@@ -23,6 +23,12 @@ Contributors:
 import { inject, ref, watch } from 'vue'
 import type { i18n } from 'org.eclipse.daanse.board.app.lib.i18next'
 import type { ProgressSettings } from './gen/ProgressSettings'
+import {
+  DButton,
+  DColorInput,
+  DIcon,
+  DInput,
+} from 'org.eclipse.daanse.board.app.ui.vue.controls'
 
 const i18n: i18n | undefined = inject('i18n')
 const t = (key: string) => (i18n ? i18n.t(key) : key)
@@ -109,25 +115,28 @@ const deleteField = (id: number) => {
       </p>
 
       <template v-else>
-        <va-button class="add-btn" @click="addItem">
+        <DButton class="add-btn" @click="addItem">
           {{ t("progress:ProgressWidget.addButton") }}
-        </va-button>
+        </DButton>
 
-        <va-data-table
-          class="table-config"
-          :items="gradientFields"
-          :columns="[{ key: 'color' }, { key: 'location' }, { key: 'actions' }]"
-        >
-          <template #cell(color)="{ rowIndex }">
-            <va-color-input class="input-color" v-model="gradientFields[rowIndex].color" />
-          </template>
-          <template #cell(location)="{ rowIndex }">
-            <va-input class="input" v-model="gradientFields[rowIndex].location" />
-          </template>
-          <template #cell(actions)="{ rowIndex }">
-            <va-button icon="delete" color="danger" @click="deleteField(rowIndex)" />
-          </template>
-        </va-data-table>
+        <!--
+          A row per stop rather than a table: there is no header worth
+          showing, nothing to sort by and nothing to page through - three
+          controls side by side is the whole of it.
+        -->
+        <ul class="stops">
+          <li v-for="(stop, index) in gradientFields" :key="index" class="stop">
+            <DColorInput v-model="stop.color" class="stop__color" />
+            <DInput v-model="stop.location" type="number" suffix="%" class="stop__at" />
+            <DButton
+              intent="quiet"
+              :title="t('progress:ProgressWidget.removeButton')"
+              @click="deleteField(index)"
+            >
+              <DIcon name="delete" size="sm" />
+            </DButton>
+          </li>
+        </ul>
       </template>
     </div>
   </section>
@@ -149,8 +158,29 @@ const deleteField = (id: number) => {
 .add-btn {
   width: 150px;
 }
-.input {
-  width: 100px;
+
+.stops {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.stop {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+}
+
+.stop__color {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.stop__at {
+  flex: 0 0 110px;
 }
 
 .loading {

@@ -18,6 +18,11 @@ import { useVariableRepository, VariableWrapper } from 'org.eclipse.daanse.board
 import { identifier, VariableRepository } from 'org.eclipse.daanse.board.app.lib.api.variable'
 import { TextSettings } from './gen/TextSettings'
 import { VariableInput, ComplexTextInput } from 'org.eclipse.daanse.board.app.ui.vue.variable.components'
+import {
+  DButton,
+  DIcon,
+  DInput,
+} from 'org.eclipse.daanse.board.app.ui.vue.controls'
 
 const previews = ref({
 } as Record<string, boolean>)
@@ -37,7 +42,7 @@ const t = (key: string) => (i18n) ? i18n.t(key) : key;
       <div class="settings-block">
         <ComplexTextInput v-model="widgetSettings.text!">
           <template #default="{ value, change }">
-            <VaInput
+            <DInput
               :modelValue="value"
               @input="change"
               :label="t('textBase:TextWidget.label')"
@@ -55,66 +60,75 @@ const t = (key: string) => (i18n) ? i18n.t(key) : key;
         -->
         <!-- Text Format -->
         <div class="toolbar-group">
-          <VaButton class="toolbar-btn" size="small" preset="secondary"
-            icon="format_bold"
+          <DButton class="toolbar-btn" size="sm" intent="quiet"
             :class="{ 'is-active': widgetSettings.fontWeight!.value === 'bold' }"
             @click="widgetSettings.fontWeight!.value = widgetSettings.fontWeight!.value === 'bold' ? 'normal' : 'bold'"
             title="Bold"
-          />
-          <VaButton class="toolbar-btn" size="small" preset="secondary"
-            icon="format_italic"
+          >
+            <DIcon name="format_bold" size="sm" />
+          </DButton>
+          <DButton class="toolbar-btn" size="sm" intent="quiet"
             :class="{ 'is-active': widgetSettings.fontStyle!.value === 'italic' }"
             @click="widgetSettings.fontStyle!.value = widgetSettings.fontStyle!.value === 'italic' ? 'normal' : 'italic'"
             title="Italic"
-          />
-          <VaButton class="toolbar-btn" size="small" preset="secondary"
-            icon="format_underlined"
+          >
+            <DIcon name="format_italic" size="sm" />
+          </DButton>
+          <DButton class="toolbar-btn" size="sm" intent="quiet"
             :class="{ 'is-active': widgetSettings.textDecoration!.value === 'underline' }"
             @click="widgetSettings.textDecoration!.value = widgetSettings.textDecoration!.value === 'underline' ? 'None' : 'underline'"
             title="Underline"
-          />
+          >
+            <DIcon name="format_underlined" size="sm" />
+          </DButton>
         </div>
         <!-- Horizontal Align -->
         <div class="toolbar-group">
-          <VaButton class="toolbar-btn" size="small" preset="secondary"
-            icon="format_align_left"
+          <DButton class="toolbar-btn" size="sm" intent="quiet"
             :class="{ 'is-active': widgetSettings.horizontalAlign!.value === 'Left' }"
             @click="widgetSettings.horizontalAlign!.value = 'Left'"
             title="Left"
-          />
-          <VaButton class="toolbar-btn" size="small" preset="secondary"
-            icon="format_align_center"
+          >
+            <DIcon name="format_align_left" size="sm" />
+          </DButton>
+          <DButton class="toolbar-btn" size="sm" intent="quiet"
             :class="{ 'is-active': widgetSettings.horizontalAlign!.value === 'Center' }"
             @click="widgetSettings.horizontalAlign!.value = 'Center'"
             title="Center"
-          />
-          <VaButton class="toolbar-btn" size="small" preset="secondary"
-            icon="format_align_right"
+          >
+            <DIcon name="format_align_center" size="sm" />
+          </DButton>
+          <DButton class="toolbar-btn" size="sm" intent="quiet"
             :class="{ 'is-active': widgetSettings.horizontalAlign!.value === 'Right' }"
             @click="widgetSettings.horizontalAlign!.value = 'Right'"
             title="Right"
-          />
+          >
+            <DIcon name="format_align_right" size="sm" />
+          </DButton>
         </div>
         <!-- Vertical Align -->
         <div class="toolbar-group">
-          <VaButton class="toolbar-btn" size="small" preset="secondary"
-            icon="vertical_align_top"
+          <DButton class="toolbar-btn" size="sm" intent="quiet"
             :class="{ 'is-active': widgetSettings.verticalAlign!.value === 'Top' }"
             @click="widgetSettings.verticalAlign!.value = 'Top'"
             title="Top"
-          />
-          <VaButton class="toolbar-btn" size="small" preset="secondary"
-            icon="vertical_align_center"
+          >
+            <DIcon name="vertical_align_top" size="sm" />
+          </DButton>
+          <DButton class="toolbar-btn" size="sm" intent="quiet"
             :class="{ 'is-active': widgetSettings.verticalAlign!.value === 'Center' }"
             @click="widgetSettings.verticalAlign!.value = 'Center'"
             title="Center"
-          />
-          <VaButton class="toolbar-btn" size="small" preset="secondary"
-            icon="vertical_align_bottom"
+          >
+            <DIcon name="vertical_align_center" size="sm" />
+          </DButton>
+          <DButton class="toolbar-btn" size="sm" intent="quiet"
             :class="{ 'is-active': widgetSettings.verticalAlign!.value === 'Bottom' }"
             @click="widgetSettings.verticalAlign!.value = 'Bottom'"
             title="Bottom"
-          />
+          >
+            <DIcon name="vertical_align_bottom" size="sm" />
+          </DButton>
         </div>
       </div>
     </div>
@@ -156,14 +170,19 @@ const t = (key: string) => (i18n) ? i18n.t(key) : key;
   background-color: var(--app-response-background);
 }
 
+/*
+ * The colours come from the theme now rather than being written out, and
+ * nothing here has to shout it down with !important: the buttons are the
+ * app's own, so there is no third-party palette left to override.
+ */
 .toolbar {
   display: flex;
   flex-wrap: wrap;
   gap: 0.25rem;
   padding: 0.5rem;
-  background: #f9fafb;
-  border: 1px solid #e5e7eb;
-  border-radius: 0.375rem;
+  background: var(--color-raised);
+  border: 1px solid var(--color-divider);
+  border-radius: var(--radius-md, 4px);
 }
 
 .toolbar-group {
@@ -171,7 +190,7 @@ const t = (key: string) => (i18n) ? i18n.t(key) : key;
   gap: 2px;
   padding-right: 0.5rem;
   margin-right: 0.25rem;
-  border-right: 1px solid #e5e7eb;
+  border-right: 1px solid var(--color-divider);
 }
 
 .toolbar-group:last-child {
@@ -181,21 +200,16 @@ const t = (key: string) => (i18n) ? i18n.t(key) : key;
 }
 
 .toolbar-btn {
-  min-width: 28px !important;
-  height: 28px !important;
-  padding: 0 4px !important;
-  border: 1px solid transparent !important;
-  border-radius: 0.25rem !important;
+  min-width: 28px;
+  height: 28px;
+  padding: 0 4px;
 }
 
-.toolbar-btn:hover {
-  background-color: #e5e7eb !important;
-}
-
+/* Pressed, not merely hovered: the border is what carries it at a glance */
 .is-active {
-  background-color: #fff3e0 !important;
-  border-color: rgb(236, 156, 29) !important;
-  color: #c45e00 !important;
+  background-color: color-mix(in srgb, var(--color-accent) 18%, transparent);
+  border-color: var(--color-accent);
+  color: var(--color-accent);
 }
 
 .toolbar-group--inputs {

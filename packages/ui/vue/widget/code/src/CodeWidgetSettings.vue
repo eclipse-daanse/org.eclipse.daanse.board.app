@@ -19,6 +19,9 @@ import { MonacoEditor } from 'org.eclipse.daanse.board.app.ui.vue.common.monaco'
 
 // @ts-ignore
 import CodeEditor from "simple-code-editor/CodeEditor.vue";
+import {
+  DInput,
+} from 'org.eclipse.daanse.board.app.ui.vue.controls'
 
 const widgetSettings = defineModel<CodeSettings>({ required: true });
 
@@ -44,7 +47,7 @@ watch(() => code.value, (newCode: any) => {
   <section class="settings-section" data-section="Quelltext">
     <div class="settings_container">
       <template v-if="editorType === 'textarea'">
-        <VaTextarea v-model="widgetSettings.code" :minRows="10" />
+        <DInput v-model="widgetSettings.code" :rows="10" />
       </template>
       <template v-else-if="editorType === 'simple'">
         <CodeEditor v-model="code" width="100%" height="500px" font-size="12px" :display-language="false" />

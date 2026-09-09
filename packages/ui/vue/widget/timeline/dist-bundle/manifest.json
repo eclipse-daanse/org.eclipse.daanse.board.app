@@ -11,7 +11,8 @@
     "lib.api.widget",
     "lib.events",
     "platform.vue",
-    "ui.vue.composables"
+    "ui.vue.composables",
+    "ui.vue.controls"
   ],
   "requiresService": [
     {
@@ -57,6 +58,10 @@
     {
       "id": "@emfts/core",
       "versionRange": "^0.1.1-next.18"
+    },
+    {
+      "id": "org.eclipse.daanse.board.app.ui.vue.controls",
+      "versionRange": ">=0.0.1-0"
     }
   ],
   "provides": [

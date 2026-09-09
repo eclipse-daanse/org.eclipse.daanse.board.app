@@ -18,6 +18,10 @@ import type {i18n} from "org.eclipse.daanse.board.app.lib.i18next"
 import { PageI } from './interface/PageI'
 import { useRoute } from 'vue-router'
 import { type PageRegistryI, identifier } from 'org.eclipse.daanse.board.app.lib.api.page'
+import {
+  DInput,
+  DSelect,
+} from 'org.eclipse.daanse.board.app.ui.vue.controls'
 
 const i18n:i18n|undefined = inject('i18n');
 const t = (key:string)=>(i18n)?i18n.t(key):key;
@@ -66,19 +70,15 @@ const isValidSelection = computed(() => {
   -->
   <section class="settings-section" data-section="Seite wählen">
     <div class="settings-container">
-      <va-select
+      <DSelect
         v-model="widgetSettings.path"
         :label="t('page:pageWidget.selectPage')"
         :options="availablePages"
-        value-by="value"
-        text-by="text"
+        value-key="value"
+        label-key="text"
         :placeholder="t('page:pageWidget.selectPagePlaceholder')"
-        :color="isValidSelection ? 'primary' : 'danger'"
+        :error="isValidSelection ? undefined : t('page:pageWidget.selfReferenceWarning')"
       />
-
-      <va-alert v-if="!isValidSelection" color="warning" :border="false" icon="warning">
-        {{ t('page:pageWidget.selfReferenceWarning') }}
-      </va-alert>
 
       <!-- A page that is not in the list yet - one being built, or one from
            a board that has not loaded - can still be reached by its path.
@@ -87,11 +87,7 @@ const isValidSelection = computed(() => {
            seeing before you need it. -->
       <div class="manual-path">
         <p class="manual-path__note">{{ t('page:pageWidget.manualPath') }}</p>
-        <va-input
-          v-model="widgetSettings.path"
-          :label="t('page:pageWidget.path')"
-          :color="isValidSelection ? 'primary' : 'danger'"
-        />
+        <DInput v-model="widgetSettings.path" :label="t('page:pageWidget.path')" />
       </div>
     </div>
   </section>

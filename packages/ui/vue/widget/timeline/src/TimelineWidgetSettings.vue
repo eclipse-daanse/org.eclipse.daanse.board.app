@@ -25,12 +25,12 @@ Contributors:
     <div class="settings-container">
       <!-- Time Range Mode -->
       <div class="setting-group">
-        <va-select
+        <DSelect
           v-model="timeRangeMode"
           :label="t('Time Range Mode')"
           :options="timeRangeModeOptions"
-          text-by="label"
-          value-by="value"
+          label-key="label"
+          value-key="value"
           @update:modelValue="onTimeRangeModeChange"
         />
       </div>
@@ -40,7 +40,7 @@ Contributors:
         <label>{{ t('Relative Time Range') }}</label>
         <div class="relative-time-config">
           <div class="relative-time-row">
-            <va-input
+            <DInput
               v-model.number="settings.relativeTime.offset"
               :label="t('Offset')"
               type="number"
@@ -49,12 +49,12 @@ Contributors:
               class="offset-input"
               @update:modelValue="onRelativeTimeChange"
             />
-            <va-select
+            <DSelect
               v-model="settings.relativeTime.unit"
               :options="timeUnitOptions"
               :label="t('Unit')"
-              text-by="text"
-              value-by="value"
+              label-key="text"
+              value-key="value"
               class="unit-select"
               @update:modelValue="onRelativeTimeChange"
             />
@@ -71,13 +71,15 @@ Contributors:
         <div class="setting-group">
           <label>{{ t('Timeline Start') }}</label>
           <div class="datetime-group">
-            <va-date-input
-              v-model="timelineMinDate"
+            <DDateInput
+              v-model="timelineMinDateText"
+              mode="date"
               :label="t('Date')"
               @update:modelValue="onTimelineMinDateChange"
             />
-            <va-time-input
-              v-model="timelineMinTime"
+            <DDateInput
+              v-model="timelineMinTimeText"
+              mode="time"
               :label="t('Time')"
               @update:modelValue="onTimelineMinTimeChange"
             />
@@ -87,19 +89,21 @@ Contributors:
         <!-- Timeline End (latest time) -->
         <div class="setting-group">
           <label>{{ t('Timeline End') }}</label>
-          <va-checkbox
+          <DCheckbox
             v-model="useCurrentTimeAsMax"
             :label="t('Use current time')"
             @update:modelValue="onTimelineEndTypeChange"
           />
           <div v-if="!useCurrentTimeAsMax" class="datetime-group">
-            <va-date-input
-              v-model="timelineMaxDate"
+            <DDateInput
+              v-model="timelineMaxDateText"
+              mode="date"
               :label="t('Date')"
               @update:modelValue="onTimelineMaxDateChange"
             />
-            <va-time-input
-              v-model="timelineMaxTime"
+            <DDateInput
+              v-model="timelineMaxTimeText"
+              mode="time"
               :label="t('Time')"
               @update:modelValue="onTimelineMaxTimeChange"
             />
@@ -112,34 +116,34 @@ Contributors:
       <div class="setting-group">
         <label>{{ t('Variable Binding') }}</label>
         <div class="variable-config">
-          <va-checkbox
+          <DCheckbox
             v-model="useStartVariable"
             :label="t('Start time from variable')"
             @update:modelValue="onStartVariableToggle"
           />
-          <va-select
+          <DSelect
             v-if="useStartVariable"
             v-model="settings.rangeStartVariable"
             :options="availableVariables"
             :label="t('Start variable')"
-            text-by="name"
-            value-by="name"
+            label-key="name"
+            value-key="name"
             @update:modelValue="onVariableChange"
           />
         </div>
         <div class="variable-config">
-          <va-checkbox
+          <DCheckbox
             v-model="useEndVariable"
             :label="t('End time from variable')"
             @update:modelValue="onEndVariableToggle"
           />
-          <va-select
+          <DSelect
             v-if="useEndVariable"
             v-model="settings.rangeEndVariable"
             :options="availableVariables"
             :label="t('End variable')"
-            text-by="name"
-            value-by="name"
+            label-key="name"
+            value-key="name"
             @update:modelValue="onVariableChange"
           />
         </div>
@@ -151,13 +155,19 @@ Contributors:
 </template>
 
 <script lang="ts" setup>
-import { ref, computed, watch, onMounted, inject } from 'vue';
+import { ref, computed, watch, onMounted, inject, type Ref } from 'vue';
 import type { i18n } from "org.eclipse.daanse.board.app.lib.i18next";
 import { VariableWrapper, plainSettings } from 'org.eclipse.daanse.board.app.ui.vue.composables';
 import {
   identifier as variableIdentifier,
   type VariableRepository
 } from 'org.eclipse.daanse.board.app.lib.api.variable';
+import {
+  DCheckbox,
+  DDateInput,
+  DInput,
+  DSelect,
+} from 'org.eclipse.daanse.board.app.ui.vue.controls'
 
 const i18n: i18n | undefined = inject('i18n');
 const t = (key: string) => (i18n) ? i18n.t(key) : key;
@@ -234,6 +244,49 @@ const timelineMinDate = ref<Date>();
 const timelineMinTime = ref<Date>();
 const timelineMaxDate = ref<Date>();
 const timelineMaxTime = ref<Date>();
+
+/*
+ * The fields speak the browser's own formats - "2026-09-09" and "14:30" -
+ * while everything below this works in Date. One writable computed per
+ * field translates, so a date picked here and a date read from the
+ * settings are still the same kind of value.
+ */
+const pad = (n: number) => String(n).padStart(2, '0');
+
+const dateText = (moment: Ref<Date | undefined>) =>
+  computed({
+    get: () => {
+      const d = moment.value;
+      return d ? `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}` : '';
+    },
+    set: (text: string) => {
+      if (!text) return void (moment.value = undefined);
+      const [year, month, day] = text.split('-').map(Number);
+      const next = moment.value ? new Date(moment.value) : new Date();
+      next.setFullYear(year, month - 1, day);
+      moment.value = next;
+    },
+  });
+
+const timeText = (moment: Ref<Date | undefined>) =>
+  computed({
+    get: () => {
+      const d = moment.value;
+      return d ? `${pad(d.getHours())}:${pad(d.getMinutes())}` : '';
+    },
+    set: (text: string) => {
+      if (!text) return void (moment.value = undefined);
+      const [hours, minutes] = text.split(':').map(Number);
+      const next = moment.value ? new Date(moment.value) : new Date();
+      next.setHours(hours, minutes, 0, 0);
+      moment.value = next;
+    },
+  });
+
+const timelineMinDateText = dateText(timelineMinDate);
+const timelineMinTimeText = timeText(timelineMinTime);
+const timelineMaxDateText = dateText(timelineMaxDate);
+const timelineMaxTimeText = timeText(timelineMaxTime);
 
 // Variable Support
 const variableRepository = ref<VariableRepository | null>(null);
