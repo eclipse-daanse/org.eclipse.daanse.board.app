@@ -284,7 +284,6 @@ const getBlur = computed(() => {
     b : ''
 })
 const getpadding = computed(() => {
-  console.log(widget.wrapperConfig.padding)
   const int = parseInt(widget.wrapperConfig.padding?.value);
   return isNaN(int) ? 0 : int;
 })

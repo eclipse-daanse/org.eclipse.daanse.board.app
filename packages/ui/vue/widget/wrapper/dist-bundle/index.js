@@ -1,4 +1,4 @@
-(function(){var i="ui.vue.widget.wrapper",d=document,s=d.querySelector('style[data-tsm-bundle="'+i+'"]');if(!s){s=d.createElement('style');s.setAttribute('data-tsm-bundle',i);d.head.appendChild(s);}s.textContent=".absolute[data-v-98bcbb39]{position:absolute}.wrapper-container[data-v-98bcbb39]{background-color:var(--v4cd81e68);border-color:var(--v057018db);border-width:var(--v02ed1f04);border-style:solid;width:100%;height:100%;box-Shadow:var(--v2e44214c);border-radius:var(--v526b7f53);backdrop-filter:blur(var(--blur-amount))}.sub[data-v-98bcbb39]{border-radius:var(--v526b7f53);padding:var(--aabc1cd4)}.scroll[data-v-98bcbb39]{width:100%;height:100%;overflow:auto}.confirm__title[data-v-98bcbb39]{margin:0;font-family:var(--font-sans);font-size:var(--text-base);font-weight:600;color:var(--color-fg)}.confirm__text[data-v-98bcbb39]{margin:0;color:var(--color-dim);line-height:1.5}.actions[data-v-98bcbb39]{position:absolute;inset:0;z-index:3000;display:flex;align-items:center;justify-content:center;border-radius:inherit;background:color-mix(in srgb,var(--color-bg, #121820) 70%,transparent);opacity:0;transition:opacity .12s ease;pointer-events:none}.wrapper-container:hover .actions[data-v-98bcbb39],.actions[data-v-98bcbb39]:focus-within{opacity:1}.actions__row[data-v-98bcbb39]{display:flex;flex-wrap:wrap;justify-content:center;gap:2px;max-width:100%;padding:0 4px;margin-bottom:6%}.action[data-v-98bcbb39]{pointer-events:auto;position:relative;display:flex;align-items:center;justify-content:center;width:34px;height:34px;border:1px solid transparent;border-radius:var(--radius-md, 4px);background:transparent;color:var(--color-dim, #8b98a8);font:inherit;cursor:pointer;transition:color .1s ease,background-color .1s ease,border-color .1s ease}.action[data-v-98bcbb39]:hover,.action[data-v-98bcbb39]:focus-visible{color:var(--color-fg, #e6edf5);background:color-mix(in srgb,var(--color-pane, #1a222c) 88%,transparent);border-color:var(--color-divider, #2b3644)}.action[data-v-98bcbb39]:focus-visible{outline:2px solid var(--color-accent, #4fa3d1);outline-offset:1px}.action--danger[data-v-98bcbb39]:hover,.action--danger[data-v-98bcbb39]:focus-visible{color:var(--color-err, #d1584f);border-color:color-mix(in srgb,var(--color-err, #d1584f) 40%,transparent)}.action__label[data-v-98bcbb39]{position:absolute;top:calc(100% + 2px);left:50%;transform:translate(-50%);padding:2px 6px;border-radius:var(--radius-sm, 3px);background:var(--color-raised, #232d3a);color:var(--color-fg, #e6edf5);font-size:11px;line-height:1.4;letter-spacing:.01em;white-space:nowrap;opacity:0;pointer-events:none;transition:opacity 90ms ease}.action:hover .action__label[data-v-98bcbb39],.action:focus-visible .action__label[data-v-98bcbb39]{opacity:1}\n";})();
+(function(){var i="ui.vue.widget.wrapper",d=document,s=d.querySelector('style[data-tsm-bundle="'+i+'"]');if(!s){s=d.createElement('style');s.setAttribute('data-tsm-bundle',i);d.head.appendChild(s);}s.textContent=".absolute[data-v-ff848c53]{position:absolute}.wrapper-container[data-v-ff848c53]{background-color:var(--v5c4aca49);border-color:var(--a8a36e08);border-width:var(--v7f74f265);border-style:solid;width:100%;height:100%;box-Shadow:var(--v8108988a);border-radius:var(--v67680318);backdrop-filter:blur(var(--blur-amount))}.sub[data-v-ff848c53]{border-radius:var(--v67680318);padding:var(--v2729c4f7)}.scroll[data-v-ff848c53]{width:100%;height:100%;overflow:auto}.confirm__title[data-v-ff848c53]{margin:0;font-family:var(--font-sans);font-size:var(--text-base);font-weight:600;color:var(--color-fg)}.confirm__text[data-v-ff848c53]{margin:0;color:var(--color-dim);line-height:1.5}.actions[data-v-ff848c53]{position:absolute;inset:0;z-index:3000;display:flex;align-items:center;justify-content:center;border-radius:inherit;background:color-mix(in srgb,var(--color-bg, #121820) 70%,transparent);opacity:0;transition:opacity .12s ease;pointer-events:none}.wrapper-container:hover .actions[data-v-ff848c53],.actions[data-v-ff848c53]:focus-within{opacity:1}.actions__row[data-v-ff848c53]{display:flex;flex-wrap:wrap;justify-content:center;gap:2px;max-width:100%;padding:0 4px;margin-bottom:6%}.action[data-v-ff848c53]{pointer-events:auto;position:relative;display:flex;align-items:center;justify-content:center;width:34px;height:34px;border:1px solid transparent;border-radius:var(--radius-md, 4px);background:transparent;color:var(--color-dim, #8b98a8);font:inherit;cursor:pointer;transition:color .1s ease,background-color .1s ease,border-color .1s ease}.action[data-v-ff848c53]:hover,.action[data-v-ff848c53]:focus-visible{color:var(--color-fg, #e6edf5);background:color-mix(in srgb,var(--color-pane, #1a222c) 88%,transparent);border-color:var(--color-divider, #2b3644)}.action[data-v-ff848c53]:focus-visible{outline:2px solid var(--color-accent, #4fa3d1);outline-offset:1px}.action--danger[data-v-ff848c53]:hover,.action--danger[data-v-ff848c53]:focus-visible{color:var(--color-err, #d1584f);border-color:color-mix(in srgb,var(--color-err, #d1584f) 40%,transparent)}.action__label[data-v-ff848c53]{position:absolute;top:calc(100% + 2px);left:50%;transform:translate(-50%);padding:2px 6px;border-radius:var(--radius-sm, 3px);background:var(--color-raised, #232d3a);color:var(--color-fg, #e6edf5);font-size:11px;line-height:1.4;letter-spacing:.01em;white-space:nowrap;opacity:0;pointer-events:none;transition:opacity 90ms ease}.action:hover .action__label[data-v-ff848c53],.action:focus-visible .action__label[data-v-ff848c53]{opacity:1}\n";})();
 import { defineComponent as se, useCssVars as re, computed as c, inject as ae, ref as U, onUnmounted as ie, createElementBlock as P, openBlock as v, normalizeStyle as x, createCommentVNode as Y, createVNode as B, toDisplayString as V, Fragment as X, createElementVNode as m, createBlock as oe, resolveDynamicComponent as ne, renderList as le, withModifiers as ue, normalizeClass as de, unref as y, withCtx as G, createTextVNode as K } from "vue";
 import { identifier as ce } from "org.eclipse.daanse.board.app.lib.api.widget";
 import { VariableWrapper as r } from "org.eclipse.daanse.board.app.ui.vue.composables";
@@ -8,7 +8,7 @@ const fe = { class: "scroll" }, Te = {
   key: 0,
   class: "actions",
   "aria-hidden": "false"
-}, Ce = { class: "actions__row" }, be = ["title", "onClick"], Ne = { class: "action__label" }, Se = { key: 2 }, pe = /* @__PURE__ */ se({
+}, Ce = { class: "actions__row" }, Ne = ["title", "onClick"], be = { class: "action__label" }, Se = { key: 2 }, pe = /* @__PURE__ */ se({
   __name: "WidgetWrapper",
   props: {
     widget: {},
@@ -18,18 +18,18 @@ const fe = { class: "scroll" }, Te = {
   emits: ["openSettings", "removeWidget"],
   setup(a, { emit: e }) {
     re((o) => ({
-      v4cd81e68: D.value,
-      v057018db: L.value,
-      v02ed1f04: q.value + "px",
-      v2e44214c: A.value,
-      v526b7f53: J.value + "px",
-      aabc1cd4: W.value + "px"
+      v5c4aca49: D.value,
+      a8a36e08: L.value,
+      v7f74f265: q.value + "px",
+      v8108988a: A.value,
+      v67680318: J.value + "px",
+      v2729c4f7: W.value + "px"
     }));
     const s = e, h = ae(ce), g = U(0), C = h.onChange?.(() => {
       g.value++;
     });
     ie(() => C?.());
-    const b = c(() => (g.value, h.getWidget(a.widget.type))), N = c(() => (g.value, h.getAllWidgets())), R = U(!1), E = U(null), S = (o) => {
+    const N = c(() => (g.value, h.getWidget(a.widget.type))), b = c(() => (g.value, h.getAllWidgets())), R = U(!1), E = U(null), S = (o) => {
       E.value = o, R.value = !0;
     }, p = () => {
       E.value && s("removeWidget", E.value), R.value = !1, E.value = null;
@@ -120,7 +120,6 @@ const fe = { class: "scroll" }, Te = {
       const o = a.widget.wrapperConfig.blur?.value;
       return F(o) ? o : "";
     }), W = c(() => {
-      console.log(a.widget.wrapperConfig.padding);
       const o = parseInt(a.widget.wrapperConfig.padding?.value);
       return isNaN(o) ? 0 : o;
     });
@@ -139,13 +138,13 @@ const fe = { class: "scroll" }, Te = {
           opacity: k.value
         })
       }, V(a.widget.wrapperConfig.title.value), 5)) : Y("", !0),
-      b.value ? (v(), P(X, { key: 1 }, [
+      N.value ? (v(), P(X, { key: 1 }, [
         m("div", {
           class: "w-full h-full box-border cursor-pointer overflow-hidden sub",
           style: x({ position: "relative", opacity: k.value })
         }, [
           m("div", fe, [
-            (v(), oe(ne(N.value[a.widget.type].component), {
+            (v(), oe(ne(b.value[a.widget.type].component), {
               config: a.widget.config,
               configv: a.widget.config,
               "onUpdate:configv": n[0] || (n[0] = (l) => a.widget.config = l),
@@ -168,8 +167,8 @@ const fe = { class: "scroll" }, Te = {
                 name: l.icon,
                 size: "lg"
               }, null, 8, ["name"]),
-              m("span", Ne, V(l.label), 1)
-            ], 10, be))), 128))
+              m("span", be, V(l.label), 1)
+            ], 10, Ne))), 128))
           ])
         ])) : Y("", !0)
       ], 64)) : (v(), P("div", Se, [
@@ -221,7 +220,7 @@ const fe = { class: "scroll" }, Te = {
   for (const [h, g] of e)
     s[h] = g;
   return s;
-}, Oe = /* @__PURE__ */ _e(pe, [["__scopeId", "data-v-98bcbb39"]]);
+}, Oe = /* @__PURE__ */ _e(pe, [["__scopeId", "data-v-ff848c53"]]);
 class z extends ge {
   static get eINSTANCE() {
     return this._instance || (this._instance = new z()), this._instance;
@@ -306,10 +305,10 @@ class i extends Re {
     g.setContainment(!1), g.setName("backgroundColorTransparence"), g.setLowerBound(0), g.setUpperBound(1), e.getEStructuralFeatures().push(g), i.Literals.WRAPPER_SETTINGS__BACKGROUND_COLOR_TRANSPARENCE = g;
     const C = new u();
     C.setContainment(!1), C.setName("titleColor"), C.setLowerBound(0), C.setUpperBound(1), e.getEStructuralFeatures().push(C), i.Literals.WRAPPER_SETTINGS__TITLE_COLOR = C;
-    const b = new u();
-    b.setContainment(!1), b.setName("padding"), b.setLowerBound(0), b.setUpperBound(1), e.getEStructuralFeatures().push(b), i.Literals.WRAPPER_SETTINGS__PADDING = b;
     const N = new u();
-    N.setContainment(!1), N.setName("titleFontSize"), N.setLowerBound(0), N.setUpperBound(1), e.getEStructuralFeatures().push(N), i.Literals.WRAPPER_SETTINGS__TITLE_FONT_SIZE = N;
+    N.setContainment(!1), N.setName("padding"), N.setLowerBound(0), N.setUpperBound(1), e.getEStructuralFeatures().push(N), i.Literals.WRAPPER_SETTINGS__PADDING = N;
+    const b = new u();
+    b.setContainment(!1), b.setName("titleFontSize"), b.setLowerBound(0), b.setUpperBound(1), e.getEStructuralFeatures().push(b), i.Literals.WRAPPER_SETTINGS__TITLE_FONT_SIZE = b;
     const R = new u();
     R.setContainment(!1), R.setName("borderSize"), R.setLowerBound(0), R.setUpperBound(1), e.getEStructuralFeatures().push(R), i.Literals.WRAPPER_SETTINGS__BORDER_SIZE = R;
     const E = new u();
