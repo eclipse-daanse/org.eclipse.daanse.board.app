@@ -1,11 +1,12 @@
-(function(){var i="ui.vue.eventmanager",d=document,s=d.querySelector('style[data-tsm-bundle="'+i+'"]');if(!s){s=d.createElement('style');s.setAttribute('data-tsm-bundle',i);d.head.appendChild(s);}s.textContent=".event-manager-ui[data-v-ee120456]{padding:1.5rem;margin-left:75px;width:100%;min-height:100vh;background:var(--color-backgroundPrimary, #f6f6f6)}.header-section[data-v-ee120456]{display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem}.page-title[data-v-ee120456]{font-size:1.75rem;font-weight:600;color:#262824;margin:0}.ice[data-v-ee120456]{background:#f7f3f3d9;border-radius:16px;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}.space-y-4[data-v-ee120456]>*+*{margin-top:1rem}.space-y-2[data-v-ee120456]>*+*{margin-top:.5rem}.space-y-3[data-v-ee120456]>*+*{margin-top:.75rem}.card-section[data-v-ee120456]{background:#fff9;border-radius:12px;backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px);border:1px solid rgba(213,213,213,.3)}[data-v-ee120456] .card-section.va-card,[data-v-ee120456] .card-section .va-card__inner{box-shadow:none!important}.section-title[data-v-ee120456]{font-size:1rem;font-weight:500;color:#262824}.condition-row[data-v-ee120456]{display:flex;gap:.5rem;align-items:center}.parameter-wrapper[data-v-ee120456]{padding:1rem;background:#fffc;border-radius:8px;border:1px solid rgba(213,213,213,.4);backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px)}.parameter-header[data-v-ee120456]{margin-bottom:.75rem}.parameter-info[data-v-ee120456]{font-family:Monaco,Courier New,monospace;font-size:.9rem}.parameter-optional[data-v-ee120456]{color:#666}.parameter-separator[data-v-ee120456]{margin:0 .25rem;color:#666}.parameter-type[data-v-ee120456]{color:teal;font-weight:500}[data-v-ee120456] .va-modal__overlay{opacity:1!important;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);background:#cccccc8c!important}[data-v-ee120456] .va-modal{z-index:3000000!important}[data-v-ee120456] .va-modal__inner{background:#f7f3f3d9!important;border-radius:16px;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}[data-v-ee120456] .va-modal__dialog,[data-v-ee120456] .va-modal__container{background:transparent!important}.table-header[data-v-ee120456]{display:flex;width:100%;padding:1rem;border-bottom:1px solid rgba(213,213,213,.4);background:#fff6;font-weight:500;font-size:.875rem;color:#262824}.header-cell[data-v-ee120456]{padding:0 .5rem;text-align:left}.table-content[data-v-ee120456]{background:#fff}[data-v-ee120456] .table-content .va-data-table{background:transparent}[data-v-ee120456] .table-content .va-data-table__table{background:#fff}.event-mapping-grid[data-v-ee120456]{display:grid;grid-template-columns:200px 120px 150px 120px 180px 150px 80px}[data-v-ee120456] .va-data-table__table-thead{background:#f9fafb;font-size:.75rem;font-weight:500;color:#6b7280;text-transform:uppercase;letter-spacing:.05em}.table-wrapper[data-v-ee120456]{height:calc(100vh - 130px);background:#fff}.actions-list[data-v-ee120456]{display:flex;flex-direction:column;gap:.25rem}.action-item[data-v-ee120456]{display:flex;align-items:center;gap:.25rem;font-size:.875rem}.mapping-id[data-v-ee120456]{font-size:.8rem;color:#374151;font-family:Monaco,Courier New,monospace;max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:inline-block}.uid-badge[data-v-ee120456]{display:inline-block;font-size:.75rem;font-family:Monaco,Courier New,monospace;color:#1e40af;background-color:#dbeafe;padding:.1rem .4rem;border-radius:.25rem;max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;vertical-align:middle;margin-left:.25rem}.action-context[data-v-ee120456]{color:#6b7280;font-size:.8rem}.action-separator[data-v-ee120456]{color:#9ca3af}.actions-tabs[data-v-ee120456]{display:flex;flex-direction:column;gap:1rem}.action-tabs-header[data-v-ee120456]{display:flex;flex-wrap:wrap;gap:.5rem;padding-bottom:.75rem;border-bottom:1px solid rgba(213,213,213,.4)}.action-tab[data-v-ee120456]{display:flex;align-items:center;gap:.5rem;padding:.5rem .75rem;background:#fff9;border:1px solid rgba(213,213,213,.4);border-radius:8px;cursor:pointer;transition:all .2s ease;font-size:.875rem}.action-tab[data-v-ee120456]:hover{background:#ffffffe6;border-color:#cd91004d}.action-tab.active[data-v-ee120456]{background:#0066cc1a;border-color:#cc9100;color:#cc9100}.action-tab-label[data-v-ee120456]{max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.action-tab-remove[data-v-ee120456]{margin-left:.25rem}.action-editor[data-v-ee120456]{padding:1rem;background:#fff6;border-radius:8px;border:1px solid rgba(213,213,213,.3)}.event-source-grid[data-v-ee120456],.actions-list-editor[data-v-ee120456]{display:flex;flex-direction:column;gap:.75rem}.action-card[data-v-ee120456]{border-radius:8px;cursor:pointer;transition:all .2s ease;box-shadow:1px 1px 5px #cccccc69}.action-card[data-v-ee120456]:hover,.action-card.active[data-v-ee120456]{border-color:#9595954d}.action-card-header[data-v-ee120456]{display:flex;align-items:center;gap:.75rem;padding:.75rem 1rem}.action-number[data-v-ee120456]{display:flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:50%;font-size:.75rem;font-weight:600;flex-shrink:0;border:1px solid #cc9100;color:#cc9100}.action-summary[data-v-ee120456]{flex:1;display:flex;align-items:center;gap:.5rem;min-width:0}.action-context-badge[data-v-ee120456]{padding:.125rem .5rem;background:#e5e7eb;color:#4b5563;border-radius:4px;font-size:.7rem;font-weight:500;text-transform:uppercase;flex-shrink:0}.action-name-text[data-v-ee120456]{font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.action-empty[data-v-ee120456]{color:#9ca3af;font-style:italic}.action-card-body[data-v-ee120456]{padding:0 1rem 1rem;border-top:1px solid rgba(213,213,213,.3);margin-top:0}.action-settings-row[data-v-ee120456]{display:grid;grid-template-columns:1fr 1fr 2fr;gap:.75rem;padding-top:.75rem}.context-select[data-v-ee120456]{min-width:100px}.target-select[data-v-ee120456]{min-width:120px}.action-select[data-v-ee120456]{min-width:180px}.action-parameters[data-v-ee120456]{margin-top:1rem;padding-top:.75rem;border-top:1px dashed rgba(213,213,213,.5)}.parameters-title[data-v-ee120456]{font-size:.75rem;font-weight:600;color:#6b7280;text-transform:uppercase;letter-spacing:.05em;margin-bottom:.5rem}.parameters-list[data-v-ee120456]{display:flex;flex-direction:column;gap:.5rem}.parameter-item[data-v-ee120456]{display:flex;flex-direction:column;gap:.25rem;padding:.5rem}.parameter-label[data-v-ee120456]{display:flex;align-items:center;gap:.25rem;font-size:.8rem}.parameter-label .parameter-name[data-v-ee120456]{font-weight:600}.parameter-label .parameter-optional[data-v-ee120456]{color:#9ca3af}.parameter-type-badge[data-v-ee120456]{margin-left:.25rem;padding:.0625rem .375rem;border-radius:3px;font-size:.65rem;font-weight:500;border:1px solid #ddd}.parameter-input-row[data-v-ee120456]{display:flex;align-items:center;gap:.5rem}.source-toggle[data-v-ee120456]{display:flex;border:1px solid rgba(213,213,213,.5);border-radius:4px;overflow:hidden;flex-shrink:0}.toggle-btn[data-v-ee120456]{padding:.25rem .5rem;font-size:.7rem;background:#fff;border:none;cursor:pointer;transition:all .15s ease;color:#6b7280}.toggle-btn[data-v-ee120456]:first-child{border-right:1px solid rgba(213,213,213,.5)}.toggle-btn[data-v-ee120456]:hover{background:#f3f4f6}.toggle-btn.active[data-v-ee120456]{background:#6767676e;color:#fff}.parameter-value-input[data-v-ee120456]{flex:1;min-width:150px}\n";})();
-import { defineComponent as st, ref as L, computed as Ee, inject as ze, onMounted as ut, resolveComponent as ne, createElementBlock as k, openBlock as h, createElementVNode as y, createVNode as m, withCtx as w, createTextVNode as ae, toDisplayString as D, Fragment as ce, renderList as fe, createCommentVNode as z, createBlock as q, normalizeClass as _e, withModifiers as xe } from "vue";
-import { EVENT_MANAGER as dt, EVENT_REGISTRY as ct, EVENT_ACTIONS_REGISTRY as ft } from "org.eclipse.daanse.board.app.lib.api.events";
-import { Comperator as be, Condition as vt } from "org.eclipse.daanse.board.app.lib.events";
-import { identifier as pt } from "org.eclipse.daanse.board.app.lib.api.page";
-import { NAVIGATION_REGISTRY_ID as et, NavigationItem as yt } from "org.eclipse.daanse.board.app.lib.api.navigation";
-import { ROUTE_REGISTRY_ID as tt, RouteDefinition as gt } from "org.eclipse.daanse.board.app.lib.api.route";
-var Je = typeof globalThis < "u" ? globalThis : typeof window < "u" ? window : typeof global < "u" ? global : typeof self < "u" ? self : {}, Qe = {};
+(function(){var i="ui.vue.eventmanager",d=document,s=d.querySelector('style[data-tsm-bundle="'+i+'"]');if(!s){s=d.createElement('style');s.setAttribute('data-tsm-bundle',i);d.head.appendChild(s);}s.textContent=".event-manager-ui[data-v-371363f0]{padding:1.5rem;margin-left:75px;width:100%;min-height:100vh;background:var(--color-backgroundPrimary, #f6f6f6)}.header-section[data-v-371363f0]{display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem}.page-title[data-v-371363f0]{font-size:1.75rem;font-weight:600;color:#262824;margin:0}.ice[data-v-371363f0]{background:#f7f3f3d9;border-radius:16px;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}.space-y-4[data-v-371363f0]>*+*{margin-top:1rem}.space-y-2[data-v-371363f0]>*+*{margin-top:.5rem}.space-y-3[data-v-371363f0]>*+*{margin-top:.75rem}.card-section[data-v-371363f0]{background:var(--color-pane);border:1px solid var(--color-divider);border-radius:var(--radius-md, 4px)}.card-section__head[data-v-371363f0]{display:flex;align-items:center;justify-content:space-between;width:100%}.section-title[data-v-371363f0]{margin:0;font-size:1rem;font-weight:500;color:var(--color-fg)}.confirm__title[data-v-371363f0]{margin:0;font-family:var(--font-sans);font-size:var(--text-base);font-weight:600;color:var(--color-fg)}.confirm__text[data-v-371363f0]{margin:0;color:var(--color-dim);line-height:1.5}.mappings[data-v-371363f0]{width:100%;border-collapse:collapse;font-family:var(--font-sans);font-size:var(--text-sm);color:var(--color-fg)}.mappings th[data-v-371363f0]{position:sticky;top:0;z-index:1;padding:8px 10px;text-align:left;background:var(--color-raised);border-bottom:1px solid var(--color-divider);font-size:var(--text-xs);font-weight:500;color:var(--color-dim);text-transform:uppercase;letter-spacing:.05em;white-space:nowrap}.mappings td[data-v-371363f0]{padding:6px 10px;border-bottom:1px solid var(--color-divider);vertical-align:top}.mappings tbody tr[data-v-371363f0]:hover{background:var(--color-raised)}.mappings__actions[data-v-371363f0]{display:flex;gap:6px;justify-content:flex-end}.mappings__empty[data-v-371363f0]{padding:14px 10px;color:var(--color-dim)}.condition-row[data-v-371363f0]{display:flex;gap:.5rem;align-items:center}.parameter-wrapper[data-v-371363f0]{padding:1rem;background:#fffc;border-radius:8px;border:1px solid rgba(213,213,213,.4);backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px)}.parameter-header[data-v-371363f0]{margin-bottom:.75rem}.parameter-info[data-v-371363f0]{font-family:Monaco,Courier New,monospace;font-size:.9rem}.parameter-optional[data-v-371363f0]{color:#666}.parameter-separator[data-v-371363f0]{margin:0 .25rem;color:#666}.parameter-type[data-v-371363f0]{color:teal;font-weight:500}.table-header[data-v-371363f0]{display:flex;width:100%;padding:1rem;border-bottom:1px solid rgba(213,213,213,.4);background:#fff6;font-weight:500;font-size:.875rem;color:#262824}.header-cell[data-v-371363f0]{padding:0 .5rem;text-align:left}.table-content[data-v-371363f0]{background:#fff}.event-mapping-grid[data-v-371363f0]{display:grid;grid-template-columns:200px 120px 150px 120px 180px 150px 80px}.table-wrapper[data-v-371363f0]{height:calc(100vh - 130px);background:#fff}.actions-list[data-v-371363f0]{display:flex;flex-direction:column;gap:.25rem}.action-item[data-v-371363f0]{display:flex;align-items:center;gap:.25rem;font-size:.875rem}.mapping-id[data-v-371363f0]{font-size:.8rem;color:#374151;font-family:Monaco,Courier New,monospace;max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:inline-block}.uid-badge[data-v-371363f0]{display:inline-block;font-size:.75rem;font-family:Monaco,Courier New,monospace;color:#1e40af;background-color:#dbeafe;padding:.1rem .4rem;border-radius:.25rem;max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;vertical-align:middle;margin-left:.25rem}.action-context[data-v-371363f0]{color:#6b7280;font-size:.8rem}.action-separator[data-v-371363f0]{color:#9ca3af}.actions-tabs[data-v-371363f0]{display:flex;flex-direction:column;gap:1rem}.action-tabs-header[data-v-371363f0]{display:flex;flex-wrap:wrap;gap:.5rem;padding-bottom:.75rem;border-bottom:1px solid rgba(213,213,213,.4)}.action-tab[data-v-371363f0]{display:flex;align-items:center;gap:.5rem;padding:.5rem .75rem;background:#fff9;border:1px solid rgba(213,213,213,.4);border-radius:8px;cursor:pointer;transition:all .2s ease;font-size:.875rem}.action-tab[data-v-371363f0]:hover{background:#ffffffe6;border-color:#cd91004d}.action-tab.active[data-v-371363f0]{background:#0066cc1a;border-color:#cc9100;color:#cc9100}.action-tab-label[data-v-371363f0]{max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.action-tab-remove[data-v-371363f0]{margin-left:.25rem}.action-editor[data-v-371363f0]{padding:1rem;background:#fff6;border-radius:8px;border:1px solid rgba(213,213,213,.3)}.event-source-grid[data-v-371363f0],.actions-list-editor[data-v-371363f0]{display:flex;flex-direction:column;gap:.75rem}.action-card[data-v-371363f0]{border-radius:8px;cursor:pointer;transition:all .2s ease;box-shadow:1px 1px 5px #cccccc69}.action-card[data-v-371363f0]:hover,.action-card.active[data-v-371363f0]{border-color:#9595954d}.action-card-header[data-v-371363f0]{display:flex;align-items:center;gap:.75rem;padding:.75rem 1rem}.action-number[data-v-371363f0]{display:flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:50%;font-size:.75rem;font-weight:600;flex-shrink:0;border:1px solid #cc9100;color:#cc9100}.action-summary[data-v-371363f0]{flex:1;display:flex;align-items:center;gap:.5rem;min-width:0}.action-context-badge[data-v-371363f0]{padding:.125rem .5rem;background:#e5e7eb;color:#4b5563;border-radius:4px;font-size:.7rem;font-weight:500;text-transform:uppercase;flex-shrink:0}.action-name-text[data-v-371363f0]{font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.action-empty[data-v-371363f0]{color:#9ca3af;font-style:italic}.action-card-body[data-v-371363f0]{padding:0 1rem 1rem;border-top:1px solid rgba(213,213,213,.3);margin-top:0}.action-settings-row[data-v-371363f0]{display:flex;flex-direction:column;gap:.25rem;padding-top:.75rem}.action-parameters[data-v-371363f0]{margin-top:1rem;padding-top:.75rem;border-top:1px dashed rgba(213,213,213,.5)}.parameters-title[data-v-371363f0]{font-size:.75rem;font-weight:600;color:#6b7280;text-transform:uppercase;letter-spacing:.05em;margin-bottom:.5rem}.parameters-list[data-v-371363f0]{display:flex;flex-direction:column;gap:.5rem}.parameter-item[data-v-371363f0]{display:flex;flex-direction:column;gap:.25rem;padding:.5rem}.parameter-label[data-v-371363f0]{display:flex;align-items:center;gap:.25rem;font-size:.8rem}.parameter-label .parameter-name[data-v-371363f0]{font-weight:600}.parameter-label .parameter-optional[data-v-371363f0]{color:#9ca3af}.parameter-type-badge[data-v-371363f0]{margin-left:.25rem;padding:.0625rem .375rem;border-radius:3px;font-size:.65rem;font-weight:500;border:1px solid #ddd}.parameter-input-row[data-v-371363f0]{display:flex;align-items:center;gap:.5rem}.source-toggle[data-v-371363f0]{display:flex;border:1px solid rgba(213,213,213,.5);border-radius:4px;overflow:hidden;flex-shrink:0}.toggle-btn[data-v-371363f0]{padding:.25rem .5rem;font-size:.7rem;background:#fff;border:none;cursor:pointer;transition:all .15s ease;color:#6b7280}.toggle-btn[data-v-371363f0]:first-child{border-right:1px solid rgba(213,213,213,.5)}.toggle-btn[data-v-371363f0]:hover{background:#f3f4f6}.toggle-btn.active[data-v-371363f0]{background:#6767676e;color:#fff}.parameter-value-input[data-v-371363f0]{flex:1;min-width:150px}\n";})();
+import { defineComponent as pt, ref as B, computed as Ee, inject as Ge, onMounted as yt, createElementBlock as k, openBlock as g, createElementVNode as d, createVNode as m, unref as f, withCtx as b, createTextVNode as ee, Fragment as ae, renderList as oe, toDisplayString as S, createCommentVNode as $, createBlock as F, normalizeClass as he, withModifiers as _e } from "vue";
+import { EVENT_MANAGER as gt, EVENT_REGISTRY as mt, EVENT_ACTIONS_REGISTRY as ht } from "org.eclipse.daanse.board.app.lib.api.events";
+import { Comperator as we, Condition as _t } from "org.eclipse.daanse.board.app.lib.events";
+import { identifier as wt } from "org.eclipse.daanse.board.app.lib.api.page";
+import { DButton as j, DIcon as Y, DModal as Ye, DCard as ke, DSelect as P, DInput as xe } from "org.eclipse.daanse.board.app.ui.vue.controls";
+import { NAVIGATION_REGISTRY_ID as tt, NavigationItem as kt } from "org.eclipse.daanse.board.app.lib.api.navigation";
+import { ROUTE_REGISTRY_ID as nt, RouteDefinition as xt } from "org.eclipse.daanse.board.app.lib.api.route";
+var Qe = typeof globalThis < "u" ? globalThis : typeof window < "u" ? window : typeof global < "u" ? global : typeof self < "u" ? self : {}, Xe = {};
 /*! *****************************************************************************
 Copyright (C) Microsoft. All rights reserved.
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use
@@ -20,18 +21,18 @@ MERCHANTABLITY OR NON-INFRINGEMENT.
 See the Apache Version 2.0 License for specific language governing permissions
 and limitations under the License.
 ***************************************************************************** */
-var Xe;
-function mt() {
-  if (Xe) return Qe;
-  Xe = 1;
-  var G;
-  return (function(F) {
-    (function(I) {
-      var E = typeof globalThis == "object" ? globalThis : typeof Je == "object" ? Je : typeof self == "object" ? self : typeof this == "object" ? this : Z(), O = ee(F);
-      typeof E.Reflect < "u" && (O = ee(E.Reflect, O)), I(O, E), typeof E.Reflect > "u" && (E.Reflect = F);
-      function ee(J, X) {
-        return function(W, j) {
-          Object.defineProperty(J, W, { configurable: !0, writable: !0, value: j }), X && X(W, j);
+var Ke;
+function bt() {
+  if (Ke) return Xe;
+  Ke = 1;
+  var z;
+  return (function(G) {
+    (function(V) {
+      var T = typeof globalThis == "object" ? globalThis : typeof Qe == "object" ? Qe : typeof self == "object" ? self : typeof this == "object" ? this : J(), E = te(G);
+      typeof T.Reflect < "u" && (E = te(T.Reflect, E)), V(E, T), typeof T.Reflect > "u" && (T.Reflect = G);
+      function te(L, Q) {
+        return function(q, D) {
+          Object.defineProperty(L, q, { configurable: !0, writable: !0, value: D }), Q && Q(q, D);
         };
       }
       function ue() {
@@ -40,216 +41,216 @@ function mt() {
         } catch {
         }
       }
-      function Y() {
+      function Z() {
         try {
           return (0, eval)("(function() { return this; })()");
         } catch {
         }
       }
-      function Z() {
-        return ue() || Y();
+      function J() {
+        return ue() || Z();
       }
-    })(function(I, E) {
-      var O = Object.prototype.hasOwnProperty, ee = typeof Symbol == "function", ue = ee && typeof Symbol.toPrimitive < "u" ? Symbol.toPrimitive : "@@toPrimitive", Y = ee && typeof Symbol.iterator < "u" ? Symbol.iterator : "@@iterator", Z = typeof Object.create == "function", J = { __proto__: [] } instanceof Array, X = !Z && !J, W = {
+    })(function(V, T) {
+      var E = Object.prototype.hasOwnProperty, te = typeof Symbol == "function", ue = te && typeof Symbol.toPrimitive < "u" ? Symbol.toPrimitive : "@@toPrimitive", Z = te && typeof Symbol.iterator < "u" ? Symbol.iterator : "@@iterator", J = typeof Object.create == "function", L = { __proto__: [] } instanceof Array, Q = !J && !L, q = {
         // create an object in dictionary mode (a.k.a. "slow" mode in v8)
-        create: Z ? function() {
+        create: J ? function() {
           return He(/* @__PURE__ */ Object.create(null));
-        } : J ? function() {
+        } : L ? function() {
           return He({ __proto__: null });
         } : function() {
           return He({});
         },
-        has: X ? function(e, t) {
-          return O.call(e, t);
-        } : function(e, t) {
-          return t in e;
+        has: Q ? function(e, n) {
+          return E.call(e, n);
+        } : function(e, n) {
+          return n in e;
         },
-        get: X ? function(e, t) {
-          return O.call(e, t) ? e[t] : void 0;
-        } : function(e, t) {
-          return e[t];
+        get: Q ? function(e, n) {
+          return E.call(e, n) ? e[n] : void 0;
+        } : function(e, n) {
+          return e[n];
         }
-      }, j = Object.getPrototypeOf(Function), d = typeof Map == "function" && typeof Map.prototype.entries == "function" ? Map : V(), oe = typeof Set == "function" && typeof Set.prototype.entries == "function" ? Set : s(), ve = typeof WeakMap == "function" ? WeakMap : B(), le = ee ? Symbol.for("@reflect-metadata:registry") : void 0, N = se(), we = Ie(N);
-      function Ae(e, t, n, i) {
-        if (p(n)) {
-          if (!De(e))
+      }, D = Object.getPrototypeOf(Function), u = typeof Map == "function" && typeof Map.prototype.entries == "function" ? Map : ut(), le = typeof Set == "function" && typeof Set.prototype.entries == "function" ? Set : dt(), ve = typeof WeakMap == "function" ? WeakMap : ct(), ne = te ? Symbol.for("@reflect-metadata:registry") : void 0, U = Le(), be = it(U);
+      function Ae(e, n, o, r) {
+        if (h(o)) {
+          if (!je(e))
             throw new TypeError();
-          if (!Ge(t))
+          if (!ze(n))
             throw new TypeError();
-          return Pe(e, t);
+          return Pe(e, n);
         } else {
-          if (!De(e))
+          if (!je(e))
             throw new TypeError();
-          if (!A(t))
+          if (!I(n))
             throw new TypeError();
-          if (!A(i) && !p(i) && !$(i))
+          if (!I(r) && !h(r) && !N(r))
             throw new TypeError();
-          return $(i) && (i = void 0), n = H(n), Ue(e, t, n, i);
+          return N(r) && (r = void 0), o = W(o), Re(e, n, o, r);
         }
       }
-      I("decorate", Ae);
-      function Oe(e, t) {
-        function n(i, g) {
-          if (!A(i))
+      V("decorate", Ae);
+      function Oe(e, n) {
+        function o(r, _) {
+          if (!I(r))
             throw new TypeError();
-          if (!p(g) && !Be(g))
+          if (!h(_) && !Be(_))
             throw new TypeError();
-          Ne(e, t, i, g);
+          Ne(e, n, r, _);
+        }
+        return o;
+      }
+      V("metadata", Oe);
+      function Me(e, n, o, r) {
+        if (!I(o))
+          throw new TypeError();
+        return h(r) || (r = W(r)), Ne(e, n, o, r);
+      }
+      V("defineMetadata", Me);
+      function qe(e, n, o) {
+        if (!I(n))
+          throw new TypeError();
+        return h(o) || (o = W(o)), Se(e, n, o);
+      }
+      V("hasMetadata", qe);
+      function Fe(e, n, o) {
+        if (!I(n))
+          throw new TypeError();
+        return h(o) || (o = W(o)), re(e, n, o);
+      }
+      V("hasOwnMetadata", Fe);
+      function We(e, n, o) {
+        if (!I(n))
+          throw new TypeError();
+        return h(o) || (o = W(o)), ce(e, n, o);
+      }
+      V("getMetadata", We);
+      function pe(e, n, o) {
+        if (!I(n))
+          throw new TypeError();
+        return h(o) || (o = W(o)), Ue(e, n, o);
+      }
+      V("getOwnMetadata", pe);
+      function Ce(e, n) {
+        if (!I(e))
+          throw new TypeError();
+        return h(n) || (n = W(n)), ge(e, n);
+      }
+      V("getMetadataKeys", Ce);
+      function ye(e, n) {
+        if (!I(e))
+          throw new TypeError();
+        return h(n) || (n = W(n)), ie(e, n);
+      }
+      V("getOwnMetadataKeys", ye);
+      function de(e, n, o) {
+        if (!I(n))
+          throw new TypeError();
+        if (h(o) || (o = W(o)), !I(n))
+          throw new TypeError();
+        h(o) || (o = W(o));
+        var r = Ie(
+          n,
+          o,
+          /*Create*/
+          !1
+        );
+        return h(r) ? !1 : r.OrdinaryDeleteMetadata(e, n, o);
+      }
+      V("deleteMetadata", de);
+      function Pe(e, n) {
+        for (var o = e.length - 1; o >= 0; --o) {
+          var r = e[o], _ = r(n);
+          if (!h(_) && !N(_)) {
+            if (!ze(_))
+              throw new TypeError();
+            n = _;
+          }
         }
         return n;
       }
-      I("metadata", Oe);
-      function Me(e, t, n, i) {
-        if (!A(n))
-          throw new TypeError();
-        return p(i) || (i = H(i)), Ne(e, t, n, i);
-      }
-      I("defineMetadata", Me);
-      function Fe(e, t, n) {
-        if (!A(t))
-          throw new TypeError();
-        return p(n) || (n = H(n)), Re(e, t, n);
-      }
-      I("hasMetadata", Fe);
-      function We(e, t, n) {
-        if (!A(t))
-          throw new TypeError();
-        return p(n) || (n = H(n)), te(e, t, n);
-      }
-      I("hasOwnMetadata", We);
-      function qe(e, t, n) {
-        if (!A(t))
-          throw new TypeError();
-        return p(n) || (n = H(n)), re(e, t, n);
-      }
-      I("getMetadata", qe);
-      function pe(e, t, n) {
-        if (!A(t))
-          throw new TypeError();
-        return p(n) || (n = H(n)), Se(e, t, n);
-      }
-      I("getOwnMetadata", pe);
-      function ke(e, t) {
-        if (!A(e))
-          throw new TypeError();
-        return p(t) || (t = H(t)), ge(e, t);
-      }
-      I("getMetadataKeys", ke);
-      function ye(e, t) {
-        if (!A(e))
-          throw new TypeError();
-        return p(t) || (t = H(t)), Ve(e, t);
-      }
-      I("getOwnMetadataKeys", ye);
-      function de(e, t, n) {
-        if (!A(t))
-          throw new TypeError();
-        if (p(n) || (n = H(n)), !A(t))
-          throw new TypeError();
-        p(n) || (n = H(n));
-        var i = o(
-          t,
-          n,
-          /*Create*/
-          !1
-        );
-        return p(i) ? !1 : i.OrdinaryDeleteMetadata(e, t, n);
-      }
-      I("deleteMetadata", de);
-      function Pe(e, t) {
-        for (var n = e.length - 1; n >= 0; --n) {
-          var i = e[n], g = i(t);
-          if (!p(g) && !$(g)) {
-            if (!Ge(g))
+      function Re(e, n, o, r) {
+        for (var _ = e.length - 1; _ >= 0; --_) {
+          var A = e[_], R = A(n, o, r);
+          if (!h(R) && !N(R)) {
+            if (!I(R))
               throw new TypeError();
-            t = g;
+            r = R;
           }
         }
-        return t;
+        return r;
       }
-      function Ue(e, t, n, i) {
-        for (var g = e.length - 1; g >= 0; --g) {
-          var P = e[g], S = P(t, n, i);
-          if (!p(S) && !$(S)) {
-            if (!A(S))
-              throw new TypeError();
-            i = S;
-          }
-        }
-        return i;
-      }
-      function Re(e, t, n) {
-        var i = te(e, t, n);
-        if (i)
+      function Se(e, n, o) {
+        var r = re(e, n, o);
+        if (r)
           return !0;
-        var g = R(t);
-        return $(g) ? !1 : Re(e, g, n);
+        var _ = M(n);
+        return N(_) ? !1 : Se(e, _, o);
       }
-      function te(e, t, n) {
-        var i = o(
-          t,
+      function re(e, n, o) {
+        var r = Ie(
           n,
+          o,
           /*Create*/
           !1
         );
-        return p(i) ? !1 : Te(i.OrdinaryHasOwnMetadata(e, t, n));
+        return h(r) ? !1 : fe(r.OrdinaryHasOwnMetadata(e, n, o));
       }
-      function re(e, t, n) {
-        var i = te(e, t, n);
-        if (i)
-          return Se(e, t, n);
-        var g = R(t);
-        if (!$(g))
-          return re(e, g, n);
+      function ce(e, n, o) {
+        var r = re(e, n, o);
+        if (r)
+          return Ue(e, n, o);
+        var _ = M(n);
+        if (!N(_))
+          return ce(e, _, o);
       }
-      function Se(e, t, n) {
-        var i = o(
-          t,
+      function Ue(e, n, o) {
+        var r = Ie(
           n,
+          o,
           /*Create*/
           !1
         );
-        if (!p(i))
-          return i.OrdinaryGetOwnMetadata(e, t, n);
+        if (!h(r))
+          return r.OrdinaryGetOwnMetadata(e, n, o);
       }
-      function Ne(e, t, n, i) {
-        var g = o(
-          n,
-          i,
+      function Ne(e, n, o, r) {
+        var _ = Ie(
+          o,
+          r,
           /*Create*/
           !0
         );
-        g.OrdinaryDefineOwnMetadata(e, t, n, i);
+        _.OrdinaryDefineOwnMetadata(e, n, o, r);
       }
-      function ge(e, t) {
-        var n = Ve(e, t), i = R(e);
-        if (i === null)
-          return n;
-        var g = ge(i, t);
-        if (g.length <= 0)
-          return n;
-        if (n.length <= 0)
-          return g;
-        for (var P = new oe(), S = [], _ = 0, u = n; _ < u.length; _++) {
-          var c = u[_], f = P.has(c);
-          f || (P.add(c), S.push(c));
+      function ge(e, n) {
+        var o = ie(e, n), r = M(e);
+        if (r === null)
+          return o;
+        var _ = ge(r, n);
+        if (_.length <= 0)
+          return o;
+        if (o.length <= 0)
+          return _;
+        for (var A = new le(), R = [], w = 0, s = o; w < s.length; w++) {
+          var c = s[w], v = A.has(c);
+          v || (A.add(c), R.push(c));
         }
-        for (var v = 0, x = g; v < x.length; v++) {
-          var c = x[v], f = P.has(c);
-          f || (P.add(c), S.push(c));
+        for (var y = 0, x = _; y < x.length; y++) {
+          var c = x[y], v = A.has(c);
+          v || (A.add(c), R.push(c));
         }
-        return S;
+        return R;
       }
-      function Ve(e, t) {
-        var n = o(
+      function ie(e, n) {
+        var o = Ie(
           e,
-          t,
+          n,
           /*create*/
           !1
         );
-        return n ? n.OrdinaryOwnMetadataKeys(e, t) : [];
+        return o ? o.OrdinaryOwnMetadataKeys(e, n) : [];
       }
-      function Ce(e) {
+      function Ve(e) {
         if (e === null)
           return 1;
         switch (typeof e) {
@@ -269,20 +270,20 @@ function mt() {
             return 6;
         }
       }
-      function p(e) {
+      function h(e) {
         return e === void 0;
       }
-      function $(e) {
+      function N(e) {
         return e === null;
       }
-      function je(e) {
+      function H(e) {
         return typeof e == "symbol";
       }
-      function A(e) {
+      function I(e) {
         return typeof e == "object" ? e !== null : typeof e == "function";
       }
-      function ie(e, t) {
-        switch (Ce(e)) {
+      function De(e, n) {
+        switch (Ve(e)) {
           case 0:
             return e;
           case 1:
@@ -296,54 +297,54 @@ function mt() {
           case 5:
             return e;
         }
-        var n = "string", i = a(e, ue);
-        if (i !== void 0) {
-          var g = i.call(e, n);
-          if (A(g))
+        var o = "string", r = i(e, ue);
+        if (r !== void 0) {
+          var _ = r.call(e, o);
+          if (I(_))
             throw new TypeError();
-          return g;
+          return _;
         }
-        return me(e);
+        return se(e);
       }
-      function me(e, t) {
-        var n, i, g;
+      function se(e, n) {
+        var o, r, _;
         {
-          var P = e.toString;
-          if (he(P)) {
-            var i = P.call(e);
-            if (!A(i))
-              return i;
+          var A = e.toString;
+          if (me(A)) {
+            var r = A.call(e);
+            if (!I(r))
+              return r;
           }
-          var n = e.valueOf;
-          if (he(n)) {
-            var i = n.call(e);
-            if (!A(i))
-              return i;
+          var o = e.valueOf;
+          if (me(o)) {
+            var r = o.call(e);
+            if (!I(r))
+              return r;
           }
         }
         throw new TypeError();
       }
-      function Te(e) {
+      function fe(e) {
         return !!e;
       }
       function $e(e) {
         return "" + e;
       }
-      function H(e) {
-        var t = ie(e);
-        return je(t) ? t : $e(t);
+      function W(e) {
+        var n = De(e);
+        return H(n) ? n : $e(n);
       }
-      function De(e) {
+      function je(e) {
         return Array.isArray ? Array.isArray(e) : e instanceof Object ? e instanceof Array : Object.prototype.toString.call(e) === "[object Array]";
       }
-      function he(e) {
+      function me(e) {
         return typeof e == "function";
       }
-      function Ge(e) {
+      function ze(e) {
         return typeof e == "function";
       }
       function Be(e) {
-        switch (Ce(e)) {
+        switch (Ve(e)) {
           case 3:
             return !0;
           case 4:
@@ -352,466 +353,466 @@ function mt() {
             return !1;
         }
       }
-      function r(e, t) {
-        return e === t || e !== e && t !== t;
+      function Te(e, n) {
+        return e === n || e !== e && n !== n;
       }
-      function a(e, t) {
-        var n = e[t];
-        if (n != null) {
-          if (!he(n))
+      function i(e, n) {
+        var o = e[n];
+        if (o != null) {
+          if (!me(o))
             throw new TypeError();
-          return n;
+          return o;
         }
       }
-      function l(e) {
-        var t = a(e, Y);
-        if (!he(t))
+      function a(e) {
+        var n = i(e, Z);
+        if (!me(n))
           throw new TypeError();
-        var n = t.call(e);
-        if (!A(n))
+        var o = n.call(e);
+        if (!I(o))
           throw new TypeError();
-        return n;
+        return o;
       }
-      function b(e) {
+      function t(e) {
         return e.value;
       }
-      function C(e) {
-        var t = e.next();
-        return t.done ? !1 : t;
+      function p(e) {
+        var n = e.next();
+        return n.done ? !1 : n;
+      }
+      function l(e) {
+        var n = e.return;
+        n && n.call(e);
       }
       function M(e) {
-        var t = e.return;
-        t && t.call(e);
+        var n = Object.getPrototypeOf(e);
+        if (typeof e != "function" || e === D || n !== D)
+          return n;
+        var o = e.prototype, r = o && Object.getPrototypeOf(o);
+        if (r == null || r === Object.prototype)
+          return n;
+        var _ = r.constructor;
+        return typeof _ != "function" || _ === e ? n : _;
       }
-      function R(e) {
-        var t = Object.getPrototypeOf(e);
-        if (typeof e != "function" || e === j || t !== j)
-          return t;
-        var n = e.prototype, i = n && Object.getPrototypeOf(n);
-        if (i == null || i === Object.prototype)
-          return t;
-        var g = i.constructor;
-        return typeof g != "function" || g === e ? t : g;
-      }
-      function K() {
+      function X() {
         var e;
-        !p(le) && typeof E.Reflect < "u" && !(le in E.Reflect) && typeof E.Reflect.defineMetadata == "function" && (e = Le(E.Reflect));
-        var t, n, i, g = new ve(), P = {
-          registerProvider: S,
-          getProvider: u,
-          setProvider: f
+        !h(ne) && typeof T.Reflect < "u" && !(ne in T.Reflect) && typeof T.Reflect.defineMetadata == "function" && (e = st(T.Reflect));
+        var n, o, r, _ = new ve(), A = {
+          registerProvider: R,
+          getProvider: s,
+          setProvider: v
         };
-        return P;
-        function S(v) {
-          if (!Object.isExtensible(P))
+        return A;
+        function R(y) {
+          if (!Object.isExtensible(A))
             throw new Error("Cannot add provider to a frozen registry.");
           switch (!0) {
-            case e === v:
+            case e === y:
               break;
-            case p(t):
-              t = v;
+            case h(n):
+              n = y;
               break;
-            case t === v:
+            case n === y:
               break;
-            case p(n):
-              n = v;
+            case h(o):
+              o = y;
               break;
-            case n === v:
+            case o === y:
               break;
             default:
-              i === void 0 && (i = new oe()), i.add(v);
+              r === void 0 && (r = new le()), r.add(y);
               break;
           }
         }
-        function _(v, x) {
-          if (!p(t)) {
-            if (t.isProviderFor(v, x))
-              return t;
-            if (!p(n)) {
-              if (n.isProviderFor(v, x))
-                return t;
-              if (!p(i))
-                for (var T = l(i); ; ) {
-                  var U = C(T);
-                  if (!U)
+        function w(y, x) {
+          if (!h(n)) {
+            if (n.isProviderFor(y, x))
+              return n;
+            if (!h(o)) {
+              if (o.isProviderFor(y, x))
+                return n;
+              if (!h(r))
+                for (var C = a(r); ; ) {
+                  var O = p(C);
+                  if (!O)
                     return;
-                  var Q = b(U);
-                  if (Q.isProviderFor(v, x))
-                    return M(T), Q;
+                  var K = t(O);
+                  if (K.isProviderFor(y, x))
+                    return l(C), K;
                 }
             }
           }
-          if (!p(e) && e.isProviderFor(v, x))
+          if (!h(e) && e.isProviderFor(y, x))
             return e;
         }
-        function u(v, x) {
-          var T = g.get(v), U;
-          return p(T) || (U = T.get(x)), p(U) && (U = _(v, x), p(U) || (p(T) && (T = new d(), g.set(v, T)), T.set(x, U))), U;
+        function s(y, x) {
+          var C = _.get(y), O;
+          return h(C) || (O = C.get(x)), h(O) && (O = w(y, x), h(O) || (h(C) && (C = new u(), _.set(y, C)), C.set(x, O))), O;
         }
-        function c(v) {
-          if (p(v))
+        function c(y) {
+          if (h(y))
             throw new TypeError();
-          return t === v || n === v || !p(i) && i.has(v);
+          return n === y || o === y || !h(r) && r.has(y);
         }
-        function f(v, x, T) {
-          if (!c(T))
+        function v(y, x, C) {
+          if (!c(C))
             throw new Error("Metadata provider not registered.");
-          var U = u(v, x);
-          if (U !== T) {
-            if (!p(U))
+          var O = s(y, x);
+          if (O !== C) {
+            if (!h(O))
               return !1;
-            var Q = g.get(v);
-            p(Q) && (Q = new d(), g.set(v, Q)), Q.set(x, T);
+            var K = _.get(y);
+            h(K) && (K = new u(), _.set(y, K)), K.set(x, C);
           }
           return !0;
         }
       }
-      function se() {
+      function Le() {
         var e;
-        return !p(le) && A(E.Reflect) && Object.isExtensible(E.Reflect) && (e = E.Reflect[le]), p(e) && (e = K()), !p(le) && A(E.Reflect) && Object.isExtensible(E.Reflect) && Object.defineProperty(E.Reflect, le, {
+        return !h(ne) && I(T.Reflect) && Object.isExtensible(T.Reflect) && (e = T.Reflect[ne]), h(e) && (e = X()), !h(ne) && I(T.Reflect) && Object.isExtensible(T.Reflect) && Object.defineProperty(T.Reflect, ne, {
           enumerable: !1,
           configurable: !1,
           writable: !1,
           value: e
         }), e;
       }
-      function Ie(e) {
-        var t = new ve(), n = {
-          isProviderFor: function(c, f) {
-            var v = t.get(c);
-            return p(v) ? !1 : v.has(f);
+      function it(e) {
+        var n = new ve(), o = {
+          isProviderFor: function(c, v) {
+            var y = n.get(c);
+            return h(y) ? !1 : y.has(v);
           },
-          OrdinaryDefineOwnMetadata: S,
-          OrdinaryHasOwnMetadata: g,
-          OrdinaryGetOwnMetadata: P,
-          OrdinaryOwnMetadataKeys: _,
-          OrdinaryDeleteMetadata: u
+          OrdinaryDefineOwnMetadata: R,
+          OrdinaryHasOwnMetadata: _,
+          OrdinaryGetOwnMetadata: A,
+          OrdinaryOwnMetadataKeys: w,
+          OrdinaryDeleteMetadata: s
         };
-        return N.registerProvider(n), n;
-        function i(c, f, v) {
-          var x = t.get(c), T = !1;
-          if (p(x)) {
-            if (!v)
+        return U.registerProvider(o), o;
+        function r(c, v, y) {
+          var x = n.get(c), C = !1;
+          if (h(x)) {
+            if (!y)
               return;
-            x = new d(), t.set(c, x), T = !0;
+            x = new u(), n.set(c, x), C = !0;
           }
-          var U = x.get(f);
-          if (p(U)) {
-            if (!v)
+          var O = x.get(v);
+          if (h(O)) {
+            if (!y)
               return;
-            if (U = new d(), x.set(f, U), !e.setProvider(c, f, n))
-              throw x.delete(f), T && t.delete(c), new Error("Wrong provider for target.");
+            if (O = new u(), x.set(v, O), !e.setProvider(c, v, o))
+              throw x.delete(v), C && n.delete(c), new Error("Wrong provider for target.");
           }
-          return U;
+          return O;
         }
-        function g(c, f, v) {
-          var x = i(
-            f,
+        function _(c, v, y) {
+          var x = r(
             v,
+            y,
             /*Create*/
             !1
           );
-          return p(x) ? !1 : Te(x.has(c));
+          return h(x) ? !1 : fe(x.has(c));
         }
-        function P(c, f, v) {
-          var x = i(
-            f,
+        function A(c, v, y) {
+          var x = r(
             v,
+            y,
             /*Create*/
             !1
           );
-          if (!p(x))
+          if (!h(x))
             return x.get(c);
         }
-        function S(c, f, v, x) {
-          var T = i(
-            v,
+        function R(c, v, y, x) {
+          var C = r(
+            y,
             x,
             /*Create*/
             !0
           );
-          T.set(c, f);
+          C.set(c, v);
         }
-        function _(c, f) {
-          var v = [], x = i(
+        function w(c, v) {
+          var y = [], x = r(
             c,
-            f,
-            /*Create*/
-            !1
-          );
-          if (p(x))
-            return v;
-          for (var T = x.keys(), U = l(T), Q = 0; ; ) {
-            var Ze = C(U);
-            if (!Ze)
-              return v.length = Q, v;
-            var rt = b(Ze);
-            try {
-              v[Q] = rt;
-            } catch (it) {
-              try {
-                M(U);
-              } finally {
-                throw it;
-              }
-            }
-            Q++;
-          }
-        }
-        function u(c, f, v) {
-          var x = i(
-            f,
             v,
             /*Create*/
             !1
           );
-          if (p(x) || !x.delete(c))
+          if (h(x))
+            return y;
+          for (var C = x.keys(), O = a(C), K = 0; ; ) {
+            var Je = p(O);
+            if (!Je)
+              return y.length = K, y;
+            var ft = t(Je);
+            try {
+              y[K] = ft;
+            } catch (vt) {
+              try {
+                l(O);
+              } finally {
+                throw vt;
+              }
+            }
+            K++;
+          }
+        }
+        function s(c, v, y) {
+          var x = r(
+            v,
+            y,
+            /*Create*/
+            !1
+          );
+          if (h(x) || !x.delete(c))
             return !1;
           if (x.size === 0) {
-            var T = t.get(f);
-            p(T) || (T.delete(v), T.size === 0 && t.delete(T));
+            var C = n.get(v);
+            h(C) || (C.delete(y), C.size === 0 && n.delete(C));
           }
           return !0;
         }
       }
-      function Le(e) {
-        var t = e.defineMetadata, n = e.hasOwnMetadata, i = e.getOwnMetadata, g = e.getOwnMetadataKeys, P = e.deleteMetadata, S = new ve(), _ = {
-          isProviderFor: function(u, c) {
-            var f = S.get(u);
-            return !p(f) && f.has(c) ? !0 : g(u, c).length ? (p(f) && (f = new oe(), S.set(u, f)), f.add(c), !0) : !1;
+      function st(e) {
+        var n = e.defineMetadata, o = e.hasOwnMetadata, r = e.getOwnMetadata, _ = e.getOwnMetadataKeys, A = e.deleteMetadata, R = new ve(), w = {
+          isProviderFor: function(s, c) {
+            var v = R.get(s);
+            return !h(v) && v.has(c) ? !0 : _(s, c).length ? (h(v) && (v = new le(), R.set(s, v)), v.add(c), !0) : !1;
           },
-          OrdinaryDefineOwnMetadata: t,
-          OrdinaryHasOwnMetadata: n,
-          OrdinaryGetOwnMetadata: i,
-          OrdinaryOwnMetadataKeys: g,
-          OrdinaryDeleteMetadata: P
+          OrdinaryDefineOwnMetadata: n,
+          OrdinaryHasOwnMetadata: o,
+          OrdinaryGetOwnMetadata: r,
+          OrdinaryOwnMetadataKeys: _,
+          OrdinaryDeleteMetadata: A
         };
-        return _;
+        return w;
       }
-      function o(e, t, n) {
-        var i = N.getProvider(e, t);
-        if (!p(i))
-          return i;
-        if (n) {
-          if (N.setProvider(e, t, we))
-            return we;
+      function Ie(e, n, o) {
+        var r = U.getProvider(e, n);
+        if (!h(r))
+          return r;
+        if (o) {
+          if (U.setProvider(e, n, be))
+            return be;
           throw new Error("Illegal state.");
         }
       }
-      function V() {
-        var e = {}, t = [], n = (
+      function ut() {
+        var e = {}, n = [], o = (
           /** @class */
           (function() {
-            function _(u, c, f) {
-              this._index = 0, this._keys = u, this._values = c, this._selector = f;
+            function w(s, c, v) {
+              this._index = 0, this._keys = s, this._values = c, this._selector = v;
             }
-            return _.prototype["@@iterator"] = function() {
+            return w.prototype["@@iterator"] = function() {
               return this;
-            }, _.prototype[Y] = function() {
+            }, w.prototype[Z] = function() {
               return this;
-            }, _.prototype.next = function() {
-              var u = this._index;
-              if (u >= 0 && u < this._keys.length) {
-                var c = this._selector(this._keys[u], this._values[u]);
-                return u + 1 >= this._keys.length ? (this._index = -1, this._keys = t, this._values = t) : this._index++, { value: c, done: !1 };
+            }, w.prototype.next = function() {
+              var s = this._index;
+              if (s >= 0 && s < this._keys.length) {
+                var c = this._selector(this._keys[s], this._values[s]);
+                return s + 1 >= this._keys.length ? (this._index = -1, this._keys = n, this._values = n) : this._index++, { value: c, done: !1 };
               }
               return { value: void 0, done: !0 };
-            }, _.prototype.throw = function(u) {
-              throw this._index >= 0 && (this._index = -1, this._keys = t, this._values = t), u;
-            }, _.prototype.return = function(u) {
-              return this._index >= 0 && (this._index = -1, this._keys = t, this._values = t), { value: u, done: !0 };
-            }, _;
+            }, w.prototype.throw = function(s) {
+              throw this._index >= 0 && (this._index = -1, this._keys = n, this._values = n), s;
+            }, w.prototype.return = function(s) {
+              return this._index >= 0 && (this._index = -1, this._keys = n, this._values = n), { value: s, done: !0 };
+            }, w;
           })()
-        ), i = (
+        ), r = (
           /** @class */
           (function() {
-            function _() {
+            function w() {
               this._keys = [], this._values = [], this._cacheKey = e, this._cacheIndex = -2;
             }
-            return Object.defineProperty(_.prototype, "size", {
+            return Object.defineProperty(w.prototype, "size", {
               get: function() {
                 return this._keys.length;
               },
               enumerable: !0,
               configurable: !0
-            }), _.prototype.has = function(u) {
+            }), w.prototype.has = function(s) {
               return this._find(
-                u,
+                s,
                 /*insert*/
                 !1
               ) >= 0;
-            }, _.prototype.get = function(u) {
+            }, w.prototype.get = function(s) {
               var c = this._find(
-                u,
+                s,
                 /*insert*/
                 !1
               );
               return c >= 0 ? this._values[c] : void 0;
-            }, _.prototype.set = function(u, c) {
-              var f = this._find(
-                u,
+            }, w.prototype.set = function(s, c) {
+              var v = this._find(
+                s,
                 /*insert*/
                 !0
               );
-              return this._values[f] = c, this;
-            }, _.prototype.delete = function(u) {
+              return this._values[v] = c, this;
+            }, w.prototype.delete = function(s) {
               var c = this._find(
-                u,
+                s,
                 /*insert*/
                 !1
               );
               if (c >= 0) {
-                for (var f = this._keys.length, v = c + 1; v < f; v++)
-                  this._keys[v - 1] = this._keys[v], this._values[v - 1] = this._values[v];
-                return this._keys.length--, this._values.length--, r(u, this._cacheKey) && (this._cacheKey = e, this._cacheIndex = -2), !0;
+                for (var v = this._keys.length, y = c + 1; y < v; y++)
+                  this._keys[y - 1] = this._keys[y], this._values[y - 1] = this._values[y];
+                return this._keys.length--, this._values.length--, Te(s, this._cacheKey) && (this._cacheKey = e, this._cacheIndex = -2), !0;
               }
               return !1;
-            }, _.prototype.clear = function() {
+            }, w.prototype.clear = function() {
               this._keys.length = 0, this._values.length = 0, this._cacheKey = e, this._cacheIndex = -2;
-            }, _.prototype.keys = function() {
-              return new n(this._keys, this._values, g);
-            }, _.prototype.values = function() {
-              return new n(this._keys, this._values, P);
-            }, _.prototype.entries = function() {
-              return new n(this._keys, this._values, S);
-            }, _.prototype["@@iterator"] = function() {
+            }, w.prototype.keys = function() {
+              return new o(this._keys, this._values, _);
+            }, w.prototype.values = function() {
+              return new o(this._keys, this._values, A);
+            }, w.prototype.entries = function() {
+              return new o(this._keys, this._values, R);
+            }, w.prototype["@@iterator"] = function() {
               return this.entries();
-            }, _.prototype[Y] = function() {
+            }, w.prototype[Z] = function() {
               return this.entries();
-            }, _.prototype._find = function(u, c) {
-              if (!r(this._cacheKey, u)) {
+            }, w.prototype._find = function(s, c) {
+              if (!Te(this._cacheKey, s)) {
                 this._cacheIndex = -1;
-                for (var f = 0; f < this._keys.length; f++)
-                  if (r(this._keys[f], u)) {
-                    this._cacheIndex = f;
+                for (var v = 0; v < this._keys.length; v++)
+                  if (Te(this._keys[v], s)) {
+                    this._cacheIndex = v;
                     break;
                   }
               }
-              return this._cacheIndex < 0 && c && (this._cacheIndex = this._keys.length, this._keys.push(u), this._values.push(void 0)), this._cacheIndex;
-            }, _;
+              return this._cacheIndex < 0 && c && (this._cacheIndex = this._keys.length, this._keys.push(s), this._values.push(void 0)), this._cacheIndex;
+            }, w;
           })()
         );
-        return i;
-        function g(_, u) {
-          return _;
+        return r;
+        function _(w, s) {
+          return w;
         }
-        function P(_, u) {
-          return u;
+        function A(w, s) {
+          return s;
         }
-        function S(_, u) {
-          return [_, u];
+        function R(w, s) {
+          return [w, s];
         }
       }
-      function s() {
+      function dt() {
         var e = (
           /** @class */
           (function() {
-            function t() {
-              this._map = new d();
+            function n() {
+              this._map = new u();
             }
-            return Object.defineProperty(t.prototype, "size", {
+            return Object.defineProperty(n.prototype, "size", {
               get: function() {
                 return this._map.size;
               },
               enumerable: !0,
               configurable: !0
-            }), t.prototype.has = function(n) {
-              return this._map.has(n);
-            }, t.prototype.add = function(n) {
-              return this._map.set(n, n), this;
-            }, t.prototype.delete = function(n) {
-              return this._map.delete(n);
-            }, t.prototype.clear = function() {
+            }), n.prototype.has = function(o) {
+              return this._map.has(o);
+            }, n.prototype.add = function(o) {
+              return this._map.set(o, o), this;
+            }, n.prototype.delete = function(o) {
+              return this._map.delete(o);
+            }, n.prototype.clear = function() {
               this._map.clear();
-            }, t.prototype.keys = function() {
+            }, n.prototype.keys = function() {
               return this._map.keys();
-            }, t.prototype.values = function() {
+            }, n.prototype.values = function() {
               return this._map.keys();
-            }, t.prototype.entries = function() {
+            }, n.prototype.entries = function() {
               return this._map.entries();
-            }, t.prototype["@@iterator"] = function() {
+            }, n.prototype["@@iterator"] = function() {
               return this.keys();
-            }, t.prototype[Y] = function() {
+            }, n.prototype[Z] = function() {
               return this.keys();
-            }, t;
+            }, n;
           })()
         );
         return e;
       }
-      function B() {
-        var e = 16, t = W.create(), n = i();
+      function ct() {
+        var e = 16, n = q.create(), o = r();
         return (
           /** @class */
           (function() {
-            function u() {
-              this._key = i();
+            function s() {
+              this._key = r();
             }
-            return u.prototype.has = function(c) {
-              var f = g(
+            return s.prototype.has = function(c) {
+              var v = _(
                 c,
                 /*create*/
                 !1
               );
-              return f !== void 0 ? W.has(f, this._key) : !1;
-            }, u.prototype.get = function(c) {
-              var f = g(
+              return v !== void 0 ? q.has(v, this._key) : !1;
+            }, s.prototype.get = function(c) {
+              var v = _(
                 c,
                 /*create*/
                 !1
               );
-              return f !== void 0 ? W.get(f, this._key) : void 0;
-            }, u.prototype.set = function(c, f) {
-              var v = g(
+              return v !== void 0 ? q.get(v, this._key) : void 0;
+            }, s.prototype.set = function(c, v) {
+              var y = _(
                 c,
                 /*create*/
                 !0
               );
-              return v[this._key] = f, this;
-            }, u.prototype.delete = function(c) {
-              var f = g(
+              return y[this._key] = v, this;
+            }, s.prototype.delete = function(c) {
+              var v = _(
                 c,
                 /*create*/
                 !1
               );
-              return f !== void 0 ? delete f[this._key] : !1;
-            }, u.prototype.clear = function() {
-              this._key = i();
-            }, u;
+              return v !== void 0 ? delete v[this._key] : !1;
+            }, s.prototype.clear = function() {
+              this._key = r();
+            }, s;
           })()
         );
-        function i() {
-          var u;
+        function r() {
+          var s;
           do
-            u = "@@WeakMap@@" + _();
-          while (W.has(t, u));
-          return t[u] = !0, u;
+            s = "@@WeakMap@@" + w();
+          while (q.has(n, s));
+          return n[s] = !0, s;
         }
-        function g(u, c) {
-          if (!O.call(u, n)) {
+        function _(s, c) {
+          if (!E.call(s, o)) {
             if (!c)
               return;
-            Object.defineProperty(u, n, { value: W.create() });
+            Object.defineProperty(s, o, { value: q.create() });
           }
-          return u[n];
+          return s[o];
         }
-        function P(u, c) {
-          for (var f = 0; f < c; ++f)
-            u[f] = Math.random() * 255 | 0;
-          return u;
+        function A(s, c) {
+          for (var v = 0; v < c; ++v)
+            s[v] = Math.random() * 255 | 0;
+          return s;
         }
-        function S(u) {
+        function R(s) {
           if (typeof Uint8Array == "function") {
-            var c = new Uint8Array(u);
-            return typeof crypto < "u" ? crypto.getRandomValues(c) : typeof msCrypto < "u" ? msCrypto.getRandomValues(c) : P(c, u), c;
+            var c = new Uint8Array(s);
+            return typeof crypto < "u" ? crypto.getRandomValues(c) : typeof msCrypto < "u" ? msCrypto.getRandomValues(c) : A(c, s), c;
           }
-          return P(new Array(u), u);
+          return A(new Array(s), s);
         }
-        function _() {
-          var u = S(e);
-          u[6] = u[6] & 79 | 64, u[8] = u[8] & 191 | 128;
-          for (var c = "", f = 0; f < e; ++f) {
-            var v = u[f];
-            (f === 4 || f === 6 || f === 8) && (c += "-"), v < 16 && (c += "0"), c += v.toString(16).toLowerCase();
+        function w() {
+          var s = R(e);
+          s[6] = s[6] & 79 | 64, s[8] = s[8] & 191 | 128;
+          for (var c = "", v = 0; v < e; ++v) {
+            var y = s[v];
+            (v === 4 || v === 6 || v === 8) && (c += "-"), y < 16 && (c += "0"), c += y.toString(16).toLowerCase();
           }
           return c;
         }
@@ -820,62 +821,62 @@ function mt() {
         return e.__ = void 0, delete e.__, e;
       }
     });
-  })(G || (G = {})), Qe;
+  })(z || (z = {})), Xe;
 }
-mt();
-const ht = { class: "event-manager-ui" }, _t = { class: "header-section" }, xt = { class: "flex flex-col border border-gray-300 rounded-lg overflow-hidden w-full table-wrapper" }, bt = { class: "w-full overflow-auto flex flex-col bg-white" }, wt = ["title"], Mt = ["title"], kt = { class: "actions-list" }, Vt = { class: "action-context" }, Ct = ["title"], Tt = { class: "action-name" }, It = { class: "text-xs" }, Et = { class: "flex gap-2" }, At = { class: "space-y-4" }, Ot = { class: "event-source-grid" }, Pt = {
+bt();
+const Mt = { class: "event-manager-ui" }, Ct = { class: "header-section" }, Vt = { class: "flex flex-col border border-gray-300 rounded-lg overflow-hidden w-full table-wrapper" }, Tt = { class: "w-full overflow-auto flex flex-col bg-white" }, It = { class: "mappings" }, Et = ["title"], At = ["title"], Ot = { class: "actions-list" }, Pt = { class: "action-context" }, Rt = ["title"], St = { class: "action-name" }, Ut = { class: "text-xs" }, Nt = { class: "mappings__actions" }, Dt = { key: 0 }, $t = ["colspan"], jt = { class: "space-y-4" }, zt = { class: "event-source-grid" }, Gt = { class: "card-section__head" }, qt = {
   key: 0,
   class: "space-y-2"
-}, Ut = {
-  key: 1,
-  class: "text-gray-500 italic text-sm"
-}, Rt = {
-  key: 0,
-  class: "actions-list-editor"
-}, St = ["onClick"], Nt = { class: "action-card-header" }, jt = { class: "action-number" }, $t = { class: "action-summary" }, Dt = { class: "action-context-badge" }, Gt = {
-  key: 0,
-  class: "action-name-text"
-}, zt = {
-  key: 1,
-  class: "action-empty"
 }, Ft = {
-  key: 0,
-  class: "action-card-body"
-}, Wt = { class: "action-settings-row" }, qt = {
-  key: 0,
-  class: "action-parameters"
-}, Bt = { class: "parameters-list" }, Lt = { class: "parameter-label" }, Ht = { class: "parameter-name" }, Yt = {
-  key: 0,
-  class: "parameter-optional"
-}, Zt = { class: "parameter-type-badge" }, Jt = { class: "parameter-input-row" }, Qt = { class: "source-toggle" }, Xt = ["onClick"], Kt = ["onClick"], en = { class: "space-y-4" }, tn = { class: "event-source-grid" }, nn = {
-  key: 0,
-  class: "space-y-2"
-}, an = {
   key: 1,
   class: "text-gray-500 italic text-sm"
-}, on = {
+}, Wt = { class: "card-section__head" }, Bt = {
   key: 0,
   class: "actions-list-editor"
-}, ln = ["onClick"], rn = { class: "action-card-header" }, sn = { class: "action-number" }, un = { class: "action-summary" }, dn = { class: "action-context-badge" }, cn = {
+}, Lt = ["onClick"], Ht = { class: "action-card-header" }, Yt = { class: "action-number" }, Zt = { class: "action-summary" }, Jt = { class: "action-context-badge" }, Qt = {
   key: 0,
   class: "action-name-text"
-}, fn = {
+}, Xt = {
   key: 1,
   class: "action-empty"
-}, vn = {
+}, Kt = {
   key: 0,
   class: "action-card-body"
-}, pn = { class: "action-settings-row" }, yn = {
+}, en = { class: "action-settings-row" }, tn = {
   key: 0,
   class: "action-parameters"
-}, gn = { class: "parameters-list" }, mn = { class: "parameter-label" }, hn = { class: "parameter-name" }, _n = {
+}, nn = { class: "parameters-list" }, an = { class: "parameter-label" }, on = { class: "parameter-name" }, ln = {
   key: 0,
   class: "parameter-optional"
-}, xn = { class: "parameter-type-badge" }, bn = { class: "parameter-input-row" }, wn = { class: "source-toggle" }, Mn = ["onClick"], kn = ["onClick"], Vn = { style: { "text-align": "center", padding: "1rem" } }, Cn = { style: { display: "flex", "justify-content": "flex-end", gap: "0.5rem" } }, Tn = /* @__PURE__ */ st({
+}, rn = { class: "parameter-type-badge" }, sn = { class: "parameter-input-row" }, un = { class: "source-toggle" }, dn = ["onClick"], cn = ["onClick"], fn = { class: "space-y-4" }, vn = { class: "event-source-grid" }, pn = { class: "card-section__head" }, yn = {
+  key: 0,
+  class: "space-y-2"
+}, gn = {
+  key: 1,
+  class: "text-gray-500 italic text-sm"
+}, mn = { class: "card-section__head" }, hn = {
+  key: 0,
+  class: "actions-list-editor"
+}, _n = ["onClick"], wn = { class: "action-card-header" }, kn = { class: "action-number" }, xn = { class: "action-summary" }, bn = { class: "action-context-badge" }, Mn = {
+  key: 0,
+  class: "action-name-text"
+}, Cn = {
+  key: 1,
+  class: "action-empty"
+}, Vn = {
+  key: 0,
+  class: "action-card-body"
+}, Tn = { class: "action-settings-row" }, In = {
+  key: 0,
+  class: "action-parameters"
+}, En = { class: "parameters-list" }, An = { class: "parameter-label" }, On = { class: "parameter-name" }, Pn = {
+  key: 0,
+  class: "parameter-optional"
+}, Rn = { class: "parameter-type-badge" }, Sn = { class: "parameter-input-row" }, Un = { class: "source-toggle" }, Nn = ["onClick"], Dn = ["onClick"], $n = /* @__PURE__ */ pt({
   __name: "EventManagerUI",
-  setup(G) {
-    let F, I, E, O;
-    const ee = L([]), ue = L([]), Y = L([]), Z = L([]), J = L(!1), X = L(!1), W = L(null), j = L(0), d = L({
+  setup(z) {
+    let G, V, T, E;
+    const te = B([]), ue = B([]), Z = B([]), J = B([]), L = B(!1), Q = B(!1), q = B(null), D = B(0), u = B({
       context: "widget",
       conditions: [],
       actions: [{
@@ -884,105 +885,105 @@ const ht = { class: "event-manager-ui" }, _t = { class: "header-section" }, xt =
         actionArgs: [],
         payloadMapping: []
       }]
-    }), oe = [
+    }), le = [
       { text: "System", value: "system" },
       { text: "Page", value: "page" },
       { text: "Widget", value: "widget" }
     ], ve = [
-      { text: "==", value: be.eq },
-      { text: "!=", value: be.neq },
-      { text: "<", value: be.lt },
-      { text: "<=", value: be.lte },
-      { text: ">", value: be.gt },
-      { text: ">=", value: be.gte }
-    ], le = [
+      { text: "==", value: we.eq },
+      { text: "!=", value: we.neq },
+      { text: "<", value: we.lt },
+      { text: "<=", value: we.lte },
+      { text: ">", value: we.gt },
+      { text: ">=", value: we.gte }
+    ], ne = [
       { key: "id", label: "ID", sortable: !0 },
       { key: "context", label: "Event Context", sortable: !0 },
       { key: "eventType", label: "Event Type", sortable: !0 },
       { key: "actionsCount", label: "Actions", sortable: !0 },
       { key: "conditions", label: "Conditions" },
       { key: "tableActions", label: "", width: 100 }
-    ], N = Ee(() => !d.value.actions || d.value.actions.length === 0 ? null : d.value.actions[j.value]), we = () => {
-      d.value.actions || (d.value.actions = []), d.value.actions.push({
+    ], U = Ee(() => !u.value.actions || u.value.actions.length === 0 ? null : u.value.actions[D.value]), be = () => {
+      u.value.actions || (u.value.actions = []), u.value.actions.push({
         targetContext: "widget",
         actionName: "",
         actionArgs: [],
         payloadMapping: []
-      }), j.value = d.value.actions.length - 1, p.value.clear(), $.value.clear();
-    }, Ae = (r) => {
-      d.value.actions && (d.value.actions.splice(r, 1), j.value >= d.value.actions.length && (j.value = Math.max(0, d.value.actions.length - 1)), p.value.clear(), $.value.clear());
-    }, Oe = (r) => {
-      j.value = r, p.value.clear(), $.value.clear();
-      const a = d.value.actions?.[r];
-      a && (a.payloadMapping && a.payloadMapping.forEach((l) => {
-        p.value.set(l.argIndex, "payload");
-      }), a.actionArgs && a.actionArgs.forEach((l, b) => {
-        l !== void 0 && !a.payloadMapping?.some((C) => C.argIndex === b) && (p.value.set(b, "manual"), $.value.set(b, String(l)));
+      }), D.value = u.value.actions.length - 1, N.value.clear(), H.value.clear();
+    }, Ae = (i) => {
+      u.value.actions && (u.value.actions.splice(i, 1), D.value >= u.value.actions.length && (D.value = Math.max(0, u.value.actions.length - 1)), N.value.clear(), H.value.clear());
+    }, Oe = (i) => {
+      D.value = i, N.value.clear(), H.value.clear();
+      const a = u.value.actions?.[i];
+      a && (a.payloadMapping && a.payloadMapping.forEach((t) => {
+        N.value.set(t.argIndex, "payload");
+      }), a.actionArgs && a.actionArgs.forEach((t, p) => {
+        t !== void 0 && !a.payloadMapping?.some((l) => l.argIndex === p) && (N.value.set(p, "manual"), H.value.set(p, String(t)));
       }));
     }, Me = () => {
-      ee.value = F.getAllMappings();
-    }, Fe = () => {
-      ue.value = I.getAllEvents();
-    }, We = () => {
-      Y.value = E.getWidgetTypes(), console.log("📋 Loaded widget types:", Y.value);
+      te.value = G.getAllMappings();
     }, qe = () => {
-      Z.value = O.getAllPageIds(), console.log("📄 Loaded pages:", Z.value);
+      ue.value = V.getAllEvents();
+    }, Fe = () => {
+      Z.value = T.getWidgetTypes(), console.log("📋 Loaded widget types:", Z.value);
+    }, We = () => {
+      J.value = E.getAllPageIds(), console.log("📄 Loaded pages:", J.value);
     }, pe = Ee(() => {
-      if (!d.value.eventType) return [];
+      if (!u.value.eventType) return [];
       try {
-        const r = I.extractPayloadPropertiesForEvent(d.value.eventType);
-        return console.log("📦 Payload properties from Ecore model:", r), r.map((a) => ({
+        const i = V.extractPayloadPropertiesForEvent(u.value.eventType);
+        return console.log("📦 Payload properties from Ecore model:", i), i.map((a) => ({
           text: `${a.name}: ${a.type}${a.optional ? "?" : ""}`,
           value: a.name
         }));
-      } catch (r) {
-        return console.error("❌ Error extracting properties from Ecore:", r), [];
+      } catch (i) {
+        return console.error("❌ Error extracting properties from Ecore:", i), [];
       }
-    }), ke = Ee(() => {
-      if (!N.value?.targetContext) return [];
-      const r = N.value.targetContext, a = [];
-      for (const l of Y.value) {
-        const b = l.context !== void 0, C = l.context || "widget";
+    }), Ce = Ee(() => {
+      if (!U.value?.targetContext) return [];
+      const i = U.value.targetContext, a = [];
+      for (const t of Z.value) {
+        const p = t.context !== void 0, l = t.context || "widget";
         let M = !1;
-        if (b ? M = C === r : M = r === "system" && l.widgetType.includes("System") || r === "page" && l.widgetType.includes("Page") || r === "widget" && !l.widgetType.includes("System") && !l.widgetType.includes("Page"), M)
-          for (const R of l.actions) {
-            const K = r === "widget" ? `${l.widgetType}.` : "";
+        if (p ? M = l === i : M = i === "system" && t.widgetType.includes("System") || i === "page" && t.widgetType.includes("Page") || i === "widget" && !t.widgetType.includes("System") && !t.widgetType.includes("Page"), M)
+          for (const X of t.actions) {
+            const Le = i === "widget" ? `${t.widgetType}.` : "";
             a.push({
-              text: `${K}${R.methodName}`,
-              value: R.methodName,
-              parameters: R.parameters,
-              widgetType: l.widgetType
+              text: `${Le}${X.methodName}`,
+              value: X.methodName,
+              parameters: X.parameters,
+              widgetType: t.widgetType
             });
           }
       }
       return a;
     }), ye = Ee(() => {
-      if (!N.value?.actionName) return [];
-      const r = ke.value.find((l) => l.value === N.value?.actionName);
-      if (!r?.widgetType) return [];
-      const a = E?.getRegisteredInstances(r.widgetType) || [];
+      if (!U.value?.actionName) return [];
+      const i = Ce.value.find((t) => t.value === U.value?.actionName);
+      if (!i?.widgetType) return [];
+      const a = T?.getRegisteredInstances(i.widgetType) || [];
       return [
         { text: "All instances", value: "" },
-        ...a.map((l) => ({
-          text: `${l.instanceId} (${l.widgetType})`,
-          value: l.instanceId
+        ...a.map((t) => ({
+          text: `${t.instanceId} (${t.widgetType})`,
+          value: t.instanceId
         }))
       ];
     }), de = Ee(() => {
-      if (!N.value?.actionName || !N.value?.targetContext) return [];
-      const r = N.value.targetContext, a = Y.value.filter((l) => {
-        const b = l.context !== void 0, C = l.context || "widget";
-        return b ? C === r : r === "system" && l.widgetType.includes("System") || r === "page" && l.widgetType.includes("Page") || r === "widget" && !l.widgetType.includes("System") && !l.widgetType.includes("Page");
+      if (!U.value?.actionName || !U.value?.targetContext) return [];
+      const i = U.value.targetContext, a = Z.value.filter((t) => {
+        const p = t.context !== void 0, l = t.context || "widget";
+        return p ? l === i : i === "system" && t.widgetType.includes("System") || i === "page" && t.widgetType.includes("Page") || i === "widget" && !t.widgetType.includes("System") && !t.widgetType.includes("Page");
       });
-      for (const l of a) {
-        const b = l.actions.find((C) => C.methodName === N.value?.actionName);
-        if (console.log("🎯 Looking for action:", N.value?.actionName, "in", l.widgetType), console.log("   Found action:", b), b && b.parameters)
-          return console.log("   Action parameters:", b.parameters), b.parameters.map((C, M) => {
-            const R = C.match(/^(\w+)(\?)?:\s*(.+)$/);
-            return console.log("   Parsing param:", C, "Match:", R), R ? {
-              name: R[1],
-              optional: !!R[2],
-              type: R[3],
+      for (const t of a) {
+        const p = t.actions.find((l) => l.methodName === U.value?.actionName);
+        if (console.log("🎯 Looking for action:", U.value?.actionName, "in", t.widgetType), console.log("   Found action:", p), p && p.parameters)
+          return console.log("   Action parameters:", p.parameters), p.parameters.map((l, M) => {
+            const X = l.match(/^(\w+)(\?)?:\s*(.+)$/);
+            return console.log("   Parsing param:", l, "Match:", X), X ? {
+              name: X[1],
+              optional: !!X[2],
+              type: X[3],
               index: M
             } : {
               name: `arg${M}`,
@@ -993,54 +994,56 @@ const ht = { class: "event-manager-ui" }, _t = { class: "header-section" }, xt =
           });
       }
       return [];
-    }), Pe = (r) => r.actions && r.actions.length > 0 ? r.actions : r.actionName ? [{
-      targetContext: r.targetContext,
-      targetContextId: r.targetContextId,
-      actionName: r.actionName,
-      actionArgs: r.actionArgs,
-      payloadMapping: r.payloadMapping
-    }] : [], Ue = () => {
-      if (!d.value.eventType)
+    }), Pe = (i) => i.actions && i.actions.length > 0 ? i.actions : i.actionName ? [{
+      targetContext: i.targetContext,
+      targetContextId: i.targetContextId,
+      actionName: i.actionName,
+      actionArgs: i.actionArgs,
+      payloadMapping: i.payloadMapping
+    }] : [], Re = () => {
+      if (!u.value.eventType)
         return;
-      const r = d.value.actions?.filter((l) => l.actionName) || [];
-      if (r.length === 0)
+      const i = u.value.actions?.filter((t) => t.actionName) || [];
+      if (i.length === 0)
         return;
       const a = {
-        id: W.value || `mapping-${Date.now()}`,
-        context: d.value.context,
-        contextId: d.value.contextId,
-        eventType: d.value.eventType,
-        conditions: d.value.conditions || [],
-        actions: r
+        id: q.value || `mapping-${Date.now()}`,
+        context: u.value.context,
+        contextId: u.value.contextId,
+        eventType: u.value.eventType,
+        conditions: u.value.conditions || [],
+        actions: i
       };
-      W.value && F.unregisterMapping(W.value), F.registerMapping(a), Me(), ge(), J.value = !1, X.value = !1, W.value = null;
-    }, Re = (r) => {
-      W.value = r.id;
-      const a = Pe(r);
-      d.value = {
-        context: r.context,
-        contextId: r.contextId,
-        eventType: r.eventType,
-        conditions: r.conditions || [],
+      q.value && G.unregisterMapping(q.value), G.registerMapping(a), Me(), ie(), L.value = !1, Q.value = !1, q.value = null;
+    }, Se = (i) => {
+      q.value = i.id;
+      const a = Pe(i);
+      u.value = {
+        context: i.context,
+        contextId: i.contextId,
+        eventType: i.eventType,
+        conditions: i.conditions || [],
         actions: a.length > 0 ? a : [{
           targetContext: "widget",
           actionName: "",
           actionArgs: [],
           payloadMapping: []
         }]
-      }, j.value = 0, p.value.clear(), $.value.clear();
-      const l = d.value.actions?.[0];
-      l && (l.payloadMapping && l.payloadMapping.forEach((b) => {
-        p.value.set(b.argIndex, "payload");
-      }), l.actionArgs && l.actionArgs.forEach((b, C) => {
-        b !== void 0 && !l.payloadMapping?.some((M) => M.argIndex === C) && (p.value.set(C, "manual"), $.value.set(C, String(b)));
-      })), X.value = !0;
-    }, te = L(!1), re = L(null), Se = (r) => {
-      re.value = r, te.value = !0;
+      }, D.value = 0, N.value.clear(), H.value.clear();
+      const t = u.value.actions?.[0];
+      t && (t.payloadMapping && t.payloadMapping.forEach((p) => {
+        N.value.set(p.argIndex, "payload");
+      }), t.actionArgs && t.actionArgs.forEach((p, l) => {
+        p !== void 0 && !t.payloadMapping?.some((M) => M.argIndex === l) && (N.value.set(l, "manual"), H.value.set(l, String(p)));
+      })), Q.value = !0;
+    }, re = B(!1), ce = B(null), Ue = (i) => {
+      ce.value = i, re.value = !0;
     }, Ne = () => {
-      re.value && (F.unregisterMapping(re.value), Me()), te.value = !1, re.value = null;
+      ce.value && (G.unregisterMapping(ce.value), Me()), ge();
     }, ge = () => {
-      d.value = {
+      re.value = !1, ce.value = null;
+    }, ie = () => {
+      u.value = {
         context: "widget",
         conditions: [],
         actions: [{
@@ -1049,740 +1052,785 @@ const ht = { class: "event-manager-ui" }, _t = { class: "header-section" }, xt =
           actionArgs: [],
           payloadMapping: []
         }]
-      }, W.value = null, j.value = 0, p.value.clear(), $.value.clear();
+      }, q.value = null, D.value = 0, N.value.clear(), H.value.clear();
     }, Ve = () => {
-      d.value.conditions || (d.value.conditions = []), d.value.conditions.push(new vt());
-    }, Ce = (r) => {
-      d.value.conditions?.splice(r, 1);
-    }, p = L(/* @__PURE__ */ new Map()), $ = L(/* @__PURE__ */ new Map()), je = (r, a) => {
-      const l = N.value;
-      l && (l.payloadMapping || (l.payloadMapping = []), l.payloadMapping = l.payloadMapping.filter(
-        (b) => b.argIndex !== r
-      ), a && l.payloadMapping.push({
+      u.value.conditions || (u.value.conditions = []), u.value.conditions.push(new _t());
+    }, h = (i) => {
+      u.value.conditions?.splice(i, 1);
+    }, N = B(/* @__PURE__ */ new Map()), H = B(/* @__PURE__ */ new Map()), I = (i, a) => {
+      const t = U.value;
+      t && (t.payloadMapping || (t.payloadMapping = []), t.payloadMapping = t.payloadMapping.filter(
+        (p) => p.argIndex !== i
+      ), a && t.payloadMapping.push({
         payloadPath: a,
-        argIndex: r
+        argIndex: i
       }));
-    }, A = (r, a) => {
-      $.value.set(r, a);
-      const l = N.value;
-      if (!l) return;
-      for (l.actionArgs || (l.actionArgs = []); l.actionArgs.length <= r; )
-        l.actionArgs.push(void 0);
-      const b = de.value.find((C) => C.index === r);
-      b && (b.type === "number" || b.type.includes("number") ? l.actionArgs[r] = parseFloat(a) || 0 : b.type === "boolean" ? l.actionArgs[r] = a === "true" : l.actionArgs[r] = a);
-    }, ie = (r) => p.value.get(r) || "payload", me = (r, a) => {
-      p.value.set(r, a);
-      const l = N.value;
-      l && (a === "manual" ? l.payloadMapping && (l.payloadMapping = l.payloadMapping.filter(
-        (b) => b.argIndex !== r
-      )) : ($.value.delete(r), l.actionArgs && l.actionArgs[r] !== void 0 && (l.actionArgs[r] = void 0)));
-    }, Te = (r) => {
-      const a = N.value;
-      return a?.payloadMapping && a.payloadMapping.find((b) => b.argIndex === r)?.payloadPath || "";
-    }, $e = (r) => $.value.get(r) || "", H = (r) => !r || r.length === 0 ? "-" : r.map((a) => `${a.prop} ${a.comperator} ${a.value}`).join(" AND "), De = ze(dt), he = ze(ct), Ge = ze(ft), Be = ze(pt);
-    return ut(() => {
-      F = De, I = he, E = Ge, O = Be, Me(), Fe(), We(), qe();
-    }), (r, a) => {
-      const l = ne("VaButton"), b = ne("VaDataTable"), C = ne("VaCardTitle"), M = ne("VaSelect"), R = ne("VaInput"), K = ne("VaCardContent"), se = ne("VaCard"), Ie = ne("VaModal"), Le = ne("VaIcon");
-      return h(), k("div", ht, [
-        y("div", _t, [
-          a[15] || (a[15] = y("h2", { class: "page-title" }, "Event Manager", -1)),
-          m(l, {
-            onClick: a[0] || (a[0] = (o) => J.value = !0),
-            icon: "add"
+    }, De = (i, a) => {
+      H.value.set(i, a);
+      const t = U.value;
+      if (!t) return;
+      for (t.actionArgs || (t.actionArgs = []); t.actionArgs.length <= i; )
+        t.actionArgs.push(void 0);
+      const p = de.value.find((l) => l.index === i);
+      p && (p.type === "number" || p.type.includes("number") ? t.actionArgs[i] = parseFloat(a) || 0 : p.type === "boolean" ? t.actionArgs[i] = a === "true" : t.actionArgs[i] = a);
+    }, se = (i) => N.value.get(i) || "payload", fe = (i, a) => {
+      N.value.set(i, a);
+      const t = U.value;
+      t && (a === "manual" ? t.payloadMapping && (t.payloadMapping = t.payloadMapping.filter(
+        (p) => p.argIndex !== i
+      )) : (H.value.delete(i), t.actionArgs && t.actionArgs[i] !== void 0 && (t.actionArgs[i] = void 0)));
+    }, $e = (i) => {
+      const a = U.value;
+      return a?.payloadMapping && a.payloadMapping.find((p) => p.argIndex === i)?.payloadPath || "";
+    }, W = (i) => H.value.get(i) || "", je = (i) => !i || i.length === 0 ? "-" : i.map((a) => `${a.prop} ${a.comperator} ${a.value}`).join(" AND "), me = Ge(gt), ze = Ge(mt), Be = Ge(ht), Te = Ge(wt);
+    return yt(() => {
+      G = me, V = ze, T = Be, E = Te, Me(), qe(), Fe(), We();
+    }), (i, a) => (g(), k("div", Mt, [
+      d("div", Ct, [
+        a[16] || (a[16] = d("h2", { class: "page-title" }, "Event Manager", -1)),
+        m(f(j), {
+          onClick: a[0] || (a[0] = (t) => L.value = !0)
+        }, {
+          default: b(() => [
+            m(f(Y), {
+              name: "add",
+              size: "sm"
+            }),
+            a[15] || (a[15] = ee("Add Mapping", -1))
+          ]),
+          _: 1
+        })
+      ]),
+      d("div", Vt, [
+        d("div", Tt, [
+          d("table", It, [
+            d("thead", null, [
+              d("tr", null, [
+                (g(), k(ae, null, oe(ne, (t) => d("th", {
+                  key: t.key
+                }, S(t.label), 1)), 64))
+              ])
+            ]),
+            d("tbody", null, [
+              (g(!0), k(ae, null, oe(te.value, (t) => (g(), k("tr", {
+                key: t.id
+              }, [
+                d("td", null, [
+                  d("span", {
+                    class: "mapping-id",
+                    title: t.id
+                  }, S(t.id), 9, Et)
+                ]),
+                d("td", null, [
+                  d("span", null, S(t.context), 1),
+                  t.contextId ? (g(), k("span", {
+                    key: 0,
+                    class: "uid-badge",
+                    title: t.contextId
+                  }, S(t.contextId), 9, At)) : $("", !0)
+                ]),
+                d("td", null, S(t.eventType), 1),
+                d("td", null, [
+                  d("div", Ot, [
+                    (g(!0), k(ae, null, oe(Pe(t), (p, l) => (g(), k("div", {
+                      key: l,
+                      class: "action-item"
+                    }, [
+                      d("span", Pt, S(p.targetContext), 1),
+                      p.targetContextId ? (g(), k("span", {
+                        key: 0,
+                        class: "uid-badge",
+                        title: p.targetContextId
+                      }, S(p.targetContextId), 9, Rt)) : $("", !0),
+                      a[17] || (a[17] = d("span", { class: "action-separator" }, "→", -1)),
+                      d("span", St, S(p.actionName), 1)
+                    ]))), 128))
+                  ])
+                ]),
+                d("td", null, [
+                  d("span", Ut, S(je(t.conditions)), 1)
+                ]),
+                d("td", Nt, [
+                  m(f(j), {
+                    intent: "quiet",
+                    size: "sm",
+                    title: "Edit mapping",
+                    onClick: (p) => Se(t)
+                  }, {
+                    default: b(() => [
+                      m(f(Y), {
+                        name: "edit",
+                        size: "sm"
+                      })
+                    ]),
+                    _: 1
+                  }, 8, ["onClick"]),
+                  m(f(j), {
+                    intent: "danger",
+                    size: "sm",
+                    title: "Remove mapping",
+                    onClick: (p) => Ue(t.id)
+                  }, {
+                    default: b(() => [
+                      m(f(Y), {
+                        name: "delete",
+                        size: "sm"
+                      })
+                    ]),
+                    _: 1
+                  }, 8, ["onClick"])
+                ])
+              ]))), 128)),
+              te.value.length === 0 ? (g(), k("tr", Dt, [
+                d("td", {
+                  class: "mappings__empty",
+                  colspan: ne.length
+                }, "No mappings yet.", 8, $t)
+              ])) : $("", !0)
+            ])
+          ])
+        ])
+      ]),
+      m(f(Ye), {
+        modelValue: L.value,
+        "onUpdate:modelValue": a[6] || (a[6] = (t) => L.value = t),
+        title: "Add Event-Action Mapping",
+        size: "lg",
+        class: "event-manager-ui_modal",
+        onCancel: ie
+      }, {
+        actions: b(() => [
+          m(f(j), {
+            intent: "quiet",
+            onClick: a[5] || (a[5] = (t) => {
+              L.value = !1, ie();
+            })
           }, {
-            default: w(() => [...a[14] || (a[14] = [
-              ae("Add Mapping", -1)
+            default: b(() => [...a[24] || (a[24] = [
+              ee("Cancel", -1)
+            ])]),
+            _: 1
+          }),
+          m(f(j), {
+            intent: "primary",
+            onClick: Re
+          }, {
+            default: b(() => [...a[25] || (a[25] = [
+              ee("Add", -1)
             ])]),
             _: 1
           })
         ]),
-        y("div", xt, [
-          y("div", bt, [
-            m(b, {
-              items: ee.value,
-              columns: le,
-              hoverable: !0,
-              class: "w-full"
-            }, {
-              "cell(id)": w(({ rowData: o }) => [
-                y("span", {
-                  class: "mapping-id",
-                  title: o.id
-                }, D(o.id), 9, wt)
-              ]),
-              "cell(context)": w(({ rowData: o }) => [
-                y("span", null, D(o.context), 1),
-                o.contextId ? (h(), k("span", {
-                  key: 0,
-                  class: "uid-badge",
-                  title: o.contextId
-                }, D(o.contextId), 9, Mt)) : z("", !0)
-              ]),
-              "cell(actionsCount)": w(({ rowData: o }) => [
-                y("div", kt, [
-                  (h(!0), k(ce, null, fe(Pe(o), (V, s) => (h(), k("div", {
-                    key: s,
-                    class: "action-item"
-                  }, [
-                    y("span", Vt, D(V.targetContext), 1),
-                    V.targetContextId ? (h(), k("span", {
-                      key: 0,
-                      class: "uid-badge",
-                      title: V.targetContextId
-                    }, D(V.targetContextId), 9, Ct)) : z("", !0),
-                    a[16] || (a[16] = y("span", { class: "action-separator" }, "→", -1)),
-                    y("span", Tt, D(V.actionName), 1)
-                  ]))), 128))
-                ])
-              ]),
-              "cell(conditions)": w(({ rowData: o }) => [
-                y("span", It, D(H(o.conditions)), 1)
-              ]),
-              "cell(tableActions)": w(({ rowData: o }) => [
-                y("div", Et, [
-                  m(l, {
-                    onClick: (V) => Re(o),
-                    preset: "plain",
-                    icon: "edit",
-                    size: "small"
-                  }, null, 8, ["onClick"]),
-                  m(l, {
-                    onClick: (V) => Se(o.id),
-                    preset: "plain",
-                    icon: "delete",
-                    color: "danger",
-                    size: "small"
-                  }, null, 8, ["onClick"])
+        default: b(() => [
+          d("div", jt, [
+            m(f(ke), { class: "card-section" }, {
+              header: b(() => [...a[18] || (a[18] = [
+                d("h3", { class: "section-title" }, "1. Event Source", -1)
+              ])]),
+              default: b(() => [
+                d("div", zt, [
+                  m(f(P), {
+                    modelValue: u.value.context,
+                    "onUpdate:modelValue": a[1] || (a[1] = (t) => u.value.context = t),
+                    label: "Context",
+                    options: le,
+                    "label-key": "text",
+                    "value-key": "value"
+                  }, null, 8, ["modelValue"]),
+                  u.value.context === "page" ? (g(), F(f(P), {
+                    key: 0,
+                    modelValue: u.value.contextId,
+                    "onUpdate:modelValue": a[2] || (a[2] = (t) => u.value.contextId = t),
+                    label: "Page ID",
+                    options: [{ text: "Any page", value: "" }, ...J.value.map((t) => ({ text: t, value: t }))],
+                    "label-key": "text",
+                    "value-key": "value",
+                    clearable: ""
+                  }, null, 8, ["modelValue", "options"])) : u.value.context === "widget" ? (g(), F(f(xe), {
+                    key: 1,
+                    modelValue: u.value.contextId,
+                    "onUpdate:modelValue": a[3] || (a[3] = (t) => u.value.contextId = t),
+                    label: "Widget ID (optional)",
+                    placeholder: "e.g., specific widgetId"
+                  }, null, 8, ["modelValue"])) : $("", !0),
+                  m(f(P), {
+                    modelValue: u.value.eventType,
+                    "onUpdate:modelValue": a[4] || (a[4] = (t) => u.value.eventType = t),
+                    label: "Event Type",
+                    options: ue.value,
+                    "label-key": "type",
+                    "value-key": "type"
+                  }, null, 8, ["modelValue", "options"])
                 ])
               ]),
               _: 1
-            }, 8, ["items"])
+            }),
+            m(f(ke), { class: "card-section" }, {
+              header: b(() => [
+                d("div", Gt, [
+                  a[20] || (a[20] = d("span", { class: "section-title" }, "2. Conditions", -1)),
+                  m(f(j), {
+                    onClick: Ve,
+                    size: "sm",
+                    intent: "quiet"
+                  }, {
+                    default: b(() => [
+                      m(f(Y), {
+                        name: "add",
+                        size: "sm"
+                      }),
+                      a[19] || (a[19] = ee("Add", -1))
+                    ]),
+                    _: 1
+                  })
+                ])
+              ]),
+              default: b(() => [
+                u.value.conditions && u.value.conditions.length > 0 ? (g(), k("div", qt, [
+                  (g(!0), k(ae, null, oe(u.value.conditions, (t, p) => (g(), k("div", {
+                    key: p,
+                    class: "condition-row"
+                  }, [
+                    m(f(P), {
+                      modelValue: t.prop,
+                      "onUpdate:modelValue": (l) => t.prop = l,
+                      placeholder: "Property",
+                      options: pe.value,
+                      "label-key": "text",
+                      "value-key": "value",
+                      class: "flex-1"
+                    }, null, 8, ["modelValue", "onUpdate:modelValue", "options"]),
+                    m(f(P), {
+                      modelValue: t.comperator,
+                      "onUpdate:modelValue": (l) => t.comperator = l,
+                      options: ve,
+                      "label-key": "text",
+                      "value-key": "value",
+                      class: "w-20"
+                    }, null, 8, ["modelValue", "onUpdate:modelValue"]),
+                    m(f(xe), {
+                      modelValue: t.value,
+                      "onUpdate:modelValue": (l) => t.value = l,
+                      placeholder: "Value",
+                      class: "flex-1"
+                    }, null, 8, ["modelValue", "onUpdate:modelValue"]),
+                    m(f(j), {
+                      onClick: (l) => h(p),
+                      intent: "danger",
+                      size: "sm"
+                    }, {
+                      default: b(() => [
+                        m(f(Y), {
+                          name: "delete",
+                          size: "sm"
+                        })
+                      ]),
+                      _: 1
+                    }, 8, ["onClick"])
+                  ]))), 128))
+                ])) : (g(), k("div", Ft, " No conditions - action will always execute "))
+              ]),
+              _: 1
+            }),
+            m(f(ke), { class: "card-section" }, {
+              header: b(() => [
+                d("div", Wt, [
+                  a[22] || (a[22] = d("span", { class: "section-title" }, "3. Actions", -1)),
+                  m(f(j), {
+                    onClick: be,
+                    size: "sm",
+                    intent: "quiet"
+                  }, {
+                    default: b(() => [
+                      m(f(Y), {
+                        name: "add",
+                        size: "sm"
+                      }),
+                      a[21] || (a[21] = ee("Add Action", -1))
+                    ]),
+                    _: 1
+                  })
+                ])
+              ]),
+              default: b(() => [
+                u.value.actions && u.value.actions.length > 0 ? (g(), k("div", Bt, [
+                  (g(!0), k(ae, null, oe(u.value.actions, (t, p) => (g(), k("div", {
+                    key: p,
+                    class: he(["action-card", { active: D.value === p }]),
+                    onClick: (l) => Oe(p)
+                  }, [
+                    d("div", Ht, [
+                      d("span", Yt, S(p + 1), 1),
+                      d("span", Zt, [
+                        d("span", Jt, S(t.targetContext), 1),
+                        t.actionName ? (g(), k("span", Qt, S(t.actionName), 1)) : (g(), k("span", Xt, "(select action)"))
+                      ]),
+                      u.value.actions.length > 1 ? (g(), F(f(j), {
+                        key: 0,
+                        onClick: _e((l) => Ae(p), ["stop"]),
+                        intent: "danger",
+                        size: "sm"
+                      }, {
+                        default: b(() => [
+                          m(f(Y), {
+                            name: "close",
+                            size: "sm"
+                          })
+                        ]),
+                        _: 1
+                      }, 8, ["onClick"])) : $("", !0)
+                    ]),
+                    D.value === p ? (g(), k("div", Kt, [
+                      d("div", en, [
+                        m(f(P), {
+                          modelValue: t.targetContext,
+                          "onUpdate:modelValue": (l) => t.targetContext = l,
+                          label: "Context",
+                          options: le,
+                          "label-key": "text",
+                          "value-key": "value"
+                        }, null, 8, ["modelValue", "onUpdate:modelValue"]),
+                        t.targetContext === "page" ? (g(), F(f(P), {
+                          key: 0,
+                          modelValue: t.targetContextId,
+                          "onUpdate:modelValue": (l) => t.targetContextId = l,
+                          label: "Target Page",
+                          options: [{ text: "Any", value: "" }, ...J.value.map((l) => ({ text: l, value: l }))],
+                          "label-key": "text",
+                          "value-key": "value",
+                          clearable: ""
+                        }, null, 8, ["modelValue", "onUpdate:modelValue", "options"])) : t.targetContext === "widget" || t.targetContext === "system" ? (g(), F(f(P), {
+                          key: 1,
+                          modelValue: t.targetContextId,
+                          "onUpdate:modelValue": (l) => t.targetContextId = l,
+                          label: "Target Instance",
+                          options: ye.value,
+                          "label-key": "text",
+                          "value-key": "value",
+                          clearable: "",
+                          placeholder: ye.value.length > 1 ? "Select instance" : "All instances"
+                        }, null, 8, ["modelValue", "onUpdate:modelValue", "options", "placeholder"])) : $("", !0),
+                        m(f(P), {
+                          modelValue: t.actionName,
+                          "onUpdate:modelValue": (l) => t.actionName = l,
+                          label: "Action",
+                          options: Ce.value,
+                          "label-key": "text",
+                          "value-key": "value"
+                        }, null, 8, ["modelValue", "onUpdate:modelValue", "options"])
+                      ]),
+                      de.value.length > 0 ? (g(), k("div", tn, [
+                        a[23] || (a[23] = d("div", { class: "parameters-title" }, "Parameters", -1)),
+                        d("div", nn, [
+                          (g(!0), k(ae, null, oe(de.value, (l) => (g(), k("div", {
+                            key: l.index,
+                            class: "parameter-item"
+                          }, [
+                            d("div", an, [
+                              d("span", on, S(l.name), 1),
+                              l.optional ? (g(), k("span", ln, "?")) : $("", !0),
+                              d("span", rn, S(l.type), 1)
+                            ]),
+                            d("div", sn, [
+                              d("div", un, [
+                                d("button", {
+                                  class: he(["toggle-btn", { active: se(l.index) === "payload" }]),
+                                  onClick: _e((M) => fe(l.index, "payload"), ["stop"]),
+                                  type: "button"
+                                }, "Payload", 10, dn),
+                                d("button", {
+                                  class: he(["toggle-btn", { active: se(l.index) === "manual" }]),
+                                  onClick: _e((M) => fe(l.index, "manual"), ["stop"]),
+                                  type: "button"
+                                }, "Manual", 10, cn)
+                              ]),
+                              se(l.index) === "payload" ? (g(), F(f(P), {
+                                key: 0,
+                                "model-value": $e(l.index),
+                                "onUpdate:modelValue": (M) => I(l.index, String(M ?? "")),
+                                placeholder: l.optional ? "(optional)" : "Select property",
+                                options: pe.value,
+                                "label-key": "text",
+                                "value-key": "value",
+                                clearable: "",
+                                class: "parameter-value-input"
+                              }, null, 8, ["model-value", "onUpdate:modelValue", "placeholder", "options"])) : (g(), F(f(xe), {
+                                key: 1,
+                                "model-value": W(l.index),
+                                "onUpdate:modelValue": (M) => De(l.index, String(M ?? "")),
+                                placeholder: `Enter ${l.type}`,
+                                class: "parameter-value-input"
+                              }, null, 8, ["model-value", "onUpdate:modelValue", "placeholder"]))
+                            ])
+                          ]))), 128))
+                        ])
+                      ])) : $("", !0)
+                    ])) : $("", !0)
+                  ], 10, Lt))), 128))
+                ])) : $("", !0)
+              ]),
+              _: 1
+            })
           ])
         ]),
-        m(Ie, {
-          modelValue: J.value,
-          "onUpdate:modelValue": a[5] || (a[5] = (o) => J.value = o),
-          title: "Add Event-Action Mapping",
-          size: "large",
-          class: "event-manager-ui_modal",
-          onOk: Ue,
-          onCancel: ge,
-          "ok-text": "Add",
-          "cancel-text": "Cancel"
-        }, {
-          default: w(() => [
-            y("div", At, [
-              m(se, { class: "card-section" }, {
-                default: w(() => [
-                  m(C, { class: "section-title" }, {
-                    default: w(() => [...a[17] || (a[17] = [
-                      ae("1. Event Source", -1)
-                    ])]),
+        _: 1
+      }, 8, ["modelValue"]),
+      m(f(Ye), {
+        modelValue: Q.value,
+        "onUpdate:modelValue": a[12] || (a[12] = (t) => Q.value = t),
+        title: "Edit Event-Action Mapping",
+        size: "lg",
+        onCancel: ie
+      }, {
+        actions: b(() => [
+          m(f(j), {
+            intent: "quiet",
+            onClick: a[11] || (a[11] = (t) => {
+              Q.value = !1, ie();
+            })
+          }, {
+            default: b(() => [...a[32] || (a[32] = [
+              ee("Cancel", -1)
+            ])]),
+            _: 1
+          }),
+          m(f(j), {
+            intent: "primary",
+            onClick: Re
+          }, {
+            default: b(() => [...a[33] || (a[33] = [
+              ee("Save", -1)
+            ])]),
+            _: 1
+          })
+        ]),
+        default: b(() => [
+          d("div", fn, [
+            m(f(ke), { class: "card-section" }, {
+              header: b(() => [...a[26] || (a[26] = [
+                d("h3", { class: "section-title" }, "1. Event Source", -1)
+              ])]),
+              default: b(() => [
+                d("div", vn, [
+                  m(f(P), {
+                    modelValue: u.value.context,
+                    "onUpdate:modelValue": a[7] || (a[7] = (t) => u.value.context = t),
+                    label: "Context",
+                    options: le,
+                    "label-key": "text",
+                    "value-key": "value"
+                  }, null, 8, ["modelValue"]),
+                  u.value.context === "page" ? (g(), F(f(P), {
+                    key: 0,
+                    modelValue: u.value.contextId,
+                    "onUpdate:modelValue": a[8] || (a[8] = (t) => u.value.contextId = t),
+                    label: "Page ID",
+                    options: [{ text: "Any page", value: "" }, ...J.value.map((t) => ({ text: t, value: t }))],
+                    "label-key": "text",
+                    "value-key": "value",
+                    clearable: ""
+                  }, null, 8, ["modelValue", "options"])) : u.value.context === "widget" ? (g(), F(f(xe), {
+                    key: 1,
+                    modelValue: u.value.contextId,
+                    "onUpdate:modelValue": a[9] || (a[9] = (t) => u.value.contextId = t),
+                    label: "Widget ID (optional)",
+                    placeholder: "e.g., specific widgetId"
+                  }, null, 8, ["modelValue"])) : $("", !0),
+                  m(f(P), {
+                    modelValue: u.value.eventType,
+                    "onUpdate:modelValue": a[10] || (a[10] = (t) => u.value.eventType = t),
+                    label: "Event Type",
+                    options: ue.value,
+                    "label-key": "type",
+                    "value-key": "type"
+                  }, null, 8, ["modelValue", "options"])
+                ])
+              ]),
+              _: 1
+            }),
+            m(f(ke), { class: "card-section" }, {
+              header: b(() => [
+                d("div", pn, [
+                  a[28] || (a[28] = d("span", { class: "section-title" }, "2. Conditions", -1)),
+                  m(f(j), {
+                    onClick: Ve,
+                    size: "sm",
+                    intent: "quiet"
+                  }, {
+                    default: b(() => [
+                      m(f(Y), {
+                        name: "add",
+                        size: "sm"
+                      }),
+                      a[27] || (a[27] = ee("Add", -1))
+                    ]),
                     _: 1
-                  }),
-                  m(K, null, {
-                    default: w(() => [
-                      y("div", Ot, [
-                        m(M, {
-                          modelValue: d.value.context,
-                          "onUpdate:modelValue": a[1] || (a[1] = (o) => d.value.context = o),
+                  })
+                ])
+              ]),
+              default: b(() => [
+                u.value.conditions && u.value.conditions.length > 0 ? (g(), k("div", yn, [
+                  (g(!0), k(ae, null, oe(u.value.conditions, (t, p) => (g(), k("div", {
+                    key: p,
+                    class: "condition-row"
+                  }, [
+                    m(f(P), {
+                      modelValue: t.prop,
+                      "onUpdate:modelValue": (l) => t.prop = l,
+                      placeholder: "Property",
+                      options: pe.value,
+                      "label-key": "text",
+                      "value-key": "value",
+                      class: "flex-1"
+                    }, null, 8, ["modelValue", "onUpdate:modelValue", "options"]),
+                    m(f(P), {
+                      modelValue: t.comperator,
+                      "onUpdate:modelValue": (l) => t.comperator = l,
+                      options: ve,
+                      "label-key": "text",
+                      "value-key": "value",
+                      class: "w-20"
+                    }, null, 8, ["modelValue", "onUpdate:modelValue"]),
+                    m(f(xe), {
+                      modelValue: t.value,
+                      "onUpdate:modelValue": (l) => t.value = l,
+                      placeholder: "Value",
+                      class: "flex-1"
+                    }, null, 8, ["modelValue", "onUpdate:modelValue"]),
+                    m(f(j), {
+                      onClick: (l) => h(p),
+                      intent: "danger",
+                      size: "sm"
+                    }, {
+                      default: b(() => [
+                        m(f(Y), {
+                          name: "delete",
+                          size: "sm"
+                        })
+                      ]),
+                      _: 1
+                    }, 8, ["onClick"])
+                  ]))), 128))
+                ])) : (g(), k("div", gn, " No conditions - action will always execute "))
+              ]),
+              _: 1
+            }),
+            m(f(ke), { class: "card-section" }, {
+              header: b(() => [
+                d("div", mn, [
+                  a[30] || (a[30] = d("span", { class: "section-title" }, "3. Actions", -1)),
+                  m(f(j), {
+                    onClick: be,
+                    size: "sm",
+                    intent: "quiet"
+                  }, {
+                    default: b(() => [
+                      m(f(Y), {
+                        name: "add",
+                        size: "sm"
+                      }),
+                      a[29] || (a[29] = ee("Add Action", -1))
+                    ]),
+                    _: 1
+                  })
+                ])
+              ]),
+              default: b(() => [
+                u.value.actions && u.value.actions.length > 0 ? (g(), k("div", hn, [
+                  (g(!0), k(ae, null, oe(u.value.actions, (t, p) => (g(), k("div", {
+                    key: p,
+                    class: he(["action-card", { active: D.value === p }]),
+                    onClick: (l) => Oe(p)
+                  }, [
+                    d("div", wn, [
+                      d("span", kn, S(p + 1), 1),
+                      d("span", xn, [
+                        d("span", bn, S(t.targetContext), 1),
+                        t.actionName ? (g(), k("span", Mn, S(t.actionName), 1)) : (g(), k("span", Cn, "(select action)"))
+                      ]),
+                      u.value.actions.length > 1 ? (g(), F(f(j), {
+                        key: 0,
+                        onClick: _e((l) => Ae(p), ["stop"]),
+                        intent: "danger",
+                        size: "sm"
+                      }, {
+                        default: b(() => [
+                          m(f(Y), {
+                            name: "close",
+                            size: "sm"
+                          })
+                        ]),
+                        _: 1
+                      }, 8, ["onClick"])) : $("", !0)
+                    ]),
+                    D.value === p ? (g(), k("div", Vn, [
+                      d("div", Tn, [
+                        m(f(P), {
+                          modelValue: t.targetContext,
+                          "onUpdate:modelValue": (l) => t.targetContext = l,
                           label: "Context",
-                          options: oe,
-                          "text-by": "text",
-                          "value-by": "value"
-                        }, null, 8, ["modelValue"]),
-                        d.value.context === "page" ? (h(), q(M, {
+                          options: le,
+                          "label-key": "text",
+                          "value-key": "value"
+                        }, null, 8, ["modelValue", "onUpdate:modelValue"]),
+                        t.targetContext === "page" ? (g(), F(f(P), {
                           key: 0,
-                          modelValue: d.value.contextId,
-                          "onUpdate:modelValue": a[2] || (a[2] = (o) => d.value.contextId = o),
-                          label: "Page ID",
-                          options: [{ text: "Any page", value: "" }, ...Z.value.map((o) => ({ text: o, value: o }))],
-                          "text-by": "text",
-                          "value-by": "value",
+                          modelValue: t.targetContextId,
+                          "onUpdate:modelValue": (l) => t.targetContextId = l,
+                          label: "Target Page",
+                          options: [{ text: "Any", value: "" }, ...J.value.map((l) => ({ text: l, value: l }))],
+                          "label-key": "text",
+                          "value-key": "value",
                           clearable: ""
-                        }, null, 8, ["modelValue", "options"])) : d.value.context === "widget" ? (h(), q(R, {
+                        }, null, 8, ["modelValue", "onUpdate:modelValue", "options"])) : t.targetContext === "widget" || t.targetContext === "system" ? (g(), F(f(P), {
                           key: 1,
-                          modelValue: d.value.contextId,
-                          "onUpdate:modelValue": a[3] || (a[3] = (o) => d.value.contextId = o),
-                          label: "Widget ID (optional)",
-                          placeholder: "e.g., specific widgetId",
-                          clearable: ""
-                        }, null, 8, ["modelValue"])) : z("", !0),
-                        m(M, {
-                          modelValue: d.value.eventType,
-                          "onUpdate:modelValue": a[4] || (a[4] = (o) => d.value.eventType = o),
-                          label: "Event Type",
-                          options: ue.value,
-                          "text-by": "type",
-                          "value-by": "type"
-                        }, null, 8, ["modelValue", "options"])
-                      ])
-                    ]),
-                    _: 1
-                  })
-                ]),
-                _: 1
-              }),
-              m(se, { class: "card-section" }, {
-                default: w(() => [
-                  m(C, { class: "flex justify-between items-center" }, {
-                    default: w(() => [
-                      a[19] || (a[19] = y("span", { class: "section-title" }, "2. Conditions", -1)),
-                      m(l, {
-                        onClick: Ve,
-                        size: "small",
-                        icon: "add",
-                        preset: "secondary"
-                      }, {
-                        default: w(() => [...a[18] || (a[18] = [
-                          ae("Add", -1)
-                        ])]),
-                        _: 1
-                      })
-                    ]),
-                    _: 1
-                  }),
-                  m(K, null, {
-                    default: w(() => [
-                      d.value.conditions && d.value.conditions.length > 0 ? (h(), k("div", Pt, [
-                        (h(!0), k(ce, null, fe(d.value.conditions, (o, V) => (h(), k("div", {
-                          key: V,
-                          class: "condition-row"
-                        }, [
-                          m(M, {
-                            modelValue: o.prop,
-                            "onUpdate:modelValue": (s) => o.prop = s,
-                            placeholder: "Property",
-                            options: pe.value,
-                            "text-by": "text",
-                            "value-by": "value",
-                            class: "flex-1"
-                          }, null, 8, ["modelValue", "onUpdate:modelValue", "options"]),
-                          m(M, {
-                            modelValue: o.comperator,
-                            "onUpdate:modelValue": (s) => o.comperator = s,
-                            options: ve,
-                            "text-by": "text",
-                            "value-by": "value",
-                            class: "w-20"
-                          }, null, 8, ["modelValue", "onUpdate:modelValue"]),
-                          m(R, {
-                            modelValue: o.value,
-                            "onUpdate:modelValue": (s) => o.value = s,
-                            placeholder: "Value",
-                            class: "flex-1"
-                          }, null, 8, ["modelValue", "onUpdate:modelValue"]),
-                          m(l, {
-                            onClick: (s) => Ce(V),
-                            preset: "plain",
-                            icon: "delete",
-                            color: "danger",
-                            size: "small"
-                          }, null, 8, ["onClick"])
-                        ]))), 128))
-                      ])) : (h(), k("div", Ut, " No conditions - action will always execute "))
-                    ]),
-                    _: 1
-                  })
-                ]),
-                _: 1
-              }),
-              m(se, { class: "card-section" }, {
-                default: w(() => [
-                  m(C, { class: "flex justify-between items-center" }, {
-                    default: w(() => [
-                      a[21] || (a[21] = y("span", { class: "section-title" }, "3. Actions", -1)),
-                      m(l, {
-                        onClick: we,
-                        size: "small",
-                        icon: "add",
-                        preset: "secondary"
-                      }, {
-                        default: w(() => [...a[20] || (a[20] = [
-                          ae("Add Action", -1)
-                        ])]),
-                        _: 1
-                      })
-                    ]),
-                    _: 1
-                  }),
-                  m(K, null, {
-                    default: w(() => [
-                      d.value.actions && d.value.actions.length > 0 ? (h(), k("div", Rt, [
-                        (h(!0), k(ce, null, fe(d.value.actions, (o, V) => (h(), k("div", {
-                          key: V,
-                          class: _e(["action-card", { active: j.value === V }]),
-                          onClick: (s) => Oe(V)
-                        }, [
-                          y("div", Nt, [
-                            y("span", jt, D(V + 1), 1),
-                            y("span", $t, [
-                              y("span", Dt, D(o.targetContext), 1),
-                              o.actionName ? (h(), k("span", Gt, D(o.actionName), 1)) : (h(), k("span", zt, "(select action)"))
+                          modelValue: t.targetContextId,
+                          "onUpdate:modelValue": (l) => t.targetContextId = l,
+                          label: "Target Instance",
+                          options: ye.value,
+                          "label-key": "text",
+                          "value-key": "value",
+                          clearable: "",
+                          placeholder: ye.value.length > 1 ? "Select instance" : "All instances"
+                        }, null, 8, ["modelValue", "onUpdate:modelValue", "options", "placeholder"])) : $("", !0),
+                        m(f(P), {
+                          modelValue: t.actionName,
+                          "onUpdate:modelValue": (l) => t.actionName = l,
+                          label: "Action",
+                          options: Ce.value,
+                          "label-key": "text",
+                          "value-key": "value"
+                        }, null, 8, ["modelValue", "onUpdate:modelValue", "options"])
+                      ]),
+                      de.value.length > 0 ? (g(), k("div", In, [
+                        a[31] || (a[31] = d("div", { class: "parameters-title" }, "Parameters", -1)),
+                        d("div", En, [
+                          (g(!0), k(ae, null, oe(de.value, (l) => (g(), k("div", {
+                            key: l.index,
+                            class: "parameter-item"
+                          }, [
+                            d("div", An, [
+                              d("span", On, S(l.name), 1),
+                              l.optional ? (g(), k("span", Pn, "?")) : $("", !0),
+                              d("span", Rn, S(l.type), 1)
                             ]),
-                            d.value.actions.length > 1 ? (h(), q(l, {
-                              key: 0,
-                              onClick: xe((s) => Ae(V), ["stop"]),
-                              preset: "plain",
-                              icon: "close",
-                              color: "danger",
-                              size: "small"
-                            }, null, 8, ["onClick"])) : z("", !0)
-                          ]),
-                          j.value === V ? (h(), k("div", Ft, [
-                            y("div", Wt, [
-                              m(M, {
-                                modelValue: o.targetContext,
-                                "onUpdate:modelValue": (s) => o.targetContext = s,
-                                label: "Context",
-                                options: oe,
-                                "text-by": "text",
-                                "value-by": "value",
-                                class: "context-select"
-                              }, null, 8, ["modelValue", "onUpdate:modelValue"]),
-                              o.targetContext === "page" ? (h(), q(M, {
+                            d("div", Sn, [
+                              d("div", Un, [
+                                d("button", {
+                                  class: he(["toggle-btn", { active: se(l.index) === "payload" }]),
+                                  onClick: _e((M) => fe(l.index, "payload"), ["stop"]),
+                                  type: "button"
+                                }, "Payload", 10, Nn),
+                                d("button", {
+                                  class: he(["toggle-btn", { active: se(l.index) === "manual" }]),
+                                  onClick: _e((M) => fe(l.index, "manual"), ["stop"]),
+                                  type: "button"
+                                }, "Manual", 10, Dn)
+                              ]),
+                              se(l.index) === "payload" ? (g(), F(f(P), {
                                 key: 0,
-                                modelValue: o.targetContextId,
-                                "onUpdate:modelValue": (s) => o.targetContextId = s,
-                                label: "Target Page",
-                                options: [{ text: "Any", value: "" }, ...Z.value.map((s) => ({ text: s, value: s }))],
-                                "text-by": "text",
-                                "value-by": "value",
+                                "model-value": $e(l.index),
+                                "onUpdate:modelValue": (M) => I(l.index, String(M ?? "")),
+                                placeholder: l.optional ? "(optional)" : "Select property",
+                                options: pe.value,
+                                "label-key": "text",
+                                "value-key": "value",
                                 clearable: "",
-                                class: "target-select"
-                              }, null, 8, ["modelValue", "onUpdate:modelValue", "options"])) : o.targetContext === "widget" || o.targetContext === "system" ? (h(), q(M, {
+                                class: "parameter-value-input"
+                              }, null, 8, ["model-value", "onUpdate:modelValue", "placeholder", "options"])) : (g(), F(f(xe), {
                                 key: 1,
-                                modelValue: o.targetContextId,
-                                "onUpdate:modelValue": (s) => o.targetContextId = s,
-                                label: "Target Instance",
-                                options: ye.value,
-                                "text-by": "text",
-                                "value-by": "value",
-                                clearable: "",
-                                class: "target-select",
-                                placeholder: ye.value.length > 1 ? "Select instance" : "All instances"
-                              }, null, 8, ["modelValue", "onUpdate:modelValue", "options", "placeholder"])) : z("", !0),
-                              m(M, {
-                                modelValue: o.actionName,
-                                "onUpdate:modelValue": (s) => o.actionName = s,
-                                label: "Action",
-                                options: ke.value,
-                                "text-by": "text",
-                                "value-by": "value",
-                                class: "action-select"
-                              }, null, 8, ["modelValue", "onUpdate:modelValue", "options"])
-                            ]),
-                            de.value.length > 0 ? (h(), k("div", qt, [
-                              a[22] || (a[22] = y("div", { class: "parameters-title" }, "Parameters", -1)),
-                              y("div", Bt, [
-                                (h(!0), k(ce, null, fe(de.value, (s) => (h(), k("div", {
-                                  key: s.index,
-                                  class: "parameter-item"
-                                }, [
-                                  y("div", Lt, [
-                                    y("span", Ht, D(s.name), 1),
-                                    s.optional ? (h(), k("span", Yt, "?")) : z("", !0),
-                                    y("span", Zt, D(s.type), 1)
-                                  ]),
-                                  y("div", Jt, [
-                                    y("div", Qt, [
-                                      y("button", {
-                                        class: _e(["toggle-btn", { active: ie(s.index) === "payload" }]),
-                                        onClick: xe((B) => me(s.index, "payload"), ["stop"]),
-                                        type: "button"
-                                      }, "Payload", 10, Xt),
-                                      y("button", {
-                                        class: _e(["toggle-btn", { active: ie(s.index) === "manual" }]),
-                                        onClick: xe((B) => me(s.index, "manual"), ["stop"]),
-                                        type: "button"
-                                      }, "Manual", 10, Kt)
-                                    ]),
-                                    ie(s.index) === "payload" ? (h(), q(M, {
-                                      key: 0,
-                                      "model-value": Te(s.index),
-                                      "onUpdate:modelValue": (B) => je(s.index, B),
-                                      placeholder: s.optional ? "(optional)" : "Select property",
-                                      options: pe.value,
-                                      "text-by": "text",
-                                      "value-by": "value",
-                                      clearable: "",
-                                      class: "parameter-value-input"
-                                    }, null, 8, ["model-value", "onUpdate:modelValue", "placeholder", "options"])) : (h(), q(R, {
-                                      key: 1,
-                                      "model-value": $e(s.index),
-                                      "onUpdate:modelValue": (B) => A(s.index, B),
-                                      placeholder: `Enter ${s.type}`,
-                                      class: "parameter-value-input"
-                                    }, null, 8, ["model-value", "onUpdate:modelValue", "placeholder"]))
-                                  ])
-                                ]))), 128))
-                              ])
-                            ])) : z("", !0)
-                          ])) : z("", !0)
-                        ], 10, St))), 128))
-                      ])) : z("", !0)
-                    ]),
-                    _: 1
-                  })
-                ]),
-                _: 1
-              })
-            ])
-          ]),
-          _: 1
-        }, 8, ["modelValue"]),
-        m(Ie, {
-          modelValue: X.value,
-          "onUpdate:modelValue": a[10] || (a[10] = (o) => X.value = o),
-          title: "Edit Event-Action Mapping",
-          size: "large",
-          onOk: Ue,
-          onCancel: ge,
-          "ok-text": "Save",
-          "cancel-text": "Cancel"
-        }, {
-          default: w(() => [
-            y("div", en, [
-              m(se, { class: "card-section" }, {
-                default: w(() => [
-                  m(C, { class: "section-title" }, {
-                    default: w(() => [...a[23] || (a[23] = [
-                      ae("1. Event Source", -1)
-                    ])]),
-                    _: 1
-                  }),
-                  m(K, null, {
-                    default: w(() => [
-                      y("div", tn, [
-                        m(M, {
-                          modelValue: d.value.context,
-                          "onUpdate:modelValue": a[6] || (a[6] = (o) => d.value.context = o),
-                          label: "Context",
-                          options: oe,
-                          "text-by": "text",
-                          "value-by": "value"
-                        }, null, 8, ["modelValue"]),
-                        d.value.context === "page" ? (h(), q(M, {
-                          key: 0,
-                          modelValue: d.value.contextId,
-                          "onUpdate:modelValue": a[7] || (a[7] = (o) => d.value.contextId = o),
-                          label: "Page ID",
-                          options: [{ text: "Any page", value: "" }, ...Z.value.map((o) => ({ text: o, value: o }))],
-                          "text-by": "text",
-                          "value-by": "value",
-                          clearable: ""
-                        }, null, 8, ["modelValue", "options"])) : d.value.context === "widget" ? (h(), q(R, {
-                          key: 1,
-                          modelValue: d.value.contextId,
-                          "onUpdate:modelValue": a[8] || (a[8] = (o) => d.value.contextId = o),
-                          label: "Widget ID (optional)",
-                          placeholder: "e.g., specific widgetId",
-                          clearable: ""
-                        }, null, 8, ["modelValue"])) : z("", !0),
-                        m(M, {
-                          modelValue: d.value.eventType,
-                          "onUpdate:modelValue": a[9] || (a[9] = (o) => d.value.eventType = o),
-                          label: "Event Type",
-                          options: ue.value,
-                          "text-by": "type",
-                          "value-by": "type"
-                        }, null, 8, ["modelValue", "options"])
-                      ])
-                    ]),
-                    _: 1
-                  })
-                ]),
-                _: 1
-              }),
-              m(se, { class: "card-section" }, {
-                default: w(() => [
-                  m(C, { class: "flex justify-between items-center" }, {
-                    default: w(() => [
-                      a[25] || (a[25] = y("span", { class: "section-title" }, "2. Conditions", -1)),
-                      m(l, {
-                        onClick: Ve,
-                        size: "small",
-                        icon: "add",
-                        preset: "secondary"
-                      }, {
-                        default: w(() => [...a[24] || (a[24] = [
-                          ae("Add", -1)
-                        ])]),
-                        _: 1
-                      })
-                    ]),
-                    _: 1
-                  }),
-                  m(K, null, {
-                    default: w(() => [
-                      d.value.conditions && d.value.conditions.length > 0 ? (h(), k("div", nn, [
-                        (h(!0), k(ce, null, fe(d.value.conditions, (o, V) => (h(), k("div", {
-                          key: V,
-                          class: "condition-row"
-                        }, [
-                          m(M, {
-                            modelValue: o.prop,
-                            "onUpdate:modelValue": (s) => o.prop = s,
-                            placeholder: "Property",
-                            options: pe.value,
-                            "text-by": "text",
-                            "value-by": "value",
-                            class: "flex-1"
-                          }, null, 8, ["modelValue", "onUpdate:modelValue", "options"]),
-                          m(M, {
-                            modelValue: o.comperator,
-                            "onUpdate:modelValue": (s) => o.comperator = s,
-                            options: ve,
-                            "text-by": "text",
-                            "value-by": "value",
-                            class: "w-20"
-                          }, null, 8, ["modelValue", "onUpdate:modelValue"]),
-                          m(R, {
-                            modelValue: o.value,
-                            "onUpdate:modelValue": (s) => o.value = s,
-                            placeholder: "Value",
-                            class: "flex-1"
-                          }, null, 8, ["modelValue", "onUpdate:modelValue"]),
-                          m(l, {
-                            onClick: (s) => Ce(V),
-                            preset: "plain",
-                            icon: "delete",
-                            color: "danger",
-                            size: "small"
-                          }, null, 8, ["onClick"])
-                        ]))), 128))
-                      ])) : (h(), k("div", an, " No conditions - action will always execute "))
-                    ]),
-                    _: 1
-                  })
-                ]),
-                _: 1
-              }),
-              m(se, { class: "card-section" }, {
-                default: w(() => [
-                  m(C, { class: "flex justify-between items-center" }, {
-                    default: w(() => [
-                      a[27] || (a[27] = y("span", { class: "section-title" }, "3. Actions", -1)),
-                      m(l, {
-                        onClick: we,
-                        size: "small",
-                        icon: "add",
-                        preset: "secondary"
-                      }, {
-                        default: w(() => [...a[26] || (a[26] = [
-                          ae("Add Action", -1)
-                        ])]),
-                        _: 1
-                      })
-                    ]),
-                    _: 1
-                  }),
-                  m(K, null, {
-                    default: w(() => [
-                      d.value.actions && d.value.actions.length > 0 ? (h(), k("div", on, [
-                        (h(!0), k(ce, null, fe(d.value.actions, (o, V) => (h(), k("div", {
-                          key: V,
-                          class: _e(["action-card", { active: j.value === V }]),
-                          onClick: (s) => Oe(V)
-                        }, [
-                          y("div", rn, [
-                            y("span", sn, D(V + 1), 1),
-                            y("span", un, [
-                              y("span", dn, D(o.targetContext), 1),
-                              o.actionName ? (h(), k("span", cn, D(o.actionName), 1)) : (h(), k("span", fn, "(select action)"))
-                            ]),
-                            d.value.actions.length > 1 ? (h(), q(l, {
-                              key: 0,
-                              onClick: xe((s) => Ae(V), ["stop"]),
-                              preset: "plain",
-                              icon: "close",
-                              color: "danger",
-                              size: "small"
-                            }, null, 8, ["onClick"])) : z("", !0)
-                          ]),
-                          j.value === V ? (h(), k("div", vn, [
-                            y("div", pn, [
-                              m(M, {
-                                modelValue: o.targetContext,
-                                "onUpdate:modelValue": (s) => o.targetContext = s,
-                                label: "Context",
-                                options: oe,
-                                "text-by": "text",
-                                "value-by": "value",
-                                class: "context-select"
-                              }, null, 8, ["modelValue", "onUpdate:modelValue"]),
-                              o.targetContext === "page" ? (h(), q(M, {
-                                key: 0,
-                                modelValue: o.targetContextId,
-                                "onUpdate:modelValue": (s) => o.targetContextId = s,
-                                label: "Target Page",
-                                options: [{ text: "Any", value: "" }, ...Z.value.map((s) => ({ text: s, value: s }))],
-                                "text-by": "text",
-                                "value-by": "value",
-                                clearable: "",
-                                class: "target-select"
-                              }, null, 8, ["modelValue", "onUpdate:modelValue", "options"])) : o.targetContext === "widget" || o.targetContext === "system" ? (h(), q(M, {
-                                key: 1,
-                                modelValue: o.targetContextId,
-                                "onUpdate:modelValue": (s) => o.targetContextId = s,
-                                label: "Target Instance",
-                                options: ye.value,
-                                "text-by": "text",
-                                "value-by": "value",
-                                clearable: "",
-                                class: "target-select",
-                                placeholder: ye.value.length > 1 ? "Select instance" : "All instances"
-                              }, null, 8, ["modelValue", "onUpdate:modelValue", "options", "placeholder"])) : z("", !0),
-                              m(M, {
-                                modelValue: o.actionName,
-                                "onUpdate:modelValue": (s) => o.actionName = s,
-                                label: "Action",
-                                options: ke.value,
-                                "text-by": "text",
-                                "value-by": "value",
-                                class: "action-select"
-                              }, null, 8, ["modelValue", "onUpdate:modelValue", "options"])
-                            ]),
-                            de.value.length > 0 ? (h(), k("div", yn, [
-                              a[28] || (a[28] = y("div", { class: "parameters-title" }, "Parameters", -1)),
-                              y("div", gn, [
-                                (h(!0), k(ce, null, fe(de.value, (s) => (h(), k("div", {
-                                  key: s.index,
-                                  class: "parameter-item"
-                                }, [
-                                  y("div", mn, [
-                                    y("span", hn, D(s.name), 1),
-                                    s.optional ? (h(), k("span", _n, "?")) : z("", !0),
-                                    y("span", xn, D(s.type), 1)
-                                  ]),
-                                  y("div", bn, [
-                                    y("div", wn, [
-                                      y("button", {
-                                        class: _e(["toggle-btn", { active: ie(s.index) === "payload" }]),
-                                        onClick: xe((B) => me(s.index, "payload"), ["stop"]),
-                                        type: "button"
-                                      }, "Payload", 10, Mn),
-                                      y("button", {
-                                        class: _e(["toggle-btn", { active: ie(s.index) === "manual" }]),
-                                        onClick: xe((B) => me(s.index, "manual"), ["stop"]),
-                                        type: "button"
-                                      }, "Manual", 10, kn)
-                                    ]),
-                                    ie(s.index) === "payload" ? (h(), q(M, {
-                                      key: 0,
-                                      "model-value": Te(s.index),
-                                      "onUpdate:modelValue": (B) => je(s.index, B),
-                                      placeholder: s.optional ? "(optional)" : "Select property",
-                                      options: pe.value,
-                                      "text-by": "text",
-                                      "value-by": "value",
-                                      clearable: "",
-                                      class: "parameter-value-input"
-                                    }, null, 8, ["model-value", "onUpdate:modelValue", "placeholder", "options"])) : (h(), q(R, {
-                                      key: 1,
-                                      "model-value": $e(s.index),
-                                      "onUpdate:modelValue": (B) => A(s.index, B),
-                                      placeholder: `Enter ${s.type}`,
-                                      class: "parameter-value-input"
-                                    }, null, 8, ["model-value", "onUpdate:modelValue", "placeholder"]))
-                                  ])
-                                ]))), 128))
-                              ])
-                            ])) : z("", !0)
-                          ])) : z("", !0)
-                        ], 10, ln))), 128))
-                      ])) : z("", !0)
-                    ]),
-                    _: 1
-                  })
-                ]),
-                _: 1
-              })
-            ])
-          ]),
-          _: 1
-        }, 8, ["modelValue"]),
-        m(Ie, {
-          modelValue: te.value,
-          "onUpdate:modelValue": a[13] || (a[13] = (o) => te.value = o),
-          size: "small",
-          "hide-default-actions": "",
-          "overlay-opacity": "0.3"
-        }, {
-          footer: w(() => [
-            y("div", Cn, [
-              m(l, {
-                preset: "secondary",
-                onClick: a[11] || (a[11] = (o) => {
-                  te.value = !1, re.value = null;
-                })
-              }, {
-                default: w(() => [...a[31] || (a[31] = [
-                  ae(" Abbrechen ", -1)
-                ])]),
-                _: 1
-              }),
-              m(l, {
-                color: "danger",
-                icon: "delete",
-                onClick: a[12] || (a[12] = (o) => Ne())
-              }, {
-                default: w(() => [...a[32] || (a[32] = [
-                  ae(" Löschen ", -1)
-                ])]),
-                _: 1
-              })
-            ])
-          ]),
-          default: w(() => [
-            y("div", Vn, [
-              m(Le, {
-                name: "warning",
-                color: "danger",
-                size: "2rem"
-              }),
-              a[29] || (a[29] = y("h5", { style: { margin: "0.5rem 0" } }, "Event-Mapping löschen", -1)),
-              a[30] || (a[30] = y("p", null, "Möchtest du dieses Event-Mapping wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden.", -1))
-            ])
-          ]),
-          _: 1
-        }, 8, ["modelValue"])
-      ]);
-    };
+                                "model-value": W(l.index),
+                                "onUpdate:modelValue": (M) => De(l.index, String(M ?? "")),
+                                placeholder: `Enter ${l.type}`,
+                                class: "parameter-value-input"
+                              }, null, 8, ["model-value", "onUpdate:modelValue", "placeholder"]))
+                            ])
+                          ]))), 128))
+                        ])
+                      ])) : $("", !0)
+                    ])) : $("", !0)
+                  ], 10, _n))), 128))
+                ])) : $("", !0)
+              ]),
+              _: 1
+            })
+          ])
+        ]),
+        _: 1
+      }, 8, ["modelValue"]),
+      m(f(Ye), {
+        modelValue: re.value,
+        "onUpdate:modelValue": a[14] || (a[14] = (t) => re.value = t),
+        size: "sm",
+        onCancel: ge
+      }, {
+        header: b(() => [
+          m(f(Y), {
+            name: "warning",
+            size: "lg",
+            tone: "color-err"
+          }),
+          a[34] || (a[34] = d("h2", { class: "confirm__title" }, "Event-Mapping löschen", -1))
+        ]),
+        actions: b(() => [
+          m(f(j), {
+            intent: "quiet",
+            onClick: ge
+          }, {
+            default: b(() => [...a[35] || (a[35] = [
+              ee("Abbrechen", -1)
+            ])]),
+            _: 1
+          }),
+          m(f(j), {
+            intent: "danger",
+            onClick: a[13] || (a[13] = (t) => Ne())
+          }, {
+            default: b(() => [...a[36] || (a[36] = [
+              ee("Löschen", -1)
+            ])]),
+            _: 1
+          })
+        ]),
+        default: b(() => [
+          a[37] || (a[37] = d("p", { class: "confirm__text" }, " Möchtest du dieses Event-Mapping wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden. ", -1))
+        ]),
+        _: 1
+      }, 8, ["modelValue"])
+    ]));
   }
-}), In = (G, F) => {
-  const I = G.__vccOpts || G;
-  for (const [E, O] of F)
-    I[E] = O;
-  return I;
-}, nt = /* @__PURE__ */ In(Tn, [["__scopeId", "data-v-ee120456"]]), Ye = "events", at = "events";
-function ot({ services: G }) {
-  const F = G.getRequired(tt), I = new gt();
-  I.path = "/events", I.name = Ye, I.component = nt, F.registerRoute(I);
-  const E = G.getRequired(et), O = new yt();
-  O.id = at, O.label = "Event Manager", O.icon = "event", O.route = "/events", O.routeName = Ye, O.order = 15, O.visible = !0, E.registerNavigationItem(O);
+}), jn = (z, G) => {
+  const V = z.__vccOpts || z;
+  for (const [T, E] of G)
+    V[T] = E;
+  return V;
+}, at = /* @__PURE__ */ jn($n, [["__scopeId", "data-v-371363f0"]]), Ze = "events", ot = "events";
+function lt({ services: z }) {
+  const G = z.getRequired(nt), V = new xt();
+  V.path = "/events", V.name = Ze, V.component = at, G.registerRoute(V);
+  const T = z.getRequired(tt), E = new kt();
+  E.id = ot, E.label = "Event Manager", E.icon = "event", E.route = "/events", E.routeName = Ze, E.order = 15, E.visible = !0, T.registerNavigationItem(E);
 }
-function lt({ services: G }) {
-  G.getRequired(tt).unregisterRoute(Ye), G.getRequired(et).unregisterNavigationItem(at);
+function rt({ services: z }) {
+  z.getRequired(nt).unregisterRoute(Ze), z.getRequired(tt).unregisterNavigationItem(ot);
 }
-const En = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const zn = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  EventManagerUI: nt,
-  activate: ot,
-  deactivate: lt
-}, Symbol.toStringTag, { value: "Module" })), Ke = "org.eclipse.daanse.board.app.ui.vue.eventmanager", An = "0.0.1-next.1";
-async function jn(G) {
-  const F = globalThis.__tsm__;
-  if (!F)
-    throw new Error(`${Ke}: tsm runtime is not initialized`);
-  F.register(Ke, En, An, "ui.vue.eventmanager"), await ot?.(G);
+  EventManagerUI: at,
+  activate: lt,
+  deactivate: rt
+}, Symbol.toStringTag, { value: "Module" })), et = "org.eclipse.daanse.board.app.ui.vue.eventmanager", Gn = "0.0.1-next.1";
+async function Zn(z) {
+  const G = globalThis.__tsm__;
+  if (!G)
+    throw new Error(`${et}: tsm runtime is not initialized`);
+  G.register(et, zn, Gn, "ui.vue.eventmanager"), await lt?.(z);
 }
-async function $n(G) {
-  await lt?.(G);
+async function Jn(z) {
+  await rt?.(z);
 }
 export {
-  nt as EventManagerUI,
-  jn as activate,
-  $n as deactivate
+  at as EventManagerUI,
+  Zn as activate,
+  Jn as deactivate
 };

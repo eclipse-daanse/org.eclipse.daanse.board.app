@@ -16,6 +16,14 @@ import { type EventActionMapping, type ActionDefinition, type WidgetEventDefinit
 import { Comperator } from 'org.eclipse.daanse.board.app.lib.events'
 import { Condition } from 'org.eclipse.daanse.board.app.lib.events'
 import { type PageRegistryI, identifier as PageIdentifier } from 'org.eclipse.daanse.board.app.lib.api.page'
+import {
+  DButton,
+  DCard,
+  DIcon,
+  DInput,
+  DModal,
+  DSelect,
+} from 'org.eclipse.daanse.board.app.ui.vue.controls'
 
 let eventManager: EventManager
 let eventRegistry: EventRegistry
@@ -399,6 +407,16 @@ const confirmRemoveMapping = () => {
     eventManager.unregisterMapping(mappingToDelete.value)
     loadMappings()
   }
+  cancelRemoveMapping()
+}
+
+/*
+ * Escape and a click on the scrim close the dialog as well as the button
+ * does, so the mapping waiting to be deleted is dropped here - otherwise a
+ * dismissed dialog leaves it pending and the next confirmation removes
+ * something nobody asked about.
+ */
+const cancelRemoveMapping = () => {
   showDeleteConfirm.value = false
   mappingToDelete.value = null
 }
@@ -550,163 +568,133 @@ onMounted(() => {
   <div class="event-manager-ui">
     <div class="header-section">
       <h2 class="page-title">Event Manager</h2>
-      <VaButton @click="showAddDialog = true" icon="add">Add Mapping</VaButton>
+      <DButton @click="showAddDialog = true"><DIcon name="add" size="sm" />Add Mapping</DButton>
     </div>
 
     <div class="flex flex-col border border-gray-300 rounded-lg overflow-hidden w-full table-wrapper">
       <div class="w-full overflow-auto flex flex-col bg-white">
-        <VaDataTable
-          :items="mappings"
-          :columns="columns"
-          :hoverable="true"
-          class="w-full"
-        >
-          <template #cell(id)="{ rowData }">
-            <span class="mapping-id" :title="rowData.id">{{ rowData.id }}</span>
-          </template>
-          <template #cell(context)="{ rowData }">
-            <span>{{ rowData.context }}</span>
-            <span v-if="rowData.contextId" class="uid-badge" :title="rowData.contextId">{{ rowData.contextId }}</span>
-          </template>
-          <template #cell(actionsCount)="{ rowData }">
-            <div class="actions-list">
-              <div v-for="(action, idx) in getMappingActions(rowData)" :key="idx" class="action-item">
-                <span class="action-context">{{ action.targetContext }}</span>
-                <span v-if="action.targetContextId" class="uid-badge" :title="action.targetContextId">{{ action.targetContextId }}</span>
-                <span class="action-separator">→</span>
-                <span class="action-name">{{ action.actionName }}</span>
-              </div>
-            </div>
-          </template>
-          <template #cell(conditions)="{ rowData }">
-            <span class="text-xs">{{ formatConditions(rowData.conditions) }}</span>
-          </template>
-          <template #cell(tableActions)="{ rowData }">
-            <div class="flex gap-2">
-              <VaButton
-                @click="editMapping(rowData)"
-                preset="plain"
-                icon="edit"
-                size="small"
-              />
-              <VaButton
-                @click="removeMapping(rowData.id)"
-                preset="plain"
-                icon="delete"
-                color="danger"
-                size="small"
-              />
-            </div>
-          </template>
-        </VaDataTable>
+        <table class="mappings">
+          <thead>
+            <tr>
+              <th v-for="column in columns" :key="column.key">{{ column.label }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="mapping in mappings" :key="mapping.id">
+              <td>
+                <span class="mapping-id" :title="mapping.id">{{ mapping.id }}</span>
+              </td>
+              <td>
+                <span>{{ mapping.context }}</span>
+                <span v-if="mapping.contextId" class="uid-badge" :title="mapping.contextId">{{ mapping.contextId }}</span>
+              </td>
+              <td>{{ mapping.eventType }}</td>
+              <td>
+                <div class="actions-list">
+                  <div v-for="(action, idx) in getMappingActions(mapping)" :key="idx" class="action-item">
+                    <span class="action-context">{{ action.targetContext }}</span>
+                    <span v-if="action.targetContextId" class="uid-badge" :title="action.targetContextId">{{ action.targetContextId }}</span>
+                    <span class="action-separator">→</span>
+                    <span class="action-name">{{ action.actionName }}</span>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <span class="text-xs">{{ formatConditions(mapping.conditions) }}</span>
+              </td>
+              <td class="mappings__actions">
+                <DButton intent="quiet" size="sm" title="Edit mapping" @click="editMapping(mapping)">
+                  <DIcon name="edit" size="sm" />
+                </DButton>
+                <DButton intent="danger" size="sm" title="Remove mapping" @click="removeMapping(mapping.id)">
+                  <DIcon name="delete" size="sm" />
+                </DButton>
+              </td>
+            </tr>
+            <tr v-if="mappings.length === 0">
+              <td class="mappings__empty" :colspan="columns.length">No mappings yet.</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
 
     <!-- Add Modal Dialog -->
-    <VaModal
+    <DModal
       v-model="showAddDialog"
       title="Add Event-Action Mapping"
-      size="large"
+      size="lg"
       class="event-manager-ui_modal"
-      @ok="addMapping"
       @cancel="resetForm"
-      ok-text="Add"
-      cancel-text="Cancel"
     >
       <div class="space-y-4">
         <!-- 1. Event Source Section -->
-        <VaCard class="card-section">
-          <VaCardTitle class="section-title">1. Event Source</VaCardTitle>
-          <VaCardContent>
+        <DCard class="card-section">
+          <template #header><h3 class="section-title">1. Event Source</h3></template>
             <div class="event-source-grid">
-              <VaSelect
+              <DSelect
                 v-model="newMapping.context"
                 label="Context"
-                :options="contextOptions"
-                text-by="text"
-                value-by="value"
-              />
+                :options="contextOptions" label-key="text" value-key="value"></DSelect>
 
-              <VaSelect
+              <DSelect
                 v-if="newMapping.context === 'page'"
                 v-model="newMapping.contextId"
                 label="Page ID"
-                :options="[{ text: 'Any page', value: '' }, ...availablePages.map(p => ({ text: p, value: p }))]"
-                text-by="text"
-                value-by="value"
-                clearable
-              />
+                :options="[{ text: 'Any page', value: '' }, ...availablePages.map(p => ({ text: p, value: p }))]" label-key="text" value-key="value"
+                clearable></DSelect>
 
-              <VaInput
+              <DInput
                 v-else-if="newMapping.context === 'widget'"
                 v-model="newMapping.contextId"
                 label="Widget ID (optional)"
-                placeholder="e.g., specific widgetId"
-                clearable
-              />
+                placeholder="e.g., specific widgetId"></DInput>
 
-              <VaSelect
+              <DSelect
                 v-model="newMapping.eventType"
                 label="Event Type"
-                :options="availableEvents"
-                text-by="type"
-                value-by="type"
-              />
+                :options="availableEvents" label-key="type" value-key="type"></DSelect>
             </div>
-          </VaCardContent>
-        </VaCard>
+                  </DCard>
 
         <!-- 2. Conditions Section -->
-        <VaCard class="card-section">
-          <VaCardTitle class="flex justify-between items-center">
+        <DCard class="card-section">
+          <template #header><div class="card-section__head">
             <span class="section-title">2. Conditions</span>
-            <VaButton @click="addCondition" size="small" icon="add" preset="secondary">Add</VaButton>
-          </VaCardTitle>
-          <VaCardContent>
+            <DButton @click="addCondition" size="sm" intent="quiet"><DIcon name="add" size="sm" />Add</DButton>
+          </div>
+          </template>
             <div v-if="newMapping.conditions && newMapping.conditions.length > 0" class="space-y-2">
               <div v-for="(condition, index) in newMapping.conditions" :key="index" class="condition-row">
-                <VaSelect
+                <DSelect
                   v-model="condition.prop"
                   placeholder="Property"
-                  :options="availablePayloadProperties"
-                  text-by="text"
-                  value-by="value"
-                  class="flex-1"
-                />
-                <VaSelect
+                  :options="availablePayloadProperties" label-key="text" value-key="value"
+                  class="flex-1"></DSelect>
+                <DSelect
                   v-model="condition.comperator"
-                  :options="comperatorOptions"
-                  text-by="text"
-                  value-by="value"
-                  class="w-20"
-                />
-                <VaInput
+                  :options="comperatorOptions" label-key="text" value-key="value"
+                  class="w-20"></DSelect>
+                <DInput
                   v-model="condition.value"
                   placeholder="Value"
-                  class="flex-1"
-                />
-                <VaButton
-                  @click="removeCondition(index)"
-                  preset="plain"
-                  icon="delete"
-                  color="danger"
-                  size="small"
-                />
+                  class="flex-1"></DInput>
+                <DButton
+                  @click="removeCondition(index)" intent="danger" size="sm"><DIcon name="delete" size="sm" /></DButton>
               </div>
             </div>
             <div v-else class="text-gray-500 italic text-sm">
               No conditions - action will always execute
             </div>
-          </VaCardContent>
-        </VaCard>
+                  </DCard>
 
         <!-- 3. Actions Section -->
-        <VaCard class="card-section">
-          <VaCardTitle class="flex justify-between items-center">
+        <DCard class="card-section">
+          <template #header><div class="card-section__head">
             <span class="section-title">3. Actions</span>
-            <VaButton @click="addAction" size="small" icon="add" preset="secondary">Add Action</VaButton>
-          </VaCardTitle>
-          <VaCardContent>
+            <DButton @click="addAction" size="sm" intent="quiet"><DIcon name="add" size="sm" />Add Action</DButton>
+          </div>
+          </template>
             <div v-if="newMapping.actions && newMapping.actions.length > 0" class="actions-list-editor">
               <!-- Action Cards -->
               <div
@@ -722,59 +710,38 @@ onMounted(() => {
                     <span v-if="action.actionName" class="action-name-text">{{ action.actionName }}</span>
                     <span v-else class="action-empty">(select action)</span>
                   </span>
-                  <VaButton
+                  <DButton
                     v-if="newMapping.actions.length > 1"
-                    @click.stop="removeAction(idx)"
-                    preset="plain"
-                    icon="close"
-                    color="danger"
-                    size="small"
-                  />
+                    @click.stop="removeAction(idx)" intent="danger" size="sm"><DIcon name="close" size="sm" /></DButton>
                 </div>
 
                 <!-- Expanded Action Editor (when selected) -->
                 <div v-if="currentActionIndex === idx" class="action-card-body">
                   <div class="action-settings-row">
-                    <VaSelect
+                    <DSelect
                       v-model="action.targetContext"
                       label="Context"
-                      :options="contextOptions"
-                      text-by="text"
-                      value-by="value"
-                      class="context-select"
-                    />
+                      :options="contextOptions" label-key="text" value-key="value"></DSelect>
 
-                    <VaSelect
+                    <DSelect
                       v-if="action.targetContext === 'page'"
                       v-model="action.targetContextId"
                       label="Target Page"
-                      :options="[{ text: 'Any', value: '' }, ...availablePages.map(p => ({ text: p, value: p }))]"
-                      text-by="text"
-                      value-by="value"
-                      clearable
-                      class="target-select"
-                    />
+                      :options="[{ text: 'Any', value: '' }, ...availablePages.map(p => ({ text: p, value: p }))]" label-key="text" value-key="value"
+                      clearable></DSelect>
 
-                    <VaSelect
+                    <DSelect
                       v-else-if="action.targetContext === 'widget' || action.targetContext === 'system'"
                       v-model="action.targetContextId"
                       label="Target Instance"
-                      :options="availableInstances"
-                      text-by="text"
-                      value-by="value"
+                      :options="availableInstances" label-key="text" value-key="value"
                       clearable
-                      class="target-select"
-                      :placeholder="availableInstances.length > 1 ? 'Select instance' : 'All instances'"
-                    />
+                      :placeholder="availableInstances.length > 1 ? 'Select instance' : 'All instances'"></DSelect>
 
-                    <VaSelect
+                    <DSelect
                       v-model="action.actionName"
                       label="Action"
-                      :options="availableActions"
-                      text-by="text"
-                      value-by="value"
-                      class="action-select"
-                    />
+                      :options="availableActions" label-key="text" value-key="value"></DSelect>
                   </div>
 
                   <!-- Parameters (inline) -->
@@ -800,24 +767,20 @@ onMounted(() => {
                               type="button"
                             >Manual</button>
                           </div>
-                          <VaSelect
+                          <DSelect
                             v-if="getParameterValueSource(param.index) === 'payload'"
                             :model-value="getPayloadPathForParameter(param.index)"
-                            @update:model-value="updateParameterMapping(param.index, $event)"
+                            @update:model-value="updateParameterMapping(param.index, String($event ?? ''))"
                             :placeholder="param.optional ? '(optional)' : 'Select property'"
-                            :options="availablePayloadProperties"
-                            text-by="text"
-                            value-by="value"
+                            :options="availablePayloadProperties" label-key="text" value-key="value"
                             clearable
-                            class="parameter-value-input"
-                          />
-                          <VaInput
+                            class="parameter-value-input"></DSelect>
+                          <DInput
                             v-else
                             :model-value="getManualValueForParameter(param.index)"
-                            @update:model-value="updateManualParameterValue(param.index, $event)"
+                            @update:model-value="updateManualParameterValue(param.index, String($event ?? ''))"
                             :placeholder="`Enter ${param.type}`"
-                            class="parameter-value-input"
-                          />
+                            class="parameter-value-input"></DInput>
                         </div>
                       </div>
                     </div>
@@ -825,115 +788,89 @@ onMounted(() => {
                 </div>
               </div>
             </div>
-          </VaCardContent>
-        </VaCard>
+                  </DCard>
       </div>
-    </VaModal>
+      <template #actions>
+        <DButton intent="quiet" @click="showAddDialog = false; resetForm()">Cancel</DButton>
+        <DButton intent="primary" @click="addMapping">Add</DButton>
+      </template>
+    </DModal>
 
     <!-- Edit Modal Dialog -->
-    <VaModal
+    <DModal
       v-model="showEditDialog"
       title="Edit Event-Action Mapping"
-      size="large"
-      @ok="addMapping"
+      size="lg"
       @cancel="resetForm"
-      ok-text="Save"
-      cancel-text="Cancel"
     >
       <div class="space-y-4">
         <!-- 1. Event Source Section -->
-        <VaCard class="card-section">
-          <VaCardTitle class="section-title">1. Event Source</VaCardTitle>
-          <VaCardContent>
+        <DCard class="card-section">
+          <template #header><h3 class="section-title">1. Event Source</h3></template>
             <div class="event-source-grid">
-              <VaSelect
+              <DSelect
                 v-model="newMapping.context"
                 label="Context"
-                :options="contextOptions"
-                text-by="text"
-                value-by="value"
-              />
+                :options="contextOptions" label-key="text" value-key="value"></DSelect>
 
-              <VaSelect
+              <DSelect
                 v-if="newMapping.context === 'page'"
                 v-model="newMapping.contextId"
                 label="Page ID"
-                :options="[{ text: 'Any page', value: '' }, ...availablePages.map(p => ({ text: p, value: p }))]"
-                text-by="text"
-                value-by="value"
-                clearable
-              />
+                :options="[{ text: 'Any page', value: '' }, ...availablePages.map(p => ({ text: p, value: p }))]" label-key="text" value-key="value"
+                clearable></DSelect>
 
-              <VaInput
+              <DInput
                 v-else-if="newMapping.context === 'widget'"
                 v-model="newMapping.contextId"
                 label="Widget ID (optional)"
-                placeholder="e.g., specific widgetId"
-                clearable
-              />
+                placeholder="e.g., specific widgetId"></DInput>
 
-              <VaSelect
+              <DSelect
                 v-model="newMapping.eventType"
                 label="Event Type"
-                :options="availableEvents"
-                text-by="type"
-                value-by="type"
-              />
+                :options="availableEvents" label-key="type" value-key="type"></DSelect>
             </div>
-          </VaCardContent>
-        </VaCard>
+                  </DCard>
 
         <!-- 2. Conditions Section -->
-        <VaCard class="card-section">
-          <VaCardTitle class="flex justify-between items-center">
+        <DCard class="card-section">
+          <template #header><div class="card-section__head">
             <span class="section-title">2. Conditions</span>
-            <VaButton @click="addCondition" size="small" icon="add" preset="secondary">Add</VaButton>
-          </VaCardTitle>
-          <VaCardContent>
+            <DButton @click="addCondition" size="sm" intent="quiet"><DIcon name="add" size="sm" />Add</DButton>
+          </div>
+          </template>
             <div v-if="newMapping.conditions && newMapping.conditions.length > 0" class="space-y-2">
               <div v-for="(condition, index) in newMapping.conditions" :key="index" class="condition-row">
-                <VaSelect
+                <DSelect
                   v-model="condition.prop"
                   placeholder="Property"
-                  :options="availablePayloadProperties"
-                  text-by="text"
-                  value-by="value"
-                  class="flex-1"
-                />
-                <VaSelect
+                  :options="availablePayloadProperties" label-key="text" value-key="value"
+                  class="flex-1"></DSelect>
+                <DSelect
                   v-model="condition.comperator"
-                  :options="comperatorOptions"
-                  text-by="text"
-                  value-by="value"
-                  class="w-20"
-                />
-                <VaInput
+                  :options="comperatorOptions" label-key="text" value-key="value"
+                  class="w-20"></DSelect>
+                <DInput
                   v-model="condition.value"
                   placeholder="Value"
-                  class="flex-1"
-                />
-                <VaButton
-                  @click="removeCondition(index)"
-                  preset="plain"
-                  icon="delete"
-                  color="danger"
-                  size="small"
-                />
+                  class="flex-1"></DInput>
+                <DButton
+                  @click="removeCondition(index)" intent="danger" size="sm"><DIcon name="delete" size="sm" /></DButton>
               </div>
             </div>
             <div v-else class="text-gray-500 italic text-sm">
               No conditions - action will always execute
             </div>
-          </VaCardContent>
-        </VaCard>
+                  </DCard>
 
         <!-- 3. Actions Section -->
-        <VaCard class="card-section">
-          <VaCardTitle class="flex justify-between items-center">
+        <DCard class="card-section">
+          <template #header><div class="card-section__head">
             <span class="section-title">3. Actions</span>
-            <VaButton @click="addAction" size="small" icon="add" preset="secondary">Add Action</VaButton>
-          </VaCardTitle>
-          <VaCardContent>
+            <DButton @click="addAction" size="sm" intent="quiet"><DIcon name="add" size="sm" />Add Action</DButton>
+          </div>
+          </template>
             <div v-if="newMapping.actions && newMapping.actions.length > 0" class="actions-list-editor">
               <!-- Action Cards -->
               <div
@@ -949,59 +886,38 @@ onMounted(() => {
                     <span v-if="action.actionName" class="action-name-text">{{ action.actionName }}</span>
                     <span v-else class="action-empty">(select action)</span>
                   </span>
-                  <VaButton
+                  <DButton
                     v-if="newMapping.actions.length > 1"
-                    @click.stop="removeAction(idx)"
-                    preset="plain"
-                    icon="close"
-                    color="danger"
-                    size="small"
-                  />
+                    @click.stop="removeAction(idx)" intent="danger" size="sm"><DIcon name="close" size="sm" /></DButton>
                 </div>
 
                 <!-- Expanded Action Editor (when selected) -->
                 <div v-if="currentActionIndex === idx" class="action-card-body">
                   <div class="action-settings-row">
-                    <VaSelect
+                    <DSelect
                       v-model="action.targetContext"
                       label="Context"
-                      :options="contextOptions"
-                      text-by="text"
-                      value-by="value"
-                      class="context-select"
-                    />
+                      :options="contextOptions" label-key="text" value-key="value"></DSelect>
 
-                    <VaSelect
+                    <DSelect
                       v-if="action.targetContext === 'page'"
                       v-model="action.targetContextId"
                       label="Target Page"
-                      :options="[{ text: 'Any', value: '' }, ...availablePages.map(p => ({ text: p, value: p }))]"
-                      text-by="text"
-                      value-by="value"
-                      clearable
-                      class="target-select"
-                    />
+                      :options="[{ text: 'Any', value: '' }, ...availablePages.map(p => ({ text: p, value: p }))]" label-key="text" value-key="value"
+                      clearable></DSelect>
 
-                    <VaSelect
+                    <DSelect
                       v-else-if="action.targetContext === 'widget' || action.targetContext === 'system'"
                       v-model="action.targetContextId"
                       label="Target Instance"
-                      :options="availableInstances"
-                      text-by="text"
-                      value-by="value"
+                      :options="availableInstances" label-key="text" value-key="value"
                       clearable
-                      class="target-select"
-                      :placeholder="availableInstances.length > 1 ? 'Select instance' : 'All instances'"
-                    />
+                      :placeholder="availableInstances.length > 1 ? 'Select instance' : 'All instances'"></DSelect>
 
-                    <VaSelect
+                    <DSelect
                       v-model="action.actionName"
                       label="Action"
-                      :options="availableActions"
-                      text-by="text"
-                      value-by="value"
-                      class="action-select"
-                    />
+                      :options="availableActions" label-key="text" value-key="value"></DSelect>
                   </div>
 
                   <!-- Parameters (inline) -->
@@ -1027,24 +943,20 @@ onMounted(() => {
                               type="button"
                             >Manual</button>
                           </div>
-                          <VaSelect
+                          <DSelect
                             v-if="getParameterValueSource(param.index) === 'payload'"
                             :model-value="getPayloadPathForParameter(param.index)"
-                            @update:model-value="updateParameterMapping(param.index, $event)"
+                            @update:model-value="updateParameterMapping(param.index, String($event ?? ''))"
                             :placeholder="param.optional ? '(optional)' : 'Select property'"
-                            :options="availablePayloadProperties"
-                            text-by="text"
-                            value-by="value"
+                            :options="availablePayloadProperties" label-key="text" value-key="value"
                             clearable
-                            class="parameter-value-input"
-                          />
-                          <VaInput
+                            class="parameter-value-input"></DSelect>
+                          <DInput
                             v-else
                             :model-value="getManualValueForParameter(param.index)"
-                            @update:model-value="updateManualParameterValue(param.index, $event)"
+                            @update:model-value="updateManualParameterValue(param.index, String($event ?? ''))"
                             :placeholder="`Enter ${param.type}`"
-                            class="parameter-value-input"
-                          />
+                            class="parameter-value-input"></DInput>
                         </div>
                       </div>
                     </div>
@@ -1052,33 +964,28 @@ onMounted(() => {
                 </div>
               </div>
             </div>
-          </VaCardContent>
-        </VaCard>
+                  </DCard>
       </div>
-    </VaModal>
-
-    <VaModal
-      v-model="showDeleteConfirm"
-      size="small"
-      hide-default-actions
-      overlay-opacity="0.3"
-    >
-      <div style="text-align: center; padding: 1rem;">
-        <VaIcon name="warning" color="danger" size="2rem" />
-        <h5 style="margin: 0.5rem 0;">Event-Mapping löschen</h5>
-        <p>Möchtest du dieses Event-Mapping wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden.</p>
-      </div>
-      <template #footer>
-        <div style="display: flex; justify-content: flex-end; gap: 0.5rem;">
-          <VaButton preset="secondary" @click="showDeleteConfirm = false; mappingToDelete = null;">
-            Abbrechen
-          </VaButton>
-          <VaButton color="danger" icon="delete" @click="confirmRemoveMapping()">
-            Löschen
-          </VaButton>
-        </div>
+      <template #actions>
+        <DButton intent="quiet" @click="showEditDialog = false; resetForm()">Cancel</DButton>
+        <DButton intent="primary" @click="addMapping">Save</DButton>
       </template>
-    </VaModal>
+    </DModal>
+
+    <DModal v-model="showDeleteConfirm" size="sm" @cancel="cancelRemoveMapping">
+      <template #header>
+        <DIcon name="warning" size="lg" tone="color-err" />
+        <h2 class="confirm__title">Event-Mapping löschen</h2>
+      </template>
+      <p class="confirm__text">
+        Möchtest du dieses Event-Mapping wirklich löschen? Diese Aktion kann nicht rückgängig
+        gemacht werden.
+      </p>
+      <template #actions>
+        <DButton intent="quiet" @click="cancelRemoveMapping">Abbrechen</DButton>
+        <DButton intent="danger" @click="confirmRemoveMapping()">Löschen</DButton>
+      </template>
+    </DModal>
   </div>
 </template>
 
@@ -1125,25 +1032,83 @@ onMounted(() => {
 }
 
 .card-section {
-  background: rgba(255, 255, 255, 0.6);
-  border-radius: 12px;
-  backdrop-filter: blur(5px);
-  -webkit-backdrop-filter: blur(5px);
-  border: 1px solid rgba(213, 213, 213, 0.3);
+  background: var(--color-pane);
+  border: 1px solid var(--color-divider);
+  border-radius: var(--radius-md, 4px);
 }
 
-:deep(.card-section.va-card) {
-  box-shadow: none !important;
-}
-
-:deep(.card-section .va-card__inner) {
-  box-shadow: none !important;
+.card-section__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
 }
 
 .section-title {
+  margin: 0;
   font-size: 1rem;
   font-weight: 500;
-  color: #262824;
+  color: var(--color-fg);
+}
+
+.confirm__title {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  font-weight: 600;
+  color: var(--color-fg);
+}
+
+.confirm__text {
+  margin: 0;
+  color: var(--color-dim);
+  line-height: 1.5;
+}
+
+/* The mappings, written out: one row per mapping, one column per field */
+.mappings {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  color: var(--color-fg);
+}
+
+.mappings th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  padding: 8px 10px;
+  text-align: left;
+  background: var(--color-raised);
+  border-bottom: 1px solid var(--color-divider);
+  font-size: var(--text-xs);
+  font-weight: 500;
+  color: var(--color-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+}
+
+.mappings td {
+  padding: 6px 10px;
+  border-bottom: 1px solid var(--color-divider);
+  vertical-align: top;
+}
+
+.mappings tbody tr:hover {
+  background: var(--color-raised);
+}
+
+.mappings__actions {
+  display: flex;
+  gap: 6px;
+  justify-content: flex-end;
+}
+
+.mappings__empty {
+  padding: 14px 10px;
+  color: var(--color-dim);
 }
 
 .condition-row {
@@ -1189,33 +1154,6 @@ onMounted(() => {
   font-weight: 500;
 }
 
-/* Modal overlay styling to match feature_menustrckt */
-:deep(.va-modal__overlay) {
-  opacity: 1 !important;
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  background: rgb(204 204 204 / 55%) !important;
-}
-
-:deep(.va-modal) {
-  z-index: 3000000 !important;
-}
-
-:deep(.va-modal__inner) {
-  background: rgb(247 243 243 / 85%) !important;
-  border-radius: 16px;
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-}
-
-:deep(.va-modal__dialog) {
-  background: transparent !important;
-}
-
-:deep(.va-modal__container) {
-  background: transparent !important;
-}
-
 /* Table header styling */
 .table-header {
   display: flex;
@@ -1237,28 +1175,10 @@ onMounted(() => {
   background: white;
 }
 
-:deep(.table-content .va-data-table) {
-  background: transparent;
-}
-
-:deep(.table-content .va-data-table__table) {
-  background: white;
-}
-
 /* Event Mapping Grid Layout */
 .event-mapping-grid {
   display: grid;
   grid-template-columns: 200px 120px 150px 120px 180px 150px 80px;
-}
-
-/* VaDataTable header styling */
-:deep(.va-data-table__table-thead) {
-  background: #f9fafb;
-  font-size: 0.75rem;
-  font-weight: 500;
-  color: #6b7280;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
 }
 
 /* Table wrapper - constrain height */
@@ -1469,23 +1389,16 @@ onMounted(() => {
   margin-top: 0;
 }
 
+/*
+ * Stacked, because these fields carry their labels beside them now: three
+ * label-and-control pairs side by side left each control a stub of what it
+ * had to show.
+ */
 .action-settings-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr 2fr;
-  gap: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
   padding-top: 0.75rem;
-}
-
-.context-select {
-  min-width: 100px;
-}
-
-.target-select {
-  min-width: 120px;
-}
-
-.action-select {
-  min-width: 180px;
 }
 
 /* Inline parameters */
