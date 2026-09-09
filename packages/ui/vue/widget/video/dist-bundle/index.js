@@ -1,15 +1,14 @@
-(function(){var i="ui.vue.widget.video",d=document,s=d.querySelector('style[data-tsm-bundle="'+i+'"]');if(!s){s=d.createElement('style');s.setAttribute('data-tsm-bundle',i);d.head.appendChild(s);}s.textContent=".container[data-v-c8b707a4]{width:100%;height:100%;display:flex;justify-content:center;align-items:center}.container video[data-v-c8b707a4]{width:100%;height:100%;border-radius:3px;object-fit:var(--v67adbbd0)}.settings-container[data-v-9a8eca2e]{display:flex;flex-direction:column;align-items:stretch;gap:1rem}\n";})();
-import { WidgetActionInterfaceImpl as Z, EVENT_ACTIONS_REGISTRY as K, PayloadImpl as h, EVENT_REGISTRY_ID as Q, EVENT_ACTIONS_REGISTRY_ID as ee } from "org.eclipse.daanse.board.app.lib.api.events";
-import { activate as te, deactivate as ie, component as se, inject as x } from "@eclipse-daanse/tsm";
-import { defineComponent as k, mergeModels as ne, useCssVars as oe, computed as L, toRefs as re, useModel as A, inject as D, ref as B, onMounted as ae, onUnmounted as le, createElementBlock as de, openBlock as M, withModifiers as ue, createElementVNode as j, resolveComponent as N, createBlock as ce, withCtx as R, createVNode as V, unref as pe } from "vue";
-import { useRoute as ge } from "vue-router";
-import { BasicEObject as J, BasicEFactory as ve, BasicEPackage as me, EPackageRegistry as X, BasicEClass as G, BasicEAttribute as he, BasicEReference as W, getEcorePackage as fe } from "@emfts/core";
-import { VariableWrapper as f } from "org.eclipse.daanse.board.app.ui.vue.composables";
-import { WidgetAction as I } from "org.eclipse.daanse.board.app.lib.events";
-import { VariableInput as Te } from "org.eclipse.daanse.board.app.ui.vue.variable.components";
-import { WIDGET_SERVICE_ID as Ee } from "org.eclipse.daanse.board.app.lib.api.widget";
-const { identifiers: Ie } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
-class v extends J {
+(function(){var i="ui.vue.widget.video",d=document,s=d.querySelector('style[data-tsm-bundle="'+i+'"]');if(!s){s=d.createElement('style');s.setAttribute('data-tsm-bundle',i);d.head.appendChild(s);}s.textContent=".container[data-v-c8b707a4]{width:100%;height:100%;display:flex;justify-content:center;align-items:center}.container video[data-v-c8b707a4]{width:100%;height:100%;border-radius:3px;object-fit:var(--v67adbbd0)}\n";})();
+import { WidgetActionInterfaceImpl as B, EVENT_ACTIONS_REGISTRY as M, PayloadImpl as h, EVENT_REGISTRY_ID as j, EVENT_ACTIONS_REGISTRY_ID as J } from "org.eclipse.daanse.board.app.lib.api.events";
+import { activate as X, deactivate as $, component as Y, inject as D } from "@eclipse-daanse/tsm";
+import { defineComponent as H, mergeModels as z, useCssVars as q, computed as C, toRefs as Z, useModel as K, inject as V, ref as Q, onMounted as ee, onUnmounted as te, createElementBlock as ie, openBlock as se, withModifiers as re, createElementVNode as ne } from "vue";
+import { useRoute as oe } from "vue-router";
+import { BasicEObject as x, BasicEFactory as ae, BasicEPackage as le, EPackageRegistry as L, BasicEClass as b, BasicEAttribute as de, BasicEReference as O, getEcorePackage as ue } from "@emfts/core";
+import { VariableWrapper as m } from "org.eclipse.daanse.board.app.ui.vue.composables";
+import { WidgetAction as f } from "org.eclipse.daanse.board.app.lib.events";
+import { WIDGET_SERVICE_ID as pe } from "org.eclipse.daanse.board.app.lib.api.widget";
+const { identifiers: ce } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
+class g extends x {
   // Feature ID Constants (eLiterals)
   static FIT = 0;
   // Private fields
@@ -18,7 +17,7 @@ class v extends J {
    * Returns the EClass of this object
    */
   eClass() {
-    return a.Literals.OBJECT_FIT_SETTING;
+    return n.Literals.OBJECT_FIT_SETTING;
   }
   // Getters and Setters
   get fit() {
@@ -30,14 +29,14 @@ class v extends J {
       getNotifier: () => this,
       getEventType: () => 1,
       // SET
-      getFeature: () => this.eClass().getEStructuralFeature(v.FIT),
+      getFeature: () => this.eClass().getEStructuralFeature(g.FIT),
       getOldValue: () => t,
       getNewValue: () => e,
       getPosition: () => -1,
       wasSet: () => !0,
       isTouch: () => !1,
       isReset: () => !1,
-      getFeatureID: () => v.FIT,
+      getFeatureID: () => g.FIT,
       merge: () => !1
     });
   }
@@ -47,7 +46,7 @@ class v extends J {
    */
   eGet(e) {
     switch (this.eClass().getFeatureID(e)) {
-      case v.FIT:
+      case g.FIT:
         return this.fit;
       default:
         return super.eGet(e);
@@ -58,7 +57,7 @@ class v extends J {
    */
   eSet(e, t) {
     switch (this.eClass().getFeatureID(e)) {
-      case v.FIT:
+      case g.FIT:
         this.fit = t, super.eSet(e, t);
         break;
       default:
@@ -70,7 +69,7 @@ class v extends J {
    */
   eIsSet(e) {
     switch (this.eClass().getFeatureID(e)) {
-      case v.FIT:
+      case g.FIT:
         return this._fit !== void 0;
       default:
         return super.eIsSet(e);
@@ -81,7 +80,7 @@ class v extends J {
    */
   eUnset(e) {
     switch (this.eClass().getFeatureID(e)) {
-      case v.FIT:
+      case g.FIT:
         this._fit = void 0;
         return;
       default:
@@ -101,26 +100,26 @@ class v extends J {
     };
   }
 }
-class C extends ve {
+class _ extends ae {
   // Lazy singleton instance
   static _instance;
   static get eINSTANCE() {
-    return this._instance || (this._instance = new C()), this._instance;
+    return this._instance || (this._instance = new _()), this._instance;
   }
   constructor() {
-    super(), this.setEPackage(a.eINSTANCE);
+    super(), this.setEPackage(n.eINSTANCE);
   }
   /**
    * Create a new ObjectFitSetting instance
    */
   createObjectFitSetting() {
-    return new v();
+    return new g();
   }
   /**
    * Create a new VideoSettings instance
    */
   createVideoSettings() {
-    return new c();
+    return new u();
   }
   /**
    * Create an instance of the given class
@@ -136,20 +135,20 @@ class C extends ve {
     }
   }
 }
-function we(r) {
-  const e = X.INSTANCE.getEPackage(r);
+function ge(o) {
+  const e = L.INSTANCE.getEPackage(o);
   if (!e)
-    throw new Error(`EPackage '${r}' is not registered. Access the eINSTANCE of that model's generated package (or register it via EPackageRegistry.INSTANCE.registerPackage) before initializing VideoSettingsPackage.`);
+    throw new Error(`EPackage '${o}' is not registered. Access the eINSTANCE of that model's generated package (or register it via EPackageRegistry.INSTANCE.registerPackage) before initializing VideoSettingsPackage.`);
   return e;
 }
-class a extends me {
+class n extends le {
   static eNAME = "videoSettings";
   static eNS_URI = "http://org.eclipse.daanse.board.app.ui.vue.widget.video";
   static eNS_PREFIX = "videoSettings";
   // Singleton instance
   static _instance;
   static get eINSTANCE() {
-    return this._instance || (this._instance = new a(), this._instance.init()), this._instance;
+    return this._instance || (this._instance = new n(), this._instance.init()), this._instance;
   }
   /**
    * Literals for quick access to metaclasses and features
@@ -162,37 +161,37 @@ class a extends me {
     VIDEO_SETTINGS__VIDEO_URL: null
   };
   constructor() {
-    super(), this.setName(a.eNAME), this.setNsURI(a.eNS_URI), this.setNsPrefix(a.eNS_PREFIX);
+    super(), this.setName(n.eNAME), this.setNsURI(n.eNS_URI), this.setNsPrefix(n.eNS_PREFIX);
   }
   /**
    * Initialize package contents
    */
   init() {
-    X.INSTANCE.set(a.eNS_URI, this), this.setEFactoryInstance(C.eINSTANCE);
-    const e = new G();
-    e.setName("ObjectFitSetting"), e.setAbstract(!1), e.setInterface(!1), this.getEClassifiers().push(e), e.setEPackage(this), a.Literals.OBJECT_FIT_SETTING = e;
-    const t = new he();
-    t.setName("fit"), t.setLowerBound(0), t.setUpperBound(1), e.getEStructuralFeatures().push(t), a.Literals.OBJECT_FIT_SETTING__FIT = t;
-    const i = new G();
-    i.setName("VideoSettings"), i.setAbstract(!1), i.setInterface(!1), this.getEClassifiers().push(i), i.setEPackage(this), a.Literals.VIDEO_SETTINGS = i;
-    const s = new W();
-    s.setContainment(!0), s.setName("videoFitSettings"), s.setLowerBound(0), s.setUpperBound(1), i.getEStructuralFeatures().push(s), a.Literals.VIDEO_SETTINGS__VIDEO_FIT_SETTINGS = s;
-    const o = new W();
-    o.setContainment(!1), o.setName("videoUrl"), o.setLowerBound(0), o.setUpperBound(1), i.getEStructuralFeatures().push(o), a.Literals.VIDEO_SETTINGS__VIDEO_URL = o, a.Literals.OBJECT_FIT_SETTING__FIT.setEType(fe().getEClassifier("EString")), a.Literals.VIDEO_SETTINGS__VIDEO_FIT_SETTINGS.setEType(a.Literals.OBJECT_FIT_SETTING), a.Literals.VIDEO_SETTINGS__VIDEO_URL.setEType(we("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper"));
+    L.INSTANCE.set(n.eNS_URI, this), this.setEFactoryInstance(_.eINSTANCE);
+    const e = new b();
+    e.setName("ObjectFitSetting"), e.setAbstract(!1), e.setInterface(!1), this.getEClassifiers().push(e), e.setEPackage(this), n.Literals.OBJECT_FIT_SETTING = e;
+    const t = new de();
+    t.setName("fit"), t.setLowerBound(0), t.setUpperBound(1), e.getEStructuralFeatures().push(t), n.Literals.OBJECT_FIT_SETTING__FIT = t;
+    const s = new b();
+    s.setName("VideoSettings"), s.setAbstract(!1), s.setInterface(!1), this.getEClassifiers().push(s), s.setEPackage(this), n.Literals.VIDEO_SETTINGS = s;
+    const i = new O();
+    i.setContainment(!0), i.setName("videoFitSettings"), i.setLowerBound(0), i.setUpperBound(1), s.getEStructuralFeatures().push(i), n.Literals.VIDEO_SETTINGS__VIDEO_FIT_SETTINGS = i;
+    const a = new O();
+    a.setContainment(!1), a.setName("videoUrl"), a.setLowerBound(0), a.setUpperBound(1), s.getEStructuralFeatures().push(a), n.Literals.VIDEO_SETTINGS__VIDEO_URL = a, n.Literals.OBJECT_FIT_SETTING__FIT.setEType(ue().getEClassifier("EString")), n.Literals.VIDEO_SETTINGS__VIDEO_FIT_SETTINGS.setEType(n.Literals.OBJECT_FIT_SETTING), n.Literals.VIDEO_SETTINGS__VIDEO_URL.setEType(ge("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper"));
   }
 }
-class c extends J {
+class u extends x {
   // Feature ID Constants (eLiterals)
   static VIDEO_FIT_SETTINGS = 0;
   static VIDEO_URL = 1;
   // Private fields
   _videoFitSettings;
-  _videoUrl = new f();
+  _videoUrl = new m();
   /**
    * Returns the EClass of this object
    */
   eClass() {
-    return a.Literals.VIDEO_SETTINGS;
+    return n.Literals.VIDEO_SETTINGS;
   }
   // Getters and Setters
   get videoFitSettings() {
@@ -204,14 +203,14 @@ class c extends J {
       getNotifier: () => this,
       getEventType: () => 1,
       // SET
-      getFeature: () => this.eClass().getEStructuralFeature(c.VIDEO_FIT_SETTINGS),
+      getFeature: () => this.eClass().getEStructuralFeature(u.VIDEO_FIT_SETTINGS),
       getOldValue: () => t,
       getNewValue: () => e,
       getPosition: () => -1,
       wasSet: () => !0,
       isTouch: () => !1,
       isReset: () => !1,
-      getFeatureID: () => c.VIDEO_FIT_SETTINGS,
+      getFeatureID: () => u.VIDEO_FIT_SETTINGS,
       merge: () => !1
     });
   }
@@ -224,14 +223,14 @@ class c extends J {
       getNotifier: () => this,
       getEventType: () => 1,
       // SET
-      getFeature: () => this.eClass().getEStructuralFeature(c.VIDEO_URL),
+      getFeature: () => this.eClass().getEStructuralFeature(u.VIDEO_URL),
       getOldValue: () => t,
       getNewValue: () => e,
       getPosition: () => -1,
       wasSet: () => !0,
       isTouch: () => !1,
       isReset: () => !1,
-      getFeatureID: () => c.VIDEO_URL,
+      getFeatureID: () => u.VIDEO_URL,
       merge: () => !1
     });
   }
@@ -241,9 +240,9 @@ class c extends J {
    */
   eGet(e) {
     switch (this.eClass().getFeatureID(e)) {
-      case c.VIDEO_FIT_SETTINGS:
+      case u.VIDEO_FIT_SETTINGS:
         return this.videoFitSettings;
-      case c.VIDEO_URL:
+      case u.VIDEO_URL:
         return this.videoUrl;
       default:
         return super.eGet(e);
@@ -254,10 +253,10 @@ class c extends J {
    */
   eSet(e, t) {
     switch (this.eClass().getFeatureID(e)) {
-      case c.VIDEO_FIT_SETTINGS:
+      case u.VIDEO_FIT_SETTINGS:
         this.videoFitSettings = t, super.eSet(e, t);
         break;
-      case c.VIDEO_URL:
+      case u.VIDEO_URL:
         this.videoUrl = t, super.eSet(e, t);
         break;
       default:
@@ -269,10 +268,10 @@ class c extends J {
    */
   eIsSet(e) {
     switch (this.eClass().getFeatureID(e)) {
-      case c.VIDEO_FIT_SETTINGS:
+      case u.VIDEO_FIT_SETTINGS:
         return this._videoFitSettings !== void 0;
-      case c.VIDEO_URL:
-        return this._videoUrl !== new f();
+      case u.VIDEO_URL:
+        return this._videoUrl !== new m();
       default:
         return super.eIsSet(e);
     }
@@ -282,11 +281,11 @@ class c extends J {
    */
   eUnset(e) {
     switch (this.eClass().getFeatureID(e)) {
-      case c.VIDEO_FIT_SETTINGS:
+      case u.VIDEO_FIT_SETTINGS:
         this._videoFitSettings = void 0;
         return;
-      case c.VIDEO_URL:
-        this._videoUrl = new f();
+      case u.VIDEO_URL:
+        this._videoUrl = new m();
         return;
       default:
         super.eUnset(e);
@@ -306,12 +305,12 @@ class c extends J {
     };
   }
 }
-var Se = Object.defineProperty, _e = Object.getOwnPropertyDescriptor, T = (r, e, t, i) => {
-  for (var s = _e(e, t), o = r.length - 1, u; o >= 0; o--)
-    (u = r[o]) && (s = u(e, t, s) || s);
-  return s && Se(e, t, s), s;
+var ve = Object.defineProperty, he = Object.getOwnPropertyDescriptor, I = (o, e, t, s) => {
+  for (var i = he(e, t), a = o.length - 1, p; a >= 0; a--)
+    (p = o[a]) && (i = p(e, t, i) || i);
+  return i && ve(e, t, i), i;
 };
-class m extends Z {
+class v extends B {
   play() {
     throw new Error("play not implemented");
   }
@@ -334,30 +333,30 @@ class m extends Z {
     throw new Error("setVolume not implemented");
   }
 }
-T([
-  I({ eventType: "video.play" })
-], m.prototype, "play");
-T([
-  I({ eventType: "video.pause" })
-], m.prototype, "pause");
-T([
-  I({ eventType: "video.stop" })
-], m.prototype, "stop");
-T([
-  I({ eventType: "video.seek" })
-], m.prototype, "seek");
-T([
-  I({ eventType: "video.mute" })
-], m.prototype, "mute");
-T([
-  I({ eventType: "video.unmute" })
-], m.prototype, "unmute");
-T([
-  I({ eventType: "video.setVolume" })
-], m.prototype, "setVolume");
-const Fe = ["src"], ye = /* @__PURE__ */ k({
+I([
+  f({ eventType: "video.play" })
+], v.prototype, "play");
+I([
+  f({ eventType: "video.pause" })
+], v.prototype, "pause");
+I([
+  f({ eventType: "video.stop" })
+], v.prototype, "stop");
+I([
+  f({ eventType: "video.seek" })
+], v.prototype, "seek");
+I([
+  f({ eventType: "video.mute" })
+], v.prototype, "mute");
+I([
+  f({ eventType: "video.unmute" })
+], v.prototype, "unmute");
+I([
+  f({ eventType: "video.setVolume" })
+], v.prototype, "setVolume");
+const me = ["src"], fe = /* @__PURE__ */ H({
   __name: "VideoWidget",
-  props: /* @__PURE__ */ ne({
+  props: /* @__PURE__ */ z({
     datasourceId: {},
     id: {}
   }, {
@@ -365,163 +364,113 @@ const Fe = ["src"], ye = /* @__PURE__ */ k({
     configvModifiers: {}
   }),
   emits: ["update:configv"],
-  setup(r, { expose: e }) {
-    oe((d) => ({
-      v67adbbd0: q.value
+  setup(o, { expose: e }) {
+    q((l) => ({
+      v67adbbd0: k.value
     }));
-    const t = r, { id: i } = re(t), s = A(r, "configv"), o = D(Ie.TINY_EMITTER), u = D(K), y = ge().params.pageid || "", l = B(null);
-    class g extends m {
+    const t = o, { id: s } = Z(t), i = K(o, "configv"), a = V(ce.TINY_EMITTER), p = V(M), R = oe().params.pageid || "", d = Q(null);
+    class G extends v {
       play() {
-        l.value && l.value.play();
+        d.value && d.value.play();
       }
       pause() {
-        l.value && l.value.pause();
+        d.value && d.value.pause();
       }
       stop() {
-        l.value && (l.value.pause(), l.value.currentTime = 0);
+        d.value && (d.value.pause(), d.value.currentTime = 0);
       }
-      seek(n) {
-        l.value && (l.value.currentTime = n);
+      seek(r) {
+        d.value && (d.value.currentTime = r);
       }
       mute() {
-        l.value && (l.value.muted = !0);
+        d.value && (d.value.muted = !0);
       }
       unmute() {
-        l.value && (l.value.muted = !1);
+        d.value && (d.value.muted = !1);
       }
-      setVolume(n) {
-        l.value && (l.value.volume = Math.max(0, Math.min(1, n)));
+      setVolume(r) {
+        d.value && (d.value.volume = Math.max(0, Math.min(1, r)));
       }
     }
-    const _ = new g();
-    e(_);
-    const Y = () => {
-      i?.value && o.emit("widget:VideoWidget:click", {
+    const y = new G();
+    e(y);
+    const P = () => {
+      s?.value && a.emit("widget:VideoWidget:click", {
         type: "widget:VideoWidget:click",
-        widgetId: i.value,
-        payload: { widgetId: i.value, timestamp: Date.now() }
+        widgetId: s.value,
+        payload: { widgetId: s.value, timestamp: Date.now() }
       });
-    }, H = () => {
-      i?.value && o.emit("widget:VideoWidget:right_click", {
+    }, W = () => {
+      s?.value && a.emit("widget:VideoWidget:right_click", {
         type: "widget:VideoWidget:right_click",
-        widgetId: i.value,
-        payload: { widgetId: i.value, timestamp: Date.now() }
+        widgetId: s.value,
+        payload: { widgetId: s.value, timestamp: Date.now() }
       });
-    }, w = (d, n) => {
-      if (!i?.value) return;
-      let p = { widgetId: i.value, timestamp: Date.now() };
-      if (d === "timeupdate") {
-        const S = n.target;
-        p.currentTime = S.currentTime, p.duration = S.duration;
-      } else if (d === "error") {
-        const S = n.target;
-        p.error = S.error?.message || S.error?.code || "Unknown Error";
+    }, E = (l, r) => {
+      if (!s?.value) return;
+      let c = { widgetId: s.value, timestamp: Date.now() };
+      if (l === "timeupdate") {
+        const w = r.target;
+        c.currentTime = w.currentTime, c.duration = w.duration;
+      } else if (l === "error") {
+        const w = r.target;
+        c.error = w.error?.message || w.error?.code || "Unknown Error";
       }
-      o.emit(`widget:VideoWidget:${d}`, {
-        type: `widget:VideoWidget:${d}`,
-        widgetId: i.value,
-        payload: p
+      a.emit(`widget:VideoWidget:${l}`, {
+        type: `widget:VideoWidget:${l}`,
+        widgetId: s.value,
+        payload: c
       });
     };
-    console.log(s);
-    const O = {
+    console.log(i);
+    const N = {
       videoUrl: "",
       videoFitSettings: {
         fit: "cover"
       }
     };
-    ae(() => {
-      i?.value && u.registerInstance(i.value, _, "VideoWidget", y), s.value || (s.value = new c());
-      const d = s.value.videoUrl;
-      if (d == null)
-        s.value.videoUrl = new f(O.videoUrl);
-      else if (!(d instanceof f)) if (typeof d == "object" && "value" in d) {
-        const n = new f(d.value);
-        "variable" in d && (n.variable = d.variable), s.value.videoUrl = n;
+    ee(() => {
+      s?.value && p.registerInstance(s.value, y, "VideoWidget", R), i.value || (i.value = new u());
+      const l = i.value.videoUrl;
+      if (l == null)
+        i.value.videoUrl = new m(N.videoUrl);
+      else if (!(l instanceof m)) if (typeof l == "object" && "value" in l) {
+        const r = new m(l.value);
+        "variable" in l && (r.variable = l.variable), i.value.videoUrl = r;
       } else
-        s.value.videoUrl = new f(d);
-      if (s.value && !s.value.videoFitSettings) {
-        const n = new v();
-        n.fit = O.videoFitSettings.fit, s.value.videoFitSettings = n;
+        i.value.videoUrl = new m(l);
+      if (i.value && !i.value.videoFitSettings) {
+        const r = new g();
+        r.fit = N.videoFitSettings.fit, i.value.videoFitSettings = r;
       }
-    }), le(() => {
-      i?.value && u.unregisterInstance(i.value);
+    }), te(() => {
+      s?.value && p.unregisterInstance(s.value);
     });
-    const q = L(() => s.value.videoFitSettings?.fit), z = L(() => s.value.videoUrl?.value);
-    return (d, n) => (M(), de("div", {
+    const k = C(() => i.value.videoFitSettings?.fit), A = C(() => i.value.videoUrl?.value);
+    return (l, r) => (se(), ie("div", {
       class: "container",
-      onClick: Y,
-      onContextmenu: ue(H, ["prevent"])
+      onClick: P,
+      onContextmenu: re(W, ["prevent"])
     }, [
-      j("video", {
+      ne("video", {
         controls: "",
-        src: z.value,
+        src: A.value,
         ref_key: "videoElement",
-        ref: l,
-        onPlay: n[0] || (n[0] = (p) => w("play", p)),
-        onPause: n[1] || (n[1] = (p) => w("pause", p)),
-        onTimeupdate: n[2] || (n[2] = (p) => w("timeupdate", p)),
-        onEnded: n[3] || (n[3] = (p) => w("ended", p)),
-        onError: n[4] || (n[4] = (p) => w("error", p))
-      }, " Your browser does not support embedded videos. ", 40, Fe)
+        ref: d,
+        onPlay: r[0] || (r[0] = (c) => E("play", c)),
+        onPause: r[1] || (r[1] = (c) => E("pause", c)),
+        onTimeupdate: r[2] || (r[2] = (c) => E("timeupdate", c)),
+        onEnded: r[3] || (r[3] = (c) => E("ended", c)),
+        onError: r[4] || (r[4] = (c) => E("error", c))
+      }, " Your browser does not support embedded videos. ", 40, me)
     ], 32));
   }
-}), $ = (r, e) => {
-  const t = r.__vccOpts || r;
-  for (const [i, s] of e)
-    t[i] = s;
+}), Ie = (o, e) => {
+  const t = o.__vccOpts || o;
+  for (const [s, i] of e)
+    t[s] = i;
   return t;
-}, Ne = /* @__PURE__ */ $(ye, [["__scopeId", "data-v-c8b707a4"]]), Ve = { class: "settings-container" }, De = /* @__PURE__ */ k({
-  __name: "VideoWidgetSettings",
-  props: {
-    modelValue: { required: !0 },
-    modelModifiers: {}
-  },
-  emits: ["update:modelValue"],
-  setup(r) {
-    const e = D("i18n"), t = (o) => e ? e.t(o) : o, i = A(r, "modelValue"), s = B({
-      widgetSection: !1,
-      storeSection: !1
-    });
-    return (o, u) => {
-      const U = N("va-input"), y = N("va-select"), l = N("va-collapse");
-      return M(), ce(l, {
-        modelValue: s.value.widgetSection,
-        "onUpdate:modelValue": u[2] || (u[2] = (g) => s.value.widgetSection = g),
-        icon: "settings",
-        header: t("video:VideoWidget.title")
-      }, {
-        default: R(() => [
-          j("div", Ve, [
-            V(pe(Te), {
-              modelValue: i.value.videoUrl,
-              "onUpdate:modelValue": u[0] || (u[0] = (g) => i.value.videoUrl = g),
-              label: t("video:VideoWidget.videoUrl")
-            }, {
-              default: R(({ value: g, change: _ }) => [
-                V(U, {
-                  "model-value": g,
-                  onInput: _,
-                  label: t("video:VideoWidget.videoUrl")
-                }, null, 8, ["model-value", "onInput", "label"])
-              ]),
-              _: 1
-            }, 8, ["modelValue", "label"]),
-            V(y, {
-              class: "mt-2",
-              modelValue: i.value.videoFitSettings.fit,
-              "onUpdate:modelValue": u[1] || (u[1] = (g) => i.value.videoFitSettings.fit = g),
-              label: t("video:VideoWidget.videoFit"),
-              options: ["Cover", "Contain", "Stretch", "Fill", "None"],
-              teleport: ".settings-container"
-            }, null, 8, ["modelValue", "label"])
-          ])
-        ]),
-        _: 1
-      }, 8, ["modelValue", "header"]);
-    };
-  }
-}), Ce = /* @__PURE__ */ $(De, [["__scopeId", "data-v-9a8eca2e"]]), be = "data:image/svg+xml,%3csvg%20width='120'%20height='120'%20viewBox='0%200%20120%20120'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cpath%20fill-rule='evenodd'%20clip-rule='evenodd'%20d='M105%207.5H15C10.8579%207.5%207.5%2010.8579%207.5%2015V105C7.5%20109.142%2010.8579%20112.5%2015%20112.5H105C109.142%20112.5%20112.5%20109.142%20112.5%20105V15C112.5%2010.8579%20109.142%207.5%20105%207.5ZM15%200C6.71573%200%200%206.71573%200%2015V105C0%20113.284%206.71573%20120%2015%20120H105C113.284%20120%20120%20113.284%20120%20105V15C120%206.71573%20113.284%200%20105%200H15Z'%20fill='%23606060'/%3e%3cpath%20d='M78.75%2056.1029C81.75%2057.8349%2081.75%2062.1651%2078.75%2063.8971L47.25%2082.0836C44.25%2083.8157%2040.5%2081.6506%2040.5%2078.1865L40.5%2041.8135C40.5%2038.3494%2044.25%2036.1843%2047.25%2037.9164L78.75%2056.1029Z'%20fill='%23606060'/%3e%3c/svg%3e", Ue = [
+}, Te = /* @__PURE__ */ Ie(fe, [["__scopeId", "data-v-c8b707a4"]]), Ee = "data:image/svg+xml,%3csvg%20width='120'%20height='120'%20viewBox='0%200%20120%20120'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cpath%20fill-rule='evenodd'%20clip-rule='evenodd'%20d='M105%207.5H15C10.8579%207.5%207.5%2010.8579%207.5%2015V105C7.5%20109.142%2010.8579%20112.5%2015%20112.5H105C109.142%20112.5%20112.5%20109.142%20112.5%20105V15C112.5%2010.8579%20109.142%207.5%20105%207.5ZM15%200C6.71573%200%200%206.71573%200%2015V105C0%20113.284%206.71573%20120%2015%20120H105C113.284%20120%20120%20113.284%20120%20105V15C120%206.71573%20113.284%200%20105%200H15Z'%20fill='%23606060'/%3e%3cpath%20d='M78.75%2056.1029C81.75%2057.8349%2081.75%2062.1651%2078.75%2063.8971L47.25%2082.0836C44.25%2083.8157%2040.5%2081.6506%2040.5%2078.1865L40.5%2041.8135C40.5%2038.3494%2044.25%2036.1843%2047.25%2037.9164L78.75%2056.1029Z'%20fill='%23606060'/%3e%3c/svg%3e", we = [
   { name: "Video Clicked", type: "click", description: "Triggered when the video widget is clicked", payloadType: h },
   { name: "Video Right Clicked", type: "right_click", description: "Triggered when the video widget is right-clicked", payloadType: h },
   { name: "Video Played", type: "play", description: "Triggered when the video starts or resumes playing", payloadType: h },
@@ -529,7 +478,7 @@ const Fe = ["src"], ye = /* @__PURE__ */ k({
   { name: "Video Time Updated", type: "timeupdate", description: "Triggered when the video playback position changes", payloadType: h },
   { name: "Video Ended", type: "ended", description: "Triggered when the video reaches the end", payloadType: h },
   { name: "Video Error", type: "error", description: "Triggered when the video encounters an error", payloadType: h }
-], Oe = `<?xml version="1.0" encoding="UTF-8"?>
+], Se = `<?xml version="1.0" encoding="UTF-8"?>
 <!--
 /*********************************************************************
 * Copyright (c) 2026 Contributors to the Eclipse Foundation.
@@ -568,7 +517,7 @@ whatever a variable points at rather than one fixed file.
         label="Darstellung"/>
   </components>
 </uimodel:UIModel>
-`, xe = `<?xml version="1.0" encoding="UTF-8"?>
+`, _e = `<?xml version="1.0" encoding="UTF-8"?>
 <!--
 /*********************************************************************
 * Copyright (c) 2026 Contributors to the Eclipse Foundation.
@@ -610,22 +559,21 @@ chosen between.
   </components>
 </uimodel:UIModel>
 `;
-var Le = Object.defineProperty, Re = Object.getOwnPropertyDescriptor, b = (r, e, t, i) => {
-  for (var s = i > 1 ? void 0 : i ? Re(e, t) : e, o = r.length - 1, u; o >= 0; o--)
-    (u = r[o]) && (s = (i ? u(e, t, s) : u(s)) || s);
-  return i && s && Le(e, t, s), s;
-}, P = (r, e) => (t, i) => e(t, i, r);
-a.eINSTANCE;
-const E = "VideoWidget";
-let F = class {
-  constructor(r, e) {
-    this.events = r, this.actions = e;
+var Fe = Object.defineProperty, ye = Object.getOwnPropertyDescriptor, F = (o, e, t, s) => {
+  for (var i = s > 1 ? void 0 : s ? ye(e, t) : e, a = o.length - 1, p; a >= 0; a--)
+    (p = o[a]) && (i = (s ? p(e, t, i) : p(i)) || i);
+  return s && i && Fe(e, t, i), i;
+}, U = (o, e) => (t, s) => e(t, s, o);
+n.eINSTANCE;
+const T = "VideoWidget";
+let S = class {
+  constructor(o, e) {
+    this.events = o, this.actions = e;
   }
-  type = E;
-  component = Ne;
-  settingsComponent = Ce;
+  type = T;
+  component = Te;
   supportedDSTypes = [];
-  icon = be;
+  icon = Ee;
   name = "Video";
   /*
    * The settings form, as a model. Carried on the registration like the
@@ -633,40 +581,39 @@ let F = class {
    * exists - and the shell needs no dependency on this bundle.
    */
   settingsForm = {
-    xmi: Oe,
+    xmi: Se,
     uri: "/video-settings.ui.xmi",
-    ePackage: () => a.eINSTANCE,
-    create: () => new c(),
+    ePackage: () => n.eINSTANCE,
+    create: () => new u(),
     /* The form for the class this one contains. */
-    entryForms: [{ xmi: xe, uri: "/video-fit.ui.xmi" }]
+    entryForms: [{ xmi: _e, uri: "/video-fit.ui.xmi" }]
   };
   register() {
-    this.events.registerWidget(E, Ue), this.actions.registerWidgetType(E, m, "widget");
+    this.events.registerWidget(T, we), this.actions.registerWidgetType(T, v, "widget");
   }
   unregister() {
-    this.events.unregisterWidget(E), this.actions.unregisterWidgetType(E);
+    this.events.unregisterWidget(T), this.actions.unregisterWidgetType(T);
   }
 };
-b([
-  te()
-], F.prototype, "register", 1);
-b([
-  ie()
-], F.prototype, "unregister", 1);
-F = b([
-  se({
-    service: [Ee],
-    properties: { "widget.type": E }
+F([
+  X()
+], S.prototype, "register", 1);
+F([
+  $()
+], S.prototype, "unregister", 1);
+S = F([
+  Y({
+    service: [pe],
+    properties: { "widget.type": T }
   }),
-  P(0, x(Q)),
-  P(1, x(ee))
-], F);
+  U(0, D(j)),
+  U(1, D(J))
+], S);
 export {
-  c as VideoSettingsImpl,
-  a as VideoSettingsPackage,
-  Ne as VideoWidget,
-  F as VideoWidgetProvider,
-  Ce as VideoWidgetSettings,
-  xe as videoFitFormXmi,
-  Oe as videoSettingsFormXmi
+  u as VideoSettingsImpl,
+  n as VideoSettingsPackage,
+  Te as VideoWidget,
+  S as VideoWidgetProvider,
+  _e as videoFitFormXmi,
+  Se as videoSettingsFormXmi
 };

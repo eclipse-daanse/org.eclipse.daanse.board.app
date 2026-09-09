@@ -15,7 +15,6 @@ import { EVENT_REGISTRY_ID, EventsPackage } from 'org.eclipse.daanse.board.app.l
 import { component, inject, activate, deactivate } from '@eclipse-daanse/tsm'
 import Icon from './assets/image.svg'
 import ImageWidget from './ImageWidget.vue'
-import ImageWidgetSettings from './ImageWidgetSettings.vue'
 import { ImageWidgetEvents } from './events/ImageWidgetEvents'
 import { ImageSettingsImpl } from './gen/ImageSettingsImpl'
 import { ImagesettingsPackage } from './gen/ImagesettingsPackage'
@@ -65,7 +64,6 @@ const WIDGET_TYPE = 'ImageWidget'
 export class ImageWidgetProvider implements WidgetProvider {
   readonly type = WIDGET_TYPE
   readonly component = ImageWidget
-  readonly settingsComponent = ImageWidgetSettings
   readonly supportedDSTypes = []
   readonly icon = Icon
   readonly name = 'Image'
@@ -103,6 +101,6 @@ export class ImageWidgetProvider implements WidgetProvider {
   }
 }
 
-export { ImageWidget, ImageWidgetSettings }
+export { ImageWidget }
 export { ImageSettingsImpl, ImagesettingsPackage, imageSettingsFormXmi, imageItemFormXmi, galleryFormXmi }
 export type { IImageSettings }

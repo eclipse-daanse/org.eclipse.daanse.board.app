@@ -15,7 +15,6 @@ import { EVENT_REGISTRY_ID, EventsPackage } from 'org.eclipse.daanse.board.app.l
 import { component, inject, activate, deactivate } from '@eclipse-daanse/tsm'
 import Icon from './assets/routing.svg'
 import RoutingWidget from './RoutingWidget.vue'
-import RoutingWidgetSettings from './RoutingWidgetSettings.vue'
 import { RoutingWidgetEvents } from './events/RoutingWidgetEvents'
 import { RoutingWidgetInterface } from './gen/RoutingWidgetInterface'
 import { RoutingWidgetSettingsImpl } from './gen/RoutingWidgetSettingsImpl'
@@ -50,7 +49,6 @@ const WIDGET_TYPE = 'RoutingWidget'
 export class RoutingWidgetProvider implements WidgetProvider {
   readonly type = WIDGET_TYPE
   readonly component = RoutingWidget
-  readonly settingsComponent = RoutingWidgetSettings
   readonly supportedDSTypes = ['valhalla']
   readonly icon = Icon
   readonly name = 'Routing'
@@ -82,5 +80,5 @@ export class RoutingWidgetProvider implements WidgetProvider {
   }
 }
 
-export { RoutingWidget, RoutingWidgetSettings }
+export { RoutingWidget }
 export { RoutingWidgetSettingsImpl, RoutingSettingsPackage, routingSettingsFormXmi }

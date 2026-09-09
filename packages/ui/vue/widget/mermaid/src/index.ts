@@ -15,7 +15,6 @@ import { EVENT_ACTIONS_REGISTRY_ID, EVENT_REGISTRY_ID } from 'org.eclipse.daanse
 import { component, inject, activate, deactivate } from '@eclipse-daanse/tsm'
 import Icon from './assets/text.svg'
 import MermaidWidget from './MermaidWidget.vue'
-import MermaidWidgetSettings from './MermaidWidgetSettings.vue'
 import { MermaidWidgetEvents } from './events/MermaidWidgetEvents'
 import { MermaidWidgetInterface } from './api/MermaidWidgetInterface'
 import { MermaidWidgetSettingsImpl } from './gen/MermaidWidgetSettingsImpl'
@@ -45,7 +44,6 @@ const WIDGET_TYPE = 'MermaidWidget'
 export class MermaidWidgetProvider implements WidgetProvider {
   readonly type = WIDGET_TYPE
   readonly component = MermaidWidget
-  readonly settingsComponent = MermaidWidgetSettings
   readonly supportedDSTypes = []
   readonly icon = Icon
   readonly name = 'Mermaid'
@@ -80,5 +78,5 @@ export class MermaidWidgetProvider implements WidgetProvider {
   }
 }
 
-export { MermaidWidget, MermaidWidgetSettings }
+export { MermaidWidget }
 export { MermaidWidgetSettingsImpl, MermaidwidgetsPackage, mermaidSettingsFormXmi }

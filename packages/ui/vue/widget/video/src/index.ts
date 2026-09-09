@@ -14,7 +14,6 @@
 import { EVENT_ACTIONS_REGISTRY_ID, EVENT_REGISTRY_ID } from 'org.eclipse.daanse.board.app.lib.api.events'
 import { component, inject, activate, deactivate } from '@eclipse-daanse/tsm'
 import VideoWidget from './VideoWidget.vue'
-import VideoWidgetSettings from './VideoWidgetSettings.vue'
 import Icon from './assets/video.svg'
 import { VideoWidgetEvents } from './events/VideoWidgetEvents'
 import { VideoWidgetInterface } from './api/VideoWidgetInterface'
@@ -55,7 +54,6 @@ const WIDGET_TYPE = 'VideoWidget'
 export class VideoWidgetProvider implements WidgetProvider {
   readonly type = WIDGET_TYPE
   readonly component = VideoWidget
-  readonly settingsComponent = VideoWidgetSettings
   readonly supportedDSTypes = []
   readonly icon = Icon
   readonly name = 'Video'
@@ -92,6 +90,6 @@ export class VideoWidgetProvider implements WidgetProvider {
   }
 }
 
-export { VideoWidget, VideoWidgetSettings }
+export { VideoWidget }
 export { VideoSettingsImpl, VideoSettingsPackage, videoSettingsFormXmi, videoFitFormXmi }
 export type { IVideoSettings }
