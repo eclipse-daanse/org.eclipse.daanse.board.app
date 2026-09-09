@@ -22,6 +22,17 @@ import RendererModal from './parts/RendererModal.vue'
 import { computedAsync } from '@vueuse/core'
 import { DatasourceRepository, identifier } from 'org.eclipse.daanse.board.app.lib.api.datasource'
 import { logServices, logDatasource } from './utils/logger'
+import {
+  DButton,
+  DCheckbox,
+  DColorInput,
+  DIcon,
+  DInput,
+  DModal,
+  DRadioGroup,
+  DSelect,
+  DSlider,
+} from 'org.eclipse.daanse.board.app.ui.vue.controls'
 
 const instance = getCurrentInstance()
 
@@ -29,14 +40,6 @@ const instance = getCurrentInstance()
 const props = defineProps<{
   dataSources?: any[]
 }>()
-
-const opened = ref({
-  widgetSectionLayer: true,
-  widgetSection: false,
-  widgetServiceSection: true,
-  storeSection: false,
-  widgetMapSection: false
-})
 
 const widgetSettings = defineModel<IMapSettings>({ required: true })
 const showModalSizeSmall = ref(false)
@@ -144,7 +147,13 @@ const services = computedAsync(async () => {
   logServices('Computing services async')
   const ret: any = []
 
-  for (let service of widgetSettings.value.services) {
+  /*
+   * A widget that has never had a service has none of the three lists the
+   * settings write into - and this runs while the component is being set
+   * up, so walking an absent one took the whole form with it and the tab
+   * opened on nothing.
+   */
+  for (let service of widgetSettings.value.services ?? []) {
     logServices('Service:', service)
 
     const isFailed = !!(service as any).reconstructionFailed
@@ -212,7 +221,7 @@ const services = computedAsync(async () => {
     }
   }
   // Process primary datasource and all additional datasources
-  const allDatasourceIds = [widgetSettings.value.datasourceId, ...widgetSettings.value.datasourceIds].filter(Boolean)
+  const allDatasourceIds = [widgetSettings.value.datasourceId, ...(widgetSettings.value.datasourceIds ?? [])].filter(Boolean)
 
   for (const id of allDatasourceIds) {
     if (!id) continue
@@ -392,82 +401,70 @@ const assignDatasourceToLayer = (layer: any, dsId: string) => {
 </script>
 
 <template>
-  <VaModal
-    v-model="showModalSizeSmall"
-    :ok-text="addServiceType === 'wms_wfs' ? 'Add' : 'Add Datasource'"
-    size="small"
-    @ok="addServiceType === 'wms_wfs' ? addService() : addServiceFromDatasource()"
-  >
-    <div class="va-modal__message">
-      <h3 class="va-h3">
-        Add Service
-      </h3>
-      <div class="m-0">
-        <div class="settings-container">
-          <VaRadio
-            v-model="addServiceType"
-            option="wms_wfs"
-            label="WMS/WFS Service"
-            style="margin-bottom: 10px"
-          />
-          <VaRadio
-            v-model="addServiceType"
-            option="datasource"
-            label="Datasource"
-            style="margin-bottom: 15px"
-          />
+  <DModal v-model="showModalSizeSmall" size="sm" title="Add service">
+    <div class="settings-container">
+      <DRadioGroup
+        v-model="addServiceType"
+        :options="[
+          { value: 'wms_wfs', label: 'WMS/WFS service' },
+          { value: 'datasource', label: 'Datasource' },
+        ]"
+        value-key="value"
+        label-key="label"
+        stacked
+      />
 
-          <div v-if="addServiceType === 'wms_wfs'">
-            <va-input v-model="url" placeholder="https://[serviceurl]"></va-input>
-          </div>
+      <div v-if="addServiceType === 'wms_wfs'">
+        <DInput v-model="url" label="Service URL" placeholder="https://[serviceurl]" />
+      </div>
 
-          <div v-else>
-            <VaSelect
-              v-if="availableDatasources.length > 0"
-              v-model="newDatasourceId"
-              :options="availableDatasources"
-              label="Select Datasource"
-              placeholder="Choose a datasource"
-              text-by="text"
-              value-by="value"
-            />
-            <va-input
-              v-else
-              v-model="newDatasourceId"
-              placeholder="Enter Datasource ID"
-              label="Datasource ID"
-            />
-            <div style="margin-top: 10px; font-size: 12px; color: #666;">
-              Primary datasource: <strong>{{ widgetSettings.datasourceId }}</strong>
-            </div>
-          </div>
-        </div>
+      <div v-else>
+        <DSelect
+          v-if="availableDatasources.length > 0"
+          v-model="newDatasourceId"
+          :options="availableDatasources"
+          label="Select datasource"
+          placeholder="Choose a datasource"
+          label-key="text"
+          value-key="value"
+        />
+        <DInput
+          v-else
+          v-model="newDatasourceId"
+          placeholder="Enter datasource ID"
+          label="Datasource ID"
+        />
+        <p class="note">
+          Primary datasource: <strong>{{ widgetSettings.datasourceId }}</strong>
+        </p>
       </div>
     </div>
-  </VaModal>
+    <template #actions>
+      <DButton intent="quiet" @click="showModalSizeSmall = false">Cancel</DButton>
+      <DButton
+        intent="primary"
+        @click="addServiceType === 'wms_wfs' ? addService() : addServiceFromDatasource()"
+      >
+        {{ addServiceType === 'wms_wfs' ? 'Add' : 'Add datasource' }}
+      </DButton>
+    </template>
+  </DModal>
 
-  <VaModal
-    v-model="showErrorModal"
-    ok-text="OK"
-    size="small"
-    :hide-default-actions="false"
-    cancel-text=""
-  >
-    <div class="va-modal__message">
-      <h3 class="va-h3" style="color: #ff6b6b; display: flex; align-items: center; gap: 8px;">
-        <VaIcon class="material-icons">error</VaIcon>
-        Service Error
-      </h3>
-      <div style="margin-top: 16px; color: #333;">
-        {{ errorMessage }}
-      </div>
-    </div>
-  </VaModal>
+  <DModal v-model="showErrorModal" size="sm">
+    <template #header>
+      <DIcon name="error" size="lg" tone="color-err" />
+      <h2 class="dialog__title">Service error</h2>
+    </template>
+    <p class="note note--body">{{ errorMessage }}</p>
+    <template #actions>
+      <DButton @click="showErrorModal = false">OK</DButton>
+    </template>
+  </DModal>
 
   <RendererModal v-model="modelswitch" v-model:layer="selectedLayer as any" v-model:show="renderShow" :services="widgetSettings.services" :all-layers="widgetSettings.layers"></RendererModal>
-  <va-collapse v-model="opened.widgetSectionLayer" header="Layers" icon="layers">
+  <section class="settings-section" data-section="Layers">
 
-        <span v-if="widgetSettings.layers.length==0" class="empty">
+        <span v-if="!widgetSettings.layers?.length" class="empty">
             No Layers here
         </span>
 
@@ -480,45 +477,35 @@ const assignDatasourceToLayer = (layer: any, dsId: string) => {
       <template #item="{ element  }">
         <li class="list-group-item">
           <div class="row dragIcon">
-            <VaIcon v-if="element.reconstructionFailed" class="material-icons" style="color: #ff6b6b;">
-              error
-            </VaIcon>
-            <VaIcon v-else-if="element.checked" class="material-icons" @click="element.checked=false">
-              layers
-            </VaIcon>
-            <VaIcon v-else class="material-icons" @click="element.checked=true">
-              layers_clear
-            </VaIcon>
+            <DIcon v-if="element.reconstructionFailed" name="error" tone="color-err" />
+            <DIcon
+              v-else
+              :name="element.checked ? 'layers' : 'layers_clear'"
+              :title="element.checked ? 'Hide layer' : 'Show layer'"
+              @click="element.checked = !element.checked"
+            />
             {{ element.title }}
-            <span v-if="element.reconstructionFailed" style="color: #ff6b6b; font-size: 0.85em; margin-left: 8px;">(failed)</span>
+            <span v-if="element.reconstructionFailed" class="failed">(failed)</span>
           </div>
           <div class="row nhidden options">
-            <VaIcon class="material-icons">
-              opacity
-            </VaIcon>
+            <DIcon name="opacity" />
             <div :id="element.id" class="slider nhidden sliderPopOver">
-              <div style="min-width: 150px">
-                <VaSlider v-model="element.opacity" :max="1"
-                          :min="0" :step="0.01" color="#555" />
+              <div class="slider__track">
+                <DSlider v-model="element.opacity" :min="0" :max="1" :step="0.01" />
               </div>
             </div>
             <div v-if="element.type=='WFSLayer' || element.type=='OGCSTA' || element.type=='GEOJSON' || element.type=='REST-GEOJSON'">
-              <VaButton
-                icon="settings"
-                preset="secondary"
-                round
+              <DButton
+                intent="quiet"
+                title="Styles"
                 @click="()=>{selectedLayer=element;renderShow=true}"
               >
-
-              </VaButton>
+                <DIcon name="settings" size="sm" />
+              </DButton>
             </div>
-            <VaButton
-              icon="delete"
-              preset="secondary"
-              round
-              color="danger"
-              @click.stop="removeLayer(element)"
-            />
+            <DButton intent="danger" title="Remove layer" @click.stop="removeLayer(element)">
+              <DIcon name="delete" size="sm" />
+            </DButton>
 
           </div>
 
@@ -527,138 +514,88 @@ const assignDatasourceToLayer = (layer: any, dsId: string) => {
       </template>
     </Draggable>
 
-  </va-collapse>
+  </section>
 
-  <va-collapse v-model="opened.widgetServiceSection" class="bottomframe" header="Services" icon="home">
-    <template #header="{ value, attrs, iconAttrs, text }">
-      <div id="header-va-4" aria-controls="panel-va-4" aria-disabled="false" aria-expanded="false" class="va-collapse__header" role="button"
-            style="color: currentcolor;" tabindex="0">
+  <section class="settings-section bottomframe" data-section="Services">
+    <div class="section__head">
+      <DIcon name="cable" size="sm" />
+      <span class="section__title">Services</span>
+      <DButton
+        intent="quiet"
+        title="Add service"
+        :busy="serviceLoading"
+        @click="showModalSizeSmall = true"
+      >
+        <DIcon name="add_circle" size="sm" />
+      </DButton>
+    </div>
 
-        <VaIcon
-          class="material-icons"
-        >cable
-        </VaIcon>
-        <div class="va-collapse__header__text">Services</div>
+    <span v-if="services && services.length==0" class="empty">
+      No Services here
+    </span>
 
-        <VaButton
-          :loading="serviceLoading"
-          icon="add_circle"
-          preset="secondary"
-          round
-          @click="(e:any)=>{e.stopImmediatePropagation();showModalSizeSmall=true;}"
-        />
-        <VaIcon
-          :class="value ? 'rotate-[-180deg]':''"
-          name="va-arrow-down"
-          v-bind="iconAttrs"
-        />
-      </div>
-    </template>
+    <!--
+      Two levels, written out rather than fed to a tree: a service and the
+      layers it offers is the whole depth, and a list of two kinds of row
+      says that plainly.
+    -->
+    <ul v-else class="tree">
+      <li v-for="node in services" :key="node.id" class="tree__service">
+        <div class="tree__row">
+          <DIcon v-if="node.failed" name="error" tone="color-err" />
+          <DIcon v-else name="cable" />
 
-    <template #body>
+          <b v-if="node.service._info.title">{{ node.service._info.title }}</b>
+          <b v-else>{{ node.service._info.name }}</b>
 
-                                <span v-if="services && services.length==0" class="empty">
-                                No Services here
-                    </span>
-      <VaTreeView v-if="services && services.length > 0" :nodes="services" :key="services.length" childrenBy="childs">
-        <template #content="node">
-          <template v-if="node.level == 0">
-            <VaIcon v-if="node.failed" class="material-icons" style="color: #ff6b6b;">
-              error
-            </VaIcon>
-            <VaIcon v-else class="material-icons">
-              cable
-            </VaIcon>
+          <!-- Only an added datasource can be taken away; the widget's own stays -->
+          <DButton
+            v-if="(node.type === 'OGCSTA' || node.type === 'GEOJSON' || node.type === 'REST-GEOJSON') &&
+                  widgetSettings.datasourceIds?.includes(node.service._info.name)"
+            intent="quiet"
+            title="Remove datasource"
+            @click.stop="removeDatasource(node.service._info.name)"
+          >
+            <DIcon name="delete" size="sm" />
+          </DButton>
+        </div>
 
-            <b v-if="node.service._info.title">{{ node.service._info.title }}</b>
-            <b v-else>{{ node.service._info.name }}</b>
+        <ul v-if="node.childs && node.childs.length" class="tree__layers">
+          <li v-for="child in node.childs" :key="child.id ?? child.title" class="tree__row">
+            <span class="tree__add" @click="()=>addLayer(child)">
+              <DIcon name="layers" class="nsee" />
+              <DIcon name="add" class="nhidden" />
+              {{ child.title }}
+            </span>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </section>
 
-            <!-- Show delete button only for additional datasources (not primary datasourceId) -->
-            <VaButton
-              class="mt4"
-              v-if="(node.type === 'OGCSTA' || node.type === 'GEOJSON' || node.type === 'REST-GEOJSON') &&
-                    widgetSettings.datasourceIds.includes(node.service._info.name)"
-              icon="delete"
-              preset="plain"
-              size="small"
-              @click.stop="removeDatasource(node.service._info.name)"
-              style="margin-left: 10px"
-            />
-          </template>
-          <template v-else>
-                                  <span @click="()=>addLayer(node)">
-                                    <VaIcon class="material-icons nsee">
-                                        layers
-                                    </VaIcon>
-                                    <VaIcon class="material-icons nhidden">
-                                        add
-                                    </VaIcon>
+  <section class="settings-section bottomframe" data-section="Map">
+    <div class="section__head">
+      <DIcon name="map" size="sm" />
+      <span class="section__title">Map</span>
+    </div>
 
-                                    {{ node.title }}
-                                  </span>
-          </template>
+    <div class="settings-container">
+      <DInput
+        v-model="widgetSettings.baseMapUrl"
+        label="Base map URL"
+        placeholder="https://tile.openstreetmap.org/{z}/{x}/{y}.png"
+        hint="Tile server URL template. Use {z}, {x}, {y} placeholders for zoom and coordinates."
+      />
 
-        </template>
-      </VaTreeView>
+      <DCheckbox v-model="widgetSettings.fixed" label="Map fixed" />
 
-
-    </template>
-
-  </va-collapse>
-
-  <va-collapse v-model="opened.widgetMapSection" class="bottomframe" header="Services" icon="map">
-    <template #header="{ value, attrs, iconAttrs, text }">
-      <div id="header-va-4" aria-controls="panel-va-4" aria-disabled="false" aria-expanded="false" class="va-collapse__header" role="button"
-            style="color: currentcolor;" tabindex="0">
-
-        <VaIcon
-          class="material-icons"
-        >map
-        </VaIcon>
-        <div class="va-collapse__header__text">Map</div>
-
-        <VaIcon
-          :class="value ? 'rotate-[-180deg]':''"
-          name="va-arrow-down"
-          v-bind="iconAttrs"
-        />
-      </div>
-    </template>
-
-    <template #body>
-
-      <div class="settings-container">
-        <va-input
-          v-model="widgetSettings.baseMapUrl"
-          label="Base Map URL"
-          placeholder="https://tile.openstreetmap.org/{z}/{x}/{y}.png"
-        >
-          <template #prepend>
-            <VaIcon name="public" />
-          </template>
-        </va-input>
-
-        <p class="hint-text">
-          Tile server URL template. Use {z}, {x}, {y} placeholders for zoom and coordinates.
-        </p>
-
-        <va-checkbox
-          v-model="widgetSettings.fixed"
-          label="Map fixed"
-        />
-
-        <va-color-input
-          v-model="widgetSettings.selectionHighlightColor"
-          label="Selection Highlight Color"
-        />
-        <p class="hint-text">
-          Color used to highlight selected Things on the map.
-        </p>
-      </div>
-
-    </template>
-
-  </va-collapse>
+      <DColorInput
+        v-model="widgetSettings.selectionHighlightColor"
+        label="Selection highlight colour"
+        hint="Colour used to highlight selected Things on the map."
+      />
+    </div>
+  </section>
 
 </template>
 <style scoped>
@@ -676,6 +613,75 @@ const assignDatasourceToLayer = (layer: any, dsId: string) => {
   color: var(--va-text-secondary);
   margin: -8px 0 0 0;
   padding-left: 4px;
+}
+
+.section__head {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin-bottom: 8px;
+  color: var(--color-fg);
+}
+
+.section__title {
+  flex: 1 1 auto;
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  font-weight: 600;
+}
+
+.note {
+  margin: 8px 0 0;
+  font-size: var(--text-xs);
+  color: var(--color-dim);
+}
+
+.note--body {
+  font-size: var(--text-sm);
+  color: var(--color-fg);
+}
+
+.dialog__title {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  font-weight: 600;
+  color: var(--color-fg);
+}
+
+.failed {
+  margin-left: 8px;
+  font-size: 0.85em;
+  color: var(--color-err);
+}
+
+.slider__track {
+  min-width: 150px;
+}
+
+.tree {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.tree__row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.tree__layers {
+  margin: 0;
+  padding-left: 18px;
+  list-style: none;
+}
+
+.tree__add {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
 }
 
 .list-group-item {
