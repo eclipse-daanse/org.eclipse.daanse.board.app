@@ -32,10 +32,6 @@ interface GradientPart {
   location: number;
 };
 
-const opened = ref({
-  /* The stops open first: it is the only thing left in this half */
-  gradientSection: true,
-});
 
 const gradientFields = ref<GradientPart[]>([]);
 const widgetSettings = defineModel<ProgressSettings>({ required: true });
@@ -106,7 +102,7 @@ const deleteField = (id: number) => {
     Nothing is shown until the gradient is switched on, which is done in
     the form: there is no such thing as a stop without one.
   -->
-  <va-collapse v-model="opened.gradientSection" header="Farbstopps" icon="gradient">
+  <section class="settings-section" data-section="Farbstopps">
     <div class="settings-container">
       <p v-if="!widgetSettings.isGradient" class="hint">
         Der Farbverlauf ist ausgeschaltet. Er lässt sich unter „Darstellung“ einschalten.
@@ -134,7 +130,7 @@ const deleteField = (id: number) => {
         </va-data-table>
       </template>
     </div>
-  </va-collapse>
+  </section>
 </template>
 
 <style scoped>

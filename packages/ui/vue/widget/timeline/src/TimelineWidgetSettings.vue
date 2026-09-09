@@ -21,11 +21,7 @@ Contributors:
     apart - none of which is a field. Playing the timeline and drawing it
     are rendered from model/ui.xmi beside this.
   -->
-  <va-collapse
-    v-model="opened.timelineSection"
-    icon="timeline"
-    header="Zeitraum"
-  >
+  <section class="settings-section" data-section="Zeitraum">
     <div class="settings-container">
       <!-- Time Range Mode -->
       <div class="setting-group">
@@ -150,7 +146,7 @@ Contributors:
       </div>
 
     </div>
-  </va-collapse>
+  </section>
 
 </template>
 
@@ -196,10 +192,6 @@ interface TimelineSettings {
 
 const widgetSettings = defineModel<TimelineSettings>({ required: true });
 
-const opened = ref({
-  /* The only section left, and the reason to open the tab */
-  timelineSection: true
-});
 
 // Time range mode: 'relative' or 'absolute'
 const timeRangeMode = ref<'relative' | 'absolute'>('absolute');

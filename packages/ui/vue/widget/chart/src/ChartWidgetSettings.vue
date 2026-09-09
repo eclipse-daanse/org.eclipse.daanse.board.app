@@ -20,14 +20,6 @@ import { SeriesSettingsImpl } from './gen/SeriesSettingsImpl'
 import { VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import { VariableInput } from 'org.eclipse.daanse.board.app.ui.vue.variable.components'
 
-const opened = ref({
-  seriesSection: false,
-  styleSection: true,
-  gridSection: false,
-  dateFormatSection: false,
-  axisLabelSection: false,
-  annotationsSection: false,
-})
 
 const widgetSettings = defineModel<ChartSettings>({ required: true })
 
@@ -320,7 +312,7 @@ onMounted(() => {
 
 <template>
   <!-- Series-specific Settings -->
-  <va-collapse v-model="opened.seriesSection" icon="format_list_numbered" header="Per-Series Settings">
+  <section class="settings-section" data-section="Per-Series Settings">
     <div class="settings-container">
       <div class="settings-block">
         <p style="margin-bottom: 12px; color: var(--va-text-secondary);">
@@ -551,9 +543,9 @@ onMounted(() => {
         </div>
       </div>
     </div>
-  </va-collapse>
+  </section>
 
-  <va-collapse v-model="opened.styleSection" icon="palette" header="Default Chart Styling">
+  <section class="settings-section" data-section="Default Chart Styling">
     <div class="settings-container">
       <div class="settings-block">
         <h3>Chart Type</h3>
@@ -783,9 +775,9 @@ onMounted(() => {
         </VariableInput>
       </div>
     </div>
-  </va-collapse>
+  </section>
 
-  <va-collapse v-model="opened.gridSection" icon="grid_on" header="Grid Lines">
+  <section class="settings-section" data-section="Grid Lines">
     <div class="settings-container">
       <div class="settings-block">
         <h3>Horizontal Grid (Y-Axis)</h3>
@@ -871,9 +863,9 @@ onMounted(() => {
       </div>
 
     </div>
-  </va-collapse>
+  </section>
 
-  <va-collapse v-model="opened.axisLabelSection" icon="text_fields" header="Axis Titles">
+  <section class="settings-section" data-section="Axis Titles">
     <div class="settings-container">
       <div class="settings-block">
 
@@ -903,9 +895,9 @@ onMounted(() => {
         </template>
       </div>
     </div>
-  </va-collapse>
+  </section>
 
-  <va-collapse v-model="opened.dateFormatSection" icon="event" header="Date/Time Formatting">
+  <section class="settings-section" data-section="Date/Time Formatting">
     <div class="settings-container">
       <div class="settings-block">
         <h3>X-Axis Date/Time Format</h3>
@@ -936,9 +928,9 @@ onMounted(() => {
 
       </div>
     </div>
-  </va-collapse>
+  </section>
 
-  <va-collapse v-model="opened.annotationsSection" icon="show_chart" header="Reference Lines & Areas">
+  <section class="settings-section" data-section="Reference Lines & Areas">
     <div class="settings-container">
       <!-- Edit Mode Toggle -->
       <div class="settings-block">
@@ -1098,7 +1090,7 @@ onMounted(() => {
         </div>
       </div>
     </div>
-  </va-collapse>
+  </section>
 </template>
 
 <style scoped>

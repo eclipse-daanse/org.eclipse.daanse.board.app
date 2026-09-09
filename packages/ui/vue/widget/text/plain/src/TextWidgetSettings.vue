@@ -22,13 +22,8 @@ import { VariableInput, ComplexTextInput } from 'org.eclipse.daanse.board.app.ui
 const previews = ref({
 } as Record<string, boolean>)
 
-const opened = ref({
-  widgetSection: false,
-  storeSection: false,
-})
 
 const widgetSettings = defineModel<TextSettings>({ required: true })
-console.log(widgetSettings)
 const variableRepository = inject<VariableRepository>(identifier)!
 
 const i18n: i18n | undefined = inject('i18n');
@@ -37,7 +32,7 @@ const t = (key: string) => (i18n) ? i18n.t(key) : key;
 </script>
 
 <template>
-  <va-collapse v-model="opened.widgetSection" icon="settings" header="Text und Formatierung">
+  <section class="settings-section" data-section="Text und Formatierung">
     <div class="settings-container">
       <div class="settings-block">
         <ComplexTextInput v-model="widgetSettings.text!">
@@ -123,7 +118,7 @@ const t = (key: string) => (i18n) ? i18n.t(key) : key;
         </div>
       </div>
     </div>
-  </va-collapse>
+  </section>
 </template>
 <style scoped>
 .settings-container {

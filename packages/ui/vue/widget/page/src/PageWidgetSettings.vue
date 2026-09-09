@@ -22,10 +22,6 @@ import { type PageRegistryI, identifier } from 'org.eclipse.daanse.board.app.lib
 const i18n:i18n|undefined = inject('i18n');
 const t = (key:string)=>(i18n)?i18n.t(key):key;
 
-const opened = ref({
-  widgetSection: false,
-  storeSection: false,
-});
 
 const widgetSettings = defineModel<PageI>({ required: true });
 const currentRoute = useRoute()
@@ -68,7 +64,7 @@ const isValidSelection = computed(() => {
     framing - the title switch and the background - is rendered from
     model/ui.xmi beside this.
   -->
-  <va-collapse v-model="opened.widgetSection" header="Seite wählen" icon="tab">
+  <section class="settings-section" data-section="Seite wählen">
     <div class="settings-container">
       <va-select
         v-model="widgetSettings.path"
@@ -85,20 +81,20 @@ const isValidSelection = computed(() => {
       </va-alert>
 
       <!-- A page that is not in the list yet - one being built, or one from
-           a board that has not loaded - can still be reached by its path. -->
-      <va-collapse
-        v-model="opened.storeSection"
-        :header="t('page:pageWidget.manualPath')"
-        icon="edit"
-      >
+           a board that has not loaded - can still be reached by its path.
+           It used to sit behind a disclosure inside the section; the way
+           out of a list that does not have your page in it is worth
+           seeing before you need it. -->
+      <div class="manual-path">
+        <p class="manual-path__note">{{ t('page:pageWidget.manualPath') }}</p>
         <va-input
           v-model="widgetSettings.path"
           :label="t('page:pageWidget.path')"
           :color="isValidSelection ? 'primary' : 'danger'"
         />
-      </va-collapse>
+      </div>
     </div>
-  </va-collapse>
+  </section>
 </template>
 
 <style scoped>
@@ -107,6 +103,18 @@ const isValidSelection = computed(() => {
   flex-direction: column;
   align-items: stretch;
   gap: 1rem;
+}
+
+.manual-path {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.manual-path__note {
+  margin: 0;
+  font-size: 12px;
+  color: var(--color-dim, #6b7280);
 }
 .add-btn {
   width: 150px;

@@ -1,17 +1,17 @@
-(function(){var i="ui.vue.widget.text.plain",d=document,s=d.querySelector('style[data-tsm-bundle="'+i+'"]');if(!s){s=d.createElement('style');s.setAttribute('data-tsm-bundle',i);d.head.appendChild(s);}s.textContent=".text-container[data-v-171a02c8]{display:flex;flex-direction:column;width:100%;height:100%;gap:1rem;align-items:stretch}.component[data-v-171a02c8]{font-size:var(--v03c0e3de);color:var(--v30456657);text-align:var(--fa842bec);font-weight:var(--e588d71c);font-style:var(--v0f55376e);text-decoration:var(--ca894bc8);overflow:hidden}.settings-container[data-v-d0cf0503]{display:flex;flex-direction:column;align-items:stretch;gap:1rem}.settings-block[data-v-d0cf0503]{display:flex;flex-direction:row;align-items:center;gap:8px}.text-title[data-v-d0cf0503]{width:100%}.text-size[data-v-d0cf0503]{width:100%;margin-left:12px}.text-weight[data-v-d0cf0503]{width:100px}.loading[data-v-d0cf0503]{height:100%;padding:50px;border-radius:4px;margin-bottom:1rem;background-color:var(--app-response-background)}.toolbar[data-v-d0cf0503]{display:flex;flex-wrap:wrap;gap:.25rem;padding:.5rem;background:#f9fafb;border:1px solid #e5e7eb;border-radius:.375rem}.toolbar-group[data-v-d0cf0503]{display:flex;gap:2px;padding-right:.5rem;margin-right:.25rem;border-right:1px solid #e5e7eb}.toolbar-group[data-v-d0cf0503]:last-child{border-right:none;padding-right:0;margin-right:0}.toolbar-btn[data-v-d0cf0503]{min-width:28px!important;height:28px!important;padding:0 4px!important;border:1px solid transparent!important;border-radius:.25rem!important}.toolbar-btn[data-v-d0cf0503]:hover{background-color:#e5e7eb!important}.is-active[data-v-d0cf0503]{background-color:#fff3e0!important;border-color:#ec9c1d!important;color:#c45e00!important}.toolbar-group--inputs[data-v-d0cf0503]{align-items:center;gap:.25rem}.toolbar-input[data-v-d0cf0503]{max-width:70px}\n";})();
+(function(){var i="ui.vue.widget.text.plain",d=document,s=d.querySelector('style[data-tsm-bundle="'+i+'"]');if(!s){s=d.createElement('style');s.setAttribute('data-tsm-bundle',i);d.head.appendChild(s);}s.textContent=".text-container[data-v-171a02c8]{display:flex;flex-direction:column;width:100%;height:100%;gap:1rem;align-items:stretch}.component[data-v-171a02c8]{font-size:var(--v03c0e3de);color:var(--v30456657);text-align:var(--fa842bec);font-weight:var(--e588d71c);font-style:var(--v0f55376e);text-decoration:var(--ca894bc8);overflow:hidden}.settings-container[data-v-f8c5e830]{display:flex;flex-direction:column;align-items:stretch;gap:1rem}.settings-block[data-v-f8c5e830]{display:flex;flex-direction:row;align-items:center;gap:8px}.text-title[data-v-f8c5e830]{width:100%}.text-size[data-v-f8c5e830]{width:100%;margin-left:12px}.text-weight[data-v-f8c5e830]{width:100px}.loading[data-v-f8c5e830]{height:100%;padding:50px;border-radius:4px;margin-bottom:1rem;background-color:var(--app-response-background)}.toolbar[data-v-f8c5e830]{display:flex;flex-wrap:wrap;gap:.25rem;padding:.5rem;background:#f9fafb;border:1px solid #e5e7eb;border-radius:.375rem}.toolbar-group[data-v-f8c5e830]{display:flex;gap:2px;padding-right:.5rem;margin-right:.25rem;border-right:1px solid #e5e7eb}.toolbar-group[data-v-f8c5e830]:last-child{border-right:none;padding-right:0;margin-right:0}.toolbar-btn[data-v-f8c5e830]{min-width:28px!important;height:28px!important;padding:0 4px!important;border:1px solid transparent!important;border-radius:.25rem!important}.toolbar-btn[data-v-f8c5e830]:hover{background-color:#e5e7eb!important}.is-active[data-v-f8c5e830]{background-color:#fff3e0!important;border-color:#ec9c1d!important;color:#c45e00!important}.toolbar-group--inputs[data-v-f8c5e830]{align-items:center;gap:.25rem}.toolbar-input[data-v-f8c5e830]{max-width:70px}\n";})();
 import { WidgetActionInterfaceImpl as ht, EVENT_ACTIONS_REGISTRY as vt, PayloadImpl as ce, EVENT_REGISTRY_ID as pt, EVENT_ACTIONS_REGISTRY_ID as gt } from "org.eclipse.daanse.board.app.lib.api.events";
-import { activate as Tt, deactivate as _t, component as yt, inject as Me } from "@eclipse-daanse/tsm";
-import { defineComponent as ze, mergeModels as wt, useCssVars as Et, useModel as Xe, computed as xe, toRefs as mt, inject as re, onMounted as Ct, onUnmounted as St, ref as de, watch as Fe, createElementBlock as Ot, openBlock as Pe, normalizeStyle as Nt, withModifiers as bt, createElementVNode as j, toDisplayString as It, resolveComponent as fe, createBlock as At, withCtx as Re, createVNode as k, unref as Lt, normalizeClass as z } from "vue";
-import { useRoute as Mt } from "vue-router";
-import { useDatasourceRepository as xt, VariableComplexStringWrapper as te, VariableWrapper as S } from "org.eclipse.daanse.board.app.ui.vue.composables";
-import De from "org.eclipse.daanse.board.app.lib.utils.helpers";
+import { activate as Tt, deactivate as _t, component as yt, inject as Ae } from "@eclipse-daanse/tsm";
+import { defineComponent as ke, mergeModels as wt, useCssVars as Et, useModel as Ve, computed as Le, toRefs as mt, inject as re, onMounted as Ct, onUnmounted as St, ref as ze, watch as Me, createElementBlock as Xe, openBlock as Pe, normalizeStyle as Ot, withModifiers as Nt, createElementVNode as B, toDisplayString as bt, resolveComponent as xe, createVNode as D, unref as It, withCtx as At, normalizeClass as V } from "vue";
+import { useRoute as Lt } from "vue-router";
+import { useDatasourceRepository as Mt, VariableComplexStringWrapper as te, VariableWrapper as S } from "org.eclipse.daanse.board.app.ui.vue.composables";
+import Fe from "org.eclipse.daanse.board.app.lib.utils.helpers";
 import { WidgetAction as He } from "org.eclipse.daanse.board.app.lib.events";
-import { identifier as Rt } from "org.eclipse.daanse.board.app.lib.api.variable";
-import { ComplexTextInput as Dt } from "org.eclipse.daanse.board.app.ui.vue.variable.components";
-import { BasicEFactory as Gt, BasicEPackage as kt, EPackageRegistry as Be, BasicEClass as Wt, BasicEReference as X, BasicEObject as Vt } from "@emfts/core";
-import { WIDGET_SERVICE_ID as zt } from "org.eclipse.daanse.board.app.lib.api.widget";
-const { identifiers: Ft } = __tsm__.require("org.eclipse.daanse.board.app.lib.core"), Xt = "data:image/svg+xml,%3csvg%20width='120'%20height='120'%20viewBox='0%200%20120%20120'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cpath%20fill-rule='evenodd'%20clip-rule='evenodd'%20d='M105%207.5H15C10.8579%207.5%207.5%2010.8579%207.5%2015V105C7.5%20109.142%2010.8579%20112.5%2015%20112.5H105C109.142%20112.5%20112.5%20109.142%20112.5%20105V15C112.5%2010.8579%20109.142%207.5%20105%207.5ZM15%200C6.71573%200%200%206.71573%200%2015V105C0%20113.284%206.71573%20120%2015%20120H105C113.284%20120%20120%20113.284%20120%20105V15C120%206.71573%20113.284%200%20105%200H15Z'%20fill='%23606060'/%3e%3cpath%20d='M22.5%2081C22.5%2077.6863%2025.1863%2075%2028.5%2075H76.5C79.8137%2075%2082.5%2077.6863%2082.5%2081V84C82.5%2087.3137%2079.8137%2090%2076.5%2090H28.5C25.1863%2090%2022.5%2087.3137%2022.5%2084V81Z'%20fill='%23606060'/%3e%3cpath%20d='M22.5%2058.5C22.5%2055.1863%2025.1863%2052.5%2028.5%2052.5H91.5C94.8137%2052.5%2097.5%2055.1863%2097.5%2058.5V61.5C97.5%2064.8137%2094.8137%2067.5%2091.5%2067.5H28.5C25.1863%2067.5%2022.5%2064.8137%2022.5%2061.5V58.5Z'%20fill='%23606060'/%3e%3cpath%20d='M43.5%2036C43.5%2032.6863%2046.1863%2030%2049.5%2030H91.5C94.8137%2030%2097.5%2032.6863%2097.5%2036V39C97.5%2042.3137%2094.8137%2045%2091.5%2045H49.5C46.1863%2045%2043.5%2042.3137%2043.5%2039V36Z'%20fill='%23606060'/%3e%3cpath%20d='M24.0287%2045.189C23.5947%2045.189%2023.2307%2045.091%2022.9367%2044.895C22.6427%2044.685%2022.4607%2044.405%2022.3907%2044.055C22.3207%2043.691%2022.3837%2043.285%2022.5797%2042.837L27.8087%2031.581C28.0607%2031.035%2028.3687%2030.636%2028.7327%2030.384C29.1107%2030.132%2029.5377%2030.006%2030.0137%2030.006C30.4897%2030.006%2030.9027%2030.132%2031.2527%2030.384C31.6167%2030.636%2031.9317%2031.035%2032.1977%2031.581L37.4267%2042.837C37.6507%2043.285%2037.7277%2043.691%2037.6577%2044.055C37.6017%2044.419%2037.4267%2044.699%2037.1327%2044.895C36.8527%2045.091%2036.5027%2045.189%2036.0827%2045.189C35.5227%2045.189%2035.0887%2045.063%2034.7807%2044.811C34.4867%2044.559%2034.2207%2044.153%2033.9827%2043.593L32.8487%2040.926L34.3187%2041.997H25.6667L27.1577%2040.926L26.0237%2043.593C25.7717%2044.153%2025.5127%2044.559%2025.2467%2044.811C24.9807%2045.063%2024.5747%2045.189%2024.0287%2045.189ZM29.9717%2034.227L27.5357%2040.044L26.9477%2039.036H33.0587L32.4707%2040.044L30.0137%2034.227H29.9717Z'%20fill='%23606060'/%3e%3c/svg%3e";
-var Ge = typeof globalThis < "u" ? globalThis : typeof window < "u" ? window : typeof global < "u" ? global : typeof self < "u" ? self : {}, ke = {};
+import { identifier as Ft } from "org.eclipse.daanse.board.app.lib.api.variable";
+import { ComplexTextInput as Rt } from "org.eclipse.daanse.board.app.ui.vue.variable.components";
+import { BasicEFactory as Dt, BasicEPackage as Gt, EPackageRegistry as je, BasicEClass as Wt, BasicEReference as X, BasicEObject as kt } from "@emfts/core";
+import { WIDGET_SERVICE_ID as Vt } from "org.eclipse.daanse.board.app.lib.api.widget";
+const { identifiers: xt } = __tsm__.require("org.eclipse.daanse.board.app.lib.core"), zt = "data:image/svg+xml,%3csvg%20width='120'%20height='120'%20viewBox='0%200%20120%20120'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cpath%20fill-rule='evenodd'%20clip-rule='evenodd'%20d='M105%207.5H15C10.8579%207.5%207.5%2010.8579%207.5%2015V105C7.5%20109.142%2010.8579%20112.5%2015%20112.5H105C109.142%20112.5%20112.5%20109.142%20112.5%20105V15C112.5%2010.8579%20109.142%207.5%20105%207.5ZM15%200C6.71573%200%200%206.71573%200%2015V105C0%20113.284%206.71573%20120%2015%20120H105C113.284%20120%20120%20113.284%20120%20105V15C120%206.71573%20113.284%200%20105%200H15Z'%20fill='%23606060'/%3e%3cpath%20d='M22.5%2081C22.5%2077.6863%2025.1863%2075%2028.5%2075H76.5C79.8137%2075%2082.5%2077.6863%2082.5%2081V84C82.5%2087.3137%2079.8137%2090%2076.5%2090H28.5C25.1863%2090%2022.5%2087.3137%2022.5%2084V81Z'%20fill='%23606060'/%3e%3cpath%20d='M22.5%2058.5C22.5%2055.1863%2025.1863%2052.5%2028.5%2052.5H91.5C94.8137%2052.5%2097.5%2055.1863%2097.5%2058.5V61.5C97.5%2064.8137%2094.8137%2067.5%2091.5%2067.5H28.5C25.1863%2067.5%2022.5%2064.8137%2022.5%2061.5V58.5Z'%20fill='%23606060'/%3e%3cpath%20d='M43.5%2036C43.5%2032.6863%2046.1863%2030%2049.5%2030H91.5C94.8137%2030%2097.5%2032.6863%2097.5%2036V39C97.5%2042.3137%2094.8137%2045%2091.5%2045H49.5C46.1863%2045%2043.5%2042.3137%2043.5%2039V36Z'%20fill='%23606060'/%3e%3cpath%20d='M24.0287%2045.189C23.5947%2045.189%2023.2307%2045.091%2022.9367%2044.895C22.6427%2044.685%2022.4607%2044.405%2022.3907%2044.055C22.3207%2043.691%2022.3837%2043.285%2022.5797%2042.837L27.8087%2031.581C28.0607%2031.035%2028.3687%2030.636%2028.7327%2030.384C29.1107%2030.132%2029.5377%2030.006%2030.0137%2030.006C30.4897%2030.006%2030.9027%2030.132%2031.2527%2030.384C31.6167%2030.636%2031.9317%2031.035%2032.1977%2031.581L37.4267%2042.837C37.6507%2043.285%2037.7277%2043.691%2037.6577%2044.055C37.6017%2044.419%2037.4267%2044.699%2037.1327%2044.895C36.8527%2045.091%2036.5027%2045.189%2036.0827%2045.189C35.5227%2045.189%2035.0887%2045.063%2034.7807%2044.811C34.4867%2044.559%2034.2207%2044.153%2033.9827%2043.593L32.8487%2040.926L34.3187%2041.997H25.6667L27.1577%2040.926L26.0237%2043.593C25.7717%2044.153%2025.5127%2044.559%2025.2467%2044.811C24.9807%2045.063%2024.5747%2045.189%2024.0287%2045.189ZM29.9717%2034.227L27.5357%2040.044L26.9477%2039.036H33.0587L32.4707%2040.044L30.0137%2034.227H29.9717Z'%20fill='%23606060'/%3e%3c/svg%3e";
+var Re = typeof globalThis < "u" ? globalThis : typeof window < "u" ? window : typeof global < "u" ? global : typeof self < "u" ? self : {}, De = {};
 /*! *****************************************************************************
 Copyright (C) Microsoft. All rights reserved.
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use
@@ -26,227 +26,227 @@ MERCHANTABLITY OR NON-INFRINGEMENT.
 See the Apache Version 2.0 License for specific language governing permissions
 and limitations under the License.
 ***************************************************************************** */
-var We;
-function Pt() {
-  if (We) return ke;
-  We = 1;
+var Ge;
+function Xt() {
+  if (Ge) return De;
+  Ge = 1;
   var E;
-  return (function(i) {
-    (function(n) {
-      var p = typeof globalThis == "object" ? globalThis : typeof Ge == "object" ? Ge : typeof self == "object" ? self : typeof this == "object" ? this : m(), d = _(i);
-      typeof p.Reflect < "u" && (d = _(p.Reflect, d)), n(d, p), typeof p.Reflect > "u" && (p.Reflect = i);
-      function _(x, C) {
-        return function(D, H) {
-          Object.defineProperty(x, D, { configurable: !0, writable: !0, value: H }), C && C(D, H);
+  return (function(n) {
+    (function(a) {
+      var p = typeof globalThis == "object" ? globalThis : typeof Re == "object" ? Re : typeof self == "object" ? self : typeof this == "object" ? this : y(), f = h(n);
+      typeof p.Reflect < "u" && (f = h(p.Reflect, f)), a(f, p), typeof p.Reflect > "u" && (p.Reflect = n);
+      function h(x, z) {
+        return function(G, H) {
+          Object.defineProperty(x, G, { configurable: !0, writable: !0, value: H }), z && z(G, H);
         };
       }
-      function v() {
+      function C() {
         try {
           return Function("return this;")();
         } catch {
         }
       }
-      function F() {
+      function m() {
         try {
           return (0, eval)("(function() { return this; })()");
         } catch {
         }
       }
-      function m() {
-        return v() || F();
+      function y() {
+        return C() || m();
       }
-    })(function(n, p) {
-      var d = Object.prototype.hasOwnProperty, _ = typeof Symbol == "function", v = _ && typeof Symbol.toPrimitive < "u" ? Symbol.toPrimitive : "@@toPrimitive", F = _ && typeof Symbol.iterator < "u" ? Symbol.iterator : "@@iterator", m = typeof Object.create == "function", x = { __proto__: [] } instanceof Array, C = !m && !x, D = {
+    })(function(a, p) {
+      var f = Object.prototype.hasOwnProperty, h = typeof Symbol == "function", C = h && typeof Symbol.toPrimitive < "u" ? Symbol.toPrimitive : "@@toPrimitive", m = h && typeof Symbol.iterator < "u" ? Symbol.iterator : "@@iterator", y = typeof Object.create == "function", x = { __proto__: [] } instanceof Array, z = !y && !x, G = {
         // create an object in dictionary mode (a.k.a. "slow" mode in v8)
-        create: m ? function() {
+        create: y ? function() {
           return ue(/* @__PURE__ */ Object.create(null));
         } : x ? function() {
           return ue({ __proto__: null });
         } : function() {
           return ue({});
         },
-        has: C ? function(e, t) {
-          return d.call(e, t);
+        has: z ? function(e, t) {
+          return f.call(e, t);
         } : function(e, t) {
           return t in e;
         },
-        get: C ? function(e, t) {
-          return d.call(e, t) ? e[t] : void 0;
+        get: z ? function(e, t) {
+          return f.call(e, t) ? e[t] : void 0;
         } : function(e, t) {
           return e[t];
         }
-      }, H = Object.getPrototypeOf(Function), B = typeof Map == "function" && typeof Map.prototype.entries == "function" ? Map : lt(), L = typeof Set == "function" && typeof Set.prototype.entries == "function" ? Set : ut(), Y = typeof WeakMap == "function" ? WeakMap : ct(), V = _ ? Symbol.for("@reflect-metadata:registry") : void 0, U = at(), Q = ot(U);
-      function q(e, t, r, a) {
-        if (h(r)) {
-          if (!Ce(e))
+      }, H = Object.getPrototypeOf(Function), j = typeof Map == "function" && typeof Map.prototype.entries == "function" ? Map : lt(), L = typeof Set == "function" && typeof Set.prototype.entries == "function" ? Set : ut(), Y = typeof WeakMap == "function" ? WeakMap : ct(), k = h ? Symbol.for("@reflect-metadata:registry") : void 0, Z = at(), Q = ot(Z);
+      function q(e, t, r, i) {
+        if (v(r)) {
+          if (!Ee(e))
             throw new TypeError();
-          if (!Se(t))
+          if (!me(t))
             throw new TypeError();
           return Je(e, t);
         } else {
-          if (!Ce(e))
+          if (!Ee(e))
             throw new TypeError();
           if (!I(t))
             throw new TypeError();
-          if (!I(a) && !h(a) && !Z(a))
+          if (!I(i) && !v(i) && !U(i))
             throw new TypeError();
-          return Z(a) && (a = void 0), r = W(r), Qe(e, t, r, a);
+          return U(i) && (i = void 0), r = W(r), Qe(e, t, r, i);
         }
       }
-      n("decorate", q);
+      a("decorate", q);
       function ae(e, t) {
-        function r(a, f) {
-          if (!I(a))
+        function r(i, d) {
+          if (!I(i))
             throw new TypeError();
-          if (!h(f) && !nt(f))
+          if (!v(d) && !nt(d))
             throw new TypeError();
-          _e(e, t, a, f);
+          ge(e, t, i, d);
         }
         return r;
       }
-      n("metadata", ae);
-      function b(e, t, r, a) {
+      a("metadata", ae);
+      function b(e, t, r, i) {
         if (!I(r))
           throw new TypeError();
-        return h(a) || (a = W(a)), _e(e, t, r, a);
+        return v(i) || (i = W(i)), ge(e, t, r, i);
       }
-      n("defineMetadata", b);
+      a("defineMetadata", b);
       function M(e, t, r) {
         if (!I(t))
           throw new TypeError();
-        return h(r) || (r = W(r)), pe(e, t, r);
+        return v(r) || (r = W(r)), he(e, t, r);
       }
-      n("hasMetadata", M);
-      function R(e, t, r) {
+      a("hasMetadata", M);
+      function F(e, t, r) {
         if (!I(t))
           throw new TypeError();
-        return h(r) || (r = W(r)), oe(e, t, r);
+        return v(r) || (r = W(r)), oe(e, t, r);
       }
-      n("hasOwnMetadata", R);
+      a("hasOwnMetadata", F);
       function K(e, t, r) {
         if (!I(t))
           throw new TypeError();
-        return h(r) || (r = W(r)), ge(e, t, r);
+        return v(r) || (r = W(r)), ve(e, t, r);
       }
-      n("getMetadata", K);
-      function Ze(e, t, r) {
+      a("getMetadata", K);
+      function Ue(e, t, r) {
         if (!I(t))
           throw new TypeError();
-        return h(r) || (r = W(r)), Te(e, t, r);
+        return v(r) || (r = W(r)), pe(e, t, r);
       }
-      n("getOwnMetadata", Ze);
+      a("getOwnMetadata", Ue);
       function $e(e, t) {
         if (!I(e))
           throw new TypeError();
-        return h(t) || (t = W(t)), ye(e, t);
+        return v(t) || (t = W(t)), Te(e, t);
       }
-      n("getMetadataKeys", $e);
+      a("getMetadataKeys", $e);
       function Ye(e, t) {
         if (!I(e))
           throw new TypeError();
-        return h(t) || (t = W(t)), we(e, t);
+        return v(t) || (t = W(t)), _e(e, t);
       }
-      n("getOwnMetadataKeys", Ye);
+      a("getOwnMetadataKeys", Ye);
       function qe(e, t, r) {
         if (!I(t))
           throw new TypeError();
-        if (h(r) || (r = W(r)), !I(t))
+        if (v(r) || (r = W(r)), !I(t))
           throw new TypeError();
-        h(r) || (r = W(r));
-        var a = J(
+        v(r) || (r = W(r));
+        var i = J(
           t,
           r,
           /*Create*/
           !1
         );
-        return h(a) ? !1 : a.OrdinaryDeleteMetadata(e, t, r);
+        return v(i) ? !1 : i.OrdinaryDeleteMetadata(e, t, r);
       }
-      n("deleteMetadata", qe);
+      a("deleteMetadata", qe);
       function Je(e, t) {
         for (var r = e.length - 1; r >= 0; --r) {
-          var a = e[r], f = a(t);
-          if (!h(f) && !Z(f)) {
-            if (!Se(f))
+          var i = e[r], d = i(t);
+          if (!v(d) && !U(d)) {
+            if (!me(d))
               throw new TypeError();
-            t = f;
+            t = d;
           }
         }
         return t;
       }
-      function Qe(e, t, r, a) {
-        for (var f = e.length - 1; f >= 0; --f) {
-          var O = e[f], A = O(t, r, a);
-          if (!h(A) && !Z(A)) {
+      function Qe(e, t, r, i) {
+        for (var d = e.length - 1; d >= 0; --d) {
+          var O = e[d], A = O(t, r, i);
+          if (!v(A) && !U(A)) {
             if (!I(A))
               throw new TypeError();
-            a = A;
+            i = A;
           }
         }
-        return a;
+        return i;
       }
-      function pe(e, t, r) {
-        var a = oe(e, t, r);
-        if (a)
+      function he(e, t, r) {
+        var i = oe(e, t, r);
+        if (i)
           return !0;
-        var f = le(t);
-        return Z(f) ? !1 : pe(e, f, r);
+        var d = le(t);
+        return U(d) ? !1 : he(e, d, r);
       }
       function oe(e, t, r) {
-        var a = J(
+        var i = J(
           t,
           r,
           /*Create*/
           !1
         );
-        return h(a) ? !1 : me(a.OrdinaryHasOwnMetadata(e, t, r));
+        return v(i) ? !1 : we(i.OrdinaryHasOwnMetadata(e, t, r));
       }
-      function ge(e, t, r) {
-        var a = oe(e, t, r);
-        if (a)
-          return Te(e, t, r);
-        var f = le(t);
-        if (!Z(f))
-          return ge(e, f, r);
+      function ve(e, t, r) {
+        var i = oe(e, t, r);
+        if (i)
+          return pe(e, t, r);
+        var d = le(t);
+        if (!U(d))
+          return ve(e, d, r);
       }
-      function Te(e, t, r) {
-        var a = J(
+      function pe(e, t, r) {
+        var i = J(
           t,
           r,
           /*Create*/
           !1
         );
-        if (!h(a))
-          return a.OrdinaryGetOwnMetadata(e, t, r);
+        if (!v(i))
+          return i.OrdinaryGetOwnMetadata(e, t, r);
       }
-      function _e(e, t, r, a) {
-        var f = J(
+      function ge(e, t, r, i) {
+        var d = J(
           r,
-          a,
+          i,
           /*Create*/
           !0
         );
-        f.OrdinaryDefineOwnMetadata(e, t, r, a);
+        d.OrdinaryDefineOwnMetadata(e, t, r, i);
       }
-      function ye(e, t) {
-        var r = we(e, t), a = le(e);
-        if (a === null)
+      function Te(e, t) {
+        var r = _e(e, t), i = le(e);
+        if (i === null)
           return r;
-        var f = ye(a, t);
-        if (f.length <= 0)
+        var d = Te(i, t);
+        if (d.length <= 0)
           return r;
         if (r.length <= 0)
-          return f;
+          return d;
         for (var O = new L(), A = [], g = 0, o = r; g < o.length; g++) {
           var s = o[g], l = O.has(s);
           l || (O.add(s), A.push(s));
         }
-        for (var u = 0, T = f; u < T.length; u++) {
+        for (var u = 0, T = d; u < T.length; u++) {
           var s = T[u], l = O.has(s);
           l || (O.add(s), A.push(s));
         }
         return A;
       }
-      function we(e, t) {
+      function _e(e, t) {
         var r = J(
           e,
           t,
@@ -255,7 +255,7 @@ function Pt() {
         );
         return r ? r.OrdinaryOwnMetadataKeys(e, t) : [];
       }
-      function Ee(e) {
+      function ye(e) {
         if (e === null)
           return 1;
         switch (typeof e) {
@@ -275,10 +275,10 @@ function Pt() {
             return 6;
         }
       }
-      function h(e) {
+      function v(e) {
         return e === void 0;
       }
-      function Z(e) {
+      function U(e) {
         return e === null;
       }
       function Ke(e) {
@@ -288,7 +288,7 @@ function Pt() {
         return typeof e == "object" ? e !== null : typeof e == "function";
       }
       function et(e, t) {
-        switch (Ee(e)) {
+        switch (ye(e)) {
           case 0:
             return e;
           case 1:
@@ -302,34 +302,34 @@ function Pt() {
           case 5:
             return e;
         }
-        var r = "string", a = Oe(e, v);
-        if (a !== void 0) {
-          var f = a.call(e, r);
-          if (I(f))
+        var r = "string", i = Ce(e, C);
+        if (i !== void 0) {
+          var d = i.call(e, r);
+          if (I(d))
             throw new TypeError();
-          return f;
+          return d;
         }
         return tt(e);
       }
       function tt(e, t) {
-        var r, a, f;
+        var r, i, d;
         {
           var O = e.toString;
           if (ee(O)) {
-            var a = O.call(e);
-            if (!I(a))
-              return a;
+            var i = O.call(e);
+            if (!I(i))
+              return i;
           }
           var r = e.valueOf;
           if (ee(r)) {
-            var a = r.call(e);
-            if (!I(a))
-              return a;
+            var i = r.call(e);
+            if (!I(i))
+              return i;
           }
         }
         throw new TypeError();
       }
-      function me(e) {
+      function we(e) {
         return !!e;
       }
       function rt(e) {
@@ -339,17 +339,17 @@ function Pt() {
         var t = et(e);
         return Ke(t) ? t : rt(t);
       }
-      function Ce(e) {
+      function Ee(e) {
         return Array.isArray ? Array.isArray(e) : e instanceof Object ? e instanceof Array : Object.prototype.toString.call(e) === "[object Array]";
       }
       function ee(e) {
         return typeof e == "function";
       }
-      function Se(e) {
+      function me(e) {
         return typeof e == "function";
       }
       function nt(e) {
-        switch (Ee(e)) {
+        switch (ye(e)) {
           case 3:
             return !0;
           case 4:
@@ -361,7 +361,7 @@ function Pt() {
       function se(e, t) {
         return e === t || e !== e && t !== t;
       }
-      function Oe(e, t) {
+      function Ce(e, t) {
         var r = e[t];
         if (r != null) {
           if (!ee(r))
@@ -369,8 +369,8 @@ function Pt() {
           return r;
         }
       }
-      function Ne(e) {
-        var t = Oe(e, F);
+      function Se(e) {
+        var t = Ce(e, m);
         if (!ee(t))
           throw new TypeError();
         var r = t.call(e);
@@ -378,14 +378,14 @@ function Pt() {
           throw new TypeError();
         return r;
       }
-      function be(e) {
+      function Oe(e) {
         return e.value;
       }
-      function Ie(e) {
+      function Ne(e) {
         var t = e.next();
         return t.done ? !1 : t;
       }
-      function Ae(e) {
+      function be(e) {
         var t = e.return;
         t && t.call(e);
       }
@@ -393,16 +393,16 @@ function Pt() {
         var t = Object.getPrototypeOf(e);
         if (typeof e != "function" || e === H || t !== H)
           return t;
-        var r = e.prototype, a = r && Object.getPrototypeOf(r);
-        if (a == null || a === Object.prototype)
+        var r = e.prototype, i = r && Object.getPrototypeOf(r);
+        if (i == null || i === Object.prototype)
           return t;
-        var f = a.constructor;
-        return typeof f != "function" || f === e ? t : f;
+        var d = i.constructor;
+        return typeof d != "function" || d === e ? t : d;
       }
       function it() {
         var e;
-        !h(V) && typeof p.Reflect < "u" && !(V in p.Reflect) && typeof p.Reflect.defineMetadata == "function" && (e = st(p.Reflect));
-        var t, r, a, f = new Y(), O = {
+        !v(k) && typeof p.Reflect < "u" && !(k in p.Reflect) && typeof p.Reflect.defineMetadata == "function" && (e = st(p.Reflect));
+        var t, r, i, d = new Y(), O = {
           registerProvider: A,
           getProvider: o,
           setProvider: l
@@ -414,67 +414,67 @@ function Pt() {
           switch (!0) {
             case e === u:
               break;
-            case h(t):
+            case v(t):
               t = u;
               break;
             case t === u:
               break;
-            case h(r):
+            case v(r):
               r = u;
               break;
             case r === u:
               break;
             default:
-              a === void 0 && (a = new L()), a.add(u);
+              i === void 0 && (i = new L()), i.add(u);
               break;
           }
         }
         function g(u, T) {
-          if (!h(t)) {
+          if (!v(t)) {
             if (t.isProviderFor(u, T))
               return t;
-            if (!h(r)) {
+            if (!v(r)) {
               if (r.isProviderFor(u, T))
                 return t;
-              if (!h(a))
-                for (var w = Ne(a); ; ) {
-                  var N = Ie(w);
+              if (!v(i))
+                for (var w = Se(i); ; ) {
+                  var N = Ne(w);
                   if (!N)
                     return;
-                  var G = be(N);
-                  if (G.isProviderFor(u, T))
-                    return Ae(w), G;
+                  var R = Oe(N);
+                  if (R.isProviderFor(u, T))
+                    return be(w), R;
                 }
             }
           }
-          if (!h(e) && e.isProviderFor(u, T))
+          if (!v(e) && e.isProviderFor(u, T))
             return e;
         }
         function o(u, T) {
-          var w = f.get(u), N;
-          return h(w) || (N = w.get(T)), h(N) && (N = g(u, T), h(N) || (h(w) && (w = new B(), f.set(u, w)), w.set(T, N))), N;
+          var w = d.get(u), N;
+          return v(w) || (N = w.get(T)), v(N) && (N = g(u, T), v(N) || (v(w) && (w = new j(), d.set(u, w)), w.set(T, N))), N;
         }
         function s(u) {
-          if (h(u))
+          if (v(u))
             throw new TypeError();
-          return t === u || r === u || !h(a) && a.has(u);
+          return t === u || r === u || !v(i) && i.has(u);
         }
         function l(u, T, w) {
           if (!s(w))
             throw new Error("Metadata provider not registered.");
           var N = o(u, T);
           if (N !== w) {
-            if (!h(N))
+            if (!v(N))
               return !1;
-            var G = f.get(u);
-            h(G) && (G = new B(), f.set(u, G)), G.set(T, w);
+            var R = d.get(u);
+            v(R) && (R = new j(), d.set(u, R)), R.set(T, w);
           }
           return !0;
         }
       }
       function at() {
         var e;
-        return !h(V) && I(p.Reflect) && Object.isExtensible(p.Reflect) && (e = p.Reflect[V]), h(e) && (e = it()), !h(V) && I(p.Reflect) && Object.isExtensible(p.Reflect) && Object.defineProperty(p.Reflect, V, {
+        return !v(k) && I(p.Reflect) && Object.isExtensible(p.Reflect) && (e = p.Reflect[k]), v(e) && (e = it()), !v(k) && I(p.Reflect) && Object.isExtensible(p.Reflect) && Object.defineProperty(p.Reflect, k, {
           enumerable: !1,
           configurable: !1,
           writable: !1,
@@ -485,52 +485,52 @@ function Pt() {
         var t = new Y(), r = {
           isProviderFor: function(s, l) {
             var u = t.get(s);
-            return h(u) ? !1 : u.has(l);
+            return v(u) ? !1 : u.has(l);
           },
           OrdinaryDefineOwnMetadata: A,
-          OrdinaryHasOwnMetadata: f,
+          OrdinaryHasOwnMetadata: d,
           OrdinaryGetOwnMetadata: O,
           OrdinaryOwnMetadataKeys: g,
           OrdinaryDeleteMetadata: o
         };
-        return U.registerProvider(r), r;
-        function a(s, l, u) {
+        return Z.registerProvider(r), r;
+        function i(s, l, u) {
           var T = t.get(s), w = !1;
-          if (h(T)) {
+          if (v(T)) {
             if (!u)
               return;
-            T = new B(), t.set(s, T), w = !0;
+            T = new j(), t.set(s, T), w = !0;
           }
           var N = T.get(l);
-          if (h(N)) {
+          if (v(N)) {
             if (!u)
               return;
-            if (N = new B(), T.set(l, N), !e.setProvider(s, l, r))
+            if (N = new j(), T.set(l, N), !e.setProvider(s, l, r))
               throw T.delete(l), w && t.delete(s), new Error("Wrong provider for target.");
           }
           return N;
         }
-        function f(s, l, u) {
-          var T = a(
+        function d(s, l, u) {
+          var T = i(
             l,
             u,
             /*Create*/
             !1
           );
-          return h(T) ? !1 : me(T.has(s));
+          return v(T) ? !1 : we(T.has(s));
         }
         function O(s, l, u) {
-          var T = a(
+          var T = i(
             l,
             u,
             /*Create*/
             !1
           );
-          if (!h(T))
+          if (!v(T))
             return T.get(s);
         }
         function A(s, l, u, T) {
-          var w = a(
+          var w = i(
             u,
             T,
             /*Create*/
@@ -539,67 +539,67 @@ function Pt() {
           w.set(s, l);
         }
         function g(s, l) {
-          var u = [], T = a(
+          var u = [], T = i(
             s,
             l,
             /*Create*/
             !1
           );
-          if (h(T))
+          if (v(T))
             return u;
-          for (var w = T.keys(), N = Ne(w), G = 0; ; ) {
-            var Le = Ie(N);
-            if (!Le)
-              return u.length = G, u;
-            var ft = be(Le);
+          for (var w = T.keys(), N = Se(w), R = 0; ; ) {
+            var Ie = Ne(N);
+            if (!Ie)
+              return u.length = R, u;
+            var ft = Oe(Ie);
             try {
-              u[G] = ft;
+              u[R] = ft;
             } catch (dt) {
               try {
-                Ae(N);
+                be(N);
               } finally {
                 throw dt;
               }
             }
-            G++;
+            R++;
           }
         }
         function o(s, l, u) {
-          var T = a(
+          var T = i(
             l,
             u,
             /*Create*/
             !1
           );
-          if (h(T) || !T.delete(s))
+          if (v(T) || !T.delete(s))
             return !1;
           if (T.size === 0) {
             var w = t.get(l);
-            h(w) || (w.delete(u), w.size === 0 && t.delete(w));
+            v(w) || (w.delete(u), w.size === 0 && t.delete(w));
           }
           return !0;
         }
       }
       function st(e) {
-        var t = e.defineMetadata, r = e.hasOwnMetadata, a = e.getOwnMetadata, f = e.getOwnMetadataKeys, O = e.deleteMetadata, A = new Y(), g = {
+        var t = e.defineMetadata, r = e.hasOwnMetadata, i = e.getOwnMetadata, d = e.getOwnMetadataKeys, O = e.deleteMetadata, A = new Y(), g = {
           isProviderFor: function(o, s) {
             var l = A.get(o);
-            return !h(l) && l.has(s) ? !0 : f(o, s).length ? (h(l) && (l = new L(), A.set(o, l)), l.add(s), !0) : !1;
+            return !v(l) && l.has(s) ? !0 : d(o, s).length ? (v(l) && (l = new L(), A.set(o, l)), l.add(s), !0) : !1;
           },
           OrdinaryDefineOwnMetadata: t,
           OrdinaryHasOwnMetadata: r,
-          OrdinaryGetOwnMetadata: a,
-          OrdinaryOwnMetadataKeys: f,
+          OrdinaryGetOwnMetadata: i,
+          OrdinaryOwnMetadataKeys: d,
           OrdinaryDeleteMetadata: O
         };
         return g;
       }
       function J(e, t, r) {
-        var a = U.getProvider(e, t);
-        if (!h(a))
-          return a;
+        var i = Z.getProvider(e, t);
+        if (!v(i))
+          return i;
         if (r) {
-          if (U.setProvider(e, t, Q))
+          if (Z.setProvider(e, t, Q))
             return Q;
           throw new Error("Illegal state.");
         }
@@ -613,7 +613,7 @@ function Pt() {
             }
             return g.prototype["@@iterator"] = function() {
               return this;
-            }, g.prototype[F] = function() {
+            }, g.prototype[m] = function() {
               return this;
             }, g.prototype.next = function() {
               var o = this._index;
@@ -628,7 +628,7 @@ function Pt() {
               return this._index >= 0 && (this._index = -1, this._keys = t, this._values = t), { value: o, done: !0 };
             }, g;
           })()
-        ), a = (
+        ), i = (
           /** @class */
           (function() {
             function g() {
@@ -675,14 +675,14 @@ function Pt() {
             }, g.prototype.clear = function() {
               this._keys.length = 0, this._values.length = 0, this._cacheKey = e, this._cacheIndex = -2;
             }, g.prototype.keys = function() {
-              return new r(this._keys, this._values, f);
+              return new r(this._keys, this._values, d);
             }, g.prototype.values = function() {
               return new r(this._keys, this._values, O);
             }, g.prototype.entries = function() {
               return new r(this._keys, this._values, A);
             }, g.prototype["@@iterator"] = function() {
               return this.entries();
-            }, g.prototype[F] = function() {
+            }, g.prototype[m] = function() {
               return this.entries();
             }, g.prototype._find = function(o, s) {
               if (!se(this._cacheKey, o)) {
@@ -697,8 +697,8 @@ function Pt() {
             }, g;
           })()
         );
-        return a;
-        function f(g, o) {
+        return i;
+        function d(g, o) {
           return g;
         }
         function O(g, o) {
@@ -713,7 +713,7 @@ function Pt() {
           /** @class */
           (function() {
             function t() {
-              this._map = new B();
+              this._map = new j();
             }
             return Object.defineProperty(t.prototype, "size", {
               get: function() {
@@ -737,7 +737,7 @@ function Pt() {
               return this._map.entries();
             }, t.prototype["@@iterator"] = function() {
               return this.keys();
-            }, t.prototype[F] = function() {
+            }, t.prototype[m] = function() {
               return this.keys();
             }, t;
           })()
@@ -745,58 +745,58 @@ function Pt() {
         return e;
       }
       function ct() {
-        var e = 16, t = D.create(), r = a();
+        var e = 16, t = G.create(), r = i();
         return (
           /** @class */
           (function() {
             function o() {
-              this._key = a();
+              this._key = i();
             }
             return o.prototype.has = function(s) {
-              var l = f(
+              var l = d(
                 s,
                 /*create*/
                 !1
               );
-              return l !== void 0 ? D.has(l, this._key) : !1;
+              return l !== void 0 ? G.has(l, this._key) : !1;
             }, o.prototype.get = function(s) {
-              var l = f(
+              var l = d(
                 s,
                 /*create*/
                 !1
               );
-              return l !== void 0 ? D.get(l, this._key) : void 0;
+              return l !== void 0 ? G.get(l, this._key) : void 0;
             }, o.prototype.set = function(s, l) {
-              var u = f(
+              var u = d(
                 s,
                 /*create*/
                 !0
               );
               return u[this._key] = l, this;
             }, o.prototype.delete = function(s) {
-              var l = f(
+              var l = d(
                 s,
                 /*create*/
                 !1
               );
               return l !== void 0 ? delete l[this._key] : !1;
             }, o.prototype.clear = function() {
-              this._key = a();
+              this._key = i();
             }, o;
           })()
         );
-        function a() {
+        function i() {
           var o;
           do
             o = "@@WeakMap@@" + g();
-          while (D.has(t, o));
+          while (G.has(t, o));
           return t[o] = !0, o;
         }
-        function f(o, s) {
-          if (!d.call(o, r)) {
+        function d(o, s) {
+          if (!f.call(o, r)) {
             if (!s)
               return;
-            Object.defineProperty(o, r, { value: D.create() });
+            Object.defineProperty(o, r, { value: G.create() });
           }
           return o[r];
         }
@@ -826,13 +826,13 @@ function Pt() {
         return e.__ = void 0, delete e.__, e;
       }
     });
-  })(E || (E = {})), ke;
+  })(E || (E = {})), De;
 }
-Pt();
-var Ht = Object.defineProperty, Bt = Object.getOwnPropertyDescriptor, je = (E, i, n, p) => {
-  for (var d = Bt(i, n), _ = E.length - 1, v; _ >= 0; _--)
-    (v = E[_]) && (d = v(i, n, d) || d);
-  return d && Ht(i, n, d), d;
+Xt();
+var Pt = Object.defineProperty, Ht = Object.getOwnPropertyDescriptor, Be = (E, n, a, p) => {
+  for (var f = Ht(n, a), h = E.length - 1, C; h >= 0; h--)
+    (C = E[h]) && (f = C(n, a, f) || f);
+  return f && Pt(n, a, f), f;
 };
 class ie extends ht {
   clearContent() {
@@ -842,13 +842,13 @@ class ie extends ht {
     throw new Error("copyContent not implemented");
   }
 }
-je([
+Be([
   He({ eventType: "text.clearContent" })
 ], ie.prototype, "clearContent");
-je([
+Be([
   He({ eventType: "text.copyContent" })
 ], ie.prototype, "copyContent");
-const jt = { class: "component" }, Ut = /* @__PURE__ */ ze({
+const jt = { class: "component" }, Bt = /* @__PURE__ */ ke({
   __name: "TextWidget",
   props: /* @__PURE__ */ wt({
     datasourceId: {},
@@ -858,7 +858,7 @@ const jt = { class: "component" }, Ut = /* @__PURE__ */ ze({
     configvModifiers: {}
   }),
   emits: ["update:configv"],
-  setup(E, { expose: i }) {
+  setup(E, { expose: n }) {
     Et((b) => ({
       v03c0e3de: ae.value,
       v30456657: L.value.fontColor?.value,
@@ -867,7 +867,7 @@ const jt = { class: "component" }, Ut = /* @__PURE__ */ ze({
       v0f55376e: L.value.fontStyle?.value,
       ca894bc8: L.value.textDecoration?.value
     }));
-    const n = E, { datasourceId: p, id: d } = mt(n), _ = re(Ft.TINY_EMITTER), v = re(vt), m = Mt().params.pageid || "";
+    const a = E, { datasourceId: p, id: f } = mt(a), h = re(xt.TINY_EMITTER), C = re(vt), y = Lt().params.pageid || "";
     class x extends ie {
       clearContent() {
         L.value?.text && (L.value.text.value = "");
@@ -878,31 +878,31 @@ const jt = { class: "component" }, Ut = /* @__PURE__ */ ze({
         });
       }
     }
-    const C = new x();
-    i(C), Ct(() => {
-      d?.value && v.registerInstance(d.value, C, "TextWidget", m);
+    const z = new x();
+    n(z), Ct(() => {
+      f?.value && C.registerInstance(f.value, z, "TextWidget", y);
     }), St(() => {
-      d?.value && v.unregisterInstance(d.value);
+      f?.value && C.unregisterInstance(f.value);
     });
-    const D = () => {
-      d?.value && _.emit("widget:TextWidget:click", {
+    const G = () => {
+      f?.value && h.emit("widget:TextWidget:click", {
         type: "widget:TextWidget:click",
-        widgetId: d.value,
-        payload: { widgetId: d.value, timestamp: Date.now() }
+        widgetId: f.value,
+        payload: { widgetId: f.value, timestamp: Date.now() }
       });
     }, H = () => {
-      d?.value && _.emit("widget:TextWidget:right_click", {
+      f?.value && h.emit("widget:TextWidget:right_click", {
         type: "widget:TextWidget:right_click",
-        widgetId: d.value,
-        payload: { widgetId: d.value, timestamp: Date.now() }
+        widgetId: f.value,
+        payload: { widgetId: f.value, timestamp: Date.now() }
       });
-    }, B = (b) => {
-      d?.value && _.emit("widget:TextWidget:text_change", {
+    }, j = (b) => {
+      f?.value && h.emit("widget:TextWidget:text_change", {
         type: "widget:TextWidget:text_change",
-        widgetId: d.value,
-        payload: { widgetId: d.value, text: b, timestamp: Date.now() }
+        widgetId: f.value,
+        payload: { widgetId: f.value, text: b, timestamp: Date.now() }
       });
-    }, L = Xe(E, "configv"), Y = {
+    }, L = Ve(E, "configv"), Y = {
       text: "Some text",
       fontSize: 12,
       fontColor: "#000",
@@ -911,46 +911,49 @@ const jt = { class: "component" }, Ut = /* @__PURE__ */ ze({
       textDecoration: "none",
       horizontalAlign: "Left",
       verticalAlign: "Top"
-    }, V = de(null), { update: U } = xt(p, "object", V), Q = (b, M) => b === "text" ? new te(String(M)) : new S(String(M));
+    }, k = ze(null), { update: Z } = Mt(p, "object", k), Q = (b, M) => b === "text" ? new te(String(M)) : new S(String(M));
     for (const [b, M] of Object.entries(Y)) {
-      const R = L.value[b];
-      R == null ? L.value[b] = Q(b, M) : (R.value === void 0 || R.value === null || R.value === "") && (R.value = String(M));
+      const F = L.value[b];
+      F == null ? L.value[b] = Q(b, M) : (F.value === void 0 || F.value === null || F.value === "") && (F.value = String(M));
     }
-    Fe(p, (b, M) => {
-      U(b, M);
+    Me(p, (b, M) => {
+      Z(b, M);
     });
-    const q = xe(() => {
+    const q = Le(() => {
       if (!L.value.text?.value)
         return "";
-      const { parts: b } = De.widget.extractValuesAndFullObject(L.value.text.value);
+      const { parts: b } = Fe.widget.extractValuesAndFullObject(L.value.text.value);
       let M = "";
-      for (const R of b)
-        if (R.path || R.path === null) {
-          const K = De.widget.getValueByPath(V.value, R.path);
-          M += K !== void 0 ? JSON.stringify(K) : R.text;
+      for (const F of b)
+        if (F.path || F.path === null) {
+          const K = Fe.widget.getValueByPath(k.value, F.path);
+          M += K !== void 0 ? JSON.stringify(K) : F.text;
         } else
-          M += R.text;
+          M += F.text;
       return M;
-    }), ae = xe(() => (L.value?.fontSize?.value || 12) + "px");
-    return Fe(q, (b, M) => {
-      b !== M && B(b);
-    }), (b, M) => (Pe(), Ot("div", {
+    }), ae = Le(() => (L.value?.fontSize?.value || 12) + "px");
+    return Me(q, (b, M) => {
+      b !== M && j(b);
+    }), (b, M) => (Pe(), Xe("div", {
       class: "text-container",
-      onClick: D,
-      onContextmenu: bt(H, ["prevent"]),
-      style: Nt({
+      onClick: G,
+      onContextmenu: Nt(H, ["prevent"]),
+      style: Ot({
         "justify-content": L.value.verticalAlign?.value === "Top" ? "flex-start" : L.value.verticalAlign?.value === "Center" ? "center" : "flex-end"
       })
     }, [
-      j("div", jt, It(q.value), 1)
+      B("div", jt, bt(q.value), 1)
     ], 36));
   }
-}), Ue = (E, i) => {
-  const n = E.__vccOpts || E;
-  for (const [p, d] of i)
-    n[p] = d;
-  return n;
-}, Zt = /* @__PURE__ */ Ue(Ut, [["__scopeId", "data-v-171a02c8"]]), $t = { class: "settings-container" }, Yt = { class: "settings-block" }, qt = { class: "toolbar" }, Jt = { class: "toolbar-group" }, Qt = { class: "toolbar-group" }, Kt = { class: "toolbar-group" }, er = /* @__PURE__ */ ze({
+}), Ze = (E, n) => {
+  const a = E.__vccOpts || E;
+  for (const [p, f] of n)
+    a[p] = f;
+  return a;
+}, Zt = /* @__PURE__ */ Ze(Bt, [["__scopeId", "data-v-171a02c8"]]), Ut = {
+  class: "settings-section",
+  "data-section": "Text und Formatierung"
+}, $t = { class: "settings-container" }, Yt = { class: "settings-block" }, qt = { class: "toolbar" }, Jt = { class: "toolbar-group" }, Qt = { class: "toolbar-group" }, Kt = { class: "toolbar-group" }, er = /* @__PURE__ */ ke({
   __name: "TextWidgetSettings",
   props: {
     modelValue: { required: !0 },
@@ -958,139 +961,128 @@ const jt = { class: "component" }, Ut = /* @__PURE__ */ ze({
   },
   emits: ["update:modelValue"],
   setup(E) {
-    de({});
-    const i = de({
-      widgetSection: !1,
-      storeSection: !1
-    }), n = Xe(E, "modelValue");
-    console.log(n), re(Rt);
-    const p = re("i18n"), d = (_) => p ? p.t(_) : _;
-    return (_, v) => {
-      const F = fe("VaInput"), m = fe("VaButton"), x = fe("va-collapse");
-      return Pe(), At(x, {
-        modelValue: i.value.widgetSection,
-        "onUpdate:modelValue": v[10] || (v[10] = (C) => i.value.widgetSection = C),
-        icon: "settings",
-        header: "Text und Formatierung"
-      }, {
-        default: Re(() => [
-          j("div", $t, [
-            j("div", Yt, [
-              k(Lt(Dt), {
-                modelValue: n.value.text,
-                "onUpdate:modelValue": v[0] || (v[0] = (C) => n.value.text = C)
-              }, {
-                default: Re(({ value: C, change: D }) => [
-                  k(F, {
-                    modelValue: C,
-                    onInput: D,
-                    label: d("textBase:TextWidget.label"),
-                    placeholder: "Enter text with variables...",
-                    class: "w-full"
-                  }, null, 8, ["modelValue", "onInput", "label"])
-                ]),
-                _: 1
-              }, 8, ["modelValue"])
+    ze({});
+    const n = Ve(E, "modelValue");
+    re(Ft);
+    const a = re("i18n"), p = (f) => a ? a.t(f) : f;
+    return (f, h) => {
+      const C = xe("VaInput"), m = xe("VaButton");
+      return Pe(), Xe("section", Ut, [
+        B("div", $t, [
+          B("div", Yt, [
+            D(It(Rt), {
+              modelValue: n.value.text,
+              "onUpdate:modelValue": h[0] || (h[0] = (y) => n.value.text = y)
+            }, {
+              default: At(({ value: y, change: x }) => [
+                D(C, {
+                  modelValue: y,
+                  onInput: x,
+                  label: p("textBase:TextWidget.label"),
+                  placeholder: "Enter text with variables...",
+                  class: "w-full"
+                }, null, 8, ["modelValue", "onInput", "label"])
+              ]),
+              _: 1
+            }, 8, ["modelValue"])
+          ]),
+          B("div", qt, [
+            B("div", Jt, [
+              D(m, {
+                class: V(["toolbar-btn", { "is-active": n.value.fontWeight.value === "bold" }]),
+                size: "small",
+                preset: "secondary",
+                icon: "format_bold",
+                onClick: h[1] || (h[1] = (y) => n.value.fontWeight.value = n.value.fontWeight.value === "bold" ? "normal" : "bold"),
+                title: "Bold"
+              }, null, 8, ["class"]),
+              D(m, {
+                class: V(["toolbar-btn", { "is-active": n.value.fontStyle.value === "italic" }]),
+                size: "small",
+                preset: "secondary",
+                icon: "format_italic",
+                onClick: h[2] || (h[2] = (y) => n.value.fontStyle.value = n.value.fontStyle.value === "italic" ? "normal" : "italic"),
+                title: "Italic"
+              }, null, 8, ["class"]),
+              D(m, {
+                class: V(["toolbar-btn", { "is-active": n.value.textDecoration.value === "underline" }]),
+                size: "small",
+                preset: "secondary",
+                icon: "format_underlined",
+                onClick: h[3] || (h[3] = (y) => n.value.textDecoration.value = n.value.textDecoration.value === "underline" ? "None" : "underline"),
+                title: "Underline"
+              }, null, 8, ["class"])
             ]),
-            j("div", qt, [
-              j("div", Jt, [
-                k(m, {
-                  class: z(["toolbar-btn", { "is-active": n.value.fontWeight.value === "bold" }]),
-                  size: "small",
-                  preset: "secondary",
-                  icon: "format_bold",
-                  onClick: v[1] || (v[1] = (C) => n.value.fontWeight.value = n.value.fontWeight.value === "bold" ? "normal" : "bold"),
-                  title: "Bold"
-                }, null, 8, ["class"]),
-                k(m, {
-                  class: z(["toolbar-btn", { "is-active": n.value.fontStyle.value === "italic" }]),
-                  size: "small",
-                  preset: "secondary",
-                  icon: "format_italic",
-                  onClick: v[2] || (v[2] = (C) => n.value.fontStyle.value = n.value.fontStyle.value === "italic" ? "normal" : "italic"),
-                  title: "Italic"
-                }, null, 8, ["class"]),
-                k(m, {
-                  class: z(["toolbar-btn", { "is-active": n.value.textDecoration.value === "underline" }]),
-                  size: "small",
-                  preset: "secondary",
-                  icon: "format_underlined",
-                  onClick: v[3] || (v[3] = (C) => n.value.textDecoration.value = n.value.textDecoration.value === "underline" ? "None" : "underline"),
-                  title: "Underline"
-                }, null, 8, ["class"])
-              ]),
-              j("div", Qt, [
-                k(m, {
-                  class: z(["toolbar-btn", { "is-active": n.value.horizontalAlign.value === "Left" }]),
-                  size: "small",
-                  preset: "secondary",
-                  icon: "format_align_left",
-                  onClick: v[4] || (v[4] = (C) => n.value.horizontalAlign.value = "Left"),
-                  title: "Left"
-                }, null, 8, ["class"]),
-                k(m, {
-                  class: z(["toolbar-btn", { "is-active": n.value.horizontalAlign.value === "Center" }]),
-                  size: "small",
-                  preset: "secondary",
-                  icon: "format_align_center",
-                  onClick: v[5] || (v[5] = (C) => n.value.horizontalAlign.value = "Center"),
-                  title: "Center"
-                }, null, 8, ["class"]),
-                k(m, {
-                  class: z(["toolbar-btn", { "is-active": n.value.horizontalAlign.value === "Right" }]),
-                  size: "small",
-                  preset: "secondary",
-                  icon: "format_align_right",
-                  onClick: v[6] || (v[6] = (C) => n.value.horizontalAlign.value = "Right"),
-                  title: "Right"
-                }, null, 8, ["class"])
-              ]),
-              j("div", Kt, [
-                k(m, {
-                  class: z(["toolbar-btn", { "is-active": n.value.verticalAlign.value === "Top" }]),
-                  size: "small",
-                  preset: "secondary",
-                  icon: "vertical_align_top",
-                  onClick: v[7] || (v[7] = (C) => n.value.verticalAlign.value = "Top"),
-                  title: "Top"
-                }, null, 8, ["class"]),
-                k(m, {
-                  class: z(["toolbar-btn", { "is-active": n.value.verticalAlign.value === "Center" }]),
-                  size: "small",
-                  preset: "secondary",
-                  icon: "vertical_align_center",
-                  onClick: v[8] || (v[8] = (C) => n.value.verticalAlign.value = "Center"),
-                  title: "Center"
-                }, null, 8, ["class"]),
-                k(m, {
-                  class: z(["toolbar-btn", { "is-active": n.value.verticalAlign.value === "Bottom" }]),
-                  size: "small",
-                  preset: "secondary",
-                  icon: "vertical_align_bottom",
-                  onClick: v[9] || (v[9] = (C) => n.value.verticalAlign.value = "Bottom"),
-                  title: "Bottom"
-                }, null, 8, ["class"])
-              ])
+            B("div", Qt, [
+              D(m, {
+                class: V(["toolbar-btn", { "is-active": n.value.horizontalAlign.value === "Left" }]),
+                size: "small",
+                preset: "secondary",
+                icon: "format_align_left",
+                onClick: h[4] || (h[4] = (y) => n.value.horizontalAlign.value = "Left"),
+                title: "Left"
+              }, null, 8, ["class"]),
+              D(m, {
+                class: V(["toolbar-btn", { "is-active": n.value.horizontalAlign.value === "Center" }]),
+                size: "small",
+                preset: "secondary",
+                icon: "format_align_center",
+                onClick: h[5] || (h[5] = (y) => n.value.horizontalAlign.value = "Center"),
+                title: "Center"
+              }, null, 8, ["class"]),
+              D(m, {
+                class: V(["toolbar-btn", { "is-active": n.value.horizontalAlign.value === "Right" }]),
+                size: "small",
+                preset: "secondary",
+                icon: "format_align_right",
+                onClick: h[6] || (h[6] = (y) => n.value.horizontalAlign.value = "Right"),
+                title: "Right"
+              }, null, 8, ["class"])
+            ]),
+            B("div", Kt, [
+              D(m, {
+                class: V(["toolbar-btn", { "is-active": n.value.verticalAlign.value === "Top" }]),
+                size: "small",
+                preset: "secondary",
+                icon: "vertical_align_top",
+                onClick: h[7] || (h[7] = (y) => n.value.verticalAlign.value = "Top"),
+                title: "Top"
+              }, null, 8, ["class"]),
+              D(m, {
+                class: V(["toolbar-btn", { "is-active": n.value.verticalAlign.value === "Center" }]),
+                size: "small",
+                preset: "secondary",
+                icon: "vertical_align_center",
+                onClick: h[8] || (h[8] = (y) => n.value.verticalAlign.value = "Center"),
+                title: "Center"
+              }, null, 8, ["class"]),
+              D(m, {
+                class: V(["toolbar-btn", { "is-active": n.value.verticalAlign.value === "Bottom" }]),
+                size: "small",
+                preset: "secondary",
+                icon: "vertical_align_bottom",
+                onClick: h[9] || (h[9] = (y) => n.value.verticalAlign.value = "Bottom"),
+                title: "Bottom"
+              }, null, 8, ["class"])
             ])
           ])
-        ]),
-        _: 1
-      }, 8, ["modelValue"]);
+        ])
+      ]);
     };
   }
-}), tr = /* @__PURE__ */ Ue(er, [["__scopeId", "data-v-d0cf0503"]]), rr = [
+}), tr = /* @__PURE__ */ Ze(er, [["__scopeId", "data-v-f8c5e830"]]), rr = [
   { name: "Text Clicked", type: "click", description: "Triggered when the text widget is clicked", payloadType: ce },
   { name: "Text Right Clicked", type: "right_click", description: "Triggered when the text widget is right-clicked", payloadType: ce },
   { name: "Text Changed", type: "text_change", description: "Triggered when the text changes", payloadType: ce }
 ];
-class he extends Gt {
+class fe extends Dt {
   // Lazy singleton instance
   static _instance;
   static get eINSTANCE() {
-    return this._instance || (this._instance = new he()), this._instance;
+    return this._instance || (this._instance = new fe()), this._instance;
   }
   constructor() {
-    super(), this.setEPackage(y.eINSTANCE);
+    super(), this.setEPackage(_.eINSTANCE);
   }
   /**
    * Create a new TextSettings instance
@@ -1101,29 +1093,29 @@ class he extends Gt {
   /**
    * Create an instance of the given class
    */
-  create(i) {
-    switch (i.getName()) {
+  create(n) {
+    switch (n.getName()) {
       case "TextSettings":
         return this.createTextSettings();
       default:
-        throw new Error(`Unknown class: ${i.getName()}`);
+        throw new Error(`Unknown class: ${n.getName()}`);
     }
   }
 }
 function P(E) {
-  const i = Be.INSTANCE.getEPackage(E);
-  if (!i)
+  const n = je.INSTANCE.getEPackage(E);
+  if (!n)
     throw new Error(`EPackage '${E}' is not registered. Access the eINSTANCE of that model's generated package (or register it via EPackageRegistry.INSTANCE.registerPackage) before initializing TextsettingsPackage.`);
-  return i;
+  return n;
 }
-class y extends kt {
+class _ extends Gt {
   static eNAME = "textsettings";
   static eNS_URI = "http://org.eclipse.daanse.board.app.ui.vue.widget.text.plain";
   static eNS_PREFIX = "textsettings";
   // Singleton instance
   static _instance;
   static get eINSTANCE() {
-    return this._instance || (this._instance = new y(), this._instance.init()), this._instance;
+    return this._instance || (this._instance = new _(), this._instance.init()), this._instance;
   }
   /**
    * Literals for quick access to metaclasses and features
@@ -1140,34 +1132,34 @@ class y extends kt {
     TEXT_SETTINGS__VERTICAL_ALIGN: null
   };
   constructor() {
-    super(), this.setName(y.eNAME), this.setNsURI(y.eNS_URI), this.setNsPrefix(y.eNS_PREFIX);
+    super(), this.setName(_.eNAME), this.setNsURI(_.eNS_URI), this.setNsPrefix(_.eNS_PREFIX);
   }
   /**
    * Initialize package contents
    */
   init() {
-    Be.INSTANCE.set(y.eNS_URI, this), this.setEFactoryInstance(he.eINSTANCE);
-    const i = new Wt();
-    i.setName("TextSettings"), i.setAbstract(!1), i.setInterface(!1), this.getEClassifiers().push(i), i.setEPackage(this), y.Literals.TEXT_SETTINGS = i;
-    const n = new X();
-    n.setContainment(!1), n.setName("text"), n.setLowerBound(0), n.setUpperBound(1), i.getEStructuralFeatures().push(n), y.Literals.TEXT_SETTINGS__TEXT = n;
+    je.INSTANCE.set(_.eNS_URI, this), this.setEFactoryInstance(fe.eINSTANCE);
+    const n = new Wt();
+    n.setName("TextSettings"), n.setAbstract(!1), n.setInterface(!1), this.getEClassifiers().push(n), n.setEPackage(this), _.Literals.TEXT_SETTINGS = n;
+    const a = new X();
+    a.setContainment(!1), a.setName("text"), a.setLowerBound(0), a.setUpperBound(1), n.getEStructuralFeatures().push(a), _.Literals.TEXT_SETTINGS__TEXT = a;
     const p = new X();
-    p.setContainment(!1), p.setName("fontSize"), p.setLowerBound(0), p.setUpperBound(1), i.getEStructuralFeatures().push(p), y.Literals.TEXT_SETTINGS__FONT_SIZE = p;
-    const d = new X();
-    d.setContainment(!1), d.setName("fontColor"), d.setLowerBound(0), d.setUpperBound(1), i.getEStructuralFeatures().push(d), y.Literals.TEXT_SETTINGS__FONT_COLOR = d;
-    const _ = new X();
-    _.setContainment(!1), _.setName("fontWeight"), _.setLowerBound(0), _.setUpperBound(1), i.getEStructuralFeatures().push(_), y.Literals.TEXT_SETTINGS__FONT_WEIGHT = _;
-    const v = new X();
-    v.setContainment(!1), v.setName("fontStyle"), v.setLowerBound(0), v.setUpperBound(1), i.getEStructuralFeatures().push(v), y.Literals.TEXT_SETTINGS__FONT_STYLE = v;
-    const F = new X();
-    F.setContainment(!1), F.setName("textDecoration"), F.setLowerBound(0), F.setUpperBound(1), i.getEStructuralFeatures().push(F), y.Literals.TEXT_SETTINGS__TEXT_DECORATION = F;
+    p.setContainment(!1), p.setName("fontSize"), p.setLowerBound(0), p.setUpperBound(1), n.getEStructuralFeatures().push(p), _.Literals.TEXT_SETTINGS__FONT_SIZE = p;
+    const f = new X();
+    f.setContainment(!1), f.setName("fontColor"), f.setLowerBound(0), f.setUpperBound(1), n.getEStructuralFeatures().push(f), _.Literals.TEXT_SETTINGS__FONT_COLOR = f;
+    const h = new X();
+    h.setContainment(!1), h.setName("fontWeight"), h.setLowerBound(0), h.setUpperBound(1), n.getEStructuralFeatures().push(h), _.Literals.TEXT_SETTINGS__FONT_WEIGHT = h;
+    const C = new X();
+    C.setContainment(!1), C.setName("fontStyle"), C.setLowerBound(0), C.setUpperBound(1), n.getEStructuralFeatures().push(C), _.Literals.TEXT_SETTINGS__FONT_STYLE = C;
     const m = new X();
-    m.setContainment(!1), m.setName("horizontalAlign"), m.setLowerBound(0), m.setUpperBound(1), i.getEStructuralFeatures().push(m), y.Literals.TEXT_SETTINGS__HORIZONTAL_ALIGN = m;
+    m.setContainment(!1), m.setName("textDecoration"), m.setLowerBound(0), m.setUpperBound(1), n.getEStructuralFeatures().push(m), _.Literals.TEXT_SETTINGS__TEXT_DECORATION = m;
+    const y = new X();
+    y.setContainment(!1), y.setName("horizontalAlign"), y.setLowerBound(0), y.setUpperBound(1), n.getEStructuralFeatures().push(y), _.Literals.TEXT_SETTINGS__HORIZONTAL_ALIGN = y;
     const x = new X();
-    x.setContainment(!1), x.setName("verticalAlign"), x.setLowerBound(0), x.setUpperBound(1), i.getEStructuralFeatures().push(x), y.Literals.TEXT_SETTINGS__VERTICAL_ALIGN = x, y.Literals.TEXT_SETTINGS__TEXT.setEType(P("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableComplexStringWrapper")), y.Literals.TEXT_SETTINGS__FONT_SIZE.setEType(P("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), y.Literals.TEXT_SETTINGS__FONT_COLOR.setEType(P("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), y.Literals.TEXT_SETTINGS__FONT_WEIGHT.setEType(P("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), y.Literals.TEXT_SETTINGS__FONT_STYLE.setEType(P("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), y.Literals.TEXT_SETTINGS__TEXT_DECORATION.setEType(P("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), y.Literals.TEXT_SETTINGS__HORIZONTAL_ALIGN.setEType(P("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), y.Literals.TEXT_SETTINGS__VERTICAL_ALIGN.setEType(P("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper"));
+    x.setContainment(!1), x.setName("verticalAlign"), x.setLowerBound(0), x.setUpperBound(1), n.getEStructuralFeatures().push(x), _.Literals.TEXT_SETTINGS__VERTICAL_ALIGN = x, _.Literals.TEXT_SETTINGS__TEXT.setEType(P("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableComplexStringWrapper")), _.Literals.TEXT_SETTINGS__FONT_SIZE.setEType(P("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), _.Literals.TEXT_SETTINGS__FONT_COLOR.setEType(P("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), _.Literals.TEXT_SETTINGS__FONT_WEIGHT.setEType(P("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), _.Literals.TEXT_SETTINGS__FONT_STYLE.setEType(P("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), _.Literals.TEXT_SETTINGS__TEXT_DECORATION.setEType(P("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), _.Literals.TEXT_SETTINGS__HORIZONTAL_ALIGN.setEType(P("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), _.Literals.TEXT_SETTINGS__VERTICAL_ALIGN.setEType(P("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper"));
   }
 }
-class c extends Vt {
+class c extends kt {
   // Feature ID Constants (eLiterals)
   static TEXT = 0;
   static FONT_SIZE = 1;
@@ -1190,21 +1182,21 @@ class c extends Vt {
    * Returns the EClass of this object
    */
   eClass() {
-    return y.Literals.TEXT_SETTINGS;
+    return _.Literals.TEXT_SETTINGS;
   }
   // Getters and Setters
   get text() {
     return this._text;
   }
-  set text(i) {
-    const n = this._text;
-    this._text = i, this.eDeliver() && this.eNotify({
+  set text(n) {
+    const a = this._text;
+    this._text = n, this.eDeliver() && this.eNotify({
       getNotifier: () => this,
       getEventType: () => 1,
       // SET
       getFeature: () => this.eClass().getEStructuralFeature(c.TEXT),
-      getOldValue: () => n,
-      getNewValue: () => i,
+      getOldValue: () => a,
+      getNewValue: () => n,
       getPosition: () => -1,
       wasSet: () => !0,
       isTouch: () => !1,
@@ -1216,15 +1208,15 @@ class c extends Vt {
   get fontSize() {
     return this._fontSize;
   }
-  set fontSize(i) {
-    const n = this._fontSize;
-    this._fontSize = i, this.eDeliver() && this.eNotify({
+  set fontSize(n) {
+    const a = this._fontSize;
+    this._fontSize = n, this.eDeliver() && this.eNotify({
       getNotifier: () => this,
       getEventType: () => 1,
       // SET
       getFeature: () => this.eClass().getEStructuralFeature(c.FONT_SIZE),
-      getOldValue: () => n,
-      getNewValue: () => i,
+      getOldValue: () => a,
+      getNewValue: () => n,
       getPosition: () => -1,
       wasSet: () => !0,
       isTouch: () => !1,
@@ -1236,15 +1228,15 @@ class c extends Vt {
   get fontColor() {
     return this._fontColor;
   }
-  set fontColor(i) {
-    const n = this._fontColor;
-    this._fontColor = i, this.eDeliver() && this.eNotify({
+  set fontColor(n) {
+    const a = this._fontColor;
+    this._fontColor = n, this.eDeliver() && this.eNotify({
       getNotifier: () => this,
       getEventType: () => 1,
       // SET
       getFeature: () => this.eClass().getEStructuralFeature(c.FONT_COLOR),
-      getOldValue: () => n,
-      getNewValue: () => i,
+      getOldValue: () => a,
+      getNewValue: () => n,
       getPosition: () => -1,
       wasSet: () => !0,
       isTouch: () => !1,
@@ -1256,15 +1248,15 @@ class c extends Vt {
   get fontWeight() {
     return this._fontWeight;
   }
-  set fontWeight(i) {
-    const n = this._fontWeight;
-    this._fontWeight = i, this.eDeliver() && this.eNotify({
+  set fontWeight(n) {
+    const a = this._fontWeight;
+    this._fontWeight = n, this.eDeliver() && this.eNotify({
       getNotifier: () => this,
       getEventType: () => 1,
       // SET
       getFeature: () => this.eClass().getEStructuralFeature(c.FONT_WEIGHT),
-      getOldValue: () => n,
-      getNewValue: () => i,
+      getOldValue: () => a,
+      getNewValue: () => n,
       getPosition: () => -1,
       wasSet: () => !0,
       isTouch: () => !1,
@@ -1276,15 +1268,15 @@ class c extends Vt {
   get fontStyle() {
     return this._fontStyle;
   }
-  set fontStyle(i) {
-    const n = this._fontStyle;
-    this._fontStyle = i, this.eDeliver() && this.eNotify({
+  set fontStyle(n) {
+    const a = this._fontStyle;
+    this._fontStyle = n, this.eDeliver() && this.eNotify({
       getNotifier: () => this,
       getEventType: () => 1,
       // SET
       getFeature: () => this.eClass().getEStructuralFeature(c.FONT_STYLE),
-      getOldValue: () => n,
-      getNewValue: () => i,
+      getOldValue: () => a,
+      getNewValue: () => n,
       getPosition: () => -1,
       wasSet: () => !0,
       isTouch: () => !1,
@@ -1296,15 +1288,15 @@ class c extends Vt {
   get textDecoration() {
     return this._textDecoration;
   }
-  set textDecoration(i) {
-    const n = this._textDecoration;
-    this._textDecoration = i, this.eDeliver() && this.eNotify({
+  set textDecoration(n) {
+    const a = this._textDecoration;
+    this._textDecoration = n, this.eDeliver() && this.eNotify({
       getNotifier: () => this,
       getEventType: () => 1,
       // SET
       getFeature: () => this.eClass().getEStructuralFeature(c.TEXT_DECORATION),
-      getOldValue: () => n,
-      getNewValue: () => i,
+      getOldValue: () => a,
+      getNewValue: () => n,
       getPosition: () => -1,
       wasSet: () => !0,
       isTouch: () => !1,
@@ -1316,15 +1308,15 @@ class c extends Vt {
   get horizontalAlign() {
     return this._horizontalAlign;
   }
-  set horizontalAlign(i) {
-    const n = this._horizontalAlign;
-    this._horizontalAlign = i, this.eDeliver() && this.eNotify({
+  set horizontalAlign(n) {
+    const a = this._horizontalAlign;
+    this._horizontalAlign = n, this.eDeliver() && this.eNotify({
       getNotifier: () => this,
       getEventType: () => 1,
       // SET
       getFeature: () => this.eClass().getEStructuralFeature(c.HORIZONTAL_ALIGN),
-      getOldValue: () => n,
-      getNewValue: () => i,
+      getOldValue: () => a,
+      getNewValue: () => n,
       getPosition: () => -1,
       wasSet: () => !0,
       isTouch: () => !1,
@@ -1336,15 +1328,15 @@ class c extends Vt {
   get verticalAlign() {
     return this._verticalAlign;
   }
-  set verticalAlign(i) {
-    const n = this._verticalAlign;
-    this._verticalAlign = i, this.eDeliver() && this.eNotify({
+  set verticalAlign(n) {
+    const a = this._verticalAlign;
+    this._verticalAlign = n, this.eDeliver() && this.eNotify({
       getNotifier: () => this,
       getEventType: () => 1,
       // SET
       getFeature: () => this.eClass().getEStructuralFeature(c.VERTICAL_ALIGN),
-      getOldValue: () => n,
-      getNewValue: () => i,
+      getOldValue: () => a,
+      getNewValue: () => n,
       getPosition: () => -1,
       wasSet: () => !0,
       isTouch: () => !1,
@@ -1357,8 +1349,8 @@ class c extends Vt {
   /**
    * Returns the value of the given feature
    */
-  eGet(i) {
-    switch (this.eClass().getFeatureID(i)) {
+  eGet(n) {
+    switch (this.eClass().getFeatureID(n)) {
       case c.TEXT:
         return this.text;
       case c.FONT_SIZE:
@@ -1376,47 +1368,47 @@ class c extends Vt {
       case c.VERTICAL_ALIGN:
         return this.verticalAlign;
       default:
-        return super.eGet(i);
+        return super.eGet(n);
     }
   }
   /**
    * Sets the value of the given feature
    */
-  eSet(i, n) {
-    switch (this.eClass().getFeatureID(i)) {
+  eSet(n, a) {
+    switch (this.eClass().getFeatureID(n)) {
       case c.TEXT:
-        this.text = n, super.eSet(i, n);
+        this.text = a, super.eSet(n, a);
         break;
       case c.FONT_SIZE:
-        this.fontSize = n, super.eSet(i, n);
+        this.fontSize = a, super.eSet(n, a);
         break;
       case c.FONT_COLOR:
-        this.fontColor = n, super.eSet(i, n);
+        this.fontColor = a, super.eSet(n, a);
         break;
       case c.FONT_WEIGHT:
-        this.fontWeight = n, super.eSet(i, n);
+        this.fontWeight = a, super.eSet(n, a);
         break;
       case c.FONT_STYLE:
-        this.fontStyle = n, super.eSet(i, n);
+        this.fontStyle = a, super.eSet(n, a);
         break;
       case c.TEXT_DECORATION:
-        this.textDecoration = n, super.eSet(i, n);
+        this.textDecoration = a, super.eSet(n, a);
         break;
       case c.HORIZONTAL_ALIGN:
-        this.horizontalAlign = n, super.eSet(i, n);
+        this.horizontalAlign = a, super.eSet(n, a);
         break;
       case c.VERTICAL_ALIGN:
-        this.verticalAlign = n, super.eSet(i, n);
+        this.verticalAlign = a, super.eSet(n, a);
         break;
       default:
-        super.eSet(i, n);
+        super.eSet(n, a);
     }
   }
   /**
    * Returns whether the feature has been set
    */
-  eIsSet(i) {
-    switch (this.eClass().getFeatureID(i)) {
+  eIsSet(n) {
+    switch (this.eClass().getFeatureID(n)) {
       case c.TEXT:
         return this._text !== new te();
       case c.FONT_SIZE:
@@ -1434,14 +1426,14 @@ class c extends Vt {
       case c.VERTICAL_ALIGN:
         return this._verticalAlign !== new S();
       default:
-        return super.eIsSet(i);
+        return super.eIsSet(n);
     }
   }
   /**
    * Unsets the given feature
    */
-  eUnset(i) {
-    switch (this.eClass().getFeatureID(i)) {
+  eUnset(n) {
+    switch (this.eClass().getFeatureID(n)) {
       case c.TEXT:
         this._text = new te();
         return;
@@ -1467,7 +1459,7 @@ class c extends Vt {
         this._verticalAlign = new S();
         return;
       default:
-        super.eUnset(i);
+        super.eUnset(n);
     }
   }
   /**
@@ -1532,22 +1524,22 @@ that is where there was room.
   </components>
 </uimodel:UIModel>
 `;
-var ir = Object.defineProperty, ar = Object.getOwnPropertyDescriptor, ve = (E, i, n, p) => {
-  for (var d = p > 1 ? void 0 : p ? ar(i, n) : i, _ = E.length - 1, v; _ >= 0; _--)
-    (v = E[_]) && (d = (p ? v(i, n, d) : v(d)) || d);
-  return p && d && ir(i, n, d), d;
-}, Ve = (E, i) => (n, p) => i(n, p, E);
-y.eINSTANCE;
+var ir = Object.defineProperty, ar = Object.getOwnPropertyDescriptor, de = (E, n, a, p) => {
+  for (var f = p > 1 ? void 0 : p ? ar(n, a) : n, h = E.length - 1, C; h >= 0; h--)
+    (C = E[h]) && (f = (p ? C(n, a, f) : C(f)) || f);
+  return p && f && ir(n, a, f), f;
+}, We = (E, n) => (a, p) => n(a, p, E);
+_.eINSTANCE;
 const $ = "TextWidget";
 let ne = class {
-  constructor(E, i) {
-    this.events = E, this.actions = i;
+  constructor(E, n) {
+    this.events = E, this.actions = n;
   }
   type = $;
   component = Zt;
   settingsComponent = tr;
   supportedDSTypes = [];
-  icon = Xt;
+  icon = zt;
   name = "Text";
   /*
    * The settings form, as a model. Carried on the registration like the
@@ -1557,7 +1549,7 @@ let ne = class {
   settingsForm = {
     xmi: nr,
     uri: "/text-settings.ui.xmi",
-    ePackage: () => y.eINSTANCE,
+    ePackage: () => _.eINSTANCE,
     create: () => new c(),
     /*
      * What the text says and how it is set are not fields: the text is
@@ -1573,25 +1565,25 @@ let ne = class {
     this.events.unregisterWidget($), this.actions.unregisterWidgetType($);
   }
 };
-ve([
+de([
   Tt()
 ], ne.prototype, "register", 1);
-ve([
+de([
   _t()
 ], ne.prototype, "unregister", 1);
-ne = ve([
+ne = de([
   yt({
-    service: [zt],
+    service: [Vt],
     properties: { "widget.type": $ }
   }),
-  Ve(0, Me(pt)),
-  Ve(1, Me(gt))
+  We(0, Ae(pt)),
+  We(1, Ae(gt))
 ], ne);
 export {
   c as TextSettingsImpl,
   Zt as TextWidget,
   ne as TextWidgetProvider,
   tr as TextWidgetSettings,
-  y as TextsettingsPackage,
+  _ as TextsettingsPackage,
   nr as textSettingsFormXmi
 };

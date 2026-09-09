@@ -21,7 +21,6 @@ import { MonacoEditor } from 'org.eclipse.daanse.board.app.ui.vue.common.monaco'
 import CodeEditor from "simple-code-editor/CodeEditor.vue";
 
 const widgetSettings = defineModel<CodeSettings>({ required: true });
-const opened = ref(false);
 
 const i18n:i18n|undefined = inject('i18n');
 const t = (key:string)=>(i18n)?i18n.t(key):key;
@@ -42,7 +41,7 @@ watch(() => code.value, (newCode: any) => {
     a small highlighting one, or Monaco - so a form cannot offer it. The
     language and the theme are rendered from model/ui.xmi beside this.
   -->
-  <va-collapse v-model="opened" icon="code" header="Quelltext">
+  <section class="settings-section" data-section="Quelltext">
     <div class="settings_container">
       <template v-if="editorType === 'textarea'">
         <VaTextarea v-model="widgetSettings.code" :minRows="10" />
@@ -61,7 +60,7 @@ watch(() => code.value, (newCode: any) => {
         />
       </template>
     </div>
-  </va-collapse>
+  </section>
 </template>
 
 <style scoped>

@@ -103,29 +103,45 @@ watch(hasOwnSettings, (has) => { if (!has && tab.value === 'look') tab.value = '
 /* --------------------------------------------------- sections as tabs */
 
 /**
- * The widget's own settings arrive as a stack of collapsible sections - the
- * chart alone brings six. Stacked accordions mean scrolling past everything
- * you are not looking for, so they are driven as tabs instead: one section
- * open, the rest closed, their headers hidden.
+ * The widget's own settings arrive in sections - the chart alone brings six
+ * - and each becomes a tab here: one shown, the rest hidden.
+ *
+ * A section says its own name through `data-section`. Widgets not yet
+ * converted still bring Vuestic collapsibles, so those are recognised too
+ * and driven the same way, with their headers hidden and one forced open;
+ * a collapsible inside a tab is a second thing to open before reading the
+ * first.
  *
  * Read from the rendered result rather than declared, because every widget
  * brings its own settings component and none of them knows about this
  * overlay. If the shape is not what we expect, the sections simply stay as
- * they were - a stack of collapsibles, which still works.
+ * they were, which still works.
  */
 const lookHost = ref<HTMLElement>()
 const sections = ref<Array<{ label: string; index: number }>>([])
 const activeSection = ref(0)
 
-function sectionElements(): HTMLElement[] {
-  const host = lookHost.value
+/** Both shapes, in the order the widget rendered them. */
+const SECTIONS = ':scope > [data-section], :scope > .va-collapse'
+
+function sectionsIn(host: HTMLElement | undefined): HTMLElement[] {
   if (!host) return []
-  return [...host.querySelectorAll(':scope > .va-collapse')] as HTMLElement[]
+  return [...host.querySelectorAll(SECTIONS)] as HTMLElement[]
 }
 
-/** The header's own words, without the icon ligatures around them. */
-function labelOf(collapse: HTMLElement): string {
-  const header = collapse.querySelector('.va-collapse__header-wrapper')
+function sectionElements(): HTMLElement[] {
+  return sectionsIn(lookHost.value)
+}
+
+/**
+ * What the section calls itself: the name it declares, or - for a
+ * collapsible - the words in its header, without the icon ligatures.
+ */
+function labelOf(section: HTMLElement): string {
+  const declared = section.dataset.section
+  if (declared) return declared
+
+  const header = section.querySelector('.va-collapse__header-wrapper')
   if (!header) return ''
   const words = [...header.querySelectorAll('*')]
     .filter((el) => !el.classList.contains('va-icon') && el.children.length === 0)
@@ -140,12 +156,14 @@ function isOpen(collapse: HTMLElement): boolean {
 
 function showSection(index: number) {
   activeSection.value = index
-  sectionElements().forEach((collapse, i) => {
-    const header = collapse.querySelector('.va-collapse__header-wrapper') as HTMLElement | null
-    if (header) header.style.display = 'none'
+  sectionElements().forEach((section, i) => {
     const wanted = i === index
-    if (wanted !== isOpen(collapse)) header?.click()
-    collapse.style.display = wanted ? '' : 'none'
+    if (section.classList.contains('va-collapse')) {
+      const header = section.querySelector('.va-collapse__header-wrapper') as HTMLElement | null
+      if (header) header.style.display = 'none'
+      if (wanted !== isOpen(section)) header?.click()
+    }
+    section.style.display = wanted ? '' : 'none'
   })
 }
 
@@ -175,8 +193,8 @@ async function trimRestSections() {
   const host = restHost.value
   if (!wanted || !host) return
   await nextTick()
-  for (const collapse of [...host.querySelectorAll(':scope > .va-collapse')] as HTMLElement[]) {
-    collapse.style.display = wanted.includes(labelOf(collapse)) ? '' : 'none'
+  for (const section of sectionsIn(host)) {
+    section.style.display = wanted.includes(labelOf(section)) ? '' : 'none'
   }
 }
 

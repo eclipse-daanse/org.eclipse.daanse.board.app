@@ -32,12 +32,6 @@ import type {i18n} from "org.eclipse.daanse.board.app.lib.i18next"
 const i18n:i18n|undefined = inject('i18n');
 const t = (key:string)=>(i18n)?i18n.t(key):key;
 
-const opened = ref({
-  /* The picker opens first: choosing the symbol is what you came for */
-  pickerSection: true,
-  widgetSection: false,
-  storeSection: false,
-})
 const widgetSettings = defineModel<IconSettings>({ required: true })
 
 const isDarkTheme: Ref<boolean> = ref(
@@ -77,7 +71,7 @@ const iconStyle = computed(() => {
     everything below it is a plain setting. Split so the settings half can be
     rendered from the model and this half kept as it is.
   -->
-  <va-collapse v-model="opened.pickerSection" icon="search" header="Symbol wählen">
+  <section class="settings-section" data-section="Symbol wählen">
     <div class="settings-container">
       <va-input
         v-model="searchQuery"
@@ -96,9 +90,9 @@ const iconStyle = computed(() => {
         </span>
       </div>
     </div>
-  </va-collapse>
+  </section>
 
-  <va-collapse v-model="opened.widgetSection" icon="settings" :header="t('IconWidget.title')">
+  <section class="settings-section" :data-section="t('IconWidget.title')">
     <div class="settings-container">
       <va-checkbox
         v-model="widgetSettings.isIconFilled"
@@ -153,7 +147,7 @@ const iconStyle = computed(() => {
         :label="t('icon:IconWidget.grade')"
       />
     </div>
-  </va-collapse>
+  </section>
 </template>
 <style lang="css" scoped>
 .settings-container {
