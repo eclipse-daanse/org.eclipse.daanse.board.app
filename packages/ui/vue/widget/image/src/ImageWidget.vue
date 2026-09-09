@@ -19,6 +19,7 @@ import type { ImageSettings } from './gen/ImageSettings'
 import { ImageSettingsImpl } from './gen/ImageSettingsImpl'
 import { identifiers } from 'org.eclipse.daanse.board.app.lib.core'
 import type { TinyEmitter } from 'tiny-emitter'
+import { DButton, DIcon } from 'org.eclipse.daanse.board.app.ui.vue.controls'
 
 const props = defineProps<{ datasourceId: string, id?: string }>()
 const { id: widgetId } = toRefs(props)
@@ -154,14 +155,15 @@ watch(lastImageIndex, () => {
   <template v-else>
     <div class="slideshow-container">
       <div class="slideshow-nav slideshow-nav--prev">
-        <va-button
-          @click="toPrev()"
-          icon="chevron_left"
-          preset="plain"
-          text-color="#ffffff"
+        <DButton
+          intent="quiet"
+          class="slideshow-nav__button"
+          title="Previous image"
           :disabled="currentImage === 0"
+          @click="toPrev()"
         >
-        </va-button>
+          <DIcon name="chevron_left" />
+        </DButton>
       </div>
       <div
         class="slideshow-track"
@@ -184,14 +186,15 @@ watch(lastImageIndex, () => {
       </div>
 
       <div class="slideshow-nav slideshow-nav--next">
-        <va-button
-          @click="toNext()"
-          icon="chevron_right"
-          text-color="#ffffff"
+        <DButton
+          intent="quiet"
+          class="slideshow-nav__button"
+          title="Next image"
           :disabled="currentImage === config.images?.length - 1"
-          preset="plain"
+          @click="toNext()"
         >
-        </va-button>
+          <DIcon name="chevron_right" />
+        </DButton>
       </div>
     </div>
   </template>
@@ -241,5 +244,22 @@ watch(lastImageIndex, () => {
 
 .slideshow-nav--next {
   right: 40px;
+}
+
+/*
+ * White on the dark disc the arrow sits on, whatever the theme does - the
+ * disc is over the picture, not over the page.
+ */
+.slideshow-nav__button {
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  padding: 0;
+  color: #ffffff;
+}
+
+.slideshow-nav__button:hover:not(:disabled) {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.15);
 }
 </style>

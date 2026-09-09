@@ -1,183 +1,174 @@
-(function(){var i="ui.vue.widget.table.data",d=document,s=d.querySelector('style[data-tsm-bundle="'+i+'"]');if(!s){s=d.createElement('style');s.setAttribute('data-tsm-bundle',i);d.head.appendChild(s);}s.textContent=".filters[data-v-5d1e9988]{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:1rem;padding:1rem;flex-grow:0}.table_container[data-v-5d1e9988]{display:flex;flex-direction:column;height:100%}.table_container .pagination[data-v-5d1e9988]{flex-grow:0;padding:1rem;display:grid;grid-template-columns:1fr 1fr 1fr;justify-items:center;align-items:end}.table_container .pagination .page_input[data-v-5d1e9988]{justify-self:start}.table_container .table[data-v-5d1e9988]{flex-grow:1;flex-shrink:1}.loading[data-v-5d1e9988]{display:flex;height:100%}\n";})();
-import { WidgetActionInterfaceImpl as X, EVENT_ACTIONS_REGISTRY as Z, PayloadImpl as p, EVENT_REGISTRY_ID as Y, EVENT_ACTIONS_REGISTRY_ID as z } from "org.eclipse.daanse.board.app.lib.api.events";
-import { activate as q, deactivate as J, component as Q, inject as b } from "@eclipse-daanse/tsm";
-import { defineComponent as ee, toRefs as te, inject as y, onUnmounted as ae, ref as ie, watch as re, onMounted as ne, computed as se, resolveComponent as le, createElementBlock as ce, openBlock as oe, withModifiers as de, createVNode as ge, normalizeStyle as ue, unref as pe } from "vue";
-import { useVariableRepository as he, useDatasourceRepository as me, VariableWrapper as h } from "org.eclipse.daanse.board.app.ui.vue.composables";
-import { useRoute as we } from "vue-router";
-import { WidgetAction as _e } from "org.eclipse.daanse.board.app.lib.events";
-import { BasicEFactory as fe, BasicEPackage as Ce, EPackageRegistry as R, BasicEClass as ve, BasicEReference as De, BasicEObject as Ee } from "@emfts/core";
-import { WIDGET_SERVICE_ID as ke } from "org.eclipse.daanse.board.app.lib.api.widget";
-const { identifiers: Te } = __tsm__.require("org.eclipse.daanse.board.app.lib.core"), Ie = "data:image/svg+xml,%3csvg%20width='120'%20height='120'%20viewBox='0%200%20120%20120'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cpath%20fill-rule='evenodd'%20clip-rule='evenodd'%20d='M105%207.5H15C10.8579%207.5%207.5%2010.8579%207.5%2015V105C7.5%20109.142%2010.8579%20112.5%2015%20112.5H105C109.142%20112.5%20112.5%20109.142%20112.5%20105V15C112.5%2010.8579%20109.142%207.5%20105%207.5ZM15%200C6.71573%200%200%206.71573%200%2015V105C0%20113.284%206.71573%20120%2015%20120H105C113.284%20120%20120%20113.284%20120%20105V15C120%206.71573%20113.284%200%20105%200H15Z'%20fill='%23606060'/%3e%3cpath%20d='M22.5%2025.5C22.5%2023.8431%2023.8431%2022.5%2025.5%2022.5H34.5C36.1569%2022.5%2037.5%2023.8431%2037.5%2025.5V34.5C37.5%2036.1569%2036.1569%2037.5%2034.5%2037.5H25.5C23.8431%2037.5%2022.5%2036.1569%2022.5%2034.5V25.5Z'%20fill='%23606060'/%3e%3cpath%20d='M22.5%2048C22.5%2046.3431%2023.8431%2045%2025.5%2045H34.5C36.1569%2045%2037.5%2046.3431%2037.5%2048V94.5C37.5%2096.1569%2036.1569%2097.5%2034.5%2097.5H25.5C23.8431%2097.5%2022.5%2096.1569%2022.5%2094.5V48Z'%20fill='%23606060'/%3e%3cpath%20d='M45%2025.5C45%2023.8431%2046.3431%2022.5%2048%2022.5H94.5C96.1569%2022.5%2097.5%2023.8431%2097.5%2025.5V34.5C97.5%2036.1569%2096.1569%2037.5%2094.5%2037.5H48C46.3431%2037.5%2045%2036.1569%2045%2034.5V25.5Z'%20fill='%23606060'/%3e%3cpath%20d='M45%2048C45%2046.3431%2046.3431%2045%2048%2045H94.5C96.1569%2045%2097.5%2046.3431%2097.5%2048V94.5C97.5%2096.1569%2096.1569%2097.5%2094.5%2097.5H48C46.3431%2097.5%2045%2096.1569%2045%2094.5V48Z'%20fill='%23606060'/%3e%3c/svg%3e";
-var be = Object.defineProperty, ye = Object.getOwnPropertyDescriptor, Ne = (s, e, i, o) => {
-  for (var r = ye(e, i), l = s.length - 1, a; l >= 0; l--)
-    (a = s[l]) && (r = a(e, i, r) || r);
-  return r && be(e, i, r), r;
+(function(){var i="ui.vue.widget.table.data",d=document,s=d.querySelector('style[data-tsm-bundle="'+i+'"]');if(!s){s=d.createElement('style');s.setAttribute('data-tsm-bundle',i);d.head.appendChild(s);}s.textContent=".filters[data-v-055c8fbb]{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:1rem;padding:1rem;flex-grow:0}.table_container[data-v-055c8fbb]{display:flex;flex-direction:column;height:100%}.table_container .pagination[data-v-055c8fbb]{flex-grow:0;padding:1rem;display:grid;grid-template-columns:1fr 1fr 1fr;justify-items:center;align-items:end}.table_container .pagination .page_input[data-v-055c8fbb]{justify-self:start}.table_container .table[data-v-055c8fbb]{flex-grow:1;flex-shrink:1}.table[data-v-055c8fbb]{width:100%;border-collapse:collapse;font-family:var(--font-sans);font-size:var(--text-sm);color:var(--color-fg)}.table th[data-v-055c8fbb]{position:sticky;top:0;z-index:1;padding:6px 10px;text-align:left;font-weight:600;background:var(--header-background, var(--color-raised));border-bottom:1px solid var(--color-divider);cursor:pointer;white-space:nowrap}.table td[data-v-055c8fbb]{padding:5px 10px;border-bottom:1px solid var(--color-divider)}.table tbody tr[data-v-055c8fbb]:hover{background:var(--color-raised)}.loading[data-v-055c8fbb]{display:flex;height:100%}\n";})();
+import { WidgetActionInterfaceImpl as J, EVENT_ACTIONS_REGISTRY as Q, PayloadImpl as u, EVENT_REGISTRY_ID as ee, EVENT_ACTIONS_REGISTRY_ID as te } from "org.eclipse.daanse.board.app.lib.api.events";
+import { activate as ae, deactivate as ie, component as re, inject as O } from "@eclipse-daanse/tsm";
+import { defineComponent as ne, toRefs as se, inject as P, onUnmounted as le, ref as ce, watch as oe, onMounted as de, computed as E, createElementBlock as h, openBlock as m, withModifiers as f, createElementVNode as C, normalizeStyle as ge, unref as ue, Fragment as k, renderList as b, toDisplayString as G } from "vue";
+import { useVariableRepository as pe, useDatasourceRepository as he, VariableWrapper as w } from "org.eclipse.daanse.board.app.ui.vue.composables";
+import { useRoute as me } from "vue-router";
+import { WidgetAction as Te } from "org.eclipse.daanse.board.app.lib.events";
+import { BasicEFactory as _e, BasicEPackage as ve, EPackageRegistry as H, BasicEClass as fe, BasicEReference as Ce, BasicEObject as De } from "@emfts/core";
+import { WIDGET_SERVICE_ID as Ee } from "org.eclipse.daanse.board.app.lib.api.widget";
+const { identifiers: we } = __tsm__.require("org.eclipse.daanse.board.app.lib.core"), ke = "data:image/svg+xml,%3csvg%20width='120'%20height='120'%20viewBox='0%200%20120%20120'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cpath%20fill-rule='evenodd'%20clip-rule='evenodd'%20d='M105%207.5H15C10.8579%207.5%207.5%2010.8579%207.5%2015V105C7.5%20109.142%2010.8579%20112.5%2015%20112.5H105C109.142%20112.5%20112.5%20109.142%20112.5%20105V15C112.5%2010.8579%20109.142%207.5%20105%207.5ZM15%200C6.71573%200%200%206.71573%200%2015V105C0%20113.284%206.71573%20120%2015%20120H105C113.284%20120%20120%20113.284%20120%20105V15C120%206.71573%20113.284%200%20105%200H15Z'%20fill='%23606060'/%3e%3cpath%20d='M22.5%2025.5C22.5%2023.8431%2023.8431%2022.5%2025.5%2022.5H34.5C36.1569%2022.5%2037.5%2023.8431%2037.5%2025.5V34.5C37.5%2036.1569%2036.1569%2037.5%2034.5%2037.5H25.5C23.8431%2037.5%2022.5%2036.1569%2022.5%2034.5V25.5Z'%20fill='%23606060'/%3e%3cpath%20d='M22.5%2048C22.5%2046.3431%2023.8431%2045%2025.5%2045H34.5C36.1569%2045%2037.5%2046.3431%2037.5%2048V94.5C37.5%2096.1569%2036.1569%2097.5%2034.5%2097.5H25.5C23.8431%2097.5%2022.5%2096.1569%2022.5%2094.5V48Z'%20fill='%23606060'/%3e%3cpath%20d='M45%2025.5C45%2023.8431%2046.3431%2022.5%2048%2022.5H94.5C96.1569%2022.5%2097.5%2023.8431%2097.5%2025.5V34.5C97.5%2036.1569%2096.1569%2037.5%2094.5%2037.5H48C46.3431%2037.5%2045%2036.1569%2045%2034.5V25.5Z'%20fill='%23606060'/%3e%3cpath%20d='M45%2048C45%2046.3431%2046.3431%2045%2048%2045H94.5C96.1569%2045%2097.5%2046.3431%2097.5%2048V94.5C97.5%2096.1569%2096.1569%2097.5%2094.5%2097.5H48C46.3431%2097.5%2045%2096.1569%2045%2094.5V48Z'%20fill='%23606060'/%3e%3c/svg%3e";
+var be = Object.defineProperty, ye = Object.getOwnPropertyDescriptor, Ie = (n, e, a, c) => {
+  for (var r = ye(e, a), s = n.length - 1, t; s >= 0; s--)
+    (t = n[s]) && (r = t(e, a, r) || r);
+  return r && be(e, a, r), r;
 };
-class f extends X {
+class y extends J {
   refresh() {
     throw new Error("refresh not implemented");
   }
 }
-Ne([
-  _e({ eventType: "dataTable.refresh" })
-], f.prototype, "refresh");
-const Re = /* @__PURE__ */ ee({
+Ie([
+  Te({ eventType: "dataTable.refresh" })
+], y.prototype, "refresh");
+const Ne = ["onClick", "onContextmenu"], Ae = ["onClick", "onContextmenu"], Se = ["onClick", "onContextmenu"], Re = /* @__PURE__ */ ne({
   __name: "DataTableWidget",
   props: {
     datasourceId: {},
     config: {},
     id: {}
   },
-  setup(s, { expose: e }) {
-    const { wrapParameters: i } = he(), o = s, { datasourceId: r, config: l, id: a } = te(o), u = y(Te.TINY_EMITTER), D = y(Z), A = we().params.pageid || "";
-    class S extends f {
+  setup(n, { expose: e }) {
+    const { wrapParameters: a } = pe(), c = n, { datasourceId: r, config: s, id: t } = se(c), g = P(we.TINY_EMITTER), A = P(Q), U = me().params.pageid || "";
+    class F extends y {
       refresh() {
-        k(r.value, r.value);
+        B(r.value, r.value);
       }
     }
-    const E = new S();
-    e(E), ae(() => {
-      a?.value && D.unregisterInstance(a.value);
+    const S = new F();
+    e(S), le(() => {
+      t?.value && A.unregisterInstance(t.value);
     });
-    const B = () => {
-      a?.value && u.emit("widget:DataTableWidget:click", {
+    const L = () => {
+      t?.value && g.emit("widget:DataTableWidget:click", {
         type: "widget:DataTableWidget:click",
-        widgetId: a.value,
-        payload: { widgetId: a.value, timestamp: Date.now() }
+        widgetId: t.value,
+        payload: { widgetId: t.value, timestamp: Date.now() }
       });
-    }, W = () => {
-      a?.value && u.emit("widget:DataTableWidget:right_click", {
+    }, M = () => {
+      t?.value && g.emit("widget:DataTableWidget:right_click", {
         type: "widget:DataTableWidget:right_click",
-        widgetId: a.value,
-        payload: { widgetId: a.value, timestamp: Date.now() }
+        widgetId: t.value,
+        payload: { widgetId: t.value, timestamp: Date.now() }
       });
-    }, x = (t) => {
-      a?.value && u.emit("widget:DataTableWidget:row_click", {
+    }, $ = (i) => {
+      t?.value && g.emit("widget:DataTableWidget:row_click", {
         type: "widget:DataTableWidget:row_click",
-        widgetId: a.value,
-        payload: { widgetId: a.value, timestamp: Date.now(), rowId: t }
+        widgetId: t.value,
+        payload: { widgetId: t.value, timestamp: Date.now(), rowId: i }
       });
-    }, O = (t) => {
-      a?.value && u.emit("widget:DataTableWidget:row_right_click", {
+    }, K = (i) => {
+      t?.value && g.emit("widget:DataTableWidget:row_right_click", {
         type: "widget:DataTableWidget:row_right_click",
-        widgetId: a.value,
-        payload: { widgetId: a.value, timestamp: Date.now(), rowId: t }
+        widgetId: t.value,
+        payload: { widgetId: t.value, timestamp: Date.now(), rowId: i }
       });
-    }, P = (t) => {
-      a?.value && u.emit("widget:DataTableWidget:col_click", {
+    }, j = (i) => {
+      t?.value && g.emit("widget:DataTableWidget:col_click", {
         type: "widget:DataTableWidget:col_click",
-        widgetId: a.value,
-        payload: { widgetId: a.value, timestamp: Date.now(), colId: t }
+        widgetId: t.value,
+        payload: { widgetId: t.value, timestamp: Date.now(), colId: i }
       });
-    }, G = (t) => {
-      a?.value && u.emit("widget:DataTableWidget:col_right_click", {
+    }, X = (i) => {
+      t?.value && g.emit("widget:DataTableWidget:col_right_click", {
         type: "widget:DataTableWidget:col_right_click",
-        widgetId: a.value,
-        payload: { widgetId: a.value, timestamp: Date.now(), colId: t }
+        widgetId: t.value,
+        payload: { widgetId: t.value, timestamp: Date.now(), colId: i }
       });
-    }, V = (t, n) => {
-      a?.value && u.emit("widget:DataTableWidget:cell_click", {
+    }, Z = (i, o) => {
+      t?.value && g.emit("widget:DataTableWidget:cell_click", {
         type: "widget:DataTableWidget:cell_click",
-        widgetId: a.value,
-        payload: { widgetId: a.value, timestamp: Date.now(), rowId: t, colId: n }
+        widgetId: t.value,
+        payload: { widgetId: t.value, timestamp: Date.now(), rowId: i, colId: o }
       });
-    }, H = (t, n) => {
-      a?.value && u.emit("widget:DataTableWidget:cell_right_click", {
+    }, Y = (i, o) => {
+      t?.value && g.emit("widget:DataTableWidget:cell_right_click", {
         type: "widget:DataTableWidget:cell_right_click",
-        widgetId: a.value,
-        payload: { widgetId: a.value, timestamp: Date.now(), rowId: t, colId: n }
+        widgetId: t.value,
+        payload: { widgetId: t.value, timestamp: Date.now(), rowId: i, colId: o }
       });
-    }, w = ie(null);
-    re(r, (t, n) => {
-      k(t, n);
-    }), ne(() => {
-      if (a?.value && D.registerInstance(a.value, E, "DataTableWidget", A), !l.value) return;
-      const t = l.value.headerBackground;
-      if (t == null)
-        l.value.headerBackground = new h("var(--color-raised)");
-      else if (!(t instanceof h)) if (typeof t == "object" && "value" in t) {
-        const n = new h(t.value);
-        "variable" in t && (n.variable = t.variable), l.value.headerBackground = n;
+    }, R = ce(null);
+    oe(r, (i, o) => {
+      B(i, o);
+    }), de(() => {
+      if (t?.value && A.registerInstance(t.value, S, "DataTableWidget", U), !s.value) return;
+      const i = s.value.headerBackground;
+      if (i == null)
+        s.value.headerBackground = new w("var(--color-raised)");
+      else if (!(i instanceof w)) if (typeof i == "object" && "value" in i) {
+        const o = new w(i.value);
+        "variable" in i && (o.variable = i.variable), s.value.headerBackground = o;
       } else
-        l.value.headerBackground = new h(t);
+        s.value.headerBackground = new w(i);
     });
     const {
-      headerBackground: U
-    } = i({
-      headerBackground: se(() => l.value.headerBackground?.value || "var(--color-raised)")
-    }), { update: k } = me(r, "DataTable", w), F = (t) => {
-      x(t.itemIndex?.toString() || "");
-    }, L = (t) => {
-      O(t.itemIndex?.toString() || "");
-    }, M = (t, n, d, T) => ({
-      onClick: ($) => {
-        V(T.toString(), d.key || d.name || "");
-      },
-      onContextmenu: ($) => {
-        H(T.toString(), d.key || d.name || "");
-      }
-    }), I = (t) => {
-      const n = t.parentElement;
-      if (!n) return "";
-      const d = Array.prototype.indexOf.call(n.children, t), T = w.value?.items?.[0] ? Object.keys(w.value.items[0]) : [];
-      return T[d] ? T[d] : t.textContent?.trim() || "";
-    }, K = (t) => {
-      const n = t.target.closest("th");
-      n && P(I(n));
-    }, j = (t) => {
-      const n = t.target.closest("th");
-      n && G(I(n));
-    };
-    return (t, n) => {
-      const d = le("va-data-table");
-      return oe(), ce("div", {
-        class: "w-full h-full",
-        onClick: B,
-        onContextmenu: de(W, ["prevent"]),
-        onClickCapture: K,
-        onContextmenuCapture: j
+      headerBackground: z
+    } = a({
+      headerBackground: E(() => s.value.headerBackground?.value || "var(--color-raised)")
+    }), { update: B } = he(r, "DataTable", R), W = E(() => R.value?.items ?? []), x = E(() => Object.keys(W.value[0] ?? {}));
+    return (i, o) => (m(), h("div", {
+      class: "w-full h-full",
+      onClick: L,
+      onContextmenu: f(M, ["prevent"])
+    }, [
+      C("table", {
+        class: "table",
+        style: ge({ "--header-background": ue(z) })
       }, [
-        ge(d, {
-          class: "table",
-          items: w.value ? w.value.items : [],
-          "sticky-header": "",
-          style: ue(`--va-data-table-thead-background--computed: ${pe(U)};`),
-          "onRow:click": F,
-          "onRow:contextmenu": L,
-          "cell-bind": M
-        }, null, 8, ["items", "style"])
-      ], 32);
-    };
+        C("thead", null, [
+          C("tr", null, [
+            (m(!0), h(k, null, b(x.value, (T) => (m(), h("th", {
+              key: T,
+              onClick: (p) => j(T),
+              onContextmenu: f((p) => X(T), ["prevent"])
+            }, G(T), 41, Ne))), 128))
+          ])
+        ]),
+        C("tbody", null, [
+          (m(!0), h(k, null, b(W.value, (T, p) => (m(), h("tr", {
+            key: p,
+            onClick: (_) => $(String(p)),
+            onContextmenu: f((_) => K(String(p)), ["prevent"])
+          }, [
+            (m(!0), h(k, null, b(x.value, (_) => (m(), h("td", {
+              key: _,
+              onClick: (q) => Z(String(p), _),
+              onContextmenu: f((q) => Y(String(p), _), ["prevent"])
+            }, G(T[_]), 41, Se))), 128))
+          ], 40, Ae))), 128))
+        ])
+      ], 4)
+    ], 32));
   }
-}), Ae = (s, e) => {
-  const i = s.__vccOpts || s;
-  for (const [o, r] of e)
-    i[o] = r;
-  return i;
-}, Se = /* @__PURE__ */ Ae(Re, [["__scopeId", "data-v-5d1e9988"]]), Be = [
-  { name: "DataTable Clicked", type: "click", description: "Triggered when the datatable widget is clicked", payloadType: p },
-  { name: "DataTable Right Clicked", type: "right_click", description: "Triggered when the datatable widget is right-clicked", payloadType: p },
-  { name: "DataTable Row Clicked", type: "row_click", description: "Triggered when a row is clicked", payloadType: p },
-  { name: "DataTable Row Right Clicked", type: "row_right_click", description: "Triggered when a row is right-clicked", payloadType: p },
-  { name: "DataTable Column Clicked", type: "col_click", description: "Triggered when a column header is clicked", payloadType: p },
-  { name: "DataTable Column Right Clicked", type: "col_right_click", description: "Triggered when a column header is right-clicked", payloadType: p },
-  { name: "DataTable Cell Clicked", type: "cell_click", description: "Triggered when a cell is clicked", payloadType: p },
-  { name: "DataTable Cell Right Clicked", type: "cell_right_click", description: "Triggered when a cell is right-clicked", payloadType: p }
+}), Be = (n, e) => {
+  const a = n.__vccOpts || n;
+  for (const [c, r] of e)
+    a[c] = r;
+  return a;
+}, We = /* @__PURE__ */ Be(Re, [["__scopeId", "data-v-055c8fbb"]]), xe = [
+  { name: "DataTable Clicked", type: "click", description: "Triggered when the datatable widget is clicked", payloadType: u },
+  { name: "DataTable Right Clicked", type: "right_click", description: "Triggered when the datatable widget is right-clicked", payloadType: u },
+  { name: "DataTable Row Clicked", type: "row_click", description: "Triggered when a row is clicked", payloadType: u },
+  { name: "DataTable Row Right Clicked", type: "row_right_click", description: "Triggered when a row is right-clicked", payloadType: u },
+  { name: "DataTable Column Clicked", type: "col_click", description: "Triggered when a column header is clicked", payloadType: u },
+  { name: "DataTable Column Right Clicked", type: "col_right_click", description: "Triggered when a column header is right-clicked", payloadType: u },
+  { name: "DataTable Cell Clicked", type: "cell_click", description: "Triggered when a cell is clicked", payloadType: u },
+  { name: "DataTable Cell Right Clicked", type: "cell_right_click", description: "Triggered when a cell is right-clicked", payloadType: u }
 ];
-class C extends fe {
+class I extends _e {
   // Lazy singleton instance
   static _instance;
   static get eINSTANCE() {
-    return this._instance || (this._instance = new C()), this._instance;
+    return this._instance || (this._instance = new I()), this._instance;
   }
   constructor() {
-    super(), this.setEPackage(c.eINSTANCE);
+    super(), this.setEPackage(l.eINSTANCE);
   }
   /**
    * Create a new DataTableSettings instance
    */
   createDataTableSettings() {
-    return new g();
+    return new d();
   }
   /**
    * Create an instance of the given class
@@ -191,20 +182,20 @@ class C extends fe {
     }
   }
 }
-function We(s) {
-  const e = R.INSTANCE.getEPackage(s);
+function Oe(n) {
+  const e = H.INSTANCE.getEPackage(n);
   if (!e)
-    throw new Error(`EPackage '${s}' is not registered. Access the eINSTANCE of that model's generated package (or register it via EPackageRegistry.INSTANCE.registerPackage) before initializing DatatablesettingsPackage.`);
+    throw new Error(`EPackage '${n}' is not registered. Access the eINSTANCE of that model's generated package (or register it via EPackageRegistry.INSTANCE.registerPackage) before initializing DatatablesettingsPackage.`);
   return e;
 }
-class c extends Ce {
+class l extends ve {
   static eNAME = "datatablesettings";
   static eNS_URI = "http://org.eclipse.daanse.board.app.ui.vue.widget.table.data";
   static eNS_PREFIX = "datatablesettings";
   // Singleton instance
   static _instance;
   static get eINSTANCE() {
-    return this._instance || (this._instance = new c(), this._instance.init()), this._instance;
+    return this._instance || (this._instance = new l(), this._instance.init()), this._instance;
   }
   /**
    * Literals for quick access to metaclasses and features
@@ -214,48 +205,48 @@ class c extends Ce {
     DATA_TABLE_SETTINGS__HEADER_BACKGROUND: null
   };
   constructor() {
-    super(), this.setName(c.eNAME), this.setNsURI(c.eNS_URI), this.setNsPrefix(c.eNS_PREFIX);
+    super(), this.setName(l.eNAME), this.setNsURI(l.eNS_URI), this.setNsPrefix(l.eNS_PREFIX);
   }
   /**
    * Initialize package contents
    */
   init() {
-    R.INSTANCE.set(c.eNS_URI, this), this.setEFactoryInstance(C.eINSTANCE);
-    const e = new ve();
-    e.setName("DataTableSettings"), e.setAbstract(!1), e.setInterface(!1), this.getEClassifiers().push(e), e.setEPackage(this), c.Literals.DATA_TABLE_SETTINGS = e;
-    const i = new De();
-    i.setContainment(!1), i.setName("headerBackground"), i.setLowerBound(0), i.setUpperBound(1), e.getEStructuralFeatures().push(i), c.Literals.DATA_TABLE_SETTINGS__HEADER_BACKGROUND = i, c.Literals.DATA_TABLE_SETTINGS__HEADER_BACKGROUND.setEType(We("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper"));
+    H.INSTANCE.set(l.eNS_URI, this), this.setEFactoryInstance(I.eINSTANCE);
+    const e = new fe();
+    e.setName("DataTableSettings"), e.setAbstract(!1), e.setInterface(!1), this.getEClassifiers().push(e), e.setEPackage(this), l.Literals.DATA_TABLE_SETTINGS = e;
+    const a = new Ce();
+    a.setContainment(!1), a.setName("headerBackground"), a.setLowerBound(0), a.setUpperBound(1), e.getEStructuralFeatures().push(a), l.Literals.DATA_TABLE_SETTINGS__HEADER_BACKGROUND = a, l.Literals.DATA_TABLE_SETTINGS__HEADER_BACKGROUND.setEType(Oe("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper"));
   }
 }
-class g extends Ee {
+class d extends De {
   // Feature ID Constants (eLiterals)
   static HEADER_BACKGROUND = 0;
   // Private fields
-  _headerBackground = new h();
+  _headerBackground = new w();
   /**
    * Returns the EClass of this object
    */
   eClass() {
-    return c.Literals.DATA_TABLE_SETTINGS;
+    return l.Literals.DATA_TABLE_SETTINGS;
   }
   // Getters and Setters
   get headerBackground() {
     return this._headerBackground;
   }
   set headerBackground(e) {
-    const i = this._headerBackground;
+    const a = this._headerBackground;
     this._headerBackground = e, this.eDeliver() && this.eNotify({
       getNotifier: () => this,
       getEventType: () => 1,
       // SET
-      getFeature: () => this.eClass().getEStructuralFeature(g.HEADER_BACKGROUND),
-      getOldValue: () => i,
+      getFeature: () => this.eClass().getEStructuralFeature(d.HEADER_BACKGROUND),
+      getOldValue: () => a,
       getNewValue: () => e,
       getPosition: () => -1,
       wasSet: () => !0,
       isTouch: () => !1,
       isReset: () => !1,
-      getFeatureID: () => g.HEADER_BACKGROUND,
+      getFeatureID: () => d.HEADER_BACKGROUND,
       merge: () => !1
     });
   }
@@ -265,7 +256,7 @@ class g extends Ee {
    */
   eGet(e) {
     switch (this.eClass().getFeatureID(e)) {
-      case g.HEADER_BACKGROUND:
+      case d.HEADER_BACKGROUND:
         return this.headerBackground;
       default:
         return super.eGet(e);
@@ -274,13 +265,13 @@ class g extends Ee {
   /**
    * Sets the value of the given feature
    */
-  eSet(e, i) {
+  eSet(e, a) {
     switch (this.eClass().getFeatureID(e)) {
-      case g.HEADER_BACKGROUND:
-        this.headerBackground = i, super.eSet(e, i);
+      case d.HEADER_BACKGROUND:
+        this.headerBackground = a, super.eSet(e, a);
         break;
       default:
-        super.eSet(e, i);
+        super.eSet(e, a);
     }
   }
   /**
@@ -288,8 +279,8 @@ class g extends Ee {
    */
   eIsSet(e) {
     switch (this.eClass().getFeatureID(e)) {
-      case g.HEADER_BACKGROUND:
-        return this._headerBackground !== new h();
+      case d.HEADER_BACKGROUND:
+        return this._headerBackground !== new w();
       default:
         return super.eIsSet(e);
     }
@@ -299,8 +290,8 @@ class g extends Ee {
    */
   eUnset(e) {
     switch (this.eClass().getFeatureID(e)) {
-      case g.HEADER_BACKGROUND:
-        this._headerBackground = new h();
+      case d.HEADER_BACKGROUND:
+        this._headerBackground = new w();
         return;
       default:
         super.eUnset(e);
@@ -319,7 +310,7 @@ class g extends Ee {
     };
   }
 }
-const xe = `<?xml version="1.0" encoding="UTF-8"?>
+const Pe = `<?xml version="1.0" encoding="UTF-8"?>
 <!--
 /*********************************************************************
 * Copyright (c) 2026 Contributors to the Eclipse Foundation.
@@ -351,19 +342,19 @@ the label does not already say.
   </components>
 </uimodel:UIModel>
 `;
-var Oe = Object.defineProperty, Pe = Object.getOwnPropertyDescriptor, v = (s, e, i, o) => {
-  for (var r = o > 1 ? void 0 : o ? Pe(e, i) : e, l = s.length - 1, a; l >= 0; l--)
-    (a = s[l]) && (r = (o ? a(e, i, r) : a(r)) || r);
-  return o && r && Oe(e, i, r), r;
-}, N = (s, e) => (i, o) => e(i, o, s);
-c.eINSTANCE;
-const m = "DataTableWidget";
-let _ = class {
-  constructor(s, e) {
-    this.events = s, this.actions = e;
+var Ge = Object.defineProperty, Ve = Object.getOwnPropertyDescriptor, N = (n, e, a, c) => {
+  for (var r = c > 1 ? void 0 : c ? Ve(e, a) : e, s = n.length - 1, t; s >= 0; s--)
+    (t = n[s]) && (r = (c ? t(e, a, r) : t(r)) || r);
+  return c && r && Ge(e, a, r), r;
+}, V = (n, e) => (a, c) => e(a, c, n);
+l.eINSTANCE;
+const v = "DataTableWidget";
+let D = class {
+  constructor(n, e) {
+    this.events = n, this.actions = e;
   }
-  type = m;
-  component = Se;
+  type = v;
+  component = We;
   /*
    * No hand-written form: the model covers all of it, so there is nothing
    * to keep beside it and no second place for the two to disagree.
@@ -373,39 +364,39 @@ let _ = class {
    * exists - and the shell needs no dependency on this bundle.
    */
   settingsForm = {
-    xmi: xe,
+    xmi: Pe,
     uri: "/data-table-settings.ui.xmi",
-    ePackage: () => c.eINSTANCE,
-    create: () => new g()
+    ePackage: () => l.eINSTANCE,
+    create: () => new d()
   };
   supportedDSTypes = ["csv", "rest"];
-  icon = Ie;
+  icon = ke;
   name = "DataTable";
   register() {
-    this.events.registerWidget(m, Be), this.actions.registerWidgetType(m, f, "widget");
+    this.events.registerWidget(v, xe), this.actions.registerWidgetType(v, y, "widget");
   }
   unregister() {
-    this.events.unregisterWidget(m), this.actions.unregisterWidgetType(m);
+    this.events.unregisterWidget(v), this.actions.unregisterWidgetType(v);
   }
 };
-v([
-  q()
-], _.prototype, "register", 1);
-v([
-  J()
-], _.prototype, "unregister", 1);
-_ = v([
-  Q({
-    service: [ke],
-    properties: { "widget.type": m }
+N([
+  ae()
+], D.prototype, "register", 1);
+N([
+  ie()
+], D.prototype, "unregister", 1);
+D = N([
+  re({
+    service: [Ee],
+    properties: { "widget.type": v }
   }),
-  N(0, b(Y)),
-  N(1, b(z))
-], _);
+  V(0, O(ee)),
+  V(1, O(te))
+], D);
 export {
-  g as DataTableSettingsImpl,
-  Se as DataTableWidget,
-  _ as DataTableWidgetProvider,
-  c as DatatablesettingsPackage,
-  xe as dataTableSettingsFormXmi
+  d as DataTableSettingsImpl,
+  We as DataTableWidget,
+  D as DataTableWidgetProvider,
+  l as DatatablesettingsPackage,
+  Pe as dataTableSettingsFormXmi
 };

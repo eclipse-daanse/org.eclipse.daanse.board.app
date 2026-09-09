@@ -21,6 +21,7 @@ const { datasourceId, id: widgetId } = toRefs(props)
 
 import { identifiers } from 'org.eclipse.daanse.board.app.lib.core'
 import type { TinyEmitter } from 'tiny-emitter';
+import { DIcon } from 'org.eclipse.daanse.board.app.ui.vue.controls'
 const eventBus = inject<TinyEmitter>(identifiers.TINY_EMITTER)!;
 
 const emitClick = () => {
@@ -220,10 +221,13 @@ const configureFilter = async (type: string, element: any) => {
       <div v-for="hierarchy in rows" :key="hierarchy.originalItem.HIERARCHY_UNIQUE_NAME" class="hierarchy-item">
         <p class="hierarchy-caption">{{ hierarchy.originalItem.HIERARCHY_NAME }} ({{ hierarchy.originalItem.HIERARCHY_UNIQUE_NAME }})</p>
         <p class="filter-caption">{{ hierarchy.filtersCaption }}</p>
-        <va-icon class="filter-icon ml-2" name="filter_list" size="small"
-          :style="{
-            color: hierarchy.filters.enabled ? 'lime' : '',
-          }" @click="configureFilter('rows', hierarchy)" />
+        <DIcon
+          name="filter_list"
+          size="sm"
+          class="filter-icon"
+          :tone="hierarchy.filters.enabled ? 'color-ok' : undefined"
+          @click="configureFilter('rows', hierarchy)"
+        />
       </div>
     </div>
     <div class="hierarchies-section" v-if="props.config.settings.showColumns && columns.length > 0">
@@ -231,10 +235,13 @@ const configureFilter = async (type: string, element: any) => {
       <div v-for="hierarchy in columns" :key="hierarchy.originalItem.HIERARCHY_UNIQUE_NAME" class="hierarchy-item">
         <p class="hierarchy-caption">{{ hierarchy.originalItem.HIERARCHY_NAME }} ({{ hierarchy.originalItem.HIERARCHY_UNIQUE_NAME }})</p>
         <p class="filter-caption">{{ hierarchy.filtersCaption }}</p>
-        <va-icon class="filter-icon ml-2" name="filter_list" size="small"
-          :style="{
-            color: hierarchy.filters.enabled ? 'lime' : '',
-          }" @click="configureFilter('columns', hierarchy)" />
+        <DIcon
+          name="filter_list"
+          size="sm"
+          class="filter-icon"
+          :tone="hierarchy.filters.enabled ? 'color-ok' : undefined"
+          @click="configureFilter('columns', hierarchy)"
+        />
       </div>
     </div>
     <div class="hierarchies-section" v-if="props.config.settings.showFilters && filters.length > 0">
@@ -242,10 +249,13 @@ const configureFilter = async (type: string, element: any) => {
       <div v-for="hierarchy in filters" :key="hierarchy.originalItem.HIERARCHY_UNIQUE_NAME" class="hierarchy-item">
         <p class="hierarchy-caption">{{ hierarchy.originalItem.HIERARCHY_NAME }} ({{ hierarchy.originalItem.HIERARCHY_UNIQUE_NAME }})</p>
         <p class="filter-caption">{{ hierarchy.filtersCaption }}</p>
-        <va-icon class="filter-icon ml-2" name="filter_list" size="small"
-          :style="{
-            color: hierarchy.filters.enabled ? 'lime' : '',
-          }" @click="configureFilter('filters', hierarchy)" />
+        <DIcon
+          name="filter_list"
+          size="sm"
+          class="filter-icon"
+          :tone="hierarchy.filters.enabled ? 'color-ok' : undefined"
+          @click="configureFilter('filters', hierarchy)"
+        />
       </div>
     </div>
   </div>
@@ -255,6 +265,12 @@ const configureFilter = async (type: string, element: any) => {
 </template>
 
 <style scoped>
+/* The one thing in a hierarchy row that can be pressed */
+.filter-icon {
+  margin-left: 8px;
+  cursor: pointer;
+}
+
 .widget {
   padding: 12px;
   display: flex;

@@ -1,12 +1,13 @@
-(function(){var i="ui.vue.widget.image",d=document,s=d.querySelector('style[data-tsm-bundle="'+i+'"]');if(!s){s=d.createElement('style');s.setAttribute('data-tsm-bundle',i);d.head.appendChild(s);}s.textContent=".slideshow-container[data-v-a566e6b2]{width:100%;height:100%;overflow:hidden;position:relative}.slideshow-track[data-v-a566e6b2]{width:100%;height:100%;overflow:visible;position:relative;transition:transform .3s ease-in-out}.slideshow-slide[data-v-a566e6b2]{width:100%;height:100%;position:absolute;top:0;left:0}.slideshow-nav[data-v-a566e6b2]{position:absolute;top:50%;width:32px;height:32px;transform:translateY(-50%);z-index:10;background:#0009;border-radius:50%;display:flex;align-items:center;justify-content:center}.slideshow-nav--prev[data-v-a566e6b2]{left:40px}.slideshow-nav--next[data-v-a566e6b2]{right:40px}\n";})();
-import { PayloadImpl as z, EventsPackage as ee, EVENT_REGISTRY_ID as te } from "org.eclipse.daanse.board.app.lib.api.events";
-import { activate as se, deactivate as ie, component as ae, inject as re } from "@eclipse-daanse/tsm";
-import { defineComponent as ne, mergeModels as le, toRefs as oe, useModel as ue, inject as ce, onMounted as H, computed as T, ref as ge, watch as b, resolveComponent as he, createElementBlock as C, openBlock as G, withModifiers as k, normalizeClass as X, createElementVNode as D, createVNode as K, normalizeStyle as j, Fragment as de, renderList as Ie } from "vue";
-import { VariableWrapper as A, plainSettings as $ } from "org.eclipse.daanse.board.app.ui.vue.composables";
-import { BasicEObject as x, BasicEFactory as Ee, BasicEPackage as pe, EPackageRegistry as J, BasicEClass as L, BasicEReference as N, BasicEAttribute as M, getEcorePackage as y, createContainmentEList as me } from "@emfts/core";
-import { WIDGET_SERVICE_ID as Se } from "org.eclipse.daanse.board.app.lib.api.widget";
-const { identifiers: fe } = __tsm__.require("org.eclipse.daanse.board.app.lib.core"), _e = "data:image/svg+xml,%3csvg%20width='120'%20height='120'%20viewBox='0%200%20120%20120'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cpath%20fill-rule='evenodd'%20clip-rule='evenodd'%20d='M105%207.5H15C10.8579%207.5%207.5%2010.8579%207.5%2015V105C7.5%20109.142%2010.8579%20112.5%2015%20112.5H105C109.142%20112.5%20112.5%20109.142%20112.5%20105V15C112.5%2010.8579%20109.142%207.5%20105%207.5ZM15%200C6.71573%200%200%206.71573%200%2015V105C0%20113.284%206.71573%20120%2015%20120H105C113.284%20120%20120%20113.284%20120%20105V15C120%206.71573%20113.284%200%20105%200H15Z'%20fill='%23606060'/%3e%3cpath%20d='M22.5%2061.5C22.5%2060.6716%2023.1716%2060%2024%2060H29.5458C29.842%2060%2030.1315%2059.9123%2030.3779%2059.7481L40.4179%2053.0547C40.9218%2052.7188%2041.5782%2052.7188%2042.0821%2053.0547L51.5874%2059.3916C52.1309%2059.7539%2052.8464%2059.7229%2053.3565%2059.3148L70.28%2045.776C70.8427%2045.3258%2071.646%2045.3395%2072.1932%2045.8085L96.9762%2067.051C97.3087%2067.336%2097.5%2067.752%2097.5%2068.1899V90.75C97.5%2094.0637%2094.8137%2096.75%2091.5%2096.75H28.5C25.1863%2096.75%2022.5%2094.0637%2022.5%2090.75V61.5Z'%20fill='%23606060'/%3e%3cpath%20d='M37.5%2030C37.5%2034.1421%2034.1421%2037.5%2030%2037.5C25.8579%2037.5%2022.5%2034.1421%2022.5%2030C22.5%2025.8579%2025.8579%2022.5%2030%2022.5C34.1421%2022.5%2037.5%2025.8579%2037.5%2030Z'%20fill='%23606060'/%3e%3c/svg%3e";
-class l extends x {
+(function(){var i="ui.vue.widget.image",d=document,s=d.querySelector('style[data-tsm-bundle="'+i+'"]');if(!s){s=d.createElement('style');s.setAttribute('data-tsm-bundle',i);d.head.appendChild(s);}s.textContent=".slideshow-container[data-v-a4f596a6]{width:100%;height:100%;overflow:hidden;position:relative}.slideshow-track[data-v-a4f596a6]{width:100%;height:100%;overflow:visible;position:relative;transition:transform .3s ease-in-out}.slideshow-slide[data-v-a4f596a6]{width:100%;height:100%;position:absolute;top:0;left:0}.slideshow-nav[data-v-a4f596a6]{position:absolute;top:50%;width:32px;height:32px;transform:translateY(-50%);z-index:10;background:#0009;border-radius:50%;display:flex;align-items:center;justify-content:center}.slideshow-nav--prev[data-v-a4f596a6]{left:40px}.slideshow-nav--next[data-v-a4f596a6]{right:40px}.slideshow-nav__button[data-v-a4f596a6]{width:100%;height:100%;min-width:0;padding:0;color:#fff}.slideshow-nav__button[data-v-a4f596a6]:hover:not(:disabled){color:#fff;background:#ffffff26}\n";})();
+import { PayloadImpl as Z, EventsPackage as ie, EVENT_REGISTRY_ID as ae } from "org.eclipse.daanse.board.app.lib.api.events";
+import { activate as re, deactivate as ne, component as le, inject as oe } from "@eclipse-daanse/tsm";
+import { defineComponent as ue, mergeModels as ce, toRefs as he, useModel as ge, inject as de, onMounted as k, computed as T, ref as Ie, watch as O, createElementBlock as C, openBlock as G, withModifiers as X, normalizeClass as K, createElementVNode as D, createVNode as N, unref as M, withCtx as j, normalizeStyle as $, Fragment as Ee, renderList as me } from "vue";
+import { VariableWrapper as A, plainSettings as q } from "org.eclipse.daanse.board.app.ui.vue.composables";
+import { BasicEObject as Y, BasicEFactory as pe, BasicEPackage as fe, EPackageRegistry as Q, BasicEClass as L, BasicEReference as y, BasicEAttribute as R, getEcorePackage as U, createContainmentEList as Se } from "@emfts/core";
+import { DButton as z, DIcon as J } from "org.eclipse.daanse.board.app.ui.vue.controls";
+import { WIDGET_SERVICE_ID as ve } from "org.eclipse.daanse.board.app.lib.api.widget";
+const { identifiers: _e } = __tsm__.require("org.eclipse.daanse.board.app.lib.core"), we = "data:image/svg+xml,%3csvg%20width='120'%20height='120'%20viewBox='0%200%20120%20120'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cpath%20fill-rule='evenodd'%20clip-rule='evenodd'%20d='M105%207.5H15C10.8579%207.5%207.5%2010.8579%207.5%2015V105C7.5%20109.142%2010.8579%20112.5%2015%20112.5H105C109.142%20112.5%20112.5%20109.142%20112.5%20105V15C112.5%2010.8579%20109.142%207.5%20105%207.5ZM15%200C6.71573%200%200%206.71573%200%2015V105C0%20113.284%206.71573%20120%2015%20120H105C113.284%20120%20120%20113.284%20120%20105V15C120%206.71573%20113.284%200%20105%200H15Z'%20fill='%23606060'/%3e%3cpath%20d='M22.5%2061.5C22.5%2060.6716%2023.1716%2060%2024%2060H29.5458C29.842%2060%2030.1315%2059.9123%2030.3779%2059.7481L40.4179%2053.0547C40.9218%2052.7188%2041.5782%2052.7188%2042.0821%2053.0547L51.5874%2059.3916C52.1309%2059.7539%2052.8464%2059.7229%2053.3565%2059.3148L70.28%2045.776C70.8427%2045.3258%2071.646%2045.3395%2072.1932%2045.8085L96.9762%2067.051C97.3087%2067.336%2097.5%2067.752%2097.5%2068.1899V90.75C97.5%2094.0637%2094.8137%2096.75%2091.5%2096.75H28.5C25.1863%2096.75%2022.5%2094.0637%2022.5%2090.75V61.5Z'%20fill='%23606060'/%3e%3cpath%20d='M37.5%2030C37.5%2034.1421%2034.1421%2037.5%2030%2037.5C25.8579%2037.5%2022.5%2034.1421%2022.5%2030C22.5%2025.8579%2025.8579%2022.5%2030%2022.5C34.1421%2022.5%2037.5%2025.8579%2037.5%2030Z'%20fill='%23606060'/%3e%3c/svg%3e";
+class l extends Y {
   // Feature ID Constants (eLiterals)
   static ID = 0;
   static URL = 1;
@@ -131,7 +132,7 @@ class l extends x {
     };
   }
 }
-class o extends x {
+class o extends Y {
   // Feature ID Constants (eLiterals)
   static FIT = 0;
   static DIASHOW_INTERVAL = 1;
@@ -256,7 +257,7 @@ class o extends x {
     };
   }
 }
-class f extends z {
+class f extends Z {
   // Feature ID Constants (eLiterals)
   static IMAGE_URL = 4;
   // Private fields
@@ -348,7 +349,7 @@ class f extends z {
     };
   }
 }
-class S extends z {
+class S extends Z {
   // Feature ID Constants (eLiterals)
   static IMAGE_URL = 4;
   // Private fields
@@ -440,11 +441,11 @@ class S extends z {
     };
   }
 }
-class O extends Ee {
+class V extends pe {
   // Lazy singleton instance
   static _instance;
   static get eINSTANCE() {
-    return this._instance || (this._instance = new O()), this._instance;
+    return this._instance || (this._instance = new V()), this._instance;
   }
   constructor() {
     super(), this.setEPackage(s.eINSTANCE);
@@ -499,13 +500,13 @@ class O extends Ee {
     }
   }
 }
-function R(n) {
-  const e = J.INSTANCE.getEPackage(n);
+function F(n) {
+  const e = Q.INSTANCE.getEPackage(n);
   if (!e)
     throw new Error(`EPackage '${n}' is not registered. Access the eINSTANCE of that model's generated package (or register it via EPackageRegistry.INSTANCE.registerPackage) before initializing ImagesettingsPackage.`);
   return e;
 }
-class s extends pe {
+class s extends fe {
   static eNAME = "imagesettings";
   static eNS_URI = "http://org.eclipse.daanse.board.app.ui.vue.widget.image";
   static eNS_PREFIX = "imagesettings";
@@ -539,36 +540,36 @@ class s extends pe {
    * Initialize package contents
    */
   init() {
-    J.INSTANCE.set(s.eNS_URI, this), this.setEFactoryInstance(O.eINSTANCE);
+    Q.INSTANCE.set(s.eNS_URI, this), this.setEFactoryInstance(V.eINSTANCE);
     const e = new L();
     e.setName("ImageSettings"), e.setAbstract(!1), e.setInterface(!1), this.getEClassifiers().push(e), e.setEPackage(this), s.Literals.IMAGE_SETTINGS = e;
-    const t = new N();
+    const t = new y();
     t.setContainment(!0), t.setName("imagesSettings"), t.setLowerBound(0), t.setUpperBound(1), e.getEStructuralFeatures().push(t), s.Literals.IMAGE_SETTINGS__IMAGES_SETTINGS = t;
-    const i = new N();
+    const i = new y();
     i.setContainment(!0), i.setName("images"), i.setLowerBound(0), i.setUpperBound(-1), e.getEStructuralFeatures().push(i), s.Literals.IMAGE_SETTINGS__IMAGES = i;
     const a = new L();
     a.setName("ImageGalleryItem"), a.setAbstract(!1), a.setInterface(!1), this.getEClassifiers().push(a), a.setEPackage(this), s.Literals.IMAGE_GALLERY_ITEM = a;
-    const c = new M();
+    const c = new R();
     c.setName("id"), c.setLowerBound(0), c.setUpperBound(1), a.getEStructuralFeatures().push(c), s.Literals.IMAGE_GALLERY_ITEM__ID = c;
-    const g = new M();
-    g.setName("url"), g.setLowerBound(0), g.setUpperBound(1), a.getEStructuralFeatures().push(g), s.Literals.IMAGE_GALLERY_ITEM__URL = g;
+    const h = new R();
+    h.setName("url"), h.setLowerBound(0), h.setUpperBound(1), a.getEStructuralFeatures().push(h), s.Literals.IMAGE_GALLERY_ITEM__URL = h;
     const d = new L();
     d.setName("GallerySettings"), d.setAbstract(!1), d.setInterface(!1), this.getEClassifiers().push(d), d.setEPackage(this), s.Literals.GALLERY_SETTINGS = d;
-    const _ = new N();
+    const _ = new y();
     _.setContainment(!1), _.setName("fit"), _.setLowerBound(0), _.setUpperBound(1), d.getEStructuralFeatures().push(_), s.Literals.GALLERY_SETTINGS__FIT = _;
-    const I = new N();
+    const I = new y();
     I.setContainment(!1), I.setName("diashowInterval"), I.setLowerBound(0), I.setUpperBound(1), d.getEStructuralFeatures().push(I), s.Literals.GALLERY_SETTINGS__DIASHOW_INTERVAL = I;
     const E = new L();
     E.setName("ImageClickPayload"), E.setAbstract(!1), E.setInterface(!1), this.getEClassifiers().push(E), E.setEPackage(this), s.Literals.IMAGE_CLICK_PAYLOAD = E;
-    const m = new M();
-    m.setName("imageUrl"), m.setLowerBound(0), m.setUpperBound(1), E.getEStructuralFeatures().push(m), s.Literals.IMAGE_CLICK_PAYLOAD__IMAGE_URL = m;
+    const p = new R();
+    p.setName("imageUrl"), p.setLowerBound(0), p.setUpperBound(1), E.getEStructuralFeatures().push(p), s.Literals.IMAGE_CLICK_PAYLOAD__IMAGE_URL = p;
     const r = new L();
     r.setName("ImageRightClickPayload"), r.setAbstract(!1), r.setInterface(!1), this.getEClassifiers().push(r), r.setEPackage(this), s.Literals.IMAGE_RIGHT_CLICK_PAYLOAD = r;
-    const v = new M();
-    v.setName("imageUrl"), v.setLowerBound(0), v.setUpperBound(1), r.getEStructuralFeatures().push(v), s.Literals.IMAGE_RIGHT_CLICK_PAYLOAD__IMAGE_URL = v, s.Literals.IMAGE_CLICK_PAYLOAD.getESuperTypes().push(R("http://org.eclipse.daanse.board.app.lib.events").getEClassifier("Payload")), s.Literals.IMAGE_RIGHT_CLICK_PAYLOAD.getESuperTypes().push(R("http://org.eclipse.daanse.board.app.lib.events").getEClassifier("Payload")), s.Literals.IMAGE_SETTINGS__IMAGES_SETTINGS.setEType(s.Literals.GALLERY_SETTINGS), s.Literals.IMAGE_SETTINGS__IMAGES.setEType(s.Literals.IMAGE_GALLERY_ITEM), s.Literals.IMAGE_GALLERY_ITEM__ID.setEType(y().getEClassifier("EString")), s.Literals.IMAGE_GALLERY_ITEM__URL.setEType(y().getEClassifier("EString")), s.Literals.GALLERY_SETTINGS__FIT.setEType(R("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), s.Literals.GALLERY_SETTINGS__DIASHOW_INTERVAL.setEType(R("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), s.Literals.IMAGE_CLICK_PAYLOAD__IMAGE_URL.setEType(y().getEClassifier("EString")), s.Literals.IMAGE_RIGHT_CLICK_PAYLOAD__IMAGE_URL.setEType(y().getEClassifier("EString"));
+    const v = new R();
+    v.setName("imageUrl"), v.setLowerBound(0), v.setUpperBound(1), r.getEStructuralFeatures().push(v), s.Literals.IMAGE_RIGHT_CLICK_PAYLOAD__IMAGE_URL = v, s.Literals.IMAGE_CLICK_PAYLOAD.getESuperTypes().push(F("http://org.eclipse.daanse.board.app.lib.events").getEClassifier("Payload")), s.Literals.IMAGE_RIGHT_CLICK_PAYLOAD.getESuperTypes().push(F("http://org.eclipse.daanse.board.app.lib.events").getEClassifier("Payload")), s.Literals.IMAGE_SETTINGS__IMAGES_SETTINGS.setEType(s.Literals.GALLERY_SETTINGS), s.Literals.IMAGE_SETTINGS__IMAGES.setEType(s.Literals.IMAGE_GALLERY_ITEM), s.Literals.IMAGE_GALLERY_ITEM__ID.setEType(U().getEClassifier("EString")), s.Literals.IMAGE_GALLERY_ITEM__URL.setEType(U().getEClassifier("EString")), s.Literals.GALLERY_SETTINGS__FIT.setEType(F("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), s.Literals.GALLERY_SETTINGS__DIASHOW_INTERVAL.setEType(F("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), s.Literals.IMAGE_CLICK_PAYLOAD__IMAGE_URL.setEType(U().getEClassifier("EString")), s.Literals.IMAGE_RIGHT_CLICK_PAYLOAD__IMAGE_URL.setEType(U().getEClassifier("EString"));
   }
 }
-class u extends x {
+class u extends Y {
   // Feature ID Constants (eLiterals)
   static IMAGES_SETTINGS = 0;
   static IMAGES = 1;
@@ -603,7 +604,7 @@ class u extends x {
     });
   }
   get images() {
-    return this._images || (this._images = me(this, this.eClass().getEStructuralFeature("images"))), this._images;
+    return this._images || (this._images = Se(this, this.eClass().getEStructuralFeature("images"))), this._images;
   }
   // Reflective API
   /**
@@ -676,12 +677,12 @@ class u extends x {
     };
   }
 }
-const ve = ["src"], we = {
+const Ae = ["src"], Le = {
   key: 1,
   class: "slideshow-container"
-}, Ae = { class: "slideshow-nav slideshow-nav--prev" }, Le = ["src", "onClick", "onContextmenu"], Te = { class: "slideshow-nav slideshow-nav--next" }, Ce = /* @__PURE__ */ ne({
+}, Te = { class: "slideshow-nav slideshow-nav--prev" }, Ce = ["src", "onClick", "onContextmenu"], Ge = { class: "slideshow-nav slideshow-nav--next" }, De = /* @__PURE__ */ ue({
   __name: "ImageWidget",
-  props: /* @__PURE__ */ le({
+  props: /* @__PURE__ */ ce({
     datasourceId: {},
     id: {}
   }, {
@@ -690,23 +691,23 @@ const ve = ["src"], we = {
   }),
   emits: ["update:configv"],
   setup(n) {
-    const e = n, { id: t } = oe(e), i = ue(n, "configv"), a = ce(fe.TINY_EMITTER), c = (h) => {
+    const e = n, { id: t } = he(e), i = ge(n, "configv"), a = de(_e.TINY_EMITTER), c = (g) => {
       t?.value && a.emit("widget:ImageWidget:click", {
         type: "widget:ImageWidget:click",
         widgetId: t.value,
-        payload: { imageUrl: h, widgetId: t.value, timestamp: Date.now() }
+        payload: { imageUrl: g, widgetId: t.value, timestamp: Date.now() }
       });
-    }, g = (h) => {
+    }, h = (g) => {
       t?.value && a.emit("widget:ImageWidget:right_click", {
         type: "widget:ImageWidget:right_click",
         widgetId: t.value,
-        payload: { imageUrl: h, widgetId: t.value, timestamp: Date.now() }
+        payload: { imageUrl: g, widgetId: t.value, timestamp: Date.now() }
       });
     }, d = new u();
-    H(() => {
+    k(() => {
       i.value && Object.assign(i.value, {
-        ...$(d),
-        ...$(i.value)
+        ...q(d),
+        ...q(i.value)
       });
     });
     const _ = T(() => i.value.imagesSettings?.fit?.value), I = T(() => i.value.imagesSettings?.diashowInterval?.value), E = T(() => ({
@@ -716,13 +717,13 @@ const ve = ["src"], we = {
       fill: "object-fill",
       "scale-down": "object-scale-down"
     })[_.value?.toLowerCase() || "none"] || "");
-    let m = null;
-    const r = ge(0), v = () => {
+    let p = null;
+    const r = Ie(0), v = () => {
       r.value < i.value.images.length - 1 && r.value++;
-    }, Z = () => {
+    }, ee = () => {
       r.value > 0 && r.value--;
-    }, V = () => {
-      m && clearInterval(m), (I.value ?? 0) > 0 && (m = setInterval(() => {
+    }, W = () => {
+      p && clearInterval(p), (I.value ?? 0) > 0 && (p = setInterval(() => {
         if (r.value === i.value.images.length - 1) {
           r.value = 0;
           return;
@@ -730,72 +731,79 @@ const ve = ["src"], we = {
         v();
       }, (I.value ?? 1) * 1e3));
     };
-    H(() => {
-      V();
-    }), b(() => I.value, V);
-    const P = (h) => h;
-    b(
+    k(() => {
+      W();
+    }), O(() => I.value, W);
+    const B = (g) => g;
+    O(
       () => i.value.images?.length,
-      (h, p) => {
-        p > h && r.value >= h && (r.value = h - 1);
+      (g, m) => {
+        m > g && r.value >= g && (r.value = g - 1);
       }
     );
-    const W = T(() => i.value.images?.length > 0 ? i.value.images.length - 1 : 0);
-    return b(W, () => {
-      r.value = W.value;
-    }), (h, p) => {
-      const B = he("va-button");
-      return i.value.images?.length <= 1 ? (G(), C("img", {
-        key: 0,
-        class: X(["w-full h-full cursor-pointer", E.value]),
-        src: P(i.value.images[0]?.url ?? ""),
-        onClick: p[0] || (p[0] = (w) => c(i.value.images[0]?.url ?? "")),
-        onContextmenu: p[1] || (p[1] = k((w) => g(i.value.images[0]?.url ?? ""), ["prevent"]))
-      }, null, 42, ve)) : (G(), C("div", we, [
-        D("div", Ae, [
-          K(B, {
-            onClick: p[2] || (p[2] = (w) => Z()),
-            icon: "chevron_left",
-            preset: "plain",
-            "text-color": "#ffffff",
-            disabled: r.value === 0
-          }, null, 8, ["disabled"])
-        ]),
-        D("div", {
-          class: "slideshow-track",
-          style: j({ transform: `translateX(-${100 * r.value}%)` })
+    const H = T(() => i.value.images?.length > 0 ? i.value.images.length - 1 : 0);
+    return O(H, () => {
+      r.value = H.value;
+    }), (g, m) => i.value.images?.length <= 1 ? (G(), C("img", {
+      key: 0,
+      class: K(["w-full h-full cursor-pointer", E.value]),
+      src: B(i.value.images[0]?.url ?? ""),
+      onClick: m[0] || (m[0] = (w) => c(i.value.images[0]?.url ?? "")),
+      onContextmenu: m[1] || (m[1] = X((w) => h(i.value.images[0]?.url ?? ""), ["prevent"]))
+    }, null, 42, Ae)) : (G(), C("div", Le, [
+      D("div", Te, [
+        N(M(z), {
+          intent: "quiet",
+          class: "slideshow-nav__button",
+          title: "Previous image",
+          disabled: r.value === 0,
+          onClick: m[2] || (m[2] = (w) => ee())
+        }, {
+          default: j(() => [
+            N(M(J), { name: "chevron_left" })
+          ]),
+          _: 1
+        }, 8, ["disabled"])
+      ]),
+      D("div", {
+        class: "slideshow-track",
+        style: $({ transform: `translateX(-${100 * r.value}%)` })
+      }, [
+        (G(!0), C(Ee, null, me(i.value.images, (w, te) => (G(), C("div", {
+          key: w.id,
+          class: "slideshow-slide",
+          style: $({ transform: `translateX(${100 * te}%)` })
         }, [
-          (G(!0), C(de, null, Ie(i.value.images, (w, q) => (G(), C("div", {
-            key: w.id,
-            class: "slideshow-slide",
-            style: j({ transform: `translateX(${100 * q}%)` })
-          }, [
-            D("img", {
-              class: X(["w-full h-full cursor-pointer", E.value]),
-              src: P(w.url ?? ""),
-              onClick: (Q) => c(w.url ?? ""),
-              onContextmenu: k((Q) => g(w.url ?? ""), ["prevent"])
-            }, null, 42, Le)
-          ], 4))), 128))
-        ], 4),
-        D("div", Te, [
-          K(B, {
-            onClick: p[3] || (p[3] = (w) => v()),
-            icon: "chevron_right",
-            "text-color": "#ffffff",
-            disabled: r.value === i.value.images?.length - 1,
-            preset: "plain"
-          }, null, 8, ["disabled"])
-        ])
-      ]));
-    };
+          D("img", {
+            class: K(["w-full h-full cursor-pointer", E.value]),
+            src: B(w.url ?? ""),
+            onClick: (se) => c(w.url ?? ""),
+            onContextmenu: X((se) => h(w.url ?? ""), ["prevent"])
+          }, null, 42, Ce)
+        ], 4))), 128))
+      ], 4),
+      D("div", Ge, [
+        N(M(z), {
+          intent: "quiet",
+          class: "slideshow-nav__button",
+          title: "Next image",
+          disabled: r.value === i.value.images?.length - 1,
+          onClick: m[3] || (m[3] = (w) => v())
+        }, {
+          default: j(() => [
+            N(M(J), { name: "chevron_right" })
+          ]),
+          _: 1
+        }, 8, ["disabled"])
+      ])
+    ]));
   }
-}), Ge = (n, e) => {
+}), Ne = (n, e) => {
   const t = n.__vccOpts || n;
   for (const [i, a] of e)
     t[i] = a;
   return t;
-}, De = /* @__PURE__ */ Ge(Ce, [["__scopeId", "data-v-a566e6b2"]]), Ne = [
+}, Me = /* @__PURE__ */ Ne(De, [["__scopeId", "data-v-a4f596a6"]]), ye = [
   {
     name: "Image Clicked",
     type: "click",
@@ -808,7 +816,7 @@ const ve = ["src"], we = {
     description: "Triggered when the image is right-clicked",
     payloadType: S
   }
-], Me = `<?xml version="1.0" encoding="UTF-8"?>
+], Re = `<?xml version="1.0" encoding="UTF-8"?>
 <!--
 /*********************************************************************
 * Copyright (c) 2026 Contributors to the Eclipse Foundation.
@@ -858,7 +866,7 @@ one that was always there.
 
   </components>
 </uimodel:UIModel>
-`, ye = `<?xml version="1.0" encoding="UTF-8"?>
+`, Ue = `<?xml version="1.0" encoding="UTF-8"?>
 <!--
 /*********************************************************************
 * Copyright (c) 2026 Contributors to the Eclipse Foundation.
@@ -892,7 +900,7 @@ widget's own bookkeeping, and nobody types one.
         placeholder="https://…"/>
   </components>
 </uimodel:UIModel>
-`, Re = `<?xml version="1.0" encoding="UTF-8"?>
+`, Fe = `<?xml version="1.0" encoding="UTF-8"?>
 <!--
 /*********************************************************************
 * Copyright (c) 2026 Contributors to the Eclipse Foundation.
@@ -937,22 +945,22 @@ size with no hint why.
   </components>
 </uimodel:UIModel>
 `;
-var Ue = Object.defineProperty, Fe = Object.getOwnPropertyDescriptor, Y = (n, e, t, i) => {
-  for (var a = i > 1 ? void 0 : i ? Fe(e, t) : e, c = n.length - 1, g; c >= 0; c--)
-    (g = n[c]) && (a = (i ? g(e, t, a) : g(a)) || a);
-  return i && a && Ue(e, t, a), a;
-}, be = (n, e) => (t, i) => e(t, i, n);
-ee.eINSTANCE;
+var be = Object.defineProperty, xe = Object.getOwnPropertyDescriptor, P = (n, e, t, i) => {
+  for (var a = i > 1 ? void 0 : i ? xe(e, t) : e, c = n.length - 1, h; c >= 0; c--)
+    (h = n[c]) && (a = (i ? h(e, t, a) : h(a)) || a);
+  return i && a && be(e, t, a), a;
+}, Oe = (n, e) => (t, i) => e(t, i, n);
+ie.eINSTANCE;
 s.eINSTANCE;
-const U = "ImageWidget";
-let F = class {
+const b = "ImageWidget";
+let x = class {
   constructor(n) {
     this.events = n;
   }
-  type = U;
-  component = De;
+  type = b;
+  component = Me;
   supportedDSTypes = [];
-  icon = _e;
+  icon = we;
   name = "Image";
   /*
    * The settings form, as a model. Carried on the registration like the
@@ -960,43 +968,43 @@ let F = class {
    * exists - and the shell needs no dependency on this bundle.
    */
   settingsForm = {
-    xmi: Me,
+    xmi: Re,
     uri: "/image-settings.ui.xmi",
     ePackage: () => s.eINSTANCE,
     create: () => new u(),
     /* Forms for the classes that appear inside this one - the pictures of
      * the list, and the display options it contains. */
     entryForms: [
-      { xmi: ye, uri: "/image-item.ui.xmi" },
-      { xmi: Re, uri: "/image-gallery.ui.xmi" }
+      { xmi: Ue, uri: "/image-item.ui.xmi" },
+      { xmi: Fe, uri: "/image-gallery.ui.xmi" }
     ]
   };
   register() {
-    this.events.registerWidget(U, Ne);
+    this.events.registerWidget(b, ye);
   }
   unregister() {
-    this.events.unregisterWidget(U);
+    this.events.unregisterWidget(b);
   }
 };
-Y([
-  se()
-], F.prototype, "register", 1);
-Y([
-  ie()
-], F.prototype, "unregister", 1);
-F = Y([
-  ae({
-    service: [Se],
-    properties: { "widget.type": U }
+P([
+  re()
+], x.prototype, "register", 1);
+P([
+  ne()
+], x.prototype, "unregister", 1);
+x = P([
+  le({
+    service: [ve],
+    properties: { "widget.type": b }
   }),
-  be(0, re(te))
-], F);
+  Oe(0, oe(ae))
+], x);
 export {
   u as ImageSettingsImpl,
-  De as ImageWidget,
-  F as ImageWidgetProvider,
+  Me as ImageWidget,
+  x as ImageWidgetProvider,
   s as ImagesettingsPackage,
-  Re as galleryFormXmi,
-  ye as imageItemFormXmi,
-  Me as imageSettingsFormXmi
+  Fe as galleryFormXmi,
+  Ue as imageItemFormXmi,
+  Re as imageSettingsFormXmi
 };

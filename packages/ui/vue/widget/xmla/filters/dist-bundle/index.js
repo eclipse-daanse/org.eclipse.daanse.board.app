@@ -1,63 +1,63 @@
-(function(){var i="ui.vue.widget.xmla.filters",d=document,s=d.querySelector('style[data-tsm-bundle="'+i+'"]');if(!s){s=d.createElement('style');s.setAttribute('data-tsm-bundle',i);d.head.appendChild(s);}s.textContent=".widget[data-v-d4a9cd2c]{padding:12px;display:flex;flex-direction:column;gap:8px}.hierarchies-section[data-v-d4a9cd2c]{display:flex;flex-direction:column;gap:4px}.hierarchies-section h4[data-v-d4a9cd2c]{font-weight:600}.hierarchy-item[data-v-d4a9cd2c]{width:100%;padding:4px 6px;font-size:14px;border:1px solid var(--color-divider);margin-bottom:4px;border-radius:4px;display:flex;gap:8px;justify-content:start;align-items:center}.hierarchy-item .filter-caption[data-v-d4a9cd2c]{font-style:italic;color:var(--color-dim)}.hierarchy-item .hierarchy-caption[data-v-d4a9cd2c]{flex-grow:1}.settings-container[data-v-3622d575]{display:flex;flex-direction:column;gap:2px}\n";})();
+(function(){var i="ui.vue.widget.xmla.filters",d=document,s=d.querySelector('style[data-tsm-bundle="'+i+'"]');if(!s){s=d.createElement('style');s.setAttribute('data-tsm-bundle',i);d.head.appendChild(s);}s.textContent=".filter-icon[data-v-d9ff06f9]{margin-left:8px;cursor:pointer}.widget[data-v-d9ff06f9]{padding:12px;display:flex;flex-direction:column;gap:8px}.hierarchies-section[data-v-d9ff06f9]{display:flex;flex-direction:column;gap:4px}.hierarchies-section h4[data-v-d9ff06f9]{font-weight:600}.hierarchy-item[data-v-d9ff06f9]{width:100%;padding:4px 6px;font-size:14px;border:1px solid var(--color-divider);margin-bottom:4px;border-radius:4px;display:flex;gap:8px;justify-content:start;align-items:center}.hierarchy-item .filter-caption[data-v-d9ff06f9]{font-style:italic;color:var(--color-dim)}.hierarchy-item .hierarchy-caption[data-v-d9ff06f9]{flex-grow:1}.settings-container[data-v-3622d575]{display:flex;flex-direction:column;gap:2px}\n";})();
 import { PayloadImpl as b, EVENT_REGISTRY_ID as B } from "org.eclipse.daanse.board.app.lib.api.events";
 import { activate as O, deactivate as q, component as z, inject as G } from "@eclipse-daanse/tsm";
-import { defineComponent as S, toRefs as X, inject as J, ref as p, watch as K, onMounted as e2, resolveComponent as t2, createElementBlock as C, openBlock as d, Fragment as E, createElementVNode as u, createBlock as s2, createCommentVNode as M, withModifiers as l2, renderList as W, createVNode as f, toDisplayString as g, normalizeStyle as $, unref as R, useModel as i2 } from "vue";
-import { useDatasourceRepository as o2 } from "org.eclipse.daanse.board.app.ui.vue.composables";
-import { FiltersModal as n2 } from "org.eclipse.daanse.board.app.ui.vue.common.xmla";
-import { DCheckbox as T } from "org.eclipse.daanse.board.app.ui.vue.controls";
-import { WIDGET_SERVICE_ID as a2 } from "org.eclipse.daanse.board.app.lib.api.widget";
-const { identifiers: r2 } = __tsm__.require("org.eclipse.daanse.board.app.lib.core"), c2 = "data:image/svg+xml,%3csvg%20width='120'%20height='120'%20viewBox='0%200%20120%20120'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cpath%20fill-rule='evenodd'%20clip-rule='evenodd'%20d='M105%207.5H15C10.8579%207.5%207.5%2010.8579%207.5%2015V105C7.5%20109.142%2010.8579%20112.5%2015%20112.5H105C109.142%20112.5%20112.5%20109.142%20112.5%20105V15C112.5%2010.8579%20109.142%207.5%20105%207.5ZM15%200C6.71573%200%200%206.71573%200%2015V105C0%20113.284%206.71573%20120%2015%20120H105C113.284%20120%20120%20113.284%20120%20105V15C120%206.71573%20113.284%200%20105%200H15Z'%20fill='%23606060'/%3e%3cpath%20d='M28.3826%2066.198C27.9026%2066.198%2027.3986%2066.162%2026.8706%2066.09C26.3546%2066.03%2025.8626%2065.934%2025.3946%2065.802C24.9266%2065.67%2024.5066%2065.514%2024.1346%2065.334C23.8106%2065.178%2023.5826%2064.974%2023.4506%2064.722C23.3186%2064.458%2023.2706%2064.182%2023.3066%2063.894C23.3426%2063.606%2023.4446%2063.354%2023.6126%2063.138C23.7806%2062.91%2024.0026%2062.76%2024.2786%2062.688C24.5546%2062.604%2024.8666%2062.64%2025.2146%2062.796C25.6706%2063.012%2026.1866%2063.18%2026.7626%2063.3C27.3386%2063.42%2027.8786%2063.48%2028.3826%2063.48C29.1746%2063.48%2029.7266%2063.378%2030.0386%2063.174C30.3626%2062.958%2030.5246%2062.694%2030.5246%2062.382C30.5246%2062.106%2030.4106%2061.884%2030.1826%2061.716C29.9666%2061.548%2029.5766%2061.404%2029.0126%2061.284L26.9066%2060.834C25.7546%2060.594%2024.8966%2060.174%2024.3326%2059.574C23.7686%2058.974%2023.4866%2058.2%2023.4866%2057.252C23.4866%2056.628%2023.6126%2056.064%2023.8646%2055.56C24.1286%2055.044%2024.4946%2054.606%2024.9626%2054.246C25.4426%2053.886%2026.0066%2053.61%2026.6546%2053.418C27.3146%2053.214%2028.0466%2053.112%2028.8506%2053.112C29.4746%2053.112%2030.1047%2053.184%2030.7407%2053.328C31.3887%2053.46%2031.9466%2053.664%2032.4146%2053.94C32.6906%2054.084%2032.8886%2054.282%2033.0086%2054.534C33.1286%2054.786%2033.1767%2055.05%2033.1526%2055.326C33.1287%2055.59%2033.0327%2055.824%2032.8647%2056.028C32.7087%2056.232%2032.4926%2056.37%2032.2166%2056.442C31.9526%2056.502%2031.6346%2056.454%2031.2626%2056.298C30.9146%2056.142%2030.5186%2056.028%2030.0746%2055.956C29.6426%2055.872%2029.2226%2055.83%2028.8146%2055.83C28.3706%2055.83%2027.9926%2055.884%2027.6806%2055.992C27.3686%2056.088%2027.1286%2056.232%2026.9606%2056.424C26.8046%2056.616%2026.7266%2056.838%2026.7266%2057.09C26.7266%2057.342%2026.8286%2057.558%2027.0326%2057.738C27.2487%2057.906%2027.6386%2058.05%2028.2026%2058.17L30.2906%2058.62C31.4546%2058.872%2032.3246%2059.286%2032.9006%2059.862C33.4766%2060.438%2033.7646%2061.188%2033.7646%2062.112C33.7646%2062.736%2033.6386%2063.3%2033.3867%2063.804C33.1346%2064.308%2032.7746%2064.74%2032.3066%2065.1C31.8386%2065.448%2031.2746%2065.718%2030.6146%2065.91C29.9546%2066.102%2029.2106%2066.198%2028.3826%2066.198Z'%20fill='%23606060'/%3e%3cpath%20d='M35.8446%2066.162C35.4726%2066.162%2035.1606%2066.078%2034.9086%2065.91C34.6566%2065.73%2034.5006%2065.49%2034.4406%2065.19C34.3806%2064.878%2034.4346%2064.53%2034.6026%2064.146L39.0846%2054.498C39.3006%2054.03%2039.5646%2053.688%2039.8766%2053.472C40.2006%2053.256%2040.5666%2053.148%2040.9746%2053.148C41.3826%2053.148%2041.7366%2053.256%2042.0366%2053.472C42.3486%2053.688%2042.6186%2054.03%2042.8466%2054.498L47.3286%2064.146C47.5206%2064.53%2047.5866%2064.878%2047.5266%2065.19C47.4786%2065.502%2047.3286%2065.742%2047.0766%2065.91C46.8366%2066.078%2046.5366%2066.162%2046.1766%2066.162C45.6966%2066.162%2045.3246%2066.054%2045.0606%2065.838C44.8086%2065.622%2044.5806%2065.274%2044.3766%2064.794L43.4046%2062.508L44.6646%2063.426H37.2486L38.5266%2062.508L37.5546%2064.794C37.3386%2065.274%2037.1166%2065.622%2036.8886%2065.838C36.6606%2066.054%2036.3126%2066.162%2035.8446%2066.162ZM40.9386%2056.766L38.8506%2061.752L38.3466%2060.888H43.5846L43.0806%2061.752L40.9746%2056.766H40.9386Z'%20fill='%23606060'/%3e%3cpath%20d='M50.5091%2066.162C50.0291%2066.162%2049.6571%2066.03%2049.3931%2065.766C49.1411%2065.502%2049.0151%2065.13%2049.0151%2064.65V54.66C49.0151%2054.168%2049.1531%2053.796%2049.4291%2053.544C49.7051%2053.28%2050.0951%2053.148%2050.5991%2053.148C51.0191%2053.148%2051.3491%2053.232%2051.5891%2053.4C51.8411%2053.556%2052.0691%2053.82%2052.2731%2054.192L56.1431%2061.14H55.5131L59.3652%2054.192C59.5812%2053.82%2059.8091%2053.556%2060.0491%2053.4C60.3011%2053.232%2060.6371%2053.148%2061.0571%2053.148C61.5371%2053.148%2061.9032%2053.28%2062.1552%2053.544C62.4192%2053.796%2062.5512%2054.168%2062.5512%2054.66V64.65C62.5512%2065.13%2062.4251%2065.502%2062.1731%2065.766C61.9211%2066.03%2061.5491%2066.162%2061.0571%2066.162C60.5771%2066.162%2060.2051%2066.03%2059.9411%2065.766C59.6891%2065.502%2059.5632%2065.13%2059.5632%2064.65V58.458H59.9411L57.0431%2063.498C56.8751%2063.762%2056.6951%2063.96%2056.5031%2064.092C56.3231%2064.224%2056.0771%2064.29%2055.7651%2064.29C55.4651%2064.29%2055.2191%2064.224%2055.0271%2064.092C54.8351%2063.96%2054.6611%2063.762%2054.5051%2063.498L51.5891%2058.44H52.0031V64.65C52.0031%2065.13%2051.8772%2065.502%2051.6252%2065.766C51.3732%2066.03%2051.0011%2066.162%2050.5091%2066.162Z'%20fill='%23606060'/%3e%3cpath%20d='M66.5434%2066.162C66.0154%2066.162%2065.6074%2066.018%2065.3194%2065.73C65.0314%2065.43%2064.8874%2065.016%2064.8874%2064.488V54.984C64.8874%2054.444%2065.0314%2054.03%2065.3194%2053.742C65.6194%2053.454%2066.0333%2053.31%2066.5613%2053.31H70.9893C72.4293%2053.31%2073.5394%2053.682%2074.3194%2054.426C75.1114%2055.158%2075.5074%2056.172%2075.5074%2057.468C75.5074%2058.764%2075.1114%2059.784%2074.3194%2060.528C73.5394%2061.26%2072.4293%2061.626%2070.9893%2061.626H68.1994V64.488C68.1994%2065.016%2068.0614%2065.43%2067.7854%2065.73C67.5094%2066.018%2067.0954%2066.162%2066.5434%2066.162ZM68.1994%2059.088H70.4134C71.0374%2059.088%2071.5173%2058.956%2071.8533%2058.692C72.1893%2058.416%2072.3574%2058.008%2072.3574%2057.468C72.3574%2056.916%2072.1893%2056.508%2071.8533%2056.244C71.5173%2055.98%2071.0374%2055.848%2070.4134%2055.848H68.1994V59.088Z'%20fill='%23606060'/%3e%3cpath%20d='M78.7254%2066C78.1974%2066%2077.7834%2065.856%2077.4834%2065.568C77.1954%2065.268%2077.0514%2064.854%2077.0514%2064.326V54.966C77.0514%2054.426%2077.1954%2054.012%2077.4834%2053.724C77.7714%2053.436%2078.1794%2053.292%2078.7074%2053.292C79.2474%2053.292%2079.6554%2053.436%2079.9314%2053.724C80.2194%2054.012%2080.3634%2054.426%2080.3634%2054.966V63.246H84.7554C85.2114%2063.246%2085.5594%2063.366%2085.7994%2063.606C86.0514%2063.834%2086.1774%2064.17%2086.1774%2064.614C86.1774%2065.058%2086.0514%2065.4%2085.7994%2065.64C85.5594%2065.88%2085.2114%2066%2084.7554%2066H78.7254Z'%20fill='%23606060'/%3e%3cpath%20d='M89.3087%2066C88.7447%2066%2088.3127%2065.856%2088.0127%2065.568C87.7247%2065.268%2087.5807%2064.842%2087.5807%2064.29V55.02C87.5807%2054.468%2087.7247%2054.048%2088.0127%2053.76C88.3127%2053.46%2088.7447%2053.31%2089.3087%2053.31H95.4107C95.8427%2053.31%2096.1667%2053.418%2096.3827%2053.634C96.5987%2053.85%2096.7067%2054.162%2096.7067%2054.57C96.7067%2054.99%2096.5987%2055.314%2096.3827%2055.542C96.1667%2055.758%2095.8427%2055.866%2095.4107%2055.866H90.7487V58.278H95.0147C95.4347%2058.278%2095.7527%2058.386%2095.9687%2058.602C96.1967%2058.818%2096.3107%2059.136%2096.3107%2059.556C96.3107%2059.976%2096.1967%2060.294%2095.9687%2060.51C95.7527%2060.726%2095.4347%2060.834%2095.0147%2060.834H90.7487V63.444H95.4107C95.8427%2063.444%2096.1667%2063.558%2096.3827%2063.786C96.5987%2064.002%2096.7067%2064.314%2096.7067%2064.722C96.7067%2065.142%2096.5987%2065.46%2096.3827%2065.676C96.1667%2065.892%2095.8427%2066%2095.4107%2066H89.3087Z'%20fill='%23606060'/%3e%3cpath%20d='M22.5%2043.5C22.5%2042.6716%2023.1716%2042%2024%2042H96C96.8284%2042%2097.5%2042.6716%2097.5%2043.5C97.5%2044.3284%2096.8284%2045%2096%2045H24C23.1716%2045%2022.5%2044.3284%2022.5%2043.5Z'%20fill='%23606060'/%3e%3cpath%20d='M22.5%2076.5C22.5%2075.6716%2023.1716%2075%2024%2075H96C96.8284%2075%2097.5%2075.6716%2097.5%2076.5C97.5%2077.3284%2096.8284%2078%2096%2078H24C23.1716%2078%2022.5%2077.3284%2022.5%2076.5Z'%20fill='%23606060'/%3e%3c/svg%3e", d2 = {
+import { defineComponent as S, toRefs as X, inject as J, ref as g, watch as K, onMounted as e2, createElementBlock as d, openBlock as c, Fragment as M, createElementVNode as C, createBlock as t2, createCommentVNode as R, withModifiers as s2, renderList as W, createVNode as m, toDisplayString as u, unref as p, useModel as i2 } from "vue";
+import { useDatasourceRepository as l2 } from "org.eclipse.daanse.board.app.ui.vue.composables";
+import { FiltersModal as o2 } from "org.eclipse.daanse.board.app.ui.vue.common.xmla";
+import { DIcon as $, DCheckbox as D } from "org.eclipse.daanse.board.app.ui.vue.controls";
+import { WIDGET_SERVICE_ID as r2 } from "org.eclipse.daanse.board.app.lib.api.widget";
+const { identifiers: n2 } = __tsm__.require("org.eclipse.daanse.board.app.lib.core"), a2 = "data:image/svg+xml,%3csvg%20width='120'%20height='120'%20viewBox='0%200%20120%20120'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cpath%20fill-rule='evenodd'%20clip-rule='evenodd'%20d='M105%207.5H15C10.8579%207.5%207.5%2010.8579%207.5%2015V105C7.5%20109.142%2010.8579%20112.5%2015%20112.5H105C109.142%20112.5%20112.5%20109.142%20112.5%20105V15C112.5%2010.8579%20109.142%207.5%20105%207.5ZM15%200C6.71573%200%200%206.71573%200%2015V105C0%20113.284%206.71573%20120%2015%20120H105C113.284%20120%20120%20113.284%20120%20105V15C120%206.71573%20113.284%200%20105%200H15Z'%20fill='%23606060'/%3e%3cpath%20d='M28.3826%2066.198C27.9026%2066.198%2027.3986%2066.162%2026.8706%2066.09C26.3546%2066.03%2025.8626%2065.934%2025.3946%2065.802C24.9266%2065.67%2024.5066%2065.514%2024.1346%2065.334C23.8106%2065.178%2023.5826%2064.974%2023.4506%2064.722C23.3186%2064.458%2023.2706%2064.182%2023.3066%2063.894C23.3426%2063.606%2023.4446%2063.354%2023.6126%2063.138C23.7806%2062.91%2024.0026%2062.76%2024.2786%2062.688C24.5546%2062.604%2024.8666%2062.64%2025.2146%2062.796C25.6706%2063.012%2026.1866%2063.18%2026.7626%2063.3C27.3386%2063.42%2027.8786%2063.48%2028.3826%2063.48C29.1746%2063.48%2029.7266%2063.378%2030.0386%2063.174C30.3626%2062.958%2030.5246%2062.694%2030.5246%2062.382C30.5246%2062.106%2030.4106%2061.884%2030.1826%2061.716C29.9666%2061.548%2029.5766%2061.404%2029.0126%2061.284L26.9066%2060.834C25.7546%2060.594%2024.8966%2060.174%2024.3326%2059.574C23.7686%2058.974%2023.4866%2058.2%2023.4866%2057.252C23.4866%2056.628%2023.6126%2056.064%2023.8646%2055.56C24.1286%2055.044%2024.4946%2054.606%2024.9626%2054.246C25.4426%2053.886%2026.0066%2053.61%2026.6546%2053.418C27.3146%2053.214%2028.0466%2053.112%2028.8506%2053.112C29.4746%2053.112%2030.1047%2053.184%2030.7407%2053.328C31.3887%2053.46%2031.9466%2053.664%2032.4146%2053.94C32.6906%2054.084%2032.8886%2054.282%2033.0086%2054.534C33.1286%2054.786%2033.1767%2055.05%2033.1526%2055.326C33.1287%2055.59%2033.0327%2055.824%2032.8647%2056.028C32.7087%2056.232%2032.4926%2056.37%2032.2166%2056.442C31.9526%2056.502%2031.6346%2056.454%2031.2626%2056.298C30.9146%2056.142%2030.5186%2056.028%2030.0746%2055.956C29.6426%2055.872%2029.2226%2055.83%2028.8146%2055.83C28.3706%2055.83%2027.9926%2055.884%2027.6806%2055.992C27.3686%2056.088%2027.1286%2056.232%2026.9606%2056.424C26.8046%2056.616%2026.7266%2056.838%2026.7266%2057.09C26.7266%2057.342%2026.8286%2057.558%2027.0326%2057.738C27.2487%2057.906%2027.6386%2058.05%2028.2026%2058.17L30.2906%2058.62C31.4546%2058.872%2032.3246%2059.286%2032.9006%2059.862C33.4766%2060.438%2033.7646%2061.188%2033.7646%2062.112C33.7646%2062.736%2033.6386%2063.3%2033.3867%2063.804C33.1346%2064.308%2032.7746%2064.74%2032.3066%2065.1C31.8386%2065.448%2031.2746%2065.718%2030.6146%2065.91C29.9546%2066.102%2029.2106%2066.198%2028.3826%2066.198Z'%20fill='%23606060'/%3e%3cpath%20d='M35.8446%2066.162C35.4726%2066.162%2035.1606%2066.078%2034.9086%2065.91C34.6566%2065.73%2034.5006%2065.49%2034.4406%2065.19C34.3806%2064.878%2034.4346%2064.53%2034.6026%2064.146L39.0846%2054.498C39.3006%2054.03%2039.5646%2053.688%2039.8766%2053.472C40.2006%2053.256%2040.5666%2053.148%2040.9746%2053.148C41.3826%2053.148%2041.7366%2053.256%2042.0366%2053.472C42.3486%2053.688%2042.6186%2054.03%2042.8466%2054.498L47.3286%2064.146C47.5206%2064.53%2047.5866%2064.878%2047.5266%2065.19C47.4786%2065.502%2047.3286%2065.742%2047.0766%2065.91C46.8366%2066.078%2046.5366%2066.162%2046.1766%2066.162C45.6966%2066.162%2045.3246%2066.054%2045.0606%2065.838C44.8086%2065.622%2044.5806%2065.274%2044.3766%2064.794L43.4046%2062.508L44.6646%2063.426H37.2486L38.5266%2062.508L37.5546%2064.794C37.3386%2065.274%2037.1166%2065.622%2036.8886%2065.838C36.6606%2066.054%2036.3126%2066.162%2035.8446%2066.162ZM40.9386%2056.766L38.8506%2061.752L38.3466%2060.888H43.5846L43.0806%2061.752L40.9746%2056.766H40.9386Z'%20fill='%23606060'/%3e%3cpath%20d='M50.5091%2066.162C50.0291%2066.162%2049.6571%2066.03%2049.3931%2065.766C49.1411%2065.502%2049.0151%2065.13%2049.0151%2064.65V54.66C49.0151%2054.168%2049.1531%2053.796%2049.4291%2053.544C49.7051%2053.28%2050.0951%2053.148%2050.5991%2053.148C51.0191%2053.148%2051.3491%2053.232%2051.5891%2053.4C51.8411%2053.556%2052.0691%2053.82%2052.2731%2054.192L56.1431%2061.14H55.5131L59.3652%2054.192C59.5812%2053.82%2059.8091%2053.556%2060.0491%2053.4C60.3011%2053.232%2060.6371%2053.148%2061.0571%2053.148C61.5371%2053.148%2061.9032%2053.28%2062.1552%2053.544C62.4192%2053.796%2062.5512%2054.168%2062.5512%2054.66V64.65C62.5512%2065.13%2062.4251%2065.502%2062.1731%2065.766C61.9211%2066.03%2061.5491%2066.162%2061.0571%2066.162C60.5771%2066.162%2060.2051%2066.03%2059.9411%2065.766C59.6891%2065.502%2059.5632%2065.13%2059.5632%2064.65V58.458H59.9411L57.0431%2063.498C56.8751%2063.762%2056.6951%2063.96%2056.5031%2064.092C56.3231%2064.224%2056.0771%2064.29%2055.7651%2064.29C55.4651%2064.29%2055.2191%2064.224%2055.0271%2064.092C54.8351%2063.96%2054.6611%2063.762%2054.5051%2063.498L51.5891%2058.44H52.0031V64.65C52.0031%2065.13%2051.8772%2065.502%2051.6252%2065.766C51.3732%2066.03%2051.0011%2066.162%2050.5091%2066.162Z'%20fill='%23606060'/%3e%3cpath%20d='M66.5434%2066.162C66.0154%2066.162%2065.6074%2066.018%2065.3194%2065.73C65.0314%2065.43%2064.8874%2065.016%2064.8874%2064.488V54.984C64.8874%2054.444%2065.0314%2054.03%2065.3194%2053.742C65.6194%2053.454%2066.0333%2053.31%2066.5613%2053.31H70.9893C72.4293%2053.31%2073.5394%2053.682%2074.3194%2054.426C75.1114%2055.158%2075.5074%2056.172%2075.5074%2057.468C75.5074%2058.764%2075.1114%2059.784%2074.3194%2060.528C73.5394%2061.26%2072.4293%2061.626%2070.9893%2061.626H68.1994V64.488C68.1994%2065.016%2068.0614%2065.43%2067.7854%2065.73C67.5094%2066.018%2067.0954%2066.162%2066.5434%2066.162ZM68.1994%2059.088H70.4134C71.0374%2059.088%2071.5173%2058.956%2071.8533%2058.692C72.1893%2058.416%2072.3574%2058.008%2072.3574%2057.468C72.3574%2056.916%2072.1893%2056.508%2071.8533%2056.244C71.5173%2055.98%2071.0374%2055.848%2070.4134%2055.848H68.1994V59.088Z'%20fill='%23606060'/%3e%3cpath%20d='M78.7254%2066C78.1974%2066%2077.7834%2065.856%2077.4834%2065.568C77.1954%2065.268%2077.0514%2064.854%2077.0514%2064.326V54.966C77.0514%2054.426%2077.1954%2054.012%2077.4834%2053.724C77.7714%2053.436%2078.1794%2053.292%2078.7074%2053.292C79.2474%2053.292%2079.6554%2053.436%2079.9314%2053.724C80.2194%2054.012%2080.3634%2054.426%2080.3634%2054.966V63.246H84.7554C85.2114%2063.246%2085.5594%2063.366%2085.7994%2063.606C86.0514%2063.834%2086.1774%2064.17%2086.1774%2064.614C86.1774%2065.058%2086.0514%2065.4%2085.7994%2065.64C85.5594%2065.88%2085.2114%2066%2084.7554%2066H78.7254Z'%20fill='%23606060'/%3e%3cpath%20d='M89.3087%2066C88.7447%2066%2088.3127%2065.856%2088.0127%2065.568C87.7247%2065.268%2087.5807%2064.842%2087.5807%2064.29V55.02C87.5807%2054.468%2087.7247%2054.048%2088.0127%2053.76C88.3127%2053.46%2088.7447%2053.31%2089.3087%2053.31H95.4107C95.8427%2053.31%2096.1667%2053.418%2096.3827%2053.634C96.5987%2053.85%2096.7067%2054.162%2096.7067%2054.57C96.7067%2054.99%2096.5987%2055.314%2096.3827%2055.542C96.1667%2055.758%2095.8427%2055.866%2095.4107%2055.866H90.7487V58.278H95.0147C95.4347%2058.278%2095.7527%2058.386%2095.9687%2058.602C96.1967%2058.818%2096.3107%2059.136%2096.3107%2059.556C96.3107%2059.976%2096.1967%2060.294%2095.9687%2060.51C95.7527%2060.726%2095.4347%2060.834%2095.0147%2060.834H90.7487V63.444H95.4107C95.8427%2063.444%2096.1667%2063.558%2096.3827%2063.786C96.5987%2064.002%2096.7067%2064.314%2096.7067%2064.722C96.7067%2065.142%2096.5987%2065.46%2096.3827%2065.676C96.1667%2065.892%2095.8427%2066%2095.4107%2066H89.3087Z'%20fill='%23606060'/%3e%3cpath%20d='M22.5%2043.5C22.5%2042.6716%2023.1716%2042%2024%2042H96C96.8284%2042%2097.5%2042.6716%2097.5%2043.5C97.5%2044.3284%2096.8284%2045%2096%2045H24C23.1716%2045%2022.5%2044.3284%2022.5%2043.5Z'%20fill='%23606060'/%3e%3cpath%20d='M22.5%2076.5C22.5%2075.6716%2023.1716%2075%2024%2075H96C96.8284%2075%2097.5%2075.6716%2097.5%2076.5C97.5%2077.3284%2096.8284%2078%2096%2078H24C23.1716%2078%2022.5%2077.3284%2022.5%2076.5Z'%20fill='%23606060'/%3e%3c/svg%3e", c2 = {
   key: 0,
   class: "hierarchies-section"
-}, C2 = { class: "hierarchy-caption" }, u2 = { class: "filter-caption" }, g2 = {
+}, d2 = { class: "hierarchy-caption" }, C2 = { class: "filter-caption" }, u2 = {
   key: 1,
   class: "hierarchies-section"
-}, p2 = { class: "hierarchy-caption" }, m2 = { class: "filter-caption" }, f2 = {
+}, g2 = { class: "hierarchy-caption" }, p2 = { class: "filter-caption" }, f2 = {
   key: 2,
   class: "hierarchies-section"
-}, v2 = { class: "hierarchy-caption" }, h2 = { class: "filter-caption" }, w2 = /* @__PURE__ */ S({
+}, m2 = { class: "hierarchy-caption" }, v2 = { class: "filter-caption" }, h2 = /* @__PURE__ */ S({
   __name: "FiltersWidget",
   props: {
     datasourceId: {},
     config: {},
     id: {}
   },
-  setup(a) {
-    const e = a, { datasourceId: c, id: s } = X(e), n = J(r2.TINY_EMITTER), v = () => {
-      s?.value && n.emit("widget:FiltersWidget:click", {
+  setup(r) {
+    const e = r, { datasourceId: a, id: i } = X(e), n = J(n2.TINY_EMITTER), v = () => {
+      i?.value && n.emit("widget:FiltersWidget:click", {
         type: "widget:FiltersWidget:click",
-        widgetId: s.value,
-        payload: { widgetId: s.value, timestamp: Date.now() }
+        widgetId: i.value,
+        payload: { widgetId: i.value, timestamp: Date.now() }
       });
     }, h = () => {
-      s?.value && n.emit("widget:FiltersWidget:right_click", {
+      i?.value && n.emit("widget:FiltersWidget:right_click", {
         type: "widget:FiltersWidget:right_click",
-        widgetId: s.value,
-        payload: { widgetId: s.value, timestamp: Date.now() }
+        widgetId: i.value,
+        payload: { widgetId: i.value, timestamp: Date.now() }
       });
-    }, Z = (l, i, r) => {
-      s?.value && n.emit("widget:FiltersWidget:change", {
+    }, Z = (l, o, t) => {
+      i?.value && n.emit("widget:FiltersWidget:change", {
         type: "widget:FiltersWidget:change",
-        widgetId: s.value,
-        payload: { widgetId: s.value, timestamp: Date.now(), id: l, area: i, filterData: r }
+        widgetId: i.value,
+        payload: { widgetId: i.value, timestamp: Date.now(), id: l, area: o, filterData: t }
       });
-    }, w = p([]), _ = p([]), I = p([]), P = p(null), m = p(null), F = p(null), k = p(null), x = async () => {
+    }, w = g([]), _ = g([]), I = g([]), P = g(null), f = g(null), F = g(null), y = g(null), x = async () => {
       const l = A();
-      m.value = await N(), w.value = l.rows, _.value = l.columns, I.value = l.filters;
+      f.value = await N(), w.value = l.rows, _.value = l.columns, I.value = l.filters;
     };
-    K(c, async (l, i) => {
-      Q(l, i);
-      const r = A();
-      m.value = await N(), w.value = r.rows, _.value = r.columns, I.value = r.filters;
+    K(a, async (l, o) => {
+      Q(l, o);
+      const t = A();
+      f.value = await N(), w.value = t.rows, _.value = t.columns, I.value = t.filters;
     });
     const N = async () => {
-      const l = D();
+      const l = U();
       if (!l)
         return console.warn("No datasource instance available"), null;
-      const i = l.getConnection(), r = await i.getApi();
-      return F.value = i.catalogName, r;
+      const o = l.getConnection(), t = await o.getApi();
+      return F.value = o.catalogName, t;
     }, A = () => {
-      const l = D();
+      const l = U();
       if (!l)
         return console.warn("No datasource instance available"), {
           rows: [],
@@ -65,32 +65,32 @@ const { identifiers: r2 } = __tsm__.require("org.eclipse.daanse.board.app.lib.co
           filters: []
         };
       try {
-        const i = l.requestParams.rows.map((t) => {
-          const H = t.filters.enabled ? t.filters.multipleChoise ? t.filters.selectAll ? "Multiple choice filter, all selected" : `Multiple choice filter (${t.filters.selectedItems.length} selected, ${t.filters.deselectedItems.length} deselected)` : `Single choice filter (${t.filters.selectedItem ? t.filters.selectedItem.Caption : "none selected"})` : "No filter applied";
+        const o = l.requestParams.rows.map((s) => {
+          const H = s.filters.enabled ? s.filters.multipleChoise ? s.filters.selectAll ? "Multiple choice filter, all selected" : `Multiple choice filter (${s.filters.selectedItems.length} selected, ${s.filters.deselectedItems.length} deselected)` : `Single choice filter (${s.filters.selectedItem ? s.filters.selectedItem.Caption : "none selected"})` : "No filter applied";
           return {
-            ...t,
+            ...s,
             filtersCaption: H
           };
-        }), r = l.requestParams.columns.map((t) => {
-          const H = t.filters.enabled ? t.filters.multipleChoise ? t.filters.selectAll ? "Multiple choice filter, all selected" : `Multiple choice filter (${t.filters.selectedItems.length} selected, ${t.filters.deselectedItems.length} deselected)` : `Single choice filter (${t.filters.selectedItem ? t.filters.selectedItem.Caption : "none selected"})` : "No filter applied";
+        }), t = l.requestParams.columns.map((s) => {
+          const H = s.filters.enabled ? s.filters.multipleChoise ? s.filters.selectAll ? "Multiple choice filter, all selected" : `Multiple choice filter (${s.filters.selectedItems.length} selected, ${s.filters.deselectedItems.length} deselected)` : `Single choice filter (${s.filters.selectedItem ? s.filters.selectedItem.Caption : "none selected"})` : "No filter applied";
           return {
-            ...t,
+            ...s,
             filtersCaption: H
           };
-        }), o = l.requestParams.filters.map((t) => {
-          const H = t.filters.enabled ? t.filters.multipleChoise ? t.filters.selectAll ? "Multiple choice filter, all selected" : `Multiple choice filter (${t.filters.selectedItems.length} selected, ${t.filters.deselectedItems.length} deselected)` : `Single choice filter (${t.filters.selectedItem ? t.filters.selectedItem.Caption : "none selected"})` : "No filter applied";
+        }), E = l.requestParams.filters.map((s) => {
+          const H = s.filters.enabled ? s.filters.multipleChoise ? s.filters.selectAll ? "Multiple choice filter, all selected" : `Multiple choice filter (${s.filters.selectedItems.length} selected, ${s.filters.deselectedItems.length} deselected)` : `Single choice filter (${s.filters.selectedItem ? s.filters.selectedItem.Caption : "none selected"})` : "No filter applied";
           return {
-            ...t,
+            ...s,
             filtersCaption: H
           };
         });
         return {
-          rows: i,
-          columns: r,
-          filters: o
+          rows: o,
+          columns: t,
+          filters: E
         };
-      } catch (i) {
-        return console.error("Error retrieving hierarchies:", i), {
+      } catch (o) {
+        return console.error("Error retrieving hierarchies:", o), {
           rows: [],
           columns: [],
           filters: []
@@ -99,180 +99,171 @@ const { identifiers: r2 } = __tsm__.require("org.eclipse.daanse.board.app.lib.co
     };
     e2(async () => {
       const l = A();
-      m.value = await N(), w.value = l.rows, _.value = l.columns, I.value = l.filters, e.config.settings.showFilters = e.config.settings.showFilters ?? !0, e.config.settings.showRows = e.config.settings.showRows ?? !0, e.config.settings.showColumns = e.config.settings.showColumns ?? !0;
+      f.value = await N(), w.value = l.rows, _.value = l.columns, I.value = l.filters, e.config.settings.showFilters = e.config.settings.showFilters ?? !0, e.config.settings.showRows = e.config.settings.showRows ?? !0, e.config.settings.showColumns = e.config.settings.showColumns ?? !0;
     });
-    const { update: Q, getDatasourceInstance: D, callEvent: j } = o2(c, "string", P, [x]), L = async (l, i) => {
-      if (!k.value) {
+    const { update: Q, getDatasourceInstance: U, callEvent: j } = l2(a, "string", P, [x]), L = async (l, o) => {
+      if (!y.value) {
         console.warn("Filter modal is not available");
         return;
       }
-      const { filters: r } = await k.value.run({
-        element: i,
-        filters: i.filters,
-        api: m
+      const { filters: t } = await y.value.run({
+        element: o,
+        filters: o.filters,
+        api: f
       });
-      r && (Z(i.id, l, r), j("filterChange", {
+      t && (Z(o.id, l, t), j("filterChange", {
         area: l,
-        id: i.id,
-        filters: r
+        id: o.id,
+        filters: t
       }));
     };
-    return (l, i) => {
-      const r = t2("va-icon");
-      return d(), C(E, null, [
-        u("div", {
-          class: "widget",
-          onClick: v,
-          onContextmenu: l2(h, ["prevent"])
-        }, [
-          e.config.settings.showRows && w.value.length > 0 ? (d(), C("div", d2, [
-            i[0] || (i[0] = u("h4", null, "Rows:", -1)),
-            (d(!0), C(E, null, W(w.value, (o) => (d(), C("div", {
-              key: o.originalItem.HIERARCHY_UNIQUE_NAME,
-              class: "hierarchy-item"
-            }, [
-              u("p", C2, g(o.originalItem.HIERARCHY_NAME) + " (" + g(o.originalItem.HIERARCHY_UNIQUE_NAME) + ")", 1),
-              u("p", u2, g(o.filtersCaption), 1),
-              f(r, {
-                class: "filter-icon ml-2",
-                name: "filter_list",
-                size: "small",
-                style: $({
-                  color: o.filters.enabled ? "lime" : ""
-                }),
-                onClick: (t) => L("rows", o)
-              }, null, 8, ["style", "onClick"])
-            ]))), 128))
-          ])) : M("", !0),
-          e.config.settings.showColumns && _.value.length > 0 ? (d(), C("div", g2, [
-            i[1] || (i[1] = u("h4", null, "Columns:", -1)),
-            (d(!0), C(E, null, W(_.value, (o) => (d(), C("div", {
-              key: o.originalItem.HIERARCHY_UNIQUE_NAME,
-              class: "hierarchy-item"
-            }, [
-              u("p", p2, g(o.originalItem.HIERARCHY_NAME) + " (" + g(o.originalItem.HIERARCHY_UNIQUE_NAME) + ")", 1),
-              u("p", m2, g(o.filtersCaption), 1),
-              f(r, {
-                class: "filter-icon ml-2",
-                name: "filter_list",
-                size: "small",
-                style: $({
-                  color: o.filters.enabled ? "lime" : ""
-                }),
-                onClick: (t) => L("columns", o)
-              }, null, 8, ["style", "onClick"])
-            ]))), 128))
-          ])) : M("", !0),
-          e.config.settings.showFilters && I.value.length > 0 ? (d(), C("div", f2, [
-            i[2] || (i[2] = u("h4", null, "Filters:", -1)),
-            (d(!0), C(E, null, W(I.value, (o) => (d(), C("div", {
-              key: o.originalItem.HIERARCHY_UNIQUE_NAME,
-              class: "hierarchy-item"
-            }, [
-              u("p", v2, g(o.originalItem.HIERARCHY_NAME) + " (" + g(o.originalItem.HIERARCHY_UNIQUE_NAME) + ")", 1),
-              u("p", h2, g(o.filtersCaption), 1),
-              f(r, {
-                class: "filter-icon ml-2",
-                name: "filter_list",
-                size: "small",
-                style: $({
-                  color: o.filters.enabled ? "lime" : ""
-                }),
-                onClick: (t) => L("filters", o)
-              }, null, 8, ["style", "onClick"])
-            ]))), 128))
-          ])) : M("", !0)
-        ], 32),
-        m.value && F.value ? (d(), s2(R(n2), {
-          key: 0,
-          ref_key: "filterModal",
-          ref: k,
-          api: m.value,
-          catalog: F.value
-        }, null, 8, ["api", "catalog"])) : M("", !0)
-      ], 64);
-    };
+    return (l, o) => (c(), d(M, null, [
+      C("div", {
+        class: "widget",
+        onClick: v,
+        onContextmenu: s2(h, ["prevent"])
+      }, [
+        e.config.settings.showRows && w.value.length > 0 ? (c(), d("div", c2, [
+          o[0] || (o[0] = C("h4", null, "Rows:", -1)),
+          (c(!0), d(M, null, W(w.value, (t) => (c(), d("div", {
+            key: t.originalItem.HIERARCHY_UNIQUE_NAME,
+            class: "hierarchy-item"
+          }, [
+            C("p", d2, u(t.originalItem.HIERARCHY_NAME) + " (" + u(t.originalItem.HIERARCHY_UNIQUE_NAME) + ")", 1),
+            C("p", C2, u(t.filtersCaption), 1),
+            m(p($), {
+              name: "filter_list",
+              size: "sm",
+              class: "filter-icon",
+              tone: t.filters.enabled ? "color-ok" : void 0,
+              onClick: (E) => L("rows", t)
+            }, null, 8, ["tone", "onClick"])
+          ]))), 128))
+        ])) : R("", !0),
+        e.config.settings.showColumns && _.value.length > 0 ? (c(), d("div", u2, [
+          o[1] || (o[1] = C("h4", null, "Columns:", -1)),
+          (c(!0), d(M, null, W(_.value, (t) => (c(), d("div", {
+            key: t.originalItem.HIERARCHY_UNIQUE_NAME,
+            class: "hierarchy-item"
+          }, [
+            C("p", g2, u(t.originalItem.HIERARCHY_NAME) + " (" + u(t.originalItem.HIERARCHY_UNIQUE_NAME) + ")", 1),
+            C("p", p2, u(t.filtersCaption), 1),
+            m(p($), {
+              name: "filter_list",
+              size: "sm",
+              class: "filter-icon",
+              tone: t.filters.enabled ? "color-ok" : void 0,
+              onClick: (E) => L("columns", t)
+            }, null, 8, ["tone", "onClick"])
+          ]))), 128))
+        ])) : R("", !0),
+        e.config.settings.showFilters && I.value.length > 0 ? (c(), d("div", f2, [
+          o[2] || (o[2] = C("h4", null, "Filters:", -1)),
+          (c(!0), d(M, null, W(I.value, (t) => (c(), d("div", {
+            key: t.originalItem.HIERARCHY_UNIQUE_NAME,
+            class: "hierarchy-item"
+          }, [
+            C("p", m2, u(t.originalItem.HIERARCHY_NAME) + " (" + u(t.originalItem.HIERARCHY_UNIQUE_NAME) + ")", 1),
+            C("p", v2, u(t.filtersCaption), 1),
+            m(p($), {
+              name: "filter_list",
+              size: "sm",
+              class: "filter-icon",
+              tone: t.filters.enabled ? "color-ok" : void 0,
+              onClick: (E) => L("filters", t)
+            }, null, 8, ["tone", "onClick"])
+          ]))), 128))
+        ])) : R("", !0)
+      ], 32),
+      f.value && F.value ? (c(), t2(p(o2), {
+        key: 0,
+        ref_key: "filterModal",
+        ref: y,
+        api: f.value,
+        catalog: F.value
+      }, null, 8, ["api", "catalog"])) : R("", !0)
+    ], 64));
   }
-}), Y = (a, e) => {
-  const c = a.__vccOpts || a;
-  for (const [s, n] of e)
-    c[s] = n;
-  return c;
-}, _2 = /* @__PURE__ */ Y(w2, [["__scopeId", "data-v-d4a9cd2c"]]), I2 = {
+}), Y = (r, e) => {
+  const a = r.__vccOpts || r;
+  for (const [i, n] of e)
+    a[i] = n;
+  return a;
+}, w2 = /* @__PURE__ */ Y(h2, [["__scopeId", "data-v-d9ff06f9"]]), _2 = {
   class: "settings-section",
   "data-section": "Vanta widget settings"
-}, H2 = { class: "settings-container" }, E2 = /* @__PURE__ */ S({
+}, I2 = { class: "settings-container" }, H2 = /* @__PURE__ */ S({
   __name: "FiltersWidgetSettings",
   props: {
     modelValue: {},
     modelModifiers: {}
   },
   emits: ["update:modelValue"],
-  setup(a) {
-    const e = i2(a, "modelValue");
-    return e.settings = e.settings ?? {}, e.settings.showRows = e.settings?.showRows ?? !0, e.settings.showColumns = e.settings?.showRows ?? !0, e.settings.showFilters = e.settings?.showRows ?? !0, (c, s) => (d(), C("section", I2, [
-      u("div", H2, [
-        f(R(T), {
+  setup(r) {
+    const e = i2(r, "modelValue");
+    return e.settings = e.settings ?? {}, e.settings.showRows = e.settings?.showRows ?? !0, e.settings.showColumns = e.settings?.showRows ?? !0, e.settings.showFilters = e.settings?.showRows ?? !0, (a, i) => (c(), d("section", _2, [
+      C("div", I2, [
+        m(p(D), {
           modelValue: e.value.settings.showRows,
-          "onUpdate:modelValue": s[0] || (s[0] = (n) => e.value.settings.showRows = n),
+          "onUpdate:modelValue": i[0] || (i[0] = (n) => e.value.settings.showRows = n),
           label: "Show rows"
         }, null, 8, ["modelValue"]),
-        f(R(T), {
+        m(p(D), {
           modelValue: e.value.settings.showColumns,
-          "onUpdate:modelValue": s[1] || (s[1] = (n) => e.value.settings.showColumns = n),
+          "onUpdate:modelValue": i[1] || (i[1] = (n) => e.value.settings.showColumns = n),
           label: "Show columns"
         }, null, 8, ["modelValue"]),
-        f(R(T), {
+        m(p(D), {
           modelValue: e.value.settings.showFilters,
-          "onUpdate:modelValue": s[2] || (s[2] = (n) => e.value.settings.showFilters = n),
+          "onUpdate:modelValue": i[2] || (i[2] = (n) => e.value.settings.showFilters = n),
           label: "Show filters"
         }, null, 8, ["modelValue"])
       ])
     ]));
   }
-}), M2 = /* @__PURE__ */ Y(E2, [["__scopeId", "data-v-3622d575"]]), R2 = [
+}), E2 = /* @__PURE__ */ Y(H2, [["__scopeId", "data-v-3622d575"]]), M2 = [
   { name: "Filters Clicked", type: "click", description: "Triggered when the filters widget is clicked", payloadType: b },
   { name: "Filters Right Clicked", type: "right_click", description: "Triggered when the filters widget is right-clicked", payloadType: b },
   { name: "Filters Changed", type: "change", description: "Triggered when a filter selection changes", payloadType: b }
 ];
-var y2 = Object.defineProperty, V2 = Object.getOwnPropertyDescriptor, U = (a, e, c, s) => {
-  for (var n = s > 1 ? void 0 : s ? V2(e, c) : e, v = a.length - 1, h; v >= 0; v--)
-    (h = a[v]) && (n = (s ? h(e, c, n) : h(n)) || n);
-  return s && n && y2(e, c, n), n;
-}, F2 = (a, e) => (c, s) => e(c, s, a);
-const y = "FiltersWidget";
-let V = class {
-  constructor(a) {
-    this.events = a;
+var R2 = Object.defineProperty, V2 = Object.getOwnPropertyDescriptor, T = (r, e, a, i) => {
+  for (var n = i > 1 ? void 0 : i ? V2(e, a) : e, v = r.length - 1, h; v >= 0; v--)
+    (h = r[v]) && (n = (i ? h(e, a, n) : h(n)) || n);
+  return i && n && R2(e, a, n), n;
+}, k2 = (r, e) => (a, i) => e(a, i, r);
+const V = "FiltersWidget";
+let k = class {
+  constructor(r) {
+    this.events = r;
   }
-  type = y;
-  component = _2;
-  settingsComponent = M2;
+  type = V;
+  component = w2;
+  settingsComponent = E2;
   supportedDSTypes = ["xmla"];
-  icon = c2;
+  icon = a2;
   name = "XMLA Filters";
   register() {
-    this.events.registerWidget(y, R2);
+    this.events.registerWidget(V, M2);
   }
   unregister() {
-    this.events.unregisterWidget(y);
+    this.events.unregisterWidget(V);
   }
 };
-U([
+T([
   O()
-], V.prototype, "register", 1);
-U([
+], k.prototype, "register", 1);
+T([
   q()
-], V.prototype, "unregister", 1);
-V = U([
+], k.prototype, "unregister", 1);
+k = T([
   z({
-    service: [a2],
-    properties: { "widget.type": y }
+    service: [r2],
+    properties: { "widget.type": V }
   }),
-  F2(0, G(B))
-], V);
+  k2(0, G(B))
+], k);
 export {
-  _2 as FiltersWidget,
-  V as FiltersWidgetProvider,
-  M2 as FiltersWidgetSettings
+  w2 as FiltersWidget,
+  k as FiltersWidgetProvider,
+  E2 as FiltersWidgetSettings
 };

@@ -147,61 +147,50 @@ const {
 
 const { update } = useDatasourceRepository(datasourceId, 'DataTable', data)
 
-const onRowClick = (e: any) => {
-    emitRowClick(e.itemIndex?.toString() || '');
-};
-
-const onRowRightClick = (e: any) => {
-    emitRowRightClick(e.itemIndex?.toString() || '');
-};
-
-const cellBind = (cell: any, row: any, column: any, rowIndex: number) => {
-    return {
-        onClick: (e: MouseEvent) => {
-            emitCellClick(rowIndex.toString(), column.key || column.name || '');
-        },
-        onContextmenu: (e: MouseEvent) => {
-            emitCellRightClick(rowIndex.toString(), column.key || column.name || '');
-        }
-    };
-};
-
-const extractColIdFromTh = (th: HTMLElement) => {
-    const tr = th.parentElement;
-    if (!tr) return '';
-    const colIndex = Array.prototype.indexOf.call(tr.children, th);
-    const keys = data.value?.items?.[0] ? Object.keys(data.value.items[0]) : [];
-    if (keys[colIndex]) {
-        return keys[colIndex];
-    }
-    return th.textContent?.trim() || '';
-};
-
-const onWrapperClick = (e: MouseEvent) => {
-    const th = (e.target as HTMLElement).closest('th');
-    if (th) {
-        emitColumnClick(extractColIdFromTh(th));
-    }
-};
-
-const onWrapperContextMenu = (e: MouseEvent) => {
-    const th = (e.target as HTMLElement).closest('th');
-    if (th) {
-        emitColumnRightClick(extractColIdFromTh(th));
-    }
-};
+/**
+ * The rows as they arrive, and the columns their first row names.
+ *
+ * The datasource hands back plain records; which columns there are is what
+ * the first one has. Writing the table out means a cell knows its row and
+ * its column - the events below say which was clicked without anything
+ * having to count table cells afterwards.
+ */
+const rows = computed<Record<string, unknown>[]>(() => data.value?.items ?? [])
+const columns = computed<string[]>(() => Object.keys(rows.value[0] ?? {}))
 </script>
 <template>
-    <div class="w-full h-full" @click="emitClick" @contextmenu.prevent="emitRightClick" @click.capture="onWrapperClick" @contextmenu.capture="onWrapperContextMenu">
-        <va-data-table
-            class="table"
-            :items="data ? data.items : []"
-            sticky-header
-            :style="`--va-data-table-thead-background--computed: ${headerBackground};`"
-            @row:click="onRowClick"
-            @row:contextmenu="onRowRightClick"
-            :cell-bind="cellBind"
-        />
+    <div class="w-full h-full" @click="emitClick" @contextmenu.prevent="emitRightClick">
+        <table class="table" :style="{ '--header-background': headerBackground }">
+            <thead>
+                <tr>
+                    <th
+                        v-for="column in columns"
+                        :key="column"
+                        @click="emitColumnClick(column)"
+                        @contextmenu.prevent="emitColumnRightClick(column)"
+                    >
+                        {{ column }}
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr
+                    v-for="(row, rowIndex) in rows"
+                    :key="rowIndex"
+                    @click="emitRowClick(String(rowIndex))"
+                    @contextmenu.prevent="emitRowRightClick(String(rowIndex))"
+                >
+                    <td
+                        v-for="column in columns"
+                        :key="column"
+                        @click="emitCellClick(String(rowIndex), column)"
+                        @contextmenu.prevent="emitCellRightClick(String(rowIndex), column)"
+                    >
+                        {{ row[column] }}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
     </div>
 </template>
 
@@ -236,6 +225,37 @@ const onWrapperContextMenu = (e: MouseEvent) => {
 .table_container .table {
     flex-grow: 1;
     flex-shrink: 1;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: var(--font-sans);
+    font-size: var(--text-sm);
+    color: var(--color-fg);
+}
+
+/* The header stays put while the rows go past it */
+.table th {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    padding: 6px 10px;
+    text-align: left;
+    font-weight: 600;
+    background: var(--header-background, var(--color-raised));
+    border-bottom: 1px solid var(--color-divider);
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.table td {
+    padding: 5px 10px;
+    border-bottom: 1px solid var(--color-divider);
+}
+
+.table tbody tr:hover {
+    background: var(--color-raised);
 }
 
 .loading {
