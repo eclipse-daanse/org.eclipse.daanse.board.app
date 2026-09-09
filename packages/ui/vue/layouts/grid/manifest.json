@@ -58,6 +58,10 @@
     {
       "id": "org.eclipse.daanse.board.app.ui.vue.composables",
       "versionRange": ">=0.0.1-0"
+    },
+    {
+      "id": "org.eclipse.daanse.board.app.ui.vue.controls",
+      "versionRange": ">=0.0.1-0"
     }
   ],
   "capabilities": [
@@ -73,6 +77,7 @@
     "lib.api.layout.page",
     "lib.api.page",
     "platform.vue",
+    "ui.vue.controls",
     "ui.vue.layouts.base",
     "ui.vue.stores.layout",
     "ui.vue.stores.widgets",

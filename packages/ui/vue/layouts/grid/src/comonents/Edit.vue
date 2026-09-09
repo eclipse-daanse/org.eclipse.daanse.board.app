@@ -12,7 +12,7 @@ Contributors:
 -->
 
 <template>
-  <VaScrollContainer class="max-h-screen ml-15" vertical>
+  <div class="scroll max-h-screen ml-15">
     <div ref="wrapper" @dragenter="onDragEnter" @drop.prevent="onDrop" @drag="onDragMove" class="alayout" @click="closeAllContextMenus"
       :style="{ '--grid-row-height': ROW_HEIGHT + 'px', '--grid-cols': currentColCount }"
     >
@@ -48,7 +48,10 @@ Contributors:
             class="widget-context-menu"
             :style="{ left: widgetContextMenu.x + 'px', top: widgetContextMenu.y + 'px' }"
           >
-            <va-button @click="copyWidgetFromMenu" size="small"> Copy </va-button>
+            <DButton intent="quiet" size="sm" class="menu__item" @click="copyWidgetFromMenu">
+              <DIcon name="content_copy" size="sm" />
+              Kopieren
+            </DButton>
           </div>
 
       <!-- Overlay für externes Draggen von Widgets -->
@@ -74,10 +77,13 @@ Contributors:
         class="canvas-context-menu"
         :style="{ left: canvasContextMenu.x + 'px', top: canvasContextMenu.y + 'px' }"
       >
-        <va-button @click="pasteWidgetFromMenu" size="small"> Paste </va-button>
+        <DButton intent="quiet" size="sm" class="menu__item" @click="pasteWidgetFromMenu">
+          <DIcon name="content_paste" size="sm" />
+          Einfügen
+        </DButton>
       </div>
     </div>
-  </VaScrollContainer>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -94,6 +100,7 @@ import { useClipboardStore } from 'org.eclipse.daanse.board.app.ui.vue.layouts.b
 import { BREAKPOINTS, resolveGridSettings } from '../GridSettings'
 import { plainSettings } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import { identifier as PageIdentifier, type PageRegistryI } from 'org.eclipse.daanse.board.app.lib.api.page'
+import { DButton, DIcon } from 'org.eclipse.daanse.board.app.ui.vue.controls'
 
 /** Grid Settings — direkt aus dem Page Repository lesen */
 const layoutSettingsRef = ref<Record<string, any> | undefined>(undefined)
@@ -560,5 +567,21 @@ const openWidgetSettings = (id: string) => {
   padding: 4px;
   box-shadow: var(--shadow-e2);
   z-index: 100000;
+}
+
+/* A row in a menu: the icon, then the word, both left */
+.menu__item {
+  justify-content: flex-start;
+  gap: 7px;
+  white-space: nowrap;
+}
+
+/*
+ * The board scrolls inside the page; main.css paints the bar from the
+ * theme, which is what the third-party container this replaced could not
+ * be told.
+ */
+.scroll {
+  overflow-y: auto;
 }
 </style>

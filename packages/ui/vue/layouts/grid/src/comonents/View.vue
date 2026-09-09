@@ -11,10 +11,7 @@ Contributors:
     Smart City Jena
 -->
 <template>
-  <VaScrollContainer
-    class="max-h-screen ml-15"
-    vertical
-  >
+  <div class="scroll max-h-screen ml-15">
     <div ref="wrapper" class="view_grid_layout">
       <GridLayout ref="gridLayout" :key="gridSettingsKey" v-model:layout="layout" :row-height="ROW_HEIGHT" :responsive="true" :vertical-compact="false" :breakpoints="BREAKPOINTS" :cols="COLS as any" :is-draggable="false" :is-resizable="false">
         <template #item="{ item }">
@@ -27,7 +24,7 @@ Contributors:
         </template>
       </GridLayout>
     </div>
-  </VaScrollContainer>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -195,6 +192,11 @@ let layout = computed(() => (storedLayout.value || []).map(toGrid))
 </script>
 
 <style scoped>
+/* The board scrolls inside the page; main.css paints the bar */
+.scroll {
+  overflow-y: auto;
+}
+
 
 .view_grid_layout{
   padding-left:60px;

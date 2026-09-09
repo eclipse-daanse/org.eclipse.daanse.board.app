@@ -20,6 +20,7 @@ import { DFloatingWindow } from 'org.eclipse.daanse.board.app.ui.vue.controls'
 import { WidgetWrapper,defaultConfig } from 'org.eclipse.daanse.board.app.ui.vue.widget.wrapper'
 import { cloneDeep } from 'lodash'
 import { useRouter, useRoute } from 'vue-router'
+import { DButton, DIcon } from 'org.eclipse.daanse.board.app.ui.vue.controls'
 
 /* ---- snapping ---------------------------------------------------------- */
 
@@ -261,8 +262,31 @@ const onCanvasContextMenu = (event: MouseEvent) => {
   }
 }
 
+/*
+ * The same commands the widget's own hover bar offers, on a right-click.
+ *
+ * Built from stackActions, so the two cannot drift apart - the menu this
+ * replaces listed them a second time in its own words, in English where
+ * the bar says it in German, and without the icons.
+ */
+const widgetContextMenu = ref({ visible: false, x: 0, y: 0, uid: '' })
+
+const openWidgetContextMenu = (uid: string, event: MouseEvent) => {
+  event.preventDefault()
+  event.stopPropagation()
+  const container = (event.currentTarget as HTMLElement).closest('.report-container')
+  const rect = container?.getBoundingClientRect()
+  widgetContextMenu.value = {
+    visible: true,
+    x: event.clientX - (rect?.left ?? 0),
+    y: event.clientY - (rect?.top ?? 0),
+    uid,
+  }
+}
+
 const closeCanvasContextMenu = () => {
   canvasContextMenu.value.visible = false
+  widgetContextMenu.value.visible = false
 }
 
 const pasteWidgetFromMenu = () => {
@@ -666,34 +690,16 @@ const change = (e: any) => {
           @pointerenter="hovered = widget.uid"
           @pointerleave="hovered = hovered === widget.uid ? null : hovered"
         >
-          <va-dropdown
-            :trigger="'right-click'"
-            :auto-placement="false"
-            placement="right-start"
-            cursor
-          >
-            <template #anchor>
-              <div class="dashboard-item" @contextmenu.stop>
-                <WidgetWrapper
-                  :widget="widget"
-                  :ref="`${widget.uid}_wrapper`"
-                  :extra-actions="stackActions(widget.uid)"
-                  @openSettings="openWidgetSettings"
-                  editEnabled
-                  @removeWidget="removeWidget"
-                />
-              </div>
-            </template>
-            <va-dropdown-content>
-              <div class="dropdown-buttons-container">
-                <va-button @click="moveUp(widget.uid)"> Move up </va-button>
-                <va-button @click="moveDown(widget.uid)"> Move down </va-button>
-                <va-button @click="moveToTop(widget.uid)"> Move to top </va-button>
-                <va-button @click="moveToBottom(widget.uid)"> Move to bottom </va-button>
-                <va-button @click="copyWidget(widget.uid)"> Copy </va-button>
-              </div>
-            </va-dropdown-content>
-          </va-dropdown>
+          <div class="dashboard-item" @contextmenu="openWidgetContextMenu(widget.uid, $event)">
+            <WidgetWrapper
+              :widget="widget"
+              :ref="`${widget.uid}_wrapper`"
+              :extra-actions="stackActions(widget.uid)"
+              @openSettings="openWidgetSettings"
+              editEnabled
+              @removeWidget="removeWidget"
+            />
+          </div>
         </div>
         <!-- One widget keeps its own handles; from two the group takes over -->
         <Moveable
@@ -844,6 +850,27 @@ const change = (e: any) => {
         </button>
       </div>
 
+      <!-- What can be done with the widget that was right-clicked -->
+      <div
+        v-if="widgetContextMenu.visible"
+        class="canvas-context-menu"
+        :style="{ left: widgetContextMenu.x + 'px', top: widgetContextMenu.y + 'px' }"
+      >
+        <div class="dropdown-buttons-container">
+          <DButton
+            v-for="action in stackActions(widgetContextMenu.uid)"
+            :key="action.id"
+            intent="quiet"
+            size="sm"
+            class="menu__item"
+            @click="action.run(); closeCanvasContextMenu()"
+          >
+            <DIcon :name="action.icon" size="sm" />
+            {{ action.label }}
+          </DButton>
+        </div>
+      </div>
+
       <!-- Canvas Context Menu (floating) for Paste -->
       <div
         v-if="canvasContextMenu.visible && clipboardStore.hasClipboard"
@@ -851,7 +878,10 @@ const change = (e: any) => {
         :style="{ left: canvasContextMenu.x + 'px', top: canvasContextMenu.y + 'px' }"
       >
         <div class="dropdown-buttons-container">
-          <va-button @click="pasteWidgetFromMenu" size="small"> Paste </va-button>
+          <DButton intent="quiet" size="sm" class="menu__item" @click="pasteWidgetFromMenu">
+            <DIcon name="content_paste" size="sm" />
+            Einfügen
+          </DButton>
         </div>
       </div><!-- end canvas-context-menu -->
       </div><!-- end widget-board -->
@@ -1011,8 +1041,15 @@ const change = (e: any) => {
 .dropdown-buttons-container {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 2px;
   z-index: 99999;
+}
+
+/* A row in a menu: the icon, then the word, both left */
+.menu__item {
+  justify-content: flex-start;
+  gap: 7px;
+  white-space: nowrap;
 }
 
 /*
@@ -1131,9 +1168,6 @@ const change = (e: any) => {
   z-index: 10000001;
 }
 
-.va-dropdown__content {
-  z-index: 10000000 !important;
-}
 
 .va-dropdown__content.va-select-dropdown__content.va-dropdown__content-wrapper {
   z-index: 20000000 !important;
