@@ -1,0 +1,38 @@
+// Operator precedence torture test, plus the set operators and the
+// navigation/aggregation functions catalogued in MDX-specs.md.
+WITH
+    MEMBER [Measures].[Power] AS 2 ^ 3 ^ 2
+    MEMBER [Measures].[Mixed] AS 1 + 2 * 3 - 4 / 5 ^ 6
+    MEMBER [Measures].[Negated] AS NOT [Measures].[A] = [Measures].[B]
+    MEMBER [Measures].[Chained] AS
+        [Measures].[A] > 1 AND [Measures].[B] < 2 XOR NOT [Measures].[C] >= 3 OR [Measures].[D] <> 4
+    MEMBER [Measures].[Identity] AS
+        IIF([Date].[Calendar].CurrentMember IS [Date].[Calendar].[All Periods], 1, 0)
+    MEMBER [Measures].[Root] AS [Measures].[Variance] ^ 0.5
+    MEMBER [Measures].[Concat] AS "Total: " + [Date].[Calendar].CurrentMember.Name
+    MEMBER [Measures].[Typed] AS
+        [Customer].[Customer].CurrentMember.Properties("Yearly Income", TYPED) * 1.0
+    MEMBER [Measures].[Lookup] AS
+        LookupCube("Budget", "([Measures].[Amount], " + [Date].[Calendar].CurrentMember.UniqueName + ")")
+    MEMBER [Measures].[Kpi] AS KPIValue("Revenue") / KPIGoal("Revenue")
+    MEMBER [Measures].[Pass] AS CalculationPassValue([Measures].[Amount], CalculationCurrentPass() - 1)
+    MEMBER [Measures].[Regression] AS
+        LinRegIntercept([Date].[Calendar].[Month].Members, [Measures].[Amount], [Measures].[Units])
+    SET [Range] AS [Date].[Year].[2023] : [Date].[Year].[2026]
+    SET [Crossed] AS {[Product].[Category].Members} * {[Date].[Year].Members}
+    SET [Merged] AS {[A].[X]} + {[A].[Y]} - {[A].[Z]}
+    SET [Narrowed] AS Filter(EXISTING [Customer].[Customer].Members, [Measures].[Amount] > 0)
+    SET [Ranked] AS Order([Product].[Product].Members, [Measures].[Amount], BDESC)
+    SET [Totals] AS VisualTotals({[Geography].[Country].Members}, "* (Visual Total)")
+    SET [Rolled] AS RollupChildren([Account].[Accounts].CurrentMember, "~")
+    SET [Deep] AS Descendants([Date].[Calendar].[CY 2003], [Date].[Calendar].[Month], SELF_AND_BEFORE)
+    SET [Ends] AS ClosingPeriod([Date].[Calendar].[Month], [Date].[Calendar].CurrentMember)
+    SET [Up] AS Ancestor([Geography].[Geography].CurrentMember, 2)
+    SET [Stats] AS
+        {Avg([Range]), Max([Range]), Min([Range]), Median([Range]),
+         Stdev([Range]), StdevP([Range]), Var([Range]), VarP([Range]),
+         DistinctCount([Range])}
+SELECT
+    {[Measures].[Power], [Measures].[Mixed]} ON AXIS(0),
+    [Range] ON AXIS(1)
+FROM [Adventure Works]
