@@ -168,6 +168,7 @@ import {
   DInput,
   DSelect,
 } from 'org.eclipse.daanse.board.app.ui.vue.controls'
+import { TimelinesettingsFactory } from './gen/TimelinesettingsFactory';
 
 const i18n: i18n | undefined = inject('i18n');
 const t = (key: string) => (i18n) ? i18n.t(key) : key;
@@ -494,8 +495,102 @@ const onSettingsChange = () => {
     showControls: settings.value.showControls
   };
 
-  Object.assign(widgetSettings.value, updatedSettings);
+  writeBack(updatedSettings);
 };
+
+/**
+ * The draft always has relative-time settings, even when the widget's
+ * configuration does not.
+ *
+ * The configuration is read through toJSON, which reports every feature
+ * including the ones never set - so a widget that has never been switched
+ * to a relative range hands back `relativeTime: undefined`, and copying
+ * that into the draft takes away the object the form writes into. The
+ * three fields are what the form offers; the model learns about them the
+ * moment someone switches the mode.
+ */
+function ensureDraftRelativeTime(): RelativeTimeConfig {
+  if (!settings.value.relativeTime) {
+    settings.value.relativeTime = { enabled: false, offset: 24, unit: 'hours' }
+  }
+  return settings.value.relativeTime
+}
+
+/**
+ * The features this form owns, by the names the model gives them.
+ *
+ * Listed rather than derived: the draft above is a plain object and can
+ * pick up keys from a board saved before this widget was modelled, and
+ * those must not be written back as if the model knew about them.
+ */
+const FEATURES = [
+  'timelineMin',
+  'timelineMax',
+  'rangeStart',
+  'rangeEnd',
+  'rangeStartVariable',
+  'rangeEndVariable',
+  'startTime',
+  'endTime',
+  'currentTime',
+  'stepSize',
+  'playbackSpeed',
+  'autoPlay',
+  'fixStartKnob',
+  'showControls',
+  'rangeStripColor',
+  'showTimeInfo',
+] as const
+
+/**
+ * The draft, written into the widget's configuration.
+ *
+ * Not Object.assign: the draft is a plain object while the configuration
+ * is a generated instance, and assigning the whole bag put a plain object
+ * where the model declares a contained one. Everything that walks the
+ * model afterwards - the form rendered beside this, the overlay's undo -
+ * then met something that could not say what it was, and asked it for
+ * eAllContents.
+ *
+ * So each feature is written by name, and the nested one is written into
+ * the object that is already there.
+ */
+function writeBack(draft: TimelineSettings) {
+  const target = widgetSettings.value as unknown as Record<string, unknown>
+
+  for (const name of FEATURES) {
+    const value = draft[name]
+    if (value !== undefined) target[name] = value
+  }
+
+  const relative = draft.relativeTime
+  if (!relative) return
+
+  const held = relativeTimeIn(target)
+  held.enabled = relative.enabled
+  held.offset = relative.offset
+  held.unit = relative.unit
+}
+
+/**
+ * The contained relative-time settings, built if the configuration has
+ * none yet - through the factory when the configuration is a modelled
+ * instance, as a plain object when it is a board saved before that.
+ */
+function relativeTimeIn(target: Record<string, unknown>): RelativeTimeConfig {
+  const held = target.relativeTime as RelativeTimeConfig | undefined
+  if (held) return held
+
+  const modelled = typeof (target as { eClass?: unknown }).eClass === 'function'
+  const created = (
+    modelled
+      ? TimelinesettingsFactory.eINSTANCE.createRelativeTimeConfig()
+      : { enabled: false, offset: 24, unit: 'hours' }
+  ) as unknown as RelativeTimeConfig
+
+  target.relativeTime = created
+  return created
+}
 
 const onTimelineEndTypeChange = () => {
   if (useCurrentTimeAsMax.value) {
@@ -559,16 +654,8 @@ onMounted(() => {
     useStartVariable.value = !!widgetSettings.value.rangeStartVariable;
     useEndVariable.value = !!widgetSettings.value.rangeEndVariable;
 
-    if (!settings.value.relativeTime) {
-      settings.value.relativeTime = {
-        enabled: false,
-        offset: 24,
-        unit: 'hours'
-      };
-    }
-
     // Set time range mode based on relativeTime.enabled
-    timeRangeMode.value = settings.value.relativeTime.enabled ? 'relative' : 'absolute';
+    timeRangeMode.value = ensureDraftRelativeTime().enabled ? 'relative' : 'absolute';
 
     if (settings.value.timelineMin) {
       const minDate = new Date(settings.value.timelineMin);
@@ -591,6 +678,7 @@ onMounted(() => {
 watch(() => widgetSettings.value, (newSettings) => {
   if (newSettings) {
     Object.assign(settings.value, plainSettings(newSettings));
+    ensureDraftRelativeTime();
     useCurrentTimeAsMax.value = !newSettings.timelineMax;
     if (newSettings.relativeTime) {
       timeRangeMode.value = newSettings.relativeTime.enabled ? 'relative' : 'absolute';
