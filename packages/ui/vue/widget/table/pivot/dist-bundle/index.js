@@ -1,14 +1,15 @@
-(function(){var i="ui.vue.widget.table.pivot",d=document,s=d.querySelector('style[data-tsm-bundle="'+i+'"]');if(!s){s=d.createElement('style');s.setAttribute('data-tsm-bundle',i);d.head.appendChild(s);}s.textContent=".text-container[data-v-498e0ac7]{display:flex;flex-direction:column;width:100%;height:100%;gap:1rem;align-items:stretch}.component[data-v-498e0ac7]{overflow:hidden;padding:16px}.settings-container[data-v-6b0d43bf]{padding:16px}.settings-block[data-v-6b0d43bf]{display:flex;flex-direction:column;gap:12px;margin-bottom:16px}.settings-block[data-v-6b0d43bf]:last-child{margin-bottom:0}.settings-block h3[data-v-6b0d43bf]{margin:0 0 8px;font-size:14px;font-weight:600;color:var(--va-primary)}.hint-text[data-v-6b0d43bf]{margin:0 0 16px;color:var(--va-text-secondary);font-size:13px}.level-header[data-v-6b0d43bf]{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;font-weight:600}.level-card[data-v-6b0d43bf]{border:1px solid #ddd;padding:16px;border-radius:4px;margin-bottom:12px;background:#fafafa;display:flex;flex-direction:column;gap:12px}.level-card-header[data-v-6b0d43bf]{display:flex;justify-content:space-between;align-items:center}.empty-state[data-v-6b0d43bf]{padding:20px;text-align:center;color:var(--va-text-secondary);background:#f5f5f5;border-radius:4px}.color-scale-row[data-v-6b0d43bf]{display:flex;gap:12px}.color-scale-row[data-v-6b0d43bf]>*{flex:1}\n";})();
-import { PayloadImpl as Le, WidgetActionInterfaceImpl as Fe, EVENT_REGISTRY_ID as Ue, EVENT_ACTIONS_REGISTRY_ID as Be } from "org.eclipse.daanse.board.app.lib.api.events";
-import { activate as We, deactivate as xe, component as He, inject as me } from "@eclipse-daanse/tsm";
-import { defineComponent as ve, mergeModels as Me, toRefs as be, inject as ke, useModel as De, onMounted as Ge, computed as F, ref as Ie, watch as Re, createElementBlock as B, openBlock as R, withModifiers as Ye, createElementVNode as C, createBlock as Ce, createCommentVNode as Q, unref as y, resolveComponent as ae, Fragment as ge, createVNode as d, withCtx as p, createTextVNode as ie, renderList as Te, toDisplayString as pe } from "vue";
-import { VariableWrapper as c, useVariableRepository as Xe, plainSettings as Ae, useDatasourceRepository as Ke } from "org.eclipse.daanse.board.app.ui.vue.composables";
-import { PivotTable as qe } from "org.eclipse.daanse.board.app.ui.vue.common.xmla";
-import { BasicEObject as fe, BasicEFactory as ze, BasicEPackage as Ze, EPackageRegistry as Ve, BasicEClass as P, BasicEReference as S, BasicEAttribute as v, getEcorePackage as D, createContainmentEList as ne } from "@emfts/core";
-import { VariableInput as U } from "org.eclipse.daanse.board.app.ui.vue.variable.components";
-import { WIDGET_SERVICE_ID as Qe } from "org.eclipse.daanse.board.app.lib.api.widget";
-const { identifiers: Je } = __tsm__.require("org.eclipse.daanse.board.app.lib.core"), je = "data:image/svg+xml,%3csvg%20width='120'%20height='120'%20viewBox='0%200%20120%20120'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cpath%20fill-rule='evenodd'%20clip-rule='evenodd'%20d='M105%207.5H15C10.8579%207.5%207.5%2010.8579%207.5%2015V105C7.5%20109.142%2010.8579%20112.5%2015%20112.5H105C109.142%20112.5%20112.5%20109.142%20112.5%20105V15C112.5%2010.8579%20109.142%207.5%20105%207.5ZM15%200C6.71573%200%200%206.71573%200%2015V105C0%20113.284%206.71573%20120%2015%20120H105C113.284%20120%20120%20113.284%20120%20105V15C120%206.71573%20113.284%200%20105%200H15Z'%20fill='%23606060'/%3e%3cpath%20d='M22.5%2048C22.5%2046.3431%2023.8431%2045%2025.5%2045H34.5C36.1569%2045%2037.5%2046.3431%2037.5%2048V94.5C37.5%2096.1569%2036.1569%2097.5%2034.5%2097.5H25.5C23.8431%2097.5%2022.5%2096.1569%2022.5%2094.5V48Z'%20fill='%23606060'/%3e%3cpath%20d='M45%2025.5C45%2023.8431%2046.3431%2022.5%2048%2022.5H94.5C96.1569%2022.5%2097.5%2023.8431%2097.5%2025.5V34.5C97.5%2036.1569%2096.1569%2037.5%2094.5%2037.5H48C46.3431%2037.5%2045%2036.1569%2045%2034.5V25.5Z'%20fill='%23606060'/%3e%3cpath%20d='M37.5%2025.5C37.5%2023.8431%2036.1569%2022.5%2034.5%2022.5H25.5C23.8431%2022.5%2022.5%2023.8431%2022.5%2025.5V34.5C22.5%2036.1569%2023.8431%2037.5%2025.5%2037.5H34.5C36.1569%2037.5%2037.5%2036.1569%2037.5%2034.5V25.5Z'%20fill='%23606060'/%3e%3cpath%20d='M57.4399%2077.5607C58.3849%2076.6157%2060.0006%2077.285%2060.0006%2078.6213V84C60.0006%2084.8284%2060.6722%2085.5%2061.5006%2085.5H84C84.8284%2085.5%2085.5%2084.8284%2085.5%2084V61.5C85.5%2060.6716%2084.8284%2060%2084%2060H78.6214C77.285%2060%2076.6158%2058.3843%2077.5608%2057.4393L88.9399%2046.0606C89.5257%2045.4749%2090.4755%2045.4749%2091.0612%2046.0607L102.439%2057.4394C103.384%2058.3843%20102.715%2060%20101.379%2060H96C95.1716%2060%2094.5%2060.6716%2094.5%2061.5V93C94.5%2093.8284%2093.8284%2094.5%2093%2094.5H61.5006C60.6722%2094.5%2060.0006%2095.1716%2060.0006%2096V101.379C60.0006%20102.715%2058.3849%20103.384%2057.44%20102.44L46.0607%2091.0613C45.4749%2090.4755%2045.4749%2089.5257%2046.0607%2088.9399L57.4399%2077.5607Z'%20fill='%23606060'/%3e%3c/svg%3e";
-class O extends fe {
+(function(){var i="ui.vue.widget.table.pivot",d=document,s=d.querySelector('style[data-tsm-bundle="'+i+'"]');if(!s){s=d.createElement('style');s.setAttribute('data-tsm-bundle',i);d.head.appendChild(s);}s.textContent=".text-container[data-v-498e0ac7]{display:flex;flex-direction:column;width:100%;height:100%;gap:1rem;align-items:stretch}.component[data-v-498e0ac7]{overflow:hidden;padding:16px}.settings-container[data-v-e490bb89]{padding:16px}.settings-block[data-v-e490bb89]{display:flex;flex-direction:column;gap:12px;margin-bottom:16px}.settings-block[data-v-e490bb89]:last-child{margin-bottom:0}.settings-block h3[data-v-e490bb89]{margin:0 0 8px;font-size:14px;font-weight:600;color:var(--va-primary)}.hint-text[data-v-e490bb89]{margin:0 0 16px;color:var(--va-text-secondary);font-size:13px}.level-header[data-v-e490bb89]{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;font-weight:600}.level-card[data-v-e490bb89]{border:1px solid #ddd;padding:16px;border-radius:4px;margin-bottom:12px;background:#fafafa;display:flex;flex-direction:column;gap:12px}.level-card-header[data-v-e490bb89]{display:flex;justify-content:space-between;align-items:center}.empty-state[data-v-e490bb89]{padding:20px;text-align:center;color:var(--va-text-secondary);background:#f5f5f5;border-radius:4px}.color-scale-row[data-v-e490bb89]{display:flex;gap:12px}.color-scale-row[data-v-e490bb89]>*{flex:1}\n";})();
+import { PayloadImpl as Te, WidgetActionInterfaceImpl as We, EVENT_REGISTRY_ID as xe, EVENT_ACTIONS_REGISTRY_ID as He } from "org.eclipse.daanse.board.app.lib.api.events";
+import { activate as Me, deactivate as be, component as ke, inject as we } from "@eclipse-daanse/tsm";
+import { defineComponent as ye, mergeModels as Ge, toRefs as Ye, inject as Xe, useModel as Ue, onMounted as Ke, computed as U, ref as qe, watch as De, createElementBlock as W, openBlock as w, withModifiers as ze, createElementVNode as _, createBlock as Oe, createCommentVNode as Q, unref as u, Fragment as Le, createVNode as c, withCtx as f, createTextVNode as ne, renderList as fe, toDisplayString as Ne } from "vue";
+import { VariableWrapper as h, useVariableRepository as Ze, plainSettings as ve, useDatasourceRepository as Je } from "org.eclipse.daanse.board.app.ui.vue.composables";
+import { PivotTable as Qe } from "org.eclipse.daanse.board.app.ui.vue.common.xmla";
+import { BasicEObject as me, BasicEFactory as je, BasicEPackage as $e, EPackageRegistry as Fe, BasicEClass as te, BasicEReference as N, BasicEAttribute as v, getEcorePackage as V, createContainmentEList as ue } from "@emfts/core";
+import { VariableInput as A } from "org.eclipse.daanse.board.app.ui.vue.variable.components";
+import { DCheckbox as Se, DColorInput as F, DInput as B, DSelect as Ve, DButton as de } from "org.eclipse.daanse.board.app.ui.vue.controls";
+import { WIDGET_SERVICE_ID as et } from "org.eclipse.daanse.board.app.lib.api.widget";
+const { identifiers: Pe } = __tsm__.require("org.eclipse.daanse.board.app.lib.core"), tt = "data:image/svg+xml,%3csvg%20width='120'%20height='120'%20viewBox='0%200%20120%20120'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cpath%20fill-rule='evenodd'%20clip-rule='evenodd'%20d='M105%207.5H15C10.8579%207.5%207.5%2010.8579%207.5%2015V105C7.5%20109.142%2010.8579%20112.5%2015%20112.5H105C109.142%20112.5%20112.5%20109.142%20112.5%20105V15C112.5%2010.8579%20109.142%207.5%20105%207.5ZM15%200C6.71573%200%200%206.71573%200%2015V105C0%20113.284%206.71573%20120%2015%20120H105C113.284%20120%20120%20113.284%20120%20105V15C120%206.71573%20113.284%200%20105%200H15Z'%20fill='%23606060'/%3e%3cpath%20d='M22.5%2048C22.5%2046.3431%2023.8431%2045%2025.5%2045H34.5C36.1569%2045%2037.5%2046.3431%2037.5%2048V94.5C37.5%2096.1569%2036.1569%2097.5%2034.5%2097.5H25.5C23.8431%2097.5%2022.5%2096.1569%2022.5%2094.5V48Z'%20fill='%23606060'/%3e%3cpath%20d='M45%2025.5C45%2023.8431%2046.3431%2022.5%2048%2022.5H94.5C96.1569%2022.5%2097.5%2023.8431%2097.5%2025.5V34.5C97.5%2036.1569%2096.1569%2037.5%2094.5%2037.5H48C46.3431%2037.5%2045%2036.1569%2045%2034.5V25.5Z'%20fill='%23606060'/%3e%3cpath%20d='M37.5%2025.5C37.5%2023.8431%2036.1569%2022.5%2034.5%2022.5H25.5C23.8431%2022.5%2022.5%2023.8431%2022.5%2025.5V34.5C22.5%2036.1569%2023.8431%2037.5%2025.5%2037.5H34.5C36.1569%2037.5%2037.5%2036.1569%2037.5%2034.5V25.5Z'%20fill='%23606060'/%3e%3cpath%20d='M57.4399%2077.5607C58.3849%2076.6157%2060.0006%2077.285%2060.0006%2078.6213V84C60.0006%2084.8284%2060.6722%2085.5%2061.5006%2085.5H84C84.8284%2085.5%2085.5%2084.8284%2085.5%2084V61.5C85.5%2060.6716%2084.8284%2060%2084%2060H78.6214C77.285%2060%2076.6158%2058.3843%2077.5608%2057.4393L88.9399%2046.0606C89.5257%2045.4749%2090.4755%2045.4749%2091.0612%2046.0607L102.439%2057.4394C103.384%2058.3843%20102.715%2060%20101.379%2060H96C95.1716%2060%2094.5%2060.6716%2094.5%2061.5V93C94.5%2093.8284%2093.8284%2094.5%2093%2094.5H61.5006C60.6722%2094.5%2060.0006%2095.1716%2060.0006%2096V101.379C60.0006%20102.715%2058.3849%20103.384%2057.44%20102.44L46.0607%2091.0613C45.4749%2090.4755%2045.4749%2089.5257%2046.0607%2088.9399L57.4399%2077.5607Z'%20fill='%23606060'/%3e%3c/svg%3e";
+class O extends me {
   // Feature ID Constants (eLiterals)
   static LEVEL = 0;
   static BACKGROUND_COLOR = 1;
@@ -16,14 +17,14 @@ class O extends fe {
   static FONT_WEIGHT = 3;
   // Private fields
   _level;
-  _backgroundColor = new c();
-  _textColor = new c();
+  _backgroundColor = new h();
+  _textColor = new h();
   _fontWeight = 600;
   /**
    * Returns the EClass of this object
    */
   eClass() {
-    return o.Literals.LEVEL_STYLE;
+    return l.Literals.LEVEL_STYLE;
   }
   // Getters and Setters
   get level() {
@@ -153,9 +154,9 @@ class O extends fe {
       case O.LEVEL:
         return this._level !== void 0;
       case O.BACKGROUND_COLOR:
-        return this._backgroundColor !== new c();
+        return this._backgroundColor !== new h();
       case O.TEXT_COLOR:
-        return this._textColor !== new c();
+        return this._textColor !== new h();
       case O.FONT_WEIGHT:
         return this._fontWeight !== 600;
       default:
@@ -171,10 +172,10 @@ class O extends fe {
         this._level = void 0;
         return;
       case O.BACKGROUND_COLOR:
-        this._backgroundColor = new c();
+        this._backgroundColor = new h();
         return;
       case O.TEXT_COLOR:
-        this._textColor = new c();
+        this._textColor = new h();
         return;
       case O.FONT_WEIGHT:
         this._fontWeight = 600;
@@ -199,7 +200,7 @@ class O extends fe {
     };
   }
 }
-class i extends fe {
+class n extends me {
   // Feature ID Constants (eLiterals)
   static ID = 0;
   static CONDITION_TYPE = 1;
@@ -217,16 +218,16 @@ class i extends fe {
   _priority;
   _value1 = "0";
   _value2 = "100";
-  _backgroundColor = new c();
-  _textColor = new c();
-  _minColor = new c();
-  _maxColor = new c();
+  _backgroundColor = new h();
+  _textColor = new h();
+  _minColor = new h();
+  _maxColor = new h();
   _fontWeight = 400;
   /**
    * Returns the EClass of this object
    */
   eClass() {
-    return o.Literals.CONDITIONAL_FORMAT;
+    return l.Literals.CONDITIONAL_FORMAT;
   }
   // Getters and Setters
   get id() {
@@ -238,14 +239,14 @@ class i extends fe {
       getNotifier: () => this,
       getEventType: () => 1,
       // SET
-      getFeature: () => this.eClass().getEStructuralFeature(i.ID),
+      getFeature: () => this.eClass().getEStructuralFeature(n.ID),
       getOldValue: () => t,
       getNewValue: () => e,
       getPosition: () => -1,
       wasSet: () => !0,
       isTouch: () => !1,
       isReset: () => !1,
-      getFeatureID: () => i.ID,
+      getFeatureID: () => n.ID,
       merge: () => !1
     });
   }
@@ -258,14 +259,14 @@ class i extends fe {
       getNotifier: () => this,
       getEventType: () => 1,
       // SET
-      getFeature: () => this.eClass().getEStructuralFeature(i.CONDITION_TYPE),
+      getFeature: () => this.eClass().getEStructuralFeature(n.CONDITION_TYPE),
       getOldValue: () => t,
       getNewValue: () => e,
       getPosition: () => -1,
       wasSet: () => !0,
       isTouch: () => !1,
       isReset: () => !1,
-      getFeatureID: () => i.CONDITION_TYPE,
+      getFeatureID: () => n.CONDITION_TYPE,
       merge: () => !1
     });
   }
@@ -278,14 +279,14 @@ class i extends fe {
       getNotifier: () => this,
       getEventType: () => 1,
       // SET
-      getFeature: () => this.eClass().getEStructuralFeature(i.PRIORITY),
+      getFeature: () => this.eClass().getEStructuralFeature(n.PRIORITY),
       getOldValue: () => t,
       getNewValue: () => e,
       getPosition: () => -1,
       wasSet: () => !0,
       isTouch: () => !1,
       isReset: () => !1,
-      getFeatureID: () => i.PRIORITY,
+      getFeatureID: () => n.PRIORITY,
       merge: () => !1
     });
   }
@@ -298,14 +299,14 @@ class i extends fe {
       getNotifier: () => this,
       getEventType: () => 1,
       // SET
-      getFeature: () => this.eClass().getEStructuralFeature(i.VALUE1),
+      getFeature: () => this.eClass().getEStructuralFeature(n.VALUE1),
       getOldValue: () => t,
       getNewValue: () => e,
       getPosition: () => -1,
       wasSet: () => !0,
       isTouch: () => !1,
       isReset: () => !1,
-      getFeatureID: () => i.VALUE1,
+      getFeatureID: () => n.VALUE1,
       merge: () => !1
     });
   }
@@ -318,14 +319,14 @@ class i extends fe {
       getNotifier: () => this,
       getEventType: () => 1,
       // SET
-      getFeature: () => this.eClass().getEStructuralFeature(i.VALUE2),
+      getFeature: () => this.eClass().getEStructuralFeature(n.VALUE2),
       getOldValue: () => t,
       getNewValue: () => e,
       getPosition: () => -1,
       wasSet: () => !0,
       isTouch: () => !1,
       isReset: () => !1,
-      getFeatureID: () => i.VALUE2,
+      getFeatureID: () => n.VALUE2,
       merge: () => !1
     });
   }
@@ -338,14 +339,14 @@ class i extends fe {
       getNotifier: () => this,
       getEventType: () => 1,
       // SET
-      getFeature: () => this.eClass().getEStructuralFeature(i.BACKGROUND_COLOR),
+      getFeature: () => this.eClass().getEStructuralFeature(n.BACKGROUND_COLOR),
       getOldValue: () => t,
       getNewValue: () => e,
       getPosition: () => -1,
       wasSet: () => !0,
       isTouch: () => !1,
       isReset: () => !1,
-      getFeatureID: () => i.BACKGROUND_COLOR,
+      getFeatureID: () => n.BACKGROUND_COLOR,
       merge: () => !1
     });
   }
@@ -358,14 +359,14 @@ class i extends fe {
       getNotifier: () => this,
       getEventType: () => 1,
       // SET
-      getFeature: () => this.eClass().getEStructuralFeature(i.TEXT_COLOR),
+      getFeature: () => this.eClass().getEStructuralFeature(n.TEXT_COLOR),
       getOldValue: () => t,
       getNewValue: () => e,
       getPosition: () => -1,
       wasSet: () => !0,
       isTouch: () => !1,
       isReset: () => !1,
-      getFeatureID: () => i.TEXT_COLOR,
+      getFeatureID: () => n.TEXT_COLOR,
       merge: () => !1
     });
   }
@@ -378,14 +379,14 @@ class i extends fe {
       getNotifier: () => this,
       getEventType: () => 1,
       // SET
-      getFeature: () => this.eClass().getEStructuralFeature(i.MIN_COLOR),
+      getFeature: () => this.eClass().getEStructuralFeature(n.MIN_COLOR),
       getOldValue: () => t,
       getNewValue: () => e,
       getPosition: () => -1,
       wasSet: () => !0,
       isTouch: () => !1,
       isReset: () => !1,
-      getFeatureID: () => i.MIN_COLOR,
+      getFeatureID: () => n.MIN_COLOR,
       merge: () => !1
     });
   }
@@ -398,14 +399,14 @@ class i extends fe {
       getNotifier: () => this,
       getEventType: () => 1,
       // SET
-      getFeature: () => this.eClass().getEStructuralFeature(i.MAX_COLOR),
+      getFeature: () => this.eClass().getEStructuralFeature(n.MAX_COLOR),
       getOldValue: () => t,
       getNewValue: () => e,
       getPosition: () => -1,
       wasSet: () => !0,
       isTouch: () => !1,
       isReset: () => !1,
-      getFeatureID: () => i.MAX_COLOR,
+      getFeatureID: () => n.MAX_COLOR,
       merge: () => !1
     });
   }
@@ -418,14 +419,14 @@ class i extends fe {
       getNotifier: () => this,
       getEventType: () => 1,
       // SET
-      getFeature: () => this.eClass().getEStructuralFeature(i.FONT_WEIGHT),
+      getFeature: () => this.eClass().getEStructuralFeature(n.FONT_WEIGHT),
       getOldValue: () => t,
       getNewValue: () => e,
       getPosition: () => -1,
       wasSet: () => !0,
       isTouch: () => !1,
       isReset: () => !1,
-      getFeatureID: () => i.FONT_WEIGHT,
+      getFeatureID: () => n.FONT_WEIGHT,
       merge: () => !1
     });
   }
@@ -435,25 +436,25 @@ class i extends fe {
    */
   eGet(e) {
     switch (this.eClass().getFeatureID(e)) {
-      case i.ID:
+      case n.ID:
         return this.id;
-      case i.CONDITION_TYPE:
+      case n.CONDITION_TYPE:
         return this.conditionType;
-      case i.PRIORITY:
+      case n.PRIORITY:
         return this.priority;
-      case i.VALUE1:
+      case n.VALUE1:
         return this.value1;
-      case i.VALUE2:
+      case n.VALUE2:
         return this.value2;
-      case i.BACKGROUND_COLOR:
+      case n.BACKGROUND_COLOR:
         return this.backgroundColor;
-      case i.TEXT_COLOR:
+      case n.TEXT_COLOR:
         return this.textColor;
-      case i.MIN_COLOR:
+      case n.MIN_COLOR:
         return this.minColor;
-      case i.MAX_COLOR:
+      case n.MAX_COLOR:
         return this.maxColor;
-      case i.FONT_WEIGHT:
+      case n.FONT_WEIGHT:
         return this.fontWeight;
       default:
         return super.eGet(e);
@@ -464,34 +465,34 @@ class i extends fe {
    */
   eSet(e, t) {
     switch (this.eClass().getFeatureID(e)) {
-      case i.ID:
+      case n.ID:
         this.id = t, super.eSet(e, t);
         break;
-      case i.CONDITION_TYPE:
+      case n.CONDITION_TYPE:
         this.conditionType = t, super.eSet(e, t);
         break;
-      case i.PRIORITY:
+      case n.PRIORITY:
         this.priority = t, super.eSet(e, t);
         break;
-      case i.VALUE1:
+      case n.VALUE1:
         this.value1 = t, super.eSet(e, t);
         break;
-      case i.VALUE2:
+      case n.VALUE2:
         this.value2 = t, super.eSet(e, t);
         break;
-      case i.BACKGROUND_COLOR:
+      case n.BACKGROUND_COLOR:
         this.backgroundColor = t, super.eSet(e, t);
         break;
-      case i.TEXT_COLOR:
+      case n.TEXT_COLOR:
         this.textColor = t, super.eSet(e, t);
         break;
-      case i.MIN_COLOR:
+      case n.MIN_COLOR:
         this.minColor = t, super.eSet(e, t);
         break;
-      case i.MAX_COLOR:
+      case n.MAX_COLOR:
         this.maxColor = t, super.eSet(e, t);
         break;
-      case i.FONT_WEIGHT:
+      case n.FONT_WEIGHT:
         this.fontWeight = t, super.eSet(e, t);
         break;
       default:
@@ -503,25 +504,25 @@ class i extends fe {
    */
   eIsSet(e) {
     switch (this.eClass().getFeatureID(e)) {
-      case i.ID:
+      case n.ID:
         return this._id !== void 0;
-      case i.CONDITION_TYPE:
+      case n.CONDITION_TYPE:
         return this._conditionType !== "greaterThan";
-      case i.PRIORITY:
+      case n.PRIORITY:
         return this._priority !== void 0;
-      case i.VALUE1:
+      case n.VALUE1:
         return this._value1 !== "0";
-      case i.VALUE2:
+      case n.VALUE2:
         return this._value2 !== "100";
-      case i.BACKGROUND_COLOR:
-        return this._backgroundColor !== new c();
-      case i.TEXT_COLOR:
-        return this._textColor !== new c();
-      case i.MIN_COLOR:
-        return this._minColor !== new c();
-      case i.MAX_COLOR:
-        return this._maxColor !== new c();
-      case i.FONT_WEIGHT:
+      case n.BACKGROUND_COLOR:
+        return this._backgroundColor !== new h();
+      case n.TEXT_COLOR:
+        return this._textColor !== new h();
+      case n.MIN_COLOR:
+        return this._minColor !== new h();
+      case n.MAX_COLOR:
+        return this._maxColor !== new h();
+      case n.FONT_WEIGHT:
         return this._fontWeight !== 400;
       default:
         return super.eIsSet(e);
@@ -532,34 +533,34 @@ class i extends fe {
    */
   eUnset(e) {
     switch (this.eClass().getFeatureID(e)) {
-      case i.ID:
+      case n.ID:
         this._id = void 0;
         return;
-      case i.CONDITION_TYPE:
+      case n.CONDITION_TYPE:
         this._conditionType = "greaterThan";
         return;
-      case i.PRIORITY:
+      case n.PRIORITY:
         this._priority = void 0;
         return;
-      case i.VALUE1:
+      case n.VALUE1:
         this._value1 = "0";
         return;
-      case i.VALUE2:
+      case n.VALUE2:
         this._value2 = "100";
         return;
-      case i.BACKGROUND_COLOR:
-        this._backgroundColor = new c();
+      case n.BACKGROUND_COLOR:
+        this._backgroundColor = new h();
         return;
-      case i.TEXT_COLOR:
-        this._textColor = new c();
+      case n.TEXT_COLOR:
+        this._textColor = new h();
         return;
-      case i.MIN_COLOR:
-        this._minColor = new c();
+      case n.MIN_COLOR:
+        this._minColor = new h();
         return;
-      case i.MAX_COLOR:
-        this._maxColor = new c();
+      case n.MAX_COLOR:
+        this._maxColor = new h();
         return;
-      case i.FONT_WEIGHT:
+      case n.FONT_WEIGHT:
         this._fontWeight = 400;
         return;
       default:
@@ -588,7 +589,7 @@ class i extends fe {
     };
   }
 }
-class x extends Le {
+class x extends Te {
   // Feature ID Constants (eLiterals)
   static UNIQUE_NAME = 4;
   // Private fields
@@ -597,7 +598,7 @@ class x extends Le {
    * Returns the EClass of this object
    */
   eClass() {
-    return o.Literals.HEADER_EXPANDED_PAYLOAD;
+    return l.Literals.HEADER_EXPANDED_PAYLOAD;
   }
   // Getters and Setters
   get uniqueName() {
@@ -680,7 +681,7 @@ class x extends Le {
     };
   }
 }
-class H extends Le {
+class H extends Te {
   // Feature ID Constants (eLiterals)
   static UNIQUE_NAME = 4;
   // Private fields
@@ -689,7 +690,7 @@ class H extends Le {
    * Returns the EClass of this object
    */
   eClass() {
-    return o.Literals.HEADER_CLICKED_PAYLOAD;
+    return l.Literals.HEADER_CLICKED_PAYLOAD;
   }
   // Getters and Setters
   get uniqueName() {
@@ -772,20 +773,20 @@ class H extends Le {
     };
   }
 }
-class Se extends ze {
+class Re extends je {
   // Lazy singleton instance
   static _instance;
   static get eINSTANCE() {
-    return this._instance || (this._instance = new Se()), this._instance;
+    return this._instance || (this._instance = new Re()), this._instance;
   }
   constructor() {
-    super(), this.setEPackage(o.eINSTANCE);
+    super(), this.setEPackage(l.eINSTANCE);
   }
   /**
    * Create a new PivotTable instance
    */
   createPivotTable() {
-    return new r();
+    return new s();
   }
   /**
    * Create a new LevelStyle instance
@@ -797,7 +798,7 @@ class Se extends ze {
    * Create a new ConditionalFormat instance
    */
   createConditionalFormat() {
-    return new i();
+    return new n();
   }
   /**
    * Create a new HeaderExpandedPayload instance
@@ -831,20 +832,20 @@ class Se extends ze {
     }
   }
 }
-function m(N) {
-  const e = Ve.INSTANCE.getEPackage(N);
+function R(S) {
+  const e = Fe.INSTANCE.getEPackage(S);
   if (!e)
-    throw new Error(`EPackage '${N}' is not registered. Access the eINSTANCE of that model's generated package (or register it via EPackageRegistry.INSTANCE.registerPackage) before initializing PivotTablePackage.`);
+    throw new Error(`EPackage '${S}' is not registered. Access the eINSTANCE of that model's generated package (or register it via EPackageRegistry.INSTANCE.registerPackage) before initializing PivotTablePackage.`);
   return e;
 }
-class o extends Ze {
+class l extends $e {
   static eNAME = "PivotTable";
   static eNS_URI = "http://org.eclipse.daanse.board.app.ui.vue.widget.table.pivot";
   static eNS_PREFIX = "PivotTable";
   // Singleton instance
   static _instance;
   static get eINSTANCE() {
-    return this._instance || (this._instance = new o(), this._instance.init()), this._instance;
+    return this._instance || (this._instance = new l(), this._instance.init()), this._instance;
   }
   /**
    * Literals for quick access to metaclasses and features
@@ -895,102 +896,102 @@ class o extends Ze {
     HEADER_CLICKED_PAYLOAD__UNIQUE_NAME: null
   };
   constructor() {
-    super(), this.setName(o.eNAME), this.setNsURI(o.eNS_URI), this.setNsPrefix(o.eNS_PREFIX);
+    super(), this.setName(l.eNAME), this.setNsURI(l.eNS_URI), this.setNsPrefix(l.eNS_PREFIX);
   }
   /**
    * Initialize package contents
    */
   init() {
-    Ve.INSTANCE.set(o.eNS_URI, this), this.setEFactoryInstance(Se.eINSTANCE);
-    const e = new P();
-    e.setName("PivotTable"), e.setAbstract(!1), e.setInterface(!1), this.getEClassifiers().push(e), e.setEPackage(this), o.Literals.PIVOT_TABLE = e;
-    const t = new S();
-    t.setContainment(!0), t.setName("rows"), t.setLowerBound(1), t.setUpperBound(-1), e.getEStructuralFeatures().push(t), o.Literals.PIVOT_TABLE__ROWS = t;
-    const n = new S();
-    n.setContainment(!0), n.setName("columns"), n.setLowerBound(1), n.setUpperBound(-1), e.getEStructuralFeatures().push(n), o.Literals.PIVOT_TABLE__COLUMNS = n;
-    const _ = new S();
-    _.setContainment(!0), _.setName("cells"), _.setLowerBound(1), _.setUpperBound(-1), e.getEStructuralFeatures().push(_), o.Literals.PIVOT_TABLE__CELLS = _;
-    const A = new v();
-    A.setName("tableState"), A.setLowerBound(0), A.setUpperBound(1), e.getEStructuralFeatures().push(A), o.Literals.PIVOT_TABLE__TABLE_STATE = A;
-    const I = new S();
-    I.setContainment(!1), I.setName("headerBackgroundColor"), I.setLowerBound(0), I.setUpperBound(1), e.getEStructuralFeatures().push(I), o.Literals.PIVOT_TABLE__HEADER_BACKGROUND_COLOR = I;
-    const M = new S();
-    M.setContainment(!1), M.setName("headerTextColor"), M.setLowerBound(0), M.setUpperBound(1), e.getEStructuralFeatures().push(M), o.Literals.PIVOT_TABLE__HEADER_TEXT_COLOR = M;
-    const b = new S();
-    b.setContainment(!1), b.setName("cellBackgroundColor"), b.setLowerBound(0), b.setUpperBound(1), e.getEStructuralFeatures().push(b), o.Literals.PIVOT_TABLE__CELL_BACKGROUND_COLOR = b;
-    const k = new S();
-    k.setContainment(!1), k.setName("cellTextColor"), k.setLowerBound(0), k.setUpperBound(1), e.getEStructuralFeatures().push(k), o.Literals.PIVOT_TABLE__CELL_TEXT_COLOR = k;
-    const G = new S();
-    G.setContainment(!1), G.setName("borderColor"), G.setLowerBound(0), G.setUpperBound(1), e.getEStructuralFeatures().push(G), o.Literals.PIVOT_TABLE__BORDER_COLOR = G;
-    const Y = new S();
-    Y.setContainment(!1), Y.setName("defaultColumnWidth"), Y.setLowerBound(0), Y.setUpperBound(1), e.getEStructuralFeatures().push(Y), o.Literals.PIVOT_TABLE__DEFAULT_COLUMN_WIDTH = Y;
-    const X = new S();
-    X.setContainment(!1), X.setName("defaultRowHeight"), X.setLowerBound(0), X.setUpperBound(1), e.getEStructuralFeatures().push(X), o.Literals.PIVOT_TABLE__DEFAULT_ROW_HEIGHT = X;
-    const K = new S();
-    K.setContainment(!1), K.setName("fontSize"), K.setLowerBound(0), K.setUpperBound(1), e.getEStructuralFeatures().push(K), o.Literals.PIVOT_TABLE__FONT_SIZE = K;
-    const q = new S();
-    q.setContainment(!1), q.setName("headerFontWeight"), q.setLowerBound(0), q.setUpperBound(1), e.getEStructuralFeatures().push(q), o.Literals.PIVOT_TABLE__HEADER_FONT_WEIGHT = q;
+    Fe.INSTANCE.set(l.eNS_URI, this), this.setEFactoryInstance(Re.eINSTANCE);
+    const e = new te();
+    e.setName("PivotTable"), e.setAbstract(!1), e.setInterface(!1), this.getEClassifiers().push(e), e.setEPackage(this), l.Literals.PIVOT_TABLE = e;
+    const t = new N();
+    t.setContainment(!0), t.setName("rows"), t.setLowerBound(1), t.setUpperBound(-1), e.getEStructuralFeatures().push(t), l.Literals.PIVOT_TABLE__ROWS = t;
+    const i = new N();
+    i.setContainment(!0), i.setName("columns"), i.setLowerBound(1), i.setUpperBound(-1), e.getEStructuralFeatures().push(i), l.Literals.PIVOT_TABLE__COLUMNS = i;
+    const L = new N();
+    L.setContainment(!0), L.setName("cells"), L.setLowerBound(1), L.setUpperBound(-1), e.getEStructuralFeatures().push(L), l.Literals.PIVOT_TABLE__CELLS = L;
+    const y = new v();
+    y.setName("tableState"), y.setLowerBound(0), y.setUpperBound(1), e.getEStructuralFeatures().push(y), l.Literals.PIVOT_TABLE__TABLE_STATE = y;
+    const I = new N();
+    I.setContainment(!1), I.setName("headerBackgroundColor"), I.setLowerBound(0), I.setUpperBound(1), e.getEStructuralFeatures().push(I), l.Literals.PIVOT_TABLE__HEADER_BACKGROUND_COLOR = I;
+    const b = new N();
+    b.setContainment(!1), b.setName("headerTextColor"), b.setLowerBound(0), b.setUpperBound(1), e.getEStructuralFeatures().push(b), l.Literals.PIVOT_TABLE__HEADER_TEXT_COLOR = b;
+    const k = new N();
+    k.setContainment(!1), k.setName("cellBackgroundColor"), k.setLowerBound(0), k.setUpperBound(1), e.getEStructuralFeatures().push(k), l.Literals.PIVOT_TABLE__CELL_BACKGROUND_COLOR = k;
+    const G = new N();
+    G.setContainment(!1), G.setName("cellTextColor"), G.setLowerBound(0), G.setUpperBound(1), e.getEStructuralFeatures().push(G), l.Literals.PIVOT_TABLE__CELL_TEXT_COLOR = G;
+    const Y = new N();
+    Y.setContainment(!1), Y.setName("borderColor"), Y.setLowerBound(0), Y.setUpperBound(1), e.getEStructuralFeatures().push(Y), l.Literals.PIVOT_TABLE__BORDER_COLOR = Y;
+    const X = new N();
+    X.setContainment(!1), X.setName("defaultColumnWidth"), X.setLowerBound(0), X.setUpperBound(1), e.getEStructuralFeatures().push(X), l.Literals.PIVOT_TABLE__DEFAULT_COLUMN_WIDTH = X;
+    const K = new N();
+    K.setContainment(!1), K.setName("defaultRowHeight"), K.setLowerBound(0), K.setUpperBound(1), e.getEStructuralFeatures().push(K), l.Literals.PIVOT_TABLE__DEFAULT_ROW_HEIGHT = K;
+    const q = new N();
+    q.setContainment(!1), q.setName("fontSize"), q.setLowerBound(0), q.setUpperBound(1), e.getEStructuralFeatures().push(q), l.Literals.PIVOT_TABLE__FONT_SIZE = q;
+    const M = new N();
+    M.setContainment(!1), M.setName("headerFontWeight"), M.setLowerBound(0), M.setUpperBound(1), e.getEStructuralFeatures().push(M), l.Literals.PIVOT_TABLE__HEADER_FONT_WEIGHT = M;
     const z = new v();
-    z.setName("cellTextAlign"), z.setLowerBound(0), z.setUpperBound(1), e.getEStructuralFeatures().push(z), o.Literals.PIVOT_TABLE__CELL_TEXT_ALIGN = z;
+    z.setName("cellTextAlign"), z.setLowerBound(0), z.setUpperBound(1), e.getEStructuralFeatures().push(z), l.Literals.PIVOT_TABLE__CELL_TEXT_ALIGN = z;
     const Z = new v();
-    Z.setName("showRowsProperties"), Z.setLowerBound(0), Z.setUpperBound(1), e.getEStructuralFeatures().push(Z), o.Literals.PIVOT_TABLE__SHOW_ROWS_PROPERTIES = Z;
+    Z.setName("showRowsProperties"), Z.setLowerBound(0), Z.setUpperBound(1), e.getEStructuralFeatures().push(Z), l.Literals.PIVOT_TABLE__SHOW_ROWS_PROPERTIES = Z;
     const T = new v();
-    T.setName("showColumnsProperties"), T.setLowerBound(0), T.setUpperBound(1), e.getEStructuralFeatures().push(T), o.Literals.PIVOT_TABLE__SHOW_COLUMNS_PROPERTIES = T;
-    const J = new v();
-    J.setName("showSingleMeasureHeader"), J.setLowerBound(0), J.setUpperBound(1), e.getEStructuralFeatures().push(J), o.Literals.PIVOT_TABLE__SHOW_SINGLE_MEASURE_HEADER = J;
-    const u = new S();
-    u.setContainment(!0), u.setName("rowLevelStyles"), u.setLowerBound(0), u.setUpperBound(-1), e.getEStructuralFeatures().push(u), o.Literals.PIVOT_TABLE__ROW_LEVEL_STYLES = u;
-    const l = new S();
-    l.setContainment(!0), l.setName("columnLevelStyles"), l.setLowerBound(0), l.setUpperBound(-1), e.getEStructuralFeatures().push(l), o.Literals.PIVOT_TABLE__COLUMN_LEVEL_STYLES = l;
-    const V = new S();
-    V.setContainment(!0), V.setName("conditionalFormats"), V.setLowerBound(0), V.setUpperBound(-1), e.getEStructuralFeatures().push(V), o.Literals.PIVOT_TABLE__CONDITIONAL_FORMATS = V;
-    const g = new P();
-    g.setName("LevelStyle"), g.setAbstract(!1), g.setInterface(!1), this.getEClassifiers().push(g), g.setEPackage(this), o.Literals.LEVEL_STYLE = g;
-    const f = new v();
-    f.setName("level"), f.setLowerBound(0), f.setUpperBound(1), g.getEStructuralFeatures().push(f), o.Literals.LEVEL_STYLE__LEVEL = f;
-    const L = new S();
-    L.setContainment(!1), L.setName("backgroundColor"), L.setLowerBound(0), L.setUpperBound(1), g.getEStructuralFeatures().push(L), o.Literals.LEVEL_STYLE__BACKGROUND_COLOR = L;
-    const W = new S();
-    W.setContainment(!1), W.setName("textColor"), W.setLowerBound(0), W.setUpperBound(1), g.getEStructuralFeatures().push(W), o.Literals.LEVEL_STYLE__TEXT_COLOR = W;
-    const w = new v();
-    w.setName("fontWeight"), w.setLowerBound(0), w.setUpperBound(1), g.getEStructuralFeatures().push(w), o.Literals.LEVEL_STYLE__FONT_WEIGHT = w;
-    const s = new P();
-    s.setName("ConditionalFormat"), s.setAbstract(!1), s.setInterface(!1), this.getEClassifiers().push(s), s.setEPackage(this), o.Literals.CONDITIONAL_FORMAT = s;
+    T.setName("showColumnsProperties"), T.setLowerBound(0), T.setUpperBound(1), e.getEStructuralFeatures().push(T), l.Literals.PIVOT_TABLE__SHOW_COLUMNS_PROPERTIES = T;
     const E = new v();
-    E.setName("id"), E.setLowerBound(0), E.setUpperBound(1), s.getEStructuralFeatures().push(E), o.Literals.CONDITIONAL_FORMAT__ID = E;
-    const a = new v();
-    a.setName("conditionType"), a.setLowerBound(0), a.setUpperBound(1), s.getEStructuralFeatures().push(a), o.Literals.CONDITIONAL_FORMAT__CONDITION_TYPE = a;
-    const h = new v();
-    h.setName("priority"), h.setLowerBound(0), h.setUpperBound(1), s.getEStructuralFeatures().push(h), o.Literals.CONDITIONAL_FORMAT__PRIORITY = h;
-    const de = new v();
-    de.setName("value1"), de.setLowerBound(0), de.setUpperBound(1), s.getEStructuralFeatures().push(de), o.Literals.CONDITIONAL_FORMAT__VALUE1 = de;
-    const ce = new v();
-    ce.setName("value2"), ce.setLowerBound(0), ce.setUpperBound(1), s.getEStructuralFeatures().push(ce), o.Literals.CONDITIONAL_FORMAT__VALUE2 = ce;
-    const ee = new S();
-    ee.setContainment(!1), ee.setName("backgroundColor"), ee.setLowerBound(0), ee.setUpperBound(1), s.getEStructuralFeatures().push(ee), o.Literals.CONDITIONAL_FORMAT__BACKGROUND_COLOR = ee;
-    const te = new S();
-    te.setContainment(!1), te.setName("textColor"), te.setLowerBound(0), te.setUpperBound(1), s.getEStructuralFeatures().push(te), o.Literals.CONDITIONAL_FORMAT__TEXT_COLOR = te;
-    const se = new S();
-    se.setContainment(!1), se.setName("minColor"), se.setLowerBound(0), se.setUpperBound(1), s.getEStructuralFeatures().push(se), o.Literals.CONDITIONAL_FORMAT__MIN_COLOR = se;
-    const re = new S();
-    re.setContainment(!1), re.setName("maxColor"), re.setLowerBound(0), re.setUpperBound(1), s.getEStructuralFeatures().push(re), o.Literals.CONDITIONAL_FORMAT__MAX_COLOR = re;
+    E.setName("showSingleMeasureHeader"), E.setLowerBound(0), E.setUpperBound(1), e.getEStructuralFeatures().push(E), l.Literals.PIVOT_TABLE__SHOW_SINGLE_MEASURE_HEADER = E;
+    const o = new N();
+    o.setContainment(!0), o.setName("rowLevelStyles"), o.setLowerBound(0), o.setUpperBound(-1), e.getEStructuralFeatures().push(o), l.Literals.PIVOT_TABLE__ROW_LEVEL_STYLES = o;
+    const r = new N();
+    r.setContainment(!0), r.setName("columnLevelStyles"), r.setLowerBound(0), r.setUpperBound(-1), e.getEStructuralFeatures().push(r), l.Literals.PIVOT_TABLE__COLUMN_LEVEL_STYLES = r;
+    const g = new N();
+    g.setContainment(!0), g.setName("conditionalFormats"), g.setLowerBound(0), g.setUpperBound(-1), e.getEStructuralFeatures().push(g), l.Literals.PIVOT_TABLE__CONDITIONAL_FORMATS = g;
+    const a = new te();
+    a.setName("LevelStyle"), a.setAbstract(!1), a.setInterface(!1), this.getEClassifiers().push(a), a.setEPackage(this), l.Literals.LEVEL_STYLE = a;
+    const p = new v();
+    p.setName("level"), p.setLowerBound(0), p.setUpperBound(1), a.getEStructuralFeatures().push(p), l.Literals.LEVEL_STYLE__LEVEL = p;
+    const D = new N();
+    D.setContainment(!1), D.setName("backgroundColor"), D.setLowerBound(0), D.setUpperBound(1), a.getEStructuralFeatures().push(D), l.Literals.LEVEL_STYLE__BACKGROUND_COLOR = D;
+    const J = new N();
+    J.setContainment(!1), J.setName("textColor"), J.setLowerBound(0), J.setUpperBound(1), a.getEStructuralFeatures().push(J), l.Literals.LEVEL_STYLE__TEXT_COLOR = J;
+    const j = new v();
+    j.setName("fontWeight"), j.setLowerBound(0), j.setUpperBound(1), a.getEStructuralFeatures().push(j), l.Literals.LEVEL_STYLE__FONT_WEIGHT = j;
+    const m = new te();
+    m.setName("ConditionalFormat"), m.setAbstract(!1), m.setInterface(!1), this.getEClassifiers().push(m), m.setEPackage(this), l.Literals.CONDITIONAL_FORMAT = m;
+    const $ = new v();
+    $.setName("id"), $.setLowerBound(0), $.setUpperBound(1), m.getEStructuralFeatures().push($), l.Literals.CONDITIONAL_FORMAT__ID = $;
+    const d = new v();
+    d.setName("conditionType"), d.setLowerBound(0), d.setUpperBound(1), m.getEStructuralFeatures().push(d), l.Literals.CONDITIONAL_FORMAT__CONDITION_TYPE = d;
+    const C = new v();
+    C.setName("priority"), C.setLowerBound(0), C.setUpperBound(1), m.getEStructuralFeatures().push(C), l.Literals.CONDITIONAL_FORMAT__PRIORITY = C;
     const he = new v();
-    he.setName("fontWeight"), he.setLowerBound(0), he.setUpperBound(1), s.getEStructuralFeatures().push(he), o.Literals.CONDITIONAL_FORMAT__FONT_WEIGHT = he;
-    const le = new P();
-    le.setName("JavaObject"), le.setAbstract(!0), le.setInterface(!1), this.getEClassifiers().push(le), le.setEPackage(this), o.Literals.JAVA_OBJECT = le;
-    const oe = new P();
-    oe.setName("PivotTableInterface"), oe.setAbstract(!0), oe.setInterface(!1), this.getEClassifiers().push(oe), oe.setEPackage(this), o.Literals.PIVOT_TABLE_INTERFACE = oe;
-    const j = new P();
-    j.setName("HeaderExpandedPayload"), j.setAbstract(!1), j.setInterface(!1), this.getEClassifiers().push(j), j.setEPackage(this), o.Literals.HEADER_EXPANDED_PAYLOAD = j;
+    he.setName("value1"), he.setLowerBound(0), he.setUpperBound(1), m.getEStructuralFeatures().push(he), l.Literals.CONDITIONAL_FORMAT__VALUE1 = he;
     const Ee = new v();
-    Ee.setName("uniqueName"), Ee.setLowerBound(0), Ee.setUpperBound(1), j.getEStructuralFeatures().push(Ee), o.Literals.HEADER_EXPANDED_PAYLOAD__UNIQUE_NAME = Ee;
-    const $ = new P();
-    $.setName("HeaderClickedPayload"), $.setAbstract(!1), $.setInterface(!1), this.getEClassifiers().push($), $.setEPackage(this), o.Literals.HEADER_CLICKED_PAYLOAD = $;
+    Ee.setName("value2"), Ee.setLowerBound(0), Ee.setUpperBound(1), m.getEStructuralFeatures().push(Ee), l.Literals.CONDITIONAL_FORMAT__VALUE2 = Ee;
+    const se = new N();
+    se.setContainment(!1), se.setName("backgroundColor"), se.setLowerBound(0), se.setUpperBound(1), m.getEStructuralFeatures().push(se), l.Literals.CONDITIONAL_FORMAT__BACKGROUND_COLOR = se;
+    const re = new N();
+    re.setContainment(!1), re.setName("textColor"), re.setLowerBound(0), re.setUpperBound(1), m.getEStructuralFeatures().push(re), l.Literals.CONDITIONAL_FORMAT__TEXT_COLOR = re;
+    const le = new N();
+    le.setContainment(!1), le.setName("minColor"), le.setLowerBound(0), le.setUpperBound(1), m.getEStructuralFeatures().push(le), l.Literals.CONDITIONAL_FORMAT__MIN_COLOR = le;
+    const oe = new N();
+    oe.setContainment(!1), oe.setName("maxColor"), oe.setLowerBound(0), oe.setUpperBound(1), m.getEStructuralFeatures().push(oe), l.Literals.CONDITIONAL_FORMAT__MAX_COLOR = oe;
     const _e = new v();
-    _e.setName("uniqueName"), _e.setLowerBound(0), _e.setUpperBound(1), $.getEStructuralFeatures().push(_e), o.Literals.HEADER_CLICKED_PAYLOAD__UNIQUE_NAME = _e, o.Literals.PIVOT_TABLE_INTERFACE.getESuperTypes().push(m("http://org.eclipse.daanse.board.app.lib.events").getEClassifier("WidgetActionInterface")), o.Literals.HEADER_EXPANDED_PAYLOAD.getESuperTypes().push(m("http://org.eclipse.daanse.board.app.lib.events").getEClassifier("Payload")), o.Literals.HEADER_CLICKED_PAYLOAD.getESuperTypes().push(m("http://org.eclipse.daanse.board.app.lib.events").getEClassifier("Payload")), o.Literals.PIVOT_TABLE__ROWS.setEType(o.Literals.JAVA_OBJECT), o.Literals.PIVOT_TABLE__COLUMNS.setEType(o.Literals.JAVA_OBJECT), o.Literals.PIVOT_TABLE__CELLS.setEType(o.Literals.JAVA_OBJECT), o.Literals.PIVOT_TABLE__TABLE_STATE.setEType(D().getEClassifier("EJavaObject")), o.Literals.PIVOT_TABLE__HEADER_BACKGROUND_COLOR.setEType(m("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), o.Literals.PIVOT_TABLE__HEADER_TEXT_COLOR.setEType(m("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), o.Literals.PIVOT_TABLE__CELL_BACKGROUND_COLOR.setEType(m("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), o.Literals.PIVOT_TABLE__CELL_TEXT_COLOR.setEType(m("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), o.Literals.PIVOT_TABLE__BORDER_COLOR.setEType(m("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), o.Literals.PIVOT_TABLE__DEFAULT_COLUMN_WIDTH.setEType(m("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), o.Literals.PIVOT_TABLE__DEFAULT_ROW_HEIGHT.setEType(m("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), o.Literals.PIVOT_TABLE__FONT_SIZE.setEType(m("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), o.Literals.PIVOT_TABLE__HEADER_FONT_WEIGHT.setEType(m("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), o.Literals.PIVOT_TABLE__CELL_TEXT_ALIGN.setEType(D().getEClassifier("EString")), o.Literals.PIVOT_TABLE__SHOW_ROWS_PROPERTIES.setEType(D().getEClassifier("EBoolean")), o.Literals.PIVOT_TABLE__SHOW_COLUMNS_PROPERTIES.setEType(D().getEClassifier("EBoolean")), o.Literals.PIVOT_TABLE__SHOW_SINGLE_MEASURE_HEADER.setEType(D().getEClassifier("EBoolean")), o.Literals.PIVOT_TABLE__ROW_LEVEL_STYLES.setEType(o.Literals.LEVEL_STYLE), o.Literals.PIVOT_TABLE__COLUMN_LEVEL_STYLES.setEType(o.Literals.LEVEL_STYLE), o.Literals.PIVOT_TABLE__CONDITIONAL_FORMATS.setEType(o.Literals.CONDITIONAL_FORMAT), o.Literals.LEVEL_STYLE__LEVEL.setEType(D().getEClassifier("EDouble")), o.Literals.LEVEL_STYLE__BACKGROUND_COLOR.setEType(m("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), o.Literals.LEVEL_STYLE__TEXT_COLOR.setEType(m("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), o.Literals.LEVEL_STYLE__FONT_WEIGHT.setEType(D().getEClassifier("EDouble")), o.Literals.CONDITIONAL_FORMAT__ID.setEType(D().getEClassifier("EString")), o.Literals.CONDITIONAL_FORMAT__CONDITION_TYPE.setEType(D().getEClassifier("EString")), o.Literals.CONDITIONAL_FORMAT__PRIORITY.setEType(D().getEClassifier("EDouble")), o.Literals.CONDITIONAL_FORMAT__VALUE1.setEType(D().getEClassifier("EString")), o.Literals.CONDITIONAL_FORMAT__VALUE2.setEType(D().getEClassifier("EString")), o.Literals.CONDITIONAL_FORMAT__BACKGROUND_COLOR.setEType(m("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), o.Literals.CONDITIONAL_FORMAT__TEXT_COLOR.setEType(m("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), o.Literals.CONDITIONAL_FORMAT__MIN_COLOR.setEType(m("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), o.Literals.CONDITIONAL_FORMAT__MAX_COLOR.setEType(m("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), o.Literals.CONDITIONAL_FORMAT__FONT_WEIGHT.setEType(D().getEClassifier("EDouble")), o.Literals.HEADER_EXPANDED_PAYLOAD__UNIQUE_NAME.setEType(D().getEClassifier("EString")), o.Literals.HEADER_CLICKED_PAYLOAD__UNIQUE_NAME.setEType(D().getEClassifier("EString"));
+    _e.setName("fontWeight"), _e.setLowerBound(0), _e.setUpperBound(1), m.getEStructuralFeatures().push(_e), l.Literals.CONDITIONAL_FORMAT__FONT_WEIGHT = _e;
+    const ae = new te();
+    ae.setName("JavaObject"), ae.setAbstract(!0), ae.setInterface(!1), this.getEClassifiers().push(ae), ae.setEPackage(this), l.Literals.JAVA_OBJECT = ae;
+    const ie = new te();
+    ie.setName("PivotTableInterface"), ie.setAbstract(!0), ie.setInterface(!1), this.getEClassifiers().push(ie), ie.setEPackage(this), l.Literals.PIVOT_TABLE_INTERFACE = ie;
+    const P = new te();
+    P.setName("HeaderExpandedPayload"), P.setAbstract(!1), P.setInterface(!1), this.getEClassifiers().push(P), P.setEPackage(this), l.Literals.HEADER_EXPANDED_PAYLOAD = P;
+    const ge = new v();
+    ge.setName("uniqueName"), ge.setLowerBound(0), ge.setUpperBound(1), P.getEStructuralFeatures().push(ge), l.Literals.HEADER_EXPANDED_PAYLOAD__UNIQUE_NAME = ge;
+    const ee = new te();
+    ee.setName("HeaderClickedPayload"), ee.setAbstract(!1), ee.setInterface(!1), this.getEClassifiers().push(ee), ee.setEPackage(this), l.Literals.HEADER_CLICKED_PAYLOAD = ee;
+    const Ce = new v();
+    Ce.setName("uniqueName"), Ce.setLowerBound(0), Ce.setUpperBound(1), ee.getEStructuralFeatures().push(Ce), l.Literals.HEADER_CLICKED_PAYLOAD__UNIQUE_NAME = Ce, l.Literals.PIVOT_TABLE_INTERFACE.getESuperTypes().push(R("http://org.eclipse.daanse.board.app.lib.events").getEClassifier("WidgetActionInterface")), l.Literals.HEADER_EXPANDED_PAYLOAD.getESuperTypes().push(R("http://org.eclipse.daanse.board.app.lib.events").getEClassifier("Payload")), l.Literals.HEADER_CLICKED_PAYLOAD.getESuperTypes().push(R("http://org.eclipse.daanse.board.app.lib.events").getEClassifier("Payload")), l.Literals.PIVOT_TABLE__ROWS.setEType(l.Literals.JAVA_OBJECT), l.Literals.PIVOT_TABLE__COLUMNS.setEType(l.Literals.JAVA_OBJECT), l.Literals.PIVOT_TABLE__CELLS.setEType(l.Literals.JAVA_OBJECT), l.Literals.PIVOT_TABLE__TABLE_STATE.setEType(V().getEClassifier("EJavaObject")), l.Literals.PIVOT_TABLE__HEADER_BACKGROUND_COLOR.setEType(R("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), l.Literals.PIVOT_TABLE__HEADER_TEXT_COLOR.setEType(R("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), l.Literals.PIVOT_TABLE__CELL_BACKGROUND_COLOR.setEType(R("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), l.Literals.PIVOT_TABLE__CELL_TEXT_COLOR.setEType(R("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), l.Literals.PIVOT_TABLE__BORDER_COLOR.setEType(R("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), l.Literals.PIVOT_TABLE__DEFAULT_COLUMN_WIDTH.setEType(R("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), l.Literals.PIVOT_TABLE__DEFAULT_ROW_HEIGHT.setEType(R("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), l.Literals.PIVOT_TABLE__FONT_SIZE.setEType(R("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), l.Literals.PIVOT_TABLE__HEADER_FONT_WEIGHT.setEType(R("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), l.Literals.PIVOT_TABLE__CELL_TEXT_ALIGN.setEType(V().getEClassifier("EString")), l.Literals.PIVOT_TABLE__SHOW_ROWS_PROPERTIES.setEType(V().getEClassifier("EBoolean")), l.Literals.PIVOT_TABLE__SHOW_COLUMNS_PROPERTIES.setEType(V().getEClassifier("EBoolean")), l.Literals.PIVOT_TABLE__SHOW_SINGLE_MEASURE_HEADER.setEType(V().getEClassifier("EBoolean")), l.Literals.PIVOT_TABLE__ROW_LEVEL_STYLES.setEType(l.Literals.LEVEL_STYLE), l.Literals.PIVOT_TABLE__COLUMN_LEVEL_STYLES.setEType(l.Literals.LEVEL_STYLE), l.Literals.PIVOT_TABLE__CONDITIONAL_FORMATS.setEType(l.Literals.CONDITIONAL_FORMAT), l.Literals.LEVEL_STYLE__LEVEL.setEType(V().getEClassifier("EDouble")), l.Literals.LEVEL_STYLE__BACKGROUND_COLOR.setEType(R("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), l.Literals.LEVEL_STYLE__TEXT_COLOR.setEType(R("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), l.Literals.LEVEL_STYLE__FONT_WEIGHT.setEType(V().getEClassifier("EDouble")), l.Literals.CONDITIONAL_FORMAT__ID.setEType(V().getEClassifier("EString")), l.Literals.CONDITIONAL_FORMAT__CONDITION_TYPE.setEType(V().getEClassifier("EString")), l.Literals.CONDITIONAL_FORMAT__PRIORITY.setEType(V().getEClassifier("EDouble")), l.Literals.CONDITIONAL_FORMAT__VALUE1.setEType(V().getEClassifier("EString")), l.Literals.CONDITIONAL_FORMAT__VALUE2.setEType(V().getEClassifier("EString")), l.Literals.CONDITIONAL_FORMAT__BACKGROUND_COLOR.setEType(R("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), l.Literals.CONDITIONAL_FORMAT__TEXT_COLOR.setEType(R("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), l.Literals.CONDITIONAL_FORMAT__MIN_COLOR.setEType(R("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), l.Literals.CONDITIONAL_FORMAT__MAX_COLOR.setEType(R("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), l.Literals.CONDITIONAL_FORMAT__FONT_WEIGHT.setEType(V().getEClassifier("EDouble")), l.Literals.HEADER_EXPANDED_PAYLOAD__UNIQUE_NAME.setEType(V().getEClassifier("EString")), l.Literals.HEADER_CLICKED_PAYLOAD__UNIQUE_NAME.setEType(V().getEClassifier("EString"));
   }
 }
-class r extends fe {
+class s extends me {
   // Feature ID Constants (eLiterals)
   static ROWS = 0;
   static COLUMNS = 1;
@@ -1017,15 +1018,15 @@ class r extends fe {
   _columns;
   _cells;
   _tableState;
-  _headerBackgroundColor = new c();
-  _headerTextColor = new c();
-  _cellBackgroundColor = new c();
-  _cellTextColor = new c();
-  _borderColor = new c();
-  _defaultColumnWidth = new c();
-  _defaultRowHeight = new c();
-  _fontSize = new c();
-  _headerFontWeight = new c();
+  _headerBackgroundColor = new h();
+  _headerTextColor = new h();
+  _cellBackgroundColor = new h();
+  _cellTextColor = new h();
+  _borderColor = new h();
+  _defaultColumnWidth = new h();
+  _defaultRowHeight = new h();
+  _fontSize = new h();
+  _headerFontWeight = new h();
   _cellTextAlign = "left";
   _showRowsProperties = !1;
   _showColumnsProperties = !1;
@@ -1037,17 +1038,17 @@ class r extends fe {
    * Returns the EClass of this object
    */
   eClass() {
-    return o.Literals.PIVOT_TABLE;
+    return l.Literals.PIVOT_TABLE;
   }
   // Getters and Setters
   get rows() {
-    return this._rows || (this._rows = ne(this, this.eClass().getEStructuralFeature("rows"))), this._rows;
+    return this._rows || (this._rows = ue(this, this.eClass().getEStructuralFeature("rows"))), this._rows;
   }
   get columns() {
-    return this._columns || (this._columns = ne(this, this.eClass().getEStructuralFeature("columns"))), this._columns;
+    return this._columns || (this._columns = ue(this, this.eClass().getEStructuralFeature("columns"))), this._columns;
   }
   get cells() {
-    return this._cells || (this._cells = ne(this, this.eClass().getEStructuralFeature("cells"))), this._cells;
+    return this._cells || (this._cells = ue(this, this.eClass().getEStructuralFeature("cells"))), this._cells;
   }
   get tableState() {
     return this._tableState;
@@ -1058,14 +1059,14 @@ class r extends fe {
       getNotifier: () => this,
       getEventType: () => 1,
       // SET
-      getFeature: () => this.eClass().getEStructuralFeature(r.TABLE_STATE),
+      getFeature: () => this.eClass().getEStructuralFeature(s.TABLE_STATE),
       getOldValue: () => t,
       getNewValue: () => e,
       getPosition: () => -1,
       wasSet: () => !0,
       isTouch: () => !1,
       isReset: () => !1,
-      getFeatureID: () => r.TABLE_STATE,
+      getFeatureID: () => s.TABLE_STATE,
       merge: () => !1
     });
   }
@@ -1078,14 +1079,14 @@ class r extends fe {
       getNotifier: () => this,
       getEventType: () => 1,
       // SET
-      getFeature: () => this.eClass().getEStructuralFeature(r.HEADER_BACKGROUND_COLOR),
+      getFeature: () => this.eClass().getEStructuralFeature(s.HEADER_BACKGROUND_COLOR),
       getOldValue: () => t,
       getNewValue: () => e,
       getPosition: () => -1,
       wasSet: () => !0,
       isTouch: () => !1,
       isReset: () => !1,
-      getFeatureID: () => r.HEADER_BACKGROUND_COLOR,
+      getFeatureID: () => s.HEADER_BACKGROUND_COLOR,
       merge: () => !1
     });
   }
@@ -1098,14 +1099,14 @@ class r extends fe {
       getNotifier: () => this,
       getEventType: () => 1,
       // SET
-      getFeature: () => this.eClass().getEStructuralFeature(r.HEADER_TEXT_COLOR),
+      getFeature: () => this.eClass().getEStructuralFeature(s.HEADER_TEXT_COLOR),
       getOldValue: () => t,
       getNewValue: () => e,
       getPosition: () => -1,
       wasSet: () => !0,
       isTouch: () => !1,
       isReset: () => !1,
-      getFeatureID: () => r.HEADER_TEXT_COLOR,
+      getFeatureID: () => s.HEADER_TEXT_COLOR,
       merge: () => !1
     });
   }
@@ -1118,14 +1119,14 @@ class r extends fe {
       getNotifier: () => this,
       getEventType: () => 1,
       // SET
-      getFeature: () => this.eClass().getEStructuralFeature(r.CELL_BACKGROUND_COLOR),
+      getFeature: () => this.eClass().getEStructuralFeature(s.CELL_BACKGROUND_COLOR),
       getOldValue: () => t,
       getNewValue: () => e,
       getPosition: () => -1,
       wasSet: () => !0,
       isTouch: () => !1,
       isReset: () => !1,
-      getFeatureID: () => r.CELL_BACKGROUND_COLOR,
+      getFeatureID: () => s.CELL_BACKGROUND_COLOR,
       merge: () => !1
     });
   }
@@ -1138,14 +1139,14 @@ class r extends fe {
       getNotifier: () => this,
       getEventType: () => 1,
       // SET
-      getFeature: () => this.eClass().getEStructuralFeature(r.CELL_TEXT_COLOR),
+      getFeature: () => this.eClass().getEStructuralFeature(s.CELL_TEXT_COLOR),
       getOldValue: () => t,
       getNewValue: () => e,
       getPosition: () => -1,
       wasSet: () => !0,
       isTouch: () => !1,
       isReset: () => !1,
-      getFeatureID: () => r.CELL_TEXT_COLOR,
+      getFeatureID: () => s.CELL_TEXT_COLOR,
       merge: () => !1
     });
   }
@@ -1158,14 +1159,14 @@ class r extends fe {
       getNotifier: () => this,
       getEventType: () => 1,
       // SET
-      getFeature: () => this.eClass().getEStructuralFeature(r.BORDER_COLOR),
+      getFeature: () => this.eClass().getEStructuralFeature(s.BORDER_COLOR),
       getOldValue: () => t,
       getNewValue: () => e,
       getPosition: () => -1,
       wasSet: () => !0,
       isTouch: () => !1,
       isReset: () => !1,
-      getFeatureID: () => r.BORDER_COLOR,
+      getFeatureID: () => s.BORDER_COLOR,
       merge: () => !1
     });
   }
@@ -1178,14 +1179,14 @@ class r extends fe {
       getNotifier: () => this,
       getEventType: () => 1,
       // SET
-      getFeature: () => this.eClass().getEStructuralFeature(r.DEFAULT_COLUMN_WIDTH),
+      getFeature: () => this.eClass().getEStructuralFeature(s.DEFAULT_COLUMN_WIDTH),
       getOldValue: () => t,
       getNewValue: () => e,
       getPosition: () => -1,
       wasSet: () => !0,
       isTouch: () => !1,
       isReset: () => !1,
-      getFeatureID: () => r.DEFAULT_COLUMN_WIDTH,
+      getFeatureID: () => s.DEFAULT_COLUMN_WIDTH,
       merge: () => !1
     });
   }
@@ -1198,14 +1199,14 @@ class r extends fe {
       getNotifier: () => this,
       getEventType: () => 1,
       // SET
-      getFeature: () => this.eClass().getEStructuralFeature(r.DEFAULT_ROW_HEIGHT),
+      getFeature: () => this.eClass().getEStructuralFeature(s.DEFAULT_ROW_HEIGHT),
       getOldValue: () => t,
       getNewValue: () => e,
       getPosition: () => -1,
       wasSet: () => !0,
       isTouch: () => !1,
       isReset: () => !1,
-      getFeatureID: () => r.DEFAULT_ROW_HEIGHT,
+      getFeatureID: () => s.DEFAULT_ROW_HEIGHT,
       merge: () => !1
     });
   }
@@ -1218,14 +1219,14 @@ class r extends fe {
       getNotifier: () => this,
       getEventType: () => 1,
       // SET
-      getFeature: () => this.eClass().getEStructuralFeature(r.FONT_SIZE),
+      getFeature: () => this.eClass().getEStructuralFeature(s.FONT_SIZE),
       getOldValue: () => t,
       getNewValue: () => e,
       getPosition: () => -1,
       wasSet: () => !0,
       isTouch: () => !1,
       isReset: () => !1,
-      getFeatureID: () => r.FONT_SIZE,
+      getFeatureID: () => s.FONT_SIZE,
       merge: () => !1
     });
   }
@@ -1238,14 +1239,14 @@ class r extends fe {
       getNotifier: () => this,
       getEventType: () => 1,
       // SET
-      getFeature: () => this.eClass().getEStructuralFeature(r.HEADER_FONT_WEIGHT),
+      getFeature: () => this.eClass().getEStructuralFeature(s.HEADER_FONT_WEIGHT),
       getOldValue: () => t,
       getNewValue: () => e,
       getPosition: () => -1,
       wasSet: () => !0,
       isTouch: () => !1,
       isReset: () => !1,
-      getFeatureID: () => r.HEADER_FONT_WEIGHT,
+      getFeatureID: () => s.HEADER_FONT_WEIGHT,
       merge: () => !1
     });
   }
@@ -1258,14 +1259,14 @@ class r extends fe {
       getNotifier: () => this,
       getEventType: () => 1,
       // SET
-      getFeature: () => this.eClass().getEStructuralFeature(r.CELL_TEXT_ALIGN),
+      getFeature: () => this.eClass().getEStructuralFeature(s.CELL_TEXT_ALIGN),
       getOldValue: () => t,
       getNewValue: () => e,
       getPosition: () => -1,
       wasSet: () => !0,
       isTouch: () => !1,
       isReset: () => !1,
-      getFeatureID: () => r.CELL_TEXT_ALIGN,
+      getFeatureID: () => s.CELL_TEXT_ALIGN,
       merge: () => !1
     });
   }
@@ -1278,14 +1279,14 @@ class r extends fe {
       getNotifier: () => this,
       getEventType: () => 1,
       // SET
-      getFeature: () => this.eClass().getEStructuralFeature(r.SHOW_ROWS_PROPERTIES),
+      getFeature: () => this.eClass().getEStructuralFeature(s.SHOW_ROWS_PROPERTIES),
       getOldValue: () => t,
       getNewValue: () => e,
       getPosition: () => -1,
       wasSet: () => !0,
       isTouch: () => !1,
       isReset: () => !1,
-      getFeatureID: () => r.SHOW_ROWS_PROPERTIES,
+      getFeatureID: () => s.SHOW_ROWS_PROPERTIES,
       merge: () => !1
     });
   }
@@ -1298,14 +1299,14 @@ class r extends fe {
       getNotifier: () => this,
       getEventType: () => 1,
       // SET
-      getFeature: () => this.eClass().getEStructuralFeature(r.SHOW_COLUMNS_PROPERTIES),
+      getFeature: () => this.eClass().getEStructuralFeature(s.SHOW_COLUMNS_PROPERTIES),
       getOldValue: () => t,
       getNewValue: () => e,
       getPosition: () => -1,
       wasSet: () => !0,
       isTouch: () => !1,
       isReset: () => !1,
-      getFeatureID: () => r.SHOW_COLUMNS_PROPERTIES,
+      getFeatureID: () => s.SHOW_COLUMNS_PROPERTIES,
       merge: () => !1
     });
   }
@@ -1318,25 +1319,25 @@ class r extends fe {
       getNotifier: () => this,
       getEventType: () => 1,
       // SET
-      getFeature: () => this.eClass().getEStructuralFeature(r.SHOW_SINGLE_MEASURE_HEADER),
+      getFeature: () => this.eClass().getEStructuralFeature(s.SHOW_SINGLE_MEASURE_HEADER),
       getOldValue: () => t,
       getNewValue: () => e,
       getPosition: () => -1,
       wasSet: () => !0,
       isTouch: () => !1,
       isReset: () => !1,
-      getFeatureID: () => r.SHOW_SINGLE_MEASURE_HEADER,
+      getFeatureID: () => s.SHOW_SINGLE_MEASURE_HEADER,
       merge: () => !1
     });
   }
   get rowLevelStyles() {
-    return this._rowLevelStyles || (this._rowLevelStyles = ne(this, this.eClass().getEStructuralFeature("rowLevelStyles"))), this._rowLevelStyles;
+    return this._rowLevelStyles || (this._rowLevelStyles = ue(this, this.eClass().getEStructuralFeature("rowLevelStyles"))), this._rowLevelStyles;
   }
   get columnLevelStyles() {
-    return this._columnLevelStyles || (this._columnLevelStyles = ne(this, this.eClass().getEStructuralFeature("columnLevelStyles"))), this._columnLevelStyles;
+    return this._columnLevelStyles || (this._columnLevelStyles = ue(this, this.eClass().getEStructuralFeature("columnLevelStyles"))), this._columnLevelStyles;
   }
   get conditionalFormats() {
-    return this._conditionalFormats || (this._conditionalFormats = ne(this, this.eClass().getEStructuralFeature("conditionalFormats"))), this._conditionalFormats;
+    return this._conditionalFormats || (this._conditionalFormats = ue(this, this.eClass().getEStructuralFeature("conditionalFormats"))), this._conditionalFormats;
   }
   // Reflective API
   /**
@@ -1344,45 +1345,45 @@ class r extends fe {
    */
   eGet(e) {
     switch (this.eClass().getFeatureID(e)) {
-      case r.ROWS:
+      case s.ROWS:
         return this.rows;
-      case r.COLUMNS:
+      case s.COLUMNS:
         return this.columns;
-      case r.CELLS:
+      case s.CELLS:
         return this.cells;
-      case r.TABLE_STATE:
+      case s.TABLE_STATE:
         return this.tableState;
-      case r.HEADER_BACKGROUND_COLOR:
+      case s.HEADER_BACKGROUND_COLOR:
         return this.headerBackgroundColor;
-      case r.HEADER_TEXT_COLOR:
+      case s.HEADER_TEXT_COLOR:
         return this.headerTextColor;
-      case r.CELL_BACKGROUND_COLOR:
+      case s.CELL_BACKGROUND_COLOR:
         return this.cellBackgroundColor;
-      case r.CELL_TEXT_COLOR:
+      case s.CELL_TEXT_COLOR:
         return this.cellTextColor;
-      case r.BORDER_COLOR:
+      case s.BORDER_COLOR:
         return this.borderColor;
-      case r.DEFAULT_COLUMN_WIDTH:
+      case s.DEFAULT_COLUMN_WIDTH:
         return this.defaultColumnWidth;
-      case r.DEFAULT_ROW_HEIGHT:
+      case s.DEFAULT_ROW_HEIGHT:
         return this.defaultRowHeight;
-      case r.FONT_SIZE:
+      case s.FONT_SIZE:
         return this.fontSize;
-      case r.HEADER_FONT_WEIGHT:
+      case s.HEADER_FONT_WEIGHT:
         return this.headerFontWeight;
-      case r.CELL_TEXT_ALIGN:
+      case s.CELL_TEXT_ALIGN:
         return this.cellTextAlign;
-      case r.SHOW_ROWS_PROPERTIES:
+      case s.SHOW_ROWS_PROPERTIES:
         return this.showRowsProperties;
-      case r.SHOW_COLUMNS_PROPERTIES:
+      case s.SHOW_COLUMNS_PROPERTIES:
         return this.showColumnsProperties;
-      case r.SHOW_SINGLE_MEASURE_HEADER:
+      case s.SHOW_SINGLE_MEASURE_HEADER:
         return this.showSingleMeasureHeader;
-      case r.ROW_LEVEL_STYLES:
+      case s.ROW_LEVEL_STYLES:
         return this.rowLevelStyles;
-      case r.COLUMN_LEVEL_STYLES:
+      case s.COLUMN_LEVEL_STYLES:
         return this.columnLevelStyles;
-      case r.CONDITIONAL_FORMATS:
+      case s.CONDITIONAL_FORMATS:
         return this.conditionalFormats;
       default:
         return super.eGet(e);
@@ -1393,64 +1394,64 @@ class r extends fe {
    */
   eSet(e, t) {
     switch (this.eClass().getFeatureID(e)) {
-      case r.ROWS:
+      case s.ROWS:
         this.rows.clear(), this.rows.addAll(t), super.eSet(e, t);
         break;
-      case r.COLUMNS:
+      case s.COLUMNS:
         this.columns.clear(), this.columns.addAll(t), super.eSet(e, t);
         break;
-      case r.CELLS:
+      case s.CELLS:
         this.cells.clear(), this.cells.addAll(t), super.eSet(e, t);
         break;
-      case r.TABLE_STATE:
+      case s.TABLE_STATE:
         this.tableState = t, super.eSet(e, t);
         break;
-      case r.HEADER_BACKGROUND_COLOR:
+      case s.HEADER_BACKGROUND_COLOR:
         this.headerBackgroundColor = t, super.eSet(e, t);
         break;
-      case r.HEADER_TEXT_COLOR:
+      case s.HEADER_TEXT_COLOR:
         this.headerTextColor = t, super.eSet(e, t);
         break;
-      case r.CELL_BACKGROUND_COLOR:
+      case s.CELL_BACKGROUND_COLOR:
         this.cellBackgroundColor = t, super.eSet(e, t);
         break;
-      case r.CELL_TEXT_COLOR:
+      case s.CELL_TEXT_COLOR:
         this.cellTextColor = t, super.eSet(e, t);
         break;
-      case r.BORDER_COLOR:
+      case s.BORDER_COLOR:
         this.borderColor = t, super.eSet(e, t);
         break;
-      case r.DEFAULT_COLUMN_WIDTH:
+      case s.DEFAULT_COLUMN_WIDTH:
         this.defaultColumnWidth = t, super.eSet(e, t);
         break;
-      case r.DEFAULT_ROW_HEIGHT:
+      case s.DEFAULT_ROW_HEIGHT:
         this.defaultRowHeight = t, super.eSet(e, t);
         break;
-      case r.FONT_SIZE:
+      case s.FONT_SIZE:
         this.fontSize = t, super.eSet(e, t);
         break;
-      case r.HEADER_FONT_WEIGHT:
+      case s.HEADER_FONT_WEIGHT:
         this.headerFontWeight = t, super.eSet(e, t);
         break;
-      case r.CELL_TEXT_ALIGN:
+      case s.CELL_TEXT_ALIGN:
         this.cellTextAlign = t, super.eSet(e, t);
         break;
-      case r.SHOW_ROWS_PROPERTIES:
+      case s.SHOW_ROWS_PROPERTIES:
         this.showRowsProperties = t, super.eSet(e, t);
         break;
-      case r.SHOW_COLUMNS_PROPERTIES:
+      case s.SHOW_COLUMNS_PROPERTIES:
         this.showColumnsProperties = t, super.eSet(e, t);
         break;
-      case r.SHOW_SINGLE_MEASURE_HEADER:
+      case s.SHOW_SINGLE_MEASURE_HEADER:
         this.showSingleMeasureHeader = t, super.eSet(e, t);
         break;
-      case r.ROW_LEVEL_STYLES:
+      case s.ROW_LEVEL_STYLES:
         this.rowLevelStyles.clear(), this.rowLevelStyles.addAll(t), super.eSet(e, t);
         break;
-      case r.COLUMN_LEVEL_STYLES:
+      case s.COLUMN_LEVEL_STYLES:
         this.columnLevelStyles.clear(), this.columnLevelStyles.addAll(t), super.eSet(e, t);
         break;
-      case r.CONDITIONAL_FORMATS:
+      case s.CONDITIONAL_FORMATS:
         this.conditionalFormats.clear(), this.conditionalFormats.addAll(t), super.eSet(e, t);
         break;
       default:
@@ -1462,45 +1463,45 @@ class r extends fe {
    */
   eIsSet(e) {
     switch (this.eClass().getFeatureID(e)) {
-      case r.ROWS:
+      case s.ROWS:
         return this._rows !== void 0 && !this._rows.isEmpty();
-      case r.COLUMNS:
+      case s.COLUMNS:
         return this._columns !== void 0 && !this._columns.isEmpty();
-      case r.CELLS:
+      case s.CELLS:
         return this._cells !== void 0 && !this._cells.isEmpty();
-      case r.TABLE_STATE:
+      case s.TABLE_STATE:
         return this._tableState !== void 0;
-      case r.HEADER_BACKGROUND_COLOR:
-        return this._headerBackgroundColor !== new c();
-      case r.HEADER_TEXT_COLOR:
-        return this._headerTextColor !== new c();
-      case r.CELL_BACKGROUND_COLOR:
-        return this._cellBackgroundColor !== new c();
-      case r.CELL_TEXT_COLOR:
-        return this._cellTextColor !== new c();
-      case r.BORDER_COLOR:
-        return this._borderColor !== new c();
-      case r.DEFAULT_COLUMN_WIDTH:
-        return this._defaultColumnWidth !== new c();
-      case r.DEFAULT_ROW_HEIGHT:
-        return this._defaultRowHeight !== new c();
-      case r.FONT_SIZE:
-        return this._fontSize !== new c();
-      case r.HEADER_FONT_WEIGHT:
-        return this._headerFontWeight !== new c();
-      case r.CELL_TEXT_ALIGN:
+      case s.HEADER_BACKGROUND_COLOR:
+        return this._headerBackgroundColor !== new h();
+      case s.HEADER_TEXT_COLOR:
+        return this._headerTextColor !== new h();
+      case s.CELL_BACKGROUND_COLOR:
+        return this._cellBackgroundColor !== new h();
+      case s.CELL_TEXT_COLOR:
+        return this._cellTextColor !== new h();
+      case s.BORDER_COLOR:
+        return this._borderColor !== new h();
+      case s.DEFAULT_COLUMN_WIDTH:
+        return this._defaultColumnWidth !== new h();
+      case s.DEFAULT_ROW_HEIGHT:
+        return this._defaultRowHeight !== new h();
+      case s.FONT_SIZE:
+        return this._fontSize !== new h();
+      case s.HEADER_FONT_WEIGHT:
+        return this._headerFontWeight !== new h();
+      case s.CELL_TEXT_ALIGN:
         return this._cellTextAlign !== "left";
-      case r.SHOW_ROWS_PROPERTIES:
+      case s.SHOW_ROWS_PROPERTIES:
         return this._showRowsProperties !== !1;
-      case r.SHOW_COLUMNS_PROPERTIES:
+      case s.SHOW_COLUMNS_PROPERTIES:
         return this._showColumnsProperties !== !1;
-      case r.SHOW_SINGLE_MEASURE_HEADER:
+      case s.SHOW_SINGLE_MEASURE_HEADER:
         return this._showSingleMeasureHeader !== !1;
-      case r.ROW_LEVEL_STYLES:
+      case s.ROW_LEVEL_STYLES:
         return this._rowLevelStyles !== void 0 && !this._rowLevelStyles.isEmpty();
-      case r.COLUMN_LEVEL_STYLES:
+      case s.COLUMN_LEVEL_STYLES:
         return this._columnLevelStyles !== void 0 && !this._columnLevelStyles.isEmpty();
-      case r.CONDITIONAL_FORMATS:
+      case s.CONDITIONAL_FORMATS:
         return this._conditionalFormats !== void 0 && !this._conditionalFormats.isEmpty();
       default:
         return super.eIsSet(e);
@@ -1511,64 +1512,64 @@ class r extends fe {
    */
   eUnset(e) {
     switch (this.eClass().getFeatureID(e)) {
-      case r.ROWS:
+      case s.ROWS:
         this._rows && this._rows.clear();
         return;
-      case r.COLUMNS:
+      case s.COLUMNS:
         this._columns && this._columns.clear();
         return;
-      case r.CELLS:
+      case s.CELLS:
         this._cells && this._cells.clear();
         return;
-      case r.TABLE_STATE:
+      case s.TABLE_STATE:
         this._tableState = void 0;
         return;
-      case r.HEADER_BACKGROUND_COLOR:
-        this._headerBackgroundColor = new c();
+      case s.HEADER_BACKGROUND_COLOR:
+        this._headerBackgroundColor = new h();
         return;
-      case r.HEADER_TEXT_COLOR:
-        this._headerTextColor = new c();
+      case s.HEADER_TEXT_COLOR:
+        this._headerTextColor = new h();
         return;
-      case r.CELL_BACKGROUND_COLOR:
-        this._cellBackgroundColor = new c();
+      case s.CELL_BACKGROUND_COLOR:
+        this._cellBackgroundColor = new h();
         return;
-      case r.CELL_TEXT_COLOR:
-        this._cellTextColor = new c();
+      case s.CELL_TEXT_COLOR:
+        this._cellTextColor = new h();
         return;
-      case r.BORDER_COLOR:
-        this._borderColor = new c();
+      case s.BORDER_COLOR:
+        this._borderColor = new h();
         return;
-      case r.DEFAULT_COLUMN_WIDTH:
-        this._defaultColumnWidth = new c();
+      case s.DEFAULT_COLUMN_WIDTH:
+        this._defaultColumnWidth = new h();
         return;
-      case r.DEFAULT_ROW_HEIGHT:
-        this._defaultRowHeight = new c();
+      case s.DEFAULT_ROW_HEIGHT:
+        this._defaultRowHeight = new h();
         return;
-      case r.FONT_SIZE:
-        this._fontSize = new c();
+      case s.FONT_SIZE:
+        this._fontSize = new h();
         return;
-      case r.HEADER_FONT_WEIGHT:
-        this._headerFontWeight = new c();
+      case s.HEADER_FONT_WEIGHT:
+        this._headerFontWeight = new h();
         return;
-      case r.CELL_TEXT_ALIGN:
+      case s.CELL_TEXT_ALIGN:
         this._cellTextAlign = "left";
         return;
-      case r.SHOW_ROWS_PROPERTIES:
+      case s.SHOW_ROWS_PROPERTIES:
         this._showRowsProperties = !1;
         return;
-      case r.SHOW_COLUMNS_PROPERTIES:
+      case s.SHOW_COLUMNS_PROPERTIES:
         this._showColumnsProperties = !1;
         return;
-      case r.SHOW_SINGLE_MEASURE_HEADER:
+      case s.SHOW_SINGLE_MEASURE_HEADER:
         this._showSingleMeasureHeader = !1;
         return;
-      case r.ROW_LEVEL_STYLES:
+      case s.ROW_LEVEL_STYLES:
         this._rowLevelStyles && this._rowLevelStyles.clear();
         return;
-      case r.COLUMN_LEVEL_STYLES:
+      case s.COLUMN_LEVEL_STYLES:
         this._columnLevelStyles && this._columnLevelStyles.clear();
         return;
-      case r.CONDITIONAL_FORMATS:
+      case s.CONDITIONAL_FORMATS:
         this._conditionalFormats && this._conditionalFormats.clear();
         return;
       default:
@@ -1607,9 +1608,9 @@ class r extends fe {
     };
   }
 }
-const $e = { class: "component" }, Pe = /* @__PURE__ */ ve({
+const st = { class: "component" }, rt = /* @__PURE__ */ ye({
   __name: "PivotTableWidget",
-  props: /* @__PURE__ */ Me({
+  props: /* @__PURE__ */ Ge({
     datasourceId: {},
     id: {}
   }, {
@@ -1617,258 +1618,271 @@ const $e = { class: "component" }, Pe = /* @__PURE__ */ ve({
     configvModifiers: {}
   }),
   emits: ["update:configv"],
-  setup(N) {
-    const e = N, { datasourceId: t, id: n } = be(e), _ = ke(Je.TINY_EMITTER), A = () => {
-      n?.value && _.emit("widget:PivotTableWidget:click", {
+  setup(S) {
+    const e = S, { datasourceId: t, id: i } = Ye(e), L = Xe(Pe.TINY_EMITTER), y = () => {
+      i?.value && L.emit("widget:PivotTableWidget:click", {
         type: "widget:PivotTableWidget:click",
-        widgetId: n.value,
-        payload: { widgetId: n.value, timestamp: Date.now() }
+        widgetId: i.value,
+        payload: { widgetId: i.value, timestamp: Date.now() }
       });
     }, I = () => {
-      n?.value && _.emit("widget:PivotTableWidget:right_click", {
+      i?.value && L.emit("widget:PivotTableWidget:right_click", {
         type: "widget:PivotTableWidget:right_click",
-        widgetId: n.value,
-        payload: { widgetId: n.value, timestamp: Date.now() }
+        widgetId: i.value,
+        payload: { widgetId: i.value, timestamp: Date.now() }
       });
-    }, M = (a) => {
-      n?.value && _.emit("widget:PivotTableWidget:row_clicked", {
+    }, b = (d) => {
+      i?.value && L.emit("widget:PivotTableWidget:row_clicked", {
         type: "widget:PivotTableWidget:row_clicked",
-        widgetId: n.value,
-        payload: { widgetId: n.value, timestamp: Date.now(), uniqueName: a }
+        widgetId: i.value,
+        payload: { widgetId: i.value, timestamp: Date.now(), uniqueName: d }
       });
-    }, b = (a) => {
-      n?.value && _.emit("widget:PivotTableWidget:row_right_clicked", {
+    }, k = (d) => {
+      i?.value && L.emit("widget:PivotTableWidget:row_right_clicked", {
         type: "widget:PivotTableWidget:row_right_clicked",
-        widgetId: n.value,
-        payload: { widgetId: n.value, timestamp: Date.now(), uniqueName: a }
+        widgetId: i.value,
+        payload: { widgetId: i.value, timestamp: Date.now(), uniqueName: d }
       });
-    }, k = (a) => {
-      n?.value && _.emit("widget:PivotTableWidget:column_clicked", {
+    }, G = (d) => {
+      i?.value && L.emit("widget:PivotTableWidget:column_clicked", {
         type: "widget:PivotTableWidget:column_clicked",
-        widgetId: n.value,
-        payload: { widgetId: n.value, timestamp: Date.now(), uniqueName: a }
+        widgetId: i.value,
+        payload: { widgetId: i.value, timestamp: Date.now(), uniqueName: d }
       });
-    }, G = (a) => {
-      n?.value && _.emit("widget:PivotTableWidget:column_right_clicked", {
+    }, Y = (d) => {
+      i?.value && L.emit("widget:PivotTableWidget:column_right_clicked", {
         type: "widget:PivotTableWidget:column_right_clicked",
-        widgetId: n.value,
-        payload: { widgetId: n.value, timestamp: Date.now(), uniqueName: a }
+        widgetId: i.value,
+        payload: { widgetId: i.value, timestamp: Date.now(), uniqueName: d }
       });
-    }, Y = (a) => {
-      n?.value && _.emit("widget:PivotTableWidget:cell_clicked", {
+    }, X = (d) => {
+      i?.value && L.emit("widget:PivotTableWidget:cell_clicked", {
         type: "widget:PivotTableWidget:cell_clicked",
-        widgetId: n.value,
-        payload: { widgetId: n.value, timestamp: Date.now(), rowId: a.rowId, colId: a.colId }
+        widgetId: i.value,
+        payload: { widgetId: i.value, timestamp: Date.now(), rowId: d.rowId, colId: d.colId }
       });
-    }, X = (a) => {
-      n?.value && _.emit("widget:PivotTableWidget:cell_right_clicked", {
+    }, K = (d) => {
+      i?.value && L.emit("widget:PivotTableWidget:cell_right_clicked", {
         type: "widget:PivotTableWidget:cell_right_clicked",
-        widgetId: n.value,
-        payload: { widgetId: n.value, timestamp: Date.now(), rowId: a.rowId, colId: a.colId }
+        widgetId: i.value,
+        payload: { widgetId: i.value, timestamp: Date.now(), rowId: d.rowId, colId: d.colId }
       });
-    }, K = (a) => {
-      n?.value && _.emit("widget:PivotTableWidget:row_expanded", {
+    }, q = (d) => {
+      i?.value && L.emit("widget:PivotTableWidget:row_expanded", {
         type: "widget:PivotTableWidget:row_expanded",
-        widgetId: n.value,
-        payload: { widgetId: n.value, timestamp: Date.now(), uniqueName: a }
+        widgetId: i.value,
+        payload: { widgetId: i.value, timestamp: Date.now(), uniqueName: d }
       });
-    }, q = (a) => {
-      n?.value && _.emit("widget:PivotTableWidget:row_collapsed", {
+    }, M = (d) => {
+      i?.value && L.emit("widget:PivotTableWidget:row_collapsed", {
         type: "widget:PivotTableWidget:row_collapsed",
-        widgetId: n.value,
-        payload: { widgetId: n.value, timestamp: Date.now(), uniqueName: a }
+        widgetId: i.value,
+        payload: { widgetId: i.value, timestamp: Date.now(), uniqueName: d }
       });
-    }, z = (a) => {
-      n?.value && _.emit("widget:PivotTableWidget:column_expanded", {
+    }, z = (d) => {
+      i?.value && L.emit("widget:PivotTableWidget:column_expanded", {
         type: "widget:PivotTableWidget:column_expanded",
-        widgetId: n.value,
-        payload: { widgetId: n.value, timestamp: Date.now(), uniqueName: a }
+        widgetId: i.value,
+        payload: { widgetId: i.value, timestamp: Date.now(), uniqueName: d }
       });
-    }, Z = (a) => {
-      n?.value && _.emit("widget:PivotTableWidget:column_collapsed", {
+    }, Z = (d) => {
+      i?.value && L.emit("widget:PivotTableWidget:column_collapsed", {
         type: "widget:PivotTableWidget:column_collapsed",
-        widgetId: n.value,
-        payload: { widgetId: n.value, timestamp: Date.now(), uniqueName: a }
+        widgetId: i.value,
+        payload: { widgetId: i.value, timestamp: Date.now(), uniqueName: d }
       });
-    }, T = De(N, "configv"), { wrapParameters: J } = Xe(), u = new r();
-    Ge(() => {
+    }, T = Ue(S, "configv"), { wrapParameters: E } = Ze(), o = new s();
+    Ke(() => {
       T.value && Object.assign(T.value, {
-        ...Ae(u),
-        ...Ae(T.value)
+        ...ve(o),
+        ...ve(T.value)
       });
     });
-    const l = J({
-      headerBackgroundColor: F(() => T.value?.headerBackgroundColor?.value ?? u.headerBackgroundColor),
-      headerTextColor: F(() => T.value?.headerTextColor?.value ?? u.headerTextColor),
-      cellBackgroundColor: F(() => T.value?.cellBackgroundColor?.value ?? u.cellBackgroundColor),
-      cellTextColor: F(() => T.value?.cellTextColor?.value ?? u.cellTextColor),
-      borderColor: F(() => T.value?.borderColor?.value ?? u.borderColor),
-      defaultColumnWidth: F(() => T.value?.defaultColumnWidth?.value ?? u.defaultColumnWidth),
-      defaultRowHeight: F(() => T.value?.defaultRowHeight?.value ?? u.defaultRowHeight),
-      fontSize: F(() => T.value?.fontSize?.value ?? u.fontSize),
-      headerFontWeight: F(() => T.value?.headerFontWeight?.value ?? u.headerFontWeight),
-      jsonArrays: F(() => {
-        const a = {
-          rowLevelStyles: T.value?.rowLevelStyles?.map((h) => ({
-            ...h,
-            backgroundColor: h.backgroundColor?.value ?? h.backgroundColor,
-            textColor: h.textColor?.value ?? h.textColor
+    const r = E({
+      headerBackgroundColor: U(() => T.value?.headerBackgroundColor?.value ?? o.headerBackgroundColor),
+      headerTextColor: U(() => T.value?.headerTextColor?.value ?? o.headerTextColor),
+      cellBackgroundColor: U(() => T.value?.cellBackgroundColor?.value ?? o.cellBackgroundColor),
+      cellTextColor: U(() => T.value?.cellTextColor?.value ?? o.cellTextColor),
+      borderColor: U(() => T.value?.borderColor?.value ?? o.borderColor),
+      defaultColumnWidth: U(() => T.value?.defaultColumnWidth?.value ?? o.defaultColumnWidth),
+      defaultRowHeight: U(() => T.value?.defaultRowHeight?.value ?? o.defaultRowHeight),
+      fontSize: U(() => T.value?.fontSize?.value ?? o.fontSize),
+      headerFontWeight: U(() => T.value?.headerFontWeight?.value ?? o.headerFontWeight),
+      jsonArrays: U(() => {
+        const d = {
+          rowLevelStyles: T.value?.rowLevelStyles?.map((C) => ({
+            ...C,
+            backgroundColor: C.backgroundColor?.value ?? C.backgroundColor,
+            textColor: C.textColor?.value ?? C.textColor
           })),
-          columnLevelStyles: T.value?.columnLevelStyles?.map((h) => ({
-            ...h,
-            backgroundColor: h.backgroundColor?.value ?? h.backgroundColor,
-            textColor: h.textColor?.value ?? h.textColor
+          columnLevelStyles: T.value?.columnLevelStyles?.map((C) => ({
+            ...C,
+            backgroundColor: C.backgroundColor?.value ?? C.backgroundColor,
+            textColor: C.textColor?.value ?? C.textColor
           })),
-          conditionalFormats: T.value?.conditionalFormats?.map((h) => ({
-            ...h,
-            id: h.id ?? "",
-            priority: h.priority ?? 0,
-            backgroundColor: h.backgroundColor?.value ?? h.backgroundColor,
-            textColor: h.textColor?.value ?? h.textColor,
-            minColor: h.minColor?.value ?? h.minColor,
-            maxColor: h.maxColor?.value ?? h.maxColor
+          conditionalFormats: T.value?.conditionalFormats?.map((C) => ({
+            ...C,
+            id: C.id ?? "",
+            priority: C.priority ?? 0,
+            backgroundColor: C.backgroundColor?.value ?? C.backgroundColor,
+            textColor: C.textColor?.value ?? C.textColor,
+            minColor: C.minColor?.value ?? C.minColor,
+            maxColor: C.maxColor?.value ?? C.maxColor
           }))
         };
-        return JSON.stringify(a);
+        return JSON.stringify(d);
       })
-    }), V = F(() => {
+    }), g = U(() => {
       try {
-        const a = l.jsonArrays.value, h = JSON.parse(a || "{}");
+        const d = r.jsonArrays.value, C = JSON.parse(d || "{}");
         return {
-          rowLevelStyles: h.rowLevelStyles || u.rowLevelStyles,
-          columnLevelStyles: h.columnLevelStyles || u.columnLevelStyles,
-          conditionalFormats: h.conditionalFormats || u.conditionalFormats
+          rowLevelStyles: C.rowLevelStyles || o.rowLevelStyles,
+          columnLevelStyles: C.columnLevelStyles || o.columnLevelStyles,
+          conditionalFormats: C.conditionalFormats || o.conditionalFormats
         };
       } catch {
         return {
-          rowLevelStyles: u.rowLevelStyles,
-          columnLevelStyles: u.columnLevelStyles,
-          conditionalFormats: u.conditionalFormats
+          rowLevelStyles: o.rowLevelStyles,
+          columnLevelStyles: o.columnLevelStyles,
+          conditionalFormats: o.conditionalFormats
         };
       }
-    }), g = F(() => ({
-      headerBackgroundColor: l.headerBackgroundColor.value,
-      headerTextColor: l.headerTextColor.value,
-      cellBackgroundColor: l.cellBackgroundColor.value,
-      cellTextColor: l.cellTextColor.value,
-      borderColor: l.borderColor.value,
-      defaultColumnWidth: l.defaultColumnWidth.value,
-      defaultRowHeight: l.defaultRowHeight.value,
-      fontSize: l.fontSize.value,
-      headerFontWeight: l.headerFontWeight.value,
-      cellTextAlign: T.value?.cellTextAlign || u.cellTextAlign,
-      rowLevelStyles: V.value.rowLevelStyles,
-      columnLevelStyles: V.value.columnLevelStyles,
-      conditionalFormats: V.value.conditionalFormats
-    })), f = F(() => ({
-      showRowsProperties: T.value?.showRowsProperties || u.showRowsProperties,
-      showColumnsProperties: T.value?.showColumnsProperties || u.showColumnsProperties,
-      showSingleMeasureHeader: T.value?.showSingleMeasureHeader ?? u.showSingleMeasureHeader
-    })), L = Ie(null), { callEvent: W, update: w } = Ke(t, "PivotTable", L, [], f);
-    Re(t, (a, h) => {
-      w(a, h);
-    }), Re(() => f.value, () => {
-      w();
+    }), a = U(() => ({
+      headerBackgroundColor: r.headerBackgroundColor.value,
+      headerTextColor: r.headerTextColor.value,
+      cellBackgroundColor: r.cellBackgroundColor.value,
+      cellTextColor: r.cellTextColor.value,
+      borderColor: r.borderColor.value,
+      defaultColumnWidth: r.defaultColumnWidth.value,
+      defaultRowHeight: r.defaultRowHeight.value,
+      fontSize: r.fontSize.value,
+      headerFontWeight: r.headerFontWeight.value,
+      cellTextAlign: T.value?.cellTextAlign || o.cellTextAlign,
+      rowLevelStyles: g.value.rowLevelStyles,
+      columnLevelStyles: g.value.columnLevelStyles,
+      conditionalFormats: g.value.conditionalFormats
+    })), p = U(() => ({
+      showRowsProperties: T.value?.showRowsProperties || o.showRowsProperties,
+      showColumnsProperties: T.value?.showColumnsProperties || o.showColumnsProperties,
+      showSingleMeasureHeader: T.value?.showSingleMeasureHeader ?? o.showSingleMeasureHeader
+    })), D = qe(null), { callEvent: J, update: j } = Je(t, "PivotTable", D, [], p);
+    De(t, (d, C) => {
+      j(d, C);
+    }), De(() => p.value, () => {
+      j();
     });
-    const s = (a) => {
-      W("expand", a, !0), a.area === "rows" ? K(a.value?.UName || a.value?.UNAME) : a.area === "columns" && z(a.value?.UName || a.value?.UNAME);
-    }, E = (a) => {
-      W("collapse", a, !0), a.area === "rows" ? q(a.value?.UName || a.value?.UNAME) : a.area === "columns" && Z(a.value?.UName || a.value?.UNAME);
+    const m = (d) => {
+      J("expand", d, !0), d.area === "rows" ? q(d.value?.UName || d.value?.UNAME) : d.area === "columns" && z(d.value?.UName || d.value?.UNAME);
+    }, $ = (d) => {
+      J("collapse", d, !0), d.area === "rows" ? M(d.value?.UName || d.value?.UNAME) : d.area === "columns" && Z(d.value?.UName || d.value?.UNAME);
     };
-    return (a, h) => (R(), B("div", {
+    return (d, C) => (w(), W("div", {
       class: "text-container",
-      onClick: A,
-      onContextmenu: Ye(I, ["prevent"])
+      onClick: y,
+      onContextmenu: ze(I, ["prevent"])
     }, [
-      C("div", $e, [
-        L.value ? (R(), Ce(y(qe), {
-          "model-value": L.value,
-          onOnExpand: s,
-          onOnCollapse: E,
-          onRow_clicked: M,
-          onRow_right_clicked: b,
-          onColumn_clicked: k,
-          onColumn_right_clicked: G,
-          onCell_clicked: Y,
-          onCell_right_clicked: X,
-          key: JSON.stringify(L.value).length,
-          rowsExpandedMembers: L.value.tableState.rowsExpandedMembers,
-          columnsExpandedMembers: L.value.tableState.columnsExpandedMembers,
-          propertiesRows: L.value.propertiesRows,
-          propertiesCols: L.value.propertiesCols,
-          headerBackgroundColor: g.value.headerBackgroundColor,
-          headerTextColor: g.value.headerTextColor,
-          cellBackgroundColor: g.value.cellBackgroundColor,
-          cellTextColor: g.value.cellTextColor,
-          borderColor: g.value.borderColor,
-          defaultColumnWidth: g.value.defaultColumnWidth,
-          defaultRowHeight: g.value.defaultRowHeight,
-          fontSize: g.value.fontSize,
-          headerFontWeight: g.value.headerFontWeight,
-          cellTextAlign: g.value.cellTextAlign,
-          rowLevelStyles: g.value.rowLevelStyles,
-          columnLevelStyles: g.value.columnLevelStyles,
-          conditionalFormats: g.value.conditionalFormats
+      _("div", st, [
+        D.value ? (w(), Oe(u(Qe), {
+          "model-value": D.value,
+          onOnExpand: m,
+          onOnCollapse: $,
+          onRow_clicked: b,
+          onRow_right_clicked: k,
+          onColumn_clicked: G,
+          onColumn_right_clicked: Y,
+          onCell_clicked: X,
+          onCell_right_clicked: K,
+          key: JSON.stringify(D.value).length,
+          rowsExpandedMembers: D.value.tableState.rowsExpandedMembers,
+          columnsExpandedMembers: D.value.tableState.columnsExpandedMembers,
+          propertiesRows: D.value.propertiesRows,
+          propertiesCols: D.value.propertiesCols,
+          headerBackgroundColor: a.value.headerBackgroundColor,
+          headerTextColor: a.value.headerTextColor,
+          cellBackgroundColor: a.value.cellBackgroundColor,
+          cellTextColor: a.value.cellTextColor,
+          borderColor: a.value.borderColor,
+          defaultColumnWidth: a.value.defaultColumnWidth,
+          defaultRowHeight: a.value.defaultRowHeight,
+          fontSize: a.value.fontSize,
+          headerFontWeight: a.value.headerFontWeight,
+          cellTextAlign: a.value.cellTextAlign,
+          rowLevelStyles: a.value.rowLevelStyles,
+          columnLevelStyles: a.value.columnLevelStyles,
+          conditionalFormats: a.value.conditionalFormats
         }, null, 8, ["model-value", "rowsExpandedMembers", "columnsExpandedMembers", "propertiesRows", "propertiesCols", "headerBackgroundColor", "headerTextColor", "cellBackgroundColor", "cellTextColor", "borderColor", "defaultColumnWidth", "defaultRowHeight", "fontSize", "headerFontWeight", "cellTextAlign", "rowLevelStyles", "columnLevelStyles", "conditionalFormats"])) : Q("", !0)
       ])
     ], 32));
   }
-}), ye = (N, e) => {
-  const t = N.__vccOpts || N;
-  for (const [n, _] of e)
-    t[n] = _;
+}), Be = (S, e) => {
+  const t = S.__vccOpts || S;
+  for (const [i, L] of e)
+    t[i] = L;
   return t;
-}, et = /* @__PURE__ */ ye(Pe, [["__scopeId", "data-v-498e0ac7"]]), tt = { class: "settings-container" }, st = { class: "settings-container" }, rt = { class: "settings-block" }, lt = { class: "settings-block" }, ot = { class: "settings-block" }, at = { class: "settings-container" }, it = { class: "settings-block" }, nt = { class: "settings-container" }, ut = { class: "settings-block" }, dt = { class: "settings-container" }, ct = { class: "level-header" }, ht = { class: "level-card-header" }, Et = {
+}, lt = /* @__PURE__ */ Be(rt, [["__scopeId", "data-v-498e0ac7"]]), ot = {
+  class: "settings-section",
+  "data-section": "Data settings"
+}, at = { class: "settings-container" }, it = {
+  class: "settings-section",
+  "data-section": "Farben"
+}, nt = { class: "settings-container" }, ut = { class: "settings-block" }, dt = { class: "settings-block" }, ct = { class: "settings-block" }, ht = {
+  class: "settings-section",
+  "data-section": "Dimensionen"
+}, Et = { class: "settings-container" }, _t = { class: "settings-block" }, gt = {
+  class: "settings-section",
+  "data-section": "Text"
+}, Ct = { class: "settings-container" }, Lt = { class: "settings-block" }, Ot = {
+  class: "settings-section",
+  "data-section": "Zeilen-Level Styles"
+}, Tt = { class: "settings-container" }, pt = { class: "level-header" }, ft = { class: "level-card-header" }, Nt = {
   key: 0,
   class: "empty-state"
-}, _t = { class: "settings-container" }, gt = { class: "level-header" }, Ct = { class: "level-card-header" }, Lt = {
+}, St = {
+  class: "settings-section",
+  "data-section": "Spalten-Level Styles"
+}, mt = { class: "settings-container" }, Rt = { class: "level-header" }, At = { class: "level-card-header" }, wt = {
   key: 0,
   class: "empty-state"
-}, Ot = { class: "settings-container" }, Tt = { class: "level-header" }, pt = { class: "level-card-header" }, ft = {
+}, Dt = {
+  class: "settings-section",
+  "data-section": "Bedingte Formatierung"
+}, vt = { class: "settings-container" }, Vt = { class: "level-header" }, It = { class: "level-card-header" }, yt = {
   key: 3,
   class: "color-scale-row"
-}, St = {
+}, Ut = {
   key: 0,
   class: "empty-state"
-}, Nt = /* @__PURE__ */ ve({
+}, Ft = /* @__PURE__ */ ye({
   __name: "PivotTableWidgetSettings",
   props: {
     modelValue: { required: !0 },
     modelModifiers: {}
   },
   emits: ["update:modelValue"],
-  setup(N) {
-    const e = De(N, "modelValue"), t = Ie({
-      colorsSection: !0,
-      dimensionsSection: !1,
-      textSection: !1,
-      rowLevelsSection: !1,
-      columnLevelsSection: !1,
-      conditionalFormatSection: !1,
-      dataSettings: !1
-    }), n = [
+  setup(S) {
+    const e = Ue(S, "modelValue"), t = [
       { value: "left", text: "Links" },
       { value: "center", text: "Zentriert" },
       { value: "right", text: "Rechts" }
     ];
-    function _(u, l) {
-      typeof u?.add == "function" ? u.add(l) : Array.isArray(u) && u.push(l);
+    function i(E, o) {
+      typeof E?.add == "function" ? E.add(o) : Array.isArray(E) && E.push(o);
     }
-    function A(u, l) {
-      typeof u?.removeAt == "function" ? u.removeAt(l) : Array.isArray(u) && u.splice(l, 1);
+    function L(E, o) {
+      typeof E?.removeAt == "function" ? E.removeAt(o) : Array.isArray(E) && E.splice(o, 1);
     }
-    const I = () => {
+    const y = () => {
       e.value.rowLevelStyles || (e.value.rowLevelStyles = []);
-      const u = e.value.rowLevelStyles.length, l = new O();
-      l.level = u, _(e.value.rowLevelStyles, l);
-    }, M = (u) => {
-      A(e.value.rowLevelStyles, u);
+      const E = e.value.rowLevelStyles.length, o = new O();
+      o.level = E, i(e.value.rowLevelStyles, o);
+    }, I = (E) => {
+      L(e.value.rowLevelStyles, E);
     }, b = () => {
       e.value.columnLevelStyles || (e.value.columnLevelStyles = []);
-      const u = e.value.columnLevelStyles.length, l = new O();
-      l.level = u, _(e.value.columnLevelStyles, l);
-    }, k = (u) => {
-      A(e.value.columnLevelStyles, u);
+      const E = e.value.columnLevelStyles.length, o = new O();
+      o.level = E, i(e.value.columnLevelStyles, o);
+    }, k = (E) => {
+      L(e.value.columnLevelStyles, E);
     }, G = [
       { value: "greaterThan", text: "Größer als" },
       { value: "lessThan", text: "Kleiner als" },
@@ -1881,538 +1895,512 @@ const $e = { class: "component" }, Pe = /* @__PURE__ */ ve({
       { value: "bottomN", text: "Bottom N Werte" }
     ], Y = () => Math.random().toString(36).substring(2, 9), X = () => {
       e.value.conditionalFormats || (e.value.conditionalFormats = []);
-      const u = e.value.conditionalFormats.length, l = new i();
-      l.id = Y(), l.priority = u, _(e.value.conditionalFormats, l);
-    }, K = (u) => {
-      A(e.value.conditionalFormats, u);
-    }, q = (u) => u === "between", z = (u) => u === "colorScale", Z = (u) => u === "contains", T = (u) => u === "topN" || u === "bottomN", J = (u) => u !== "colorScale";
-    return (u, l) => {
-      const V = ae("VaCheckbox"), g = ae("va-collapse"), f = ae("va-color-input"), L = ae("va-input"), W = ae("va-select"), w = ae("va-button");
-      return R(), B(ge, null, [
-        d(g, {
-          modelValue: t.value.dataSettings,
-          "onUpdate:modelValue": l[3] || (l[3] = (s) => t.value.dataSettings = s),
-          header: "Data settings",
-          icon: "palette"
-        }, {
-          default: p(() => [
-            C("div", tt, [
-              d(V, {
-                modelValue: e.value.showRowsProperties,
-                "onUpdate:modelValue": l[0] || (l[0] = (s) => e.value.showRowsProperties = s),
-                label: "Show rows properties",
-                style: { margin: "0.5rem 0" }
-              }, null, 8, ["modelValue"]),
-              d(V, {
-                modelValue: e.value.showColumnsProperties,
-                "onUpdate:modelValue": l[1] || (l[1] = (s) => e.value.showColumnsProperties = s),
-                label: "Show columns properties",
-                style: { margin: "0.5rem 0" }
-              }, null, 8, ["modelValue"]),
-              d(V, {
-                modelValue: e.value.showSingleMeasureHeader,
-                "onUpdate:modelValue": l[2] || (l[2] = (s) => e.value.showSingleMeasureHeader = s),
-                label: "Show single measure header",
-                style: { margin: "0.5rem 0" }
-              }, null, 8, ["modelValue"])
-            ])
-          ]),
-          _: 1
-        }, 8, ["modelValue"]),
-        d(g, {
-          modelValue: t.value.colorsSection,
-          "onUpdate:modelValue": l[9] || (l[9] = (s) => t.value.colorsSection = s),
-          header: "Farben",
-          icon: "palette"
-        }, {
-          default: p(() => [
-            C("div", st, [
-              C("div", rt, [
-                l[20] || (l[20] = C("h3", null, "Header", -1)),
-                d(y(U), {
-                  modelValue: e.value.headerBackgroundColor,
-                  "onUpdate:modelValue": l[4] || (l[4] = (s) => e.value.headerBackgroundColor = s),
-                  label: "Header Hintergrund"
-                }, {
-                  default: p(({ value: s, change: E }) => [
-                    d(f, {
-                      label: "Header Hintergrund",
-                      "model-value": s,
-                      onInput: E
-                    }, null, 8, ["model-value", "onInput"])
-                  ]),
-                  _: 1
-                }, 8, ["modelValue"]),
-                d(y(U), {
-                  modelValue: e.value.headerTextColor,
-                  "onUpdate:modelValue": l[5] || (l[5] = (s) => e.value.headerTextColor = s),
-                  label: "Header Textfarbe"
-                }, {
-                  default: p(({ value: s, change: E }) => [
-                    d(f, {
-                      label: "Header Textfarbe",
-                      "model-value": s,
-                      onInput: E
-                    }, null, 8, ["model-value", "onInput"])
-                  ]),
-                  _: 1
-                }, 8, ["modelValue"])
+      const E = e.value.conditionalFormats.length, o = new n();
+      o.id = Y(), o.priority = E, i(e.value.conditionalFormats, o);
+    }, K = (E) => {
+      L(e.value.conditionalFormats, E);
+    }, q = (E) => E === "between", M = (E) => E === "colorScale", z = (E) => E === "contains", Z = (E) => E === "topN" || E === "bottomN", T = (E) => E !== "colorScale";
+    return (E, o) => (w(), W(Le, null, [
+      _("section", ot, [
+        _("div", at, [
+          c(u(Se), {
+            modelValue: e.value.showRowsProperties,
+            "onUpdate:modelValue": o[0] || (o[0] = (r) => e.value.showRowsProperties = r),
+            label: "Show rows properties"
+          }, null, 8, ["modelValue"]),
+          c(u(Se), {
+            modelValue: e.value.showColumnsProperties,
+            "onUpdate:modelValue": o[1] || (o[1] = (r) => e.value.showColumnsProperties = r),
+            label: "Show columns properties"
+          }, null, 8, ["modelValue"]),
+          c(u(Se), {
+            modelValue: e.value.showSingleMeasureHeader,
+            "onUpdate:modelValue": o[2] || (o[2] = (r) => e.value.showSingleMeasureHeader = r),
+            label: "Show single measure header"
+          }, null, 8, ["modelValue"])
+        ])
+      ]),
+      _("section", it, [
+        _("div", nt, [
+          _("div", ut, [
+            o[13] || (o[13] = _("h3", null, "Header", -1)),
+            c(u(A), {
+              modelValue: e.value.headerBackgroundColor,
+              "onUpdate:modelValue": o[3] || (o[3] = (r) => e.value.headerBackgroundColor = r),
+              label: "Header Hintergrund"
+            }, {
+              default: f(({ value: r, change: g }) => [
+                c(u(F), {
+                  label: "Header Hintergrund",
+                  "model-value": r,
+                  "onUpdate:modelValue": g
+                }, null, 8, ["model-value", "onUpdate:modelValue"])
               ]),
-              C("div", lt, [
-                l[21] || (l[21] = C("h3", null, "Zellen", -1)),
-                d(y(U), {
-                  modelValue: e.value.cellBackgroundColor,
-                  "onUpdate:modelValue": l[6] || (l[6] = (s) => e.value.cellBackgroundColor = s),
-                  label: "Zellen Hintergrund"
-                }, {
-                  default: p(({ value: s, change: E }) => [
-                    d(f, {
-                      label: "Zellen Hintergrund",
-                      "model-value": s,
-                      onInput: E
-                    }, null, 8, ["model-value", "onInput"])
-                  ]),
-                  _: 1
-                }, 8, ["modelValue"]),
-                d(y(U), {
-                  modelValue: e.value.cellTextColor,
-                  "onUpdate:modelValue": l[7] || (l[7] = (s) => e.value.cellTextColor = s),
-                  label: "Zellen Textfarbe"
-                }, {
-                  default: p(({ value: s, change: E }) => [
-                    d(f, {
-                      label: "Zellen Textfarbe",
-                      "model-value": s,
-                      onInput: E
-                    }, null, 8, ["model-value", "onInput"])
-                  ]),
-                  _: 1
-                }, 8, ["modelValue"])
+              _: 1
+            }, 8, ["modelValue"]),
+            c(u(A), {
+              modelValue: e.value.headerTextColor,
+              "onUpdate:modelValue": o[4] || (o[4] = (r) => e.value.headerTextColor = r),
+              label: "Header Textfarbe"
+            }, {
+              default: f(({ value: r, change: g }) => [
+                c(u(F), {
+                  label: "Header Textfarbe",
+                  "model-value": r,
+                  "onUpdate:modelValue": g
+                }, null, 8, ["model-value", "onUpdate:modelValue"])
               ]),
-              C("div", ot, [
-                l[22] || (l[22] = C("h3", null, "Rahmen", -1)),
-                d(y(U), {
-                  modelValue: e.value.borderColor,
-                  "onUpdate:modelValue": l[8] || (l[8] = (s) => e.value.borderColor = s),
-                  label: "Rahmenfarbe"
-                }, {
-                  default: p(({ value: s, change: E }) => [
-                    d(f, {
-                      label: "Rahmenfarbe",
-                      "model-value": s,
-                      onInput: E
-                    }, null, 8, ["model-value", "onInput"])
-                  ]),
-                  _: 1
-                }, 8, ["modelValue"])
-              ])
-            ])
+              _: 1
+            }, 8, ["modelValue"])
           ]),
-          _: 1
-        }, 8, ["modelValue"]),
-        d(g, {
-          modelValue: t.value.dimensionsSection,
-          "onUpdate:modelValue": l[12] || (l[12] = (s) => t.value.dimensionsSection = s),
-          header: "Dimensionen",
-          icon: "straighten"
-        }, {
-          default: p(() => [
-            C("div", at, [
-              C("div", it, [
-                d(y(U), {
-                  modelValue: e.value.defaultColumnWidth,
-                  "onUpdate:modelValue": l[10] || (l[10] = (s) => e.value.defaultColumnWidth = s),
-                  label: "Standard Spaltenbreite (px)"
-                }, {
-                  default: p(({ value: s, change: E }) => [
-                    d(L, {
-                      label: "Standard Spaltenbreite (px)",
-                      "model-value": s,
-                      "onUpdate:modelValue": E,
-                      type: "number",
-                      min: 50,
-                      max: 500
-                    }, null, 8, ["model-value", "onUpdate:modelValue"])
-                  ]),
-                  _: 1
-                }, 8, ["modelValue"]),
-                d(y(U), {
-                  modelValue: e.value.defaultRowHeight,
-                  "onUpdate:modelValue": l[11] || (l[11] = (s) => e.value.defaultRowHeight = s),
-                  label: "Standard Zeilenhöhe (px)"
-                }, {
-                  default: p(({ value: s, change: E }) => [
-                    d(L, {
-                      label: "Standard Zeilenhöhe (px)",
-                      "model-value": s,
-                      "onUpdate:modelValue": E,
-                      type: "number",
-                      min: 20,
-                      max: 100
-                    }, null, 8, ["model-value", "onUpdate:modelValue"])
-                  ]),
-                  _: 1
-                }, 8, ["modelValue"])
-              ])
-            ])
-          ]),
-          _: 1
-        }, 8, ["modelValue"]),
-        d(g, {
-          modelValue: t.value.textSection,
-          "onUpdate:modelValue": l[16] || (l[16] = (s) => t.value.textSection = s),
-          header: "Text",
-          icon: "text_fields"
-        }, {
-          default: p(() => [
-            C("div", nt, [
-              C("div", ut, [
-                d(y(U), {
-                  modelValue: e.value.fontSize,
-                  "onUpdate:modelValue": l[13] || (l[13] = (s) => e.value.fontSize = s),
-                  label: "Schriftgröße (px)"
-                }, {
-                  default: p(({ value: s, change: E }) => [
-                    d(L, {
-                      label: "Schriftgröße (px)",
-                      "model-value": s,
-                      "onUpdate:modelValue": E,
-                      type: "number",
-                      min: 8,
-                      max: 32
-                    }, null, 8, ["model-value", "onUpdate:modelValue"])
-                  ]),
-                  _: 1
-                }, 8, ["modelValue"]),
-                d(y(U), {
-                  modelValue: e.value.headerFontWeight,
-                  "onUpdate:modelValue": l[14] || (l[14] = (s) => e.value.headerFontWeight = s),
-                  label: "Header Font-Weight"
-                }, {
-                  default: p(({ value: s, change: E }) => [
-                    d(L, {
-                      label: "Header Font-Weight",
-                      "model-value": s,
-                      "onUpdate:modelValue": E,
-                      type: "number",
-                      min: 100,
-                      max: 900,
-                      step: 100
-                    }, null, 8, ["model-value", "onUpdate:modelValue"])
-                  ]),
-                  _: 1
-                }, 8, ["modelValue"]),
-                d(W, {
-                  label: "Text-Ausrichtung (Zellen)",
-                  modelValue: e.value.cellTextAlign,
-                  "onUpdate:modelValue": l[15] || (l[15] = (s) => e.value.cellTextAlign = s),
-                  options: n,
-                  "value-by": "value"
-                }, null, 8, ["modelValue"])
-              ])
-            ])
-          ]),
-          _: 1
-        }, 8, ["modelValue"]),
-        d(g, {
-          modelValue: t.value.rowLevelsSection,
-          "onUpdate:modelValue": l[17] || (l[17] = (s) => t.value.rowLevelsSection = s),
-          header: "Zeilen-Level Styles",
-          icon: "table_rows"
-        }, {
-          default: p(() => [
-            C("div", dt, [
-              l[26] || (l[26] = C("p", { class: "hint-text" }, " Definiere individuelle Styles für verschiedene Hierarchie-Level in den Zeilen-Headern. ", -1)),
-              C("div", ct, [
-                l[24] || (l[24] = C("span", null, "Level-Konfiguration", -1)),
-                d(w, {
-                  size: "small",
-                  onClick: I
-                }, {
-                  default: p(() => [...l[23] || (l[23] = [
-                    ie("Level hinzufügen", -1)
-                  ])]),
-                  _: 1
-                })
+          _("div", dt, [
+            o[14] || (o[14] = _("h3", null, "Zellen", -1)),
+            c(u(A), {
+              modelValue: e.value.cellBackgroundColor,
+              "onUpdate:modelValue": o[5] || (o[5] = (r) => e.value.cellBackgroundColor = r),
+              label: "Zellen Hintergrund"
+            }, {
+              default: f(({ value: r, change: g }) => [
+                c(u(F), {
+                  label: "Zellen Hintergrund",
+                  "model-value": r,
+                  "onUpdate:modelValue": g
+                }, null, 8, ["model-value", "onUpdate:modelValue"])
               ]),
-              (R(!0), B(ge, null, Te(e.value.rowLevelStyles, (s, E) => (R(), B("div", {
-                key: `row_level_${E}`,
-                class: "level-card"
-              }, [
-                C("div", ht, [
-                  C("strong", null, "Level " + pe(s.level), 1),
-                  d(w, {
-                    size: "small",
-                    color: "danger",
-                    onClick: (a) => M(E)
-                  }, {
-                    default: p(() => [...l[25] || (l[25] = [
-                      ie("Entfernen", -1)
-                    ])]),
-                    _: 1
-                  }, 8, ["onClick"])
-                ]),
-                d(L, {
-                  label: "Level-Nummer",
-                  modelValue: s.level,
-                  "onUpdate:modelValue": (a) => s.level = a,
-                  modelModifiers: { number: !0 },
+              _: 1
+            }, 8, ["modelValue"]),
+            c(u(A), {
+              modelValue: e.value.cellTextColor,
+              "onUpdate:modelValue": o[6] || (o[6] = (r) => e.value.cellTextColor = r),
+              label: "Zellen Textfarbe"
+            }, {
+              default: f(({ value: r, change: g }) => [
+                c(u(F), {
+                  label: "Zellen Textfarbe",
+                  "model-value": r,
+                  "onUpdate:modelValue": g
+                }, null, 8, ["model-value", "onUpdate:modelValue"])
+              ]),
+              _: 1
+            }, 8, ["modelValue"])
+          ]),
+          _("div", ct, [
+            o[15] || (o[15] = _("h3", null, "Rahmen", -1)),
+            c(u(A), {
+              modelValue: e.value.borderColor,
+              "onUpdate:modelValue": o[7] || (o[7] = (r) => e.value.borderColor = r),
+              label: "Rahmenfarbe"
+            }, {
+              default: f(({ value: r, change: g }) => [
+                c(u(F), {
+                  label: "Rahmenfarbe",
+                  "model-value": r,
+                  "onUpdate:modelValue": g
+                }, null, 8, ["model-value", "onUpdate:modelValue"])
+              ]),
+              _: 1
+            }, 8, ["modelValue"])
+          ])
+        ])
+      ]),
+      _("section", ht, [
+        _("div", Et, [
+          _("div", _t, [
+            c(u(A), {
+              modelValue: e.value.defaultColumnWidth,
+              "onUpdate:modelValue": o[8] || (o[8] = (r) => e.value.defaultColumnWidth = r),
+              label: "Standard Spaltenbreite (px)"
+            }, {
+              default: f(({ value: r, change: g }) => [
+                c(u(B), {
+                  label: "Standard Spaltenbreite (px)",
+                  "model-value": r,
+                  "onUpdate:modelValue": g,
                   type: "number",
-                  min: 0
-                }, null, 8, ["modelValue", "onUpdate:modelValue"]),
-                d(y(U), {
-                  modelValue: s.backgroundColor,
-                  "onUpdate:modelValue": (a) => s.backgroundColor = a,
-                  label: "Hintergrundfarbe"
-                }, {
-                  default: p(({ value: a, change: h }) => [
-                    d(f, {
-                      label: "Hintergrundfarbe",
-                      "model-value": a,
-                      onInput: h
-                    }, null, 8, ["model-value", "onInput"])
-                  ]),
-                  _: 1
-                }, 8, ["modelValue", "onUpdate:modelValue"]),
-                d(y(U), {
-                  modelValue: s.textColor,
-                  "onUpdate:modelValue": (a) => s.textColor = a,
-                  label: "Textfarbe"
-                }, {
-                  default: p(({ value: a, change: h }) => [
-                    d(f, {
-                      label: "Textfarbe",
-                      "model-value": a,
-                      onInput: h
-                    }, null, 8, ["model-value", "onInput"])
-                  ]),
-                  _: 1
-                }, 8, ["modelValue", "onUpdate:modelValue"]),
-                d(L, {
-                  label: "Font-Weight",
-                  modelValue: s.fontWeight,
-                  "onUpdate:modelValue": (a) => s.fontWeight = a,
-                  modelModifiers: { number: !0 },
+                  min: 50,
+                  max: 500
+                }, null, 8, ["model-value", "onUpdate:modelValue"])
+              ]),
+              _: 1
+            }, 8, ["modelValue"]),
+            c(u(A), {
+              modelValue: e.value.defaultRowHeight,
+              "onUpdate:modelValue": o[9] || (o[9] = (r) => e.value.defaultRowHeight = r),
+              label: "Standard Zeilenhöhe (px)"
+            }, {
+              default: f(({ value: r, change: g }) => [
+                c(u(B), {
+                  label: "Standard Zeilenhöhe (px)",
+                  "model-value": r,
+                  "onUpdate:modelValue": g,
+                  type: "number",
+                  min: 20,
+                  max: 100
+                }, null, 8, ["model-value", "onUpdate:modelValue"])
+              ]),
+              _: 1
+            }, 8, ["modelValue"])
+          ])
+        ])
+      ]),
+      _("section", gt, [
+        _("div", Ct, [
+          _("div", Lt, [
+            c(u(A), {
+              modelValue: e.value.fontSize,
+              "onUpdate:modelValue": o[10] || (o[10] = (r) => e.value.fontSize = r),
+              label: "Schriftgröße (px)"
+            }, {
+              default: f(({ value: r, change: g }) => [
+                c(u(B), {
+                  label: "Schriftgröße (px)",
+                  "model-value": r,
+                  "onUpdate:modelValue": g,
+                  type: "number",
+                  min: 8,
+                  max: 32
+                }, null, 8, ["model-value", "onUpdate:modelValue"])
+              ]),
+              _: 1
+            }, 8, ["modelValue"]),
+            c(u(A), {
+              modelValue: e.value.headerFontWeight,
+              "onUpdate:modelValue": o[11] || (o[11] = (r) => e.value.headerFontWeight = r),
+              label: "Header Font-Weight"
+            }, {
+              default: f(({ value: r, change: g }) => [
+                c(u(B), {
+                  label: "Header Font-Weight",
+                  "model-value": r,
+                  "onUpdate:modelValue": g,
                   type: "number",
                   min: 100,
                   max: 900,
                   step: 100
-                }, null, 8, ["modelValue", "onUpdate:modelValue"])
-              ]))), 128)),
-              e.value.rowLevelStyles?.length ? Q("", !0) : (R(), B("div", Et, ' Keine Level-Styles definiert. Klicke "Level hinzufügen" um anzufangen. '))
-            ])
-          ]),
-          _: 1
-        }, 8, ["modelValue"]),
-        d(g, {
-          modelValue: t.value.columnLevelsSection,
-          "onUpdate:modelValue": l[18] || (l[18] = (s) => t.value.columnLevelsSection = s),
-          header: "Spalten-Level Styles",
-          icon: "view_column"
-        }, {
-          default: p(() => [
-            C("div", _t, [
-              l[30] || (l[30] = C("p", { class: "hint-text" }, " Definiere individuelle Styles für verschiedene Hierarchie-Level in den Spalten-Headern. ", -1)),
-              C("div", gt, [
-                l[28] || (l[28] = C("span", null, "Level-Konfiguration", -1)),
-                d(w, {
-                  size: "small",
-                  onClick: b
-                }, {
-                  default: p(() => [...l[27] || (l[27] = [
-                    ie("Level hinzufügen", -1)
-                  ])]),
-                  _: 1
-                })
+                }, null, 8, ["model-value", "onUpdate:modelValue"])
               ]),
-              (R(!0), B(ge, null, Te(e.value.columnLevelStyles, (s, E) => (R(), B("div", {
-                key: `col_level_${E}`,
-                class: "level-card"
-              }, [
-                C("div", Ct, [
-                  C("strong", null, "Level " + pe(s.level), 1),
-                  d(w, {
-                    size: "small",
-                    color: "danger",
-                    onClick: (a) => k(E)
-                  }, {
-                    default: p(() => [...l[29] || (l[29] = [
-                      ie("Entfernen", -1)
-                    ])]),
-                    _: 1
-                  }, 8, ["onClick"])
-                ]),
-                d(L, {
-                  label: "Level-Nummer",
-                  modelValue: s.level,
-                  "onUpdate:modelValue": (a) => s.level = a,
-                  modelModifiers: { number: !0 },
-                  type: "number",
-                  min: 0
-                }, null, 8, ["modelValue", "onUpdate:modelValue"]),
-                d(y(U), {
-                  modelValue: s.backgroundColor,
-                  "onUpdate:modelValue": (a) => s.backgroundColor = a,
-                  label: "Hintergrundfarbe"
-                }, {
-                  default: p(({ value: a, change: h }) => [
-                    d(f, {
-                      label: "Hintergrundfarbe",
-                      "model-value": a,
-                      onInput: h
-                    }, null, 8, ["model-value", "onInput"])
-                  ]),
-                  _: 1
-                }, 8, ["modelValue", "onUpdate:modelValue"]),
-                d(y(U), {
-                  modelValue: s.textColor,
-                  "onUpdate:modelValue": (a) => s.textColor = a,
-                  label: "Textfarbe"
-                }, {
-                  default: p(({ value: a, change: h }) => [
-                    d(f, {
-                      label: "Textfarbe",
-                      "model-value": a,
-                      onInput: h
-                    }, null, 8, ["model-value", "onInput"])
-                  ]),
-                  _: 1
-                }, 8, ["modelValue", "onUpdate:modelValue"]),
-                d(L, {
-                  label: "Font-Weight",
-                  modelValue: s.fontWeight,
-                  "onUpdate:modelValue": (a) => s.fontWeight = a,
-                  modelModifiers: { number: !0 },
-                  type: "number",
-                  min: 100,
-                  max: 900,
-                  step: 100
-                }, null, 8, ["modelValue", "onUpdate:modelValue"])
-              ]))), 128)),
-              e.value.columnLevelStyles?.length ? Q("", !0) : (R(), B("div", Lt, ' Keine Level-Styles definiert. Klicke "Level hinzufügen" um anzufangen. '))
-            ])
+              _: 1
+            }, 8, ["modelValue"]),
+            c(u(Ve), {
+              label: "Text-Ausrichtung (Zellen)",
+              modelValue: e.value.cellTextAlign,
+              "onUpdate:modelValue": o[12] || (o[12] = (r) => e.value.cellTextAlign = r),
+              options: t,
+              "value-key": "value"
+            }, null, 8, ["modelValue"])
+          ])
+        ])
+      ]),
+      _("section", Ot, [
+        _("div", Tt, [
+          o[19] || (o[19] = _("p", { class: "hint-text" }, " Definiere individuelle Styles für verschiedene Hierarchie-Level in den Zeilen-Headern. ", -1)),
+          _("div", pt, [
+            o[17] || (o[17] = _("span", null, "Level-Konfiguration", -1)),
+            c(u(de), {
+              size: "sm",
+              onClick: y
+            }, {
+              default: f(() => [...o[16] || (o[16] = [
+                ne("Level hinzufügen", -1)
+              ])]),
+              _: 1
+            })
           ]),
-          _: 1
-        }, 8, ["modelValue"]),
-        d(g, {
-          modelValue: t.value.conditionalFormatSection,
-          "onUpdate:modelValue": l[19] || (l[19] = (s) => t.value.conditionalFormatSection = s),
-          header: "Bedingte Formatierung",
-          icon: "format_color_fill"
-        }, {
-          default: p(() => [
-            C("div", Ot, [
-              l[34] || (l[34] = C("p", { class: "hint-text" }, " Definiere Regeln zur automatischen Formatierung von Zellen basierend auf ihren Werten. ", -1)),
-              C("div", Tt, [
-                l[32] || (l[32] = C("span", null, "Formatierungsregeln", -1)),
-                d(w, {
-                  size: "small",
-                  onClick: X
-                }, {
-                  default: p(() => [...l[31] || (l[31] = [
-                    ie("Regel hinzufügen", -1)
-                  ])]),
-                  _: 1
-                })
+          (w(!0), W(Le, null, fe(e.value.rowLevelStyles, (r, g) => (w(), W("div", {
+            key: `row_level_${g}`,
+            class: "level-card"
+          }, [
+            _("div", ft, [
+              _("strong", null, "Level " + Ne(r.level), 1),
+              c(u(de), {
+                size: "sm",
+                intent: "danger",
+                onClick: (a) => I(g)
+              }, {
+                default: f(() => [...o[18] || (o[18] = [
+                  ne("Entfernen", -1)
+                ])]),
+                _: 1
+              }, 8, ["onClick"])
+            ]),
+            c(u(B), {
+              label: "Level-Nummer",
+              modelValue: r.level,
+              "onUpdate:modelValue": (a) => r.level = a,
+              modelModifiers: { number: !0 },
+              type: "number",
+              min: 0
+            }, null, 8, ["modelValue", "onUpdate:modelValue"]),
+            c(u(A), {
+              modelValue: r.backgroundColor,
+              "onUpdate:modelValue": (a) => r.backgroundColor = a,
+              label: "Hintergrundfarbe"
+            }, {
+              default: f(({ value: a, change: p }) => [
+                c(u(F), {
+                  label: "Hintergrundfarbe",
+                  "model-value": a,
+                  "onUpdate:modelValue": p
+                }, null, 8, ["model-value", "onUpdate:modelValue"])
               ]),
-              (R(!0), B(ge, null, Te(e.value.conditionalFormats, (s, E) => (R(), B("div", {
-                key: s.id,
-                class: "level-card"
-              }, [
-                C("div", pt, [
-                  C("strong", null, "Regel " + pe(E + 1), 1),
-                  d(w, {
-                    size: "small",
-                    color: "danger",
-                    onClick: (a) => K(E)
-                  }, {
-                    default: p(() => [...l[33] || (l[33] = [
-                      ie("Entfernen", -1)
-                    ])]),
-                    _: 1
-                  }, 8, ["onClick"])
-                ]),
-                d(W, {
-                  label: "Bedingungstyp",
-                  modelValue: s.conditionType,
-                  "onUpdate:modelValue": (a) => s.conditionType = a,
-                  options: G,
-                  "value-by": "value"
-                }, null, 8, ["modelValue", "onUpdate:modelValue"]),
-                !Z(s.conditionType) && !z(s.conditionType) ? (R(), Ce(L, {
-                  key: 0,
-                  label: T(s.conditionType) ? "Anzahl (N)" : "Wert",
-                  modelValue: s.value1,
-                  "onUpdate:modelValue": (a) => s.value1 = a,
-                  modelModifiers: { number: !0 },
-                  type: "number"
-                }, null, 8, ["label", "modelValue", "onUpdate:modelValue"])) : Q("", !0),
-                q(s.conditionType) ? (R(), Ce(L, {
-                  key: 1,
-                  label: "Bis Wert",
-                  modelValue: s.value2,
-                  "onUpdate:modelValue": (a) => s.value2 = a,
-                  modelModifiers: { number: !0 },
-                  type: "number"
-                }, null, 8, ["modelValue", "onUpdate:modelValue"])) : Q("", !0),
-                Z(s.conditionType) ? (R(), Ce(L, {
-                  key: 2,
-                  label: "Text",
-                  modelValue: s.value1,
-                  "onUpdate:modelValue": (a) => s.value1 = a
-                }, null, 8, ["modelValue", "onUpdate:modelValue"])) : Q("", !0),
-                z(s.conditionType) ? (R(), B("div", ft, [
-                  d(f, {
+              _: 1
+            }, 8, ["modelValue", "onUpdate:modelValue"]),
+            c(u(A), {
+              modelValue: r.textColor,
+              "onUpdate:modelValue": (a) => r.textColor = a,
+              label: "Textfarbe"
+            }, {
+              default: f(({ value: a, change: p }) => [
+                c(u(F), {
+                  label: "Textfarbe",
+                  "model-value": a,
+                  "onUpdate:modelValue": p
+                }, null, 8, ["model-value", "onUpdate:modelValue"])
+              ]),
+              _: 1
+            }, 8, ["modelValue", "onUpdate:modelValue"]),
+            c(u(B), {
+              label: "Font-Weight",
+              modelValue: r.fontWeight,
+              "onUpdate:modelValue": (a) => r.fontWeight = a,
+              modelModifiers: { number: !0 },
+              type: "number",
+              min: 100,
+              max: 900,
+              step: 100
+            }, null, 8, ["modelValue", "onUpdate:modelValue"])
+          ]))), 128)),
+          e.value.rowLevelStyles?.length ? Q("", !0) : (w(), W("div", Nt, ' Keine Level-Styles definiert. Klicke "Level hinzufügen" um anzufangen. '))
+        ])
+      ]),
+      _("section", St, [
+        _("div", mt, [
+          o[23] || (o[23] = _("p", { class: "hint-text" }, " Definiere individuelle Styles für verschiedene Hierarchie-Level in den Spalten-Headern. ", -1)),
+          _("div", Rt, [
+            o[21] || (o[21] = _("span", null, "Level-Konfiguration", -1)),
+            c(u(de), {
+              size: "sm",
+              onClick: b
+            }, {
+              default: f(() => [...o[20] || (o[20] = [
+                ne("Level hinzufügen", -1)
+              ])]),
+              _: 1
+            })
+          ]),
+          (w(!0), W(Le, null, fe(e.value.columnLevelStyles, (r, g) => (w(), W("div", {
+            key: `col_level_${g}`,
+            class: "level-card"
+          }, [
+            _("div", At, [
+              _("strong", null, "Level " + Ne(r.level), 1),
+              c(u(de), {
+                size: "sm",
+                intent: "danger",
+                onClick: (a) => k(g)
+              }, {
+                default: f(() => [...o[22] || (o[22] = [
+                  ne("Entfernen", -1)
+                ])]),
+                _: 1
+              }, 8, ["onClick"])
+            ]),
+            c(u(B), {
+              label: "Level-Nummer",
+              modelValue: r.level,
+              "onUpdate:modelValue": (a) => r.level = a,
+              modelModifiers: { number: !0 },
+              type: "number",
+              min: 0
+            }, null, 8, ["modelValue", "onUpdate:modelValue"]),
+            c(u(A), {
+              modelValue: r.backgroundColor,
+              "onUpdate:modelValue": (a) => r.backgroundColor = a,
+              label: "Hintergrundfarbe"
+            }, {
+              default: f(({ value: a, change: p }) => [
+                c(u(F), {
+                  label: "Hintergrundfarbe",
+                  "model-value": a,
+                  "onUpdate:modelValue": p
+                }, null, 8, ["model-value", "onUpdate:modelValue"])
+              ]),
+              _: 1
+            }, 8, ["modelValue", "onUpdate:modelValue"]),
+            c(u(A), {
+              modelValue: r.textColor,
+              "onUpdate:modelValue": (a) => r.textColor = a,
+              label: "Textfarbe"
+            }, {
+              default: f(({ value: a, change: p }) => [
+                c(u(F), {
+                  label: "Textfarbe",
+                  "model-value": a,
+                  "onUpdate:modelValue": p
+                }, null, 8, ["model-value", "onUpdate:modelValue"])
+              ]),
+              _: 1
+            }, 8, ["modelValue", "onUpdate:modelValue"]),
+            c(u(B), {
+              label: "Font-Weight",
+              modelValue: r.fontWeight,
+              "onUpdate:modelValue": (a) => r.fontWeight = a,
+              modelModifiers: { number: !0 },
+              type: "number",
+              min: 100,
+              max: 900,
+              step: 100
+            }, null, 8, ["modelValue", "onUpdate:modelValue"])
+          ]))), 128)),
+          e.value.columnLevelStyles?.length ? Q("", !0) : (w(), W("div", wt, ' Keine Level-Styles definiert. Klicke "Level hinzufügen" um anzufangen. '))
+        ])
+      ]),
+      _("section", Dt, [
+        _("div", vt, [
+          o[27] || (o[27] = _("p", { class: "hint-text" }, " Definiere Regeln zur automatischen Formatierung von Zellen basierend auf ihren Werten. ", -1)),
+          _("div", Vt, [
+            o[25] || (o[25] = _("span", null, "Formatierungsregeln", -1)),
+            c(u(de), {
+              size: "sm",
+              onClick: X
+            }, {
+              default: f(() => [...o[24] || (o[24] = [
+                ne("Regel hinzufügen", -1)
+              ])]),
+              _: 1
+            })
+          ]),
+          (w(!0), W(Le, null, fe(e.value.conditionalFormats, (r, g) => (w(), W("div", {
+            key: r.id,
+            class: "level-card"
+          }, [
+            _("div", It, [
+              _("strong", null, "Regel " + Ne(g + 1), 1),
+              c(u(de), {
+                size: "sm",
+                intent: "danger",
+                onClick: (a) => K(g)
+              }, {
+                default: f(() => [...o[26] || (o[26] = [
+                  ne("Entfernen", -1)
+                ])]),
+                _: 1
+              }, 8, ["onClick"])
+            ]),
+            c(u(Ve), {
+              label: "Bedingungstyp",
+              modelValue: r.conditionType,
+              "onUpdate:modelValue": (a) => r.conditionType = a,
+              options: G,
+              "value-key": "value"
+            }, null, 8, ["modelValue", "onUpdate:modelValue"]),
+            !z(r.conditionType) && !M(r.conditionType) ? (w(), Oe(u(B), {
+              key: 0,
+              label: Z(r.conditionType) ? "Anzahl (N)" : "Wert",
+              modelValue: r.value1,
+              "onUpdate:modelValue": (a) => r.value1 = a,
+              modelModifiers: { number: !0 },
+              type: "number"
+            }, null, 8, ["label", "modelValue", "onUpdate:modelValue"])) : Q("", !0),
+            q(r.conditionType) ? (w(), Oe(u(B), {
+              key: 1,
+              label: "Bis Wert",
+              modelValue: r.value2,
+              "onUpdate:modelValue": (a) => r.value2 = a,
+              modelModifiers: { number: !0 },
+              type: "number"
+            }, null, 8, ["modelValue", "onUpdate:modelValue"])) : Q("", !0),
+            z(r.conditionType) ? (w(), Oe(u(B), {
+              key: 2,
+              label: "Text",
+              modelValue: r.value1,
+              "onUpdate:modelValue": (a) => r.value1 = a
+            }, null, 8, ["modelValue", "onUpdate:modelValue"])) : Q("", !0),
+            M(r.conditionType) ? (w(), W("div", yt, [
+              c(u(A), {
+                modelValue: r.minColor,
+                "onUpdate:modelValue": (a) => r.minColor = a,
+                label: "Min-Farbe"
+              }, {
+                default: f(({ value: a, change: p }) => [
+                  c(u(F), {
                     label: "Min-Farbe",
-                    modelValue: s.minColor,
-                    "onUpdate:modelValue": (a) => s.minColor = a
-                  }, null, 8, ["modelValue", "onUpdate:modelValue"]),
-                  d(f, {
+                    "model-value": a,
+                    "onUpdate:modelValue": p
+                  }, null, 8, ["model-value", "onUpdate:modelValue"])
+                ]),
+                _: 1
+              }, 8, ["modelValue", "onUpdate:modelValue"]),
+              c(u(A), {
+                modelValue: r.maxColor,
+                "onUpdate:modelValue": (a) => r.maxColor = a,
+                label: "Max-Farbe"
+              }, {
+                default: f(({ value: a, change: p }) => [
+                  c(u(F), {
                     label: "Max-Farbe",
-                    modelValue: s.maxColor,
-                    "onUpdate:modelValue": (a) => s.maxColor = a
-                  }, null, 8, ["modelValue", "onUpdate:modelValue"])
-                ])) : Q("", !0),
-                J(s.conditionType) ? (R(), B(ge, { key: 4 }, [
-                  d(f, {
+                    "model-value": a,
+                    "onUpdate:modelValue": p
+                  }, null, 8, ["model-value", "onUpdate:modelValue"])
+                ]),
+                _: 1
+              }, 8, ["modelValue", "onUpdate:modelValue"])
+            ])) : Q("", !0),
+            T(r.conditionType) ? (w(), W(Le, { key: 4 }, [
+              c(u(A), {
+                modelValue: r.backgroundColor,
+                "onUpdate:modelValue": (a) => r.backgroundColor = a,
+                label: "Hintergrundfarbe"
+              }, {
+                default: f(({ value: a, change: p }) => [
+                  c(u(F), {
                     label: "Hintergrundfarbe",
-                    modelValue: s.backgroundColor,
-                    "onUpdate:modelValue": (a) => s.backgroundColor = a
-                  }, null, 8, ["modelValue", "onUpdate:modelValue"]),
-                  d(f, {
+                    "model-value": a,
+                    "onUpdate:modelValue": p
+                  }, null, 8, ["model-value", "onUpdate:modelValue"])
+                ]),
+                _: 1
+              }, 8, ["modelValue", "onUpdate:modelValue"]),
+              c(u(A), {
+                modelValue: r.textColor,
+                "onUpdate:modelValue": (a) => r.textColor = a,
+                label: "Textfarbe"
+              }, {
+                default: f(({ value: a, change: p }) => [
+                  c(u(F), {
                     label: "Textfarbe",
-                    modelValue: s.textColor,
-                    "onUpdate:modelValue": (a) => s.textColor = a
-                  }, null, 8, ["modelValue", "onUpdate:modelValue"]),
-                  d(L, {
-                    label: "Font-Weight",
-                    modelValue: s.fontWeight,
-                    "onUpdate:modelValue": (a) => s.fontWeight = a,
-                    modelModifiers: { number: !0 },
-                    type: "number",
-                    min: 100,
-                    max: 900,
-                    step: 100
-                  }, null, 8, ["modelValue", "onUpdate:modelValue"])
-                ], 64)) : Q("", !0),
-                d(L, {
-                  label: "Priorität (niedriger = höher)",
-                  modelValue: s.priority,
-                  "onUpdate:modelValue": (a) => s.priority = a,
-                  modelModifiers: { number: !0 },
-                  type: "number",
-                  min: 0
-                }, null, 8, ["modelValue", "onUpdate:modelValue"])
-              ]))), 128)),
-              e.value.conditionalFormats?.length ? Q("", !0) : (R(), B("div", St, ' Keine Formatierungsregeln definiert. Klicke "Regel hinzufügen" um anzufangen. '))
-            ])
-          ]),
-          _: 1
-        }, 8, ["modelValue"])
-      ], 64);
-    };
+                    "model-value": a,
+                    "onUpdate:modelValue": p
+                  }, null, 8, ["model-value", "onUpdate:modelValue"])
+                ]),
+                _: 1
+              }, 8, ["modelValue", "onUpdate:modelValue"]),
+              c(u(B), {
+                label: "Font-Weight",
+                modelValue: r.fontWeight,
+                "onUpdate:modelValue": (a) => r.fontWeight = a,
+                modelModifiers: { number: !0 },
+                type: "number",
+                min: 100,
+                max: 900,
+                step: 100
+              }, null, 8, ["modelValue", "onUpdate:modelValue"])
+            ], 64)) : Q("", !0),
+            c(u(B), {
+              label: "Priorität (niedriger = höher)",
+              modelValue: r.priority,
+              "onUpdate:modelValue": (a) => r.priority = a,
+              modelModifiers: { number: !0 },
+              type: "number",
+              min: 0
+            }, null, 8, ["modelValue", "onUpdate:modelValue"])
+          ]))), 128)),
+          e.value.conditionalFormats?.length ? Q("", !0) : (w(), W("div", Ut, ' Keine Formatierungsregeln definiert. Klicke "Regel hinzufügen" um anzufangen. '))
+        ])
+      ])
+    ], 64));
   }
-}), mt = /* @__PURE__ */ ye(Nt, [["__scopeId", "data-v-6b0d43bf"]]), Rt = [
+}), Bt = /* @__PURE__ */ Be(Ft, [["__scopeId", "data-v-e490bb89"]]), Wt = [
   {
     name: "Row Expanded",
     type: "row_expanded",
@@ -2465,23 +2453,23 @@ const $e = { class: "component" }, Pe = /* @__PURE__ */ ve({
     name: "Cell Clicked",
     type: "cell_clicked",
     description: "Triggered when a cell is clicked in the pivot table",
-    payloadType: Le
+    payloadType: Te
   },
   {
     name: "Cell Right Clicked",
     type: "cell_right_clicked",
     description: "Triggered when a cell is right-clicked in the pivot table",
-    payloadType: Le
+    payloadType: Te
   }
 ];
-class At extends Fe {
+class xt extends We {
   // Feature ID Constants (eLiterals)
   // Private fields
   /**
    * Returns the EClass of this object
    */
   eClass() {
-    return o.Literals.PIVOT_TABLE_INTERFACE;
+    return l.Literals.PIVOT_TABLE_INTERFACE;
   }
   // Getters and Setters
   // Reflective API
@@ -2496,7 +2484,7 @@ class At extends Fe {
    * Sets the value of the given feature
    */
   eSet(e, t) {
-    const n = this.eClass().getFeatureID(e);
+    const i = this.eClass().getFeatureID(e);
     super.eSet(e, t);
   }
   /**
@@ -2517,46 +2505,46 @@ class At extends Fe {
     throw new Error("expandRow not implemented");
   }
 }
-var wt = Object.defineProperty, vt = Object.getOwnPropertyDescriptor, Ne = (N, e, t, n) => {
-  for (var _ = n > 1 ? void 0 : n ? vt(e, t) : e, A = N.length - 1, I; A >= 0; A--)
-    (I = N[A]) && (_ = (n ? I(e, t, _) : I(_)) || _);
-  return n && _ && wt(e, t, _), _;
-}, we = (N, e) => (t, n) => e(t, n, N);
-o.eINSTANCE;
-const ue = "PivotTableWidget";
-let Oe = class {
-  constructor(N, e) {
-    this.events = N, this.actions = e;
+var Ht = Object.defineProperty, Mt = Object.getOwnPropertyDescriptor, Ae = (S, e, t, i) => {
+  for (var L = i > 1 ? void 0 : i ? Mt(e, t) : e, y = S.length - 1, I; y >= 0; y--)
+    (I = S[y]) && (L = (i ? I(e, t, L) : I(L)) || L);
+  return i && L && Ht(e, t, L), L;
+}, Ie = (S, e) => (t, i) => e(t, i, S);
+l.eINSTANCE;
+const ce = "PivotTableWidget";
+let pe = class {
+  constructor(S, e) {
+    this.events = S, this.actions = e;
   }
-  type = ue;
-  component = et;
-  settingsComponent = mt;
+  type = ce;
+  component = lt;
+  settingsComponent = Bt;
   supportedDSTypes = [];
-  icon = je;
+  icon = tt;
   name = "PivotTable";
   register() {
-    this.events.registerWidget(ue, Rt), this.actions.registerWidgetType(ue, At, "widget");
+    this.events.registerWidget(ce, Wt), this.actions.registerWidgetType(ce, xt, "widget");
   }
   unregister() {
-    this.events.unregisterWidget(ue), this.actions.unregisterWidgetType(ue);
+    this.events.unregisterWidget(ce), this.actions.unregisterWidgetType(ce);
   }
 };
-Ne([
-  We()
-], Oe.prototype, "register", 1);
-Ne([
-  xe()
-], Oe.prototype, "unregister", 1);
-Oe = Ne([
-  He({
-    service: [Qe],
-    properties: { "widget.type": ue }
+Ae([
+  Me()
+], pe.prototype, "register", 1);
+Ae([
+  be()
+], pe.prototype, "unregister", 1);
+pe = Ae([
+  ke({
+    service: [et],
+    properties: { "widget.type": ce }
   }),
-  we(0, me(Ue)),
-  we(1, me(Be))
-], Oe);
+  Ie(0, we(xe)),
+  Ie(1, we(He))
+], pe);
 export {
-  et as PivotTableWidget,
-  Oe as PivotTableWidgetProvider,
-  mt as PivotTableWidgetSettings
+  lt as PivotTableWidget,
+  pe as PivotTableWidgetProvider,
+  Bt as PivotTableWidgetSettings
 };

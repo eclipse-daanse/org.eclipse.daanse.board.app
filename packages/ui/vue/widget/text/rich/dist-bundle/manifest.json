@@ -14,6 +14,7 @@
     "lib.utils.helpers",
     "platform.vue",
     "ui.vue.composables",
+    "ui.vue.controls",
     "ui.vue.variable.components"
   ],
   "requiresService": [
@@ -67,6 +68,10 @@
     },
     {
       "id": "org.eclipse.daanse.board.app.ui.vue.variable.components",
+      "versionRange": ">=0.0.1-0"
+    },
+    {
+      "id": "org.eclipse.daanse.board.app.ui.vue.controls",
       "versionRange": ">=0.0.1-0"
     }
   ],

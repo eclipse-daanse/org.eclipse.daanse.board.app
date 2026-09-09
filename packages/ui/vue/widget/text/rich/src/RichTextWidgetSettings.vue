@@ -36,6 +36,7 @@ import { RichTextEditorSettings } from './gen/RichTextEditorSettings'
 import { identifier as varIdentifier, type VariableRepository } from 'org.eclipse.daanse.board.app.lib.api.variable'
 import { VariableInput } from 'org.eclipse.daanse.board.app.ui.vue.variable.components'
 import { VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+import { DButton, DIcon } from 'org.eclipse.daanse.board.app.ui.vue.controls'
 
 // Extend OrderedList to support listStyleType attribute
 const CustomOrderedList = OrderedList.extend({
@@ -203,10 +204,6 @@ if (!widgetSettings.value.fontColor) {
     widgetSettings.value.fontColor = new VariableWrapper<string>('#000000');
 }
 
-const opened = ref({
-    widgetSection: false,
-    storeSection: false,
-});
 
 const editor = useEditor({
     content: widgetSettings.value.editor || '',
@@ -291,7 +288,7 @@ watch(
 </script>
 
 <template>
-    <va-collapse v-model="opened.widgetSection" icon="settings" :header="t('textRich:RichTextWidget.title')">
+    <section class="settings-section" :data-section="t('textRich:RichTextWidget.title')">
         <div class="settings-container">
             <div v-if="editor" class="toolbar">
                 <!-- Font Size & Color -->
@@ -305,13 +302,13 @@ watch(
                         title="Font Size"
                     />
                     <div class="toolbar-dropdown-wrapper">
-                        <va-button
-                            class="toolbar-btn toolbar-btn--var" size="small" preset="secondary"
-                            icon="tune"
+                        <DButton
+                            class="toolbar-btn toolbar-btn--var" size="sm" intent="quiet"
                             @click.stop="showSizeVarMenu = !showSizeVarMenu; showColorVarMenu = false; showOlStyleMenu = false; showUlStyleMenu = false; showVariableMenu = false"
                             :class="{ 'is-active': widgetSettings.fontSize?.isSet }"
-                            title="Font Size Variable"
-                        />
+                            title="Font Size Variable">
+                        <DIcon name="tune" size="sm" />
+                    </DButton>
                         <div v-if="showSizeVarMenu" class="toolbar-dropdown-menu toolbar-dropdown-menu--wide">
                             <button class="toolbar-dropdown-item" @click="clearSizeVariable()">
                                 <span class="var-name">Manual</span>
@@ -334,13 +331,13 @@ watch(
                         title="Font Color"
                     />
                     <div class="toolbar-dropdown-wrapper">
-                        <va-button
-                            class="toolbar-btn toolbar-btn--var" size="small" preset="secondary"
-                            icon="tune"
+                        <DButton
+                            class="toolbar-btn toolbar-btn--var" size="sm" intent="quiet"
                             @click.stop="showColorVarMenu = !showColorVarMenu; showSizeVarMenu = false; showOlStyleMenu = false; showUlStyleMenu = false; showVariableMenu = false"
                             :class="{ 'is-active': widgetSettings.fontColor?.isSet }"
-                            title="Font Color Variable"
-                        />
+                            title="Font Color Variable">
+                        <DIcon name="tune" size="sm" />
+                    </DButton>
                         <div v-if="showColorVarMenu" class="toolbar-dropdown-menu toolbar-dropdown-menu--wide">
                             <button class="toolbar-dropdown-item" @click="clearColorVariable()">
                                 <span class="var-name">Manual</span>
@@ -359,150 +356,143 @@ watch(
 
                 <!-- Text Format -->
                 <div class="toolbar-group">
-                    <va-button
-                        class="toolbar-btn" size="small" preset="secondary"
-                        icon="format_bold"
+                    <DButton
+                        class="toolbar-btn" size="sm" intent="quiet"
                         @click="editor.chain().focus().toggleBold().run()"
                         :disabled="!editor.can().chain().focus().toggleBold().run()"
                         :class="{ 'is-active': editor.isActive('bold') }"
-                        title="Bold"
-                    />
-                    <va-button
-                        class="toolbar-btn" size="small" preset="secondary"
-                        icon="format_italic"
+                        title="Bold">
+                        <DIcon name="format_bold" size="sm" />
+                    </DButton>
+                    <DButton
+                        class="toolbar-btn" size="sm" intent="quiet"
                         @click="editor.chain().focus().toggleItalic().run()"
                         :disabled="!editor.can().chain().focus().toggleItalic().run()"
                         :class="{ 'is-active': editor.isActive('italic') }"
-                        title="Italic"
-                    />
-                    <va-button
-                        class="toolbar-btn" size="small" preset="secondary"
-                        icon="format_underlined"
+                        title="Italic">
+                        <DIcon name="format_italic" size="sm" />
+                    </DButton>
+                    <DButton
+                        class="toolbar-btn" size="sm" intent="quiet"
                         @click="editor.chain().focus().toggleUnderline().run()"
                         :disabled="!editor.can().chain().focus().toggleUnderline().run()"
                         :class="{ 'is-active': editor.isActive('underline') }"
-                        title="Underline"
-                    />
-                    <va-button
-                        class="toolbar-btn" size="small" preset="secondary"
-                        icon="strikethrough_s"
+                        title="Underline">
+                        <DIcon name="format_underlined" size="sm" />
+                    </DButton>
+                    <DButton
+                        class="toolbar-btn" size="sm" intent="quiet"
                         @click="editor.chain().focus().toggleStrike().run()"
                         :disabled="!editor.can().chain().focus().toggleStrike().run()"
                         :class="{ 'is-active': editor.isActive('strike') }"
-                        title="Strikethrough"
-                    />
-                    <va-button
-                        class="toolbar-btn" size="small" preset="secondary"
-                        icon="code"
+                        title="Strikethrough">
+                        <DIcon name="strikethrough_s" size="sm" />
+                    </DButton>
+                    <DButton
+                        class="toolbar-btn" size="sm" intent="quiet"
                         @click="editor.chain().focus().toggleCode().run()"
                         :disabled="!editor.can().chain().focus().toggleCode().run()"
                         :class="{ 'is-active': editor.isActive('code') }"
-                        title="Inline Code"
-                    />
-                    <va-button
-                        class="toolbar-btn" size="small" preset="secondary"
-                        icon="superscript"
+                        title="Inline Code">
+                        <DIcon name="code" size="sm" />
+                    </DButton>
+                    <DButton
+                        class="toolbar-btn" size="sm" intent="quiet"
                         @click="editor.chain().focus().toggleSuperscript().run()"
                         :class="{ 'is-active': editor.isActive('superscript') }"
-                        title="Superscript"
-                    />
-                    <va-button
-                        class="toolbar-btn" size="small" preset="secondary"
-                        icon="subscript"
+                        title="Superscript">
+                        <DIcon name="superscript" size="sm" />
+                    </DButton>
+                    <DButton
+                        class="toolbar-btn" size="sm" intent="quiet"
                         @click="editor.chain().focus().toggleSubscript().run()"
                         :class="{ 'is-active': editor.isActive('subscript') }"
-                        title="Subscript"
-                    />
+                        title="Subscript">
+                        <DIcon name="subscript" size="sm" />
+                    </DButton>
                 </div>
 
                 <!-- Headings -->
                 <div class="toolbar-group">
-                    <va-button
-                        class="toolbar-btn" size="small" preset="secondary"
+                    <DButton
+                        class="toolbar-btn" size="sm" intent="quiet"
                         @click="editor.chain().focus().setParagraph().run()"
                         :class="{ 'is-active': editor.isActive('paragraph') }"
-                        title="Paragraph"
-                    >P</va-button>
-                    <va-button
-                        class="toolbar-btn" size="small" preset="secondary"
+                        title="Paragraph">P</DButton>
+                    <DButton
+                        class="toolbar-btn" size="sm" intent="quiet"
                         @click="editor.chain().focus().toggleHeading({ level: 1 }).run()"
                         :class="{ 'is-active': editor.isActive('heading', { level: 1 }) }"
-                        title="Heading 1"
-                    >H1</va-button>
-                    <va-button
-                        class="toolbar-btn" size="small" preset="secondary"
+                        title="Heading 1">H1</DButton>
+                    <DButton
+                        class="toolbar-btn" size="sm" intent="quiet"
                         @click="editor.chain().focus().toggleHeading({ level: 2 }).run()"
                         :class="{ 'is-active': editor.isActive('heading', { level: 2 }) }"
-                        title="Heading 2"
-                    >H2</va-button>
-                    <va-button
-                        class="toolbar-btn" size="small" preset="secondary"
+                        title="Heading 2">H2</DButton>
+                    <DButton
+                        class="toolbar-btn" size="sm" intent="quiet"
                         @click="editor.chain().focus().toggleHeading({ level: 3 }).run()"
                         :class="{ 'is-active': editor.isActive('heading', { level: 3 }) }"
-                        title="Heading 3"
-                    >H3</va-button>
-                    <va-button
-                        class="toolbar-btn" size="small" preset="secondary"
+                        title="Heading 3">H3</DButton>
+                    <DButton
+                        class="toolbar-btn" size="sm" intent="quiet"
                         @click="editor.chain().focus().toggleHeading({ level: 4 }).run()"
                         :class="{ 'is-active': editor.isActive('heading', { level: 4 }) }"
-                        title="Heading 4"
-                    >H4</va-button>
-                    <va-button
-                        class="toolbar-btn" size="small" preset="secondary"
+                        title="Heading 4">H4</DButton>
+                    <DButton
+                        class="toolbar-btn" size="sm" intent="quiet"
                         @click="editor.chain().focus().toggleHeading({ level: 5 }).run()"
                         :class="{ 'is-active': editor.isActive('heading', { level: 5 }) }"
-                        title="Heading 5"
-                    >H5</va-button>
-                    <va-button
-                        class="toolbar-btn" size="small" preset="secondary"
+                        title="Heading 5">H5</DButton>
+                    <DButton
+                        class="toolbar-btn" size="sm" intent="quiet"
                         @click="editor.chain().focus().toggleHeading({ level: 6 }).run()"
                         :class="{ 'is-active': editor.isActive('heading', { level: 6 }) }"
-                        title="Heading 6"
-                    >H6</va-button>
+                        title="Heading 6">H6</DButton>
                 </div>
 
                 <!-- Text Align -->
                 <div class="toolbar-group">
-                    <va-button
-                        class="toolbar-btn" size="small" preset="secondary"
-                        icon="format_align_left"
+                    <DButton
+                        class="toolbar-btn" size="sm" intent="quiet"
                         @click="editor.chain().focus().setTextAlign('left').run()"
                         :class="{ 'is-active': editor.isActive({ textAlign: 'left' }) }"
-                        title="Align Left"
-                    />
-                    <va-button
-                        class="toolbar-btn" size="small" preset="secondary"
-                        icon="format_align_center"
+                        title="Align Left">
+                        <DIcon name="format_align_left" size="sm" />
+                    </DButton>
+                    <DButton
+                        class="toolbar-btn" size="sm" intent="quiet"
                         @click="editor.chain().focus().setTextAlign('center').run()"
                         :class="{ 'is-active': editor.isActive({ textAlign: 'center' }) }"
-                        title="Align Center"
-                    />
-                    <va-button
-                        class="toolbar-btn" size="small" preset="secondary"
-                        icon="format_align_right"
+                        title="Align Center">
+                        <DIcon name="format_align_center" size="sm" />
+                    </DButton>
+                    <DButton
+                        class="toolbar-btn" size="sm" intent="quiet"
                         @click="editor.chain().focus().setTextAlign('right').run()"
                         :class="{ 'is-active': editor.isActive({ textAlign: 'right' }) }"
-                        title="Align Right"
-                    />
-                    <va-button
-                        class="toolbar-btn" size="small" preset="secondary"
-                        icon="format_align_justify"
+                        title="Align Right">
+                        <DIcon name="format_align_right" size="sm" />
+                    </DButton>
+                    <DButton
+                        class="toolbar-btn" size="sm" intent="quiet"
                         @click="editor.chain().focus().setTextAlign('justify').run()"
                         :class="{ 'is-active': editor.isActive({ textAlign: 'justify' }) }"
-                        title="Justify"
-                    />
+                        title="Justify">
+                        <DIcon name="format_align_justify" size="sm" />
+                    </DButton>
                 </div>
 
                 <!-- Lists -->
                 <div class="toolbar-group">
                     <div class="toolbar-dropdown-wrapper">
-                        <va-button
-                            class="toolbar-btn" size="small" preset="secondary"
-                            icon="format_list_bulleted"
+                        <DButton
+                            class="toolbar-btn" size="sm" intent="quiet"
                             @click="editor.chain().focus().toggleBulletList().run()"
                             :class="{ 'is-active': editor.isActive('bulletList') }"
-                            title="Bullet List"
-                        />
+                            title="Bullet List">
+                        <DIcon name="format_list_bulleted" size="sm" />
+                    </DButton>
                         <button class="toolbar-dropdown-arrow"
                             @click.stop="showUlStyleMenu = !showUlStyleMenu; showOlStyleMenu = false"
                         >▾</button>
@@ -515,13 +505,13 @@ watch(
                         </div>
                     </div>
                     <div class="toolbar-dropdown-wrapper">
-                        <va-button
-                            class="toolbar-btn" size="small" preset="secondary"
-                            icon="format_list_numbered"
+                        <DButton
+                            class="toolbar-btn" size="sm" intent="quiet"
                             @click="editor.chain().focus().toggleOrderedList().run()"
                             :class="{ 'is-active': editor.isActive('orderedList') }"
-                            title="Ordered List"
-                        />
+                            title="Ordered List">
+                        <DIcon name="format_list_numbered" size="sm" />
+                    </DButton>
                         <button class="toolbar-dropdown-arrow"
                             @click.stop="showOlStyleMenu = !showOlStyleMenu; showUlStyleMenu = false"
                         >▾</button>
@@ -533,79 +523,79 @@ watch(
                             >{{ s.label }}</button>
                         </div>
                     </div>
-                    <va-button
-                        class="toolbar-btn" size="small" preset="secondary"
-                        icon="format_indent_decrease"
+                    <DButton
+                        class="toolbar-btn" size="sm" intent="quiet"
                         @click="editor.chain().focus().liftListItem('listItem').run()"
                         :disabled="!editor.can().liftListItem('listItem')"
-                        title="Outdent"
-                    />
-                    <va-button
-                        class="toolbar-btn" size="small" preset="secondary"
-                        icon="format_indent_increase"
+                        title="Outdent">
+                        <DIcon name="format_indent_decrease" size="sm" />
+                    </DButton>
+                    <DButton
+                        class="toolbar-btn" size="sm" intent="quiet"
                         @click="editor.chain().focus().sinkListItem('listItem').run()"
                         :disabled="!editor.can().sinkListItem('listItem')"
-                        title="Indent"
-                    />
+                        title="Indent">
+                        <DIcon name="format_indent_increase" size="sm" />
+                    </DButton>
                 </div>
 
                 <!-- Blocks -->
                 <div class="toolbar-group">
-                    <va-button
-                        class="toolbar-btn" size="small" preset="secondary"
-                        icon="data_object"
+                    <DButton
+                        class="toolbar-btn" size="sm" intent="quiet"
                         @click="editor.chain().focus().toggleCodeBlock().run()"
                         :class="{ 'is-active': editor.isActive('codeBlock') }"
-                        title="Code Block"
-                    />
-                    <va-button
-                        class="toolbar-btn" size="small" preset="secondary"
-                        icon="format_quote"
+                        title="Code Block">
+                        <DIcon name="data_object" size="sm" />
+                    </DButton>
+                    <DButton
+                        class="toolbar-btn" size="sm" intent="quiet"
                         @click="editor.chain().focus().toggleBlockquote().run()"
                         :class="{ 'is-active': editor.isActive('blockquote') }"
-                        title="Blockquote"
-                    />
-                    <va-button
-                        class="toolbar-btn" size="small" preset="secondary"
-                        icon="horizontal_rule"
+                        title="Blockquote">
+                        <DIcon name="format_quote" size="sm" />
+                    </DButton>
+                    <DButton
+                        class="toolbar-btn" size="sm" intent="quiet"
                         @click="editor.chain().focus().setHorizontalRule().run()"
-                        title="Horizontal Rule"
-                    />
-                    <va-button
-                        class="toolbar-btn" size="small" preset="secondary"
-                        icon="keyboard_return"
+                        title="Horizontal Rule">
+                        <DIcon name="horizontal_rule" size="sm" />
+                    </DButton>
+                    <DButton
+                        class="toolbar-btn" size="sm" intent="quiet"
                         @click="editor.chain().focus().setHardBreak().run()"
-                        title="Hard Break"
-                    />
+                        title="Hard Break">
+                        <DIcon name="keyboard_return" size="sm" />
+                    </DButton>
                 </div>
 
                 <!-- Links -->
                 <div class="toolbar-group">
-                    <va-button
-                        class="toolbar-btn" size="small" preset="secondary"
-                        icon="link"
+                    <DButton
+                        class="toolbar-btn" size="sm" intent="quiet"
                         @click="setLink()"
                         :class="{ 'is-active': editor.isActive('link') }"
-                        title="Set Link"
-                    />
-                    <va-button
-                        class="toolbar-btn" size="small" preset="secondary"
-                        icon="link_off"
+                        title="Set Link">
+                        <DIcon name="link" size="sm" />
+                    </DButton>
+                    <DButton
+                        class="toolbar-btn" size="sm" intent="quiet"
                         @click="editor.chain().focus().unsetLink().run()"
                         :disabled="!editor.isActive('link')"
-                        title="Remove Link"
-                    />
+                        title="Remove Link">
+                        <DIcon name="link_off" size="sm" />
+                    </DButton>
                 </div>
 
                 <!-- Variables -->
                 <div class="toolbar-group">
                     <div class="toolbar-dropdown-wrapper">
-                        <va-button
-                            class="toolbar-btn" size="small" preset="secondary"
-                            icon="data_array"
+                        <DButton
+                            class="toolbar-btn" size="sm" intent="quiet"
                             @click.stop="showVariableMenu = !showVariableMenu; showOlStyleMenu = false; showUlStyleMenu = false"
-                            title="Insert Variable"
-                        />
+                            title="Insert Variable">
+                        <DIcon name="data_array" size="sm" />
+                    </DButton>
                         <button class="toolbar-dropdown-arrow"
                             @click.stop="showVariableMenu = !showVariableMenu; showOlStyleMenu = false; showUlStyleMenu = false"
                         >▾</button>
@@ -627,33 +617,33 @@ watch(
 
                 <!-- Undo/Redo & Clear -->
                 <div class="toolbar-group">
-                    <va-button
-                        class="toolbar-btn" size="small" preset="secondary"
-                        icon="undo"
+                    <DButton
+                        class="toolbar-btn" size="sm" intent="quiet"
                         @click="editor.chain().focus().undo().run()"
                         :disabled="!editor.can().chain().focus().undo().run()"
-                        title="Undo"
-                    />
-                    <va-button
-                        class="toolbar-btn" size="small" preset="secondary"
-                        icon="redo"
+                        title="Undo">
+                        <DIcon name="undo" size="sm" />
+                    </DButton>
+                    <DButton
+                        class="toolbar-btn" size="sm" intent="quiet"
                         @click="editor.chain().focus().redo().run()"
                         :disabled="!editor.can().chain().focus().redo().run()"
-                        title="Redo"
-                    />
-                    <va-button
-                        class="toolbar-btn" size="small" preset="secondary"
-                        icon="format_clear"
+                        title="Redo">
+                        <DIcon name="redo" size="sm" />
+                    </DButton>
+                    <DButton
+                        class="toolbar-btn" size="sm" intent="quiet"
                         @click="editor.chain().focus().unsetAllMarks().run()"
-                        title="Clear Formatting"
-                    />
+                        title="Clear Formatting">
+                        <DIcon name="format_clear" size="sm" />
+                    </DButton>
                 </div>
             </div>
             <div class="rte-surface">
                 <editor-content class="ml-2" :editor="editor" />
             </div>
         </div>
-    </va-collapse>
+    </section>
 </template>
 
 <style>
@@ -819,24 +809,24 @@ watch(
     margin-right: 0;
 }
 
+/*
+ * The colours come from the theme now, and nothing here has to shout it
+ * down with !important: the buttons are the app's own, so there is no
+ * third-party palette left to override.
+ */
 .toolbar-btn {
-    min-width: 28px !important;
-    height: 28px !important;
-    padding: 0 4px !important;
-    border: 1px solid transparent !important;
-    border-radius: 0.25rem !important;
-    font-size: 0.7rem !important;
-    font-weight: 600 !important;
+    min-width: 28px;
+    height: 28px;
+    padding: 0 4px;
+    font-size: 0.7rem;
+    font-weight: 600;
 }
 
-.toolbar-btn:hover {
-    background-color: #e5e7eb !important;
-}
-
+/* Pressed, not merely hovered: the border is what carries it at a glance */
 .is-active {
-    background-color: #fff3e0 !important;
-    border-color: rgb(236, 156, 29) !important;
-    color: #c45e00 !important;
+    background-color: color-mix(in srgb, var(--color-accent) 18%, transparent);
+    border-color: var(--color-accent);
+    color: var(--color-accent);
 }
 
 .toolbar-group--inputs {
@@ -845,10 +835,10 @@ watch(
 }
 
 .toolbar-btn--var {
-    min-width: 22px !important;
-    height: 22px !important;
-    padding: 0 2px !important;
-    font-size: 0.6rem !important;
+    min-width: 22px;
+    height: 22px;
+    padding: 0 2px;
+    font-size: 0.6rem;
 }
 
 .toolbar-size-input {
