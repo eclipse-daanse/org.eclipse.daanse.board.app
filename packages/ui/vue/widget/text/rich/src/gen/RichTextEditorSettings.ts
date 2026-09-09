@@ -5,20 +5,16 @@
  * @generated
  */
 
-import { VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables';
-import { Documentation, Attribute, ModelClass, Reference } from 'org.eclipse.daanse.board.app.lib.annotations';
+import type { EObject } from '@emfts/core';
+import type { VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables';
 
-@Documentation("Represents the configuration settings for a rich text editor, e.g., which editor type to use.")
-@ModelClass({ type: 'http://org.eclipse.daanse.board.app.ui.vue.widget.text.rich#//RichTextEditorSettings' })
-export class RichTextEditorSettings {
-  @Documentation("An identifier or type string indicating which rich text editor should be used (e.g., 'TinyMCE', 'Quill', 'ProseMirror' etc.).")
-  @Attribute()
+/**
+ * RichTextEditorSettings
+ * @generated
+ */
+export interface RichTextEditorSettings extends EObject {
   editor?: string;
-
-  @Reference('VariableWrapper')
-  fontSize: VariableWrapper<string> = new VariableWrapper<string>();
-
-  @Reference('VariableWrapper')
-  fontColor: VariableWrapper<string> = new VariableWrapper<string>();
+  fontSize?: VariableWrapper<string>;
+  fontColor?: VariableWrapper<string>;
 
 }

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/*********************************************************************
+* Copyright (c) 2026 Contributors to the Eclipse Foundation.
+*
+* This program and the accompanying materials are made
+* available under the terms of the Eclipse Public License 2.0
+* which is available at https://www.eclipse.org/legal/epl-2.0/
+*
+* SPDX-License-Identifier: EPL-2.0
+**********************************************************************/
+
+The form for the rich text widget: the size and the colour the text is
+drawn in.
+
+Writing the text is the other half, and it stays hand-written - a rich
+text editor is a surface you type into, and its toolbar is a row of things
+you press. Size and colour were sitting in that row; they are the only two
+values in it that get typed, and both can come from a variable, which is
+what the form beside this offers without the widget having to build it.
+
+The model calls the content "editor", which is the name a board already
+stored it under.
+-->
+<uimodel:UIModel
+    xmlns:xmi="http://www.omg.org/XMI"
+    xmi:version="2.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:uimodel="http://uimodel/1.0"
+    name="RichTextSettingsForm">
+
+  <targetClasses href="http://org.eclipse.daanse.board.app.ui.vue.widget.text.rich#//RichTextEditorSettings"/>
+
+  <components xsi:type="uimodel:FormView" name="RichTextSettingsFormView">
+    <fields xsi:type="uimodel:NumberWidget" name="fontSize"
+        feature="http://org.eclipse.daanse.board.app.ui.vue.widget.text.rich#//RichTextEditorSettings/fontSize"
+        label="Schriftgröße (px)" min="8" max="96" step="1"/>
+    <fields xsi:type="uimodel:InputWidget" name="fontColor"
+        feature="http://org.eclipse.daanse.board.app.ui.vue.widget.text.rich#//RichTextEditorSettings/fontColor"
+        label="Schriftfarbe"/>
+  </components>
+</uimodel:UIModel>

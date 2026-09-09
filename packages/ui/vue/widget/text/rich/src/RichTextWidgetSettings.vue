@@ -14,7 +14,7 @@ Contributors:
 <script lang="ts" setup>
 import { inject, ref, watch, onMounted } from 'vue'
 import StarterKit from "@tiptap/starter-kit";
-import { useEditor, EditorContent } from "@tiptap/vue-3";
+import { useEditor } from "@tiptap/vue-3";
 import Bold from "@tiptap/extension-bold";
 import Italic from "@tiptap/extension-italic";
 import Heading from "@tiptap/extension-heading";
@@ -31,10 +31,8 @@ import { TextStyleKit } from "@tiptap/extension-text-style";
 import { Subscript } from "@tiptap/extension-subscript";
 import { Superscript } from "@tiptap/extension-superscript";
 import { TextAlign } from "@tiptap/extension-text-align";
-import type {i18n} from "org.eclipse.daanse.board.app.lib.i18next"
 import { RichTextEditorSettings } from './gen/RichTextEditorSettings'
 import { identifier as varIdentifier, type VariableRepository } from 'org.eclipse.daanse.board.app.lib.api.variable'
-import { VariableInput } from 'org.eclipse.daanse.board.app.ui.vue.variable.components'
 import { VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import { DButton, DIcon } from 'org.eclipse.daanse.board.app.ui.vue.controls'
 
@@ -70,16 +68,11 @@ const CustomBulletList = BulletList.extend({
     },
 })
 
-const i18n:i18n|undefined = inject('i18n');
-const t = (key:string)=>(i18n)?i18n.t(key):key;
-
 const fontSize = ref('16')
 const fontColor = ref('#000000')
 const showOlStyleMenu = ref(false)
 const showUlStyleMenu = ref(false)
 const showVariableMenu = ref(false)
-const showSizeVarMenu = ref(false)
-const showColorVarMenu = ref(false)
 const availableVariables = ref<{ name: string; value: any }[]>([])
 
 onMounted(() => {
@@ -93,42 +86,6 @@ onMounted(() => {
         console.warn('VariableRepository not available:', e)
     }
 })
-
-const setSizeVariable = (varName: string) => {
-    try {
-        const repo = inject<VariableRepository>(varIdentifier)!
-        const variable = repo.getVariable(varName)
-        if (variable && widgetSettings.value.fontSize) {
-            widgetSettings.value.fontSize.setTo(variable)
-        }
-    } catch (e) { console.warn(e) }
-    showSizeVarMenu.value = false
-}
-
-const clearSizeVariable = () => {
-    if (widgetSettings.value.fontSize) {
-        widgetSettings.value.fontSize.value = fontSize.value
-    }
-    showSizeVarMenu.value = false
-}
-
-const setColorVariable = (varName: string) => {
-    try {
-        const repo = inject<VariableRepository>(varIdentifier)!
-        const variable = repo.getVariable(varName)
-        if (variable && widgetSettings.value.fontColor) {
-            widgetSettings.value.fontColor.setTo(variable)
-        }
-    } catch (e) { console.warn(e) }
-    showColorVarMenu.value = false
-}
-
-const clearColorVariable = () => {
-    if (widgetSettings.value.fontColor) {
-        widgetSettings.value.fontColor.value = fontColor.value
-    }
-    showColorVarMenu.value = false
-}
 
 const insertVariable = (varName: string) => {
     if (!editor.value) return
@@ -288,10 +245,20 @@ watch(
 </script>
 
 <template>
-    <section class="settings-section" :data-section="t('textRich:RichTextWidget.title')">
+    <section class="settings-section" data-section="Text und Formatierung">
         <div class="settings-container">
             <div v-if="editor" class="toolbar">
-                <!-- Font Size & Color -->
+                <!--
+                  The size and the colour of what is selected - editing
+                  commands, like the buttons beside them.
+
+                  What the widget draws its text in when nothing says
+                  otherwise is a different thing, and that is the model's
+                  fontSize and fontColor, rendered from model/ui.xmi beside
+                  this. The two menus that used to hang off these inputs
+                  wrote that setting from here, which made one control
+                  stand for both.
+                -->
                 <div class="toolbar-group toolbar-group--inputs">
                     <input
                         type="number"
@@ -299,59 +266,15 @@ watch(
                         v-model="fontSize"
                         @change="setFontSize()"
                         min="8" max="96" step="1"
-                        title="Font Size"
+                        title="Größe der Auswahl"
                     />
-                    <div class="toolbar-dropdown-wrapper">
-                        <DButton
-                            class="toolbar-btn toolbar-btn--var" size="sm" intent="quiet"
-                            @click.stop="showSizeVarMenu = !showSizeVarMenu; showColorVarMenu = false; showOlStyleMenu = false; showUlStyleMenu = false; showVariableMenu = false"
-                            :class="{ 'is-active': widgetSettings.fontSize?.isSet }"
-                            title="Font Size Variable">
-                        <DIcon name="tune" size="sm" />
-                    </DButton>
-                        <div v-if="showSizeVarMenu" class="toolbar-dropdown-menu toolbar-dropdown-menu--wide">
-                            <button class="toolbar-dropdown-item" @click="clearSizeVariable()">
-                                <span class="var-name">Manual</span>
-                            </button>
-                            <button
-                                v-for="v in availableVariables" :key="'fs-'+v.name"
-                                class="toolbar-dropdown-item"
-                                @click="setSizeVariable(v.name)"
-                            >
-                                <span class="var-name">{{ v.name }}</span>
-                                <span class="var-value">{{ v.value }}</span>
-                            </button>
-                        </div>
-                    </div>
                     <input
                         type="color"
                         class="toolbar-color-input"
                         :value="fontColor"
                         @input="setFontColor(($event.target as HTMLInputElement).value)"
-                        title="Font Color"
+                        title="Farbe der Auswahl"
                     />
-                    <div class="toolbar-dropdown-wrapper">
-                        <DButton
-                            class="toolbar-btn toolbar-btn--var" size="sm" intent="quiet"
-                            @click.stop="showColorVarMenu = !showColorVarMenu; showSizeVarMenu = false; showOlStyleMenu = false; showUlStyleMenu = false; showVariableMenu = false"
-                            :class="{ 'is-active': widgetSettings.fontColor?.isSet }"
-                            title="Font Color Variable">
-                        <DIcon name="tune" size="sm" />
-                    </DButton>
-                        <div v-if="showColorVarMenu" class="toolbar-dropdown-menu toolbar-dropdown-menu--wide">
-                            <button class="toolbar-dropdown-item" @click="clearColorVariable()">
-                                <span class="var-name">Manual</span>
-                            </button>
-                            <button
-                                v-for="v in availableVariables" :key="'fc-'+v.name"
-                                class="toolbar-dropdown-item"
-                                @click="setColorVariable(v.name)"
-                            >
-                                <span class="var-name">{{ v.name }}</span>
-                                <span class="var-value">{{ v.value }}</span>
-                            </button>
-                        </div>
-                    </div>
                 </div>
 
                 <!-- Text Format -->
