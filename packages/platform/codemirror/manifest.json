@@ -1,0 +1,74 @@
+{
+  "$schema": "https://tsm.dev/schema/manifest/v1.json",
+  "id": "platform.codemirror",
+  "name": "CodeMirror Platform Libraries",
+  "version": "0.0.1-next.1",
+  "description": "Provides the CodeMirror stack as shared libraries",
+  "entry": "/bundles/platform.codemirror/index.js",
+  "exports": {},
+  "capabilities": [
+    {
+      "namespace": "tsm.library",
+      "attributes": {
+        "library": "@codemirror/state",
+        "version": "6.7.2"
+      }
+    },
+    {
+      "namespace": "tsm.library",
+      "attributes": {
+        "library": "@codemirror/view",
+        "version": "6.43.10"
+      }
+    },
+    {
+      "namespace": "tsm.library",
+      "attributes": {
+        "library": "@codemirror/language",
+        "version": "6.12.4"
+      }
+    },
+    {
+      "namespace": "tsm.library",
+      "attributes": {
+        "library": "@codemirror/commands",
+        "version": "6.9.0"
+      }
+    },
+    {
+      "namespace": "tsm.library",
+      "attributes": {
+        "library": "@codemirror/search",
+        "version": "6.5.11"
+      }
+    },
+    {
+      "namespace": "tsm.library",
+      "attributes": {
+        "library": "@codemirror/lint",
+        "version": "6.9.7"
+      }
+    },
+    {
+      "namespace": "tsm.library",
+      "attributes": {
+        "library": "@codemirror/autocomplete",
+        "version": "6.20.3"
+      }
+    },
+    {
+      "namespace": "tsm.library",
+      "attributes": {
+        "library": "@codemirror/lsp-client",
+        "version": "6.2.5"
+      }
+    },
+    {
+      "namespace": "tsm.library",
+      "attributes": {
+        "library": "@lezer/highlight",
+        "version": "1.2.3"
+      }
+    }
+  ]
+}
