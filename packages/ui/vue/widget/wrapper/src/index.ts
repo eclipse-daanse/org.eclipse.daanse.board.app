@@ -9,7 +9,6 @@ Contributors: Smart City Jena
 */
 
 import WidgetWrapper from './WidgetWrapper.vue'
-import WidgetWrapperSettings from './WidgetWrapperSettings.vue'
 import { WrapperSettingsImpl } from './gen/WrapperSettingsImpl'
 import { WrapperSettingsPackage } from './gen/WrapperSettingsPackage'
 /*
@@ -29,7 +28,7 @@ WrapperSettingsPackage.eINSTANCE
  */
 const defaultConfig = new WrapperSettingsImpl();
 
-export { WidgetWrapper, WidgetWrapperSettings, defaultConfig }
+export { WidgetWrapper, defaultConfig }
 /* The generated class and its package: what a UI model needs to render
  * these settings from the model rather than from a hand-written form. */
 /* The form for these settings, written as a model rather than as a
