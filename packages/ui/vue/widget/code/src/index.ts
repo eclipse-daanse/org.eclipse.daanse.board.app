@@ -27,7 +27,7 @@ import codeSettingsFormXmi from '../model/ui.xmi?raw'
  * null, an instance cannot say what it is, and nothing can render it from
  * the model.
  */
-CodesettingsPackage.eINSTANCE
+void CodesettingsPackage.eINSTANCE
 import { CodeWidgetEvents } from './events/CodeWidgetEvents'
 import { CodeWidgetInterface } from './api/CodeWidgetInterface'
 import type { EventRegistry, EventActionsRegistry } from 'org.eclipse.daanse.board.app.lib.api.events'

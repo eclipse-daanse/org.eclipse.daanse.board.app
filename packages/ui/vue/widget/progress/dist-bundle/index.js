@@ -41,7 +41,7 @@ class J extends Ke {
     }
   }
 }
-function _(n) {
+function v(n) {
   const e = re.INSTANCE.getEPackage(n);
   if (!e)
     throw new Error(`EPackage '${n}' is not registered. Access the eINSTANCE of that model's generated package (or register it via EPackageRegistry.INSTANCE.registerPackage) before initializing ProgresswidgetsPackage.`);
@@ -106,14 +106,14 @@ class r extends je {
     S.setContainment(!1), S.setName("max"), S.setLowerBound(0), S.setUpperBound(1), e.getEStructuralFeatures().push(S), r.Literals.PROGRESS_SETTINGS__MAX = S;
     const g = new T();
     g.setContainment(!1), g.setName("textColor"), g.setLowerBound(0), g.setUpperBound(1), e.getEStructuralFeatures().push(g), r.Literals.PROGRESS_SETTINGS__TEXT_COLOR = g;
-    const v = new T();
-    v.setContainment(!1), v.setName("barThickness"), v.setLowerBound(0), v.setUpperBound(1), e.getEStructuralFeatures().push(v), r.Literals.PROGRESS_SETTINGS__BAR_THICKNESS = v;
+    const _ = new T();
+    _.setContainment(!1), _.setName("barThickness"), _.setLowerBound(0), _.setUpperBound(1), e.getEStructuralFeatures().push(_), r.Literals.PROGRESS_SETTINGS__BAR_THICKNESS = _;
     const a = new T();
     a.setContainment(!1), a.setName("borderRadius"), a.setLowerBound(0), a.setUpperBound(1), e.getEStructuralFeatures().push(a), r.Literals.PROGRESS_SETTINGS__BORDER_RADIUS = a;
     const N = new F();
     N.setName("valueAlign"), N.setLowerBound(0), N.setUpperBound(1), e.getEStructuralFeatures().push(N), r.Literals.PROGRESS_SETTINGS__VALUE_ALIGN = N;
     const b = new F();
-    b.setName("valueJustify"), b.setLowerBound(0), b.setUpperBound(1), e.getEStructuralFeatures().push(b), r.Literals.PROGRESS_SETTINGS__VALUE_JUSTIFY = b, r.Literals.PROGRESS_SETTINGS__PROGRESS.setEType(_("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), r.Literals.PROGRESS_SETTINGS__FILL_COLOR.setEType(_("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), r.Literals.PROGRESS_SETTINGS__GRADIENT_COLOR.setEType(_("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), r.Literals.PROGRESS_SETTINGS__BACKGROUND_COLOR.setEType(_("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), r.Literals.PROGRESS_SETTINGS__IS_GRADIENT.setEType(Q().getEClassifier("EBoolean")), r.Literals.PROGRESS_SETTINGS__IS_VERTICAL.setEType(Q().getEClassifier("EBoolean")), r.Literals.PROGRESS_SETTINGS__ROTATION.setEType(_("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), r.Literals.PROGRESS_SETTINGS__MIN.setEType(_("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), r.Literals.PROGRESS_SETTINGS__MAX.setEType(_("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), r.Literals.PROGRESS_SETTINGS__TEXT_COLOR.setEType(_("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), r.Literals.PROGRESS_SETTINGS__BAR_THICKNESS.setEType(_("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), r.Literals.PROGRESS_SETTINGS__BORDER_RADIUS.setEType(_("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper"));
+    b.setName("valueJustify"), b.setLowerBound(0), b.setUpperBound(1), e.getEStructuralFeatures().push(b), r.Literals.PROGRESS_SETTINGS__VALUE_JUSTIFY = b, r.Literals.PROGRESS_SETTINGS__PROGRESS.setEType(v("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), r.Literals.PROGRESS_SETTINGS__FILL_COLOR.setEType(v("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), r.Literals.PROGRESS_SETTINGS__GRADIENT_COLOR.setEType(v("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), r.Literals.PROGRESS_SETTINGS__BACKGROUND_COLOR.setEType(v("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), r.Literals.PROGRESS_SETTINGS__IS_GRADIENT.setEType(Q().getEClassifier("EBoolean")), r.Literals.PROGRESS_SETTINGS__IS_VERTICAL.setEType(Q().getEClassifier("EBoolean")), r.Literals.PROGRESS_SETTINGS__ROTATION.setEType(v("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), r.Literals.PROGRESS_SETTINGS__MIN.setEType(v("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), r.Literals.PROGRESS_SETTINGS__MAX.setEType(v("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), r.Literals.PROGRESS_SETTINGS__TEXT_COLOR.setEType(v("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), r.Literals.PROGRESS_SETTINGS__BAR_THICKNESS.setEType(v("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), r.Literals.PROGRESS_SETTINGS__BORDER_RADIUS.setEType(v("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper"));
   }
 }
 class t extends $e {
@@ -669,7 +669,7 @@ const tt = /* @__PURE__ */ te({
   setup(n, { expose: e }) {
     De((c) => ({
       v095f0594: de.value,
-      e369f6f8: _e.value,
+      e369f6f8: ve.value,
       v63c75e65: Te.value,
       v1c012893: Ce.value,
       acc6ed20: Re.value,
@@ -700,7 +700,7 @@ const tt = /* @__PURE__ */ te({
         widgetId: i.value,
         payload: { widgetId: i.value, timestamp: Date.now() }
       });
-    }, v = () => {
+    }, _ = () => {
       i?.value && u.emit("widget:ProgressWidget:right_click", {
         type: "widget:ProgressWidget:right_click",
         widgetId: i.value,
@@ -757,7 +757,7 @@ const tt = /* @__PURE__ */ te({
       () => a.value.isVertical && O.value !== null ? "35px" : "100%"
     ), Te = f(
       () => !a.value.isVertical && O.value !== null ? "35px" : "100%"
-    ), _e = f(() => a.value.borderRadius?.value || "10px"), O = f(() => {
+    ), ve = f(() => a.value.borderRadius?.value || "10px"), O = f(() => {
       const c = a.value.progress;
       if (!c) return null;
       const E = c.value;
@@ -772,7 +772,7 @@ const tt = /* @__PURE__ */ te({
       if (isNaN(K)) return null;
       const be = fe.value, me = B.value;
       return Math.max(be, Math.min(me, K));
-    }), ve = f(() => {
+    }), _e = f(() => {
       switch (a.value?.valueAlign) {
         case "left":
           return "align-left";
@@ -794,13 +794,13 @@ const tt = /* @__PURE__ */ te({
     return (c, E) => (G(), m("div", {
       class: "container",
       onClick: g,
-      onContextmenu: ke(v, ["prevent"])
+      onContextmenu: ke(_, ["prevent"])
     }, [
       L("div", {
         class: Y(["grid-layout", { vertical: a.value.isVertical }])
       }, [
         L("div", {
-          class: Y(["progress-value", [Oe.value, ve.value]])
+          class: Y(["progress-value", [Oe.value, _e.value]])
         }, ae(O.value !== null ? O.value : "n/a"), 3),
         E[0] || (E[0] = L("div", { class: "progress-bar" }, [
           L("div", { class: "progress-percent" })

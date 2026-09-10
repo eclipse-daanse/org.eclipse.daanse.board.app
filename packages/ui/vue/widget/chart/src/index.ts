@@ -30,7 +30,7 @@ import seriesSettingsFormXmi from '../model/ui-series.xmi?raw'
  * null, an instance cannot say what it is, and nothing can render it from
  * the model.
  */
-ChartsettingsPackage.eINSTANCE
+void ChartsettingsPackage.eINSTANCE
 import { ChartWidgetEvents } from './events/ChartWidgetEvents'
 import { ChartWidgetInterface } from './api/ChartWidgetInterface'
 import type { EventRegistry, EventActionsRegistry } from 'org.eclipse.daanse.board.app.lib.api.events'

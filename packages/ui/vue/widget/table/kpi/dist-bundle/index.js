@@ -22,7 +22,7 @@ class A extends j {
 Ne([
   Te({ eventType: "kpiTable.refresh" })
 ], A.prototype, "refresh");
-const ye = /* @__PURE__ */ q({
+const ve = /* @__PURE__ */ q({
   __name: "KpiTableWidget",
   props: {
     datasourceId: {},
@@ -30,7 +30,7 @@ const ye = /* @__PURE__ */ q({
     id: {}
   },
   setup(l, { expose: e }) {
-    const { wrapParameters: t } = ue(), u = l, { datasourceId: a, config: r, id: i } = Q(u), v = B(pe.TINY_EMITTER), P = B(M), k = ce().params.pageid || "";
+    const { wrapParameters: t } = ue(), u = l, { datasourceId: a, config: r, id: i } = Q(u), y = B(pe.TINY_EMITTER), P = B(M), k = ce().params.pageid || "";
     class O extends A {
       refresh() {
         m(a.value, a.value);
@@ -41,13 +41,13 @@ const ye = /* @__PURE__ */ q({
       i?.value && P.unregisterInstance(i.value);
     });
     const U = () => {
-      i?.value && v.emit("widget:KpiTableWidget:click", {
+      i?.value && y.emit("widget:KpiTableWidget:click", {
         type: "widget:KpiTableWidget:click",
         widgetId: i.value,
         payload: { widgetId: i.value, timestamp: Date.now() }
       });
     }, H = () => {
-      i?.value && v.emit("widget:KpiTableWidget:right_click", {
+      i?.value && y.emit("widget:KpiTableWidget:right_click", {
         type: "widget:KpiTableWidget:right_click",
         widgetId: i.value,
         payload: { widgetId: i.value, timestamp: Date.now() }
@@ -134,12 +134,12 @@ const ye = /* @__PURE__ */ q({
       oe(le(he), { tableData: x.value }, null, 8, ["tableData"])
     ], 32));
   }
-}), ve = (l, e) => {
+}), ye = (l, e) => {
   const t = l.__vccOpts || l;
   for (const [u, a] of e)
     t[u] = a;
   return t;
-}, Pe = /* @__PURE__ */ ve(ye, [["__scopeId", "data-v-f4b39436"]]), De = [
+}, Pe = /* @__PURE__ */ ye(ve, [["__scopeId", "data-v-f4b39436"]]), De = [
   { name: "KpiTable Clicked", type: "click", description: "Triggered when the kpi table widget is clicked", payloadType: V },
   { name: "KpiTable Right Clicked", type: "right_click", description: "Triggered when the kpi table widget is right-clicked", payloadType: V }
 ];
@@ -501,7 +501,7 @@ them - so they are the values; optionLabel says what each one looks like.
   </components>
 </uimodel:UIModel>
 `;
-var Le = Object.defineProperty, Be = Object.getOwnPropertyDescriptor, y = (l, e, t, u) => {
+var Le = Object.defineProperty, Be = Object.getOwnPropertyDescriptor, v = (l, e, t, u) => {
   for (var a = u > 1 ? void 0 : u ? Be(e, t) : e, r = l.length - 1, i; r >= 0; r--)
     (i = l[r]) && (a = (u ? i(e, t, a) : i(a)) || a);
   return u && a && Le(e, t, a), a;
@@ -538,13 +538,13 @@ let C = class {
     this.events.unregisterWidget(E), this.actions.unregisterWidgetType(E);
   }
 };
-y([
+v([
   $()
 ], C.prototype, "register", 1);
-y([
+v([
   z()
 ], C.prototype, "unregister", 1);
-C = y([
+C = v([
   J({
     service: [we],
     properties: { "widget.type": E }

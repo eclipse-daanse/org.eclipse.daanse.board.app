@@ -39,7 +39,7 @@ import { WIDGET_SERVICE_ID, type WidgetProvider } from 'org.eclipse.daanse.board
  * register itself when its code is loaded, and for a bundle that moment
  * is here.
  */
-MapSettingsPackage.eINSTANCE
+void MapSettingsPackage.eINSTANCE
 
 const WIDGET_TYPE = 'MapWidget'
 

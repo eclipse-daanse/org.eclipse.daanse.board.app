@@ -30,7 +30,7 @@ import svgRuleFormXmi from '../model/ui-rule.xmi?raw'
  * null, an instance cannot say what it is, and nothing can render it from
  * the model.
  */
-SvgwidgetsPackage.eINSTANCE
+void SvgwidgetsPackage.eINSTANCE
 import type { EventRegistry, EventActionsRegistry } from 'org.eclipse.daanse.board.app.lib.api.events'
 import { WIDGET_SERVICE_ID, type WidgetProvider } from 'org.eclipse.daanse.board.app.lib.api.widget'
 

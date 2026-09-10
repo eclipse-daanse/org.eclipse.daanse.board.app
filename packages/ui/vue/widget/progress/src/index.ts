@@ -31,7 +31,7 @@ import progressSettingsFormXmi from '../model/ui.xmi?raw'
  * null, an instance cannot say what it is, and nothing can render it from
  * the model.
  */
-ProgresswidgetsPackage.eINSTANCE
+void ProgresswidgetsPackage.eINSTANCE
 
 const WIDGET_TYPE = 'ProgressWidget'
 

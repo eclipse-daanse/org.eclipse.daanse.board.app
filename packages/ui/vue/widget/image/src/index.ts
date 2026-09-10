@@ -33,8 +33,8 @@ import galleryFormXmi from '../model/ui-gallery.xmi?raw'
  * The events package first: the click payloads below inherit from Payload,
  * and a package cannot resolve a supertype that is not in the registry yet.
  */
-EventsPackage.eINSTANCE
-ImagesettingsPackage.eINSTANCE
+void EventsPackage.eINSTANCE
+void ImagesettingsPackage.eINSTANCE
 import type { EventRegistry } from 'org.eclipse.daanse.board.app.lib.api.events'
 import { WIDGET_SERVICE_ID, type WidgetProvider } from 'org.eclipse.daanse.board.app.lib.api.widget'
 

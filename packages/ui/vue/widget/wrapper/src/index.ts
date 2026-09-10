@@ -18,7 +18,7 @@ import { WrapperSettingsPackage } from './gen/WrapperSettingsPackage'
  * the package to register itself when its code is loaded, and for a bundle
  * that moment is here.
  */
-WrapperSettingsPackage.eINSTANCE
+void WrapperSettingsPackage.eINSTANCE
 
 /*
  * Generated in emf mode now: the plain properties are still there, so

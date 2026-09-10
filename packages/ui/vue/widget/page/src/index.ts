@@ -27,7 +27,7 @@ import pageSettingsFormXmi from '../model/ui.xmi?raw'
  * null, an instance cannot say what it is, and nothing can render it from
  * the model.
  */
-PagesettingsPackage.eINSTANCE
+void PagesettingsPackage.eINSTANCE
 import { WIDGET_SERVICE_ID, type WidgetProvider } from 'org.eclipse.daanse.board.app.lib.api.widget'
 
 const WIDGET_TYPE = 'PageWidget'

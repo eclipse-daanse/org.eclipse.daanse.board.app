@@ -28,7 +28,7 @@ import gridColumnsFormXmi from '../model/ui-columns.xmi?raw'
  * null, an instance cannot say what it is, and nothing can render it from
  * the model.
  */
-GridsettingsPackage.eINSTANCE
+void GridsettingsPackage.eINSTANCE
 
 const LAYOUT_ID = 'org.eclipse.daanse.board.app.ui.vue.layouts.grid'
 

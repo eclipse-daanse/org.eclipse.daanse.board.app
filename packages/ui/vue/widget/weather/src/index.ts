@@ -27,7 +27,7 @@ import weatherSettingsFormXmi from '../model/ui.xmi?raw'
  * null, an instance cannot say what it is, and nothing can render it from
  * the model.
  */
-WeathersettingsPackage.eINSTANCE
+void WeathersettingsPackage.eINSTANCE
 import { WeatherWidgetEvents } from './events/WeatherWidgetEvents'
 import { WeatherWidgetInterface } from './api/WeatherWidgetInterface'
 import type { EventRegistry, EventActionsRegistry } from 'org.eclipse.daanse.board.app.lib.api.events'

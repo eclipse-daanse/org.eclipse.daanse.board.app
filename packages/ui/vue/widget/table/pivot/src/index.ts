@@ -38,7 +38,7 @@ interface IPivotTable {
  * register itself when its code is loaded, and for a bundle that moment
  * is here.
  */
-PivotTablePackage.eINSTANCE
+void PivotTablePackage.eINSTANCE
 
 const WIDGET_TYPE = 'PivotTableWidget'
 

@@ -32,7 +32,7 @@ import { WIDGET_SERVICE_ID, type WidgetProvider } from 'org.eclipse.daanse.board
  * the package to register itself when its code is loaded, and for a bundle
  * that moment is here.
  */
-RichTextEditorPackage.eINSTANCE
+void RichTextEditorPackage.eINSTANCE
 
 const WIDGET_TYPE = 'RichTextWidget'
 

@@ -30,8 +30,8 @@ import routingSettingsFormXmi from '../model/ui.xmi?raw'
  * The events package first: the payloads inherit from Payload, and a
  * package cannot resolve a supertype that is not in the registry yet.
  */
-EventsPackage.eINSTANCE
-RoutingSettingsPackage.eINSTANCE
+void EventsPackage.eINSTANCE
+void RoutingSettingsPackage.eINSTANCE
 import ecoreModelContent from '../model/model.ecore?raw'
 import type { EventRegistry } from 'org.eclipse.daanse.board.app.lib.api.events'
 import { WIDGET_SERVICE_ID, type WidgetProvider } from 'org.eclipse.daanse.board.app.lib.api.widget'

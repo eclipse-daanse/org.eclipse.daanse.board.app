@@ -26,7 +26,7 @@ import vantaSettingsFormXmi from '../model/ui.xmi?raw'
  * null, an instance cannot say what it is, and nothing can render it from
  * the model.
  */
-VantasettingsPackage.eINSTANCE
+void VantasettingsPackage.eINSTANCE
 import type { EventRegistry } from 'org.eclipse.daanse.board.app.lib.api.events'
 import { WIDGET_SERVICE_ID, type WidgetProvider } from 'org.eclipse.daanse.board.app.lib.api.widget'
 import type { Component } from 'vue'

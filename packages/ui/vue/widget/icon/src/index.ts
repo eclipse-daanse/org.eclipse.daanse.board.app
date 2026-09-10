@@ -34,8 +34,8 @@ import iconSettingsFormXmi from '../model/ui.xmi?raw'
  * The events package first: the click payloads inherit from Payload, and a
  * package cannot resolve a supertype that is not in the registry yet.
  */
-EventsPackage.eINSTANCE
-IconSettingsPackage.eINSTANCE
+void EventsPackage.eINSTANCE
+void IconSettingsPackage.eINSTANCE
 
 const WIDGET_TYPE = 'IconWidget'
 
