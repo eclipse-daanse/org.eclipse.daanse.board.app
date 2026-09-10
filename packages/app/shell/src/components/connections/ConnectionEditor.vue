@@ -17,6 +17,7 @@ import {
   identifier,
 } from 'org.eclipse.daanse.board.app.lib.api.connection'
 import { useConnectionsStore } from 'org.eclipse.daanse.board.app.ui.vue.stores.connection'
+import { DButton, DInput, DSelect } from 'org.eclipse.daanse.board.app.ui.vue.controls'
 
 const props = defineProps({
   itemId: {
@@ -57,31 +58,38 @@ const saveConnection = () => {
 }
 </script>
 <template>
-  <div class="w-full h-full flex gap-4">
-    <div class="min-w-[350px]">
-      <div class="flex flex-col border border-[var(--color-divider)] rounded-lg overflow-hidden w-full h-full">
-        <div class="flex gap-4 w-full border-b border-[var(--color-divider)] px-4 py-2 items-center">
-          <h4 class="flex-grow text-sm font-semibold leading-[1.5rem]">Connection settings</h4>
-        </div>
-        <div class="flex-grow flex flex-col h-full">
-          <div class="flex-grow p-4 flex flex-col gap-2">
-            <template v-if="connectionProxy">
-              <VaInput v-model="connectionProxy.uid" label="UID" readonly />
-              <VaInput v-model="connectionProxy.name" label="Name" />
-              <VaSelect
-                v-model="connectionProxy.type"
-                label="Type"
-                :options="availableConnections"
-              />
-              <component :is="settingsComponent" :config="connectionProxy.config" />
-            </template>
-          </div>
-          <div class="self-end flex gap-4 p-4">
-            <va-button @click="saveConnection">Save</va-button>
-            <va-button @click="$emit('close')" preset="plain">Close</va-button>
-          </div>
-        </div>
-      </div>
+  <!-- The frame, the heading and the tabs belong to the page around this -->
+  <div class="editor">
+    <div class="editor__fields">
+      <DInput v-model="connectionProxy.uid" label="UID" readonly />
+      <DInput v-model="connectionProxy.name" label="Name" />
+      <DSelect v-model="connectionProxy.type" label="Typ" :options="availableConnections" />
+      <component :is="settingsComponent" :config="connectionProxy.config" />
+    </div>
+    <div class="editor__actions">
+      <DButton intent="quiet" @click="$emit('close')">Schließen</DButton>
+      <DButton intent="primary" @click="saveConnection">Speichern</DButton>
     </div>
   </div>
 </template>
+
+<style scoped>
+.editor {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.editor__fields {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  max-width: 620px;
+}
+
+.editor__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 7px;
+}
+</style>

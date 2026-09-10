@@ -13,7 +13,7 @@
 
 import { createRouter, createWebHistory } from 'vue-router'
 import ViewReport from '@/pages/ViewReport.vue'
-import DataSettings from '@/pages/DataSettings.vue'
+import ConnectionsAndData from '@/pages/ConnectionsAndData.vue'
 import EditReport from '@/pages/EditReport.vue'
 
 const router = createRouter({
@@ -30,10 +30,20 @@ const router = createRouter({
       name: 'edit',
       component: EditReport,
     },
+    /*
+     * The screen the mockups call "Verbindungen & Daten". The old path
+     * carried a board id it never read - the page is about the workspace,
+     * not about one board - so /datasources is the name, and the old one
+     * still lands here for links that are already out there.
+     */
+    {
+      path: '/datasources',
+      name: 'data',
+      component: ConnectionsAndData,
+    },
     {
       path: '/:id/data',
-      name: 'data',
-      component: DataSettings,
+      redirect: { name: 'data' },
     },
     {
       path:'/page/:pageid/edit',

@@ -19,13 +19,22 @@ import {
 import { useDataSourcesStore } from 'org.eclipse.daanse.board.app.ui.vue.stores.datasouce'
 import { useConnectionsStore } from 'org.eclipse.daanse.board.app.ui.vue.stores.connection'
 import { cloneDeep } from 'lodash'
+import { DButton, DInput, DSelect } from 'org.eclipse.daanse.board.app.ui.vue.controls'
 
-const props = defineProps({
-  itemId: {
-    type: String,
-    required: true,
-  },
-})
+const props = withDefaults(
+  defineProps<{
+    itemId: string
+    /**
+     * Which half of a source is shown.
+     *
+     * The two used to sit side by side in one strip. The page around this
+     * makes them tabs, because reading the data and changing the settings
+     * are two different visits.
+     */
+    view?: 'settings' | 'preview'
+  }>(),
+  { view: 'settings' },
+)
 
 const datasourceProxy = ref({} as any)
 
@@ -59,7 +68,6 @@ const previewComponent = computed(() => {
 
 const settingsComponent = computed(() => {
   const identifiers = datasourceRepository.getDatasourceIdentifiers(datasourceProxy.value.type)
-  console.log(identifiers);
 
   if (!identifiers) {
     return null
@@ -69,51 +77,68 @@ const settingsComponent = computed(() => {
 })
 
 const updateConfig = (config: any) => {
-  console.log('updateConfig called')
-  console.log(config)
   datasourceProxy.value.config = config
 }
 
 const emit = defineEmits(['close'])
 </script>
 <template>
-  <div class="w-full h-full flex gap-4">
-    <div class="min-w-[350px]">
-      <div class="flex flex-col border border-[var(--color-divider)] rounded-lg overflow-hidden w-full h-full">
-        <div class="flex gap-4 w-full border-b border-[var(--color-divider)] px-4 py-2 items-center">
-          <h4 class="flex-grow text-sm font-semibold leading-[1.5rem]">Store settings</h4>
-        </div>
-        <div class="flex-grow flex flex-col h-full">
-          <div class="flex-grow p-4 flex flex-col gap-2">
-            <template v-if="datasourceProxy">
-              <VaInput v-model="datasourceProxy.uid" label="UID" readonly />
-              <VaInput v-model="datasourceProxy.name" label="Name" />
-              <VaSelect
-                v-model="datasourceProxy.type"
-                label="Type"
-                :options="availableDatasources"
-              />
-              <component
-                :is="settingsComponent"
-                :config="datasourceProxy.config"
-                :connections="connections"
-                :dataSources="dataSources"
-              />
-            </template>
-          </div>
-          <div class="self-end flex gap-4 p-4">
-            <va-button @click="saveDataSource">Save</va-button>
-            <va-button @click="$emit('close')" preset="plain">Close</va-button>
-          </div>
-        </div>
+  <div class="editor">
+    <template v-if="view === 'settings'">
+      <div class="editor__fields">
+        <DInput v-model="datasourceProxy.uid" label="UID" readonly />
+        <DInput v-model="datasourceProxy.name" label="Name" />
+        <DSelect v-model="datasourceProxy.type" label="Typ" :options="availableDatasources" />
+        <component
+          :is="settingsComponent"
+          :config="datasourceProxy.config"
+          :connections="connections"
+          :dataSources="dataSources"
+        />
       </div>
-    </div>
-    <div class="flex-grow overflow-hidden w-full">
-      <div class="bg-pane rounded-lg p-4 border border-[var(--color-divider)]
-        h-full w-full flex items-center justify-center overflow-hidden">
-        <component :is="previewComponent" :data-source="datasourceProxy" :key="datasourceProxy.uid"
-          @updateConfig="updateConfig" />
+      <div class="editor__actions">
+        <DButton intent="quiet" @click="$emit('close')">Schließen</DButton>
+        <DButton intent="primary" @click="saveDataSource">Speichern</DButton>
       </div>
+    </template>
+
+    <div v-else class="editor__preview">
+      <component
+        :is="previewComponent"
+        :data-source="datasourceProxy"
+        :key="datasourceProxy.uid"
+        @updateConfig="updateConfig"
+      />
     </div>
   </div>
 </template>
+
+<style scoped>
+.editor {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  height: 100%;
+  min-height: 0;
+}
+
+.editor__fields {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  max-width: 620px;
+}
+
+.editor__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 7px;
+}
+
+.editor__preview {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  overflow: auto;
+}
+</style>

@@ -102,7 +102,7 @@ const go = (target: string) => router.push(target)
           :class="['ri', { on: route.name === 'data' }]"
           :aria-current="route.name === 'data' ? 'page' : undefined"
           title="Verbindungen &amp; Daten"
-          @click="go('/qweqwe/data')"
+          @click="go('/datasources')"
         >
           <va-icon name="dataset" />
           <span class="sr-only">Verbindungen &amp; Daten</span>
