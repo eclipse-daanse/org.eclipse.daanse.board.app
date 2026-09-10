@@ -279,8 +279,7 @@ const removingUsage = computed(() => {
   flex-direction: column;
   min-height: 0;
   height: 100%;
-  border: 1px solid var(--color-divider);
-  border-radius: var(--radius-md, 4px);
+  border-right: 1px solid var(--color-divider);
   background: var(--color-pane);
   overflow: hidden;
 }

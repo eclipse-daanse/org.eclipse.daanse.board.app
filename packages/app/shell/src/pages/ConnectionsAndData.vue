@@ -129,10 +129,8 @@ watch(selected, (at) => {
 <style scoped>
 .data-page {
   display: flex;
-  gap: 16px;
   height: 100%;
   min-height: 0;
-  padding: 16px 16px 16px 72px;
 }
 
 .data-page__tree {
@@ -147,8 +145,6 @@ watch(selected, (at) => {
   flex: 1 1 auto;
   min-width: 0;
   min-height: 0;
-  border: 1px solid var(--color-divider);
-  border-radius: var(--radius-md, 4px);
   background: var(--color-pane);
   overflow: hidden;
 }
