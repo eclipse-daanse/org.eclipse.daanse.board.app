@@ -32,6 +32,7 @@ import {
   WrapperSettingsPackage,
   wrapperSettingsFormXmi,
 } from 'org.eclipse.daanse.board.app.ui.vue.widget.wrapper'
+import { DButton } from 'org.eclipse.daanse.board.app.ui.vue.controls'
 import { SettingsForm } from 'org.eclipse.daanse.board.app.ui.vue.uimodel'
 import {
   identifier as WORKSPACE,
@@ -616,8 +617,8 @@ onBeforeUnmount(() => {
           <footer class="foot">
             <span class="foot__hint">Änderungen greifen erst mit „Fertig“</span>
             <span class="stage__spacer" />
-            <button class="btn" type="button" @click="discard">Verwerfen</button>
-            <button class="btn btn--primary" type="button" @click="accept">Fertig</button>
+            <DButton size="sm" @click="discard">Verwerfen</DButton>
+            <DButton intent="primary" size="sm" @click="accept">Fertig</DButton>
           </footer>
         </div>
       </section>
@@ -890,30 +891,6 @@ onBeforeUnmount(() => {
   color: var(--color-dim);
 }
 
-.btn {
-  height: 24px;
-  padding: 0 12px;
-  font-family: inherit;
-  font-size: var(--text-sm);
-  color: var(--color-fg);
-  background-color: var(--color-raised);
-  border: 1px solid var(--color-divider);
-  border-radius: var(--radius-xs);
-  cursor: pointer;
-}
-
-.btn:hover {
-  border-color: var(--color-outline);
-}
-
-.btn--primary {
-  color: var(--color-onAccent);
-  background-color: var(--color-accent);
-  border-color: var(--color-accent);
-  font-weight: 500;
-}
-
-.btn:focus-visible,
 .tab:focus-visible,
 .seg button:focus-visible {
   outline: 2px solid var(--color-accent);

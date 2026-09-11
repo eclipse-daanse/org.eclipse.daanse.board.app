@@ -23,6 +23,7 @@ Contributors:
 import { computed, inject, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { v4 as uuidv4 } from 'uuid'
+import { DButton } from 'org.eclipse.daanse.board.app.ui.vue.controls'
 import BoardFloorplan from './BoardFloorplan.vue'
 import WorkspaceStorage from './WorkspaceStorage.vue'
 import { summarizeBoard, type BoardSummary } from '@/composables/boardSummary'
@@ -156,9 +157,7 @@ function openStorage() {
           placeholder="Boards filtern"
           aria-label="Boards filtern"
         />
-        <button class="boards__action boards__action--primary" type="button" @click="createBoard">
-          Neues Board
-        </button>
+        <DButton intent="primary" size="sm" @click="createBoard">Neues Board</DButton>
       </div>
     </header>
 
@@ -181,12 +180,8 @@ function openStorage() {
         öffne einen gespeicherten Arbeitsstand.
       </p>
       <div class="boards__empty-actions">
-        <button class="boards__action boards__action--primary" type="button" @click="createBoard">
-          Neues Board
-        </button>
-        <button class="boards__action" type="button" @click="openStorage">
-          Aus Speicher öffnen
-        </button>
+        <DButton intent="primary" size="sm" @click="createBoard">Neues Board</DButton>
+        <DButton size="sm" @click="openStorage">Aus Speicher öffnen</DButton>
       </div>
     </div>
 
@@ -392,36 +387,9 @@ function openStorage() {
 }
 
 .boards__search:focus-visible,
-.boards__action:focus-visible,
 .board:focus-visible {
   outline: 2px solid var(--color-accent);
   outline-offset: 1px;
-}
-
-.boards__action {
-  height: 22px;
-  padding: 0 10px;
-  font-size: var(--text-sm);
-  font-family: inherit;
-  color: var(--color-fg);
-  background-color: var(--color-raised);
-  border: 1px solid var(--color-divider);
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-.boards__action:hover {
-  border-color: var(--color-outline);
-}
-
-.boards__action--primary {
-  color: var(--color-white);
-  background-color: var(--color-accent);
-  border-color: var(--color-accent);
-}
-
-.boards__action--primary:hover {
-  filter: brightness(1.08);
 }
 
 .boards__grid {

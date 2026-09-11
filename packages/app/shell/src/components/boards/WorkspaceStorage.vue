@@ -22,6 +22,7 @@ Contributors:
  * contains before you replace your workspace with it.
  */
 import { computed, inject, onMounted, ref, watch } from 'vue'
+import { DButton } from 'org.eclipse.daanse.board.app.ui.vue.controls'
 import BoardFloorplan from './BoardFloorplan.vue'
 import {
   parseWorkspace,
@@ -372,8 +373,8 @@ watch(() => repoManager, loadPlaces)
             type="text"
             placeholder="z. B. bodenfeuchte"
           />
-          <button class="btn btn--primary" type="submit" :disabled="!newName.trim()">Ablegen</button>
-          <button class="btn" type="button" @click="creating = false">Abbrechen</button>
+          <DButton intent="primary" size="sm" type="submit" :disabled="!newName.trim()">Ablegen</DButton>
+          <DButton size="sm" @click="creating = false">Abbrechen</DButton>
           <p class="create__hint">
             Abgelegt wird der gesamte Arbeitsstand: {{ pending.boards }}
             {{ pending.boards === 1 ? 'Board' : 'Boards' }} mit {{ pending.widgets }} Widgets, dazu
@@ -400,25 +401,24 @@ watch(() => repoManager, loadPlaces)
             {{ totals.sources }} Datenquellen
           </span>
           <span class="detail__spacer" />
-          <button class="btn btn--primary" type="button" @click="open(selectedEntry)">Laden</button>
-          <button
+          <DButton intent="primary" size="sm" @click="open(selectedEntry)">Laden</DButton>
+          <DButton
             v-if="isWritable(selectedPlace)"
-            class="btn"
-            type="button"
+            size="sm"
             title="Aktuellen Arbeitsstand hierhin schreiben"
             @click="overwrite(selectedEntry)"
           >
             Überschreiben
-          </button>
-          <button class="btn" type="button" @click="download(selectedEntry)">Herunterladen</button>
-          <button
+          </DButton>
+          <DButton size="sm" @click="download(selectedEntry)">Herunterladen</DButton>
+          <DButton
             v-if="isWritable(selectedPlace)"
-            class="btn btn--danger"
-            type="button"
+            intent="danger"
+            size="sm"
             @click="remove(selectedEntry)"
           >
             Löschen
-          </button>
+          </DButton>
         </header>
 
         <div v-if="boards.length" class="boards">
@@ -713,40 +713,6 @@ watch(() => repoManager, loadPlaces)
   color: var(--color-dim);
 }
 
-/* --------------------------------------------------------------- buttons */
-
-.btn {
-  height: 24px;
-  padding: 0 10px;
-  font-size: var(--text-sm);
-  font-family: inherit;
-  color: var(--color-fg);
-  background-color: var(--color-raised);
-  border: 1px solid var(--color-divider);
-  border-radius: var(--radius-xs);
-  cursor: pointer;
-}
-
-.btn:hover {
-  border-color: var(--color-outline);
-}
-
-.btn:disabled {
-  opacity: 0.5;
-  cursor: default;
-}
-
-.btn--primary {
-  color: var(--color-onAccent);
-  background-color: var(--color-accent);
-  border-color: var(--color-accent);
-}
-
-.btn--danger {
-  color: var(--color-err);
-}
-
-.btn:focus-visible,
 .row:focus-visible,
 .tree__search:focus-visible,
 .create__input:focus-visible {
