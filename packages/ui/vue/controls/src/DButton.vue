@@ -169,14 +169,15 @@ withDefaults(
     color-mix(in srgb, var(--color-accent) 55%, var(--color-ok)),
     var(--color-accent)
   );
-  filter: blur(14px);
+  filter: blur(24px);
   opacity: 0;
   transition: opacity 240ms cubic-bezier(0.2, 0.6, 0.2, 1);
   pointer-events: none;
 }
 
 .btn--glow:hover:not(:disabled)::before {
-  opacity: 0.45;
+  /* Raised with the blur: the same colour over more area is less of it. */
+  opacity: 0.6;
 }
 
 .btn--glow:focus-visible::before {
