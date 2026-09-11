@@ -32,14 +32,15 @@ import {
   type Workspace,
 } from 'org.eclipse.daanse.board.app.lib.model.workspace'
 import { useEList, useEObject } from 'org.eclipse.daanse.board.app.ui.vue.composables'
-import { useDataSourcesStore } from 'org.eclipse.daanse.board.app.ui.vue.stores.datasouce'
 import DataTree, { type Selection } from '@/components/datasources/DataTree.vue'
 import DatasourceEditor from '@/components/datasources/DatasourceEditor.vue'
 import ConnectionEditor from '@/components/connections/ConnectionEditor.vue'
 import { useDatasourceUsage } from '@/composables/useDatasourceUsage'
 
-const connections = useEList(inject<Workspace>(WORKSPACE)!, (w) => w.connections)
-const { dataSources } = useDataSourcesStore()
+const workspace = inject<Workspace>(WORKSPACE)!
+const connections = useEList(workspace, (w) => w.connections)
+const dataSources = useEList(workspace, (w) => w.datasources)
+
 const { usageOf, usageLabel } = useDatasourceUsage()
 
 const selected = ref<Selection | undefined>(undefined)
@@ -60,7 +61,7 @@ const held = useEObject(() => {
   if (!at) return undefined
   return at.type === 'Connection'
     ? connections.value.find((c: any) => c.uid === at.itemId)
-    : dataSources.find((d: any) => d.uid === at.itemId)
+    : dataSources.value.find((d) => d.uid === at.itemId)
 })
 
 /** "xmla · ssas-demo" - what it is, and what it reads through. */
@@ -68,8 +69,8 @@ const subtitle = computed(() => {
   const item: any = held.value
   if (!item) return ''
   if (selected.value?.type === 'Connection') return item.type ?? ''
-  const through = connections.value.find((c: any) => c.uid === item.config?.connection)
-  return [item.type, through?.name].filter(Boolean).join(' · ')
+  /* The reference, not an id in the configuration. */
+  return [item.type, item.connection?.name].filter(Boolean).join(' · ')
 })
 
 const usage = computed(() => {

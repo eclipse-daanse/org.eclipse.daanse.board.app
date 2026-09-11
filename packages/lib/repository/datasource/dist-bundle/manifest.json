@@ -14,6 +14,10 @@
     {
       "id": "org.eclipse.daanse.board.app.lib.datasource.base",
       "versionRange": ">=0.0.1-0"
+    },
+    {
+      "id": "org.eclipse.daanse.board.app.lib.model.workspace",
+      "versionRange": ">=0.0.1-0"
     }
   ],
   "capabilities": [
@@ -27,6 +31,7 @@
   ],
   "dependencies": [
     "lib.api.datasource",
-    "lib.datasource.base"
+    "lib.datasource.base",
+    "lib.model.workspace"
   ]
 }

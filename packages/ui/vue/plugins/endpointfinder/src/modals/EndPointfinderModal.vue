@@ -18,7 +18,7 @@ import { useSparQLEndPointManager } from '../sparql/SparqlEndpointRegistry'
 import { Formats } from '../queryBuilder/FilterAPI'
 import { VaBadge, VaStepper } from 'vuestic-ui'
 import { type ConnectionRepository, identifier } from 'org.eclipse.daanse.board.app.lib.api.connection'
-import { DatasourceRepository, IDataRetrieveable, identifier as DataSourceIdentifier } from 'org.eclipse.daanse.board.app.lib.api.datasource'
+import { DatasourceRepository, IDataRetrieveable, type Datasource, identifier as DataSourceIdentifier } from 'org.eclipse.daanse.board.app.lib.api.datasource'
 import SearchResultCard from '../components/Searchcard/SearchResultCard.vue'
 import { type Connection } from 'org.eclipse.daanse.board.app.lib.api.connection'
 import {
@@ -26,7 +26,6 @@ import {
   type Workspace,
 } from 'org.eclipse.daanse.board.app.lib.model.workspace'
 import { useEList } from 'org.eclipse.daanse.board.app.ui.vue.composables'
-import { DataSourceDTO, useDataSourcesStore } from 'org.eclipse.daanse.board.app.ui.vue.stores.datasouce'
 import FilterModal from './FilterModal.vue'
 import { WidgetRepository, identifier as widgetRepoIdentifier } from 'org.eclipse.daanse.board.app.lib.api.widget'
 import { useWidgetsStore } from 'org.eclipse.daanse.board.app.ui.vue.stores.widgets'
@@ -53,7 +52,7 @@ const connectionForm = ref()
 
 const connectionRepository = inject<ConnectionRepository>(identifier)!
 const connections = useEList(inject<Workspace>(WORKSPACE)!, (w) => w.connections)
-const { dataSources, createDataSource,updateDataSource } = useDataSourcesStore()
+const dataSources = useEList(inject<Workspace>(WORKSPACE)!, (w) => w.datasources)
 
 
 const registeredWidgets = inject<WidgetRepository>(widgetRepoIdentifier)!
@@ -224,25 +223,20 @@ const createStoreFromFormat = (format: string, aconnection: string, aresourceUri
   switch ('<' + format + '>') {
     case Formats.CSV:
 
-      const uid = createDataSource('csv', { connection: aconnection, resourceUrl: aresourceUri,separators:',' })
-      return dataSources.find((ds: DataSourceDTO) => ds.uid === uid)
+      return storeManager.createDatasource('csv', { connection: aconnection, resourceUrl: aresourceUri,separators:',' })
 
     case Formats.JSON:
-      const uid_rest = createDataSource('rest', { connection: aconnection, resourceUrl: aresourceUri })
-      return dataSources.find((ds: DataSourceDTO) => ds.uid === uid_rest)
+      return storeManager.createDatasource('rest', { connection: aconnection, resourceUrl: aresourceUri })
 
 
     case Formats.REST:
-      const uid_rest2 = createDataSource('rest', { connection: aconnection, resourceUrl: aresourceUri })
-      return dataSources.find((ds: DataSourceDTO) => ds.uid === uid_rest2)
+      return storeManager.createDatasource('rest', { connection: aconnection, resourceUrl: aresourceUri })
 
     case Formats.OGCSTA:
-      const uid_ogcsta = createDataSource('ogcsta', { connection: aconnection, resourceUrl: aresourceUri })
-      return dataSources.find((ds: DataSourceDTO) => ds.uid === uid_ogcsta)
+      return storeManager.createDatasource('ogcsta', { connection: aconnection, resourceUrl: aresourceUri })
 
     case Formats.XMLA:
-      const uid_xmla = createDataSource('xmla', { connection: aconnection, resourceUrl: aresourceUri })
-      return dataSources.find((ds: DataSourceDTO) => ds.uid === uid_xmla)
+      return storeManager.createDatasource('xmla', { connection: aconnection, resourceUrl: aresourceUri })
 
   }
   return null

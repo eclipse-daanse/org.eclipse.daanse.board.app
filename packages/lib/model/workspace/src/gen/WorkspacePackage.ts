@@ -35,6 +35,13 @@ export class WorkspacePackage extends BasicEPackage {
   static readonly Literals = {
     WORKSPACE: null as unknown as EClass,
     WORKSPACE__CONNECTIONS: null as unknown as EAttribute | EReference,
+    WORKSPACE__DATASOURCES: null as unknown as EAttribute | EReference,
+    DATASOURCE: null as unknown as EClass,
+    DATASOURCE__UID: null as unknown as EAttribute | EReference,
+    DATASOURCE__NAME: null as unknown as EAttribute | EReference,
+    DATASOURCE__TYPE: null as unknown as EAttribute | EReference,
+    DATASOURCE__CONNECTION: null as unknown as EAttribute | EReference,
+    DATASOURCE__CONFIG: null as unknown as EAttribute | EReference,
     CONNECTION: null as unknown as EClass,
     CONNECTION__UID: null as unknown as EAttribute | EReference,
     CONNECTION__NAME: null as unknown as EAttribute | EReference,
@@ -77,6 +84,65 @@ export class WorkspacePackage extends BasicEPackage {
     workspace_connections.setUpperBound(-1);
     workspaceClass.getEStructuralFeatures().push(workspace_connections);
     WorkspacePackage.Literals.WORKSPACE__CONNECTIONS = workspace_connections;
+
+    // Create datasources feature
+    const workspace_datasources = new BasicEReference();
+    workspace_datasources.setContainment(true);
+    workspace_datasources.setName('datasources');
+    workspace_datasources.setLowerBound(0);
+    workspace_datasources.setUpperBound(-1);
+    workspaceClass.getEStructuralFeatures().push(workspace_datasources);
+    WorkspacePackage.Literals.WORKSPACE__DATASOURCES = workspace_datasources;
+
+    // Create Datasource class
+    const datasourceClass = new BasicEClass();
+    datasourceClass.setName('Datasource');
+    datasourceClass.setAbstract(false);
+    datasourceClass.setInterface(false);
+    this.getEClassifiers().push(datasourceClass);
+    datasourceClass.setEPackage(this);
+    WorkspacePackage.Literals.DATASOURCE = datasourceClass;
+
+    // Create uid feature
+    const datasource_uid = new BasicEAttribute();
+    datasource_uid.setName('uid');
+    datasource_uid.setLowerBound(0);
+    datasource_uid.setUpperBound(1);
+    datasourceClass.getEStructuralFeatures().push(datasource_uid);
+    WorkspacePackage.Literals.DATASOURCE__UID = datasource_uid;
+
+    // Create name feature
+    const datasource_name = new BasicEAttribute();
+    datasource_name.setName('name');
+    datasource_name.setLowerBound(0);
+    datasource_name.setUpperBound(1);
+    datasourceClass.getEStructuralFeatures().push(datasource_name);
+    WorkspacePackage.Literals.DATASOURCE__NAME = datasource_name;
+
+    // Create type feature
+    const datasource_type = new BasicEAttribute();
+    datasource_type.setName('type');
+    datasource_type.setLowerBound(0);
+    datasource_type.setUpperBound(1);
+    datasourceClass.getEStructuralFeatures().push(datasource_type);
+    WorkspacePackage.Literals.DATASOURCE__TYPE = datasource_type;
+
+    // Create connection feature
+    const datasource_connection = new BasicEReference();
+    datasource_connection.setContainment(false);
+    datasource_connection.setName('connection');
+    datasource_connection.setLowerBound(0);
+    datasource_connection.setUpperBound(1);
+    datasourceClass.getEStructuralFeatures().push(datasource_connection);
+    WorkspacePackage.Literals.DATASOURCE__CONNECTION = datasource_connection;
+
+    // Create config feature
+    const datasource_config = new BasicEAttribute();
+    datasource_config.setName('config');
+    datasource_config.setLowerBound(0);
+    datasource_config.setUpperBound(1);
+    datasourceClass.getEStructuralFeatures().push(datasource_config);
+    WorkspacePackage.Literals.DATASOURCE__CONFIG = datasource_config;
 
     // Create Connection class
     const connectionClass = new BasicEClass();
@@ -130,6 +196,12 @@ export class WorkspacePackage extends BasicEPackage {
     // convert against - every value would arrive as a raw string (#37)
     // ============================================
     (WorkspacePackage.Literals.WORKSPACE__CONNECTIONS as BasicEReference).setEType(WorkspacePackage.Literals.CONNECTION);
+    (WorkspacePackage.Literals.WORKSPACE__DATASOURCES as BasicEReference).setEType(WorkspacePackage.Literals.DATASOURCE);
+    (WorkspacePackage.Literals.DATASOURCE__UID as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (WorkspacePackage.Literals.DATASOURCE__NAME as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (WorkspacePackage.Literals.DATASOURCE__TYPE as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (WorkspacePackage.Literals.DATASOURCE__CONNECTION as BasicEReference).setEType(WorkspacePackage.Literals.CONNECTION);
+    (WorkspacePackage.Literals.DATASOURCE__CONFIG as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EJavaObject')!);
     (WorkspacePackage.Literals.CONNECTION__UID as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
     (WorkspacePackage.Literals.CONNECTION__NAME as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
     (WorkspacePackage.Literals.CONNECTION__TYPE as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);

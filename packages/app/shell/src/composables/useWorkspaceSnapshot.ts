@@ -26,7 +26,6 @@
 import { inject, ref } from 'vue'
 import { parse, stringify } from 'flatted'
 import { useLayoutStore } from 'org.eclipse.daanse.board.app.ui.vue.stores.layout'
-import { useDataSourcesStore } from 'org.eclipse.daanse.board.app.ui.vue.stores.datasouce'
 import { useWidgetsStore } from 'org.eclipse.daanse.board.app.ui.vue.stores.widgets'
 import {
   type ConnectionRepository,
@@ -57,9 +56,6 @@ import {
   EVENT_MANAGER,
   type EventManager,
 } from 'org.eclipse.daanse.board.app.lib.api.events'
-
-/** Sources whose input is another source, so they are registered last. */
-const DERIVED_SOURCE_TYPES = ['chart', 'datatable']
 
 /** Where the workspace currently in the app came from, or nothing if it was never stored. */
 export interface WorkspaceOrigin {
@@ -119,7 +115,6 @@ export function useWorkspaceSnapshot() {
   /** The current workspace as a storable string. */
   function capture(): string {
     const layoutStore = useLayoutStore()
-    const sources = useDataSourcesStore()
     const widgets = useWidgetsStore()
 
     const variables: unknown[] = []
@@ -140,7 +135,12 @@ export function useWorkspaceSnapshot() {
 
     return stringify({
       layout: layoutStore.layout,
-      datasources: sources.dataSources,
+      datasources: (dsRepository?.getDatasources() ?? []).map((source) => ({
+        uid: source.uid,
+        name: source.name,
+        type: source.type,
+        config: source.config,
+      })),
       /*
        * Still written under the misspelled key and still as plain objects:
        * the format is what stored boards already hold, and changing it is
@@ -171,7 +171,6 @@ export function useWorkspaceSnapshot() {
     if (!data) return []
 
     const layoutStore = useLayoutStore()
-    const sources = useDataSourcesStore()
     const widgets = useWidgetsStore()
 
     for (const variable of data.variables ?? []) {
@@ -181,20 +180,14 @@ export function useWorkspaceSnapshot() {
     /* Both halves in one call now - the model objects and their live ones. */
     connectionRepository?.setConnections((data.conections ?? []) as never)
 
-    // Plain sources first: the derived ones resolve against them on registration
-    for (const source of data.datasources ?? []) {
-      if (!DERIVED_SOURCE_TYPES.includes(source.type)) {
-        dsRepository?.registerDatasource(source.uid, source.type, source.config)
-      }
-    }
-    for (const source of data.datasources ?? []) {
-      if (DERIVED_SOURCE_TYPES.includes(source.type)) {
-        dsRepository?.registerDatasource(source.uid, source.type, source.config)
-      }
-    }
+    /*
+     * Both halves in one call, and the ordering of derived sources with it -
+     * which source has to exist before which is a property of how they are
+     * built, not of this view.
+     */
+    dsRepository?.setDatasources((data.datasources ?? []) as never)
 
     variableWrapperFactory?.initilazeVariableWrappers(data.widgets)
-    if (data.datasources) sources.dataSources = data.datasources
     if (data.layout) layoutStore.layout = data.layout
     if (data.widgets) widgets.widgets = data.widgets
 

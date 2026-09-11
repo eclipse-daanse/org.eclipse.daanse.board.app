@@ -33,7 +33,11 @@ import {
   wrapperSettingsFormXmi,
 } from 'org.eclipse.daanse.board.app.ui.vue.widget.wrapper'
 import { SettingsForm } from 'org.eclipse.daanse.board.app.ui.vue.uimodel'
-import { useDataSourcesStore } from 'org.eclipse.daanse.board.app.ui.vue.stores.datasouce'
+import {
+  identifier as WORKSPACE,
+  type Workspace,
+} from 'org.eclipse.daanse.board.app.lib.model.workspace'
+import { useEList } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import type { i18n } from 'org.eclipse.daanse.board.app.lib.i18next'
 import { type IWidget } from 'org.eclipse.daanse.board.app.ui.vue.stores.widgets'
 import { WidgetRepository, identifier } from 'org.eclipse.daanse.board.app.lib.api.widget'
@@ -46,7 +50,7 @@ const props = defineProps<{
   boardSize?: { width: number; height: number }
 }>()
 
-const { dataSources } = useDataSourcesStore()
+const dataSources = useEList(inject<Workspace>(WORKSPACE)!, (w) => w.datasources)
 const registeredWidgets = inject<WidgetRepository>(identifier)!
 const availableWidgetsSettings = registeredWidgets.getAllWidgets()
 const i18n: i18n | undefined = inject('i18n')

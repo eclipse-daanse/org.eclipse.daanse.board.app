@@ -12,7 +12,11 @@ Contributors:
 -->
 
 <script setup lang="ts">
-import { useDataSourcesStore } from 'org.eclipse.daanse.board.app.ui.vue.stores.datasouce'
+import {
+  identifier as WORKSPACE,
+  type Workspace,
+} from 'org.eclipse.daanse.board.app.lib.model.workspace'
+import { useEList } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import { WidgetRepository, identifier } from 'org.eclipse.daanse.board.app.lib.api.widget'
 import { inject, ref, computed, watch } from 'vue'
 import Draggable from 'vuedraggable'
@@ -21,7 +25,7 @@ import { VaScrollContainer } from 'vuestic-ui'
 
 const selectedDatasource = ref('')
 const selectedType = ref('')
-const { dataSources } = useDataSourcesStore()
+const dataSources = useEList(inject<Workspace>(WORKSPACE)!, (w) => w.datasources)
 
 const dataSourceTypeToDataTypes = {
   CSV: ['DataTable'],
@@ -83,12 +87,12 @@ const computedWidgets = computed(() => {
 const filteredTypes = computed(() => {
   return [
     'None',
-    ...dataSources.map((ds) => ds.type).filter((el, id, arr) => id === arr.indexOf(el)),
+    ...dataSources.value.map((ds) => ds.type).filter((el, id, arr) => id === arr.indexOf(el)),
   ]
 })
 
 const filteredIds = computed(() => {
-  return dataSources.filter((ds) => ds.type === selectedType.value).map((ds) => ({ uid: ds.uid }))
+  return dataSources.value.filter((ds) => ds.type === selectedType.value).map((ds) => ({ uid: ds.uid }))
 })
 
 watch(selectedType, (newType) => {

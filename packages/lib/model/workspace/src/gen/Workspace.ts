@@ -7,6 +7,7 @@
 
 import type { EObject, EList } from '@emfts/core';
 import type { Connection } from './Connection.js';
+import type { Datasource } from './Datasource.js';
 
 /**
  * Workspace
@@ -14,5 +15,6 @@ import type { Connection } from './Connection.js';
  */
 export interface Workspace extends EObject {
   connections: EList<Connection>;
+  datasources: EList<Datasource>;
 
 }

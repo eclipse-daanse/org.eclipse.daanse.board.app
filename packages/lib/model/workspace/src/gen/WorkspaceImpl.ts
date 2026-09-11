@@ -9,6 +9,7 @@ import { BasicEObject } from '@emfts/core';
 import { createContainmentEList } from '@emfts/core';
 import type { EClass, EStructuralFeature, EList, EReference } from '@emfts/core';
 import type { Connection } from './Connection.js';
+import type { Datasource } from './Datasource.js';
 import type { Workspace } from './Workspace.js';
 import { WorkspacePackage } from './WorkspacePackage.js';
 
@@ -19,9 +20,11 @@ import { WorkspacePackage } from './WorkspacePackage.js';
 export class WorkspaceImpl extends BasicEObject implements Workspace {
   // Feature ID Constants (eLiterals)
   static readonly CONNECTIONS: number = 0;
+  static readonly DATASOURCES: number = 1;
 
   // Private fields
   private _connections!: EList<Connection>;
+  private _datasources!: EList<Datasource>;
 
   /**
    * Returns the EClass of this object
@@ -38,6 +41,13 @@ export class WorkspaceImpl extends BasicEObject implements Workspace {
     return this._connections;
   }
 
+  get datasources(): EList<Datasource> {
+    if (!this._datasources) {
+      this._datasources = createContainmentEList<any>(this, this.eClass().getEStructuralFeature('datasources') as EReference);
+    }
+    return this._datasources;
+  }
+
   // Reflective API
 
   /**
@@ -48,6 +58,8 @@ export class WorkspaceImpl extends BasicEObject implements Workspace {
     switch (featureID) {
       case WorkspaceImpl.CONNECTIONS:
         return this.connections;
+      case WorkspaceImpl.DATASOURCES:
+        return this.datasources;
       default:
         return super.eGet(feature);
     }
@@ -64,6 +76,11 @@ export class WorkspaceImpl extends BasicEObject implements Workspace {
         this.connections.addAll(newValue as any[]);
         super.eSet(feature, newValue);
         break;
+      case WorkspaceImpl.DATASOURCES:
+        this.datasources.clear();
+        this.datasources.addAll(newValue as any[]);
+        super.eSet(feature, newValue);
+        break;
       default:
         super.eSet(feature, newValue);
     }
@@ -77,6 +94,8 @@ export class WorkspaceImpl extends BasicEObject implements Workspace {
     switch (featureID) {
       case WorkspaceImpl.CONNECTIONS:
         return this._connections !== undefined && !this._connections.isEmpty();
+      case WorkspaceImpl.DATASOURCES:
+        return this._datasources !== undefined && !this._datasources.isEmpty();
       default:
         return super.eIsSet(feature);
     }
@@ -90,6 +109,9 @@ export class WorkspaceImpl extends BasicEObject implements Workspace {
     switch (featureID) {
       case WorkspaceImpl.CONNECTIONS:
         if (this._connections) this._connections.clear();
+        return;
+      case WorkspaceImpl.DATASOURCES:
+        if (this._datasources) this._datasources.clear();
         return;
       default:
         super.eUnset(feature);
@@ -107,6 +129,7 @@ export class WorkspaceImpl extends BasicEObject implements Workspace {
   toJSON(): Record<string, unknown> {
     return {
       connections: this.connections?.toArray?.() ?? this.connections,
+      datasources: this.datasources?.toArray?.() ?? this.datasources,
     };
   }
 }

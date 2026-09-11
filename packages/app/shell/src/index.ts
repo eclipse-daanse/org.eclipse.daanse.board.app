@@ -54,6 +54,10 @@ import {
   CONNECTION_REPOSITORY,
   type ConnectionRepository,
 } from 'org.eclipse.daanse.board.app.lib.api.connection'
+import {
+  DATASOURCE_REPOSITORY,
+  type DatasourceRepository,
+} from 'org.eclipse.daanse.board.app.lib.api.datasource'
 import { provideVariablesStoreDependencies } from './stores/VariablesPinia'
 
 let app: VueApp | undefined
@@ -155,13 +159,28 @@ export async function activate({ services, log }: ActivationContext) {
    * stored board is never overwritten.
    */
   const connectionRepository = services.getRequired<ConnectionRepository>(CONNECTION_REPOSITORY)
+  const datasourceRepository = services.getRequired<DatasourceRepository>(DATASOURCE_REPOSITORY)
   if (connectionRepository.getConnections().length === 0) {
-    const connection = connectionRepository.createConnection('rest', {
-      url: 'https://jsonplaceholder.typicode.com/',
-    })
+    /*
+     * Created without a type, then filled in, then saved once. Creating
+     * with the type would build the live object straight away - under the
+     * generated uid, and from a configuration that is not finished yet.
+     * A source would be rejected outright for naming no connection.
+     */
+    const connection = connectionRepository.createConnection('')
     connection.uid = 'test'
     connection.name = 'Test Connection 01'
+    connection.type = 'rest'
+    connection.config = { url: 'https://jsonplaceholder.typicode.com/' }
     connectionRepository.saveConnection(connection)
+
+    const source = datasourceRepository.createDatasource('')
+    source.uid = 'test_ds'
+    source.name = 'Test DataSource 01'
+    source.type = 'rest'
+    source.connection = connection
+    source.config = { resourceUrl: 'posts' }
+    datasourceRepository.saveDatasource(source)
   }
 
   // Store dependencies, closed over at the module boundary

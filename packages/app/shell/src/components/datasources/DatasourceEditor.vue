@@ -16,7 +16,6 @@ import {
   DatasourceRepository,
   identifier,
 } from 'org.eclipse.daanse.board.app.lib.api.datasource'
-import { useDataSourcesStore } from 'org.eclipse.daanse.board.app.ui.vue.stores.datasouce'
 import {
   identifier as WORKSPACE,
   type Workspace,
@@ -43,20 +42,43 @@ const props = withDefaults(
 const datasourceProxy = ref({} as any)
 
 const datasourceRepository = inject<DatasourceRepository>(identifier)!
-const { dataSources, updateDataSource } = useDataSourcesStore()
-const connections = useEList(inject<Workspace>(WORKSPACE)!, (w) => w.connections)
+const workspace = inject<Workspace>(WORKSPACE)!
+const connections = useEList(workspace, (w) => w.connections)
+/* A composer's settings pick the sources it reads from. */
+const dataSources = useEList(workspace, (w) => w.datasources)
 
 const availableDatasources = computed(() => {
   return datasourceRepository.registeredDatasources
 })
 
+/*
+ * Edited on a copy and committed on Save, the way it always was - what
+ * changed is only where the copy comes from and where it goes back to.
+ */
 onMounted(() => {
-  const dataSource = dataSources.find((ds: any) => ds.uid === props.itemId)
-  datasourceProxy.value = cloneDeep(dataSource)
+  const dataSource = datasourceRepository.getDatasourceModel(props.itemId)
+  datasourceProxy.value = dataSource
+    ? {
+        uid: dataSource.uid,
+        name: dataSource.name,
+        type: dataSource.type,
+        config: cloneDeep(dataSource.config ?? {}),
+      }
+    : {}
 })
 
 const saveDataSource = () => {
-  updateDataSource(datasourceProxy.value.uid, datasourceProxy.value)
+  const dataSource = datasourceRepository.getDatasourceModel(props.itemId)
+  if (dataSource) {
+    dataSource.name = datasourceProxy.value.name
+    dataSource.type = datasourceProxy.value.type
+    dataSource.config = datasourceProxy.value.config
+    /* The settings name the connection by id; the model holds the reference. */
+    dataSource.connection = connections.value.find(
+      (connection) => connection.uid === datasourceProxy.value.config?.connection,
+    )
+    datasourceRepository.saveDatasource(dataSource)
+  }
   emit('close')
 }
 

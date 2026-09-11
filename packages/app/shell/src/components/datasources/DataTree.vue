@@ -34,11 +34,14 @@ import {
   identifier as CONNECTION_REPOSITORY,
 } from 'org.eclipse.daanse.board.app.lib.api.connection'
 import {
+  type DatasourceRepository,
+  identifier as DATASOURCE_REPOSITORY,
+} from 'org.eclipse.daanse.board.app.lib.api.datasource'
+import {
   identifier as WORKSPACE,
   type Workspace,
 } from 'org.eclipse.daanse.board.app.lib.model.workspace'
 import { useEList } from 'org.eclipse.daanse.board.app.ui.vue.composables'
-import { useDataSourcesStore } from 'org.eclipse.daanse.board.app.ui.vue.stores.datasouce'
 import { DButton, DIcon, DInput, DModal } from 'org.eclipse.daanse.board.app.ui.vue.controls'
 import { useDatasourceUsage } from '@/composables/useDatasourceUsage'
 
@@ -69,12 +72,14 @@ const selected = defineModel<Selection | undefined>()
 
 const connectionRepository = inject<ConnectionRepository>(CONNECTION_REPOSITORY)!
 /*
- * Straight from the model: the list is what the workspace holds, and the
- * adapter behind useEList re-renders this tree when one is added, renamed or
- * removed - no second copy to keep in step.
+ * Straight from the model: both lists are what the workspace holds, and the
+ * adapter behind useEList re-renders this tree when something is added,
+ * renamed or removed - no second copy to keep in step.
  */
-const connections = useEList(inject<Workspace>(WORKSPACE)!, (w) => w.connections)
-const { dataSources, createDataSource, removeDataSource } = useDataSourcesStore()
+const workspace = inject<Workspace>(WORKSPACE)!
+const connections = useEList(workspace, (w) => w.connections)
+const datasourceRepository = inject<DatasourceRepository>(DATASOURCE_REPOSITORY)!
+const dataSources = useEList(workspace, (w) => w.datasources)
 const { usageByDatasource, usageLabel } = useDatasourceUsage()
 
 const emit = defineEmits<{ findEndpoints: [] }>()
@@ -91,8 +96,8 @@ const groups = computed(() => {
     !term || words.some((w) => (w ?? '').toLowerCase().includes(term))
 
   const sourcesOf = (connectionId: string | undefined): Row[] =>
-    dataSources
-      .filter((source: any) => (source.config?.connection ?? undefined) === connectionId)
+    dataSources.value
+      .filter((source) => source.connection?.uid === connectionId)
       .filter((source: any) => matches(source.name, source.type, source.uid))
       .map((source: any) => ({
         uid: source.uid,
@@ -115,8 +120,9 @@ const groups = computed(() => {
   }))
 
   const attached = new Set(connections.value.map((c) => c.uid))
-  const loose: Row[] = dataSources
-    .filter((source: any) => !attached.has(source.config?.connection))
+  /* No connection, or one that is gone: the reference is the tell. */
+  const loose: Row[] = dataSources.value
+    .filter((source) => !source.connection || !attached.has(source.connection.uid))
     .filter((source: any) => matches(source.name, source.type, source.uid))
     .map((source: any) => ({
       uid: source.uid,
@@ -161,7 +167,7 @@ function addConnection() {
 }
 
 function addDataSource() {
-  select('DataSource', createDataSource(null))
+  select('DataSource', datasourceRepository.createDatasource('').uid as string)
 }
 
 const removing = ref<Selection | undefined>(undefined)
@@ -174,7 +180,7 @@ function doRemove() {
   const target = removing.value
   if (!target) return
   if (target.type === 'Connection') connectionRepository.removeConnection(target.itemId)
-  else removeDataSource(target.itemId)
+  else datasourceRepository.removeDatasource(target.itemId)
   if (isSelected(target.type, target.itemId)) selected.value = undefined
   removing.value = undefined
 }
@@ -185,7 +191,7 @@ const removingLabel = computed(() => {
   const held =
     target.type === 'Connection'
       ? connections.value.find((c: any) => c.uid === target.itemId)
-      : dataSources.find((d: any) => d.uid === target.itemId)
+      : dataSources.value.find((d) => d.uid === target.itemId)
   return held?.name ?? target.itemId
 })
 

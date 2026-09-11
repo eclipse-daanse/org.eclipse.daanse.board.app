@@ -14,7 +14,7 @@ What a workspace holds. One root, everything under it by containment, so
 one EContentAdapter at the root hears every change anywhere below - which
 is the reactivity four Pinia stores used to provide by hand.
 
-Connections come first; data sources, pages, widgets and layout follow in
+Connections and data sources are in; pages, widgets and layout follow in
 their own steps.
 -->
 <ecore:EPackage xmi:version="2.0"
@@ -30,6 +30,43 @@ their own steps.
                              lowerBound="0" upperBound="-1" containment="true">
             <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
                 <details key="documentation" value="The connections this workspace can read through."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="datasources" eType="#//Datasource"
+                             lowerBound="0" upperBound="-1" containment="true">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="The data sources widgets read from."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+    </eClassifiers>
+
+    <eClassifiers xsi:type="ecore:EClass" name="Datasource">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+            <details key="documentation" value="Something a widget reads from: a query, a file, a feed, a topic. The live store that fetches it is built from this and kept beside it."/>
+        </eAnnotations>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="uid" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="Identifies this source across the workspace. A widget names the one it reads from by this."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="What a person calls it."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="Which registered source type builds the live store - 'rest', 'csv', 'xmla'."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="connection" eType="#//Connection" lowerBound="0">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="The connection this source reads through, as a reference rather than an id in the configuration. A source whose connection was deleted points at nothing, which is visible; an id pointing nowhere is not. The uid is still projected into the configuration on save, because that is what a store's own init reads."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="config" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject" lowerBound="0">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="What the chosen type needs - a query, a URL, separators. The source types are modelled (lib/datasource/*/model) but their configurations are not EObjects in the workspace yet; this becomes a containment reference once they are."/>
             </eAnnotations>
         </eStructuralFeatures>
     </eClassifiers>

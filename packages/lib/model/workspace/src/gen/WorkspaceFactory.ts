@@ -10,6 +10,8 @@ import type { EClass, EObject } from '@emfts/core';
 import { WorkspacePackage } from './WorkspacePackage.js';
 import { Workspace } from './Workspace.js';
 import { WorkspaceImpl } from './WorkspaceImpl.js';
+import { Datasource } from './Datasource.js';
+import { DatasourceImpl } from './DatasourceImpl.js';
 import { Connection } from './Connection.js';
 import { ConnectionImpl } from './ConnectionImpl.js';
 
@@ -41,6 +43,13 @@ export class WorkspaceFactory extends BasicEFactory {
   }
 
   /**
+   * Create a new Datasource instance
+   */
+  createDatasource(): Datasource {
+    return new DatasourceImpl();
+  }
+
+  /**
    * Create a new Connection instance
    */
   createConnection(): Connection {
@@ -54,6 +63,8 @@ export class WorkspaceFactory extends BasicEFactory {
     switch (eClass.getName()) {
       case 'Workspace':
         return this.createWorkspace();
+      case 'Datasource':
+        return this.createDatasource();
       case 'Connection':
         return this.createConnection();
       default:

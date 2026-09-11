@@ -1,4 +1,4 @@
-import { BaseDatasource as f, IBaseConnectionConfigurationImpl as d } from "org.eclipse.daanse.board.app.lib.datasource.base";
+import { BaseDatasource as f, IBaseConnectionConfigurationImpl as g } from "org.eclipse.daanse.board.app.lib.datasource.base";
 import { CONNECTION_REPOSITORY as I } from "org.eclipse.daanse.board.app.lib.api.connection";
 import { inject as S } from "@eclipse-daanse/tsm";
 import { BasicEFactory as m, BasicEPackage as R, EPackageRegistry as O, BasicEClass as w, BasicEAttribute as C, getEcorePackage as _ } from "@emfts/core";
@@ -14,13 +14,15 @@ class h extends f {
   lastMessage = null;
   accumulate = !1;
   topic = "";
+  /* Held so a second init can take it off again - see below. */
+  listener;
   connectionRepository;
   init(e) {
-    super.init(e), this.connection = e.connection, this.accumulate = e.accumulate ?? !1;
+    super.init(e), this.detach(), this.connection = e.connection, this.accumulate = e.accumulate ?? !1;
     const t = this.connectionRepository.getConnection(
       this.connection
     );
-    e.topic && t.hasTopics() && (this.topic = e.topic, t.connectStore(this, e.topic)), t.subscribe((c, i, n) => {
+    e.topic && t.hasTopics() && (this.topic = e.topic, t.connectStore(this, e.topic)), this.listener = (c, i, n) => {
       switch (c) {
         case "connect":
           this.onConnect();
@@ -35,7 +37,15 @@ class h extends f {
           this.onError(i);
           break;
       }
-    });
+    }, t.subscribe(this.listener);
+  }
+  /** Takes this store off the connection it is currently attached to. */
+  detach() {
+    if (!this.connection) return;
+    const e = this.connectionRepository.getConnection(
+      this.connection
+    );
+    e && (this.listener && (e.unsubscribe(this.listener), this.listener = void 0), this.topic && e.hasTopics() && (e.disconnectStore(this), this.topic = ""));
   }
   onError(e) {
   }
@@ -73,11 +83,7 @@ class h extends f {
     }), { items: i, headers: t, rows: c };
   }
   destroy() {
-    console.log("Destroying WSStore");
-    const e = this.connectionRepository.getConnection(
-      this.connection
-    );
-    e && e.hasTopics() && e.disconnectStore(this);
+    this.detach();
   }
   getData(e) {
     let t = this.lastMessage;
@@ -100,7 +106,7 @@ class h extends f {
 b([
   S(I)
 ], h.prototype, "connectionRepository");
-class s extends d {
+class s extends g {
   // Feature ID Constants (eLiterals)
   static CONNECTION = 4;
   static TOPIC = 5;
@@ -329,7 +335,7 @@ class a extends R {
 }
 a.eINSTANCE;
 const E = A("WSStoreFactory"), F = Symbol.for(E);
-function g({ services: r }) {
+function p({ services: r }) {
   r.register(E, (e) => {
     if (!h.validateConfiguration(e))
       throw new Error(
@@ -339,7 +345,7 @@ function g({ services: r }) {
     return t.init(e), t;
   });
 }
-function p({ services: r }) {
+function d({ services: r }) {
   r.unregister(E);
 }
 const D = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
@@ -349,18 +355,18 @@ const D = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   WS_STORE_FACTORY: E,
   WsstoreFactory: N,
   WsstorePackage: a,
-  activate: g,
-  deactivate: p,
+  activate: p,
+  deactivate: d,
   factorySymbol: F
 }, Symbol.toStringTag, { value: "Module" })), T = "org.eclipse.daanse.board.app.lib.datasource.websocket", v = "0.0.1-next.1";
 async function G(r) {
   const e = globalThis.__tsm__;
   if (!e)
     throw new Error(`${T}: tsm runtime is not initialized`);
-  e.register(T, D, v, "lib.datasource.websocket"), await g?.(r);
+  e.register(T, D, v, "lib.datasource.websocket"), await p?.(r);
 }
 async function k(r) {
-  await p?.(r);
+  await d?.(r);
 }
 export {
   s as IWSStoreConfigurationImpl,
