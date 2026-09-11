@@ -184,6 +184,22 @@ withDefaults(
   opacity: 0.35;
 }
 
+/*
+ * Not on a light ground.
+ *
+ * A glow needs darkness to be a glow. On a pale theme the same field is a
+ * wash rather than a light, and it lands on the one meaning already taken:
+ * focus is drawn with this very colour, so a hover that looks like it is
+ * two signals wearing one face.
+ *
+ * `data-theme` is written by the shell's theme system from each theme's
+ * own `dark` flag - four themes, one of them dark - so this asks the
+ * question the palette already answers instead of guessing from a colour.
+ */
+:root[data-theme='light'] .btn--glow::before {
+  content: none;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .btn--glow::before {
     transition-duration: 0.01ms;
