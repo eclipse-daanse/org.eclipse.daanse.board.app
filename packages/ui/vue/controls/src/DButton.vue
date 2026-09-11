@@ -29,6 +29,15 @@ withDefaults(
     busy?: boolean
     /** Fills the width of whatever holds it. */
     block?: boolean
+    /**
+     * A soft field of accent colour behind it, on hover.
+     *
+     * Borrowed from the Vue devtools anchor, which wears one because it is
+     * a single floating thing with nothing around it to compete with. Opt-in
+     * for the same reason: on every button in a settings form this is not a
+     * signature, it is noise.
+     */
+    glow?: boolean
     type?: 'button' | 'submit' | 'reset'
   }>(),
   {
@@ -37,6 +46,7 @@ withDefaults(
     disabled: false,
     busy: false,
     block: false,
+    glow: false,
     type: 'button',
   },
 )
@@ -45,7 +55,12 @@ withDefaults(
 <template>
   <button
     :type="type"
-    :class="['btn', `btn--${intent}`, `btn--${size}`, { 'btn--block': block, 'btn--busy': busy }]"
+    :class="[
+      'btn',
+      `btn--${intent}`,
+      `btn--${size}`,
+      { 'btn--block': block, 'btn--busy': busy, 'btn--glow': glow },
+    ]"
     :disabled="disabled || busy"
     :aria-busy="busy || undefined"
   >
@@ -112,6 +127,66 @@ withDefaults(
 .btn--block {
   display: flex;
   width: 100%;
+}
+
+/* --- the halo --------------------------------------------------------- */
+
+/*
+ * A blurred field of colour behind the button, revealed on hover.
+ *
+ * The idea is the Vue devtools anchor's: an element far larger than what it
+ * sits behind, heavily blurred, faded in. Three things are ours rather than
+ * theirs. The colour comes from the accent token, so it belongs to whatever
+ * theme is on instead of announcing someone else's brand. It is a pseudo
+ * element, so no button needs an extra span to carry it. And it fades in a
+ * quarter of a second rather than a whole one - theirs is ambient decoration
+ * on something that floats, ours answers a pointer.
+ *
+ * `isolation` is what keeps it behind the button's own background without
+ * falling behind the page: it gives the button a stacking context of its
+ * own, and z-index -1 is then measured inside that.
+ */
+.btn--glow {
+  position: relative;
+  isolation: isolate;
+}
+
+.btn--glow::before {
+  content: '';
+  position: absolute;
+  /*
+   * An even band around the button, in pixels rather than a percentage:
+   * percentages resolve against width sideways and height vertically, and
+   * on a button that is three times wider than it is tall that turns a
+   * halo into a smear reaching for whatever stands beside it.
+   */
+  inset: -12px;
+  z-index: -1;
+  border-radius: 9999px;
+  background-image: linear-gradient(
+    45deg,
+    var(--color-accent),
+    color-mix(in srgb, var(--color-accent) 55%, var(--color-ok)),
+    var(--color-accent)
+  );
+  filter: blur(14px);
+  opacity: 0;
+  transition: opacity 240ms cubic-bezier(0.2, 0.6, 0.2, 1);
+  pointer-events: none;
+}
+
+.btn--glow:hover:not(:disabled)::before {
+  opacity: 0.45;
+}
+
+.btn--glow:focus-visible::before {
+  opacity: 0.35;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .btn--glow::before {
+    transition-duration: 0.01ms;
+  }
 }
 
 /* --- intents ---------------------------------------------------------- */

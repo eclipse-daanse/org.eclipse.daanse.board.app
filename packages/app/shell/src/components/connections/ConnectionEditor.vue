@@ -83,7 +83,7 @@ const saveConnection = () => {
     </div>
     <div class="editor__actions">
       <DButton intent="quiet" @click="$emit('close')">Schließen</DButton>
-      <DButton intent="primary" @click="saveConnection">Speichern</DButton>
+      <DButton intent="primary" glow @click="saveConnection">Speichern</DButton>
     </div>
   </div>
 </template>
