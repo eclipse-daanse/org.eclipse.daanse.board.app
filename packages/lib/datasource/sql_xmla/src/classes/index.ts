@@ -13,18 +13,16 @@
 import {
   BaseDatasource,
   IBaseConnectionConfiguration,
+  type ConfigurationOf,
 } from 'org.eclipse.daanse.board.app.lib.datasource.base'
 import { CONNECTION_REPOSITORY,
   identifier,
   ConnectionRepository,} from 'org.eclipse.daanse.board.app.lib.api.connection'
 import { inject } from '@eclipse-daanse/tsm'
 
-export interface ISqlXmlaStoreConfiguration
-  extends IBaseConnectionConfiguration {
-  connection: string
-  sql: string
-  pollingInterval?: number
-}
+/* The configuration is the model's; see ../gen. */
+export type { ISqlXmlaStoreConfiguration } from '../gen/ISqlXmlaStoreConfiguration'
+import type { ISqlXmlaStoreConfiguration } from '../gen/ISqlXmlaStoreConfiguration'
 
 export class SqlXmlaStore extends BaseDatasource {
   private connection: any
@@ -34,11 +32,11 @@ export class SqlXmlaStore extends BaseDatasource {
   private connectionRepository!: ConnectionRepository
   // private computedUrl: ComputedVariable;
 
-  init(configuration: ISqlXmlaStoreConfiguration) {
+  init(configuration: ConfigurationOf<ISqlXmlaStoreConfiguration>) {
     super.init(configuration)
 
     this.connection = configuration.connection
-    this.sql = configuration.sql
+    this.sql = configuration.sql ?? ''
   }
 
   async getData(type: string): Promise<any> {

@@ -15,16 +15,16 @@ import { injectable, inject } from '@eclipse-daanse/tsm'
 import {
   BaseDatasource,
   IBaseConnectionConfiguration,
+  type ConfigurationOf,
 } from 'org.eclipse.daanse.board.app.lib.datasource.base'
 import { CONNECTION_REPOSITORY,
   identifier,
   type IConnection,
   ConnectionRepository,} from 'org.eclipse.daanse.board.app.lib.api.connection'
 
-export interface IRssStoreConfiguration extends IBaseConnectionConfiguration {
-  resourceUrl: string
-  connection: string
-}
+/* The configuration is the model's; see ../gen. */
+export type { IRssStoreConfiguration } from '../gen/IRssStoreConfiguration'
+import type { IRssStoreConfiguration } from '../gen/IRssStoreConfiguration'
 
 export interface IRssParseResult {
   header: string[]
@@ -39,7 +39,7 @@ export class RssStore extends BaseDatasource {
   @inject(CONNECTION_REPOSITORY)
   private connectionRepository!: ConnectionRepository
 
-  init(configuration: IRssStoreConfiguration) {
+  init(configuration: ConfigurationOf<IRssStoreConfiguration>) {
     super.init(configuration)
 
     this.connection = configuration.connection

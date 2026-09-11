@@ -9,7 +9,7 @@
 
 */
 import { Datastream, Observation, Thing, Location } from '../client'
-import { IBaseConnectionConfiguration } from 'org.eclipse.daanse.board.app.lib.datasource.base'
+import { IBaseConnectionConfiguration, type ConfigurationOf } from 'org.eclipse.daanse.board.app.lib.datasource.base'
 
 export interface IOGCSTAHistoryConfig {
   enabled: boolean;
@@ -35,7 +35,13 @@ export interface IOGCSTAHistoryConfig {
   limit?: number; // $top parameter
 }
 
-export interface IOGCSTAConfigartion extends IBaseConnectionConfiguration{
+/*
+ * Still hand-written: the model describes only the connection, while a
+ * configuration here also carries the MQTT connection and a history
+ * section with three time windows in it. Modelling those is its own step;
+ * until then this is the one that says what the store reads.
+ */
+export interface IOGCSTAConfigartion extends ConfigurationOf<IBaseConnectionConfiguration>{
   connection: string;
   mqttConnection?: string;
   history?: IOGCSTAHistoryConfig;

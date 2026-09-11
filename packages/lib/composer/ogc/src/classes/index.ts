@@ -11,10 +11,10 @@
  *   Smart City Jena
  **********************************************************************/
 
-import { BaseDatasource, IBaseConnectionConfiguration } from 'org.eclipse.daanse.board.app.lib.datasource.base'
+import { BaseDatasource, IBaseConnectionConfiguration, type ConfigurationOf } from 'org.eclipse.daanse.board.app.lib.datasource.base'
 import { identifier, DatasourceRepository, IDatasourceRepository } from 'org.eclipse.daanse.board.app.lib.api.datasource';
 
-export interface IOgcFeatureComposerConfiguration extends IBaseConnectionConfiguration {
+export interface IOgcFeatureComposerConfiguration extends ConfigurationOf<IBaseConnectionConfiguration> {
   connectedDatasources: string[];
   composeBy: string;
   name: string;
@@ -24,6 +24,7 @@ export interface IOgcFeatureComposerConfiguration extends IBaseConnectionConfigu
   yField: string;
   useGeometryFromData?: boolean;
   useGeometryFromProps?: boolean;
+  geometryType: string;
   geometryField?: string;
   geometryPropsField?: string;
 }

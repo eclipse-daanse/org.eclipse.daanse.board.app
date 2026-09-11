@@ -5,21 +5,16 @@
  * @generated
  */
 
-import { Documentation, Attribute, ModelClass } from 'org.eclipse.daanse.board.app.lib.annotations';
+import type { EObject } from '@emfts/core';
 
-@Documentation("Represents a base configuration for various connections.\n                                        Includes core properties and allows for arbitrary additional configuration\n                                        (similar to TypeScript's index signature, handled by dynamic property access in implementations).")
-@ModelClass({ type: 'http://org.eclipse.daanse.board.app.lib.datasource.base#//IBaseConnectionConfiguration' })
-export abstract class IBaseConnectionConfiguration {
-  @Documentation("A human-readable name for the connection configuration.")
-  @Attribute()
+/**
+ * IBaseConnectionConfiguration
+ * @generated
+ */
+export interface IBaseConnectionConfiguration extends EObject {
   name?: string;
-
-  @Documentation("The type of connection (e.g., 'GraphQL', 'MQTT', 'REST').")
-  @Attribute()
   type?: string;
-
-  @Documentation("A unique identifier for this specific connection configuration.")
-  @Attribute()
   uid?: string;
+  pollingEnabled?: boolean;
 
 }

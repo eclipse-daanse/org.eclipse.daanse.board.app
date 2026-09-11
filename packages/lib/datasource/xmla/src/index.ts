@@ -14,6 +14,16 @@
 import { XmlaStore, type IXmlaStoreConfiguration } from './classes'
 import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
 import { serviceId } from 'org.eclipse.daanse.board.app.lib.core'
+import { XmlastorePackage } from './gen/XmlastorePackage'
+import { XmlastoreFactory } from './gen/XmlastoreFactory'
+import { IXmlaStoreConfigurationImpl } from './gen/IXmlaStoreConfigurationImpl'
+import { XMLARequestParamsImpl } from './gen/XMLARequestParamsImpl'
+/*
+ * Building the EPackage on load: until it exists the class literals are
+ * null, an instance cannot say what it is, and nothing can render a form
+ * from the model.
+ */
+void XmlastorePackage.eINSTANCE
 
 /** Typed service id - the name and the contract declared once, here. */
 const XMLA_STORE_FACTORY = serviceId<(config: IXmlaStoreConfiguration) => XmlaStore>('XmlaStoreFactory')
@@ -47,3 +57,4 @@ export function deactivate({ services }: ActivationContext) {
 }
 
 export { XmlaStore, IXmlaStoreConfiguration, XMLA_STORE_FACTORY, factorySymbol }
+export { XmlastorePackage, XmlastoreFactory, IXmlaStoreConfigurationImpl, XMLARequestParamsImpl }

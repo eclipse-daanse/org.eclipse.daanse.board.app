@@ -14,6 +14,15 @@
 import { RssStore, type IRssStoreConfiguration } from './classes'
 import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
 import { serviceId } from 'org.eclipse.daanse.board.app.lib.core'
+import { RssstorePackage } from './gen/RssstorePackage'
+import { RssstoreFactory } from './gen/RssstoreFactory'
+import { IRssStoreConfigurationImpl } from './gen/IRssStoreConfigurationImpl'
+/*
+ * Building the EPackage on load: until it exists the class literals are
+ * null, an instance cannot say what it is, and nothing can render a form
+ * from the model.
+ */
+void RssstorePackage.eINSTANCE
 
 /** Typed service id - the name and the contract declared once, here. */
 const RSS_STORE_FACTORY = serviceId<(config: IRssStoreConfiguration) => RssStore>('RssStoreFactory')
@@ -47,3 +56,4 @@ export function deactivate({ services }: ActivationContext) {
 }
 
 export { RssStore, IRssStoreConfiguration, RSS_STORE_FACTORY, factorySymbol }
+export { RssstorePackage, RssstoreFactory, IRssStoreConfigurationImpl }

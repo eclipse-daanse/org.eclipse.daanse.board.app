@@ -13,7 +13,7 @@
 
 // import { extractDataByPath } from "@/utils/helpers";
 import { inject } from '@eclipse-daanse/tsm'
-import { BaseDatasource } from 'org.eclipse.daanse.board.app.lib.datasource.base'
+import { type ConfigurationOf, BaseDatasource } from 'org.eclipse.daanse.board.app.lib.datasource.base'
 import { CONNECTION_REPOSITORY,
   identifier,
   type IConnection,
@@ -22,17 +22,9 @@ import { ComputedStoreParameter } from 'org.eclipse.daanse.board.app.lib.variabl
 import helpers from 'org.eclipse.daanse.board.app.lib.utils.helpers'
 import { ParseOptions } from 'org.eclipse.daanse.board.app.lib.utils.helpers'
 
-export interface ICsvStoreConfiguration {
-  resourceUrl: string
-  connection: string
-  pollingInterval?: number
-  type: string
-  name: string
-  uid: string
-  separators: string[]
-  skipRowsFromStart?: number
-  skipRowsFromEnd?: number
-}
+/* The configuration is the model's; see ../gen. */
+export type { ICsvStoreConfiguration } from '../gen/ICsvStoreConfiguration'
+import type { ICsvStoreConfiguration } from '../gen/ICsvStoreConfiguration'
 
 export interface ICsvParseResult {
   header: string[]
@@ -51,17 +43,17 @@ export class CsvStore extends BaseDatasource {
   @inject(CONNECTION_REPOSITORY)
   private connectionRepository!: ConnectionRepository
 
-  init(configuration: ICsvStoreConfiguration) {
+  init(configuration: ConfigurationOf<ICsvStoreConfiguration>) {
     super.init(configuration)
 
     this.connection = configuration.connection
     this.parseOptions = {
-      separators: configuration.separators,
+      separators: Array.from(configuration.separators ?? []),
     }
     this.skipRowsFromStart = configuration.skipRowsFromStart ?? 0
     this.skipRowsFromEnd = configuration.skipRowsFromEnd ?? 0
 
-    this.resourceUrl = super.initVariable(configuration.resourceUrl)
+    this.resourceUrl = super.initVariable(configuration.resourceUrl ?? '')
     this.pollingInterval = configuration.pollingInterval ?? 5000
     if (this.pollingEnabled) {
       this.startPolling(this.pollingInterval)

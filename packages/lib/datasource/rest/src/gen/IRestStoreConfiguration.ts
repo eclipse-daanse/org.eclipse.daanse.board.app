@@ -5,26 +5,16 @@
  * @generated
  */
 
-import { IBaseConnectionConfiguration } from 'org.eclipse.daanse.board.app.lib.datasource.base';
-import { Documentation, Attribute, ModelClass } from 'org.eclipse.daanse.board.app.lib.annotations';
+import type { IBaseConnectionConfiguration } from 'org.eclipse.daanse.board.app.lib.datasource.base';
 
-@Documentation("Represents the configuration for a REST data store, extending the base connection configuration.")
-@ModelClass({ type: 'http://org.eclipse.daanse.board.app.lib.datasource.rest#//IRestStoreConfiguration' })
-export class IRestStoreConfiguration extends IBaseConnectionConfiguration {
-  @Documentation("The specific path or resource URL to fetch data from (e.g., '/api/data').")
-  @Attribute()
+/**
+ * IRestStoreConfiguration
+ * @generated
+ */
+export interface IRestStoreConfiguration extends IBaseConnectionConfiguration {
   resourceUrl?: string;
-
-  @Documentation("A reference or ID to a REST connection configuration used to access the resource.")
-  @Attribute()
   connection?: string;
-
-  @Documentation("An optional JSONPath or similar expression to select a specific value from the REST response.")
-  @Attribute()
   selectedJSONValue?: string;
-
-  @Documentation("The optional interval in milliseconds to poll the REST resource for updates. If not specified, polling might be disabled or use a default value.")
-  @Attribute()
   pollingInterval?: number;
 
 }

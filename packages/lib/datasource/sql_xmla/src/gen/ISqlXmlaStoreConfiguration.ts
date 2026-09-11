@@ -5,22 +5,15 @@
  * @generated
  */
 
-import { IBaseConnectionConfiguration } from 'org.eclipse.daanse.board.app.lib.datasource.base';
-import { Documentation, Attribute, ModelClass } from 'org.eclipse.daanse.board.app.lib.annotations';
+import type { IBaseConnectionConfiguration } from 'org.eclipse.daanse.board.app.lib.datasource.base';
 
-@Documentation("Represents the configuration for a SQL XMLA data store, extending the base connection configuration.")
-@ModelClass({ type: 'http://org.eclipse.daanse.board.app.lib.datasource.sql_xmla#//ISqlXmlaStoreConfiguration' })
-export class ISqlXmlaStoreConfiguration extends IBaseConnectionConfiguration {
-  @Documentation("A reference or ID to a SQL XMLA connection configuration used to access the data source.")
-  @Attribute()
+/**
+ * ISqlXmlaStoreConfiguration
+ * @generated
+ */
+export interface ISqlXmlaStoreConfiguration extends IBaseConnectionConfiguration {
   connection?: string;
-
-  @Documentation("The SQL query to be executed to retrieve data from the XMLA source.")
-  @Attribute()
   sql?: string;
-
-  @Documentation("The optional interval in milliseconds to poll the SQL XMLA resource for updates. If not specified, polling might be disabled or use a default value.")
-  @Attribute()
   pollingInterval?: number;
 
 }

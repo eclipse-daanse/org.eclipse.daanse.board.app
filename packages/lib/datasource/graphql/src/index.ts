@@ -14,6 +14,15 @@
 import { GraphQLStore, type IGraphQLStoreConfiguration } from './classes'
 import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
 import { serviceId } from 'org.eclipse.daanse.board.app.lib.core'
+import { GraphqlstorePackage } from './gen/GraphqlstorePackage'
+import { GraphqlstoreFactory } from './gen/GraphqlstoreFactory'
+import { IGraphQLStoreConfigurationImpl } from './gen/IGraphQLStoreConfigurationImpl'
+/*
+ * Building the EPackage on load: until it exists the class literals are
+ * null, an instance cannot say what it is, and nothing can render a form
+ * from the model.
+ */
+void GraphqlstorePackage.eINSTANCE
 
 /** Typed service id - the name and the contract declared once, here. */
 const GRAPHQL_STORE_FACTORY = serviceId<(config: IGraphQLStoreConfiguration) => GraphQLStore>('GraphQLStoreFactory')
@@ -47,3 +56,4 @@ export function deactivate({ services }: ActivationContext) {
 }
 
 export { GraphQLStore, IGraphQLStoreConfiguration, GRAPHQL_STORE_FACTORY, factorySymbol }
+export { GraphqlstorePackage, GraphqlstoreFactory, IGraphQLStoreConfigurationImpl }

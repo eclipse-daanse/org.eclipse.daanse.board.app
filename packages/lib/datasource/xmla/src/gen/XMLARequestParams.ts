@@ -5,17 +5,16 @@
  * @generated
  */
 
-import { Documentation, Attribute, ModelClass } from 'org.eclipse.daanse.board.app.lib.annotations';
+import type { EObject, EList } from '@emfts/core';
 
-@Documentation("Parameters for an XMLA request, detailing the command and properties for execution.")
-@ModelClass({ type: 'http://org.eclipse.daanse.board.app.lib.datasource.xmla#//XMLARequestParams' })
-export class XMLARequestParams {
-  @Documentation("The XMLA command (e.g., 'Execute', 'Discover').")
-  @Attribute()
-  command?: string;
-
-  @Documentation("Optional properties for the XMLA command (e.g., format, axis info). Represented as a generic object.")
-  @Attribute()
-  properties?: unknown;
+/**
+ * XMLARequestParams
+ * @generated
+ */
+export interface XMLARequestParams extends EObject {
+  rows: EList<unknown>;
+  columns: EList<unknown>;
+  measures: EList<unknown>;
+  filters: EList<unknown>;
 
 }

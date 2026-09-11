@@ -37,7 +37,7 @@ import { type IRequestParams } from 'org.eclipse.daanse.board.app.lib.connection
 import { transformFromThingLocationDastreamToLocationThingDatastream } from '../util/transformThings'
 import { FILTER, FILTERRESET, NOACTION, UPDATE_MQTT_SUBSCRIPTIONS, MQTT_UNSUBSCRIBE_ALL } from '../interfaces/Constances'
 import { OgcStaStoreI } from '../interface/OgcStaI'
-import { BaseDatasource } from 'org.eclipse.daanse.board.app.lib.datasource.base'
+import { BaseDatasource, type ConfigurationOf } from 'org.eclipse.daanse.board.app.lib.datasource.base'
 import { LOGGER_FACTORY, LoggerFactory,
   identifier as loggerIdentifier,
   type ILogger } from 'org.eclipse.daanse.board.app.lib.api.logger'
@@ -89,7 +89,7 @@ export class OgcStaStore extends BaseDatasource implements OgcStaStoreI {
   private workerManager: ObservationsWorkerManager | null = null;
   private connectionBaseUrl: string = '';
 
-  init(configuration: IOGCSTAConfigartion): void {
+  init(configuration: ConfigurationOf<IOGCSTAConfigartion>): void {
     super.init(configuration)
 
     // Initialize loggers from factory

@@ -12,10 +12,7 @@
  **********************************************************************/
 
 import { inject, injectable } from '@eclipse-daanse/tsm'
-import {
-  BaseDatasource,
-  IBaseConnectionConfiguration,
-} from 'org.eclipse.daanse.board.app.lib.datasource.base'
+import { BaseDatasource, IBaseConnectionConfiguration, type ConfigurationOf } from 'org.eclipse.daanse.board.app.lib.datasource.base'
 import { CONNECTION_REPOSITORY,
   identifier,
   type IConnection,
@@ -71,7 +68,7 @@ export interface ValhallaRouteResult {
 }
 
 export interface IValhallaStoreConfiguration
-  extends IBaseConnectionConfiguration {
+  extends ConfigurationOf<IBaseConnectionConfiguration> {
   connection: string
   costing: CostingModel
   units?: 'kilometers' | 'miles'

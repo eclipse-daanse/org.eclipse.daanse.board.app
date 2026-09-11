@@ -5,14 +5,13 @@
  * @generated
  */
 
-import { IBaseConnectionConfiguration } from 'org.eclipse.daanse.board.app.lib.datasource.base';
-import { Documentation, Attribute, ModelClass } from 'org.eclipse.daanse.board.app.lib.annotations';
+import type { IBaseConnectionConfiguration } from 'org.eclipse.daanse.board.app.lib.datasource.base';
 
-@Documentation("Configuration for an OGC SensorThings API (OGCSTA) data source, extending the base connection configuration.")
-@ModelClass({ type: 'http://org.eclipse.daanse.board.app.lib.datasource.ogcsta#//IOGCSTAConfiguration' })
-export class IOGCSTAConfiguration extends IBaseConnectionConfiguration {
-  @Documentation("A reference or ID to a specific OGCSTA connection endpoint.")
-  @Attribute()
+/**
+ * IOGCSTAConfiguration
+ * @generated
+ */
+export interface IOGCSTAConfiguration extends IBaseConnectionConfiguration {
   connection?: string;
 
 }

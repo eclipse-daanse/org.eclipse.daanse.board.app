@@ -16,6 +16,7 @@ import { inject, injectable } from '@eclipse-daanse/tsm'
 import {
   BaseDatasource,
   IBaseConnectionConfiguration,
+  type ConfigurationOf,
 } from 'org.eclipse.daanse.board.app.lib.datasource.base'
 import { CONNECTION_REPOSITORY,
   identifier,
@@ -24,12 +25,9 @@ import { CONNECTION_REPOSITORY,
 import { ComputedStoreParameter } from 'org.eclipse.daanse.board.app.lib.variables'
 import helpers from 'org.eclipse.daanse.board.app.lib.utils.helpers'
 
-export interface IRestStoreConfiguration extends IBaseConnectionConfiguration {
-  resourceUrl: string
-  connection: string
-  selectedJSONValue?: string
-  pollingInterval?: number
-}
+/* The configuration is the model's; see ../gen. */
+export type { IRestStoreConfiguration } from '../gen/IRestStoreConfiguration'
+import type { IRestStoreConfiguration } from '../gen/IRestStoreConfiguration'
 
 @injectable()
 export class RestStore extends BaseDatasource {
@@ -40,12 +38,12 @@ export class RestStore extends BaseDatasource {
   @inject(CONNECTION_REPOSITORY)
   private connectionRepository!: ConnectionRepository
 
-  init(configuration: IRestStoreConfiguration) {
+  init(configuration: ConfigurationOf<IRestStoreConfiguration>) {
     super.init(configuration)
 
     this.connection = configuration.connection
 
-    this.resourceUrl = super.initVariable(configuration.resourceUrl)
+    this.resourceUrl = super.initVariable(configuration.resourceUrl ?? '')
 
     this.selectedJSONValue = configuration.selectedJSONValue
     this.pollingInterval = configuration.pollingInterval ?? 5000

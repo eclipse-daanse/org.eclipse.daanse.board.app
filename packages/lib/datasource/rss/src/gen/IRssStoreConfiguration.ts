@@ -5,18 +5,14 @@
  * @generated
  */
 
-import { IBaseConnectionConfiguration } from 'org.eclipse.daanse.board.app.lib.datasource.base';
-import { Documentation, Attribute, ModelClass } from 'org.eclipse.daanse.board.app.lib.annotations';
+import type { IBaseConnectionConfiguration } from 'org.eclipse.daanse.board.app.lib.datasource.base';
 
-@Documentation("Represents the configuration for an RSS data store, extending the base connection configuration.")
-@ModelClass({ type: 'http://org.eclipse.daanse.board.app.lib.datasource.rss#//IRssStoreConfiguration' })
-export class IRssStoreConfiguration extends IBaseConnectionConfiguration {
-  @Documentation("The URL of the RSS feed to fetch data from.")
-  @Attribute()
+/**
+ * IRssStoreConfiguration
+ * @generated
+ */
+export interface IRssStoreConfiguration extends IBaseConnectionConfiguration {
   resourceUrl?: string;
-
-  @Documentation("A reference or ID to an RSS connection configuration used to access the feed.")
-  @Attribute()
   connection?: string;
 
 }

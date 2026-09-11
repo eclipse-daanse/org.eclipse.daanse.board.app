@@ -14,6 +14,16 @@
 import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
 import { serviceId } from 'org.eclipse.daanse.board.app.lib.core'
 import { RestStore, type IRestStoreConfiguration } from './classes'
+import { ReststorePackage } from './gen/ReststorePackage'
+import { ReststoreFactory } from './gen/ReststoreFactory'
+import { IRestStoreConfigurationImpl } from './gen/IRestStoreConfigurationImpl'
+
+/*
+ * Building the EPackage on load: until it exists the class literals are
+ * null, an instance cannot say what it is, and nothing can render a form
+ * from the model.
+ */
+void ReststorePackage.eINSTANCE
 
 /** Typed service id - the name and the contract declared once, here. */
 const REST_STORE_FACTORY = serviceId<(config: any) => RestStore>('RestStoreFactory')
@@ -53,3 +63,4 @@ export function deactivate({ services }: ActivationContext) {
 // }
 
 export { type RestStore, IRestStoreConfiguration, REST_STORE_FACTORY, factorySymbol }
+export { ReststorePackage, ReststoreFactory, IRestStoreConfigurationImpl }

@@ -11,10 +11,10 @@
  *   Smart City Jena
  **********************************************************************/
 
-import { BaseDatasource, IBaseConnectionConfiguration } from 'org.eclipse.daanse.board.app.lib.datasource.base'
+import { BaseDatasource, IBaseConnectionConfiguration, type ConfigurationOf } from 'org.eclipse.daanse.board.app.lib.datasource.base'
 import { identifier, DatasourceRepository, IDatasourceRepository } from 'org.eclipse.daanse.board.app.lib.api.datasource';
 
-export interface IDataTableComposerConfiguration extends IBaseConnectionConfiguration {
+export interface IDataTableComposerConfiguration extends ConfigurationOf<IBaseConnectionConfiguration> {
   connectedDatasources: string[];
   composeBy: string;
   name: string;

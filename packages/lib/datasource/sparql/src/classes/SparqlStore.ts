@@ -9,7 +9,10 @@
 
 */
 
-import { BaseDatasource } from 'org.eclipse.daanse.board.app.lib.datasource.base'
+import {
+  BaseDatasource,
+  type ConfigurationOf,
+} from 'org.eclipse.daanse.board.app.lib.datasource.base'
 import { inject, injectable } from '@eclipse-daanse/tsm'
 import { QUERY } from '../interfaces/Constances'
 import { CONNECTION_REPOSITORY,
@@ -29,11 +32,11 @@ export default class SparqlStore extends BaseDatasource {
   @inject(CONNECTION_REPOSITORY)
   private connectionRepository!: ConnectionRepository
 
-  init(configuration: ISparqlStoreConfiguration) {
+  init(configuration: ConfigurationOf<ISparqlStoreConfiguration>) {
     super.init(configuration)
 
     this.connection = configuration.connection
-    this.query = configuration.query
+    this.query = configuration.query ?? ''
   }
 
   public static TYPE = 'sparql'

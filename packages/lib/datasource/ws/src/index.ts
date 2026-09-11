@@ -14,6 +14,15 @@
 import { WSStore, type IWSStoreConfiguration } from './classes'
 import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
 import { serviceId } from 'org.eclipse.daanse.board.app.lib.core'
+import { WsstorePackage } from './gen/WsstorePackage'
+import { WsstoreFactory } from './gen/WsstoreFactory'
+import { IWSStoreConfigurationImpl } from './gen/IWSStoreConfigurationImpl'
+/*
+ * Building the EPackage on load: until it exists the class literals are
+ * null, an instance cannot say what it is, and nothing can render a form
+ * from the model.
+ */
+void WsstorePackage.eINSTANCE
 
 /** Typed service id - the name and the contract declared once, here. */
 const WS_STORE_FACTORY = serviceId<(config: IWSStoreConfiguration) => WSStore>('WSStoreFactory')
@@ -47,3 +56,4 @@ export function deactivate({ services }: ActivationContext) {
 }
 
 export { WSStore, IWSStoreConfiguration, WS_STORE_FACTORY, factorySymbol }
+export { WsstorePackage, WsstoreFactory, IWSStoreConfigurationImpl }

@@ -11,11 +11,11 @@
  *   Smart City Jena
  **********************************************************************/
 
-import { BaseDatasource, IBaseConnectionConfiguration } from 'org.eclipse.daanse.board.app.lib.datasource.base'
+import { BaseDatasource, IBaseConnectionConfiguration, type ConfigurationOf } from 'org.eclipse.daanse.board.app.lib.datasource.base'
 import { DatasourceRepository } from 'org.eclipse.daanse.board.app.lib.api.datasource'
 import { WeatherData, WeatherValue, LocationInfo, WeatherMapping, ForecastMapping } from '../interfaces/WeatherData'
 
-export interface IWeatherComposerConfiguration extends IBaseConnectionConfiguration {
+export interface IWeatherComposerConfiguration extends ConfigurationOf<IBaseConnectionConfiguration> {
   connectedDatasources: string[]
   thingId?: string | number
   customMapping?: Partial<WeatherMapping>

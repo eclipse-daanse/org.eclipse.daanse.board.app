@@ -5,35 +5,21 @@
  * @generated
  */
 
-import { IBaseConnectionConfiguration } from 'org.eclipse.daanse.board.app.lib.datasource.base';
-import { XMLARequestParams } from './XMLARequestParams.js';
-import { Documentation, Attribute, ModelClass, Reference } from 'org.eclipse.daanse.board.app.lib.annotations';
+import type { IBaseConnectionConfiguration } from 'org.eclipse.daanse.board.app.lib.datasource.base';
+import type { XMLARequestParams } from './XMLARequestParams.js';
 
-@Documentation("Represents the configuration for an XMLA data store, extending the base connection configuration.")
-@ModelClass({ type: 'http://org.eclipse.daanse.board.app.lib.datasource.xmla#//IXmlaStoreConfiguration' })
-export class IXmlaStoreConfiguration extends IBaseConnectionConfiguration {
-  @Documentation("A reference or ID to an XMLA connection configuration.")
-  @Attribute()
+/**
+ * IXmlaStoreConfiguration
+ * @generated
+ */
+export interface IXmlaStoreConfiguration extends IBaseConnectionConfiguration {
   connection?: string;
-
-  @Documentation("The parameters for the XMLA request to be executed.")
-  @Reference('XMLARequestParams')
-  requestParams: XMLARequestParams = new XMLARequestParams();
-
-  @Documentation("Indicates whether a visual editor should be used for MDX queries.")
-  @Attribute()
+  requestParams: XMLARequestParams;
   useVisualEditor?: boolean;
-
-  @Documentation("The MultiDimensional Expressions (MDX) query string.")
-  @Attribute()
   mdx?: string;
-
-  @Documentation("Optional state information for drill-down operations, represented as a generic object.")
-  @Attribute()
   drilldownState?: unknown;
-
-  @Documentation("The optional interval in milliseconds to poll the XMLA source for updates.")
-  @Attribute()
   pollingInterval?: number;
+  cube?: string;
+  useMdx?: boolean;
 
 }

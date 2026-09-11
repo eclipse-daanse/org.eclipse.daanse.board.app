@@ -5,22 +5,16 @@
  * @generated
  */
 
-import { IBaseConnectionConfiguration } from 'org.eclipse.daanse.board.app.lib.datasource.base';
-import { Documentation, Attribute, ModelClass } from 'org.eclipse.daanse.board.app.lib.annotations';
+import type { IBaseConnectionConfiguration } from 'org.eclipse.daanse.board.app.lib.datasource.base';
 
-@Documentation("Represents the configuration for a GraphQL data store, extending the base connection configuration.")
-@ModelClass({ type: 'http://org.eclipse.daanse.board.app.lib.datasource.graphql#//IGraphQLStoreConfiguration' })
-export class IGraphQLStoreConfiguration extends IBaseConnectionConfiguration {
-  @Documentation("A reference or ID to a GraphQL connection configuration used to execute the query.")
-  @Attribute()
+/**
+ * IGraphQLStoreConfiguration
+ * @generated
+ */
+export interface IGraphQLStoreConfiguration extends IBaseConnectionConfiguration {
   connection?: string;
-
-  @Documentation("The GraphQL query string to be executed.")
-  @Attribute()
   query?: string;
-
-  @Documentation("Optional variables to be passed with the GraphQL query.")
-  @Attribute()
   variables?: unknown;
+  pollingInterval?: number;
 
 }

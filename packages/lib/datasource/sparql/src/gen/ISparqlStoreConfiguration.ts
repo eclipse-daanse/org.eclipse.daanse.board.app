@@ -5,18 +5,14 @@
  * @generated
  */
 
-import { IBaseConnectionConfiguration } from 'org.eclipse.daanse.board.app.lib.datasource.base';
-import { Documentation, Attribute, ModelClass } from 'org.eclipse.daanse.board.app.lib.annotations';
+import type { IBaseConnectionConfiguration } from 'org.eclipse.daanse.board.app.lib.datasource.base';
 
-@Documentation("Represents the configuration for a SPARQL data store, extending the base connection configuration.")
-@ModelClass({ type: 'http://org.eclipse.daanse.board.app.lib.datasource.sparql#//ISparqlStoreConfiguration' })
-export class ISparqlStoreConfiguration extends IBaseConnectionConfiguration {
-  @Documentation("The SPARQL query string to be executed to retrieve data.")
-  @Attribute()
+/**
+ * ISparqlStoreConfiguration
+ * @generated
+ */
+export interface ISparqlStoreConfiguration extends IBaseConnectionConfiguration {
   query?: string;
-
-  @Documentation("A reference or ID to a SPARQL connection configuration used to access the endpoint.")
-  @Attribute()
   connection?: string;
 
 }

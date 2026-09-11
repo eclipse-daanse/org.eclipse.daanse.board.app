@@ -1,10 +1,11 @@
-import { inject as U, injectable as X } from "@eclipse-daanse/tsm";
-import { CONNECTION_REPOSITORY as P } from "org.eclipse.daanse.board.app.lib.api.connection";
-import { VARIABLE_REPOSITORY as j } from "org.eclipse.daanse.board.app.lib.api.variable";
-import { BaseDatasource as tt } from "org.eclipse.daanse.board.app.lib.datasource.base";
-import { LOGGER_FACTORY as et } from "org.eclipse.daanse.board.app.lib.api.logger";
-const { serviceId: it } = __tsm__.require("org.eclipse.daanse.board.app.lib.core"), nt = "https://sensors.bgs.ac.uk/FROST-Server".replace(/\/+$/, "");
-class J {
+import { inject as q, injectable as et } from "@eclipse-daanse/tsm";
+import { CONNECTION_REPOSITORY as it } from "org.eclipse.daanse.board.app.lib.api.connection";
+import { VARIABLE_REPOSITORY as nt } from "org.eclipse.daanse.board.app.lib.api.variable";
+import { BaseDatasource as st, IBaseConnectionConfigurationImpl as ot } from "org.eclipse.daanse.board.app.lib.datasource.base";
+import { LOGGER_FACTORY as at } from "org.eclipse.daanse.board.app.lib.api.logger";
+import { BasicEFactory as lt, BasicEPackage as ct, EPackageRegistry as B, BasicEClass as dt, BasicEAttribute as ut, getEcorePackage as ht } from "@emfts/core";
+const { serviceId: rt } = __tsm__.require("org.eclipse.daanse.board.app.lib.core"), pt = "https://sensors.bgs.ac.uk/FROST-Server".replace(/\/+$/, "");
+class Q {
   constructor(t = {}) {
     this.configuration = t;
   }
@@ -12,7 +13,7 @@ class J {
     this.configuration = t;
   }
   get basePath() {
-    return this.configuration.basePath != null ? this.configuration.basePath : nt;
+    return this.configuration.basePath != null ? this.configuration.basePath : pt;
   }
   get fetchApi() {
     return this.configuration.fetchApi;
@@ -21,7 +22,7 @@ class J {
     return this.configuration.middleware || [];
   }
   get queryParamsStringify() {
-    return this.configuration.queryParamsStringify || H;
+    return this.configuration.queryParamsStringify || W;
   }
   get username() {
     return this.configuration.username;
@@ -46,9 +47,9 @@ class J {
     return this.configuration.credentials;
   }
 }
-const st = new J();
-class S {
-  constructor(t = st) {
+const ft = new Q();
+class _ {
+  constructor(t = ft) {
     this.configuration = t, this.middleware = t.middleware;
   }
   static jsonRegex = new RegExp("^(:?application/json|[^;/ 	]+/[^;/ 	]+[+]json)[ 	]*(:?;.*)?$", "i");
@@ -76,13 +77,13 @@ class S {
    * @return True if the given MIME is JSON, false otherwise.
    */
   isJsonMime(t) {
-    return t ? S.jsonRegex.test(t) : !1;
+    return t ? _.jsonRegex.test(t) : !1;
   }
   async request(t, n) {
     const { url: i, init: s } = await this.createFetchParams(t, n), o = await this.fetchApi(i, s);
     if (o && o.status >= 200 && o.status < 300)
       return o;
-    throw new rt(o, "Response returned an error code");
+    throw new vt(o, "Response returned an error code");
   }
   async createFetchParams(t, n) {
     let i = this.configuration.basePath + t.path;
@@ -102,7 +103,7 @@ class S {
       })
     };
     let c;
-    at(r.body) || r.body instanceof URLSearchParams || ot(r.body) ? c = r.body : this.isJsonMime(s["Content-Type"]) ? c = JSON.stringify(r.body) : c = r.body;
+    yt(r.body) || r.body instanceof URLSearchParams || gt(r.body) ? c = r.body : this.isJsonMime(s["Content-Type"]) ? c = JSON.stringify(r.body) : c = r.body;
     const h = {
       ...r,
       body: c
@@ -129,7 +130,7 @@ class S {
           response: s ? s.clone() : void 0
         }) || s);
       if (s === void 0)
-        throw o instanceof Error ? new lt(o, "The request failed and the interceptors did not return an alternative response") : o;
+        throw o instanceof Error ? new mt(o, "The request failed and the interceptors did not return an alternative response") : o;
     }
     for (const o of this.middleware)
       o.post && (s = await o.post({
@@ -149,19 +150,19 @@ class S {
     return n.middleware = this.middleware.slice(), n;
   }
 }
-function ot(e) {
+function gt(e) {
   return typeof Blob < "u" && e instanceof Blob;
 }
-function at(e) {
+function yt(e) {
   return typeof FormData < "u" && e instanceof FormData;
 }
-class rt extends Error {
+class vt extends Error {
   constructor(t, n) {
     super(n), this.response = t;
   }
   name = "ResponseError";
 }
-class lt extends Error {
+class mt extends Error {
   constructor(t, n) {
     super(n), this.cause = t;
   }
@@ -173,10 +174,10 @@ class v extends Error {
   }
   name = "RequiredError";
 }
-function H(e, t = "") {
-  return Object.keys(e).map((n) => z(n, e[n], t)).filter((n) => n.length > 0).join("&");
+function W(e, t = "") {
+  return Object.keys(e).map((n) => Y(n, e[n], t)).filter((n) => n.length > 0).join("&");
 }
-function z(e, t, n = "") {
+function Y(e, t, n = "") {
   const i = n + (n.length ? `[${e}]` : e);
   if (t instanceof Array) {
     const s = t.map((o) => encodeURIComponent(String(o))).join(`&${encodeURIComponent(i)}=`);
@@ -184,11 +185,11 @@ function z(e, t, n = "") {
   }
   if (t instanceof Set) {
     const s = Array.from(t);
-    return z(e, s, n);
+    return Y(e, s, n);
   }
-  return t instanceof Date ? `${encodeURIComponent(i)}=${encodeURIComponent(t.toISOString())}` : t instanceof Object ? H(t, i) : `${encodeURIComponent(i)}=${encodeURIComponent(String(t))}`;
+  return t instanceof Date ? `${encodeURIComponent(i)}=${encodeURIComponent(t.toISOString())}` : t instanceof Object ? W(t, i) : `${encodeURIComponent(i)}=${encodeURIComponent(String(t))}`;
 }
-class y {
+class g {
   constructor(t, n = (i) => i) {
     this.raw = t, this.transformer = n;
   }
@@ -196,20 +197,20 @@ class y {
     return this.transformer(await this.raw.json());
   }
 }
-function ct(e) {
-  return dt(e);
+function bt(e) {
+  return $t(e);
 }
-function dt(e, t) {
+function $t(e, t) {
   return e == null ? e : {
     name: e.name == null ? void 0 : e.name,
     symbol: e.symbol == null ? void 0 : e.symbol,
     defintion: e.defintion == null ? void 0 : e.defintion
   };
 }
-function ut(e) {
-  return ht(e);
+function It(e) {
+  return wt(e);
 }
-function ht(e, t) {
+function wt(e, t) {
   return e == null ? e : {
     senId: e.sen_id == null ? void 0 : e.sen_id,
     dataType: e.data_type == null ? void 0 : e.data_type,
@@ -217,23 +218,23 @@ function ht(e, t) {
     publishYn: e["publish_yn&quot;"] == null ? void 0 : e["publish_yn&quot;"]
   };
 }
-function N(e) {
-  return pt(e);
+function V(e) {
+  return Tt(e);
 }
-function pt(e, t) {
+function Tt(e, t) {
   return e == null ? e : {
     iotId: e["@iot.id"] == null ? void 0 : e["@iot.id"],
     iotSelfLink: e["@iot.selfLink"] == null ? void 0 : e["@iot.selfLink"],
     definition: e.definition == null ? void 0 : e.definition,
     description: e.description == null ? void 0 : e.description,
     name: e.name == null ? void 0 : e.name,
-    properties: e.properties == null ? void 0 : ut(e.properties)
+    properties: e.properties == null ? void 0 : It(e.properties)
   };
 }
-function ft(e) {
-  return yt(e);
+function Ot(e) {
+  return Dt(e);
 }
-function yt(e, t) {
+function Dt(e, t) {
   return e == null ? e : {
     senId: e.sen_id == null ? void 0 : e.sen_id,
     dataType: e.data_type == null ? void 0 : e.data_type,
@@ -242,23 +243,23 @@ function yt(e, t) {
     publishYn: e["publish_yn&quot;"] == null ? void 0 : e["publish_yn&quot;"]
   };
 }
-function gt(e) {
-  return vt(e);
+function Et(e) {
+  return Rt(e);
 }
-function vt(e, t) {
+function Rt(e, t) {
   return e == null ? e : {
     senId: e.sen_id == null ? void 0 : e.sen_id,
     publishYn: e["publish_yn&quot;"] == null ? void 0 : e["publish_yn&quot;"]
   };
 }
 function k(e) {
-  return mt(e);
+  return St(e);
 }
-function mt(e, t) {
+function St(e, t) {
   return e == null ? e : {
     iotId: e["@iot.id"] == null ? void 0 : e["@iot.id"],
     iotSelfLink: e["@iot.selfLink"] == null ? void 0 : e["@iot.selfLink"],
-    parameters: e.parameters == null ? void 0 : gt(e.parameters),
+    parameters: e.parameters == null ? void 0 : Et(e.parameters),
     phenomenonTime: e.phenomenonTime == null ? void 0 : e.phenomenonTime,
     result: e.result == null ? void 0 : e.result,
     resultQuality: e.resultQuality == null ? void 0 : e.resultQuality,
@@ -266,10 +267,10 @@ function mt(e, t) {
     validTime: e.validTime == null ? void 0 : e.validTime
   };
 }
-function bt(e) {
-  return $t(e);
+function Ct(e) {
+  return _t(e);
 }
-function $t(e, t) {
+function _t(e, t) {
   return e == null ? e : {
     senId: e.sen_id == null ? void 0 : e.sen_id,
     site: e.site == null ? void 0 : e.site,
@@ -283,14 +284,14 @@ function $t(e, t) {
     publishYn: e["publish_yn&quot;"] == null ? void 0 : e["publish_yn&quot;"]
   };
 }
-function Q(e) {
-  return wt(e);
+function K(e) {
+  return Lt(e);
 }
-function wt(e, t) {
+function Lt(e, t) {
   return e == null ? e : {
     iotId: e["@iot.id"] == null ? void 0 : e["@iot.id"],
     iotSelfLink: e["@iot.selfLink"] == null ? void 0 : e["@iot.selfLink"],
-    things: e.Things == null ? void 0 : e.Things.map(D),
+    things: e.Things == null ? void 0 : e.Things.map(R),
     thingsiotCount: e["Things@iot.count"] == null ? void 0 : e["Things@iot.count"],
     thingsiotNavigationLink: e["Things@iot.navigationLink"] == null ? void 0 : e["Things@iot.navigationLink"],
     thingsiotNextLink: e["Things@iot.nextLink"] == null ? void 0 : e["Things@iot.nextLink"],
@@ -298,13 +299,13 @@ function wt(e, t) {
     encodingType: e.encodingType == null ? void 0 : e.encodingType,
     location: e.location == null ? void 0 : e.location,
     name: e.name == null ? void 0 : e.name,
-    properties: e.properties == null ? void 0 : bt(e.properties)
+    properties: e.properties == null ? void 0 : Ct(e.properties)
   };
 }
-function It(e) {
-  return Tt(e);
+function Gt(e) {
+  return kt(e);
 }
-function Tt(e, t) {
+function kt(e, t) {
   return e == null ? e : {
     senId: e.sen_id == null ? void 0 : e.sen_id,
     type: e.type == null ? void 0 : e.type,
@@ -320,40 +321,40 @@ function Tt(e, t) {
     publishYn: e["publish_yn&quot;"] == null ? void 0 : e["publish_yn&quot;"]
   };
 }
-function D(e) {
-  return Ot(e);
+function R(e) {
+  return Ft(e);
 }
-function Ot(e, t) {
+function Ft(e, t) {
   return e == null ? e : {
     iotId: e["@iot.id"] == null ? void 0 : e["@iot.id"],
     iotSelfLink: e["@iot.selfLink"] == null ? void 0 : e["@iot.selfLink"],
-    datastreams: e.Datastreams == null ? void 0 : e.Datastreams.map(G),
+    datastreams: e.Datastreams == null ? void 0 : e.Datastreams.map(F),
     datastreamsiotCount: e["Datastreams@iot.count"] == null ? void 0 : e["Datastreams@iot.count"],
     datastreamsiotNavigationLink: e["Datastreams@iot.navigationLink"] == null ? void 0 : e["Datastreams@iot.navigationLink"],
     datastreamsiotNextLink: e["Datastreams@iot.nextLink"] == null ? void 0 : e["Datastreams@iot.nextLink"],
-    locations: e.Locations == null ? void 0 : e.Locations.map(Q),
+    locations: e.Locations == null ? void 0 : e.Locations.map(K),
     locationsiotCount: e["Locations@iot.count"] == null ? void 0 : e["Locations@iot.count"],
     locationsiotNavigationLink: e["Locations@iot.navigationLink"] == null ? void 0 : e["Locations@iot.navigationLink"],
     locationsiotNextLink: e["Locations@iot.nextLink"] == null ? void 0 : e["Locations@iot.nextLink"],
     description: e.description == null ? void 0 : e.description,
     name: e.name == null ? void 0 : e.name,
-    properties: e.properties == null ? void 0 : It(e.properties)
+    properties: e.properties == null ? void 0 : Gt(e.properties)
   };
 }
-function Dt(e) {
-  return Rt(e);
+function Nt(e) {
+  return xt(e);
 }
-function Rt(e, t) {
+function xt(e, t) {
   return e == null ? e : {
     senId: e.sen_id == null ? void 0 : e.sen_id,
     complexDataYn: e["complex_data_yn&quot;"] == null ? void 0 : e["complex_data_yn&quot;"],
     publishYn: e["publish_yn&quot;"] == null ? void 0 : e["publish_yn&quot;"]
   };
 }
-function q(e) {
-  return Et(e);
+function J(e) {
+  return Mt(e);
 }
-function Et(e, t) {
+function Mt(e, t) {
   return e == null ? e : {
     iotId: e["@iot.id"] == null ? void 0 : e["@iot.id"],
     iotSelfLink: e["@iot.selfLink"] == null ? void 0 : e["@iot.selfLink"],
@@ -361,13 +362,13 @@ function Et(e, t) {
     encodingType: e.encodingType == null ? void 0 : e.encodingType,
     metadata: e.metadata == null ? void 0 : e.metadata,
     name: e.name == null ? void 0 : e.name,
-    properties: e.properties == null ? void 0 : Dt(e.properties)
+    properties: e.properties == null ? void 0 : Nt(e.properties)
   };
 }
-function G(e) {
-  return St(e);
+function F(e) {
+  return Ut(e);
 }
-function St(e, t) {
+function Ut(e, t) {
   return e == null ? e : {
     iotId: e["@iot.id"] == null ? void 0 : e["@iot.id"],
     iotSelfLink: e["@iot.selfLink"] == null ? void 0 : e["@iot.selfLink"],
@@ -375,36 +376,36 @@ function St(e, t) {
     observationsiotCount: e["Observations@iot.count"] == null ? void 0 : e["Observations@iot.count"],
     observationsiotNavigationLink: e["Observations@iot.navigationLink"] == null ? void 0 : e["Observations@iot.navigationLink"],
     observationsiotNextLink: e["Observations@iot.nextLink"] == null ? void 0 : e["Observations@iot.nextLink"],
-    observedProperty: e.ObservedProperty == null ? void 0 : N(e.ObservedProperty),
+    observedProperty: e.ObservedProperty == null ? void 0 : V(e.ObservedProperty),
     observedPropertyiotNavigationLink: e["ObservedProperty@iot.navigationLink"] == null ? void 0 : e["ObservedProperty@iot.navigationLink"],
-    sensor: e.Sensor == null ? void 0 : q(e.Sensor),
+    sensor: e.Sensor == null ? void 0 : J(e.Sensor),
     sensoriotNavigationLink: e["Sensor@iot.navigationLink"] == null ? void 0 : e["Sensor@iot.navigationLink"],
-    thing: e.Thing == null ? void 0 : D(e.Thing),
+    thing: e.Thing == null ? void 0 : R(e.Thing),
     thingiotNavigationLink: e["Thing@iot.navigationLink"] == null ? void 0 : e["Thing@iot.navigationLink"],
     description: e.description == null ? void 0 : e.description,
     name: e.name == null ? void 0 : e.name,
     observationType: e.observationType == null ? void 0 : e.observationType,
     observedArea: e.observedArea == null ? void 0 : e.observedArea,
     phenomenonTime: e.phenomenonTime == null ? void 0 : e.phenomenonTime,
-    properties: e.properties == null ? void 0 : ft(e.properties),
+    properties: e.properties == null ? void 0 : Ot(e.properties),
     resultTime: e.resultTime == null ? void 0 : e.resultTime,
-    unitOfMeasurement: e.unitOfMeasurement == null ? void 0 : ct(e.unitOfMeasurement)
+    unitOfMeasurement: e.unitOfMeasurement == null ? void 0 : bt(e.unitOfMeasurement)
   };
 }
-function w(e) {
-  return Lt(e);
+function T(e) {
+  return At(e);
 }
-function Lt(e, t) {
+function At(e, t) {
   return e == null ? e : {
     iotCount: e["@iot.count"] == null ? void 0 : e["@iot.count"],
     iotNextLink: e["@iot.nextLink"] == null ? void 0 : e["@iot.nextLink"],
-    value: e.value == null ? void 0 : e.value.map(G)
+    value: e.value == null ? void 0 : e.value.map(F)
   };
 }
-function Ct(e) {
-  return kt(e);
+function qt(e) {
+  return Vt(e);
 }
-function kt(e, t) {
+function Vt(e, t) {
   return e == null ? e : {
     senId: e.sen_id == null ? void 0 : e.sen_id,
     type: e.type == null ? void 0 : e.type,
@@ -421,10 +422,10 @@ function kt(e, t) {
     publishYn: e.publish_yn == null ? void 0 : e.publish_yn
   };
 }
-function Gt(e) {
-  return xt(e);
+function Jt(e) {
+  return Ht(e);
 }
-function xt(e, t) {
+function Ht(e, t) {
   return e == null ? e : {
     iotId: e["@iot.id"] == null ? void 0 : e["@iot.id"],
     iotSelfLink: e["@iot.selfLink"] == null ? void 0 : e["@iot.selfLink"],
@@ -436,40 +437,40 @@ function xt(e, t) {
     encodingType: e.encodingType == null ? void 0 : e.encodingType,
     feature: e.feature == null ? void 0 : e.feature,
     name: e.name == null ? void 0 : e.name,
-    properties: e.properties == null ? void 0 : Ct(e.properties)
+    properties: e.properties == null ? void 0 : qt(e.properties)
   };
 }
-function V(e) {
-  return Ft(e);
+function H(e) {
+  return zt(e);
 }
-function Ft(e, t) {
+function zt(e, t) {
   return e == null ? e : {
     iotCount: e["@iot.count"] == null ? void 0 : e["@iot.count"],
     iotNextLink: e["@iot.nextLink"] == null ? void 0 : e["@iot.nextLink"],
-    value: e.value == null ? void 0 : e.value.map(Q)
+    value: e.value == null ? void 0 : e.value.map(K)
   };
 }
-function C(e) {
-  return Mt(e);
+function G(e) {
+  return Bt(e);
 }
-function Mt(e, t) {
+function Bt(e, t) {
   return e == null ? e : {
     iotCount: e["@iot.count"] == null ? void 0 : e["@iot.count"],
     iotNextLink: e["@iot.nextLink"] == null ? void 0 : e["@iot.nextLink"],
     value: e.value == null ? void 0 : e.value.map(k)
   };
 }
-function _t(e) {
-  return Ut(e);
+function Qt(e) {
+  return Wt(e);
 }
-function Ut(e, t) {
+function Wt(e, t) {
   return e == null ? e : {
     iotCount: e["@iot.count"] == null ? void 0 : e["@iot.count"],
     iotNextLink: e["@iot.nextLink"] == null ? void 0 : e["@iot.nextLink"],
-    value: e.value == null ? void 0 : e.value.map(D)
+    value: e.value == null ? void 0 : e.value.map(R)
   };
 }
-class R extends S {
+class S extends _ {
   /**
    * Returns information about the datastream identified by **entityId**
    * Get information about an individual datastream
@@ -488,7 +489,7 @@ class R extends S {
       headers: s,
       query: i
     }, n);
-    return new y(o, (a) => G(a));
+    return new g(o, (a) => F(a));
   }
   /**
    * Returns information about the datastream identified by **entityId**
@@ -515,7 +516,7 @@ class R extends S {
       headers: s,
       query: i
     }, n);
-    return new y(o, (a) => C(a));
+    return new g(o, (a) => G(a));
   }
   /**
    * Returns all observations for the datastream identified by **entityId** (subject to any other parameters set)
@@ -542,7 +543,7 @@ class R extends S {
       headers: s,
       query: i
     }, n);
-    return new y(o, (a) => w(a));
+    return new g(o, (a) => T(a));
   }
   /**
    * Returns all datastreams that provide the observed property for the datastream identified by **entityId** (subject to any other parameters set)
@@ -569,7 +570,7 @@ class R extends S {
       headers: s,
       query: i
     }, n);
-    return new y(o, (a) => N(a));
+    return new g(o, (a) => V(a));
   }
   /**
    * Returns information about the observed property for the datastream identified by **entityId**
@@ -596,7 +597,7 @@ class R extends S {
       headers: s,
       query: i
     }, n);
-    return new y(o, (a) => w(a));
+    return new g(o, (a) => T(a));
   }
   /**
    * Returns all datastreams which share the sensor type for the datastream identified by **entityId** (subject to any other parameters set)
@@ -623,7 +624,7 @@ class R extends S {
       headers: s,
       query: i
     }, n);
-    return new y(o, (a) => q(a));
+    return new g(o, (a) => J(a));
   }
   /**
    * Returns information about the sensor type for the datastream identified by **entityId**
@@ -650,7 +651,7 @@ class R extends S {
       headers: s,
       query: i
     }, n);
-    return new y(o, (a) => w(a));
+    return new g(o, (a) => T(a));
   }
   /**
    * Returns all datastreams provided by the thing for the datastream identified by **entityId** (subject to any other parameters set)
@@ -677,7 +678,7 @@ class R extends S {
       headers: s,
       query: i
     }, n);
-    return new y(o, (a) => D(a));
+    return new g(o, (a) => R(a));
   }
   /**
    * Returns information about the thing for the datastream identified by **entityId**
@@ -704,7 +705,7 @@ class R extends S {
       headers: s,
       query: i
     }, n);
-    return new y(o, (a) => V(a));
+    return new g(o, (a) => H(a));
   }
   /**
    * Returns all locations of the thing for the datastream identified by **entityId** (subject to any other parameters set)
@@ -726,7 +727,7 @@ class R extends S {
       headers: s,
       query: i
     }, n);
-    return new y(o, (a) => w(a));
+    return new g(o, (a) => T(a));
   }
   /**
    * Returns all the datastreams provided by this api (subject to any parameters set)
@@ -736,7 +737,7 @@ class R extends S {
     return await (await this.v11DatastreamsGetRaw(t, n)).value();
   }
 }
-class Nt extends S {
+class Yt extends _ {
   /**
    * Returns information about the datastream for the observation identified by **entityId**
    * Get information about an observation\'s datastream
@@ -755,7 +756,7 @@ class Nt extends S {
       headers: s,
       query: i
     }, n);
-    return new y(o, (a) => G(a));
+    return new g(o, (a) => F(a));
   }
   /**
    * Returns information about the datastream for the observation identified by **entityId**
@@ -782,7 +783,7 @@ class Nt extends S {
       headers: s,
       query: i
     }, n);
-    return new y(o, (a) => C(a));
+    return new g(o, (a) => G(a));
   }
   /**
    * Returns all observations for the datastream of the observation identified by **entityId** (subject to any other parameters set)
@@ -807,7 +808,7 @@ class Nt extends S {
       headers: s,
       query: i
     }, n);
-    return new y(o, (a) => w(a));
+    return new g(o, (a) => T(a));
   }
   /**
    */
@@ -830,7 +831,7 @@ class Nt extends S {
       headers: s,
       query: i
     }, n);
-    return new y(o, (a) => N(a));
+    return new g(o, (a) => V(a));
   }
   /**
    */
@@ -853,7 +854,7 @@ class Nt extends S {
       headers: s,
       query: i
     }, n);
-    return new y(o, (a) => w(a));
+    return new g(o, (a) => T(a));
   }
   /**
    */
@@ -876,7 +877,7 @@ class Nt extends S {
       headers: s,
       query: i
     }, n);
-    return new y(o, (a) => q(a));
+    return new g(o, (a) => J(a));
   }
   /**
    */
@@ -899,7 +900,7 @@ class Nt extends S {
       headers: s,
       query: i
     }, n);
-    return new y(o, (a) => w(a));
+    return new g(o, (a) => T(a));
   }
   /**
    */
@@ -922,7 +923,7 @@ class Nt extends S {
       headers: s,
       query: i
     }, n);
-    return new y(o, (a) => D(a));
+    return new g(o, (a) => R(a));
   }
   /**
    */
@@ -945,7 +946,7 @@ class Nt extends S {
       headers: s,
       query: i
     }, n);
-    return new y(o, (a) => V(a));
+    return new g(o, (a) => H(a));
   }
   /**
    */
@@ -970,7 +971,7 @@ class Nt extends S {
       headers: s,
       query: i
     }, n);
-    return new y(o, (a) => Gt(a));
+    return new g(o, (a) => Jt(a));
   }
   /**
    * Returns information about the feature of interest for the observation identified by **entityId**
@@ -995,7 +996,7 @@ class Nt extends S {
       headers: s,
       query: i
     }, n);
-    return new y(o, (a) => C(a));
+    return new g(o, (a) => G(a));
   }
   /**
    */
@@ -1020,7 +1021,7 @@ class Nt extends S {
       headers: s,
       query: i
     }, n);
-    return new y(o, (a) => k(a));
+    return new g(o, (a) => k(a));
   }
   /**
    * Returns information about the observation identified by **entityId**
@@ -1042,7 +1043,7 @@ class Nt extends S {
       headers: s,
       query: i
     }, n);
-    return new y(o, (a) => C(a));
+    return new g(o, (a) => G(a));
   }
   /**
    * Returns all the observations provided by this api (subject to any parameters set)
@@ -1052,7 +1053,7 @@ class Nt extends S {
     return await (await this.v11ObservationsGetRaw(t, n)).value();
   }
 }
-class T extends S {
+class D extends _ {
   /**
    * Returns all datastreams for the thing identified by **entityId** (subject to any other parameters set)
    * Get all datastreams for a thing
@@ -1071,7 +1072,7 @@ class T extends S {
       headers: s,
       query: i
     }, n);
-    return new y(o, (a) => w(a));
+    return new g(o, (a) => T(a));
   }
   /**
    * Returns all datastreams for the thing identified by **entityId** (subject to any other parameters set)
@@ -1098,7 +1099,7 @@ class T extends S {
       headers: s,
       query: i
     }, n);
-    return new y(o, (a) => D(a));
+    return new g(o, (a) => R(a));
   }
   /**
    * Returns information about the thing identified by **entityId**
@@ -1125,7 +1126,7 @@ class T extends S {
       headers: s,
       query: i
     }, n);
-    return new y(o, (a) => V(a));
+    return new g(o, (a) => H(a));
   }
   /**
    * Returns information about the location for the thing identified by **entityId**
@@ -1147,7 +1148,7 @@ class T extends S {
       headers: s,
       query: i
     }, n);
-    return new y(o, (a) => _t(a));
+    return new g(o, (a) => Qt(a));
   }
   /**
    * Returns all the things provided by this api (subject to any parameters set)
@@ -1157,7 +1158,7 @@ class T extends S {
     return await (await this.v11ThingsGetRaw(t, n)).value();
   }
 }
-class qt {
+class Kt {
   cache = /* @__PURE__ */ new Map();
   pendingRequests = /* @__PURE__ */ new Map();
   ttl;
@@ -1200,38 +1201,38 @@ class qt {
         return console.log("[OGC STA Cache] Dedup - waiting for pending request:", s.substring(0, 80)), (await c).clone();
       console.log("[OGC STA Cache] Cache MISS - fetching:", s.substring(0, 80));
       let h, l;
-      const p = new Promise((g, d) => {
-        h = g, l = d;
+      const p = new Promise((y, d) => {
+        h = y, l = d;
       });
       this.pendingRequests.set(a, p);
       try {
-        const g = await t(n, i);
-        if (g.ok) {
-          const d = g.clone();
+        const y = await t(n, i);
+        if (y.ok) {
+          const d = y.clone();
           try {
             const f = await d.json();
             this.cache.set(a, {
               body: f,
-              status: g.status,
-              statusText: g.statusText,
-              headers: g.headers,
+              status: y.status,
+              statusText: y.statusText,
+              headers: y.headers,
               timestamp: Date.now()
             }), this.cache.size > this.maxEntries && this.cleanExpiredCache();
           } catch {
           }
         }
-        return h(g.clone()), g;
-      } catch (g) {
-        throw l(g), g;
+        return h(y.clone()), y;
+      } catch (y) {
+        throw l(y), y;
       } finally {
         this.pendingRequests.delete(a);
       }
     };
   }
 }
-let M = null;
-function Vt(e, t) {
-  return M || (M = new qt(t)), M.createCachingFetch(e);
+let U = null;
+function Xt(e, t) {
+  return U || (U = new Kt(t)), U.createCachingFetch(e);
 }
 const L = (e) => {
   const t = { locations: [], things: e, datastreams: [] }, n = [];
@@ -1249,8 +1250,8 @@ const L = (e) => {
     }
   }
   return t.datastreams = i, t.locations = n, t;
-}, $ = "EFilter", E = "EFilterReset", At = "ENoAction", B = "EMqttUnsubscribeAll", W = "EUpdateMqttSubscriptions";
-class Jt {
+}, w = "EFilter", C = "EFilterReset", Zt = "ENoAction", X = "EMqttUnsubscribeAll", Z = "EUpdateMqttSubscriptions";
+class Pt {
   worker = null;
   pendingRequests = /* @__PURE__ */ new Map();
   requestCounter = 0;
@@ -1372,16 +1373,16 @@ class Jt {
     this.worker && (this.worker.terminate(), this.worker = null), this.pendingRequests.clear();
   }
 }
-let _ = null;
-function Ht() {
-  return _ || (_ = new Jt()), _;
+let A = null;
+function jt() {
+  return A || (A = new Pt()), A;
 }
-var zt = Object.defineProperty, Qt = Object.getOwnPropertyDescriptor, x = (e, t, n, i) => {
-  for (var s = i > 1 ? void 0 : i ? Qt(t, n) : t, o = e.length - 1, a; o >= 0; o--)
+var te = Object.defineProperty, ee = Object.getOwnPropertyDescriptor, N = (e, t, n, i) => {
+  for (var s = i > 1 ? void 0 : i ? ee(t, n) : t, o = e.length - 1, a; o >= 0; o--)
     (a = e[o]) && (s = (i ? a(t, n, s) : a(s)) || s);
-  return i && s && zt(t, n, s), s;
+  return i && s && te(t, n, s), s;
 };
-let O = class extends tt {
+let E = class extends st {
   connectionRepository;
   variableRepository;
   loggerFactory;
@@ -1401,7 +1402,7 @@ let O = class extends tt {
   mqttUpdateTimer = null;
   hasPendingMqttUpdates = !1;
   requestFlag = {
-    key: E,
+    key: C,
     params: void 0
   };
   baseConfigration;
@@ -1423,14 +1424,14 @@ let O = class extends tt {
     super.init(e), this.logMqtt = this.loggerFactory.createLogger("daanse:ogcsta:mqtt"), this.logData = this.loggerFactory.createLogger("daanse:ogcsta:data"), this.logHistory = this.loggerFactory.createLogger("daanse:ogcsta:history"), this.logCore = this.loggerFactory.createLogger("daanse:ogcsta:core");
     const t = this.configuration !== void 0;
     if (t && this.mqttConnection && (this.logMqtt("Configuration changed, cleaning up old MQTT subscriptions"), this.unsubscribeAll(), this.initialLoadDone = !1), this.configuration = e, !e.connection) throw new Error("Connetion must be set");
-    if (this.connection = e.connection, this.requestFlag = { key: E, params: void 0 }, e.history && e.history.enabled === void 0 && (e.history.timeRange?.start || e.history.timeRange?.startVariable || e.history.timeRange?.end || e.history.timeRange?.endVariable || e.history.phenomenonTime?.start || e.history.phenomenonTime?.startVariable || e.history.phenomenonTime?.end || e.history.phenomenonTime?.endVariable || e.history.resultTime?.start || e.history.resultTime?.startVariable || e.history.resultTime?.end || e.history.resultTime?.endVariable) && (this.logHistory("Auto-enabling history due to configured time filters"), e.history.enabled = !0), e.mqttConnection && this.connectionRepository)
+    if (this.connection = e.connection, this.requestFlag = { key: C, params: void 0 }, e.history && e.history.enabled === void 0 && (e.history.timeRange?.start || e.history.timeRange?.startVariable || e.history.timeRange?.end || e.history.timeRange?.endVariable || e.history.phenomenonTime?.start || e.history.phenomenonTime?.startVariable || e.history.phenomenonTime?.end || e.history.phenomenonTime?.endVariable || e.history.resultTime?.start || e.history.resultTime?.startVariable || e.history.resultTime?.end || e.history.resultTime?.endVariable) && (this.logHistory("Auto-enabling history due to configured time filters"), e.history.enabled = !0), e.mqttConnection && this.connectionRepository)
       try {
         this.mqttConnection = this.connectionRepository.getConnection(e.mqttConnection), this.setupMQTTMessageHandler(), this.logMqtt("MQTT Connection established:", e.mqttConnection);
       } catch (n) {
         console.error("OGCSTA: Could not establish MQTT connection:", n), this.mqttConnection = null;
       }
     else t && this.mqttConnection && (this.logMqtt("MQTT Connection removed from configuration"), this.mqttConnection = null);
-    this.setupVariableWatchers(), this.workerManager = Ht();
+    this.setupVariableWatchers(), this.workerManager = jt();
     try {
       const n = this.connectionRepository.getConnection(this.connection);
       n?.url && (this.connectionBaseUrl = n.url);
@@ -1439,17 +1440,17 @@ let O = class extends tt {
     }
   }
   callEvent(e, t, n = !0) {
-    if (e == $) {
+    if (e == w) {
       const i = Object.keys(t)[0];
       if (i === "observations" && t.observations && (this.lastObservationsParams = t.observations), !n)
-        return this.filterDebounceTimer && (clearTimeout(this.filterDebounceTimer), this.filterDebounceTimer = null), this.requestFlag = { key: $, params: t }, this.getData("OGCSTAData").then(() => {
+        return this.filterDebounceTimer && (clearTimeout(this.filterDebounceTimer), this.filterDebounceTimer = null), this.requestFlag = { key: w, params: t }, this.getData("OGCSTAData").then(() => {
         }).catch((s) => {
           this.logCore("Silent getData error:", s);
         });
-      this.filterDebounceTimer && i === this.lastFilterType ? clearTimeout(this.filterDebounceTimer) : this.filterDebounceTimer && (clearTimeout(this.filterDebounceTimer), this.filterDebounceTimer = null, this.pendingRequestFlag = { ...this.requestFlag }, this.notify()), this.requestFlag = { key: $, params: t }, this.lastFilterType = i, this.filterDebounceTimer = setTimeout(() => {
+      this.filterDebounceTimer && i === this.lastFilterType ? clearTimeout(this.filterDebounceTimer) : this.filterDebounceTimer && (clearTimeout(this.filterDebounceTimer), this.filterDebounceTimer = null, this.pendingRequestFlag = { ...this.requestFlag }, this.notify()), this.requestFlag = { key: w, params: t }, this.lastFilterType = i, this.filterDebounceTimer = setTimeout(() => {
         this.notify(), this.filterDebounceTimer = null;
       }, 300);
-    } else e == W ? this.mqttConnection && (this.logCore("Updating MQTT subscriptions:", t?.observations?.length || 0, "observations"), this.subscribeToDatastreams(t?.observations || []), this.subscribeToLocations()) : e == B ? this.mqttConnection && (this.logCore("Unsubscribing from all MQTT topics"), this.unsubscribeAll()) : (this.requestFlag = { key: E, params: t }, this.notify());
+    } else e == Z ? this.mqttConnection && (this.logCore("Updating MQTT subscriptions:", t?.observations?.length || 0, "observations"), this.subscribeToDatastreams(t?.observations || []), this.subscribeToLocations()) : e == X ? this.mqttConnection && (this.logCore("Unsubscribing from all MQTT topics"), this.unsubscribeAll()) : (this.requestFlag = { key: C, params: t }, this.notify());
   }
   destroy() {
     if (this.logCore("Store destroy() called"), this.debounceTimer && (clearTimeout(this.debounceTimer), this.debounceTimer = null), this.filterDebounceTimer && (clearTimeout(this.filterDebounceTimer), this.filterDebounceTimer = null), this.mqttUpdateTimer && (clearTimeout(this.mqttUpdateTimer), this.mqttUpdateTimer = null), this.mqttConnection) {
@@ -1465,12 +1466,12 @@ let O = class extends tt {
       throw new Error("ConnectionRepository is not provided to Store Classes");
     const i = this.connectionRepository.getConnection(
       this.connection
-    ), o = Vt((h, l) => i.fetch({ url: h }, l), { ttl: 3e4, maxEntries: 200 });
-    this.baseConfigration = new J({
+    ), o = Xt((h, l) => i.fetch({ url: h }, l), { ttl: 3e4, maxEntries: 200 });
+    this.baseConfigration = new Q({
       basePath: "",
       fetchApi: o
     });
-    const a = t?.isolatedRequest === !0, r = t?.reload || n.key == E || !this.resultMap.things || this.resultMap.things.length === 0;
+    const a = t?.isolatedRequest === !0, r = t?.reload || n.key == C || !this.resultMap.things || this.resultMap.things.length === 0;
     r && !a && (this.resultMap = {
       things: [],
       datastreams: [],
@@ -1480,8 +1481,8 @@ let O = class extends tt {
     const c = [];
     if (t?.filter) {
       const h = this.requestFlag;
-      this.requestFlag = { key: $, params: t.filter }, this.getPartitionalData(c), this.requestFlag = h;
-    } else if (n.key == $) {
+      this.requestFlag = { key: w, params: t.filter }, this.getPartitionalData(c), this.requestFlag = h;
+    } else if (n.key == w) {
       const h = this.requestFlag;
       this.requestFlag = n, this.getPartitionalData(c), this.requestFlag = h;
     } else r && this.getAllData(c);
@@ -1505,22 +1506,22 @@ let O = class extends tt {
       }
       for (const l of h)
         l.datastreams && (this.resultMap.datastreams = this.resultMap.datastreams?.concat(l.datastreams)), l.things && (this.resultMap.things = this.resultMap.things?.concat(l.things)), l.observations && (this.resultMap.observations = this.resultMap.observations?.concat(l.observations)), l.locations && (this.resultMap.locations = this.resultMap.locations?.concat(l.locations));
-      if (t?.filter || n.key == $) {
+      if (t?.filter || n.key == w) {
         const l = t?.filter?.observations || n.params?.observations;
         for (const p of l ?? []) {
-          const g = this.resultMap.datastreams?.find((d) => d.iotId == p.iotId);
-          if (g) {
+          const y = this.resultMap.datastreams?.find((d) => d.iotId == p.iotId);
+          if (y) {
             const d = this.resultMap.observations?.filter(
               (f) => f.ds_source == p.iotId
             ) || [];
-            g.observations = d;
+            y.observations = d;
             for (const f of this.resultMap.things || []) {
               const u = f.datastreams?.find((m) => m.iotId == p.iotId);
               u && (u.observations = d);
             }
             for (const f of this.resultMap.locations || [])
               for (const u of f.things || []) {
-                const m = u.datastreams?.find((b) => b.iotId == p.iotId);
+                const m = u.datastreams?.find(($) => $.iotId == p.iotId);
                 m && (m.observations = d);
               }
           }
@@ -1547,7 +1548,7 @@ let O = class extends tt {
     e.push(
       (async () => {
         try {
-          const t = (await new T(this.baseConfigration).v11ThingsGet({
+          const t = (await new D(this.baseConfigration).v11ThingsGet({
             $expand: "Datastreams,Locations"
           })).value;
           return L(
@@ -1562,12 +1563,12 @@ let O = class extends tt {
     );
   }
   async fallBackSingleRequests() {
-    const e = (await new T(this.baseConfigration).v11ThingsGet()).value;
+    const e = (await new D(this.baseConfigration).v11ThingsGet()).value;
     for (const n of e) {
       n.locations || (n.locations = []), n.datastreams || (n.datastreams = []);
       try {
         if (n.iotId) {
-          const i = (await new T(
+          const i = (await new D(
             this.baseConfigration
           ).v11ThingsEntityIdLocationsGet({ entityId: n.iotId })).value;
           n.locations = i;
@@ -1576,7 +1577,7 @@ let O = class extends tt {
         this.logCore("Error:", i);
       }
       try {
-        const i = (await new T(
+        const i = (await new D(
           this.baseConfigration
         ).v11ThingsEntityIdDatastreamsGet({ entityId: n.iotId })).value;
         n.datastreams = i;
@@ -1636,7 +1637,7 @@ let O = class extends tt {
     if (!this.baseConfigration)
       throw new Error("Base configuration not initialized");
     const n = this.getHistoryQueryParams(t);
-    return (await new R(this.baseConfigration).v11DatastreamsEntityIdObservationsGet({
+    return (await new S(this.baseConfigration).v11DatastreamsEntityIdObservationsGet({
       entityId: e,
       ...n
     })).value || [];
@@ -1648,7 +1649,7 @@ let O = class extends tt {
         e.push(
           (async () => {
             const n = this.getHistoryQueryParams(t);
-            return { observations: (await new Nt(
+            return { observations: (await new Yt(
               this.baseConfigration
             ).v11ObservationsGet(n)).value };
           })()
@@ -1665,7 +1666,7 @@ let O = class extends tt {
                   entityId: i.iotId + "",
                   $orderby: "phenomenonTime desc",
                   $top: 1
-                }, o = (await new R(
+                }, o = (await new S(
                   this.baseConfigration
                 ).v11DatastreamsEntityIdObservationsGet(s)).value;
                 return o && o.length > 0 && o.forEach((a) => {
@@ -1702,7 +1703,7 @@ let O = class extends tt {
                 $orderby: "phenomenonTime desc"
               };
               t?.enabled || (o.$top = 1);
-              const a = (await new R(
+              const a = (await new S(
                 this.baseConfigration
               ).v11DatastreamsEntityIdObservationsGet({
                 ...o,
@@ -1719,14 +1720,14 @@ let O = class extends tt {
     if (this.requestFlag.params && "datastreams" in this.requestFlag.params) {
       if ("all" in this.requestFlag.params.datastreams)
         e.push(
-          (async () => ({ datastreams: (await new R(
+          (async () => ({ datastreams: (await new S(
             this.baseConfigration
           ).v11DatastreamsGet()).value }))()
         );
       else if ("ids" in this.requestFlag.params.datastreams)
         for (const t of this.requestFlag.params.datastreams.ids)
           e.push(
-            (async () => ({ observations: (await new R(
+            (async () => ({ observations: (await new S(
               this.baseConfigration
             ).v11DatastreamsEntityIdObservationsGet({
               entityId: t,
@@ -1743,13 +1744,13 @@ let O = class extends tt {
         t && i.push("Datastreams"), n && i.push("Locations"), e.push(
           (async () => {
             try {
-              const s = i.length > 0 ? i.join(",") : void 0, o = (await new T(this.baseConfigration).v11ThingsGet({
+              const s = i.length > 0 ? i.join(",") : void 0, o = (await new D(this.baseConfigration).v11ThingsGet({
                 $expand: s
               })).value;
               return i.length > 0 ? L(o) : { things: o };
             } catch (s) {
               if (s.response.status == 501)
-                return i.includes("Datastreams") || i.includes("Locations") ? await this.fallBackSingleRequests() : { things: (await new T(this.baseConfigration).v11ThingsGet()).value };
+                return i.includes("Datastreams") || i.includes("Locations") ? await this.fallBackSingleRequests() : { things: (await new D(this.baseConfigration).v11ThingsGet()).value };
               throw s;
             }
           })()
@@ -1764,7 +1765,7 @@ let O = class extends tt {
             (async () => {
               const o = i.length > 0 ? i.join(",") : void 0;
               this.logData(`🔍 OgcSta: Fetching thing ${s} with expand: ${o}`);
-              const a = await new T(
+              const a = await new D(
                 this.baseConfigration
               ).v11ThingsEntityIdGet({ entityId: s, $expand: o });
               return i.length > 0 ? L([a]) : { things: [a] };
@@ -1836,21 +1837,21 @@ let O = class extends tt {
               u.thing?.iotId === a && u.thing.locations && (u.thing.locations = d, this.logHistory(`📍 Updated datastream ${u.iotId} with historical location`));
             f && f.locations && (f.locations = d, this.logHistory(`🟢 AFTER UPDATE - Thing ${a} new location:`, JSON.stringify(f.locations)));
             for (const u of d) {
-              const m = this.resultMap.locations?.find((b) => b.iotId === u.iotId);
+              const m = this.resultMap.locations?.find(($) => $.iotId === u.iotId);
               if (m)
-                m.location = u.location, m.encodingType = u.encodingType, u.name && (m.name = u.name), u.description && (m.description = u.description), m.things || (m.things = []), f && !m.things.find((b) => b.iotId === a) && (m.things.push(f), this.logHistory(`📍 Added thing ${a} back to location ${u.iotId}`));
+                m.location = u.location, m.encodingType = u.encodingType, u.name && (m.name = u.name), u.description && (m.description = u.description), m.things || (m.things = []), f && !m.things.find(($) => $.iotId === a) && (m.things.push(f), this.logHistory(`📍 Added thing ${a} back to location ${u.iotId}`));
               else if (f) {
-                const b = { ...u, things: [f] };
-                this.resultMap.locations?.push(b), this.logHistory(`📍 Created new location ${u.iotId} with thing ${a}`);
+                const $ = { ...u, things: [f] };
+                this.resultMap.locations?.push($), this.logHistory(`📍 Created new location ${u.iotId} with thing ${a}`);
               }
             }
           }
         } else {
           this.logHistory(`📍 No historical location found for thing ${a} at time ${n}`);
-          const g = this.resultMap.things?.find((d) => d.iotId === a);
+          const y = this.resultMap.things?.find((d) => d.iotId === a);
           for (const d of this.resultMap.datastreams || [])
             d.thing && d.thing.iotId === a && (d.thing.locations = [], this.logHistory(`📍 Cleared location for datastream ${d.iotId}`));
-          g && g.locations && (g.locations = [], this.logHistory(`🟢 Cleared location for Thing ${a}`));
+          y && y.locations && (y.locations = [], this.logHistory(`🟢 Cleared location for Thing ${a}`));
           for (const d of this.resultMap.locations || [])
             if (d.things) {
               const f = d.things.findIndex((u) => u.iotId === a);
@@ -1896,22 +1897,22 @@ let O = class extends tt {
               );
               let c = `time le ${a}`;
               o && (c = `time ge ${o} and ${c}`);
-              const h = `/v1.1/Things(${s})/HistoricalLocations?$filter=${c}&$orderby=time desc&$top=1&$expand=Locations`, g = (await (await r.fetch({ url: h }, {
+              const h = `/v1.1/Things(${s})/HistoricalLocations?$filter=${c}&$orderby=time desc&$top=1&$expand=Locations`, y = (await (await r.fetch({ url: h }, {
                 method: "GET"
               })).json()).value;
-              if (g && g.length > 0) {
-                const f = g[0].Locations;
+              if (y && y.length > 0) {
+                const f = y[0].Locations;
                 if (f && f.length > 0) {
                   const u = f[0];
                   this.logHistory(`📍 Found historical location for thing ${s}:`, u);
-                  const m = this.resultMap.things?.find((I) => I.iotId === s);
+                  const m = this.resultMap.things?.find((O) => O.iotId === s);
                   m && (m.locations = [u]);
-                  for (const I of this.resultMap.datastreams || [])
-                    I.thing?.iotId === s && I.thing && (I.thing.locations = [u]);
-                  const b = this.resultMap.locations?.find(
-                    (I) => I.things?.some((Z) => Z.iotId === s)
+                  for (const O of this.resultMap.datastreams || [])
+                    O.thing?.iotId === s && O.thing && (O.thing.locations = [u]);
+                  const $ = this.resultMap.locations?.find(
+                    (O) => O.things?.some((tt) => tt.iotId === s)
                   );
-                  b && (b.location = u.location, b.encodingType = u.encodingType, u.name && (b.name = u.name), u.description && (b.description = u.description));
+                  $ && ($.location = u.location, $.encodingType = u.encodingType, u.name && ($.name = u.name), u.description && ($.description = u.description));
                 }
               } else
                 this.logHistory(`📍 No historical location found for thing ${s} at time ${a}`);
@@ -1926,7 +1927,7 @@ let O = class extends tt {
   onVariableChanged() {
     this.debounceTimer && clearTimeout(this.debounceTimer), this.debounceTimer = setTimeout(async () => {
       try {
-        this.lastObservationsParams && (this.requestFlag = { key: $, params: { observations: this.lastObservationsParams } }, await this.getData("OGCSTAData"), await this.fetchHistoricalLocations(), this.requestFlag = { key: At, params: void 0 }), this.notify();
+        this.lastObservationsParams && (this.requestFlag = { key: w, params: { observations: this.lastObservationsParams } }, await this.getData("OGCSTAData"), await this.fetchHistoricalLocations(), this.requestFlag = { key: Zt, params: void 0 }), this.notify();
       } catch (e) {
         this.logCore("Error refetching observations after variable change:", e);
       }
@@ -2072,59 +2073,221 @@ let O = class extends tt {
     }
   }
 };
-x([
-  U(P)
-], O.prototype, "connectionRepository", 2);
-x([
-  U(j)
-], O.prototype, "variableRepository", 2);
-x([
-  U(et)
-], O.prototype, "loggerFactory", 2);
-O = x([
-  X()
-], O);
-const F = it("OgcStaStoreFactory"), Bt = Symbol.for(F);
-function Y({ services: e }) {
-  e.register(F, (t) => {
-    if (!O.validateConfiguration(t))
+N([
+  q(it)
+], E.prototype, "connectionRepository", 2);
+N([
+  q(nt)
+], E.prototype, "variableRepository", 2);
+N([
+  q(at)
+], E.prototype, "loggerFactory", 2);
+E = N([
+  et()
+], E);
+class I extends ot {
+  // Feature ID Constants (eLiterals)
+  static CONNECTION = 3;
+  // Private fields
+  _connection;
+  /**
+   * Returns the EClass of this object
+   */
+  eClass() {
+    return b.Literals.I_O_G_C_S_T_A_CONFIGURATION;
+  }
+  // Getters and Setters
+  get connection() {
+    return this._connection;
+  }
+  set connection(t) {
+    const n = this._connection;
+    this._connection = t, this.eDeliver() && this.eNotify({
+      getNotifier: () => this,
+      getEventType: () => 1,
+      // SET
+      getFeature: () => this.eClass().getEStructuralFeature(I.CONNECTION),
+      getOldValue: () => n,
+      getNewValue: () => t,
+      getPosition: () => -1,
+      wasSet: () => !0,
+      isTouch: () => !1,
+      isReset: () => !1,
+      getFeatureID: () => I.CONNECTION,
+      merge: () => !1
+    });
+  }
+  // Reflective API
+  /**
+   * Returns the value of the given feature
+   */
+  eGet(t) {
+    switch (this.eClass().getFeatureID(t)) {
+      case I.CONNECTION:
+        return this.connection;
+      default:
+        return super.eGet(t);
+    }
+  }
+  /**
+   * Sets the value of the given feature
+   */
+  eSet(t, n) {
+    switch (this.eClass().getFeatureID(t)) {
+      case I.CONNECTION:
+        this.connection = n, super.eSet(t, n);
+        break;
+      default:
+        super.eSet(t, n);
+    }
+  }
+  /**
+   * Returns whether the feature has been set
+   */
+  eIsSet(t) {
+    switch (this.eClass().getFeatureID(t)) {
+      case I.CONNECTION:
+        return this._connection !== void 0;
+      default:
+        return super.eIsSet(t);
+    }
+  }
+  /**
+   * Unsets the given feature
+   */
+  eUnset(t) {
+    switch (this.eClass().getFeatureID(t)) {
+      case I.CONNECTION:
+        this._connection = void 0;
+        return;
+      default:
+        super.eUnset(t);
+    }
+  }
+  /**
+   * What this object is when it is stored.
+   *
+   * The plain names, not the private fields the getters sit in: those
+   * are this class's business, and a stored board is read by things
+   * that only know the model.
+   */
+  toJSON() {
+    return {
+      connection: this.connection
+    };
+  }
+}
+class x extends lt {
+  // Lazy singleton instance
+  static _instance;
+  static get eINSTANCE() {
+    return this._instance || (this._instance = new x()), this._instance;
+  }
+  constructor() {
+    super(), this.setEPackage(b.eINSTANCE);
+  }
+  /**
+   * Create a new IOGCSTAConfiguration instance
+   */
+  createIOGCSTAConfiguration() {
+    return new I();
+  }
+  /**
+   * Create an instance of the given class
+   */
+  create(t) {
+    switch (t.getName()) {
+      case "IOGCSTAConfiguration":
+        return this.createIOGCSTAConfiguration();
+      default:
+        throw new Error(`Unknown class: ${t.getName()}`);
+    }
+  }
+}
+function ie(e) {
+  const t = B.INSTANCE.getEPackage(e);
+  if (!t)
+    throw new Error(`EPackage '${e}' is not registered. Access the eINSTANCE of that model's generated package (or register it via EPackageRegistry.INSTANCE.registerPackage) before initializing OgcstaPackage.`);
+  return t;
+}
+class b extends ct {
+  static eNAME = "ogcsta";
+  static eNS_URI = "http://org.eclipse.daanse.board.app.lib.datasource.ogcsta";
+  static eNS_PREFIX = "ogcsta";
+  // Singleton instance
+  static _instance;
+  static get eINSTANCE() {
+    return this._instance || (this._instance = new b(), this._instance.init()), this._instance;
+  }
+  /**
+   * Literals for quick access to metaclasses and features
+   */
+  static Literals = {
+    I_O_G_C_S_T_A_CONFIGURATION: null,
+    I_O_G_C_S_T_A_CONFIGURATION__CONNECTION: null
+  };
+  constructor() {
+    super(), this.setName(b.eNAME), this.setNsURI(b.eNS_URI), this.setNsPrefix(b.eNS_PREFIX);
+  }
+  /**
+   * Initialize package contents
+   */
+  init() {
+    B.INSTANCE.set(b.eNS_URI, this), this.setEFactoryInstance(x.eINSTANCE);
+    const t = new dt();
+    t.setName("IOGCSTAConfiguration"), t.setAbstract(!1), t.setInterface(!1), this.getEClassifiers().push(t), t.setEPackage(this), b.Literals.I_O_G_C_S_T_A_CONFIGURATION = t;
+    const n = new ut();
+    n.setName("connection"), n.setLowerBound(0), n.setUpperBound(1), t.getEStructuralFeatures().push(n), b.Literals.I_O_G_C_S_T_A_CONFIGURATION__CONNECTION = n, b.Literals.I_O_G_C_S_T_A_CONFIGURATION.getESuperTypes().push(ie("http://org.eclipse.daanse.board.app.lib.datasource.base").getEClassifier("IBaseConnectionConfiguration")), b.Literals.I_O_G_C_S_T_A_CONFIGURATION__CONNECTION.setEType(ht().getEClassifier("EString"));
+  }
+}
+b.eINSTANCE;
+const M = rt("OgcStaStoreFactory"), ne = Symbol.for(M);
+function P({ services: e }) {
+  e.register(M, (t) => {
+    if (!E.validateConfiguration(t))
       throw new Error(
         "Invalid OgcStaStore configuration. Please provide a valid configuration."
       );
-    const n = e.construct(O);
+    const n = e.construct(E);
     return n.init(t), n;
   });
 }
-function K({ services: e }) {
-  e.unregister(F);
+function j({ services: e }) {
+  e.unregister(M);
 }
-const Wt = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const se = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  FILTER: $,
-  FILTERRESET: E,
-  MQTT_UNSUBSCRIBE_ALL: B,
-  OGC_STA_STORE_FACTORY: F,
-  UPDATE_MQTT_SUBSCRIPTIONS: W,
-  activate: Y,
-  deactivate: K,
-  factorySymbol: Bt
-}, Symbol.toStringTag, { value: "Module" })), A = "org.eclipse.daanse.board.app.lib.datasource.ogcsta", Yt = "0.0.1-next.1";
-async function te(e) {
+  FILTER: w,
+  FILTERRESET: C,
+  IOGCSTAConfigurationImpl: I,
+  MQTT_UNSUBSCRIBE_ALL: X,
+  OGC_STA_STORE_FACTORY: M,
+  OgcstaFactory: x,
+  OgcstaPackage: b,
+  UPDATE_MQTT_SUBSCRIPTIONS: Z,
+  activate: P,
+  deactivate: j,
+  factorySymbol: ne
+}, Symbol.toStringTag, { value: "Module" })), z = "org.eclipse.daanse.board.app.lib.datasource.ogcsta", oe = "0.0.1-next.1";
+async function he(e) {
   const t = globalThis.__tsm__;
   if (!t)
-    throw new Error(`${A}: tsm runtime is not initialized`);
-  t.register(A, Wt, Yt, "lib.datasource.ogcsta"), await Y?.(e);
+    throw new Error(`${z}: tsm runtime is not initialized`);
+  t.register(z, se, oe, "lib.datasource.ogcsta"), await P?.(e);
 }
-async function ee(e) {
-  await K?.(e);
+async function pe(e) {
+  await j?.(e);
 }
 export {
-  $ as FILTER,
-  E as FILTERRESET,
-  B as MQTT_UNSUBSCRIBE_ALL,
-  F as OGC_STA_STORE_FACTORY,
-  W as UPDATE_MQTT_SUBSCRIPTIONS,
-  te as activate,
-  ee as deactivate,
-  Bt as factorySymbol
+  w as FILTER,
+  C as FILTERRESET,
+  I as IOGCSTAConfigurationImpl,
+  X as MQTT_UNSUBSCRIBE_ALL,
+  M as OGC_STA_STORE_FACTORY,
+  x as OgcstaFactory,
+  b as OgcstaPackage,
+  Z as UPDATE_MQTT_SUBSCRIPTIONS,
+  he as activate,
+  pe as deactivate,
+  ne as factorySymbol
 };

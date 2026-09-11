@@ -5,26 +5,19 @@
  * @generated
  */
 
-import { IBaseConnectionConfiguration } from 'org.eclipse.daanse.board.app.lib.datasource.base';
-import { Documentation, Attribute, ModelClass } from 'org.eclipse.daanse.board.app.lib.annotations';
+import type { EList } from '@emfts/core';
+import type { IBaseConnectionConfiguration } from 'org.eclipse.daanse.board.app.lib.datasource.base';
 
-@Documentation("Represents the configuration for a CSV data store, extending the base connection configuration.")
-@ModelClass({ type: 'http://org.eclipse.daanse.board.app.lib.datasource.csv#//ICsvStoreConfiguration' })
-export class ICsvStoreConfiguration extends IBaseConnectionConfiguration {
-  @Documentation("The URL of the CSV resource (e.g., a file path or web URL).")
-  @Attribute()
+/**
+ * ICsvStoreConfiguration
+ * @generated
+ */
+export interface ICsvStoreConfiguration extends IBaseConnectionConfiguration {
   resourceUrl?: string;
-
-  @Documentation("A reference or ID to a connection configuration used to access the resource.")
-  @Attribute()
   connection?: string;
-
-  @Documentation("The optional interval in milliseconds to poll the CSV resource for updates. If not specified, polling might be disabled or use a default value.")
-  @Attribute()
   pollingInterval?: number;
-
-  @Documentation("A list of possible separator characters used in the CSV file (e.g., ',', ';', '\\t').")
-  @Attribute()
-  separators: string[] = [];
+  separators: EList<string>;
+  skipRowsFromStart?: number;
+  skipRowsFromEnd?: number;
 
 }

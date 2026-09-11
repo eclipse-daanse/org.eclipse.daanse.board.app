@@ -11,10 +11,10 @@
  *   Smart City Jena
  **********************************************************************/
 
-import { BaseDatasource, IBaseConnectionConfiguration } from 'org.eclipse.daanse.board.app.lib.datasource.base'
+import { BaseDatasource, IBaseConnectionConfiguration, type ConfigurationOf } from 'org.eclipse.daanse.board.app.lib.datasource.base'
 import { identifier, DatasourceRepository } from 'org.eclipse.daanse.board.app.lib.api.datasource';
 
-export interface IChartComposerConfiguration extends IBaseConnectionConfiguration {
+export interface IChartComposerConfiguration extends ConfigurationOf<IBaseConnectionConfiguration> {
   connectedDatasources: string[];
   composeBy: string;
   usedSets: string[];
@@ -44,7 +44,7 @@ export class ChartComposer extends BaseDatasource {
   private usedSets: string[] = [];
   private labelColumn: string = '';
 
-  init(configuration: IBaseConnectionConfiguration): void {
+  init(configuration: ConfigurationOf<IChartComposerConfiguration>): void {
       super.init(configuration);
 
       this.connectedDatasources = configuration.connectedDatasources;

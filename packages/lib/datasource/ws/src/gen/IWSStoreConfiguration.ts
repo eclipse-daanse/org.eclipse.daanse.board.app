@@ -5,18 +5,15 @@
  * @generated
  */
 
-import { IBaseConnectionConfiguration } from 'org.eclipse.daanse.board.app.lib.datasource.base';
-import { Documentation, Attribute, ModelClass } from 'org.eclipse.daanse.board.app.lib.annotations';
+import type { IBaseConnectionConfiguration } from 'org.eclipse.daanse.board.app.lib.datasource.base';
 
-@Documentation("Represents the configuration for a WebSocket (WS) data store, extending the base connection configuration.")
-@ModelClass({ type: 'http://org.eclipse.daanse.board.app.lib.datasource.websocket#//IWSStoreConfiguration' })
-export class IWSStoreConfiguration extends IBaseConnectionConfiguration {
-  @Documentation("A reference or ID to a WebSocket connection configuration.")
-  @Attribute()
+/**
+ * IWSStoreConfiguration
+ * @generated
+ */
+export interface IWSStoreConfiguration extends IBaseConnectionConfiguration {
   connection?: string;
-
-  @Documentation("An optional topic to subscribe to or publish on the WebSocket connection.")
-  @Attribute()
   topic?: string;
+  accumulate?: boolean;
 
 }

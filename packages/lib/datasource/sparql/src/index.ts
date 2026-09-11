@@ -13,6 +13,15 @@ import type { ISparqlStoreConfiguration } from './interfaces/ISparqlStoreConfigu
 import { symbol } from './interfaces/Constances'
 import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
 import { serviceId } from 'org.eclipse.daanse.board.app.lib.core'
+import { SparqlstorePackage } from './gen/SparqlstorePackage'
+import { SparqlstoreFactory } from './gen/SparqlstoreFactory'
+import { ISparqlStoreConfigurationImpl } from './gen/ISparqlStoreConfigurationImpl'
+/*
+ * Building the EPackage on load: until it exists the class literals are
+ * null, an instance cannot say what it is, and nothing can render a form
+ * from the model.
+ */
+void SparqlstorePackage.eINSTANCE
 
 /** Typed service id - the name and the contract declared once, here. */
 const SPARQL_STORE = serviceId<(config: ISparqlStoreConfiguration) => SparqlStore>('SparqlStore')
@@ -49,3 +58,4 @@ export function deactivate({ services }: ActivationContext) {
 // }
 
 export { symbol, SparqlStore, ISparqlStoreConfiguration }
+export { SparqlstorePackage, SparqlstoreFactory, ISparqlStoreConfigurationImpl }
