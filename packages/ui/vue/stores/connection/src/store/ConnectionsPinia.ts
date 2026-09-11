@@ -61,14 +61,39 @@ export const useConnectionsStore = defineStore('connections', () => {
    */
   const connectionRepository = requireRepository()
 
+  /**
+   * Puts a connection into the repository, where the live object that talks
+   * to it is built.
+   *
+   * Every path that adds or changes one goes through here - creating,
+   * editing, loading a stored board, and the list this store starts with.
+   * That last one used to be missed: the seeded connection existed in the
+   * array and nowhere else, so every datasource reading through it failed
+   * with "Connection with id test not found" until someone opened the
+   * connection and pressed save. There is no autoload, so on a normal start
+   * this list is all there is.
+   *
+   * The uid, name and type are copied into the config because that is where
+   * a connection's own init() reads them.
+   */
+  const register = (connection: ConnectionDTO) => {
+    connection.config['name'] = connection.name
+    connection.config['type'] = connection.type
+    connection.config['uid'] = connection.uid
+    connectionRepository.registerConnection(
+      connection.uid,
+      connection.type,
+      connection.config as BaseConnectionConfig,
+    )
+  }
+
+  connections.value.forEach(register)
+
   const createConnection = (type: any, config: any = {}) => {
     const uid = Math.random().toString(36).substring(7)
-    const name = 'Connection ' + uid
-    config['name'] = name;
-    config['type'] = type;
-    config['uid'] = uid;
-    connectionRepository.registerConnection(uid, type, config)
-    connections.value.push({ uid, type, name, config })
+    const connection: ConnectionDTO = { uid, type, name: 'Connection ' + uid, config }
+    connections.value.push(connection)
+    register(connection)
     return uid;
   }
 
@@ -89,28 +114,15 @@ export const useConnectionsStore = defineStore('connections', () => {
     connection.type = connectionProxy.type
     connection.name = connectionProxy.name
     connection.config = connectionProxy.config
-    connection.config['name'] = connectionProxy.name
-    connection.config['type'] =connectionProxy.type
-    connection.config['uid'] =connectionProxy.uid
 
-    connectionRepository.registerConnection(connectionId, connection.type, connection.config as BaseConnectionConfig)
-    console.log(connectionRepository)
+    register(connection)
   }
 
   const updateConnections = (connectionProxies: ConnectionDTO[]) => {
     connections.value.splice(0)
     connectionProxies.forEach((connectionProxy) => {
       connections.value.push(connectionProxy)
-
-      connectionProxy.config['name'] = connectionProxy.name
-      connectionProxy.config['type'] =connectionProxy.type
-      connectionProxy.config['uid'] =connectionProxy.uid
-
-      connectionRepository.registerConnection(
-        connectionProxy.uid,
-        connectionProxy.type,
-        connectionProxy.config as BaseConnectionConfig,
-      )
+      register(connectionProxy)
     })
   }
 

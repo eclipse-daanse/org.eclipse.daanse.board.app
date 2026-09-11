@@ -62,14 +62,37 @@ export const useDataSourcesStore = defineStore('datasource', () => {
    */
   const datasourceRepository = requireRepository()
 
+  /**
+   * Puts a data source into the repository, where the live store that reads
+   * it is built.
+   *
+   * Every path that adds or changes one goes through here - creating,
+   * editing, loading a stored board, and the list this store starts with.
+   * That last one used to be missed, and there is no autoload, so on a
+   * normal start this list is all there is.
+   *
+   * The uid, name and type are copied into the config because that is where
+   * a store's own init() reads them.
+   */
+  const register = (dataSource: DataSourceDTO) => {
+    if (!dataSource.config) dataSource.config = {}
+    dataSource.config['name'] = dataSource.name
+    dataSource.config['type'] = dataSource.type
+    dataSource.config['uid'] = dataSource.uid
+    datasourceRepository.registerDatasource(
+      dataSource.uid,
+      dataSource.type,
+      dataSource.config,
+    )
+  }
+
+  dataSources.value.forEach(register)
+
   const createDataSource = (type: any, config: any = {}) => {
     const uid = Math.random().toString(36).substring(7)
-    const name = 'DataSource ' + uid
-    config['name'] = name;
-    config['type'] = type;
-    config['uid'] = uid;
-    datasourceRepository.registerDatasource(uid, type, config)
-    dataSources.value.push({ uid, type, name, config })
+    const dataSource: DataSourceDTO = { uid, type, name: 'DataSource ' + uid, config }
+    dataSources.value.push(dataSource)
+    register(dataSource)
     return uid;
   }
 
@@ -90,30 +113,16 @@ export const useDataSourcesStore = defineStore('datasource', () => {
     dataSource.uid = dataSourceProxy.uid
     dataSource.type = dataSourceProxy.type
     dataSource.name = dataSourceProxy.name
-    dataSource.config = dataSourceProxy.config??{}
+    dataSource.config = dataSourceProxy.config ?? {}
 
-    dataSource.config['name'] = dataSourceProxy.name
-    dataSource.config['type'] =dataSourceProxy.type
-    dataSource.config['uid'] =dataSourceProxy.uid
-
-    datasourceRepository.registerDatasource(dataSourceId, dataSource.type, dataSource.config)
-    console.log(datasourceRepository)
+    register(dataSource)
   }
 
   const updateDataSources = (dataSourceProxies: DataSourceDTO[]) => {
     dataSources.value.splice(0)
     dataSourceProxies.forEach((dataSourceProxy) => {
       dataSources.value.push(dataSourceProxy)
-      if(!dataSourceProxy.config)dataSourceProxy.config = {};
-      dataSourceProxy.config['name'] = dataSourceProxy.name
-      dataSourceProxy.config['type'] =dataSourceProxy.type
-      dataSourceProxy.config['uid'] =dataSourceProxy.uid
-
-      datasourceRepository.registerDatasource(
-        dataSourceProxy.uid,
-        dataSourceProxy.type,
-        dataSourceProxy.config,
-      )
+      register(dataSourceProxy)
     })
   }
 

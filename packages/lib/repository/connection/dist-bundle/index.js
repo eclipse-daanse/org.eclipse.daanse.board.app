@@ -1,7 +1,7 @@
-import { CONNECTION_REPOSITORY as c, identifier as u } from "org.eclipse.daanse.board.app.lib.api.connection";
-import { CONNECTION_REPOSITORY as O, identifier as _ } from "org.eclipse.daanse.board.app.lib.api.connection";
-const i = /* @__PURE__ */ new Map();
-class f {
+import { CONNECTION_REPOSITORY as s, identifier as u } from "org.eclipse.daanse.board.app.lib.api.connection";
+import { CONNECTION_REPOSITORY as O, identifier as w } from "org.eclipse.daanse.board.app.lib.api.connection";
+const o = /* @__PURE__ */ new Map();
+class y {
   constructor(e) {
     this.resolver = e;
   }
@@ -16,10 +16,10 @@ class f {
   availableConnections = {};
   connectionsByType = {};
   removeConnection(e) {
-    i.has(e) && i.delete(e);
+    o.has(e) && o.delete(e);
   }
   getConnection(e) {
-    const n = i.get(e);
+    const n = o.get(e);
     if (!n)
       throw new Error(`Connection with id ${e} not found`);
     return n;
@@ -53,8 +53,8 @@ class f {
   }
   getConnectionId(e) {
     let n;
-    return i.forEach((r, o) => {
-      e === r && (n = o);
+    return o.forEach((r, i) => {
+      e === r && (n = i);
     }), n;
   }
   getConnectionTypeFromConnection(e) {
@@ -63,31 +63,35 @@ class f {
       return this.getConnectionType(n);
   }
   registerConnection(e, n, r) {
-    const o = this.availableConnections[n];
-    if (o) {
-      const C = this.resolveIdentifier(o.Connection)(r);
-      i.set(e, C), this.connectionsByType[e] = n;
+    const i = this.availableConnections[n];
+    if (!i) {
+      console.warn(
+        `Connection "${e}" not registered: no connection type "${n}". Known types: ${Object.keys(this.availableConnections).join(", ") || "none"}`
+      );
+      return;
     }
+    const C = this.resolveIdentifier(i.Connection)(r);
+    o.set(e, C), this.connectionsByType[e] = n;
   }
 }
 function a({ services: t }) {
-  t.register(c, new f(t));
+  t.register(s, new y(t));
 }
 function l({ services: t }) {
-  t.unregister(c);
+  t.unregister(s);
 }
-const y = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const f = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  CONNECTION_REPOSITORY: c,
+  CONNECTION_REPOSITORY: s,
   activate: a,
   deactivate: l,
   identifier: u
-}, Symbol.toStringTag, { value: "Module" })), s = "org.eclipse.daanse.board.app.lib.repository.connection", d = "0.0.1-next.1";
+}, Symbol.toStringTag, { value: "Module" })), c = "org.eclipse.daanse.board.app.lib.repository.connection", g = "0.0.1-next.1";
 async function h(t) {
   const e = globalThis.__tsm__;
   if (!e)
-    throw new Error(`${s}: tsm runtime is not initialized`);
-  e.register(s, y, d, "lib.repository.connection"), await a?.(t);
+    throw new Error(`${c}: tsm runtime is not initialized`);
+  e.register(c, f, g, "lib.repository.connection"), await a?.(t);
 }
 async function v(t) {
   await l?.(t);
@@ -96,5 +100,5 @@ export {
   O as CONNECTION_REPOSITORY,
   h as activate,
   v as deactivate,
-  _ as identifier
+  w as identifier
 };

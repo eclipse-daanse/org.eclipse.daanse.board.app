@@ -93,12 +93,23 @@ export class DatasourceRepository implements IDatasourceRepository {
   registerDatasource(datasourceId: string, type: string, config: any): void {
     const identifiers = this.availableDatasources[type]
 
-    if (identifiers) {
-      const datasourceFactory = this.resolveIdentifier<(c: unknown) => IDataRetrieveable>(identifiers.Store)
-      const datasource = datasourceFactory(config)
-      datasources.set(datasourceId, datasource)
-      this.datasourcesByType[datasourceId] = type
+    /*
+     * Saying so rather than dropping it: the caller asked for a source of
+     * this type to exist, and it will not. Every widget reading from it
+     * fails later with "Store with id ... not found", far from here.
+     */
+    if (!identifiers) {
+      console.warn(
+        `Datasource "${datasourceId}" not registered: no datasource type "${type}". ` +
+          `Known types: ${Object.keys(this.availableDatasources).join(', ') || 'none'}`,
+      )
+      return
     }
+
+    const datasourceFactory = this.resolveIdentifier<(c: unknown) => IDataRetrieveable>(identifiers.Store)
+    const datasource = datasourceFactory(config)
+    datasources.set(datasourceId, datasource)
+    this.datasourcesByType[datasourceId] = type
   }
   getDatasourceType(datasourceId: string) {
     return this.datasourcesByType[datasourceId]

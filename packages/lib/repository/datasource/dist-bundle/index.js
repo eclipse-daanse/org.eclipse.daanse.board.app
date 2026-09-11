@@ -1,5 +1,5 @@
 import { DATASOURCE_REPOSITORY as i, identifier as D } from "org.eclipse.daanse.board.app.lib.api.datasource";
-import { DATASOURCE_REPOSITORY as O, identifier as R } from "org.eclipse.daanse.board.app.lib.api.datasource";
+import { DATASOURCE_REPOSITORY as O, identifier as w } from "org.eclipse.daanse.board.app.lib.api.datasource";
 const a = /* @__PURE__ */ new Map();
 class n {
   constructor(e) {
@@ -48,10 +48,14 @@ class n {
   }
   registerDatasource(e, t, o) {
     const s = this.availableDatasources[t];
-    if (s) {
-      const d = this.resolveIdentifier(s.Store)(o);
-      a.set(e, d), this.datasourcesByType[e] = t;
+    if (!s) {
+      console.warn(
+        `Datasource "${e}" not registered: no datasource type "${t}". Known types: ${Object.keys(this.availableDatasources).join(", ") || "none"}`
+      );
+      return;
     }
+    const d = this.resolveIdentifier(s.Store)(o);
+    a.set(e, d), this.datasourcesByType[e] = t;
   }
   getDatasourceType(e) {
     return this.datasourcesByType[e];
@@ -81,12 +85,12 @@ const y = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   activate: u,
   deactivate: l,
   identifier: D
-}, Symbol.toStringTag, { value: "Module" })), c = "org.eclipse.daanse.board.app.lib.repository.datasource", f = "0.0.1-next.1";
+}, Symbol.toStringTag, { value: "Module" })), c = "org.eclipse.daanse.board.app.lib.repository.datasource", g = "0.0.1-next.1";
 async function h(r) {
   const e = globalThis.__tsm__;
   if (!e)
     throw new Error(`${c}: tsm runtime is not initialized`);
-  e.register(c, y, f, "lib.repository.datasource"), await u?.(r);
+  e.register(c, y, g, "lib.repository.datasource"), await u?.(r);
 }
 async function v(r) {
   await l?.(r);
@@ -96,5 +100,5 @@ export {
   n as DatasourceRepository,
   h as activate,
   v as deactivate,
-  R as identifier
+  w as identifier
 };

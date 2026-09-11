@@ -120,11 +120,22 @@ export class ConnectionRepository {
   ): void {
     const identifiers = this.availableConnections[type]
 
-    if (identifiers) {
-      const connectionFactory = this.resolveIdentifier<(c: BaseConnectionConfig) => IConnection | PubSubConnection>(identifiers.Connection)
-      const connection = connectionFactory(connectionConfig)
-      connections.set(connectionId, connection)
-      this.connectionsByType[connectionId] = type
+    /*
+     * Saying so rather than dropping it: the caller asked for a connection
+     * of this type to exist, and it will not. Everything reading through it
+     * fails later with "Connection with id ... not found", far from here.
+     */
+    if (!identifiers) {
+      console.warn(
+        `Connection "${connectionId}" not registered: no connection type "${type}". ` +
+          `Known types: ${Object.keys(this.availableConnections).join(', ') || 'none'}`,
+      )
+      return
     }
+
+    const connectionFactory = this.resolveIdentifier<(c: BaseConnectionConfig) => IConnection | PubSubConnection>(identifiers.Connection)
+    const connection = connectionFactory(connectionConfig)
+    connections.set(connectionId, connection)
+    this.connectionsByType[connectionId] = type
   }
 }
