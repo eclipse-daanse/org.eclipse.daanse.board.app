@@ -4,10 +4,10 @@ import { CONNECTION_REPOSITORY as U } from "org.eclipse.daanse.board.app.lib.api
 import p from "org.eclipse.daanse.board.app.lib.utils.helpers";
 import { createBasicEList as L, BasicEFactory as m, BasicEPackage as C, EPackageRegistry as T, BasicEClass as y, BasicEAttribute as l, getEcorePackage as _ } from "@emfts/core";
 const { serviceId: f } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
-var P = Object.defineProperty, k = (o, t, e, R) => {
-  for (var n = void 0, i = o.length - 1, a; i >= 0; i--)
-    (a = o[i]) && (n = a(t, e, n) || n);
-  return n && P(t, e, n), n;
+var P = Object.defineProperty, k = (n, t, e, R) => {
+  for (var o = void 0, i = n.length - 1, a; i >= 0; i--)
+    (a = n[i]) && (o = a(t, e, o) || o);
+  return o && P(t, e, o), o;
 };
 class N extends w {
   connection;
@@ -18,7 +18,16 @@ class N extends w {
   connectionRepository;
   init(t) {
     super.init(t), this.connection = t.connection, this.parseOptions = {
-      separators: Array.from(t.separators ?? [])
+      /*
+       * Left out entirely when the configuration names none: the parser
+       * falls back to a comma through a default parameter, and a default
+       * parameter only fires on undefined. An empty list would be taken as
+       * "split on nothing" and put every line in one column.
+       *
+       * A many-valued feature is an EList on the model and a plain array in
+       * a stored board; both are iterable.
+       */
+      separators: t.separators ? Array.from(t.separators) : void 0
     }, this.skipRowsFromStart = t.skipRowsFromStart ?? 0, this.skipRowsFromEnd = t.skipRowsFromEnd ?? 0, this.resourceUrl = super.initVariable(t.resourceUrl ?? ""), this.pollingInterval = t.pollingInterval ?? 5e3, this.pollingEnabled && this.startPolling(this.pollingInterval);
   }
   async getOriginalData() {
@@ -34,15 +43,15 @@ class N extends w {
       this.connection
     ).fetch({ url: this.resourceUrl?.value || "" });
     if (!R.ok) return null;
-    let n = await R.text();
+    let o = await R.text();
     if (this.skipRowsFromStart > 0 || this.skipRowsFromEnd > 0) {
-      const a = n.split(`
+      const a = o.split(`
 `), c = this.skipRowsFromStart, E = this.skipRowsFromEnd > 0 ? a.length - this.skipRowsFromEnd : a.length;
-      n = a.slice(c, E).join(`
+      o = a.slice(c, E).join(`
 `);
     }
     const i = p.csv.parse(
-      n,
+      o,
       this.parseOptions || {}
     );
     return i.header = i.header.map((a) => typeof a == "string" ? a.trim() : a), i.rows = i.rows.map(
@@ -50,8 +59,8 @@ class N extends w {
     ), i.mappedRows = i.mappedRows.map((a) => {
       const c = {};
       for (const [E, S] of Object.entries(a)) {
-        const d = typeof E == "string" ? E.trim() : E;
-        c[d] = typeof S == "string" ? S.trim() : S;
+        const F = typeof E == "string" ? E.trim() : E;
+        c[F] = typeof S == "string" ? S.trim() : S;
       }
       return c;
     }), console.log(i), t === "DataTable" ? {
@@ -343,10 +352,10 @@ class O extends m {
     }
   }
 }
-function V(o) {
-  const t = T.INSTANCE.getEPackage(o);
+function V(n) {
+  const t = T.INSTANCE.getEPackage(n);
   if (!t)
-    throw new Error(`EPackage '${o}' is not registered. Access the eINSTANCE of that model's generated package (or register it via EPackageRegistry.INSTANCE.registerPackage) before initializing CsvstorePackage.`);
+    throw new Error(`EPackage '${n}' is not registered. Access the eINSTANCE of that model's generated package (or register it via EPackageRegistry.INSTANCE.registerPackage) before initializing CsvstorePackage.`);
   return t;
 }
 class r extends C {
@@ -384,8 +393,8 @@ class r extends C {
     e.setName("resourceUrl"), e.setLowerBound(0), e.setUpperBound(1), t.getEStructuralFeatures().push(e), r.Literals.I_CSV_STORE_CONFIGURATION__RESOURCE_URL = e;
     const R = new l();
     R.setName("connection"), R.setLowerBound(0), R.setUpperBound(1), t.getEStructuralFeatures().push(R), r.Literals.I_CSV_STORE_CONFIGURATION__CONNECTION = R;
-    const n = new l();
-    n.setName("pollingInterval"), n.setLowerBound(0), n.setUpperBound(1), t.getEStructuralFeatures().push(n), r.Literals.I_CSV_STORE_CONFIGURATION__POLLING_INTERVAL = n;
+    const o = new l();
+    o.setName("pollingInterval"), o.setLowerBound(0), o.setUpperBound(1), t.getEStructuralFeatures().push(o), r.Literals.I_CSV_STORE_CONFIGURATION__POLLING_INTERVAL = o;
     const i = new l();
     i.setName("separators"), i.setLowerBound(0), i.setUpperBound(-1), t.getEStructuralFeatures().push(i), r.Literals.I_CSV_STORE_CONFIGURATION__SEPARATORS = i;
     const a = new l();
@@ -396,18 +405,18 @@ class r extends C {
 }
 r.eINSTANCE;
 const u = f("CsvStoreFactory"), D = Symbol.for(u);
-function I({ services: o }) {
-  o.register(u, (t) => {
+function I({ services: n }) {
+  n.register(u, (t) => {
     if (!N.validateConfiguration(t))
       throw new Error(
         "Invalid CsvStore configuration. Please provide a valid configuration."
       );
-    const e = o.construct(N);
+    const e = n.construct(N);
     return e.init(t), e;
   });
 }
-function F({ services: o }) {
-  o.unregister(u);
+function d({ services: n }) {
+  n.unregister(u);
 }
 const G = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
@@ -416,17 +425,17 @@ const G = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   CsvstorePackage: r,
   ICsvStoreConfigurationImpl: s,
   activate: I,
-  deactivate: F,
+  deactivate: d,
   factorySymbol: D
 }, Symbol.toStringTag, { value: "Module" })), h = "org.eclipse.daanse.board.app.lib.datasource.csv", b = "0.0.1-next.1";
-async function x(o) {
+async function x(n) {
   const t = globalThis.__tsm__;
   if (!t)
     throw new Error(`${h}: tsm runtime is not initialized`);
-  t.register(h, G, b, "lib.datasource.csv"), await I?.(o);
+  t.register(h, G, b, "lib.datasource.csv"), await I?.(n);
 }
-async function j(o) {
-  await F?.(o);
+async function j(n) {
+  await d?.(n);
 }
 export {
   u as CSV_STORE_FACTORY,

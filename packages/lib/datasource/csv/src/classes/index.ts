@@ -48,7 +48,18 @@ export class CsvStore extends BaseDatasource {
 
     this.connection = configuration.connection
     this.parseOptions = {
-      separators: Array.from(configuration.separators ?? []),
+      /*
+       * Left out entirely when the configuration names none: the parser
+       * falls back to a comma through a default parameter, and a default
+       * parameter only fires on undefined. An empty list would be taken as
+       * "split on nothing" and put every line in one column.
+       *
+       * A many-valued feature is an EList on the model and a plain array in
+       * a stored board; both are iterable.
+       */
+      separators: configuration.separators
+        ? Array.from(configuration.separators)
+        : undefined,
     }
     this.skipRowsFromStart = configuration.skipRowsFromStart ?? 0
     this.skipRowsFromEnd = configuration.skipRowsFromEnd ?? 0
