@@ -17,7 +17,6 @@ import type { ConnectionRepository } from 'org.eclipse.daanse.board.app.lib.api.
 import { CONNECTION_REPOSITORY, identifier } from 'org.eclipse.daanse.board.app.lib.api.connection'
 import { useSparQLEndPointManager } from './sparql/SparqlEndpointRegistry'
 import type { RestConnection } from 'org.eclipse.daanse.board.app.lib.connection.rest'
-import { useConnectionsStore } from 'org.eclipse.daanse.board.app.ui.vue.stores.connection'
 import { DataSourceDTO } from 'org.eclipse.daanse.board.app.ui.vue.stores.datasouce'
 
 /**
@@ -41,11 +40,11 @@ export function activate({ services, log }: ActivationContext) {
 
   services.getRequired<App<any>>('App').use(endpointFinderPlugin)
 
-  const { createConnection } = useConnectionsStore()
-  const conid = createConnection('rest', { url: 'https://www.govdata.de/sparql' })
-
   const connectionRepository = services.getRequired(CONNECTION_REPOSITORY)
-  const verbindung = connectionRepository.getConnection(conid)
+  const created = connectionRepository.createConnection('rest', {
+    url: 'https://www.govdata.de/sparql',
+  })
+  const verbindung = connectionRepository.getConnection(created.uid as string)
 
   useSparQLEndPointManager().registerEndpoint(verbindung as RestConnection, 'SparqlDataEurope')
   useSparQLEndPointManager().setActive('SparqlDataEurope')

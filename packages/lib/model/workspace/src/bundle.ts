@@ -22,7 +22,7 @@ import * as library from './index'
 
 export * from './index'
 
-const LIBRARY_ID = 'org.eclipse.daanse.board.app.ui.vue.stores.connection'
+const LIBRARY_ID = 'org.eclipse.daanse.board.app.lib.model.workspace'
 const VERSION = '0.0.1-next.1'
 
 interface SharedLibraryRuntime {
@@ -41,7 +41,7 @@ export async function activate(context: unknown): Promise<void> {
   if (!runtime) {
     throw new Error(`${LIBRARY_ID}: tsm runtime is not initialized`)
   }
-  runtime.register(LIBRARY_ID, library, VERSION, 'ui.vue.stores.connection')
+  runtime.register(LIBRARY_ID, library, VERSION, 'lib.model.workspace')
   await (library as LifecycleModule).activate?.(context)
 }
 

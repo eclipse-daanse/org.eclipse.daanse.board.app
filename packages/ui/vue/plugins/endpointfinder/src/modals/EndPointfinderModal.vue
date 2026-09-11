@@ -20,7 +20,12 @@ import { VaBadge, VaStepper } from 'vuestic-ui'
 import { type ConnectionRepository, identifier } from 'org.eclipse.daanse.board.app.lib.api.connection'
 import { DatasourceRepository, IDataRetrieveable, identifier as DataSourceIdentifier } from 'org.eclipse.daanse.board.app.lib.api.datasource'
 import SearchResultCard from '../components/Searchcard/SearchResultCard.vue'
-import { ConnectionDTO, useConnectionsStore } from 'org.eclipse.daanse.board.app.ui.vue.stores.connection'
+import { type Connection } from 'org.eclipse.daanse.board.app.lib.api.connection'
+import {
+  identifier as WORKSPACE,
+  type Workspace,
+} from 'org.eclipse.daanse.board.app.lib.model.workspace'
+import { useEList } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import { DataSourceDTO, useDataSourcesStore } from 'org.eclipse.daanse.board.app.ui.vue.stores.datasouce'
 import FilterModal from './FilterModal.vue'
 import { WidgetRepository, identifier as widgetRepoIdentifier } from 'org.eclipse.daanse.board.app.lib.api.widget'
@@ -46,7 +51,8 @@ const step = ref(0)
 const formRef = ref()
 const connectionForm = ref()
 
-const { connections, createConnection } = useConnectionsStore()
+const connectionRepository = inject<ConnectionRepository>(identifier)!
+const connections = useEList(inject<Workspace>(WORKSPACE)!, (w) => w.connections)
 const { dataSources, createDataSource,updateDataSource } = useDataSourcesStore()
 
 
@@ -136,7 +142,7 @@ const search = async () => {
 const connectionManager = inject<ConnectionRepository>(identifier)!
 const storeManager = inject<DatasourceRepository>(DataSourceIdentifier)!
 const types = storeManager.getDataSourceTypes()
-let ds = ref<ConnectionDTO | undefined>()
+let ds = ref<Connection | undefined>()
 const ds_type = ref('rest')
 let store: any = ref<IDataRetrieveable | undefined>()
 const ds_notFountInfo = ref(false)
@@ -192,7 +198,7 @@ watch(step, (val) => {
 
 })
 const createConnectionFromFormat = (format: string, url: string) => {
-  let con: ConnectionDTO | undefined = undefined
+  let con: Connection | undefined = undefined
 
   const availableTypes = connectionManager.getRegisteredTypes()
   switch ('<' + format + '>') {
@@ -201,14 +207,12 @@ const createConnectionFromFormat = (format: string, url: string) => {
     case Formats.REST:
     case Formats.OGCSTA:
       if (availableTypes.includes('rest')) {
-        const id = createConnection('rest', { url: url })
-        con = connections.find((con: ConnectionDTO) => con.uid === id)
+        con = connectionRepository.createConnection('rest', { url: url })
       }
       break
     case Formats.XMLA:
       if (availableTypes.includes('xmla')) {
-        const id = createConnection('xmla', { url: url })
-        con = connections.find((con: ConnectionDTO) => con.uid === id)
+        con = connectionRepository.createConnection('xmla', { url: url })
       }
       break
 

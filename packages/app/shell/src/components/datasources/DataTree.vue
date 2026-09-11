@@ -28,11 +28,37 @@ Contributors:
  * difference between changing a setting and changing five widgets on two
  * boards.
  */
-import { computed, ref } from 'vue'
-import { useConnectionsStore } from 'org.eclipse.daanse.board.app.ui.vue.stores.connection'
+import { computed, inject, ref } from 'vue'
+import {
+  type ConnectionRepository,
+  identifier as CONNECTION_REPOSITORY,
+} from 'org.eclipse.daanse.board.app.lib.api.connection'
+import {
+  identifier as WORKSPACE,
+  type Workspace,
+} from 'org.eclipse.daanse.board.app.lib.model.workspace'
+import { useEList } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import { useDataSourcesStore } from 'org.eclipse.daanse.board.app.ui.vue.stores.datasouce'
 import { DButton, DIcon, DInput, DModal } from 'org.eclipse.daanse.board.app.ui.vue.controls'
 import { useDatasourceUsage } from '@/composables/useDatasourceUsage'
+
+/** A source as the tree shows it. */
+interface Row {
+  uid: string
+  name: string
+  type: string
+  usage: string
+}
+
+/** A connection with what hangs under it, or the bucket for the loose ones. */
+interface Group {
+  uid: string
+  name: string
+  type: string
+  orphan: boolean
+  sources: Row[]
+  itself: boolean
+}
 
 export interface Selection {
   type: 'Connection' | 'DataSource'
@@ -41,7 +67,13 @@ export interface Selection {
 
 const selected = defineModel<Selection | undefined>()
 
-const { connections, createConnection, removeConnection } = useConnectionsStore()
+const connectionRepository = inject<ConnectionRepository>(CONNECTION_REPOSITORY)!
+/*
+ * Straight from the model: the list is what the workspace holds, and the
+ * adapter behind useEList re-renders this tree when one is added, renamed or
+ * removed - no second copy to keep in step.
+ */
+const connections = useEList(inject<Workspace>(WORKSPACE)!, (w) => w.connections)
 const { dataSources, createDataSource, removeDataSource } = useDataSourcesStore()
 const { usageByDatasource, usageLabel } = useDatasourceUsage()
 
@@ -58,7 +90,7 @@ const groups = computed(() => {
   const matches = (...words: (string | undefined)[]) =>
     !term || words.some((w) => (w ?? '').toLowerCase().includes(term))
 
-  const sourcesOf = (connectionId: string | undefined) =>
+  const sourcesOf = (connectionId: string | undefined): Row[] =>
     dataSources
       .filter((source: any) => (source.config?.connection ?? undefined) === connectionId)
       .filter((source: any) => matches(source.name, source.type, source.uid))
@@ -69,10 +101,12 @@ const groups = computed(() => {
         usage: usageLabel(usage[source.uid] ?? { boards: 0, widgets: 0 }),
       }))
 
-  const known = connections.map((connection: any) => ({
-    uid: connection.uid,
-    name: connection.name,
-    type: connection.type,
+  const known: Group[] = connections.value.map((connection) => ({
+    /* A connection just created has no type yet, and the row says so by
+       showing none - the model has every feature optional for that reason. */
+    uid: connection.uid ?? '',
+    name: connection.name ?? '',
+    type: connection.type ?? '',
     orphan: false,
     sources: sourcesOf(connection.uid),
     /* A connection stays visible while its own name matches, even with no
@@ -80,8 +114,8 @@ const groups = computed(() => {
     itself: matches(connection.name, connection.type, connection.uid),
   }))
 
-  const attached = new Set(connections.map((c: any) => c.uid))
-  const loose = dataSources
+  const attached = new Set(connections.value.map((c) => c.uid))
+  const loose: Row[] = dataSources
     .filter((source: any) => !attached.has(source.config?.connection))
     .filter((source: any) => matches(source.name, source.type, source.uid))
     .map((source: any) => ({
@@ -122,7 +156,8 @@ function select(type: Selection['type'], itemId: string) {
 
 /* A new thing is selected straight away: it is what you came to fill in. */
 function addConnection() {
-  select('Connection', createConnection(null))
+  /* No type yet - the person picks one in the editor that opens next. */
+  select('Connection', connectionRepository.createConnection('').uid as string)
 }
 
 function addDataSource() {
@@ -138,7 +173,7 @@ function confirmRemove(type: Selection['type'], itemId: string) {
 function doRemove() {
   const target = removing.value
   if (!target) return
-  if (target.type === 'Connection') removeConnection(target.itemId)
+  if (target.type === 'Connection') connectionRepository.removeConnection(target.itemId)
   else removeDataSource(target.itemId)
   if (isSelected(target.type, target.itemId)) selected.value = undefined
   removing.value = undefined
@@ -149,7 +184,7 @@ const removingLabel = computed(() => {
   if (!target) return ''
   const held =
     target.type === 'Connection'
-      ? connections.find((c: any) => c.uid === target.itemId)
+      ? connections.value.find((c: any) => c.uid === target.itemId)
       : dataSources.find((d: any) => d.uid === target.itemId)
   return held?.name ?? target.itemId
 })

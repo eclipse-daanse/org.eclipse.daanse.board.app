@@ -17,7 +17,11 @@ import {
   identifier,
 } from 'org.eclipse.daanse.board.app.lib.api.datasource'
 import { useDataSourcesStore } from 'org.eclipse.daanse.board.app.ui.vue.stores.datasouce'
-import { useConnectionsStore } from 'org.eclipse.daanse.board.app.ui.vue.stores.connection'
+import {
+  identifier as WORKSPACE,
+  type Workspace,
+} from 'org.eclipse.daanse.board.app.lib.model.workspace'
+import { useEList } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import { cloneDeep } from 'lodash'
 import { DButton, DInput, DSelect } from 'org.eclipse.daanse.board.app.ui.vue.controls'
 
@@ -40,7 +44,7 @@ const datasourceProxy = ref({} as any)
 
 const datasourceRepository = inject<DatasourceRepository>(identifier)!
 const { dataSources, updateDataSource } = useDataSourcesStore()
-const { connections } = useConnectionsStore()
+const connections = useEList(inject<Workspace>(WORKSPACE)!, (w) => w.connections)
 
 const availableDatasources = computed(() => {
   return datasourceRepository.registeredDatasources

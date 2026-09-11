@@ -50,6 +50,10 @@ import { initBoardBackdrop } from './composables/useBoardBackdrop'
 import { initGridSnap } from './composables/useGridSnap'
 import { registerSystemActions } from './systemActions'
 import { registerTestActions } from './testActions'
+import {
+  CONNECTION_REPOSITORY,
+  type ConnectionRepository,
+} from 'org.eclipse.daanse.board.app.lib.api.connection'
 import { provideVariablesStoreDependencies } from './stores/VariablesPinia'
 
 let app: VueApp | undefined
@@ -140,6 +144,25 @@ export async function activate({ services, log }: ActivationContext) {
 
   // The one service the shell owns: the app instance it just created.
   services.register(APP, app)
+
+  /*
+   * What an empty workspace starts with.
+   *
+   * It used to be a hard-coded entry in the connections store, which is
+   * both the wrong layer for it and the reason it was never registered with
+   * anything. Deciding what an application opens with is the application's
+   * business, so it is here - and only when nothing has been loaded, so a
+   * stored board is never overwritten.
+   */
+  const connectionRepository = services.getRequired<ConnectionRepository>(CONNECTION_REPOSITORY)
+  if (connectionRepository.getConnections().length === 0) {
+    const connection = connectionRepository.createConnection('rest', {
+      url: 'https://jsonplaceholder.typicode.com/',
+    })
+    connection.uid = 'test'
+    connection.name = 'Test Connection 01'
+    connectionRepository.saveConnection(connection)
+  }
 
   // Store dependencies, closed over at the module boundary
   provideVariablesStoreDependencies({

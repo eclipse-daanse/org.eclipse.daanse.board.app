@@ -27,14 +27,18 @@ Contributors:
  */
 import { computed, inject, ref, watch } from 'vue'
 import { DTabs } from 'org.eclipse.daanse.board.app.ui.vue.controls'
-import { useConnectionsStore } from 'org.eclipse.daanse.board.app.ui.vue.stores.connection'
+import {
+  identifier as WORKSPACE,
+  type Workspace,
+} from 'org.eclipse.daanse.board.app.lib.model.workspace'
+import { useEList, useEObject } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import { useDataSourcesStore } from 'org.eclipse.daanse.board.app.ui.vue.stores.datasouce'
 import DataTree, { type Selection } from '@/components/datasources/DataTree.vue'
 import DatasourceEditor from '@/components/datasources/DatasourceEditor.vue'
 import ConnectionEditor from '@/components/connections/ConnectionEditor.vue'
 import { useDatasourceUsage } from '@/composables/useDatasourceUsage'
 
-const { connections } = useConnectionsStore()
+const connections = useEList(inject<Workspace>(WORKSPACE)!, (w) => w.connections)
 const { dataSources } = useDataSourcesStore()
 const { usageOf, usageLabel } = useDatasourceUsage()
 
@@ -44,11 +48,18 @@ const tab = ref('preview')
 const endpointfinder = inject('endpointfinder', null)
 const findEndpoints = () => (endpointfinder as any)?.()
 
-const held = computed(() => {
+/*
+ * Through useEObject, not a plain computed: a computed that finds a
+ * modelled object returns the same instance every time, and Vue stops
+ * there - the header would keep showing the name a connection had when it
+ * was selected. A data source is still a plain reactive object and passes
+ * through untouched.
+ */
+const held = useEObject(() => {
   const at = selected.value
   if (!at) return undefined
   return at.type === 'Connection'
-    ? connections.find((c: any) => c.uid === at.itemId)
+    ? connections.value.find((c: any) => c.uid === at.itemId)
     : dataSources.find((d: any) => d.uid === at.itemId)
 })
 
@@ -57,7 +68,7 @@ const subtitle = computed(() => {
   const item: any = held.value
   if (!item) return ''
   if (selected.value?.type === 'Connection') return item.type ?? ''
-  const through = connections.find((c: any) => c.uid === item.config?.connection)
+  const through = connections.value.find((c: any) => c.uid === item.config?.connection)
   return [item.type, through?.name].filter(Boolean).join(' · ')
 })
 

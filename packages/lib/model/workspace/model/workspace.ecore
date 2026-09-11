@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/*********************************************************************
+* Copyright (c) 2026 Contributors to the Eclipse Foundation.
+*
+* This program and the accompanying materials are made
+* available under the terms of the Eclipse Public License 2.0
+* which is available at https://www.eclipse.org/legal/epl-2.0/
+*
+* SPDX-License-Identifier: EPL-2.0
+**********************************************************************/
+
+What a workspace holds. One root, everything under it by containment, so
+one EContentAdapter at the root hears every change anywhere below - which
+is the reactivity four Pinia stores used to provide by hand.
+
+Connections come first; data sources, pages, widgets and layout follow in
+their own steps.
+-->
+<ecore:EPackage xmi:version="2.0"
+                xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="workspace"
+                nsURI="http://org.eclipse.daanse.board.app.lib.model.workspace" nsPrefix="workspace">
+
+    <eClassifiers xsi:type="ecore:EClass" name="Workspace">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+            <details key="documentation" value="The root of everything a board application holds. There is one per running application, registered as a service."/>
+        </eAnnotations>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="connections" eType="#//Connection"
+                             lowerBound="0" upperBound="-1" containment="true">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="The connections this workspace can read through."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+    </eClassifiers>
+
+    <eClassifiers xsi:type="ecore:EClass" name="Connection">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+            <details key="documentation" value="A place data is read from - an endpoint, a broker, a server. What it takes to reach one is the connection type's own business; this says which type, under which name."/>
+        </eAnnotations>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="uid" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="Identifies this connection across the workspace. A data source names the one it reads through by this."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="What a person calls it."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="Which registered connection type builds the live object - 'rest', 'xmla', 'mqtt'."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="config" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject" lowerBound="0">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="What the chosen type needs - a URL, credentials, a catalog. Opaque here on purpose: the connection models under lib/connection are still generated in decorator mode, so there is no EObject to contain yet. This becomes a containment reference once they follow."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+    </eClassifiers>
+
+</ecore:EPackage>

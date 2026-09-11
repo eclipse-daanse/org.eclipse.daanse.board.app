@@ -69,7 +69,6 @@ import b53 from 'org.eclipse.daanse.board.app.lib.connection.twowayconnection/ma
 import b54 from 'org.eclipse.daanse.board.app.lib.utils.subscriber/manifest.json'
 import b55 from 'org.eclipse.daanse.board.app.platform.system/manifest.json'
 import b56 from 'org.eclipse.daanse.board.app.lib.variables/manifest.json'
-import b57 from 'org.eclipse.daanse.board.app.ui.vue.stores.connection/manifest.json'
 import b58 from 'org.eclipse.daanse.board.app.ui.vue.stores.datasouce/manifest.json'
 import b59 from 'org.eclipse.daanse.board.app.lib.composer.chart/manifest.json'
 import b60 from 'org.eclipse.daanse.board.app.lib.composer.datatable/manifest.json'
@@ -152,6 +151,7 @@ import b134 from 'org.eclipse.daanse.board.app.lib.api.datasource/manifest.json'
 import b135 from 'org.eclipse.daanse.board.app.lib.api.variable/manifest.json'
 import b136 from 'org.eclipse.daanse.board.app.lib.api.persistence/manifest.json'
 import b137 from 'org.eclipse.daanse.board.app.lib.api.route/manifest.json'
+import b147 from 'org.eclipse.daanse.board.app.lib.model.workspace/manifest.json'
 import b138 from 'org.eclipse.daanse.board.app.lib.api.navigation/manifest.json'
 import b139 from 'org.eclipse.daanse.board.app.lib.api.layout.page/manifest.json'
 import b140 from 'org.eclipse.daanse.board.app.lib.api.page/manifest.json'
@@ -223,7 +223,7 @@ export const bundles: ModuleManifest[] = [
   b54 as ModuleManifest,
   b55 as ModuleManifest,
   b56 as ModuleManifest,
-  b57 as ModuleManifest,
+  b147 as ModuleManifest,
   b58 as ModuleManifest,
   b59 as ModuleManifest,
   b60 as ModuleManifest,

@@ -10,8 +10,9 @@
     "lib.api.datasource",
     "lib.api.widget",
     "lib.connection.rest",
+    "lib.model.workspace",
     "platform.vue",
-    "ui.vue.stores.connection",
+    "ui.vue.composables",
     "ui.vue.stores.datasouce",
     "ui.vue.stores.layout",
     "ui.vue.stores.widgets"
@@ -53,10 +54,6 @@
       "versionRange": ">=0.0.1-0"
     },
     {
-      "id": "org.eclipse.daanse.board.app.ui.vue.stores.connection",
-      "versionRange": ">=0.0.1-0"
-    },
-    {
       "id": "org.eclipse.daanse.board.app.ui.vue.stores.datasouce",
       "versionRange": ">=0.0.1-0"
     },
@@ -66,6 +63,14 @@
     },
     {
       "id": "org.eclipse.daanse.board.app.ui.vue.stores.widgets",
+      "versionRange": ">=0.0.1-0"
+    },
+    {
+      "id": "org.eclipse.daanse.board.app.lib.model.workspace",
+      "versionRange": ">=0.0.1-0"
+    },
+    {
+      "id": "org.eclipse.daanse.board.app.ui.vue.composables",
       "versionRange": ">=0.0.1-0"
     }
   ]

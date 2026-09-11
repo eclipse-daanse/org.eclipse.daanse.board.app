@@ -17,6 +17,8 @@ import { usePromisifiedModal } from './promisifiedModal'
 import { useVariableRepository } from './useVariableRepository'
 import { useGlobalLoading } from './useGlobalLoading'
 import { plainSettings } from './plainSettings'
+/* Modelled objects, as something Vue re-renders on. */
+import { useEObject, useEList, useFeature } from './useEmf'
 // VariableWrapper ist Vue-frei und liegt deshalb in lib.variables. Der
 // Re-Export haelt die bestehenden Importpfade gueltig; neuer Code sollte
 // direkt aus org.eclipse.daanse.board.app.lib.variables importieren.
@@ -43,4 +45,4 @@ const WrapperTypes = {
 EPackageRegistry.INSTANCE.registerPackage(ComposablesPackage.eINSTANCE)
 
 export { ComposablesPackage }
-export { useDatasourceRepository, useTemporaryStore, useVariableRepository, usePromisifiedModal, useGlobalLoading, VariableWrapper,VARIABLEWRAPPER,VariableComplexStringWrapper,VARIABLECOMPLEXSTRINGWRAPPER, WrapperTypes, plainSettings}
+export { useDatasourceRepository, useTemporaryStore, useVariableRepository, usePromisifiedModal, useGlobalLoading, VariableWrapper,VARIABLEWRAPPER,VariableComplexStringWrapper,VARIABLECOMPLEXSTRINGWRAPPER, WrapperTypes, plainSettings, useEObject, useEList, useFeature}

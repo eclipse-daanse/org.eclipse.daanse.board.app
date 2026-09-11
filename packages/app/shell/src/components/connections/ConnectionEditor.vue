@@ -16,7 +16,6 @@ import {
   ConnectionRepository,
   identifier,
 } from 'org.eclipse.daanse.board.app.lib.api.connection'
-import { useConnectionsStore } from 'org.eclipse.daanse.board.app.ui.vue.stores.connection'
 import { DButton, DInput, DSelect } from 'org.eclipse.daanse.board.app.ui.vue.controls'
 
 const props = defineProps({
@@ -31,15 +30,25 @@ const emit = defineEmits(['close'])
 const connectionProxy = ref({} as any)
 
 const connectionRepository = inject<ConnectionRepository>(identifier)!
-const { connections, updateConnection } = useConnectionsStore()
 
 const availableConnections = computed(() => {
   return connectionRepository.registeredConnections
 })
 
+/*
+ * Edited on a copy and committed on Save, the way it always was - what
+ * changed is only where the copy comes from and where it goes back to.
+ */
 onMounted(() => {
-  const connection = connections.find((c) => c.uid === props.itemId)
-  connectionProxy.value = JSON.parse(JSON.stringify(connection))
+  const connection = connectionRepository.getConnectionModel(props.itemId)
+  connectionProxy.value = connection
+    ? {
+        uid: connection.uid,
+        name: connection.name,
+        type: connection.type,
+        config: JSON.parse(JSON.stringify(connection.config ?? {})),
+      }
+    : {}
 })
 
 const settingsComponent = computed(() => {
@@ -53,7 +62,13 @@ const settingsComponent = computed(() => {
 })
 
 const saveConnection = () => {
-  updateConnection(connectionProxy.value.uid, connectionProxy.value)
+  const connection = connectionRepository.getConnectionModel(props.itemId)
+  if (connection) {
+    connection.name = connectionProxy.value.name
+    connection.type = connectionProxy.value.type
+    connection.config = connectionProxy.value.config
+    connectionRepository.saveConnection(connection)
+  }
   emit('close')
 }
 </script>

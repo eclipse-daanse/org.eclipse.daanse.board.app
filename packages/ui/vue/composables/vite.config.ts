@@ -43,6 +43,23 @@ export default defineConfig({
   plugins: [
     dts({
       insertTypesEntry: true,
+      /*
+       * The emitter turns a bare `from 'vue'` into a relative path to the
+       * hoisted copy - '../../../../../node_modules/vue', which lands
+       * outside the workspace and resolves nowhere. Every type this package
+       * exports that mentions a Ref or a ComputedRef then arrives at the
+       * consumer as `any`, silently, because skipLibCheck swallows the
+       * unresolved import.
+       *
+       * Put back as the bare specifier, which is what a consumer resolves
+       * against its own vue.
+       */
+      beforeWriteFile(filePath: string, content: string) {
+        return {
+          filePath,
+          content: content.replace(/(['"])(?:\.\.\/)+node_modules\/vue\1/g, "'vue'"),
+        }
+      },
     }),
     //@ts-ignore
     vue(),

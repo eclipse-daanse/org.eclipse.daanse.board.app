@@ -26,7 +26,6 @@
 import { inject, ref } from 'vue'
 import { parse, stringify } from 'flatted'
 import { useLayoutStore } from 'org.eclipse.daanse.board.app.ui.vue.stores.layout'
-import { useConnectionsStore } from 'org.eclipse.daanse.board.app.ui.vue.stores.connection'
 import { useDataSourcesStore } from 'org.eclipse.daanse.board.app.ui.vue.stores.datasouce'
 import { useWidgetsStore } from 'org.eclipse.daanse.board.app.ui.vue.stores.widgets'
 import {
@@ -121,7 +120,6 @@ export function useWorkspaceSnapshot() {
   function capture(): string {
     const layoutStore = useLayoutStore()
     const sources = useDataSourcesStore()
-    const connections = useConnectionsStore()
     const widgets = useWidgetsStore()
 
     const variables: unknown[] = []
@@ -143,7 +141,18 @@ export function useWorkspaceSnapshot() {
     return stringify({
       layout: layoutStore.layout,
       datasources: sources.dataSources,
-      conections: connections.connections,
+      /*
+       * Still written under the misspelled key and still as plain objects:
+       * the format is what stored boards already hold, and changing it is
+       * its own step. The connections come from the model now, the rest
+       * from the stores that have not moved yet.
+       */
+      conections: (connectionRepository?.getConnections() ?? []).map((connection) => ({
+        uid: connection.uid,
+        name: connection.name,
+        type: connection.type,
+        config: connection.config,
+      })),
       widgets: widgets.widgets,
       variables,
       pages,
@@ -163,17 +172,14 @@ export function useWorkspaceSnapshot() {
 
     const layoutStore = useLayoutStore()
     const sources = useDataSourcesStore()
-    const connections = useConnectionsStore()
     const widgets = useWidgetsStore()
 
     for (const variable of data.variables ?? []) {
       variableRepository?.registerVariable(variable.name, variable.type, variable)
     }
 
-    if (data.conections) connections.connections = data.conections
-    for (const connection of data.conections ?? []) {
-      connectionRepository?.registerConnection(connection.uid, connection.type, connection.config)
-    }
+    /* Both halves in one call now - the model objects and their live ones. */
+    connectionRepository?.setConnections((data.conections ?? []) as never)
 
     // Plain sources first: the derived ones resolve against them on registration
     for (const source of data.datasources ?? []) {
