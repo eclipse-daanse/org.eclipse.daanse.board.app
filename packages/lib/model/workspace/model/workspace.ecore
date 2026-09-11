@@ -14,8 +14,8 @@ What a workspace holds. One root, everything under it by containment, so
 one EContentAdapter at the root hears every change anywhere below - which
 is the reactivity four Pinia stores used to provide by hand.
 
-Connections, data sources and pages are in; widgets and layout follow in
-their own step.
+Everything a board application holds is in: connections, data sources,
+pages, and on each page its widgets and where they sit.
 -->
 <ecore:EPackage xmi:version="2.0"
                 xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -55,7 +55,7 @@ their own step.
         <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
             <details key="documentation" value="A board: a named surface with a layout, and the widgets arranged on it."/>
         </eAnnotations>
-        <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" lowerBound="1">
             <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
                 <details key="documentation" value="Identifies this board. It is in the route, so it outlives a rename."/>
             </eAnnotations>
@@ -79,13 +79,77 @@ their own step.
         <eStructuralFeatures xsi:type="ecore:EAttribute" name="backgroundSize" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" lowerBound="0"/>
         <eStructuralFeatures xsi:type="ecore:EAttribute" name="backgroundPosition" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" lowerBound="0"/>
         <eStructuralFeatures xsi:type="ecore:EAttribute" name="backgroundRepeat" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" lowerBound="0"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="widgets" eType="#//Widget"
+                             lowerBound="0" upperBound="-1" containment="true">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="What is on this board."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="layout" eType="#//LayoutItem"
+                             lowerBound="0" upperBound="-1" containment="true">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="Where each widget sits and how big it is. Separate from the widget because the same widget is placed differently by different layouts, and a layout item names its widget by id."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+    </eClassifiers>
+
+    <eClassifiers xsi:type="ecore:EClass" name="Widget">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+            <details key="documentation" value="One thing on a board: a chart, a map, a piece of text. What it shows comes from a data source; how it is framed and configured is its own."/>
+        </eAnnotations>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="uid" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" lowerBound="1">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="Identifies this widget on its board. The layout item that places it carries the same value as its id."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="Which registered widget provider renders it."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="datasource" eType="#//Datasource" lowerBound="0">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="The source it reads from, as a reference rather than an id in its configuration. Asking which widgets read from a source becomes a question the model answers, instead of a walk over every board. The id is still projected into the configuration on save, because that is what a widget's own settings read."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="config" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject" lowerBound="0">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="The widget's own settings. Each widget type models these for itself (ui/vue/widget/*/model); this stays opaque until those settings are contained here rather than copied in and out."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="wrapperConfig" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject" lowerBound="0">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="The frame around it - border, title, padding. Modelled as WrapperSettings in ui/vue/widget/wrapper."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+    </eClassifiers>
+
+    <eClassifiers xsi:type="ecore:EClass" name="LayoutItem">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+            <details key="documentation" value="Where one widget sits on its board."/>
+        </eAnnotations>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" lowerBound="1">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="The uid of the widget this places."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="x" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt" lowerBound="1"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="y" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt" lowerBound="1"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="z" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt" lowerBound="1"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="width" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt" lowerBound="1"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="height" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt" lowerBound="1"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="group" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" lowerBound="0">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="Which group it belongs to, if any. Widgets that say the same thing together - a chart and the number beside it - are moved and picked as one. Kept on the item rather than in a list of its own, so a group travels with the layout it describes and a widget that is removed takes its membership with it."/>
+            </eAnnotations>
+        </eStructuralFeatures>
     </eClassifiers>
 
     <eClassifiers xsi:type="ecore:EClass" name="Datasource">
         <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
             <details key="documentation" value="Something a widget reads from: a query, a file, a feed, a topic. The live store that fetches it is built from this and kept beside it."/>
         </eAnnotations>
-        <eStructuralFeatures xsi:type="ecore:EAttribute" name="uid" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="uid" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" lowerBound="1">
             <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
                 <details key="documentation" value="Identifies this source across the workspace. A widget names the one it reads from by this."/>
             </eAnnotations>
@@ -116,7 +180,7 @@ their own step.
         <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
             <details key="documentation" value="A place data is read from - an endpoint, a broker, a server. What it takes to reach one is the connection type's own business; this says which type, under which name."/>
         </eAnnotations>
-        <eStructuralFeatures xsi:type="ecore:EAttribute" name="uid" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="uid" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" lowerBound="1">
             <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
                 <details key="documentation" value="Identifies this connection across the workspace. A data source names the one it reads through by this."/>
             </eAnnotations>

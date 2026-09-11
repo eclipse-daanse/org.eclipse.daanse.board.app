@@ -13,12 +13,19 @@
 
 import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
-import type { IWidget } from 'org.eclipse.daanse.board.app.ui.vue.stores.widgets'
-import type { ILayoutItem } from './useMovableLayout'
+import type { StoredWidget, StoredLayoutItem } from 'org.eclipse.daanse.board.app.lib.api.page'
 
+/**
+ * What was copied, as plain data.
+ *
+ * A snapshot rather than the modelled objects: a clipboard holds a copy,
+ * and pasting one twice has to make two widgets. This is also the one
+ * thing here that is genuinely view state and not the workspace - which is
+ * why it is still a store.
+ */
 export interface IClipboardItem {
-  widget: Omit<IWidget, 'uid'>
-  layout: Omit<ILayoutItem, 'id'>
+  widget: Omit<StoredWidget, 'uid'>
+  layout: Omit<StoredLayoutItem, 'id'>
 }
 
 // Global clipboard store (not per-page) for cross-page copy/paste
@@ -27,14 +34,8 @@ export const useClipboardStore = defineStore('widget-clipboard', () => {
 
   const hasClipboard = computed(() => clipboardItem.value !== null)
 
-  const copy = (widget: IWidget, layout: ILayoutItem) => {
-    // Remove uid and id to create clean copies
-    const { uid, ...widgetWithoutUid } = widget
-    const { id, ...layoutWithoutId } = layout
-    clipboardItem.value = {
-      widget: widgetWithoutUid as Omit<IWidget, 'uid'>,
-      layout: layoutWithoutId as Omit<ILayoutItem, 'id'>
-    }
+  const copy = (widget: Omit<StoredWidget, 'uid'>, layout: Omit<StoredLayoutItem, 'id'>) => {
+    clipboardItem.value = { widget, layout }
   }
 
   const paste = () => clipboardItem.value

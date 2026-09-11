@@ -28,22 +28,16 @@ import {
 import { useEList } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import FilterModal from './FilterModal.vue'
 import { WidgetRepository, identifier as widgetRepoIdentifier } from 'org.eclipse.daanse.board.app.lib.api.widget'
-import { useWidgetsStore } from 'org.eclipse.daanse.board.app.ui.vue.stores.widgets'
-import { ILayoutItem, useLayoutStore } from 'org.eclipse.daanse.board.app.ui.vue.stores.layout'
+import { useBoard } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import { useRoute } from 'vue-router'
 
 const route = useRoute();
 const toogle = ref(false)
-let createWidget:any,updateLayout:any,layout:any;
+
+/* The board the route points at - widgets and their placement together. */
+const board = useBoard(() => (route.params.pageid as string) ?? '')
 
 const run = () => {
-  const pageID = route.params.pageid ?? '';
-  const widgetStore = useWidgetsStore(pageID as string);
-  const layoutStore = useLayoutStore(pageID as string);
-  createWidget = widgetStore.createWidget;
-  updateLayout = layoutStore.updateLayout;
-  layout = layoutStore.layout;
-
   toogle.value = !toogle.value
 }
 const step = ref(0)
@@ -255,11 +249,12 @@ const getComponentConnection = computed(() => {
 const finish = () => {
 
   if(selectedWidgets.value.length>0){
-    const newLayoutItems: ILayoutItem[] = []
-
     selectedWidgets.value.forEach((widget,index)=>{
-      const id= createWidget(widget.type,{datasourceId:store.value?.uid},
-        { title: '',
+      board.addWidget({
+        uid: '',
+        type: widget.type,
+        config: { datasourceId: store.value?.uid, settings: {} },
+        wrapperConfig: { title: '',
         backgroundColor: '#fff',
         backgroundColorTransparence: 255,
         titleColor: '#7c7c7c',
@@ -275,23 +270,15 @@ const finish = () => {
         shadowX: 5,
         shadowY: 5,
         shadowTransparence: 25,
-        transparency: 255})
-
-      const slayout:ILayoutItem={
-        id: id,
-        x: 50 +(index*300),
+        transparency: 255 },
+      }, {
+        x: 50 + (index * 300),
         y: 50,
-        width:200,
-        height:100,
+        width: 200,
+        height: 100,
         z: 3005,
-      }
-      newLayoutItems.push(slayout)
-      console.log('Endpointfinder created Widget:' +widget.type)
+      })
     });
-
-    // Update layout once with all new items
-    const updatedLayout = [...layout, ...newLayoutItems]
-    updateLayout(updatedLayout)
   }
   selectedWidgets.value = [];
   ds.value = undefined

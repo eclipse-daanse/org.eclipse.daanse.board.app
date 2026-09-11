@@ -5,14 +5,16 @@
  * @generated
  */
 
-import type { EObject } from '@emfts/core';
+import type { EObject, EList } from '@emfts/core';
+import type { Widget } from './Widget.js';
+import type { LayoutItem } from './LayoutItem.js';
 
 /**
  * Page
  * @generated
  */
 export interface Page extends EObject {
-  id?: string;
+  id: string;
   name?: string;
   description?: string;
   icon?: string;
@@ -24,5 +26,7 @@ export interface Page extends EObject {
   backgroundSize?: string;
   backgroundPosition?: string;
   backgroundRepeat?: string;
+  widgets: EList<Widget>;
+  layout: EList<LayoutItem>;
 
 }

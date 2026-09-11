@@ -11,28 +11,18 @@
  *   Smart City Jena
  **********************************************************************/
 
-export interface ILayoutItem {
-  id: string
-  width: number
-  height: number
-  x: number
-  y: number
-  z: number
-  /**
-   * Which group it belongs to, if any.
-   *
-   * Widgets that say the same thing together - a chart and the number
-   * beside it - are moved and picked as one. Kept on the item rather than
-   * in a list of its own, so a group travels with the layout it describes
-   * and a widget that is removed takes its membership with it.
-   */
-  group?: string
-}
+/**
+ * Where a widget sits.
+ *
+ * The model's, now that the layout is part of the workspace. The name
+ * stays: it is what every layout in this repo imports.
+ */
+export type ILayoutItem = LayoutItem
 
 import { ref } from 'vue'
 import type { OnDrag, OnResize } from 'vue3-moveable'
-import { useLayoutStore } from 'org.eclipse.daanse.board.app.ui.vue.stores.layout'
-import { useWidgetsStore } from 'org.eclipse.daanse.board.app.ui.vue.stores.widgets'
+import { useBoard } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+import type { LayoutItem, StoredWidget } from 'org.eclipse.daanse.board.app.lib.api.page'
 import { useClipboardStore } from './useClipboardStore'
 import { cloneDeep } from 'lodash'
 
@@ -41,7 +31,12 @@ import { cloneDeep } from 'lodash'
  *   every drag rather than passed once, so the switch takes effect at once.
  */
 export function useMoveableLayout(pageId: string = '', gridSize: () => number = () => 0) {
-  const layoutStore = useLayoutStore(pageId)
+  /*
+   * One board, both halves. The widgets and their placement used to be two
+   * stores, and adding a widget wrote to each in turn - a widget could be
+   * on the board and nowhere on it.
+   */
+  const board = useBoard(pageId)
 
   /*
    * Lands the value on the grid.
@@ -56,7 +51,6 @@ export function useMoveableLayout(pageId: string = '', gridSize: () => number = 
     const grid = gridSize()
     return grid > 0 ? Math.round(value / grid) * grid : value
   }
-  const widgetStore = useWidgetsStore(pageId)
   const clipboardStore = useClipboardStore()
 
   const ghostPlaceholder = ref({
@@ -93,7 +87,7 @@ export function useMoveableLayout(pageId: string = '', gridSize: () => number = 
   }
 
   const getInitialStyle = (id: string) => {
-    const item = layoutStore?.layout?.find((item: ILayoutItem) => item.id === id)
+    const item = board.layout.value.find((item: ILayoutItem) => item.id === id)
     if (!item) return {}
 
     return {
@@ -105,7 +99,7 @@ export function useMoveableLayout(pageId: string = '', gridSize: () => number = 
   }
 
   const getMovableControlStyles = (id: string) => {
-    const item = layoutStore.layout.find((item: ILayoutItem) => item.id === id)
+    const item = board.layout.value.find((item: ILayoutItem) => item.id === id)
     if (!item) return {}
 
     return {
@@ -114,7 +108,7 @@ export function useMoveableLayout(pageId: string = '', gridSize: () => number = 
   }
 
   const drag = (id: string, e: OnDrag) => {
-    const item = layoutStore.layout.find((item: ILayoutItem) => item.id === id)
+    const item = board.layout.value.find((item: ILayoutItem) => item.id === id)
     if (!item) return
 
     item.x = toGrid(e.translate[0])
@@ -125,7 +119,7 @@ export function useMoveableLayout(pageId: string = '', gridSize: () => number = 
   }
 
   const resize = (id: string, e: OnResize) => {
-    const item = layoutStore.layout.find((item: ILayoutItem) => item.id === id)
+    const item = board.layout.value.find((item: ILayoutItem) => item.id === id)
     if (!item) return
 
     // Size lands on the grid too: an edge between two dots is as crooked
@@ -141,64 +135,71 @@ export function useMoveableLayout(pageId: string = '', gridSize: () => number = 
   }
 
   const moveUp = (id: string) => {
-    const item = layoutStore.layout.find((item: ILayoutItem) => item.id === id)
+    const item = board.layout.value.find((item: ILayoutItem) => item.id === id)
     if (!item) return
 
     item.z += 1
   }
 
   const moveToTop = (id: string) => {
-    const zIndexMax = Math.max(...layoutStore.layout.map((item: ILayoutItem) => item.z))
-    const item = layoutStore.layout.find((item: ILayoutItem) => item.id === id)
+    const zIndexMax = Math.max(...board.layout.value.map((item: ILayoutItem) => item.z))
+    const item = board.layout.value.find((item: ILayoutItem) => item.id === id)
     if (!item) return
 
     item.z = zIndexMax + 1
   }
 
   const moveDown = (id: string) => {
-    const item = layoutStore.layout.find((item: ILayoutItem) => item.id === id)
+    const item = board.layout.value.find((item: ILayoutItem) => item.id === id)
     if (!item) return
 
     item.z -= 1
   }
 
   const moveToBottom = (id: string) => {
-    const zIndexMin = Math.min(...layoutStore.layout.map((item: ILayoutItem) => item.z))
-    const item = layoutStore.layout.find((item: ILayoutItem) => item.id === id)
+    const zIndexMin = Math.min(...board.layout.value.map((item: ILayoutItem) => item.z))
+    const item = board.layout.value.find((item: ILayoutItem) => item.id === id)
     if (!item) return
 
     item.z = zIndexMin - 1
   }
 
   const addWidget = (type: any, config: any = {}, wrapperConfig: any = {}, layoutConfig: Partial<ILayoutItem> = {}) => {
-    const uid = widgetStore.createWidget(type, config, wrapperConfig)
-
-    const defaultLayout: ILayoutItem = {
-      id: uid,
-      width: layoutConfig.width || 300,
-      height: layoutConfig.height || 150,
-      x: layoutConfig.x || 0,
-      y: layoutConfig.y || 0,
-      z: layoutConfig.z || Math.max(...layoutStore.layout.map((item:any) => item.z), 0) + 1,
+    const widget: StoredWidget = {
+      uid: '',
+      type,
+      config: { datasourceId: config?.datasourceId, settings: { ...(config?.settings ?? {}) } },
+      wrapperConfig,
     }
-
-    layoutStore.layout.push(defaultLayout)
-    return uid
+    return board.addWidget(widget, layoutConfig)
   }
 
+  /* The placement goes with it - that is one call now, not two. */
   const removeWidget = (id: string) => {
-    widgetStore.removeWidget(id)
-    const layoutIndex = layoutStore.layout.findIndex((item:any) => item.id === id)
-    if (layoutIndex > -1) {
-      layoutStore.layout.splice(layoutIndex, 1)
-    }
+    board.removeWidget(id)
   }
 
   const copyWidget = (widgetId: string) => {
-    const widget = widgetStore.widgets.find((w: any) => w.uid === widgetId)
-    const layoutItem = layoutStore.layout.find((l: ILayoutItem) => l.id === widgetId)
+    const widget = board.widgets.value.find((w: { uid?: string }) => w.uid === widgetId)
+    const layoutItem = board.layout.value.find((l: ILayoutItem) => l.id === widgetId)
     if (widget && layoutItem) {
-      clipboardStore.copy(widget, layoutItem)
+      /* A snapshot, feature by feature: a modelled object keeps its values
+         in private fields, so spreading one copies _uid, not uid. */
+      clipboardStore.copy(
+        {
+          type: widget.type as string,
+          config: cloneDeep(widget.config ?? {}) as StoredWidget['config'],
+          wrapperConfig: cloneDeep(widget.wrapperConfig ?? {}) as Record<string, any>,
+        },
+        {
+          x: layoutItem.x,
+          y: layoutItem.y,
+          z: layoutItem.z,
+          width: layoutItem.width,
+          height: layoutItem.height,
+          group: layoutItem.group,
+        },
+      )
     }
   }
 
@@ -207,32 +208,25 @@ export function useMoveableLayout(pageId: string = '', gridSize: () => number = 
     if (!clipboard) return null
 
     const newUid = 'li_' + Math.random().toString(36).substring(7)
-    const maxZ = Math.max(...layoutStore.layout.map((item: ILayoutItem) => item.z), 0)
+    const maxZ = Math.max(...board.layout.value.map((item: ILayoutItem) => item.z), 0)
 
-    // Clone widget with new UID
-    const newWidget = cloneDeep(clipboard.widget) as any
-    newWidget.uid = newUid
-    if (newWidget.config?.settings) {
-      newWidget.config.settings.name = 'widget_' + newUid
-    }
+    const copied = cloneDeep(clipboard.widget)
+    const settings = { ...(copied.config?.settings ?? {}), name: 'widget_' + newUid }
 
-    // Clone layout with new position
-    const newLayout: ILayoutItem = {
-      ...clipboard.layout,
-      id: newUid,
-      x: x,
-      y: y,
-      z: maxZ + 1
-    }
-
-    widgetStore.widgets.push(newWidget)
-    layoutStore.layout.push(newLayout)
+    board.addWidget(
+      {
+        uid: newUid,
+        type: copied.type,
+        config: { datasourceId: copied.config?.datasourceId, settings },
+        wrapperConfig: copied.wrapperConfig,
+      },
+      { ...clipboard.layout, id: newUid, x, y, z: maxZ + 1 },
+    )
     return newUid
   }
 
   return {
-    layoutStore,
-    widgetStore,
+    board,
     clipboardStore,
     ghostPlaceholder,
     processDropCoordinates,

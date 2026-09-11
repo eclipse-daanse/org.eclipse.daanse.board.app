@@ -51,6 +51,22 @@ export class WorkspacePackage extends BasicEPackage {
     PAGE__BACKGROUND_SIZE: null as unknown as EAttribute | EReference,
     PAGE__BACKGROUND_POSITION: null as unknown as EAttribute | EReference,
     PAGE__BACKGROUND_REPEAT: null as unknown as EAttribute | EReference,
+    PAGE__WIDGETS: null as unknown as EAttribute | EReference,
+    PAGE__LAYOUT: null as unknown as EAttribute | EReference,
+    WIDGET: null as unknown as EClass,
+    WIDGET__UID: null as unknown as EAttribute | EReference,
+    WIDGET__TYPE: null as unknown as EAttribute | EReference,
+    WIDGET__DATASOURCE: null as unknown as EAttribute | EReference,
+    WIDGET__CONFIG: null as unknown as EAttribute | EReference,
+    WIDGET__WRAPPER_CONFIG: null as unknown as EAttribute | EReference,
+    LAYOUT_ITEM: null as unknown as EClass,
+    LAYOUT_ITEM__ID: null as unknown as EAttribute | EReference,
+    LAYOUT_ITEM__X: null as unknown as EAttribute | EReference,
+    LAYOUT_ITEM__Y: null as unknown as EAttribute | EReference,
+    LAYOUT_ITEM__Z: null as unknown as EAttribute | EReference,
+    LAYOUT_ITEM__WIDTH: null as unknown as EAttribute | EReference,
+    LAYOUT_ITEM__HEIGHT: null as unknown as EAttribute | EReference,
+    LAYOUT_ITEM__GROUP: null as unknown as EAttribute | EReference,
     DATASOURCE: null as unknown as EClass,
     DATASOURCE__UID: null as unknown as EAttribute | EReference,
     DATASOURCE__NAME: null as unknown as EAttribute | EReference,
@@ -139,7 +155,7 @@ export class WorkspacePackage extends BasicEPackage {
     // Create id feature
     const page_id = new BasicEAttribute();
     page_id.setName('id');
-    page_id.setLowerBound(0);
+    page_id.setLowerBound(1);
     page_id.setUpperBound(1);
     pageClass.getEStructuralFeatures().push(page_id);
     WorkspacePackage.Literals.PAGE__ID = page_id;
@@ -232,6 +248,139 @@ export class WorkspacePackage extends BasicEPackage {
     pageClass.getEStructuralFeatures().push(page_backgroundRepeat);
     WorkspacePackage.Literals.PAGE__BACKGROUND_REPEAT = page_backgroundRepeat;
 
+    // Create widgets feature
+    const page_widgets = new BasicEReference();
+    page_widgets.setContainment(true);
+    page_widgets.setName('widgets');
+    page_widgets.setLowerBound(0);
+    page_widgets.setUpperBound(-1);
+    pageClass.getEStructuralFeatures().push(page_widgets);
+    WorkspacePackage.Literals.PAGE__WIDGETS = page_widgets;
+
+    // Create layout feature
+    const page_layout = new BasicEReference();
+    page_layout.setContainment(true);
+    page_layout.setName('layout');
+    page_layout.setLowerBound(0);
+    page_layout.setUpperBound(-1);
+    pageClass.getEStructuralFeatures().push(page_layout);
+    WorkspacePackage.Literals.PAGE__LAYOUT = page_layout;
+
+    // Create Widget class
+    const widgetClass = new BasicEClass();
+    widgetClass.setName('Widget');
+    widgetClass.setAbstract(false);
+    widgetClass.setInterface(false);
+    this.getEClassifiers().push(widgetClass);
+    widgetClass.setEPackage(this);
+    WorkspacePackage.Literals.WIDGET = widgetClass;
+
+    // Create uid feature
+    const widget_uid = new BasicEAttribute();
+    widget_uid.setName('uid');
+    widget_uid.setLowerBound(1);
+    widget_uid.setUpperBound(1);
+    widgetClass.getEStructuralFeatures().push(widget_uid);
+    WorkspacePackage.Literals.WIDGET__UID = widget_uid;
+
+    // Create type feature
+    const widget_type = new BasicEAttribute();
+    widget_type.setName('type');
+    widget_type.setLowerBound(0);
+    widget_type.setUpperBound(1);
+    widgetClass.getEStructuralFeatures().push(widget_type);
+    WorkspacePackage.Literals.WIDGET__TYPE = widget_type;
+
+    // Create datasource feature
+    const widget_datasource = new BasicEReference();
+    widget_datasource.setContainment(false);
+    widget_datasource.setName('datasource');
+    widget_datasource.setLowerBound(0);
+    widget_datasource.setUpperBound(1);
+    widgetClass.getEStructuralFeatures().push(widget_datasource);
+    WorkspacePackage.Literals.WIDGET__DATASOURCE = widget_datasource;
+
+    // Create config feature
+    const widget_config = new BasicEAttribute();
+    widget_config.setName('config');
+    widget_config.setLowerBound(0);
+    widget_config.setUpperBound(1);
+    widgetClass.getEStructuralFeatures().push(widget_config);
+    WorkspacePackage.Literals.WIDGET__CONFIG = widget_config;
+
+    // Create wrapperConfig feature
+    const widget_wrapperConfig = new BasicEAttribute();
+    widget_wrapperConfig.setName('wrapperConfig');
+    widget_wrapperConfig.setLowerBound(0);
+    widget_wrapperConfig.setUpperBound(1);
+    widgetClass.getEStructuralFeatures().push(widget_wrapperConfig);
+    WorkspacePackage.Literals.WIDGET__WRAPPER_CONFIG = widget_wrapperConfig;
+
+    // Create LayoutItem class
+    const layoutItemClass = new BasicEClass();
+    layoutItemClass.setName('LayoutItem');
+    layoutItemClass.setAbstract(false);
+    layoutItemClass.setInterface(false);
+    this.getEClassifiers().push(layoutItemClass);
+    layoutItemClass.setEPackage(this);
+    WorkspacePackage.Literals.LAYOUT_ITEM = layoutItemClass;
+
+    // Create id feature
+    const layoutItem_id = new BasicEAttribute();
+    layoutItem_id.setName('id');
+    layoutItem_id.setLowerBound(1);
+    layoutItem_id.setUpperBound(1);
+    layoutItemClass.getEStructuralFeatures().push(layoutItem_id);
+    WorkspacePackage.Literals.LAYOUT_ITEM__ID = layoutItem_id;
+
+    // Create x feature
+    const layoutItem_x = new BasicEAttribute();
+    layoutItem_x.setName('x');
+    layoutItem_x.setLowerBound(1);
+    layoutItem_x.setUpperBound(1);
+    layoutItemClass.getEStructuralFeatures().push(layoutItem_x);
+    WorkspacePackage.Literals.LAYOUT_ITEM__X = layoutItem_x;
+
+    // Create y feature
+    const layoutItem_y = new BasicEAttribute();
+    layoutItem_y.setName('y');
+    layoutItem_y.setLowerBound(1);
+    layoutItem_y.setUpperBound(1);
+    layoutItemClass.getEStructuralFeatures().push(layoutItem_y);
+    WorkspacePackage.Literals.LAYOUT_ITEM__Y = layoutItem_y;
+
+    // Create z feature
+    const layoutItem_z = new BasicEAttribute();
+    layoutItem_z.setName('z');
+    layoutItem_z.setLowerBound(1);
+    layoutItem_z.setUpperBound(1);
+    layoutItemClass.getEStructuralFeatures().push(layoutItem_z);
+    WorkspacePackage.Literals.LAYOUT_ITEM__Z = layoutItem_z;
+
+    // Create width feature
+    const layoutItem_width = new BasicEAttribute();
+    layoutItem_width.setName('width');
+    layoutItem_width.setLowerBound(1);
+    layoutItem_width.setUpperBound(1);
+    layoutItemClass.getEStructuralFeatures().push(layoutItem_width);
+    WorkspacePackage.Literals.LAYOUT_ITEM__WIDTH = layoutItem_width;
+
+    // Create height feature
+    const layoutItem_height = new BasicEAttribute();
+    layoutItem_height.setName('height');
+    layoutItem_height.setLowerBound(1);
+    layoutItem_height.setUpperBound(1);
+    layoutItemClass.getEStructuralFeatures().push(layoutItem_height);
+    WorkspacePackage.Literals.LAYOUT_ITEM__HEIGHT = layoutItem_height;
+
+    // Create group feature
+    const layoutItem_group = new BasicEAttribute();
+    layoutItem_group.setName('group');
+    layoutItem_group.setLowerBound(0);
+    layoutItem_group.setUpperBound(1);
+    layoutItemClass.getEStructuralFeatures().push(layoutItem_group);
+    WorkspacePackage.Literals.LAYOUT_ITEM__GROUP = layoutItem_group;
+
     // Create Datasource class
     const datasourceClass = new BasicEClass();
     datasourceClass.setName('Datasource');
@@ -244,7 +393,7 @@ export class WorkspacePackage extends BasicEPackage {
     // Create uid feature
     const datasource_uid = new BasicEAttribute();
     datasource_uid.setName('uid');
-    datasource_uid.setLowerBound(0);
+    datasource_uid.setLowerBound(1);
     datasource_uid.setUpperBound(1);
     datasourceClass.getEStructuralFeatures().push(datasource_uid);
     WorkspacePackage.Literals.DATASOURCE__UID = datasource_uid;
@@ -294,7 +443,7 @@ export class WorkspacePackage extends BasicEPackage {
     // Create uid feature
     const connection_uid = new BasicEAttribute();
     connection_uid.setName('uid');
-    connection_uid.setLowerBound(0);
+    connection_uid.setLowerBound(1);
     connection_uid.setUpperBound(1);
     connectionClass.getEStructuralFeatures().push(connection_uid);
     WorkspacePackage.Literals.CONNECTION__UID = connection_uid;
@@ -349,6 +498,20 @@ export class WorkspacePackage extends BasicEPackage {
     (WorkspacePackage.Literals.PAGE__BACKGROUND_SIZE as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
     (WorkspacePackage.Literals.PAGE__BACKGROUND_POSITION as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
     (WorkspacePackage.Literals.PAGE__BACKGROUND_REPEAT as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (WorkspacePackage.Literals.PAGE__WIDGETS as BasicEReference).setEType(WorkspacePackage.Literals.WIDGET);
+    (WorkspacePackage.Literals.PAGE__LAYOUT as BasicEReference).setEType(WorkspacePackage.Literals.LAYOUT_ITEM);
+    (WorkspacePackage.Literals.WIDGET__UID as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (WorkspacePackage.Literals.WIDGET__TYPE as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (WorkspacePackage.Literals.WIDGET__DATASOURCE as BasicEReference).setEType(WorkspacePackage.Literals.DATASOURCE);
+    (WorkspacePackage.Literals.WIDGET__CONFIG as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EJavaObject')!);
+    (WorkspacePackage.Literals.WIDGET__WRAPPER_CONFIG as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EJavaObject')!);
+    (WorkspacePackage.Literals.LAYOUT_ITEM__ID as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (WorkspacePackage.Literals.LAYOUT_ITEM__X as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EInt')!);
+    (WorkspacePackage.Literals.LAYOUT_ITEM__Y as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EInt')!);
+    (WorkspacePackage.Literals.LAYOUT_ITEM__Z as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EInt')!);
+    (WorkspacePackage.Literals.LAYOUT_ITEM__WIDTH as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EInt')!);
+    (WorkspacePackage.Literals.LAYOUT_ITEM__HEIGHT as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EInt')!);
+    (WorkspacePackage.Literals.LAYOUT_ITEM__GROUP as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
     (WorkspacePackage.Literals.DATASOURCE__UID as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
     (WorkspacePackage.Literals.DATASOURCE__NAME as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
     (WorkspacePackage.Literals.DATASOURCE__TYPE as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);

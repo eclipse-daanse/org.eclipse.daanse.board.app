@@ -32,8 +32,6 @@ import {
   type Workspace,
 } from 'org.eclipse.daanse.board.app.lib.model.workspace'
 import { useEList } from 'org.eclipse.daanse.board.app.ui.vue.composables'
-import { useLayoutStore } from 'org.eclipse.daanse.board.app.ui.vue.stores.layout'
-import { useWidgetsStore } from 'org.eclipse.daanse.board.app.ui.vue.stores.widgets'
 import type { PageRegistryI, PageI } from 'org.eclipse.daanse.board.app.lib.api.page'
 import type { LayoutRepositoryI } from 'org.eclipse.daanse.board.app.lib.api.layout.page'
 
@@ -73,7 +71,13 @@ const boards = computed<BoardSummary[]>(() => {
     .slice()
     .sort(byUsage)
     .map((id: string) =>
-      summarizeBoard(id, repo.getPage(id) as PageI | undefined, useLayoutStore(id).layout, useWidgetsStore(id).widgets),
+      /* Both halves come off the page itself now. */
+      summarizeBoard(
+        id,
+        repo.getPage(id) as PageI | undefined,
+        repo.getPage(id)?.layout?.toArray() ?? [],
+        repo.getPage(id)?.widgets?.toArray() ?? [],
+      ),
     )
 })
 

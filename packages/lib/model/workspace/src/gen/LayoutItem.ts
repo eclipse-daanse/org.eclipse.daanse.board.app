@@ -8,13 +8,16 @@
 import type { EObject } from '@emfts/core';
 
 /**
- * Connection
+ * LayoutItem
  * @generated
  */
-export interface Connection extends EObject {
-  uid: string;
-  name?: string;
-  type?: string;
-  config?: unknown;
+export interface LayoutItem extends EObject {
+  id: string;
+  x: number;
+  y: number;
+  z: number;
+  width: number;
+  height: number;
+  group?: string;
 
 }

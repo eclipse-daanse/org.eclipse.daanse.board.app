@@ -29,6 +29,10 @@
     {
       "id": "@emfts/core",
       "versionRange": "^0.1.1-next.18"
+    },
+    {
+      "id": "org.eclipse.daanse.board.app.lib.api.page",
+      "versionRange": ">=0.0.1-0"
     }
   ],
   "capabilities": [
@@ -45,6 +49,7 @@
     "lib.api.pagecontext",
     "lib.api.variable",
     "lib.variables",
-    "platform.vue"
+    "platform.vue",
+    "lib.api.page"
   ]
 }

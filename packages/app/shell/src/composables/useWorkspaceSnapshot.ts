@@ -25,8 +25,6 @@
  */
 import { inject, ref } from 'vue'
 import { parse, stringify } from 'flatted'
-import { useLayoutStore } from 'org.eclipse.daanse.board.app.ui.vue.stores.layout'
-import { useWidgetsStore } from 'org.eclipse.daanse.board.app.ui.vue.stores.widgets'
 import {
   type ConnectionRepository,
   identifier as ConnectionRepoId,
@@ -48,6 +46,10 @@ import {
   type PageRegistryI,
   type Page,
   type StoredPage,
+  type Widget,
+  type StoredWidget,
+  type LayoutItem,
+  type StoredLayoutItem,
   identifier as PageIdentifier,
 } from 'org.eclipse.daanse.board.app.lib.api.page'
 import {
@@ -130,6 +132,29 @@ function toStoredPage(page: Page | undefined): StoredPage | undefined {
   }
 }
 
+/** A modelled widget as plain data, feature by feature. */
+function toStoredWidget(widget: Widget): StoredWidget {
+  return {
+    uid: widget.uid,
+    type: widget.type as string,
+    config: widget.config as StoredWidget['config'],
+    wrapperConfig: widget.wrapperConfig as Record<string, unknown>,
+  }
+}
+
+/** Where it sits, likewise. */
+function toStoredLayoutItem(item: LayoutItem): StoredLayoutItem {
+  return {
+    id: item.id,
+    x: item.x,
+    y: item.y,
+    z: item.z,
+    width: item.width,
+    height: item.height,
+    group: item.group,
+  }
+}
+
 export function useWorkspaceSnapshot() {
   const pageRepo = inject<PageRegistryI>(PageIdentifier)
   const layoutRepo = inject<LayoutRepositoryI>(LayoutRepositoryIdentifier)
@@ -141,9 +166,6 @@ export function useWorkspaceSnapshot() {
 
   /** The current workspace as a storable string. */
   function capture(): string {
-    const layoutStore = useLayoutStore()
-    const widgets = useWidgetsStore()
-
     const variables: unknown[] = []
     for (const entry of variableRepository?.getAllVariables() ?? []) {
       const serialized = (entry[1] as Variable).serialize()
@@ -153,15 +175,15 @@ export function useWorkspaceSnapshot() {
 
     const pages: Record<string, unknown> = {}
     for (const id of pageRepo?.getAllPageIds() ?? []) {
+      const page = pageRepo?.getPage(id)
       pages[id] = {
-        info: toStoredPage(pageRepo?.getPage(id)),
-        widgets: useWidgetsStore(id).widgets,
-        layout: useLayoutStore(id).layout,
+        info: toStoredPage(page),
+        widgets: (page?.widgets?.toArray() ?? []).map((w) => toStoredWidget(w as Widget)),
+        layout: (page?.layout?.toArray() ?? []).map(toStoredLayoutItem),
       }
     }
 
     return stringify({
-      layout: layoutStore.layout,
       datasources: (dsRepository?.getDatasources() ?? []).map((source) => ({
         uid: source.uid,
         name: source.name,
@@ -180,7 +202,6 @@ export function useWorkspaceSnapshot() {
         type: connection.type,
         config: connection.config,
       })),
-      widgets: widgets.widgets,
       variables,
       pages,
       eventMappings: eventManager?.getAllMappings() ?? [],
@@ -197,9 +218,6 @@ export function useWorkspaceSnapshot() {
     const data = parseSnapshot(content) as any
     if (!data) return []
 
-    const layoutStore = useLayoutStore()
-    const widgets = useWidgetsStore()
-
     for (const variable of data.variables ?? []) {
       variableRepository?.registerVariable(variable.name, variable.type, variable)
     }
@@ -214,15 +232,8 @@ export function useWorkspaceSnapshot() {
      */
     dsRepository?.setDatasources((data.datasources ?? []) as never)
 
-    variableWrapperFactory?.initilazeVariableWrappers(data.widgets)
-    if (data.layout) layoutStore.layout = data.layout
-    if (data.widgets) widgets.widgets = data.widgets
-
     const restored: string[] = []
     for (const [id, page] of Object.entries<any>(data.pages ?? {})) {
-      useLayoutStore(id).layout = page.layout
-      useWidgetsStore(id).widgets = page.widgets
-
       /*
        * A board stored before the layout became an id carries the whole
        * layout object, Vue components and all. Only its id is of any use
@@ -239,6 +250,12 @@ export function useWorkspaceSnapshot() {
           layout: undefined,
         })
       }
+
+      /*
+       * The board's contents after the page exists to hold them, and both
+       * halves in one call - a widget and its placement arrive together.
+       */
+      pageRepo?.setBoard(id, page.widgets ?? [], page.layout ?? [])
       variableWrapperFactory?.initilazeVariableWrappers(page.widgets)
       restored.push(id)
     }

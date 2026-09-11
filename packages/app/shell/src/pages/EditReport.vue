@@ -22,11 +22,11 @@ Contributors:
 <script setup lang="ts">
 import { ref, computed, inject } from 'vue'
 
-import { useWidgetsStore, type IWidget } from 'org.eclipse.daanse.board.app.ui.vue.stores.widgets'
+import { useBoard } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+import type { Widget as IWidget } from 'org.eclipse.daanse.board.app.lib.api.page'
 import AddWidgetWindow from '@/components/common/AddWidgetWindow.vue'
 import WidgetSettingsOverlay from '@/components/common/WidgetSettingsOverlay.vue'
 import { WidgetWrapper } from 'org.eclipse.daanse.board.app.ui.vue.widget.wrapper'
-import { useLayoutStore } from 'org.eclipse.daanse.board.app.ui.vue.stores.layout'
 import { useRoute } from 'vue-router'
 import PageSettings from '@/components/pageEditor/PageSettings.vue'
 import { usePages } from '@/composables/usePages'
@@ -38,7 +38,16 @@ const widgetSettingsOpenedId = ref('')
 const route = useRoute()
 
 const pageID = route.params.pageid ?? ''
-const { widgets } = useWidgetsStore((pageID as string) || '')
+/*
+ * One board: what is on it and where each thing sits.
+ *
+ * Not called `board`: the element below carries ref="board", and with
+ * <script setup> a template ref binds to the setup binding of that name.
+ * Vue then tried to write the element into this object and threw reading
+ * `refs` of undefined - on every board route, edit and view alike.
+ */
+const contents = useBoard((pageID as string) || '')
+const widgets = contents.widgets
 
 const innerWidgets = ref<IWidget[]>([])
 
@@ -56,7 +65,7 @@ const openWidgetSettings = (id: string) => {
 }
 
 const currentlyEditingWidget = computed(() => {
-  const widgetFromStore = widgets?.find((widget: any) => widget.uid === widgetSettingsOpenedId.value)
+  const widgetFromStore = widgets.value.find((widget) => widget.uid === widgetSettingsOpenedId.value)
   if (widgetFromStore) return widgetFromStore
   return innerWidgets.value.find((widget) => widget.uid === widgetSettingsOpenedId.value)
 })
@@ -65,11 +74,8 @@ const currentlyEditingWidget = computed(() => {
  * The preview shows the widget at the size it has on the board, so what is
  * set here is set for the real thing rather than for a stand-in.
  */
-const { layout } = useLayoutStore((pageID as string) || '')
 const editedWidgetSize = computed(() => {
-  const item = (layout as Array<{ id?: string; width?: number; height?: number }> | undefined)?.find(
-    (entry) => entry.id === widgetSettingsOpenedId.value,
-  )
+  const item = contents.layout.value.find((entry) => entry.id === widgetSettingsOpenedId.value)
   if (!item?.width || !item?.height) return undefined
   return { width: item.width, height: item.height }
 })

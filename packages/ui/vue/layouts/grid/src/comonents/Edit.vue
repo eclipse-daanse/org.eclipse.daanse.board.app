@@ -89,8 +89,8 @@ Contributors:
 <script setup lang="ts">
 import { inject, ref, computed, watch, nextTick, onMounted, onBeforeUnmount } from 'vue'
 import { GridLayout, type LayoutItem } from 'grid-layout-plus'
-import { type IWidget, useWidgetsStore } from 'org.eclipse.daanse.board.app.ui.vue.stores.widgets'
-import { useLayoutStore } from 'org.eclipse.daanse.board.app.ui.vue.stores.layout'
+import { useBoard } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+import type { StoredWidget } from 'org.eclipse.daanse.board.app.lib.api.page'
 import { WidgetWrapper, defaultConfig } from 'org.eclipse.daanse.board.app.ui.vue.widget.wrapper'
 import { useRoute } from 'vue-router'
 import Draggable from 'vuedraggable'
@@ -114,10 +114,10 @@ const currentColCount = computed(() => getCurrentCols(windowWidth.value))
 /** Routing/Stores */
 const route = useRoute()
 const pageID = computed(() => (route.params.pageid as string) || '')
-const widgetStore = computed(() => useWidgetsStore(pageID.value))
-const layoutStore = computed(() => useLayoutStore(pageID.value))
-const widgets = computed(() => widgetStore.value.widgets)
-const storedLayout = computed(() => layoutStore.value.layout)
+/* One board: the widgets and where they sit, from the model. */
+const board = useBoard(pageID)
+const widgets = board.widgets
+const storedLayout = board.layout
 const clipboardStore = useClipboardStore()
 
 /** Copy/Paste */
@@ -195,7 +195,23 @@ const copyWidget = (widgetId: string) => {
   const widget = widgets.value.find((w: any) => w.uid === widgetId)
   const layoutItem = storedLayout.value.find((l: any) => l.id === widgetId)
   if (widget && layoutItem) {
-    clipboardStore.copy(widget, layoutItem)
+    /* A snapshot, feature by feature: a modelled object keeps its values
+       in private fields, so spreading one copies _uid, not uid. */
+    clipboardStore.copy(
+      {
+        type: widget.type as string,
+        config: cloneDeep(widget.config ?? {}) as StoredWidget['config'],
+        wrapperConfig: cloneDeep(widget.wrapperConfig ?? {}) as Record<string, any>,
+      },
+      {
+        x: layoutItem.x,
+        y: layoutItem.y,
+        z: layoutItem.z,
+        width: layoutItem.width,
+        height: layoutItem.height,
+        group: layoutItem.group,
+      },
+    )
   }
 }
 
@@ -226,8 +242,14 @@ const pasteWidget = () => {
     static: false
   }
 
-  // Add to stores
-  widgetStore.value.updateWidgets([...widgets.value, newWidget])
+  board.addWidget(newWidget, {
+    id: newWidget.uid,
+    x: gridX * colW,
+    y: gridY * rowH,
+    z: 0,
+    width: clipboard.layout.width ?? 200,
+    height: clipboard.layout.height ?? 100,
+  })
   layoutModel.value = [...layoutModel.value, newLayout]
   persistLayout(layoutModel.value)
 }
@@ -388,7 +410,7 @@ function persistLayout(newLayout?: LayoutItem[]) {
 
   // Nur schreiben, wenn wirklich anders
   if (!isEqual(roundedCurr, roundedNext)) {
-    layoutStore.value.updateLayout(nextPixels)
+    board.setBoard(toStoredWidgets(), nextPixels)
   }
 }
 
@@ -483,14 +505,33 @@ function onDrop() { onOverlayEnd() }
 
 /** Widgets hinzufügen/entfernen */
 function addWidget(uid: string, type: string, datasourceId: string) {
-  const config = { datasourceId, settings: {} }
-  const newWidget: IWidget = { uid, type, config, wrapperConfig: cloneDeep(defaultConfig) }
-  widgetStore.value.updateWidgets([...widgets.value, newWidget])
+  const widget: StoredWidget = {
+    uid,
+    type,
+    config: { datasourceId, settings: {} },
+    wrapperConfig: cloneDeep(defaultConfig),
+  }
+  board.addWidget(widget, { id: uid, x: 0, y: 0, z: 0, width: 300, height: 150 })
 }
 function removeWidget(uid: string) {
-  widgetStore.value.updateWidgets(widgets.value.filter((w: any) => w.uid !== uid))
+  board.removeWidget(uid)
   layoutModel.value = layoutModel.value.filter((it: any) => it.i !== uid)
   persistLayout(layoutModel.value)
+}
+
+/**
+ * The widgets as plain data, for the one call that replaces the board.
+ *
+ * Writing the layout means writing both halves, because they arrive and
+ * leave together; the widgets go back unchanged.
+ */
+function toStoredWidgets(): StoredWidget[] {
+  return widgets.value.map((widget) => ({
+    uid: widget.uid,
+    type: widget.type as string,
+    config: widget.config as StoredWidget['config'],
+    wrapperConfig: widget.wrapperConfig as Record<string, any>,
+  }))
 }
 
 /** UI */

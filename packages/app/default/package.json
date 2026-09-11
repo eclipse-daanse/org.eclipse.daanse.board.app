@@ -112,8 +112,6 @@
     "org.eclipse.daanse.board.app.ui.vue.persistence.git": "^0.0.1-next.1",
     "org.eclipse.daanse.board.app.ui.vue.plugins.endpointfinder": "^0.0.1-next.1",
     "org.eclipse.daanse.board.app.ui.vue.plugins.geojson_renderer": "^0.0.1-next.1",
-    "org.eclipse.daanse.board.app.ui.vue.stores.layout": "^0.0.1-next.1",
-    "org.eclipse.daanse.board.app.ui.vue.stores.widgets": "^0.0.1-next.1",
     "org.eclipse.daanse.board.app.ui.vue.uimodel": "^0.0.1-next.1",
     "org.eclipse.daanse.board.app.ui.vue.variable.computed": "^0.0.1-next.1",
     "org.eclipse.daanse.board.app.ui.vue.variable.constant": "^0.0.1-next.1",

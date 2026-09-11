@@ -6,15 +6,17 @@
  */
 
 import type { EObject } from '@emfts/core';
+import type { Datasource } from './Datasource.js';
 
 /**
- * Connection
+ * Widget
  * @generated
  */
-export interface Connection extends EObject {
+export interface Widget extends EObject {
   uid: string;
-  name?: string;
   type?: string;
+  datasource?: Datasource;
   config?: unknown;
+  wrapperConfig?: unknown;
 
 }

@@ -40,9 +40,11 @@ import {
   onScopeDispose,
   ref,
   shallowRef,
+  toValue,
   triggerRef,
   watch,
   type ComputedRef,
+  type MaybeRefOrGetter,
   type ShallowRef,
   type WritableComputedRef,
 } from 'vue'
@@ -126,9 +128,9 @@ function useChangeCount(target: () => EObject | undefined) {
  *     const held = useEObject(() => connections.value.find(byId))
  */
 export function useEObject<T extends EObject>(
-  source: T | undefined | (() => T | undefined),
+  source: MaybeRefOrGetter<T | undefined>,
 ): ShallowRef<T | undefined> {
-  const read = typeof source === 'function' ? (source as () => T | undefined) : () => source
+  const read = () => toValue(source)
   /*
    * Cast: shallowRef's overloads narrow to the argument's own type, and T
    * here is only bounded by EObject, so the inferred ref is not the one the
@@ -163,10 +165,10 @@ export function useEObject<T extends EObject>(
  * unresolvable at every call site.
  */
 export function useEList<T extends EObject, E>(
-  owner: T | undefined | (() => T | undefined),
+  owner: MaybeRefOrGetter<T | undefined>,
   select: (owner: T) => EListLike<E> | undefined,
 ): ComputedRef<E[]> {
-  const read = typeof owner === 'function' ? (owner as () => T | undefined) : () => owner
+  const read = () => toValue(owner)
   const count = useChangeCount(read)
 
   return computed(() => {
@@ -189,10 +191,10 @@ interface EListLike<E> {
  * notification. Nothing here assigns to a proxy or around the instance.
  */
 export function useFeature<T extends EObject, K extends keyof T>(
-  object: T | undefined | (() => T | undefined),
+  object: MaybeRefOrGetter<T | undefined>,
   key: K,
 ): WritableComputedRef<T[K] | undefined> {
-  const read = typeof object === 'function' ? (object as () => T | undefined) : () => object
+  const read = () => toValue(object)
   const count = useChangeCount(read)
 
   return computed({

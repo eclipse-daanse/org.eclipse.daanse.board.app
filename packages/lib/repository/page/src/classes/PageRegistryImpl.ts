@@ -11,11 +11,24 @@
  *   Smart City Jena
  **********************************************************************/
 
-import type { PageRegistryI, StoredPage } from 'org.eclipse.daanse.board.app.lib.api.page'
+import type {
+  PageRegistryI,
+  StoredPage,
+  StoredWidget,
+  StoredLayoutItem,
+} from 'org.eclipse.daanse.board.app.lib.api.page'
+import {
+  DATASOURCE_REPOSITORY,
+  type DatasourceRepository,
+} from 'org.eclipse.daanse.board.app.lib.api.datasource'
 import {
   WORKSPACE,
   PageImpl,
+  WidgetImpl,
+  LayoutItemImpl,
+  type LayoutItem,
   type Page,
+  type Widget,
   type Workspace,
 } from 'org.eclipse.daanse.board.app.lib.model.workspace'
 
@@ -127,5 +140,103 @@ export class PageRegistryImpl implements PageRegistryI {
 
   updatePage(page: StoredPage): void {
     this.registerPage(page)
+  }
+
+  // ----------------------------------------------------- what is on a board
+
+  private get datasources(): DatasourceRepository {
+    return this.resolver.getRequired<DatasourceRepository>(DATASOURCE_REPOSITORY)
+  }
+
+  /**
+   * Writes a widget's plain values onto the modelled one.
+   *
+   * The source is held as a reference and the id kept in the settings, in
+   * that order - one direction, because the reference is the truth and the
+   * id is what a widget's own settings read.
+   */
+  private applyWidget(held: Widget, widget: StoredWidget): void {
+    held.uid = widget.uid
+    held.type = widget.type
+    held.wrapperConfig = widget.wrapperConfig ?? {}
+
+    const config = (widget.config ?? {}) as Record<string, unknown>
+    const datasourceId = config['datasourceId'] as string | undefined
+    held.datasource = datasourceId
+      ? this.datasources.getDatasourceModel(datasourceId)
+      : undefined
+    config['datasourceId'] = held.datasource?.uid ?? datasourceId
+    held.config = config
+  }
+
+  addWidget(
+    pageId: string,
+    widget: StoredWidget,
+    placement: Partial<StoredLayoutItem> = {},
+  ): Widget | undefined {
+    const page = this.getPage(pageId)
+    if (!page) return undefined
+
+    const held = new WidgetImpl()
+    this.applyWidget(held, widget)
+    page.widgets.push(held)
+
+    const item = new LayoutItemImpl()
+    item.id = widget.uid
+    item.width = placement.width ?? 300
+    item.height = placement.height ?? 150
+    item.x = placement.x ?? 0
+    item.y = placement.y ?? 0
+    /* On top of what is already there, unless told where to go. */
+    item.z = placement.z ?? Math.max(0, ...page.layout.toArray().map((l: LayoutItem) => l.z ?? 0)) + 1
+    item.group = placement.group
+    page.layout.push(item)
+
+    return held
+  }
+
+  saveWidget(pageId: string, widget: StoredWidget): void {
+    const page = this.getPage(pageId)
+    const held = page?.widgets.toArray().find((w: Widget) => w.uid === widget.uid)
+    if (held) this.applyWidget(held, widget)
+  }
+
+  removeWidget(pageId: string, widgetUid: string): void {
+    const page = this.getPage(pageId)
+    if (!page) return
+
+    const widgets = page.widgets
+    const atWidget = widgets.toArray().findIndex((w: Widget) => w.uid === widgetUid)
+    if (atWidget > -1) widgets.removeAt(atWidget)
+
+    /* Its placement goes with it - a layout item for nothing places nothing. */
+    const layout = page.layout
+    const atItem = layout.toArray().findIndex((item: LayoutItem) => item.id === widgetUid)
+    if (atItem > -1) layout.removeAt(atItem)
+  }
+
+  setBoard(pageId: string, widgets: StoredWidget[], layout: StoredLayoutItem[]): void {
+    const page = this.getPage(pageId)
+    if (!page) return
+
+    page.widgets.clear()
+    for (const widget of widgets) {
+      const held = new WidgetImpl()
+      this.applyWidget(held, widget)
+      page.widgets.push(held)
+    }
+
+    page.layout.clear()
+    for (const item of layout) {
+      const held = new LayoutItemImpl()
+      held.id = item.id
+      held.x = item.x
+      held.y = item.y
+      held.z = item.z
+      held.width = item.width
+      held.height = item.height
+      held.group = item.group
+      page.layout.push(held)
+    }
   }
 }

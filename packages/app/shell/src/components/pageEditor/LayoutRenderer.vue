@@ -18,7 +18,7 @@ import {
   identifier as LayoutRepositoryIdentifier,
   type LayoutI
 } from 'org.eclipse.daanse.board.app.lib.api.layout.page'
-import { useEObject } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+import { useEObject, useFeature } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import {
   type PageRegistryI,
   identifier as PageIdentifier,
@@ -95,15 +95,23 @@ const loadLayout = async () => {
  * so this is a watcher on it rather than a subscription to three event
  * names the registry used to publish.
  */
-const held = useEObject(() => (props.pageId ? pageRepo?.getPage(props.pageId) : undefined))
+const page = () => (props.pageId ? pageRepo?.getPage(props.pageId) : undefined)
+const held = useEObject(page)
+watch(held, () => { currentPage.value = held.value ?? null })
 
-watch(held, () => {
-  const page = held.value
-  currentPage.value = page ?? null
-  if (page?.layoutId !== currentLayout.value?.id || !currentLayout.value) {
-    refreshTrigger.value++
-    loadLayout()
-  }
+/*
+ * The layout engine is reloaded when the layout changes, and only then.
+ *
+ * Watching the page itself means watching everything under it - the widgets
+ * are contained in it now, so a widget added or a pixel dragged is a change
+ * to the page, and this watcher would run on every frame of a drag only to
+ * decide it has nothing to do. The feature is what matters, so the feature
+ * is what is watched.
+ */
+const layoutId = useFeature(page, 'layoutId')
+watch(layoutId, () => {
+  refreshTrigger.value++
+  loadLayout()
 })
 
 /*watchEffect(() => {

@@ -24,8 +24,6 @@
     "lib.variables",
     "platform.vue",
     "ui.vue.composables",
-    "ui.vue.stores.layout",
-    "ui.vue.stores.widgets",
     "ui.vue.widget.wrapper",
     "ui.vue.controls",
     "ui.vue.uimodel",
@@ -149,14 +147,6 @@
     },
     {
       "id": "org.eclipse.daanse.board.app.ui.vue.composables",
-      "versionRange": ">=0.0.1-0"
-    },
-    {
-      "id": "org.eclipse.daanse.board.app.ui.vue.stores.layout",
-      "versionRange": ">=0.0.1-0"
-    },
-    {
-      "id": "org.eclipse.daanse.board.app.ui.vue.stores.widgets",
       "versionRange": ">=0.0.1-0"
     },
     {

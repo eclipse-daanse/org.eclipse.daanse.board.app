@@ -13,8 +13,6 @@ Contributors:
 
 <script setup lang="ts">
 import { computed, ref, watch, onMounted, onErrorCaptured, inject, shallowRef } from 'vue'
-import { useWidgetsStore, type IWidget } from 'org.eclipse.daanse.board.app.ui.vue.stores.widgets'
-import { useLayoutStore } from 'org.eclipse.daanse.board.app.ui.vue.stores.layout'
 import { WidgetWrapper } from 'org.eclipse.daanse.board.app.ui.vue.widget.wrapper'
 import {
   type LayoutRepositoryI,

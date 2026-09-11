@@ -138,8 +138,6 @@ import b124 from 'org.eclipse.daanse.board.app.ui.vue.composables/manifest.json'
 import b125 from 'org.eclipse.daanse.board.app.ui.vue.variable.components/manifest.json'
 import b145 from 'org.eclipse.daanse.board.app.ui.vue.controls/manifest.json'
 import b146 from 'org.eclipse.daanse.board.app.ui.vue.uimodel/manifest.json'
-import b126 from 'org.eclipse.daanse.board.app.ui.vue.stores.layout/manifest.json'
-import b127 from 'org.eclipse.daanse.board.app.ui.vue.stores.widgets/manifest.json'
 import b128 from 'org.eclipse.daanse.board.app.ui.vue.widget.wrapper/manifest.json'
 import b129 from 'org.eclipse.daanse.board.app.ui.vue.common.kpi/manifest.json'
 import b130 from 'org.eclipse.daanse.board.app.ui.vue.common.monaco/manifest.json'
@@ -290,8 +288,6 @@ export const bundles: ModuleManifest[] = [
   b123 as ModuleManifest,
   b124 as ModuleManifest,
   b125 as ModuleManifest,
-  b126 as ModuleManifest,
-  b127 as ModuleManifest,
   b128 as ModuleManifest,
   b129 as ModuleManifest,
   b130 as ModuleManifest,

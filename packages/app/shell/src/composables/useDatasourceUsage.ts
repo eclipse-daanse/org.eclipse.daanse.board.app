@@ -30,7 +30,6 @@ import {
   identifier as PAGE_REPOSITORY,
   type PageRegistryI,
 } from 'org.eclipse.daanse.board.app.lib.api.page'
-import { useWidgetsStore } from 'org.eclipse.daanse.board.app.ui.vue.stores.widgets'
 
 export interface DatasourceUsage {
   /** Boards holding at least one widget that reads from the source. */
@@ -51,8 +50,8 @@ export function useDatasourceUsage() {
 
     for (const pageId of pages.getAllPageIds()) {
       const onThisBoard = new Set<string>()
-      for (const widget of useWidgetsStore(pageId).widgets) {
-        const id = widget?.config?.datasourceId
+      for (const widget of pages.getPage(pageId)?.widgets?.toArray() ?? []) {
+        const id = widget.datasource?.uid
         if (!id) continue
         const held = (found[id] ??= { boards: 0, widgets: 0 })
         held.widgets++

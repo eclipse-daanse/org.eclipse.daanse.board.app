@@ -6,7 +6,10 @@
  */
 
 import { BasicEObject } from '@emfts/core';
-import type { EClass, EStructuralFeature } from '@emfts/core';
+import { createContainmentEList } from '@emfts/core';
+import type { EClass, EStructuralFeature, EList, EReference } from '@emfts/core';
+import type { Widget } from './Widget.js';
+import type { LayoutItem } from './LayoutItem.js';
 import type { Page } from './Page.js';
 import { WorkspacePackage } from './WorkspacePackage.js';
 
@@ -28,9 +31,11 @@ export class PageImpl extends BasicEObject implements Page {
   static readonly BACKGROUND_SIZE: number = 9;
   static readonly BACKGROUND_POSITION: number = 10;
   static readonly BACKGROUND_REPEAT: number = 11;
+  static readonly WIDGETS: number = 12;
+  static readonly LAYOUT: number = 13;
 
   // Private fields
-  private _id?: string;
+  private _id: string = "";
   private _name?: string;
   private _description?: string;
   private _icon?: string;
@@ -42,6 +47,8 @@ export class PageImpl extends BasicEObject implements Page {
   private _backgroundSize?: string;
   private _backgroundPosition?: string;
   private _backgroundRepeat?: string;
+  private _widgets!: EList<Widget>;
+  private _layout!: EList<LayoutItem>;
 
   /**
    * Returns the EClass of this object
@@ -339,6 +346,20 @@ export class PageImpl extends BasicEObject implements Page {
     }
   }
 
+  get widgets(): EList<Widget> {
+    if (!this._widgets) {
+      this._widgets = createContainmentEList<any>(this, this.eClass().getEStructuralFeature('widgets') as EReference);
+    }
+    return this._widgets;
+  }
+
+  get layout(): EList<LayoutItem> {
+    if (!this._layout) {
+      this._layout = createContainmentEList<any>(this, this.eClass().getEStructuralFeature('layout') as EReference);
+    }
+    return this._layout;
+  }
+
   // Reflective API
 
   /**
@@ -371,6 +392,10 @@ export class PageImpl extends BasicEObject implements Page {
         return this.backgroundPosition;
       case PageImpl.BACKGROUND_REPEAT:
         return this.backgroundRepeat;
+      case PageImpl.WIDGETS:
+        return this.widgets;
+      case PageImpl.LAYOUT:
+        return this.layout;
       default:
         return super.eGet(feature);
     }
@@ -430,6 +455,16 @@ export class PageImpl extends BasicEObject implements Page {
         this.backgroundRepeat = newValue as string;
         super.eSet(feature, newValue);
         break;
+      case PageImpl.WIDGETS:
+        this.widgets.clear();
+        this.widgets.addAll(newValue as any[]);
+        super.eSet(feature, newValue);
+        break;
+      case PageImpl.LAYOUT:
+        this.layout.clear();
+        this.layout.addAll(newValue as any[]);
+        super.eSet(feature, newValue);
+        break;
       default:
         super.eSet(feature, newValue);
     }
@@ -442,7 +477,7 @@ export class PageImpl extends BasicEObject implements Page {
     const featureID = this.eClass().getFeatureID(feature);
     switch (featureID) {
       case PageImpl.ID:
-        return this._id !== undefined;
+        return this._id !== "";
       case PageImpl.NAME:
         return this._name !== undefined;
       case PageImpl.DESCRIPTION:
@@ -465,6 +500,10 @@ export class PageImpl extends BasicEObject implements Page {
         return this._backgroundPosition !== undefined;
       case PageImpl.BACKGROUND_REPEAT:
         return this._backgroundRepeat !== undefined;
+      case PageImpl.WIDGETS:
+        return this._widgets !== undefined && !this._widgets.isEmpty();
+      case PageImpl.LAYOUT:
+        return this._layout !== undefined && !this._layout.isEmpty();
       default:
         return super.eIsSet(feature);
     }
@@ -477,7 +516,7 @@ export class PageImpl extends BasicEObject implements Page {
     const featureID = this.eClass().getFeatureID(feature);
     switch (featureID) {
       case PageImpl.ID:
-        this._id = undefined;
+        this._id = "";
         return;
       case PageImpl.NAME:
         this._name = undefined;
@@ -512,6 +551,12 @@ export class PageImpl extends BasicEObject implements Page {
       case PageImpl.BACKGROUND_REPEAT:
         this._backgroundRepeat = undefined;
         return;
+      case PageImpl.WIDGETS:
+        if (this._widgets) this._widgets.clear();
+        return;
+      case PageImpl.LAYOUT:
+        if (this._layout) this._layout.clear();
+        return;
       default:
         super.eUnset(feature);
     }
@@ -539,6 +584,8 @@ export class PageImpl extends BasicEObject implements Page {
       backgroundSize: this.backgroundSize,
       backgroundPosition: this.backgroundPosition,
       backgroundRepeat: this.backgroundRepeat,
+      widgets: this.widgets?.toArray?.() ?? this.widgets,
+      layout: this.layout?.toArray?.() ?? this.layout,
     };
   }
 }

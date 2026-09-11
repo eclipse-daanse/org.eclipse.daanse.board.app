@@ -13,7 +13,7 @@ import type { Connection } from './Connection.js';
  * @generated
  */
 export interface Datasource extends EObject {
-  uid?: string;
+  uid: string;
   name?: string;
   type?: string;
   connection?: Connection;

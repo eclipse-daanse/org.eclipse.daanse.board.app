@@ -27,8 +27,7 @@ const route = useRoute();
 const pageID = props.pageId ?? route.params.pageid ?? '';
 
 const {
-  layoutStore,
-  widgetStore,
+  board,
   getInitialStyle,
 } = useMoveableLayout(pageID as string || '');
 
@@ -47,7 +46,7 @@ onMounted(async () => {
 
 <template>
   <div class="widget-board">
-    <template v-for="widget in widgetStore?.widgets || []" :key="widget.uid">
+    <template v-for="widget in board.widgets.value" :key="widget.uid">
       <div
         :class="`${widget.uid} dashboard-item-container`"
         :style="getInitialStyle(widget.uid)"

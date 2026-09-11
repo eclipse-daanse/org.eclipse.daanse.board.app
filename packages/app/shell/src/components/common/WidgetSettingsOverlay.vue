@@ -39,7 +39,7 @@ import {
 } from 'org.eclipse.daanse.board.app.lib.model.workspace'
 import { useEList } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import type { i18n } from 'org.eclipse.daanse.board.app.lib.i18next'
-import { type IWidget } from 'org.eclipse.daanse.board.app.ui.vue.stores.widgets'
+import { type Widget as IWidget } from 'org.eclipse.daanse.board.app.lib.api.page'
 import { WidgetRepository, identifier } from 'org.eclipse.daanse.board.app.lib.api.widget'
 
 const emit = defineEmits(['close'])
@@ -524,7 +524,7 @@ onBeforeUnmount(() => {
               <VaSelect
                 label="Datenquelle"
                 class="pick"
-                v-model="widget.config.datasourceId"
+                v-model="widget.config!.datasourceId"
                 :options="dataSources"
                 value-by="uid"
                 text-by="name"
@@ -552,7 +552,7 @@ onBeforeUnmount(() => {
               />
               <component
                 v-else
-                :is="availableWidgetsSettings[widget.type]?.settingsComponent"
+                :is="availableWidgetsSettings[widget.type ?? '']?.settingsComponent"
                 v-model="widget.config"
                 :key="widget.uid"
                 :dataSources="dataSources"
@@ -572,7 +572,7 @@ onBeforeUnmount(() => {
               </p>
               <component
                 v-if="showRestTab"
-                :is="availableWidgetsSettings[widget.type]?.settingsComponent"
+                :is="availableWidgetsSettings[widget.type ?? '']?.settingsComponent"
                 v-model="widget.config"
                 :key="widget.uid + '-rest'"
                 :dataSources="dataSources"

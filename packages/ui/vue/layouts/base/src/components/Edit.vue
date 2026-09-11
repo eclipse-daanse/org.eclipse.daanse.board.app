@@ -78,8 +78,7 @@ const widgetSelectorVisible = ref(false)
 const pageSettingsOpenedId = ref<string|undefined>(undefined);
 
 const {
-  layoutStore,
-  widgetStore,
+  board,
   clipboardStore,
   ghostPlaceholder,
   processDropCoordinates,
@@ -99,7 +98,7 @@ const {
   pasteWidget: pasteWidgetComposable,
 } = useMoveableLayout(pageId, () => (snapToGrid.value ? GRID : 0))
 
-const safeWidgets = computed(() => widgetStore?.widgets || [])
+const safeWidgets = computed(() => board.widgets.value)
 
 /*
  * How large the board has to be for what is on it.
@@ -112,7 +111,7 @@ const CANVAS_PADDING_X = 160
 const CANVAS_PADDING_Y = 160
 
 const canvasSize = computed(() => {
-  const layout = layoutStore?.layout || []
+  const layout = board.layout.value
   if (layout.length === 0) return { width: 0, height: 0 }
 
   let maxRight = 0
@@ -351,7 +350,7 @@ function controlStyles(uid: string) {
 
 /** Whether a widget belongs to a group - marked even while nothing is picked. */
 function isGrouped(uid: string) {
-  const item = (layoutStore?.layout ?? []).find((i: ILayoutItem) => i.id === uid)
+  const item = board.layout.value.find((i: ILayoutItem) => i.id === uid)
   return Boolean(item?.group)
 }
 
@@ -361,7 +360,7 @@ function isGrouped(uid: string) {
  * grouping them was for.
  */
 function withGroup(uid: string): string[] {
-  const layout = layoutStore?.layout ?? []
+  const layout = board.layout.value
   const item = layout.find((i: ILayoutItem) => i.id === uid)
   if (!item?.group) return [uid]
   return layout.filter((i: ILayoutItem) => i.group === item.group).map((i: ILayoutItem) => i.id)
@@ -389,7 +388,7 @@ function clearSelection() {
 
 /* A widget that was removed cannot stay picked */
 watch(
-  () => (layoutStore?.layout ?? []).map((item: ILayoutItem) => item.id).join(','),
+  () => board.layout.value.map((item: ILayoutItem) => item.id).join(','),
   (ids) => {
     const alive = new Set(ids ? ids.split(',') : [])
     const kept = selected.value.filter((uid) => alive.has(uid))
@@ -399,7 +398,7 @@ watch(
 
 /** The picked widgets' layout entries, for moving and lining up. */
 function pickedItems(): ILayoutItem[] {
-  const layout = layoutStore?.layout ?? []
+  const layout = board.layout.value
   return selected.value
     .map((uid) => layout.find((item: ILayoutItem) => item.id === uid))
     .filter(Boolean) as ILayoutItem[]
@@ -417,7 +416,7 @@ function dragGroup(e: any) {
   for (const ev of e.events) {
     const uid = [...ev.target.classList].find((c: string) => selected.value.includes(c))
     if (!uid) continue
-    const item = (layoutStore?.layout ?? []).find((i: ILayoutItem) => i.id === uid)
+    const item = board.layout.value.find((i: ILayoutItem) => i.id === uid)
     if (!item) continue
     item.x = toGrid(ev.translate[0])
     item.y = toGrid(ev.translate[1])
@@ -450,7 +449,7 @@ function ungroupSelection() {
   for (const item of pickedItems()) delete item.group
 
   // Members that were not picked would be left in a group of their own
-  const layout = layoutStore?.layout ?? []
+  const layout = board.layout.value
   const counts = new Map<string, number>()
   for (const item of layout) {
     if (item.group) counts.set(item.group, (counts.get(item.group) ?? 0) + 1)
@@ -565,12 +564,12 @@ const saveLayout = () => {
 
 const resetLayout = () => {
   // Reset to empty state using store methods
-  widgetStore?.updateWidgets([])
-  layoutStore?.updateLayout([])
+  /* Both halves in one call - they cannot fall out of step now. */
+  board.clear()
 }
 
 const isSaveResetDisabled = computed(() => {
-  return safeWidgets.value.length === 0 && (layoutStore?.layout || []).length === 0
+  return safeWidgets.value.length === 0 && (board.layout.value).length === 0
 })
 
 const removeWidget = (uid: string) => {
@@ -907,7 +906,7 @@ const change = (e: any) => {
     >
       <div ref="minimapBox" class="minimap-canvas" @click="onMinimapClick">
         <div
-          v-for="item in (layoutStore?.layout || [])"
+          v-for="item in (board.layout.value)"
           :key="item.id"
           class="minimap-widget"
           :style="{

@@ -12,6 +12,10 @@ import { Workspace } from './Workspace.js';
 import { WorkspaceImpl } from './WorkspaceImpl.js';
 import { Page } from './Page.js';
 import { PageImpl } from './PageImpl.js';
+import { Widget } from './Widget.js';
+import { WidgetImpl } from './WidgetImpl.js';
+import { LayoutItem } from './LayoutItem.js';
+import { LayoutItemImpl } from './LayoutItemImpl.js';
 import { Datasource } from './Datasource.js';
 import { DatasourceImpl } from './DatasourceImpl.js';
 import { Connection } from './Connection.js';
@@ -52,6 +56,20 @@ export class WorkspaceFactory extends BasicEFactory {
   }
 
   /**
+   * Create a new Widget instance
+   */
+  createWidget(): Widget {
+    return new WidgetImpl();
+  }
+
+  /**
+   * Create a new LayoutItem instance
+   */
+  createLayoutItem(): LayoutItem {
+    return new LayoutItemImpl();
+  }
+
+  /**
    * Create a new Datasource instance
    */
   createDatasource(): Datasource {
@@ -74,6 +92,10 @@ export class WorkspaceFactory extends BasicEFactory {
         return this.createWorkspace();
       case 'Page':
         return this.createPage();
+      case 'Widget':
+        return this.createWidget();
+      case 'LayoutItem':
+        return this.createLayoutItem();
       case 'Datasource':
         return this.createDatasource();
       case 'Connection':

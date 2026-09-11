@@ -7,34 +7,34 @@
 
 import { BasicEObject } from '@emfts/core';
 import type { EClass, EStructuralFeature } from '@emfts/core';
-import type { Connection } from './Connection.js';
 import type { Datasource } from './Datasource.js';
+import type { Widget } from './Widget.js';
 import { WorkspacePackage } from './WorkspacePackage.js';
 
 /**
- * Implementation of Datasource
+ * Implementation of Widget
  * @generated
  */
-export class DatasourceImpl extends BasicEObject implements Datasource {
+export class WidgetImpl extends BasicEObject implements Widget {
   // Feature ID Constants (eLiterals)
   static readonly UID: number = 0;
-  static readonly NAME: number = 1;
-  static readonly TYPE: number = 2;
-  static readonly CONNECTION: number = 3;
-  static readonly CONFIG: number = 4;
+  static readonly TYPE: number = 1;
+  static readonly DATASOURCE: number = 2;
+  static readonly CONFIG: number = 3;
+  static readonly WRAPPER_CONFIG: number = 4;
 
   // Private fields
   private _uid: string = "";
-  private _name?: string;
   private _type?: string;
-  private _connection?: Connection;
+  private _datasource?: Datasource;
   private _config?: unknown;
+  private _wrapperConfig?: unknown;
 
   /**
    * Returns the EClass of this object
    */
   override eClass(): EClass {
-    return WorkspacePackage.Literals.DATASOURCE;
+    return WorkspacePackage.Literals.WIDGET;
   }
 
   // Getters and Setters
@@ -49,38 +49,14 @@ export class DatasourceImpl extends BasicEObject implements Datasource {
       this.eNotify({
         getNotifier: () => this,
         getEventType: () => 1, // SET
-        getFeature: () => this.eClass().getEStructuralFeature(DatasourceImpl.UID),
+        getFeature: () => this.eClass().getEStructuralFeature(WidgetImpl.UID),
         getOldValue: () => oldValue,
         getNewValue: () => value,
         getPosition: () => -1,
         wasSet: () => true,
         isTouch: () => false,
         isReset: () => false,
-        getFeatureID: () => DatasourceImpl.UID,
-        merge: () => false
-      });
-    }
-  }
-
-  get name(): string {
-    return this._name!;
-  }
-
-  set name(value: string) {
-    const oldValue = this._name;
-    this._name = value;
-    if (this.eDeliver()) {
-      this.eNotify({
-        getNotifier: () => this,
-        getEventType: () => 1, // SET
-        getFeature: () => this.eClass().getEStructuralFeature(DatasourceImpl.NAME),
-        getOldValue: () => oldValue,
-        getNewValue: () => value,
-        getPosition: () => -1,
-        wasSet: () => true,
-        isTouch: () => false,
-        isReset: () => false,
-        getFeatureID: () => DatasourceImpl.NAME,
+        getFeatureID: () => WidgetImpl.UID,
         merge: () => false
       });
     }
@@ -97,38 +73,38 @@ export class DatasourceImpl extends BasicEObject implements Datasource {
       this.eNotify({
         getNotifier: () => this,
         getEventType: () => 1, // SET
-        getFeature: () => this.eClass().getEStructuralFeature(DatasourceImpl.TYPE),
+        getFeature: () => this.eClass().getEStructuralFeature(WidgetImpl.TYPE),
         getOldValue: () => oldValue,
         getNewValue: () => value,
         getPosition: () => -1,
         wasSet: () => true,
         isTouch: () => false,
         isReset: () => false,
-        getFeatureID: () => DatasourceImpl.TYPE,
+        getFeatureID: () => WidgetImpl.TYPE,
         merge: () => false
       });
     }
   }
 
-  get connection(): Connection {
-    return this._connection!;
+  get datasource(): Datasource {
+    return this._datasource!;
   }
 
-  set connection(value: Connection) {
-    const oldValue = this._connection;
-    this._connection = value;
+  set datasource(value: Datasource) {
+    const oldValue = this._datasource;
+    this._datasource = value;
     if (this.eDeliver()) {
       this.eNotify({
         getNotifier: () => this,
         getEventType: () => 1, // SET
-        getFeature: () => this.eClass().getEStructuralFeature(DatasourceImpl.CONNECTION),
+        getFeature: () => this.eClass().getEStructuralFeature(WidgetImpl.DATASOURCE),
         getOldValue: () => oldValue,
         getNewValue: () => value,
         getPosition: () => -1,
         wasSet: () => true,
         isTouch: () => false,
         isReset: () => false,
-        getFeatureID: () => DatasourceImpl.CONNECTION,
+        getFeatureID: () => WidgetImpl.DATASOURCE,
         merge: () => false
       });
     }
@@ -145,14 +121,38 @@ export class DatasourceImpl extends BasicEObject implements Datasource {
       this.eNotify({
         getNotifier: () => this,
         getEventType: () => 1, // SET
-        getFeature: () => this.eClass().getEStructuralFeature(DatasourceImpl.CONFIG),
+        getFeature: () => this.eClass().getEStructuralFeature(WidgetImpl.CONFIG),
         getOldValue: () => oldValue,
         getNewValue: () => value,
         getPosition: () => -1,
         wasSet: () => true,
         isTouch: () => false,
         isReset: () => false,
-        getFeatureID: () => DatasourceImpl.CONFIG,
+        getFeatureID: () => WidgetImpl.CONFIG,
+        merge: () => false
+      });
+    }
+  }
+
+  get wrapperConfig(): unknown {
+    return this._wrapperConfig!;
+  }
+
+  set wrapperConfig(value: unknown) {
+    const oldValue = this._wrapperConfig;
+    this._wrapperConfig = value;
+    if (this.eDeliver()) {
+      this.eNotify({
+        getNotifier: () => this,
+        getEventType: () => 1, // SET
+        getFeature: () => this.eClass().getEStructuralFeature(WidgetImpl.WRAPPER_CONFIG),
+        getOldValue: () => oldValue,
+        getNewValue: () => value,
+        getPosition: () => -1,
+        wasSet: () => true,
+        isTouch: () => false,
+        isReset: () => false,
+        getFeatureID: () => WidgetImpl.WRAPPER_CONFIG,
         merge: () => false
       });
     }
@@ -166,16 +166,16 @@ export class DatasourceImpl extends BasicEObject implements Datasource {
   override eGet(feature: EStructuralFeature): unknown {
     const featureID = this.eClass().getFeatureID(feature);
     switch (featureID) {
-      case DatasourceImpl.UID:
+      case WidgetImpl.UID:
         return this.uid;
-      case DatasourceImpl.NAME:
-        return this.name;
-      case DatasourceImpl.TYPE:
+      case WidgetImpl.TYPE:
         return this.type;
-      case DatasourceImpl.CONNECTION:
-        return this.connection;
-      case DatasourceImpl.CONFIG:
+      case WidgetImpl.DATASOURCE:
+        return this.datasource;
+      case WidgetImpl.CONFIG:
         return this.config;
+      case WidgetImpl.WRAPPER_CONFIG:
+        return this.wrapperConfig;
       default:
         return super.eGet(feature);
     }
@@ -187,24 +187,24 @@ export class DatasourceImpl extends BasicEObject implements Datasource {
   override eSet(feature: EStructuralFeature, newValue: unknown): void {
     const featureID = this.eClass().getFeatureID(feature);
     switch (featureID) {
-      case DatasourceImpl.UID:
+      case WidgetImpl.UID:
         this.uid = newValue as string;
         super.eSet(feature, newValue);
         break;
-      case DatasourceImpl.NAME:
-        this.name = newValue as string;
-        super.eSet(feature, newValue);
-        break;
-      case DatasourceImpl.TYPE:
+      case WidgetImpl.TYPE:
         this.type = newValue as string;
         super.eSet(feature, newValue);
         break;
-      case DatasourceImpl.CONNECTION:
-        this.connection = newValue as Connection;
+      case WidgetImpl.DATASOURCE:
+        this.datasource = newValue as Datasource;
         super.eSet(feature, newValue);
         break;
-      case DatasourceImpl.CONFIG:
+      case WidgetImpl.CONFIG:
         this.config = newValue as unknown;
+        super.eSet(feature, newValue);
+        break;
+      case WidgetImpl.WRAPPER_CONFIG:
+        this.wrapperConfig = newValue as unknown;
         super.eSet(feature, newValue);
         break;
       default:
@@ -218,16 +218,16 @@ export class DatasourceImpl extends BasicEObject implements Datasource {
   override eIsSet(feature: EStructuralFeature): boolean {
     const featureID = this.eClass().getFeatureID(feature);
     switch (featureID) {
-      case DatasourceImpl.UID:
+      case WidgetImpl.UID:
         return this._uid !== "";
-      case DatasourceImpl.NAME:
-        return this._name !== undefined;
-      case DatasourceImpl.TYPE:
+      case WidgetImpl.TYPE:
         return this._type !== undefined;
-      case DatasourceImpl.CONNECTION:
-        return this._connection !== undefined;
-      case DatasourceImpl.CONFIG:
+      case WidgetImpl.DATASOURCE:
+        return this._datasource !== undefined;
+      case WidgetImpl.CONFIG:
         return this._config !== undefined;
+      case WidgetImpl.WRAPPER_CONFIG:
+        return this._wrapperConfig !== undefined;
       default:
         return super.eIsSet(feature);
     }
@@ -239,20 +239,20 @@ export class DatasourceImpl extends BasicEObject implements Datasource {
   override eUnset(feature: EStructuralFeature): void {
     const featureID = this.eClass().getFeatureID(feature);
     switch (featureID) {
-      case DatasourceImpl.UID:
+      case WidgetImpl.UID:
         this._uid = "";
         return;
-      case DatasourceImpl.NAME:
-        this._name = undefined;
-        return;
-      case DatasourceImpl.TYPE:
+      case WidgetImpl.TYPE:
         this._type = undefined;
         return;
-      case DatasourceImpl.CONNECTION:
-        this._connection = undefined;
+      case WidgetImpl.DATASOURCE:
+        this._datasource = undefined;
         return;
-      case DatasourceImpl.CONFIG:
+      case WidgetImpl.CONFIG:
         this._config = undefined;
+        return;
+      case WidgetImpl.WRAPPER_CONFIG:
+        this._wrapperConfig = undefined;
         return;
       default:
         super.eUnset(feature);
@@ -270,10 +270,10 @@ export class DatasourceImpl extends BasicEObject implements Datasource {
   toJSON(): Record<string, unknown> {
     return {
       uid: this.uid,
-      name: this.name,
       type: this.type,
-      connection: this.connection,
+      datasource: this.datasource,
       config: this.config,
+      wrapperConfig: this.wrapperConfig,
     };
   }
 }

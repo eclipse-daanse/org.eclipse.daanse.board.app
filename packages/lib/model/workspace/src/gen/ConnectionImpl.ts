@@ -22,7 +22,7 @@ export class ConnectionImpl extends BasicEObject implements Connection {
   static readonly CONFIG: number = 3;
 
   // Private fields
-  private _uid?: string;
+  private _uid: string = "";
   private _name?: string;
   private _type?: string;
   private _config?: unknown;
@@ -186,7 +186,7 @@ export class ConnectionImpl extends BasicEObject implements Connection {
     const featureID = this.eClass().getFeatureID(feature);
     switch (featureID) {
       case ConnectionImpl.UID:
-        return this._uid !== undefined;
+        return this._uid !== "";
       case ConnectionImpl.NAME:
         return this._name !== undefined;
       case ConnectionImpl.TYPE:
@@ -205,7 +205,7 @@ export class ConnectionImpl extends BasicEObject implements Connection {
     const featureID = this.eClass().getFeatureID(feature);
     switch (featureID) {
       case ConnectionImpl.UID:
-        this._uid = undefined;
+        this._uid = "";
         return;
       case ConnectionImpl.NAME:
         this._name = undefined;
