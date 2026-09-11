@@ -18,7 +18,6 @@ import { Condition } from 'org.eclipse.daanse.board.app.lib.events'
 import { type PageRegistryI, identifier as PageIdentifier } from 'org.eclipse.daanse.board.app.lib.api.page'
 import {
   DButton,
-  DCard,
   DIcon,
   DInput,
   DModal,
@@ -52,7 +51,7 @@ const newMapping = ref<Partial<EventActionMapping>>({
 
 const contextOptions = [
   { text: 'System', value: 'system' },
-  { text: 'Page', value: 'page' },
+  { text: 'Seite', value: 'page' },
   { text: 'Widget', value: 'widget' }
 ]
 
@@ -63,15 +62,6 @@ const comperatorOptions = [
   { text: '<=', value: Comperator.lte },
   { text: '>', value: Comperator.gt },
   { text: '>=', value: Comperator.gte }
-]
-
-const columns = [
-  { key: 'id', label: 'ID', sortable: true },
-  { key: 'context', label: 'Event Context', sortable: true },
-  { key: 'eventType', label: 'Event Type', sortable: true },
-  { key: 'actionsCount', label: 'Actions', sortable: true },
-  { key: 'conditions', label: 'Conditions' },
-  { key: 'tableActions', label: '', width: 100 }
 ]
 
 // Get current action being edited
@@ -146,12 +136,10 @@ const loadEvents = () => {
 
 const loadWidgetTypes = () => {
   availableWidgetTypes.value = actionsRegistry.getWidgetTypes()
-  console.log('📋 Loaded widget types:', availableWidgetTypes.value)
 }
 
 const loadPages = () => {
   availablePages.value = pageRegistry.getAllPageIds()
-  console.log('📄 Loaded pages:', availablePages.value)
 }
 
 const availablePayloadProperties = computed(() => {
@@ -160,7 +148,6 @@ const availablePayloadProperties = computed(() => {
   try {
     // Use EventRegistry's extractPayloadPropertiesForEvent which extracts from Ecore model
     const properties = eventRegistry.extractPayloadPropertiesForEvent(newMapping.value.eventType)
-    console.log('📦 Payload properties from Ecore model:', properties)
 
     // Return options with text showing "name: type"
     return properties.map(prop => ({
@@ -225,7 +212,7 @@ const availableInstances = computed(() => {
   const instances = actionsRegistry?.getRegisteredInstances(selectedAction.widgetType) || []
 
   return [
-    { text: 'All instances', value: '' },
+    { text: 'alle Instanzen', value: '' },
     ...instances.map(inst => ({
       text: `${inst.instanceId} (${inst.widgetType})`,
       value: inst.instanceId
@@ -264,17 +251,11 @@ const selectedActionParameters = computed<ActionParameterInfo[]>(() => {
 
   for (const widgetType of searchWidgetTypes) {
     const action = widgetType.actions.find(a => a.methodName === currentAction.value?.actionName)
-    console.log('🎯 Looking for action:', currentAction.value?.actionName, 'in', widgetType.widgetType)
-    console.log('   Found action:', action)
 
     if (action && action.parameters) {
-      console.log('   Action parameters:', action.parameters)
-
       return action.parameters.map((param, index) => {
         // Parse parameter string like "thingId: string" or "zoom?: number"
         const match = param.match(/^(\w+)(\?)?:\s*(.+)$/)
-        console.log('   Parsing param:', param, 'Match:', match)
-
         if (match) {
           return {
             name: match[1],
@@ -540,10 +521,53 @@ const getManualValueForParameter = (paramIndex: number): string => {
   return manualParameterValues.value.get(paramIndex) || ''
 }
 
+/**
+ * The conditions as one phrase, or nothing at all.
+ *
+ * Nothing, not a dash: a rule without conditions has no "falls" line, and
+ * a missing line says "always" better than a sentence explaining that no
+ * conditions were set.
+ */
 const formatConditions = (conditions?: Condition[]) => {
-  if (!conditions || conditions.length === 0) return '-'
-  return conditions.map(c => `${c.prop} ${c.comperator} ${c.value}`).join(' AND ')
+  if (!conditions || conditions.length === 0) return ''
+  return conditions
+    .map(c => {
+      /* The symbol the dialog offered, not the enum's name. */
+      const operator = comperatorOptions.find(o => o.value === c.comperator)?.text ?? c.comperator
+      return [c.prop, operator, c.value].filter(part => part !== undefined && part !== '').join(' ')
+    })
+    .join(' und ')
 }
+
+/** Where the event comes from, as the second half of the sentence. */
+const sourcePhrase = (mapping: EventActionMapping) => {
+  if (mapping.context === 'system') return 'im System'
+  if (mapping.context === 'page') return mapping.contextId ? `auf Seite ${mapping.contextId}` : 'auf jeder Seite'
+  return mapping.contextId ? `an ${mapping.contextId}` : 'an jedem Widget dieser Art'
+}
+
+/** Where the action lands, likewise. */
+const targetPhrase = (action: ActionDefinition) => {
+  if (action.targetContext === 'system') return 'im System'
+  if (action.targetContext === 'page') return action.targetContextId ? `auf Seite ${action.targetContextId}` : 'auf jeder Seite'
+  return action.targetContextId ? `an ${action.targetContextId}` : 'an allen Instanzen'
+}
+
+/*
+ * One dialog for both. Adding and editing differ in their title and in the
+ * word on the button, and in nothing else - they used to be two copies of
+ * the same two hundred lines, which is two places to change a label in.
+ */
+const isEditing = computed(() => showEditDialog.value)
+const dialogOpen = computed({
+  get: () => showAddDialog.value || showEditDialog.value,
+  set: (open: boolean) => {
+    if (!open) {
+      showAddDialog.value = false
+      showEditDialog.value = false
+    }
+  },
+})
 
 const injectedEventManager = inject<EventManager>(EVENT_MANAGER)!
 const injectedEventRegistry = inject<EventRegistry>(EVENT_REGISTRY)!
@@ -565,421 +589,292 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="event-manager-ui">
-    <div class="header-section">
-      <h2 class="page-title">Event Manager</h2>
-      <DButton @click="showAddDialog = true"><DIcon name="add" size="sm" />Add Mapping</DButton>
-    </div>
+  <div class="events">
+    <header class="events__head">
+      <div>
+        <h1 class="events__title">Ereignisse</h1>
+        <p class="events__lead">
+          Eine Regel verbindet, was auf einem Board geschieht, mit dem, was daraufhin
+          geschehen soll.
+        </p>
+      </div>
+      <DButton intent="primary" @click="showAddDialog = true">
+        <DIcon name="add" size="sm" />Regel anlegen
+      </DButton>
+    </header>
 
-    <div class="flex flex-col border border-gray-300 rounded-lg overflow-hidden w-full table-wrapper">
-      <div class="w-full overflow-auto flex flex-col bg-white">
-        <table class="mappings">
-          <thead>
-            <tr>
-              <th v-for="column in columns" :key="column.key">{{ column.label }}</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="mapping in mappings" :key="mapping.id">
-              <td>
-                <span class="mapping-id" :title="mapping.id">{{ mapping.id }}</span>
-              </td>
-              <td>
-                <span>{{ mapping.context }}</span>
-                <span v-if="mapping.contextId" class="uid-badge" :title="mapping.contextId">{{ mapping.contextId }}</span>
-              </td>
-              <td>{{ mapping.eventType }}</td>
-              <td>
-                <div class="actions-list">
-                  <div v-for="(action, idx) in getMappingActions(mapping)" :key="idx" class="action-item">
-                    <span class="action-context">{{ action.targetContext }}</span>
-                    <span v-if="action.targetContextId" class="uid-badge" :title="action.targetContextId">{{ action.targetContextId }}</span>
-                    <span class="action-separator">→</span>
-                    <span class="action-name">{{ action.actionName }}</span>
-                  </div>
-                </div>
-              </td>
-              <td>
-                <span class="text-xs">{{ formatConditions(mapping.conditions) }}</span>
-              </td>
-              <td class="mappings__actions">
-                <DButton intent="quiet" size="sm" title="Edit mapping" @click="editMapping(mapping)">
-                  <DIcon name="edit" size="sm" />
-                </DButton>
-                <DButton intent="danger" size="sm" title="Remove mapping" @click="removeMapping(mapping.id)">
+    <!--
+      A rule is a conditional sentence, so it is set as one: the conjunction
+      in the gutter, the clause beside it. It used to be five table columns
+      with the uuid in the widest of them - to read one rule you read across
+      and put the sentence back together yourself.
+    -->
+    <ul v-if="mappings.length" class="rules">
+      <li v-for="mapping in mappings" :key="mapping.id" class="rule">
+        <div class="rule__clauses">
+          <p class="clause">
+            <span class="clause__word">Wenn</span>
+            <span class="clause__body">
+              <span class="clause__subject">{{ mapping.eventType || 'irgendein Ereignis' }}</span>
+              <span class="clause__place">{{ sourcePhrase(mapping) }}</span>
+            </span>
+          </p>
+
+          <p v-if="formatConditions(mapping.conditions)" class="clause">
+            <span class="clause__word">Falls</span>
+            <span class="clause__body">
+              <span class="clause__subject">{{ formatConditions(mapping.conditions) }}</span>
+            </span>
+          </p>
+
+          <p v-for="(action, at) in getMappingActions(mapping)" :key="at" class="clause">
+            <span class="clause__word">{{ at === 0 ? 'Dann' : 'und' }}</span>
+            <span class="clause__body">
+              <span class="clause__subject">{{ action.actionName || 'noch keine Aktion' }}</span>
+              <span class="clause__place">{{ targetPhrase(action) }}</span>
+            </span>
+          </p>
+        </div>
+
+        <div class="rule__tools">
+          <DButton intent="quiet" size="sm" title="Regel bearbeiten" @click="editMapping(mapping)">
+            <DIcon name="edit" size="sm" />
+          </DButton>
+          <DButton intent="quiet" size="sm" title="Regel löschen" @click="removeMapping(mapping.id)">
+            <DIcon name="delete" size="sm" />
+          </DButton>
+        </div>
+      </li>
+    </ul>
+
+    <p v-else class="events__empty">
+      Noch keine Regel. Eine beginnt mit einem Ereignis — ein Klick auf ein Widget, eine
+      Zeile in einer Tabelle — und endet in einer Aktion auf einem anderen.
+    </p>
+
+    <DModal
+      v-model="dialogOpen"
+      :title="isEditing ? 'Regel bearbeiten' : 'Regel anlegen'"
+      size="lg"
+      @cancel="resetForm"
+    >
+      <!-- The same three words as the list, so both say the rule the same way -->
+      <div class="form">
+        <section class="part">
+          <h3 class="part__word">Wenn</h3>
+          <div class="part__body part__body--row">
+            <DSelect
+              v-model="newMapping.context"
+              label="Kontext"
+              stacked
+              :options="contextOptions"
+              label-key="text"
+              value-key="value"
+            />
+            <DSelect
+              v-if="newMapping.context === 'page'"
+              v-model="newMapping.contextId"
+              label="Seite"
+              stacked
+              :options="[{ text: 'jede Seite', value: '' }, ...availablePages.map(p => ({ text: p, value: p }))]"
+              label-key="text"
+              value-key="value"
+              clearable
+            />
+            <DInput
+              v-else-if="newMapping.context === 'widget'"
+              v-model="newMapping.contextId"
+              label="Widget"
+              stacked
+              placeholder="Kennung, leer für jedes"
+            />
+            <DSelect
+              v-model="newMapping.eventType"
+              label="Ereignis"
+              stacked
+              :options="availableEvents"
+              label-key="type"
+              value-key="type"
+            />
+          </div>
+        </section>
+
+        <section class="part">
+          <h3 class="part__word">Falls</h3>
+          <div class="part__body">
+            <div v-if="newMapping.conditions && newMapping.conditions.length" class="conditions">
+              <div
+                v-for="(condition, index) in newMapping.conditions"
+                :key="index"
+                class="condition"
+              >
+                <DSelect
+                  v-model="condition.prop"
+                  placeholder="Eigenschaft"
+                  :options="availablePayloadProperties"
+                  label-key="text"
+                  value-key="value"
+                />
+                <DSelect
+                  v-model="condition.comperator"
+                  :options="comperatorOptions"
+                  label-key="text"
+                  value-key="value"
+                  class="condition__operator"
+                />
+                <DInput v-model="condition.value" placeholder="Wert" />
+                <DButton intent="quiet" size="sm" title="Bedingung entfernen" @click="removeCondition(index)">
                   <DIcon name="delete" size="sm" />
                 </DButton>
-              </td>
-            </tr>
-            <tr v-if="mappings.length === 0">
-              <td class="mappings__empty" :colspan="columns.length">No mappings yet.</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-
-    <!-- Add Modal Dialog -->
-    <DModal
-      v-model="showAddDialog"
-      title="Add Event-Action Mapping"
-      size="lg"
-      class="event-manager-ui_modal"
-      @cancel="resetForm"
-    >
-      <div class="space-y-4">
-        <!-- 1. Event Source Section -->
-        <DCard class="card-section">
-          <template #header><h3 class="section-title">1. Event Source</h3></template>
-            <div class="event-source-grid">
-              <DSelect
-                v-model="newMapping.context"
-                label="Context"
-                :options="contextOptions" label-key="text" value-key="value"></DSelect>
-
-              <DSelect
-                v-if="newMapping.context === 'page'"
-                v-model="newMapping.contextId"
-                label="Page ID"
-                :options="[{ text: 'Any page', value: '' }, ...availablePages.map(p => ({ text: p, value: p }))]" label-key="text" value-key="value"
-                clearable></DSelect>
-
-              <DInput
-                v-else-if="newMapping.context === 'widget'"
-                v-model="newMapping.contextId"
-                label="Widget ID (optional)"
-                placeholder="e.g., specific widgetId"></DInput>
-
-              <DSelect
-                v-model="newMapping.eventType"
-                label="Event Type"
-                :options="availableEvents" label-key="type" value-key="type"></DSelect>
-            </div>
-                  </DCard>
-
-        <!-- 2. Conditions Section -->
-        <DCard class="card-section">
-          <template #header><div class="card-section__head">
-            <span class="section-title">2. Conditions</span>
-            <DButton @click="addCondition" size="sm" intent="quiet"><DIcon name="add" size="sm" />Add</DButton>
-          </div>
-          </template>
-            <div v-if="newMapping.conditions && newMapping.conditions.length > 0" class="space-y-2">
-              <div v-for="(condition, index) in newMapping.conditions" :key="index" class="condition-row">
-                <DSelect
-                  v-model="condition.prop"
-                  placeholder="Property"
-                  :options="availablePayloadProperties" label-key="text" value-key="value"
-                  class="flex-1"></DSelect>
-                <DSelect
-                  v-model="condition.comperator"
-                  :options="comperatorOptions" label-key="text" value-key="value"
-                  class="w-20"></DSelect>
-                <DInput
-                  v-model="condition.value"
-                  placeholder="Value"
-                  class="flex-1"></DInput>
-                <DButton
-                  @click="removeCondition(index)" intent="danger" size="sm"><DIcon name="delete" size="sm" /></DButton>
               </div>
             </div>
-            <div v-else class="text-gray-500 italic text-sm">
-              No conditions - action will always execute
-            </div>
-                  </DCard>
-
-        <!-- 3. Actions Section -->
-        <DCard class="card-section">
-          <template #header><div class="card-section__head">
-            <span class="section-title">3. Actions</span>
-            <DButton @click="addAction" size="sm" intent="quiet"><DIcon name="add" size="sm" />Add Action</DButton>
+            <p v-else class="part__none">Ohne Bedingung läuft die Regel jedes Mal.</p>
+            <DButton size="sm" intent="quiet" @click="addCondition">
+              <DIcon name="add" size="sm" />Bedingung
+            </DButton>
           </div>
-          </template>
-            <div v-if="newMapping.actions && newMapping.actions.length > 0" class="actions-list-editor">
-              <!-- Action Cards -->
+        </section>
+
+        <section class="part">
+          <h3 class="part__word">Dann</h3>
+          <div class="part__body">
+            <div v-if="newMapping.actions && newMapping.actions.length" class="actions">
               <div
                 v-for="(action, idx) in newMapping.actions"
                 :key="idx"
-                :class="['action-card', { active: currentActionIndex === idx }]"
-                @click="selectAction(idx)"
+                :class="['action', { 'action--open': currentActionIndex === idx }]"
               >
-                <div class="action-card-header">
-                  <span class="action-number">{{ idx + 1 }}</span>
-                  <span class="action-summary">
-                    <span class="action-context-badge">{{ action.targetContext }}</span>
-                    <span v-if="action.actionName" class="action-name-text">{{ action.actionName }}</span>
-                    <span v-else class="action-empty">(select action)</span>
+                <!-- A row to switch between, which a single action is not. -->
+                <button
+                  v-if="newMapping.actions.length > 1"
+                  type="button"
+                  class="action__head"
+                  @click="selectAction(idx)"
+                >
+                  <span class="action__name">
+                    {{ action.actionName || 'Aktion wählen' }}
                   </span>
-                  <DButton
-                    v-if="newMapping.actions.length > 1"
-                    @click.stop="removeAction(idx)" intent="danger" size="sm"><DIcon name="close" size="sm" /></DButton>
-                </div>
+                  <span class="action__place">{{ targetPhrase(action) }}</span>
+                </button>
+                <DButton
+                  v-if="newMapping.actions.length > 1"
+                  intent="quiet"
+                  size="sm"
+                  title="Aktion entfernen"
+                  @click.stop="removeAction(idx)"
+                >
+                  <DIcon name="close" size="sm" />
+                </DButton>
 
-                <!-- Expanded Action Editor (when selected) -->
-                <div v-if="currentActionIndex === idx" class="action-card-body">
-                  <div class="action-settings-row">
+                <div v-if="currentActionIndex === idx" class="action__body">
+                  <div class="part__body--row">
                     <DSelect
                       v-model="action.targetContext"
-                      label="Context"
-                      :options="contextOptions" label-key="text" value-key="value"></DSelect>
-
+                      label="Kontext"
+                      stacked
+                      :options="contextOptions"
+                      label-key="text"
+                      value-key="value"
+                    />
                     <DSelect
                       v-if="action.targetContext === 'page'"
                       v-model="action.targetContextId"
-                      label="Target Page"
-                      :options="[{ text: 'Any', value: '' }, ...availablePages.map(p => ({ text: p, value: p }))]" label-key="text" value-key="value"
-                      clearable></DSelect>
-
+                      label="Seite"
+                      stacked
+                      :options="[{ text: 'jede Seite', value: '' }, ...availablePages.map(p => ({ text: p, value: p }))]"
+                      label-key="text"
+                      value-key="value"
+                      clearable
+                    />
                     <DSelect
                       v-else-if="action.targetContext === 'widget' || action.targetContext === 'system'"
                       v-model="action.targetContextId"
-                      label="Target Instance"
-                      :options="availableInstances" label-key="text" value-key="value"
+                      label="Ziel"
+                      stacked
+                      :options="availableInstances"
+                      label-key="text"
+                      value-key="value"
                       clearable
-                      :placeholder="availableInstances.length > 1 ? 'Select instance' : 'All instances'"></DSelect>
-
+                      placeholder="alle Instanzen"
+                    />
                     <DSelect
                       v-model="action.actionName"
-                      label="Action"
-                      :options="availableActions" label-key="text" value-key="value"></DSelect>
+                      label="Aktion"
+                      stacked
+                      :options="availableActions"
+                      label-key="text"
+                      value-key="value"
+                    />
                   </div>
 
-                  <!-- Parameters (inline) -->
-                  <div v-if="selectedActionParameters.length > 0" class="action-parameters">
-                    <div class="parameters-title">Parameters</div>
-                    <div class="parameters-list">
-                      <div v-for="param in selectedActionParameters" :key="param.index" class="parameter-item">
-                        <div class="parameter-label">
-                          <span class="parameter-name">{{ param.name }}</span>
-                          <span v-if="param.optional" class="parameter-optional">?</span>
-                          <span class="parameter-type-badge">{{ param.type }}</span>
+                  <div v-if="selectedActionParameters.length" class="params">
+                    <div v-for="param in selectedActionParameters" :key="param.index" class="param">
+                      <span class="param__name">
+                        {{ param.name }}<span v-if="param.optional" class="param__optional">, wahlweise</span>
+                      </span>
+                      <div class="param__value">
+                        <div class="source" role="group" :aria-label="`Wert für ${param.name}`">
+                          <button
+                            type="button"
+                            :class="['source__side', { 'source__side--on': getParameterValueSource(param.index) === 'payload' }]"
+                            :aria-pressed="getParameterValueSource(param.index) === 'payload'"
+                            @click.stop="setParameterValueSource(param.index, 'payload')"
+                          >
+                            aus dem Ereignis
+                          </button>
+                          <button
+                            type="button"
+                            :class="['source__side', { 'source__side--on': getParameterValueSource(param.index) === 'manual' }]"
+                            :aria-pressed="getParameterValueSource(param.index) === 'manual'"
+                            @click.stop="setParameterValueSource(param.index, 'manual')"
+                          >
+                            fester Wert
+                          </button>
                         </div>
-                        <div class="parameter-input-row">
-                          <div class="source-toggle">
-                            <button
-                              :class="['toggle-btn', { active: getParameterValueSource(param.index) === 'payload' }]"
-                              @click.stop="setParameterValueSource(param.index, 'payload')"
-                              type="button"
-                            >Payload</button>
-                            <button
-                              :class="['toggle-btn', { active: getParameterValueSource(param.index) === 'manual' }]"
-                              @click.stop="setParameterValueSource(param.index, 'manual')"
-                              type="button"
-                            >Manual</button>
-                          </div>
-                          <DSelect
-                            v-if="getParameterValueSource(param.index) === 'payload'"
-                            :model-value="getPayloadPathForParameter(param.index)"
-                            @update:model-value="updateParameterMapping(param.index, String($event ?? ''))"
-                            :placeholder="param.optional ? '(optional)' : 'Select property'"
-                            :options="availablePayloadProperties" label-key="text" value-key="value"
-                            clearable
-                            class="parameter-value-input"></DSelect>
-                          <DInput
-                            v-else
-                            :model-value="getManualValueForParameter(param.index)"
-                            @update:model-value="updateManualParameterValue(param.index, String($event ?? ''))"
-                            :placeholder="`Enter ${param.type}`"
-                            class="parameter-value-input"></DInput>
-                        </div>
+                        <DSelect
+                          v-if="getParameterValueSource(param.index) === 'payload'"
+                          :model-value="getPayloadPathForParameter(param.index)"
+                          :options="availablePayloadProperties"
+                          label-key="text"
+                          value-key="value"
+                          :placeholder="param.optional ? 'wahlweise' : 'Eigenschaft wählen'"
+                          clearable
+                          @update:model-value="updateParameterMapping(param.index, String($event ?? ''))"
+                        />
+                        <DInput
+                          v-else
+                          :model-value="getManualValueForParameter(param.index)"
+                          :placeholder="param.type"
+                          @update:model-value="updateManualParameterValue(param.index, String($event ?? ''))"
+                        />
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-                  </DCard>
-      </div>
-      <template #actions>
-        <DButton intent="quiet" @click="showAddDialog = false; resetForm()">Cancel</DButton>
-        <DButton intent="primary" @click="addMapping">Add</DButton>
-      </template>
-    </DModal>
-
-    <!-- Edit Modal Dialog -->
-    <DModal
-      v-model="showEditDialog"
-      title="Edit Event-Action Mapping"
-      size="lg"
-      @cancel="resetForm"
-    >
-      <div class="space-y-4">
-        <!-- 1. Event Source Section -->
-        <DCard class="card-section">
-          <template #header><h3 class="section-title">1. Event Source</h3></template>
-            <div class="event-source-grid">
-              <DSelect
-                v-model="newMapping.context"
-                label="Context"
-                :options="contextOptions" label-key="text" value-key="value"></DSelect>
-
-              <DSelect
-                v-if="newMapping.context === 'page'"
-                v-model="newMapping.contextId"
-                label="Page ID"
-                :options="[{ text: 'Any page', value: '' }, ...availablePages.map(p => ({ text: p, value: p }))]" label-key="text" value-key="value"
-                clearable></DSelect>
-
-              <DInput
-                v-else-if="newMapping.context === 'widget'"
-                v-model="newMapping.contextId"
-                label="Widget ID (optional)"
-                placeholder="e.g., specific widgetId"></DInput>
-
-              <DSelect
-                v-model="newMapping.eventType"
-                label="Event Type"
-                :options="availableEvents" label-key="type" value-key="type"></DSelect>
-            </div>
-                  </DCard>
-
-        <!-- 2. Conditions Section -->
-        <DCard class="card-section">
-          <template #header><div class="card-section__head">
-            <span class="section-title">2. Conditions</span>
-            <DButton @click="addCondition" size="sm" intent="quiet"><DIcon name="add" size="sm" />Add</DButton>
+            <DButton size="sm" intent="quiet" @click="addAction">
+              <DIcon name="add" size="sm" />Aktion
+            </DButton>
           </div>
-          </template>
-            <div v-if="newMapping.conditions && newMapping.conditions.length > 0" class="space-y-2">
-              <div v-for="(condition, index) in newMapping.conditions" :key="index" class="condition-row">
-                <DSelect
-                  v-model="condition.prop"
-                  placeholder="Property"
-                  :options="availablePayloadProperties" label-key="text" value-key="value"
-                  class="flex-1"></DSelect>
-                <DSelect
-                  v-model="condition.comperator"
-                  :options="comperatorOptions" label-key="text" value-key="value"
-                  class="w-20"></DSelect>
-                <DInput
-                  v-model="condition.value"
-                  placeholder="Value"
-                  class="flex-1"></DInput>
-                <DButton
-                  @click="removeCondition(index)" intent="danger" size="sm"><DIcon name="delete" size="sm" /></DButton>
-              </div>
-            </div>
-            <div v-else class="text-gray-500 italic text-sm">
-              No conditions - action will always execute
-            </div>
-                  </DCard>
-
-        <!-- 3. Actions Section -->
-        <DCard class="card-section">
-          <template #header><div class="card-section__head">
-            <span class="section-title">3. Actions</span>
-            <DButton @click="addAction" size="sm" intent="quiet"><DIcon name="add" size="sm" />Add Action</DButton>
-          </div>
-          </template>
-            <div v-if="newMapping.actions && newMapping.actions.length > 0" class="actions-list-editor">
-              <!-- Action Cards -->
-              <div
-                v-for="(action, idx) in newMapping.actions"
-                :key="idx"
-                :class="['action-card', { active: currentActionIndex === idx }]"
-                @click="selectAction(idx)"
-              >
-                <div class="action-card-header">
-                  <span class="action-number">{{ idx + 1 }}</span>
-                  <span class="action-summary">
-                    <span class="action-context-badge">{{ action.targetContext }}</span>
-                    <span v-if="action.actionName" class="action-name-text">{{ action.actionName }}</span>
-                    <span v-else class="action-empty">(select action)</span>
-                  </span>
-                  <DButton
-                    v-if="newMapping.actions.length > 1"
-                    @click.stop="removeAction(idx)" intent="danger" size="sm"><DIcon name="close" size="sm" /></DButton>
-                </div>
-
-                <!-- Expanded Action Editor (when selected) -->
-                <div v-if="currentActionIndex === idx" class="action-card-body">
-                  <div class="action-settings-row">
-                    <DSelect
-                      v-model="action.targetContext"
-                      label="Context"
-                      :options="contextOptions" label-key="text" value-key="value"></DSelect>
-
-                    <DSelect
-                      v-if="action.targetContext === 'page'"
-                      v-model="action.targetContextId"
-                      label="Target Page"
-                      :options="[{ text: 'Any', value: '' }, ...availablePages.map(p => ({ text: p, value: p }))]" label-key="text" value-key="value"
-                      clearable></DSelect>
-
-                    <DSelect
-                      v-else-if="action.targetContext === 'widget' || action.targetContext === 'system'"
-                      v-model="action.targetContextId"
-                      label="Target Instance"
-                      :options="availableInstances" label-key="text" value-key="value"
-                      clearable
-                      :placeholder="availableInstances.length > 1 ? 'Select instance' : 'All instances'"></DSelect>
-
-                    <DSelect
-                      v-model="action.actionName"
-                      label="Action"
-                      :options="availableActions" label-key="text" value-key="value"></DSelect>
-                  </div>
-
-                  <!-- Parameters (inline) -->
-                  <div v-if="selectedActionParameters.length > 0" class="action-parameters">
-                    <div class="parameters-title">Parameters</div>
-                    <div class="parameters-list">
-                      <div v-for="param in selectedActionParameters" :key="param.index" class="parameter-item">
-                        <div class="parameter-label">
-                          <span class="parameter-name">{{ param.name }}</span>
-                          <span v-if="param.optional" class="parameter-optional">?</span>
-                          <span class="parameter-type-badge">{{ param.type }}</span>
-                        </div>
-                        <div class="parameter-input-row">
-                          <div class="source-toggle">
-                            <button
-                              :class="['toggle-btn', { active: getParameterValueSource(param.index) === 'payload' }]"
-                              @click.stop="setParameterValueSource(param.index, 'payload')"
-                              type="button"
-                            >Payload</button>
-                            <button
-                              :class="['toggle-btn', { active: getParameterValueSource(param.index) === 'manual' }]"
-                              @click.stop="setParameterValueSource(param.index, 'manual')"
-                              type="button"
-                            >Manual</button>
-                          </div>
-                          <DSelect
-                            v-if="getParameterValueSource(param.index) === 'payload'"
-                            :model-value="getPayloadPathForParameter(param.index)"
-                            @update:model-value="updateParameterMapping(param.index, String($event ?? ''))"
-                            :placeholder="param.optional ? '(optional)' : 'Select property'"
-                            :options="availablePayloadProperties" label-key="text" value-key="value"
-                            clearable
-                            class="parameter-value-input"></DSelect>
-                          <DInput
-                            v-else
-                            :model-value="getManualValueForParameter(param.index)"
-                            @update:model-value="updateManualParameterValue(param.index, String($event ?? ''))"
-                            :placeholder="`Enter ${param.type}`"
-                            class="parameter-value-input"></DInput>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-                  </DCard>
+        </section>
       </div>
+
       <template #actions>
-        <DButton intent="quiet" @click="showEditDialog = false; resetForm()">Cancel</DButton>
-        <DButton intent="primary" @click="addMapping">Save</DButton>
+        <DButton intent="quiet" @click="dialogOpen = false; resetForm()">Abbrechen</DButton>
+        <DButton intent="primary" @click="addMapping">
+          {{ isEditing ? 'Speichern' : 'Anlegen' }}
+        </DButton>
       </template>
     </DModal>
 
     <DModal v-model="showDeleteConfirm" size="sm" @cancel="cancelRemoveMapping">
       <template #header>
         <DIcon name="warning" size="lg" tone="color-err" />
-        <h2 class="confirm__title">Event-Mapping löschen</h2>
+        <h2 class="confirm__title">Regel löschen</h2>
       </template>
       <p class="confirm__text">
-        Möchtest du dieses Event-Mapping wirklich löschen? Diese Aktion kann nicht rückgängig
-        gemacht werden.
+        Die Regel wird entfernt. Das lässt sich nicht rückgängig machen.
       </p>
       <template #actions>
         <DButton intent="quiet" @click="cancelRemoveMapping">Abbrechen</DButton>
@@ -990,516 +885,409 @@ onMounted(() => {
 </template>
 
 <style scoped>
-.event-manager-ui {
-  padding: 1.5rem;
-  margin-left: 75px;
-  width: 100%;
-  min-height: 100vh;
-  background: var(--color-backgroundPrimary, #f6f6f6);
-}
-
-.header-section {
+/*
+ * Everything here is a token. The page used to set its own greys, its own
+ * white table background and a 75px left margin on top of a full width,
+ * which put a fifth of it past the right edge of the window.
+ */
+.events {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 1.5rem;
+  flex-direction: column;
+  gap: 28px;
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
+  padding: 28px 32px 40px;
+  font-family: var(--font-sans);
+  color: var(--color-fg);
+  background-color: var(--color-bg);
 }
 
-.page-title {
-  font-size: 1.75rem;
+/*
+ * A rule is a sentence, so the column it sits in is measured for reading
+ * rather than stretched to whatever the window happens to be.
+ */
+.events__head,
+.rules,
+.events__empty {
+  width: 100%;
+  max-width: 940px;
+}
+
+.events__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+.events__title {
+  margin: 0 0 6px;
+  font-size: 20px;
   font-weight: 600;
-  color: #262824;
+  letter-spacing: -0.01em;
+}
+
+.events__lead {
   margin: 0;
+  max-width: 56ch;
+  font-size: var(--text-base);
+  line-height: 1.55;
+  color: var(--color-dim);
 }
 
-.ice {
-  background: rgb(247 243 243 / 85%);
-  border-radius: 16px;
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+.events__empty {
+  max-width: 52ch;
+  margin: 0;
+  padding: 20px 0;
+  border-top: 1px solid var(--color-divider);
+  font-size: var(--text-base);
+  line-height: 1.6;
+  color: var(--color-dim);
 }
 
-.space-y-4 > * + * {
-  margin-top: 1rem;
+/* -------------------------------------------------------------- the rules */
+
+.rules {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--color-divider);
 }
 
-.space-y-2 > * + * {
-  margin-top: 0.5rem;
+.rule {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: start;
+  gap: 16px;
+  padding: 14px 8px 16px 0;
+  border-bottom: 1px solid var(--color-divider);
 }
 
-.space-y-3 > * + * {
-  margin-top: 0.75rem;
+.rule:hover {
+  background-color: color-mix(in srgb, var(--color-pane) 60%, transparent);
 }
 
-.card-section {
-  background: var(--color-pane);
-  border: 1px solid var(--color-divider);
-  border-radius: var(--radius-md, 4px);
-}
-
-.card-section__head {
+.rule__clauses {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+/*
+ * The conjunction sits in its own column, flush right against the clause,
+ * so Wenn / Falls / Dann line up and the sentences start on one edge.
+ */
+.clause {
+  display: grid;
+  grid-template-columns: 4.5rem minmax(0, 1fr);
+  gap: 12px;
+  margin: 0;
+  line-height: 1.5;
+}
+
+.clause__word {
+  text-align: right;
+  font-size: var(--text-sm);
+  color: var(--color-dim);
+  padding-top: 1px;
+}
+
+.clause__body {
+  min-width: 0;
+  font-size: var(--text-base);
+}
+
+/* The identifiers really are symbols picked from a registry, so they read as such. */
+.clause__subject {
+  font-family: var(--font-mono);
+  overflow-wrap: anywhere;
+}
+
+.clause__place {
+  margin-left: 10px;
+  color: var(--color-dim);
+}
+
+.rule__tools {
+  display: flex;
+  gap: 2px;
+}
+
+/* ------------------------------------------------------------- the dialog */
+
+.form {
+  display: flex;
+  flex-direction: column;
+}
+
+.part {
+  display: grid;
+  grid-template-columns: 4.5rem minmax(0, 1fr);
+  gap: 12px;
+  padding: 16px 0;
+  border-top: 1px solid var(--color-divider);
+}
+
+.part:first-child {
+  border-top: 0;
+  padding-top: 4px;
+}
+
+.part__word {
+  margin: 0;
+  text-align: right;
+  font-size: var(--text-sm);
+  font-weight: 400;
+  color: var(--color-dim);
+  padding-top: 7px;
+}
+
+.part__body {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+  min-width: 0;
+}
+
+/* A modifier, so it has to undo the column the base class sets. */
+.part__body--row {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 12px;
   width: 100%;
 }
 
-.section-title {
+.part__body--row > * {
+  flex: 1 1 180px;
+  min-width: 0;
+}
+
+.part__none {
   margin: 0;
-  font-size: 1rem;
-  font-weight: 500;
+  font-size: var(--text-base);
+  color: var(--color-dim);
+}
+
+.conditions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+}
+
+.condition {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.condition > * {
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+.condition__operator {
+  flex: 0 0 5rem;
+}
+
+.condition > .btn,
+.rule__tools .btn {
+  flex: 0 0 auto;
+}
+
+/* ------------------------------------------------------------ the actions */
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  border-top: 1px solid var(--color-divider);
+}
+
+.action {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  column-gap: 8px;
+  border-bottom: 1px solid var(--color-divider);
+}
+
+.action__head {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  min-width: 0;
+  padding: 10px 0;
+  border: 0;
+  background: none;
+  text-align: left;
+  cursor: pointer;
+  color: inherit;
+  font-family: inherit;
+}
+
+.action__name {
+  font-family: var(--font-mono);
+  font-size: var(--text-base);
+  overflow-wrap: anywhere;
+}
+
+.action__place {
+  font-size: var(--text-sm);
+  color: var(--color-dim);
+}
+
+.action__body {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 4px 0 16px;
+}
+
+/*
+ * A rule down the side rather than a tint: on the pale themes the tint is
+ * the same colour as the dialog and says nothing.
+ */
+.action--open {
+  box-shadow: inset 2px 0 0 var(--color-accent);
+  padding-left: 10px;
+}
+
+/* One action needs no rows to pick from, and so no rules to separate them. */
+.actions:has(> .action:only-child) {
+  border-top: 0;
+}
+
+.action:only-child {
+  border-bottom: 0;
+  box-shadow: none;
+  padding-left: 0;
+}
+
+.action:only-child .action__body {
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+/* --------------------------------------------------------- the parameters */
+
+.params {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.param {
+  display: grid;
+  grid-template-columns: 9rem minmax(0, 1fr);
+  gap: 12px;
+  align-items: center;
+}
+
+.param__name {
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  overflow-wrap: anywhere;
+}
+
+.param__optional {
+  font-family: var(--font-sans);
+  color: var(--color-dim);
+}
+
+.param__value {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.param__value > *:last-child {
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+/* Where a value comes from is a choice between two, so it is shown as two. */
+.source {
+  display: inline-flex;
+  flex: 0 0 auto;
+  border: 1px solid var(--color-outline);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.source__side {
+  padding: 5px 10px;
+  border: 0;
+  background-color: transparent;
+  color: var(--color-dim);
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  cursor: pointer;
+  transition: background-color 120ms ease, color 120ms ease;
+}
+
+.source__side + .source__side {
+  border-left: 1px solid var(--color-outline);
+}
+
+.source__side:hover {
   color: var(--color-fg);
 }
+
+.source__side--on {
+  background-color: var(--color-accent);
+  color: var(--color-onAccent);
+}
+
+.source__side:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: -2px;
+}
+
+/* -------------------------------------------------------------- confirming */
 
 .confirm__title {
   margin: 0;
-  font-family: var(--font-sans);
-  font-size: var(--text-base);
+  font-size: var(--text-lg);
   font-weight: 600;
-  color: var(--color-fg);
 }
 
 .confirm__text {
   margin: 0;
-  color: var(--color-dim);
-  line-height: 1.5;
-}
-
-/* The mappings, written out: one row per mapping, one column per field */
-.mappings {
-  width: 100%;
-  border-collapse: collapse;
-  font-family: var(--font-sans);
-  font-size: var(--text-sm);
-  color: var(--color-fg);
-}
-
-.mappings th {
-  position: sticky;
-  top: 0;
-  z-index: 1;
-  padding: 8px 10px;
-  text-align: left;
-  background: var(--color-raised);
-  border-bottom: 1px solid var(--color-divider);
-  font-size: var(--text-xs);
-  font-weight: 500;
-  color: var(--color-dim);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  white-space: nowrap;
-}
-
-.mappings td {
-  padding: 6px 10px;
-  border-bottom: 1px solid var(--color-divider);
-  vertical-align: top;
-}
-
-.mappings tbody tr:hover {
-  background: var(--color-raised);
-}
-
-.mappings__actions {
-  display: flex;
-  gap: 6px;
-  justify-content: flex-end;
-}
-
-.mappings__empty {
-  padding: 14px 10px;
+  font-size: var(--text-base);
+  line-height: 1.6;
   color: var(--color-dim);
 }
 
-.condition-row {
-  display: flex;
-  gap: 0.5rem;
-  align-items: center;
-}
+@media (max-width: 640px) {
+  .events {
+    padding: 20px 16px 32px;
+  }
 
-.parameter-wrapper {
-  padding: 1rem;
-  background: rgba(255, 255, 255, 0.8);
-  border-radius: 8px;
-  border: 1px solid rgba(213, 213, 213, 0.4);
-  backdrop-filter: blur(5px);
-  -webkit-backdrop-filter: blur(5px);
-}
+  .clause,
+  .part {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 2px;
+  }
 
-.parameter-header {
-  margin-bottom: 0.75rem;
-}
+  .clause__word,
+  .part__word {
+    text-align: left;
+    padding-top: 0;
+  }
 
-.parameter-info {
-  font-family: 'Monaco', 'Courier New', monospace;
-  font-size: 0.9rem;
-}
-
-.parameter-name {
-  /*font-weight: 600;
-  color: #cc9100;*/
-}
-
-.parameter-optional {
-  color: #666;
-}
-
-.parameter-separator {
-  margin: 0 0.25rem;
-  color: #666;
-}
-
-.parameter-type {
-  color: #008080;
-  font-weight: 500;
-}
-
-/* Table header styling */
-.table-header {
-  display: flex;
-  width: 100%;
-  padding: 1rem;
-  border-bottom: 1px solid rgba(213, 213, 213, 0.4);
-  background: rgba(255, 255, 255, 0.4);
-  font-weight: 500;
-  font-size: 0.875rem;
-  color: #262824;
-}
-
-.header-cell {
-  padding: 0 0.5rem;
-  text-align: left;
-}
-
-.table-content {
-  background: white;
-}
-
-/* Event Mapping Grid Layout */
-.event-mapping-grid {
-  display: grid;
-  grid-template-columns: 200px 120px 150px 120px 180px 150px 80px;
-}
-
-/* Table wrapper - constrain height */
-.table-wrapper {
-  height: calc(100vh - 130px);
-  background: #fff;
-}
-
-/* Actions list in table */
-.actions-list {
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-}
-
-.action-item {
-  display: flex;
-  align-items: center;
-  gap: 0.25rem;
-  font-size: 0.875rem;
-}
-
-.mapping-id {
-  font-size: 0.8rem;
-  color: #374151;
-  font-family: 'Monaco', 'Courier New', monospace;
-  max-width: 220px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  display: inline-block;
-}
-
-.uid-badge {
-  display: inline-block;
-  font-size: 0.75rem;
-  font-family: 'Monaco', 'Courier New', monospace;
-  color: #1e40af;
-  background-color: #dbeafe;
-  padding: 0.1rem 0.4rem;
-  border-radius: 0.25rem;
-  max-width: 180px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  vertical-align: middle;
-  margin-left: 0.25rem;
-}
-
-.action-context {
-  color: #6b7280;
-  font-size: 0.8rem;
-}
-
-.action-separator {
-  color: #9ca3af;
-}
-
-.action-name {
-  /*font-weight: 500;
-  color: #cc9100;*/
-}
-
-/* Action tabs styling */
-.actions-tabs {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-
-.action-tabs-header {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  padding-bottom: 0.75rem;
-  border-bottom: 1px solid rgba(213, 213, 213, 0.4);
-}
-
-.action-tab {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.5rem 0.75rem;
-  background: rgba(255, 255, 255, 0.6);
-  border: 1px solid rgba(213, 213, 213, 0.4);
-  border-radius: 8px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  font-size: 0.875rem;
-}
-
-.action-tab:hover {
-  background: rgba(255, 255, 255, 0.9);
-  border-color: rgba(205, 145, 0, 0.3);
-}
-
-.action-tab.active {
-  background: rgba(0, 102, 204, 0.1);
-  border-color: #cc9100;
-  color: #cc9100;
-}
-
-.action-tab-label {
-  max-width: 150px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.action-tab-remove {
-  margin-left: 0.25rem;
-}
-
-.action-editor {
-  padding: 1rem;
-  background: rgba(255, 255, 255, 0.4);
-  border-radius: 8px;
-  border: 1px solid rgba(213, 213, 213, 0.3);
-}
-
-/* New compact layout styles */
-.event-source-grid {
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-}
-
-/* Action cards list */
-.actions-list-editor {
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-}
-
-.action-card {
-  /* border: 1px solid rgba(213, 213, 213, 0.4);*/
-  border-radius: 8px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  box-shadow: 1px 1px 5px #cccccc69;
-}
-
-.action-card:hover {
-  border-color: rgba(149, 149, 149, 0.3);
-}
-
-.action-card.active {
-  border-color: rgba(149, 149, 149, 0.3);
-}
-
-.action-card-header {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  padding: 0.75rem 1rem;
-}
-
-.action-number {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 24px;
-  height: 24px;
-  /* background: #cc9100; */
-  border-radius: 50%;
-  font-size: 0.75rem;
-  font-weight: 600;
-  flex-shrink: 0;
-  border: 1px solid #cc9100;
-  color: #cc9100;
-}
-
-.action-summary {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  min-width: 0;
-}
-
-.action-context-badge {
-  padding: 0.125rem 0.5rem;
-  background: #e5e7eb;
-  color: #4b5563;
-  border-radius: 4px;
-  font-size: 0.7rem;
-  font-weight: 500;
-  text-transform: uppercase;
-  flex-shrink: 0;
-}
-
-.action-name-text {
-  font-weight: 500;
-  /*color: #cc9100;*/
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.action-empty {
-  color: #9ca3af;
-  font-style: italic;
-}
-
-.action-card-body {
-  padding: 0 1rem 1rem 1rem;
-  border-top: 1px solid rgba(213, 213, 213, 0.3);
-  margin-top: 0;
-}
-
-/*
- * Stacked, because these fields carry their labels beside them now: three
- * label-and-control pairs side by side left each control a stub of what it
- * had to show.
- */
-.action-settings-row {
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-  padding-top: 0.75rem;
-}
-
-/* Inline parameters */
-.action-parameters {
-  margin-top: 1rem;
-  padding-top: 0.75rem;
-  border-top: 1px dashed rgba(213, 213, 213, 0.5);
-}
-
-.parameters-title {
-  font-size: 0.75rem;
-  font-weight: 600;
-  color: #6b7280;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  margin-bottom: 0.5rem;
-}
-
-.parameters-list {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-.parameter-item {
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-  padding: 0.5rem;
-  /*background: rgba(248, 250, 252, 0.8);
-  border-radius: 6px;
-  border: 1px solid rgba(213, 213, 213, 0.3);*/
-}
-
-.parameter-label {
-  display: flex;
-  align-items: center;
-  gap: 0.25rem;
-  font-size: 0.8rem;
-}
-
-.parameter-label .parameter-name {
-  font-weight: 600;
-  /*color: #cc9100;*/
-}
-
-.parameter-label .parameter-optional {
-  color: #9ca3af;
-}
-
-.parameter-type-badge {
-  margin-left: 0.25rem;
-  padding: 0.0625rem 0.375rem;
-  /* background: #dbeafe; */
-  /* color: #cc9100; */
-  border-radius: 3px;
-  font-size: 0.65rem;
-  font-weight: 500;
-  /* border-color: #d9d9d9; */
-  border: 1px solid #ddd;
-}
-
-.parameter-input-row {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.source-toggle {
-  display: flex;
-  border: 1px solid rgba(213, 213, 213, 0.5);
-  border-radius: 4px;
-  overflow: hidden;
-  flex-shrink: 0;
-}
-
-.toggle-btn {
-  padding: 0.25rem 0.5rem;
-  font-size: 0.7rem;
-  background: white;
-  border: none;
-  cursor: pointer;
-  transition: all 0.15s ease;
-  color: #6b7280;
-}
-
-.toggle-btn:first-child {
-  border-right: 1px solid rgba(213, 213, 213, 0.5);
-}
-
-.toggle-btn:hover {
-  background: #f3f4f6;
-}
-
-.toggle-btn.active {
-  background: #6767676e;
-  color: white;
-}
-
-.parameter-value-input {
-  flex: 1;
-  min-width: 150px;
+  .param {
+    grid-template-columns: minmax(0, 1fr);
+    align-items: start;
+  }
 }
 </style>
