@@ -155,12 +155,12 @@ withDefaults(
   content: '';
   position: absolute;
   /*
-   * An even band around the button, in pixels rather than a percentage:
-   * percentages resolve against width sideways and height vertically, and
-   * on a button that is three times wider than it is tall that turns a
-   * halo into a smear reaching for whatever stands beside it.
+   * A narrow band, blurred far wider than itself. In pixels rather than a
+   * percentage: percentages resolve against width sideways and height
+   * vertically, and on a button three times wider than it is tall that
+   * turns a halo into a smear reaching for whatever stands beside it.
    */
-  inset: -12px;
+  inset: -7px;
   z-index: -1;
   border-radius: 9999px;
   background-image: linear-gradient(
@@ -169,7 +169,7 @@ withDefaults(
     color-mix(in srgb, var(--color-accent) 55%, var(--color-ok)),
     var(--color-accent)
   );
-  filter: blur(24px);
+  filter: blur(34px);
   opacity: 0;
   transition: opacity 240ms cubic-bezier(0.2, 0.6, 0.2, 1);
   pointer-events: none;
