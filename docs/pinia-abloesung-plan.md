@@ -2,6 +2,12 @@
 
 Stand: 2026-09-11 · Branch `feat/workbench-layout-design`
 
+**Reihenfolge geändert (2026-09-11):** Phase 3 wandert ans Ende. Sie
+verspricht, dass `useWorkspaceSnapshot` samt `flatted` und dem
+Schlüssel `conections` verschwindet — das geht erst, wenn alles im Modell
+ist. Vorgezogen würde sie ein Zwischenformat erzeugen, das nach Phase 5
+noch einmal angefasst werden müsste. Neue Folge: **0 → 1 → 2 → 4 → 5 → 3**.
+
 Voraussetzung, bereits erledigt: die Datenquellen-Konfigurationen kommen aus
 ihren Modellen (`a98c0e60`), `@emfts/core` ist geteilte Abhängigkeit aller
 zehn Datenquellen-Pakete, alle EPackages registrieren in **eine** Registry.
@@ -170,7 +176,7 @@ darauf zeigen; die Konfigurations-EObjects der Datenquellen ebenso.
 
 Jede Phase ist für sich lauffähig und einzeln zurücknehmbar.
 
-### Phase 0 — Das Registrierungsloch zumachen
+### Phase 0 — Das Registrierungsloch zumachen ✔ erledigt (`97b5e6bc`)
 
 Unabhängig vom Rest, behebt einen Defekt, der heute jeden Board-Start trifft.
 
@@ -180,7 +186,7 @@ Unabhängig vom Rest, behebt einen Defekt, der heute jeden Board-Start trifft.
 - **Fertig, wenn** eine frisch geladene Seite Daten zeigt, ohne dass man die
   Verbindung von Hand speichert.
 
-### Phase 1 — Brücke und Wurzel, bewiesen an den Verbindungen
+### Phase 1 — Brücke und Wurzel, bewiesen an den Verbindungen ✔ erledigt (`36338ff1`)
 
 - `lib/model/workspace` anlegen, zunächst nur `Workspace` und `Connection`.
 - `ui/vue/emf` mit `useEObject`/`useEList`/`useFeature`.
@@ -195,7 +201,7 @@ Unabhängig vom Rest, behebt einen Defekt, der heute jeden Board-Start trifft.
 
 Das ist die Probe. Trägt der Schnitt hier nicht, kostet die Rücknahme wenig.
 
-### Phase 2 — Datenquellen
+### Phase 2 — Datenquellen ✔ erledigt (`e5b69040`)
 
 - `Datasource` ins Modell, `connection` als EReference.
 - `updateDataSource` schreibt in das EObject statt zu zerstören und neu zu
@@ -207,7 +213,7 @@ Das ist die Probe. Trägt der Schnitt hier nicht, kostet die Rücknahme wenig.
 - **Fertig, wenn** ein Speichern in den Einstellungen keine Subscription mehr
   abreißt — prüfbar an einer Datenquelle mit Long Polling.
 
-### Phase 3 — Persistenz auf `JSONResource`
+### Phase 3 — Persistenz auf `JSONResource` (zuletzt, siehe oben)
 
 - `Workspace` in eine `JSONResource` legen, `save()`/`load()` statt
   `capture()`/`restore()`.
