@@ -29,15 +29,6 @@ withDefaults(
     busy?: boolean
     /** Fills the width of whatever holds it. */
     block?: boolean
-    /**
-     * A soft field of accent colour behind it, on hover.
-     *
-     * Borrowed from the Vue devtools anchor, which wears one because it is
-     * a single floating thing with nothing around it to compete with. Opt-in
-     * for the same reason: on every button in a settings form this is not a
-     * signature, it is noise.
-     */
-    glow?: boolean
     type?: 'button' | 'submit' | 'reset'
   }>(),
   {
@@ -46,7 +37,6 @@ withDefaults(
     disabled: false,
     busy: false,
     block: false,
-    glow: false,
     type: 'button',
   },
 )
@@ -59,7 +49,7 @@ withDefaults(
       'btn',
       `btn--${intent}`,
       `btn--${size}`,
-      { 'btn--block': block, 'btn--busy': busy, 'btn--glow': glow },
+      { 'btn--block': block, 'btn--busy': busy },
     ]"
     :disabled="disabled || busy"
     :aria-busy="busy || undefined"
@@ -129,83 +119,6 @@ withDefaults(
   width: 100%;
 }
 
-/* --- the halo --------------------------------------------------------- */
-
-/*
- * A blurred field of colour behind the button, revealed on hover.
- *
- * The idea is the Vue devtools anchor's: an element far larger than what it
- * sits behind, heavily blurred, faded in. Three things are ours rather than
- * theirs. The colour comes from the accent token, so it belongs to whatever
- * theme is on instead of announcing someone else's brand. It is a pseudo
- * element, so no button needs an extra span to carry it. And it fades in a
- * quarter of a second rather than a whole one - theirs is ambient decoration
- * on something that floats, ours answers a pointer.
- *
- * `isolation` is what keeps it behind the button's own background without
- * falling behind the page: it gives the button a stacking context of its
- * own, and z-index -1 is then measured inside that.
- */
-.btn--glow {
-  position: relative;
-  isolation: isolate;
-}
-
-.btn--glow::before {
-  content: '';
-  position: absolute;
-  /*
-   * A narrow band, blurred far wider than itself. In pixels rather than a
-   * percentage: percentages resolve against width sideways and height
-   * vertically, and on a button three times wider than it is tall that
-   * turns a halo into a smear reaching for whatever stands beside it.
-   */
-  inset: -7px;
-  z-index: -1;
-  border-radius: 9999px;
-  background-image: linear-gradient(
-    45deg,
-    var(--color-accent),
-    color-mix(in srgb, var(--color-accent) 55%, var(--color-ok)),
-    var(--color-accent)
-  );
-  filter: blur(34px);
-  opacity: 0;
-  transition: opacity 240ms cubic-bezier(0.2, 0.6, 0.2, 1);
-  pointer-events: none;
-}
-
-.btn--glow:hover:not(:disabled)::before {
-  /* Raised with the blur: the same colour over more area is less of it. */
-  opacity: 0.6;
-}
-
-.btn--glow:focus-visible::before {
-  opacity: 0.35;
-}
-
-/*
- * Not on a light ground.
- *
- * A glow needs darkness to be a glow. On a pale theme the same field is a
- * wash rather than a light, and it lands on the one meaning already taken:
- * focus is drawn with this very colour, so a hover that looks like it is
- * two signals wearing one face.
- *
- * `data-theme` is written by the shell's theme system from each theme's
- * own `dark` flag - four themes, one of them dark - so this asks the
- * question the palette already answers instead of guessing from a colour.
- */
-:root[data-theme='light'] .btn--glow::before {
-  content: none;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .btn--glow::before {
-    transition-duration: 0.01ms;
-  }
-}
-
 /* --- intents ---------------------------------------------------------- */
 
 .btn--primary {
@@ -241,6 +154,88 @@ withDefaults(
 .btn--danger:hover:not(:disabled) {
   background-color: color-mix(in srgb, var(--color-err) 12%, transparent);
   border-color: var(--color-err);
+}
+
+/* --- the halo, on the primary action ---------------------------------- */
+
+/*
+ * A blurred field of colour behind the button, revealed on hover.
+ *
+ * The idea is the Vue devtools anchor's: an element far larger than what it
+ * sits behind, heavily blurred, faded in. Three things are ours rather than
+ * theirs. The colour comes from the accent token, so it belongs to whatever
+ * theme is on instead of announcing someone else's brand. It is a pseudo
+ * element, so no button needs an extra span to carry it. And it fades in a
+ * quarter of a second rather than a whole one - theirs is ambient decoration
+ * on something that floats, ours answers a pointer.
+ *
+ * On the primary intent and nowhere else. Their anchor wears one because it
+ * is the only thing on screen; a view has one primary action for the same
+ * reason, and putting the halo there says which button that is without a
+ * caller having to ask for it.
+ *
+ * `isolation` is what keeps it behind the button's own background without
+ * falling behind the page: it gives the button a stacking context of its
+ * own, and z-index -1 is then measured inside that.
+ */
+.btn--primary {
+  position: relative;
+  isolation: isolate;
+}
+
+.btn--primary::before {
+  content: '';
+  position: absolute;
+  /*
+   * A narrow band, blurred far wider than itself. In pixels rather than a
+   * percentage: percentages resolve against width sideways and height
+   * vertically, and on a button three times wider than it is tall that
+   * turns a halo into a smear reaching for whatever stands beside it.
+   */
+  inset: -7px;
+  z-index: -1;
+  border-radius: 9999px;
+  background-image: linear-gradient(
+    45deg,
+    var(--color-accent),
+    color-mix(in srgb, var(--color-accent) 55%, var(--color-ok)),
+    var(--color-accent)
+  );
+  filter: blur(34px);
+  opacity: 0;
+  transition: opacity 240ms cubic-bezier(0.2, 0.6, 0.2, 1);
+  pointer-events: none;
+}
+
+.btn--primary:hover:not(:disabled)::before {
+  /* Raised with the blur: the same colour over more area is less of it. */
+  opacity: 0.6;
+}
+
+.btn--primary:focus-visible::before {
+  opacity: 0.35;
+}
+
+/*
+ * Not on a light ground.
+ *
+ * A glow needs darkness to be a glow. On a pale theme the same field is a
+ * wash rather than a light, and it lands on the one meaning already taken:
+ * focus is drawn with this very colour, so a hover that looks like it is
+ * two signals wearing one face.
+ *
+ * `data-theme` is written by the shell's theme system from each theme's
+ * own `dark` flag - four themes, one of them dark - so this asks the
+ * question the palette already answers instead of guessing from a colour.
+ */
+:root[data-theme='light'] .btn--primary::before {
+  content: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .btn--primary::before {
+    transition-duration: 0.01ms;
+  }
 }
 
 /* --- busy ------------------------------------------------------------- */
