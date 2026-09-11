@@ -213,7 +213,7 @@ Das ist die Probe. Trägt der Schnitt hier nicht, kostet die Rücknahme wenig.
 - **Fertig, wenn** ein Speichern in den Einstellungen keine Subscription mehr
   abreißt — prüfbar an einer Datenquelle mit Long Polling.
 
-### Phase 3 — Persistenz auf `JSONResource` (zuletzt, siehe oben)
+### Phase 3 — Persistenz auf `JSONResource` ✔ erledigt (zuletzt, siehe oben)
 
 - `Workspace` in eine `JSONResource` legen, `save()`/`load()` statt
   `capture()`/`restore()`.
@@ -225,7 +225,7 @@ Das ist die Probe. Trägt der Schnitt hier nicht, kostet die Rücknahme wenig.
 - **Fertig, wenn** ein vor dem Umbau gespeicherter Stand lädt und danach im
   neuen Format zurückgeschrieben wird.
 
-### Phase 4 — Seiten
+### Phase 4 — Seiten ✔ erledigt (`d85eb718`)
 
 - `Page` ins Modell; `PageRegistryImpl` gibt `SubscribeNotifyImpl` auf und
   benachrichtigt über EMF. Damit fällt der zweite von drei
@@ -236,7 +236,7 @@ Das ist die Probe. Trägt der Schnitt hier nicht, kostet die Rücknahme wenig.
 - **Fertig, wenn** Anlegen und Umbenennen einer Seite die Navigation ohne
   `SubscribeNotifyImpl` aktualisiert.
 
-### Phase 5 — Widgets und Layout
+### Phase 5 — Widgets und Layout ✔ erledigt (`3a5f67f7`)
 
 Die unordentlichste Ecke und deshalb zuletzt: 13 Dateien benutzen
 `useWidgetsStore`, 10 `useLayoutStore`, und beide legen pro Seite einen Store

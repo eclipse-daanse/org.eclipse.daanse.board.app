@@ -1,10 +1,10 @@
-import { WORKSPACE as g, DatasourceImpl as d } from "org.eclipse.daanse.board.app.lib.model.workspace";
-import { DATASOURCE_REPOSITORY as c, identifier as D } from "org.eclipse.daanse.board.app.lib.api.datasource";
+import { WORKSPACE as D, DatasourceImpl as l } from "org.eclipse.daanse.board.app.lib.model.workspace";
+import { DATASOURCE_REPOSITORY as u, identifier as g } from "org.eclipse.daanse.board.app.lib.api.datasource";
 import { DATASOURCE_REPOSITORY as E, identifier as _ } from "org.eclipse.daanse.board.app.lib.api.datasource";
 function v(a) {
   return typeof a?.init == "function";
 }
-const n = /* @__PURE__ */ new Map(), l = ["chart", "datatable"];
+const n = /* @__PURE__ */ new Map(), c = ["chart", "datatable"];
 class p {
   constructor(e) {
     this.resolver = e;
@@ -18,7 +18,7 @@ class p {
    */
   workspaceHeld;
   get workspace() {
-    return this.workspaceHeld || (this.workspaceHeld = this.resolver.getRequired(g)), this.workspaceHeld;
+    return this.workspaceHeld || (this.workspaceHeld = this.resolver.getRequired(D)), this.workspaceHeld;
   }
   /** See IdentifierResolver: symbol description is the service id. */
   resolveIdentifier(e) {
@@ -48,7 +48,7 @@ class p {
     return this.getDatasources().find((t) => t.uid === e);
   }
   createDatasource(e, t = {}) {
-    const r = new d();
+    const r = new l();
     return r.uid = Math.random().toString(36).substring(7), r.name = "DataSource " + r.uid, r.type = e, r.config = t, this.workspace.datasources.push(r), this.saveDatasource(r), r;
   }
   saveDatasource(e) {
@@ -61,20 +61,33 @@ class p {
     }
     this.dropLive(r), this.registerDatasource(r, e.type, t);
   }
+  /**
+   * Builds a live store for every source the workspace holds.
+   *
+   * Plain sources first: a derived one resolves against the sources it
+   * reads while it is being registered, so they have to be there.
+   */
+  rebuildLive() {
+    const e = this.getDatasources();
+    for (const t of e)
+      c.includes(t.type) || this.saveDatasource(t);
+    for (const t of e)
+      c.includes(t.type) && this.saveDatasource(t);
+  }
   setDatasources(e) {
     const t = this.workspace.datasources;
     for (const s of t.toArray()) this.dropLive(s.uid);
     t.clear();
     const r = (s) => this.workspace.connections.toArray().find((i) => i.uid === s), o = (s) => {
-      const i = new d();
+      const i = new l();
       i.uid = s.uid, i.name = s.name, i.type = s.type, i.config = s.config ?? {};
-      const u = r((s.config ?? {}).connection);
-      u && (i.connection = u), t.push(i), this.saveDatasource(i);
+      const d = r((s.config ?? {}).connection);
+      d && (i.connection = d), t.push(i), this.saveDatasource(i);
     };
     for (const s of e)
-      l.includes(s.type) || o(s);
+      c.includes(s.type) || o(s);
     for (const s of e)
-      l.includes(s.type) && o(s);
+      c.includes(s.type) && o(s);
   }
   getDatasource(e) {
     const t = n.get(e);
@@ -132,18 +145,18 @@ class p {
   }
 }
 function h({ services: a }) {
-  a.register(c, new p(a));
+  a.register(u, new p(a));
 }
 function y({ services: a }) {
-  a.unregister(c);
+  a.unregister(u);
 }
 const b = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  DATASOURCE_REPOSITORY: c,
+  DATASOURCE_REPOSITORY: u,
   DatasourceRepository: p,
   activate: h,
   deactivate: y,
-  identifier: D
+  identifier: g
 }, Symbol.toStringTag, { value: "Module" })), f = "org.eclipse.daanse.board.app.lib.repository.datasource", w = "0.0.1-next.1";
 async function R(a) {
   const e = globalThis.__tsm__;

@@ -29,12 +29,7 @@
     "ui.vue.uimodel",
     "lib.model.workspace"
   ],
-  "provides": [
-    {
-      "id": "App",
-      "description": "The mounted Vue application instance"
-    }
-  ],
+  "provides": [],
   "requiresService": [
     {
       "id": "TINY_EMITTER"

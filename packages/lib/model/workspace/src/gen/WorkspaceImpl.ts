@@ -11,6 +11,8 @@ import type { EClass, EStructuralFeature, EList, EReference } from '@emfts/core'
 import type { Connection } from './Connection.js';
 import type { Datasource } from './Datasource.js';
 import type { Page } from './Page.js';
+import type { Variable } from './Variable.js';
+import type { EventMapping } from './EventMapping.js';
 import type { Workspace } from './Workspace.js';
 import { WorkspacePackage } from './WorkspacePackage.js';
 
@@ -23,12 +25,16 @@ export class WorkspaceImpl extends BasicEObject implements Workspace {
   static readonly CONNECTIONS: number = 0;
   static readonly DATASOURCES: number = 1;
   static readonly PAGES: number = 2;
-  static readonly DEFAULT_PAGE: number = 3;
+  static readonly VARIABLES: number = 3;
+  static readonly EVENT_MAPPINGS: number = 4;
+  static readonly DEFAULT_PAGE: number = 5;
 
   // Private fields
   private _connections!: EList<Connection>;
   private _datasources!: EList<Datasource>;
   private _pages!: EList<Page>;
+  private _variables!: EList<Variable>;
+  private _eventMappings!: EList<EventMapping>;
   private _defaultPage?: Page;
 
   /**
@@ -58,6 +64,20 @@ export class WorkspaceImpl extends BasicEObject implements Workspace {
       this._pages = createContainmentEList<any>(this, this.eClass().getEStructuralFeature('pages') as EReference);
     }
     return this._pages;
+  }
+
+  get variables(): EList<Variable> {
+    if (!this._variables) {
+      this._variables = createContainmentEList<any>(this, this.eClass().getEStructuralFeature('variables') as EReference);
+    }
+    return this._variables;
+  }
+
+  get eventMappings(): EList<EventMapping> {
+    if (!this._eventMappings) {
+      this._eventMappings = createContainmentEList<any>(this, this.eClass().getEStructuralFeature('eventMappings') as EReference);
+    }
+    return this._eventMappings;
   }
 
   get defaultPage(): Page {
@@ -98,6 +118,10 @@ export class WorkspaceImpl extends BasicEObject implements Workspace {
         return this.datasources;
       case WorkspaceImpl.PAGES:
         return this.pages;
+      case WorkspaceImpl.VARIABLES:
+        return this.variables;
+      case WorkspaceImpl.EVENT_MAPPINGS:
+        return this.eventMappings;
       case WorkspaceImpl.DEFAULT_PAGE:
         return this.defaultPage;
       default:
@@ -126,6 +150,16 @@ export class WorkspaceImpl extends BasicEObject implements Workspace {
         this.pages.addAll(newValue as any[]);
         super.eSet(feature, newValue);
         break;
+      case WorkspaceImpl.VARIABLES:
+        this.variables.clear();
+        this.variables.addAll(newValue as any[]);
+        super.eSet(feature, newValue);
+        break;
+      case WorkspaceImpl.EVENT_MAPPINGS:
+        this.eventMappings.clear();
+        this.eventMappings.addAll(newValue as any[]);
+        super.eSet(feature, newValue);
+        break;
       case WorkspaceImpl.DEFAULT_PAGE:
         this.defaultPage = newValue as Page;
         super.eSet(feature, newValue);
@@ -147,6 +181,10 @@ export class WorkspaceImpl extends BasicEObject implements Workspace {
         return this._datasources !== undefined && !this._datasources.isEmpty();
       case WorkspaceImpl.PAGES:
         return this._pages !== undefined && !this._pages.isEmpty();
+      case WorkspaceImpl.VARIABLES:
+        return this._variables !== undefined && !this._variables.isEmpty();
+      case WorkspaceImpl.EVENT_MAPPINGS:
+        return this._eventMappings !== undefined && !this._eventMappings.isEmpty();
       case WorkspaceImpl.DEFAULT_PAGE:
         return this._defaultPage !== undefined;
       default:
@@ -169,6 +207,12 @@ export class WorkspaceImpl extends BasicEObject implements Workspace {
       case WorkspaceImpl.PAGES:
         if (this._pages) this._pages.clear();
         return;
+      case WorkspaceImpl.VARIABLES:
+        if (this._variables) this._variables.clear();
+        return;
+      case WorkspaceImpl.EVENT_MAPPINGS:
+        if (this._eventMappings) this._eventMappings.clear();
+        return;
       case WorkspaceImpl.DEFAULT_PAGE:
         this._defaultPage = undefined;
         return;
@@ -190,6 +234,8 @@ export class WorkspaceImpl extends BasicEObject implements Workspace {
       connections: this.connections?.toArray?.() ?? this.connections,
       datasources: this.datasources?.toArray?.() ?? this.datasources,
       pages: this.pages?.toArray?.() ?? this.pages,
+      variables: this.variables?.toArray?.() ?? this.variables,
+      eventMappings: this.eventMappings?.toArray?.() ?? this.eventMappings,
       defaultPage: this.defaultPage,
     };
   }

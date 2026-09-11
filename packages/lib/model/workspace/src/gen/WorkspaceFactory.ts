@@ -14,6 +14,10 @@ import { Page } from './Page.js';
 import { PageImpl } from './PageImpl.js';
 import { Widget } from './Widget.js';
 import { WidgetImpl } from './WidgetImpl.js';
+import { Variable } from './Variable.js';
+import { VariableImpl } from './VariableImpl.js';
+import { EventMapping } from './EventMapping.js';
+import { EventMappingImpl } from './EventMappingImpl.js';
 import { LayoutItem } from './LayoutItem.js';
 import { LayoutItemImpl } from './LayoutItemImpl.js';
 import { Datasource } from './Datasource.js';
@@ -63,6 +67,20 @@ export class WorkspaceFactory extends BasicEFactory {
   }
 
   /**
+   * Create a new Variable instance
+   */
+  createVariable(): Variable {
+    return new VariableImpl();
+  }
+
+  /**
+   * Create a new EventMapping instance
+   */
+  createEventMapping(): EventMapping {
+    return new EventMappingImpl();
+  }
+
+  /**
    * Create a new LayoutItem instance
    */
   createLayoutItem(): LayoutItem {
@@ -94,6 +112,10 @@ export class WorkspaceFactory extends BasicEFactory {
         return this.createPage();
       case 'Widget':
         return this.createWidget();
+      case 'Variable':
+        return this.createVariable();
+      case 'EventMapping':
+        return this.createEventMapping();
       case 'LayoutItem':
         return this.createLayoutItem();
       case 'Datasource':

@@ -37,6 +37,8 @@ export class WorkspacePackage extends BasicEPackage {
     WORKSPACE__CONNECTIONS: null as unknown as EAttribute | EReference,
     WORKSPACE__DATASOURCES: null as unknown as EAttribute | EReference,
     WORKSPACE__PAGES: null as unknown as EAttribute | EReference,
+    WORKSPACE__VARIABLES: null as unknown as EAttribute | EReference,
+    WORKSPACE__EVENT_MAPPINGS: null as unknown as EAttribute | EReference,
     WORKSPACE__DEFAULT_PAGE: null as unknown as EAttribute | EReference,
     PAGE: null as unknown as EClass,
     PAGE__ID: null as unknown as EAttribute | EReference,
@@ -59,6 +61,13 @@ export class WorkspacePackage extends BasicEPackage {
     WIDGET__DATASOURCE: null as unknown as EAttribute | EReference,
     WIDGET__CONFIG: null as unknown as EAttribute | EReference,
     WIDGET__WRAPPER_CONFIG: null as unknown as EAttribute | EReference,
+    VARIABLE: null as unknown as EClass,
+    VARIABLE__NAME: null as unknown as EAttribute | EReference,
+    VARIABLE__TYPE: null as unknown as EAttribute | EReference,
+    VARIABLE__DEFINITION: null as unknown as EAttribute | EReference,
+    EVENT_MAPPING: null as unknown as EClass,
+    EVENT_MAPPING__ID: null as unknown as EAttribute | EReference,
+    EVENT_MAPPING__DEFINITION: null as unknown as EAttribute | EReference,
     LAYOUT_ITEM: null as unknown as EClass,
     LAYOUT_ITEM__ID: null as unknown as EAttribute | EReference,
     LAYOUT_ITEM__X: null as unknown as EAttribute | EReference,
@@ -133,6 +142,24 @@ export class WorkspacePackage extends BasicEPackage {
     workspace_pages.setUpperBound(-1);
     workspaceClass.getEStructuralFeatures().push(workspace_pages);
     WorkspacePackage.Literals.WORKSPACE__PAGES = workspace_pages;
+
+    // Create variables feature
+    const workspace_variables = new BasicEReference();
+    workspace_variables.setContainment(true);
+    workspace_variables.setName('variables');
+    workspace_variables.setLowerBound(0);
+    workspace_variables.setUpperBound(-1);
+    workspaceClass.getEStructuralFeatures().push(workspace_variables);
+    WorkspacePackage.Literals.WORKSPACE__VARIABLES = workspace_variables;
+
+    // Create eventMappings feature
+    const workspace_eventMappings = new BasicEReference();
+    workspace_eventMappings.setContainment(true);
+    workspace_eventMappings.setName('eventMappings');
+    workspace_eventMappings.setLowerBound(0);
+    workspace_eventMappings.setUpperBound(-1);
+    workspaceClass.getEStructuralFeatures().push(workspace_eventMappings);
+    WorkspacePackage.Literals.WORKSPACE__EVENT_MAPPINGS = workspace_eventMappings;
 
     // Create defaultPage feature
     const workspace_defaultPage = new BasicEReference();
@@ -316,6 +343,64 @@ export class WorkspacePackage extends BasicEPackage {
     widgetClass.getEStructuralFeatures().push(widget_wrapperConfig);
     WorkspacePackage.Literals.WIDGET__WRAPPER_CONFIG = widget_wrapperConfig;
 
+    // Create Variable class
+    const variableClass = new BasicEClass();
+    variableClass.setName('Variable');
+    variableClass.setAbstract(false);
+    variableClass.setInterface(false);
+    this.getEClassifiers().push(variableClass);
+    variableClass.setEPackage(this);
+    WorkspacePackage.Literals.VARIABLE = variableClass;
+
+    // Create name feature
+    const variable_name = new BasicEAttribute();
+    variable_name.setName('name');
+    variable_name.setLowerBound(1);
+    variable_name.setUpperBound(1);
+    variableClass.getEStructuralFeatures().push(variable_name);
+    WorkspacePackage.Literals.VARIABLE__NAME = variable_name;
+
+    // Create type feature
+    const variable_type = new BasicEAttribute();
+    variable_type.setName('type');
+    variable_type.setLowerBound(0);
+    variable_type.setUpperBound(1);
+    variableClass.getEStructuralFeatures().push(variable_type);
+    WorkspacePackage.Literals.VARIABLE__TYPE = variable_type;
+
+    // Create definition feature
+    const variable_definition = new BasicEAttribute();
+    variable_definition.setName('definition');
+    variable_definition.setLowerBound(0);
+    variable_definition.setUpperBound(1);
+    variableClass.getEStructuralFeatures().push(variable_definition);
+    WorkspacePackage.Literals.VARIABLE__DEFINITION = variable_definition;
+
+    // Create EventMapping class
+    const eventMappingClass = new BasicEClass();
+    eventMappingClass.setName('EventMapping');
+    eventMappingClass.setAbstract(false);
+    eventMappingClass.setInterface(false);
+    this.getEClassifiers().push(eventMappingClass);
+    eventMappingClass.setEPackage(this);
+    WorkspacePackage.Literals.EVENT_MAPPING = eventMappingClass;
+
+    // Create id feature
+    const eventMapping_id = new BasicEAttribute();
+    eventMapping_id.setName('id');
+    eventMapping_id.setLowerBound(1);
+    eventMapping_id.setUpperBound(1);
+    eventMappingClass.getEStructuralFeatures().push(eventMapping_id);
+    WorkspacePackage.Literals.EVENT_MAPPING__ID = eventMapping_id;
+
+    // Create definition feature
+    const eventMapping_definition = new BasicEAttribute();
+    eventMapping_definition.setName('definition');
+    eventMapping_definition.setLowerBound(0);
+    eventMapping_definition.setUpperBound(1);
+    eventMappingClass.getEStructuralFeatures().push(eventMapping_definition);
+    WorkspacePackage.Literals.EVENT_MAPPING__DEFINITION = eventMapping_definition;
+
     // Create LayoutItem class
     const layoutItemClass = new BasicEClass();
     layoutItemClass.setName('LayoutItem');
@@ -485,6 +570,8 @@ export class WorkspacePackage extends BasicEPackage {
     (WorkspacePackage.Literals.WORKSPACE__CONNECTIONS as BasicEReference).setEType(WorkspacePackage.Literals.CONNECTION);
     (WorkspacePackage.Literals.WORKSPACE__DATASOURCES as BasicEReference).setEType(WorkspacePackage.Literals.DATASOURCE);
     (WorkspacePackage.Literals.WORKSPACE__PAGES as BasicEReference).setEType(WorkspacePackage.Literals.PAGE);
+    (WorkspacePackage.Literals.WORKSPACE__VARIABLES as BasicEReference).setEType(WorkspacePackage.Literals.VARIABLE);
+    (WorkspacePackage.Literals.WORKSPACE__EVENT_MAPPINGS as BasicEReference).setEType(WorkspacePackage.Literals.EVENT_MAPPING);
     (WorkspacePackage.Literals.WORKSPACE__DEFAULT_PAGE as BasicEReference).setEType(WorkspacePackage.Literals.PAGE);
     (WorkspacePackage.Literals.PAGE__ID as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
     (WorkspacePackage.Literals.PAGE__NAME as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
@@ -505,6 +592,11 @@ export class WorkspacePackage extends BasicEPackage {
     (WorkspacePackage.Literals.WIDGET__DATASOURCE as BasicEReference).setEType(WorkspacePackage.Literals.DATASOURCE);
     (WorkspacePackage.Literals.WIDGET__CONFIG as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EJavaObject')!);
     (WorkspacePackage.Literals.WIDGET__WRAPPER_CONFIG as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EJavaObject')!);
+    (WorkspacePackage.Literals.VARIABLE__NAME as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (WorkspacePackage.Literals.VARIABLE__TYPE as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (WorkspacePackage.Literals.VARIABLE__DEFINITION as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EJavaObject')!);
+    (WorkspacePackage.Literals.EVENT_MAPPING__ID as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (WorkspacePackage.Literals.EVENT_MAPPING__DEFINITION as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EJavaObject')!);
     (WorkspacePackage.Literals.LAYOUT_ITEM__ID as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
     (WorkspacePackage.Literals.LAYOUT_ITEM__X as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EInt')!);
     (WorkspacePackage.Literals.LAYOUT_ITEM__Y as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EInt')!);

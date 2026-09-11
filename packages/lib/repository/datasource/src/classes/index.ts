@@ -165,6 +165,22 @@ export class DatasourceRepository implements IDatasourceRepository {
     this.registerDatasource(uid, datasource.type, config)
   }
 
+  /**
+   * Builds a live store for every source the workspace holds.
+   *
+   * Plain sources first: a derived one resolves against the sources it
+   * reads while it is being registered, so they have to be there.
+   */
+  rebuildLive(): void {
+    const held = this.getDatasources()
+    for (const source of held) {
+      if (!DERIVED_SOURCE_TYPES.includes(source.type as string)) this.saveDatasource(source)
+    }
+    for (const source of held) {
+      if (DERIVED_SOURCE_TYPES.includes(source.type as string)) this.saveDatasource(source)
+    }
+  }
+
   setDatasources(stored: StoredDatasource[]): void {
     const held = this.workspace.datasources
     for (const source of held.toArray()) this.dropLive(source.uid as string)

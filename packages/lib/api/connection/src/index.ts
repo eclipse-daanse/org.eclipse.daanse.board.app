@@ -87,6 +87,8 @@ export interface ConnectionRepository {
   createConnection(type: string, config?: Record<string, unknown>): Connection;
   /** Rebuilds the live object after the modelled one was changed. */
   saveConnection(connection: Connection): void;
+  /** Builds a live object for every connection the workspace holds. */
+  rebuildLive(): void;
   /**
    * Replaces every connection at once - what loading a stored workspace
    * does. Takes plain objects because that is the shape a stored board

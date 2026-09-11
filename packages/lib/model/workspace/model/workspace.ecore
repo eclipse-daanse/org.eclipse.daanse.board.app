@@ -44,6 +44,18 @@ pages, and on each page its widgets and where they sit.
                 <details key="documentation" value="The boards this workspace holds."/>
             </eAnnotations>
         </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="variables" eType="#//Variable"
+                             lowerBound="0" upperBound="-1" containment="true">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="The named values widgets and sources read through."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="eventMappings" eType="#//EventMapping"
+                             lowerBound="0" upperBound="-1" containment="true">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="What happens when something happens: which event on which widget calls which action."/>
+            </eAnnotations>
+        </eStructuralFeatures>
         <eStructuralFeatures xsi:type="ecore:EReference" name="defaultPage" eType="#//Page" lowerBound="0">
             <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
                 <details key="documentation" value="The board shown when none is asked for. A reference, so deleting that board leaves no id pointing nowhere."/>
@@ -120,6 +132,39 @@ pages, and on each page its widgets and where they sit.
         <eStructuralFeatures xsi:type="ecore:EAttribute" name="wrapperConfig" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject" lowerBound="0">
             <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
                 <details key="documentation" value="The frame around it - border, title, padding. Modelled as WrapperSettings in ui/vue/widget/wrapper."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+    </eClassifiers>
+
+    <eClassifiers xsi:type="ecore:EClass" name="Variable">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+            <details key="documentation" value="A named value the workspace holds - a constant, a clock, the answer to a query. What each kind needs is its own type's business, the way a connection's is."/>
+        </eAnnotations>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" lowerBound="1">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="What it is referred to by, in a widget's settings and in an expression."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="Which registered variable type builds it."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="definition" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject" lowerBound="0">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="Everything the chosen type serialises about itself - the value, the interval, the query. Opaque here for the same reason a connection's configuration is."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+    </eClassifiers>
+
+    <eClassifiers xsi:type="ecore:EClass" name="EventMapping">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+            <details key="documentation" value="One rule of the event manager: an event, the conditions it has to meet, and the actions it then calls."/>
+        </eAnnotations>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" lowerBound="1"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="definition" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject" lowerBound="0">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="The rule as the event manager reads it. Its parts - conditions, actions, payload mappings - are modelled in lib.events; this holds what that package hands over."/>
             </eAnnotations>
         </eStructuralFeatures>
     </eClassifiers>

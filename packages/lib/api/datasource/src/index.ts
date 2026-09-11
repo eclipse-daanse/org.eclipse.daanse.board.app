@@ -91,6 +91,8 @@ export interface DatasourceRepository {
    * different type is a different class.
    */
   saveDatasource(datasource: Datasource): void;
+  /** Builds a live store for every source the workspace holds. */
+  rebuildLive(): void;
   /**
    * Replaces every data source at once - what loading a stored workspace
    * does. Takes plain objects because that is the shape a stored board

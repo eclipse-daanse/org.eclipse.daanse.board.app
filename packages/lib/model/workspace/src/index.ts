@@ -24,6 +24,7 @@
  * its own copy of.
  */
 
+import { EPackageRegistry } from '@emfts/core'
 import { serviceId } from 'org.eclipse.daanse.board.app.lib.core'
 import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
 import { WorkspacePackage } from './gen/WorkspacePackage'
@@ -37,18 +38,30 @@ import type { Workspace } from './gen/Workspace'
  */
 void WorkspacePackage.eINSTANCE
 
+/*
+ * And into the registry, which is what lets a stored workspace resolve its
+ * own eClass on the way back in. Generated packages resolve foreign types
+ * through EPackageRegistry.INSTANCE but do not enter themselves into it,
+ * so whoever owns the package has to. Reported as emf.ts.codegen#36.
+ */
+EPackageRegistry.INSTANCE.registerPackage(WorkspacePackage.eINSTANCE)
+
 export type { Workspace } from './gen/Workspace'
 export type { Connection } from './gen/Connection'
 export type { Datasource } from './gen/Datasource'
 export type { Page } from './gen/Page'
 export type { Widget } from './gen/Widget'
 export type { LayoutItem } from './gen/LayoutItem'
+export type { Variable } from './gen/Variable'
+export type { EventMapping } from './gen/EventMapping'
 export { WorkspaceImpl } from './gen/WorkspaceImpl'
 export { ConnectionImpl } from './gen/ConnectionImpl'
 export { DatasourceImpl } from './gen/DatasourceImpl'
 export { PageImpl } from './gen/PageImpl'
 export { WidgetImpl } from './gen/WidgetImpl'
 export { LayoutItemImpl } from './gen/LayoutItemImpl'
+export { VariableImpl } from './gen/VariableImpl'
+export { EventMappingImpl } from './gen/EventMappingImpl'
 export { WorkspacePackage } from './gen/WorkspacePackage'
 export { WorkspaceFactory } from './gen/WorkspaceFactory'
 

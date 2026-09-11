@@ -1,36 +1,47 @@
-const { serviceId: r } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
+const { serviceId: s } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
 class o {
+  /**
+   * Whether stored content is a workspace.
+   *
+   * Two shapes are: a resource, which names the class it holds, and the
+   * one written before the workspace was modelled, recognised by the keys
+   * it always had - `conections` among them, misspelled since the first
+   * board was ever saved.
+   */
   checkContent(t) {
-    const i = Object.keys(t);
-    return !!(i.includes("layout") && i.includes("datasources") && i.includes("conections") && i.includes("widgets"));
+    if (!t || typeof t != "object") return !1;
+    if (typeof t.eClass == "string" && t.eClass.includes("#//Workspace"))
+      return !0;
+    const c = Object.keys(t);
+    return c.includes("datasources") && c.includes("conections");
   }
 }
-const n = r("ValidityCheck"), l = Symbol.for(n);
-function s({ services: e }) {
-  e.register(n, new o());
+const i = s("ValidityCheck"), l = Symbol.for(i);
+function n({ services: e }) {
+  e.register(i, new o());
 }
 function a({ services: e }) {
-  e.unregister(n);
+  e.unregister(i);
 }
 const u = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  VALIDITY_CHECK: n,
-  activate: s,
+  VALIDITY_CHECK: i,
+  activate: n,
   deactivate: a,
   identifier: l
-}, Symbol.toStringTag, { value: "Module" })), c = "org.eclipse.daanse.board.app.lib.persistence.util", d = "0.0.1-next.1";
-async function _(e) {
+}, Symbol.toStringTag, { value: "Module" })), r = "org.eclipse.daanse.board.app.lib.persistence.util", d = "0.0.1-next.1";
+async function f(e) {
   const t = globalThis.__tsm__;
   if (!t)
-    throw new Error(`${c}: tsm runtime is not initialized`);
-  t.register(c, u, d, "lib.persistence.util"), await s?.(e);
+    throw new Error(`${r}: tsm runtime is not initialized`);
+  t.register(r, u, d, "lib.persistence.util"), await n?.(e);
 }
-async function b(e) {
+async function p(e) {
   await a?.(e);
 }
 export {
-  n as VALIDITY_CHECK,
-  _ as activate,
-  b as deactivate,
+  i as VALIDITY_CHECK,
+  f as activate,
+  p as deactivate,
   l as identifier
 };

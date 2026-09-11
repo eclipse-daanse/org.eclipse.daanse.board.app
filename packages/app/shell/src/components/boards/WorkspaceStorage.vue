@@ -24,11 +24,12 @@ Contributors:
 import { computed, inject, onMounted, ref, watch } from 'vue'
 import BoardFloorplan from './BoardFloorplan.vue'
 import {
-  parseSnapshot,
+  parseWorkspace,
+  useWorkspaceFile,
   useWorkspaceOrigin,
-  useWorkspaceSnapshot,
-} from '@/composables/useWorkspaceSnapshot'
+} from '@/composables/useWorkspaceFile'
 import { summarizeBoard, type BoardSummary } from '@/composables/boardSummary'
+import { type Workspace } from 'org.eclipse.daanse.board.app.lib.model.workspace'
 import {
   type Repository,
   type WritableRepository,
@@ -40,7 +41,7 @@ import {
 const emit = defineEmits<{ restored: [ids: string[]] }>()
 
 const repoManager = inject<RepositoryRegistryI>(RepoManagerId)
-const { capture, restore } = useWorkspaceSnapshot()
+const { save, load } = useWorkspaceFile()
 
 const places = ref<Repository[]>([])
 const entriesByPlace = ref<Record<string, Entity[]>>({})
@@ -172,12 +173,20 @@ function remember(entry: Entity, name: string) {
 
 /* --------------------------------------------------------------- reading */
 
-/** The boards inside a stored state, summarised the way the launcher does it. */
+/**
+ * The boards inside a stored state, summarised the way the launcher does it.
+ *
+ * Read into the model without applying it - both the format written here
+ * and the one stored before any of this end up as the same objects, so
+ * this reads one shape rather than two.
+ */
 function boardsIn(entry: Entity | undefined): BoardSummary[] {
-  const data = parseSnapshot(entry?.data)
-  if (!data?.pages) return []
-  return Object.entries(data.pages).map(([id, page]) =>
-    summarizeBoard(id, page?.info, page?.layout, page?.widgets),
+  return summarize(parseWorkspace(entry?.data))
+}
+
+function summarize(held: Workspace | undefined): BoardSummary[] {
+  return (held?.pages.toArray() ?? []).map((page) =>
+    summarizeBoard(page.id as string, page, page.layout.toArray(), page.widgets.toArray()),
   )
 }
 
@@ -199,10 +208,7 @@ function entrySummary(entry: Entity): string {
 /** What the current workspace would be stored as, shown before storing it. */
 const pending = computed(() => {
   if (!creating.value) return { boards: 0, widgets: 0 }
-  const data = parseSnapshot(capture())
-  const list = Object.entries(data?.pages ?? {}).map(([id, page]) =>
-    summarizeBoard(id, page?.info, page?.layout, page?.widgets),
-  )
+  const list = summarize(parseWorkspace(save()))
   return {
     boards: list.length,
     widgets: list.reduce((sum, b) => sum + b.widgetCount, 0),
@@ -215,7 +221,7 @@ async function open(entry: Entity) {
   failure.value = ''
   try {
     const stored = await selectedPlace.value?.getEntityByUri(entry.uri as unknown as URL)
-    const ids = restore(stored?.data ?? entry.data)
+    const ids = load(stored?.data ?? entry.data)
     remember(entry, label(entry))
     emit('restored', ids)
   } catch (error) {
@@ -228,7 +234,7 @@ async function overwrite(entry: Entity) {
   if (!place) return
   failure.value = ''
   try {
-    await (place as WritableRepository).update({ ...entry, data: capture() } as Entity)
+    await (place as WritableRepository).update({ ...entry, data: save() } as Entity)
     remember(entry, label(entry))
     await readEntries(place)
     selectedEntry.value = entriesOf(place).find((e) => String(e.uri) === String(entry.uri))
@@ -251,7 +257,7 @@ async function createEntry() {
   if (!place || !name) return
   failure.value = ''
   try {
-    const entry = { name, uri: uriFor(place, name), data: capture() } as unknown as Entity
+    const entry = { name, uri: uriFor(place, name), data: save() } as unknown as Entity
     await (place as WritableRepository).create(entry)
     remember(entry, name)
     await expand(place)

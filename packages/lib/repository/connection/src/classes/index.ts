@@ -132,6 +132,16 @@ export class ConnectionRepository {
     )
   }
 
+  /**
+   * Builds a live object for every connection the workspace holds.
+   *
+   * What a loaded workspace needs: the model came out of a file, the
+   * things that talk to endpoints did not.
+   */
+  rebuildLive(): void {
+    for (const connection of this.getConnections()) this.saveConnection(connection)
+  }
+
   setConnections(stored: StoredConnection[]): void {
     const held = this.workspace.connections
     for (const connection of held.toArray()) {

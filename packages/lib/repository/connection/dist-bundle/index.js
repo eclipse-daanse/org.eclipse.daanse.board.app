@@ -1,5 +1,5 @@
-import { WORKSPACE as p, ConnectionImpl as c } from "org.eclipse.daanse.board.app.lib.model.workspace";
-import { CONNECTION_REPOSITORY as s, identifier as C } from "org.eclipse.daanse.board.app.lib.api.connection";
+import { WORKSPACE as C, ConnectionImpl as c } from "org.eclipse.daanse.board.app.lib.model.workspace";
+import { CONNECTION_REPOSITORY as s, identifier as p } from "org.eclipse.daanse.board.app.lib.api.connection";
 import { CONNECTION_REPOSITORY as k, identifier as R } from "org.eclipse.daanse.board.app.lib.api.connection";
 const r = /* @__PURE__ */ new Map();
 class f {
@@ -13,7 +13,7 @@ class f {
    */
   workspaceHeld;
   get workspace() {
-    return this.workspaceHeld || (this.workspaceHeld = this.resolver.getRequired(p)), this.workspaceHeld;
+    return this.workspaceHeld || (this.workspaceHeld = this.resolver.getRequired(C)), this.workspaceHeld;
   }
   /**
    * Resolves one of the identifiers a registered type entry carries
@@ -61,6 +61,15 @@ class f {
       e.type,
       n
     );
+  }
+  /**
+   * Builds a live object for every connection the workspace holds.
+   *
+   * What a loaded workspace needs: the model came out of a file, the
+   * things that talk to endpoints did not.
+   */
+  rebuildLive() {
+    for (const e of this.getConnections()) this.saveConnection(e);
   }
   setConnections(e) {
     const n = this.workspace.connections;
@@ -139,20 +148,20 @@ const h = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   CONNECTION_REPOSITORY: s,
   activate: l,
   deactivate: u,
-  identifier: C
-}, Symbol.toStringTag, { value: "Module" })), a = "org.eclipse.daanse.board.app.lib.repository.connection", y = "0.0.1-next.1";
-async function b(i) {
+  identifier: p
+}, Symbol.toStringTag, { value: "Module" })), a = "org.eclipse.daanse.board.app.lib.repository.connection", g = "0.0.1-next.1";
+async function w(i) {
   const e = globalThis.__tsm__;
   if (!e)
     throw new Error(`${a}: tsm runtime is not initialized`);
-  e.register(a, h, y, "lib.repository.connection"), await l?.(i);
+  e.register(a, h, g, "lib.repository.connection"), await l?.(i);
 }
 async function m(i) {
   await u?.(i);
 }
 export {
   k as CONNECTION_REPOSITORY,
-  b as activate,
+  w as activate,
   m as deactivate,
   R as identifier
 };
