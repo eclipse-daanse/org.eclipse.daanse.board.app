@@ -20,7 +20,7 @@
       "versionRange": ">=0.0.1-0"
     },
     {
-      "id": "org.eclipse.daanse.board.app.lib.utils.subscriber",
+      "id": "org.eclipse.daanse.board.app.lib.model.workspace",
       "versionRange": ">=0.0.1-0"
     }
   ],
@@ -36,6 +36,6 @@
   "dependencies": [
     "lib.api.page",
     "lib.repository.layout.page",
-    "lib.utils.subscriber"
+    "lib.model.workspace"
   ]
 }

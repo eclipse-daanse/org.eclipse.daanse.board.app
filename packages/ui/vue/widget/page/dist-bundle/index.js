@@ -1,6 +1,6 @@
-(function(){var i="ui.vue.widget.page",d=document,s=d.querySelector('style[data-tsm-bundle="'+i+'"]');if(!s){s=d.createElement('style');s.setAttribute('data-tsm-bundle',i);d.head.appendChild(s);}s.textContent=".page-layout-renderer[data-v-1f16ff64]{width:100%;height:100%;position:relative;min-height:300px}.loading-state[data-v-1f16ff64],.error-state[data-v-1f16ff64],.empty-state[data-v-1f16ff64],.no-layout-state[data-v-1f16ff64]{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;padding:2rem;text-align:center}.loading-spinner[data-v-1f16ff64]{width:32px;height:32px;border:3px solid #f3f3f3;border-top:3px solid #007bff;border-radius:50%;animation:spin-1f16ff64 1s linear infinite}@keyframes spin-1f16ff64{0%{transform:rotate(0)}to{transform:rotate(360deg)}}.error-state[data-v-1f16ff64]{color:#dc3545}.error-icon[data-v-1f16ff64],.empty-icon[data-v-1f16ff64],.warning-icon[data-v-1f16ff64]{font-size:2rem;margin-bottom:1rem}.no-layout-state[data-v-1f16ff64]{color:#ffc107}.layout-engine-container[data-v-1f16ff64]{width:100%;height:100%;position:relative}.empty-state[data-v-1f16ff64]{color:#6c757d}.layout-container[data-v-1f16ff64]{position:relative;width:100%;height:100%;background:#f8f9fa;min-height:400px}.layout-container.view-mode[data-v-1f16ff64]{background:transparent}.layout-item[data-v-1f16ff64]{border:1px solid #e9ecef;border-radius:4px;background:#fff;box-shadow:0 2px 4px #0000001a;overflow:hidden}.view-mode .layout-item[data-v-1f16ff64]{border-color:transparent;box-shadow:none}.missing-widget[data-v-1f16ff64]{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;color:#6c757d;background:#f8f9fa;text-align:center;font-size:.8rem}.missing-widget-icon[data-v-1f16ff64]{font-size:1.5rem;margin-bottom:.5rem}.debug-info[data-v-1f16ff64]{position:absolute;bottom:10px;right:10px;background:#000c;color:#fff;padding:.5rem;border-radius:4px;font-size:.7rem;max-width:300px}.debug-info pre[data-v-1f16ff64]{margin:0;white-space:pre-wrap}.container[data-v-a181d5f3]{width:100%;height:100%}.recursion-warning[data-v-a181d5f3]{padding:1rem;background-color:#fff3cd;border:1px solid #ffeaa7;border-radius:4px;color:#856404;text-align:center}.recursion-details[data-v-a181d5f3]{font-size:.8em;margin-top:.5rem;opacity:.7}.page-widget-content[data-v-a181d5f3]{width:100%;height:100%;border:1px solid #e0e0e0;border-radius:4px;overflow:hidden;display:flex;flex-direction:column}.page-widget-content.scroll-mode[data-v-a181d5f3]{overflow:auto}.page-widget-content.scroll-mode .page-content-wrapper[data-v-a181d5f3]{min-height:fit-content;overflow:visible}.page-widget-content.responsive-mode[data-v-a181d5f3]{overflow:hidden}.page-widget-content.responsive-mode .page-content-wrapper[data-v-a181d5f3]{flex:1;overflow:hidden;position:relative}.page-info[data-v-a181d5f3]{background:#f8f9fa;padding:.5rem;font-size:.9em;color:#6c757d;border-bottom:1px solid #e0e0e0;flex-shrink:0}.page-content-wrapper[data-v-a181d5f3]{flex:1;position:relative;min-height:0;width:100%;overflow:auto}.page-content-wrapper[data-v-a181d5f3]>*{width:100%;height:100%}.settings-container[data-v-a1b8e7f4]{display:flex;flex-direction:column;align-items:stretch;gap:1rem}.manual-path[data-v-a1b8e7f4]{display:flex;flex-direction:column;gap:6px}.manual-path__note[data-v-a1b8e7f4]{margin:0;font-size:12px;color:var(--color-dim, #6b7280)}.add-btn[data-v-a1b8e7f4]{width:150px}.input[data-v-a1b8e7f4]{width:100px}.loading[data-v-a1b8e7f4]{height:100%;padding:50px;border-radius:4px;margin-bottom:1rem;background-color:var(--app-response-background)}\n";})();
+(function(){var i="ui.vue.widget.page",d=document,s=d.querySelector('style[data-tsm-bundle="'+i+'"]');if(!s){s=d.createElement('style');s.setAttribute('data-tsm-bundle',i);d.head.appendChild(s);}s.textContent=".page-layout-renderer[data-v-60a30709]{width:100%;height:100%;position:relative;min-height:300px}.loading-state[data-v-60a30709],.error-state[data-v-60a30709],.empty-state[data-v-60a30709],.no-layout-state[data-v-60a30709]{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;padding:2rem;text-align:center}.loading-spinner[data-v-60a30709]{width:32px;height:32px;border:3px solid #f3f3f3;border-top:3px solid #007bff;border-radius:50%;animation:spin-60a30709 1s linear infinite}@keyframes spin-60a30709{0%{transform:rotate(0)}to{transform:rotate(360deg)}}.error-state[data-v-60a30709]{color:#dc3545}.error-icon[data-v-60a30709],.empty-icon[data-v-60a30709],.warning-icon[data-v-60a30709]{font-size:2rem;margin-bottom:1rem}.no-layout-state[data-v-60a30709]{color:#ffc107}.layout-engine-container[data-v-60a30709]{width:100%;height:100%;position:relative}.empty-state[data-v-60a30709]{color:#6c757d}.layout-container[data-v-60a30709]{position:relative;width:100%;height:100%;background:#f8f9fa;min-height:400px}.layout-container.view-mode[data-v-60a30709]{background:transparent}.layout-item[data-v-60a30709]{border:1px solid #e9ecef;border-radius:4px;background:#fff;box-shadow:0 2px 4px #0000001a;overflow:hidden}.view-mode .layout-item[data-v-60a30709]{border-color:transparent;box-shadow:none}.missing-widget[data-v-60a30709]{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;color:#6c757d;background:#f8f9fa;text-align:center;font-size:.8rem}.missing-widget-icon[data-v-60a30709]{font-size:1.5rem;margin-bottom:.5rem}.debug-info[data-v-60a30709]{position:absolute;bottom:10px;right:10px;background:#000c;color:#fff;padding:.5rem;border-radius:4px;font-size:.7rem;max-width:300px}.debug-info pre[data-v-60a30709]{margin:0;white-space:pre-wrap}.container[data-v-a181d5f3]{width:100%;height:100%}.recursion-warning[data-v-a181d5f3]{padding:1rem;background-color:#fff3cd;border:1px solid #ffeaa7;border-radius:4px;color:#856404;text-align:center}.recursion-details[data-v-a181d5f3]{font-size:.8em;margin-top:.5rem;opacity:.7}.page-widget-content[data-v-a181d5f3]{width:100%;height:100%;border:1px solid #e0e0e0;border-radius:4px;overflow:hidden;display:flex;flex-direction:column}.page-widget-content.scroll-mode[data-v-a181d5f3]{overflow:auto}.page-widget-content.scroll-mode .page-content-wrapper[data-v-a181d5f3]{min-height:fit-content;overflow:visible}.page-widget-content.responsive-mode[data-v-a181d5f3]{overflow:hidden}.page-widget-content.responsive-mode .page-content-wrapper[data-v-a181d5f3]{flex:1;overflow:hidden;position:relative}.page-info[data-v-a181d5f3]{background:#f8f9fa;padding:.5rem;font-size:.9em;color:#6c757d;border-bottom:1px solid #e0e0e0;flex-shrink:0}.page-content-wrapper[data-v-a181d5f3]{flex:1;position:relative;min-height:0;width:100%;overflow:auto}.page-content-wrapper[data-v-a181d5f3]>*{width:100%;height:100%}.settings-container[data-v-a1b8e7f4]{display:flex;flex-direction:column;align-items:stretch;gap:1rem}.manual-path[data-v-a1b8e7f4]{display:flex;flex-direction:column;gap:6px}.manual-path__note[data-v-a1b8e7f4]{margin:0;font-size:12px;color:var(--color-dim, #6b7280)}.add-btn[data-v-a1b8e7f4]{width:150px}.input[data-v-a1b8e7f4]{width:100px}.loading[data-v-a1b8e7f4]{height:100%;padding:50px;border-radius:4px;margin-bottom:1rem;background-color:var(--app-response-background)}\n";})();
 import { component as V } from "@eclipse-daanse/tsm";
-import { defineComponent as b, inject as T, ref as S, shallowRef as B, onMounted as H, onErrorCaptured as U, createElementBlock as f, openBlock as g, createCommentVNode as E, createElementVNode as h, toDisplayString as C, createBlock as $, resolveDynamicComponent as M, useModel as k, provide as R, computed as I, createTextVNode as w, normalizeStyle as K, normalizeClass as Z, createVNode as N, unref as A } from "vue";
+import { defineComponent as b, inject as T, ref as S, shallowRef as B, onMounted as H, onErrorCaptured as U, createElementBlock as C, openBlock as g, createCommentVNode as E, createElementVNode as h, toDisplayString as f, createBlock as $, resolveDynamicComponent as M, useModel as k, provide as R, computed as I, createTextVNode as w, normalizeStyle as K, normalizeClass as Z, createVNode as N, unref as A } from "vue";
 import { useRouter as X, useRoute as W } from "vue-router";
 import { identifier as j } from "org.eclipse.daanse.board.app.lib.api.layout.page";
 import { identifier as x } from "org.eclipse.daanse.board.app.lib.api.page";
@@ -16,10 +16,10 @@ const se = "data:image/svg+xml,%3csvg%20width='120'%20height='120'%20viewBox='0%
 }, oe = {
   key: 2,
   class: "no-layout-state"
-}, le = { key: 0 }, ue = { key: 1 }, ce = {
+}, le = { key: 0 }, ue = { key: 1 }, de = {
   key: 3,
   class: "layout-engine-container"
-}, de = /* @__PURE__ */ b({
+}, ce = /* @__PURE__ */ b({
   __name: "PageLayoutRenderer",
   props: {
     pageId: {},
@@ -27,12 +27,12 @@ const se = "data:image/svg+xml,%3csvg%20width='120'%20height='120'%20viewBox='0%
   },
   emits: ["openWidgetSettings", "removeWidget"],
   setup(p, { emit: e }) {
-    const t = p, s = T(j), n = T(x), u = S(null), c = S(null), v = B(null), _ = S(!0), d = S(null), l = () => {
+    const t = p, s = T(j), n = T(x), u = S(null), d = S(null), v = B(null), _ = S(!0), c = S(null), l = () => {
       if (t.pageId && n) {
         const a = n.getPage(t.pageId);
-        if (u.value = a || null, v.value = null, c.value = null, a?.layout && s) {
-          const r = s.getLayout(a.layout.id);
-          c.value = r || null, r?.component && (v.value = r.component, console.log(`PageLayoutRenderer: Loaded layout component for page ${t.pageId}`, {
+        if (u.value = a || null, v.value = null, d.value = null, a?.layoutId && s) {
+          const r = s.getLayout(a.layoutId);
+          d.value = r || null, r?.component && (v.value = r.component, console.log(`PageLayoutRenderer: Loaded layout component for page ${t.pageId}`, {
             layoutId: r.id,
             component: r.component
           }));
@@ -41,27 +41,27 @@ const se = "data:image/svg+xml,%3csvg%20width='120'%20height='120'%20viewBox='0%
     };
     return H(async () => {
       try {
-        _.value = !0, d.value = null, await new Promise((a) => setTimeout(a, 50)), l();
+        _.value = !0, c.value = null, await new Promise((a) => setTimeout(a, 50)), l();
       } catch (a) {
-        d.value = `Fehler beim Laden der Seite ${t.pageId}: ${a}`, console.error("PageLayoutRenderer error:", a);
+        c.value = `Fehler beim Laden der Seite ${t.pageId}: ${a}`, console.error("PageLayoutRenderer error:", a);
       } finally {
         _.value = !1;
       }
-    }), U((a) => (d.value = `Render-Fehler: ${a.message}`, console.error("PageLayoutRenderer render error:", a), !1)), (a, r) => (g(), f("div", ie, [
-      _.value ? (g(), f("div", re, [
+    }), U((a) => (c.value = `Render-Fehler: ${a.message}`, console.error("PageLayoutRenderer render error:", a), !1)), (a, r) => (g(), C("div", ie, [
+      _.value ? (g(), C("div", re, [
         r[0] || (r[0] = h("div", { class: "loading-spinner" }, null, -1)),
-        h("p", null, "Lade Seite " + C(p.pageId) + "...", 1)
-      ])) : d.value ? (g(), f("div", ne, [
+        h("p", null, "Lade Seite " + f(p.pageId) + "...", 1)
+      ])) : c.value ? (g(), C("div", ne, [
         r[1] || (r[1] = h("div", { class: "error-icon" }, "⚠️", -1)),
-        h("p", null, C(d.value), 1)
-      ])) : !v.value && !d.value ? (g(), f("div", oe, [
+        h("p", null, f(c.value), 1)
+      ])) : !v.value && !c.value ? (g(), C("div", oe, [
         r[2] || (r[2] = h("div", { class: "warning-icon" }, "⚠️", -1)),
-        h("p", null, "Kein Layout-System für Seite " + C(p.pageId) + " gefunden", 1),
-        u.value ? (g(), f("small", le, "Page: " + C(u.value.name), 1)) : E("", !0),
-        c.value ? (g(), f("small", ue, "Layout: " + C(c.value.id), 1)) : E("", !0)
-      ])) : v.value ? (g(), f("div", ce, [
+        h("p", null, "Kein Layout-System für Seite " + f(p.pageId) + " gefunden", 1),
+        u.value ? (g(), C("small", le, "Page: " + f(u.value.name), 1)) : E("", !0),
+        d.value ? (g(), C("small", ue, "Layout: " + f(d.value.id), 1)) : E("", !0)
+      ])) : v.value ? (g(), C("div", de, [
         (g(), $(M(v.value), {
-          key: c.value?.id || "view",
+          key: d.value?.id || "view",
           pageId: t.pageId
         }, null, 8, ["pageId"]))
       ])) : E("", !0)
@@ -72,13 +72,13 @@ const se = "data:image/svg+xml,%3csvg%20width='120'%20height='120'%20viewBox='0%
   for (const [s, n] of e)
     t[s] = n;
   return t;
-}, pe = /* @__PURE__ */ P(de, [["__scopeId", "data-v-1f16ff64"]]), ge = {
+}, pe = /* @__PURE__ */ P(ce, [["__scopeId", "data-v-60a30709"]]), ge = {
   key: 0,
   class: "container"
 }, he = {
   key: 0,
   class: "recursion-warning"
-}, fe = { class: "recursion-details" }, Ce = {
+}, Ce = { class: "recursion-details" }, fe = {
   key: 1,
   style: { width: "100%", height: "100%" }
 }, ve = {
@@ -99,15 +99,15 @@ const se = "data:image/svg+xml,%3csvg%20width='120'%20height='120'%20viewBox='0%
     X();
     const s = W(), u = T("pageWidgetDepth", 0) + 1;
     R("pageWidgetDepth", u);
-    const c = T("pageWidgetPaths", []), v = `/page/${s.params.pageid}`, _ = [...c, v];
+    const d = T("pageWidgetPaths", []), v = `/page/${s.params.pageid}`, _ = [...d, v];
     R("pageWidgetPaths", _);
-    const d = I(() => {
+    const c = I(() => {
       const a = e.value.path;
       if (!a) return !1;
       if (u > L)
         return console.warn(`PageWidget: Max depth ${L} reached`, { currentDepth: u, targetPath: a }), !0;
-      if (c.includes(a))
-        return console.warn("PageWidget: Circular reference detected", { targetPath: a, parentPaths: c }), !0;
+      if (d.includes(a))
+        return console.warn("PageWidget: Circular reference detected", { targetPath: a, parentPaths: d }), !0;
       const r = a.split("/").pop(), m = s.params.pageid;
       return r === m ? (console.warn("PageWidget: Self-reference detected", { targetPageId: r, currentPageId: m }), !0) : !1;
     });
@@ -117,22 +117,22 @@ const se = "data:image/svg+xml,%3csvg%20width='120'%20height='120'%20viewBox='0%
         m == null && (e.value[a] = r);
       }
     const l = I(() => e.value.path?.split("/").pop() || "abc");
-    return (a, r) => e.value.path ? (g(), f("div", ge, [
-      d.value ? (g(), f("div", he, [
-        w(" ⚠️ Rekursive Seitenverweis verhindert: " + C(e.value.path) + " ", 1),
-        h("div", fe, [
-          w(" Tiefe: " + C(u) + "/" + C(L)),
+    return (a, r) => e.value.path ? (g(), C("div", ge, [
+      c.value ? (g(), C("div", he, [
+        w(" ⚠️ Rekursive Seitenverweis verhindert: " + f(e.value.path) + " ", 1),
+        h("div", Ce, [
+          w(" Tiefe: " + f(u) + "/" + f(L)),
           r[0] || (r[0] = h("br", null, null, -1)),
-          w(" Aufrufkette: " + C(_.join(" → ")) + " → " + C(e.value.path), 1)
+          w(" Aufrufkette: " + f(_.join(" → ")) + " → " + f(e.value.path), 1)
         ])
-      ])) : (g(), f("div", Ce, [
+      ])) : (g(), C("div", fe, [
         h("div", {
           class: Z(["page-widget-content", {}]),
           style: K({
             backgroundColor: e.value.backgroundColor || void 0
           })
         }, [
-          e.value.hideTitle ? E("", !0) : (g(), f("div", ve, " 📄 Seite: " + C(l.value), 1)),
+          e.value.hideTitle ? E("", !0) : (g(), C("div", ve, " 📄 Seite: " + f(l.value), 1)),
           h("div", _e, [
             N(pe, { pageId: l.value }, null, 8, ["pageId"])
           ])
@@ -151,15 +151,15 @@ const se = "data:image/svg+xml,%3csvg%20width='120'%20height='120'%20viewBox='0%
   },
   emits: ["update:modelValue"],
   setup(p) {
-    const e = T("i18n"), t = (d) => e ? e.t(d) : d, s = k(p, "modelValue"), n = W(), u = T(x), c = I(() => n.params.pageid), v = I(() => u.getAllPageIds().filter((l) => l !== c.value).map((l) => {
+    const e = T("i18n"), t = (c) => e ? e.t(c) : c, s = k(p, "modelValue"), n = W(), u = T(x), d = I(() => n.params.pageid), v = I(() => u.getAllPageIds().filter((l) => l !== d.value).map((l) => {
       const a = u.getPage(l);
       return {
         value: `/page/${l}`,
         text: a?.name || l,
         id: l
       };
-    })), _ = I(() => s.value.path ? s.value.path.split("/").pop() !== c.value : !0);
-    return (d, l) => (g(), f("section", Ee, [
+    })), _ = I(() => s.value.path ? s.value.path.split("/").pop() !== d.value : !0);
+    return (c, l) => (g(), C("section", Ee, [
       h("div", Ie, [
         N(A(q), {
           modelValue: s.value.path,
@@ -172,7 +172,7 @@ const se = "data:image/svg+xml,%3csvg%20width='120'%20height='120'%20viewBox='0%
           error: _.value ? void 0 : t("page:pageWidget.selfReferenceWarning")
         }, null, 8, ["modelValue", "label", "options", "placeholder", "error"]),
         h("div", Se, [
-          h("p", we, C(t("page:pageWidget.manualPath")), 1),
+          h("p", we, f(t("page:pageWidget.manualPath")), 1),
           N(A(z), {
             modelValue: s.value.path,
             "onUpdate:modelValue": l[1] || (l[1] = (a) => s.value.path = a),
@@ -442,8 +442,8 @@ offered anywhere; it is offered here.
 </uimodel:UIModel>
 `;
 var Ne = Object.getOwnPropertyDescriptor, be = (p, e, t, s) => {
-  for (var n = s > 1 ? void 0 : s ? Ne(e, t) : e, u = p.length - 1, c; u >= 0; u--)
-    (c = p[u]) && (n = c(n) || n);
+  for (var n = s > 1 ? void 0 : s ? Ne(e, t) : e, u = p.length - 1, d; u >= 0; u--)
+    (d = p[u]) && (n = d(n) || n);
   return n;
 };
 o.eINSTANCE;

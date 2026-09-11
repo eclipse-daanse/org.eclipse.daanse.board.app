@@ -20,13 +20,18 @@ Contributors:
  * from the board itself (its layout, its widgets, its data sources);
  * nothing is decoration standing in for data we do not have.
  */
-import { computed, onMounted, onUnmounted, ref } from 'vue'
+import { computed, inject, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { v4 as uuidv4 } from 'uuid'
 import BoardFloorplan from './BoardFloorplan.vue'
 import WorkspaceStorage from './WorkspaceStorage.vue'
 import { summarizeBoard, type BoardSummary } from '@/composables/boardSummary'
 import { useBoardUsage } from '@/composables/useBoardUsage'
+import {
+  identifier as WORKSPACE,
+  type Workspace,
+} from 'org.eclipse.daanse.board.app.lib.model.workspace'
+import { useEList } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import { useLayoutStore } from 'org.eclipse.daanse.board.app.ui.vue.stores.layout'
 import { useWidgetsStore } from 'org.eclipse.daanse.board.app.ui.vue.stores.widgets'
 import type { PageRegistryI, PageI } from 'org.eclipse.daanse.board.app.lib.api.page'
@@ -46,32 +51,10 @@ const { usageOf, byUsage, lastOpenedLabel } = useBoardUsage()
 /** Boards and storage are two views of the same place, not two places. */
 const view = ref<'boards' | 'storage'>(route.query.view === 'storage' ? 'storage' : 'boards')
 
-/*
- * The page repository is a plain service, not a reactive store, so a board
- * registered while this view is open would go unnoticed. It publishes
- * changes instead - probed rather than assumed, the way the widget tracker
- * does it, so the API contract stays the only thing we depend on.
- */
-const revision = ref(0)
-let subscription: string | undefined
 
-function subscribable(repo: unknown) {
-  const candidate = repo as {
-    subscribe?: (cb: (event: string) => void) => string
-    unsubscribe?: (id: string) => void
-  }
-  return typeof candidate?.subscribe === 'function' ? candidate : undefined
-}
 
-onMounted(() => {
-  subscription = subscribable(props.pageRepo)?.subscribe(() => {
-    revision.value += 1
-  })
-})
-
-onUnmounted(() => {
-  if (subscription) subscribable(props.pageRepo)?.unsubscribe?.(subscription)
-})
+/* The modelled pages - reading this list is what makes the summary re-run. */
+const pages = useEList(inject<Workspace>(WORKSPACE)!, (w) => w.pages)
 
 /*
  * Ordered by how much each board is actually used, so the ones worked with
@@ -79,7 +62,9 @@ onUnmounted(() => {
  * board is never hidden, only ranked.
  */
 const boards = computed<BoardSummary[]>(() => {
-  revision.value // re-read the repository whenever it announces a change
+  /* Reading the modelled list is what makes this re-run. */
+  const held = pages.value
+  void held
   const repo = props.pageRepo
   if (!repo) return []
 
@@ -122,8 +107,9 @@ function createBoard() {
     description: '',
     icon: '',
     visibleInNavigation: true,
-    layout: props.layoutRepo.getLayout('org.eclipse.daanse.board.app.ui.vue.layouts.base'),
-  } as PageI)
+    /* The id; the layout itself is resolved from the repository on render. */
+    layoutId: 'org.eclipse.daanse.board.app.ui.vue.layouts.base',
+  })
   router.push(`/page/${id}/edit`)
 }
 

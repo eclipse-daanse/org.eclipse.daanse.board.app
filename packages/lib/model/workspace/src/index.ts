@@ -40,9 +40,11 @@ void WorkspacePackage.eINSTANCE
 export type { Workspace } from './gen/Workspace'
 export type { Connection } from './gen/Connection'
 export type { Datasource } from './gen/Datasource'
+export type { Page } from './gen/Page'
 export { WorkspaceImpl } from './gen/WorkspaceImpl'
 export { ConnectionImpl } from './gen/ConnectionImpl'
 export { DatasourceImpl } from './gen/DatasourceImpl'
+export { PageImpl } from './gen/PageImpl'
 export { WorkspacePackage } from './gen/WorkspacePackage'
 export { WorkspaceFactory } from './gen/WorkspaceFactory'
 

@@ -15,8 +15,6 @@ import {
   computed,
   type ComputedRef,
   inject,
-  onMounted,
-  onUnmounted,
   reactive,
   ref,
   watch
@@ -24,59 +22,46 @@ import {
 import {
   type PageRegistryI,
   identifier as PageIdentifier,
-  type PageI, events,type PageRegistryImpl
+  type PageI
 } from 'org.eclipse.daanse.board.app.lib.repository.page'
 import {
   type LayoutRepositoryI,
   identifier as LayoutRepositoryIdentifier
 } from 'org.eclipse.daanse.board.app.lib.api.layout.page'
+import {
+  identifier as WORKSPACE,
+  type Workspace,
+} from 'org.eclipse.daanse.board.app.lib.model.workspace'
+import { useEList } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import { useRoute, useRouter } from 'vue-router'
 import { v4 } from 'uuid'
 
 const router = useRouter();
 const route = useRoute();
 const pageRepo:PageRegistryI|undefined = inject<PageRegistryI>(PageIdentifier);
-const layoutRepo:LayoutRepositoryI|undefined
-  = inject<LayoutRepositoryI>(LayoutRepositoryIdentifier);
-const updated = ref(0);
 const createNew = ref(false);
 const name = ref('newPage');
 const showDeleteConfirm = ref(false);
 const pageToDelete = ref<string | null>(null);
 const emit = defineEmits(['pageSettings'])
-let subid:string|undefined = undefined
-onMounted(() => {
-  subid = (pageRepo as PageRegistryImpl).subscribe((ev:string)=>{
-    if(
-      ev == events.PAGE_UPDATE
-      || ev == events.PAGE_UNREGISTRATION
-      || ev == events.PAGE_REGISTRATION
-    ) updated.value+=1;
-  })
-})
-onUnmounted(()=> {
-  (pageRepo as PageRegistryImpl).unsubscribe(subid as string);
-})
+/*
+ * The list re-renders because the pages are modelled and say when they
+ * change. This used to be three event names of the registry's own and a
+ * counter to turn them back into reactivity.
+ */
+const pages: ComputedRef<PageI[]> = useEList(
+  inject<Workspace>(WORKSPACE)!,
+  (w) => w.pages,
+) as unknown as ComputedRef<PageI[]>
 
-const pages:ComputedRef<PageI[]> = computed(() => {
-  updated.value
-  const pageIds = pageRepo?.getAllPageIds()
-  const pages:PageI[] = [];
-  for (const pageId of pageIds||[]) {
-    const page = pageRepo?.getPage(pageId);
-    if(page){
-      pages.push(page);
-    }
-  }
-  return pages;
-})
+
 const nodes = computed(() => {
 
   const ret = [];
   for(const page of pages.value){
     ret.push({
-      id: page.id,
-      label: page.name,
+      id: page.id ?? '',
+      label: page.name ?? '',
       icon: 'note',
     });
   }
@@ -112,18 +97,15 @@ const filter = ref("");
 const addPage = () => {
   createNew.value = false;
 
-  // Get default base layout
-  const baseLayout = layoutRepo?.getLayout('org.eclipse.daanse.board.app.ui.vue.layouts.base')
-
   pageRepo?.registerPage({
     id: v4(),
     name: name.value,
     description: '',
     icon: '',
     visibleInNavigation: true,
-    layout: baseLayout
-  } as PageI);
-  updated.value! += 1;
+    /* The id; the layout itself is resolved from the repository on render. */
+    layoutId: 'org.eclipse.daanse.board.app.ui.vue.layouts.base',
+  });
 }
 const pageToDeleteName = computed(() => {
   if (!pageToDelete.value) return '';
@@ -141,7 +123,6 @@ const removePage = () => {
   const pageId = pageToDelete.value;
   if (!pageId) return;
   pageRepo?.unregisterPage(pageId);
-  updated.value += 1;
   showDeleteConfirm.value = false;
   pageToDelete.value = null;
   if (route.params.pageid === pageId) {

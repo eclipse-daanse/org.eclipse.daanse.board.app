@@ -11,10 +11,8 @@
  *   Smart City Jena
  **********************************************************************/
 
-import type { PageI } from './api/PageI'
 import { PageRegistryImpl } from './classes/PageRegistryImpl'
-import type { PageRegistryI } from './api/PageRegistryI'
-import { events } from './api/Events'
+import type { PageI, PageRegistryI, StoredPage } from 'org.eclipse.daanse.board.app.lib.api.page'
 import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
 import { PAGE_REPOSITORY, identifier } from 'org.eclipse.daanse.board.app.lib.api.page'
 export { PAGE_REPOSITORY, identifier } from 'org.eclipse.daanse.board.app.lib.api.page'
@@ -22,7 +20,7 @@ export { PAGE_REPOSITORY, identifier } from 'org.eclipse.daanse.board.app.lib.ap
 
 
 export function activate({ services }: ActivationContext) {
-  services.register<PageRegistryI>(PAGE_REPOSITORY, new PageRegistryImpl())
+  services.register<PageRegistryI>(PAGE_REPOSITORY, new PageRegistryImpl(services))
 }
 
 export function deactivate({ services }: ActivationContext) {
@@ -33,5 +31,5 @@ export {
   type PageI,
   type PageRegistryI,
   type PageRegistryImpl,
-  events,
+  type StoredPage,
 }

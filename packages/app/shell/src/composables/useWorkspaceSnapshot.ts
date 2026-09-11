@@ -46,6 +46,8 @@ import {
 import { type Variable } from 'org.eclipse.daanse.board.app.lib.variables'
 import {
   type PageRegistryI,
+  type Page,
+  type StoredPage,
   identifier as PageIdentifier,
 } from 'org.eclipse.daanse.board.app.lib.api.page'
 import {
@@ -103,6 +105,31 @@ export function parseSnapshot(content: unknown): StoredWorkspace | undefined {
   }
 }
 
+/**
+ * A modelled page as plain data.
+ *
+ * Feature by feature, because a modelled object keeps its values in
+ * private fields behind getters - spreading it would store _name and _id
+ * rather than what the model calls them.
+ */
+function toStoredPage(page: Page | undefined): StoredPage | undefined {
+  if (!page) return undefined
+  return {
+    id: page.id as string,
+    name: page.name as string,
+    description: page.description,
+    icon: page.icon,
+    visibleInNavigation: page.visibleInNavigation ?? true,
+    layoutId: page.layoutId,
+    layoutSettings: page.layoutSettings as Record<string, unknown> | undefined,
+    backgroundColor: page.backgroundColor,
+    backgroundImage: page.backgroundImage,
+    backgroundSize: page.backgroundSize as StoredPage['backgroundSize'],
+    backgroundPosition: page.backgroundPosition,
+    backgroundRepeat: page.backgroundRepeat as StoredPage['backgroundRepeat'],
+  }
+}
+
 export function useWorkspaceSnapshot() {
   const pageRepo = inject<PageRegistryI>(PageIdentifier)
   const layoutRepo = inject<LayoutRepositoryI>(LayoutRepositoryIdentifier)
@@ -127,7 +154,7 @@ export function useWorkspaceSnapshot() {
     const pages: Record<string, unknown> = {}
     for (const id of pageRepo?.getAllPageIds() ?? []) {
       pages[id] = {
-        info: pageRepo?.getPage(id),
+        info: toStoredPage(pageRepo?.getPage(id)),
         widgets: useWidgetsStore(id).widgets,
         layout: useLayoutStore(id).layout,
       }
@@ -196,11 +223,22 @@ export function useWorkspaceSnapshot() {
       useLayoutStore(id).layout = page.layout
       useWidgetsStore(id).widgets = page.widgets
 
+      /*
+       * A board stored before the layout became an id carries the whole
+       * layout object, Vue components and all. Only its id is of any use
+       * here; the rest is resolved from the repository on render.
+       */
       const info = page.info
-      if (info && !info.layout && layoutRepo) {
-        info.layout = layoutRepo.getLayout('org.eclipse.daanse.board.app.ui.vue.layouts.base')
+      if (info) {
+        pageRepo?.registerPage({
+          ...info,
+          layoutId:
+            info.layoutId ??
+            info.layout?.id ??
+            'org.eclipse.daanse.board.app.ui.vue.layouts.base',
+          layout: undefined,
+        })
       }
-      pageRepo?.registerPage(info)
       variableWrapperFactory?.initilazeVariableWrappers(page.widgets)
       restored.push(id)
     }

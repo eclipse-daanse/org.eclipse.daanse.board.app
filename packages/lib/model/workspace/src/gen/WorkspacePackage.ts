@@ -36,6 +36,21 @@ export class WorkspacePackage extends BasicEPackage {
     WORKSPACE: null as unknown as EClass,
     WORKSPACE__CONNECTIONS: null as unknown as EAttribute | EReference,
     WORKSPACE__DATASOURCES: null as unknown as EAttribute | EReference,
+    WORKSPACE__PAGES: null as unknown as EAttribute | EReference,
+    WORKSPACE__DEFAULT_PAGE: null as unknown as EAttribute | EReference,
+    PAGE: null as unknown as EClass,
+    PAGE__ID: null as unknown as EAttribute | EReference,
+    PAGE__NAME: null as unknown as EAttribute | EReference,
+    PAGE__DESCRIPTION: null as unknown as EAttribute | EReference,
+    PAGE__ICON: null as unknown as EAttribute | EReference,
+    PAGE__VISIBLE_IN_NAVIGATION: null as unknown as EAttribute | EReference,
+    PAGE__LAYOUT_ID: null as unknown as EAttribute | EReference,
+    PAGE__LAYOUT_SETTINGS: null as unknown as EAttribute | EReference,
+    PAGE__BACKGROUND_COLOR: null as unknown as EAttribute | EReference,
+    PAGE__BACKGROUND_IMAGE: null as unknown as EAttribute | EReference,
+    PAGE__BACKGROUND_SIZE: null as unknown as EAttribute | EReference,
+    PAGE__BACKGROUND_POSITION: null as unknown as EAttribute | EReference,
+    PAGE__BACKGROUND_REPEAT: null as unknown as EAttribute | EReference,
     DATASOURCE: null as unknown as EClass,
     DATASOURCE__UID: null as unknown as EAttribute | EReference,
     DATASOURCE__NAME: null as unknown as EAttribute | EReference,
@@ -93,6 +108,129 @@ export class WorkspacePackage extends BasicEPackage {
     workspace_datasources.setUpperBound(-1);
     workspaceClass.getEStructuralFeatures().push(workspace_datasources);
     WorkspacePackage.Literals.WORKSPACE__DATASOURCES = workspace_datasources;
+
+    // Create pages feature
+    const workspace_pages = new BasicEReference();
+    workspace_pages.setContainment(true);
+    workspace_pages.setName('pages');
+    workspace_pages.setLowerBound(0);
+    workspace_pages.setUpperBound(-1);
+    workspaceClass.getEStructuralFeatures().push(workspace_pages);
+    WorkspacePackage.Literals.WORKSPACE__PAGES = workspace_pages;
+
+    // Create defaultPage feature
+    const workspace_defaultPage = new BasicEReference();
+    workspace_defaultPage.setContainment(false);
+    workspace_defaultPage.setName('defaultPage');
+    workspace_defaultPage.setLowerBound(0);
+    workspace_defaultPage.setUpperBound(1);
+    workspaceClass.getEStructuralFeatures().push(workspace_defaultPage);
+    WorkspacePackage.Literals.WORKSPACE__DEFAULT_PAGE = workspace_defaultPage;
+
+    // Create Page class
+    const pageClass = new BasicEClass();
+    pageClass.setName('Page');
+    pageClass.setAbstract(false);
+    pageClass.setInterface(false);
+    this.getEClassifiers().push(pageClass);
+    pageClass.setEPackage(this);
+    WorkspacePackage.Literals.PAGE = pageClass;
+
+    // Create id feature
+    const page_id = new BasicEAttribute();
+    page_id.setName('id');
+    page_id.setLowerBound(0);
+    page_id.setUpperBound(1);
+    pageClass.getEStructuralFeatures().push(page_id);
+    WorkspacePackage.Literals.PAGE__ID = page_id;
+
+    // Create name feature
+    const page_name = new BasicEAttribute();
+    page_name.setName('name');
+    page_name.setLowerBound(0);
+    page_name.setUpperBound(1);
+    pageClass.getEStructuralFeatures().push(page_name);
+    WorkspacePackage.Literals.PAGE__NAME = page_name;
+
+    // Create description feature
+    const page_description = new BasicEAttribute();
+    page_description.setName('description');
+    page_description.setLowerBound(0);
+    page_description.setUpperBound(1);
+    pageClass.getEStructuralFeatures().push(page_description);
+    WorkspacePackage.Literals.PAGE__DESCRIPTION = page_description;
+
+    // Create icon feature
+    const page_icon = new BasicEAttribute();
+    page_icon.setName('icon');
+    page_icon.setLowerBound(0);
+    page_icon.setUpperBound(1);
+    pageClass.getEStructuralFeatures().push(page_icon);
+    WorkspacePackage.Literals.PAGE__ICON = page_icon;
+
+    // Create visibleInNavigation feature
+    const page_visibleInNavigation = new BasicEAttribute();
+    page_visibleInNavigation.setName('visibleInNavigation');
+    page_visibleInNavigation.setLowerBound(0);
+    page_visibleInNavigation.setUpperBound(1);
+    pageClass.getEStructuralFeatures().push(page_visibleInNavigation);
+    WorkspacePackage.Literals.PAGE__VISIBLE_IN_NAVIGATION = page_visibleInNavigation;
+
+    // Create layoutId feature
+    const page_layoutId = new BasicEAttribute();
+    page_layoutId.setName('layoutId');
+    page_layoutId.setLowerBound(0);
+    page_layoutId.setUpperBound(1);
+    pageClass.getEStructuralFeatures().push(page_layoutId);
+    WorkspacePackage.Literals.PAGE__LAYOUT_ID = page_layoutId;
+
+    // Create layoutSettings feature
+    const page_layoutSettings = new BasicEAttribute();
+    page_layoutSettings.setName('layoutSettings');
+    page_layoutSettings.setLowerBound(0);
+    page_layoutSettings.setUpperBound(1);
+    pageClass.getEStructuralFeatures().push(page_layoutSettings);
+    WorkspacePackage.Literals.PAGE__LAYOUT_SETTINGS = page_layoutSettings;
+
+    // Create backgroundColor feature
+    const page_backgroundColor = new BasicEAttribute();
+    page_backgroundColor.setName('backgroundColor');
+    page_backgroundColor.setLowerBound(0);
+    page_backgroundColor.setUpperBound(1);
+    pageClass.getEStructuralFeatures().push(page_backgroundColor);
+    WorkspacePackage.Literals.PAGE__BACKGROUND_COLOR = page_backgroundColor;
+
+    // Create backgroundImage feature
+    const page_backgroundImage = new BasicEAttribute();
+    page_backgroundImage.setName('backgroundImage');
+    page_backgroundImage.setLowerBound(0);
+    page_backgroundImage.setUpperBound(1);
+    pageClass.getEStructuralFeatures().push(page_backgroundImage);
+    WorkspacePackage.Literals.PAGE__BACKGROUND_IMAGE = page_backgroundImage;
+
+    // Create backgroundSize feature
+    const page_backgroundSize = new BasicEAttribute();
+    page_backgroundSize.setName('backgroundSize');
+    page_backgroundSize.setLowerBound(0);
+    page_backgroundSize.setUpperBound(1);
+    pageClass.getEStructuralFeatures().push(page_backgroundSize);
+    WorkspacePackage.Literals.PAGE__BACKGROUND_SIZE = page_backgroundSize;
+
+    // Create backgroundPosition feature
+    const page_backgroundPosition = new BasicEAttribute();
+    page_backgroundPosition.setName('backgroundPosition');
+    page_backgroundPosition.setLowerBound(0);
+    page_backgroundPosition.setUpperBound(1);
+    pageClass.getEStructuralFeatures().push(page_backgroundPosition);
+    WorkspacePackage.Literals.PAGE__BACKGROUND_POSITION = page_backgroundPosition;
+
+    // Create backgroundRepeat feature
+    const page_backgroundRepeat = new BasicEAttribute();
+    page_backgroundRepeat.setName('backgroundRepeat');
+    page_backgroundRepeat.setLowerBound(0);
+    page_backgroundRepeat.setUpperBound(1);
+    pageClass.getEStructuralFeatures().push(page_backgroundRepeat);
+    WorkspacePackage.Literals.PAGE__BACKGROUND_REPEAT = page_backgroundRepeat;
 
     // Create Datasource class
     const datasourceClass = new BasicEClass();
@@ -197,6 +335,20 @@ export class WorkspacePackage extends BasicEPackage {
     // ============================================
     (WorkspacePackage.Literals.WORKSPACE__CONNECTIONS as BasicEReference).setEType(WorkspacePackage.Literals.CONNECTION);
     (WorkspacePackage.Literals.WORKSPACE__DATASOURCES as BasicEReference).setEType(WorkspacePackage.Literals.DATASOURCE);
+    (WorkspacePackage.Literals.WORKSPACE__PAGES as BasicEReference).setEType(WorkspacePackage.Literals.PAGE);
+    (WorkspacePackage.Literals.WORKSPACE__DEFAULT_PAGE as BasicEReference).setEType(WorkspacePackage.Literals.PAGE);
+    (WorkspacePackage.Literals.PAGE__ID as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (WorkspacePackage.Literals.PAGE__NAME as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (WorkspacePackage.Literals.PAGE__DESCRIPTION as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (WorkspacePackage.Literals.PAGE__ICON as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (WorkspacePackage.Literals.PAGE__VISIBLE_IN_NAVIGATION as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EBoolean')!);
+    (WorkspacePackage.Literals.PAGE__LAYOUT_ID as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (WorkspacePackage.Literals.PAGE__LAYOUT_SETTINGS as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EJavaObject')!);
+    (WorkspacePackage.Literals.PAGE__BACKGROUND_COLOR as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (WorkspacePackage.Literals.PAGE__BACKGROUND_IMAGE as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (WorkspacePackage.Literals.PAGE__BACKGROUND_SIZE as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (WorkspacePackage.Literals.PAGE__BACKGROUND_POSITION as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (WorkspacePackage.Literals.PAGE__BACKGROUND_REPEAT as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
     (WorkspacePackage.Literals.DATASOURCE__UID as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
     (WorkspacePackage.Literals.DATASOURCE__NAME as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
     (WorkspacePackage.Literals.DATASOURCE__TYPE as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);

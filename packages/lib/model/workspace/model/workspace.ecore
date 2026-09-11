@@ -14,8 +14,8 @@ What a workspace holds. One root, everything under it by containment, so
 one EContentAdapter at the root hears every change anywhere below - which
 is the reactivity four Pinia stores used to provide by hand.
 
-Connections and data sources are in; pages, widgets and layout follow in
-their own steps.
+Connections, data sources and pages are in; widgets and layout follow in
+their own step.
 -->
 <ecore:EPackage xmi:version="2.0"
                 xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -38,6 +38,47 @@ their own steps.
                 <details key="documentation" value="The data sources widgets read from."/>
             </eAnnotations>
         </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="pages" eType="#//Page"
+                             lowerBound="0" upperBound="-1" containment="true">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="The boards this workspace holds."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="defaultPage" eType="#//Page" lowerBound="0">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="The board shown when none is asked for. A reference, so deleting that board leaves no id pointing nowhere."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+    </eClassifiers>
+
+    <eClassifiers xsi:type="ecore:EClass" name="Page">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+            <details key="documentation" value="A board: a named surface with a layout, and the widgets arranged on it."/>
+        </eAnnotations>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="Identifies this board. It is in the route, so it outlives a rename."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" lowerBound="0"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="icon" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" lowerBound="0"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="visibleInNavigation" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean" lowerBound="0"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="layoutId" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" lowerBound="0">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="Which registered layout arranges this board - the id, not the layout itself. A layout carries Vue components; those belong to the bundle that registered them and are resolved through the LayoutRepository, not stored with the board."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="layoutSettings" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject" lowerBound="0">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="What the chosen layout was configured with."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="backgroundColor" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" lowerBound="0"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="backgroundImage" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" lowerBound="0"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="backgroundSize" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" lowerBound="0"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="backgroundPosition" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" lowerBound="0"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="backgroundRepeat" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" lowerBound="0"/>
     </eClassifiers>
 
     <eClassifiers xsi:type="ecore:EClass" name="Datasource">

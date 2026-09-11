@@ -1,65 +1,131 @@
-/*
-  Copyright (c) 2023 Contributors to the  Eclipse Foundation.
-  This program and the accompanying materials are made
-  available under the terms of the Eclipse Public License 2.0
-  which is available at https://www.eclipse.org/legal/epl-2.0/
-  SPDX-License-Identifier: EPL-2.0
+/*********************************************************************
+ * Copyright (c) 2025 Contributors to the Eclipse Foundation.
+ *
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ *
+ * SPDX-License-Identifier: EPL-2.0
+ *
+ * Contributors:
+ *   Smart City Jena
+ **********************************************************************/
 
-  Contributors: Smart City Jena
+import type { PageRegistryI, StoredPage } from 'org.eclipse.daanse.board.app.lib.api.page'
+import {
+  WORKSPACE,
+  PageImpl,
+  type Page,
+  type Workspace,
+} from 'org.eclipse.daanse.board.app.lib.model.workspace'
 
-*/
+/** The slice of the service registry this needs. */
+export interface IdentifierResolver {
+  getRequired<T>(id: string): T
+}
 
-import { PageI } from '../api/PageI'
-import type {PageRegistryI}  from '../api/PageRegistryI'
-import {SubscribeNotifyImpl} from 'org.eclipse.daanse.board.app.lib.utils.subscriber'
-import { events } from '../api/Events'
+/**
+ * The pages a workspace holds.
+ *
+ * They live in the model rather than in a record of their own, and changes
+ * are announced the way every other modelled change is - through the
+ * object's own notification. This class used to extend SubscribeNotifyImpl
+ * and publish three event names of its own, which was a second
+ * notification mechanism beside Vue's and EMF's for no reason anyone could
+ * name.
+ */
+export class PageRegistryImpl implements PageRegistryI {
+  constructor(private readonly resolver: IdentifierResolver) {}
 
-export class PageRegistryImpl extends SubscribeNotifyImpl implements PageRegistryI {
+  /*
+   * Resolved on first use, not in the constructor: this registry is created
+   * while its own module activates, and the workspace may not be registered
+   * yet at that point.
+   */
+  private workspaceHeld: Workspace | undefined
 
-  public pages: Record<string, PageI> = {}
-  public defaultPageId: string | null = null
-
-  registerPage(page: PageI): void {
-    this.pages[page.id] = page
-    // Automatically set first registered page as default if none is set
-    if (this.defaultPageId === null) {
-      this.defaultPageId = page.id
+  private get workspace(): Workspace {
+    if (!this.workspaceHeld) {
+      this.workspaceHeld = this.resolver.getRequired<Workspace>(WORKSPACE)
     }
-    this.notify(events.PAGE_REGISTRATION)
+    return this.workspaceHeld
   }
 
-  getPage(pageId: string): PageI {
-    return this.pages[pageId]
+  getPages(): Page[] {
+    return this.workspace.pages.toArray()
   }
 
-  getDefaultPage(): PageI | null {
-    if (this.defaultPageId && this.pages[this.defaultPageId]) {
-      return this.pages[this.defaultPageId]
-    }
-    return null
+  /** Built on read, so it cannot drift from what the workspace holds. */
+  get pages(): Record<string, Page> {
+    const byId: Record<string, Page> = {}
+    for (const page of this.getPages()) byId[page.id as string] = page
+    return byId
+  }
+
+  get defaultPageId(): string | null {
+    return (this.workspace.defaultPage?.id as string) ?? null
+  }
+
+  registerPage(page: StoredPage): Page {
+    const existing = this.getPage(page.id)
+    const held = existing ?? new PageImpl()
+
+    held.id = page.id
+    held.name = page.name
+    held.description = page.description
+    held.icon = page.icon
+    held.visibleInNavigation = page.visibleInNavigation ?? true
+    held.layoutId = page.layoutId
+    held.layoutSettings = page.layoutSettings
+    held.backgroundColor = page.backgroundColor
+    held.backgroundImage = page.backgroundImage
+    held.backgroundSize = page.backgroundSize
+    held.backgroundPosition = page.backgroundPosition
+    held.backgroundRepeat = page.backgroundRepeat
+
+    if (!existing) this.workspace.pages.push(held)
+
+    /* The first board registered is the one that opens, until told otherwise. */
+    if (!this.workspace.defaultPage) this.workspace.defaultPage = held
+
+    return held
+  }
+
+  getPage(pageId: string): Page {
+    return this.getPages().find((page) => page.id === pageId) as Page
+  }
+
+  getDefaultPage(): Page | null {
+    return this.workspace.defaultPage ?? null
   }
 
   setDefaultPage(pageId: string): void {
-    if (this.pages[pageId]) {
-      this.defaultPageId = pageId
-    }
+    const page = this.getPage(pageId)
+    if (page) this.workspace.defaultPage = page
   }
 
   unregisterPage(pageId: string): void {
-    delete this.pages[pageId]
-    // Reset default if the default page was unregistered
-    if (this.defaultPageId === pageId) {
-      const remainingIds = Object.keys(this.pages)
-      this.defaultPageId = remainingIds.length > 0 ? remainingIds[0] : null
+    const held = this.workspace.pages
+    const at = held.toArray().findIndex((page: Page) => page.id === pageId)
+    if (at < 0) return
+
+    const removed = held.get(at)
+    held.removeAt(at)
+
+    /*
+     * A reference rather than an id, so the default cannot survive as a
+     * name for something that is gone. The next board takes over.
+     */
+    if (this.workspace.defaultPage === removed) {
+      this.workspace.defaultPage = held.size() > 0 ? held.get(0) : undefined
     }
-    this.notify(events.PAGE_UNREGISTRATION)
-  }
-  getAllPageIds():string[] {
-    return Object.keys(this.pages)
-  }
-  updatePage(page: PageI): void {
-    this.pages[page.id] = page
-    this.notify(events.PAGE_UPDATE)
   }
 
+  getAllPageIds(): string[] {
+    return this.getPages().map((page) => page.id as string)
+  }
+
+  updatePage(page: StoredPage): void {
+    this.registerPage(page)
+  }
 }

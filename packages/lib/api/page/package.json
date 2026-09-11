@@ -16,6 +16,7 @@
     "build": "tsc --noEmit"
   },
   "dependencies": {
-    "org.eclipse.daanse.board.app.lib.core": "^0.0.1-next.1"
+    "org.eclipse.daanse.board.app.lib.core": "^0.0.1-next.1",
+    "org.eclipse.daanse.board.app.lib.model.workspace": "^0.0.1-next.1"
   }
 }

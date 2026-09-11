@@ -57,8 +57,8 @@ const loadLayout = () => {
     ViewComponent.value = null
     currentLayout.value = null
 
-    if (page?.layout && layoutRepo) {
-      const layout = layoutRepo.getLayout(page.layout.id)
+    if (page?.layoutId && layoutRepo) {
+      const layout = layoutRepo.getLayout(page.layoutId as string)
       currentLayout.value = layout || null
 
       // Für ViewMode verwende die View-Komponente des Layouts

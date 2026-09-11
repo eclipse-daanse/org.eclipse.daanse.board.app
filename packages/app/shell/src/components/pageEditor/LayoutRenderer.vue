@@ -11,13 +11,14 @@ Contributors:
     Smart City Jena
 -->
 <script setup lang="ts">
-import { inject, ref, computed, watchEffect, onMounted, onUnmounted, shallowRef, nextTick }
+import { inject, ref, computed, watch, watchEffect, onMounted, shallowRef, nextTick }
   from 'vue'
 import {
   type LayoutRepositoryI,
   identifier as LayoutRepositoryIdentifier,
   type LayoutI
 } from 'org.eclipse.daanse.board.app.lib.api.layout.page'
+import { useEObject } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import {
   type PageRegistryI,
   identifier as PageIdentifier,
@@ -63,10 +64,10 @@ const loadLayout = async () => {
 
   if (props.pageId && pageRepo) {
     const page = pageRepo.getPage(props.pageId)
-    currentPage.value = page ? { ...page } : null
+    currentPage.value = page ?? null
 
-    if (page?.layout && layoutRepo) {
-      const layout = layoutRepo.getLayout(page.layout.id)
+    if (page?.layoutId && layoutRepo) {
+      const layout = layoutRepo.getLayout(page.layoutId as string)
       currentLayout.value = layout || null
 
       if (props.viewMode) {
@@ -89,24 +90,21 @@ const loadLayout = async () => {
   isLoading.value = false
 }
 
-const subscriptionId = ref<string | null>(null)
+/*
+ * The page watches itself now. A modelled object announces its own changes,
+ * so this is a watcher on it rather than a subscription to three event
+ * names the registry used to publish.
+ */
+const held = useEObject(() => (props.pageId ? pageRepo?.getPage(props.pageId) : undefined))
 
-const onPageUpdate = (eventType: string) => {
-  if (eventType === 'PAGE_UPDATE') {
-    if (props.pageId && pageRepo) {
-      const page = pageRepo.getPage(props.pageId)
-      currentPage.value = page ? { ...page } : null
-
-      const layoutChanged =
-        page?.layout?.id !== currentLayout.value?.id
-
-      if (layoutChanged || !currentLayout.value) {
-        refreshTrigger.value++
-        loadLayout()
-      }
-    }
+watch(held, () => {
+  const page = held.value
+  currentPage.value = page ?? null
+  if (page?.layoutId !== currentLayout.value?.id || !currentLayout.value) {
+    refreshTrigger.value++
+    loadLayout()
   }
-}
+})
 
 /*watchEffect(() => {
   // Trigger reactivity
@@ -123,15 +121,6 @@ onMounted(async () => {
 
   await loadLayout()
 
-  if (pageRepo && 'subscribe' in pageRepo) {
-    subscriptionId.value = (pageRepo as any).subscribe(onPageUpdate)
-  }
-})
-
-onUnmounted(() => {
-  if (pageRepo && 'unsubscribe' in pageRepo && subscriptionId.value) {
-    (pageRepo as any).unsubscribe(subscriptionId.value)
-  }
 })
 </script>
 

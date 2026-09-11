@@ -23,7 +23,8 @@ import { inject, ref, computed, watch, onMounted } from 'vue'
 import {
   type PageRegistryI,
   identifier as PageIdentifier,
-  type PageI,
+  type Page,
+  type StoredPage,
 } from 'org.eclipse.daanse.board.app.lib.api.page'
 import {
   type LayoutRepositoryI,
@@ -44,7 +45,7 @@ const emit = defineEmits(['close'])
 
 const pageRepo = inject<PageRegistryI>(PageIdentifier)
 const layoutRepo = inject<LayoutRepositoryI>(LayoutRepositoryIdentifier)
-const pageSettings = ref<PageI | null>(null)
+const pageSettings = ref<StoredPage | null>(null)
 
 const availableLayouts = computed(() => layoutRepo?.getAllLayouts() ?? [])
 
@@ -55,15 +56,21 @@ const defaultLayout = computed(
     ) ?? availableLayouts.value[0],
 )
 
-/* The layout is chosen by id; the object behind it carries its settings component */
+/*
+ * The page names its layout by id; the object behind it carries the Vue
+ * components and the settings form, and is resolved here rather than stored
+ * with the board.
+ */
 const layoutId = computed({
-  get: () => pageSettings.value?.layout?.id ?? '',
+  get: () => pageSettings.value?.layoutId ?? '',
   set: (id: string) => {
-    if (!pageSettings.value) return
-    const layout = layoutRepo?.getLayout(id)
-    if (layout) pageSettings.value.layout = layout
+    if (pageSettings.value) pageSettings.value.layoutId = id
   },
 })
+
+const chosenLayout = computed(() =>
+  pageSettings.value?.layoutId ? layoutRepo?.getLayout(pageSettings.value.layoutId) : undefined,
+)
 
 const backgroundSizes = [
   { uid: 'auto', name: 'Auto' },
@@ -104,7 +111,7 @@ function load() {
     return
   }
 
-  let original: PageI | undefined
+  let original: Page | undefined
   try {
     original = pageRepo.getPage(pageid.value)
   } catch {
@@ -112,35 +119,39 @@ function load() {
     original = undefined
   }
 
-  pageSettings.value = original ? { ...original } : null
-  if (!pageSettings.value) return
-
-  if (!pageSettings.value.layout && defaultLayout.value) {
-    pageSettings.value.layout = defaultLayout.value
-  }
-
-  // The stored layout is a plain record; the one from the repo has its
-  // settings component attached
-  if (pageSettings.value.layout && layoutRepo) {
-    const full = layoutRepo.getLayout(pageSettings.value.layout.id)
-    if (full) pageSettings.value.layout = full
-  }
+  /*
+   * Copied feature by feature. A modelled object keeps its values in
+   * private fields behind getters, so spreading it would hand back _name
+   * and _id rather than what the model calls them.
+   */
+  pageSettings.value = original
+    ? {
+        id: original.id as string,
+        name: original.name as string,
+        description: original.description,
+        icon: original.icon,
+        visibleInNavigation: original.visibleInNavigation ?? true,
+        layoutId: original.layoutId ?? defaultLayout.value?.id,
+        layoutSettings: original.layoutSettings as Record<string, any> | undefined,
+        backgroundColor: original.backgroundColor,
+        backgroundImage: original.backgroundImage,
+        backgroundSize: original.backgroundSize as 'auto' | 'cover' | 'contain' | undefined,
+        backgroundPosition: original.backgroundPosition,
+        backgroundRepeat: original.backgroundRepeat as StoredPage['backgroundRepeat'],
+      }
+    : null
 }
 
 onMounted(load)
 /* Opened again for a different page while still on screen */
 watch(pageid, load)
 
-const { touch: pagesChanged } = usePages()
 
 watch(
   pageSettings,
   () => {
     if (!pageSettings.value) return
     pageRepo?.updatePage(pageSettings.value)
-    // The registry is not reactive, so a rename has to be announced -
-    // otherwise the name in the topbar stays as it was
-    pagesChanged()
   },
   { deep: true },
 )
@@ -179,17 +190,17 @@ watch(
           and the layout's own component where it does not.
         -->
         <SettingsForm
-          v-if="pageSettings.layout?.settingsForm"
+          v-if="chosenLayout?.settingsForm"
           v-model="pageSettings.layoutSettings"
-          :create="pageSettings.layout.settingsForm.create as () => any"
-          :ui-model-xmi="pageSettings.layout.settingsForm.xmi"
-          :domain-package="pageSettings.layout.settingsForm.ePackage() as any"
-          :ui-model-uri="pageSettings.layout.settingsForm.uri"
-          :entry-forms="pageSettings.layout.settingsForm.entryForms"
+          :create="chosenLayout!.settingsForm!.create as () => any"
+          :ui-model-xmi="chosenLayout!.settingsForm!.xmi"
+          :domain-package="chosenLayout!.settingsForm!.ePackage() as any"
+          :ui-model-uri="chosenLayout!.settingsForm!.uri"
+          :entry-forms="chosenLayout!.settingsForm!.entryForms"
         />
         <component
-          v-else-if="pageSettings.layout?.settings"
-          :is="pageSettings.layout.settings"
+          v-else-if="chosenLayout?.settings"
+          :is="chosenLayout!.settings"
           v-model="pageSettings.layoutSettings"
         />
       </section>

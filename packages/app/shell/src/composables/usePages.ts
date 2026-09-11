@@ -14,39 +14,29 @@
 /**
  * What the topbar and the board have to agree on about pages.
  *
- * Two things: which page's settings are open, and that something about the
- * pages changed. The button sits above the board, the settings window
- * belongs over it, and neither is inside the other - one value in module
- * scope joins them, and a page is only ever configured one at a time.
+ * One thing: which page's settings are open. The button sits above the
+ * board, the settings window belongs over it, and neither is inside the
+ * other - one value in module scope joins them, and a page is only ever
+ * configured one at a time.
  *
- * The revision exists because the page registry is deliberately
- * framework-free: renaming a page writes through updatePage without Vue
- * hearing about it, so the name in the topbar stayed as it was. Whoever
- * changes a page says so; whoever shows one listens.
+ * There used to be a revision here as well, bumped by whoever changed a
+ * page, because the registry was framework-free and a rename reached Vue
+ * through nothing. The pages are modelled now and announce themselves.
  */
 import { ref } from 'vue'
 
 const settingsFor = ref<string | undefined>(undefined)
-const revision = ref(0)
 
 export function usePages() {
   return {
     /** The page whose settings are open, if any. */
     settingsFor,
 
-    /** Bumped whenever a page is added, removed or edited. */
-    revision,
-
     openSettings: (pageId: string) => {
       settingsFor.value = pageId
     },
     closeSettings: () => {
       settingsFor.value = undefined
-    },
-
-    /** Say that a page changed, so what shows it can catch up. */
-    touch: () => {
-      revision.value++
     },
   }
 }

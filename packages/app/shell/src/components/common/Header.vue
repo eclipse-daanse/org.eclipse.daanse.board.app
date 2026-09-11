@@ -32,6 +32,11 @@ import {
   identifier as LayoutRepositoryIdentifier,
 } from 'org.eclipse.daanse.board.app.lib.api.layout.page'
 import { v4 } from 'uuid'
+import {
+  identifier as WORKSPACE,
+  type Workspace,
+} from 'org.eclipse.daanse.board.app.lib.model.workspace'
+import { useEList } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import { usePages } from '@/composables/usePages'
 import { useWidgetPalette } from '@/composables/useWidgetPalette'
 import { useBoardBackdrop } from '@/composables/useBoardBackdrop'
@@ -99,12 +104,14 @@ const showModes = computed(() => Boolean(pageId.value))
 const pageRepo = inject<PageRegistryI>(PageIdentifier)
 const layoutRepo = inject<LayoutRepositoryI>(LayoutRepositoryIdentifier)
 
+const { openSettings: openPageSettings } = usePages()
+
 /*
- * The registry is framework-free, so its record is not reactive: every
- * reader lists the shared revision as a dependency, and whoever changes a
- * page bumps it.
+ * The modelled pages. Reading this list is what makes everything below
+ * re-run; there used to be a shared counter here, bumped by whoever
+ * changed a page, because the registry told Vue nothing.
  */
-const { revision: pagesVersion, touch: pagesChanged, openSettings: openPageSettings } = usePages()
+const modelledPages = useEList(inject<Workspace>(WORKSPACE)!, (w) => w.pages)
 
 /*
  * The widget palette floats over the board, so the way to it belongs here
@@ -123,7 +130,7 @@ const { shown: backdropShown, toggle: toggleBackdrop } = useBoardBackdrop()
 const { snapping, toggle: toggleSnapping } = useGridSnap()
 
 const hasBackdrop = computed(() => {
-  void pagesVersion.value
+  void modelledPages.value
   if (!pageId.value) return false
   try {
     const page = pageRepo?.getPage(pageId.value)
@@ -134,7 +141,7 @@ const hasBackdrop = computed(() => {
 })
 
 const pages = computed<PageI[]>(() => {
-  void pagesVersion.value
+  void modelledPages.value
   const ids = pageRepo?.getAllPageIds() ?? []
   const found: PageI[] = []
   for (const id of ids) {
@@ -145,7 +152,7 @@ const pages = computed<PageI[]>(() => {
 })
 
 const currentPageName = computed(() => {
-  void pagesVersion.value
+  void modelledPages.value
   if (!pageId.value) return ''
   try {
     return pageRepo?.getPage(pageId.value)?.name ?? 'Seite'
@@ -190,7 +197,6 @@ onBeforeUnmount(() => {
  * than a question asked before the page exists.
  */
 function addPage() {
-  const baseLayout = layoutRepo?.getLayout('org.eclipse.daanse.board.app.ui.vue.layouts.base')
   const id = v4()
   pageRepo?.registerPage({
     id,
@@ -198,9 +204,9 @@ function addPage() {
     description: '',
     icon: '',
     visibleInNavigation: true,
-    layout: baseLayout,
-  } as PageI)
-  pagesChanged()
+    /* The id; the layout itself is resolved from the repository on render. */
+    layoutId: 'org.eclipse.daanse.board.app.ui.vue.layouts.base',
+  })
   pagesOpen.value = false
   router.push(`/page/${id}/edit`)
 }
@@ -214,7 +220,6 @@ function removePage(id: string) {
   if (!confirm(`Seite „${page?.name ?? id}" löschen? Das lässt sich nicht rückgängig machen.`)) return
 
   pageRepo?.unregisterPage(id)
-  pagesChanged()
 
   // Standing on the page that just went: move to whichever is left
   if (id === pageId.value) {
@@ -292,7 +297,7 @@ const openAppearance = () => router.push('/appearance')
             type="button"
             role="menuitem"
             :class="['pages__item', { on: page.id === pageId }]"
-            @click="choosePage(page.id)"
+            @click="choosePage(page.id as string)"
           >
             {{ page.name }}
           </button>
@@ -302,7 +307,7 @@ const openAppearance = () => router.push('/appearance')
             class="pages__remove"
             :title="`Seite „${page.name}“ löschen`"
             :aria-label="`Seite ${page.name} löschen`"
-            @click.stop="removePage(page.id)"
+            @click.stop="removePage(page.id as string)"
           >
             ×
           </button>

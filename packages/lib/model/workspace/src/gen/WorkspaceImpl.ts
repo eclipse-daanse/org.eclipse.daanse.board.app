@@ -10,6 +10,7 @@ import { createContainmentEList } from '@emfts/core';
 import type { EClass, EStructuralFeature, EList, EReference } from '@emfts/core';
 import type { Connection } from './Connection.js';
 import type { Datasource } from './Datasource.js';
+import type { Page } from './Page.js';
 import type { Workspace } from './Workspace.js';
 import { WorkspacePackage } from './WorkspacePackage.js';
 
@@ -21,10 +22,14 @@ export class WorkspaceImpl extends BasicEObject implements Workspace {
   // Feature ID Constants (eLiterals)
   static readonly CONNECTIONS: number = 0;
   static readonly DATASOURCES: number = 1;
+  static readonly PAGES: number = 2;
+  static readonly DEFAULT_PAGE: number = 3;
 
   // Private fields
   private _connections!: EList<Connection>;
   private _datasources!: EList<Datasource>;
+  private _pages!: EList<Page>;
+  private _defaultPage?: Page;
 
   /**
    * Returns the EClass of this object
@@ -48,6 +53,37 @@ export class WorkspaceImpl extends BasicEObject implements Workspace {
     return this._datasources;
   }
 
+  get pages(): EList<Page> {
+    if (!this._pages) {
+      this._pages = createContainmentEList<any>(this, this.eClass().getEStructuralFeature('pages') as EReference);
+    }
+    return this._pages;
+  }
+
+  get defaultPage(): Page {
+    return this._defaultPage!;
+  }
+
+  set defaultPage(value: Page) {
+    const oldValue = this._defaultPage;
+    this._defaultPage = value;
+    if (this.eDeliver()) {
+      this.eNotify({
+        getNotifier: () => this,
+        getEventType: () => 1, // SET
+        getFeature: () => this.eClass().getEStructuralFeature(WorkspaceImpl.DEFAULT_PAGE),
+        getOldValue: () => oldValue,
+        getNewValue: () => value,
+        getPosition: () => -1,
+        wasSet: () => true,
+        isTouch: () => false,
+        isReset: () => false,
+        getFeatureID: () => WorkspaceImpl.DEFAULT_PAGE,
+        merge: () => false
+      });
+    }
+  }
+
   // Reflective API
 
   /**
@@ -60,6 +96,10 @@ export class WorkspaceImpl extends BasicEObject implements Workspace {
         return this.connections;
       case WorkspaceImpl.DATASOURCES:
         return this.datasources;
+      case WorkspaceImpl.PAGES:
+        return this.pages;
+      case WorkspaceImpl.DEFAULT_PAGE:
+        return this.defaultPage;
       default:
         return super.eGet(feature);
     }
@@ -81,6 +121,15 @@ export class WorkspaceImpl extends BasicEObject implements Workspace {
         this.datasources.addAll(newValue as any[]);
         super.eSet(feature, newValue);
         break;
+      case WorkspaceImpl.PAGES:
+        this.pages.clear();
+        this.pages.addAll(newValue as any[]);
+        super.eSet(feature, newValue);
+        break;
+      case WorkspaceImpl.DEFAULT_PAGE:
+        this.defaultPage = newValue as Page;
+        super.eSet(feature, newValue);
+        break;
       default:
         super.eSet(feature, newValue);
     }
@@ -96,6 +145,10 @@ export class WorkspaceImpl extends BasicEObject implements Workspace {
         return this._connections !== undefined && !this._connections.isEmpty();
       case WorkspaceImpl.DATASOURCES:
         return this._datasources !== undefined && !this._datasources.isEmpty();
+      case WorkspaceImpl.PAGES:
+        return this._pages !== undefined && !this._pages.isEmpty();
+      case WorkspaceImpl.DEFAULT_PAGE:
+        return this._defaultPage !== undefined;
       default:
         return super.eIsSet(feature);
     }
@@ -112,6 +165,12 @@ export class WorkspaceImpl extends BasicEObject implements Workspace {
         return;
       case WorkspaceImpl.DATASOURCES:
         if (this._datasources) this._datasources.clear();
+        return;
+      case WorkspaceImpl.PAGES:
+        if (this._pages) this._pages.clear();
+        return;
+      case WorkspaceImpl.DEFAULT_PAGE:
+        this._defaultPage = undefined;
         return;
       default:
         super.eUnset(feature);
@@ -130,6 +189,8 @@ export class WorkspaceImpl extends BasicEObject implements Workspace {
     return {
       connections: this.connections?.toArray?.() ?? this.connections,
       datasources: this.datasources?.toArray?.() ?? this.datasources,
+      pages: this.pages?.toArray?.() ?? this.pages,
+      defaultPage: this.defaultPage,
     };
   }
 }

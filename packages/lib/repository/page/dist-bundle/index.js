@@ -1,68 +1,77 @@
-import { SubscribeNotifyImpl as o } from "org.eclipse.daanse.board.app.lib.utils.subscriber";
-import { PAGE_REPOSITORY as s, identifier as l } from "org.eclipse.daanse.board.app.lib.api.page";
-import { PAGE_REPOSITORY as A, identifier as R } from "org.eclipse.daanse.board.app.lib.api.page";
-const i = {
-  PAGE_REGISTRATION: "PAGE_REGISTRATION",
-  PAGE_UPDATE: "PAGE_UPDATE",
-  PAGE_UNREGISTRATION: "PAGE_UNREGISTRATION"
-};
-class u extends o {
-  constructor() {
-    super(...arguments), this.pages = {}, this.defaultPageId = null;
+import { WORKSPACE as d, PageImpl as u } from "org.eclipse.daanse.board.app.lib.model.workspace";
+import { PAGE_REPOSITORY as r, identifier as l } from "org.eclipse.daanse.board.app.lib.api.page";
+import { PAGE_REPOSITORY as v, identifier as y } from "org.eclipse.daanse.board.app.lib.api.page";
+class f {
+  constructor(e) {
+    this.resolver = e;
+  }
+  get workspace() {
+    return this.workspaceHeld || (this.workspaceHeld = this.resolver.getRequired(d)), this.workspaceHeld;
+  }
+  getPages() {
+    return this.workspace.pages.toArray();
+  }
+  /** Built on read, so it cannot drift from what the workspace holds. */
+  get pages() {
+    const e = {};
+    for (const i of this.getPages()) e[i.id] = i;
+    return e;
+  }
+  get defaultPageId() {
+    return this.workspace.defaultPage?.id ?? null;
   }
   registerPage(e) {
-    this.pages[e.id] = e, this.defaultPageId === null && (this.defaultPageId = e.id), this.notify(i.PAGE_REGISTRATION);
+    const i = this.getPage(e.id), t = i ?? new u();
+    return t.id = e.id, t.name = e.name, t.description = e.description, t.icon = e.icon, t.visibleInNavigation = e.visibleInNavigation ?? !0, t.layoutId = e.layoutId, t.layoutSettings = e.layoutSettings, t.backgroundColor = e.backgroundColor, t.backgroundImage = e.backgroundImage, t.backgroundSize = e.backgroundSize, t.backgroundPosition = e.backgroundPosition, t.backgroundRepeat = e.backgroundRepeat, i || this.workspace.pages.push(t), this.workspace.defaultPage || (this.workspace.defaultPage = t), t;
   }
   getPage(e) {
-    return this.pages[e];
+    return this.getPages().find((i) => i.id === e);
   }
   getDefaultPage() {
-    return this.defaultPageId && this.pages[this.defaultPageId] ? this.pages[this.defaultPageId] : null;
+    return this.workspace.defaultPage ?? null;
   }
   setDefaultPage(e) {
-    this.pages[e] && (this.defaultPageId = e);
+    const i = this.getPage(e);
+    i && (this.workspace.defaultPage = i);
   }
   unregisterPage(e) {
-    if (delete this.pages[e], this.defaultPageId === e) {
-      const a = Object.keys(this.pages);
-      this.defaultPageId = a.length > 0 ? a[0] : null;
-    }
-    this.notify(i.PAGE_UNREGISTRATION);
+    const i = this.workspace.pages, t = i.toArray().findIndex((c) => c.id === e);
+    if (t < 0) return;
+    const g = i.get(t);
+    i.removeAt(t), this.workspace.defaultPage === g && (this.workspace.defaultPage = i.size() > 0 ? i.get(0) : void 0);
   }
   getAllPageIds() {
-    return Object.keys(this.pages);
+    return this.getPages().map((e) => e.id);
   }
   updatePage(e) {
-    this.pages[e.id] = e, this.notify(i.PAGE_UPDATE);
+    this.registerPage(e);
   }
 }
-function n({ services: t }) {
-  t.register(s, new u());
+function s({ services: a }) {
+  a.register(r, new f(a));
 }
-function g({ services: t }) {
-  t.unregister(s);
+function n({ services: a }) {
+  a.unregister(r);
 }
-const d = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const P = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  PAGE_REPOSITORY: s,
-  activate: n,
-  deactivate: g,
-  events: i,
+  PAGE_REPOSITORY: r,
+  activate: s,
+  deactivate: n,
   identifier: l
-}, Symbol.toStringTag, { value: "Module" })), r = "org.eclipse.daanse.board.app.lib.repository.page", P = "0.0.1-next.1";
-async function c(t) {
+}, Symbol.toStringTag, { value: "Module" })), o = "org.eclipse.daanse.board.app.lib.repository.page", p = "0.0.1-next.1";
+async function b(a) {
   const e = globalThis.__tsm__;
   if (!e)
-    throw new Error(`${r}: tsm runtime is not initialized`);
-  e.register(r, d, P, "lib.repository.page"), await n?.(t);
+    throw new Error(`${o}: tsm runtime is not initialized`);
+  e.register(o, P, p, "lib.repository.page"), await s?.(a);
 }
-async function h(t) {
-  await g?.(t);
+async function w(a) {
+  await n?.(a);
 }
 export {
-  A as PAGE_REPOSITORY,
-  c as activate,
-  h as deactivate,
-  i as events,
-  R as identifier
+  v as PAGE_REPOSITORY,
+  b as activate,
+  w as deactivate,
+  y as identifier
 };
