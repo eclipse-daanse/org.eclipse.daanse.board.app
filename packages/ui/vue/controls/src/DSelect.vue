@@ -268,6 +268,23 @@ const selectedIndex = computed<string>({
   background-color: var(--color-pane);
 }
 
+/*
+ * The headings need the same treatment, and one more thing: a browser
+ * passes an optgroup's colour down to the options inside it, so the
+ * options take theirs back below. Without this the heading keeps the
+ * user agent's own colour and disappears into a dark list.
+ */
+.select optgroup {
+  color: var(--color-dim);
+  background-color: var(--color-pane);
+  font-weight: 600;
+  font-style: normal;
+}
+
+.select optgroup option {
+  color: var(--color-fg);
+}
+
 .chevron {
   position: absolute;
   right: 7px;
