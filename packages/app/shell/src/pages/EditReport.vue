@@ -31,7 +31,7 @@ import { useRoute } from 'vue-router'
 import PageSettings from '@/components/pageEditor/PageSettings.vue'
 import { usePages } from '@/composables/usePages'
 import { useWidgetPalette } from '@/composables/useWidgetPalette'
-import { DFloatingWindow } from 'org.eclipse.daanse.board.app.ui.vue.controls'
+import { DFloatingWindow, DIcon } from 'org.eclipse.daanse.board.app.ui.vue.controls'
 import LayoutRenderer from '@/components/pageEditor/LayoutRenderer.vue'
 
 const widgetSettingsOpenedId = ref('')
@@ -118,7 +118,7 @@ const { visible: paletteVisible, hide: hidePalette } = useWidgetPalette()
           @pointerdown.stop
           @click="endPointFinder()"
         >
-          <va-icon name="travel_explore" size="15px" />
+          <DIcon name="travel_explore" size="sm" />
         </button>
       </template>
 

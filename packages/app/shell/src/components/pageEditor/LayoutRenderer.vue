@@ -11,6 +11,7 @@ Contributors:
     Smart City Jena
 -->
 <script setup lang="ts">
+import { DIcon } from 'org.eclipse.daanse.board.app.ui.vue.controls'
 import { inject, ref, computed, watch, watchEffect, onMounted, shallowRef, nextTick }
   from 'vue'
 import {
@@ -144,8 +145,8 @@ onMounted(async () => {
   }">
     <!-- Loading state -->
     <div v-if="isLoading" class="loading-state">
-      <va-progress-circle indeterminate />
-      <p>Loading layout...</p>
+      <span class="spinner" aria-hidden="true" />
+      <p>Layout wird geladen…</p>
     </div>
 
     <!-- View mode - only render if all components are ready -->
@@ -172,23 +173,23 @@ onMounted(async () => {
 
     <!-- Error/fallback state with more detailed info -->
     <div v-else class="no-layout-message">
-      <va-alert color="warning" icon="warning">
-        <div v-if="isLoading">
-          Loading layout components...
-        </div>
-        <div v-else-if="!currentPage">
-          Page "{{ props.pageId }}" not found
-        </div>
-        <div v-else-if="!currentLayout">
-          No layout configured for page "{{ currentPage.name || props.pageId }}"
-        </div>
-        <div v-else>
-          {{ props.viewMode ?
-          'No layout component found for the current page layout'
-          : 'No layout editor found for the current page layout' }}
-          <br><small>Layout ID: {{ currentLayout.id }}</small>
-        </div>
-      </va-alert>
+      <!-- Not an alert component: a page without a layout is a state to
+           explain, and what it needs is the sentence. -->
+      <p class="no-layout-message__text">
+        <DIcon name="warning" size="lg" tone="color-warn" />
+        <span v-if="!currentPage">
+          Die Seite „{{ props.pageId }}" gibt es nicht.
+        </span>
+        <span v-else-if="!currentLayout">
+          Für „{{ currentPage.name || props.pageId }}" ist kein Layout eingestellt.
+        </span>
+        <span v-else>
+          {{ props.viewMode
+            ? 'Zu diesem Layout gibt es keine Darstellung.'
+            : 'Zu diesem Layout gibt es keinen Editor.' }}
+          <br /><small>Layout: {{ currentLayout.id }}</small>
+        </span>
+      </p>
     </div>
   </div>
 </template>
@@ -204,6 +205,15 @@ onMounted(async () => {
     height: 100%;
   }
 
+  .spinner {
+    width: 22px;
+    height: 22px;
+    border: 2px solid var(--color-divider);
+    border-top-color: var(--color-accent);
+    border-radius: 50%;
+    animation: layout-spin 700ms linear infinite;
+  }
+
   .no-layout-message,
   .loading-state {
     display: flex;
@@ -213,5 +223,23 @@ onMounted(async () => {
     padding: 2rem;
     gap: 1rem;
   }
+
+  .no-layout-message__text {
+    display: flex;
+    align-items: flex-start;
+    gap: 9px;
+    margin: 0;
+    font-family: var(--font-sans);
+    font-size: var(--text-base);
+    line-height: 1.55;
+    color: var(--color-dim);
+  }
+}
+</style>
+
+<style>
+/* A turning ring needs a keyframe, and a keyframe cannot be scoped. */
+@keyframes layout-spin {
+  to { transform: rotate(360deg); }
 }
 </style>

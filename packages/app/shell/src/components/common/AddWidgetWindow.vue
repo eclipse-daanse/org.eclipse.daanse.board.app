@@ -20,7 +20,6 @@ import { useEList } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import { WidgetRepository, identifier } from 'org.eclipse.daanse.board.app.lib.api.widget'
 import { inject, ref, computed, watch } from 'vue'
 import Draggable from 'vuedraggable'
-import { VaScrollContainer } from 'vuestic-ui'
 // import SERVICE_IDENTIFIER from "@/config/identifiers/services";
 
 const selectedDatasource = ref('')
@@ -109,27 +108,7 @@ watch(selectedType, (newType) => {
 
 <template>
   <div class="add_widget_window">
-    <!--<VaSelect
-      label="Store type"
-      class="mx-3 my-3"
-      v-model="selectedType"
-      :options="filteredTypes"
-      teleport=".add_widget_window"
-    />
-    <VaSelect
-      v-if="selectedType && selectedType !== 'None'"
-      label="Store ID"
-      class="mx-3 my-3"
-      v-model="selectedDatasource"
-      :options="filteredIds"
-      text-by="uid"
-      value-by="uid"
-      teleport=".add_widget_window"
-    />-->
-    <VaScrollContainer
-
-      vertical
-    >
+    <div class="add_widget_window__scroll">
     <draggable
       class="widgets_grid"
       :list="computedWidgets"
@@ -147,7 +126,7 @@ watch(selectedType, (newType) => {
         </div>
       </template>
     </draggable>
-    </VaScrollContainer>
+    </div>
   </div>
 </template>
 
@@ -208,10 +187,11 @@ watch(selectedType, (newType) => {
   width: 100%;
   height: 100%;
   padding: 6px 0;
-  /*background-color: #ecf0f1;
-  padding: 1rem;
-  border-radius: 8px;
-  z-index: 3500;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);*/
+}
+
+/* What the scroll container was: a box that scrolls. */
+.add_widget_window__scroll {
+  height: 100%;
+  overflow-y: auto;
 }
 </style>

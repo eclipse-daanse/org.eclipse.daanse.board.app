@@ -22,6 +22,7 @@ Contributors:
 -->
 
 <script setup lang="ts">
+import { DIcon } from 'org.eclipse.daanse.board.app.ui.vue.controls'
 import Header from './components/common/Header.vue'
 import { inject, ref, onMounted, computed, watchEffect } from 'vue'
 import { useColors } from 'vuestic-ui'
@@ -93,7 +94,7 @@ const go = (target: string) => router.push(target)
           title="Board"
           @click="go(boardTarget)"
         >
-          <va-icon name="dashboard" />
+          <DIcon name="dashboard" />
           <span class="sr-only">Board</span>
         </button>
 
@@ -104,7 +105,7 @@ const go = (target: string) => router.push(target)
           title="Verbindungen &amp; Daten"
           @click="go('/datasources')"
         >
-          <va-icon name="dataset" />
+          <DIcon name="dataset" />
           <span class="sr-only">Verbindungen &amp; Daten</span>
         </button>
 
@@ -117,7 +118,7 @@ const go = (target: string) => router.push(target)
           :title="item.label"
           @click="go(item.route)"
         >
-          <va-icon :name="item.icon" />
+          <DIcon :name="item.icon" />
           <span class="sr-only">{{ item.label }}</span>
         </button>
 
@@ -208,7 +209,7 @@ const go = (target: string) => router.push(target)
   outline: 2px solid var(--color-accent);
   outline-offset: 2px;
 }
-.ri :deep(.va-icon) {
+.ri :deep(.icon) {
   font-size: 20px;
 }
 

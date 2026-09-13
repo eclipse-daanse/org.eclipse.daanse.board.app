@@ -32,7 +32,7 @@ import {
   WrapperSettingsPackage,
   wrapperSettingsFormXmi,
 } from 'org.eclipse.daanse.board.app.ui.vue.widget.wrapper'
-import { DButton } from 'org.eclipse.daanse.board.app.ui.vue.controls'
+import { DButton, DSelect } from 'org.eclipse.daanse.board.app.ui.vue.controls'
 import { SettingsForm } from 'org.eclipse.daanse.board.app.ui.vue.uimodel'
 import {
   identifier as WORKSPACE,
@@ -522,13 +522,11 @@ onBeforeUnmount(() => {
 
           <div class="fields" v-if="widget">
             <template v-if="tab === 'data'">
-              <VaSelect
+              <DSelect
+                v-model="widget.config!.datasourceId"
                 label="Datenquelle"
                 class="pick"
-                v-model="widget.config!.datasourceId"
                 :options="dataSources"
-                value-by="uid"
-                text-by="name"
                 clearable
               />
               <p class="note">
