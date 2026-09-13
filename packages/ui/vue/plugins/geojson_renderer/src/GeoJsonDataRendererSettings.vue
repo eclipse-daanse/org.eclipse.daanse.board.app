@@ -9,13 +9,19 @@ Contributors: Smart City Jena
 
 -->
 <script lang="ts" setup>
+import { DTabs } from 'org.eclipse.daanse.board.app.ui.vue.controls'
 import { ref, computed } from 'vue'
 import { ConditionSettings } from 'org.eclipse.daanse.board.app.ui.vue.widget.map'
 import { PointStyler } from 'org.eclipse.daanse.board.app.ui.vue.widget.map'
 import { AreaStyler } from 'org.eclipse.daanse.board.app.ui.vue.widget.map'
 
 const model = defineModel<any>({ required: true })
-const tabNo = ref(0)
+const tabs = [
+  { id: 'conditions', label: 'Bedingungen' },
+  { id: 'points', label: 'Punkte' },
+  { id: 'areas', label: 'Flächen' },
+]
+const tab = ref('conditions')
 
 // Initialize default values in setting
 if (!model.value) {
@@ -54,30 +60,18 @@ if (!model.value.renderer) {
 
 <template>
   <div class="geojson-settings">
-    <VaTabs v-model="tabNo">
-      <template #tabs>
-        <VaTab
-          v-for="tab in ['Conditions', 'Points', 'Areas']"
-          :key="tab"
-        >
-          {{ tab }}
-        </VaTab>
-      </template>
-    </VaTabs>
+    <DTabs v-model="tab" :tabs="tabs" label="Was gezeichnet wird" />
 
     <div class="tab-content">
-      <!-- Conditions Tab -->
-      <div v-if="tabNo === 0" class="full">
+      <div v-if="tab === 'conditions'" class="full">
         <ConditionSettings v-model="model.conditions" />
       </div>
 
-      <!-- Points Tab -->
-      <div v-else-if="tabNo === 1" class="full">
+      <div v-else-if="tab === 'points'" class="full">
         <PointStyler v-model="model.renderer" />
       </div>
 
-      <!-- Areas Tab -->
-      <div v-else-if="tabNo === 2" class="full">
+      <div v-else class="full">
         <AreaStyler v-model="model.renderer.area" />
       </div>
     </div>

@@ -23,12 +23,13 @@ Contributors:
             </span>
         </template>
         <template v-else>
-            <VaBadge :color="statusValue > 0.5 ? 'success' : 'danger'" :text="statusValue"></VaBadge>
+            <DChip :tone="statusValue > 0.5 ? 'ok' : 'err'" numeric>{{ statusValue }}</DChip>
         </template>
     </td>
 </template>
 
 <script lang="ts" setup>
+import { DChip } from 'org.eclipse.daanse.board.app.ui.vue.controls'
 import { computed, inject } from 'vue'
 
 const props = defineProps<{

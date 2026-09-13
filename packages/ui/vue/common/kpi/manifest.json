@@ -9,6 +9,10 @@
     {
       "id": "vue",
       "versionRange": "^3.5.0"
+    },
+    {
+      "id": "org.eclipse.daanse.board.app.ui.vue.controls",
+      "versionRange": ">=0.0.1-0"
     }
   ],
   "capabilities": [
@@ -21,6 +25,7 @@
     }
   ],
   "dependencies": [
-    "platform.vue"
+    "platform.vue",
+    "ui.vue.controls"
   ]
 }

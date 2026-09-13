@@ -7,7 +7,8 @@
   "exports": {},
   "dependencies": [
     "platform.vue",
-    "ui.vue.widget.map"
+    "ui.vue.widget.map",
+    "ui.vue.controls"
   ],
   "requiresService": [],
   "sharedDependencies": [
@@ -17,6 +18,10 @@
     },
     {
       "id": "org.eclipse.daanse.board.app.ui.vue.widget.map",
+      "versionRange": ">=0.0.1-0"
+    },
+    {
+      "id": "org.eclipse.daanse.board.app.ui.vue.controls",
       "versionRange": ">=0.0.1-0"
     }
   ],
