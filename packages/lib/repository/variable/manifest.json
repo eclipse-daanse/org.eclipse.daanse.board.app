@@ -12,15 +12,16 @@
   ],
   "requiresService": [
     {
-      "id": "TINY_EMITTER"
-    },
-    {
       "id": "EventActionsRegistry"
     }
   ],
   "sharedDependencies": [
     {
       "id": "org.eclipse.daanse.board.app.lib.api.variable",
+      "versionRange": ">=0.0.1-0"
+    },
+    {
+      "id": "org.eclipse.daanse.board.app.lib.model.workspace",
       "versionRange": ">=0.0.1-0"
     },
     {
@@ -52,6 +53,7 @@
   "dependencies": [
     "lib.api.variable",
     "lib.events",
-    "lib.logger"
+    "lib.logger",
+    "lib.model.workspace"
   ]
 }

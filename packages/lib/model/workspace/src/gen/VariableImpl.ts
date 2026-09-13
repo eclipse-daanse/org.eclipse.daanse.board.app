@@ -7,6 +7,7 @@
 
 import { BasicEObject } from '@emfts/core';
 import type { EClass, EStructuralFeature } from '@emfts/core';
+import type { Page } from './Page.js';
 import type { Variable } from './Variable.js';
 import { WorkspacePackage } from './WorkspacePackage.js';
 
@@ -16,13 +17,21 @@ import { WorkspacePackage } from './WorkspacePackage.js';
  */
 export class VariableImpl extends BasicEObject implements Variable {
   // Feature ID Constants (eLiterals)
-  static readonly NAME: number = 0;
-  static readonly TYPE: number = 1;
-  static readonly DEFINITION: number = 2;
+  static readonly UID: number = 0;
+  static readonly NAME: number = 1;
+  static readonly TYPE: number = 2;
+  static readonly SCOPE: number = 3;
+  static readonly ACCESS_MODE: number = 4;
+  static readonly PAGE: number = 5;
+  static readonly DEFINITION: number = 6;
 
   // Private fields
+  private _uid: string = "";
   private _name: string = "";
   private _type?: string;
+  private _scope?: string;
+  private _accessMode?: string;
+  private _page?: Page;
   private _definition?: unknown;
 
   /**
@@ -33,6 +42,30 @@ export class VariableImpl extends BasicEObject implements Variable {
   }
 
   // Getters and Setters
+  get uid(): string {
+    return this._uid!;
+  }
+
+  set uid(value: string) {
+    const oldValue = this._uid;
+    this._uid = value;
+    if (this.eDeliver()) {
+      this.eNotify({
+        getNotifier: () => this,
+        getEventType: () => 1, // SET
+        getFeature: () => this.eClass().getEStructuralFeature(VariableImpl.UID),
+        getOldValue: () => oldValue,
+        getNewValue: () => value,
+        getPosition: () => -1,
+        wasSet: () => true,
+        isTouch: () => false,
+        isReset: () => false,
+        getFeatureID: () => VariableImpl.UID,
+        merge: () => false
+      });
+    }
+  }
+
   get name(): string {
     return this._name!;
   }
@@ -81,6 +114,78 @@ export class VariableImpl extends BasicEObject implements Variable {
     }
   }
 
+  get scope(): string {
+    return this._scope!;
+  }
+
+  set scope(value: string) {
+    const oldValue = this._scope;
+    this._scope = value;
+    if (this.eDeliver()) {
+      this.eNotify({
+        getNotifier: () => this,
+        getEventType: () => 1, // SET
+        getFeature: () => this.eClass().getEStructuralFeature(VariableImpl.SCOPE),
+        getOldValue: () => oldValue,
+        getNewValue: () => value,
+        getPosition: () => -1,
+        wasSet: () => true,
+        isTouch: () => false,
+        isReset: () => false,
+        getFeatureID: () => VariableImpl.SCOPE,
+        merge: () => false
+      });
+    }
+  }
+
+  get accessMode(): string {
+    return this._accessMode!;
+  }
+
+  set accessMode(value: string) {
+    const oldValue = this._accessMode;
+    this._accessMode = value;
+    if (this.eDeliver()) {
+      this.eNotify({
+        getNotifier: () => this,
+        getEventType: () => 1, // SET
+        getFeature: () => this.eClass().getEStructuralFeature(VariableImpl.ACCESS_MODE),
+        getOldValue: () => oldValue,
+        getNewValue: () => value,
+        getPosition: () => -1,
+        wasSet: () => true,
+        isTouch: () => false,
+        isReset: () => false,
+        getFeatureID: () => VariableImpl.ACCESS_MODE,
+        merge: () => false
+      });
+    }
+  }
+
+  get page(): Page {
+    return this._page!;
+  }
+
+  set page(value: Page) {
+    const oldValue = this._page;
+    this._page = value;
+    if (this.eDeliver()) {
+      this.eNotify({
+        getNotifier: () => this,
+        getEventType: () => 1, // SET
+        getFeature: () => this.eClass().getEStructuralFeature(VariableImpl.PAGE),
+        getOldValue: () => oldValue,
+        getNewValue: () => value,
+        getPosition: () => -1,
+        wasSet: () => true,
+        isTouch: () => false,
+        isReset: () => false,
+        getFeatureID: () => VariableImpl.PAGE,
+        merge: () => false
+      });
+    }
+  }
+
   get definition(): unknown {
     return this._definition!;
   }
@@ -113,10 +218,18 @@ export class VariableImpl extends BasicEObject implements Variable {
   override eGet(feature: EStructuralFeature): unknown {
     const featureID = this.eClass().getFeatureID(feature);
     switch (featureID) {
+      case VariableImpl.UID:
+        return this.uid;
       case VariableImpl.NAME:
         return this.name;
       case VariableImpl.TYPE:
         return this.type;
+      case VariableImpl.SCOPE:
+        return this.scope;
+      case VariableImpl.ACCESS_MODE:
+        return this.accessMode;
+      case VariableImpl.PAGE:
+        return this.page;
       case VariableImpl.DEFINITION:
         return this.definition;
       default:
@@ -130,12 +243,28 @@ export class VariableImpl extends BasicEObject implements Variable {
   override eSet(feature: EStructuralFeature, newValue: unknown): void {
     const featureID = this.eClass().getFeatureID(feature);
     switch (featureID) {
+      case VariableImpl.UID:
+        this.uid = newValue as string;
+        super.eSet(feature, newValue);
+        break;
       case VariableImpl.NAME:
         this.name = newValue as string;
         super.eSet(feature, newValue);
         break;
       case VariableImpl.TYPE:
         this.type = newValue as string;
+        super.eSet(feature, newValue);
+        break;
+      case VariableImpl.SCOPE:
+        this.scope = newValue as string;
+        super.eSet(feature, newValue);
+        break;
+      case VariableImpl.ACCESS_MODE:
+        this.accessMode = newValue as string;
+        super.eSet(feature, newValue);
+        break;
+      case VariableImpl.PAGE:
+        this.page = newValue as Page;
         super.eSet(feature, newValue);
         break;
       case VariableImpl.DEFINITION:
@@ -153,10 +282,18 @@ export class VariableImpl extends BasicEObject implements Variable {
   override eIsSet(feature: EStructuralFeature): boolean {
     const featureID = this.eClass().getFeatureID(feature);
     switch (featureID) {
+      case VariableImpl.UID:
+        return this._uid !== "";
       case VariableImpl.NAME:
         return this._name !== "";
       case VariableImpl.TYPE:
         return this._type !== undefined;
+      case VariableImpl.SCOPE:
+        return this._scope !== undefined;
+      case VariableImpl.ACCESS_MODE:
+        return this._accessMode !== undefined;
+      case VariableImpl.PAGE:
+        return this._page !== undefined;
       case VariableImpl.DEFINITION:
         return this._definition !== undefined;
       default:
@@ -170,11 +307,23 @@ export class VariableImpl extends BasicEObject implements Variable {
   override eUnset(feature: EStructuralFeature): void {
     const featureID = this.eClass().getFeatureID(feature);
     switch (featureID) {
+      case VariableImpl.UID:
+        this._uid = "";
+        return;
       case VariableImpl.NAME:
         this._name = "";
         return;
       case VariableImpl.TYPE:
         this._type = undefined;
+        return;
+      case VariableImpl.SCOPE:
+        this._scope = undefined;
+        return;
+      case VariableImpl.ACCESS_MODE:
+        this._accessMode = undefined;
+        return;
+      case VariableImpl.PAGE:
+        this._page = undefined;
         return;
       case VariableImpl.DEFINITION:
         this._definition = undefined;
@@ -194,8 +343,12 @@ export class VariableImpl extends BasicEObject implements Variable {
    */
   toJSON(): Record<string, unknown> {
     return {
+      uid: this.uid,
       name: this.name,
       type: this.type,
+      scope: this.scope,
+      accessMode: this.accessMode,
+      page: this.page,
       definition: this.definition,
     };
   }

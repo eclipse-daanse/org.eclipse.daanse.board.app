@@ -1,8 +1,9 @@
-(function(){var i="ui.vue.variable.timepicker",d=document,s=d.querySelector('style[data-tsm-bundle="'+i+'"]');if(!s){s=d.createElement('style');s.setAttribute('data-tsm-bundle',i);d.head.appendChild(s);}s.textContent=".datetime-group[data-v-7a419d93]{display:flex;gap:1rem}.datetime-group[data-v-7a419d93]>*{flex:1}\n";})();
-import { VARIABLE_REPOSITORY as V } from "org.eclipse.daanse.board.app.lib.api.variable";
-import { DATETIME_PICKER_VARIABLE as g, DateTimePickerVariableSymbol as I } from "org.eclipse.daanse.board.app.lib.variables";
-import { defineComponent as T, useModel as D, computed as p, resolveComponent as c, createElementBlock as y, openBlock as E, createVNode as d, createElementVNode as R } from "vue";
-const $ = { class: "flex flex-col gap-4" }, M = { class: "datetime-group" }, O = /* @__PURE__ */ T({
+(function(){var i="ui.vue.variable.timepicker",d=document,s=d.querySelector('style[data-tsm-bundle="'+i+'"]');if(!s){s=d.createElement('style');s.setAttribute('data-tsm-bundle',i);d.head.appendChild(s);}s.textContent=".settings[data-v-03d9e794]{display:flex;flex-direction:column;gap:4px}\n";})();
+import { VARIABLE_REPOSITORY as m } from "org.eclipse.daanse.board.app.lib.api.variable";
+import { DATETIME_PICKER_VARIABLE as d, DateTimePickerVariableSymbol as v } from "org.eclipse.daanse.board.app.lib.variables";
+import { defineComponent as _, useModel as f, computed as b, createElementBlock as V, openBlock as S, createVNode as n, unref as l } from "vue";
+import { DInput as u } from "org.eclipse.daanse.board.app.ui.vue.controls";
+const I = { class: "settings" }, T = /* @__PURE__ */ _({
   __name: "Settings",
   props: {
     modelValue: {},
@@ -10,91 +11,69 @@ const $ = { class: "flex flex-col gap-4" }, M = { class: "datetime-group" }, O =
   },
   emits: ["update:modelValue"],
   setup(t) {
-    const e = D(t, "modelValue"), n = p({
-      get: () => e.value?.datetime ? new Date(e.value.datetime) : null,
-      set: (l) => {
-        if (!l) {
-          e.value.datetime = "";
+    const a = f(t, "modelValue"), r = b({
+      get() {
+        const i = a.value?.datetime;
+        if (!i) return "";
+        const e = new Date(i);
+        if (Number.isNaN(e.getTime())) return "";
+        const o = (g) => String(g).padStart(2, "0");
+        return `${e.getFullYear()}-${o(e.getMonth() + 1)}-${o(e.getDate())}T${o(e.getHours())}:${o(e.getMinutes())}`;
+      },
+      set(i) {
+        if (!i) {
+          a.value.datetime = "";
           return;
         }
-        i(l, r.value);
+        const e = new Date(i);
+        a.value.datetime = Number.isNaN(e.getTime()) ? "" : e.toISOString();
       }
-    }), r = p({
-      get: () => e.value?.datetime ? new Date(e.value.datetime) : null,
-      set: (l) => {
-        l && i(n.value, l);
-      }
-    }), i = (l, a) => {
-      if (!l) {
-        e.value.datetime = "";
-        return;
-      }
-      const u = l.getFullYear(), m = (l.getMonth() + 1).toString().padStart(2, "0"), s = l.getDate().toString().padStart(2, "0"), o = (a?.getHours() || 0).toString().padStart(2, "0"), S = (a?.getMinutes() || 0).toString().padStart(2, "0"), b = (a?.getSeconds() || 0).toString().padStart(2, "0");
-      e.value.datetime = `${u}-${m}-${s}T${o}:${S}:${b}Z`;
-    };
-    return (l, a) => {
-      const u = c("VaInput"), m = c("VaDateInput"), s = c("VaTimeInput");
-      return E(), y("div", $, [
-        d(u, {
-          modelValue: e.value.name,
-          "onUpdate:modelValue": a[0] || (a[0] = (o) => e.value.name = o),
-          label: "Variable Name",
-          placeholder: "Enter variable name"
-        }, null, 8, ["modelValue"]),
-        R("div", M, [
-          d(m, {
-            modelValue: n.value,
-            "onUpdate:modelValue": a[1] || (a[1] = (o) => n.value = o),
-            label: "Date",
-            placeholder: "Select date"
-          }, null, 8, ["modelValue"]),
-          d(s, {
-            modelValue: r.value,
-            "onUpdate:modelValue": a[2] || (a[2] = (o) => r.value = o),
-            label: "Time",
-            placeholder: "Select time"
-          }, null, 8, ["modelValue"])
-        ]),
-        d(u, {
-          modelValue: e.value.datetime,
-          "onUpdate:modelValue": a[3] || (a[3] = (o) => e.value.datetime = o),
-          label: "ISO 8601 DateTime (UTC)",
-          placeholder: "YYYY-MM-DDTHH:mm:ssZ",
-          readonly: ""
-        }, null, 8, ["modelValue"])
-      ]);
-    };
+    });
+    return (i, e) => (S(), V("div", I, [
+      n(l(u), {
+        modelValue: a.value.name,
+        "onUpdate:modelValue": e[0] || (e[0] = (o) => a.value.name = o),
+        label: "Name",
+        placeholder: "Wie es gelesen wird"
+      }, null, 8, ["modelValue"]),
+      n(l(u), {
+        modelValue: r.value,
+        "onUpdate:modelValue": e[1] || (e[1] = (o) => r.value = o),
+        label: "Zeitpunkt",
+        type: "datetime-local"
+      }, null, 8, ["modelValue"])
+    ]));
   }
-}), Y = (t, e) => {
-  const n = t.__vccOpts || t;
-  for (const [r, i] of e)
-    n[r] = i;
-  return n;
-}, k = /* @__PURE__ */ Y(O, [["__scopeId", "data-v-7a419d93"]]);
-function _({ services: t }) {
-  t.getRequired(V).registerVariableType(g, {
-    Variable: I,
-    Settings: k
+}), y = (t, a) => {
+  const r = t.__vccOpts || t;
+  for (const [i, e] of a)
+    r[i] = e;
+  return r;
+}, R = /* @__PURE__ */ y(T, [["__scopeId", "data-v-03d9e794"]]);
+function c({ services: t }) {
+  t.getRequired(m).registerVariableType(d, {
+    Variable: v,
+    Settings: R
   });
 }
-function f({ services: t }) {
-  t.getRequired(V).unregisterVariableType(g);
+function p({ services: t }) {
+  t.getRequired(m).unregisterVariableType(d);
 }
-const w = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const E = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  activate: _,
-  deactivate: f
-}, Symbol.toStringTag, { value: "Module" })), v = "org.eclipse.daanse.board.app.ui.vue.variable.timepicker", x = "0.0.1-next.1";
-async function h(t) {
-  const e = globalThis.__tsm__;
-  if (!e)
-    throw new Error(`${v}: tsm runtime is not initialized`);
-  e.register(v, w, x, "ui.vue.variable.timepicker"), await _?.(t);
+  activate: c,
+  deactivate: p
+}, Symbol.toStringTag, { value: "Module" })), s = "org.eclipse.daanse.board.app.ui.vue.variable.timepicker", N = "0.0.1-next.1";
+async function O(t) {
+  const a = globalThis.__tsm__;
+  if (!a)
+    throw new Error(`${s}: tsm runtime is not initialized`);
+  a.register(s, E, N, "ui.vue.variable.timepicker"), await c?.(t);
 }
-async function C(t) {
-  await f?.(t);
+async function A(t) {
+  await p?.(t);
 }
 export {
-  h as activate,
-  C as deactivate
+  O as activate,
+  A as deactivate
 };

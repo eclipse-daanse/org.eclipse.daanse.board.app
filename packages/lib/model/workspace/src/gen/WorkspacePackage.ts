@@ -62,8 +62,12 @@ export class WorkspacePackage extends BasicEPackage {
     WIDGET__CONFIG: null as unknown as EAttribute | EReference,
     WIDGET__WRAPPER_CONFIG: null as unknown as EAttribute | EReference,
     VARIABLE: null as unknown as EClass,
+    VARIABLE__UID: null as unknown as EAttribute | EReference,
     VARIABLE__NAME: null as unknown as EAttribute | EReference,
     VARIABLE__TYPE: null as unknown as EAttribute | EReference,
+    VARIABLE__SCOPE: null as unknown as EAttribute | EReference,
+    VARIABLE__ACCESS_MODE: null as unknown as EAttribute | EReference,
+    VARIABLE__PAGE: null as unknown as EAttribute | EReference,
     VARIABLE__DEFINITION: null as unknown as EAttribute | EReference,
     EVENT_MAPPING: null as unknown as EClass,
     EVENT_MAPPING__ID: null as unknown as EAttribute | EReference,
@@ -352,6 +356,14 @@ export class WorkspacePackage extends BasicEPackage {
     variableClass.setEPackage(this);
     WorkspacePackage.Literals.VARIABLE = variableClass;
 
+    // Create uid feature
+    const variable_uid = new BasicEAttribute();
+    variable_uid.setName('uid');
+    variable_uid.setLowerBound(1);
+    variable_uid.setUpperBound(1);
+    variableClass.getEStructuralFeatures().push(variable_uid);
+    WorkspacePackage.Literals.VARIABLE__UID = variable_uid;
+
     // Create name feature
     const variable_name = new BasicEAttribute();
     variable_name.setName('name');
@@ -367,6 +379,31 @@ export class WorkspacePackage extends BasicEPackage {
     variable_type.setUpperBound(1);
     variableClass.getEStructuralFeatures().push(variable_type);
     WorkspacePackage.Literals.VARIABLE__TYPE = variable_type;
+
+    // Create scope feature
+    const variable_scope = new BasicEAttribute();
+    variable_scope.setName('scope');
+    variable_scope.setLowerBound(0);
+    variable_scope.setUpperBound(1);
+    variableClass.getEStructuralFeatures().push(variable_scope);
+    WorkspacePackage.Literals.VARIABLE__SCOPE = variable_scope;
+
+    // Create accessMode feature
+    const variable_accessMode = new BasicEAttribute();
+    variable_accessMode.setName('accessMode');
+    variable_accessMode.setLowerBound(0);
+    variable_accessMode.setUpperBound(1);
+    variableClass.getEStructuralFeatures().push(variable_accessMode);
+    WorkspacePackage.Literals.VARIABLE__ACCESS_MODE = variable_accessMode;
+
+    // Create page feature
+    const variable_page = new BasicEReference();
+    variable_page.setContainment(false);
+    variable_page.setName('page');
+    variable_page.setLowerBound(0);
+    variable_page.setUpperBound(1);
+    variableClass.getEStructuralFeatures().push(variable_page);
+    WorkspacePackage.Literals.VARIABLE__PAGE = variable_page;
 
     // Create definition feature
     const variable_definition = new BasicEAttribute();
@@ -592,8 +629,12 @@ export class WorkspacePackage extends BasicEPackage {
     (WorkspacePackage.Literals.WIDGET__DATASOURCE as BasicEReference).setEType(WorkspacePackage.Literals.DATASOURCE);
     (WorkspacePackage.Literals.WIDGET__CONFIG as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EJavaObject')!);
     (WorkspacePackage.Literals.WIDGET__WRAPPER_CONFIG as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EJavaObject')!);
+    (WorkspacePackage.Literals.VARIABLE__UID as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
     (WorkspacePackage.Literals.VARIABLE__NAME as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
     (WorkspacePackage.Literals.VARIABLE__TYPE as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (WorkspacePackage.Literals.VARIABLE__SCOPE as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (WorkspacePackage.Literals.VARIABLE__ACCESS_MODE as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (WorkspacePackage.Literals.VARIABLE__PAGE as BasicEReference).setEType(WorkspacePackage.Literals.PAGE);
     (WorkspacePackage.Literals.VARIABLE__DEFINITION as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EJavaObject')!);
     (WorkspacePackage.Literals.EVENT_MAPPING__ID as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
     (WorkspacePackage.Literals.EVENT_MAPPING__DEFINITION as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EJavaObject')!);

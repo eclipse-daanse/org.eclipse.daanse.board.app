@@ -11,9 +11,30 @@
  *   Smart City Jena
  **********************************************************************/
 
-import { type TinyEmitter } from 'tiny-emitter'
+/**
+ * The variables a workspace holds.
+ *
+ * They live in the model, beside the connections and the data sources, and
+ * what runs is built from them - the same arrangement, because it is the
+ * same kind of thing: a stored description and a live object made from it.
+ *
+ * What this replaces kept two Maps. One was keyed by name and held only
+ * the global variables; the other was keyed by "scope" or "page-<id>" and
+ * held all of them. Both were written on every change and read in a
+ * different order by every method, `getVariablesByScope` read the one that
+ * never held a page variable, and renaming had to move an entry between
+ * keys because the key was the name being changed.
+ */
+
 import { SystemVariableActions } from '../gen/SystemVariableActions'
 import { PageVariableActions } from '../gen/PageVariableActions'
+import {
+  WORKSPACE,
+  VariableImpl,
+  type Page,
+  type Variable as ModelVariable,
+  type Workspace,
+} from 'org.eclipse.daanse.board.app.lib.model.workspace'
 
 export interface VariableConfig {
   [key: string]: any
@@ -23,15 +44,37 @@ export interface VariableDeffinition {
   Variable: symbol,
   Settings: any
 }
+
+/** The slice of the service registry this needs. */
+export interface IdentifierResolver {
+  getRequired<T>(id: string): T
+}
+
 export class VariableRepository implements SystemVariableActions, PageVariableActions {
-  private availableVariables: Map<string, any> = new Map();
-  private availableVariablesByScope: Map<string, Map<string, any>> = new Map(); // scope -> name -> variable
+  /** The running objects, by the uid of the modelled variable they were built from. */
+  private live: Map<string, any> = new Map()
   private availableVariablesTypes: Map<string, VariableDeffinition> = new Map();
 
-  constructor(
-    private readonly resolver: { getRequired<T>(id: string): T },
-    private readonly tinyEmitter?: TinyEmitter,
-  ) {}
+  /*
+   * No event bus. A change to the list is announced by the model itself,
+   * the way every other modelled change is; the bus carries value changes,
+   * which a variable emits on its own and which this never saw.
+   */
+  constructor(private readonly resolver: IdentifierResolver) {}
+
+  /*
+   * Resolved on first use, not in the constructor: this repository is
+   * created while its own module activates, and the workspace may not be
+   * registered yet at that point.
+   */
+  private workspaceHeld: Workspace | undefined
+
+  private get workspace(): Workspace {
+    if (!this.workspaceHeld) {
+      this.workspaceHeld = this.resolver.getRequired<Workspace>(WORKSPACE)
+    }
+    return this.workspaceHeld
+  }
 
   /**
    * Resolves one of the identifiers a registered variable type carries.
@@ -41,6 +84,8 @@ export class VariableRepository implements SystemVariableActions, PageVariableAc
     return this.resolver.getRequired<T>(identifier.description as string)
   }
 
+  // ------------------------------------------------------------ the types
+
   registerVariableType(type: string, identifiers: VariableDeffinition) {
     if (this.availableVariablesTypes.has(type)) {
       throw Error('Multiple registration of the same variable type')
@@ -49,13 +94,13 @@ export class VariableRepository implements SystemVariableActions, PageVariableAc
   }
 
   /**
-   * Nimmt die Registrierung eines Variablentyps zurück.
+   * Takes a variable type's registration back.
    *
-   * Gegenstück zu registerVariableType, damit ein Modul seine Registrierung
-   * in deactivate() wieder aufheben kann. Betrifft nur den Typ; angelegte
-   * Variablen werden über removeVariable entfernt.
+   * The counterpart to registerVariableType, so a module can undo its
+   * registration in deactivate(). Concerns the type only; variables that
+   * were created are removed through removeVariable.
    *
-   * @returns ob der Typ registriert war
+   * @returns whether the type was registered
    */
   unregisterVariableType(type: string): boolean {
     return this.availableVariablesTypes.delete(type)
@@ -69,235 +114,187 @@ export class VariableRepository implements SystemVariableActions, PageVariableAc
     return this.availableVariablesTypes.get(type);
   }
 
+  // -------------------------------------------------------- the model side
+
+  /** What the workspace holds, in order. */
+  getVariableModels(): ModelVariable[] {
+    return this.workspace.variables.toArray()
+  }
+
+  getVariableModel(uid: string): ModelVariable | undefined {
+    return this.getVariableModels().find((variable) => variable.uid === uid)
+  }
+
+  /** The board a page-scoped variable names, if the workspace still holds it. */
+  private pageById(pageId?: string): Page | undefined {
+    if (!pageId) return undefined
+    return this.workspace.pages.toArray().find((page: Page) => page.id === pageId)
+  }
+
+  /**
+   * Builds the running object for one modelled variable.
+   *
+   * The uid, name and scope are put back into the configuration because
+   * that is what a variable's own init() reads - the one place that
+   * happens, rather than at each caller.
+   */
+  private build(held: ModelVariable): void {
+    const identifiers = this.availableVariablesTypes.get(held.type as string)
+    if (!identifiers) return
+
+    const config = { ...((held.definition ?? {}) as VariableConfig) }
+    config['uid'] = held.uid
+    config['scope'] = held.scope ?? 'global'
+    config['accessMode'] = held.accessMode ?? 'external-writable'
+    config['pageId'] = held.page?.id
+
+    const factory = this.resolveIdentifier<(name: string, config: VariableConfig) => any>(
+      identifiers.Variable,
+    )
+    const variable = factory(held.name as string, config)
+    /* One identity for the pair: the model's uid is the live object's id. */
+    variable.id = held.uid
+    this.live.set(held.uid as string, variable)
+  }
+
+  /**
+   * Builds a live object for every variable the workspace holds.
+   *
+   * What a loaded workspace needs: the model came out of a file, the things
+   * that hold a value and tick did not.
+   */
+  rebuildLive(): void {
+    this.live.clear()
+    for (const held of this.getVariableModels()) this.build(held)
+  }
+
+  // ---------------------------------------------------------- the variables
+
   registerVariable(name: string, type: string, config: VariableConfig) {
-    const identifiers = this.availableVariablesTypes.get(type)
-    if (identifiers) {
-      const variableFactory = this.resolveIdentifier<(name: string, config: VariableConfig) => unknown>(identifiers.Variable) as any
-      const variable = variableFactory(name, config)
+    const uid = (config.uid ?? config.id ?? Math.random().toString(36).substring(7)) as string
 
-      // Add to scope-aware storage (primary system)
-      const scope = config.scope || 'global'
-      const scopeKey = config.pageId && scope === 'page' ? `${scope}-${config.pageId}` : scope
-      if (!this.availableVariablesByScope.has(scopeKey)) {
-        this.availableVariablesByScope.set(scopeKey, new Map())
-      }
-      this.availableVariablesByScope.get(scopeKey)!.set(name, variable)
+    const held = this.getVariableModel(uid) ?? new VariableImpl()
+    held.uid = uid
+    held.name = name
+    held.type = type
+    held.scope = (config.scope as string) ?? 'global'
+    held.accessMode = (config.accessMode as string) ?? 'external-writable'
+    held.page = this.pageById(config.pageId as string)
 
-      // Deprecated: Keep backward compatibility with old Map, but use unique keys
-      // Only for global variables to avoid conflicts
-      if (!config.scope || config.scope === 'global') {
-        this.availableVariables.set(name, variable)
-      }
-    }
+    /*
+     * The identity and the placement are the model's own features now, so
+     * they do not go in the bag as well: one fact, one place.
+     */
+    const { uid: _uid, id: _id, scope: _scope, accessMode: _mode, pageId: _page, ...rest } = config
+    held.definition = rest
+
+    if (!this.getVariableModel(uid)) this.workspace.variables.push(held)
+
+    this.build(held)
+  }
+
+  /**
+   * Writes a changed variable back and builds it again.
+   *
+   * Changing the type means a different live object, which is why this
+   * rebuilds rather than updating in place.
+   */
+  saveVariable(uid: string, name: string, type: string, config: VariableConfig): void {
+    this.registerVariable(name, type, { ...config, uid })
   }
 
   getVariable(name: string): any {
-    // Search in scope-aware system
-    for (const [scopeKey, scopeMap] of this.availableVariablesByScope.entries()) {
-      if (scopeMap.has(name)) {
-        return scopeMap.get(name);
-      }
-    }
-
-    // Also check old system for backward compatibility
-    if (this.availableVariables.has(name)) {
-      return this.availableVariables.get(name);
-    }
-
-    return undefined;
+    const held = this.getVariableModels().find((variable) => variable.name === name)
+    return held ? this.live.get(held.uid as string) : undefined
   }
 
+  /**
+   * The variable this name means on this board.
+   *
+   * A board's own variable wins over a global one of the same name, which
+   * is what makes a page variable a local override.
+   */
   getVariableWithContext(name: string, pageId?: string): any {
-    // First check for page-scoped variable if pageId is provided
+    const models = this.getVariableModels()
+
     if (pageId) {
-      const pageScopeKey = `page-${pageId}`
-      const pageScope = this.availableVariablesByScope.get(pageScopeKey)
-      if (pageScope && pageScope.has(name)) {
-        return pageScope.get(name)
-      }
+      const onPage = models.find(
+        (variable) => variable.name === name && variable.scope === 'page' && variable.page?.id === pageId,
+      )
+      if (onPage) return this.live.get(onPage.uid as string)
     }
 
-    // Fall back to global variable
-    const globalScope = this.availableVariablesByScope.get('global')
-    if (globalScope && globalScope.has(name)) {
-      return globalScope.get(name)
-    }
-
-    // Final fallback to old system
-    return this.availableVariables.get(name)
+    const global = models.find(
+      (variable) => variable.name === name && (variable.scope ?? 'global') === 'global',
+    )
+    return global ? this.live.get(global.uid as string) : this.getVariable(name)
   }
 
   getVariableById(id: string): any {
-    // First search in scope-aware storage
-    for (const scopeMap of this.availableVariablesByScope.values()) {
-      for (const variable of scopeMap.values()) {
-        if (variable.id === id) {
-          return variable;
-        }
-      }
-    }
-
-    // Fallback to old system
-    for (const variable of this.availableVariables.values()) {
-      if (variable.id === id) {
-        return variable;
-      }
-    }
-    return undefined;
+    return this.live.get(id)
   }
 
+  /**
+   * Takes a variable out of the workspace and lets go of its live object.
+   *
+   * Both halves, because both exist. Either the uid or the name reaches it;
+   * the name because that is what a caller who only ever saw a name has.
+   */
   removeVariable(nameOrId: string): void {
-    // Try to find by ID first
-    let variableToRemove = this.getVariableById(nameOrId)
-    let nameToRemove = nameOrId
+    const held = this.getVariableModels()
+    const at = held.findIndex(
+      (variable) => variable.uid === nameOrId || variable.name === nameOrId,
+    )
+    if (at < 0) return
 
-    if (variableToRemove) {
-      nameToRemove = variableToRemove.name
-
-      // Remove from scope-aware storage
-      const scope = variableToRemove.scope || 'global'
-      const scopeKey = variableToRemove.pageId && scope === 'page' ? `page-${variableToRemove.pageId}` : scope
-      const scopeMap = this.availableVariablesByScope.get(scopeKey)
-      if (scopeMap) {
-        scopeMap.delete(nameToRemove)
-      }
-    }
-
-    // Remove from old system (backward compatibility)
-    if (this.availableVariables.has(nameToRemove)) {
-      this.availableVariables.delete(nameToRemove)
-    }
+    this.live.delete(held[at].uid as string)
+    this.workspace.variables.removeAt(at)
   }
 
+  /** Every variable as a [name, live object] pair, the way callers read them. */
   getAllVariables(): any[] {
-    const allVariables = new Map<string, any>()
-
-    // Collect all variables from scope-aware storage
-    for (const [scopeKey, scopeMap] of this.availableVariablesByScope.entries()) {
-      for (const [name, variable] of scopeMap) {
-        // Use variable ID as key to ensure each variable appears once
-        allVariables.set(variable.id, [variable.name, variable])
-      }
+    const pairs: any[] = []
+    for (const held of this.getVariableModels()) {
+      const variable = this.live.get(held.uid as string)
+      if (variable) pairs.push([held.name, variable])
     }
-
-    // Add variables from old system that might not be in new system
-    for (const [name, variable] of this.availableVariables) {
-      if (variable.id && !allVariables.has(variable.id)) {
-        allVariables.set(variable.id, [name, variable])
-      }
-    }
-
-    // Not sure about this fix
-    return Array.from(allVariables.values());
+    return pairs
   }
 
   renameVariable(newname: string, oldname: string): void {
-    let avar: any = null;
-    let foundScopeKey: string | null = null;
-
-    // Search in scope-aware system first (primary system)
-    for (const [scopeKey, scopeMap] of this.availableVariablesByScope.entries()) {
-      if (scopeMap.has(oldname)) {
-        avar = scopeMap.get(oldname);
-        foundScopeKey = scopeKey;
-        break;
-      }
-    }
-
-    // Fallback to old system if not found in scope-aware system
-    if (!avar) {
-      avar = this.availableVariables.get(oldname);
-      if (avar) {
-        foundScopeKey = 'old-system';
-      }
-    }
-
-    if (avar && foundScopeKey) {
-      // Update scope-aware system
-      if (foundScopeKey !== 'old-system') {
-        const scopeMap = this.availableVariablesByScope.get(foundScopeKey)
-        if (scopeMap) {
-          scopeMap.set(newname, avar)
-          scopeMap.delete(oldname)
-        }
-      }
-
-      // Update old system if variable exists there (only for global variables)
-      if (this.availableVariables.has(oldname)) {
-        this.availableVariables.set(newname, avar)
-        this.availableVariables.delete(oldname);
-      }
-    }
+    const held = this.getVariableModels().find((variable) => variable.name === oldname)
+    if (held) this.renameVariableById(held.uid as string, newname)
   }
 
+  /**
+   * Renames one variable.
+   *
+   * Nothing is keyed by the name, so this writes it in the two places that
+   * hold it - the model and the running object - and is done. It used to
+   * have to move the entry between Map keys, in whichever of the two Maps
+   * it was found in.
+   */
   renameVariableById(id: string, newname: string): void {
-    // Find the variable by ID
-    let avar: any = null;
-    let foundScopeKey: string | null = null;
-    let oldname: string | null = null;
+    const held = this.getVariableModel(id)
+    if (!held) return
 
-    // Search in scope-aware system
-    for (const [scopeKey, scopeMap] of this.availableVariablesByScope.entries()) {
-      for (const [name, variable] of scopeMap) {
-        if (variable.id === id) {
-          avar = variable;
-          foundScopeKey = scopeKey;
-          oldname = name;
-          break;
-        }
-      }
-      if (avar) break;
-    }
-
-    // Fallback to old system
-    if (!avar) {
-      for (const [name, variable] of this.availableVariables) {
-        if (variable.id === id) {
-          avar = variable;
-          foundScopeKey = 'old-system';
-          oldname = name;
-          break;
-        }
-      }
-    }
-
-    if (avar && foundScopeKey && oldname) {
-      // Update scope-aware system
-      if (foundScopeKey !== 'old-system') {
-        const scopeMap = this.availableVariablesByScope.get(foundScopeKey)
-        if (scopeMap) {
-          scopeMap.set(newname, avar)
-          scopeMap.delete(oldname)
-        }
-      }
-
-      // Update old system if variable exists there
-      if (this.availableVariables.has(oldname)) {
-        this.availableVariables.set(newname, avar)
-        this.availableVariables.delete(oldname);
-      }
-    }
+    held.name = newname
+    this.live.get(id)?.rename?.(newname)
   }
 
   getVariablesByScope(scope: 'global' | 'page', pageId?: string): any[] {
-    const allVars = Array.from(this.availableVariables);
-    return allVars.filter(([name, variable]) => {
-      if (scope === 'global') {
-        return variable.scope === 'global';
-      } else {
-        return variable.scope === 'page' && variable.pageId === pageId;
-      }
-    });
+    return this.getVariableModels()
+      .filter((variable) =>
+        scope === 'global'
+          ? (variable.scope ?? 'global') === 'global'
+          : variable.scope === 'page' && variable.page?.id === pageId,
+      )
+      .map((variable) => [variable.name, this.live.get(variable.uid as string)])
+      .filter(([, live]) => !!live)
   }
 
   getVariableWithPageContext(pageId: string, name: string): any {
-    // First check for page-scoped variable
-    const pageVar = this.getVariablesByScope('page', pageId).find(([varName]) => varName === name);
-    if (pageVar) {
-      return pageVar[1];
-    }
-    // Fall back to global variable
-    return this.getVariable(name);
+    return this.getVariableWithContext(name, pageId)
   }
 
   /**

@@ -25,7 +25,7 @@ const model = defineModel<string | number | null>()
 const props = withDefaults(
   defineProps<{
     label?: string
-    type?: 'text' | 'number' | 'password' | 'search' | 'email' | 'url'
+    type?: 'text' | 'number' | 'password' | 'search' | 'email' | 'url' | 'datetime-local'
     placeholder?: string
     hint?: string
     error?: string

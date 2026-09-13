@@ -1,16 +1,29 @@
-import { EVENT_ACTIONS_REGISTRY_ID as h } from "org.eclipse.daanse.board.app.lib.events";
-import { loggerFactory as y } from "org.eclipse.daanse.board.app.lib.logger";
-import { VARIABLE_REPOSITORY as c, identifier as V } from "org.eclipse.daanse.board.app.lib.api.variable";
-import { VARIABLE_REPOSITORY as R, identifier as _ } from "org.eclipse.daanse.board.app.lib.api.variable";
-const { TINY_EMITTER: u } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
-class f {
-  constructor(e, t) {
-    this.resolver = e, this.tinyEmitter = t;
+import { EVENT_ACTIONS_REGISTRY_ID as u } from "org.eclipse.daanse.board.app.lib.events";
+import { WORKSPACE as m, VariableImpl as h } from "org.eclipse.daanse.board.app.lib.model.workspace";
+import { loggerFactory as f } from "org.eclipse.daanse.board.app.lib.logger";
+import { VARIABLE_REPOSITORY as o, identifier as w } from "org.eclipse.daanse.board.app.lib.api.variable";
+import { VARIABLE_REPOSITORY as G, identifier as B } from "org.eclipse.daanse.board.app.lib.api.variable";
+class p {
+  /*
+   * No event bus. A change to the list is announced by the model itself,
+   * the way every other modelled change is; the bus carries value changes,
+   * which a variable emits on its own and which this never saw.
+   */
+  constructor(e) {
+    this.resolver = e;
   }
-  availableVariables = /* @__PURE__ */ new Map();
-  availableVariablesByScope = /* @__PURE__ */ new Map();
-  // scope -> name -> variable
+  /** The running objects, by the uid of the modelled variable they were built from. */
+  live = /* @__PURE__ */ new Map();
   availableVariablesTypes = /* @__PURE__ */ new Map();
+  /*
+   * Resolved on first use, not in the constructor: this repository is
+   * created while its own module activates, and the workspace may not be
+   * registered yet at that point.
+   */
+  workspaceHeld;
+  get workspace() {
+    return this.workspaceHeld || (this.workspaceHeld = this.resolver.getRequired(m)), this.workspaceHeld;
+  }
   /**
    * Resolves one of the identifiers a registered variable type carries.
    * All of them are created with Symbol.for, so the description IS the id.
@@ -18,19 +31,20 @@ class f {
   resolveIdentifier(e) {
     return this.resolver.getRequired(e.description);
   }
-  registerVariableType(e, t) {
+  // ------------------------------------------------------------ the types
+  registerVariableType(e, a) {
     if (this.availableVariablesTypes.has(e))
       throw Error("Multiple registration of the same variable type");
-    this.availableVariablesTypes.set(e, t);
+    this.availableVariablesTypes.set(e, a);
   }
   /**
-   * Nimmt die Registrierung eines Variablentyps zurück.
+   * Takes a variable type's registration back.
    *
-   * Gegenstück zu registerVariableType, damit ein Modul seine Registrierung
-   * in deactivate() wieder aufheben kann. Betrifft nur den Typ; angelegte
-   * Variablen werden über removeVariable entfernt.
+   * The counterpart to registerVariableType, so a module can undo its
+   * registration in deactivate(). Concerns the type only; variables that
+   * were created are removed through removeVariable.
    *
-   * @returns ob der Typ registriert war
+   * @returns whether the type was registered
    */
   unregisterVariableType(e) {
     return this.availableVariablesTypes.delete(e);
@@ -41,126 +55,156 @@ class f {
   getVariableIdentifiers(e) {
     return this.availableVariablesTypes.get(e);
   }
-  registerVariable(e, t, a) {
-    const i = this.availableVariablesTypes.get(t);
-    if (i) {
-      const r = this.resolveIdentifier(i.Variable)(e, a), n = a.scope || "global", l = a.pageId && n === "page" ? `${n}-${a.pageId}` : n;
-      this.availableVariablesByScope.has(l) || this.availableVariablesByScope.set(l, /* @__PURE__ */ new Map()), this.availableVariablesByScope.get(l).set(e, r), (!a.scope || a.scope === "global") && this.availableVariables.set(e, r);
-    }
+  // -------------------------------------------------------- the model side
+  /** What the workspace holds, in order. */
+  getVariableModels() {
+    return this.workspace.variables.toArray();
+  }
+  getVariableModel(e) {
+    return this.getVariableModels().find((a) => a.uid === e);
+  }
+  /** The board a page-scoped variable names, if the workspace still holds it. */
+  pageById(e) {
+    if (e)
+      return this.workspace.pages.toArray().find((a) => a.id === e);
+  }
+  /**
+   * Builds the running object for one modelled variable.
+   *
+   * The uid, name and scope are put back into the configuration because
+   * that is what a variable's own init() reads - the one place that
+   * happens, rather than at each caller.
+   */
+  build(e) {
+    const a = this.availableVariablesTypes.get(e.type);
+    if (!a) return;
+    const t = { ...e.definition ?? {} };
+    t.uid = e.uid, t.scope = e.scope ?? "global", t.accessMode = e.accessMode ?? "external-writable", t.pageId = e.page?.id;
+    const n = this.resolveIdentifier(
+      a.Variable
+    )(e.name, t);
+    n.id = e.uid, this.live.set(e.uid, n);
+  }
+  /**
+   * Builds a live object for every variable the workspace holds.
+   *
+   * What a loaded workspace needs: the model came out of a file, the things
+   * that hold a value and tick did not.
+   */
+  rebuildLive() {
+    this.live.clear();
+    for (const e of this.getVariableModels()) this.build(e);
+  }
+  // ---------------------------------------------------------- the variables
+  registerVariable(e, a, t) {
+    const i = t.uid ?? t.id ?? Math.random().toString(36).substring(7), n = this.getVariableModel(i) ?? new h();
+    n.uid = i, n.name = e, n.type = a, n.scope = t.scope ?? "global", n.accessMode = t.accessMode ?? "external-writable", n.page = this.pageById(t.pageId);
+    const { uid: s, id: E, scope: M, accessMode: T, pageId: P, ...b } = t;
+    n.definition = b, this.getVariableModel(i) || this.workspace.variables.push(n), this.build(n);
+  }
+  /**
+   * Writes a changed variable back and builds it again.
+   *
+   * Changing the type means a different live object, which is why this
+   * rebuilds rather than updating in place.
+   */
+  saveVariable(e, a, t, i) {
+    this.registerVariable(a, t, { ...i, uid: e });
   }
   getVariable(e) {
-    for (const [t, a] of this.availableVariablesByScope.entries())
-      if (a.has(e))
-        return a.get(e);
-    if (this.availableVariables.has(e))
-      return this.availableVariables.get(e);
+    const a = this.getVariableModels().find((t) => t.name === e);
+    return a ? this.live.get(a.uid) : void 0;
   }
-  getVariableWithContext(e, t) {
-    if (t) {
-      const i = `page-${t}`, s = this.availableVariablesByScope.get(i);
-      if (s && s.has(e))
-        return s.get(e);
+  /**
+   * The variable this name means on this board.
+   *
+   * A board's own variable wins over a global one of the same name, which
+   * is what makes a page variable a local override.
+   */
+  getVariableWithContext(e, a) {
+    const t = this.getVariableModels();
+    if (a) {
+      const n = t.find(
+        (s) => s.name === e && s.scope === "page" && s.page?.id === a
+      );
+      if (n) return this.live.get(n.uid);
     }
-    const a = this.availableVariablesByScope.get("global");
-    return a && a.has(e) ? a.get(e) : this.availableVariables.get(e);
+    const i = t.find(
+      (n) => n.name === e && (n.scope ?? "global") === "global"
+    );
+    return i ? this.live.get(i.uid) : this.getVariable(e);
   }
   getVariableById(e) {
-    for (const t of this.availableVariablesByScope.values())
-      for (const a of t.values())
-        if (a.id === e)
-          return a;
-    for (const t of this.availableVariables.values())
-      if (t.id === e)
-        return t;
+    return this.live.get(e);
   }
+  /**
+   * Takes a variable out of the workspace and lets go of its live object.
+   *
+   * Both halves, because both exist. Either the uid or the name reaches it;
+   * the name because that is what a caller who only ever saw a name has.
+   */
   removeVariable(e) {
-    let t = this.getVariableById(e), a = e;
-    if (t) {
-      a = t.name;
-      const i = t.scope || "global", s = t.pageId && i === "page" ? `page-${t.pageId}` : i, r = this.availableVariablesByScope.get(s);
-      r && r.delete(a);
-    }
-    this.availableVariables.has(a) && this.availableVariables.delete(a);
+    const a = this.getVariableModels(), t = a.findIndex(
+      (i) => i.uid === e || i.name === e
+    );
+    t < 0 || (this.live.delete(a[t].uid), this.workspace.variables.removeAt(t));
   }
+  /** Every variable as a [name, live object] pair, the way callers read them. */
   getAllVariables() {
-    const e = /* @__PURE__ */ new Map();
-    for (const [t, a] of this.availableVariablesByScope.entries())
-      for (const [i, s] of a)
-        e.set(s.id, [s.name, s]);
-    for (const [t, a] of this.availableVariables)
-      a.id && !e.has(a.id) && e.set(a.id, [t, a]);
-    return Array.from(e.values());
-  }
-  renameVariable(e, t) {
-    let a = null, i = null;
-    for (const [s, r] of this.availableVariablesByScope.entries())
-      if (r.has(t)) {
-        a = r.get(t), i = s;
-        break;
-      }
-    if (a || (a = this.availableVariables.get(t), a && (i = "old-system")), a && i) {
-      if (i !== "old-system") {
-        const s = this.availableVariablesByScope.get(i);
-        s && (s.set(e, a), s.delete(t));
-      }
-      this.availableVariables.has(t) && (this.availableVariables.set(e, a), this.availableVariables.delete(t));
+    const e = [];
+    for (const a of this.getVariableModels()) {
+      const t = this.live.get(a.uid);
+      t && e.push([a.name, t]);
     }
+    return e;
   }
-  renameVariableById(e, t) {
-    let a = null, i = null, s = null;
-    for (const [r, n] of this.availableVariablesByScope.entries()) {
-      for (const [l, p] of n)
-        if (p.id === e) {
-          a = p, i = r, s = l;
-          break;
-        }
-      if (a) break;
-    }
-    if (!a) {
-      for (const [r, n] of this.availableVariables)
-        if (n.id === e) {
-          a = n, i = "old-system", s = r;
-          break;
-        }
-    }
-    if (a && i && s) {
-      if (i !== "old-system") {
-        const r = this.availableVariablesByScope.get(i);
-        r && (r.set(t, a), r.delete(s));
-      }
-      this.availableVariables.has(s) && (this.availableVariables.set(t, a), this.availableVariables.delete(s));
-    }
+  renameVariable(e, a) {
+    const t = this.getVariableModels().find((i) => i.name === a);
+    t && this.renameVariableById(t.uid, e);
   }
-  getVariablesByScope(e, t) {
-    return Array.from(this.availableVariables).filter(([i, s]) => e === "global" ? s.scope === "global" : s.scope === "page" && s.pageId === t);
+  /**
+   * Renames one variable.
+   *
+   * Nothing is keyed by the name, so this writes it in the two places that
+   * hold it - the model and the running object - and is done. It used to
+   * have to move the entry between Map keys, in whichever of the two Maps
+   * it was found in.
+   */
+  renameVariableById(e, a) {
+    const t = this.getVariableModel(e);
+    t && (t.name = a, this.live.get(e)?.rename?.(a));
   }
-  getVariableWithPageContext(e, t) {
-    const a = this.getVariablesByScope("page", e).find(([i]) => i === t);
-    return a ? a[1] : this.getVariable(t);
+  getVariablesByScope(e, a) {
+    return this.getVariableModels().filter(
+      (t) => e === "global" ? (t.scope ?? "global") === "global" : t.scope === "page" && t.page?.id === a
+    ).map((t) => [t.name, this.live.get(t.uid)]).filter(([, t]) => !!t);
+  }
+  getVariableWithPageContext(e, a) {
+    return this.getVariableWithContext(a, e);
   }
   /**
    * Sets or updates a global variable (Action method)
    */
-  setGlobalVariable(e, t) {
-    const a = this.getVariable(e);
-    a ? a.value = t : this.registerVariable(e, "constant", {
-      value: t,
+  setGlobalVariable(e, a) {
+    const t = this.getVariable(e);
+    t ? t.value = a : this.registerVariable(e, "constant", {
+      value: a,
       scope: "global"
     });
   }
   /**
    * Sets or updates a page-scoped variable (Action method)
    */
-  setPageVariable(e, t, a) {
-    const i = this.getVariableWithContext(e, a);
-    i && typeof i.set == "function" ? i.set(t) : i ? i.value = t : this.registerVariable(e, "constant", {
-      value: t,
+  setPageVariable(e, a, t) {
+    const i = this.getVariableWithContext(e, t);
+    i && typeof i.set == "function" ? i.set(a) : i ? i.value = a : this.registerVariable(e, "constant", {
+      value: a,
       scope: "page",
-      pageId: a
+      pageId: t
     });
   }
 }
-const b = `<?xml version="1.0" encoding="UTF-8"?>
+const l = `<?xml version="1.0" encoding="UTF-8"?>
 <!--
   Copyright (c) 2025 Contributors to the Eclipse Foundation.
 
@@ -232,54 +276,51 @@ const b = `<?xml version="1.0" encoding="UTF-8"?>
       </eParameters>
     </eOperations>
   </eClassifiers>
-</ecore:EPackage>`, m = y.createLogger("daanse:variable:actions");
-function w(o, e) {
-  o.registerActionsFromEcoreString(
+</ecore:EPackage>`, v = f.createLogger("daanse:variable:actions");
+function y(r, e) {
+  r.registerActionsFromEcoreString(
     "SystemVariableActions",
-    b,
+    l,
     "system",
     "VariableActions.ecore"
-  ), o.registerActionsFromEcoreString(
+  ), r.registerActionsFromEcoreString(
     "PageVariableActions",
-    b,
+    l,
     "page",
     "VariableActions.ecore"
-  ), o.registerInstance("VariableRepository", e), m("Variable actions registered");
+  ), r.registerInstance("VariableRepository", e), v("Variable actions registered");
 }
-function v({ services: o }) {
-  const e = new f(
-    o,
-    o.get(u)
-  );
-  o.register(c, e), w(
-    o.getRequired(h),
+function d({ services: r }) {
+  const e = new p(r);
+  r.register(o, e), y(
+    r.getRequired(u),
     e
   );
 }
-function d({ services: o }) {
-  o.unregister(c);
+function g({ services: r }) {
+  r.unregister(o);
 }
-const A = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const V = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  VARIABLE_REPOSITORY: c,
-  VariableRepository: f,
-  activate: v,
-  deactivate: d,
-  identifier: V
-}, Symbol.toStringTag, { value: "Module" })), g = "org.eclipse.daanse.board.app.lib.repository.variable", S = "0.0.1-next.1";
-async function M(o) {
+  VARIABLE_REPOSITORY: o,
+  VariableRepository: p,
+  activate: d,
+  deactivate: g,
+  identifier: w
+}, Symbol.toStringTag, { value: "Module" })), c = "org.eclipse.daanse.board.app.lib.repository.variable", A = "0.0.1-next.1";
+async function _(r) {
   const e = globalThis.__tsm__;
   if (!e)
-    throw new Error(`${g}: tsm runtime is not initialized`);
-  e.register(g, A, S, "lib.repository.variable"), await v?.(o);
+    throw new Error(`${c}: tsm runtime is not initialized`);
+  e.register(c, V, A, "lib.repository.variable"), await d?.(r);
 }
-async function P(o) {
-  await d?.(o);
+async function R(r) {
+  await g?.(r);
 }
 export {
-  R as VARIABLE_REPOSITORY,
-  f as VariableRepository,
-  M as activate,
-  P as deactivate,
-  _ as identifier
+  G as VARIABLE_REPOSITORY,
+  p as VariableRepository,
+  _ as activate,
+  R as deactivate,
+  B as identifier
 };

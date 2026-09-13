@@ -10,388 +10,416 @@ SPDX-License-Identifier: EPL-2.0
 Contributors:
     Smart City Jena
 -->
-<template>
-  <div class="configuration w-full h-full flex flex-col p-6 pl-18">
-    <h1 class="text-2xl font-bold mb-6">Variables Configuration</h1>
-
-    <!-- Two column layout -->
-    <div class="flex gap-6 flex-grow">
-      <!-- Left column: Global Variables -->
-      <div class="w-1/2 flex flex-col">
-        <div class="flex justify-between items-center mb-4">
-          <h2 class="text-lg font-semibold">Global Variables</h2>
-          <VaButton icon="add" @click="store.createVariable()">
-            Add Global Variable
-          </VaButton>
-        </div>
-
-        <div class="bg-pane border border-[var(--color-divider)] rounded-lg overflow-hidden flex-grow">
-          <!-- Header row -->
-          <div class="variable-table-header">
-            <div class="var-col-name">Name</div>
-            <div class="var-col-type">Type</div>
-            <div class="var-col-value">Value</div>
-            <div class="var-col-actions">Actions</div>
-          </div>
-
-          <!-- List items -->
-          <div class="divide-y divide-[var(--color-divider)]">
-            <template v-for="variable in store.variables" :key="variable.id">
-              <div class="variable-table-row" v-if="variable.scope == VariableScope.Global">
-                <div class="var-col-name truncate">{{ variable.name }}</div>
-                <div class="var-col-type truncate">{{ variable.type }}</div>
-                <div class="var-col-value truncate">{{ getVariableValue(variable.id) }}</div>
-                <div class="var-col-actions">
-                  <VaButton icon="edit" size="small" preset="secondary"
-                            @click="editVariable(variable.id)"></VaButton>
-                  <VaButton icon="delete" size="small" color="danger"
-                            @click="confirmRemoveVariable(variable.id)"></VaButton>
-                </div>
-              </div>
-            </template>
-          </div>
-        </div>
-      </div>
-
-      <!-- Right column: Page Variables -->
-      <div class="w-1/2 flex flex-col">
-        <div class="flex justify-between items-center mb-4">
-          <h2 class="text-lg font-semibold">Page Variables</h2>
-          <VaButton icon="add" @click="createPageVariable" :disabled="!selectedPageId">
-            Add Page Variable
-          </VaButton>
-        </div>
-
-        <!-- Page selector -->
-        <div class="mb-4">
-          <VaSelect
-            v-model="selectedPageId"
-            label="Select Page"
-            :options="pages"
-            value-by="id"
-            text-by="name"
-            placeholder="Choose a page to view variables"
-            @update:model-value="onPageSelected"
-          />
-        </div>
-
-        <div class="bg-pane border border-[var(--color-divider)] rounded-lg overflow-hidden flex-grow">
-          <!-- Header row -->
-          <div class="variable-table-header">
-            <div class="var-col-name">Name</div>
-            <div class="var-col-type">Access Mode</div>
-            <div class="var-col-value">Value</div>
-            <div class="var-col-actions">Actions</div>
-          </div>
-
-          <!-- Page variables list -->
-          <div class="divide-y divide-[var(--color-divider)]"
-                v-if="selectedPageId && currentPageVariables">
-            <div class="variable-table-row"
-                  v-for="variable in currentPageVariables" :key="variable.id">
-              <div class="var-col-name truncate">{{ variable.name }}</div>
-              <div class="var-col-type truncate">{{ getAccessModeText(variable.accessMode) }}</div>
-              <div class="var-col-value truncate">{{ variable.value }}</div>
-              <div class="var-col-actions">
-                <VaButton icon="edit" size="small" preset="secondary"
-                          @click="editVariable(variable.id)"></VaButton>
-                <VaButton icon="delete" size="small" color="danger"
-                          @click="confirmRemoveVariable(variable.id)"></VaButton>
-              </div>
-            </div>
-          </div>
-
-          <!-- Empty state for page variables -->
-          <div v-else-if="selectedPageId" class="p-8 text-center text-dim">
-            <div class="text-2xl mb-2">📋</div>
-            <p>No page variables found for this page</p>
-          </div>
-
-          <!-- No page selected state -->
-          <div v-else class="p-8 text-center text-dim">
-            <div class="text-2xl mb-2">📄</div>
-            <p>Select a page to view its variables</p>
-          </div>
-        </div>
-      </div>
-    </div>
-    <VaModal
-      v-model="showVariableModal" title="Edit Variable"
-      ok-text="Save" cancel-text="Cancel"
-      @ok="saveVariable" @cancel="showVariableModal = false"
-    >
-      <div class="flex flex-col gap-4">
-        <VaSelect
-          :options="options"
-          v-model="currentlySelectedType"
-          label="Type"
-        ></VaSelect>
-        <component :is="currentEditor" v-model="variableProxy"
-                    :variable="currentlySelectedVariable">
-        </component>
-        <VaSelect
-          v-model="variableProxy.accessMode"
-          label="Access Mode"
-          :options="[
-                    { value: 'readonly', text: 'Read Only' },
-                    { value: 'page-only', text: 'Page Only' },
-                    { value: 'external-writable', text: 'External Writable' }
-                ]"
-          value-by="value"
-          text-by="text"
-          placeholder="Select access mode" />
-
-
-      </div>
-    </VaModal>
-
-    <VaModal
-      v-model="showDeleteConfirm"
-      size="small"
-      hide-default-actions
-      overlay-opacity="0.3"
-    >
-      <div style="text-align: center; padding: 1rem;">
-        <VaIcon name="warning" color="danger" size="2rem" />
-        <h5 style="margin: 0.5rem 0;">Variable löschen</h5>
-        <p>Möchtest du diese Variable wirklich löschen?
-          Diese Aktion kann nicht rückgängig gemacht werden.</p>
-      </div>
-      <template #footer>
-        <div style="display: flex; justify-content: flex-end; gap: 0.5rem;">
-          <VaButton preset="secondary" @click="showDeleteConfirm = false; variableToDelete = null;">
-            Abbrechen
-          </VaButton>
-          <VaButton color="danger" icon="delete" @click="doRemoveVariable()">
-            Löschen
-          </VaButton>
-        </div>
-      </template>
-    </VaModal>
-
-    <!-- Empty state (uncomment to use) -->
-    <!--
-  <div class="p-8 flex flex-col items-center justify-center text-center text-dim">
-    <div class="text-5xl mb-4">📋</div>
-    <p class="mb-4">No variables found</p>
-    <VaButton preset="primary" icon="add">Add Variable</VaButton>
-  </div>
-  -->
-  </div>
-</template>
-
 <script setup lang="ts">
-import { inject, onMounted, ref, computed } from 'vue'
-import { type VariableRepository, identifier }
-  from 'org.eclipse.daanse.board.app.lib.api.variable'
-import { useVariablesStore } from '@/stores/VariablesPinia'
+/*
+ * The variables a workspace holds.
+ *
+ * They are modelled, so this reads the workspace's own list and changes it
+ * through the repository - no store in between. What it replaces kept a
+ * Pinia store that mirrored the repository, listened on an event bus to
+ * notice its own writes, and reached into a private Map to rename.
+ *
+ * The two halves used to be two tables side by side, and the page-scoped
+ * one was unreachable until a board had been picked from a select above
+ * it. Reach is a property of a variable, not a place to keep it, so there
+ * is one list and the boards are headings in it.
+ */
+import { computed, inject, onBeforeUnmount, onMounted, ref } from 'vue'
 import {
-  VariableScope,
-  VariableAccessMode,
+  type VariableRepository,
+  identifier as VARIABLE_REPOSITORY,
+} from 'org.eclipse.daanse.board.app.lib.api.variable'
+import {
+  identifier as WORKSPACE,
+  type Page,
   type Variable,
-  CONSTANT_VARIABLE
-} from 'org.eclipse.daanse.board.app.lib.variables'
-import { identifier as PageRepoIdentifier, type PageRegistryI }
-  from 'org.eclipse.daanse.board.app.lib.api.page'
+  type Workspace,
+} from 'org.eclipse.daanse.board.app.lib.model.workspace'
+import { useEList } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+import { TINY_EMITTER } from 'org.eclipse.daanse.board.app.lib.core'
+import { VariableEvents } from 'org.eclipse.daanse.board.app.lib.variables'
+import type { TinyEmitter } from 'tiny-emitter'
+import {
+  DButton,
+  DIcon,
+  DInput,
+  DModal,
+  DSelect,
+} from 'org.eclipse.daanse.board.app.ui.vue.controls'
 
-const store = useVariablesStore()
+/* Injected here, in setup, which is the only place inject() works. The
+   page used to call it inside editVariable and saveVariable, where it
+   returns undefined - which is why editing threw instead of opening. */
+const repository = inject<VariableRepository>(VARIABLE_REPOSITORY)!
+const workspace = inject<Workspace>(WORKSPACE)!
+const eventBus = inject<TinyEmitter>(Symbol.for(TINY_EMITTER))
 
-const pages = ref([] as any[])
-const selectedPageId = ref<string>('')
+const variables = useEList(workspace, (w) => w.variables)
+const pages = useEList(workspace, (w) => w.pages)
 
-const showDeleteConfirm = ref(false)
-const variableToDelete = ref<string | null>(null)
+/*
+ * A value is the live object's, not the model's, and it changes without
+ * the model changing - a clock ticks, a query comes back. This counter is
+ * what makes those show up; the bus is where a variable announces them.
+ */
+const valueTick = ref(0)
+const onValueChange = () => (valueTick.value += 1)
+onMounted(() => eventBus?.on(VariableEvents.VariableUpdated, onValueChange))
+onBeforeUnmount(() => eventBus?.off(VariableEvents.VariableUpdated, onValueChange))
 
-const confirmRemoveVariable = (variableId: string) => {
-  variableToDelete.value = variableId
-  showDeleteConfirm.value = true
-}
-
-const doRemoveVariable = () => {
-  if (variableToDelete.value) {
-    store.removeVariable(variableToDelete.value)
+function valueOf(variable: Variable): string {
+  void valueTick.value
+  try {
+    const live = repository.getVariableById(variable.uid as string)
+    const value = live?.value
+    if (value === undefined || value === null) return ''
+    return typeof value === 'object' ? JSON.stringify(value) : String(value)
+  } catch {
+    /* A page-only variable read from outside its board says so by throwing. */
+    return 'nur auf seiner Seite lesbar'
   }
-  showDeleteConfirm.value = false
-  variableToDelete.value = null
 }
 
-const showVariableModal = ref(false)
-const currentlySelectedVariable = ref(null)
-const currentlySelectedVariableVar = ref<Variable | null>(null)
-const currentlySelectedType = ref(null)
-const options = ref([] as any[])
-const variableProxy = ref(null as unknown as any)
+/** The variables under the reach they have, boards last and named. */
+const sections = computed(() => {
+  const global = variables.value.filter((v) => (v.scope ?? 'global') === 'global')
+  const byPage = pages.value
+    .map((page: Page) => ({
+      title: page.name as string,
+      lead: 'Nur auf diesem Board',
+      page,
+      rows: variables.value.filter((v) => v.scope === 'page' && v.page === page),
+    }))
+    .filter((section) => section.rows.length > 0)
 
-onMounted(() => {
-  const variableRepository = inject<VariableRepository>(identifier)!
-  const pageRepository = inject<PageRegistryI>(PageRepoIdentifier)!
+  const orphans = variables.value.filter((v) => v.scope === 'page' && !v.page)
 
-  const variableTypes = variableRepository.getRegisteredVariableTypes()
-  options.value = variableTypes
-
-  // Load all pages
-  pages.value = pageRepository.getAllPageIds().map(id => pageRepository.getPage(id))
+  return [
+    { title: 'Überall', lead: 'Auf jedem Board lesbar', page: undefined, rows: global },
+    ...byPage,
+    ...(orphans.length
+      ? [{ title: 'Ohne Board', lead: 'Das Board dazu gibt es nicht mehr', page: undefined, rows: orphans }]
+      : []),
+  ]
 })
 
-const saveVariable = () => {
-  // Build config object based on variable type and available fields
-  const config: any = {}
+const types = ref<string[]>([])
+onMounted(() => (types.value = repository.getRegisteredVariableTypes()))
 
-  // Copy all fields from variableProxy except 'name' (which is handled separately)
-  Object.keys(variableProxy.value).forEach(key => {
-    if (key !== 'name') {
-      config[key] = variableProxy.value[key]
-    }
+const reachOptions = computed(() => [
+  { text: 'Überall', value: '' },
+  ...pages.value.map((page: Page) => ({ text: page.name as string, value: page.id as string })),
+])
+
+const accessOptions = [
+  { text: 'Von außen beschreibbar', value: 'external-writable' },
+  { text: 'Nur auf seiner Seite', value: 'page-only' },
+  { text: 'Nur lesbar', value: 'readonly' },
+]
+
+// ------------------------------------------------------------- the dialog
+
+const dialogOpen = ref(false)
+const editingUid = ref<string | null>(null)
+const draft = ref<Record<string, any>>({})
+const draftType = ref('')
+const draftReach = ref('')
+
+const isEditing = computed(() => editingUid.value !== null)
+
+/** The type's own settings component, or nothing while no type is picked. */
+const typeEditor = computed(() =>
+  draftType.value ? repository.getVariableIdentifiers(draftType.value)?.Settings : null,
+)
+
+function openNew(): void {
+  editingUid.value = null
+  draftType.value = types.value[0] ?? ''
+  draftReach.value = ''
+  draft.value = { name: 'Variable ' + Math.random().toString(36).substring(7), accessMode: 'external-writable' }
+  dialogOpen.value = true
+}
+
+function openEdit(variable: Variable): void {
+  editingUid.value = variable.uid as string
+  draftType.value = (variable.type as string) ?? ''
+  draftReach.value = (variable.page?.id as string) ?? ''
+
+  const live = repository.getVariableById(variable.uid as string)
+  draft.value = {
+    ...((variable.definition ?? {}) as Record<string, unknown>),
+    ...(live?.serialize?.() ?? {}),
+    name: variable.name,
+    accessMode: variable.accessMode ?? 'external-writable',
+  }
+  dialogOpen.value = true
+}
+
+function save(): void {
+  const { name, accessMode, ...rest } = draft.value
+  repository.registerVariable(name as string, draftType.value, {
+    ...rest,
+    uid: editingUid.value ?? undefined,
+    accessMode,
+    scope: draftReach.value ? 'page' : 'global',
+    pageId: draftReach.value || undefined,
   })
-
-  // Update the actual variable in the repository with new values
-  const variableRepository = inject<VariableRepository>(identifier)!
-  const variable = variableRepository.getVariableById(currentlySelectedVariable.value)
-  if (variable) {
-    // Update the variable with new properties from proxy
-    Object.keys(variableProxy.value).forEach(key => {
-      if (key !== 'name' && key !== 'id' && variable.hasOwnProperty(key)) {
-        (variable as any)[key] = variableProxy.value[key]
-      }
-    })
-  }
-
-  store.updateVariable({
-    id: currentlySelectedVariable.value,
-    name: variableProxy.value.name,
-    originalName: variable?.name,
-    type: currentlySelectedType.value,
-    config
-  })
-
-  variableProxy.value = null
-  currentlySelectedVariable.value = null
-  currentlySelectedVariableVar.value = null
-  showVariableModal.value = false
+  dialogOpen.value = false
+  editingUid.value = null
 }
 
-const editVariable = (id: any) => {
-  currentlySelectedVariable.value = id
-  const variableRepository = inject<VariableRepository>(identifier)!
-  const variable = variableRepository.getVariableById(id)
-  if (variable) {
-    currentlySelectedType.value = variable.type
-    currentlySelectedVariableVar.value = variable
-  }
+// ----------------------------------------------------------- the deletion
 
-  // Create proxy object with all variable properties
-  variableProxy.value = {
-    id: variable?.id,
-    name: variable?.name,
-    value: variable?.value,
-    expression: variable?.expression,
-    scope: variable?.scope || 'global',
-    accessMode: variable?.accessMode || 'external-writable',
-    pageId: variable?.pageId,
-    ...variable?.serialize?.() // Include any additional serialized properties
-  }
+const pendingDelete = ref<Variable | null>(null)
 
-  showVariableModal.value = true
-}
-
-const currentEditor = computed(() => {
-  const variableRepository = inject<VariableRepository>(identifier)!
-  const type = currentlySelectedType.value
-  if (!type) {
-    return null
-  }
-  const identifiers = variableRepository.getVariableIdentifiers(type)
-  return identifiers?.Settings
-})
-
-const getVariableValue = (id: any) => {
-  const variableRepository = inject<VariableRepository>(identifier)!
-  const variable = variableRepository.getVariableById(id)
-  if (variable) {
-    return variable.value
-  }
-  return null
-}
-
-const currentPageVariables = computed(() => {
-  if (!selectedPageId.value) return []
-  if (!store.variables || !Array.isArray(store.variables)) return []
-
-  return store.variables.filter(v => {
-    return v.pageId === selectedPageId.value
-  })
-})
-
-
-const getAccessModeText = (mode: string) => {
-  switch (mode) {
-    case VariableAccessMode.ReadOnly:
-      return 'Read Only'
-    case VariableAccessMode.PageOnly:
-      return 'Page Only'
-    case VariableAccessMode.ExternalWritable:
-      return 'External'
-    default:
-      return mode
-  }
-}
-
-const createPageVariable = () => {
-  store.createVariable(CONSTANT_VARIABLE, {
-    value: 'test', pageId: selectedPageId.value,
-    accessMode: VariableAccessMode.ExternalWritable, scope: VariableScope.Page
-  })
-}
-
-const onPageSelected = (pageId: string) => {
-  // The computed property will automatically update
+function confirmDelete(): void {
+  if (pendingDelete.value) repository.removeVariable(pendingDelete.value.uid as string)
+  pendingDelete.value = null
 }
 </script>
 
+<template>
+  <div class="variables">
+    <header class="variables__head">
+      <div>
+        <h1 class="variables__title">Variablen</h1>
+        <p class="variables__lead">
+          Ein benannter Wert, den Widgets und Datenquellen lesen. Manche gelten überall,
+          manche nur auf einem Board.
+        </p>
+      </div>
+      <DButton intent="primary" @click="openNew">
+        <DIcon name="add" size="sm" />Variable anlegen
+      </DButton>
+    </header>
+
+    <section v-for="section in sections" :key="section.title" class="reach">
+      <h2 class="reach__title">
+        {{ section.title }}<span class="reach__lead">{{ section.lead }}</span>
+      </h2>
+
+      <ul v-if="section.rows.length" class="rows">
+        <li v-for="variable in section.rows" :key="variable.uid" class="row">
+          <span class="row__name">{{ variable.name }}</span>
+          <span class="row__type">{{ variable.type }}</span>
+          <span class="row__value">{{ valueOf(variable) }}</span>
+          <span class="row__tools">
+            <DButton intent="quiet" size="sm" title="Variable bearbeiten" @click="openEdit(variable)">
+              <DIcon name="edit" size="sm" />
+            </DButton>
+            <DButton intent="quiet" size="sm" title="Variable löschen" @click="pendingDelete = variable">
+              <DIcon name="delete" size="sm" />
+            </DButton>
+          </span>
+        </li>
+      </ul>
+
+      <p v-else class="reach__empty">Noch keine.</p>
+    </section>
+
+    <DModal
+      v-model="dialogOpen"
+      :title="isEditing ? 'Variable bearbeiten' : 'Variable anlegen'"
+      size="md"
+    >
+      <div class="form">
+        <DSelect v-model="draftType" label="Typ" :options="types" />
+        <DSelect
+          v-model="draftReach"
+          label="Gilt"
+          :options="reachOptions"
+          label-key="text"
+          value-key="value"
+        />
+        <DSelect
+          v-model="draft.accessMode"
+          label="Beschreibbar"
+          :options="accessOptions"
+          label-key="text"
+          value-key="value"
+        />
+
+        <!-- What the chosen type needs, asked by the type itself. -->
+        <component :is="typeEditor" v-if="typeEditor" v-model="draft" />
+        <DInput v-else v-model="draft.name" label="Name" />
+      </div>
+
+      <template #actions>
+        <DButton intent="quiet" @click="dialogOpen = false">Abbrechen</DButton>
+        <DButton intent="primary" @click="save">{{ isEditing ? 'Speichern' : 'Anlegen' }}</DButton>
+      </template>
+    </DModal>
+
+    <DModal :model-value="!!pendingDelete" size="sm" @update:model-value="pendingDelete = null">
+      <template #header>
+        <DIcon name="warning" size="lg" tone="color-err" />
+        <h2 class="confirm__title">Variable löschen</h2>
+      </template>
+      <p class="confirm__text">
+        {{ pendingDelete?.name }} wird entfernt. Widgets, die darauf zeigen, finden sie
+        danach nicht mehr.
+      </p>
+      <template #actions>
+        <DButton intent="quiet" @click="pendingDelete = null">Abbrechen</DButton>
+        <DButton intent="danger" @click="confirmDelete">Löschen</DButton>
+      </template>
+    </DModal>
+  </div>
+</template>
+
 <style scoped>
-.variable-table-header {
+.variables {
   display: flex;
-  background-color: var(--color-raised);
-  border-bottom: 1px solid var(--color-divider);
-  font-size: 0.75rem;
-  font-weight: 500;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
+  flex-direction: column;
+  gap: 28px;
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
+  padding: 28px 32px 40px;
+  font-family: var(--font-sans);
+  color: var(--color-fg);
+  background-color: var(--color-bg);
+}
+
+.variables__head,
+.reach {
+  width: 100%;
+  max-width: 940px;
+}
+
+.variables__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+.variables__title {
+  margin: 0 0 6px;
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.variables__lead {
+  margin: 0;
+  max-width: 56ch;
+  font-size: var(--text-base);
+  line-height: 1.55;
   color: var(--color-dim);
 }
 
-.variable-table-row {
+/* ------------------------------------------------------------ the reaches */
+
+.reach__title {
   display: flex;
+  align-items: baseline;
+  gap: 12px;
+  margin: 0 0 2px;
+  font-size: var(--text-base);
+  font-weight: 600;
+}
+
+.reach__lead {
+  font-weight: 400;
+  font-size: var(--text-sm);
+  color: var(--color-dim);
+}
+
+.reach__empty {
+  margin: 0;
+  padding: 12px 0;
+  border-top: 1px solid var(--color-divider);
+  font-size: var(--text-base);
+  color: var(--color-dim);
+}
+
+.rows {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--color-divider);
+}
+
+/*
+ * A name, what makes it, and what it says right now. No heading row: three
+ * words over three columns told nobody anything the columns did not, and
+ * the fourth said "Actions" over two icons.
+ */
+.row {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(0, 1.4fr) minmax(0, 2fr) auto;
   align-items: center;
+  gap: 16px;
+  padding: 7px 8px 7px 0;
+  border-bottom: 1px solid var(--color-divider);
+  font-size: var(--text-base);
 }
 
-.variable-table-row:hover {
-  background-color: var(--color-raised);
+.row:hover {
+  background-color: color-mix(in srgb, var(--color-pane) 60%, transparent);
 }
 
-.var-col-name {
-  flex: 2;
-  min-width: 0;
-  padding: 0.75rem 1rem;
+.row__name {
+  font-family: var(--font-mono);
+  overflow-wrap: anywhere;
 }
 
-.var-col-type {
-  flex: 1;
-  min-width: 0;
-  padding: 0.75rem 1rem;
+.row__type,
+.row__value {
+  color: var(--color-dim);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
-.var-col-value {
-  flex: 2;
-  min-width: 0;
-  padding: 0.75rem 1rem;
+.row__value {
+  font-family: var(--font-mono);
+  color: var(--color-fg);
 }
 
-.var-col-actions {
-  flex: 0 0 auto;
+.row__tools {
   display: flex;
-  justify-content: flex-end;
-  gap: 0.25rem;
-  padding: 0.75rem 1rem;
+  gap: 2px;
+}
+
+/* -------------------------------------------------------------- the dialog */
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.confirm__title {
+  margin: 0;
+  font-size: var(--text-lg);
+  font-weight: 600;
+}
+
+.confirm__text {
+  margin: 0;
+  font-size: var(--text-base);
+  line-height: 1.6;
+  color: var(--color-dim);
+}
+
+@media (max-width: 640px) {
+  .variables {
+    padding: 20px 16px 32px;
+  }
+
+  .row {
+    grid-template-columns: minmax(0, 1fr) auto;
+    row-gap: 2px;
+  }
+
+  .row__type,
+  .row__value {
+    grid-column: 1;
+    white-space: normal;
+  }
 }
 </style>

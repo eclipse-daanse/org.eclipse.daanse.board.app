@@ -58,7 +58,6 @@ import {
   DATASOURCE_REPOSITORY,
   type DatasourceRepository,
 } from 'org.eclipse.daanse.board.app.lib.api.datasource'
-import { provideVariablesStoreDependencies } from './stores/VariablesPinia'
 
 let app: VueApp | undefined
 
@@ -182,12 +181,6 @@ export async function activate({ services, log }: ActivationContext) {
     source.config = { resourceUrl: 'posts' }
     datasourceRepository.saveDatasource(source)
   }
-
-  // Store dependencies, closed over at the module boundary
-  provideVariablesStoreDependencies({
-    repository: services.getRequired(VARIABLE_REPOSITORY),
-    eventBus: services.getRequired(TINY_EMITTER),
-  })
 
   // VariableComplexStringWrapper depends on Vue and therefore lives in the
   // UI layer; the factory in lib only knows it through this registration.

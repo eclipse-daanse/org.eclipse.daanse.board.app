@@ -6,14 +6,19 @@
  */
 
 import type { EObject } from '@emfts/core';
+import type { Page } from './Page.js';
 
 /**
  * Variable
  * @generated
  */
 export interface Variable extends EObject {
+  uid: string;
   name: string;
   type?: string;
+  scope?: string;
+  accessMode?: string;
+  page?: Page;
   definition?: unknown;
 
 }

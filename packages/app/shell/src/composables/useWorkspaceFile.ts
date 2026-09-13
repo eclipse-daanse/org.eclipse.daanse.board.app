@@ -33,10 +33,8 @@ import { inject, ref } from 'vue'
 import { JSONResource, OPTION_INDENT, URI } from '@emfts/core'
 import {
   identifier as WORKSPACE,
-  type Variable,
   type Workspace,
   EventMappingImpl,
-  VariableImpl,
 } from 'org.eclipse.daanse.board.app.lib.model.workspace'
 import {
   type ConnectionRepository,
@@ -54,7 +52,6 @@ import {
   identifier as VariableWrapperFactoryId,
   type VariableWrapperFactory,
 } from 'org.eclipse.daanse.board.app.lib.factory.variableWrapper'
-import { type Variable as LiveVariable } from 'org.eclipse.daanse.board.app.lib.variables'
 import { EVENT_MANAGER, type EventManager } from 'org.eclipse.daanse.board.app.lib.api.events'
 import { decodeStored, isResource, readLegacyWorkspace } from './legacyWorkspace'
 
@@ -110,27 +107,14 @@ export function useWorkspaceFile() {
   const events = inject<EventManager>(EVENT_MANAGER)
 
   /**
-   * Brings the two lists whose live side is the truth up to date.
+   * Brings the one list whose live side is the truth up to date.
    *
-   * Connections, data sources and boards are the model, and what runs is
-   * built from it. Variables and event mappings are the other way round -
-   * the repository and the manager hold them, and this is where what they
-   * hold is written into the workspace, just before it is stored.
+   * Connections, data sources, boards and variables are the model, and what
+   * runs is built from it. The event mappings are the other way round - the
+   * manager holds them, and this is where what it holds is written into the
+   * workspace, just before it is stored.
    */
   function collect(): void {
-    workspace.variables.clear()
-    for (const entry of variables?.getAllVariables() ?? []) {
-      const [name, live] = entry as [string, LiveVariable]
-      const serialized = live.serialize()
-      serialized.name = name
-
-      const variable = new VariableImpl()
-      variable.name = name
-      variable.type = serialized.type
-      variable.definition = serialized
-      workspace.variables.push(variable)
-    }
-
     workspace.eventMappings.clear()
     for (const mapping of events?.getAllMappings() ?? []) {
       const held = new EventMappingImpl()
@@ -193,15 +177,9 @@ export function useWorkspaceFile() {
       (workspace.pages.size() > 0 ? workspace.pages.get(0) : undefined)
 
     /* Now the things that run: built from the model, never stored with it. */
-    for (const variable of workspace.variables.toArray() as Variable[]) {
-      variables?.registerVariable(
-        variable.name,
-        variable.type as string,
-        variable.definition as never,
-      )
-    }
     connections?.rebuildLive()
     datasources?.rebuildLive()
+    variables?.rebuildLive()
     events?.setAllMappings(
       workspace.eventMappings.toArray().map((mapping) => mapping.definition as never),
     )

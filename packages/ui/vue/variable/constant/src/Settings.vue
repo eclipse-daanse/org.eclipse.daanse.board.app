@@ -11,18 +11,22 @@ Contributors:
     Smart City Jena
 -->
 <script setup lang="ts">
-const variableSettings = defineModel<any>();
+import { DInput } from 'org.eclipse.daanse.board.app.ui.vue.controls'
+
+const variableSettings = defineModel<any>()
 </script>
 
 <template>
-    <div class="flex flex-col gap-4">
-        <VaInput
-            v-model="variableSettings.name"
-            label="Variable Name"
-            placeholder="Enter variable name" />
-        <VaInput
-            v-model="variableSettings.value"
-            label="Value"
-            placeholder="Enter variable name" />
-    </div>
+  <div class="settings">
+    <DInput v-model="variableSettings.name" label="Name" placeholder="Wie es gelesen wird" />
+    <DInput v-model="variableSettings.value" label="Wert" placeholder="Was darin steht" />
+  </div>
 </template>
+
+<style scoped>
+.settings {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+</style>

@@ -105,12 +105,23 @@ export function readLegacyWorkspace(data: LegacyWorkspace): Workspace | undefine
     sources.set(entry.uid, source)
   }
 
+  /*
+   * A stored variable carried its whole serialised self in one bag, with
+   * the scope and the board it belongs to among the rest. Those are the
+   * model's own features now, so they are lifted out of the bag here - the
+   * only place an old file is read.
+   */
+  const variables: Array<{ entry: Record<string, unknown>; variable: VariableImpl }> = []
   for (const entry of data.variables ?? []) {
     const variable = new VariableImpl()
+    variable.uid = (entry['id'] ?? entry['uid'] ?? Math.random().toString(36).substring(7)) as string
     variable.name = entry['name'] as string
     variable.type = entry['type'] as string
+    variable.scope = (entry['scope'] as string) ?? 'global'
+    variable.accessMode = (entry['accessMode'] as string) ?? 'external-writable'
     variable.definition = entry
     workspace.variables.push(variable)
+    variables.push({ entry, variable })
   }
 
   for (const entry of data.eventMappings ?? []) {
@@ -165,6 +176,13 @@ export function readLegacyWorkspace(data: LegacyWorkspace): Workspace | undefine
     }
 
     workspace.pages.push(page)
+  }
+
+  /* Now that the boards exist, a page variable can point at the one it names. */
+  for (const { entry, variable } of variables) {
+    const pageId = entry['pageId'] as string | undefined
+    if (!pageId) continue
+    variable.page = workspace.pages.toArray().find((page) => page.id === pageId)
   }
 
   if (workspace.pages.size() > 0) workspace.defaultPage = workspace.pages.get(0)

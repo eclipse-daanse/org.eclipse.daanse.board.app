@@ -44,6 +44,14 @@ export interface VariableRepository {
   getRegisteredVariableTypes(): string[];
   getVariableIdentifiers(type: string): VariableDeffinition | undefined;
   registerVariable(name: string, type: string, config: VariableConfig): void;
+  /**
+  * Builds a live object for every variable the workspace holds.
+  *
+  * What a loaded workspace needs: the model came out of a file, the things
+  * that hold a value and tick did not. The same call the connection and
+  * data source repositories answer.
+  */
+  rebuildLive(): void;
   getVariable(name: string): any;
   getVariableWithContext(name: string, pageId?: string): any;
   getVariableById(id: string): any;
