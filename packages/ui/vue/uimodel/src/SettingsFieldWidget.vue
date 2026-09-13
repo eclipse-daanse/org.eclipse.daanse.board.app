@@ -329,7 +329,9 @@ const numberBounds = computed(() => ({
   step: props.custom?.rawWidget?.step,
 }))
 
-const kind = computed<'flag' | 'number' | 'colour' | 'choice' | 'lines' | 'set' | 'text'>(() => {
+const kind = computed<
+  'flag' | 'number' | 'colour' | 'choice' | 'lines' | 'set' | 'text' | 'moment'
+>(() => {
   /* Several values are a set of choices however the form names the field */
   if (isMany.value) return 'set'
 
@@ -343,12 +345,46 @@ const kind = computed<'flag' | 'number' | 'colour' | 'choice' | 'lines' | 'set' 
     case 'SelectWidget':
     case 'ComboboxWidget':
       return 'choice'
-    case 'InputWidget':
-      // The metamodel has no colour widget; the name is what is left to go on
-      return props.feature && kindOf(props.feature) === 'colour' ? 'colour' : 'text'
+    case 'InputWidget': {
+      /*
+       * The metamodel has no colour or date widget; the name is what is
+       * left to go on, the same way kindOf reads it.
+       */
+      const byName = props.feature ? kindOf(props.feature) : 'text'
+      return byName === 'colour' || byName === 'moment' ? byName : 'text'
+    }
     default:
       return props.feature ? kindOf(props.feature) : 'text'
   }
+})
+
+/**
+ * A moment, stored as ISO 8601 and edited in local time.
+ *
+ * A datetime-local field carries "YYYY-MM-DDTHH:mm" with no zone, so the
+ * two are not the same string and the conversion belongs here - once, for
+ * every modelled date, rather than in each model that has one.
+ */
+const moment = computed<string>({
+  get() {
+    const stored = value.value
+    if (!stored) return ''
+    const at = new Date(String(stored))
+    if (Number.isNaN(at.getTime())) return ''
+    const pad = (n: number) => String(n).padStart(2, '0')
+    return (
+      `${at.getFullYear()}-${pad(at.getMonth() + 1)}-${pad(at.getDate())}` +
+      `T${pad(at.getHours())}:${pad(at.getMinutes())}`
+    )
+  },
+  set(next: string) {
+    if (!next) {
+      value.value = ''
+      return
+    }
+    const at = new Date(next)
+    value.value = Number.isNaN(at.getTime()) ? '' : at.toISOString()
+  },
 })
 
 const label = computed(
@@ -438,6 +474,14 @@ const noVariables = computed(() => bindingMode.value && variableNames.value.leng
         :min="numberBounds.min"
         :max="numberBounds.max"
         :step="numberBounds.step"
+        :disabled="!editable"
+      />
+
+      <DInput
+        v-else-if="kind === 'moment'"
+        v-model="moment"
+        :label="label"
+        type="datetime-local"
         :disabled="!editable"
       />
 

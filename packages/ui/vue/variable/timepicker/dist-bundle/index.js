@@ -1,79 +1,229 @@
-(function(){var i="ui.vue.variable.timepicker",d=document,s=d.querySelector('style[data-tsm-bundle="'+i+'"]');if(!s){s=d.createElement('style');s.setAttribute('data-tsm-bundle',i);d.head.appendChild(s);}s.textContent=".settings[data-v-03d9e794]{display:flex;flex-direction:column;gap:4px}\n";})();
-import { VARIABLE_REPOSITORY as m } from "org.eclipse.daanse.board.app.lib.api.variable";
-import { DATETIME_PICKER_VARIABLE as d, DateTimePickerVariableSymbol as v } from "org.eclipse.daanse.board.app.lib.variables";
-import { defineComponent as _, useModel as f, computed as b, createElementBlock as V, openBlock as S, createVNode as n, unref as l } from "vue";
-import { DInput as u } from "org.eclipse.daanse.board.app.ui.vue.controls";
-const I = { class: "settings" }, T = /* @__PURE__ */ _({
-  __name: "Settings",
-  props: {
-    modelValue: {},
-    modelModifiers: {}
-  },
-  emits: ["update:modelValue"],
-  setup(t) {
-    const a = f(t, "modelValue"), r = b({
-      get() {
-        const i = a.value?.datetime;
-        if (!i) return "";
-        const e = new Date(i);
-        if (Number.isNaN(e.getTime())) return "";
-        const o = (g) => String(g).padStart(2, "0");
-        return `${e.getFullYear()}-${o(e.getMonth() + 1)}-${o(e.getDate())}T${o(e.getHours())}:${o(e.getMinutes())}`;
-      },
-      set(i) {
-        if (!i) {
-          a.value.datetime = "";
-          return;
-        }
-        const e = new Date(i);
-        a.value.datetime = Number.isNaN(e.getTime()) ? "" : e.toISOString();
-      }
-    });
-    return (i, e) => (S(), V("div", I, [
-      n(l(u), {
-        modelValue: a.value.name,
-        "onUpdate:modelValue": e[0] || (e[0] = (o) => a.value.name = o),
-        label: "Name",
-        placeholder: "Wie es gelesen wird"
-      }, null, 8, ["modelValue"]),
-      n(l(u), {
-        modelValue: r.value,
-        "onUpdate:modelValue": e[1] || (e[1] = (o) => r.value = o),
-        label: "Zeitpunkt",
-        type: "datetime-local"
-      }, null, 8, ["modelValue"])
-    ]));
+import { VARIABLE_REPOSITORY as o } from "org.eclipse.daanse.board.app.lib.api.variable";
+import { DATETIME_PICKER_VARIABLE as c, DateTimePickerVariableSymbol as h } from "org.eclipse.daanse.board.app.lib.variables";
+import { BasicEFactory as I, BasicEPackage as d, EPackageRegistry as m, BasicEClass as T, BasicEAttribute as p, getEcorePackage as g, BasicEObject as A } from "@emfts/core";
+class r extends I {
+  static get eINSTANCE() {
+    return this._instance || (this._instance = new r()), this._instance;
   }
-}), y = (t, a) => {
-  const r = t.__vccOpts || t;
-  for (const [i, e] of a)
-    r[i] = e;
-  return r;
-}, R = /* @__PURE__ */ y(T, [["__scopeId", "data-v-03d9e794"]]);
-function c({ services: t }) {
-  t.getRequired(m).registerVariableType(d, {
-    Variable: v,
-    Settings: R
+  constructor() {
+    super(), this.setEPackage(i.eINSTANCE);
+  }
+  /**
+   * Create a new DateTimePickerVariableSettings instance
+   */
+  createDateTimePickerVariableSettings() {
+    return new s();
+  }
+  /**
+   * Create an instance of the given class
+   */
+  create(e) {
+    switch (e.getName()) {
+      case "DateTimePickerVariableSettings":
+        return this.createDateTimePickerVariableSettings();
+      default:
+        throw new Error(`Unknown class: ${e.getName()}`);
+    }
+  }
+}
+class i extends d {
+  static {
+    this.eNAME = "dateTimePickerVariable";
+  }
+  static {
+    this.eNS_URI = "http://org.eclipse.daanse.board.app.ui.vue.variable.timepicker";
+  }
+  static {
+    this.eNS_PREFIX = "dateTimePickerVariable";
+  }
+  static get eINSTANCE() {
+    return this._instance || (this._instance = new i(), this._instance.init()), this._instance;
+  }
+  static {
+    this.Literals = {
+      DATE_TIME_PICKER_VARIABLE_SETTINGS: null,
+      DATE_TIME_PICKER_VARIABLE_SETTINGS__DATETIME: null
+    };
+  }
+  constructor() {
+    super(), this.setName(i.eNAME), this.setNsURI(i.eNS_URI), this.setNsPrefix(i.eNS_PREFIX);
+  }
+  /**
+   * Initialize package contents
+   */
+  init() {
+    m.INSTANCE.set(i.eNS_URI, this), this.setEFactoryInstance(r.eINSTANCE);
+    const e = new T();
+    e.setName("DateTimePickerVariableSettings"), e.setAbstract(!1), e.setInterface(!1), this.getEClassifiers().push(e), e.setEPackage(this), i.Literals.DATE_TIME_PICKER_VARIABLE_SETTINGS = e;
+    const t = new p();
+    t.setName("datetime"), t.setLowerBound(0), t.setUpperBound(1), e.getEStructuralFeatures().push(t), i.Literals.DATE_TIME_PICKER_VARIABLE_SETTINGS__DATETIME = t, i.Literals.DATE_TIME_PICKER_VARIABLE_SETTINGS__DATETIME.setEType(g().getEClassifier("EString"));
+  }
+}
+class s extends A {
+  static {
+    this.DATETIME = 0;
+  }
+  /**
+   * Returns the EClass of this object
+   */
+  eClass() {
+    return i.Literals.DATE_TIME_PICKER_VARIABLE_SETTINGS;
+  }
+  // Getters and Setters
+  get datetime() {
+    return this._datetime;
+  }
+  set datetime(e) {
+    const t = this._datetime;
+    this._datetime = e, this.eDeliver() && this.eNotify({
+      getNotifier: () => this,
+      getEventType: () => 1,
+      // SET
+      getFeature: () => this.eClass().getEStructuralFeature(s.DATETIME),
+      getOldValue: () => t,
+      getNewValue: () => e,
+      getPosition: () => -1,
+      wasSet: () => !0,
+      isTouch: () => !1,
+      isReset: () => !1,
+      getFeatureID: () => s.DATETIME,
+      merge: () => !1
+    });
+  }
+  // Reflective API
+  /**
+   * Returns the value of the given feature
+   */
+  eGet(e) {
+    switch (this.eClass().getFeatureID(e)) {
+      case s.DATETIME:
+        return this.datetime;
+      default:
+        return super.eGet(e);
+    }
+  }
+  /**
+   * Sets the value of the given feature
+   */
+  eSet(e, t) {
+    switch (this.eClass().getFeatureID(e)) {
+      case s.DATETIME:
+        this.datetime = t, super.eSet(e, t);
+        break;
+      default:
+        super.eSet(e, t);
+    }
+  }
+  /**
+   * Returns whether the feature has been set
+   */
+  eIsSet(e) {
+    switch (this.eClass().getFeatureID(e)) {
+      case s.DATETIME:
+        return this._datetime !== void 0;
+      default:
+        return super.eIsSet(e);
+    }
+  }
+  /**
+   * Unsets the given feature
+   */
+  eUnset(e) {
+    switch (this.eClass().getFeatureID(e)) {
+      case s.DATETIME:
+        this._datetime = void 0;
+        return;
+      default:
+        super.eUnset(e);
+    }
+  }
+  /**
+   * What this object is when it is stored.
+   *
+   * The plain names, not the private fields the getters sit in: those
+   * are this class's business, and a stored board is read by things
+   * that only know the model.
+   */
+  toJSON() {
+    return {
+      datetime: this.datetime
+    };
+  }
+}
+const l = `<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/*********************************************************************
+* Copyright (c) 2026 Contributors to the Eclipse Foundation.
+*
+* This program and the accompanying materials are made
+* available under the terms of the Eclipse Public License 2.0
+* which is available at https://www.eclipse.org/legal/epl-2.0/
+*
+* SPDX-License-Identifier: EPL-2.0
+**********************************************************************/
+
+The form for this variable type: the one thing it needs.
+
+What it is called, where it applies and who may write it belong to every
+variable, not to this type, and the dialog asks for them once.
+-->
+<uimodel:UIModel
+    xmlns:xmi="http://www.omg.org/XMI"
+    xmi:version="2.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:uimodel="http://uimodel/1.0"
+    name="DateTimePickerVariableSettingsForm">
+
+  <targetClasses href="http://org.eclipse.daanse.board.app.ui.vue.variable.timepicker#//DateTimePickerVariableSettings"/>
+
+  <components xsi:type="uimodel:FormView" name="DateTimePickerVariableSettingsFormView">
+    <fields xsi:type="uimodel:InputWidget" name="datetime"
+        feature="http://org.eclipse.daanse.board.app.ui.vue.variable.timepicker#//DateTimePickerVariableSettings/datetime"
+        label="Zeitpunkt"/>
+  </components>
+</uimodel:UIModel>
+`;
+i.eINSTANCE;
+function E({ services: a }) {
+  a.getRequired(o).registerVariableType(c, {
+    Variable: h,
+    /*
+     * The form is a model, not a template: the fields come from the
+     * Ecore beside this, so there is one description of what this type
+     * needs rather than a class and a form that can drift apart.
+     */
+    settingsForm: {
+      xmi: l,
+      uri: "/timepicker-variable-settings.ui.xmi",
+      ePackage: () => i.eINSTANCE,
+      create: () => new s()
+    }
   });
 }
-function p({ services: t }) {
-  t.getRequired(m).unregisterVariableType(d);
+function u({ services: a }) {
+  a.getRequired(o).unregisterVariableType(c);
 }
-const E = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const _ = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  activate: c,
-  deactivate: p
-}, Symbol.toStringTag, { value: "Module" })), s = "org.eclipse.daanse.board.app.ui.vue.variable.timepicker", N = "0.0.1-next.1";
-async function O(t) {
-  const a = globalThis.__tsm__;
-  if (!a)
-    throw new Error(`${s}: tsm runtime is not initialized`);
-  a.register(s, E, N, "ui.vue.variable.timepicker"), await c?.(t);
+  DateTimePickerVariableSettingsImpl: s,
+  DateTimePickerVariableSettingsPackage: i,
+  activate: E,
+  deactivate: u,
+  settingsFormXmi: l
+}, Symbol.toStringTag, { value: "Module" })), n = "org.eclipse.daanse.board.app.ui.vue.variable.timepicker", f = "0.0.1-next.1";
+async function D(a) {
+  const e = globalThis.__tsm__;
+  if (!e)
+    throw new Error(`${n}: tsm runtime is not initialized`);
+  e.register(n, _, f, "ui.vue.variable.timepicker"), await E?.(a);
 }
-async function A(t) {
-  await p?.(t);
+async function R(a) {
+  await u?.(a);
 }
 export {
-  O as activate,
-  A as deactivate
+  s as DateTimePickerVariableSettingsImpl,
+  i as DateTimePickerVariableSettingsPackage,
+  D as activate,
+  R as deactivate,
+  l as settingsFormXmi
 };

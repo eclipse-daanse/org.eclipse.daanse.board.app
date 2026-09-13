@@ -39,6 +39,7 @@ import { useEList } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import { TINY_EMITTER } from 'org.eclipse.daanse.board.app.lib.core'
 import { VariableEvents } from 'org.eclipse.daanse.board.app.lib.variables'
 import type { TinyEmitter } from 'tiny-emitter'
+import { SettingsForm, isModelled } from 'org.eclipse.daanse.board.app.ui.vue.uimodel'
 import {
   DButton,
   DIcon,
@@ -121,13 +122,34 @@ const accessOptions = [
 
 const dialogOpen = ref(false)
 const editingUid = ref<string | null>(null)
-const draft = ref<Record<string, any>>({})
 const draftType = ref('')
 const draftReach = ref('')
+const draftName = ref('')
+const draftAccess = ref('external-writable')
+
+/*
+ * Only what the type asks for. The name, the reach and who may write are
+ * every variable's and are asked beside this, so they do not travel in the
+ * bag a form turns into a modelled instance - a form replaces what it is
+ * given with an instance of its own class, and anything else in it is gone.
+ */
+const draft = ref<any>({})
 
 const isEditing = computed(() => editingUid.value !== null)
 
-/** The type's own settings component, or nothing while no type is picked. */
+/**
+ * The chosen type's form, as the model of it.
+ *
+ * A type says what it needs in an Ecore beside its registration, and the
+ * fields are drawn from that - one description instead of a class and a
+ * template that can drift apart. A type that still has a hand-written
+ * component falls back to it below.
+ */
+const typeForm = computed(() =>
+  draftType.value ? repository.getVariableIdentifiers(draftType.value)?.settingsForm : undefined,
+)
+
+/** The hand-written component, for a type that has not been modelled. */
 const typeEditor = computed(() =>
   draftType.value ? repository.getVariableIdentifiers(draftType.value)?.Settings : null,
 )
@@ -136,7 +158,9 @@ function openNew(): void {
   editingUid.value = null
   draftType.value = types.value[0] ?? ''
   draftReach.value = ''
-  draft.value = { name: 'Variable ' + Math.random().toString(36).substring(7), accessMode: 'external-writable' }
+  draftName.value = 'Variable ' + Math.random().toString(36).substring(7)
+  draftAccess.value = 'external-writable'
+  draft.value = {}
   dialogOpen.value = true
 }
 
@@ -144,23 +168,57 @@ function openEdit(variable: Variable): void {
   editingUid.value = variable.uid as string
   draftType.value = (variable.type as string) ?? ''
   draftReach.value = (variable.page?.id as string) ?? ''
+  draftName.value = variable.name as string
+  draftAccess.value = (variable.accessMode as string) ?? 'external-writable'
 
+  /*
+   * What is on screen is what is running, not what was stored: a variable
+   * that has been refreshed since holds the newer value.
+   */
   const live = repository.getVariableById(variable.uid as string)
-  draft.value = {
+  const { name: _name, ...settings } = {
     ...((variable.definition ?? {}) as Record<string, unknown>),
     ...(live?.serialize?.() ?? {}),
-    name: variable.name,
-    accessMode: variable.accessMode ?? 'external-writable',
   }
+  draft.value = settings
   dialogOpen.value = true
 }
 
+/**
+ * A modelled settings object as plain values again.
+ *
+ * The form hands back an instance of the settings class, which keeps its
+ * values in private fields behind the getters - so spreading it would give
+ * the fields and not the values. The class says what it has; this asks it.
+ */
+function plainOf(settings: any): Record<string, unknown> {
+  if (!isModelled(settings)) return { ...(settings ?? {}) }
+
+  const out: Record<string, unknown> = {}
+  for (const feature of settings.eClass().getEAllStructuralFeatures()) {
+    const value = settings.eGet(feature)
+    if (value !== undefined) out[feature.getName()] = value
+  }
+  return out
+}
+
+/**
+ * Picking a different type empties what the last one was asked.
+ *
+ * A form turns what it is given into an instance of its own class and
+ * keeps it; handed an instance of the class before, it has nothing it
+ * recognises and draws no fields at all. The key beside it remounts the
+ * form, and this gives it an empty object to start from.
+ */
+function onTypeChosen(): void {
+  draft.value = {}
+}
+
 function save(): void {
-  const { name, accessMode, ...rest } = draft.value
-  repository.registerVariable(name as string, draftType.value, {
-    ...rest,
+  repository.registerVariable(draftName.value, draftType.value, {
+    ...plainOf(draft.value),
     uid: editingUid.value ?? undefined,
-    accessMode,
+    accessMode: draftAccess.value,
     scope: draftReach.value ? 'page' : 'global',
     pageId: draftReach.value || undefined,
   })
@@ -223,7 +281,12 @@ function confirmDelete(): void {
       size="md"
     >
       <div class="form">
-        <DSelect v-model="draftType" label="Typ" :options="types" />
+        <DSelect
+          v-model="draftType"
+          label="Typ"
+          :options="types"
+          @update:model-value="onTypeChosen"
+        />
         <DSelect
           v-model="draftReach"
           label="Gilt"
@@ -232,16 +295,28 @@ function confirmDelete(): void {
           value-key="value"
         />
         <DSelect
-          v-model="draft.accessMode"
+          v-model="draftAccess"
           label="Beschreibbar"
           :options="accessOptions"
           label-key="text"
           value-key="value"
         />
 
-        <!-- What the chosen type needs, asked by the type itself. -->
-        <component :is="typeEditor" v-if="typeEditor" v-model="draft" />
-        <DInput v-else v-model="draft.name" label="Name" />
+        <!-- The name is every variable's, so it is asked here rather than
+             three times over in three type forms. -->
+        <DInput v-model="draftName" label="Name" />
+
+        <!-- And what the chosen type needs, said by the type itself. -->
+        <SettingsForm
+          v-if="typeForm"
+          :key="draftType"
+          v-model="draft"
+          :create="typeForm.create"
+          :ui-model-xmi="typeForm.xmi"
+          :domain-package="typeForm.ePackage()"
+          :ui-model-uri="typeForm.uri"
+        />
+        <component :is="typeEditor" v-else-if="typeEditor" v-model="draft" />
       </div>
 
       <template #actions>

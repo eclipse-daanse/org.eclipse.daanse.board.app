@@ -73,7 +73,25 @@ export interface VariableRepository {
 
 export interface VariableDeffinition {
     Variable: symbol;
-    Settings: any;
+    /**
+    * The hand-written settings component, where a type still has one.
+    *
+    * Optional now: a type that carries a settingsForm has its fields drawn
+    * from the model instead, and needs no template of its own.
+    */
+    Settings?: any;
+    /**
+    * This type's settings as a model rather than a template.
+    *
+    * The same shape a widget's registration carries, read by whoever shows
+    * the settings - so the shell needs no dependency on the type's bundle.
+    */
+    settingsForm?: {
+        xmi: string;
+        uri?: string;
+        ePackage: () => any;
+        create: () => any;
+    };
 }
 
 export const VARIABLE_REPOSITORY = serviceId<VariableRepository>('VariableRepository')

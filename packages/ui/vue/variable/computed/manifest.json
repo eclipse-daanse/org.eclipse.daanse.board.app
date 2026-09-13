@@ -20,8 +20,8 @@
       "versionRange": ">=0.0.1-0"
     },
     {
-      "id": "org.eclipse.daanse.board.app.ui.vue.controls",
-      "versionRange": ">=0.0.1-0"
+      "id": "@emfts/core",
+      "versionRange": "^0.1.1-next.18"
     }
   ],
   "capabilities": [
@@ -35,7 +35,6 @@
   ],
   "dependencies": [
     "lib.api.variable",
-    "lib.variables",
-    "ui.vue.controls"
+    "lib.variables"
   ]
 }

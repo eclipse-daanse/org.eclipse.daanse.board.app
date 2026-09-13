@@ -19,14 +19,34 @@ import {
   DateTimePickerVariableSymbol,
 } from 'org.eclipse.daanse.board.app.lib.variables'
 import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
-import Settings from './Settings.vue'
+import { DateTimePickerVariableSettingsImpl } from './gen/DateTimePickerVariableSettingsImpl'
+import { DateTimePickerVariableSettingsPackage } from './gen/DateTimePickerVariableSettingsPackage'
+import settingsFormXmi from '../model/ui.xmi?raw'
+
+/*
+ * Touching eINSTANCE is what builds the EPackage: until then the class
+ * literals are null and an instance cannot say what it is. EMF expects the
+ * package to register itself when its code is loaded, and for a bundle
+ * that moment is here.
+ */
+void DateTimePickerVariableSettingsPackage.eINSTANCE
 
 export function activate({ services }: ActivationContext) {
   services
     .getRequired<VariableRepository>(VARIABLE_REPOSITORY)
     .registerVariableType(DATETIME_PICKER_VARIABLE, {
       Variable: DateTimePickerVariableSymbol,
-      Settings: Settings,
+      /*
+       * The form is a model, not a template: the fields come from the
+       * Ecore beside this, so there is one description of what this type
+       * needs rather than a class and a form that can drift apart.
+       */
+      settingsForm: {
+        xmi: settingsFormXmi,
+        uri: '/timepicker-variable-settings.ui.xmi',
+        ePackage: () => DateTimePickerVariableSettingsPackage.eINSTANCE,
+        create: () => new DateTimePickerVariableSettingsImpl(),
+      },
     })
 }
 
@@ -35,3 +55,5 @@ export function deactivate({ services }: ActivationContext) {
     .getRequired<VariableRepository>(VARIABLE_REPOSITORY)
     .unregisterVariableType(DATETIME_PICKER_VARIABLE)
 }
+
+export { DateTimePickerVariableSettingsImpl, DateTimePickerVariableSettingsPackage, settingsFormXmi }

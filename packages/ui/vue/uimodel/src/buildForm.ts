@@ -29,7 +29,7 @@ import { UimodelFactory } from '@emfts/uimodel-composer'
 import type { UIModel, WidgetComponent } from '@emfts/uimodel-composer'
 
 /** How a feature should be edited, from its name and type. */
-export type FieldKind = 'colour' | 'number' | 'text' | 'flag'
+export type FieldKind = 'colour' | 'number' | 'text' | 'flag' | 'moment'
 
 /*
  * The settings models express nearly everything as a string wrapper, so the
@@ -46,6 +46,8 @@ export type FieldKind = 'colour' | 'number' | 'text' | 'flag'
 const COLOUR = /color|colour|background|^fill$|^stroke$/i
 const NUMBER = /size|width|height|radius|blur|padding|transparence|transparency|opacity|zoom|count|index/i
 const FLAG = /^(is|has|show|enable|fullscreen|visible)/i
+/* A point in time, the same way a colour is known: by what it is called. */
+const MOMENT = /datetime|timestamp|^moment$/i
 
 export function kindOf(feature: EStructuralFeature): FieldKind {
   const name = feature.getName?.() ?? ''
@@ -60,6 +62,7 @@ export function kindOf(feature: EStructuralFeature): FieldKind {
    */
   if (type === 'EInt' || type === 'EDouble' || NUMBER.test(name)) return 'number'
   if (COLOUR.test(name)) return 'colour'
+  if (MOMENT.test(name)) return 'moment'
   return 'text'
 }
 
@@ -102,9 +105,11 @@ function widgetFor(factory: typeof UimodelFactory.eINSTANCE, feature: EStructura
       return factory.createCheckboxWidget()
     case 'number':
       return factory.createNumberWidget()
-    // Colours have no widget class of their own in the metamodel; the
-    // renderer picks the picker from the feature name, the same way this does
+    // Neither colours nor dates have a widget class of their own in the
+    // metamodel; the renderer picks the control from the feature name, the
+    // same way this does
     case 'colour':
+    case 'moment':
     case 'text':
     default:
       return factory.createInputWidget()
