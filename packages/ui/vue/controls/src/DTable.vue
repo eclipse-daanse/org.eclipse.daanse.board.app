@@ -25,6 +25,14 @@ Contributors:
  */
 import { computed } from 'vue'
 
+/**
+ * The row that is picked, when the table is one you pick from.
+ *
+ * Left undefined by a table nobody picks from, which is most of them - a
+ * preview is read, not chosen from.
+ */
+const selected = defineModel<Record<string, unknown> | undefined>('selected')
+
 const props = withDefaults(
   defineProps<{
     items: Array<Record<string, unknown>>
@@ -32,8 +40,10 @@ const props = withDefaults(
     columns?: Array<string | { key: string; label?: string }>
     /** Shown in place of the table when there are no rows. */
     empty?: string
+    /** Rows answer a click and the chosen one is marked. */
+    selectable?: boolean
   }>(),
-  { empty: 'Keine Zeilen' },
+  { empty: 'Keine Zeilen', selectable: false },
 )
 
 interface Column {
@@ -70,7 +80,13 @@ function cell(row: Record<string, unknown>, key: string): string {
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(row, index) in items" :key="index">
+        <tr
+          v-for="(row, index) in items"
+          :key="index"
+          :class="{ 'row--pick': selectable, 'row--on': selectable && row === selected }"
+          :aria-selected="selectable ? row === selected : undefined"
+          @click="selectable && (selected = row)"
+        >
           <td v-for="column in columns" :key="column.key" :title="cell(row, column.key)">
             {{ cell(row, column.key) }}
           </td>
@@ -125,6 +141,20 @@ td {
 
 tbody tr:hover {
   background-color: color-mix(in srgb, var(--color-pane) 60%, transparent);
+}
+
+.row--pick {
+  cursor: pointer;
+}
+
+/* Marked by a rule down its side rather than a fill: a fill of the accent
+   would fight the hover, and both have to be readable at once. */
+.row--on td:first-child {
+  box-shadow: inset 2px 0 0 var(--color-accent);
+}
+
+.row--on td {
+  background-color: color-mix(in srgb, var(--color-accent) 12%, transparent);
 }
 
 .table__empty {

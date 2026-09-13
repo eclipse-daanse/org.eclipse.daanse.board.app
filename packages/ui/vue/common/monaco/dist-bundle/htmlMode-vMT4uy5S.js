@@ -1,18 +1,18 @@
-import { m as et } from "./bundle-DEbS4dHa.js";
+import { m as lt } from "./bundle-CnHBSE4i.js";
 /*!-----------------------------------------------------------------------------
  * Copyright (c) Microsoft Corporation. All rights reserved.
  * Version: 0.52.2(404545bded1df6ffa41ea0af4e8ddb219018c6c1)
  * Released under the MIT license
  * https://github.com/microsoft/monaco-editor/blob/main/LICENSE.txt
  *-----------------------------------------------------------------------------*/
-var tt = Object.defineProperty, rt = Object.getOwnPropertyDescriptor, nt = Object.getOwnPropertyNames, it = Object.prototype.hasOwnProperty, ot = (e, n, i, r) => {
+var ft = Object.defineProperty, gt = Object.getOwnPropertyDescriptor, ht = Object.getOwnPropertyNames, vt = Object.prototype.hasOwnProperty, pt = (e, n, i, r) => {
   if (n && typeof n == "object" || typeof n == "function")
-    for (let t of nt(n))
-      !it.call(e, t) && t !== i && tt(e, t, { get: () => n[t], enumerable: !(r = rt(n, t)) || r.enumerable });
+    for (let t of ht(n))
+      !vt.call(e, t) && t !== i && ft(e, t, { get: () => n[t], enumerable: !(r = gt(n, t)) || r.enumerable });
   return e;
-}, at = (e, n, i) => (ot(e, n, "default"), i), d = {};
-at(d, et);
-var st = 120 * 1e3, ut = class {
+}, mt = (e, n, i) => (pt(e, n, "default"), i), c = {};
+mt(c, lt);
+var _t = 120 * 1e3, Qe = class {
   constructor(e) {
     this._defaults = e, this._worker = null, this._client = null, this._idleCheckInterval = window.setInterval(() => this._checkIfIdle(), 30 * 1e3), this._lastUsedTime = 0, this._configChangeListener = this._defaults.onDidChange(() => this._stopWorker());
   }
@@ -25,18 +25,18 @@ var st = 120 * 1e3, ut = class {
   _checkIfIdle() {
     if (!this._worker)
       return;
-    Date.now() - this._lastUsedTime > st && this._stopWorker();
+    Date.now() - this._lastUsedTime > _t && this._stopWorker();
   }
   _getClient() {
-    return this._lastUsedTime = Date.now(), this._client || (this._worker = d.editor.createWebWorker({
-      // module that exports the create() method and returns a `CSSWorker` instance
-      moduleId: "vs/language/css/cssWorker",
-      label: this._defaults.languageId,
+    return this._lastUsedTime = Date.now(), this._client || (this._worker = c.editor.createWebWorker({
+      // module that exports the create() method and returns a `HTMLWorker` instance
+      moduleId: "vs/language/html/htmlWorker",
       // passed in to the create() method
       createData: {
-        options: this._defaults.options,
+        languageSettings: this._defaults.options,
         languageId: this._defaults.languageId
-      }
+      },
+      label: this._defaults.languageId
     }), this._client = this._worker.getProxy()), this._client;
   }
   getLanguageServiceWorker(...e) {
@@ -48,20 +48,20 @@ var st = 120 * 1e3, ut = class {
         return this._worker.withSyncedResources(e);
     }).then((i) => n);
   }
-}, T;
+}, J;
 (function(e) {
   function n(i) {
     return typeof i == "string";
   }
   e.is = n;
-})(T || (T = {}));
-var O;
+})(J || (J = {}));
+var S;
 (function(e) {
   function n(i) {
     return typeof i == "string";
   }
   e.is = n;
-})(O || (O = {}));
+})(S || (S = {}));
 var Y;
 (function(e) {
   e.MIN_VALUE = -2147483648, e.MAX_VALUE = 2147483647;
@@ -78,7 +78,7 @@ var M;
   }
   e.is = n;
 })(M || (M = {}));
-var w;
+var b;
 (function(e) {
   function n(r, t) {
     return r === Number.MAX_VALUE && (r = M.MAX_VALUE), t === Number.MAX_VALUE && (t = M.MAX_VALUE), { line: r, character: t };
@@ -89,20 +89,20 @@ var w;
     return a.objectLiteral(t) && a.uinteger(t.line) && a.uinteger(t.character);
   }
   e.is = i;
-})(w || (w = {}));
+})(b || (b = {}));
 var h;
 (function(e) {
   function n(r, t, o, s) {
     if (a.uinteger(r) && a.uinteger(t) && a.uinteger(o) && a.uinteger(s))
-      return { start: w.create(r, t), end: w.create(o, s) };
-    if (w.is(r) && w.is(t))
+      return { start: b.create(r, t), end: b.create(o, s) };
+    if (b.is(r) && b.is(t))
       return { start: r, end: t };
     throw new Error(`Range#create called with invalid arguments[${r}, ${t}, ${o}, ${s}]`);
   }
   e.create = n;
   function i(r) {
     let t = r;
-    return a.objectLiteral(t) && w.is(t.start) && w.is(t.end);
+    return a.objectLiteral(t) && b.is(t.start) && b.is(t.end);
   }
   e.is = i;
 })(h || (h = {}));
@@ -130,7 +130,7 @@ var Z;
   }
   e.is = i;
 })(Z || (Z = {}));
-var S;
+var O;
 (function(e) {
   function n(r, t, o, s) {
     return {
@@ -146,7 +146,7 @@ var S;
     return a.objectLiteral(t) && a.numberRange(t.red, 0, 1) && a.numberRange(t.green, 0, 1) && a.numberRange(t.blue, 0, 1) && a.numberRange(t.alpha, 0, 1);
   }
   e.is = i;
-})(S || (S = {}));
+})(O || (O = {}));
 var K;
 (function(e) {
   function n(r, t) {
@@ -158,7 +158,7 @@ var K;
   e.create = n;
   function i(r) {
     const t = r;
-    return a.objectLiteral(t) && h.is(t.range) && S.is(t.color);
+    return a.objectLiteral(t) && h.is(t.range) && O.is(t.color);
   }
   e.is = i;
 })(K || (K = {}));
@@ -185,11 +185,11 @@ var A;
 var te;
 (function(e) {
   function n(r, t, o, s, u, f) {
-    const c = {
+    const d = {
       startLine: r,
       endLine: t
     };
-    return a.defined(o) && (c.startCharacter = o), a.defined(s) && (c.endCharacter = s), a.defined(u) && (c.kind = u), a.defined(f) && (c.collapsedText = f), c;
+    return a.defined(o) && (d.startCharacter = o), a.defined(s) && (d.endCharacter = s), a.defined(u) && (d.kind = u), a.defined(f) && (d.collapsedText = f), d;
   }
   e.create = n;
   function i(r) {
@@ -229,11 +229,11 @@ var ne;
   }
   e.is = n;
 })(ne || (ne = {}));
-var y;
+var F;
 (function(e) {
   function n(r, t, o, s, u, f) {
-    let c = { range: r, message: t };
-    return a.defined(o) && (c.severity = o), a.defined(s) && (c.code = s), a.defined(u) && (c.source = u), a.defined(f) && (c.relatedInformation = f), c;
+    let d = { range: r, message: t };
+    return a.defined(o) && (d.severity = o), a.defined(s) && (d.code = s), a.defined(u) && (d.source = u), a.defined(f) && (d.relatedInformation = f), d;
   }
   e.create = n;
   function i(r) {
@@ -242,7 +242,7 @@ var y;
     return a.defined(o) && h.is(o.range) && a.string(o.message) && (a.number(o.severity) || a.undefined(o.severity)) && (a.integer(o.code) || a.string(o.code) || a.undefined(o.code)) && (a.undefined(o.codeDescription) || a.string((t = o.codeDescription) === null || t === void 0 ? void 0 : t.href)) && (a.string(o.source) || a.undefined(o.source)) && (a.undefined(o.relatedInformation) || a.typedArray(o.relatedInformation, U.is));
   }
   e.is = i;
-})(y || (y = {}));
+})(F || (F = {}));
 var I;
 (function(e) {
   function n(r, t, ...o) {
@@ -501,7 +501,7 @@ var ge;
   }
   e.create = n;
 })(ge || (ge = {}));
-var F;
+var y;
 (function(e) {
   function n(r) {
     return r.replace(/[\\`*_{}[\]()#+\-.!]/g, "\\$&");
@@ -512,12 +512,12 @@ var F;
     return a.string(t) || a.objectLiteral(t) && a.string(t.language) && a.string(t.value);
   }
   e.is = i;
-})(F || (F = {}));
+})(y || (y = {}));
 var he;
 (function(e) {
   function n(i) {
     let r = i;
-    return !!r && a.objectLiteral(r) && (P.is(r.contents) || F.is(r.contents) || a.typedArray(r.contents, F.is)) && (i.range === void 0 || h.is(i.range));
+    return !!r && a.objectLiteral(r) && (P.is(r.contents) || y.is(r.contents) || a.typedArray(r.contents, y.is)) && (i.range === void 0 || h.is(i.range));
   }
   e.is = n;
 })(he || (he = {}));
@@ -556,7 +556,7 @@ var _e;
 (function(e) {
   e.Deprecated = 1;
 })(_e || (_e = {}));
-var be;
+var we;
 (function(e) {
   function n(i, r, t, o, s) {
     let u = {
@@ -567,25 +567,25 @@ var be;
     return s && (u.containerName = s), u;
   }
   e.create = n;
-})(be || (be = {}));
-var we;
+})(we || (we = {}));
+var be;
 (function(e) {
   function n(i, r, t, o) {
     return o !== void 0 ? { name: i, kind: r, location: { uri: t, range: o } } : { name: i, kind: r, location: { uri: t } };
   }
   e.create = n;
-})(we || (we = {}));
+})(be || (be = {}));
 var ke;
 (function(e) {
   function n(r, t, o, s, u, f) {
-    let c = {
+    let d = {
       name: r,
       detail: t,
       kind: o,
       range: s,
       selectionRange: u
     };
-    return f !== void 0 && (c.children = f), c;
+    return f !== void 0 && (d.children = f), d;
   }
   e.create = n;
   function i(r) {
@@ -611,7 +611,7 @@ var Ie;
   e.create = n;
   function i(r) {
     let t = r;
-    return a.defined(t) && a.typedArray(t.diagnostics, y.is) && (t.only === void 0 || a.typedArray(t.only, a.string)) && (t.triggerKind === void 0 || t.triggerKind === j.Invoked || t.triggerKind === j.Automatic);
+    return a.defined(t) && a.typedArray(t.diagnostics, F.is) && (t.only === void 0 || a.typedArray(t.only, a.string)) && (t.triggerKind === void 0 || t.triggerKind === j.Invoked || t.triggerKind === j.Automatic);
   }
   e.is = i;
 })(Ie || (Ie = {}));
@@ -624,7 +624,7 @@ var Ee;
   e.create = n;
   function i(r) {
     let t = r;
-    return t && a.string(t.title) && (t.diagnostics === void 0 || a.typedArray(t.diagnostics, y.is)) && (t.kind === void 0 || a.string(t.kind)) && (t.edit !== void 0 || t.command !== void 0) && (t.command === void 0 || I.is(t.command)) && (t.isPreferred === void 0 || a.boolean(t.isPreferred)) && (t.edit === void 0 || z.is(t.edit));
+    return t && a.string(t.title) && (t.diagnostics === void 0 || a.typedArray(t.diagnostics, F.is)) && (t.kind === void 0 || a.string(t.kind)) && (t.edit !== void 0 || t.command !== void 0) && (t.command === void 0 || I.is(t.command)) && (t.isPreferred === void 0 || a.boolean(t.isPreferred)) && (t.edit === void 0 || z.is(t.edit));
   }
   e.is = i;
 })(Ee || (Ee = {}));
@@ -693,7 +693,7 @@ var Ce;
   }
   e.is = n;
 })(Ce || (Ce = {}));
-var ye;
+var Fe;
 (function(e) {
   function n(r, t) {
     return { range: r, text: t };
@@ -704,8 +704,8 @@ var ye;
     return t != null && h.is(t.range) && a.string(t.text);
   }
   e.is = i;
-})(ye || (ye = {}));
-var Fe;
+})(Fe || (Fe = {}));
+var ye;
 (function(e) {
   function n(r, t, o) {
     return { range: r, variableName: t, caseSensitiveLookup: o };
@@ -716,7 +716,7 @@ var Fe;
     return t != null && h.is(t.range) && a.boolean(t.caseSensitiveLookup) && (a.string(t.variableName) || t.variableName === void 0);
   }
   e.is = i;
-})(Fe || (Fe = {}));
+})(ye || (ye = {}));
 var je;
 (function(e) {
   function n(r, t) {
@@ -741,15 +741,15 @@ var Ne;
   }
   e.is = i;
 })(Ne || (Ne = {}));
-var G;
+var T;
 (function(e) {
   e.Type = 1, e.Parameter = 2;
   function n(i) {
     return i === 1 || i === 2;
   }
   e.is = n;
-})(G || (G = {}));
-var J;
+})(T || (T = {}));
+var G;
 (function(e) {
   function n(r) {
     return { value: r };
@@ -760,8 +760,8 @@ var J;
     return a.objectLiteral(t) && (t.tooltip === void 0 || a.string(t.tooltip) || P.is(t.tooltip)) && (t.location === void 0 || C.is(t.location)) && (t.command === void 0 || I.is(t.command));
   }
   e.is = i;
-})(J || (J = {}));
-var Oe;
+})(G || (G = {}));
+var Se;
 (function(e) {
   function n(r, t, o) {
     const s = { position: r, label: t };
@@ -770,17 +770,17 @@ var Oe;
   e.create = n;
   function i(r) {
     const t = r;
-    return a.objectLiteral(t) && w.is(t.position) && (a.string(t.label) || a.typedArray(t.label, J.is)) && (t.kind === void 0 || G.is(t.kind)) && t.textEdits === void 0 || a.typedArray(t.textEdits, E.is) && (t.tooltip === void 0 || a.string(t.tooltip) || P.is(t.tooltip)) && (t.paddingLeft === void 0 || a.boolean(t.paddingLeft)) && (t.paddingRight === void 0 || a.boolean(t.paddingRight));
+    return a.objectLiteral(t) && b.is(t.position) && (a.string(t.label) || a.typedArray(t.label, G.is)) && (t.kind === void 0 || T.is(t.kind)) && t.textEdits === void 0 || a.typedArray(t.textEdits, E.is) && (t.tooltip === void 0 || a.string(t.tooltip) || P.is(t.tooltip)) && (t.paddingLeft === void 0 || a.boolean(t.paddingLeft)) && (t.paddingRight === void 0 || a.boolean(t.paddingRight));
   }
   e.is = i;
-})(Oe || (Oe = {}));
-var Se;
+})(Se || (Se = {}));
+var Oe;
 (function(e) {
   function n(i) {
     return { kind: "snippet", value: i };
   }
   e.createSnippet = n;
-})(Se || (Se = {}));
+})(Oe || (Oe = {}));
 var Ue;
 (function(e) {
   function n(i, r, t, o) {
@@ -817,14 +817,14 @@ var $e;
 (function(e) {
   function n(i) {
     const r = i;
-    return a.objectLiteral(r) && O.is(r.uri) && a.string(r.name);
+    return a.objectLiteral(r) && S.is(r.uri) && a.string(r.name);
   }
   e.is = n;
 })($e || ($e = {}));
 var ze;
 (function(e) {
   function n(o, s, u, f) {
-    return new ct(o, s, u, f);
+    return new wt(o, s, u, f);
   }
   e.create = n;
   function i(o) {
@@ -834,16 +834,16 @@ var ze;
   e.is = i;
   function r(o, s) {
     let u = o.getText(), f = t(s, (g, _) => {
-      let b = g.range.start.line - _.range.start.line;
-      return b === 0 ? g.range.start.character - _.range.start.character : b;
-    }), c = u.length;
+      let w = g.range.start.line - _.range.start.line;
+      return w === 0 ? g.range.start.character - _.range.start.character : w;
+    }), d = u.length;
     for (let g = f.length - 1; g >= 0; g--) {
-      let _ = f[g], b = o.offsetAt(_.range.start), l = o.offsetAt(_.range.end);
-      if (l <= c)
-        u = u.substring(0, b) + _.newText + u.substring(l, u.length);
+      let _ = f[g], w = o.offsetAt(_.range.start), l = o.offsetAt(_.range.end);
+      if (l <= d)
+        u = u.substring(0, w) + _.newText + u.substring(l, u.length);
       else
         throw new Error("Overlapping edit");
-      c = b;
+      d = w;
     }
     return u;
   }
@@ -851,19 +851,19 @@ var ze;
   function t(o, s) {
     if (o.length <= 1)
       return o;
-    const u = o.length / 2 | 0, f = o.slice(0, u), c = o.slice(u);
-    t(f, s), t(c, s);
-    let g = 0, _ = 0, b = 0;
-    for (; g < f.length && _ < c.length; )
-      s(f[g], c[_]) <= 0 ? o[b++] = f[g++] : o[b++] = c[_++];
+    const u = o.length / 2 | 0, f = o.slice(0, u), d = o.slice(u);
+    t(f, s), t(d, s);
+    let g = 0, _ = 0, w = 0;
+    for (; g < f.length && _ < d.length; )
+      s(f[g], d[_]) <= 0 ? o[w++] = f[g++] : o[w++] = d[_++];
     for (; g < f.length; )
-      o[b++] = f[g++];
-    for (; _ < c.length; )
-      o[b++] = c[_++];
+      o[w++] = f[g++];
+    for (; _ < d.length; )
+      o[w++] = d[_++];
     return o;
   }
 })(ze || (ze = {}));
-var ct = class {
+var wt = class {
   constructor(e, n, i, r) {
     this._uri = e, this._languageId = n, this._version = i, this._content = r, this._lineOffsets = void 0;
   }
@@ -904,13 +904,13 @@ var ct = class {
     e = Math.max(Math.min(e, this._content.length), 0);
     let n = this.getLineOffsets(), i = 0, r = n.length;
     if (r === 0)
-      return w.create(0, e);
+      return b.create(0, e);
     for (; i < r; ) {
       let o = Math.floor((i + r) / 2);
       n[o] > e ? r = o : i = o + 1;
     }
     let t = i - 1;
-    return w.create(t, e - n[t]);
+    return b.create(t, e - n[t]);
   }
   offsetAt(e) {
     let n = this.getLineOffsets();
@@ -947,18 +947,18 @@ var ct = class {
     return n.call(l) === "[object Number]";
   }
   e.number = s;
-  function u(l, N, Ke) {
-    return n.call(l) === "[object Number]" && N <= l && l <= Ke;
+  function u(l, N, dt) {
+    return n.call(l) === "[object Number]" && N <= l && l <= dt;
   }
   e.numberRange = u;
   function f(l) {
     return n.call(l) === "[object Number]" && -2147483648 <= l && l <= 2147483647;
   }
   e.integer = f;
-  function c(l) {
+  function d(l) {
     return n.call(l) === "[object Number]" && 0 <= l && l <= 2147483647;
   }
-  e.uinteger = c;
+  e.uinteger = d;
   function g(l) {
     return n.call(l) === "[object Function]";
   }
@@ -967,12 +967,12 @@ var ct = class {
     return l !== null && typeof l == "object";
   }
   e.objectLiteral = _;
-  function b(l, N) {
+  function w(l, N) {
     return Array.isArray(l) && l.every(N);
   }
-  e.typedArray = b;
+  e.typedArray = w;
 })(a || (a = {}));
-var dt = class {
+var yt = class {
   constructor(e, n, i) {
     this._languageId = e, this._worker = n, this._disposables = [], this._listener = /* @__PURE__ */ Object.create(null);
     const r = (o) => {
@@ -984,59 +984,59 @@ var dt = class {
         window.clearTimeout(u), u = window.setTimeout(() => this._doValidate(o.uri, s), 500);
       }), this._doValidate(o.uri, s);
     }, t = (o) => {
-      d.editor.setModelMarkers(o, this._languageId, []);
+      c.editor.setModelMarkers(o, this._languageId, []);
       let s = o.uri.toString(), u = this._listener[s];
       u && (u.dispose(), delete this._listener[s]);
     };
-    this._disposables.push(d.editor.onDidCreateModel(r)), this._disposables.push(d.editor.onWillDisposeModel(t)), this._disposables.push(
-      d.editor.onDidChangeModelLanguage((o) => {
+    this._disposables.push(c.editor.onDidCreateModel(r)), this._disposables.push(c.editor.onWillDisposeModel(t)), this._disposables.push(
+      c.editor.onDidChangeModelLanguage((o) => {
         t(o.model), r(o.model);
       })
     ), this._disposables.push(
       i((o) => {
-        d.editor.getModels().forEach((s) => {
+        c.editor.getModels().forEach((s) => {
           s.getLanguageId() === this._languageId && (t(s), r(s));
         });
       })
     ), this._disposables.push({
       dispose: () => {
-        d.editor.getModels().forEach(t);
+        c.editor.getModels().forEach(t);
         for (let o in this._listener)
           this._listener[o].dispose();
       }
-    }), d.editor.getModels().forEach(r);
+    }), c.editor.getModels().forEach(r);
   }
   dispose() {
     this._disposables.forEach((e) => e && e.dispose()), this._disposables.length = 0;
   }
   _doValidate(e, n) {
     this._worker(e).then((i) => i.doValidation(e.toString())).then((i) => {
-      const r = i.map((o) => ft(e, o));
-      let t = d.editor.getModel(e);
-      t && t.getLanguageId() === n && d.editor.setModelMarkers(t, n, r);
+      const r = i.map((o) => kt(e, o));
+      let t = c.editor.getModel(e);
+      t && t.getLanguageId() === n && c.editor.setModelMarkers(t, n, r);
     }).then(void 0, (i) => {
       console.error(i);
     });
   }
 };
-function lt(e) {
+function bt(e) {
   switch (e) {
     case x.Error:
-      return d.MarkerSeverity.Error;
+      return c.MarkerSeverity.Error;
     case x.Warning:
-      return d.MarkerSeverity.Warning;
+      return c.MarkerSeverity.Warning;
     case x.Information:
-      return d.MarkerSeverity.Info;
+      return c.MarkerSeverity.Info;
     case x.Hint:
-      return d.MarkerSeverity.Hint;
+      return c.MarkerSeverity.Hint;
     default:
-      return d.MarkerSeverity.Info;
+      return c.MarkerSeverity.Info;
   }
 }
-function ft(e, n) {
+function kt(e, n) {
   let i = typeof n.code == "number" ? String(n.code) : n.code;
   return {
-    severity: lt(n.severity),
+    severity: bt(n.severity),
     startLineNumber: n.range.start.line + 1,
     startColumn: n.range.start.character + 1,
     endLineNumber: n.range.end.line + 1,
@@ -1046,7 +1046,7 @@ function ft(e, n) {
     source: n.source
   };
 }
-var gt = class {
+var xt = class {
   constructor(e, n) {
     this._worker = e, this._triggerCharacters = n;
   }
@@ -1058,27 +1058,27 @@ var gt = class {
     return this._worker(t).then((o) => o.doComplete(t.toString(), k(n))).then((o) => {
       if (!o)
         return;
-      const s = e.getWordUntilPosition(n), u = new d.Range(
+      const s = e.getWordUntilPosition(n), u = new c.Range(
         n.lineNumber,
         s.startColumn,
         n.lineNumber,
         s.endColumn
-      ), f = o.items.map((c) => {
+      ), f = o.items.map((d) => {
         const g = {
-          label: c.label,
-          insertText: c.insertText || c.label,
-          sortText: c.sortText,
-          filterText: c.filterText,
-          documentation: c.documentation,
-          detail: c.detail,
-          command: pt(c.command),
+          label: d.label,
+          insertText: d.insertText || d.label,
+          sortText: d.sortText,
+          filterText: d.filterText,
+          documentation: d.documentation,
+          detail: d.detail,
+          command: Lt(d.command),
           range: u,
-          kind: vt(c.kind)
+          kind: Et(d.kind)
         };
-        return c.textEdit && (ht(c.textEdit) ? g.range = {
-          insert: m(c.textEdit.insert),
-          replace: m(c.textEdit.replace)
-        } : g.range = m(c.textEdit.range), g.insertText = c.textEdit.newText), c.additionalTextEdits && (g.additionalTextEdits = c.additionalTextEdits.map(D)), c.insertTextFormat === Q.Snippet && (g.insertTextRules = d.languages.CompletionItemInsertTextRule.InsertAsSnippet), g;
+        return d.textEdit && (It(d.textEdit) ? g.range = {
+          insert: m(d.textEdit.insert),
+          replace: m(d.textEdit.replace)
+        } : g.range = m(d.textEdit.range), g.insertText = d.textEdit.newText), d.additionalTextEdits && (g.additionalTextEdits = d.additionalTextEdits.map(D)), d.insertTextFormat === Q.Snippet && (g.insertTextRules = c.languages.CompletionItemInsertTextRule.InsertAsSnippet), g;
       });
       return {
         isIncomplete: o.isIncomplete,
@@ -1091,7 +1091,7 @@ function k(e) {
   if (e)
     return { character: e.column - 1, line: e.lineNumber - 1 };
 }
-function Qe(e) {
+function Te(e) {
   if (e)
     return {
       start: {
@@ -1103,18 +1103,18 @@ function Qe(e) {
 }
 function m(e) {
   if (e)
-    return new d.Range(
+    return new c.Range(
       e.start.line + 1,
       e.start.character + 1,
       e.end.line + 1,
       e.end.character + 1
     );
 }
-function ht(e) {
+function It(e) {
   return typeof e.insert < "u" && typeof e.replace < "u";
 }
-function vt(e) {
-  const n = d.languages.CompletionItemKind;
+function Et(e) {
+  const n = c.languages.CompletionItemKind;
   switch (e) {
     case v.Text:
       return n.Text;
@@ -1162,10 +1162,10 @@ function D(e) {
       text: e.newText
     };
 }
-function pt(e) {
+function Lt(e) {
   return e && e.command === "editor.action.triggerSuggest" ? { id: e.command, title: e.title, arguments: e.arguments } : void 0;
 }
-var mt = class {
+var Ge = class {
   constructor(e) {
     this._worker = e;
   }
@@ -1175,29 +1175,29 @@ var mt = class {
       if (t)
         return {
           range: m(t.range),
-          contents: bt(t.contents)
+          contents: Rt(t.contents)
         };
     });
   }
 };
-function _t(e) {
+function At(e) {
   return e && typeof e == "object" && typeof e.kind == "string";
 }
 function Be(e) {
   return typeof e == "string" ? {
     value: e
-  } : _t(e) ? e.kind === "plaintext" ? {
+  } : At(e) ? e.kind === "plaintext" ? {
     value: e.value.replace(/[\\`*_{}[\]()#+\-.!]/g, "\\$&")
   } : {
     value: e.value
   } : { value: "```" + e.language + `
 ` + e.value + "\n```\n" };
 }
-function bt(e) {
+function Rt(e) {
   if (e)
     return Array.isArray(e) ? e.map(Be) : [Be(e)];
 }
-var wt = class {
+var Je = class {
   constructor(e) {
     this._worker = e;
   }
@@ -1207,23 +1207,23 @@ var wt = class {
       if (t)
         return t.map((o) => ({
           range: m(o.range),
-          kind: kt(o.kind)
+          kind: Pt(o.kind)
         }));
     });
   }
 };
-function kt(e) {
+function Pt(e) {
   switch (e) {
     case R.Read:
-      return d.languages.DocumentHighlightKind.Read;
+      return c.languages.DocumentHighlightKind.Read;
     case R.Write:
-      return d.languages.DocumentHighlightKind.Write;
+      return c.languages.DocumentHighlightKind.Write;
     case R.Text:
-      return d.languages.DocumentHighlightKind.Text;
+      return c.languages.DocumentHighlightKind.Text;
   }
-  return d.languages.DocumentHighlightKind.Text;
+  return c.languages.DocumentHighlightKind.Text;
 }
-var xt = class {
+var jt = class {
   constructor(e) {
     this._worker = e;
   }
@@ -1231,17 +1231,17 @@ var xt = class {
     const r = e.uri;
     return this._worker(r).then((t) => t.findDefinition(r.toString(), k(n))).then((t) => {
       if (t)
-        return [Ge(t)];
+        return [Ye(t)];
     });
   }
 };
-function Ge(e) {
+function Ye(e) {
   return {
-    uri: d.Uri.parse(e.uri),
+    uri: c.Uri.parse(e.uri),
     range: m(e.range)
   };
 }
-var It = class {
+var Nt = class {
   constructor(e) {
     this._worker = e;
   }
@@ -1249,24 +1249,24 @@ var It = class {
     const t = e.uri;
     return this._worker(t).then((o) => o.findReferences(t.toString(), k(n))).then((o) => {
       if (o)
-        return o.map(Ge);
+        return o.map(Ye);
     });
   }
-}, Et = class {
+}, Ze = class {
   constructor(e) {
     this._worker = e;
   }
   provideRenameEdits(e, n, i, r) {
     const t = e.uri;
-    return this._worker(t).then((o) => o.doRename(t.toString(), k(n), i)).then((o) => Lt(o));
+    return this._worker(t).then((o) => o.doRename(t.toString(), k(n), i)).then((o) => Dt(o));
   }
 };
-function Lt(e) {
+function Dt(e) {
   if (!e || !e.changes)
     return;
   let n = [];
   for (let i in e.changes) {
-    const r = d.Uri.parse(i);
+    const r = c.Uri.parse(i);
     for (let t of e.changes[i])
       n.push({
         resource: r,
@@ -1281,7 +1281,7 @@ function Lt(e) {
     edits: n
   };
 }
-var At = class {
+var Ke = class {
   constructor(e) {
     this._worker = e;
   }
@@ -1289,11 +1289,11 @@ var At = class {
     const i = e.uri;
     return this._worker(i).then((r) => r.findDocumentSymbols(i.toString())).then((r) => {
       if (r)
-        return r.map((t) => Rt(t) ? Je(t) : {
+        return r.map((t) => Mt(t) ? et(t) : {
           name: t.name,
           detail: "",
           containerName: t.containerName,
-          kind: Te(t.kind),
+          kind: tt(t.kind),
           range: m(t.location.range),
           selectionRange: m(t.location.range),
           tags: []
@@ -1301,22 +1301,22 @@ var At = class {
     });
   }
 };
-function Rt(e) {
+function Mt(e) {
   return "children" in e;
 }
-function Je(e) {
+function et(e) {
   return {
     name: e.name,
     detail: e.detail ?? "",
-    kind: Te(e.kind),
+    kind: tt(e.kind),
     range: m(e.range),
     selectionRange: m(e.selectionRange),
     tags: e.tags ?? [],
-    children: (e.children ?? []).map((n) => Je(n))
+    children: (e.children ?? []).map((n) => et(n))
   };
 }
-function Te(e) {
-  let n = d.languages.SymbolKind;
+function tt(e) {
+  let n = c.languages.SymbolKind;
   switch (e) {
     case p.File:
       return n.File;
@@ -1357,7 +1357,7 @@ function Te(e) {
   }
   return n.Function;
 }
-var Nt = class {
+var rt = class {
   constructor(e) {
     this._worker = e;
   }
@@ -1373,36 +1373,36 @@ var Nt = class {
         };
     });
   }
-}, Pt = class {
+}, nt = class {
   constructor(e) {
     this._worker = e;
   }
   provideDocumentFormattingEdits(e, n, i) {
     const r = e.uri;
-    return this._worker(r).then((t) => t.format(r.toString(), null, Ye(n)).then((o) => {
+    return this._worker(r).then((t) => t.format(r.toString(), null, ot(n)).then((o) => {
       if (!(!o || o.length === 0))
         return o.map(D);
     }));
   }
-}, Dt = class {
+}, it = class {
   constructor(e) {
     this._worker = e, this.canFormatMultipleRanges = !1;
   }
   provideDocumentRangeFormattingEdits(e, n, i, r) {
     const t = e.uri;
-    return this._worker(t).then((o) => o.format(t.toString(), Qe(n), Ye(i)).then((s) => {
+    return this._worker(t).then((o) => o.format(t.toString(), Te(n), ot(i)).then((s) => {
       if (!(!s || s.length === 0))
         return s.map(D);
     }));
   }
 };
-function Ye(e) {
+function ot(e) {
   return {
     tabSize: e.tabSize,
     insertSpaces: e.insertSpaces
   };
 }
-var Mt = class {
+var St = class {
   constructor(e) {
     this._worker = e;
   }
@@ -1419,7 +1419,7 @@ var Mt = class {
   provideColorPresentations(e, n, i) {
     const r = e.uri;
     return this._worker(r).then(
-      (t) => t.getColorPresentations(r.toString(), n.color, Qe(n.range))
+      (t) => t.getColorPresentations(r.toString(), n.color, Te(n.range))
     ).then((t) => {
       if (t)
         return t.map((o) => {
@@ -1430,7 +1430,7 @@ var Mt = class {
         });
     });
   }
-}, Ct = class {
+}, at = class {
   constructor(e) {
     this._worker = e;
   }
@@ -1443,22 +1443,22 @@ var Mt = class {
             start: o.startLine + 1,
             end: o.endLine + 1
           };
-          return typeof o.kind < "u" && (s.kind = yt(o.kind)), s;
+          return typeof o.kind < "u" && (s.kind = Ct(o.kind)), s;
         });
     });
   }
 };
-function yt(e) {
+function Ct(e) {
   switch (e) {
     case A.Comment:
-      return d.languages.FoldingRangeKind.Comment;
+      return c.languages.FoldingRangeKind.Comment;
     case A.Imports:
-      return d.languages.FoldingRangeKind.Imports;
+      return c.languages.FoldingRangeKind.Imports;
     case A.Region:
-      return d.languages.FoldingRangeKind.Region;
+      return c.languages.FoldingRangeKind.Region;
   }
 }
-var Ft = class {
+var st = class {
   constructor(e) {
     this._worker = e;
   }
@@ -1479,99 +1479,109 @@ var Ft = class {
         });
     });
   }
+}, ut = class extends xt {
+  constructor(e) {
+    super(e, [".", ":", "<", '"', "=", "/"]);
+  }
 };
 function Ot(e) {
-  const n = [], i = [], r = new ut(e);
+  const n = new Qe(e), i = (...t) => n.getLanguageServiceWorker(...t);
+  let r = e.languageId;
+  c.languages.registerCompletionItemProvider(r, new ut(i)), c.languages.registerHoverProvider(r, new Ge(i)), c.languages.registerDocumentHighlightProvider(
+    r,
+    new Je(i)
+  ), c.languages.registerLinkProvider(r, new rt(i)), c.languages.registerFoldingRangeProvider(
+    r,
+    new at(i)
+  ), c.languages.registerDocumentSymbolProvider(
+    r,
+    new Ke(i)
+  ), c.languages.registerSelectionRangeProvider(
+    r,
+    new st(i)
+  ), c.languages.registerRenameProvider(r, new Ze(i)), r === "html" && (c.languages.registerDocumentFormattingEditProvider(
+    r,
+    new nt(i)
+  ), c.languages.registerDocumentRangeFormattingEditProvider(
+    r,
+    new it(i)
+  ));
+}
+function Ut(e) {
+  const n = [], i = [], r = new Qe(e);
   n.push(r);
   const t = (...s) => r.getLanguageServiceWorker(...s);
   function o() {
     const { languageId: s, modeConfiguration: u } = e;
-    Ze(i), u.completionItems && i.push(
-      d.languages.registerCompletionItemProvider(
-        s,
-        new gt(t, ["/", "-", ":"])
-      )
+    ct(i), u.completionItems && i.push(
+      c.languages.registerCompletionItemProvider(s, new ut(t))
     ), u.hovers && i.push(
-      d.languages.registerHoverProvider(s, new mt(t))
+      c.languages.registerHoverProvider(s, new Ge(t))
     ), u.documentHighlights && i.push(
-      d.languages.registerDocumentHighlightProvider(
+      c.languages.registerDocumentHighlightProvider(
         s,
-        new wt(t)
+        new Je(t)
       )
-    ), u.definitions && i.push(
-      d.languages.registerDefinitionProvider(
-        s,
-        new xt(t)
-      )
-    ), u.references && i.push(
-      d.languages.registerReferenceProvider(
-        s,
-        new It(t)
-      )
+    ), u.links && i.push(
+      c.languages.registerLinkProvider(s, new rt(t))
     ), u.documentSymbols && i.push(
-      d.languages.registerDocumentSymbolProvider(
+      c.languages.registerDocumentSymbolProvider(
         s,
-        new At(t)
+        new Ke(t)
       )
     ), u.rename && i.push(
-      d.languages.registerRenameProvider(s, new Et(t))
-    ), u.colors && i.push(
-      d.languages.registerColorProvider(
-        s,
-        new Mt(t)
-      )
+      c.languages.registerRenameProvider(s, new Ze(t))
     ), u.foldingRanges && i.push(
-      d.languages.registerFoldingRangeProvider(
+      c.languages.registerFoldingRangeProvider(
         s,
-        new Ct(t)
+        new at(t)
       )
-    ), u.diagnostics && i.push(
-      new dt(s, t, e.onDidChange)
     ), u.selectionRanges && i.push(
-      d.languages.registerSelectionRangeProvider(
+      c.languages.registerSelectionRangeProvider(
         s,
-        new Ft(t)
+        new st(t)
       )
     ), u.documentFormattingEdits && i.push(
-      d.languages.registerDocumentFormattingEditProvider(
+      c.languages.registerDocumentFormattingEditProvider(
         s,
-        new Pt(t)
+        new nt(t)
       )
     ), u.documentRangeFormattingEdits && i.push(
-      d.languages.registerDocumentRangeFormattingEditProvider(
+      c.languages.registerDocumentRangeFormattingEditProvider(
         s,
-        new Dt(t)
+        new it(t)
       )
     );
   }
   return o(), n.push(qe(i)), qe(n);
 }
 function qe(e) {
-  return { dispose: () => Ze(e) };
+  return { dispose: () => ct(e) };
 }
-function Ze(e) {
+function ct(e) {
   for (; e.length; )
     e.pop().dispose();
 }
 export {
-  gt as CompletionAdapter,
-  xt as DefinitionAdapter,
-  dt as DiagnosticsAdapter,
-  Mt as DocumentColorAdapter,
-  Pt as DocumentFormattingEditProvider,
-  wt as DocumentHighlightAdapter,
-  Nt as DocumentLinkAdapter,
-  Dt as DocumentRangeFormattingEditProvider,
-  At as DocumentSymbolAdapter,
-  Ct as FoldingRangeAdapter,
-  mt as HoverAdapter,
-  It as ReferenceAdapter,
-  Et as RenameAdapter,
-  Ft as SelectionRangeAdapter,
-  ut as WorkerManager,
+  xt as CompletionAdapter,
+  jt as DefinitionAdapter,
+  yt as DiagnosticsAdapter,
+  St as DocumentColorAdapter,
+  nt as DocumentFormattingEditProvider,
+  Je as DocumentHighlightAdapter,
+  rt as DocumentLinkAdapter,
+  it as DocumentRangeFormattingEditProvider,
+  Ke as DocumentSymbolAdapter,
+  at as FoldingRangeAdapter,
+  Ge as HoverAdapter,
+  Nt as ReferenceAdapter,
+  Ze as RenameAdapter,
+  st as SelectionRangeAdapter,
+  Qe as WorkerManager,
   k as fromPosition,
-  Qe as fromRange,
-  Ot as setupMode,
+  Te as fromRange,
+  Ut as setupMode,
+  Ot as setupMode1,
   m as toRange,
   D as toTextEdit
 };

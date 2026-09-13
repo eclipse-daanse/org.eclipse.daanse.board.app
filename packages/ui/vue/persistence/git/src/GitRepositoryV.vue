@@ -18,7 +18,7 @@ import type {
 } from 'org.eclipse.daanse.board.app.lib.api.persistence'
 
 import { asyncComputed } from '@vueuse/core'
-import { useToast } from 'vuestic-ui'
+import { DButton, DIcon, DInput, DModal, DSelect, DTable } from 'org.eclipse.daanse.board.app.ui.vue.controls'
 
 import { usePromisifiedModal } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import { GitWritableRepository, AuthentificationError } from 'org.eclipse.daanse.board.app.lib.persistence.git'
@@ -31,20 +31,24 @@ const props = defineProps<{ repo: GitWritableRepository, context: { context: str
 const emts = defineEmits<{ close: any }>()
 
 //Refs
+/*
+ * Three columns. There was a fourth holding a newspaper icon on every
+ * row, and a fifth with a download and a delete button whose only
+ * handler was `ev.stopImmediatePropagation()` - they have never done
+ * anything.
+ */
 const columns = ref([
-  { key: 'icon', label: 'icon' },
-  { key: 'name', label: 'file' },
-  { key: 'date', label: 'date' },
-  { key: 'size', label: 'size' },
-  { key: 'options', label: 'options' }])
+  { key: 'name', label: 'Datei' },
+  { key: 'date', label: 'Datum' },
+  { key: 'size', label: 'Größe' },
+])
 
 const savedData = ref<Entity[]>([])
 const branch = ref<string>('main')
 const commit = ref<string>('')
 const isTableLoading = ref<boolean>(false)
-const inputkeyModal = ref<boolean>(false)
 const token = ref<undefined | string>(undefined)
-const selectedRow = ref<any>(null)
+const selectedRow = ref<any>(undefined)
 
 //Logic
 watch(() => props.repo, async (_new) => {
@@ -66,20 +70,15 @@ watch(commit, async (date) => {
     getFiles()
   }
 })
-const rowClick = async (row: any) => {
-  selectedRow.value = row
 
-}
 const branch_options = asyncComputed(async () => {
   return (await props.repo.getBranches()).map(b => b.name)
 })
 const commit_options = asyncComputed(async () => {
-  console.log('updated')
   return (await props.repo.getCommits()).map(c => c.creation_date)
 })
 
 async function getFiles() {
-  console.log('update')
   if (props.repo != undefined) {
     try {
       isTableLoading.value = true
@@ -100,11 +99,11 @@ const override = async (e: Entity) => {
   e.data = props.context!.state
   try {
     await (props.repo as WritableRepository).update(e)
-    notify({ message: 'File saved', color: '#dee5f2', position: 'bottom-right', duration: 2000 })
+    notify({ message: 'Datei abgelegt' })
   } catch (ee) {
     let token = await run(null)
     if (!token) {
-      notify({ title: 'Error on saving File', message: (ee as any), color: '#d23a1f', position: 'bottom-right', duration: 2000 })
+      notify({ title: 'Ablegen fehlgeschlagen', message: String(ee) })
     } else {
       await props.repo.auth({ auth: token })
       override(e)
@@ -121,20 +120,20 @@ const save = async (e: Entity) => {
   e.data = props.context!.state
   try {
     await (props.repo as WritableRepository).create(e)
-    notify({ message: 'File saved', color: '#dee5f2', position: 'bottom-right', duration: 2000 })
+    notify({ message: 'Datei abgelegt' })
   } catch (ee) {
     if (ee instanceof AuthentificationError) {
       //alert('not auth')
       let token = await run(null)
       if (!token) {
-        notify({ title: 'Error on saving File', message: (ee as any), color: '#d23a1f', position: 'bottom-right', duration: 2000 })
+        notify({ title: 'Ablegen fehlgeschlagen', message: String(ee) })
       } else {
         await props.repo.auth({ auth: token })
         await save(e)
       }
 
     } else {
-      notify({ title: 'Error on saving File', message: (ee as any), color: '#d23a1f', position: 'bottom-right', duration: 2000 })
+      notify({ title: 'Ablegen fehlgeschlagen', message: String(ee) })
       console.log(e)
     }
 
@@ -147,22 +146,36 @@ const auth = () => {
   return token.value
 }
 
-//Uses
-const { init, notify, closeAll } = useToast()
-const { isOpened, run, close } = usePromisifiedModal(auth)
-const getRowClass = (item: any) => {
-  if (!selectedRow.value) return ''
-  return item.name === selectedRow.value.item.name ? { class: ['selected bg-gray-200'] } : ''
+/**
+ * What just happened, said where it happened.
+ *
+ * This used to be a floating toast in the corner of the window, three
+ * hex colours for its background. A save either worked or did not, and
+ * the place to say so is beside the list it changed.
+ */
+const message = ref<{ text: string; bad?: boolean } | undefined>()
+let clearAt: ReturnType<typeof setTimeout> | undefined
+
+function notify(what: { message: string; title?: string; color?: string }) {
+  message.value = {
+    text: what.title ? `${what.title}: ${what.message}` : what.message,
+    bad: !!what.title,
+  }
+  if (clearAt) clearTimeout(clearAt)
+  clearAt = setTimeout(() => (message.value = undefined), 4000)
 }
+
+//Uses
+const { isOpened, run, close } = usePromisifiedModal(auth)
+
 const loadFile = async () => {
   const row = selectedRow.value
   try {
-    let entity = await (props.repo as Repository).getEntityByUri(row.item.uri)
+    let entity = await (props.repo as Repository).getEntityByUri(row.uri)
     if (entity && entity.data) {
       emts('close', entity?.data as any)
     }
-    notify({ message: 'File loaded', color: '#dee5f2',
-      position: 'bottom-right', duration: 2000 })
+    notify({ message: 'Datei geladen' })
   } catch (e) {
     console.log(e)
   }
@@ -170,145 +183,82 @@ const loadFile = async () => {
 </script>
 
 <template>
-
   <div class="flex-nowrap">
     <Teleport defer to="#loadSaveModalFooter">
-      <span class="va-title">Branch: </span>
-      <VaButtonDropdown
-
-        :label="branch"
-        preset="secondary"
-        border-color="primary"
-      >
-        <VaMenuList
-          :options="branch_options"
-          @selected="(v) => {branch=v}"
-        />
-      </VaButtonDropdown>
-      <div class="space"></div>
-
-      <div class="commit">
-
-        <span class="va-title">Commit: </span>
-        <VaButtonDropdown
-          :label="commit"
-          preset="secondary"
-          border-color="primary"
-        >
-          <VaMenuList
-            :options="commit_options"
-            @selected="(v) => {commit=v}"
-          />
-        </VaButtonDropdown>
-      </div>
+      <!-- Picking a branch and picking a commit is picking from a list. It
+           was a dropdown button with a menu hanging off it, twice. -->
+      <DSelect v-model="branch" label="Branch" :options="branch_options ?? []" size="sm" />
+      <DSelect v-model="commit" label="Stand" :options="commit_options ?? []" size="sm" clearable />
     </Teleport>
-    <SaveInputGit :repo="repo" @save="save" @override="override"></SaveInputGit>
+
+    <SaveInputGit :repo="repo" @save="save" @override="override" />
+
     <Teleport defer to="#loadSaveModalFooter">
-      <VaButton @click="loadFile" :disabled="!selectedRow" icon="task" border-color="primary"
-                preset="secondary"> load</VaButton>
+      <DButton intent="primary" :disabled="!selectedRow" @click="loadFile">
+        <DIcon name="task" size="sm" />Laden
+      </DButton>
     </Teleport>
-
   </div>
-  <VaDataTable
+
+  <p v-if="message" :class="['note', { 'note--bad': message.bad }]" role="status">
+    {{ message.text }}
+  </p>
+
+  <DTable
+    v-model:selected="selectedRow"
     class="table"
-    striped
-    virtual-scroller
-    :loading="isTableLoading"
     :items="savedData"
     :columns="columns"
-    hoverable
-    @row:click="rowClick"
-    :row-bind="getRowClass"
-  >
-    <template #cell(options)="{ rowIndex ,row}">
-      <VaButton
-        preset="plain"
-        icon="download"
-        class="ml-3"
-        @click="(ev)=>{ev.stopImmediatePropagation();}"
-      />
-      <VaButton
-        preset="plain"
-        icon="delete"
-        class="ml-3"
-        @click="(ev)=>{ev.stopImmediatePropagation();}"
-      />
+    selectable
+    :empty="isTableLoading ? 'Wird geladen…' : 'Keine Datei in diesem Stand'"
+  />
 
+  <DModal v-model="isOpened" size="sm">
+    <template #header>
+      <h2 class="token__title">Zugang zum Repository</h2>
     </template>
-    <template #cell(icon)="{ rowIndex ,row}">
-      <VaIcon name="newspaper" />
 
+    <DInput
+      v-model="token"
+      label="Token"
+      type="password"
+      hint="Wird nur für diese Sitzung behalten."
+    />
+
+    <template #actions>
+      <DButton intent="quiet" @click="() => { token = undefined; close(null) }">Abbrechen</DButton>
+      <DButton intent="primary" @click="() => close(token)">Weiter</DButton>
     </template>
-  </VaDataTable>
-  <VaModal
-    size="auto"
-    hide-default-actions
-    v-model="isOpened">
-    <div class="deleteDailog">
-            <span class="va-h5">
-                Please provide a token to access the Repo:
-            </span><br /><br />
-      <VaInput
-        v-model="token"
-        class="minwidth100"
-        placeholder="Token"
-      />
-    </div>
-    <template #footer class="footer">
-      <VaButton preset="secondary" @click="()=>{token=undefined;close(null)}">
-        cancel
-      </VaButton>
-      <VaButton preset="secondary" @click="()=>{close(token)}"> ok</VaButton>
-    </template>
-  </VaModal>
+  </DModal>
 </template>
 
 <style scoped lang="scss">
 .table {
   min-height: 100px;
-
-  ::v-deep(th) {
-    /* border: 1px solid var(--va-background-border);*/
-  }
-
-  ::v-deep(tr) {
-    border-bottom: 1px solid var(--va-background-border);
-
-    td {
-      /*height: 4rem;*/
-      white-space: normal;
-    }
-  }
-}
-
-::v-deep(.additional-class) {
-  font-weight: bolder;
-}
-
-.space {
-  width: 25px;
 }
 
 .flex-nowrap {
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
-  align-content: center;
-  align-items: center;
+  align-items: flex-end;
+  gap: 8px;
 }
 
-.minwidth100 {
-  min-width: 100%;
+.note {
+  margin: 8px 0;
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  color: var(--color-dim);
 }
 
-::v-deep(.selected) {
-  font-weight: bolder;
-  background-color: var(--va-css-variables-hover-color) !important;
+.note--bad {
+  color: var(--color-err);
 }
-</style>
 
-<style>
-.va-inner-loading--active {
-  height: auto !important;
+.token__title {
+  margin: 0;
+  font-size: var(--text-lg);
+  font-weight: 600;
 }
 </style>

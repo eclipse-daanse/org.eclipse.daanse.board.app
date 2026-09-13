@@ -41,8 +41,5 @@
     "org.eclipse.daanse.board.app.lib.variables": "^0.0.1-next.1",
     "org.eclipse.daanse.board.app.ui.vue.composables": "^0.0.1-next.1",
     "org.eclipse.daanse.board.app.ui.vue.controls": "^0.0.1-next.1"
-  },
-  "resolutions": {
-    "pinia": "^3.0.1"
   }
 }

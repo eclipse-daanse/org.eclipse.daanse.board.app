@@ -9,6 +9,7 @@ Contributors: Smart City Jena
 
 -->
 <script setup lang="ts">
+import { DButton, DIcon, DInput } from 'org.eclipse.daanse.board.app.ui.vue.controls'
 import { computed, onMounted, ref, watch } from 'vue'
 import type { Entity, Repository } from 'org.eclipse.daanse.board.app.lib.api.persistence'
 
@@ -56,21 +57,23 @@ defineExpose({ setNameSuggestion })
 </script>
 <template>
   <Teleport defer to="#loadSaveModalFooter">
-    <div class="flex-nowrap">
-      <span class="va-title">Name: </span>
-      <VaInput
-        v-model="nameForSaving"
-        placeholder="Name"
-      />
-    </div>
+    <div class="save">
+      <DInput v-model="nameForSaving" label="Name" placeholder="Dateiname" />
 
-    <VaButton color="danger" @click="override" :disabled="isDisabled" v-if="isSameName" border-color="primary" preset="secondary" icon="save">
-      override
-    </VaButton>
-    <VaButton @click="save" :disabled="isDisabled" v-else border-color="primary" preset="secondary" icon="save"> save</VaButton>
+      <DButton v-if="isSameName" intent="danger" :disabled="isDisabled" @click="override">
+        <DIcon name="save" size="sm" />Überschreiben
+      </DButton>
+      <DButton v-else intent="primary" :disabled="isDisabled" @click="save">
+        <DIcon name="save" size="sm" />Ablegen
+      </DButton>
+    </div>
   </Teleport>
 </template>
 
 <style scoped lang="scss">
-
+.save {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+}
 </style>

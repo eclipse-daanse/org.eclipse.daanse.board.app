@@ -12,6 +12,7 @@ Contributors:
 -->
 
 <script setup lang="ts">
+import { DSelect } from 'org.eclipse.daanse.board.app.ui.vue.controls'
 interface IMonacoEditorProps {
     modelValue?: string;
     language?: 'sql' | 'msdax' | 'mdx';
@@ -169,8 +170,7 @@ watch(() => props.modelValue, (newValue) => {
     <div class="editor-page">
         <div class="header-container">
             <div class="toolbar" v-if="props.showToolbar">
-                <va-select v-model="selectedLanguage" label="Language:" :options="supportedLanguages" />
-                <!-- <va-select class="ml-3" v-model="selectedTheme" label="Theme:" :options="supportedThemes" /> -->
+                <DSelect v-model="selectedLanguage" label="Sprache" :options="supportedLanguages" size="sm" />
             </div>
             <slot name="actions">
                 <!-- Additional action buttons can be inserted here -->

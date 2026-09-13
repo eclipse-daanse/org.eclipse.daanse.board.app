@@ -12,7 +12,6 @@ Contributors:
 -->
 
 <script setup lang="ts">
-import { storeToRefs } from "pinia";
 import type { TinyEmitter } from "tiny-emitter";
 import { computed, inject, ref, watch, type Ref } from "vue";
 import CellDropdown from "./CellDropdown.vue";

@@ -1,4 +1,4 @@
-(function(){var i="ui.vue.composer.ogcsta2chart",d=document,s=d.querySelector('style[data-tsm-bundle="'+i+'"]');if(!s){s=d.createElement('style');s.setAttribute('data-tsm-bundle',i);d.head.appendChild(s);}s.textContent=".h50[data-v-795437d5]{height:50%}.preview-placeholder[data-v-795437d5]{display:flex;align-items:center;justify-content:center;height:100%;color:#6c757d;font-style:italic}.ogcsta2chart-composer-settings[data-v-41a61125]{display:flex;flex-direction:column;gap:16px;padding:16px;max-height:600px;overflow-y:auto}.datastreams-section[data-v-41a61125]{border:1px solid #dee2e6;border-radius:8px;padding:16px;background:#f8f9fa}.section-header[data-v-41a61125]{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}.section-header h3[data-v-41a61125]{margin:0;color:#495057;font-size:1.1em}.loading-indicator[data-v-41a61125],.no-datastreams[data-v-41a61125]{padding:16px;text-align:center;color:#6c757d;font-style:italic}.datastream-list[data-v-41a61125]{display:flex;flex-direction:column;gap:12px;max-height:300px;overflow-y:auto}.datastream-item[data-v-41a61125]{display:flex;gap:8px;align-items:flex-start;padding:12px;background:#fff;border:1px solid #dee2e6;border-radius:6px}.datastream-fields[data-v-41a61125]{flex:1;display:grid;grid-template-columns:2fr 1fr auto;gap:12px;align-items:start}.datastream-select[data-v-41a61125]{grid-column:1 / 2}.datastream-label[data-v-41a61125]{grid-column:2 / 3}.datastream-color[data-v-41a61125]{grid-column:3 / 4;width:100px}.remove-button[data-v-41a61125]{margin-top:8px}\n";})();
+(function(){var i="ui.vue.composer.ogcsta2chart",d=document,s=d.querySelector('style[data-tsm-bundle="'+i+'"]');if(!s){s=d.createElement('style');s.setAttribute('data-tsm-bundle',i);d.head.appendChild(s);}s.textContent=".h50[data-v-795437d5]{height:50%}.preview-placeholder[data-v-795437d5]{display:flex;align-items:center;justify-content:center;height:100%;color:#6c757d;font-style:italic}.ogcsta2chart-composer-settings[data-v-5e91cbc1]{display:flex;flex-direction:column;gap:16px;padding:16px;max-height:600px;overflow-y:auto}.datastreams-section[data-v-5e91cbc1]{border:1px solid #dee2e6;border-radius:8px;padding:16px;background:#f8f9fa}.section-header[data-v-5e91cbc1]{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}.section-header h3[data-v-5e91cbc1]{margin:0;color:#495057;font-size:1.1em}.loading-indicator[data-v-5e91cbc1],.no-datastreams[data-v-5e91cbc1]{padding:16px;text-align:center;color:#6c757d;font-style:italic}.datastream-list[data-v-5e91cbc1]{display:flex;flex-direction:column;gap:12px;max-height:300px;overflow-y:auto}.datastream-item[data-v-5e91cbc1]{display:flex;gap:8px;align-items:flex-start;padding:12px;background:#fff;border:1px solid #dee2e6;border-radius:6px}.datastream-fields[data-v-5e91cbc1]{flex:1;display:grid;grid-template-columns:2fr 1fr auto;gap:12px;align-items:start}.datastream-select[data-v-5e91cbc1]{grid-column:1 / 2}.datastream-label[data-v-5e91cbc1]{grid-column:2 / 3}.datastream-color[data-v-5e91cbc1]{grid-column:3 / 4;width:100px}.remove-button[data-v-5e91cbc1]{margin-top:8px}\n";})();
 import { identifier as xi, DATASOURCE_REPOSITORY as Is } from "org.eclipse.daanse.board.app.lib.api.datasource";
 import { OGCSTAToChartComposer as Dn, symbol as Pn } from "org.eclipse.daanse.board.app.lib.composer.ogcsta2chart";
 import { defineComponent as Le, shallowRef as si, h as Ge, ref as et, onMounted as Fs, onUnmounted as On, watch as Jt, toRaw as Ze, nextTick as Cn, version as Tn, isProxy as Rs, createElementBlock as ct, openBlock as rt, createElementVNode as St, createVNode as st, unref as at, createBlock as An, createCommentVNode as ve, computed as Ln, resolveComponent as In, withCtx as _i, createTextVNode as Fn, Fragment as Rn, renderList as zn, inject as yi } from "vue";
@@ -7046,7 +7046,6 @@ const zl = /* @__PURE__ */ Rl("bar", Va), El = {
           label: "Things (erforderlich)",
           options: e.value,
           multiple: "",
-          searchable: "",
           "label-key": "name",
           "value-key": "id",
           placeholder: "Select one or more Things",
@@ -7080,7 +7079,6 @@ const zl = /* @__PURE__ */ Rl("bar", Va), El = {
                   "onUpdate:modelValue": (m) => p.datastreamId = m,
                   label: "Datenstrom",
                   options: s.value,
-                  searchable: "",
                   "label-key": "name",
                   "value-key": "id",
                   class: "datastream-select",
@@ -7121,7 +7119,7 @@ const zl = /* @__PURE__ */ Rl("bar", Va), El = {
       ]);
     };
   }
-}), Zl = /* @__PURE__ */ Mn(Gl, [["__scopeId", "data-v-41a61125"]]), Ql = Symbol.for("OGCSTAToChartComposerPreview"), Jl = Symbol.for("OGCSTAToChartComposerSettings");
+}), Zl = /* @__PURE__ */ Mn(Gl, [["__scopeId", "data-v-5e91cbc1"]]), Ql = Symbol.for("OGCSTAToChartComposerPreview"), Jl = Symbol.for("OGCSTAToChartComposerSettings");
 function rc({ services: i }) {
   i.register("OGCSTAToChartComposerPreview", Nl), i.register("OGCSTAToChartComposerSettings", Zl), i.getRequired(Is).registerDatasourceType("ogcsta2chart", {
     Store: Pn,
