@@ -13,6 +13,7 @@ Contributors:
 <script setup lang="ts">
 import { debounce } from 'lodash';
 import { computed, onMounted, reactive, ref, watch } from 'vue';
+import { DInput, DSelect, DSwitch } from 'org.eclipse.daanse.board.app.ui.vue.controls';
 
 const { config, connections } = defineProps<{
     config: any;
@@ -23,6 +24,32 @@ const { config, connections } = defineProps<{
 const tempResourceUrl = ref(config.resourceUrl);
 const innerInterval = ref(config.pollingInterval ?? 5000);
 const available = ref(false);
+
+/*
+ * The separators the file may use, as data. They were five object
+ * literals inside the template, one of them carrying an escaped tab
+ * through two levels of quoting.
+ */
+/**
+ * What the endpoint said, when it said no.
+ *
+ * The old message was "Invalid resource URL", which the path is not: it is
+ * a path, and it is joined to the connection's address before anything is
+ * fetched. What can be wrong is the answer, so that is what this reports.
+ */
+const urlError = computed(() => {
+  if (!tempResourceUrl.value || available.value) return undefined
+  if (response.code) return `${response.code} ${response.statusText}`.trim()
+  return 'Nicht erreichbar'
+})
+
+const separatorOptions = [
+  { label: 'Komma (,)', value: ',' },
+  { label: 'Semikolon (;)', value: ';' },
+  { label: 'Tabulator', value: '\t' },
+  { label: 'Senkrechter Strich (|)', value: '|' },
+  { label: 'Doppelpunkt (:)', value: ':' },
+]
 const response = reactive<{
     code: number | null;
     statusText: string;
@@ -97,46 +124,58 @@ onMounted(async () => {
 </script>
 
 <template>
+  <div class="settings">
     <!-- eslint-disable-next-line vue/no-mutating-props -->
-    <VaSelect v-model="config.connection" label="Connection" :options="connectionsFiltered" text-by="name"
-        value-by="uid" />
+    <DSelect v-model="config.connection" label="Verbindung" :options="connectionsFiltered" />
 
     <!-- eslint-disable-next-line vue/no-mutating-props -->
-    <VaInput v-model="tempResourceUrl" label="Resource Url"
-        :rules="[() => !tempResourceUrl || available || `Invalid resource URL`]" />
-    <VaSelect v-model="config.separators" label="Separators"
-        :options="[
-            { label: 'Comma (,)', value: ',' },
-            { label: 'Semicolon (;)', value: ';'  },
-            { label: 'Tab', value: '\\t' },
-            { label: 'Pipe (|)', value: '|' },
-            { label: 'Colon (:)', value: ':' },
-        ]"
-        text-by="label" value-by="value"
+    <DInput
+      v-model="tempResourceUrl"
+      label="Pfad"
+      :error="urlError"
+      hint="Relativ zur Adresse der Verbindung."
     />
 
-    <VaInput
-        v-model.number="config.skipRowsFromStart"
-        type="number"
-        label="Skip Rows from Start"
-        :min="0"
-        placeholder="0"
-    >
-        <template #prepend>
-            <VaIcon name="skip_next" />
-        </template>
-    </VaInput>
-    <VaInput
-        v-model.number="config.skipRowsFromEnd"
-        type="number"
-        label="Skip Rows from End"
-        :min="0"
-        placeholder="0"
-    >
-        <template #prepend>
-            <VaIcon name="skip_previous" />
-        </template>
-    </VaInput>
-    <VaSwitch v-model="config.pollingEnabled" label="Enable Long Polling" />
-    <VaInput v-if="config.pollingEnabled" v-model="innerInterval" label="Polling Interval (ms)" />
+    <DSelect
+      v-model="config.separators"
+      label="Trennzeichen"
+      :options="separatorOptions"
+      label-key="label"
+      value-key="value"
+    />
+
+    <DInput
+      v-model.number="config.skipRowsFromStart"
+      type="number"
+      label="Zeilen oben überspringen"
+      :min="0"
+      placeholder="0"
+    />
+
+    <DInput
+      v-model.number="config.skipRowsFromEnd"
+      type="number"
+      label="Zeilen unten überspringen"
+      :min="0"
+      placeholder="0"
+    />
+
+    <DSwitch v-model="config.pollingEnabled" label="Regelmäßig neu laden" />
+
+    <DInput
+      v-if="config.pollingEnabled"
+      v-model="innerInterval"
+      label="Abstand"
+      type="number"
+      suffix="ms"
+    />
+  </div>
 </template>
+
+<style scoped>
+.settings {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+</style>

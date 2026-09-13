@@ -11,6 +11,8 @@ Contributors:
     Smart City Jena
 -->
 <script setup lang="ts">
+import { DButton, DTable, DTabs } from 'org.eclipse.daanse.board.app.ui.vue.controls'
+import SchemaTree from './SchemaTree.vue'
 import { watch, ref, shallowRef } from 'vue';
 import { MonacoEditor } from 'org.eclipse.daanse.board.app.ui.vue.common.monaco';
 import { useTemporaryStore } from 'org.eclipse.daanse.board.app.ui.vue.composables';
@@ -135,11 +137,9 @@ watch(tempStore, async () => {
 
   console.log('catalogs', catalogs);
   treeData.value = catalogs;
-  console.log('treeData', treeData.value);
 
   metadata.value = transformToSchema(treeData.value);
-  console.log('metadata for autocomplete', metadata.value);
-  messages.value.push({ type: 'success', text: `Metadata refreshed at ${(new Date()).toLocaleTimeString()}` });
+  messages.value.push({ type: 'success', text: `Schema gelesen um ${(new Date()).toLocaleTimeString()}` });
 }, { deep: true });
 
 
@@ -151,82 +151,121 @@ watch(() => query, async () => {
 }, { deep: true });
 
 const tabs = [
-  {
-    title: 'Data',
-    icon: 'table_chart',
-  },
-  {
-    title: 'Messages',
-    icon: 'message',
-  },
+  { id: 'data', label: 'Ergebnis' },
+  { id: 'messages', label: 'Meldungen' },
 ];
-const currentTab = ref(tabs[0].title);
+const currentTab = ref(tabs[0].id);
 
 const run = async () => {
-  console.log(tempStore.value);
   tempStore.value.sql = query.value;
   try {
     const startTime = new Date();
     data.value = (await tempStore.value.getData('DataTable')).items;
     const now = new Date();
-    messages.value.push({ type: 'success', text: `Query executed successfully in ${(now.getTime() - startTime.getTime())}ms. Returned ${data.value.length} rows.` });
+    messages.value.push({ type: 'success', text: `${data.value.length} Zeilen in ${(now.getTime() - startTime.getTime())} ms.` });
   } catch (e: any) {
-    messages.value.push({ type: 'error', text: `Query failed: ${e.message}` });
+    messages.value.push({ type: 'error', text: `Abfrage fehlgeschlagen: ${e.message}` });
   }
 };
 </script>
 <template>
-  <div class="flex gap-4" style="overflow: hidden; height: 100%; width: 100%;">
-    <div class="flex flex-col gap-4 overflow-auto" style="width: 550px; flex-grow: 0;">
-      <h4 class="">Explorer</h4>
-      <VaTreeView :nodes="treeData" />
-    </div>
-    <div class="flex flex-col gap-4" style="overflow: hidden; height: 100%; width: 100%;">
-      <MonacoEditor class="h-full" :supportedLanguages="['sql']" language="sql" v-model="query" :metadata="metadata">
+  <div class="explorer">
+    <aside class="explorer__schema">
+      <h4 class="explorer__title">Schema</h4>
+      <SchemaTree :nodes="treeData" />
+    </aside>
+
+    <div class="explorer__work">
+      <MonacoEditor
+        class="h-full"
+        :supportedLanguages="['sql']"
+        language="sql"
+        v-model="query"
+        :metadata="metadata"
+      >
         <template #actions>
-          <va-button color="primary" @click="run">Run Query</va-button>
+          <DButton intent="primary" size="sm" @click="run">Ausführen</DButton>
         </template>
       </MonacoEditor>
-      <div class="h-full">
-          <VaTabs v-model="currentTab" color="rgb(33, 150, 243)">
-            <template #tabs>
-              <VaTab
-                v-for="tab in tabs"
-                :key="tab.title"
-                :name="tab.title"
-              >
-                {{ tab.title }}
-              </VaTab>
-            </template>
-            <div style="padding-top: 4px; height: 100%;">
-              <template v-if="currentTab === 'Data'">
-                <VaDataTable :items="data" :stickyHeader="true" style="height: 100%;" />
-              </template>
-              <template v-else-if="currentTab === 'Messages'">
-                <div class="flex flex-col" style="width: 100%; height: 100%; overflow: auto; border: 1px solid silver; padding: 0px;">
-                  <p
-                    v-for="message in messages" :key="message"
-                    style="border-bottom: 1px solid silver; padding: 8px;"
-                    :style="{
-                      color: message.type === 'error' ? '#f00' : message.type === 'success' ? '#0f0' : '#000'
-                    }"
-                  >
-                    {{ message.text }}
-                  </p>
-                </div>
-              </template>
-            </div>
-          </VaTabs>
+
+      <div class="explorer__result">
+        <DTabs v-model="currentTab" :tabs="tabs" label="Ergebnis oder Meldungen" />
+
+        <div class="explorer__pane">
+          <DTable v-if="currentTab === 'data'" :items="data" empty="Noch nichts ausgeführt" />
+
+          <ul v-else class="messages">
+            <li
+              v-for="(message, index) in messages"
+              :key="index"
+              class="message"
+              :style="{ color: message.type === 'error' ? 'var(--color-err)' : 'var(--color-fg)' }"
+            >
+              {{ message.text }}
+            </li>
+          </ul>
+        </div>
       </div>
     </div>
   </div>
 </template>
-<style lang="css">
-.va-tabs__wrapper {
-  overflow: visible;
+<style scoped>
+.explorer {
+  display: flex;
+  gap: 16px;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
 }
 
-.va-tabs__content {
+.explorer__schema {
+  width: 320px;
+  flex: none;
+  overflow: auto;
+  border-right: 1px solid var(--color-divider);
+  padding-right: 8px;
+}
+
+.explorer__title {
+  margin: 0 0 6px;
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--color-dim);
+}
+
+.explorer__work {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  flex: 1 1 auto;
+  min-width: 0;
   overflow: hidden;
+}
+
+.explorer__result {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+.explorer__pane {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: auto;
+}
+
+.messages {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+}
+
+.message {
+  padding: 7px 8px;
+  border-bottom: 1px solid var(--color-divider);
 }
 </style>

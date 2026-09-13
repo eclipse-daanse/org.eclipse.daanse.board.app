@@ -1,47 +1,48 @@
-(function(){var i="ui.vue.datasource.valhalla",d=document,s=d.querySelector('style[data-tsm-bundle="'+i+'"]');if(!s){s=d.createElement('style');s.setAttribute('data-tsm-bundle',i);d.head.appendChild(s);}s.textContent=".leaflet-pane,.leaflet-tile,.leaflet-marker-icon,.leaflet-marker-shadow,.leaflet-tile-container,.leaflet-pane>svg,.leaflet-pane>canvas,.leaflet-zoom-box,.leaflet-image-layer,.leaflet-layer{position:absolute;left:0;top:0}.leaflet-container{overflow:hidden}.leaflet-tile,.leaflet-marker-icon,.leaflet-marker-shadow{-webkit-user-select:none;-moz-user-select:none;user-select:none;-webkit-user-drag:none}.leaflet-tile::selection{background:transparent}.leaflet-safari .leaflet-tile{image-rendering:-webkit-optimize-contrast}.leaflet-safari .leaflet-tile-container{width:1600px;height:1600px;-webkit-transform-origin:0 0}.leaflet-marker-icon,.leaflet-marker-shadow{display:block}.leaflet-container .leaflet-overlay-pane svg{max-width:none!important;max-height:none!important}.leaflet-container .leaflet-marker-pane img,.leaflet-container .leaflet-shadow-pane img,.leaflet-container .leaflet-tile-pane img,.leaflet-container img.leaflet-image-layer,.leaflet-container .leaflet-tile{max-width:none!important;max-height:none!important;width:auto;padding:0}.leaflet-container img.leaflet-tile{mix-blend-mode:plus-lighter}.leaflet-container.leaflet-touch-zoom{-ms-touch-action:pan-x pan-y;touch-action:pan-x pan-y}.leaflet-container.leaflet-touch-drag{-ms-touch-action:pinch-zoom;touch-action:none;touch-action:pinch-zoom}.leaflet-container.leaflet-touch-drag.leaflet-touch-zoom{-ms-touch-action:none;touch-action:none}.leaflet-container{-webkit-tap-highlight-color:transparent}.leaflet-container a{-webkit-tap-highlight-color:rgba(51,181,229,.4)}.leaflet-tile{filter:inherit;visibility:hidden}.leaflet-tile-loaded{visibility:inherit}.leaflet-zoom-box{width:0;height:0;-moz-box-sizing:border-box;box-sizing:border-box;z-index:800}.leaflet-overlay-pane svg{-moz-user-select:none}.leaflet-pane{z-index:400}.leaflet-tile-pane{z-index:200}.leaflet-overlay-pane{z-index:400}.leaflet-shadow-pane{z-index:500}.leaflet-marker-pane{z-index:600}.leaflet-tooltip-pane{z-index:650}.leaflet-popup-pane{z-index:700}.leaflet-map-pane canvas{z-index:100}.leaflet-map-pane svg{z-index:200}.leaflet-vml-shape{width:1px;height:1px}.lvml{behavior:url(#default#VML);display:inline-block;position:absolute}.leaflet-control{position:relative;z-index:800;pointer-events:visiblePainted;pointer-events:auto}.leaflet-top,.leaflet-bottom{position:absolute;z-index:1000;pointer-events:none}.leaflet-top{top:0}.leaflet-right{right:0}.leaflet-bottom{bottom:0}.leaflet-left{left:0}.leaflet-control{float:left;clear:both}.leaflet-right .leaflet-control{float:right}.leaflet-top .leaflet-control{margin-top:10px}.leaflet-bottom .leaflet-control{margin-bottom:10px}.leaflet-left .leaflet-control{margin-left:10px}.leaflet-right .leaflet-control{margin-right:10px}.leaflet-fade-anim .leaflet-popup{opacity:0;-webkit-transition:opacity .2s linear;-moz-transition:opacity .2s linear;transition:opacity .2s linear}.leaflet-fade-anim .leaflet-map-pane .leaflet-popup{opacity:1}.leaflet-zoom-animated{-webkit-transform-origin:0 0;-ms-transform-origin:0 0;transform-origin:0 0}svg.leaflet-zoom-animated{will-change:transform}.leaflet-zoom-anim .leaflet-zoom-animated{-webkit-transition:-webkit-transform .25s cubic-bezier(0,0,.25,1);-moz-transition:-moz-transform .25s cubic-bezier(0,0,.25,1);transition:transform .25s cubic-bezier(0,0,.25,1)}.leaflet-zoom-anim .leaflet-tile,.leaflet-pan-anim .leaflet-tile{-webkit-transition:none;-moz-transition:none;transition:none}.leaflet-zoom-anim .leaflet-zoom-hide{visibility:hidden}.leaflet-interactive{cursor:pointer}.leaflet-grab{cursor:-webkit-grab;cursor:-moz-grab;cursor:grab}.leaflet-crosshair,.leaflet-crosshair .leaflet-interactive{cursor:crosshair}.leaflet-popup-pane,.leaflet-control{cursor:auto}.leaflet-dragging .leaflet-grab,.leaflet-dragging .leaflet-grab .leaflet-interactive,.leaflet-dragging .leaflet-marker-draggable{cursor:move;cursor:-webkit-grabbing;cursor:-moz-grabbing;cursor:grabbing}.leaflet-marker-icon,.leaflet-marker-shadow,.leaflet-image-layer,.leaflet-pane>svg path,.leaflet-tile-container{pointer-events:none}.leaflet-marker-icon.leaflet-interactive,.leaflet-image-layer.leaflet-interactive,.leaflet-pane>svg path.leaflet-interactive,svg.leaflet-image-layer.leaflet-interactive path{pointer-events:visiblePainted;pointer-events:auto}.leaflet-container{background:#ddd;outline-offset:1px}.leaflet-container a{color:#0078a8}.leaflet-zoom-box{border:2px dotted #38f;background:#ffffff80}.leaflet-container{font-family:Helvetica Neue,Arial,Helvetica,sans-serif;font-size:12px;font-size:.75rem;line-height:1.5}.leaflet-bar{box-shadow:0 1px 5px #000000a6;border-radius:4px}.leaflet-bar a{background-color:#fff;border-bottom:1px solid #ccc;width:26px;height:26px;line-height:26px;display:block;text-align:center;text-decoration:none;color:#000}.leaflet-bar a,.leaflet-control-layers-toggle{background-position:50% 50%;background-repeat:no-repeat;display:block}.leaflet-bar a:hover,.leaflet-bar a:focus{background-color:#f4f4f4}.leaflet-bar a:first-child{border-top-left-radius:4px;border-top-right-radius:4px}.leaflet-bar a:last-child{border-bottom-left-radius:4px;border-bottom-right-radius:4px;border-bottom:none}.leaflet-bar a.leaflet-disabled{cursor:default;background-color:#f4f4f4;color:#bbb}.leaflet-touch .leaflet-bar a{width:30px;height:30px;line-height:30px}.leaflet-touch .leaflet-bar a:first-child{border-top-left-radius:2px;border-top-right-radius:2px}.leaflet-touch .leaflet-bar a:last-child{border-bottom-left-radius:2px;border-bottom-right-radius:2px}.leaflet-control-zoom-in,.leaflet-control-zoom-out{font:700 18px Lucida Console,Monaco,monospace;text-indent:1px}.leaflet-touch .leaflet-control-zoom-in,.leaflet-touch .leaflet-control-zoom-out{font-size:22px}.leaflet-control-layers{box-shadow:0 1px 5px #0006;background:#fff;border-radius:5px}.leaflet-control-layers-toggle{background-image:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABoAAAAaCAQAAAADQ4RFAAACf0lEQVR4AY1UM3gkARTePdvdoTxXKc+qTl3aU5U6b2Kbkz3Gtq3Zw6ziLGNPzrYx7946Tr6/ee/XeCQ4D3ykPtL5tHno4n0d/h3+xfuWHGLX81cn7r0iTNzjr7LrlxCqPtkbTQEHeqOrTy4Yyt3VCi/IOB0v7rVC7q45Q3Gr5K6jt+3Gl5nCoDD4MtO+j96Wu8atmhGqcNGHObuf8OM/x3AMx38+4Z2sPqzCxRFK2aF2e5Jol56XTLyggAMTL56XOMoS1W4pOyjUcGGQdZxU6qRh7B9Zp+PfpOFlqt0zyDZckPi1ttmIp03jX8gyJ8a/PG2yutpS/Vol7peZIbZcKBAEEheEIAgFbDkz5H6Zrkm2hVWGiXKiF4Ycw0RWKdtC16Q7qe3X4iOMxruonzegJzWaXFrU9utOSsLUmrc0YjeWYjCW4PDMADElpJSSQ0vQvA1Tm6/JlKnqFs1EGyZiFCqnRZTEJJJiKRYzVYzJck2Rm6P4iH+cmSY0YzimYa8l0EtTODFWhcMIMVqdsI2uiTvKmTisIDHJ3od5GILVhBCarCfVRmo4uTjkhrhzkiBV7SsaqS+TzrzM1qpGGUFt28pIySQHR6h7F6KSwGWm97ay+Z+ZqMcEjEWebE7wxCSQwpkhJqoZA5ivCdZDjJepuJ9IQjGGUmuXJdBFUygxVqVsxFsLMbDe8ZbDYVCGKxs+W080max1hFCarCfV+C1KATwcnvE9gRRuMP2prdbWGowm1KB1y+zwMMENkM755cJ2yPDtqhTI6ED1M/82yIDtC/4j4BijjeObflpO9I9MwXTCsSX8jWAFeHr05WoLTJ5G8IQVS/7vwR6ohirYM7f6HzYpogfS3R2OAAAAAElFTkSuQmCC);width:36px;height:36px}.leaflet-retina .leaflet-control-layers-toggle{background-image:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADQAAAA0CAQAAABvcdNgAAAEsklEQVR4AWL4TydIhpZK1kpWOlg0w3ZXP6D2soBtG42jeI6ZmQTHzAxiTbSJsYLjO9HhP+WOmcuhciVnmHVQcJnp7DFvScowZorad/+V/fVzMdMT2g9Cv9guXGv/7pYOrXh2U+RRR3dSd9JRx6bIFc/ekqHI29JC6pJ5ZEh1yWkhkbcFeSjxgx3L2m1cb1C7bceyxA+CNjT/Ifff+/kDk2u/w/33/IeCMOSaWZ4glosqT3DNnNZQ7Cs58/3Ce5HL78iZH/vKVIaYlqzfdLu8Vi7dnvUbEza5Idt36tquZFldl6N5Z/POLof0XLK61mZCmJSWjVF9tEjUluu74IUXvgttuVIHE7YxSkaYhJZam7yiM9Pv82JYfl9nptxZaxMJE4YSPty+vF0+Y2up9d3wwijfjZbabqm/3bZ9ecKHsiGmRflnn1MW4pjHf9oLufyn2z3y1D6n8g8TZhxyzipLNPnAUpsOiuWimg52psrTZYnOWYNDTMuWBWa0tJb4rgq1UvmutpaYEbZlwU3CLJm/ayYjHW5/h7xWLn9Hh1vepDkyf7dE7MtT5LR4e7yYpHrkhOUpEfssBLq2pPhAqoSWKUkk7EDqkmK6RrCEzqDjhNDWNE+XSMvkJRDWlZTmCW0l0PHQGRZY5t1L83kT0Y3l2SItk5JAWHl2dCOBm+fPu3fo5/3v61RMCO9Jx2EEYYhb0rmNQMX/vm7gqOEJLcXTGw3CAuRNeyaPWwjR8PRqKQ1PDA/dpv+on9Shox52WFnx0KY8onHayrJzm87i5h9xGw/tfkev0jGsQizqezUKjk12hBMKJ4kbCqGPVNXudyyrShovGw5CgxsRICxF6aRmSjlBnHRzg7Gx8fKqEubI2rahQYdR1YgDIRQO7JvQyD52hoIQx0mxa0ODtW2Iozn1le2iIRdzwWewedyZzewidueOGqlsn1MvcnQpuVwLGG3/IR1hIKxCjelIDZ8ldqWz25jWAsnldEnK0Zxro19TGVb2ffIZEsIO89EIEDvKMPrzmBOQcKQ+rroye6NgRRxqR4U8EAkz0CL6uSGOm6KQCdWjvjRiSP1BPalCRS5iQYiEIvxuBMJEWgzSoHADcVMuN7IuqqTeyUPq22qFimFtxDyBBJEwNyt6TM88blFHao/6tWWhuuOM4SAK4EI4QmFHA+SEyWlp4EQoJ13cYGzMu7yszEIBOm2rVmHUNqwAIQabISNMRstmdhNWcFLsSm+0tjJH1MdRxO5Nx0WDMhCtgD6OKgZeljJqJKc9po8juskR9XN0Y1lZ3mWjLR9JCO1jRDMd0fpYC2VnvjBSEFg7wBENc0R9HFlb0xvF1+TBEpF68d+DHR6IOWVv2BECtxo46hOFUBd/APU57WIoEwJhIi2CdpyZX0m93BZicktMj1AS9dClteUFAUNUIEygRZCtik5zSxI9MubTBH1GOiHsiLJ3OCoSZkILa9PxiN0EbvhsAo8tdAf9Seepd36lGWHmtNANTv5Jd0z4QYyeo/UEJqxKRpg5LZx6btLPsOaEmdMyxYdlc8LMaJnikDlhclqmPiQnTEpLUIZEwkRagjYkEibQErwhkTAKCLQEbUgkzJQWc/0PstHHcfEdQ+UAAAAASUVORK5CYII=);background-size:26px 26px}.leaflet-touch .leaflet-control-layers-toggle{width:44px;height:44px}.leaflet-control-layers .leaflet-control-layers-list,.leaflet-control-layers-expanded .leaflet-control-layers-toggle{display:none}.leaflet-control-layers-expanded .leaflet-control-layers-list{display:block;position:relative}.leaflet-control-layers-expanded{padding:6px 10px 6px 6px;color:#333;background:#fff}.leaflet-control-layers-scrollbar{overflow-y:scroll;overflow-x:hidden;padding-right:5px}.leaflet-control-layers-selector{margin-top:2px;position:relative;top:1px}.leaflet-control-layers label{display:block;font-size:13px;font-size:1.08333em}.leaflet-control-layers-separator{height:0;border-top:1px solid #ddd;margin:5px -10px 5px -6px}.leaflet-default-icon-path{background-image:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABkAAAApCAYAAADAk4LOAAAFgUlEQVR4Aa1XA5BjWRTN2oW17d3YaZtr2962HUzbDNpjszW24mRt28p47v7zq/bXZtrp/lWnXr337j3nPCe85NcypgSFdugCpW5YoDAMRaIMqRi6aKq5E3YqDQO3qAwjVWrD8Ncq/RBpykd8oZUb/kaJutow8r1aP9II0WmLKLIsJyv1w/kqw9Ch2MYdB++12Onxee/QMwvf4/Dk/Lfp/i4nxTXtOoQ4pW5Aj7wpici1A9erdAN2OH64x8OSP9j3Ft3b7aWkTg/Fm91siTra0f9on5sQr9INejH6CUUUpavjFNq1B+Oadhxmnfa8RfEmN8VNAsQhPqF55xHkMzz3jSmChWU6f7/XZKNH+9+hBLOHYozuKQPxyMPUKkrX/K0uWnfFaJGS1QPRtZsOPtr3NsW0uyh6NNCOkU3Yz+bXbT3I8G3xE5EXLXtCXbbqwCO9zPQYPRTZ5vIDXD7U+w7rFDEoUUf7ibHIR4y6bLVPXrz8JVZEql13trxwue/uDivd3fkWRbS6/IA2bID4uk0UpF1N8qLlbBlXs4Ee7HLTfV1j54APvODnSfOWBqtKVvjgLKzF5YdEk5ewRkGlK0i33Eofffc7HT56jD7/6U+qH3Cx7SBLNntH5YIPvODnyfIXZYRVDPqgHtLs5ABHD3YzLuespb7t79FY34DjMwrVrcTuwlT55YMPvOBnRrJ4VXTdNnYug5ucHLBjEpt30701A3Ts+HEa73u6dT3FNWwflY86eMHPk+Yu+i6pzUpRrW7SNDg5JHR4KapmM5Wv2E8Tfcb1HoqqHMHU+uWDD7zg54mz5/2BSnizi9T1Dg4QQXLToGNCkb6tb1NU+QAlGr1++eADrzhn/u8Q2YZhQVlZ5+CAOtqfbhmaUCS1ezNFVm2imDbPmPng5wmz+gwh+oHDce0eUtQ6OGDIyR0uUhUsoO3vfDmmgOezH0mZN59x7MBi++WDL1g/eEiU3avlidO671bkLfwbw5XV2P8Pzo0ydy4t2/0eu33xYSOMOD8hTf4CrBtGMSoXfPLchX+J0ruSePw3LZeK0juPJbYzrhkH0io7B3k164hiGvawhOKMLkrQLyVpZg8rHFW7E2uHOL888IBPlNZ1FPzstSJM694fWr6RwpvcJK60+0HCILTBzZLFNdtAzJaohze60T8qBzyh5ZuOg5e7uwQppofEmf2++DYvmySqGBuKaicF1blQjhuHdvCIMvp8whTTfZzI7RldpwtSzL+F1+wkdZ2TBOW2gIF88PBTzD/gpeREAMEbxnJcaJHNHrpzji0gQCS6hdkEeYt9DF/2qPcEC8RM28Hwmr3sdNyht00byAut2k3gufWNtgtOEOFGUwcXWNDbdNbpgBGxEvKkOQsxivJx33iow0Vw5S6SVTrpVq11ysA2Rp7gTfPfktc6zhtXBBC+adRLshf6sG2RfHPZ5EAc4sVZ83yCN00Fk/4kggu40ZTvIEm5g24qtU4KjBrx/BTTH8ifVASAG7gKrnWxJDcU7x8X6Ecczhm3o6YicvsLXWfh3Ch1W0k8x0nXF+0fFxgt4phz8QvypiwCCFKMqXCnqXExjq10beH+UUA7+nG6mdG/Pu0f3LgFcGrl2s0kNNjpmoJ9o4B29CMO8dMT4Q5ox8uitF6fqsrJOr8qnwNbRzv6hSnG5wP+64C7h9lp30hKNtKdWjtdkbuPA19nJ7Tz3zR/ibgARbhb4AlhavcBebmTHcFl2fvYEnW0ox9xMxKBS8btJ+KiEbq9zA4RthQXDhPa0T9TEe69gWupwc6uBUphquXgf+/FrIjweHQS4/pduMe5ERUMHUd9xv8ZR98CxkS4F2n3EUrUZ10EYNw7BWm9x1GiPssi3GgiGRDKWRYZfXlON+dfNbM+GgIwYdwAAAAASUVORK5CYII=)}.leaflet-container .leaflet-control-attribution{background:#fff;background:#fffc;margin:0}.leaflet-control-attribution,.leaflet-control-scale-line{padding:0 5px;color:#333;line-height:1.4}.leaflet-control-attribution a{text-decoration:none}.leaflet-control-attribution a:hover,.leaflet-control-attribution a:focus{text-decoration:underline}.leaflet-attribution-flag{display:inline!important;vertical-align:baseline!important;width:1em;height:.6669em}.leaflet-left .leaflet-control-scale{margin-left:5px}.leaflet-bottom .leaflet-control-scale{margin-bottom:5px}.leaflet-control-scale-line{border:2px solid #777;border-top:none;line-height:1.1;padding:2px 5px 1px;white-space:nowrap;-moz-box-sizing:border-box;box-sizing:border-box;background:#fffc;text-shadow:1px 1px #fff}.leaflet-control-scale-line:not(:first-child){border-top:2px solid #777;border-bottom:none;margin-top:-2px}.leaflet-control-scale-line:not(:first-child):not(:last-child){border-bottom:2px solid #777}.leaflet-touch .leaflet-control-attribution,.leaflet-touch .leaflet-control-layers,.leaflet-touch .leaflet-bar{box-shadow:none}.leaflet-touch .leaflet-control-layers,.leaflet-touch .leaflet-bar{border:2px solid rgba(0,0,0,.2);background-clip:padding-box}.leaflet-popup{position:absolute;text-align:center;margin-bottom:20px}.leaflet-popup-content-wrapper{padding:1px;text-align:left;border-radius:12px}.leaflet-popup-content{margin:13px 24px 13px 20px;line-height:1.3;font-size:13px;font-size:1.08333em;min-height:1px}.leaflet-popup-content p{margin:1.3em 0}.leaflet-popup-tip-container{width:40px;height:20px;position:absolute;left:50%;margin-top:-1px;margin-left:-20px;overflow:hidden;pointer-events:none}.leaflet-popup-tip{width:17px;height:17px;padding:1px;margin:-10px auto 0;pointer-events:auto;-webkit-transform:rotate(45deg);-moz-transform:rotate(45deg);-ms-transform:rotate(45deg);transform:rotate(45deg)}.leaflet-popup-content-wrapper,.leaflet-popup-tip{background:#fff;color:#333;box-shadow:0 3px 14px #0006}.leaflet-container a.leaflet-popup-close-button{position:absolute;top:0;right:0;border:none;text-align:center;width:24px;height:24px;font:16px/24px Tahoma,Verdana,sans-serif;color:#757575;text-decoration:none;background:transparent}.leaflet-container a.leaflet-popup-close-button:hover,.leaflet-container a.leaflet-popup-close-button:focus{color:#585858}.leaflet-popup-scrolled{overflow:auto}.leaflet-oldie .leaflet-popup-content-wrapper{-ms-zoom:1}.leaflet-oldie .leaflet-popup-tip{width:24px;margin:0 auto;-ms-filter:\"progid:DXImageTransform.Microsoft.Matrix(M11=0.70710678, M12=0.70710678, M21=-0.70710678, M22=0.70710678)\";filter:progid:DXImageTransform.Microsoft.Matrix(M11=.70710678,M12=.70710678,M21=-.70710678,M22=.70710678)}.leaflet-oldie .leaflet-control-zoom,.leaflet-oldie .leaflet-control-layers,.leaflet-oldie .leaflet-popup-content-wrapper,.leaflet-oldie .leaflet-popup-tip{border:1px solid #999}.leaflet-div-icon{background:#fff;border:1px solid #666}.leaflet-tooltip{position:absolute;padding:6px;background-color:#fff;border:1px solid #fff;border-radius:3px;color:#222;white-space:nowrap;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;pointer-events:none;box-shadow:0 1px 3px #0006}.leaflet-tooltip.leaflet-interactive{cursor:pointer;pointer-events:auto}.leaflet-tooltip-top:before,.leaflet-tooltip-bottom:before,.leaflet-tooltip-left:before,.leaflet-tooltip-right:before{position:absolute;pointer-events:none;border:6px solid transparent;background:transparent;content:\"\"}.leaflet-tooltip-bottom{margin-top:6px}.leaflet-tooltip-top{margin-top:-6px}.leaflet-tooltip-bottom:before,.leaflet-tooltip-top:before{left:50%;margin-left:-6px}.leaflet-tooltip-top:before{bottom:0;margin-bottom:-12px;border-top-color:#fff}.leaflet-tooltip-bottom:before{top:0;margin-top:-12px;margin-left:-6px;border-bottom-color:#fff}.leaflet-tooltip-left{margin-left:-6px}.leaflet-tooltip-right{margin-left:6px}.leaflet-tooltip-left:before,.leaflet-tooltip-right:before{top:50%;margin-top:-6px}.leaflet-tooltip-left:before{right:0;margin-right:-12px;border-left-color:#fff}.leaflet-tooltip-right:before{left:0;margin-left:-12px;border-right-color:#fff}@media print{.leaflet-control{-webkit-print-color-adjust:exact;print-color-adjust:exact}}.valhalla-preview[data-v-5cc943b1]{display:flex;height:100%;width:100%;overflow:hidden}.sidebar[data-v-5cc943b1]{width:360px;min-width:300px;display:flex;flex-direction:column;border-right:1px solid #e5e7eb;overflow-y:auto;background:#fafafa}.search-section[data-v-5cc943b1]{padding:.75rem;border-bottom:1px solid #e5e7eb;background:#fff}.search-box[data-v-5cc943b1]{position:relative}.search-input[data-v-5cc943b1]{width:100%}.search-results[data-v-5cc943b1]{position:absolute;top:100%;left:0;right:0;background:#fff;border:1px solid #e5e7eb;border-radius:0 0 .5rem .5rem;box-shadow:0 4px 12px #00000026;z-index:1000;max-height:250px;overflow-y:auto}.search-result-item[data-v-5cc943b1]{display:flex;align-items:flex-start;gap:.5rem;padding:.5rem .75rem;cursor:pointer;font-size:.85em;border-bottom:1px solid #f3f4f6}.search-result-item[data-v-5cc943b1]:hover{background-color:#f0f4ff}.search-result-item[data-v-5cc943b1]:last-child{border-bottom:none}.controls-row[data-v-5cc943b1]{display:flex;align-items:flex-end;gap:.5rem;padding:.75rem;border-bottom:1px solid #e5e7eb;background:#fff}.costing-select[data-v-5cc943b1]{flex:1}.waypoints-list[data-v-5cc943b1]{flex:1;overflow-y:auto;padding:.5rem}.waypoints-header[data-v-5cc943b1]{display:flex;justify-content:space-between;align-items:center;padding:.25rem .5rem .5rem}.section-title[data-v-5cc943b1]{font-weight:600;font-size:.9em;color:#374151}.hint[data-v-5cc943b1]{font-size:.75em;color:#9ca3af}.waypoint-item[data-v-5cc943b1]{display:flex;align-items:center;gap:.4rem;padding:.4rem .5rem;margin-bottom:.25rem;background:#fff;border-radius:.375rem;border:1px solid #e5e7eb;cursor:grab;transition:box-shadow .15s,opacity .15s}.waypoint-item[data-v-5cc943b1]:hover{box-shadow:0 1px 4px #00000014}.waypoint-item.dragging[data-v-5cc943b1]{opacity:.5}.waypoint-grip[data-v-5cc943b1]{cursor:grab;display:flex;align-items:center}.waypoint-marker[data-v-5cc943b1]{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:.7em;font-weight:700;flex-shrink:0}.waypoint-info[data-v-5cc943b1]{flex:1;min-width:0;display:flex;flex-direction:column}.waypoint-role[data-v-5cc943b1]{font-size:.7em;font-weight:600;color:#6b7280;text-transform:uppercase;letter-spacing:.03em}.waypoint-name[data-v-5cc943b1]{font-size:.85em;color:#374151;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.waypoint-actions[data-v-5cc943b1]{display:flex;gap:0;flex-shrink:0}.no-waypoints[data-v-5cc943b1]{text-align:center;color:#9ca3af;font-size:.85em;padding:2rem 1rem}.action-buttons[data-v-5cc943b1]{display:flex;gap:.5rem;padding:.75rem;border-top:1px solid #e5e7eb;background:#fff}.route-summary[data-v-5cc943b1]{border-top:1px solid #e5e7eb;padding:.75rem;background:#fff}.summary-header[data-v-5cc943b1]{font-weight:600;font-size:.95em;color:#111827;margin-bottom:.5rem}.summary-stats[data-v-5cc943b1]{display:flex;gap:1rem;margin-bottom:.5rem}.stat[data-v-5cc943b1]{display:flex;align-items:center;gap:.3rem;font-size:.9em;color:#374151;font-weight:500}.maneuvers-list[data-v-5cc943b1]{max-height:200px;overflow-y:auto;border-top:1px solid #f3f4f6;padding-top:.5rem;margin-top:.25rem}.maneuver-item[data-v-5cc943b1]{display:flex;gap:.4rem;padding:.2rem 0;font-size:.8em;color:#4b5563;align-items:flex-start}.maneuver-index[data-v-5cc943b1]{color:#9ca3af;min-width:1.5em;text-align:right}.maneuver-text[data-v-5cc943b1]{flex:1}.maneuver-dist[data-v-5cc943b1]{color:#9ca3af;flex-shrink:0}.map-container[data-v-5cc943b1]{flex:1;min-width:300px}\n";})();
-import { DATASOURCE_REPOSITORY as Ue } from "org.eclipse.daanse.board.app.lib.api.datasource";
-import { defineComponent as L, h as ae, ref as c, reactive as Bt, provide as G, computed as Y, onMounted as T, markRaw as x, nextTick as S, onBeforeUnmount as ue, inject as B, watch as Oe, onUnmounted as xe, render as _t, shallowRef as kt, resolveComponent as te, createElementBlock as U, openBlock as V, createElementVNode as f, createCommentVNode as K, createVNode as A, withKeys as xt, withCtx as ee, Fragment as ie, renderList as ge, toDisplayString as E, createBlock as he, createTextVNode as be, normalizeClass as Rt, normalizeStyle as At, unref as re } from "vue";
-import { useTemporaryStore as Pt } from "org.eclipse.daanse.board.app.ui.vue.composables";
-const $e = (e, a) => {
+(function(){var i="ui.vue.datasource.valhalla",d=document,s=d.querySelector('style[data-tsm-bundle="'+i+'"]');if(!s){s=d.createElement('style');s.setAttribute('data-tsm-bundle',i);d.head.appendChild(s);}s.textContent=".leaflet-pane,.leaflet-tile,.leaflet-marker-icon,.leaflet-marker-shadow,.leaflet-tile-container,.leaflet-pane>svg,.leaflet-pane>canvas,.leaflet-zoom-box,.leaflet-image-layer,.leaflet-layer{position:absolute;left:0;top:0}.leaflet-container{overflow:hidden}.leaflet-tile,.leaflet-marker-icon,.leaflet-marker-shadow{-webkit-user-select:none;-moz-user-select:none;user-select:none;-webkit-user-drag:none}.leaflet-tile::selection{background:transparent}.leaflet-safari .leaflet-tile{image-rendering:-webkit-optimize-contrast}.leaflet-safari .leaflet-tile-container{width:1600px;height:1600px;-webkit-transform-origin:0 0}.leaflet-marker-icon,.leaflet-marker-shadow{display:block}.leaflet-container .leaflet-overlay-pane svg{max-width:none!important;max-height:none!important}.leaflet-container .leaflet-marker-pane img,.leaflet-container .leaflet-shadow-pane img,.leaflet-container .leaflet-tile-pane img,.leaflet-container img.leaflet-image-layer,.leaflet-container .leaflet-tile{max-width:none!important;max-height:none!important;width:auto;padding:0}.leaflet-container img.leaflet-tile{mix-blend-mode:plus-lighter}.leaflet-container.leaflet-touch-zoom{-ms-touch-action:pan-x pan-y;touch-action:pan-x pan-y}.leaflet-container.leaflet-touch-drag{-ms-touch-action:pinch-zoom;touch-action:none;touch-action:pinch-zoom}.leaflet-container.leaflet-touch-drag.leaflet-touch-zoom{-ms-touch-action:none;touch-action:none}.leaflet-container{-webkit-tap-highlight-color:transparent}.leaflet-container a{-webkit-tap-highlight-color:rgba(51,181,229,.4)}.leaflet-tile{filter:inherit;visibility:hidden}.leaflet-tile-loaded{visibility:inherit}.leaflet-zoom-box{width:0;height:0;-moz-box-sizing:border-box;box-sizing:border-box;z-index:800}.leaflet-overlay-pane svg{-moz-user-select:none}.leaflet-pane{z-index:400}.leaflet-tile-pane{z-index:200}.leaflet-overlay-pane{z-index:400}.leaflet-shadow-pane{z-index:500}.leaflet-marker-pane{z-index:600}.leaflet-tooltip-pane{z-index:650}.leaflet-popup-pane{z-index:700}.leaflet-map-pane canvas{z-index:100}.leaflet-map-pane svg{z-index:200}.leaflet-vml-shape{width:1px;height:1px}.lvml{behavior:url(#default#VML);display:inline-block;position:absolute}.leaflet-control{position:relative;z-index:800;pointer-events:visiblePainted;pointer-events:auto}.leaflet-top,.leaflet-bottom{position:absolute;z-index:1000;pointer-events:none}.leaflet-top{top:0}.leaflet-right{right:0}.leaflet-bottom{bottom:0}.leaflet-left{left:0}.leaflet-control{float:left;clear:both}.leaflet-right .leaflet-control{float:right}.leaflet-top .leaflet-control{margin-top:10px}.leaflet-bottom .leaflet-control{margin-bottom:10px}.leaflet-left .leaflet-control{margin-left:10px}.leaflet-right .leaflet-control{margin-right:10px}.leaflet-fade-anim .leaflet-popup{opacity:0;-webkit-transition:opacity .2s linear;-moz-transition:opacity .2s linear;transition:opacity .2s linear}.leaflet-fade-anim .leaflet-map-pane .leaflet-popup{opacity:1}.leaflet-zoom-animated{-webkit-transform-origin:0 0;-ms-transform-origin:0 0;transform-origin:0 0}svg.leaflet-zoom-animated{will-change:transform}.leaflet-zoom-anim .leaflet-zoom-animated{-webkit-transition:-webkit-transform .25s cubic-bezier(0,0,.25,1);-moz-transition:-moz-transform .25s cubic-bezier(0,0,.25,1);transition:transform .25s cubic-bezier(0,0,.25,1)}.leaflet-zoom-anim .leaflet-tile,.leaflet-pan-anim .leaflet-tile{-webkit-transition:none;-moz-transition:none;transition:none}.leaflet-zoom-anim .leaflet-zoom-hide{visibility:hidden}.leaflet-interactive{cursor:pointer}.leaflet-grab{cursor:-webkit-grab;cursor:-moz-grab;cursor:grab}.leaflet-crosshair,.leaflet-crosshair .leaflet-interactive{cursor:crosshair}.leaflet-popup-pane,.leaflet-control{cursor:auto}.leaflet-dragging .leaflet-grab,.leaflet-dragging .leaflet-grab .leaflet-interactive,.leaflet-dragging .leaflet-marker-draggable{cursor:move;cursor:-webkit-grabbing;cursor:-moz-grabbing;cursor:grabbing}.leaflet-marker-icon,.leaflet-marker-shadow,.leaflet-image-layer,.leaflet-pane>svg path,.leaflet-tile-container{pointer-events:none}.leaflet-marker-icon.leaflet-interactive,.leaflet-image-layer.leaflet-interactive,.leaflet-pane>svg path.leaflet-interactive,svg.leaflet-image-layer.leaflet-interactive path{pointer-events:visiblePainted;pointer-events:auto}.leaflet-container{background:#ddd;outline-offset:1px}.leaflet-container a{color:#0078a8}.leaflet-zoom-box{border:2px dotted #38f;background:#ffffff80}.leaflet-container{font-family:Helvetica Neue,Arial,Helvetica,sans-serif;font-size:12px;font-size:.75rem;line-height:1.5}.leaflet-bar{box-shadow:0 1px 5px #000000a6;border-radius:4px}.leaflet-bar a{background-color:#fff;border-bottom:1px solid #ccc;width:26px;height:26px;line-height:26px;display:block;text-align:center;text-decoration:none;color:#000}.leaflet-bar a,.leaflet-control-layers-toggle{background-position:50% 50%;background-repeat:no-repeat;display:block}.leaflet-bar a:hover,.leaflet-bar a:focus{background-color:#f4f4f4}.leaflet-bar a:first-child{border-top-left-radius:4px;border-top-right-radius:4px}.leaflet-bar a:last-child{border-bottom-left-radius:4px;border-bottom-right-radius:4px;border-bottom:none}.leaflet-bar a.leaflet-disabled{cursor:default;background-color:#f4f4f4;color:#bbb}.leaflet-touch .leaflet-bar a{width:30px;height:30px;line-height:30px}.leaflet-touch .leaflet-bar a:first-child{border-top-left-radius:2px;border-top-right-radius:2px}.leaflet-touch .leaflet-bar a:last-child{border-bottom-left-radius:2px;border-bottom-right-radius:2px}.leaflet-control-zoom-in,.leaflet-control-zoom-out{font:700 18px Lucida Console,Monaco,monospace;text-indent:1px}.leaflet-touch .leaflet-control-zoom-in,.leaflet-touch .leaflet-control-zoom-out{font-size:22px}.leaflet-control-layers{box-shadow:0 1px 5px #0006;background:#fff;border-radius:5px}.leaflet-control-layers-toggle{background-image:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABoAAAAaCAQAAAADQ4RFAAACf0lEQVR4AY1UM3gkARTePdvdoTxXKc+qTl3aU5U6b2Kbkz3Gtq3Zw6ziLGNPzrYx7946Tr6/ee/XeCQ4D3ykPtL5tHno4n0d/h3+xfuWHGLX81cn7r0iTNzjr7LrlxCqPtkbTQEHeqOrTy4Yyt3VCi/IOB0v7rVC7q45Q3Gr5K6jt+3Gl5nCoDD4MtO+j96Wu8atmhGqcNGHObuf8OM/x3AMx38+4Z2sPqzCxRFK2aF2e5Jol56XTLyggAMTL56XOMoS1W4pOyjUcGGQdZxU6qRh7B9Zp+PfpOFlqt0zyDZckPi1ttmIp03jX8gyJ8a/PG2yutpS/Vol7peZIbZcKBAEEheEIAgFbDkz5H6Zrkm2hVWGiXKiF4Ycw0RWKdtC16Q7qe3X4iOMxruonzegJzWaXFrU9utOSsLUmrc0YjeWYjCW4PDMADElpJSSQ0vQvA1Tm6/JlKnqFs1EGyZiFCqnRZTEJJJiKRYzVYzJck2Rm6P4iH+cmSY0YzimYa8l0EtTODFWhcMIMVqdsI2uiTvKmTisIDHJ3od5GILVhBCarCfVRmo4uTjkhrhzkiBV7SsaqS+TzrzM1qpGGUFt28pIySQHR6h7F6KSwGWm97ay+Z+ZqMcEjEWebE7wxCSQwpkhJqoZA5ivCdZDjJepuJ9IQjGGUmuXJdBFUygxVqVsxFsLMbDe8ZbDYVCGKxs+W080max1hFCarCfV+C1KATwcnvE9gRRuMP2prdbWGowm1KB1y+zwMMENkM755cJ2yPDtqhTI6ED1M/82yIDtC/4j4BijjeObflpO9I9MwXTCsSX8jWAFeHr05WoLTJ5G8IQVS/7vwR6ohirYM7f6HzYpogfS3R2OAAAAAElFTkSuQmCC);width:36px;height:36px}.leaflet-retina .leaflet-control-layers-toggle{background-image:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADQAAAA0CAQAAABvcdNgAAAEsklEQVR4AWL4TydIhpZK1kpWOlg0w3ZXP6D2soBtG42jeI6ZmQTHzAxiTbSJsYLjO9HhP+WOmcuhciVnmHVQcJnp7DFvScowZorad/+V/fVzMdMT2g9Cv9guXGv/7pYOrXh2U+RRR3dSd9JRx6bIFc/ekqHI29JC6pJ5ZEh1yWkhkbcFeSjxgx3L2m1cb1C7bceyxA+CNjT/Ifff+/kDk2u/w/33/IeCMOSaWZ4glosqT3DNnNZQ7Cs58/3Ce5HL78iZH/vKVIaYlqzfdLu8Vi7dnvUbEza5Idt36tquZFldl6N5Z/POLof0XLK61mZCmJSWjVF9tEjUluu74IUXvgttuVIHE7YxSkaYhJZam7yiM9Pv82JYfl9nptxZaxMJE4YSPty+vF0+Y2up9d3wwijfjZbabqm/3bZ9ecKHsiGmRflnn1MW4pjHf9oLufyn2z3y1D6n8g8TZhxyzipLNPnAUpsOiuWimg52psrTZYnOWYNDTMuWBWa0tJb4rgq1UvmutpaYEbZlwU3CLJm/ayYjHW5/h7xWLn9Hh1vepDkyf7dE7MtT5LR4e7yYpHrkhOUpEfssBLq2pPhAqoSWKUkk7EDqkmK6RrCEzqDjhNDWNE+XSMvkJRDWlZTmCW0l0PHQGRZY5t1L83kT0Y3l2SItk5JAWHl2dCOBm+fPu3fo5/3v61RMCO9Jx2EEYYhb0rmNQMX/vm7gqOEJLcXTGw3CAuRNeyaPWwjR8PRqKQ1PDA/dpv+on9Shox52WFnx0KY8onHayrJzm87i5h9xGw/tfkev0jGsQizqezUKjk12hBMKJ4kbCqGPVNXudyyrShovGw5CgxsRICxF6aRmSjlBnHRzg7Gx8fKqEubI2rahQYdR1YgDIRQO7JvQyD52hoIQx0mxa0ODtW2Iozn1le2iIRdzwWewedyZzewidueOGqlsn1MvcnQpuVwLGG3/IR1hIKxCjelIDZ8ldqWz25jWAsnldEnK0Zxro19TGVb2ffIZEsIO89EIEDvKMPrzmBOQcKQ+rroye6NgRRxqR4U8EAkz0CL6uSGOm6KQCdWjvjRiSP1BPalCRS5iQYiEIvxuBMJEWgzSoHADcVMuN7IuqqTeyUPq22qFimFtxDyBBJEwNyt6TM88blFHao/6tWWhuuOM4SAK4EI4QmFHA+SEyWlp4EQoJ13cYGzMu7yszEIBOm2rVmHUNqwAIQabISNMRstmdhNWcFLsSm+0tjJH1MdRxO5Nx0WDMhCtgD6OKgZeljJqJKc9po8juskR9XN0Y1lZ3mWjLR9JCO1jRDMd0fpYC2VnvjBSEFg7wBENc0R9HFlb0xvF1+TBEpF68d+DHR6IOWVv2BECtxo46hOFUBd/APU57WIoEwJhIi2CdpyZX0m93BZicktMj1AS9dClteUFAUNUIEygRZCtik5zSxI9MubTBH1GOiHsiLJ3OCoSZkILa9PxiN0EbvhsAo8tdAf9Seepd36lGWHmtNANTv5Jd0z4QYyeo/UEJqxKRpg5LZx6btLPsOaEmdMyxYdlc8LMaJnikDlhclqmPiQnTEpLUIZEwkRagjYkEibQErwhkTAKCLQEbUgkzJQWc/0PstHHcfEdQ+UAAAAASUVORK5CYII=);background-size:26px 26px}.leaflet-touch .leaflet-control-layers-toggle{width:44px;height:44px}.leaflet-control-layers .leaflet-control-layers-list,.leaflet-control-layers-expanded .leaflet-control-layers-toggle{display:none}.leaflet-control-layers-expanded .leaflet-control-layers-list{display:block;position:relative}.leaflet-control-layers-expanded{padding:6px 10px 6px 6px;color:#333;background:#fff}.leaflet-control-layers-scrollbar{overflow-y:scroll;overflow-x:hidden;padding-right:5px}.leaflet-control-layers-selector{margin-top:2px;position:relative;top:1px}.leaflet-control-layers label{display:block;font-size:13px;font-size:1.08333em}.leaflet-control-layers-separator{height:0;border-top:1px solid #ddd;margin:5px -10px 5px -6px}.leaflet-default-icon-path{background-image:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABkAAAApCAYAAADAk4LOAAAFgUlEQVR4Aa1XA5BjWRTN2oW17d3YaZtr2962HUzbDNpjszW24mRt28p47v7zq/bXZtrp/lWnXr337j3nPCe85NcypgSFdugCpW5YoDAMRaIMqRi6aKq5E3YqDQO3qAwjVWrD8Ncq/RBpykd8oZUb/kaJutow8r1aP9II0WmLKLIsJyv1w/kqw9Ch2MYdB++12Onxee/QMwvf4/Dk/Lfp/i4nxTXtOoQ4pW5Aj7wpici1A9erdAN2OH64x8OSP9j3Ft3b7aWkTg/Fm91siTra0f9on5sQr9INejH6CUUUpavjFNq1B+Oadhxmnfa8RfEmN8VNAsQhPqF55xHkMzz3jSmChWU6f7/XZKNH+9+hBLOHYozuKQPxyMPUKkrX/K0uWnfFaJGS1QPRtZsOPtr3NsW0uyh6NNCOkU3Yz+bXbT3I8G3xE5EXLXtCXbbqwCO9zPQYPRTZ5vIDXD7U+w7rFDEoUUf7ibHIR4y6bLVPXrz8JVZEql13trxwue/uDivd3fkWRbS6/IA2bID4uk0UpF1N8qLlbBlXs4Ee7HLTfV1j54APvODnSfOWBqtKVvjgLKzF5YdEk5ewRkGlK0i33Eofffc7HT56jD7/6U+qH3Cx7SBLNntH5YIPvODnyfIXZYRVDPqgHtLs5ABHD3YzLuespb7t79FY34DjMwrVrcTuwlT55YMPvOBnRrJ4VXTdNnYug5ucHLBjEpt30701A3Ts+HEa73u6dT3FNWwflY86eMHPk+Yu+i6pzUpRrW7SNDg5JHR4KapmM5Wv2E8Tfcb1HoqqHMHU+uWDD7zg54mz5/2BSnizi9T1Dg4QQXLToGNCkb6tb1NU+QAlGr1++eADrzhn/u8Q2YZhQVlZ5+CAOtqfbhmaUCS1ezNFVm2imDbPmPng5wmz+gwh+oHDce0eUtQ6OGDIyR0uUhUsoO3vfDmmgOezH0mZN59x7MBi++WDL1g/eEiU3avlidO671bkLfwbw5XV2P8Pzo0ydy4t2/0eu33xYSOMOD8hTf4CrBtGMSoXfPLchX+J0ruSePw3LZeK0juPJbYzrhkH0io7B3k164hiGvawhOKMLkrQLyVpZg8rHFW7E2uHOL888IBPlNZ1FPzstSJM694fWr6RwpvcJK60+0HCILTBzZLFNdtAzJaohze60T8qBzyh5ZuOg5e7uwQppofEmf2++DYvmySqGBuKaicF1blQjhuHdvCIMvp8whTTfZzI7RldpwtSzL+F1+wkdZ2TBOW2gIF88PBTzD/gpeREAMEbxnJcaJHNHrpzji0gQCS6hdkEeYt9DF/2qPcEC8RM28Hwmr3sdNyht00byAut2k3gufWNtgtOEOFGUwcXWNDbdNbpgBGxEvKkOQsxivJx33iow0Vw5S6SVTrpVq11ysA2Rp7gTfPfktc6zhtXBBC+adRLshf6sG2RfHPZ5EAc4sVZ83yCN00Fk/4kggu40ZTvIEm5g24qtU4KjBrx/BTTH8ifVASAG7gKrnWxJDcU7x8X6Ecczhm3o6YicvsLXWfh3Ch1W0k8x0nXF+0fFxgt4phz8QvypiwCCFKMqXCnqXExjq10beH+UUA7+nG6mdG/Pu0f3LgFcGrl2s0kNNjpmoJ9o4B29CMO8dMT4Q5ox8uitF6fqsrJOr8qnwNbRzv6hSnG5wP+64C7h9lp30hKNtKdWjtdkbuPA19nJ7Tz3zR/ibgARbhb4AlhavcBebmTHcFl2fvYEnW0ox9xMxKBS8btJ+KiEbq9zA4RthQXDhPa0T9TEe69gWupwc6uBUphquXgf+/FrIjweHQS4/pduMe5ERUMHUd9xv8ZR98CxkS4F2n3EUrUZ10EYNw7BWm9x1GiPssi3GgiGRDKWRYZfXlON+dfNbM+GgIwYdwAAAAASUVORK5CYII=)}.leaflet-container .leaflet-control-attribution{background:#fff;background:#fffc;margin:0}.leaflet-control-attribution,.leaflet-control-scale-line{padding:0 5px;color:#333;line-height:1.4}.leaflet-control-attribution a{text-decoration:none}.leaflet-control-attribution a:hover,.leaflet-control-attribution a:focus{text-decoration:underline}.leaflet-attribution-flag{display:inline!important;vertical-align:baseline!important;width:1em;height:.6669em}.leaflet-left .leaflet-control-scale{margin-left:5px}.leaflet-bottom .leaflet-control-scale{margin-bottom:5px}.leaflet-control-scale-line{border:2px solid #777;border-top:none;line-height:1.1;padding:2px 5px 1px;white-space:nowrap;-moz-box-sizing:border-box;box-sizing:border-box;background:#fffc;text-shadow:1px 1px #fff}.leaflet-control-scale-line:not(:first-child){border-top:2px solid #777;border-bottom:none;margin-top:-2px}.leaflet-control-scale-line:not(:first-child):not(:last-child){border-bottom:2px solid #777}.leaflet-touch .leaflet-control-attribution,.leaflet-touch .leaflet-control-layers,.leaflet-touch .leaflet-bar{box-shadow:none}.leaflet-touch .leaflet-control-layers,.leaflet-touch .leaflet-bar{border:2px solid rgba(0,0,0,.2);background-clip:padding-box}.leaflet-popup{position:absolute;text-align:center;margin-bottom:20px}.leaflet-popup-content-wrapper{padding:1px;text-align:left;border-radius:12px}.leaflet-popup-content{margin:13px 24px 13px 20px;line-height:1.3;font-size:13px;font-size:1.08333em;min-height:1px}.leaflet-popup-content p{margin:1.3em 0}.leaflet-popup-tip-container{width:40px;height:20px;position:absolute;left:50%;margin-top:-1px;margin-left:-20px;overflow:hidden;pointer-events:none}.leaflet-popup-tip{width:17px;height:17px;padding:1px;margin:-10px auto 0;pointer-events:auto;-webkit-transform:rotate(45deg);-moz-transform:rotate(45deg);-ms-transform:rotate(45deg);transform:rotate(45deg)}.leaflet-popup-content-wrapper,.leaflet-popup-tip{background:#fff;color:#333;box-shadow:0 3px 14px #0006}.leaflet-container a.leaflet-popup-close-button{position:absolute;top:0;right:0;border:none;text-align:center;width:24px;height:24px;font:16px/24px Tahoma,Verdana,sans-serif;color:#757575;text-decoration:none;background:transparent}.leaflet-container a.leaflet-popup-close-button:hover,.leaflet-container a.leaflet-popup-close-button:focus{color:#585858}.leaflet-popup-scrolled{overflow:auto}.leaflet-oldie .leaflet-popup-content-wrapper{-ms-zoom:1}.leaflet-oldie .leaflet-popup-tip{width:24px;margin:0 auto;-ms-filter:\"progid:DXImageTransform.Microsoft.Matrix(M11=0.70710678, M12=0.70710678, M21=-0.70710678, M22=0.70710678)\";filter:progid:DXImageTransform.Microsoft.Matrix(M11=.70710678,M12=.70710678,M21=-.70710678,M22=.70710678)}.leaflet-oldie .leaflet-control-zoom,.leaflet-oldie .leaflet-control-layers,.leaflet-oldie .leaflet-popup-content-wrapper,.leaflet-oldie .leaflet-popup-tip{border:1px solid #999}.leaflet-div-icon{background:#fff;border:1px solid #666}.leaflet-tooltip{position:absolute;padding:6px;background-color:#fff;border:1px solid #fff;border-radius:3px;color:#222;white-space:nowrap;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;pointer-events:none;box-shadow:0 1px 3px #0006}.leaflet-tooltip.leaflet-interactive{cursor:pointer;pointer-events:auto}.leaflet-tooltip-top:before,.leaflet-tooltip-bottom:before,.leaflet-tooltip-left:before,.leaflet-tooltip-right:before{position:absolute;pointer-events:none;border:6px solid transparent;background:transparent;content:\"\"}.leaflet-tooltip-bottom{margin-top:6px}.leaflet-tooltip-top{margin-top:-6px}.leaflet-tooltip-bottom:before,.leaflet-tooltip-top:before{left:50%;margin-left:-6px}.leaflet-tooltip-top:before{bottom:0;margin-bottom:-12px;border-top-color:#fff}.leaflet-tooltip-bottom:before{top:0;margin-top:-12px;margin-left:-6px;border-bottom-color:#fff}.leaflet-tooltip-left{margin-left:-6px}.leaflet-tooltip-right{margin-left:6px}.leaflet-tooltip-left:before,.leaflet-tooltip-right:before{top:50%;margin-top:-6px}.leaflet-tooltip-left:before{right:0;margin-right:-12px;border-left-color:#fff}.leaflet-tooltip-right:before{left:0;margin-left:-12px;border-right-color:#fff}@media print{.leaflet-control{-webkit-print-color-adjust:exact;print-color-adjust:exact}}.valhalla-preview[data-v-e6b8f6de]{display:flex;height:100%;width:100%;overflow:hidden}.sidebar[data-v-e6b8f6de]{width:360px;min-width:300px;display:flex;flex-direction:column;border-right:1px solid #e5e7eb;overflow-y:auto;background:#fafafa}.search-section[data-v-e6b8f6de]{padding:.75rem;border-bottom:1px solid #e5e7eb;background:#fff}.search-box[data-v-e6b8f6de]{position:relative}.search-input[data-v-e6b8f6de]{width:100%}.search-results[data-v-e6b8f6de]{position:absolute;top:100%;left:0;right:0;background:#fff;border:1px solid #e5e7eb;border-radius:0 0 .5rem .5rem;box-shadow:0 4px 12px #00000026;z-index:1000;max-height:250px;overflow-y:auto}.search-result-item[data-v-e6b8f6de]{display:flex;align-items:flex-start;gap:.5rem;padding:.5rem .75rem;cursor:pointer;font-size:.85em;border-bottom:1px solid #f3f4f6}.search-result-item[data-v-e6b8f6de]:hover{background-color:#f0f4ff}.search-result-item[data-v-e6b8f6de]:last-child{border-bottom:none}.controls-row[data-v-e6b8f6de]{display:flex;align-items:flex-end;gap:.5rem;padding:.75rem;border-bottom:1px solid #e5e7eb;background:#fff}.costing-select[data-v-e6b8f6de]{flex:1}.waypoints-list[data-v-e6b8f6de]{flex:1;overflow-y:auto;padding:.5rem}.waypoints-header[data-v-e6b8f6de]{display:flex;justify-content:space-between;align-items:center;padding:.25rem .5rem .5rem}.section-title[data-v-e6b8f6de]{font-weight:600;font-size:.9em;color:#374151}.hint[data-v-e6b8f6de]{font-size:.75em;color:#9ca3af}.waypoint-item[data-v-e6b8f6de]{display:flex;align-items:center;gap:.4rem;padding:.4rem .5rem;margin-bottom:.25rem;background:#fff;border-radius:.375rem;border:1px solid #e5e7eb;cursor:grab;transition:box-shadow .15s,opacity .15s}.waypoint-item[data-v-e6b8f6de]:hover{box-shadow:0 1px 4px #00000014}.waypoint-item.dragging[data-v-e6b8f6de]{opacity:.5}.waypoint-grip[data-v-e6b8f6de]{cursor:grab;display:flex;align-items:center}.waypoint-marker[data-v-e6b8f6de]{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:.7em;font-weight:700;flex-shrink:0}.waypoint-info[data-v-e6b8f6de]{flex:1;min-width:0;display:flex;flex-direction:column}.waypoint-role[data-v-e6b8f6de]{font-size:.7em;font-weight:600;color:#6b7280;text-transform:uppercase;letter-spacing:.03em}.waypoint-name[data-v-e6b8f6de]{font-size:.85em;color:#374151;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.waypoint-actions[data-v-e6b8f6de]{display:flex;gap:0;flex-shrink:0}.no-waypoints[data-v-e6b8f6de]{text-align:center;color:#9ca3af;font-size:.85em;padding:2rem 1rem}.action-buttons[data-v-e6b8f6de]{display:flex;gap:.5rem;padding:.75rem;border-top:1px solid #e5e7eb;background:#fff}.route-summary[data-v-e6b8f6de]{border-top:1px solid #e5e7eb;padding:.75rem;background:#fff}.summary-header[data-v-e6b8f6de]{font-weight:600;font-size:.95em;color:#111827;margin-bottom:.5rem}.summary-stats[data-v-e6b8f6de]{display:flex;gap:1rem;margin-bottom:.5rem}.stat[data-v-e6b8f6de]{display:flex;align-items:center;gap:.3rem;font-size:.9em;color:#374151;font-weight:500}.maneuvers-list[data-v-e6b8f6de]{max-height:200px;overflow-y:auto;border-top:1px solid #f3f4f6;padding-top:.5rem;margin-top:.25rem}.maneuver-item[data-v-e6b8f6de]{display:flex;gap:.4rem;padding:.2rem 0;font-size:.8em;color:#4b5563;align-items:flex-start}.maneuver-index[data-v-e6b8f6de]{color:#9ca3af;min-width:1.5em;text-align:right}.maneuver-text[data-v-e6b8f6de]{flex:1}.maneuver-dist[data-v-e6b8f6de]{color:#9ca3af;flex-shrink:0}.map-container[data-v-e6b8f6de]{flex:1;min-width:300px}\n";})();
+import { DATASOURCE_REPOSITORY as Fe } from "org.eclipse.daanse.board.app.lib.api.datasource";
+import { defineComponent as C, h as te, ref as c, reactive as Ct, provide as G, computed as X, onMounted as R, markRaw as _, nextTick as j, onBeforeUnmount as ie, inject as A, watch as Oe, onUnmounted as Be, render as Tt, shallowRef as kt, createElementBlock as E, openBlock as I, createElementVNode as g, createCommentVNode as Y, createVNode as O, unref as b, withKeys as Bt, Fragment as re, renderList as fe, toDisplayString as U, createBlock as ge, withCtx as K, createTextVNode as he, normalizeClass as Rt, normalizeStyle as At } from "vue";
+import { DInput as Me, DIcon as W, DSelect as Le, DButton as ne } from "org.eclipse.daanse.board.app.ui.vue.controls";
+import { useTemporaryStore as xt } from "org.eclipse.daanse.board.app.ui.vue.composables";
+const ze = (e, a) => {
   for (const t of Object.keys(a))
     e.on(t, a[t]);
 }, Ee = (e) => {
   for (const a of Object.keys(e)) {
     const t = e[a];
-    t && H(t.cancel) && t.cancel();
+    t && Q(t.cancel) && t.cancel();
   }
-}, It = (e) => !e || typeof e.charAt != "function" ? e : e.charAt(0).toUpperCase() + e.slice(1), H = (e) => typeof e == "function", _ = (e, a, t) => {
-  for (const o in t) {
-    const r = "set" + It(o);
-    e[r] ? Oe(
-      () => t[o],
-      (l, n) => {
-        e[r](l, n);
+}, Pt = (e) => !e || typeof e.charAt != "function" ? e : e.charAt(0).toUpperCase() + e.slice(1), Q = (e) => typeof e == "function", x = (e, a, t) => {
+  for (const n in t) {
+    const s = "set" + Pt(n);
+    e[s] ? Oe(
+      () => t[n],
+      (o, l) => {
+        e[s](o, l);
       }
-    ) : a[r] && Oe(
-      () => t[o],
-      (l) => {
-        a[r](l);
+    ) : a[s] && Oe(
+      () => t[n],
+      (o) => {
+        a[s](o);
       }
     );
   }
-}, w = (e, a, t = {}) => {
-  const o = { ...t };
-  for (const r in e) {
-    const l = a[r], n = e[r];
-    l && (l && l.custom === !0 || n !== void 0 && (o[r] = n));
+}, k = (e, a, t = {}) => {
+  const n = { ...t };
+  for (const s in e) {
+    const o = a[s], l = e[s];
+    o && (o && o.custom === !0 || l !== void 0 && (n[s] = l));
   }
-  return o;
-}, z = (e) => {
+  return n;
+}, V = (e) => {
   const a = {}, t = {};
-  for (const o in e)
-    if (o.startsWith("on") && !o.startsWith("onUpdate") && o !== "onReady") {
-      const r = o.slice(2).toLocaleLowerCase();
-      a[r] = e[o];
+  for (const n in e)
+    if (n.startsWith("on") && !n.startsWith("onUpdate") && n !== "onReady") {
+      const s = n.slice(2).toLocaleLowerCase();
+      a[s] = e[n];
     } else
-      t[o] = e[o];
+      t[n] = e[n];
   return { listeners: a, attrs: t };
-}, Vt = async (e) => {
+}, _t = async (e) => {
   const a = await Promise.all([
     import("./marker-icon-2x-DVSLMKfE.js"),
     import("./marker-icon-DbhCZIpd.js"),
@@ -52,34 +53,34 @@ const $e = (e, a) => {
     iconUrl: a[1].default,
     shadowUrl: a[2].default
   });
-}, Se = (e) => {
+}, be = (e) => {
   const a = c(
-    (...o) => console.warn(`Method ${e} has been invoked without being replaced`)
-  ), t = (...o) => a.value(...o);
+    (...n) => console.warn(`Method ${e} has been invoked without being replaced`)
+  ), t = (...n) => a.value(...n);
   return t.wrapped = a, G(e, t), t;
-}, Le = (e, a) => e.wrapped.value = a, b = typeof self == "object" && self.self === self && self || typeof global == "object" && global.global === global && global || globalThis, g = (e) => {
-  const a = B(e);
+}, Se = (e, a) => e.wrapped.value = a, w = typeof self == "object" && self.self === self && self || typeof global == "object" && global.global === global && global || globalThis, S = (e) => {
+  const a = A(e);
   if (a === void 0)
     throw new Error(
       `Attempt to inject ${e.description} before it was provided.`
     );
   return a;
-}, k = Symbol(
+}, P = Symbol(
   "useGlobalLeaflet"
-), D = Symbol("addLayer"), je = Symbol("removeLayer"), ce = Symbol(
+), $ = Symbol("addLayer"), je = Symbol("removeLayer"), ue = Symbol(
   "registerControl"
-), Ze = Symbol(
+), Ue = Symbol(
   "registerLayerControl"
-), We = Symbol(
+), Ze = Symbol(
   "canSetParentHtml"
-), Ge = Symbol("setParentHtml"), qe = Symbol("setIcon"), Je = Symbol("bindPopup"), Ke = Symbol("bindTooltip"), He = Symbol("unbindPopup"), Ye = Symbol("unbindTooltip"), de = {
+), qe = Symbol("setParentHtml"), We = Symbol("setIcon"), Ge = Symbol("bindPopup"), Je = Symbol("bindTooltip"), Ke = Symbol("unbindPopup"), He = Symbol("unbindTooltip"), ce = {
   options: {
     type: Object,
     default: () => ({}),
     custom: !0
   }
-}, pe = (e) => ({ options: e.options, methods: {} }), ne = {
-  ...de,
+}, de = (e) => ({ options: e.options, methods: {} }), le = {
+  ...ce,
   pane: {
     type: String
   },
@@ -99,13 +100,13 @@ const $e = (e, a) => {
     custom: !0,
     default: !0
   }
-}, ve = (e, a, t) => {
-  const o = g(D), r = g(je), { options: l, methods: n } = pe(e), s = w(
+}, pe = (e, a, t) => {
+  const n = S($), s = S(je), { options: o, methods: l } = de(e), r = k(
     e,
-    ne,
-    l
-  ), i = () => o({ leafletObject: a.value }), u = () => r({ leafletObject: a.value }), v = {
-    ...n,
+    le,
+    o
+  ), i = () => n({ leafletObject: a.value }), u = () => s({ leafletObject: a.value }), v = {
+    ...l,
     setAttribution(y) {
       u(), a.value.options.attribution = y, e.visible && i();
     },
@@ -119,7 +120,7 @@ const $e = (e, a) => {
       a.value && (y ? i() : u());
     },
     bindPopup(y) {
-      if (!a.value || !H(a.value.bindPopup)) {
+      if (!a.value || !Q(a.value.bindPopup)) {
         console.warn(
           "Attempt to bind popup before bindPopup method available on layer."
         );
@@ -128,7 +129,7 @@ const $e = (e, a) => {
       a.value.bindPopup(y);
     },
     bindTooltip(y) {
-      if (!a.value || !H(a.value.bindTooltip)) {
+      if (!a.value || !Q(a.value.bindTooltip)) {
         console.warn(
           "Attempt to bind tooltip before bindTooltip method available on layer."
         );
@@ -137,23 +138,23 @@ const $e = (e, a) => {
       a.value.bindTooltip(y);
     },
     unbindTooltip() {
-      a.value && (H(a.value.closeTooltip) && a.value.closeTooltip(), H(a.value.unbindTooltip) && a.value.unbindTooltip());
+      a.value && (Q(a.value.closeTooltip) && a.value.closeTooltip(), Q(a.value.unbindTooltip) && a.value.unbindTooltip());
     },
     unbindPopup() {
-      a.value && (H(a.value.closePopup) && a.value.closePopup(), H(a.value.unbindPopup) && a.value.unbindPopup());
+      a.value && (Q(a.value.closePopup) && a.value.closePopup(), Q(a.value.unbindPopup) && a.value.unbindPopup());
     },
     updateVisibleProp(y) {
       t.emit("update:visible", y);
     }
   };
-  return G(Je, v.bindPopup), G(Ke, v.bindTooltip), G(He, v.unbindPopup), G(Ye, v.unbindTooltip), xe(() => {
+  return G(Ge, v.bindPopup), G(Je, v.bindTooltip), G(Ke, v.unbindPopup), G(He, v.unbindTooltip), Be(() => {
     v.unbindPopup(), v.unbindTooltip(), u();
-  }), { options: s, methods: v };
-}, q = (e, a) => {
+  }), { options: r, methods: v };
+}, J = (e, a) => {
   if (e && a.default)
-    return ae("div", { style: { display: "none" } }, a.default());
-}, Qe = {
-  ...ne,
+    return te("div", { style: { display: "none" } }, a.default());
+}, Ye = {
+  ...le,
   interactive: {
     type: Boolean,
     default: void 0
@@ -163,18 +164,18 @@ const $e = (e, a) => {
     default: void 0
   }
 }, Nt = (e, a, t) => {
-  const { options: o, methods: r } = ve(
+  const { options: n, methods: s } = pe(
     e,
     a,
     t
   );
-  return { options: w(
+  return { options: k(
     e,
-    Qe,
-    o
-  ), methods: r };
+    Ye,
+    n
+  ), methods: s };
 }, Re = {
-  ...Qe,
+  ...Ye,
   stroke: {
     type: Boolean,
     default: void 0
@@ -216,13 +217,13 @@ const $e = (e, a) => {
   className: {
     type: String
   }
-}, Xe = (e, a, t) => {
-  const { options: o, methods: r } = Nt(e, a, t), l = w(
+}, Qe = (e, a, t) => {
+  const { options: n, methods: s } = Nt(e, a, t), o = k(
     e,
     Re,
-    o
-  ), n = g(je), s = {
-    ...r,
+    n
+  ), l = S(je), r = {
+    ...s,
     setStroke(i) {
       a.value.setStyle({ stroke: i });
     },
@@ -263,9 +264,9 @@ const $e = (e, a) => {
       a.value.setStyle({ className: i });
     }
   };
-  return ue(() => {
-    n({ leafletObject: a.value });
-  }), { options: l, methods: s };
+  return ie(() => {
+    l({ leafletObject: a.value });
+  }), { options: o, methods: r };
 }, Ae = {
   ...Re,
   /**
@@ -279,26 +280,26 @@ const $e = (e, a) => {
     required: !0,
     custom: !0
   }
-}, et = (e, a, t) => {
-  const { options: o, methods: r } = Xe(
+}, Xe = (e, a, t) => {
+  const { options: n, methods: s } = Qe(
     e,
     a,
     t
-  ), l = w(
+  ), o = k(
     e,
     Ae,
-    o
-  ), n = {
-    ...r,
-    setRadius(s) {
-      a.value.setRadius(s);
+    n
+  ), l = {
+    ...s,
+    setRadius(r) {
+      a.value.setRadius(r);
     },
-    setLatLng(s) {
-      a.value.setLatLng(s);
+    setLatLng(r) {
+      a.value.setLatLng(r);
     }
   };
-  return { options: l, methods: n };
-}, tt = {
+  return { options: o, methods: l };
+}, et = {
   ...Ae,
   /**
    * Radius of the circle in meters.
@@ -306,85 +307,85 @@ const $e = (e, a) => {
   radius: {
     type: Number
   }
-}, zt = (e, a, t) => {
-  const { options: o, methods: r } = et(e, a, t), l = w(
+}, It = (e, a, t) => {
+  const { options: n, methods: s } = Xe(e, a, t), o = k(
     e,
-    tt,
-    o
-  ), n = {
-    ...r
+    et,
+    n
+  ), l = {
+    ...s
   };
-  return { options: l, methods: n };
+  return { options: o, methods: l };
 };
-L({
+C({
   name: "LCircle",
-  props: tt,
+  props: et,
   setup(e, a) {
-    const t = c(), o = c(!1), r = B(k), l = g(D), { options: n, methods: s } = zt(e, t, a);
-    return T(async () => {
-      const { circle: i } = r ? b.L : await import("./leaflet-src.esm-BnEQV3J-.js");
-      t.value = x(i(e.latLng, n));
-      const { listeners: u } = z(a.attrs);
-      t.value.on(u), _(s, t.value, e), l({
+    const t = c(), n = c(!1), s = A(P), o = S($), { options: l, methods: r } = It(e, t, a);
+    return R(async () => {
+      const { circle: i } = s ? w.L : await import("./leaflet-src.esm-BnEQV3J-.js");
+      t.value = _(i(e.latLng, l));
+      const { listeners: u } = V(a.attrs);
+      t.value.on(u), x(r, t.value, e), o({
         ...e,
-        ...s,
+        ...r,
         leafletObject: t.value
-      }), o.value = !0, S(() => a.emit("ready", t.value));
-    }), { ready: o, leafletObject: t };
+      }), n.value = !0, j(() => a.emit("ready", t.value));
+    }), { ready: n, leafletObject: t };
   },
   render() {
-    return q(this.ready, this.$slots);
+    return J(this.ready, this.$slots);
   }
 });
-const $t = L({
+const zt = C({
   name: "LCircleMarker",
   props: Ae,
   setup(e, a) {
-    const t = c(), o = c(!1), r = B(k), l = g(D), { options: n, methods: s } = et(
+    const t = c(), n = c(!1), s = A(P), o = S($), { options: l, methods: r } = Xe(
       e,
       t,
       a
     );
-    return T(async () => {
-      const { circleMarker: i } = r ? b.L : await import("./leaflet-src.esm-BnEQV3J-.js");
-      t.value = x(
-        i(e.latLng, n)
+    return R(async () => {
+      const { circleMarker: i } = s ? w.L : await import("./leaflet-src.esm-BnEQV3J-.js");
+      t.value = _(
+        i(e.latLng, l)
       );
-      const { listeners: u } = z(a.attrs);
-      t.value.on(u), _(s, t.value, e), l({
+      const { listeners: u } = V(a.attrs);
+      t.value.on(u), x(r, t.value, e), o({
         ...e,
-        ...s,
+        ...r,
         leafletObject: t.value
-      }), o.value = !0, S(() => a.emit("ready", t.value));
-    }), { ready: o, leafletObject: t };
+      }), n.value = !0, j(() => a.emit("ready", t.value));
+    }), { ready: n, leafletObject: t };
   },
   render() {
-    return q(this.ready, this.$slots);
+    return J(this.ready, this.$slots);
   }
-}), le = {
-  ...de,
+}), oe = {
+  ...ce,
   position: {
     type: String
   }
-}, me = (e, a) => {
-  const { options: t, methods: o } = pe(e), r = w(
+}, ve = (e, a) => {
+  const { options: t, methods: n } = de(e), s = k(
     e,
-    le,
+    oe,
     t
-  ), l = {
-    ...o,
-    setPosition(n) {
-      a.value && a.value.setPosition(n);
+  ), o = {
+    ...n,
+    setPosition(l) {
+      a.value && a.value.setPosition(l);
     }
   };
-  return xe(() => {
+  return Be(() => {
     a.value && a.value.remove();
-  }), { options: r, methods: l };
-}, Dt = (e) => e.default ? ae("div", { ref: "root" }, e.default()) : null;
-L({
+  }), { options: s, methods: o };
+}, Vt = (e) => e.default ? te("div", { ref: "root" }, e.default()) : null;
+C({
   name: "LControl",
   props: {
-    ...le,
+    ...oe,
     disableClickPropagation: {
       type: Boolean,
       custom: !0,
@@ -397,59 +398,59 @@ L({
     }
   },
   setup(e, a) {
-    const t = c(), o = c(), r = B(k), l = g(ce), { options: n, methods: s } = me(e, t);
-    return T(async () => {
-      const { Control: i, DomEvent: u } = r ? b.L : await import("./leaflet-src.esm-BnEQV3J-.js"), v = i.extend({
+    const t = c(), n = c(), s = A(P), o = S(ue), { options: l, methods: r } = ve(e, t);
+    return R(async () => {
+      const { Control: i, DomEvent: u } = s ? w.L : await import("./leaflet-src.esm-BnEQV3J-.js"), v = i.extend({
         onAdd() {
-          return o.value;
+          return n.value;
         }
       });
-      t.value = x(new v(n)), _(s, t.value, e), l({ leafletObject: t.value }), e.disableClickPropagation && o.value && u.disableClickPropagation(o.value), e.disableScrollPropagation && o.value && u.disableScrollPropagation(o.value), S(() => a.emit("ready", t.value));
-    }), { root: o, leafletObject: t };
+      t.value = _(new v(l)), x(r, t.value, e), o({ leafletObject: t.value }), e.disableClickPropagation && n.value && u.disableClickPropagation(n.value), e.disableScrollPropagation && n.value && u.disableScrollPropagation(n.value), j(() => a.emit("ready", t.value));
+    }), { root: n, leafletObject: t };
   },
   render() {
-    return Dt(this.$slots);
+    return Vt(this.$slots);
   }
 });
-const at = {
-  ...le,
+const tt = {
+  ...oe,
   prefix: {
     type: String
   }
-}, Mt = (e, a) => {
-  const { options: t, methods: o } = me(
+}, Dt = (e, a) => {
+  const { options: t, methods: n } = ve(
     e,
     a
-  ), r = w(
+  ), s = k(
     e,
-    at,
+    tt,
     t
-  ), l = {
-    ...o,
-    setPrefix(n) {
-      a.value.setPrefix(n);
+  ), o = {
+    ...n,
+    setPrefix(l) {
+      a.value.setPrefix(l);
     }
   };
-  return { options: r, methods: l };
+  return { options: s, methods: o };
 };
-L({
+C({
   name: "LControlAttribution",
-  props: at,
+  props: tt,
   setup(e, a) {
-    const t = c(), o = B(k), r = g(ce), { options: l, methods: n } = Mt(e, t);
-    return T(async () => {
-      const { control: s } = o ? b.L : await import("./leaflet-src.esm-BnEQV3J-.js");
-      t.value = x(
-        s.attribution(l)
-      ), _(n, t.value, e), r({ leafletObject: t.value }), S(() => a.emit("ready", t.value));
+    const t = c(), n = A(P), s = S(ue), { options: o, methods: l } = Dt(e, t);
+    return R(async () => {
+      const { control: r } = n ? w.L : await import("./leaflet-src.esm-BnEQV3J-.js");
+      t.value = _(
+        r.attribution(o)
+      ), x(l, t.value, e), s({ leafletObject: t.value }), j(() => a.emit("ready", t.value));
     }), { leafletObject: t };
   },
   render() {
     return null;
   }
 });
-const ot = {
-  ...le,
+const at = {
+  ...oe,
   collapsed: {
     type: Boolean,
     default: void 0
@@ -469,35 +470,35 @@ const ot = {
   sortFunction: {
     type: Function
   }
-}, Ft = (e, a) => {
-  const { options: t } = me(e, a);
-  return { options: w(
+}, $t = (e, a) => {
+  const { options: t } = ve(e, a);
+  return { options: k(
     e,
-    ot,
+    at,
     t
   ), methods: {
-    addLayer(o) {
-      o.layerType === "base" ? a.value.addBaseLayer(o.leafletObject, o.name) : o.layerType === "overlay" && a.value.addOverlay(o.leafletObject, o.name);
+    addLayer(n) {
+      n.layerType === "base" ? a.value.addBaseLayer(n.leafletObject, n.name) : n.layerType === "overlay" && a.value.addOverlay(n.leafletObject, n.name);
     },
-    removeLayer(o) {
-      a.value.removeLayer(o.leafletObject);
+    removeLayer(n) {
+      a.value.removeLayer(n.leafletObject);
     }
   } };
 };
-L({
+C({
   name: "LControlLayers",
-  props: ot,
+  props: at,
   setup(e, a) {
-    const t = c(), o = B(k), r = g(Ze), { options: l, methods: n } = Ft(e, t);
-    return T(async () => {
-      const { control: s } = o ? b.L : await import("./leaflet-src.esm-BnEQV3J-.js");
-      t.value = x(
-        s.layers(void 0, void 0, l)
-      ), _(n, t.value, e), r({
+    const t = c(), n = A(P), s = S(Ue), { options: o, methods: l } = $t(e, t);
+    return R(async () => {
+      const { control: r } = n ? w.L : await import("./leaflet-src.esm-BnEQV3J-.js");
+      t.value = _(
+        r.layers(void 0, void 0, o)
+      ), x(l, t.value, e), s({
         ...e,
-        ...n,
+        ...l,
         leafletObject: t.value
-      }), S(() => a.emit("ready", t.value));
+      }), j(() => a.emit("ready", t.value));
     }), { leafletObject: t };
   },
   render() {
@@ -505,7 +506,7 @@ L({
   }
 });
 const nt = {
-  ...le,
+  ...oe,
   maxWidth: {
     type: Number
   },
@@ -521,25 +522,25 @@ const nt = {
     type: Boolean,
     default: void 0
   }
-}, Ut = (e, a) => {
-  const { options: t, methods: o } = me(
+}, Ft = (e, a) => {
+  const { options: t, methods: n } = ve(
     e,
     a
   );
-  return { options: w(
+  return { options: k(
     e,
     nt,
     t
-  ), methods: o };
+  ), methods: n };
 };
-L({
+C({
   name: "LControlScale",
   props: nt,
   setup(e, a) {
-    const t = c(), o = B(k), r = g(ce), { options: l, methods: n } = Ut(e, t);
-    return T(async () => {
-      const { control: s } = o ? b.L : await import("./leaflet-src.esm-BnEQV3J-.js");
-      t.value = x(s.scale(l)), _(n, t.value, e), r({ leafletObject: t.value }), S(() => a.emit("ready", t.value));
+    const t = c(), n = A(P), s = S(ue), { options: o, methods: l } = Ft(e, t);
+    return R(async () => {
+      const { control: r } = n ? w.L : await import("./leaflet-src.esm-BnEQV3J-.js");
+      t.value = _(r.scale(o)), x(l, t.value, e), s({ leafletObject: t.value }), j(() => a.emit("ready", t.value));
     }), { leafletObject: t };
   },
   render() {
@@ -547,7 +548,7 @@ L({
   }
 });
 const lt = {
-  ...le,
+  ...oe,
   zoomInText: {
     type: String
   },
@@ -560,25 +561,25 @@ const lt = {
   zoomOutTitle: {
     type: String
   }
-}, Et = (e, a) => {
-  const { options: t, methods: o } = me(
+}, Mt = (e, a) => {
+  const { options: t, methods: n } = ve(
     e,
     a
   );
-  return { options: w(
+  return { options: k(
     e,
     lt,
     t
-  ), methods: o };
+  ), methods: n };
 };
-L({
+C({
   name: "LControlZoom",
   props: lt,
   setup(e, a) {
-    const t = c(), o = B(k), r = g(ce), { options: l, methods: n } = Et(e, t);
-    return T(async () => {
-      const { control: s } = o ? b.L : await import("./leaflet-src.esm-BnEQV3J-.js");
-      t.value = x(s.zoom(l)), _(n, t.value, e), r({ leafletObject: t.value }), S(() => a.emit("ready", t.value));
+    const t = c(), n = A(P), s = S(ue), { options: o, methods: l } = Mt(e, t);
+    return R(async () => {
+      const { control: r } = n ? w.L : await import("./leaflet-src.esm-BnEQV3J-.js");
+      t.value = _(r.zoom(o)), x(l, t.value, e), s({ leafletObject: t.value }), j(() => a.emit("ready", t.value));
     }), { leafletObject: t };
   },
   render() {
@@ -586,68 +587,68 @@ L({
   }
 });
 const Ce = {
-  ...ne
-}, Pe = (e, a, t) => {
-  const { options: o, methods: r } = ve(
+  ...le
+}, xe = (e, a, t) => {
+  const { options: n, methods: s } = pe(
     e,
     a,
     t
-  ), l = w(
+  ), o = k(
     e,
     Ce,
-    o
-  ), n = {
-    ...r,
-    addLayer(s) {
-      a.value.addLayer(s.leafletObject);
+    n
+  ), l = {
+    ...s,
+    addLayer(r) {
+      a.value.addLayer(r.leafletObject);
     },
-    removeLayer(s) {
-      a.value.removeLayer(s.leafletObject);
+    removeLayer(r) {
+      a.value.removeLayer(r.leafletObject);
     }
   };
-  return G(D, n.addLayer), G(je, n.removeLayer), { options: l, methods: n };
-}, st = {
+  return G($, l.addLayer), G(je, l.removeLayer), { options: o, methods: l };
+}, ot = {
   ...Ce
-}, Zt = (e, a, t) => {
-  const { options: o, methods: r } = Pe(
+}, Et = (e, a, t) => {
+  const { options: n, methods: s } = xe(
     e,
     a,
     t
-  ), l = w(
+  ), o = k(
     e,
-    st,
-    o
-  ), n = {
-    ...r
+    ot,
+    n
+  ), l = {
+    ...s
   };
-  return { options: l, methods: n };
+  return { options: o, methods: l };
 };
-L({
-  props: st,
+C({
+  props: ot,
   setup(e, a) {
-    const t = c(), o = c(!1), r = B(k), l = g(D), { methods: n, options: s } = Zt(
+    const t = c(), n = c(!1), s = A(P), o = S($), { methods: l, options: r } = Et(
       e,
       t,
       a
     );
-    return T(async () => {
-      const { featureGroup: i } = r ? b.L : await import("./leaflet-src.esm-BnEQV3J-.js");
-      t.value = x(
-        i(void 0, s)
+    return R(async () => {
+      const { featureGroup: i } = s ? w.L : await import("./leaflet-src.esm-BnEQV3J-.js");
+      t.value = _(
+        i(void 0, r)
       );
-      const { listeners: u } = z(a.attrs);
-      t.value.on(u), _(n, t.value, e), l({
+      const { listeners: u } = V(a.attrs);
+      t.value.on(u), x(l, t.value, e), o({
         ...e,
-        ...n,
+        ...l,
         leafletObject: t.value
-      }), o.value = !0, S(() => a.emit("ready", t.value));
-    }), { ready: o, leafletObject: t };
+      }), n.value = !0, j(() => a.emit("ready", t.value));
+    }), { ready: n, leafletObject: t };
   },
   render() {
-    return q(this.ready, this.$slots);
+    return J(this.ready, this.$slots);
   }
 });
-const rt = {
+const st = {
   ...Ce,
   geojson: {
     type: [Object, Array],
@@ -657,24 +658,24 @@ const rt = {
     type: Function,
     custom: !0
   }
-}, Wt = (e, a, t) => {
-  const { options: o, methods: r } = Pe(
+}, Ut = (e, a, t) => {
+  const { options: n, methods: s } = xe(
     e,
     a,
     t
-  ), l = w(
+  ), o = k(
     e,
-    rt,
-    o
+    st,
+    n
   );
-  Object.prototype.hasOwnProperty.call(e, "optionsStyle") && (l.style = e.optionsStyle);
-  const n = {
-    ...r,
-    setGeojson(s) {
-      a.value.clearLayers(), a.value.addData(s);
+  Object.prototype.hasOwnProperty.call(e, "optionsStyle") && (o.style = e.optionsStyle);
+  const l = {
+    ...s,
+    setGeojson(r) {
+      a.value.clearLayers(), a.value.addData(r);
     },
-    setOptionsStyle(s) {
-      a.value.setStyle(s);
+    setOptionsStyle(r) {
+      a.value.setStyle(r);
     },
     getGeoJSONData() {
       return a.value.toGeoJSON();
@@ -683,27 +684,27 @@ const rt = {
       return a.value.getBounds();
     }
   };
-  return { options: l, methods: n };
-}, Gt = L({
-  props: rt,
+  return { options: o, methods: l };
+}, Zt = C({
+  props: st,
   setup(e, a) {
-    const t = c(), o = c(!1), r = B(k), l = g(D), { methods: n, options: s } = Wt(e, t, a);
-    return T(async () => {
-      const { geoJSON: i } = r ? b.L : await import("./leaflet-src.esm-BnEQV3J-.js");
-      t.value = x(i(e.geojson, s));
-      const { listeners: u } = z(a.attrs);
-      t.value.on(u), _(n, t.value, e), l({
+    const t = c(), n = c(!1), s = A(P), o = S($), { methods: l, options: r } = Ut(e, t, a);
+    return R(async () => {
+      const { geoJSON: i } = s ? w.L : await import("./leaflet-src.esm-BnEQV3J-.js");
+      t.value = _(i(e.geojson, r));
+      const { listeners: u } = V(a.attrs);
+      t.value.on(u), x(l, t.value, e), o({
         ...e,
-        ...n,
+        ...l,
         leafletObject: t.value
-      }), o.value = !0, S(() => a.emit("ready", t.value));
-    }), { ready: o, leafletObject: t };
+      }), n.value = !0, j(() => a.emit("ready", t.value));
+    }), { ready: n, leafletObject: t };
   },
   render() {
-    return q(this.ready, this.$slots);
+    return J(this.ready, this.$slots);
   }
-}), Ie = {
-  ...ne,
+}), Pe = {
+  ...le,
   opacity: {
     type: Number
   },
@@ -726,71 +727,71 @@ const rt = {
   className: {
     type: String
   }
-}, it = (e, a, t) => {
-  const { options: o, methods: r } = ve(
+}, rt = (e, a, t) => {
+  const { options: n, methods: s } = pe(
     e,
     a,
     t
-  ), l = w(
+  ), o = k(
     e,
-    Ie,
-    o
-  ), n = {
-    ...r,
+    Pe,
+    n
+  ), l = {
+    ...s,
     setTileComponent() {
-      var s;
-      (s = a.value) == null || s.redraw();
+      var r;
+      (r = a.value) == null || r.redraw();
     }
   };
-  return xe(() => {
+  return Be(() => {
     a.value.off();
-  }), { options: l, methods: n };
-}, qt = (e, a, t, o) => e.extend({
-  initialize(r) {
-    this.tileComponents = {}, this.on("tileunload", this._unloadTile), t.setOptions(this, r);
+  }), { options: o, methods: l };
+}, qt = (e, a, t, n) => e.extend({
+  initialize(s) {
+    this.tileComponents = {}, this.on("tileunload", this._unloadTile), t.setOptions(this, s);
   },
-  createTile(r) {
-    const l = this._tileCoordsToKey(r);
-    this.tileComponents[l] = a.create("div");
-    const n = ae({ setup: o, props: ["coords"] }, { coords: r });
-    return _t(n, this.tileComponents[l]), this.tileComponents[l];
+  createTile(s) {
+    const o = this._tileCoordsToKey(s);
+    this.tileComponents[o] = a.create("div");
+    const l = te({ setup: n, props: ["coords"] }, { coords: s });
+    return Tt(l, this.tileComponents[o]), this.tileComponents[o];
   },
-  _unloadTile(r) {
-    const l = this._tileCoordsToKey(r.coords);
-    this.tileComponents[l] && (this.tileComponents[l].innerHTML = "", this.tileComponents[l] = void 0);
+  _unloadTile(s) {
+    const o = this._tileCoordsToKey(s.coords);
+    this.tileComponents[o] && (this.tileComponents[o].innerHTML = "", this.tileComponents[o] = void 0);
   }
 });
-L({
+C({
   props: {
-    ...Ie,
+    ...Pe,
     childRender: {
       type: Function,
       required: !0
     }
   },
   setup(e, a) {
-    const t = c(), o = c(null), r = c(!1), l = B(k), n = g(D), { options: s, methods: i } = it(e, t, a);
-    return T(async () => {
-      const { GridLayer: u, DomUtil: v, Util: y } = l ? b.L : await import("./leaflet-src.esm-BnEQV3J-.js"), N = qt(
+    const t = c(), n = c(null), s = c(!1), o = A(P), l = S($), { options: r, methods: i } = rt(e, t, a);
+    return R(async () => {
+      const { GridLayer: u, DomUtil: v, Util: y } = o ? w.L : await import("./leaflet-src.esm-BnEQV3J-.js"), z = qt(
         u,
         v,
         y,
         e.childRender
       );
-      t.value = x(new N(s));
-      const { listeners: h } = z(a.attrs);
-      t.value.on(h), _(i, t.value, e), n({
+      t.value = _(new z(r));
+      const { listeners: L } = V(a.attrs);
+      t.value.on(L), x(i, t.value, e), l({
         ...e,
         ...i,
         leafletObject: t.value
-      }), r.value = !0, S(() => a.emit("ready", t.value));
-    }), { root: o, ready: r, leafletObject: t };
+      }), s.value = !0, j(() => a.emit("ready", t.value));
+    }), { root: n, ready: s, leafletObject: t };
   },
   render() {
-    return this.ready ? ae("div", { style: { display: "none" }, ref: "root" }) : null;
+    return this.ready ? te("div", { style: { display: "none" }, ref: "root" }) : null;
   }
 });
-const De = {
+const Ve = {
   iconUrl: {
     type: String
   },
@@ -828,68 +829,68 @@ const De = {
     type: String
   }
 };
-L({
+C({
   name: "LIcon",
   props: {
-    ...De,
-    ...de
+    ...Ve,
+    ...ce
   },
   setup(e, a) {
-    const t = c(), o = B(k), r = g(We), l = g(Ge), n = g(qe);
-    let s, i, u, v, y;
-    const N = (P, j, I) => {
-      const M = P && P.innerHTML;
-      if (!j) {
-        I && y && r() && l(M);
+    const t = c(), n = A(P), s = S(Ze), o = S(qe), l = S(We);
+    let r, i, u, v, y;
+    const z = (D, B, N) => {
+      const F = D && D.innerHTML;
+      if (!B) {
+        N && y && s() && o(F);
         return;
       }
-      const { listeners: J } = z(a.attrs);
-      y && i(y, J);
-      const { options: oe } = pe(e), Z = w(
+      const { listeners: H } = V(a.attrs);
+      y && i(y, H);
+      const { options: ae } = de(e), Z = k(
         e,
-        De,
-        oe
+        Ve,
+        ae
       );
-      M && (Z.html = M), y = Z.html ? u(Z) : v(Z), s(y, J), n(y);
-    }, h = () => {
-      S(() => N(t.value, !0, !1));
-    }, W = () => {
-      S(() => N(t.value, !1, !0));
-    }, F = {
-      setIconUrl: h,
-      setIconRetinaUrl: h,
-      setIconSize: h,
-      setIconAnchor: h,
-      setPopupAnchor: h,
-      setTooltipAnchor: h,
-      setShadowUrl: h,
-      setShadowRetinaUrl: h,
-      setShadowAnchor: h,
-      setBgPos: h,
-      setClassName: h,
-      setHtml: h
+      F && (Z.html = F), y = Z.html ? u(Z) : v(Z), r(y, H), l(y);
+    }, L = () => {
+      j(() => z(t.value, !0, !1));
+    }, q = () => {
+      j(() => z(t.value, !1, !0));
+    }, M = {
+      setIconUrl: L,
+      setIconRetinaUrl: L,
+      setIconSize: L,
+      setIconAnchor: L,
+      setPopupAnchor: L,
+      setTooltipAnchor: L,
+      setShadowUrl: L,
+      setShadowRetinaUrl: L,
+      setShadowAnchor: L,
+      setBgPos: L,
+      setClassName: L,
+      setHtml: L
     };
-    return T(async () => {
+    return R(async () => {
       const {
-        DomEvent: P,
-        divIcon: j,
-        icon: I
-      } = o ? b.L : await import("./leaflet-src.esm-BnEQV3J-.js");
-      s = P.on, i = P.off, u = j, v = I, _(F, {}, e), new MutationObserver(W).observe(t.value, {
+        DomEvent: D,
+        divIcon: B,
+        icon: N
+      } = n ? w.L : await import("./leaflet-src.esm-BnEQV3J-.js");
+      r = D.on, i = D.off, u = B, v = N, x(M, {}, e), new MutationObserver(q).observe(t.value, {
         attributes: !0,
         childList: !0,
         characterData: !0,
         subtree: !0
-      }), h();
+      }), L();
     }), { root: t };
   },
   render() {
     const e = this.$slots.default ? this.$slots.default() : void 0;
-    return ae("div", { ref: "root" }, e);
+    return te("div", { ref: "root" }, e);
   }
 });
-const ut = {
-  ...ne,
+const it = {
+  ...le,
   opacity: {
     type: Number
   },
@@ -923,37 +924,37 @@ const ut = {
     required: !0,
     custom: !0
   }
-}, Jt = (e, a, t) => {
-  const { options: o, methods: r } = ve(
+}, Wt = (e, a, t) => {
+  const { options: n, methods: s } = pe(
     e,
     a,
     t
-  ), l = w(
+  ), o = k(
     e,
-    ut,
-    o
-  ), n = {
-    ...r,
+    it,
+    n
+  ), l = {
+    ...s,
     /**
      * Sets the opacity of the overlay.
      * @param {number} opacity
      */
-    setOpacity(s) {
-      return a.value.setOpacity(s);
+    setOpacity(r) {
+      return a.value.setOpacity(r);
     },
     /**
      * Changes the URL of the image.
      * @param {string} url
      */
-    setUrl(s) {
-      return a.value.setUrl(s);
+    setUrl(r) {
+      return a.value.setUrl(r);
     },
     /**
      * Update the bounds that this ImageOverlay covers
      * @param {LatLngBounds | Array<Array<number>>} bounds
      */
-    setBounds(s) {
-      return a.value.setBounds(s);
+    setBounds(r) {
+      return a.value.setBounds(r);
     },
     /**
      * Get the bounds that this ImageOverlay covers
@@ -985,97 +986,97 @@ const ut = {
      * Changes the zIndex of the image overlay.
      * @param {number} zIndex
      */
-    setZIndex(s) {
-      return a.value.setZIndex(s);
+    setZIndex(r) {
+      return a.value.setZIndex(r);
     }
   };
-  return { options: l, methods: n };
+  return { options: o, methods: l };
 };
-L({
+C({
   name: "LImageOverlay",
-  props: ut,
+  props: it,
   setup(e, a) {
-    const t = c(), o = c(!1), r = B(k), l = g(D), { options: n, methods: s } = Jt(
+    const t = c(), n = c(!1), s = A(P), o = S($), { options: l, methods: r } = Wt(
       e,
       t,
       a
     );
-    return T(async () => {
-      const { imageOverlay: i } = r ? b.L : await import("./leaflet-src.esm-BnEQV3J-.js");
-      t.value = x(
-        i(e.url, e.bounds, n)
+    return R(async () => {
+      const { imageOverlay: i } = s ? w.L : await import("./leaflet-src.esm-BnEQV3J-.js");
+      t.value = _(
+        i(e.url, e.bounds, l)
       );
-      const { listeners: u } = z(a.attrs);
-      t.value.on(u), _(s, t.value, e), l({
+      const { listeners: u } = V(a.attrs);
+      t.value.on(u), x(r, t.value, e), o({
         ...e,
-        ...s,
+        ...r,
         leafletObject: t.value
-      }), o.value = !0, S(() => a.emit("ready", t.value));
-    }), { ready: o, leafletObject: t };
+      }), n.value = !0, j(() => a.emit("ready", t.value));
+    }), { ready: n, leafletObject: t };
   },
   render() {
-    return q(this.ready, this.$slots);
+    return J(this.ready, this.$slots);
   }
 });
-L({
+C({
   props: Ce,
   setup(e, a) {
-    const t = c(), o = c(!1), r = B(k), l = g(D), { methods: n } = Pe(e, t, a);
-    return T(async () => {
-      const { layerGroup: s } = r ? b.L : await import("./leaflet-src.esm-BnEQV3J-.js");
-      t.value = x(
-        s(void 0, e.options)
+    const t = c(), n = c(!1), s = A(P), o = S($), { methods: l } = xe(e, t, a);
+    return R(async () => {
+      const { layerGroup: r } = s ? w.L : await import("./leaflet-src.esm-BnEQV3J-.js");
+      t.value = _(
+        r(void 0, e.options)
       );
-      const { listeners: i } = z(a.attrs);
-      t.value.on(i), _(n, t.value, e), l({
+      const { listeners: i } = V(a.attrs);
+      t.value.on(i), x(l, t.value, e), o({
         ...e,
-        ...n,
+        ...l,
         leafletObject: t.value
-      }), o.value = !0, S(() => a.emit("ready", t.value));
-    }), { ready: o, leafletObject: t };
+      }), n.value = !0, j(() => a.emit("ready", t.value));
+    }), { ready: n, leafletObject: t };
   },
   render() {
-    return q(this.ready, this.$slots);
+    return J(this.ready, this.$slots);
   }
 });
-function ct(e, a, t) {
-  var o, r, l;
+function ut(e, a, t) {
+  var n, s, o;
   a === void 0 && (a = 50), t === void 0 && (t = {});
-  var n = (o = t.isImmediate) != null && o, s = (r = t.callback) != null && r, i = t.maxWait, u = Date.now(), v = [];
+  var l = (n = t.isImmediate) != null && n, r = (s = t.callback) != null && s, i = t.maxWait, u = Date.now(), v = [];
   function y() {
     if (i !== void 0) {
-      var h = Date.now() - u;
-      if (h + a >= i)
-        return i - h;
+      var L = Date.now() - u;
+      if (L + a >= i)
+        return i - L;
     }
     return a;
   }
-  var N = function() {
-    var h = [].slice.call(arguments), W = this;
-    return new Promise(function(F, P) {
-      var j = n && l === void 0;
-      if (l !== void 0 && clearTimeout(l), l = setTimeout(function() {
-        if (l = void 0, u = Date.now(), !n) {
-          var M = e.apply(W, h);
-          s && s(M), v.forEach(function(J) {
-            return (0, J.resolve)(M);
+  var z = function() {
+    var L = [].slice.call(arguments), q = this;
+    return new Promise(function(M, D) {
+      var B = l && o === void 0;
+      if (o !== void 0 && clearTimeout(o), o = setTimeout(function() {
+        if (o = void 0, u = Date.now(), !l) {
+          var F = e.apply(q, L);
+          r && r(F), v.forEach(function(H) {
+            return (0, H.resolve)(F);
           }), v = [];
         }
-      }, y()), j) {
-        var I = e.apply(W, h);
-        return s && s(I), F(I);
+      }, y()), B) {
+        var N = e.apply(q, L);
+        return r && r(N), M(N);
       }
-      v.push({ resolve: F, reject: P });
+      v.push({ resolve: M, reject: D });
     });
   };
-  return N.cancel = function(h) {
-    l !== void 0 && clearTimeout(l), v.forEach(function(W) {
-      return (0, W.reject)(h);
+  return z.cancel = function(L) {
+    o !== void 0 && clearTimeout(o), v.forEach(function(q) {
+      return (0, q.reject)(L);
     }), v = [];
-  }, N;
+  }, z;
 }
-const Me = {
-  ...de,
+const De = {
+  ...ce,
   /**
    * The center of the map, supports .sync modifier
    */
@@ -1186,112 +1187,112 @@ const Me = {
     default: !0,
     custom: !0
   }
-}, Kt = L({
+}, Gt = C({
   inheritAttrs: !1,
   emits: ["ready", "update:zoom", "update:center", "update:bounds"],
-  props: Me,
+  props: De,
   setup(e, a) {
-    const t = c(), o = Bt({
+    const t = c(), n = Ct({
       ready: !1,
       layersToAdd: [],
       layersInControl: []
-    }), { options: r } = pe(e), l = w(
+    }), { options: s } = de(e), o = k(
       e,
-      Me,
-      r
-    ), { listeners: n, attrs: s } = z(a.attrs), i = Se(D), u = Se(je), v = Se(ce), y = Se(
-      Ze
+      De,
+      s
+    ), { listeners: l, attrs: r } = V(a.attrs), i = be($), u = be(je), v = be(ue), y = be(
+      Ue
     );
-    G(k, e.useGlobalLeaflet);
-    const N = Y(() => {
-      const j = {};
-      return e.noBlockingAnimations && (j.animate = !1), j;
-    }), h = Y(() => {
-      const j = N.value;
-      return e.padding && (j.padding = e.padding), e.paddingTopLeft && (j.paddingTopLeft = e.paddingTopLeft), e.paddingBottomRight && (j.paddingBottomRight = e.paddingBottomRight), j;
-    }), W = {
-      moveend: ct((j) => {
-        o.leafletRef && (a.emit("update:zoom", o.leafletRef.getZoom()), a.emit("update:center", o.leafletRef.getCenter()), a.emit("update:bounds", o.leafletRef.getBounds()));
+    G(P, e.useGlobalLeaflet);
+    const z = X(() => {
+      const B = {};
+      return e.noBlockingAnimations && (B.animate = !1), B;
+    }), L = X(() => {
+      const B = z.value;
+      return e.padding && (B.padding = e.padding), e.paddingTopLeft && (B.paddingTopLeft = e.paddingTopLeft), e.paddingBottomRight && (B.paddingBottomRight = e.paddingBottomRight), B;
+    }), q = {
+      moveend: ut((B) => {
+        n.leafletRef && (a.emit("update:zoom", n.leafletRef.getZoom()), a.emit("update:center", n.leafletRef.getCenter()), a.emit("update:bounds", n.leafletRef.getBounds()));
       }),
-      overlayadd(j) {
-        const I = o.layersInControl.find((M) => M.name === j.name);
-        I && I.updateVisibleProp(!0);
+      overlayadd(B) {
+        const N = n.layersInControl.find((F) => F.name === B.name);
+        N && N.updateVisibleProp(!0);
       },
-      overlayremove(j) {
-        const I = o.layersInControl.find((M) => M.name === j.name);
-        I && I.updateVisibleProp(!1);
+      overlayremove(B) {
+        const N = n.layersInControl.find((F) => F.name === B.name);
+        N && N.updateVisibleProp(!1);
       }
     };
-    T(async () => {
-      e.useGlobalLeaflet && (b.L = b.L || await import("./leaflet-src-BDi_6Owi.js").then((m) => m.l));
-      const { map: j, CRS: I, Icon: M, latLngBounds: J, latLng: oe, stamp: Z } = e.useGlobalLeaflet ? b.L : await import("./leaflet-src.esm-BnEQV3J-.js");
+    R(async () => {
+      e.useGlobalLeaflet && (w.L = w.L || await import("./leaflet-src-BDi_6Owi.js").then((m) => m.l));
+      const { map: B, CRS: N, Icon: F, latLngBounds: H, latLng: ae, stamp: Z } = e.useGlobalLeaflet ? w.L : await import("./leaflet-src.esm-BnEQV3J-.js");
       try {
-        l.beforeMapMount && await l.beforeMapMount();
+        o.beforeMapMount && await o.beforeMapMount();
       } catch (m) {
         console.error(
           `The following error occurred running the provided beforeMapMount hook ${m.message}`
         );
       }
-      await Vt(M);
-      const ye = typeof l.crs == "string" ? I[l.crs] : l.crs;
-      l.crs = ye || I.EPSG3857;
-      const Q = {
+      await _t(F);
+      const me = typeof o.crs == "string" ? N[o.crs] : o.crs;
+      o.crs = me || N.EPSG3857;
+      const ee = {
         addLayer(m) {
-          m.layerType !== void 0 && (o.layerControl === void 0 ? o.layersToAdd.push(m) : o.layersInControl.find(
-            (O) => Z(O.leafletObject) === Z(m.leafletObject)
-          ) || (o.layerControl.addLayer(m), o.layersInControl.push(m))), m.visible !== !1 && o.leafletRef.addLayer(m.leafletObject);
+          m.layerType !== void 0 && (n.layerControl === void 0 ? n.layersToAdd.push(m) : n.layersInControl.find(
+            (T) => Z(T.leafletObject) === Z(m.leafletObject)
+          ) || (n.layerControl.addLayer(m), n.layersInControl.push(m))), m.visible !== !1 && n.leafletRef.addLayer(m.leafletObject);
         },
         removeLayer(m) {
-          m.layerType !== void 0 && (o.layerControl === void 0 ? o.layersToAdd = o.layersToAdd.filter(
-            (O) => O.name !== m.name
-          ) : (o.layerControl.removeLayer(m.leafletObject), o.layersInControl = o.layersInControl.filter(
-            (O) => Z(O.leafletObject) !== Z(m.leafletObject)
-          ))), o.leafletRef.removeLayer(m.leafletObject);
+          m.layerType !== void 0 && (n.layerControl === void 0 ? n.layersToAdd = n.layersToAdd.filter(
+            (T) => T.name !== m.name
+          ) : (n.layerControl.removeLayer(m.leafletObject), n.layersInControl = n.layersInControl.filter(
+            (T) => Z(T.leafletObject) !== Z(m.leafletObject)
+          ))), n.leafletRef.removeLayer(m.leafletObject);
         },
         registerLayerControl(m) {
-          o.layerControl = m, o.layersToAdd.forEach((O) => {
-            o.layerControl.addLayer(O);
-          }), o.layersToAdd = [], v(m);
+          n.layerControl = m, n.layersToAdd.forEach((T) => {
+            n.layerControl.addLayer(T);
+          }), n.layersToAdd = [], v(m);
         },
         registerControl(m) {
-          o.leafletRef.addControl(m.leafletObject);
+          n.leafletRef.addControl(m.leafletObject);
         },
         setZoom(m) {
-          const O = o.leafletRef.getZoom();
-          m !== O && o.leafletRef.setZoom(m, N.value);
+          const T = n.leafletRef.getZoom();
+          m !== T && n.leafletRef.setZoom(m, z.value);
         },
         setCrs(m) {
-          const O = o.leafletRef.getBounds();
-          o.leafletRef.options.crs = m, o.leafletRef.fitBounds(O, {
+          const T = n.leafletRef.getBounds();
+          n.leafletRef.options.crs = m, n.leafletRef.fitBounds(T, {
             animate: !1,
             padding: [0, 0]
           });
         },
         fitBounds(m) {
-          o.leafletRef.fitBounds(m, h.value);
+          n.leafletRef.fitBounds(m, L.value);
         },
         setBounds(m) {
           if (!m)
             return;
-          const O = J(m);
-          O.isValid() && !(o.lastSetBounds || o.leafletRef.getBounds()).equals(O, 0) && (o.lastSetBounds = O, o.leafletRef.fitBounds(O));
+          const T = H(m);
+          T.isValid() && !(n.lastSetBounds || n.leafletRef.getBounds()).equals(T, 0) && (n.lastSetBounds = T, n.leafletRef.fitBounds(T));
         },
         setCenter(m) {
           if (m == null)
             return;
-          const O = oe(m), fe = o.lastSetCenter || o.leafletRef.getCenter();
-          (fe.lat !== O.lat || fe.lng !== O.lng) && (o.lastSetCenter = O, o.leafletRef.panTo(O, N.value));
+          const T = ae(m), ye = n.lastSetCenter || n.leafletRef.getCenter();
+          (ye.lat !== T.lat || ye.lng !== T.lng) && (n.lastSetCenter = T, n.leafletRef.panTo(T, z.value));
         }
       };
-      Le(i, Q.addLayer), Le(u, Q.removeLayer), Le(v, Q.registerControl), Le(y, Q.registerLayerControl), o.leafletRef = x(j(t.value, l)), _(Q, o.leafletRef, e), $e(o.leafletRef, W), $e(o.leafletRef, n), o.ready = !0, S(() => a.emit("ready", o.leafletRef));
-    }), ue(() => {
-      Ee(W), o.leafletRef && (o.leafletRef.off(), o.leafletRef.remove());
+      Se(i, ee.addLayer), Se(u, ee.removeLayer), Se(v, ee.registerControl), Se(y, ee.registerLayerControl), n.leafletRef = _(B(t.value, o)), x(ee, n.leafletRef, e), ze(n.leafletRef, q), ze(n.leafletRef, l), n.ready = !0, j(() => a.emit("ready", n.leafletRef));
+    }), ie(() => {
+      Ee(q), n.leafletRef && (n.leafletRef.off(), n.leafletRef.remove());
     });
-    const F = Y(() => o.leafletRef), P = Y(() => o.ready);
-    return { root: t, ready: P, leafletObject: F, attrs: s };
+    const M = X(() => n.leafletRef), D = X(() => n.ready);
+    return { root: t, ready: D, leafletObject: M, attrs: r };
   },
   render({ attrs: e }) {
-    return e.style || (e.style = {}), e.style.width || (e.style.width = "100%"), e.style.height || (e.style.height = "100%"), ae(
+    return e.style || (e.style = {}), e.style.width || (e.style.width = "100%"), e.style.height || (e.style.height = "100%"), te(
       "div",
       {
         ...e,
@@ -1300,8 +1301,8 @@ const Me = {
       this.ready && this.$slots.default ? this.$slots.default() : {}
     );
   }
-}), Ht = ["Symbol(Comment)", "Symbol(Text)"], Yt = ["LTooltip", "LPopup"], dt = {
-  ...ne,
+}), Jt = ["Symbol(Comment)", "Symbol(Text)"], Kt = ["LTooltip", "LPopup"], ct = {
+  ...le,
   draggable: {
     type: Boolean,
     default: void 0
@@ -1317,79 +1318,79 @@ const Me = {
     custom: !0,
     required: !0
   }
-}, Qt = (e, a, t) => {
-  const { options: o, methods: r } = ve(
+}, Ht = (e, a, t) => {
+  const { options: n, methods: s } = pe(
     e,
     a,
     t
-  ), l = w(
+  ), o = k(
     e,
-    dt,
-    o
-  ), n = {
-    ...r,
-    setDraggable(s) {
-      a.value.dragging && (s ? a.value.dragging.enable() : a.value.dragging.disable());
+    ct,
+    n
+  ), l = {
+    ...s,
+    setDraggable(r) {
+      a.value.dragging && (r ? a.value.dragging.enable() : a.value.dragging.disable());
     },
-    latLngSync(s) {
-      t.emit("update:latLng", s.latlng), t.emit("update:lat-lng", s.latlng);
+    latLngSync(r) {
+      t.emit("update:latLng", r.latlng), t.emit("update:lat-lng", r.latlng);
     },
-    setLatLng(s) {
-      if (s != null && a.value) {
+    setLatLng(r) {
+      if (r != null && a.value) {
         const i = a.value.getLatLng();
-        (!i || !i.equals(s)) && a.value.setLatLng(s);
+        (!i || !i.equals(r)) && a.value.setLatLng(r);
       }
     }
   };
-  return { options: l, methods: n };
-}, Xt = (e, a) => {
+  return { options: o, methods: l };
+}, Yt = (e, a) => {
   const t = a.slots.default && a.slots.default();
-  return t && t.length && t.some(ea);
+  return t && t.length && t.some(Qt);
 };
-function ea(e) {
-  return !(Ht.includes(e.type.toString()) || Yt.includes(e.type.name));
+function Qt(e) {
+  return !(Jt.includes(e.type.toString()) || Kt.includes(e.type.name));
 }
-L({
+C({
   name: "LMarker",
-  props: dt,
+  props: ct,
   setup(e, a) {
-    const t = c(), o = c(!1), r = B(k), l = g(D);
+    const t = c(), n = c(!1), s = A(P), o = S($);
     G(
-      We,
+      Ze,
       () => {
         var u;
         return !!((u = t.value) != null && u.getElement());
       }
-    ), G(Ge, (u) => {
+    ), G(qe, (u) => {
       var v, y;
-      const N = H((v = t.value) == null ? void 0 : v.getElement) && ((y = t.value) == null ? void 0 : y.getElement());
-      N && (N.innerHTML = u);
+      const z = Q((v = t.value) == null ? void 0 : v.getElement) && ((y = t.value) == null ? void 0 : y.getElement());
+      z && (z.innerHTML = u);
     }), G(
-      qe,
+      We,
       (u) => {
         var v;
         return ((v = t.value) == null ? void 0 : v.setIcon) && t.value.setIcon(u);
       }
     );
-    const { options: n, methods: s } = Qt(e, t, a), i = {
-      moveHandler: ct(s.latLngSync)
+    const { options: l, methods: r } = Ht(e, t, a), i = {
+      moveHandler: ut(r.latLngSync)
     };
-    return T(async () => {
-      const { marker: u, divIcon: v } = r ? b.L : await import("./leaflet-src.esm-BnEQV3J-.js");
-      Xt(n, a) && (n.icon = v({ className: "" })), t.value = x(u(e.latLng, n));
-      const { listeners: y } = z(a.attrs);
-      t.value.on(y), t.value.on("move", i.moveHandler), _(s, t.value, e), l({
+    return R(async () => {
+      const { marker: u, divIcon: v } = s ? w.L : await import("./leaflet-src.esm-BnEQV3J-.js");
+      Yt(l, a) && (l.icon = v({ className: "" })), t.value = _(u(e.latLng, l));
+      const { listeners: y } = V(a.attrs);
+      t.value.on(y), t.value.on("move", i.moveHandler), x(r, t.value, e), o({
         ...e,
-        ...s,
+        ...r,
         leafletObject: t.value
-      }), o.value = !0, S(() => a.emit("ready", t.value));
-    }), ue(() => Ee(i)), { ready: o, leafletObject: t };
+      }), n.value = !0, j(() => a.emit("ready", t.value));
+    }), ie(() => Ee(i)), { ready: n, leafletObject: t };
   },
   render() {
-    return q(this.ready, this.$slots);
+    return J(this.ready, this.$slots);
   }
 });
-const Ve = {
+const _e = {
   ...Re,
   smoothFactor: {
     type: Number
@@ -1403,130 +1404,130 @@ const Ve = {
     required: !0,
     custom: !0
   }
-}, pt = (e, a, t) => {
-  const { options: o, methods: r } = Xe(
+}, dt = (e, a, t) => {
+  const { options: n, methods: s } = Qe(
     e,
     a,
     t
-  ), l = w(
+  ), o = k(
     e,
-    Ve,
-    o
-  ), n = {
-    ...r,
-    setSmoothFactor(s) {
-      a.value.setStyle({ smoothFactor: s });
+    _e,
+    n
+  ), l = {
+    ...s,
+    setSmoothFactor(r) {
+      a.value.setStyle({ smoothFactor: r });
     },
-    setNoClip(s) {
-      a.value.setStyle({ noClip: s });
+    setNoClip(r) {
+      a.value.setStyle({ noClip: r });
     },
-    addLatLng(s) {
-      a.value.addLatLng(s);
+    addLatLng(r) {
+      a.value.addLatLng(r);
     }
   };
-  return { options: l, methods: n };
+  return { options: o, methods: l };
 }, we = {
-  ...Ve
-}, vt = (e, a, t) => {
-  const { options: o, methods: r } = pt(
+  ..._e
+}, pt = (e, a, t) => {
+  const { options: n, methods: s } = dt(
     e,
     a,
     t
-  ), l = w(
+  ), o = k(
     e,
     we,
-    o
-  ), n = {
-    ...r,
-    toGeoJSON(s) {
-      return a.value.toGeoJSON(s);
+    n
+  ), l = {
+    ...s,
+    toGeoJSON(r) {
+      return a.value.toGeoJSON(r);
     }
   };
-  return { options: l, methods: n };
+  return { options: o, methods: l };
 };
-L({
+C({
   name: "LPolygon",
   props: we,
   setup(e, a) {
-    const t = c(), o = c(!1), r = B(k), l = g(D), { options: n, methods: s } = vt(e, t, a);
-    return T(async () => {
-      const { polygon: i } = r ? b.L : await import("./leaflet-src.esm-BnEQV3J-.js");
-      t.value = x(i(e.latLngs, n));
-      const { listeners: u } = z(a.attrs);
-      t.value.on(u), _(s, t.value, e), l({
+    const t = c(), n = c(!1), s = A(P), o = S($), { options: l, methods: r } = pt(e, t, a);
+    return R(async () => {
+      const { polygon: i } = s ? w.L : await import("./leaflet-src.esm-BnEQV3J-.js");
+      t.value = _(i(e.latLngs, l));
+      const { listeners: u } = V(a.attrs);
+      t.value.on(u), x(r, t.value, e), o({
         ...e,
-        ...s,
+        ...r,
         leafletObject: t.value
-      }), o.value = !0, S(() => a.emit("ready", t.value));
-    }), { ready: o, leafletObject: t };
+      }), n.value = !0, j(() => a.emit("ready", t.value));
+    }), { ready: n, leafletObject: t };
   },
   render() {
-    return q(this.ready, this.$slots);
+    return J(this.ready, this.$slots);
   }
 });
-L({
+C({
   name: "LPolyline",
-  props: Ve,
+  props: _e,
   setup(e, a) {
-    const t = c(), o = c(!1), r = B(k), l = g(D), { options: n, methods: s } = pt(e, t, a);
-    return T(async () => {
-      const { polyline: i } = r ? b.L : await import("./leaflet-src.esm-BnEQV3J-.js");
-      t.value = x(
-        i(e.latLngs, n)
+    const t = c(), n = c(!1), s = A(P), o = S($), { options: l, methods: r } = dt(e, t, a);
+    return R(async () => {
+      const { polyline: i } = s ? w.L : await import("./leaflet-src.esm-BnEQV3J-.js");
+      t.value = _(
+        i(e.latLngs, l)
       );
-      const { listeners: u } = z(a.attrs);
-      t.value.on(u), _(s, t.value, e), l({
+      const { listeners: u } = V(a.attrs);
+      t.value.on(u), x(r, t.value, e), o({
         ...e,
-        ...s,
+        ...r,
         leafletObject: t.value
-      }), o.value = !0, S(() => a.emit("ready", t.value));
-    }), { ready: o, leafletObject: t };
+      }), n.value = !0, j(() => a.emit("ready", t.value));
+    }), { ready: n, leafletObject: t };
   },
   render() {
-    return q(this.ready, this.$slots);
+    return J(this.ready, this.$slots);
   }
 });
-const mt = {
-  ...de,
+const vt = {
+  ...ce,
   content: {
     type: String,
     default: null
   }
-}, yt = (e, a) => {
-  const { options: t, methods: o } = pe(e), r = {
-    ...o,
-    setContent(l) {
-      a.value && l !== null && l !== void 0 && a.value.setContent(l);
+}, mt = (e, a) => {
+  const { options: t, methods: n } = de(e), s = {
+    ...n,
+    setContent(o) {
+      a.value && o !== null && o !== void 0 && a.value.setContent(o);
     }
   };
-  return { options: t, methods: r };
-}, ft = (e) => e.default ? ae("div", { ref: "root" }, e.default()) : null, ta = {
-  ...mt,
+  return { options: t, methods: s };
+}, yt = (e) => e.default ? te("div", { ref: "root" }, e.default()) : null, Xt = {
+  ...vt,
   latLng: {
     type: [Object, Array],
     default: () => []
   }
-}, aa = (e, a) => {
-  const { options: t, methods: o } = yt(e, a);
-  return { options: t, methods: o };
-}, oa = L({
+}, ea = (e, a) => {
+  const { options: t, methods: n } = mt(e, a);
+  return { options: t, methods: n };
+}, ta = C({
   name: "LPopup",
-  props: ta,
+  props: Xt,
   setup(e, a) {
-    const t = c(), o = c(null), r = B(k), l = g(Je), n = g(He), { options: s, methods: i } = aa(e, t);
-    return T(async () => {
-      const { popup: u } = r ? b.L : await import("./leaflet-src.esm-BnEQV3J-.js");
-      t.value = x(u(s)), e.latLng !== void 0 && t.value.setLatLng(e.latLng), _(i, t.value, e);
-      const { listeners: v } = z(a.attrs);
-      t.value.on(v), t.value.setContent(e.content || o.value || ""), l(t.value), S(() => a.emit("ready", t.value));
-    }), ue(() => {
-      n();
-    }), { root: o, leafletObject: t };
+    const t = c(), n = c(null), s = A(P), o = S(Ge), l = S(Ke), { options: r, methods: i } = ea(e, t);
+    return R(async () => {
+      const { popup: u } = s ? w.L : await import("./leaflet-src.esm-BnEQV3J-.js");
+      t.value = _(u(r)), e.latLng !== void 0 && t.value.setLatLng(e.latLng), x(i, t.value, e);
+      const { listeners: v } = V(a.attrs);
+      t.value.on(v), t.value.setContent(e.content || n.value || ""), o(t.value), j(() => a.emit("ready", t.value));
+    }), ie(() => {
+      l();
+    }), { root: n, leafletObject: t };
   },
   render() {
-    return ft(this.$slots);
+    return yt(this.$slots);
   }
-}), gt = {
+}), ft = {
   ...we,
   latLngs: {
     ...we.latLngs,
@@ -1536,48 +1537,48 @@ const mt = {
     type: Object,
     custom: !0
   }
-}, na = (e, a, t) => {
-  const { options: o, methods: r } = vt(
+}, aa = (e, a, t) => {
+  const { options: n, methods: s } = pt(
     e,
     a,
     t
-  ), l = w(
+  ), o = k(
     e,
-    gt,
-    o
-  ), n = {
-    ...r,
-    setBounds(s) {
-      a.value.setBounds(s);
+    ft,
+    n
+  ), l = {
+    ...s,
+    setBounds(r) {
+      a.value.setBounds(r);
     },
-    setLatLngs(s) {
-      a.value.setBounds(s);
+    setLatLngs(r) {
+      a.value.setBounds(r);
     }
   };
-  return { options: l, methods: n };
+  return { options: o, methods: l };
 };
-L({
+C({
   name: "LRectangle",
-  props: gt,
+  props: ft,
   setup(e, a) {
-    const t = c(), o = c(!1), r = B(k), l = g(D), { options: n, methods: s } = na(e, t, a);
-    return T(async () => {
-      const { rectangle: i, latLngBounds: u } = r ? b.L : await import("./leaflet-src.esm-BnEQV3J-.js"), v = e.bounds ? u(e.bounds) : u(e.latLngs || []);
-      t.value = x(i(v, n));
-      const { listeners: y } = z(a.attrs);
-      t.value.on(y), _(s, t.value, e), l({
+    const t = c(), n = c(!1), s = A(P), o = S($), { options: l, methods: r } = aa(e, t, a);
+    return R(async () => {
+      const { rectangle: i, latLngBounds: u } = s ? w.L : await import("./leaflet-src.esm-BnEQV3J-.js"), v = e.bounds ? u(e.bounds) : u(e.latLngs || []);
+      t.value = _(i(v, l));
+      const { listeners: y } = V(a.attrs);
+      t.value.on(y), x(r, t.value, e), o({
         ...e,
-        ...s,
+        ...r,
         leafletObject: t.value
-      }), o.value = !0, S(() => a.emit("ready", t.value));
-    }), { ready: o, leafletObject: t };
+      }), n.value = !0, j(() => a.emit("ready", t.value));
+    }), { ready: n, leafletObject: t };
   },
   render() {
-    return q(this.ready, this.$slots);
+    return J(this.ready, this.$slots);
   }
 });
 const Ne = {
-  ...Ie,
+  ...Pe,
   tms: {
     type: Boolean,
     default: void 0
@@ -1595,58 +1596,58 @@ const Ne = {
     required: !0,
     custom: !0
   }
-}, ht = (e, a, t) => {
-  const { options: o, methods: r } = it(e, a, t), l = w(
+}, gt = (e, a, t) => {
+  const { options: n, methods: s } = rt(e, a, t), o = k(
     e,
     Ne,
-    o
-  ), n = {
-    ...r
+    n
+  ), l = {
+    ...s
   };
-  return { options: l, methods: n };
-}, la = L({
+  return { options: o, methods: l };
+}, na = C({
   props: Ne,
   setup(e, a) {
-    const t = c(), o = B(k), r = g(D), { options: l, methods: n } = ht(e, t, a);
-    return T(async () => {
-      const { tileLayer: s } = o ? b.L : await import("./leaflet-src.esm-BnEQV3J-.js");
-      t.value = x(s(e.url, l));
-      const { listeners: i } = z(a.attrs);
-      t.value.on(i), _(n, t.value, e), r({
+    const t = c(), n = A(P), s = S($), { options: o, methods: l } = gt(e, t, a);
+    return R(async () => {
+      const { tileLayer: r } = n ? w.L : await import("./leaflet-src.esm-BnEQV3J-.js");
+      t.value = _(r(e.url, o));
+      const { listeners: i } = V(a.attrs);
+      t.value.on(i), x(l, t.value, e), s({
         ...e,
-        ...n,
+        ...l,
         leafletObject: t.value
-      }), S(() => a.emit("ready", t.value));
+      }), j(() => a.emit("ready", t.value));
     }), { leafletObject: t };
   },
   render() {
     return null;
   }
-}), sa = {
-  ...mt
-}, ra = (e, a) => {
-  const { options: t, methods: o } = yt(e, a), r = g(Ye);
-  return ue(() => {
-    r();
-  }), { options: t, methods: o };
+}), la = {
+  ...vt
+}, oa = (e, a) => {
+  const { options: t, methods: n } = mt(e, a), s = S(He);
+  return ie(() => {
+    s();
+  }), { options: t, methods: n };
 };
-L({
+C({
   name: "LTooltip",
-  props: sa,
+  props: la,
   setup(e, a) {
-    const t = c(), o = c(null), r = B(k), l = g(Ke), { options: n, methods: s } = ra(e, t);
-    return T(async () => {
-      const { tooltip: i } = r ? b.L : await import("./leaflet-src.esm-BnEQV3J-.js");
-      t.value = x(i(n)), _(s, t.value, e);
-      const { listeners: u } = z(a.attrs);
-      t.value.on(u), t.value.setContent(e.content || o.value || ""), l(t.value), S(() => a.emit("ready", t.value));
-    }), { root: o, leafletObject: t };
+    const t = c(), n = c(null), s = A(P), o = S(Je), { options: l, methods: r } = oa(e, t);
+    return R(async () => {
+      const { tooltip: i } = s ? w.L : await import("./leaflet-src.esm-BnEQV3J-.js");
+      t.value = _(i(l)), x(r, t.value, e);
+      const { listeners: u } = V(a.attrs);
+      t.value.on(u), t.value.setContent(e.content || n.value || ""), o(t.value), j(() => a.emit("ready", t.value));
+    }), { root: n, leafletObject: t };
   },
   render() {
-    return ft(this.$slots);
+    return yt(this.$slots);
   }
 });
-const bt = {
+const ht = {
   ...Ne,
   layers: {
     type: String,
@@ -1672,68 +1673,68 @@ const bt = {
     type: Boolean,
     default: void 0
   }
-}, ia = (e, a, t) => {
-  const { options: o, methods: r } = ht(e, a, t);
+}, sa = (e, a, t) => {
+  const { options: n, methods: s } = gt(e, a, t);
   return {
-    options: w(
+    options: k(
       e,
-      bt,
-      o
+      ht,
+      n
     ),
     methods: {
-      ...r
+      ...s
     }
   };
 };
-L({
-  props: bt,
+C({
+  props: ht,
   setup(e, a) {
-    const t = c(), o = B(k), r = g(D), { options: l, methods: n } = ia(
+    const t = c(), n = A(P), s = S($), { options: o, methods: l } = sa(
       e,
       t,
       a
     );
-    return T(async () => {
-      const { tileLayer: s } = o ? b.L : await import("./leaflet-src.esm-BnEQV3J-.js");
-      t.value = x(
-        s.wms(e.url, l)
+    return R(async () => {
+      const { tileLayer: r } = n ? w.L : await import("./leaflet-src.esm-BnEQV3J-.js");
+      t.value = _(
+        r.wms(e.url, o)
       );
-      const { listeners: i } = z(a.attrs);
-      t.value.on(i), _(n, t.value, e), r({
+      const { listeners: i } = V(a.attrs);
+      t.value.on(i), x(l, t.value, e), s({
         ...e,
-        ...n,
+        ...l,
         leafletObject: t.value
-      }), S(() => a.emit("ready", t.value));
+      }), j(() => a.emit("ready", t.value));
     }), { leafletObject: t };
   },
   render() {
     return null;
   }
 });
-const ua = { class: "valhalla-preview" }, ca = { class: "sidebar" }, da = { class: "search-section" }, pa = { class: "search-box" }, va = {
+const ra = { class: "valhalla-preview" }, ia = { class: "sidebar" }, ua = { class: "search-section" }, ca = { class: "search-box" }, da = {
   key: 0,
   class: "search-results"
-}, ma = ["onClick"], ya = { class: "controls-row" }, fa = { class: "waypoints-list" }, ga = { class: "waypoints-header" }, ha = { class: "section-title" }, ba = ["onDragstart", "onDragover"], Sa = { class: "waypoint-grip" }, La = { class: "waypoint-info" }, Oa = { class: "waypoint-role" }, wa = { class: "waypoint-name" }, ja = { class: "waypoint-actions" }, Ca = {
+}, pa = ["onClick"], va = { class: "controls-row" }, ma = { class: "waypoints-list" }, ya = { class: "waypoints-header" }, fa = { class: "section-title" }, ga = ["onDragstart", "onDragover"], ha = { class: "waypoint-grip" }, ba = { class: "waypoint-info" }, Sa = { class: "waypoint-role" }, La = { class: "waypoint-name" }, Oa = { class: "waypoint-actions" }, wa = {
   key: 0,
   class: "no-waypoints"
-}, Ta = {
+}, ja = {
   key: 0,
   class: "action-buttons"
-}, Ba = {
+}, Ca = {
   key: 1,
   class: "route-summary"
-}, _a = { class: "summary-stats" }, ka = { class: "stat" }, xa = { class: "stat" }, Ra = { class: "stat" }, Aa = {
+}, Ta = { class: "summary-stats" }, ka = { class: "stat" }, Ba = { class: "stat" }, Ra = { class: "stat" }, Aa = {
   key: 0,
   class: "maneuvers-list"
-}, Pa = { class: "maneuver-index" }, Ia = { class: "maneuver-text" }, Va = { class: "maneuver-dist" }, Na = { class: "map-container" }, Fe = "SET_WAYPOINTS", za = "OPTIMIZE_ROUTE", $a = /* @__PURE__ */ L({
+}, xa = { class: "maneuver-index" }, Pa = { class: "maneuver-text" }, _a = { class: "maneuver-dist" }, Na = { class: "map-container" }, $e = "SET_WAYPOINTS", Ia = "OPTIMIZE_ROUTE", za = /* @__PURE__ */ C({
   __name: "Preview",
   props: {
     dataSource: {}
   },
   setup(e) {
-    const a = e, t = c(null), o = kt(null), r = c(a.dataSource), { update: l } = Pt(a.dataSource.type, r, o), n = c([]), s = c(a.dataSource.config?.costing || "auto"), i = c(""), u = c([]), v = c(!1);
+    const a = e, t = c(null), n = kt(null), s = c(a.dataSource), { update: o } = xt(a.dataSource.type, s, n), l = c([]), r = c(a.dataSource.config?.costing || "auto"), i = c(""), u = c([]), v = c(!1);
     let y = null;
-    const N = c(null), h = c([50.93, 11.59]), W = c(10), F = c(null), P = c(!1), j = [
+    const z = c(null), L = c([50.93, 11.59]), q = c(10), M = c(null), D = c(!1), B = [
       { text: "Auto", value: "auto" },
       { text: "Fahrrad", value: "bicycle" },
       { text: "Fußgänger", value: "pedestrian" },
@@ -1741,19 +1742,19 @@ const ua = { class: "valhalla-preview" }, ca = { class: "sidebar" }, da = { clas
       { text: "Bus", value: "bus" },
       { text: "Motorroller", value: "motor_scooter" },
       { text: "Motorrad", value: "motorcycle" }
-    ], I = Y(() => t.value?.geojson?.features ? t.value.geojson.features.filter((p) => p.geometry?.type === "LineString") : []), M = Y(() => I.value.length === 0 ? null : { type: "FeatureCollection", features: I.value }), J = () => ({ color: "#c45e00", weight: 5, opacity: 0.8 });
-    function oe(p) {
-      return p === 0 ? "#4caf50" : p === n.value.length - 1 ? "#f44336" : "#2196f3";
+    ], N = X(() => t.value?.geojson?.features ? t.value.geojson.features.filter((p) => p.geometry?.type === "LineString") : []), F = X(() => N.value.length === 0 ? null : { type: "FeatureCollection", features: N.value }), H = () => ({ color: "#c45e00", weight: 5, opacity: 0.8 });
+    function ae(p) {
+      return p === 0 ? "#4caf50" : p === l.value.length - 1 ? "#f44336" : "#2196f3";
     }
     function Z(p) {
-      return p === 0 ? "Start" : p === n.value.length - 1 ? "Ziel" : `Stop ${p}`;
+      return p === 0 ? "Start" : p === l.value.length - 1 ? "Ziel" : `Stop ${p}`;
     }
-    Oe(o, async () => {
-      o.value && (t.value = await o.value.getData("object"), o.value.subscribe(async () => {
-        t.value = await o.value.getData("object");
+    Oe(n, async () => {
+      n.value && (t.value = await n.value.getData("object"), n.value.subscribe(async () => {
+        t.value = await n.value.getData("object");
       }));
-    }, { deep: !0 }), Oe(a.dataSource, () => l(), { deep: !0 });
-    async function ye() {
+    }, { deep: !0 }), Oe(a.dataSource, () => o(), { deep: !0 });
+    async function me() {
       const p = i.value.trim();
       if (p.length < 3) {
         u.value = [];
@@ -1771,8 +1772,8 @@ const ua = { class: "valhalla-preview" }, ca = { class: "sidebar" }, da = { clas
         v.value = !1;
       }
     }
-    function Q() {
-      y && clearTimeout(y), y = setTimeout(ye, 400);
+    function ee() {
+      y && clearTimeout(y), y = setTimeout(me, 400);
     }
     function m(p) {
       const d = {
@@ -1780,313 +1781,331 @@ const ua = { class: "valhalla-preview" }, ca = { class: "sidebar" }, da = { clas
         lon: parseFloat(p.lon),
         name: p.display_name.split(",").slice(0, 2).join(", ")
       };
-      n.value.push(d), i.value = "", u.value = [], Te();
+      l.value.push(d), i.value = "", u.value = [], Te();
     }
-    function O(p) {
-      const { lat: d, lng: $ } = p.latlng;
-      n.value.push({ lat: d, lon: $, name: `${d.toFixed(4)}, ${$.toFixed(4)}` });
+    function T(p) {
+      const { lat: d, lng: f } = p.latlng;
+      l.value.push({ lat: d, lon: f, name: `${d.toFixed(4)}, ${f.toFixed(4)}` });
     }
-    function fe(p) {
-      n.value.splice(p, 1);
+    function ye(p) {
+      l.value.splice(p, 1);
     }
-    function St() {
-      n.value = [], t.value = null, o.value && o.value.callEvent(Fe, { waypoints: [], costing: s.value });
+    function bt() {
+      l.value = [], t.value = null, n.value && n.value.callEvent($e, { waypoints: [], costing: r.value });
     }
-    function ze(p, d) {
-      if (d < 0 || d >= n.value.length) return;
-      const $ = n.value.splice(p, 1)[0];
-      n.value.splice(d, 0, $);
+    function Ie(p, d) {
+      if (d < 0 || d >= l.value.length) return;
+      const f = l.value.splice(p, 1)[0];
+      l.value.splice(d, 0, f);
     }
-    async function Lt() {
-      if (!(!o.value || n.value.length < 2)) {
-        P.value = !0;
+    async function St() {
+      if (!(!n.value || l.value.length < 2)) {
+        D.value = !0;
         try {
-          await o.value.callEvent(Fe, {
-            waypoints: n.value.map((p) => ({ lat: p.lat, lon: p.lon, name: p.name })),
-            costing: s.value
+          await n.value.callEvent($e, {
+            waypoints: l.value.map((p) => ({ lat: p.lat, lon: p.lon, name: p.name })),
+            costing: r.value
           }), Te();
         } finally {
-          P.value = !1;
+          D.value = !1;
         }
       }
     }
-    async function Ot() {
-      if (!(!o.value || n.value.length < 3)) {
-        P.value = !0;
+    async function Lt() {
+      if (!(!n.value || l.value.length < 3)) {
+        D.value = !0;
         try {
-          await o.value.callEvent(za, {
-            waypoints: n.value.map((d) => ({ lat: d.lat, lon: d.lon, name: d.name })),
-            costing: s.value
+          await n.value.callEvent(Ia, {
+            waypoints: l.value.map((d) => ({ lat: d.lat, lon: d.lon, name: d.name })),
+            costing: r.value
           });
-          const p = await o.value.getData("object");
-          p?.waypoints && (n.value = p.waypoints.map((d) => ({
+          const p = await n.value.getData("object");
+          p?.waypoints && (l.value = p.waypoints.map((d) => ({
             lat: d.lat,
             lon: d.lon,
             name: d.name || `${d.lat.toFixed(4)}, ${d.lon.toFixed(4)}`
           }))), Te();
         } finally {
-          P.value = !1;
+          D.value = !1;
         }
       }
     }
     function Te() {
-      n.value.length !== 0 && S(() => {
-        const p = N.value?.leafletObject;
+      l.value.length !== 0 && j(() => {
+        const p = z.value?.leafletObject;
         if (p)
-          if (n.value.length === 1)
-            p.setView([n.value[0].lat, n.value[0].lon], 14);
+          if (l.value.length === 1)
+            p.setView([l.value[0].lat, l.value[0].lon], 14);
           else {
-            const d = n.value.map((X) => X.lat), $ = n.value.map((X) => X.lon);
+            const d = l.value.map((h) => h.lat), f = l.value.map((h) => h.lon);
             p.fitBounds(
-              [[Math.min(...d), Math.min(...$)], [Math.max(...d), Math.max(...$)]],
+              [[Math.min(...d), Math.min(...f)], [Math.max(...d), Math.max(...f)]],
               { padding: [40, 40] }
             );
           }
       });
     }
-    function wt(p) {
-      F.value = p;
+    function Ot(p) {
+      M.value = p;
     }
-    function jt(p, d) {
-      if (p.preventDefault(), F.value === null || F.value === d) return;
-      const $ = F.value, X = n.value.splice($, 1)[0];
-      n.value.splice(d, 0, X), F.value = d;
+    function wt(p, d) {
+      if (p.preventDefault(), M.value === null || M.value === d) return;
+      const f = M.value, h = l.value.splice(f, 1)[0];
+      l.value.splice(d, 0, h), M.value = d;
     }
-    function Ct() {
-      F.value = null;
+    function jt() {
+      M.value = null;
     }
-    const Be = Y(() => t.value?.legs ? t.value.legs.flatMap((p) => p.maneuvers || []) : []);
-    return (p, d) => {
-      const $ = te("va-icon"), X = te("VaInput"), Tt = te("VaSelect"), _e = te("VaButton"), ke = te("va-button");
-      return V(), U("div", ua, [
-        f("div", ca, [
-          f("div", da, [
-            f("div", pa, [
-              A(X, {
-                modelValue: i.value,
-                "onUpdate:modelValue": d[0] || (d[0] = (R) => i.value = R),
-                placeholder: "Adresse suchen...",
-                class: "search-input",
-                onInput: Q,
-                onKeydown: xt(ye, ["enter"])
+    const ke = X(() => t.value?.legs ? t.value.legs.flatMap((p) => p.maneuvers || []) : []);
+    return (p, d) => (I(), E("div", ra, [
+      g("div", ia, [
+        g("div", ua, [
+          g("div", ca, [
+            O(b(Me), {
+              modelValue: i.value,
+              "onUpdate:modelValue": d[0] || (d[0] = (f) => i.value = f),
+              placeholder: "Adresse suchen…",
+              class: "search-input",
+              onInput: ee,
+              onKeydown: Bt(me, ["enter"])
+            }, null, 8, ["modelValue"]),
+            u.value.length > 0 ? (I(), E("div", da, [
+              (I(!0), E(re, null, fe(u.value, (f) => (I(), E("div", {
+                key: f.place_id,
+                class: "search-result-item",
+                onClick: (h) => m(f)
+              }, [
+                O(b(W), {
+                  name: "location_on",
+                  size: "sm",
+                  tone: "color-accent"
+                }),
+                g("span", null, U(f.display_name), 1)
+              ], 8, pa))), 128))
+            ])) : Y("", !0)
+          ])
+        ]),
+        g("div", va, [
+          O(b(Le), {
+            modelValue: r.value,
+            "onUpdate:modelValue": d[1] || (d[1] = (f) => r.value = f),
+            options: B,
+            "label-key": "text",
+            "value-key": "value",
+            label: "Modus",
+            class: "costing-select"
+          }, null, 8, ["modelValue"]),
+          l.value.length > 0 ? (I(), ge(b(ne), {
+            key: 0,
+            size: "sm",
+            onClick: bt
+          }, {
+            default: K(() => [
+              O(b(W), {
+                name: "delete_sweep",
+                size: "sm"
+              }),
+              d[2] || (d[2] = he("Alle löschen ", -1))
+            ]),
+            _: 1
+          })) : Y("", !0)
+        ]),
+        g("div", ma, [
+          g("div", ya, [
+            g("span", fa, "Wegpunkte (" + U(l.value.length) + ")", 1),
+            d[3] || (d[3] = g("span", { class: "hint" }, "Klick auf Karte = Wegpunkt hinzufügen", -1))
+          ]),
+          (I(!0), E(re, null, fe(l.value, (f, h) => (I(), E("div", {
+            key: h,
+            class: Rt(["waypoint-item", { dragging: M.value === h }]),
+            draggable: "true",
+            onDragstart: (se) => Ot(h),
+            onDragover: (se) => wt(se, h),
+            onDragend: jt
+          }, [
+            g("div", ha, [
+              O(b(W), {
+                name: "drag_indicator",
+                size: "sm",
+                tone: "color-dim"
+              })
+            ]),
+            g("div", {
+              class: "waypoint-marker",
+              style: At({ backgroundColor: ae(h) })
+            }, U(h + 1), 5),
+            g("div", ba, [
+              g("span", Sa, U(Z(h)), 1),
+              g("span", La, U(f.name || `${f.lat.toFixed(4)}, ${f.lon.toFixed(4)}`), 1)
+            ]),
+            g("div", Oa, [
+              O(b(ne), {
+                intent: "quiet",
+                size: "sm",
+                title: "Nach oben",
+                disabled: h === 0,
+                onClick: (se) => Ie(h, h - 1)
               }, {
-                prependInner: ee(() => [
-                  A($, {
-                    name: "search",
-                    size: "small"
+                default: K(() => [
+                  O(b(W), {
+                    name: "arrow_upward",
+                    size: "sm"
                   })
                 ]),
                 _: 1
-              }, 8, ["modelValue"]),
-              u.value.length > 0 ? (V(), U("div", va, [
-                (V(!0), U(ie, null, ge(u.value, (R) => (V(), U("div", {
-                  key: R.place_id,
-                  class: "search-result-item",
-                  onClick: (C) => m(R)
-                }, [
-                  A($, {
-                    name: "location_on",
-                    size: "small",
-                    color: "primary"
-                  }),
-                  f("span", null, E(R.display_name), 1)
-                ], 8, ma))), 128))
-              ])) : K("", !0)
-            ])
-          ]),
-          f("div", ya, [
-            A(Tt, {
-              modelValue: s.value,
-              "onUpdate:modelValue": d[1] || (d[1] = (R) => s.value = R),
-              options: j,
-              "text-by": "text",
-              "value-by": "value",
-              label: "Modus",
-              class: "costing-select"
-            }, null, 8, ["modelValue"]),
-            n.value.length > 0 ? (V(), he(_e, {
-              key: 0,
-              preset: "secondary",
-              size: "small",
-              icon: "delete_sweep",
-              onClick: St
-            }, {
-              default: ee(() => [...d[2] || (d[2] = [
-                be(" Alle löschen ", -1)
-              ])]),
-              _: 1
-            })) : K("", !0)
-          ]),
-          f("div", fa, [
-            f("div", ga, [
-              f("span", ha, "Wegpunkte (" + E(n.value.length) + ")", 1),
-              d[3] || (d[3] = f("span", { class: "hint" }, "Klick auf Karte = Wegpunkt hinzufügen", -1))
-            ]),
-            (V(!0), U(ie, null, ge(n.value, (R, C) => (V(), U("div", {
-              key: C,
-              class: Rt(["waypoint-item", { dragging: F.value === C }]),
-              draggable: "true",
-              onDragstart: (se) => wt(C),
-              onDragover: (se) => jt(se, C),
-              onDragend: Ct
-            }, [
-              f("div", Sa, [
-                A($, {
-                  name: "drag_indicator",
-                  size: "small",
-                  color: "secondary"
-                })
-              ]),
-              f("div", {
-                class: "waypoint-marker",
-                style: At({ backgroundColor: oe(C) })
-              }, E(C + 1), 5),
-              f("div", La, [
-                f("span", Oa, E(Z(C)), 1),
-                f("span", wa, E(R.name || `${R.lat.toFixed(4)}, ${R.lon.toFixed(4)}`), 1)
-              ]),
-              f("div", ja, [
-                A(ke, {
-                  preset: "plain",
-                  size: "small",
-                  icon: "arrow_upward",
-                  disabled: C === 0,
-                  onClick: (se) => ze(C, C - 1)
-                }, null, 8, ["disabled", "onClick"]),
-                A(ke, {
-                  preset: "plain",
-                  size: "small",
-                  icon: "arrow_downward",
-                  disabled: C === n.value.length - 1,
-                  onClick: (se) => ze(C, C + 1)
-                }, null, 8, ["disabled", "onClick"]),
-                A(ke, {
-                  preset: "plain",
-                  size: "small",
-                  icon: "close",
-                  color: "danger",
-                  onClick: (se) => fe(C)
-                }, null, 8, ["onClick"])
-              ])
-            ], 42, ba))), 128)),
-            n.value.length === 0 ? (V(), U("div", Ca, " Noch keine Wegpunkte. Klicke auf die Karte oder suche eine Adresse. ")) : K("", !0)
-          ]),
-          n.value.length >= 2 ? (V(), U("div", Ta, [
-            A(_e, {
-              disabled: P.value,
-              loading: P.value,
-              icon: "route",
-              onClick: Lt
-            }, {
-              default: ee(() => [...d[4] || (d[4] = [
-                be(" Route berechnen ", -1)
-              ])]),
-              _: 1
-            }, 8, ["disabled", "loading"]),
-            n.value.length >= 3 ? (V(), he(_e, {
-              key: 0,
-              preset: "secondary",
-              disabled: P.value,
-              loading: P.value,
-              icon: "auto_fix_high",
-              onClick: Ot
-            }, {
-              default: ee(() => [...d[5] || (d[5] = [
-                be(" Route optimieren ", -1)
-              ])]),
-              _: 1
-            }, 8, ["disabled", "loading"])) : K("", !0)
-          ])) : K("", !0),
-          t.value?.summary ? (V(), U("div", Ba, [
-            d[6] || (d[6] = f("div", { class: "summary-header" }, "Route", -1)),
-            f("div", _a, [
-              f("div", ka, [
-                A($, {
-                  name: "straighten",
-                  size: "small"
-                }),
-                f("span", null, E(t.value.summary.distance_km.toFixed(1)) + " km", 1)
-              ]),
-              f("div", xa, [
-                A($, {
-                  name: "schedule",
-                  size: "small"
-                }),
-                f("span", null, E(t.value.summary.duration_min) + " min", 1)
-              ]),
-              f("div", Ra, [
-                A($, {
-                  name: "turn_right",
-                  size: "small"
-                }),
-                f("span", null, E(Be.value.length) + " Manöver", 1)
-              ])
-            ]),
-            Be.value.length > 0 ? (V(), U("div", Aa, [
-              (V(!0), U(ie, null, ge(Be.value, (R, C) => (V(), U("div", {
-                key: C,
-                class: "maneuver-item"
-              }, [
-                f("span", Pa, E(C + 1) + ".", 1),
-                f("span", Ia, E(R.instruction), 1),
-                f("span", Va, E(R.length.toFixed(1)) + " km", 1)
-              ]))), 128))
-            ])) : K("", !0)
-          ])) : K("", !0)
-        ]),
-        f("div", Na, [
-          A(re(Kt), {
-            ref_key: "mapRef",
-            ref: N,
-            center: h.value,
-            zoom: W.value,
-            style: { height: "100%", width: "100%" },
-            onClick: O
-          }, {
-            default: ee(() => [
-              A(re(la), {
-                url: "https://a.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png",
-                options: { maxNativeZoom: 19, maxZoom: 21 }
-              }),
-              M.value ? (V(), he(re(Gt), {
-                key: 0,
-                geojson: M.value,
-                "options-style": J
-              }, null, 8, ["geojson"])) : K("", !0),
-              (V(!0), U(ie, null, ge(n.value, (R, C) => (V(), he(re($t), {
-                key: "wp-" + C,
-                "lat-lng": [R.lat, R.lon],
-                radius: 10,
-                "fill-color": oe(C),
-                color: "#fff",
-                weight: 3,
-                "fill-opacity": 1
+              }, 8, ["disabled", "onClick"]),
+              O(b(ne), {
+                intent: "quiet",
+                size: "sm",
+                title: "Nach unten",
+                disabled: h === l.value.length - 1,
+                onClick: (se) => Ie(h, h + 1)
               }, {
-                default: ee(() => [
-                  A(re(oa), null, {
-                    default: ee(() => [
-                      f("strong", null, E(Z(C)), 1),
-                      d[7] || (d[7] = f("br", null, null, -1)),
-                      be(" " + E(R.name || `${R.lat.toFixed(4)}, ${R.lon.toFixed(4)}`), 1)
-                    ]),
-                    _: 2
-                  }, 1024)
+                default: K(() => [
+                  O(b(W), {
+                    name: "arrow_downward",
+                    size: "sm"
+                  })
                 ]),
-                _: 2
-              }, 1032, ["lat-lng", "fill-color"]))), 128))
+                _: 1
+              }, 8, ["disabled", "onClick"]),
+              O(b(ne), {
+                intent: "danger",
+                size: "sm",
+                title: "Entfernen",
+                onClick: (se) => ye(h)
+              }, {
+                default: K(() => [
+                  O(b(W), {
+                    name: "close",
+                    size: "sm"
+                  })
+                ]),
+                _: 1
+              }, 8, ["onClick"])
+            ])
+          ], 42, ga))), 128)),
+          l.value.length === 0 ? (I(), E("div", wa, " Noch keine Wegpunkte. Klicke auf die Karte oder suche eine Adresse. ")) : Y("", !0)
+        ]),
+        l.value.length >= 2 ? (I(), E("div", ja, [
+          O(b(ne), {
+            intent: "primary",
+            busy: D.value,
+            onClick: St
+          }, {
+            default: K(() => [
+              O(b(W), {
+                name: "route",
+                size: "sm"
+              }),
+              d[4] || (d[4] = he("Route berechnen ", -1))
             ]),
             _: 1
-          }, 8, ["center", "zoom"])
-        ])
-      ]);
-    };
+          }, 8, ["busy"]),
+          l.value.length >= 3 ? (I(), ge(b(ne), {
+            key: 0,
+            busy: D.value,
+            onClick: Lt
+          }, {
+            default: K(() => [
+              O(b(W), {
+                name: "auto_fix_high",
+                size: "sm"
+              }),
+              d[5] || (d[5] = he("Route optimieren ", -1))
+            ]),
+            _: 1
+          }, 8, ["busy"])) : Y("", !0)
+        ])) : Y("", !0),
+        t.value?.summary ? (I(), E("div", Ca, [
+          d[6] || (d[6] = g("div", { class: "summary-header" }, "Route", -1)),
+          g("div", Ta, [
+            g("div", ka, [
+              O(b(W), {
+                name: "straighten",
+                size: "sm"
+              }),
+              g("span", null, U(t.value.summary.distance_km.toFixed(1)) + " km", 1)
+            ]),
+            g("div", Ba, [
+              O(b(W), {
+                name: "schedule",
+                size: "sm"
+              }),
+              g("span", null, U(t.value.summary.duration_min) + " min", 1)
+            ]),
+            g("div", Ra, [
+              O(b(W), {
+                name: "turn_right",
+                size: "sm"
+              }),
+              g("span", null, U(ke.value.length) + " Manöver", 1)
+            ])
+          ]),
+          ke.value.length > 0 ? (I(), E("div", Aa, [
+            (I(!0), E(re, null, fe(ke.value, (f, h) => (I(), E("div", {
+              key: h,
+              class: "maneuver-item"
+            }, [
+              g("span", xa, U(h + 1) + ".", 1),
+              g("span", Pa, U(f.instruction), 1),
+              g("span", _a, U(f.length.toFixed(1)) + " km", 1)
+            ]))), 128))
+          ])) : Y("", !0)
+        ])) : Y("", !0)
+      ]),
+      g("div", Na, [
+        O(b(Gt), {
+          ref_key: "mapRef",
+          ref: z,
+          center: L.value,
+          zoom: q.value,
+          style: { height: "100%", width: "100%" },
+          onClick: T
+        }, {
+          default: K(() => [
+            O(b(na), {
+              url: "https://a.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png",
+              options: { maxNativeZoom: 19, maxZoom: 21 }
+            }),
+            F.value ? (I(), ge(b(Zt), {
+              key: 0,
+              geojson: F.value,
+              "options-style": H
+            }, null, 8, ["geojson"])) : Y("", !0),
+            (I(!0), E(re, null, fe(l.value, (f, h) => (I(), ge(b(zt), {
+              key: "wp-" + h,
+              "lat-lng": [f.lat, f.lon],
+              radius: 10,
+              "fill-color": ae(h),
+              color: "#fff",
+              weight: 3,
+              "fill-opacity": 1
+            }, {
+              default: K(() => [
+                O(b(ta), null, {
+                  default: K(() => [
+                    g("strong", null, U(Z(h)), 1),
+                    d[7] || (d[7] = g("br", null, null, -1)),
+                    he(" " + U(f.name || `${f.lat.toFixed(4)}, ${f.lon.toFixed(4)}`), 1)
+                  ]),
+                  _: 2
+                }, 1024)
+              ]),
+              _: 2
+            }, 1032, ["lat-lng", "fill-color"]))), 128))
+          ]),
+          _: 1
+        }, 8, ["center", "zoom"])
+      ])
+    ]));
   }
-}), Da = (e, a) => {
+}), Va = (e, a) => {
   const t = e.__vccOpts || e;
-  for (const [o, r] of a)
-    t[o] = r;
+  for (const [n, s] of a)
+    t[n] = s;
   return t;
-}, Ma = /* @__PURE__ */ Da($a, [["__scopeId", "data-v-5cc943b1"]]), Fa = /* @__PURE__ */ L({
+}, Da = /* @__PURE__ */ Va(za, [["__scopeId", "data-v-e6b8f6de"]]), $a = /* @__PURE__ */ C({
   __name: "Settings",
   props: {
     config: {},
@@ -2094,8 +2113,8 @@ const ua = { class: "valhalla-preview" }, ca = { class: "sidebar" }, da = { clas
     dataSources: {}
   },
   setup(e) {
-    const a = Y(
-      () => e.connections.filter((r) => r.type === "rest")
+    const a = X(
+      () => e.connections.filter((s) => s.type === "rest")
     ), t = [
       { text: "Auto", value: "auto" },
       { text: "Bicycle", value: "bicycle" },
@@ -2104,57 +2123,54 @@ const ua = { class: "valhalla-preview" }, ca = { class: "sidebar" }, da = { clas
       { text: "Bus", value: "bus" },
       { text: "Motor Scooter", value: "motor_scooter" },
       { text: "Motorcycle", value: "motorcycle" }
-    ], o = [
+    ], n = [
       { text: "Kilometers", value: "kilometers" },
       { text: "Miles", value: "miles" }
     ];
-    return e.config.costing || (e.config.costing = "auto"), e.config.units || (e.config.units = "kilometers"), e.config.language || (e.config.language = "de-DE"), (r, l) => {
-      const n = te("VaSelect"), s = te("VaInput");
-      return V(), U(ie, null, [
-        A(n, {
-          modelValue: e.config.connection,
-          "onUpdate:modelValue": l[0] || (l[0] = (i) => e.config.connection = i),
-          label: "Valhalla Connection",
-          options: a.value,
-          "text-by": "name",
-          "value-by": "uid"
-        }, null, 8, ["modelValue", "options"]),
-        A(n, {
-          modelValue: e.config.costing,
-          "onUpdate:modelValue": l[1] || (l[1] = (i) => e.config.costing = i),
-          label: "Default Costing",
-          options: t,
-          "text-by": "text",
-          "value-by": "value"
-        }, null, 8, ["modelValue"]),
-        A(n, {
-          modelValue: e.config.units,
-          "onUpdate:modelValue": l[2] || (l[2] = (i) => e.config.units = i),
-          label: "Units",
-          options: o,
-          "text-by": "text",
-          "value-by": "value"
-        }, null, 8, ["modelValue"]),
-        A(s, {
-          modelValue: e.config.language,
-          "onUpdate:modelValue": l[3] || (l[3] = (i) => e.config.language = i),
-          label: "Language (e.g. de-DE)"
-        }, null, 8, ["modelValue"])
-      ], 64);
-    };
+    return e.config.costing || (e.config.costing = "auto"), e.config.units || (e.config.units = "kilometers"), e.config.language || (e.config.language = "de-DE"), (s, o) => (I(), E(re, null, [
+      O(b(Le), {
+        modelValue: e.config.connection,
+        "onUpdate:modelValue": o[0] || (o[0] = (l) => e.config.connection = l),
+        label: "Valhalla-Verbindung",
+        options: a.value,
+        "label-key": "name",
+        "value-key": "uid"
+      }, null, 8, ["modelValue", "options"]),
+      O(b(Le), {
+        modelValue: e.config.costing,
+        "onUpdate:modelValue": o[1] || (o[1] = (l) => e.config.costing = l),
+        label: "Standard-Fortbewegung",
+        options: t,
+        "label-key": "text",
+        "value-key": "value"
+      }, null, 8, ["modelValue"]),
+      O(b(Le), {
+        modelValue: e.config.units,
+        "onUpdate:modelValue": o[2] || (o[2] = (l) => e.config.units = l),
+        label: "Einheiten",
+        options: n,
+        "label-key": "text",
+        "value-key": "value"
+      }, null, 8, ["modelValue"]),
+      O(b(Me), {
+        modelValue: e.config.language,
+        "onUpdate:modelValue": o[3] || (o[3] = (l) => e.config.language = l),
+        label: "Language (e.g. de-DE)"
+      }, null, 8, ["modelValue"])
+    ], 64));
   }
-}), Ua = Symbol.for("ValhallaStoreFactory"), Ea = Symbol.for("ValhallaPreview"), Za = Symbol.for("ValhallaSettings");
-function Ja({ services: e }) {
-  e.register("ValhallaPreview", Ma), e.register("ValhallaSettings", Fa), e.getRequired(Ue).registerDatasourceType("valhalla", {
-    Store: Ua,
-    Preview: Ea,
-    Settings: Za
+}), Fa = Symbol.for("ValhallaStoreFactory"), Ma = Symbol.for("ValhallaPreview"), Ea = Symbol.for("ValhallaSettings");
+function Ga({ services: e }) {
+  e.register("ValhallaPreview", Da), e.register("ValhallaSettings", $a), e.getRequired(Fe).registerDatasourceType("valhalla", {
+    Store: Fa,
+    Preview: Ma,
+    Settings: Ea
   });
 }
-function Ka({ services: e }) {
-  e.getRequired(Ue).unregisterDatasourceType("valhalla"), e.unregister("ValhallaPreview"), e.unregister("ValhallaSettings");
+function Ja({ services: e }) {
+  e.getRequired(Fe).unregisterDatasourceType("valhalla"), e.unregister("ValhallaPreview"), e.unregister("ValhallaSettings");
 }
 export {
-  Ja as activate,
-  Ka as deactivate
+  Ga as activate,
+  Ja as deactivate
 };

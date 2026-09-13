@@ -10,7 +10,8 @@
     "lib.composer.ogc",
     "lib.repository.datasource",
     "platform.vue",
-    "ui.vue.composables"
+    "ui.vue.composables",
+    "ui.vue.controls"
   ],
   "requiresService": [
     {
@@ -39,6 +40,10 @@
     },
     {
       "id": "org.eclipse.daanse.board.app.ui.vue.composables",
+      "versionRange": ">=0.0.1-0"
+    },
+    {
+      "id": "org.eclipse.daanse.board.app.ui.vue.controls",
       "versionRange": ">=0.0.1-0"
     }
   ]

@@ -8,7 +8,8 @@
   "dependencies": [
     "lib.api.connection",
     "lib.connection.rest",
-    "platform.vue"
+    "platform.vue",
+    "ui.vue.controls"
   ],
   "requiresService": [
     {
@@ -29,6 +30,10 @@
     },
     {
       "id": "org.eclipse.daanse.board.app.lib.connection.rest",
+      "versionRange": ">=0.0.1-0"
+    },
+    {
+      "id": "org.eclipse.daanse.board.app.ui.vue.controls",
       "versionRange": ">=0.0.1-0"
     }
   ]

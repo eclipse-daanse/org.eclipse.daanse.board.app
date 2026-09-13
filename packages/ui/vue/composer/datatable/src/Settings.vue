@@ -11,6 +11,7 @@ Contributors:
     Smart City Jena
 -->
 <script setup lang="ts">
+import { DSelect } from 'org.eclipse.daanse.board.app.ui.vue.controls'
 import { inject } from 'vue'
 import { DataTableComposer } from "org.eclipse.daanse.board.app.lib.composer.datatable";
 import {
@@ -42,9 +43,9 @@ watch(() => config.connectedDatasources, async (newValue) => {
 </script>
 <template>
   <!-- eslint-disable-next-line vue/no-mutating-props -->
-  <VaSelect v-model="config.connectedDatasources" label="Sources" :options="datasourcesFiltered" multiple text-by="name"
-    value-by="uid" />
+  <DSelect v-model="config.connectedDatasources" label="Quellen" :options="datasourcesFiltered" multiple label-key="name"
+    value-key="uid" />
 
   <!-- eslint-disable-next-line vue/no-mutating-props -->
-  <VaSelect v-model="config.composeBy" label="Compose By" :options="composeByOptions" />
+  <DSelect v-model="config.composeBy" label="Zusammensetzen nach" :options="composeByOptions" />
 </template>

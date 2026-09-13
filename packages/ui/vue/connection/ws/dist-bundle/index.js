@@ -1,51 +1,47 @@
-import { CONNECTION_REPOSITORY as E } from "org.eclipse.daanse.board.app.lib.api.connection";
+import { CONNECTION_REPOSITORY as d } from "org.eclipse.daanse.board.app.lib.api.connection";
+import { DInput as j } from "org.eclipse.daanse.board.app.ui.vue.controls";
 /**
 * @vue/shared v3.5.24
 * (c) 2018-present Yuxi (Evan) You and Vue contributors
 * @license MIT
 **/
-const P = [], B = (t) => t.charCodeAt(0) === 111 && t.charCodeAt(1) === 110 && // uppercase letter
-(t.charCodeAt(2) > 122 || t.charCodeAt(2) < 97), F = Object.assign, f = Array.isArray, g = (t) => typeof t == "function", u = (t) => typeof t == "string", W = (t) => typeof t == "symbol", p = (t) => t !== null && typeof t == "object", V = (t) => {
-  const n = /* @__PURE__ */ Object.create(null);
-  return ((e) => n[e] || (n[e] = t(e)));
-}, q = /-\w/g, C = V(
-  (t) => t.replace(q, (n) => n.slice(1).toUpperCase())
-), A = V((t) => t.charAt(0).toUpperCase() + t.slice(1));
+const z = [], B = (t) => t.charCodeAt(0) === 111 && t.charCodeAt(1) === 110 && // uppercase letter
+(t.charCodeAt(2) > 122 || t.charCodeAt(2) < 97), h = Object.assign, f = Array.isArray, g = (t) => typeof t == "function", u = (t) => typeof t == "string", P = (t) => typeof t == "symbol", C = (t) => t !== null && typeof t == "object";
 let R;
-const T = () => R || (R = typeof globalThis < "u" ? globalThis : typeof self < "u" ? self : typeof window < "u" ? window : typeof global < "u" ? global : {});
-function N(t) {
+const F = () => R || (R = typeof globalThis < "u" ? globalThis : typeof self < "u" ? self : typeof window < "u" ? window : typeof global < "u" ? global : {});
+function T(t) {
   if (f(t)) {
     const n = {};
     for (let e = 0; e < t.length; e++) {
-      const l = t[e], s = u(l) ? G(l) : N(l);
-      if (s)
-        for (const c in s)
-          n[c] = s[c];
+      const s = t[e], l = u(s) ? M(s) : T(s);
+      if (l)
+        for (const o in l)
+          n[o] = l[o];
     }
     return n;
-  } else if (u(t) || p(t))
+  } else if (u(t) || C(t))
     return t;
 }
-const D = /;(?![^(]*\))/g, L = /:([^]+)/, Y = /\/\*[^]*?\*\//g;
-function G(t) {
+const U = /;(?![^(]*\))/g, W = /:([^]+)/, D = /\/\*[^]*?\*\//g;
+function M(t) {
   const n = {};
-  return t.replace(Y, "").split(D).forEach((e) => {
+  return t.replace(D, "").split(U).forEach((e) => {
     if (e) {
-      const l = e.split(L);
-      l.length > 1 && (n[l[0].trim()] = l[1].trim());
+      const s = e.split(W);
+      s.length > 1 && (n[s[0].trim()] = s[1].trim());
     }
   }), n;
 }
-function O(t) {
+function N(t) {
   let n = "";
   if (u(t))
     n = t;
   else if (f(t))
     for (let e = 0; e < t.length; e++) {
-      const l = O(t[e]);
-      l && (n += l + " ");
+      const s = N(t[e]);
+      s && (n += s + " ");
     }
-  else if (p(t))
+  else if (C(t))
     for (const e in t)
       t[e] && (n += e + " ");
   return n.trim();
@@ -56,103 +52,77 @@ function O(t) {
 * @license MIT
 **/
 new Set(
-  /* @__PURE__ */ Object.getOwnPropertyNames(Symbol).filter((t) => t !== "arguments" && t !== "caller").map((t) => Symbol[t]).filter(W)
+  /* @__PURE__ */ Object.getOwnPropertyNames(Symbol).filter((t) => t !== "arguments" && t !== "caller").map((t) => Symbol[t]).filter(P)
 );
-function k(t) {
+function I(t) {
   return t ? !!t.__v_raw : !1;
 }
-function H(t) {
+function E(t) {
   return t ? t.__v_isRef === !0 : !1;
+}
+function q(t) {
+  return E(t) ? t.value : t;
 }
 /**
 * @vue/runtime-core v3.5.24
 * (c) 2018-present Yuxi (Evan) You and Vue contributors
 * @license MIT
 **/
-let S = null, K = null;
-const J = (t) => t.__isTeleport;
-function w(t, n) {
-  t.shapeFlag & 6 && t.component ? (t.transition = n, w(t.component.subTree, n)) : t.shapeFlag & 128 ? (t.ssContent.transition = n.clone(t.ssContent), t.ssFallback.transition = n.clone(t.ssFallback)) : t.transition = n;
+let S = null, L = null;
+const Y = (t) => t.__isTeleport;
+function V(t, n) {
+  t.shapeFlag & 6 && t.component ? (t.transition = n, V(t.component.subTree, n)) : t.shapeFlag & 128 ? (t.ssContent.transition = n.clone(t.ssContent), t.ssFallback.transition = n.clone(t.ssFallback)) : t.transition = n;
 }
 // @__NO_SIDE_EFFECTS__
-function Q(t, n) {
+function G(t, n) {
   return g(t) ? (
     // #8236: extend call and options.name access are considered side-effects
     // by Rollup, so we have to wrap it in a pure-annotated IIFE.
-    F({ name: t.name }, n, { setup: t })
+    h({ name: t.name }, n, { setup: t })
   ) : t;
 }
-T().requestIdleCallback;
-T().cancelIdleCallback;
-const X = "components";
-function Z(t, n) {
-  return v(X, t, !0, n) || t;
-}
-const $ = Symbol.for("v-ndc");
-function v(t, n, e = !0, l = !1) {
-  const s = M;
-  if (s) {
-    const c = s.type;
-    {
-      const o = _t(
-        c,
-        !1
-      );
-      if (o && (o === n || o === C(n) || o === A(C(n))))
-        return c;
-    }
-    const i = (
-      // local registration
-      // check instance[type] first which is resolved for options API
-      d(s[t] || c[t], n) || // global registration
-      d(s.appContext[t], n)
-    );
-    return !i && l ? c : i;
-  }
-}
-function d(t, n) {
-  return t && (t[n] || t[C(n)] || t[A(C(n))]);
-}
-const tt = {}, x = (t) => Object.getPrototypeOf(t) === tt, nt = (t) => t.__isSuspense, z = Symbol.for("v-fgt"), et = Symbol.for("v-txt"), st = Symbol.for("v-cmt"), m = [];
+F().requestIdleCallback;
+F().cancelIdleCallback;
+const H = Symbol.for("v-ndc"), K = {}, k = (t) => Object.getPrototypeOf(t) === K, J = (t) => t.__isSuspense, A = Symbol.for("v-fgt"), Q = Symbol.for("v-txt"), X = Symbol.for("v-cmt"), m = [];
 let a = null;
-function lt(t = !1) {
+function Z(t = !1) {
   m.push(a = t ? null : []);
 }
-function ct() {
+function $() {
   m.pop(), a = m[m.length - 1] || null;
 }
-function ot(t) {
-  return t.dynamicChildren = a || P, ct(), a && a.push(t), t;
+function v(t) {
+  return t.dynamicChildren = a || z, $(), a && a.push(t), t;
 }
-function it(t, n, e, l, s) {
-  return ot(
-    U(
+function tt(t, n, e, s, l) {
+  return v(
+    w(
       t,
       n,
       e,
-      l,
       s,
+      l,
       !0
     )
   );
 }
-function rt(t) {
+function nt(t) {
   return t ? t.__v_isVNode === !0 : !1;
 }
-const j = ({ key: t }) => t ?? null, _ = ({
+const x = ({ key: t }) => t ?? null, _ = ({
   ref: t,
   ref_key: n,
   ref_for: e
-}) => (typeof t == "number" && (t = "" + t), t != null ? u(t) || H(t) || g(t) ? { i: S, r: t, k: n, f: !!e } : t : null);
-function at(t, n = null, e = null, l = 0, s = null, c = t === z ? 0 : 1, i = !1, o = !1) {
-  const r = {
+}) => (typeof t == "number" && (t = "" + t), t != null ? u(t) || E(t) || g(t) ? { i: S, r: t, k: n, f: !!e } : t : null);
+function et(t, n = null, e = null, s = 0, l = null, o = t === A ? 0 : 1, c = !1, r = !1) {
+  const i = {
     __v_isVNode: !0,
     __v_skip: !0,
     type: t,
     props: n,
-    key: n && j(n),
+    key: n && x(n),
     ref: n && _(n),
-    scopeId: K,
+    scopeId: L,
     slotScopeIds: null,
     children: e,
     component: null,
@@ -167,70 +137,70 @@ function at(t, n = null, e = null, l = 0, s = null, c = t === z ? 0 : 1, i = !1,
     targetStart: null,
     targetAnchor: null,
     staticCount: 0,
-    shapeFlag: c,
-    patchFlag: l,
-    dynamicProps: s,
+    shapeFlag: o,
+    patchFlag: s,
+    dynamicProps: l,
     dynamicChildren: null,
     appContext: null,
     ctx: S
   };
-  return o ? (I(r, e), c & 128 && t.normalize(r)) : e && (r.shapeFlag |= u(e) ? 8 : 16), // avoid a block node from tracking itself
-  !i && // has current parent block
+  return r ? (O(i, e), o & 128 && t.normalize(i)) : e && (i.shapeFlag |= u(e) ? 8 : 16), // avoid a block node from tracking itself
+  !c && // has current parent block
   a && // presence of a patch flag indicates this node needs patching on updates.
   // component nodes also should always be patched, because even if the
   // component doesn't need to update, it needs to persist the instance on to
   // the next vnode so that it can be properly unmounted later.
-  (r.patchFlag > 0 || c & 6) && // the EVENTS flag is only for hydration and if it is the only flag, the
+  (i.patchFlag > 0 || o & 6) && // the EVENTS flag is only for hydration and if it is the only flag, the
   // vnode should not be considered dynamic due to handler caching.
-  r.patchFlag !== 32 && a.push(r), r;
+  i.patchFlag !== 32 && a.push(i), i;
 }
-const U = ut;
-function ut(t, n = null, e = null, l = 0, s = null, c = !1) {
-  if ((!t || t === $) && (t = st), rt(t)) {
-    const o = h(
+const w = lt;
+function lt(t, n = null, e = null, s = 0, l = null, o = !1) {
+  if ((!t || t === H) && (t = X), nt(t)) {
+    const r = y(
       t,
       n,
       !0
       /* mergeRef: true */
     );
-    return e && I(o, e), !c && a && (o.shapeFlag & 6 ? a[a.indexOf(t)] = o : a.push(o)), o.patchFlag = -2, o;
+    return e && O(r, e), !o && a && (r.shapeFlag & 6 ? a[a.indexOf(t)] = r : a.push(r)), r.patchFlag = -2, r;
   }
-  if (pt(t) && (t = t.__vccOpts), n) {
-    n = ft(n);
-    let { class: o, style: r } = n;
-    o && !u(o) && (n.class = O(o)), p(r) && (k(r) && !f(r) && (r = F({}, r)), n.style = N(r));
+  if (ct(t) && (t = t.__vccOpts), n) {
+    n = st(n);
+    let { class: r, style: i } = n;
+    r && !u(r) && (n.class = N(r)), C(i) && (I(i) && !f(i) && (i = h({}, i)), n.style = T(i));
   }
-  const i = u(t) ? 1 : nt(t) ? 128 : J(t) ? 64 : p(t) ? 4 : g(t) ? 2 : 0;
-  return at(
+  const c = u(t) ? 1 : J(t) ? 128 : Y(t) ? 64 : C(t) ? 4 : g(t) ? 2 : 0;
+  return et(
     t,
     n,
     e,
-    l,
     s,
-    i,
+    l,
     c,
+    o,
     !0
   );
 }
-function ft(t) {
-  return t ? k(t) || x(t) ? F({}, t) : t : null;
+function st(t) {
+  return t ? I(t) || k(t) ? h({}, t) : t : null;
 }
-function h(t, n, e = !1, l = !1) {
-  const { props: s, ref: c, patchFlag: i, children: o, transition: r } = t, b = n ? mt(s || {}, n) : s, y = {
+function y(t, n, e = !1, s = !1) {
+  const { props: l, ref: o, patchFlag: c, children: r, transition: i } = t, p = n ? it(l || {}, n) : l, b = {
     __v_isVNode: !0,
     __v_skip: !0,
     type: t.type,
-    props: b,
-    key: b && j(b),
+    props: p,
+    key: p && x(p),
     ref: n && n.ref ? (
       // #2078 in the case of <component :is="vnode" ref="extra"/>
       // if the vnode itself already has a ref, cloneVNode will need to merge
       // the refs so the single vnode can be set on multiple refs
-      e && c ? f(c) ? c.concat(_(n)) : [c, _(n)] : _(n)
-    ) : c,
+      e && o ? f(o) ? o.concat(_(n)) : [o, _(n)] : _(n)
+    ) : o,
     scopeId: t.scopeId,
     slotScopeIds: t.slotScopeIds,
-    children: o,
+    children: r,
     target: t.target,
     targetStart: t.targetStart,
     targetAnchor: t.targetAnchor,
@@ -240,115 +210,108 @@ function h(t, n, e = !1, l = !1) {
     // existing patch flag to be reliable and need to add the FULL_PROPS flag.
     // note: preserve flag for fragments since they use the flag for children
     // fast paths only.
-    patchFlag: n && t.type !== z ? i === -1 ? 16 : i | 16 : i,
+    patchFlag: n && t.type !== A ? c === -1 ? 16 : c | 16 : c,
     dynamicProps: t.dynamicProps,
     dynamicChildren: t.dynamicChildren,
     appContext: t.appContext,
     dirs: t.dirs,
-    transition: r,
+    transition: i,
     // These should technically only be non-null on mounted VNodes. However,
     // they *should* be copied for kept-alive vnodes. So we just always copy
     // them since them being non-null during a mount doesn't affect the logic as
     // they will simply be overwritten.
     component: t.component,
     suspense: t.suspense,
-    ssContent: t.ssContent && h(t.ssContent),
-    ssFallback: t.ssFallback && h(t.ssFallback),
+    ssContent: t.ssContent && y(t.ssContent),
+    ssFallback: t.ssFallback && y(t.ssFallback),
     placeholder: t.placeholder,
     el: t.el,
     anchor: t.anchor,
     ctx: t.ctx,
     ce: t.ce
   };
-  return r && l && w(
-    y,
-    r.clone(y)
-  ), y;
+  return i && s && V(
+    b,
+    i.clone(b)
+  ), b;
 }
-function gt(t = " ", n = 0) {
-  return U(et, null, t, n);
+function ot(t = " ", n = 0) {
+  return w(Q, null, t, n);
 }
-function I(t, n) {
+function O(t, n) {
   let e = 0;
-  const { shapeFlag: l } = t;
+  const { shapeFlag: s } = t;
   if (n == null)
     n = null;
   else if (f(n))
     e = 16;
   else if (typeof n == "object")
-    if (l & 65) {
-      const s = n.default;
-      s && (s._c && (s._d = !1), I(t, s()), s._c && (s._d = !0));
+    if (s & 65) {
+      const l = n.default;
+      l && (l._c && (l._d = !1), O(t, l()), l._c && (l._d = !0));
       return;
     } else
-      e = 32, !n._ && !x(n) && (n._ctx = S);
-  else g(n) ? (n = { default: n, _ctx: S }, e = 32) : (n = String(n), l & 64 ? (e = 16, n = [gt(n)]) : e = 8);
+      e = 32, !n._ && !k(n) && (n._ctx = S);
+  else g(n) ? (n = { default: n, _ctx: S }, e = 32) : (n = String(n), s & 64 ? (e = 16, n = [ot(n)]) : e = 8);
   t.children = n, t.shapeFlag |= e;
 }
-function mt(...t) {
+function it(...t) {
   const n = {};
   for (let e = 0; e < t.length; e++) {
-    const l = t[e];
-    for (const s in l)
-      if (s === "class")
-        n.class !== l.class && (n.class = O([n.class, l.class]));
-      else if (s === "style")
-        n.style = N([n.style, l.style]);
-      else if (B(s)) {
-        const c = n[s], i = l[s];
-        i && c !== i && !(f(c) && c.includes(i)) && (n[s] = c ? [].concat(c, i) : i);
-      } else s !== "" && (n[s] = l[s]);
+    const s = t[e];
+    for (const l in s)
+      if (l === "class")
+        n.class !== s.class && (n.class = N([n.class, s.class]));
+      else if (l === "style")
+        n.style = T([n.style, s.style]);
+      else if (B(l)) {
+        const o = n[l], c = s[l];
+        c && o !== c && !(f(o) && o.includes(c)) && (n[l] = o ? [].concat(o, c) : c);
+      } else l !== "" && (n[l] = s[l]);
   }
   return n;
 }
-let M = null;
 {
-  const t = T(), n = (e, l) => {
-    let s;
-    return (s = t[e]) || (s = t[e] = []), s.push(l), (c) => {
-      s.length > 1 ? s.forEach((i) => i(c)) : s[0](c);
+  const t = F(), n = (e, s) => {
+    let l;
+    return (l = t[e]) || (l = t[e] = []), l.push(s), (o) => {
+      l.length > 1 ? l.forEach((c) => c(o)) : l[0](o);
     };
   };
   n(
     "__VUE_INSTANCE_SETTERS__",
-    (e) => M = e
+    (e) => e
   ), n(
     "__VUE_SSR_SETTERS__",
     (e) => e
   );
 }
-function _t(t, n = !0) {
-  return g(t) ? t.displayName || t.name : t.name || n && t.__name;
-}
-function pt(t) {
+function ct(t) {
   return g(t) && "__vccOpts" in t;
 }
-const Ct = /* @__PURE__ */ Q({
+const rt = /* @__PURE__ */ G({
   __name: "Settings",
   props: {
     config: {}
   },
   setup(t) {
-    return (n, e) => {
-      const l = Z("VaInput");
-      return lt(), it(l, {
-        modelValue: t.config.url,
-        "onUpdate:modelValue": e[0] || (e[0] = (s) => t.config.url = s),
-        label: "URL"
-      }, null, 8, ["modelValue"]);
-    };
+    return (n, e) => (Z(), tt(q(j), {
+      modelValue: t.config.url,
+      "onUpdate:modelValue": e[0] || (e[0] = (s) => t.config.url = s),
+      label: "URL"
+    }, null, 8, ["modelValue"]));
   }
-}), St = Symbol.for("WSConnectionFactory"), bt = Symbol.for("WsConnectionSettings");
-function ht({ services: t }) {
-  t.register("WsConnectionSettings", Ct), t.getRequired(E).registerConnectionType("ws", {
-    Connection: St,
-    Settings: bt
+}), at = Symbol.for("WSConnectionFactory"), ut = Symbol.for("WsConnectionSettings");
+function mt({ services: t }) {
+  t.register("WsConnectionSettings", rt), t.getRequired(d).registerConnectionType("ws", {
+    Connection: at,
+    Settings: ut
   });
 }
-function Ft({ services: t }) {
-  t.getRequired(E).unregisterConnectionType("ws"), t.unregister("WsConnectionSettings");
+function _t({ services: t }) {
+  t.getRequired(d).unregisterConnectionType("ws"), t.unregister("WsConnectionSettings");
 }
 export {
-  ht as activate,
-  Ft as deactivate
+  mt as activate,
+  _t as deactivate
 };

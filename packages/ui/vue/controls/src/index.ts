@@ -53,6 +53,7 @@ import DRadioGroup from './DRadioGroup.vue'
 import DSelect from './DSelect.vue'
 import DSlider from './DSlider.vue'
 import DSwitch from './DSwitch.vue'
+import DTable from './DTable.vue'
 import DTabs from './DTabs.vue'
 
 export {
@@ -72,6 +73,7 @@ export {
   DSelect,
   DSlider,
   DSwitch,
+  DTable,
   DTabs,
 }
 
@@ -93,5 +95,6 @@ export const CONTROLS = {
   DSelect,
   DSlider,
   DSwitch,
+  DTable,
   DTabs,
 }

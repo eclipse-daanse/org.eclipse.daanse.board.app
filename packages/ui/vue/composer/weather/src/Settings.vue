@@ -11,6 +11,7 @@ Contributors:
     Smart City Jena
 -->
 <script setup lang="ts">
+import { DInput, DSelect } from 'org.eclipse.daanse.board.app.ui.vue.controls'
 import { inject, ref, computed, watch } from 'vue'
 import { identifier, DatasourceRepository } from 'org.eclipse.daanse.board.app.lib.api.datasource'
 
@@ -114,16 +115,16 @@ const getCustomMappingValue = (parameter: string) => {
 <template>
   <div class="weather-composer-settings">
     <!-- eslint-disable-next-line vue/no-mutating-props -->
-    <VaSelect v-model="config.connectedDatasources" label="OGC STA Sources" :options="datasourcesFiltered" multiple text-by="name" value-by="uid" />
+    <DSelect v-model="config.connectedDatasources" label="OGC-STA-Quellen" :options="datasourcesFiltered" multiple label-key="name" value-key="uid" />
 
     <!-- eslint-disable-next-line vue/no-mutating-props -->
-    <VaSelect
+    <DSelect
       v-model="config.thingId"
-      label="Thing (Optional)"
+      label="Thing (wahlweise)"
       placeholder="All Things"
       :options="availableThings"
-      text-by="name"
-      value-by="iotId"
+      label-key="name"
+      value-key="iotId"
       :loading="isLoadingThings"
       :disabled="isLoadingThings || availableThings.length === 0"
       clearable
@@ -140,7 +141,7 @@ const getCustomMappingValue = (parameter: string) => {
 
         <div v-for="param in weatherParameters" :key="param.key" class="mapping-item">
           <!-- eslint-disable-next-line vue/no-mutating-props -->
-          <VaInput
+          <DInput
             :model-value="getCustomMappingValue(param.key)"
             @update:model-value="updateCustomMapping(param.key, $event)"
             :label="param.label"

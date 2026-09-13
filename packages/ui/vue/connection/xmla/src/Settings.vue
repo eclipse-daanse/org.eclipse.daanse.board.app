@@ -14,6 +14,7 @@ Contributors:
 <script setup lang="ts">
 import { watch, onMounted, ref } from 'vue';
 import { XmlaConnection } from 'org.eclipse.daanse.board.app.lib.connection.xmla';
+import { DInput, DSelect } from 'org.eclipse.daanse.board.app.ui.vue.controls';
 
 const catalogs = ref([] as any[]);
 
@@ -28,7 +29,6 @@ onMounted(async () => {
 });
 
 const fetchCatalogs = async () => {
-  console.log('Fetching catalogs for URL', config.url, 'with security', config.security);
   catalogs.value = await XmlaConnection.getCatalogs(config.url, {
     type: config.security,
     user: config.user,
@@ -57,13 +57,23 @@ watch(async () => config.password, async () => {
 <template>
 
   <!-- eslint-disable-next-line vue/no-mutating-props -->
-  <VaInput v-model="config.url" label="URL" />
+  <DInput v-model="config.url" label="URL" />
 
   <!-- eslint-disable-next-line vue/no-mutating-props -->
-  <VaSelect v-model="config.catalogName" label="Catalog" :options="catalogs" text-by="CATALOG_NAME"
-    value-by="CATALOG_NAME" />
+  <DSelect
+    v-model="config.catalogName"
+    label="Katalog"
+    :options="catalogs"
+    label-key="CATALOG_NAME"
+    value-key="CATALOG_NAME"
+  />
 
-  <VaSelect v-model="config.security" label="Security" :options="['None', 'Basic']" />
-  <VaInput v-if="config.security === 'Basic'" v-model="config.user" label="User" />
-  <VaInput v-if="config.security === 'Basic'" type="password" v-model="config.password" label="Password" />
+  <DSelect v-model="config.security" label="Anmeldung" :options="['None', 'Basic']" />
+  <DInput v-if="config.security === 'Basic'" v-model="config.user" label="Benutzer" />
+  <DInput
+    v-if="config.security === 'Basic'"
+    v-model="config.password"
+    label="Passwort"
+    type="password"
+  />
 </template>

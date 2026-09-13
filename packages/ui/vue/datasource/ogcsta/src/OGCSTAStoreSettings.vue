@@ -9,6 +9,7 @@ Contributors: Smart City Jena
 
 -->
 <script setup lang="ts">
+import { DButton, DCheckbox, DDateInput, DInput, DSelect } from 'org.eclipse.daanse.board.app.ui.vue.controls'
 import { inject, computed, reactive, watch, ref } from 'vue';
 import { VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables';
 import {
@@ -194,78 +195,81 @@ const resultTimeEndDT = createDateTimeComputed(() => timeWrappers.resultTimeEnd)
 
 <template>
   <div class="ogcsta-settings-wrapper">
-    <va-scroll-container class="ogcsta-scroll-container" vertical>
+    <div class="ogcsta-scroll-container">
       <div class="ogcsta-settings">
         <!-- Connection Selection -->
         <div class="setting-group">
-          <VaSelect
+          <DSelect
             v-model="config.connection"
-            label="Connection"
+            label="Verbindung"
             :options="connectionsFiltered"
-            text-by="name"
-            value-by="uid"
+            label-key="name"
+            value-key="uid"
             clearable
           />
         </div>
 
         <!-- MQTT Connection Selection -->
         <div class="setting-group">
-          <VaSelect
+          <DSelect
             v-model="config.mqttConnection"
             label="MQTT Connection (optional, for realtime updates)"
             :options="mqttConnectionsFiltered"
-            text-by="name"
-            value-by="uid"
+            label-key="name"
+            value-key="uid"
             clearable
           />
         </div>
 
         <!-- History Configuration -->
-        <va-collapse v-model="config.history.enabled" icon="history" header="Historical Data Configuration">
+        <!-- A disclosure, which the browser already has. Its open state is
+             the setting it guards, so opening it turns history on. -->
+        <details class="history" :open="config.history.enabled">
+          <summary class="history__head" @click.prevent="config.history.enabled = !config.history.enabled">
+            <DIcon name="history" size="sm" tone="color-dim" />Verlaufsdaten
+          </summary>
           <div class="history-settings">
 
         <!-- Time Range Configuration -->
         <div class="setting-group">
           <div class="filter-header">
             <h4>Time Range Filter</h4>
-            <va-button
-              preset="plain"
-              icon="delete"
-              size="small"
-              color="danger"
+            <DButton intent="danger"
+              size="sm"
               @click="clearTimeRange"
-              title="Clear Time Range Filter"
-            />
+              title="Clear Time Range Filter">
+  <DIcon name="delete" size="sm" />
+</DButton>
           </div>
 
-          <VariableInput v-model="timeWrappers.timeRangeStart" label="Start Time">
+          <VariableInput v-model="timeWrappers.timeRangeStart" label="Startzeit">
             <template #default="{ value, change }">
               <div class="datetime-picker-group">
-                <va-date-input
+                <DDateInput
                   v-model="timeRangeStartDT.dateValue.value"
-                  label="Start Date"
+                  label="Startdatum"
                   @update:model-value="timeRangeStartDT.updateWrapper()"
                 />
-                <va-time-input
+                <DDateInput mode="time"
                   v-model="timeRangeStartDT.timeValue.value"
-                  label="Start Time"
+                  label="Startzeit"
                   @update:model-value="timeRangeStartDT.updateWrapper()"
                 />
               </div>
             </template>
           </VariableInput>
 
-          <VariableInput v-model="timeWrappers.timeRangeEnd" label="End Time">
+          <VariableInput v-model="timeWrappers.timeRangeEnd" label="Endzeit">
             <template #default="{ value, change }">
               <div class="datetime-picker-group">
-                <va-date-input
+                <DDateInput
                   v-model="timeRangeEndDT.dateValue.value"
-                  label="End Date"
+                  label="Enddatum"
                   @update:model-value="timeRangeEndDT.updateWrapper()"
                 />
-                <va-time-input
+                <DDateInput mode="time"
                   v-model="timeRangeEndDT.timeValue.value"
-                  label="End Time"
+                  label="Endzeit"
                   @update:model-value="timeRangeEndDT.updateWrapper()"
                 />
               </div>
@@ -277,44 +281,42 @@ const resultTimeEndDT = createDateTimeComputed(() => timeWrappers.resultTimeEnd)
         <div class="setting-group">
           <div class="filter-header">
             <h4>Phenomenon Time Filter</h4>
-            <va-button
-              preset="plain"
-              icon="delete"
-              size="small"
-              color="danger"
+            <DButton intent="danger"
+              size="sm"
               @click="clearPhenomenonTime"
-              title="Clear Phenomenon Time Filter"
-            />
+              title="Clear Phenomenon Time Filter">
+  <DIcon name="delete" size="sm" />
+</DButton>
           </div>
 
-          <VariableInput v-model="timeWrappers.phenomenonTimeStart" label="Start Time">
+          <VariableInput v-model="timeWrappers.phenomenonTimeStart" label="Startzeit">
             <template #default="{ value, change }">
               <div class="datetime-picker-group">
-                <va-date-input
+                <DDateInput
                   v-model="phenomenonTimeStartDT.dateValue.value"
-                  label="Start Date"
+                  label="Startdatum"
                   @update:model-value="phenomenonTimeStartDT.updateWrapper()"
                 />
-                <va-time-input
+                <DDateInput mode="time"
                   v-model="phenomenonTimeStartDT.timeValue.value"
-                  label="Start Time"
+                  label="Startzeit"
                   @update:model-value="phenomenonTimeStartDT.updateWrapper()"
                 />
               </div>
             </template>
           </VariableInput>
 
-          <VariableInput v-model="timeWrappers.phenomenonTimeEnd" label="End Time">
+          <VariableInput v-model="timeWrappers.phenomenonTimeEnd" label="Endzeit">
             <template #default="{ value, change }">
               <div class="datetime-picker-group">
-                <va-date-input
+                <DDateInput
                   v-model="phenomenonTimeEndDT.dateValue.value"
-                  label="End Date"
+                  label="Enddatum"
                   @update:model-value="phenomenonTimeEndDT.updateWrapper()"
                 />
-                <va-time-input
+                <DDateInput mode="time"
                   v-model="phenomenonTimeEndDT.timeValue.value"
-                  label="End Time"
+                  label="Endzeit"
                   @update:model-value="phenomenonTimeEndDT.updateWrapper()"
                 />
               </div>
@@ -326,44 +328,42 @@ const resultTimeEndDT = createDateTimeComputed(() => timeWrappers.resultTimeEnd)
         <div class="setting-group">
           <div class="filter-header">
             <h4>Result Time Filter</h4>
-            <va-button
-              preset="plain"
-              icon="delete"
-              size="small"
-              color="danger"
+            <DButton intent="danger"
+              size="sm"
               @click="clearResultTime"
-              title="Clear Result Time Filter"
-            />
+              title="Clear Result Time Filter">
+  <DIcon name="delete" size="sm" />
+</DButton>
           </div>
 
-          <VariableInput v-model="timeWrappers.resultTimeStart" label="Start Time">
+          <VariableInput v-model="timeWrappers.resultTimeStart" label="Startzeit">
             <template #default="{ value, change }">
               <div class="datetime-picker-group">
-                <va-date-input
+                <DDateInput
                   v-model="resultTimeStartDT.dateValue.value"
-                  label="Start Date"
+                  label="Startdatum"
                   @update:model-value="resultTimeStartDT.updateWrapper()"
                 />
-                <va-time-input
+                <DDateInput mode="time"
                   v-model="resultTimeStartDT.timeValue.value"
-                  label="Start Time"
+                  label="Startzeit"
                   @update:model-value="resultTimeStartDT.updateWrapper()"
                 />
               </div>
             </template>
           </VariableInput>
 
-          <VariableInput v-model="timeWrappers.resultTimeEnd" label="End Time">
+          <VariableInput v-model="timeWrappers.resultTimeEnd" label="Endzeit">
             <template #default="{ value, change }">
               <div class="datetime-picker-group">
-                <va-date-input
+                <DDateInput
                   v-model="resultTimeEndDT.dateValue.value"
-                  label="End Date"
+                  label="Enddatum"
                   @update:model-value="resultTimeEndDT.updateWrapper()"
                 />
-                <va-time-input
+                <DDateInput mode="time"
                   v-model="resultTimeEndDT.timeValue.value"
-                  label="End Time"
+                  label="Endzeit"
                   @update:model-value="resultTimeEndDT.updateWrapper()"
                 />
               </div>
@@ -375,7 +375,7 @@ const resultTimeEndDT = createDateTimeComputed(() => timeWrappers.resultTimeEnd)
         <div class="setting-group">
           <h4>Query Settings</h4>
 
-          <va-select
+          <DSelect
             v-model="config.history.orderBy"
             :options="[
               { text: 'Phenomenon Time (Descending)', value: 'phenomenonTime desc' },
@@ -383,11 +383,11 @@ const resultTimeEndDT = createDateTimeComputed(() => timeWrappers.resultTimeEnd)
               { text: 'Result Time (Descending)', value: 'resultTime desc' },
               { text: 'Result Time (Ascending)', value: 'resultTime asc' }
             ]"
-            label="Order By"
+            label="Sortieren nach"
             clearable
           />
 
-          <va-input
+          <DInput
             v-model.number="config.history.limit"
             label="Limit (max records)"
             type="number"
@@ -396,22 +396,22 @@ const resultTimeEndDT = createDateTimeComputed(() => timeWrappers.resultTimeEnd)
             placeholder="100"
           />
 
-          <va-checkbox
+          <DCheckbox
             v-model="config.useCurrentLocationInsteadOfHistorical"
-            label="Use current locations instead of historical locations"
+            label="Aktuelle statt historische Orte"
           >
             <template #label>
               <span>Use current locations instead of historical locations</span>
-              <div style="font-size: 0.75rem; color: var(--va-text-secondary); margin-top: 0.25rem;">
+              <div style="font-size: 0.75rem; color: var(--color-dim); margin-top: 0.25rem;">
                 Reuse already loaded current locations instead of fetching historical locations via API
               </div>
             </template>
-          </va-checkbox>
+          </DCheckbox>
         </div>
       </div>
-    </va-collapse>
+        </details>
       </div>
-    </va-scroll-container>
+    </div>
   </div>
 </template>
 
@@ -454,7 +454,7 @@ const resultTimeEndDT = createDateTimeComputed(() => timeWrappers.resultTimeEnd)
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 1px solid var(--va-background-border);
+  border-bottom: 1px solid var(--color-divider);
   padding-bottom: 0.5rem;
 }
 
@@ -468,8 +468,8 @@ const resultTimeEndDT = createDateTimeComputed(() => timeWrappers.resultTimeEnd)
   margin: 0;
   font-size: 0.9rem;
   font-weight: 600;
-  color: var(--va-text-primary);
-  border-bottom: 1px solid var(--va-background-border);
+  color: var(--color-fg);
+  border-bottom: 1px solid var(--color-divider);
   padding-bottom: 0.5rem;
 }
 
@@ -484,12 +484,24 @@ const resultTimeEndDT = createDateTimeComputed(() => timeWrappers.resultTimeEnd)
   width: 100%;
 }
 
-:deep(.va-collapse__body-wrapper) {
-  overflow: visible !important;
-}
-
 .datetime-picker-group > * {
   flex: 1;
   min-width: 0;
+}
+
+.history {
+  border-top: 1px solid var(--color-divider);
+  padding-top: 8px;
+}
+
+.history__head {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  font-weight: 600;
+  color: var(--color-fg);
 }
 </style>

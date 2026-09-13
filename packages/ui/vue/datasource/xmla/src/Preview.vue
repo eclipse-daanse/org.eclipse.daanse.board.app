@@ -12,6 +12,7 @@ Contributors:
 -->
 
 <script setup lang="ts">
+import { DCheckbox, DTabs } from 'org.eclipse.daanse.board.app.ui.vue.controls'
 import { useTemporaryStore } from 'org.eclipse.daanse.board.app.ui.vue.composables';
 import { identifier, ConnectionRepository } from 'org.eclipse.daanse.board.app.lib.api.connection'
 import { inject, ref, watch, toRef, shallowRef, nextTick, onMounted } from 'vue';
@@ -33,8 +34,11 @@ const { update } = useTemporaryStore(props.dataSource.type, settingsRef, tempSto
 
 console.log(props.dataSource)
 
-const tabs = ["Visual Editor", "Code Editor"];
-const currentTab = ref(0);
+const tabs = [
+  { id: 'visual', label: 'Abfrage bauen' },
+  { id: 'code', label: 'MDX schreiben' },
+];
+const currentTab = ref('visual');
 const api = ref(null as any);
 const catalog = ref(null as any);
 
@@ -157,32 +161,23 @@ const getSettingsHash = (obj: any) => {
 <template>
   <div class="flex w-full h-full rounded gap-4 overflow-hidden">
     <div class="flex flex-col w-full h-full overflow-hidden flex-grow data-designer">
-      <va-tabs v-model="currentTab" hidePagination color="info" grow>
-        <template #tabs>
-          <div class="flex justify-between w-full">
-            <div>
-              <va-tab v-for="tab in tabs" :key="tab">
-                {{ tab }}
-              </va-tab>
-            </div>
+      <DTabs v-model="currentTab" :tabs="tabs" label="Abfrage bauen oder schreiben" />
 
-            <!-- eslint-disable-next-line vue/no-mutating-props -->
-          </div>
-        </template>
-        <template v-if="currentTab === 1 && connection">
+      <div class="editor-pane">
+        <template v-if="currentTab === 'code' && connection">
           <!-- <MonacoEditor v-model="query" height="100%" width="100%" language="mdx" :supported-languages="[ 'mdx' ]" :metadata="metadataStore" /> -->
           <MonacoEditor v-model="query" class="monaco-container" language="mdx" :supported-languages="['mdx']">
             <template #actions>
-              <VaCheckbox v-model="props.dataSource.config.useMdx" class="mt-2" label="Use mdx request" />
+              <DCheckbox v-model="props.dataSource.config.useMdx" class="mt-2" label="MDX-Abfrage verwenden" />
             </template>
           </MonacoEditor>
         </template>
-        <template v-if="currentTab === 0">
+        <template v-if="currentTab === 'visual'">
           <div class="w-full h-full">
             <QueryDesigner v-model="queryConfig" :api="api" :catalog="catalog"/>
           </div>
         </template>
-      </va-tabs>
+      </div>
       <div class="h-full w-full flex flex-col data-preview">
         <h4>
           Data Preview
@@ -205,14 +200,10 @@ const getSettingsHash = (obj: any) => {
   </div>
 </template>
 <style>
-.va-tabs {
-  height: 100% !important;
-  width: 100% !important;
-}
-
-.va-tabs__content {
-  height: 100% !important;
-  width: 100% !important;
+.editor-pane {
+  height: 100%;
+  width: 100%;
+  min-height: 0;
 }
 
 .metadata-container {

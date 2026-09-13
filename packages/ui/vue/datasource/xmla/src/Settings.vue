@@ -12,6 +12,7 @@ Contributors:
 -->
 
 <script setup lang="ts">
+import { DInput, DSelect, DSwitch } from 'org.eclipse.daanse.board.app.ui.vue.controls'
 import { debounce } from 'lodash';
 import { computed, onMounted, ref, watch } from 'vue';
 import { XmlaStore } from 'org.eclipse.daanse.board.app.lib.datasource.xmla';
@@ -61,11 +62,11 @@ onMounted(async () => {
 
 <template>
     <!-- eslint-disable-next-line vue/no-mutating-props -->
-    <VaSelect v-model="config.connection" label="Connection" :options="connectionsFiltered" text-by="name"
-        value-by="uid" />
-    <VaSelect v-model="config.cube" label="Cube" :options="cubes" text-by="CUBE_NAME" value-by="CUBE_NAME" />
-    <VaSwitch v-model="config.pollingEnabled" label="Enable Long Polling" />
-    <VaInput v-if="config.pollingEnabled" v-model="innerInterval" label="Polling Interval (ms)" />
+    <DSelect v-model="config.connection" label="Verbindung" :options="connectionsFiltered" label-key="name"
+        value-key="uid" />
+    <DSelect v-model="config.cube" label="Würfel" :options="cubes" label-key="CUBE_NAME" value-key="CUBE_NAME" />
+    <DSwitch v-model="config.pollingEnabled" label="Regelmäßig neu laden" />
+    <DInput v-if="config.pollingEnabled" v-model="innerInterval" label="Abstand (ms)" />
     <!-- eslint-disable-next-line vue/no-mutating-props -->
-    <!-- <VaInput v-model="config.resourceUrl" label="Resource Url" /> -->
+    <!-- <DInput v-model="config.resourceUrl" label="Pfad" /> -->
 </template>

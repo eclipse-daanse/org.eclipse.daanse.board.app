@@ -11,6 +11,7 @@ Contributors:
     Smart City Jena
 -->
 <script setup lang="ts">
+import { DButton, DColorInput, DInput, DSelect } from 'org.eclipse.daanse.board.app.ui.vue.controls'
 import { inject, ref, computed, watch, onMounted } from 'vue'
 import { OGCSTAToChartComposer } from 'org.eclipse.daanse.board.app.lib.composer.ogcsta2chart'
 import {
@@ -215,24 +216,23 @@ onMounted(() => {
 <template>
   <div class="ogcsta2chart-composer-settings">
     <!-- eslint-disable-next-line vue/no-mutating-props -->
-    <VaSelect
+    <DSelect
       v-model="config.connectedDatasources"
-      label="OGC STA Sources"
+      label="OGC-STA-Quellen"
       :options="datasourcesFiltered"
       multiple
-      text-by="name"
-      value-by="uid"
+      label-key="name"
+      value-key="uid"
     />
 
     <!-- eslint-disable-next-line vue/no-mutating-props -->
-    <VaSelect
+    <DSelect
       v-model="config.thingIds"
-      label="Things (Required)"
+      label="Things (erforderlich)"
       :options="availableThings"
       multiple
-      searchable
-      text-by="name"
-      value-by="id"
+      label-key="name"
+      value-key="id"
       placeholder="Select one or more Things"
       :loading="isLoadingThings"
       no-options-text="No things found"
@@ -241,13 +241,13 @@ onMounted(() => {
     <div class="datastreams-section">
       <div class="section-header">
         <h3>Selected Datastreams</h3>
-        <VaButton
-          size="small"
+        <DButton
+          size="sm"
           @click="addDatastream"
           :disabled="isLoadingDatastreams || availableDatastreams.length === 0"
         >
           Add Datastream
-        </VaButton>
+        </DButton>
       </div>
 
       <div v-if="isLoadingDatastreams" class="loading-indicator">
@@ -266,20 +266,19 @@ onMounted(() => {
         >
           <div class="datastream-fields">
             <!-- eslint-disable-next-line vue/no-mutating-props -->
-            <VaSelect
+            <DSelect
               v-model="datastream.datastreamId"
-              label="Datastream"
+              label="Datenstrom"
               :options="availableDatastreams"
-              searchable
-              text-by="name"
-              value-by="id"
+              label-key="name"
+              value-key="id"
               class="datastream-select"
               :loading="isLoadingDatastreams"
               no-options-text="No datastreams found"
             />
 
             <!-- eslint-disable-next-line vue/no-mutating-props -->
-            <VaInput
+            <DInput
               v-model="datastream.label"
               label="Label (Optional)"
               placeholder="Custom label for chart"
@@ -287,21 +286,19 @@ onMounted(() => {
             />
 
             <!-- eslint-disable-next-line vue/no-mutating-props -->
-            <VaColorInput
+            <DColorInput
               v-model="datastream.color"
-              label="Color"
+              label="Farbe"
               class="datastream-color"
             />
           </div>
 
-          <VaButton
-            preset="plain"
-            icon="delete"
-            color="danger"
-            size="small"
+          <DButton intent="danger"
+            size="sm"
             @click="removeDatastream(index)"
-            class="remove-button"
-          />
+            class="remove-button">
+  <DIcon name="delete" size="sm" />
+</DButton>
         </div>
       </div>
     </div>

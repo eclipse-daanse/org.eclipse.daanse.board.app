@@ -11,117 +11,148 @@ Contributors:
     Smart City Jena
 -->
 <script setup lang="ts">
-import { computed, onMounted, ref, watch } from 'vue';
-import { debounce } from 'lodash';
+import { computed, onMounted, ref, watch } from 'vue'
+import { debounce } from 'lodash'
+import { DCheckbox, DInput } from 'org.eclipse.daanse.board.app.ui.vue.controls'
 
 const { config } = defineProps<{
-  config: any;
-}>();
+  config: any
+}>()
 
-const available = ref(false);
-const url = ref(config.url);
-const isUrlValid = ref(true);
-const statusCode = ref<string | null>(null);
-const cacheEnabled = ref(config.cacheEnabled ?? false);
-const cacheTTL = ref(config.cacheTTL ?? 30000);
+const available = ref(false)
+const url = ref(config.url)
+const statusCode = ref<string | null>(null)
+const cacheEnabled = ref(config.cacheEnabled ?? false)
+const cacheTTL = ref(config.cacheTTL ?? 30000)
 
-const statusCircleClass = computed(() => {
-  if (!url.value) return 'bg-gray-400';
-  return available.value ? 'bg-green-500' : 'bg-red-500';
-});
+/** The smallest cache lifetime that is worth keeping one for. */
+const MIN_TTL = 1000
 
-const statusTextClass = computed(() => {
-  if (!url.value) return 'text-gray-500';
-  if (!statusCode.value) return 'text-black';
-  return statusCode.value.toString()[0] === '2' ? 'text-green-500' : 'text-red-500';
-});
+const urlError = computed(() => (!url.value || isValidUrl(url.value) ? undefined : 'Keine gültige http- oder https-Adresse'))
+const ttlError = computed(() => (cacheTTL.value >= MIN_TTL ? undefined : `Mindestens ${MIN_TTL} ms`))
+
+/**
+ * What the endpoint answered, as a word rather than a colour alone.
+ *
+ * The three states were three Tailwind colours - green, red, grey - which
+ * say nothing to anyone who cannot tell them apart, and nothing at all to
+ * a theme that is not the one they were picked against.
+ */
+const reach = computed(() => {
+  if (!url.value) return undefined
+  if (!statusCode.value) return { tone: 'color-dim', text: 'Noch nicht geprüft' }
+  if (available.value) return { tone: 'color-ok', text: `Erreichbar (${statusCode.value})` }
+  return { tone: 'color-err', text: `Nicht erreichbar (${statusCode.value})` }
+})
 
 const updateUrl = debounce((newUrl: string) => {
-  config.url = newUrl;
-  validateAndCheckUrl(newUrl);
-}, 700);
+  config.url = newUrl
+  validateAndCheckUrl(newUrl)
+}, 700)
 
-function isValidUrl(url: string): boolean {
+function isValidUrl(value: string): boolean {
   try {
-    const parsedUrl = new URL(url);
-    return parsedUrl.protocol === "http:" || parsedUrl.protocol === "https:";
+    const parsed = new URL(value)
+    return parsed.protocol === 'http:' || parsed.protocol === 'https:'
   } catch {
-    return false;
+    return false
   }
-};
+}
 
-async function ifUrlExist(url: string) {
+async function ifUrlExist(value: string) {
   try {
-    const response = await fetch(url, { method: 'HEAD' });
-    return { available: response.ok, statusCode: response.status.toString() };
+    const response = await fetch(value, { method: 'HEAD' })
+    return { available: response.ok, statusCode: response.status.toString() }
   } catch (error: any) {
-    console.warn('Network error:', error.name);
-    return { available: false, statusCode: 'Error' };
+    console.warn('Network error:', error.name)
+    return { available: false, statusCode: 'Fehler' }
   }
-};
+}
 
 async function validateAndCheckUrl(newUrl: string) {
   if (!isValidUrl(newUrl)) {
-    available.value = false;
-    statusCode.value = null;
-    return;
+    available.value = false
+    statusCode.value = null
+    return
   }
 
-  isUrlValid.value = true;
-  const result = await ifUrlExist(newUrl);
-  available.value = result.available;
-  statusCode.value = result.statusCode;
+  const result = await ifUrlExist(newUrl)
+  available.value = result.available
+  statusCode.value = result.statusCode
 }
 
-watch(url, (newUrl) =>  {
+watch(url, (newUrl) => {
   if (newUrl !== config.url) {
-    updateUrl(newUrl);
+    updateUrl(newUrl)
   }
-});
+})
 
 watch(cacheEnabled, (newValue) => {
-  config.cacheEnabled = newValue;
-});
+  config.cacheEnabled = newValue
+})
 
 watch(cacheTTL, (newValue) => {
-  config.cacheTTL = newValue;
-});
+  config.cacheTTL = newValue
+})
 
 onMounted(async () => {
   if (config.url) {
-    url.value = config.url;
-    const resp = await ifUrlExist(config.url);
-    available.value = resp.available;
-    statusCode.value = resp.statusCode;
+    url.value = config.url
+    const resp = await ifUrlExist(config.url)
+    available.value = resp.available
+    statusCode.value = resp.statusCode
   }
-  cacheEnabled.value = config.cacheEnabled ?? false;
-  cacheTTL.value = config.cacheTTL ?? 30000;
-});
+  cacheEnabled.value = config.cacheEnabled ?? false
+  cacheTTL.value = config.cacheTTL ?? 30000
+})
 </script>
 
 <template>
-  <!-- eslint-disable-next-line vue/no-mutating-props -->
-  <VaInput v-model="url" label="URL" :rules="[() => !url || isUrlValid || `Invalid URL`]" />
+  <div class="rest">
+    <DInput v-model="url" label="URL" :error="urlError" />
 
-  <div v-if="isUrlValid && url" class="ml-2 flex items-center space-x-2">
-    <div :class="`w-3 h-3 rounded-full ${statusCircleClass}`"></div>
-    <span class="text-sm font-medium" :class="statusTextClass">Status: {{ statusCode  }}</span>
-  </div>
+    <p v-if="reach" class="reach">
+      <span class="reach__dot" :style="{ backgroundColor: `var(--${reach.tone})` }" />
+      {{ reach.text }}
+    </p>
 
-  <div class="mt-4">
-    <VaCheckbox v-model="cacheEnabled" label="Enable Response Caching" />
-  </div>
+    <DCheckbox v-model="cacheEnabled" label="Antworten zwischenspeichern" />
 
-  <div v-if="cacheEnabled" class="mt-2">
-    <VaInput
+    <DInput
+      v-if="cacheEnabled"
       v-model.number="cacheTTL"
-      label="Cache TTL (ms)"
+      label="Haltbarkeit"
       type="number"
-      :min="1000"
+      suffix="ms"
+      :min="MIN_TTL"
       :max="3600000"
-      :rules="[() => cacheTTL >= 1000 || 'Minimum 1000ms']"
+      :error="ttlError"
+      hint="Wie lange eine Antwort wiederverwendet wird, bevor neu gefragt wird."
     />
-    <span class="text-xs text-gray-500">Time-to-live for cached responses (default: 30000ms = 30s)</span>
   </div>
 </template>
 
+<style scoped>
+.rest {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.reach {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin: 0 0 4px;
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  color: var(--color-dim);
+}
+
+.reach__dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  flex: none;
+}
+</style>

@@ -11,6 +11,7 @@ Contributors:
     Smart City Jena
 -->
 <script setup lang="ts">
+import { DInput, DSelect, DSwitch } from 'org.eclipse.daanse.board.app.ui.vue.controls'
 import { debounce } from 'lodash';
 import { computed, ref, watch } from 'vue';
 
@@ -42,8 +43,8 @@ watch(() => innerInterval.value, (nv) => {
 
 <template>
     <!-- eslint-disable-next-line vue/no-mutating-props -->
-    <VaSelect v-model="config.connection" label="Connection" :options="connectionsFiltered" text-by="name"
-        value-by="uid" />
-    <VaSwitch v-model="config.pollingEnabled" label="Enable Long Polling" />
-    <VaInput v-if="config.pollingEnabled" v-model="innerInterval" label="Polling Interval (ms)" />
+    <DSelect v-model="config.connection" label="Verbindung" :options="connectionsFiltered" label-key="name"
+        value-key="uid" />
+    <DSwitch v-model="config.pollingEnabled" label="Regelmäßig neu laden" />
+    <DInput v-if="config.pollingEnabled" v-model="innerInterval" label="Abstand (ms)" />
 </template>

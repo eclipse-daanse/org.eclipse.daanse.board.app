@@ -51,6 +51,14 @@ const props = withDefaults(
     size?: 'sm' | 'md' | 'lg'
     /** Offers an empty choice. */
     clearable?: boolean
+    /**
+     * Several at once.
+     *
+     * The native control again: it opens as a list rather than a popup and
+     * takes ctrl- and shift-click, which is what a person expects of a
+     * multiple select on their own platform. The model is an array.
+     */
+    multiple?: boolean
     stacked?: boolean
   }>(),
   {
@@ -60,6 +68,7 @@ const props = withDefaults(
     disabled: false,
     required: false,
     clearable: false,
+    multiple: false,
     stacked: false,
   },
 )
@@ -118,6 +127,19 @@ const selectedIndex = computed<string>({
     model.value = next === '' ? undefined : entries.value[Number(next)]?.value
   },
 })
+
+/** The same, for several at once: the model is the values, not the places. */
+const selectedIndexes = computed<string[]>({
+  get() {
+    const chosen = Array.isArray(model.value) ? model.value : []
+    return entries.value
+      .map((entry, index) => (chosen.includes(entry.value) ? String(index) : ''))
+      .filter((index) => index !== '')
+  },
+  set(next: string[]) {
+    model.value = next.map((index) => entries.value[Number(index)]?.value)
+  },
+})
 </script>
 
 <template>
@@ -130,6 +152,23 @@ const selectedIndex = computed<string>({
     <div class="field__control">
       <div :class="['shell', `shell--${size}`, { 'shell--invalid': !!error, 'shell--off': disabled }]">
         <select
+          v-if="multiple"
+          :id="id"
+          v-model="selectedIndexes"
+          :class="['select', 'select--many']"
+          multiple
+          :size="Math.min(Math.max(entries.length, 2), 8)"
+          :disabled="disabled"
+          :required="required"
+          :aria-invalid="!!error || undefined"
+        >
+          <option v-for="(entry, index) in entries" :key="index" :value="String(index)">
+            {{ entry.label }}
+          </option>
+        </select>
+
+        <select
+          v-else
           :id="id"
           v-model="selectedIndex"
           class="select"
@@ -158,7 +197,7 @@ const selectedIndex = computed<string>({
             {{ entry.label }}
           </option>
         </select>
-        <span class="chevron" aria-hidden="true">▾</span>
+        <span v-if="!multiple" class="chevron" aria-hidden="true">▾</span>
       </div>
 
       <p v-if="error" class="field__error" role="alert">{{ error }}</p>
@@ -242,6 +281,11 @@ const selectedIndex = computed<string>({
 .shell--md { height: 26px; }
 .shell--lg { height: 32px; }
 
+.shell:has(.select--many) {
+  height: auto;
+  padding: 0 2px;
+}
+
 .select {
   flex: 1 1 auto;
   min-width: 0;
@@ -283,6 +327,12 @@ const selectedIndex = computed<string>({
 
 .select optgroup option {
   color: var(--color-fg);
+}
+
+/* A list rather than one line, so the shell grows with it. */
+.select--many {
+  height: auto;
+  padding: 4px 0;
 }
 
 .chevron {

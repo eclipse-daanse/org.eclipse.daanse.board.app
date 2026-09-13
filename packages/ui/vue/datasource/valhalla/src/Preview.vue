@@ -11,6 +11,7 @@ Contributors:
     Smart City Jena
 -->
 <script setup lang="ts">
+import { DButton, DIcon, DInput, DSelect } from 'org.eclipse.daanse.board.app.ui.vue.controls'
 import { ref, computed, watch, shallowRef, nextTick } from 'vue'
 import { LMap, LTileLayer, LGeoJson, LCircleMarker, LPopup } from '@vue-leaflet/vue-leaflet'
 import type { PointExpression } from 'leaflet'
@@ -229,17 +230,13 @@ const maneuvers = computed(() => {
     <div class="sidebar">
       <div class="search-section">
         <div class="search-box">
-          <VaInput
+          <DInput
             v-model="searchQuery"
-            placeholder="Adresse suchen..."
+            placeholder="Adresse suchen…"
             class="search-input"
             @input="onSearchInput"
             @keydown.enter="searchAddress"
-          >
-            <template #prependInner>
-              <va-icon name="search" size="small" />
-            </template>
-          </VaInput>
+          />
           <div v-if="searchResults.length > 0" class="search-results">
             <div
               v-for="result in searchResults"
@@ -247,7 +244,7 @@ const maneuvers = computed(() => {
               class="search-result-item"
               @click="selectSearchResult(result)"
             >
-              <va-icon name="location_on" size="small" color="primary" />
+              <DIcon name="location_on" size="sm" tone="color-accent" />
               <span>{{ result.display_name }}</span>
             </div>
           </div>
@@ -255,23 +252,17 @@ const maneuvers = computed(() => {
       </div>
 
       <div class="controls-row">
-        <VaSelect
+        <DSelect
           v-model="costing"
           :options="costingOptions"
-          text-by="text"
-          value-by="value"
+          label-key="text"
+          value-key="value"
           label="Modus"
           class="costing-select"
         />
-        <VaButton
-          v-if="waypoints.length > 0"
-          preset="secondary"
-          size="small"
-          icon="delete_sweep"
-          @click="clearAllWaypoints"
-        >
-          Alle löschen
-        </VaButton>
+        <DButton v-if="waypoints.length > 0" size="sm" @click="clearAllWaypoints">
+          <DIcon name="delete_sweep" size="sm" />Alle löschen
+        </DButton>
       </div>
 
       <div class="waypoints-list">
@@ -290,7 +281,7 @@ const maneuvers = computed(() => {
           @dragend="onDragEnd"
         >
           <div class="waypoint-grip">
-            <va-icon name="drag_indicator" size="small" color="secondary" />
+            <DIcon name="drag_indicator" size="sm" tone="color-dim" />
           </div>
           <div class="waypoint-marker" :style="{ backgroundColor: waypointColor(i) }">
             {{ i + 1 }}
@@ -300,9 +291,15 @@ const maneuvers = computed(() => {
             <span class="waypoint-name">{{ wp.name || `${wp.lat.toFixed(4)}, ${wp.lon.toFixed(4)}` }}</span>
           </div>
           <div class="waypoint-actions">
-            <va-button preset="plain" size="small" icon="arrow_upward" :disabled="i === 0" @click="moveWaypoint(i, i - 1)" />
-            <va-button preset="plain" size="small" icon="arrow_downward" :disabled="i === waypoints.length - 1" @click="moveWaypoint(i, i + 1)" />
-            <va-button preset="plain" size="small" icon="close" color="danger" @click="removeWaypoint(i)" />
+            <DButton intent="quiet" size="sm" title="Nach oben" :disabled="i === 0" @click="moveWaypoint(i, i - 1)">
+              <DIcon name="arrow_upward" size="sm" />
+            </DButton>
+            <DButton intent="quiet" size="sm" title="Nach unten" :disabled="i === waypoints.length - 1" @click="moveWaypoint(i, i + 1)">
+              <DIcon name="arrow_downward" size="sm" />
+            </DButton>
+            <DButton intent="danger" size="sm" title="Entfernen" @click="removeWaypoint(i)">
+              <DIcon name="close" size="sm" />
+            </DButton>
           </div>
         </div>
         <div v-if="waypoints.length === 0" class="no-waypoints">
@@ -311,39 +308,31 @@ const maneuvers = computed(() => {
       </div>
 
       <div v-if="waypoints.length >= 2" class="action-buttons">
-        <VaButton
-          :disabled="calculating"
-          :loading="calculating"
-          icon="route"
-          @click="calculateRoute"
-        >
-          Route berechnen
-        </VaButton>
-        <VaButton
+        <DButton intent="primary" :busy="calculating" @click="calculateRoute">
+          <DIcon name="route" size="sm" />Route berechnen
+        </DButton>
+        <DButton
           v-if="waypoints.length >= 3"
-          preset="secondary"
-          :disabled="calculating"
-          :loading="calculating"
-          icon="auto_fix_high"
+          :busy="calculating"
           @click="optimizeRoute"
         >
-          Route optimieren
-        </VaButton>
+          <DIcon name="auto_fix_high" size="sm" />Route optimieren
+        </DButton>
       </div>
 
       <div v-if="data?.summary" class="route-summary">
         <div class="summary-header">Route</div>
         <div class="summary-stats">
           <div class="stat">
-            <va-icon name="straighten" size="small" />
+            <DIcon name="straighten" size="sm" />
             <span>{{ data.summary.distance_km.toFixed(1) }} km</span>
           </div>
           <div class="stat">
-            <va-icon name="schedule" size="small" />
+            <DIcon name="schedule" size="sm" />
             <span>{{ data.summary.duration_min }} min</span>
           </div>
           <div class="stat">
-            <va-icon name="turn_right" size="small" />
+            <DIcon name="turn_right" size="sm" />
             <span>{{ maneuvers.length }} Manöver</span>
           </div>
         </div>

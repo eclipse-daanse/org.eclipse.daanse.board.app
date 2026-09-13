@@ -1,5 +1,5 @@
-import { e as h, U as v, l as m } from "./toggleHighContrast-DWTqNP5X.js";
-import { g as M, a as _, C as r } from "./index-CQ_e6P5s.js";
+import { e as h, U as v, l as m } from "./toggleHighContrast-Dv1xP0YK.js";
+import { g as M, a as _, C as r } from "./index-Ds8m1Kpt.js";
 const T = 120 * 1e3;
 class x {
   _defaults;
@@ -107,7 +107,7 @@ class F {
       return;
     const l = await a.doValidation(e.toString());
     if (h.setModelMarkers(h.getModel(e), s, l), c) {
-      if (await import("./toggleHighContrast-DWTqNP5X.js").then((p) => p.d), !c.length)
+      if (await import("./toggleHighContrast-Dv1xP0YK.js").then((p) => p.d), !c.length)
         throw new Error("No variables URI strings provided to validate");
       const t = await a.doGetVariablesJSONSchema(e.toString());
       if (!t)

@@ -11,12 +11,12 @@ Contributors:
     Smart City Jena
 -->
 <script lang="ts" setup>
+import { DButton, DCheckbox, DChip, DIcon, DInput, DModal } from 'org.eclipse.daanse.board.app.ui.vue.controls'
 
-import { computed, inject, onMounted, reactive, ref, watch } from 'vue'
+import { computed, inject, reactive, ref, watch } from 'vue'
 import QueryBuilder from '../queryBuilder/QueryBuilder'
 import { useSparQLEndPointManager } from '../sparql/SparqlEndpointRegistry'
 import { Formats } from '../queryBuilder/FilterAPI'
-import { VaBadge, VaStepper } from 'vuestic-ui'
 import { type ConnectionRepository, identifier } from 'org.eclipse.daanse.board.app.lib.api.connection'
 import { DatasourceRepository, IDataRetrieveable, type Datasource, identifier as DataSourceIdentifier } from 'org.eclipse.daanse.board.app.lib.api.datasource'
 import SearchResultCard from '../components/Searchcard/SearchResultCard.vue'
@@ -41,8 +41,6 @@ const run = () => {
   toogle.value = !toogle.value
 }
 const step = ref(0)
-const formRef = ref()
-const connectionForm = ref()
 
 const connectionRepository = inject<ConnectionRepository>(identifier)!
 const connections = useEList(inject<Workspace>(WORKSPACE)!, (w) => w.connections)
@@ -60,27 +58,19 @@ const stepsVailid = reactive({
   step2: true,
   step3: true
 })
+/*
+ * The four steps, in the order they are taken. What the framework's own
+ * stepper added to this was a beforeLeave hook per step that set a
+ * hasError flag nothing ever read; whether a step may be left is the
+ * stepsVailid entry beside it, which the Weiter button already asks.
+ */
 const steps = [
-  {
-    label: 'Search', icon: 'travel_explore', beforeLeave: (step: any) => {
-      step.hasError = !stepsVailid.step0
-    }
-  },
-  {
-    label: 'Connection', icon: 'polyline', beforeLeave: (step: any) => {
-      step.hasError = !stepsVailid.step1
-    }
-  },
-  {
-    label: 'Store', icon: 'store', beforeLeave: (step: any) => {
-      step.hasError = !stepsVailid.step2
-    }
-  },
-  { label: 'Widgets', icon: 'widgets', beforeLeave: (step: any) => { step.hasError = !stepsVailid.step3} }
+  { label: 'Suchen', icon: 'travel_explore' },
+  { label: 'Verbindung', icon: 'polyline' },
+  { label: 'Datenquelle', icon: 'store' },
+  { label: 'Widgets', icon: 'widgets' },
 ]
-onMounted(()=>{
-  console.log('Mounting endpoint finder');
-})
+
 const form = reactive({
   searchString: '',
   loading: false
@@ -291,253 +281,148 @@ const finish = () => {
   stepsVailid.step1 = true
   stepsVailid.step2 = true
   stepsVailid.step3 = true
-  formRef.value?.resetValidation()
-  connectionForm.value?.resetValidation()
   toogle.value = false
 }
-watch(()=>store.value?.config,(config)=>{
-  console.log(config)
-  //updateDataSource(config.uid,store)
-},{deep:true})
-
-
 defineExpose({
   run
 })
 </script>
 <template>
-
-  <va-modal :modelValue="toogle" class="infobox" hide-default-actions no-padding>
-    <template #footer class="footer">
-      <VaButton v-if="step!=3" :disabled="!(stepsVailid as any)['step'+step]" @click="step++">next</VaButton>
-      <VaButton v-if="step==3" :disabled="!(stepsVailid as any)['step'+step]" @click="finish">finish</VaButton>
+  <DModal v-model="toogle" size="lg" @cancel="finish()">
+    <template #header>
+      <h2 class="finder__title">Datenquelle finden</h2>
     </template>
-    <template #default="{ ok }">
-      <va-button
-        class="mr-1 mb-1 close"
-        preset="secondary"
-        style="position: absolute;right: 0;"
-        @click="finish()"
+
+    <!-- Four steps, taken in order, so they are numbered and the one being
+         taken is marked. The framework's stepper did the same and brought
+         a controls bar that had to be hidden. -->
+    <ol class="steps" aria-label="Schritte">
+      <li
+        v-for="(entry, index) in steps"
+        :key="entry.label"
+        :class="['step', { 'step--on': index === step, 'step--done': index < step }]"
+        :aria-current="index === step ? 'step' : undefined"
       >
-        x
-      </va-button>
-      <va-card-content class="no-padding">
-        <VaStepper
-          color="#c29803"
-          v-model="step"
-          :steps="steps"
-          controlsHidden
-          linear
-        >
+        <DIcon :name="entry.icon" size="sm" />
+        <span class="step__label">{{ entry.label }}</span>
+      </li>
+    </ol>
 
-          <template #step-content-0>
-            <VaForm ref="formRef" class="flex flex-col items-baseline gap-6">
-              <div class="flex padd15">
-                <VaInput
-                  v-model="form.searchString"
-                  :loading="form.loading"
-                  class="flex"
-                  label="Search String"
-                  @keyup="(e:any)=>{if(e.key=='Enter')search()}">
-                  <template #prependInner>
-                    <VaIcon
-                      color="secondary"
-                      name="search"
-                    />
-                  </template>
-                </VaInput>
-                <div class="buttonbar">
-                  <VaBadge
-                    :offset="[-5,5]"
-                    :text="filterCount"
-                    class="mr-6"
-                    overlap
-                    style="--va-badge-text-wrapper-border-radius: 50%;"
+    <div class="finder">
+      <!-- 1. searching -->
+      <template v-if="step === 0">
+        <div class="search">
+          <DInput
+            v-model="form.searchString"
+            label="Suche"
+            placeholder="Wonach suchst du?"
+            @keyup="(e: any) => { if (e.key == 'Enter') search() }"
+          />
+          <DButton title="Filter" @click="openFilterModal">
+            <DIcon name="filter_alt" size="sm" />Filter<DChip v-if="filterCount" numeric>{{ filterCount }}</DChip>
+          </DButton>
+        </div>
 
-                  >
-                    <VaButton icon="filter_alt" preset="secondary" round @click="openFilterModal"></VaButton>
-                  </VaBadge>
-                </div>
+        <div v-if="resultAsTable.length > 0" class="results">
+          <SearchResultCard
+            v-for="result in resultAsTable"
+            :key="result.title.value"
+            :class="{ active: result == selectedItemsEmitted }"
+            :result="result"
+            @click="selectedItemsEmitted = result"
+          />
+        </div>
+      </template>
 
-              </div>
-            </VaForm>
+      <!-- 2. the connection that will be made -->
+      <template v-else-if="step === 1">
+        <h3 v-if="!ds_notFountInfo" class="finder__lead">Diese Verbindung wird angelegt:</h3>
+        <p v-else class="finder__warn">
+          <DIcon name="warning" size="lg" tone="color-warn" />
+          Die Verbindung lässt sich nicht automatisch bestimmen - das passiert, wenn der Typ
+          des Datensatzes unbekannt oder nicht unterstützt ist. Du kannst sie von Hand einrichten.
+        </p>
 
+        <div class="pair">
+          <DInput v-if="ds" :model-value="ds?.name" label="Name" readonly />
+          <DInput :model-value="ds?.type" label="Typ" readonly />
+        </div>
 
-            <VaScrollContainer
-              v-if="resultAsTable.length>0"
-              class="padd"
-              vertical
-            >
-              <template v-for="result in resultAsTable">
-                <SearchResultCard :class="{active:result==selectedItemsEmitted}" :result="result"
-                                  @click="selectedItemsEmitted = result"></SearchResultCard>
-                <br>
-              </template>
-            </VaScrollContainer>
-          </template>
-          <template #step-content-1>
-            <div class="padd">
-              <VaForm ref="connectionForm" v-model="stepsVailid['step1']" immediate>
-                <h2 v-if="!ds_notFountInfo" class="title"> The following Connection will be created:</h2>
-                <div v-else class="aflex">
-                  <VaIcon
-                    class="mr-2"
-                    color="#ec9c1d"
-                    name="warning"
-                    size="2rem"
-                  />
-                  <h2 class="title"> The Connection cant be automatic detected, this happens if the Type of Dataset is not known or not supported.
-                    Never the less you can try to configure the connection manualy:</h2>
-                </div>
-                <br>
-                <br>
-                <div class="aflex">
+        <component :is="getComponentConnection" :config="ds?.config" />
+      </template>
 
-                  <va-input
-                    v-if="ds"
-                    :modelValue="ds?.name"
-                    :rules="[(v:any) => !!v || 'Required',]"
-                    label="Name"
-                  ></va-input>
+      <!-- 3. the data source that will be made -->
+      <template v-else-if="step === 2">
+        <h3 class="finder__lead">Diese Datenquelle wird angelegt:</h3>
 
+        <div class="pair">
+          <DInput v-if="ds" :model-value="store?.name" label="Name" readonly />
+          <DInput :model-value="store?.type" label="Typ" readonly />
+        </div>
 
-                  <va-input
-                    :modelValue="ds?.type"
-                    class="type-input"
-                    label="Type"
+        <component
+          :is="getComponent"
+          :config="store.config"
+          :connections="connections"
+          :dataSources="dataSources"
+        />
+      </template>
 
-                  />
+      <!-- 4. what to put on the board -->
+      <template v-else>
+        <h3 class="finder__lead">Widgets zur Datenquelle auswählen</h3>
 
+        <div class="widgets_grid">
+          <button
+            v-for="widget in widgetOptions"
+            :key="widget.type"
+            type="button"
+            :class="['widgets_grid-item', { on: selectedWidgets.includes(widget) }]"
+            @click="() => {
+              if (selectedWidgets.includes(widget)) {
+                selectedWidgets.splice(selectedWidgets.indexOf(widget), 1)
+              } else {
+                selectedWidgets.push(widget)
+              }
+            }"
+          >
+            <DCheckbox :model-value="selectedWidgets.includes(widget)" />
+            <img :src="widget.icon" alt="" class="widgets_grid-icon" />
+            {{ widget.type }}
+          </button>
+        </div>
+      </template>
+    </div>
 
-                  <br>
-                  <br>
-
-
-                </div>
-                <br>
-                <component
-
-                  :is="getComponentConnection"
-                  :config="ds?.config"
-                ></component>
-              </VaForm>
-            </div>
-          </template>
-          <template #step-content-2>
-
-            <VaScrollContainer
-              class="padd"
-              vertical
-            >
-              <h2 class="title"> The following Store will be created:</h2>
-              <br>
-              <div class="aflex">
-
-                <va-input
-                  v-if="ds"
-                  :modelValue="store?.name"
-                  :rules="[(v:any) => !!v || 'Required',]"
-                  label="Name"
-                ></va-input>
-
-
-                <va-input
-                  :modelValue="store?.type"
-                  class="type-input"
-                  label="Type"
-
-                />
-
-
-                <br>
-                <br>
-
-
-              </div>
-              <br>
-              <component
-
-                :is="getComponent"
-                :config="store.config"
-                :connections="connections"
-                :dataSources="dataSources"
-              ></component>
-              <br>
-            </VaScrollContainer>
-          </template>
-          <template #step-content-3>
-            <VaScrollContainer class="padd" vertical>
-              <h2 class="title">Widgets zur Datenquelle auswählen</h2>
-              <br>
-
-              <div class= "widgets_grid">
-                <div class="widgets_grid-item"
-                  v-for="widget in widgetOptions"
-                  :key="widget.type"
-                  :active="selectedWidgets.includes(widget)"
-                  @click="() => {
-                    if (selectedWidgets.includes(widget)) {
-                      selectedWidgets.splice(selectedWidgets.indexOf(widget), 1)
-                    } else {
-                      selectedWidgets.push(widget)
-                    }
-                  }"
-                >
-                      <VaCheckbox :model-value="selectedWidgets.includes(widget)" />
-                    <img class="m-2" :src="widget.icon" style="height:30px"/>
-                    {{ widget.type }}
-
-                </div>
-              </div>
-            </VaScrollContainer>
-          </template>
-
-
-        </VaStepper>
-      </va-card-content>
+    <template #actions>
+      <DButton
+        v-if="step != 3"
+        intent="primary"
+        :disabled="!(stepsVailid as any)['step' + step]"
+        @click="step++"
+      >
+        Weiter
+      </DButton>
+      <DButton
+        v-else
+        intent="primary"
+        :disabled="!(stepsVailid as any)['step' + step]"
+        @click="finish"
+      >
+        Fertig
+      </DButton>
     </template>
-  </va-modal>
-  <FilterModal ref="loadModalref" v-model="filter"></FilterModal>
+  </DModal>
+
+  <FilterModal ref="loadModalref" v-model="filter" />
 </template>
 
 <style lang="scss">
-.infobox {
-  .va-modal__dialog{
-    max-width: 80%!important;
-  }
-  .footer, .va-modal__footer {
-
-    background: #f7f7f7;
-    padding: 10px 16px;
-    display: flex;
-    flex-direction: row;
-    flex-wrap: nowrap;
-    justify-content: flex-end;
-  }
-
-  .va-stepper__navigation {
-    padding: 30px 30px 0px 15px;
-    /* border-bottom: 1px solid #ccc; */
-    background: #f7f7f7;
-    margin-bottom: 10px;
-  }
-
-  .va-stepper__step-content-wrapper, .va-stepper__step-content {
-    padding: 0;
-    margin: 0;
-  }
-
-  .va-modal__message {
-    margin: 0;
-  }
-
-  .aflex {
-    display: flex;
-    flex-direction: row;
-    align-items: flex-start;
-    gap: 9px;
-  }
-
+/*
+ * Unscoped on purpose: what it reaches are the settings components the
+ * two middle steps mount, which come from other bundles.
+ */
+.finder {
   .store-item-header {
     display: none;
   }
@@ -547,59 +432,141 @@ defineExpose({
     padding: 0;
   }
 
-  .datasource-list {
-    .datasource-list-add-button {
-      display: none;
-    }
+  .datasource-list .datasource-list-add-button {
+    display: none;
   }
 }
-
 </style>
+
 <style lang="scss" scoped>
-.widgets_grid {
-  display: grid;
-  grid-template-columns: repeat(3, 33%);
-  gap: 1rem;
+.finder__title {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: var(--text-lg);
+  font-weight: 600;
 }
 
-:deep() .widgets_grid-item {
-  height: 50px;
+/* The steps, as the sequence they are. */
+.steps {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px;
+  margin: 0 0 18px;
+  padding: 0 0 12px;
+  list-style: none;
+  border-bottom: 1px solid var(--color-divider);
+  counter-reset: step;
+}
+
+.step {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  color: var(--color-dim);
+}
+
+.step::before {
+  counter-increment: step;
+  content: counter(step) '.';
+  font-variant-numeric: tabular-nums;
+}
+
+.step--done {
+  color: var(--color-fg);
+}
+
+.step--on {
+  color: var(--color-accent);
+  font-weight: 600;
+}
+
+.finder {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-height: 62vh;
+  overflow-y: auto;
+}
+
+.finder__lead {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  font-weight: 600;
+}
+
+.finder__warn {
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  line-height: 1.55;
+  color: var(--color-dim);
+}
+
+.search {
+  display: flex;
+  align-items: flex-end;
+  gap: 10px;
+}
+
+.search > :first-child {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.results {
+  display: flex;
+  flex-direction: column;
+}
+
+.pair {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.pair > * {
+  flex: 1 1 200px;
+  min-width: 0;
+}
+
+.widgets_grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 8px;
+}
+
+.widgets_grid-item {
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: flex-start;
-
-}
-.flex {
-  width: 100%;
-}
-
-.flex {
-  display: flex;
-  flex-direction: row;
-  align-content: center;
-  align-items: center;
-
+  gap: 8px;
+  padding: 8px 10px;
+  border: 1px solid var(--color-divider);
+  border-radius: var(--radius-sm);
+  background-color: var(--color-raised);
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  color: var(--color-fg);
+  cursor: pointer;
+  text-align: left;
 }
 
-.buttonbar {
-  margin-top: 15px;
+.widgets_grid-item:hover {
+  border-color: var(--color-outline);
 }
 
-.padd {
-  max-height: 75vh;
-  padding: 15px 25px;
+.widgets_grid-item.on {
+  border-color: var(--color-accent);
 }
 
-.padd15 {
-  padding: 10px 25px 30px;
-  border-bottom: 1px solid #e5e5e5;
-
+.widgets_grid-icon {
+  height: 30px;
 }
-
-.no-padding {
-  padding: 0;
-}
-
-
 </style>

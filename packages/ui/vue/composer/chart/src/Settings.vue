@@ -11,6 +11,7 @@ Contributors:
     Smart City Jena
 -->
 <script setup lang="ts">
+import { DSelect } from 'org.eclipse.daanse.board.app.ui.vue.controls'
 import { inject } from 'vue'
 import { ChartComposer } from "org.eclipse.daanse.board.app.lib.composer.chart";
 import {
@@ -51,16 +52,16 @@ watch(() => config.connectedDatasources, async (newValue) => {
 </script>
 <template>
   <!-- eslint-disable-next-line vue/no-mutating-props -->
-  <VaSelect v-model="config.connectedDatasources" label="Sources" :options="datasourcesFiltered" multiple text-by="name"
-    value-by="uid" />
+  <DSelect v-model="config.connectedDatasources" label="Quellen" :options="datasourcesFiltered" multiple label-key="name"
+    value-key="uid" />
 
   <!-- eslint-disable-next-line vue/no-mutating-props -->
-  <VaSelect v-model="config.composeBy" label="Compose By" :options="composeByOptions" />
+  <DSelect v-model="config.composeBy" label="Zusammensetzen nach" :options="composeByOptions" />
 
 
   <!-- eslint-disable-next-line vue/no-mutating-props -->
-  <VaSelect v-model="config.usedSets" label="Series" :options="composeByOptions" multiple />
+  <DSelect v-model="config.usedSets" label="Reihen" :options="composeByOptions" multiple />
 
   <!-- eslint-disable-next-line vue/no-mutating-props -->
-  <VaSelect v-model="config.labelColumn" label="Label Column" :options="composeByOptions" />
+  <DSelect v-model="config.labelColumn" label="Spalte für die Beschriftung" :options="composeByOptions" />
 </template>

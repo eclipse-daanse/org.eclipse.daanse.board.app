@@ -10,7 +10,8 @@
     "lib.api.variable",
     "platform.vue",
     "ui.vue.composables",
-    "ui.vue.variable.components"
+    "ui.vue.variable.components",
+    "ui.vue.controls"
   ],
   "requiresService": [
     {
@@ -39,6 +40,10 @@
     },
     {
       "id": "org.eclipse.daanse.board.app.ui.vue.variable.components",
+      "versionRange": ">=0.0.1-0"
+    },
+    {
+      "id": "org.eclipse.daanse.board.app.ui.vue.controls",
       "versionRange": ">=0.0.1-0"
     }
   ]

@@ -1,4 +1,4 @@
-import { E as c, l as d } from "./toggleHighContrast-DWTqNP5X.js";
+import { E as c, l as d } from "./toggleHighContrast-Dv1xP0YK.js";
 class m {
   _onDidChange = new c();
   _formattingOptions;
@@ -124,7 +124,7 @@ function S(n) {
   return o || (o = u(_, n), d.graphql = { api: o }, p().then((t) => t.setupMode(o))), o;
 }
 function p() {
-  return import("./graphqlMode-DEsgctQz.js");
+  return import("./graphqlMode-DZs1d9Ip.js");
 }
 export {
   _ as LANGUAGE_ID,
