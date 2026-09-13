@@ -35,6 +35,14 @@ const props = withDefaults(
     valueKey?: string
     /** Field holding the text when options are objects. */
     labelKey?: string
+    /**
+     * Field holding the heading an option belongs under.
+     *
+     * With it the list is grouped; without it, flat. Grouping is what keeps
+     * a list of a hundred readable - a widget's events under the widget's
+     * name rather than a hundred lines of "Type:event".
+     */
+    groupKey?: string
     placeholder?: string
     hint?: string
     error?: string
@@ -61,6 +69,8 @@ const id = useId()
 interface Entry {
   value: unknown
   label: string
+  /** The heading it belongs under, when the caller named one. */
+  group?: string
 }
 
 const entries = computed<Entry[]>(() =>
@@ -71,9 +81,32 @@ const entries = computed<Entry[]>(() =>
     const record = option as Record<string, unknown>
     const value = props.valueKey in record ? record[props.valueKey] : record
     const label = props.labelKey in record ? record[props.labelKey] : value
-    return { value, label: String(label ?? '') }
+    const group = props.groupKey ? record[props.groupKey] : undefined
+    return { value, label: String(label ?? ''), group: group === undefined ? undefined : String(group) }
   }),
 )
+
+/**
+ * The same entries under their headings, each keeping its position.
+ *
+ * The index is carried along because that is what the native select
+ * addresses an option by, and grouping must not change which index means
+ * which value.
+ */
+const groups = computed(() => {
+  const byLabel = new Map<string, Array<{ index: number; label: string }>>()
+  const loose: Array<{ index: number; label: string }> = []
+  entries.value.forEach((entry, index) => {
+    /* An option the caller gave no heading stands above the headings. */
+    if (!entry.group) {
+      loose.push({ index, label: entry.label })
+      return
+    }
+    if (!byLabel.has(entry.group)) byLabel.set(entry.group, [])
+    byLabel.get(entry.group)!.push({ index, label: entry.label })
+  })
+  return { loose, headed: [...byLabel].map(([label, options]) => ({ label, options })) }
+})
 
 /* The native select carries strings, so values are addressed by position. */
 const selectedIndex = computed<string>({
@@ -107,7 +140,21 @@ const selectedIndex = computed<string>({
           <option v-if="clearable || model === undefined" value="">
             {{ placeholder ?? '—' }}
           </option>
-          <option v-for="(entry, index) in entries" :key="index" :value="String(index)">
+          <template v-if="groupKey">
+            <option
+              v-for="entry in groups.loose"
+              :key="entry.index"
+              :value="String(entry.index)"
+            >
+              {{ entry.label }}
+            </option>
+            <optgroup v-for="group in groups.headed" :key="group.label" :label="group.label">
+              <option v-for="entry in group.options" :key="entry.index" :value="String(entry.index)">
+                {{ entry.label }}
+              </option>
+            </optgroup>
+          </template>
+          <option v-for="(entry, index) in entries" v-else :key="index" :value="String(index)">
             {{ entry.label }}
           </option>
         </select>

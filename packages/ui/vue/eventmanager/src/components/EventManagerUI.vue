@@ -160,11 +160,36 @@ const availablePayloadProperties = computed(() => {
   }
 })
 
+/**
+ * The events, under the widget type that raises them.
+ *
+ * An event is named "WidgetType:what_happened", and a hundred of those in
+ * one flat list is a hundred lines that all start with a word you are not
+ * looking for. The two halves are split: the type becomes the heading, the
+ * rest is the entry.
+ */
+const eventOptions = computed(() =>
+  availableEvents.value.map((event) => {
+    const at = event.type.indexOf(':')
+    return {
+      value: event.type,
+      text: at > -1 ? event.type.slice(at + 1) : event.type,
+      group: at > -1 ? event.type.slice(0, at) : 'Sonstige',
+    }
+  }),
+)
+
 const availableActions = computed(() => {
   if (!currentAction.value?.targetContext) return []
 
   const targetContext = currentAction.value.targetContext
-  const actions: { text: string; value: string; parameters?: string[]; widgetType?: string }[] = []
+  const actions: {
+    text: string
+    group: string
+    value: string
+    parameters?: string[]
+    widgetType?: string
+  }[] = []
 
   for (const widgetType of availableWidgetTypes.value) {
     // Filter by context field, fallback to name-based filtering only if context is not set
@@ -186,9 +211,10 @@ const availableActions = computed(() => {
 
     if (matches) {
       for (const action of widgetType.actions) {
-        const prefix = targetContext === 'widget' ? `${widgetType.widgetType}.` : ''
         actions.push({
-          text: `${prefix}${action.methodName}`,
+          /* The type is the heading now, so the entry is the method alone. */
+          text: action.methodName,
+          group: widgetType.widgetType,
           value: action.methodName,
           parameters: action.parameters,
           widgetType: widgetType.widgetType
@@ -692,9 +718,10 @@ onMounted(() => {
               v-model="newMapping.eventType"
               label="Ereignis"
               stacked
-              :options="availableEvents"
-              label-key="type"
-              value-key="type"
+              :options="eventOptions"
+              label-key="text"
+              value-key="value"
+              group-key="group"
             />
           </div>
         </section>
@@ -804,6 +831,7 @@ onMounted(() => {
                       :options="availableActions"
                       label-key="text"
                       value-key="value"
+                      group-key="group"
                     />
                   </div>
 
