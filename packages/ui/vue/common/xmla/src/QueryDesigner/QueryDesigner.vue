@@ -12,6 +12,7 @@ Contributors:
 -->
 
 <script setup lang="ts">
+import { DChip, DIcon } from "org.eclipse.daanse.board.app.ui.vue.controls";
 import draggable from 'vuedraggable';
 import { ref } from "vue";
 import { HierarchyTreeItem, MeasureTreeItem } from '../MetadataTree/TreeViewItems';
@@ -226,78 +227,88 @@ const t = (text) => text;
   <div class="queryDesigner">
     <div class="areas">
       <div class="queryDesignerArea">
-        <div class="va-title">{{ t('QueryDesigner.filters') }}</div>
+        <div class="area-title">{{ t('QueryDesigner.filters') }}</div>
         <div class="queryDesingnerArea_container">
           <draggable class="dragArea list-group" :list="queryConfig.filters" group="hierarchies"
             @change="changeItems('filters', $event)" item-key="id">
             <template #item="{ element }">
-              <va-chip :model-value="true" closeable @update:model-value="remove('filters', element, $event)">
+              <DChip removable @remove="remove('filters', element, false)">
                 <div class="flex items-center chip_caption">
                   <span class="chip_caption_text">
                     {{ element.caption }}
                   </span>
-                  <va-icon class="filter-icon ml-2" name="filter_list" size="small" :style="{
-                    color: element.filters.enabled ? 'lime' : '',
-                  }" @click="configureFilter('filters', element)" />
+                  <DIcon
+                    class="filter-icon ml-2"
+                    name="filter_list"
+                    size="sm"
+                    :tone="element.filters.enabled ? 'color-ok' : 'color-dim'"
+                    @click="configureFilter('filters', element)"
+                  />
                 </div>
-              </va-chip>
+              </DChip>
             </template>
           </draggable>
         </div>
       </div>
       <div class="queryDesignerArea">
-        <div class="va-title">{{ t('QueryDesigner.columns') }}</div>
+        <div class="area-title">{{ t('QueryDesigner.columns') }}</div>
         <div class="queryDesingnerArea_container">
           <draggable class="dragArea list-group" :list="queryConfig.columns" group="hierarchies"
             @change="changeItems('columns', $event)" item-key="id">
             <template #item="{ element }">
-              <va-chip :model-value="true" :closeable="element.type !== 'Values'"
-                @update:model-value="remove('columns', element, $event)">
+              <DChip :removable="element.type !== 'Values'" @remove="remove('columns', element, false)">
                 <div class="flex items-center chip_caption">
                   <span class="chip_caption_text">
                     {{ element.caption }}
                   </span>
-                  <va-icon v-if="element.type !== 'Values'" class="filter-icon ml-2" name="filter_list" size="small"
-                    :style="{
-                      color: element.filters.enabled ? 'lime' : '',
-                    }" @click="configureFilter('columns', element)" />
+                  <DIcon
+                    v-if="element.type !== 'Values'"
+                    class="filter-icon ml-2"
+                    name="filter_list"
+                    size="sm"
+                    :tone="element.filters.enabled ? 'color-ok' : 'color-dim'"
+                    @click="configureFilter('columns', element)"
+                  />
                 </div>
-              </va-chip>
+              </DChip>
             </template>
           </draggable>
         </div>
       </div>
       <div class="queryDesignerArea">
-        <div class="va-title">{{ t('QueryDesigner.rows') }}</div>
+        <div class="area-title">{{ t('QueryDesigner.rows') }}</div>
         <div class="queryDesingnerArea_container">
           <draggable class="dragArea list-group" :list="queryConfig.rows" group="hierarchies"
             @change="changeItems('rows', $event)" item-key="id">
             <template #item="{ element }">
-              <va-chip :model-value="true" :closeable="element.type !== 'Values'"
-                @update:model-value="remove('rows', element, $event)">
+              <DChip :removable="element.type !== 'Values'" @remove="remove('rows', element, false)">
                 <div class="flex items-center chip_caption">
                   <span class="chip_caption_text">
                     {{ element.caption }}
                   </span>
-                  <va-icon v-if="element.type !== 'Values'" class="filter-icon ml-2" name="filter_list" size="small"
-                    :style="{
-                      color: element.filters.enabled ? 'lime' : '',
-                    }" @click="configureFilter('rows', element)" />
+                  <DIcon
+                    v-if="element.type !== 'Values'"
+                    class="filter-icon ml-2"
+                    name="filter_list"
+                    size="sm"
+                    :tone="element.filters.enabled ? 'color-ok' : 'color-dim'"
+                    @click="configureFilter('rows', element)"
+                  />
                 </div>
-              </va-chip>
+              </DChip>
             </template>
           </draggable>
         </div>
       </div>
       <div class="queryDesignerArea">
-        <div class="va-title">{{ t('QueryDesigner.data') }}</div>
+        <div class="area-title">{{ t('QueryDesigner.data') }}</div>
         <div class="queryDesingnerArea_container">
           <draggable class="dragArea list-group" :list="queryConfig.measures" group="measures"
             @change="changeMeasures($event)" item-key="id">
             <template #item="{ element }">
-              <va-chip :model-value="true" closeable @update:model-value="remove('measures', element, $event)">
+              <DChip removable @remove="remove('measures', element, false)">
                 {{ element.caption }}
-              </va-chip>
+              </DChip>
             </template>
           </draggable>
         </div>
@@ -337,11 +348,19 @@ const t = (text) => text;
       flex-direction: column;
       height: 100%;
 
+      /* Was .va-title, a class the framework defined globally. */
+      .area-title {
+        font-family: var(--font-sans);
+        font-size: var(--text-sm);
+        font-weight: 600;
+        color: var(--color-dim);
+      }
+
       .queryDesingnerArea_container {
         height: 100%;
         width: 100%;
 
-        border: 1px solid #9ea3ac;
+        border: 1px solid var(--color-divider);
         margin: 0.25rem 0 1rem;
 
         .list-group {
@@ -353,39 +372,19 @@ const t = (text) => text;
           gap: 0.25rem;
           align-items: baseline;
 
-          --va-chip-content-display: inline;
-
-          .va-chip {
-            max-width: 100%;
-          }
-
-          .va-chip__content {
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-          }
-
+          /* What a chip being dragged leaves behind, in the shape of one. */
           div.sortable-ghost {
-            border: var(--va-chip-border, var(--va-control-border));
-            position: var(--va-chip-position);
-            border-radius: var(--va-chip-border-radius);
-            width: var(--va-chip-width);
-            height: var(--va-chip-height);
-            min-width: var(--va-chip-min-width);
-            min-height: var(--va-chip-min-height);
             padding: 0 0.6rem;
-            cursor: var(--va-chip-cursor);
-            font-size: var(--va-chip-font-size);
-            font-family: var(--va-font-family);
-            vertical-align: var(--va-chip-vertical-align);
-            color: rgb(255, 255, 255);
-            background: #4e81e9;
-            line-height: var(--va-chip-content-line-height);
+            border: 1px dashed var(--color-outline);
+            border-radius: 9999px;
+            font-family: var(--font-sans);
+            font-size: var(--text-sm);
+            color: var(--color-dim);
+            background-color: color-mix(in srgb, var(--color-accent) 15%, transparent);
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
             max-width: 100%;
-            display: inline;
           }
 
           .chip_caption {

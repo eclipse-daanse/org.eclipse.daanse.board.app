@@ -12,6 +12,8 @@ Contributors:
 -->
 
 <script setup lang="ts">
+import { DInput } from "org.eclipse.daanse.board.app.ui.vue.controls";
+import TreeView from "../TreeView.vue";
 import { ref, onMounted } from 'vue';
 import { getTreeViewNodes } from './XMLAMetadataTree';
 import { TreeItemTypesEnum } from './TreeViewItems';
@@ -129,9 +131,9 @@ const populateDragEvent = (e: any, element: any) => {
     <div v-if="treeViewData">
       <div class="tree-container">
         <div class="tree-header mb-2">
-          <va-input v-model="filter" placeholder="Filter..." clearable class="filter-input" />
+          <DInput v-model="filter" placeholder="Filtern…" class="filter-input" />
         </div>
-        <va-tree-view :nodes="treeViewData" class="tree-view overflow-auto" :filter="filter" :text-by="'caption'">
+        <TreeView :nodes="treeViewData" class="tree-view overflow-auto" :filter="filter" text-by="caption">
           <!-- @update:expanded="triggerExpanded" -->
           <template #content="node">
             <draggable v-if="node.type === TreeItemTypesEnum.Hierarchy" :modelValue="[node]"
@@ -166,11 +168,11 @@ const populateDragEvent = (e: any, element: any) => {
               {{ node.caption }}
             </div>
           </template>
-        </va-tree-view>
+        </TreeView>
       </div>
     </div>
     <div v-else class="progress-circle">
-      <va-progress-circle indeterminate size="large" />
+      <span class="spinner" aria-label="Wird geladen" />
     </div>
   </div>
 </template>
@@ -193,7 +195,7 @@ const populateDragEvent = (e: any, element: any) => {
   overflow: auto;
 }
 
-.tree-container .va-tree-node-content__body svg {
+.tree-container svg {
   vertical-align: baseline;
 }
 
@@ -214,5 +216,23 @@ const populateDragEvent = (e: any, element: any) => {
   display: flex;
   flex-direction: column;
   height: 100%;
+}
+</style>
+
+<style scoped>
+.spinner {
+  display: inline-block;
+  width: 26px;
+  height: 26px;
+  border: 2px solid var(--color-divider);
+  border-top-color: var(--color-accent);
+  border-radius: 50%;
+  animation: xmla-spin 700ms linear infinite;
+}
+</style>
+
+<style>
+@keyframes xmla-spin {
+  to { transform: rotate(360deg); }
 }
 </style>

@@ -211,10 +211,8 @@ url('https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600&family=Jet
 }
 
 body {
-  --va-sidebar-z-index: 30000;
   --moveable-color: var(--color-outline) !important;
   font-family: var(--font-sans);
-  --va-font-family: var(--font-sans);
   font-optical-sizing: auto;
   /* was 200 - a hairline weight at 13px is barely readable; the mockups
    * use 400 for body and 500/600 for emphasis */
@@ -241,29 +239,10 @@ table {
     transform-origin: 0px 50%;
   }
 }
-.va-modal__overlay {
-  opacity: 1 !important;
-  -webkit-backdrop-filter: blur(2px);
-  backdrop-filter: blur(2px);
-  background: rgb(25 30 45 / 45%) !important;
-}
-.va-modal {
-  z-index: 3000000 !important;
-}
-:root .daans {
-  --va-button-font-weight: 400;
-}
-
 @keyframes spin {
   to {
     transform: rotate(360deg);
   }
-}
-
-/* Fix color picker positioning - browser needs dimensions to calculate popup position */
-.va-color-input__hidden-input {
-  width: 1px !important;
-  height: 1px !important;
 }
 
 /* --------------------------------------------------------- scrollbars */

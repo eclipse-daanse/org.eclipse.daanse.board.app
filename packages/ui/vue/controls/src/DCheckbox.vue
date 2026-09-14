@@ -13,21 +13,46 @@ Contributors:
 
 <script setup lang="ts">
 /* A checkbox with its label - the whole row is the hit area. */
-import { useId } from 'vue'
+import { ref, useId, watchEffect } from 'vue'
 
 const model = defineModel<boolean>()
 
-withDefaults(
-  defineProps<{ label?: string; hint?: string; disabled?: boolean }>(),
-  { disabled: false },
+const props = withDefaults(
+  defineProps<{
+    label?: string
+    hint?: string
+    disabled?: boolean
+    /**
+     * Neither on nor off: some of what it stands for is chosen.
+     *
+     * The native box draws its own mark for this, but only through a
+     * property - there is no attribute for it, which is why it is set
+     * below rather than bound.
+     */
+    indeterminate?: boolean
+  }>(),
+  { disabled: false, indeterminate: false },
 )
 
 const id = useId()
+
+/* The one thing about a checkbox that is a property and not an attribute. */
+const box = ref<HTMLInputElement | null>(null)
+watchEffect(() => {
+  if (box.value) box.value.indeterminate = props.indeterminate
+})
 </script>
 
 <template>
   <div class="check" :class="{ 'check--off': disabled }">
-    <input :id="id" v-model="model" class="check__box" type="checkbox" :disabled="disabled" />
+    <input
+      :id="id"
+      ref="box"
+      v-model="model"
+      class="check__box"
+      type="checkbox"
+      :disabled="disabled"
+    />
     <label :for="id" class="check__label">
       <slot>{{ label }}</slot>
       <span v-if="hint" class="check__hint">{{ hint }}</span>

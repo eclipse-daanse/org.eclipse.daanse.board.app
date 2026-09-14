@@ -16,17 +16,15 @@ Contributors:
   fixed 52px activity rail on the left, content beside it.
 
   What changed against the old shell: the rail no longer hovers open over
-  the content (va-sidebar hoverable + absolute), it holds its width and the
-  content sits next to it. View/Edit left the navigation - they are modes of
+  the content, it holds its width and the content sits next to it. View/Edit left the navigation - they are modes of
   the open board and live in the topbar now.
 -->
 
 <script setup lang="ts">
 import { DIcon } from 'org.eclipse.daanse.board.app.ui.vue.controls'
 import Header from './components/common/Header.vue'
-import { inject, ref, onMounted, computed, watchEffect } from 'vue'
-import { useColors } from 'vuestic-ui'
-import { useTheme, vuesticColorsFrom } from './theme/useTheme'
+import { inject, ref, onMounted, computed } from 'vue'
+import { useTheme } from './theme/useTheme'
 import { useRoute, useRouter } from 'vue-router'
 import {
   NAVIGATION_REGISTRY,
@@ -37,17 +35,8 @@ import { useGlobalLoading } from 'org.eclipse.daanse.board.app.ui.vue.composable
 
 const navigationItems = ref<NavigationItem[]>([])
 const { isLoading } = useGlobalLoading()
-/*
- * The va-* components paint from their own colour store, so a theme that
- * only writes CSS properties would leave every button, input and modal on
- * the previous palette. One theme, both worlds.
- */
-const { activeTheme } = useTheme()
-const { applyPreset, setColors } = useColors()
-watchEffect(() => {
-  applyPreset(activeTheme.value.dark ? 'dark' : 'light')
-  setColors(vuesticColorsFrom(activeTheme.value))
-})
+/* The theme writes the tokens; everything paints from those. */
+useTheme()
 
 const route = useRoute()
 const router = useRouter()
@@ -268,17 +257,4 @@ const go = (target: string) => router.push(target)
 @import './assets/main.css';
 @import 'floating-vue/dist/style.css';
 
-.va-modal {
-  .va-dropdown__content {
-    z-index: 38000;
-  }
-}
-.va-dropdown__content {
-  z-index: 38000 !important;
-}
-@supports (-moz-appearance: none) {
-  .va-scroll-container__content {
-    height: 100%;
-  }
-}
 </style>

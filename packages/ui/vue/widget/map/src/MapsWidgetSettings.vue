@@ -610,7 +610,7 @@ const assignDatasourceToLayer = (layer: any, dsId: string) => {
 
 .hint-text {
   font-size: 12px;
-  color: var(--va-text-secondary);
+  color: var(--color-dim);
   margin: -8px 0 0 0;
   padding-left: 4px;
 }
@@ -698,12 +698,12 @@ const assignDatasourceToLayer = (layer: any, dsId: string) => {
   }
 
   cursor: move;
-  padding: var(--va-tree-node-padding);
+  padding: 4px;
   list-style: none;
 
   &:hover {
     background-color: #d6dde3;
-    border-radius: var(--va-tree-node-border-radius);
+    border-radius: var(--radius-xs);
   }
 }
 
@@ -718,7 +718,7 @@ const assignDatasourceToLayer = (layer: any, dsId: string) => {
 }
 
 .bottomframe {
-  border-bottom: 1px solid var(--va-background-border);
+  border-bottom: 1px solid var(--color-divider);
 
 }
 

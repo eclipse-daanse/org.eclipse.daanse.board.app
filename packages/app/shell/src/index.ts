@@ -25,9 +25,6 @@ import { EVENT_ACTIONS_REGISTRY_ID } from 'org.eclipse.daanse.board.app.lib.api.
 import { VARIABLE_REPOSITORY } from 'org.eclipse.daanse.board.app.lib.api.variable'
 import { createApp, type App as VueApp } from 'vue'
 import { createPinia, setActivePinia } from 'pinia'
-import { createVuestic } from 'vuestic-ui'
-import 'vuestic-ui/styles/essential.css'
-import 'vuestic-ui/styles/typography.css'
 import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
 import { NAVIGATION_REGISTRY_ID, type NavigationRegistry } from 'org.eclipse.daanse.board.app.lib.api.navigation'
 import { NavigationItem } from 'org.eclipse.daanse.board.app.lib.api.navigation'
@@ -71,55 +68,6 @@ export async function activate({ services, log }: ActivationContext) {
   initGridSnap()
 
   app = createApp(App)
-
-  /*
-   * Vuestic palette, aligned with the design tokens in assets/main.css
-   * (which come from docs/mdx-workbench-layout-mockups.html). Keep the two
-   * in step: these values are what the va-* components paint with, the CSS
-   * tokens are what everything else uses.
-   */
-  app.use(createVuestic({
-    config: {
-      colors: {
-        presets: {
-          light: {
-            primary: '#2b5599',
-            secondary: '#5c5c55',
-            success: '#1f6f4a',
-            info: '#2b5599',
-            danger: '#b02a1c',
-            warning: '#8a5a0c',
-            lightPrim: '#d5d5d0',
-            orange: '#c08a10',
-            active: 'rgba(43,85,153,0.10)',
-            backgroundPrimary: '#f8f8f6',
-            backgroundSecondary: '#ffffff',
-            backgroundElement: '#efefec',
-            backgroundBorder: '#d5d5d0',
-            textPrimary: '#24241f',
-            textInverted: '#ffffff',
-          },
-          dark: {
-            primary: '#86aef0',
-            secondary: '#9d9d95',
-            success: '#6cc79a',
-            info: '#86aef0',
-            danger: '#ec8189',
-            warning: '#dfb069',
-            lightPrim: '#3a3a36',
-            orange: '#dfab35',
-            active: 'rgba(134,174,240,0.16)',
-            backgroundPrimary: '#262624',
-            backgroundSecondary: '#2d2d2b',
-            backgroundElement: '#1f1f1e',
-            backgroundBorder: '#3a3a36',
-            textPrimary: '#dcdcd7',
-            textInverted: '#12120f',
-          },
-        },
-      },
-    },
-  }))
 
   const pinia = createPinia()
   setActivePinia(pinia)

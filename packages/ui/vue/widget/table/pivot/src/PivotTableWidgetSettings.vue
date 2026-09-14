@@ -476,12 +476,12 @@ const needsResultColors = (type?: string) => {
   margin: 0 0 8px 0;
   font-size: 14px;
   font-weight: 600;
-  color: var(--va-primary);
+  color: var(--color-accent);
 }
 
 .hint-text {
   margin: 0 0 16px 0;
-  color: var(--va-text-secondary);
+  color: var(--color-dim);
   font-size: 13px;
 }
 
@@ -513,7 +513,7 @@ const needsResultColors = (type?: string) => {
 .empty-state {
   padding: 20px;
   text-align: center;
-  color: var(--va-text-secondary);
+  color: var(--color-dim);
   background: #f5f5f5;
   border-radius: 4px;
 }

@@ -15,6 +15,7 @@ Contributors:
 import type { TinyEmitter } from "tiny-emitter";
 import { inject, ref, watch } from "vue";
 import { v4 } from "uuid";
+import ContextMenu from "./ContextMenu.vue";
 // import { useI18n } from 'vue-i18n';
 
 defineEmits(["openCellProperties", "drillthrough"]);
@@ -37,53 +38,16 @@ watch(opened, () => {
 });
 </script>
 <template>
-  <va-dropdown prevent-overflow v-model="opened" placement="bottom-start" trigger="right-click" keep-anchor-width
-    :offset="[-5, 10]">
+  <ContextMenu v-model="opened">
     <template #anchor>
-      <slot></slot>
+      <slot />
     </template>
 
-    <va-dropdown-content style="padding: 0; margin: 0">
-      <va-button-group class="dropdown_button-group">
-        <va-button preset="plain" class="dropdown_button" text-color="#000" :hover-opacity="0.5"
-          @click="$emit('openCellProperties')">
-          {{ t('PivotTable.openCellPropertiesButton') }}
-        </va-button>
-        <va-button preset="plain" class="dropdown_button" text-color="#000" :hover-opacity="0.5"
-          @click="$emit('drillthrough')">
-          {{ t('PivotTable.drillthroughButton') }}
-        </va-button>
-      </va-button-group>
-    </va-dropdown-content>
-  </va-dropdown>
+    <button type="button" @click="$emit('openCellProperties')">
+      {{ t('PivotTable.openCellPropertiesButton') }}
+    </button>
+    <button type="button" @click="$emit('drillthrough')">
+      {{ t('PivotTable.drillthroughButton') }}
+    </button>
+  </ContextMenu>
 </template>
-<style scoped>
-.dropdown_button-group {
-  display: flex;
-  flex-direction: column;
-  padding: 0;
-  margin: 0;
-  width: 100%;
-}
-
-.dropdown_button {
-  text-align: left;
-  justify-content: flex-start;
-  border: 1px solid silver !important;
-  border-bottom: 0 !important;
-  border-radius: 0 !important;
-  padding: 0.25rem !important;
-}
-
-.dropdown_button:deep() .va-button__content {
-  color: #000;
-}
-
-.dropdown_button:hover:deep() .va-button__content {
-  color: #555;
-}
-
-.dropdown_button:last-child {
-  border-bottom: 1px solid silver !important;
-}
-</style>

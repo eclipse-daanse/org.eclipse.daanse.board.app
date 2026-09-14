@@ -145,8 +145,7 @@
     "vue-grid-layout": "^2.4.0",
     "vue-router": "^5.0.1",
     "vue3-moveable": "^0.28.0",
-    "vuedraggable": "^4.1.0",
-    "vuestic-ui": "^1.10.3"
+    "vuedraggable": "^4.1.0"
   },
   "devDependencies": {
     "@playwright/test": "^1.51.0",

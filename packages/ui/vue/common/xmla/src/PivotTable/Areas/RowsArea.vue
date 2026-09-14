@@ -12,6 +12,7 @@ Contributors:
 -->
 
 <script setup lang="ts">
+import { DIcon } from "org.eclipse.daanse.board.app.ui.vue.controls";
 import type { TinyEmitter } from "tiny-emitter";
 import { computed, inject, ref, watch, type Ref } from "vue";
 import MemberDropdown from "./MemberDropdown.vue";
@@ -415,13 +416,13 @@ watch(
                                                 j,
                                             )
                                         " class="expandIcon">
-                                            <va-icon name="chevron_right" size="small" @click="expand(member)" />
+                                            <DIcon name="chevron_right" size="sm" @click="expand(member)" />
                                         </div>
                                         <div v-else-if="
                                             getRowChildCount(member.i, j) &&
                                             rowIsExpanded(member.i, j)
                                         " class="expandIcon">
-                                            <va-icon name="expand_more" size="small" @click="collapse(member)" />
+                                            <DIcon name="expand_more" size="sm" @click="collapse(member)" />
                                         </div>
                                     </template>
                                     <div class="rowMemberCaption">

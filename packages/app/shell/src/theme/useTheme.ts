@@ -177,35 +177,6 @@ export function initTheme() {
   paint()
 }
 
-/**
- * The same theme, in the shape Vuestic wants.
- *
- * The va-* components keep their own colour store and paint from it, so a
- * theme that only writes CSS properties leaves every button, input and
- * modal behind. Deriving them here means one palette, not two kept in step
- * by hand.
- */
-export function vuesticColorsFrom(theme: Theme): Record<string, string> {
-  const t = theme.tokens
-  return {
-    primary: t['color-accent'],
-    secondary: t['color-dim'],
-    success: t['color-ok'],
-    info: t['color-accent'],
-    danger: t['color-err'],
-    warning: t['color-warn'],
-    lightPrim: t['color-divider'],
-    orange: t['color-brandFill'],
-    active: withAlpha(t['color-accent'], theme.dark ? 0.16 : 0.1),
-    backgroundPrimary: t['color-pane'],
-    backgroundSecondary: t['color-raised'],
-    backgroundElement: t['color-bg'],
-    backgroundBorder: t['color-divider'],
-    textPrimary: t['color-fg'],
-    textInverted: t['color-onAccent'],
-  }
-}
-
 /** Hex plus alpha; anything that is not a plain hex is passed through. */
 function withAlpha(colour: string | undefined, alpha: number): string {
   if (!colour?.startsWith('#')) return colour ?? 'transparent'

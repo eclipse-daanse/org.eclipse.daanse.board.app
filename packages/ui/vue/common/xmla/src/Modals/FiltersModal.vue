@@ -12,6 +12,7 @@ Contributors:
 -->
 
 <script lang="ts" setup>
+import { DButton, DModal } from "org.eclipse.daanse.board.app.ui.vue.controls";
 import { ref } from "vue";
 import { usePromisifiedModal } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import FilterTreeView from "../Filters/FilterTreeView.vue";
@@ -126,88 +127,57 @@ function resetSelection() {
 </script>
 
 <template>
-  <va-modal
-    :modelValue="isOpened"
-    no-padding
-    class="filter-modal"
-    @ok="ok"
-    fixed-layout
-  >
-    <template #content="{ ok }">
-      <va-card-title class="va-h6">Enable any filters:</va-card-title>
-      <va-card-content>
-        <Suspense>
-          <FilterTreeView
-            ref="filterTreeView"
-            :rootHierarchy="rootHierarchy"
-            :api="api"
-            :catalog="catalog"
-            @set-selection="setSelection"
-          ></FilterTreeView>
-        </Suspense>
-      </va-card-content>
-      <va-card-actions class="actions">
-        <div class="action-buttons">
-          <va-button @click="ok" color="primary">Confirm</va-button>
-          <va-button @click="cancel" color="secondary">Cancel</va-button>
-        </div>
-        <div
-          v-if="!multipleChoise && currentlySelected && currentlySelected.id"
-        >
-          <div>Currently selected: {{ currentlySelected.Caption }}</div>
-          <div class="reset-button" @click="resetSelection">
-            Reset selection
-          </div>
-        </div>
-      </va-card-actions>
+  <DModal :model-value="isOpened" size="lg" @cancel="cancel">
+    <template #header>
+      <h2 class="filter-modal__title">Filter setzen</h2>
     </template>
-  </va-modal>
+
+    <Suspense>
+      <FilterTreeView
+        ref="filterTreeView"
+        :rootHierarchy="rootHierarchy"
+        :api="api"
+        :catalog="catalog"
+        @set-selection="setSelection"
+      />
+    </Suspense>
+
+    <template #actions>
+      <div v-if="!multipleChoise && currentlySelected && currentlySelected.id" class="chosen">
+        Gewählt: {{ currentlySelected.Caption }}
+        <button type="button" class="reset-button" @click="resetSelection">zurücksetzen</button>
+      </div>
+      <DButton intent="quiet" @click="cancel">Abbrechen</DButton>
+      <DButton intent="primary" @click="ok">Übernehmen</DButton>
+    </template>
+  </DModal>
 </template>
-<style lang="scss">
-.filter-modal {
-  .va-modal--fixed-layout .va-modal__inner {
-    height: calc(100vh - 2rem);
-  }
 
-  .va-modal__container {
-    width: 100%;
-  }
+<style lang="scss" scoped>
+.filter-modal__title {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: var(--text-lg);
+  font-weight: 600;
+}
 
-  .va-modal__dialog {
-    margin: auto;
-  }
+.chosen {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-right: auto;
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  color: var(--color-dim);
+}
 
-  .va-modal__inner > div {
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-  }
-
-  .va-card__content {
-    overflow: hidden;
-    display: flex;
-    width: 100%;
-    height: 100%;
-  }
-
-  .va-card__content > div {
-    flex-direction: column;
-    overflow: hidden;
-    width: 100%;
-  }
-
-  .actions {
-    display: flex;
-    justify-content: space-between !important;
-  }
-
-  .reset-button {
-    margin-top: 0.25rem;
-    color: var(--va-primary);
-    text-decoration: underline;
-    user-select: none;
-    cursor: pointer;
-  }
+.reset-button {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--color-accent);
+  font: inherit;
+  cursor: pointer;
+  text-decoration: underline;
 }
 </style>

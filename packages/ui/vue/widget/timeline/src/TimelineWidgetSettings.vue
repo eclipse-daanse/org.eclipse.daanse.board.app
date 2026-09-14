@@ -705,7 +705,7 @@ watch(() => widgetSettings.value, (newSettings) => {
 
 .setting-group > label {
   font-weight: 600;
-  color: var(--va-text-primary);
+  color: var(--color-fg);
   font-size: 0.9rem;
 }
 
@@ -726,7 +726,7 @@ watch(() => widgetSettings.value, (newSettings) => {
   flex-direction: column;
   gap: 0.75rem;
   padding: 0.75rem;
-  background: var(--va-background-element);
+  background: var(--color-raised);
   border-radius: 4px;
   min-width: 0;
   overflow: hidden;
@@ -752,9 +752,9 @@ watch(() => widgetSettings.value, (newSettings) => {
 
 .relative-time-preview {
   font-size: 0.85rem;
-  color: var(--va-primary);
+  color: var(--color-accent);
   padding: 0.5rem;
-  background: var(--va-background-secondary);
+  background: var(--color-pane);
   border-radius: 4px;
   text-align: center;
   word-break: break-word;
