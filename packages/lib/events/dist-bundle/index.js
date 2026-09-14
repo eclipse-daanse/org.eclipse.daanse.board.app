@@ -1228,8 +1228,11 @@ class Fe {
       return this.pageIdLookupFn(e);
   }
   /**
-   * Setzt eine Funktion die pageId von widgetId ableiten kann
-   * Diese Funktion wird von der Vue-App gesetzt um Zugriff auf die Pinia Stores zu haben
+   * Setzt eine Funktion die pageId von widgetId ableiten kann.
+   *
+   * Ein Haken für den Fall, dass eine Instanz nicht von Hand registriert
+   * wurde. Gesetzt wird er zurzeit von niemandem: er stammt aus der Zeit,
+   * als die Vue-App darüber an ihre Stores kam.
    */
   setPageIdLookup(e) {
     this.pageIdLookupFn = e, console.log("📝 PageId lookup function registered");
