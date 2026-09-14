@@ -43,6 +43,11 @@ const BUNDLE_TYPES: Record<string, string> = {
   '.css': 'text/css',
 }
 
+/* How long to let a bundle's output settle before telling the client about
+   it: two checks of the same size, up to a minute for a slow build. */
+const SETTLE_STEP = 150
+const SETTLE_TRIES = 400
+
 /**
  * Serves the built bundles under /bundles/<id>/ as plain files and reloads
  * them in the running app when their build output changes.
@@ -148,13 +153,38 @@ function tsmBundles(): Plugin {
 
       for (const [id, dir] of Object.entries(bundleDirs)) {
         if (!existsSync(dir)) continue
+        const entry = join(dir, 'index.js')
         let timer: ReturnType<typeof setTimeout> | undefined
+        let seen = -1
+
+        /*
+         * A build empties the directory before it writes into it, and the
+         * first thing the watch reports is the emptying. Announcing then
+         * sends the client after a file that is not there yet - a 404 that
+         * leaves the module unloaded. So wait for the entry to exist and to
+         * stop growing; a build that never finishes announces nothing, and
+         * the next one that does will.
+         */
+        const announce = (attempt: number) => {
+          const size = existsSync(entry) ? statSync(entry).size : -1
+          if (size > 0 && size === seen) {
+            seen = -1
+            server.ws.send({ type: 'custom', event: 'tsm:bundle-changed', data: { id } })
+            return
+          }
+          seen = size
+          if (attempt >= SETTLE_TRIES) {
+            seen = -1
+            return
+          }
+          timer = setTimeout(() => announce(attempt + 1), SETTLE_STEP)
+        }
+
         watch(dir, () => {
           // Debounced: one build touches several files
           clearTimeout(timer)
-          timer = setTimeout(() => {
-            server.ws.send({ type: 'custom', event: 'tsm:bundle-changed', data: { id } })
-          }, 150)
+          seen = -1
+          timer = setTimeout(() => announce(0), SETTLE_STEP)
         })
       }
     },

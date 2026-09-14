@@ -8,13 +8,19 @@
  * in between would be served from an old dist-bundle/. On an untouched tree
  * it costs well under a second.
  *
- * Usage: node scripts/dev.mjs [bundle-filter...]
+ * Usage: node scripts/dev.mjs [bundle-filter...] [--port n]
  *   filter is passed through to both the catch-up build and watch-bundles.mjs
+ *   --port: hand a port to vite; without it the package's own default holds
  */
 import { spawn, spawnSync } from 'node:child_process'
 import { describe, holder } from './bundle-lock.mjs'
 
-const filters = process.argv.slice(2)
+const args = process.argv.slice(2)
+const portAt = args.indexOf('--port')
+/* The port decides the origin, and the origin decides which localStorage the
+   app sees - a fallback port would silently open an empty workspace. */
+const port = portAt >= 0 ? args[portAt + 1] : undefined
+const filters = args.filter((a, i) => i !== portAt && i !== portAt + 1)
 
 /* Checked here rather than left to the catch-up build, so the reason is the
    first thing on screen instead of a build error. */
@@ -34,10 +40,14 @@ if (catchUp.status !== 0) {
 }
 
 const children = [
-  spawn('npm', ['run', 'dev', '--workspace=packages/app/default'], {
-    stdio: 'inherit',
-    env: { ...process.env, NODE_ENV: 'development' },
-  }),
+  spawn(
+    'npm',
+    ['run', 'dev', '--workspace=packages/app/default', ...(port ? ['--', '--port', port, '--strictPort'] : [])],
+    {
+      stdio: 'inherit',
+      env: { ...process.env, NODE_ENV: 'development' },
+    },
+  ),
   spawn('node', ['scripts/watch-bundles.mjs', ...filters], {
     stdio: 'inherit',
   }),
