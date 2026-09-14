@@ -1,18 +1,33 @@
 /**
- * One-command dev environment: starts the vite dev server (launcher) and the
- * bundle watcher together; killing this process (Ctrl+C) takes both down.
+ * One-command dev environment: brings the bundles up to date, then starts the
+ * vite dev server (launcher) and the bundle watcher together; killing this
+ * process (Ctrl+C) takes both down.
+ *
+ * The catch-up build matters after a pull or a branch switch: the watcher
+ * only reacts to changes it sees while running, so anything that went stale
+ * in between would be served from an old dist-bundle/. On an untouched tree
+ * it costs well under a second.
  *
  * Usage: node scripts/dev.mjs [bundle-filter...]
- *   filter is passed through to watch-bundles.mjs
+ *   filter is passed through to both the catch-up build and watch-bundles.mjs
  */
-import { spawn } from 'node:child_process'
+import { spawn, spawnSync } from 'node:child_process'
+
+const filters = process.argv.slice(2)
+
+const catchUp = spawnSync('node', ['scripts/build-bundles.mjs', ...filters], { stdio: 'inherit' })
+if (catchUp.status !== 0) {
+  // A bundle that will not build is worth seeing now, not behind a dev server
+  console.error('\nbundles are not up to date - fix the build above, then start again')
+  process.exit(catchUp.status ?? 1)
+}
 
 const children = [
   spawn('npm', ['run', 'dev', '--workspace=packages/app/default'], {
     stdio: 'inherit',
     env: { ...process.env, NODE_ENV: 'development' },
   }),
-  spawn('node', ['scripts/watch-bundles.mjs', ...process.argv.slice(2)], {
+  spawn('node', ['scripts/watch-bundles.mjs', ...filters], {
     stdio: 'inherit',
   }),
 ]

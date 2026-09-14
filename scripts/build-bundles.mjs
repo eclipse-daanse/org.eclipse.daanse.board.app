@@ -4,11 +4,7 @@
  * and the production build serve the resulting dist-bundle/ directories
  * under /bundles/<id>/.
  *
- * Only what changed is rebuilt. A bundle's inputs are its own files and the
- * built output of the workspace packages it inlines; shared dependencies are
- * externalized by the tsm plugin and never end up inside, so a change to one
- * of those is not a reason to build this. When every input is older than the
- * output, the build is skipped.
+ * Only what changed is rebuilt; bundle-graph.mjs holds the rule for that.
  *
  * Builds run in a worker pool (defaults to the number of cores, override with
  * BUNDLE_JOBS=n).
@@ -20,9 +16,9 @@
  */
 import { exec } from 'node:child_process'
 import { availableParallelism } from 'node:os'
-import { globSync, readFileSync, statSync } from 'node:fs'
-import { dirname, join, resolve } from 'node:path'
+import { join, resolve } from 'node:path'
 import { promisify } from 'node:util'
+import { bundleDirs, isStale } from './bundle-graph.mjs'
 
 const run = promisify(exec)
 const args = process.argv.slice(2)
@@ -35,110 +31,9 @@ const ROOT = resolve(import.meta.dirname, '..')
    are a hundred and forty of them. */
 const VITE = join(ROOT, 'node_modules', '.bin', 'vite')
 
-const configs = globSync('packages/**/vite.bundle.config.ts')
-  .filter((f) => !f.includes('node_modules'))
-  .filter((f) => filters.length === 0 || filters.some((t) => f.includes(t)))
-  .sort()
-
-/* Every workspace package by name, so a dependency can be found on disk. */
-const packageDirs = new Map()
-for (const file of globSync('packages/**/package.json').filter((f) => !f.includes('node_modules'))) {
-  try {
-    packageDirs.set(JSON.parse(readFileSync(file, 'utf8')).name, dirname(file))
-  } catch {
-    // a package.json that will not parse is not a dependency anyone resolves
-  }
-}
-
-function readJson(file) {
-  try {
-    return JSON.parse(readFileSync(file, 'utf8'))
-  } catch {
-    return undefined
-  }
-}
-
-/**
- * The newest mtime under a directory, or 0 when there is nothing.
- *
- * Directories count too: deleting a file leaves every remaining file older
- * than the output, and only the directory's own mtime says it happened.
- */
-function newestUnder(dir, skip = []) {
-  const excluded = (entry) =>
-    skip.some((s) => entry === s || entry.startsWith(s + '/'))
-  let newest = 0
-  let entries
-  try {
-    entries = globSync('**/*', { cwd: dir, exclude: excluded })
-  } catch {
-    return 0
-  }
-  for (const entry of entries) {
-    if (excluded(entry)) continue
-    try {
-      const at = statSync(join(dir, entry)).mtimeMs
-      if (at > newest) newest = at
-    } catch {
-      // a file that vanished between listing and reading is not an input
-    }
-  }
-  return newest
-}
-
-/** The oldest mtime in a directory - 0 when it is missing or empty. */
-function oldestUnder(dir) {
-  let oldest = Infinity
-  let entries
-  try {
-    entries = globSync('**/*', { cwd: dir, nodir: true })
-  } catch {
-    return 0
-  }
-  for (const entry of entries) {
-    try {
-      const at = statSync(join(dir, entry)).mtimeMs
-      if (at < oldest) oldest = at
-    } catch {
-      return 0
-    }
-  }
-  return oldest === Infinity ? 0 : oldest
-}
-
-/**
- * Whether this bundle has to be built again.
- *
- * Its own files are inputs, and so is the built output of every workspace
- * package it inlines. What the manifest lists as shared is externalized, so
- * it is not.
- */
-function isStale(dir) {
-  const built = oldestUnder(join(dir, 'dist-bundle'))
-  if (!built) return true
-
-  /* dist/ is turbo's output for this same package, not an input, and
-     .turbo holds its log. */
-  let newest = newestUnder(dir, ['dist-bundle', 'dist', 'node_modules', '.turbo'])
-
-  const manifest = readJson(join(dir, 'manifest.json')) ?? {}
-  const shared = new Set((manifest.sharedDependencies ?? []).map((d) => d.id))
-  const pkg = readJson(join(dir, 'package.json')) ?? {}
-
-  for (const name of Object.keys(pkg.dependencies ?? {})) {
-    if (shared.has(name)) continue
-    const depDir = packageDirs.get(name)
-    if (!depDir) continue
-    const at = newestUnder(join(depDir, 'dist'))
-    if (at > newest) newest = at
-  }
-
-  return newest > built
-}
-
 const jobs = Math.max(1, Number(process.env.BUNDLE_JOBS) || availableParallelism())
 
-const all = configs.map((c) => dirname(c))
+const all = bundleDirs(filters)
 const queue = force ? [...all] : all.filter(isStale)
 const toBuild = queue.length
 const skipped = all.length - toBuild
