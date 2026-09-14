@@ -27,10 +27,20 @@ import { promisify } from 'node:util'
 import chokidar from 'chokidar'
 import { build } from 'vite'
 import { bundleDirs, inlinedInto } from './bundle-graph.mjs'
+import { claim, describe, inheritEnv } from './bundle-lock.mjs'
 
 const run = promisify(exec)
 const ROOT = resolve(import.meta.dirname, '..')
 const TURBO = join(ROOT, 'node_modules', '.bin', 'turbo')
+
+const lock = claim('watch')
+if (!lock.ok) {
+  console.error(
+    `${describe(lock.held)} is already running.\n` +
+      'Two watchers write the same dist-bundle/ directories and leave them empty.',
+  )
+  process.exit(1)
+}
 
 const filters = process.argv.slice(2)
 const bundles = bundleDirs(filters).sort((a, b) => b.length - a.length) // longest first: nested packages win
@@ -139,7 +149,7 @@ function flushLibs() {
     try {
       await run(`"${TURBO}" run build ${names.map((n) => `--filter=${n}`).join(' ')}`, {
         cwd: ROOT,
-        env: { ...process.env, SKIP_TYPE_CHECK: 'true' },
+        env: inheritEnv({ ...process.env, SKIP_TYPE_CHECK: 'true' }),
       })
     } catch (error) {
       const tail = `${error.stdout ?? ''}\n${error.stderr ?? ''}`.trim().split('\n').slice(-8)
@@ -165,7 +175,10 @@ function flushLibs() {
     console.log(`[${now()}] ${affected.length} bundle(s) inline it, rebuilding`)
     const spread = Date.now()
     try {
-      await run(`node scripts/build-bundles.mjs ${affected.join(' ')}`, { cwd: ROOT })
+      await run(`node scripts/build-bundles.mjs ${affected.join(' ')}`, {
+        cwd: ROOT,
+        env: inheritEnv(),
+      })
       console.log(`[${now()}] inlining bundles rebuilt in ${((Date.now() - spread) / 1000).toFixed(1)}s`)
     } catch (error) {
       const tail = `${error.stdout ?? ''}\n${error.stderr ?? ''}`.trim().split('\n').slice(-12)
@@ -188,6 +201,7 @@ trigger.on('all', (_event, file) => {
 
 async function shutdown() {
   await Promise.all([trigger.close(), ...[...active.values()].map((w) => w?.close())])
+  lock.release()
   process.exit(0)
 }
 process.on('SIGINT', shutdown)

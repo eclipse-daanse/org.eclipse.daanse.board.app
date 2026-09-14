@@ -19,6 +19,7 @@ import { availableParallelism } from 'node:os'
 import { join, resolve } from 'node:path'
 import { promisify } from 'node:util'
 import { bundleDirs, isStale } from './bundle-graph.mjs'
+import { claim, describe } from './bundle-lock.mjs'
 
 const run = promisify(exec)
 const args = process.argv.slice(2)
@@ -30,6 +31,18 @@ const ROOT = resolve(import.meta.dirname, '..')
 /* The binary directly: npx costs about half a second per call, and there
    are a hundred and forty of them. */
 const VITE = join(ROOT, 'node_modules', '.bin', 'vite')
+
+/* --list only reads mtimes; everything else writes to dist-bundle/ */
+if (!list) {
+  const lock = claim('build')
+  if (!lock.ok) {
+    console.error(
+      `${describe(lock.held)} is running.\n` +
+        'Only one process may write dist-bundle/ - two of them leave it empty.',
+    )
+    process.exit(1)
+  }
+}
 
 const jobs = Math.max(1, Number(process.env.BUNDLE_JOBS) || availableParallelism())
 

@@ -12,8 +12,19 @@
  *   filter is passed through to both the catch-up build and watch-bundles.mjs
  */
 import { spawn, spawnSync } from 'node:child_process'
+import { describe, holder } from './bundle-lock.mjs'
 
 const filters = process.argv.slice(2)
+
+/* Checked here rather than left to the catch-up build, so the reason is the
+   first thing on screen instead of a build error. */
+const held = holder()
+if (held) {
+  console.error(
+    `${describe(held)} is already running - stop it before starting another.`,
+  )
+  process.exit(1)
+}
 
 const catchUp = spawnSync('node', ['scripts/build-bundles.mjs', ...filters], { stdio: 'inherit' })
 if (catchUp.status !== 0) {
