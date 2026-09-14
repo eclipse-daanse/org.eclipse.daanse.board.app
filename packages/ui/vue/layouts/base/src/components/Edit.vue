@@ -79,6 +79,7 @@ const pageSettingsOpenedId = ref<string|undefined>(undefined);
 
 const {
   board,
+  history,
   clipboardStore,
   ghostPlaceholder,
   processDropCoordinates,
@@ -97,6 +98,35 @@ const {
   copyWidget: copyWidgetComposable,
   pasteWidget: pasteWidgetComposable,
 } = useMoveableLayout(pageId, () => (snapToGrid.value ? GRID : 0))
+
+/* ---- taking a change back ---------------------------------------------- */
+
+/*
+ * A drag reports every pixel. The gesture says when it starts and when it
+ * stops, so taking it back takes back the whole move and not the last
+ * pixel of it.
+ */
+const beginDrag = () => history.begin('Widget verschoben')
+const beginResize = () => history.begin('Größe geändert')
+const beginGroupDrag = () => history.begin('Auswahl verschoben')
+const endGesture = () => history.end()
+
+function onHistoryKey(event: KeyboardEvent) {
+  if (!(event.ctrlKey || event.metaKey)) return
+
+  const key = event.key.toLowerCase()
+  /* Ctrl+Z takes back, Ctrl+Y and Ctrl+Shift+Z put back again. */
+  if (key === 'z' && !event.shiftKey) {
+    event.preventDefault()
+    history.undo()
+  } else if (key === 'y' || (key === 'z' && event.shiftKey)) {
+    event.preventDefault()
+    history.redo()
+  }
+}
+
+onMounted(() => window.addEventListener('keydown', onHistoryKey))
+onUnmounted(() => window.removeEventListener('keydown', onHistoryKey))
 
 const safeWidgets = computed(() => board.widgets.value)
 
@@ -708,8 +738,12 @@ const change = (e: any) => {
           v-bind:resizable="true"
           v-bind:useResizeObserver="true"
           v-bind:useMutationObserver="true"
+          @dragStart="beginDrag"
           @drag="drag(widget.uid, $event)"
+          @dragEnd="endGesture"
+          @resizeStart="beginResize"
           @resize="resize(widget.uid, $event)"
+          @resizeEnd="endGesture"
           :snappable="snapToGrid"
           :snapGridWidth="GRID"
           :snapGridHeight="GRID"
@@ -735,8 +769,40 @@ const change = (e: any) => {
         :snappable="snapToGrid"
         :snapGridWidth="GRID"
         :snapGridHeight="GRID"
+        @dragGroupStart="beginGroupDrag"
         @dragGroup="dragGroup"
+        @dragGroupEnd="endGesture"
       />
+
+      <!--
+        Shown once there is something to take back. It sits where the
+        alignment bar sits, and gives way to it: a person lining widths up
+        is not the one looking for the last change.
+      -->
+      <div
+        v-if="(history.canUndo.value || history.canRedo.value) && !selectionActive"
+        class="align-bar history-bar"
+        @pointerdown.stop
+      >
+        <button
+          type="button"
+          class="align-bar__btn"
+          :disabled="!history.canUndo.value"
+          :title="history.undoLabel.value ? `Rückgängig: ${history.undoLabel.value}` : 'Rückgängig'"
+          @click="history.undo()"
+        >
+          <DIcon name="undo" size="sm" />
+        </button>
+        <button
+          type="button"
+          class="align-bar__btn"
+          :disabled="!history.canRedo.value"
+          :title="history.redoLabel.value ? `Wiederholen: ${history.redoLabel.value}` : 'Wiederholen'"
+          @click="history.redo()"
+        >
+          <DIcon name="redo" size="sm" />
+        </button>
+      </div>
 
       <!--
         Shown only with something to line up. Against the outside of the
@@ -1093,6 +1159,16 @@ const change = (e: any) => {
  * selection can be anywhere, and a bar that follows it would cover what
  * you are lining up.
  */
+/* The same bar, holding the two that take a change back. */
+.history-bar {
+  gap: 2px;
+}
+
+.align-bar__btn:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
 .align-bar {
   position: absolute;
   top: 10px;

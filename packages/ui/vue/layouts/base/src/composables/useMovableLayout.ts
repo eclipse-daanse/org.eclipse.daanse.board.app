@@ -21,7 +21,7 @@ export type ILayoutItem = LayoutItem
 
 import { ref } from 'vue'
 import type { OnDrag, OnResize } from 'vue3-moveable'
-import { useBoard } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+import { useBoard, useHistory } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import type { LayoutItem, StoredWidget } from 'org.eclipse.daanse.board.app.lib.api.page'
 import { useClipboardStore } from './useClipboardStore'
 import { cloneDeep } from 'lodash'
@@ -52,6 +52,13 @@ export function useMoveableLayout(pageId: string = '', gridSize: () => number = 
     return grid > 0 ? Math.round(value / grid) * grid : value
   }
   const clipboardStore = useClipboardStore()
+
+  /*
+   * The history listens to the board rather than copying it. It is made
+   * here because this is where the board is, and handed out below so the
+   * editor can offer the two buttons and the shortcuts.
+   */
+  const history = useHistory(() => board.page.value)
 
   const ghostPlaceholder = ref({
     x: 0,
@@ -138,7 +145,9 @@ export function useMoveableLayout(pageId: string = '', gridSize: () => number = 
     const item = board.layout.value.find((item: ILayoutItem) => item.id === id)
     if (!item) return
 
-    item.z += 1
+    history.record('Nach vorn', () => {
+      item.z += 1
+    })
   }
 
   const moveToTop = (id: string) => {
@@ -146,14 +155,18 @@ export function useMoveableLayout(pageId: string = '', gridSize: () => number = 
     const item = board.layout.value.find((item: ILayoutItem) => item.id === id)
     if (!item) return
 
-    item.z = zIndexMax + 1
+    history.record('Ganz nach vorn', () => {
+      item.z = zIndexMax + 1
+    })
   }
 
   const moveDown = (id: string) => {
     const item = board.layout.value.find((item: ILayoutItem) => item.id === id)
     if (!item) return
 
-    item.z -= 1
+    history.record('Nach hinten', () => {
+      item.z -= 1
+    })
   }
 
   const moveToBottom = (id: string) => {
@@ -161,7 +174,9 @@ export function useMoveableLayout(pageId: string = '', gridSize: () => number = 
     const item = board.layout.value.find((item: ILayoutItem) => item.id === id)
     if (!item) return
 
-    item.z = zIndexMin - 1
+    history.record('Ganz nach hinten', () => {
+      item.z = zIndexMin - 1
+    })
   }
 
   const addWidget = (type: any, config: any = {}, wrapperConfig: any = {}, layoutConfig: Partial<ILayoutItem> = {}) => {
@@ -171,12 +186,12 @@ export function useMoveableLayout(pageId: string = '', gridSize: () => number = 
       config: { datasourceId: config?.datasourceId, settings: { ...(config?.settings ?? {}) } },
       wrapperConfig,
     }
-    return board.addWidget(widget, layoutConfig)
+    return history.record('Widget hinzugefügt', () => board.addWidget(widget, layoutConfig))
   }
 
   /* The placement goes with it - that is one call now, not two. */
   const removeWidget = (id: string) => {
-    board.removeWidget(id)
+    history.record('Widget gelöscht', () => board.removeWidget(id))
   }
 
   const copyWidget = (widgetId: string) => {
@@ -213,14 +228,16 @@ export function useMoveableLayout(pageId: string = '', gridSize: () => number = 
     const copied = cloneDeep(clipboard.widget)
     const settings = { ...(copied.config?.settings ?? {}), name: 'widget_' + newUid }
 
-    board.addWidget(
-      {
-        uid: newUid,
-        type: copied.type,
-        config: { datasourceId: copied.config?.datasourceId, settings },
-        wrapperConfig: copied.wrapperConfig,
-      },
-      { ...clipboard.layout, id: newUid, x, y, z: maxZ + 1 },
+    history.record('Widget eingefügt', () =>
+      board.addWidget(
+        {
+          uid: newUid,
+          type: copied.type,
+          config: { datasourceId: copied.config?.datasourceId, settings },
+          wrapperConfig: copied.wrapperConfig,
+        },
+        { ...clipboard.layout, id: newUid, x, y, z: maxZ + 1 },
+      ),
     )
     return newUid
   }
@@ -228,6 +245,7 @@ export function useMoveableLayout(pageId: string = '', gridSize: () => number = 
   return {
     board,
     clipboardStore,
+    history,
     ghostPlaceholder,
     processDropCoordinates,
     processDragOverCoordinates,
