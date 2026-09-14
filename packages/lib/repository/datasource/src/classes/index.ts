@@ -244,7 +244,7 @@ export class DatasourceRepository implements IDatasourceRepository {
     return Object.keys(this.availableDatasources)
   }
 
-  get registeredDatasources(): String[] {
+  get registeredDatasources(): string[] {
     return Object.keys(this.availableDatasources)
   }
 

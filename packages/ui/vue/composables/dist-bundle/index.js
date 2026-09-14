@@ -1,15 +1,15 @@
-import { identifier as z } from "org.eclipse.daanse.board.app.lib.api.datasource";
-import { ref as W, computed as p, inject as C, onMounted as H, onUnmounted as ie, watch as m, onBeforeUnmount as ue, shallowRef as M, toValue as F, triggerRef as oe, getCurrentScope as q, onScopeDispose as Z } from "vue";
-import { identifier as ce } from "org.eclipse.daanse.board.app.lib.api.variable";
-import { identifier as le } from "org.eclipse.daanse.board.app.lib.api.pagecontext";
-import { EContentAdapter as K, NotificationType as A, BasicEObject as Q, BasicEFactory as Ee, BasicEPackage as fe, EPackageRegistry as k, BasicEClass as $, BasicEAttribute as D, getEcorePackage as B } from "@emfts/core";
-import { identifier as ve } from "org.eclipse.daanse.board.app.lib.api.page";
-import { VariableWrapper as ee, VARIABLEWRAPPER as he } from "org.eclipse.daanse.board.app.lib.variables";
-import { VARIABLEWRAPPER as me, VariableWrapper as Ge } from "org.eclipse.daanse.board.app.lib.variables";
+import { identifier as k } from "org.eclipse.daanse.board.app.lib.api.datasource";
+import { ref as W, computed as I, inject as C, onMounted as q, onUnmounted as Ee, watch as G, onBeforeUnmount as de, shallowRef as U, toValue as F, triggerRef as ve, getCurrentScope as Z, onScopeDispose as K } from "vue";
+import { identifier as ge } from "org.eclipse.daanse.board.app.lib.api.variable";
+import { identifier as he } from "org.eclipse.daanse.board.app.lib.api.pagecontext";
+import { EContentAdapter as Q, NotificationType as R, BasicEObject as ee, BasicEFactory as Ae, BasicEPackage as Re, EPackageRegistry as te, BasicEClass as j, BasicEAttribute as D, getEcorePackage as B } from "@emfts/core";
+import { identifier as ye } from "org.eclipse.daanse.board.app.lib.api.page";
+import { VariableWrapper as se, VARIABLEWRAPPER as pe } from "org.eclipse.daanse.board.app.lib.variables";
+import { VARIABLEWRAPPER as Ke, VariableWrapper as Qe } from "org.eclipse.daanse.board.app.lib.variables";
 const O = W(0);
-function te() {
+function re() {
   return {
-    isLoading: p(() => O.value > 0),
+    isLoading: I(() => O.value > 0),
     activeLoadingCount: O,
     startLoading: () => {
       O.value++;
@@ -19,288 +19,288 @@ function te() {
     }
   };
 }
-function de(r, e, t, n = [], a) {
-  const u = C(z);
-  if (!u)
+function Pe(s, e, t, r = [], n) {
+  const i = C(k);
+  if (!i)
     throw new Error("DatasourceRepository not provided");
-  const { startLoading: d, stopLoading: s } = te(), c = async () => {
-    if (!r.value) {
+  const { startLoading: f, stopLoading: a } = re(), l = async () => {
+    if (!s.value) {
       t.value = null;
       return;
     }
-    console.log("getData", r.value), console.log("type", e), d();
+    console.log("getData", s.value), console.log("type", e), f();
     try {
-      const l = await u.getDatasource(r.value).getData(e, a?.value || {});
-      e === "PivotTable" ? t.value = JSON.parse(JSON.stringify(l)) : t.value = structuredClone(l);
+      const c = await i.getDatasource(s.value).getData(e, n?.value || {});
+      e === "PivotTable" ? t.value = JSON.parse(JSON.stringify(c)) : t.value = structuredClone(c);
     } catch (o) {
       t.value = null, console.warn(o);
     } finally {
-      s();
+      a();
     }
-  }, L = async (o, l, v = !0) => {
-    if (r.value)
+  }, h = async (o, c, E = !0) => {
+    if (s.value)
       try {
-        const g = u.getDatasource(
-          r.value
-        ), i = g.callEvent(o, l, v);
-        if (!v && i instanceof Promise) {
-          await i;
-          const E = await g.getData(e);
-          t.value = structuredClone(E);
+        const y = i.getDatasource(
+          s.value
+        ), u = y.callEvent(o, c, E);
+        if (!E && u instanceof Promise) {
+          await u;
+          const d = await y.getData(e);
+          t.value = structuredClone(d);
         }
-      } catch (g) {
-        console.warn(g);
+      } catch (y) {
+        console.warn(y);
       }
   }, S = async (o) => {
-    if (!r.value) {
+    if (!s.value) {
       t.value = null;
       return;
     }
-    console.log("getDataWithOptions", r.value, o), console.log("type", e), d();
+    console.log("getDataWithOptions", s.value, o), console.log("type", e), f();
     try {
-      const v = await u.getDatasource(r.value).getData(e, o);
-      t.value = structuredClone(v);
-    } catch (l) {
-      t.value = null, console.warn(l);
+      const E = await i.getDatasource(s.value).getData(e, o);
+      t.value = structuredClone(E);
+    } catch (c) {
+      t.value = null, console.warn(c);
     } finally {
-      s();
+      a();
     }
-  }, P = (o, l) => {
+  }, A = (o, c) => {
     try {
-      c();
-    } catch (v) {
-      console.warn(v);
+      l();
+    } catch (E) {
+      console.warn(E);
     }
-    if (!(!o || !l || o === l)) {
+    if (!(!o || !c || o === c)) {
       try {
-        const v = u.getDatasource(l);
-        v.unsubscribe(c), n.forEach((g) => {
-          v.unsubscribe(g);
+        const E = i.getDatasource(c);
+        E.unsubscribe(l), r.forEach((y) => {
+          E.unsubscribe(y);
         });
-      } catch (v) {
-        console.warn(v);
+      } catch (E) {
+        console.warn(E);
       }
       try {
-        const v = u.getDatasource(o);
-        v.subscribe(() => c()), n.forEach((g) => {
-          v.subscribe(g);
+        const E = i.getDatasource(o);
+        E.subscribe(() => l()), r.forEach((y) => {
+          E.subscribe(y);
         });
-      } catch (v) {
-        console.warn(v);
+      } catch (E) {
+        console.warn(E);
       }
     }
-  }, w = () => {
+  }, _ = () => {
     try {
-      return u.getDatasource(r.value);
+      return i.getDatasource(s.value);
     } catch (o) {
       return console.warn(o), null;
     }
   };
-  return H(() => {
-    c();
+  return q(() => {
+    l();
     try {
-      const o = u.getDatasource(r.value);
-      o.subscribe(c), n.forEach((l) => {
-        o.subscribe(l);
+      const o = i.getDatasource(s.value);
+      o.subscribe(l), r.forEach((c) => {
+        o.subscribe(c);
       });
     } catch (o) {
       console.warn(o);
     }
-  }), ie(() => {
+  }), Ee(() => {
     try {
-      const o = u.getDatasource(r.value);
-      o.unsubscribe(c), n.forEach((l) => {
-        o.unsubscribe(l);
+      const o = i.getDatasource(s.value);
+      o.unsubscribe(l), r.forEach((c) => {
+        o.unsubscribe(c);
       });
     } catch (o) {
       console.warn(o);
     }
   }), {
     data: t,
-    callEvent: L,
-    update: P,
+    callEvent: h,
+    update: A,
     getDataWithOptions: S,
-    getDatasourceInstance: w
+    getDatasourceInstance: _
   };
 }
-function Ae(r, e, t) {
-  const n = C(z);
-  if (!n)
+function Se(s, e, t) {
+  const r = C(k);
+  if (!r)
     throw new Error("DatasourceRepository not provided");
-  const a = n.getDatasourceIdentifiers(r);
-  console.log("Identifiers for datasource type", r, a), H(async () => {
+  const n = r.getDatasourceIdentifiers(s);
+  console.log("Identifiers for datasource type", s, n), q(async () => {
     console.log(
       "Creating temporary store for type",
-      r,
+      s,
       "with settings",
       e.value
     );
-    const d = n.resolveIdentifier(a.Store);
-    t.value = d({ ...e.value.config, _isTemporaryPreview: !0 });
+    const f = r.resolveIdentifier(n.Store);
+    t.value = f({ ...e.value.config, _isTemporaryPreview: !0 });
   });
-  const u = async () => {
+  const i = async () => {
     t.value?.destroy(), t.value = null;
-    const s = n.resolveIdentifier(a.Store)({ ...e.value.config, _isTemporaryPreview: !0 });
-    return s.initPromise ? (await s.initPromise, t.value = s, s) : (t.value = s, s);
+    const a = r.resolveIdentifier(n.Store)({ ...e.value.config, _isTemporaryPreview: !0 });
+    return a.initPromise ? (await a.initPromise, t.value = a, a) : (t.value = a, a);
   };
-  return m(
+  return G(
     () => e,
     async () => {
     },
     { deep: !0 }
-  ), ue(() => {
+  ), de(() => {
     console.log("Destroying temporary store"), t.value?.destroy();
   }), {
-    update: u
+    update: i
   };
 }
-function ge(r, e = () => {
+function Le(s, e = () => {
 }) {
   const t = W(!1);
-  let n = (s) => {
-  }, a = new Promise((s) => {
-    n = s;
+  let r = (a) => {
+  }, n = new Promise((a) => {
+    r = a;
   });
-  return { isOpened: t, run: (s) => (t.value = !0, e(s), a), close: (s) => {
-    n(s), a = new Promise((c) => {
-      n = c;
-    }), t.value = !1, r();
+  return { isOpened: t, run: (a) => (t.value = !0, e(a), n), close: (a) => {
+    r(a), n = new Promise((l) => {
+      r = l;
+    }), t.value = !1, s();
   } };
 }
-function se() {
-  const r = W(Date.now()), e = [], t = C(ce);
+function ne() {
+  const s = W(Date.now()), e = [], t = C(ge);
   if (!t)
     throw new Error("VariableRepository not provided");
-  let n = null;
+  let r = null;
   try {
-    n = C(le);
+    r = C(he);
   } catch {
     console.warn("PageContextService not available for variable resolution");
   }
-  const a = () => {
-    r.value = Date.now();
-  }, u = (s, c = () => {
+  const n = () => {
+    s.value = Date.now();
+  }, i = (a, l = () => {
   }) => {
-    const L = /\{\s*([a-zA-Z0-9_]+)\s*\}/g;
+    const h = /\{\s*([a-zA-Z0-9_]+)\s*\}/g;
     for (const o of e)
-      o.unsubscribe(a), o.unsubscribe(c);
+      o.unsubscribe(n), o.unsubscribe(l);
     e.length = 0;
-    const P = [...s.matchAll(L)].map((o) => o[1]);
-    let w = s;
-    for (const o of P)
+    const A = [...a.matchAll(h)].map((o) => o[1]);
+    let _ = a;
+    for (const o of A)
       try {
-        let l;
+        let c;
         try {
-          const v = n?.getCurrentPageId();
-          l = t.getVariableWithContext ? t.getVariableWithContext(o, v) : t.getVariable(o);
-        } catch (v) {
-          console.error(v);
+          const E = r?.getCurrentPageId();
+          c = t.getVariableWithContext ? t.getVariableWithContext(o, E) : t.getVariable(o);
+        } catch (E) {
+          console.error(E);
         }
-        if (l) {
-          l.subscribe(a), l.subscribe(c), e.push(l);
-          const v = l.value, g = new RegExp(
+        if (c) {
+          c.subscribe(n), c.subscribe(l), e.push(c);
+          const E = c.value, y = new RegExp(
             `\\{\\s*${o}\\s*\\}`,
             "g"
           );
-          w = w.replace(g, String(v));
+          _ = _.replace(y, String(E));
         }
-      } catch (l) {
-        console.warn(`Error resolving variable ${o}:`, l);
+      } catch (c) {
+        console.warn(`Error resolving variable ${o}:`, c);
       }
-    return w;
+    return _;
   };
   return {
-    calculateValue: u,
-    wrapParameters: (s) => {
-      const c = {};
-      for (const [L, S] of Object.entries(s))
+    calculateValue: i,
+    wrapParameters: (a) => {
+      const l = {};
+      for (const [h, S] of Object.entries(a))
         try {
-          const P = p(() => (r.value, S && u(S.value + "")));
-          c[L] = P;
-        } catch (P) {
-          console.log(P);
+          const A = I(() => (s.value, S && i(S.value + "")));
+          l[h] = A;
+        } catch (A) {
+          console.log(A);
         }
-      return c;
+      return l;
     }
   };
 }
-function Re(r) {
-  if (!r || typeof r != "object") return {};
-  const e = r;
-  return typeof e.toJSON == "function" ? e.toJSON() : r;
+function _e(s) {
+  if (!s || typeof s != "object") return {};
+  const e = s;
+  return typeof e.toJSON == "function" ? e.toJSON() : s;
 }
-function ye(r) {
-  return typeof r?.eAdapterAdd == "function" && typeof r?.eAdapterRemove == "function";
+function Te(s) {
+  return typeof s?.eAdapterAdd == "function" && typeof s?.eAdapterRemove == "function";
 }
-function Y(r) {
+function x(s) {
   const e = W(0);
-  class t extends K {
-    notifyChanged(c) {
-      super.notifyChanged(c), !c.isTouch() && c.getEventType() !== A.REMOVING_ADAPTER && (e.value += 1);
+  class t extends Q {
+    notifyChanged(l) {
+      super.notifyChanged(l), !l.isTouch() && l.getEventType() !== R.REMOVING_ADAPTER && (e.value += 1);
     }
   }
-  let n, a;
-  const u = () => {
-    a && n && a.eAdapterRemove(n), a = void 0, n = void 0;
+  let r, n;
+  const i = () => {
+    n && r && n.eAdapterRemove(r), n = void 0, r = void 0;
   };
-  return m(r, (s) => {
-    u(), ye(s) && (n = new t(), s.eAdapterAdd(n), a = s);
-  }, { immediate: !0 }), q() && Z(u), e;
+  return G(s, (a) => {
+    i(), Te(a) && (r = new t(), a.eAdapterAdd(r), n = a);
+  }, { immediate: !0 }), Z() && K(i), e;
 }
-function re(r) {
-  const e = () => F(r), t = M(e()), n = Y(e);
-  return m(
-    [n, e],
-    ([, a]) => {
-      t.value === a ? oe(t) : t.value = a;
+function ae(s) {
+  const e = () => F(s), t = U(e()), r = x(e);
+  return G(
+    [r, e],
+    ([, n]) => {
+      t.value === n ? ve(t) : t.value = n;
     }
   ), t;
 }
-function G(r, e) {
-  const t = () => F(r), n = Y(t);
-  return p(() => {
-    n.value;
-    const a = t();
-    return a ? e(a)?.toArray() ?? [] : [];
+function Y(s, e) {
+  const t = () => F(s), r = x(t);
+  return I(() => {
+    r.value;
+    const n = t();
+    return n ? e(n)?.toArray() ?? [] : [];
   });
 }
-function Pe(r, e) {
-  const t = () => F(r), n = Y(t);
-  return p({
-    get: () => (n.value, t()?.[e]),
-    set: (a) => {
-      const u = t();
-      u && (u[e] = a);
+function Ie(s, e) {
+  const t = () => F(s), r = x(t);
+  return I({
+    get: () => (r.value, t()?.[e]),
+    set: (n) => {
+      const i = t();
+      i && (i[e] = n);
     }
   });
 }
-function _e(r) {
-  const e = C(ve), t = () => F(r) ?? "", n = re(() => t() ? e.getPage(t()) : void 0), a = p(() => n.value), u = G(a, (s) => s.widgets), d = G(a, (s) => s.layout);
+function we(s) {
+  const e = C(ye), t = () => F(s) ?? "", r = ae(() => t() ? e.getPage(t()) : void 0), n = I(() => r.value), i = Y(n, (a) => a.widgets), f = Y(n, (a) => a.layout);
   return {
-    page: a,
-    widgets: u,
-    layout: d,
-    addWidget(s, c) {
-      const L = s.uid || "li_" + Math.random().toString(36).substring(7);
-      return e.addWidget(t(), { ...s, uid: L }, c), L;
+    page: n,
+    widgets: i,
+    layout: f,
+    addWidget(a, l) {
+      const h = a.uid || "li_" + Math.random().toString(36).substring(7);
+      return e.addWidget(t(), { ...a, uid: h }, l), h;
     },
-    removeWidget(s) {
-      e.removeWidget(t(), s);
+    removeWidget(a) {
+      e.removeWidget(t(), a);
     },
-    saveWidget(s) {
-      e.saveWidget(t(), s);
+    saveWidget(a) {
+      e.saveWidget(t(), a);
     },
-    setBoard(s, c) {
-      e.setBoard(t(), s, c);
+    setBoard(a, l) {
+      e.setBoard(t(), a, l);
     },
     clear() {
       e.setBoard(t(), [], []);
     }
   };
 }
-const ae = "VARIABLECOMPLEXSTRINGWRAPPER";
-class ne {
-  type = ae;
+const ie = "VARIABLECOMPLEXSTRINGWRAPPER";
+class oe {
+  type = ie;
   _value = void 0;
   _computedValue = null;
   constructor(e = "") {
@@ -334,8 +334,8 @@ class ne {
   /** The substituted text, or null when the variables are out of reach. */
   substitute(e, t) {
     try {
-      const { calculateValue: n } = se();
-      return t ? n(e, t) : n(e);
+      const { calculateValue: r } = ne();
+      return t ? r(e, t) : r(e);
     } catch {
       return null;
     }
@@ -344,7 +344,7 @@ class ne {
     this._value = e;
   }
 }
-class f extends Q {
+class v extends ee {
   // Feature ID Constants (eLiterals)
   static VALUE = 0;
   static VARIABLE = 1;
@@ -359,7 +359,7 @@ class f extends Q {
    * Returns the EClass of this object
    */
   eClass() {
-    return h.Literals.VARIABLE_WRAPPER;
+    return g.Literals.VARIABLE_WRAPPER;
   }
   // Getters and Setters
   get value() {
@@ -371,14 +371,14 @@ class f extends Q {
       getNotifier: () => this,
       getEventType: () => 1,
       // SET
-      getFeature: () => this.eClass().getEStructuralFeature(f.VALUE),
+      getFeature: () => this.eClass().getEStructuralFeature(v.VALUE),
       getOldValue: () => t,
       getNewValue: () => e,
       getPosition: () => -1,
       wasSet: () => !0,
       isTouch: () => !1,
       isReset: () => !1,
-      getFeatureID: () => f.VALUE,
+      getFeatureID: () => v.VALUE,
       merge: () => !1
     });
   }
@@ -391,14 +391,14 @@ class f extends Q {
       getNotifier: () => this,
       getEventType: () => 1,
       // SET
-      getFeature: () => this.eClass().getEStructuralFeature(f.VARIABLE),
+      getFeature: () => this.eClass().getEStructuralFeature(v.VARIABLE),
       getOldValue: () => t,
       getNewValue: () => e,
       getPosition: () => -1,
       wasSet: () => !0,
       isTouch: () => !1,
       isReset: () => !1,
-      getFeatureID: () => f.VARIABLE,
+      getFeatureID: () => v.VARIABLE,
       merge: () => !1
     });
   }
@@ -411,14 +411,14 @@ class f extends Q {
       getNotifier: () => this,
       getEventType: () => 1,
       // SET
-      getFeature: () => this.eClass().getEStructuralFeature(f.IS_SET),
+      getFeature: () => this.eClass().getEStructuralFeature(v.IS_SET),
       getOldValue: () => t,
       getNewValue: () => e,
       getPosition: () => -1,
       wasSet: () => !0,
       isTouch: () => !1,
       isReset: () => !1,
-      getFeatureID: () => f.IS_SET,
+      getFeatureID: () => v.IS_SET,
       merge: () => !1
     });
   }
@@ -431,14 +431,14 @@ class f extends Q {
       getNotifier: () => this,
       getEventType: () => 1,
       // SET
-      getFeature: () => this.eClass().getEStructuralFeature(f.TYPE),
+      getFeature: () => this.eClass().getEStructuralFeature(v.TYPE),
       getOldValue: () => t,
       getNewValue: () => e,
       getPosition: () => -1,
       wasSet: () => !0,
       isTouch: () => !1,
       isReset: () => !1,
-      getFeatureID: () => f.TYPE,
+      getFeatureID: () => v.TYPE,
       merge: () => !1
     });
   }
@@ -448,13 +448,13 @@ class f extends Q {
    */
   eGet(e) {
     switch (this.eClass().getFeatureID(e)) {
-      case f.VALUE:
+      case v.VALUE:
         return this.value;
-      case f.VARIABLE:
+      case v.VARIABLE:
         return this.variable;
-      case f.IS_SET:
+      case v.IS_SET:
         return this.isSet;
-      case f.TYPE:
+      case v.TYPE:
         return this.type;
       default:
         return super.eGet(e);
@@ -465,16 +465,16 @@ class f extends Q {
    */
   eSet(e, t) {
     switch (this.eClass().getFeatureID(e)) {
-      case f.VALUE:
+      case v.VALUE:
         this.value = t, super.eSet(e, t);
         break;
-      case f.VARIABLE:
+      case v.VARIABLE:
         this.variable = t, super.eSet(e, t);
         break;
-      case f.IS_SET:
+      case v.IS_SET:
         this.isSet = t, super.eSet(e, t);
         break;
-      case f.TYPE:
+      case v.TYPE:
         this.type = t, super.eSet(e, t);
         break;
       default:
@@ -486,13 +486,13 @@ class f extends Q {
    */
   eIsSet(e) {
     switch (this.eClass().getFeatureID(e)) {
-      case f.VALUE:
+      case v.VALUE:
         return this._value !== void 0;
-      case f.VARIABLE:
+      case v.VARIABLE:
         return this._variable !== void 0;
-      case f.IS_SET:
+      case v.IS_SET:
         return this._isSet !== !1;
-      case f.TYPE:
+      case v.TYPE:
         return this._type !== "VARIABLEWRAPPER";
       default:
         return super.eIsSet(e);
@@ -503,16 +503,16 @@ class f extends Q {
    */
   eUnset(e) {
     switch (this.eClass().getFeatureID(e)) {
-      case f.VALUE:
+      case v.VALUE:
         this._value = void 0;
         return;
-      case f.VARIABLE:
+      case v.VARIABLE:
         this._variable = void 0;
         return;
-      case f.IS_SET:
+      case v.IS_SET:
         this._isSet = !1;
         return;
-      case f.TYPE:
+      case v.TYPE:
         this._type = "VARIABLEWRAPPER";
         return;
       default:
@@ -535,7 +535,7 @@ class f extends Q {
     };
   }
 }
-class y extends Q {
+class P extends ee {
   // Feature ID Constants (eLiterals)
   static VALUE = 0;
   static TYPE = 1;
@@ -546,7 +546,7 @@ class y extends Q {
    * Returns the EClass of this object
    */
   eClass() {
-    return h.Literals.VARIABLE_COMPLEX_STRING_WRAPPER;
+    return g.Literals.VARIABLE_COMPLEX_STRING_WRAPPER;
   }
   // Getters and Setters
   get value() {
@@ -558,14 +558,14 @@ class y extends Q {
       getNotifier: () => this,
       getEventType: () => 1,
       // SET
-      getFeature: () => this.eClass().getEStructuralFeature(y.VALUE),
+      getFeature: () => this.eClass().getEStructuralFeature(P.VALUE),
       getOldValue: () => t,
       getNewValue: () => e,
       getPosition: () => -1,
       wasSet: () => !0,
       isTouch: () => !1,
       isReset: () => !1,
-      getFeatureID: () => y.VALUE,
+      getFeatureID: () => P.VALUE,
       merge: () => !1
     });
   }
@@ -578,14 +578,14 @@ class y extends Q {
       getNotifier: () => this,
       getEventType: () => 1,
       // SET
-      getFeature: () => this.eClass().getEStructuralFeature(y.TYPE),
+      getFeature: () => this.eClass().getEStructuralFeature(P.TYPE),
       getOldValue: () => t,
       getNewValue: () => e,
       getPosition: () => -1,
       wasSet: () => !0,
       isTouch: () => !1,
       isReset: () => !1,
-      getFeatureID: () => y.TYPE,
+      getFeatureID: () => P.TYPE,
       merge: () => !1
     });
   }
@@ -595,9 +595,9 @@ class y extends Q {
    */
   eGet(e) {
     switch (this.eClass().getFeatureID(e)) {
-      case y.VALUE:
+      case P.VALUE:
         return this.value;
-      case y.TYPE:
+      case P.TYPE:
         return this.type;
       default:
         return super.eGet(e);
@@ -608,10 +608,10 @@ class y extends Q {
    */
   eSet(e, t) {
     switch (this.eClass().getFeatureID(e)) {
-      case y.VALUE:
+      case P.VALUE:
         this.value = t, super.eSet(e, t);
         break;
-      case y.TYPE:
+      case P.TYPE:
         this.type = t, super.eSet(e, t);
         break;
       default:
@@ -623,9 +623,9 @@ class y extends Q {
    */
   eIsSet(e) {
     switch (this.eClass().getFeatureID(e)) {
-      case y.VALUE:
+      case P.VALUE:
         return this._value !== void 0;
-      case y.TYPE:
+      case P.TYPE:
         return this._type !== "VARIABLECOMPLEXSTRINGWRAPPER";
       default:
         return super.eIsSet(e);
@@ -636,10 +636,10 @@ class y extends Q {
    */
   eUnset(e) {
     switch (this.eClass().getFeatureID(e)) {
-      case y.VALUE:
+      case P.VALUE:
         this._value = void 0;
         return;
-      case y.TYPE:
+      case P.TYPE:
         this._type = "VARIABLECOMPLEXSTRINGWRAPPER";
         return;
       default:
@@ -660,26 +660,26 @@ class y extends Q {
     };
   }
 }
-class x extends Ee {
+class X extends Ae {
   // Lazy singleton instance
   static _instance;
   static get eINSTANCE() {
-    return this._instance || (this._instance = new x()), this._instance;
+    return this._instance || (this._instance = new X()), this._instance;
   }
   constructor() {
-    super(), this.setEPackage(h.eINSTANCE);
+    super(), this.setEPackage(g.eINSTANCE);
   }
   /**
    * Create a new VariableWrapper instance
    */
   createVariableWrapper() {
-    return new f();
+    return new v();
   }
   /**
    * Create a new VariableComplexStringWrapper instance
    */
   createVariableComplexStringWrapper() {
-    return new y();
+    return new P();
   }
   /**
    * Create an instance of the given class
@@ -695,14 +695,14 @@ class x extends Ee {
     }
   }
 }
-class h extends fe {
+class g extends Re {
   static eNAME = "composables";
   static eNS_URI = "org.eclipse.daanse.board.app.ui.vue.composables";
   static eNS_PREFIX = "composables";
   // Singleton instance
   static _instance;
   static get eINSTANCE() {
-    return this._instance || (this._instance = new h(), this._instance.init()), this._instance;
+    return this._instance || (this._instance = new g(), this._instance.init()), this._instance;
   }
   /**
    * Literals for quick access to metaclasses and features
@@ -718,224 +718,346 @@ class h extends fe {
     VARIABLE_COMPLEX_STRING_WRAPPER__TYPE: null
   };
   constructor() {
-    super(), this.setName(h.eNAME), this.setNsURI(h.eNS_URI), this.setNsPrefix(h.eNS_PREFIX);
+    super(), this.setName(g.eNAME), this.setNsURI(g.eNS_URI), this.setNsPrefix(g.eNS_PREFIX);
   }
   /**
    * Initialize package contents
    */
   init() {
-    k.INSTANCE.set(h.eNS_URI, this), this.setEFactoryInstance(x.eINSTANCE);
-    const e = new $();
-    e.setName("VariableWrapper"), e.setAbstract(!1), e.setInterface(!1), this.getEClassifiers().push(e), e.setEPackage(this), h.Literals.VARIABLE_WRAPPER = e;
+    te.INSTANCE.set(g.eNS_URI, this), this.setEFactoryInstance(X.eINSTANCE);
+    const e = new j();
+    e.setName("VariableWrapper"), e.setAbstract(!1), e.setInterface(!1), this.getEClassifiers().push(e), e.setEPackage(this), g.Literals.VARIABLE_WRAPPER = e;
     const t = new D();
-    t.setName("value"), t.setLowerBound(0), t.setUpperBound(1), e.getEStructuralFeatures().push(t), h.Literals.VARIABLE_WRAPPER__VALUE = t;
+    t.setName("value"), t.setLowerBound(0), t.setUpperBound(1), e.getEStructuralFeatures().push(t), g.Literals.VARIABLE_WRAPPER__VALUE = t;
+    const r = new D();
+    r.setName("variable"), r.setLowerBound(0), r.setUpperBound(1), e.getEStructuralFeatures().push(r), g.Literals.VARIABLE_WRAPPER__VARIABLE = r;
     const n = new D();
-    n.setName("variable"), n.setLowerBound(0), n.setUpperBound(1), e.getEStructuralFeatures().push(n), h.Literals.VARIABLE_WRAPPER__VARIABLE = n;
+    n.setName("isSet"), n.setLowerBound(0), n.setUpperBound(1), e.getEStructuralFeatures().push(n), g.Literals.VARIABLE_WRAPPER__IS_SET = n;
+    const i = new D();
+    i.setName("type"), i.setLowerBound(0), i.setUpperBound(1), e.getEStructuralFeatures().push(i), g.Literals.VARIABLE_WRAPPER__TYPE = i;
+    const f = new j();
+    f.setName("VariableComplexStringWrapper"), f.setAbstract(!1), f.setInterface(!1), this.getEClassifiers().push(f), f.setEPackage(this), g.Literals.VARIABLE_COMPLEX_STRING_WRAPPER = f;
     const a = new D();
-    a.setName("isSet"), a.setLowerBound(0), a.setUpperBound(1), e.getEStructuralFeatures().push(a), h.Literals.VARIABLE_WRAPPER__IS_SET = a;
-    const u = new D();
-    u.setName("type"), u.setLowerBound(0), u.setUpperBound(1), e.getEStructuralFeatures().push(u), h.Literals.VARIABLE_WRAPPER__TYPE = u;
-    const d = new $();
-    d.setName("VariableComplexStringWrapper"), d.setAbstract(!1), d.setInterface(!1), this.getEClassifiers().push(d), d.setEPackage(this), h.Literals.VARIABLE_COMPLEX_STRING_WRAPPER = d;
-    const s = new D();
-    s.setName("value"), s.setLowerBound(0), s.setUpperBound(1), d.getEStructuralFeatures().push(s), h.Literals.VARIABLE_COMPLEX_STRING_WRAPPER__VALUE = s;
-    const c = new D();
-    c.setName("type"), c.setLowerBound(0), c.setUpperBound(1), d.getEStructuralFeatures().push(c), h.Literals.VARIABLE_COMPLEX_STRING_WRAPPER__TYPE = c, h.Literals.VARIABLE_WRAPPER__VALUE.setEType(B().getEClassifier("EObject")), h.Literals.VARIABLE_WRAPPER__VARIABLE.setEType(B().getEClassifier("EString")), h.Literals.VARIABLE_WRAPPER__IS_SET.setEType(B().getEClassifier("EBoolean")), h.Literals.VARIABLE_WRAPPER__TYPE.setEType(B().getEClassifier("EString")), h.Literals.VARIABLE_COMPLEX_STRING_WRAPPER__VALUE.setEType(B().getEClassifier("EObject")), h.Literals.VARIABLE_COMPLEX_STRING_WRAPPER__TYPE.setEType(B().getEClassifier("EString"));
+    a.setName("value"), a.setLowerBound(0), a.setUpperBound(1), f.getEStructuralFeatures().push(a), g.Literals.VARIABLE_COMPLEX_STRING_WRAPPER__VALUE = a;
+    const l = new D();
+    l.setName("type"), l.setLowerBound(0), l.setUpperBound(1), f.getEStructuralFeatures().push(l), g.Literals.VARIABLE_COMPLEX_STRING_WRAPPER__TYPE = l, g.Literals.VARIABLE_WRAPPER__VALUE.setEType(B().getEClassifier("EObject")), g.Literals.VARIABLE_WRAPPER__VARIABLE.setEType(B().getEClassifier("EString")), g.Literals.VARIABLE_WRAPPER__IS_SET.setEType(B().getEClassifier("EBoolean")), g.Literals.VARIABLE_WRAPPER__TYPE.setEType(B().getEClassifier("EString")), g.Literals.VARIABLE_COMPLEX_STRING_WRAPPER__VALUE.setEType(B().getEClassifier("EObject")), g.Literals.VARIABLE_COMPLEX_STRING_WRAPPER__TYPE.setEType(B().getEClassifier("EString"));
   }
 }
-function Le(r) {
-  const e = r;
+function be(s) {
+  const e = s;
   return typeof e?.eAdapterAdd == "function" ? e : void 0;
 }
-const j = 50, U = M();
-function Se() {
-  return U;
+const J = 50, M = U();
+function Ne() {
+  return M;
 }
-function Te(r) {
-  const e = M([]), t = M([]);
-  let n = !0, a, u = !1, d = !1;
-  function s(i) {
-    if (!i.changes.length) return;
-    const E = [...e.value, i];
-    e.value = E.length > j ? E.slice(E.length - j) : E, t.value = [];
+function Ve(s) {
+  const e = U([]), t = U([]);
+  let r = !0, n, i = !1, f = !1;
+  function a(u) {
+    if (!u.changes.length) return;
+    const d = [...e.value, u];
+    e.value = d.length > J ? d.slice(d.length - J) : d, t.value = [];
   }
-  function c(i) {
-    if (!n || i.isTouch() || i.getEventType() === A.REMOVING_ADAPTER) return;
-    const E = {
-      notifier: i.getNotifier(),
-      feature: i.getFeature(),
-      eventType: i.getEventType(),
-      oldValue: i.getOldValue(),
-      newValue: i.getNewValue(),
-      position: i.getPosition()
+  function l(u) {
+    if (!r || u.isTouch() || u.getEventType() === R.REMOVING_ADAPTER) return;
+    const d = {
+      notifier: u.getNotifier(),
+      feature: u.getFeature(),
+      eventType: u.getEventType(),
+      oldValue: u.getOldValue(),
+      newValue: u.getNewValue(),
+      position: u.getPosition()
     };
-    if (a || (a = { label: "Änderung", changes: [] }, !u && !d && (d = !0, queueMicrotask(() => {
-      d = !1, !u && a && (s(a), a = void 0);
-    }))), E.eventType === A.SET) {
-      const R = a.changes.find(
-        (I) => I.eventType === A.SET && I.notifier === E.notifier && I.feature === E.feature
+    if (n || (n = { label: "Änderung", changes: [] }, !i && !f && (f = !0, queueMicrotask(() => {
+      f = !1, !i && n && (a(n), n = void 0);
+    }))), d.eventType === R.SET) {
+      const p = n.changes.find(
+        (w) => w.eventType === R.SET && w.notifier === d.notifier && w.feature === d.feature
       );
-      if (R) {
-        R.newValue = E.newValue;
+      if (p) {
+        p.newValue = d.newValue;
         return;
       }
     }
-    a.changes.push(E);
+    n.changes.push(d);
   }
-  class L extends K {
-    notifyChanged(E) {
-      super.notifyChanged(E), c(E);
+  class h extends Q {
+    notifyChanged(d) {
+      super.notifyChanged(d), l(d);
     }
   }
-  const S = new L();
-  let P;
-  m(
-    () => F(r),
-    (i) => {
-      P?.eAdapterRemove(S), P = Le(i), P?.eAdapterAdd(S), e.value = [], t.value = [], a = void 0;
+  const S = new h();
+  let A;
+  G(
+    () => F(s),
+    (u) => {
+      A?.eAdapterRemove(S), A = be(u), A?.eAdapterAdd(S), e.value = [], t.value = [], n = void 0;
     },
     { immediate: !0 }
-  ), q() && Z(() => {
-    P?.eAdapterRemove(S), U.value === g && (U.value = void 0);
+  ), Z() && K(() => {
+    A?.eAdapterRemove(S), M.value === y && (M.value = void 0);
   });
-  function w(i) {
-    const { notifier: E, feature: R, eventType: I, oldValue: N, newValue: b, position: V } = i;
-    if (R)
-      switch (I) {
-        case A.SET:
-        case A.UNSET:
-          return E.eSet(R, N), { ...i, oldValue: b, newValue: N };
-        case A.ADD: {
-          const _ = E.eGet(R), T = V >= 0 ? V : _.indexOf(b);
-          return T >= 0 && _.removeAt(T), { ...i, eventType: A.REMOVE, oldValue: b, position: T };
+  function _(u) {
+    const { notifier: d, feature: p, eventType: w, oldValue: b, newValue: m, position: V } = u;
+    if (p)
+      switch (w) {
+        case R.SET:
+        case R.UNSET:
+          return d.eSet(p, b), { ...u, oldValue: m, newValue: b };
+        case R.ADD: {
+          const L = d.eGet(p), T = V >= 0 ? V : L.indexOf(m);
+          return T >= 0 && L.removeAt(T), { ...u, eventType: R.REMOVE, oldValue: m, position: T };
         }
-        case A.REMOVE: {
-          const _ = E.eGet(R), T = V >= 0 ? Math.min(V, _.size()) : _.size();
-          return _.addAt(T, N), { ...i, eventType: A.ADD, newValue: N, position: T };
+        case R.REMOVE: {
+          const L = d.eGet(p), T = V >= 0 ? Math.min(V, L.size()) : L.size();
+          return L.addAt(T, b), { ...u, eventType: R.ADD, newValue: b, position: T };
         }
-        case A.ADD_MANY: {
-          const _ = E.eGet(R);
-          for (const T of b ?? []) {
-            const X = _.indexOf(T);
-            X >= 0 && _.removeAt(X);
+        case R.ADD_MANY: {
+          const L = d.eGet(p);
+          for (const T of m ?? []) {
+            const $ = L.indexOf(T);
+            $ >= 0 && L.removeAt($);
           }
-          return { ...i, eventType: A.REMOVE_MANY, oldValue: b };
+          return { ...u, eventType: R.REMOVE_MANY, oldValue: m };
         }
-        case A.REMOVE_MANY: {
-          const _ = E.eGet(R);
-          for (const T of N ?? []) _.add(T);
-          return { ...i, eventType: A.ADD_MANY, newValue: N };
+        case R.REMOVE_MANY: {
+          const L = d.eGet(p);
+          for (const T of b ?? []) L.add(T);
+          return { ...u, eventType: R.ADD_MANY, newValue: b };
         }
-        case A.MOVE:
-          return E.eGet(R).move(N, V), { ...i, oldValue: V, position: N };
+        case R.MOVE:
+          return d.eGet(p).move(b, V), { ...u, oldValue: V, position: b };
         default:
           return;
       }
   }
-  function o(i) {
-    n = !1;
-    const E = [];
+  function o(u) {
+    r = !1;
+    const d = [];
     try {
-      for (let R = i.changes.length - 1; R >= 0; R -= 1) {
-        const I = w(i.changes[R]);
-        I && E.push(I);
+      for (let p = u.changes.length - 1; p >= 0; p -= 1) {
+        const w = _(u.changes[p]);
+        w && d.push(w);
       }
     } finally {
-      n = !0;
+      r = !0;
     }
-    return { label: i.label, changes: E };
+    return { label: u.label, changes: d };
   }
-  function l(i) {
-    u || (u = !0, a = { label: i, changes: [] });
+  function c(u) {
+    i || (i = !0, n = { label: u, changes: [] });
   }
-  function v() {
-    u && (u = !1, a && s(a), a = void 0);
+  function E() {
+    i && (i = !1, n && a(n), n = void 0);
   }
-  const g = {
-    canUndo: p(() => e.value.length > 0),
-    canRedo: p(() => t.value.length > 0),
-    undoLabel: p(() => e.value[e.value.length - 1]?.label),
-    redoLabel: p(() => t.value[t.value.length - 1]?.label),
+  const y = {
+    canUndo: I(() => e.value.length > 0),
+    canRedo: I(() => t.value.length > 0),
+    undoLabel: I(() => e.value[e.value.length - 1]?.label),
+    redoLabel: I(() => t.value[t.value.length - 1]?.label),
     undo() {
-      const i = e.value[e.value.length - 1];
-      i && (e.value = e.value.slice(0, -1), t.value = [...t.value, o(i)]);
+      const u = e.value[e.value.length - 1];
+      u && (e.value = e.value.slice(0, -1), t.value = [...t.value, o(u)]);
     },
     redo() {
-      const i = t.value[t.value.length - 1];
-      i && (t.value = t.value.slice(0, -1), e.value = [...e.value, o(i)]);
+      const u = t.value[t.value.length - 1];
+      u && (t.value = t.value.slice(0, -1), e.value = [...e.value, o(u)]);
     },
-    begin: l,
-    end: v,
+    begin: c,
+    end: E,
     /* Free functions, not methods: a caller that pulls `record` out of the
        object still gets a working one. */
-    record(i, E) {
-      l(i);
+    record(u, d) {
+      c(u);
       try {
-        return E();
+        return d();
       } finally {
-        v();
+        E();
       }
     },
     clear() {
-      e.value = [], t.value = [], a = void 0, u = !1;
+      e.value = [], t.value = [], n = void 0, i = !1;
     }
   };
-  return U.value = g, g;
+  return M.value = y, y;
 }
-const pe = {
-  VariableWrapper: ee,
-  VariableComplexStringWrapper: ne
+const De = "http://www.eclipse.org/emf/2002/GenModel", Be = {
+  EString: "string",
+  EInt: "number",
+  EIntegerObject: "number",
+  ELong: "number",
+  EFloat: "number",
+  EDouble: "number",
+  EBoolean: "boolean",
+  EBooleanObject: "boolean",
+  EDate: "string"
+}, N = /* @__PURE__ */ new Map();
+function ue(s) {
+  for (const e of Array.from(s.children))
+    if (e.tagName === "eAnnotations" && e.getAttribute("source") === De)
+      for (const t of Array.from(e.children)) {
+        if (t.getAttribute("key") !== "documentation") continue;
+        const r = t.getAttribute("value");
+        if (r) return r.split(/\s+/).filter(Boolean).join(" ");
+      }
+}
+function me(s) {
+  const e = s.getAttribute("eType") ?? "", t = e.split("#//").pop() ?? e;
+  return Be[t] ?? t;
+}
+function Oe(s) {
+  const e = s.indexOf("#//");
+  if (!(e < 0))
+    return { nsURI: s.slice(0, e), name: s.slice(e + 3) };
+}
+function ce(s) {
+  let e;
+  try {
+    e = new DOMParser().parseFromString(s, "application/xml");
+  } catch {
+    return;
+  }
+  const t = e.documentElement;
+  if (!t || t.getElementsByTagName("parsererror").length) return;
+  const r = t.getAttribute("nsURI");
+  if (!r) return;
+  if (N.has(r)) return r;
+  const n = /* @__PURE__ */ new Map();
+  for (const i of Array.from(t.children)) {
+    if (i.tagName !== "eClassifiers") continue;
+    const f = i.getAttribute("name");
+    f && n.set(f, i);
+  }
+  return N.set(r, { nsURI: r, classes: n }), r;
+}
+function Ce(s) {
+  return N.has(s);
+}
+function z(s, e) {
+  const t = [];
+  for (const r of Array.from(s.children)) {
+    if (r.tagName !== "eStructuralFeatures") continue;
+    const n = r.getAttribute("name");
+    if (!n) continue;
+    const i = r.getAttribute("upperBound");
+    t.push({
+      name: n,
+      documentation: ue(r),
+      type: me(r),
+      /* Ecore's default lowerBound is 0; a field is required only when the
+         model says so. */
+      optional: (r.getAttribute("lowerBound") ?? "0") === "0",
+      many: i === "-1" || Number(i ?? "1") > 1,
+      declaredBy: e
+    });
+  }
+  return t;
+}
+function le(s, e) {
+  const t = N.get(s), r = t?.classes.get(e);
+  if (!t || !r) return;
+  const n = [], i = /* @__PURE__ */ new Set([`${s}#//${e}`]), f = (h, S) => {
+    const A = N.get(h)?.classes.get(S);
+    if (A)
+      for (const _ of Array.from(A.children)) {
+        if (_.tagName !== "eSuperTypes") continue;
+        const o = _.getAttribute("href"), c = o ? Oe(o) : void 0;
+        if (!c || i.has(o)) continue;
+        i.add(o), f(c.nsURI, c.name);
+        const E = N.get(c.nsURI)?.classes.get(c.name);
+        E && n.push(...z(E, c.name));
+      }
+  };
+  f(s, e);
+  const a = z(r, e), l = /* @__PURE__ */ new Map();
+  for (const h of [...n, ...a]) l.set(h.name, h);
+  return {
+    name: e,
+    documentation: ue(r),
+    features: [...l.values()]
+  };
+}
+function fe(s) {
+  const e = N.get(s);
+  if (!e) return;
+  const t = [...e.classes.keys()], r = t.filter((i) => /config(uration)?$/i.test(i)), n = r.length === 1 || r.length > 1 ? r[0] : t.length === 1 ? t[0] : void 0;
+  return n ? le(s, n) : void 0;
+}
+function Fe(s) {
+  if (!s) return;
+  const e = ce(s);
+  return e ? fe(e) : void 0;
+}
+function Me() {
+  N.clear();
+}
+const Ue = {
+  VariableWrapper: se,
+  VariableComplexStringWrapper: oe
 };
-k.INSTANCE.registerPackage(h.eINSTANCE);
-const Ie = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+te.INSTANCE.registerPackage(g.eINSTANCE);
+const We = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  ComposablesPackage: h,
-  VARIABLECOMPLEXSTRINGWRAPPER: ae,
-  VARIABLEWRAPPER: he,
-  VariableComplexStringWrapper: ne,
-  VariableWrapper: ee,
-  WrapperTypes: pe,
-  plainSettings: Re,
-  useBoard: _e,
-  useCurrentHistory: Se,
-  useDatasourceRepository: de,
-  useEList: G,
-  useEObject: re,
-  useFeature: Pe,
-  useGlobalLoading: te,
-  useHistory: Te,
-  usePromisifiedModal: ge,
-  useTemporaryStore: Ae,
-  useVariableRepository: se
-}, Symbol.toStringTag, { value: "Module" })), J = "org.eclipse.daanse.board.app.ui.vue.composables", Ne = "0.0.1-next.1";
-async function Fe(r) {
+  ComposablesPackage: g,
+  VARIABLECOMPLEXSTRINGWRAPPER: ie,
+  VARIABLEWRAPPER: pe,
+  VariableComplexStringWrapper: oe,
+  VariableWrapper: se,
+  WrapperTypes: Ue,
+  describeClass: le,
+  describeConfiguration: fe,
+  describeModel: Fe,
+  hasModelDocs: Ce,
+  plainSettings: _e,
+  registerModelDocs: ce,
+  resetModelDocs: Me,
+  useBoard: we,
+  useCurrentHistory: Ne,
+  useDatasourceRepository: Pe,
+  useEList: Y,
+  useEObject: ae,
+  useFeature: Ie,
+  useGlobalLoading: re,
+  useHistory: Ve,
+  usePromisifiedModal: Le,
+  useTemporaryStore: Se,
+  useVariableRepository: ne
+}, Symbol.toStringTag, { value: "Module" })), H = "org.eclipse.daanse.board.app.ui.vue.composables", Ge = "0.0.1-next.1";
+async function He(s) {
   const e = globalThis.__tsm__;
   if (!e)
-    throw new Error(`${J}: tsm runtime is not initialized`);
-  e.register(J, Ie, Ne, "ui.vue.composables"), await void 0;
+    throw new Error(`${H}: tsm runtime is not initialized`);
+  e.register(H, We, Ge, "ui.vue.composables"), await void 0;
 }
-async function Ue(r) {
+async function ke(s) {
   await void 0;
 }
 export {
-  h as ComposablesPackage,
-  ae as VARIABLECOMPLEXSTRINGWRAPPER,
-  me as VARIABLEWRAPPER,
-  ne as VariableComplexStringWrapper,
-  Ge as VariableWrapper,
-  pe as WrapperTypes,
-  Fe as activate,
-  Ue as deactivate,
-  Re as plainSettings,
-  _e as useBoard,
-  Se as useCurrentHistory,
-  de as useDatasourceRepository,
-  G as useEList,
-  re as useEObject,
-  Pe as useFeature,
-  te as useGlobalLoading,
-  Te as useHistory,
-  ge as usePromisifiedModal,
-  Ae as useTemporaryStore,
-  se as useVariableRepository
+  g as ComposablesPackage,
+  ie as VARIABLECOMPLEXSTRINGWRAPPER,
+  Ke as VARIABLEWRAPPER,
+  oe as VariableComplexStringWrapper,
+  Qe as VariableWrapper,
+  Ue as WrapperTypes,
+  He as activate,
+  ke as deactivate,
+  le as describeClass,
+  fe as describeConfiguration,
+  Fe as describeModel,
+  Ce as hasModelDocs,
+  _e as plainSettings,
+  ce as registerModelDocs,
+  Me as resetModelDocs,
+  we as useBoard,
+  Ne as useCurrentHistory,
+  Pe as useDatasourceRepository,
+  Y as useEList,
+  ae as useEObject,
+  Ie as useFeature,
+  re as useGlobalLoading,
+  Ve as useHistory,
+  Le as usePromisifiedModal,
+  Se as useTemporaryStore,
+  ne as useVariableRepository
 };

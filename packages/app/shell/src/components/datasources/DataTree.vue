@@ -44,6 +44,8 @@ import {
 import { useEList } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import { DButton, DIcon, DInput, DModal } from 'org.eclipse.daanse.board.app.ui.vue.controls'
 import { useDatasourceUsage } from '@/composables/useDatasourceUsage'
+import NewConnectionDialog from '../connections/NewConnectionDialog.vue'
+import NewDatasourceDialog from './NewDatasourceDialog.vue'
 
 /** A source as the tree shows it. */
 interface Row {
@@ -160,14 +162,24 @@ function select(type: Selection['type'], itemId: string) {
   selected.value = { type, itemId }
 }
 
+/*
+ * Creating goes through a dialog now.
+ *
+ * It used to add an empty, typeless object and select it, which left a row
+ * in the tree that stood for nothing until somebody finished it - and one
+ * per accidental click. The dialog asks for the type first, because the
+ * type's model is what says which fields exist and what they are for.
+ */
+const creatingConnection = ref(false)
+const creatingDataSource = ref(false)
+
 /* A new thing is selected straight away: it is what you came to fill in. */
-function addConnection() {
-  /* No type yet - the person picks one in the editor that opens next. */
-  select('Connection', connectionRepository.createConnection('').uid as string)
+function onConnectionCreated(uid: string) {
+  select('Connection', uid)
 }
 
-function addDataSource() {
-  select('DataSource', datasourceRepository.createDatasource('').uid as string)
+function onDataSourceCreated(uid: string) {
+  select('DataSource', uid)
 }
 
 const removing = ref<Selection | undefined>(undefined)
@@ -207,10 +219,10 @@ const removingUsage = computed(() => {
   <section class="tree">
     <header class="tree__head">
       <h2 class="tree__title">Verbindungen &amp; Daten</h2>
-      <DButton intent="quiet" size="sm" title="Verbindung anlegen" @click="addConnection">
+      <DButton intent="quiet" size="sm" title="Verbindung anlegen" @click="creatingConnection = true">
         <DIcon name="add_link" size="sm" />
       </DButton>
-      <DButton intent="quiet" size="sm" title="Datenquelle anlegen" @click="addDataSource">
+      <DButton intent="quiet" size="sm" title="Datenquelle anlegen" @click="creatingDataSource = true">
         <DIcon name="add" size="sm" />
       </DButton>
       <DButton intent="quiet" size="sm" title="Endpunkte suchen" @click="emit('findEndpoints')">
@@ -293,6 +305,9 @@ const removingUsage = computed(() => {
       </ul>
     </div>
   </section>
+
+  <NewConnectionDialog v-model="creatingConnection" @created="onConnectionCreated" />
+  <NewDatasourceDialog v-model="creatingDataSource" @created="onDataSourceCreated" />
 
   <DModal :model-value="!!removing" size="sm" @update:model-value="removing = undefined" @cancel="removing = undefined">
     <template #header>

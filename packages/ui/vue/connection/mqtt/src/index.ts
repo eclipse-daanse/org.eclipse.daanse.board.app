@@ -11,6 +11,12 @@
  *   Smart City Jena
  **********************************************************************/
 import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
+/*
+ * The model file itself, not the package around it: a value import from
+ * the library would pull its runtime - and lib.core with it - into this
+ * bundle, which has to share that, not carry a copy.
+ */
+import MODEL_ECORE from 'org.eclipse.daanse.board.app.lib.connection.mqtt/model/mqttConnectionModel.ecore?raw'
 import {
   type ConnectionRepository,
   CONNECTION_REPOSITORY,
@@ -29,6 +35,7 @@ export function activate({ services }: ActivationContext) {
   services
     .getRequired<ConnectionRepository>(CONNECTION_REPOSITORY)
     .registerConnectionType('mqtt', {
+      Model: MODEL_ECORE,
       Connection: MqttConnectionIdentifier,
       Settings: settingsSymbol,
     })

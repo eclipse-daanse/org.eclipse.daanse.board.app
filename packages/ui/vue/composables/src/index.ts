@@ -49,3 +49,18 @@ EPackageRegistry.INSTANCE.registerPackage(ComposablesPackage.eINSTANCE)
 export { ComposablesPackage }
 export { useDatasourceRepository, useTemporaryStore, useVariableRepository, usePromisifiedModal, useGlobalLoading, VariableWrapper,VARIABLEWRAPPER,VariableComplexStringWrapper,VARIABLECOMPLEXSTRINGWRAPPER, WrapperTypes, plainSettings, useEObject, useEList, useFeature, useBoard}
 export { useHistory, useCurrentHistory, type History } from './useHistory'
+
+/*
+ * What the .ecore models say about themselves - the field descriptions the
+ * code generator drops. Used by the forms that create connections and data
+ * sources.
+ */
+export {
+  describeClass,
+  describeConfiguration,
+  describeModel,
+  hasModelDocs,
+  registerModelDocs,
+  resetModelDocs,
+} from './modelDocs'
+export type { ClassDoc, FeatureDoc } from './modelDocs'

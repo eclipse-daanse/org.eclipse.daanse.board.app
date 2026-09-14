@@ -1,50 +1,80 @@
-import { CONNECTION_REPOSITORY as d } from "org.eclipse.daanse.board.app.lib.api.connection";
-import { DInput as j } from "org.eclipse.daanse.board.app.ui.vue.controls";
+import { CONNECTION_REPOSITORY as I } from "org.eclipse.daanse.board.app.lib.api.connection";
+import { DInput as P } from "org.eclipse.daanse.board.app.ui.vue.controls";
+const M = `<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/*********************************************************************
+* Copyright (c) 2024 Contributors to the Eclipse Foundation.
+*
+* This program and the accompanying materials are made
+* available under the terms of the Eclipse Public License 2.0
+* which is available at https://www.eclipse.org/legal/epl-2.0/
+*
+* SPDX-License-Identifier: EPL-2.0
+**********************************************************************/
+-->
+<ecore:EPackage xmi:version="2.0"
+                xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="wsconnection"
+                nsURI="http://org.eclipse.daanse.board.app.lib.connection.websocket" nsPrefix="wsconn">
+
+    <eClassifiers xsi:type="ecore:EClass" name="IWSConnectionConfiguration" interface="true" abstract="true">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+            <details key="documentation" value="A connection to a WebSocket endpoint. It stays open and delivers messages as the server sends them, so data sources on it update without polling."/>
+        </eAnnotations>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="url" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="The URL endpoint for the WebSocket connection (e.g., 'ws://example.com/socket')."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+    </eClassifiers>
+
+</ecore:EPackage>
+`;
 /**
 * @vue/shared v3.5.24
 * (c) 2018-present Yuxi (Evan) You and Vue contributors
 * @license MIT
 **/
-const z = [], B = (t) => t.charCodeAt(0) === 111 && t.charCodeAt(1) === 110 && // uppercase letter
-(t.charCodeAt(2) > 122 || t.charCodeAt(2) < 97), h = Object.assign, f = Array.isArray, g = (t) => typeof t == "function", u = (t) => typeof t == "string", P = (t) => typeof t == "symbol", C = (t) => t !== null && typeof t == "object";
-let R;
-const F = () => R || (R = typeof globalThis < "u" ? globalThis : typeof self < "u" ? self : typeof window < "u" ? window : typeof global < "u" ? global : {});
-function T(t) {
+const L = [], j = (t) => t.charCodeAt(0) === 111 && t.charCodeAt(1) === 110 && // uppercase letter
+(t.charCodeAt(2) > 122 || t.charCodeAt(2) < 97), y = Object.assign, f = Array.isArray, g = (t) => typeof t == "function", u = (t) => typeof t == "string", z = (t) => typeof t == "symbol", _ = (t) => t !== null && typeof t == "object";
+let F;
+const d = () => F || (F = typeof globalThis < "u" ? globalThis : typeof self < "u" ? self : typeof window < "u" ? window : typeof global < "u" ? global : {});
+function w(t) {
   if (f(t)) {
-    const n = {};
-    for (let e = 0; e < t.length; e++) {
-      const s = t[e], l = u(s) ? M(s) : T(s);
-      if (l)
-        for (const o in l)
-          n[o] = l[o];
+    const e = {};
+    for (let n = 0; n < t.length; n++) {
+      const o = t[n], s = u(o) ? B(o) : w(o);
+      if (s)
+        for (const l in s)
+          e[l] = s[l];
     }
-    return n;
-  } else if (u(t) || C(t))
+    return e;
+  } else if (u(t) || _(t))
     return t;
 }
 const U = /;(?![^(]*\))/g, W = /:([^]+)/, D = /\/\*[^]*?\*\//g;
-function M(t) {
-  const n = {};
-  return t.replace(D, "").split(U).forEach((e) => {
-    if (e) {
-      const s = e.split(W);
-      s.length > 1 && (n[s[0].trim()] = s[1].trim());
+function B(t) {
+  const e = {};
+  return t.replace(D, "").split(U).forEach((n) => {
+    if (n) {
+      const o = n.split(W);
+      o.length > 1 && (e[o[0].trim()] = o[1].trim());
     }
-  }), n;
+  }), e;
 }
-function N(t) {
-  let n = "";
+function E(t) {
+  let e = "";
   if (u(t))
-    n = t;
+    e = t;
   else if (f(t))
-    for (let e = 0; e < t.length; e++) {
-      const s = N(t[e]);
-      s && (n += s + " ");
+    for (let n = 0; n < t.length; n++) {
+      const o = E(t[n]);
+      o && (e += o + " ");
     }
-  else if (C(t))
-    for (const e in t)
-      t[e] && (n += e + " ");
-  return n.trim();
+  else if (_(t))
+    for (const n in t)
+      t[n] && (e += n + " ");
+  return e.trim();
 }
 /**
 * @vue/reactivity v3.5.24
@@ -52,56 +82,56 @@ function N(t) {
 * @license MIT
 **/
 new Set(
-  /* @__PURE__ */ Object.getOwnPropertyNames(Symbol).filter((t) => t !== "arguments" && t !== "caller").map((t) => Symbol[t]).filter(P)
+  /* @__PURE__ */ Object.getOwnPropertyNames(Symbol).filter((t) => t !== "arguments" && t !== "caller").map((t) => Symbol[t]).filter(z)
 );
-function I(t) {
+function k(t) {
   return t ? !!t.__v_raw : !1;
 }
-function E(t) {
+function x(t) {
   return t ? t.__v_isRef === !0 : !1;
 }
-function q(t) {
-  return E(t) ? t.value : t;
+function G(t) {
+  return x(t) ? t.value : t;
 }
 /**
 * @vue/runtime-core v3.5.24
 * (c) 2018-present Yuxi (Evan) You and Vue contributors
 * @license MIT
 **/
-let S = null, L = null;
-const Y = (t) => t.__isTeleport;
-function V(t, n) {
-  t.shapeFlag & 6 && t.component ? (t.transition = n, V(t.component.subTree, n)) : t.shapeFlag & 128 ? (t.ssContent.transition = n.clone(t.ssContent), t.ssFallback.transition = n.clone(t.ssFallback)) : t.transition = n;
+let C = null, q = null;
+const X = (t) => t.__isTeleport;
+function R(t, e) {
+  t.shapeFlag & 6 && t.component ? (t.transition = e, R(t.component.subTree, e)) : t.shapeFlag & 128 ? (t.ssContent.transition = e.clone(t.ssContent), t.ssFallback.transition = e.clone(t.ssFallback)) : t.transition = e;
 }
 // @__NO_SIDE_EFFECTS__
-function G(t, n) {
+function Y(t, e) {
   return g(t) ? (
     // #8236: extend call and options.name access are considered side-effects
     // by Rollup, so we have to wrap it in a pure-annotated IIFE.
-    h({ name: t.name }, n, { setup: t })
+    y({ name: t.name }, e, { setup: t })
   ) : t;
 }
-F().requestIdleCallback;
-F().cancelIdleCallback;
-const H = Symbol.for("v-ndc"), K = {}, k = (t) => Object.getPrototypeOf(t) === K, J = (t) => t.__isSuspense, A = Symbol.for("v-fgt"), Q = Symbol.for("v-txt"), X = Symbol.for("v-cmt"), m = [];
+d().requestIdleCallback;
+d().cancelIdleCallback;
+const H = Symbol.for("v-ndc"), K = {}, O = (t) => Object.getPrototypeOf(t) === K, J = (t) => t.__isSuspense, A = Symbol.for("v-fgt"), Q = Symbol.for("v-txt"), Z = Symbol.for("v-cmt"), m = [];
 let a = null;
-function Z(t = !1) {
+function $(t = !1) {
   m.push(a = t ? null : []);
 }
-function $() {
+function v() {
   m.pop(), a = m[m.length - 1] || null;
 }
-function v(t) {
-  return t.dynamicChildren = a || z, $(), a && a.push(t), t;
+function tt(t) {
+  return t.dynamicChildren = a || L, v(), a && a.push(t), t;
 }
-function tt(t, n, e, s, l) {
-  return v(
-    w(
+function et(t, e, n, o, s) {
+  return tt(
+    V(
       t,
-      n,
       e,
+      n,
+      o,
       s,
-      l,
       !0
     )
   );
@@ -109,22 +139,22 @@ function tt(t, n, e, s, l) {
 function nt(t) {
   return t ? t.__v_isVNode === !0 : !1;
 }
-const x = ({ key: t }) => t ?? null, _ = ({
+const N = ({ key: t }) => t ?? null, p = ({
   ref: t,
-  ref_key: n,
-  ref_for: e
-}) => (typeof t == "number" && (t = "" + t), t != null ? u(t) || E(t) || g(t) ? { i: S, r: t, k: n, f: !!e } : t : null);
-function et(t, n = null, e = null, s = 0, l = null, o = t === A ? 0 : 1, c = !1, r = !1) {
+  ref_key: e,
+  ref_for: n
+}) => (typeof t == "number" && (t = "" + t), t != null ? u(t) || x(t) || g(t) ? { i: C, r: t, k: e, f: !!n } : t : null);
+function st(t, e = null, n = null, o = 0, s = null, l = t === A ? 0 : 1, c = !1, r = !1) {
   const i = {
     __v_isVNode: !0,
     __v_skip: !0,
     type: t,
-    props: n,
-    key: n && x(n),
-    ref: n && _(n),
-    scopeId: L,
+    props: e,
+    key: e && N(e),
+    ref: e && p(e),
+    scopeId: q,
     slotScopeIds: null,
-    children: e,
+    children: n,
     component: null,
     suspense: null,
     ssContent: null,
@@ -137,67 +167,67 @@ function et(t, n = null, e = null, s = 0, l = null, o = t === A ? 0 : 1, c = !1,
     targetStart: null,
     targetAnchor: null,
     staticCount: 0,
-    shapeFlag: o,
-    patchFlag: s,
-    dynamicProps: l,
+    shapeFlag: l,
+    patchFlag: o,
+    dynamicProps: s,
     dynamicChildren: null,
     appContext: null,
-    ctx: S
+    ctx: C
   };
-  return r ? (O(i, e), o & 128 && t.normalize(i)) : e && (i.shapeFlag |= u(e) ? 8 : 16), // avoid a block node from tracking itself
+  return r ? (T(i, n), l & 128 && t.normalize(i)) : n && (i.shapeFlag |= u(n) ? 8 : 16), // avoid a block node from tracking itself
   !c && // has current parent block
   a && // presence of a patch flag indicates this node needs patching on updates.
   // component nodes also should always be patched, because even if the
   // component doesn't need to update, it needs to persist the instance on to
   // the next vnode so that it can be properly unmounted later.
-  (i.patchFlag > 0 || o & 6) && // the EVENTS flag is only for hydration and if it is the only flag, the
+  (i.patchFlag > 0 || l & 6) && // the EVENTS flag is only for hydration and if it is the only flag, the
   // vnode should not be considered dynamic due to handler caching.
   i.patchFlag !== 32 && a.push(i), i;
 }
-const w = lt;
-function lt(t, n = null, e = null, s = 0, l = null, o = !1) {
-  if ((!t || t === H) && (t = X), nt(t)) {
-    const r = y(
+const V = ot;
+function ot(t, e = null, n = null, o = 0, s = null, l = !1) {
+  if ((!t || t === H) && (t = Z), nt(t)) {
+    const r = h(
       t,
-      n,
+      e,
       !0
       /* mergeRef: true */
     );
-    return e && O(r, e), !o && a && (r.shapeFlag & 6 ? a[a.indexOf(t)] = r : a.push(r)), r.patchFlag = -2, r;
+    return n && T(r, n), !l && a && (r.shapeFlag & 6 ? a[a.indexOf(t)] = r : a.push(r)), r.patchFlag = -2, r;
   }
-  if (ct(t) && (t = t.__vccOpts), n) {
-    n = st(n);
-    let { class: r, style: i } = n;
-    r && !u(r) && (n.class = N(r)), C(i) && (I(i) && !f(i) && (i = h({}, i)), n.style = T(i));
+  if (rt(t) && (t = t.__vccOpts), e) {
+    e = lt(e);
+    let { class: r, style: i } = e;
+    r && !u(r) && (e.class = E(r)), _(i) && (k(i) && !f(i) && (i = y({}, i)), e.style = w(i));
   }
-  const c = u(t) ? 1 : J(t) ? 128 : Y(t) ? 64 : C(t) ? 4 : g(t) ? 2 : 0;
-  return et(
+  const c = u(t) ? 1 : J(t) ? 128 : X(t) ? 64 : _(t) ? 4 : g(t) ? 2 : 0;
+  return st(
     t,
-    n,
     e,
-    s,
-    l,
-    c,
+    n,
     o,
+    s,
+    c,
+    l,
     !0
   );
 }
-function st(t) {
-  return t ? I(t) || k(t) ? h({}, t) : t : null;
+function lt(t) {
+  return t ? k(t) || O(t) ? y({}, t) : t : null;
 }
-function y(t, n, e = !1, s = !1) {
-  const { props: l, ref: o, patchFlag: c, children: r, transition: i } = t, p = n ? it(l || {}, n) : l, b = {
+function h(t, e, n = !1, o = !1) {
+  const { props: s, ref: l, patchFlag: c, children: r, transition: i } = t, S = e ? ct(s || {}, e) : s, b = {
     __v_isVNode: !0,
     __v_skip: !0,
     type: t.type,
-    props: p,
-    key: p && x(p),
-    ref: n && n.ref ? (
+    props: S,
+    key: S && N(S),
+    ref: e && e.ref ? (
       // #2078 in the case of <component :is="vnode" ref="extra"/>
       // if the vnode itself already has a ref, cloneVNode will need to merge
       // the refs so the single vnode can be set on multiple refs
-      e && o ? f(o) ? o.concat(_(n)) : [o, _(n)] : _(n)
-    ) : o,
+      n && l ? f(l) ? l.concat(p(e)) : [l, p(e)] : p(e)
+    ) : l,
     scopeId: t.scopeId,
     slotScopeIds: t.slotScopeIds,
     children: r,
@@ -210,7 +240,7 @@ function y(t, n, e = !1, s = !1) {
     // existing patch flag to be reliable and need to add the FULL_PROPS flag.
     // note: preserve flag for fragments since they use the flag for children
     // fast paths only.
-    patchFlag: n && t.type !== A ? c === -1 ? 16 : c | 16 : c,
+    patchFlag: e && t.type !== A ? c === -1 ? 16 : c | 16 : c,
     dynamicProps: t.dynamicProps,
     dynamicChildren: t.dynamicChildren,
     appContext: t.appContext,
@@ -222,96 +252,97 @@ function y(t, n, e = !1, s = !1) {
     // they will simply be overwritten.
     component: t.component,
     suspense: t.suspense,
-    ssContent: t.ssContent && y(t.ssContent),
-    ssFallback: t.ssFallback && y(t.ssFallback),
+    ssContent: t.ssContent && h(t.ssContent),
+    ssFallback: t.ssFallback && h(t.ssFallback),
     placeholder: t.placeholder,
     el: t.el,
     anchor: t.anchor,
     ctx: t.ctx,
     ce: t.ce
   };
-  return i && s && V(
+  return i && o && R(
     b,
     i.clone(b)
   ), b;
 }
-function ot(t = " ", n = 0) {
-  return w(Q, null, t, n);
+function it(t = " ", e = 0) {
+  return V(Q, null, t, e);
 }
-function O(t, n) {
-  let e = 0;
-  const { shapeFlag: s } = t;
-  if (n == null)
-    n = null;
-  else if (f(n))
-    e = 16;
-  else if (typeof n == "object")
-    if (s & 65) {
-      const l = n.default;
-      l && (l._c && (l._d = !1), O(t, l()), l._c && (l._d = !0));
+function T(t, e) {
+  let n = 0;
+  const { shapeFlag: o } = t;
+  if (e == null)
+    e = null;
+  else if (f(e))
+    n = 16;
+  else if (typeof e == "object")
+    if (o & 65) {
+      const s = e.default;
+      s && (s._c && (s._d = !1), T(t, s()), s._c && (s._d = !0));
       return;
     } else
-      e = 32, !n._ && !k(n) && (n._ctx = S);
-  else g(n) ? (n = { default: n, _ctx: S }, e = 32) : (n = String(n), s & 64 ? (e = 16, n = [ot(n)]) : e = 8);
-  t.children = n, t.shapeFlag |= e;
+      n = 32, !e._ && !O(e) && (e._ctx = C);
+  else g(e) ? (e = { default: e, _ctx: C }, n = 32) : (e = String(e), o & 64 ? (n = 16, e = [it(e)]) : n = 8);
+  t.children = e, t.shapeFlag |= n;
 }
-function it(...t) {
-  const n = {};
-  for (let e = 0; e < t.length; e++) {
-    const s = t[e];
-    for (const l in s)
-      if (l === "class")
-        n.class !== s.class && (n.class = N([n.class, s.class]));
-      else if (l === "style")
-        n.style = T([n.style, s.style]);
-      else if (B(l)) {
-        const o = n[l], c = s[l];
-        c && o !== c && !(f(o) && o.includes(c)) && (n[l] = o ? [].concat(o, c) : c);
-      } else l !== "" && (n[l] = s[l]);
+function ct(...t) {
+  const e = {};
+  for (let n = 0; n < t.length; n++) {
+    const o = t[n];
+    for (const s in o)
+      if (s === "class")
+        e.class !== o.class && (e.class = E([e.class, o.class]));
+      else if (s === "style")
+        e.style = w([e.style, o.style]);
+      else if (j(s)) {
+        const l = e[s], c = o[s];
+        c && l !== c && !(f(l) && l.includes(c)) && (e[s] = l ? [].concat(l, c) : c);
+      } else s !== "" && (e[s] = o[s]);
   }
-  return n;
+  return e;
 }
 {
-  const t = F(), n = (e, s) => {
-    let l;
-    return (l = t[e]) || (l = t[e] = []), l.push(s), (o) => {
-      l.length > 1 ? l.forEach((c) => c(o)) : l[0](o);
+  const t = d(), e = (n, o) => {
+    let s;
+    return (s = t[n]) || (s = t[n] = []), s.push(o), (l) => {
+      s.length > 1 ? s.forEach((c) => c(l)) : s[0](l);
     };
   };
-  n(
+  e(
     "__VUE_INSTANCE_SETTERS__",
-    (e) => e
-  ), n(
+    (n) => n
+  ), e(
     "__VUE_SSR_SETTERS__",
-    (e) => e
+    (n) => n
   );
 }
-function ct(t) {
+function rt(t) {
   return g(t) && "__vccOpts" in t;
 }
-const rt = /* @__PURE__ */ G({
+const at = /* @__PURE__ */ Y({
   __name: "Settings",
   props: {
     config: {}
   },
   setup(t) {
-    return (n, e) => (Z(), tt(q(j), {
+    return (e, n) => ($(), et(G(P), {
       modelValue: t.config.url,
-      "onUpdate:modelValue": e[0] || (e[0] = (s) => t.config.url = s),
+      "onUpdate:modelValue": n[0] || (n[0] = (o) => t.config.url = o),
       label: "URL"
     }, null, 8, ["modelValue"]));
   }
-}), at = Symbol.for("WSConnectionFactory"), ut = Symbol.for("WsConnectionSettings");
-function mt({ services: t }) {
-  t.register("WsConnectionSettings", rt), t.getRequired(d).registerConnectionType("ws", {
-    Connection: at,
-    Settings: ut
+}), ut = Symbol.for("WSConnectionFactory"), ft = Symbol.for("WsConnectionSettings");
+function pt({ services: t }) {
+  t.register("WsConnectionSettings", at), t.getRequired(I).registerConnectionType("ws", {
+    Model: M,
+    Connection: ut,
+    Settings: ft
   });
 }
 function _t({ services: t }) {
-  t.getRequired(d).unregisterConnectionType("ws"), t.unregister("WsConnectionSettings");
+  t.getRequired(I).unregisterConnectionType("ws"), t.unregister("WsConnectionSettings");
 }
 export {
-  mt as activate,
+  pt as activate,
   _t as deactivate
 };

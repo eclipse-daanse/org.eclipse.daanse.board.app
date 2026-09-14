@@ -10,6 +10,12 @@
  * Contributors:
  *   Smart City Jena
  **********************************************************************/
+/*
+ * The model file itself, not the package around it: a value import from
+ * the library would pull its runtime - and lib.core with it - into this
+ * bundle, which has to share that, not carry a copy.
+ */
+import MODEL_ECORE from 'org.eclipse.daanse.board.app.lib.datasource.csv/model/CsvDataSourceModel.ecore?raw'
 import {
   type DatasourceRepository,
   DATASOURCE_REPOSITORY,
@@ -31,6 +37,7 @@ export function activate({ services }: ActivationContext) {
   services
     .getRequired<DatasourceRepository>(DATASOURCE_REPOSITORY)
     .registerDatasourceType('csv', {
+      Model: MODEL_ECORE,
       Store: CSVDatasourceIdentifier,
       Preview: previewSymbol,
       Settings: settingsSymbol,

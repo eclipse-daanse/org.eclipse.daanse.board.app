@@ -42,6 +42,16 @@ export type PubSubEvents = 'connect' | 'message' | 'close' | 'error';
 export interface ConnectionIdentifiers {
     Connection: symbol;
     Settings: symbol;
+    /**
+     * The type's .ecore file, as text.
+     *
+     * What a field is for is written in the model as a GenModel
+     * `documentation` annotation, and the code generator drops it. Handing
+     * the model over here is what lets a form explain itself - see
+     * modelDocs in ui.vue.composables. Optional: a type without a model
+     * still registers, it just has nothing to say about its fields.
+     */
+    Model?: string;
 }
 
 export interface ConnectionRepository {

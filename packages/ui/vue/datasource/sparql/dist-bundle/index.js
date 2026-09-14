@@ -3,6 +3,45 @@ import { DATASOURCE_REPOSITORY } from "org.eclipse.daanse.board.app.lib.api.data
 import { defineComponent, computed, ref, onMounted, createElementBlock, openBlock, createVNode, createElementVNode, unref, shallowRef, watch } from "vue";
 import { DSelect } from "org.eclipse.daanse.board.app.ui.vue.controls";
 import { useTemporaryStore } from "org.eclipse.daanse.board.app.ui.vue.composables";
+const MODEL_ECORE = `<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/*********************************************************************
+* Copyright (c) 2024 Contributors to the Eclipse Foundation.
+*
+* This program and the accompanying materials are made
+* available under the terms of the Eclipse Public License 2.0
+* which is available at https://www.eclipse.org/legal/epl-2.0/
+*
+* SPDX-License-Identifier: EPL-2.0
+**********************************************************************/
+-->
+<ecore:EPackage xmi:version="2.0"
+                xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="sparqlstore"
+                nsURI="http://org.eclipse.daanse.board.app.lib.datasource.sparql" nsPrefix="sparqlstore">
+
+    <eClassifiers xsi:type="ecore:EClass" name="ISparqlStoreConfiguration">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+            <details key="documentation" value="Represents the configuration for a SPARQL data store, extending the base connection configuration."/>
+        </eAnnotations>
+        <eSuperTypes href="http://org.eclipse.daanse.board.app.lib.datasource.base#//IBaseConnectionConfiguration"/>
+
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="query" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="The SPARQL query string to be executed to retrieve data."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="connection" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="A reference or ID to a SPARQL connection configuration used to access the endpoint."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+    </eClassifiers>
+
+    <eSubpackages href="http://org.eclipse.daanse.board.app.lib.datasource.base#/"/>
+
+</ecore:EPackage>
+`;
 function getDefaultExportFromCjs(Ne) {
   return Ne && Ne.__esModule && Object.prototype.hasOwnProperty.call(Ne, "default") ? Ne.default : Ne;
 }
@@ -39629,6 +39668,7 @@ const Yasr = /* @__PURE__ */ getDefaultExportFromCjs(yasr_minExports), _sfc_main
 }), symbol = Symbol.for("SparqlStore"), previewSymbol = Symbol.for("SparqlPreview"), settingsSymbol = Symbol.for("SparqlSettings");
 function activate({ services: Ne }) {
   Ne.register("SparqlPreview", _sfc_main), Ne.register("SparqlSettings", _sfc_main$1), Ne.getRequired(DATASOURCE_REPOSITORY).registerDatasourceType("sparql", {
+    Model: MODEL_ECORE,
     Store: symbol,
     Preview: previewSymbol,
     Settings: settingsSymbol

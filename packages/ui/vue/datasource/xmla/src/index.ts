@@ -17,6 +17,12 @@ import {
 } from 'org.eclipse.daanse.board.app.lib.api.datasource'
 import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
 import { factorySymbol as XmlaDatasourceIndentifier } from 'org.eclipse.daanse.board.app.lib.datasource.xmla'
+/*
+ * The model file itself, not the package around it: a value import from
+ * the library would pull its runtime - and lib.core with it - into this
+ * bundle, which has to share that, not carry a copy.
+ */
+import MODEL_ECORE from 'org.eclipse.daanse.board.app.lib.datasource.xmla/model/XmlaDataSourceModel.ecore?raw'
 
 import Preview from './Preview.vue'
 import Settings from './Settings.vue'
@@ -31,6 +37,7 @@ export function activate({ services }: ActivationContext) {
   services
     .getRequired<DatasourceRepository>(DATASOURCE_REPOSITORY)
     .registerDatasourceType('xmla', {
+      Model: MODEL_ECORE,
       Store: XmlaDatasourceIndentifier,
       Preview: previewSymbol,
       Settings: settingsSymbol,

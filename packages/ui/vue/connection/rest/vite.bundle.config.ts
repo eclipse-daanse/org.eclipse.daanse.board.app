@@ -144,6 +144,12 @@ export default defineConfig({
     rewriteSharedImportsInChunks(),
     tsmPlugin({
       manifest: resolve(__dirname, 'manifest.json'),
+      /*
+       * The model file is a contract, not code: it is read for the field
+       * descriptions the generator drops, and carrying a copy of a text
+       * file across the boundary costs nothing at runtime.
+       */
+      boundary: { allow: ['../../../../lib/connection/rest/model'] },
       components: 'derive',
       sharedModules,
       // Cast: tsm links its own vite copy, whose Plugin type is nominally

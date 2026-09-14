@@ -11,6 +11,12 @@ Contributors: Smart City Jena
 // Service id of lib.datasource.ogcsta; Symbol.for is global, so this literal
 // denotes the same symbol the factory package exports.
 const factorySymbol = Symbol.for('OgcStaStoreFactory')
+/*
+ * The model file itself, not the package around it: a value import from
+ * the library would pull its runtime - and lib.core with it - into this
+ * bundle, which has to share that, not carry a copy.
+ */
+import MODEL_ECORE from 'org.eclipse.daanse.board.app.lib.datasource.ogcsta/model/OgcstaDataSourceModel.ecore?raw'
 import {
   type DatasourceRepository,
   DATASOURCE_REPOSITORY,
@@ -29,6 +35,7 @@ export function activate({ services }: ActivationContext) {
   services
     .getRequired<DatasourceRepository>(DATASOURCE_REPOSITORY)
     .registerDatasourceType('ogcsta', {
+      Model: MODEL_ECORE,
       Store: factorySymbol,
       Preview: symbolForOgcStaPreview,
       Settings: symbolForOgcStaSettings,
