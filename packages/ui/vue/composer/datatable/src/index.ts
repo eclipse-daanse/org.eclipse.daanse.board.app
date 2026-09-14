@@ -32,6 +32,7 @@ export function activate({ services }: ActivationContext) {
   services
     .getRequired<DatasourceRepository>(DATASOURCE_REPOSITORY)
     .registerDatasourceType('datatable', {
+      kind: 'composer',
       Store: DatatableComposerIdentifier,
       Preview: previewSymbol,
       Settings: settingsSymbol,

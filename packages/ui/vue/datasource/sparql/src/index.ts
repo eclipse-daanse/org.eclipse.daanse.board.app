@@ -34,6 +34,7 @@ export function activate({ services }: ActivationContext) {
   services
     .getRequired<DatasourceRepository>(DATASOURCE_REPOSITORY)
     .registerDatasourceType('sparql', {
+      connections: ['rest'],
       Model: MODEL_ECORE,
       Store: symbol,
       Preview: previewSymbol,

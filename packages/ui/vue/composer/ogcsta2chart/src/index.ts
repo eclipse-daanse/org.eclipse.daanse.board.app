@@ -33,6 +33,7 @@ export function activate({ services }: ActivationContext) {
   services
     .getRequired<DatasourceRepository>(DATASOURCE_REPOSITORY)
     .registerDatasourceType('ogcsta2chart', {
+      kind: 'composer',
       Store: OGCSTAToChartComposerIdentifier,
       Preview: previewSymbol,
       Settings: settingsSymbol,

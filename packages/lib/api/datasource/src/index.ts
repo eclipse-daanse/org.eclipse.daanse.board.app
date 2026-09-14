@@ -43,6 +43,23 @@ export interface StoreIdentifiers {
     Preview: symbol;
     Settings: symbol;
     /**
+     * What this type is, for the places that list types.
+     *
+     * A composer reads from other data sources rather than from an endpoint
+     * of its own, which makes it a different thing to pick even though it
+     * registers the same way. Absent means a plain source.
+     */
+    kind?: 'source' | 'composer';
+    /**
+     * The connection types this source can read through.
+     *
+     * A hint, not a rule: the list a person picks from puts these first and
+     * still offers the rest, because a connection nobody anticipated may
+     * well answer - and being unable to choose it would be worse than
+     * choosing badly.
+     */
+    connections?: string[];
+    /**
      * The type's .ecore file, as text.
      *
      * What a field is for is written in the model as a GenModel

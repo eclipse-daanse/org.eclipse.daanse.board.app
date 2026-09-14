@@ -46,6 +46,7 @@ import { DButton, DIcon, DInput, DModal } from 'org.eclipse.daanse.board.app.ui.
 import { useDatasourceUsage } from '@/composables/useDatasourceUsage'
 import NewConnectionDialog from '../connections/NewConnectionDialog.vue'
 import NewDatasourceDialog from './NewDatasourceDialog.vue'
+import TreeMenu, { type MenuItem } from './TreeMenu.vue'
 
 /** A source as the tree shows it. */
 interface Row {
@@ -84,10 +85,24 @@ const datasourceRepository = inject<DatasourceRepository>(DATASOURCE_REPOSITORY)
 const dataSources = useEList(workspace, (w) => w.datasources)
 const { usageByDatasource, usageLabel } = useDatasourceUsage()
 
-const emit = defineEmits<{ findEndpoints: [] }>()
+const emit = defineEmits<{
+  findEndpoints: []
+  /* Which half of the selection to show - the menu asks for one by name,
+     where a plain click leaves the page to its own default. */
+  view: [view: 'settings' | 'preview']
+}>()
 
 const search = ref('')
 const collapsed = ref<Set<string>>(new Set())
+
+/* Not a connection uid - a heading that groups what reads from sources
+   rather than from an endpoint. */
+const COMPOSED = '\u0000composed'
+
+/** Whether a type composes other sources instead of reading an endpoint. */
+function isComposer(type: string | undefined): boolean {
+  return !!type && datasourceRepository.getDatasourceIdentifiers(type)?.kind === 'composer'
+}
 
 /** What the tree shows, with the sources hung under their connection. */
 const groups = computed(() => {
@@ -122,18 +137,35 @@ const groups = computed(() => {
   }))
 
   const attached = new Set(connections.value.map((c) => c.uid))
+  const row = (source: any): Row => ({
+    uid: source.uid,
+    name: source.name,
+    type: source.type,
+    usage: usageLabel(usage[source.uid] ?? { boards: 0, widgets: 0 }),
+  })
+
   /* No connection, or one that is gone: the reference is the tell. */
-  const loose: Row[] = dataSources.value
+  const unattached = dataSources.value
     .filter((source) => !source.connection || !attached.has(source.connection.uid))
     .filter((source: any) => matches(source.name, source.type, source.uid))
-    .map((source: any) => ({
-      uid: source.uid,
-      name: source.name,
-      type: source.type,
-      usage: usageLabel(usage[source.uid] ?? { boards: 0, widgets: 0 }),
-    }))
+
+  /* A composer reads from other sources, so having no connection is its
+     normal state - not the same thing as a source that lost one. Listing
+     both under "Ohne Verbindung" made every composer look broken. */
+  const composed: Row[] = unattached.filter((source: any) => isComposer(source.type)).map(row)
+  const loose: Row[] = unattached.filter((source: any) => !isComposer(source.type)).map(row)
 
   const shown = known.filter((group) => group.itself || group.sources.length)
+  if (composed.length) {
+    shown.push({
+      uid: COMPOSED,
+      name: 'Zusammengesetzt',
+      type: '',
+      orphan: true,
+      sources: composed,
+      itself: true,
+    })
+  }
   if (loose.length) {
     shown.push({
       uid: '',
@@ -172,6 +204,8 @@ function select(type: Selection['type'], itemId: string) {
  */
 const creatingConnection = ref(false)
 const creatingDataSource = ref(false)
+/* Set when the dialog was opened from a connection's own menu. */
+const creatingFor = ref<string | undefined>(undefined)
 
 /* A new thing is selected straight away: it is what you came to fill in. */
 function onConnectionCreated(uid: string) {
@@ -180,6 +214,78 @@ function onConnectionCreated(uid: string) {
 
 function onDataSourceCreated(uid: string) {
   select('DataSource', uid)
+}
+
+/*
+ * The right-click menu.
+ *
+ * What it offers depends on what was clicked, so the target is held
+ * alongside the position: a connection can take a new source, a source can
+ * be previewed, and the empty space below the tree can only create.
+ */
+type MenuTarget =
+  | { what: 'connection'; uid: string; name: string }
+  | { what: 'source'; uid: string; name: string }
+  | { what: 'nothing' }
+
+const menuAt = ref<{ x: number; y: number } | undefined>(undefined)
+const menuFor = ref<MenuTarget>({ what: 'nothing' })
+
+const menuItems = computed<MenuItem[]>(() => {
+  const target = menuFor.value
+  if (target.what === 'connection') {
+    return [
+      { id: 'edit', label: 'Bearbeiten', icon: 'edit' },
+      { id: 'add-source', label: 'Datenquelle hier anlegen', icon: 'add' },
+      { id: 'remove', label: 'Verbindung löschen', icon: 'delete', danger: true, separated: true },
+    ]
+  }
+  if (target.what === 'source') {
+    return [
+      { id: 'edit', label: 'Bearbeiten', icon: 'edit' },
+      { id: 'preview', label: 'Daten ansehen', icon: 'table' },
+      { id: 'remove', label: 'Datenquelle löschen', icon: 'delete', danger: true, separated: true },
+    ]
+  }
+  return [
+    { id: 'new-connection', label: 'Verbindung anlegen', icon: 'add_link' },
+    { id: 'new-source', label: 'Datenquelle anlegen', icon: 'add' },
+  ]
+})
+
+function openMenu(event: MouseEvent, target: MenuTarget) {
+  menuFor.value = target
+  menuAt.value = { x: event.clientX, y: event.clientY }
+}
+
+function closeMenu() {
+  menuAt.value = undefined
+}
+
+function onMenuChoice(id: string) {
+  const target = menuFor.value
+  closeMenu()
+  if (id === 'new-connection') return void (creatingConnection.value = true)
+  if (id === 'new-source') return void (creatingDataSource.value = true)
+  if (target.what === 'connection') {
+    if (id === 'edit') select('Connection', target.uid)
+    /* The dialog picks the connection itself; selecting it first is what
+       makes it the obvious one to choose. */
+    if (id === 'add-source') {
+      select('Connection', target.uid)
+      creatingFor.value = target.uid
+      creatingDataSource.value = true
+    }
+    if (id === 'remove') confirmRemove('Connection', target.uid)
+    return
+  }
+  if (target.what === 'source') {
+    if (id === 'edit' || id === 'preview') {
+      select('DataSource', target.uid)
+      emit('view', id === 'preview' ? 'preview' : 'settings')
+    }
+    if (id === 'remove') confirmRemove('DataSource', target.uid)
+  }
 }
 
 const removing = ref<Selection | undefined>(undefined)
@@ -222,7 +328,7 @@ const removingUsage = computed(() => {
       <DButton intent="quiet" size="sm" title="Verbindung anlegen" @click="creatingConnection = true">
         <DIcon name="add_link" size="sm" />
       </DButton>
-      <DButton intent="quiet" size="sm" title="Datenquelle anlegen" @click="creatingDataSource = true">
+      <DButton intent="quiet" size="sm" title="Datenquelle anlegen" @click="creatingFor = undefined; creatingDataSource = true">
         <DIcon name="add" size="sm" />
       </DButton>
       <DButton intent="quiet" size="sm" title="Endpunkte suchen" @click="emit('findEndpoints')">
@@ -234,7 +340,7 @@ const removingUsage = computed(() => {
       <DInput v-model="search" type="search" placeholder="Suchen…" stacked />
     </div>
 
-    <div class="tree__body">
+    <div class="tree__body" @contextmenu.prevent="openMenu($event, { what: 'nothing' })">
       <p v-if="!groups.length" class="tree__empty">
         <template v-if="search">Nichts gefunden.</template>
         <template v-else>Noch keine Verbindung. Lege eine an, um Daten zu lesen.</template>
@@ -244,6 +350,14 @@ const removingUsage = computed(() => {
         <li v-for="group in groups" :key="group.uid || 'loose'">
           <div
             :class="['row', 'row--connection', { 'row--on': isSelected('Connection', group.uid) }]"
+            @contextmenu.prevent.stop="
+              openMenu(
+                $event,
+                group.orphan
+                  ? { what: 'nothing' }
+                  : { what: 'connection', uid: group.uid, name: group.name },
+              )
+            "
           >
             <button
               type="button"
@@ -278,7 +392,12 @@ const removingUsage = computed(() => {
 
           <ul v-if="isOpen(group.uid)" class="tree__sources">
             <li v-for="source in group.sources" :key="source.uid">
-              <div :class="['row', 'row--source', { 'row--on': isSelected('DataSource', source.uid) }]">
+              <div
+                :class="['row', 'row--source', { 'row--on': isSelected('DataSource', source.uid) }]"
+                @contextmenu.prevent.stop="
+                  openMenu($event, { what: 'source', uid: source.uid, name: source.name })
+                "
+              >
                 <span class="row__twist row__twist--none">
                   <DIcon name="database" size="sm" />
                 </span>
@@ -306,8 +425,14 @@ const removingUsage = computed(() => {
     </div>
   </section>
 
+  <TreeMenu :at="menuAt" :items="menuItems" @choose="onMenuChoice" @close="closeMenu" />
+
   <NewConnectionDialog v-model="creatingConnection" @created="onConnectionCreated" />
-  <NewDatasourceDialog v-model="creatingDataSource" @created="onDataSourceCreated" />
+  <NewDatasourceDialog
+    v-model="creatingDataSource"
+    :for-connection="creatingFor"
+    @created="onDataSourceCreated"
+  />
 
   <DModal :model-value="!!removing" size="sm" @update:model-value="removing = undefined" @cancel="removing = undefined">
     <template #header>

@@ -99,7 +99,7 @@ watch(selected, (at) => {
 <template>
   <div class="data-page">
     <aside class="data-page__tree">
-      <DataTree v-model="selected" @find-endpoints="findEndpoints" />
+      <DataTree v-model="selected" @find-endpoints="findEndpoints" @view="tab = $event" />
     </aside>
 
     <section class="data-page__detail">

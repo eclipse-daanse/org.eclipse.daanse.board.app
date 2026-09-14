@@ -32,6 +32,10 @@ import { DButton, DIcon, DInput, DModal, DSelect } from 'org.eclipse.daanse.boar
 import ModelFields from './ModelFields.vue'
 
 const open = defineModel<boolean>({ required: true })
+const props = defineProps<{
+  /** Opened from a connection's menu: that one is the obvious choice. */
+  forConnection?: string
+}>()
 const emit = defineEmits<{ created: [uid: string] }>()
 
 const datasources = inject<DatasourceRepository>(DATASOURCE_REPOSITORY)!
@@ -56,6 +60,20 @@ const summaries = computed(() => {
   return byType
 })
 
+/*
+ * Two kinds of thing register the same way and are picked for different
+ * reasons: a source reads from an endpoint, a composer reads from sources
+ * that already exist. Listing them together made the second kind look like
+ * an endpoint that had lost its settings.
+ */
+const sourceTypes = computed(() =>
+  types.value.filter((each) => datasources.getDatasourceIdentifiers(each)?.kind !== 'composer'),
+)
+
+const composerTypes = computed(() =>
+  types.value.filter((each) => datasources.getDatasourceIdentifiers(each)?.kind === 'composer'),
+)
+
 const doc = computed(() =>
   type.value ? describeModel(datasources.getDatasourceIdentifiers(type.value)?.Model) : undefined,
 )
@@ -70,8 +88,30 @@ const needsConnection = computed(() =>
   (doc.value?.features ?? []).some((f) => f.name === 'connection'),
 )
 
-const connectionOptions = computed(() =>
-  connections.value.map((each: any) => ({ label: each.name || each.uid, value: each.uid })),
+/**
+ * The connections this type reads through, first.
+ *
+ * The type says which kinds it expects, and those are grouped as suggested.
+ * The rest stay in the list: the hint is what the type's author anticipated,
+ * not a rule, and a connection that works but was not foreseen has to remain
+ * choosable.
+ */
+const connectionOptions = computed(() => {
+  const suits = new Set(datasources.getDatasourceIdentifiers(type.value)?.connections ?? [])
+  return connections.value.map((each: any) => ({
+    label: each.name || each.uid,
+    value: each.uid,
+    group:
+      suits.size === 0 ? 'Verbindungen' : suits.has(each.type) ? 'Passend zum Typ' : 'Weitere',
+  }))
+})
+
+/** Whether anything at all suits - said plainly rather than left to guess. */
+const nothingSuits = computed(
+  () =>
+    connectionOptions.value.length > 0 &&
+    !connectionOptions.value.some((each) => each.group === 'Passend zum Typ') &&
+    (datasources.getDatasourceIdentifiers(type.value)?.connections ?? []).length > 0,
 )
 
 watch(type, () => {
@@ -82,7 +122,7 @@ watch(open, (isOpen) => {
   if (!isOpen) return
   type.value = ''
   name.value = ''
-  connection.value = undefined
+  connection.value = props.forConnection
   config.value = {}
 })
 
@@ -122,8 +162,10 @@ function create() {
       <section class="new__step">
         <h3 class="new__label">Typ</h3>
         <p class="new__lead">Was für Daten sollen gelesen werden? Die Beschreibung stammt aus dem Modell des Typs.</p>
+
+        <h4 class="new__rubric">Aus einer Verbindung lesen</h4>
         <ul class="types">
-          <li v-for="each in types" :key="each">
+          <li v-for="each in sourceTypes" :key="each">
             <button
               type="button"
               :class="['type', { 'type--on': type === each }]"
@@ -137,6 +179,25 @@ function create() {
             </button>
           </li>
         </ul>
+
+        <template v-if="composerTypes.length">
+          <h4 class="new__rubric">Aus vorhandenen Datenquellen zusammensetzen</h4>
+          <ul class="types">
+            <li v-for="each in composerTypes" :key="each">
+              <button
+                type="button"
+                :class="['type', { 'type--on': type === each }]"
+                @click="type = each"
+              >
+                <span class="type__name">
+                  {{ each }}
+                  <DIcon v-if="type === each" name="check" size="sm" />
+                </span>
+                <span v-if="summaries[each]" class="type__what">{{ summaries[each] }}</span>
+              </button>
+            </li>
+          </ul>
+        </template>
       </section>
 
       <section v-if="type" class="new__step">
@@ -156,12 +217,17 @@ function create() {
           Es gibt noch keine Verbindung. Lege zuerst eine an — ohne sie hat die Datenquelle
           nichts, woraus sie lesen kann.
         </p>
+        <p v-else-if="nothingSuits" class="new__warn">
+          Keine der vorhandenen Verbindungen ist von diesem Typ vorgesehen. Du kannst
+          trotzdem eine wählen — die Angabe ist ein Hinweis, keine Regel.
+        </p>
         <DSelect
-          v-else
+          v-if="connectionOptions.length"
           v-model="connection"
           :options="connectionOptions"
           value-key="value"
           label-key="label"
+          group-key="group"
           placeholder="Verbindung wählen"
           hint="Der Endpunkt, aus dem diese Quelle liest."
           stacked
@@ -211,6 +277,13 @@ function create() {
   color: var(--color-dim);
 }
 
+.new__rubric {
+  margin: 6px 0 2px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--color-fg);
+}
+
 .new__warn {
   margin: 0;
   padding: 10px 12px;
@@ -225,6 +298,7 @@ function create() {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
   gap: 8px;
+  margin-bottom: 4px;
   /* A type without a model has a shorter card; stretching it to the tallest
      one in the row just adds empty space. */
   align-items: start;
