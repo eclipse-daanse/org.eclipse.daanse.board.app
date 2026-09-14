@@ -775,36 +775,6 @@ const change = (e: any) => {
       />
 
       <!--
-        Shown once there is something to take back. It sits where the
-        alignment bar sits, and gives way to it: a person lining widths up
-        is not the one looking for the last change.
-      -->
-      <div
-        v-if="(history.canUndo.value || history.canRedo.value) && !selectionActive"
-        class="align-bar history-bar"
-        @pointerdown.stop
-      >
-        <button
-          type="button"
-          class="align-bar__btn"
-          :disabled="!history.canUndo.value"
-          :title="history.undoLabel.value ? `Rückgängig: ${history.undoLabel.value}` : 'Rückgängig'"
-          @click="history.undo()"
-        >
-          <DIcon name="undo" size="sm" />
-        </button>
-        <button
-          type="button"
-          class="align-bar__btn"
-          :disabled="!history.canRedo.value"
-          :title="history.redoLabel.value ? `Wiederholen: ${history.redoLabel.value}` : 'Wiederholen'"
-          @click="history.redo()"
-        >
-          <DIcon name="redo" size="sm" />
-        </button>
-      </div>
-
-      <!--
         Shown only with something to line up. Against the outside of the
         selection, so "left" means the same thing whichever widget was
         picked first.
@@ -1159,11 +1129,6 @@ const change = (e: any) => {
  * selection can be anywhere, and a bar that follows it would cover what
  * you are lining up.
  */
-/* The same bar, holding the two that take a change back. */
-.history-bar {
-  gap: 2px;
-}
-
 .align-bar__btn:disabled {
   opacity: 0.4;
   cursor: default;

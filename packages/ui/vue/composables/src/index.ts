@@ -48,4 +48,4 @@ EPackageRegistry.INSTANCE.registerPackage(ComposablesPackage.eINSTANCE)
 
 export { ComposablesPackage }
 export { useDatasourceRepository, useTemporaryStore, useVariableRepository, usePromisifiedModal, useGlobalLoading, VariableWrapper,VARIABLEWRAPPER,VariableComplexStringWrapper,VARIABLECOMPLEXSTRINGWRAPPER, WrapperTypes, plainSettings, useEObject, useEList, useFeature, useBoard}
-export { useHistory, type History } from './useHistory'
+export { useHistory, useCurrentHistory, type History } from './useHistory'

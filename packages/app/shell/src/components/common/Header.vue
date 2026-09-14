@@ -20,6 +20,7 @@ Contributors:
 -->
 
 <script lang="ts" setup>
+import { DIcon } from 'org.eclipse.daanse.board.app.ui.vue.controls'
 import { computed, inject, onBeforeUnmount, onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import {
@@ -36,7 +37,7 @@ import {
   identifier as WORKSPACE,
   type Workspace,
 } from 'org.eclipse.daanse.board.app.lib.model.workspace'
-import { useEList } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+import { useCurrentHistory, useEList } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import { usePages } from '@/composables/usePages'
 import { useWidgetPalette } from '@/composables/useWidgetPalette'
 import { useBoardBackdrop } from '@/composables/useBoardBackdrop'
@@ -47,6 +48,13 @@ const router = useRouter()
 
 /** The page currently open, if any - drives both crumb and mode switch. */
 const pageId = computed(() => (route.params.pageid as string | undefined) ?? '')
+
+/*
+ * Taking a change back belongs to the board, and the buttons for it
+ * belong up here with the rest of what one does to a board. The layout
+ * owns the history and publishes it; this reads whichever board is open.
+ */
+const history = useCurrentHistory()
 
 const isEditing = computed(
   () => route.name === 'edit' || route.name === 'pageEdit' || String(route.path).endsWith('/edit'),
@@ -320,6 +328,30 @@ const openAppearance = () => router.push('/appearance')
         </li>
       </ul>
     </div>
+
+    <button
+      v-if="isEditing && history"
+      type="button"
+      class="icon-action"
+      :disabled="!history.canUndo.value"
+      :title="history.undoLabel.value ? `Rückgängig: ${history.undoLabel.value}` : 'Rückgängig'"
+      aria-label="Letzte Änderung rückgängig machen"
+      @click="history.undo()"
+    >
+      <DIcon name="undo" size="sm" />
+    </button>
+
+    <button
+      v-if="isEditing && history"
+      type="button"
+      class="icon-action"
+      :disabled="!history.canRedo.value"
+      :title="history.redoLabel.value ? `Wiederholen: ${history.redoLabel.value}` : 'Wiederholen'"
+      aria-label="Rückgängig gemachte Änderung wiederholen"
+      @click="history.redo()"
+    >
+      <DIcon name="redo" size="sm" />
+    </button>
 
     <button
       v-if="isEditing"
@@ -726,6 +758,11 @@ const openAppearance = () => router.push('/appearance')
   outline-offset: -2px;
 }
 
+
+.icon-action:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
 .icon-action {
   display: grid;
   place-items: center;

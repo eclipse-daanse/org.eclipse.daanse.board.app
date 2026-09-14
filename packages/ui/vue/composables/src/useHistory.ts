@@ -37,6 +37,7 @@ import {
   toValue,
   watch,
   type MaybeRefOrGetter,
+  type ShallowRef,
 } from 'vue'
 import { EContentAdapter, NotificationType, type EObject, type Notification } from '@emfts/core'
 
@@ -69,6 +70,22 @@ interface Step {
 
 /** How many steps are kept. Beyond this the oldest is forgotten. */
 const DEPTH = 50
+
+/*
+ * The history of the board being edited, for whoever is not the board.
+ *
+ * The buttons sit in the topbar, which is a different bundle from the
+ * layout that owns the board - the same split the snap switch lives with.
+ * A boolean travels there as an attribute on the root element; a history
+ * is more than a boolean, so it travels through this module, which both
+ * sides already share. One board is open at a time, so there is one.
+ */
+const current = shallowRef<History | undefined>()
+
+/** The open board's history, or nothing while no board is being edited. */
+export function useCurrentHistory(): Readonly<ShallowRef<History | undefined>> {
+  return current
+}
 
 export interface History {
   canUndo: Readonly<{ value: boolean }>
@@ -186,7 +203,10 @@ export function useHistory(root: MaybeRefOrGetter<EObject | undefined>): History
   )
 
   if (getCurrentScope()) {
-    onScopeDispose(() => attachedTo?.eAdapterRemove(recorder))
+    onScopeDispose(() => {
+      attachedTo?.eAdapterRemove(recorder)
+      if (current.value === api) current.value = undefined
+    })
   }
 
   /** Puts one change back, and reports what would put it back again. */
@@ -274,7 +294,7 @@ export function useHistory(root: MaybeRefOrGetter<EObject | undefined>): History
     open = undefined
   }
 
-  return {
+  const api: History = {
     canUndo: computed(() => undoable.value.length > 0),
     canRedo: computed(() => redoable.value.length > 0),
     undoLabel: computed(() => undoable.value[undoable.value.length - 1]?.label),
@@ -315,4 +335,7 @@ export function useHistory(root: MaybeRefOrGetter<EObject | undefined>): History
       gesture = false
     },
   }
+
+  current.value = api
+  return api
 }
