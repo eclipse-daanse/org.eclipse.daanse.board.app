@@ -123,7 +123,7 @@ export function isStale(dir) {
 
   /* dist/ is turbo's output for this same package, not an input, and
      .turbo holds its log. */
-  let newest = newestUnder(dir, ['dist-bundle', 'dist', 'node_modules', '.turbo'])
+  let newest = newestUnder(dir, ['dist-bundle', 'dist-bundle.building', 'dist', 'node_modules', '.turbo'])
 
   for (const dep of inlinedDeps(dir)) {
     const at = newestUnder(join(dep.dir, 'dist'))

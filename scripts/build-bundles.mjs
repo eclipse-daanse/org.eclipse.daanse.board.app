@@ -15,6 +15,7 @@
  *   --list: name what would be built and stop
  */
 import { exec } from 'node:child_process'
+import { renameSync, rmSync } from 'node:fs'
 import { availableParallelism } from 'node:os'
 import { join, resolve } from 'node:path'
 import { promisify } from 'node:util'
@@ -47,6 +48,14 @@ if (!list) {
 const jobs = Math.max(1, Number(process.env.BUNDLE_JOBS) || availableParallelism())
 
 const all = bundleDirs(filters)
+
+/* A staging directory that outlived its build is rubbish, and `git add -A`
+   would otherwise commit it. */
+if (!list) {
+  for (const dir of all) {
+    rmSync(join(dir, 'dist-bundle.building'), { recursive: true, force: true })
+  }
+}
 const queue = force ? [...all] : all.filter(isStale)
 const toBuild = queue.length
 const skipped = all.length - toBuild
@@ -65,13 +74,33 @@ if (list) {
 let ok = 0
 const failed = []
 
+/*
+ * Built beside the real output and moved into place only once it is whole.
+ *
+ * A bundle build empties its output directory before it writes into it, so a
+ * build that is interrupted - Ctrl+C, a killed watcher, a machine that runs
+ * out of memory - leaves an empty dist-bundle/ behind. Empty is worse than
+ * stale: the module 404s at load time, far from the cause. Building next
+ * door means an interrupted build changes nothing at all.
+ */
+const STAGING = 'dist-bundle.building'
+
 async function worker() {
   for (let dir = queue.shift(); dir; dir = queue.shift()) {
+    const staging = join(dir, STAGING)
+    const output = join(dir, 'dist-bundle')
     try {
-      await run(`"${VITE}" build --config vite.bundle.config.ts`, { cwd: dir })
+      rmSync(staging, { recursive: true, force: true })
+      await run(`"${VITE}" build --config vite.bundle.config.ts --outDir ${STAGING}`, { cwd: dir })
+      /* The gap between these two is a few milliseconds of work already
+         done, against seconds of building - and nothing reads the directory
+         while a build of it is running. */
+      rmSync(output, { recursive: true, force: true })
+      renameSync(staging, output)
       ok += 1
       console.log(`done   ${dir}`)
     } catch (error) {
+      rmSync(staging, { recursive: true, force: true })
       failed.push(dir)
       // vite prints build errors on stderr; keep the message, drop the stack
       const lines = `${error.stdout ?? ''}\n${error.stderr ?? ''}`

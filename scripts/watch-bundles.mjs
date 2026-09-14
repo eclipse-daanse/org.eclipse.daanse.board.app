@@ -13,6 +13,13 @@
  * library is rebuilt first - through turbo, which also brings its own
  * dependencies up to date - and then the bundles that inline it.
  *
+ * Nothing here empties the output directory first. A build that is
+ * interrupted - the watcher is killed mid-rebuild - would otherwise leave an
+ * empty dist-bundle/ behind, and an empty bundle 404s at load time rather
+ * than merely being stale. Overwriting in place leaves the previous artefact
+ * readable until the new one replaces it. (build-bundles.mjs stages instead,
+ * because a released artefact has to be exactly what the build produced.)
+ *
  * Persistent watchers are capped (WATCH_LIMIT, default 8): each one holds a
  * warm module graph, and a mass change - a codemod touching two hundred
  * files - would otherwise accumulate a hundred of them and eat the machine.
@@ -80,7 +87,7 @@ async function buildOnce(dir) {
       configFile: resolve(dir, 'vite.bundle.config.ts'),
       root: resolve(dir),
       logLevel: 'silent',
-      build: { minify: false },
+      build: { minify: false, emptyOutDir: false },
     })
     console.log(`[${now()}] ${dir} rebuilt (one-shot) in ${((Date.now() - start) / 1000).toFixed(1)}s`)
   } catch (error) {
@@ -106,7 +113,7 @@ function startBundleWatcher(dir, { oneShot = false } = {}) {
         configFile: resolve(dir, 'vite.bundle.config.ts'),
         root: resolve(dir),
         logLevel: 'silent',
-        build: { watch: {}, minify: false },
+        build: { watch: {}, minify: false, emptyOutDir: false },
       })
       watcher.on('event', (event) => {
         if (event.code === 'BUNDLE_START') {
