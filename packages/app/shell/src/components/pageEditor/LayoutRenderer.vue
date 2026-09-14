@@ -122,12 +122,12 @@ watch(layoutId, () => {
 })*/
 
 onMounted(async () => {
-  // Wait a tick to ensure all dependencies are ready
+  /*
+   * One tick, for the components this mounts. The hundred milliseconds
+   * that used to follow were waiting for Pinia to finish starting, and
+   * there is no Pinia to wait for - every board paid them on open.
+   */
   await nextTick()
-
-  // Small delay to ensure Pinia is fully initialized for dynamic components
-  await new Promise(resolve => setTimeout(resolve, 100))
-
   await loadLayout()
 
 })

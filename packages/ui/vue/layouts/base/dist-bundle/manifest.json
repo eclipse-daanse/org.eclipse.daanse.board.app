@@ -20,10 +20,6 @@
       "versionRange": "^5.0.0"
     },
     {
-      "id": "pinia",
-      "versionRange": "^3.0.0"
-    },
-    {
       "id": "vuedraggable",
       "versionRange": "^4.0.0"
     },

@@ -206,7 +206,7 @@ export default defineConfig({
         },
       ] : [])
     ],
-    dedupe: ['vue', 'pinia', 'debug']
+    dedupe: ['vue', 'debug']
 
   },
   server: {

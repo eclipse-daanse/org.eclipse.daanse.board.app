@@ -24,7 +24,6 @@ import { VARIABLE_WRAPPER_FACTORY } from 'org.eclipse.daanse.board.app.lib.facto
 import { EVENT_ACTIONS_REGISTRY_ID } from 'org.eclipse.daanse.board.app.lib.api.events'
 import { VARIABLE_REPOSITORY } from 'org.eclipse.daanse.board.app.lib.api.variable'
 import { createApp, type App as VueApp } from 'vue'
-import { createPinia, setActivePinia } from 'pinia'
 import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
 import { NAVIGATION_REGISTRY_ID, type NavigationRegistry } from 'org.eclipse.daanse.board.app.lib.api.navigation'
 import { NavigationItem } from 'org.eclipse.daanse.board.app.lib.api.navigation'
@@ -68,10 +67,6 @@ export async function activate({ services, log }: ActivationContext) {
   initGridSnap()
 
   app = createApp(App)
-
-  const pinia = createPinia()
-  setActivePinia(pinia)
-  app.use(pinia)
   app.use(router)
   app.provide('codeEditorType', 'monaco')
 

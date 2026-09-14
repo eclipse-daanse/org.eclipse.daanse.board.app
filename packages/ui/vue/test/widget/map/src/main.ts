@@ -11,7 +11,6 @@
 
 import 'reflect-metadata'
 import { createApp } from 'vue'
-import { createPinia, setActivePinia } from 'pinia'
 import App from './App.vue'
 import 'leaflet/dist/leaflet.css'
 
@@ -27,10 +26,5 @@ const app = createApp(App)
 
 // Setup global properties
 services.register(APP, app)
-
-// Setup pinia
-const pinia = createPinia()
-setActivePinia(pinia)
-app.use(pinia)
 
 app.mount('#app')

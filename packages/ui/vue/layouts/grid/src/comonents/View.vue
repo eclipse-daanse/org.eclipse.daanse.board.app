@@ -100,16 +100,14 @@ onMounted(async () => {
     })
   }
 
-  // Wait a tick to ensure Pinia is fully initialized
-  await nextTick()
-
+  /* One tick, so the widgets this mounts exist before it says so. The
+     second one was waiting for Pinia to finish starting. */
   await nextTick()
   emitPageLoaded()
 })
 
 // Emit page loaded event
 const emitPageLoaded = () => {
-  console.log('📄 Emitting system:pageLoaded for page:', pageId)
   eventBus.emit('system:pageLoaded', { pageId })
 }
 

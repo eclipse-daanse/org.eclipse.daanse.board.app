@@ -21,7 +21,7 @@
 import { resolve } from 'node:path'
 import { defineConfig } from 'vite'
 
-const libraries = ['vue', 'vue-router', 'pinia', 'vuedraggable', '@emfts/core']
+const libraries = ['vue', 'vue-router', 'vuedraggable', '@emfts/core']
 
 export default defineConfig({
   define: {
@@ -45,7 +45,6 @@ export default defineConfig({
         index: resolve(__dirname, 'src/index.ts'),
         vue: resolve(__dirname, 'src/artifacts/vue.ts'),
         'vue-router': resolve(__dirname, 'src/artifacts/vue-router.ts'),
-        pinia: resolve(__dirname, 'src/artifacts/pinia.ts'),
         vuedraggable: resolve(__dirname, 'src/artifacts/vuedraggable.ts'),
         'emfts-core': resolve(__dirname, 'src/artifacts/emfts-core.ts'),
       },

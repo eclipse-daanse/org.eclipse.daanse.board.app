@@ -12,7 +12,7 @@
  **********************************************************************/
 
 /**
- * The Vue platform bundle: serves vue, vue-router, pinia and vuedraggable as
+ * The Vue platform bundle: serves vue, vue-router and vuedraggable as
  * standalone ESM artefacts next to this entry. The import map in the host
  * page points the bare specifiers at those files, so every bundle - and the
  * page itself, which no longer bundles any of them - shares one instance of
@@ -34,7 +34,6 @@ import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
 const VERSIONS = {
   vue: '3.5.24',
   'vue-router': '5.0.6',
-  pinia: '3.0.4',
   '@emfts/core': '0.1.1-next.18',
   vuedraggable: '4.1.0',
 } as const
@@ -53,17 +52,15 @@ export async function activate({ log }: ActivationContext) {
 
   // Relative imports resolve to the same URLs the import map names, so the
   // registered instances are identical to what bare imports receive.
-  const [vue, vueRouter, pinia, vuedraggable, emftsCore] = await Promise.all([
+  const [vue, vueRouter, vuedraggable, emftsCore] = await Promise.all([
     import('./artifacts/vue'),
     import('./artifacts/vue-router'),
-    import('./artifacts/pinia'),
     import('./artifacts/vuedraggable'),
     import('./artifacts/emfts-core'),
   ])
 
   runtime.register('vue', vue, VERSIONS.vue, 'platform.vue')
   runtime.register('vue-router', vueRouter, VERSIONS['vue-router'], 'platform.vue')
-  runtime.register('pinia', pinia, VERSIONS.pinia, 'platform.vue')
   runtime.register('vuedraggable', vuedraggable, VERSIONS.vuedraggable, 'platform.vue')
   /*
    * EMF is built on identity: a generated package registers its EClass
@@ -74,7 +71,7 @@ export async function activate({ log }: ActivationContext) {
   runtime.register('@emfts/core', emftsCore, VERSIONS['@emfts/core'], 'platform.vue')
 
   log.info(
-    `shared libraries ready: vue@${VERSIONS.vue}, vue-router@${VERSIONS['vue-router']}, pinia@${VERSIONS.pinia}`,
+    `shared libraries ready: vue@${VERSIONS.vue}, vue-router@${VERSIONS['vue-router']}`,
   )
 }
 
