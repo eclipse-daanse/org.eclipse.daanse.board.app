@@ -34,7 +34,7 @@ export function activate({ services }: ActivationContext) {
   services
     .getRequired<ConnectionRepository>(CONNECTION_REPOSITORY)
     .registerConnectionType('xmla', {
-      icon: 'deployed_code',
+      icon: 'dataset',
       Model: MODEL_ECORE,
       Connection: XmlaConnectionIdentifier,
       Settings: settingsSymbol,

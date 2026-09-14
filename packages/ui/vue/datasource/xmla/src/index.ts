@@ -37,7 +37,7 @@ export function activate({ services }: ActivationContext) {
   services
     .getRequired<DatasourceRepository>(DATASOURCE_REPOSITORY)
     .registerDatasourceType('xmla', {
-      icon: 'deployed_code',
+      icon: 'dataset',
       connections: ['xmla'],
       Model: MODEL_ECORE,
       Store: XmlaDatasourceIndentifier,

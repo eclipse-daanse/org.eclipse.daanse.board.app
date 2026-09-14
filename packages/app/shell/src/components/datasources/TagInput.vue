@@ -20,7 +20,7 @@ Contributors:
  * no tags at all, so they are lowercased and matched against what exists.
  */
 import { computed, ref } from 'vue'
-import { DChip, DField } from 'org.eclipse.daanse.board.app.ui.vue.controls'
+import { DChip, DField, DInput } from 'org.eclipse.daanse.board.app.ui.vue.controls'
 
 const model = defineModel<string[]>({ default: () => [] })
 
@@ -79,11 +79,12 @@ function onKey(event: KeyboardEvent) {
           {{ tag }}
         </DChip>
       </div>
-      <input
+      <!-- The design system's own input, so this field's left edge and
+           frame are the ones every other field has. -->
+      <DInput
         v-model="draft"
-        class="tags__input"
-        type="text"
         placeholder="Wort eingeben, Enter"
+        stacked
         @keydown="onKey"
         @blur="add(draft)"
       />
@@ -113,21 +114,6 @@ function onKey(event: KeyboardEvent) {
   display: flex;
   flex-wrap: wrap;
   gap: 4px;
-}
-
-.tags__input {
-  width: 100%;
-  padding: 6px 10px;
-  font: inherit;
-  color: var(--color-fg);
-  background-color: var(--color-sunken);
-  border: 1px solid var(--color-outline);
-  border-radius: var(--radius-sm);
-}
-
-.tags__input:focus {
-  outline: 2px solid var(--color-accent);
-  outline-offset: -1px;
 }
 
 .tags__offer {

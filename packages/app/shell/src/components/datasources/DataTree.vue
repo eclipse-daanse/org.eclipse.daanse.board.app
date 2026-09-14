@@ -203,7 +203,7 @@ const groups = computed(() => {
       orphan: true,
       sources: composed,
       itself: true,
-      icon: 'stacks',
+      icon: 'layers',
       tags: [],
     })
   }

@@ -12,11 +12,11 @@ Contributors:
 -->
 <script setup lang="ts">
 /**
- * Creating a data source, one step at a time.
+ * Creating a data source.
  *
- * Same shape as the connection dialog, with the connection to read from in
- * between: a source without one has nowhere to fetch from, and the model
- * says so by declaring a `connection` field.
+ * Same two steps as the connection dialog, with the connection to read
+ * through in between: a source without one has nowhere to fetch from, and
+ * the model says so by declaring a `connection` field.
  */
 import { computed, inject, ref, watch } from 'vue'
 import {
@@ -28,7 +28,8 @@ import {
   type Workspace,
 } from 'org.eclipse.daanse.board.app.lib.model.workspace'
 import { describeModel, useEList } from 'org.eclipse.daanse.board.app.ui.vue.composables'
-import { DButton, DIcon, DInput, DModal, DSelect } from 'org.eclipse.daanse.board.app.ui.vue.controls'
+import { DIcon, DInput, DSelect } from 'org.eclipse.daanse.board.app.ui.vue.controls'
+import CreateWizard from './CreateWizard.vue'
 import ModelFields from './ModelFields.vue'
 import TagInput from './TagInput.vue'
 
@@ -42,21 +43,44 @@ const emit = defineEmits<{ created: [uid: string] }>()
 const datasources = inject<DatasourceRepository>(DATASOURCE_REPOSITORY)!
 const workspace = inject<Workspace>(WORKSPACE)!
 const connections = useEList(workspace, (w) => w.connections)
+const held = useEList(workspace, (w) => w.datasources)
 
 const type = ref('')
 const name = ref('')
 const icon = ref('')
 const tags = ref<string[]>([])
-/* undefined, not '': DSelect shows its placeholder only while nothing is
-   chosen, and an empty string reads as a choice - the first connection would
-   look selected without being it. */
 const connection = ref<string | undefined>(undefined)
 const config = ref<Record<string, unknown>>({})
 
-const held = useEList(workspace, (w) => w.datasources)
+const types = computed(() => datasources.registeredDatasources)
+const kindOf = (each: string) => datasources.getDatasourceIdentifiers(each)?.kind
 
-/* Every tag already in use, so the same thing is not filed twice under two
-   spellings. */
+/*
+ * Two kinds of thing register the same way and are picked for different
+ * reasons: a source reads from an endpoint, a composer reads from sources
+ * that already exist. Listing them together made the second kind look like
+ * an endpoint that had lost its settings.
+ */
+const groups = computed(() => [
+  {
+    label: 'Aus einer Verbindung lesen',
+    types: types.value.filter((each) => kindOf(each) !== 'composer'),
+  },
+  {
+    label: 'Aus vorhandenen Datenquellen zusammensetzen',
+    types: types.value.filter((each) => kindOf(each) === 'composer'),
+  },
+])
+
+const summaryOf = (each: string) =>
+  describeModel(datasources.getDatasourceIdentifiers(each)?.Model)?.documentation
+
+const iconOf = (each: string) => datasources.getDatasourceIdentifiers(each)?.icon ?? 'database'
+
+const doc = computed(() =>
+  type.value ? describeModel(datasources.getDatasourceIdentifiers(type.value)?.Model) : undefined,
+)
+
 const knownTags = computed(() => {
   const all = new Set<string>()
   for (const source of held.value as any[]) {
@@ -65,44 +89,11 @@ const knownTags = computed(() => {
   return [...all].sort()
 })
 
-/** What the icon field stands for while it is empty. */
-const typeIcon = computed(
-  () => datasources.getDatasourceIdentifiers(type.value)?.icon ?? 'database',
-)
-
-const types = computed(() => datasources.registeredDatasources)
-
-const summaries = computed(() => {
-  const byType: Record<string, string | undefined> = {}
-  for (const each of types.value) {
-    byType[each] = describeModel(datasources.getDatasourceIdentifiers(each)?.Model)?.documentation
-  }
-  return byType
-})
-
-/*
- * Two kinds of thing register the same way and are picked for different
- * reasons: a source reads from an endpoint, a composer reads from sources
- * that already exist. Listing them together made the second kind look like
- * an endpoint that had lost its settings.
- */
-const sourceTypes = computed(() =>
-  types.value.filter((each) => datasources.getDatasourceIdentifiers(each)?.kind !== 'composer'),
-)
-
-const composerTypes = computed(() =>
-  types.value.filter((each) => datasources.getDatasourceIdentifiers(each)?.kind === 'composer'),
-)
-
-const doc = computed(() =>
-  type.value ? describeModel(datasources.getDatasourceIdentifiers(type.value)?.Model) : undefined,
-)
-
 /**
  * Whether this type reads through a connection.
  *
  * The model answers it: a source that needs one declares a `connection`
- * field. A type that does not - a computed source, say - is not asked.
+ * field. A composer does not, and is not asked.
  */
 const needsConnection = computed(() =>
   (doc.value?.features ?? []).some((f) => f.name === 'connection'),
@@ -111,18 +102,17 @@ const needsConnection = computed(() =>
 /**
  * The connections this type reads through, first.
  *
- * The type says which kinds it expects, and those are grouped as suggested.
- * The rest stay in the list: the hint is what the type's author anticipated,
- * not a rule, and a connection that works but was not foreseen has to remain
- * choosable.
+ * The type says which kinds it expects, and those are grouped as suited.
+ * The rest stay in the list: the hint is what the type's author
+ * anticipated, not a rule, and a connection that works but was not foreseen
+ * has to remain choosable.
  */
 const connectionOptions = computed(() => {
   const suits = new Set(datasources.getDatasourceIdentifiers(type.value)?.connections ?? [])
   return connections.value.map((each: any) => ({
     label: each.name || each.uid,
     value: each.uid,
-    group:
-      suits.size === 0 ? 'Verbindungen' : suits.has(each.type) ? 'Passend zum Typ' : 'Weitere',
+    group: suits.size === 0 ? 'Verbindungen' : suits.has(each.type) ? 'Passend zum Typ' : 'Weitere',
   }))
 })
 
@@ -148,23 +138,23 @@ watch(open, (isOpen) => {
   config.value = {}
 })
 
-/* `connection` is answered by its own select above, not by ModelFields. */
+/* `connection` is answered by its own select, not by ModelFields. */
 const missing = computed(() => {
   const required = (doc.value?.features ?? [])
     .filter((f) => !f.optional && !['name', 'type', 'uid', 'connection'].includes(f.name))
     .filter((f) => {
-      const held = config.value[f.name]
-      return held === undefined || held === null || held === ''
+      const value = config.value[f.name]
+      return value === undefined || value === null || value === ''
     })
     .map((f) => f.name)
   if (needsConnection.value && !connection.value) required.push('connection')
   return required
 })
 
-const canCreate = computed(() => !!type.value && !!name.value.trim() && !missing.value.length)
+const ready = computed(() => !!type.value && !!name.value.trim() && !missing.value.length)
 
 function create() {
-  if (!canCreate.value) return
+  if (!ready.value) return
   const settings = { ...config.value }
   if (needsConnection.value) settings.connection = connection.value
 
@@ -183,233 +173,115 @@ function create() {
 </script>
 
 <template>
-  <DModal v-model="open" title="Datenquelle anlegen" size="lg" @cancel="open = false">
-    <div class="new">
-      <section class="new__step">
-        <h3 class="new__label">Typ</h3>
-        <p class="new__lead">Was für Daten sollen gelesen werden? Die Beschreibung stammt aus dem Modell des Typs.</p>
+  <CreateWizard
+    v-model="open"
+    v-model:type="type"
+    title="Datenquelle anlegen"
+    lead="Was für Daten sollen gelesen werden? Die Beschreibungen stammen aus den Modellen der Typen."
+    :groups="groups"
+    :summary-of="summaryOf"
+    :icon-of="iconOf"
+    :ready="ready"
+    @create="create"
+  >
+    <template #setup>
+      <DInput
+        v-model="name"
+        label="Name"
+        placeholder="Wofür diese Datenquelle steht"
+        hint="Unter diesem Namen wählst du die Datenquelle im Widget aus."
+        stacked
+        required
+      />
 
-        <h4 class="new__rubric">Aus einer Verbindung lesen</h4>
-        <ul class="types">
-          <li v-for="each in sourceTypes" :key="each">
-            <button
-              type="button"
-              :class="['type', { 'type--on': type === each }]"
-              @click="type = each"
-            >
-              <span class="type__name">
-                {{ each }}
-                <DIcon v-if="type === each" name="check" size="sm" />
-              </span>
-              <span v-if="summaries[each]" class="type__what">{{ summaries[each] }}</span>
-            </button>
-          </li>
-        </ul>
-
-        <template v-if="composerTypes.length">
-          <h4 class="new__rubric">Aus vorhandenen Datenquellen zusammensetzen</h4>
-          <ul class="types">
-            <li v-for="each in composerTypes" :key="each">
-              <button
-                type="button"
-                :class="['type', { 'type--on': type === each }]"
-                @click="type = each"
-              >
-                <span class="type__name">
-                  {{ each }}
-                  <DIcon v-if="type === each" name="check" size="sm" />
-                </span>
-                <span v-if="summaries[each]" class="type__what">{{ summaries[each] }}</span>
-              </button>
-            </li>
-          </ul>
-        </template>
-      </section>
-
-      <section v-if="type" class="new__step">
-        <h3 class="new__label">Name</h3>
-        <DInput
-          v-model="name"
-          placeholder="Wofür diese Datenquelle steht"
-          hint="Unter diesem Namen wählst du die Datenquelle im Widget aus."
-          stacked
-          required
-        />
-      </section>
-
-      <section v-if="type && needsConnection" class="new__step">
-        <h3 class="new__label">Verbindung</h3>
-        <p v-if="!connectionOptions.length" class="new__warn">
+      <template v-if="needsConnection">
+        <p v-if="!connectionOptions.length" class="note note--warn">
           Es gibt noch keine Verbindung. Lege zuerst eine an — ohne sie hat die Datenquelle
           nichts, woraus sie lesen kann.
         </p>
-        <p v-else-if="nothingSuits" class="new__warn">
-          Keine der vorhandenen Verbindungen ist von diesem Typ vorgesehen. Du kannst
-          trotzdem eine wählen — die Angabe ist ein Hinweis, keine Regel.
-        </p>
-        <DSelect
-          v-if="connectionOptions.length"
-          v-model="connection"
-          :options="connectionOptions"
-          value-key="value"
-          label-key="label"
-          group-key="group"
-          placeholder="Verbindung wählen"
-          hint="Der Endpunkt, aus dem diese Quelle liest."
-          stacked
-          required
-        />
-      </section>
-
-      <section v-if="type" class="new__step">
-        <h3 class="new__label">Einordnung</h3>
-        <div class="new__icon">
-          <span class="new__icon-preview" aria-hidden="true">
-            <DIcon :name="icon.trim() || typeIcon" size="lg" />
-          </span>
-          <DInput
-            v-model="icon"
-            label="Symbol"
-            :placeholder="typeIcon"
-            hint="Ein Material-Symbols-Name. Leer lassen für das Symbol des Typs."
+        <template v-else>
+          <p v-if="nothingSuits" class="note">
+            Keine der vorhandenen Verbindungen ist von diesem Typ vorgesehen. Du kannst
+            trotzdem eine wählen — die Angabe ist ein Hinweis, keine Regel.
+          </p>
+          <DSelect
+            v-model="connection"
+            label="Verbindung"
+            :options="connectionOptions"
+            value-key="value"
+            label-key="label"
+            group-key="group"
+            placeholder="Verbindung wählen"
+            hint="Der Endpunkt, aus dem diese Quelle liest."
             stacked
+            required
           />
-        </div>
-        <TagInput
-          v-model="tags"
-          label="Schlagworte"
-          hint="Wofür diese Datenquelle da ist — danach lässt sich später suchen."
-          :known="knownTags"
+        </template>
+      </template>
+
+      <div class="icon">
+        <DInput
+          v-model="icon"
+          label="Symbol"
+          :placeholder="iconOf(type)"
+          hint="Ein Material-Icons-Name. Leer lassen für das Symbol des Typs."
+          stacked
         />
-      </section>
+        <span class="icon__preview" aria-hidden="true">
+          <DIcon :name="icon.trim() || iconOf(type)" size="lg" />
+        </span>
+      </div>
 
-      <section v-if="type" class="new__step">
-        <h3 class="new__label">Einstellungen</h3>
-        <p v-if="doc?.documentation" class="new__lead">{{ doc.documentation }}</p>
-        <!-- `connection` is answered by the select above -->
-        <ModelFields :doc="doc" :config="config" :omit="['connection']" />
-      </section>
-    </div>
+      <TagInput
+        v-model="tags"
+        label="Schlagworte"
+        hint="Wofür diese Datenquelle da ist — danach lässt sich später suchen."
+        :known="knownTags"
+      />
 
-    <template #actions>
-      <DButton intent="quiet" @click="open = false">Abbrechen</DButton>
-      <DButton intent="primary" :disabled="!canCreate" @click="create">Anlegen</DButton>
+      <ModelFields :doc="doc" :config="config" :omit="['connection']" />
     </template>
-  </DModal>
+  </CreateWizard>
 </template>
 
 <style scoped>
-.new {
-  display: flex;
-  flex-direction: column;
-  gap: 22px;
-}
-
-.new__step {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.new__label {
+.note {
   margin: 0;
-  font-size: 0.78rem;
-  font-weight: 600;
-  letter-spacing: 0.04em;
-  color: var(--color-dim);
-}
-
-.new__lead {
-  margin: 0;
+  padding: 10px 12px;
   font-size: 0.85rem;
+  line-height: 1.45;
   color: var(--color-dim);
+  background-color: var(--color-sunken);
+  border-radius: var(--radius-sm);
 }
 
-.new__icon {
+.note--warn {
+  color: var(--color-fg);
+  border-left: 2px solid var(--color-warn, var(--color-accent));
+}
+
+.icon {
   display: flex;
   align-items: flex-start;
   gap: 10px;
 }
 
-.new__icon-preview {
+.icon__preview {
   display: grid;
+  flex: none;
   place-items: center;
-  width: 42px;
-  height: 42px;
+  /* The same box as the control beside it, which sits below its own label. */
+  margin-top: 21px;
+  width: 26px;
+  height: 26px;
   color: var(--color-accent);
   background-color: var(--color-sunken);
   border: 1px solid var(--color-outline);
   border-radius: var(--radius-sm);
 }
 
-.new__icon :deep(.field) {
+.icon :deep(.field) {
   flex: 1;
-}
-
-.new__rubric {
-  margin: 6px 0 2px;
-  font-size: 0.85rem;
-  font-weight: 600;
-  color: var(--color-fg);
-}
-
-.new__warn {
-  margin: 0;
-  padding: 10px 12px;
-  font-size: 0.85rem;
-  color: var(--color-fg);
-  background-color: var(--color-sunken);
-  border-left: 2px solid var(--color-warn, var(--color-accent));
-  border-radius: var(--radius-sm);
-}
-
-.types {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-  gap: 8px;
-  margin-bottom: 4px;
-  /* A type without a model has a shorter card; stretching it to the tallest
-     one in the row just adds empty space. */
-  align-items: start;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.type {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  width: 100%;
-  padding: 10px 12px;
-  text-align: left;
-  background-color: var(--color-sunken);
-  border: 1px solid var(--color-outline);
-  border-radius: var(--radius-sm);
-  cursor: pointer;
-}
-
-.type:hover {
-  border-color: var(--color-accent);
-}
-
-.type--on {
-  border-color: var(--color-accent);
-  box-shadow: inset 2px 0 0 var(--color-accent);
-}
-
-.type__name {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 6px;
-  font-weight: 600;
-  color: var(--color-fg);
-}
-
-.type__what {
-  font-size: 0.8rem;
-  line-height: 1.4;
-  color: var(--color-dim);
+  min-width: 0;
 }
 </style>

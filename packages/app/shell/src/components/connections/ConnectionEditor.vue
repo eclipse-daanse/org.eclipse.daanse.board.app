@@ -100,15 +100,15 @@ const saveConnection = () => {
       <DInput v-model="connectionProxy.name" label="Name" />
       <DSelect v-model="connectionProxy.type" label="Typ" :options="availableConnections" />
       <div class="editor__icon">
-        <span class="editor__icon-preview" aria-hidden="true">
-          <DIcon :name="connectionProxy.icon?.trim() || typeIcon" size="lg" />
-        </span>
         <DInput
           v-model="connectionProxy.icon"
           label="Symbol"
           :placeholder="typeIcon"
-          hint="Ein Material-Symbols-Name. Leer lassen für das Symbol des Typs."
+          hint="Ein Material-Icons-Name. Leer lassen für das Symbol des Typs."
         />
+        <span class="editor__icon-preview" aria-hidden="true">
+          <DIcon :name="connectionProxy.icon?.trim() || typeIcon" size="lg" />
+        </span>
       </div>
       <TagInput
         v-model="connectionProxy.tags"
@@ -141,15 +141,19 @@ const saveConnection = () => {
 
 .editor__icon {
   display: flex;
-  align-items: flex-start;
+  /* The label sits beside the control here, not above it, so the preview
+     lines up on the middle rather than the top. */
+  align-items: center;
   gap: 10px;
 }
 
 .editor__icon-preview {
   display: grid;
+  flex: none;
   place-items: center;
-  width: 42px;
-  height: 42px;
+  /* The same box as the control beside it. */
+  width: 26px;
+  height: 26px;
   color: var(--color-accent);
   background-color: var(--color-sunken);
   border: 1px solid var(--color-outline);

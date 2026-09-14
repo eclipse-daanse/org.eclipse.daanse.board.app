@@ -37,7 +37,7 @@ export function activate({ services }: ActivationContext) {
   services
     .getRequired<DatasourceRepository>(DATASOURCE_REPOSITORY)
     .registerDatasourceType('csv', {
-      icon: 'table',
+      icon: 'grid_on',
       connections: ['rest'],
       Model: MODEL_ECORE,
       Store: CSVDatasourceIdentifier,
