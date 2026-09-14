@@ -83,6 +83,7 @@ function activate({ services }) {
   services.register("DatatablePreview", _sfc_main$1);
   services.register("DatatableSettings", _sfc_main);
   services.getRequired(DATASOURCE_REPOSITORY).registerDatasourceType("datatable", {
+    icon: "table_chart",
     kind: "composer",
     Store: DatatableComposerIdentifier,
     Preview: previewSymbol,

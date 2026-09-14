@@ -111,6 +111,7 @@ const C = `<?xml version="1.0" encoding="UTF-8"?>
 }), S = Symbol.for("XmlaConnectionSettings");
 function v({ services: e }) {
   e.register("XmlaConnectionSettings", A), e.getRequired(d).registerConnectionType("xmla", {
+    icon: "deployed_code",
     Model: C,
     Connection: w,
     Settings: S

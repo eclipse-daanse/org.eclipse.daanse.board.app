@@ -5,7 +5,7 @@
  * @generated
  */
 
-import type { EObject } from '@emfts/core';
+import type { EObject, EList } from '@emfts/core';
 
 /**
  * Connection
@@ -16,5 +16,7 @@ export interface Connection extends EObject {
   name?: string;
   type?: string;
   config?: unknown;
+  icon?: string;
+  tags: EList<string>;
 
 }

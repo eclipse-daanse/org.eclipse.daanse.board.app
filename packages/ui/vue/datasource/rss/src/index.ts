@@ -38,6 +38,7 @@ export function activate({ services }: ActivationContext) {
   services
     .getRequired<DatasourceRepository>(DATASOURCE_REPOSITORY)
     .registerDatasourceType('rss', {
+      icon: 'rss_feed',
       connections: ['rss'],
       Model: MODEL_ECORE,
       Store: RssDatasourceIdentifier,

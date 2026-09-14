@@ -1,4 +1,4 @@
-import { g as fn } from "./index-CyJGxwMM.js";
+import { g as fn } from "./index-B1S39GBy.js";
 function En(w, G) {
   for (var _ = 0; _ < G.length; _++) {
     const g = G[_];

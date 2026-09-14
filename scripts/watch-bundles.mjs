@@ -113,7 +113,14 @@ function startBundleWatcher(dir, { oneShot = false } = {}) {
         configFile: resolve(dir, 'vite.bundle.config.ts'),
         root: resolve(dir),
         logLevel: 'silent',
-        build: { watch: {}, minify: false, emptyOutDir: false },
+        build: {
+          /* Rollup watches every file in the graph and, left alone, the
+             directory it writes into as well - which makes each build the
+             trigger for the next one. */
+          watch: { exclude: ['**/dist-bundle/**', '**/node_modules/**'] },
+          minify: false,
+          emptyOutDir: false,
+        },
       })
       watcher.on('event', (event) => {
         if (event.code === 'BUNDLE_START') {

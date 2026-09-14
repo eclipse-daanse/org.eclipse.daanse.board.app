@@ -6,7 +6,8 @@
  */
 
 import { BasicEObject } from '@emfts/core';
-import type { EClass, EStructuralFeature } from '@emfts/core';
+import { createBasicEList } from '@emfts/core';
+import type { EClass, EStructuralFeature, EList } from '@emfts/core';
 import type { Connection } from './Connection.js';
 import type { Datasource } from './Datasource.js';
 import { WorkspacePackage } from './WorkspacePackage.js';
@@ -22,6 +23,8 @@ export class DatasourceImpl extends BasicEObject implements Datasource {
   static readonly TYPE: number = 2;
   static readonly CONNECTION: number = 3;
   static readonly CONFIG: number = 4;
+  static readonly ICON: number = 5;
+  static readonly TAGS: number = 6;
 
   // Private fields
   private _uid: string = "";
@@ -29,6 +32,8 @@ export class DatasourceImpl extends BasicEObject implements Datasource {
   private _type?: string;
   private _connection?: Connection;
   private _config?: unknown;
+  private _icon?: string;
+  private _tags!: EList<string>;
 
   /**
    * Returns the EClass of this object
@@ -158,6 +163,37 @@ export class DatasourceImpl extends BasicEObject implements Datasource {
     }
   }
 
+  get icon(): string {
+    return this._icon!;
+  }
+
+  set icon(value: string) {
+    const oldValue = this._icon;
+    this._icon = value;
+    if (this.eDeliver()) {
+      this.eNotify({
+        getNotifier: () => this,
+        getEventType: () => 1, // SET
+        getFeature: () => this.eClass().getEStructuralFeature(DatasourceImpl.ICON),
+        getOldValue: () => oldValue,
+        getNewValue: () => value,
+        getPosition: () => -1,
+        wasSet: () => true,
+        isTouch: () => false,
+        isReset: () => false,
+        getFeatureID: () => DatasourceImpl.ICON,
+        merge: () => false
+      });
+    }
+  }
+
+  get tags(): EList<string> {
+    if (!this._tags) {
+      this._tags = createBasicEList<any>(this, this.eClass().getEStructuralFeature('tags')!);
+    }
+    return this._tags;
+  }
+
   // Reflective API
 
   /**
@@ -176,6 +212,10 @@ export class DatasourceImpl extends BasicEObject implements Datasource {
         return this.connection;
       case DatasourceImpl.CONFIG:
         return this.config;
+      case DatasourceImpl.ICON:
+        return this.icon;
+      case DatasourceImpl.TAGS:
+        return this.tags;
       default:
         return super.eGet(feature);
     }
@@ -207,6 +247,15 @@ export class DatasourceImpl extends BasicEObject implements Datasource {
         this.config = newValue as unknown;
         super.eSet(feature, newValue);
         break;
+      case DatasourceImpl.ICON:
+        this.icon = newValue as string;
+        super.eSet(feature, newValue);
+        break;
+      case DatasourceImpl.TAGS:
+        this.tags.clear();
+        this.tags.addAll(newValue as any[]);
+        super.eSet(feature, newValue);
+        break;
       default:
         super.eSet(feature, newValue);
     }
@@ -228,6 +277,10 @@ export class DatasourceImpl extends BasicEObject implements Datasource {
         return this._connection !== undefined;
       case DatasourceImpl.CONFIG:
         return this._config !== undefined;
+      case DatasourceImpl.ICON:
+        return this._icon !== undefined;
+      case DatasourceImpl.TAGS:
+        return this._tags !== undefined && !this._tags.isEmpty();
       default:
         return super.eIsSet(feature);
     }
@@ -254,6 +307,12 @@ export class DatasourceImpl extends BasicEObject implements Datasource {
       case DatasourceImpl.CONFIG:
         this._config = undefined;
         return;
+      case DatasourceImpl.ICON:
+        this._icon = undefined;
+        return;
+      case DatasourceImpl.TAGS:
+        if (this._tags) this._tags.clear();
+        return;
       default:
         super.eUnset(feature);
     }
@@ -274,6 +333,8 @@ export class DatasourceImpl extends BasicEObject implements Datasource {
       type: this.type,
       connection: this.connection,
       config: this.config,
+      icon: this.icon,
+      tags: this.tags?.toArray?.() ?? this.tags,
     };
   }
 }

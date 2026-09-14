@@ -10925,6 +10925,7 @@ function activate({ services }) {
   services.register("ChartPreview", Preview);
   services.register("ChartSettings", _sfc_main);
   services.getRequired(DATASOURCE_REPOSITORY).registerDatasourceType("chart", {
+    icon: "bar_chart",
     kind: "composer",
     Store: ChartComposerIdentifier,
     Preview: previewSymbol,

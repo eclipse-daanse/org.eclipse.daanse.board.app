@@ -98,7 +98,7 @@ function G(t) {
 * (c) 2018-present Yuxi (Evan) You and Vue contributors
 * @license MIT
 **/
-let C = null, q = null;
+let b = null, q = null;
 const X = (t) => t.__isTeleport;
 function R(t, e) {
   t.shapeFlag & 6 && t.component ? (t.transition = e, R(t.component.subTree, e)) : t.shapeFlag & 128 ? (t.ssContent.transition = e.clone(t.ssContent), t.ssFallback.transition = e.clone(t.ssFallback)) : t.transition = e;
@@ -143,7 +143,7 @@ const N = ({ key: t }) => t ?? null, p = ({
   ref: t,
   ref_key: e,
   ref_for: n
-}) => (typeof t == "number" && (t = "" + t), t != null ? u(t) || x(t) || g(t) ? { i: C, r: t, k: e, f: !!n } : t : null);
+}) => (typeof t == "number" && (t = "" + t), t != null ? u(t) || x(t) || g(t) ? { i: b, r: t, k: e, f: !!n } : t : null);
 function st(t, e = null, n = null, o = 0, s = null, l = t === A ? 0 : 1, c = !1, r = !1) {
   const i = {
     __v_isVNode: !0,
@@ -172,7 +172,7 @@ function st(t, e = null, n = null, o = 0, s = null, l = t === A ? 0 : 1, c = !1,
     dynamicProps: s,
     dynamicChildren: null,
     appContext: null,
-    ctx: C
+    ctx: b
   };
   return r ? (T(i, n), l & 128 && t.normalize(i)) : n && (i.shapeFlag |= u(n) ? 8 : 16), // avoid a block node from tracking itself
   !c && // has current parent block
@@ -216,12 +216,12 @@ function lt(t) {
   return t ? k(t) || O(t) ? y({}, t) : t : null;
 }
 function h(t, e, n = !1, o = !1) {
-  const { props: s, ref: l, patchFlag: c, children: r, transition: i } = t, S = e ? ct(s || {}, e) : s, b = {
+  const { props: s, ref: l, patchFlag: c, children: r, transition: i } = t, C = e ? ct(s || {}, e) : s, S = {
     __v_isVNode: !0,
     __v_skip: !0,
     type: t.type,
-    props: S,
-    key: S && N(S),
+    props: C,
+    key: C && N(C),
     ref: e && e.ref ? (
       // #2078 in the case of <component :is="vnode" ref="extra"/>
       // if the vnode itself already has a ref, cloneVNode will need to merge
@@ -261,9 +261,9 @@ function h(t, e, n = !1, o = !1) {
     ce: t.ce
   };
   return i && o && R(
-    b,
-    i.clone(b)
-  ), b;
+    S,
+    i.clone(S)
+  ), S;
 }
 function it(t = " ", e = 0) {
   return V(Q, null, t, e);
@@ -281,8 +281,8 @@ function T(t, e) {
       s && (s._c && (s._d = !1), T(t, s()), s._c && (s._d = !0));
       return;
     } else
-      n = 32, !e._ && !O(e) && (e._ctx = C);
-  else g(e) ? (e = { default: e, _ctx: C }, n = 32) : (e = String(e), o & 64 ? (n = 16, e = [it(e)]) : n = 8);
+      n = 32, !e._ && !O(e) && (e._ctx = b);
+  else g(e) ? (e = { default: e, _ctx: b }, n = 32) : (e = String(e), o & 64 ? (n = 16, e = [it(e)]) : n = 8);
   t.children = e, t.shapeFlag |= n;
 }
 function ct(...t) {
@@ -334,6 +334,7 @@ const at = /* @__PURE__ */ Y({
 }), ut = Symbol.for("WSConnectionFactory"), ft = Symbol.for("WsConnectionSettings");
 function pt({ services: t }) {
   t.register("WsConnectionSettings", at), t.getRequired(I).registerConnectionType("ws", {
+    icon: "bolt",
     Model: M,
     Connection: ut,
     Settings: ft

@@ -36,6 +36,7 @@ export function activate({ services }: ActivationContext) {
   services
     .getRequired<ConnectionRepository>(CONNECTION_REPOSITORY)
     .registerConnectionType('rest', {
+      icon: 'api',
       Model: MODEL_ECORE,
       Connection: RestConnectionIdentifier,
       Settings: settingsSymbol,

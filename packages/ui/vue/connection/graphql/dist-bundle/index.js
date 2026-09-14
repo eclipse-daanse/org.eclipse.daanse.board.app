@@ -342,6 +342,7 @@ const at = /* @__PURE__ */ Y({
 }), ut = Symbol.for("GraphQLConnectionFactory"), ft = Symbol.for("GraphqlConnectionSettings");
 function mt({ services: t }) {
   t.register("GraphqlConnectionSettings", at), t.getRequired(I).registerConnectionType("graphql", {
+    icon: "hub",
     Model: V,
     Connection: ut,
     Settings: ft

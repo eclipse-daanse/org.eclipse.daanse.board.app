@@ -22,7 +22,8 @@ import {
 } from 'org.eclipse.daanse.board.app.lib.model.workspace'
 import { useEList } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import { cloneDeep } from 'lodash'
-import { DButton, DInput, DSelect } from 'org.eclipse.daanse.board.app.ui.vue.controls'
+import { DButton, DIcon, DInput, DSelect } from 'org.eclipse.daanse.board.app.ui.vue.controls'
+import TagInput from './TagInput.vue'
 
 const props = withDefaults(
   defineProps<{
@@ -47,6 +48,20 @@ const connections = useEList(workspace, (w) => w.connections)
 /* A composer's settings pick the sources it reads from. */
 const dataSources = useEList(workspace, (w) => w.datasources)
 
+const typeIcon = computed(
+  () =>
+    datasourceRepository.getDatasourceIdentifiers(datasourceProxy.value.type)?.icon ?? 'database',
+)
+
+/* Every tag already in use, so the same thing is not filed twice. */
+const knownTags = computed(() => {
+  const all = new Set<string>()
+  for (const source of dataSources.value as any[]) {
+    for (const tag of source.tags ?? []) all.add(tag)
+  }
+  return [...all].sort()
+})
+
 const availableDatasources = computed(() => {
   return datasourceRepository.registeredDatasources
 })
@@ -62,9 +77,11 @@ onMounted(() => {
         uid: dataSource.uid,
         name: dataSource.name,
         type: dataSource.type,
+        icon: dataSource.icon ?? '',
+        tags: [...(dataSource.tags ?? [])],
         config: cloneDeep(dataSource.config ?? {}),
       }
-    : {}
+    : { tags: [] }
 })
 
 const saveDataSource = () => {
@@ -72,6 +89,10 @@ const saveDataSource = () => {
   if (dataSource) {
     dataSource.name = datasourceProxy.value.name
     dataSource.type = datasourceProxy.value.type
+    dataSource.icon = datasourceProxy.value.icon?.trim() || undefined
+    /* Replaced wholesale: the EList is the model's, the array was a copy. */
+    dataSource.tags.clear()
+    for (const tag of datasourceProxy.value.tags ?? []) dataSource.tags.add(tag)
     dataSource.config = datasourceProxy.value.config
     /* The settings name the connection by id; the model holds the reference. */
     dataSource.connection = connections.value.find(
@@ -115,6 +136,23 @@ const emit = defineEmits(['close'])
         <DInput v-model="datasourceProxy.uid" label="UID" readonly />
         <DInput v-model="datasourceProxy.name" label="Name" />
         <DSelect v-model="datasourceProxy.type" label="Typ" :options="availableDatasources" />
+        <div class="editor__icon">
+          <span class="editor__icon-preview" aria-hidden="true">
+            <DIcon :name="datasourceProxy.icon?.trim() || typeIcon" size="lg" />
+          </span>
+          <DInput
+            v-model="datasourceProxy.icon"
+            label="Symbol"
+            :placeholder="typeIcon"
+            hint="Ein Material-Symbols-Name. Leer lassen für das Symbol des Typs."
+          />
+        </div>
+        <TagInput
+          v-model="datasourceProxy.tags"
+          label="Schlagworte"
+          hint="Wofür diese Datenquelle da ist — danach lässt sich suchen."
+          :known="knownTags"
+        />
         <component
           :is="settingsComponent"
           :config="datasourceProxy.config"
@@ -146,6 +184,27 @@ const emit = defineEmits(['close'])
   gap: 12px;
   height: 100%;
   min-height: 0;
+}
+
+.editor__icon {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.editor__icon-preview {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  color: var(--color-accent);
+  background-color: var(--color-sunken);
+  border: 1px solid var(--color-outline);
+  border-radius: var(--radius-sm);
+}
+
+.editor__icon :deep(.field) {
+  flex: 1;
 }
 
 .editor__fields {

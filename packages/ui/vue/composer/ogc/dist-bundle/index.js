@@ -811,6 +811,7 @@ function activate({ services }) {
   services.register("OgcComposerPreview", _sfc_main$1);
   services.register("OgcComposerSettings", _sfc_main);
   services.getRequired(DATASOURCE_REPOSITORY).registerDatasourceType("OGC Composer", {
+    icon: "sensors",
     kind: "composer",
     Store: OgcComposerIdentifier,
     Preview: previewSymbol,

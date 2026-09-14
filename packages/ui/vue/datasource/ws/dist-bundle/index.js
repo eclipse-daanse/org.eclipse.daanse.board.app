@@ -1,94 +1,116 @@
-import { DATASOURCE_REPOSITORY } from "org.eclipse.daanse.board.app.lib.api.datasource";
-import { defineComponent, shallowRef, ref, watch, createElementBlock, createCommentVNode, openBlock, toDisplayString, computed, Fragment, createVNode, unref } from "vue";
-import { useTemporaryStore } from "org.eclipse.daanse.board.app.ui.vue.composables";
-import { DSelect, DSwitch, DInput } from "org.eclipse.daanse.board.app.ui.vue.controls";
-const MODEL_ECORE = '<?xml version="1.0" encoding="UTF-8"?>\n<!--\n/*********************************************************************\n* Copyright (c) 2024 Contributors to the Eclipse Foundation.\n*\n* This program and the accompanying materials are made\n* available under the terms of the Eclipse Public License 2.0\n* which is available at https://www.eclipse.org/legal/epl-2.0/\n*\n* SPDX-License-Identifier: EPL-2.0\n**********************************************************************/\n-->\n<ecore:EPackage xmi:version="2.0"\n                xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"\n                xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="wsstore"\n                nsURI="http://org.eclipse.daanse.board.app.lib.datasource.websocket" nsPrefix="wsstore">\n\n    <eClassifiers xsi:type="ecore:EClass" name="IWSStoreConfiguration">\n        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">\n            <details key="documentation" value="Represents the configuration for a WebSocket (WS) data store, extending the base connection configuration."/>\n        </eAnnotations>\n        <eSuperTypes href="http://org.eclipse.daanse.board.app.lib.datasource.base#//IBaseConnectionConfiguration"/>\n\n        <eStructuralFeatures xsi:type="ecore:EAttribute" name="connection" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">\n            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">\n                <details key="documentation" value="A reference or ID to a WebSocket connection configuration."/>\n            </eAnnotations>\n        </eStructuralFeatures>\n        <eStructuralFeatures xsi:type="ecore:EAttribute" name="topic" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" lowerBound="0">\n            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">\n                <details key="documentation" value="An optional topic to subscribe to or publish on the WebSocket connection."/>\n            </eAnnotations>\n        </eStructuralFeatures>\n            <eStructuralFeatures xsi:type="ecore:EAttribute" name="accumulate" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean" lowerBound="0">\n            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">\n                <details key="documentation" value="Whether every message is kept, or only the last one that arrived."/>\n            </eAnnotations>\n        </eStructuralFeatures>\n</eClassifiers>\n\n    <eSubpackages href="http://org.eclipse.daanse.board.app.lib.datasource.base#/"/>\n\n</ecore:EPackage>\n';
-const _hoisted_1 = {
+import { DATASOURCE_REPOSITORY as p } from "org.eclipse.daanse.board.app.lib.api.datasource";
+import { defineComponent as m, shallowRef as w, ref as l, watch as u, createElementBlock as d, createCommentVNode as f, openBlock as g, toDisplayString as S, computed as h, Fragment as b, createVNode as i, unref as s } from "vue";
+import { useTemporaryStore as y } from "org.eclipse.daanse.board.app.ui.vue.composables";
+import { DSelect as v, DSwitch as E, DInput as k } from "org.eclipse.daanse.board.app.ui.vue.controls";
+const x = `<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/*********************************************************************
+* Copyright (c) 2024 Contributors to the Eclipse Foundation.
+*
+* This program and the accompanying materials are made
+* available under the terms of the Eclipse Public License 2.0
+* which is available at https://www.eclipse.org/legal/epl-2.0/
+*
+* SPDX-License-Identifier: EPL-2.0
+**********************************************************************/
+-->
+<ecore:EPackage xmi:version="2.0"
+                xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="wsstore"
+                nsURI="http://org.eclipse.daanse.board.app.lib.datasource.websocket" nsPrefix="wsstore">
+
+    <eClassifiers xsi:type="ecore:EClass" name="IWSStoreConfiguration">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+            <details key="documentation" value="Represents the configuration for a WebSocket (WS) data store, extending the base connection configuration."/>
+        </eAnnotations>
+        <eSuperTypes href="http://org.eclipse.daanse.board.app.lib.datasource.base#//IBaseConnectionConfiguration"/>
+
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="connection" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="A reference or ID to a WebSocket connection configuration."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="topic" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" lowerBound="0">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="An optional topic to subscribe to or publish on the WebSocket connection."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+            <eStructuralFeatures xsi:type="ecore:EAttribute" name="accumulate" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean" lowerBound="0">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="Whether every message is kept, or only the last one that arrived."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+</eClassifiers>
+
+    <eSubpackages href="http://org.eclipse.daanse.board.app.lib.datasource.base#/"/>
+
+</ecore:EPackage>
+`, D = {
   key: 0,
-  style: { "overflow": "hidden", "height": "100%" }
-};
-const _sfc_main$1 = /* @__PURE__ */ defineComponent({
+  style: { overflow: "hidden", height: "100%" }
+}, A = /* @__PURE__ */ m({
   __name: "Preview",
   props: {
     dataSource: {}
   },
-  setup(__props) {
-    const props = __props;
-    const tempStore = shallowRef(null);
-    const settingsRef = ref(props.dataSource);
-    watch(props.dataSource, () => {
-      update();
-    }, { deep: true });
-    const { update } = useTemporaryStore(props.dataSource.type, settingsRef, tempStore);
-    const data = ref(null);
-    watch(tempStore, async () => {
-      console.log("tempStore changed", tempStore.value);
-      data.value = await tempStore.value.getData("object");
-      tempStore.value.subscribe(async () => {
-        const req = await tempStore.value.getData("object");
-        data.value = req;
+  setup(e) {
+    const a = e, t = w(null), n = l(a.dataSource);
+    u(a.dataSource, () => {
+      o();
+    }, { deep: !0 });
+    const { update: o } = y(a.dataSource.type, n, t), r = l(null);
+    return u(t, async () => {
+      console.log("tempStore changed", t.value), r.value = await t.value.getData("object"), t.value.subscribe(async () => {
+        const c = await t.value.getData("object");
+        r.value = c;
       });
-    }, { deep: true });
-    return (_ctx, _cache) => {
-      return tempStore.value && data.value ? (openBlock(), createElementBlock("div", _hoisted_1, toDisplayString(data.value), 1)) : createCommentVNode("", true);
-    };
+    }, { deep: !0 }), (c, V) => t.value && r.value ? (g(), d("div", D, S(r.value), 1)) : f("", !0);
   }
-});
-const _sfc_main = /* @__PURE__ */ defineComponent({
+}), T = /* @__PURE__ */ m({
   __name: "Settings",
   props: {
     config: {},
     connections: {},
     dataSources: {}
   },
-  setup(__props) {
-    const connectionsFiltered = computed(() => {
-      return __props.connections.filter((c) => c.type === "ws" || c.type === "mqtt");
-    });
-    return (_ctx, _cache) => {
-      return openBlock(), createElementBlock(Fragment, null, [
-        createVNode(unref(DSelect), {
-          modelValue: __props.config.connection,
-          "onUpdate:modelValue": _cache[0] || (_cache[0] = ($event) => __props.config.connection = $event),
-          label: "Verbindung",
-          options: connectionsFiltered.value,
-          "label-key": "name",
-          "value-key": "uid"
-        }, null, 8, ["modelValue", "options"]),
-        createVNode(unref(DSwitch), {
-          modelValue: __props.config.accumulate,
-          "onUpdate:modelValue": _cache[1] || (_cache[1] = ($event) => __props.config.accumulate = $event),
-          label: "Nachrichten sammeln"
-        }, null, 8, ["modelValue"]),
-        createVNode(unref(DInput), {
-          modelValue: __props.config.topic,
-          "onUpdate:modelValue": _cache[2] || (_cache[2] = ($event) => __props.config.topic = $event),
-          label: "Thema"
-        }, null, 8, ["modelValue"])
-      ], 64);
-    };
+  setup(e) {
+    const a = h(() => e.connections.filter((t) => t.type === "ws" || t.type === "mqtt"));
+    return (t, n) => (g(), d(b, null, [
+      i(s(v), {
+        modelValue: e.config.connection,
+        "onUpdate:modelValue": n[0] || (n[0] = (o) => e.config.connection = o),
+        label: "Verbindung",
+        options: a.value,
+        "label-key": "name",
+        "value-key": "uid"
+      }, null, 8, ["modelValue", "options"]),
+      i(s(E), {
+        modelValue: e.config.accumulate,
+        "onUpdate:modelValue": n[1] || (n[1] = (o) => e.config.accumulate = o),
+        label: "Nachrichten sammeln"
+      }, null, 8, ["modelValue"]),
+      i(s(k), {
+        modelValue: e.config.topic,
+        "onUpdate:modelValue": n[2] || (n[2] = (o) => e.config.topic = o),
+        label: "Thema"
+      }, null, 8, ["modelValue"])
+    ], 64));
   }
-});
-const WSDatasourceIdentifier = Symbol.for("WSStoreFactory");
-const previewSymbol = Symbol.for("WsPreview");
-const settingsSymbol = Symbol.for("WsSettings");
-function activate({ services }) {
-  services.register("WsPreview", _sfc_main$1);
-  services.register("WsSettings", _sfc_main);
-  services.getRequired(DATASOURCE_REPOSITORY).registerDatasourceType("ws", {
+}), W = Symbol.for("WSStoreFactory"), C = Symbol.for("WsPreview"), P = Symbol.for("WsSettings");
+function B({ services: e }) {
+  e.register("WsPreview", A), e.register("WsSettings", T), e.getRequired(p).registerDatasourceType("ws", {
+    icon: "bolt",
     connections: ["ws"],
-    Model: MODEL_ECORE,
-    Store: WSDatasourceIdentifier,
-    Preview: previewSymbol,
-    Settings: settingsSymbol
+    Model: x,
+    Store: W,
+    Preview: C,
+    Settings: P
   });
 }
-function deactivate({ services }) {
-  services.getRequired(DATASOURCE_REPOSITORY).unregisterDatasourceType("ws");
-  services.unregister("WsPreview");
-  services.unregister("WsSettings");
+function U({ services: e }) {
+  e.getRequired(p).unregisterDatasourceType("ws"), e.unregister("WsPreview"), e.unregister("WsSettings");
 }
 export {
-  activate,
-  deactivate
+  B as activate,
+  U as deactivate
 };

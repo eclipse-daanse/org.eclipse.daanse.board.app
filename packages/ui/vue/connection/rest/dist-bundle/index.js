@@ -3809,6 +3809,7 @@ const I_ = { class: "rest" }, L_ = {
 }, W_ = /* @__PURE__ */ b_(O_, [["__scopeId", "data-v-2669651a"]]), P_ = Symbol.for(__), B_ = Symbol.for("RestConnectionSettings");
 function N_({ services: F }) {
   F.register("RestConnectionSettings", W_), F.getRequired(xo).registerConnectionType("rest", {
+    icon: "api",
     Model: T_,
     Connection: P_,
     Settings: B_

@@ -3,8 +3,8 @@ import { DATASOURCE_REPOSITORY as v } from "org.eclipse.daanse.board.app.lib.api
 import { defineComponent as y, shallowRef as K, ref as r, computed as s, watch as u, createElementBlock as S, createCommentVNode as k, openBlock as b, createElementVNode as P, createVNode as d, unref as f, inject as V, onMounted as D, Fragment as I } from "vue";
 import { useTemporaryStore as h } from "org.eclipse.daanse.board.app.ui.vue.composables";
 import { KpiTable as E } from "org.eclipse.daanse.board.app.ui.vue.common.kpi";
-import { DSelect as g } from "org.eclipse.daanse.board.app.ui.vue.controls";
-import { XmlaStore as p } from "org.eclipse.daanse.board.app.lib.datasource.xmla";
+import { DSelect as p } from "org.eclipse.daanse.board.app.ui.vue.controls";
+import { XmlaStore as g } from "org.eclipse.daanse.board.app.lib.datasource.xmla";
 import { identifier as R } from "org.eclipse.daanse.board.app.lib.api.connection";
 const T = {
   key: 0,
@@ -54,11 +54,11 @@ const T = {
   setup(e) {
     const n = V(R), t = r([]), o = s(() => e.connections.filter((a) => a.type === "xmla"));
     return u(async () => e.config.connection, async () => {
-      e.config.connection && (t.value = await p.fetchCubes(e.config.connection, n));
+      e.config.connection && (t.value = await g.fetchCubes(e.config.connection, n));
     }), D(async () => {
-      e.config.connection && (t.value = await p.fetchCubes(e.config.connection, n));
+      e.config.connection && (t.value = await g.fetchCubes(e.config.connection, n));
     }), (a, i) => (b(), S(I, null, [
-      d(f(g), {
+      d(f(p), {
         modelValue: e.config.connection,
         "onUpdate:modelValue": i[0] || (i[0] = (c) => e.config.connection = c),
         label: "Verbindung",
@@ -66,7 +66,7 @@ const T = {
         "label-key": "name",
         "value-key": "uid"
       }, null, 8, ["modelValue", "options"]),
-      d(f(g), {
+      d(f(p), {
         modelValue: e.config.cube,
         "onUpdate:modelValue": i[1] || (i[1] = (c) => e.config.cube = c),
         label: "Würfel",
@@ -79,6 +79,7 @@ const T = {
 }), A = Symbol.for("KpiStoreFactory"), B = Symbol.for("KpiPreview"), F = Symbol.for("KpiSettings");
 function $({ services: e }) {
   e.register("KpiPreview", N), e.register("KpiSettings", O), e.getRequired(v).registerDatasourceType("KPI", {
+    icon: "speed",
     Store: A,
     Preview: B,
     Settings: F

@@ -35,6 +35,7 @@ export function activate({ services }: ActivationContext) {
   services
     .getRequired<DatasourceRepository>(DATASOURCE_REPOSITORY)
     .registerDatasourceType('ogcsta', {
+      icon: 'sensors',
       connections: ['rest'],
       Model: MODEL_ECORE,
       Store: factorySymbol,

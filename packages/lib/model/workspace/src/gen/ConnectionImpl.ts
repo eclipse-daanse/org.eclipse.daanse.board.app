@@ -6,7 +6,8 @@
  */
 
 import { BasicEObject } from '@emfts/core';
-import type { EClass, EStructuralFeature } from '@emfts/core';
+import { createBasicEList } from '@emfts/core';
+import type { EClass, EStructuralFeature, EList } from '@emfts/core';
 import type { Connection } from './Connection.js';
 import { WorkspacePackage } from './WorkspacePackage.js';
 
@@ -20,12 +21,16 @@ export class ConnectionImpl extends BasicEObject implements Connection {
   static readonly NAME: number = 1;
   static readonly TYPE: number = 2;
   static readonly CONFIG: number = 3;
+  static readonly ICON: number = 4;
+  static readonly TAGS: number = 5;
 
   // Private fields
   private _uid: string = "";
   private _name?: string;
   private _type?: string;
   private _config?: unknown;
+  private _icon?: string;
+  private _tags!: EList<string>;
 
   /**
    * Returns the EClass of this object
@@ -131,6 +136,37 @@ export class ConnectionImpl extends BasicEObject implements Connection {
     }
   }
 
+  get icon(): string {
+    return this._icon!;
+  }
+
+  set icon(value: string) {
+    const oldValue = this._icon;
+    this._icon = value;
+    if (this.eDeliver()) {
+      this.eNotify({
+        getNotifier: () => this,
+        getEventType: () => 1, // SET
+        getFeature: () => this.eClass().getEStructuralFeature(ConnectionImpl.ICON),
+        getOldValue: () => oldValue,
+        getNewValue: () => value,
+        getPosition: () => -1,
+        wasSet: () => true,
+        isTouch: () => false,
+        isReset: () => false,
+        getFeatureID: () => ConnectionImpl.ICON,
+        merge: () => false
+      });
+    }
+  }
+
+  get tags(): EList<string> {
+    if (!this._tags) {
+      this._tags = createBasicEList<any>(this, this.eClass().getEStructuralFeature('tags')!);
+    }
+    return this._tags;
+  }
+
   // Reflective API
 
   /**
@@ -147,6 +183,10 @@ export class ConnectionImpl extends BasicEObject implements Connection {
         return this.type;
       case ConnectionImpl.CONFIG:
         return this.config;
+      case ConnectionImpl.ICON:
+        return this.icon;
+      case ConnectionImpl.TAGS:
+        return this.tags;
       default:
         return super.eGet(feature);
     }
@@ -174,6 +214,15 @@ export class ConnectionImpl extends BasicEObject implements Connection {
         this.config = newValue as unknown;
         super.eSet(feature, newValue);
         break;
+      case ConnectionImpl.ICON:
+        this.icon = newValue as string;
+        super.eSet(feature, newValue);
+        break;
+      case ConnectionImpl.TAGS:
+        this.tags.clear();
+        this.tags.addAll(newValue as any[]);
+        super.eSet(feature, newValue);
+        break;
       default:
         super.eSet(feature, newValue);
     }
@@ -193,6 +242,10 @@ export class ConnectionImpl extends BasicEObject implements Connection {
         return this._type !== undefined;
       case ConnectionImpl.CONFIG:
         return this._config !== undefined;
+      case ConnectionImpl.ICON:
+        return this._icon !== undefined;
+      case ConnectionImpl.TAGS:
+        return this._tags !== undefined && !this._tags.isEmpty();
       default:
         return super.eIsSet(feature);
     }
@@ -216,6 +269,12 @@ export class ConnectionImpl extends BasicEObject implements Connection {
       case ConnectionImpl.CONFIG:
         this._config = undefined;
         return;
+      case ConnectionImpl.ICON:
+        this._icon = undefined;
+        return;
+      case ConnectionImpl.TAGS:
+        if (this._tags) this._tags.clear();
+        return;
       default:
         super.eUnset(feature);
     }
@@ -235,6 +294,8 @@ export class ConnectionImpl extends BasicEObject implements Connection {
       name: this.name,
       type: this.type,
       config: this.config,
+      icon: this.icon,
+      tags: this.tags?.toArray?.() ?? this.tags,
     };
   }
 }

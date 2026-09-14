@@ -350,6 +350,7 @@ const at = /* @__PURE__ */ Y({
 }), ut = Symbol.for("MQTTConnectionFactory"), ft = Symbol.for("MqttConnectionSettings");
 function gt({ services: t }) {
   t.register("MqttConnectionSettings", at), t.getRequired(A).registerConnectionType("mqtt", {
+    icon: "sensors",
     Model: V,
     Connection: ut,
     Settings: ft

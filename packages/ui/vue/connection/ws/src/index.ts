@@ -35,6 +35,7 @@ export function activate({ services }: ActivationContext) {
   services
     .getRequired<ConnectionRepository>(CONNECTION_REPOSITORY)
     .registerConnectionType('ws', {
+      icon: 'bolt',
       Model: MODEL_ECORE,
       Connection: WSConnectionIdentifier,
       Settings: settingsSymbol,

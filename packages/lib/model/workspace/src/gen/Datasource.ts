@@ -5,7 +5,7 @@
  * @generated
  */
 
-import type { EObject } from '@emfts/core';
+import type { EObject, EList } from '@emfts/core';
 import type { Connection } from './Connection.js';
 
 /**
@@ -18,5 +18,7 @@ export interface Datasource extends EObject {
   type?: string;
   connection?: Connection;
   config?: unknown;
+  icon?: string;
+  tags: EList<string>;
 
 }

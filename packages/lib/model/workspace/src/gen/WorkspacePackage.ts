@@ -86,11 +86,15 @@ export class WorkspacePackage extends BasicEPackage {
     DATASOURCE__TYPE: null as unknown as EAttribute | EReference,
     DATASOURCE__CONNECTION: null as unknown as EAttribute | EReference,
     DATASOURCE__CONFIG: null as unknown as EAttribute | EReference,
+    DATASOURCE__ICON: null as unknown as EAttribute | EReference,
+    DATASOURCE__TAGS: null as unknown as EAttribute | EReference,
     CONNECTION: null as unknown as EClass,
     CONNECTION__UID: null as unknown as EAttribute | EReference,
     CONNECTION__NAME: null as unknown as EAttribute | EReference,
     CONNECTION__TYPE: null as unknown as EAttribute | EReference,
     CONNECTION__CONFIG: null as unknown as EAttribute | EReference,
+    CONNECTION__ICON: null as unknown as EAttribute | EReference,
+    CONNECTION__TAGS: null as unknown as EAttribute | EReference,
   };
 
   private constructor() {
@@ -553,6 +557,22 @@ export class WorkspacePackage extends BasicEPackage {
     datasourceClass.getEStructuralFeatures().push(datasource_config);
     WorkspacePackage.Literals.DATASOURCE__CONFIG = datasource_config;
 
+    // Create icon feature
+    const datasource_icon = new BasicEAttribute();
+    datasource_icon.setName('icon');
+    datasource_icon.setLowerBound(0);
+    datasource_icon.setUpperBound(1);
+    datasourceClass.getEStructuralFeatures().push(datasource_icon);
+    WorkspacePackage.Literals.DATASOURCE__ICON = datasource_icon;
+
+    // Create tags feature
+    const datasource_tags = new BasicEAttribute();
+    datasource_tags.setName('tags');
+    datasource_tags.setLowerBound(0);
+    datasource_tags.setUpperBound(-1);
+    datasourceClass.getEStructuralFeatures().push(datasource_tags);
+    WorkspacePackage.Literals.DATASOURCE__TAGS = datasource_tags;
+
     // Create Connection class
     const connectionClass = new BasicEClass();
     connectionClass.setName('Connection');
@@ -593,6 +613,22 @@ export class WorkspacePackage extends BasicEPackage {
     connection_config.setUpperBound(1);
     connectionClass.getEStructuralFeatures().push(connection_config);
     WorkspacePackage.Literals.CONNECTION__CONFIG = connection_config;
+
+    // Create icon feature
+    const connection_icon = new BasicEAttribute();
+    connection_icon.setName('icon');
+    connection_icon.setLowerBound(0);
+    connection_icon.setUpperBound(1);
+    connectionClass.getEStructuralFeatures().push(connection_icon);
+    WorkspacePackage.Literals.CONNECTION__ICON = connection_icon;
+
+    // Create tags feature
+    const connection_tags = new BasicEAttribute();
+    connection_tags.setName('tags');
+    connection_tags.setLowerBound(0);
+    connection_tags.setUpperBound(-1);
+    connectionClass.getEStructuralFeatures().push(connection_tags);
+    WorkspacePackage.Literals.CONNECTION__TAGS = connection_tags;
 
 
     // ============================================
@@ -650,10 +686,14 @@ export class WorkspacePackage extends BasicEPackage {
     (WorkspacePackage.Literals.DATASOURCE__TYPE as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
     (WorkspacePackage.Literals.DATASOURCE__CONNECTION as BasicEReference).setEType(WorkspacePackage.Literals.CONNECTION);
     (WorkspacePackage.Literals.DATASOURCE__CONFIG as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EJavaObject')!);
+    (WorkspacePackage.Literals.DATASOURCE__ICON as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (WorkspacePackage.Literals.DATASOURCE__TAGS as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
     (WorkspacePackage.Literals.CONNECTION__UID as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
     (WorkspacePackage.Literals.CONNECTION__NAME as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
     (WorkspacePackage.Literals.CONNECTION__TYPE as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
     (WorkspacePackage.Literals.CONNECTION__CONFIG as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EJavaObject')!);
+    (WorkspacePackage.Literals.CONNECTION__ICON as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (WorkspacePackage.Literals.CONNECTION__TAGS as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
 
     // ============================================
     // Register XML name mappings from ExtendedMetaData annotations

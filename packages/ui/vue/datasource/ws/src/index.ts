@@ -37,6 +37,7 @@ export function activate({ services }: ActivationContext) {
   services
     .getRequired<DatasourceRepository>(DATASOURCE_REPOSITORY)
     .registerDatasourceType('ws', {
+      icon: 'bolt',
       connections: ['ws'],
       Model: MODEL_ECORE,
       Store: WSDatasourceIdentifier,

@@ -239,6 +239,16 @@ pages, and on each page its widgets and where they sit.
                 <details key="documentation" value="What the chosen type needs - a query, a URL, separators. The source types are modelled (lib/datasource/*/model) but their configurations are not EObjects in the workspace yet; this becomes a containment reference once they are."/>
             </eAnnotations>
         </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="icon" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" lowerBound="0">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="The symbol shown beside it in lists - a Material Symbols name. Empty means the one its type carries, so a workspace that never sets an icon still reads as more than rows of text."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="tags" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" upperBound="-1" lowerBound="0">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="Words a person files it under - 'produktion', 'extern', 'sensorik'. The type says what something is; a tag says what it is for, which no type can know."/>
+            </eAnnotations>
+        </eStructuralFeatures>
     </eClassifiers>
 
     <eClassifiers xsi:type="ecore:EClass" name="Connection">
@@ -263,6 +273,16 @@ pages, and on each page its widgets and where they sit.
         <eStructuralFeatures xsi:type="ecore:EAttribute" name="config" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject" lowerBound="0">
             <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
                 <details key="documentation" value="What the chosen type needs - a URL, credentials, a catalog. Opaque here on purpose: the connection models under lib/connection are still generated in decorator mode, so there is no EObject to contain yet. This becomes a containment reference once they follow."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="icon" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" lowerBound="0">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="The symbol shown beside it in lists - a Material Symbols name. Empty means the one its type carries, so a workspace that never sets an icon still reads as more than rows of text."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="tags" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" upperBound="-1" lowerBound="0">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="Words a person files it under - 'produktion', 'extern', 'sensorik'. The type says what something is; a tag says what it is for, which no type can know."/>
             </eAnnotations>
         </eStructuralFeatures>
     </eClassifiers>

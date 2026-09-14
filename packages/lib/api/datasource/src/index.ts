@@ -43,6 +43,14 @@ export interface StoreIdentifiers {
     Preview: symbol;
     Settings: symbol;
     /**
+     * The symbol this type wears in lists - a Material Symbols name.
+     *
+     * What a connection or source carries itself wins; this is what stands
+     * there until somebody picks one, so a fresh workspace still reads as
+     * more than rows of text.
+     */
+    icon?: string;
+    /**
      * What this type is, for the places that list types.
      *
      * A composer reads from other data sources rather than from an endpoint

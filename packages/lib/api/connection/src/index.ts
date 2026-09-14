@@ -43,6 +43,14 @@ export interface ConnectionIdentifiers {
     Connection: symbol;
     Settings: symbol;
     /**
+     * The symbol this type wears in lists - a Material Symbols name.
+     *
+     * What a connection or source carries itself wins; this is what stands
+     * there until somebody picks one, so a fresh workspace still reads as
+     * more than rows of text.
+     */
+    icon?: string;
+    /**
      * The type's .ecore file, as text.
      *
      * What a field is for is written in the model as a GenModel

@@ -44,9 +44,9 @@ const M = `<?xml version="1.0" encoding="UTF-8"?>
 * @license MIT
 **/
 const L = [], j = (t) => t.charCodeAt(0) === 111 && t.charCodeAt(1) === 110 && // uppercase letter
-(t.charCodeAt(2) > 122 || t.charCodeAt(2) < 97), y = Object.assign, f = Array.isArray, g = (t) => typeof t == "function", u = (t) => typeof t == "string", z = (t) => typeof t == "symbol", _ = (t) => t !== null && typeof t == "object";
+(t.charCodeAt(2) > 122 || t.charCodeAt(2) < 97), d = Object.assign, f = Array.isArray, g = (t) => typeof t == "function", u = (t) => typeof t == "string", z = (t) => typeof t == "symbol", _ = (t) => t !== null && typeof t == "object";
 let T;
-const d = () => T || (T = typeof globalThis < "u" ? globalThis : typeof self < "u" ? self : typeof window < "u" ? window : typeof global < "u" ? global : {});
+const y = () => T || (T = typeof globalThis < "u" ? globalThis : typeof self < "u" ? self : typeof window < "u" ? window : typeof global < "u" ? global : {});
 function w(t) {
   if (f(t)) {
     const e = {};
@@ -116,11 +116,11 @@ function H(t, e) {
   return g(t) ? (
     // #8236: extend call and options.name access are considered side-effects
     // by Rollup, so we have to wrap it in a pure-annotated IIFE.
-    y({ name: t.name }, e, { setup: t })
+    d({ name: t.name }, e, { setup: t })
   ) : t;
 }
-d().requestIdleCallback;
-d().cancelIdleCallback;
+y().requestIdleCallback;
+y().cancelIdleCallback;
 const K = Symbol.for("v-ndc"), J = {}, O = (t) => Object.getPrototypeOf(t) === J, Q = (t) => t.__isSuspense, k = Symbol.for("v-fgt"), W = Symbol.for("v-txt"), Z = Symbol.for("v-cmt"), m = [];
 let a = null;
 function $(t = !1) {
@@ -206,7 +206,7 @@ function ot(t, e = null, n = null, o = 0, s = null, l = !1) {
   if (rt(t) && (t = t.__vccOpts), e) {
     e = lt(e);
     let { class: r, style: i } = e;
-    r && !u(r) && (e.class = E(r)), _(i) && (I(i) && !f(i) && (i = y({}, i)), e.style = w(i));
+    r && !u(r) && (e.class = E(r)), _(i) && (I(i) && !f(i) && (i = d({}, i)), e.style = w(i));
   }
   const c = u(t) ? 1 : Q(t) ? 128 : Y(t) ? 64 : _(t) ? 4 : g(t) ? 2 : 0;
   return st(
@@ -221,7 +221,7 @@ function ot(t, e = null, n = null, o = 0, s = null, l = !1) {
   );
 }
 function lt(t) {
-  return t ? I(t) || O(t) ? y({}, t) : t : null;
+  return t ? I(t) || O(t) ? d({}, t) : t : null;
 }
 function h(t, e, n = !1, o = !1) {
   const { props: s, ref: l, patchFlag: c, children: r, transition: i } = t, C = e ? ct(s || {}, e) : s, S = {
@@ -310,7 +310,7 @@ function ct(...t) {
   return e;
 }
 {
-  const t = d(), e = (n, o) => {
+  const t = y(), e = (n, o) => {
     let s;
     return (s = t[n]) || (s = t[n] = []), s.push(o), (l) => {
       s.length > 1 ? s.forEach((c) => c(l)) : s[0](l);
@@ -342,6 +342,7 @@ const at = /* @__PURE__ */ H({
 }), ut = Symbol.for("RssConnectionFactory"), ft = Symbol.for("RssConnectionSettings");
 function pt({ services: t }) {
   t.register("RssConnectionSettings", at), t.getRequired(F).registerConnectionType("rss", {
+    icon: "rss_feed",
     Model: M,
     Connection: ut,
     Settings: ft

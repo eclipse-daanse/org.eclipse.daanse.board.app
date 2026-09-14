@@ -16,7 +16,8 @@ import {
   ConnectionRepository,
   identifier,
 } from 'org.eclipse.daanse.board.app.lib.api.connection'
-import { DButton, DInput, DSelect } from 'org.eclipse.daanse.board.app.ui.vue.controls'
+import { DButton, DIcon, DInput, DSelect } from 'org.eclipse.daanse.board.app.ui.vue.controls'
+import TagInput from '../datasources/TagInput.vue'
 
 const props = defineProps({
   itemId: {
@@ -46,9 +47,24 @@ onMounted(() => {
         uid: connection.uid,
         name: connection.name,
         type: connection.type,
+        icon: connection.icon ?? '',
+        tags: [...(connection.tags ?? [])],
         config: JSON.parse(JSON.stringify(connection.config ?? {})),
       }
-    : {}
+    : { tags: [] }
+})
+
+const typeIcon = computed(
+  () => connectionRepository.getConnectionIdentifiers(connectionProxy.value.type)?.icon ?? 'link',
+)
+
+/* Every tag already in use, so the same thing is not filed twice. */
+const knownTags = computed(() => {
+  const all = new Set<string>()
+  for (const connection of connectionRepository.getConnections() as any[]) {
+    for (const tag of connection.tags ?? []) all.add(tag)
+  }
+  return [...all].sort()
 })
 
 const settingsComponent = computed(() => {
@@ -66,6 +82,10 @@ const saveConnection = () => {
   if (connection) {
     connection.name = connectionProxy.value.name
     connection.type = connectionProxy.value.type
+    connection.icon = connectionProxy.value.icon?.trim() || undefined
+    /* Replaced wholesale: the EList is the model's, the array was a copy. */
+    connection.tags.clear()
+    for (const tag of connectionProxy.value.tags ?? []) connection.tags.add(tag)
     connection.config = connectionProxy.value.config
     connectionRepository.saveConnection(connection)
   }
@@ -79,6 +99,23 @@ const saveConnection = () => {
       <DInput v-model="connectionProxy.uid" label="UID" readonly />
       <DInput v-model="connectionProxy.name" label="Name" />
       <DSelect v-model="connectionProxy.type" label="Typ" :options="availableConnections" />
+      <div class="editor__icon">
+        <span class="editor__icon-preview" aria-hidden="true">
+          <DIcon :name="connectionProxy.icon?.trim() || typeIcon" size="lg" />
+        </span>
+        <DInput
+          v-model="connectionProxy.icon"
+          label="Symbol"
+          :placeholder="typeIcon"
+          hint="Ein Material-Symbols-Name. Leer lassen für das Symbol des Typs."
+        />
+      </div>
+      <TagInput
+        v-model="connectionProxy.tags"
+        label="Schlagworte"
+        hint="Wofür diese Verbindung da ist — danach lässt sich suchen."
+        :known="knownTags"
+      />
       <component :is="settingsComponent" :config="connectionProxy.config" />
     </div>
     <div class="editor__actions">
@@ -100,6 +137,27 @@ const saveConnection = () => {
   flex-direction: column;
   gap: 4px;
   max-width: 620px;
+}
+
+.editor__icon {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.editor__icon-preview {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  color: var(--color-accent);
+  background-color: var(--color-sunken);
+  border: 1px solid var(--color-outline);
+  border-radius: var(--radius-sm);
+}
+
+.editor__icon :deep(.field) {
+  flex: 1;
 }
 
 .editor__actions {

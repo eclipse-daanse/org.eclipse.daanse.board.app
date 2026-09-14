@@ -54,6 +54,8 @@ interface Row {
   name: string
   type: string
   usage: string
+  icon: string
+  tags: string[]
 }
 
 /** A connection with what hangs under it, or the bucket for the loose ones. */
@@ -64,6 +66,8 @@ interface Group {
   orphan: boolean
   sources: Row[]
   itself: boolean
+  icon?: string
+  tags?: string[]
 }
 
 export interface Selection {
@@ -104,6 +108,35 @@ function isComposer(type: string | undefined): boolean {
   return !!type && datasourceRepository.getDatasourceIdentifiers(type)?.kind === 'composer'
 }
 
+/**
+ * What to draw beside a row.
+ *
+ * What the thing carries wins; failing that the type's own symbol, so a
+ * workspace where nobody picked an icon still reads as more than rows of
+ * text. The last fallback is for a type that is gone - a board from a
+ * deployment that had a plugin this one does not.
+ */
+function iconFor(held: any, kind: 'connection' | 'source'): string {
+  if (held.icon) return held.icon
+  const type = held.type
+  const registered =
+    kind === 'connection'
+      ? connectionRepository.getConnectionIdentifiers(type)?.icon
+      : datasourceRepository.getDatasourceIdentifiers(type)?.icon
+  return registered ?? (kind === 'connection' ? 'link' : 'database')
+}
+
+/* Two tags fit beside a name without pushing it out; the rest are counted.
+   The name is what you read a row by. */
+const TAGS_SHOWN = 2
+
+/** EList or plain array, depending on where the object came from. */
+function tagsOf(held: any): string[] {
+  const tags = held.tags
+  if (!tags) return []
+  return Array.isArray(tags) ? tags : typeof tags.toArray === 'function' ? tags.toArray() : [...tags]
+}
+
 /** What the tree shows, with the sources hung under their connection. */
 const groups = computed(() => {
   const usage = usageByDatasource()
@@ -115,12 +148,14 @@ const groups = computed(() => {
   const sourcesOf = (connectionId: string | undefined): Row[] =>
     dataSources.value
       .filter((source) => source.connection?.uid === connectionId)
-      .filter((source: any) => matches(source.name, source.type, source.uid))
+      .filter((source: any) => matches(source.name, source.type, source.uid, ...tagsOf(source)))
       .map((source: any) => ({
         uid: source.uid,
         name: source.name,
         type: source.type,
         usage: usageLabel(usage[source.uid] ?? { boards: 0, widgets: 0 }),
+        icon: iconFor(source, 'source'),
+        tags: tagsOf(source),
       }))
 
   const known: Group[] = connections.value.map((connection) => ({
@@ -133,7 +168,9 @@ const groups = computed(() => {
     sources: sourcesOf(connection.uid),
     /* A connection stays visible while its own name matches, even with no
        source under it - otherwise searching would hide where to add one. */
-    itself: matches(connection.name, connection.type, connection.uid),
+    itself: matches(connection.name, connection.type, connection.uid, ...tagsOf(connection)),
+    icon: iconFor(connection, 'connection'),
+    tags: tagsOf(connection),
   }))
 
   const attached = new Set(connections.value.map((c) => c.uid))
@@ -142,12 +179,14 @@ const groups = computed(() => {
     name: source.name,
     type: source.type,
     usage: usageLabel(usage[source.uid] ?? { boards: 0, widgets: 0 }),
+    icon: iconFor(source, 'source'),
+    tags: tagsOf(source),
   })
 
   /* No connection, or one that is gone: the reference is the tell. */
   const unattached = dataSources.value
     .filter((source) => !source.connection || !attached.has(source.connection.uid))
-    .filter((source: any) => matches(source.name, source.type, source.uid))
+    .filter((source: any) => matches(source.name, source.type, source.uid, ...tagsOf(source)))
 
   /* A composer reads from other sources, so having no connection is its
      normal state - not the same thing as a source that lost one. Listing
@@ -164,6 +203,8 @@ const groups = computed(() => {
       orphan: true,
       sources: composed,
       itself: true,
+      icon: 'stacks',
+      tags: [],
     })
   }
   if (loose.length) {
@@ -174,6 +215,8 @@ const groups = computed(() => {
       orphan: true,
       sources: loose,
       itself: true,
+      icon: 'link_off',
+      tags: [],
     })
   }
   return shown
@@ -374,8 +417,18 @@ const removingUsage = computed(() => {
               :disabled="group.orphan"
               @click="!group.orphan && select('Connection', group.uid)"
             >
+              <DIcon :name="group.icon ?? 'link'" size="sm" class="row__icon" />
               <span class="row__name">{{ group.name }}</span>
               <span v-if="group.type" class="row__what">{{ group.type }}</span>
+              <span
+                v-for="tag in (group.tags ?? []).slice(0, TAGS_SHOWN)"
+                :key="tag"
+                class="row__tag"
+                >{{ tag }}</span
+              >
+              <span v-if="(group.tags?.length ?? 0) > TAGS_SHOWN" class="row__tag row__tag--more">
+                +{{ (group.tags?.length ?? 0) - TAGS_SHOWN }}
+              </span>
               <span class="row__what">{{ group.sources.length }}</span>
             </button>
 
@@ -399,11 +452,20 @@ const removingUsage = computed(() => {
                 "
               >
                 <span class="row__twist row__twist--none">
-                  <DIcon name="database" size="sm" />
+                  <DIcon :name="source.icon" size="sm" />
                 </span>
                 <button type="button" class="row__body" @click="select('DataSource', source.uid)">
                   <span class="row__name">{{ source.name }}</span>
                   <span class="row__what">{{ source.type }}</span>
+                  <span
+                    v-for="tag in source.tags.slice(0, TAGS_SHOWN)"
+                    :key="tag"
+                    class="row__tag"
+                    >{{ tag }}</span
+                  >
+                  <span v-if="source.tags.length > TAGS_SHOWN" class="row__tag row__tag--more">
+                    +{{ source.tags.length - TAGS_SHOWN }}
+                  </span>
                   <span v-if="source.usage" class="row__usage">{{ source.usage }}</span>
                 </button>
                 <DButton
@@ -557,6 +619,9 @@ const removingUsage = computed(() => {
   text-align: left;
   color: var(--color-fg);
   cursor: pointer;
+  /* A row with tags is two lines rather than a name squeezed out of its
+     own row: the name is what you read it by. */
+  flex-wrap: wrap;
 }
 
 .row__body:disabled {
@@ -574,10 +639,38 @@ const removingUsage = computed(() => {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  /* Shrinks last: the tags beside it give way first. */
+  min-width: 10ch;
 }
 
 .row--connection .row__name {
   font-weight: 600;
+}
+
+.row__icon {
+  flex: none;
+  color: var(--color-dim);
+}
+
+/* A tag is a word, not a chip: a row holding several of them turns into a
+   bar of pills otherwise, and the name stops being the thing you read. */
+.row__tag {
+  flex: none;
+  max-width: 84px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding: 0 6px;
+  font-size: 0.72rem;
+  line-height: 1.5;
+  color: var(--color-accent);
+  background-color: color-mix(in srgb, var(--color-accent) 12%, transparent);
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+.row__tag--more {
+  color: var(--color-dim);
+  background-color: var(--color-sunken);
 }
 
 .row__what {

@@ -31,6 +31,7 @@ export function activate({ services }: ActivationContext) {
   services
     .getRequired<DatasourceRepository>(DATASOURCE_REPOSITORY)
     .registerDatasourceType('OGC Composer', {
+      icon: 'sensors',
       kind: 'composer',
       Store: OgcComposerIdentifier,
       Preview: previewSymbol,

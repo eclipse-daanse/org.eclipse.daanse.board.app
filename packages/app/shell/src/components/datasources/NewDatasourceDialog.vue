@@ -30,6 +30,7 @@ import {
 import { describeModel, useEList } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import { DButton, DIcon, DInput, DModal, DSelect } from 'org.eclipse.daanse.board.app.ui.vue.controls'
 import ModelFields from './ModelFields.vue'
+import TagInput from './TagInput.vue'
 
 const open = defineModel<boolean>({ required: true })
 const props = defineProps<{
@@ -44,11 +45,30 @@ const connections = useEList(workspace, (w) => w.connections)
 
 const type = ref('')
 const name = ref('')
+const icon = ref('')
+const tags = ref<string[]>([])
 /* undefined, not '': DSelect shows its placeholder only while nothing is
    chosen, and an empty string reads as a choice - the first connection would
    look selected without being it. */
 const connection = ref<string | undefined>(undefined)
 const config = ref<Record<string, unknown>>({})
+
+const held = useEList(workspace, (w) => w.datasources)
+
+/* Every tag already in use, so the same thing is not filed twice under two
+   spellings. */
+const knownTags = computed(() => {
+  const all = new Set<string>()
+  for (const source of held.value as any[]) {
+    for (const tag of source.tags ?? []) all.add(tag)
+  }
+  return [...all].sort()
+})
+
+/** What the icon field stands for while it is empty. */
+const typeIcon = computed(
+  () => datasources.getDatasourceIdentifiers(type.value)?.icon ?? 'database',
+)
 
 const types = computed(() => datasources.registeredDatasources)
 
@@ -122,6 +142,8 @@ watch(open, (isOpen) => {
   if (!isOpen) return
   type.value = ''
   name.value = ''
+  icon.value = ''
+  tags.value = []
   connection.value = props.forConnection
   config.value = {}
 })
@@ -148,6 +170,10 @@ function create() {
 
   const datasource = datasources.createDatasource(type.value, settings)
   datasource.name = name.value.trim()
+  /* Empty means "the one the type carries" - storing that here would freeze
+     a default that should follow the type. */
+  if (icon.value.trim()) datasource.icon = icon.value.trim()
+  for (const tag of tags.value) datasource.tags.add(tag)
   /* The settings name the connection by id; the model holds the reference. */
   datasource.connection = connections.value.find((each: any) => each.uid === connection.value)
   datasources.saveDatasource(datasource)
@@ -236,6 +262,28 @@ function create() {
       </section>
 
       <section v-if="type" class="new__step">
+        <h3 class="new__label">Einordnung</h3>
+        <div class="new__icon">
+          <span class="new__icon-preview" aria-hidden="true">
+            <DIcon :name="icon.trim() || typeIcon" size="lg" />
+          </span>
+          <DInput
+            v-model="icon"
+            label="Symbol"
+            :placeholder="typeIcon"
+            hint="Ein Material-Symbols-Name. Leer lassen für das Symbol des Typs."
+            stacked
+          />
+        </div>
+        <TagInput
+          v-model="tags"
+          label="Schlagworte"
+          hint="Wofür diese Datenquelle da ist — danach lässt sich später suchen."
+          :known="knownTags"
+        />
+      </section>
+
+      <section v-if="type" class="new__step">
         <h3 class="new__label">Einstellungen</h3>
         <p v-if="doc?.documentation" class="new__lead">{{ doc.documentation }}</p>
         <!-- `connection` is answered by the select above -->
@@ -275,6 +323,27 @@ function create() {
   margin: 0;
   font-size: 0.85rem;
   color: var(--color-dim);
+}
+
+.new__icon {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.new__icon-preview {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  color: var(--color-accent);
+  background-color: var(--color-sunken);
+  border: 1px solid var(--color-outline);
+  border-radius: var(--radius-sm);
+}
+
+.new__icon :deep(.field) {
+  flex: 1;
 }
 
 .new__rubric {

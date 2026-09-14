@@ -34,6 +34,7 @@ export function activate({ services }: ActivationContext) {
   services
     .getRequired<DatasourceRepository>(DATASOURCE_REPOSITORY)
     .registerDatasourceType('weather', {
+      icon: 'cloud',
       kind: 'composer',
       Store: WeatherComposerIdentifier,
       Preview: previewSymbol,

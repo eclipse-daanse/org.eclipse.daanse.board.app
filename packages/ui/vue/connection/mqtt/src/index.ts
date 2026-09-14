@@ -35,6 +35,7 @@ export function activate({ services }: ActivationContext) {
   services
     .getRequired<ConnectionRepository>(CONNECTION_REPOSITORY)
     .registerConnectionType('mqtt', {
+      icon: 'sensors',
       Model: MODEL_ECORE,
       Connection: MqttConnectionIdentifier,
       Settings: settingsSymbol,

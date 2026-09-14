@@ -1,276 +1,211 @@
-(function(){var i="ui.vue.composer.weather",d=document,s=d.querySelector('style[data-tsm-bundle="'+i+'"]');if(!s){s=d.createElement('style');s.setAttribute('data-tsm-bundle',i);d.head.appendChild(s);}s.textContent="\n.weather-composer-preview[data-v-2a15dca0] {\n  padding: 16px;\n  background: #f8f9fa;\n  border-radius: 8px;\n  max-width: 400px;\n}\n.preview-header h3[data-v-2a15dca0] {\n  margin: 0 0 16px 0;\n  color: #495057;\n  font-size: 1.2em;\n}\n.preview-content[data-v-2a15dca0] {\n  display: flex;\n  flex-direction: column;\n  gap: 12px;\n}\n.info-item[data-v-2a15dca0] {\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n  padding: 8px 0;\n  border-bottom: 1px solid #dee2e6;\n}\n.info-item .label[data-v-2a15dca0] {\n  color: #6c757d;\n  font-weight: 500;\n}\n.info-item .value[data-v-2a15dca0] {\n  color: #495057;\n  font-weight: 600;\n}\n.capabilities[data-v-2a15dca0] {\n  margin-top: 16px;\n}\n.capabilities h4[data-v-2a15dca0] {\n  margin: 0 0 8px 0;\n  color: #495057;\n  font-size: 1em;\n}\n.capabilities ul[data-v-2a15dca0] {\n  list-style: none;\n  padding: 0;\n  margin: 0;\n}\n.capabilities li[data-v-2a15dca0] {\n  padding: 4px 0;\n  color: #6c757d;\n  font-size: 0.9em;\n}\n.preview-empty[data-v-2a15dca0] {\n  text-align: center;\n  color: #6c757d;\n  font-style: italic;\n  padding: 20px;\n}\n.weather-stations[data-v-2a15dca0] {\n  display: flex;\n  flex-direction: column;\n  gap: 16px;\n}\n.weather-station[data-v-2a15dca0] {\n  background: white;\n  border-radius: 8px;\n  padding: 16px;\n  border: 1px solid #e9ecef;\n  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);\n}\n.station-header[data-v-2a15dca0] {\n  margin-bottom: 16px;\n  border-bottom: 1px solid #f1f3f4;\n  padding-bottom: 12px;\n}\n.station-header h4[data-v-2a15dca0] {\n  margin: 0 0 4px 0;\n  color: #343a40;\n  font-size: 1.1em;\n}\n.station-header small[data-v-2a15dca0] {\n  display: block;\n  color: #6c757d;\n  margin-bottom: 2px;\n}\n.coordinates[data-v-2a15dca0] {\n  font-family: monospace;\n  font-size: 0.85em !important;\n}\n.weather-measurements[data-v-2a15dca0] {\n  display: grid;\n  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));\n  gap: 8px;\n  margin-bottom: 12px;\n}\n.measurement[data-v-2a15dca0] {\n  display: flex;\n  align-items: center;\n  gap: 8px;\n  padding: 8px;\n  background: #f8f9fa;\n  border-radius: 6px;\n  border: 1px solid #e9ecef;\n}\n.measurement-icon[data-v-2a15dca0] {\n  font-size: 1.2em;\n  width: 24px;\n  text-align: center;\n}\n.measurement-info[data-v-2a15dca0] {\n  display: flex;\n  flex-direction: column;\n  flex: 1;\n}\n.measurement-info .label[data-v-2a15dca0] {\n  font-size: 0.85em;\n  color: #6c757d;\n  font-weight: 500;\n}\n.measurement-info .value[data-v-2a15dca0] {\n  font-size: 1em;\n  color: #495057;\n  font-weight: 600;\n}\n.timestamp[data-v-2a15dca0] {\n  text-align: center;\n  padding-top: 8px;\n  border-top: 1px solid #f1f3f4;\n}\n.timestamp small[data-v-2a15dca0] {\n  color: #6c757d;\n  font-size: 0.8em;\n}\n\n.weather-composer-settings[data-v-c7230bfa] {\n  display: flex;\n  flex-direction: column;\n  gap: 16px;\n  padding: 16px;\n  max-height: 600px;\n  overflow-y: auto;\n}\n.section-description[data-v-c7230bfa] {\n  margin: 0 0 16px 0;\n  color: #6c757d;\n  font-size: 0.9em;\n}\n\n/* Collapsible section styles */\n.collapsible-section[data-v-c7230bfa] {\n  border: 1px solid #dee2e6;\n  border-radius: 8px;\n  overflow: hidden;\n}\n.collapsible-header[data-v-c7230bfa] {\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n  cursor: pointer;\n  user-select: none;\n  padding: 12px 16px;\n  background: #f8f9fa;\n  border-bottom: 1px solid #dee2e6;\n}\n.collapsible-header[data-v-c7230bfa]:hover {\n  background: #e9ecef;\n}\n.collapsible-header h3[data-v-c7230bfa] {\n  margin: 0;\n  color: #495057;\n  font-size: 1.1em;\n}\n.collapse-icon[data-v-c7230bfa] {\n  font-size: 12px;\n  transition: transform 0.2s ease;\n  color: #6c757d;\n}\n.collapse-icon.expanded[data-v-c7230bfa] {\n  transform: rotate(-180deg);\n}\n.collapsible-content[data-v-c7230bfa] {\n  padding: 16px;\n  animation: slideDown-c7230bfa 0.2s ease-out;\n}\n@keyframes slideDown-c7230bfa {\nfrom {\n    opacity: 0;\n    max-height: 0;\n}\nto {\n    opacity: 1;\n    max-height: 800px;\n}\n}\n.mapping-item[data-v-c7230bfa] {\n  margin-bottom: 12px;\n}\n";})();
-import { identifier, DATASOURCE_REPOSITORY } from "org.eclipse.daanse.board.app.lib.api.datasource";
-import { defineComponent, shallowRef, ref, watch, createElementBlock, openBlock, createElementVNode, Fragment, renderList, createCommentVNode, toDisplayString, computed, inject, createVNode, unref, normalizeClass } from "vue";
-import { useTemporaryStore } from "org.eclipse.daanse.board.app.ui.vue.composables";
-import { DSelect, DInput } from "org.eclipse.daanse.board.app.ui.vue.controls";
-const _hoisted_1$1 = { class: "weather-composer-preview" };
-const _hoisted_2$1 = {
+(function(){var i="ui.vue.composer.weather",d=document,s=d.querySelector('style[data-tsm-bundle="'+i+'"]');if(!s){s=d.createElement('style');s.setAttribute('data-tsm-bundle',i);d.head.appendChild(s);}s.textContent=".weather-composer-preview[data-v-2a15dca0]{padding:16px;background:#f8f9fa;border-radius:8px;max-width:400px}.preview-header h3[data-v-2a15dca0]{margin:0 0 16px;color:#495057;font-size:1.2em}.preview-content[data-v-2a15dca0]{display:flex;flex-direction:column;gap:12px}.info-item[data-v-2a15dca0]{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid #dee2e6}.info-item .label[data-v-2a15dca0]{color:#6c757d;font-weight:500}.info-item .value[data-v-2a15dca0]{color:#495057;font-weight:600}.capabilities[data-v-2a15dca0]{margin-top:16px}.capabilities h4[data-v-2a15dca0]{margin:0 0 8px;color:#495057;font-size:1em}.capabilities ul[data-v-2a15dca0]{list-style:none;padding:0;margin:0}.capabilities li[data-v-2a15dca0]{padding:4px 0;color:#6c757d;font-size:.9em}.preview-empty[data-v-2a15dca0]{text-align:center;color:#6c757d;font-style:italic;padding:20px}.weather-stations[data-v-2a15dca0]{display:flex;flex-direction:column;gap:16px}.weather-station[data-v-2a15dca0]{background:#fff;border-radius:8px;padding:16px;border:1px solid #e9ecef;box-shadow:0 1px 3px #0000001a}.station-header[data-v-2a15dca0]{margin-bottom:16px;border-bottom:1px solid #f1f3f4;padding-bottom:12px}.station-header h4[data-v-2a15dca0]{margin:0 0 4px;color:#343a40;font-size:1.1em}.station-header small[data-v-2a15dca0]{display:block;color:#6c757d;margin-bottom:2px}.coordinates[data-v-2a15dca0]{font-family:monospace;font-size:.85em!important}.weather-measurements[data-v-2a15dca0]{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px;margin-bottom:12px}.measurement[data-v-2a15dca0]{display:flex;align-items:center;gap:8px;padding:8px;background:#f8f9fa;border-radius:6px;border:1px solid #e9ecef}.measurement-icon[data-v-2a15dca0]{font-size:1.2em;width:24px;text-align:center}.measurement-info[data-v-2a15dca0]{display:flex;flex-direction:column;flex:1}.measurement-info .label[data-v-2a15dca0]{font-size:.85em;color:#6c757d;font-weight:500}.measurement-info .value[data-v-2a15dca0]{font-size:1em;color:#495057;font-weight:600}.timestamp[data-v-2a15dca0]{text-align:center;padding-top:8px;border-top:1px solid #f1f3f4}.timestamp small[data-v-2a15dca0]{color:#6c757d;font-size:.8em}.weather-composer-settings[data-v-c7230bfa]{display:flex;flex-direction:column;gap:16px;padding:16px;max-height:600px;overflow-y:auto}.section-description[data-v-c7230bfa]{margin:0 0 16px;color:#6c757d;font-size:.9em}.collapsible-section[data-v-c7230bfa]{border:1px solid #dee2e6;border-radius:8px;overflow:hidden}.collapsible-header[data-v-c7230bfa]{display:flex;align-items:center;justify-content:space-between;cursor:pointer;user-select:none;padding:12px 16px;background:#f8f9fa;border-bottom:1px solid #dee2e6}.collapsible-header[data-v-c7230bfa]:hover{background:#e9ecef}.collapsible-header h3[data-v-c7230bfa]{margin:0;color:#495057;font-size:1.1em}.collapse-icon[data-v-c7230bfa]{font-size:12px;transition:transform .2s ease;color:#6c757d}.collapse-icon.expanded[data-v-c7230bfa]{transform:rotate(-180deg)}.collapsible-content[data-v-c7230bfa]{padding:16px;animation:slideDown-c7230bfa .2s ease-out}@keyframes slideDown-c7230bfa{0%{opacity:0;max-height:0}to{opacity:1;max-height:800px}}.mapping-item[data-v-c7230bfa]{margin-bottom:12px}\n";})();
+import { identifier as E, DATASOURCE_REPOSITORY as _ } from "org.eclipse.daanse.board.app.lib.api.datasource";
+import { defineComponent as V, shallowRef as M, ref as g, watch as C, createElementBlock as n, openBlock as l, createElementVNode as s, Fragment as W, renderList as I, createCommentVNode as r, toDisplayString as a, computed as x, inject as O, createVNode as k, unref as S, normalizeClass as R } from "vue";
+import { useTemporaryStore as A } from "org.eclipse.daanse.board.app.ui.vue.composables";
+import { DSelect as T, DInput as L } from "org.eclipse.daanse.board.app.ui.vue.controls";
+const $ = { class: "weather-composer-preview" }, N = {
   key: 0,
   class: "preview-empty"
-};
-const _hoisted_3$1 = {
+}, U = {
   key: 1,
   class: "weather-stations"
-};
-const _hoisted_4 = { class: "station-header" };
-const _hoisted_5 = { key: 0 };
-const _hoisted_6 = {
+}, F = { class: "station-header" }, j = { key: 0 }, q = {
   key: 1,
   class: "coordinates"
-};
-const _hoisted_7 = { class: "weather-measurements" };
-const _hoisted_8 = {
+}, B = { class: "weather-measurements" }, G = {
   key: 0,
   class: "measurement"
-};
-const _hoisted_9 = { class: "measurement-info" };
-const _hoisted_10 = { class: "value" };
-const _hoisted_11 = {
+}, H = { class: "measurement-info" }, z = { class: "value" }, K = {
   key: 1,
   class: "measurement"
-};
-const _hoisted_12 = { class: "measurement-info" };
-const _hoisted_13 = { class: "value" };
-const _hoisted_14 = {
+}, Q = { class: "measurement-info" }, Y = { class: "value" }, J = {
   key: 2,
   class: "measurement"
-};
-const _hoisted_15 = { class: "measurement-info" };
-const _hoisted_16 = { class: "value" };
-const _hoisted_17 = {
+}, X = { class: "measurement-info" }, Z = { class: "value" }, ee = {
   key: 3,
   class: "measurement"
-};
-const _hoisted_18 = { class: "measurement-info" };
-const _hoisted_19 = { class: "value" };
-const _hoisted_20 = {
+}, te = { class: "measurement-info" }, se = { class: "value" }, ie = {
   key: 4,
   class: "measurement"
-};
-const _hoisted_21 = { class: "measurement-info" };
-const _hoisted_22 = { class: "value" };
-const _hoisted_23 = {
+}, ae = { class: "measurement-info" }, oe = { class: "value" }, ne = {
   key: 5,
   class: "measurement"
-};
-const _hoisted_24 = { class: "measurement-info" };
-const _hoisted_25 = { class: "value" };
-const _hoisted_26 = {
+}, le = { class: "measurement-info" }, re = { class: "value" }, de = {
   key: 6,
   class: "measurement"
-};
-const _hoisted_27 = { class: "measurement-info" };
-const _hoisted_28 = { class: "value" };
-const _hoisted_29 = {
+}, ue = { class: "measurement-info" }, ce = { class: "value" }, me = {
   key: 7,
   class: "measurement"
-};
-const _hoisted_30 = { class: "measurement-info" };
-const _hoisted_31 = { class: "value" };
-const _hoisted_32 = {
+}, pe = { class: "measurement-info" }, ve = { class: "value" }, ge = {
   key: 0,
   class: "timestamp"
-};
-const _sfc_main$1 = /* @__PURE__ */ defineComponent({
+}, fe = /* @__PURE__ */ V({
   __name: "Preview",
   props: {
     dataSource: {}
   },
-  setup(__props) {
-    const props = __props;
-    const tempStore = shallowRef(null);
-    const settingsRef = ref(props.dataSource);
-    const { update } = useTemporaryStore(props.dataSource.type, settingsRef, tempStore);
-    const waetherData = ref(null);
-    watch(tempStore, async () => {
-      waetherData.value = await tempStore.value.getData("WeatherData");
-    });
-    watch(props.dataSource, () => {
-      update();
-    }, { deep: true });
-    function hasTimestamp(station) {
-      const measurements = ["temperature", "humidity", "pressure", "windSpeed", "windDirection", "precipitation", "visibility", "cloudCover"];
-      return measurements.some((key) => station[key]?.timestamp);
+  setup(i) {
+    const p = i, d = M(null), c = g(p.dataSource), { update: v } = A(p.dataSource.type, c, d), u = g(null);
+    C(d, async () => {
+      u.value = await d.value.getData("WeatherData");
+    }), C(p.dataSource, () => {
+      v();
+    }, { deep: !0 });
+    function y(o) {
+      return ["temperature", "humidity", "pressure", "windSpeed", "windDirection", "precipitation", "visibility", "cloudCover"].some((t) => o[t]?.timestamp);
     }
-    function getLatestTimestamp(station) {
-      const measurements = ["temperature", "humidity", "pressure", "windSpeed", "windDirection", "precipitation", "visibility", "cloudCover"];
-      let latest = "";
-      measurements.forEach((key) => {
-        if (station[key]?.timestamp && station[key].timestamp > latest) {
-          latest = station[key].timestamp;
-        }
-      });
-      return latest;
+    function h(o) {
+      const e = ["temperature", "humidity", "pressure", "windSpeed", "windDirection", "precipitation", "visibility", "cloudCover"];
+      let t = "";
+      return e.forEach((m) => {
+        o[m]?.timestamp && o[m].timestamp > t && (t = o[m].timestamp);
+      }), t;
     }
-    function formatTimestamp(timestamp) {
-      if (!timestamp) return "";
+    function w(o) {
+      if (!o) return "";
       try {
-        const date = new Date(timestamp);
-        return date.toLocaleString();
+        return new Date(o).toLocaleString();
       } catch {
-        return timestamp;
+        return o;
       }
     }
-    return (_ctx, _cache) => {
-      return openBlock(), createElementBlock("div", _hoisted_1$1, [
-        _cache[17] || (_cache[17] = createElementVNode("div", { class: "preview-header" }, [
-          createElementVNode("h3", null, "🌤️ Weather Data Composer")
-        ], -1)),
-        !waetherData.value || waetherData.value.length === 0 ? (openBlock(), createElementBlock("div", _hoisted_2$1, [..._cache[0] || (_cache[0] = [
-          createElementVNode("p", null, "No weather data available", -1),
-          createElementVNode("small", null, "Configure connected datasources to see weather data", -1)
-        ])])) : (openBlock(), createElementBlock("div", _hoisted_3$1, [
-          (openBlock(true), createElementBlock(Fragment, null, renderList(waetherData.value, (station) => {
-            return openBlock(), createElementBlock("div", {
-              key: station.thingId,
-              class: "weather-station"
-            }, [
-              createElementVNode("div", _hoisted_4, [
-                createElementVNode("h4", null, "📍 " + toDisplayString(station.location.name), 1),
-                station.location.description ? (openBlock(), createElementBlock("small", _hoisted_5, toDisplayString(station.location.description), 1)) : createCommentVNode("", true),
-                station.location.coordinates?.latitude != null && station.location.coordinates?.longitude != null ? (openBlock(), createElementBlock("small", _hoisted_6, toDisplayString(station.location.coordinates.latitude.toFixed(4)) + "°N, " + toDisplayString(station.location.coordinates.longitude.toFixed(4)) + "°E ", 1)) : createCommentVNode("", true)
-              ]),
-              createElementVNode("div", _hoisted_7, [
-                station.temperature ? (openBlock(), createElementBlock("div", _hoisted_8, [
-                  _cache[2] || (_cache[2] = createElementVNode("div", { class: "measurement-icon" }, "🌡️", -1)),
-                  createElementVNode("div", _hoisted_9, [
-                    _cache[1] || (_cache[1] = createElementVNode("span", { class: "label" }, "Temperature", -1)),
-                    createElementVNode("span", _hoisted_10, toDisplayString(station.temperature.value) + toDisplayString(station.temperature.unit), 1)
-                  ])
-                ])) : createCommentVNode("", true),
-                station.humidity ? (openBlock(), createElementBlock("div", _hoisted_11, [
-                  _cache[4] || (_cache[4] = createElementVNode("div", { class: "measurement-icon" }, "💧", -1)),
-                  createElementVNode("div", _hoisted_12, [
-                    _cache[3] || (_cache[3] = createElementVNode("span", { class: "label" }, "Humidity", -1)),
-                    createElementVNode("span", _hoisted_13, toDisplayString(station.humidity.value) + toDisplayString(station.humidity.unit), 1)
-                  ])
-                ])) : createCommentVNode("", true),
-                station.pressure ? (openBlock(), createElementBlock("div", _hoisted_14, [
-                  _cache[6] || (_cache[6] = createElementVNode("div", { class: "measurement-icon" }, "📊", -1)),
-                  createElementVNode("div", _hoisted_15, [
-                    _cache[5] || (_cache[5] = createElementVNode("span", { class: "label" }, "Pressure", -1)),
-                    createElementVNode("span", _hoisted_16, toDisplayString(station.pressure.value) + toDisplayString(station.pressure.unit), 1)
-                  ])
-                ])) : createCommentVNode("", true),
-                station.windSpeed ? (openBlock(), createElementBlock("div", _hoisted_17, [
-                  _cache[8] || (_cache[8] = createElementVNode("div", { class: "measurement-icon" }, "💨", -1)),
-                  createElementVNode("div", _hoisted_18, [
-                    _cache[7] || (_cache[7] = createElementVNode("span", { class: "label" }, "Wind Speed", -1)),
-                    createElementVNode("span", _hoisted_19, toDisplayString(station.windSpeed.value) + toDisplayString(station.windSpeed.unit), 1)
-                  ])
-                ])) : createCommentVNode("", true),
-                station.windDirection ? (openBlock(), createElementBlock("div", _hoisted_20, [
-                  _cache[10] || (_cache[10] = createElementVNode("div", { class: "measurement-icon" }, "🧭", -1)),
-                  createElementVNode("div", _hoisted_21, [
-                    _cache[9] || (_cache[9] = createElementVNode("span", { class: "label" }, "Wind Direction", -1)),
-                    createElementVNode("span", _hoisted_22, toDisplayString(station.windDirection.value) + toDisplayString(station.windDirection.unit), 1)
-                  ])
-                ])) : createCommentVNode("", true),
-                station.precipitation ? (openBlock(), createElementBlock("div", _hoisted_23, [
-                  _cache[12] || (_cache[12] = createElementVNode("div", { class: "measurement-icon" }, "🌧️", -1)),
-                  createElementVNode("div", _hoisted_24, [
-                    _cache[11] || (_cache[11] = createElementVNode("span", { class: "label" }, "Precipitation", -1)),
-                    createElementVNode("span", _hoisted_25, toDisplayString(station.precipitation.value) + toDisplayString(station.precipitation.unit), 1)
-                  ])
-                ])) : createCommentVNode("", true),
-                station.visibility ? (openBlock(), createElementBlock("div", _hoisted_26, [
-                  _cache[14] || (_cache[14] = createElementVNode("div", { class: "measurement-icon" }, "👁️", -1)),
-                  createElementVNode("div", _hoisted_27, [
-                    _cache[13] || (_cache[13] = createElementVNode("span", { class: "label" }, "Visibility", -1)),
-                    createElementVNode("span", _hoisted_28, toDisplayString(station.visibility.value) + toDisplayString(station.visibility.unit), 1)
-                  ])
-                ])) : createCommentVNode("", true),
-                station.cloudCover ? (openBlock(), createElementBlock("div", _hoisted_29, [
-                  _cache[16] || (_cache[16] = createElementVNode("div", { class: "measurement-icon" }, "☁️", -1)),
-                  createElementVNode("div", _hoisted_30, [
-                    _cache[15] || (_cache[15] = createElementVNode("span", { class: "label" }, "Cloud Cover", -1)),
-                    createElementVNode("span", _hoisted_31, toDisplayString(station.cloudCover.value) + toDisplayString(station.cloudCover.unit), 1)
-                  ])
-                ])) : createCommentVNode("", true)
-              ]),
-              hasTimestamp(station) ? (openBlock(), createElementBlock("div", _hoisted_32, [
-                createElementVNode("small", null, "Last updated: " + toDisplayString(formatTimestamp(getLatestTimestamp(station))), 1)
-              ])) : createCommentVNode("", true)
-            ]);
-          }), 128))
-        ]))
-      ]);
-    };
+    return (o, e) => (l(), n("div", $, [
+      e[17] || (e[17] = s("div", { class: "preview-header" }, [
+        s("h3", null, "🌤️ Weather Data Composer")
+      ], -1)),
+      !u.value || u.value.length === 0 ? (l(), n("div", N, [...e[0] || (e[0] = [
+        s("p", null, "No weather data available", -1),
+        s("small", null, "Configure connected datasources to see weather data", -1)
+      ])])) : (l(), n("div", U, [
+        (l(!0), n(W, null, I(u.value, (t) => (l(), n("div", {
+          key: t.thingId,
+          class: "weather-station"
+        }, [
+          s("div", F, [
+            s("h4", null, "📍 " + a(t.location.name), 1),
+            t.location.description ? (l(), n("small", j, a(t.location.description), 1)) : r("", !0),
+            t.location.coordinates?.latitude != null && t.location.coordinates?.longitude != null ? (l(), n("small", q, a(t.location.coordinates.latitude.toFixed(4)) + "°N, " + a(t.location.coordinates.longitude.toFixed(4)) + "°E ", 1)) : r("", !0)
+          ]),
+          s("div", B, [
+            t.temperature ? (l(), n("div", G, [
+              e[2] || (e[2] = s("div", { class: "measurement-icon" }, "🌡️", -1)),
+              s("div", H, [
+                e[1] || (e[1] = s("span", { class: "label" }, "Temperature", -1)),
+                s("span", z, a(t.temperature.value) + a(t.temperature.unit), 1)
+              ])
+            ])) : r("", !0),
+            t.humidity ? (l(), n("div", K, [
+              e[4] || (e[4] = s("div", { class: "measurement-icon" }, "💧", -1)),
+              s("div", Q, [
+                e[3] || (e[3] = s("span", { class: "label" }, "Humidity", -1)),
+                s("span", Y, a(t.humidity.value) + a(t.humidity.unit), 1)
+              ])
+            ])) : r("", !0),
+            t.pressure ? (l(), n("div", J, [
+              e[6] || (e[6] = s("div", { class: "measurement-icon" }, "📊", -1)),
+              s("div", X, [
+                e[5] || (e[5] = s("span", { class: "label" }, "Pressure", -1)),
+                s("span", Z, a(t.pressure.value) + a(t.pressure.unit), 1)
+              ])
+            ])) : r("", !0),
+            t.windSpeed ? (l(), n("div", ee, [
+              e[8] || (e[8] = s("div", { class: "measurement-icon" }, "💨", -1)),
+              s("div", te, [
+                e[7] || (e[7] = s("span", { class: "label" }, "Wind Speed", -1)),
+                s("span", se, a(t.windSpeed.value) + a(t.windSpeed.unit), 1)
+              ])
+            ])) : r("", !0),
+            t.windDirection ? (l(), n("div", ie, [
+              e[10] || (e[10] = s("div", { class: "measurement-icon" }, "🧭", -1)),
+              s("div", ae, [
+                e[9] || (e[9] = s("span", { class: "label" }, "Wind Direction", -1)),
+                s("span", oe, a(t.windDirection.value) + a(t.windDirection.unit), 1)
+              ])
+            ])) : r("", !0),
+            t.precipitation ? (l(), n("div", ne, [
+              e[12] || (e[12] = s("div", { class: "measurement-icon" }, "🌧️", -1)),
+              s("div", le, [
+                e[11] || (e[11] = s("span", { class: "label" }, "Precipitation", -1)),
+                s("span", re, a(t.precipitation.value) + a(t.precipitation.unit), 1)
+              ])
+            ])) : r("", !0),
+            t.visibility ? (l(), n("div", de, [
+              e[14] || (e[14] = s("div", { class: "measurement-icon" }, "👁️", -1)),
+              s("div", ue, [
+                e[13] || (e[13] = s("span", { class: "label" }, "Visibility", -1)),
+                s("span", ce, a(t.visibility.value) + a(t.visibility.unit), 1)
+              ])
+            ])) : r("", !0),
+            t.cloudCover ? (l(), n("div", me, [
+              e[16] || (e[16] = s("div", { class: "measurement-icon" }, "☁️", -1)),
+              s("div", pe, [
+                e[15] || (e[15] = s("span", { class: "label" }, "Cloud Cover", -1)),
+                s("span", ve, a(t.cloudCover.value) + a(t.cloudCover.unit), 1)
+              ])
+            ])) : r("", !0)
+          ]),
+          y(t) ? (l(), n("div", ge, [
+            s("small", null, "Last updated: " + a(w(h(t))), 1)
+          ])) : r("", !0)
+        ]))), 128))
+      ]))
+    ]));
   }
-});
-const _export_sfc = (sfc, props) => {
-  const target = sfc.__vccOpts || sfc;
-  for (const [key, val] of props) {
-    target[key] = val;
-  }
-  return target;
-};
-const Preview = /* @__PURE__ */ _export_sfc(_sfc_main$1, [["__scopeId", "data-v-2a15dca0"]]);
-const _hoisted_1 = { class: "weather-composer-settings" };
-const _hoisted_2 = { class: "collapsible-section" };
-const _hoisted_3 = {
+}), P = (i, p) => {
+  const d = i.__vccOpts || i;
+  for (const [c, v] of p)
+    d[c] = v;
+  return d;
+}, ye = /* @__PURE__ */ P(fe, [["__scopeId", "data-v-2a15dca0"]]), he = { class: "weather-composer-settings" }, we = { class: "collapsible-section" }, be = {
   key: 0,
   class: "collapsible-content"
-};
-const _sfc_main = /* @__PURE__ */ defineComponent({
+}, ke = /* @__PURE__ */ V({
   __name: "Settings",
   props: {
     config: {},
     dataSources: {}
   },
-  setup(__props) {
-    const datasourcesFiltered = computed(() => {
-      return __props.dataSources.filter((ds) => ds.type === "ogcsta");
-    });
-    const availableThings = ref([]);
-    const isLoadingThings = ref(false);
-    watch(() => __props.config.connectedDatasources, async () => {
-      await loadAvailableThings();
-    }, { immediate: true });
-    async function loadAvailableThings() {
-      if (!__props.config.connectedDatasources || __props.config.connectedDatasources.length === 0) {
-        availableThings.value = [];
+  setup(i) {
+    const p = x(() => i.dataSources.filter((o) => o.type === "ogcsta")), d = g([]), c = g(!1);
+    C(() => i.config.connectedDatasources, async () => {
+      await v();
+    }, { immediate: !0 });
+    async function v() {
+      if (!i.config.connectedDatasources || i.config.connectedDatasources.length === 0) {
+        d.value = [];
         return;
       }
-      isLoadingThings.value = true;
+      c.value = !0;
       try {
-        const datasourceRepository = inject(identifier);
-        const allThings = [];
-        for (const datasourceId of __props.config.connectedDatasources) {
+        const o = O(E), e = [];
+        for (const t of i.config.connectedDatasources)
           try {
-            const datasource = datasourceRepository.getDatasource(datasourceId);
-            const data = await datasource.getData("OGCSTAData", {
+            const D = await o.getDatasource(t).getData("OGCSTAData", {
               filter: {
                 things: {
                   all: {
-                    includeDatastreams: false,
-                    includeLocations: false
+                    includeDatastreams: !1,
+                    includeLocations: !1
                   }
                 }
               }
             });
-            if (data?.things) {
-              data.things.forEach((thing) => {
-                const thingId = thing["@iot.id"] || thing.iotId || thing.id;
-                if (thingId) {
-                  allThings.push({
-                    iotId: String(thingId),
-                    name: thing.name || `Thing ${thingId}`
-                  });
-                }
+            D?.things && D.things.forEach((f) => {
+              const b = f["@iot.id"] || f.iotId || f.id;
+              b && e.push({
+                iotId: String(b),
+                name: f.name || `Thing ${b}`
               });
-            }
-          } catch (error) {
-            console.error("Error loading things from datasource:", datasourceId, error);
+            });
+          } catch (m) {
+            console.error("Error loading things from datasource:", t, m);
           }
-        }
-        availableThings.value = allThings;
+        d.value = e;
       } finally {
-        isLoadingThings.value = false;
+        c.value = !1;
       }
     }
-    const isMappingSectionExpanded = ref(false);
-    const weatherParameters = [
+    const u = g(!1), y = [
       { key: "temperature", label: "Temperature", placeholder: "temp, temperatur, lufttemperatur" },
       { key: "humidity", label: "Humidity", placeholder: "humidity, feuchte, luftfeuchte" },
       { key: "pressure", label: "Pressure", placeholder: "pressure, luftdruck" },
@@ -279,94 +214,72 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
       { key: "precipitation", label: "Precipitation", placeholder: "precipitation, niederschlag, rain" },
       { key: "visibility", label: "Visibility", placeholder: "visibility, sicht" },
       { key: "cloudCover", label: "Cloud Cover", placeholder: "cloudcover, wolken, bedeckung" }
-    ];
-    const updateCustomMapping = (parameter, keywords) => {
-      if (!__props.config.customMapping) {
-        __props.config.customMapping = {};
-      }
-      if (keywords.trim()) {
-        __props.config.customMapping[parameter] = keywords.split(",").map((k) => k.trim());
-      } else {
-        delete __props.config.customMapping[parameter];
-      }
-    };
-    const getCustomMappingValue = (parameter) => {
-      return __props.config.customMapping?.[parameter]?.join(", ") || "";
-    };
-    return (_ctx, _cache) => {
-      return openBlock(), createElementBlock("div", _hoisted_1, [
-        createVNode(unref(DSelect), {
-          modelValue: __props.config.connectedDatasources,
-          "onUpdate:modelValue": _cache[0] || (_cache[0] = ($event) => __props.config.connectedDatasources = $event),
-          label: "OGC-STA-Quellen",
-          options: datasourcesFiltered.value,
-          multiple: "",
-          "label-key": "name",
-          "value-key": "uid"
-        }, null, 8, ["modelValue", "options"]),
-        createVNode(unref(DSelect), {
-          modelValue: __props.config.thingId,
-          "onUpdate:modelValue": _cache[1] || (_cache[1] = ($event) => __props.config.thingId = $event),
-          label: "Thing (wahlweise)",
-          placeholder: "All Things",
-          options: availableThings.value,
-          "label-key": "name",
-          "value-key": "iotId",
-          loading: isLoadingThings.value,
-          disabled: isLoadingThings.value || availableThings.value.length === 0,
-          clearable: ""
-        }, null, 8, ["modelValue", "options", "loading", "disabled"]),
-        createElementVNode("div", _hoisted_2, [
-          createElementVNode("div", {
-            class: "collapsible-header",
-            onClick: _cache[2] || (_cache[2] = ($event) => isMappingSectionExpanded.value = !isMappingSectionExpanded.value)
+    ], h = (o, e) => {
+      i.config.customMapping || (i.config.customMapping = {}), e.trim() ? i.config.customMapping[o] = e.split(",").map((t) => t.trim()) : delete i.config.customMapping[o];
+    }, w = (o) => i.config.customMapping?.[o]?.join(", ") || "";
+    return (o, e) => (l(), n("div", he, [
+      k(S(T), {
+        modelValue: i.config.connectedDatasources,
+        "onUpdate:modelValue": e[0] || (e[0] = (t) => i.config.connectedDatasources = t),
+        label: "OGC-STA-Quellen",
+        options: p.value,
+        multiple: "",
+        "label-key": "name",
+        "value-key": "uid"
+      }, null, 8, ["modelValue", "options"]),
+      k(S(T), {
+        modelValue: i.config.thingId,
+        "onUpdate:modelValue": e[1] || (e[1] = (t) => i.config.thingId = t),
+        label: "Thing (wahlweise)",
+        placeholder: "All Things",
+        options: d.value,
+        "label-key": "name",
+        "value-key": "iotId",
+        loading: c.value,
+        disabled: c.value || d.value.length === 0,
+        clearable: ""
+      }, null, 8, ["modelValue", "options", "loading", "disabled"]),
+      s("div", we, [
+        s("div", {
+          class: "collapsible-header",
+          onClick: e[2] || (e[2] = (t) => u.value = !u.value)
+        }, [
+          e[3] || (e[3] = s("h3", null, "Custom Keyword Mapping (Optional)", -1)),
+          s("span", {
+            class: R(["collapse-icon", { expanded: u.value }])
+          }, "▼", 2)
+        ]),
+        u.value ? (l(), n("div", be, [
+          e[4] || (e[4] = s("p", { class: "section-description" }, "Override default keywords for weather parameter detection", -1)),
+          (l(), n(W, null, I(y, (t) => s("div", {
+            key: t.key,
+            class: "mapping-item"
           }, [
-            _cache[3] || (_cache[3] = createElementVNode("h3", null, "Custom Keyword Mapping (Optional)", -1)),
-            createElementVNode("span", {
-              class: normalizeClass(["collapse-icon", { "expanded": isMappingSectionExpanded.value }])
-            }, "▼", 2)
-          ]),
-          isMappingSectionExpanded.value ? (openBlock(), createElementBlock("div", _hoisted_3, [
-            _cache[4] || (_cache[4] = createElementVNode("p", { class: "section-description" }, "Override default keywords for weather parameter detection", -1)),
-            (openBlock(), createElementBlock(Fragment, null, renderList(weatherParameters, (param) => {
-              return createElementVNode("div", {
-                key: param.key,
-                class: "mapping-item"
-              }, [
-                createVNode(unref(DInput), {
-                  "model-value": getCustomMappingValue(param.key),
-                  "onUpdate:modelValue": ($event) => updateCustomMapping(param.key, $event),
-                  label: param.label,
-                  placeholder: param.placeholder
-                }, null, 8, ["model-value", "onUpdate:modelValue", "label", "placeholder"])
-              ]);
-            }), 64))
-          ])) : createCommentVNode("", true)
-        ])
-      ]);
-    };
+            k(S(L), {
+              "model-value": w(t.key),
+              "onUpdate:modelValue": (m) => h(t.key, m),
+              label: t.label,
+              placeholder: t.placeholder
+            }, null, 8, ["model-value", "onUpdate:modelValue", "label", "placeholder"])
+          ])), 64))
+        ])) : r("", !0)
+      ])
+    ]));
   }
-});
-const Settings = /* @__PURE__ */ _export_sfc(_sfc_main, [["__scopeId", "data-v-c7230bfa"]]);
-const WeatherComposerIdentifier = Symbol.for("WeatherComposer");
-const previewSymbol = Symbol.for("WeatherComposerPreview");
-const settingsSymbol = Symbol.for("WeatherComposerSettings");
-function activate({ services }) {
-  services.register("WeatherComposerPreview", Preview);
-  services.register("WeatherComposerSettings", Settings);
-  services.getRequired(DATASOURCE_REPOSITORY).registerDatasourceType("weather", {
+}), Se = /* @__PURE__ */ P(ke, [["__scopeId", "data-v-c7230bfa"]]), Ce = Symbol.for("WeatherComposer"), De = Symbol.for("WeatherComposerPreview"), Te = Symbol.for("WeatherComposerSettings");
+function Pe({ services: i }) {
+  i.register("WeatherComposerPreview", ye), i.register("WeatherComposerSettings", Se), i.getRequired(_).registerDatasourceType("weather", {
+    icon: "cloud",
     kind: "composer",
-    Store: WeatherComposerIdentifier,
-    Preview: previewSymbol,
-    Settings: settingsSymbol
+    Store: Ce,
+    Preview: De,
+    Settings: Te
   });
 }
-function deactivate({ services }) {
-  services.getRequired(DATASOURCE_REPOSITORY).unregisterDatasourceType("weather");
-  services.unregister("WeatherComposerPreview");
-  services.unregister("WeatherComposerSettings");
+function Ee({ services: i }) {
+  i.getRequired(_).unregisterDatasourceType("weather"), i.unregister("WeatherComposerPreview"), i.unregister("WeatherComposerSettings");
 }
 export {
-  activate,
-  deactivate
+  Pe as activate,
+  Ee as deactivate
 };

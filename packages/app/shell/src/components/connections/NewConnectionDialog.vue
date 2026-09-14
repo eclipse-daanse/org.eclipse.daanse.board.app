@@ -25,17 +25,42 @@ import {
   identifier as CONNECTION_REPOSITORY,
 } from 'org.eclipse.daanse.board.app.lib.api.connection'
 import { describeModel } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+import {
+  identifier as WORKSPACE,
+  type Workspace,
+} from 'org.eclipse.daanse.board.app.lib.model.workspace'
+import { useEList } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import { DButton, DIcon, DInput, DModal } from 'org.eclipse.daanse.board.app.ui.vue.controls'
 import ModelFields from '../datasources/ModelFields.vue'
+import TagInput from '../datasources/TagInput.vue'
 
 const open = defineModel<boolean>({ required: true })
 const emit = defineEmits<{ created: [uid: string] }>()
 
 const connections = inject<ConnectionRepository>(CONNECTION_REPOSITORY)!
+const workspace = inject<Workspace>(WORKSPACE)!
+const held = useEList(workspace, (w) => w.connections)
 
 const type = ref('')
 const name = ref('')
+const icon = ref('')
+const tags = ref<string[]>([])
 const config = ref<Record<string, unknown>>({})
+
+/* Every tag already in use, so the same thing is not filed twice under two
+   spellings. */
+const knownTags = computed(() => {
+  const all = new Set<string>()
+  for (const connection of held.value as any[]) {
+    for (const tag of connection.tags ?? []) all.add(tag)
+  }
+  return [...all].sort()
+})
+
+/** What the icon field stands for while it is empty. */
+const typeIcon = computed(
+  () => connections.getConnectionIdentifiers(type.value)?.icon ?? 'link',
+)
 
 const types = computed(() => connections.registeredConnections)
 
@@ -63,6 +88,8 @@ watch(open, (isOpen) => {
   if (!isOpen) return
   type.value = ''
   name.value = ''
+  icon.value = ''
+  tags.value = []
   config.value = {}
 })
 
@@ -83,6 +110,10 @@ function create() {
   if (!canCreate.value) return
   const connection = connections.createConnection(type.value, { ...config.value })
   connection.name = name.value.trim()
+  /* Empty means "the one the type carries" - storing that here would freeze
+     a default that should follow the type. */
+  if (icon.value.trim()) connection.icon = icon.value.trim()
+  for (const tag of tags.value) connection.tags.add(tag)
   connections.saveConnection(connection)
   open.value = false
   emit('created', connection.uid as string)
@@ -120,6 +151,28 @@ function create() {
           hint="Unter diesem Namen wählst du die Verbindung später aus."
           stacked
           required
+        />
+      </section>
+
+      <section v-if="type" class="new__step">
+        <h3 class="new__label">Einordnung</h3>
+        <div class="new__icon">
+          <span class="new__icon-preview" aria-hidden="true">
+            <DIcon :name="icon.trim() || typeIcon" size="lg" />
+          </span>
+          <DInput
+            v-model="icon"
+            label="Symbol"
+            :placeholder="typeIcon"
+            hint="Ein Material-Symbols-Name. Leer lassen für das Symbol des Typs."
+            stacked
+          />
+        </div>
+        <TagInput
+          v-model="tags"
+          label="Schlagworte"
+          hint="Wofür diese Verbindung da ist — danach lässt sich später suchen."
+          :known="knownTags"
         />
       </section>
 
@@ -162,6 +215,27 @@ function create() {
   margin: 0;
   font-size: 0.85rem;
   color: var(--color-dim);
+}
+
+.new__icon {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.new__icon-preview {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  color: var(--color-accent);
+  background-color: var(--color-sunken);
+  border: 1px solid var(--color-outline);
+  border-radius: var(--radius-sm);
+}
+
+.new__icon :deep(.field) {
+  flex: 1;
 }
 
 .types {

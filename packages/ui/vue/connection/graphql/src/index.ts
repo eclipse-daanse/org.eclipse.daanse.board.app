@@ -35,6 +35,7 @@ export function activate({ services }: ActivationContext) {
   services
     .getRequired<ConnectionRepository>(CONNECTION_REPOSITORY)
     .registerConnectionType('graphql', {
+      icon: 'hub',
       Model: MODEL_ECORE,
       Connection: GraphqlConnectionIdentifier,
       Settings: settingsSymbol,

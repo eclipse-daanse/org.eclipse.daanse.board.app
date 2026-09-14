@@ -64,6 +64,7 @@ function activate({ services }) {
   services.register("KpiComposerPreview", _sfc_main$1);
   services.register("KpiComposerSettings", _sfc_main);
   services.getRequired(DATASOURCE_REPOSITORY).registerDatasourceType("KpiComposer", {
+    icon: "speed",
     kind: "composer",
     Store: KpiComposerIdentifier,
     Preview: previewSymbol,

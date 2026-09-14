@@ -35,6 +35,7 @@ export function activate({ services }: ActivationContext) {
   services
     .getRequired<ConnectionRepository>(CONNECTION_REPOSITORY)
     .registerConnectionType('rss', {
+      icon: 'rss_feed',
       Model: MODEL_ECORE,
       Connection: RssConnectionIdentifier,
       Settings: settingsSymbol,
