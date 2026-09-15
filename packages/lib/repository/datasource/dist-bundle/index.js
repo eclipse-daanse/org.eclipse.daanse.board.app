@@ -1,13 +1,14 @@
-import { WORKSPACE as D, DatasourceImpl as l } from "org.eclipse.daanse.board.app.lib.model.workspace";
-import { DATASOURCE_REPOSITORY as u, identifier as g } from "org.eclipse.daanse.board.app.lib.api.datasource";
-import { DATASOURCE_REPOSITORY as E, identifier as _ } from "org.eclipse.daanse.board.app.lib.api.datasource";
-function v(a) {
-  return typeof a?.init == "function";
+import { WORKSPACE, DatasourceImpl } from "org.eclipse.daanse.board.app.lib.model.workspace";
+import { DATASOURCE_REPOSITORY, identifier } from "org.eclipse.daanse.board.app.lib.api.datasource";
+import { DATASOURCE_REPOSITORY as DATASOURCE_REPOSITORY2, identifier as identifier2 } from "org.eclipse.daanse.board.app.lib.api.datasource";
+function isReconfigurable(store) {
+  return typeof store?.init === "function";
 }
-const n = /* @__PURE__ */ new Map(), c = ["chart", "datatable"];
-class p {
-  constructor(e) {
-    this.resolver = e;
+const datasources = /* @__PURE__ */ new Map();
+const DERIVED_SOURCE_TYPES = ["chart", "datatable"];
+class DatasourceRepository {
+  constructor(resolver) {
+    this.resolver = resolver;
   }
   availableDatasources = {};
   datasourcesByType = {};
@@ -18,16 +19,22 @@ class p {
    */
   workspaceHeld;
   get workspace() {
-    return this.workspaceHeld || (this.workspaceHeld = this.resolver.getRequired(D)), this.workspaceHeld;
+    if (!this.workspaceHeld) {
+      this.workspaceHeld = this.resolver.getRequired(WORKSPACE);
+    }
+    return this.workspaceHeld;
   }
   /** See IdentifierResolver: symbol description is the service id. */
-  resolveIdentifier(e) {
-    return this.resolver.getRequired(e.description);
+  resolveIdentifier(identifier3) {
+    return this.resolver.getRequired(identifier3.description);
   }
   /** Lets go of the live store without touching the workspace. */
-  dropLive(e) {
-    const t = n.get(e);
-    t && (t.destroy(), n.delete(e), delete this.datasourcesByType[e]);
+  dropLive(datasourceId) {
+    const datasource = datasources.get(datasourceId);
+    if (!datasource) return;
+    datasource.destroy();
+    datasources.delete(datasourceId);
+    delete this.datasourcesByType[datasourceId];
   }
   /**
    * Takes a source out of the workspace and lets go of its live store.
@@ -36,30 +43,48 @@ class p {
    * registered when a source was deleted, since the removal happened in a
    * store that knew nothing about it.
    */
-  removeDatasource(e) {
-    this.dropLive(e);
-    const t = this.workspace.datasources, r = t.toArray().findIndex((o) => o.uid === e);
-    r > -1 && t.removeAt(r);
+  removeDatasource(datasourceId) {
+    this.dropLive(datasourceId);
+    const held = this.workspace.datasources;
+    const at = held.toArray().findIndex((source) => source.uid === datasourceId);
+    if (at > -1) held.removeAt(at);
   }
   getDatasources() {
     return this.workspace.datasources.toArray();
   }
-  getDatasourceModel(e) {
-    return this.getDatasources().find((t) => t.uid === e);
+  getDatasourceModel(datasourceId) {
+    return this.getDatasources().find((source) => source.uid === datasourceId);
   }
-  createDatasource(e, t = {}) {
-    const r = new l();
-    return r.uid = Math.random().toString(36).substring(7), r.name = "DataSource " + r.uid, r.type = e, r.config = t, this.workspace.datasources.push(r), this.saveDatasource(r), r;
+  createDatasource(type, config = {}) {
+    const datasource = new DatasourceImpl();
+    datasource.uid = Math.random().toString(36).substring(7);
+    datasource.name = "DataSource " + datasource.uid;
+    datasource.type = type;
+    datasource.config = config;
+    this.workspace.datasources.push(datasource);
+    try {
+      this.saveDatasource(datasource);
+    } catch (error) {
+      console.warn(`datasource ${datasource.uid} is not live yet:`, error);
+    }
+    return datasource;
   }
-  saveDatasource(e) {
-    const t = e.config ?? {};
-    if (t.uid = e.uid, t.name = e.name, t.type = e.type, e.connection && (t.connection = e.connection.uid), e.config = t, !e.type) return;
-    const r = e.uid, o = n.get(r);
-    if (o && this.datasourcesByType[r] === e.type && v(o)) {
-      o.init(t);
+  saveDatasource(datasource) {
+    const config = datasource.config ?? {};
+    config["uid"] = datasource.uid;
+    config["name"] = datasource.name;
+    config["type"] = datasource.type;
+    if (datasource.connection) config["connection"] = datasource.connection.uid;
+    datasource.config = config;
+    if (!datasource.type) return;
+    const uid = datasource.uid;
+    const live = datasources.get(uid);
+    if (live && this.datasourcesByType[uid] === datasource.type && isReconfigurable(live)) {
+      live.init(config);
       return;
     }
-    this.dropLive(r), this.registerDatasource(r, e.type, t);
+    this.dropLive(uid);
+    this.registerDatasource(uid, datasource.type, config);
   }
   /**
    * Builds a live store for every source the workspace holds.
@@ -68,34 +93,44 @@ class p {
    * reads while it is being registered, so they have to be there.
    */
   rebuildLive() {
-    const e = this.getDatasources();
-    for (const t of e)
-      c.includes(t.type) || this.saveDatasource(t);
-    for (const t of e)
-      c.includes(t.type) && this.saveDatasource(t);
+    const held = this.getDatasources();
+    for (const source of held) {
+      if (!DERIVED_SOURCE_TYPES.includes(source.type)) this.saveDatasource(source);
+    }
+    for (const source of held) {
+      if (DERIVED_SOURCE_TYPES.includes(source.type)) this.saveDatasource(source);
+    }
   }
-  setDatasources(e) {
-    const t = this.workspace.datasources;
-    for (const s of t.toArray()) this.dropLive(s.uid);
-    t.clear();
-    const r = (s) => this.workspace.connections.toArray().find((i) => i.uid === s), o = (s) => {
-      const i = new l();
-      i.uid = s.uid, i.name = s.name, i.type = s.type, i.config = s.config ?? {};
-      const d = r((s.config ?? {}).connection);
-      d && (i.connection = d), t.push(i), this.saveDatasource(i);
+  setDatasources(stored) {
+    const held = this.workspace.datasources;
+    for (const source of held.toArray()) this.dropLive(source.uid);
+    held.clear();
+    const connectionOf = (uid) => this.workspace.connections.toArray().find((connection) => connection.uid === uid);
+    const build = (entry) => {
+      const datasource = new DatasourceImpl();
+      datasource.uid = entry.uid;
+      datasource.name = entry.name;
+      datasource.type = entry.type;
+      datasource.config = entry.config ?? {};
+      const connection = connectionOf((entry.config ?? {})["connection"]);
+      if (connection) datasource.connection = connection;
+      held.push(datasource);
+      this.saveDatasource(datasource);
     };
-    for (const s of e)
-      c.includes(s.type) || o(s);
-    for (const s of e)
-      c.includes(s.type) && o(s);
+    for (const entry of stored) {
+      if (!DERIVED_SOURCE_TYPES.includes(entry.type)) build(entry);
+    }
+    for (const entry of stored) {
+      if (DERIVED_SOURCE_TYPES.includes(entry.type)) build(entry);
+    }
   }
-  getDatasource(e) {
-    const t = n.get(e);
-    if (!t) throw new Error(`Store with id ${e} not found`);
-    return t;
+  getDatasource(datasourceId) {
+    const datasource = datasources.get(datasourceId);
+    if (!datasource) throw new Error(`Store with id ${datasourceId} not found`);
+    return datasource;
   }
-  registerDatasourceType(e, t) {
-    this.availableDatasources[e] = t;
+  registerDatasourceType(name, identifiers) {
+    this.availableDatasources[name] = identifiers;
   }
   /**
    * Nimmt die Registrierung eines Datenquellen-Typs zurück.
@@ -106,8 +141,12 @@ class p {
    *
    * @returns ob der Typ registriert war
    */
-  unregisterDatasourceType(e) {
-    return e in this.availableDatasources ? (delete this.availableDatasources[e], !0) : !1;
+  unregisterDatasourceType(name) {
+    if (!(name in this.availableDatasources)) {
+      return false;
+    }
+    delete this.availableDatasources[name];
+    return true;
   }
   getDataSourceTypes() {
     return Object.keys(this.availableDatasources);
@@ -115,62 +154,71 @@ class p {
   get registeredDatasources() {
     return Object.keys(this.availableDatasources);
   }
-  getDatasourceIdentifiers(e) {
-    return this.availableDatasources[e];
+  getDatasourceIdentifiers(type) {
+    return this.availableDatasources[type];
   }
-  registerDatasource(e, t, r) {
-    const o = this.availableDatasources[t];
-    if (!o) {
+  registerDatasource(datasourceId, type, config) {
+    const identifiers = this.availableDatasources[type];
+    if (!identifiers) {
       console.warn(
-        `Datasource "${e}" not registered: no datasource type "${t}". Known types: ${Object.keys(this.availableDatasources).join(", ") || "none"}`
+        `Datasource "${datasourceId}" not registered: no datasource type "${type}". Known types: ${Object.keys(this.availableDatasources).join(", ") || "none"}`
       );
       return;
     }
-    const i = this.resolveIdentifier(o.Store)(r);
-    n.set(e, i), this.datasourcesByType[e] = t;
+    const datasourceFactory = this.resolveIdentifier(identifiers.Store);
+    const datasource = datasourceFactory(config);
+    datasources.set(datasourceId, datasource);
+    this.datasourcesByType[datasourceId] = type;
   }
-  getDatasourceType(e) {
-    return this.datasourcesByType[e];
+  getDatasourceType(datasourceId) {
+    return this.datasourcesByType[datasourceId];
   }
-  getDatasourceId(e) {
-    let t;
-    return n.forEach((r, o) => {
-      e === r && (t = o);
-    }), t;
+  getDatasourceId(dataSource) {
+    let key;
+    datasources.forEach((aDataSource, akey) => {
+      if (dataSource === aDataSource) {
+        key = akey;
+      }
+    });
+    return key;
   }
-  getDatasourceTypeFromDatasource(e) {
-    const t = this.getDatasourceId(e);
-    if (t)
-      return this.getDatasourceType(t);
+  getDatasourceTypeFromDatasource(dataSource) {
+    const id = this.getDatasourceId(dataSource);
+    if (!id) return void 0;
+    return this.getDatasourceType(id);
   }
 }
-function h({ services: a }) {
-  a.register(u, new p(a));
+function activate$1({ services }) {
+  services.register(DATASOURCE_REPOSITORY, new DatasourceRepository(services));
 }
-function y({ services: a }) {
-  a.unregister(u);
+function deactivate$1({ services }) {
+  services.unregister(DATASOURCE_REPOSITORY);
 }
-const b = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const library = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  DATASOURCE_REPOSITORY: u,
-  DatasourceRepository: p,
-  activate: h,
-  deactivate: y,
-  identifier: g
-}, Symbol.toStringTag, { value: "Module" })), f = "org.eclipse.daanse.board.app.lib.repository.datasource", w = "0.0.1-next.1";
-async function R(a) {
-  const e = globalThis.__tsm__;
-  if (!e)
-    throw new Error(`${f}: tsm runtime is not initialized`);
-  e.register(f, b, w, "lib.repository.datasource"), await h?.(a);
+  DATASOURCE_REPOSITORY,
+  DatasourceRepository,
+  activate: activate$1,
+  deactivate: deactivate$1,
+  identifier
+}, Symbol.toStringTag, { value: "Module" }));
+const LIBRARY_ID = "org.eclipse.daanse.board.app.lib.repository.datasource";
+const VERSION = "0.0.1-next.1";
+async function activate(context) {
+  const runtime = globalThis.__tsm__;
+  if (!runtime) {
+    throw new Error(`${LIBRARY_ID}: tsm runtime is not initialized`);
+  }
+  runtime.register(LIBRARY_ID, library, VERSION, "lib.repository.datasource");
+  await activate$1?.(context);
 }
-async function O(a) {
-  await y?.(a);
+async function deactivate(context) {
+  await deactivate$1?.(context);
 }
 export {
-  E as DATASOURCE_REPOSITORY,
-  p as DatasourceRepository,
-  R as activate,
-  O as deactivate,
-  _ as identifier
+  DATASOURCE_REPOSITORY2 as DATASOURCE_REPOSITORY,
+  DatasourceRepository,
+  activate,
+  deactivate,
+  identifier2 as identifier
 };

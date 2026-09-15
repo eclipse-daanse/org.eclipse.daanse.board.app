@@ -451,10 +451,11 @@ const removingUsage = computed(() => {
                   openMenu($event, { what: 'source', uid: source.uid, name: source.name })
                 "
               >
-                <span class="row__twist row__twist--none">
-                  <DIcon :name="source.icon" size="sm" />
-                </span>
+                <!-- Empty, but the same width as a connection's chevron: the
+                     row below has to start where the row above starts. -->
+                <span class="row__twist row__twist--none" aria-hidden="true" />
                 <button type="button" class="row__body" @click="select('DataSource', source.uid)">
+                  <DIcon :name="source.icon" size="sm" class="row__icon" />
                   <span class="row__name">{{ source.name }}</span>
                   <span class="row__what">{{ source.type }}</span>
                   <span
@@ -532,7 +533,8 @@ const removingUsage = computed(() => {
   align-items: center;
   gap: 2px;
   flex: none;
-  padding: 7px 8px 7px 12px;
+  /* The panel's gutter, the same one the rows and the search box use. */
+  padding: 7px 8px 7px 10px;
   border-bottom: 1px solid var(--color-divider);
 }
 
@@ -569,13 +571,18 @@ const removingUsage = computed(() => {
 }
 
 .tree__sources {
-  padding-left: 18px;
+  /* One step, the width of the chevron column: a source's icon lands under
+     its connection's name, which is what makes the nesting readable. */
+  padding-left: 22px;
 }
 
 .row {
   display: flex;
   align-items: center;
   gap: 2px;
+  /* The hover and selection band still runs the full width; only what is
+     inside it starts at the gutter. */
+  padding-left: 10px;
   padding-right: 4px;
 }
 
@@ -689,9 +696,21 @@ const removingUsage = computed(() => {
   white-space: nowrap;
 }
 
-.tree__none,
 .tree__empty {
-  padding: 6px 12px;
+  padding: 6px 10px;
+  font-family: var(--font-sans);
+  font-size: var(--text-xs);
+  color: var(--color-dim);
+}
+
+/*
+ * Lines up with the names it stands in for, not with the gutter: it says
+ * what is missing from this connection, so it belongs where those would be.
+ */
+.tree__none {
+  /* 36px inside a list that is already indented 22: the text lands on the
+     icon edge of the sources it stands in for. */
+  padding: 6px 10px 6px 36px;
   font-family: var(--font-sans);
   font-size: var(--text-xs);
   color: var(--color-dim);

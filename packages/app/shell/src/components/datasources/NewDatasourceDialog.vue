@@ -166,7 +166,16 @@ function create() {
   for (const tag of tags.value) datasource.tags.add(tag)
   /* The settings name the connection by id; the model holds the reference. */
   datasource.connection = connections.value.find((each: any) => each.uid === connection.value)
-  datasources.saveDatasource(datasource)
+  /*
+   * A type that brings no model - a composer - is configured afterwards, in
+   * the editor, and until then its live store cannot be built. That is a
+   * half-finished source, not a failed one.
+   */
+  try {
+    datasources.saveDatasource(datasource)
+  } catch (error) {
+    console.warn(`${datasource.uid} is not live yet:`, error)
+  }
   open.value = false
   emit('created', datasource.uid as string)
 }

@@ -126,7 +126,21 @@ export class DatasourceRepository implements IDatasourceRepository {
     datasource.config = config
 
     this.workspace.datasources.push(datasource)
-    this.saveDatasource(datasource)
+    /*
+     * A source that cannot be built yet is still a source.
+     *
+     * The live store is built from a configuration the caller has usually
+     * not filled in yet - a composer has nothing to read from until it is
+     * told what. Letting that failure out would abandon the caller halfway
+     * through creating: the object is already in the workspace, but its
+     * name and everything after it never gets set. The live half arrives on
+     * the next save, once the configuration is there.
+     */
+    try {
+      this.saveDatasource(datasource)
+    } catch (error) {
+      console.warn(`datasource ${datasource.uid} is not live yet:`, error)
+    }
     return datasource
   }
 

@@ -105,7 +105,13 @@ function create() {
      a default that should follow the type. */
   if (icon.value.trim()) connection.icon = icon.value.trim()
   for (const tag of tags.value) connection.tags.add(tag)
-  connections.saveConnection(connection)
+  /* Same as for a data source: a configuration that is not complete yet
+     leaves a connection that is modelled but not live. */
+  try {
+    connections.saveConnection(connection)
+  } catch (error) {
+    console.warn(`${connection.uid} is not live yet:`, error)
+  }
   open.value = false
   emit('created', connection.uid as string)
 }

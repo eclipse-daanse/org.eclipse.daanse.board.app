@@ -100,7 +100,16 @@ export class ConnectionRepository {
     connection.config = config
 
     this.workspace.connections.push(connection)
-    this.saveConnection(connection)
+    /*
+     * A connection that cannot be built yet is still a connection - see the
+     * same reasoning in the datasource repository. The live half arrives on
+     * the next save, once the configuration is there.
+     */
+    try {
+      this.saveConnection(connection)
+    } catch (error) {
+      console.warn(`connection ${connection.uid} is not live yet:`, error)
+    }
     return connection
   }
 
