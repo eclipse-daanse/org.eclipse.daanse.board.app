@@ -47,6 +47,7 @@ import DDivider from './DDivider.vue'
 import DField from './DField.vue'
 import DFloatingWindow from './DFloatingWindow.vue'
 import DIcon from './DIcon.vue'
+import DIconPicker from './DIconPicker.vue'
 import DInput from './DInput.vue'
 import DModal from './DModal.vue'
 import DRadioGroup from './DRadioGroup.vue'
@@ -67,6 +68,7 @@ export {
   DField,
   DFloatingWindow,
   DIcon,
+  DIconPicker,
   DInput,
   DModal,
   DRadioGroup,
@@ -89,6 +91,7 @@ export const CONTROLS = {
   DField,
   DFloatingWindow,
   DIcon,
+  DIconPicker,
   DInput,
   DModal,
   DRadioGroup,

@@ -28,7 +28,7 @@ import {
   type Workspace,
 } from 'org.eclipse.daanse.board.app.lib.model.workspace'
 import { describeModel, useEList } from 'org.eclipse.daanse.board.app.ui.vue.composables'
-import { DIcon, DInput, DSelect } from 'org.eclipse.daanse.board.app.ui.vue.controls'
+import { DIconPicker, DInput, DSelect } from 'org.eclipse.daanse.board.app.ui.vue.controls'
 import CreateWizard from './CreateWizard.vue'
 import ModelFields from './ModelFields.vue'
 import TagInput from './TagInput.vue'
@@ -228,18 +228,12 @@ function create() {
         </template>
       </template>
 
-      <div class="icon">
-        <DInput
-          v-model="icon"
-          label="Symbol"
-          :placeholder="iconOf(type)"
-          hint="Ein Material-Icons-Name. Leer lassen für das Symbol des Typs."
-          stacked
-        />
-        <span class="icon__preview" aria-hidden="true">
-          <DIcon :name="icon.trim() || iconOf(type)" size="lg" />
-        </span>
-      </div>
+      <DIconPicker
+        v-model="icon"
+        label="Symbol"
+        :fallback="iconOf(type)"
+        hint="Ohne eigenes Symbol steht hier das des Typs."
+      />
 
       <TagInput
         v-model="tags"
@@ -269,28 +263,6 @@ function create() {
   border-left: 2px solid var(--color-warn, var(--color-accent));
 }
 
-.icon {
-  display: flex;
-  align-items: flex-start;
-  gap: 10px;
-}
 
-.icon__preview {
-  display: grid;
-  flex: none;
-  place-items: center;
-  /* The same box as the control beside it, which sits below its own label. */
-  margin-top: 21px;
-  width: 26px;
-  height: 26px;
-  color: var(--color-accent);
-  background-color: var(--color-sunken);
-  border: 1px solid var(--color-outline);
-  border-radius: var(--radius-sm);
-}
 
-.icon :deep(.field) {
-  flex: 1;
-  min-width: 0;
-}
 </style>

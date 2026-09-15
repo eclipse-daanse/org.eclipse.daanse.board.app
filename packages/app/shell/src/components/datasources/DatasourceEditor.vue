@@ -22,7 +22,7 @@ import {
 } from 'org.eclipse.daanse.board.app.lib.model.workspace'
 import { useEList } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import { cloneDeep } from 'lodash'
-import { DButton, DIcon, DInput, DSelect } from 'org.eclipse.daanse.board.app.ui.vue.controls'
+import { DButton, DIconPicker, DInput, DSelect } from 'org.eclipse.daanse.board.app.ui.vue.controls'
 import TagInput from './TagInput.vue'
 
 const props = withDefaults(
@@ -136,17 +136,12 @@ const emit = defineEmits(['close'])
         <DInput v-model="datasourceProxy.uid" label="UID" readonly />
         <DInput v-model="datasourceProxy.name" label="Name" />
         <DSelect v-model="datasourceProxy.type" label="Typ" :options="availableDatasources" />
-        <div class="editor__icon">
-          <DInput
-            v-model="datasourceProxy.icon"
-            label="Symbol"
-            :placeholder="typeIcon"
-            hint="Ein Material-Icons-Name. Leer lassen für das Symbol des Typs."
-          />
-          <span class="editor__icon-preview" aria-hidden="true">
-            <DIcon :name="datasourceProxy.icon?.trim() || typeIcon" size="lg" />
-          </span>
-        </div>
+        <DIconPicker
+          v-model="datasourceProxy.icon"
+          label="Symbol"
+          :fallback="typeIcon"
+          hint="Ohne eigenes Symbol steht hier das des Typs."
+        />
         <TagInput
           v-model="datasourceProxy.tags"
           label="Schlagworte"
@@ -186,30 +181,8 @@ const emit = defineEmits(['close'])
   min-height: 0;
 }
 
-.editor__icon {
-  display: flex;
-  /* The label sits beside the control here, not above it, so the preview
-     lines up on the middle rather than the top. */
-  align-items: center;
-  gap: 10px;
-}
 
-.editor__icon-preview {
-  display: grid;
-  flex: none;
-  place-items: center;
-  /* The same box as the control beside it. */
-  width: 26px;
-  height: 26px;
-  color: var(--color-accent);
-  background-color: var(--color-sunken);
-  border: 1px solid var(--color-outline);
-  border-radius: var(--radius-sm);
-}
 
-.editor__icon :deep(.field) {
-  flex: 1;
-}
 
 .editor__fields {
   display: flex;

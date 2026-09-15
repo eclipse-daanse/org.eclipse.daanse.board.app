@@ -1,822 +1,1366 @@
-(function(){var i="ui.vue.controls",d=document,s=d.querySelector('style[data-tsm-bundle="'+i+'"]');if(!s){s=d.createElement('style');s.setAttribute('data-tsm-bundle',i);d.head.appendChild(s);}s.textContent=".btn[data-v-5b01af26]{display:inline-flex;align-items:center;justify-content:center;gap:6px;font-family:var(--font-sans);font-size:var(--text-sm);font-weight:500;line-height:1;white-space:nowrap;color:var(--color-fg);background-color:var(--color-raised);border:1px solid var(--color-divider);border-radius:var(--radius-xs);cursor:pointer}.btn[data-v-5b01af26]:hover:not(:disabled){border-color:var(--color-outline)}.btn[data-v-5b01af26]:active:not(:disabled){transform:translateY(.5px)}.btn[data-v-5b01af26]:disabled{opacity:.45;cursor:default}.btn[data-v-5b01af26]:focus-visible{outline:2px solid var(--color-accent);outline-offset:1px}.btn--sm[data-v-5b01af26]{height:22px;padding:0 9px;font-size:var(--text-xs)}.btn--md[data-v-5b01af26]{height:26px;padding:0 12px}.btn--lg[data-v-5b01af26]{height:32px;padding:0 16px;font-size:var(--text-base)}.btn--block[data-v-5b01af26]{display:flex;width:100%}.btn--primary[data-v-5b01af26]{color:var(--color-onAccent);background-color:var(--color-accent);border-color:var(--color-accent);font-weight:600}.btn--primary[data-v-5b01af26]:hover:not(:disabled){filter:brightness(1.08)}.btn--quiet[data-v-5b01af26]{background-color:transparent;border-color:transparent;color:var(--color-dim)}.btn--quiet[data-v-5b01af26]:hover:not(:disabled){color:var(--color-fg);background-color:var(--color-raised);border-color:var(--color-divider)}.btn--danger[data-v-5b01af26]{color:var(--color-err);border-color:color-mix(in srgb,var(--color-err) 45%,transparent)}.btn--danger[data-v-5b01af26]:hover:not(:disabled){background-color:color-mix(in srgb,var(--color-err) 12%,transparent);border-color:var(--color-err)}.btn--primary[data-v-5b01af26]{position:relative;isolation:isolate}.btn--primary[data-v-5b01af26]:before{content:\"\";position:absolute;inset:-7px;z-index:-1;border-radius:9999px;background-image:linear-gradient(45deg,var(--color-accent),color-mix(in srgb,var(--color-accent) 55%,var(--color-ok)),var(--color-accent));filter:blur(34px);opacity:0;transition:opacity .24s cubic-bezier(.2,.6,.2,1);pointer-events:none}.btn--primary[data-v-5b01af26]:hover:not(:disabled):before{opacity:.6}.btn--primary[data-v-5b01af26]:focus-visible:before{opacity:.35}:root[data-theme=light] .btn--primary[data-v-5b01af26]:before{content:none}@media(prefers-reduced-motion:reduce){.btn--primary[data-v-5b01af26]:before{transition-duration:.01ms}}.btn__spinner[data-v-5b01af26]{width:11px;height:11px;flex:none;border:1.5px solid currentColor;border-top-color:transparent;border-radius:50%;animation:btn-spin-5b01af26 .7s linear infinite}@keyframes btn-spin-5b01af26{to{transform:rotate(360deg)}}@media(prefers-reduced-motion:reduce){.btn__spinner[data-v-5b01af26]{animation-duration:2s}}.card[data-v-8c187da1]{display:flex;flex-direction:column;min-width:0;background-color:var(--color-pane);border:1px solid var(--color-divider);border-radius:var(--radius-sm);overflow:hidden}.card--interactive[data-v-8c187da1]{cursor:pointer}.card--interactive[data-v-8c187da1]:hover{border-color:var(--color-outline)}.card__head[data-v-8c187da1]{display:flex;align-items:center;gap:8px;flex:none;height:var(--spacing-panelHeader);padding:0 10px;border-bottom:1px solid var(--color-divider)}.card__title[data-v-8c187da1]{margin:0;font-family:var(--font-sans);font-size:var(--text-xs);font-weight:650;letter-spacing:.07em;text-transform:uppercase;color:var(--color-dim)}.card__spacer[data-v-8c187da1]{flex:1 1 auto}.card__body[data-v-8c187da1]{flex:1 1 auto;min-height:0}.card__body--padded[data-v-8c187da1]{padding:10px 12px}.check[data-v-e080554d]{display:flex;align-items:baseline;gap:7px;margin-bottom:6px}.check--off[data-v-e080554d]{opacity:.5}.check__box[data-v-e080554d]{width:13px;height:13px;flex:none;accent-color:var(--color-accent);cursor:pointer}.check__box[data-v-e080554d]:focus-visible{outline:2px solid var(--color-accent);outline-offset:1px}.check__label[data-v-e080554d]{font-family:var(--font-sans);font-size:var(--text-sm);color:var(--color-fg);cursor:pointer}.check__hint[data-v-e080554d]{display:block;font-size:var(--text-xs);color:var(--color-dim)}.chip[data-v-30700fa0]{display:inline-flex;align-items:center;gap:4px;padding:1px 7px;font-family:var(--font-sans);font-size:var(--text-xs);line-height:1.5;border-radius:var(--radius-xs);white-space:nowrap}.chip--num[data-v-30700fa0]{font-family:var(--font-mono);font-variant-numeric:tabular-nums}.chip--neutral[data-v-30700fa0]{color:var(--color-dim);background-color:var(--color-raised);border:1px solid var(--color-divider)}.chip--accent[data-v-30700fa0]{color:var(--color-accent);background-color:color-mix(in srgb,var(--color-accent) 14%,transparent)}.chip--ok[data-v-30700fa0]{color:var(--color-ok);background-color:color-mix(in srgb,var(--color-ok) 14%,transparent)}.chip--warn[data-v-30700fa0]{color:var(--color-warn);background-color:color-mix(in srgb,var(--color-warn) 14%,transparent)}.chip--err[data-v-30700fa0]{color:var(--color-err);background-color:color-mix(in srgb,var(--color-err) 14%,transparent)}.chip__x[data-v-30700fa0]{font-size:9px;color:inherit;background:none;border:0;padding:0;cursor:pointer;opacity:.7}.chip__x[data-v-30700fa0]:hover{opacity:1}.field[data-v-0c4cf022]{display:flex;align-items:baseline;gap:10px;margin-bottom:7px}.field--stacked[data-v-0c4cf022]{flex-direction:column;align-items:stretch;gap:3px}.field__label[data-v-0c4cf022]{width:112px;flex:none;font-family:var(--font-sans);font-size:var(--text-sm);color:var(--color-dim)}.field--stacked .field__label[data-v-0c4cf022]{width:auto}.field__control[data-v-0c4cf022]{flex:1 1 auto;min-width:0}.field__hint[data-v-0c4cf022]{margin:3px 0 0;font-family:var(--font-sans);font-size:var(--text-xs);color:var(--color-dim)}.row[data-v-0c4cf022]{display:flex;align-items:center;gap:6px}.picker[data-v-0c4cf022]{width:26px;height:26px;flex:none;padding:2px;background-color:var(--color-bg);border:1px solid var(--color-divider);border-radius:var(--radius-xs);cursor:pointer}.picker[data-v-0c4cf022]:focus-visible,.hex[data-v-0c4cf022]:focus-visible{outline:2px solid var(--color-accent);outline-offset:1px}.hex[data-v-0c4cf022]{flex:1 1 auto;min-width:0;height:26px;padding:0 8px;font-family:var(--font-mono);font-size:var(--text-sm);color:var(--color-fg);background-color:var(--color-bg);border:1px solid var(--color-divider);border-radius:var(--radius-xs)}.picker[data-v-0c4cf022]:disabled,.hex[data-v-0c4cf022]:disabled{opacity:.5}.field[data-v-3afdb10c]{display:flex;align-items:baseline;gap:10px;margin-bottom:7px}.field--stacked[data-v-3afdb10c]{flex-direction:column;align-items:stretch;gap:3px}.field__label[data-v-3afdb10c]{width:112px;flex:none;font-family:var(--font-sans);font-size:var(--text-sm);color:var(--color-dim)}.field--stacked .field__label[data-v-3afdb10c]{width:auto}.field__required[data-v-3afdb10c]{color:var(--color-err)}.field__control[data-v-3afdb10c]{flex:1 1 auto;min-width:0}.field__hint[data-v-3afdb10c],.field__error[data-v-3afdb10c]{margin:3px 0 0;font-family:var(--font-sans);font-size:var(--text-xs);color:var(--color-dim)}.field__error[data-v-3afdb10c]{color:var(--color-err)}.input[data-v-3afdb10c]{width:100%;height:26px;padding:0 8px;font-family:var(--font-mono);font-size:var(--text-sm);font-variant-numeric:tabular-nums;color:var(--color-fg);background-color:var(--color-bg);border:1px solid var(--color-divider);border-radius:var(--radius-xs)}.input--invalid[data-v-3afdb10c]{border-color:var(--color-err)}.input[data-v-3afdb10c]:focus-visible{outline:2px solid var(--color-accent);outline-offset:-1px}.input[data-v-3afdb10c]:disabled{opacity:.5}.rule[data-v-521e9319]{height:1px;margin:12px 0;background-color:var(--color-divider)}.rule--labelled[data-v-521e9319]{display:flex;align-items:center;gap:8px;height:auto;background:none;margin:14px 0 7px}.rule--labelled[data-v-521e9319]:before,.rule--labelled[data-v-521e9319]:after{content:\"\";height:1px;background-color:var(--color-divider)}.rule--labelled[data-v-521e9319]:before{width:10px;flex:none}.rule--labelled[data-v-521e9319]:after{flex:1 1 auto}.rule__label[data-v-521e9319]{font-family:var(--font-sans);font-size:var(--text-xs);font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--color-dim)}.field[data-v-1a8ee938]{display:flex;align-items:baseline;gap:10px;margin-bottom:7px}.field--stacked[data-v-1a8ee938]{flex-direction:column;align-items:stretch;gap:3px}.field__label[data-v-1a8ee938]{width:112px;flex:none;font-family:var(--font-sans);font-size:var(--text-sm);color:var(--color-dim)}.field--stacked .field__label[data-v-1a8ee938]{width:auto}.field__required[data-v-1a8ee938]{color:var(--color-err)}.field__control[data-v-1a8ee938]{flex:1 1 auto;min-width:0}.field__hint[data-v-1a8ee938],.field__error[data-v-1a8ee938]{margin:3px 0 0;font-family:var(--font-sans);font-size:var(--text-xs);line-height:1.4;color:var(--color-dim)}.field__error[data-v-1a8ee938]{color:var(--color-err)}.fw[data-v-b6b4a10b]{position:absolute;display:flex;flex-direction:column;overflow:hidden;background:var(--color-pane);border:1px solid var(--color-divider);border-radius:var(--radius-md, 4px);box-shadow:var(--shadow-e3, 0 6px 20px rgb(0 0 0 / 22%))}.fw--docked[data-v-b6b4a10b]{border-radius:0}.fw--docked.fw--left[data-v-b6b4a10b]{border-left:0}.fw--docked.fw--right[data-v-b6b4a10b]{border-right:0}.fw--docked .fw__grip[data-v-b6b4a10b]{cursor:ew-resize}.fw__bar[data-v-b6b4a10b]{display:flex;align-items:center;gap:2px;flex:none;height:28px;padding:0 4px 0 10px;border-bottom:1px solid var(--color-divider);cursor:grab;touch-action:none;user-select:none}.fw__bar[data-v-b6b4a10b]:active{cursor:grabbing}.fw__bar[data-v-b6b4a10b]:focus-visible{outline:2px solid var(--color-accent);outline-offset:-2px}.fw__title[data-v-b6b4a10b]{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:var(--text-xs, 11px);font-weight:500;letter-spacing:.06em;text-transform:uppercase;color:var(--color-dim)}.fw__act[data-v-b6b4a10b]{display:flex;align-items:center;justify-content:center;width:22px;height:22px;font-size:14px;line-height:1;color:var(--color-dim);background:none;border:0;border-radius:var(--radius-xs, 3px);cursor:pointer}.fw__act[data-v-b6b4a10b]:hover{color:var(--color-fg);background-color:var(--color-raised)}.fw__act[data-v-b6b4a10b]:focus-visible{outline:2px solid var(--color-accent);outline-offset:1px}.fw__body[data-v-b6b4a10b]{flex:1;min-height:0;overflow:auto}.fw__grip[data-v-b6b4a10b]{position:absolute;right:0;bottom:0;width:14px;height:14px;cursor:nwse-resize;touch-action:none}.fw__grip[data-v-b6b4a10b]:after{content:\"\";position:absolute;right:3px;bottom:3px;width:6px;height:6px;border-right:2px solid var(--color-outline, #3a4756);border-bottom:2px solid var(--color-outline, #3a4756)}.icon[data-v-15dffeec]{font-family:Material Icons,sans-serif;font-style:normal;font-weight:400;line-height:1;letter-spacing:normal;white-space:nowrap;direction:ltr;display:inline-block;vertical-align:middle;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;font-feature-settings:\"liga\";color:inherit}.icon--xs[data-v-15dffeec]{font-size:12px}.icon--sm[data-v-15dffeec]{font-size:14px}.icon--md[data-v-15dffeec]{font-size:16px}.icon--lg[data-v-15dffeec]{font-size:20px}.field[data-v-a5fd75e2]{display:flex;align-items:baseline;gap:10px;margin-bottom:7px}.field--stacked[data-v-a5fd75e2]{flex-direction:column;align-items:stretch;gap:3px}.field__label[data-v-a5fd75e2]{width:112px;flex:none;font-family:var(--font-sans);font-size:var(--text-sm);color:var(--color-dim)}.field--stacked .field__label[data-v-a5fd75e2]{width:auto}.field__required[data-v-a5fd75e2]{color:var(--color-err)}.field__control[data-v-a5fd75e2]{flex:1 1 auto;min-width:0}.field__hint[data-v-a5fd75e2],.field__error[data-v-a5fd75e2]{margin:3px 0 0;font-family:var(--font-sans);font-size:var(--text-xs);line-height:1.4;color:var(--color-dim)}.field__error[data-v-a5fd75e2]{color:var(--color-err)}.shell[data-v-a5fd75e2]{display:flex;align-items:center;gap:6px;padding:0 8px;background-color:var(--color-bg);border:1px solid var(--color-divider);border-radius:var(--radius-xs)}.shell[data-v-a5fd75e2]:focus-within{border-color:var(--color-accent);outline:1px solid var(--color-accent)}.shell--invalid[data-v-a5fd75e2]{border-color:var(--color-err)}.shell--off[data-v-a5fd75e2]{opacity:.5}.shell--sm[data-v-a5fd75e2]{height:22px}.shell--md[data-v-a5fd75e2]{height:26px}.shell--lg[data-v-a5fd75e2]{height:32px}.shell[data-v-a5fd75e2]:has(.input--area){height:auto;padding:5px 8px}.input[data-v-a5fd75e2]{flex:1 1 auto;min-width:0;padding:0;font-family:var(--font-sans);font-size:var(--text-sm);color:var(--color-fg);background:none;border:0;outline:none}.shell--lg .input[data-v-a5fd75e2]{font-size:var(--text-base)}.input--num[data-v-a5fd75e2]{font-family:var(--font-mono);font-variant-numeric:tabular-nums}.input--area[data-v-a5fd75e2]{resize:vertical;line-height:1.45}.input[data-v-a5fd75e2]::placeholder{color:var(--color-dim);opacity:.75}.suffix[data-v-a5fd75e2]{flex:none;font-family:var(--font-mono);font-size:var(--text-xs);color:var(--color-dim)}.scrim[data-v-03f9e875]{position:fixed;inset:0;z-index:40000;display:grid;place-items:center;padding:24px;background-color:color-mix(in srgb,var(--color-canvas) 62%,transparent);backdrop-filter:blur(4px)}.dialog[data-v-03f9e875]{display:flex;flex-direction:column;max-height:100%;background-color:var(--color-pane);border:1px solid var(--color-outline);border-radius:var(--radius-md);box-shadow:var(--shadow-e3);overflow:hidden}.dialog--sm[data-v-03f9e875]{width:380px}.dialog--md[data-v-03f9e875]{width:560px}.dialog--lg[data-v-03f9e875]{width:840px}.dialog__head[data-v-03f9e875]{display:flex;align-items:center;gap:10px;flex:none;padding:9px 12px;border-bottom:1px solid var(--color-divider)}.dialog__title[data-v-03f9e875]{margin:0;font-family:var(--font-sans);font-size:var(--text-base);font-weight:600;color:var(--color-fg)}.dialog__close[data-v-03f9e875]{margin-left:auto;width:22px;height:22px;font-family:var(--font-sans);font-size:var(--text-sm);color:var(--color-dim);background:none;border:0;border-radius:var(--radius-xs);cursor:pointer}.dialog__close[data-v-03f9e875]:hover{color:var(--color-fg);background-color:var(--color-raised)}.dialog__close[data-v-03f9e875]:focus-visible{outline:2px solid var(--color-accent);outline-offset:1px}.dialog__body[data-v-03f9e875]{flex:1 1 auto;min-height:0;padding:14px 12px;overflow-y:auto;font-family:var(--font-sans);font-size:var(--text-sm);color:var(--color-fg)}.dialog__foot[data-v-03f9e875]{display:flex;align-items:center;justify-content:flex-end;gap:7px;flex:none;padding:9px 12px;border-top:1px solid var(--color-divider)}.field[data-v-da414860]{display:flex;align-items:flex-start;gap:10px;margin-bottom:7px}.field--stacked[data-v-da414860]{flex-direction:column;gap:4px}.field__label[data-v-da414860]{flex:none;width:120px;padding-top:2px;font-family:var(--font-sans);font-size:var(--text-sm);color:var(--color-dim)}.field--stacked .field__label[data-v-da414860]{width:auto}.field__required[data-v-da414860]{color:var(--color-err)}.field__control[data-v-da414860]{flex:1 1 auto;min-width:0}.choices[data-v-da414860]{display:flex;flex-direction:column;gap:4px}.choices--inline[data-v-da414860]{flex-direction:row;flex-wrap:wrap;gap:14px}.choice[data-v-da414860]{display:flex;align-items:baseline;gap:7px;cursor:pointer}.choice--off[data-v-da414860]{opacity:.5;cursor:default}.choice__dot[data-v-da414860]{width:13px;height:13px;flex:none;accent-color:var(--color-accent);cursor:inherit}.choice__dot[data-v-da414860]:focus-visible{outline:2px solid var(--color-accent);outline-offset:1px}.choice__label[data-v-da414860]{font-family:var(--font-sans);font-size:var(--text-sm);color:var(--color-fg)}.field__error[data-v-da414860]{margin:3px 0 0;font-size:var(--text-xs);color:var(--color-err)}.field__hint[data-v-da414860]{margin:3px 0 0;font-size:var(--text-xs);color:var(--color-dim)}.field[data-v-940042b2]{display:flex;align-items:baseline;gap:10px;margin-bottom:7px}.field--stacked[data-v-940042b2]{flex-direction:column;align-items:stretch;gap:3px}.field__label[data-v-940042b2]{width:112px;flex:none;font-family:var(--font-sans);font-size:var(--text-sm);color:var(--color-dim)}.field--stacked .field__label[data-v-940042b2]{width:auto}.field__required[data-v-940042b2]{color:var(--color-err)}.field__control[data-v-940042b2]{flex:1 1 auto;min-width:0}.field__hint[data-v-940042b2],.field__error[data-v-940042b2]{margin:3px 0 0;font-family:var(--font-sans);font-size:var(--text-xs);line-height:1.4;color:var(--color-dim)}.field__error[data-v-940042b2]{color:var(--color-err)}.shell[data-v-940042b2]{position:relative;display:flex;align-items:center;padding:0 8px;background-color:var(--color-bg);border:1px solid var(--color-divider);border-radius:var(--radius-xs)}.shell[data-v-940042b2]:focus-within{border-color:var(--color-accent);outline:1px solid var(--color-accent)}.shell--invalid[data-v-940042b2]{border-color:var(--color-err)}.shell--off[data-v-940042b2]{opacity:.5}.shell--sm[data-v-940042b2]{height:22px}.shell--md[data-v-940042b2]{height:26px}.shell--lg[data-v-940042b2]{height:32px}.shell[data-v-940042b2]:has(.select--many){height:auto;padding:0 2px}.select[data-v-940042b2]{flex:1 1 auto;min-width:0;height:100%;padding:0 14px 0 0;font-family:var(--font-sans);font-size:var(--text-sm);color:var(--color-fg);background:none;border:0;outline:none;appearance:none;cursor:pointer}.shell--lg .select[data-v-940042b2]{font-size:var(--text-base)}.select option[data-v-940042b2]{color:var(--color-fg);background-color:var(--color-pane)}.select optgroup[data-v-940042b2]{color:var(--color-dim);background-color:var(--color-pane);font-weight:600;font-style:normal}.select optgroup option[data-v-940042b2]{color:var(--color-fg)}.select--many[data-v-940042b2]{height:auto;padding:4px 0}.chevron[data-v-940042b2]{position:absolute;right:7px;font-size:9px;color:var(--color-dim);pointer-events:none}.field[data-v-ed7d97ce]{display:flex;align-items:center;gap:10px;margin-bottom:7px}.field--stacked[data-v-ed7d97ce]{flex-direction:column;align-items:stretch;gap:3px}.field__label[data-v-ed7d97ce]{width:112px;flex:none;font-family:var(--font-sans);font-size:var(--text-sm);color:var(--color-dim)}.field--stacked .field__label[data-v-ed7d97ce]{width:auto}.field__control[data-v-ed7d97ce]{flex:1 1 auto;min-width:0}.row[data-v-ed7d97ce]{display:flex;align-items:center;gap:8px}.range[data-v-ed7d97ce]{flex:1 1 auto;min-width:0;accent-color:var(--color-accent);cursor:pointer}.range[data-v-ed7d97ce]:focus-visible{outline:2px solid var(--color-accent);outline-offset:2px}.num[data-v-ed7d97ce]{width:62px;flex:none;height:22px;padding:0 6px;font-family:var(--font-mono);font-size:var(--text-xs);font-variant-numeric:tabular-nums;color:var(--color-fg);background-color:var(--color-bg);border:1px solid var(--color-divider);border-radius:var(--radius-xs)}.num[data-v-ed7d97ce]:focus-visible{outline:2px solid var(--color-accent);outline-offset:1px}.suffix[data-v-ed7d97ce]{flex:none;font-family:var(--font-mono);font-size:var(--text-xs);color:var(--color-dim)}.range[data-v-ed7d97ce]:disabled,.num[data-v-ed7d97ce]:disabled{opacity:.5}.sw[data-v-70940a00]{display:flex;align-items:center;gap:8px;margin-bottom:6px}.sw--off[data-v-70940a00]{opacity:.5}.sw__track[data-v-70940a00]{position:relative;width:28px;height:15px;flex:none;padding:0;background-color:var(--color-outline);border:0;border-radius:8px;cursor:pointer}.sw__track.on[data-v-70940a00]{background-color:var(--color-accent)}.sw__track[data-v-70940a00]:disabled{cursor:default}.sw__track[data-v-70940a00]:focus-visible{outline:2px solid var(--color-accent);outline-offset:2px}.sw__knob[data-v-70940a00]{position:absolute;top:2px;left:2px;width:11px;height:11px;border-radius:50%;background-color:var(--color-pane);transition:left .12s ease}.sw__track.on .sw__knob[data-v-70940a00]{left:15px}@media(prefers-reduced-motion:reduce){.sw__knob[data-v-70940a00]{transition:none}}.sw__label[data-v-70940a00]{font-family:var(--font-sans);font-size:var(--text-sm);color:var(--color-fg);cursor:pointer}.table[data-v-925340b8]{width:100%;height:100%;overflow:auto;font-family:var(--font-sans);font-size:var(--text-sm);color:var(--color-fg)}table[data-v-925340b8]{width:100%;border-collapse:collapse}th[data-v-925340b8]{position:sticky;top:0;z-index:1;padding:6px 10px;text-align:left;font-weight:500;white-space:nowrap;color:var(--color-dim);background-color:var(--color-raised);border-bottom:1px solid var(--color-divider)}td[data-v-925340b8]{padding:5px 10px;max-width:28ch;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;border-bottom:1px solid var(--color-divider)}tbody tr[data-v-925340b8]:hover{background-color:color-mix(in srgb,var(--color-pane) 60%,transparent)}.row--pick[data-v-925340b8]{cursor:pointer}.row--on td[data-v-925340b8]:first-child{box-shadow:inset 2px 0 0 var(--color-accent)}.row--on td[data-v-925340b8]{background-color:color-mix(in srgb,var(--color-accent) 12%,transparent)}.table__empty[data-v-925340b8]{margin:0;padding:14px 10px;color:var(--color-dim)}.tabs[data-v-f7c65d26]{display:flex;flex-wrap:wrap;align-items:stretch;gap:1px;min-height:var(--spacing-panelHeader);padding:0 6px;border-bottom:1px solid var(--color-divider)}.tab[data-v-f7c65d26]{position:relative;display:flex;align-items:center;gap:5px;height:var(--spacing-panelHeader);padding:0 10px;font-family:var(--font-sans);font-size:var(--text-sm);color:var(--color-dim);background:none;border:0;cursor:pointer}.tab[data-v-f7c65d26]:hover:not(:disabled){color:var(--color-fg)}.tab[data-v-f7c65d26]:disabled{opacity:.45;cursor:default}.tab.on[data-v-f7c65d26]{color:var(--color-fg);font-weight:600}.tab.on[data-v-f7c65d26]:after{content:\"\";position:absolute;left:7px;right:7px;bottom:-1px;height:2px;background-color:var(--color-accent);border-radius:2px}.tab[data-v-f7c65d26]:focus-visible{outline:2px solid var(--color-accent);outline-offset:-2px}.tab__count[data-v-f7c65d26]{font-family:var(--font-mono);font-size:9.5px;font-variant-numeric:tabular-nums;opacity:.8}\n";})();
-import { defineComponent as g, createElementBlock as a, openBlock as l, normalizeClass as $, createCommentVNode as y, renderSlot as B, createElementVNode as k, toDisplayString as b, mergeModels as I, useModel as z, useId as T, ref as R, watchEffect as Ee, withDirectives as Y, unref as D, vModelCheckbox as We, createTextVNode as L, computed as C, vModelText as P, vModelDynamic as de, reactive as oe, watch as se, onMounted as re, onBeforeUnmount as ue, normalizeStyle as ce, withKeys as U, withModifiers as K, createBlock as Le, Teleport as Ne, Fragment as q, renderList as H, vModelRadio as Te, vModelSelect as te } from "vue";
-const Ue = ["type", "disabled", "aria-busy"], Ae = {
+(function(){var i="ui.vue.controls",d=document,s=d.querySelector('style[data-tsm-bundle="'+i+'"]');if(!s){s=d.createElement('style');s.setAttribute('data-tsm-bundle',i);d.head.appendChild(s);}s.textContent="\n.btn[data-v-5b01af26] {\n  display: inline-flex;\n  align-items: center;\n  justify-content: center;\n  gap: 6px;\n  font-family: var(--font-sans);\n  font-size: var(--text-sm);\n  font-weight: 500;\n  line-height: 1;\n  white-space: nowrap;\n  color: var(--color-fg);\n  background-color: var(--color-raised);\n  border: 1px solid var(--color-divider);\n  border-radius: var(--radius-xs);\n  cursor: pointer;\n}\n.btn[data-v-5b01af26]:hover:not(:disabled) {\n  border-color: var(--color-outline);\n}\n.btn[data-v-5b01af26]:active:not(:disabled) {\n  transform: translateY(0.5px);\n}\n.btn[data-v-5b01af26]:disabled {\n  opacity: 0.45;\n  cursor: default;\n}\n.btn[data-v-5b01af26]:focus-visible {\n  outline: 2px solid var(--color-accent);\n  outline-offset: 1px;\n}\n\n/* --- sizes: heights that line up with inputs of the same size --------- */\n.btn--sm[data-v-5b01af26] {\n  height: 22px;\n  padding: 0 9px;\n  font-size: var(--text-xs);\n}\n.btn--md[data-v-5b01af26] {\n  height: 26px;\n  padding: 0 12px;\n}\n.btn--lg[data-v-5b01af26] {\n  height: 32px;\n  padding: 0 16px;\n  font-size: var(--text-base);\n}\n.btn--block[data-v-5b01af26] {\n  display: flex;\n  width: 100%;\n}\n\n/* --- intents ---------------------------------------------------------- */\n.btn--primary[data-v-5b01af26] {\n  color: var(--color-onAccent);\n  background-color: var(--color-accent);\n  border-color: var(--color-accent);\n  font-weight: 600;\n}\n.btn--primary[data-v-5b01af26]:hover:not(:disabled) {\n  filter: brightness(1.08);\n}\n.btn--quiet[data-v-5b01af26] {\n  background-color: transparent;\n  border-color: transparent;\n  color: var(--color-dim);\n}\n.btn--quiet[data-v-5b01af26]:hover:not(:disabled) {\n  color: var(--color-fg);\n  background-color: var(--color-raised);\n  border-color: var(--color-divider);\n}\n\n/* Destructive: the colour carries the warning, the fill stays quiet so it\n   cannot be mistaken for the primary action. */\n.btn--danger[data-v-5b01af26] {\n  color: var(--color-err);\n  border-color: color-mix(in srgb, var(--color-err) 45%, transparent);\n}\n.btn--danger[data-v-5b01af26]:hover:not(:disabled) {\n  background-color: color-mix(in srgb, var(--color-err) 12%, transparent);\n  border-color: var(--color-err);\n}\n\n/* --- the halo, on the primary action ---------------------------------- */\n\n/*\n * A blurred field of colour behind the button, revealed on hover.\n *\n * The idea is the Vue devtools anchor's: an element far larger than what it\n * sits behind, heavily blurred, faded in. Three things are ours rather than\n * theirs. The colour comes from the accent token, so it belongs to whatever\n * theme is on instead of announcing someone else's brand. It is a pseudo\n * element, so no button needs an extra span to carry it. And it fades in a\n * quarter of a second rather than a whole one - theirs is ambient decoration\n * on something that floats, ours answers a pointer.\n *\n * On the primary intent and nowhere else. Their anchor wears one because it\n * is the only thing on screen; a view has one primary action for the same\n * reason, and putting the halo there says which button that is without a\n * caller having to ask for it.\n *\n * `isolation` is what keeps it behind the button's own background without\n * falling behind the page: it gives the button a stacking context of its\n * own, and z-index -1 is then measured inside that.\n */\n.btn--primary[data-v-5b01af26] {\n  position: relative;\n  isolation: isolate;\n}\n.btn--primary[data-v-5b01af26]::before {\n  content: '';\n  position: absolute;\n  /*\n   * A narrow band, blurred far wider than itself. In pixels rather than a\n   * percentage: percentages resolve against width sideways and height\n   * vertically, and on a button three times wider than it is tall that\n   * turns a halo into a smear reaching for whatever stands beside it.\n   */\n  inset: -7px;\n  z-index: -1;\n  border-radius: 9999px;\n  background-image: linear-gradient(\n    45deg,\n    var(--color-accent),\n    color-mix(in srgb, var(--color-accent) 55%, var(--color-ok)),\n    var(--color-accent)\n  );\n  filter: blur(34px);\n  opacity: 0;\n  transition: opacity 240ms cubic-bezier(0.2, 0.6, 0.2, 1);\n  pointer-events: none;\n}\n.btn--primary[data-v-5b01af26]:hover:not(:disabled)::before {\n  /* Raised with the blur: the same colour over more area is less of it. */\n  opacity: 0.6;\n}\n.btn--primary[data-v-5b01af26]:focus-visible::before {\n  opacity: 0.35;\n}\n\n/*\n * Not on a light ground.\n *\n * A glow needs darkness to be a glow. On a pale theme the same field is a\n * wash rather than a light, and it lands on the one meaning already taken:\n * focus is drawn with this very colour, so a hover that looks like it is\n * two signals wearing one face.\n *\n * `data-theme` is written by the shell's theme system from each theme's\n * own `dark` flag - four themes, one of them dark - so this asks the\n * question the palette already answers instead of guessing from a colour.\n */\n:root[data-theme='light'] .btn--primary[data-v-5b01af26]::before {\n  content: none;\n}\n@media (prefers-reduced-motion: reduce) {\n.btn--primary[data-v-5b01af26]::before {\n    transition-duration: 0.01ms;\n}\n}\n\n/* --- busy ------------------------------------------------------------- */\n.btn__spinner[data-v-5b01af26] {\n  width: 11px;\n  height: 11px;\n  flex: none;\n  border: 1.5px solid currentColor;\n  border-top-color: transparent;\n  border-radius: 50%;\n  animation: btn-spin-5b01af26 0.7s linear infinite;\n}\n@keyframes btn-spin-5b01af26 {\nto {\n    transform: rotate(360deg);\n}\n}\n@media (prefers-reduced-motion: reduce) {\n.btn__spinner[data-v-5b01af26] {\n    animation-duration: 2s;\n}\n}\n\n.card[data-v-8c187da1] {\n  display: flex;\n  flex-direction: column;\n  min-width: 0;\n  background-color: var(--color-pane);\n  border: 1px solid var(--color-divider);\n  border-radius: var(--radius-sm);\n  overflow: hidden;\n}\n.card--interactive[data-v-8c187da1] {\n  cursor: pointer;\n}\n.card--interactive[data-v-8c187da1]:hover {\n  border-color: var(--color-outline);\n}\n.card__head[data-v-8c187da1] {\n  display: flex;\n  align-items: center;\n  gap: 8px;\n  flex: none;\n  height: var(--spacing-panelHeader);\n  padding: 0 10px;\n  border-bottom: 1px solid var(--color-divider);\n}\n.card__title[data-v-8c187da1] {\n  margin: 0;\n  font-family: var(--font-sans);\n  font-size: var(--text-xs);\n  font-weight: 650;\n  letter-spacing: 0.07em;\n  text-transform: uppercase;\n  color: var(--color-dim);\n}\n.card__spacer[data-v-8c187da1] {\n  flex: 1 1 auto;\n}\n.card__body[data-v-8c187da1] {\n  flex: 1 1 auto;\n  min-height: 0;\n}\n.card__body--padded[data-v-8c187da1] {\n  padding: 10px 12px;\n}\n\n.check[data-v-e080554d] {\n  display: flex;\n  align-items: baseline;\n  gap: 7px;\n  margin-bottom: 6px;\n}\n.check--off[data-v-e080554d] {\n  opacity: 0.5;\n}\n.check__box[data-v-e080554d] {\n  width: 13px;\n  height: 13px;\n  flex: none;\n  accent-color: var(--color-accent);\n  cursor: pointer;\n}\n.check__box[data-v-e080554d]:focus-visible {\n  outline: 2px solid var(--color-accent);\n  outline-offset: 1px;\n}\n.check__label[data-v-e080554d] {\n  font-family: var(--font-sans);\n  font-size: var(--text-sm);\n  color: var(--color-fg);\n  cursor: pointer;\n}\n.check__hint[data-v-e080554d] {\n  display: block;\n  font-size: var(--text-xs);\n  color: var(--color-dim);\n}\n\n.chip[data-v-30700fa0] {\n  display: inline-flex;\n  align-items: center;\n  gap: 4px;\n  padding: 1px 7px;\n  font-family: var(--font-sans);\n  font-size: var(--text-xs);\n  line-height: 1.5;\n  border-radius: var(--radius-xs);\n  white-space: nowrap;\n}\n.chip--num[data-v-30700fa0] {\n  font-family: var(--font-mono);\n  font-variant-numeric: tabular-nums;\n}\n.chip--neutral[data-v-30700fa0] {\n  color: var(--color-dim);\n  background-color: var(--color-raised);\n  border: 1px solid var(--color-divider);\n}\n.chip--accent[data-v-30700fa0] {\n  color: var(--color-accent);\n  background-color: color-mix(in srgb, var(--color-accent) 14%, transparent);\n}\n.chip--ok[data-v-30700fa0] {\n  color: var(--color-ok);\n  background-color: color-mix(in srgb, var(--color-ok) 14%, transparent);\n}\n.chip--warn[data-v-30700fa0] {\n  color: var(--color-warn);\n  background-color: color-mix(in srgb, var(--color-warn) 14%, transparent);\n}\n.chip--err[data-v-30700fa0] {\n  color: var(--color-err);\n  background-color: color-mix(in srgb, var(--color-err) 14%, transparent);\n}\n.chip__x[data-v-30700fa0] {\n  font-size: 9px;\n  color: inherit;\n  background: none;\n  border: 0;\n  padding: 0;\n  cursor: pointer;\n  opacity: 0.7;\n}\n.chip__x[data-v-30700fa0]:hover {\n  opacity: 1;\n}\n\n.field[data-v-0c4cf022] {\n  display: flex;\n  align-items: baseline;\n  gap: 10px;\n  margin-bottom: 7px;\n}\n.field--stacked[data-v-0c4cf022] {\n  flex-direction: column;\n  align-items: stretch;\n  gap: 3px;\n}\n.field__label[data-v-0c4cf022] {\n  width: 112px;\n  flex: none;\n  font-family: var(--font-sans);\n  font-size: var(--text-sm);\n  color: var(--color-dim);\n}\n.field--stacked .field__label[data-v-0c4cf022] {\n  width: auto;\n}\n.field__control[data-v-0c4cf022] {\n  flex: 1 1 auto;\n  min-width: 0;\n}\n.field__hint[data-v-0c4cf022] {\n  margin: 3px 0 0;\n  font-family: var(--font-sans);\n  font-size: var(--text-xs);\n  color: var(--color-dim);\n}\n.row[data-v-0c4cf022] {\n  display: flex;\n  align-items: center;\n  gap: 6px;\n}\n.picker[data-v-0c4cf022] {\n  width: 26px;\n  height: 26px;\n  flex: none;\n  padding: 2px;\n  background-color: var(--color-bg);\n  border: 1px solid var(--color-divider);\n  border-radius: var(--radius-xs);\n  cursor: pointer;\n}\n.picker[data-v-0c4cf022]:focus-visible,\n.hex[data-v-0c4cf022]:focus-visible {\n  outline: 2px solid var(--color-accent);\n  outline-offset: 1px;\n}\n.hex[data-v-0c4cf022] {\n  flex: 1 1 auto;\n  min-width: 0;\n  height: 26px;\n  padding: 0 8px;\n  font-family: var(--font-mono);\n  font-size: var(--text-sm);\n  color: var(--color-fg);\n  background-color: var(--color-bg);\n  border: 1px solid var(--color-divider);\n  border-radius: var(--radius-xs);\n}\n.picker[data-v-0c4cf022]:disabled,\n.hex[data-v-0c4cf022]:disabled {\n  opacity: 0.5;\n}\n\n.field[data-v-3afdb10c] {\n  display: flex;\n  align-items: baseline;\n  gap: 10px;\n  margin-bottom: 7px;\n}\n.field--stacked[data-v-3afdb10c] {\n  flex-direction: column;\n  align-items: stretch;\n  gap: 3px;\n}\n.field__label[data-v-3afdb10c] {\n  width: 112px;\n  flex: none;\n  font-family: var(--font-sans);\n  font-size: var(--text-sm);\n  color: var(--color-dim);\n}\n.field--stacked .field__label[data-v-3afdb10c] {\n  width: auto;\n}\n.field__required[data-v-3afdb10c] {\n  color: var(--color-err);\n}\n.field__control[data-v-3afdb10c] {\n  flex: 1 1 auto;\n  min-width: 0;\n}\n.field__hint[data-v-3afdb10c],\n.field__error[data-v-3afdb10c] {\n  margin: 3px 0 0;\n  font-family: var(--font-sans);\n  font-size: var(--text-xs);\n  color: var(--color-dim);\n}\n.field__error[data-v-3afdb10c] {\n  color: var(--color-err);\n}\n.input[data-v-3afdb10c] {\n  width: 100%;\n  height: 26px;\n  padding: 0 8px;\n  font-family: var(--font-mono);\n  font-size: var(--text-sm);\n  font-variant-numeric: tabular-nums;\n  color: var(--color-fg);\n  background-color: var(--color-bg);\n  border: 1px solid var(--color-divider);\n  border-radius: var(--radius-xs);\n}\n.input--invalid[data-v-3afdb10c] {\n  border-color: var(--color-err);\n}\n.input[data-v-3afdb10c]:focus-visible {\n  outline: 2px solid var(--color-accent);\n  outline-offset: -1px;\n}\n.input[data-v-3afdb10c]:disabled {\n  opacity: 0.5;\n}\n\n.rule[data-v-521e9319] {\n  height: 1px;\n  margin: 12px 0;\n  background-color: var(--color-divider);\n}\n.rule--labelled[data-v-521e9319] {\n  display: flex;\n  align-items: center;\n  gap: 8px;\n  height: auto;\n  background: none;\n  margin: 14px 0 7px;\n}\n.rule--labelled[data-v-521e9319]::before,\n.rule--labelled[data-v-521e9319]::after {\n  content: '';\n  height: 1px;\n  background-color: var(--color-divider);\n}\n.rule--labelled[data-v-521e9319]::before {\n  width: 10px;\n  flex: none;\n}\n.rule--labelled[data-v-521e9319]::after {\n  flex: 1 1 auto;\n}\n.rule__label[data-v-521e9319] {\n  font-family: var(--font-sans);\n  font-size: var(--text-xs);\n  font-weight: 600;\n  letter-spacing: 0.08em;\n  text-transform: uppercase;\n  color: var(--color-dim);\n}\n\n.field[data-v-1a8ee938] {\n  display: flex;\n  align-items: baseline;\n  gap: 10px;\n  margin-bottom: 7px;\n}\n.field--stacked[data-v-1a8ee938] {\n  flex-direction: column;\n  align-items: stretch;\n  gap: 3px;\n}\n.field__label[data-v-1a8ee938] {\n  width: 112px;\n  flex: none;\n  font-family: var(--font-sans);\n  font-size: var(--text-sm);\n  color: var(--color-dim);\n}\n.field--stacked .field__label[data-v-1a8ee938] {\n  width: auto;\n}\n.field__required[data-v-1a8ee938] {\n  color: var(--color-err);\n}\n.field__control[data-v-1a8ee938] {\n  flex: 1 1 auto;\n  min-width: 0;\n}\n.field__hint[data-v-1a8ee938],\n.field__error[data-v-1a8ee938] {\n  margin: 3px 0 0;\n  font-family: var(--font-sans);\n  font-size: var(--text-xs);\n  line-height: 1.4;\n  color: var(--color-dim);\n}\n.field__error[data-v-1a8ee938] {\n  color: var(--color-err);\n}\n\n.fw[data-v-b6b4a10b] {\n  position: absolute;\n  display: flex;\n  flex-direction: column;\n  overflow: hidden;\n  background: var(--color-pane);\n  border: 1px solid var(--color-divider);\n  border-radius: var(--radius-md, 4px);\n  box-shadow: var(--shadow-e3, 0 6px 20px rgb(0 0 0 / 22%));\n}\n\n/* Fastened to a side: square against the edge it holds, and no border\n   shared with it */\n.fw--docked[data-v-b6b4a10b] {\n  border-radius: 0;\n}\n.fw--docked.fw--left[data-v-b6b4a10b] {\n  border-left: 0;\n}\n.fw--docked.fw--right[data-v-b6b4a10b] {\n  border-right: 0;\n}\n.fw--docked .fw__grip[data-v-b6b4a10b] {\n  cursor: ew-resize;\n}\n\n/* The whole bar is the handle, so there is nothing small to aim at */\n.fw__bar[data-v-b6b4a10b] {\n  display: flex;\n  align-items: center;\n  gap: 2px;\n  flex: none;\n  height: 28px;\n  padding: 0 4px 0 10px;\n  border-bottom: 1px solid var(--color-divider);\n  cursor: grab;\n  touch-action: none;\n  user-select: none;\n}\n.fw__bar[data-v-b6b4a10b]:active {\n  cursor: grabbing;\n}\n.fw__bar[data-v-b6b4a10b]:focus-visible {\n  outline: 2px solid var(--color-accent);\n  outline-offset: -2px;\n}\n.fw__title[data-v-b6b4a10b] {\n  flex: 1;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n  font-size: var(--text-xs, 11px);\n  font-weight: 500;\n  letter-spacing: 0.06em;\n  text-transform: uppercase;\n  color: var(--color-dim);\n}\n.fw__act[data-v-b6b4a10b] {\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  width: 22px;\n  height: 22px;\n  font-size: 14px;\n  line-height: 1;\n  color: var(--color-dim);\n  background: none;\n  border: 0;\n  border-radius: var(--radius-xs, 3px);\n  cursor: pointer;\n}\n.fw__act[data-v-b6b4a10b]:hover {\n  color: var(--color-fg);\n  background-color: var(--color-raised);\n}\n.fw__act[data-v-b6b4a10b]:focus-visible {\n  outline: 2px solid var(--color-accent);\n  outline-offset: 1px;\n}\n.fw__body[data-v-b6b4a10b] {\n  flex: 1;\n  min-height: 0;\n  overflow: auto;\n}\n\n/* Bottom right corner, where a window is resized */\n.fw__grip[data-v-b6b4a10b] {\n  position: absolute;\n  right: 0;\n  bottom: 0;\n  width: 14px;\n  height: 14px;\n  cursor: nwse-resize;\n  touch-action: none;\n}\n.fw__grip[data-v-b6b4a10b]::after {\n  content: '';\n  position: absolute;\n  right: 3px;\n  bottom: 3px;\n  width: 6px;\n  height: 6px;\n  border-right: 2px solid var(--color-outline, #3a4756);\n  border-bottom: 2px solid var(--color-outline, #3a4756);\n}\n\n.icon[data-v-15dffeec] {\n  font-family: 'Material Icons', sans-serif;\n  font-style: normal;\n  font-weight: 400;\n  line-height: 1;\n  letter-spacing: normal;\n  white-space: nowrap;\n  direction: ltr;\n  display: inline-block;\n  vertical-align: middle;\n  -webkit-font-smoothing: antialiased;\n  text-rendering: optimizeLegibility;\n  font-feature-settings: 'liga';\n  color: inherit;\n}\n.icon--xs[data-v-15dffeec] { font-size: 12px;\n}\n.icon--sm[data-v-15dffeec] { font-size: 14px;\n}\n.icon--md[data-v-15dffeec] { font-size: 16px;\n}\n.icon--lg[data-v-15dffeec] { font-size: 20px;\n}\n\n.picker[data-v-c86d0906] {\n  display: flex;\n  align-items: center;\n  gap: 10px;\n}\n.picker__current[data-v-c86d0906] {\n  display: grid;\n  flex: none;\n  place-items: center;\n  width: 34px;\n  height: 34px;\n  color: var(--color-accent);\n  background-color: var(--color-sunken);\n  border: 1px solid var(--color-outline);\n  border-radius: var(--radius-sm);\n  cursor: pointer;\n}\n.picker__current[data-v-c86d0906]:hover:not(:disabled) {\n  border-color: var(--color-accent);\n}\n.picker__current[data-v-c86d0906]:disabled {\n  cursor: default;\n  opacity: 0.5;\n}\n.picker__name[data-v-c86d0906] {\n  flex: 1;\n  min-width: 0;\n  overflow: hidden;\n  font-size: 0.85rem;\n  color: var(--color-dim);\n  text-overflow: ellipsis;\n  white-space: nowrap;\n}\n.picker__clear[data-v-c86d0906] {\n  flex: none;\n  padding: 2px 6px;\n  font: inherit;\n  font-size: 0.78rem;\n  color: var(--color-dim);\n  background: none;\n  border: 0;\n  cursor: pointer;\n}\n.picker__clear[data-v-c86d0906]:hover {\n  color: var(--color-fg);\n  text-decoration: underline;\n}\n.picker__catch[data-v-c86d0906] {\n  position: fixed;\n  inset: 0;\n  z-index: 50000;\n}\n.sheet[data-v-c86d0906] {\n  position: fixed;\n  z-index: 50001;\n  top: 50%;\n  left: 50%;\n  display: flex;\n  flex-direction: column;\n  gap: 10px;\n  width: min(460px, calc(100vw - 32px));\n  max-height: min(70vh, 560px);\n  padding: 12px;\n  background-color: var(--color-pane);\n  border: 1px solid var(--color-outline);\n  border-radius: var(--radius-md);\n  box-shadow: var(--shadow-e3);\n  transform: translate(-50%, -50%);\n}\n.sheet__search input[data-v-c86d0906],\n.sheet__own input[data-v-c86d0906] {\n  width: 100%;\n  padding: 6px 10px;\n  font: inherit;\n  color: var(--color-fg);\n  background-color: var(--color-sunken);\n  border: 1px solid var(--color-outline);\n  border-radius: var(--radius-sm);\n}\n.sheet__grid[data-v-c86d0906] {\n  display: grid;\n  flex: 1 1 auto;\n  grid-template-columns: repeat(auto-fill, minmax(44px, 1fr));\n  gap: 4px;\n  margin: 0;\n  padding: 0;\n  overflow-y: auto;\n  list-style: none;\n}\n.sheet__item[data-v-c86d0906] {\n  display: grid;\n  place-items: center;\n  width: 100%;\n  aspect-ratio: 1;\n  color: var(--color-fg);\n  background: none;\n  border: 1px solid transparent;\n  border-radius: var(--radius-sm);\n  cursor: pointer;\n}\n.sheet__item[data-v-c86d0906]:hover {\n  background-color: var(--color-sunken);\n  border-color: var(--color-outline);\n}\n.sheet__item--on[data-v-c86d0906] {\n  color: var(--color-accent);\n  border-color: var(--color-accent);\n}\n.sheet__none[data-v-c86d0906] {\n  flex: 1 1 auto;\n  margin: 0;\n  padding: 16px 4px;\n  font-size: 0.85rem;\n  color: var(--color-dim);\n}\n.sheet__own[data-v-c86d0906] {\n  display: flex;\n  align-items: center;\n  gap: 8px;\n  padding-top: 10px;\n  border-top: 1px solid var(--color-divider, var(--color-outline));\n}\n.sheet__own-label[data-v-c86d0906] {\n  flex: none;\n  font-size: 0.8rem;\n  color: var(--color-dim);\n}\n.sheet__own input[data-v-c86d0906] {\n  flex: 1;\n  min-width: 0;\n}\n.sheet__preview[data-v-c86d0906] {\n  display: grid;\n  flex: none;\n  place-items: center;\n  width: 28px;\n  height: 28px;\n  color: var(--color-accent);\n}\n.sheet__take[data-v-c86d0906] {\n  flex: none;\n  padding: 5px 10px;\n  font: inherit;\n  font-size: 0.82rem;\n  color: var(--color-fg);\n  background-color: var(--color-sunken);\n  border: 1px solid var(--color-outline);\n  border-radius: var(--radius-sm);\n  cursor: pointer;\n}\n.sheet__take[data-v-c86d0906]:disabled {\n  cursor: default;\n  opacity: 0.45;\n}\n.sheet__warn[data-v-c86d0906] {\n  margin: 0;\n  font-size: 0.8rem;\n  color: var(--color-err);\n}\n\n.field[data-v-a5fd75e2] {\n  display: flex;\n  align-items: baseline;\n  gap: 10px;\n  margin-bottom: 7px;\n}\n.field--stacked[data-v-a5fd75e2] {\n  flex-direction: column;\n  align-items: stretch;\n  gap: 3px;\n}\n.field__label[data-v-a5fd75e2] {\n  width: 112px;\n  flex: none;\n  font-family: var(--font-sans);\n  font-size: var(--text-sm);\n  color: var(--color-dim);\n}\n.field--stacked .field__label[data-v-a5fd75e2] {\n  width: auto;\n}\n.field__required[data-v-a5fd75e2] {\n  color: var(--color-err);\n}\n.field__control[data-v-a5fd75e2] {\n  flex: 1 1 auto;\n  min-width: 0;\n}\n.field__hint[data-v-a5fd75e2],\n.field__error[data-v-a5fd75e2] {\n  margin: 3px 0 0;\n  font-family: var(--font-sans);\n  font-size: var(--text-xs);\n  line-height: 1.4;\n  color: var(--color-dim);\n}\n.field__error[data-v-a5fd75e2] {\n  color: var(--color-err);\n}\n.shell[data-v-a5fd75e2] {\n  display: flex;\n  align-items: center;\n  gap: 6px;\n  padding: 0 8px;\n  background-color: var(--color-bg);\n  border: 1px solid var(--color-divider);\n  border-radius: var(--radius-xs);\n}\n.shell[data-v-a5fd75e2]:focus-within {\n  border-color: var(--color-accent);\n  outline: 1px solid var(--color-accent);\n}\n.shell--invalid[data-v-a5fd75e2] {\n  border-color: var(--color-err);\n}\n.shell--off[data-v-a5fd75e2] {\n  opacity: 0.5;\n}\n.shell--sm[data-v-a5fd75e2] { height: 22px;\n}\n.shell--md[data-v-a5fd75e2] { height: 26px;\n}\n.shell--lg[data-v-a5fd75e2] { height: 32px;\n}\n.shell[data-v-a5fd75e2]:has(.input--area) {\n  height: auto;\n  padding: 5px 8px;\n}\n.input[data-v-a5fd75e2] {\n  flex: 1 1 auto;\n  min-width: 0;\n  padding: 0;\n  font-family: var(--font-sans);\n  font-size: var(--text-sm);\n  color: var(--color-fg);\n  background: none;\n  border: 0;\n  outline: none;\n}\n.shell--lg .input[data-v-a5fd75e2] {\n  font-size: var(--text-base);\n}\n\n/* Figures line up in a column and a changed digit stays in place */\n.input--num[data-v-a5fd75e2] {\n  font-family: var(--font-mono);\n  font-variant-numeric: tabular-nums;\n}\n.input--area[data-v-a5fd75e2] {\n  resize: vertical;\n  line-height: 1.45;\n}\n.input[data-v-a5fd75e2]::placeholder {\n  color: var(--color-dim);\n  opacity: 0.75;\n}\n.suffix[data-v-a5fd75e2] {\n  flex: none;\n  font-family: var(--font-mono);\n  font-size: var(--text-xs);\n  color: var(--color-dim);\n}\n\n.scrim[data-v-03f9e875] {\n  position: fixed;\n  inset: 0;\n  z-index: 40000;\n  display: grid;\n  place-items: center;\n  padding: 24px;\n  background-color: color-mix(in srgb, var(--color-canvas) 62%, transparent);\n  backdrop-filter: blur(4px);\n}\n.dialog[data-v-03f9e875] {\n  display: flex;\n  flex-direction: column;\n  max-height: 100%;\n  background-color: var(--color-pane);\n  border: 1px solid var(--color-outline);\n  border-radius: var(--radius-md);\n  box-shadow: var(--shadow-e3);\n  overflow: hidden;\n}\n.dialog--sm[data-v-03f9e875] { width: 380px;\n}\n.dialog--md[data-v-03f9e875] { width: 560px;\n}\n.dialog--lg[data-v-03f9e875] { width: 840px;\n}\n.dialog__head[data-v-03f9e875] {\n  display: flex;\n  align-items: center;\n  gap: 10px;\n  flex: none;\n  padding: 9px 12px;\n  border-bottom: 1px solid var(--color-divider);\n}\n.dialog__title[data-v-03f9e875] {\n  margin: 0;\n  font-family: var(--font-sans);\n  font-size: var(--text-base);\n  font-weight: 600;\n  color: var(--color-fg);\n}\n.dialog__close[data-v-03f9e875] {\n  margin-left: auto;\n  width: 22px;\n  height: 22px;\n  font-family: var(--font-sans);\n  font-size: var(--text-sm);\n  color: var(--color-dim);\n  background: none;\n  border: 0;\n  border-radius: var(--radius-xs);\n  cursor: pointer;\n}\n.dialog__close[data-v-03f9e875]:hover {\n  color: var(--color-fg);\n  background-color: var(--color-raised);\n}\n.dialog__close[data-v-03f9e875]:focus-visible {\n  outline: 2px solid var(--color-accent);\n  outline-offset: 1px;\n}\n.dialog__body[data-v-03f9e875] {\n  flex: 1 1 auto;\n  min-height: 0;\n  padding: 14px 12px;\n  overflow-y: auto;\n  font-family: var(--font-sans);\n  font-size: var(--text-sm);\n  color: var(--color-fg);\n}\n.dialog__foot[data-v-03f9e875] {\n  display: flex;\n  align-items: center;\n  justify-content: flex-end;\n  gap: 7px;\n  flex: none;\n  padding: 9px 12px;\n  border-top: 1px solid var(--color-divider);\n}\n\n.field[data-v-da414860] {\n  display: flex;\n  align-items: flex-start;\n  gap: 10px;\n  margin-bottom: 7px;\n}\n.field--stacked[data-v-da414860] {\n  flex-direction: column;\n  gap: 4px;\n}\n.field__label[data-v-da414860] {\n  flex: none;\n  width: 120px;\n  padding-top: 2px;\n  font-family: var(--font-sans);\n  font-size: var(--text-sm);\n  color: var(--color-dim);\n}\n.field--stacked .field__label[data-v-da414860] {\n  width: auto;\n}\n.field__required[data-v-da414860] {\n  color: var(--color-err);\n}\n.field__control[data-v-da414860] {\n  flex: 1 1 auto;\n  min-width: 0;\n}\n.choices[data-v-da414860] {\n  display: flex;\n  flex-direction: column;\n  gap: 4px;\n}\n.choices--inline[data-v-da414860] {\n  flex-direction: row;\n  flex-wrap: wrap;\n  gap: 14px;\n}\n.choice[data-v-da414860] {\n  display: flex;\n  align-items: baseline;\n  gap: 7px;\n  cursor: pointer;\n}\n.choice--off[data-v-da414860] {\n  opacity: 0.5;\n  cursor: default;\n}\n.choice__dot[data-v-da414860] {\n  width: 13px;\n  height: 13px;\n  flex: none;\n  accent-color: var(--color-accent);\n  cursor: inherit;\n}\n.choice__dot[data-v-da414860]:focus-visible {\n  outline: 2px solid var(--color-accent);\n  outline-offset: 1px;\n}\n.choice__label[data-v-da414860] {\n  font-family: var(--font-sans);\n  font-size: var(--text-sm);\n  color: var(--color-fg);\n}\n.field__error[data-v-da414860] {\n  margin: 3px 0 0;\n  font-size: var(--text-xs);\n  color: var(--color-err);\n}\n.field__hint[data-v-da414860] {\n  margin: 3px 0 0;\n  font-size: var(--text-xs);\n  color: var(--color-dim);\n}\n\n.field[data-v-940042b2] {\n  display: flex;\n  align-items: baseline;\n  gap: 10px;\n  margin-bottom: 7px;\n}\n.field--stacked[data-v-940042b2] {\n  flex-direction: column;\n  align-items: stretch;\n  gap: 3px;\n}\n.field__label[data-v-940042b2] {\n  width: 112px;\n  flex: none;\n  font-family: var(--font-sans);\n  font-size: var(--text-sm);\n  color: var(--color-dim);\n}\n.field--stacked .field__label[data-v-940042b2] {\n  width: auto;\n}\n.field__required[data-v-940042b2] {\n  color: var(--color-err);\n}\n.field__control[data-v-940042b2] {\n  flex: 1 1 auto;\n  min-width: 0;\n}\n.field__hint[data-v-940042b2],\n.field__error[data-v-940042b2] {\n  margin: 3px 0 0;\n  font-family: var(--font-sans);\n  font-size: var(--text-xs);\n  line-height: 1.4;\n  color: var(--color-dim);\n}\n.field__error[data-v-940042b2] {\n  color: var(--color-err);\n}\n.shell[data-v-940042b2] {\n  position: relative;\n  display: flex;\n  align-items: center;\n  padding: 0 8px;\n  background-color: var(--color-bg);\n  border: 1px solid var(--color-divider);\n  border-radius: var(--radius-xs);\n}\n.shell[data-v-940042b2]:focus-within {\n  border-color: var(--color-accent);\n  outline: 1px solid var(--color-accent);\n}\n.shell--invalid[data-v-940042b2] {\n  border-color: var(--color-err);\n}\n.shell--off[data-v-940042b2] {\n  opacity: 0.5;\n}\n.shell--sm[data-v-940042b2] { height: 22px;\n}\n.shell--md[data-v-940042b2] { height: 26px;\n}\n.shell--lg[data-v-940042b2] { height: 32px;\n}\n.shell[data-v-940042b2]:has(.select--many) {\n  height: auto;\n  padding: 0 2px;\n}\n.select[data-v-940042b2] {\n  flex: 1 1 auto;\n  min-width: 0;\n  height: 100%;\n  padding: 0 14px 0 0;\n  font-family: var(--font-sans);\n  font-size: var(--text-sm);\n  color: var(--color-fg);\n  background: none;\n  border: 0;\n  outline: none;\n  appearance: none;\n  cursor: pointer;\n}\n.shell--lg .select[data-v-940042b2] {\n  font-size: var(--text-base);\n}\n\n/* The list itself is drawn by the browser, which does not inherit the\n   panel's colours - so the options get them explicitly. */\n.select option[data-v-940042b2] {\n  color: var(--color-fg);\n  background-color: var(--color-pane);\n}\n\n/*\n * The headings need the same treatment, and one more thing: a browser\n * passes an optgroup's colour down to the options inside it, so the\n * options take theirs back below. Without this the heading keeps the\n * user agent's own colour and disappears into a dark list.\n */\n.select optgroup[data-v-940042b2] {\n  color: var(--color-dim);\n  background-color: var(--color-pane);\n  font-weight: 600;\n  font-style: normal;\n}\n.select optgroup option[data-v-940042b2] {\n  color: var(--color-fg);\n}\n\n/* A list rather than one line, so the shell grows with it. */\n.select--many[data-v-940042b2] {\n  height: auto;\n  padding: 4px 0;\n}\n.chevron[data-v-940042b2] {\n  position: absolute;\n  right: 7px;\n  font-size: 9px;\n  color: var(--color-dim);\n  pointer-events: none;\n}\n\n.field[data-v-ed7d97ce] {\n  display: flex;\n  align-items: center;\n  gap: 10px;\n  margin-bottom: 7px;\n}\n.field--stacked[data-v-ed7d97ce] {\n  flex-direction: column;\n  align-items: stretch;\n  gap: 3px;\n}\n.field__label[data-v-ed7d97ce] {\n  width: 112px;\n  flex: none;\n  font-family: var(--font-sans);\n  font-size: var(--text-sm);\n  color: var(--color-dim);\n}\n.field--stacked .field__label[data-v-ed7d97ce] {\n  width: auto;\n}\n.field__control[data-v-ed7d97ce] {\n  flex: 1 1 auto;\n  min-width: 0;\n}\n.row[data-v-ed7d97ce] {\n  display: flex;\n  align-items: center;\n  gap: 8px;\n}\n.range[data-v-ed7d97ce] {\n  flex: 1 1 auto;\n  min-width: 0;\n  accent-color: var(--color-accent);\n  cursor: pointer;\n}\n.range[data-v-ed7d97ce]:focus-visible {\n  outline: 2px solid var(--color-accent);\n  outline-offset: 2px;\n}\n.num[data-v-ed7d97ce] {\n  width: 62px;\n  flex: none;\n  height: 22px;\n  padding: 0 6px;\n  font-family: var(--font-mono);\n  font-size: var(--text-xs);\n  font-variant-numeric: tabular-nums;\n  color: var(--color-fg);\n  background-color: var(--color-bg);\n  border: 1px solid var(--color-divider);\n  border-radius: var(--radius-xs);\n}\n.num[data-v-ed7d97ce]:focus-visible {\n  outline: 2px solid var(--color-accent);\n  outline-offset: 1px;\n}\n.suffix[data-v-ed7d97ce] {\n  flex: none;\n  font-family: var(--font-mono);\n  font-size: var(--text-xs);\n  color: var(--color-dim);\n}\n.range[data-v-ed7d97ce]:disabled,\n.num[data-v-ed7d97ce]:disabled {\n  opacity: 0.5;\n}\n\n.sw[data-v-70940a00] {\n  display: flex;\n  align-items: center;\n  gap: 8px;\n  margin-bottom: 6px;\n}\n.sw--off[data-v-70940a00] {\n  opacity: 0.5;\n}\n.sw__track[data-v-70940a00] {\n  position: relative;\n  width: 28px;\n  height: 15px;\n  flex: none;\n  padding: 0;\n  background-color: var(--color-outline);\n  border: 0;\n  border-radius: 8px;\n  cursor: pointer;\n}\n.sw__track.on[data-v-70940a00] {\n  background-color: var(--color-accent);\n}\n.sw__track[data-v-70940a00]:disabled {\n  cursor: default;\n}\n.sw__track[data-v-70940a00]:focus-visible {\n  outline: 2px solid var(--color-accent);\n  outline-offset: 2px;\n}\n.sw__knob[data-v-70940a00] {\n  position: absolute;\n  top: 2px;\n  left: 2px;\n  width: 11px;\n  height: 11px;\n  border-radius: 50%;\n  background-color: var(--color-pane);\n  transition: left 0.12s ease;\n}\n.sw__track.on .sw__knob[data-v-70940a00] {\n  left: 15px;\n}\n@media (prefers-reduced-motion: reduce) {\n.sw__knob[data-v-70940a00] {\n    transition: none;\n}\n}\n.sw__label[data-v-70940a00] {\n  font-family: var(--font-sans);\n  font-size: var(--text-sm);\n  color: var(--color-fg);\n  cursor: pointer;\n}\n\n.table[data-v-925340b8] {\n  width: 100%;\n  height: 100%;\n  overflow: auto;\n  font-family: var(--font-sans);\n  font-size: var(--text-sm);\n  color: var(--color-fg);\n}\ntable[data-v-925340b8] {\n  width: 100%;\n  border-collapse: collapse;\n}\n\n/*\n * The head stays put: the point of the thing is to scroll through rows\n * and still know which column is which.\n */\nth[data-v-925340b8] {\n  position: sticky;\n  top: 0;\n  z-index: 1;\n  padding: 6px 10px;\n  text-align: left;\n  font-weight: 500;\n  white-space: nowrap;\n  color: var(--color-dim);\n  background-color: var(--color-raised);\n  border-bottom: 1px solid var(--color-divider);\n}\ntd[data-v-925340b8] {\n  padding: 5px 10px;\n  max-width: 28ch;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n  border-bottom: 1px solid var(--color-divider);\n}\ntbody tr[data-v-925340b8]:hover {\n  background-color: color-mix(in srgb, var(--color-pane) 60%, transparent);\n}\n.row--pick[data-v-925340b8] {\n  cursor: pointer;\n}\n\n/* Marked by a rule down its side rather than a fill: a fill of the accent\n   would fight the hover, and both have to be readable at once. */\n.row--on td[data-v-925340b8]:first-child {\n  box-shadow: inset 2px 0 0 var(--color-accent);\n}\n.row--on td[data-v-925340b8] {\n  background-color: color-mix(in srgb, var(--color-accent) 12%, transparent);\n}\n.table__empty[data-v-925340b8] {\n  margin: 0;\n  padding: 14px 10px;\n  color: var(--color-dim);\n}\n\n.tabs[data-v-f7c65d26] {\n  display: flex;\n  flex-wrap: wrap;\n  align-items: stretch;\n  gap: 1px;\n  min-height: var(--spacing-panelHeader);\n  padding: 0 6px;\n  border-bottom: 1px solid var(--color-divider);\n}\n.tab[data-v-f7c65d26] {\n  position: relative;\n  display: flex;\n  align-items: center;\n  gap: 5px;\n  height: var(--spacing-panelHeader);\n  padding: 0 10px;\n  font-family: var(--font-sans);\n  font-size: var(--text-sm);\n  color: var(--color-dim);\n  background: none;\n  border: 0;\n  cursor: pointer;\n}\n.tab[data-v-f7c65d26]:hover:not(:disabled) {\n  color: var(--color-fg);\n}\n.tab[data-v-f7c65d26]:disabled {\n  opacity: 0.45;\n  cursor: default;\n}\n.tab.on[data-v-f7c65d26] {\n  color: var(--color-fg);\n  font-weight: 600;\n}\n\n/* Sits on the panel edge, over the divider */\n.tab.on[data-v-f7c65d26]::after {\n  content: '';\n  position: absolute;\n  left: 7px;\n  right: 7px;\n  bottom: -1px;\n  height: 2px;\n  background-color: var(--color-accent);\n  border-radius: 2px;\n}\n.tab[data-v-f7c65d26]:focus-visible {\n  outline: 2px solid var(--color-accent);\n  outline-offset: -2px;\n}\n.tab__count[data-v-f7c65d26] {\n  font-family: var(--font-mono);\n  font-size: 9.5px;\n  font-variant-numeric: tabular-nums;\n  opacity: 0.8;\n}\n";})();
+import { defineComponent, createElementBlock, openBlock, normalizeClass, createCommentVNode, renderSlot, createElementVNode, toDisplayString, mergeModels, useModel, useId, ref, watchEffect, withDirectives, unref, vModelCheckbox, createTextVNode, computed, vModelText, vModelDynamic, reactive, watch, onMounted, onBeforeUnmount, normalizeStyle, withKeys, withModifiers, nextTick, createBlock, withCtx, createVNode, Teleport, Fragment, renderList, vModelRadio, vModelSelect } from "vue";
+const _hoisted_1$h = ["type", "disabled", "aria-busy"];
+const _hoisted_2$e = {
   key: 0,
   class: "btn__spinner",
   "aria-hidden": "true"
-}, Oe = /* @__PURE__ */ g({
+};
+const _sfc_main$i = /* @__PURE__ */ defineComponent({
   __name: "DButton",
   props: {
     intent: { default: "default" },
     size: { default: "md" },
-    disabled: { type: Boolean, default: !1 },
-    busy: { type: Boolean, default: !1 },
-    block: { type: Boolean, default: !1 },
+    disabled: { type: Boolean, default: false },
+    busy: { type: Boolean, default: false },
+    block: { type: Boolean, default: false },
     type: { default: "button" }
   },
-  setup(e) {
-    return (t, d) => (l(), a("button", {
-      type: e.type,
-      class: $([
-        "btn",
-        `btn--${e.intent}`,
-        `btn--${e.size}`,
-        { "btn--block": e.block, "btn--busy": e.busy }
-      ]),
-      disabled: e.disabled || e.busy,
-      "aria-busy": e.busy || void 0
-    }, [
-      e.busy ? (l(), a("span", Ae)) : y("", !0),
-      B(t.$slots, "default", {}, void 0, !0)
-    ], 10, Ue));
+  setup(__props) {
+    return (_ctx, _cache) => {
+      return openBlock(), createElementBlock("button", {
+        type: __props.type,
+        class: normalizeClass([
+          "btn",
+          `btn--${__props.intent}`,
+          `btn--${__props.size}`,
+          { "btn--block": __props.block, "btn--busy": __props.busy }
+        ]),
+        disabled: __props.disabled || __props.busy,
+        "aria-busy": __props.busy || void 0
+      }, [
+        __props.busy ? (openBlock(), createElementBlock("span", _hoisted_2$e)) : createCommentVNode("", true),
+        renderSlot(_ctx.$slots, "default", {}, void 0, true)
+      ], 10, _hoisted_1$h);
+    };
   }
-}), x = (e, t) => {
-  const d = e.__vccOpts || e;
-  for (const [o, u] of t)
-    d[o] = u;
-  return d;
-}, fe = /* @__PURE__ */ x(Oe, [["__scopeId", "data-v-5b01af26"]]), Xe = {
+});
+const _export_sfc = (sfc, props) => {
+  const target = sfc.__vccOpts || sfc;
+  for (const [key, val] of props) {
+    target[key] = val;
+  }
+  return target;
+};
+const DButton = /* @__PURE__ */ _export_sfc(_sfc_main$i, [["__scopeId", "data-v-5b01af26"]]);
+const _hoisted_1$g = {
   key: 0,
   class: "card__head"
-}, Fe = { class: "card__title" }, _e = /* @__PURE__ */ g({
+};
+const _hoisted_2$d = { class: "card__title" };
+const _sfc_main$h = /* @__PURE__ */ defineComponent({
   __name: "DCard",
   props: {
     title: {},
-    padded: { type: Boolean, default: !0 },
-    interactive: { type: Boolean, default: !1 }
+    padded: { type: Boolean, default: true },
+    interactive: { type: Boolean, default: false }
   },
-  setup(e) {
-    return (t, d) => (l(), a("section", {
-      class: $(["card", { "card--interactive": e.interactive }])
-    }, [
-      e.title || t.$slots.header ? (l(), a("header", Xe, [
-        B(t.$slots, "header", {}, () => [
-          k("h3", Fe, b(e.title), 1)
-        ], !0),
-        d[0] || (d[0] = k("span", { class: "card__spacer" }, null, -1)),
-        B(t.$slots, "actions", {}, void 0, !0)
-      ])) : y("", !0),
-      k("div", {
-        class: $(["card__body", { "card__body--padded": e.padded }])
+  setup(__props) {
+    return (_ctx, _cache) => {
+      return openBlock(), createElementBlock("section", {
+        class: normalizeClass(["card", { "card--interactive": __props.interactive }])
       }, [
-        B(t.$slots, "default", {}, void 0, !0)
-      ], 2)
-    ], 2));
+        __props.title || _ctx.$slots.header ? (openBlock(), createElementBlock("header", _hoisted_1$g, [
+          renderSlot(_ctx.$slots, "header", {}, () => [
+            createElementVNode("h3", _hoisted_2$d, toDisplayString(__props.title), 1)
+          ], true),
+          _cache[0] || (_cache[0] = createElementVNode("span", { class: "card__spacer" }, null, -1)),
+          renderSlot(_ctx.$slots, "actions", {}, void 0, true)
+        ])) : createCommentVNode("", true),
+        createElementVNode("div", {
+          class: normalizeClass(["card__body", { "card__body--padded": __props.padded }])
+        }, [
+          renderSlot(_ctx.$slots, "default", {}, void 0, true)
+        ], 2)
+      ], 2);
+    };
   }
-}), ve = /* @__PURE__ */ x(_e, [["__scopeId", "data-v-8c187da1"]]), je = ["id", "disabled"], Re = ["for"], Pe = {
+});
+const DCard = /* @__PURE__ */ _export_sfc(_sfc_main$h, [["__scopeId", "data-v-8c187da1"]]);
+const _hoisted_1$f = ["id", "disabled"];
+const _hoisted_2$c = ["for"];
+const _hoisted_3$c = {
   key: 0,
   class: "check__hint"
-}, Ge = /* @__PURE__ */ g({
+};
+const _sfc_main$g = /* @__PURE__ */ defineComponent({
   __name: "DCheckbox",
-  props: /* @__PURE__ */ I({
+  props: /* @__PURE__ */ mergeModels({
     label: {},
     hint: {},
-    disabled: { type: Boolean, default: !1 },
-    indeterminate: { type: Boolean, default: !1 }
+    disabled: { type: Boolean, default: false },
+    indeterminate: { type: Boolean, default: false }
   }, {
-    modelValue: { type: Boolean },
-    modelModifiers: {}
+    "modelValue": { type: Boolean },
+    "modelModifiers": {}
   }),
   emits: ["update:modelValue"],
-  setup(e) {
-    const t = z(e, "modelValue"), d = e, o = T(), u = R(null);
-    return Ee(() => {
-      u.value && (u.value.indeterminate = d.indeterminate);
-    }), (r, s) => (l(), a("div", {
-      class: $(["check", { "check--off": e.disabled }])
-    }, [
-      Y(k("input", {
-        id: D(o),
-        ref_key: "box",
-        ref: u,
-        "onUpdate:modelValue": s[0] || (s[0] = (c) => t.value = c),
-        class: "check__box",
-        type: "checkbox",
-        disabled: e.disabled
-      }, null, 8, je), [
-        [We, t.value]
-      ]),
-      k("label", {
-        for: D(o),
-        class: "check__label"
+  setup(__props) {
+    const model = useModel(__props, "modelValue");
+    const props = __props;
+    const id = useId();
+    const box = ref(null);
+    watchEffect(() => {
+      if (box.value) box.value.indeterminate = props.indeterminate;
+    });
+    return (_ctx, _cache) => {
+      return openBlock(), createElementBlock("div", {
+        class: normalizeClass(["check", { "check--off": __props.disabled }])
       }, [
-        B(r.$slots, "default", {}, () => [
-          L(b(e.label), 1)
-        ], !0),
-        e.hint ? (l(), a("span", Pe, b(e.hint), 1)) : y("", !0)
-      ], 8, Re)
-    ], 2));
+        withDirectives(createElementVNode("input", {
+          id: unref(id),
+          ref_key: "box",
+          ref: box,
+          "onUpdate:modelValue": _cache[0] || (_cache[0] = ($event) => model.value = $event),
+          class: "check__box",
+          type: "checkbox",
+          disabled: __props.disabled
+        }, null, 8, _hoisted_1$f), [
+          [vModelCheckbox, model.value]
+        ]),
+        createElementVNode("label", {
+          for: unref(id),
+          class: "check__label"
+        }, [
+          renderSlot(_ctx.$slots, "default", {}, () => [
+            createTextVNode(toDisplayString(__props.label), 1)
+          ], true),
+          __props.hint ? (openBlock(), createElementBlock("span", _hoisted_3$c, toDisplayString(__props.hint), 1)) : createCommentVNode("", true)
+        ], 8, _hoisted_2$c)
+      ], 2);
+    };
   }
-}), me = /* @__PURE__ */ x(Ge, [["__scopeId", "data-v-e080554d"]]), Je = /* @__PURE__ */ g({
+});
+const DCheckbox = /* @__PURE__ */ _export_sfc(_sfc_main$g, [["__scopeId", "data-v-e080554d"]]);
+const _sfc_main$f = /* @__PURE__ */ defineComponent({
   __name: "DChip",
   props: {
     tone: { default: "neutral" },
-    numeric: { type: Boolean, default: !1 },
-    removable: { type: Boolean, default: !1 }
+    numeric: { type: Boolean, default: false },
+    removable: { type: Boolean, default: false }
   },
   emits: ["remove"],
-  setup(e) {
-    return (t, d) => (l(), a("span", {
-      class: $(["chip", `chip--${e.tone}`, { "chip--num": e.numeric }])
-    }, [
-      B(t.$slots, "default", {}, void 0, !0),
-      e.removable ? (l(), a("button", {
-        key: 0,
-        type: "button",
-        class: "chip__x",
-        "aria-label": "Entfernen",
-        onClick: d[0] || (d[0] = (o) => t.$emit("remove"))
-      }, " ✕ ")) : y("", !0)
-    ], 2));
+  setup(__props) {
+    return (_ctx, _cache) => {
+      return openBlock(), createElementBlock("span", {
+        class: normalizeClass(["chip", `chip--${__props.tone}`, { "chip--num": __props.numeric }])
+      }, [
+        renderSlot(_ctx.$slots, "default", {}, void 0, true),
+        __props.removable ? (openBlock(), createElementBlock("button", {
+          key: 0,
+          type: "button",
+          class: "chip__x",
+          "aria-label": "Entfernen",
+          onClick: _cache[0] || (_cache[0] = ($event) => _ctx.$emit("remove"))
+        }, " ✕ ")) : createCommentVNode("", true)
+      ], 2);
+    };
   }
-}), be = /* @__PURE__ */ x(Je, [["__scopeId", "data-v-30700fa0"]]), Ze = ["for"], pe = { class: "field__control" }, Qe = { class: "row" }, et = ["id", "value", "disabled", "aria-label"], tt = ["disabled", "aria-label"], lt = {
+});
+const DChip = /* @__PURE__ */ _export_sfc(_sfc_main$f, [["__scopeId", "data-v-30700fa0"]]);
+const _hoisted_1$e = ["for"];
+const _hoisted_2$b = { class: "field__control" };
+const _hoisted_3$b = { class: "row" };
+const _hoisted_4$a = ["id", "value", "disabled", "aria-label"];
+const _hoisted_5$a = ["disabled", "aria-label"];
+const _hoisted_6$6 = {
   key: 0,
   class: "field__hint"
-}, at = /* @__PURE__ */ g({
+};
+const _sfc_main$e = /* @__PURE__ */ defineComponent({
   __name: "DColorInput",
-  props: /* @__PURE__ */ I({
+  props: /* @__PURE__ */ mergeModels({
     label: {},
     hint: {},
-    disabled: { type: Boolean, default: !1 },
-    stacked: { type: Boolean, default: !1 }
+    disabled: { type: Boolean, default: false },
+    stacked: { type: Boolean, default: false }
   }, {
-    modelValue: {},
-    modelModifiers: {}
+    "modelValue": {},
+    "modelModifiers": {}
   }),
   emits: ["update:modelValue"],
-  setup(e) {
-    const t = z(e, "modelValue"), d = T(), o = C(() => {
-      const u = (t.value ?? "").trim();
-      return /^#[0-9a-f]{6}$/i.test(u) ? u : /^#[0-9a-f]{3}$/i.test(u) ? "#" + [...u.slice(1)].map((r) => r + r).join("") : "#000000";
+  setup(__props) {
+    const model = useModel(__props, "modelValue");
+    const id = useId();
+    const pickable = computed(() => {
+      const value = (model.value ?? "").trim();
+      if (/^#[0-9a-f]{6}$/i.test(value)) return value;
+      if (/^#[0-9a-f]{3}$/i.test(value)) {
+        return "#" + [...value.slice(1)].map((c) => c + c).join("");
+      }
+      return "#000000";
     });
-    return (u, r) => (l(), a("div", {
-      class: $(["field", { "field--stacked": e.stacked }])
-    }, [
-      e.label ? (l(), a("label", {
-        key: 0,
-        class: "field__label",
-        for: D(d)
-      }, b(e.label), 9, Ze)) : y("", !0),
-      k("div", pe, [
-        k("div", Qe, [
-          k("input", {
-            id: D(d),
-            class: "picker",
-            type: "color",
-            value: o.value,
-            disabled: e.disabled,
-            "aria-label": e.label ?? "Farbe",
-            onInput: r[0] || (r[0] = (s) => t.value = s.target.value)
-          }, null, 40, et),
-          Y(k("input", {
-            "onUpdate:modelValue": r[1] || (r[1] = (s) => t.value = s),
-            class: "hex",
-            type: "text",
-            spellcheck: "false",
-            disabled: e.disabled,
-            "aria-label": e.label ? `${e.label} als Hexwert` : "Farbe als Hexwert"
-          }, null, 8, tt), [
-            [P, t.value]
-          ])
-        ]),
-        e.hint ? (l(), a("p", lt, b(e.hint), 1)) : y("", !0)
-      ])
-    ], 2));
+    return (_ctx, _cache) => {
+      return openBlock(), createElementBlock("div", {
+        class: normalizeClass(["field", { "field--stacked": __props.stacked }])
+      }, [
+        __props.label ? (openBlock(), createElementBlock("label", {
+          key: 0,
+          class: "field__label",
+          for: unref(id)
+        }, toDisplayString(__props.label), 9, _hoisted_1$e)) : createCommentVNode("", true),
+        createElementVNode("div", _hoisted_2$b, [
+          createElementVNode("div", _hoisted_3$b, [
+            createElementVNode("input", {
+              id: unref(id),
+              class: "picker",
+              type: "color",
+              value: pickable.value,
+              disabled: __props.disabled,
+              "aria-label": __props.label ?? "Farbe",
+              onInput: _cache[0] || (_cache[0] = ($event) => model.value = $event.target.value)
+            }, null, 40, _hoisted_4$a),
+            withDirectives(createElementVNode("input", {
+              "onUpdate:modelValue": _cache[1] || (_cache[1] = ($event) => model.value = $event),
+              class: "hex",
+              type: "text",
+              spellcheck: "false",
+              disabled: __props.disabled,
+              "aria-label": __props.label ? `${__props.label} als Hexwert` : "Farbe als Hexwert"
+            }, null, 8, _hoisted_5$a), [
+              [vModelText, model.value]
+            ])
+          ]),
+          __props.hint ? (openBlock(), createElementBlock("p", _hoisted_6$6, toDisplayString(__props.hint), 1)) : createCommentVNode("", true)
+        ])
+      ], 2);
+    };
   }
-}), he = /* @__PURE__ */ x(at, [["__scopeId", "data-v-0c4cf022"]]), it = ["for"], nt = {
+});
+const DColorInput = /* @__PURE__ */ _export_sfc(_sfc_main$e, [["__scopeId", "data-v-0c4cf022"]]);
+const _hoisted_1$d = ["for"];
+const _hoisted_2$a = {
   key: 0,
   class: "field__required",
   "aria-hidden": "true"
-}, dt = { class: "field__control" }, ot = ["id", "type", "disabled", "required", "min", "max", "aria-invalid"], st = {
+};
+const _hoisted_3$a = { class: "field__control" };
+const _hoisted_4$9 = ["id", "type", "disabled", "required", "min", "max", "aria-invalid"];
+const _hoisted_5$9 = {
   key: 0,
   class: "field__error",
   role: "alert"
-}, rt = {
+};
+const _hoisted_6$5 = {
   key: 1,
   class: "field__hint"
-}, ut = /* @__PURE__ */ g({
+};
+const _sfc_main$d = /* @__PURE__ */ defineComponent({
   __name: "DDateInput",
-  props: /* @__PURE__ */ I({
+  props: /* @__PURE__ */ mergeModels({
     label: {},
     mode: { default: "date" },
     hint: {},
     error: {},
-    disabled: { type: Boolean, default: !1 },
-    required: { type: Boolean, default: !1 },
-    stacked: { type: Boolean, default: !1 },
+    disabled: { type: Boolean, default: false },
+    required: { type: Boolean, default: false },
+    stacked: { type: Boolean, default: false },
     min: {},
     max: {}
   }, {
-    modelValue: {},
-    modelModifiers: {}
+    "modelValue": {},
+    "modelModifiers": {}
   }),
   emits: ["update:modelValue"],
-  setup(e) {
-    const t = z(e, "modelValue"), d = T(), o = { date: "date", time: "time", datetime: "datetime-local" };
-    return (u, r) => (l(), a("div", {
-      class: $(["field", { "field--stacked": e.stacked, "field--invalid": !!e.error }])
-    }, [
-      e.label ? (l(), a("label", {
-        key: 0,
-        class: "field__label",
-        for: D(d)
+  setup(__props) {
+    const model = useModel(__props, "modelValue");
+    const id = useId();
+    const nativeType = { date: "date", time: "time", datetime: "datetime-local" };
+    return (_ctx, _cache) => {
+      return openBlock(), createElementBlock("div", {
+        class: normalizeClass(["field", { "field--stacked": __props.stacked, "field--invalid": !!__props.error }])
       }, [
-        L(b(e.label) + " ", 1),
-        e.required ? (l(), a("span", nt, "*")) : y("", !0)
-      ], 8, it)) : y("", !0),
-      k("div", dt, [
-        Y(k("input", {
-          id: D(d),
-          "onUpdate:modelValue": r[0] || (r[0] = (s) => t.value = s),
-          class: $(["input", { "input--invalid": !!e.error }]),
-          type: o[e.mode],
-          disabled: e.disabled,
-          required: e.required,
-          min: e.min,
-          max: e.max,
-          "aria-invalid": !!e.error || void 0
-        }, null, 10, ot), [
-          [de, t.value]
-        ]),
-        e.error ? (l(), a("p", st, b(e.error), 1)) : e.hint ? (l(), a("p", rt, b(e.hint), 1)) : y("", !0)
-      ])
-    ], 2));
+        __props.label ? (openBlock(), createElementBlock("label", {
+          key: 0,
+          class: "field__label",
+          for: unref(id)
+        }, [
+          createTextVNode(toDisplayString(__props.label) + " ", 1),
+          __props.required ? (openBlock(), createElementBlock("span", _hoisted_2$a, "*")) : createCommentVNode("", true)
+        ], 8, _hoisted_1$d)) : createCommentVNode("", true),
+        createElementVNode("div", _hoisted_3$a, [
+          withDirectives(createElementVNode("input", {
+            id: unref(id),
+            "onUpdate:modelValue": _cache[0] || (_cache[0] = ($event) => model.value = $event),
+            class: normalizeClass(["input", { "input--invalid": !!__props.error }]),
+            type: nativeType[__props.mode],
+            disabled: __props.disabled,
+            required: __props.required,
+            min: __props.min,
+            max: __props.max,
+            "aria-invalid": !!__props.error || void 0
+          }, null, 10, _hoisted_4$9), [
+            [vModelDynamic, model.value]
+          ]),
+          __props.error ? (openBlock(), createElementBlock("p", _hoisted_5$9, toDisplayString(__props.error), 1)) : __props.hint ? (openBlock(), createElementBlock("p", _hoisted_6$5, toDisplayString(__props.hint), 1)) : createCommentVNode("", true)
+        ])
+      ], 2);
+    };
   }
-}), ye = /* @__PURE__ */ x(ut, [["__scopeId", "data-v-3afdb10c"]]), ct = {
+});
+const DDateInput = /* @__PURE__ */ _export_sfc(_sfc_main$d, [["__scopeId", "data-v-3afdb10c"]]);
+const _hoisted_1$c = {
   key: 0,
   class: "rule__label"
-}, ft = /* @__PURE__ */ g({
+};
+const _sfc_main$c = /* @__PURE__ */ defineComponent({
   __name: "DDivider",
   props: {
     label: {}
   },
-  setup(e) {
-    return (t, d) => (l(), a("div", {
-      class: $(["rule", { "rule--labelled": e.label }]),
-      role: "separator"
-    }, [
-      e.label ? (l(), a("span", ct, b(e.label), 1)) : y("", !0)
-    ], 2));
+  setup(__props) {
+    return (_ctx, _cache) => {
+      return openBlock(), createElementBlock("div", {
+        class: normalizeClass(["rule", { "rule--labelled": __props.label }]),
+        role: "separator"
+      }, [
+        __props.label ? (openBlock(), createElementBlock("span", _hoisted_1$c, toDisplayString(__props.label), 1)) : createCommentVNode("", true)
+      ], 2);
+    };
   }
-}), ke = /* @__PURE__ */ x(ft, [["__scopeId", "data-v-521e9319"]]), vt = ["for"], mt = {
+});
+const DDivider = /* @__PURE__ */ _export_sfc(_sfc_main$c, [["__scopeId", "data-v-521e9319"]]);
+const _hoisted_1$b = ["for"];
+const _hoisted_2$9 = {
   key: 0,
   class: "field__required",
   "aria-hidden": "true"
-}, bt = { class: "field__control" }, ht = {
+};
+const _hoisted_3$9 = { class: "field__control" };
+const _hoisted_4$8 = {
   key: 0,
   class: "field__error",
   role: "alert"
-}, yt = {
+};
+const _hoisted_5$8 = {
   key: 1,
   class: "field__hint"
-}, kt = /* @__PURE__ */ g({
+};
+const _sfc_main$b = /* @__PURE__ */ defineComponent({
   __name: "DField",
   props: {
     label: {},
     for: {},
     hint: {},
     error: {},
-    required: { type: Boolean, default: !1 },
-    stacked: { type: Boolean, default: !1 }
+    required: { type: Boolean, default: false },
+    stacked: { type: Boolean, default: false }
   },
-  setup(e) {
-    return (t, d) => (l(), a("div", {
-      class: $(["field", { "field--stacked": e.stacked, "field--invalid": !!e.error }])
-    }, [
-      e.label ? (l(), a("label", {
-        key: 0,
-        class: "field__label",
-        for: t.$props.for
+  setup(__props) {
+    return (_ctx, _cache) => {
+      return openBlock(), createElementBlock("div", {
+        class: normalizeClass(["field", { "field--stacked": __props.stacked, "field--invalid": !!__props.error }])
       }, [
-        L(b(e.label) + " ", 1),
-        e.required ? (l(), a("span", mt, "*")) : y("", !0)
-      ], 8, vt)) : y("", !0),
-      k("div", bt, [
-        B(t.$slots, "default", {}, void 0, !0),
-        e.error ? (l(), a("p", ht, b(e.error), 1)) : e.hint ? (l(), a("p", yt, b(e.hint), 1)) : y("", !0)
-      ])
-    ], 2));
+        __props.label ? (openBlock(), createElementBlock("label", {
+          key: 0,
+          class: "field__label",
+          for: _ctx.$props.for
+        }, [
+          createTextVNode(toDisplayString(__props.label) + " ", 1),
+          __props.required ? (openBlock(), createElementBlock("span", _hoisted_2$9, "*")) : createCommentVNode("", true)
+        ], 8, _hoisted_1$b)) : createCommentVNode("", true),
+        createElementVNode("div", _hoisted_3$9, [
+          renderSlot(_ctx.$slots, "default", {}, void 0, true),
+          __props.error ? (openBlock(), createElementBlock("p", _hoisted_4$8, toDisplayString(__props.error), 1)) : __props.hint ? (openBlock(), createElementBlock("p", _hoisted_5$8, toDisplayString(__props.hint), 1)) : createCommentVNode("", true)
+        ])
+      ], 2);
+    };
   }
-}), $e = /* @__PURE__ */ x(kt, [["__scopeId", "data-v-1a8ee938"]]), A = oe(/* @__PURE__ */ new Map());
-let $t = 0;
-const we = oe({ left: 240, right: 240 });
-function le(e) {
-  return we[e];
+});
+const DField = /* @__PURE__ */ _export_sfc(_sfc_main$b, [["__scopeId", "data-v-1a8ee938"]]);
+const entries = reactive(/* @__PURE__ */ new Map());
+let counter = 0;
+const widths = reactive({ left: 240, right: 240 });
+function dockWidth(side) {
+  return widths[side];
 }
-function Z(e, t) {
-  we[e] = t;
+function setDockWidth(side, width) {
+  widths[side] = width;
 }
-function ae(e, t, d, o) {
-  const u = A.get(e);
-  A.set(e, { side: t, want: d, min: o, seq: u?.seq ?? $t++ });
+function joinDock(id, side, want, min) {
+  const existing = entries.get(id);
+  entries.set(id, { side, want, min, seq: existing?.seq ?? counter++ });
 }
-function ie(e) {
-  A.delete(e);
+function leaveDock(id) {
+  entries.delete(id);
 }
-function ge(e) {
-  return [...A.entries()].filter(([, t]) => t.side === e).sort((t, d) => t[1].seq - d[1].seq);
+function onSide(side) {
+  return [...entries.entries()].filter(([, e]) => e.side === side).sort((a, b) => a[1].seq - b[1].seq);
 }
-function wt(e, t) {
-  const d = A.get(e);
-  if (!d) return null;
-  const o = ge(d.side);
-  if (!o.length) return null;
-  const u = o.reduce((v, [, h]) => v + h.min, 0), r = u > t && u > 0 ? t / u : 1, s = Math.max(0, t - u * r), c = o.reduce((v, [, h]) => v + Math.max(1, h.want), 0);
-  let i = 0;
-  for (let v = 0; v < o.length; v++) {
-    const [h, w] = o[v], W = v === o.length - 1 ? Math.max(0, t - i) : Math.round(w.min * r + s * Math.max(1, w.want) / c);
-    if (h === e) return { y: i, h: W };
-    i += W;
+function dockSlot(id, available) {
+  const entry = entries.get(id);
+  if (!entry) return null;
+  const column = onSide(entry.side);
+  if (!column.length) return null;
+  const floorSum = column.reduce((sum, [, e]) => sum + e.min, 0);
+  const scale = floorSum > available && floorSum > 0 ? available / floorSum : 1;
+  const flexible = Math.max(0, available - floorSum * scale);
+  const wanted = column.reduce((sum, [, e]) => sum + Math.max(1, e.want), 0);
+  let y = 0;
+  for (let i = 0; i < column.length; i++) {
+    const [key, e] = column[i];
+    const last = i === column.length - 1;
+    const share = last ? Math.max(0, available - y) : Math.round(e.min * scale + flexible * Math.max(1, e.want) / wanted);
+    if (key === id) return { y, h: share };
+    y += share;
   }
   return null;
 }
-function gt(e) {
-  return ge(e).length;
+function dockCount(side) {
+  return onSide(side).length;
 }
-const xt = ["aria-label"], Mt = ["aria-label"], Dt = { class: "fw__title" }, Bt = ["aria-label"], Vt = { class: "fw__body" }, St = ["aria-label"], j = 24, It = /* @__PURE__ */ g({
+const _hoisted_1$a = ["aria-label"];
+const _hoisted_2$8 = ["aria-label"];
+const _hoisted_3$8 = { class: "fw__title" };
+const _hoisted_4$7 = ["aria-label"];
+const _hoisted_5$7 = { class: "fw__body" };
+const _hoisted_6$4 = ["aria-label"];
+const SNAP = 24;
+const _sfc_main$a = /* @__PURE__ */ defineComponent({
   __name: "DFloatingWindow",
   props: {
     title: {},
     initial: {},
     rememberAs: {},
-    resizable: { type: Boolean, default: !0 },
-    dockable: { type: Boolean, default: !1 },
+    resizable: { type: Boolean, default: true },
+    dockable: { type: Boolean, default: false },
     minWidth: { default: 160 },
     maxWidth: { default: 480 },
     minHeight: { default: 120 },
-    closable: { type: Boolean, default: !0 },
+    closable: { type: Boolean, default: true },
     layer: { default: 2e4 }
   },
   emits: ["close"],
-  setup(e, { expose: t, emit: d }) {
-    const o = e, u = d, r = C(() => o.dockable || o.initial?.dock != null), s = { x: 16, y: 16, w: 240, h: 320, dock: null, freeY: 16, freeH: 320 };
-    function c() {
-      const n = { ...s, ...o.initial };
-      if (n.freeY = n.y, n.freeH = n.h, !o.rememberAs) return n;
+  setup(__props, { expose: __expose, emit: __emit }) {
+    const props = __props;
+    const emit = __emit;
+    const canDock = computed(() => props.dockable || props.initial?.dock != null);
+    const DEFAULT = { x: 16, y: 16, w: 240, h: 320, dock: null, freeY: 16, freeH: 320 };
+    function read() {
+      const start = { ...DEFAULT, ...props.initial };
+      start.freeY = start.y;
+      start.freeH = start.h;
+      if (!props.rememberAs) return start;
       try {
-        const m = localStorage.getItem(o.rememberAs);
-        if (!m) return n;
-        const f = JSON.parse(m), M = (S, J) => Number.isFinite(S) ? S : J;
+        const raw = localStorage.getItem(props.rememberAs);
+        if (!raw) return start;
+        const d = JSON.parse(raw);
+        const num = (v, fallback) => Number.isFinite(v) ? v : fallback;
         return {
-          x: M(f?.x, n.x),
-          y: M(f?.y, n.y),
-          w: M(f?.w, n.w),
-          h: M(f?.h, n.h),
-          dock: f?.dock === "left" || f?.dock === "right" ? f.dock : null,
-          freeY: M(f?.freeY, n.y),
-          freeH: M(f?.freeH, n.h)
+          x: num(d?.x, start.x),
+          y: num(d?.y, start.y),
+          w: num(d?.w, start.w),
+          h: num(d?.h, start.h),
+          dock: d?.dock === "left" || d?.dock === "right" ? d.dock : null,
+          freeY: num(d?.freeY, start.y),
+          freeH: num(d?.freeH, start.h)
         };
       } catch {
-        return n;
+        return start;
       }
     }
-    const i = R(c()), v = R();
-    function h() {
-      if (o.rememberAs)
-        try {
-          localStorage.setItem(o.rememberAs, JSON.stringify(i.value));
-        } catch {
-        }
+    const place = ref(read());
+    const root = ref();
+    function persist() {
+      if (!props.rememberAs) return;
+      try {
+        localStorage.setItem(props.rememberAs, JSON.stringify(place.value));
+      } catch {
+      }
     }
-    function w(n) {
-      return Math.min(o.maxWidth, Math.max(o.minWidth, n));
+    function clampW(w) {
+      return Math.min(props.maxWidth, Math.max(props.minWidth, w));
     }
-    function E() {
-      const n = v.value?.offsetParent;
+    function bounds() {
+      const parent = root.value?.offsetParent;
       return {
-        width: n?.clientWidth ?? window.innerWidth,
-        height: n?.clientHeight ?? window.innerHeight
+        width: parent?.clientWidth ?? window.innerWidth,
+        height: parent?.clientHeight ?? window.innerHeight
       };
     }
-    const W = C(() => o.rememberAs ?? o.title), N = R({ width: 0, height: 0 });
-    function O() {
-      const n = i.value.dock;
-      if (!n) return;
-      const m = wt(W.value, N.value.height);
-      if (!m) return;
-      const f = le(n);
-      i.value = {
-        ...i.value,
-        w: f,
-        x: n === "left" ? 0 : Math.max(0, N.value.width - f),
-        y: m.y,
-        h: m.h
+    const dockId = computed(() => props.rememberAs ?? props.title);
+    const room = ref({ width: 0, height: 0 });
+    function applySlot() {
+      const side = place.value.dock;
+      if (!side) return;
+      const slot = dockSlot(dockId.value, room.value.height);
+      if (!slot) return;
+      const w = dockWidth(side);
+      place.value = {
+        ...place.value,
+        w,
+        x: side === "left" ? 0 : Math.max(0, room.value.width - w),
+        y: slot.y,
+        h: slot.h
       };
     }
-    se(
+    watch(
       () => {
-        const n = i.value.dock;
-        return n ? `${gt(n)}:${le(n)}` : "";
+        const side = place.value.dock;
+        if (!side) return "";
+        return `${dockCount(side)}:${dockWidth(side)}`;
       },
-      (n) => {
-        n && (N.value = E(), O());
+      (now) => {
+        if (!now) return;
+        room.value = bounds();
+        applySlot();
       }
     );
-    function X(n, m) {
-      const f = i.value;
-      N.value = m;
-      const M = f.dock ? f.freeY : f.y, S = f.dock ? f.freeH : f.h;
-      f.dock || Z(n, w(f.w)), ae(W.value, n, S, o.minHeight), i.value = { ...f, dock: n, freeY: M, freeH: S }, O();
+    function dockTo(side, b) {
+      const p = place.value;
+      room.value = b;
+      const freeY = p.dock ? p.freeY : p.y;
+      const freeH = p.dock ? p.freeH : p.h;
+      if (!p.dock) setDockWidth(side, clampW(p.w));
+      joinDock(dockId.value, side, freeH, props.minHeight);
+      place.value = { ...p, dock: side, freeY, freeH };
+      applySlot();
     }
-    function p() {
-      const n = i.value;
-      n.dock && (ie(W.value), i.value = { ...n, y: n.freeY, h: n.freeH, dock: null });
+    function undock() {
+      const p = place.value;
+      if (!p.dock) return;
+      leaveDock(dockId.value);
+      place.value = { ...p, y: p.freeY, h: p.freeH, dock: null };
     }
-    let V = null;
-    function Q(n) {
-      if (!V) return;
-      const m = E();
-      if (V.kind === "move") {
-        const M = i.value.w, S = Math.min(
-          Math.max(0, V.fromX + (n.clientX - V.startX)),
-          Math.max(0, m.width - M)
-        ), J = Math.min(
-          Math.max(0, V.fromY + (n.clientY - V.startY)),
-          Math.max(0, m.height - 28)
+    let gesture = null;
+    function onMove(e) {
+      if (!gesture) return;
+      const b = bounds();
+      if (gesture.kind === "move") {
+        const w2 = place.value.w;
+        const x = Math.min(
+          Math.max(0, gesture.fromX + (e.clientX - gesture.startX)),
+          Math.max(0, b.width - w2)
         );
-        r.value && S <= j ? X("left", m) : r.value && S + M >= m.width - j ? X("right", m) : (p(), i.value = { ...i.value, x: S, y: J });
-        return;
-      }
-      const f = w(V.fromW + (n.clientX - V.startX));
-      if (i.value.dock) {
-        N.value = m, Z(i.value.dock, f), O();
-        return;
-      }
-      i.value = {
-        ...i.value,
-        w: f,
-        h: Math.max(o.minHeight, V.fromH + (n.clientY - V.startY))
-      };
-    }
-    function G() {
-      V && h(), V = null, window.removeEventListener("pointermove", Q), window.removeEventListener("pointerup", G), document.body.style.userSelect = "";
-    }
-    function ee(n) {
-      V = n, window.addEventListener("pointermove", Q), window.addEventListener("pointerup", G), document.body.style.userSelect = "none";
-    }
-    const Ke = (n) => ee({ kind: "move", startX: n.clientX, startY: n.clientY, fromX: i.value.x, fromY: i.value.y }), He = (n) => ee({ kind: "size", startX: n.clientX, startY: n.clientY, fromW: i.value.w, fromH: i.value.h });
-    function F(n, m) {
-      const f = E(), M = i.value.w, S = Math.min(Math.max(0, i.value.x + n), Math.max(0, f.width - M));
-      r.value && S <= j ? X("left", f) : r.value && S + M >= f.width - j ? X("right", f) : (p(), i.value = {
-        ...i.value,
-        x: S,
-        y: Math.min(Math.max(0, i.value.y + m), Math.max(0, f.height - 28))
-      }), h();
-    }
-    function _() {
-      const n = E();
-      N.value = n;
-      const m = i.value, f = Math.min(w(m.w), n.width);
-      if (m.dock) {
-        O();
-        return;
-      }
-      const M = Math.min(m.h, n.height);
-      i.value = {
-        ...m,
-        w: f,
-        h: M,
-        x: Math.min(Math.max(0, m.x), Math.max(0, n.width - f)),
-        y: Math.min(Math.max(0, m.y), Math.max(0, n.height - M))
-      };
-    }
-    re(() => {
-      if (i.value.dock) {
-        const n = E();
-        N.value = n, Z(i.value.dock, w(i.value.w)), ae(W.value, i.value.dock, i.value.freeH, o.minHeight);
-      }
-      _(), window.addEventListener("resize", _);
-    }), ue(() => {
-      G(), ie(W.value), window.removeEventListener("resize", _);
-    });
-    const Ye = C(() => ({
-      left: i.value.x + "px",
-      top: i.value.y + "px",
-      width: i.value.w + "px",
-      height: i.value.h + "px",
-      zIndex: String(o.layer)
-    }));
-    return t({ placement: i, keepInView: _ }), (n, m) => (l(), a("aside", {
-      ref_key: "root",
-      ref: v,
-      class: $([
-        "fw",
-        {
-          "fw--docked": !!i.value.dock,
-          "fw--left": i.value.dock === "left",
-          "fw--right": i.value.dock === "right"
+        const y = Math.min(
+          Math.max(0, gesture.fromY + (e.clientY - gesture.startY)),
+          Math.max(0, b.height - 28)
+        );
+        if (canDock.value && x <= SNAP) dockTo("left", b);
+        else if (canDock.value && x + w2 >= b.width - SNAP) dockTo("right", b);
+        else {
+          undock();
+          place.value = { ...place.value, x, y };
         }
-      ]),
-      style: ce(Ye.value),
-      "aria-label": e.title
-    }, [
-      k("div", {
-        class: "fw__bar",
-        role: "toolbar",
-        tabindex: "0",
-        "aria-label": `${e.title} verschieben - mit den Pfeiltasten bewegen`,
-        onPointerdown: m[2] || (m[2] = K((f) => Ke(f), ["prevent"])),
-        onKeydown: [
-          m[3] || (m[3] = U(K((f) => F(-16, 0), ["prevent"]), ["left"])),
-          m[4] || (m[4] = U(K((f) => F(16, 0), ["prevent"]), ["right"])),
-          m[5] || (m[5] = U(K((f) => F(0, -16), ["prevent"]), ["up"])),
-          m[6] || (m[6] = U(K((f) => F(0, 16), ["prevent"]), ["down"]))
-        ]
+        return;
+      }
+      const w = clampW(gesture.fromW + (e.clientX - gesture.startX));
+      if (place.value.dock) {
+        room.value = b;
+        setDockWidth(place.value.dock, w);
+        applySlot();
+        return;
+      }
+      place.value = {
+        ...place.value,
+        w,
+        h: Math.max(props.minHeight, gesture.fromH + (e.clientY - gesture.startY))
+      };
+    }
+    function endGesture() {
+      if (gesture) persist();
+      gesture = null;
+      window.removeEventListener("pointermove", onMove);
+      window.removeEventListener("pointerup", endGesture);
+      document.body.style.userSelect = "";
+    }
+    function begin(g) {
+      gesture = g;
+      window.addEventListener("pointermove", onMove);
+      window.addEventListener("pointerup", endGesture);
+      document.body.style.userSelect = "none";
+    }
+    const startMove = (e) => begin({ kind: "move", startX: e.clientX, startY: e.clientY, fromX: place.value.x, fromY: place.value.y });
+    const startResize = (e) => begin({ kind: "size", startX: e.clientX, startY: e.clientY, fromW: place.value.w, fromH: place.value.h });
+    function nudge(dx, dy) {
+      const b = bounds();
+      const w = place.value.w;
+      const x = Math.min(Math.max(0, place.value.x + dx), Math.max(0, b.width - w));
+      if (canDock.value && x <= SNAP) dockTo("left", b);
+      else if (canDock.value && x + w >= b.width - SNAP) dockTo("right", b);
+      else {
+        undock();
+        place.value = {
+          ...place.value,
+          x,
+          y: Math.min(Math.max(0, place.value.y + dy), Math.max(0, b.height - 28))
+        };
+      }
+      persist();
+    }
+    function keepInView() {
+      const b = bounds();
+      room.value = b;
+      const p = place.value;
+      const w = Math.min(clampW(p.w), b.width);
+      if (p.dock) {
+        applySlot();
+        return;
+      }
+      const h = Math.min(p.h, b.height);
+      place.value = {
+        ...p,
+        w,
+        h,
+        x: Math.min(Math.max(0, p.x), Math.max(0, b.width - w)),
+        y: Math.min(Math.max(0, p.y), Math.max(0, b.height - h))
+      };
+    }
+    onMounted(() => {
+      if (place.value.dock) {
+        const b = bounds();
+        room.value = b;
+        setDockWidth(place.value.dock, clampW(place.value.w));
+        joinDock(dockId.value, place.value.dock, place.value.freeH, props.minHeight);
+      }
+      keepInView();
+      window.addEventListener("resize", keepInView);
+    });
+    onBeforeUnmount(() => {
+      endGesture();
+      leaveDock(dockId.value);
+      window.removeEventListener("resize", keepInView);
+    });
+    const style = computed(() => ({
+      left: place.value.x + "px",
+      top: place.value.y + "px",
+      width: place.value.w + "px",
+      height: place.value.h + "px",
+      zIndex: String(props.layer)
+    }));
+    __expose({ placement: place, keepInView });
+    return (_ctx, _cache) => {
+      return openBlock(), createElementBlock("aside", {
+        ref_key: "root",
+        ref: root,
+        class: normalizeClass([
+          "fw",
+          {
+            "fw--docked": !!place.value.dock,
+            "fw--left": place.value.dock === "left",
+            "fw--right": place.value.dock === "right"
+          }
+        ]),
+        style: normalizeStyle(style.value),
+        "aria-label": __props.title
       }, [
-        k("span", Dt, b(e.title), 1),
-        B(n.$slots, "actions", {}, void 0, !0),
-        e.closable ? (l(), a("button", {
+        createElementVNode("div", {
+          class: "fw__bar",
+          role: "toolbar",
+          tabindex: "0",
+          "aria-label": `${__props.title} verschieben - mit den Pfeiltasten bewegen`,
+          onPointerdown: _cache[2] || (_cache[2] = withModifiers(($event) => startMove($event), ["prevent"])),
+          onKeydown: [
+            _cache[3] || (_cache[3] = withKeys(withModifiers(($event) => nudge(-16, 0), ["prevent"]), ["left"])),
+            _cache[4] || (_cache[4] = withKeys(withModifiers(($event) => nudge(16, 0), ["prevent"]), ["right"])),
+            _cache[5] || (_cache[5] = withKeys(withModifiers(($event) => nudge(0, -16), ["prevent"]), ["up"])),
+            _cache[6] || (_cache[6] = withKeys(withModifiers(($event) => nudge(0, 16), ["prevent"]), ["down"]))
+          ]
+        }, [
+          createElementVNode("span", _hoisted_3$8, toDisplayString(__props.title), 1),
+          renderSlot(_ctx.$slots, "actions", {}, void 0, true),
+          __props.closable ? (openBlock(), createElementBlock("button", {
+            key: 0,
+            type: "button",
+            class: "fw__act",
+            title: "Schließen",
+            "aria-label": `${__props.title} schließen`,
+            onPointerdown: _cache[0] || (_cache[0] = withModifiers(() => {
+            }, ["stop"])),
+            onClick: _cache[1] || (_cache[1] = ($event) => emit("close"))
+          }, " × ", 40, _hoisted_4$7)) : createCommentVNode("", true)
+        ], 40, _hoisted_2$8),
+        createElementVNode("div", _hoisted_5$7, [
+          renderSlot(_ctx.$slots, "default", {}, void 0, true)
+        ]),
+        __props.resizable ? (openBlock(), createElementBlock("div", {
           key: 0,
-          type: "button",
-          class: "fw__act",
-          title: "Schließen",
-          "aria-label": `${e.title} schließen`,
-          onPointerdown: m[0] || (m[0] = K(() => {
-          }, ["stop"])),
-          onClick: m[1] || (m[1] = (f) => u("close"))
-        }, " × ", 40, Bt)) : y("", !0)
-      ], 40, Mt),
-      k("div", Vt, [
-        B(n.$slots, "default", {}, void 0, !0)
-      ]),
-      e.resizable ? (l(), a("div", {
-        key: 0,
-        class: "fw__grip",
-        role: "separator",
-        "aria-label": `Größe von ${e.title}`,
-        title: "Größe ändern",
-        onPointerdown: m[7] || (m[7] = K((f) => He(f), ["prevent"]))
-      }, null, 40, St)) : y("", !0)
-    ], 14, xt));
+          class: "fw__grip",
+          role: "separator",
+          "aria-label": `Größe von ${__props.title}`,
+          title: "Größe ändern",
+          onPointerdown: _cache[7] || (_cache[7] = withModifiers(($event) => startResize($event), ["prevent"]))
+        }, null, 40, _hoisted_6$4)) : createCommentVNode("", true)
+      ], 14, _hoisted_1$a);
+    };
   }
-}), xe = /* @__PURE__ */ x(It, [["__scopeId", "data-v-b6b4a10b"]]), qt = ["aria-hidden", "aria-label", "role"], Ct = /* @__PURE__ */ g({
+});
+const DFloatingWindow = /* @__PURE__ */ _export_sfc(_sfc_main$a, [["__scopeId", "data-v-b6b4a10b"]]);
+const _hoisted_1$9 = ["aria-hidden", "aria-label", "role"];
+const _sfc_main$9 = /* @__PURE__ */ defineComponent({
   __name: "DIcon",
   props: {
     name: {},
     size: { default: "md" },
     tone: {},
-    decorative: { type: Boolean, default: !0 },
+    decorative: { type: Boolean, default: true },
     label: {}
   },
-  setup(e) {
-    return (t, d) => (l(), a("i", {
-      class: $(["icon", `icon--${e.size}`]),
-      style: ce(e.tone ? { color: `var(--${e.tone})` } : void 0),
-      "aria-hidden": e.decorative ? "true" : void 0,
-      "aria-label": e.decorative ? void 0 : e.label ?? e.name,
-      role: e.decorative ? void 0 : "img"
-    }, b(e.name), 15, qt));
+  setup(__props) {
+    return (_ctx, _cache) => {
+      return openBlock(), createElementBlock("i", {
+        class: normalizeClass(["icon", `icon--${__props.size}`]),
+        style: normalizeStyle(__props.tone ? { color: `var(--${__props.tone})` } : void 0),
+        "aria-hidden": __props.decorative ? "true" : void 0,
+        "aria-label": __props.decorative ? void 0 : __props.label ?? __props.name,
+        role: __props.decorative ? void 0 : "img"
+      }, toDisplayString(__props.name), 15, _hoisted_1$9);
+    };
   }
-}), Me = /* @__PURE__ */ x(Ct, [["__scopeId", "data-v-15dffeec"]]), zt = ["for"], Kt = {
+});
+const DIcon = /* @__PURE__ */ _export_sfc(_sfc_main$9, [["__scopeId", "data-v-15dffeec"]]);
+const _hoisted_1$8 = { class: "picker" };
+const _hoisted_2$7 = ["disabled", "title"];
+const _hoisted_3$7 = { class: "picker__name" };
+const _hoisted_4$6 = { class: "sheet__search" };
+const _hoisted_5$6 = {
+  key: 0,
+  class: "sheet__grid"
+};
+const _hoisted_6$3 = ["title", "onClick"];
+const _hoisted_7$3 = {
+  key: 1,
+  class: "sheet__none"
+};
+const _hoisted_8$3 = { class: "sheet__own" };
+const _hoisted_9$1 = ["onKeydown"];
+const _hoisted_10$1 = {
+  class: "sheet__preview",
+  "aria-hidden": "true"
+};
+const _hoisted_11$1 = ["disabled"];
+const _hoisted_12$1 = {
+  key: 2,
+  class: "sheet__warn"
+};
+const _sfc_main$8 = /* @__PURE__ */ defineComponent({
+  __name: "DIconPicker",
+  props: /* @__PURE__ */ mergeModels({
+    label: {},
+    hint: {},
+    fallback: { default: "category" },
+    disabled: { type: Boolean, default: false }
+  }, {
+    "modelValue": { default: "" },
+    "modelModifiers": {}
+  }),
+  emits: ["update:modelValue"],
+  setup(__props) {
+    const model = useModel(__props, "modelValue");
+    const CANDIDATES = [
+      // data and its shapes
+      "dataset",
+      "storage",
+      "table_chart",
+      "grid_on",
+      "list",
+      "view_list",
+      "account_tree",
+      "schema",
+      "hub",
+      "share",
+      "category",
+      "inventory_2",
+      "folder",
+      "description",
+      "article",
+      "code",
+      "data_object",
+      "data_array",
+      "functions",
+      "calculate",
+      "tag",
+      // moving data around
+      "api",
+      "cloud",
+      "cloud_download",
+      "cloud_upload",
+      "sync",
+      "swap_horiz",
+      "bolt",
+      "rss_feed",
+      "router",
+      "lan",
+      "wifi",
+      "cable",
+      "dns",
+      "vpn_key",
+      "lock",
+      "key",
+      // measuring and showing
+      "insights",
+      "bar_chart",
+      "show_chart",
+      "pie_chart",
+      "stacked_line_chart",
+      "timeline",
+      "speed",
+      "monitor_heart",
+      "thermostat",
+      "water_drop",
+      "air",
+      "bloodtype",
+      "scale",
+      "trending_up",
+      "trending_down",
+      "leaderboard",
+      "analytics",
+      "query_stats",
+      // things in the world
+      "sensors",
+      "devices",
+      "memory",
+      "developer_board",
+      "precision_manufacturing",
+      "factory",
+      "warehouse",
+      "home",
+      "apartment",
+      "store",
+      "agriculture",
+      "construction",
+      "build",
+      "electric_bolt",
+      "solar_power",
+      "wind_power",
+      "battery_full",
+      "power",
+      // where and when
+      "place",
+      "map",
+      "route",
+      "explore",
+      "public",
+      "my_location",
+      "directions",
+      "schedule",
+      "calendar_month",
+      "event",
+      "history",
+      "update",
+      "alarm",
+      "timer",
+      // how it is going
+      "check_circle",
+      "error",
+      "warning",
+      "info",
+      "help",
+      "visibility",
+      "flag",
+      "star",
+      "bookmark",
+      "label",
+      "priority_high",
+      "notifications",
+      "campaign",
+      "verified",
+      // people and work
+      "person",
+      "group",
+      "badge",
+      "work",
+      "assignment",
+      "task_alt",
+      "science",
+      "biotech",
+      "psychology",
+      "school",
+      "local_shipping",
+      "shopping_cart",
+      "payments",
+      "receipt_long"
+    ];
+    const open = ref(false);
+    const search = ref("");
+    const draft = ref("");
+    const panel = ref();
+    const resolved = ref([]);
+    function measure() {
+      const probe = document.createElement("span");
+      probe.setAttribute("aria-hidden", "true");
+      probe.style.cssText = 'position:absolute;left:-9999px;top:-9999px;font-family:"Material Icons";font-size:24px;line-height:1;white-space:nowrap';
+      document.body.appendChild(probe);
+      const good = [];
+      for (const name of CANDIDATES) {
+        probe.textContent = name;
+        if (Math.abs(probe.getBoundingClientRect().width - 24) < 1.5) good.push(name);
+      }
+      probe.remove();
+      return good;
+    }
+    function draws(name) {
+      if (!name.trim()) return true;
+      const probe = document.createElement("span");
+      probe.style.cssText = 'position:absolute;left:-9999px;top:-9999px;font-family:"Material Icons";font-size:24px;line-height:1;white-space:nowrap';
+      probe.textContent = name.trim();
+      document.body.appendChild(probe);
+      const width = probe.getBoundingClientRect().width;
+      probe.remove();
+      return Math.abs(width - 24) < 1.5;
+    }
+    const typedIsReal = computed(() => draws(draft.value));
+    const shown = computed(() => {
+      const term = search.value.trim().toLowerCase();
+      if (!term) return resolved.value;
+      return resolved.value.filter((name) => name.includes(term));
+    });
+    watch(open, async (isOpen) => {
+      if (!isOpen) {
+        window.removeEventListener("keydown", onKey);
+        return;
+      }
+      draft.value = model.value;
+      search.value = "";
+      window.addEventListener("keydown", onKey);
+      await nextTick();
+      try {
+        await document.fonts?.ready;
+      } catch {
+      }
+      const good = measure();
+      resolved.value = good.length ? good : CANDIDATES;
+    });
+    onBeforeUnmount(() => window.removeEventListener("keydown", onKey));
+    function onKey(event) {
+      if (event.key === "Escape") open.value = false;
+    }
+    function choose(name) {
+      model.value = name;
+      open.value = false;
+    }
+    function clear() {
+      model.value = "";
+      open.value = false;
+    }
+    function commitTyped() {
+      if (!typedIsReal.value) return;
+      model.value = draft.value.trim();
+      open.value = false;
+    }
+    return (_ctx, _cache) => {
+      return openBlock(), createBlock(DField, {
+        label: __props.label,
+        hint: __props.hint,
+        stacked: ""
+      }, {
+        default: withCtx(() => [
+          createElementVNode("div", _hoisted_1$8, [
+            createElementVNode("button", {
+              type: "button",
+              class: "picker__current",
+              disabled: __props.disabled,
+              title: model.value || `${__props.fallback} (vom Typ)`,
+              onClick: _cache[0] || (_cache[0] = ($event) => open.value = !open.value)
+            }, [
+              createVNode(DIcon, {
+                name: model.value || __props.fallback,
+                size: "lg"
+              }, null, 8, ["name"])
+            ], 8, _hoisted_2$7),
+            createElementVNode("span", _hoisted_3$7, toDisplayString(model.value || `${__props.fallback} — vom Typ`), 1),
+            model.value ? (openBlock(), createElementBlock("button", {
+              key: 0,
+              type: "button",
+              class: "picker__clear",
+              onClick: clear
+            }, " Zurücksetzen ")) : createCommentVNode("", true)
+          ]),
+          (openBlock(), createBlock(Teleport, { to: "body" }, [
+            open.value ? (openBlock(), createElementBlock(Fragment, { key: 0 }, [
+              createElementVNode("div", {
+                class: "picker__catch",
+                onClick: _cache[1] || (_cache[1] = ($event) => open.value = false)
+              }),
+              createElementVNode("div", {
+                ref_key: "panel",
+                ref: panel,
+                class: "sheet",
+                role: "dialog",
+                "aria-label": "Symbol wählen"
+              }, [
+                createElementVNode("div", _hoisted_4$6, [
+                  withDirectives(createElementVNode("input", {
+                    "onUpdate:modelValue": _cache[2] || (_cache[2] = ($event) => search.value = $event),
+                    type: "search",
+                    placeholder: "Symbol suchen…",
+                    autofocus: ""
+                  }, null, 512), [
+                    [vModelText, search.value]
+                  ])
+                ]),
+                shown.value.length ? (openBlock(), createElementBlock("ul", _hoisted_5$6, [
+                  (openBlock(true), createElementBlock(Fragment, null, renderList(shown.value, (name) => {
+                    return openBlock(), createElementBlock("li", { key: name }, [
+                      createElementVNode("button", {
+                        type: "button",
+                        class: normalizeClass(["sheet__item", { "sheet__item--on": model.value === name }]),
+                        title: name,
+                        onClick: ($event) => choose(name)
+                      }, [
+                        createVNode(DIcon, {
+                          name,
+                          size: "lg"
+                        }, null, 8, ["name"])
+                      ], 10, _hoisted_6$3)
+                    ]);
+                  }), 128))
+                ])) : (openBlock(), createElementBlock("p", _hoisted_7$3, "Kein Symbol mit diesem Namen in der Auswahl.")),
+                createElementVNode("div", _hoisted_8$3, [
+                  _cache[4] || (_cache[4] = createElementVNode("label", {
+                    class: "sheet__own-label",
+                    for: "icon-own"
+                  }, "Anderer Name", -1)),
+                  withDirectives(createElementVNode("input", {
+                    id: "icon-own",
+                    "onUpdate:modelValue": _cache[3] || (_cache[3] = ($event) => draft.value = $event),
+                    type: "text",
+                    placeholder: "z. B. thermostat",
+                    onKeydown: withKeys(withModifiers(commitTyped, ["prevent"]), ["enter"])
+                  }, null, 40, _hoisted_9$1), [
+                    [vModelText, draft.value]
+                  ]),
+                  createElementVNode("span", _hoisted_10$1, [
+                    typedIsReal.value && draft.value.trim() ? (openBlock(), createBlock(DIcon, {
+                      key: 0,
+                      name: draft.value.trim(),
+                      size: "md"
+                    }, null, 8, ["name"])) : createCommentVNode("", true)
+                  ]),
+                  createElementVNode("button", {
+                    type: "button",
+                    class: "sheet__take",
+                    disabled: !typedIsReal.value || !draft.value.trim(),
+                    onClick: commitTyped
+                  }, " Übernehmen ", 8, _hoisted_11$1)
+                ]),
+                draft.value.trim() && !typedIsReal.value ? (openBlock(), createElementBlock("p", _hoisted_12$1, " Dieses Symbol kennt die Schrift nicht — es würde als Text erscheinen. ")) : createCommentVNode("", true)
+              ], 512)
+            ], 64)) : createCommentVNode("", true)
+          ]))
+        ]),
+        _: 1
+      }, 8, ["label", "hint"]);
+    };
+  }
+});
+const DIconPicker = /* @__PURE__ */ _export_sfc(_sfc_main$8, [["__scopeId", "data-v-c86d0906"]]);
+const _hoisted_1$7 = ["for"];
+const _hoisted_2$6 = {
   key: 0,
   class: "field__required",
   "aria-hidden": "true"
-}, Ht = { class: "field__control" }, Yt = ["id", "rows", "placeholder", "disabled", "readonly", "required", "aria-invalid"], Et = ["id", "type", "placeholder", "disabled", "readonly", "required", "min", "max", "step", "aria-invalid"], Wt = {
+};
+const _hoisted_3$6 = { class: "field__control" };
+const _hoisted_4$5 = ["id", "rows", "placeholder", "disabled", "readonly", "required", "aria-invalid"];
+const _hoisted_5$5 = ["id", "type", "placeholder", "disabled", "readonly", "required", "min", "max", "step", "aria-invalid"];
+const _hoisted_6$2 = {
   key: 2,
   class: "suffix"
-}, Lt = {
+};
+const _hoisted_7$2 = {
   key: 0,
   class: "field__error",
   role: "alert"
-}, Nt = {
+};
+const _hoisted_8$2 = {
   key: 1,
   class: "field__hint"
-}, Tt = /* @__PURE__ */ g({
+};
+const _sfc_main$7 = /* @__PURE__ */ defineComponent({
   __name: "DInput",
-  props: /* @__PURE__ */ I({
+  props: /* @__PURE__ */ mergeModels({
     label: {},
     type: { default: "text" },
     placeholder: {},
     hint: {},
     error: {},
-    disabled: { type: Boolean, default: !1 },
-    readonly: { type: Boolean, default: !1 },
-    required: { type: Boolean, default: !1 },
+    disabled: { type: Boolean, default: false },
+    readonly: { type: Boolean, default: false },
+    required: { type: Boolean, default: false },
     size: { default: "md" },
     rows: {},
     suffix: {},
-    stacked: { type: Boolean, default: !1 },
+    stacked: { type: Boolean, default: false },
     min: {},
     max: {},
     step: {}
   }, {
-    modelValue: {},
-    modelModifiers: {}
+    "modelValue": {},
+    "modelModifiers": {}
   }),
   emits: ["update:modelValue"],
-  setup(e) {
-    const t = z(e, "modelValue"), d = e, o = T(), u = C(() => d.type === "number");
-    return (r, s) => (l(), a("div", {
-      class: $(["field", { "field--stacked": e.stacked, "field--invalid": !!e.error }])
-    }, [
-      e.label ? (l(), a("label", {
-        key: 0,
-        class: "field__label",
-        for: D(o)
+  setup(__props) {
+    const model = useModel(__props, "modelValue");
+    const props = __props;
+    const id = useId();
+    const isNumeric = computed(() => props.type === "number");
+    return (_ctx, _cache) => {
+      return openBlock(), createElementBlock("div", {
+        class: normalizeClass(["field", { "field--stacked": __props.stacked, "field--invalid": !!__props.error }])
       }, [
-        L(b(e.label) + " ", 1),
-        e.required ? (l(), a("span", Kt, "*")) : y("", !0)
-      ], 8, zt)) : y("", !0),
-      k("div", Ht, [
-        k("div", {
-          class: $(["shell", `shell--${e.size}`, { "shell--invalid": !!e.error, "shell--off": e.disabled }])
+        __props.label ? (openBlock(), createElementBlock("label", {
+          key: 0,
+          class: "field__label",
+          for: unref(id)
         }, [
-          e.rows ? Y((l(), a("textarea", {
-            key: 0,
-            id: D(o),
-            "onUpdate:modelValue": s[0] || (s[0] = (c) => t.value = c),
-            class: "input input--area",
-            rows: e.rows,
-            placeholder: e.placeholder,
-            disabled: e.disabled,
-            readonly: e.readonly,
-            required: e.required,
-            "aria-invalid": !!e.error || void 0
-          }, null, 8, Yt)), [
-            [P, t.value]
-          ]) : Y((l(), a("input", {
-            key: 1,
-            id: D(o),
-            "onUpdate:modelValue": s[1] || (s[1] = (c) => t.value = c),
-            class: $(["input", { "input--num": u.value }]),
-            type: e.type,
-            placeholder: e.placeholder,
-            disabled: e.disabled,
-            readonly: e.readonly,
-            required: e.required,
-            min: e.min,
-            max: e.max,
-            step: e.step,
-            "aria-invalid": !!e.error || void 0
-          }, null, 10, Et)), [
-            [de, t.value]
-          ]),
-          e.suffix ? (l(), a("span", Wt, b(e.suffix), 1)) : y("", !0)
-        ], 2),
-        e.error ? (l(), a("p", Lt, b(e.error), 1)) : e.hint ? (l(), a("p", Nt, b(e.hint), 1)) : y("", !0)
-      ])
-    ], 2));
+          createTextVNode(toDisplayString(__props.label) + " ", 1),
+          __props.required ? (openBlock(), createElementBlock("span", _hoisted_2$6, "*")) : createCommentVNode("", true)
+        ], 8, _hoisted_1$7)) : createCommentVNode("", true),
+        createElementVNode("div", _hoisted_3$6, [
+          createElementVNode("div", {
+            class: normalizeClass(["shell", `shell--${__props.size}`, { "shell--invalid": !!__props.error, "shell--off": __props.disabled }])
+          }, [
+            __props.rows ? withDirectives((openBlock(), createElementBlock("textarea", {
+              key: 0,
+              id: unref(id),
+              "onUpdate:modelValue": _cache[0] || (_cache[0] = ($event) => model.value = $event),
+              class: "input input--area",
+              rows: __props.rows,
+              placeholder: __props.placeholder,
+              disabled: __props.disabled,
+              readonly: __props.readonly,
+              required: __props.required,
+              "aria-invalid": !!__props.error || void 0
+            }, null, 8, _hoisted_4$5)), [
+              [vModelText, model.value]
+            ]) : withDirectives((openBlock(), createElementBlock("input", {
+              key: 1,
+              id: unref(id),
+              "onUpdate:modelValue": _cache[1] || (_cache[1] = ($event) => model.value = $event),
+              class: normalizeClass(["input", { "input--num": isNumeric.value }]),
+              type: __props.type,
+              placeholder: __props.placeholder,
+              disabled: __props.disabled,
+              readonly: __props.readonly,
+              required: __props.required,
+              min: __props.min,
+              max: __props.max,
+              step: __props.step,
+              "aria-invalid": !!__props.error || void 0
+            }, null, 10, _hoisted_5$5)), [
+              [vModelDynamic, model.value]
+            ]),
+            __props.suffix ? (openBlock(), createElementBlock("span", _hoisted_6$2, toDisplayString(__props.suffix), 1)) : createCommentVNode("", true)
+          ], 2),
+          __props.error ? (openBlock(), createElementBlock("p", _hoisted_7$2, toDisplayString(__props.error), 1)) : __props.hint ? (openBlock(), createElementBlock("p", _hoisted_8$2, toDisplayString(__props.hint), 1)) : createCommentVNode("", true)
+        ])
+      ], 2);
+    };
   }
-}), De = /* @__PURE__ */ x(Tt, [["__scopeId", "data-v-a5fd75e2"]]), Ut = ["aria-label"], At = {
+});
+const DInput = /* @__PURE__ */ _export_sfc(_sfc_main$7, [["__scopeId", "data-v-a5fd75e2"]]);
+const _hoisted_1$6 = ["aria-label"];
+const _hoisted_2$5 = {
   key: 0,
   class: "dialog__head"
-}, Ot = { class: "dialog__title" }, Xt = { class: "dialog__body" }, Ft = {
+};
+const _hoisted_3$5 = { class: "dialog__title" };
+const _hoisted_4$4 = { class: "dialog__body" };
+const _hoisted_5$4 = {
   key: 1,
   class: "dialog__foot"
-}, _t = /* @__PURE__ */ g({
+};
+const _sfc_main$6 = /* @__PURE__ */ defineComponent({
   __name: "DModal",
-  props: /* @__PURE__ */ I({
+  props: /* @__PURE__ */ mergeModels({
     title: {},
     size: { default: "md" },
-    persistent: { type: Boolean, default: !1 }
+    persistent: { type: Boolean, default: false }
   }, {
-    modelValue: { type: Boolean, default: !1 },
-    modelModifiers: {}
+    "modelValue": { type: Boolean, ...{ default: false } },
+    "modelModifiers": {}
   }),
-  emits: /* @__PURE__ */ I(["cancel"], ["update:modelValue"]),
-  setup(e, { emit: t }) {
-    const d = z(e, "modelValue"), o = e, u = t;
-    function r() {
-      o.persistent || (d.value = !1, u("cancel"));
+  emits: /* @__PURE__ */ mergeModels(["cancel"], ["update:modelValue"]),
+  setup(__props, { emit: __emit }) {
+    const open = useModel(__props, "modelValue");
+    const props = __props;
+    const emit = __emit;
+    function close() {
+      if (props.persistent) return;
+      open.value = false;
+      emit("cancel");
     }
-    function s(c) {
-      c.key === "Escape" && d.value && r();
+    function onKey(event) {
+      if (event.key === "Escape" && open.value) close();
     }
-    return se(d, (c) => {
-      document.body.style.overflow = c ? "hidden" : "";
-    }), re(() => window.addEventListener("keydown", s)), ue(() => {
-      window.removeEventListener("keydown", s), document.body.style.overflow = "";
-    }), (c, i) => (l(), Le(Ne, { to: "body" }, [
-      d.value ? (l(), a("div", {
-        key: 0,
-        class: "scrim",
-        onClick: K(r, ["self"])
-      }, [
-        k("div", {
-          class: $(["dialog", `dialog--${e.size}`]),
-          role: "dialog",
-          "aria-modal": "true",
-          "aria-label": e.title
+    watch(open, (isOpen) => {
+      document.body.style.overflow = isOpen ? "hidden" : "";
+    });
+    onMounted(() => window.addEventListener("keydown", onKey));
+    onBeforeUnmount(() => {
+      window.removeEventListener("keydown", onKey);
+      document.body.style.overflow = "";
+    });
+    return (_ctx, _cache) => {
+      return openBlock(), createBlock(Teleport, { to: "body" }, [
+        open.value ? (openBlock(), createElementBlock("div", {
+          key: 0,
+          class: "scrim",
+          onClick: withModifiers(close, ["self"])
         }, [
-          e.title || c.$slots.header ? (l(), a("header", At, [
-            B(c.$slots, "header", {}, () => [
-              k("h2", Ot, b(e.title), 1)
-            ], !0),
-            e.persistent ? y("", !0) : (l(), a("button", {
-              key: 0,
-              type: "button",
-              class: "dialog__close",
-              "aria-label": "Schließen",
-              onClick: r
-            }, " ✕ "))
-          ])) : y("", !0),
-          k("div", Xt, [
-            B(c.$slots, "default", {}, void 0, !0)
-          ]),
-          c.$slots.actions ? (l(), a("footer", Ft, [
-            B(c.$slots, "actions", {}, void 0, !0)
-          ])) : y("", !0)
-        ], 10, Ut)
-      ])) : y("", !0)
-    ]));
+          createElementVNode("div", {
+            class: normalizeClass(["dialog", `dialog--${__props.size}`]),
+            role: "dialog",
+            "aria-modal": "true",
+            "aria-label": __props.title
+          }, [
+            __props.title || _ctx.$slots.header ? (openBlock(), createElementBlock("header", _hoisted_2$5, [
+              renderSlot(_ctx.$slots, "header", {}, () => [
+                createElementVNode("h2", _hoisted_3$5, toDisplayString(__props.title), 1)
+              ], true),
+              !__props.persistent ? (openBlock(), createElementBlock("button", {
+                key: 0,
+                type: "button",
+                class: "dialog__close",
+                "aria-label": "Schließen",
+                onClick: close
+              }, " ✕ ")) : createCommentVNode("", true)
+            ])) : createCommentVNode("", true),
+            createElementVNode("div", _hoisted_4$4, [
+              renderSlot(_ctx.$slots, "default", {}, void 0, true)
+            ]),
+            _ctx.$slots.actions ? (openBlock(), createElementBlock("footer", _hoisted_5$4, [
+              renderSlot(_ctx.$slots, "actions", {}, void 0, true)
+            ])) : createCommentVNode("", true)
+          ], 10, _hoisted_1$6)
+        ])) : createCommentVNode("", true)
+      ]);
+    };
   }
-}), Be = /* @__PURE__ */ x(_t, [["__scopeId", "data-v-03f9e875"]]), jt = {
+});
+const DModal = /* @__PURE__ */ _export_sfc(_sfc_main$6, [["__scopeId", "data-v-03f9e875"]]);
+const _hoisted_1$5 = {
   key: 0,
   class: "field__label"
-}, Rt = {
+};
+const _hoisted_2$4 = {
   key: 0,
   class: "field__required",
   "aria-hidden": "true"
-}, Pt = { class: "field__control" }, Gt = ["aria-label"], Jt = ["name", "value", "disabled", "required"], Zt = { class: "choice__label" }, pt = {
+};
+const _hoisted_3$4 = { class: "field__control" };
+const _hoisted_4$3 = ["aria-label"];
+const _hoisted_5$3 = ["name", "value", "disabled", "required"];
+const _hoisted_6$1 = { class: "choice__label" };
+const _hoisted_7$1 = {
   key: 0,
   class: "field__error",
   role: "alert"
-}, Qt = {
+};
+const _hoisted_8$1 = {
   key: 1,
   class: "field__hint"
-}, el = /* @__PURE__ */ g({
+};
+const _sfc_main$5 = /* @__PURE__ */ defineComponent({
   __name: "DRadioGroup",
-  props: /* @__PURE__ */ I({
+  props: /* @__PURE__ */ mergeModels({
     options: {},
     label: {},
     valueKey: { default: "uid" },
     labelKey: { default: "name" },
     hint: {},
     error: {},
-    disabled: { type: Boolean, default: !1 },
-    required: { type: Boolean, default: !1 },
-    inline: { type: Boolean, default: !1 },
-    stacked: { type: Boolean, default: !1 }
+    disabled: { type: Boolean, default: false },
+    required: { type: Boolean, default: false },
+    inline: { type: Boolean, default: false },
+    stacked: { type: Boolean, default: false }
   }, {
-    modelValue: {},
-    modelModifiers: {}
+    "modelValue": {},
+    "modelModifiers": {}
   }),
   emits: ["update:modelValue"],
-  setup(e) {
-    const t = z(e, "modelValue"), d = e, o = T(), u = C(
-      () => (d.options ?? []).map((r) => {
-        if (r === null || typeof r != "object")
-          return { value: r, label: String(r) };
-        const s = r, c = d.valueKey in s ? s[d.valueKey] : s, i = d.labelKey in s ? s[d.labelKey] : c;
-        return { value: c, label: String(i ?? "") };
+  setup(__props) {
+    const model = useModel(__props, "modelValue");
+    const props = __props;
+    const name = useId();
+    const entries2 = computed(
+      () => (props.options ?? []).map((option) => {
+        if (option === null || typeof option !== "object") {
+          return { value: option, label: String(option) };
+        }
+        const record = option;
+        const value = props.valueKey in record ? record[props.valueKey] : record;
+        const label = props.labelKey in record ? record[props.labelKey] : value;
+        return { value, label: String(label ?? "") };
       })
     );
-    return (r, s) => (l(), a("div", {
-      class: $(["field", { "field--stacked": e.stacked, "field--invalid": !!e.error }])
-    }, [
-      e.label ? (l(), a("span", jt, [
-        L(b(e.label) + " ", 1),
-        e.required ? (l(), a("span", Rt, "*")) : y("", !0)
-      ])) : y("", !0),
-      k("div", Pt, [
-        k("div", {
-          class: $(["choices", { "choices--inline": e.inline }]),
-          role: "radiogroup",
-          "aria-label": e.label
-        }, [
-          (l(!0), a(q, null, H(u.value, (c, i) => (l(), a("label", {
-            key: i,
-            class: $(["choice", { "choice--off": e.disabled }])
+    return (_ctx, _cache) => {
+      return openBlock(), createElementBlock("div", {
+        class: normalizeClass(["field", { "field--stacked": __props.stacked, "field--invalid": !!__props.error }])
+      }, [
+        __props.label ? (openBlock(), createElementBlock("span", _hoisted_1$5, [
+          createTextVNode(toDisplayString(__props.label) + " ", 1),
+          __props.required ? (openBlock(), createElementBlock("span", _hoisted_2$4, "*")) : createCommentVNode("", true)
+        ])) : createCommentVNode("", true),
+        createElementVNode("div", _hoisted_3$4, [
+          createElementVNode("div", {
+            class: normalizeClass(["choices", { "choices--inline": __props.inline }]),
+            role: "radiogroup",
+            "aria-label": __props.label
           }, [
-            Y(k("input", {
-              "onUpdate:modelValue": s[0] || (s[0] = (v) => t.value = v),
-              class: "choice__dot",
-              type: "radio",
-              name: D(o),
-              value: c.value,
-              disabled: e.disabled,
-              required: e.required
-            }, null, 8, Jt), [
-              [Te, t.value]
-            ]),
-            k("span", Zt, b(c.label), 1)
-          ], 2))), 128))
-        ], 10, Gt),
-        e.error ? (l(), a("p", pt, b(e.error), 1)) : e.hint ? (l(), a("p", Qt, b(e.hint), 1)) : y("", !0)
-      ])
-    ], 2));
+            (openBlock(true), createElementBlock(Fragment, null, renderList(entries2.value, (entry, index) => {
+              return openBlock(), createElementBlock("label", {
+                key: index,
+                class: normalizeClass(["choice", { "choice--off": __props.disabled }])
+              }, [
+                withDirectives(createElementVNode("input", {
+                  "onUpdate:modelValue": _cache[0] || (_cache[0] = ($event) => model.value = $event),
+                  class: "choice__dot",
+                  type: "radio",
+                  name: unref(name),
+                  value: entry.value,
+                  disabled: __props.disabled,
+                  required: __props.required
+                }, null, 8, _hoisted_5$3), [
+                  [vModelRadio, model.value]
+                ]),
+                createElementVNode("span", _hoisted_6$1, toDisplayString(entry.label), 1)
+              ], 2);
+            }), 128))
+          ], 10, _hoisted_4$3),
+          __props.error ? (openBlock(), createElementBlock("p", _hoisted_7$1, toDisplayString(__props.error), 1)) : __props.hint ? (openBlock(), createElementBlock("p", _hoisted_8$1, toDisplayString(__props.hint), 1)) : createCommentVNode("", true)
+        ])
+      ], 2);
+    };
   }
-}), Ve = /* @__PURE__ */ x(el, [["__scopeId", "data-v-da414860"]]), tl = ["for"], ll = {
+});
+const DRadioGroup = /* @__PURE__ */ _export_sfc(_sfc_main$5, [["__scopeId", "data-v-da414860"]]);
+const _hoisted_1$4 = ["for"];
+const _hoisted_2$3 = {
   key: 0,
   class: "field__required",
   "aria-hidden": "true"
-}, al = { class: "field__control" }, il = ["id", "size", "disabled", "required", "aria-invalid"], nl = ["value"], dl = ["id", "disabled", "required", "aria-invalid"], ol = {
+};
+const _hoisted_3$3 = { class: "field__control" };
+const _hoisted_4$2 = ["id", "size", "disabled", "required", "aria-invalid"];
+const _hoisted_5$2 = ["value"];
+const _hoisted_6 = ["id", "disabled", "required", "aria-invalid"];
+const _hoisted_7 = {
   key: 0,
   value: ""
-}, sl = ["value"], rl = ["label"], ul = ["value"], cl = ["value"], fl = {
+};
+const _hoisted_8 = ["value"];
+const _hoisted_9 = ["label"];
+const _hoisted_10 = ["value"];
+const _hoisted_11 = ["value"];
+const _hoisted_12 = {
   key: 2,
   class: "chevron",
   "aria-hidden": "true"
-}, vl = {
+};
+const _hoisted_13 = {
   key: 0,
   class: "field__error",
   role: "alert"
-}, ml = {
+};
+const _hoisted_14 = {
   key: 1,
   class: "field__hint"
-}, bl = /* @__PURE__ */ g({
+};
+const _sfc_main$4 = /* @__PURE__ */ defineComponent({
   __name: "DSelect",
-  props: /* @__PURE__ */ I({
+  props: /* @__PURE__ */ mergeModels({
     options: {},
     label: {},
     valueKey: { default: "uid" },
@@ -825,391 +1369,472 @@ const xt = ["aria-label"], Mt = ["aria-label"], Dt = { class: "fw__title" }, Bt 
     placeholder: {},
     hint: {},
     error: {},
-    disabled: { type: Boolean, default: !1 },
-    required: { type: Boolean, default: !1 },
+    disabled: { type: Boolean, default: false },
+    required: { type: Boolean, default: false },
     size: { default: "md" },
-    clearable: { type: Boolean, default: !1 },
-    multiple: { type: Boolean, default: !1 },
-    stacked: { type: Boolean, default: !1 }
+    clearable: { type: Boolean, default: false },
+    multiple: { type: Boolean, default: false },
+    stacked: { type: Boolean, default: false }
   }, {
-    modelValue: {},
-    modelModifiers: {}
+    "modelValue": {},
+    "modelModifiers": {}
   }),
   emits: ["update:modelValue"],
-  setup(e) {
-    const t = z(e, "modelValue"), d = e, o = T(), u = C(
-      () => (d.options ?? []).map((i) => {
-        if (i === null || typeof i != "object")
-          return { value: i, label: String(i) };
-        const v = i, h = d.valueKey in v ? v[d.valueKey] : v, w = d.labelKey in v ? v[d.labelKey] : h, E = d.groupKey ? v[d.groupKey] : void 0;
-        return { value: h, label: String(w ?? ""), group: E === void 0 ? void 0 : String(E) };
+  setup(__props) {
+    const model = useModel(__props, "modelValue");
+    const props = __props;
+    const id = useId();
+    const entries2 = computed(
+      () => (props.options ?? []).map((option) => {
+        if (option === null || typeof option !== "object") {
+          return { value: option, label: String(option) };
+        }
+        const record = option;
+        const value = props.valueKey in record ? record[props.valueKey] : record;
+        const label = props.labelKey in record ? record[props.labelKey] : value;
+        const group = props.groupKey ? record[props.groupKey] : void 0;
+        return { value, label: String(label ?? ""), group: group === void 0 ? void 0 : String(group) };
       })
-    ), r = C(() => {
-      const i = /* @__PURE__ */ new Map(), v = [];
-      return u.value.forEach((h, w) => {
-        if (!h.group) {
-          v.push({ index: w, label: h.label });
+    );
+    const groups = computed(() => {
+      const byLabel = /* @__PURE__ */ new Map();
+      const loose = [];
+      entries2.value.forEach((entry, index) => {
+        if (!entry.group) {
+          loose.push({ index, label: entry.label });
           return;
         }
-        i.has(h.group) || i.set(h.group, []), i.get(h.group).push({ index: w, label: h.label });
-      }), { loose: v, headed: [...i].map(([h, w]) => ({ label: h, options: w })) };
-    }), s = C({
+        if (!byLabel.has(entry.group)) byLabel.set(entry.group, []);
+        byLabel.get(entry.group).push({ index, label: entry.label });
+      });
+      return { loose, headed: [...byLabel].map(([label, options]) => ({ label, options })) };
+    });
+    const selectedIndex = computed({
       get() {
-        const i = u.value.findIndex((v) => v.value === t.value);
-        return i >= 0 ? String(i) : "";
+        const index = entries2.value.findIndex((entry) => entry.value === model.value);
+        return index >= 0 ? String(index) : "";
       },
-      set(i) {
-        t.value = i === "" ? void 0 : u.value[Number(i)]?.value;
-      }
-    }), c = C({
-      get() {
-        const i = Array.isArray(t.value) ? t.value : [];
-        return u.value.map((v, h) => i.includes(v.value) ? String(h) : "").filter((v) => v !== "");
-      },
-      set(i) {
-        t.value = i.map((v) => u.value[Number(v)]?.value);
+      set(next) {
+        model.value = next === "" ? void 0 : entries2.value[Number(next)]?.value;
       }
     });
-    return (i, v) => (l(), a("div", {
-      class: $(["field", { "field--stacked": e.stacked, "field--invalid": !!e.error }])
-    }, [
-      e.label ? (l(), a("label", {
-        key: 0,
-        class: "field__label",
-        for: D(o)
+    const selectedIndexes = computed({
+      get() {
+        const chosen = Array.isArray(model.value) ? model.value : [];
+        return entries2.value.map((entry, index) => chosen.includes(entry.value) ? String(index) : "").filter((index) => index !== "");
+      },
+      set(next) {
+        model.value = next.map((index) => entries2.value[Number(index)]?.value);
+      }
+    });
+    return (_ctx, _cache) => {
+      return openBlock(), createElementBlock("div", {
+        class: normalizeClass(["field", { "field--stacked": __props.stacked, "field--invalid": !!__props.error }])
       }, [
-        L(b(e.label) + " ", 1),
-        e.required ? (l(), a("span", ll, "*")) : y("", !0)
-      ], 8, tl)) : y("", !0),
-      k("div", al, [
-        k("div", {
-          class: $(["shell", `shell--${e.size}`, { "shell--invalid": !!e.error, "shell--off": e.disabled }])
+        __props.label ? (openBlock(), createElementBlock("label", {
+          key: 0,
+          class: "field__label",
+          for: unref(id)
         }, [
-          e.multiple ? Y((l(), a("select", {
-            key: 0,
-            id: D(o),
-            "onUpdate:modelValue": v[0] || (v[0] = (h) => c.value = h),
-            class: $(["select", "select--many"]),
-            multiple: "",
-            size: Math.min(Math.max(u.value.length, 2), 8),
-            disabled: e.disabled,
-            required: e.required,
-            "aria-invalid": !!e.error || void 0
+          createTextVNode(toDisplayString(__props.label) + " ", 1),
+          __props.required ? (openBlock(), createElementBlock("span", _hoisted_2$3, "*")) : createCommentVNode("", true)
+        ], 8, _hoisted_1$4)) : createCommentVNode("", true),
+        createElementVNode("div", _hoisted_3$3, [
+          createElementVNode("div", {
+            class: normalizeClass(["shell", `shell--${__props.size}`, { "shell--invalid": !!__props.error, "shell--off": __props.disabled }])
           }, [
-            (l(!0), a(q, null, H(u.value, (h, w) => (l(), a("option", {
-              key: w,
-              value: String(w)
-            }, b(h.label), 9, nl))), 128))
-          ], 8, il)), [
-            [te, c.value]
-          ]) : Y((l(), a("select", {
-            key: 1,
-            id: D(o),
-            "onUpdate:modelValue": v[1] || (v[1] = (h) => s.value = h),
-            class: "select",
-            disabled: e.disabled,
-            required: e.required,
-            "aria-invalid": !!e.error || void 0
-          }, [
-            e.clearable || t.value === void 0 ? (l(), a("option", ol, b(e.placeholder ?? "—"), 1)) : y("", !0),
-            e.groupKey ? (l(), a(q, { key: 1 }, [
-              (l(!0), a(q, null, H(r.value.loose, (h) => (l(), a("option", {
-                key: h.index,
-                value: String(h.index)
-              }, b(h.label), 9, sl))), 128)),
-              (l(!0), a(q, null, H(r.value.headed, (h) => (l(), a("optgroup", {
-                key: h.label,
-                label: h.label
-              }, [
-                (l(!0), a(q, null, H(h.options, (w) => (l(), a("option", {
-                  key: w.index,
-                  value: String(w.index)
-                }, b(w.label), 9, ul))), 128))
-              ], 8, rl))), 128))
-            ], 64)) : (l(!0), a(q, { key: 2 }, H(u.value, (h, w) => (l(), a("option", {
-              key: w,
-              value: String(w)
-            }, b(h.label), 9, cl))), 128))
-          ], 8, dl)), [
-            [te, s.value]
-          ]),
-          e.multiple ? y("", !0) : (l(), a("span", fl, "▾"))
-        ], 2),
-        e.error ? (l(), a("p", vl, b(e.error), 1)) : e.hint ? (l(), a("p", ml, b(e.hint), 1)) : y("", !0)
-      ])
-    ], 2));
+            __props.multiple ? withDirectives((openBlock(), createElementBlock("select", {
+              key: 0,
+              id: unref(id),
+              "onUpdate:modelValue": _cache[0] || (_cache[0] = ($event) => selectedIndexes.value = $event),
+              class: normalizeClass(["select", "select--many"]),
+              multiple: "",
+              size: Math.min(Math.max(entries2.value.length, 2), 8),
+              disabled: __props.disabled,
+              required: __props.required,
+              "aria-invalid": !!__props.error || void 0
+            }, [
+              (openBlock(true), createElementBlock(Fragment, null, renderList(entries2.value, (entry, index) => {
+                return openBlock(), createElementBlock("option", {
+                  key: index,
+                  value: String(index)
+                }, toDisplayString(entry.label), 9, _hoisted_5$2);
+              }), 128))
+            ], 8, _hoisted_4$2)), [
+              [vModelSelect, selectedIndexes.value]
+            ]) : withDirectives((openBlock(), createElementBlock("select", {
+              key: 1,
+              id: unref(id),
+              "onUpdate:modelValue": _cache[1] || (_cache[1] = ($event) => selectedIndex.value = $event),
+              class: "select",
+              disabled: __props.disabled,
+              required: __props.required,
+              "aria-invalid": !!__props.error || void 0
+            }, [
+              __props.clearable || model.value === void 0 ? (openBlock(), createElementBlock("option", _hoisted_7, toDisplayString(__props.placeholder ?? "—"), 1)) : createCommentVNode("", true),
+              __props.groupKey ? (openBlock(), createElementBlock(Fragment, { key: 1 }, [
+                (openBlock(true), createElementBlock(Fragment, null, renderList(groups.value.loose, (entry) => {
+                  return openBlock(), createElementBlock("option", {
+                    key: entry.index,
+                    value: String(entry.index)
+                  }, toDisplayString(entry.label), 9, _hoisted_8);
+                }), 128)),
+                (openBlock(true), createElementBlock(Fragment, null, renderList(groups.value.headed, (group) => {
+                  return openBlock(), createElementBlock("optgroup", {
+                    key: group.label,
+                    label: group.label
+                  }, [
+                    (openBlock(true), createElementBlock(Fragment, null, renderList(group.options, (entry) => {
+                      return openBlock(), createElementBlock("option", {
+                        key: entry.index,
+                        value: String(entry.index)
+                      }, toDisplayString(entry.label), 9, _hoisted_10);
+                    }), 128))
+                  ], 8, _hoisted_9);
+                }), 128))
+              ], 64)) : (openBlock(true), createElementBlock(Fragment, { key: 2 }, renderList(entries2.value, (entry, index) => {
+                return openBlock(), createElementBlock("option", {
+                  key: index,
+                  value: String(index)
+                }, toDisplayString(entry.label), 9, _hoisted_11);
+              }), 128))
+            ], 8, _hoisted_6)), [
+              [vModelSelect, selectedIndex.value]
+            ]),
+            !__props.multiple ? (openBlock(), createElementBlock("span", _hoisted_12, "▾")) : createCommentVNode("", true)
+          ], 2),
+          __props.error ? (openBlock(), createElementBlock("p", _hoisted_13, toDisplayString(__props.error), 1)) : __props.hint ? (openBlock(), createElementBlock("p", _hoisted_14, toDisplayString(__props.hint), 1)) : createCommentVNode("", true)
+        ])
+      ], 2);
+    };
   }
-}), Se = /* @__PURE__ */ x(bl, [["__scopeId", "data-v-940042b2"]]), hl = ["for"], yl = { class: "field__control row" }, kl = ["id", "min", "max", "step", "disabled"], $l = ["min", "max", "step", "disabled", "aria-label"], wl = {
+});
+const DSelect = /* @__PURE__ */ _export_sfc(_sfc_main$4, [["__scopeId", "data-v-940042b2"]]);
+const _hoisted_1$3 = ["for"];
+const _hoisted_2$2 = { class: "field__control row" };
+const _hoisted_3$2 = ["id", "min", "max", "step", "disabled"];
+const _hoisted_4$1 = ["min", "max", "step", "disabled", "aria-label"];
+const _hoisted_5$1 = {
   key: 0,
   class: "suffix"
-}, gl = /* @__PURE__ */ g({
+};
+const _sfc_main$3 = /* @__PURE__ */ defineComponent({
   __name: "DSlider",
-  props: /* @__PURE__ */ I({
+  props: /* @__PURE__ */ mergeModels({
     label: {},
     min: { default: 0 },
     max: { default: 100 },
     step: { default: 1 },
     suffix: {},
-    disabled: { type: Boolean, default: !1 },
-    stacked: { type: Boolean, default: !1 }
+    disabled: { type: Boolean, default: false },
+    stacked: { type: Boolean, default: false }
   }, {
-    modelValue: {},
-    modelModifiers: {}
+    "modelValue": {},
+    "modelModifiers": {}
   }),
   emits: ["update:modelValue"],
-  setup(e) {
-    const t = z(e, "modelValue"), d = T();
-    return (o, u) => (l(), a("div", {
-      class: $(["field", { "field--stacked": e.stacked }])
-    }, [
-      e.label ? (l(), a("label", {
-        key: 0,
-        class: "field__label",
-        for: D(d)
-      }, b(e.label), 9, hl)) : y("", !0),
-      k("div", yl, [
-        Y(k("input", {
-          id: D(d),
-          "onUpdate:modelValue": u[0] || (u[0] = (r) => t.value = r),
-          class: "range",
-          type: "range",
-          min: e.min,
-          max: e.max,
-          step: e.step,
-          disabled: e.disabled
-        }, null, 8, kl), [
-          [
-            P,
-            t.value,
-            void 0,
-            { number: !0 }
-          ]
-        ]),
-        Y(k("input", {
-          "onUpdate:modelValue": u[1] || (u[1] = (r) => t.value = r),
-          class: "num",
-          type: "number",
-          min: e.min,
-          max: e.max,
-          step: e.step,
-          disabled: e.disabled,
-          "aria-label": e.label ? `${e.label} als Zahl` : "Wert"
-        }, null, 8, $l), [
-          [
-            P,
-            t.value,
-            void 0,
-            { number: !0 }
-          ]
-        ]),
-        e.suffix ? (l(), a("span", wl, b(e.suffix), 1)) : y("", !0)
-      ])
-    ], 2));
-  }
-}), Ie = /* @__PURE__ */ x(gl, [["__scopeId", "data-v-ed7d97ce"]]), xl = ["aria-checked", "aria-label", "disabled"], Ml = /* @__PURE__ */ g({
-  __name: "DSwitch",
-  props: /* @__PURE__ */ I({
-    label: {},
-    disabled: { type: Boolean, default: !1 }
-  }, {
-    modelValue: { type: Boolean },
-    modelModifiers: {}
-  }),
-  emits: ["update:modelValue"],
-  setup(e) {
-    const t = z(e, "modelValue");
-    return (d, o) => (l(), a("div", {
-      class: $(["sw", { "sw--off": e.disabled }])
-    }, [
-      k("button", {
-        type: "button",
-        role: "switch",
-        "aria-checked": !!t.value,
-        "aria-label": e.label,
-        disabled: e.disabled,
-        class: $(["sw__track", { on: t.value }]),
-        onClick: o[0] || (o[0] = (u) => t.value = !t.value)
-      }, [...o[2] || (o[2] = [
-        k("span", { class: "sw__knob" }, null, -1)
-      ])], 10, xl),
-      e.label || d.$slots.default ? (l(), a("span", {
-        key: 0,
-        class: "sw__label",
-        onClick: o[1] || (o[1] = (u) => !e.disabled && (t.value = !t.value))
+  setup(__props) {
+    const model = useModel(__props, "modelValue");
+    const id = useId();
+    return (_ctx, _cache) => {
+      return openBlock(), createElementBlock("div", {
+        class: normalizeClass(["field", { "field--stacked": __props.stacked }])
       }, [
-        B(d.$slots, "default", {}, () => [
-          L(b(e.label), 1)
-        ], !0)
-      ])) : y("", !0)
-    ], 2));
+        __props.label ? (openBlock(), createElementBlock("label", {
+          key: 0,
+          class: "field__label",
+          for: unref(id)
+        }, toDisplayString(__props.label), 9, _hoisted_1$3)) : createCommentVNode("", true),
+        createElementVNode("div", _hoisted_2$2, [
+          withDirectives(createElementVNode("input", {
+            id: unref(id),
+            "onUpdate:modelValue": _cache[0] || (_cache[0] = ($event) => model.value = $event),
+            class: "range",
+            type: "range",
+            min: __props.min,
+            max: __props.max,
+            step: __props.step,
+            disabled: __props.disabled
+          }, null, 8, _hoisted_3$2), [
+            [
+              vModelText,
+              model.value,
+              void 0,
+              { number: true }
+            ]
+          ]),
+          withDirectives(createElementVNode("input", {
+            "onUpdate:modelValue": _cache[1] || (_cache[1] = ($event) => model.value = $event),
+            class: "num",
+            type: "number",
+            min: __props.min,
+            max: __props.max,
+            step: __props.step,
+            disabled: __props.disabled,
+            "aria-label": __props.label ? `${__props.label} als Zahl` : "Wert"
+          }, null, 8, _hoisted_4$1), [
+            [
+              vModelText,
+              model.value,
+              void 0,
+              { number: true }
+            ]
+          ]),
+          __props.suffix ? (openBlock(), createElementBlock("span", _hoisted_5$1, toDisplayString(__props.suffix), 1)) : createCommentVNode("", true)
+        ])
+      ], 2);
+    };
   }
-}), qe = /* @__PURE__ */ x(Ml, [["__scopeId", "data-v-70940a00"]]), Dl = { class: "table" }, Bl = { key: 0 }, Vl = ["aria-selected", "onClick"], Sl = ["title"], Il = {
+});
+const DSlider = /* @__PURE__ */ _export_sfc(_sfc_main$3, [["__scopeId", "data-v-ed7d97ce"]]);
+const _hoisted_1$2 = ["aria-checked", "aria-label", "disabled"];
+const _sfc_main$2 = /* @__PURE__ */ defineComponent({
+  __name: "DSwitch",
+  props: /* @__PURE__ */ mergeModels({
+    label: {},
+    disabled: { type: Boolean, default: false }
+  }, {
+    "modelValue": { type: Boolean },
+    "modelModifiers": {}
+  }),
+  emits: ["update:modelValue"],
+  setup(__props) {
+    const model = useModel(__props, "modelValue");
+    return (_ctx, _cache) => {
+      return openBlock(), createElementBlock("div", {
+        class: normalizeClass(["sw", { "sw--off": __props.disabled }])
+      }, [
+        createElementVNode("button", {
+          type: "button",
+          role: "switch",
+          "aria-checked": !!model.value,
+          "aria-label": __props.label,
+          disabled: __props.disabled,
+          class: normalizeClass(["sw__track", { on: model.value }]),
+          onClick: _cache[0] || (_cache[0] = ($event) => model.value = !model.value)
+        }, [..._cache[2] || (_cache[2] = [
+          createElementVNode("span", { class: "sw__knob" }, null, -1)
+        ])], 10, _hoisted_1$2),
+        __props.label || _ctx.$slots.default ? (openBlock(), createElementBlock("span", {
+          key: 0,
+          class: "sw__label",
+          onClick: _cache[1] || (_cache[1] = ($event) => !__props.disabled && (model.value = !model.value))
+        }, [
+          renderSlot(_ctx.$slots, "default", {}, () => [
+            createTextVNode(toDisplayString(__props.label), 1)
+          ], true)
+        ])) : createCommentVNode("", true)
+      ], 2);
+    };
+  }
+});
+const DSwitch = /* @__PURE__ */ _export_sfc(_sfc_main$2, [["__scopeId", "data-v-70940a00"]]);
+const _hoisted_1$1 = { class: "table" };
+const _hoisted_2$1 = { key: 0 };
+const _hoisted_3$1 = ["aria-selected", "onClick"];
+const _hoisted_4 = ["title"];
+const _hoisted_5 = {
   key: 1,
   class: "table__empty"
-}, ql = /* @__PURE__ */ g({
+};
+const _sfc_main$1 = /* @__PURE__ */ defineComponent({
   __name: "DTable",
-  props: /* @__PURE__ */ I({
+  props: /* @__PURE__ */ mergeModels({
     items: {},
     columns: {},
     empty: { default: "Keine Zeilen" },
-    selectable: { type: Boolean, default: !1 }
+    selectable: { type: Boolean, default: false }
   }, {
-    selected: {},
-    selectedModifiers: {}
+    "selected": {},
+    "selectedModifiers": {}
   }),
   emits: ["update:selected"],
-  setup(e) {
-    const t = z(e, "selected"), d = e, o = C(() => {
-      if (d.columns?.length)
-        return d.columns.map(
-          (s) => typeof s == "string" ? { key: s, label: s } : { key: s.key, label: s.label ?? s.key }
+  setup(__props) {
+    const selected = useModel(__props, "selected");
+    const props = __props;
+    const columns = computed(() => {
+      if (props.columns?.length) {
+        return props.columns.map(
+          (column) => typeof column === "string" ? { key: column, label: column } : { key: column.key, label: column.label ?? column.key }
         );
-      const r = d.items?.[0];
-      return r ? Object.keys(r).map((s) => ({ key: s, label: s })) : [];
+      }
+      const first = props.items?.[0];
+      return first ? Object.keys(first).map((key) => ({ key, label: key })) : [];
     });
-    function u(r, s) {
-      const c = r?.[s];
-      return c == null ? "" : typeof c == "object" ? JSON.stringify(c) : String(c);
+    function cell(row, key) {
+      const value = row?.[key];
+      if (value === void 0 || value === null) return "";
+      return typeof value === "object" ? JSON.stringify(value) : String(value);
     }
-    return (r, s) => (l(), a("div", Dl, [
-      e.items?.length && o.value.length ? (l(), a("table", Bl, [
-        k("thead", null, [
-          k("tr", null, [
-            (l(!0), a(q, null, H(o.value, (c) => (l(), a("th", {
-              key: c.key
-            }, b(c.label), 1))), 128))
+    return (_ctx, _cache) => {
+      return openBlock(), createElementBlock("div", _hoisted_1$1, [
+        __props.items?.length && columns.value.length ? (openBlock(), createElementBlock("table", _hoisted_2$1, [
+          createElementVNode("thead", null, [
+            createElementVNode("tr", null, [
+              (openBlock(true), createElementBlock(Fragment, null, renderList(columns.value, (column) => {
+                return openBlock(), createElementBlock("th", {
+                  key: column.key
+                }, toDisplayString(column.label), 1);
+              }), 128))
+            ])
+          ]),
+          createElementVNode("tbody", null, [
+            (openBlock(true), createElementBlock(Fragment, null, renderList(__props.items, (row, index) => {
+              return openBlock(), createElementBlock("tr", {
+                key: index,
+                class: normalizeClass({ "row--pick": __props.selectable, "row--on": __props.selectable && row === selected.value }),
+                "aria-selected": __props.selectable ? row === selected.value : void 0,
+                onClick: ($event) => __props.selectable && (selected.value = row)
+              }, [
+                (openBlock(true), createElementBlock(Fragment, null, renderList(columns.value, (column) => {
+                  return openBlock(), createElementBlock("td", {
+                    key: column.key,
+                    title: cell(row, column.key)
+                  }, toDisplayString(cell(row, column.key)), 9, _hoisted_4);
+                }), 128))
+              ], 10, _hoisted_3$1);
+            }), 128))
           ])
-        ]),
-        k("tbody", null, [
-          (l(!0), a(q, null, H(e.items, (c, i) => (l(), a("tr", {
-            key: i,
-            class: $({ "row--pick": e.selectable, "row--on": e.selectable && c === t.value }),
-            "aria-selected": e.selectable ? c === t.value : void 0,
-            onClick: (v) => e.selectable && (t.value = c)
-          }, [
-            (l(!0), a(q, null, H(o.value, (v) => (l(), a("td", {
-              key: v.key,
-              title: u(c, v.key)
-            }, b(u(c, v.key)), 9, Sl))), 128))
-          ], 10, Vl))), 128))
-        ])
-      ])) : (l(), a("p", Il, b(e.empty), 1))
-    ]));
+        ])) : (openBlock(), createElementBlock("p", _hoisted_5, toDisplayString(__props.empty), 1))
+      ]);
+    };
   }
-}), Ce = /* @__PURE__ */ x(ql, [["__scopeId", "data-v-925340b8"]]), Cl = ["aria-label"], zl = ["aria-selected", "tabindex", "disabled", "onClick"], Kl = {
+});
+const DTable = /* @__PURE__ */ _export_sfc(_sfc_main$1, [["__scopeId", "data-v-925340b8"]]);
+const _hoisted_1 = ["aria-label"];
+const _hoisted_2 = ["aria-selected", "tabindex", "disabled", "onClick"];
+const _hoisted_3 = {
   key: 0,
   class: "tab__count"
-}, Hl = /* @__PURE__ */ g({
+};
+const _sfc_main = /* @__PURE__ */ defineComponent({
   __name: "DTabs",
-  props: /* @__PURE__ */ I({
+  props: /* @__PURE__ */ mergeModels({
     tabs: {},
     label: {}
   }, {
-    modelValue: {},
-    modelModifiers: {}
+    "modelValue": {},
+    "modelModifiers": {}
   }),
   emits: ["update:modelValue"],
-  setup(e) {
-    const t = z(e, "modelValue"), d = e;
-    function o(u) {
-      const r = d.tabs.filter((i) => !i.disabled), s = r.findIndex((i) => i.id === t.value), c = r[(s + u + r.length) % r.length];
-      c && (t.value = c.id);
+  setup(__props) {
+    const model = useModel(__props, "modelValue");
+    const props = __props;
+    function move(step) {
+      const usable = props.tabs.filter((tab) => !tab.disabled);
+      const at = usable.findIndex((tab) => tab.id === model.value);
+      const next = usable[(at + step + usable.length) % usable.length];
+      if (next) model.value = next.id;
     }
-    return (u, r) => (l(), a("div", {
-      class: "tabs",
-      role: "tablist",
-      "aria-label": e.label,
-      onKeydown: [
-        r[0] || (r[0] = U(K((s) => o(-1), ["prevent"]), ["left"])),
-        r[1] || (r[1] = U(K((s) => o(1), ["prevent"]), ["right"]))
-      ]
-    }, [
-      (l(!0), a(q, null, H(e.tabs, (s) => (l(), a("button", {
-        key: s.id,
-        type: "button",
-        role: "tab",
-        "aria-selected": t.value === s.id,
-        tabindex: t.value === s.id ? 0 : -1,
-        disabled: s.disabled,
-        class: $(["tab", { on: t.value === s.id }]),
-        onClick: (c) => t.value = s.id
+    return (_ctx, _cache) => {
+      return openBlock(), createElementBlock("div", {
+        class: "tabs",
+        role: "tablist",
+        "aria-label": __props.label,
+        onKeydown: [
+          _cache[0] || (_cache[0] = withKeys(withModifiers(($event) => move(-1), ["prevent"]), ["left"])),
+          _cache[1] || (_cache[1] = withKeys(withModifiers(($event) => move(1), ["prevent"]), ["right"]))
+        ]
       }, [
-        L(b(s.label) + " ", 1),
-        s.count !== void 0 ? (l(), a("span", Kl, b(s.count), 1)) : y("", !0)
-      ], 10, zl))), 128)),
-      B(u.$slots, "actions", {}, void 0, !0)
-    ], 40, Cl));
+        (openBlock(true), createElementBlock(Fragment, null, renderList(__props.tabs, (tab) => {
+          return openBlock(), createElementBlock("button", {
+            key: tab.id,
+            type: "button",
+            role: "tab",
+            "aria-selected": model.value === tab.id,
+            tabindex: model.value === tab.id ? 0 : -1,
+            disabled: tab.disabled,
+            class: normalizeClass(["tab", { on: model.value === tab.id }]),
+            onClick: ($event) => model.value = tab.id
+          }, [
+            createTextVNode(toDisplayString(tab.label) + " ", 1),
+            tab.count !== void 0 ? (openBlock(), createElementBlock("span", _hoisted_3, toDisplayString(tab.count), 1)) : createCommentVNode("", true)
+          ], 10, _hoisted_2);
+        }), 128)),
+        renderSlot(_ctx.$slots, "actions", {}, void 0, true)
+      ], 40, _hoisted_1);
+    };
   }
-}), ze = /* @__PURE__ */ x(Hl, [["__scopeId", "data-v-f7c65d26"]]), Yl = {
-  DButton: fe,
-  DCard: ve,
-  DCheckbox: me,
-  DChip: be,
-  DColorInput: he,
-  DDateInput: ye,
-  DDivider: ke,
-  DField: $e,
-  DFloatingWindow: xe,
-  DIcon: Me,
-  DInput: De,
-  DModal: Be,
-  DRadioGroup: Ve,
-  DSelect: Se,
-  DSlider: Ie,
-  DSwitch: qe,
-  DTable: Ce,
-  DTabs: ze
-}, El = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+});
+const DTabs = /* @__PURE__ */ _export_sfc(_sfc_main, [["__scopeId", "data-v-f7c65d26"]]);
+const CONTROLS = {
+  DButton,
+  DCard,
+  DCheckbox,
+  DChip,
+  DColorInput,
+  DDateInput,
+  DDivider,
+  DField,
+  DFloatingWindow,
+  DIcon,
+  DIconPicker,
+  DInput,
+  DModal,
+  DRadioGroup,
+  DSelect,
+  DSlider,
+  DSwitch,
+  DTable,
+  DTabs
+};
+const library = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  CONTROLS: Yl,
-  DButton: fe,
-  DCard: ve,
-  DCheckbox: me,
-  DChip: be,
-  DColorInput: he,
-  DDateInput: ye,
-  DDivider: ke,
-  DField: $e,
-  DFloatingWindow: xe,
-  DIcon: Me,
-  DInput: De,
-  DModal: Be,
-  DRadioGroup: Ve,
-  DSelect: Se,
-  DSlider: Ie,
-  DSwitch: qe,
-  DTable: Ce,
-  DTabs: ze
-}, Symbol.toStringTag, { value: "Module" })), ne = "org.eclipse.daanse.board.app.ui.vue.controls", Wl = "0.0.1-next.1";
-async function Nl(e) {
-  const t = globalThis.__tsm__;
-  if (!t)
-    throw new Error(`${ne}: tsm runtime is not initialized`);
-  t.register(ne, El, Wl, "ui.vue.controls"), await void 0;
+  CONTROLS,
+  DButton,
+  DCard,
+  DCheckbox,
+  DChip,
+  DColorInput,
+  DDateInput,
+  DDivider,
+  DField,
+  DFloatingWindow,
+  DIcon,
+  DIconPicker,
+  DInput,
+  DModal,
+  DRadioGroup,
+  DSelect,
+  DSlider,
+  DSwitch,
+  DTable,
+  DTabs
+}, Symbol.toStringTag, { value: "Module" }));
+const LIBRARY_ID = "org.eclipse.daanse.board.app.ui.vue.controls";
+const VERSION = "0.0.1-next.1";
+async function activate(context) {
+  const runtime = globalThis.__tsm__;
+  if (!runtime) {
+    throw new Error(`${LIBRARY_ID}: tsm runtime is not initialized`);
+  }
+  runtime.register(LIBRARY_ID, library, VERSION, "ui.vue.controls");
+  await void 0;
 }
-async function Tl(e) {
+async function deactivate(context) {
   await void 0;
 }
 export {
-  Yl as CONTROLS,
-  fe as DButton,
-  ve as DCard,
-  me as DCheckbox,
-  be as DChip,
-  he as DColorInput,
-  ye as DDateInput,
-  ke as DDivider,
-  $e as DField,
-  xe as DFloatingWindow,
-  Me as DIcon,
-  De as DInput,
-  Be as DModal,
-  Ve as DRadioGroup,
-  Se as DSelect,
-  Ie as DSlider,
-  qe as DSwitch,
-  Ce as DTable,
-  ze as DTabs,
-  Nl as activate,
-  Tl as deactivate
+  CONTROLS,
+  DButton,
+  DCard,
+  DCheckbox,
+  DChip,
+  DColorInput,
+  DDateInput,
+  DDivider,
+  DField,
+  DFloatingWindow,
+  DIcon,
+  DIconPicker,
+  DInput,
+  DModal,
+  DRadioGroup,
+  DSelect,
+  DSlider,
+  DSwitch,
+  DTable,
+  DTabs,
+  activate,
+  deactivate
 };

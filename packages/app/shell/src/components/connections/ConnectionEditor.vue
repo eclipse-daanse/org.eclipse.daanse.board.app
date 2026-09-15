@@ -16,7 +16,7 @@ import {
   ConnectionRepository,
   identifier,
 } from 'org.eclipse.daanse.board.app.lib.api.connection'
-import { DButton, DIcon, DInput, DSelect } from 'org.eclipse.daanse.board.app.ui.vue.controls'
+import { DButton, DIconPicker, DInput, DSelect } from 'org.eclipse.daanse.board.app.ui.vue.controls'
 import TagInput from '../datasources/TagInput.vue'
 
 const props = defineProps({
@@ -99,17 +99,12 @@ const saveConnection = () => {
       <DInput v-model="connectionProxy.uid" label="UID" readonly />
       <DInput v-model="connectionProxy.name" label="Name" />
       <DSelect v-model="connectionProxy.type" label="Typ" :options="availableConnections" />
-      <div class="editor__icon">
-        <DInput
-          v-model="connectionProxy.icon"
-          label="Symbol"
-          :placeholder="typeIcon"
-          hint="Ein Material-Icons-Name. Leer lassen für das Symbol des Typs."
-        />
-        <span class="editor__icon-preview" aria-hidden="true">
-          <DIcon :name="connectionProxy.icon?.trim() || typeIcon" size="lg" />
-        </span>
-      </div>
+      <DIconPicker
+        v-model="connectionProxy.icon"
+        label="Symbol"
+        :fallback="typeIcon"
+        hint="Ohne eigenes Symbol steht hier das des Typs."
+      />
       <TagInput
         v-model="connectionProxy.tags"
         label="Schlagworte"
@@ -139,30 +134,8 @@ const saveConnection = () => {
   max-width: 620px;
 }
 
-.editor__icon {
-  display: flex;
-  /* The label sits beside the control here, not above it, so the preview
-     lines up on the middle rather than the top. */
-  align-items: center;
-  gap: 10px;
-}
 
-.editor__icon-preview {
-  display: grid;
-  flex: none;
-  place-items: center;
-  /* The same box as the control beside it. */
-  width: 26px;
-  height: 26px;
-  color: var(--color-accent);
-  background-color: var(--color-sunken);
-  border: 1px solid var(--color-outline);
-  border-radius: var(--radius-sm);
-}
 
-.editor__icon :deep(.field) {
-  flex: 1;
-}
 
 .editor__actions {
   display: flex;
