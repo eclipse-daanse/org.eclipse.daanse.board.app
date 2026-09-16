@@ -100,6 +100,9 @@ const crumb = computed<Crumb[]>(() => {
     case 'edit':
     case 'pageEdit':
       return [boards, board, { label: 'Bearbeiten' }]
+    case 'pages':
+      /* The board, then its pages - the same path as opening one. */
+      return [boards, board, { label: 'Seiten' }]
     case 'data':
       return [boards, { label: 'Verbindungen & Daten' }]
     case 'config':

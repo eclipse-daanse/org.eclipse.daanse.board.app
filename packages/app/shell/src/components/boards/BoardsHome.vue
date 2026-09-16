@@ -142,6 +142,19 @@ function createPage() {
 function openStorage() {
   view.value = 'storage'
 }
+
+/**
+ * Loading a state opens the board it holds.
+ *
+ * Landing back on the launcher was the old behaviour and the wrong one:
+ * you came here to open something, and after opening it the app still
+ * showed the list of things to open.
+ */
+function openRestored(ids: string[]) {
+  const id = props.pageRepo?.getDefaultPage()?.id ?? ids[0]
+  if (id) router.push(`/page/${id}`)
+  else view.value = 'recent'
+}
 </script>
 
 <template>
@@ -231,7 +244,7 @@ function openStorage() {
       </p>
     </div>
 
-    <WorkspaceStorage v-else @restored="view = 'recent'" />
+    <WorkspaceStorage v-else @restored="openRestored" />
     </div>
    </div>
   </div>
@@ -242,8 +255,9 @@ function openStorage() {
   display: flex;
   flex-direction: column;
   gap: 12px;
-  /* Clear of the tab strip above it, like the other views' first row. */
-  padding-top: 12px;
+  /* The same frame the grid view has, so switching tabs does not move the
+     content it shows. */
+  padding: 16px;
   max-width: 640px;
 }
 
