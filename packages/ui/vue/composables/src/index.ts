@@ -64,3 +64,10 @@ export {
   resetModelDocs,
 } from './modelDocs'
 export type { ClassDoc, FeatureDoc } from './modelDocs'
+
+/*
+ * Translation that re-renders when a language pack arrives or the language
+ * changes - which is what lets a widget or its texts be deployed later.
+ */
+export { useTranslation } from './useTranslation'
+export type { Translation } from './useTranslation'
