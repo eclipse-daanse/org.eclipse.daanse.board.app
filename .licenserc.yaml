@@ -51,5 +51,6 @@ header:
     - 'packages/lib/datasource/ogcsta/src/client/**'
     - 'packages/lib/persistence/git/src/git_api/generated/**'
     - 'packages/lib/lsp/lang/*/src/language/generated/**'
+    - 'packages/lib/lsp/lang/*/src/language/generated-*/**'
 
   comment: always
