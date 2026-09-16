@@ -37,7 +37,7 @@ import {
   identifier as WORKSPACE,
   type Workspace,
 } from 'org.eclipse.daanse.board.app.lib.model.workspace'
-import { useCurrentHistory, useEList } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+import { useCurrentHistory, useEList, useLanguage } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import { usePages } from '@/composables/usePages'
 import { useWidgetPalette } from '@/composables/useWidgetPalette'
 import { useBoardBackdrop } from '@/composables/useBoardBackdrop'
@@ -71,6 +71,20 @@ interface Crumb {
 }
 
 const workspace = inject<Workspace>(WORKSPACE)!
+
+/*
+ * The language, and the ones there are to choose from.
+ *
+ * Offered only when there is more than one: a single language is not a
+ * choice, and a menu with one entry is furniture.
+ */
+const { available: languages, current: language, choose: chooseLanguage } = useLanguage()
+const languageOpen = ref(false)
+
+function pickLanguage(tag: string) {
+  chooseLanguage(tag)
+  languageOpen.value = false
+}
 
 /*
  * The modelled pages. Reading this list is what makes everything below
@@ -193,12 +207,16 @@ function choosePage(id: string) {
 
 /* Clicking anywhere else closes it, as a menu should */
 const menuHost = ref<HTMLElement>()
+const languageHost = ref<HTMLElement>()
 function onDocumentPointer(event: PointerEvent) {
-  if (!pagesOpen.value) return
-  if (!menuHost.value?.contains(event.target as Node)) pagesOpen.value = false
+  const at = event.target as Node
+  if (pagesOpen.value && !menuHost.value?.contains(at)) pagesOpen.value = false
+  if (languageOpen.value && !languageHost.value?.contains(at)) languageOpen.value = false
 }
 function onEscape(event: KeyboardEvent) {
-  if (event.key === 'Escape') pagesOpen.value = false
+  if (event.key !== 'Escape') return
+  pagesOpen.value = false
+  languageOpen.value = false
 }
 onMounted(() => {
   document.addEventListener('pointerdown', onDocumentPointer)
@@ -469,6 +487,33 @@ const openAppearance = () => router.push('/appearance')
       >
         Bearbeiten
       </button>
+    </div>
+
+    <div v-if="languages.length > 1" ref="languageHost" class="lang">
+      <button
+        type="button"
+        class="icon-action lang__button"
+        :aria-expanded="languageOpen"
+        aria-haspopup="menu"
+        title="Sprache"
+        aria-label="Sprache"
+        @click="languageOpen = !languageOpen"
+      >
+        {{ (language ?? '').slice(0, 2).toUpperCase() }}
+      </button>
+
+      <ul v-if="languageOpen" class="lang__menu" role="menu">
+        <li v-for="each in languages" :key="each.tag" role="none">
+          <button
+            type="button"
+            role="menuitem"
+            :class="['lang__item', { on: each.tag === language }]"
+            @click="pickLanguage(each.tag)"
+          >
+            {{ each.label }}
+          </button>
+        </li>
+      </ul>
     </div>
 
     <button
@@ -817,5 +862,54 @@ const openAppearance = () => router.push('/appearance')
   font-weight: 700;
   color: var(--color-dim);
   flex: none;
+}
+
+/* The language, shown as its tag - two letters say it without a word. */
+.lang {
+  position: relative;
+}
+
+.lang__button {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.lang__menu {
+  position: absolute;
+  top: calc(100% + 4px);
+  right: 0;
+  z-index: 60;
+  min-width: 150px;
+  margin: 0;
+  padding: 4px;
+  list-style: none;
+  background-color: var(--color-pane);
+  border: 1px solid var(--color-outline);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-e3);
+}
+
+.lang__item {
+  display: block;
+  width: 100%;
+  padding: 5px 10px;
+  font: inherit;
+  color: var(--color-fg);
+  text-align: left;
+  background: none;
+  border: 0;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.lang__item:hover,
+.lang__item:focus-visible {
+  background-color: var(--color-sunken);
+}
+
+.lang__item.on {
+  color: var(--color-accent);
 }
 </style>

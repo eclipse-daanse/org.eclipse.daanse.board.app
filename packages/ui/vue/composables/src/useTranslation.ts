@@ -49,6 +49,16 @@ export interface Translation {
   t: (key: string, options?: Record<string, unknown>) => string
   /** The language in use, as a ref, so a label can show it. */
   language: Ref<string | undefined>
+  /**
+   * Bumped by anything that changes what is translatable - a pack added or
+   * removed, the language switched.
+   *
+   * Exposed because a pack arriving for a language nobody is using changes
+   * nothing else: the language is the same, the texts on screen are the
+   * same, and only this says something happened. Anything deriving from
+   * what i18next holds - which languages exist, say - has to read it.
+   */
+  revision: Ref<number>
   /** Whether anything is there to translate with. */
   available: boolean
 }
@@ -96,5 +106,5 @@ export function useTranslation(namespace?: string): Translation {
     return i18n.t(full, options)
   }
 
-  return { t, language, available: !!i18n }
+  return { t, language, revision: changed, available: !!i18n }
 }

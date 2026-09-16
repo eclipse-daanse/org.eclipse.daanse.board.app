@@ -70,4 +70,6 @@ export type { ClassDoc, FeatureDoc } from './modelDocs'
  * changes - which is what lets a widget or its texts be deployed later.
  */
 export { useTranslation } from './useTranslation'
+export { useLanguage } from './useLanguage'
 export type { Translation } from './useTranslation'
+export type { Language, LanguageChoice } from './useLanguage'
