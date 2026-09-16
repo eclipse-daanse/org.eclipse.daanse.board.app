@@ -21,7 +21,7 @@ Contributors:
 import { computed, inject, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { v4 as uuidv4 } from 'uuid'
-import { DButton, DIcon } from 'org.eclipse.daanse.board.app.ui.vue.controls'
+import { DButton } from 'org.eclipse.daanse.board.app.ui.vue.controls'
 import BoardFloorplan from '@/components/boards/BoardFloorplan.vue'
 import { summarizePage, type PageSummary } from '@/composables/pageSummary'
 import { useBoardUsage } from '@/composables/useBoardUsage'
@@ -105,81 +105,95 @@ function createPage() {
 </script>
 
 <template>
-  <section class="pages">
-    <header class="pages__head">
-      <div class="pages__title">
-        <span class="pages__icon" aria-hidden="true">
-          <DIcon :name="board?.icon || 'dashboard'" size="sm" />
-        </span>
-        <h1 class="pages__name">Seiten<template v-if="board?.name"> von {{ board.name }}</template></h1>
-      </div>
-      <div class="pages__tools">
-        <input
-          v-model="query"
-          class="pages__search"
-          type="search"
-          placeholder="Seiten filtern"
-          aria-label="Seiten filtern"
-        />
-        <DButton intent="primary" size="sm" @click="createPage">Neue Seite</DButton>
-      </div>
-    </header>
+  <div class="pages">
+    <div class="pages__panel">
+      <header class="pages__bar">
+        <h1 class="pages__title">
+          Seiten
+          <span v-if="pages.length" class="pages__count">{{ pages.length }}</span>
+        </h1>
+        <p v-if="board?.name" class="pages__of">in {{ board.name }}</p>
 
-    <div class="pages__grid">
-      <article
-        v-for="page in visiblePages"
-        :key="page.id"
-        class="card"
-        tabindex="0"
-        role="button"
-        :aria-label="`Seite ${page.name} öffnen`"
-        @click="openPage(page.id)"
-        @keydown.enter="openPage(page.id)"
-        @keydown.space.prevent="openPage(page.id)"
-      >
-        <BoardFloorplan :items="page.items" :type-by-id="page.typeById" />
+        <div class="pages__tools">
+          <input
+            v-model="query"
+            class="pages__search"
+            type="search"
+            placeholder="Seiten filtern"
+            aria-label="Seiten filtern"
+          />
+          <DButton intent="primary" size="sm" @click="createPage">Neue Seite</DButton>
+        </div>
+      </header>
 
-        <div class="card__body">
-          <h2 class="card__name">{{ page.name }}</h2>
-          <p class="card__meta">
-            {{ page.widgetCount }} {{ page.widgetCount === 1 ? 'Widget' : 'Widgets' }}
-            <template v-if="page.sourceCount">
-              · {{ page.sourceCount }}
-              {{ page.sourceCount === 1 ? 'Datenquelle' : 'Datenquellen' }}
-            </template>
-          </p>
-          <p v-if="usageOf(page.id)" class="card__usage">
-            {{ usageOf(page.id)?.count }}× geöffnet · zuletzt {{ lastOpenedLabel(page.id) }}
+      <div class="pages__body">
+        <div class="pages__grid">
+          <article
+            v-for="page in visiblePages"
+            :key="page.id"
+            class="page"
+            tabindex="0"
+            role="button"
+            :aria-label="`Seite ${page.name} öffnen`"
+            @click="openPage(page.id)"
+            @keydown.enter="openPage(page.id)"
+            @keydown.space.prevent="openPage(page.id)"
+          >
+            <BoardFloorplan :items="page.items" :type-by-id="page.typeById" />
+
+            <div class="page__body">
+              <h2 class="page__name">{{ page.name }}</h2>
+              <p class="page__meta">
+                {{ page.widgetCount }} {{ page.widgetCount === 1 ? 'Widget' : 'Widgets' }}
+                <template v-if="page.sourceCount">
+                  · {{ page.sourceCount }}
+                  {{ page.sourceCount === 1 ? 'Datenquelle' : 'Datenquellen' }}
+                </template>
+              </p>
+              <p v-if="usageOf(page.id)" class="page__usage">
+                {{ usageOf(page.id)?.count }}× geöffnet · zuletzt {{ lastOpenedLabel(page.id) }}
+              </p>
+
+              <ul v-if="page.kinds.length" class="page__kinds">
+                <li v-for="kind in page.kinds.slice(0, 3)" :key="kind" class="page__kind">
+                  {{ kind }}
+                </li>
+                <li v-if="page.kinds.length > 3" class="page__kind">
+                  +{{ page.kinds.length - 3 }}
+                </li>
+              </ul>
+            </div>
+
+            <button
+              class="page__edit"
+              type="button"
+              :aria-label="`Seite ${page.name} bearbeiten`"
+              @click.stop="editPage(page.id)"
+            >
+              Bearbeiten
+            </button>
+          </article>
+
+          <button class="page page--new" type="button" @click="createPage">
+            <span class="page__plus" aria-hidden="true">+</span>
+            <span class="page__name">Neue Seite</span>
+            <span class="page__meta">Leer starten</span>
+          </button>
+
+          <p v-if="pages.length && visiblePages.length === 0" class="pages__nomatch">
+            Keine Seite passt zu „{{ query }}“.
           </p>
         </div>
-
-        <button
-          class="card__edit"
-          type="button"
-          :aria-label="`Seite ${page.name} bearbeiten`"
-          @click.stop="editPage(page.id)"
-        >
-          Bearbeiten
-        </button>
-      </article>
-
-      <button class="card card--new" type="button" @click="createPage">
-        <span class="card__plus" aria-hidden="true">+</span>
-        <span class="card__name">Neue Seite</span>
-        <span class="card__meta">Leer starten</span>
-      </button>
-
-      <p v-if="pages.length && visiblePages.length === 0" class="pages__nomatch">
-        Keine Seite passt zu „{{ query }}“.
-      </p>
+      </div>
     </div>
-  </section>
+  </div>
 </template>
 
 <style scoped>
+/* The frame every full-surface area has: a panel on the canvas, a header
+   with a rule under it, and the content scrolling below. */
 .pages {
   display: flex;
-  flex-direction: column;
   width: 100%;
   flex: 1 1 auto;
   min-height: 0;
@@ -187,134 +201,194 @@ function createPage() {
   background-color: var(--color-bg);
 }
 
-.pages__head {
+.pages__panel {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-width: 0;
+  min-height: 0;
+  background-color: var(--color-pane);
+  border: 1px solid var(--color-divider);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+
+.pages__bar {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 12px;
+  gap: 8px;
+  height: var(--spacing-panelHeader);
   flex: none;
-  padding-bottom: 10px;
+  padding: 0 8px;
+  border-bottom: 1px solid var(--color-divider);
 }
 
 .pages__title {
   display: flex;
   align-items: center;
-  gap: 8px;
-}
-
-.pages__icon {
-  display: grid;
-  place-items: center;
-  width: 26px;
-  height: 26px;
-  color: var(--color-accent);
-  background-color: var(--color-sunken);
-  border: 1px solid var(--color-outline);
-  border-radius: var(--radius-sm);
-}
-
-.pages__name {
+  gap: 6px;
   margin: 0;
-  font-size: 0.95rem;
+  font-size: var(--text-sm);
+  font-weight: 600;
   color: var(--color-fg);
+}
+
+.pages__count {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-size: var(--text-xs);
+  font-weight: 500;
+  color: var(--color-dim);
+}
+
+.pages__of {
+  margin: 0;
+  font-size: var(--text-xs);
+  color: var(--color-dim);
 }
 
 .pages__tools {
   display: flex;
   align-items: center;
   gap: 8px;
+  margin-left: auto;
 }
 
 .pages__search {
-  padding: 5px 9px;
-  font: inherit;
-  font-size: 0.85rem;
+  height: 22px;
+  min-width: 180px;
+  padding: 0 8px;
+  font-size: var(--text-sm);
   color: var(--color-fg);
-  background-color: var(--color-sunken);
-  border: 1px solid var(--color-outline);
-  border-radius: var(--radius-sm);
+  background-color: var(--color-raised);
+  border: 1px solid var(--color-divider);
+  border-radius: 4px;
+}
+
+.pages__body {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-height: 0;
+  background-color: var(--color-bg);
+  overflow: auto;
 }
 
 .pages__grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-  gap: 12px;
+  grid-template-columns: repeat(auto-fill, minmax(232px, 1fr));
   align-content: start;
-  flex: 1 1 auto;
-  min-height: 0;
-  overflow-y: auto;
+  gap: 16px;
+  padding: 16px;
 }
 
-.card {
+/* A page card is a board card: same thing, one level down. */
+.page {
+  position: relative;
   display: flex;
   flex-direction: column;
+  padding: 0;
   overflow: hidden;
   text-align: left;
   background-color: var(--color-pane);
-  border: 1px solid var(--color-outline);
-  border-radius: var(--radius-md);
+  border: 1px solid var(--color-divider);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-e1);
   cursor: pointer;
+  transition: border-color 120ms ease, box-shadow 120ms ease, transform 120ms ease;
 }
 
-.card:hover,
-.card:focus-visible {
-  border-color: var(--color-accent);
+.page:hover,
+.page:focus-visible {
+  border-color: var(--color-outline);
+  box-shadow: var(--shadow-e2);
+  transform: translateY(-1px);
 }
 
-.card__body {
-  padding: 10px 12px;
+.page__body {
+  padding: 12px;
 }
 
-.card__name {
+.page__name {
   margin: 0;
-  font-size: 0.92rem;
+  font-size: var(--text-base);
+  font-weight: 600;
   color: var(--color-fg);
 }
 
-.card__meta,
-.card__usage {
-  margin: 3px 0 0;
-  font-size: 0.8rem;
+.page__meta {
+  margin: 2px 0 0;
+  font-size: var(--text-xs);
   color: var(--color-dim);
 }
 
-.card__edit {
-  padding: 7px 12px;
-  font: inherit;
-  font-size: 0.8rem;
+.page__usage {
+  margin: 3px 0 0;
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  font-variant-numeric: tabular-nums;
   color: var(--color-dim);
-  text-align: left;
-  background: none;
-  border: 0;
-  border-top: 1px solid var(--color-divider, var(--color-outline));
+}
+
+.page__kinds {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin: 8px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.page__kind {
+  padding: 1px 6px;
+  font-size: var(--text-xs);
+  color: var(--color-dim);
+  background-color: var(--color-canvas);
+  border-radius: 3px;
+}
+
+/* Out of the way until the card is the one being looked at. */
+.page__edit {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  padding: 2px 8px;
+  font-family: inherit;
+  font-size: var(--text-xs);
+  color: var(--color-fg);
+  background-color: var(--color-raised);
+  border: 1px solid var(--color-divider);
+  border-radius: 3px;
+  opacity: 0;
   cursor: pointer;
 }
 
-.card__edit:hover {
-  color: var(--color-fg);
-  background-color: var(--color-sunken);
+.page:hover .page__edit,
+.page__edit:focus-visible {
+  opacity: 1;
 }
 
-.card--new {
+.page--new {
   align-items: center;
   justify-content: center;
   gap: 2px;
-  min-height: 150px;
-  color: var(--color-dim);
-  background: none;
+  min-height: 180px;
+  font-family: inherit;
+  background-color: transparent;
   border-style: dashed;
+  box-shadow: none;
 }
 
-.card__plus {
-  font-size: 1.4rem;
+.page__plus {
+  font-size: 20px;
   line-height: 1;
+  color: var(--color-outline);
 }
 
 .pages__nomatch {
   grid-column: 1 / -1;
   margin: 0;
-  padding: 12px 2px;
-  font-size: 0.85rem;
+  font-size: var(--text-sm);
   color: var(--color-dim);
 }
 </style>
