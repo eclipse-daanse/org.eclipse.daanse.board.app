@@ -1483,7 +1483,8 @@ function liftPagesIntoBoard(data) {
     name: "Board",
     pages: moved.pages
   };
-  if (moved.defaultPage) board.defaultPage = moved.defaultPage;
+  const named = moved.defaultPage;
+  if (named?.$ref?.includes("//@board/@pages.")) board.defaultPage = named;
   delete moved.pages;
   delete moved.defaultPage;
   moved.board = board;

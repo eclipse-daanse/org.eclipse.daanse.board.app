@@ -46,6 +46,20 @@ describe('liftPagesIntoBoard', () => {
     expect(after.board.defaultPage.$ref).toBe('//@board/@pages.1')
   })
 
+  it('drops a default written as a position in the file', () => {
+    /*
+     * What phase3-neu actually held. The pages are not at that position
+     * any more, so keeping it would resolve to whatever now is - which is
+     * how the open board came to link to a page that does not exist.
+     */
+    const positional = { ...stored(), defaultPage: { $ref: 'workspace.json#/0/3' } }
+    const after = liftPagesIntoBoard(positional) as any
+    expect(after.board.defaultPage).toBeUndefined()
+    expect(after.defaultPage).toBeUndefined()
+    /* The pages themselves still come across. */
+    expect(after.board.pages).toHaveLength(2)
+  })
+
   it('repoints anything else that referenced a page', () => {
     const after = liftPagesIntoBoard(stored()) as any
     expect(after.variables[0].page.$ref).toBe('//@board/@pages.0')

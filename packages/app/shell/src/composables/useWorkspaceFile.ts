@@ -104,7 +104,16 @@ export function liftPagesIntoBoard(data: unknown): unknown {
     name: 'Board',
     pages: moved.pages,
   }
-  if (moved.defaultPage) board.defaultPage = moved.defaultPage
+  /*
+   * Only a path to the page survives the move. Older states wrote the
+   * default as a position in the file instead - "workspace.json#/0/3" -
+   * and the pages are not at that position any more, so such a reference
+   * would resolve to whatever now sits there. Dropped rather than
+   * repaired: the first page is the right answer, and a wrong page is
+   * worse than no preference.
+   */
+  const named = moved.defaultPage as { $ref?: string } | undefined
+  if (named?.$ref?.includes('//@board/@pages.')) board.defaultPage = named
   delete moved.pages
   delete moved.defaultPage
   moved.board = board

@@ -129,8 +129,21 @@ export class PageRegistryImpl implements PageRegistryI {
     return this.getPages().find((page) => page.id === pageId) as Page
   }
 
+  /**
+   * The page to open when none is asked for.
+   *
+   * What the board names, but only if that page is still one of its own. A
+   * stored state can carry a reference to a page that is not in it - an
+   * older one wrote the default as a position in the file rather than as a
+   * path to the page - and answering with it sends the caller to a board
+   * that shows "this page does not exist".
+   */
   getDefaultPage(): Page | null {
-    return this.workspace.board?.defaultPage ?? null
+    const board = this.workspace.board
+    if (!board) return null
+    const named = board.defaultPage
+    if (named && board.pages.toArray().includes(named)) return named
+    return board.pages.size() > 0 ? board.pages.get(0) : null
   }
 
   setDefaultPage(pageId: string): void {
