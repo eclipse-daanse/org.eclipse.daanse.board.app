@@ -42,9 +42,9 @@
     }
   ],
   "dependencies": [
+    "lib.api.datasource",
     "lib.api.page",
-    "lib.repository.layout.page",
     "lib.model.workspace",
-    "lib.api.datasource"
+    "lib.repository.layout.page"
   ]
 }

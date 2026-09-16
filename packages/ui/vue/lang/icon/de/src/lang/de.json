@@ -1,0 +1,12 @@
+{
+  "IconWidget": {
+    "title": "Symbol-Widget einrichten",
+    "iconSearch": "Symbol suchen",
+    "iconFilled": "Gefüllt",
+    "iconColor": "Farbe",
+    "iconSize": "Größe",
+    "strokeWeight": "Strichstärke",
+    "opticSize": "Optische Größe",
+    "grade": "Stärkegrad"
+  }
+}

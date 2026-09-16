@@ -6,7 +6,10 @@
   "exports": {},
   "entry": "/bundles/ui.vue.controls/index.js",
   "sharedDependencies": [
-    { "id": "vue", "versionRange": "^3.5.0" }
+    {
+      "id": "vue",
+      "versionRange": "^3.5.0"
+    }
   ],
   "capabilities": [
     {
@@ -17,5 +20,7 @@
       }
     }
   ],
-  "dependencies": ["platform.vue"]
+  "dependencies": [
+    "platform.vue"
+  ]
 }

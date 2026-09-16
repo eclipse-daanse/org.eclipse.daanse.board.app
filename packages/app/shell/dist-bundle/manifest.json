@@ -20,14 +20,14 @@
     "lib.events",
     "lib.factory.variableWrapper",
     "lib.logger",
+    "lib.model.workspace",
     "lib.repository.page",
     "lib.variables",
     "platform.vue",
     "ui.vue.composables",
-    "ui.vue.widget.wrapper",
     "ui.vue.controls",
     "ui.vue.uimodel",
-    "lib.model.workspace"
+    "ui.vue.widget.wrapper"
   ],
   "provides": [],
   "requiresService": [

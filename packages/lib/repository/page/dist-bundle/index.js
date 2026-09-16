@@ -1,16 +1,13 @@
-import { DATASOURCE_REPOSITORY } from "org.eclipse.daanse.board.app.lib.api.datasource";
-import { WORKSPACE, BoardImpl, PageImpl, WidgetImpl, LayoutItemImpl } from "org.eclipse.daanse.board.app.lib.model.workspace";
-import { PAGE_REPOSITORY, identifier } from "org.eclipse.daanse.board.app.lib.api.page";
-import { PAGE_REPOSITORY as PAGE_REPOSITORY2, identifier as identifier2 } from "org.eclipse.daanse.board.app.lib.api.page";
-class PageRegistryImpl {
-  constructor(resolver) {
-    this.resolver = resolver;
+import { DATASOURCE_REPOSITORY as h } from "org.eclipse.daanse.board.app.lib.api.datasource";
+import { WORKSPACE as y, BoardImpl as P, PageImpl as b, WidgetImpl as u, LayoutItemImpl as c } from "org.eclipse.daanse.board.app.lib.model.workspace";
+import { PAGE_REPOSITORY as g, identifier as m } from "org.eclipse.daanse.board.app.lib.api.page";
+import { PAGE_REPOSITORY as O, identifier as W } from "org.eclipse.daanse.board.app.lib.api.page";
+class w {
+  constructor(t) {
+    this.resolver = t;
   }
   get workspace() {
-    if (!this.workspaceHeld) {
-      this.workspaceHeld = this.resolver.getRequired(WORKSPACE);
-    }
-    return this.workspaceHeld;
+    return this.workspaceHeld || (this.workspaceHeld = this.resolver.getRequired(y)), this.workspaceHeld;
   }
   /**
    * The board that holds the pages, made if it is not there yet.
@@ -20,49 +17,29 @@ class PageRegistryImpl {
    * something.
    */
   get board() {
-    let held = this.workspace.board;
-    if (!held) {
-      held = new BoardImpl();
-      held.id = crypto.randomUUID();
-      held.name = "Board";
-      this.workspace.board = held;
-    }
-    return held;
+    let t = this.workspace.board;
+    return t || (t = new P(), t.id = crypto.randomUUID(), t.name = "Board", this.workspace.board = t), t;
   }
   getPages() {
     return this.workspace.board?.pages.toArray() ?? [];
   }
   /** Built on read, so it cannot drift from what the workspace holds. */
   get pages() {
-    const byId = {};
-    for (const page of this.getPages()) byId[page.id] = page;
-    return byId;
+    const t = {};
+    for (const r of this.getPages()) t[r.id] = r;
+    return t;
   }
   get defaultPageId() {
     return this.workspace.board?.defaultPage?.id ?? null;
   }
-  registerPage(page) {
-    const existing = this.getPage(page.id);
-    const held = existing ?? new PageImpl();
-    held.id = page.id;
-    held.name = page.name;
-    held.description = page.description;
-    held.icon = page.icon;
-    held.visibleInNavigation = page.visibleInNavigation ?? true;
-    held.layoutId = page.layoutId;
-    held.layoutSettings = page.layoutSettings;
-    held.backgroundColor = page.backgroundColor;
-    held.backgroundImage = page.backgroundImage;
-    held.backgroundSize = page.backgroundSize;
-    held.backgroundPosition = page.backgroundPosition;
-    held.backgroundRepeat = page.backgroundRepeat;
-    const board = this.board;
-    if (!existing) board.pages.push(held);
-    if (!board.defaultPage) board.defaultPage = held;
-    return held;
+  registerPage(t) {
+    const r = this.getPage(t.id), e = r ?? new b();
+    e.id = t.id, e.name = t.name, e.description = t.description, e.icon = t.icon, e.visibleInNavigation = t.visibleInNavigation ?? !0, e.layoutId = t.layoutId, e.layoutSettings = t.layoutSettings, e.backgroundColor = t.backgroundColor, e.backgroundImage = t.backgroundImage, e.backgroundSize = t.backgroundSize, e.backgroundPosition = t.backgroundPosition, e.backgroundRepeat = t.backgroundRepeat;
+    const o = this.board;
+    return r || o.pages.push(e), o.defaultPage || (o.defaultPage = e), e;
   }
-  getPage(pageId) {
-    return this.getPages().find((page) => page.id === pageId);
+  getPage(t) {
+    return this.getPages().find((r) => r.id === t);
   }
   /**
    * The page to open when none is asked for.
@@ -74,37 +51,32 @@ class PageRegistryImpl {
    * that shows "this page does not exist".
    */
   getDefaultPage() {
-    const board = this.workspace.board;
-    if (!board) return null;
-    const named = board.defaultPage;
-    if (named && board.pages.toArray().includes(named)) return named;
-    return board.pages.size() > 0 ? board.pages.get(0) : null;
+    const t = this.workspace.board;
+    if (!t) return null;
+    const r = t.defaultPage;
+    return r && t.pages.toArray().includes(r) ? r : t.pages.size() > 0 ? t.pages.get(0) : null;
   }
-  setDefaultPage(pageId) {
-    const page = this.getPage(pageId);
-    if (page && this.workspace.board) this.workspace.board.defaultPage = page;
+  setDefaultPage(t) {
+    const r = this.getPage(t);
+    r && this.workspace.board && (this.workspace.board.defaultPage = r);
   }
-  unregisterPage(pageId) {
-    const board = this.workspace.board;
-    if (!board) return;
-    const held = board.pages;
-    const at = held.toArray().findIndex((page) => page.id === pageId);
-    if (at < 0) return;
-    const removed = held.get(at);
-    held.removeAt(at);
-    if (board.defaultPage === removed) {
-      board.defaultPage = held.size() > 0 ? held.get(0) : void 0;
-    }
+  unregisterPage(t) {
+    const r = this.workspace.board;
+    if (!r) return;
+    const e = r.pages, o = e.toArray().findIndex((i) => i.id === t);
+    if (o < 0) return;
+    const a = e.get(o);
+    e.removeAt(o), r.defaultPage === a && (r.defaultPage = e.size() > 0 ? e.get(0) : void 0);
   }
   getAllPageIds() {
-    return this.getPages().map((page) => page.id);
+    return this.getPages().map((t) => t.id);
   }
-  updatePage(page) {
-    this.registerPage(page);
+  updatePage(t) {
+    this.registerPage(t);
   }
   // ----------------------------------------------------- what is on a board
   get datasources() {
-    return this.resolver.getRequired(DATASOURCE_REPOSITORY);
+    return this.resolver.getRequired(h);
   }
   /**
    * Writes a widget's plain values onto the modelled one.
@@ -113,100 +85,72 @@ class PageRegistryImpl {
    * that order - one direction, because the reference is the truth and the
    * id is what a widget's own settings read.
    */
-  applyWidget(held, widget) {
-    held.uid = widget.uid;
-    held.type = widget.type;
-    held.wrapperConfig = widget.wrapperConfig ?? {};
-    const config = widget.config ?? {};
-    const datasourceId = config["datasourceId"];
-    held.datasource = datasourceId ? this.datasources.getDatasourceModel(datasourceId) : void 0;
-    config["datasourceId"] = held.datasource?.uid ?? datasourceId;
-    held.config = config;
+  applyWidget(t, r) {
+    t.uid = r.uid, t.type = r.type, t.wrapperConfig = r.wrapperConfig ?? {};
+    const e = r.config ?? {}, o = e.datasourceId;
+    t.datasource = o ? this.datasources.getDatasourceModel(o) : void 0, e.datasourceId = t.datasource?.uid ?? o, t.config = e;
   }
-  addWidget(pageId, widget, placement = {}) {
-    const page = this.getPage(pageId);
-    if (!page) return void 0;
-    const held = new WidgetImpl();
-    this.applyWidget(held, widget);
-    page.widgets.push(held);
-    const item = new LayoutItemImpl();
-    item.id = widget.uid;
-    item.width = placement.width ?? 300;
-    item.height = placement.height ?? 150;
-    item.x = placement.x ?? 0;
-    item.y = placement.y ?? 0;
-    item.z = placement.z ?? Math.max(0, ...page.layout.toArray().map((l) => l.z ?? 0)) + 1;
-    item.group = placement.group;
-    page.layout.push(item);
-    return held;
+  addWidget(t, r, e = {}) {
+    const o = this.getPage(t);
+    if (!o) return;
+    const a = new u();
+    this.applyWidget(a, r), o.widgets.push(a);
+    const i = new c();
+    return i.id = r.uid, i.width = e.width ?? 300, i.height = e.height ?? 150, i.x = e.x ?? 0, i.y = e.y ?? 0, i.z = e.z ?? Math.max(0, ...o.layout.toArray().map((n) => n.z ?? 0)) + 1, i.group = e.group, o.layout.push(i), a;
   }
-  saveWidget(pageId, widget) {
-    const page = this.getPage(pageId);
-    const held = page?.widgets.toArray().find((w) => w.uid === widget.uid);
-    if (held) this.applyWidget(held, widget);
+  saveWidget(t, r) {
+    const o = this.getPage(t)?.widgets.toArray().find((a) => a.uid === r.uid);
+    o && this.applyWidget(o, r);
   }
-  removeWidget(pageId, widgetUid) {
-    const page = this.getPage(pageId);
-    if (!page) return;
-    const widgets = page.widgets;
-    const atWidget = widgets.toArray().findIndex((w) => w.uid === widgetUid);
-    if (atWidget > -1) widgets.removeAt(atWidget);
-    const layout = page.layout;
-    const atItem = layout.toArray().findIndex((item) => item.id === widgetUid);
-    if (atItem > -1) layout.removeAt(atItem);
+  removeWidget(t, r) {
+    const e = this.getPage(t);
+    if (!e) return;
+    const o = e.widgets, a = o.toArray().findIndex((d) => d.uid === r);
+    a > -1 && o.removeAt(a);
+    const i = e.layout, n = i.toArray().findIndex((d) => d.id === r);
+    n > -1 && i.removeAt(n);
   }
-  setBoard(pageId, widgets, layout) {
-    const page = this.getPage(pageId);
-    if (!page) return;
-    page.widgets.clear();
-    for (const widget of widgets) {
-      const held = new WidgetImpl();
-      this.applyWidget(held, widget);
-      page.widgets.push(held);
-    }
-    page.layout.clear();
-    for (const item of layout) {
-      const held = new LayoutItemImpl();
-      held.id = item.id;
-      held.x = item.x;
-      held.y = item.y;
-      held.z = item.z;
-      held.width = item.width;
-      held.height = item.height;
-      held.group = item.group;
-      page.layout.push(held);
+  setBoard(t, r, e) {
+    const o = this.getPage(t);
+    if (o) {
+      o.widgets.clear();
+      for (const a of r) {
+        const i = new u();
+        this.applyWidget(i, a), o.widgets.push(i);
+      }
+      o.layout.clear();
+      for (const a of e) {
+        const i = new c();
+        i.id = a.id, i.x = a.x, i.y = a.y, i.z = a.z, i.width = a.width, i.height = a.height, i.group = a.group, o.layout.push(i);
+      }
     }
   }
 }
-function activate$1({ services }) {
-  services.register(PAGE_REPOSITORY, new PageRegistryImpl(services));
+function p({ services: s }) {
+  s.register(g, new w(s));
 }
-function deactivate$1({ services }) {
-  services.unregister(PAGE_REPOSITORY);
+function f({ services: s }) {
+  s.unregister(g);
 }
-const library = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const I = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  PAGE_REPOSITORY,
-  activate: activate$1,
-  deactivate: deactivate$1,
-  identifier
-}, Symbol.toStringTag, { value: "Module" }));
-const LIBRARY_ID = "org.eclipse.daanse.board.app.lib.repository.page";
-const VERSION = "0.0.1-next.1";
-async function activate(context) {
-  const runtime = globalThis.__tsm__;
-  if (!runtime) {
-    throw new Error(`${LIBRARY_ID}: tsm runtime is not initialized`);
-  }
-  runtime.register(LIBRARY_ID, library, VERSION, "lib.repository.page");
-  await activate$1?.(context);
+  PAGE_REPOSITORY: g,
+  activate: p,
+  deactivate: f,
+  identifier: m
+}, Symbol.toStringTag, { value: "Module" })), l = "org.eclipse.daanse.board.app.lib.repository.page", k = "0.0.1-next.1";
+async function x(s) {
+  const t = globalThis.__tsm__;
+  if (!t)
+    throw new Error(`${l}: tsm runtime is not initialized`);
+  t.register(l, I, k, "lib.repository.page"), await p?.(s);
 }
-async function deactivate(context) {
-  await deactivate$1?.(context);
+async function S(s) {
+  await f?.(s);
 }
 export {
-  PAGE_REPOSITORY2 as PAGE_REPOSITORY,
-  activate,
-  deactivate,
-  identifier2 as identifier
+  O as PAGE_REPOSITORY,
+  x as activate,
+  S as deactivate,
+  W as identifier
 };

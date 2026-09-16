@@ -10,8 +10,8 @@
     "lib.api.variable",
     "platform.vue",
     "ui.vue.composables",
-    "ui.vue.variable.components",
-    "ui.vue.controls"
+    "ui.vue.controls",
+    "ui.vue.variable.components"
   ],
   "requiresService": [
     {

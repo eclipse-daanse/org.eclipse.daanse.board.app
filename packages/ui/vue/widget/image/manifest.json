@@ -11,6 +11,7 @@
     "lib.api.widget",
     "lib.events",
     "platform.vue",
+    "ui.vue.composables",
     "ui.vue.controls"
   ],
   "requiresService": [

@@ -46,11 +46,11 @@
   ],
   "dependencies": [
     "lib.api.datasource",
+    "lib.api.page",
     "lib.api.pagecontext",
     "lib.api.variable",
     "lib.variables",
-    "platform.vue",
-    "lib.api.page"
+    "platform.vue"
   ],
   "provides": []
 }

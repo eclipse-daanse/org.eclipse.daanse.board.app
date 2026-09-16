@@ -26,7 +26,7 @@ import MaterialIcons from './assets/output.json'
 //     sizes_px?: number[];
 // }
 
-import type {i18n} from "org.eclipse.daanse.board.app.lib.i18next"
+import { useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import {
   DCheckbox,
   DColorInput,
@@ -35,8 +35,12 @@ import {
 } from 'org.eclipse.daanse.board.app.ui.vue.controls'
 import { VariableInput } from 'org.eclipse.daanse.board.app.ui.vue.variable.components'
 
-const i18n:i18n|undefined = inject('i18n');
-const t = (key:string)=>(i18n)?i18n.t(key):key;
+/*
+ * Reactive on purpose. A language pack is a bundle of its own and can be
+ * deployed after this component has rendered - reading through a plain
+ * i18n.t left those texts unseen until a reload.
+ */
+const { t } = useTranslation('icon')
 
 const widgetSettings = defineModel<IconSettings>({ required: true })
 
@@ -84,7 +88,7 @@ const iconStyle = computed(() => {
         v-model="searchQuery"
         type="search"
         placeholder="Search icon..."
-        :label="t('icon:IconWidget.iconSearch')"
+        :label="t('IconWidget.iconSearch')"
       />
       <div class="icons-container" :style="iconStyle">
         <span
@@ -104,14 +108,14 @@ const iconStyle = computed(() => {
     <div class="settings-container">
       <DCheckbox
         v-model="widgetSettings.isIconFilled"
-        :label="t('icon:IconWidget.iconFilled')"
+        :label="t('IconWidget.iconFilled')"
       />
-      <VariableInput v-model="widgetSettings.iconColor!" :label="t('icon:IconWidget.iconColor')">
+      <VariableInput v-model="widgetSettings.iconColor!" :label="t('IconWidget.iconColor')">
         <template #default="{ value, change }">
           <DColorInput
             :model-value="value"
             @update:model-value="change"
-            :label="t('icon:IconWidget.iconColor')"
+            :label="t('IconWidget.iconColor')"
           />
         </template>
       </VariableInput>
@@ -121,27 +125,27 @@ const iconStyle = computed(() => {
         :max="1000"
         :step="10"
         suffix="px"
-        :label="t('icon:IconWidget.iconSize')"
+        :label="t('IconWidget.iconSize')"
       />
       <DSlider
         v-model="widgetSettings.strokeWeight"
         :min="100"
         :max="700"
         :step="100"
-        :label="t('icon:IconWidget.strokeWeight')"
+        :label="t('IconWidget.strokeWeight')"
       />
       <DSlider
         v-model="widgetSettings.opticSize"
         :min="20"
         :max="48"
-        :label="t('icon:IconWidget.opticSize')"
+        :label="t('IconWidget.opticSize')"
       />
       <DSlider
         v-model="widgetSettings.grade"
         :min="-25"
         :max="200"
         :step="15"
-        :label="t('icon:IconWidget.grade')"
+        :label="t('IconWidget.grade')"
       />
     </div>
   </section>

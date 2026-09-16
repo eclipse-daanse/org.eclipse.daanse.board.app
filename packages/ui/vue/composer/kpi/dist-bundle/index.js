@@ -1,82 +1,62 @@
-import { DATASOURCE_REPOSITORY } from "org.eclipse.daanse.board.app.lib.api.datasource";
-import { defineComponent, ref, watch, shallowRef, createElementBlock, createCommentVNode, openBlock, createVNode, unref, computed, createBlock } from "vue";
-import { useTemporaryStore } from "org.eclipse.daanse.board.app.ui.vue.composables";
-import { KpiTable } from "org.eclipse.daanse.board.app.ui.vue.common.kpi";
-import { DSelect } from "org.eclipse.daanse.board.app.ui.vue.controls";
-import { KpiComposer } from "org.eclipse.daanse.board.app.lib.composer.kpi";
-const _hoisted_1 = {
+import { DATASOURCE_REPOSITORY as s } from "org.eclipse.daanse.board.app.lib.api.datasource";
+import { defineComponent as p, ref as n, watch as i, shallowRef as m, createElementBlock as d, createCommentVNode as f, openBlock as c, createVNode as S, unref as l, computed as g, createBlock as y } from "vue";
+import { useTemporaryStore as v } from "org.eclipse.daanse.board.app.ui.vue.composables";
+import { KpiTable as C } from "org.eclipse.daanse.board.app.ui.vue.common.kpi";
+import { DSelect as K } from "org.eclipse.daanse.board.app.ui.vue.controls";
+import { KpiComposer as b } from "org.eclipse.daanse.board.app.lib.composer.kpi";
+const w = {
   key: 0,
-  style: { "overflow": "hidden", "height": "100%", "width": "100%" }
-};
-const _sfc_main$1 = /* @__PURE__ */ defineComponent({
+  style: { overflow: "hidden", height: "100%", width: "100%" }
+}, D = /* @__PURE__ */ p({
   __name: "Preview",
   props: {
     dataSource: {}
   },
-  setup(__props) {
-    const props = __props;
-    const data = ref(null);
-    watch(props.dataSource, () => {
-      update();
-    }, { deep: true });
-    const tempStore = shallowRef(null);
-    const settingsRef = ref(props.dataSource);
-    const { update } = useTemporaryStore(props.dataSource.type, settingsRef, tempStore);
-    watch(tempStore, async () => {
-      console.log("tempStore changed", tempStore.value);
-      data.value = await tempStore.value.getData("DataTable");
-    }, { deep: true });
-    return (_ctx, _cache) => {
-      return tempStore.value && data.value ? (openBlock(), createElementBlock("div", _hoisted_1, [
-        createVNode(unref(KpiTable), { tableData: data.value }, null, 8, ["tableData"])
-      ])) : createCommentVNode("", true);
-    };
+  setup(e) {
+    const r = e, o = n(null);
+    i(r.dataSource, () => {
+      u();
+    }, { deep: !0 });
+    const t = m(null), a = n(r.dataSource), { update: u } = v(r.dataSource.type, a, t);
+    return i(t, async () => {
+      console.log("tempStore changed", t.value), o.value = await t.value.getData("DataTable");
+    }, { deep: !0 }), (P, R) => t.value && o.value ? (c(), d("div", w, [
+      S(l(C), { tableData: o.value }, null, 8, ["tableData"])
+    ])) : f("", !0);
   }
-});
-const _sfc_main = /* @__PURE__ */ defineComponent({
+}), _ = /* @__PURE__ */ p({
   __name: "Settings",
   props: {
     config: {},
     dataSources: {},
     connections: {}
   },
-  setup(__props) {
-    const datasourcesFiltered = computed(() => {
-      return __props.dataSources.filter((ds) => KpiComposer.availableTypes.includes(ds.type));
-    });
-    return (_ctx, _cache) => {
-      return openBlock(), createBlock(unref(DSelect), {
-        modelValue: __props.config.connectedDatasources,
-        "onUpdate:modelValue": _cache[0] || (_cache[0] = ($event) => __props.config.connectedDatasources = $event),
-        label: "KPI Sources",
-        options: datasourcesFiltered.value,
-        multiple: "",
-        "label-key": "name",
-        "value-key": "uid"
-      }, null, 8, ["modelValue", "options"]);
-    };
+  setup(e) {
+    const r = g(() => e.dataSources.filter((o) => b.availableTypes.includes(o.type)));
+    return (o, t) => (c(), y(l(K), {
+      modelValue: e.config.connectedDatasources,
+      "onUpdate:modelValue": t[0] || (t[0] = (a) => e.config.connectedDatasources = a),
+      label: "KPI Sources",
+      options: r.value,
+      multiple: "",
+      "label-key": "name",
+      "value-key": "uid"
+    }, null, 8, ["modelValue", "options"]));
   }
-});
-const KpiComposerIdentifier = Symbol.for("KpiComposer");
-const previewSymbol = Symbol.for("KpiComposerPreview");
-const settingsSymbol = Symbol.for("KpiComposerSettings");
-function activate({ services }) {
-  services.register("KpiComposerPreview", _sfc_main$1);
-  services.register("KpiComposerSettings", _sfc_main);
-  services.getRequired(DATASOURCE_REPOSITORY).registerDatasourceType("KpiComposer", {
+}), h = Symbol.for("KpiComposer"), T = Symbol.for("KpiComposerPreview"), k = Symbol.for("KpiComposerSettings");
+function q({ services: e }) {
+  e.register("KpiComposerPreview", D), e.register("KpiComposerSettings", _), e.getRequired(s).registerDatasourceType("KpiComposer", {
     icon: "speed",
     kind: "composer",
-    Store: KpiComposerIdentifier,
-    Preview: previewSymbol,
-    Settings: settingsSymbol
+    Store: h,
+    Preview: T,
+    Settings: k
   });
 }
-function deactivate({ services }) {
-  services.getRequired(DATASOURCE_REPOSITORY).unregisterDatasourceType("KpiComposer");
-  services.unregister("KpiComposerPreview");
-  services.unregister("KpiComposerSettings");
+function A({ services: e }) {
+  e.getRequired(s).unregisterDatasourceType("KpiComposer"), e.unregister("KpiComposerPreview"), e.unregister("KpiComposerSettings");
 }
 export {
-  activate,
-  deactivate
+  q as activate,
+  A as deactivate
 };

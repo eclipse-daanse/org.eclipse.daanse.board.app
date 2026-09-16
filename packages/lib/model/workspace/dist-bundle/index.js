@@ -1,6 +1,6 @@
-import { BasicEObject, createContainmentEList, createBasicEList, BasicEFactory, BasicEPackage, EPackageRegistry, BasicEClass, BasicEReference, BasicEAttribute, getEcorePackage } from "@emfts/core";
-const { serviceId } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
-class WorkspaceImpl extends BasicEObject {
+import { BasicEObject as I, createContainmentEList as G, createBasicEList as be, BasicEFactory as Ye, BasicEPackage as Ke, EPackageRegistry as pe, BasicEClass as D, BasicEReference as C, BasicEAttribute as r, getEcorePackage as u } from "@emfts/core";
+const { serviceId: Ve } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
+class c extends I {
   // Feature ID Constants (eLiterals)
   static CONNECTIONS = 0;
   static DATASOURCES = 1;
@@ -17,154 +17,126 @@ class WorkspaceImpl extends BasicEObject {
    * Returns the EClass of this object
    */
   eClass() {
-    return WorkspacePackage.Literals.WORKSPACE;
+    return s.Literals.WORKSPACE;
   }
   // Getters and Setters
   get connections() {
-    if (!this._connections) {
-      this._connections = createContainmentEList(this, this.eClass().getEStructuralFeature("connections"));
-    }
-    return this._connections;
+    return this._connections || (this._connections = G(this, this.eClass().getEStructuralFeature("connections"))), this._connections;
   }
   get datasources() {
-    if (!this._datasources) {
-      this._datasources = createContainmentEList(this, this.eClass().getEStructuralFeature("datasources"));
-    }
-    return this._datasources;
+    return this._datasources || (this._datasources = G(this, this.eClass().getEStructuralFeature("datasources"))), this._datasources;
   }
   get board() {
     return this._board;
   }
-  set board(value) {
-    const oldValue = this._board;
-    this._board = value;
-    if (this.eDeliver()) {
-      this.eNotify({
-        getNotifier: () => this,
-        getEventType: () => 1,
-        // SET
-        getFeature: () => this.eClass().getEStructuralFeature(WorkspaceImpl.BOARD),
-        getOldValue: () => oldValue,
-        getNewValue: () => value,
-        getPosition: () => -1,
-        wasSet: () => true,
-        isTouch: () => false,
-        isReset: () => false,
-        getFeatureID: () => WorkspaceImpl.BOARD,
-        merge: () => false
-      });
-    }
+  set board(e) {
+    const t = this._board;
+    this._board = e, this.eDeliver() && this.eNotify({
+      getNotifier: () => this,
+      getEventType: () => 1,
+      // SET
+      getFeature: () => this.eClass().getEStructuralFeature(c.BOARD),
+      getOldValue: () => t,
+      getNewValue: () => e,
+      getPosition: () => -1,
+      wasSet: () => !0,
+      isTouch: () => !1,
+      isReset: () => !1,
+      getFeatureID: () => c.BOARD,
+      merge: () => !1
+    });
   }
   get variables() {
-    if (!this._variables) {
-      this._variables = createContainmentEList(this, this.eClass().getEStructuralFeature("variables"));
-    }
-    return this._variables;
+    return this._variables || (this._variables = G(this, this.eClass().getEStructuralFeature("variables"))), this._variables;
   }
   get eventMappings() {
-    if (!this._eventMappings) {
-      this._eventMappings = createContainmentEList(this, this.eClass().getEStructuralFeature("eventMappings"));
-    }
-    return this._eventMappings;
+    return this._eventMappings || (this._eventMappings = G(this, this.eClass().getEStructuralFeature("eventMappings"))), this._eventMappings;
   }
   // Reflective API
   /**
    * Returns the value of the given feature
    */
-  eGet(feature) {
-    const featureID = this.eClass().getFeatureID(feature);
-    switch (featureID) {
-      case WorkspaceImpl.CONNECTIONS:
+  eGet(e) {
+    switch (this.eClass().getFeatureID(e)) {
+      case c.CONNECTIONS:
         return this.connections;
-      case WorkspaceImpl.DATASOURCES:
+      case c.DATASOURCES:
         return this.datasources;
-      case WorkspaceImpl.BOARD:
+      case c.BOARD:
         return this.board;
-      case WorkspaceImpl.VARIABLES:
+      case c.VARIABLES:
         return this.variables;
-      case WorkspaceImpl.EVENT_MAPPINGS:
+      case c.EVENT_MAPPINGS:
         return this.eventMappings;
       default:
-        return super.eGet(feature);
+        return super.eGet(e);
     }
   }
   /**
    * Sets the value of the given feature
    */
-  eSet(feature, newValue) {
-    const featureID = this.eClass().getFeatureID(feature);
-    switch (featureID) {
-      case WorkspaceImpl.CONNECTIONS:
-        this.connections.clear();
-        this.connections.addAll(newValue);
-        super.eSet(feature, newValue);
+  eSet(e, t) {
+    switch (this.eClass().getFeatureID(e)) {
+      case c.CONNECTIONS:
+        this.connections.clear(), this.connections.addAll(t), super.eSet(e, t);
         break;
-      case WorkspaceImpl.DATASOURCES:
-        this.datasources.clear();
-        this.datasources.addAll(newValue);
-        super.eSet(feature, newValue);
+      case c.DATASOURCES:
+        this.datasources.clear(), this.datasources.addAll(t), super.eSet(e, t);
         break;
-      case WorkspaceImpl.BOARD:
-        this.board = newValue;
-        super.eSet(feature, newValue);
+      case c.BOARD:
+        this.board = t, super.eSet(e, t);
         break;
-      case WorkspaceImpl.VARIABLES:
-        this.variables.clear();
-        this.variables.addAll(newValue);
-        super.eSet(feature, newValue);
+      case c.VARIABLES:
+        this.variables.clear(), this.variables.addAll(t), super.eSet(e, t);
         break;
-      case WorkspaceImpl.EVENT_MAPPINGS:
-        this.eventMappings.clear();
-        this.eventMappings.addAll(newValue);
-        super.eSet(feature, newValue);
+      case c.EVENT_MAPPINGS:
+        this.eventMappings.clear(), this.eventMappings.addAll(t), super.eSet(e, t);
         break;
       default:
-        super.eSet(feature, newValue);
+        super.eSet(e, t);
     }
   }
   /**
    * Returns whether the feature has been set
    */
-  eIsSet(feature) {
-    const featureID = this.eClass().getFeatureID(feature);
-    switch (featureID) {
-      case WorkspaceImpl.CONNECTIONS:
+  eIsSet(e) {
+    switch (this.eClass().getFeatureID(e)) {
+      case c.CONNECTIONS:
         return this._connections !== void 0 && !this._connections.isEmpty();
-      case WorkspaceImpl.DATASOURCES:
+      case c.DATASOURCES:
         return this._datasources !== void 0 && !this._datasources.isEmpty();
-      case WorkspaceImpl.BOARD:
+      case c.BOARD:
         return this._board !== void 0;
-      case WorkspaceImpl.VARIABLES:
+      case c.VARIABLES:
         return this._variables !== void 0 && !this._variables.isEmpty();
-      case WorkspaceImpl.EVENT_MAPPINGS:
+      case c.EVENT_MAPPINGS:
         return this._eventMappings !== void 0 && !this._eventMappings.isEmpty();
       default:
-        return super.eIsSet(feature);
+        return super.eIsSet(e);
     }
   }
   /**
    * Unsets the given feature
    */
-  eUnset(feature) {
-    const featureID = this.eClass().getFeatureID(feature);
-    switch (featureID) {
-      case WorkspaceImpl.CONNECTIONS:
-        if (this._connections) this._connections.clear();
+  eUnset(e) {
+    switch (this.eClass().getFeatureID(e)) {
+      case c.CONNECTIONS:
+        this._connections && this._connections.clear();
         return;
-      case WorkspaceImpl.DATASOURCES:
-        if (this._datasources) this._datasources.clear();
+      case c.DATASOURCES:
+        this._datasources && this._datasources.clear();
         return;
-      case WorkspaceImpl.BOARD:
+      case c.BOARD:
         this._board = void 0;
         return;
-      case WorkspaceImpl.VARIABLES:
-        if (this._variables) this._variables.clear();
+      case c.VARIABLES:
+        this._variables && this._variables.clear();
         return;
-      case WorkspaceImpl.EVENT_MAPPINGS:
-        if (this._eventMappings) this._eventMappings.clear();
+      case c.EVENT_MAPPINGS:
+        this._eventMappings && this._eventMappings.clear();
         return;
       default:
-        super.eUnset(feature);
+        super.eUnset(e);
     }
   }
   /**
@@ -184,7 +156,7 @@ class WorkspaceImpl extends BasicEObject {
     };
   }
 }
-class BoardImpl extends BasicEObject {
+class h extends I {
   // Feature ID Constants (eLiterals)
   static ID = 0;
   static NAME = 1;
@@ -203,236 +175,207 @@ class BoardImpl extends BasicEObject {
    * Returns the EClass of this object
    */
   eClass() {
-    return WorkspacePackage.Literals.BOARD;
+    return s.Literals.BOARD;
   }
   // Getters and Setters
   get id() {
     return this._id;
   }
-  set id(value) {
-    const oldValue = this._id;
-    this._id = value;
-    if (this.eDeliver()) {
-      this.eNotify({
-        getNotifier: () => this,
-        getEventType: () => 1,
-        // SET
-        getFeature: () => this.eClass().getEStructuralFeature(BoardImpl.ID),
-        getOldValue: () => oldValue,
-        getNewValue: () => value,
-        getPosition: () => -1,
-        wasSet: () => true,
-        isTouch: () => false,
-        isReset: () => false,
-        getFeatureID: () => BoardImpl.ID,
-        merge: () => false
-      });
-    }
+  set id(e) {
+    const t = this._id;
+    this._id = e, this.eDeliver() && this.eNotify({
+      getNotifier: () => this,
+      getEventType: () => 1,
+      // SET
+      getFeature: () => this.eClass().getEStructuralFeature(h.ID),
+      getOldValue: () => t,
+      getNewValue: () => e,
+      getPosition: () => -1,
+      wasSet: () => !0,
+      isTouch: () => !1,
+      isReset: () => !1,
+      getFeatureID: () => h.ID,
+      merge: () => !1
+    });
   }
   get name() {
     return this._name;
   }
-  set name(value) {
-    const oldValue = this._name;
-    this._name = value;
-    if (this.eDeliver()) {
-      this.eNotify({
-        getNotifier: () => this,
-        getEventType: () => 1,
-        // SET
-        getFeature: () => this.eClass().getEStructuralFeature(BoardImpl.NAME),
-        getOldValue: () => oldValue,
-        getNewValue: () => value,
-        getPosition: () => -1,
-        wasSet: () => true,
-        isTouch: () => false,
-        isReset: () => false,
-        getFeatureID: () => BoardImpl.NAME,
-        merge: () => false
-      });
-    }
+  set name(e) {
+    const t = this._name;
+    this._name = e, this.eDeliver() && this.eNotify({
+      getNotifier: () => this,
+      getEventType: () => 1,
+      // SET
+      getFeature: () => this.eClass().getEStructuralFeature(h.NAME),
+      getOldValue: () => t,
+      getNewValue: () => e,
+      getPosition: () => -1,
+      wasSet: () => !0,
+      isTouch: () => !1,
+      isReset: () => !1,
+      getFeatureID: () => h.NAME,
+      merge: () => !1
+    });
   }
   get description() {
     return this._description;
   }
-  set description(value) {
-    const oldValue = this._description;
-    this._description = value;
-    if (this.eDeliver()) {
-      this.eNotify({
-        getNotifier: () => this,
-        getEventType: () => 1,
-        // SET
-        getFeature: () => this.eClass().getEStructuralFeature(BoardImpl.DESCRIPTION),
-        getOldValue: () => oldValue,
-        getNewValue: () => value,
-        getPosition: () => -1,
-        wasSet: () => true,
-        isTouch: () => false,
-        isReset: () => false,
-        getFeatureID: () => BoardImpl.DESCRIPTION,
-        merge: () => false
-      });
-    }
+  set description(e) {
+    const t = this._description;
+    this._description = e, this.eDeliver() && this.eNotify({
+      getNotifier: () => this,
+      getEventType: () => 1,
+      // SET
+      getFeature: () => this.eClass().getEStructuralFeature(h.DESCRIPTION),
+      getOldValue: () => t,
+      getNewValue: () => e,
+      getPosition: () => -1,
+      wasSet: () => !0,
+      isTouch: () => !1,
+      isReset: () => !1,
+      getFeatureID: () => h.DESCRIPTION,
+      merge: () => !1
+    });
   }
   get icon() {
     return this._icon;
   }
-  set icon(value) {
-    const oldValue = this._icon;
-    this._icon = value;
-    if (this.eDeliver()) {
-      this.eNotify({
-        getNotifier: () => this,
-        getEventType: () => 1,
-        // SET
-        getFeature: () => this.eClass().getEStructuralFeature(BoardImpl.ICON),
-        getOldValue: () => oldValue,
-        getNewValue: () => value,
-        getPosition: () => -1,
-        wasSet: () => true,
-        isTouch: () => false,
-        isReset: () => false,
-        getFeatureID: () => BoardImpl.ICON,
-        merge: () => false
-      });
-    }
+  set icon(e) {
+    const t = this._icon;
+    this._icon = e, this.eDeliver() && this.eNotify({
+      getNotifier: () => this,
+      getEventType: () => 1,
+      // SET
+      getFeature: () => this.eClass().getEStructuralFeature(h.ICON),
+      getOldValue: () => t,
+      getNewValue: () => e,
+      getPosition: () => -1,
+      wasSet: () => !0,
+      isTouch: () => !1,
+      isReset: () => !1,
+      getFeatureID: () => h.ICON,
+      merge: () => !1
+    });
   }
   get pages() {
-    if (!this._pages) {
-      this._pages = createContainmentEList(this, this.eClass().getEStructuralFeature("pages"));
-    }
-    return this._pages;
+    return this._pages || (this._pages = G(this, this.eClass().getEStructuralFeature("pages"))), this._pages;
   }
   get defaultPage() {
     return this._defaultPage;
   }
-  set defaultPage(value) {
-    const oldValue = this._defaultPage;
-    this._defaultPage = value;
-    if (this.eDeliver()) {
-      this.eNotify({
-        getNotifier: () => this,
-        getEventType: () => 1,
-        // SET
-        getFeature: () => this.eClass().getEStructuralFeature(BoardImpl.DEFAULT_PAGE),
-        getOldValue: () => oldValue,
-        getNewValue: () => value,
-        getPosition: () => -1,
-        wasSet: () => true,
-        isTouch: () => false,
-        isReset: () => false,
-        getFeatureID: () => BoardImpl.DEFAULT_PAGE,
-        merge: () => false
-      });
-    }
+  set defaultPage(e) {
+    const t = this._defaultPage;
+    this._defaultPage = e, this.eDeliver() && this.eNotify({
+      getNotifier: () => this,
+      getEventType: () => 1,
+      // SET
+      getFeature: () => this.eClass().getEStructuralFeature(h.DEFAULT_PAGE),
+      getOldValue: () => t,
+      getNewValue: () => e,
+      getPosition: () => -1,
+      wasSet: () => !0,
+      isTouch: () => !1,
+      isReset: () => !1,
+      getFeatureID: () => h.DEFAULT_PAGE,
+      merge: () => !1
+    });
   }
   // Reflective API
   /**
    * Returns the value of the given feature
    */
-  eGet(feature) {
-    const featureID = this.eClass().getFeatureID(feature);
-    switch (featureID) {
-      case BoardImpl.ID:
+  eGet(e) {
+    switch (this.eClass().getFeatureID(e)) {
+      case h.ID:
         return this.id;
-      case BoardImpl.NAME:
+      case h.NAME:
         return this.name;
-      case BoardImpl.DESCRIPTION:
+      case h.DESCRIPTION:
         return this.description;
-      case BoardImpl.ICON:
+      case h.ICON:
         return this.icon;
-      case BoardImpl.PAGES:
+      case h.PAGES:
         return this.pages;
-      case BoardImpl.DEFAULT_PAGE:
+      case h.DEFAULT_PAGE:
         return this.defaultPage;
       default:
-        return super.eGet(feature);
+        return super.eGet(e);
     }
   }
   /**
    * Sets the value of the given feature
    */
-  eSet(feature, newValue) {
-    const featureID = this.eClass().getFeatureID(feature);
-    switch (featureID) {
-      case BoardImpl.ID:
-        this.id = newValue;
-        super.eSet(feature, newValue);
+  eSet(e, t) {
+    switch (this.eClass().getFeatureID(e)) {
+      case h.ID:
+        this.id = t, super.eSet(e, t);
         break;
-      case BoardImpl.NAME:
-        this.name = newValue;
-        super.eSet(feature, newValue);
+      case h.NAME:
+        this.name = t, super.eSet(e, t);
         break;
-      case BoardImpl.DESCRIPTION:
-        this.description = newValue;
-        super.eSet(feature, newValue);
+      case h.DESCRIPTION:
+        this.description = t, super.eSet(e, t);
         break;
-      case BoardImpl.ICON:
-        this.icon = newValue;
-        super.eSet(feature, newValue);
+      case h.ICON:
+        this.icon = t, super.eSet(e, t);
         break;
-      case BoardImpl.PAGES:
-        this.pages.clear();
-        this.pages.addAll(newValue);
-        super.eSet(feature, newValue);
+      case h.PAGES:
+        this.pages.clear(), this.pages.addAll(t), super.eSet(e, t);
         break;
-      case BoardImpl.DEFAULT_PAGE:
-        this.defaultPage = newValue;
-        super.eSet(feature, newValue);
+      case h.DEFAULT_PAGE:
+        this.defaultPage = t, super.eSet(e, t);
         break;
       default:
-        super.eSet(feature, newValue);
+        super.eSet(e, t);
     }
   }
   /**
    * Returns whether the feature has been set
    */
-  eIsSet(feature) {
-    const featureID = this.eClass().getFeatureID(feature);
-    switch (featureID) {
-      case BoardImpl.ID:
+  eIsSet(e) {
+    switch (this.eClass().getFeatureID(e)) {
+      case h.ID:
         return this._id !== "";
-      case BoardImpl.NAME:
+      case h.NAME:
         return this._name !== void 0;
-      case BoardImpl.DESCRIPTION:
+      case h.DESCRIPTION:
         return this._description !== void 0;
-      case BoardImpl.ICON:
+      case h.ICON:
         return this._icon !== void 0;
-      case BoardImpl.PAGES:
+      case h.PAGES:
         return this._pages !== void 0 && !this._pages.isEmpty();
-      case BoardImpl.DEFAULT_PAGE:
+      case h.DEFAULT_PAGE:
         return this._defaultPage !== void 0;
       default:
-        return super.eIsSet(feature);
+        return super.eIsSet(e);
     }
   }
   /**
    * Unsets the given feature
    */
-  eUnset(feature) {
-    const featureID = this.eClass().getFeatureID(feature);
-    switch (featureID) {
-      case BoardImpl.ID:
+  eUnset(e) {
+    switch (this.eClass().getFeatureID(e)) {
+      case h.ID:
         this._id = "";
         return;
-      case BoardImpl.NAME:
+      case h.NAME:
         this._name = void 0;
         return;
-      case BoardImpl.DESCRIPTION:
+      case h.DESCRIPTION:
         this._description = void 0;
         return;
-      case BoardImpl.ICON:
+      case h.ICON:
         this._icon = void 0;
         return;
-      case BoardImpl.PAGES:
-        if (this._pages) this._pages.clear();
+      case h.PAGES:
+        this._pages && this._pages.clear();
         return;
-      case BoardImpl.DEFAULT_PAGE:
+      case h.DEFAULT_PAGE:
         this._defaultPage = void 0;
         return;
       default:
-        super.eUnset(feature);
+        super.eUnset(e);
     }
   }
   /**
@@ -453,7 +396,7 @@ class BoardImpl extends BasicEObject {
     };
   }
 }
-class PageImpl extends BasicEObject {
+class i extends I {
   // Feature ID Constants (eLiterals)
   static ID = 0;
   static NAME = 1;
@@ -488,492 +431,430 @@ class PageImpl extends BasicEObject {
    * Returns the EClass of this object
    */
   eClass() {
-    return WorkspacePackage.Literals.PAGE;
+    return s.Literals.PAGE;
   }
   // Getters and Setters
   get id() {
     return this._id;
   }
-  set id(value) {
-    const oldValue = this._id;
-    this._id = value;
-    if (this.eDeliver()) {
-      this.eNotify({
-        getNotifier: () => this,
-        getEventType: () => 1,
-        // SET
-        getFeature: () => this.eClass().getEStructuralFeature(PageImpl.ID),
-        getOldValue: () => oldValue,
-        getNewValue: () => value,
-        getPosition: () => -1,
-        wasSet: () => true,
-        isTouch: () => false,
-        isReset: () => false,
-        getFeatureID: () => PageImpl.ID,
-        merge: () => false
-      });
-    }
+  set id(e) {
+    const t = this._id;
+    this._id = e, this.eDeliver() && this.eNotify({
+      getNotifier: () => this,
+      getEventType: () => 1,
+      // SET
+      getFeature: () => this.eClass().getEStructuralFeature(i.ID),
+      getOldValue: () => t,
+      getNewValue: () => e,
+      getPosition: () => -1,
+      wasSet: () => !0,
+      isTouch: () => !1,
+      isReset: () => !1,
+      getFeatureID: () => i.ID,
+      merge: () => !1
+    });
   }
   get name() {
     return this._name;
   }
-  set name(value) {
-    const oldValue = this._name;
-    this._name = value;
-    if (this.eDeliver()) {
-      this.eNotify({
-        getNotifier: () => this,
-        getEventType: () => 1,
-        // SET
-        getFeature: () => this.eClass().getEStructuralFeature(PageImpl.NAME),
-        getOldValue: () => oldValue,
-        getNewValue: () => value,
-        getPosition: () => -1,
-        wasSet: () => true,
-        isTouch: () => false,
-        isReset: () => false,
-        getFeatureID: () => PageImpl.NAME,
-        merge: () => false
-      });
-    }
+  set name(e) {
+    const t = this._name;
+    this._name = e, this.eDeliver() && this.eNotify({
+      getNotifier: () => this,
+      getEventType: () => 1,
+      // SET
+      getFeature: () => this.eClass().getEStructuralFeature(i.NAME),
+      getOldValue: () => t,
+      getNewValue: () => e,
+      getPosition: () => -1,
+      wasSet: () => !0,
+      isTouch: () => !1,
+      isReset: () => !1,
+      getFeatureID: () => i.NAME,
+      merge: () => !1
+    });
   }
   get description() {
     return this._description;
   }
-  set description(value) {
-    const oldValue = this._description;
-    this._description = value;
-    if (this.eDeliver()) {
-      this.eNotify({
-        getNotifier: () => this,
-        getEventType: () => 1,
-        // SET
-        getFeature: () => this.eClass().getEStructuralFeature(PageImpl.DESCRIPTION),
-        getOldValue: () => oldValue,
-        getNewValue: () => value,
-        getPosition: () => -1,
-        wasSet: () => true,
-        isTouch: () => false,
-        isReset: () => false,
-        getFeatureID: () => PageImpl.DESCRIPTION,
-        merge: () => false
-      });
-    }
+  set description(e) {
+    const t = this._description;
+    this._description = e, this.eDeliver() && this.eNotify({
+      getNotifier: () => this,
+      getEventType: () => 1,
+      // SET
+      getFeature: () => this.eClass().getEStructuralFeature(i.DESCRIPTION),
+      getOldValue: () => t,
+      getNewValue: () => e,
+      getPosition: () => -1,
+      wasSet: () => !0,
+      isTouch: () => !1,
+      isReset: () => !1,
+      getFeatureID: () => i.DESCRIPTION,
+      merge: () => !1
+    });
   }
   get icon() {
     return this._icon;
   }
-  set icon(value) {
-    const oldValue = this._icon;
-    this._icon = value;
-    if (this.eDeliver()) {
-      this.eNotify({
-        getNotifier: () => this,
-        getEventType: () => 1,
-        // SET
-        getFeature: () => this.eClass().getEStructuralFeature(PageImpl.ICON),
-        getOldValue: () => oldValue,
-        getNewValue: () => value,
-        getPosition: () => -1,
-        wasSet: () => true,
-        isTouch: () => false,
-        isReset: () => false,
-        getFeatureID: () => PageImpl.ICON,
-        merge: () => false
-      });
-    }
+  set icon(e) {
+    const t = this._icon;
+    this._icon = e, this.eDeliver() && this.eNotify({
+      getNotifier: () => this,
+      getEventType: () => 1,
+      // SET
+      getFeature: () => this.eClass().getEStructuralFeature(i.ICON),
+      getOldValue: () => t,
+      getNewValue: () => e,
+      getPosition: () => -1,
+      wasSet: () => !0,
+      isTouch: () => !1,
+      isReset: () => !1,
+      getFeatureID: () => i.ICON,
+      merge: () => !1
+    });
   }
   get visibleInNavigation() {
     return this._visibleInNavigation;
   }
-  set visibleInNavigation(value) {
-    const oldValue = this._visibleInNavigation;
-    this._visibleInNavigation = value;
-    if (this.eDeliver()) {
-      this.eNotify({
-        getNotifier: () => this,
-        getEventType: () => 1,
-        // SET
-        getFeature: () => this.eClass().getEStructuralFeature(PageImpl.VISIBLE_IN_NAVIGATION),
-        getOldValue: () => oldValue,
-        getNewValue: () => value,
-        getPosition: () => -1,
-        wasSet: () => true,
-        isTouch: () => false,
-        isReset: () => false,
-        getFeatureID: () => PageImpl.VISIBLE_IN_NAVIGATION,
-        merge: () => false
-      });
-    }
+  set visibleInNavigation(e) {
+    const t = this._visibleInNavigation;
+    this._visibleInNavigation = e, this.eDeliver() && this.eNotify({
+      getNotifier: () => this,
+      getEventType: () => 1,
+      // SET
+      getFeature: () => this.eClass().getEStructuralFeature(i.VISIBLE_IN_NAVIGATION),
+      getOldValue: () => t,
+      getNewValue: () => e,
+      getPosition: () => -1,
+      wasSet: () => !0,
+      isTouch: () => !1,
+      isReset: () => !1,
+      getFeatureID: () => i.VISIBLE_IN_NAVIGATION,
+      merge: () => !1
+    });
   }
   get layoutId() {
     return this._layoutId;
   }
-  set layoutId(value) {
-    const oldValue = this._layoutId;
-    this._layoutId = value;
-    if (this.eDeliver()) {
-      this.eNotify({
-        getNotifier: () => this,
-        getEventType: () => 1,
-        // SET
-        getFeature: () => this.eClass().getEStructuralFeature(PageImpl.LAYOUT_ID),
-        getOldValue: () => oldValue,
-        getNewValue: () => value,
-        getPosition: () => -1,
-        wasSet: () => true,
-        isTouch: () => false,
-        isReset: () => false,
-        getFeatureID: () => PageImpl.LAYOUT_ID,
-        merge: () => false
-      });
-    }
+  set layoutId(e) {
+    const t = this._layoutId;
+    this._layoutId = e, this.eDeliver() && this.eNotify({
+      getNotifier: () => this,
+      getEventType: () => 1,
+      // SET
+      getFeature: () => this.eClass().getEStructuralFeature(i.LAYOUT_ID),
+      getOldValue: () => t,
+      getNewValue: () => e,
+      getPosition: () => -1,
+      wasSet: () => !0,
+      isTouch: () => !1,
+      isReset: () => !1,
+      getFeatureID: () => i.LAYOUT_ID,
+      merge: () => !1
+    });
   }
   get layoutSettings() {
     return this._layoutSettings;
   }
-  set layoutSettings(value) {
-    const oldValue = this._layoutSettings;
-    this._layoutSettings = value;
-    if (this.eDeliver()) {
-      this.eNotify({
-        getNotifier: () => this,
-        getEventType: () => 1,
-        // SET
-        getFeature: () => this.eClass().getEStructuralFeature(PageImpl.LAYOUT_SETTINGS),
-        getOldValue: () => oldValue,
-        getNewValue: () => value,
-        getPosition: () => -1,
-        wasSet: () => true,
-        isTouch: () => false,
-        isReset: () => false,
-        getFeatureID: () => PageImpl.LAYOUT_SETTINGS,
-        merge: () => false
-      });
-    }
+  set layoutSettings(e) {
+    const t = this._layoutSettings;
+    this._layoutSettings = e, this.eDeliver() && this.eNotify({
+      getNotifier: () => this,
+      getEventType: () => 1,
+      // SET
+      getFeature: () => this.eClass().getEStructuralFeature(i.LAYOUT_SETTINGS),
+      getOldValue: () => t,
+      getNewValue: () => e,
+      getPosition: () => -1,
+      wasSet: () => !0,
+      isTouch: () => !1,
+      isReset: () => !1,
+      getFeatureID: () => i.LAYOUT_SETTINGS,
+      merge: () => !1
+    });
   }
   get backgroundColor() {
     return this._backgroundColor;
   }
-  set backgroundColor(value) {
-    const oldValue = this._backgroundColor;
-    this._backgroundColor = value;
-    if (this.eDeliver()) {
-      this.eNotify({
-        getNotifier: () => this,
-        getEventType: () => 1,
-        // SET
-        getFeature: () => this.eClass().getEStructuralFeature(PageImpl.BACKGROUND_COLOR),
-        getOldValue: () => oldValue,
-        getNewValue: () => value,
-        getPosition: () => -1,
-        wasSet: () => true,
-        isTouch: () => false,
-        isReset: () => false,
-        getFeatureID: () => PageImpl.BACKGROUND_COLOR,
-        merge: () => false
-      });
-    }
+  set backgroundColor(e) {
+    const t = this._backgroundColor;
+    this._backgroundColor = e, this.eDeliver() && this.eNotify({
+      getNotifier: () => this,
+      getEventType: () => 1,
+      // SET
+      getFeature: () => this.eClass().getEStructuralFeature(i.BACKGROUND_COLOR),
+      getOldValue: () => t,
+      getNewValue: () => e,
+      getPosition: () => -1,
+      wasSet: () => !0,
+      isTouch: () => !1,
+      isReset: () => !1,
+      getFeatureID: () => i.BACKGROUND_COLOR,
+      merge: () => !1
+    });
   }
   get backgroundImage() {
     return this._backgroundImage;
   }
-  set backgroundImage(value) {
-    const oldValue = this._backgroundImage;
-    this._backgroundImage = value;
-    if (this.eDeliver()) {
-      this.eNotify({
-        getNotifier: () => this,
-        getEventType: () => 1,
-        // SET
-        getFeature: () => this.eClass().getEStructuralFeature(PageImpl.BACKGROUND_IMAGE),
-        getOldValue: () => oldValue,
-        getNewValue: () => value,
-        getPosition: () => -1,
-        wasSet: () => true,
-        isTouch: () => false,
-        isReset: () => false,
-        getFeatureID: () => PageImpl.BACKGROUND_IMAGE,
-        merge: () => false
-      });
-    }
+  set backgroundImage(e) {
+    const t = this._backgroundImage;
+    this._backgroundImage = e, this.eDeliver() && this.eNotify({
+      getNotifier: () => this,
+      getEventType: () => 1,
+      // SET
+      getFeature: () => this.eClass().getEStructuralFeature(i.BACKGROUND_IMAGE),
+      getOldValue: () => t,
+      getNewValue: () => e,
+      getPosition: () => -1,
+      wasSet: () => !0,
+      isTouch: () => !1,
+      isReset: () => !1,
+      getFeatureID: () => i.BACKGROUND_IMAGE,
+      merge: () => !1
+    });
   }
   get backgroundSize() {
     return this._backgroundSize;
   }
-  set backgroundSize(value) {
-    const oldValue = this._backgroundSize;
-    this._backgroundSize = value;
-    if (this.eDeliver()) {
-      this.eNotify({
-        getNotifier: () => this,
-        getEventType: () => 1,
-        // SET
-        getFeature: () => this.eClass().getEStructuralFeature(PageImpl.BACKGROUND_SIZE),
-        getOldValue: () => oldValue,
-        getNewValue: () => value,
-        getPosition: () => -1,
-        wasSet: () => true,
-        isTouch: () => false,
-        isReset: () => false,
-        getFeatureID: () => PageImpl.BACKGROUND_SIZE,
-        merge: () => false
-      });
-    }
+  set backgroundSize(e) {
+    const t = this._backgroundSize;
+    this._backgroundSize = e, this.eDeliver() && this.eNotify({
+      getNotifier: () => this,
+      getEventType: () => 1,
+      // SET
+      getFeature: () => this.eClass().getEStructuralFeature(i.BACKGROUND_SIZE),
+      getOldValue: () => t,
+      getNewValue: () => e,
+      getPosition: () => -1,
+      wasSet: () => !0,
+      isTouch: () => !1,
+      isReset: () => !1,
+      getFeatureID: () => i.BACKGROUND_SIZE,
+      merge: () => !1
+    });
   }
   get backgroundPosition() {
     return this._backgroundPosition;
   }
-  set backgroundPosition(value) {
-    const oldValue = this._backgroundPosition;
-    this._backgroundPosition = value;
-    if (this.eDeliver()) {
-      this.eNotify({
-        getNotifier: () => this,
-        getEventType: () => 1,
-        // SET
-        getFeature: () => this.eClass().getEStructuralFeature(PageImpl.BACKGROUND_POSITION),
-        getOldValue: () => oldValue,
-        getNewValue: () => value,
-        getPosition: () => -1,
-        wasSet: () => true,
-        isTouch: () => false,
-        isReset: () => false,
-        getFeatureID: () => PageImpl.BACKGROUND_POSITION,
-        merge: () => false
-      });
-    }
+  set backgroundPosition(e) {
+    const t = this._backgroundPosition;
+    this._backgroundPosition = e, this.eDeliver() && this.eNotify({
+      getNotifier: () => this,
+      getEventType: () => 1,
+      // SET
+      getFeature: () => this.eClass().getEStructuralFeature(i.BACKGROUND_POSITION),
+      getOldValue: () => t,
+      getNewValue: () => e,
+      getPosition: () => -1,
+      wasSet: () => !0,
+      isTouch: () => !1,
+      isReset: () => !1,
+      getFeatureID: () => i.BACKGROUND_POSITION,
+      merge: () => !1
+    });
   }
   get backgroundRepeat() {
     return this._backgroundRepeat;
   }
-  set backgroundRepeat(value) {
-    const oldValue = this._backgroundRepeat;
-    this._backgroundRepeat = value;
-    if (this.eDeliver()) {
-      this.eNotify({
-        getNotifier: () => this,
-        getEventType: () => 1,
-        // SET
-        getFeature: () => this.eClass().getEStructuralFeature(PageImpl.BACKGROUND_REPEAT),
-        getOldValue: () => oldValue,
-        getNewValue: () => value,
-        getPosition: () => -1,
-        wasSet: () => true,
-        isTouch: () => false,
-        isReset: () => false,
-        getFeatureID: () => PageImpl.BACKGROUND_REPEAT,
-        merge: () => false
-      });
-    }
+  set backgroundRepeat(e) {
+    const t = this._backgroundRepeat;
+    this._backgroundRepeat = e, this.eDeliver() && this.eNotify({
+      getNotifier: () => this,
+      getEventType: () => 1,
+      // SET
+      getFeature: () => this.eClass().getEStructuralFeature(i.BACKGROUND_REPEAT),
+      getOldValue: () => t,
+      getNewValue: () => e,
+      getPosition: () => -1,
+      wasSet: () => !0,
+      isTouch: () => !1,
+      isReset: () => !1,
+      getFeatureID: () => i.BACKGROUND_REPEAT,
+      merge: () => !1
+    });
   }
   get widgets() {
-    if (!this._widgets) {
-      this._widgets = createContainmentEList(this, this.eClass().getEStructuralFeature("widgets"));
-    }
-    return this._widgets;
+    return this._widgets || (this._widgets = G(this, this.eClass().getEStructuralFeature("widgets"))), this._widgets;
   }
   get layout() {
-    if (!this._layout) {
-      this._layout = createContainmentEList(this, this.eClass().getEStructuralFeature("layout"));
-    }
-    return this._layout;
+    return this._layout || (this._layout = G(this, this.eClass().getEStructuralFeature("layout"))), this._layout;
   }
   // Reflective API
   /**
    * Returns the value of the given feature
    */
-  eGet(feature) {
-    const featureID = this.eClass().getFeatureID(feature);
-    switch (featureID) {
-      case PageImpl.ID:
+  eGet(e) {
+    switch (this.eClass().getFeatureID(e)) {
+      case i.ID:
         return this.id;
-      case PageImpl.NAME:
+      case i.NAME:
         return this.name;
-      case PageImpl.DESCRIPTION:
+      case i.DESCRIPTION:
         return this.description;
-      case PageImpl.ICON:
+      case i.ICON:
         return this.icon;
-      case PageImpl.VISIBLE_IN_NAVIGATION:
+      case i.VISIBLE_IN_NAVIGATION:
         return this.visibleInNavigation;
-      case PageImpl.LAYOUT_ID:
+      case i.LAYOUT_ID:
         return this.layoutId;
-      case PageImpl.LAYOUT_SETTINGS:
+      case i.LAYOUT_SETTINGS:
         return this.layoutSettings;
-      case PageImpl.BACKGROUND_COLOR:
+      case i.BACKGROUND_COLOR:
         return this.backgroundColor;
-      case PageImpl.BACKGROUND_IMAGE:
+      case i.BACKGROUND_IMAGE:
         return this.backgroundImage;
-      case PageImpl.BACKGROUND_SIZE:
+      case i.BACKGROUND_SIZE:
         return this.backgroundSize;
-      case PageImpl.BACKGROUND_POSITION:
+      case i.BACKGROUND_POSITION:
         return this.backgroundPosition;
-      case PageImpl.BACKGROUND_REPEAT:
+      case i.BACKGROUND_REPEAT:
         return this.backgroundRepeat;
-      case PageImpl.WIDGETS:
+      case i.WIDGETS:
         return this.widgets;
-      case PageImpl.LAYOUT:
+      case i.LAYOUT:
         return this.layout;
       default:
-        return super.eGet(feature);
+        return super.eGet(e);
     }
   }
   /**
    * Sets the value of the given feature
    */
-  eSet(feature, newValue) {
-    const featureID = this.eClass().getFeatureID(feature);
-    switch (featureID) {
-      case PageImpl.ID:
-        this.id = newValue;
-        super.eSet(feature, newValue);
+  eSet(e, t) {
+    switch (this.eClass().getFeatureID(e)) {
+      case i.ID:
+        this.id = t, super.eSet(e, t);
         break;
-      case PageImpl.NAME:
-        this.name = newValue;
-        super.eSet(feature, newValue);
+      case i.NAME:
+        this.name = t, super.eSet(e, t);
         break;
-      case PageImpl.DESCRIPTION:
-        this.description = newValue;
-        super.eSet(feature, newValue);
+      case i.DESCRIPTION:
+        this.description = t, super.eSet(e, t);
         break;
-      case PageImpl.ICON:
-        this.icon = newValue;
-        super.eSet(feature, newValue);
+      case i.ICON:
+        this.icon = t, super.eSet(e, t);
         break;
-      case PageImpl.VISIBLE_IN_NAVIGATION:
-        this.visibleInNavigation = newValue;
-        super.eSet(feature, newValue);
+      case i.VISIBLE_IN_NAVIGATION:
+        this.visibleInNavigation = t, super.eSet(e, t);
         break;
-      case PageImpl.LAYOUT_ID:
-        this.layoutId = newValue;
-        super.eSet(feature, newValue);
+      case i.LAYOUT_ID:
+        this.layoutId = t, super.eSet(e, t);
         break;
-      case PageImpl.LAYOUT_SETTINGS:
-        this.layoutSettings = newValue;
-        super.eSet(feature, newValue);
+      case i.LAYOUT_SETTINGS:
+        this.layoutSettings = t, super.eSet(e, t);
         break;
-      case PageImpl.BACKGROUND_COLOR:
-        this.backgroundColor = newValue;
-        super.eSet(feature, newValue);
+      case i.BACKGROUND_COLOR:
+        this.backgroundColor = t, super.eSet(e, t);
         break;
-      case PageImpl.BACKGROUND_IMAGE:
-        this.backgroundImage = newValue;
-        super.eSet(feature, newValue);
+      case i.BACKGROUND_IMAGE:
+        this.backgroundImage = t, super.eSet(e, t);
         break;
-      case PageImpl.BACKGROUND_SIZE:
-        this.backgroundSize = newValue;
-        super.eSet(feature, newValue);
+      case i.BACKGROUND_SIZE:
+        this.backgroundSize = t, super.eSet(e, t);
         break;
-      case PageImpl.BACKGROUND_POSITION:
-        this.backgroundPosition = newValue;
-        super.eSet(feature, newValue);
+      case i.BACKGROUND_POSITION:
+        this.backgroundPosition = t, super.eSet(e, t);
         break;
-      case PageImpl.BACKGROUND_REPEAT:
-        this.backgroundRepeat = newValue;
-        super.eSet(feature, newValue);
+      case i.BACKGROUND_REPEAT:
+        this.backgroundRepeat = t, super.eSet(e, t);
         break;
-      case PageImpl.WIDGETS:
-        this.widgets.clear();
-        this.widgets.addAll(newValue);
-        super.eSet(feature, newValue);
+      case i.WIDGETS:
+        this.widgets.clear(), this.widgets.addAll(t), super.eSet(e, t);
         break;
-      case PageImpl.LAYOUT:
-        this.layout.clear();
-        this.layout.addAll(newValue);
-        super.eSet(feature, newValue);
+      case i.LAYOUT:
+        this.layout.clear(), this.layout.addAll(t), super.eSet(e, t);
         break;
       default:
-        super.eSet(feature, newValue);
+        super.eSet(e, t);
     }
   }
   /**
    * Returns whether the feature has been set
    */
-  eIsSet(feature) {
-    const featureID = this.eClass().getFeatureID(feature);
-    switch (featureID) {
-      case PageImpl.ID:
+  eIsSet(e) {
+    switch (this.eClass().getFeatureID(e)) {
+      case i.ID:
         return this._id !== "";
-      case PageImpl.NAME:
+      case i.NAME:
         return this._name !== void 0;
-      case PageImpl.DESCRIPTION:
+      case i.DESCRIPTION:
         return this._description !== void 0;
-      case PageImpl.ICON:
+      case i.ICON:
         return this._icon !== void 0;
-      case PageImpl.VISIBLE_IN_NAVIGATION:
+      case i.VISIBLE_IN_NAVIGATION:
         return this._visibleInNavigation !== void 0;
-      case PageImpl.LAYOUT_ID:
+      case i.LAYOUT_ID:
         return this._layoutId !== void 0;
-      case PageImpl.LAYOUT_SETTINGS:
+      case i.LAYOUT_SETTINGS:
         return this._layoutSettings !== void 0;
-      case PageImpl.BACKGROUND_COLOR:
+      case i.BACKGROUND_COLOR:
         return this._backgroundColor !== void 0;
-      case PageImpl.BACKGROUND_IMAGE:
+      case i.BACKGROUND_IMAGE:
         return this._backgroundImage !== void 0;
-      case PageImpl.BACKGROUND_SIZE:
+      case i.BACKGROUND_SIZE:
         return this._backgroundSize !== void 0;
-      case PageImpl.BACKGROUND_POSITION:
+      case i.BACKGROUND_POSITION:
         return this._backgroundPosition !== void 0;
-      case PageImpl.BACKGROUND_REPEAT:
+      case i.BACKGROUND_REPEAT:
         return this._backgroundRepeat !== void 0;
-      case PageImpl.WIDGETS:
+      case i.WIDGETS:
         return this._widgets !== void 0 && !this._widgets.isEmpty();
-      case PageImpl.LAYOUT:
+      case i.LAYOUT:
         return this._layout !== void 0 && !this._layout.isEmpty();
       default:
-        return super.eIsSet(feature);
+        return super.eIsSet(e);
     }
   }
   /**
    * Unsets the given feature
    */
-  eUnset(feature) {
-    const featureID = this.eClass().getFeatureID(feature);
-    switch (featureID) {
-      case PageImpl.ID:
+  eUnset(e) {
+    switch (this.eClass().getFeatureID(e)) {
+      case i.ID:
         this._id = "";
         return;
-      case PageImpl.NAME:
+      case i.NAME:
         this._name = void 0;
         return;
-      case PageImpl.DESCRIPTION:
+      case i.DESCRIPTION:
         this._description = void 0;
         return;
-      case PageImpl.ICON:
+      case i.ICON:
         this._icon = void 0;
         return;
-      case PageImpl.VISIBLE_IN_NAVIGATION:
+      case i.VISIBLE_IN_NAVIGATION:
         this._visibleInNavigation = void 0;
         return;
-      case PageImpl.LAYOUT_ID:
+      case i.LAYOUT_ID:
         this._layoutId = void 0;
         return;
-      case PageImpl.LAYOUT_SETTINGS:
+      case i.LAYOUT_SETTINGS:
         this._layoutSettings = void 0;
         return;
-      case PageImpl.BACKGROUND_COLOR:
+      case i.BACKGROUND_COLOR:
         this._backgroundColor = void 0;
         return;
-      case PageImpl.BACKGROUND_IMAGE:
+      case i.BACKGROUND_IMAGE:
         this._backgroundImage = void 0;
         return;
-      case PageImpl.BACKGROUND_SIZE:
+      case i.BACKGROUND_SIZE:
         this._backgroundSize = void 0;
         return;
-      case PageImpl.BACKGROUND_POSITION:
+      case i.BACKGROUND_POSITION:
         this._backgroundPosition = void 0;
         return;
-      case PageImpl.BACKGROUND_REPEAT:
+      case i.BACKGROUND_REPEAT:
         this._backgroundRepeat = void 0;
         return;
-      case PageImpl.WIDGETS:
-        if (this._widgets) this._widgets.clear();
+      case i.WIDGETS:
+        this._widgets && this._widgets.clear();
         return;
-      case PageImpl.LAYOUT:
-        if (this._layout) this._layout.clear();
+      case i.LAYOUT:
+        this._layout && this._layout.clear();
         return;
       default:
-        super.eUnset(feature);
+        super.eUnset(e);
     }
   }
   /**
@@ -1002,7 +883,7 @@ class PageImpl extends BasicEObject {
     };
   }
 }
-class WidgetImpl extends BasicEObject {
+class g extends I {
   // Feature ID Constants (eLiterals)
   static UID = 0;
   static TYPE = 1;
@@ -1019,218 +900,194 @@ class WidgetImpl extends BasicEObject {
    * Returns the EClass of this object
    */
   eClass() {
-    return WorkspacePackage.Literals.WIDGET;
+    return s.Literals.WIDGET;
   }
   // Getters and Setters
   get uid() {
     return this._uid;
   }
-  set uid(value) {
-    const oldValue = this._uid;
-    this._uid = value;
-    if (this.eDeliver()) {
-      this.eNotify({
-        getNotifier: () => this,
-        getEventType: () => 1,
-        // SET
-        getFeature: () => this.eClass().getEStructuralFeature(WidgetImpl.UID),
-        getOldValue: () => oldValue,
-        getNewValue: () => value,
-        getPosition: () => -1,
-        wasSet: () => true,
-        isTouch: () => false,
-        isReset: () => false,
-        getFeatureID: () => WidgetImpl.UID,
-        merge: () => false
-      });
-    }
+  set uid(e) {
+    const t = this._uid;
+    this._uid = e, this.eDeliver() && this.eNotify({
+      getNotifier: () => this,
+      getEventType: () => 1,
+      // SET
+      getFeature: () => this.eClass().getEStructuralFeature(g.UID),
+      getOldValue: () => t,
+      getNewValue: () => e,
+      getPosition: () => -1,
+      wasSet: () => !0,
+      isTouch: () => !1,
+      isReset: () => !1,
+      getFeatureID: () => g.UID,
+      merge: () => !1
+    });
   }
   get type() {
     return this._type;
   }
-  set type(value) {
-    const oldValue = this._type;
-    this._type = value;
-    if (this.eDeliver()) {
-      this.eNotify({
-        getNotifier: () => this,
-        getEventType: () => 1,
-        // SET
-        getFeature: () => this.eClass().getEStructuralFeature(WidgetImpl.TYPE),
-        getOldValue: () => oldValue,
-        getNewValue: () => value,
-        getPosition: () => -1,
-        wasSet: () => true,
-        isTouch: () => false,
-        isReset: () => false,
-        getFeatureID: () => WidgetImpl.TYPE,
-        merge: () => false
-      });
-    }
+  set type(e) {
+    const t = this._type;
+    this._type = e, this.eDeliver() && this.eNotify({
+      getNotifier: () => this,
+      getEventType: () => 1,
+      // SET
+      getFeature: () => this.eClass().getEStructuralFeature(g.TYPE),
+      getOldValue: () => t,
+      getNewValue: () => e,
+      getPosition: () => -1,
+      wasSet: () => !0,
+      isTouch: () => !1,
+      isReset: () => !1,
+      getFeatureID: () => g.TYPE,
+      merge: () => !1
+    });
   }
   get datasource() {
     return this._datasource;
   }
-  set datasource(value) {
-    const oldValue = this._datasource;
-    this._datasource = value;
-    if (this.eDeliver()) {
-      this.eNotify({
-        getNotifier: () => this,
-        getEventType: () => 1,
-        // SET
-        getFeature: () => this.eClass().getEStructuralFeature(WidgetImpl.DATASOURCE),
-        getOldValue: () => oldValue,
-        getNewValue: () => value,
-        getPosition: () => -1,
-        wasSet: () => true,
-        isTouch: () => false,
-        isReset: () => false,
-        getFeatureID: () => WidgetImpl.DATASOURCE,
-        merge: () => false
-      });
-    }
+  set datasource(e) {
+    const t = this._datasource;
+    this._datasource = e, this.eDeliver() && this.eNotify({
+      getNotifier: () => this,
+      getEventType: () => 1,
+      // SET
+      getFeature: () => this.eClass().getEStructuralFeature(g.DATASOURCE),
+      getOldValue: () => t,
+      getNewValue: () => e,
+      getPosition: () => -1,
+      wasSet: () => !0,
+      isTouch: () => !1,
+      isReset: () => !1,
+      getFeatureID: () => g.DATASOURCE,
+      merge: () => !1
+    });
   }
   get config() {
     return this._config;
   }
-  set config(value) {
-    const oldValue = this._config;
-    this._config = value;
-    if (this.eDeliver()) {
-      this.eNotify({
-        getNotifier: () => this,
-        getEventType: () => 1,
-        // SET
-        getFeature: () => this.eClass().getEStructuralFeature(WidgetImpl.CONFIG),
-        getOldValue: () => oldValue,
-        getNewValue: () => value,
-        getPosition: () => -1,
-        wasSet: () => true,
-        isTouch: () => false,
-        isReset: () => false,
-        getFeatureID: () => WidgetImpl.CONFIG,
-        merge: () => false
-      });
-    }
+  set config(e) {
+    const t = this._config;
+    this._config = e, this.eDeliver() && this.eNotify({
+      getNotifier: () => this,
+      getEventType: () => 1,
+      // SET
+      getFeature: () => this.eClass().getEStructuralFeature(g.CONFIG),
+      getOldValue: () => t,
+      getNewValue: () => e,
+      getPosition: () => -1,
+      wasSet: () => !0,
+      isTouch: () => !1,
+      isReset: () => !1,
+      getFeatureID: () => g.CONFIG,
+      merge: () => !1
+    });
   }
   get wrapperConfig() {
     return this._wrapperConfig;
   }
-  set wrapperConfig(value) {
-    const oldValue = this._wrapperConfig;
-    this._wrapperConfig = value;
-    if (this.eDeliver()) {
-      this.eNotify({
-        getNotifier: () => this,
-        getEventType: () => 1,
-        // SET
-        getFeature: () => this.eClass().getEStructuralFeature(WidgetImpl.WRAPPER_CONFIG),
-        getOldValue: () => oldValue,
-        getNewValue: () => value,
-        getPosition: () => -1,
-        wasSet: () => true,
-        isTouch: () => false,
-        isReset: () => false,
-        getFeatureID: () => WidgetImpl.WRAPPER_CONFIG,
-        merge: () => false
-      });
-    }
+  set wrapperConfig(e) {
+    const t = this._wrapperConfig;
+    this._wrapperConfig = e, this.eDeliver() && this.eNotify({
+      getNotifier: () => this,
+      getEventType: () => 1,
+      // SET
+      getFeature: () => this.eClass().getEStructuralFeature(g.WRAPPER_CONFIG),
+      getOldValue: () => t,
+      getNewValue: () => e,
+      getPosition: () => -1,
+      wasSet: () => !0,
+      isTouch: () => !1,
+      isReset: () => !1,
+      getFeatureID: () => g.WRAPPER_CONFIG,
+      merge: () => !1
+    });
   }
   // Reflective API
   /**
    * Returns the value of the given feature
    */
-  eGet(feature) {
-    const featureID = this.eClass().getFeatureID(feature);
-    switch (featureID) {
-      case WidgetImpl.UID:
+  eGet(e) {
+    switch (this.eClass().getFeatureID(e)) {
+      case g.UID:
         return this.uid;
-      case WidgetImpl.TYPE:
+      case g.TYPE:
         return this.type;
-      case WidgetImpl.DATASOURCE:
+      case g.DATASOURCE:
         return this.datasource;
-      case WidgetImpl.CONFIG:
+      case g.CONFIG:
         return this.config;
-      case WidgetImpl.WRAPPER_CONFIG:
+      case g.WRAPPER_CONFIG:
         return this.wrapperConfig;
       default:
-        return super.eGet(feature);
+        return super.eGet(e);
     }
   }
   /**
    * Sets the value of the given feature
    */
-  eSet(feature, newValue) {
-    const featureID = this.eClass().getFeatureID(feature);
-    switch (featureID) {
-      case WidgetImpl.UID:
-        this.uid = newValue;
-        super.eSet(feature, newValue);
+  eSet(e, t) {
+    switch (this.eClass().getFeatureID(e)) {
+      case g.UID:
+        this.uid = t, super.eSet(e, t);
         break;
-      case WidgetImpl.TYPE:
-        this.type = newValue;
-        super.eSet(feature, newValue);
+      case g.TYPE:
+        this.type = t, super.eSet(e, t);
         break;
-      case WidgetImpl.DATASOURCE:
-        this.datasource = newValue;
-        super.eSet(feature, newValue);
+      case g.DATASOURCE:
+        this.datasource = t, super.eSet(e, t);
         break;
-      case WidgetImpl.CONFIG:
-        this.config = newValue;
-        super.eSet(feature, newValue);
+      case g.CONFIG:
+        this.config = t, super.eSet(e, t);
         break;
-      case WidgetImpl.WRAPPER_CONFIG:
-        this.wrapperConfig = newValue;
-        super.eSet(feature, newValue);
+      case g.WRAPPER_CONFIG:
+        this.wrapperConfig = t, super.eSet(e, t);
         break;
       default:
-        super.eSet(feature, newValue);
+        super.eSet(e, t);
     }
   }
   /**
    * Returns whether the feature has been set
    */
-  eIsSet(feature) {
-    const featureID = this.eClass().getFeatureID(feature);
-    switch (featureID) {
-      case WidgetImpl.UID:
+  eIsSet(e) {
+    switch (this.eClass().getFeatureID(e)) {
+      case g.UID:
         return this._uid !== "";
-      case WidgetImpl.TYPE:
+      case g.TYPE:
         return this._type !== void 0;
-      case WidgetImpl.DATASOURCE:
+      case g.DATASOURCE:
         return this._datasource !== void 0;
-      case WidgetImpl.CONFIG:
+      case g.CONFIG:
         return this._config !== void 0;
-      case WidgetImpl.WRAPPER_CONFIG:
+      case g.WRAPPER_CONFIG:
         return this._wrapperConfig !== void 0;
       default:
-        return super.eIsSet(feature);
+        return super.eIsSet(e);
     }
   }
   /**
    * Unsets the given feature
    */
-  eUnset(feature) {
-    const featureID = this.eClass().getFeatureID(feature);
-    switch (featureID) {
-      case WidgetImpl.UID:
+  eUnset(e) {
+    switch (this.eClass().getFeatureID(e)) {
+      case g.UID:
         this._uid = "";
         return;
-      case WidgetImpl.TYPE:
+      case g.TYPE:
         this._type = void 0;
         return;
-      case WidgetImpl.DATASOURCE:
+      case g.DATASOURCE:
         this._datasource = void 0;
         return;
-      case WidgetImpl.CONFIG:
+      case g.CONFIG:
         this._config = void 0;
         return;
-      case WidgetImpl.WRAPPER_CONFIG:
+      case g.WRAPPER_CONFIG:
         this._wrapperConfig = void 0;
         return;
       default:
-        super.eUnset(feature);
+        super.eUnset(e);
     }
   }
   /**
@@ -1250,7 +1107,7 @@ class WidgetImpl extends BasicEObject {
     };
   }
 }
-class VariableImpl extends BasicEObject {
+class a extends I {
   // Feature ID Constants (eLiterals)
   static UID = 0;
   static NAME = 1;
@@ -1271,286 +1128,254 @@ class VariableImpl extends BasicEObject {
    * Returns the EClass of this object
    */
   eClass() {
-    return WorkspacePackage.Literals.VARIABLE;
+    return s.Literals.VARIABLE;
   }
   // Getters and Setters
   get uid() {
     return this._uid;
   }
-  set uid(value) {
-    const oldValue = this._uid;
-    this._uid = value;
-    if (this.eDeliver()) {
-      this.eNotify({
-        getNotifier: () => this,
-        getEventType: () => 1,
-        // SET
-        getFeature: () => this.eClass().getEStructuralFeature(VariableImpl.UID),
-        getOldValue: () => oldValue,
-        getNewValue: () => value,
-        getPosition: () => -1,
-        wasSet: () => true,
-        isTouch: () => false,
-        isReset: () => false,
-        getFeatureID: () => VariableImpl.UID,
-        merge: () => false
-      });
-    }
+  set uid(e) {
+    const t = this._uid;
+    this._uid = e, this.eDeliver() && this.eNotify({
+      getNotifier: () => this,
+      getEventType: () => 1,
+      // SET
+      getFeature: () => this.eClass().getEStructuralFeature(a.UID),
+      getOldValue: () => t,
+      getNewValue: () => e,
+      getPosition: () => -1,
+      wasSet: () => !0,
+      isTouch: () => !1,
+      isReset: () => !1,
+      getFeatureID: () => a.UID,
+      merge: () => !1
+    });
   }
   get name() {
     return this._name;
   }
-  set name(value) {
-    const oldValue = this._name;
-    this._name = value;
-    if (this.eDeliver()) {
-      this.eNotify({
-        getNotifier: () => this,
-        getEventType: () => 1,
-        // SET
-        getFeature: () => this.eClass().getEStructuralFeature(VariableImpl.NAME),
-        getOldValue: () => oldValue,
-        getNewValue: () => value,
-        getPosition: () => -1,
-        wasSet: () => true,
-        isTouch: () => false,
-        isReset: () => false,
-        getFeatureID: () => VariableImpl.NAME,
-        merge: () => false
-      });
-    }
+  set name(e) {
+    const t = this._name;
+    this._name = e, this.eDeliver() && this.eNotify({
+      getNotifier: () => this,
+      getEventType: () => 1,
+      // SET
+      getFeature: () => this.eClass().getEStructuralFeature(a.NAME),
+      getOldValue: () => t,
+      getNewValue: () => e,
+      getPosition: () => -1,
+      wasSet: () => !0,
+      isTouch: () => !1,
+      isReset: () => !1,
+      getFeatureID: () => a.NAME,
+      merge: () => !1
+    });
   }
   get type() {
     return this._type;
   }
-  set type(value) {
-    const oldValue = this._type;
-    this._type = value;
-    if (this.eDeliver()) {
-      this.eNotify({
-        getNotifier: () => this,
-        getEventType: () => 1,
-        // SET
-        getFeature: () => this.eClass().getEStructuralFeature(VariableImpl.TYPE),
-        getOldValue: () => oldValue,
-        getNewValue: () => value,
-        getPosition: () => -1,
-        wasSet: () => true,
-        isTouch: () => false,
-        isReset: () => false,
-        getFeatureID: () => VariableImpl.TYPE,
-        merge: () => false
-      });
-    }
+  set type(e) {
+    const t = this._type;
+    this._type = e, this.eDeliver() && this.eNotify({
+      getNotifier: () => this,
+      getEventType: () => 1,
+      // SET
+      getFeature: () => this.eClass().getEStructuralFeature(a.TYPE),
+      getOldValue: () => t,
+      getNewValue: () => e,
+      getPosition: () => -1,
+      wasSet: () => !0,
+      isTouch: () => !1,
+      isReset: () => !1,
+      getFeatureID: () => a.TYPE,
+      merge: () => !1
+    });
   }
   get scope() {
     return this._scope;
   }
-  set scope(value) {
-    const oldValue = this._scope;
-    this._scope = value;
-    if (this.eDeliver()) {
-      this.eNotify({
-        getNotifier: () => this,
-        getEventType: () => 1,
-        // SET
-        getFeature: () => this.eClass().getEStructuralFeature(VariableImpl.SCOPE),
-        getOldValue: () => oldValue,
-        getNewValue: () => value,
-        getPosition: () => -1,
-        wasSet: () => true,
-        isTouch: () => false,
-        isReset: () => false,
-        getFeatureID: () => VariableImpl.SCOPE,
-        merge: () => false
-      });
-    }
+  set scope(e) {
+    const t = this._scope;
+    this._scope = e, this.eDeliver() && this.eNotify({
+      getNotifier: () => this,
+      getEventType: () => 1,
+      // SET
+      getFeature: () => this.eClass().getEStructuralFeature(a.SCOPE),
+      getOldValue: () => t,
+      getNewValue: () => e,
+      getPosition: () => -1,
+      wasSet: () => !0,
+      isTouch: () => !1,
+      isReset: () => !1,
+      getFeatureID: () => a.SCOPE,
+      merge: () => !1
+    });
   }
   get accessMode() {
     return this._accessMode;
   }
-  set accessMode(value) {
-    const oldValue = this._accessMode;
-    this._accessMode = value;
-    if (this.eDeliver()) {
-      this.eNotify({
-        getNotifier: () => this,
-        getEventType: () => 1,
-        // SET
-        getFeature: () => this.eClass().getEStructuralFeature(VariableImpl.ACCESS_MODE),
-        getOldValue: () => oldValue,
-        getNewValue: () => value,
-        getPosition: () => -1,
-        wasSet: () => true,
-        isTouch: () => false,
-        isReset: () => false,
-        getFeatureID: () => VariableImpl.ACCESS_MODE,
-        merge: () => false
-      });
-    }
+  set accessMode(e) {
+    const t = this._accessMode;
+    this._accessMode = e, this.eDeliver() && this.eNotify({
+      getNotifier: () => this,
+      getEventType: () => 1,
+      // SET
+      getFeature: () => this.eClass().getEStructuralFeature(a.ACCESS_MODE),
+      getOldValue: () => t,
+      getNewValue: () => e,
+      getPosition: () => -1,
+      wasSet: () => !0,
+      isTouch: () => !1,
+      isReset: () => !1,
+      getFeatureID: () => a.ACCESS_MODE,
+      merge: () => !1
+    });
   }
   get page() {
     return this._page;
   }
-  set page(value) {
-    const oldValue = this._page;
-    this._page = value;
-    if (this.eDeliver()) {
-      this.eNotify({
-        getNotifier: () => this,
-        getEventType: () => 1,
-        // SET
-        getFeature: () => this.eClass().getEStructuralFeature(VariableImpl.PAGE),
-        getOldValue: () => oldValue,
-        getNewValue: () => value,
-        getPosition: () => -1,
-        wasSet: () => true,
-        isTouch: () => false,
-        isReset: () => false,
-        getFeatureID: () => VariableImpl.PAGE,
-        merge: () => false
-      });
-    }
+  set page(e) {
+    const t = this._page;
+    this._page = e, this.eDeliver() && this.eNotify({
+      getNotifier: () => this,
+      getEventType: () => 1,
+      // SET
+      getFeature: () => this.eClass().getEStructuralFeature(a.PAGE),
+      getOldValue: () => t,
+      getNewValue: () => e,
+      getPosition: () => -1,
+      wasSet: () => !0,
+      isTouch: () => !1,
+      isReset: () => !1,
+      getFeatureID: () => a.PAGE,
+      merge: () => !1
+    });
   }
   get definition() {
     return this._definition;
   }
-  set definition(value) {
-    const oldValue = this._definition;
-    this._definition = value;
-    if (this.eDeliver()) {
-      this.eNotify({
-        getNotifier: () => this,
-        getEventType: () => 1,
-        // SET
-        getFeature: () => this.eClass().getEStructuralFeature(VariableImpl.DEFINITION),
-        getOldValue: () => oldValue,
-        getNewValue: () => value,
-        getPosition: () => -1,
-        wasSet: () => true,
-        isTouch: () => false,
-        isReset: () => false,
-        getFeatureID: () => VariableImpl.DEFINITION,
-        merge: () => false
-      });
-    }
+  set definition(e) {
+    const t = this._definition;
+    this._definition = e, this.eDeliver() && this.eNotify({
+      getNotifier: () => this,
+      getEventType: () => 1,
+      // SET
+      getFeature: () => this.eClass().getEStructuralFeature(a.DEFINITION),
+      getOldValue: () => t,
+      getNewValue: () => e,
+      getPosition: () => -1,
+      wasSet: () => !0,
+      isTouch: () => !1,
+      isReset: () => !1,
+      getFeatureID: () => a.DEFINITION,
+      merge: () => !1
+    });
   }
   // Reflective API
   /**
    * Returns the value of the given feature
    */
-  eGet(feature) {
-    const featureID = this.eClass().getFeatureID(feature);
-    switch (featureID) {
-      case VariableImpl.UID:
+  eGet(e) {
+    switch (this.eClass().getFeatureID(e)) {
+      case a.UID:
         return this.uid;
-      case VariableImpl.NAME:
+      case a.NAME:
         return this.name;
-      case VariableImpl.TYPE:
+      case a.TYPE:
         return this.type;
-      case VariableImpl.SCOPE:
+      case a.SCOPE:
         return this.scope;
-      case VariableImpl.ACCESS_MODE:
+      case a.ACCESS_MODE:
         return this.accessMode;
-      case VariableImpl.PAGE:
+      case a.PAGE:
         return this.page;
-      case VariableImpl.DEFINITION:
+      case a.DEFINITION:
         return this.definition;
       default:
-        return super.eGet(feature);
+        return super.eGet(e);
     }
   }
   /**
    * Sets the value of the given feature
    */
-  eSet(feature, newValue) {
-    const featureID = this.eClass().getFeatureID(feature);
-    switch (featureID) {
-      case VariableImpl.UID:
-        this.uid = newValue;
-        super.eSet(feature, newValue);
+  eSet(e, t) {
+    switch (this.eClass().getFeatureID(e)) {
+      case a.UID:
+        this.uid = t, super.eSet(e, t);
         break;
-      case VariableImpl.NAME:
-        this.name = newValue;
-        super.eSet(feature, newValue);
+      case a.NAME:
+        this.name = t, super.eSet(e, t);
         break;
-      case VariableImpl.TYPE:
-        this.type = newValue;
-        super.eSet(feature, newValue);
+      case a.TYPE:
+        this.type = t, super.eSet(e, t);
         break;
-      case VariableImpl.SCOPE:
-        this.scope = newValue;
-        super.eSet(feature, newValue);
+      case a.SCOPE:
+        this.scope = t, super.eSet(e, t);
         break;
-      case VariableImpl.ACCESS_MODE:
-        this.accessMode = newValue;
-        super.eSet(feature, newValue);
+      case a.ACCESS_MODE:
+        this.accessMode = t, super.eSet(e, t);
         break;
-      case VariableImpl.PAGE:
-        this.page = newValue;
-        super.eSet(feature, newValue);
+      case a.PAGE:
+        this.page = t, super.eSet(e, t);
         break;
-      case VariableImpl.DEFINITION:
-        this.definition = newValue;
-        super.eSet(feature, newValue);
+      case a.DEFINITION:
+        this.definition = t, super.eSet(e, t);
         break;
       default:
-        super.eSet(feature, newValue);
+        super.eSet(e, t);
     }
   }
   /**
    * Returns whether the feature has been set
    */
-  eIsSet(feature) {
-    const featureID = this.eClass().getFeatureID(feature);
-    switch (featureID) {
-      case VariableImpl.UID:
+  eIsSet(e) {
+    switch (this.eClass().getFeatureID(e)) {
+      case a.UID:
         return this._uid !== "";
-      case VariableImpl.NAME:
+      case a.NAME:
         return this._name !== "";
-      case VariableImpl.TYPE:
+      case a.TYPE:
         return this._type !== void 0;
-      case VariableImpl.SCOPE:
+      case a.SCOPE:
         return this._scope !== void 0;
-      case VariableImpl.ACCESS_MODE:
+      case a.ACCESS_MODE:
         return this._accessMode !== void 0;
-      case VariableImpl.PAGE:
+      case a.PAGE:
         return this._page !== void 0;
-      case VariableImpl.DEFINITION:
+      case a.DEFINITION:
         return this._definition !== void 0;
       default:
-        return super.eIsSet(feature);
+        return super.eIsSet(e);
     }
   }
   /**
    * Unsets the given feature
    */
-  eUnset(feature) {
-    const featureID = this.eClass().getFeatureID(feature);
-    switch (featureID) {
-      case VariableImpl.UID:
+  eUnset(e) {
+    switch (this.eClass().getFeatureID(e)) {
+      case a.UID:
         this._uid = "";
         return;
-      case VariableImpl.NAME:
+      case a.NAME:
         this._name = "";
         return;
-      case VariableImpl.TYPE:
+      case a.TYPE:
         this._type = void 0;
         return;
-      case VariableImpl.SCOPE:
+      case a.SCOPE:
         this._scope = void 0;
         return;
-      case VariableImpl.ACCESS_MODE:
+      case a.ACCESS_MODE:
         this._accessMode = void 0;
         return;
-      case VariableImpl.PAGE:
+      case a.PAGE:
         this._page = void 0;
         return;
-      case VariableImpl.DEFINITION:
+      case a.DEFINITION:
         this._definition = void 0;
         return;
       default:
-        super.eUnset(feature);
+        super.eUnset(e);
     }
   }
   /**
@@ -1572,7 +1397,7 @@ class VariableImpl extends BasicEObject {
     };
   }
 }
-class EventMappingImpl extends BasicEObject {
+class d extends I {
   // Feature ID Constants (eLiterals)
   static ID = 0;
   static DEFINITION = 1;
@@ -1583,116 +1408,104 @@ class EventMappingImpl extends BasicEObject {
    * Returns the EClass of this object
    */
   eClass() {
-    return WorkspacePackage.Literals.EVENT_MAPPING;
+    return s.Literals.EVENT_MAPPING;
   }
   // Getters and Setters
   get id() {
     return this._id;
   }
-  set id(value) {
-    const oldValue = this._id;
-    this._id = value;
-    if (this.eDeliver()) {
-      this.eNotify({
-        getNotifier: () => this,
-        getEventType: () => 1,
-        // SET
-        getFeature: () => this.eClass().getEStructuralFeature(EventMappingImpl.ID),
-        getOldValue: () => oldValue,
-        getNewValue: () => value,
-        getPosition: () => -1,
-        wasSet: () => true,
-        isTouch: () => false,
-        isReset: () => false,
-        getFeatureID: () => EventMappingImpl.ID,
-        merge: () => false
-      });
-    }
+  set id(e) {
+    const t = this._id;
+    this._id = e, this.eDeliver() && this.eNotify({
+      getNotifier: () => this,
+      getEventType: () => 1,
+      // SET
+      getFeature: () => this.eClass().getEStructuralFeature(d.ID),
+      getOldValue: () => t,
+      getNewValue: () => e,
+      getPosition: () => -1,
+      wasSet: () => !0,
+      isTouch: () => !1,
+      isReset: () => !1,
+      getFeatureID: () => d.ID,
+      merge: () => !1
+    });
   }
   get definition() {
     return this._definition;
   }
-  set definition(value) {
-    const oldValue = this._definition;
-    this._definition = value;
-    if (this.eDeliver()) {
-      this.eNotify({
-        getNotifier: () => this,
-        getEventType: () => 1,
-        // SET
-        getFeature: () => this.eClass().getEStructuralFeature(EventMappingImpl.DEFINITION),
-        getOldValue: () => oldValue,
-        getNewValue: () => value,
-        getPosition: () => -1,
-        wasSet: () => true,
-        isTouch: () => false,
-        isReset: () => false,
-        getFeatureID: () => EventMappingImpl.DEFINITION,
-        merge: () => false
-      });
-    }
+  set definition(e) {
+    const t = this._definition;
+    this._definition = e, this.eDeliver() && this.eNotify({
+      getNotifier: () => this,
+      getEventType: () => 1,
+      // SET
+      getFeature: () => this.eClass().getEStructuralFeature(d.DEFINITION),
+      getOldValue: () => t,
+      getNewValue: () => e,
+      getPosition: () => -1,
+      wasSet: () => !0,
+      isTouch: () => !1,
+      isReset: () => !1,
+      getFeatureID: () => d.DEFINITION,
+      merge: () => !1
+    });
   }
   // Reflective API
   /**
    * Returns the value of the given feature
    */
-  eGet(feature) {
-    const featureID = this.eClass().getFeatureID(feature);
-    switch (featureID) {
-      case EventMappingImpl.ID:
+  eGet(e) {
+    switch (this.eClass().getFeatureID(e)) {
+      case d.ID:
         return this.id;
-      case EventMappingImpl.DEFINITION:
+      case d.DEFINITION:
         return this.definition;
       default:
-        return super.eGet(feature);
+        return super.eGet(e);
     }
   }
   /**
    * Sets the value of the given feature
    */
-  eSet(feature, newValue) {
-    const featureID = this.eClass().getFeatureID(feature);
-    switch (featureID) {
-      case EventMappingImpl.ID:
-        this.id = newValue;
-        super.eSet(feature, newValue);
+  eSet(e, t) {
+    switch (this.eClass().getFeatureID(e)) {
+      case d.ID:
+        this.id = t, super.eSet(e, t);
         break;
-      case EventMappingImpl.DEFINITION:
-        this.definition = newValue;
-        super.eSet(feature, newValue);
+      case d.DEFINITION:
+        this.definition = t, super.eSet(e, t);
         break;
       default:
-        super.eSet(feature, newValue);
+        super.eSet(e, t);
     }
   }
   /**
    * Returns whether the feature has been set
    */
-  eIsSet(feature) {
-    const featureID = this.eClass().getFeatureID(feature);
-    switch (featureID) {
-      case EventMappingImpl.ID:
+  eIsSet(e) {
+    switch (this.eClass().getFeatureID(e)) {
+      case d.ID:
         return this._id !== "";
-      case EventMappingImpl.DEFINITION:
+      case d.DEFINITION:
         return this._definition !== void 0;
       default:
-        return super.eIsSet(feature);
+        return super.eIsSet(e);
     }
   }
   /**
    * Unsets the given feature
    */
-  eUnset(feature) {
-    const featureID = this.eClass().getFeatureID(feature);
-    switch (featureID) {
-      case EventMappingImpl.ID:
+  eUnset(e) {
+    switch (this.eClass().getFeatureID(e)) {
+      case d.ID:
         this._id = "";
         return;
-      case EventMappingImpl.DEFINITION:
+      case d.DEFINITION:
         this._definition = void 0;
         return;
       default:
-        super.eUnset(feature);
+        super.eUnset(e);
     }
   }
   /**
@@ -1709,7 +1522,7 @@ class EventMappingImpl extends BasicEObject {
     };
   }
 }
-class LayoutItemImpl extends BasicEObject {
+class n extends I {
   // Feature ID Constants (eLiterals)
   static ID = 0;
   static X = 1;
@@ -1730,286 +1543,254 @@ class LayoutItemImpl extends BasicEObject {
    * Returns the EClass of this object
    */
   eClass() {
-    return WorkspacePackage.Literals.LAYOUT_ITEM;
+    return s.Literals.LAYOUT_ITEM;
   }
   // Getters and Setters
   get id() {
     return this._id;
   }
-  set id(value) {
-    const oldValue = this._id;
-    this._id = value;
-    if (this.eDeliver()) {
-      this.eNotify({
-        getNotifier: () => this,
-        getEventType: () => 1,
-        // SET
-        getFeature: () => this.eClass().getEStructuralFeature(LayoutItemImpl.ID),
-        getOldValue: () => oldValue,
-        getNewValue: () => value,
-        getPosition: () => -1,
-        wasSet: () => true,
-        isTouch: () => false,
-        isReset: () => false,
-        getFeatureID: () => LayoutItemImpl.ID,
-        merge: () => false
-      });
-    }
+  set id(e) {
+    const t = this._id;
+    this._id = e, this.eDeliver() && this.eNotify({
+      getNotifier: () => this,
+      getEventType: () => 1,
+      // SET
+      getFeature: () => this.eClass().getEStructuralFeature(n.ID),
+      getOldValue: () => t,
+      getNewValue: () => e,
+      getPosition: () => -1,
+      wasSet: () => !0,
+      isTouch: () => !1,
+      isReset: () => !1,
+      getFeatureID: () => n.ID,
+      merge: () => !1
+    });
   }
   get x() {
     return this._x;
   }
-  set x(value) {
-    const oldValue = this._x;
-    this._x = value;
-    if (this.eDeliver()) {
-      this.eNotify({
-        getNotifier: () => this,
-        getEventType: () => 1,
-        // SET
-        getFeature: () => this.eClass().getEStructuralFeature(LayoutItemImpl.X),
-        getOldValue: () => oldValue,
-        getNewValue: () => value,
-        getPosition: () => -1,
-        wasSet: () => true,
-        isTouch: () => false,
-        isReset: () => false,
-        getFeatureID: () => LayoutItemImpl.X,
-        merge: () => false
-      });
-    }
+  set x(e) {
+    const t = this._x;
+    this._x = e, this.eDeliver() && this.eNotify({
+      getNotifier: () => this,
+      getEventType: () => 1,
+      // SET
+      getFeature: () => this.eClass().getEStructuralFeature(n.X),
+      getOldValue: () => t,
+      getNewValue: () => e,
+      getPosition: () => -1,
+      wasSet: () => !0,
+      isTouch: () => !1,
+      isReset: () => !1,
+      getFeatureID: () => n.X,
+      merge: () => !1
+    });
   }
   get y() {
     return this._y;
   }
-  set y(value) {
-    const oldValue = this._y;
-    this._y = value;
-    if (this.eDeliver()) {
-      this.eNotify({
-        getNotifier: () => this,
-        getEventType: () => 1,
-        // SET
-        getFeature: () => this.eClass().getEStructuralFeature(LayoutItemImpl.Y),
-        getOldValue: () => oldValue,
-        getNewValue: () => value,
-        getPosition: () => -1,
-        wasSet: () => true,
-        isTouch: () => false,
-        isReset: () => false,
-        getFeatureID: () => LayoutItemImpl.Y,
-        merge: () => false
-      });
-    }
+  set y(e) {
+    const t = this._y;
+    this._y = e, this.eDeliver() && this.eNotify({
+      getNotifier: () => this,
+      getEventType: () => 1,
+      // SET
+      getFeature: () => this.eClass().getEStructuralFeature(n.Y),
+      getOldValue: () => t,
+      getNewValue: () => e,
+      getPosition: () => -1,
+      wasSet: () => !0,
+      isTouch: () => !1,
+      isReset: () => !1,
+      getFeatureID: () => n.Y,
+      merge: () => !1
+    });
   }
   get z() {
     return this._z;
   }
-  set z(value) {
-    const oldValue = this._z;
-    this._z = value;
-    if (this.eDeliver()) {
-      this.eNotify({
-        getNotifier: () => this,
-        getEventType: () => 1,
-        // SET
-        getFeature: () => this.eClass().getEStructuralFeature(LayoutItemImpl.Z),
-        getOldValue: () => oldValue,
-        getNewValue: () => value,
-        getPosition: () => -1,
-        wasSet: () => true,
-        isTouch: () => false,
-        isReset: () => false,
-        getFeatureID: () => LayoutItemImpl.Z,
-        merge: () => false
-      });
-    }
+  set z(e) {
+    const t = this._z;
+    this._z = e, this.eDeliver() && this.eNotify({
+      getNotifier: () => this,
+      getEventType: () => 1,
+      // SET
+      getFeature: () => this.eClass().getEStructuralFeature(n.Z),
+      getOldValue: () => t,
+      getNewValue: () => e,
+      getPosition: () => -1,
+      wasSet: () => !0,
+      isTouch: () => !1,
+      isReset: () => !1,
+      getFeatureID: () => n.Z,
+      merge: () => !1
+    });
   }
   get width() {
     return this._width;
   }
-  set width(value) {
-    const oldValue = this._width;
-    this._width = value;
-    if (this.eDeliver()) {
-      this.eNotify({
-        getNotifier: () => this,
-        getEventType: () => 1,
-        // SET
-        getFeature: () => this.eClass().getEStructuralFeature(LayoutItemImpl.WIDTH),
-        getOldValue: () => oldValue,
-        getNewValue: () => value,
-        getPosition: () => -1,
-        wasSet: () => true,
-        isTouch: () => false,
-        isReset: () => false,
-        getFeatureID: () => LayoutItemImpl.WIDTH,
-        merge: () => false
-      });
-    }
+  set width(e) {
+    const t = this._width;
+    this._width = e, this.eDeliver() && this.eNotify({
+      getNotifier: () => this,
+      getEventType: () => 1,
+      // SET
+      getFeature: () => this.eClass().getEStructuralFeature(n.WIDTH),
+      getOldValue: () => t,
+      getNewValue: () => e,
+      getPosition: () => -1,
+      wasSet: () => !0,
+      isTouch: () => !1,
+      isReset: () => !1,
+      getFeatureID: () => n.WIDTH,
+      merge: () => !1
+    });
   }
   get height() {
     return this._height;
   }
-  set height(value) {
-    const oldValue = this._height;
-    this._height = value;
-    if (this.eDeliver()) {
-      this.eNotify({
-        getNotifier: () => this,
-        getEventType: () => 1,
-        // SET
-        getFeature: () => this.eClass().getEStructuralFeature(LayoutItemImpl.HEIGHT),
-        getOldValue: () => oldValue,
-        getNewValue: () => value,
-        getPosition: () => -1,
-        wasSet: () => true,
-        isTouch: () => false,
-        isReset: () => false,
-        getFeatureID: () => LayoutItemImpl.HEIGHT,
-        merge: () => false
-      });
-    }
+  set height(e) {
+    const t = this._height;
+    this._height = e, this.eDeliver() && this.eNotify({
+      getNotifier: () => this,
+      getEventType: () => 1,
+      // SET
+      getFeature: () => this.eClass().getEStructuralFeature(n.HEIGHT),
+      getOldValue: () => t,
+      getNewValue: () => e,
+      getPosition: () => -1,
+      wasSet: () => !0,
+      isTouch: () => !1,
+      isReset: () => !1,
+      getFeatureID: () => n.HEIGHT,
+      merge: () => !1
+    });
   }
   get group() {
     return this._group;
   }
-  set group(value) {
-    const oldValue = this._group;
-    this._group = value;
-    if (this.eDeliver()) {
-      this.eNotify({
-        getNotifier: () => this,
-        getEventType: () => 1,
-        // SET
-        getFeature: () => this.eClass().getEStructuralFeature(LayoutItemImpl.GROUP),
-        getOldValue: () => oldValue,
-        getNewValue: () => value,
-        getPosition: () => -1,
-        wasSet: () => true,
-        isTouch: () => false,
-        isReset: () => false,
-        getFeatureID: () => LayoutItemImpl.GROUP,
-        merge: () => false
-      });
-    }
+  set group(e) {
+    const t = this._group;
+    this._group = e, this.eDeliver() && this.eNotify({
+      getNotifier: () => this,
+      getEventType: () => 1,
+      // SET
+      getFeature: () => this.eClass().getEStructuralFeature(n.GROUP),
+      getOldValue: () => t,
+      getNewValue: () => e,
+      getPosition: () => -1,
+      wasSet: () => !0,
+      isTouch: () => !1,
+      isReset: () => !1,
+      getFeatureID: () => n.GROUP,
+      merge: () => !1
+    });
   }
   // Reflective API
   /**
    * Returns the value of the given feature
    */
-  eGet(feature) {
-    const featureID = this.eClass().getFeatureID(feature);
-    switch (featureID) {
-      case LayoutItemImpl.ID:
+  eGet(e) {
+    switch (this.eClass().getFeatureID(e)) {
+      case n.ID:
         return this.id;
-      case LayoutItemImpl.X:
+      case n.X:
         return this.x;
-      case LayoutItemImpl.Y:
+      case n.Y:
         return this.y;
-      case LayoutItemImpl.Z:
+      case n.Z:
         return this.z;
-      case LayoutItemImpl.WIDTH:
+      case n.WIDTH:
         return this.width;
-      case LayoutItemImpl.HEIGHT:
+      case n.HEIGHT:
         return this.height;
-      case LayoutItemImpl.GROUP:
+      case n.GROUP:
         return this.group;
       default:
-        return super.eGet(feature);
+        return super.eGet(e);
     }
   }
   /**
    * Sets the value of the given feature
    */
-  eSet(feature, newValue) {
-    const featureID = this.eClass().getFeatureID(feature);
-    switch (featureID) {
-      case LayoutItemImpl.ID:
-        this.id = newValue;
-        super.eSet(feature, newValue);
+  eSet(e, t) {
+    switch (this.eClass().getFeatureID(e)) {
+      case n.ID:
+        this.id = t, super.eSet(e, t);
         break;
-      case LayoutItemImpl.X:
-        this.x = newValue;
-        super.eSet(feature, newValue);
+      case n.X:
+        this.x = t, super.eSet(e, t);
         break;
-      case LayoutItemImpl.Y:
-        this.y = newValue;
-        super.eSet(feature, newValue);
+      case n.Y:
+        this.y = t, super.eSet(e, t);
         break;
-      case LayoutItemImpl.Z:
-        this.z = newValue;
-        super.eSet(feature, newValue);
+      case n.Z:
+        this.z = t, super.eSet(e, t);
         break;
-      case LayoutItemImpl.WIDTH:
-        this.width = newValue;
-        super.eSet(feature, newValue);
+      case n.WIDTH:
+        this.width = t, super.eSet(e, t);
         break;
-      case LayoutItemImpl.HEIGHT:
-        this.height = newValue;
-        super.eSet(feature, newValue);
+      case n.HEIGHT:
+        this.height = t, super.eSet(e, t);
         break;
-      case LayoutItemImpl.GROUP:
-        this.group = newValue;
-        super.eSet(feature, newValue);
+      case n.GROUP:
+        this.group = t, super.eSet(e, t);
         break;
       default:
-        super.eSet(feature, newValue);
+        super.eSet(e, t);
     }
   }
   /**
    * Returns whether the feature has been set
    */
-  eIsSet(feature) {
-    const featureID = this.eClass().getFeatureID(feature);
-    switch (featureID) {
-      case LayoutItemImpl.ID:
+  eIsSet(e) {
+    switch (this.eClass().getFeatureID(e)) {
+      case n.ID:
         return this._id !== "";
-      case LayoutItemImpl.X:
+      case n.X:
         return this._x !== 0;
-      case LayoutItemImpl.Y:
+      case n.Y:
         return this._y !== 0;
-      case LayoutItemImpl.Z:
+      case n.Z:
         return this._z !== 0;
-      case LayoutItemImpl.WIDTH:
+      case n.WIDTH:
         return this._width !== 0;
-      case LayoutItemImpl.HEIGHT:
+      case n.HEIGHT:
         return this._height !== 0;
-      case LayoutItemImpl.GROUP:
+      case n.GROUP:
         return this._group !== void 0;
       default:
-        return super.eIsSet(feature);
+        return super.eIsSet(e);
     }
   }
   /**
    * Unsets the given feature
    */
-  eUnset(feature) {
-    const featureID = this.eClass().getFeatureID(feature);
-    switch (featureID) {
-      case LayoutItemImpl.ID:
+  eUnset(e) {
+    switch (this.eClass().getFeatureID(e)) {
+      case n.ID:
         this._id = "";
         return;
-      case LayoutItemImpl.X:
+      case n.X:
         this._x = 0;
         return;
-      case LayoutItemImpl.Y:
+      case n.Y:
         this._y = 0;
         return;
-      case LayoutItemImpl.Z:
+      case n.Z:
         this._z = 0;
         return;
-      case LayoutItemImpl.WIDTH:
+      case n.WIDTH:
         this._width = 0;
         return;
-      case LayoutItemImpl.HEIGHT:
+      case n.HEIGHT:
         this._height = 0;
         return;
-      case LayoutItemImpl.GROUP:
+      case n.GROUP:
         this._group = void 0;
         return;
       default:
-        super.eUnset(feature);
+        super.eUnset(e);
     }
   }
   /**
@@ -2031,7 +1812,7 @@ class LayoutItemImpl extends BasicEObject {
     };
   }
 }
-class DatasourceImpl extends BasicEObject {
+class o extends I {
   // Feature ID Constants (eLiterals)
   static UID = 0;
   static NAME = 1;
@@ -2052,270 +1833,237 @@ class DatasourceImpl extends BasicEObject {
    * Returns the EClass of this object
    */
   eClass() {
-    return WorkspacePackage.Literals.DATASOURCE;
+    return s.Literals.DATASOURCE;
   }
   // Getters and Setters
   get uid() {
     return this._uid;
   }
-  set uid(value) {
-    const oldValue = this._uid;
-    this._uid = value;
-    if (this.eDeliver()) {
-      this.eNotify({
-        getNotifier: () => this,
-        getEventType: () => 1,
-        // SET
-        getFeature: () => this.eClass().getEStructuralFeature(DatasourceImpl.UID),
-        getOldValue: () => oldValue,
-        getNewValue: () => value,
-        getPosition: () => -1,
-        wasSet: () => true,
-        isTouch: () => false,
-        isReset: () => false,
-        getFeatureID: () => DatasourceImpl.UID,
-        merge: () => false
-      });
-    }
+  set uid(e) {
+    const t = this._uid;
+    this._uid = e, this.eDeliver() && this.eNotify({
+      getNotifier: () => this,
+      getEventType: () => 1,
+      // SET
+      getFeature: () => this.eClass().getEStructuralFeature(o.UID),
+      getOldValue: () => t,
+      getNewValue: () => e,
+      getPosition: () => -1,
+      wasSet: () => !0,
+      isTouch: () => !1,
+      isReset: () => !1,
+      getFeatureID: () => o.UID,
+      merge: () => !1
+    });
   }
   get name() {
     return this._name;
   }
-  set name(value) {
-    const oldValue = this._name;
-    this._name = value;
-    if (this.eDeliver()) {
-      this.eNotify({
-        getNotifier: () => this,
-        getEventType: () => 1,
-        // SET
-        getFeature: () => this.eClass().getEStructuralFeature(DatasourceImpl.NAME),
-        getOldValue: () => oldValue,
-        getNewValue: () => value,
-        getPosition: () => -1,
-        wasSet: () => true,
-        isTouch: () => false,
-        isReset: () => false,
-        getFeatureID: () => DatasourceImpl.NAME,
-        merge: () => false
-      });
-    }
+  set name(e) {
+    const t = this._name;
+    this._name = e, this.eDeliver() && this.eNotify({
+      getNotifier: () => this,
+      getEventType: () => 1,
+      // SET
+      getFeature: () => this.eClass().getEStructuralFeature(o.NAME),
+      getOldValue: () => t,
+      getNewValue: () => e,
+      getPosition: () => -1,
+      wasSet: () => !0,
+      isTouch: () => !1,
+      isReset: () => !1,
+      getFeatureID: () => o.NAME,
+      merge: () => !1
+    });
   }
   get type() {
     return this._type;
   }
-  set type(value) {
-    const oldValue = this._type;
-    this._type = value;
-    if (this.eDeliver()) {
-      this.eNotify({
-        getNotifier: () => this,
-        getEventType: () => 1,
-        // SET
-        getFeature: () => this.eClass().getEStructuralFeature(DatasourceImpl.TYPE),
-        getOldValue: () => oldValue,
-        getNewValue: () => value,
-        getPosition: () => -1,
-        wasSet: () => true,
-        isTouch: () => false,
-        isReset: () => false,
-        getFeatureID: () => DatasourceImpl.TYPE,
-        merge: () => false
-      });
-    }
+  set type(e) {
+    const t = this._type;
+    this._type = e, this.eDeliver() && this.eNotify({
+      getNotifier: () => this,
+      getEventType: () => 1,
+      // SET
+      getFeature: () => this.eClass().getEStructuralFeature(o.TYPE),
+      getOldValue: () => t,
+      getNewValue: () => e,
+      getPosition: () => -1,
+      wasSet: () => !0,
+      isTouch: () => !1,
+      isReset: () => !1,
+      getFeatureID: () => o.TYPE,
+      merge: () => !1
+    });
   }
   get connection() {
     return this._connection;
   }
-  set connection(value) {
-    const oldValue = this._connection;
-    this._connection = value;
-    if (this.eDeliver()) {
-      this.eNotify({
-        getNotifier: () => this,
-        getEventType: () => 1,
-        // SET
-        getFeature: () => this.eClass().getEStructuralFeature(DatasourceImpl.CONNECTION),
-        getOldValue: () => oldValue,
-        getNewValue: () => value,
-        getPosition: () => -1,
-        wasSet: () => true,
-        isTouch: () => false,
-        isReset: () => false,
-        getFeatureID: () => DatasourceImpl.CONNECTION,
-        merge: () => false
-      });
-    }
+  set connection(e) {
+    const t = this._connection;
+    this._connection = e, this.eDeliver() && this.eNotify({
+      getNotifier: () => this,
+      getEventType: () => 1,
+      // SET
+      getFeature: () => this.eClass().getEStructuralFeature(o.CONNECTION),
+      getOldValue: () => t,
+      getNewValue: () => e,
+      getPosition: () => -1,
+      wasSet: () => !0,
+      isTouch: () => !1,
+      isReset: () => !1,
+      getFeatureID: () => o.CONNECTION,
+      merge: () => !1
+    });
   }
   get config() {
     return this._config;
   }
-  set config(value) {
-    const oldValue = this._config;
-    this._config = value;
-    if (this.eDeliver()) {
-      this.eNotify({
-        getNotifier: () => this,
-        getEventType: () => 1,
-        // SET
-        getFeature: () => this.eClass().getEStructuralFeature(DatasourceImpl.CONFIG),
-        getOldValue: () => oldValue,
-        getNewValue: () => value,
-        getPosition: () => -1,
-        wasSet: () => true,
-        isTouch: () => false,
-        isReset: () => false,
-        getFeatureID: () => DatasourceImpl.CONFIG,
-        merge: () => false
-      });
-    }
+  set config(e) {
+    const t = this._config;
+    this._config = e, this.eDeliver() && this.eNotify({
+      getNotifier: () => this,
+      getEventType: () => 1,
+      // SET
+      getFeature: () => this.eClass().getEStructuralFeature(o.CONFIG),
+      getOldValue: () => t,
+      getNewValue: () => e,
+      getPosition: () => -1,
+      wasSet: () => !0,
+      isTouch: () => !1,
+      isReset: () => !1,
+      getFeatureID: () => o.CONFIG,
+      merge: () => !1
+    });
   }
   get icon() {
     return this._icon;
   }
-  set icon(value) {
-    const oldValue = this._icon;
-    this._icon = value;
-    if (this.eDeliver()) {
-      this.eNotify({
-        getNotifier: () => this,
-        getEventType: () => 1,
-        // SET
-        getFeature: () => this.eClass().getEStructuralFeature(DatasourceImpl.ICON),
-        getOldValue: () => oldValue,
-        getNewValue: () => value,
-        getPosition: () => -1,
-        wasSet: () => true,
-        isTouch: () => false,
-        isReset: () => false,
-        getFeatureID: () => DatasourceImpl.ICON,
-        merge: () => false
-      });
-    }
+  set icon(e) {
+    const t = this._icon;
+    this._icon = e, this.eDeliver() && this.eNotify({
+      getNotifier: () => this,
+      getEventType: () => 1,
+      // SET
+      getFeature: () => this.eClass().getEStructuralFeature(o.ICON),
+      getOldValue: () => t,
+      getNewValue: () => e,
+      getPosition: () => -1,
+      wasSet: () => !0,
+      isTouch: () => !1,
+      isReset: () => !1,
+      getFeatureID: () => o.ICON,
+      merge: () => !1
+    });
   }
   get tags() {
-    if (!this._tags) {
-      this._tags = createBasicEList(this, this.eClass().getEStructuralFeature("tags"));
-    }
-    return this._tags;
+    return this._tags || (this._tags = be(this, this.eClass().getEStructuralFeature("tags"))), this._tags;
   }
   // Reflective API
   /**
    * Returns the value of the given feature
    */
-  eGet(feature) {
-    const featureID = this.eClass().getFeatureID(feature);
-    switch (featureID) {
-      case DatasourceImpl.UID:
+  eGet(e) {
+    switch (this.eClass().getFeatureID(e)) {
+      case o.UID:
         return this.uid;
-      case DatasourceImpl.NAME:
+      case o.NAME:
         return this.name;
-      case DatasourceImpl.TYPE:
+      case o.TYPE:
         return this.type;
-      case DatasourceImpl.CONNECTION:
+      case o.CONNECTION:
         return this.connection;
-      case DatasourceImpl.CONFIG:
+      case o.CONFIG:
         return this.config;
-      case DatasourceImpl.ICON:
+      case o.ICON:
         return this.icon;
-      case DatasourceImpl.TAGS:
+      case o.TAGS:
         return this.tags;
       default:
-        return super.eGet(feature);
+        return super.eGet(e);
     }
   }
   /**
    * Sets the value of the given feature
    */
-  eSet(feature, newValue) {
-    const featureID = this.eClass().getFeatureID(feature);
-    switch (featureID) {
-      case DatasourceImpl.UID:
-        this.uid = newValue;
-        super.eSet(feature, newValue);
+  eSet(e, t) {
+    switch (this.eClass().getFeatureID(e)) {
+      case o.UID:
+        this.uid = t, super.eSet(e, t);
         break;
-      case DatasourceImpl.NAME:
-        this.name = newValue;
-        super.eSet(feature, newValue);
+      case o.NAME:
+        this.name = t, super.eSet(e, t);
         break;
-      case DatasourceImpl.TYPE:
-        this.type = newValue;
-        super.eSet(feature, newValue);
+      case o.TYPE:
+        this.type = t, super.eSet(e, t);
         break;
-      case DatasourceImpl.CONNECTION:
-        this.connection = newValue;
-        super.eSet(feature, newValue);
+      case o.CONNECTION:
+        this.connection = t, super.eSet(e, t);
         break;
-      case DatasourceImpl.CONFIG:
-        this.config = newValue;
-        super.eSet(feature, newValue);
+      case o.CONFIG:
+        this.config = t, super.eSet(e, t);
         break;
-      case DatasourceImpl.ICON:
-        this.icon = newValue;
-        super.eSet(feature, newValue);
+      case o.ICON:
+        this.icon = t, super.eSet(e, t);
         break;
-      case DatasourceImpl.TAGS:
-        this.tags.clear();
-        this.tags.addAll(newValue);
-        super.eSet(feature, newValue);
+      case o.TAGS:
+        this.tags.clear(), this.tags.addAll(t), super.eSet(e, t);
         break;
       default:
-        super.eSet(feature, newValue);
+        super.eSet(e, t);
     }
   }
   /**
    * Returns whether the feature has been set
    */
-  eIsSet(feature) {
-    const featureID = this.eClass().getFeatureID(feature);
-    switch (featureID) {
-      case DatasourceImpl.UID:
+  eIsSet(e) {
+    switch (this.eClass().getFeatureID(e)) {
+      case o.UID:
         return this._uid !== "";
-      case DatasourceImpl.NAME:
+      case o.NAME:
         return this._name !== void 0;
-      case DatasourceImpl.TYPE:
+      case o.TYPE:
         return this._type !== void 0;
-      case DatasourceImpl.CONNECTION:
+      case o.CONNECTION:
         return this._connection !== void 0;
-      case DatasourceImpl.CONFIG:
+      case o.CONFIG:
         return this._config !== void 0;
-      case DatasourceImpl.ICON:
+      case o.ICON:
         return this._icon !== void 0;
-      case DatasourceImpl.TAGS:
+      case o.TAGS:
         return this._tags !== void 0 && !this._tags.isEmpty();
       default:
-        return super.eIsSet(feature);
+        return super.eIsSet(e);
     }
   }
   /**
    * Unsets the given feature
    */
-  eUnset(feature) {
-    const featureID = this.eClass().getFeatureID(feature);
-    switch (featureID) {
-      case DatasourceImpl.UID:
+  eUnset(e) {
+    switch (this.eClass().getFeatureID(e)) {
+      case o.UID:
         this._uid = "";
         return;
-      case DatasourceImpl.NAME:
+      case o.NAME:
         this._name = void 0;
         return;
-      case DatasourceImpl.TYPE:
+      case o.TYPE:
         this._type = void 0;
         return;
-      case DatasourceImpl.CONNECTION:
+      case o.CONNECTION:
         this._connection = void 0;
         return;
-      case DatasourceImpl.CONFIG:
+      case o.CONFIG:
         this._config = void 0;
         return;
-      case DatasourceImpl.ICON:
+      case o.ICON:
         this._icon = void 0;
         return;
-      case DatasourceImpl.TAGS:
-        if (this._tags) this._tags.clear();
+      case o.TAGS:
+        this._tags && this._tags.clear();
         return;
       default:
-        super.eUnset(feature);
+        super.eUnset(e);
     }
   }
   /**
@@ -2337,7 +2085,7 @@ class DatasourceImpl extends BasicEObject {
     };
   }
 }
-class ConnectionImpl extends BasicEObject {
+class E extends I {
   // Feature ID Constants (eLiterals)
   static UID = 0;
   static NAME = 1;
@@ -2356,236 +2104,207 @@ class ConnectionImpl extends BasicEObject {
    * Returns the EClass of this object
    */
   eClass() {
-    return WorkspacePackage.Literals.CONNECTION;
+    return s.Literals.CONNECTION;
   }
   // Getters and Setters
   get uid() {
     return this._uid;
   }
-  set uid(value) {
-    const oldValue = this._uid;
-    this._uid = value;
-    if (this.eDeliver()) {
-      this.eNotify({
-        getNotifier: () => this,
-        getEventType: () => 1,
-        // SET
-        getFeature: () => this.eClass().getEStructuralFeature(ConnectionImpl.UID),
-        getOldValue: () => oldValue,
-        getNewValue: () => value,
-        getPosition: () => -1,
-        wasSet: () => true,
-        isTouch: () => false,
-        isReset: () => false,
-        getFeatureID: () => ConnectionImpl.UID,
-        merge: () => false
-      });
-    }
+  set uid(e) {
+    const t = this._uid;
+    this._uid = e, this.eDeliver() && this.eNotify({
+      getNotifier: () => this,
+      getEventType: () => 1,
+      // SET
+      getFeature: () => this.eClass().getEStructuralFeature(E.UID),
+      getOldValue: () => t,
+      getNewValue: () => e,
+      getPosition: () => -1,
+      wasSet: () => !0,
+      isTouch: () => !1,
+      isReset: () => !1,
+      getFeatureID: () => E.UID,
+      merge: () => !1
+    });
   }
   get name() {
     return this._name;
   }
-  set name(value) {
-    const oldValue = this._name;
-    this._name = value;
-    if (this.eDeliver()) {
-      this.eNotify({
-        getNotifier: () => this,
-        getEventType: () => 1,
-        // SET
-        getFeature: () => this.eClass().getEStructuralFeature(ConnectionImpl.NAME),
-        getOldValue: () => oldValue,
-        getNewValue: () => value,
-        getPosition: () => -1,
-        wasSet: () => true,
-        isTouch: () => false,
-        isReset: () => false,
-        getFeatureID: () => ConnectionImpl.NAME,
-        merge: () => false
-      });
-    }
+  set name(e) {
+    const t = this._name;
+    this._name = e, this.eDeliver() && this.eNotify({
+      getNotifier: () => this,
+      getEventType: () => 1,
+      // SET
+      getFeature: () => this.eClass().getEStructuralFeature(E.NAME),
+      getOldValue: () => t,
+      getNewValue: () => e,
+      getPosition: () => -1,
+      wasSet: () => !0,
+      isTouch: () => !1,
+      isReset: () => !1,
+      getFeatureID: () => E.NAME,
+      merge: () => !1
+    });
   }
   get type() {
     return this._type;
   }
-  set type(value) {
-    const oldValue = this._type;
-    this._type = value;
-    if (this.eDeliver()) {
-      this.eNotify({
-        getNotifier: () => this,
-        getEventType: () => 1,
-        // SET
-        getFeature: () => this.eClass().getEStructuralFeature(ConnectionImpl.TYPE),
-        getOldValue: () => oldValue,
-        getNewValue: () => value,
-        getPosition: () => -1,
-        wasSet: () => true,
-        isTouch: () => false,
-        isReset: () => false,
-        getFeatureID: () => ConnectionImpl.TYPE,
-        merge: () => false
-      });
-    }
+  set type(e) {
+    const t = this._type;
+    this._type = e, this.eDeliver() && this.eNotify({
+      getNotifier: () => this,
+      getEventType: () => 1,
+      // SET
+      getFeature: () => this.eClass().getEStructuralFeature(E.TYPE),
+      getOldValue: () => t,
+      getNewValue: () => e,
+      getPosition: () => -1,
+      wasSet: () => !0,
+      isTouch: () => !1,
+      isReset: () => !1,
+      getFeatureID: () => E.TYPE,
+      merge: () => !1
+    });
   }
   get config() {
     return this._config;
   }
-  set config(value) {
-    const oldValue = this._config;
-    this._config = value;
-    if (this.eDeliver()) {
-      this.eNotify({
-        getNotifier: () => this,
-        getEventType: () => 1,
-        // SET
-        getFeature: () => this.eClass().getEStructuralFeature(ConnectionImpl.CONFIG),
-        getOldValue: () => oldValue,
-        getNewValue: () => value,
-        getPosition: () => -1,
-        wasSet: () => true,
-        isTouch: () => false,
-        isReset: () => false,
-        getFeatureID: () => ConnectionImpl.CONFIG,
-        merge: () => false
-      });
-    }
+  set config(e) {
+    const t = this._config;
+    this._config = e, this.eDeliver() && this.eNotify({
+      getNotifier: () => this,
+      getEventType: () => 1,
+      // SET
+      getFeature: () => this.eClass().getEStructuralFeature(E.CONFIG),
+      getOldValue: () => t,
+      getNewValue: () => e,
+      getPosition: () => -1,
+      wasSet: () => !0,
+      isTouch: () => !1,
+      isReset: () => !1,
+      getFeatureID: () => E.CONFIG,
+      merge: () => !1
+    });
   }
   get icon() {
     return this._icon;
   }
-  set icon(value) {
-    const oldValue = this._icon;
-    this._icon = value;
-    if (this.eDeliver()) {
-      this.eNotify({
-        getNotifier: () => this,
-        getEventType: () => 1,
-        // SET
-        getFeature: () => this.eClass().getEStructuralFeature(ConnectionImpl.ICON),
-        getOldValue: () => oldValue,
-        getNewValue: () => value,
-        getPosition: () => -1,
-        wasSet: () => true,
-        isTouch: () => false,
-        isReset: () => false,
-        getFeatureID: () => ConnectionImpl.ICON,
-        merge: () => false
-      });
-    }
+  set icon(e) {
+    const t = this._icon;
+    this._icon = e, this.eDeliver() && this.eNotify({
+      getNotifier: () => this,
+      getEventType: () => 1,
+      // SET
+      getFeature: () => this.eClass().getEStructuralFeature(E.ICON),
+      getOldValue: () => t,
+      getNewValue: () => e,
+      getPosition: () => -1,
+      wasSet: () => !0,
+      isTouch: () => !1,
+      isReset: () => !1,
+      getFeatureID: () => E.ICON,
+      merge: () => !1
+    });
   }
   get tags() {
-    if (!this._tags) {
-      this._tags = createBasicEList(this, this.eClass().getEStructuralFeature("tags"));
-    }
-    return this._tags;
+    return this._tags || (this._tags = be(this, this.eClass().getEStructuralFeature("tags"))), this._tags;
   }
   // Reflective API
   /**
    * Returns the value of the given feature
    */
-  eGet(feature) {
-    const featureID = this.eClass().getFeatureID(feature);
-    switch (featureID) {
-      case ConnectionImpl.UID:
+  eGet(e) {
+    switch (this.eClass().getFeatureID(e)) {
+      case E.UID:
         return this.uid;
-      case ConnectionImpl.NAME:
+      case E.NAME:
         return this.name;
-      case ConnectionImpl.TYPE:
+      case E.TYPE:
         return this.type;
-      case ConnectionImpl.CONFIG:
+      case E.CONFIG:
         return this.config;
-      case ConnectionImpl.ICON:
+      case E.ICON:
         return this.icon;
-      case ConnectionImpl.TAGS:
+      case E.TAGS:
         return this.tags;
       default:
-        return super.eGet(feature);
+        return super.eGet(e);
     }
   }
   /**
    * Sets the value of the given feature
    */
-  eSet(feature, newValue) {
-    const featureID = this.eClass().getFeatureID(feature);
-    switch (featureID) {
-      case ConnectionImpl.UID:
-        this.uid = newValue;
-        super.eSet(feature, newValue);
+  eSet(e, t) {
+    switch (this.eClass().getFeatureID(e)) {
+      case E.UID:
+        this.uid = t, super.eSet(e, t);
         break;
-      case ConnectionImpl.NAME:
-        this.name = newValue;
-        super.eSet(feature, newValue);
+      case E.NAME:
+        this.name = t, super.eSet(e, t);
         break;
-      case ConnectionImpl.TYPE:
-        this.type = newValue;
-        super.eSet(feature, newValue);
+      case E.TYPE:
+        this.type = t, super.eSet(e, t);
         break;
-      case ConnectionImpl.CONFIG:
-        this.config = newValue;
-        super.eSet(feature, newValue);
+      case E.CONFIG:
+        this.config = t, super.eSet(e, t);
         break;
-      case ConnectionImpl.ICON:
-        this.icon = newValue;
-        super.eSet(feature, newValue);
+      case E.ICON:
+        this.icon = t, super.eSet(e, t);
         break;
-      case ConnectionImpl.TAGS:
-        this.tags.clear();
-        this.tags.addAll(newValue);
-        super.eSet(feature, newValue);
+      case E.TAGS:
+        this.tags.clear(), this.tags.addAll(t), super.eSet(e, t);
         break;
       default:
-        super.eSet(feature, newValue);
+        super.eSet(e, t);
     }
   }
   /**
    * Returns whether the feature has been set
    */
-  eIsSet(feature) {
-    const featureID = this.eClass().getFeatureID(feature);
-    switch (featureID) {
-      case ConnectionImpl.UID:
+  eIsSet(e) {
+    switch (this.eClass().getFeatureID(e)) {
+      case E.UID:
         return this._uid !== "";
-      case ConnectionImpl.NAME:
+      case E.NAME:
         return this._name !== void 0;
-      case ConnectionImpl.TYPE:
+      case E.TYPE:
         return this._type !== void 0;
-      case ConnectionImpl.CONFIG:
+      case E.CONFIG:
         return this._config !== void 0;
-      case ConnectionImpl.ICON:
+      case E.ICON:
         return this._icon !== void 0;
-      case ConnectionImpl.TAGS:
+      case E.TAGS:
         return this._tags !== void 0 && !this._tags.isEmpty();
       default:
-        return super.eIsSet(feature);
+        return super.eIsSet(e);
     }
   }
   /**
    * Unsets the given feature
    */
-  eUnset(feature) {
-    const featureID = this.eClass().getFeatureID(feature);
-    switch (featureID) {
-      case ConnectionImpl.UID:
+  eUnset(e) {
+    switch (this.eClass().getFeatureID(e)) {
+      case E.UID:
         this._uid = "";
         return;
-      case ConnectionImpl.NAME:
+      case E.NAME:
         this._name = void 0;
         return;
-      case ConnectionImpl.TYPE:
+      case E.TYPE:
         this._type = void 0;
         return;
-      case ConnectionImpl.CONFIG:
+      case E.CONFIG:
         this._config = void 0;
         return;
-      case ConnectionImpl.ICON:
+      case E.ICON:
         this._icon = void 0;
         return;
-      case ConnectionImpl.TAGS:
-        if (this._tags) this._tags.clear();
+      case E.TAGS:
+        this._tags && this._tags.clear();
         return;
       default:
-        super.eUnset(feature);
+        super.eUnset(e);
     }
   }
   /**
@@ -2606,78 +2325,74 @@ class ConnectionImpl extends BasicEObject {
     };
   }
 }
-class WorkspaceFactory extends BasicEFactory {
+class we extends Ye {
   // Lazy singleton instance
   static _instance;
   static get eINSTANCE() {
-    if (!this._instance) {
-      this._instance = new WorkspaceFactory();
-    }
-    return this._instance;
+    return this._instance || (this._instance = new we()), this._instance;
   }
   constructor() {
-    super();
-    this.setEPackage(WorkspacePackage.eINSTANCE);
+    super(), this.setEPackage(s.eINSTANCE);
   }
   /**
    * Create a new Workspace instance
    */
   createWorkspace() {
-    return new WorkspaceImpl();
+    return new c();
   }
   /**
    * Create a new Board instance
    */
   createBoard() {
-    return new BoardImpl();
+    return new h();
   }
   /**
    * Create a new Page instance
    */
   createPage() {
-    return new PageImpl();
+    return new i();
   }
   /**
    * Create a new Widget instance
    */
   createWidget() {
-    return new WidgetImpl();
+    return new g();
   }
   /**
    * Create a new Variable instance
    */
   createVariable() {
-    return new VariableImpl();
+    return new a();
   }
   /**
    * Create a new EventMapping instance
    */
   createEventMapping() {
-    return new EventMappingImpl();
+    return new d();
   }
   /**
    * Create a new LayoutItem instance
    */
   createLayoutItem() {
-    return new LayoutItemImpl();
+    return new n();
   }
   /**
    * Create a new Datasource instance
    */
   createDatasource() {
-    return new DatasourceImpl();
+    return new o();
   }
   /**
    * Create a new Connection instance
    */
   createConnection() {
-    return new ConnectionImpl();
+    return new E();
   }
   /**
    * Create an instance of the given class
    */
-  create(eClass) {
-    switch (eClass.getName()) {
+  create(e) {
+    switch (e.getName()) {
       case "Workspace":
         return this.createWorkspace();
       case "Board":
@@ -2697,22 +2412,18 @@ class WorkspaceFactory extends BasicEFactory {
       case "Connection":
         return this.createConnection();
       default:
-        throw new Error(`Unknown class: ${eClass.getName()}`);
+        throw new Error(`Unknown class: ${e.getName()}`);
     }
   }
 }
-class WorkspacePackage extends BasicEPackage {
+class s extends Ke {
   static eNAME = "workspace";
   static eNS_URI = "http://org.eclipse.daanse.board.app.lib.model.workspace";
   static eNS_PREFIX = "workspace";
   // Singleton instance
   static _instance;
   static get eINSTANCE() {
-    if (!this._instance) {
-      this._instance = new WorkspacePackage();
-      this._instance.init();
-    }
-    return this._instance;
+    return this._instance || (this._instance = new s(), this._instance.init()), this._instance;
   }
   /**
    * Literals for quick access to metaclasses and features
@@ -2788,562 +2499,201 @@ class WorkspacePackage extends BasicEPackage {
     CONNECTION__TAGS: null
   };
   constructor() {
-    super();
-    this.setName(WorkspacePackage.eNAME);
-    this.setNsURI(WorkspacePackage.eNS_URI);
-    this.setNsPrefix(WorkspacePackage.eNS_PREFIX);
+    super(), this.setName(s.eNAME), this.setNsURI(s.eNS_URI), this.setNsPrefix(s.eNS_PREFIX);
   }
   /**
    * Initialize package contents
    */
   init() {
-    EPackageRegistry.INSTANCE.set(WorkspacePackage.eNS_URI, this);
-    this.setEFactoryInstance(WorkspaceFactory.eINSTANCE);
-    const workspaceClass = new BasicEClass();
-    workspaceClass.setName("Workspace");
-    workspaceClass.setAbstract(false);
-    workspaceClass.setInterface(false);
-    this.getEClassifiers().push(workspaceClass);
-    workspaceClass.setEPackage(this);
-    WorkspacePackage.Literals.WORKSPACE = workspaceClass;
-    const workspace_connections = new BasicEReference();
-    workspace_connections.setContainment(true);
-    workspace_connections.setName("connections");
-    workspace_connections.setLowerBound(0);
-    workspace_connections.setUpperBound(-1);
-    workspaceClass.getEStructuralFeatures().push(workspace_connections);
-    WorkspacePackage.Literals.WORKSPACE__CONNECTIONS = workspace_connections;
-    const workspace_datasources = new BasicEReference();
-    workspace_datasources.setContainment(true);
-    workspace_datasources.setName("datasources");
-    workspace_datasources.setLowerBound(0);
-    workspace_datasources.setUpperBound(-1);
-    workspaceClass.getEStructuralFeatures().push(workspace_datasources);
-    WorkspacePackage.Literals.WORKSPACE__DATASOURCES = workspace_datasources;
-    const workspace_board = new BasicEReference();
-    workspace_board.setContainment(true);
-    workspace_board.setName("board");
-    workspace_board.setLowerBound(0);
-    workspace_board.setUpperBound(1);
-    workspaceClass.getEStructuralFeatures().push(workspace_board);
-    WorkspacePackage.Literals.WORKSPACE__BOARD = workspace_board;
-    const workspace_variables = new BasicEReference();
-    workspace_variables.setContainment(true);
-    workspace_variables.setName("variables");
-    workspace_variables.setLowerBound(0);
-    workspace_variables.setUpperBound(-1);
-    workspaceClass.getEStructuralFeatures().push(workspace_variables);
-    WorkspacePackage.Literals.WORKSPACE__VARIABLES = workspace_variables;
-    const workspace_eventMappings = new BasicEReference();
-    workspace_eventMappings.setContainment(true);
-    workspace_eventMappings.setName("eventMappings");
-    workspace_eventMappings.setLowerBound(0);
-    workspace_eventMappings.setUpperBound(-1);
-    workspaceClass.getEStructuralFeatures().push(workspace_eventMappings);
-    WorkspacePackage.Literals.WORKSPACE__EVENT_MAPPINGS = workspace_eventMappings;
-    const boardClass = new BasicEClass();
-    boardClass.setName("Board");
-    boardClass.setAbstract(false);
-    boardClass.setInterface(false);
-    this.getEClassifiers().push(boardClass);
-    boardClass.setEPackage(this);
-    WorkspacePackage.Literals.BOARD = boardClass;
-    const board_id = new BasicEAttribute();
-    board_id.setName("id");
-    board_id.setLowerBound(1);
-    board_id.setUpperBound(1);
-    boardClass.getEStructuralFeatures().push(board_id);
-    WorkspacePackage.Literals.BOARD__ID = board_id;
-    const board_name = new BasicEAttribute();
-    board_name.setName("name");
-    board_name.setLowerBound(0);
-    board_name.setUpperBound(1);
-    boardClass.getEStructuralFeatures().push(board_name);
-    WorkspacePackage.Literals.BOARD__NAME = board_name;
-    const board_description = new BasicEAttribute();
-    board_description.setName("description");
-    board_description.setLowerBound(0);
-    board_description.setUpperBound(1);
-    boardClass.getEStructuralFeatures().push(board_description);
-    WorkspacePackage.Literals.BOARD__DESCRIPTION = board_description;
-    const board_icon = new BasicEAttribute();
-    board_icon.setName("icon");
-    board_icon.setLowerBound(0);
-    board_icon.setUpperBound(1);
-    boardClass.getEStructuralFeatures().push(board_icon);
-    WorkspacePackage.Literals.BOARD__ICON = board_icon;
-    const board_pages = new BasicEReference();
-    board_pages.setContainment(true);
-    board_pages.setName("pages");
-    board_pages.setLowerBound(0);
-    board_pages.setUpperBound(-1);
-    boardClass.getEStructuralFeatures().push(board_pages);
-    WorkspacePackage.Literals.BOARD__PAGES = board_pages;
-    const board_defaultPage = new BasicEReference();
-    board_defaultPage.setContainment(false);
-    board_defaultPage.setName("defaultPage");
-    board_defaultPage.setLowerBound(0);
-    board_defaultPage.setUpperBound(1);
-    boardClass.getEStructuralFeatures().push(board_defaultPage);
-    WorkspacePackage.Literals.BOARD__DEFAULT_PAGE = board_defaultPage;
-    const pageClass = new BasicEClass();
-    pageClass.setName("Page");
-    pageClass.setAbstract(false);
-    pageClass.setInterface(false);
-    this.getEClassifiers().push(pageClass);
-    pageClass.setEPackage(this);
-    WorkspacePackage.Literals.PAGE = pageClass;
-    const page_id = new BasicEAttribute();
-    page_id.setName("id");
-    page_id.setLowerBound(1);
-    page_id.setUpperBound(1);
-    pageClass.getEStructuralFeatures().push(page_id);
-    WorkspacePackage.Literals.PAGE__ID = page_id;
-    const page_name = new BasicEAttribute();
-    page_name.setName("name");
-    page_name.setLowerBound(0);
-    page_name.setUpperBound(1);
-    pageClass.getEStructuralFeatures().push(page_name);
-    WorkspacePackage.Literals.PAGE__NAME = page_name;
-    const page_description = new BasicEAttribute();
-    page_description.setName("description");
-    page_description.setLowerBound(0);
-    page_description.setUpperBound(1);
-    pageClass.getEStructuralFeatures().push(page_description);
-    WorkspacePackage.Literals.PAGE__DESCRIPTION = page_description;
-    const page_icon = new BasicEAttribute();
-    page_icon.setName("icon");
-    page_icon.setLowerBound(0);
-    page_icon.setUpperBound(1);
-    pageClass.getEStructuralFeatures().push(page_icon);
-    WorkspacePackage.Literals.PAGE__ICON = page_icon;
-    const page_visibleInNavigation = new BasicEAttribute();
-    page_visibleInNavigation.setName("visibleInNavigation");
-    page_visibleInNavigation.setLowerBound(0);
-    page_visibleInNavigation.setUpperBound(1);
-    pageClass.getEStructuralFeatures().push(page_visibleInNavigation);
-    WorkspacePackage.Literals.PAGE__VISIBLE_IN_NAVIGATION = page_visibleInNavigation;
-    const page_layoutId = new BasicEAttribute();
-    page_layoutId.setName("layoutId");
-    page_layoutId.setLowerBound(0);
-    page_layoutId.setUpperBound(1);
-    pageClass.getEStructuralFeatures().push(page_layoutId);
-    WorkspacePackage.Literals.PAGE__LAYOUT_ID = page_layoutId;
-    const page_layoutSettings = new BasicEAttribute();
-    page_layoutSettings.setName("layoutSettings");
-    page_layoutSettings.setLowerBound(0);
-    page_layoutSettings.setUpperBound(1);
-    pageClass.getEStructuralFeatures().push(page_layoutSettings);
-    WorkspacePackage.Literals.PAGE__LAYOUT_SETTINGS = page_layoutSettings;
-    const page_backgroundColor = new BasicEAttribute();
-    page_backgroundColor.setName("backgroundColor");
-    page_backgroundColor.setLowerBound(0);
-    page_backgroundColor.setUpperBound(1);
-    pageClass.getEStructuralFeatures().push(page_backgroundColor);
-    WorkspacePackage.Literals.PAGE__BACKGROUND_COLOR = page_backgroundColor;
-    const page_backgroundImage = new BasicEAttribute();
-    page_backgroundImage.setName("backgroundImage");
-    page_backgroundImage.setLowerBound(0);
-    page_backgroundImage.setUpperBound(1);
-    pageClass.getEStructuralFeatures().push(page_backgroundImage);
-    WorkspacePackage.Literals.PAGE__BACKGROUND_IMAGE = page_backgroundImage;
-    const page_backgroundSize = new BasicEAttribute();
-    page_backgroundSize.setName("backgroundSize");
-    page_backgroundSize.setLowerBound(0);
-    page_backgroundSize.setUpperBound(1);
-    pageClass.getEStructuralFeatures().push(page_backgroundSize);
-    WorkspacePackage.Literals.PAGE__BACKGROUND_SIZE = page_backgroundSize;
-    const page_backgroundPosition = new BasicEAttribute();
-    page_backgroundPosition.setName("backgroundPosition");
-    page_backgroundPosition.setLowerBound(0);
-    page_backgroundPosition.setUpperBound(1);
-    pageClass.getEStructuralFeatures().push(page_backgroundPosition);
-    WorkspacePackage.Literals.PAGE__BACKGROUND_POSITION = page_backgroundPosition;
-    const page_backgroundRepeat = new BasicEAttribute();
-    page_backgroundRepeat.setName("backgroundRepeat");
-    page_backgroundRepeat.setLowerBound(0);
-    page_backgroundRepeat.setUpperBound(1);
-    pageClass.getEStructuralFeatures().push(page_backgroundRepeat);
-    WorkspacePackage.Literals.PAGE__BACKGROUND_REPEAT = page_backgroundRepeat;
-    const page_widgets = new BasicEReference();
-    page_widgets.setContainment(true);
-    page_widgets.setName("widgets");
-    page_widgets.setLowerBound(0);
-    page_widgets.setUpperBound(-1);
-    pageClass.getEStructuralFeatures().push(page_widgets);
-    WorkspacePackage.Literals.PAGE__WIDGETS = page_widgets;
-    const page_layout = new BasicEReference();
-    page_layout.setContainment(true);
-    page_layout.setName("layout");
-    page_layout.setLowerBound(0);
-    page_layout.setUpperBound(-1);
-    pageClass.getEStructuralFeatures().push(page_layout);
-    WorkspacePackage.Literals.PAGE__LAYOUT = page_layout;
-    const widgetClass = new BasicEClass();
-    widgetClass.setName("Widget");
-    widgetClass.setAbstract(false);
-    widgetClass.setInterface(false);
-    this.getEClassifiers().push(widgetClass);
-    widgetClass.setEPackage(this);
-    WorkspacePackage.Literals.WIDGET = widgetClass;
-    const widget_uid = new BasicEAttribute();
-    widget_uid.setName("uid");
-    widget_uid.setLowerBound(1);
-    widget_uid.setUpperBound(1);
-    widgetClass.getEStructuralFeatures().push(widget_uid);
-    WorkspacePackage.Literals.WIDGET__UID = widget_uid;
-    const widget_type = new BasicEAttribute();
-    widget_type.setName("type");
-    widget_type.setLowerBound(0);
-    widget_type.setUpperBound(1);
-    widgetClass.getEStructuralFeatures().push(widget_type);
-    WorkspacePackage.Literals.WIDGET__TYPE = widget_type;
-    const widget_datasource = new BasicEReference();
-    widget_datasource.setContainment(false);
-    widget_datasource.setName("datasource");
-    widget_datasource.setLowerBound(0);
-    widget_datasource.setUpperBound(1);
-    widgetClass.getEStructuralFeatures().push(widget_datasource);
-    WorkspacePackage.Literals.WIDGET__DATASOURCE = widget_datasource;
-    const widget_config = new BasicEAttribute();
-    widget_config.setName("config");
-    widget_config.setLowerBound(0);
-    widget_config.setUpperBound(1);
-    widgetClass.getEStructuralFeatures().push(widget_config);
-    WorkspacePackage.Literals.WIDGET__CONFIG = widget_config;
-    const widget_wrapperConfig = new BasicEAttribute();
-    widget_wrapperConfig.setName("wrapperConfig");
-    widget_wrapperConfig.setLowerBound(0);
-    widget_wrapperConfig.setUpperBound(1);
-    widgetClass.getEStructuralFeatures().push(widget_wrapperConfig);
-    WorkspacePackage.Literals.WIDGET__WRAPPER_CONFIG = widget_wrapperConfig;
-    const variableClass = new BasicEClass();
-    variableClass.setName("Variable");
-    variableClass.setAbstract(false);
-    variableClass.setInterface(false);
-    this.getEClassifiers().push(variableClass);
-    variableClass.setEPackage(this);
-    WorkspacePackage.Literals.VARIABLE = variableClass;
-    const variable_uid = new BasicEAttribute();
-    variable_uid.setName("uid");
-    variable_uid.setLowerBound(1);
-    variable_uid.setUpperBound(1);
-    variableClass.getEStructuralFeatures().push(variable_uid);
-    WorkspacePackage.Literals.VARIABLE__UID = variable_uid;
-    const variable_name = new BasicEAttribute();
-    variable_name.setName("name");
-    variable_name.setLowerBound(1);
-    variable_name.setUpperBound(1);
-    variableClass.getEStructuralFeatures().push(variable_name);
-    WorkspacePackage.Literals.VARIABLE__NAME = variable_name;
-    const variable_type = new BasicEAttribute();
-    variable_type.setName("type");
-    variable_type.setLowerBound(0);
-    variable_type.setUpperBound(1);
-    variableClass.getEStructuralFeatures().push(variable_type);
-    WorkspacePackage.Literals.VARIABLE__TYPE = variable_type;
-    const variable_scope = new BasicEAttribute();
-    variable_scope.setName("scope");
-    variable_scope.setLowerBound(0);
-    variable_scope.setUpperBound(1);
-    variableClass.getEStructuralFeatures().push(variable_scope);
-    WorkspacePackage.Literals.VARIABLE__SCOPE = variable_scope;
-    const variable_accessMode = new BasicEAttribute();
-    variable_accessMode.setName("accessMode");
-    variable_accessMode.setLowerBound(0);
-    variable_accessMode.setUpperBound(1);
-    variableClass.getEStructuralFeatures().push(variable_accessMode);
-    WorkspacePackage.Literals.VARIABLE__ACCESS_MODE = variable_accessMode;
-    const variable_page = new BasicEReference();
-    variable_page.setContainment(false);
-    variable_page.setName("page");
-    variable_page.setLowerBound(0);
-    variable_page.setUpperBound(1);
-    variableClass.getEStructuralFeatures().push(variable_page);
-    WorkspacePackage.Literals.VARIABLE__PAGE = variable_page;
-    const variable_definition = new BasicEAttribute();
-    variable_definition.setName("definition");
-    variable_definition.setLowerBound(0);
-    variable_definition.setUpperBound(1);
-    variableClass.getEStructuralFeatures().push(variable_definition);
-    WorkspacePackage.Literals.VARIABLE__DEFINITION = variable_definition;
-    const eventMappingClass = new BasicEClass();
-    eventMappingClass.setName("EventMapping");
-    eventMappingClass.setAbstract(false);
-    eventMappingClass.setInterface(false);
-    this.getEClassifiers().push(eventMappingClass);
-    eventMappingClass.setEPackage(this);
-    WorkspacePackage.Literals.EVENT_MAPPING = eventMappingClass;
-    const eventMapping_id = new BasicEAttribute();
-    eventMapping_id.setName("id");
-    eventMapping_id.setLowerBound(1);
-    eventMapping_id.setUpperBound(1);
-    eventMappingClass.getEStructuralFeatures().push(eventMapping_id);
-    WorkspacePackage.Literals.EVENT_MAPPING__ID = eventMapping_id;
-    const eventMapping_definition = new BasicEAttribute();
-    eventMapping_definition.setName("definition");
-    eventMapping_definition.setLowerBound(0);
-    eventMapping_definition.setUpperBound(1);
-    eventMappingClass.getEStructuralFeatures().push(eventMapping_definition);
-    WorkspacePackage.Literals.EVENT_MAPPING__DEFINITION = eventMapping_definition;
-    const layoutItemClass = new BasicEClass();
-    layoutItemClass.setName("LayoutItem");
-    layoutItemClass.setAbstract(false);
-    layoutItemClass.setInterface(false);
-    this.getEClassifiers().push(layoutItemClass);
-    layoutItemClass.setEPackage(this);
-    WorkspacePackage.Literals.LAYOUT_ITEM = layoutItemClass;
-    const layoutItem_id = new BasicEAttribute();
-    layoutItem_id.setName("id");
-    layoutItem_id.setLowerBound(1);
-    layoutItem_id.setUpperBound(1);
-    layoutItemClass.getEStructuralFeatures().push(layoutItem_id);
-    WorkspacePackage.Literals.LAYOUT_ITEM__ID = layoutItem_id;
-    const layoutItem_x = new BasicEAttribute();
-    layoutItem_x.setName("x");
-    layoutItem_x.setLowerBound(1);
-    layoutItem_x.setUpperBound(1);
-    layoutItemClass.getEStructuralFeatures().push(layoutItem_x);
-    WorkspacePackage.Literals.LAYOUT_ITEM__X = layoutItem_x;
-    const layoutItem_y = new BasicEAttribute();
-    layoutItem_y.setName("y");
-    layoutItem_y.setLowerBound(1);
-    layoutItem_y.setUpperBound(1);
-    layoutItemClass.getEStructuralFeatures().push(layoutItem_y);
-    WorkspacePackage.Literals.LAYOUT_ITEM__Y = layoutItem_y;
-    const layoutItem_z = new BasicEAttribute();
-    layoutItem_z.setName("z");
-    layoutItem_z.setLowerBound(1);
-    layoutItem_z.setUpperBound(1);
-    layoutItemClass.getEStructuralFeatures().push(layoutItem_z);
-    WorkspacePackage.Literals.LAYOUT_ITEM__Z = layoutItem_z;
-    const layoutItem_width = new BasicEAttribute();
-    layoutItem_width.setName("width");
-    layoutItem_width.setLowerBound(1);
-    layoutItem_width.setUpperBound(1);
-    layoutItemClass.getEStructuralFeatures().push(layoutItem_width);
-    WorkspacePackage.Literals.LAYOUT_ITEM__WIDTH = layoutItem_width;
-    const layoutItem_height = new BasicEAttribute();
-    layoutItem_height.setName("height");
-    layoutItem_height.setLowerBound(1);
-    layoutItem_height.setUpperBound(1);
-    layoutItemClass.getEStructuralFeatures().push(layoutItem_height);
-    WorkspacePackage.Literals.LAYOUT_ITEM__HEIGHT = layoutItem_height;
-    const layoutItem_group = new BasicEAttribute();
-    layoutItem_group.setName("group");
-    layoutItem_group.setLowerBound(0);
-    layoutItem_group.setUpperBound(1);
-    layoutItemClass.getEStructuralFeatures().push(layoutItem_group);
-    WorkspacePackage.Literals.LAYOUT_ITEM__GROUP = layoutItem_group;
-    const datasourceClass = new BasicEClass();
-    datasourceClass.setName("Datasource");
-    datasourceClass.setAbstract(false);
-    datasourceClass.setInterface(false);
-    this.getEClassifiers().push(datasourceClass);
-    datasourceClass.setEPackage(this);
-    WorkspacePackage.Literals.DATASOURCE = datasourceClass;
-    const datasource_uid = new BasicEAttribute();
-    datasource_uid.setName("uid");
-    datasource_uid.setLowerBound(1);
-    datasource_uid.setUpperBound(1);
-    datasourceClass.getEStructuralFeatures().push(datasource_uid);
-    WorkspacePackage.Literals.DATASOURCE__UID = datasource_uid;
-    const datasource_name = new BasicEAttribute();
-    datasource_name.setName("name");
-    datasource_name.setLowerBound(0);
-    datasource_name.setUpperBound(1);
-    datasourceClass.getEStructuralFeatures().push(datasource_name);
-    WorkspacePackage.Literals.DATASOURCE__NAME = datasource_name;
-    const datasource_type = new BasicEAttribute();
-    datasource_type.setName("type");
-    datasource_type.setLowerBound(0);
-    datasource_type.setUpperBound(1);
-    datasourceClass.getEStructuralFeatures().push(datasource_type);
-    WorkspacePackage.Literals.DATASOURCE__TYPE = datasource_type;
-    const datasource_connection = new BasicEReference();
-    datasource_connection.setContainment(false);
-    datasource_connection.setName("connection");
-    datasource_connection.setLowerBound(0);
-    datasource_connection.setUpperBound(1);
-    datasourceClass.getEStructuralFeatures().push(datasource_connection);
-    WorkspacePackage.Literals.DATASOURCE__CONNECTION = datasource_connection;
-    const datasource_config = new BasicEAttribute();
-    datasource_config.setName("config");
-    datasource_config.setLowerBound(0);
-    datasource_config.setUpperBound(1);
-    datasourceClass.getEStructuralFeatures().push(datasource_config);
-    WorkspacePackage.Literals.DATASOURCE__CONFIG = datasource_config;
-    const datasource_icon = new BasicEAttribute();
-    datasource_icon.setName("icon");
-    datasource_icon.setLowerBound(0);
-    datasource_icon.setUpperBound(1);
-    datasourceClass.getEStructuralFeatures().push(datasource_icon);
-    WorkspacePackage.Literals.DATASOURCE__ICON = datasource_icon;
-    const datasource_tags = new BasicEAttribute();
-    datasource_tags.setName("tags");
-    datasource_tags.setLowerBound(0);
-    datasource_tags.setUpperBound(-1);
-    datasourceClass.getEStructuralFeatures().push(datasource_tags);
-    WorkspacePackage.Literals.DATASOURCE__TAGS = datasource_tags;
-    const connectionClass = new BasicEClass();
-    connectionClass.setName("Connection");
-    connectionClass.setAbstract(false);
-    connectionClass.setInterface(false);
-    this.getEClassifiers().push(connectionClass);
-    connectionClass.setEPackage(this);
-    WorkspacePackage.Literals.CONNECTION = connectionClass;
-    const connection_uid = new BasicEAttribute();
-    connection_uid.setName("uid");
-    connection_uid.setLowerBound(1);
-    connection_uid.setUpperBound(1);
-    connectionClass.getEStructuralFeatures().push(connection_uid);
-    WorkspacePackage.Literals.CONNECTION__UID = connection_uid;
-    const connection_name = new BasicEAttribute();
-    connection_name.setName("name");
-    connection_name.setLowerBound(0);
-    connection_name.setUpperBound(1);
-    connectionClass.getEStructuralFeatures().push(connection_name);
-    WorkspacePackage.Literals.CONNECTION__NAME = connection_name;
-    const connection_type = new BasicEAttribute();
-    connection_type.setName("type");
-    connection_type.setLowerBound(0);
-    connection_type.setUpperBound(1);
-    connectionClass.getEStructuralFeatures().push(connection_type);
-    WorkspacePackage.Literals.CONNECTION__TYPE = connection_type;
-    const connection_config = new BasicEAttribute();
-    connection_config.setName("config");
-    connection_config.setLowerBound(0);
-    connection_config.setUpperBound(1);
-    connectionClass.getEStructuralFeatures().push(connection_config);
-    WorkspacePackage.Literals.CONNECTION__CONFIG = connection_config;
-    const connection_icon = new BasicEAttribute();
-    connection_icon.setName("icon");
-    connection_icon.setLowerBound(0);
-    connection_icon.setUpperBound(1);
-    connectionClass.getEStructuralFeatures().push(connection_icon);
-    WorkspacePackage.Literals.CONNECTION__ICON = connection_icon;
-    const connection_tags = new BasicEAttribute();
-    connection_tags.setName("tags");
-    connection_tags.setLowerBound(0);
-    connection_tags.setUpperBound(-1);
-    connectionClass.getEStructuralFeatures().push(connection_tags);
-    WorkspacePackage.Literals.CONNECTION__TAGS = connection_tags;
-    WorkspacePackage.Literals.WORKSPACE__CONNECTIONS.setEType(WorkspacePackage.Literals.CONNECTION);
-    WorkspacePackage.Literals.WORKSPACE__DATASOURCES.setEType(WorkspacePackage.Literals.DATASOURCE);
-    WorkspacePackage.Literals.WORKSPACE__BOARD.setEType(WorkspacePackage.Literals.BOARD);
-    WorkspacePackage.Literals.WORKSPACE__VARIABLES.setEType(WorkspacePackage.Literals.VARIABLE);
-    WorkspacePackage.Literals.WORKSPACE__EVENT_MAPPINGS.setEType(WorkspacePackage.Literals.EVENT_MAPPING);
-    WorkspacePackage.Literals.BOARD__ID.setEType(getEcorePackage().getEClassifier("EString"));
-    WorkspacePackage.Literals.BOARD__NAME.setEType(getEcorePackage().getEClassifier("EString"));
-    WorkspacePackage.Literals.BOARD__DESCRIPTION.setEType(getEcorePackage().getEClassifier("EString"));
-    WorkspacePackage.Literals.BOARD__ICON.setEType(getEcorePackage().getEClassifier("EString"));
-    WorkspacePackage.Literals.BOARD__PAGES.setEType(WorkspacePackage.Literals.PAGE);
-    WorkspacePackage.Literals.BOARD__DEFAULT_PAGE.setEType(WorkspacePackage.Literals.PAGE);
-    WorkspacePackage.Literals.PAGE__ID.setEType(getEcorePackage().getEClassifier("EString"));
-    WorkspacePackage.Literals.PAGE__NAME.setEType(getEcorePackage().getEClassifier("EString"));
-    WorkspacePackage.Literals.PAGE__DESCRIPTION.setEType(getEcorePackage().getEClassifier("EString"));
-    WorkspacePackage.Literals.PAGE__ICON.setEType(getEcorePackage().getEClassifier("EString"));
-    WorkspacePackage.Literals.PAGE__VISIBLE_IN_NAVIGATION.setEType(getEcorePackage().getEClassifier("EBoolean"));
-    WorkspacePackage.Literals.PAGE__LAYOUT_ID.setEType(getEcorePackage().getEClassifier("EString"));
-    WorkspacePackage.Literals.PAGE__LAYOUT_SETTINGS.setEType(getEcorePackage().getEClassifier("EJavaObject"));
-    WorkspacePackage.Literals.PAGE__BACKGROUND_COLOR.setEType(getEcorePackage().getEClassifier("EString"));
-    WorkspacePackage.Literals.PAGE__BACKGROUND_IMAGE.setEType(getEcorePackage().getEClassifier("EString"));
-    WorkspacePackage.Literals.PAGE__BACKGROUND_SIZE.setEType(getEcorePackage().getEClassifier("EString"));
-    WorkspacePackage.Literals.PAGE__BACKGROUND_POSITION.setEType(getEcorePackage().getEClassifier("EString"));
-    WorkspacePackage.Literals.PAGE__BACKGROUND_REPEAT.setEType(getEcorePackage().getEClassifier("EString"));
-    WorkspacePackage.Literals.PAGE__WIDGETS.setEType(WorkspacePackage.Literals.WIDGET);
-    WorkspacePackage.Literals.PAGE__LAYOUT.setEType(WorkspacePackage.Literals.LAYOUT_ITEM);
-    WorkspacePackage.Literals.WIDGET__UID.setEType(getEcorePackage().getEClassifier("EString"));
-    WorkspacePackage.Literals.WIDGET__TYPE.setEType(getEcorePackage().getEClassifier("EString"));
-    WorkspacePackage.Literals.WIDGET__DATASOURCE.setEType(WorkspacePackage.Literals.DATASOURCE);
-    WorkspacePackage.Literals.WIDGET__CONFIG.setEType(getEcorePackage().getEClassifier("EJavaObject"));
-    WorkspacePackage.Literals.WIDGET__WRAPPER_CONFIG.setEType(getEcorePackage().getEClassifier("EJavaObject"));
-    WorkspacePackage.Literals.VARIABLE__UID.setEType(getEcorePackage().getEClassifier("EString"));
-    WorkspacePackage.Literals.VARIABLE__NAME.setEType(getEcorePackage().getEClassifier("EString"));
-    WorkspacePackage.Literals.VARIABLE__TYPE.setEType(getEcorePackage().getEClassifier("EString"));
-    WorkspacePackage.Literals.VARIABLE__SCOPE.setEType(getEcorePackage().getEClassifier("EString"));
-    WorkspacePackage.Literals.VARIABLE__ACCESS_MODE.setEType(getEcorePackage().getEClassifier("EString"));
-    WorkspacePackage.Literals.VARIABLE__PAGE.setEType(WorkspacePackage.Literals.PAGE);
-    WorkspacePackage.Literals.VARIABLE__DEFINITION.setEType(getEcorePackage().getEClassifier("EJavaObject"));
-    WorkspacePackage.Literals.EVENT_MAPPING__ID.setEType(getEcorePackage().getEClassifier("EString"));
-    WorkspacePackage.Literals.EVENT_MAPPING__DEFINITION.setEType(getEcorePackage().getEClassifier("EJavaObject"));
-    WorkspacePackage.Literals.LAYOUT_ITEM__ID.setEType(getEcorePackage().getEClassifier("EString"));
-    WorkspacePackage.Literals.LAYOUT_ITEM__X.setEType(getEcorePackage().getEClassifier("EInt"));
-    WorkspacePackage.Literals.LAYOUT_ITEM__Y.setEType(getEcorePackage().getEClassifier("EInt"));
-    WorkspacePackage.Literals.LAYOUT_ITEM__Z.setEType(getEcorePackage().getEClassifier("EInt"));
-    WorkspacePackage.Literals.LAYOUT_ITEM__WIDTH.setEType(getEcorePackage().getEClassifier("EInt"));
-    WorkspacePackage.Literals.LAYOUT_ITEM__HEIGHT.setEType(getEcorePackage().getEClassifier("EInt"));
-    WorkspacePackage.Literals.LAYOUT_ITEM__GROUP.setEType(getEcorePackage().getEClassifier("EString"));
-    WorkspacePackage.Literals.DATASOURCE__UID.setEType(getEcorePackage().getEClassifier("EString"));
-    WorkspacePackage.Literals.DATASOURCE__NAME.setEType(getEcorePackage().getEClassifier("EString"));
-    WorkspacePackage.Literals.DATASOURCE__TYPE.setEType(getEcorePackage().getEClassifier("EString"));
-    WorkspacePackage.Literals.DATASOURCE__CONNECTION.setEType(WorkspacePackage.Literals.CONNECTION);
-    WorkspacePackage.Literals.DATASOURCE__CONFIG.setEType(getEcorePackage().getEClassifier("EJavaObject"));
-    WorkspacePackage.Literals.DATASOURCE__ICON.setEType(getEcorePackage().getEClassifier("EString"));
-    WorkspacePackage.Literals.DATASOURCE__TAGS.setEType(getEcorePackage().getEClassifier("EString"));
-    WorkspacePackage.Literals.CONNECTION__UID.setEType(getEcorePackage().getEClassifier("EString"));
-    WorkspacePackage.Literals.CONNECTION__NAME.setEType(getEcorePackage().getEClassifier("EString"));
-    WorkspacePackage.Literals.CONNECTION__TYPE.setEType(getEcorePackage().getEClassifier("EString"));
-    WorkspacePackage.Literals.CONNECTION__CONFIG.setEType(getEcorePackage().getEClassifier("EJavaObject"));
-    WorkspacePackage.Literals.CONNECTION__ICON.setEType(getEcorePackage().getEClassifier("EString"));
-    WorkspacePackage.Literals.CONNECTION__TAGS.setEType(getEcorePackage().getEClassifier("EString"));
+    pe.INSTANCE.set(s.eNS_URI, this), this.setEFactoryInstance(we.eINSTANCE);
+    const e = new D();
+    e.setName("Workspace"), e.setAbstract(!1), e.setInterface(!1), this.getEClassifiers().push(e), e.setEPackage(this), s.Literals.WORKSPACE = e;
+    const t = new C();
+    t.setContainment(!0), t.setName("connections"), t.setLowerBound(0), t.setUpperBound(-1), e.getEStructuralFeatures().push(t), s.Literals.WORKSPACE__CONNECTIONS = t;
+    const N = new C();
+    N.setContainment(!0), N.setName("datasources"), N.setLowerBound(0), N.setUpperBound(-1), e.getEStructuralFeatures().push(N), s.Literals.WORKSPACE__DATASOURCES = N;
+    const L = new C();
+    L.setContainment(!0), L.setName("board"), L.setLowerBound(0), L.setUpperBound(1), e.getEStructuralFeatures().push(L), s.Literals.WORKSPACE__BOARD = L;
+    const U = new C();
+    U.setContainment(!0), U.setName("variables"), U.setLowerBound(0), U.setUpperBound(-1), e.getEStructuralFeatures().push(U), s.Literals.WORKSPACE__VARIABLES = U;
+    const y = new C();
+    y.setContainment(!0), y.setName("eventMappings"), y.setLowerBound(0), y.setUpperBound(-1), e.getEStructuralFeatures().push(y), s.Literals.WORKSPACE__EVENT_MAPPINGS = y;
+    const O = new D();
+    O.setName("Board"), O.setAbstract(!1), O.setInterface(!1), this.getEClassifiers().push(O), O.setEPackage(this), s.Literals.BOARD = O;
+    const Y = new r();
+    Y.setName("id"), Y.setLowerBound(1), Y.setUpperBound(1), O.getEStructuralFeatures().push(Y), s.Literals.BOARD__ID = Y;
+    const K = new r();
+    K.setName("name"), K.setLowerBound(0), K.setUpperBound(1), O.getEStructuralFeatures().push(K), s.Literals.BOARD__NAME = K;
+    const V = new r();
+    V.setName("description"), V.setLowerBound(0), V.setUpperBound(1), O.getEStructuralFeatures().push(V), s.Literals.BOARD__DESCRIPTION = V;
+    const z = new r();
+    z.setName("icon"), z.setLowerBound(0), z.setUpperBound(1), O.getEStructuralFeatures().push(z), s.Literals.BOARD__ICON = z;
+    const w = new C();
+    w.setContainment(!0), w.setName("pages"), w.setLowerBound(0), w.setUpperBound(-1), O.getEStructuralFeatures().push(w), s.Literals.BOARD__PAGES = w;
+    const B = new C();
+    B.setContainment(!1), B.setName("defaultPage"), B.setLowerBound(0), B.setUpperBound(1), O.getEStructuralFeatures().push(B), s.Literals.BOARD__DEFAULT_PAGE = B;
+    const l = new D();
+    l.setName("Page"), l.setAbstract(!1), l.setInterface(!1), this.getEClassifiers().push(l), l.setEPackage(this), s.Literals.PAGE = l;
+    const H = new r();
+    H.setName("id"), H.setLowerBound(1), H.setUpperBound(1), l.getEStructuralFeatures().push(H), s.Literals.PAGE__ID = H;
+    const x = new r();
+    x.setName("name"), x.setLowerBound(0), x.setUpperBound(1), l.getEStructuralFeatures().push(x), s.Literals.PAGE__NAME = x;
+    const Z = new r();
+    Z.setName("description"), Z.setLowerBound(0), Z.setUpperBound(1), l.getEStructuralFeatures().push(Z), s.Literals.PAGE__DESCRIPTION = Z;
+    const J = new r();
+    J.setName("icon"), J.setLowerBound(0), J.setUpperBound(1), l.getEStructuralFeatures().push(J), s.Literals.PAGE__ICON = J;
+    const X = new r();
+    X.setName("visibleInNavigation"), X.setLowerBound(0), X.setUpperBound(1), l.getEStructuralFeatures().push(X), s.Literals.PAGE__VISIBLE_IN_NAVIGATION = X;
+    const j = new r();
+    j.setName("layoutId"), j.setLowerBound(0), j.setUpperBound(1), l.getEStructuralFeatures().push(j), s.Literals.PAGE__LAYOUT_ID = j;
+    const $ = new r();
+    $.setName("layoutSettings"), $.setLowerBound(0), $.setUpperBound(1), l.getEStructuralFeatures().push($), s.Literals.PAGE__LAYOUT_SETTINGS = $;
+    const q = new r();
+    q.setName("backgroundColor"), q.setLowerBound(0), q.setUpperBound(1), l.getEStructuralFeatures().push(q), s.Literals.PAGE__BACKGROUND_COLOR = q;
+    const Q = new r();
+    Q.setName("backgroundImage"), Q.setLowerBound(0), Q.setUpperBound(1), l.getEStructuralFeatures().push(Q), s.Literals.PAGE__BACKGROUND_IMAGE = Q;
+    const m = new r();
+    m.setName("backgroundSize"), m.setLowerBound(0), m.setUpperBound(1), l.getEStructuralFeatures().push(m), s.Literals.PAGE__BACKGROUND_SIZE = m;
+    const W = new r();
+    W.setName("backgroundPosition"), W.setLowerBound(0), W.setUpperBound(1), l.getEStructuralFeatures().push(W), s.Literals.PAGE__BACKGROUND_POSITION = W;
+    const k = new r();
+    k.setName("backgroundRepeat"), k.setLowerBound(0), k.setUpperBound(1), l.getEStructuralFeatures().push(k), s.Literals.PAGE__BACKGROUND_REPEAT = k;
+    const v = new C();
+    v.setContainment(!0), v.setName("widgets"), v.setLowerBound(0), v.setUpperBound(-1), l.getEStructuralFeatures().push(v), s.Literals.PAGE__WIDGETS = v;
+    const b = new C();
+    b.setContainment(!0), b.setName("layout"), b.setLowerBound(0), b.setUpperBound(-1), l.getEStructuralFeatures().push(b), s.Literals.PAGE__LAYOUT = b;
+    const _ = new D();
+    _.setName("Widget"), _.setAbstract(!1), _.setInterface(!1), this.getEClassifiers().push(_), _.setEPackage(this), s.Literals.WIDGET = _;
+    const ee = new r();
+    ee.setName("uid"), ee.setLowerBound(1), ee.setUpperBound(1), _.getEStructuralFeatures().push(ee), s.Literals.WIDGET__UID = ee;
+    const te = new r();
+    te.setName("type"), te.setLowerBound(0), te.setUpperBound(1), _.getEStructuralFeatures().push(te), s.Literals.WIDGET__TYPE = te;
+    const p = new C();
+    p.setContainment(!1), p.setName("datasource"), p.setLowerBound(0), p.setUpperBound(1), _.getEStructuralFeatures().push(p), s.Literals.WIDGET__DATASOURCE = p;
+    const se = new r();
+    se.setName("config"), se.setLowerBound(0), se.setUpperBound(1), _.getEStructuralFeatures().push(se), s.Literals.WIDGET__CONFIG = se;
+    const ie = new r();
+    ie.setName("wrapperConfig"), ie.setLowerBound(0), ie.setUpperBound(1), _.getEStructuralFeatures().push(ie), s.Literals.WIDGET__WRAPPER_CONFIG = ie;
+    const S = new D();
+    S.setName("Variable"), S.setAbstract(!1), S.setInterface(!1), this.getEClassifiers().push(S), S.setEPackage(this), s.Literals.VARIABLE = S;
+    const re = new r();
+    re.setName("uid"), re.setLowerBound(1), re.setUpperBound(1), S.getEStructuralFeatures().push(re), s.Literals.VARIABLE__UID = re;
+    const ue = new r();
+    ue.setName("name"), ue.setLowerBound(1), ue.setUpperBound(1), S.getEStructuralFeatures().push(ue), s.Literals.VARIABLE__NAME = ue;
+    const ae = new r();
+    ae.setName("type"), ae.setLowerBound(0), ae.setUpperBound(1), S.getEStructuralFeatures().push(ae), s.Literals.VARIABLE__TYPE = ae;
+    const ne = new r();
+    ne.setName("scope"), ne.setLowerBound(0), ne.setUpperBound(1), S.getEStructuralFeatures().push(ne), s.Literals.VARIABLE__SCOPE = ne;
+    const oe = new r();
+    oe.setName("accessMode"), oe.setLowerBound(0), oe.setUpperBound(1), S.getEStructuralFeatures().push(oe), s.Literals.VARIABLE__ACCESS_MODE = oe;
+    const M = new C();
+    M.setContainment(!1), M.setName("page"), M.setLowerBound(0), M.setUpperBound(1), S.getEStructuralFeatures().push(M), s.Literals.VARIABLE__PAGE = M;
+    const he = new r();
+    he.setName("definition"), he.setLowerBound(0), he.setUpperBound(1), S.getEStructuralFeatures().push(he), s.Literals.VARIABLE__DEFINITION = he;
+    const F = new D();
+    F.setName("EventMapping"), F.setAbstract(!1), F.setInterface(!1), this.getEClassifiers().push(F), F.setEPackage(this), s.Literals.EVENT_MAPPING = F;
+    const Ee = new r();
+    Ee.setName("id"), Ee.setLowerBound(1), Ee.setUpperBound(1), F.getEStructuralFeatures().push(Ee), s.Literals.EVENT_MAPPING__ID = Ee;
+    const ge = new r();
+    ge.setName("definition"), ge.setLowerBound(0), ge.setUpperBound(1), F.getEStructuralFeatures().push(ge), s.Literals.EVENT_MAPPING__DEFINITION = ge;
+    const A = new D();
+    A.setName("LayoutItem"), A.setAbstract(!1), A.setInterface(!1), this.getEClassifiers().push(A), A.setEPackage(this), s.Literals.LAYOUT_ITEM = A;
+    const ce = new r();
+    ce.setName("id"), ce.setLowerBound(1), ce.setUpperBound(1), A.getEStructuralFeatures().push(ce), s.Literals.LAYOUT_ITEM__ID = ce;
+    const le = new r();
+    le.setName("x"), le.setLowerBound(1), le.setUpperBound(1), A.getEStructuralFeatures().push(le), s.Literals.LAYOUT_ITEM__X = le;
+    const Ne = new r();
+    Ne.setName("y"), Ne.setLowerBound(1), Ne.setUpperBound(1), A.getEStructuralFeatures().push(Ne), s.Literals.LAYOUT_ITEM__Y = Ne;
+    const de = new r();
+    de.setName("z"), de.setLowerBound(1), de.setUpperBound(1), A.getEStructuralFeatures().push(de), s.Literals.LAYOUT_ITEM__Z = de;
+    const Se = new r();
+    Se.setName("width"), Se.setLowerBound(1), Se.setUpperBound(1), A.getEStructuralFeatures().push(Se), s.Literals.LAYOUT_ITEM__WIDTH = Se;
+    const Ae = new r();
+    Ae.setName("height"), Ae.setLowerBound(1), Ae.setUpperBound(1), A.getEStructuralFeatures().push(Ae), s.Literals.LAYOUT_ITEM__HEIGHT = Ae;
+    const Te = new r();
+    Te.setName("group"), Te.setLowerBound(0), Te.setUpperBound(1), A.getEStructuralFeatures().push(Te), s.Literals.LAYOUT_ITEM__GROUP = Te;
+    const T = new D();
+    T.setName("Datasource"), T.setAbstract(!1), T.setInterface(!1), this.getEClassifiers().push(T), T.setEPackage(this), s.Literals.DATASOURCE = T;
+    const Oe = new r();
+    Oe.setName("uid"), Oe.setLowerBound(1), Oe.setUpperBound(1), T.getEStructuralFeatures().push(Oe), s.Literals.DATASOURCE__UID = Oe;
+    const fe = new r();
+    fe.setName("name"), fe.setLowerBound(0), fe.setUpperBound(1), T.getEStructuralFeatures().push(fe), s.Literals.DATASOURCE__NAME = fe;
+    const Ce = new r();
+    Ce.setName("type"), Ce.setLowerBound(0), Ce.setUpperBound(1), T.getEStructuralFeatures().push(Ce), s.Literals.DATASOURCE__TYPE = Ce;
+    const P = new C();
+    P.setContainment(!1), P.setName("connection"), P.setLowerBound(0), P.setUpperBound(1), T.getEStructuralFeatures().push(P), s.Literals.DATASOURCE__CONNECTION = P;
+    const _e = new r();
+    _e.setName("config"), _e.setLowerBound(0), _e.setUpperBound(1), T.getEStructuralFeatures().push(_e), s.Literals.DATASOURCE__CONFIG = _e;
+    const De = new r();
+    De.setName("icon"), De.setLowerBound(0), De.setUpperBound(1), T.getEStructuralFeatures().push(De), s.Literals.DATASOURCE__ICON = De;
+    const Ie = new r();
+    Ie.setName("tags"), Ie.setLowerBound(0), Ie.setUpperBound(-1), T.getEStructuralFeatures().push(Ie), s.Literals.DATASOURCE__TAGS = Ie;
+    const f = new D();
+    f.setName("Connection"), f.setAbstract(!1), f.setInterface(!1), this.getEClassifiers().push(f), f.setEPackage(this), s.Literals.CONNECTION = f;
+    const Fe = new r();
+    Fe.setName("uid"), Fe.setLowerBound(1), Fe.setUpperBound(1), f.getEStructuralFeatures().push(Fe), s.Literals.CONNECTION__UID = Fe;
+    const Re = new r();
+    Re.setName("name"), Re.setLowerBound(0), Re.setUpperBound(1), f.getEStructuralFeatures().push(Re), s.Literals.CONNECTION__NAME = Re;
+    const Ge = new r();
+    Ge.setName("type"), Ge.setLowerBound(0), Ge.setUpperBound(1), f.getEStructuralFeatures().push(Ge), s.Literals.CONNECTION__TYPE = Ge;
+    const Le = new r();
+    Le.setName("config"), Le.setLowerBound(0), Le.setUpperBound(1), f.getEStructuralFeatures().push(Le), s.Literals.CONNECTION__CONFIG = Le;
+    const Ue = new r();
+    Ue.setName("icon"), Ue.setLowerBound(0), Ue.setUpperBound(1), f.getEStructuralFeatures().push(Ue), s.Literals.CONNECTION__ICON = Ue;
+    const ye = new r();
+    ye.setName("tags"), ye.setLowerBound(0), ye.setUpperBound(-1), f.getEStructuralFeatures().push(ye), s.Literals.CONNECTION__TAGS = ye, s.Literals.WORKSPACE__CONNECTIONS.setEType(s.Literals.CONNECTION), s.Literals.WORKSPACE__DATASOURCES.setEType(s.Literals.DATASOURCE), s.Literals.WORKSPACE__BOARD.setEType(s.Literals.BOARD), s.Literals.WORKSPACE__VARIABLES.setEType(s.Literals.VARIABLE), s.Literals.WORKSPACE__EVENT_MAPPINGS.setEType(s.Literals.EVENT_MAPPING), s.Literals.BOARD__ID.setEType(u().getEClassifier("EString")), s.Literals.BOARD__NAME.setEType(u().getEClassifier("EString")), s.Literals.BOARD__DESCRIPTION.setEType(u().getEClassifier("EString")), s.Literals.BOARD__ICON.setEType(u().getEClassifier("EString")), s.Literals.BOARD__PAGES.setEType(s.Literals.PAGE), s.Literals.BOARD__DEFAULT_PAGE.setEType(s.Literals.PAGE), s.Literals.PAGE__ID.setEType(u().getEClassifier("EString")), s.Literals.PAGE__NAME.setEType(u().getEClassifier("EString")), s.Literals.PAGE__DESCRIPTION.setEType(u().getEClassifier("EString")), s.Literals.PAGE__ICON.setEType(u().getEClassifier("EString")), s.Literals.PAGE__VISIBLE_IN_NAVIGATION.setEType(u().getEClassifier("EBoolean")), s.Literals.PAGE__LAYOUT_ID.setEType(u().getEClassifier("EString")), s.Literals.PAGE__LAYOUT_SETTINGS.setEType(u().getEClassifier("EJavaObject")), s.Literals.PAGE__BACKGROUND_COLOR.setEType(u().getEClassifier("EString")), s.Literals.PAGE__BACKGROUND_IMAGE.setEType(u().getEClassifier("EString")), s.Literals.PAGE__BACKGROUND_SIZE.setEType(u().getEClassifier("EString")), s.Literals.PAGE__BACKGROUND_POSITION.setEType(u().getEClassifier("EString")), s.Literals.PAGE__BACKGROUND_REPEAT.setEType(u().getEClassifier("EString")), s.Literals.PAGE__WIDGETS.setEType(s.Literals.WIDGET), s.Literals.PAGE__LAYOUT.setEType(s.Literals.LAYOUT_ITEM), s.Literals.WIDGET__UID.setEType(u().getEClassifier("EString")), s.Literals.WIDGET__TYPE.setEType(u().getEClassifier("EString")), s.Literals.WIDGET__DATASOURCE.setEType(s.Literals.DATASOURCE), s.Literals.WIDGET__CONFIG.setEType(u().getEClassifier("EJavaObject")), s.Literals.WIDGET__WRAPPER_CONFIG.setEType(u().getEClassifier("EJavaObject")), s.Literals.VARIABLE__UID.setEType(u().getEClassifier("EString")), s.Literals.VARIABLE__NAME.setEType(u().getEClassifier("EString")), s.Literals.VARIABLE__TYPE.setEType(u().getEClassifier("EString")), s.Literals.VARIABLE__SCOPE.setEType(u().getEClassifier("EString")), s.Literals.VARIABLE__ACCESS_MODE.setEType(u().getEClassifier("EString")), s.Literals.VARIABLE__PAGE.setEType(s.Literals.PAGE), s.Literals.VARIABLE__DEFINITION.setEType(u().getEClassifier("EJavaObject")), s.Literals.EVENT_MAPPING__ID.setEType(u().getEClassifier("EString")), s.Literals.EVENT_MAPPING__DEFINITION.setEType(u().getEClassifier("EJavaObject")), s.Literals.LAYOUT_ITEM__ID.setEType(u().getEClassifier("EString")), s.Literals.LAYOUT_ITEM__X.setEType(u().getEClassifier("EInt")), s.Literals.LAYOUT_ITEM__Y.setEType(u().getEClassifier("EInt")), s.Literals.LAYOUT_ITEM__Z.setEType(u().getEClassifier("EInt")), s.Literals.LAYOUT_ITEM__WIDTH.setEType(u().getEClassifier("EInt")), s.Literals.LAYOUT_ITEM__HEIGHT.setEType(u().getEClassifier("EInt")), s.Literals.LAYOUT_ITEM__GROUP.setEType(u().getEClassifier("EString")), s.Literals.DATASOURCE__UID.setEType(u().getEClassifier("EString")), s.Literals.DATASOURCE__NAME.setEType(u().getEClassifier("EString")), s.Literals.DATASOURCE__TYPE.setEType(u().getEClassifier("EString")), s.Literals.DATASOURCE__CONNECTION.setEType(s.Literals.CONNECTION), s.Literals.DATASOURCE__CONFIG.setEType(u().getEClassifier("EJavaObject")), s.Literals.DATASOURCE__ICON.setEType(u().getEClassifier("EString")), s.Literals.DATASOURCE__TAGS.setEType(u().getEClassifier("EString")), s.Literals.CONNECTION__UID.setEType(u().getEClassifier("EString")), s.Literals.CONNECTION__NAME.setEType(u().getEClassifier("EString")), s.Literals.CONNECTION__TYPE.setEType(u().getEClassifier("EString")), s.Literals.CONNECTION__CONFIG.setEType(u().getEClassifier("EJavaObject")), s.Literals.CONNECTION__ICON.setEType(u().getEClassifier("EString")), s.Literals.CONNECTION__TAGS.setEType(u().getEClassifier("EString"));
   }
 }
-void WorkspacePackage.eINSTANCE;
-EPackageRegistry.INSTANCE.registerPackage(WorkspacePackage.eINSTANCE);
-const WORKSPACE = serviceId("Workspace");
-const identifier = Symbol.for(WORKSPACE);
-function activate$1({ services }) {
-  services.register(WORKSPACE, new WorkspaceImpl());
+s.eINSTANCE;
+pe.INSTANCE.registerPackage(s.eINSTANCE);
+const Be = Ve("Workspace"), ze = Symbol.for(Be);
+function Me({ services: R }) {
+  R.register(Be, new c());
 }
-function deactivate$1({ services }) {
-  services.unregister(WORKSPACE);
+function Pe({ services: R }) {
+  R.unregister(Be);
 }
-const library = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const He = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  BoardImpl,
-  ConnectionImpl,
-  DatasourceImpl,
-  EventMappingImpl,
-  LayoutItemImpl,
-  PageImpl,
-  VariableImpl,
-  WORKSPACE,
-  WidgetImpl,
-  WorkspaceFactory,
-  WorkspaceImpl,
-  WorkspacePackage,
-  activate: activate$1,
-  deactivate: deactivate$1,
-  identifier
-}, Symbol.toStringTag, { value: "Module" }));
-const LIBRARY_ID = "org.eclipse.daanse.board.app.lib.model.workspace";
-const VERSION = "0.0.1-next.1";
-async function activate(context) {
-  const runtime = globalThis.__tsm__;
-  if (!runtime) {
-    throw new Error(`${LIBRARY_ID}: tsm runtime is not initialized`);
-  }
-  runtime.register(LIBRARY_ID, library, VERSION, "lib.model.workspace");
-  await activate$1?.(context);
+  BoardImpl: h,
+  ConnectionImpl: E,
+  DatasourceImpl: o,
+  EventMappingImpl: d,
+  LayoutItemImpl: n,
+  PageImpl: i,
+  VariableImpl: a,
+  WORKSPACE: Be,
+  WidgetImpl: g,
+  WorkspaceFactory: we,
+  WorkspaceImpl: c,
+  WorkspacePackage: s,
+  activate: Me,
+  deactivate: Pe,
+  identifier: ze
+}, Symbol.toStringTag, { value: "Module" })), ve = "org.eclipse.daanse.board.app.lib.model.workspace", xe = "0.0.1-next.1";
+async function Je(R) {
+  const e = globalThis.__tsm__;
+  if (!e)
+    throw new Error(`${ve}: tsm runtime is not initialized`);
+  e.register(ve, He, xe, "lib.model.workspace"), await Me?.(R);
 }
-async function deactivate(context) {
-  await deactivate$1?.(context);
+async function Xe(R) {
+  await Pe?.(R);
 }
 export {
-  BoardImpl,
-  ConnectionImpl,
-  DatasourceImpl,
-  EventMappingImpl,
-  LayoutItemImpl,
-  PageImpl,
-  VariableImpl,
-  WORKSPACE,
-  WidgetImpl,
-  WorkspaceFactory,
-  WorkspaceImpl,
-  WorkspacePackage,
-  activate,
-  deactivate,
-  identifier
+  h as BoardImpl,
+  E as ConnectionImpl,
+  o as DatasourceImpl,
+  d as EventMappingImpl,
+  n as LayoutItemImpl,
+  i as PageImpl,
+  a as VariableImpl,
+  Be as WORKSPACE,
+  g as WidgetImpl,
+  we as WorkspaceFactory,
+  c as WorkspaceImpl,
+  s as WorkspacePackage,
+  Je as activate,
+  Xe as deactivate,
+  ze as identifier
 };

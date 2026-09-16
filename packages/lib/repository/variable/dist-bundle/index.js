@@ -1,16 +1,16 @@
-import { EVENT_ACTIONS_REGISTRY_ID } from "org.eclipse.daanse.board.app.lib.events";
-import { WORKSPACE, VariableImpl } from "org.eclipse.daanse.board.app.lib.model.workspace";
-import { loggerFactory } from "org.eclipse.daanse.board.app.lib.logger";
-import { VARIABLE_REPOSITORY, identifier } from "org.eclipse.daanse.board.app.lib.api.variable";
-import { VARIABLE_REPOSITORY as VARIABLE_REPOSITORY2, identifier as identifier2 } from "org.eclipse.daanse.board.app.lib.api.variable";
-class VariableRepository {
+import { EVENT_ACTIONS_REGISTRY_ID as u } from "org.eclipse.daanse.board.app.lib.events";
+import { WORKSPACE as m, VariableImpl as h } from "org.eclipse.daanse.board.app.lib.model.workspace";
+import { loggerFactory as f } from "org.eclipse.daanse.board.app.lib.logger";
+import { VARIABLE_REPOSITORY as o, identifier as w } from "org.eclipse.daanse.board.app.lib.api.variable";
+import { VARIABLE_REPOSITORY as G, identifier as B } from "org.eclipse.daanse.board.app.lib.api.variable";
+class p {
   /*
    * No event bus. A change to the list is announced by the model itself,
    * the way every other modelled change is; the bus carries value changes,
    * which a variable emits on its own and which this never saw.
    */
-  constructor(resolver) {
-    this.resolver = resolver;
+  constructor(e) {
+    this.resolver = e;
   }
   /** The running objects, by the uid of the modelled variable they were built from. */
   live = /* @__PURE__ */ new Map();
@@ -22,24 +22,20 @@ class VariableRepository {
    */
   workspaceHeld;
   get workspace() {
-    if (!this.workspaceHeld) {
-      this.workspaceHeld = this.resolver.getRequired(WORKSPACE);
-    }
-    return this.workspaceHeld;
+    return this.workspaceHeld || (this.workspaceHeld = this.resolver.getRequired(m)), this.workspaceHeld;
   }
   /**
    * Resolves one of the identifiers a registered variable type carries.
    * All of them are created with Symbol.for, so the description IS the id.
    */
-  resolveIdentifier(identifier3) {
-    return this.resolver.getRequired(identifier3.description);
+  resolveIdentifier(e) {
+    return this.resolver.getRequired(e.description);
   }
   // ------------------------------------------------------------ the types
-  registerVariableType(type, identifiers) {
-    if (this.availableVariablesTypes.has(type)) {
+  registerVariableType(e, a) {
+    if (this.availableVariablesTypes.has(e))
       throw Error("Multiple registration of the same variable type");
-    }
-    this.availableVariablesTypes.set(type, identifiers);
+    this.availableVariablesTypes.set(e, a);
   }
   /**
    * Takes a variable type's registration back.
@@ -50,27 +46,27 @@ class VariableRepository {
    *
    * @returns whether the type was registered
    */
-  unregisterVariableType(type) {
-    return this.availableVariablesTypes.delete(type);
+  unregisterVariableType(e) {
+    return this.availableVariablesTypes.delete(e);
   }
   getRegisteredVariableTypes() {
     return Array.from(this.availableVariablesTypes.keys());
   }
-  getVariableIdentifiers(type) {
-    return this.availableVariablesTypes.get(type);
+  getVariableIdentifiers(e) {
+    return this.availableVariablesTypes.get(e);
   }
   // -------------------------------------------------------- the model side
   /** What the workspace holds, in order. */
   getVariableModels() {
     return this.workspace.variables.toArray();
   }
-  getVariableModel(uid) {
-    return this.getVariableModels().find((variable) => variable.uid === uid);
+  getVariableModel(e) {
+    return this.getVariableModels().find((a) => a.uid === e);
   }
   /** The board a page-scoped variable names, if the workspace still holds it. */
-  pageById(pageId) {
-    if (!pageId) return void 0;
-    return this.workspace.board?.pages.toArray().find((page) => page.id === pageId);
+  pageById(e) {
+    if (e)
+      return this.workspace.board?.pages.toArray().find((a) => a.id === e);
   }
   /**
    * Builds the running object for one modelled variable.
@@ -79,20 +75,15 @@ class VariableRepository {
    * that is what a variable's own init() reads - the one place that
    * happens, rather than at each caller.
    */
-  build(held) {
-    const identifiers = this.availableVariablesTypes.get(held.type);
-    if (!identifiers) return;
-    const config = { ...held.definition ?? {} };
-    config["uid"] = held.uid;
-    config["scope"] = held.scope ?? "global";
-    config["accessMode"] = held.accessMode ?? "external-writable";
-    config["pageId"] = held.page?.id;
-    const factory = this.resolveIdentifier(
-      identifiers.Variable
-    );
-    const variable = factory(held.name, config);
-    variable.id = held.uid;
-    this.live.set(held.uid, variable);
+  build(e) {
+    const a = this.availableVariablesTypes.get(e.type);
+    if (!a) return;
+    const t = { ...e.definition ?? {} };
+    t.uid = e.uid, t.scope = e.scope ?? "global", t.accessMode = e.accessMode ?? "external-writable", t.pageId = e.page?.id;
+    const n = this.resolveIdentifier(
+      a.Variable
+    )(e.name, t);
+    n.id = e.uid, this.live.set(e.uid, n);
   }
   /**
    * Builds a live object for every variable the workspace holds.
@@ -102,22 +93,14 @@ class VariableRepository {
    */
   rebuildLive() {
     this.live.clear();
-    for (const held of this.getVariableModels()) this.build(held);
+    for (const e of this.getVariableModels()) this.build(e);
   }
   // ---------------------------------------------------------- the variables
-  registerVariable(name, type, config) {
-    const uid = config.uid ?? config.id ?? Math.random().toString(36).substring(7);
-    const held = this.getVariableModel(uid) ?? new VariableImpl();
-    held.uid = uid;
-    held.name = name;
-    held.type = type;
-    held.scope = config.scope ?? "global";
-    held.accessMode = config.accessMode ?? "external-writable";
-    held.page = this.pageById(config.pageId);
-    const { uid: _uid, id: _id, scope: _scope, accessMode: _mode, pageId: _page, ...rest } = config;
-    held.definition = rest;
-    if (!this.getVariableModel(uid)) this.workspace.variables.push(held);
-    this.build(held);
+  registerVariable(e, a, t) {
+    const i = t.uid ?? t.id ?? Math.random().toString(36).substring(7), n = this.getVariableModel(i) ?? new h();
+    n.uid = i, n.name = e, n.type = a, n.scope = t.scope ?? "global", n.accessMode = t.accessMode ?? "external-writable", n.page = this.pageById(t.pageId);
+    const { uid: s, id: E, scope: M, accessMode: T, pageId: P, ...b } = t;
+    n.definition = b, this.getVariableModel(i) || this.workspace.variables.push(n), this.build(n);
   }
   /**
    * Writes a changed variable back and builds it again.
@@ -125,12 +108,12 @@ class VariableRepository {
    * Changing the type means a different live object, which is why this
    * rebuilds rather than updating in place.
    */
-  saveVariable(uid, name, type, config) {
-    this.registerVariable(name, type, { ...config, uid });
+  saveVariable(e, a, t, i) {
+    this.registerVariable(a, t, { ...i, uid: e });
   }
-  getVariable(name) {
-    const held = this.getVariableModels().find((variable) => variable.name === name);
-    return held ? this.live.get(held.uid) : void 0;
+  getVariable(e) {
+    const a = this.getVariableModels().find((t) => t.name === e);
+    return a ? this.live.get(a.uid) : void 0;
   }
   /**
    * The variable this name means on this board.
@@ -138,21 +121,21 @@ class VariableRepository {
    * A board's own variable wins over a global one of the same name, which
    * is what makes a page variable a local override.
    */
-  getVariableWithContext(name, pageId) {
-    const models = this.getVariableModels();
-    if (pageId) {
-      const onPage = models.find(
-        (variable) => variable.name === name && variable.scope === "page" && variable.page?.id === pageId
+  getVariableWithContext(e, a) {
+    const t = this.getVariableModels();
+    if (a) {
+      const n = t.find(
+        (s) => s.name === e && s.scope === "page" && s.page?.id === a
       );
-      if (onPage) return this.live.get(onPage.uid);
+      if (n) return this.live.get(n.uid);
     }
-    const global = models.find(
-      (variable) => variable.name === name && (variable.scope ?? "global") === "global"
+    const i = t.find(
+      (n) => n.name === e && (n.scope ?? "global") === "global"
     );
-    return global ? this.live.get(global.uid) : this.getVariable(name);
+    return i ? this.live.get(i.uid) : this.getVariable(e);
   }
-  getVariableById(id) {
-    return this.live.get(id);
+  getVariableById(e) {
+    return this.live.get(e);
   }
   /**
    * Takes a variable out of the workspace and lets go of its live object.
@@ -160,27 +143,24 @@ class VariableRepository {
    * Both halves, because both exist. Either the uid or the name reaches it;
    * the name because that is what a caller who only ever saw a name has.
    */
-  removeVariable(nameOrId) {
-    const held = this.getVariableModels();
-    const at = held.findIndex(
-      (variable) => variable.uid === nameOrId || variable.name === nameOrId
+  removeVariable(e) {
+    const a = this.getVariableModels(), t = a.findIndex(
+      (i) => i.uid === e || i.name === e
     );
-    if (at < 0) return;
-    this.live.delete(held[at].uid);
-    this.workspace.variables.removeAt(at);
+    t < 0 || (this.live.delete(a[t].uid), this.workspace.variables.removeAt(t));
   }
   /** Every variable as a [name, live object] pair, the way callers read them. */
   getAllVariables() {
-    const pairs = [];
-    for (const held of this.getVariableModels()) {
-      const variable = this.live.get(held.uid);
-      if (variable) pairs.push([held.name, variable]);
+    const e = [];
+    for (const a of this.getVariableModels()) {
+      const t = this.live.get(a.uid);
+      t && e.push([a.name, t]);
     }
-    return pairs;
+    return e;
   }
-  renameVariable(newname, oldname) {
-    const held = this.getVariableModels().find((variable) => variable.name === oldname);
-    if (held) this.renameVariableById(held.uid, newname);
+  renameVariable(e, a) {
+    const t = this.getVariableModels().find((i) => i.name === a);
+    t && this.renameVariableById(t.uid, e);
   }
   /**
    * Renames one variable.
@@ -190,106 +170,157 @@ class VariableRepository {
    * have to move the entry between Map keys, in whichever of the two Maps
    * it was found in.
    */
-  renameVariableById(id, newname) {
-    const held = this.getVariableModel(id);
-    if (!held) return;
-    held.name = newname;
-    this.live.get(id)?.rename?.(newname);
+  renameVariableById(e, a) {
+    const t = this.getVariableModel(e);
+    t && (t.name = a, this.live.get(e)?.rename?.(a));
   }
-  getVariablesByScope(scope, pageId) {
+  getVariablesByScope(e, a) {
     return this.getVariableModels().filter(
-      (variable) => scope === "global" ? (variable.scope ?? "global") === "global" : variable.scope === "page" && variable.page?.id === pageId
-    ).map((variable) => [variable.name, this.live.get(variable.uid)]).filter(([, live]) => !!live);
+      (t) => e === "global" ? (t.scope ?? "global") === "global" : t.scope === "page" && t.page?.id === a
+    ).map((t) => [t.name, this.live.get(t.uid)]).filter(([, t]) => !!t);
   }
-  getVariableWithPageContext(pageId, name) {
-    return this.getVariableWithContext(name, pageId);
+  getVariableWithPageContext(e, a) {
+    return this.getVariableWithContext(a, e);
   }
   /**
    * Sets or updates a global variable (Action method)
    */
-  setGlobalVariable(variableName, value) {
-    const existingVar = this.getVariable(variableName);
-    if (existingVar) {
-      existingVar.value = value;
-    } else {
-      this.registerVariable(variableName, "constant", {
-        value,
-        scope: "global"
-      });
-    }
+  setGlobalVariable(e, a) {
+    const t = this.getVariable(e);
+    t ? t.value = a : this.registerVariable(e, "constant", {
+      value: a,
+      scope: "global"
+    });
   }
   /**
    * Sets or updates a page-scoped variable (Action method)
    */
-  setPageVariable(variableName, value, pageId) {
-    const existingVar = this.getVariableWithContext(variableName, pageId);
-    if (existingVar && typeof existingVar.set === "function") {
-      existingVar.set(value);
-    } else if (existingVar) {
-      existingVar.value = value;
-    } else {
-      this.registerVariable(variableName, "constant", {
-        value,
-        scope: "page",
-        pageId
-      });
-    }
+  setPageVariable(e, a, t) {
+    const i = this.getVariableWithContext(e, t);
+    i && typeof i.set == "function" ? i.set(a) : i ? i.value = a : this.registerVariable(e, "constant", {
+      value: a,
+      scope: "page",
+      pageId: t
+    });
   }
 }
-const VariableActionsModelContent = '<?xml version="1.0" encoding="UTF-8"?>\n<!--\n  Copyright (c) 2025 Contributors to the Eclipse Foundation.\n\n  This program and the accompanying materials are made\n  available under the terms of the Eclipse Public License 2.0\n  which is available at https://www.eclipse.org/legal/epl-2.0/\n\n  SPDX-License-Identifier: EPL-2.0\n\n  Contributors:\n    Smart City Jena\n-->\n<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"\n    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="variableactions" nsURI="http://org.eclipse.daanse.board.app.lib.repository.variable.actions"\n    nsPrefix="variableactions">\n\n  <!-- Reference to Events package -->\n  <eClassifiers xsi:type="ecore:EClass" name="SystemVariableActions" interface="true" eSuperTypes="http://org.eclipse.daanse.board.app.lib.events#//SystemActionInterface">\n    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">\n      <details key="documentation" value="System-level variable actions"/>\n    </eAnnotations>\n\n    <eOperations name="setGlobalVariable">\n      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">\n        <details key="documentation" value="Set or update a global variable"/>\n      </eAnnotations>\n      <eAnnotations source="org.eclipse.daanse.board.app.lib.events/WidgetAction">\n        <details key="eventType" value="system.setGlobalVariable"/>\n      </eAnnotations>\n      <eParameters name="variableName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">\n        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">\n          <details key="documentation" value="Name of the variable to set"/>\n        </eAnnotations>\n      </eParameters>\n      <eParameters name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject">\n        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">\n          <details key="documentation" value="Value to set"/>\n        </eAnnotations>\n      </eParameters>\n    </eOperations>\n  </eClassifiers>\n\n  <eClassifiers xsi:type="ecore:EClass" name="PageVariableActions" interface="true" eSuperTypes="http://org.eclipse.daanse.board.app.lib.events#//PageActionInterface">\n    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">\n      <details key="documentation" value="Page-level variable actions"/>\n    </eAnnotations>\n\n    <eOperations name="setPageVariable">\n      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">\n        <details key="documentation" value="Set or update a page-scoped variable"/>\n      </eAnnotations>\n      <eAnnotations source="org.eclipse.daanse.board.app.lib.events/WidgetAction">\n        <details key="eventType" value="page.setPageVariable"/>\n      </eAnnotations>\n      <eParameters name="variableName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">\n        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">\n          <details key="documentation" value="Name of the variable to set"/>\n        </eAnnotations>\n      </eParameters>\n      <eParameters name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject">\n        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">\n          <details key="documentation" value="Value to set"/>\n        </eAnnotations>\n      </eParameters>\n      <eParameters name="pageId" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" lowerBound="0">\n        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">\n          <details key="documentation" value="Optional page ID (defaults to current page)"/>\n        </eAnnotations>\n      </eParameters>\n    </eOperations>\n  </eClassifiers>\n</ecore:EPackage>';
-const log = loggerFactory.createLogger("daanse:variable:actions");
-function registerVariableActions(actionsRegistry, variableRepository) {
-  actionsRegistry.registerActionsFromEcoreString(
+const l = `<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright (c) 2025 Contributors to the Eclipse Foundation.
+
+  This program and the accompanying materials are made
+  available under the terms of the Eclipse Public License 2.0
+  which is available at https://www.eclipse.org/legal/epl-2.0/
+
+  SPDX-License-Identifier: EPL-2.0
+
+  Contributors:
+    Smart City Jena
+-->
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="variableactions" nsURI="http://org.eclipse.daanse.board.app.lib.repository.variable.actions"
+    nsPrefix="variableactions">
+
+  <!-- Reference to Events package -->
+  <eClassifiers xsi:type="ecore:EClass" name="SystemVariableActions" interface="true" eSuperTypes="http://org.eclipse.daanse.board.app.lib.events#//SystemActionInterface">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="System-level variable actions"/>
+    </eAnnotations>
+
+    <eOperations name="setGlobalVariable">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Set or update a global variable"/>
+      </eAnnotations>
+      <eAnnotations source="org.eclipse.daanse.board.app.lib.events/WidgetAction">
+        <details key="eventType" value="system.setGlobalVariable"/>
+      </eAnnotations>
+      <eParameters name="variableName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="Name of the variable to set"/>
+        </eAnnotations>
+      </eParameters>
+      <eParameters name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="Value to set"/>
+        </eAnnotations>
+      </eParameters>
+    </eOperations>
+  </eClassifiers>
+
+  <eClassifiers xsi:type="ecore:EClass" name="PageVariableActions" interface="true" eSuperTypes="http://org.eclipse.daanse.board.app.lib.events#//PageActionInterface">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Page-level variable actions"/>
+    </eAnnotations>
+
+    <eOperations name="setPageVariable">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Set or update a page-scoped variable"/>
+      </eAnnotations>
+      <eAnnotations source="org.eclipse.daanse.board.app.lib.events/WidgetAction">
+        <details key="eventType" value="page.setPageVariable"/>
+      </eAnnotations>
+      <eParameters name="variableName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="Name of the variable to set"/>
+        </eAnnotations>
+      </eParameters>
+      <eParameters name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="Value to set"/>
+        </eAnnotations>
+      </eParameters>
+      <eParameters name="pageId" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" lowerBound="0">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="Optional page ID (defaults to current page)"/>
+        </eAnnotations>
+      </eParameters>
+    </eOperations>
+  </eClassifiers>
+</ecore:EPackage>`, v = f.createLogger("daanse:variable:actions");
+function y(r, e) {
+  r.registerActionsFromEcoreString(
     "SystemVariableActions",
-    VariableActionsModelContent,
+    l,
     "system",
     "VariableActions.ecore"
-  );
-  actionsRegistry.registerActionsFromEcoreString(
+  ), r.registerActionsFromEcoreString(
     "PageVariableActions",
-    VariableActionsModelContent,
+    l,
     "page",
     "VariableActions.ecore"
-  );
-  actionsRegistry.registerInstance("VariableRepository", variableRepository);
-  log("Variable actions registered");
+  ), r.registerInstance("VariableRepository", e), v("Variable actions registered");
 }
-function activate$1({ services }) {
-  const repository = new VariableRepository(services);
-  services.register(VARIABLE_REPOSITORY, repository);
-  registerVariableActions(
-    services.getRequired(EVENT_ACTIONS_REGISTRY_ID),
-    repository
+function d({ services: r }) {
+  const e = new p(r);
+  r.register(o, e), y(
+    r.getRequired(u),
+    e
   );
 }
-function deactivate$1({ services }) {
-  services.unregister(VARIABLE_REPOSITORY);
+function g({ services: r }) {
+  r.unregister(o);
 }
-const library = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const V = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  VARIABLE_REPOSITORY,
-  VariableRepository,
-  activate: activate$1,
-  deactivate: deactivate$1,
-  identifier
-}, Symbol.toStringTag, { value: "Module" }));
-const LIBRARY_ID = "org.eclipse.daanse.board.app.lib.repository.variable";
-const VERSION = "0.0.1-next.1";
-async function activate(context) {
-  const runtime = globalThis.__tsm__;
-  if (!runtime) {
-    throw new Error(`${LIBRARY_ID}: tsm runtime is not initialized`);
-  }
-  runtime.register(LIBRARY_ID, library, VERSION, "lib.repository.variable");
-  await activate$1?.(context);
+  VARIABLE_REPOSITORY: o,
+  VariableRepository: p,
+  activate: d,
+  deactivate: g,
+  identifier: w
+}, Symbol.toStringTag, { value: "Module" })), c = "org.eclipse.daanse.board.app.lib.repository.variable", A = "0.0.1-next.1";
+async function _(r) {
+  const e = globalThis.__tsm__;
+  if (!e)
+    throw new Error(`${c}: tsm runtime is not initialized`);
+  e.register(c, V, A, "lib.repository.variable"), await d?.(r);
 }
-async function deactivate(context) {
-  await deactivate$1?.(context);
+async function R(r) {
+  await g?.(r);
 }
 export {
-  VARIABLE_REPOSITORY2 as VARIABLE_REPOSITORY,
-  VariableRepository,
-  activate,
-  deactivate,
-  identifier2 as identifier
+  G as VARIABLE_REPOSITORY,
+  p as VariableRepository,
+  _ as activate,
+  R as deactivate,
+  B as identifier
 };

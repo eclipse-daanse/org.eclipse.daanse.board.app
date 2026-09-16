@@ -1,101 +1,77 @@
-import { DATASOURCE_REPOSITORY } from "org.eclipse.daanse.board.app.lib.api.datasource";
-import { defineComponent, ref, watch, shallowRef, createElementBlock, createCommentVNode, openBlock, createVNode, unref, inject, computed, Fragment } from "vue";
-import { DTable, DSelect } from "org.eclipse.daanse.board.app.ui.vue.controls";
-import { useTemporaryStore } from "org.eclipse.daanse.board.app.ui.vue.composables";
-import { DataTableComposer } from "org.eclipse.daanse.board.app.lib.composer.datatable";
-import { identifier } from "org.eclipse.daanse.board.app.lib.repository.datasource";
-const _hoisted_1 = {
+import { DATASOURCE_REPOSITORY as p } from "org.eclipse.daanse.board.app.lib.api.datasource";
+import { defineComponent as f, ref as i, watch as s, shallowRef as S, createElementBlock as g, createCommentVNode as y, openBlock as b, createVNode as c, unref as u, inject as D, computed as v, Fragment as w } from "vue";
+import { DTable as T, DSelect as m } from "org.eclipse.daanse.board.app.ui.vue.controls";
+import { useTemporaryStore as h } from "org.eclipse.daanse.board.app.ui.vue.composables";
+import { DataTableComposer as d } from "org.eclipse.daanse.board.app.lib.composer.datatable";
+import { identifier as R } from "org.eclipse.daanse.board.app.lib.repository.datasource";
+const V = {
   key: 0,
-  style: { "overflow": "hidden", "height": "100%", "width": "100%" }
-};
-const _sfc_main$1 = /* @__PURE__ */ defineComponent({
+  style: { overflow: "hidden", height: "100%", width: "100%" }
+}, k = /* @__PURE__ */ f({
   __name: "Preview",
   props: {
     dataSource: {}
   },
-  setup(__props) {
-    const props = __props;
-    const data = ref(null);
-    watch(props.dataSource, () => {
-      update();
-    }, { deep: true });
-    const tempStore = shallowRef(null);
-    const settingsRef = ref(props.dataSource);
-    const { update } = useTemporaryStore(props.dataSource.type, settingsRef, tempStore);
-    watch(tempStore, async () => {
-      console.log("tempStore changed", tempStore.value);
-      data.value = await tempStore.value.getData("DataTable");
-    }, { deep: true });
-    return (_ctx, _cache) => {
-      return tempStore.value && data.value ? (openBlock(), createElementBlock("div", _hoisted_1, [
-        createVNode(unref(DTable), {
-          items: data.value.items
-        }, null, 8, ["items"])
-      ])) : createCommentVNode("", true);
-    };
+  setup(e) {
+    const n = e, l = i(null);
+    s(n.dataSource, () => {
+      o();
+    }, { deep: !0 });
+    const t = S(null), a = i(n.dataSource), { update: o } = h(n.dataSource.type, a, t);
+    return s(t, async () => {
+      console.log("tempStore changed", t.value), l.value = await t.value.getData("DataTable");
+    }, { deep: !0 }), (r, x) => t.value && l.value ? (b(), g("div", V, [
+      c(u(T), {
+        items: l.value.items
+      }, null, 8, ["items"])
+    ])) : y("", !0);
   }
-});
-const _sfc_main = /* @__PURE__ */ defineComponent({
+}), C = /* @__PURE__ */ f({
   __name: "Settings",
   props: {
     config: {},
     dataSources: {},
     connections: {}
   },
-  setup(__props) {
-    const dsRepository = inject(identifier);
-    const datasourcesFiltered = computed(() => {
-      return __props.dataSources.filter((ds) => DataTableComposer.availableTypes.includes(ds.type));
-    });
-    const composeByOptions = ref([]);
-    watch(() => __props.config.connectedDatasources, async (newValue) => {
-      console.log("newValue", newValue);
-      composeByOptions.value = await DataTableComposer.getHeaders(
-        newValue,
-        dsRepository
+  setup(e) {
+    const n = D(R), l = v(() => e.dataSources.filter((a) => d.availableTypes.includes(a.type))), t = i([]);
+    return s(() => e.config.connectedDatasources, async (a) => {
+      console.log("newValue", a), t.value = await d.getHeaders(
+        a,
+        n
       );
-    });
-    return (_ctx, _cache) => {
-      return openBlock(), createElementBlock(Fragment, null, [
-        createVNode(unref(DSelect), {
-          modelValue: __props.config.connectedDatasources,
-          "onUpdate:modelValue": _cache[0] || (_cache[0] = ($event) => __props.config.connectedDatasources = $event),
-          label: "Quellen",
-          options: datasourcesFiltered.value,
-          multiple: "",
-          "label-key": "name",
-          "value-key": "uid"
-        }, null, 8, ["modelValue", "options"]),
-        createVNode(unref(DSelect), {
-          modelValue: __props.config.composeBy,
-          "onUpdate:modelValue": _cache[1] || (_cache[1] = ($event) => __props.config.composeBy = $event),
-          label: "Zusammensetzen nach",
-          options: composeByOptions.value
-        }, null, 8, ["modelValue", "options"])
-      ], 64);
-    };
+    }), (a, o) => (b(), g(w, null, [
+      c(u(m), {
+        modelValue: e.config.connectedDatasources,
+        "onUpdate:modelValue": o[0] || (o[0] = (r) => e.config.connectedDatasources = r),
+        label: "Quellen",
+        options: l.value,
+        multiple: "",
+        "label-key": "name",
+        "value-key": "uid"
+      }, null, 8, ["modelValue", "options"]),
+      c(u(m), {
+        modelValue: e.config.composeBy,
+        "onUpdate:modelValue": o[1] || (o[1] = (r) => e.config.composeBy = r),
+        label: "Zusammensetzen nach",
+        options: t.value
+      }, null, 8, ["modelValue", "options"])
+    ], 64));
   }
-});
-const DatatableComposerIdentifier = Symbol.for("DataTableComposer");
-const previewSymbol = Symbol.for("DatatablePreview");
-const settingsSymbol = Symbol.for("DatatableSettings");
-function activate({ services }) {
-  services.register("DatatablePreview", _sfc_main$1);
-  services.register("DatatableSettings", _sfc_main);
-  services.getRequired(DATASOURCE_REPOSITORY).registerDatasourceType("datatable", {
+}), P = Symbol.for("DataTableComposer"), B = Symbol.for("DatatablePreview"), O = Symbol.for("DatatableSettings");
+function N({ services: e }) {
+  e.register("DatatablePreview", k), e.register("DatatableSettings", C), e.getRequired(p).registerDatasourceType("datatable", {
     icon: "table_chart",
     kind: "composer",
-    Store: DatatableComposerIdentifier,
-    Preview: previewSymbol,
-    Settings: settingsSymbol
+    Store: P,
+    Preview: B,
+    Settings: O
   });
 }
-function deactivate({ services }) {
-  services.getRequired(DATASOURCE_REPOSITORY).unregisterDatasourceType("datatable");
-  services.unregister("DatatablePreview");
-  services.unregister("DatatableSettings");
+function _({ services: e }) {
+  e.getRequired(p).unregisterDatasourceType("datatable"), e.unregister("DatatablePreview"), e.unregister("DatatableSettings");
 }
 export {
-  activate,
-  deactivate
+  N as activate,
+  _ as deactivate
 };

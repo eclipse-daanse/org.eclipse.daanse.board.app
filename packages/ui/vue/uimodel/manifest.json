@@ -37,9 +37,9 @@
     }
   ],
   "dependencies": [
-    "platform.vue",
-    "ui.vue.controls",
     "lib.api.variable",
-    "ui.vue.composables"
+    "platform.vue",
+    "ui.vue.composables",
+    "ui.vue.controls"
   ]
 }

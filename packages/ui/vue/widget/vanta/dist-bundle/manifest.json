@@ -9,7 +9,8 @@
     "lib.api.events",
     "lib.api.widget",
     "lib.events",
-    "platform.vue"
+    "platform.vue",
+    "ui.vue.composables"
   ],
   "requiresService": [
     {
