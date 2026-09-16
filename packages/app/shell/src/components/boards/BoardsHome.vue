@@ -13,20 +13,21 @@ Contributors:
 
 <script setup lang="ts">
 /*
- * The board launcher - what the app opens with.
+ * The launcher - what the app opens with.
  *
- * It shows the boards that exist, each with its floorplan, so choosing one
- * is recognition rather than reading a list. Everything on a card comes
- * from the board itself (its layout, its widgets, its data sources);
- * nothing is decoration standing in for data we do not have.
+ * A workspace holds one board, and the board holds the pages. Those are two
+ * different things to look at, so they are two tabs: the board is what you
+ * open and name, a page is what carries a layout and widgets. They used to
+ * be one list, which is why making a page inside a board made it show up
+ * here as a board of its own.
  */
 import { computed, inject, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { v4 as uuidv4 } from 'uuid'
-import { DButton } from 'org.eclipse.daanse.board.app.ui.vue.controls'
+import { DButton, DIcon } from 'org.eclipse.daanse.board.app.ui.vue.controls'
 import BoardFloorplan from './BoardFloorplan.vue'
 import WorkspaceStorage from './WorkspaceStorage.vue'
-import { summarizeBoard, type BoardSummary } from '@/composables/boardSummary'
+import { summarizePage, type PageSummary } from '@/composables/pageSummary'
 import { useBoardUsage } from '@/composables/useBoardUsage'
 import {
   identifier as WORKSPACE,
@@ -43,27 +44,38 @@ const props = defineProps<{
 
 const router = useRouter()
 const route = useRoute()
-const query = ref('')
 
-const { usageOf, byUsage, lastOpenedLabel } = useBoardUsage()
+/* Used for the order the pages are counted in, nothing more. */
+const { byUsage } = useBoardUsage()
 
-/** Boards and storage are two views of the same place, not two places. */
-const view = ref<'boards' | 'storage'>(route.query.view === 'storage' ? 'storage' : 'boards')
-
-
-
-/* The modelled pages - reading this list is what makes the summary re-run. */
-const pages = useEList(inject<Workspace>(WORKSPACE)!, (w) => w.pages)
+const workspace = inject<Workspace>(WORKSPACE)!
 
 /*
- * Ordered by how much each board is actually used, so the ones worked with
- * daily stay at the front and the rest keep their place behind them - a
- * board is never hidden, only ranked.
+ * Reading the pages is what makes everything here re-run: the list is
+ * watched on the workspace with a deep adapter, so it also reports a board
+ * being renamed or replaced.
  */
-const boards = computed<BoardSummary[]>(() => {
-  /* Reading the modelled list is what makes this re-run. */
-  const held = pages.value
-  void held
+const modelledPages = useEList(workspace, (w) => w.board?.pages)
+const board = computed(() => {
+  void modelledPages.value
+  return workspace.board
+})
+
+/*
+ * Two views of the same question - which board to open. Pages are not one
+ * of them: they live inside a board, so they are an area of the workspace
+ * once it is open, not a tab out here.
+ */
+type View = 'recent' | 'storage'
+const view = ref<View>(route.query.view === 'storage' ? 'storage' : 'recent')
+
+/*
+ * Ordered by how much each page is actually used, so the ones worked with
+ * daily stay at the front and the rest keep their place behind them - a
+ * page is never hidden, only ranked.
+ */
+const pages = computed<PageSummary[]>(() => {
+  void modelledPages.value
   const repo = props.pageRepo
   if (!repo) return []
 
@@ -72,8 +84,7 @@ const boards = computed<BoardSummary[]>(() => {
     .slice()
     .sort(byUsage)
     .map((id: string) =>
-      /* Both halves come off the page itself now. */
-      summarizeBoard(
+      summarizePage(
         id,
         repo.getPage(id) as PageI | undefined,
         repo.getPage(id)?.layout?.toArray() ?? [],
@@ -82,26 +93,36 @@ const boards = computed<BoardSummary[]>(() => {
     )
 })
 
-const visibleBoards = computed(() => {
-  const needle = query.value.trim().toLowerCase()
-  if (!needle) return boards.value
-  return boards.value.filter(
-    (b) =>
-      b.name.toLowerCase().includes(needle) ||
-      b.description.toLowerCase().includes(needle) ||
-      b.kinds.some((k) => k.toLowerCase().includes(needle)),
-  )
-})
 
-function openBoard(id: string) {
+/** What the board itself is worth saying: its pages, added up. */
+const boardTotals = computed(() => ({
+  pages: pages.value.length,
+  widgets: pages.value.reduce((sum, page) => sum + page.widgetCount, 0),
+  sources: new Set(pages.value.flatMap((page) => page.kinds)).size,
+}))
+
+/** Where opening the board lands: its default page, else the first one. */
+const entryPageId = computed(
+  () => props.pageRepo?.getDefaultPage()?.id ?? pages.value[0]?.id,
+)
+
+function openPage(id: string) {
   router.push(`/page/${id}`)
 }
 
-function editBoard(id: string) {
-  router.push(`/page/${id}/edit`)
+
+function openBoard() {
+  const id = entryPageId.value
+  if (id) openPage(id as string)
 }
 
-function createBoard() {
+/**
+ * A page, in the board that holds them.
+ *
+ * The registry makes the board if there is none yet - which is what
+ * creating the first page of a fresh workspace does.
+ */
+function createPage() {
   const repo = props.pageRepo
   if (!repo || !props.layoutRepo) return
 
@@ -131,12 +152,11 @@ function openStorage() {
         <button
           type="button"
           role="tab"
-          :aria-selected="view === 'boards'"
-          :class="['boards__view', { on: view === 'boards' }]"
-          @click="view = 'boards'"
+          :aria-selected="view === 'recent'"
+          :class="['boards__view', { on: view === 'recent' }]"
+          @click="view = 'recent'"
         >
-          Oft genutzt
-          <span v-if="boards.length" class="boards__count">{{ boards.length }}</span>
+          Oft benutzt
         </button>
         <button
           type="button"
@@ -149,21 +169,11 @@ function openStorage() {
         </button>
       </div>
 
-      <div v-if="view === 'boards'" class="boards__tools">
-        <input
-          v-model="query"
-          class="boards__search"
-          type="search"
-          placeholder="Boards filtern"
-          aria-label="Boards filtern"
-        />
-        <DButton intent="primary" size="sm" @click="createBoard">Neues Board</DButton>
-      </div>
     </header>
 
     <div class="boards__body">
-    <!-- Nothing built yet: say what a board is and offer the one useful move -->
-    <div v-if="view === 'boards' && boards.length === 0" class="boards__empty">
+    <!-- Nothing open and nothing built: say what a board is -->
+    <div v-if="view === 'recent' && pages.length === 0" class="boards__empty">
       <BoardFloorplan
         class="boards__empty-plan"
         :items="[
@@ -176,79 +186,143 @@ function openStorage() {
       />
       <h2 class="boards__empty-title">Noch kein Board</h2>
       <p class="boards__empty-text">
-        Ein Board ist eine Seite mit Widgets über deinen Datenquellen. Lege eines an oder
-        öffne einen gespeicherten Arbeitsstand.
+        Ein Board besteht aus Seiten, auf denen Widgets über deinen Datenquellen liegen.
+        Lege eines an oder öffne einen gespeicherten Arbeitsstand.
       </p>
       <div class="boards__empty-actions">
-        <DButton intent="primary" size="sm" @click="createBoard">Neues Board</DButton>
+        <DButton intent="primary" size="sm" @click="createPage">Board anlegen</DButton>
         <DButton size="sm" @click="openStorage">Aus Speicher öffnen</DButton>
       </div>
     </div>
 
-    <div v-else-if="view === 'boards'" class="boards__grid">
+    <!-- The board this workspace holds: one, so one card rather than a grid -->
+    <div v-else-if="view === 'recent'" class="single">
+      <h2 class="single__heading">Geöffnet</h2>
       <article
-        v-for="board in visibleBoards"
-        :key="board.id"
-        class="board"
+        class="single__card"
         tabindex="0"
         role="button"
-        :aria-label="`Board ${board.name} öffnen`"
-        @click="openBoard(board.id)"
-        @keydown.enter="openBoard(board.id)"
-        @keydown.space.prevent="openBoard(board.id)"
+        :aria-label="`Board ${board?.name ?? ''} öffnen`"
+        @click="openBoard"
+        @keydown.enter="openBoard"
+        @keydown.space.prevent="openBoard"
       >
-        <BoardFloorplan :items="board.items" :type-by-id="board.typeById" />
-
-        <div class="board__body">
-          <h2 class="board__name">{{ board.name }}</h2>
-          <p class="board__meta">
-            {{ board.widgetCount }} {{ board.widgetCount === 1 ? 'Widget' : 'Widgets' }}
-            <template v-if="board.sourceCount">
-              · {{ board.sourceCount }} {{ board.sourceCount === 1 ? 'Datenquelle' : 'Datenquellen' }}
-            </template>
+        <span class="single__icon" aria-hidden="true">
+          <DIcon :name="board?.icon || 'dashboard'" size="lg" />
+        </span>
+        <div class="single__text">
+          <h3 class="single__name">{{ board?.name || 'Board' }}</h3>
+          <p v-if="board?.description" class="single__desc">{{ board.description }}</p>
+          <p class="single__meta">
+            {{ boardTotals.pages }} {{ boardTotals.pages === 1 ? 'Seite' : 'Seiten' }}
+            · {{ boardTotals.widgets }}
+            {{ boardTotals.widgets === 1 ? 'Widget' : 'Widgets' }}
           </p>
-          <p v-if="usageOf(board.id)" class="board__usage">
-            {{ usageOf(board.id)?.count }}× geöffnet · zuletzt {{ lastOpenedLabel(board.id) }}
-          </p>
-
-          <ul v-if="board.kinds.length" class="board__kinds">
-            <li v-for="kind in board.kinds.slice(0, 3)" :key="kind" class="board__kind">
-              {{ kind }}
-            </li>
-            <li v-if="board.kinds.length > 3" class="board__kind board__kind--more">
-              +{{ board.kinds.length - 3 }}
-            </li>
-          </ul>
         </div>
-
-        <button
-          class="board__edit"
-          type="button"
-          :aria-label="`Board ${board.name} bearbeiten`"
-          @click.stop="editBoard(board.id)"
-        >
-          Bearbeiten
-        </button>
+        <div class="single__actions">
+          <DButton intent="primary" size="sm" @click.stop="openBoard">Öffnen</DButton>
+        </div>
       </article>
 
-      <button class="board board--new" type="button" @click="createBoard">
-        <span class="board__plus" aria-hidden="true">+</span>
-        <span class="board__name">Neues Board</span>
-        <span class="board__meta">Leer starten</span>
-      </button>
-
-      <p v-if="visibleBoards.length === 0" class="boards__nomatch">
-        Kein Board passt zu „{{ query }}“.
+      <p class="single__note">
+        Ein Arbeitsstand hält genau ein Board. Ein anderes bekommst du, indem du im
+        Speicher einen anderen Stand öffnest; die Seiten dieses Boards liegen im
+        Bereich „Seiten“.
       </p>
     </div>
 
-    <WorkspaceStorage v-else @restored="view = 'boards'" />
+    <WorkspaceStorage v-else @restored="view = 'recent'" />
     </div>
    </div>
   </div>
 </template>
 
 <style scoped>
+.single {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  /* Clear of the tab strip above it, like the other views' first row. */
+  padding-top: 12px;
+  max-width: 640px;
+}
+
+.single__heading {
+  margin: 0;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--color-dim);
+  text-transform: uppercase;
+}
+
+.single__card {
+  cursor: pointer;
+}
+
+.single__card:hover,
+.single__card:focus-visible {
+  border-color: var(--color-accent);
+}
+
+.single__card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px;
+  background-color: var(--color-pane);
+  border: 1px solid var(--color-outline);
+  border-radius: var(--radius-md);
+}
+
+.single__icon {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  color: var(--color-accent);
+  background-color: var(--color-sunken);
+  border: 1px solid var(--color-outline);
+  border-radius: var(--radius-sm);
+}
+
+.single__text {
+  flex: 1;
+  min-width: 0;
+}
+
+.single__name {
+  margin: 0;
+  font-size: 1.05rem;
+  color: var(--color-fg);
+}
+
+.single__desc {
+  margin: 3px 0 0;
+  font-size: 0.85rem;
+  color: var(--color-dim);
+}
+
+.single__meta {
+  margin: 4px 0 0;
+  font-size: 0.82rem;
+  color: var(--color-dim);
+}
+
+.single__actions {
+  display: flex;
+  flex: none;
+  gap: 6px;
+}
+
+.single__note {
+  margin: 0;
+  font-size: 0.82rem;
+  line-height: 1.5;
+  color: var(--color-dim);
+}
+
 .boards {
   /* The page container is a column flexbox; without this the launcher
      shrinks to its content width instead of filling the surface. */

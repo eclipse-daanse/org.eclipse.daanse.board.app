@@ -29,7 +29,7 @@ import {
   useWorkspaceFile,
   useWorkspaceOrigin,
 } from '@/composables/useWorkspaceFile'
-import { summarizeBoard, type BoardSummary } from '@/composables/boardSummary'
+import { summarizePage, type PageSummary } from '@/composables/pageSummary'
 import { type Workspace } from 'org.eclipse.daanse.board.app.lib.model.workspace'
 import {
   type Repository,
@@ -181,13 +181,13 @@ function remember(entry: Entity, name: string) {
  * and the one stored before any of this end up as the same objects, so
  * this reads one shape rather than two.
  */
-function boardsIn(entry: Entity | undefined): BoardSummary[] {
+function boardsIn(entry: Entity | undefined): PageSummary[] {
   return summarize(parseWorkspace(entry?.data))
 }
 
-function summarize(held: Workspace | undefined): BoardSummary[] {
-  return (held?.pages.toArray() ?? []).map((page) =>
-    summarizeBoard(page.id as string, page, page.layout.toArray(), page.widgets.toArray()),
+function summarize(held: Workspace | undefined): PageSummary[] {
+  return (held?.board?.pages.toArray() ?? []).map((page) =>
+    summarizePage(page.id as string, page, page.layout.toArray(), page.widgets.toArray()),
   )
 }
 
@@ -203,7 +203,9 @@ const totals = computed(() => ({
 function entrySummary(entry: Entity): string {
   const list = boardsIn(entry)
   if (list.length === 0) return 'leer'
-  return `${list.length} ${list.length === 1 ? 'Board' : 'Boards'}`
+  /* Pages, not boards: a stored state holds one board, and what is counted
+     here is what is inside it. */
+  return `${list.length} ${list.length === 1 ? 'Seite' : 'Seiten'}`
 }
 
 /** What the current workspace would be stored as, shown before storing it. */
@@ -377,7 +379,7 @@ watch(() => repoManager, loadPlaces)
           <DButton size="sm" @click="creating = false">Abbrechen</DButton>
           <p class="create__hint">
             Abgelegt wird der gesamte Arbeitsstand: {{ pending.boards }}
-            {{ pending.boards === 1 ? 'Board' : 'Boards' }} mit {{ pending.widgets }} Widgets, dazu
+            {{ pending.boards === 1 ? 'Seite' : 'Seiten' }} mit {{ pending.widgets }} Widgets, dazu
             Verbindungen, Datenquellen und Variablen.
           </p>
         </form>
@@ -397,7 +399,7 @@ watch(() => repoManager, loadPlaces)
           <span v-if="isOpen(selectedEntry)" class="detail__badge">geladen</span>
           <span class="detail__facts">
             {{ selectedPlace?.name }} · {{ totals.boards }}
-            {{ totals.boards === 1 ? 'Board' : 'Boards' }} · {{ totals.widgets }} Widgets ·
+            {{ totals.boards === 1 ? 'Seite' : 'Seiten' }} · {{ totals.widgets }} Widgets ·
             {{ totals.sources }} Datenquellen
           </span>
           <span class="detail__spacer" />

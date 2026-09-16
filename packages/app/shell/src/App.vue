@@ -89,6 +89,17 @@ const go = (target: string) => router.push(target)
 
         <button
           type="button"
+          :class="['ri', { on: route.name === 'pages' }]"
+          :aria-current="route.name === 'pages' ? 'page' : undefined"
+          title="Seiten"
+          @click="go('/pages')"
+        >
+          <DIcon name="layers" />
+          <span class="sr-only">Seiten</span>
+        </button>
+
+        <button
+          type="button"
           :class="['ri', { on: route.name === 'data' }]"
           :aria-current="route.name === 'data' ? 'page' : undefined"
           title="Verbindungen &amp; Daten"

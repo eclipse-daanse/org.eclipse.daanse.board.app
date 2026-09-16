@@ -36,10 +36,16 @@ export class WorkspacePackage extends BasicEPackage {
     WORKSPACE: null as unknown as EClass,
     WORKSPACE__CONNECTIONS: null as unknown as EAttribute | EReference,
     WORKSPACE__DATASOURCES: null as unknown as EAttribute | EReference,
-    WORKSPACE__PAGES: null as unknown as EAttribute | EReference,
+    WORKSPACE__BOARD: null as unknown as EAttribute | EReference,
     WORKSPACE__VARIABLES: null as unknown as EAttribute | EReference,
     WORKSPACE__EVENT_MAPPINGS: null as unknown as EAttribute | EReference,
-    WORKSPACE__DEFAULT_PAGE: null as unknown as EAttribute | EReference,
+    BOARD: null as unknown as EClass,
+    BOARD__ID: null as unknown as EAttribute | EReference,
+    BOARD__NAME: null as unknown as EAttribute | EReference,
+    BOARD__DESCRIPTION: null as unknown as EAttribute | EReference,
+    BOARD__ICON: null as unknown as EAttribute | EReference,
+    BOARD__PAGES: null as unknown as EAttribute | EReference,
+    BOARD__DEFAULT_PAGE: null as unknown as EAttribute | EReference,
     PAGE: null as unknown as EClass,
     PAGE__ID: null as unknown as EAttribute | EReference,
     PAGE__NAME: null as unknown as EAttribute | EReference,
@@ -142,14 +148,14 @@ export class WorkspacePackage extends BasicEPackage {
     workspaceClass.getEStructuralFeatures().push(workspace_datasources);
     WorkspacePackage.Literals.WORKSPACE__DATASOURCES = workspace_datasources;
 
-    // Create pages feature
-    const workspace_pages = new BasicEReference();
-    workspace_pages.setContainment(true);
-    workspace_pages.setName('pages');
-    workspace_pages.setLowerBound(0);
-    workspace_pages.setUpperBound(-1);
-    workspaceClass.getEStructuralFeatures().push(workspace_pages);
-    WorkspacePackage.Literals.WORKSPACE__PAGES = workspace_pages;
+    // Create board feature
+    const workspace_board = new BasicEReference();
+    workspace_board.setContainment(true);
+    workspace_board.setName('board');
+    workspace_board.setLowerBound(0);
+    workspace_board.setUpperBound(1);
+    workspaceClass.getEStructuralFeatures().push(workspace_board);
+    WorkspacePackage.Literals.WORKSPACE__BOARD = workspace_board;
 
     // Create variables feature
     const workspace_variables = new BasicEReference();
@@ -169,14 +175,64 @@ export class WorkspacePackage extends BasicEPackage {
     workspaceClass.getEStructuralFeatures().push(workspace_eventMappings);
     WorkspacePackage.Literals.WORKSPACE__EVENT_MAPPINGS = workspace_eventMappings;
 
+    // Create Board class
+    const boardClass = new BasicEClass();
+    boardClass.setName('Board');
+    boardClass.setAbstract(false);
+    boardClass.setInterface(false);
+    this.getEClassifiers().push(boardClass);
+    boardClass.setEPackage(this);
+    WorkspacePackage.Literals.BOARD = boardClass;
+
+    // Create id feature
+    const board_id = new BasicEAttribute();
+    board_id.setName('id');
+    board_id.setLowerBound(1);
+    board_id.setUpperBound(1);
+    boardClass.getEStructuralFeatures().push(board_id);
+    WorkspacePackage.Literals.BOARD__ID = board_id;
+
+    // Create name feature
+    const board_name = new BasicEAttribute();
+    board_name.setName('name');
+    board_name.setLowerBound(0);
+    board_name.setUpperBound(1);
+    boardClass.getEStructuralFeatures().push(board_name);
+    WorkspacePackage.Literals.BOARD__NAME = board_name;
+
+    // Create description feature
+    const board_description = new BasicEAttribute();
+    board_description.setName('description');
+    board_description.setLowerBound(0);
+    board_description.setUpperBound(1);
+    boardClass.getEStructuralFeatures().push(board_description);
+    WorkspacePackage.Literals.BOARD__DESCRIPTION = board_description;
+
+    // Create icon feature
+    const board_icon = new BasicEAttribute();
+    board_icon.setName('icon');
+    board_icon.setLowerBound(0);
+    board_icon.setUpperBound(1);
+    boardClass.getEStructuralFeatures().push(board_icon);
+    WorkspacePackage.Literals.BOARD__ICON = board_icon;
+
+    // Create pages feature
+    const board_pages = new BasicEReference();
+    board_pages.setContainment(true);
+    board_pages.setName('pages');
+    board_pages.setLowerBound(0);
+    board_pages.setUpperBound(-1);
+    boardClass.getEStructuralFeatures().push(board_pages);
+    WorkspacePackage.Literals.BOARD__PAGES = board_pages;
+
     // Create defaultPage feature
-    const workspace_defaultPage = new BasicEReference();
-    workspace_defaultPage.setContainment(false);
-    workspace_defaultPage.setName('defaultPage');
-    workspace_defaultPage.setLowerBound(0);
-    workspace_defaultPage.setUpperBound(1);
-    workspaceClass.getEStructuralFeatures().push(workspace_defaultPage);
-    WorkspacePackage.Literals.WORKSPACE__DEFAULT_PAGE = workspace_defaultPage;
+    const board_defaultPage = new BasicEReference();
+    board_defaultPage.setContainment(false);
+    board_defaultPage.setName('defaultPage');
+    board_defaultPage.setLowerBound(0);
+    board_defaultPage.setUpperBound(1);
+    boardClass.getEStructuralFeatures().push(board_defaultPage);
+    WorkspacePackage.Literals.BOARD__DEFAULT_PAGE = board_defaultPage;
 
     // Create Page class
     const pageClass = new BasicEClass();
@@ -642,10 +698,15 @@ export class WorkspacePackage extends BasicEPackage {
     // ============================================
     (WorkspacePackage.Literals.WORKSPACE__CONNECTIONS as BasicEReference).setEType(WorkspacePackage.Literals.CONNECTION);
     (WorkspacePackage.Literals.WORKSPACE__DATASOURCES as BasicEReference).setEType(WorkspacePackage.Literals.DATASOURCE);
-    (WorkspacePackage.Literals.WORKSPACE__PAGES as BasicEReference).setEType(WorkspacePackage.Literals.PAGE);
+    (WorkspacePackage.Literals.WORKSPACE__BOARD as BasicEReference).setEType(WorkspacePackage.Literals.BOARD);
     (WorkspacePackage.Literals.WORKSPACE__VARIABLES as BasicEReference).setEType(WorkspacePackage.Literals.VARIABLE);
     (WorkspacePackage.Literals.WORKSPACE__EVENT_MAPPINGS as BasicEReference).setEType(WorkspacePackage.Literals.EVENT_MAPPING);
-    (WorkspacePackage.Literals.WORKSPACE__DEFAULT_PAGE as BasicEReference).setEType(WorkspacePackage.Literals.PAGE);
+    (WorkspacePackage.Literals.BOARD__ID as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (WorkspacePackage.Literals.BOARD__NAME as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (WorkspacePackage.Literals.BOARD__DESCRIPTION as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (WorkspacePackage.Literals.BOARD__ICON as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (WorkspacePackage.Literals.BOARD__PAGES as BasicEReference).setEType(WorkspacePackage.Literals.PAGE);
+    (WorkspacePackage.Literals.BOARD__DEFAULT_PAGE as BasicEReference).setEType(WorkspacePackage.Literals.PAGE);
     (WorkspacePackage.Literals.PAGE__ID as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
     (WorkspacePackage.Literals.PAGE__NAME as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
     (WorkspacePackage.Literals.PAGE__DESCRIPTION as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);

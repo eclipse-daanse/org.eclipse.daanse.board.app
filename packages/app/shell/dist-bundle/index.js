@@ -1,4 +1,4 @@
-(function(){var i="app.shell",d=document,s=d.querySelector('style[data-tsm-bundle="'+i+'"]');if(!s){s=d.createElement('style');s.setAttribute('data-tsm-bundle',i);d.head.appendChild(s);}s.textContent="@import \"https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap\";\n.topbar[data-v-7fa027b5] {\n  height: var(--spacing-topbar, 42px);\n  flex: none;\n  display: flex;\n  align-items: center;\n  gap: 12px;\n  padding: 0 12px;\n  background: var(--color-pane);\n  border-bottom: 1px solid var(--color-divider);\n  color: var(--color-fg);\n  font-size: var(--text-sm, 12px);\n}\n.brand[data-v-7fa027b5] {\n  display: flex;\n  align-items: center;\n  gap: 8px;\n  flex: none;\n  white-space: nowrap;\n  font-weight: 600;\n  font-size: var(--text-base, 13px);\n}\n.brand-mark[data-v-7fa027b5] {\n  width: 20px;\n  height: 20px;\n  border-radius: var(--radius-sm, 5px);\n  background: var(--color-brandFill);\n  color: var(--color-onBrand);\n  display: inline-flex;\n  align-items: center;\n  justify-content: center;\n  font-size: var(--text-xs, 11px);\n  font-weight: 700;\n  flex: none;\n}\n.crumb[data-v-7fa027b5] {\n  display: flex;\n  align-items: center;\n  gap: 6px;\n  min-width: 0;\n  overflow: hidden;\n  white-space: nowrap;\n  color: var(--color-dim);\n}\n.crumb-part[data-v-7fa027b5] {\n  overflow: hidden;\n  text-overflow: ellipsis;\n}\n.crumb-part.current[data-v-7fa027b5] {\n  color: var(--color-fg);\n  font-weight: 500;\n}\n.crumb-link[data-v-7fa027b5] {\n  padding: 0;\n  font: inherit;\n  color: inherit;\n  background: none;\n  border: 0;\n  border-radius: var(--radius-xs, 3px);\n  cursor: pointer;\n}\n.crumb-link[data-v-7fa027b5]:hover {\n  color: var(--color-fg);\n  text-decoration: underline;\n}\n.crumb-link[data-v-7fa027b5]:focus-visible {\n  outline: 2px solid var(--color-accent);\n  outline-offset: 2px;\n}\n.crumb-sep[data-v-7fa027b5] {\n  color: var(--color-outline);\n}\n.spacer[data-v-7fa027b5] {\n  flex: 1 1 auto;\n  min-width: 8px;\n}\n\n/* ------------------------------------------------------ page of a board */\n.pages[data-v-7fa027b5] {\n  position: relative;\n  margin-left: 10px;\n  flex: none;\n}\n\n/*\n * Quieter than .action: this says where you are, it does not ask to be\n * pressed. It takes the breadcrumb's weight so the two read as one path.\n */\n.pages__current[data-v-7fa027b5] {\n  display: flex;\n  align-items: center;\n  gap: 5px;\n  max-width: 200px;\n  height: 24px;\n  padding: 0 7px;\n  font-size: var(--text-sm, 12px);\n  font-family: inherit;\n  color: var(--color-fg);\n  background: none;\n  border: 1px solid transparent;\n  border-radius: var(--radius-xs, 3px);\n  cursor: pointer;\n}\n.pages__current[data-v-7fa027b5]:hover {\n  background-color: var(--color-raised);\n  border-color: var(--color-divider);\n}\n.pages__current[data-v-7fa027b5]:focus-visible {\n  outline: 2px solid var(--color-accent);\n  outline-offset: 1px;\n}\n.pages__name[data-v-7fa027b5] {\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n}\n.pages__caret[data-v-7fa027b5] {\n  font-size: 9px;\n  color: var(--color-dim);\n}\n.pages__menu[data-v-7fa027b5] {\n  position: absolute;\n  top: calc(100% + 3px);\n  left: 0;\n  z-index: 400;\n  min-width: 180px;\n  max-height: 60vh;\n  overflow-y: auto;\n  padding: 3px;\n  margin: 0;\n  list-style: none;\n  background-color: var(--color-pane);\n  border: 1px solid var(--color-divider);\n  border-radius: var(--radius-sm, 3px);\n  box-shadow: var(--shadow-e2, 0 2px 8px rgb(0 0 0 / 14%));\n}\n.pages__item[data-v-7fa027b5] {\n  display: block;\n  width: 100%;\n  padding: 5px 8px;\n  font-size: var(--text-sm, 12px);\n  font-family: inherit;\n  text-align: left;\n  color: var(--color-fg);\n  background: none;\n  border: 0;\n  border-radius: var(--radius-xs, 3px);\n  cursor: pointer;\n}\n.pages__item[data-v-7fa027b5]:hover {\n  background-color: var(--color-raised);\n}\n\n/* The row holds the name and, on hover, the way to remove it */\n.pages__line[data-v-7fa027b5] {\n  display: flex;\n  align-items: center;\n  gap: 2px;\n}\n.pages__line .pages__item[data-v-7fa027b5] {\n  flex: 1;\n  min-width: 0;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n}\n.pages__remove[data-v-7fa027b5] {\n  flex: none;\n  width: 20px;\n  height: 20px;\n  font-size: 14px;\n  line-height: 1;\n  color: var(--color-dim);\n  background: none;\n  border: 0;\n  border-radius: var(--radius-xs, 3px);\n  cursor: pointer;\n  opacity: 0;\n  transition: opacity 90ms ease, color 90ms ease;\n}\n.pages__line:hover .pages__remove[data-v-7fa027b5],\n.pages__remove[data-v-7fa027b5]:focus-visible {\n  opacity: 1;\n}\n.pages__remove[data-v-7fa027b5]:hover {\n  color: var(--color-err);\n}\n.pages__sep[data-v-7fa027b5] {\n  height: 1px;\n  margin: 3px 0;\n  background-color: var(--color-divider);\n}\n.pages__add[data-v-7fa027b5] {\n  color: var(--color-accent);\n}\n\n/* The open page is marked, not hidden: a list that drops its own entry\n   makes you count to work out where you are */\n.pages__item.on[data-v-7fa027b5] {\n  color: var(--color-accent);\n}\n.pages__empty[data-v-7fa027b5] {\n  padding: 5px 8px;\n  font-size: var(--text-sm, 12px);\n  color: var(--color-dim);\n}\n.action[data-v-7fa027b5] {\n  height: 24px;\n  padding: 0 10px;\n  margin-right: 8px;\n  font-size: var(--text-sm, 12px);\n  font-family: inherit;\n  color: var(--color-fg);\n  background-color: var(--color-raised);\n  border: 1px solid var(--color-divider);\n  border-radius: var(--radius-xs, 3px);\n  cursor: pointer;\n}\n.action[data-v-7fa027b5]:hover {\n  border-color: var(--color-outline);\n}\n.action[data-v-7fa027b5]:focus-visible {\n  outline: 2px solid var(--color-accent);\n  outline-offset: 1px;\n}\n.modes[data-v-7fa027b5] {\n  display: inline-flex;\n  border: 1px solid var(--color-outline);\n  border-radius: var(--radius-sm, 5px);\n  overflow: hidden;\n  flex: none;\n}\n.mode[data-v-7fa027b5] {\n  font: inherit;\n  padding: 4px 11px;\n  border: 0;\n  background: var(--color-raised);\n  color: var(--color-dim);\n  cursor: pointer;\n  white-space: nowrap;\n}\n.mode[data-v-7fa027b5]:hover {\n  color: var(--color-fg);\n}\n.mode.on[data-v-7fa027b5] {\n  background: var(--color-accent);\n  color: var(--color-onAccent);\n  font-weight: 600;\n}\n.mode[data-v-7fa027b5]:focus-visible {\n  outline: 2px solid var(--color-accent);\n  outline-offset: -2px;\n}\n.icon-action[data-v-7fa027b5]:disabled {\n  opacity: 0.4;\n  cursor: default;\n}\n.icon-action[data-v-7fa027b5] {\n  display: grid;\n  place-items: center;\n  width: 24px;\n  height: 24px;\n  color: var(--color-dim);\n  background: none;\n  border: 0;\n  border-radius: var(--radius-xs);\n  cursor: pointer;\n}\n.icon-action[data-v-7fa027b5]:hover {\n  color: var(--color-fg);\n  background-color: var(--color-raised);\n}\n\n/* A toggle says which way it stands, not just that it can be pressed */\n.icon-action.on[data-v-7fa027b5] {\n  color: var(--color-accent);\n  background-color: var(--color-raised);\n}\n.icon-action[data-v-7fa027b5]:focus-visible {\n  outline: 2px solid var(--color-accent);\n  outline-offset: 1px;\n}\n.avatar[data-v-7fa027b5] {\n  width: 24px;\n  height: 24px;\n  border-radius: 50%;\n  background: var(--color-raised);\n  border: 1px solid var(--color-outline);\n  display: inline-flex;\n  align-items: center;\n  justify-content: center;\n  font-size: var(--text-xs, 11px);\n  font-weight: 700;\n  color: var(--color-dim);\n  flex: none;\n}\n\n.shell[data-v-27fec35c] {\n  display: flex;\n  flex-direction: column;\n  height: 100%;\n  width: 100%;\n  min-height: 0;\n  background: var(--color-bg);\n}\n.shell-body[data-v-27fec35c] {\n  flex: 1 1 auto;\n  display: grid;\n  grid-template-columns: var(--spacing-rail, 52px) minmax(0, 1fr);\n  min-height: 0;\n  overflow: hidden;\n}\n\n/* The launcher has no rail, so the content takes the whole width */\n.shell-body--norail[data-v-27fec35c] {\n  grid-template-columns: minmax(0, 1fr);\n}\n.rail[data-v-27fec35c] {\n  background: var(--color-pane);\n  border-right: 1px solid var(--color-divider);\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n  padding: 8px 0;\n  gap: 4px;\n  overflow: hidden;\n}\n.rail-spacer[data-v-27fec35c] {\n  flex: 1 1 auto;\n}\n\n/* 36px hit target, 8px radius, and the 3px accent bar the mockups put on\n   the active entry. */\n.ri[data-v-27fec35c] {\n  position: relative;\n  width: 36px;\n  height: 36px;\n  flex: none;\n  border: 0;\n  border-radius: var(--radius-md, 8px);\n  background: transparent;\n  color: var(--color-dim);\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  cursor: pointer;\n  transition:\n    background 140ms cubic-bezier(0.2, 0.6, 0.2, 1),\n    color 140ms cubic-bezier(0.2, 0.6, 0.2, 1);\n}\n.ri[data-v-27fec35c]:hover {\n  color: var(--color-fg);\n  background: color-mix(in srgb, var(--color-accent) 10%, transparent);\n}\n.ri.on[data-v-27fec35c] {\n  background: color-mix(in srgb, var(--color-accent) 14%, transparent);\n  color: var(--color-accent);\n}\n.ri.on[data-v-27fec35c]::before {\n  content: '';\n  position: absolute;\n  left: -8px;\n  top: 8px;\n  bottom: 8px;\n  width: 3px;\n  border-radius: var(--radius-xs, 3px);\n  background: var(--color-accent);\n}\n.ri[data-v-27fec35c]:focus-visible {\n  outline: 2px solid var(--color-accent);\n  outline-offset: 2px;\n}\n.ri[data-v-27fec35c] .icon {\n  font-size: 20px;\n}\n.sr-only[data-v-27fec35c] {\n  position: absolute;\n  width: 1px;\n  height: 1px;\n  padding: 0;\n  margin: -1px;\n  overflow: hidden;\n  clip-path: inset(50%);\n  white-space: nowrap;\n  border: 0;\n}\n.content[data-v-27fec35c] {\n  min-width: 0;\n  min-height: 0;\n  overflow: hidden;\n  display: flex;\n  flex-direction: column;\n}\n@media (prefers-reduced-motion: reduce) {\n.ri[data-v-27fec35c] {\n    transition-duration: 0.01ms;\n}\n}\n.global-loading-bar[data-v-27fec35c] {\n  position: fixed;\n  top: 0;\n  left: 0;\n  right: 0;\n  height: 3px;\n  z-index: 8000;\n  overflow: hidden;\n}\n.global-loading-bar-progress[data-v-27fec35c] {\n  height: 100%;\n  width: 30%;\n  background: var(--color-brandFill);\n  animation: loading-slide-27fec35c 1.2s ease-in-out infinite;\n}\n@keyframes loading-slide-27fec35c {\n0% {\n    transform: translateX(-100%);\n}\n100% {\n    transform: translateX(400%);\n}\n}\n\n\n/*! tailwindcss v4.1.17 | MIT License | https://tailwindcss.com */\n@layer properties {\n@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {\n*, :before, :after, ::backdrop {\n      --tw-rotate-x: initial;\n      --tw-rotate-y: initial;\n      --tw-rotate-z: initial;\n      --tw-skew-x: initial;\n      --tw-skew-y: initial;\n      --tw-border-style: solid;\n      --tw-font-weight: initial;\n      --tw-ordinal: initial;\n      --tw-slashed-zero: initial;\n      --tw-numeric-figure: initial;\n      --tw-numeric-spacing: initial;\n      --tw-numeric-fraction: initial;\n      --tw-shadow: 0 0 #0000;\n      --tw-shadow-color: initial;\n      --tw-shadow-alpha: 100%;\n      --tw-inset-shadow: 0 0 #0000;\n      --tw-inset-shadow-color: initial;\n      --tw-inset-shadow-alpha: 100%;\n      --tw-ring-color: initial;\n      --tw-ring-shadow: 0 0 #0000;\n      --tw-inset-ring-color: initial;\n      --tw-inset-ring-shadow: 0 0 #0000;\n      --tw-ring-inset: initial;\n      --tw-ring-offset-width: 0px;\n      --tw-ring-offset-color: #fff;\n      --tw-ring-offset-shadow: 0 0 #0000;\n      --tw-outline-style: solid;\n      --tw-blur: initial;\n      --tw-brightness: initial;\n      --tw-contrast: initial;\n      --tw-grayscale: initial;\n      --tw-hue-rotate: initial;\n      --tw-invert: initial;\n      --tw-opacity: initial;\n      --tw-saturate: initial;\n      --tw-sepia: initial;\n      --tw-drop-shadow: initial;\n      --tw-drop-shadow-color: initial;\n      --tw-drop-shadow-alpha: 100%;\n      --tw-drop-shadow-size: initial;\n      --tw-backdrop-blur: initial;\n      --tw-backdrop-brightness: initial;\n      --tw-backdrop-contrast: initial;\n      --tw-backdrop-grayscale: initial;\n      --tw-backdrop-hue-rotate: initial;\n      --tw-backdrop-invert: initial;\n      --tw-backdrop-opacity: initial;\n      --tw-backdrop-saturate: initial;\n      --tw-backdrop-sepia: initial;\n      --tw-ease: initial;\n}\n}\n}\n@layer theme {\n:root, :host {\n    --font-sans: \"Barlow\", system-ui, -apple-system, \"Segoe UI\", sans-serif;\n    --font-mono: \"JetBrains Mono\", ui-monospace, SFMono-Regular, Menlo, monospace;\n    --color-gray-200: oklch(92.8% .006 264.531);\n    --color-gray-300: oklch(87.2% .01 258.338);\n    --color-white: #fff;\n    --spacing: .25rem;\n    --container-xs: 20rem;\n    --text-xs: 11px;\n    --text-xs--line-height: calc(1 / .75);\n    --text-sm: 12px;\n    --text-sm--line-height: calc(1.25 / .875);\n    --text-base: 13px;\n    --text-base--line-height: calc(1.5 / 1);\n    --text-lg: 15px;\n    --text-lg--line-height: calc(1.75 / 1.125);\n    --text-xl: 24px;\n    --text-xl--line-height: calc(1.75 / 1.25);\n    --font-weight-medium: 500;\n    --font-weight-semibold: 600;\n    --radius-xs: 2px;\n    --radius-sm: 3px;\n    --radius-md: 4px;\n    --radius-lg: 6px;\n    --ease-in: cubic-bezier(.4, 0, 1, 1);\n    --ease-out: cubic-bezier(0, 0, .2, 1);\n    --ease-in-out: cubic-bezier(.4, 0, .2, 1);\n    --default-transition-duration: .15s;\n    --default-transition-timing-function: cubic-bezier(.4, 0, .2, 1);\n    --default-font-family: var(--font-sans);\n    --default-mono-font-family: var(--font-mono);\n    --color-bg: #121820;\n    --color-pane: #1a222c;\n    --color-raised: #232d39;\n    --color-canvas: #0e141b;\n    --color-divider: #2a3541;\n    --color-outline: #3c4959;\n    --color-fg: #dfe8ef;\n    --color-dim: #8b9bab;\n    --color-accent: #4fa3d1;\n    --color-onAccent: #08131c;\n    --color-brand: #d8a13c;\n    --color-brandFill: #d8a13c;\n    --color-onBrand: #14100a;\n    --color-ok: #5fb98a;\n    --color-warn: #d8a13c;\n    --color-err: #e2766a;\n    --color-kw: #4fa3d1;\n    --color-measure: #d8a13c;\n    --color-member: #5fb98a;\n    --color-fn: #c294d8;\n    --color-primary: #4fa3d1;\n    --color-secondary: #8b9bab;\n    --color-success: #5fb98a;\n    --color-info: #4fa3d1;\n    --color-danger: #e2766a;\n    --color-warning: #d8a13c;\n    --color-backgroundPrimary: #121820;\n    --color-backgroundSecondary: #1a222c;\n    --color-backgroundElement: #232d39;\n    --color-backgroundBorder: #2a3541;\n    --color-textPrimary: #dfe8ef;\n    --color-textInverted: #08131c;\n    --color-daanse_blue: #4fa3d1;\n    --color-daanse_grey: #dfe8ef;\n    --shadow-e1: 0 1px 2px #00000073;\n    --shadow-e2: 0 2px 8px #00000073;\n    --shadow-e3: 0 8px 24px #00000080;\n    --spacing-topbar: 42px;\n    --spacing-rail: 52px;\n    --spacing-panelHeader: 30px;\n    --spacing-splitter: 4px;\n    --spacing-statusbar: 24px;\n}\n}\n@layer base {\n*, :after, :before, ::backdrop {\n    box-sizing: border-box;\n    border: 0 solid;\n    margin: 0;\n    padding: 0;\n}\n::file-selector-button {\n    box-sizing: border-box;\n    border: 0 solid;\n    margin: 0;\n    padding: 0;\n}\nhtml, :host {\n    -webkit-text-size-adjust: 100%;\n    tab-size: 4;\n    line-height: 1.5;\n    font-family: var(--default-font-family, ui-sans-serif, system-ui, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\");\n    font-feature-settings: var(--default-font-feature-settings, normal);\n    font-variation-settings: var(--default-font-variation-settings, normal);\n    -webkit-tap-highlight-color: transparent;\n}\nhr {\n    height: 0;\n    color: inherit;\n    border-top-width: 1px;\n}\nabbr:where([title]) {\n    -webkit-text-decoration: underline dotted;\n    text-decoration: underline dotted;\n}\nh1, h2, h3, h4, h5, h6 {\n    font-size: inherit;\n    font-weight: inherit;\n}\na {\n    color: inherit;\n    -webkit-text-decoration: inherit;\n    -webkit-text-decoration: inherit;\n    -webkit-text-decoration: inherit;\n    text-decoration: inherit;\n}\nb, strong {\n    font-weight: bolder;\n}\ncode, kbd, samp, pre {\n    font-family: var(--default-mono-font-family, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, \"Liberation Mono\", \"Courier New\", monospace);\n    font-feature-settings: var(--default-mono-font-feature-settings, normal);\n    font-variation-settings: var(--default-mono-font-variation-settings, normal);\n    font-size: 1em;\n}\nsmall {\n    font-size: 80%;\n}\nsub, sup {\n    vertical-align: baseline;\n    font-size: 75%;\n    line-height: 0;\n    position: relative;\n}\nsub {\n    bottom: -.25em;\n}\nsup {\n    top: -.5em;\n}\ntable {\n    text-indent: 0;\n    border-color: inherit;\n    border-collapse: collapse;\n}\n:-moz-focusring {\n    outline: auto;\n}\nprogress {\n    vertical-align: baseline;\n}\nsummary {\n    display: list-item;\n}\nol, ul, menu {\n    list-style: none;\n}\nimg, svg, video, canvas, audio, iframe, embed, object {\n    vertical-align: middle;\n    display: block;\n}\nimg, video {\n    max-width: 100%;\n    height: auto;\n}\nbutton, input, select, optgroup, textarea {\n    font: inherit;\n    font-feature-settings: inherit;\n    font-variation-settings: inherit;\n    letter-spacing: inherit;\n    color: inherit;\n    opacity: 1;\n    background-color: #0000;\n    border-radius: 0;\n}\n::file-selector-button {\n    font: inherit;\n    font-feature-settings: inherit;\n    font-variation-settings: inherit;\n    letter-spacing: inherit;\n    color: inherit;\n    opacity: 1;\n    background-color: #0000;\n    border-radius: 0;\n}\n:where(select:is([multiple], [size])) optgroup {\n    font-weight: bolder;\n}\n:where(select:is([multiple], [size])) optgroup option {\n    padding-inline-start: 20px;\n}\n::file-selector-button {\n    margin-inline-end: 4px;\n}\n::placeholder {\n    opacity: 1;\n}\n@supports (not ((-webkit-appearance: -apple-pay-button))) or (contain-intrinsic-size: 1px) {\n::placeholder {\n      color: currentColor;\n}\n@supports (color: color-mix(in lab, red, red)) {\n::placeholder {\n        color: color-mix(in oklab, currentcolor 50%, transparent);\n}\n}\n}\ntextarea {\n    resize: vertical;\n}\n::-webkit-search-decoration {\n    -webkit-appearance: none;\n}\n::-webkit-date-and-time-value {\n    min-height: 1lh;\n    text-align: inherit;\n}\n::-webkit-datetime-edit {\n    display: inline-flex;\n}\n::-webkit-datetime-edit-fields-wrapper {\n    padding: 0;\n}\n::-webkit-datetime-edit {\n    padding-block: 0;\n}\n::-webkit-datetime-edit-year-field {\n    padding-block: 0;\n}\n::-webkit-datetime-edit-month-field {\n    padding-block: 0;\n}\n::-webkit-datetime-edit-day-field {\n    padding-block: 0;\n}\n::-webkit-datetime-edit-hour-field {\n    padding-block: 0;\n}\n::-webkit-datetime-edit-minute-field {\n    padding-block: 0;\n}\n::-webkit-datetime-edit-second-field {\n    padding-block: 0;\n}\n::-webkit-datetime-edit-millisecond-field {\n    padding-block: 0;\n}\n::-webkit-datetime-edit-meridiem-field {\n    padding-block: 0;\n}\n::-webkit-calendar-picker-indicator {\n    line-height: 1;\n}\n:-moz-ui-invalid {\n    box-shadow: none;\n}\nbutton, input:where([type=\"button\"], [type=\"reset\"], [type=\"submit\"]) {\n    appearance: button;\n}\n::file-selector-button {\n    appearance: button;\n}\n::-webkit-inner-spin-button {\n    height: auto;\n}\n::-webkit-outer-spin-button {\n    height: auto;\n}\n[hidden]:where(:not([hidden=\"until-found\"])) {\n    display: none !important;\n}\n}\n@layer components {\n.ice_gray {\n    padding: var(--spacing-6);\n    background: var(--color-pane);\n    border-right: 1px solid var(--color-divider);\n    box-shadow: var(--shadow-e1);\n}\n.ice {\n    padding: var(--spacing-6);\n    background: var(--color-pane);\n    border: 1px solid var(--color-divider);\n    border-radius: var(--radius-md);\n    box-shadow: var(--shadow-e2);\n}\n.z-mx {\n    z-index: 30000;\n}\n}\n@layer utilities {\n.\\@container {\n    container-type: inline-size;\n}\n.collapse {\n    visibility: collapse;\n}\n.invisible {\n    visibility: hidden;\n}\n.visible {\n    visibility: visible;\n}\n.sr-only {\n    clip-path: inset(50%);\n    white-space: nowrap;\n    border-width: 0;\n    width: 1px;\n    height: 1px;\n    margin: -1px;\n    padding: 0;\n    position: absolute;\n    overflow: hidden;\n}\n.absolute {\n    position: absolute;\n}\n.fixed {\n    position: fixed;\n}\n.relative {\n    position: relative;\n}\n.static {\n    position: static;\n}\n.sticky {\n    position: sticky;\n}\n.top-\\[-25px\\] {\n    top: -25px;\n}\n.right-0 {\n    right: calc(var(--spacing) * 0);\n}\n.isolate {\n    isolation: isolate;\n}\n.col-span-1 {\n    grid-column: span 1 / span 1;\n}\n.row-span-4 {\n    grid-row: span 4 / span 4;\n}\n.float-left {\n    float: left;\n}\n.float-right {\n    float: right;\n}\n.container {\n    width: 100%;\n}\n@media (min-width: 40rem) {\n.container {\n      max-width: 40rem;\n}\n}\n@media (min-width: 48rem) {\n.container {\n      max-width: 48rem;\n}\n}\n@media (min-width: 64rem) {\n.container {\n      max-width: 64rem;\n}\n}\n@media (min-width: 80rem) {\n.container {\n      max-width: 80rem;\n}\n}\n@media (min-width: 96rem) {\n.container {\n      max-width: 96rem;\n}\n}\n.m-2 {\n    margin: calc(var(--spacing) * 2);\n}\n.mt-2 {\n    margin-top: calc(var(--spacing) * 2);\n}\n.mt-3 {\n    margin-top: calc(var(--spacing) * 3);\n}\n.mr-1 {\n    margin-right: calc(var(--spacing) * 1);\n}\n.mr-2 {\n    margin-right: calc(var(--spacing) * 2);\n}\n.mr-3 {\n    margin-right: calc(var(--spacing) * 3);\n}\n.mb-2 {\n    margin-bottom: calc(var(--spacing) * 2);\n}\n.mb-3 {\n    margin-bottom: calc(var(--spacing) * 3);\n}\n.ml-2 {\n    margin-left: calc(var(--spacing) * 2);\n}\n.ml-15 {\n    margin-left: calc(var(--spacing) * 15);\n}\n.box-border {\n    box-sizing: border-box;\n}\n.block {\n    display: block;\n}\n.contents {\n    display: contents;\n}\n.flex {\n    display: flex;\n}\n.grid {\n    display: grid;\n}\n.hidden {\n    display: none;\n}\n.inline {\n    display: inline;\n}\n.inline-block {\n    display: inline-block;\n}\n.table {\n    display: table;\n}\n.table-cell {\n    display: table-cell;\n}\n.h-40 {\n    height: calc(var(--spacing) * 40);\n}\n.h-84 {\n    height: calc(var(--spacing) * 84);\n}\n.h-120 {\n    height: calc(var(--spacing) * 120);\n}\n.h-full {\n    height: 100%;\n}\n.max-h-screen {\n    max-height: 100vh;\n}\n.w-full {\n    width: 100%;\n}\n.max-w-xs {\n    max-width: var(--container-xs);\n}\n.flex-shrink, .shrink {\n    flex-shrink: 1;\n}\n.flex-grow, .grow {\n    flex-grow: 1;\n}\n.border-collapse {\n    border-collapse: collapse;\n}\n.transform {\n    transform: var(--tw-rotate-x, ) var(--tw-rotate-y, ) var(--tw-rotate-z, ) var(--tw-skew-x, ) var(--tw-skew-y, );\n}\n.cursor-pointer {\n    cursor: pointer;\n}\n.resize {\n    resize: both;\n}\n.grid-cols-2 {\n    grid-template-columns: repeat(2, minmax(0, 1fr));\n}\n.grid-rows-4 {\n    grid-template-rows: repeat(4, minmax(0, 1fr));\n}\n.flex-col {\n    flex-direction: column;\n}\n.flex-row {\n    flex-direction: row;\n}\n.flex-nowrap {\n    flex-wrap: nowrap;\n}\n.flex-wrap {\n    flex-wrap: wrap;\n}\n.items-center {\n    align-items: center;\n}\n.justify-center {\n    justify-content: center;\n}\n.gap-4 {\n    gap: calc(var(--spacing) * 4);\n}\n.truncate {\n    text-overflow: ellipsis;\n    white-space: nowrap;\n    overflow: hidden;\n}\n.overflow-auto {\n    overflow: auto;\n}\n.overflow-hidden {\n    overflow: hidden;\n}\n.rounded {\n    border-radius: .25rem;\n}\n.rounded-lg {\n    border-radius: var(--radius-lg);\n}\n.border {\n    border-style: var(--tw-border-style);\n    border-width: 1px;\n}\n.border-gray-200 {\n    border-color: var(--color-gray-200);\n}\n.bg-gray-300 {\n    background-color: var(--color-gray-300);\n}\n.bg-white {\n    background-color: var(--color-white);\n}\n.mask-repeat {\n    -webkit-mask-repeat: repeat;\n    mask-repeat: repeat;\n}\n.object-contain {\n    object-fit: contain;\n}\n.object-cover {\n    object-fit: cover;\n}\n.object-fill {\n    object-fit: fill;\n}\n.object-scale-down {\n    object-fit: scale-down;\n}\n.p-4 {\n    padding: calc(var(--spacing) * 4);\n}\n.pl-6 {\n    padding-left: calc(var(--spacing) * 6);\n}\n.text-justify {\n    text-align: justify;\n}\n.font-mono {\n    font-family: var(--font-mono);\n}\n.font-sans {\n    font-family: var(--font-sans);\n}\n.text-base {\n    font-size: var(--text-base);\n    line-height: var(--tw-leading, var(--text-base--line-height));\n}\n.text-lg {\n    font-size: var(--text-lg);\n    line-height: var(--tw-leading, var(--text-lg--line-height));\n}\n.text-sm {\n    font-size: var(--text-sm);\n    line-height: var(--tw-leading, var(--text-sm--line-height));\n}\n.text-xl {\n    font-size: var(--text-xl);\n    line-height: var(--tw-leading, var(--text-xl--line-height));\n}\n.text-xs {\n    font-size: var(--text-xs);\n    line-height: var(--tw-leading, var(--text-xs--line-height));\n}\n.font-semibold {\n    --tw-font-weight: var(--font-weight-semibold);\n    font-weight: var(--font-weight-semibold);\n}\n.text-wrap {\n    text-wrap: wrap;\n}\n.capitalize {\n    text-transform: capitalize;\n}\n.lowercase {\n    text-transform: lowercase;\n}\n.uppercase {\n    text-transform: uppercase;\n}\n.italic {\n    font-style: italic;\n}\n.ordinal {\n    --tw-ordinal: ordinal;\n    font-variant-numeric: var(--tw-ordinal, ) var(--tw-slashed-zero, ) var(--tw-numeric-figure, ) var(--tw-numeric-spacing, ) var(--tw-numeric-fraction, );\n}\n.line-through {\n    text-decoration-line: line-through;\n}\n.overline {\n    text-decoration-line: overline;\n}\n.underline {\n    text-decoration-line: underline;\n}\n.shadow {\n    --tw-shadow: 0 1px 3px 0 var(--tw-shadow-color, #0000001a), 0 1px 2px -1px var(--tw-shadow-color, #0000001a);\n    box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);\n}\n.shadow-e1 {\n    --tw-shadow: 0 1px 2px var(--tw-shadow-color, #00000073);\n    box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);\n}\n.shadow-e2 {\n    --tw-shadow: 0 2px 8px var(--tw-shadow-color, #00000073);\n    box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);\n}\n.shadow-e3 {\n    --tw-shadow: 0 8px 24px var(--tw-shadow-color, #00000080);\n    box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);\n}\n.ring {\n    --tw-ring-shadow: var(--tw-ring-inset, ) 0 0 0 calc(1px + var(--tw-ring-offset-width)) var(--tw-ring-color, currentcolor);\n    box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);\n}\n.outline {\n    outline-style: var(--tw-outline-style);\n    outline-width: 1px;\n}\n.blur {\n    --tw-blur: blur(8px);\n    filter: var(--tw-blur, ) var(--tw-brightness, ) var(--tw-contrast, ) var(--tw-grayscale, ) var(--tw-hue-rotate, ) var(--tw-invert, ) var(--tw-saturate, ) var(--tw-sepia, ) var(--tw-drop-shadow, );\n}\n.drop-shadow {\n    --tw-drop-shadow-size: drop-shadow(0 1px 2px var(--tw-drop-shadow-color, #0000001a)) drop-shadow(0 1px 1px var(--tw-drop-shadow-color, #0000000f));\n    --tw-drop-shadow: drop-shadow(0 1px 2px #0000001a) drop-shadow(0 1px 1px #0000000f);\n    filter: var(--tw-blur, ) var(--tw-brightness, ) var(--tw-contrast, ) var(--tw-grayscale, ) var(--tw-hue-rotate, ) var(--tw-invert, ) var(--tw-saturate, ) var(--tw-sepia, ) var(--tw-drop-shadow, );\n}\n.grayscale {\n    --tw-grayscale: grayscale(100%);\n    filter: var(--tw-blur, ) var(--tw-brightness, ) var(--tw-contrast, ) var(--tw-grayscale, ) var(--tw-hue-rotate, ) var(--tw-invert, ) var(--tw-saturate, ) var(--tw-sepia, ) var(--tw-drop-shadow, );\n}\n.invert {\n    --tw-invert: invert(100%);\n    filter: var(--tw-blur, ) var(--tw-brightness, ) var(--tw-contrast, ) var(--tw-grayscale, ) var(--tw-hue-rotate, ) var(--tw-invert, ) var(--tw-saturate, ) var(--tw-sepia, ) var(--tw-drop-shadow, );\n}\n.filter {\n    filter: var(--tw-blur, ) var(--tw-brightness, ) var(--tw-contrast, ) var(--tw-grayscale, ) var(--tw-hue-rotate, ) var(--tw-invert, ) var(--tw-saturate, ) var(--tw-sepia, ) var(--tw-drop-shadow, );\n}\n.backdrop-filter {\n    -webkit-backdrop-filter: var(--tw-backdrop-blur, ) var(--tw-backdrop-brightness, ) var(--tw-backdrop-contrast, ) var(--tw-backdrop-grayscale, ) var(--tw-backdrop-hue-rotate, ) var(--tw-backdrop-invert, ) var(--tw-backdrop-opacity, ) var(--tw-backdrop-saturate, ) var(--tw-backdrop-sepia, );\n    backdrop-filter: var(--tw-backdrop-blur, ) var(--tw-backdrop-brightness, ) var(--tw-backdrop-contrast, ) var(--tw-backdrop-grayscale, ) var(--tw-backdrop-hue-rotate, ) var(--tw-backdrop-invert, ) var(--tw-backdrop-opacity, ) var(--tw-backdrop-saturate, ) var(--tw-backdrop-sepia, );\n}\n.transition {\n    transition-property: color, background-color, border-color, outline-color, text-decoration-color, fill, stroke, --tw-gradient-from, --tw-gradient-via, --tw-gradient-to, opacity, box-shadow, transform, translate, scale, rotate, filter, -webkit-backdrop-filter, backdrop-filter, display, content-visibility, overlay, pointer-events;\n    transition-timing-function: var(--tw-ease, var(--default-transition-timing-function));\n    transition-duration: var(--tw-duration, var(--default-transition-duration));\n}\n.ease-in {\n    --tw-ease: var(--ease-in);\n    transition-timing-function: var(--ease-in);\n}\n.ease-in-out {\n    --tw-ease: var(--ease-in-out);\n    transition-timing-function: var(--ease-in-out);\n}\n.ease-out {\n    --tw-ease: var(--ease-out);\n    transition-timing-function: var(--ease-out);\n}\n}\n:root[data-theme=\"light\"] {\n  --color-bg: #eef1f4;\n  --color-pane: #f7f9fb;\n  --color-raised: #fff;\n  --color-canvas: #e2e7ec;\n  --color-divider: #d3dae1;\n  --color-outline: #b3bec9;\n  --color-fg: #16202a;\n  --color-dim: #55646f;\n  --color-accent: #1f6690;\n  --color-onAccent: #fff;\n  --color-brand: #8a6206;\n  --color-brandFill: #c08a10;\n  --color-onBrand: #14100a;\n  --color-ok: #1f6f4a;\n  --color-warn: #8a5a0c;\n  --color-err: #b02a1c;\n  --color-kw: #1f6690;\n  --color-measure: #8a5a0c;\n  --color-member: #1f6f4a;\n  --color-fn: #7b3fa0;\n  --color-primary: #1f6690;\n  --color-secondary: #55646f;\n  --color-success: #1f6f4a;\n  --color-info: #1f6690;\n  --color-danger: #b02a1c;\n  --color-warning: #8a5a0c;\n  --color-backgroundPrimary: #eef1f4;\n  --color-backgroundSecondary: #f7f9fb;\n  --color-backgroundElement: #fff;\n  --color-backgroundBorder: #d3dae1;\n  --color-textPrimary: #16202a;\n  --color-textInverted: #fff;\n  --color-daanse_blue: #1f6690;\n  --color-daanse_grey: #16202a;\n  --shadow-e1: 0 1px 2px #16202a24;\n  --shadow-e2: 0 2px 8px #16202a24;\n  --shadow-e3: 0 8px 24px #16202a24;\n}\n:root {\n  --mdxwb-bg: var(--color-bg);\n  --mdxwb-pane: var(--color-pane);\n  --mdxwb-raised: var(--color-raised);\n  --mdxwb-border: var(--color-divider);\n  --mdxwb-outline: var(--color-outline);\n  --mdxwb-fg: var(--color-fg);\n  --mdxwb-dim: var(--color-dim);\n  --mdxwb-accent: var(--color-accent);\n  --mdxwb-on-accent: var(--color-onAccent);\n  --mdxwb-ok: var(--color-ok);\n  --mdxwb-warn: var(--color-warn);\n  --mdxwb-err: var(--color-err);\n  --mdxwb-kw: var(--color-kw);\n  --mdxwb-measure: var(--color-measure);\n  --mdxwb-member: var(--color-member);\n  --mdxwb-fn: var(--color-fn);\n}\nbody {\n  font-family: var(--font-sans);\n  font-optical-sizing: auto;\n  font-weight: 400;\n  font-size: var(--text-base);\n  font-variation-settings: \"wdth\" 100;\n  background: var(--color-bg);\n  color: var(--color-fg);\n  font-style: normal;\n  --moveable-color: var(--color-outline) !important;\n}\ntable {\n  font-variant-numeric: tabular-nums;\n}\n.rCS1w3zcxh {\n  --moveable-color: var(--color-outline) !important;\n}\n.rCS1w3zcxh .moveable-line {\n  transform-origin: 0;\n  width: 1px;\n  height: 1px;\n  border-bottom: 2px dashed var(--color-outline) !important;\n  background: none !important;\n}\n@keyframes spin {\nto {\n    transform: rotate(360deg);\n}\n}\n* {\n  scrollbar-width: thin;\n  scrollbar-color: var(--color-outline) transparent;\n}\n::-webkit-scrollbar {\n  width: 10px;\n  height: 10px;\n}\n::-webkit-scrollbar-track {\n  background: none;\n}\n::-webkit-scrollbar-thumb {\n  background-color: var(--color-outline);\n  background-clip: padding-box;\n  border: 3px solid #0000;\n  border-radius: 6px;\n}\n::-webkit-scrollbar-thumb:hover {\n  background-color: var(--color-dim);\n}\n::-webkit-scrollbar-corner {\n  background: none;\n}\n.resize-observer[data-v-b329ee4c] {\n  z-index: -1;\n  pointer-events: none;\n  opacity: 0;\n  background-color: #0000;\n  border: none;\n  width: 100%;\n  height: 100%;\n  display: block;\n  position: absolute;\n  top: 0;\n  left: 0;\n  overflow: hidden;\n}\n.resize-observer[data-v-b329ee4c] object {\n  pointer-events: none;\n  z-index: -1;\n  width: 100%;\n  height: 100%;\n  display: block;\n  position: absolute;\n  top: 0;\n  left: 0;\n  overflow: hidden;\n}\n.v-popper__popper {\n  z-index: 10000;\n  outline: none;\n  top: 0;\n  left: 0;\n}\n.v-popper__popper.v-popper__popper--hidden {\n  visibility: hidden;\n  opacity: 0;\n  pointer-events: none;\n  transition: opacity .15s, visibility .15s;\n}\n.v-popper__popper.v-popper__popper--shown {\n  visibility: visible;\n  opacity: 1;\n  transition: opacity .15s;\n}\n.v-popper__popper.v-popper__popper--skip-transition, .v-popper__popper.v-popper__popper--skip-transition > .v-popper__wrapper {\n  transition: none !important;\n}\n.v-popper__backdrop {\n  width: 100%;\n  height: 100%;\n  display: none;\n  position: absolute;\n  top: 0;\n  left: 0;\n}\n.v-popper__inner {\n  box-sizing: border-box;\n  position: relative;\n  overflow-y: auto;\n}\n.v-popper__inner > div {\n  z-index: 1;\n  max-width: inherit;\n  max-height: inherit;\n  position: relative;\n}\n.v-popper__arrow-container {\n  width: 10px;\n  height: 10px;\n  position: absolute;\n}\n.v-popper__popper--arrow-overflow .v-popper__arrow-container, .v-popper__popper--no-positioning .v-popper__arrow-container {\n  display: none;\n}\n.v-popper__arrow-inner, .v-popper__arrow-outer {\n  border-style: solid;\n  width: 0;\n  height: 0;\n  position: absolute;\n  top: 0;\n  left: 0;\n}\n.v-popper__arrow-inner {\n  visibility: hidden;\n  border-width: 7px;\n}\n.v-popper__arrow-outer {\n  border-width: 6px;\n}\n.v-popper__popper[data-popper-placement^=\"top\"] .v-popper__arrow-inner, .v-popper__popper[data-popper-placement^=\"bottom\"] .v-popper__arrow-inner {\n  left: -2px;\n}\n.v-popper__popper[data-popper-placement^=\"top\"] .v-popper__arrow-outer, .v-popper__popper[data-popper-placement^=\"bottom\"] .v-popper__arrow-outer {\n  left: -1px;\n}\n.v-popper__popper[data-popper-placement^=\"top\"] .v-popper__arrow-inner, .v-popper__popper[data-popper-placement^=\"top\"] .v-popper__arrow-outer {\n  border-bottom-width: 0;\n  border-bottom-color: #0000 !important;\n  border-left-color: #0000 !important;\n  border-right-color: #0000 !important;\n}\n.v-popper__popper[data-popper-placement^=\"top\"] .v-popper__arrow-inner {\n  top: -2px;\n}\n.v-popper__popper[data-popper-placement^=\"bottom\"] .v-popper__arrow-container {\n  top: 0;\n}\n.v-popper__popper[data-popper-placement^=\"bottom\"] .v-popper__arrow-inner, .v-popper__popper[data-popper-placement^=\"bottom\"] .v-popper__arrow-outer {\n  border-top-width: 0;\n  border-top-color: #0000 !important;\n  border-left-color: #0000 !important;\n  border-right-color: #0000 !important;\n}\n.v-popper__popper[data-popper-placement^=\"bottom\"] .v-popper__arrow-inner {\n  top: -4px;\n}\n.v-popper__popper[data-popper-placement^=\"bottom\"] .v-popper__arrow-outer {\n  top: -6px;\n}\n.v-popper__popper[data-popper-placement^=\"left\"] .v-popper__arrow-inner, .v-popper__popper[data-popper-placement^=\"right\"] .v-popper__arrow-inner {\n  top: -2px;\n}\n.v-popper__popper[data-popper-placement^=\"left\"] .v-popper__arrow-outer, .v-popper__popper[data-popper-placement^=\"right\"] .v-popper__arrow-outer {\n  top: -1px;\n}\n.v-popper__popper[data-popper-placement^=\"right\"] .v-popper__arrow-inner, .v-popper__popper[data-popper-placement^=\"right\"] .v-popper__arrow-outer {\n  border-left-width: 0;\n  border-top-color: #0000 !important;\n  border-bottom-color: #0000 !important;\n  border-left-color: #0000 !important;\n}\n.v-popper__popper[data-popper-placement^=\"right\"] .v-popper__arrow-inner {\n  left: -4px;\n}\n.v-popper__popper[data-popper-placement^=\"right\"] .v-popper__arrow-outer {\n  left: -6px;\n}\n.v-popper__popper[data-popper-placement^=\"left\"] .v-popper__arrow-container {\n  right: -10px;\n}\n.v-popper__popper[data-popper-placement^=\"left\"] .v-popper__arrow-inner, .v-popper__popper[data-popper-placement^=\"left\"] .v-popper__arrow-outer {\n  border-right-width: 0;\n  border-top-color: #0000 !important;\n  border-bottom-color: #0000 !important;\n  border-right-color: #0000 !important;\n}\n.v-popper__popper[data-popper-placement^=\"left\"] .v-popper__arrow-inner {\n  left: -2px;\n}\n.v-popper--theme-tooltip .v-popper__inner {\n  color: #fff;\n  background: #000c;\n  border-radius: 6px;\n  padding: 7px 12px 6px;\n}\n.v-popper--theme-tooltip .v-popper__arrow-outer {\n  border-color: #000c;\n}\n.v-popper--theme-dropdown .v-popper__inner {\n  color: #000;\n  background: #fff;\n  border: 1px solid #ddd;\n  border-radius: 6px;\n  box-shadow: 0 6px 30px #0000001a;\n}\n.v-popper--theme-dropdown .v-popper__arrow-inner {\n  visibility: visible;\n  border-color: #fff;\n}\n.v-popper--theme-dropdown .v-popper__arrow-outer {\n  border-color: #ddd;\n}\n@property --tw-rotate-x {\n  syntax: \"*\";\n  inherits: false\n}\n@property --tw-rotate-y {\n  syntax: \"*\";\n  inherits: false\n}\n@property --tw-rotate-z {\n  syntax: \"*\";\n  inherits: false\n}\n@property --tw-skew-x {\n  syntax: \"*\";\n  inherits: false\n}\n@property --tw-skew-y {\n  syntax: \"*\";\n  inherits: false\n}\n@property --tw-border-style {\n  syntax: \"*\";\n  inherits: false;\n  initial-value: solid;\n}\n@property --tw-font-weight {\n  syntax: \"*\";\n  inherits: false\n}\n@property --tw-ordinal {\n  syntax: \"*\";\n  inherits: false\n}\n@property --tw-slashed-zero {\n  syntax: \"*\";\n  inherits: false\n}\n@property --tw-numeric-figure {\n  syntax: \"*\";\n  inherits: false\n}\n@property --tw-numeric-spacing {\n  syntax: \"*\";\n  inherits: false\n}\n@property --tw-numeric-fraction {\n  syntax: \"*\";\n  inherits: false\n}\n@property --tw-shadow {\n  syntax: \"*\";\n  inherits: false;\n  initial-value: 0 0 #0000;\n}\n@property --tw-shadow-color {\n  syntax: \"*\";\n  inherits: false\n}\n@property --tw-shadow-alpha {\n  syntax: \"<percentage>\";\n  inherits: false;\n  initial-value: 100%;\n}\n@property --tw-inset-shadow {\n  syntax: \"*\";\n  inherits: false;\n  initial-value: 0 0 #0000;\n}\n@property --tw-inset-shadow-color {\n  syntax: \"*\";\n  inherits: false\n}\n@property --tw-inset-shadow-alpha {\n  syntax: \"<percentage>\";\n  inherits: false;\n  initial-value: 100%;\n}\n@property --tw-ring-color {\n  syntax: \"*\";\n  inherits: false\n}\n@property --tw-ring-shadow {\n  syntax: \"*\";\n  inherits: false;\n  initial-value: 0 0 #0000;\n}\n@property --tw-inset-ring-color {\n  syntax: \"*\";\n  inherits: false\n}\n@property --tw-inset-ring-shadow {\n  syntax: \"*\";\n  inherits: false;\n  initial-value: 0 0 #0000;\n}\n@property --tw-ring-inset {\n  syntax: \"*\";\n  inherits: false\n}\n@property --tw-ring-offset-width {\n  syntax: \"<length>\";\n  inherits: false;\n  initial-value: 0;\n}\n@property --tw-ring-offset-color {\n  syntax: \"*\";\n  inherits: false;\n  initial-value: #fff;\n}\n@property --tw-ring-offset-shadow {\n  syntax: \"*\";\n  inherits: false;\n  initial-value: 0 0 #0000;\n}\n@property --tw-outline-style {\n  syntax: \"*\";\n  inherits: false;\n  initial-value: solid;\n}\n@property --tw-blur {\n  syntax: \"*\";\n  inherits: false\n}\n@property --tw-brightness {\n  syntax: \"*\";\n  inherits: false\n}\n@property --tw-contrast {\n  syntax: \"*\";\n  inherits: false\n}\n@property --tw-grayscale {\n  syntax: \"*\";\n  inherits: false\n}\n@property --tw-hue-rotate {\n  syntax: \"*\";\n  inherits: false\n}\n@property --tw-invert {\n  syntax: \"*\";\n  inherits: false\n}\n@property --tw-opacity {\n  syntax: \"*\";\n  inherits: false\n}\n@property --tw-saturate {\n  syntax: \"*\";\n  inherits: false\n}\n@property --tw-sepia {\n  syntax: \"*\";\n  inherits: false\n}\n@property --tw-drop-shadow {\n  syntax: \"*\";\n  inherits: false\n}\n@property --tw-drop-shadow-color {\n  syntax: \"*\";\n  inherits: false\n}\n@property --tw-drop-shadow-alpha {\n  syntax: \"<percentage>\";\n  inherits: false;\n  initial-value: 100%;\n}\n@property --tw-drop-shadow-size {\n  syntax: \"*\";\n  inherits: false\n}\n@property --tw-backdrop-blur {\n  syntax: \"*\";\n  inherits: false\n}\n@property --tw-backdrop-brightness {\n  syntax: \"*\";\n  inherits: false\n}\n@property --tw-backdrop-contrast {\n  syntax: \"*\";\n  inherits: false\n}\n@property --tw-backdrop-grayscale {\n  syntax: \"*\";\n  inherits: false\n}\n@property --tw-backdrop-hue-rotate {\n  syntax: \"*\";\n  inherits: false\n}\n@property --tw-backdrop-invert {\n  syntax: \"*\";\n  inherits: false\n}\n@property --tw-backdrop-opacity {\n  syntax: \"*\";\n  inherits: false\n}\n@property --tw-backdrop-saturate {\n  syntax: \"*\";\n  inherits: false\n}\n@property --tw-backdrop-sepia {\n  syntax: \"*\";\n  inherits: false\n}\n@property --tw-ease {\n  syntax: \"*\";\n  inherits: false\n}\n.layout-renderer[data-v-965fd8c7] {\n  width: 100%;\n  height: 100%;\n}\n.layout-renderer .edit-component-wrapper[data-v-965fd8c7],\n.layout-renderer .view-component-wrapper[data-v-965fd8c7] {\n  width: 100%;\n  height: 100%;\n}\n.layout-renderer .spinner[data-v-965fd8c7] {\n  width: 22px;\n  height: 22px;\n  border: 2px solid var(--color-divider);\n  border-top-color: var(--color-accent);\n  border-radius: 50%;\n  animation: layout-spin 700ms linear infinite;\n}\n.layout-renderer .no-layout-message[data-v-965fd8c7],\n.layout-renderer .loading-state[data-v-965fd8c7] {\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n  justify-content: center;\n  padding: 2rem;\n  gap: 1rem;\n}\n.layout-renderer .no-layout-message__text[data-v-965fd8c7] {\n  display: flex;\n  align-items: flex-start;\n  gap: 9px;\n  margin: 0;\n  font-family: var(--font-sans);\n  font-size: var(--text-base);\n  line-height: 1.55;\n  color: var(--color-dim);\n}\n/* A turning ring needs a keyframe, and a keyframe cannot be scoped. */\n@keyframes layout-spin {\nto { transform: rotate(360deg);\n}\n}\n\n.floorplan[data-v-0eecd73b] {\n  position: relative;\n  aspect-ratio: 16 / 9;\n  background-color: var(--color-bg);\n  border-bottom: 1px solid var(--color-divider);\n  overflow: hidden;\n}\n.floorplan__block[data-v-0eecd73b] {\n  position: absolute;\n  margin: 2px 0 0 2px;\n  border-radius: 2px;\n  /* On the dark ground a lit edge reads as a block where a filled area only\n     reads as a stain - so the outline carries the family and the fill stays\n     barely there. The arrangement is what has to come across, not the hue. */\n  border: 1px solid color-mix(in srgb, currentColor 70%, transparent);\n  background-color: color-mix(in srgb, currentColor 14%, transparent);\n}\n.floorplan__block--data[data-v-0eecd73b] {\n  color: var(--color-accent);\n}\n.floorplan__block--visual[data-v-0eecd73b] {\n  color: var(--color-brand);\n}\n.floorplan__block--text[data-v-0eecd73b] {\n  color: var(--color-dim);\n}\n.floorplan__empty[data-v-0eecd73b] {\n  position: absolute;\n  inset: 0;\n  display: grid;\n  place-items: center;\n  font-size: var(--text-xs);\n  color: var(--color-dim);\n}\n\n.storage[data-v-82d034f3] {\n  display: grid;\n  grid-template-columns: 280px minmax(0, 1fr);\n  flex: 1 1 auto;\n  min-height: 0;\n  background-color: var(--color-pane);\n  overflow: hidden;\n}\n\n/* ------------------------------------------------------------------ tree */\n.tree[data-v-82d034f3] {\n  display: flex;\n  flex-direction: column;\n  min-height: 0;\n  border-right: 1px solid var(--color-divider);\n}\n.tree__search[data-v-82d034f3] {\n  margin: 8px;\n  height: 26px;\n  padding: 0 8px;\n  font-size: var(--text-sm);\n  font-family: inherit;\n  color: var(--color-fg);\n  background-color: var(--color-bg);\n  border: 1px solid var(--color-divider);\n  border-radius: var(--radius-xs);\n}\n.tree__body[data-v-82d034f3] {\n  flex: 1 1 auto;\n  min-height: 0;\n  padding: 0 4px 8px;\n  overflow-y: auto;\n}\n.row[data-v-82d034f3] {\n  display: flex;\n  align-items: baseline;\n  flex-wrap: nowrap;\n  gap: 6px;\n  width: 100%;\n  padding: 4px 6px;\n  font-family: inherit;\n  font-size: var(--text-base);\n  color: var(--color-fg);\n  text-align: left;\n  background: none;\n  border: 0;\n  border-radius: var(--radius-xs);\n  cursor: pointer;\n}\n.row[data-v-82d034f3]:hover {\n  background-color: var(--color-raised);\n}\n.row.on[data-v-82d034f3] {\n  background-color: color-mix(in srgb, var(--color-accent) 12%, transparent);\n  box-shadow: inset 2px 0 0 var(--color-accent);\n}\n.row--place[data-v-82d034f3] {\n  font-weight: 600;\n}\n.row--entry[data-v-82d034f3] {\n  padding-left: 22px;\n  font-family: var(--font-mono);\n  font-size: var(--text-sm);\n}\n.row--hint[data-v-82d034f3] {\n  padding-left: 22px;\n  margin: 0;\n  color: var(--color-dim);\n  font-size: var(--text-sm);\n  cursor: default;\n}\n.row--add[data-v-82d034f3] {\n  color: var(--color-dim);\n  font-size: var(--text-sm);\n}\n.row__twist[data-v-82d034f3] {\n  width: 12px;\n  flex: none;\n  font-size: var(--text-xs);\n  color: var(--color-dim);\n}\n.row__name[data-v-82d034f3] {\n  min-width: 0;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n}\n.row__meta[data-v-82d034f3] {\n  margin-left: auto;\n  padding-left: 8px;\n  flex: none;\n  font-family: var(--font-mono);\n  font-variant-numeric: tabular-nums;\n  font-size: var(--text-xs);\n  color: var(--color-dim);\n}\n\n/* The state that is loaded right now carries the accent; the others stay quiet. */\n.row__dot[data-v-82d034f3] {\n  width: 5px;\n  height: 5px;\n  flex: none;\n  border-radius: 50%;\n  background-color: transparent;\n}\n.row__dot.open[data-v-82d034f3] {\n  background-color: var(--color-accent);\n}\n\n/* ---------------------------------------------------------------- detail */\n.detail[data-v-82d034f3] {\n  display: flex;\n  flex-direction: column;\n  min-width: 0;\n  min-height: 0;\n  background-color: var(--color-bg);\n  overflow-y: auto;\n}\n.detail__head[data-v-82d034f3] {\n  display: flex;\n  align-items: center;\n  gap: 8px;\n  padding: 7px 12px;\n  background-color: var(--color-pane);\n  border-bottom: 1px solid var(--color-divider);\n}\n.detail__name[data-v-82d034f3] {\n  margin: 0;\n  font-size: var(--text-base);\n  font-weight: 600;\n  color: var(--color-fg);\n}\n.detail__facts[data-v-82d034f3] {\n  font-family: var(--font-mono);\n  font-variant-numeric: tabular-nums;\n  font-size: var(--text-sm);\n  color: var(--color-dim);\n}\n.detail__spacer[data-v-82d034f3] {\n  flex: 1 1 auto;\n}\n.detail__badge[data-v-82d034f3] {\n  padding: 1px 6px;\n  font-size: var(--text-xs);\n  color: var(--color-accent);\n  background-color: color-mix(in srgb, var(--color-accent) 14%, transparent);\n  border-radius: var(--radius-xs);\n}\n.detail__hint[data-v-82d034f3] {\n  display: grid;\n  place-items: center;\n  flex: 1 1 auto;\n  margin: 0;\n  padding: 24px;\n  font-size: var(--text-sm);\n  color: var(--color-dim);\n  text-align: center;\n}\n.detail__failure[data-v-82d034f3] {\n  margin: 12px 12px 0;\n  padding: 8px 10px;\n  font-size: var(--text-sm);\n  color: var(--color-err);\n  background-color: color-mix(in srgb, var(--color-err) 10%, transparent);\n  border-radius: var(--radius-xs);\n}\n\n/* --------------------------------------------------- boards inside a state */\n.boards[data-v-82d034f3] {\n  display: grid;\n  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));\n  gap: 12px;\n  padding: 12px;\n}\n.board[data-v-82d034f3] {\n  background-color: var(--color-pane);\n  border: 1px solid var(--color-divider);\n  border-radius: var(--radius-sm);\n  overflow: hidden;\n}\n.board__text[data-v-82d034f3] {\n  padding: 8px 10px;\n}\n.board__name[data-v-82d034f3] {\n  margin: 0;\n  font-size: var(--text-base);\n  font-weight: 600;\n  color: var(--color-fg);\n}\n.board__facts[data-v-82d034f3] {\n  margin: 2px 0 0;\n  font-family: var(--font-mono);\n  font-variant-numeric: tabular-nums;\n  font-size: var(--text-sm);\n  color: var(--color-dim);\n}\n.board__kinds[data-v-82d034f3] {\n  margin: 4px 0 0;\n  font-size: var(--text-xs);\n  color: var(--color-dim);\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n}\n\n/* ---------------------------------------------------------------- create */\n.create[data-v-82d034f3] {\n  display: flex;\n  flex-wrap: wrap;\n  align-items: center;\n  gap: 8px;\n  padding: 16px;\n}\n.create__label[data-v-82d034f3] {\n  font-size: var(--text-sm);\n  color: var(--color-dim);\n}\n.create__input[data-v-82d034f3] {\n  height: 26px;\n  min-width: 220px;\n  padding: 0 8px;\n  font-size: var(--text-base);\n  font-family: inherit;\n  color: var(--color-fg);\n  background-color: var(--color-raised);\n  border: 1px solid var(--color-divider);\n  border-radius: var(--radius-xs);\n}\n.create__hint[data-v-82d034f3] {\n  flex: 1 0 100%;\n  margin: 0;\n  font-size: var(--text-sm);\n  color: var(--color-dim);\n}\n.row[data-v-82d034f3]:focus-visible,\n.tree__search[data-v-82d034f3]:focus-visible,\n.create__input[data-v-82d034f3]:focus-visible {\n  outline: 2px solid var(--color-accent);\n  outline-offset: 1px;\n}\n\n.boards[data-v-4c11f243] {\n  /* The page container is a column flexbox; without this the launcher\n     shrinks to its content width instead of filling the surface. */\n  display: flex;\n  width: 100%;\n  flex: 1 1 auto;\n  min-height: 0;\n  padding: 14px 16px 16px;\n  background-color: var(--color-bg);\n}\n\n/*\n * One panel holds both views. The switch rides on its top edge the way the\n * other detail screens carry their tabs, so it reads as part of the surface\n * instead of floating above it.\n */\n.boards__panel[data-v-4c11f243] {\n  display: flex;\n  flex-direction: column;\n  flex: 1 1 auto;\n  min-width: 0;\n  min-height: 0;\n  background-color: var(--color-pane);\n  border: 1px solid var(--color-divider);\n  border-radius: var(--radius-sm);\n  overflow: hidden;\n}\n.boards__body[data-v-4c11f243] {\n  display: flex;\n  flex-direction: column;\n  flex: 1 1 auto;\n  min-height: 0;\n  background-color: var(--color-bg);\n  overflow: auto;\n}\n\n/* The panel's top edge: the switch on the left, the tools for the current\n   view on the right. */\n.boards__bar[data-v-4c11f243] {\n  display: flex;\n  align-items: center;\n  gap: 12px;\n  height: var(--spacing-panelHeader);\n  flex: none;\n  padding: 0 8px;\n  border-bottom: 1px solid var(--color-divider);\n}\n.boards__views[data-v-4c11f243] {\n  display: flex;\n  align-items: center;\n  gap: 2px;\n  height: 100%;\n}\n.boards__view[data-v-4c11f243] {\n  position: relative;\n  display: flex;\n  align-items: center;\n  gap: 6px;\n  height: 100%;\n  padding: 0 12px;\n  font-size: var(--text-sm);\n  font-family: inherit;\n  font-weight: 500;\n  color: var(--color-dim);\n  background: none;\n  border: 0;\n  cursor: pointer;\n}\n.boards__view[data-v-4c11f243]:hover {\n  color: var(--color-fg);\n}\n.boards__view.on[data-v-4c11f243] {\n  color: var(--color-fg);\n  font-weight: 600;\n}\n\n/* Sits on the panel edge, over the divider */\n.boards__view.on[data-v-4c11f243]::after {\n  content: '';\n  position: absolute;\n  left: 8px;\n  right: 8px;\n  bottom: -1px;\n  height: 2px;\n  background-color: var(--color-accent);\n  border-radius: 2px;\n}\n.boards__view[data-v-4c11f243]:focus-visible {\n  outline: 2px solid var(--color-accent);\n  outline-offset: 1px;\n}\n.boards__title[data-v-4c11f243] {\n  display: flex;\n  align-items: center;\n  gap: 8px;\n  margin: 0;\n  font-size: var(--text-lg);\n  font-weight: 600;\n  color: var(--color-fg);\n}\n.boards__count[data-v-4c11f243] {\n  font-family: var(--font-mono);\n  font-variant-numeric: tabular-nums;\n  font-size: var(--text-xs);\n  font-weight: 500;\n  color: var(--color-dim);\n  padding: 1px 6px;\n  border: 1px solid var(--color-divider);\n  border-radius: 999px;\n}\n.boards__tools[data-v-4c11f243] {\n  display: flex;\n  align-items: center;\n  gap: 8px;\n  margin-left: auto;\n}\n.boards__search[data-v-4c11f243] {\n  height: 22px;\n  min-width: 180px;\n  padding: 0 8px;\n  font-size: var(--text-sm);\n  color: var(--color-fg);\n  background-color: var(--color-raised);\n  border: 1px solid var(--color-divider);\n  border-radius: 4px;\n}\n.boards__search[data-v-4c11f243]:focus-visible,\n.board[data-v-4c11f243]:focus-visible {\n  outline: 2px solid var(--color-accent);\n  outline-offset: 1px;\n}\n.boards__grid[data-v-4c11f243] {\n  display: grid;\n  grid-template-columns: repeat(auto-fill, minmax(232px, 1fr));\n  align-content: start;\n  gap: 16px;\n  padding: 16px;\n}\n.board[data-v-4c11f243] {\n  position: relative;\n  display: flex;\n  flex-direction: column;\n  padding: 0;\n  overflow: hidden;\n  text-align: left;\n  background-color: var(--color-pane);\n  border: 1px solid var(--color-divider);\n  border-radius: var(--radius-sm);\n  box-shadow: var(--shadow-e1);\n  cursor: pointer;\n  transition: border-color 120ms ease, box-shadow 120ms ease, transform 120ms ease;\n}\n.board[data-v-4c11f243]:hover {\n  border-color: var(--color-outline);\n  box-shadow: var(--shadow-e2);\n  transform: translateY(-1px);\n}\n.board__body[data-v-4c11f243] {\n  padding: 12px;\n}\n.board__name[data-v-4c11f243] {\n  margin: 0;\n  font-size: var(--text-base);\n  font-weight: 600;\n  color: var(--color-fg);\n}\n.board__meta[data-v-4c11f243] {\n  margin: 2px 0 0;\n  font-size: var(--text-xs);\n  color: var(--color-dim);\n}\n.board__kinds[data-v-4c11f243] {\n  display: flex;\n  flex-wrap: wrap;\n  gap: 4px;\n  margin: 8px 0 0;\n  padding: 0;\n  list-style: none;\n}\n.board__kind[data-v-4c11f243] {\n  padding: 1px 6px;\n  font-size: var(--text-xs);\n  color: var(--color-dim);\n  background-color: var(--color-canvas);\n  border-radius: 3px;\n}\n.board__kind--more[data-v-4c11f243] {\n  color: var(--color-outline);\n}\n.board__edit[data-v-4c11f243] {\n  position: absolute;\n  top: 8px;\n  right: 8px;\n  padding: 2px 8px;\n  font-size: var(--text-xs);\n  font-family: inherit;\n  color: var(--color-fg);\n  background-color: var(--color-raised);\n  border: 1px solid var(--color-divider);\n  border-radius: 3px;\n  opacity: 0;\n  cursor: pointer;\n}\n.board:hover .board__edit[data-v-4c11f243],\n.board__edit[data-v-4c11f243]:focus-visible {\n  opacity: 1;\n}\n.board--new[data-v-4c11f243] {\n  box-shadow: none;\n  align-items: center;\n  justify-content: center;\n  gap: 2px;\n  min-height: 180px;\n  font-family: inherit;\n  background-color: transparent;\n  border-style: dashed;\n}\n.board__plus[data-v-4c11f243] {\n  font-size: 20px;\n  line-height: 1;\n  color: var(--color-outline);\n}\n.board__usage[data-v-4c11f243] {\n  margin: 3px 0 0;\n  font-family: var(--font-mono);\n  font-size: var(--text-xs);\n  font-variant-numeric: tabular-nums;\n  color: var(--color-dim);\n}\n.boards__nomatch[data-v-4c11f243] {\n  grid-column: 1 / -1;\n  margin: 0;\n  font-size: var(--text-sm);\n  color: var(--color-dim);\n}\n.boards__empty[data-v-4c11f243] {\n  max-width: 420px;\n  margin: 10vh auto 0;\n  padding: 0 16px;\n  text-align: center;\n}\n.boards__empty-plan[data-v-4c11f243] {\n  width: 200px;\n  margin: 0 auto 16px;\n  border: 1px solid var(--color-divider);\n  border-radius: 4px;\n}\n.boards__empty-title[data-v-4c11f243] {\n  margin: 0;\n  font-size: var(--text-lg);\n  font-weight: 600;\n  color: var(--color-fg);\n}\n.boards__empty-text[data-v-4c11f243] {\n  margin: 8px 0 16px;\n  font-size: var(--text-sm);\n  line-height: 1.5;\n  color: var(--color-dim);\n}\n.boards__empty-actions[data-v-4c11f243] {\n  display: flex;\n  justify-content: center;\n  gap: 8px;\n}\n@media (prefers-reduced-motion: reduce) {\n.board[data-v-4c11f243] {\n    transition: none;\n}\n.board[data-v-4c11f243]:hover {\n    transform: none;\n}\n}\n\n.dottet[data-v-3ecae506]{\n  background: var(--color-canvas);\n  background-image: radial-gradient(var(--color-divider) 1px, transparent 0);\n  background-size: 40px 40px;\n  background-position: -19px -19px;\n}\n.ghost-placeholder[data-v-3ecae506] {\n  position: absolute;\n  background-color: rgba(0, 0, 0, 0.1);\n  border-radius: 5px;\n  border: 2px dashed var(--color-outline);\n  z-index: 100000;\n  pointer-events: none;\n}\n.report-container[data-v-3ecae506] {\n  display: flex;\n  justify-content: flex-start;\n  align-items: flex-start;\n  flex-direction: column;\n  width: 100%;\n  height: 100%;\n  position: relative;\n  /* Board surface from the mockups (view mode): canvas token, no dot grid */\n  background: var(--color-canvas, #dee1e7);\n}\n.report-container__title[data-v-3ecae506] {\n  width: 100%;\n  padding: 16px;\n  border-bottom: 1px dashed var(--color-divider, #ccd1d9);\n}\n.report-container .widgets-adding-controls[data-v-3ecae506] {\n  display: flex;\n  border: 1px solid var(--color-divider, #ccd1d9);\n  border-radius: 8px;\n  margin: 16px;\n}\n.report-container .widget-board[data-v-3ecae506] {\n  width: 100%;\n  height: 100%;\n  display: flex;\n  box-sizing: border-box;\n  overflow-y: auto;\n  overflow-x: hidden;\n}\n.report-container .add-btn[data-v-3ecae506] {\n  margin: 0 16px 16px 0;\n  align-self: self-end;\n}\n.dashboard-item[data-v-3ecae506] {\n  position: absolute;\n  width: 100%;\n  height: 100%;\n}\n.dashboard-item-container[data-v-3ecae506] {\n  position: absolute;\n}\n.dropdown-buttons-container[data-v-3ecae506] {\n  display: flex;\n  flex-direction: column;\n  gap: 0.5rem;\n  z-index: 99999;\n}\n.va-dropdown__content[data-v-3ecae506] {\n  z-index: 10000000 !important;\n}\n.va-dropdown__content.va-select-dropdown__content.va-dropdown__content-wrapper[data-v-3ecae506] {\n  z-index: 20000000 !important;\n}\n.add_widget-button[data-v-3ecae506] {\n  position: absolute;\n  display: flex;\n  flex-direction: row;\n  gap: 10px;\n  right: 30px;\n  bottom: 20px;\n}\n.v-enter-active[data-v-3ecae506],\n.v-leave-active[data-v-3ecae506] {\n  transition: opacity 0.5s ease;\n}\n.v-enter-from[data-v-3ecae506],\n.v-leave-to[data-v-3ecae506] {\n  opacity: 0;\n}\n\n/* One rhythm for both steps: 8px inside a group, 24px between groups. */\n.pick[data-v-6d945def],\n.fill[data-v-6d945def] {\n  display: flex;\n  flex-direction: column;\n  gap: 24px;\n}\n.pick__lead[data-v-6d945def] {\n  margin: 0;\n  font-size: 0.9rem;\n  color: var(--color-dim);\n}\n.pick__group[data-v-6d945def] {\n  display: flex;\n  flex-direction: column;\n  gap: 8px;\n}\n.pick__rubric[data-v-6d945def] {\n  margin: 0;\n  font-size: 0.8rem;\n  font-weight: 600;\n  letter-spacing: 0.03em;\n  color: var(--color-dim);\n  text-transform: none;\n}\n.tiles[data-v-6d945def] {\n  display: grid;\n  grid-template-columns: repeat(auto-fill, minmax(232px, 1fr));\n  gap: 8px;\n  margin: 0;\n  padding: 0;\n  list-style: none;\n}\n.tile[data-v-6d945def] {\n  display: flex;\n  flex-direction: column;\n  gap: 6px;\n  width: 100%;\n  height: 100%;\n  padding: 10px 12px;\n  font: inherit;\n  text-align: left;\n  background-color: var(--color-sunken);\n  border: 1px solid var(--color-outline);\n  border-radius: var(--radius-sm);\n  cursor: pointer;\n}\n.tile[data-v-6d945def]:hover {\n  border-color: var(--color-accent);\n}\n.tile[data-v-6d945def]:focus-visible {\n  outline: 2px solid var(--color-accent);\n  outline-offset: 1px;\n}\n.tile--on[data-v-6d945def] {\n  border-color: var(--color-accent);\n  box-shadow: inset 2px 0 0 var(--color-accent);\n}\n.tile__head[data-v-6d945def] {\n  display: flex;\n  align-items: center;\n  gap: 6px;\n}\n.tile__icon[data-v-6d945def] {\n  flex: none;\n  color: var(--color-accent);\n}\n.tile__name[data-v-6d945def] {\n  flex: 1;\n  font-weight: 600;\n  color: var(--color-fg);\n}\n.tile__check[data-v-6d945def] {\n  flex: none;\n  color: var(--color-accent);\n}\n\n/*\n * Three lines at most.\n *\n * The model's sentences run to different lengths, and a grid where one tile\n * is twice the height of its neighbour reads as broken. The full sentence\n * is on the second step, where there is room for it.\n */\n.tile__what[data-v-6d945def] {\n  display: -webkit-box;\n  -webkit-box-orient: vertical;\n  -webkit-line-clamp: 3;\n  line-clamp: 3;\n  overflow: hidden;\n  font-size: 0.8rem;\n  line-height: 1.45;\n  color: var(--color-dim);\n}\n.chosen[data-v-6d945def] {\n  display: flex;\n  align-items: center;\n  gap: 12px;\n  padding: 12px;\n  background-color: var(--color-sunken);\n  border: 1px solid var(--color-outline);\n  border-radius: var(--radius-sm);\n}\n.chosen__icon[data-v-6d945def] {\n  display: grid;\n  flex: none;\n  place-items: center;\n  width: 40px;\n  height: 40px;\n  color: var(--color-accent);\n  background-color: var(--color-pane);\n  border: 1px solid var(--color-outline);\n  border-radius: var(--radius-sm);\n}\n.chosen__text[data-v-6d945def] {\n  flex: 1;\n  min-width: 0;\n}\n.chosen__name[data-v-6d945def] {\n  font-weight: 600;\n  color: var(--color-fg);\n}\n.chosen__what[data-v-6d945def] {\n  margin: 2px 0 0;\n  font-size: 0.82rem;\n  line-height: 1.45;\n  color: var(--color-dim);\n}\n\n/* Every field the same distance apart, whatever control it holds. */\n.fill__fields[data-v-6d945def] {\n  display: flex;\n  flex-direction: column;\n  gap: 16px;\n}\n\n.model__none[data-v-deac0807] {\n  margin: 0;\n  padding: 10px 12px;\n  font-size: 0.85rem;\n  color: var(--color-dim);\n  background-color: var(--color-sunken);\n  border-radius: var(--radius-sm);\n}\n\n.tags[data-v-b6b361a8] {\n  display: flex;\n  flex-direction: column;\n  gap: 6px;\n}\n.tags__held[data-v-b6b361a8] {\n  display: flex;\n  flex-wrap: wrap;\n  gap: 4px;\n}\n.tags__offer[data-v-b6b361a8] {\n  display: flex;\n  flex-wrap: wrap;\n  gap: 4px;\n}\n.tags__suggestion[data-v-b6b361a8] {\n  padding: 2px 8px;\n  font-size: 0.8rem;\n  color: var(--color-dim);\n  background: none;\n  border: 1px dashed var(--color-outline);\n  border-radius: 999px;\n  cursor: pointer;\n}\n.tags__suggestion[data-v-b6b361a8]:hover {\n  color: var(--color-fg);\n  border-style: solid;\n  border-color: var(--color-accent);\n}\n\n.note[data-v-585727e2] {\n  margin: 0;\n  padding: 10px 12px;\n  font-size: 0.85rem;\n  line-height: 1.45;\n  color: var(--color-dim);\n  background-color: var(--color-sunken);\n  border-radius: var(--radius-sm);\n}\n.note--warn[data-v-585727e2] {\n  color: var(--color-fg);\n  border-left: 2px solid var(--color-warn, var(--color-accent));\n}\n\n\n\n\n.menu__catch[data-v-3e59dfe4] {\n  position: fixed;\n  inset: 0;\n  z-index: 50000;\n}\n.menu[data-v-3e59dfe4] {\n  position: fixed;\n  z-index: 50001;\n  min-width: 200px;\n  margin: 0;\n  padding: 4px;\n  list-style: none;\n  background-color: var(--color-pane);\n  border: 1px solid var(--color-outline);\n  border-radius: var(--radius-sm);\n  box-shadow: var(--shadow-e3);\n}\n.menu__sep[data-v-3e59dfe4] {\n  margin-top: 4px;\n  padding-top: 4px;\n  border-top: 1px solid var(--color-outline);\n}\n.menu__item[data-v-3e59dfe4] {\n  display: flex;\n  align-items: center;\n  gap: 8px;\n  width: 100%;\n  padding: 6px 10px;\n  font: inherit;\n  color: var(--color-fg);\n  text-align: left;\n  background: none;\n  border: 0;\n  border-radius: var(--radius-xs, 3px);\n  cursor: pointer;\n}\n.menu__item[data-v-3e59dfe4]:hover,\n.menu__item[data-v-3e59dfe4]:focus-visible {\n  background-color: var(--color-sunken);\n}\n.menu__item--danger[data-v-3e59dfe4] {\n  color: var(--color-err);\n}\n\n.tree[data-v-b599ea25] {\n  display: flex;\n  flex-direction: column;\n  min-height: 0;\n  height: 100%;\n  border-right: 1px solid var(--color-divider);\n  background: var(--color-pane);\n  overflow: hidden;\n}\n.tree__head[data-v-b599ea25] {\n  display: flex;\n  align-items: center;\n  gap: 2px;\n  flex: none;\n  /* The panel's gutter, the same one the rows and the search box use. */\n  padding: 7px 8px 7px 10px;\n  border-bottom: 1px solid var(--color-divider);\n}\n.tree__title[data-v-b599ea25] {\n  flex: 1 1 auto;\n  margin: 0;\n  font-family: var(--font-sans);\n  font-size: var(--text-xs);\n  font-weight: 600;\n  letter-spacing: 0.05em;\n  text-transform: uppercase;\n  color: var(--color-dim);\n}\n.tree__search[data-v-b599ea25] {\n  flex: none;\n  padding: 8px 10px;\n  border-bottom: 1px solid var(--color-divider);\n}\n\n/* The tree scrolls; main.css paints the bar from the theme */\n.tree__body[data-v-b599ea25] {\n  flex: 1 1 auto;\n  min-height: 0;\n  overflow-y: auto;\n  padding: 4px 0;\n}\n.tree__list[data-v-b599ea25],\n.tree__sources[data-v-b599ea25] {\n  margin: 0;\n  padding: 0;\n  list-style: none;\n}\n.tree__sources[data-v-b599ea25] {\n  /* One step, the width of the chevron column: a source's icon lands under\n     its connection's name, which is what makes the nesting readable. */\n  padding-left: 22px;\n}\n.row[data-v-b599ea25] {\n  display: flex;\n  align-items: center;\n  gap: 2px;\n  /* The hover and selection band still runs the full width; only what is\n     inside it starts at the gutter. */\n  padding-left: 10px;\n  padding-right: 4px;\n}\n.row[data-v-b599ea25]:hover {\n  background: var(--color-raised);\n}\n\n/* The selected row keeps its mark while the pointer is somewhere else */\n.row--on[data-v-b599ea25],\n.row--on[data-v-b599ea25]:hover {\n  background: color-mix(in srgb, var(--color-accent) 14%, transparent);\n}\n.row__twist[data-v-b599ea25] {\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  width: 22px;\n  height: 26px;\n  flex: none;\n  border: none;\n  background: transparent;\n  color: var(--color-dim);\n  cursor: pointer;\n}\n.row__twist--none[data-v-b599ea25] {\n  cursor: default;\n}\n.row__body[data-v-b599ea25] {\n  display: flex;\n  align-items: baseline;\n  gap: 8px;\n  flex: 1 1 auto;\n  min-width: 0;\n  padding: 3px 2px;\n  border: none;\n  background: transparent;\n  font: inherit;\n  text-align: left;\n  color: var(--color-fg);\n  cursor: pointer;\n  /* A row with tags is two lines rather than a name squeezed out of its\n     own row: the name is what you read it by. */\n  flex-wrap: wrap;\n}\n.row__body[data-v-b599ea25]:disabled {\n  cursor: default;\n}\n.row__body[data-v-b599ea25]:focus-visible {\n  outline: 2px solid var(--color-accent);\n  outline-offset: -2px;\n}\n.row__name[data-v-b599ea25] {\n  font-family: var(--font-sans);\n  font-size: var(--text-sm);\n  white-space: nowrap;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  /* Shrinks last: the tags beside it give way first. */\n  min-width: 10ch;\n}\n.row--connection .row__name[data-v-b599ea25] {\n  font-weight: 600;\n}\n.row__icon[data-v-b599ea25] {\n  flex: none;\n  color: var(--color-dim);\n}\n\n/* A tag is a word, not a chip: a row holding several of them turns into a\n   bar of pills otherwise, and the name stops being the thing you read. */\n.row__tag[data-v-b599ea25] {\n  flex: none;\n  max-width: 84px;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  padding: 0 6px;\n  font-size: 0.72rem;\n  line-height: 1.5;\n  color: var(--color-accent);\n  background-color: color-mix(in srgb, var(--color-accent) 12%, transparent);\n  border-radius: 999px;\n  white-space: nowrap;\n}\n.row__tag--more[data-v-b599ea25] {\n  color: var(--color-dim);\n  background-color: var(--color-sunken);\n}\n.row__what[data-v-b599ea25] {\n  flex: none;\n  font-size: var(--text-xs);\n  color: var(--color-dim);\n}\n\n/* What reads from this source, pushed to the far end of the row */\n.row__usage[data-v-b599ea25] {\n  flex: none;\n  margin-left: auto;\n  padding-left: 8px;\n  font-size: var(--text-xs);\n  color: var(--color-dim);\n  white-space: nowrap;\n}\n.tree__empty[data-v-b599ea25] {\n  padding: 6px 10px;\n  font-family: var(--font-sans);\n  font-size: var(--text-xs);\n  color: var(--color-dim);\n}\n\n/*\n * Lines up with the names it stands in for, not with the gutter: it says\n * what is missing from this connection, so it belongs where those would be.\n */\n.tree__none[data-v-b599ea25] {\n  /* 36px inside a list that is already indented 22: the text lands on the\n     icon edge of the sources it stands in for. */\n  padding: 6px 10px 6px 36px;\n  font-family: var(--font-sans);\n  font-size: var(--text-xs);\n  color: var(--color-dim);\n}\n.confirm__title[data-v-b599ea25] {\n  margin: 0;\n  font-family: var(--font-sans);\n  font-size: var(--text-base);\n  font-weight: 600;\n  color: var(--color-fg);\n}\n.confirm__text[data-v-b599ea25] {\n  margin: 0 0 6px;\n  color: var(--color-dim);\n  line-height: 1.5;\n}\n.confirm__text--warn[data-v-b599ea25] {\n  color: var(--color-err);\n}\n\n.editor[data-v-41f0a44b] {\n  display: flex;\n  flex-direction: column;\n  gap: 12px;\n  height: 100%;\n  min-height: 0;\n}\n.editor__fields[data-v-41f0a44b] {\n  display: flex;\n  flex-direction: column;\n  gap: 4px;\n  max-width: 620px;\n}\n.editor__actions[data-v-41f0a44b] {\n  display: flex;\n  justify-content: flex-end;\n  gap: 7px;\n}\n.editor__preview[data-v-41f0a44b] {\n  flex: 1 1 auto;\n  min-height: 0;\n  display: flex;\n  overflow: auto;\n}\n\n.editor[data-v-0fad9a41] {\n  display: flex;\n  flex-direction: column;\n  gap: 12px;\n}\n.editor__fields[data-v-0fad9a41] {\n  display: flex;\n  flex-direction: column;\n  gap: 4px;\n  max-width: 620px;\n}\n.editor__actions[data-v-0fad9a41] {\n  display: flex;\n  justify-content: flex-end;\n  gap: 7px;\n}\n\n.data-page[data-v-2b44b5f1] {\n  display: flex;\n  height: 100%;\n  min-height: 0;\n}\n.data-page__tree[data-v-2b44b5f1] {\n  flex: none;\n  width: 320px;\n  min-height: 0;\n}\n.data-page__detail[data-v-2b44b5f1] {\n  display: flex;\n  flex-direction: column;\n  flex: 1 1 auto;\n  min-width: 0;\n  min-height: 0;\n  background: var(--color-pane);\n  overflow: hidden;\n}\n.data-page__nothing[data-v-2b44b5f1] {\n  margin: auto;\n  font-family: var(--font-sans);\n  font-size: var(--text-sm);\n  color: var(--color-dim);\n}\n.detail__head[data-v-2b44b5f1] {\n  display: flex;\n  align-items: baseline;\n  gap: 12px;\n  flex: none;\n  padding: 12px 16px 8px;\n}\n.detail__what[data-v-2b44b5f1] {\n  display: flex;\n  align-items: baseline;\n  gap: 10px;\n  min-width: 0;\n}\n.detail__name[data-v-2b44b5f1] {\n  margin: 0;\n  font-family: var(--font-sans);\n  font-size: var(--text-base);\n  font-weight: 600;\n  color: var(--color-fg);\n  white-space: nowrap;\n  overflow: hidden;\n  text-overflow: ellipsis;\n}\n.detail__sub[data-v-2b44b5f1] {\n  font-size: var(--text-xs);\n  color: var(--color-dim);\n  white-space: nowrap;\n}\n\n/* What depends on this, before anything about it is changed */\n.detail__usage[data-v-2b44b5f1] {\n  margin-left: auto;\n  flex: none;\n  font-size: var(--text-xs);\n  color: var(--color-dim);\n}\n.detail__body[data-v-2b44b5f1] {\n  flex: 1 1 auto;\n  min-height: 0;\n  overflow: auto;\n  padding: 16px;\n}\n\n/* A list, not a tile grid - that is what the mockups' palette is, and it\n   survives a 240px column. */\n.widgets_grid[data-v-3ac9fb06] {\n  display: flex;\n  flex-direction: column;\n}\n[data-v-3ac9fb06]  .widgets_grid-item {\n  display: flex;\n  flex-direction: row;\n  align-items: center;\n  gap: 9px;\n  padding: 6px 12px;\n  font-size: var(--text-base, 13px);\n  color: var(--color-fg);\n  cursor: grab;\n  border-radius: var(--radius-sm, 5px);\n  margin: 0 6px;\n}\n[data-v-3ac9fb06]  .widgets_grid-item:hover {\n  background: var(--color-bg);\n}\n[data-v-3ac9fb06]  .widgets_grid-icon {\n  width: 26px;\n  height: 26px;\n  flex: none;\n  display: inline-flex;\n  align-items: center;\n  justify-content: center;\n  background: var(--color-raised);\n  border: 1px solid var(--color-divider);\n  border-radius: var(--radius-sm, 5px);\n  overflow: hidden;\n}\n[data-v-3ac9fb06]  .widgets_grid-icon img {\n  max-width: 18px;\n  max-height: 18px;\n}\n[data-v-3ac9fb06]  .widgets_grid-name {\n  min-width: 0;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n}\n\n/* Docked into the palette panel of the editor (mockup screen 4) - the panel\n   owns position, width and header now. */\n.add_widget_window[data-v-3ac9fb06] {\n  position: relative;\n  width: 100%;\n  height: 100%;\n  padding: 6px 0;\n}\n\n/* What the scroll container was: a box that scrolls. */\n.add_widget_window__scroll[data-v-3ac9fb06] {\n  height: 100%;\n  overflow-y: auto;\n}\n\n.scrim[data-v-67bd2420] {\n  position: fixed;\n  inset: 0;\n  z-index: 40000;\n  display: grid;\n  place-items: stretch;\n  padding: 26px 22px;\n  background-color: color-mix(in srgb, var(--color-canvas) 62%, transparent);\n  /* The board stays visible but out of focus - it is where you return to */\n  backdrop-filter: blur(6px);\n}\n.overlay[data-v-67bd2420] {\n  display: flex;\n  min-width: 0;\n  min-height: 0;\n  background-color: var(--color-bg);\n  border: 1px solid var(--color-outline);\n  border-radius: var(--radius-md);\n  box-shadow: var(--shadow-e3);\n  overflow: hidden;\n}\n\n/* ----------------------------------------------------------------- left */\n.stage[data-v-67bd2420] {\n  display: flex;\n  flex-direction: column;\n  flex: 1 1 auto;\n  min-width: 0;\n}\n.stage__head[data-v-67bd2420] {\n  display: flex;\n  align-items: center;\n  gap: 8px;\n  height: var(--spacing-panelHeader);\n  flex: none;\n  padding: 0 12px;\n  background-color: var(--color-pane);\n  border-bottom: 1px solid var(--color-divider);\n}\n.stage__name[data-v-67bd2420] {\n  font-size: var(--text-base);\n  font-weight: 600;\n  color: var(--color-fg);\n}\n.stage__uid[data-v-67bd2420] {\n  font-family: var(--font-mono);\n  font-size: var(--text-xs);\n  color: var(--color-dim);\n}\n.stage__spacer[data-v-67bd2420] {\n  flex: 1 1 auto;\n}\n.seg[data-v-67bd2420] {\n  display: flex;\n  border: 1px solid var(--color-divider);\n  border-radius: var(--radius-xs);\n  overflow: hidden;\n}\n.seg button[data-v-67bd2420] {\n  padding: 1px 9px;\n  font-family: inherit;\n  font-size: var(--text-xs);\n  color: var(--color-dim);\n  background: none;\n  border: 0;\n  cursor: pointer;\n}\n.seg button.on[data-v-67bd2420] {\n  color: var(--color-onAccent);\n  background-color: var(--color-accent);\n}\n.stage__bar[data-v-67bd2420] {\n  flex: none;\n  padding: 5px 12px;\n  font-family: var(--font-mono);\n  font-size: var(--text-xs);\n  color: var(--color-dim);\n  border-bottom: 1px solid var(--color-divider);\n}\n.stage__body[data-v-67bd2420] {\n  flex: 1 1 auto;\n  display: grid;\n  place-items: center;\n  min-height: 0;\n  padding: 18px;\n  background-color: var(--color-canvas);\n  overflow: auto;\n}\n.preview[data-v-67bd2420] {\n  background-color: var(--color-pane);\n  border: 1px solid var(--color-divider);\n  border-radius: var(--radius-xs);\n  overflow: hidden;\n}\n\n/* --------------------------------------------------------------- handle */\n.handle[data-v-67bd2420] {\n  width: var(--spacing-splitter);\n  flex: none;\n  cursor: col-resize;\n  background-color: var(--color-divider);\n}\n.handle[data-v-67bd2420]:hover,\n.handle[data-v-67bd2420]:focus-visible {\n  background-color: var(--color-accent);\n  outline: none;\n}\n\n/* ---------------------------------------------------------------- right */\n.side[data-v-67bd2420] {\n  display: flex;\n  flex-direction: column;\n  flex: none;\n  min-width: 0;\n  min-height: 0;\n  background-color: var(--color-pane);\n}\n\n/* The chart brings six sections of its own, so the row wraps rather than\n   scrolling sideways - a tab you have to hunt for is not a tab. */\n.tabs[data-v-67bd2420] {\n  display: flex;\n  flex-wrap: wrap;\n  align-items: stretch;\n  min-height: var(--spacing-panelHeader);\n  flex: none;\n  padding: 0 6px;\n  gap: 1px;\n  border-bottom: 1px solid var(--color-divider);\n}\n.tab[data-v-67bd2420] {\n  position: relative;\n  display: flex;\n  align-items: center;\n  gap: 5px;\n  height: var(--spacing-panelHeader);\n  padding: 0 9px;\n  font-family: inherit;\n  font-size: var(--text-sm);\n  color: var(--color-dim);\n  background: none;\n  border: 0;\n  cursor: pointer;\n}\n.tab.on[data-v-67bd2420] {\n  color: var(--color-fg);\n  font-weight: 600;\n}\n.tab.on[data-v-67bd2420]::after {\n  content: '';\n  position: absolute;\n  left: 7px;\n  right: 7px;\n  bottom: -1px;\n  height: 2px;\n  background-color: var(--color-accent);\n  border-radius: 2px;\n}\n.tab__n[data-v-67bd2420] {\n  font-family: var(--font-mono);\n  font-size: 9.5px;\n  font-variant-numeric: tabular-nums;\n  opacity: 0.8;\n}\n.fields[data-v-67bd2420] {\n  flex: 1 1 auto;\n  min-height: 0;\n  padding: 10px 12px 16px;\n  overflow-y: auto;\n}\n.pick[data-v-67bd2420] {\n  margin-bottom: 8px;\n}\n.rest__note[data-v-67bd2420] {\n  margin: 0 0 10px;\n  padding: 7px 9px;\n  font-size: var(--text-xs);\n  line-height: 1.5;\n  color: var(--color-dim);\n  background-color: var(--color-raised);\n  border-radius: var(--radius-xs);\n}\n.note[data-v-67bd2420] {\n  margin: 8px 0 0;\n  font-size: var(--text-sm);\n  line-height: 1.5;\n  color: var(--color-dim);\n}\n.var-mark[data-v-67bd2420] {\n  font-family: var(--font-mono);\n  font-style: italic;\n  color: var(--color-brand);\n}\n.bound[data-v-67bd2420] {\n  width: 100%;\n  border-collapse: collapse;\n  font-size: var(--text-sm);\n}\n.bound th[data-v-67bd2420] {\n  padding: 5px 8px;\n  text-align: left;\n  font-size: var(--text-xs);\n  font-weight: 600;\n  color: var(--color-dim);\n  border-bottom: 1px solid var(--color-divider);\n}\n.bound td[data-v-67bd2420] {\n  padding: 5px 8px;\n  border-bottom: 1px solid var(--color-divider);\n}\n.bound__name[data-v-67bd2420],\n.bound__var[data-v-67bd2420] {\n  font-family: var(--font-mono);\n  font-size: var(--text-xs);\n}\n.bound__var[data-v-67bd2420] {\n  color: var(--color-brand);\n}\n.foot[data-v-67bd2420] {\n  display: flex;\n  align-items: center;\n  gap: 7px;\n  height: 38px;\n  flex: none;\n  padding: 0 12px;\n  background-color: var(--color-pane);\n  border-top: 1px solid var(--color-divider);\n}\n.foot__hint[data-v-67bd2420] {\n  font-size: var(--text-xs);\n  color: var(--color-dim);\n}\n.tab[data-v-67bd2420]:focus-visible,\n.seg button[data-v-67bd2420]:focus-visible {\n  outline: 2px solid var(--color-accent);\n  outline-offset: 1px;\n}\n\n/*\n * A docked panel on the right, the same surface and edge as the rest of the\n * workbench. It keeps the widget settings' shape - head, scrolling body,\n * footer - so the two read as the same kind of thing.\n */\n.page-settings[data-v-9ea0fdd8] {\n  position: absolute;\n  top: 12px;\n  right: 12px;\n  bottom: 12px;\n  z-index: 1000000;\n  display: flex;\n  flex-direction: column;\n  width: 340px;\n  background-color: var(--color-pane);\n  border: 1px solid var(--color-divider);\n  border-radius: var(--radius-md, 4px);\n  box-shadow: var(--shadow-e3, 0 6px 20px rgb(0 0 0 / 22%));\n}\n.head[data-v-9ea0fdd8] {\n  display: flex;\n  align-items: center;\n  gap: 8px;\n  flex: none;\n  height: 34px;\n  padding: 0 6px 0 12px;\n  border-bottom: 1px solid var(--color-divider);\n}\n.head__title[data-v-9ea0fdd8] {\n  flex: 1;\n  margin: 0;\n  font-size: var(--text-sm, 12px);\n  font-weight: 500;\n  color: var(--color-fg);\n}\n.head__close[data-v-9ea0fdd8] {\n  width: 24px;\n  height: 24px;\n  font-size: 16px;\n  line-height: 1;\n  color: var(--color-dim);\n  background: none;\n  border: 0;\n  border-radius: var(--radius-xs, 3px);\n  cursor: pointer;\n}\n.head__close[data-v-9ea0fdd8]:hover {\n  color: var(--color-fg);\n  background-color: var(--color-raised);\n}\n.head__close[data-v-9ea0fdd8]:focus-visible {\n  outline: 2px solid var(--color-accent);\n  outline-offset: 1px;\n}\n.body[data-v-9ea0fdd8] {\n  flex: 1;\n  min-height: 0;\n  overflow-y: auto;\n  padding: 12px;\n}\n.group + .group[data-v-9ea0fdd8] {\n  margin-top: 18px;\n}\n.group__label[data-v-9ea0fdd8] {\n  margin: 0 0 8px;\n  font-size: var(--text-xs, 11px);\n  font-weight: 500;\n  letter-spacing: 0.06em;\n  text-transform: uppercase;\n  color: var(--color-dim);\n}\n.group[data-v-9ea0fdd8] >  .field {\n  margin-bottom: 8px;\n}\n\n/* Shown, not offered: it is how the page is addressed, not a setting */\n.ident[data-v-9ea0fdd8] {\n  margin: 18px 0 0;\n  font-size: var(--text-xs, 11px);\n  color: var(--color-dim);\n}\n.ident code[data-v-9ea0fdd8] {\n  font-family: var(--font-mono);\n  user-select: all;\n}\n.missing[data-v-9ea0fdd8] {\n  margin: 0;\n  font-size: var(--text-sm, 12px);\n  color: var(--color-dim);\n}\n.foot[data-v-9ea0fdd8] {\n  display: flex;\n  justify-content: flex-end;\n  flex: none;\n  padding: 8px 12px;\n  border-top: 1px solid var(--color-divider);\n}\n\n.ghost {\n  display: none;\n}\n\n/* Three docked columns; the panels keep their width, the board takes the rest. */\n.editor[data-v-bd444b0c] {\n  /* The frame the palette floats in, and is kept inside of */\n  position: relative;\n  /* Said out loud: the board goes to the edge, and a class named \"editor\"\n     is common enough that something else may try to pad it */\n  padding: 0;\n  border: 0;\n  display: flex;\n  align-items: stretch;\n  width: 100%;\n  height: 100%;\n  min-height: 0;\n  overflow: hidden;\n  background: var(--color-bg);\n}\n\n/* The one action the palette adds to its window's title bar */\n.palette__act[data-v-bd444b0c] {\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  width: 22px;\n  height: 22px;\n  color: var(--color-dim);\n  background: none;\n  border: 0;\n  border-radius: var(--radius-xs, 3px);\n  cursor: pointer;\n}\n.palette__act[data-v-bd444b0c]:hover {\n  color: var(--color-fg);\n  background-color: var(--color-raised);\n}\n.palette__act[data-v-bd444b0c]:focus-visible {\n  outline: 2px solid var(--color-accent);\n  outline-offset: 1px;\n}\n.report-container[data-v-bd444b0c] {\n  flex: 1 1 auto;\n  display: flex;\n  justify-content: flex-start;\n  align-items: flex-start;\n  flex-direction: column;\n  min-width: 0;\n  height: 100%;\n  position: relative;\n  /* Board surface from the mockups (edit mode): canvas token + 24px dot grid */\n  background: var(--color-canvas);\n}\n.report-container.dottet[data-v-bd444b0c] {\n  background-image: radial-gradient(var(--color-divider) 1px, transparent 0);\n  background-size: 24px 24px;\n  background-position: -12px -12px;\n  background-repeat: repeat;\n}\n.report-container__title[data-v-bd444b0c] {\n  width: 100%;\n  padding: 16px;\n  border-bottom: 1px dashed var(--color-divider);\n}\n.report-container .widgets-adding-controls[data-v-bd444b0c] {\n  display: flex;\n  border: 1px solid var(--color-divider);\n  border-radius: var(--radius-md, 8px);\n  margin: 16px;\n}\n.report-container .widget-board[data-v-bd444b0c] {\n  width: 100%;\n  height: 100%;\n  display: flex;\n  box-sizing: border-box;\n  overflow-y: auto;\n  overflow-x: hidden;\n}\n.report-container .add-btn[data-v-bd444b0c] {\n  margin: 0 16px 16px 0;\n  align-self: self-end;\n}\n.dashboard-item[data-v-bd444b0c] {\n  position: absolute;\n  width: 100%;\n  height: 100%;\n}\n.dashboard-item-container[data-v-bd444b0c] {\n  position: absolute;\n}\n.dropdown-buttons-container[data-v-bd444b0c] {\n  display: flex;\n  flex-direction: column;\n  gap: 0.5rem;\n  z-index: 99999;\n}\n.va-dropdown__content[data-v-bd444b0c] {\n  z-index: 10000000 !important;\n}\n.va-dropdown__content.va-select-dropdown__content.va-dropdown__content-wrapper[data-v-bd444b0c] {\n  z-index: 20000000 !important;\n}\n.v-enter-active[data-v-bd444b0c],\n.v-leave-active[data-v-bd444b0c] {\n  transition: opacity 0.5s ease;\n}\n.v-enter-from[data-v-bd444b0c],\n.v-leave-to[data-v-bd444b0c] {\n  opacity: 0;\n}\n\n.variables[data-v-9292252d] {\n  display: flex;\n  flex-direction: column;\n  gap: 28px;\n  box-sizing: border-box;\n  width: 100%;\n  height: 100%;\n  overflow-y: auto;\n  padding: 28px 32px 40px;\n  font-family: var(--font-sans);\n  color: var(--color-fg);\n  background-color: var(--color-bg);\n}\n.variables__head[data-v-9292252d],\n.reach[data-v-9292252d] {\n  width: 100%;\n  max-width: 940px;\n}\n.variables__head[data-v-9292252d] {\n  display: flex;\n  align-items: flex-start;\n  justify-content: space-between;\n  gap: 24px;\n  flex-wrap: wrap;\n}\n.variables__title[data-v-9292252d] {\n  margin: 0 0 6px;\n  font-size: 20px;\n  font-weight: 600;\n  letter-spacing: -0.01em;\n}\n.variables__lead[data-v-9292252d] {\n  margin: 0;\n  max-width: 56ch;\n  font-size: var(--text-base);\n  line-height: 1.55;\n  color: var(--color-dim);\n}\n\n/* ------------------------------------------------------------ the reaches */\n.reach__title[data-v-9292252d] {\n  display: flex;\n  align-items: baseline;\n  gap: 12px;\n  margin: 0 0 2px;\n  font-size: var(--text-base);\n  font-weight: 600;\n}\n.reach__lead[data-v-9292252d] {\n  font-weight: 400;\n  font-size: var(--text-sm);\n  color: var(--color-dim);\n}\n.reach__empty[data-v-9292252d] {\n  margin: 0;\n  padding: 12px 0;\n  border-top: 1px solid var(--color-divider);\n  font-size: var(--text-base);\n  color: var(--color-dim);\n}\n.rows[data-v-9292252d] {\n  margin: 0;\n  padding: 0;\n  list-style: none;\n  border-top: 1px solid var(--color-divider);\n}\n\n/*\n * A name, what makes it, and what it says right now. No heading row: three\n * words over three columns told nobody anything the columns did not, and\n * the fourth said \"Actions\" over two icons.\n */\n.row[data-v-9292252d] {\n  display: grid;\n  grid-template-columns: minmax(0, 2fr) minmax(0, 1.4fr) minmax(0, 2fr) auto;\n  align-items: center;\n  gap: 16px;\n  padding: 7px 8px 7px 0;\n  border-bottom: 1px solid var(--color-divider);\n  font-size: var(--text-base);\n}\n.row[data-v-9292252d]:hover {\n  background-color: color-mix(in srgb, var(--color-pane) 60%, transparent);\n}\n.row__name[data-v-9292252d] {\n  font-family: var(--font-mono);\n  overflow-wrap: anywhere;\n}\n.row__type[data-v-9292252d],\n.row__value[data-v-9292252d] {\n  color: var(--color-dim);\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n}\n.row__value[data-v-9292252d] {\n  font-family: var(--font-mono);\n  color: var(--color-fg);\n}\n.row__tools[data-v-9292252d] {\n  display: flex;\n  gap: 2px;\n}\n\n/* -------------------------------------------------------------- the dialog */\n.form[data-v-9292252d] {\n  display: flex;\n  flex-direction: column;\n  gap: 4px;\n}\n.confirm__title[data-v-9292252d] {\n  margin: 0;\n  font-size: var(--text-lg);\n  font-weight: 600;\n}\n.confirm__text[data-v-9292252d] {\n  margin: 0;\n  font-size: var(--text-base);\n  line-height: 1.6;\n  color: var(--color-dim);\n}\n@media (max-width: 640px) {\n.variables[data-v-9292252d] {\n    padding: 20px 16px 32px;\n}\n.row[data-v-9292252d] {\n    grid-template-columns: minmax(0, 1fr) auto;\n    row-gap: 2px;\n}\n.row__type[data-v-9292252d],\n  .row__value[data-v-9292252d] {\n    grid-column: 1;\n    white-space: normal;\n}\n}\n\n.appearance[data-v-a84ca0bf] {\n  display: flex;\n  width: 100%;\n  flex: 1 1 auto;\n  min-height: 0;\n  padding: 14px 16px 16px;\n  background-color: var(--color-bg);\n}\n.panel[data-v-a84ca0bf] {\n  display: flex;\n  flex-direction: column;\n  flex: 1 1 auto;\n  min-width: 0;\n  min-height: 0;\n  background-color: var(--color-pane);\n  border: 1px solid var(--color-divider);\n  border-radius: var(--radius-sm);\n  overflow: hidden;\n}\n.panel__head[data-v-a84ca0bf] {\n  display: flex;\n  align-items: center;\n  gap: 8px;\n  height: var(--spacing-panelHeader);\n  flex: none;\n  padding: 0 10px;\n  font-size: var(--text-xs);\n  font-weight: 650;\n  letter-spacing: 0.07em;\n  text-transform: uppercase;\n  color: var(--color-dim);\n  border-bottom: 1px solid var(--color-divider);\n}\n.head__tab[data-v-a84ca0bf] {\n  position: relative;\n  height: 100%;\n  padding: 0 10px;\n  font-family: inherit;\n  font-size: var(--text-xs);\n  font-weight: 650;\n  letter-spacing: 0.07em;\n  text-transform: uppercase;\n  color: var(--color-dim);\n  background: none;\n  border: 0;\n  cursor: pointer;\n}\n.head__tab.on[data-v-a84ca0bf] {\n  color: var(--color-fg);\n}\n.head__tab.on[data-v-a84ca0bf]::after {\n  content: '';\n  position: absolute;\n  left: 6px;\n  right: 6px;\n  bottom: -1px;\n  height: 2px;\n  background-color: var(--color-accent);\n  border-radius: 2px;\n}\n.head__tab[data-v-a84ca0bf]:focus-visible {\n  outline: 2px solid var(--color-accent);\n  outline-offset: -2px;\n}\n\n/* -------------------------------------------------------------- gallery */\n.gallery[data-v-a84ca0bf] {\n  flex: 1 1 auto;\n  min-height: 0;\n  padding: 16px 18px 24px;\n  overflow-y: auto;\n  background-color: var(--color-bg);\n}\n.gallery__lead[data-v-a84ca0bf] {\n  margin: 0 0 18px;\n  max-width: 70ch;\n  font-size: var(--text-sm);\n  color: var(--color-dim);\n}\n.demo[data-v-a84ca0bf] {\n  margin-bottom: 26px;\n}\n.demo__title[data-v-a84ca0bf] {\n  margin: 0 0 10px;\n  padding-bottom: 4px;\n  font-size: var(--text-xs);\n  font-weight: 650;\n  letter-spacing: 0.08em;\n  text-transform: uppercase;\n  color: var(--color-dim);\n  border-bottom: 1px solid var(--color-divider);\n}\n.demo__row[data-v-a84ca0bf] {\n  display: flex;\n  flex-wrap: wrap;\n  align-items: center;\n  gap: 10px;\n  margin-bottom: 12px;\n}\n.demo__form[data-v-a84ca0bf] {\n  max-width: 460px;\n}\n.panel__tools[data-v-a84ca0bf] {\n  display: flex;\n  align-items: center;\n  gap: 6px;\n  margin-left: auto;\n  text-transform: none;\n  letter-spacing: 0;\n  font-weight: 400;\n}\n.changed[data-v-a84ca0bf] {\n  font-family: var(--font-mono);\n  font-size: var(--text-xs);\n  color: var(--color-accent);\n}\n.body[data-v-a84ca0bf] {\n  display: flex;\n  flex: 1 1 auto;\n  min-height: 0;\n  background-color: var(--color-bg);\n}\n\n/* ---------------------------------------------------------------- themes */\n.themes[data-v-a84ca0bf] {\n  width: 240px;\n  flex: none;\n  display: flex;\n  flex-direction: column;\n  gap: 2px;\n  padding: 8px 6px;\n  overflow-y: auto;\n  background-color: var(--color-pane);\n  border-right: 1px solid var(--color-divider);\n}\n.theme[data-v-a84ca0bf] {\n  display: grid;\n  gap: 3px;\n  padding: 8px;\n  font-family: inherit;\n  text-align: left;\n  background: none;\n  border: 1px solid transparent;\n  border-radius: var(--radius-xs);\n  cursor: pointer;\n}\n.theme[data-v-a84ca0bf]:hover {\n  background-color: var(--color-raised);\n}\n.theme.on[data-v-a84ca0bf] {\n  background-color: color-mix(in srgb, var(--color-accent) 12%, transparent);\n  border-color: color-mix(in srgb, var(--color-accent) 45%, transparent);\n}\n.theme__strip[data-v-a84ca0bf] {\n  display: flex;\n  height: 14px;\n  border-radius: 2px;\n  overflow: hidden;\n  border: 1px solid var(--color-divider);\n}\n.theme__strip i[data-v-a84ca0bf] {\n  flex: 1;\n}\n.theme__name[data-v-a84ca0bf] {\n  font-size: var(--text-base);\n  font-weight: 600;\n  color: var(--color-fg);\n}\n.theme__note[data-v-a84ca0bf] {\n  font-size: var(--text-xs);\n  line-height: 1.4;\n  color: var(--color-dim);\n}\n\n/* ---------------------------------------------------------------- tokens */\n.tokens[data-v-a84ca0bf] {\n  flex: 1 1 auto;\n  min-width: 0;\n  padding: 8px 10px 16px;\n  overflow-y: auto;\n}\n.group__head[data-v-a84ca0bf] {\n  display: flex;\n  align-items: baseline;\n  gap: 7px;\n  width: 100%;\n  padding: 6px 4px;\n  font-family: inherit;\n  font-size: var(--text-base);\n  font-weight: 600;\n  color: var(--color-fg);\n  text-align: left;\n  background: none;\n  border: 0;\n  border-bottom: 1px solid var(--color-divider);\n  cursor: pointer;\n}\n.group__twist[data-v-a84ca0bf] {\n  width: 11px;\n  font-size: var(--text-xs);\n  color: var(--color-dim);\n}\n.group__count[data-v-a84ca0bf] {\n  margin-left: auto;\n  font-family: var(--font-mono);\n  font-size: var(--text-xs);\n  font-variant-numeric: tabular-nums;\n  color: var(--color-dim);\n}\n.group__body[data-v-a84ca0bf] {\n  padding: 8px 0 14px 18px;\n}\n.group__note[data-v-a84ca0bf] {\n  margin: 0 0 8px;\n  font-size: var(--text-sm);\n  color: var(--color-dim);\n  max-width: 70ch;\n}\n.token[data-v-a84ca0bf] {\n  display: flex;\n  align-items: center;\n  gap: 8px;\n  padding: 3px 0;\n}\n.token__swatch[data-v-a84ca0bf] {\n  width: 22px;\n  height: 22px;\n  flex: none;\n  border: 1px solid var(--color-divider);\n  border-radius: var(--radius-xs);\n}\n.token__swatch--none[data-v-a84ca0bf] {\n  background: repeating-linear-gradient(\n    45deg,\n    var(--color-raised),\n    var(--color-raised) 3px,\n    var(--color-bg) 3px,\n    var(--color-bg) 6px\n  );\n}\n.token__text[data-v-a84ca0bf] {\n  display: flex;\n  flex-direction: column;\n  min-width: 0;\n  flex: 1 1 auto;\n}\n.token__name[data-v-a84ca0bf] {\n  font-family: var(--font-mono);\n  font-size: var(--text-sm);\n  color: var(--color-fg);\n}\n.token__role[data-v-a84ca0bf] {\n  font-size: var(--text-xs);\n  color: var(--color-dim);\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n}\n.token__picker[data-v-a84ca0bf] {\n  width: 28px;\n  height: 24px;\n  flex: none;\n  padding: 0;\n  background: none;\n  border: 1px solid var(--color-divider);\n  border-radius: var(--radius-xs);\n  cursor: pointer;\n}\n.token__value[data-v-a84ca0bf] {\n  width: 220px;\n  flex: none;\n  height: 24px;\n  padding: 0 7px;\n  font-family: var(--font-mono);\n  font-size: var(--text-sm);\n  color: var(--color-fg);\n  background-color: var(--color-bg);\n  border: 1px solid var(--color-divider);\n  border-radius: var(--radius-xs);\n}\n.token__reset[data-v-a84ca0bf] {\n  width: 24px;\n  height: 24px;\n  flex: none;\n  font-family: inherit;\n  font-size: var(--text-base);\n  color: var(--color-dim);\n  background-color: var(--color-raised);\n  border: 1px solid var(--color-divider);\n  border-radius: var(--radius-xs);\n  cursor: pointer;\n}\n.token__reset[data-v-a84ca0bf]:disabled {\n  opacity: 0.35;\n  cursor: default;\n}\n.btn[data-v-a84ca0bf] {\n  height: 22px;\n  padding: 0 10px;\n  font-family: inherit;\n  font-size: var(--text-sm);\n  color: var(--color-fg);\n  background-color: var(--color-raised);\n  border: 1px solid var(--color-divider);\n  border-radius: var(--radius-xs);\n  cursor: pointer;\n}\n.btn[data-v-a84ca0bf]:hover {\n  border-color: var(--color-outline);\n}\n.btn[data-v-a84ca0bf]:focus-visible,\n.theme[data-v-a84ca0bf]:focus-visible,\n.group__head[data-v-a84ca0bf]:focus-visible,\n.token__value[data-v-a84ca0bf]:focus-visible,\n.token__picker[data-v-a84ca0bf]:focus-visible,\n.token__reset[data-v-a84ca0bf]:focus-visible {\n  outline: 2px solid var(--color-accent);\n  outline-offset: 1px;\n}\n";})();
+(function(){var i="app.shell",d=document,s=d.querySelector('style[data-tsm-bundle="'+i+'"]');if(!s){s=d.createElement('style');s.setAttribute('data-tsm-bundle',i);d.head.appendChild(s);}s.textContent="@import \"https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap\";\n.topbar[data-v-c882ba5e] {\n  height: var(--spacing-topbar, 42px);\n  flex: none;\n  display: flex;\n  align-items: center;\n  gap: 12px;\n  padding: 0 12px;\n  background: var(--color-pane);\n  border-bottom: 1px solid var(--color-divider);\n  color: var(--color-fg);\n  font-size: var(--text-sm, 12px);\n}\n.brand[data-v-c882ba5e] {\n  display: flex;\n  align-items: center;\n  gap: 8px;\n  flex: none;\n  white-space: nowrap;\n  font-weight: 600;\n  font-size: var(--text-base, 13px);\n}\n.brand-mark[data-v-c882ba5e] {\n  width: 20px;\n  height: 20px;\n  border-radius: var(--radius-sm, 5px);\n  background: var(--color-brandFill);\n  color: var(--color-onBrand);\n  display: inline-flex;\n  align-items: center;\n  justify-content: center;\n  font-size: var(--text-xs, 11px);\n  font-weight: 700;\n  flex: none;\n}\n.crumb[data-v-c882ba5e] {\n  display: flex;\n  align-items: center;\n  gap: 6px;\n  min-width: 0;\n  overflow: hidden;\n  white-space: nowrap;\n  color: var(--color-dim);\n}\n.crumb-part[data-v-c882ba5e] {\n  overflow: hidden;\n  text-overflow: ellipsis;\n}\n.crumb-part.current[data-v-c882ba5e] {\n  color: var(--color-fg);\n  font-weight: 500;\n}\n.crumb-link[data-v-c882ba5e] {\n  padding: 0;\n  font: inherit;\n  color: inherit;\n  background: none;\n  border: 0;\n  border-radius: var(--radius-xs, 3px);\n  cursor: pointer;\n}\n.crumb-link[data-v-c882ba5e]:hover {\n  color: var(--color-fg);\n  text-decoration: underline;\n}\n.crumb-link[data-v-c882ba5e]:focus-visible {\n  outline: 2px solid var(--color-accent);\n  outline-offset: 2px;\n}\n.crumb-sep[data-v-c882ba5e] {\n  color: var(--color-outline);\n}\n.spacer[data-v-c882ba5e] {\n  flex: 1 1 auto;\n  min-width: 8px;\n}\n\n/* ------------------------------------------------------ page of a board */\n.pages[data-v-c882ba5e] {\n  position: relative;\n  margin-left: 10px;\n  flex: none;\n}\n\n/*\n * Quieter than .action: this says where you are, it does not ask to be\n * pressed. It takes the breadcrumb's weight so the two read as one path.\n */\n.pages__current[data-v-c882ba5e] {\n  display: flex;\n  align-items: center;\n  gap: 5px;\n  max-width: 200px;\n  height: 24px;\n  padding: 0 7px;\n  font-size: var(--text-sm, 12px);\n  font-family: inherit;\n  color: var(--color-fg);\n  background: none;\n  border: 1px solid transparent;\n  border-radius: var(--radius-xs, 3px);\n  cursor: pointer;\n}\n.pages__current[data-v-c882ba5e]:hover {\n  background-color: var(--color-raised);\n  border-color: var(--color-divider);\n}\n.pages__current[data-v-c882ba5e]:focus-visible {\n  outline: 2px solid var(--color-accent);\n  outline-offset: 1px;\n}\n.pages__name[data-v-c882ba5e] {\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n}\n.pages__caret[data-v-c882ba5e] {\n  font-size: 9px;\n  color: var(--color-dim);\n}\n.pages__menu[data-v-c882ba5e] {\n  position: absolute;\n  top: calc(100% + 3px);\n  left: 0;\n  z-index: 400;\n  min-width: 180px;\n  max-height: 60vh;\n  overflow-y: auto;\n  padding: 3px;\n  margin: 0;\n  list-style: none;\n  background-color: var(--color-pane);\n  border: 1px solid var(--color-divider);\n  border-radius: var(--radius-sm, 3px);\n  box-shadow: var(--shadow-e2, 0 2px 8px rgb(0 0 0 / 14%));\n}\n.pages__item[data-v-c882ba5e] {\n  display: block;\n  width: 100%;\n  padding: 5px 8px;\n  font-size: var(--text-sm, 12px);\n  font-family: inherit;\n  text-align: left;\n  color: var(--color-fg);\n  background: none;\n  border: 0;\n  border-radius: var(--radius-xs, 3px);\n  cursor: pointer;\n}\n.pages__item[data-v-c882ba5e]:hover {\n  background-color: var(--color-raised);\n}\n\n/* The row holds the name and, on hover, the way to remove it */\n.pages__line[data-v-c882ba5e] {\n  display: flex;\n  align-items: center;\n  gap: 2px;\n}\n.pages__line .pages__item[data-v-c882ba5e] {\n  flex: 1;\n  min-width: 0;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n}\n.pages__remove[data-v-c882ba5e] {\n  flex: none;\n  width: 20px;\n  height: 20px;\n  font-size: 14px;\n  line-height: 1;\n  color: var(--color-dim);\n  background: none;\n  border: 0;\n  border-radius: var(--radius-xs, 3px);\n  cursor: pointer;\n  opacity: 0;\n  transition: opacity 90ms ease, color 90ms ease;\n}\n.pages__line:hover .pages__remove[data-v-c882ba5e],\n.pages__remove[data-v-c882ba5e]:focus-visible {\n  opacity: 1;\n}\n.pages__remove[data-v-c882ba5e]:hover {\n  color: var(--color-err);\n}\n.pages__sep[data-v-c882ba5e] {\n  height: 1px;\n  margin: 3px 0;\n  background-color: var(--color-divider);\n}\n.pages__add[data-v-c882ba5e] {\n  color: var(--color-accent);\n}\n\n/* The open page is marked, not hidden: a list that drops its own entry\n   makes you count to work out where you are */\n.pages__item.on[data-v-c882ba5e] {\n  color: var(--color-accent);\n}\n.pages__empty[data-v-c882ba5e] {\n  padding: 5px 8px;\n  font-size: var(--text-sm, 12px);\n  color: var(--color-dim);\n}\n.action[data-v-c882ba5e] {\n  height: 24px;\n  padding: 0 10px;\n  margin-right: 8px;\n  font-size: var(--text-sm, 12px);\n  font-family: inherit;\n  color: var(--color-fg);\n  background-color: var(--color-raised);\n  border: 1px solid var(--color-divider);\n  border-radius: var(--radius-xs, 3px);\n  cursor: pointer;\n}\n.action[data-v-c882ba5e]:hover {\n  border-color: var(--color-outline);\n}\n.action[data-v-c882ba5e]:focus-visible {\n  outline: 2px solid var(--color-accent);\n  outline-offset: 1px;\n}\n.modes[data-v-c882ba5e] {\n  display: inline-flex;\n  border: 1px solid var(--color-outline);\n  border-radius: var(--radius-sm, 5px);\n  overflow: hidden;\n  flex: none;\n}\n.mode[data-v-c882ba5e] {\n  font: inherit;\n  padding: 4px 11px;\n  border: 0;\n  background: var(--color-raised);\n  color: var(--color-dim);\n  cursor: pointer;\n  white-space: nowrap;\n}\n.mode[data-v-c882ba5e]:hover {\n  color: var(--color-fg);\n}\n.mode.on[data-v-c882ba5e] {\n  background: var(--color-accent);\n  color: var(--color-onAccent);\n  font-weight: 600;\n}\n.mode[data-v-c882ba5e]:focus-visible {\n  outline: 2px solid var(--color-accent);\n  outline-offset: -2px;\n}\n.icon-action[data-v-c882ba5e]:disabled {\n  opacity: 0.4;\n  cursor: default;\n}\n.icon-action[data-v-c882ba5e] {\n  display: grid;\n  place-items: center;\n  width: 24px;\n  height: 24px;\n  color: var(--color-dim);\n  background: none;\n  border: 0;\n  border-radius: var(--radius-xs);\n  cursor: pointer;\n}\n.icon-action[data-v-c882ba5e]:hover {\n  color: var(--color-fg);\n  background-color: var(--color-raised);\n}\n\n/* A toggle says which way it stands, not just that it can be pressed */\n.icon-action.on[data-v-c882ba5e] {\n  color: var(--color-accent);\n  background-color: var(--color-raised);\n}\n.icon-action[data-v-c882ba5e]:focus-visible {\n  outline: 2px solid var(--color-accent);\n  outline-offset: 1px;\n}\n.avatar[data-v-c882ba5e] {\n  width: 24px;\n  height: 24px;\n  border-radius: 50%;\n  background: var(--color-raised);\n  border: 1px solid var(--color-outline);\n  display: inline-flex;\n  align-items: center;\n  justify-content: center;\n  font-size: var(--text-xs, 11px);\n  font-weight: 700;\n  color: var(--color-dim);\n  flex: none;\n}\n\n.shell[data-v-ce3039cb] {\n  display: flex;\n  flex-direction: column;\n  height: 100%;\n  width: 100%;\n  min-height: 0;\n  background: var(--color-bg);\n}\n.shell-body[data-v-ce3039cb] {\n  flex: 1 1 auto;\n  display: grid;\n  grid-template-columns: var(--spacing-rail, 52px) minmax(0, 1fr);\n  min-height: 0;\n  overflow: hidden;\n}\n\n/* The launcher has no rail, so the content takes the whole width */\n.shell-body--norail[data-v-ce3039cb] {\n  grid-template-columns: minmax(0, 1fr);\n}\n.rail[data-v-ce3039cb] {\n  background: var(--color-pane);\n  border-right: 1px solid var(--color-divider);\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n  padding: 8px 0;\n  gap: 4px;\n  overflow: hidden;\n}\n.rail-spacer[data-v-ce3039cb] {\n  flex: 1 1 auto;\n}\n\n/* 36px hit target, 8px radius, and the 3px accent bar the mockups put on\n   the active entry. */\n.ri[data-v-ce3039cb] {\n  position: relative;\n  width: 36px;\n  height: 36px;\n  flex: none;\n  border: 0;\n  border-radius: var(--radius-md, 8px);\n  background: transparent;\n  color: var(--color-dim);\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  cursor: pointer;\n  transition:\n    background 140ms cubic-bezier(0.2, 0.6, 0.2, 1),\n    color 140ms cubic-bezier(0.2, 0.6, 0.2, 1);\n}\n.ri[data-v-ce3039cb]:hover {\n  color: var(--color-fg);\n  background: color-mix(in srgb, var(--color-accent) 10%, transparent);\n}\n.ri.on[data-v-ce3039cb] {\n  background: color-mix(in srgb, var(--color-accent) 14%, transparent);\n  color: var(--color-accent);\n}\n.ri.on[data-v-ce3039cb]::before {\n  content: '';\n  position: absolute;\n  left: -8px;\n  top: 8px;\n  bottom: 8px;\n  width: 3px;\n  border-radius: var(--radius-xs, 3px);\n  background: var(--color-accent);\n}\n.ri[data-v-ce3039cb]:focus-visible {\n  outline: 2px solid var(--color-accent);\n  outline-offset: 2px;\n}\n.ri[data-v-ce3039cb] .icon {\n  font-size: 20px;\n}\n.sr-only[data-v-ce3039cb] {\n  position: absolute;\n  width: 1px;\n  height: 1px;\n  padding: 0;\n  margin: -1px;\n  overflow: hidden;\n  clip-path: inset(50%);\n  white-space: nowrap;\n  border: 0;\n}\n.content[data-v-ce3039cb] {\n  min-width: 0;\n  min-height: 0;\n  overflow: hidden;\n  display: flex;\n  flex-direction: column;\n}\n@media (prefers-reduced-motion: reduce) {\n.ri[data-v-ce3039cb] {\n    transition-duration: 0.01ms;\n}\n}\n.global-loading-bar[data-v-ce3039cb] {\n  position: fixed;\n  top: 0;\n  left: 0;\n  right: 0;\n  height: 3px;\n  z-index: 8000;\n  overflow: hidden;\n}\n.global-loading-bar-progress[data-v-ce3039cb] {\n  height: 100%;\n  width: 30%;\n  background: var(--color-brandFill);\n  animation: loading-slide-ce3039cb 1.2s ease-in-out infinite;\n}\n@keyframes loading-slide-ce3039cb {\n0% {\n    transform: translateX(-100%);\n}\n100% {\n    transform: translateX(400%);\n}\n}\n\n\n/*! tailwindcss v4.1.17 | MIT License | https://tailwindcss.com */\n@layer properties {\n@supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {\n*, :before, :after, ::backdrop {\n      --tw-rotate-x: initial;\n      --tw-rotate-y: initial;\n      --tw-rotate-z: initial;\n      --tw-skew-x: initial;\n      --tw-skew-y: initial;\n      --tw-border-style: solid;\n      --tw-font-weight: initial;\n      --tw-ordinal: initial;\n      --tw-slashed-zero: initial;\n      --tw-numeric-figure: initial;\n      --tw-numeric-spacing: initial;\n      --tw-numeric-fraction: initial;\n      --tw-shadow: 0 0 #0000;\n      --tw-shadow-color: initial;\n      --tw-shadow-alpha: 100%;\n      --tw-inset-shadow: 0 0 #0000;\n      --tw-inset-shadow-color: initial;\n      --tw-inset-shadow-alpha: 100%;\n      --tw-ring-color: initial;\n      --tw-ring-shadow: 0 0 #0000;\n      --tw-inset-ring-color: initial;\n      --tw-inset-ring-shadow: 0 0 #0000;\n      --tw-ring-inset: initial;\n      --tw-ring-offset-width: 0px;\n      --tw-ring-offset-color: #fff;\n      --tw-ring-offset-shadow: 0 0 #0000;\n      --tw-outline-style: solid;\n      --tw-blur: initial;\n      --tw-brightness: initial;\n      --tw-contrast: initial;\n      --tw-grayscale: initial;\n      --tw-hue-rotate: initial;\n      --tw-invert: initial;\n      --tw-opacity: initial;\n      --tw-saturate: initial;\n      --tw-sepia: initial;\n      --tw-drop-shadow: initial;\n      --tw-drop-shadow-color: initial;\n      --tw-drop-shadow-alpha: 100%;\n      --tw-drop-shadow-size: initial;\n      --tw-backdrop-blur: initial;\n      --tw-backdrop-brightness: initial;\n      --tw-backdrop-contrast: initial;\n      --tw-backdrop-grayscale: initial;\n      --tw-backdrop-hue-rotate: initial;\n      --tw-backdrop-invert: initial;\n      --tw-backdrop-opacity: initial;\n      --tw-backdrop-saturate: initial;\n      --tw-backdrop-sepia: initial;\n      --tw-ease: initial;\n}\n}\n}\n@layer theme {\n:root, :host {\n    --font-sans: \"Barlow\", system-ui, -apple-system, \"Segoe UI\", sans-serif;\n    --font-mono: \"JetBrains Mono\", ui-monospace, SFMono-Regular, Menlo, monospace;\n    --color-gray-200: oklch(92.8% .006 264.531);\n    --color-gray-300: oklch(87.2% .01 258.338);\n    --color-white: #fff;\n    --spacing: .25rem;\n    --container-xs: 20rem;\n    --text-xs: 11px;\n    --text-xs--line-height: calc(1 / .75);\n    --text-sm: 12px;\n    --text-sm--line-height: calc(1.25 / .875);\n    --text-base: 13px;\n    --text-base--line-height: calc(1.5 / 1);\n    --text-lg: 15px;\n    --text-lg--line-height: calc(1.75 / 1.125);\n    --text-xl: 24px;\n    --text-xl--line-height: calc(1.75 / 1.25);\n    --font-weight-medium: 500;\n    --font-weight-semibold: 600;\n    --radius-xs: 2px;\n    --radius-sm: 3px;\n    --radius-md: 4px;\n    --radius-lg: 6px;\n    --ease-in: cubic-bezier(.4, 0, 1, 1);\n    --ease-out: cubic-bezier(0, 0, .2, 1);\n    --ease-in-out: cubic-bezier(.4, 0, .2, 1);\n    --default-transition-duration: .15s;\n    --default-transition-timing-function: cubic-bezier(.4, 0, .2, 1);\n    --default-font-family: var(--font-sans);\n    --default-mono-font-family: var(--font-mono);\n    --color-bg: #121820;\n    --color-pane: #1a222c;\n    --color-raised: #232d39;\n    --color-canvas: #0e141b;\n    --color-divider: #2a3541;\n    --color-outline: #3c4959;\n    --color-fg: #dfe8ef;\n    --color-dim: #8b9bab;\n    --color-accent: #4fa3d1;\n    --color-onAccent: #08131c;\n    --color-brand: #d8a13c;\n    --color-brandFill: #d8a13c;\n    --color-onBrand: #14100a;\n    --color-ok: #5fb98a;\n    --color-warn: #d8a13c;\n    --color-err: #e2766a;\n    --color-kw: #4fa3d1;\n    --color-measure: #d8a13c;\n    --color-member: #5fb98a;\n    --color-fn: #c294d8;\n    --color-primary: #4fa3d1;\n    --color-secondary: #8b9bab;\n    --color-success: #5fb98a;\n    --color-info: #4fa3d1;\n    --color-danger: #e2766a;\n    --color-warning: #d8a13c;\n    --color-backgroundPrimary: #121820;\n    --color-backgroundSecondary: #1a222c;\n    --color-backgroundElement: #232d39;\n    --color-backgroundBorder: #2a3541;\n    --color-textPrimary: #dfe8ef;\n    --color-textInverted: #08131c;\n    --color-daanse_blue: #4fa3d1;\n    --color-daanse_grey: #dfe8ef;\n    --shadow-e1: 0 1px 2px #00000073;\n    --shadow-e2: 0 2px 8px #00000073;\n    --shadow-e3: 0 8px 24px #00000080;\n    --spacing-topbar: 42px;\n    --spacing-rail: 52px;\n    --spacing-panelHeader: 30px;\n    --spacing-splitter: 4px;\n    --spacing-statusbar: 24px;\n}\n}\n@layer base {\n*, :after, :before, ::backdrop {\n    box-sizing: border-box;\n    border: 0 solid;\n    margin: 0;\n    padding: 0;\n}\n::file-selector-button {\n    box-sizing: border-box;\n    border: 0 solid;\n    margin: 0;\n    padding: 0;\n}\nhtml, :host {\n    -webkit-text-size-adjust: 100%;\n    tab-size: 4;\n    line-height: 1.5;\n    font-family: var(--default-font-family, ui-sans-serif, system-ui, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\");\n    font-feature-settings: var(--default-font-feature-settings, normal);\n    font-variation-settings: var(--default-font-variation-settings, normal);\n    -webkit-tap-highlight-color: transparent;\n}\nhr {\n    height: 0;\n    color: inherit;\n    border-top-width: 1px;\n}\nabbr:where([title]) {\n    -webkit-text-decoration: underline dotted;\n    text-decoration: underline dotted;\n}\nh1, h2, h3, h4, h5, h6 {\n    font-size: inherit;\n    font-weight: inherit;\n}\na {\n    color: inherit;\n    -webkit-text-decoration: inherit;\n    -webkit-text-decoration: inherit;\n    -webkit-text-decoration: inherit;\n    text-decoration: inherit;\n}\nb, strong {\n    font-weight: bolder;\n}\ncode, kbd, samp, pre {\n    font-family: var(--default-mono-font-family, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, \"Liberation Mono\", \"Courier New\", monospace);\n    font-feature-settings: var(--default-mono-font-feature-settings, normal);\n    font-variation-settings: var(--default-mono-font-variation-settings, normal);\n    font-size: 1em;\n}\nsmall {\n    font-size: 80%;\n}\nsub, sup {\n    vertical-align: baseline;\n    font-size: 75%;\n    line-height: 0;\n    position: relative;\n}\nsub {\n    bottom: -.25em;\n}\nsup {\n    top: -.5em;\n}\ntable {\n    text-indent: 0;\n    border-color: inherit;\n    border-collapse: collapse;\n}\n:-moz-focusring {\n    outline: auto;\n}\nprogress {\n    vertical-align: baseline;\n}\nsummary {\n    display: list-item;\n}\nol, ul, menu {\n    list-style: none;\n}\nimg, svg, video, canvas, audio, iframe, embed, object {\n    vertical-align: middle;\n    display: block;\n}\nimg, video {\n    max-width: 100%;\n    height: auto;\n}\nbutton, input, select, optgroup, textarea {\n    font: inherit;\n    font-feature-settings: inherit;\n    font-variation-settings: inherit;\n    letter-spacing: inherit;\n    color: inherit;\n    opacity: 1;\n    background-color: #0000;\n    border-radius: 0;\n}\n::file-selector-button {\n    font: inherit;\n    font-feature-settings: inherit;\n    font-variation-settings: inherit;\n    letter-spacing: inherit;\n    color: inherit;\n    opacity: 1;\n    background-color: #0000;\n    border-radius: 0;\n}\n:where(select:is([multiple], [size])) optgroup {\n    font-weight: bolder;\n}\n:where(select:is([multiple], [size])) optgroup option {\n    padding-inline-start: 20px;\n}\n::file-selector-button {\n    margin-inline-end: 4px;\n}\n::placeholder {\n    opacity: 1;\n}\n@supports (not ((-webkit-appearance: -apple-pay-button))) or (contain-intrinsic-size: 1px) {\n::placeholder {\n      color: currentColor;\n}\n@supports (color: color-mix(in lab, red, red)) {\n::placeholder {\n        color: color-mix(in oklab, currentcolor 50%, transparent);\n}\n}\n}\ntextarea {\n    resize: vertical;\n}\n::-webkit-search-decoration {\n    -webkit-appearance: none;\n}\n::-webkit-date-and-time-value {\n    min-height: 1lh;\n    text-align: inherit;\n}\n::-webkit-datetime-edit {\n    display: inline-flex;\n}\n::-webkit-datetime-edit-fields-wrapper {\n    padding: 0;\n}\n::-webkit-datetime-edit {\n    padding-block: 0;\n}\n::-webkit-datetime-edit-year-field {\n    padding-block: 0;\n}\n::-webkit-datetime-edit-month-field {\n    padding-block: 0;\n}\n::-webkit-datetime-edit-day-field {\n    padding-block: 0;\n}\n::-webkit-datetime-edit-hour-field {\n    padding-block: 0;\n}\n::-webkit-datetime-edit-minute-field {\n    padding-block: 0;\n}\n::-webkit-datetime-edit-second-field {\n    padding-block: 0;\n}\n::-webkit-datetime-edit-millisecond-field {\n    padding-block: 0;\n}\n::-webkit-datetime-edit-meridiem-field {\n    padding-block: 0;\n}\n::-webkit-calendar-picker-indicator {\n    line-height: 1;\n}\n:-moz-ui-invalid {\n    box-shadow: none;\n}\nbutton, input:where([type=\"button\"], [type=\"reset\"], [type=\"submit\"]) {\n    appearance: button;\n}\n::file-selector-button {\n    appearance: button;\n}\n::-webkit-inner-spin-button {\n    height: auto;\n}\n::-webkit-outer-spin-button {\n    height: auto;\n}\n[hidden]:where(:not([hidden=\"until-found\"])) {\n    display: none !important;\n}\n}\n@layer components {\n.ice_gray {\n    padding: var(--spacing-6);\n    background: var(--color-pane);\n    border-right: 1px solid var(--color-divider);\n    box-shadow: var(--shadow-e1);\n}\n.ice {\n    padding: var(--spacing-6);\n    background: var(--color-pane);\n    border: 1px solid var(--color-divider);\n    border-radius: var(--radius-md);\n    box-shadow: var(--shadow-e2);\n}\n.z-mx {\n    z-index: 30000;\n}\n}\n@layer utilities {\n.\\@container {\n    container-type: inline-size;\n}\n.collapse {\n    visibility: collapse;\n}\n.invisible {\n    visibility: hidden;\n}\n.visible {\n    visibility: visible;\n}\n.sr-only {\n    clip-path: inset(50%);\n    white-space: nowrap;\n    border-width: 0;\n    width: 1px;\n    height: 1px;\n    margin: -1px;\n    padding: 0;\n    position: absolute;\n    overflow: hidden;\n}\n.absolute {\n    position: absolute;\n}\n.fixed {\n    position: fixed;\n}\n.relative {\n    position: relative;\n}\n.static {\n    position: static;\n}\n.sticky {\n    position: sticky;\n}\n.top-\\[-25px\\] {\n    top: -25px;\n}\n.right-0 {\n    right: calc(var(--spacing) * 0);\n}\n.isolate {\n    isolation: isolate;\n}\n.col-span-1 {\n    grid-column: span 1 / span 1;\n}\n.row-span-4 {\n    grid-row: span 4 / span 4;\n}\n.float-left {\n    float: left;\n}\n.float-right {\n    float: right;\n}\n.container {\n    width: 100%;\n}\n@media (min-width: 40rem) {\n.container {\n      max-width: 40rem;\n}\n}\n@media (min-width: 48rem) {\n.container {\n      max-width: 48rem;\n}\n}\n@media (min-width: 64rem) {\n.container {\n      max-width: 64rem;\n}\n}\n@media (min-width: 80rem) {\n.container {\n      max-width: 80rem;\n}\n}\n@media (min-width: 96rem) {\n.container {\n      max-width: 96rem;\n}\n}\n.m-2 {\n    margin: calc(var(--spacing) * 2);\n}\n.mt-2 {\n    margin-top: calc(var(--spacing) * 2);\n}\n.mt-3 {\n    margin-top: calc(var(--spacing) * 3);\n}\n.mr-1 {\n    margin-right: calc(var(--spacing) * 1);\n}\n.mr-2 {\n    margin-right: calc(var(--spacing) * 2);\n}\n.mr-3 {\n    margin-right: calc(var(--spacing) * 3);\n}\n.mb-2 {\n    margin-bottom: calc(var(--spacing) * 2);\n}\n.mb-3 {\n    margin-bottom: calc(var(--spacing) * 3);\n}\n.ml-2 {\n    margin-left: calc(var(--spacing) * 2);\n}\n.ml-15 {\n    margin-left: calc(var(--spacing) * 15);\n}\n.box-border {\n    box-sizing: border-box;\n}\n.block {\n    display: block;\n}\n.contents {\n    display: contents;\n}\n.flex {\n    display: flex;\n}\n.grid {\n    display: grid;\n}\n.hidden {\n    display: none;\n}\n.inline {\n    display: inline;\n}\n.inline-block {\n    display: inline-block;\n}\n.table {\n    display: table;\n}\n.table-cell {\n    display: table-cell;\n}\n.h-40 {\n    height: calc(var(--spacing) * 40);\n}\n.h-84 {\n    height: calc(var(--spacing) * 84);\n}\n.h-120 {\n    height: calc(var(--spacing) * 120);\n}\n.h-full {\n    height: 100%;\n}\n.max-h-screen {\n    max-height: 100vh;\n}\n.w-full {\n    width: 100%;\n}\n.max-w-xs {\n    max-width: var(--container-xs);\n}\n.flex-shrink, .shrink {\n    flex-shrink: 1;\n}\n.flex-grow, .grow {\n    flex-grow: 1;\n}\n.border-collapse {\n    border-collapse: collapse;\n}\n.transform {\n    transform: var(--tw-rotate-x, ) var(--tw-rotate-y, ) var(--tw-rotate-z, ) var(--tw-skew-x, ) var(--tw-skew-y, );\n}\n.cursor-pointer {\n    cursor: pointer;\n}\n.resize {\n    resize: both;\n}\n.grid-cols-2 {\n    grid-template-columns: repeat(2, minmax(0, 1fr));\n}\n.grid-rows-4 {\n    grid-template-rows: repeat(4, minmax(0, 1fr));\n}\n.flex-col {\n    flex-direction: column;\n}\n.flex-row {\n    flex-direction: row;\n}\n.flex-nowrap {\n    flex-wrap: nowrap;\n}\n.flex-wrap {\n    flex-wrap: wrap;\n}\n.items-center {\n    align-items: center;\n}\n.justify-center {\n    justify-content: center;\n}\n.gap-4 {\n    gap: calc(var(--spacing) * 4);\n}\n.truncate {\n    text-overflow: ellipsis;\n    white-space: nowrap;\n    overflow: hidden;\n}\n.overflow-auto {\n    overflow: auto;\n}\n.overflow-hidden {\n    overflow: hidden;\n}\n.rounded {\n    border-radius: .25rem;\n}\n.rounded-lg {\n    border-radius: var(--radius-lg);\n}\n.border {\n    border-style: var(--tw-border-style);\n    border-width: 1px;\n}\n.border-gray-200 {\n    border-color: var(--color-gray-200);\n}\n.bg-gray-300 {\n    background-color: var(--color-gray-300);\n}\n.bg-white {\n    background-color: var(--color-white);\n}\n.mask-repeat {\n    -webkit-mask-repeat: repeat;\n    mask-repeat: repeat;\n}\n.object-contain {\n    object-fit: contain;\n}\n.object-cover {\n    object-fit: cover;\n}\n.object-fill {\n    object-fit: fill;\n}\n.object-scale-down {\n    object-fit: scale-down;\n}\n.p-4 {\n    padding: calc(var(--spacing) * 4);\n}\n.pl-6 {\n    padding-left: calc(var(--spacing) * 6);\n}\n.text-justify {\n    text-align: justify;\n}\n.font-mono {\n    font-family: var(--font-mono);\n}\n.font-sans {\n    font-family: var(--font-sans);\n}\n.text-base {\n    font-size: var(--text-base);\n    line-height: var(--tw-leading, var(--text-base--line-height));\n}\n.text-lg {\n    font-size: var(--text-lg);\n    line-height: var(--tw-leading, var(--text-lg--line-height));\n}\n.text-sm {\n    font-size: var(--text-sm);\n    line-height: var(--tw-leading, var(--text-sm--line-height));\n}\n.text-xl {\n    font-size: var(--text-xl);\n    line-height: var(--tw-leading, var(--text-xl--line-height));\n}\n.text-xs {\n    font-size: var(--text-xs);\n    line-height: var(--tw-leading, var(--text-xs--line-height));\n}\n.font-semibold {\n    --tw-font-weight: var(--font-weight-semibold);\n    font-weight: var(--font-weight-semibold);\n}\n.text-wrap {\n    text-wrap: wrap;\n}\n.capitalize {\n    text-transform: capitalize;\n}\n.lowercase {\n    text-transform: lowercase;\n}\n.uppercase {\n    text-transform: uppercase;\n}\n.italic {\n    font-style: italic;\n}\n.ordinal {\n    --tw-ordinal: ordinal;\n    font-variant-numeric: var(--tw-ordinal, ) var(--tw-slashed-zero, ) var(--tw-numeric-figure, ) var(--tw-numeric-spacing, ) var(--tw-numeric-fraction, );\n}\n.line-through {\n    text-decoration-line: line-through;\n}\n.overline {\n    text-decoration-line: overline;\n}\n.underline {\n    text-decoration-line: underline;\n}\n.shadow {\n    --tw-shadow: 0 1px 3px 0 var(--tw-shadow-color, #0000001a), 0 1px 2px -1px var(--tw-shadow-color, #0000001a);\n    box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);\n}\n.shadow-e1 {\n    --tw-shadow: 0 1px 2px var(--tw-shadow-color, #00000073);\n    box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);\n}\n.shadow-e2 {\n    --tw-shadow: 0 2px 8px var(--tw-shadow-color, #00000073);\n    box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);\n}\n.shadow-e3 {\n    --tw-shadow: 0 8px 24px var(--tw-shadow-color, #00000080);\n    box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);\n}\n.ring {\n    --tw-ring-shadow: var(--tw-ring-inset, ) 0 0 0 calc(1px + var(--tw-ring-offset-width)) var(--tw-ring-color, currentcolor);\n    box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);\n}\n.outline {\n    outline-style: var(--tw-outline-style);\n    outline-width: 1px;\n}\n.blur {\n    --tw-blur: blur(8px);\n    filter: var(--tw-blur, ) var(--tw-brightness, ) var(--tw-contrast, ) var(--tw-grayscale, ) var(--tw-hue-rotate, ) var(--tw-invert, ) var(--tw-saturate, ) var(--tw-sepia, ) var(--tw-drop-shadow, );\n}\n.drop-shadow {\n    --tw-drop-shadow-size: drop-shadow(0 1px 2px var(--tw-drop-shadow-color, #0000001a)) drop-shadow(0 1px 1px var(--tw-drop-shadow-color, #0000000f));\n    --tw-drop-shadow: drop-shadow(0 1px 2px #0000001a) drop-shadow(0 1px 1px #0000000f);\n    filter: var(--tw-blur, ) var(--tw-brightness, ) var(--tw-contrast, ) var(--tw-grayscale, ) var(--tw-hue-rotate, ) var(--tw-invert, ) var(--tw-saturate, ) var(--tw-sepia, ) var(--tw-drop-shadow, );\n}\n.grayscale {\n    --tw-grayscale: grayscale(100%);\n    filter: var(--tw-blur, ) var(--tw-brightness, ) var(--tw-contrast, ) var(--tw-grayscale, ) var(--tw-hue-rotate, ) var(--tw-invert, ) var(--tw-saturate, ) var(--tw-sepia, ) var(--tw-drop-shadow, );\n}\n.invert {\n    --tw-invert: invert(100%);\n    filter: var(--tw-blur, ) var(--tw-brightness, ) var(--tw-contrast, ) var(--tw-grayscale, ) var(--tw-hue-rotate, ) var(--tw-invert, ) var(--tw-saturate, ) var(--tw-sepia, ) var(--tw-drop-shadow, );\n}\n.filter {\n    filter: var(--tw-blur, ) var(--tw-brightness, ) var(--tw-contrast, ) var(--tw-grayscale, ) var(--tw-hue-rotate, ) var(--tw-invert, ) var(--tw-saturate, ) var(--tw-sepia, ) var(--tw-drop-shadow, );\n}\n.backdrop-filter {\n    -webkit-backdrop-filter: var(--tw-backdrop-blur, ) var(--tw-backdrop-brightness, ) var(--tw-backdrop-contrast, ) var(--tw-backdrop-grayscale, ) var(--tw-backdrop-hue-rotate, ) var(--tw-backdrop-invert, ) var(--tw-backdrop-opacity, ) var(--tw-backdrop-saturate, ) var(--tw-backdrop-sepia, );\n    backdrop-filter: var(--tw-backdrop-blur, ) var(--tw-backdrop-brightness, ) var(--tw-backdrop-contrast, ) var(--tw-backdrop-grayscale, ) var(--tw-backdrop-hue-rotate, ) var(--tw-backdrop-invert, ) var(--tw-backdrop-opacity, ) var(--tw-backdrop-saturate, ) var(--tw-backdrop-sepia, );\n}\n.transition {\n    transition-property: color, background-color, border-color, outline-color, text-decoration-color, fill, stroke, --tw-gradient-from, --tw-gradient-via, --tw-gradient-to, opacity, box-shadow, transform, translate, scale, rotate, filter, -webkit-backdrop-filter, backdrop-filter, display, content-visibility, overlay, pointer-events;\n    transition-timing-function: var(--tw-ease, var(--default-transition-timing-function));\n    transition-duration: var(--tw-duration, var(--default-transition-duration));\n}\n.ease-in {\n    --tw-ease: var(--ease-in);\n    transition-timing-function: var(--ease-in);\n}\n.ease-in-out {\n    --tw-ease: var(--ease-in-out);\n    transition-timing-function: var(--ease-in-out);\n}\n.ease-out {\n    --tw-ease: var(--ease-out);\n    transition-timing-function: var(--ease-out);\n}\n}\n:root[data-theme=\"light\"] {\n  --color-bg: #eef1f4;\n  --color-pane: #f7f9fb;\n  --color-raised: #fff;\n  --color-canvas: #e2e7ec;\n  --color-divider: #d3dae1;\n  --color-outline: #b3bec9;\n  --color-fg: #16202a;\n  --color-dim: #55646f;\n  --color-accent: #1f6690;\n  --color-onAccent: #fff;\n  --color-brand: #8a6206;\n  --color-brandFill: #c08a10;\n  --color-onBrand: #14100a;\n  --color-ok: #1f6f4a;\n  --color-warn: #8a5a0c;\n  --color-err: #b02a1c;\n  --color-kw: #1f6690;\n  --color-measure: #8a5a0c;\n  --color-member: #1f6f4a;\n  --color-fn: #7b3fa0;\n  --color-primary: #1f6690;\n  --color-secondary: #55646f;\n  --color-success: #1f6f4a;\n  --color-info: #1f6690;\n  --color-danger: #b02a1c;\n  --color-warning: #8a5a0c;\n  --color-backgroundPrimary: #eef1f4;\n  --color-backgroundSecondary: #f7f9fb;\n  --color-backgroundElement: #fff;\n  --color-backgroundBorder: #d3dae1;\n  --color-textPrimary: #16202a;\n  --color-textInverted: #fff;\n  --color-daanse_blue: #1f6690;\n  --color-daanse_grey: #16202a;\n  --shadow-e1: 0 1px 2px #16202a24;\n  --shadow-e2: 0 2px 8px #16202a24;\n  --shadow-e3: 0 8px 24px #16202a24;\n}\n:root {\n  --mdxwb-bg: var(--color-bg);\n  --mdxwb-pane: var(--color-pane);\n  --mdxwb-raised: var(--color-raised);\n  --mdxwb-border: var(--color-divider);\n  --mdxwb-outline: var(--color-outline);\n  --mdxwb-fg: var(--color-fg);\n  --mdxwb-dim: var(--color-dim);\n  --mdxwb-accent: var(--color-accent);\n  --mdxwb-on-accent: var(--color-onAccent);\n  --mdxwb-ok: var(--color-ok);\n  --mdxwb-warn: var(--color-warn);\n  --mdxwb-err: var(--color-err);\n  --mdxwb-kw: var(--color-kw);\n  --mdxwb-measure: var(--color-measure);\n  --mdxwb-member: var(--color-member);\n  --mdxwb-fn: var(--color-fn);\n}\nbody {\n  font-family: var(--font-sans);\n  font-optical-sizing: auto;\n  font-weight: 400;\n  font-size: var(--text-base);\n  font-variation-settings: \"wdth\" 100;\n  background: var(--color-bg);\n  color: var(--color-fg);\n  font-style: normal;\n  --moveable-color: var(--color-outline) !important;\n}\ntable {\n  font-variant-numeric: tabular-nums;\n}\n.rCS1w3zcxh {\n  --moveable-color: var(--color-outline) !important;\n}\n.rCS1w3zcxh .moveable-line {\n  transform-origin: 0;\n  width: 1px;\n  height: 1px;\n  border-bottom: 2px dashed var(--color-outline) !important;\n  background: none !important;\n}\n@keyframes spin {\nto {\n    transform: rotate(360deg);\n}\n}\n* {\n  scrollbar-width: thin;\n  scrollbar-color: var(--color-outline) transparent;\n}\n::-webkit-scrollbar {\n  width: 10px;\n  height: 10px;\n}\n::-webkit-scrollbar-track {\n  background: none;\n}\n::-webkit-scrollbar-thumb {\n  background-color: var(--color-outline);\n  background-clip: padding-box;\n  border: 3px solid #0000;\n  border-radius: 6px;\n}\n::-webkit-scrollbar-thumb:hover {\n  background-color: var(--color-dim);\n}\n::-webkit-scrollbar-corner {\n  background: none;\n}\n.resize-observer[data-v-b329ee4c] {\n  z-index: -1;\n  pointer-events: none;\n  opacity: 0;\n  background-color: #0000;\n  border: none;\n  width: 100%;\n  height: 100%;\n  display: block;\n  position: absolute;\n  top: 0;\n  left: 0;\n  overflow: hidden;\n}\n.resize-observer[data-v-b329ee4c] object {\n  pointer-events: none;\n  z-index: -1;\n  width: 100%;\n  height: 100%;\n  display: block;\n  position: absolute;\n  top: 0;\n  left: 0;\n  overflow: hidden;\n}\n.v-popper__popper {\n  z-index: 10000;\n  outline: none;\n  top: 0;\n  left: 0;\n}\n.v-popper__popper.v-popper__popper--hidden {\n  visibility: hidden;\n  opacity: 0;\n  pointer-events: none;\n  transition: opacity .15s, visibility .15s;\n}\n.v-popper__popper.v-popper__popper--shown {\n  visibility: visible;\n  opacity: 1;\n  transition: opacity .15s;\n}\n.v-popper__popper.v-popper__popper--skip-transition, .v-popper__popper.v-popper__popper--skip-transition > .v-popper__wrapper {\n  transition: none !important;\n}\n.v-popper__backdrop {\n  width: 100%;\n  height: 100%;\n  display: none;\n  position: absolute;\n  top: 0;\n  left: 0;\n}\n.v-popper__inner {\n  box-sizing: border-box;\n  position: relative;\n  overflow-y: auto;\n}\n.v-popper__inner > div {\n  z-index: 1;\n  max-width: inherit;\n  max-height: inherit;\n  position: relative;\n}\n.v-popper__arrow-container {\n  width: 10px;\n  height: 10px;\n  position: absolute;\n}\n.v-popper__popper--arrow-overflow .v-popper__arrow-container, .v-popper__popper--no-positioning .v-popper__arrow-container {\n  display: none;\n}\n.v-popper__arrow-inner, .v-popper__arrow-outer {\n  border-style: solid;\n  width: 0;\n  height: 0;\n  position: absolute;\n  top: 0;\n  left: 0;\n}\n.v-popper__arrow-inner {\n  visibility: hidden;\n  border-width: 7px;\n}\n.v-popper__arrow-outer {\n  border-width: 6px;\n}\n.v-popper__popper[data-popper-placement^=\"top\"] .v-popper__arrow-inner, .v-popper__popper[data-popper-placement^=\"bottom\"] .v-popper__arrow-inner {\n  left: -2px;\n}\n.v-popper__popper[data-popper-placement^=\"top\"] .v-popper__arrow-outer, .v-popper__popper[data-popper-placement^=\"bottom\"] .v-popper__arrow-outer {\n  left: -1px;\n}\n.v-popper__popper[data-popper-placement^=\"top\"] .v-popper__arrow-inner, .v-popper__popper[data-popper-placement^=\"top\"] .v-popper__arrow-outer {\n  border-bottom-width: 0;\n  border-bottom-color: #0000 !important;\n  border-left-color: #0000 !important;\n  border-right-color: #0000 !important;\n}\n.v-popper__popper[data-popper-placement^=\"top\"] .v-popper__arrow-inner {\n  top: -2px;\n}\n.v-popper__popper[data-popper-placement^=\"bottom\"] .v-popper__arrow-container {\n  top: 0;\n}\n.v-popper__popper[data-popper-placement^=\"bottom\"] .v-popper__arrow-inner, .v-popper__popper[data-popper-placement^=\"bottom\"] .v-popper__arrow-outer {\n  border-top-width: 0;\n  border-top-color: #0000 !important;\n  border-left-color: #0000 !important;\n  border-right-color: #0000 !important;\n}\n.v-popper__popper[data-popper-placement^=\"bottom\"] .v-popper__arrow-inner {\n  top: -4px;\n}\n.v-popper__popper[data-popper-placement^=\"bottom\"] .v-popper__arrow-outer {\n  top: -6px;\n}\n.v-popper__popper[data-popper-placement^=\"left\"] .v-popper__arrow-inner, .v-popper__popper[data-popper-placement^=\"right\"] .v-popper__arrow-inner {\n  top: -2px;\n}\n.v-popper__popper[data-popper-placement^=\"left\"] .v-popper__arrow-outer, .v-popper__popper[data-popper-placement^=\"right\"] .v-popper__arrow-outer {\n  top: -1px;\n}\n.v-popper__popper[data-popper-placement^=\"right\"] .v-popper__arrow-inner, .v-popper__popper[data-popper-placement^=\"right\"] .v-popper__arrow-outer {\n  border-left-width: 0;\n  border-top-color: #0000 !important;\n  border-bottom-color: #0000 !important;\n  border-left-color: #0000 !important;\n}\n.v-popper__popper[data-popper-placement^=\"right\"] .v-popper__arrow-inner {\n  left: -4px;\n}\n.v-popper__popper[data-popper-placement^=\"right\"] .v-popper__arrow-outer {\n  left: -6px;\n}\n.v-popper__popper[data-popper-placement^=\"left\"] .v-popper__arrow-container {\n  right: -10px;\n}\n.v-popper__popper[data-popper-placement^=\"left\"] .v-popper__arrow-inner, .v-popper__popper[data-popper-placement^=\"left\"] .v-popper__arrow-outer {\n  border-right-width: 0;\n  border-top-color: #0000 !important;\n  border-bottom-color: #0000 !important;\n  border-right-color: #0000 !important;\n}\n.v-popper__popper[data-popper-placement^=\"left\"] .v-popper__arrow-inner {\n  left: -2px;\n}\n.v-popper--theme-tooltip .v-popper__inner {\n  color: #fff;\n  background: #000c;\n  border-radius: 6px;\n  padding: 7px 12px 6px;\n}\n.v-popper--theme-tooltip .v-popper__arrow-outer {\n  border-color: #000c;\n}\n.v-popper--theme-dropdown .v-popper__inner {\n  color: #000;\n  background: #fff;\n  border: 1px solid #ddd;\n  border-radius: 6px;\n  box-shadow: 0 6px 30px #0000001a;\n}\n.v-popper--theme-dropdown .v-popper__arrow-inner {\n  visibility: visible;\n  border-color: #fff;\n}\n.v-popper--theme-dropdown .v-popper__arrow-outer {\n  border-color: #ddd;\n}\n@property --tw-rotate-x {\n  syntax: \"*\";\n  inherits: false\n}\n@property --tw-rotate-y {\n  syntax: \"*\";\n  inherits: false\n}\n@property --tw-rotate-z {\n  syntax: \"*\";\n  inherits: false\n}\n@property --tw-skew-x {\n  syntax: \"*\";\n  inherits: false\n}\n@property --tw-skew-y {\n  syntax: \"*\";\n  inherits: false\n}\n@property --tw-border-style {\n  syntax: \"*\";\n  inherits: false;\n  initial-value: solid;\n}\n@property --tw-font-weight {\n  syntax: \"*\";\n  inherits: false\n}\n@property --tw-ordinal {\n  syntax: \"*\";\n  inherits: false\n}\n@property --tw-slashed-zero {\n  syntax: \"*\";\n  inherits: false\n}\n@property --tw-numeric-figure {\n  syntax: \"*\";\n  inherits: false\n}\n@property --tw-numeric-spacing {\n  syntax: \"*\";\n  inherits: false\n}\n@property --tw-numeric-fraction {\n  syntax: \"*\";\n  inherits: false\n}\n@property --tw-shadow {\n  syntax: \"*\";\n  inherits: false;\n  initial-value: 0 0 #0000;\n}\n@property --tw-shadow-color {\n  syntax: \"*\";\n  inherits: false\n}\n@property --tw-shadow-alpha {\n  syntax: \"<percentage>\";\n  inherits: false;\n  initial-value: 100%;\n}\n@property --tw-inset-shadow {\n  syntax: \"*\";\n  inherits: false;\n  initial-value: 0 0 #0000;\n}\n@property --tw-inset-shadow-color {\n  syntax: \"*\";\n  inherits: false\n}\n@property --tw-inset-shadow-alpha {\n  syntax: \"<percentage>\";\n  inherits: false;\n  initial-value: 100%;\n}\n@property --tw-ring-color {\n  syntax: \"*\";\n  inherits: false\n}\n@property --tw-ring-shadow {\n  syntax: \"*\";\n  inherits: false;\n  initial-value: 0 0 #0000;\n}\n@property --tw-inset-ring-color {\n  syntax: \"*\";\n  inherits: false\n}\n@property --tw-inset-ring-shadow {\n  syntax: \"*\";\n  inherits: false;\n  initial-value: 0 0 #0000;\n}\n@property --tw-ring-inset {\n  syntax: \"*\";\n  inherits: false\n}\n@property --tw-ring-offset-width {\n  syntax: \"<length>\";\n  inherits: false;\n  initial-value: 0;\n}\n@property --tw-ring-offset-color {\n  syntax: \"*\";\n  inherits: false;\n  initial-value: #fff;\n}\n@property --tw-ring-offset-shadow {\n  syntax: \"*\";\n  inherits: false;\n  initial-value: 0 0 #0000;\n}\n@property --tw-outline-style {\n  syntax: \"*\";\n  inherits: false;\n  initial-value: solid;\n}\n@property --tw-blur {\n  syntax: \"*\";\n  inherits: false\n}\n@property --tw-brightness {\n  syntax: \"*\";\n  inherits: false\n}\n@property --tw-contrast {\n  syntax: \"*\";\n  inherits: false\n}\n@property --tw-grayscale {\n  syntax: \"*\";\n  inherits: false\n}\n@property --tw-hue-rotate {\n  syntax: \"*\";\n  inherits: false\n}\n@property --tw-invert {\n  syntax: \"*\";\n  inherits: false\n}\n@property --tw-opacity {\n  syntax: \"*\";\n  inherits: false\n}\n@property --tw-saturate {\n  syntax: \"*\";\n  inherits: false\n}\n@property --tw-sepia {\n  syntax: \"*\";\n  inherits: false\n}\n@property --tw-drop-shadow {\n  syntax: \"*\";\n  inherits: false\n}\n@property --tw-drop-shadow-color {\n  syntax: \"*\";\n  inherits: false\n}\n@property --tw-drop-shadow-alpha {\n  syntax: \"<percentage>\";\n  inherits: false;\n  initial-value: 100%;\n}\n@property --tw-drop-shadow-size {\n  syntax: \"*\";\n  inherits: false\n}\n@property --tw-backdrop-blur {\n  syntax: \"*\";\n  inherits: false\n}\n@property --tw-backdrop-brightness {\n  syntax: \"*\";\n  inherits: false\n}\n@property --tw-backdrop-contrast {\n  syntax: \"*\";\n  inherits: false\n}\n@property --tw-backdrop-grayscale {\n  syntax: \"*\";\n  inherits: false\n}\n@property --tw-backdrop-hue-rotate {\n  syntax: \"*\";\n  inherits: false\n}\n@property --tw-backdrop-invert {\n  syntax: \"*\";\n  inherits: false\n}\n@property --tw-backdrop-opacity {\n  syntax: \"*\";\n  inherits: false\n}\n@property --tw-backdrop-saturate {\n  syntax: \"*\";\n  inherits: false\n}\n@property --tw-backdrop-sepia {\n  syntax: \"*\";\n  inherits: false\n}\n@property --tw-ease {\n  syntax: \"*\";\n  inherits: false\n}\n.layout-renderer[data-v-965fd8c7] {\n  width: 100%;\n  height: 100%;\n}\n.layout-renderer .edit-component-wrapper[data-v-965fd8c7],\n.layout-renderer .view-component-wrapper[data-v-965fd8c7] {\n  width: 100%;\n  height: 100%;\n}\n.layout-renderer .spinner[data-v-965fd8c7] {\n  width: 22px;\n  height: 22px;\n  border: 2px solid var(--color-divider);\n  border-top-color: var(--color-accent);\n  border-radius: 50%;\n  animation: layout-spin 700ms linear infinite;\n}\n.layout-renderer .no-layout-message[data-v-965fd8c7],\n.layout-renderer .loading-state[data-v-965fd8c7] {\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n  justify-content: center;\n  padding: 2rem;\n  gap: 1rem;\n}\n.layout-renderer .no-layout-message__text[data-v-965fd8c7] {\n  display: flex;\n  align-items: flex-start;\n  gap: 9px;\n  margin: 0;\n  font-family: var(--font-sans);\n  font-size: var(--text-base);\n  line-height: 1.55;\n  color: var(--color-dim);\n}\n/* A turning ring needs a keyframe, and a keyframe cannot be scoped. */\n@keyframes layout-spin {\nto { transform: rotate(360deg);\n}\n}\n\n.floorplan[data-v-0eecd73b] {\n  position: relative;\n  aspect-ratio: 16 / 9;\n  background-color: var(--color-bg);\n  border-bottom: 1px solid var(--color-divider);\n  overflow: hidden;\n}\n.floorplan__block[data-v-0eecd73b] {\n  position: absolute;\n  margin: 2px 0 0 2px;\n  border-radius: 2px;\n  /* On the dark ground a lit edge reads as a block where a filled area only\n     reads as a stain - so the outline carries the family and the fill stays\n     barely there. The arrangement is what has to come across, not the hue. */\n  border: 1px solid color-mix(in srgb, currentColor 70%, transparent);\n  background-color: color-mix(in srgb, currentColor 14%, transparent);\n}\n.floorplan__block--data[data-v-0eecd73b] {\n  color: var(--color-accent);\n}\n.floorplan__block--visual[data-v-0eecd73b] {\n  color: var(--color-brand);\n}\n.floorplan__block--text[data-v-0eecd73b] {\n  color: var(--color-dim);\n}\n.floorplan__empty[data-v-0eecd73b] {\n  position: absolute;\n  inset: 0;\n  display: grid;\n  place-items: center;\n  font-size: var(--text-xs);\n  color: var(--color-dim);\n}\n\n.storage[data-v-3b03814f] {\n  display: grid;\n  grid-template-columns: 280px minmax(0, 1fr);\n  flex: 1 1 auto;\n  min-height: 0;\n  background-color: var(--color-pane);\n  overflow: hidden;\n}\n\n/* ------------------------------------------------------------------ tree */\n.tree[data-v-3b03814f] {\n  display: flex;\n  flex-direction: column;\n  min-height: 0;\n  border-right: 1px solid var(--color-divider);\n}\n.tree__search[data-v-3b03814f] {\n  margin: 8px;\n  height: 26px;\n  padding: 0 8px;\n  font-size: var(--text-sm);\n  font-family: inherit;\n  color: var(--color-fg);\n  background-color: var(--color-bg);\n  border: 1px solid var(--color-divider);\n  border-radius: var(--radius-xs);\n}\n.tree__body[data-v-3b03814f] {\n  flex: 1 1 auto;\n  min-height: 0;\n  padding: 0 4px 8px;\n  overflow-y: auto;\n}\n.row[data-v-3b03814f] {\n  display: flex;\n  align-items: baseline;\n  flex-wrap: nowrap;\n  gap: 6px;\n  width: 100%;\n  padding: 4px 6px;\n  font-family: inherit;\n  font-size: var(--text-base);\n  color: var(--color-fg);\n  text-align: left;\n  background: none;\n  border: 0;\n  border-radius: var(--radius-xs);\n  cursor: pointer;\n}\n.row[data-v-3b03814f]:hover {\n  background-color: var(--color-raised);\n}\n.row.on[data-v-3b03814f] {\n  background-color: color-mix(in srgb, var(--color-accent) 12%, transparent);\n  box-shadow: inset 2px 0 0 var(--color-accent);\n}\n.row--place[data-v-3b03814f] {\n  font-weight: 600;\n}\n.row--entry[data-v-3b03814f] {\n  padding-left: 22px;\n  font-family: var(--font-mono);\n  font-size: var(--text-sm);\n}\n.row--hint[data-v-3b03814f] {\n  padding-left: 22px;\n  margin: 0;\n  color: var(--color-dim);\n  font-size: var(--text-sm);\n  cursor: default;\n}\n.row--add[data-v-3b03814f] {\n  color: var(--color-dim);\n  font-size: var(--text-sm);\n}\n.row__twist[data-v-3b03814f] {\n  width: 12px;\n  flex: none;\n  font-size: var(--text-xs);\n  color: var(--color-dim);\n}\n.row__name[data-v-3b03814f] {\n  min-width: 0;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n}\n.row__meta[data-v-3b03814f] {\n  margin-left: auto;\n  padding-left: 8px;\n  flex: none;\n  font-family: var(--font-mono);\n  font-variant-numeric: tabular-nums;\n  font-size: var(--text-xs);\n  color: var(--color-dim);\n}\n\n/* The state that is loaded right now carries the accent; the others stay quiet. */\n.row__dot[data-v-3b03814f] {\n  width: 5px;\n  height: 5px;\n  flex: none;\n  border-radius: 50%;\n  background-color: transparent;\n}\n.row__dot.open[data-v-3b03814f] {\n  background-color: var(--color-accent);\n}\n\n/* ---------------------------------------------------------------- detail */\n.detail[data-v-3b03814f] {\n  display: flex;\n  flex-direction: column;\n  min-width: 0;\n  min-height: 0;\n  background-color: var(--color-bg);\n  overflow-y: auto;\n}\n.detail__head[data-v-3b03814f] {\n  display: flex;\n  align-items: center;\n  gap: 8px;\n  padding: 7px 12px;\n  background-color: var(--color-pane);\n  border-bottom: 1px solid var(--color-divider);\n}\n.detail__name[data-v-3b03814f] {\n  margin: 0;\n  font-size: var(--text-base);\n  font-weight: 600;\n  color: var(--color-fg);\n}\n.detail__facts[data-v-3b03814f] {\n  font-family: var(--font-mono);\n  font-variant-numeric: tabular-nums;\n  font-size: var(--text-sm);\n  color: var(--color-dim);\n}\n.detail__spacer[data-v-3b03814f] {\n  flex: 1 1 auto;\n}\n.detail__badge[data-v-3b03814f] {\n  padding: 1px 6px;\n  font-size: var(--text-xs);\n  color: var(--color-accent);\n  background-color: color-mix(in srgb, var(--color-accent) 14%, transparent);\n  border-radius: var(--radius-xs);\n}\n.detail__hint[data-v-3b03814f] {\n  display: grid;\n  place-items: center;\n  flex: 1 1 auto;\n  margin: 0;\n  padding: 24px;\n  font-size: var(--text-sm);\n  color: var(--color-dim);\n  text-align: center;\n}\n.detail__failure[data-v-3b03814f] {\n  margin: 12px 12px 0;\n  padding: 8px 10px;\n  font-size: var(--text-sm);\n  color: var(--color-err);\n  background-color: color-mix(in srgb, var(--color-err) 10%, transparent);\n  border-radius: var(--radius-xs);\n}\n\n/* --------------------------------------------------- boards inside a state */\n.boards[data-v-3b03814f] {\n  display: grid;\n  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));\n  gap: 12px;\n  padding: 12px;\n}\n.board[data-v-3b03814f] {\n  background-color: var(--color-pane);\n  border: 1px solid var(--color-divider);\n  border-radius: var(--radius-sm);\n  overflow: hidden;\n}\n.board__text[data-v-3b03814f] {\n  padding: 8px 10px;\n}\n.board__name[data-v-3b03814f] {\n  margin: 0;\n  font-size: var(--text-base);\n  font-weight: 600;\n  color: var(--color-fg);\n}\n.board__facts[data-v-3b03814f] {\n  margin: 2px 0 0;\n  font-family: var(--font-mono);\n  font-variant-numeric: tabular-nums;\n  font-size: var(--text-sm);\n  color: var(--color-dim);\n}\n.board__kinds[data-v-3b03814f] {\n  margin: 4px 0 0;\n  font-size: var(--text-xs);\n  color: var(--color-dim);\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n}\n\n/* ---------------------------------------------------------------- create */\n.create[data-v-3b03814f] {\n  display: flex;\n  flex-wrap: wrap;\n  align-items: center;\n  gap: 8px;\n  padding: 16px;\n}\n.create__label[data-v-3b03814f] {\n  font-size: var(--text-sm);\n  color: var(--color-dim);\n}\n.create__input[data-v-3b03814f] {\n  height: 26px;\n  min-width: 220px;\n  padding: 0 8px;\n  font-size: var(--text-base);\n  font-family: inherit;\n  color: var(--color-fg);\n  background-color: var(--color-raised);\n  border: 1px solid var(--color-divider);\n  border-radius: var(--radius-xs);\n}\n.create__hint[data-v-3b03814f] {\n  flex: 1 0 100%;\n  margin: 0;\n  font-size: var(--text-sm);\n  color: var(--color-dim);\n}\n.row[data-v-3b03814f]:focus-visible,\n.tree__search[data-v-3b03814f]:focus-visible,\n.create__input[data-v-3b03814f]:focus-visible {\n  outline: 2px solid var(--color-accent);\n  outline-offset: 1px;\n}\n\n.single[data-v-6397919d] {\n  display: flex;\n  flex-direction: column;\n  gap: 12px;\n  /* Clear of the tab strip above it, like the other views' first row. */\n  padding-top: 12px;\n  max-width: 640px;\n}\n.single__heading[data-v-6397919d] {\n  margin: 0;\n  font-size: 0.78rem;\n  font-weight: 600;\n  letter-spacing: 0.04em;\n  color: var(--color-dim);\n  text-transform: uppercase;\n}\n.single__card[data-v-6397919d] {\n  cursor: pointer;\n}\n.single__card[data-v-6397919d]:hover,\n.single__card[data-v-6397919d]:focus-visible {\n  border-color: var(--color-accent);\n}\n.single__card[data-v-6397919d] {\n  display: flex;\n  align-items: center;\n  gap: 14px;\n  padding: 16px;\n  background-color: var(--color-pane);\n  border: 1px solid var(--color-outline);\n  border-radius: var(--radius-md);\n}\n.single__icon[data-v-6397919d] {\n  display: grid;\n  flex: none;\n  place-items: center;\n  width: 48px;\n  height: 48px;\n  color: var(--color-accent);\n  background-color: var(--color-sunken);\n  border: 1px solid var(--color-outline);\n  border-radius: var(--radius-sm);\n}\n.single__text[data-v-6397919d] {\n  flex: 1;\n  min-width: 0;\n}\n.single__name[data-v-6397919d] {\n  margin: 0;\n  font-size: 1.05rem;\n  color: var(--color-fg);\n}\n.single__desc[data-v-6397919d] {\n  margin: 3px 0 0;\n  font-size: 0.85rem;\n  color: var(--color-dim);\n}\n.single__meta[data-v-6397919d] {\n  margin: 4px 0 0;\n  font-size: 0.82rem;\n  color: var(--color-dim);\n}\n.single__actions[data-v-6397919d] {\n  display: flex;\n  flex: none;\n  gap: 6px;\n}\n.single__note[data-v-6397919d] {\n  margin: 0;\n  font-size: 0.82rem;\n  line-height: 1.5;\n  color: var(--color-dim);\n}\n.boards[data-v-6397919d] {\n  /* The page container is a column flexbox; without this the launcher\n     shrinks to its content width instead of filling the surface. */\n  display: flex;\n  width: 100%;\n  flex: 1 1 auto;\n  min-height: 0;\n  padding: 14px 16px 16px;\n  background-color: var(--color-bg);\n}\n\n/*\n * One panel holds both views. The switch rides on its top edge the way the\n * other detail screens carry their tabs, so it reads as part of the surface\n * instead of floating above it.\n */\n.boards__panel[data-v-6397919d] {\n  display: flex;\n  flex-direction: column;\n  flex: 1 1 auto;\n  min-width: 0;\n  min-height: 0;\n  background-color: var(--color-pane);\n  border: 1px solid var(--color-divider);\n  border-radius: var(--radius-sm);\n  overflow: hidden;\n}\n.boards__body[data-v-6397919d] {\n  display: flex;\n  flex-direction: column;\n  flex: 1 1 auto;\n  min-height: 0;\n  background-color: var(--color-bg);\n  overflow: auto;\n}\n\n/* The panel's top edge: the switch on the left, the tools for the current\n   view on the right. */\n.boards__bar[data-v-6397919d] {\n  display: flex;\n  align-items: center;\n  gap: 12px;\n  height: var(--spacing-panelHeader);\n  flex: none;\n  padding: 0 8px;\n  border-bottom: 1px solid var(--color-divider);\n}\n.boards__views[data-v-6397919d] {\n  display: flex;\n  align-items: center;\n  gap: 2px;\n  height: 100%;\n}\n.boards__view[data-v-6397919d] {\n  position: relative;\n  display: flex;\n  align-items: center;\n  gap: 6px;\n  height: 100%;\n  padding: 0 12px;\n  font-size: var(--text-sm);\n  font-family: inherit;\n  font-weight: 500;\n  color: var(--color-dim);\n  background: none;\n  border: 0;\n  cursor: pointer;\n}\n.boards__view[data-v-6397919d]:hover {\n  color: var(--color-fg);\n}\n.boards__view.on[data-v-6397919d] {\n  color: var(--color-fg);\n  font-weight: 600;\n}\n\n/* Sits on the panel edge, over the divider */\n.boards__view.on[data-v-6397919d]::after {\n  content: '';\n  position: absolute;\n  left: 8px;\n  right: 8px;\n  bottom: -1px;\n  height: 2px;\n  background-color: var(--color-accent);\n  border-radius: 2px;\n}\n.boards__view[data-v-6397919d]:focus-visible {\n  outline: 2px solid var(--color-accent);\n  outline-offset: 1px;\n}\n.boards__title[data-v-6397919d] {\n  display: flex;\n  align-items: center;\n  gap: 8px;\n  margin: 0;\n  font-size: var(--text-lg);\n  font-weight: 600;\n  color: var(--color-fg);\n}\n.boards__count[data-v-6397919d] {\n  font-family: var(--font-mono);\n  font-variant-numeric: tabular-nums;\n  font-size: var(--text-xs);\n  font-weight: 500;\n  color: var(--color-dim);\n  padding: 1px 6px;\n  border: 1px solid var(--color-divider);\n  border-radius: 999px;\n}\n.boards__tools[data-v-6397919d] {\n  display: flex;\n  align-items: center;\n  gap: 8px;\n  margin-left: auto;\n}\n.boards__search[data-v-6397919d] {\n  height: 22px;\n  min-width: 180px;\n  padding: 0 8px;\n  font-size: var(--text-sm);\n  color: var(--color-fg);\n  background-color: var(--color-raised);\n  border: 1px solid var(--color-divider);\n  border-radius: 4px;\n}\n.boards__search[data-v-6397919d]:focus-visible,\n.board[data-v-6397919d]:focus-visible {\n  outline: 2px solid var(--color-accent);\n  outline-offset: 1px;\n}\n.boards__grid[data-v-6397919d] {\n  display: grid;\n  grid-template-columns: repeat(auto-fill, minmax(232px, 1fr));\n  align-content: start;\n  gap: 16px;\n  padding: 16px;\n}\n.board[data-v-6397919d] {\n  position: relative;\n  display: flex;\n  flex-direction: column;\n  padding: 0;\n  overflow: hidden;\n  text-align: left;\n  background-color: var(--color-pane);\n  border: 1px solid var(--color-divider);\n  border-radius: var(--radius-sm);\n  box-shadow: var(--shadow-e1);\n  cursor: pointer;\n  transition: border-color 120ms ease, box-shadow 120ms ease, transform 120ms ease;\n}\n.board[data-v-6397919d]:hover {\n  border-color: var(--color-outline);\n  box-shadow: var(--shadow-e2);\n  transform: translateY(-1px);\n}\n.board__body[data-v-6397919d] {\n  padding: 12px;\n}\n.board__name[data-v-6397919d] {\n  margin: 0;\n  font-size: var(--text-base);\n  font-weight: 600;\n  color: var(--color-fg);\n}\n.board__meta[data-v-6397919d] {\n  margin: 2px 0 0;\n  font-size: var(--text-xs);\n  color: var(--color-dim);\n}\n.board__kinds[data-v-6397919d] {\n  display: flex;\n  flex-wrap: wrap;\n  gap: 4px;\n  margin: 8px 0 0;\n  padding: 0;\n  list-style: none;\n}\n.board__kind[data-v-6397919d] {\n  padding: 1px 6px;\n  font-size: var(--text-xs);\n  color: var(--color-dim);\n  background-color: var(--color-canvas);\n  border-radius: 3px;\n}\n.board__kind--more[data-v-6397919d] {\n  color: var(--color-outline);\n}\n.board__edit[data-v-6397919d] {\n  position: absolute;\n  top: 8px;\n  right: 8px;\n  padding: 2px 8px;\n  font-size: var(--text-xs);\n  font-family: inherit;\n  color: var(--color-fg);\n  background-color: var(--color-raised);\n  border: 1px solid var(--color-divider);\n  border-radius: 3px;\n  opacity: 0;\n  cursor: pointer;\n}\n.board:hover .board__edit[data-v-6397919d],\n.board__edit[data-v-6397919d]:focus-visible {\n  opacity: 1;\n}\n.board--new[data-v-6397919d] {\n  box-shadow: none;\n  align-items: center;\n  justify-content: center;\n  gap: 2px;\n  min-height: 180px;\n  font-family: inherit;\n  background-color: transparent;\n  border-style: dashed;\n}\n.board__plus[data-v-6397919d] {\n  font-size: 20px;\n  line-height: 1;\n  color: var(--color-outline);\n}\n.board__usage[data-v-6397919d] {\n  margin: 3px 0 0;\n  font-family: var(--font-mono);\n  font-size: var(--text-xs);\n  font-variant-numeric: tabular-nums;\n  color: var(--color-dim);\n}\n.boards__nomatch[data-v-6397919d] {\n  grid-column: 1 / -1;\n  margin: 0;\n  font-size: var(--text-sm);\n  color: var(--color-dim);\n}\n.boards__empty[data-v-6397919d] {\n  max-width: 420px;\n  margin: 10vh auto 0;\n  padding: 0 16px;\n  text-align: center;\n}\n.boards__empty-plan[data-v-6397919d] {\n  width: 200px;\n  margin: 0 auto 16px;\n  border: 1px solid var(--color-divider);\n  border-radius: 4px;\n}\n.boards__empty-title[data-v-6397919d] {\n  margin: 0;\n  font-size: var(--text-lg);\n  font-weight: 600;\n  color: var(--color-fg);\n}\n.boards__empty-text[data-v-6397919d] {\n  margin: 8px 0 16px;\n  font-size: var(--text-sm);\n  line-height: 1.5;\n  color: var(--color-dim);\n}\n.boards__empty-actions[data-v-6397919d] {\n  display: flex;\n  justify-content: center;\n  gap: 8px;\n}\n@media (prefers-reduced-motion: reduce) {\n.board[data-v-6397919d] {\n    transition: none;\n}\n.board[data-v-6397919d]:hover {\n    transform: none;\n}\n}\n\n.dottet[data-v-3ecae506]{\n  background: var(--color-canvas);\n  background-image: radial-gradient(var(--color-divider) 1px, transparent 0);\n  background-size: 40px 40px;\n  background-position: -19px -19px;\n}\n.ghost-placeholder[data-v-3ecae506] {\n  position: absolute;\n  background-color: rgba(0, 0, 0, 0.1);\n  border-radius: 5px;\n  border: 2px dashed var(--color-outline);\n  z-index: 100000;\n  pointer-events: none;\n}\n.report-container[data-v-3ecae506] {\n  display: flex;\n  justify-content: flex-start;\n  align-items: flex-start;\n  flex-direction: column;\n  width: 100%;\n  height: 100%;\n  position: relative;\n  /* Board surface from the mockups (view mode): canvas token, no dot grid */\n  background: var(--color-canvas, #dee1e7);\n}\n.report-container__title[data-v-3ecae506] {\n  width: 100%;\n  padding: 16px;\n  border-bottom: 1px dashed var(--color-divider, #ccd1d9);\n}\n.report-container .widgets-adding-controls[data-v-3ecae506] {\n  display: flex;\n  border: 1px solid var(--color-divider, #ccd1d9);\n  border-radius: 8px;\n  margin: 16px;\n}\n.report-container .widget-board[data-v-3ecae506] {\n  width: 100%;\n  height: 100%;\n  display: flex;\n  box-sizing: border-box;\n  overflow-y: auto;\n  overflow-x: hidden;\n}\n.report-container .add-btn[data-v-3ecae506] {\n  margin: 0 16px 16px 0;\n  align-self: self-end;\n}\n.dashboard-item[data-v-3ecae506] {\n  position: absolute;\n  width: 100%;\n  height: 100%;\n}\n.dashboard-item-container[data-v-3ecae506] {\n  position: absolute;\n}\n.dropdown-buttons-container[data-v-3ecae506] {\n  display: flex;\n  flex-direction: column;\n  gap: 0.5rem;\n  z-index: 99999;\n}\n.va-dropdown__content[data-v-3ecae506] {\n  z-index: 10000000 !important;\n}\n.va-dropdown__content.va-select-dropdown__content.va-dropdown__content-wrapper[data-v-3ecae506] {\n  z-index: 20000000 !important;\n}\n.add_widget-button[data-v-3ecae506] {\n  position: absolute;\n  display: flex;\n  flex-direction: row;\n  gap: 10px;\n  right: 30px;\n  bottom: 20px;\n}\n.v-enter-active[data-v-3ecae506],\n.v-leave-active[data-v-3ecae506] {\n  transition: opacity 0.5s ease;\n}\n.v-enter-from[data-v-3ecae506],\n.v-leave-to[data-v-3ecae506] {\n  opacity: 0;\n}\n\n/* One rhythm for both steps: 8px inside a group, 24px between groups. */\n.pick[data-v-6d945def],\n.fill[data-v-6d945def] {\n  display: flex;\n  flex-direction: column;\n  gap: 24px;\n}\n.pick__lead[data-v-6d945def] {\n  margin: 0;\n  font-size: 0.9rem;\n  color: var(--color-dim);\n}\n.pick__group[data-v-6d945def] {\n  display: flex;\n  flex-direction: column;\n  gap: 8px;\n}\n.pick__rubric[data-v-6d945def] {\n  margin: 0;\n  font-size: 0.8rem;\n  font-weight: 600;\n  letter-spacing: 0.03em;\n  color: var(--color-dim);\n  text-transform: none;\n}\n.tiles[data-v-6d945def] {\n  display: grid;\n  grid-template-columns: repeat(auto-fill, minmax(232px, 1fr));\n  gap: 8px;\n  margin: 0;\n  padding: 0;\n  list-style: none;\n}\n.tile[data-v-6d945def] {\n  display: flex;\n  flex-direction: column;\n  gap: 6px;\n  width: 100%;\n  height: 100%;\n  padding: 10px 12px;\n  font: inherit;\n  text-align: left;\n  background-color: var(--color-sunken);\n  border: 1px solid var(--color-outline);\n  border-radius: var(--radius-sm);\n  cursor: pointer;\n}\n.tile[data-v-6d945def]:hover {\n  border-color: var(--color-accent);\n}\n.tile[data-v-6d945def]:focus-visible {\n  outline: 2px solid var(--color-accent);\n  outline-offset: 1px;\n}\n.tile--on[data-v-6d945def] {\n  border-color: var(--color-accent);\n  box-shadow: inset 2px 0 0 var(--color-accent);\n}\n.tile__head[data-v-6d945def] {\n  display: flex;\n  align-items: center;\n  gap: 6px;\n}\n.tile__icon[data-v-6d945def] {\n  flex: none;\n  color: var(--color-accent);\n}\n.tile__name[data-v-6d945def] {\n  flex: 1;\n  font-weight: 600;\n  color: var(--color-fg);\n}\n.tile__check[data-v-6d945def] {\n  flex: none;\n  color: var(--color-accent);\n}\n\n/*\n * Three lines at most.\n *\n * The model's sentences run to different lengths, and a grid where one tile\n * is twice the height of its neighbour reads as broken. The full sentence\n * is on the second step, where there is room for it.\n */\n.tile__what[data-v-6d945def] {\n  display: -webkit-box;\n  -webkit-box-orient: vertical;\n  -webkit-line-clamp: 3;\n  line-clamp: 3;\n  overflow: hidden;\n  font-size: 0.8rem;\n  line-height: 1.45;\n  color: var(--color-dim);\n}\n.chosen[data-v-6d945def] {\n  display: flex;\n  align-items: center;\n  gap: 12px;\n  padding: 12px;\n  background-color: var(--color-sunken);\n  border: 1px solid var(--color-outline);\n  border-radius: var(--radius-sm);\n}\n.chosen__icon[data-v-6d945def] {\n  display: grid;\n  flex: none;\n  place-items: center;\n  width: 40px;\n  height: 40px;\n  color: var(--color-accent);\n  background-color: var(--color-pane);\n  border: 1px solid var(--color-outline);\n  border-radius: var(--radius-sm);\n}\n.chosen__text[data-v-6d945def] {\n  flex: 1;\n  min-width: 0;\n}\n.chosen__name[data-v-6d945def] {\n  font-weight: 600;\n  color: var(--color-fg);\n}\n.chosen__what[data-v-6d945def] {\n  margin: 2px 0 0;\n  font-size: 0.82rem;\n  line-height: 1.45;\n  color: var(--color-dim);\n}\n\n/* Every field the same distance apart, whatever control it holds. */\n.fill__fields[data-v-6d945def] {\n  display: flex;\n  flex-direction: column;\n  gap: 16px;\n}\n\n.model__none[data-v-deac0807] {\n  margin: 0;\n  padding: 10px 12px;\n  font-size: 0.85rem;\n  color: var(--color-dim);\n  background-color: var(--color-sunken);\n  border-radius: var(--radius-sm);\n}\n\n.tags[data-v-b6b361a8] {\n  display: flex;\n  flex-direction: column;\n  gap: 6px;\n}\n.tags__held[data-v-b6b361a8] {\n  display: flex;\n  flex-wrap: wrap;\n  gap: 4px;\n}\n.tags__offer[data-v-b6b361a8] {\n  display: flex;\n  flex-wrap: wrap;\n  gap: 4px;\n}\n.tags__suggestion[data-v-b6b361a8] {\n  padding: 2px 8px;\n  font-size: 0.8rem;\n  color: var(--color-dim);\n  background: none;\n  border: 1px dashed var(--color-outline);\n  border-radius: 999px;\n  cursor: pointer;\n}\n.tags__suggestion[data-v-b6b361a8]:hover {\n  color: var(--color-fg);\n  border-style: solid;\n  border-color: var(--color-accent);\n}\n\n.note[data-v-585727e2] {\n  margin: 0;\n  padding: 10px 12px;\n  font-size: 0.85rem;\n  line-height: 1.45;\n  color: var(--color-dim);\n  background-color: var(--color-sunken);\n  border-radius: var(--radius-sm);\n}\n.note--warn[data-v-585727e2] {\n  color: var(--color-fg);\n  border-left: 2px solid var(--color-warn, var(--color-accent));\n}\n\n\n\n\n.menu__catch[data-v-3e59dfe4] {\n  position: fixed;\n  inset: 0;\n  z-index: 50000;\n}\n.menu[data-v-3e59dfe4] {\n  position: fixed;\n  z-index: 50001;\n  min-width: 200px;\n  margin: 0;\n  padding: 4px;\n  list-style: none;\n  background-color: var(--color-pane);\n  border: 1px solid var(--color-outline);\n  border-radius: var(--radius-sm);\n  box-shadow: var(--shadow-e3);\n}\n.menu__sep[data-v-3e59dfe4] {\n  margin-top: 4px;\n  padding-top: 4px;\n  border-top: 1px solid var(--color-outline);\n}\n.menu__item[data-v-3e59dfe4] {\n  display: flex;\n  align-items: center;\n  gap: 8px;\n  width: 100%;\n  padding: 6px 10px;\n  font: inherit;\n  color: var(--color-fg);\n  text-align: left;\n  background: none;\n  border: 0;\n  border-radius: var(--radius-xs, 3px);\n  cursor: pointer;\n}\n.menu__item[data-v-3e59dfe4]:hover,\n.menu__item[data-v-3e59dfe4]:focus-visible {\n  background-color: var(--color-sunken);\n}\n.menu__item--danger[data-v-3e59dfe4] {\n  color: var(--color-err);\n}\n\n.tree[data-v-b599ea25] {\n  display: flex;\n  flex-direction: column;\n  min-height: 0;\n  height: 100%;\n  border-right: 1px solid var(--color-divider);\n  background: var(--color-pane);\n  overflow: hidden;\n}\n.tree__head[data-v-b599ea25] {\n  display: flex;\n  align-items: center;\n  gap: 2px;\n  flex: none;\n  /* The panel's gutter, the same one the rows and the search box use. */\n  padding: 7px 8px 7px 10px;\n  border-bottom: 1px solid var(--color-divider);\n}\n.tree__title[data-v-b599ea25] {\n  flex: 1 1 auto;\n  margin: 0;\n  font-family: var(--font-sans);\n  font-size: var(--text-xs);\n  font-weight: 600;\n  letter-spacing: 0.05em;\n  text-transform: uppercase;\n  color: var(--color-dim);\n}\n.tree__search[data-v-b599ea25] {\n  flex: none;\n  padding: 8px 10px;\n  border-bottom: 1px solid var(--color-divider);\n}\n\n/* The tree scrolls; main.css paints the bar from the theme */\n.tree__body[data-v-b599ea25] {\n  flex: 1 1 auto;\n  min-height: 0;\n  overflow-y: auto;\n  padding: 4px 0;\n}\n.tree__list[data-v-b599ea25],\n.tree__sources[data-v-b599ea25] {\n  margin: 0;\n  padding: 0;\n  list-style: none;\n}\n.tree__sources[data-v-b599ea25] {\n  /* One step, the width of the chevron column: a source's icon lands under\n     its connection's name, which is what makes the nesting readable. */\n  padding-left: 22px;\n}\n.row[data-v-b599ea25] {\n  display: flex;\n  align-items: center;\n  gap: 2px;\n  /* The hover and selection band still runs the full width; only what is\n     inside it starts at the gutter. */\n  padding-left: 10px;\n  padding-right: 4px;\n}\n.row[data-v-b599ea25]:hover {\n  background: var(--color-raised);\n}\n\n/* The selected row keeps its mark while the pointer is somewhere else */\n.row--on[data-v-b599ea25],\n.row--on[data-v-b599ea25]:hover {\n  background: color-mix(in srgb, var(--color-accent) 14%, transparent);\n}\n.row__twist[data-v-b599ea25] {\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  width: 22px;\n  height: 26px;\n  flex: none;\n  border: none;\n  background: transparent;\n  color: var(--color-dim);\n  cursor: pointer;\n}\n.row__twist--none[data-v-b599ea25] {\n  cursor: default;\n}\n.row__body[data-v-b599ea25] {\n  display: flex;\n  align-items: baseline;\n  gap: 8px;\n  flex: 1 1 auto;\n  min-width: 0;\n  padding: 3px 2px;\n  border: none;\n  background: transparent;\n  font: inherit;\n  text-align: left;\n  color: var(--color-fg);\n  cursor: pointer;\n  /* A row with tags is two lines rather than a name squeezed out of its\n     own row: the name is what you read it by. */\n  flex-wrap: wrap;\n}\n.row__body[data-v-b599ea25]:disabled {\n  cursor: default;\n}\n.row__body[data-v-b599ea25]:focus-visible {\n  outline: 2px solid var(--color-accent);\n  outline-offset: -2px;\n}\n.row__name[data-v-b599ea25] {\n  font-family: var(--font-sans);\n  font-size: var(--text-sm);\n  white-space: nowrap;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  /* Shrinks last: the tags beside it give way first. */\n  min-width: 10ch;\n}\n.row--connection .row__name[data-v-b599ea25] {\n  font-weight: 600;\n}\n.row__icon[data-v-b599ea25] {\n  flex: none;\n  color: var(--color-dim);\n}\n\n/* A tag is a word, not a chip: a row holding several of them turns into a\n   bar of pills otherwise, and the name stops being the thing you read. */\n.row__tag[data-v-b599ea25] {\n  flex: none;\n  max-width: 84px;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  padding: 0 6px;\n  font-size: 0.72rem;\n  line-height: 1.5;\n  color: var(--color-accent);\n  background-color: color-mix(in srgb, var(--color-accent) 12%, transparent);\n  border-radius: 999px;\n  white-space: nowrap;\n}\n.row__tag--more[data-v-b599ea25] {\n  color: var(--color-dim);\n  background-color: var(--color-sunken);\n}\n.row__what[data-v-b599ea25] {\n  flex: none;\n  font-size: var(--text-xs);\n  color: var(--color-dim);\n}\n\n/* What reads from this source, pushed to the far end of the row */\n.row__usage[data-v-b599ea25] {\n  flex: none;\n  margin-left: auto;\n  padding-left: 8px;\n  font-size: var(--text-xs);\n  color: var(--color-dim);\n  white-space: nowrap;\n}\n.tree__empty[data-v-b599ea25] {\n  padding: 6px 10px;\n  font-family: var(--font-sans);\n  font-size: var(--text-xs);\n  color: var(--color-dim);\n}\n\n/*\n * Lines up with the names it stands in for, not with the gutter: it says\n * what is missing from this connection, so it belongs where those would be.\n */\n.tree__none[data-v-b599ea25] {\n  /* 36px inside a list that is already indented 22: the text lands on the\n     icon edge of the sources it stands in for. */\n  padding: 6px 10px 6px 36px;\n  font-family: var(--font-sans);\n  font-size: var(--text-xs);\n  color: var(--color-dim);\n}\n.confirm__title[data-v-b599ea25] {\n  margin: 0;\n  font-family: var(--font-sans);\n  font-size: var(--text-base);\n  font-weight: 600;\n  color: var(--color-fg);\n}\n.confirm__text[data-v-b599ea25] {\n  margin: 0 0 6px;\n  color: var(--color-dim);\n  line-height: 1.5;\n}\n.confirm__text--warn[data-v-b599ea25] {\n  color: var(--color-err);\n}\n\n.editor[data-v-41f0a44b] {\n  display: flex;\n  flex-direction: column;\n  gap: 12px;\n  height: 100%;\n  min-height: 0;\n}\n.editor__fields[data-v-41f0a44b] {\n  display: flex;\n  flex-direction: column;\n  gap: 4px;\n  max-width: 620px;\n}\n.editor__actions[data-v-41f0a44b] {\n  display: flex;\n  justify-content: flex-end;\n  gap: 7px;\n}\n.editor__preview[data-v-41f0a44b] {\n  flex: 1 1 auto;\n  min-height: 0;\n  display: flex;\n  overflow: auto;\n}\n\n.editor[data-v-0fad9a41] {\n  display: flex;\n  flex-direction: column;\n  gap: 12px;\n}\n.editor__fields[data-v-0fad9a41] {\n  display: flex;\n  flex-direction: column;\n  gap: 4px;\n  max-width: 620px;\n}\n.editor__actions[data-v-0fad9a41] {\n  display: flex;\n  justify-content: flex-end;\n  gap: 7px;\n}\n\n.data-page[data-v-2b44b5f1] {\n  display: flex;\n  height: 100%;\n  min-height: 0;\n}\n.data-page__tree[data-v-2b44b5f1] {\n  flex: none;\n  width: 320px;\n  min-height: 0;\n}\n.data-page__detail[data-v-2b44b5f1] {\n  display: flex;\n  flex-direction: column;\n  flex: 1 1 auto;\n  min-width: 0;\n  min-height: 0;\n  background: var(--color-pane);\n  overflow: hidden;\n}\n.data-page__nothing[data-v-2b44b5f1] {\n  margin: auto;\n  font-family: var(--font-sans);\n  font-size: var(--text-sm);\n  color: var(--color-dim);\n}\n.detail__head[data-v-2b44b5f1] {\n  display: flex;\n  align-items: baseline;\n  gap: 12px;\n  flex: none;\n  padding: 12px 16px 8px;\n}\n.detail__what[data-v-2b44b5f1] {\n  display: flex;\n  align-items: baseline;\n  gap: 10px;\n  min-width: 0;\n}\n.detail__name[data-v-2b44b5f1] {\n  margin: 0;\n  font-family: var(--font-sans);\n  font-size: var(--text-base);\n  font-weight: 600;\n  color: var(--color-fg);\n  white-space: nowrap;\n  overflow: hidden;\n  text-overflow: ellipsis;\n}\n.detail__sub[data-v-2b44b5f1] {\n  font-size: var(--text-xs);\n  color: var(--color-dim);\n  white-space: nowrap;\n}\n\n/* What depends on this, before anything about it is changed */\n.detail__usage[data-v-2b44b5f1] {\n  margin-left: auto;\n  flex: none;\n  font-size: var(--text-xs);\n  color: var(--color-dim);\n}\n.detail__body[data-v-2b44b5f1] {\n  flex: 1 1 auto;\n  min-height: 0;\n  overflow: auto;\n  padding: 16px;\n}\n\n.pages[data-v-87cc4b3e] {\n  display: flex;\n  flex-direction: column;\n  width: 100%;\n  flex: 1 1 auto;\n  min-height: 0;\n  padding: 14px 16px 16px;\n  background-color: var(--color-bg);\n}\n.pages__head[data-v-87cc4b3e] {\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n  gap: 12px;\n  flex: none;\n  padding-bottom: 10px;\n}\n.pages__title[data-v-87cc4b3e] {\n  display: flex;\n  align-items: center;\n  gap: 8px;\n}\n.pages__icon[data-v-87cc4b3e] {\n  display: grid;\n  place-items: center;\n  width: 26px;\n  height: 26px;\n  color: var(--color-accent);\n  background-color: var(--color-sunken);\n  border: 1px solid var(--color-outline);\n  border-radius: var(--radius-sm);\n}\n.pages__name[data-v-87cc4b3e] {\n  margin: 0;\n  font-size: 0.95rem;\n  color: var(--color-fg);\n}\n.pages__tools[data-v-87cc4b3e] {\n  display: flex;\n  align-items: center;\n  gap: 8px;\n}\n.pages__search[data-v-87cc4b3e] {\n  padding: 5px 9px;\n  font: inherit;\n  font-size: 0.85rem;\n  color: var(--color-fg);\n  background-color: var(--color-sunken);\n  border: 1px solid var(--color-outline);\n  border-radius: var(--radius-sm);\n}\n.pages__grid[data-v-87cc4b3e] {\n  display: grid;\n  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));\n  gap: 12px;\n  align-content: start;\n  flex: 1 1 auto;\n  min-height: 0;\n  overflow-y: auto;\n}\n.card[data-v-87cc4b3e] {\n  display: flex;\n  flex-direction: column;\n  overflow: hidden;\n  text-align: left;\n  background-color: var(--color-pane);\n  border: 1px solid var(--color-outline);\n  border-radius: var(--radius-md);\n  cursor: pointer;\n}\n.card[data-v-87cc4b3e]:hover,\n.card[data-v-87cc4b3e]:focus-visible {\n  border-color: var(--color-accent);\n}\n.card__body[data-v-87cc4b3e] {\n  padding: 10px 12px;\n}\n.card__name[data-v-87cc4b3e] {\n  margin: 0;\n  font-size: 0.92rem;\n  color: var(--color-fg);\n}\n.card__meta[data-v-87cc4b3e],\n.card__usage[data-v-87cc4b3e] {\n  margin: 3px 0 0;\n  font-size: 0.8rem;\n  color: var(--color-dim);\n}\n.card__edit[data-v-87cc4b3e] {\n  padding: 7px 12px;\n  font: inherit;\n  font-size: 0.8rem;\n  color: var(--color-dim);\n  text-align: left;\n  background: none;\n  border: 0;\n  border-top: 1px solid var(--color-divider, var(--color-outline));\n  cursor: pointer;\n}\n.card__edit[data-v-87cc4b3e]:hover {\n  color: var(--color-fg);\n  background-color: var(--color-sunken);\n}\n.card--new[data-v-87cc4b3e] {\n  align-items: center;\n  justify-content: center;\n  gap: 2px;\n  min-height: 150px;\n  color: var(--color-dim);\n  background: none;\n  border-style: dashed;\n}\n.card__plus[data-v-87cc4b3e] {\n  font-size: 1.4rem;\n  line-height: 1;\n}\n.pages__nomatch[data-v-87cc4b3e] {\n  grid-column: 1 / -1;\n  margin: 0;\n  padding: 12px 2px;\n  font-size: 0.85rem;\n  color: var(--color-dim);\n}\n\n/* A list, not a tile grid - that is what the mockups' palette is, and it\n   survives a 240px column. */\n.widgets_grid[data-v-3ac9fb06] {\n  display: flex;\n  flex-direction: column;\n}\n[data-v-3ac9fb06]  .widgets_grid-item {\n  display: flex;\n  flex-direction: row;\n  align-items: center;\n  gap: 9px;\n  padding: 6px 12px;\n  font-size: var(--text-base, 13px);\n  color: var(--color-fg);\n  cursor: grab;\n  border-radius: var(--radius-sm, 5px);\n  margin: 0 6px;\n}\n[data-v-3ac9fb06]  .widgets_grid-item:hover {\n  background: var(--color-bg);\n}\n[data-v-3ac9fb06]  .widgets_grid-icon {\n  width: 26px;\n  height: 26px;\n  flex: none;\n  display: inline-flex;\n  align-items: center;\n  justify-content: center;\n  background: var(--color-raised);\n  border: 1px solid var(--color-divider);\n  border-radius: var(--radius-sm, 5px);\n  overflow: hidden;\n}\n[data-v-3ac9fb06]  .widgets_grid-icon img {\n  max-width: 18px;\n  max-height: 18px;\n}\n[data-v-3ac9fb06]  .widgets_grid-name {\n  min-width: 0;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n}\n\n/* Docked into the palette panel of the editor (mockup screen 4) - the panel\n   owns position, width and header now. */\n.add_widget_window[data-v-3ac9fb06] {\n  position: relative;\n  width: 100%;\n  height: 100%;\n  padding: 6px 0;\n}\n\n/* What the scroll container was: a box that scrolls. */\n.add_widget_window__scroll[data-v-3ac9fb06] {\n  height: 100%;\n  overflow-y: auto;\n}\n\n.scrim[data-v-67bd2420] {\n  position: fixed;\n  inset: 0;\n  z-index: 40000;\n  display: grid;\n  place-items: stretch;\n  padding: 26px 22px;\n  background-color: color-mix(in srgb, var(--color-canvas) 62%, transparent);\n  /* The board stays visible but out of focus - it is where you return to */\n  backdrop-filter: blur(6px);\n}\n.overlay[data-v-67bd2420] {\n  display: flex;\n  min-width: 0;\n  min-height: 0;\n  background-color: var(--color-bg);\n  border: 1px solid var(--color-outline);\n  border-radius: var(--radius-md);\n  box-shadow: var(--shadow-e3);\n  overflow: hidden;\n}\n\n/* ----------------------------------------------------------------- left */\n.stage[data-v-67bd2420] {\n  display: flex;\n  flex-direction: column;\n  flex: 1 1 auto;\n  min-width: 0;\n}\n.stage__head[data-v-67bd2420] {\n  display: flex;\n  align-items: center;\n  gap: 8px;\n  height: var(--spacing-panelHeader);\n  flex: none;\n  padding: 0 12px;\n  background-color: var(--color-pane);\n  border-bottom: 1px solid var(--color-divider);\n}\n.stage__name[data-v-67bd2420] {\n  font-size: var(--text-base);\n  font-weight: 600;\n  color: var(--color-fg);\n}\n.stage__uid[data-v-67bd2420] {\n  font-family: var(--font-mono);\n  font-size: var(--text-xs);\n  color: var(--color-dim);\n}\n.stage__spacer[data-v-67bd2420] {\n  flex: 1 1 auto;\n}\n.seg[data-v-67bd2420] {\n  display: flex;\n  border: 1px solid var(--color-divider);\n  border-radius: var(--radius-xs);\n  overflow: hidden;\n}\n.seg button[data-v-67bd2420] {\n  padding: 1px 9px;\n  font-family: inherit;\n  font-size: var(--text-xs);\n  color: var(--color-dim);\n  background: none;\n  border: 0;\n  cursor: pointer;\n}\n.seg button.on[data-v-67bd2420] {\n  color: var(--color-onAccent);\n  background-color: var(--color-accent);\n}\n.stage__bar[data-v-67bd2420] {\n  flex: none;\n  padding: 5px 12px;\n  font-family: var(--font-mono);\n  font-size: var(--text-xs);\n  color: var(--color-dim);\n  border-bottom: 1px solid var(--color-divider);\n}\n.stage__body[data-v-67bd2420] {\n  flex: 1 1 auto;\n  display: grid;\n  place-items: center;\n  min-height: 0;\n  padding: 18px;\n  background-color: var(--color-canvas);\n  overflow: auto;\n}\n.preview[data-v-67bd2420] {\n  background-color: var(--color-pane);\n  border: 1px solid var(--color-divider);\n  border-radius: var(--radius-xs);\n  overflow: hidden;\n}\n\n/* --------------------------------------------------------------- handle */\n.handle[data-v-67bd2420] {\n  width: var(--spacing-splitter);\n  flex: none;\n  cursor: col-resize;\n  background-color: var(--color-divider);\n}\n.handle[data-v-67bd2420]:hover,\n.handle[data-v-67bd2420]:focus-visible {\n  background-color: var(--color-accent);\n  outline: none;\n}\n\n/* ---------------------------------------------------------------- right */\n.side[data-v-67bd2420] {\n  display: flex;\n  flex-direction: column;\n  flex: none;\n  min-width: 0;\n  min-height: 0;\n  background-color: var(--color-pane);\n}\n\n/* The chart brings six sections of its own, so the row wraps rather than\n   scrolling sideways - a tab you have to hunt for is not a tab. */\n.tabs[data-v-67bd2420] {\n  display: flex;\n  flex-wrap: wrap;\n  align-items: stretch;\n  min-height: var(--spacing-panelHeader);\n  flex: none;\n  padding: 0 6px;\n  gap: 1px;\n  border-bottom: 1px solid var(--color-divider);\n}\n.tab[data-v-67bd2420] {\n  position: relative;\n  display: flex;\n  align-items: center;\n  gap: 5px;\n  height: var(--spacing-panelHeader);\n  padding: 0 9px;\n  font-family: inherit;\n  font-size: var(--text-sm);\n  color: var(--color-dim);\n  background: none;\n  border: 0;\n  cursor: pointer;\n}\n.tab.on[data-v-67bd2420] {\n  color: var(--color-fg);\n  font-weight: 600;\n}\n.tab.on[data-v-67bd2420]::after {\n  content: '';\n  position: absolute;\n  left: 7px;\n  right: 7px;\n  bottom: -1px;\n  height: 2px;\n  background-color: var(--color-accent);\n  border-radius: 2px;\n}\n.tab__n[data-v-67bd2420] {\n  font-family: var(--font-mono);\n  font-size: 9.5px;\n  font-variant-numeric: tabular-nums;\n  opacity: 0.8;\n}\n.fields[data-v-67bd2420] {\n  flex: 1 1 auto;\n  min-height: 0;\n  padding: 10px 12px 16px;\n  overflow-y: auto;\n}\n.pick[data-v-67bd2420] {\n  margin-bottom: 8px;\n}\n.rest__note[data-v-67bd2420] {\n  margin: 0 0 10px;\n  padding: 7px 9px;\n  font-size: var(--text-xs);\n  line-height: 1.5;\n  color: var(--color-dim);\n  background-color: var(--color-raised);\n  border-radius: var(--radius-xs);\n}\n.note[data-v-67bd2420] {\n  margin: 8px 0 0;\n  font-size: var(--text-sm);\n  line-height: 1.5;\n  color: var(--color-dim);\n}\n.var-mark[data-v-67bd2420] {\n  font-family: var(--font-mono);\n  font-style: italic;\n  color: var(--color-brand);\n}\n.bound[data-v-67bd2420] {\n  width: 100%;\n  border-collapse: collapse;\n  font-size: var(--text-sm);\n}\n.bound th[data-v-67bd2420] {\n  padding: 5px 8px;\n  text-align: left;\n  font-size: var(--text-xs);\n  font-weight: 600;\n  color: var(--color-dim);\n  border-bottom: 1px solid var(--color-divider);\n}\n.bound td[data-v-67bd2420] {\n  padding: 5px 8px;\n  border-bottom: 1px solid var(--color-divider);\n}\n.bound__name[data-v-67bd2420],\n.bound__var[data-v-67bd2420] {\n  font-family: var(--font-mono);\n  font-size: var(--text-xs);\n}\n.bound__var[data-v-67bd2420] {\n  color: var(--color-brand);\n}\n.foot[data-v-67bd2420] {\n  display: flex;\n  align-items: center;\n  gap: 7px;\n  height: 38px;\n  flex: none;\n  padding: 0 12px;\n  background-color: var(--color-pane);\n  border-top: 1px solid var(--color-divider);\n}\n.foot__hint[data-v-67bd2420] {\n  font-size: var(--text-xs);\n  color: var(--color-dim);\n}\n.tab[data-v-67bd2420]:focus-visible,\n.seg button[data-v-67bd2420]:focus-visible {\n  outline: 2px solid var(--color-accent);\n  outline-offset: 1px;\n}\n\n/*\n * A docked panel on the right, the same surface and edge as the rest of the\n * workbench. It keeps the widget settings' shape - head, scrolling body,\n * footer - so the two read as the same kind of thing.\n */\n.page-settings[data-v-9ea0fdd8] {\n  position: absolute;\n  top: 12px;\n  right: 12px;\n  bottom: 12px;\n  z-index: 1000000;\n  display: flex;\n  flex-direction: column;\n  width: 340px;\n  background-color: var(--color-pane);\n  border: 1px solid var(--color-divider);\n  border-radius: var(--radius-md, 4px);\n  box-shadow: var(--shadow-e3, 0 6px 20px rgb(0 0 0 / 22%));\n}\n.head[data-v-9ea0fdd8] {\n  display: flex;\n  align-items: center;\n  gap: 8px;\n  flex: none;\n  height: 34px;\n  padding: 0 6px 0 12px;\n  border-bottom: 1px solid var(--color-divider);\n}\n.head__title[data-v-9ea0fdd8] {\n  flex: 1;\n  margin: 0;\n  font-size: var(--text-sm, 12px);\n  font-weight: 500;\n  color: var(--color-fg);\n}\n.head__close[data-v-9ea0fdd8] {\n  width: 24px;\n  height: 24px;\n  font-size: 16px;\n  line-height: 1;\n  color: var(--color-dim);\n  background: none;\n  border: 0;\n  border-radius: var(--radius-xs, 3px);\n  cursor: pointer;\n}\n.head__close[data-v-9ea0fdd8]:hover {\n  color: var(--color-fg);\n  background-color: var(--color-raised);\n}\n.head__close[data-v-9ea0fdd8]:focus-visible {\n  outline: 2px solid var(--color-accent);\n  outline-offset: 1px;\n}\n.body[data-v-9ea0fdd8] {\n  flex: 1;\n  min-height: 0;\n  overflow-y: auto;\n  padding: 12px;\n}\n.group + .group[data-v-9ea0fdd8] {\n  margin-top: 18px;\n}\n.group__label[data-v-9ea0fdd8] {\n  margin: 0 0 8px;\n  font-size: var(--text-xs, 11px);\n  font-weight: 500;\n  letter-spacing: 0.06em;\n  text-transform: uppercase;\n  color: var(--color-dim);\n}\n.group[data-v-9ea0fdd8] >  .field {\n  margin-bottom: 8px;\n}\n\n/* Shown, not offered: it is how the page is addressed, not a setting */\n.ident[data-v-9ea0fdd8] {\n  margin: 18px 0 0;\n  font-size: var(--text-xs, 11px);\n  color: var(--color-dim);\n}\n.ident code[data-v-9ea0fdd8] {\n  font-family: var(--font-mono);\n  user-select: all;\n}\n.missing[data-v-9ea0fdd8] {\n  margin: 0;\n  font-size: var(--text-sm, 12px);\n  color: var(--color-dim);\n}\n.foot[data-v-9ea0fdd8] {\n  display: flex;\n  justify-content: flex-end;\n  flex: none;\n  padding: 8px 12px;\n  border-top: 1px solid var(--color-divider);\n}\n\n.ghost {\n  display: none;\n}\n\n/* Three docked columns; the panels keep their width, the board takes the rest. */\n.editor[data-v-bd444b0c] {\n  /* The frame the palette floats in, and is kept inside of */\n  position: relative;\n  /* Said out loud: the board goes to the edge, and a class named \"editor\"\n     is common enough that something else may try to pad it */\n  padding: 0;\n  border: 0;\n  display: flex;\n  align-items: stretch;\n  width: 100%;\n  height: 100%;\n  min-height: 0;\n  overflow: hidden;\n  background: var(--color-bg);\n}\n\n/* The one action the palette adds to its window's title bar */\n.palette__act[data-v-bd444b0c] {\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  width: 22px;\n  height: 22px;\n  color: var(--color-dim);\n  background: none;\n  border: 0;\n  border-radius: var(--radius-xs, 3px);\n  cursor: pointer;\n}\n.palette__act[data-v-bd444b0c]:hover {\n  color: var(--color-fg);\n  background-color: var(--color-raised);\n}\n.palette__act[data-v-bd444b0c]:focus-visible {\n  outline: 2px solid var(--color-accent);\n  outline-offset: 1px;\n}\n.report-container[data-v-bd444b0c] {\n  flex: 1 1 auto;\n  display: flex;\n  justify-content: flex-start;\n  align-items: flex-start;\n  flex-direction: column;\n  min-width: 0;\n  height: 100%;\n  position: relative;\n  /* Board surface from the mockups (edit mode): canvas token + 24px dot grid */\n  background: var(--color-canvas);\n}\n.report-container.dottet[data-v-bd444b0c] {\n  background-image: radial-gradient(var(--color-divider) 1px, transparent 0);\n  background-size: 24px 24px;\n  background-position: -12px -12px;\n  background-repeat: repeat;\n}\n.report-container__title[data-v-bd444b0c] {\n  width: 100%;\n  padding: 16px;\n  border-bottom: 1px dashed var(--color-divider);\n}\n.report-container .widgets-adding-controls[data-v-bd444b0c] {\n  display: flex;\n  border: 1px solid var(--color-divider);\n  border-radius: var(--radius-md, 8px);\n  margin: 16px;\n}\n.report-container .widget-board[data-v-bd444b0c] {\n  width: 100%;\n  height: 100%;\n  display: flex;\n  box-sizing: border-box;\n  overflow-y: auto;\n  overflow-x: hidden;\n}\n.report-container .add-btn[data-v-bd444b0c] {\n  margin: 0 16px 16px 0;\n  align-self: self-end;\n}\n.dashboard-item[data-v-bd444b0c] {\n  position: absolute;\n  width: 100%;\n  height: 100%;\n}\n.dashboard-item-container[data-v-bd444b0c] {\n  position: absolute;\n}\n.dropdown-buttons-container[data-v-bd444b0c] {\n  display: flex;\n  flex-direction: column;\n  gap: 0.5rem;\n  z-index: 99999;\n}\n.va-dropdown__content[data-v-bd444b0c] {\n  z-index: 10000000 !important;\n}\n.va-dropdown__content.va-select-dropdown__content.va-dropdown__content-wrapper[data-v-bd444b0c] {\n  z-index: 20000000 !important;\n}\n.v-enter-active[data-v-bd444b0c],\n.v-leave-active[data-v-bd444b0c] {\n  transition: opacity 0.5s ease;\n}\n.v-enter-from[data-v-bd444b0c],\n.v-leave-to[data-v-bd444b0c] {\n  opacity: 0;\n}\n\n.variables[data-v-dda92d6f] {\n  display: flex;\n  flex-direction: column;\n  gap: 28px;\n  box-sizing: border-box;\n  width: 100%;\n  height: 100%;\n  overflow-y: auto;\n  padding: 28px 32px 40px;\n  font-family: var(--font-sans);\n  color: var(--color-fg);\n  background-color: var(--color-bg);\n}\n.variables__head[data-v-dda92d6f],\n.reach[data-v-dda92d6f] {\n  width: 100%;\n  max-width: 940px;\n}\n.variables__head[data-v-dda92d6f] {\n  display: flex;\n  align-items: flex-start;\n  justify-content: space-between;\n  gap: 24px;\n  flex-wrap: wrap;\n}\n.variables__title[data-v-dda92d6f] {\n  margin: 0 0 6px;\n  font-size: 20px;\n  font-weight: 600;\n  letter-spacing: -0.01em;\n}\n.variables__lead[data-v-dda92d6f] {\n  margin: 0;\n  max-width: 56ch;\n  font-size: var(--text-base);\n  line-height: 1.55;\n  color: var(--color-dim);\n}\n\n/* ------------------------------------------------------------ the reaches */\n.reach__title[data-v-dda92d6f] {\n  display: flex;\n  align-items: baseline;\n  gap: 12px;\n  margin: 0 0 2px;\n  font-size: var(--text-base);\n  font-weight: 600;\n}\n.reach__lead[data-v-dda92d6f] {\n  font-weight: 400;\n  font-size: var(--text-sm);\n  color: var(--color-dim);\n}\n.reach__empty[data-v-dda92d6f] {\n  margin: 0;\n  padding: 12px 0;\n  border-top: 1px solid var(--color-divider);\n  font-size: var(--text-base);\n  color: var(--color-dim);\n}\n.rows[data-v-dda92d6f] {\n  margin: 0;\n  padding: 0;\n  list-style: none;\n  border-top: 1px solid var(--color-divider);\n}\n\n/*\n * A name, what makes it, and what it says right now. No heading row: three\n * words over three columns told nobody anything the columns did not, and\n * the fourth said \"Actions\" over two icons.\n */\n.row[data-v-dda92d6f] {\n  display: grid;\n  grid-template-columns: minmax(0, 2fr) minmax(0, 1.4fr) minmax(0, 2fr) auto;\n  align-items: center;\n  gap: 16px;\n  padding: 7px 8px 7px 0;\n  border-bottom: 1px solid var(--color-divider);\n  font-size: var(--text-base);\n}\n.row[data-v-dda92d6f]:hover {\n  background-color: color-mix(in srgb, var(--color-pane) 60%, transparent);\n}\n.row__name[data-v-dda92d6f] {\n  font-family: var(--font-mono);\n  overflow-wrap: anywhere;\n}\n.row__type[data-v-dda92d6f],\n.row__value[data-v-dda92d6f] {\n  color: var(--color-dim);\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n}\n.row__value[data-v-dda92d6f] {\n  font-family: var(--font-mono);\n  color: var(--color-fg);\n}\n.row__tools[data-v-dda92d6f] {\n  display: flex;\n  gap: 2px;\n}\n\n/* -------------------------------------------------------------- the dialog */\n.form[data-v-dda92d6f] {\n  display: flex;\n  flex-direction: column;\n  gap: 4px;\n}\n.confirm__title[data-v-dda92d6f] {\n  margin: 0;\n  font-size: var(--text-lg);\n  font-weight: 600;\n}\n.confirm__text[data-v-dda92d6f] {\n  margin: 0;\n  font-size: var(--text-base);\n  line-height: 1.6;\n  color: var(--color-dim);\n}\n@media (max-width: 640px) {\n.variables[data-v-dda92d6f] {\n    padding: 20px 16px 32px;\n}\n.row[data-v-dda92d6f] {\n    grid-template-columns: minmax(0, 1fr) auto;\n    row-gap: 2px;\n}\n.row__type[data-v-dda92d6f],\n  .row__value[data-v-dda92d6f] {\n    grid-column: 1;\n    white-space: normal;\n}\n}\n\n.appearance[data-v-a84ca0bf] {\n  display: flex;\n  width: 100%;\n  flex: 1 1 auto;\n  min-height: 0;\n  padding: 14px 16px 16px;\n  background-color: var(--color-bg);\n}\n.panel[data-v-a84ca0bf] {\n  display: flex;\n  flex-direction: column;\n  flex: 1 1 auto;\n  min-width: 0;\n  min-height: 0;\n  background-color: var(--color-pane);\n  border: 1px solid var(--color-divider);\n  border-radius: var(--radius-sm);\n  overflow: hidden;\n}\n.panel__head[data-v-a84ca0bf] {\n  display: flex;\n  align-items: center;\n  gap: 8px;\n  height: var(--spacing-panelHeader);\n  flex: none;\n  padding: 0 10px;\n  font-size: var(--text-xs);\n  font-weight: 650;\n  letter-spacing: 0.07em;\n  text-transform: uppercase;\n  color: var(--color-dim);\n  border-bottom: 1px solid var(--color-divider);\n}\n.head__tab[data-v-a84ca0bf] {\n  position: relative;\n  height: 100%;\n  padding: 0 10px;\n  font-family: inherit;\n  font-size: var(--text-xs);\n  font-weight: 650;\n  letter-spacing: 0.07em;\n  text-transform: uppercase;\n  color: var(--color-dim);\n  background: none;\n  border: 0;\n  cursor: pointer;\n}\n.head__tab.on[data-v-a84ca0bf] {\n  color: var(--color-fg);\n}\n.head__tab.on[data-v-a84ca0bf]::after {\n  content: '';\n  position: absolute;\n  left: 6px;\n  right: 6px;\n  bottom: -1px;\n  height: 2px;\n  background-color: var(--color-accent);\n  border-radius: 2px;\n}\n.head__tab[data-v-a84ca0bf]:focus-visible {\n  outline: 2px solid var(--color-accent);\n  outline-offset: -2px;\n}\n\n/* -------------------------------------------------------------- gallery */\n.gallery[data-v-a84ca0bf] {\n  flex: 1 1 auto;\n  min-height: 0;\n  padding: 16px 18px 24px;\n  overflow-y: auto;\n  background-color: var(--color-bg);\n}\n.gallery__lead[data-v-a84ca0bf] {\n  margin: 0 0 18px;\n  max-width: 70ch;\n  font-size: var(--text-sm);\n  color: var(--color-dim);\n}\n.demo[data-v-a84ca0bf] {\n  margin-bottom: 26px;\n}\n.demo__title[data-v-a84ca0bf] {\n  margin: 0 0 10px;\n  padding-bottom: 4px;\n  font-size: var(--text-xs);\n  font-weight: 650;\n  letter-spacing: 0.08em;\n  text-transform: uppercase;\n  color: var(--color-dim);\n  border-bottom: 1px solid var(--color-divider);\n}\n.demo__row[data-v-a84ca0bf] {\n  display: flex;\n  flex-wrap: wrap;\n  align-items: center;\n  gap: 10px;\n  margin-bottom: 12px;\n}\n.demo__form[data-v-a84ca0bf] {\n  max-width: 460px;\n}\n.panel__tools[data-v-a84ca0bf] {\n  display: flex;\n  align-items: center;\n  gap: 6px;\n  margin-left: auto;\n  text-transform: none;\n  letter-spacing: 0;\n  font-weight: 400;\n}\n.changed[data-v-a84ca0bf] {\n  font-family: var(--font-mono);\n  font-size: var(--text-xs);\n  color: var(--color-accent);\n}\n.body[data-v-a84ca0bf] {\n  display: flex;\n  flex: 1 1 auto;\n  min-height: 0;\n  background-color: var(--color-bg);\n}\n\n/* ---------------------------------------------------------------- themes */\n.themes[data-v-a84ca0bf] {\n  width: 240px;\n  flex: none;\n  display: flex;\n  flex-direction: column;\n  gap: 2px;\n  padding: 8px 6px;\n  overflow-y: auto;\n  background-color: var(--color-pane);\n  border-right: 1px solid var(--color-divider);\n}\n.theme[data-v-a84ca0bf] {\n  display: grid;\n  gap: 3px;\n  padding: 8px;\n  font-family: inherit;\n  text-align: left;\n  background: none;\n  border: 1px solid transparent;\n  border-radius: var(--radius-xs);\n  cursor: pointer;\n}\n.theme[data-v-a84ca0bf]:hover {\n  background-color: var(--color-raised);\n}\n.theme.on[data-v-a84ca0bf] {\n  background-color: color-mix(in srgb, var(--color-accent) 12%, transparent);\n  border-color: color-mix(in srgb, var(--color-accent) 45%, transparent);\n}\n.theme__strip[data-v-a84ca0bf] {\n  display: flex;\n  height: 14px;\n  border-radius: 2px;\n  overflow: hidden;\n  border: 1px solid var(--color-divider);\n}\n.theme__strip i[data-v-a84ca0bf] {\n  flex: 1;\n}\n.theme__name[data-v-a84ca0bf] {\n  font-size: var(--text-base);\n  font-weight: 600;\n  color: var(--color-fg);\n}\n.theme__note[data-v-a84ca0bf] {\n  font-size: var(--text-xs);\n  line-height: 1.4;\n  color: var(--color-dim);\n}\n\n/* ---------------------------------------------------------------- tokens */\n.tokens[data-v-a84ca0bf] {\n  flex: 1 1 auto;\n  min-width: 0;\n  padding: 8px 10px 16px;\n  overflow-y: auto;\n}\n.group__head[data-v-a84ca0bf] {\n  display: flex;\n  align-items: baseline;\n  gap: 7px;\n  width: 100%;\n  padding: 6px 4px;\n  font-family: inherit;\n  font-size: var(--text-base);\n  font-weight: 600;\n  color: var(--color-fg);\n  text-align: left;\n  background: none;\n  border: 0;\n  border-bottom: 1px solid var(--color-divider);\n  cursor: pointer;\n}\n.group__twist[data-v-a84ca0bf] {\n  width: 11px;\n  font-size: var(--text-xs);\n  color: var(--color-dim);\n}\n.group__count[data-v-a84ca0bf] {\n  margin-left: auto;\n  font-family: var(--font-mono);\n  font-size: var(--text-xs);\n  font-variant-numeric: tabular-nums;\n  color: var(--color-dim);\n}\n.group__body[data-v-a84ca0bf] {\n  padding: 8px 0 14px 18px;\n}\n.group__note[data-v-a84ca0bf] {\n  margin: 0 0 8px;\n  font-size: var(--text-sm);\n  color: var(--color-dim);\n  max-width: 70ch;\n}\n.token[data-v-a84ca0bf] {\n  display: flex;\n  align-items: center;\n  gap: 8px;\n  padding: 3px 0;\n}\n.token__swatch[data-v-a84ca0bf] {\n  width: 22px;\n  height: 22px;\n  flex: none;\n  border: 1px solid var(--color-divider);\n  border-radius: var(--radius-xs);\n}\n.token__swatch--none[data-v-a84ca0bf] {\n  background: repeating-linear-gradient(\n    45deg,\n    var(--color-raised),\n    var(--color-raised) 3px,\n    var(--color-bg) 3px,\n    var(--color-bg) 6px\n  );\n}\n.token__text[data-v-a84ca0bf] {\n  display: flex;\n  flex-direction: column;\n  min-width: 0;\n  flex: 1 1 auto;\n}\n.token__name[data-v-a84ca0bf] {\n  font-family: var(--font-mono);\n  font-size: var(--text-sm);\n  color: var(--color-fg);\n}\n.token__role[data-v-a84ca0bf] {\n  font-size: var(--text-xs);\n  color: var(--color-dim);\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n}\n.token__picker[data-v-a84ca0bf] {\n  width: 28px;\n  height: 24px;\n  flex: none;\n  padding: 0;\n  background: none;\n  border: 1px solid var(--color-divider);\n  border-radius: var(--radius-xs);\n  cursor: pointer;\n}\n.token__value[data-v-a84ca0bf] {\n  width: 220px;\n  flex: none;\n  height: 24px;\n  padding: 0 7px;\n  font-family: var(--font-mono);\n  font-size: var(--text-sm);\n  color: var(--color-fg);\n  background-color: var(--color-bg);\n  border: 1px solid var(--color-divider);\n  border-radius: var(--radius-xs);\n}\n.token__reset[data-v-a84ca0bf] {\n  width: 24px;\n  height: 24px;\n  flex: none;\n  font-family: inherit;\n  font-size: var(--text-base);\n  color: var(--color-dim);\n  background-color: var(--color-raised);\n  border: 1px solid var(--color-divider);\n  border-radius: var(--radius-xs);\n  cursor: pointer;\n}\n.token__reset[data-v-a84ca0bf]:disabled {\n  opacity: 0.35;\n  cursor: default;\n}\n.btn[data-v-a84ca0bf] {\n  height: 22px;\n  padding: 0 10px;\n  font-family: inherit;\n  font-size: var(--text-sm);\n  color: var(--color-fg);\n  background-color: var(--color-raised);\n  border: 1px solid var(--color-divider);\n  border-radius: var(--radius-xs);\n  cursor: pointer;\n}\n.btn[data-v-a84ca0bf]:hover {\n  border-color: var(--color-outline);\n}\n.btn[data-v-a84ca0bf]:focus-visible,\n.theme[data-v-a84ca0bf]:focus-visible,\n.group__head[data-v-a84ca0bf]:focus-visible,\n.token__value[data-v-a84ca0bf]:focus-visible,\n.token__picker[data-v-a84ca0bf]:focus-visible,\n.token__reset[data-v-a84ca0bf]:focus-visible {\n  outline: 2px solid var(--color-accent);\n  outline-offset: 1px;\n}\n";})();
 const { TINY_EMITTER, APP } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
 import { identifier as identifier$6, VARIABLE_WRAPPER_FACTORY } from "org.eclipse.daanse.board.app.lib.factory.variableWrapper";
 import { EVENT_MANAGER, EVENT_ACTIONS_REGISTRY_ID } from "org.eclipse.daanse.board.app.lib.api.events";
@@ -8,9 +8,9 @@ import { ROUTE_REGISTRY_ID, RouteDefinition } from "org.eclipse.daanse.board.app
 import { useCurrentHistory, useEList, useGlobalLoading, useEObject, useFeature, describeModel, useBoard, VariableComplexStringWrapper, VARIABLECOMPLEXSTRINGWRAPPER } from "org.eclipse.daanse.board.app.ui.vue.composables";
 import { DIcon, DButton, DModal, DField, DSwitch, DInput, DChip, DIconPicker, DSelect, DTabs, DColorInput, DFloatingWindow, DDateInput, DSlider, DCheckbox, DDivider } from "org.eclipse.daanse.board.app.ui.vue.controls";
 import { useRoute, useRouter, createRouter, createWebHistory } from "vue-router";
-import { identifier } from "org.eclipse.daanse.board.app.lib.api.page";
-import { identifier as identifier$1 } from "org.eclipse.daanse.board.app.lib.api.layout.page";
-import { identifier as identifier$2, WorkspaceImpl, ConnectionImpl, DatasourceImpl, VariableImpl, EventMappingImpl, PageImpl, WidgetImpl, LayoutItemImpl } from "org.eclipse.daanse.board.app.lib.model.workspace";
+import { identifier as identifier$1 } from "org.eclipse.daanse.board.app.lib.api.page";
+import { identifier as identifier$2 } from "org.eclipse.daanse.board.app.lib.api.layout.page";
+import { identifier, WorkspaceImpl, ConnectionImpl, DatasourceImpl, VariableImpl, EventMappingImpl, BoardImpl, PageImpl, WidgetImpl, LayoutItemImpl } from "org.eclipse.daanse.board.app.lib.model.workspace";
 import { JSONResource, URI, OPTION_INDENT } from "@emfts/core";
 import { identifier as identifier$3, CONNECTION_REPOSITORY } from "org.eclipse.daanse.board.app.lib.api.connection";
 import { identifier as identifier$4, DATASOURCE_REPOSITORY } from "org.eclipse.daanse.board.app.lib.api.datasource";
@@ -140,31 +140,31 @@ function useGridSnap() {
 function initGridSnap() {
   paint$1();
 }
-const _hoisted_1$l = { class: "topbar" };
-const _hoisted_2$j = {
+const _hoisted_1$m = { class: "topbar" };
+const _hoisted_2$k = {
   class: "crumb",
   "aria-label": "Pfad"
 };
-const _hoisted_3$f = {
+const _hoisted_3$g = {
   key: 0,
   class: "crumb-sep",
   "aria-hidden": "true"
 };
-const _hoisted_4$e = ["onClick"];
-const _hoisted_5$c = ["aria-expanded"];
-const _hoisted_6$b = { class: "pages__name" };
-const _hoisted_7$b = {
+const _hoisted_4$f = ["onClick"];
+const _hoisted_5$d = ["aria-expanded"];
+const _hoisted_6$c = { class: "pages__name" };
+const _hoisted_7$c = {
   key: 0,
   class: "pages__menu",
   role: "menu"
 };
-const _hoisted_8$b = ["onClick"];
-const _hoisted_9$9 = ["title", "aria-label", "onClick"];
-const _hoisted_10$9 = ["disabled", "title"];
-const _hoisted_11$7 = ["disabled", "title"];
-const _hoisted_12$7 = ["aria-pressed"];
-const _hoisted_13$6 = ["aria-pressed"];
-const _hoisted_14$6 = ["aria-pressed"];
+const _hoisted_8$c = ["onClick"];
+const _hoisted_9$b = ["title", "aria-label", "onClick"];
+const _hoisted_10$a = ["disabled", "title"];
+const _hoisted_11$8 = ["disabled", "title"];
+const _hoisted_12$8 = ["aria-pressed"];
+const _hoisted_13$7 = ["aria-pressed"];
+const _hoisted_14$7 = ["aria-pressed"];
 const _hoisted_15$6 = {
   key: 8,
   class: "modes",
@@ -173,7 +173,7 @@ const _hoisted_15$6 = {
 };
 const _hoisted_16$5 = ["aria-pressed"];
 const _hoisted_17$5 = ["aria-pressed"];
-const _sfc_main$m = /* @__PURE__ */ defineComponent({
+const _sfc_main$n = /* @__PURE__ */ defineComponent({
   __name: "Header",
   setup(__props) {
     const route = useRoute();
@@ -183,10 +183,13 @@ const _sfc_main$m = /* @__PURE__ */ defineComponent({
     const isEditing = computed(
       () => route.name === "edit" || route.name === "pageEdit" || String(route.path).endsWith("/edit")
     );
+    const workspace = inject(identifier);
+    const modelledPages = useEList(workspace, (w) => w.board?.pages);
     const crumb = computed(() => {
+      void modelledPages.value;
       const boards = { label: "Boards", to: "/" };
       const board = {
-        label: pageId.value ? `Board ${pageId.value.slice(0, 8)}` : "Board",
+        label: workspace.board?.name || "Board",
         to: pageId.value ? `/page/${pageId.value}` : void 0
       };
       switch (route.name) {
@@ -210,10 +213,9 @@ const _sfc_main$m = /* @__PURE__ */ defineComponent({
       }
     });
     const showModes = computed(() => Boolean(pageId.value));
-    const pageRepo = inject(identifier);
-    inject(identifier$1);
+    const pageRepo = inject(identifier$1);
+    inject(identifier$2);
     const { openSettings: openPageSettings } = usePages();
-    const modelledPages = useEList(inject(identifier$2), (w) => w.pages);
     const { visible: paletteVisible, toggle: togglePalette } = useWidgetPalette();
     const { shown: backdropShown, toggle: toggleBackdrop } = useBoardBackdrop();
     const { snapping: snapping2, toggle: toggleSnapping } = useGridSnap();
@@ -303,7 +305,7 @@ const _sfc_main$m = /* @__PURE__ */ defineComponent({
     const openAppearance = () => router2.push("/appearance");
     return (_ctx, _cache) => {
       return openBlock(), createElementBlock(Fragment, null, [
-        createElementVNode("header", _hoisted_1$l, [
+        createElementVNode("header", _hoisted_1$m, [
           _cache[14] || (_cache[14] = createElementVNode("span", { class: "brand" }, [
             createElementVNode("span", {
               class: "brand-mark",
@@ -311,18 +313,18 @@ const _sfc_main$m = /* @__PURE__ */ defineComponent({
             }, "D"),
             createElementVNode("span", { class: "brand-name" }, "Daanse Board")
           ], -1)),
-          createElementVNode("nav", _hoisted_2$j, [
+          createElementVNode("nav", _hoisted_2$k, [
             (openBlock(true), createElementBlock(Fragment, null, renderList(crumb.value, (part, i) => {
               return openBlock(), createElementBlock(Fragment, {
                 key: part.label + i
               }, [
-                i > 0 ? (openBlock(), createElementBlock("span", _hoisted_3$f, "/")) : createCommentVNode("", true),
+                i > 0 ? (openBlock(), createElementBlock("span", _hoisted_3$g, "/")) : createCommentVNode("", true),
                 part.to && i < crumb.value.length - 1 ? (openBlock(), createElementBlock("button", {
                   key: 1,
                   type: "button",
                   class: "crumb-part crumb-link",
                   onClick: ($event) => unref(router2).push(part.to)
-                }, toDisplayString(part.label), 9, _hoisted_4$e)) : (openBlock(), createElementBlock("span", {
+                }, toDisplayString(part.label), 9, _hoisted_4$f)) : (openBlock(), createElementBlock("span", {
                   key: 2,
                   class: normalizeClass(["crumb-part", { current: i === crumb.value.length - 1 }])
                 }, toDisplayString(part.label), 3))
@@ -343,13 +345,13 @@ const _sfc_main$m = /* @__PURE__ */ defineComponent({
               title: "Seite wechseln",
               onClick: _cache[0] || (_cache[0] = ($event) => pagesOpen.value = !pagesOpen.value)
             }, [
-              createElementVNode("span", _hoisted_6$b, toDisplayString(currentPageName.value), 1),
+              createElementVNode("span", _hoisted_6$c, toDisplayString(currentPageName.value), 1),
               _cache[7] || (_cache[7] = createElementVNode("span", {
                 class: "pages__caret",
                 "aria-hidden": "true"
               }, "▾", -1))
-            ], 8, _hoisted_5$c),
-            pagesOpen.value ? (openBlock(), createElementBlock("ul", _hoisted_7$b, [
+            ], 8, _hoisted_5$d),
+            pagesOpen.value ? (openBlock(), createElementBlock("ul", _hoisted_7$c, [
               (openBlock(true), createElementBlock(Fragment, null, renderList(pages.value, (page) => {
                 return openBlock(), createElementBlock("li", {
                   key: page.id,
@@ -361,7 +363,7 @@ const _sfc_main$m = /* @__PURE__ */ defineComponent({
                     role: "menuitem",
                     class: normalizeClass(["pages__item", { on: page.id === pageId.value }]),
                     onClick: ($event) => choosePage(page.id)
-                  }, toDisplayString(page.name), 11, _hoisted_8$b),
+                  }, toDisplayString(page.name), 11, _hoisted_8$c),
                   canRemove.value ? (openBlock(), createElementBlock("button", {
                     key: 0,
                     type: "button",
@@ -369,7 +371,7 @@ const _sfc_main$m = /* @__PURE__ */ defineComponent({
                     title: `Seite „${page.name}“ löschen`,
                     "aria-label": `Seite ${page.name} löschen`,
                     onClick: withModifiers(($event) => removePage(page.id), ["stop"])
-                  }, " × ", 8, _hoisted_9$9)) : createCommentVNode("", true)
+                  }, " × ", 8, _hoisted_9$b)) : createCommentVNode("", true)
                 ]);
               }), 128)),
               _cache[8] || (_cache[8] = createElementVNode("li", {
@@ -399,7 +401,7 @@ const _sfc_main$m = /* @__PURE__ */ defineComponent({
               name: "undo",
               size: "sm"
             })
-          ], 8, _hoisted_10$9)) : createCommentVNode("", true),
+          ], 8, _hoisted_10$a)) : createCommentVNode("", true),
           isEditing.value && unref(history) ? (openBlock(), createElementBlock("button", {
             key: 2,
             type: "button",
@@ -413,7 +415,7 @@ const _sfc_main$m = /* @__PURE__ */ defineComponent({
               name: "redo",
               size: "sm"
             })
-          ], 8, _hoisted_11$7)) : createCommentVNode("", true),
+          ], 8, _hoisted_11$8)) : createCommentVNode("", true),
           isEditing.value ? (openBlock(), createElementBlock("button", {
             key: 3,
             type: "button",
@@ -445,7 +447,7 @@ const _sfc_main$m = /* @__PURE__ */ defineComponent({
                 fill: "currentColor"
               })
             ], -1)
-          ])], 10, _hoisted_12$7)) : createCommentVNode("", true),
+          ])], 10, _hoisted_12$8)) : createCommentVNode("", true),
           isEditing.value && hasBackdrop.value ? (openBlock(), createElementBlock("button", {
             key: 4,
             type: "button",
@@ -486,7 +488,7 @@ const _sfc_main$m = /* @__PURE__ */ defineComponent({
                 "stroke-linejoin": "round"
               })
             ], -1)
-          ])], 10, _hoisted_13$6)) : createCommentVNode("", true),
+          ])], 10, _hoisted_13$7)) : createCommentVNode("", true),
           isEditing.value ? (openBlock(), createElementBlock("button", {
             key: 5,
             type: "button",
@@ -497,8 +499,8 @@ const _sfc_main$m = /* @__PURE__ */ defineComponent({
             onClick: _cache[5] || (_cache[5] = //@ts-ignore
             (...args) => unref(togglePalette) && unref(togglePalette)(...args))
           }, [..._cache[11] || (_cache[11] = [
-            createStaticVNode('<svg viewBox="0 0 24 24" aria-hidden="true" width="15" height="15" data-v-7fa027b5><rect x="3.5" y="3.5" width="7" height="7" rx="1" fill="none" stroke="currentColor" stroke-width="1.6" data-v-7fa027b5></rect><rect x="13.5" y="3.5" width="7" height="7" rx="1" fill="none" stroke="currentColor" stroke-width="1.6" data-v-7fa027b5></rect><rect x="3.5" y="13.5" width="7" height="7" rx="1" fill="none" stroke="currentColor" stroke-width="1.6" data-v-7fa027b5></rect><rect x="13.5" y="13.5" width="7" height="7" rx="1" fill="currentColor" stroke="currentColor" stroke-width="1.6" data-v-7fa027b5></rect></svg>', 1)
-          ])], 10, _hoisted_14$6)) : createCommentVNode("", true),
+            createStaticVNode('<svg viewBox="0 0 24 24" aria-hidden="true" width="15" height="15" data-v-c882ba5e><rect x="3.5" y="3.5" width="7" height="7" rx="1" fill="none" stroke="currentColor" stroke-width="1.6" data-v-c882ba5e></rect><rect x="13.5" y="3.5" width="7" height="7" rx="1" fill="none" stroke="currentColor" stroke-width="1.6" data-v-c882ba5e></rect><rect x="3.5" y="13.5" width="7" height="7" rx="1" fill="none" stroke="currentColor" stroke-width="1.6" data-v-c882ba5e></rect><rect x="13.5" y="13.5" width="7" height="7" rx="1" fill="currentColor" stroke="currentColor" stroke-width="1.6" data-v-c882ba5e></rect></svg>', 1)
+          ])], 10, _hoisted_14$7)) : createCommentVNode("", true),
           showModes.value ? (openBlock(), createElementBlock("button", {
             key: 6,
             type: "button",
@@ -596,7 +598,7 @@ const _export_sfc = (sfc, props) => {
   }
   return target;
 };
-const Header = /* @__PURE__ */ _export_sfc(_sfc_main$m, [["__scopeId", "data-v-7fa027b5"]]);
+const Header = /* @__PURE__ */ _export_sfc(_sfc_main$n, [["__scopeId", "data-v-c882ba5e"]]);
 const TOKEN_GROUPS = [
   {
     id: "surfaces",
@@ -968,22 +970,23 @@ function useTheme() {
 function initTheme() {
   paint();
 }
-const _hoisted_1$k = { class: "shell" };
-const _hoisted_2$i = {
+const _hoisted_1$l = { class: "shell" };
+const _hoisted_2$j = {
   key: 0,
   class: "global-loading-bar"
 };
-const _hoisted_3$e = {
+const _hoisted_3$f = {
   key: 0,
   class: "rail",
   "aria-label": "Bereiche"
 };
-const _hoisted_4$d = ["aria-current"];
-const _hoisted_5$b = ["aria-current"];
-const _hoisted_6$a = ["aria-current", "title", "onClick"];
-const _hoisted_7$a = { class: "sr-only" };
-const _hoisted_8$a = { class: "content" };
-const _sfc_main$l = /* @__PURE__ */ defineComponent({
+const _hoisted_4$e = ["aria-current"];
+const _hoisted_5$c = ["aria-current"];
+const _hoisted_6$b = ["aria-current"];
+const _hoisted_7$b = ["aria-current", "title", "onClick"];
+const _hoisted_8$b = { class: "sr-only" };
+const _hoisted_9$a = { class: "content" };
+const _sfc_main$m = /* @__PURE__ */ defineComponent({
   __name: "App",
   setup(__props) {
     const navigationItems = ref([]);
@@ -1005,15 +1008,15 @@ const _sfc_main$l = /* @__PURE__ */ defineComponent({
     const go = (target) => router2.push(target);
     return (_ctx, _cache) => {
       const _component_router_view = resolveComponent("router-view");
-      return openBlock(), createElementBlock("div", _hoisted_1$k, [
-        unref(isLoading) ? (openBlock(), createElementBlock("div", _hoisted_2$i, [..._cache[2] || (_cache[2] = [
+      return openBlock(), createElementBlock("div", _hoisted_1$l, [
+        unref(isLoading) ? (openBlock(), createElementBlock("div", _hoisted_2$j, [..._cache[3] || (_cache[3] = [
           createElementVNode("div", { class: "global-loading-bar-progress" }, null, -1)
         ])])) : createCommentVNode("", true),
         createVNode(Header),
         createElementVNode("div", {
           class: normalizeClass(["shell-body", { "shell-body--norail": isLauncher.value }])
         }, [
-          !isLauncher.value ? (openBlock(), createElementBlock("nav", _hoisted_3$e, [
+          !isLauncher.value ? (openBlock(), createElementBlock("nav", _hoisted_3$f, [
             createElementVNode("button", {
               type: "button",
               class: normalizeClass(["ri", { on: boardActive.value }]),
@@ -1022,18 +1025,28 @@ const _sfc_main$l = /* @__PURE__ */ defineComponent({
               onClick: _cache[0] || (_cache[0] = ($event) => go(boardTarget.value))
             }, [
               createVNode(unref(DIcon), { name: "dashboard" }),
-              _cache[3] || (_cache[3] = createElementVNode("span", { class: "sr-only" }, "Board", -1))
-            ], 10, _hoisted_4$d),
+              _cache[4] || (_cache[4] = createElementVNode("span", { class: "sr-only" }, "Board", -1))
+            ], 10, _hoisted_4$e),
+            createElementVNode("button", {
+              type: "button",
+              class: normalizeClass(["ri", { on: unref(route).name === "pages" }]),
+              "aria-current": unref(route).name === "pages" ? "page" : void 0,
+              title: "Seiten",
+              onClick: _cache[1] || (_cache[1] = ($event) => go("/pages"))
+            }, [
+              createVNode(unref(DIcon), { name: "layers" }),
+              _cache[5] || (_cache[5] = createElementVNode("span", { class: "sr-only" }, "Seiten", -1))
+            ], 10, _hoisted_5$c),
             createElementVNode("button", {
               type: "button",
               class: normalizeClass(["ri", { on: unref(route).name === "data" }]),
               "aria-current": unref(route).name === "data" ? "page" : void 0,
               title: "Verbindungen & Daten",
-              onClick: _cache[1] || (_cache[1] = ($event) => go("/datasources"))
+              onClick: _cache[2] || (_cache[2] = ($event) => go("/datasources"))
             }, [
               createVNode(unref(DIcon), { name: "dataset" }),
-              _cache[4] || (_cache[4] = createElementVNode("span", { class: "sr-only" }, "Verbindungen & Daten", -1))
-            ], 10, _hoisted_5$b),
+              _cache[6] || (_cache[6] = createElementVNode("span", { class: "sr-only" }, "Verbindungen & Daten", -1))
+            ], 10, _hoisted_6$b),
             (openBlock(true), createElementBlock(Fragment, null, renderList(navigationItems.value, (item) => {
               return openBlock(), createElementBlock("button", {
                 key: item.id,
@@ -1046,12 +1059,12 @@ const _sfc_main$l = /* @__PURE__ */ defineComponent({
                 createVNode(unref(DIcon), {
                   name: item.icon
                 }, null, 8, ["name"]),
-                createElementVNode("span", _hoisted_7$a, toDisplayString(item.label), 1)
-              ], 10, _hoisted_6$a);
+                createElementVNode("span", _hoisted_8$b, toDisplayString(item.label), 1)
+              ], 10, _hoisted_7$b);
             }), 128)),
-            _cache[5] || (_cache[5] = createElementVNode("span", { class: "rail-spacer" }, null, -1))
+            _cache[7] || (_cache[7] = createElementVNode("span", { class: "rail-spacer" }, null, -1))
           ])) : createCommentVNode("", true),
-          createElementVNode("main", _hoisted_8$a, [
+          createElementVNode("main", _hoisted_9$a, [
             (openBlock(), createBlock(_component_router_view, {
               key: _ctx.$route.fullPath
             }))
@@ -1061,7 +1074,7 @@ const _sfc_main$l = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const App = /* @__PURE__ */ _export_sfc(_sfc_main$l, [["__scopeId", "data-v-27fec35c"]]);
+const App = /* @__PURE__ */ _export_sfc(_sfc_main$m, [["__scopeId", "data-v-ce3039cb"]]);
 const KEY = "daanse.board.usage";
 function read() {
   try {
@@ -1106,27 +1119,27 @@ function useBoardUsage() {
   }
   return { usage, recordOpened, usageOf, byUsage, lastOpenedLabel };
 }
-const _hoisted_1$j = {
+const _hoisted_1$k = {
   key: 0,
   class: "loading-state"
 };
-const _hoisted_2$h = {
+const _hoisted_2$i = {
   key: 1,
   class: "view-component-wrapper"
 };
-const _hoisted_3$d = {
+const _hoisted_3$e = {
   key: 2,
   class: "edit-component-wrapper"
 };
-const _hoisted_4$c = {
+const _hoisted_4$d = {
   key: 3,
   class: "no-layout-message"
 };
-const _hoisted_5$a = { class: "no-layout-message__text" };
-const _hoisted_6$9 = { key: 0 };
-const _hoisted_7$9 = { key: 1 };
-const _hoisted_8$9 = { key: 2 };
-const _sfc_main$k = /* @__PURE__ */ defineComponent({
+const _hoisted_5$b = { class: "no-layout-message__text" };
+const _hoisted_6$a = { key: 0 };
+const _hoisted_7$a = { key: 1 };
+const _hoisted_8$a = { key: 2 };
+const _sfc_main$l = /* @__PURE__ */ defineComponent({
   __name: "LayoutRenderer",
   props: {
     pageId: {},
@@ -1136,8 +1149,8 @@ const _sfc_main$k = /* @__PURE__ */ defineComponent({
   setup(__props, { emit: __emit }) {
     const props = __props;
     const emit = __emit;
-    const layoutRepo = inject(identifier$1);
-    const pageRepo = inject(identifier);
+    const layoutRepo = inject(identifier$2);
+    const pageRepo = inject(identifier$1);
     const currentPage = ref(null);
     const currentLayout = ref(null);
     const EditComponent = shallowRef(null);
@@ -1204,32 +1217,32 @@ const _sfc_main$k = /* @__PURE__ */ defineComponent({
           backgroundRepeat: currentPage.value?.backgroundRepeat || "no-repeat"
         })
       }, [
-        isLoading.value ? (openBlock(), createElementBlock("div", _hoisted_1$j, [..._cache[0] || (_cache[0] = [
+        isLoading.value ? (openBlock(), createElementBlock("div", _hoisted_1$k, [..._cache[0] || (_cache[0] = [
           createElementVNode("span", {
             class: "spinner",
             "aria-hidden": "true"
           }, null, -1),
           createElementVNode("p", null, "Layout wird geladen…", -1)
-        ])])) : props.viewMode && ViewComponent.value && currentLayout.value ? (openBlock(), createElementBlock("div", _hoisted_2$h, [
+        ])])) : props.viewMode && ViewComponent.value && currentLayout.value ? (openBlock(), createElementBlock("div", _hoisted_2$i, [
           (openBlock(), createBlock(resolveDynamicComponent(ViewComponent.value), {
             key: currentLayout.value.id || "view",
             "layout-settings": currentPage.value?.layoutSettings
           }, null, 8, ["layout-settings"]))
-        ])) : !props.viewMode && EditComponent.value && currentLayout.value ? (openBlock(), createElementBlock("div", _hoisted_3$d, [
+        ])) : !props.viewMode && EditComponent.value && currentLayout.value ? (openBlock(), createElementBlock("div", _hoisted_3$e, [
           (openBlock(), createBlock(resolveDynamicComponent(EditComponent.value), {
             key: currentLayout.value.id || "edit",
             "layout-settings": currentPage.value?.layoutSettings,
             onOpenSettings: handleOpenWidgetSettings,
             onRemoveWidget: handleRemoveWidget
           }, null, 40, ["layout-settings"]))
-        ])) : (openBlock(), createElementBlock("div", _hoisted_4$c, [
-          createElementVNode("p", _hoisted_5$a, [
+        ])) : (openBlock(), createElementBlock("div", _hoisted_4$d, [
+          createElementVNode("p", _hoisted_5$b, [
             createVNode(unref(DIcon), {
               name: "warning",
               size: "lg",
               tone: "color-warn"
             }),
-            !currentPage.value ? (openBlock(), createElementBlock("span", _hoisted_6$9, " Die Seite „" + toDisplayString(props.pageId) + '" gibt es nicht. ', 1)) : !currentLayout.value ? (openBlock(), createElementBlock("span", _hoisted_7$9, " Für „" + toDisplayString(currentPage.value.name || props.pageId) + '" ist kein Layout eingestellt. ', 1)) : (openBlock(), createElementBlock("span", _hoisted_8$9, [
+            !currentPage.value ? (openBlock(), createElementBlock("span", _hoisted_6$a, " Die Seite „" + toDisplayString(props.pageId) + '" gibt es nicht. ', 1)) : !currentLayout.value ? (openBlock(), createElementBlock("span", _hoisted_7$a, " Für „" + toDisplayString(currentPage.value.name || props.pageId) + '" ist kein Layout eingestellt. ', 1)) : (openBlock(), createElementBlock("span", _hoisted_8$a, [
               createTextVNode(toDisplayString(props.viewMode ? "Zu diesem Layout gibt es keine Darstellung." : "Zu diesem Layout gibt es keinen Editor.") + " ", 1),
               _cache[1] || (_cache[1] = createElementVNode("br", null, null, -1)),
               createElementVNode("small", null, "Layout: " + toDisplayString(currentLayout.value.id), 1)
@@ -1240,16 +1253,16 @@ const _sfc_main$k = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const LayoutRenderer = /* @__PURE__ */ _export_sfc(_sfc_main$k, [["__scopeId", "data-v-965fd8c7"]]);
-const _hoisted_1$i = {
+const LayoutRenderer = /* @__PURE__ */ _export_sfc(_sfc_main$l, [["__scopeId", "data-v-965fd8c7"]]);
+const _hoisted_1$j = {
   class: "floorplan",
   "aria-hidden": "true"
 };
-const _hoisted_2$g = {
+const _hoisted_2$h = {
   key: 0,
   class: "floorplan__empty"
 };
-const _sfc_main$j = /* @__PURE__ */ defineComponent({
+const _sfc_main$k = /* @__PURE__ */ defineComponent({
   __name: "BoardFloorplan",
   props: {
     items: {},
@@ -1285,7 +1298,7 @@ const _sfc_main$j = /* @__PURE__ */ defineComponent({
       }));
     });
     return (_ctx, _cache) => {
-      return openBlock(), createElementBlock("div", _hoisted_1$i, [
+      return openBlock(), createElementBlock("div", _hoisted_1$j, [
         (openBlock(true), createElementBlock(Fragment, null, renderList(blocks.value, (block) => {
           return openBlock(), createElementBlock("div", {
             key: block.key,
@@ -1293,12 +1306,12 @@ const _sfc_main$j = /* @__PURE__ */ defineComponent({
             style: normalizeStyle(block.style)
           }, null, 6);
         }), 128)),
-        blocks.value.length === 0 ? (openBlock(), createElementBlock("span", _hoisted_2$g, "keine Widgets")) : createCommentVNode("", true)
+        blocks.value.length === 0 ? (openBlock(), createElementBlock("span", _hoisted_2$h, "keine Widgets")) : createCommentVNode("", true)
       ]);
     };
   }
 });
-const BoardFloorplan = /* @__PURE__ */ _export_sfc(_sfc_main$j, [["__scopeId", "data-v-0eecd73b"]]);
+const BoardFloorplan = /* @__PURE__ */ _export_sfc(_sfc_main$k, [["__scopeId", "data-v-0eecd73b"]]);
 const { parse: $parse } = JSON;
 const { keys } = Object;
 const Primitive = String;
@@ -1398,6 +1411,10 @@ function readLegacyWorkspace(data) {
     mapping.definition = entry;
     workspace.eventMappings.push(mapping);
   }
+  const board = new BoardImpl();
+  board.id = crypto.randomUUID();
+  board.name = "Board";
+  workspace.board = board;
   for (const [id, stored] of Object.entries(data.pages ?? {})) {
     const info = stored?.info ?? {};
     const page = new PageImpl();
@@ -1434,14 +1451,14 @@ function readLegacyWorkspace(data) {
       item.group = stored_item.group;
       page.layout.push(item);
     }
-    workspace.pages.push(page);
+    board.pages.push(page);
   }
   for (const { entry, variable } of variables) {
     const pageId = entry["pageId"];
     if (!pageId) continue;
-    variable.page = workspace.pages.toArray().find((page) => page.id === pageId);
+    variable.page = board.pages.toArray().find((page) => page.id === pageId);
   }
-  if (workspace.pages.size() > 0) workspace.defaultPage = workspace.pages.get(0);
+  if (board.pages.size() > 0) board.defaultPage = board.pages.get(0);
   return workspace;
 }
 const origin = ref();
@@ -1449,20 +1466,41 @@ function useWorkspaceOrigin() {
   return origin;
 }
 const WORKSPACE_URI = "workspace.json";
+const BOARD_ECLASS = "http://org.eclipse.daanse.board.app.lib.model.workspace#//Board";
+function liftPagesIntoBoard(data) {
+  if (!data || typeof data !== "object") return data;
+  const held = data;
+  if (held.board || !Array.isArray(held.pages)) return data;
+  const moved = JSON.parse(
+    JSON.stringify(held).replace(/"\/\/@pages\./g, '"//@board/@pages.')
+  );
+  const board = {
+    eClass: BOARD_ECLASS,
+    id: crypto.randomUUID(),
+    /* Nothing in the old shape named the board; the pages were the boards. */
+    name: "Board",
+    pages: moved.pages
+  };
+  if (moved.defaultPage) board.defaultPage = moved.defaultPage;
+  delete moved.pages;
+  delete moved.defaultPage;
+  moved.board = board;
+  return moved;
+}
 function parseWorkspace(content) {
   const data = decodeStored(content);
   if (!data) return void 0;
   try {
     if (!isResource(data)) return readLegacyWorkspace(data);
     const resource = new JSONResource(URI.createURI(WORKSPACE_URI));
-    resource.loadFromString(JSON.stringify(data));
+    resource.loadFromString(JSON.stringify(liftPagesIntoBoard(data)));
     return resource.getContents().get(0);
   } catch {
     return void 0;
   }
 }
 function useWorkspaceFile() {
-  const workspace = inject(identifier$2);
+  const workspace = inject(identifier);
   const connections = inject(identifier$3);
   const datasources = inject(identifier$4);
   const variables = inject(identifier$5);
@@ -1492,13 +1530,11 @@ function useWorkspaceFile() {
     for (const connection of loaded.connections.toArray()) workspace.connections.push(connection);
     workspace.datasources.clear();
     for (const source of loaded.datasources.toArray()) workspace.datasources.push(source);
-    workspace.pages.clear();
-    for (const page of loaded.pages.toArray()) workspace.pages.push(page);
+    workspace.board = loaded.board;
     workspace.variables.clear();
     for (const variable of loaded.variables.toArray()) workspace.variables.push(variable);
     workspace.eventMappings.clear();
     for (const mapping of loaded.eventMappings.toArray()) workspace.eventMappings.push(mapping);
-    workspace.defaultPage = workspace.pages.toArray().find((page) => page.id === loaded.defaultPage?.id) ?? (workspace.pages.size() > 0 ? workspace.pages.get(0) : void 0);
     connections?.rebuildLive();
     datasources?.rebuildLive();
     variables?.rebuildLive();
@@ -1506,7 +1542,7 @@ function useWorkspaceFile() {
       workspace.eventMappings.toArray().map((mapping) => mapping.definition)
     );
     const opened = [];
-    for (const page of workspace.pages.toArray()) {
+    for (const page of workspace.board?.pages.toArray() ?? []) {
       variableWrappers?.initilazeVariableWrappers(
         page.widgets.toArray().map((widget) => ({
           uid: widget.uid,
@@ -1525,7 +1561,7 @@ function shortKind(type) {
   const parts = type.split(".").filter(Boolean);
   return (parts[parts.length - 1] ?? type).replace(/widget$/i, "") || type;
 }
-function summarizeBoard(id, page, layout, widgets) {
+function summarizePage(id, page, layout, widgets) {
   const items = Array.isArray(layout) ? layout : [];
   const list = Array.isArray(widgets) ? widgets : [];
   const typeById = {};
@@ -1547,32 +1583,32 @@ function summarizeBoard(id, page, layout, widgets) {
     kinds
   };
 }
-const _hoisted_1$h = { class: "storage" };
-const _hoisted_2$f = {
+const _hoisted_1$i = { class: "storage" };
+const _hoisted_2$g = {
   class: "tree",
   "aria-label": "Speicher"
 };
-const _hoisted_3$c = {
+const _hoisted_3$d = {
   class: "tree__body",
   role: "tree"
 };
-const _hoisted_4$b = ["aria-expanded", "onClick"];
-const _hoisted_5$9 = { class: "row__twist" };
-const _hoisted_6$8 = { class: "row__name" };
-const _hoisted_7$8 = { class: "row__meta" };
-const _hoisted_8$8 = ["onClick"];
-const _hoisted_9$8 = { class: "row__name" };
-const _hoisted_10$8 = { class: "row__meta" };
-const _hoisted_11$6 = {
+const _hoisted_4$c = ["aria-expanded", "onClick"];
+const _hoisted_5$a = { class: "row__twist" };
+const _hoisted_6$9 = { class: "row__name" };
+const _hoisted_7$9 = { class: "row__meta" };
+const _hoisted_8$9 = ["onClick"];
+const _hoisted_9$9 = { class: "row__name" };
+const _hoisted_10$9 = { class: "row__meta" };
+const _hoisted_11$7 = {
   key: 0,
   class: "row row--hint"
 };
-const _hoisted_12$6 = ["onClick"];
-const _hoisted_13$5 = {
+const _hoisted_12$7 = ["onClick"];
+const _hoisted_13$6 = {
   key: 0,
   class: "row row--hint"
 };
-const _hoisted_14$5 = { class: "detail" };
+const _hoisted_14$6 = { class: "detail" };
 const _hoisted_15$5 = {
   key: 0,
   class: "detail__failure",
@@ -1587,31 +1623,31 @@ const _hoisted_21$4 = {
   key: 0,
   class: "detail__badge"
 };
-const _hoisted_22$3 = { class: "detail__facts" };
-const _hoisted_23$3 = {
+const _hoisted_22$4 = { class: "detail__facts" };
+const _hoisted_23$4 = {
   key: 0,
   class: "boards"
 };
-const _hoisted_24$2 = { class: "board__text" };
-const _hoisted_25$1 = { class: "board__name" };
-const _hoisted_26$1 = { class: "board__facts" };
-const _hoisted_27$1 = {
+const _hoisted_24$3 = { class: "board__text" };
+const _hoisted_25$2 = { class: "board__name" };
+const _hoisted_26$2 = { class: "board__facts" };
+const _hoisted_27$2 = {
   key: 0,
   class: "board__kinds"
 };
-const _hoisted_28$1 = {
+const _hoisted_28$2 = {
   key: 1,
   class: "detail__hint"
 };
-const _hoisted_29$1 = {
+const _hoisted_29$2 = {
   key: 4,
   class: "detail__hint"
 };
-const _hoisted_30$1 = {
+const _hoisted_30$2 = {
   key: 5,
   class: "detail__hint"
 };
-const _sfc_main$i = /* @__PURE__ */ defineComponent({
+const _sfc_main$j = /* @__PURE__ */ defineComponent({
   __name: "WorkspaceStorage",
   emits: ["restored"],
   setup(__props, { emit: __emit }) {
@@ -1714,8 +1750,8 @@ const _sfc_main$i = /* @__PURE__ */ defineComponent({
       return summarize(parseWorkspace(entry?.data));
     }
     function summarize(held) {
-      return (held?.pages.toArray() ?? []).map(
-        (page) => summarizeBoard(page.id, page, page.layout.toArray(), page.widgets.toArray())
+      return (held?.board?.pages.toArray() ?? []).map(
+        (page) => summarizePage(page.id, page, page.layout.toArray(), page.widgets.toArray())
       );
     }
     const boards = computed(() => boardsIn(selectedEntry.value));
@@ -1727,7 +1763,7 @@ const _sfc_main$i = /* @__PURE__ */ defineComponent({
     function entrySummary(entry) {
       const list = boardsIn(entry);
       if (list.length === 0) return "leer";
-      return `${list.length} ${list.length === 1 ? "Board" : "Boards"}`;
+      return `${list.length} ${list.length === 1 ? "Seite" : "Seiten"}`;
     }
     const pending = computed(() => {
       if (!creating.value) return { boards: 0, widgets: 0 };
@@ -1809,8 +1845,8 @@ const _sfc_main$i = /* @__PURE__ */ defineComponent({
     onMounted(loadPlaces);
     watch(() => repoManager, loadPlaces);
     return (_ctx, _cache) => {
-      return openBlock(), createElementBlock("div", _hoisted_1$h, [
-        createElementVNode("aside", _hoisted_2$f, [
+      return openBlock(), createElementBlock("div", _hoisted_1$i, [
+        createElementVNode("aside", _hoisted_2$g, [
           withDirectives(createElementVNode("input", {
             "onUpdate:modelValue": _cache[0] || (_cache[0] = ($event) => query.value = $event),
             class: "tree__search",
@@ -1820,7 +1856,7 @@ const _sfc_main$i = /* @__PURE__ */ defineComponent({
           }, null, 512), [
             [vModelText, query.value]
           ]),
-          createElementVNode("div", _hoisted_3$c, [
+          createElementVNode("div", _hoisted_3$d, [
             (openBlock(true), createElementBlock(Fragment, null, renderList(places.value, (place) => {
               return openBlock(), createElementBlock(Fragment, {
                 key: key(place)
@@ -1832,10 +1868,10 @@ const _sfc_main$i = /* @__PURE__ */ defineComponent({
                   class: normalizeClass(["row", "row--place", { on: selectedPlace.value === place && !selectedEntry.value }]),
                   onClick: ($event) => togglePlace(place)
                 }, [
-                  createElementVNode("span", _hoisted_5$9, toDisplayString(expanded.value.has(key(place)) ? "▾" : "▸"), 1),
-                  createElementVNode("span", _hoisted_6$8, toDisplayString(place.name), 1),
-                  createElementVNode("span", _hoisted_7$8, toDisplayString((entriesByPlace.value[key(place)] ?? []).length), 1)
-                ], 10, _hoisted_4$b),
+                  createElementVNode("span", _hoisted_5$a, toDisplayString(expanded.value.has(key(place)) ? "▾" : "▸"), 1),
+                  createElementVNode("span", _hoisted_6$9, toDisplayString(place.name), 1),
+                  createElementVNode("span", _hoisted_7$9, toDisplayString((entriesByPlace.value[key(place)] ?? []).length), 1)
+                ], 10, _hoisted_4$c),
                 expanded.value.has(key(place)) ? (openBlock(), createElementBlock(Fragment, { key: 0 }, [
                   (openBlock(true), createElementBlock(Fragment, null, renderList(entriesOf(place), (entry) => {
                     return openBlock(), createElementBlock("button", {
@@ -1849,11 +1885,11 @@ const _sfc_main$i = /* @__PURE__ */ defineComponent({
                         class: normalizeClass(["row__dot", { open: isOpen(entry) }]),
                         "aria-hidden": "true"
                       }, null, 2),
-                      createElementVNode("span", _hoisted_9$8, toDisplayString(label(entry)), 1),
-                      createElementVNode("span", _hoisted_10$8, toDisplayString(entrySummary(entry)), 1)
-                    ], 10, _hoisted_8$8);
+                      createElementVNode("span", _hoisted_9$9, toDisplayString(label(entry)), 1),
+                      createElementVNode("span", _hoisted_10$9, toDisplayString(entrySummary(entry)), 1)
+                    ], 10, _hoisted_8$9);
                   }), 128)),
-                  entriesOf(place).length === 0 ? (openBlock(), createElementBlock("p", _hoisted_11$6, toDisplayString(query.value ? "Nichts gefunden" : "Noch kein Stand"), 1)) : createCommentVNode("", true),
+                  entriesOf(place).length === 0 ? (openBlock(), createElementBlock("p", _hoisted_11$7, toDisplayString(query.value ? "Nichts gefunden" : "Noch kein Stand"), 1)) : createCommentVNode("", true),
                   isWritable(place) ? (openBlock(), createElementBlock("button", {
                     key: 1,
                     type: "button",
@@ -1862,14 +1898,14 @@ const _sfc_main$i = /* @__PURE__ */ defineComponent({
                   }, [..._cache[8] || (_cache[8] = [
                     createElementVNode("span", { class: "row__twist" }, "＋", -1),
                     createElementVNode("span", { class: "row__name" }, "Aktuellen Stand ablegen…", -1)
-                  ])], 8, _hoisted_12$6)) : createCommentVNode("", true)
+                  ])], 8, _hoisted_12$7)) : createCommentVNode("", true)
                 ], 64)) : createCommentVNode("", true)
               ], 64);
             }), 128)),
-            !places.value.length ? (openBlock(), createElementBlock("p", _hoisted_13$5, "Keine Speicherorte eingerichtet.")) : createCommentVNode("", true)
+            !places.value.length ? (openBlock(), createElementBlock("p", _hoisted_13$6, "Keine Speicherorte eingerichtet.")) : createCommentVNode("", true)
           ])
         ]),
-        createElementVNode("section", _hoisted_14$5, [
+        createElementVNode("section", _hoisted_14$6, [
           failure.value ? (openBlock(), createElementBlock("p", _hoisted_15$5, toDisplayString(failure.value), 1)) : createCommentVNode("", true),
           creating.value ? (openBlock(), createElementBlock(Fragment, { key: 1 }, [
             createElementVNode("header", _hoisted_16$4, [
@@ -1913,7 +1949,7 @@ const _sfc_main$i = /* @__PURE__ */ defineComponent({
                 ])]),
                 _: 1
               }),
-              createElementVNode("p", _hoisted_18$4, " Abgelegt wird der gesamte Arbeitsstand: " + toDisplayString(pending.value.boards) + " " + toDisplayString(pending.value.boards === 1 ? "Board" : "Boards") + " mit " + toDisplayString(pending.value.widgets) + " Widgets, dazu Verbindungen, Datenquellen und Variablen. ", 1)
+              createElementVNode("p", _hoisted_18$4, " Abgelegt wird der gesamte Arbeitsstand: " + toDisplayString(pending.value.boards) + " " + toDisplayString(pending.value.boards === 1 ? "Seite" : "Seiten") + " mit " + toDisplayString(pending.value.widgets) + " Widgets, dazu Verbindungen, Datenquellen und Variablen. ", 1)
             ], 32)
           ], 64)) : placeView.value && !selectedEntry.value ? (openBlock(), createBlock(resolveDynamicComponent(placeView.value), {
             key: 2,
@@ -1924,7 +1960,7 @@ const _sfc_main$i = /* @__PURE__ */ defineComponent({
             createElementVNode("header", _hoisted_19$4, [
               createElementVNode("h2", _hoisted_20$4, toDisplayString(label(selectedEntry.value)), 1),
               isOpen(selectedEntry.value) ? (openBlock(), createElementBlock("span", _hoisted_21$4, "geladen")) : createCommentVNode("", true),
-              createElementVNode("span", _hoisted_22$3, toDisplayString(selectedPlace.value?.name) + " · " + toDisplayString(totals.value.boards) + " " + toDisplayString(totals.value.boards === 1 ? "Board" : "Boards") + " · " + toDisplayString(totals.value.widgets) + " Widgets · " + toDisplayString(totals.value.sources) + " Datenquellen ", 1),
+              createElementVNode("span", _hoisted_22$4, toDisplayString(selectedPlace.value?.name) + " · " + toDisplayString(totals.value.boards) + " " + toDisplayString(totals.value.boards === 1 ? "Seite" : "Seiten") + " · " + toDisplayString(totals.value.widgets) + " Widgets · " + toDisplayString(totals.value.sources) + " Datenquellen ", 1),
               _cache[17] || (_cache[17] = createElementVNode("span", { class: "detail__spacer" }, null, -1)),
               createVNode(unref(DButton), {
                 intent: "primary",
@@ -1968,7 +2004,7 @@ const _sfc_main$i = /* @__PURE__ */ defineComponent({
                 _: 1
               })) : createCommentVNode("", true)
             ]),
-            boards.value.length ? (openBlock(), createElementBlock("div", _hoisted_23$3, [
+            boards.value.length ? (openBlock(), createElementBlock("div", _hoisted_23$4, [
               (openBlock(true), createElementBlock(Fragment, null, renderList(boards.value, (board) => {
                 return openBlock(), createElementBlock("article", {
                   key: board.id,
@@ -1978,71 +2014,55 @@ const _sfc_main$i = /* @__PURE__ */ defineComponent({
                     items: board.items,
                     "type-by-id": board.typeById
                   }, null, 8, ["items", "type-by-id"]),
-                  createElementVNode("div", _hoisted_24$2, [
-                    createElementVNode("h3", _hoisted_25$1, toDisplayString(board.name), 1),
-                    createElementVNode("p", _hoisted_26$1, toDisplayString(board.widgetCount) + " Widgets · " + toDisplayString(board.sourceCount) + " " + toDisplayString(board.sourceCount === 1 ? "Datenquelle" : "Datenquellen"), 1),
-                    board.kinds.length ? (openBlock(), createElementBlock("p", _hoisted_27$1, toDisplayString(board.kinds.join(" · ")), 1)) : createCommentVNode("", true)
+                  createElementVNode("div", _hoisted_24$3, [
+                    createElementVNode("h3", _hoisted_25$2, toDisplayString(board.name), 1),
+                    createElementVNode("p", _hoisted_26$2, toDisplayString(board.widgetCount) + " Widgets · " + toDisplayString(board.sourceCount) + " " + toDisplayString(board.sourceCount === 1 ? "Datenquelle" : "Datenquellen"), 1),
+                    board.kinds.length ? (openBlock(), createElementBlock("p", _hoisted_27$2, toDisplayString(board.kinds.join(" · ")), 1)) : createCommentVNode("", true)
                   ])
                 ]);
               }), 128))
-            ])) : (openBlock(), createElementBlock("p", _hoisted_28$1, " In diesem Stand liegt kein Board - er enthält nur Verbindungen, Quellen oder Variablen. "))
-          ], 64)) : busy.value ? (openBlock(), createElementBlock("p", _hoisted_29$1, "Wird gelesen…")) : (openBlock(), createElementBlock("p", _hoisted_30$1, "Wähle links einen Stand, um zu sehen, was darin liegt."))
+            ])) : (openBlock(), createElementBlock("p", _hoisted_28$2, " In diesem Stand liegt kein Board - er enthält nur Verbindungen, Quellen oder Variablen. "))
+          ], 64)) : busy.value ? (openBlock(), createElementBlock("p", _hoisted_29$2, "Wird gelesen…")) : (openBlock(), createElementBlock("p", _hoisted_30$2, "Wähle links einen Stand, um zu sehen, was darin liegt."))
         ])
       ]);
     };
   }
 });
-const WorkspaceStorage = /* @__PURE__ */ _export_sfc(_sfc_main$i, [["__scopeId", "data-v-82d034f3"]]);
-const _hoisted_1$g = { class: "boards" };
-const _hoisted_2$e = { class: "boards__panel" };
-const _hoisted_3$b = { class: "boards__bar" };
-const _hoisted_4$a = {
+const WorkspaceStorage = /* @__PURE__ */ _export_sfc(_sfc_main$j, [["__scopeId", "data-v-3b03814f"]]);
+const _hoisted_1$h = { class: "boards" };
+const _hoisted_2$f = { class: "boards__panel" };
+const _hoisted_3$c = { class: "boards__bar" };
+const _hoisted_4$b = {
   class: "boards__views",
   role: "tablist",
   "aria-label": "Ansicht"
 };
-const _hoisted_5$8 = ["aria-selected"];
-const _hoisted_6$7 = {
-  key: 0,
-  class: "boards__count"
-};
-const _hoisted_7$7 = ["aria-selected"];
-const _hoisted_8$7 = {
-  key: 0,
-  class: "boards__tools"
-};
-const _hoisted_9$7 = { class: "boards__body" };
-const _hoisted_10$7 = {
+const _hoisted_5$9 = ["aria-selected"];
+const _hoisted_6$8 = ["aria-selected"];
+const _hoisted_7$8 = { class: "boards__body" };
+const _hoisted_8$8 = {
   key: 0,
   class: "boards__empty"
 };
-const _hoisted_11$5 = { class: "boards__empty-actions" };
-const _hoisted_12$5 = {
+const _hoisted_9$8 = { class: "boards__empty-actions" };
+const _hoisted_10$8 = {
   key: 1,
-  class: "boards__grid"
+  class: "single"
 };
-const _hoisted_13$4 = ["aria-label", "onClick", "onKeydown"];
-const _hoisted_14$4 = { class: "board__body" };
-const _hoisted_15$4 = { class: "board__name" };
-const _hoisted_16$3 = { class: "board__meta" };
-const _hoisted_17$3 = {
+const _hoisted_11$6 = ["aria-label", "onKeydown"];
+const _hoisted_12$6 = {
+  class: "single__icon",
+  "aria-hidden": "true"
+};
+const _hoisted_13$5 = { class: "single__text" };
+const _hoisted_14$5 = { class: "single__name" };
+const _hoisted_15$4 = {
   key: 0,
-  class: "board__usage"
+  class: "single__desc"
 };
-const _hoisted_18$3 = {
-  key: 1,
-  class: "board__kinds"
-};
-const _hoisted_19$3 = {
-  key: 0,
-  class: "board__kind board__kind--more"
-};
-const _hoisted_20$3 = ["aria-label", "onClick"];
-const _hoisted_21$3 = {
-  key: 0,
-  class: "boards__nomatch"
-};
-const _sfc_main$h = /* @__PURE__ */ defineComponent({
+const _hoisted_16$3 = { class: "single__meta" };
+const _hoisted_17$3 = { class: "single__actions" };
+const _sfc_main$i = /* @__PURE__ */ defineComponent({
   __name: "BoardsHome",
   props: {
     pageRepo: {},
@@ -2052,40 +2072,43 @@ const _sfc_main$h = /* @__PURE__ */ defineComponent({
     const props = __props;
     const router2 = useRouter();
     const route = useRoute();
-    const query = ref("");
-    const { usageOf, byUsage, lastOpenedLabel } = useBoardUsage();
-    const view = ref(route.query.view === "storage" ? "storage" : "boards");
-    const pages = useEList(inject(identifier$2), (w) => w.pages);
-    const boards = computed(() => {
-      pages.value;
+    const { byUsage } = useBoardUsage();
+    const workspace = inject(identifier);
+    const modelledPages = useEList(workspace, (w) => w.board?.pages);
+    const board = computed(() => {
+      void modelledPages.value;
+      return workspace.board;
+    });
+    const view = ref(route.query.view === "storage" ? "storage" : "recent");
+    const pages = computed(() => {
+      void modelledPages.value;
       const repo = props.pageRepo;
       if (!repo) return [];
       return repo.getAllPageIds().slice().sort(byUsage).map(
-        (id) => (
-          /* Both halves come off the page itself now. */
-          summarizeBoard(
-            id,
-            repo.getPage(id),
-            repo.getPage(id)?.layout?.toArray() ?? [],
-            repo.getPage(id)?.widgets?.toArray() ?? []
-          )
+        (id) => summarizePage(
+          id,
+          repo.getPage(id),
+          repo.getPage(id)?.layout?.toArray() ?? [],
+          repo.getPage(id)?.widgets?.toArray() ?? []
         )
       );
     });
-    const visibleBoards = computed(() => {
-      const needle = query.value.trim().toLowerCase();
-      if (!needle) return boards.value;
-      return boards.value.filter(
-        (b) => b.name.toLowerCase().includes(needle) || b.description.toLowerCase().includes(needle) || b.kinds.some((k) => k.toLowerCase().includes(needle))
-      );
-    });
-    function openBoard(id) {
+    const boardTotals = computed(() => ({
+      pages: pages.value.length,
+      widgets: pages.value.reduce((sum, page) => sum + page.widgetCount, 0),
+      sources: new Set(pages.value.flatMap((page) => page.kinds)).size
+    }));
+    const entryPageId = computed(
+      () => props.pageRepo?.getDefaultPage()?.id ?? pages.value[0]?.id
+    );
+    function openPage(id) {
       router2.push(`/page/${id}`);
     }
-    function editBoard(id) {
-      router2.push(`/page/${id}/edit`);
+    function openBoard() {
+      const id = entryPageId.value;
+      if (id) openPage(id);
     }
-    function createBoard() {
+    function createPage() {
       const repo = props.pageRepo;
       if (!repo || !props.layoutRepo) return;
       const id = v4();
@@ -2104,52 +2127,28 @@ const _sfc_main$h = /* @__PURE__ */ defineComponent({
       view.value = "storage";
     }
     return (_ctx, _cache) => {
-      return openBlock(), createElementBlock("div", _hoisted_1$g, [
-        createElementVNode("div", _hoisted_2$e, [
-          createElementVNode("header", _hoisted_3$b, [
-            createElementVNode("div", _hoisted_4$a, [
+      return openBlock(), createElementBlock("div", _hoisted_1$h, [
+        createElementVNode("div", _hoisted_2$f, [
+          createElementVNode("header", _hoisted_3$c, [
+            createElementVNode("div", _hoisted_4$b, [
               createElementVNode("button", {
                 type: "button",
                 role: "tab",
-                "aria-selected": view.value === "boards",
-                class: normalizeClass(["boards__view", { on: view.value === "boards" }]),
-                onClick: _cache[0] || (_cache[0] = ($event) => view.value = "boards")
-              }, [
-                _cache[4] || (_cache[4] = createTextVNode(" Oft genutzt ", -1)),
-                boards.value.length ? (openBlock(), createElementBlock("span", _hoisted_6$7, toDisplayString(boards.value.length), 1)) : createCommentVNode("", true)
-              ], 10, _hoisted_5$8),
+                "aria-selected": view.value === "recent",
+                class: normalizeClass(["boards__view", { on: view.value === "recent" }]),
+                onClick: _cache[0] || (_cache[0] = ($event) => view.value = "recent")
+              }, " Oft benutzt ", 10, _hoisted_5$9),
               createElementVNode("button", {
                 type: "button",
                 role: "tab",
                 "aria-selected": view.value === "storage",
                 class: normalizeClass(["boards__view", { on: view.value === "storage" }]),
                 onClick: _cache[1] || (_cache[1] = ($event) => view.value = "storage")
-              }, " Speicher ", 10, _hoisted_7$7)
-            ]),
-            view.value === "boards" ? (openBlock(), createElementBlock("div", _hoisted_8$7, [
-              withDirectives(createElementVNode("input", {
-                "onUpdate:modelValue": _cache[2] || (_cache[2] = ($event) => query.value = $event),
-                class: "boards__search",
-                type: "search",
-                placeholder: "Boards filtern",
-                "aria-label": "Boards filtern"
-              }, null, 512), [
-                [vModelText, query.value]
-              ]),
-              createVNode(unref(DButton), {
-                intent: "primary",
-                size: "sm",
-                onClick: createBoard
-              }, {
-                default: withCtx(() => [..._cache[5] || (_cache[5] = [
-                  createTextVNode("Neues Board", -1)
-                ])]),
-                _: 1
-              })
-            ])) : createCommentVNode("", true)
+              }, " Speicher ", 10, _hoisted_6$8)
+            ])
           ]),
-          createElementVNode("div", _hoisted_9$7, [
-            view.value === "boards" && boards.value.length === 0 ? (openBlock(), createElementBlock("div", _hoisted_10$7, [
+          createElementVNode("div", _hoisted_7$8, [
+            view.value === "recent" && pages.value.length === 0 ? (openBlock(), createElementBlock("div", _hoisted_8$8, [
               createVNode(BoardFloorplan, {
                 class: "boards__empty-plan",
                 items: [
@@ -2160,16 +2159,16 @@ const _sfc_main$h = /* @__PURE__ */ defineComponent({
                 ],
                 "type-by-id": { a: "chart", b: "map", c: "table", d: "text" }
               }),
-              _cache[8] || (_cache[8] = createElementVNode("h2", { class: "boards__empty-title" }, "Noch kein Board", -1)),
-              _cache[9] || (_cache[9] = createElementVNode("p", { class: "boards__empty-text" }, " Ein Board ist eine Seite mit Widgets über deinen Datenquellen. Lege eines an oder öffne einen gespeicherten Arbeitsstand. ", -1)),
-              createElementVNode("div", _hoisted_11$5, [
+              _cache[5] || (_cache[5] = createElementVNode("h2", { class: "boards__empty-title" }, "Noch kein Board", -1)),
+              _cache[6] || (_cache[6] = createElementVNode("p", { class: "boards__empty-text" }, " Ein Board besteht aus Seiten, auf denen Widgets über deinen Datenquellen liegen. Lege eines an oder öffne einen gespeicherten Arbeitsstand. ", -1)),
+              createElementVNode("div", _hoisted_9$8, [
                 createVNode(unref(DButton), {
                   intent: "primary",
                   size: "sm",
-                  onClick: createBoard
+                  onClick: createPage
                 }, {
-                  default: withCtx(() => [..._cache[6] || (_cache[6] = [
-                    createTextVNode("Neues Board", -1)
+                  default: withCtx(() => [..._cache[3] || (_cache[3] = [
+                    createTextVNode("Board anlegen", -1)
                   ])]),
                   _: 1
                 }),
@@ -2177,73 +2176,53 @@ const _sfc_main$h = /* @__PURE__ */ defineComponent({
                   size: "sm",
                   onClick: openStorage
                 }, {
-                  default: withCtx(() => [..._cache[7] || (_cache[7] = [
+                  default: withCtx(() => [..._cache[4] || (_cache[4] = [
                     createTextVNode("Aus Speicher öffnen", -1)
                   ])]),
                   _: 1
                 })
               ])
-            ])) : view.value === "boards" ? (openBlock(), createElementBlock("div", _hoisted_12$5, [
-              (openBlock(true), createElementBlock(Fragment, null, renderList(visibleBoards.value, (board) => {
-                return openBlock(), createElementBlock("article", {
-                  key: board.id,
-                  class: "board",
-                  tabindex: "0",
-                  role: "button",
-                  "aria-label": `Board ${board.name} öffnen`,
-                  onClick: ($event) => openBoard(board.id),
-                  onKeydown: [
-                    withKeys(($event) => openBoard(board.id), ["enter"]),
-                    withKeys(withModifiers(($event) => openBoard(board.id), ["prevent"]), ["space"])
-                  ]
-                }, [
-                  createVNode(BoardFloorplan, {
-                    items: board.items,
-                    "type-by-id": board.typeById
-                  }, null, 8, ["items", "type-by-id"]),
-                  createElementVNode("div", _hoisted_14$4, [
-                    createElementVNode("h2", _hoisted_15$4, toDisplayString(board.name), 1),
-                    createElementVNode("p", _hoisted_16$3, [
-                      createTextVNode(toDisplayString(board.widgetCount) + " " + toDisplayString(board.widgetCount === 1 ? "Widget" : "Widgets") + " ", 1),
-                      board.sourceCount ? (openBlock(), createElementBlock(Fragment, { key: 0 }, [
-                        createTextVNode(" · " + toDisplayString(board.sourceCount) + " " + toDisplayString(board.sourceCount === 1 ? "Datenquelle" : "Datenquellen"), 1)
-                      ], 64)) : createCommentVNode("", true)
-                    ]),
-                    unref(usageOf)(board.id) ? (openBlock(), createElementBlock("p", _hoisted_17$3, toDisplayString(unref(usageOf)(board.id)?.count) + "× geöffnet · zuletzt " + toDisplayString(unref(lastOpenedLabel)(board.id)), 1)) : createCommentVNode("", true),
-                    board.kinds.length ? (openBlock(), createElementBlock("ul", _hoisted_18$3, [
-                      (openBlock(true), createElementBlock(Fragment, null, renderList(board.kinds.slice(0, 3), (kind) => {
-                        return openBlock(), createElementBlock("li", {
-                          key: kind,
-                          class: "board__kind"
-                        }, toDisplayString(kind), 1);
-                      }), 128)),
-                      board.kinds.length > 3 ? (openBlock(), createElementBlock("li", _hoisted_19$3, " +" + toDisplayString(board.kinds.length - 3), 1)) : createCommentVNode("", true)
-                    ])) : createCommentVNode("", true)
-                  ]),
-                  createElementVNode("button", {
-                    class: "board__edit",
-                    type: "button",
-                    "aria-label": `Board ${board.name} bearbeiten`,
-                    onClick: withModifiers(($event) => editBoard(board.id), ["stop"])
-                  }, " Bearbeiten ", 8, _hoisted_20$3)
-                ], 40, _hoisted_13$4);
-              }), 128)),
-              createElementVNode("button", {
-                class: "board board--new",
-                type: "button",
-                onClick: createBoard
-              }, [..._cache[10] || (_cache[10] = [
-                createElementVNode("span", {
-                  class: "board__plus",
-                  "aria-hidden": "true"
-                }, "+", -1),
-                createElementVNode("span", { class: "board__name" }, "Neues Board", -1),
-                createElementVNode("span", { class: "board__meta" }, "Leer starten", -1)
-              ])]),
-              visibleBoards.value.length === 0 ? (openBlock(), createElementBlock("p", _hoisted_21$3, " Kein Board passt zu „" + toDisplayString(query.value) + "“. ", 1)) : createCommentVNode("", true)
+            ])) : view.value === "recent" ? (openBlock(), createElementBlock("div", _hoisted_10$8, [
+              _cache[8] || (_cache[8] = createElementVNode("h2", { class: "single__heading" }, "Geöffnet", -1)),
+              createElementVNode("article", {
+                class: "single__card",
+                tabindex: "0",
+                role: "button",
+                "aria-label": `Board ${board.value?.name ?? ""} öffnen`,
+                onClick: openBoard,
+                onKeydown: [
+                  withKeys(openBoard, ["enter"]),
+                  withKeys(withModifiers(openBoard, ["prevent"]), ["space"])
+                ]
+              }, [
+                createElementVNode("span", _hoisted_12$6, [
+                  createVNode(unref(DIcon), {
+                    name: board.value?.icon || "dashboard",
+                    size: "lg"
+                  }, null, 8, ["name"])
+                ]),
+                createElementVNode("div", _hoisted_13$5, [
+                  createElementVNode("h3", _hoisted_14$5, toDisplayString(board.value?.name || "Board"), 1),
+                  board.value?.description ? (openBlock(), createElementBlock("p", _hoisted_15$4, toDisplayString(board.value.description), 1)) : createCommentVNode("", true),
+                  createElementVNode("p", _hoisted_16$3, toDisplayString(boardTotals.value.pages) + " " + toDisplayString(boardTotals.value.pages === 1 ? "Seite" : "Seiten") + " · " + toDisplayString(boardTotals.value.widgets) + " " + toDisplayString(boardTotals.value.widgets === 1 ? "Widget" : "Widgets"), 1)
+                ]),
+                createElementVNode("div", _hoisted_17$3, [
+                  createVNode(unref(DButton), {
+                    intent: "primary",
+                    size: "sm",
+                    onClick: withModifiers(openBoard, ["stop"])
+                  }, {
+                    default: withCtx(() => [..._cache[7] || (_cache[7] = [
+                      createTextVNode("Öffnen", -1)
+                    ])]),
+                    _: 1
+                  })
+                ])
+              ], 40, _hoisted_11$6),
+              _cache[9] || (_cache[9] = createElementVNode("p", { class: "single__note" }, " Ein Arbeitsstand hält genau ein Board. Ein anderes bekommst du, indem du im Speicher einen anderen Stand öffnest; die Seiten dieses Boards liegen im Bereich „Seiten“. ", -1))
             ])) : (openBlock(), createBlock(WorkspaceStorage, {
               key: 2,
-              onRestored: _cache[3] || (_cache[3] = ($event) => view.value = "boards")
+              onRestored: _cache[2] || (_cache[2] = ($event) => view.value = "recent")
             }))
           ])
         ])
@@ -2251,23 +2230,23 @@ const _sfc_main$h = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const BoardsHome = /* @__PURE__ */ _export_sfc(_sfc_main$h, [["__scopeId", "data-v-4c11f243"]]);
-const _hoisted_1$f = { class: "report-container" };
-const _sfc_main$g = /* @__PURE__ */ defineComponent({
+const BoardsHome = /* @__PURE__ */ _export_sfc(_sfc_main$i, [["__scopeId", "data-v-6397919d"]]);
+const _hoisted_1$g = { class: "report-container" };
+const _sfc_main$h = /* @__PURE__ */ defineComponent({
   __name: "ViewReport",
   props: ["params"],
   setup(__props) {
     const props = __props;
     const route = useRoute();
-    const pageRepo = inject(identifier);
-    const layoutRepo = inject(identifier$1);
+    const pageRepo = inject(identifier$1);
+    const layoutRepo = inject(identifier$2);
     const pageID = computed(() => {
       return props.params?.pageid ?? route.params.pageid ?? "";
     });
     const { recordOpened } = useBoardUsage();
     watch(pageID, (id) => recordOpened(id), { immediate: true });
     return (_ctx, _cache) => {
-      return openBlock(), createElementBlock("div", _hoisted_1$f, [
+      return openBlock(), createElementBlock("div", _hoisted_1$g, [
         pageID.value ? (openBlock(), createBlock(LayoutRenderer, {
           key: 0,
           pageId: pageID.value,
@@ -2281,10 +2260,10 @@ const _sfc_main$g = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const ViewReport = /* @__PURE__ */ _export_sfc(_sfc_main$g, [["__scopeId", "data-v-3ecae506"]]);
+const ViewReport = /* @__PURE__ */ _export_sfc(_sfc_main$h, [["__scopeId", "data-v-3ecae506"]]);
 const NONE = { boards: 0, widgets: 0 };
 function useDatasourceUsage() {
-  const pages = inject(identifier);
+  const pages = inject(identifier$1);
   function usageByDatasource() {
     const found = {};
     if (!pages) return found;
@@ -2312,40 +2291,40 @@ function useDatasourceUsage() {
   }
   return { usageByDatasource, usageOf, usageLabel };
 }
-const _hoisted_1$e = {
+const _hoisted_1$f = {
   key: 0,
   class: "pick"
 };
-const _hoisted_2$d = { class: "pick__lead" };
-const _hoisted_3$a = {
+const _hoisted_2$e = { class: "pick__lead" };
+const _hoisted_3$b = {
   key: 0,
   class: "pick__rubric"
 };
-const _hoisted_4$9 = { class: "tiles" };
-const _hoisted_5$7 = ["onClick"];
-const _hoisted_6$6 = { class: "tile__head" };
-const _hoisted_7$6 = { class: "tile__name" };
-const _hoisted_8$6 = {
+const _hoisted_4$a = { class: "tiles" };
+const _hoisted_5$8 = ["onClick"];
+const _hoisted_6$7 = { class: "tile__head" };
+const _hoisted_7$7 = { class: "tile__name" };
+const _hoisted_8$7 = {
   key: 0,
   class: "tile__what"
 };
-const _hoisted_9$6 = {
+const _hoisted_9$7 = {
   key: 1,
   class: "fill"
 };
-const _hoisted_10$6 = { class: "chosen" };
-const _hoisted_11$4 = {
+const _hoisted_10$7 = { class: "chosen" };
+const _hoisted_11$5 = {
   class: "chosen__icon",
   "aria-hidden": "true"
 };
-const _hoisted_12$4 = { class: "chosen__text" };
-const _hoisted_13$3 = { class: "chosen__name" };
-const _hoisted_14$3 = {
+const _hoisted_12$5 = { class: "chosen__text" };
+const _hoisted_13$4 = { class: "chosen__name" };
+const _hoisted_14$4 = {
   key: 0,
   class: "chosen__what"
 };
 const _hoisted_15$3 = { class: "fill__fields" };
-const _sfc_main$f = /* @__PURE__ */ defineComponent({
+const _sfc_main$g = /* @__PURE__ */ defineComponent({
   __name: "CreateWizard",
   props: /* @__PURE__ */ mergeModels({
     title: {},
@@ -2417,15 +2396,15 @@ const _sfc_main$f = /* @__PURE__ */ defineComponent({
           }, 8, ["disabled"])) : createCommentVNode("", true)
         ]),
         default: withCtx(() => [
-          step.value === 1 ? (openBlock(), createElementBlock("div", _hoisted_1$e, [
-            createElementVNode("p", _hoisted_2$d, toDisplayString(__props.lead), 1),
+          step.value === 1 ? (openBlock(), createElementBlock("div", _hoisted_1$f, [
+            createElementVNode("p", _hoisted_2$e, toDisplayString(__props.lead), 1),
             (openBlock(true), createElementBlock(Fragment, null, renderList(shown2.value, (group) => {
               return openBlock(), createElementBlock("section", {
                 key: group.label,
                 class: "pick__group"
               }, [
-                shown2.value.length > 1 ? (openBlock(), createElementBlock("h3", _hoisted_3$a, toDisplayString(group.label), 1)) : createCommentVNode("", true),
-                createElementVNode("ul", _hoisted_4$9, [
+                shown2.value.length > 1 ? (openBlock(), createElementBlock("h3", _hoisted_3$b, toDisplayString(group.label), 1)) : createCommentVNode("", true),
+                createElementVNode("ul", _hoisted_4$a, [
                   (openBlock(true), createElementBlock(Fragment, null, renderList(group.types, (each) => {
                     return openBlock(), createElementBlock("li", { key: each }, [
                       createElementVNode("button", {
@@ -2433,13 +2412,13 @@ const _sfc_main$f = /* @__PURE__ */ defineComponent({
                         class: normalizeClass(["tile", { "tile--on": type.value === each }]),
                         onClick: ($event) => choose(each)
                       }, [
-                        createElementVNode("span", _hoisted_6$6, [
+                        createElementVNode("span", _hoisted_6$7, [
                           createVNode(unref(DIcon), {
                             name: __props.iconOf(each),
                             size: "sm",
                             class: "tile__icon"
                           }, null, 8, ["name"]),
-                          createElementVNode("span", _hoisted_7$6, toDisplayString(each), 1),
+                          createElementVNode("span", _hoisted_7$7, toDisplayString(each), 1),
                           type.value === each ? (openBlock(), createBlock(unref(DIcon), {
                             key: 0,
                             name: "check",
@@ -2447,24 +2426,24 @@ const _sfc_main$f = /* @__PURE__ */ defineComponent({
                             class: "tile__check"
                           })) : createCommentVNode("", true)
                         ]),
-                        __props.summaryOf(each) ? (openBlock(), createElementBlock("span", _hoisted_8$6, toDisplayString(__props.summaryOf(each)), 1)) : createCommentVNode("", true)
-                      ], 10, _hoisted_5$7)
+                        __props.summaryOf(each) ? (openBlock(), createElementBlock("span", _hoisted_8$7, toDisplayString(__props.summaryOf(each)), 1)) : createCommentVNode("", true)
+                      ], 10, _hoisted_5$8)
                     ]);
                   }), 128))
                 ])
               ]);
             }), 128))
-          ])) : (openBlock(), createElementBlock("div", _hoisted_9$6, [
-            createElementVNode("header", _hoisted_10$6, [
-              createElementVNode("span", _hoisted_11$4, [
+          ])) : (openBlock(), createElementBlock("div", _hoisted_9$7, [
+            createElementVNode("header", _hoisted_10$7, [
+              createElementVNode("span", _hoisted_11$5, [
                 createVNode(unref(DIcon), {
                   name: __props.iconOf(type.value),
                   size: "lg"
                 }, null, 8, ["name"])
               ]),
-              createElementVNode("div", _hoisted_12$4, [
-                createElementVNode("span", _hoisted_13$3, toDisplayString(type.value), 1),
-                __props.summaryOf(type.value) ? (openBlock(), createElementBlock("p", _hoisted_14$3, toDisplayString(__props.summaryOf(type.value)), 1)) : createCommentVNode("", true)
+              createElementVNode("div", _hoisted_12$5, [
+                createElementVNode("span", _hoisted_13$4, toDisplayString(type.value), 1),
+                __props.summaryOf(type.value) ? (openBlock(), createElementBlock("p", _hoisted_14$4, toDisplayString(__props.summaryOf(type.value)), 1)) : createCommentVNode("", true)
               ]),
               createVNode(unref(DButton), {
                 intent: "quiet",
@@ -2487,16 +2466,16 @@ const _sfc_main$f = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const CreateWizard = /* @__PURE__ */ _export_sfc(_sfc_main$f, [["__scopeId", "data-v-6d945def"]]);
-const _hoisted_1$d = {
+const CreateWizard = /* @__PURE__ */ _export_sfc(_sfc_main$g, [["__scopeId", "data-v-6d945def"]]);
+const _hoisted_1$e = {
   key: 0,
   class: "model__none"
 };
-const _hoisted_2$c = {
+const _hoisted_2$d = {
   key: 1,
   class: "model__none"
 };
-const _sfc_main$e = /* @__PURE__ */ defineComponent({
+const _sfc_main$f = /* @__PURE__ */ defineComponent({
   __name: "ModelFields",
   props: {
     doc: {},
@@ -2519,7 +2498,7 @@ const _sfc_main$e = /* @__PURE__ */ defineComponent({
       props.config[feature.name] = value === "" ? void 0 : Number(value);
     }
     return (_ctx, _cache) => {
-      return !__props.doc ? (openBlock(), createElementBlock("p", _hoisted_1$d, " Dieser Typ bringt kein Modell mit — die Felder füllst du nach dem Anlegen im Editor aus. ")) : !fields.value.length ? (openBlock(), createElementBlock("p", _hoisted_2$c, " Dieser Typ braucht außer dem Namen nichts weiter. ")) : (openBlock(true), createElementBlock(Fragment, { key: 2 }, renderList(fields.value, (feature) => {
+      return !__props.doc ? (openBlock(), createElementBlock("p", _hoisted_1$e, " Dieser Typ bringt kein Modell mit — die Felder füllst du nach dem Anlegen im Editor aus. ")) : !fields.value.length ? (openBlock(), createElementBlock("p", _hoisted_2$d, " Dieser Typ braucht außer dem Namen nichts weiter. ")) : (openBlock(true), createElementBlock(Fragment, { key: 2 }, renderList(fields.value, (feature) => {
         return openBlock(), createElementBlock(Fragment, {
           key: feature.name
         }, [
@@ -2560,18 +2539,18 @@ const _sfc_main$e = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const ModelFields = /* @__PURE__ */ _export_sfc(_sfc_main$e, [["__scopeId", "data-v-deac0807"]]);
-const _hoisted_1$c = { class: "tags" };
-const _hoisted_2$b = {
+const ModelFields = /* @__PURE__ */ _export_sfc(_sfc_main$f, [["__scopeId", "data-v-deac0807"]]);
+const _hoisted_1$d = { class: "tags" };
+const _hoisted_2$c = {
   key: 0,
   class: "tags__held"
 };
-const _hoisted_3$9 = {
+const _hoisted_3$a = {
   key: 1,
   class: "tags__offer"
 };
-const _hoisted_4$8 = ["onMousedown"];
-const _sfc_main$d = /* @__PURE__ */ defineComponent({
+const _hoisted_4$9 = ["onMousedown"];
+const _sfc_main$e = /* @__PURE__ */ defineComponent({
   __name: "TagInput",
   props: /* @__PURE__ */ mergeModels({
     label: {},
@@ -2620,8 +2599,8 @@ const _sfc_main$d = /* @__PURE__ */ defineComponent({
         stacked: ""
       }, {
         default: withCtx(() => [
-          createElementVNode("div", _hoisted_1$c, [
-            model.value.length ? (openBlock(), createElementBlock("div", _hoisted_2$b, [
+          createElementVNode("div", _hoisted_1$d, [
+            model.value.length ? (openBlock(), createElementBlock("div", _hoisted_2$c, [
               (openBlock(true), createElementBlock(Fragment, null, renderList(model.value, (tag) => {
                 return openBlock(), createBlock(unref(DChip), {
                   key: tag,
@@ -2644,14 +2623,14 @@ const _sfc_main$d = /* @__PURE__ */ defineComponent({
               onKeydown: onKey,
               onBlur: _cache[1] || (_cache[1] = ($event) => add(draft.value))
             }, null, 8, ["modelValue"]),
-            suggestions.value.length ? (openBlock(), createElementBlock("div", _hoisted_3$9, [
+            suggestions.value.length ? (openBlock(), createElementBlock("div", _hoisted_3$a, [
               (openBlock(true), createElementBlock(Fragment, null, renderList(suggestions.value, (tag) => {
                 return openBlock(), createElementBlock("button", {
                   key: tag,
                   type: "button",
                   class: "tags__suggestion",
                   onMousedown: withModifiers(($event) => add(tag), ["prevent"])
-                }, toDisplayString(tag), 41, _hoisted_4$8);
+                }, toDisplayString(tag), 41, _hoisted_4$9);
               }), 128))
             ])) : createCommentVNode("", true)
           ])
@@ -2661,8 +2640,8 @@ const _sfc_main$d = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const TagInput = /* @__PURE__ */ _export_sfc(_sfc_main$d, [["__scopeId", "data-v-b6b361a8"]]);
-const _sfc_main$c = /* @__PURE__ */ defineComponent({
+const TagInput = /* @__PURE__ */ _export_sfc(_sfc_main$e, [["__scopeId", "data-v-b6b361a8"]]);
+const _sfc_main$d = /* @__PURE__ */ defineComponent({
   __name: "NewConnectionDialog",
   props: {
     "modelValue": { type: Boolean, ...{ required: true } },
@@ -2673,7 +2652,7 @@ const _sfc_main$c = /* @__PURE__ */ defineComponent({
     const open = useModel(__props, "modelValue");
     const emit = __emit;
     const connections = inject(identifier$3);
-    const workspace = inject(identifier$2);
+    const workspace = inject(identifier);
     const held = useEList(workspace, (w) => w.connections);
     const type = ref("");
     const name = ref("");
@@ -2775,15 +2754,15 @@ const _sfc_main$c = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const _hoisted_1$b = {
+const _hoisted_1$c = {
   key: 0,
   class: "note note--warn"
 };
-const _hoisted_2$a = {
+const _hoisted_2$b = {
   key: 0,
   class: "note"
 };
-const _sfc_main$b = /* @__PURE__ */ defineComponent({
+const _sfc_main$c = /* @__PURE__ */ defineComponent({
   __name: "NewDatasourceDialog",
   props: /* @__PURE__ */ mergeModels({
     forConnection: {}
@@ -2797,7 +2776,7 @@ const _sfc_main$b = /* @__PURE__ */ defineComponent({
     const props = __props;
     const emit = __emit;
     const datasources = inject(identifier$4);
-    const workspace = inject(identifier$2);
+    const workspace = inject(identifier);
     const connections = useEList(workspace, (w) => w.connections);
     const held = useEList(workspace, (w) => w.datasources);
     const type = ref("");
@@ -2907,8 +2886,8 @@ const _sfc_main$b = /* @__PURE__ */ defineComponent({
             required: ""
           }, null, 8, ["modelValue"]),
           needsConnection.value ? (openBlock(), createElementBlock(Fragment, { key: 0 }, [
-            !connectionOptions.value.length ? (openBlock(), createElementBlock("p", _hoisted_1$b, " Es gibt noch keine Verbindung. Lege zuerst eine an — ohne sie hat die Datenquelle nichts, woraus sie lesen kann. ")) : (openBlock(), createElementBlock(Fragment, { key: 1 }, [
-              nothingSuits.value ? (openBlock(), createElementBlock("p", _hoisted_2$a, " Keine der vorhandenen Verbindungen ist von diesem Typ vorgesehen. Du kannst trotzdem eine wählen — die Angabe ist ein Hinweis, keine Regel. ")) : createCommentVNode("", true),
+            !connectionOptions.value.length ? (openBlock(), createElementBlock("p", _hoisted_1$c, " Es gibt noch keine Verbindung. Lege zuerst eine an — ohne sie hat die Datenquelle nichts, woraus sie lesen kann. ")) : (openBlock(), createElementBlock(Fragment, { key: 1 }, [
+              nothingSuits.value ? (openBlock(), createElementBlock("p", _hoisted_2$b, " Keine der vorhandenen Verbindungen ist von diesem Typ vorgesehen. Du kannst trotzdem eine wählen — die Angabe ist ein Hinweis, keine Regel. ")) : createCommentVNode("", true),
               createVNode(unref(DSelect), {
                 modelValue: connection.value,
                 "onUpdate:modelValue": _cache[1] || (_cache[1] = ($event) => connection.value = $event),
@@ -2949,9 +2928,9 @@ const _sfc_main$b = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const NewDatasourceDialog = /* @__PURE__ */ _export_sfc(_sfc_main$b, [["__scopeId", "data-v-585727e2"]]);
-const _hoisted_1$a = ["onClick"];
-const _sfc_main$a = /* @__PURE__ */ defineComponent({
+const NewDatasourceDialog = /* @__PURE__ */ _export_sfc(_sfc_main$c, [["__scopeId", "data-v-585727e2"]]);
+const _hoisted_1$b = ["onClick"];
+const _sfc_main$b = /* @__PURE__ */ defineComponent({
   __name: "TreeMenu",
   props: {
     at: {},
@@ -3023,7 +3002,7 @@ const _sfc_main$a = /* @__PURE__ */ defineComponent({
                     size: "sm"
                   }, null, 8, ["name"])) : createCommentVNode("", true),
                   createElementVNode("span", null, toDisplayString(item.label), 1)
-                ], 10, _hoisted_1$a)
+                ], 10, _hoisted_1$b)
               ], 2);
             }), 128))
           ], 4)
@@ -3032,36 +3011,36 @@ const _sfc_main$a = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const TreeMenu = /* @__PURE__ */ _export_sfc(_sfc_main$a, [["__scopeId", "data-v-3e59dfe4"]]);
-const _hoisted_1$9 = { class: "tree" };
-const _hoisted_2$9 = { class: "tree__head" };
-const _hoisted_3$8 = { class: "tree__search" };
-const _hoisted_4$7 = {
+const TreeMenu = /* @__PURE__ */ _export_sfc(_sfc_main$b, [["__scopeId", "data-v-3e59dfe4"]]);
+const _hoisted_1$a = { class: "tree" };
+const _hoisted_2$a = { class: "tree__head" };
+const _hoisted_3$9 = { class: "tree__search" };
+const _hoisted_4$8 = {
   key: 0,
   class: "tree__empty"
 };
-const _hoisted_5$6 = {
+const _hoisted_5$7 = {
   key: 1,
   class: "tree__list"
 };
-const _hoisted_6$5 = ["onContextmenu"];
-const _hoisted_7$5 = ["title", "onClick"];
-const _hoisted_8$5 = ["disabled", "onClick"];
-const _hoisted_9$5 = { class: "row__name" };
-const _hoisted_10$5 = {
+const _hoisted_6$6 = ["onContextmenu"];
+const _hoisted_7$6 = ["title", "onClick"];
+const _hoisted_8$6 = ["disabled", "onClick"];
+const _hoisted_9$6 = { class: "row__name" };
+const _hoisted_10$6 = {
   key: 0,
   class: "row__what"
 };
-const _hoisted_11$3 = {
+const _hoisted_11$4 = {
   key: 1,
   class: "row__tag row__tag--more"
 };
-const _hoisted_12$3 = { class: "row__what" };
-const _hoisted_13$2 = {
+const _hoisted_12$4 = { class: "row__what" };
+const _hoisted_13$3 = {
   key: 0,
   class: "tree__sources"
 };
-const _hoisted_14$2 = ["onContextmenu"];
+const _hoisted_14$3 = ["onContextmenu"];
 const _hoisted_15$2 = ["onClick"];
 const _hoisted_16$2 = { class: "row__name" };
 const _hoisted_17$2 = { class: "row__what" };
@@ -3085,7 +3064,7 @@ const _hoisted_23$2 = {
 };
 const COMPOSED = "\0composed";
 const TAGS_SHOWN = 2;
-const _sfc_main$9 = /* @__PURE__ */ defineComponent({
+const _sfc_main$a = /* @__PURE__ */ defineComponent({
   __name: "DataTree",
   props: {
     "modelValue": {},
@@ -3095,7 +3074,7 @@ const _sfc_main$9 = /* @__PURE__ */ defineComponent({
   setup(__props, { emit: __emit }) {
     const selected = useModel(__props, "modelValue");
     const connectionRepository = inject(identifier$3);
-    const workspace = inject(identifier$2);
+    const workspace = inject(identifier);
     const connections = useEList(workspace, (w) => w.connections);
     const datasourceRepository = inject(identifier$4);
     const dataSources = useEList(workspace, (w) => w.datasources);
@@ -3279,8 +3258,8 @@ const _sfc_main$9 = /* @__PURE__ */ defineComponent({
     });
     return (_ctx, _cache) => {
       return openBlock(), createElementBlock(Fragment, null, [
-        createElementVNode("section", _hoisted_1$9, [
-          createElementVNode("header", _hoisted_2$9, [
+        createElementVNode("section", _hoisted_1$a, [
+          createElementVNode("header", _hoisted_2$a, [
             _cache[10] || (_cache[10] = createElementVNode("h2", { class: "tree__title" }, "Verbindungen & Daten", -1)),
             createVNode(unref(DButton), {
               intent: "quiet",
@@ -3328,7 +3307,7 @@ const _sfc_main$9 = /* @__PURE__ */ defineComponent({
               _: 1
             })
           ]),
-          createElementVNode("div", _hoisted_3$8, [
+          createElementVNode("div", _hoisted_3$9, [
             createVNode(unref(DInput), {
               modelValue: search.value,
               "onUpdate:modelValue": _cache[3] || (_cache[3] = ($event) => search.value = $event),
@@ -3341,13 +3320,13 @@ const _sfc_main$9 = /* @__PURE__ */ defineComponent({
             class: "tree__body",
             onContextmenu: _cache[4] || (_cache[4] = withModifiers(($event) => openMenu($event, { what: "nothing" }), ["prevent"]))
           }, [
-            !groups.value.length ? (openBlock(), createElementBlock("p", _hoisted_4$7, [
+            !groups.value.length ? (openBlock(), createElementBlock("p", _hoisted_4$8, [
               search.value ? (openBlock(), createElementBlock(Fragment, { key: 0 }, [
                 createTextVNode("Nichts gefunden.")
               ], 64)) : (openBlock(), createElementBlock(Fragment, { key: 1 }, [
                 createTextVNode("Noch keine Verbindung. Lege eine an, um Daten zu lesen.")
               ], 64))
-            ])) : (openBlock(), createElementBlock("ul", _hoisted_5$6, [
+            ])) : (openBlock(), createElementBlock("ul", _hoisted_5$7, [
               (openBlock(true), createElementBlock(Fragment, null, renderList(groups.value, (group) => {
                 return openBlock(), createElementBlock("li", {
                   key: group.uid || "loose"
@@ -3369,7 +3348,7 @@ const _sfc_main$9 = /* @__PURE__ */ defineComponent({
                         name: isOpen(group.uid) ? "expand_more" : "chevron_right",
                         size: "sm"
                       }, null, 8, ["name"])
-                    ], 8, _hoisted_7$5),
+                    ], 8, _hoisted_7$6),
                     createElementVNode("button", {
                       type: "button",
                       class: "row__body",
@@ -3381,17 +3360,17 @@ const _sfc_main$9 = /* @__PURE__ */ defineComponent({
                         size: "sm",
                         class: "row__icon"
                       }, null, 8, ["name"]),
-                      createElementVNode("span", _hoisted_9$5, toDisplayString(group.name), 1),
-                      group.type ? (openBlock(), createElementBlock("span", _hoisted_10$5, toDisplayString(group.type), 1)) : createCommentVNode("", true),
+                      createElementVNode("span", _hoisted_9$6, toDisplayString(group.name), 1),
+                      group.type ? (openBlock(), createElementBlock("span", _hoisted_10$6, toDisplayString(group.type), 1)) : createCommentVNode("", true),
                       (openBlock(true), createElementBlock(Fragment, null, renderList((group.tags ?? []).slice(0, TAGS_SHOWN), (tag) => {
                         return openBlock(), createElementBlock("span", {
                           key: tag,
                           class: "row__tag"
                         }, toDisplayString(tag), 1);
                       }), 128)),
-                      (group.tags?.length ?? 0) > TAGS_SHOWN ? (openBlock(), createElementBlock("span", _hoisted_11$3, " +" + toDisplayString((group.tags?.length ?? 0) - TAGS_SHOWN), 1)) : createCommentVNode("", true),
-                      createElementVNode("span", _hoisted_12$3, toDisplayString(group.sources.length), 1)
-                    ], 8, _hoisted_8$5),
+                      (group.tags?.length ?? 0) > TAGS_SHOWN ? (openBlock(), createElementBlock("span", _hoisted_11$4, " +" + toDisplayString((group.tags?.length ?? 0) - TAGS_SHOWN), 1)) : createCommentVNode("", true),
+                      createElementVNode("span", _hoisted_12$4, toDisplayString(group.sources.length), 1)
+                    ], 8, _hoisted_8$6),
                     !group.orphan ? (openBlock(), createBlock(unref(DButton), {
                       key: 0,
                       intent: "quiet",
@@ -3407,8 +3386,8 @@ const _sfc_main$9 = /* @__PURE__ */ defineComponent({
                       ]),
                       _: 1
                     }, 8, ["onClick"])) : createCommentVNode("", true)
-                  ], 42, _hoisted_6$5),
-                  isOpen(group.uid) ? (openBlock(), createElementBlock("ul", _hoisted_13$2, [
+                  ], 42, _hoisted_6$6),
+                  isOpen(group.uid) ? (openBlock(), createElementBlock("ul", _hoisted_13$3, [
                     (openBlock(true), createElementBlock(Fragment, null, renderList(group.sources, (source) => {
                       return openBlock(), createElementBlock("li", {
                         key: source.uid
@@ -3456,7 +3435,7 @@ const _sfc_main$9 = /* @__PURE__ */ defineComponent({
                             ]),
                             _: 1
                           }, 8, ["onClick"])
-                        ], 42, _hoisted_14$2)
+                        ], 42, _hoisted_14$3)
                       ]);
                     }), 128)),
                     !group.sources.length && !group.orphan ? (openBlock(), createElementBlock("li", _hoisted_20$2, " Keine Datenquelle an dieser Verbindung. ")) : createCommentVNode("", true)
@@ -3472,7 +3451,7 @@ const _sfc_main$9 = /* @__PURE__ */ defineComponent({
           onChoose: onMenuChoice,
           onClose: closeMenu
         }, null, 8, ["at", "items"]),
-        createVNode(_sfc_main$c, {
+        createVNode(_sfc_main$d, {
           modelValue: creatingConnection.value,
           "onUpdate:modelValue": _cache[5] || (_cache[5] = ($event) => creatingConnection.value = $event),
           onCreated: onConnectionCreated
@@ -3527,7 +3506,7 @@ const _sfc_main$9 = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const DataTree = /* @__PURE__ */ _export_sfc(_sfc_main$9, [["__scopeId", "data-v-b599ea25"]]);
+const DataTree = /* @__PURE__ */ _export_sfc(_sfc_main$a, [["__scopeId", "data-v-b599ea25"]]);
 var commonjsGlobal = typeof globalThis !== "undefined" ? globalThis : typeof window !== "undefined" ? window : typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : {};
 var lodash$1 = { exports: {} };
 /**
@@ -9017,14 +8996,14 @@ function requireLodash() {
   return lodash$1.exports;
 }
 var lodashExports = requireLodash();
-const _hoisted_1$8 = { class: "editor" };
-const _hoisted_2$8 = { class: "editor__fields" };
-const _hoisted_3$7 = { class: "editor__actions" };
-const _hoisted_4$6 = {
+const _hoisted_1$9 = { class: "editor" };
+const _hoisted_2$9 = { class: "editor__fields" };
+const _hoisted_3$8 = { class: "editor__actions" };
+const _hoisted_4$7 = {
   key: 1,
   class: "editor__preview"
 };
-const _sfc_main$8 = /* @__PURE__ */ defineComponent({
+const _sfc_main$9 = /* @__PURE__ */ defineComponent({
   __name: "DatasourceEditor",
   props: {
     itemId: {},
@@ -9035,7 +9014,7 @@ const _sfc_main$8 = /* @__PURE__ */ defineComponent({
     const props = __props;
     const datasourceProxy = ref({});
     const datasourceRepository = inject(identifier$4);
-    const workspace = inject(identifier$2);
+    const workspace = inject(identifier);
     const connections = useEList(workspace, (w) => w.connections);
     const dataSources = useEList(workspace, (w) => w.datasources);
     const typeIcon = computed(
@@ -9097,9 +9076,9 @@ const _sfc_main$8 = /* @__PURE__ */ defineComponent({
     };
     const emit = __emit;
     return (_ctx, _cache) => {
-      return openBlock(), createElementBlock("div", _hoisted_1$8, [
+      return openBlock(), createElementBlock("div", _hoisted_1$9, [
         __props.view === "settings" ? (openBlock(), createElementBlock(Fragment, { key: 0 }, [
-          createElementVNode("div", _hoisted_2$8, [
+          createElementVNode("div", _hoisted_2$9, [
             createVNode(unref(DInput), {
               modelValue: datasourceProxy.value.uid,
               "onUpdate:modelValue": _cache[0] || (_cache[0] = ($event) => datasourceProxy.value.uid = $event),
@@ -9137,7 +9116,7 @@ const _sfc_main$8 = /* @__PURE__ */ defineComponent({
               dataSources: unref(dataSources)
             }, null, 8, ["config", "connections", "dataSources"]))
           ]),
-          createElementVNode("div", _hoisted_3$7, [
+          createElementVNode("div", _hoisted_3$8, [
             createVNode(unref(DButton), {
               intent: "quiet",
               onClick: _cache[5] || (_cache[5] = ($event) => _ctx.$emit("close"))
@@ -9157,7 +9136,7 @@ const _sfc_main$8 = /* @__PURE__ */ defineComponent({
               _: 1
             })
           ])
-        ], 64)) : (openBlock(), createElementBlock("div", _hoisted_4$6, [
+        ], 64)) : (openBlock(), createElementBlock("div", _hoisted_4$7, [
           (openBlock(), createBlock(resolveDynamicComponent(previewComponent.value), {
             "data-source": datasourceProxy.value,
             key: datasourceProxy.value.uid,
@@ -9168,11 +9147,11 @@ const _sfc_main$8 = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const DatasourceEditor = /* @__PURE__ */ _export_sfc(_sfc_main$8, [["__scopeId", "data-v-41f0a44b"]]);
-const _hoisted_1$7 = { class: "editor" };
-const _hoisted_2$7 = { class: "editor__fields" };
-const _hoisted_3$6 = { class: "editor__actions" };
-const _sfc_main$7 = /* @__PURE__ */ defineComponent({
+const DatasourceEditor = /* @__PURE__ */ _export_sfc(_sfc_main$9, [["__scopeId", "data-v-41f0a44b"]]);
+const _hoisted_1$8 = { class: "editor" };
+const _hoisted_2$8 = { class: "editor__fields" };
+const _hoisted_3$7 = { class: "editor__actions" };
+const _sfc_main$8 = /* @__PURE__ */ defineComponent({
   __name: "ConnectionEditor",
   props: {
     itemId: {
@@ -9231,8 +9210,8 @@ const _sfc_main$7 = /* @__PURE__ */ defineComponent({
       emit("close");
     };
     return (_ctx, _cache) => {
-      return openBlock(), createElementBlock("div", _hoisted_1$7, [
-        createElementVNode("div", _hoisted_2$7, [
+      return openBlock(), createElementBlock("div", _hoisted_1$8, [
+        createElementVNode("div", _hoisted_2$8, [
           createVNode(unref(DInput), {
             modelValue: connectionProxy.value.uid,
             "onUpdate:modelValue": _cache[0] || (_cache[0] = ($event) => connectionProxy.value.uid = $event),
@@ -9268,7 +9247,7 @@ const _sfc_main$7 = /* @__PURE__ */ defineComponent({
             config: connectionProxy.value.config
           }, null, 8, ["config"]))
         ]),
-        createElementVNode("div", _hoisted_3$6, [
+        createElementVNode("div", _hoisted_3$7, [
           createVNode(unref(DButton), {
             intent: "quiet",
             onClick: _cache[5] || (_cache[5] = ($event) => _ctx.$emit("close"))
@@ -9292,30 +9271,30 @@ const _sfc_main$7 = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const ConnectionEditor = /* @__PURE__ */ _export_sfc(_sfc_main$7, [["__scopeId", "data-v-0fad9a41"]]);
-const _hoisted_1$6 = { class: "data-page" };
-const _hoisted_2$6 = { class: "data-page__tree" };
-const _hoisted_3$5 = { class: "data-page__detail" };
-const _hoisted_4$5 = {
+const ConnectionEditor = /* @__PURE__ */ _export_sfc(_sfc_main$8, [["__scopeId", "data-v-0fad9a41"]]);
+const _hoisted_1$7 = { class: "data-page" };
+const _hoisted_2$7 = { class: "data-page__tree" };
+const _hoisted_3$6 = { class: "data-page__detail" };
+const _hoisted_4$6 = {
   key: 0,
   class: "data-page__nothing"
 };
-const _hoisted_5$5 = { class: "detail__head" };
-const _hoisted_6$4 = { class: "detail__what" };
-const _hoisted_7$4 = { class: "detail__name" };
-const _hoisted_8$4 = {
+const _hoisted_5$6 = { class: "detail__head" };
+const _hoisted_6$5 = { class: "detail__what" };
+const _hoisted_7$5 = { class: "detail__name" };
+const _hoisted_8$5 = {
   key: 0,
   class: "detail__sub"
 };
-const _hoisted_9$4 = {
+const _hoisted_9$5 = {
   key: 0,
   class: "detail__usage"
 };
-const _hoisted_10$4 = { class: "detail__body" };
-const _sfc_main$6 = /* @__PURE__ */ defineComponent({
+const _hoisted_10$5 = { class: "detail__body" };
+const _sfc_main$7 = /* @__PURE__ */ defineComponent({
   __name: "ConnectionsAndData",
   setup(__props) {
-    const workspace = inject(identifier$2);
+    const workspace = inject(identifier);
     const connections = useEList(workspace, (w) => w.connections);
     const dataSources = useEList(workspace, (w) => w.datasources);
     const { usageOf, usageLabel } = useDatasourceUsage();
@@ -9348,8 +9327,8 @@ const _sfc_main$6 = /* @__PURE__ */ defineComponent({
       tab.value = at?.type === "DataSource" ? "preview" : "settings";
     });
     return (_ctx, _cache) => {
-      return openBlock(), createElementBlock("div", _hoisted_1$6, [
-        createElementVNode("aside", _hoisted_2$6, [
+      return openBlock(), createElementBlock("div", _hoisted_1$7, [
+        createElementVNode("aside", _hoisted_2$7, [
           createVNode(DataTree, {
             modelValue: selected.value,
             "onUpdate:modelValue": _cache[0] || (_cache[0] = ($event) => selected.value = $event),
@@ -9357,14 +9336,14 @@ const _sfc_main$6 = /* @__PURE__ */ defineComponent({
             onView: _cache[1] || (_cache[1] = ($event) => tab.value = $event)
           }, null, 8, ["modelValue"])
         ]),
-        createElementVNode("section", _hoisted_3$5, [
-          !selected.value ? (openBlock(), createElementBlock("p", _hoisted_4$5, " Wähle links eine Verbindung oder eine Datenquelle. ")) : (openBlock(), createElementBlock(Fragment, { key: 1 }, [
-            createElementVNode("header", _hoisted_5$5, [
-              createElementVNode("div", _hoisted_6$4, [
-                createElementVNode("h1", _hoisted_7$4, toDisplayString(unref(held)?.name ?? selected.value.itemId), 1),
-                subtitle.value ? (openBlock(), createElementBlock("span", _hoisted_8$4, toDisplayString(subtitle.value), 1)) : createCommentVNode("", true)
+        createElementVNode("section", _hoisted_3$6, [
+          !selected.value ? (openBlock(), createElementBlock("p", _hoisted_4$6, " Wähle links eine Verbindung oder eine Datenquelle. ")) : (openBlock(), createElementBlock(Fragment, { key: 1 }, [
+            createElementVNode("header", _hoisted_5$6, [
+              createElementVNode("div", _hoisted_6$5, [
+                createElementVNode("h1", _hoisted_7$5, toDisplayString(unref(held)?.name ?? selected.value.itemId), 1),
+                subtitle.value ? (openBlock(), createElementBlock("span", _hoisted_8$5, toDisplayString(subtitle.value), 1)) : createCommentVNode("", true)
               ]),
-              usage2.value ? (openBlock(), createElementBlock("span", _hoisted_9$4, "Verwendet in " + toDisplayString(usage2.value), 1)) : createCommentVNode("", true)
+              usage2.value ? (openBlock(), createElementBlock("span", _hoisted_9$5, "Verwendet in " + toDisplayString(usage2.value), 1)) : createCommentVNode("", true)
             ]),
             createVNode(unref(DTabs), {
               modelValue: tab.value,
@@ -9372,7 +9351,7 @@ const _sfc_main$6 = /* @__PURE__ */ defineComponent({
               tabs: tabs.value,
               label: "Ansicht der Auswahl"
             }, null, 8, ["modelValue", "tabs"]),
-            createElementVNode("div", _hoisted_10$4, [
+            createElementVNode("div", _hoisted_10$5, [
               selected.value.type === "Connection" ? (openBlock(), createBlock(ConnectionEditor, {
                 key: selected.value.itemId,
                 "item-id": selected.value.itemId,
@@ -9390,7 +9369,175 @@ const _sfc_main$6 = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const ConnectionsAndData = /* @__PURE__ */ _export_sfc(_sfc_main$6, [["__scopeId", "data-v-2b44b5f1"]]);
+const ConnectionsAndData = /* @__PURE__ */ _export_sfc(_sfc_main$7, [["__scopeId", "data-v-2b44b5f1"]]);
+const _hoisted_1$6 = { class: "pages" };
+const _hoisted_2$6 = { class: "pages__head" };
+const _hoisted_3$5 = { class: "pages__title" };
+const _hoisted_4$5 = {
+  class: "pages__icon",
+  "aria-hidden": "true"
+};
+const _hoisted_5$5 = { class: "pages__name" };
+const _hoisted_6$4 = { class: "pages__tools" };
+const _hoisted_7$4 = { class: "pages__grid" };
+const _hoisted_8$4 = ["aria-label", "onClick", "onKeydown"];
+const _hoisted_9$4 = { class: "card__body" };
+const _hoisted_10$4 = { class: "card__name" };
+const _hoisted_11$3 = { class: "card__meta" };
+const _hoisted_12$3 = {
+  key: 0,
+  class: "card__usage"
+};
+const _hoisted_13$2 = ["aria-label", "onClick"];
+const _hoisted_14$2 = {
+  key: 0,
+  class: "pages__nomatch"
+};
+const _sfc_main$6 = /* @__PURE__ */ defineComponent({
+  __name: "BoardPages",
+  setup(__props) {
+    const router2 = useRouter();
+    const query = ref("");
+    const { usageOf, byUsage, lastOpenedLabel } = useBoardUsage();
+    const workspace = inject(identifier);
+    const pageRepo = inject(identifier$1);
+    const modelledPages = useEList(workspace, (w) => w.board?.pages);
+    const board = computed(() => {
+      void modelledPages.value;
+      return workspace.board;
+    });
+    const pages = computed(() => {
+      void modelledPages.value;
+      if (!pageRepo) return [];
+      return pageRepo.getAllPageIds().slice().sort(byUsage).map(
+        (id) => summarizePage(
+          id,
+          pageRepo.getPage(id),
+          pageRepo.getPage(id)?.layout?.toArray() ?? [],
+          pageRepo.getPage(id)?.widgets?.toArray() ?? []
+        )
+      );
+    });
+    const visiblePages = computed(() => {
+      const needle = query.value.trim().toLowerCase();
+      if (!needle) return pages.value;
+      return pages.value.filter(
+        (p) => p.name.toLowerCase().includes(needle) || p.description.toLowerCase().includes(needle) || p.kinds.some((k) => k.toLowerCase().includes(needle))
+      );
+    });
+    function openPage(id) {
+      router2.push(`/page/${id}`);
+    }
+    function editPage(id) {
+      router2.push(`/page/${id}/edit`);
+    }
+    function createPage() {
+      if (!pageRepo) return;
+      const id = v4();
+      pageRepo.registerPage({
+        id,
+        name: "Neue Seite",
+        description: "",
+        icon: "",
+        visibleInNavigation: true,
+        layoutId: "org.eclipse.daanse.board.app.ui.vue.layouts.base"
+      });
+      router2.push(`/page/${id}/edit`);
+    }
+    return (_ctx, _cache) => {
+      return openBlock(), createElementBlock("section", _hoisted_1$6, [
+        createElementVNode("header", _hoisted_2$6, [
+          createElementVNode("div", _hoisted_3$5, [
+            createElementVNode("span", _hoisted_4$5, [
+              createVNode(unref(DIcon), {
+                name: board.value?.icon || "dashboard",
+                size: "sm"
+              }, null, 8, ["name"])
+            ]),
+            createElementVNode("h1", _hoisted_5$5, [
+              _cache[1] || (_cache[1] = createTextVNode("Seiten", -1)),
+              board.value?.name ? (openBlock(), createElementBlock(Fragment, { key: 0 }, [
+                createTextVNode(" von " + toDisplayString(board.value.name), 1)
+              ], 64)) : createCommentVNode("", true)
+            ])
+          ]),
+          createElementVNode("div", _hoisted_6$4, [
+            withDirectives(createElementVNode("input", {
+              "onUpdate:modelValue": _cache[0] || (_cache[0] = ($event) => query.value = $event),
+              class: "pages__search",
+              type: "search",
+              placeholder: "Seiten filtern",
+              "aria-label": "Seiten filtern"
+            }, null, 512), [
+              [vModelText, query.value]
+            ]),
+            createVNode(unref(DButton), {
+              intent: "primary",
+              size: "sm",
+              onClick: createPage
+            }, {
+              default: withCtx(() => [..._cache[2] || (_cache[2] = [
+                createTextVNode("Neue Seite", -1)
+              ])]),
+              _: 1
+            })
+          ])
+        ]),
+        createElementVNode("div", _hoisted_7$4, [
+          (openBlock(true), createElementBlock(Fragment, null, renderList(visiblePages.value, (page) => {
+            return openBlock(), createElementBlock("article", {
+              key: page.id,
+              class: "card",
+              tabindex: "0",
+              role: "button",
+              "aria-label": `Seite ${page.name} öffnen`,
+              onClick: ($event) => openPage(page.id),
+              onKeydown: [
+                withKeys(($event) => openPage(page.id), ["enter"]),
+                withKeys(withModifiers(($event) => openPage(page.id), ["prevent"]), ["space"])
+              ]
+            }, [
+              createVNode(BoardFloorplan, {
+                items: page.items,
+                "type-by-id": page.typeById
+              }, null, 8, ["items", "type-by-id"]),
+              createElementVNode("div", _hoisted_9$4, [
+                createElementVNode("h2", _hoisted_10$4, toDisplayString(page.name), 1),
+                createElementVNode("p", _hoisted_11$3, [
+                  createTextVNode(toDisplayString(page.widgetCount) + " " + toDisplayString(page.widgetCount === 1 ? "Widget" : "Widgets") + " ", 1),
+                  page.sourceCount ? (openBlock(), createElementBlock(Fragment, { key: 0 }, [
+                    createTextVNode(" · " + toDisplayString(page.sourceCount) + " " + toDisplayString(page.sourceCount === 1 ? "Datenquelle" : "Datenquellen"), 1)
+                  ], 64)) : createCommentVNode("", true)
+                ]),
+                unref(usageOf)(page.id) ? (openBlock(), createElementBlock("p", _hoisted_12$3, toDisplayString(unref(usageOf)(page.id)?.count) + "× geöffnet · zuletzt " + toDisplayString(unref(lastOpenedLabel)(page.id)), 1)) : createCommentVNode("", true)
+              ]),
+              createElementVNode("button", {
+                class: "card__edit",
+                type: "button",
+                "aria-label": `Seite ${page.name} bearbeiten`,
+                onClick: withModifiers(($event) => editPage(page.id), ["stop"])
+              }, " Bearbeiten ", 8, _hoisted_13$2)
+            ], 40, _hoisted_8$4);
+          }), 128)),
+          createElementVNode("button", {
+            class: "card card--new",
+            type: "button",
+            onClick: createPage
+          }, [..._cache[3] || (_cache[3] = [
+            createElementVNode("span", {
+              class: "card__plus",
+              "aria-hidden": "true"
+            }, "+", -1),
+            createElementVNode("span", { class: "card__name" }, "Neue Seite", -1),
+            createElementVNode("span", { class: "card__meta" }, "Leer starten", -1)
+          ])]),
+          pages.value.length && visiblePages.value.length === 0 ? (openBlock(), createElementBlock("p", _hoisted_14$2, " Keine Seite passt zu „" + toDisplayString(query.value) + "“. ", 1)) : createCommentVNode("", true)
+        ])
+      ]);
+    };
+  }
+});
+const BoardPages = /* @__PURE__ */ _export_sfc(_sfc_main$6, [["__scopeId", "data-v-87cc4b3e"]]);
 const _hoisted_1$5 = { class: "add_widget_window" };
 const _hoisted_2$5 = { class: "add_widget_window__scroll" };
 const _hoisted_3$4 = { class: "widgets_grid-icon" };
@@ -9401,7 +9548,7 @@ const _sfc_main$5 = /* @__PURE__ */ defineComponent({
   setup(__props) {
     const selectedDatasource = ref("");
     const selectedType = ref("");
-    const dataSources = useEList(inject(identifier$2), (w) => w.datasources);
+    const dataSources = useEList(inject(identifier), (w) => w.datasources);
     const onDragStart = (event) => {
       const dragElement = document.createElement("div");
       document.body.appendChild(dragElement);
@@ -9527,7 +9674,7 @@ const _sfc_main$4 = /* @__PURE__ */ defineComponent({
     const emit = __emit;
     const widget = useModel(__props, "modelValue");
     const props = __props;
-    const dataSources = useEList(inject(identifier$2), (w) => w.datasources);
+    const dataSources = useEList(inject(identifier), (w) => w.datasources);
     const registeredWidgets = inject(identifier$8);
     const availableWidgetsSettings = registeredWidgets.getAllWidgets();
     inject("i18n");
@@ -9990,8 +10137,8 @@ const _sfc_main$3 = /* @__PURE__ */ defineComponent({
   setup(__props, { emit: __emit }) {
     const pageid = useModel(__props, "modelValue");
     const emit = __emit;
-    const pageRepo = inject(identifier);
-    const layoutRepo = inject(identifier$1);
+    const pageRepo = inject(identifier$1);
+    const layoutRepo = inject(identifier$2);
     const pageSettings = ref(null);
     const availableLayouts = computed(() => layoutRepo?.getAllLayouts() ?? []);
     const defaultLayout = computed(
@@ -10315,6 +10462,13 @@ const router = createRouter({
      * still lands here for links that are already out there.
      */
     {
+      /* The pages of the open board - an area of the workspace, not a view
+         of the launcher: a page only means anything once a board is open. */
+      path: "/pages",
+      name: "pages",
+      component: BoardPages
+    },
+    {
       path: "/datasources",
       name: "data",
       component: ConnectionsAndData
@@ -10357,10 +10511,10 @@ const _sfc_main$1 = /* @__PURE__ */ defineComponent({
   __name: "Configuration",
   setup(__props) {
     const repository = inject(identifier$5);
-    const workspace = inject(identifier$2);
+    const workspace = inject(identifier);
     const eventBus = inject(Symbol.for(TINY_EMITTER));
     const variables = useEList(workspace, (w) => w.variables);
-    const pages = useEList(workspace, (w) => w.pages);
+    const pages = useEList(workspace, (w) => w.board?.pages);
     const valueTick = ref(0);
     const onValueChange = () => valueTick.value += 1;
     onMounted(() => eventBus?.on(VariableEvents.VariableUpdated, onValueChange));
@@ -10658,7 +10812,7 @@ const _sfc_main$1 = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const Configuration = /* @__PURE__ */ _export_sfc(_sfc_main$1, [["__scopeId", "data-v-9292252d"]]);
+const Configuration = /* @__PURE__ */ _export_sfc(_sfc_main$1, [["__scopeId", "data-v-dda92d6f"]]);
 const _hoisted_1 = { class: "appearance" };
 const _hoisted_2 = { class: "panel" };
 const _hoisted_3 = { class: "panel__head" };

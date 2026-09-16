@@ -12,11 +12,14 @@
  **********************************************************************/
 
 /**
- * What a board card shows, derived the same way whether the board is live in
- * the app or still sitting in a stored state - so a board looks like itself
+ * What a page card shows, derived the same way whether the page is live in
+ * the app or still sitting in a stored state - so a page looks like itself
  * in the launcher and in the storage view.
+ *
+ * A page is where the layout and the widgets are; the board above it only
+ * holds the pages and their order.
  */
-export interface BoardSummary {
+export interface PageSummary {
   id: string
   name: string
   description: string
@@ -41,13 +44,13 @@ export function shortKind(type: string): string {
   return (parts[parts.length - 1] ?? type).replace(/widget$/i, '') || type
 }
 
-export function summarizeBoard(
+export function summarizePage(
   id: string,
   page: { name?: string; description?: string } | undefined,
   layout: unknown,
   widgets: unknown,
-): BoardSummary {
-  const items = (Array.isArray(layout) ? layout : []) as BoardSummary['items']
+): PageSummary {
+  const items = (Array.isArray(layout) ? layout : []) as PageSummary['items']
   const list = (Array.isArray(widgets) ? widgets : []) as WidgetLike[]
 
   const typeById: Record<string, string> = {}

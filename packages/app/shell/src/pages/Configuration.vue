@@ -56,7 +56,7 @@ const workspace = inject<Workspace>(WORKSPACE)!
 const eventBus = inject<TinyEmitter>(Symbol.for(TINY_EMITTER))
 
 const variables = useEList(workspace, (w) => w.variables)
-const pages = useEList(workspace, (w) => w.pages)
+const pages = useEList(workspace, (w) => w.board?.pages)
 
 /*
  * A value is the live object's, not the model's, and it changes without

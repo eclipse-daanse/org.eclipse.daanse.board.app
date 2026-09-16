@@ -38,10 +38,10 @@ pages, and on each page its widgets and where they sit.
                 <details key="documentation" value="The data sources widgets read from."/>
             </eAnnotations>
         </eStructuralFeatures>
-        <eStructuralFeatures xsi:type="ecore:EReference" name="pages" eType="#//Page"
-                             lowerBound="0" upperBound="-1" containment="true">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="board" eType="#//Board"
+                             lowerBound="0" containment="true">
             <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-                <details key="documentation" value="The boards this workspace holds."/>
+                <details key="documentation" value="The board this workspace holds - one, or none before anybody makes one. The connections, sources and variables beside it are the workspace's, not the board's: the board is what a person looks at, the rest is what it reads."/>
             </eAnnotations>
         </eStructuralFeatures>
         <eStructuralFeatures xsi:type="ecore:EReference" name="variables" eType="#//Variable"
@@ -56,20 +56,48 @@ pages, and on each page its widgets and where they sit.
                 <details key="documentation" value="What happens when something happens: which event on which widget calls which action."/>
             </eAnnotations>
         </eStructuralFeatures>
+    </eClassifiers>
+
+    <eClassifiers xsi:type="ecore:EClass" name="Board">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+            <details key="documentation" value="What a person opens and works in: a named thing holding the pages it is made of. A board carries no layout or widgets itself - those belong to its pages."/>
+        </eAnnotations>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" lowerBound="1">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="Identifies this board. It outlives a rename."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="What a person calls it."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" lowerBound="0"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="icon" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" lowerBound="0">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="The symbol shown beside it in lists - a Material Icons name."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="pages" eType="#//Page"
+                             lowerBound="0" upperBound="-1" containment="true">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="The pages it is made of, in the order they are shown."/>
+            </eAnnotations>
+        </eStructuralFeatures>
         <eStructuralFeatures xsi:type="ecore:EReference" name="defaultPage" eType="#//Page" lowerBound="0">
             <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-                <details key="documentation" value="The board shown when none is asked for. A reference, so deleting that board leaves no id pointing nowhere."/>
+                <details key="documentation" value="The page shown when none is asked for. A reference, so deleting that page leaves no id pointing nowhere."/>
             </eAnnotations>
         </eStructuralFeatures>
     </eClassifiers>
 
     <eClassifiers xsi:type="ecore:EClass" name="Page">
         <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-            <details key="documentation" value="A board: a named surface with a layout, and the widgets arranged on it."/>
+            <details key="documentation" value="A surface inside a board: a layout, and the widgets arranged on it."/>
         </eAnnotations>
         <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" lowerBound="1">
             <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-                <details key="documentation" value="Identifies this board. It is in the route, so it outlives a rename."/>
+                <details key="documentation" value="Identifies this page. It is in the route, so it outlives a rename."/>
             </eAnnotations>
         </eStructuralFeatures>
         <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>

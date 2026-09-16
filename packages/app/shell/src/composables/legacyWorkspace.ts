@@ -29,6 +29,7 @@ import {
   DatasourceImpl,
   EventMappingImpl,
   LayoutItemImpl,
+  BoardImpl,
   PageImpl,
   VariableImpl,
   WidgetImpl,
@@ -131,6 +132,15 @@ export function readLegacyWorkspace(data: LegacyWorkspace): Workspace | undefine
     workspace.eventMappings.push(mapping)
   }
 
+  /*
+   * Everything this shape stored as a page is one board's worth of pages:
+   * it had no board, and a workspace holds one.
+   */
+  const board = new BoardImpl()
+  board.id = crypto.randomUUID()
+  board.name = 'Board'
+  workspace.board = board
+
   for (const [id, stored] of Object.entries(data.pages ?? {})) {
     const info = stored?.info ?? {}
     const page = new PageImpl()
@@ -175,17 +185,17 @@ export function readLegacyWorkspace(data: LegacyWorkspace): Workspace | undefine
       page.layout.push(item)
     }
 
-    workspace.pages.push(page)
+    board.pages.push(page)
   }
 
-  /* Now that the boards exist, a page variable can point at the one it names. */
+  /* Now that the pages exist, a page variable can point at the one it names. */
   for (const { entry, variable } of variables) {
     const pageId = entry['pageId'] as string | undefined
     if (!pageId) continue
-    variable.page = workspace.pages.toArray().find((page) => page.id === pageId)
+    variable.page = board.pages.toArray().find((page) => page.id === pageId)
   }
 
-  if (workspace.pages.size() > 0) workspace.defaultPage = workspace.pages.get(0)
+  if (board.pages.size() > 0) board.defaultPage = board.pages.get(0)
 
   return workspace
 }

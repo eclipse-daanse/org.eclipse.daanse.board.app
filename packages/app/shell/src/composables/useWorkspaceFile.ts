@@ -76,6 +76,41 @@ export function useWorkspaceOrigin() {
 /** The name the resource carries, and what its `$ref`s resolve against. */
 const WORKSPACE_URI = 'workspace.json'
 
+const BOARD_ECLASS = 'http://org.eclipse.daanse.board.app.lib.model.workspace#//Board'
+
+/**
+ * A state written before a board held the pages.
+ *
+ * Back then the pages sat on the workspace itself. The model puts them in a
+ * board now, and a workspace has one or none - so a stored state's pages
+ * are exactly one board's worth. They move there, and so does every
+ * reference that pointed into them: the default page, a variable's page.
+ * Those are fragment paths, which is why this is done on the text before
+ * the resource reads it rather than on the objects afterwards.
+ */
+export function liftPagesIntoBoard(data: unknown): unknown {
+  if (!data || typeof data !== 'object') return data
+  const held = data as Record<string, unknown>
+  if (held.board || !Array.isArray(held.pages)) return data
+
+  const moved = JSON.parse(
+    JSON.stringify(held).replace(/"\/\/@pages\./g, '"//@board/@pages.'),
+  ) as Record<string, unknown>
+
+  const board: Record<string, unknown> = {
+    eClass: BOARD_ECLASS,
+    id: crypto.randomUUID(),
+    /* Nothing in the old shape named the board; the pages were the boards. */
+    name: 'Board',
+    pages: moved.pages,
+  }
+  if (moved.defaultPage) board.defaultPage = moved.defaultPage
+  delete moved.pages
+  delete moved.defaultPage
+  moved.board = board
+  return moved
+}
+
 /**
  * A workspace read out of stored content, without applying it.
  *
@@ -91,7 +126,7 @@ export function parseWorkspace(content: unknown): Workspace | undefined {
     if (!isResource(data)) return readLegacyWorkspace(data as never)
 
     const resource = new JSONResource(URI.createURI(WORKSPACE_URI))
-    resource.loadFromString(JSON.stringify(data))
+    resource.loadFromString(JSON.stringify(liftPagesIntoBoard(data)))
     return resource.getContents().get(0) as Workspace
   } catch {
     return undefined
@@ -163,8 +198,12 @@ export function useWorkspaceFile() {
     workspace.datasources.clear()
     for (const source of loaded.datasources.toArray()) workspace.datasources.push(source)
 
-    workspace.pages.clear()
-    for (const page of loaded.pages.toArray()) workspace.pages.push(page)
+    /*
+     * The board comes over whole. A state written before boards existed has
+     * its pages directly on the workspace; parseWorkspace puts those into a
+     * board, so there is one shape to move here.
+     */
+    workspace.board = loaded.board
 
     workspace.variables.clear()
     for (const variable of loaded.variables.toArray()) workspace.variables.push(variable)
@@ -172,9 +211,6 @@ export function useWorkspaceFile() {
     workspace.eventMappings.clear()
     for (const mapping of loaded.eventMappings.toArray()) workspace.eventMappings.push(mapping)
 
-    workspace.defaultPage =
-      workspace.pages.toArray().find((page) => page.id === loaded.defaultPage?.id) ??
-      (workspace.pages.size() > 0 ? workspace.pages.get(0) : undefined)
 
     /* Now the things that run: built from the model, never stored with it. */
     connections?.rebuildLive()
@@ -185,7 +221,7 @@ export function useWorkspaceFile() {
     )
 
     const opened: string[] = []
-    for (const page of workspace.pages.toArray()) {
+    for (const page of workspace.board?.pages.toArray() ?? []) {
       variableWrappers?.initilazeVariableWrappers(
         page.widgets.toArray().map((widget) => ({
           uid: widget.uid,

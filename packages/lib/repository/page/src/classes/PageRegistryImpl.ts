@@ -23,10 +23,12 @@ import {
 } from 'org.eclipse.daanse.board.app.lib.api.datasource'
 import {
   WORKSPACE,
+  BoardImpl,
   PageImpl,
   WidgetImpl,
   LayoutItemImpl,
   type LayoutItem,
+  type Board,
   type Page,
   type Widget,
   type Workspace,
@@ -64,8 +66,26 @@ export class PageRegistryImpl implements PageRegistryI {
     return this.workspaceHeld
   }
 
+  /**
+   * The board that holds the pages, made if it is not there yet.
+   *
+   * A workspace holds one board or none, and registering a page is one of
+   * the ways the first one comes into being - a page has to belong to
+   * something.
+   */
+  private get board(): Board {
+    let held = this.workspace.board
+    if (!held) {
+      held = new BoardImpl()
+      held.id = crypto.randomUUID()
+      held.name = 'Board'
+      this.workspace.board = held
+    }
+    return held
+  }
+
   getPages(): Page[] {
-    return this.workspace.pages.toArray()
+    return this.workspace.board?.pages.toArray() ?? []
   }
 
   /** Built on read, so it cannot drift from what the workspace holds. */
@@ -76,7 +96,7 @@ export class PageRegistryImpl implements PageRegistryI {
   }
 
   get defaultPageId(): string | null {
-    return (this.workspace.defaultPage?.id as string) ?? null
+    return (this.workspace.board?.defaultPage?.id as string) ?? null
   }
 
   registerPage(page: StoredPage): Page {
@@ -96,10 +116,11 @@ export class PageRegistryImpl implements PageRegistryI {
     held.backgroundPosition = page.backgroundPosition
     held.backgroundRepeat = page.backgroundRepeat
 
-    if (!existing) this.workspace.pages.push(held)
+    const board = this.board
+    if (!existing) board.pages.push(held)
 
-    /* The first board registered is the one that opens, until told otherwise. */
-    if (!this.workspace.defaultPage) this.workspace.defaultPage = held
+    /* The first page registered is the one that opens, until told otherwise. */
+    if (!board.defaultPage) board.defaultPage = held
 
     return held
   }
@@ -109,16 +130,18 @@ export class PageRegistryImpl implements PageRegistryI {
   }
 
   getDefaultPage(): Page | null {
-    return this.workspace.defaultPage ?? null
+    return this.workspace.board?.defaultPage ?? null
   }
 
   setDefaultPage(pageId: string): void {
     const page = this.getPage(pageId)
-    if (page) this.workspace.defaultPage = page
+    if (page && this.workspace.board) this.workspace.board.defaultPage = page
   }
 
   unregisterPage(pageId: string): void {
-    const held = this.workspace.pages
+    const board = this.workspace.board
+    if (!board) return
+    const held = board.pages
     const at = held.toArray().findIndex((page: Page) => page.id === pageId)
     if (at < 0) return
 
@@ -129,8 +152,8 @@ export class PageRegistryImpl implements PageRegistryI {
      * A reference rather than an id, so the default cannot survive as a
      * name for something that is gone. The next board takes over.
      */
-    if (this.workspace.defaultPage === removed) {
-      this.workspace.defaultPage = held.size() > 0 ? held.get(0) : undefined
+    if (board.defaultPage === removed) {
+      board.defaultPage = held.size() > 0 ? held.get(0) : undefined
     }
   }
 

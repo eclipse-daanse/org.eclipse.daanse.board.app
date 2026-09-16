@@ -128,7 +128,7 @@ export class VariableRepository implements SystemVariableActions, PageVariableAc
   /** The board a page-scoped variable names, if the workspace still holds it. */
   private pageById(pageId?: string): Page | undefined {
     if (!pageId) return undefined
-    return this.workspace.pages.toArray().find((page: Page) => page.id === pageId)
+    return this.workspace.board?.pages.toArray().find((page: Page) => page.id === pageId)
   }
 
   /**

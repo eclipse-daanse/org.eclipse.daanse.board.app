@@ -14,6 +14,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import ViewReport from '@/pages/ViewReport.vue'
 import ConnectionsAndData from '@/pages/ConnectionsAndData.vue'
+import BoardPages from '@/pages/BoardPages.vue'
 import EditReport from '@/pages/EditReport.vue'
 
 const router = createRouter({
@@ -36,6 +37,13 @@ const router = createRouter({
      * not about one board - so /datasources is the name, and the old one
      * still lands here for links that are already out there.
      */
+    {
+      /* The pages of the open board - an area of the workspace, not a view
+         of the launcher: a page only means anything once a board is open. */
+      path: '/pages',
+      name: 'pages',
+      component: BoardPages,
+    },
     {
       path: '/datasources',
       name: 'data',

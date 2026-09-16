@@ -4,17 +4,15 @@ class WorkspaceImpl extends BasicEObject {
   // Feature ID Constants (eLiterals)
   static CONNECTIONS = 0;
   static DATASOURCES = 1;
-  static PAGES = 2;
+  static BOARD = 2;
   static VARIABLES = 3;
   static EVENT_MAPPINGS = 4;
-  static DEFAULT_PAGE = 5;
   // Private fields
   _connections;
   _datasources;
-  _pages;
+  _board;
   _variables;
   _eventMappings;
-  _defaultPage;
   /**
    * Returns the EClass of this object
    */
@@ -34,11 +32,28 @@ class WorkspaceImpl extends BasicEObject {
     }
     return this._datasources;
   }
-  get pages() {
-    if (!this._pages) {
-      this._pages = createContainmentEList(this, this.eClass().getEStructuralFeature("pages"));
+  get board() {
+    return this._board;
+  }
+  set board(value) {
+    const oldValue = this._board;
+    this._board = value;
+    if (this.eDeliver()) {
+      this.eNotify({
+        getNotifier: () => this,
+        getEventType: () => 1,
+        // SET
+        getFeature: () => this.eClass().getEStructuralFeature(WorkspaceImpl.BOARD),
+        getOldValue: () => oldValue,
+        getNewValue: () => value,
+        getPosition: () => -1,
+        wasSet: () => true,
+        isTouch: () => false,
+        isReset: () => false,
+        getFeatureID: () => WorkspaceImpl.BOARD,
+        merge: () => false
+      });
     }
-    return this._pages;
   }
   get variables() {
     if (!this._variables) {
@@ -52,29 +67,6 @@ class WorkspaceImpl extends BasicEObject {
     }
     return this._eventMappings;
   }
-  get defaultPage() {
-    return this._defaultPage;
-  }
-  set defaultPage(value) {
-    const oldValue = this._defaultPage;
-    this._defaultPage = value;
-    if (this.eDeliver()) {
-      this.eNotify({
-        getNotifier: () => this,
-        getEventType: () => 1,
-        // SET
-        getFeature: () => this.eClass().getEStructuralFeature(WorkspaceImpl.DEFAULT_PAGE),
-        getOldValue: () => oldValue,
-        getNewValue: () => value,
-        getPosition: () => -1,
-        wasSet: () => true,
-        isTouch: () => false,
-        isReset: () => false,
-        getFeatureID: () => WorkspaceImpl.DEFAULT_PAGE,
-        merge: () => false
-      });
-    }
-  }
   // Reflective API
   /**
    * Returns the value of the given feature
@@ -86,14 +78,12 @@ class WorkspaceImpl extends BasicEObject {
         return this.connections;
       case WorkspaceImpl.DATASOURCES:
         return this.datasources;
-      case WorkspaceImpl.PAGES:
-        return this.pages;
+      case WorkspaceImpl.BOARD:
+        return this.board;
       case WorkspaceImpl.VARIABLES:
         return this.variables;
       case WorkspaceImpl.EVENT_MAPPINGS:
         return this.eventMappings;
-      case WorkspaceImpl.DEFAULT_PAGE:
-        return this.defaultPage;
       default:
         return super.eGet(feature);
     }
@@ -114,9 +104,8 @@ class WorkspaceImpl extends BasicEObject {
         this.datasources.addAll(newValue);
         super.eSet(feature, newValue);
         break;
-      case WorkspaceImpl.PAGES:
-        this.pages.clear();
-        this.pages.addAll(newValue);
+      case WorkspaceImpl.BOARD:
+        this.board = newValue;
         super.eSet(feature, newValue);
         break;
       case WorkspaceImpl.VARIABLES:
@@ -127,10 +116,6 @@ class WorkspaceImpl extends BasicEObject {
       case WorkspaceImpl.EVENT_MAPPINGS:
         this.eventMappings.clear();
         this.eventMappings.addAll(newValue);
-        super.eSet(feature, newValue);
-        break;
-      case WorkspaceImpl.DEFAULT_PAGE:
-        this.defaultPage = newValue;
         super.eSet(feature, newValue);
         break;
       default:
@@ -147,14 +132,12 @@ class WorkspaceImpl extends BasicEObject {
         return this._connections !== void 0 && !this._connections.isEmpty();
       case WorkspaceImpl.DATASOURCES:
         return this._datasources !== void 0 && !this._datasources.isEmpty();
-      case WorkspaceImpl.PAGES:
-        return this._pages !== void 0 && !this._pages.isEmpty();
+      case WorkspaceImpl.BOARD:
+        return this._board !== void 0;
       case WorkspaceImpl.VARIABLES:
         return this._variables !== void 0 && !this._variables.isEmpty();
       case WorkspaceImpl.EVENT_MAPPINGS:
         return this._eventMappings !== void 0 && !this._eventMappings.isEmpty();
-      case WorkspaceImpl.DEFAULT_PAGE:
-        return this._defaultPage !== void 0;
       default:
         return super.eIsSet(feature);
     }
@@ -171,17 +154,14 @@ class WorkspaceImpl extends BasicEObject {
       case WorkspaceImpl.DATASOURCES:
         if (this._datasources) this._datasources.clear();
         return;
-      case WorkspaceImpl.PAGES:
-        if (this._pages) this._pages.clear();
+      case WorkspaceImpl.BOARD:
+        this._board = void 0;
         return;
       case WorkspaceImpl.VARIABLES:
         if (this._variables) this._variables.clear();
         return;
       case WorkspaceImpl.EVENT_MAPPINGS:
         if (this._eventMappings) this._eventMappings.clear();
-        return;
-      case WorkspaceImpl.DEFAULT_PAGE:
-        this._defaultPage = void 0;
         return;
       default:
         super.eUnset(feature);
@@ -198,9 +178,277 @@ class WorkspaceImpl extends BasicEObject {
     return {
       connections: this.connections?.toArray?.() ?? this.connections,
       datasources: this.datasources?.toArray?.() ?? this.datasources,
-      pages: this.pages?.toArray?.() ?? this.pages,
+      board: this.board,
       variables: this.variables?.toArray?.() ?? this.variables,
-      eventMappings: this.eventMappings?.toArray?.() ?? this.eventMappings,
+      eventMappings: this.eventMappings?.toArray?.() ?? this.eventMappings
+    };
+  }
+}
+class BoardImpl extends BasicEObject {
+  // Feature ID Constants (eLiterals)
+  static ID = 0;
+  static NAME = 1;
+  static DESCRIPTION = 2;
+  static ICON = 3;
+  static PAGES = 4;
+  static DEFAULT_PAGE = 5;
+  // Private fields
+  _id = "";
+  _name;
+  _description;
+  _icon;
+  _pages;
+  _defaultPage;
+  /**
+   * Returns the EClass of this object
+   */
+  eClass() {
+    return WorkspacePackage.Literals.BOARD;
+  }
+  // Getters and Setters
+  get id() {
+    return this._id;
+  }
+  set id(value) {
+    const oldValue = this._id;
+    this._id = value;
+    if (this.eDeliver()) {
+      this.eNotify({
+        getNotifier: () => this,
+        getEventType: () => 1,
+        // SET
+        getFeature: () => this.eClass().getEStructuralFeature(BoardImpl.ID),
+        getOldValue: () => oldValue,
+        getNewValue: () => value,
+        getPosition: () => -1,
+        wasSet: () => true,
+        isTouch: () => false,
+        isReset: () => false,
+        getFeatureID: () => BoardImpl.ID,
+        merge: () => false
+      });
+    }
+  }
+  get name() {
+    return this._name;
+  }
+  set name(value) {
+    const oldValue = this._name;
+    this._name = value;
+    if (this.eDeliver()) {
+      this.eNotify({
+        getNotifier: () => this,
+        getEventType: () => 1,
+        // SET
+        getFeature: () => this.eClass().getEStructuralFeature(BoardImpl.NAME),
+        getOldValue: () => oldValue,
+        getNewValue: () => value,
+        getPosition: () => -1,
+        wasSet: () => true,
+        isTouch: () => false,
+        isReset: () => false,
+        getFeatureID: () => BoardImpl.NAME,
+        merge: () => false
+      });
+    }
+  }
+  get description() {
+    return this._description;
+  }
+  set description(value) {
+    const oldValue = this._description;
+    this._description = value;
+    if (this.eDeliver()) {
+      this.eNotify({
+        getNotifier: () => this,
+        getEventType: () => 1,
+        // SET
+        getFeature: () => this.eClass().getEStructuralFeature(BoardImpl.DESCRIPTION),
+        getOldValue: () => oldValue,
+        getNewValue: () => value,
+        getPosition: () => -1,
+        wasSet: () => true,
+        isTouch: () => false,
+        isReset: () => false,
+        getFeatureID: () => BoardImpl.DESCRIPTION,
+        merge: () => false
+      });
+    }
+  }
+  get icon() {
+    return this._icon;
+  }
+  set icon(value) {
+    const oldValue = this._icon;
+    this._icon = value;
+    if (this.eDeliver()) {
+      this.eNotify({
+        getNotifier: () => this,
+        getEventType: () => 1,
+        // SET
+        getFeature: () => this.eClass().getEStructuralFeature(BoardImpl.ICON),
+        getOldValue: () => oldValue,
+        getNewValue: () => value,
+        getPosition: () => -1,
+        wasSet: () => true,
+        isTouch: () => false,
+        isReset: () => false,
+        getFeatureID: () => BoardImpl.ICON,
+        merge: () => false
+      });
+    }
+  }
+  get pages() {
+    if (!this._pages) {
+      this._pages = createContainmentEList(this, this.eClass().getEStructuralFeature("pages"));
+    }
+    return this._pages;
+  }
+  get defaultPage() {
+    return this._defaultPage;
+  }
+  set defaultPage(value) {
+    const oldValue = this._defaultPage;
+    this._defaultPage = value;
+    if (this.eDeliver()) {
+      this.eNotify({
+        getNotifier: () => this,
+        getEventType: () => 1,
+        // SET
+        getFeature: () => this.eClass().getEStructuralFeature(BoardImpl.DEFAULT_PAGE),
+        getOldValue: () => oldValue,
+        getNewValue: () => value,
+        getPosition: () => -1,
+        wasSet: () => true,
+        isTouch: () => false,
+        isReset: () => false,
+        getFeatureID: () => BoardImpl.DEFAULT_PAGE,
+        merge: () => false
+      });
+    }
+  }
+  // Reflective API
+  /**
+   * Returns the value of the given feature
+   */
+  eGet(feature) {
+    const featureID = this.eClass().getFeatureID(feature);
+    switch (featureID) {
+      case BoardImpl.ID:
+        return this.id;
+      case BoardImpl.NAME:
+        return this.name;
+      case BoardImpl.DESCRIPTION:
+        return this.description;
+      case BoardImpl.ICON:
+        return this.icon;
+      case BoardImpl.PAGES:
+        return this.pages;
+      case BoardImpl.DEFAULT_PAGE:
+        return this.defaultPage;
+      default:
+        return super.eGet(feature);
+    }
+  }
+  /**
+   * Sets the value of the given feature
+   */
+  eSet(feature, newValue) {
+    const featureID = this.eClass().getFeatureID(feature);
+    switch (featureID) {
+      case BoardImpl.ID:
+        this.id = newValue;
+        super.eSet(feature, newValue);
+        break;
+      case BoardImpl.NAME:
+        this.name = newValue;
+        super.eSet(feature, newValue);
+        break;
+      case BoardImpl.DESCRIPTION:
+        this.description = newValue;
+        super.eSet(feature, newValue);
+        break;
+      case BoardImpl.ICON:
+        this.icon = newValue;
+        super.eSet(feature, newValue);
+        break;
+      case BoardImpl.PAGES:
+        this.pages.clear();
+        this.pages.addAll(newValue);
+        super.eSet(feature, newValue);
+        break;
+      case BoardImpl.DEFAULT_PAGE:
+        this.defaultPage = newValue;
+        super.eSet(feature, newValue);
+        break;
+      default:
+        super.eSet(feature, newValue);
+    }
+  }
+  /**
+   * Returns whether the feature has been set
+   */
+  eIsSet(feature) {
+    const featureID = this.eClass().getFeatureID(feature);
+    switch (featureID) {
+      case BoardImpl.ID:
+        return this._id !== "";
+      case BoardImpl.NAME:
+        return this._name !== void 0;
+      case BoardImpl.DESCRIPTION:
+        return this._description !== void 0;
+      case BoardImpl.ICON:
+        return this._icon !== void 0;
+      case BoardImpl.PAGES:
+        return this._pages !== void 0 && !this._pages.isEmpty();
+      case BoardImpl.DEFAULT_PAGE:
+        return this._defaultPage !== void 0;
+      default:
+        return super.eIsSet(feature);
+    }
+  }
+  /**
+   * Unsets the given feature
+   */
+  eUnset(feature) {
+    const featureID = this.eClass().getFeatureID(feature);
+    switch (featureID) {
+      case BoardImpl.ID:
+        this._id = "";
+        return;
+      case BoardImpl.NAME:
+        this._name = void 0;
+        return;
+      case BoardImpl.DESCRIPTION:
+        this._description = void 0;
+        return;
+      case BoardImpl.ICON:
+        this._icon = void 0;
+        return;
+      case BoardImpl.PAGES:
+        if (this._pages) this._pages.clear();
+        return;
+      case BoardImpl.DEFAULT_PAGE:
+        this._defaultPage = void 0;
+        return;
+      default:
+        super.eUnset(feature);
+    }
+  }
+  /**
+   * What this object is when it is stored.
+   *
+   * The plain names, not the private fields the getters sit in: those
+   * are this class's business, and a stored board is read by things
+   * that only know the model.
+   */
+  toJSON() {
+    return {
+      id: this.id,
+      name: this.name,
+      description: this.description,
+      icon: this.icon,
+      pages: this.pages?.toArray?.() ?? this.pages,
       defaultPage: this.defaultPage
     };
   }
@@ -2378,6 +2626,12 @@ class WorkspaceFactory extends BasicEFactory {
     return new WorkspaceImpl();
   }
   /**
+   * Create a new Board instance
+   */
+  createBoard() {
+    return new BoardImpl();
+  }
+  /**
    * Create a new Page instance
    */
   createPage() {
@@ -2426,6 +2680,8 @@ class WorkspaceFactory extends BasicEFactory {
     switch (eClass.getName()) {
       case "Workspace":
         return this.createWorkspace();
+      case "Board":
+        return this.createBoard();
       case "Page":
         return this.createPage();
       case "Widget":
@@ -2465,10 +2721,16 @@ class WorkspacePackage extends BasicEPackage {
     WORKSPACE: null,
     WORKSPACE__CONNECTIONS: null,
     WORKSPACE__DATASOURCES: null,
-    WORKSPACE__PAGES: null,
+    WORKSPACE__BOARD: null,
     WORKSPACE__VARIABLES: null,
     WORKSPACE__EVENT_MAPPINGS: null,
-    WORKSPACE__DEFAULT_PAGE: null,
+    BOARD: null,
+    BOARD__ID: null,
+    BOARD__NAME: null,
+    BOARD__DESCRIPTION: null,
+    BOARD__ICON: null,
+    BOARD__PAGES: null,
+    BOARD__DEFAULT_PAGE: null,
     PAGE: null,
     PAGE__ID: null,
     PAGE__NAME: null,
@@ -2558,13 +2820,13 @@ class WorkspacePackage extends BasicEPackage {
     workspace_datasources.setUpperBound(-1);
     workspaceClass.getEStructuralFeatures().push(workspace_datasources);
     WorkspacePackage.Literals.WORKSPACE__DATASOURCES = workspace_datasources;
-    const workspace_pages = new BasicEReference();
-    workspace_pages.setContainment(true);
-    workspace_pages.setName("pages");
-    workspace_pages.setLowerBound(0);
-    workspace_pages.setUpperBound(-1);
-    workspaceClass.getEStructuralFeatures().push(workspace_pages);
-    WorkspacePackage.Literals.WORKSPACE__PAGES = workspace_pages;
+    const workspace_board = new BasicEReference();
+    workspace_board.setContainment(true);
+    workspace_board.setName("board");
+    workspace_board.setLowerBound(0);
+    workspace_board.setUpperBound(1);
+    workspaceClass.getEStructuralFeatures().push(workspace_board);
+    WorkspacePackage.Literals.WORKSPACE__BOARD = workspace_board;
     const workspace_variables = new BasicEReference();
     workspace_variables.setContainment(true);
     workspace_variables.setName("variables");
@@ -2579,13 +2841,51 @@ class WorkspacePackage extends BasicEPackage {
     workspace_eventMappings.setUpperBound(-1);
     workspaceClass.getEStructuralFeatures().push(workspace_eventMappings);
     WorkspacePackage.Literals.WORKSPACE__EVENT_MAPPINGS = workspace_eventMappings;
-    const workspace_defaultPage = new BasicEReference();
-    workspace_defaultPage.setContainment(false);
-    workspace_defaultPage.setName("defaultPage");
-    workspace_defaultPage.setLowerBound(0);
-    workspace_defaultPage.setUpperBound(1);
-    workspaceClass.getEStructuralFeatures().push(workspace_defaultPage);
-    WorkspacePackage.Literals.WORKSPACE__DEFAULT_PAGE = workspace_defaultPage;
+    const boardClass = new BasicEClass();
+    boardClass.setName("Board");
+    boardClass.setAbstract(false);
+    boardClass.setInterface(false);
+    this.getEClassifiers().push(boardClass);
+    boardClass.setEPackage(this);
+    WorkspacePackage.Literals.BOARD = boardClass;
+    const board_id = new BasicEAttribute();
+    board_id.setName("id");
+    board_id.setLowerBound(1);
+    board_id.setUpperBound(1);
+    boardClass.getEStructuralFeatures().push(board_id);
+    WorkspacePackage.Literals.BOARD__ID = board_id;
+    const board_name = new BasicEAttribute();
+    board_name.setName("name");
+    board_name.setLowerBound(0);
+    board_name.setUpperBound(1);
+    boardClass.getEStructuralFeatures().push(board_name);
+    WorkspacePackage.Literals.BOARD__NAME = board_name;
+    const board_description = new BasicEAttribute();
+    board_description.setName("description");
+    board_description.setLowerBound(0);
+    board_description.setUpperBound(1);
+    boardClass.getEStructuralFeatures().push(board_description);
+    WorkspacePackage.Literals.BOARD__DESCRIPTION = board_description;
+    const board_icon = new BasicEAttribute();
+    board_icon.setName("icon");
+    board_icon.setLowerBound(0);
+    board_icon.setUpperBound(1);
+    boardClass.getEStructuralFeatures().push(board_icon);
+    WorkspacePackage.Literals.BOARD__ICON = board_icon;
+    const board_pages = new BasicEReference();
+    board_pages.setContainment(true);
+    board_pages.setName("pages");
+    board_pages.setLowerBound(0);
+    board_pages.setUpperBound(-1);
+    boardClass.getEStructuralFeatures().push(board_pages);
+    WorkspacePackage.Literals.BOARD__PAGES = board_pages;
+    const board_defaultPage = new BasicEReference();
+    board_defaultPage.setContainment(false);
+    board_defaultPage.setName("defaultPage");
+    board_defaultPage.setLowerBound(0);
+    board_defaultPage.setUpperBound(1);
+    boardClass.getEStructuralFeatures().push(board_defaultPage);
+    WorkspacePackage.Literals.BOARD__DEFAULT_PAGE = board_defaultPage;
     const pageClass = new BasicEClass();
     pageClass.setName("Page");
     pageClass.setAbstract(false);
@@ -2930,10 +3230,15 @@ class WorkspacePackage extends BasicEPackage {
     WorkspacePackage.Literals.CONNECTION__TAGS = connection_tags;
     WorkspacePackage.Literals.WORKSPACE__CONNECTIONS.setEType(WorkspacePackage.Literals.CONNECTION);
     WorkspacePackage.Literals.WORKSPACE__DATASOURCES.setEType(WorkspacePackage.Literals.DATASOURCE);
-    WorkspacePackage.Literals.WORKSPACE__PAGES.setEType(WorkspacePackage.Literals.PAGE);
+    WorkspacePackage.Literals.WORKSPACE__BOARD.setEType(WorkspacePackage.Literals.BOARD);
     WorkspacePackage.Literals.WORKSPACE__VARIABLES.setEType(WorkspacePackage.Literals.VARIABLE);
     WorkspacePackage.Literals.WORKSPACE__EVENT_MAPPINGS.setEType(WorkspacePackage.Literals.EVENT_MAPPING);
-    WorkspacePackage.Literals.WORKSPACE__DEFAULT_PAGE.setEType(WorkspacePackage.Literals.PAGE);
+    WorkspacePackage.Literals.BOARD__ID.setEType(getEcorePackage().getEClassifier("EString"));
+    WorkspacePackage.Literals.BOARD__NAME.setEType(getEcorePackage().getEClassifier("EString"));
+    WorkspacePackage.Literals.BOARD__DESCRIPTION.setEType(getEcorePackage().getEClassifier("EString"));
+    WorkspacePackage.Literals.BOARD__ICON.setEType(getEcorePackage().getEClassifier("EString"));
+    WorkspacePackage.Literals.BOARD__PAGES.setEType(WorkspacePackage.Literals.PAGE);
+    WorkspacePackage.Literals.BOARD__DEFAULT_PAGE.setEType(WorkspacePackage.Literals.PAGE);
     WorkspacePackage.Literals.PAGE__ID.setEType(getEcorePackage().getEClassifier("EString"));
     WorkspacePackage.Literals.PAGE__NAME.setEType(getEcorePackage().getEClassifier("EString"));
     WorkspacePackage.Literals.PAGE__DESCRIPTION.setEType(getEcorePackage().getEClassifier("EString"));
@@ -2996,6 +3301,7 @@ function deactivate$1({ services }) {
 }
 const library = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
+  BoardImpl,
   ConnectionImpl,
   DatasourceImpl,
   EventMappingImpl,
@@ -3025,6 +3331,7 @@ async function deactivate(context) {
   await deactivate$1?.(context);
 }
 export {
+  BoardImpl,
   ConnectionImpl,
   DatasourceImpl,
   EventMappingImpl,

@@ -70,10 +70,26 @@ interface Crumb {
   to?: string
 }
 
+const workspace = inject<Workspace>(WORKSPACE)!
+
+/*
+ * The modelled pages. Reading this list is what makes everything below
+ * re-run; there used to be a shared counter here, bumped by whoever
+ * changed a page, because the registry told Vue nothing.
+ */
+const modelledPages = useEList(workspace, (w) => w.board?.pages)
+
 const crumb = computed<Crumb[]>(() => {
+  /* Reading the pages is what makes this re-run when the board is renamed. */
+  void modelledPages.value
   const boards: Crumb = { label: 'Boards', to: '/' }
+  /*
+   * The board's own name, not the open page's id. They were the same thing
+   * once - a page was a board - and the crumb said "Board 76134a0b", which
+   * was the page you happened to be on.
+   */
   const board: Crumb = {
-    label: pageId.value ? `Board ${pageId.value.slice(0, 8)}` : 'Board',
+    label: (workspace.board?.name as string) || 'Board',
     to: pageId.value ? `/page/${pageId.value}` : undefined,
   }
   switch (route.name) {
@@ -114,12 +130,6 @@ const layoutRepo = inject<LayoutRepositoryI>(LayoutRepositoryIdentifier)
 
 const { openSettings: openPageSettings } = usePages()
 
-/*
- * The modelled pages. Reading this list is what makes everything below
- * re-run; there used to be a shared counter here, bumped by whoever
- * changed a page, because the registry told Vue nothing.
- */
-const modelledPages = useEList(inject<Workspace>(WORKSPACE)!, (w) => w.pages)
 
 /*
  * The widget palette floats over the board, so the way to it belongs here

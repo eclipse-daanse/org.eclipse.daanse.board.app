@@ -8,7 +8,7 @@
 import type { EObject, EList } from '@emfts/core';
 import type { Connection } from './Connection.js';
 import type { Datasource } from './Datasource.js';
-import type { Page } from './Page.js';
+import type { Board } from './Board.js';
 import type { Variable } from './Variable.js';
 import type { EventMapping } from './EventMapping.js';
 
@@ -19,9 +19,8 @@ import type { EventMapping } from './EventMapping.js';
 export interface Workspace extends EObject {
   connections: EList<Connection>;
   datasources: EList<Datasource>;
-  pages: EList<Page>;
+  board?: Board;
   variables: EList<Variable>;
   eventMappings: EList<EventMapping>;
-  defaultPage?: Page;
 
 }
