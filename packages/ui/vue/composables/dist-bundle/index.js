@@ -1,422 +1,317 @@
-import { identifier } from "org.eclipse.daanse.board.app.lib.api.datasource";
-import { ref, computed, inject, onMounted, onUnmounted, watch, onBeforeUnmount, shallowRef, toValue, triggerRef, getCurrentScope, onScopeDispose } from "vue";
-import { identifier as identifier$1 } from "org.eclipse.daanse.board.app.lib.api.variable";
-import { identifier as identifier$2 } from "org.eclipse.daanse.board.app.lib.api.pagecontext";
-import { EContentAdapter, NotificationType, BasicEObject, BasicEFactory, BasicEPackage, EPackageRegistry, BasicEClass, BasicEAttribute, getEcorePackage } from "@emfts/core";
-import { identifier as identifier$3 } from "org.eclipse.daanse.board.app.lib.api.page";
-import { VariableWrapper, VARIABLEWRAPPER } from "org.eclipse.daanse.board.app.lib.variables";
-import { VARIABLEWRAPPER as VARIABLEWRAPPER2, VariableWrapper as VariableWrapper2 } from "org.eclipse.daanse.board.app.lib.variables";
-const activeLoadingCount = ref(0);
-function useGlobalLoading() {
-  const isLoading = computed(() => activeLoadingCount.value > 0);
-  const startLoading = () => {
-    activeLoadingCount.value++;
-  };
-  const stopLoading = () => {
-    if (activeLoadingCount.value > 0) {
-      activeLoadingCount.value--;
-    }
-  };
+import { identifier as Q } from "org.eclipse.daanse.board.app.lib.api.datasource";
+import { ref as B, computed as I, inject as M, onMounted as G, onUnmounted as ve, watch as Y, onBeforeUnmount as he, shallowRef as W, toValue as F, triggerRef as Ae, getCurrentScope as X, onScopeDispose as $, getCurrentInstance as ee } from "vue";
+import { identifier as Re } from "org.eclipse.daanse.board.app.lib.api.variable";
+import { identifier as ye } from "org.eclipse.daanse.board.app.lib.api.pagecontext";
+import { EContentAdapter as te, NotificationType as R, BasicEObject as se, BasicEFactory as pe, BasicEPackage as Pe, EPackageRegistry as ne, BasicEClass as H, BasicEAttribute as D, getEcorePackage as m } from "@emfts/core";
+import { identifier as Se } from "org.eclipse.daanse.board.app.lib.api.page";
+import { VariableWrapper as re, VARIABLEWRAPPER as Le } from "org.eclipse.daanse.board.app.lib.variables";
+import { VARIABLEWRAPPER as ot, VariableWrapper as ut } from "org.eclipse.daanse.board.app.lib.variables";
+const O = B(0);
+function ae() {
   return {
-    isLoading,
-    activeLoadingCount,
-    startLoading,
-    stopLoading
+    isLoading: I(() => O.value > 0),
+    activeLoadingCount: O,
+    startLoading: () => {
+      O.value++;
+    },
+    stopLoading: () => {
+      O.value > 0 && O.value--;
+    }
   };
 }
-function useDatasourceRepository(dataSourceId, type, data, subscriptions = [], requestConfig) {
-  const datasourceRepository = inject(identifier);
-  if (!datasourceRepository) {
+function _e(s, e, t, n = [], r) {
+  const i = M(Q);
+  if (!i)
     throw new Error("DatasourceRepository not provided");
-  }
-  const { startLoading, stopLoading } = useGlobalLoading();
-  const getData = async () => {
-    if (!dataSourceId.value) {
-      data.value = null;
+  const { startLoading: o, stopLoading: a } = ae(), l = async () => {
+    if (!s.value) {
+      t.value = null;
       return;
     }
-    console.log("getData", dataSourceId.value);
-    console.log("type", type);
-    startLoading();
+    console.log("getData", s.value), console.log("type", e), o();
     try {
-      const dataSource = datasourceRepository.getDatasource(dataSourceId.value);
-      const dataRaw = await dataSource.getData(type, requestConfig?.value || {});
-      if (type === "PivotTable") {
-        data.value = JSON.parse(JSON.stringify(dataRaw));
-      } else {
-        data.value = structuredClone(dataRaw);
-      }
-    } catch (e) {
-      data.value = null;
-      console.warn(e);
+      const f = await i.getDatasource(s.value).getData(e, r?.value || {});
+      e === "PivotTable" ? t.value = JSON.parse(JSON.stringify(f)) : t.value = structuredClone(f);
+    } catch (u) {
+      t.value = null, console.warn(u);
     } finally {
-      stopLoading();
+      a();
     }
-  };
-  const callEvent = async (event, params, shouldUpdate = true) => {
-    if (dataSourceId.value) {
+  }, d = async (u, f, E = !0) => {
+    if (s.value)
       try {
-        const dataSource = datasourceRepository.getDatasource(
-          dataSourceId.value
-        );
-        const result = dataSource.callEvent(event, params, shouldUpdate);
-        if (!shouldUpdate && result instanceof Promise) {
-          await result;
-          const dataRaw = await dataSource.getData(type);
-          data.value = structuredClone(dataRaw);
+        const p = i.getDatasource(
+          s.value
+        ), c = p.callEvent(u, f, E);
+        if (!E && c instanceof Promise) {
+          await c;
+          const g = await p.getData(e);
+          t.value = structuredClone(g);
         }
-      } catch (e) {
-        console.warn(e);
+      } catch (p) {
+        console.warn(p);
       }
-    }
-  };
-  const getDataWithOptions = async (options) => {
-    if (!dataSourceId.value) {
-      data.value = null;
+  }, y = async (u) => {
+    if (!s.value) {
+      t.value = null;
       return;
     }
-    console.log("getDataWithOptions", dataSourceId.value, options);
-    console.log("type", type);
-    startLoading();
+    console.log("getDataWithOptions", s.value, u), console.log("type", e), o();
     try {
-      const dataSource = datasourceRepository.getDatasource(dataSourceId.value);
-      const dataRaw = await dataSource.getData(type, options);
-      data.value = structuredClone(dataRaw);
-    } catch (e) {
-      data.value = null;
-      console.warn(e);
+      const E = await i.getDatasource(s.value).getData(e, u);
+      t.value = structuredClone(E);
+    } catch (f) {
+      t.value = null, console.warn(f);
     } finally {
-      stopLoading();
+      a();
+    }
+  }, A = (u, f) => {
+    try {
+      l();
+    } catch (E) {
+      console.warn(E);
+    }
+    if (!(!u || !f || u === f)) {
+      try {
+        const E = i.getDatasource(f);
+        E.unsubscribe(l), n.forEach((p) => {
+          E.unsubscribe(p);
+        });
+      } catch (E) {
+        console.warn(E);
+      }
+      try {
+        const E = i.getDatasource(u);
+        E.subscribe(() => l()), n.forEach((p) => {
+          E.subscribe(p);
+        });
+      } catch (E) {
+        console.warn(E);
+      }
+    }
+  }, L = () => {
+    try {
+      return i.getDatasource(s.value);
+    } catch (u) {
+      return console.warn(u), null;
     }
   };
-  const update = (newVal, oldVal) => {
+  return G(() => {
+    l();
     try {
-      getData();
-    } catch (e) {
-      console.warn(e);
-    }
-    if (!newVal || !oldVal || newVal === oldVal) return;
-    try {
-      const oldDataSource = datasourceRepository.getDatasource(oldVal);
-      oldDataSource.unsubscribe(getData);
-      subscriptions.forEach((fn) => {
-        oldDataSource.unsubscribe(fn);
+      const u = i.getDatasource(s.value);
+      u.subscribe(l), n.forEach((f) => {
+        u.subscribe(f);
       });
-    } catch (e) {
-      console.warn(e);
+    } catch (u) {
+      console.warn(u);
     }
+  }), ve(() => {
     try {
-      const dataSource = datasourceRepository.getDatasource(newVal);
-      dataSource.subscribe(() => getData());
-      subscriptions.forEach((fn) => {
-        dataSource.subscribe(fn);
+      const u = i.getDatasource(s.value);
+      u.unsubscribe(l), n.forEach((f) => {
+        u.unsubscribe(f);
       });
-    } catch (e) {
-      console.warn(e);
+    } catch (u) {
+      console.warn(u);
     }
-  };
-  const getDatasourceInstance = () => {
-    try {
-      const dataSource = datasourceRepository.getDatasource(dataSourceId.value);
-      return dataSource;
-    } catch (e) {
-      console.warn(e);
-      return null;
-    }
-  };
-  onMounted(() => {
-    getData();
-    try {
-      const dataSource = datasourceRepository.getDatasource(dataSourceId.value);
-      dataSource.subscribe(getData);
-      subscriptions.forEach((fn) => {
-        dataSource.subscribe(fn);
-      });
-    } catch (e) {
-      console.warn(e);
-    }
-  });
-  onUnmounted(() => {
-    try {
-      const dataSource = datasourceRepository.getDatasource(dataSourceId.value);
-      dataSource.unsubscribe(getData);
-      subscriptions.forEach((fn) => {
-        dataSource.unsubscribe(fn);
-      });
-    } catch (e) {
-      console.warn(e);
-    }
-  });
-  return {
-    data,
-    callEvent,
-    update,
-    getDataWithOptions,
-    getDatasourceInstance
+  }), {
+    data: t,
+    callEvent: d,
+    update: A,
+    getDataWithOptions: y,
+    getDatasourceInstance: L
   };
 }
-function useTemporaryStore(type, settings, tempStore) {
-  const datasourceRepository = inject(identifier);
-  if (!datasourceRepository) {
+function Te(s, e, t) {
+  const n = M(Q);
+  if (!n)
     throw new Error("DatasourceRepository not provided");
-  }
-  const identifiers = datasourceRepository.getDatasourceIdentifiers(type);
-  console.log("Identifiers for datasource type", type, identifiers);
-  onMounted(async () => {
+  const r = n.getDatasourceIdentifiers(s);
+  console.log("Identifiers for datasource type", s, r), G(async () => {
     console.log(
       "Creating temporary store for type",
-      type,
+      s,
       "with settings",
-      settings.value
+      e.value
     );
-    const factory = datasourceRepository.resolveIdentifier(identifiers.Store);
-    tempStore.value = factory({ ...settings.value.config, _isTemporaryPreview: true });
+    const o = n.resolveIdentifier(r.Store);
+    t.value = o({ ...e.value.config, _isTemporaryPreview: !0 });
   });
-  const update = async () => {
-    tempStore.value?.destroy();
-    tempStore.value = null;
-    const factory = datasourceRepository.resolveIdentifier(identifiers.Store);
-    const newStore = factory({ ...settings.value.config, _isTemporaryPreview: true });
-    if (newStore.initPromise) {
-      await newStore.initPromise;
-      tempStore.value = newStore;
-      return newStore;
-    } else {
-      tempStore.value = newStore;
-      return newStore;
-    }
+  const i = async () => {
+    t.value?.destroy(), t.value = null;
+    const a = n.resolveIdentifier(r.Store)({ ...e.value.config, _isTemporaryPreview: !0 });
+    return a.initPromise ? (await a.initPromise, t.value = a, a) : (t.value = a, a);
   };
-  watch(
-    () => settings,
+  return Y(
+    () => e,
     async () => {
     },
-    { deep: true }
-  );
-  onBeforeUnmount(() => {
-    console.log("Destroying temporary store");
-    tempStore.value?.destroy();
-  });
-  return {
-    update
+    { deep: !0 }
+  ), he(() => {
+    console.log("Destroying temporary store"), t.value?.destroy();
+  }), {
+    update: i
   };
 }
-function usePromisifiedModal(resetFn, opened = () => {
+function Ie(s, e = () => {
 }) {
-  const isOpened = ref(false);
-  let resolveFunction = (_val) => {
-  };
-  let runPromise = new Promise((res) => {
-    resolveFunction = res;
+  const t = B(!1);
+  let n = (a) => {
+  }, r = new Promise((a) => {
+    n = a;
   });
-  const run = (data) => {
-    isOpened.value = true;
-    opened(data);
-    return runPromise;
-  };
-  const close = (data) => {
-    resolveFunction(data);
-    runPromise = new Promise((res) => {
-      resolveFunction = res;
-    });
-    isOpened.value = false;
-    resetFn();
-  };
-  return { isOpened, run, close };
+  return { isOpened: t, run: (a) => (t.value = !0, e(a), r), close: (a) => {
+    n(a), r = new Promise((l) => {
+      n = l;
+    }), t.value = !1, s();
+  } };
 }
-function useVariableRepository() {
-  const updateTimestamp = ref(Date.now());
-  const connectedVariables = [];
-  const variableRepository = inject(identifier$1);
-  if (!variableRepository) {
+function ie() {
+  const s = B(Date.now()), e = [], t = M(Re);
+  if (!t)
     throw new Error("VariableRepository not provided");
-  }
-  let pageContextService = null;
+  let n = null;
   try {
-    pageContextService = inject(identifier$2);
-  } catch (e) {
+    n = M(ye);
+  } catch {
     console.warn("PageContextService not available for variable resolution");
   }
-  const subscriptionFn = () => {
-    updateTimestamp.value = Date.now();
-  };
-  const calculateValue = (templateValue, subscription = () => {
+  const r = () => {
+    s.value = Date.now();
+  }, i = (a, l = () => {
   }) => {
-    const regex = /\{\s*([a-zA-Z0-9_]+)\s*\}/g;
-    for (const variable of connectedVariables) {
-      variable.unsubscribe(subscriptionFn);
-      variable.unsubscribe(subscription);
-    }
-    connectedVariables.length = 0;
-    const matches = [...templateValue.matchAll(regex)];
-    const listOfVariables = matches.map((match) => match[1]);
-    let result = templateValue;
-    for (const varName of listOfVariables) {
+    const d = /\{\s*([a-zA-Z0-9_]+)\s*\}/g;
+    for (const u of e)
+      u.unsubscribe(r), u.unsubscribe(l);
+    e.length = 0;
+    const A = [...a.matchAll(d)].map((u) => u[1]);
+    let L = a;
+    for (const u of A)
       try {
-        let variable = void 0;
+        let f;
         try {
-          const currentPageId = pageContextService?.getCurrentPageId();
-          variable = variableRepository.getVariableWithContext ? variableRepository.getVariableWithContext(varName, currentPageId) : variableRepository.getVariable(varName);
-        } catch (e) {
-          console.error(e);
+          const E = n?.getCurrentPageId();
+          f = t.getVariableWithContext ? t.getVariableWithContext(u, E) : t.getVariable(u);
+        } catch (E) {
+          console.error(E);
         }
-        if (variable) {
-          variable.subscribe(subscriptionFn);
-          variable.subscribe(subscription);
-          connectedVariables.push(variable);
-          const value = variable.value;
-          const variableRegex = new RegExp(
-            `\\{\\s*${varName}\\s*\\}`,
+        if (f) {
+          f.subscribe(r), f.subscribe(l), e.push(f);
+          const E = f.value, p = new RegExp(
+            `\\{\\s*${u}\\s*\\}`,
             "g"
           );
-          result = result.replace(variableRegex, String(value));
+          L = L.replace(p, String(E));
         }
-      } catch (error) {
-        console.warn(`Error resolving variable ${varName}:`, error);
+      } catch (f) {
+        console.warn(`Error resolving variable ${u}:`, f);
       }
-    }
-    return result;
-  };
-  const wrapParameters = (parameters) => {
-    const wrappedParameters = {};
-    for (const [key, value] of Object.entries(parameters)) {
-      try {
-        const computedValue = computed(() => {
-          updateTimestamp.value;
-          if (value) {
-            return calculateValue(value.value + "");
-          } else {
-            return value;
-          }
-        });
-        wrappedParameters[key] = computedValue;
-      } catch (r) {
-        console.log(r);
-      }
-    }
-    return wrappedParameters;
+    return L;
   };
   return {
-    calculateValue,
-    wrapParameters
+    calculateValue: i,
+    wrapParameters: (a) => {
+      const l = {};
+      for (const [d, y] of Object.entries(a))
+        try {
+          const A = I(() => (s.value, y && i(y.value + "")));
+          l[d] = A;
+        } catch (A) {
+          console.log(A);
+        }
+      return l;
+    }
   };
 }
-function plainSettings(settings) {
-  if (!settings || typeof settings !== "object") return {};
-  const held = settings;
-  return typeof held.toJSON === "function" ? held.toJSON() : settings;
+function we(s) {
+  if (!s || typeof s != "object") return {};
+  const e = s;
+  return typeof e.toJSON == "function" ? e.toJSON() : s;
 }
-function isAdaptable(object) {
-  return typeof object?.eAdapterAdd === "function" && typeof object?.eAdapterRemove === "function";
+function be(s) {
+  return typeof s?.eAdapterAdd == "function" && typeof s?.eAdapterRemove == "function";
 }
-function useChangeCount(target) {
-  const count = ref(0);
-  class CountingAdapter extends EContentAdapter {
-    notifyChanged(notification) {
-      super.notifyChanged(notification);
-      if (notification.isTouch()) return;
-      if (notification.getEventType() === NotificationType.REMOVING_ADAPTER) return;
-      count.value += 1;
+function j(s) {
+  const e = B(0);
+  class t extends te {
+    notifyChanged(l) {
+      super.notifyChanged(l), !l.isTouch() && l.getEventType() !== R.REMOVING_ADAPTER && (e.value += 1);
     }
   }
-  let adapter;
-  let attached;
-  const detach = () => {
-    if (attached && adapter) attached.eAdapterRemove(adapter);
-    attached = void 0;
-    adapter = void 0;
+  let n, r;
+  const i = () => {
+    r && n && r.eAdapterRemove(n), r = void 0, n = void 0;
   };
-  const attach = (object) => {
-    detach();
-    if (!isAdaptable(object)) return;
-    adapter = new CountingAdapter();
-    object.eAdapterAdd(adapter);
-    attached = object;
-  };
-  watch(target, attach, { immediate: true });
-  if (getCurrentScope()) onScopeDispose(detach);
-  return count;
+  return Y(s, (a) => {
+    i(), be(a) && (n = new t(), a.eAdapterAdd(n), r = a);
+  }, { immediate: !0 }), X() && $(i), e;
 }
-function useEObject(source) {
-  const read = () => toValue(source);
-  const held = shallowRef(read());
-  const count = useChangeCount(read);
-  watch(
-    [count, read],
-    ([, object]) => {
-      if (held.value === object) triggerRef(held);
-      else held.value = object;
+function oe(s) {
+  const e = () => F(s), t = W(e()), n = j(e);
+  return Y(
+    [n, e],
+    ([, r]) => {
+      t.value === r ? Ae(t) : t.value = r;
     }
-  );
-  return held;
+  ), t;
 }
-function useEList(owner, select) {
-  const read = () => toValue(owner);
-  const count = useChangeCount(read);
-  return computed(() => {
-    void count.value;
-    const object = read();
-    if (!object) return [];
-    return select(object)?.toArray() ?? [];
+function x(s, e) {
+  const t = () => F(s), n = j(t);
+  return I(() => {
+    n.value;
+    const r = t();
+    return r ? e(r)?.toArray() ?? [] : [];
   });
 }
-function useFeature(object, key) {
-  const read = () => toValue(object);
-  const count = useChangeCount(read);
-  return computed({
-    get: () => {
-      void count.value;
-      return read()?.[key];
-    },
-    set: (value) => {
-      const held = read();
-      if (held) held[key] = value;
+function Ne(s, e) {
+  const t = () => F(s), n = j(t);
+  return I({
+    get: () => (n.value, t()?.[e]),
+    set: (r) => {
+      const i = t();
+      i && (i[e] = r);
     }
   });
 }
-function useBoard(pageId) {
-  const pages = inject(identifier$3);
-  const id = () => toValue(pageId) ?? "";
-  const held = useEObject(() => id() ? pages.getPage(id()) : void 0);
-  const page = computed(() => held.value);
-  const widgets = useEList(page, (p) => p.widgets);
-  const layout = useEList(page, (p) => p.layout);
+function Ve(s) {
+  const e = M(Se), t = () => F(s) ?? "", n = oe(() => t() ? e.getPage(t()) : void 0), r = I(() => n.value), i = x(r, (a) => a.widgets), o = x(r, (a) => a.layout);
   return {
-    page,
-    widgets,
-    layout,
-    addWidget(widget, placement) {
-      const uid = widget.uid || "li_" + Math.random().toString(36).substring(7);
-      pages.addWidget(id(), { ...widget, uid }, placement);
-      return uid;
+    page: r,
+    widgets: i,
+    layout: o,
+    addWidget(a, l) {
+      const d = a.uid || "li_" + Math.random().toString(36).substring(7);
+      return e.addWidget(t(), { ...a, uid: d }, l), d;
     },
-    removeWidget(widgetUid) {
-      pages.removeWidget(id(), widgetUid);
+    removeWidget(a) {
+      e.removeWidget(t(), a);
     },
-    saveWidget(widget) {
-      pages.saveWidget(id(), widget);
+    saveWidget(a) {
+      e.saveWidget(t(), a);
     },
-    setBoard(widgets2, layout2) {
-      pages.setBoard(id(), widgets2, layout2);
+    setBoard(a, l) {
+      e.setBoard(t(), a, l);
     },
     clear() {
-      pages.setBoard(id(), [], []);
+      e.setBoard(t(), [], []);
     }
   };
 }
-const TYPE = "VARIABLECOMPLEXSTRINGWRAPPER";
-class VariableComplexStringWrapper {
-  type = TYPE;
+const ue = "VARIABLECOMPLEXSTRINGWRAPPER";
+class ce {
+  type = ue;
   _value = void 0;
   _computedValue = null;
-  constructor(initValue = "") {
-    this._value = initValue;
+  constructor(e = "") {
+    this._value = e;
   }
   get original() {
     return this._value || "";
   }
   updateFn() {
-    const substituted = this.substitute(this._value || "");
-    if (substituted !== null) this._computedValue = substituted;
+    const e = this.substitute(this._value || "");
+    e !== null && (this._computedValue = e);
   }
   /**
    * The text with the variables it names filled in.
@@ -433,25 +328,23 @@ class VariableComplexStringWrapper {
    * handing it back would show the previous value as if it were current.
    */
   get value() {
-    const substituted = this.substitute(this._value || "", this.updateFn.bind(this));
-    if (substituted === null) return this._value ?? "";
-    this._computedValue = substituted;
-    return substituted;
+    const e = this.substitute(this._value || "", this.updateFn.bind(this));
+    return e === null ? this._value ?? "" : (this._computedValue = e, e);
   }
   /** The substituted text, or null when the variables are out of reach. */
-  substitute(text, subscription) {
+  substitute(e, t) {
     try {
-      const { calculateValue } = useVariableRepository();
-      return subscription ? calculateValue(text, subscription) : calculateValue(text);
+      const { calculateValue: n } = ie();
+      return t ? n(e, t) : n(e);
     } catch {
       return null;
     }
   }
-  set value(newValue) {
-    this._value = newValue;
+  set value(e) {
+    this._value = e;
   }
 }
-class VariableWrapperImpl extends BasicEObject {
+class v extends se {
   // Feature ID Constants (eLiterals)
   static VALUE = 0;
   static VARIABLE = 1;
@@ -460,190 +353,170 @@ class VariableWrapperImpl extends BasicEObject {
   // Private fields
   _value;
   _variable;
-  _isSet = false;
+  _isSet = !1;
   _type = "VARIABLEWRAPPER";
   /**
    * Returns the EClass of this object
    */
   eClass() {
-    return ComposablesPackage.Literals.VARIABLE_WRAPPER;
+    return h.Literals.VARIABLE_WRAPPER;
   }
   // Getters and Setters
   get value() {
     return this._value;
   }
-  set value(value) {
-    const oldValue = this._value;
-    this._value = value;
-    if (this.eDeliver()) {
-      this.eNotify({
-        getNotifier: () => this,
-        getEventType: () => 1,
-        // SET
-        getFeature: () => this.eClass().getEStructuralFeature(VariableWrapperImpl.VALUE),
-        getOldValue: () => oldValue,
-        getNewValue: () => value,
-        getPosition: () => -1,
-        wasSet: () => true,
-        isTouch: () => false,
-        isReset: () => false,
-        getFeatureID: () => VariableWrapperImpl.VALUE,
-        merge: () => false
-      });
-    }
+  set value(e) {
+    const t = this._value;
+    this._value = e, this.eDeliver() && this.eNotify({
+      getNotifier: () => this,
+      getEventType: () => 1,
+      // SET
+      getFeature: () => this.eClass().getEStructuralFeature(v.VALUE),
+      getOldValue: () => t,
+      getNewValue: () => e,
+      getPosition: () => -1,
+      wasSet: () => !0,
+      isTouch: () => !1,
+      isReset: () => !1,
+      getFeatureID: () => v.VALUE,
+      merge: () => !1
+    });
   }
   get variable() {
     return this._variable;
   }
-  set variable(value) {
-    const oldValue = this._variable;
-    this._variable = value;
-    if (this.eDeliver()) {
-      this.eNotify({
-        getNotifier: () => this,
-        getEventType: () => 1,
-        // SET
-        getFeature: () => this.eClass().getEStructuralFeature(VariableWrapperImpl.VARIABLE),
-        getOldValue: () => oldValue,
-        getNewValue: () => value,
-        getPosition: () => -1,
-        wasSet: () => true,
-        isTouch: () => false,
-        isReset: () => false,
-        getFeatureID: () => VariableWrapperImpl.VARIABLE,
-        merge: () => false
-      });
-    }
+  set variable(e) {
+    const t = this._variable;
+    this._variable = e, this.eDeliver() && this.eNotify({
+      getNotifier: () => this,
+      getEventType: () => 1,
+      // SET
+      getFeature: () => this.eClass().getEStructuralFeature(v.VARIABLE),
+      getOldValue: () => t,
+      getNewValue: () => e,
+      getPosition: () => -1,
+      wasSet: () => !0,
+      isTouch: () => !1,
+      isReset: () => !1,
+      getFeatureID: () => v.VARIABLE,
+      merge: () => !1
+    });
   }
   get isSet() {
     return this._isSet;
   }
-  set isSet(value) {
-    const oldValue = this._isSet;
-    this._isSet = value;
-    if (this.eDeliver()) {
-      this.eNotify({
-        getNotifier: () => this,
-        getEventType: () => 1,
-        // SET
-        getFeature: () => this.eClass().getEStructuralFeature(VariableWrapperImpl.IS_SET),
-        getOldValue: () => oldValue,
-        getNewValue: () => value,
-        getPosition: () => -1,
-        wasSet: () => true,
-        isTouch: () => false,
-        isReset: () => false,
-        getFeatureID: () => VariableWrapperImpl.IS_SET,
-        merge: () => false
-      });
-    }
+  set isSet(e) {
+    const t = this._isSet;
+    this._isSet = e, this.eDeliver() && this.eNotify({
+      getNotifier: () => this,
+      getEventType: () => 1,
+      // SET
+      getFeature: () => this.eClass().getEStructuralFeature(v.IS_SET),
+      getOldValue: () => t,
+      getNewValue: () => e,
+      getPosition: () => -1,
+      wasSet: () => !0,
+      isTouch: () => !1,
+      isReset: () => !1,
+      getFeatureID: () => v.IS_SET,
+      merge: () => !1
+    });
   }
   get type() {
     return this._type;
   }
-  set type(value) {
-    const oldValue = this._type;
-    this._type = value;
-    if (this.eDeliver()) {
-      this.eNotify({
-        getNotifier: () => this,
-        getEventType: () => 1,
-        // SET
-        getFeature: () => this.eClass().getEStructuralFeature(VariableWrapperImpl.TYPE),
-        getOldValue: () => oldValue,
-        getNewValue: () => value,
-        getPosition: () => -1,
-        wasSet: () => true,
-        isTouch: () => false,
-        isReset: () => false,
-        getFeatureID: () => VariableWrapperImpl.TYPE,
-        merge: () => false
-      });
-    }
+  set type(e) {
+    const t = this._type;
+    this._type = e, this.eDeliver() && this.eNotify({
+      getNotifier: () => this,
+      getEventType: () => 1,
+      // SET
+      getFeature: () => this.eClass().getEStructuralFeature(v.TYPE),
+      getOldValue: () => t,
+      getNewValue: () => e,
+      getPosition: () => -1,
+      wasSet: () => !0,
+      isTouch: () => !1,
+      isReset: () => !1,
+      getFeatureID: () => v.TYPE,
+      merge: () => !1
+    });
   }
   // Reflective API
   /**
    * Returns the value of the given feature
    */
-  eGet(feature) {
-    const featureID = this.eClass().getFeatureID(feature);
-    switch (featureID) {
-      case VariableWrapperImpl.VALUE:
+  eGet(e) {
+    switch (this.eClass().getFeatureID(e)) {
+      case v.VALUE:
         return this.value;
-      case VariableWrapperImpl.VARIABLE:
+      case v.VARIABLE:
         return this.variable;
-      case VariableWrapperImpl.IS_SET:
+      case v.IS_SET:
         return this.isSet;
-      case VariableWrapperImpl.TYPE:
+      case v.TYPE:
         return this.type;
       default:
-        return super.eGet(feature);
+        return super.eGet(e);
     }
   }
   /**
    * Sets the value of the given feature
    */
-  eSet(feature, newValue) {
-    const featureID = this.eClass().getFeatureID(feature);
-    switch (featureID) {
-      case VariableWrapperImpl.VALUE:
-        this.value = newValue;
-        super.eSet(feature, newValue);
+  eSet(e, t) {
+    switch (this.eClass().getFeatureID(e)) {
+      case v.VALUE:
+        this.value = t, super.eSet(e, t);
         break;
-      case VariableWrapperImpl.VARIABLE:
-        this.variable = newValue;
-        super.eSet(feature, newValue);
+      case v.VARIABLE:
+        this.variable = t, super.eSet(e, t);
         break;
-      case VariableWrapperImpl.IS_SET:
-        this.isSet = newValue;
-        super.eSet(feature, newValue);
+      case v.IS_SET:
+        this.isSet = t, super.eSet(e, t);
         break;
-      case VariableWrapperImpl.TYPE:
-        this.type = newValue;
-        super.eSet(feature, newValue);
+      case v.TYPE:
+        this.type = t, super.eSet(e, t);
         break;
       default:
-        super.eSet(feature, newValue);
+        super.eSet(e, t);
     }
   }
   /**
    * Returns whether the feature has been set
    */
-  eIsSet(feature) {
-    const featureID = this.eClass().getFeatureID(feature);
-    switch (featureID) {
-      case VariableWrapperImpl.VALUE:
+  eIsSet(e) {
+    switch (this.eClass().getFeatureID(e)) {
+      case v.VALUE:
         return this._value !== void 0;
-      case VariableWrapperImpl.VARIABLE:
+      case v.VARIABLE:
         return this._variable !== void 0;
-      case VariableWrapperImpl.IS_SET:
-        return this._isSet !== false;
-      case VariableWrapperImpl.TYPE:
+      case v.IS_SET:
+        return this._isSet !== !1;
+      case v.TYPE:
         return this._type !== "VARIABLEWRAPPER";
       default:
-        return super.eIsSet(feature);
+        return super.eIsSet(e);
     }
   }
   /**
    * Unsets the given feature
    */
-  eUnset(feature) {
-    const featureID = this.eClass().getFeatureID(feature);
-    switch (featureID) {
-      case VariableWrapperImpl.VALUE:
+  eUnset(e) {
+    switch (this.eClass().getFeatureID(e)) {
+      case v.VALUE:
         this._value = void 0;
         return;
-      case VariableWrapperImpl.VARIABLE:
+      case v.VARIABLE:
         this._variable = void 0;
         return;
-      case VariableWrapperImpl.IS_SET:
-        this._isSet = false;
+      case v.IS_SET:
+        this._isSet = !1;
         return;
-      case VariableWrapperImpl.TYPE:
+      case v.TYPE:
         this._type = "VARIABLEWRAPPER";
         return;
       default:
-        super.eUnset(feature);
+        super.eUnset(e);
     }
   }
   /**
@@ -662,7 +535,7 @@ class VariableWrapperImpl extends BasicEObject {
     };
   }
 }
-class VariableComplexStringWrapperImpl extends BasicEObject {
+class S extends se {
   // Feature ID Constants (eLiterals)
   static VALUE = 0;
   static TYPE = 1;
@@ -673,116 +546,104 @@ class VariableComplexStringWrapperImpl extends BasicEObject {
    * Returns the EClass of this object
    */
   eClass() {
-    return ComposablesPackage.Literals.VARIABLE_COMPLEX_STRING_WRAPPER;
+    return h.Literals.VARIABLE_COMPLEX_STRING_WRAPPER;
   }
   // Getters and Setters
   get value() {
     return this._value;
   }
-  set value(value) {
-    const oldValue = this._value;
-    this._value = value;
-    if (this.eDeliver()) {
-      this.eNotify({
-        getNotifier: () => this,
-        getEventType: () => 1,
-        // SET
-        getFeature: () => this.eClass().getEStructuralFeature(VariableComplexStringWrapperImpl.VALUE),
-        getOldValue: () => oldValue,
-        getNewValue: () => value,
-        getPosition: () => -1,
-        wasSet: () => true,
-        isTouch: () => false,
-        isReset: () => false,
-        getFeatureID: () => VariableComplexStringWrapperImpl.VALUE,
-        merge: () => false
-      });
-    }
+  set value(e) {
+    const t = this._value;
+    this._value = e, this.eDeliver() && this.eNotify({
+      getNotifier: () => this,
+      getEventType: () => 1,
+      // SET
+      getFeature: () => this.eClass().getEStructuralFeature(S.VALUE),
+      getOldValue: () => t,
+      getNewValue: () => e,
+      getPosition: () => -1,
+      wasSet: () => !0,
+      isTouch: () => !1,
+      isReset: () => !1,
+      getFeatureID: () => S.VALUE,
+      merge: () => !1
+    });
   }
   get type() {
     return this._type;
   }
-  set type(value) {
-    const oldValue = this._type;
-    this._type = value;
-    if (this.eDeliver()) {
-      this.eNotify({
-        getNotifier: () => this,
-        getEventType: () => 1,
-        // SET
-        getFeature: () => this.eClass().getEStructuralFeature(VariableComplexStringWrapperImpl.TYPE),
-        getOldValue: () => oldValue,
-        getNewValue: () => value,
-        getPosition: () => -1,
-        wasSet: () => true,
-        isTouch: () => false,
-        isReset: () => false,
-        getFeatureID: () => VariableComplexStringWrapperImpl.TYPE,
-        merge: () => false
-      });
-    }
+  set type(e) {
+    const t = this._type;
+    this._type = e, this.eDeliver() && this.eNotify({
+      getNotifier: () => this,
+      getEventType: () => 1,
+      // SET
+      getFeature: () => this.eClass().getEStructuralFeature(S.TYPE),
+      getOldValue: () => t,
+      getNewValue: () => e,
+      getPosition: () => -1,
+      wasSet: () => !0,
+      isTouch: () => !1,
+      isReset: () => !1,
+      getFeatureID: () => S.TYPE,
+      merge: () => !1
+    });
   }
   // Reflective API
   /**
    * Returns the value of the given feature
    */
-  eGet(feature) {
-    const featureID = this.eClass().getFeatureID(feature);
-    switch (featureID) {
-      case VariableComplexStringWrapperImpl.VALUE:
+  eGet(e) {
+    switch (this.eClass().getFeatureID(e)) {
+      case S.VALUE:
         return this.value;
-      case VariableComplexStringWrapperImpl.TYPE:
+      case S.TYPE:
         return this.type;
       default:
-        return super.eGet(feature);
+        return super.eGet(e);
     }
   }
   /**
    * Sets the value of the given feature
    */
-  eSet(feature, newValue) {
-    const featureID = this.eClass().getFeatureID(feature);
-    switch (featureID) {
-      case VariableComplexStringWrapperImpl.VALUE:
-        this.value = newValue;
-        super.eSet(feature, newValue);
+  eSet(e, t) {
+    switch (this.eClass().getFeatureID(e)) {
+      case S.VALUE:
+        this.value = t, super.eSet(e, t);
         break;
-      case VariableComplexStringWrapperImpl.TYPE:
-        this.type = newValue;
-        super.eSet(feature, newValue);
+      case S.TYPE:
+        this.type = t, super.eSet(e, t);
         break;
       default:
-        super.eSet(feature, newValue);
+        super.eSet(e, t);
     }
   }
   /**
    * Returns whether the feature has been set
    */
-  eIsSet(feature) {
-    const featureID = this.eClass().getFeatureID(feature);
-    switch (featureID) {
-      case VariableComplexStringWrapperImpl.VALUE:
+  eIsSet(e) {
+    switch (this.eClass().getFeatureID(e)) {
+      case S.VALUE:
         return this._value !== void 0;
-      case VariableComplexStringWrapperImpl.TYPE:
+      case S.TYPE:
         return this._type !== "VARIABLECOMPLEXSTRINGWRAPPER";
       default:
-        return super.eIsSet(feature);
+        return super.eIsSet(e);
     }
   }
   /**
    * Unsets the given feature
    */
-  eUnset(feature) {
-    const featureID = this.eClass().getFeatureID(feature);
-    switch (featureID) {
-      case VariableComplexStringWrapperImpl.VALUE:
+  eUnset(e) {
+    switch (this.eClass().getFeatureID(e)) {
+      case S.VALUE:
         this._value = void 0;
         return;
-      case VariableComplexStringWrapperImpl.TYPE:
+      case S.TYPE:
         this._type = "VARIABLECOMPLEXSTRINGWRAPPER";
         return;
       default:
-        super.eUnset(feature);
+        super.eUnset(e);
     }
   }
   /**
@@ -799,57 +660,49 @@ class VariableComplexStringWrapperImpl extends BasicEObject {
     };
   }
 }
-class ComposablesFactory extends BasicEFactory {
+class J extends pe {
   // Lazy singleton instance
   static _instance;
   static get eINSTANCE() {
-    if (!this._instance) {
-      this._instance = new ComposablesFactory();
-    }
-    return this._instance;
+    return this._instance || (this._instance = new J()), this._instance;
   }
   constructor() {
-    super();
-    this.setEPackage(ComposablesPackage.eINSTANCE);
+    super(), this.setEPackage(h.eINSTANCE);
   }
   /**
    * Create a new VariableWrapper instance
    */
   createVariableWrapper() {
-    return new VariableWrapperImpl();
+    return new v();
   }
   /**
    * Create a new VariableComplexStringWrapper instance
    */
   createVariableComplexStringWrapper() {
-    return new VariableComplexStringWrapperImpl();
+    return new S();
   }
   /**
    * Create an instance of the given class
    */
-  create(eClass) {
-    switch (eClass.getName()) {
+  create(e) {
+    switch (e.getName()) {
       case "VariableWrapper":
         return this.createVariableWrapper();
       case "VariableComplexStringWrapper":
         return this.createVariableComplexStringWrapper();
       default:
-        throw new Error(`Unknown class: ${eClass.getName()}`);
+        throw new Error(`Unknown class: ${e.getName()}`);
     }
   }
 }
-class ComposablesPackage extends BasicEPackage {
+class h extends Pe {
   static eNAME = "composables";
   static eNS_URI = "org.eclipse.daanse.board.app.ui.vue.composables";
   static eNS_PREFIX = "composables";
   // Singleton instance
   static _instance;
   static get eINSTANCE() {
-    if (!this._instance) {
-      this._instance = new ComposablesPackage();
-      this._instance.init();
-    }
-    return this._instance;
+    return this._instance || (this._instance = new h(), this._instance.init()), this._instance;
   }
   /**
    * Literals for quick access to metaclasses and features
@@ -865,266 +718,171 @@ class ComposablesPackage extends BasicEPackage {
     VARIABLE_COMPLEX_STRING_WRAPPER__TYPE: null
   };
   constructor() {
-    super();
-    this.setName(ComposablesPackage.eNAME);
-    this.setNsURI(ComposablesPackage.eNS_URI);
-    this.setNsPrefix(ComposablesPackage.eNS_PREFIX);
+    super(), this.setName(h.eNAME), this.setNsURI(h.eNS_URI), this.setNsPrefix(h.eNS_PREFIX);
   }
   /**
    * Initialize package contents
    */
   init() {
-    EPackageRegistry.INSTANCE.set(ComposablesPackage.eNS_URI, this);
-    this.setEFactoryInstance(ComposablesFactory.eINSTANCE);
-    const variableWrapperClass = new BasicEClass();
-    variableWrapperClass.setName("VariableWrapper");
-    variableWrapperClass.setAbstract(false);
-    variableWrapperClass.setInterface(false);
-    this.getEClassifiers().push(variableWrapperClass);
-    variableWrapperClass.setEPackage(this);
-    ComposablesPackage.Literals.VARIABLE_WRAPPER = variableWrapperClass;
-    const variableWrapper_value = new BasicEAttribute();
-    variableWrapper_value.setName("value");
-    variableWrapper_value.setLowerBound(0);
-    variableWrapper_value.setUpperBound(1);
-    variableWrapperClass.getEStructuralFeatures().push(variableWrapper_value);
-    ComposablesPackage.Literals.VARIABLE_WRAPPER__VALUE = variableWrapper_value;
-    const variableWrapper_variable = new BasicEAttribute();
-    variableWrapper_variable.setName("variable");
-    variableWrapper_variable.setLowerBound(0);
-    variableWrapper_variable.setUpperBound(1);
-    variableWrapperClass.getEStructuralFeatures().push(variableWrapper_variable);
-    ComposablesPackage.Literals.VARIABLE_WRAPPER__VARIABLE = variableWrapper_variable;
-    const variableWrapper_isSet = new BasicEAttribute();
-    variableWrapper_isSet.setName("isSet");
-    variableWrapper_isSet.setLowerBound(0);
-    variableWrapper_isSet.setUpperBound(1);
-    variableWrapperClass.getEStructuralFeatures().push(variableWrapper_isSet);
-    ComposablesPackage.Literals.VARIABLE_WRAPPER__IS_SET = variableWrapper_isSet;
-    const variableWrapper_type = new BasicEAttribute();
-    variableWrapper_type.setName("type");
-    variableWrapper_type.setLowerBound(0);
-    variableWrapper_type.setUpperBound(1);
-    variableWrapperClass.getEStructuralFeatures().push(variableWrapper_type);
-    ComposablesPackage.Literals.VARIABLE_WRAPPER__TYPE = variableWrapper_type;
-    const variableComplexStringWrapperClass = new BasicEClass();
-    variableComplexStringWrapperClass.setName("VariableComplexStringWrapper");
-    variableComplexStringWrapperClass.setAbstract(false);
-    variableComplexStringWrapperClass.setInterface(false);
-    this.getEClassifiers().push(variableComplexStringWrapperClass);
-    variableComplexStringWrapperClass.setEPackage(this);
-    ComposablesPackage.Literals.VARIABLE_COMPLEX_STRING_WRAPPER = variableComplexStringWrapperClass;
-    const variableComplexStringWrapper_value = new BasicEAttribute();
-    variableComplexStringWrapper_value.setName("value");
-    variableComplexStringWrapper_value.setLowerBound(0);
-    variableComplexStringWrapper_value.setUpperBound(1);
-    variableComplexStringWrapperClass.getEStructuralFeatures().push(variableComplexStringWrapper_value);
-    ComposablesPackage.Literals.VARIABLE_COMPLEX_STRING_WRAPPER__VALUE = variableComplexStringWrapper_value;
-    const variableComplexStringWrapper_type = new BasicEAttribute();
-    variableComplexStringWrapper_type.setName("type");
-    variableComplexStringWrapper_type.setLowerBound(0);
-    variableComplexStringWrapper_type.setUpperBound(1);
-    variableComplexStringWrapperClass.getEStructuralFeatures().push(variableComplexStringWrapper_type);
-    ComposablesPackage.Literals.VARIABLE_COMPLEX_STRING_WRAPPER__TYPE = variableComplexStringWrapper_type;
-    ComposablesPackage.Literals.VARIABLE_WRAPPER__VALUE.setEType(getEcorePackage().getEClassifier("EObject"));
-    ComposablesPackage.Literals.VARIABLE_WRAPPER__VARIABLE.setEType(getEcorePackage().getEClassifier("EString"));
-    ComposablesPackage.Literals.VARIABLE_WRAPPER__IS_SET.setEType(getEcorePackage().getEClassifier("EBoolean"));
-    ComposablesPackage.Literals.VARIABLE_WRAPPER__TYPE.setEType(getEcorePackage().getEClassifier("EString"));
-    ComposablesPackage.Literals.VARIABLE_COMPLEX_STRING_WRAPPER__VALUE.setEType(getEcorePackage().getEClassifier("EObject"));
-    ComposablesPackage.Literals.VARIABLE_COMPLEX_STRING_WRAPPER__TYPE.setEType(getEcorePackage().getEClassifier("EString"));
+    ne.INSTANCE.set(h.eNS_URI, this), this.setEFactoryInstance(J.eINSTANCE);
+    const e = new H();
+    e.setName("VariableWrapper"), e.setAbstract(!1), e.setInterface(!1), this.getEClassifiers().push(e), e.setEPackage(this), h.Literals.VARIABLE_WRAPPER = e;
+    const t = new D();
+    t.setName("value"), t.setLowerBound(0), t.setUpperBound(1), e.getEStructuralFeatures().push(t), h.Literals.VARIABLE_WRAPPER__VALUE = t;
+    const n = new D();
+    n.setName("variable"), n.setLowerBound(0), n.setUpperBound(1), e.getEStructuralFeatures().push(n), h.Literals.VARIABLE_WRAPPER__VARIABLE = n;
+    const r = new D();
+    r.setName("isSet"), r.setLowerBound(0), r.setUpperBound(1), e.getEStructuralFeatures().push(r), h.Literals.VARIABLE_WRAPPER__IS_SET = r;
+    const i = new D();
+    i.setName("type"), i.setLowerBound(0), i.setUpperBound(1), e.getEStructuralFeatures().push(i), h.Literals.VARIABLE_WRAPPER__TYPE = i;
+    const o = new H();
+    o.setName("VariableComplexStringWrapper"), o.setAbstract(!1), o.setInterface(!1), this.getEClassifiers().push(o), o.setEPackage(this), h.Literals.VARIABLE_COMPLEX_STRING_WRAPPER = o;
+    const a = new D();
+    a.setName("value"), a.setLowerBound(0), a.setUpperBound(1), o.getEStructuralFeatures().push(a), h.Literals.VARIABLE_COMPLEX_STRING_WRAPPER__VALUE = a;
+    const l = new D();
+    l.setName("type"), l.setLowerBound(0), l.setUpperBound(1), o.getEStructuralFeatures().push(l), h.Literals.VARIABLE_COMPLEX_STRING_WRAPPER__TYPE = l, h.Literals.VARIABLE_WRAPPER__VALUE.setEType(m().getEClassifier("EObject")), h.Literals.VARIABLE_WRAPPER__VARIABLE.setEType(m().getEClassifier("EString")), h.Literals.VARIABLE_WRAPPER__IS_SET.setEType(m().getEClassifier("EBoolean")), h.Literals.VARIABLE_WRAPPER__TYPE.setEType(m().getEClassifier("EString")), h.Literals.VARIABLE_COMPLEX_STRING_WRAPPER__VALUE.setEType(m().getEClassifier("EObject")), h.Literals.VARIABLE_COMPLEX_STRING_WRAPPER__TYPE.setEType(m().getEClassifier("EString"));
   }
 }
-function adaptable(value) {
-  const held = value;
-  return typeof held?.eAdapterAdd === "function" ? held : void 0;
+function De(s) {
+  const e = s;
+  return typeof e?.eAdapterAdd == "function" ? e : void 0;
 }
-const DEPTH = 50;
-const current = shallowRef();
-function useCurrentHistory() {
-  return current;
+const q = 50, U = W();
+function me() {
+  return U;
 }
-function useHistory(root) {
-  const undoable = shallowRef([]);
-  const redoable = shallowRef([]);
-  let recording = true;
-  let open;
-  let gesture = false;
-  let flushing = false;
-  function push(step) {
-    if (!step.changes.length) return;
-    const next = [...undoable.value, step];
-    undoable.value = next.length > DEPTH ? next.slice(next.length - DEPTH) : next;
-    redoable.value = [];
+function Be(s) {
+  const e = W([]), t = W([]);
+  let n = !0, r, i = !1, o = !1;
+  function a(c) {
+    if (!c.changes.length) return;
+    const g = [...e.value, c];
+    e.value = g.length > q ? g.slice(g.length - q) : g, t.value = [];
   }
-  function remember(notification) {
-    if (!recording || notification.isTouch()) return;
-    if (notification.getEventType() === NotificationType.REMOVING_ADAPTER) return;
-    const change = {
-      notifier: notification.getNotifier(),
-      feature: notification.getFeature(),
-      eventType: notification.getEventType(),
-      oldValue: notification.getOldValue(),
-      newValue: notification.getNewValue(),
-      position: notification.getPosition()
+  function l(c) {
+    if (!n || c.isTouch() || c.getEventType() === R.REMOVING_ADAPTER) return;
+    const g = {
+      notifier: c.getNotifier(),
+      feature: c.getFeature(),
+      eventType: c.getEventType(),
+      oldValue: c.getOldValue(),
+      newValue: c.getNewValue(),
+      position: c.getPosition()
     };
-    if (!open) {
-      open = { label: "Änderung", changes: [] };
-      if (!gesture && !flushing) {
-        flushing = true;
-        queueMicrotask(() => {
-          flushing = false;
-          if (!gesture && open) {
-            push(open);
-            open = void 0;
-          }
-        });
-      }
-    }
-    if (change.eventType === NotificationType.SET) {
-      const earlier = open.changes.find(
-        (held) => held.eventType === NotificationType.SET && held.notifier === change.notifier && held.feature === change.feature
+    if (r || (r = { label: "Änderung", changes: [] }, !i && !o && (o = !0, queueMicrotask(() => {
+      o = !1, !i && r && (a(r), r = void 0);
+    }))), g.eventType === R.SET) {
+      const P = r.changes.find(
+        (w) => w.eventType === R.SET && w.notifier === g.notifier && w.feature === g.feature
       );
-      if (earlier) {
-        earlier.newValue = change.newValue;
+      if (P) {
+        P.newValue = g.newValue;
         return;
       }
     }
-    open.changes.push(change);
+    r.changes.push(g);
   }
-  class Recorder extends EContentAdapter {
-    notifyChanged(notification) {
-      super.notifyChanged(notification);
-      remember(notification);
+  class d extends te {
+    notifyChanged(g) {
+      super.notifyChanged(g), l(g);
     }
   }
-  const recorder = new Recorder();
-  let attachedTo;
-  watch(
-    () => toValue(root),
-    (next) => {
-      attachedTo?.eAdapterRemove(recorder);
-      attachedTo = adaptable(next);
-      attachedTo?.eAdapterAdd(recorder);
-      undoable.value = [];
-      redoable.value = [];
-      open = void 0;
+  const y = new d();
+  let A;
+  Y(
+    () => F(s),
+    (c) => {
+      A?.eAdapterRemove(y), A = De(c), A?.eAdapterAdd(y), e.value = [], t.value = [], r = void 0;
     },
-    { immediate: true }
-  );
-  if (getCurrentScope()) {
-    onScopeDispose(() => {
-      attachedTo?.eAdapterRemove(recorder);
-      if (current.value === api) current.value = void 0;
-    });
-  }
-  function invert(change) {
-    const { notifier, feature, eventType, oldValue, newValue, position } = change;
-    if (!feature) return void 0;
-    switch (eventType) {
-      case NotificationType.SET:
-      case NotificationType.UNSET: {
-        notifier.eSet(feature, oldValue);
-        return { ...change, oldValue: newValue, newValue: oldValue };
-      }
-      case NotificationType.ADD: {
-        const list = notifier.eGet(feature);
-        const at = position >= 0 ? position : list.indexOf(newValue);
-        if (at >= 0) list.removeAt(at);
-        return { ...change, eventType: NotificationType.REMOVE, oldValue: newValue, position: at };
-      }
-      case NotificationType.REMOVE: {
-        const list = notifier.eGet(feature);
-        const at = position >= 0 ? Math.min(position, list.size()) : list.size();
-        list.addAt(at, oldValue);
-        return { ...change, eventType: NotificationType.ADD, newValue: oldValue, position: at };
-      }
-      case NotificationType.ADD_MANY: {
-        const list = notifier.eGet(feature);
-        for (const value of newValue ?? []) {
-          const at = list.indexOf(value);
-          if (at >= 0) list.removeAt(at);
+    { immediate: !0 }
+  ), X() && $(() => {
+    A?.eAdapterRemove(y), U.value === p && (U.value = void 0);
+  });
+  function L(c) {
+    const { notifier: g, feature: P, eventType: w, oldValue: b, newValue: C, position: V } = c;
+    if (P)
+      switch (w) {
+        case R.SET:
+        case R.UNSET:
+          return g.eSet(P, b), { ...c, oldValue: C, newValue: b };
+        case R.ADD: {
+          const _ = g.eGet(P), T = V >= 0 ? V : _.indexOf(C);
+          return T >= 0 && _.removeAt(T), { ...c, eventType: R.REMOVE, oldValue: C, position: T };
         }
-        return { ...change, eventType: NotificationType.REMOVE_MANY, oldValue: newValue };
+        case R.REMOVE: {
+          const _ = g.eGet(P), T = V >= 0 ? Math.min(V, _.size()) : _.size();
+          return _.addAt(T, b), { ...c, eventType: R.ADD, newValue: b, position: T };
+        }
+        case R.ADD_MANY: {
+          const _ = g.eGet(P);
+          for (const T of C ?? []) {
+            const z = _.indexOf(T);
+            z >= 0 && _.removeAt(z);
+          }
+          return { ...c, eventType: R.REMOVE_MANY, oldValue: C };
+        }
+        case R.REMOVE_MANY: {
+          const _ = g.eGet(P);
+          for (const T of b ?? []) _.add(T);
+          return { ...c, eventType: R.ADD_MANY, newValue: b };
+        }
+        case R.MOVE:
+          return g.eGet(P).move(b, V), { ...c, oldValue: V, position: b };
+        default:
+          return;
       }
-      case NotificationType.REMOVE_MANY: {
-        const list = notifier.eGet(feature);
-        for (const value of oldValue ?? []) list.add(value);
-        return { ...change, eventType: NotificationType.ADD_MANY, newValue: oldValue };
-      }
-      case NotificationType.MOVE: {
-        const list = notifier.eGet(feature);
-        list.move(oldValue, position);
-        return { ...change, oldValue: position, position: oldValue };
-      }
-      default:
-        return void 0;
-    }
   }
-  function apply(step) {
-    recording = false;
-    const back = [];
+  function u(c) {
+    n = !1;
+    const g = [];
     try {
-      for (let i = step.changes.length - 1; i >= 0; i -= 1) {
-        const inverse = invert(step.changes[i]);
-        if (inverse) back.push(inverse);
+      for (let P = c.changes.length - 1; P >= 0; P -= 1) {
+        const w = L(c.changes[P]);
+        w && g.push(w);
       }
     } finally {
-      recording = true;
+      n = !0;
     }
-    return { label: step.label, changes: back };
+    return { label: c.label, changes: g };
   }
-  function begin(label) {
-    if (gesture) return;
-    gesture = true;
-    open = { label, changes: [] };
+  function f(c) {
+    i || (i = !0, r = { label: c, changes: [] });
   }
-  function end() {
-    if (!gesture) return;
-    gesture = false;
-    if (open) push(open);
-    open = void 0;
+  function E() {
+    i && (i = !1, r && a(r), r = void 0);
   }
-  const api = {
-    canUndo: computed(() => undoable.value.length > 0),
-    canRedo: computed(() => redoable.value.length > 0),
-    undoLabel: computed(() => undoable.value[undoable.value.length - 1]?.label),
-    redoLabel: computed(() => redoable.value[redoable.value.length - 1]?.label),
+  const p = {
+    canUndo: I(() => e.value.length > 0),
+    canRedo: I(() => t.value.length > 0),
+    undoLabel: I(() => e.value[e.value.length - 1]?.label),
+    redoLabel: I(() => t.value[t.value.length - 1]?.label),
     undo() {
-      const step = undoable.value[undoable.value.length - 1];
-      if (!step) return;
-      undoable.value = undoable.value.slice(0, -1);
-      redoable.value = [...redoable.value, apply(step)];
+      const c = e.value[e.value.length - 1];
+      c && (e.value = e.value.slice(0, -1), t.value = [...t.value, u(c)]);
     },
     redo() {
-      const step = redoable.value[redoable.value.length - 1];
-      if (!step) return;
-      redoable.value = redoable.value.slice(0, -1);
-      undoable.value = [...undoable.value, apply(step)];
+      const c = t.value[t.value.length - 1];
+      c && (t.value = t.value.slice(0, -1), e.value = [...e.value, u(c)]);
     },
-    begin,
-    end,
+    begin: f,
+    end: E,
     /* Free functions, not methods: a caller that pulls `record` out of the
        object still gets a working one. */
-    record(label, change) {
-      begin(label);
+    record(c, g) {
+      f(c);
       try {
-        return change();
+        return g();
       } finally {
-        end();
+        E();
       }
     },
     clear() {
-      undoable.value = [];
-      redoable.value = [];
-      open = void 0;
-      gesture = false;
+      e.value = [], t.value = [], r = void 0, i = !1;
     }
   };
-  current.value = api;
-  return api;
+  return U.value = p, p;
 }
-const GEN_MODEL = "http://www.eclipse.org/emf/2002/GenModel";
-const PRIMITIVES = {
+const Ce = "http://www.eclipse.org/emf/2002/GenModel", Oe = {
   EString: "string",
   EInt: "number",
   EIntegerObject: "number",
@@ -1134,258 +892,231 @@ const PRIMITIVES = {
   EBoolean: "boolean",
   EBooleanObject: "boolean",
   EDate: "string"
-};
-const models = /* @__PURE__ */ new Map();
-function documentationOf(element) {
-  for (const annotation of Array.from(element.children)) {
-    if (annotation.tagName !== "eAnnotations") continue;
-    if (annotation.getAttribute("source") !== GEN_MODEL) continue;
-    for (const detail of Array.from(annotation.children)) {
-      if (detail.getAttribute("key") !== "documentation") continue;
-      const value = detail.getAttribute("value");
-      if (value) return value.split(/\s+/).filter(Boolean).join(" ");
-    }
-  }
-  return void 0;
+}, N = /* @__PURE__ */ new Map();
+function le(s) {
+  for (const e of Array.from(s.children))
+    if (e.tagName === "eAnnotations" && e.getAttribute("source") === Ce)
+      for (const t of Array.from(e.children)) {
+        if (t.getAttribute("key") !== "documentation") continue;
+        const n = t.getAttribute("value");
+        if (n) return n.split(/\s+/).filter(Boolean).join(" ");
+      }
 }
-function typeOf(feature) {
-  const raw = feature.getAttribute("eType") ?? "";
-  const name = raw.split("#//").pop() ?? raw;
-  return PRIMITIVES[name] ?? name;
+function Me(s) {
+  const e = s.getAttribute("eType") ?? "", t = e.split("#//").pop() ?? e;
+  return Oe[t] ?? t;
 }
-function splitHref(href) {
-  const at = href.indexOf("#//");
-  if (at < 0) return void 0;
-  return { nsURI: href.slice(0, at), name: href.slice(at + 3) };
+function Fe(s) {
+  const e = s.indexOf("#//");
+  if (!(e < 0))
+    return { nsURI: s.slice(0, e), name: s.slice(e + 3) };
 }
-function registerModelDocs(ecore) {
-  let document;
+function fe(s) {
+  let e;
   try {
-    document = new DOMParser().parseFromString(ecore, "application/xml");
+    e = new DOMParser().parseFromString(s, "application/xml");
   } catch {
-    return void 0;
+    return;
   }
-  const root = document.documentElement;
-  if (!root || root.getElementsByTagName("parsererror").length) return void 0;
-  const nsURI = root.getAttribute("nsURI");
-  if (!nsURI) return void 0;
-  if (models.has(nsURI)) return nsURI;
-  const classes = /* @__PURE__ */ new Map();
-  for (const classifier of Array.from(root.children)) {
-    if (classifier.tagName !== "eClassifiers") continue;
-    const name = classifier.getAttribute("name");
-    if (name) classes.set(name, classifier);
+  const t = e.documentElement;
+  if (!t || t.getElementsByTagName("parsererror").length) return;
+  const n = t.getAttribute("nsURI");
+  if (!n) return;
+  if (N.has(n)) return n;
+  const r = /* @__PURE__ */ new Map();
+  for (const i of Array.from(t.children)) {
+    if (i.tagName !== "eClassifiers") continue;
+    const o = i.getAttribute("name");
+    o && r.set(o, i);
   }
-  models.set(nsURI, { nsURI, classes });
-  return nsURI;
+  return N.set(n, { nsURI: n, classes: r }), n;
 }
-function hasModelDocs(nsURI) {
-  return models.has(nsURI);
+function Ue(s) {
+  return N.has(s);
 }
-function featuresOf(element, owner) {
-  const features = [];
-  for (const feature of Array.from(element.children)) {
-    if (feature.tagName !== "eStructuralFeatures") continue;
-    const name = feature.getAttribute("name");
-    if (!name) continue;
-    const upper = feature.getAttribute("upperBound");
-    features.push({
-      name,
-      documentation: documentationOf(feature),
-      type: typeOf(feature),
+function Z(s, e) {
+  const t = [];
+  for (const n of Array.from(s.children)) {
+    if (n.tagName !== "eStructuralFeatures") continue;
+    const r = n.getAttribute("name");
+    if (!r) continue;
+    const i = n.getAttribute("upperBound");
+    t.push({
+      name: r,
+      documentation: le(n),
+      type: Me(n),
       /* Ecore's default lowerBound is 0; a field is required only when the
          model says so. */
-      optional: (feature.getAttribute("lowerBound") ?? "0") === "0",
-      many: upper === "-1" || Number(upper ?? "1") > 1,
-      declaredBy: owner
+      optional: (n.getAttribute("lowerBound") ?? "0") === "0",
+      many: i === "-1" || Number(i ?? "1") > 1,
+      declaredBy: e
     });
   }
-  return features;
+  return t;
 }
-function describeClass(nsURI, className) {
-  const model = models.get(nsURI);
-  const element = model?.classes.get(className);
-  if (!model || !element) return void 0;
-  const inherited = [];
-  const seen = /* @__PURE__ */ new Set([`${nsURI}#//${className}`]);
-  const walk = (uri, name) => {
-    const at = models.get(uri)?.classes.get(name);
-    if (!at) return;
-    for (const superType of Array.from(at.children)) {
-      if (superType.tagName !== "eSuperTypes") continue;
-      const href = superType.getAttribute("href");
-      const split = href ? splitHref(href) : void 0;
-      if (!split || seen.has(href)) continue;
-      seen.add(href);
-      walk(split.nsURI, split.name);
-      const parent = models.get(split.nsURI)?.classes.get(split.name);
-      if (parent) inherited.push(...featuresOf(parent, split.name));
-    }
+function de(s, e) {
+  const t = N.get(s), n = t?.classes.get(e);
+  if (!t || !n) return;
+  const r = [], i = /* @__PURE__ */ new Set([`${s}#//${e}`]), o = (d, y) => {
+    const A = N.get(d)?.classes.get(y);
+    if (A)
+      for (const L of Array.from(A.children)) {
+        if (L.tagName !== "eSuperTypes") continue;
+        const u = L.getAttribute("href"), f = u ? Fe(u) : void 0;
+        if (!f || i.has(u)) continue;
+        i.add(u), o(f.nsURI, f.name);
+        const E = N.get(f.nsURI)?.classes.get(f.name);
+        E && r.push(...Z(E, f.name));
+      }
   };
-  walk(nsURI, className);
-  const own = featuresOf(element, className);
-  const byName = /* @__PURE__ */ new Map();
-  for (const feature of [...inherited, ...own]) byName.set(feature.name, feature);
+  o(s, e);
+  const a = Z(n, e), l = /* @__PURE__ */ new Map();
+  for (const d of [...r, ...a]) l.set(d.name, d);
   return {
-    name: className,
-    documentation: documentationOf(element),
-    features: [...byName.values()]
+    name: e,
+    documentation: le(n),
+    features: [...l.values()]
   };
 }
-function describeConfiguration(nsURI) {
-  const model = models.get(nsURI);
-  if (!model) return void 0;
-  const names = [...model.classes.keys()];
-  const named = names.filter((name) => /config(uration)?$/i.test(name));
-  const pick = named.length === 1 ? named[0] : named.length > 1 ? named[0] : names.length === 1 ? names[0] : void 0;
-  return pick ? describeClass(nsURI, pick) : void 0;
+function Ee(s) {
+  const e = N.get(s);
+  if (!e) return;
+  const t = [...e.classes.keys()], n = t.filter((i) => /config(uration)?$/i.test(i)), r = n.length === 1 || n.length > 1 ? n[0] : t.length === 1 ? t[0] : void 0;
+  return r ? de(s, r) : void 0;
 }
-function describeModel(ecore) {
-  if (!ecore) return void 0;
-  const nsURI = registerModelDocs(ecore);
-  return nsURI ? describeConfiguration(nsURI) : void 0;
+function We(s) {
+  if (!s) return;
+  const e = fe(s);
+  return e ? Ee(e) : void 0;
 }
-function resetModelDocs() {
-  models.clear();
+function Ge() {
+  N.clear();
 }
-const PROVIDED$1 = "i18n";
-function useTranslation(namespace) {
-  const i18n = inject(PROVIDED$1, void 0);
-  const changed = ref(0);
-  const language = ref(i18n?.language);
-  const onChange = () => {
-    changed.value += 1;
-    language.value = i18n?.language;
+const Ye = "i18n", xe = "I18next";
+function ge(s) {
+  const e = ee(), t = () => {
+    const d = e?.appContext?.provides;
+    return d?.[Ye] ?? d?.[xe];
+  }, n = B(0), r = B(t()?.language), i = () => {
+    n.value += 1, r.value = t()?.language;
   };
-  i18n?.on?.("languageChanged", onChange);
-  i18n?.store?.on?.("added", onChange);
-  i18n?.store?.on?.("removed", onChange);
-  if (getCurrentScope()) {
-    onScopeDispose(() => {
-      i18n?.off?.("languageChanged", onChange);
-      i18n?.store?.off?.("added", onChange);
-      i18n?.store?.off?.("removed", onChange);
-    });
-  }
-  const t = (key, options) => {
-    void changed.value;
-    if (!i18n) return key;
-    const full = namespace && !key.includes(":") ? `${namespace}:${key}` : key;
-    return i18n.t(full, options);
+  let o;
+  const a = () => {
+    const d = t();
+    !d || o === d || (o = d, d.on?.("languageChanged", i), d.store?.on?.("added", i), d.store?.on?.("removed", i), i());
   };
-  return { t, language, revision: changed, available: !!i18n };
+  return a(), e && G(a), X() && $(() => {
+    o?.off?.("languageChanged", i), o?.store?.off?.("added", i), o?.store?.off?.("removed", i), o = void 0;
+  }), { t: (d, y) => {
+    n.value;
+    const A = t();
+    if (!A) return d;
+    const L = s && !d.includes(":") ? `${s}:${d}` : d;
+    return A.t(L, y);
+  }, language: r, revision: n, available: !!t() };
 }
-const PROVIDED = "i18n";
-const REMEMBERED = "daanse.board.language";
-function nameOf(tag) {
+const Xe = "i18n", $e = "I18next", k = "daanse.board.language";
+function je(s) {
   try {
-    const display = new Intl.DisplayNames([tag], { type: "language" });
-    const name = display.of(tag);
-    if (name && name !== tag) return name.charAt(0).toUpperCase() + name.slice(1);
+    const t = new Intl.DisplayNames([s], { type: "language" }).of(s);
+    if (t && t !== s) return t.charAt(0).toUpperCase() + t.slice(1);
   } catch {
   }
-  return tag.toUpperCase();
+  return s.toUpperCase();
 }
-function useLanguage() {
-  const i18n = inject(PROVIDED, void 0);
-  const { language, revision } = useTranslation();
-  const available = computed(() => {
-    void revision.value;
-    const held = Object.keys(i18n?.store?.data ?? {});
-    return held.sort().map((tag) => ({ tag, label: nameOf(tag) }));
-  });
-  function choose(tag) {
+function Je() {
+  const s = ee(), e = () => {
+    const o = s?.appContext?.provides;
+    return o?.[Xe] ?? o?.[$e];
+  }, { language: t, revision: n } = ge(), r = I(() => (n.value, Object.keys(e()?.store?.data ?? {}).sort().map((a) => ({ tag: a, label: je(a) }))));
+  function i(o) {
     try {
-      localStorage.setItem(REMEMBERED, tag);
+      localStorage.setItem(k, o);
     } catch {
     }
-    i18n?.changeLanguage?.(tag);
+    e()?.changeLanguage?.(o);
   }
-  onMounted(() => {
-    let remembered = null;
+  return G(() => {
+    let o = null;
     try {
-      remembered = localStorage.getItem(REMEMBERED);
+      o = localStorage.getItem(k);
     } catch {
-      remembered = null;
+      o = null;
     }
-    if (remembered && remembered !== i18n?.language) i18n?.changeLanguage?.(remembered);
-  });
-  return { available, current: language, choose };
+    const a = e();
+    o && a && o !== a.language && a.changeLanguage?.(o);
+  }), { available: r, current: t, choose: i };
 }
-const WrapperTypes = {
-  "VariableWrapper": VariableWrapper,
-  "VariableComplexStringWrapper": VariableComplexStringWrapper
+const ze = {
+  VariableWrapper: re,
+  VariableComplexStringWrapper: ce
 };
-EPackageRegistry.INSTANCE.registerPackage(ComposablesPackage.eINSTANCE);
-const library = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+ne.INSTANCE.registerPackage(h.eINSTANCE);
+const He = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  ComposablesPackage,
-  VARIABLECOMPLEXSTRINGWRAPPER: TYPE,
-  VARIABLEWRAPPER,
-  VariableComplexStringWrapper,
-  VariableWrapper,
-  WrapperTypes,
-  describeClass,
-  describeConfiguration,
-  describeModel,
-  hasModelDocs,
-  plainSettings,
-  registerModelDocs,
-  resetModelDocs,
-  useBoard,
-  useCurrentHistory,
-  useDatasourceRepository,
-  useEList,
-  useEObject,
-  useFeature,
-  useGlobalLoading,
-  useHistory,
-  useLanguage,
-  usePromisifiedModal,
-  useTemporaryStore,
-  useTranslation,
-  useVariableRepository
-}, Symbol.toStringTag, { value: "Module" }));
-const LIBRARY_ID = "org.eclipse.daanse.board.app.ui.vue.composables";
-const VERSION = "0.0.1-next.1";
-async function activate(context) {
-  const runtime = globalThis.__tsm__;
-  if (!runtime) {
-    throw new Error(`${LIBRARY_ID}: tsm runtime is not initialized`);
-  }
-  runtime.register(LIBRARY_ID, library, VERSION, "ui.vue.composables");
-  await void 0;
+  ComposablesPackage: h,
+  VARIABLECOMPLEXSTRINGWRAPPER: ue,
+  VARIABLEWRAPPER: Le,
+  VariableComplexStringWrapper: ce,
+  VariableWrapper: re,
+  WrapperTypes: ze,
+  describeClass: de,
+  describeConfiguration: Ee,
+  describeModel: We,
+  hasModelDocs: Ue,
+  plainSettings: we,
+  registerModelDocs: fe,
+  resetModelDocs: Ge,
+  useBoard: Ve,
+  useCurrentHistory: me,
+  useDatasourceRepository: _e,
+  useEList: x,
+  useEObject: oe,
+  useFeature: Ne,
+  useGlobalLoading: ae,
+  useHistory: Be,
+  useLanguage: Je,
+  usePromisifiedModal: Ie,
+  useTemporaryStore: Te,
+  useTranslation: ge,
+  useVariableRepository: ie
+}, Symbol.toStringTag, { value: "Module" })), K = "org.eclipse.daanse.board.app.ui.vue.composables", qe = "0.0.1-next.1";
+async function nt(s) {
+  const e = globalThis.__tsm__;
+  if (!e)
+    throw new Error(`${K}: tsm runtime is not initialized`);
+  e.register(K, He, qe, "ui.vue.composables"), await void 0;
 }
-async function deactivate(context) {
+async function rt(s) {
   await void 0;
 }
 export {
-  ComposablesPackage,
-  TYPE as VARIABLECOMPLEXSTRINGWRAPPER,
-  VARIABLEWRAPPER2 as VARIABLEWRAPPER,
-  VariableComplexStringWrapper,
-  VariableWrapper2 as VariableWrapper,
-  WrapperTypes,
-  activate,
-  deactivate,
-  describeClass,
-  describeConfiguration,
-  describeModel,
-  hasModelDocs,
-  plainSettings,
-  registerModelDocs,
-  resetModelDocs,
-  useBoard,
-  useCurrentHistory,
-  useDatasourceRepository,
-  useEList,
-  useEObject,
-  useFeature,
-  useGlobalLoading,
-  useHistory,
-  useLanguage,
-  usePromisifiedModal,
-  useTemporaryStore,
-  useTranslation,
-  useVariableRepository
+  h as ComposablesPackage,
+  ue as VARIABLECOMPLEXSTRINGWRAPPER,
+  ot as VARIABLEWRAPPER,
+  ce as VariableComplexStringWrapper,
+  ut as VariableWrapper,
+  ze as WrapperTypes,
+  nt as activate,
+  rt as deactivate,
+  de as describeClass,
+  Ee as describeConfiguration,
+  We as describeModel,
+  Ue as hasModelDocs,
+  we as plainSettings,
+  fe as registerModelDocs,
+  Ge as resetModelDocs,
+  Ve as useBoard,
+  me as useCurrentHistory,
+  _e as useDatasourceRepository,
+  x as useEList,
+  oe as useEObject,
+  Ne as useFeature,
+  ae as useGlobalLoading,
+  Be as useHistory,
+  Je as useLanguage,
+  Ie as usePromisifiedModal,
+  Te as useTemporaryStore,
+  ge as useTranslation,
+  ie as useVariableRepository
 };

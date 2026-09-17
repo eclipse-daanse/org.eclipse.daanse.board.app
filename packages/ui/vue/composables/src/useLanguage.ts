@@ -21,7 +21,7 @@
  * keys. Reading the store means a pack that lands adds its language here
  * by existing.
  */
-import { computed, inject, onMounted, type ComputedRef, type Ref } from 'vue'
+import { computed, getCurrentInstance, onMounted, type ComputedRef, type Ref } from 'vue'
 import { useTranslation } from './useTranslation'
 
 interface Store {
@@ -35,7 +35,20 @@ interface Translator {
   changeLanguage?(lng: string): Promise<unknown> | unknown
 }
 
+/*
+ * Two ways to the same instance, and the second is why this works at all.
+ *
+ * 'i18n' is what the Vue plugin provides - but a plugin needs the app, the
+ * shell creates the app and mounts it at the end of its own activation, so
+ * that provide lands after the shell's components exist. Vue's provides are
+ * not reactive, so nothing would ever notice.
+ *
+ * 'I18next' is the same object registered as a service by lib.i18next,
+ * which has no such ordering problem: it is there before anything renders.
+ * Preferring the plugin's key keeps whatever it may wrap in future.
+ */
 const PROVIDED = 'i18n'
+const SERVICE = 'I18next'
 /* Survives a reload; the choice is the person's, not the session's. */
 const REMEMBERED = 'daanse.board.language'
 
@@ -65,7 +78,12 @@ function nameOf(tag: string): string {
 }
 
 export function useLanguage(): LanguageChoice {
-  const i18n = inject<Translator | undefined>(PROVIDED, undefined)
+  /* Read each time, for the reason useTranslation explains. */
+  const host = getCurrentInstance()
+  const read = (): Translator | undefined => {
+    const provides = host?.appContext?.provides as Record<string, Translator> | undefined
+    return provides?.[PROVIDED] ?? provides?.[SERVICE]
+  }
   const { language, revision } = useTranslation()
 
   const available = computed<Language[]>(() => {
@@ -75,7 +93,7 @@ export function useLanguage(): LanguageChoice {
      * list has to notice.
      */
     void revision.value
-    const held = Object.keys(i18n?.store?.data ?? {})
+    const held = Object.keys(read()?.store?.data ?? {})
     return held.sort().map((tag) => ({ tag, label: nameOf(tag) }))
   })
 
@@ -85,7 +103,7 @@ export function useLanguage(): LanguageChoice {
     } catch {
       // private window, or storage turned off: the choice holds for this session
     }
-    i18n?.changeLanguage?.(tag)
+    read()?.changeLanguage?.(tag)
   }
 
   /*
@@ -100,7 +118,8 @@ export function useLanguage(): LanguageChoice {
     } catch {
       remembered = null
     }
-    if (remembered && remembered !== i18n?.language) i18n?.changeLanguage?.(remembered)
+    const i18n = read()
+    if (remembered && i18n && remembered !== i18n.language) i18n.changeLanguage?.(remembered)
   })
 
   return { available, current: language, choose }

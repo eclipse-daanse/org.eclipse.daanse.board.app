@@ -27,7 +27,14 @@
  * trick: the counter is a reactive dependency of every render that
  * translates anything, so late texts reach the screen that needed them.
  */
-import { getCurrentScope, inject, onScopeDispose, ref, type Ref } from 'vue'
+import {
+  getCurrentInstance,
+  getCurrentScope,
+  onMounted,
+  onScopeDispose,
+  ref,
+  type Ref,
+} from 'vue'
 
 /** What this needs of i18next - not the whole interface. */
 interface Translator {
@@ -41,8 +48,20 @@ interface Translator {
   }
 }
 
-/* The key the i18next plugin provides under. */
+/*
+ * Two ways to the same instance, and the second is why this works at all.
+ *
+ * 'i18n' is what the Vue plugin provides - but a plugin needs the app, the
+ * shell creates the app and mounts it at the end of its own activation, so
+ * that provide lands after the shell's components exist. Vue's provides are
+ * not reactive, so nothing would ever notice.
+ *
+ * 'I18next' is the same object registered as a service by lib.i18next,
+ * which has no such ordering problem: it is there before anything renders.
+ * Preferring the plugin's key keeps whatever it may wrap in future.
+ */
 const PROVIDED = 'i18n'
+const SERVICE = 'I18next'
 
 export interface Translation {
   /** Translates a key, and re-runs when what it translates changes. */
@@ -68,15 +87,30 @@ export interface Translation {
  *   keys without repeating its namespace on every one of them.
  */
 export function useTranslation(namespace?: string): Translation {
-  const i18n = inject<Translator | undefined>(PROVIDED, undefined)
+  /*
+   * Read on every use, not injected once.
+   *
+   * The thing that provides i18n is a plugin, and a plugin needs the Vue
+   * app - which the shell creates. So the shell is necessarily up before
+   * the translator is, and a component set up in that window would inject
+   * undefined and keep it forever. The provides table is the same object
+   * throughout; reading it each time sees what has since been put in it.
+   * (The shell cannot simply wait for the plugin: the plugin waits for the
+   * app, and that is a cycle.)
+   */
+  const host = getCurrentInstance()
+  const read = (): Translator | undefined => {
+    const provides = host?.appContext?.provides as Record<string, Translator> | undefined
+    return provides?.[PROVIDED] ?? provides?.[SERVICE]
+  }
 
   /* Bumped by every event that can change what a key translates to. */
   const changed = ref(0)
-  const language = ref<string | undefined>(i18n?.language)
+  const language = ref<string | undefined>(read()?.language)
 
   const onChange = () => {
     changed.value += 1
-    language.value = i18n?.language
+    language.value = read()?.language
   }
 
   /*
@@ -85,15 +119,28 @@ export function useTranslation(namespace?: string): Translation {
    * switch. Both are optional: a stub translator has neither, and asking
    * for one should not be a reason to fail.
    */
-  i18n?.on?.('languageChanged', onChange)
-  i18n?.store?.on?.('added', onChange)
-  i18n?.store?.on?.('removed', onChange)
+  let listening: Translator | undefined
+  const listen = () => {
+    const i18n = read()
+    if (!i18n || listening === i18n) return
+    listening = i18n
+    i18n.on?.('languageChanged', onChange)
+    i18n.store?.on?.('added', onChange)
+    i18n.store?.on?.('removed', onChange)
+    /* It may have arrived with texts already in it. */
+    onChange()
+  }
+
+  listen()
+  /* By the time everything is mounted, a plugin that provides has done so. */
+  if (host) onMounted(listen)
 
   if (getCurrentScope()) {
     onScopeDispose(() => {
-      i18n?.off?.('languageChanged', onChange)
-      i18n?.store?.off?.('added', onChange)
-      i18n?.store?.off?.('removed', onChange)
+      listening?.off?.('languageChanged', onChange)
+      listening?.store?.off?.('added', onChange)
+      listening?.store?.off?.('removed', onChange)
+      listening = undefined
     })
   }
 
@@ -101,10 +148,11 @@ export function useTranslation(namespace?: string): Translation {
     /* The dependency. Without this read the rest is a plain function
        again and nothing re-renders. */
     void changed.value
+    const i18n = read()
     if (!i18n) return key
     const full = namespace && !key.includes(':') ? `${namespace}:${key}` : key
     return i18n.t(full, options)
   }
 
-  return { t, language, revision: changed, available: !!i18n }
+  return { t, language, revision: changed, available: !!read() }
 }

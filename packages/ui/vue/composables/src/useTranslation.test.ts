@@ -12,7 +12,7 @@
  **********************************************************************/
 
 import { describe, expect, it } from 'vitest'
-import { defineComponent, h, nextTick } from 'vue'
+import { createApp, defineComponent, h, nextTick } from 'vue'
 import { mount } from '@vue/test-utils'
 import i18next from 'i18next'
 import { useTranslation } from './useTranslation'
@@ -102,6 +102,43 @@ describe('useTranslation', () => {
 
     expect(view.text()).toBe('Übersicht')
     expect(i18n.t('demo:other')).toBe('Anderes')
+  })
+
+  it('does not see a provide that lands after mount, which is why the service exists', async () => {
+    /*
+     * The limit, written down rather than worked around: Vue's provides are
+     * not reactive, so a value put there after a component is mounted
+     * reaches nothing - there is no event to re-render on. The Vue plugin
+     * provides exactly that late, because it needs the app the shell
+     * mounts. Which is why the service key above is the one that carries
+     * this in the real application.
+     */
+    const i18n = await fresh()
+    i18n.addResourceBundle('en', 'demo', { title: 'Overview' })
+
+    const app = createApp(screen('demo'))
+    const host = document.createElement('div')
+    app.mount(host)
+    expect(host.textContent).toBe('title')
+
+    app.provide('i18n', i18n)
+    await nextTick()
+
+    /* Still the key - and that is the documented behaviour, not a defect. */
+    expect(host.textContent).toBe('title')
+    app.unmount()
+  })
+
+  it('finds the translator under the service key too', async () => {
+    /*
+     * lib.i18next registers the instance as a service before anything
+     * renders; the Vue plugin provides the same object later. Reading the
+     * service is what makes a component work in the window between.
+     */
+    const i18n = await fresh()
+    i18n.addResourceBundle('en', 'demo', { title: 'Overview' })
+    const view = mount(screen('demo'), { global: { provide: { I18next: i18n } } })
+    expect(view.text()).toBe('Overview')
   })
 
   it('renders the key rather than failing when nothing is provided', () => {
