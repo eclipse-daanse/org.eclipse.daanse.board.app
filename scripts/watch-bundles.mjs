@@ -202,7 +202,18 @@ function flushLibs() {
 }
 
 const trigger = chokidar.watch(
-  watched.flatMap((d) => [`${d}/src`, `${d}/manifest.json`, `${d}/vite.bundle.config.ts`]),
+  /*
+   * model/ counts as source. The .ecore and .xmi files there are read at
+   * build time and baked into the bundle - a widget's form labels live in
+   * its ui.xmi - so editing one and seeing nothing happen was a trap worth
+   * closing.
+   */
+  watched.flatMap((d) => [
+    `${d}/src`,
+    `${d}/model`,
+    `${d}/manifest.json`,
+    `${d}/vite.bundle.config.ts`,
+  ]),
   { ignoreInitial: true, ignored: ['**/dist-bundle/**', '**/dist/**', '**/node_modules/**'] },
 )
 trigger.on('all', (_event, file) => {
