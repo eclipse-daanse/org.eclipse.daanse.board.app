@@ -33,3 +33,10 @@ export { SettingsForm, SettingsListWidget, SettingsObjectWidget, SettingsFieldWi
 export { adopt, asModel, isModelled } from './adopt'
 export { formFor, kindOf, labelOf, type FieldKind } from './buildForm'
 export { loadUIModel } from './loadUIModel'
+
+/*
+ * Labels in a UI model can be translation keys; this is how the
+ * application hands in the translator that turns them into words.
+ */
+export { useLabelTranslator, retranslate } from './loadUIModel'
+export { hasLabelKeys } from './translateLabels'

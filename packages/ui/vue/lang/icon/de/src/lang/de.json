@@ -7,6 +7,8 @@
     "iconSize": "Größe",
     "strokeWeight": "Strichstärke",
     "opticSize": "Optische Größe",
-    "grade": "Stärkegrad"
+    "grade": "Stärkegrad",
+    "appearance": "Aussehen",
+    "fontAxes": "Schriftachsen"
   }
 }

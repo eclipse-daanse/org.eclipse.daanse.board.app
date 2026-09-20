@@ -33,6 +33,7 @@ import {
   type EPackage,
   type XMIResource,
 } from '@emfts/core'
+import { noteLabelKeys, translateLabels } from './translateLabels'
 import {
   UimodelFactory,
   UimodelPackage,
@@ -41,6 +42,27 @@ import {
 } from '@emfts/uimodel-composer'
 
 const cache = new Map<string, UIModel>()
+
+/*
+ * How labels become words.
+ *
+ * Set by the application once it has a translator; until then a model's
+ * keys stay as they are, which is visible but harmless. Every loaded model
+ * is translated again whenever this is called, because the language can
+ * change long after the models were read.
+ */
+let translator: ((key: string) => string) | undefined
+
+export function useLabelTranslator(t: (key: string) => string): void {
+  translator = t
+  retranslate()
+}
+
+/** Applies the current translator to every model that has been loaded. */
+export function retranslate(): void {
+  if (!translator) return
+  for (const model of cache.values()) translateLabels(model, translator)
+}
 
 /*
  * Every loaded form, by the class it is written for.
@@ -112,6 +134,10 @@ export function loadUIModel(xml: string, domainPackage: EPackage, uri = '/ui.xmi
     const model = resource.getContents().get(0) as UIModel
     cache.set(uri, model)
     indexByTarget(model)
+    /* Its labels may be translation keys; remember which, so the model can
+       be translated now and again on every language change. */
+    noteLabelKeys(model)
+    retranslate()
     return model
   } catch (error) {
     // A form that cannot be read is not a reason to take the settings down;

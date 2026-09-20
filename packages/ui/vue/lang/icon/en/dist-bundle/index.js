@@ -1,28 +1,35 @@
-import { I18NEXT as n } from "org.eclipse.daanse.board.app.lib.i18next";
-const s = { title: "Icon widget settings", iconSearch: "Search icon", iconFilled: "Icon filled", iconColor: "Icon color", iconSize: "Icon size", strokeWeight: "Stroke weight", opticSize: "Optic size", grade: "Grade" }, l = {
-  IconWidget: s
-}, o = "en", c = "icon";
-function a({ services: e }) {
-  e.getRequired(n).addResourceBundle(o, c, l);
+import { I18NEXT } from "org.eclipse.daanse.board.app.lib.i18next";
+const IconWidget = { "title": "Icon widget settings", "iconSearch": "Search icon", "iconFilled": "Filled", "iconColor": "Icon color", "iconSize": "Icon size", "strokeWeight": "Stroke weight", "opticSize": "Optic size", "grade": "Grade", "appearance": "Appearance", "fontAxes": "Font axes" };
+const en = {
+  IconWidget
+};
+const SPRACHE = "en";
+const NAMENSRAUM = "icon";
+function activate$1({ services }) {
+  services.getRequired(I18NEXT).addResourceBundle(SPRACHE, NAMENSRAUM, en);
 }
-function r({ services: e }) {
-  e.getRequired(n).removeResourceBundle(o, c);
+function deactivate$1({ services }) {
+  services.getRequired(I18NEXT).removeResourceBundle(SPRACHE, NAMENSRAUM);
 }
-const d = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const library = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  activate: a,
-  deactivate: r
-}, Symbol.toStringTag, { value: "Module" })), i = "org.eclipse.daanse.board.app.ui.vue.lang.icon.en", u = "0.0.1-next.1";
-async function v(e) {
-  const t = globalThis.__tsm__;
-  if (!t)
-    throw new Error(`${i}: tsm runtime is not initialized`);
-  t.register(i, d, u, "ui.vue.lang.icon.en"), await a?.(e);
+  activate: activate$1,
+  deactivate: deactivate$1
+}, Symbol.toStringTag, { value: "Module" }));
+const LIBRARY_ID = "org.eclipse.daanse.board.app.ui.vue.lang.icon.en";
+const VERSION = "0.0.1-next.1";
+async function activate(context) {
+  const runtime = globalThis.__tsm__;
+  if (!runtime) {
+    throw new Error(`${LIBRARY_ID}: tsm runtime is not initialized`);
+  }
+  runtime.register(LIBRARY_ID, library, VERSION, "ui.vue.lang.icon.en");
+  await activate$1?.(context);
 }
-async function S(e) {
-  await r?.(e);
+async function deactivate(context) {
+  await deactivate$1?.(context);
 }
 export {
-  v as activate,
-  S as deactivate
+  activate,
+  deactivate
 };

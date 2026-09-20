@@ -28,15 +28,34 @@ Contributors:
  */
 import { computed, markRaw, onMounted, provide, shallowRef, watch } from 'vue'
 import type { EObject, EPackage } from '@emfts/core'
-import { UIModelComposer } from '@emfts/uimodel-composer'
+import { UIModelComposer, bumpExpressionTick } from '@emfts/uimodel-composer'
 import type { UIModel } from '@emfts/uimodel-composer'
+import { useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import { componentRegistry, COMPONENT_REGISTRY_KEY } from '@emfts/vue-registry'
 import { UimodelPackage } from '@emfts/uimodel-composer'
 import { asModel } from './adopt'
 import { registerListRenderer, registerWrapperRenderer } from './registerRenderer'
 import { formFor } from './buildForm'
-import { loadUIModel } from './loadUIModel'
+import { loadUIModel, retranslate, useLabelTranslator } from './loadUIModel'
 import SettingsFieldWidget from './SettingsFieldWidget.vue'
+
+/*
+ * Labels written as translation keys become words here.
+ *
+ * The models are loaded once and live on; the language can change at any
+ * time, so the translator is handed to the loader and every loaded model
+ * is written again on each change. Reading `revision` is what makes that
+ * happen - it counts the same events a text would re-render on.
+ */
+const { t: translate, revision } = useTranslation()
+useLabelTranslator(translate)
+watch(revision, () => {
+  retranslate()
+  // EObject attributes are not reactive sources, so rewriting a label does
+  // not invalidate the composer's computed on its own. This is the signal
+  // the library documents for changes its own content adapter cannot see.
+  bumpExpressionTick()
+})
 
 /*
  * Both metamodels have to exist before anything reads them: the settings
@@ -154,7 +173,11 @@ const hasFields = computed(() => (model.value?.eClass?.().getEStructuralFeatures
 
 <template>
   <div class="settings-form">
-    <UIModelComposer v-if="uiModel && model && hasFields" :ui-model="uiModel" :model="model" />
+    <UIModelComposer
+      v-if="uiModel && model && hasFields"
+      :ui-model="uiModel"
+      :model="model"
+    />
     <p v-else class="settings-form__empty">
       {{ emptyText ?? 'Für dieses Widget sind keine Einstellungen modelliert.' }}
     </p>

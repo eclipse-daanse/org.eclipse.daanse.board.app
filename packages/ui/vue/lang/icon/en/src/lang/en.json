@@ -1,12 +1,14 @@
 {
   "IconWidget": {
-  "title": "Icon widget settings",
-  "iconSearch": "Search icon",
-  "iconFilled": "Icon filled",
-  "iconColor": "Icon color",
-  "iconSize": "Icon size",
-  "strokeWeight": "Stroke weight",
-  "opticSize": "Optic size",
-  "grade": "Grade"
+    "title": "Icon widget settings",
+    "iconSearch": "Search icon",
+    "iconFilled": "Filled",
+    "iconColor": "Icon color",
+    "iconSize": "Icon size",
+    "strokeWeight": "Stroke weight",
+    "opticSize": "Optic size",
+    "grade": "Grade",
+    "appearance": "Appearance",
+    "fontAxes": "Font axes"
   }
 }
