@@ -22,7 +22,7 @@ import {
     watch,
 } from "vue";
 import { useRoute } from 'vue-router';
-import { VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+import { VariableWrapper, sanitizeSvg, sanitizeStyleBlock } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 // import { useDatasourceRepository } from "../composables/datasourceRepository";
 
 const props = defineProps<{ datasourceId: string, id?: string }>();
@@ -195,12 +195,12 @@ const styles = computed(() => {
         string += "</style>";
     }
 
-    return string;
+    return sanitizeStyleBlock(string);
 });
 
 const svgSourceParced = computed(() => {
     let processedString = svgSource.value;
-    return processedString;
+    return sanitizeSvg(processedString);
     // const regex = /{(.*?)}/g;
     // const parts = processedString.match(regex);
 
@@ -223,7 +223,9 @@ const svgSourceParced = computed(() => {
 </script>
 
 <template>
+    <!-- eslint-disable-next-line vue/no-v-html -- Style block assembled from board configuration. -->
     <div v-html="styles"></div>
+    <!-- eslint-disable-next-line vue/no-v-html -- SVG fetched from an asset host. -->
     <div v-bind="$attrs" class="svg" v-html="svgSourceParced" @click="emitClick" @contextmenu.prevent="emitRightClick" ref="svgContainerRef"></div>
     <div v-if="!svgSourceParced && !((config?.src as any)?.value)" class="fallback" @click="emitClick" @contextmenu.prevent="emitRightClick">
         No SVG configured

@@ -113,6 +113,7 @@ watch(() => props.config.language, async () => {
 </script>
 
 <template>
+    <!-- eslint-disable-next-line vue/no-v-html -- shiki escapes the code it highlights. -->
     <div v-html="htmlString" class="code_container" @click="emitClick" @contextmenu.prevent="emitRightClick"></div>
 </template>
 

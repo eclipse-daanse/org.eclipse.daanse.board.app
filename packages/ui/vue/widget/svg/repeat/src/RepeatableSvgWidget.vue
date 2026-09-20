@@ -16,7 +16,7 @@ import { RepeatableSVGSettings } from "./gen/RepeatableSVGSettings";
 import { SVGItemStyles } from "./gen/SVGItemStyles";
 import { onMounted, onUnmounted, computed, ref, watch } from "vue";
 import { useRoute } from 'vue-router';
-import { VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+import { VariableWrapper, sanitizeSvg } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 // import { useDatasourceRepository } from "../composables/datasourceRepository";
 
 const props = defineProps<{ datasourceId: string, id?: string }>();
@@ -78,6 +78,7 @@ const emitRightClick = () => {
     });
 };
 const svgSource = ref("");
+const safeSvgSource = computed(() => sanitizeSvg(svgSource.value));
 // const { data } = useDatasourceRepository(datasourceId, "object");
 
 const defaultConfig = new RepeatableSVGSettings();
@@ -200,8 +201,8 @@ const defaultStroke = computed(() => (config.value?.defaultItemStyles?.stroke as
                 :fill="defaultFill"
                 :stroke="defaultStroke"
             >
-                <g
-                    v-html="svgSource"
+                <!-- eslint-disable-next-line vue/no-v-html -- SVG fetched from an asset host. -->
+                <g v-html="safeSvgSource"
                     v-for="index in repeationsToNumber"
                     :transform="`translate(${100 * (index - 1)}, 0)`"
                     :key="index"
@@ -213,8 +214,8 @@ const defaultStroke = computed(() => (config.value?.defaultItemStyles?.stroke as
                 :fill="activeFill"
                 :stroke="activeStroke"
             >
-                <g
-                    v-html="svgSource"
+                <!-- eslint-disable-next-line vue/no-v-html -- SVG fetched from an asset host. -->
+                <g v-html="safeSvgSource"
                     v-for="index in repeationsToNumber"
                     :transform="`translate(${100 * (index - 1)}, 0)`"
                     :key="index">

@@ -11,7 +11,7 @@ Contributors:
     Smart City Jena
 -->
 <script setup lang="ts">
-import { useDatasourceRepository } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+import { useDatasourceRepository, sanitizeHtml } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import { toRefs, watch, ref, onMounted, onUnmounted } from 'vue'
 import { useRoute } from 'vue-router'
 
@@ -72,7 +72,8 @@ const { update } = useDatasourceRepository(datasourceId, 'object', data)
   <div class="widget" @click="emitClick" @contextmenu.prevent="emitRightClick">
     <div v-if="data && data.items" v-for="item in data.items" class="preview-item">
         <div class="preview-item-title">{{ item.title }}</div>
-        <div v-html="item.content" class="preview-item-content">
+        <!-- eslint-disable-next-line vue/no-v-html -- Feed HTML from a third party. -->
+        <div v-html="sanitizeHtml(item.content)" class="preview-item-content">
         </div>
     </div>
   </div>

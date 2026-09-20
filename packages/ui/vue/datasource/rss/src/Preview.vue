@@ -11,7 +11,7 @@ Contributors:
     Smart City Jena
 -->
 <script setup lang="ts">
-import { useTemporaryStore } from 'org.eclipse.daanse.board.app.ui.vue.composables';
+import { useTemporaryStore, sanitizeHtml } from 'org.eclipse.daanse.board.app.ui.vue.composables';
 import { ref, watch, shallowRef } from 'vue';
 
 const props = defineProps<{ dataSource: any }>();
@@ -36,7 +36,8 @@ watch(tempStore, async () => {
 
     <div v-for="item in data.items" class="preview-item">
         <div class="preview-item-title">{{ item.title }}</div>
-        <div v-html="item.content" class="preview-item-content">
+        <!-- eslint-disable-next-line vue/no-v-html -- Feed HTML from a third party. -->
+    <div v-html="sanitizeHtml(item.content)" class="preview-item-content">
         </div>
     </div>
   </div>

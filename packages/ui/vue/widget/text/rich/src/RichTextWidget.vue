@@ -15,7 +15,7 @@ Contributors:
 
 import { computed, toRefs, onMounted, onUnmounted, ref, watch } from "vue";
 import { useRoute } from 'vue-router';
-import { useDatasourceRepository, useVariableRepository } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+import { useDatasourceRepository, useVariableRepository, sanitizeHtml } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import helpers from 'org.eclipse.daanse.board.app.lib.utils.helpers'
 import { RichTextEditorSettings } from './gen/RichTextEditorSettings'
 
@@ -110,7 +110,9 @@ const parsedEditorText = computed(() => {
         }
     }
 
-    return result;
+    // `config.editor` is board content, and the interpolated datasource values
+    // are network responses; JSON.stringify escapes neither < nor >.
+    return sanitizeHtml(result);
 });
 
 watch(parsedEditorText, (newVal, oldVal) => {
@@ -123,6 +125,7 @@ watch(parsedEditorText, (newVal, oldVal) => {
 <template>
     <div class="text-container" @click="emitClick" @contextmenu.prevent="emitRightClick"
         :style="{ fontSize: resolvedStyle.fontSize.value + 'px', color: resolvedStyle.fontColor.value }">
+        <!-- eslint-disable-next-line vue/no-v-html -- Board content with datasource values; sanitised in the computed. -->
         <div class="editor-content pl-6" v-html="parsedEditorText" />
     </div>
 </template>

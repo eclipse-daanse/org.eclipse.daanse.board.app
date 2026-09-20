@@ -18,10 +18,11 @@ import { useVariableRepository } from './useVariableRepository'
 import { useGlobalLoading } from './useGlobalLoading'
 import { VariableWrapper,VARIABLEWRAPPER } from './VariableWrapper'
 import { VariableComplexStringWrapper,VARIABLECOMPLEXSTRINGWRAPPER } from './VariableComplexStringWrapper'
+import { sanitizeHtml, sanitizeSvg, sanitizeStyleBlock } from './sanitize'
 
 const WrapperTypes = {
   'VariableWrapper': VariableWrapper,
   'VariableComplexStringWrapper': VariableComplexStringWrapper,
 }
 
-export { useDatasourceRepository, useTemporaryStore, useVariableRepository, usePromisifiedModal, useGlobalLoading, VariableWrapper,VARIABLEWRAPPER,VariableComplexStringWrapper,VARIABLECOMPLEXSTRINGWRAPPER, WrapperTypes}
+export { useDatasourceRepository, useTemporaryStore, useVariableRepository, usePromisifiedModal, useGlobalLoading, VariableWrapper,VARIABLEWRAPPER,VariableComplexStringWrapper,VARIABLECOMPLEXSTRINGWRAPPER, WrapperTypes, sanitizeHtml, sanitizeSvg, sanitizeStyleBlock}
