@@ -11,14 +11,11 @@ Contributors:
     Smart City Jena
 -->
 <script setup lang="ts">
-import { ref, onMounted, watch, markRaw } from 'vue'
+import { ref } from 'vue'
 import { VariableInput } from 'org.eclipse.daanse.board.app.ui.vue.variable.components'
-import { VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import { PivotTable } from './gen/PivotTable'
 import { LevelStyle } from './gen/LevelStyle'
 import { ConditionalFormat } from './gen/ConditionalFormat'
-
-type ConditionType = 'greaterThan' | 'lessThan' | 'equals' | 'notEquals' | 'between' | 'contains' | 'colorScale' | 'topN' | 'bottomN'
 
 const widgetSettings = defineModel<PivotTable>({ required: true });
 
@@ -38,32 +35,22 @@ const textAlignOptions = [
   { value: 'right', text: 'Rechts' },
 ]
 
-const addRowLevelStyle = () => {
-  if (!widgetSettings.value.rowLevelStyles) {
-    widgetSettings.value.rowLevelStyles = []
-  }
-  const nextLevel = widgetSettings.value.rowLevelStyles.length
+type LevelStylesKey = 'rowLevelStyles' | 'columnLevelStyles'
+
+const levelSections: { key: LevelStylesKey; opened: 'rowLevelsSection' | 'columnLevelsSection'; header: string; icon: string; area: string }[] = [
+  { key: 'rowLevelStyles', opened: 'rowLevelsSection', header: 'Zeilen-Level Styles', icon: 'table_rows', area: 'Zeilen' },
+  { key: 'columnLevelStyles', opened: 'columnLevelsSection', header: 'Spalten-Level Styles', icon: 'view_column', area: 'Spalten' },
+]
+
+const addLevelStyle = (key: LevelStylesKey) => {
+  const styles = (widgetSettings.value[key] ??= [])
   const newStyle = new LevelStyle()
-  newStyle.level = nextLevel
-  widgetSettings.value.rowLevelStyles.push(newStyle)
+  newStyle.level = styles.length
+  styles.push(newStyle)
 }
 
-const removeRowLevelStyle = (index: number) => {
-  widgetSettings.value.rowLevelStyles?.splice(index, 1)
-}
-
-const addColumnLevelStyle = () => {
-  if (!widgetSettings.value.columnLevelStyles) {
-    widgetSettings.value.columnLevelStyles = []
-  }
-  const nextLevel = widgetSettings.value.columnLevelStyles.length
-  const newStyle = new LevelStyle()
-  newStyle.level = nextLevel
-  widgetSettings.value.columnLevelStyles.push(newStyle)
-}
-
-const removeColumnLevelStyle = (index: number) => {
-  widgetSettings.value.columnLevelStyles?.splice(index, 1)
+const removeLevelStyle = (key: LevelStylesKey, index: number) => {
+  widgetSettings.value[key]?.splice(index, 1)
 }
 
 const conditionTypeOptions = [
@@ -128,13 +115,13 @@ const needsResultColors = (type?: string) => {
     <div class="settings-container">
       <div class="settings-block">
         <h3>Header</h3>
-        <VariableInput v-model="(widgetSettings.headerBackgroundColor as unknown as VariableWrapper<string>)" label="Header Hintergrund">
+        <VariableInput v-model="widgetSettings.headerBackgroundColor" label="Header Hintergrund">
           <template #default="{ value, change }">
             <va-color-input label="Header Hintergrund" :model-value="value" @input="change" />
           </template>
         </VariableInput>
 
-        <VariableInput v-model="(widgetSettings.headerTextColor as unknown as VariableWrapper<string>)" label="Header Textfarbe">
+        <VariableInput v-model="widgetSettings.headerTextColor" label="Header Textfarbe">
           <template #default="{ value, change }">
             <va-color-input label="Header Textfarbe" :model-value="value" @input="change" />
           </template>
@@ -143,13 +130,13 @@ const needsResultColors = (type?: string) => {
 
       <div class="settings-block">
         <h3>Zellen</h3>
-        <VariableInput v-model="(widgetSettings.cellBackgroundColor as unknown as VariableWrapper<string>)" label="Zellen Hintergrund">
+        <VariableInput v-model="widgetSettings.cellBackgroundColor" label="Zellen Hintergrund">
           <template #default="{ value, change }">
             <va-color-input label="Zellen Hintergrund" :model-value="value" @input="change" />
           </template>
         </VariableInput>
 
-        <VariableInput v-model="(widgetSettings.cellTextColor as unknown as VariableWrapper<string>)" label="Zellen Textfarbe">
+        <VariableInput v-model="widgetSettings.cellTextColor" label="Zellen Textfarbe">
           <template #default="{ value, change }">
             <va-color-input label="Zellen Textfarbe" :model-value="value" @input="change" />
           </template>
@@ -158,7 +145,7 @@ const needsResultColors = (type?: string) => {
 
       <div class="settings-block">
         <h3>Rahmen</h3>
-        <VariableInput v-model="(widgetSettings.borderColor as unknown as VariableWrapper<string>)" label="Rahmenfarbe">
+        <VariableInput v-model="widgetSettings.borderColor" label="Rahmenfarbe">
           <template #default="{ value, change }">
             <va-color-input label="Rahmenfarbe" :model-value="value" @input="change" />
           </template>
@@ -170,7 +157,7 @@ const needsResultColors = (type?: string) => {
   <va-collapse v-model="opened.dimensionsSection" header="Dimensionen" icon="straighten">
     <div class="settings-container">
       <div class="settings-block">
-        <VariableInput v-model="(widgetSettings.defaultColumnWidth as unknown as VariableWrapper<any>)" label="Standard Spaltenbreite (px)">
+        <VariableInput v-model="widgetSettings.defaultColumnWidth" label="Standard Spaltenbreite (px)">
           <template #default="{ value, change }">
             <va-input
               label="Standard Spaltenbreite (px)"
@@ -182,7 +169,7 @@ const needsResultColors = (type?: string) => {
             />
           </template>
         </VariableInput>
-        <VariableInput v-model="(widgetSettings.defaultRowHeight as unknown as VariableWrapper<any>)" label="Standard Zeilenhöhe (px)">
+        <VariableInput v-model="widgetSettings.defaultRowHeight" label="Standard Zeilenhöhe (px)">
           <template #default="{ value, change }">
             <va-input
               label="Standard Zeilenhöhe (px)"
@@ -201,7 +188,7 @@ const needsResultColors = (type?: string) => {
   <va-collapse v-model="opened.textSection" header="Text" icon="text_fields">
     <div class="settings-container">
       <div class="settings-block">
-        <VariableInput v-model="(widgetSettings.fontSize as unknown as VariableWrapper<any>)" label="Schriftgröße (px)">
+        <VariableInput v-model="widgetSettings.fontSize" label="Schriftgröße (px)">
           <template #default="{ value, change }">
             <va-input
               label="Schriftgröße (px)"
@@ -213,7 +200,7 @@ const needsResultColors = (type?: string) => {
             />
           </template>
         </VariableInput>
-        <VariableInput v-model="(widgetSettings.headerFontWeight as unknown as VariableWrapper<any>)" label="Header Font-Weight">
+        <VariableInput v-model="widgetSettings.headerFontWeight" label="Header Font-Weight">
           <template #default="{ value, change }">
             <va-input
               label="Header Font-Weight"
@@ -236,25 +223,25 @@ const needsResultColors = (type?: string) => {
     </div>
   </va-collapse>
 
-  <va-collapse v-model="opened.rowLevelsSection" header="Zeilen-Level Styles" icon="table_rows">
+  <va-collapse v-for="section in levelSections" :key="section.key" v-model="opened[section.opened]" :header="section.header" :icon="section.icon">
     <div class="settings-container">
       <p class="hint-text">
-        Definiere individuelle Styles für verschiedene Hierarchie-Level in den Zeilen-Headern.
+        Definiere individuelle Styles für verschiedene Hierarchie-Level in den {{ section.area }}-Headern.
       </p>
 
       <div class="level-header">
         <span>Level-Konfiguration</span>
-        <va-button size="small" @click="addRowLevelStyle">Level hinzufügen</va-button>
+        <va-button size="small" @click="addLevelStyle(section.key)">Level hinzufügen</va-button>
       </div>
 
       <div
-        v-for="(levelStyle, index) in widgetSettings.rowLevelStyles"
-        :key="`row_level_${index}`"
+        v-for="(levelStyle, index) in widgetSettings[section.key]"
+        :key="`${section.key}_${index}`"
         class="level-card"
       >
         <div class="level-card-header">
           <strong>Level {{ levelStyle.level }}</strong>
-          <va-button size="small" color="danger" @click="removeRowLevelStyle(index)">Entfernen</va-button>
+          <va-button size="small" color="danger" @click="removeLevelStyle(section.key, index)">Entfernen</va-button>
         </div>
 
         <va-input
@@ -264,13 +251,13 @@ const needsResultColors = (type?: string) => {
           :min="0"
         />
 
-        <VariableInput v-model="(levelStyle.backgroundColor as unknown as VariableWrapper<string>)" label="Hintergrundfarbe">
+        <VariableInput v-model="levelStyle.backgroundColor" label="Hintergrundfarbe">
           <template #default="{ value, change }">
             <va-color-input label="Hintergrundfarbe" :model-value="value" @input="change" />
           </template>
         </VariableInput>
 
-        <VariableInput v-model="(levelStyle.textColor as unknown as VariableWrapper<string>)" label="Textfarbe">
+        <VariableInput v-model="levelStyle.textColor" label="Textfarbe">
           <template #default="{ value, change }">
             <va-color-input label="Textfarbe" :model-value="value" @input="change" />
           </template>
@@ -286,63 +273,7 @@ const needsResultColors = (type?: string) => {
         />
       </div>
 
-      <div v-if="!widgetSettings.rowLevelStyles?.length" class="empty-state">
-        Keine Level-Styles definiert. Klicke "Level hinzufügen" um anzufangen.
-      </div>
-    </div>
-  </va-collapse>
-
-  <va-collapse v-model="opened.columnLevelsSection" header="Spalten-Level Styles" icon="view_column">
-    <div class="settings-container">
-      <p class="hint-text">
-        Definiere individuelle Styles für verschiedene Hierarchie-Level in den Spalten-Headern.
-      </p>
-
-      <div class="level-header">
-        <span>Level-Konfiguration</span>
-        <va-button size="small" @click="addColumnLevelStyle">Level hinzufügen</va-button>
-      </div>
-
-      <div
-        v-for="(levelStyle, index) in widgetSettings.columnLevelStyles"
-        :key="`col_level_${index}`"
-        class="level-card"
-      >
-        <div class="level-card-header">
-          <strong>Level {{ levelStyle.level }}</strong>
-          <va-button size="small" color="danger" @click="removeColumnLevelStyle(index)">Entfernen</va-button>
-        </div>
-
-        <va-input
-          label="Level-Nummer"
-          v-model.number="levelStyle.level"
-          type="number"
-          :min="0"
-        />
-
-        <VariableInput v-model="(levelStyle.backgroundColor as unknown as VariableWrapper<string>)" label="Hintergrundfarbe">
-          <template #default="{ value, change }">
-            <va-color-input label="Hintergrundfarbe" :model-value="value" @input="change" />
-          </template>
-        </VariableInput>
-
-        <VariableInput v-model="(levelStyle.textColor as unknown as VariableWrapper<string>)" label="Textfarbe">
-          <template #default="{ value, change }">
-            <va-color-input label="Textfarbe" :model-value="value" @input="change" />
-          </template>
-        </VariableInput>
-
-        <va-input
-          label="Font-Weight"
-          v-model.number="levelStyle.fontWeight"
-          type="number"
-          :min="100"
-          :max="900"
-          :step="100"
-        />
-      </div>
-
-      <div v-if="!widgetSettings.columnLevelStyles?.length" class="empty-state">
+      <div v-if="!widgetSettings[section.key]?.length" class="empty-state">
         Keine Level-Styles definiert. Klicke "Level hinzufügen" um anzufangen.
       </div>
     </div>

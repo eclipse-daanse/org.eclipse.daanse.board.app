@@ -40,7 +40,8 @@ export default defineConfig({
   },
   plugins: [
     dts({
-      insertTypesEntry: true
+      insertTypesEntry: true,
+      exclude: ['node_modules/**', '**/*.test.ts', 'vitest.config.ts']
     }),
     //@ts-ignore
     vue(),
