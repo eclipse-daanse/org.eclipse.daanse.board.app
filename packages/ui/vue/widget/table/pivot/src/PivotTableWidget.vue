@@ -12,128 +12,29 @@ Contributors:
 -->
 
 <script lang="ts" setup>
-import { toRefs, ref, watch, onMounted, computed, markRaw } from "vue";
-import { useVariableRepository, useDatasourceRepository, VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+import { toRefs, watch, onMounted, computed, shallowRef } from "vue";
+import { useVariableRepository, useDatasourceRepository } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import { PivotTable as PivotTableComponent } from 'org.eclipse.daanse.board.app.ui.vue.common.xmla';
 import { PivotTable } from "./gen/PivotTable";
-import { container } from 'org.eclipse.daanse.board.app.lib.core'
-import { EventActionsRegistry, EVENT_ACTIONS_REGISTRY } from 'org.eclipse.daanse.board.app.lib.events'
-import { useRoute } from 'vue-router'
+import { identifiers, container as coreContainer } from 'org.eclipse.daanse.board.app.lib.core';
+import type { TinyEmitter } from 'tiny-emitter';
 
 const props = defineProps<{ datasourceId: string, id?: string }>();
 const { datasourceId, id: widgetId } = toRefs(props);
 
-import { identifiers, container as coreContainer } from 'org.eclipse.daanse.board.app.lib.core';
-import type { TinyEmitter } from 'tiny-emitter';
 const eventBus = coreContainer.get<TinyEmitter>(identifiers.TINY_EMITTER);
 
-const emitClick = () => {
+// Publishes widget:PivotTableWidget:<name> on the board's event bus
+const emitWidgetEvent = (name: string, details: Record<string, unknown> = {}) => {
     if (!widgetId?.value) return;
-    eventBus.emit('widget:PivotTableWidget:click', {
-        type: 'widget:PivotTableWidget:click',
+    const type = `widget:PivotTableWidget:${name}`;
+    eventBus.emit(type, {
+        type,
         widgetId: widgetId.value,
-        payload: { widgetId: widgetId.value, timestamp: Date.now() }
+        payload: { widgetId: widgetId.value, timestamp: Date.now(), ...details },
     });
 };
 
-const emitRightClick = () => {
-    if (!widgetId?.value) return;
-    eventBus.emit('widget:PivotTableWidget:right_click', {
-        type: 'widget:PivotTableWidget:right_click',
-        widgetId: widgetId.value,
-        payload: { widgetId: widgetId.value, timestamp: Date.now() }
-    });
-};
-
-const emitRowClick = (uName: string) => {
-    if (!widgetId?.value) return;
-    eventBus.emit('widget:PivotTableWidget:row_clicked', {
-        type: 'widget:PivotTableWidget:row_clicked',
-        widgetId: widgetId.value,
-        payload: { widgetId: widgetId.value, timestamp: Date.now(), uniqueName: uName }
-    });
-};
-
-const emitRowRightClick = (uName: string) => {
-    if (!widgetId?.value) return;
-    eventBus.emit('widget:PivotTableWidget:row_right_clicked', {
-        type: 'widget:PivotTableWidget:row_right_clicked',
-        widgetId: widgetId.value,
-        payload: { widgetId: widgetId.value, timestamp: Date.now(), uniqueName: uName }
-    });
-};
-
-const emitColumnClick = (uName: string) => {
-    if (!widgetId?.value) return;
-    eventBus.emit('widget:PivotTableWidget:column_clicked', {
-        type: 'widget:PivotTableWidget:column_clicked',
-        widgetId: widgetId.value,
-        payload: { widgetId: widgetId.value, timestamp: Date.now(), uniqueName: uName }
-    });
-};
-
-const emitColumnRightClick = (uName: string) => {
-    if (!widgetId?.value) return;
-    eventBus.emit('widget:PivotTableWidget:column_right_clicked', {
-        type: 'widget:PivotTableWidget:column_right_clicked',
-        widgetId: widgetId.value,
-        payload: { widgetId: widgetId.value, timestamp: Date.now(), uniqueName: uName }
-    });
-};
-
-const emitCellClick = (payloadObj: { rowId: string, colId: string }) => {
-    if (!widgetId?.value) return;
-    eventBus.emit('widget:PivotTableWidget:cell_clicked', {
-        type: 'widget:PivotTableWidget:cell_clicked',
-        widgetId: widgetId.value,
-        payload: { widgetId: widgetId.value, timestamp: Date.now(), rowId: payloadObj.rowId, colId: payloadObj.colId }
-    });
-};
-
-const emitCellRightClick = (payloadObj: { rowId: string, colId: string }) => {
-    if (!widgetId?.value) return;
-    eventBus.emit('widget:PivotTableWidget:cell_right_clicked', {
-        type: 'widget:PivotTableWidget:cell_right_clicked',
-        widgetId: widgetId.value,
-        payload: { widgetId: widgetId.value, timestamp: Date.now(), rowId: payloadObj.rowId, colId: payloadObj.colId }
-    });
-};
-
-const emitRowExpanded = (uName: string) => {
-    if (!widgetId?.value) return;
-    eventBus.emit('widget:PivotTableWidget:row_expanded', {
-        type: 'widget:PivotTableWidget:row_expanded',
-        widgetId: widgetId.value,
-        payload: { widgetId: widgetId.value, timestamp: Date.now(), uniqueName: uName }
-    });
-};
-
-const emitRowCollapsed = (uName: string) => {
-    if (!widgetId?.value) return;
-    eventBus.emit('widget:PivotTableWidget:row_collapsed', {
-        type: 'widget:PivotTableWidget:row_collapsed',
-        widgetId: widgetId.value,
-        payload: { widgetId: widgetId.value, timestamp: Date.now(), uniqueName: uName }
-    });
-};
-
-const emitColumnExpanded = (uName: string) => {
-    if (!widgetId?.value) return;
-    eventBus.emit('widget:PivotTableWidget:column_expanded', {
-        type: 'widget:PivotTableWidget:column_expanded',
-        widgetId: widgetId.value,
-        payload: { widgetId: widgetId.value, timestamp: Date.now(), uniqueName: uName }
-    });
-};
-
-const emitColumnCollapsed = (uName: string) => {
-    if (!widgetId?.value) return;
-    eventBus.emit('widget:PivotTableWidget:column_collapsed', {
-        type: 'widget:PivotTableWidget:column_collapsed',
-        widgetId: widgetId.value,
-        payload: { widgetId: widgetId.value, timestamp: Date.now(), uniqueName: uName }
-    });
-};
 const config = defineModel<PivotTable>('configv', { required: true });
 const { wrapParameters } = useVariableRepository();
 
@@ -143,191 +44,165 @@ onMounted(() => {
     if (config.value) {
         Object.assign(config.value, { ...defaultConfig, ...config.value });
     }
-
-    // actionsRegistry.registerInstance(widgetId.value, api, 'MapWidget', pageId);
 });
 
+type StyleKey = 'headerBackgroundColor' | 'headerTextColor' | 'cellBackgroundColor' | 'cellTextColor' | 'borderColor'
+    | 'defaultColumnWidth' | 'defaultRowHeight' | 'fontSize' | 'headerFontWeight';
+
+const configValue = (key: StyleKey) =>
+    computed(() => (config.value?.[key] as any)?.value ?? defaultConfig[key].value);
+
+// Colours of saved configs are either a VariableWrapper or a plain string
+const plain = (value: any) => value?.value ?? value;
+
+// wrapParameters resolves {variables} in strings. The level styles and
+// conditional formats go through it as one JSON string, so variables work
+// inside their colours as well
 const wrappedConfig = wrapParameters({
-    headerBackgroundColor: computed(() => (config.value?.headerBackgroundColor as any)?.value ?? defaultConfig.headerBackgroundColor.value),
-    headerTextColor: computed(() => (config.value?.headerTextColor as any)?.value ?? defaultConfig.headerTextColor.value),
-    cellBackgroundColor: computed(() => (config.value?.cellBackgroundColor as any)?.value ?? defaultConfig.cellBackgroundColor.value),
-    cellTextColor: computed(() => (config.value?.cellTextColor as any)?.value ?? defaultConfig.cellTextColor.value),
-    borderColor: computed(() => (config.value?.borderColor as any)?.value ?? defaultConfig.borderColor.value),
-    defaultColumnWidth: computed(() => (config.value?.defaultColumnWidth as any)?.value ?? defaultConfig.defaultColumnWidth.value),
-    defaultRowHeight: computed(() => (config.value?.defaultRowHeight as any)?.value ?? defaultConfig.defaultRowHeight.value),
-    fontSize: computed(() => (config.value?.fontSize as any)?.value ?? defaultConfig.fontSize.value),
-    headerFontWeight: computed(() => (config.value?.headerFontWeight as any)?.value ?? defaultConfig.headerFontWeight.value),
-    jsonArrays: computed(() => {
-        const payload = {
-            rowLevelStyles: config.value?.rowLevelStyles?.map((s:any) => ({
-                ...s,
-                backgroundColor: (s.backgroundColor as any)?.value ?? s.backgroundColor,
-                textColor: (s.textColor as any)?.value ?? s.textColor,
-            })),
-            columnLevelStyles: config.value?.columnLevelStyles?.map((s:any) => ({
-                ...s,
-                backgroundColor: (s.backgroundColor as any)?.value ?? s.backgroundColor,
-                textColor: (s.textColor as any)?.value ?? s.textColor,
-            })),
-            conditionalFormats: config.value?.conditionalFormats?.map((s:any) => ({
-                ...s,
-                id: s.id ?? '',
-                priority: s.priority ?? 0,
-                backgroundColor: (s.backgroundColor as any)?.value ?? s.backgroundColor,
-                textColor: (s.textColor as any)?.value ?? s.textColor,
-                minColor: (s.minColor as any)?.value ?? s.minColor,
-                maxColor: (s.maxColor as any)?.value ?? s.maxColor,
-            })),
-        };
-        return JSON.stringify(payload);
-    })
+    headerBackgroundColor: configValue('headerBackgroundColor'),
+    headerTextColor: configValue('headerTextColor'),
+    cellBackgroundColor: configValue('cellBackgroundColor'),
+    cellTextColor: configValue('cellTextColor'),
+    borderColor: configValue('borderColor'),
+    defaultColumnWidth: configValue('defaultColumnWidth'),
+    defaultRowHeight: configValue('defaultRowHeight'),
+    fontSize: configValue('fontSize'),
+    headerFontWeight: configValue('headerFontWeight'),
+    jsonArrays: computed(() => JSON.stringify({
+        rowLevelStyles: config.value?.rowLevelStyles?.map((s: any) => ({
+            ...s,
+            backgroundColor: plain(s.backgroundColor),
+            textColor: plain(s.textColor),
+        })),
+        columnLevelStyles: config.value?.columnLevelStyles?.map((s: any) => ({
+            ...s,
+            backgroundColor: plain(s.backgroundColor),
+            textColor: plain(s.textColor),
+        })),
+        conditionalFormats: config.value?.conditionalFormats?.map((s: any) => ({
+            ...s,
+            id: s.id ?? '',
+            priority: s.priority ?? 0,
+            backgroundColor: plain(s.backgroundColor),
+            textColor: plain(s.textColor),
+            minColor: plain(s.minColor),
+            maxColor: plain(s.maxColor),
+        })),
+    })),
 });
 
-const parsedNestedPivots = computed(() => {
+const nestedStyles = computed(() => {
+    let parsed: any = {};
     try {
-        const str = wrappedConfig.jsonArrays.value;
-        const parsed = JSON.parse(str || "{}");
-        return {
-            rowLevelStyles: parsed.rowLevelStyles || defaultConfig.rowLevelStyles,
-            columnLevelStyles: parsed.columnLevelStyles || defaultConfig.columnLevelStyles,
-            conditionalFormats: parsed.conditionalFormats || defaultConfig.conditionalFormats,
-        };
+        parsed = JSON.parse(wrappedConfig.jsonArrays.value || "{}");
     } catch (e) {
-        return {
-          rowLevelStyles: defaultConfig.rowLevelStyles,
-          columnLevelStyles: defaultConfig.columnLevelStyles,
-          conditionalFormats: defaultConfig.conditionalFormats,
-        };
+        // fall back to the defaults below
     }
+    return {
+        rowLevelStyles: parsed.rowLevelStyles || defaultConfig.rowLevelStyles,
+        columnLevelStyles: parsed.columnLevelStyles || defaultConfig.columnLevelStyles,
+        conditionalFormats: parsed.conditionalFormats || defaultConfig.conditionalFormats,
+    };
 });
+
+// wrapParameters hands back strings; sizes and weights are numbers for the table
+const numeric = (key: StyleKey) => {
+    const value = Number(wrappedConfig[key].value);
+    return Number.isFinite(value) ? value : Number(defaultConfig[key].value);
+};
 
 const stylingProps = computed(() => ({
-  headerBackgroundColor: wrappedConfig.headerBackgroundColor.value,
-  headerTextColor: wrappedConfig.headerTextColor.value,
-  cellBackgroundColor: wrappedConfig.cellBackgroundColor.value,
-  cellTextColor: wrappedConfig.cellTextColor.value,
-  borderColor: wrappedConfig.borderColor.value,
-  defaultColumnWidth: wrappedConfig.defaultColumnWidth.value,
-  defaultRowHeight: wrappedConfig.defaultRowHeight.value,
-  fontSize: wrappedConfig.fontSize.value,
-  headerFontWeight: wrappedConfig.headerFontWeight.value,
-  cellTextAlign: (config.value?.cellTextAlign || defaultConfig.cellTextAlign) as "left" | "center" | "right" | undefined,
-  rowLevelStyles: parsedNestedPivots.value.rowLevelStyles,
-  columnLevelStyles: parsedNestedPivots.value.columnLevelStyles,
-  conditionalFormats: parsedNestedPivots.value.conditionalFormats as any[],
+    headerBackgroundColor: wrappedConfig.headerBackgroundColor.value,
+    headerTextColor: wrappedConfig.headerTextColor.value,
+    cellBackgroundColor: wrappedConfig.cellBackgroundColor.value,
+    cellTextColor: wrappedConfig.cellTextColor.value,
+    borderColor: wrappedConfig.borderColor.value,
+    defaultColumnWidth: numeric('defaultColumnWidth'),
+    defaultRowHeight: numeric('defaultRowHeight'),
+    fontSize: numeric('fontSize'),
+    headerFontWeight: numeric('headerFontWeight'),
+    cellTextAlign: (config.value?.cellTextAlign || defaultConfig.cellTextAlign) as "left" | "center" | "right",
+    ...nestedStyles.value,
 }));
 
-console.log('stylingProps', stylingProps.value);
-console.log('fontSize', wrappedConfig.fontSize);
-
 const dataProps = computed(() => ({
-  showRowsProperties: config.value?.showRowsProperties || defaultConfig.showRowsProperties,
-  showColumnsProperties: config.value?.showColumnsProperties || defaultConfig.showColumnsProperties,
-  showSingleMeasureHeader: config.value?.showSingleMeasureHeader ?? defaultConfig.showSingleMeasureHeader,
+    showRowsProperties: config.value?.showRowsProperties || defaultConfig.showRowsProperties,
+    showColumnsProperties: config.value?.showColumnsProperties || defaultConfig.showColumnsProperties,
+    showSingleMeasureHeader: config.value?.showSingleMeasureHeader ?? defaultConfig.showSingleMeasureHeader,
 }))
 
-const data = ref(null as any);
+// Replaced as a whole on every load, never mutated: no deep reactivity over
+// what can be hundreds of thousands of cells
+const data = shallowRef(null as any);
 const { callEvent, update, getDatasourceInstance } = useDatasourceRepository(datasourceId, "PivotTable", data, [], dataProps);
 
 const cubeName = computed(() => {
-  const ds = getDatasourceInstance();
-  return ds?.getCubeName ? ds.getCubeName() : '';
+    const ds = getDatasourceInstance();
+    return ds?.getCubeName ? ds.getCubeName() : '';
 });
 
-const emitCellEdit = (e: any) => {
-    console.log('CELL EDIT FIRED')
+const onCellEdit = (e: any) => {
     callEvent('cellUpdate', { query: e.query });
-    if (!widgetId?.value) return;
-    eventBus.emit('widget:PivotTableWidget:cell_edited', {
-        type: 'widget:PivotTableWidget:cell_edited',
-        widgetId: widgetId.value,
-        payload: { widgetId: widgetId.value, timestamp: Date.now(), cell: e.cell, value: e.value, query: e.query }
-    });
+    emitWidgetEvent('cell_edited', { cell: e.cell, value: e.value, query: e.query });
 };
 
 const onEditModeChanged = async (isEditing: boolean) => {
-    console.log('EDIT MODE CHANGED', isEditing);
     if (isEditing) {
         await callEvent('beginTransaction', undefined);
     }
 };
 
 const onCommitTransaction = async () => {
-    console.log('COMMIT TRANSACTION IN WIDGET');
     await callEvent('commitTransaction', undefined);
 };
 
 const onRollbackTransaction = async () => {
-    console.log('ROLLBACK TRANSACTION IN WIDGET');
     await callEvent('rollbackTransaction', undefined);
 };
 
 watch(datasourceId, (newVal, oldVal) => {
-  update(newVal, oldVal);
+    update(newVal, oldVal);
 })
 
 watch(() => dataProps.value, () => {
-  update();
+    update();
 });
 
+const memberName = (e: any) => e.value?.UName || e.value?.UNAME;
+
 const onExpand = (e: any) => {
-  callEvent('expand', e, true);
-  if (e.area === 'rows') {
-      emitRowExpanded(e.value?.UName || e.value?.UNAME);
-  } else if (e.area === 'columns') {
-      emitColumnExpanded(e.value?.UName || e.value?.UNAME);
-  }
+    callEvent('expand', e, true);
+    if (e.area === 'rows') emitWidgetEvent('row_expanded', { uniqueName: memberName(e) });
+    else if (e.area === 'columns') emitWidgetEvent('column_expanded', { uniqueName: memberName(e) });
 };
 
 const onCollapse = (e: any) => {
-  callEvent('collapse', e, true);
-  if (e.area === 'rows') {
-      emitRowCollapsed(e.value?.UName || e.value?.UNAME);
-  } else if (e.area === 'columns') {
-      emitColumnCollapsed(e.value?.UName || e.value?.UNAME);
-  }
+    callEvent('collapse', e, true);
+    if (e.area === 'rows') emitWidgetEvent('row_collapsed', { uniqueName: memberName(e) });
+    else if (e.area === 'columns') emitWidgetEvent('column_collapsed', { uniqueName: memberName(e) });
 };
-
-const tableKey = computed(() => {
-  if (!data.value) return 'empty';
-  const rowsLen = data.value.rows?.length ?? 0;
-  const colsLen = data.value.columns?.length ?? 0;
-  const rowsExpanded = data.value.tableState?.rowsExpandedMembers?.join(',') ?? '';
-  const colsExpanded = data.value.tableState?.columnsExpandedMembers?.join(',') ?? '';
-  return `${datasourceId.value}_${rowsLen}_${colsLen}_${rowsExpanded}_${colsExpanded}`;
-});
 </script>
 
 <template>
-  <div class="text-container" @click="emitClick" @contextmenu.prevent="emitRightClick">
+  <div class="text-container" @click="emitWidgetEvent('click')" @contextmenu.prevent="emitWidgetEvent('right_click')">
     <div class="component">
       <PivotTableComponent v-if="data" :model-value="data" @onExpand="onExpand" @onCollapse="onCollapse"
-        @row_clicked="emitRowClick" @row_right_clicked="emitRowRightClick"
-        @column_clicked="emitColumnClick" @column_right_clicked="emitColumnRightClick"
-        @cell_clicked="emitCellClick" @cell_right_clicked="emitCellRightClick"
-        @onCellEdit="emitCellEdit"
+        @row_clicked="(uName: string) => emitWidgetEvent('row_clicked', { uniqueName: uName })"
+        @row_right_clicked="(uName: string) => emitWidgetEvent('row_right_clicked', { uniqueName: uName })"
+        @column_clicked="(uName: string) => emitWidgetEvent('column_clicked', { uniqueName: uName })"
+        @column_right_clicked="(uName: string) => emitWidgetEvent('column_right_clicked', { uniqueName: uName })"
+        @cell_clicked="(ids: { rowId: string, colId: string }) => emitWidgetEvent('cell_clicked', ids)"
+        @cell_right_clicked="(ids: { rowId: string, colId: string }) => emitWidgetEvent('cell_right_clicked', ids)"
+        @onCellEdit="onCellEdit"
         @onEditModeChanged="onEditModeChanged"
         @onCommitTransaction="onCommitTransaction"
         @onRollbackTransaction="onRollbackTransaction"
         :cubeName="cubeName"
-        :key="tableKey"
-        :rowsExpandedMembers="data.tableState.rowsExpandedMembers"
-        :columnsExpandedMembers="data.tableState.columnsExpandedMembers"
+        :rowsExpandedMembers="data.tableState?.rowsExpandedMembers"
+        :columnsExpandedMembers="data.tableState?.columnsExpandedMembers"
         :propertiesRows="data.propertiesRows"
         :propertiesCols="data.propertiesCols"
-        :headerBackgroundColor="stylingProps.headerBackgroundColor"
-        :headerTextColor="stylingProps.headerTextColor"
-        :cellBackgroundColor="stylingProps.cellBackgroundColor"
-        :cellTextColor="stylingProps.cellTextColor"
-        :borderColor="stylingProps.borderColor"
-        :defaultColumnWidth="stylingProps.defaultColumnWidth"
-        :defaultRowHeight="stylingProps.defaultRowHeight"
-        :fontSize="stylingProps.fontSize"
-        :headerFontWeight="stylingProps.headerFontWeight"
-        :cellTextAlign="stylingProps.cellTextAlign"
-        :rowLevelStyles="stylingProps.rowLevelStyles"
-        :columnLevelStyles="stylingProps.columnLevelStyles"
-        :conditionalFormats="stylingProps.conditionalFormats" />
+        v-bind="stylingProps" />
     </div>
   </div>
 </template>

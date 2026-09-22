@@ -12,42 +12,58 @@ Contributors:
 -->
 
 <script lang="ts" setup>
-import { provide, ref, type Ref, computed, inject } from "vue";
+import { computed, nextTick, onBeforeUnmount, provide, ref, shallowRef, toRaw, type PropType } from "vue";
 import { TinyEmitter } from "tiny-emitter";
 import { useElementSize } from "@vueuse/core";
 import RowsArea from "./Areas/RowsArea.vue";
 import ColumnsArea from "./Areas/ColumnsArea.vue";
 import CellsArea from "./Areas/CellsArea.vue";
 import DrillthroughModal from "./DrillthroughModal.vue";
+import PivotContextMenu from "./PivotContextMenu.vue";
+import {
+    type MenuAction,
+    type MenuTarget,
+    type PivotActions,
+    type PivotBusEvents,
+    PIVOT_ACTIONS,
+    PIVOT_BUS,
+    typedBus,
+} from "./context";
+import { buildAxis, entryKey, sizeAt, visibleRange } from "./logic/axis";
+import { cellIds } from "./logic/cell";
+import { compileConditionalFormats } from "./logic/conditionalFormat";
+import { analyzeAxis, levelStyleMap } from "./logic/hierarchy";
+import type {
+    Area,
+    AxisEntry,
+    ConditionalFormat,
+    LevelStyle,
+    PivotData,
+    PivotMember,
+    PivotProperty,
+} from "./logic/types";
 
-interface IPivotTable {
-    rows: any[][];
-    columns: any[][];
-    cells: any[][];
-    tableState: any;
-}
-
-const data = defineModel<IPivotTable>({ required: true });
+const data = defineModel<PivotData>({ required: true });
 
 const props = defineProps({
     propertiesRows: {
         required: false,
-        type: Array,
+        type: Array as PropType<PivotProperty[]>,
         default: () => [],
     },
     propertiesCols: {
         required: false,
-        type: Array,
+        type: Array as PropType<PivotProperty[]>,
         default: () => [],
     },
     rowsExpandedMembers: {
         required: false,
-        type: Array,
+        type: Array as PropType<PivotMember[]>,
         default: () => [],
     },
     columnsExpandedMembers: {
         required: false,
-        type: Array,
+        type: Array as PropType<PivotMember[]>,
         default: () => [],
     },
     headerBackgroundColor: {
@@ -97,33 +113,22 @@ const props = defineProps({
     },
     cellTextAlign: {
         required: false,
-        type: String as () => 'left' | 'center' | 'right',
+        type: String as PropType<'left' | 'center' | 'right'>,
         default: 'left',
     },
     rowLevelStyles: {
         required: false,
-        type: Array as () => Array<{ level: number; backgroundColor: string; textColor: string; fontWeight: number }>,
+        type: Array as PropType<LevelStyle[]>,
         default: () => [],
     },
     columnLevelStyles: {
         required: false,
-        type: Array as () => Array<{ level: number; backgroundColor: string; textColor: string; fontWeight: number }>,
+        type: Array as PropType<LevelStyle[]>,
         default: () => [],
     },
     conditionalFormats: {
         required: false,
-        type: Array as () => Array<{
-            id: string;
-            conditionType: string;
-            value1: number | string;
-            value2?: number | string;
-            backgroundColor: string;
-            textColor: string;
-            fontWeight?: number;
-            minColor?: string;
-            maxColor?: string;
-            priority: number;
-        }>,
+        type: Array as PropType<ConditionalFormat[]>,
         default: () => [],
     },
     cubeName: {
@@ -133,19 +138,199 @@ const props = defineProps({
     },
 });
 
-const DEFAULT_COLUMN_WIDTH = computed(() => props.defaultColumnWidth);
-const DEFAULT_ROW_HEIGHT = computed(() => props.defaultRowHeight);
-const DEFAULT_ROW_HEIGHT_CSS = computed(() => `${props.defaultRowHeight}px`);
+const emit = defineEmits(["onExpand", "onCollapse", "onDrilldown", "onDrillup", "row_clicked", "row_right_clicked", "column_clicked", "column_right_clicked", "cell_clicked", "cell_right_clicked", "onCellEdit", "onEditModeChanged", "onCommitTransaction", "onRollbackTransaction"]);
 
-const colStyles = ref([] as number[]);
-const rowsStyles = ref([] as number[]);
+// Everything below reads the plain data: the table can hold hundreds of
+// thousands of cells and must not go through reactive proxies
+const raw = computed(() => toRaw(data.value));
+const propertiesRows = computed(() => toRaw(props.propertiesRows));
+const propertiesCols = computed(() => toRaw(props.propertiesCols));
 
-const rowsContainer = ref(null) as Ref<any>;
-const { width: rowsWidth } = useElementSize(rowsContainer);
+const rowEntries = computed<AxisEntry[]>(() => [...propertiesRows.value, ...(raw.value.rows ?? [])]);
+const colEntries = computed<AxisEntry[]>(() => [...propertiesCols.value, ...(raw.value.columns ?? [])]);
+const rowKeys = computed(() => rowEntries.value.map(entryKey));
+const colKeys = computed(() => colEntries.value.map(entryKey));
 
-const eventBus = new TinyEmitter();
-provide("pivotTableEventBus", eventBus);
+const rowHierarchies = computed(() => analyzeAxis(rowEntries.value));
+const colHierarchies = computed(() => analyzeAxis(colEntries.value));
 
+// Sizes the user dragged, by header identity so they follow the header when
+// expand/collapse shifts positions
+const rowHeights = new Map<string, number>();
+const colWidths = new Map<string, number>();
+const sizesVersion = ref(0);
+
+// An axis without tuples still gets one row/column for the cells to sit in
+const rowAxis = computed(() => {
+    sizesVersion.value;
+    const count = propertiesRows.value.length + (raw.value.rows?.length || 1);
+    return buildAxis(count, j => rowHeights.get(rowKeys.value[j] ?? `#${j}`) ?? props.defaultRowHeight);
+});
+const colAxis = computed(() => {
+    sizesVersion.value;
+    const count = propertiesCols.value.length + (raw.value.columns?.length || 1);
+    return buildAxis(count, i => colWidths.get(colKeys.value[i] ?? `#${i}`) ?? props.defaultColumnWidth);
+});
+
+// Row headers grow with the levels shown per hierarchy, column headers stack one row per level
+const rowMemberWidths = computed(() => rowHierarchies.value.levelCounts.map(levels => 50 * (levels - 1) + 150));
+const rowHeaderWidth = computed(() => {
+    const members = rowMemberWidths.value.reduce((a, b) => a + b, 0);
+    const width = Math.max(members, propertiesRows.value.length ? 150 : 0);
+    return width ? width + 10 : 0;
+});
+const colMemberHeights = computed(() => colHierarchies.value.levelCounts.map(levels => levels * props.defaultRowHeight));
+const colHeaderHeight = computed(() => {
+    const members = colMemberHeights.value.reduce((a, b) => a + b, 0);
+    return members || (propertiesCols.value.length ? props.defaultRowHeight : 0);
+});
+
+const rowsExpanded = computed(() => new Set((props.rowsExpandedMembers ?? []).map(m => m.UName)));
+const colsExpanded = computed(() => new Set((props.columnsExpandedMembers ?? []).map(m => m.UName)));
+const rowLevelStyles = computed(() => levelStyleMap(props.rowLevelStyles));
+const colLevelStyles = computed(() => levelStyleMap(props.columnLevelStyles));
+
+const format = computed(() => compileConditionalFormats(toRaw(props.conditionalFormats), raw.value.cells ?? []));
+const cellDefaults = computed(() => ({
+    textColor: props.cellTextColor,
+    backgroundColor: props.cellBackgroundColor,
+    fontSize: props.fontSize,
+    textAlign: props.cellTextAlign,
+}));
+
+// Windowing: only what intersects the scroller, plus a margin, is rendered
+const OVERSCAN = 240;
+const scroller = ref<HTMLElement | null>(null);
+const { width: viewportWidth, height: viewportHeight } = useElementSize(scroller);
+const scrollLeft = ref(0);
+const scrollTop = ref(0);
+
+const rowRange = computed(() =>
+    visibleRange(rowAxis.value, scrollTop.value, viewportHeight.value - colHeaderHeight.value, OVERSCAN));
+const colRange = computed(() =>
+    visibleRange(colAxis.value, scrollLeft.value, viewportWidth.value - rowHeaderWidth.value, OVERSCAN));
+
+const onScroll = () => {
+    if (!scroller.value) return;
+    scrollLeft.value = scroller.value.scrollLeft;
+    scrollTop.value = scroller.value.scrollTop;
+    closeMenu();
+};
+
+// Event bus: areas report clicks, PivotTable re-emits them with UNames
+const emitter = new TinyEmitter();
+provide(PIVOT_BUS, typedBus(emitter));
+
+const toIds = ({ i, j }: { i: number; j: number }) =>
+    cellIds(raw.value, i, j, propertiesRows.value.length, propertiesCols.value.length);
+
+const forwarded: { [K in keyof PivotBusEvents]: (payload: PivotBusEvents[K]) => void } = {
+    row_clicked: uName => emit("row_clicked", uName),
+    row_right_clicked: uName => emit("row_right_clicked", uName),
+    column_clicked: uName => emit("column_clicked", uName),
+    column_right_clicked: uName => emit("column_right_clicked", uName),
+    cell_clicked: position => emit("cell_clicked", toIds(position)),
+    cell_right_clicked: position => emit("cell_right_clicked", toIds(position)),
+};
+for (const [event, handler] of Object.entries(forwarded)) emitter.on(event, handler);
+
+// Resizing follows the pointer until the button is released anywhere in the window
+const MIN_SIZE = 10;
+let stopResizing: (() => void) | null = null;
+
+const startResize = (area: Area, index: number, event: MouseEvent) => {
+    if (event.button !== 0) return;
+    event.preventDefault();
+    stopResizing?.();
+    const sizes = area === "rows" ? rowHeights : colWidths;
+    const key = (area === "rows" ? rowKeys : colKeys).value[index] ?? `#${index}`;
+    const startSize = sizeAt(area === "rows" ? rowAxis.value : colAxis.value, index);
+    const startPosition = area === "rows" ? event.clientY : event.clientX;
+
+    const onMove = (e: MouseEvent) => {
+        const position = area === "rows" ? e.clientY : e.clientX;
+        sizes.set(key, Math.max(MIN_SIZE, startSize + position - startPosition));
+        sizesVersion.value++;
+    };
+    stopResizing = () => {
+        window.removeEventListener("mousemove", onMove);
+        window.removeEventListener("mouseup", stopResizing!);
+        stopResizing = null;
+    };
+    window.addEventListener("mousemove", onMove);
+    window.addEventListener("mouseup", stopResizing);
+};
+
+// Context menu
+const menu = shallowRef<{ target: MenuTarget; x: number; y: number } | null>(null);
+const openMenu = (event: MouseEvent, target: MenuTarget) => {
+    menu.value = { target, x: event.clientX, y: event.clientY };
+};
+const closeMenu = () => {
+    if (menu.value) menu.value = null;
+};
+
+const drillthroughModal = ref<InstanceType<typeof DrillthroughModal> | null>(null);
+
+const onMenuAction = (action: MenuAction, target: MenuTarget) => {
+    if (target.kind === "cell") {
+        if (action === "drillthrough") drillthroughModal.value?.open(target.cell, data.value);
+        // cell properties have no dialog yet
+        return;
+    }
+    const payload = { value: target.member, area: target.area };
+    if (action === "drilldown") emit("onDrilldown", payload);
+    if (action === "drillup") emit("onDrillup", payload);
+    // member properties have no dialog yet
+};
+
+// Moves keyboard focus to an editable cell, scrolling it into view first
+const focusCell = async (col: number, row: number) => {
+    const el = scroller.value;
+    if (!el) return;
+    const margin = 10;
+    const x0 = colAxis.value.starts[col];
+    const x1 = colAxis.value.starts[col + 1];
+    const y0 = rowAxis.value.starts[row];
+    const y1 = rowAxis.value.starts[row + 1];
+    const visibleWidth = el.clientWidth - rowHeaderWidth.value;
+    const visibleHeight = el.clientHeight - colHeaderHeight.value;
+
+    let left = el.scrollLeft;
+    let top = el.scrollTop;
+    if (x0 < left) left = x0 - margin;
+    else if (x1 > left + visibleWidth) left = x1 - visibleWidth + margin;
+    if (y0 < top) top = y0 - margin;
+    else if (y1 > top + visibleHeight) top = y1 - visibleHeight + margin;
+
+    if (left !== el.scrollLeft || top !== el.scrollTop) {
+        el.scrollLeft = left;
+        el.scrollTop = top;
+        // render the target right away instead of waiting for the scroll event
+        scrollLeft.value = el.scrollLeft;
+        scrollTop.value = el.scrollTop;
+        await nextTick();
+    }
+    const input = el.querySelector<HTMLInputElement>(`input[data-col="${col}"][data-row="${row}"]`);
+    input?.focus();
+    input?.select();
+};
+
+const actions: PivotActions = {
+    expand: (value, area) => emit("onExpand", { value, area }),
+    collapse: (value, area) => emit("onCollapse", { value, area }),
+    startResize,
+    openMenu,
+    focusCell,
+};
+provide(PIVOT_ACTIONS, actions);
+
+onBeforeUnmount(() => {
+    for (const [event, handler] of Object.entries(forwarded)) emitter.off(event, handler);
+    stopResizing?.();
+});
+
+// Write-back
 const isEditMode = ref(false);
 const toggleEditMode = () => {
     isEditMode.value = !isEditMode.value;
@@ -155,170 +340,39 @@ const toggleEditMode = () => {
 const commitTransaction = () => {
     emit("onCommitTransaction");
     isEditMode.value = false;
-    // emit("onEditModeChanged", false);
 };
 
 const rollbackTransaction = () => {
     emit("onRollbackTransaction");
     isEditMode.value = false;
-    // emit("onEditModeChanged", false);
 };
-
-const onResize = (e: MouseEvent) => {
-    eventBus.emit("onResize", e);
-};
-
-const onStopResize = () => {
-    eventBus.emit("onStopResize");
-};
-
-const drillthroughModal = ref<InstanceType<typeof DrillthroughModal> | null>(null);
-
-const drillthrough = (cell: any) => {
-    drillthroughModal.value?.open(cell, data.value);
-};
-
-const columnsOffset = computed(() => {
-    return data.value.rows?.[0]?.length * DEFAULT_COLUMN_WIDTH.value;
-});
-
-const setRowsStyles = (i: number, value: number) => {
-    rowsStyles.value[i] = value;
-};
-
-const setColumnsStyles = (i: number, value: number) => {
-    colStyles.value[i] = value;
-};
-
-const emit = defineEmits(["onExpand", "onCollapse", "onDrilldown", "onDrillup", "row_clicked", "row_right_clicked", "column_clicked", "column_right_clicked", "cell_clicked", "cell_right_clicked", "onCellEdit", "onEditModeChanged", "onCommitTransaction", "onRollbackTransaction"]);
 
 const onCellEdit = ({ cell, value }: { cell: any; value: any }) => {
     const rowOffset = props.propertiesRows?.length || 0;
     const colOffset = props.propertiesCols?.length || 0;
-    const rowTuple = data.value.rows?.[cell.j - rowOffset] || [];
-    const colTuple = data.value.columns?.[cell.i - colOffset] || [];
+    const rowTuple = raw.value.rows?.[cell.j - rowOffset] || [];
+    const colTuple = raw.value.columns?.[cell.i - colOffset] || [];
     const uNames = [...rowTuple, ...colTuple].map(m => m.UName).filter(Boolean);
     uNames.sort();
     const cube = props.cubeName || 'AccountingWb';
     const query = `UPDATE CUBE [${cube}] SET  (${uNames.join(', ')})  = ${value} USE_EQUAL_ALLOCATION`;
-    console.log(query);
     emit("onCellEdit", { cell, value, query });
 };
 
-eventBus.on("row_clicked", (uName: string) => emit("row_clicked", uName));
-eventBus.on("row_right_clicked", (uName: string) => emit("row_right_clicked", uName));
-eventBus.on("column_clicked", (uName: string) => emit("column_clicked", uName));
-eventBus.on("column_right_clicked", (uName: string) => emit("column_right_clicked", uName));
-eventBus.on("cell_clicked", ({ i, j }: { i: number; j: number }) => {
-    const rowOffset = props.propertiesRows?.length || 0;
-    const colOffset = props.propertiesCols?.length || 0;
-    let rowId = String(j);
-    let colId = String(i);
-    const rowIdx = j - rowOffset;
-    const colIdx = i - colOffset;
-    if (data.value && Array.isArray(data.value.rows) && data.value.rows[rowIdx]) {
-        rowId = data.value.rows[rowIdx][data.value.rows[rowIdx].length - 1]?.UName || rowId;
-    }
-    if (data.value && Array.isArray(data.value.columns) && data.value.columns[colIdx]) {
-        colId = data.value.columns[colIdx][data.value.columns[colIdx].length - 1]?.UName || colId;
-    }
-    emit("cell_clicked", { rowId, colId });
-});
-eventBus.on("cell_right_clicked", ({ i, j }: { i: number; j: number }) => {
-    const rowOffset = props.propertiesRows?.length || 0;
-    const colOffset = props.propertiesCols?.length || 0;
-    let rowId = String(j);
-    let colId = String(i);
-    const rowIdx = j - rowOffset;
-    const colIdx = i - colOffset;
-    if (data.value && Array.isArray(data.value.rows) && data.value.rows[rowIdx]) {
-        rowId = data.value.rows[rowIdx][data.value.rows[rowIdx].length - 1]?.UName || rowId;
-    }
-    if (data.value && Array.isArray(data.value.columns) && data.value.columns[colIdx]) {
-        colId = data.value.columns[colIdx][data.value.columns[colIdx].length - 1]?.UName || colId;
-    }
-    emit("cell_right_clicked", { rowId, colId });
-});
-
-provide("setRowsStyles", setRowsStyles);
-provide("setColumnsStyles", setColumnsStyles);
-
-provide("drilldown", (value: any, area: string) => {
-    // EventBus.emit(`DRILLDOWN:${store.value.id}`, { value, area });
-});
-provide("drillup", (value: any, area: string) => {
-    // EventBus.emit(`DRILLUP:${store.value.id}`, { value, area });
-});
-provide("expand", (value: any, area: string) => {
-    emit("onExpand", { value, area });
-    // EventBus.emit(`EXPAND:${store.value.id}`, { value, area });
-});
-provide("collapse", (value: any, area: string) => {
-    emit("onCollapse", { value, area });
-    // EventBus.emit(`COLLAPSE:${store.value.id}`, { value, area });
-});
-
-const totalContentSize = computed(() => {
-    console.log('col styles', colStyles);
-    const columnsDesc = [
-        ...props.propertiesCols,
-        ...(data.value.columns.length ? data.value.columns : [{}]),
-    ];
-    const xAxisDesc = columnsDesc.reduce(
-        (
-            acc: {
-                items: any[];
-                totalWidth: number;
-            },
-            _: any,
-            i: number,
-        ) => {
-            const width = Number(colStyles.value[i]) || Number(DEFAULT_COLUMN_WIDTH.value);
-            acc.items[i] = {
-                start: acc.totalWidth,
-                width: width,
-            };
-            acc.totalWidth = acc.totalWidth + width;
-            return acc;
-        },
-        { items: [], totalWidth: 0 },
-    );
-
-    const rowsDesc = [
-        ...props.propertiesRows,
-        ...(data.value.rows.length ? data.value.rows : [{}]),
-    ];
-    const yAxisDesc = rowsDesc.reduce(
-        (
-            acc: {
-                items: any[];
-                totalWidth: number;
-            },
-            _: any,
-            i: number,
-        ) => {
-            const height = Number(rowsStyles.value[i]) || Number(DEFAULT_ROW_HEIGHT.value);
-            acc.items[i] = {
-                start: acc.totalWidth,
-                width: height,
-            };
-            acc.totalWidth = acc.totalWidth + height;
-            return acc;
-        },
-        { items: [], totalWidth: 0 },
-    );
-
-    return {
-        xAxis: xAxisDesc,
-        yAxis: yAxisDesc,
-    };
-});
+const cssVars = computed(() => ({
+    "--pt-row-height": `${props.defaultRowHeight}px`,
+    "--pt-border-color": props.borderColor,
+    "--pt-header-background-color": props.headerBackgroundColor,
+    "--pt-header-text-color": props.headerTextColor,
+    "--pt-header-font-weight": String(props.headerFontWeight),
+    "--pt-font-size": `${props.fontSize}px`,
+    "--pt-corner-background-color": props.cellBackgroundColor,
+}));
 </script>
 
 <template>
     <template v-if="data">
-        <div class="pivotTable_container" @mousemove="onResize" @mouseup="onStopResize" @mouseleave="onStopResize"
-            @contextmenu.stop.prevent="">
+        <div class="pivotTable_container" :style="cssVars" @contextmenu.stop.prevent="">
             <div class="bar">
                 <template v-if="isEditMode">
                     <va-button size="small" color="success" class="mr-2" @click="commitTransaction" icon="check"></va-button>
@@ -326,43 +380,26 @@ const totalContentSize = computed(() => {
                 </template>
                 <va-button size="small" :class="['edit-mode-btn', { active: isEditMode }]" @click="toggleEditMode" :color="isEditMode ? 'danger' : ''" :icon="isEditMode ? 'close' : 'edit'"></va-button>
             </div>
-            <ColumnsArea :columnsStyles="colStyles" :columnsOffset="columnsOffset"
-                :columns="[...propertiesCols, ...data.columns]" :totalContentSize="totalContentSize"
-                :leftPadding="rowsWidth" :columns-expanded-members="props.columnsExpandedMembers"
-                :headerBackgroundColor="props.headerBackgroundColor"
-                :headerTextColor="props.headerTextColor"
-                :borderColor="props.borderColor"
-                :defaultColumnWidth="props.defaultColumnWidth"
-                :defaultRowHeight="props.defaultRowHeight"
-                :fontSize="props.fontSize"
-                :headerFontWeight="props.headerFontWeight"
-                :levelStyles="props.columnLevelStyles"></ColumnsArea>
-            <div class="flex flex-row overflow-hidden vertical-scroll">
-                <RowsArea ref="rowsContainer" :rows="[...propertiesRows, ...data.rows]" :rowsStyles="rowsStyles"
-                    :totalContentSize="totalContentSize" :rows-expanded-members="props.rowsExpandedMembers"
-                    :headerBackgroundColor="props.headerBackgroundColor"
-                    :headerTextColor="props.headerTextColor"
-                    :borderColor="props.borderColor"
-                    :defaultColumnWidth="props.defaultColumnWidth"
-                    :defaultRowHeight="props.defaultRowHeight"
-                    :fontSize="props.fontSize"
-                    :headerFontWeight="props.headerFontWeight"
-                    :levelStyles="props.rowLevelStyles"></RowsArea>
-                <CellsArea :rowsStyles="rowsStyles" :colsStyles="colStyles" :totalContentSize="totalContentSize"
-                    :cells="data.cells" @drillthrough="drillthrough"
-                    @cell-edit="onCellEdit"
-                    :isEditMode="isEditMode"
-                    :cellBackgroundColor="props.cellBackgroundColor"
-                    :cellTextColor="props.cellTextColor"
-                    :borderColor="props.borderColor"
-                    :defaultColumnWidth="props.defaultColumnWidth"
-                    :defaultRowHeight="props.defaultRowHeight"
-                    :fontSize="props.fontSize"
-                    :cellTextAlign="props.cellTextAlign"
-                    :conditionalFormats="props.conditionalFormats"></CellsArea>
+            <div ref="scroller" class="pivotTable_scroller" @scroll.passive="onScroll">
+                <div class="pivotTable_head" :style="{ height: `${colHeaderHeight}px` }">
+                    <div class="pivotTable_corner" :style="{ width: `${rowHeaderWidth}px` }"></div>
+                    <ColumnsArea :entries="colEntries" :axis="colAxis" :range="colRange" :hierarchies="colHierarchies"
+                        :memberHeights="colMemberHeights" :height="colHeaderHeight" :expanded="colsExpanded"
+                        :levelStyles="colLevelStyles" />
+                </div>
+                <div class="pivotTable_body">
+                    <RowsArea :entries="rowEntries" :axis="rowAxis" :range="rowRange" :hierarchies="rowHierarchies"
+                        :memberWidths="rowMemberWidths" :width="rowHeaderWidth" :expanded="rowsExpanded"
+                        :levelStyles="rowLevelStyles" />
+                    <CellsArea :cells="raw.cells ?? []" :rowAxis="rowAxis" :colAxis="colAxis" :rowRange="rowRange"
+                        :colRange="colRange" :defaults="cellDefaults" :format="format" :isEditMode="isEditMode"
+                        @cell-edit="onCellEdit" />
+                </div>
             </div>
 
-            <!-- Separate Drillthrough Modal Component -->
+            <PivotContextMenu :target="menu?.target ?? null" :x="menu?.x ?? 0" :y="menu?.y ?? 0" @close="closeMenu"
+                @action="onMenuAction" />
+
             <DrillthroughModal
                 ref="drillthroughModal"
                 :cubeName="props.cubeName"
@@ -375,11 +412,12 @@ const totalContentSize = computed(() => {
 
 <style scoped>
 .pivotTable_container {
-    padding: v-bind(DEFAULT_ROW_HEIGHT_CSS);
+    padding: var(--pt-row-height);
     height: 100%;
     overflow: hidden;
     display: flex;
     flex-direction: column;
+    font-size: var(--pt-font-size);
 
     .bar {
         width: 100%;
@@ -424,20 +462,36 @@ const totalContentSize = computed(() => {
     .edit-mode-btn.active {
         background: linear-gradient(135deg, hsl(340, 80%, 60%) 0%, hsl(10, 80%, 60%) 100%);
     }
-
-    .placeholder {
-        height: 8px;
-    }
 }
 
-.pivotTable {
-    overflow: hidden;
-    height: 100%;
+/* One scroll container: the header row sticks to the top, the row headers to
+  the left, the corner to both */
+.pivotTable_scroller {
+    flex: 1;
+    min-height: 0;
+    overflow: auto;
+    position: relative;
+}
+
+.pivotTable_head {
+    position: sticky;
+    top: 0;
+    z-index: 2;
     display: flex;
-    flex-direction: column;
+    width: max-content;
+    min-width: 100%;
 }
 
-.vertical-scroll {
-    height: 100%;
+.pivotTable_corner {
+    position: sticky;
+    left: 0;
+    z-index: 3;
+    flex-shrink: 0;
+    background-color: var(--pt-corner-background-color);
+}
+
+.pivotTable_body {
+    display: flex;
+    width: max-content;
 }
 </style>
