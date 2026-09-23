@@ -33,88 +33,88 @@ derived version can only ever list seventeen fields.
 
   <components xsi:type="uimodel:FormView" name="WrapperSettingsFormView">
 
-    <fields xsi:type="uimodel:GroupWidget" name="titleGroup" layout="VERTICAL" label="Titel">
+    <fields xsi:type="uimodel:GroupWidget" name="titleGroup" layout="VERTICAL" label="wrapper:Form.titleGroup">
       <fields xsi:type="uimodel:InputWidget"
           name="title"
           feature="http://org.eclipse.daanse.board.app.ui.vue.widget.wrapper#//WrapperSettings/title"
-          label="Text"
+          label="wrapper:Form.title"
           placeholder="Ohne Titel"/>
       <fields xsi:type="uimodel:NumberWidget"
           name="titleFontSize"
           feature="http://org.eclipse.daanse.board.app.ui.vue.widget.wrapper#//WrapperSettings/titleFontSize"
-          label="Schriftgröße" min="6" max="72" step="1"/>
+          label="wrapper:Form.titleFontSize" min="6" max="72" step="1"/>
       <fields xsi:type="uimodel:InputWidget"
           name="titleColor"
           feature="http://org.eclipse.daanse.board.app.ui.vue.widget.wrapper#//WrapperSettings/titleColor"
-          label="Schriftfarbe"/>
+          label="wrapper:Form.titleColor"/>
     </fields>
 
-    <fields xsi:type="uimodel:GroupWidget" name="surfaceGroup" layout="VERTICAL" label="Fläche">
+    <fields xsi:type="uimodel:GroupWidget" name="surfaceGroup" layout="VERTICAL" label="wrapper:Form.surfaceGroup">
       <fields xsi:type="uimodel:InputWidget"
           name="backgroundColor"
           feature="http://org.eclipse.daanse.board.app.ui.vue.widget.wrapper#//WrapperSettings/backgroundColor"
-          label="Hintergrund"/>
+          label="wrapper:Form.backgroundColor"/>
       <fields xsi:type="uimodel:NumberWidget"
           name="backgroundColorTransparence"
           feature="http://org.eclipse.daanse.board.app.ui.vue.widget.wrapper#//WrapperSettings/backgroundColorTransparence"
-          label="Deckkraft" min="0" max="255" step="1"/>
+          label="wrapper:Form.backgroundColorTransparence" min="0" max="255" step="1"/>
       <fields xsi:type="uimodel:NumberWidget"
           name="transparency"
           feature="http://org.eclipse.daanse.board.app.ui.vue.widget.wrapper#//WrapperSettings/transparency"
-          label="Gesamtdeckkraft" min="0" max="255" step="1"/>
+          label="wrapper:Form.transparency" min="0" max="255" step="1"/>
       <fields xsi:type="uimodel:NumberWidget"
           name="blur"
           feature="http://org.eclipse.daanse.board.app.ui.vue.widget.wrapper#//WrapperSettings/blur"
-          label="Weichzeichnen" min="0" max="50" step="1"/>
+          label="wrapper:Form.blur" min="0" max="50" step="1"/>
       <fields xsi:type="uimodel:NumberWidget"
           name="padding"
           feature="http://org.eclipse.daanse.board.app.ui.vue.widget.wrapper#//WrapperSettings/padding"
-          label="Innenabstand" min="0" max="200" step="1"/>
+          label="wrapper:Form.padding" min="0" max="200" step="1"/>
     </fields>
 
-    <fields xsi:type="uimodel:GroupWidget" name="borderGroup" layout="VERTICAL" label="Rand">
+    <fields xsi:type="uimodel:GroupWidget" name="borderGroup" layout="VERTICAL" label="wrapper:Form.borderGroup">
       <fields xsi:type="uimodel:NumberWidget"
           name="borderSize"
           feature="http://org.eclipse.daanse.board.app.ui.vue.widget.wrapper#//WrapperSettings/borderSize"
-          label="Stärke" min="0" max="40" step="1"/>
+          label="wrapper:Form.borderSize" min="0" max="40" step="1"/>
       <fields xsi:type="uimodel:InputWidget"
           name="borderColor"
           feature="http://org.eclipse.daanse.board.app.ui.vue.widget.wrapper#//WrapperSettings/borderColor"
-          label="Farbe"/>
+          label="wrapper:Form.borderColor"/>
       <fields xsi:type="uimodel:NumberWidget"
           name="borderRadius"
           feature="http://org.eclipse.daanse.board.app.ui.vue.widget.wrapper#//WrapperSettings/borderRadius"
-          label="Eckenradius" min="0" max="100" step="1"/>
+          label="wrapper:Form.borderRadius" min="0" max="100" step="1"/>
     </fields>
 
-    <fields xsi:type="uimodel:GroupWidget" name="shadowGroup" layout="VERTICAL" label="Schatten">
+    <fields xsi:type="uimodel:GroupWidget" name="shadowGroup" layout="VERTICAL" label="wrapper:Form.shadowGroup">
       <fields xsi:type="uimodel:InputWidget"
           name="shadowColor"
           feature="http://org.eclipse.daanse.board.app.ui.vue.widget.wrapper#//WrapperSettings/shadowColor"
-          label="Farbe"/>
+          label="wrapper:Form.shadowColor"/>
       <fields xsi:type="uimodel:NumberWidget"
           name="shadowBlur"
           feature="http://org.eclipse.daanse.board.app.ui.vue.widget.wrapper#//WrapperSettings/shadowBlur"
-          label="Weichheit" min="0" max="100" step="1"/>
+          label="wrapper:Form.shadowBlur" min="0" max="100" step="1"/>
       <fields xsi:type="uimodel:NumberWidget"
           name="shadowX"
           feature="http://org.eclipse.daanse.board.app.ui.vue.widget.wrapper#//WrapperSettings/shadowX"
-          label="Versatz X" min="-100" max="100" step="1"/>
+          label="wrapper:Form.shadowX" min="-100" max="100" step="1"/>
       <fields xsi:type="uimodel:NumberWidget"
           name="shadowY"
           feature="http://org.eclipse.daanse.board.app.ui.vue.widget.wrapper#//WrapperSettings/shadowY"
-          label="Versatz Y" min="-100" max="100" step="1"/>
+          label="wrapper:Form.shadowY" min="-100" max="100" step="1"/>
       <fields xsi:type="uimodel:NumberWidget"
           name="shadowTransparence"
           feature="http://org.eclipse.daanse.board.app.ui.vue.widget.wrapper#//WrapperSettings/shadowTransparence"
-          label="Deckkraft" min="0" max="255" step="1"/>
+          label="wrapper:Form.shadowTransparence" min="0" max="255" step="1"/>
     </fields>
 
-    <fields xsi:type="uimodel:GroupWidget" name="behaviourGroup" layout="VERTICAL" label="Verhalten">
+    <fields xsi:type="uimodel:GroupWidget" name="behaviourGroup" layout="VERTICAL" label="wrapper:Form.behaviourGroup">
       <fields xsi:type="uimodel:CheckboxWidget"
           name="fullscreen"
           feature="http://org.eclipse.daanse.board.app.ui.vue.widget.wrapper#//WrapperSettings/fullscreen"
-          label="Vollbild erlauben"/>
+          label="wrapper:Form.fullscreen"/>
     </fields>
 
   </components>

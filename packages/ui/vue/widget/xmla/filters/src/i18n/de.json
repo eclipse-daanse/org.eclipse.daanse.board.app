@@ -1,0 +1,14 @@
+{
+  "Widget": {
+    "name": "XMLA-Filter",
+    "rows": "Zeilen:",
+    "columns": "Spalten:",
+    "filters": "Filter:"
+  },
+  "Settings": {
+    "section": "Filter-Widget",
+    "showRows": "Zeilen zeigen",
+    "showColumns": "Spalten zeigen",
+    "showFilters": "Filter zeigen"
+  }
+}

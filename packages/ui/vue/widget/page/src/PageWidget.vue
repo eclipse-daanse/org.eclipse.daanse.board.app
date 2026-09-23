@@ -17,6 +17,7 @@ import { computed, toRefs, onMounted, ref, watch, inject, provide } from "vue";
 import { PageI } from './interface/PageI'
 import { RouterView, useRouter, useRoute } from 'vue-router'
 import PageLayoutRenderer from './PageLayoutRenderer.vue'
+import { useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 
 const config = defineModel<PageI>('configv', { required: true});
 const defaultConfig: PageI = {
@@ -26,6 +27,7 @@ const defaultConfig: PageI = {
 
 const router = useRouter()
 const currentRoute = useRoute()
+const { t } = useTranslation('page')
 
 // Rekursions-Schutz: Prüfe ob wir bereits auf der Zielseite sind
 const parentDepth = inject('pageWidgetDepth', 0) as number
@@ -104,11 +106,10 @@ const handleRemoveWidget = (widgetId: string) => {
   <div class="container" v-if="config.path">
     <!-- Rekursions-Warnung -->
     <div v-if="isRecursive" class="recursion-warning">
-      ⚠️ Rekursive Seitenverweis verhindert:
-      {{ config.path }}
+      ⚠️ {{ t('Widget.recursion', { path: config.path }) }}
       <div class="recursion-details">
-        Tiefe: {{ currentDepth }}/{{ maxRecursionDepth }}<br>
-        Aufrufkette: {{ currentPaths.join(' → ') }} → {{ config.path }}
+        {{ t('Widget.depth', { depth: currentDepth, max: maxRecursionDepth }) }}<br>
+        {{ t('Widget.chain', { chain: [...currentPaths, config.path].join(' → ') }) }}
       </div>
     </div>
 
@@ -125,7 +126,7 @@ const handleRemoveWidget = (widgetId: string) => {
       >
         <!-- Titel (optional anzeigen) -->
         <div v-if="!config.hideTitle" class="page-info">
-          📄 Seite: {{ targetPageId }}
+          📄 {{ t('Widget.target', { page: targetPageId }) }}
         </div>
 
         <!-- PageLayoutRenderer mit spezifischer pageId -->

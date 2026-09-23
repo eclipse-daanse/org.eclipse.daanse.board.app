@@ -35,6 +35,7 @@ import {
   DSlider,
   DSwitch,
 } from 'org.eclipse.daanse.board.app.ui.vue.controls'
+import { useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 
 const {
   themes,
@@ -49,6 +50,8 @@ const {
   exportTheme,
 } = useTheme()
 
+const { t } = useTranslation('shell')
+
 const openGroup = ref<string>(TOKEN_GROUPS[0].id)
 const copied = ref(false)
 
@@ -61,7 +64,7 @@ const view = ref<'tokens' | 'controls'>('tokens')
  * control that breaks under a theme breaks in plain sight.
  */
 const demo = ref({
-  text: 'Bodenfeuchte Feld 3',
+  text: t('Appearance.demo.sample'),
   number: 38.4,
   choice: 'ogcsta',
   colour: '#4fa3d1',
@@ -115,85 +118,84 @@ async function copyTheme() {
           :class="['head__tab', { on: view === 'tokens' }]"
           @click="view = 'tokens'"
         >
-          Tokens
+          {{ t('Appearance.tokens') }}
         </button>
         <button
           type="button"
           :class="['head__tab', { on: view === 'controls' }]"
           @click="view = 'controls'"
         >
-          Elemente
+          {{ t('Appearance.controls') }}
         </button>
         <span class="panel__tools">
           <span v-if="changedCount" class="changed">
-            {{ changedCount }} {{ changedCount === 1 ? 'Wert geändert' : 'Werte geändert' }}
+            {{ t('Appearance.changed', { count: changedCount }) }}
           </span>
           <button v-if="changedCount" class="btn" type="button" @click="clearAllTokens">
-            Alle zurücksetzen
+            {{ t('Appearance.resetAll') }}
           </button>
           <button class="btn" type="button" @click="copyTheme">
-            {{ copied ? 'Kopiert' : 'Als JSON kopieren' }}
+            {{ copied ? t('Appearance.copied') : t('Appearance.copy') }}
           </button>
         </span>
       </header>
 
       <div v-if="view === 'controls'" class="gallery">
         <p class="gallery__lead">
-          Dieselben Elemente, aus denen die App gebaut ist. Was drüben an Tokens geändert wird,
-          steht hier sofort.
+          {{ t('Appearance.lead') }}
         </p>
 
         <section class="demo">
-          <h3 class="demo__title">Knöpfe</h3>
+          <h3 class="demo__title">{{ t('Appearance.demo.buttons') }}</h3>
           <div class="demo__row">
-            <DButton>Standard</DButton>
-            <DButton intent="primary">Speichern</DButton>
-            <DButton intent="quiet">Abbrechen</DButton>
-            <DButton intent="danger">Löschen</DButton>
-            <DButton disabled>Gesperrt</DButton>
-            <DButton busy>Lädt</DButton>
+            <DButton>{{ t('Appearance.demo.standard') }}</DButton>
+            <DButton intent="primary">{{ t('common:Action.save') }}</DButton>
+            <DButton intent="quiet">{{ t('common:Action.cancel') }}</DButton>
+            <DButton intent="danger">{{ t('common:Action.delete') }}</DButton>
+            <DButton disabled>{{ t('Appearance.demo.disabled') }}</DButton>
+            <DButton busy>{{ t('Appearance.demo.busy') }}</DButton>
           </div>
           <div class="demo__row">
-            <DButton size="sm">Klein</DButton>
-            <DButton size="md">Mittel</DButton>
-            <DButton size="lg">Groß</DButton>
+            <DButton size="sm">{{ t('Appearance.demo.small') }}</DButton>
+            <DButton size="md">{{ t('Appearance.demo.medium') }}</DButton>
+            <DButton size="lg">{{ t('Appearance.demo.large') }}</DButton>
           </div>
         </section>
 
         <section class="demo">
-          <h3 class="demo__title">Eingaben</h3>
+          <h3 class="demo__title">{{ t('Appearance.demo.inputs') }}</h3>
           <div class="demo__form">
-            <DInput v-model="demo.text" label="Titel" />
-            <DInput v-model="demo.number" label="Messwert" type="number" suffix="%" />
-            <DSelect v-model="demo.choice" label="Datenquelle" :options="demoOptions" />
-            <DColorInput v-model="demo.colour" label="Farbe" />
-            <DDateInput v-model="demo.when" label="Stichtag" />
-            <DSlider v-model="demo.amount" label="Deckung" suffix="%" />
-            <DInput v-model="demo.note" label="Notiz" :rows="2" stacked />
-            <DInput v-model="demo.text" label="Mit Fehler" error="Der Name ist schon vergeben." />
+            <DInput v-model="demo.text" :label="t('Appearance.demo.title')" />
+            <DInput v-model="demo.number" :label="t('Appearance.demo.value')" type="number" suffix="%" />
+            <DSelect v-model="demo.choice" :label="t('WidgetSettings.datasource')" :options="demoOptions" />
+            <DColorInput v-model="demo.colour" :label="t('PageSettings.color')" />
+            <DDateInput v-model="demo.when" :label="t('Appearance.demo.date')" />
+            <DSlider v-model="demo.amount" :label="t('Appearance.demo.coverage')" suffix="%" />
+            <DInput v-model="demo.note" :label="t('Appearance.demo.note')" :rows="2" stacked />
+            <DInput v-model="demo.text" :label="t('Appearance.demo.withError')" :error="t('Appearance.demo.error')" />
           </div>
         </section>
 
         <section class="demo">
-          <h3 class="demo__title">Schalter und Marken</h3>
+          <h3 class="demo__title">{{ t('Appearance.demo.switches') }}</h3>
           <div class="demo__row">
-            <DCheckbox v-model="demo.checked" label="Im Board zeigen" />
-            <DSwitch v-model="demo.on" label="Automatisch aktualisieren" />
+            <DCheckbox v-model="demo.checked" :label="t('Appearance.demo.showOnBoard')" />
+            <DSwitch v-model="demo.on" :label="t('Appearance.demo.autoRefresh')" />
           </div>
           <div class="demo__row">
-            <DChip>neutral</DChip>
-            <DChip tone="accent">geladen</DChip>
-            <DChip tone="ok">im Rahmen</DChip>
-            <DChip tone="warn">prüfen</DChip>
-            <DChip tone="err">getrennt</DChip>
+            <DChip>{{ t('Appearance.demo.neutral') }}</DChip>
+            <DChip tone="accent">{{ t('Storage.loaded') }}</DChip>
+            <DChip tone="ok">{{ t('Appearance.demo.ok') }}</DChip>
+            <DChip tone="warn">{{ t('Appearance.demo.warn') }}</DChip>
+            <DChip tone="err">{{ t('Appearance.demo.err') }}</DChip>
             <DChip tone="accent" numeric>14</DChip>
           </div>
-          <DDivider label="Trenner" />
+          <DDivider :label="t('Appearance.demo.divider')" />
         </section>
       </div>
 
       <div v-else class="body">
-        <aside class="themes" aria-label="Themen">
+        <aside class="themes" :aria-label="t('Appearance.themes')">
           <button
             v-for="theme in themes"
             :key="theme.id"
@@ -204,8 +206,8 @@ async function copyTheme() {
             <span class="theme__strip" aria-hidden="true">
               <i v-for="(colour, i) in stripOf(theme)" :key="i" :style="{ background: colour }" />
             </span>
-            <span class="theme__name">{{ theme.name }}</span>
-            <span class="theme__note">{{ theme.note }}</span>
+            <span class="theme__name">{{ t(theme.name) }}</span>
+            <span class="theme__note">{{ t(theme.note) }}</span>
           </button>
         </aside>
 
@@ -218,12 +220,12 @@ async function copyTheme() {
               @click="openGroup = openGroup === group.id ? '' : group.id"
             >
               <span class="group__twist">{{ openGroup === group.id ? '▾' : '▸' }}</span>
-              <span class="group__label">{{ group.label }}</span>
+              <span class="group__label">{{ t(group.label) }}</span>
               <span class="group__count">{{ group.tokens.length }}</span>
             </button>
 
             <div v-if="openGroup === group.id" class="group__body">
-              <p v-if="group.note" class="group__note">{{ group.note }}</p>
+              <p v-if="group.note" class="group__note">{{ t(group.note) }}</p>
 
               <div v-for="spec in group.tokens" :key="spec.name" class="token">
                 <span
@@ -236,7 +238,7 @@ async function copyTheme() {
 
                 <span class="token__text">
                   <code class="token__name">--{{ spec.name }}</code>
-                  <span class="token__role">{{ spec.role }}</span>
+                  <span class="token__role">{{ t(spec.role) }}</span>
                 </span>
 
                 <input
@@ -244,7 +246,7 @@ async function copyTheme() {
                   class="token__picker"
                   type="color"
                   :value="valueOf(spec.name)"
-                  :aria-label="`Farbe für ${spec.name}`"
+                  :aria-label="t('Appearance.colorOf', { name: spec.name })"
                   @input="setToken(spec.name, ($event.target as HTMLInputElement).value)"
                 />
 
@@ -252,7 +254,7 @@ async function copyTheme() {
                   class="token__value"
                   type="text"
                   :value="valueOf(spec.name)"
-                  :aria-label="`Wert für ${spec.name}`"
+                  :aria-label="t('Appearance.valueOf', { name: spec.name })"
                   @change="setToken(spec.name, ($event.target as HTMLInputElement).value)"
                 />
 
@@ -262,8 +264,8 @@ async function copyTheme() {
                   :disabled="!isOverridden(spec.name)"
                   :title="
                     isOverridden(spec.name)
-                      ? 'Auf den Wert des Themas zurücksetzen'
-                      : 'Unverändert'
+                      ? t('Appearance.reset')
+                      : t('Appearance.unchanged')
                   "
                   @click="clearToken(spec.name)"
                 >

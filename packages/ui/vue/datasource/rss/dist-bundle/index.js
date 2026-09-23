@@ -1,9 +1,10 @@
 (function(){var i="ui.vue.datasource.rss",d=document,s=d.querySelector('style[data-tsm-bundle="'+i+'"]');if(!s){s=d.createElement('style');s.setAttribute('data-tsm-bundle',i);d.head.appendChild(s);}s.textContent=".preview-container[data-v-99ea3482]{padding:8px;display:flex;flex-direction:column;gap:8px}.preview-item[data-v-99ea3482]{border:1px solid #000;border-radius:8px}.preview-item-title[data-v-99ea3482]{background-color:#f0f0f0;font-size:1.25rem;font-weight:700;padding:8px;border-radius:8px 8px 0 0}.preview-item-content[data-v-99ea3482]{padding:8px}\n";})();
-import { DATASOURCE_REPOSITORY as p } from "org.eclipse.daanse.board.app.lib.api.datasource";
-import { defineComponent as d, ref as c, shallowRef as g, watch as l, createElementBlock as a, createCommentVNode as f, openBlock as s, Fragment as w, renderList as S, createElementVNode as u, toDisplayString as h, computed as v, createBlock as y, unref as b } from "vue";
-import { useTemporaryStore as R } from "org.eclipse.daanse.board.app.ui.vue.composables";
-import { DSelect as _ } from "org.eclipse.daanse.board.app.ui.vue.controls";
-const E = `<?xml version="1.0" encoding="UTF-8"?>
+import { DATASOURCE_REPOSITORY as f } from "org.eclipse.daanse.board.app.lib.api.datasource";
+import { defineComponent as w, ref as u, shallowRef as h, watch as p, createElementBlock as c, createCommentVNode as v, openBlock as a, Fragment as y, renderList as _, createElementVNode as d, toDisplayString as b, computed as R, createBlock as E, unref as m } from "vue";
+import { useTemporaryStore as T, useTranslation as x } from "org.eclipse.daanse.board.app.ui.vue.composables";
+import { DSelect as P } from "org.eclipse.daanse.board.app.ui.vue.controls";
+import { component as C } from "@eclipse-daanse/tsm";
+const D = `<?xml version="1.0" encoding="UTF-8"?>
 <!--
 /*********************************************************************
 * Copyright (c) 2024 Contributors to the Eclipse Foundation.
@@ -41,37 +42,37 @@ const E = `<?xml version="1.0" encoding="UTF-8"?>
     <eSubpackages href="http://org.eclipse.daanse.board.app.lib.datasource.base#/"/>
 
 </ecore:EPackage>
-`, x = {
+`, A = {
   key: 0,
   class: "preview-container",
   style: { overflow: "auto", height: "100%" }
-}, T = { class: "preview-item" }, k = { class: "preview-item-title" }, P = ["innerHTML"], C = /* @__PURE__ */ d({
+}, k = { class: "preview-item" }, M = { class: "preview-item-title" }, F = ["innerHTML"], I = /* @__PURE__ */ w({
   __name: "Preview",
   props: {
     dataSource: {}
   },
   setup(e) {
-    const o = e, t = c(null), n = g(null), r = c(o.dataSource), { update: m } = R(o.dataSource.type, r, n);
-    return l(o.dataSource, () => {
-      m();
-    }, { deep: !0 }), l(n, async () => {
-      t.value = await n.value.getData("object");
-    }, { deep: !0 }), (O, U) => n.value && t.value ? (s(), a("div", x, [
-      (s(!0), a(w, null, S(t.value.items, (i) => (s(), a("div", T, [
-        u("div", k, h(i.title), 1),
-        u("div", {
-          innerHTML: i.content,
+    const o = e, s = u(null), t = h(null), n = u(o.dataSource), { update: r } = T(o.dataSource.type, n, t);
+    return p(o.dataSource, () => {
+      r();
+    }, { deep: !0 }), p(t, async () => {
+      s.value = await t.value.getData("object");
+    }, { deep: !0 }), (i, Y) => t.value && s.value ? (a(), c("div", A, [
+      (a(!0), c(y, null, _(s.value.items, (l) => (a(), c("div", k, [
+        d("div", M, b(l.title), 1),
+        d("div", {
+          innerHTML: l.content,
           class: "preview-item-content"
-        }, null, 8, P)
+        }, null, 8, F)
       ]))), 256))
-    ])) : f("", !0);
+    ])) : v("", !0);
   }
-}), D = (e, o) => {
-  const t = e.__vccOpts || e;
-  for (const [n, r] of o)
-    t[n] = r;
-  return t;
-}, A = /* @__PURE__ */ D(C, [["__scopeId", "data-v-99ea3482"]]), F = /* @__PURE__ */ d({
+}), L = (e, o) => {
+  const s = e.__vccOpts || e;
+  for (const [t, n] of o)
+    s[t] = n;
+  return s;
+}, O = /* @__PURE__ */ L(I, [["__scopeId", "data-v-99ea3482"]]), U = /* @__PURE__ */ w({
   __name: "Settings",
   props: {
     config: {},
@@ -79,31 +80,56 @@ const E = `<?xml version="1.0" encoding="UTF-8"?>
     connections: {}
   },
   setup(e) {
-    const o = v(() => e.connections.filter((t) => t.type === "rss"));
-    return (t, n) => (s(), y(b(_), {
+    const { t: o } = x("datasourceRss"), s = R(() => e.connections.filter((t) => t.type === "rss"));
+    return (t, n) => (a(), E(m(P), {
       modelValue: e.config.connection,
       "onUpdate:modelValue": n[0] || (n[0] = (r) => e.config.connection = r),
-      label: "Verbindung",
-      options: o.value,
+      label: m(o)("Settings.connection"),
+      options: s.value,
       "label-key": "name",
       "value-key": "uid"
-    }, null, 8, ["modelValue", "options"]));
+    }, null, 8, ["modelValue", "label", "options"]));
   }
-}), I = Symbol.for("RssStoreFactory"), L = Symbol.for("RssPreview"), M = Symbol.for("RssSettings");
-function q({ services: e }) {
-  e.register("RssPreview", A), e.register("RssSettings", F), e.getRequired(p).registerDatasourceType("rss", {
+}), V = { connection: "Verbindung" }, B = {
+  Settings: V
+}, G = { connection: "Connection" }, N = {
+  Settings: G
+};
+var X = Object.getOwnPropertyDescriptor, j = (e, o, s, t) => {
+  for (var n = t > 1 ? void 0 : t ? X(o, s) : o, r = e.length - 1, i; r >= 0; r--)
+    (i = e[r]) && (n = i(n) || n);
+  return n;
+};
+const S = "datasourceRss";
+let g = class {
+  namespace = S;
+  resources = {
+    de: B,
+    en: N
+  };
+};
+g = j([
+  C({
+    service: ["Translations"],
+    properties: { "i18n.namespace": S }
+  })
+], g);
+const q = Symbol.for("RssStoreFactory"), H = Symbol.for("RssPreview"), $ = Symbol.for("RssSettings");
+function Z({ services: e }) {
+  e.register("RssPreview", O), e.register("RssSettings", U), e.getRequired(f).registerDatasourceType("rss", {
     icon: "rss_feed",
     connections: ["rss"],
-    Model: E,
-    Store: I,
-    Preview: L,
-    Settings: M
+    Model: D,
+    Store: q,
+    Preview: H,
+    Settings: $
   });
 }
-function H({ services: e }) {
-  e.getRequired(p).unregisterDatasourceType("rss"), e.unregister("RssPreview"), e.unregister("RssSettings");
+function ee({ services: e }) {
+  e.getRequired(f).unregisterDatasourceType("rss"), e.unregister("RssPreview"), e.unregister("RssSettings");
 }
 export {
-  q as activate,
-  H as deactivate
+  g as DatasourceRssTranslations,
+  Z as activate,
+  ee as deactivate
 };

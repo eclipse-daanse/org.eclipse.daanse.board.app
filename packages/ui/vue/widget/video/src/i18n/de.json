@@ -1,0 +1,22 @@
+{
+  "Widget": {
+    "name": "Video",
+    "unsupported": "Dein Browser kann eingebettete Videos nicht abspielen."
+  },
+  "FormFit": {
+    "fit": "Einpassen"
+  },
+  "Form": {
+    "videoUrl": "Adresse",
+    "videoFitSettings": "Darstellung"
+  },
+  "Options": {
+    "fit": {
+      "cover": "Ausfüllen, Ränder beschneiden",
+      "contain": "Ganz zeigen, Ränder frei lassen",
+      "fill": "Auf den Rahmen verzerren",
+      "scaleDown": "Nur verkleinern",
+      "none": "Originalgröße"
+    }
+  }
+}

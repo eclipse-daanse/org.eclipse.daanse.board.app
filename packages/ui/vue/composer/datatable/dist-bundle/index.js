@@ -1,32 +1,33 @@
-import { DATASOURCE_REPOSITORY as p } from "org.eclipse.daanse.board.app.lib.api.datasource";
-import { defineComponent as f, ref as i, watch as s, shallowRef as S, createElementBlock as g, createCommentVNode as y, openBlock as b, createVNode as c, unref as u, inject as D, computed as v, Fragment as w } from "vue";
-import { DTable as T, DSelect as m } from "org.eclipse.daanse.board.app.ui.vue.controls";
-import { useTemporaryStore as h } from "org.eclipse.daanse.board.app.ui.vue.composables";
+import { DATASOURCE_REPOSITORY as f } from "org.eclipse.daanse.board.app.lib.api.datasource";
+import { defineComponent as b, ref as i, watch as u, shallowRef as v, createElementBlock as S, createCommentVNode as w, openBlock as y, createVNode as m, unref as l, inject as T, computed as C, Fragment as h } from "vue";
+import { DTable as P, DSelect as p } from "org.eclipse.daanse.board.app.ui.vue.controls";
+import { useTemporaryStore as B, useTranslation as R } from "org.eclipse.daanse.board.app.ui.vue.composables";
 import { DataTableComposer as d } from "org.eclipse.daanse.board.app.lib.composer.datatable";
-import { identifier as R } from "org.eclipse.daanse.board.app.lib.repository.datasource";
-const V = {
+import { identifier as V } from "org.eclipse.daanse.board.app.lib.repository.datasource";
+import { component as _ } from "@eclipse-daanse/tsm";
+const O = {
   key: 0,
   style: { overflow: "hidden", height: "100%", width: "100%" }
-}, k = /* @__PURE__ */ f({
+}, k = /* @__PURE__ */ b({
   __name: "Preview",
   props: {
     dataSource: {}
   },
   setup(e) {
-    const n = e, l = i(null);
-    s(n.dataSource, () => {
-      o();
+    const n = e, s = i(null);
+    u(n.dataSource, () => {
+      t();
     }, { deep: !0 });
-    const t = S(null), a = i(n.dataSource), { update: o } = h(n.dataSource.type, a, t);
-    return s(t, async () => {
-      console.log("tempStore changed", t.value), l.value = await t.value.getData("DataTable");
-    }, { deep: !0 }), (r, x) => t.value && l.value ? (b(), g("div", V, [
-      c(u(T), {
-        items: l.value.items
+    const o = v(null), a = i(n.dataSource), { update: t } = B(n.dataSource.type, a, o);
+    return u(o, async () => {
+      console.log("tempStore changed", o.value), s.value = await o.value.getData("DataTable");
+    }, { deep: !0 }), (r, c) => o.value && s.value ? (y(), S("div", O, [
+      m(l(P), {
+        items: s.value.items
       }, null, 8, ["items"])
-    ])) : y("", !0);
+    ])) : w("", !0);
   }
-}), C = /* @__PURE__ */ f({
+}), E = /* @__PURE__ */ b({
   __name: "Settings",
   props: {
     config: {},
@@ -34,44 +35,69 @@ const V = {
     connections: {}
   },
   setup(e) {
-    const n = D(R), l = v(() => e.dataSources.filter((a) => d.availableTypes.includes(a.type))), t = i([]);
-    return s(() => e.config.connectedDatasources, async (a) => {
-      console.log("newValue", a), t.value = await d.getHeaders(
-        a,
+    const n = T(V), { t: s } = R("composerDatatable"), o = C(() => e.dataSources.filter((t) => d.availableTypes.includes(t.type))), a = i([]);
+    return u(() => e.config.connectedDatasources, async (t) => {
+      console.log("newValue", t), a.value = await d.getHeaders(
+        t,
         n
       );
-    }), (a, o) => (b(), g(w, null, [
-      c(u(m), {
+    }), (t, r) => (y(), S(h, null, [
+      m(l(p), {
         modelValue: e.config.connectedDatasources,
-        "onUpdate:modelValue": o[0] || (o[0] = (r) => e.config.connectedDatasources = r),
-        label: "Quellen",
-        options: l.value,
+        "onUpdate:modelValue": r[0] || (r[0] = (c) => e.config.connectedDatasources = c),
+        label: l(s)("Settings.sources"),
+        options: o.value,
         multiple: "",
         "label-key": "name",
         "value-key": "uid"
-      }, null, 8, ["modelValue", "options"]),
-      c(u(m), {
+      }, null, 8, ["modelValue", "label", "options"]),
+      m(l(p), {
         modelValue: e.config.composeBy,
-        "onUpdate:modelValue": o[1] || (o[1] = (r) => e.config.composeBy = r),
-        label: "Zusammensetzen nach",
-        options: t.value
-      }, null, 8, ["modelValue", "options"])
+        "onUpdate:modelValue": r[1] || (r[1] = (c) => e.config.composeBy = c),
+        label: l(s)("Settings.composeBy"),
+        options: a.value
+      }, null, 8, ["modelValue", "label", "options"])
     ], 64));
   }
-}), P = Symbol.for("DataTableComposer"), B = Symbol.for("DatatablePreview"), O = Symbol.for("DatatableSettings");
-function N({ services: e }) {
-  e.register("DatatablePreview", k), e.register("DatatableSettings", C), e.getRequired(p).registerDatasourceType("datatable", {
+}), A = { sources: "Quellen", composeBy: "Zusammensetzen nach" }, x = {
+  Settings: A
+}, N = { sources: "Sources", composeBy: "Compose by" }, U = {
+  Settings: N
+};
+var j = Object.getOwnPropertyDescriptor, q = (e, n, s, o) => {
+  for (var a = o > 1 ? void 0 : o ? j(n, s) : n, t = e.length - 1, r; t >= 0; t--)
+    (r = e[t]) && (a = r(a) || a);
+  return a;
+};
+const D = "composerDatatable";
+let g = class {
+  namespace = D;
+  resources = {
+    de: x,
+    en: U
+  };
+};
+g = q([
+  _({
+    service: ["Translations"],
+    properties: { "i18n.namespace": D }
+  })
+], g);
+const F = Symbol.for("DataTableComposer"), I = Symbol.for("DatatablePreview"), $ = Symbol.for("DatatableSettings");
+function J({ services: e }) {
+  e.register("DatatablePreview", k), e.register("DatatableSettings", E), e.getRequired(f).registerDatasourceType("datatable", {
     icon: "table_chart",
     kind: "composer",
-    Store: P,
-    Preview: B,
-    Settings: O
+    Store: F,
+    Preview: I,
+    Settings: $
   });
 }
-function _({ services: e }) {
-  e.getRequired(p).unregisterDatasourceType("datatable"), e.unregister("DatatablePreview"), e.unregister("DatatableSettings");
+function K({ services: e }) {
+  e.getRequired(f).unregisterDatasourceType("datatable"), e.unregister("DatatablePreview"), e.unregister("DatatableSettings");
 }
 export {
-  N as activate,
-  _ as deactivate
+  g as ComposerDatatableTranslations,
+  J as activate,
+  K as deactivate
 };

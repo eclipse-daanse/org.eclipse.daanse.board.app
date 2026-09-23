@@ -43,7 +43,10 @@ export interface SettingsFormI {
     create: () => unknown;
     /** Forms for the classes that appear inside this one. */
     entryForms?: Array<{ xmi: string; uri?: string }>;
-    /** Sections of a hand-written form that the model does not cover. */
+    /**
+     * Sections of a hand-written form that the model does not cover, by the
+     * data-section-id they carry - not by their name, which is translated.
+     */
     unmodelledSections?: string[];
 }
 
@@ -53,7 +56,13 @@ export interface WidgetConfig {
   settingsForm?: SettingsFormI
   supportedDSTypes: string[]
   icon: string
+  /** What the palette calls it when there is no text for nameKey. */
   name: string
+  /**
+   * Translation key for the name, such as 'chart:Widget.name'. Optional, so
+   * a widget without a language pack still shows up under its name.
+   */
+  nameKey?: string
   datasource?: string
 }
 

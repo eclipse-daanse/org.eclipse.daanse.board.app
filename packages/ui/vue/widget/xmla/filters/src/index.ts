@@ -37,6 +37,7 @@ export class FiltersWidgetProvider implements WidgetProvider {
   readonly supportedDSTypes = ['xmla']
   readonly icon = Icon
   readonly name = 'XMLA Filters'
+  readonly nameKey = 'xmlaFilters:Widget.name'
 
   constructor(
     @inject(EVENT_REGISTRY_ID) private readonly events: EventRegistry,
@@ -54,3 +55,6 @@ export class FiltersWidgetProvider implements WidgetProvider {
 }
 
 export { FiltersWidget, FiltersWidgetSettings }
+
+/* Its texts - collected by lib.i18next, see src/i18n. */
+export { XmlaFiltersTranslations } from './i18n'

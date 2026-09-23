@@ -1,0 +1,22 @@
+{
+  "Widget": {
+    "name": "Text"
+  },
+  "Settings": {
+    "section": "Text and formatting",
+    "text": "Text",
+    "textPlaceholder": "Enter text with variables…",
+    "bold": "Bold",
+    "italic": "Italic",
+    "underline": "Underline",
+    "left": "Left",
+    "center": "Centre",
+    "right": "Right",
+    "top": "Top",
+    "bottom": "Bottom"
+  },
+  "Form": {
+    "fontSize": "Font size (px)",
+    "fontColor": "Font colour"
+  }
+}

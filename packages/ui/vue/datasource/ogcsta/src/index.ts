@@ -53,3 +53,6 @@ export function deactivate({ services }: ActivationContext) {
 }
 
 export { symbolForOgcStaPreview, symbolForOgcStaSettings }
+
+/* Its texts - collected by lib.i18next, see src/i18n. */
+export { DatasourceOgcstaTranslations } from './i18n'

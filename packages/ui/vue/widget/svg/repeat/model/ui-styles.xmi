@@ -28,8 +28,8 @@ apart by position, not by naming them.
 
   <components xsi:type="uimodel:FormView" name="SVGItemStylesFormView">
     <fields xsi:type="uimodel:InputWidget" name="fill"
-        feature="http://org.eclipse.daanse.board.app.ui.vue.widget.svg.repeat#//SVGItemStyles/fill" label="Füllfarbe"/>
+        feature="http://org.eclipse.daanse.board.app.ui.vue.widget.svg.repeat#//SVGItemStyles/fill" label="svgRepeat:FormStyles.fill"/>
     <fields xsi:type="uimodel:InputWidget" name="stroke"
-        feature="http://org.eclipse.daanse.board.app.ui.vue.widget.svg.repeat#//SVGItemStyles/stroke" label="Linienfarbe"/>
+        feature="http://org.eclipse.daanse.board.app.ui.vue.widget.svg.repeat#//SVGItemStyles/stroke" label="svgRepeat:FormStyles.stroke"/>
   </components>
 </uimodel:UIModel>

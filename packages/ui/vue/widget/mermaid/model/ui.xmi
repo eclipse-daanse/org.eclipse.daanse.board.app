@@ -30,13 +30,13 @@ diagram, and there is nothing to theme until something is drawn.
     <fields xsi:type="uimodel:TextAreaWidget"
         name="value"
         feature="http://org.eclipse.daanse.board.app.ui.vue.widget.mermaid#//MermaidWidgetSettings/value"
-        label="Diagramm"
+        label="mermaid:Form.value"
         rows="12"
         placeholder="graph TD; A--&gt;B;"/>
     <fields xsi:type="uimodel:SelectWidget"
         name="theme"
         feature="http://org.eclipse.daanse.board.app.ui.vue.widget.mermaid#//MermaidWidgetSettings/theme"
-        label="Farbschema">
+        label="mermaid:Form.theme">
       <values>default</values>
       <values>neutral</values>
       <values>dark</values>

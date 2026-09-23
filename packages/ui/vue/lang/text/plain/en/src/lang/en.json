@@ -1,8 +1,0 @@
-{
-  "TextWidget": {
-    "title": "Text widget settings",
-    "label": "Title",
-    "fontSize": "Font Size",
-    "fontColor": "Font Color"
-  }
-}

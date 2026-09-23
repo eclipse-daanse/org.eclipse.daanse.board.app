@@ -43,13 +43,18 @@ export interface SettingsFormI {
     create: () => unknown;
     /** Forms for the classes that appear inside this one. */
     entryForms?: Array<{ xmi: string; uri?: string }>;
-    /** Sections of a hand-written form that the model does not cover. */
+    /**
+     * Sections of a hand-written form that the model does not cover, by the
+     * data-section-id they carry - not by their name, which is translated.
+     */
     unmodelledSections?: string[];
 }
 
 export interface LayoutI {
     id: string;
     name: string;
+    /** Translation key for the name, such as 'layout:Base.name'; name is the fallback. */
+    nameKey?: string;
     description: string;
     icon?: string;
     component: Component;

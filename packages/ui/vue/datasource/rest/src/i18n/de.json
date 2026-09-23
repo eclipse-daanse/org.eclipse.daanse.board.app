@@ -1,0 +1,11 @@
+{
+  "Settings": {
+    "connection": "Verbindung",
+    "polling": "Regelmäßig neu laden",
+    "intervalMs": "Abstand (ms)",
+    "path": "Pfad"
+  },
+  "Rest": {
+    "selectedValue": "Ausgewählter Wert"
+  }
+}

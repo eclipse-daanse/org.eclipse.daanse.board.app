@@ -1,0 +1,7 @@
+{
+  "Settings": {
+    "connection": "Verbindung",
+    "polling": "Regelmäßig neu laden",
+    "intervalMs": "Abstand (ms)"
+  }
+}

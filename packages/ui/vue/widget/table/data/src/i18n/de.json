@@ -1,0 +1,8 @@
+{
+  "Widget": {
+    "name": "Datentabelle"
+  },
+  "Form": {
+    "headerBackground": "Kopfzeilenfarbe"
+  }
+}

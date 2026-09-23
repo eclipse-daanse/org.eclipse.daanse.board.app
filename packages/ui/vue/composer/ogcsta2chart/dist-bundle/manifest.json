@@ -42,5 +42,21 @@
       "versionRange": ">=0.0.1-0"
     }
   ],
-  "provides": []
+  "capabilities": [
+    {
+      "namespace": "tsm.i18n",
+      "attributes": {
+        "namespace": "composerOgcsta2chart",
+        "languages": [
+          "de",
+          "en"
+        ]
+      }
+    }
+  ],
+  "provides": [
+    {
+      "id": "Translations"
+    }
+  ]
 }

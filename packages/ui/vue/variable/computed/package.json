@@ -24,6 +24,7 @@
     "url": "https://github.com/eclipse-daanse/org.eclipse.daanse.board.app/issues"
   },
   "dependencies": {
+    "@eclipse-daanse/tsm": "0.1.0-next.1",
     "org.eclipse.daanse.board.app.lib.repository.variable": "^0.0.1-next.1",
     "org.eclipse.daanse.board.app.lib.variables": "^0.0.1-next.1"
   },

@@ -41,7 +41,7 @@ import {
   identifier as WORKSPACE,
   type Workspace,
 } from 'org.eclipse.daanse.board.app.lib.model.workspace'
-import { useEList } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+import { useEList, useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import { DButton, DIcon, DInput, DModal } from 'org.eclipse.daanse.board.app.ui.vue.controls'
 import { useDatasourceUsage } from '@/composables/useDatasourceUsage'
 import NewConnectionDialog from '../connections/NewConnectionDialog.vue'
@@ -88,6 +88,7 @@ const connections = useEList(workspace, (w) => w.connections)
 const datasourceRepository = inject<DatasourceRepository>(DATASOURCE_REPOSITORY)!
 const dataSources = useEList(workspace, (w) => w.datasources)
 const { usageByDatasource, usageLabel } = useDatasourceUsage()
+const { t } = useTranslation('shell')
 
 const emit = defineEmits<{
   findEndpoints: []
@@ -198,7 +199,7 @@ const groups = computed(() => {
   if (composed.length) {
     shown.push({
       uid: COMPOSED,
-      name: 'Zusammengesetzt',
+      name: t('Tree.composed'),
       type: '',
       orphan: true,
       sources: composed,
@@ -210,7 +211,7 @@ const groups = computed(() => {
   if (loose.length) {
     shown.push({
       uid: '',
-      name: 'Ohne Verbindung',
+      name: t('Tree.loose'),
       type: '',
       orphan: true,
       sources: loose,
@@ -278,21 +279,21 @@ const menuItems = computed<MenuItem[]>(() => {
   const target = menuFor.value
   if (target.what === 'connection') {
     return [
-      { id: 'edit', label: 'Bearbeiten', icon: 'edit' },
-      { id: 'add-source', label: 'Datenquelle hier anlegen', icon: 'add' },
-      { id: 'remove', label: 'Verbindung löschen', icon: 'delete', danger: true, separated: true },
+      { id: 'edit', label: t('Tree.menu.edit'), icon: 'edit' },
+      { id: 'add-source', label: t('Tree.menu.addSourceHere'), icon: 'add' },
+      { id: 'remove', label: t('Tree.removeConnection'), icon: 'delete', danger: true, separated: true },
     ]
   }
   if (target.what === 'source') {
     return [
-      { id: 'edit', label: 'Bearbeiten', icon: 'edit' },
-      { id: 'preview', label: 'Daten ansehen', icon: 'table' },
-      { id: 'remove', label: 'Datenquelle löschen', icon: 'delete', danger: true, separated: true },
+      { id: 'edit', label: t('Tree.menu.edit'), icon: 'edit' },
+      { id: 'preview', label: t('Tree.menu.preview'), icon: 'table' },
+      { id: 'remove', label: t('Tree.removeSource'), icon: 'delete', danger: true, separated: true },
     ]
   }
   return [
-    { id: 'new-connection', label: 'Verbindung anlegen', icon: 'add_link' },
-    { id: 'new-source', label: 'Datenquelle anlegen', icon: 'add' },
+    { id: 'new-connection', label: t('Tree.newConnection'), icon: 'add_link' },
+    { id: 'new-source', label: t('Tree.newSource'), icon: 'add' },
   ]
 })
 
@@ -367,26 +368,26 @@ const removingUsage = computed(() => {
 <template>
   <section class="tree">
     <header class="tree__head">
-      <h2 class="tree__title">Verbindungen &amp; Daten</h2>
-      <DButton intent="quiet" size="sm" title="Verbindung anlegen" @click="creatingConnection = true">
+      <h2 class="tree__title">{{ t('Tree.title') }}</h2>
+      <DButton intent="quiet" size="sm" :title="t('Tree.newConnection')" @click="creatingConnection = true">
         <DIcon name="add_link" size="sm" />
       </DButton>
-      <DButton intent="quiet" size="sm" title="Datenquelle anlegen" @click="creatingFor = undefined; creatingDataSource = true">
+      <DButton intent="quiet" size="sm" :title="t('Tree.newSource')" @click="creatingFor = undefined; creatingDataSource = true">
         <DIcon name="add" size="sm" />
       </DButton>
-      <DButton intent="quiet" size="sm" title="Endpunkte suchen" @click="emit('findEndpoints')">
+      <DButton intent="quiet" size="sm" :title="t('Tree.findEndpoints')" @click="emit('findEndpoints')">
         <DIcon name="travel_explore" size="sm" />
       </DButton>
     </header>
 
     <div class="tree__search">
-      <DInput v-model="search" type="search" placeholder="Suchen…" stacked />
+      <DInput v-model="search" type="search" :placeholder="t('Tree.search')" stacked />
     </div>
 
     <div class="tree__body" @contextmenu.prevent="openMenu($event, { what: 'nothing' })">
       <p v-if="!groups.length" class="tree__empty">
-        <template v-if="search">Nichts gefunden.</template>
-        <template v-else>Noch keine Verbindung. Lege eine an, um Daten zu lesen.</template>
+        <template v-if="search">{{ t('Tree.nothingFound') }}</template>
+        <template v-else>{{ t('Tree.empty') }}</template>
       </p>
 
       <ul v-else class="tree__list">
@@ -405,7 +406,7 @@ const removingUsage = computed(() => {
             <button
               type="button"
               class="row__twist"
-              :title="isOpen(group.uid) ? 'Zuklappen' : 'Aufklappen'"
+              :title="isOpen(group.uid) ? t('Tree.collapse') : t('Tree.expand')"
               @click="toggle(group.uid)"
             >
               <DIcon :name="isOpen(group.uid) ? 'expand_more' : 'chevron_right'" size="sm" />
@@ -436,7 +437,7 @@ const removingUsage = computed(() => {
               v-if="!group.orphan"
               intent="quiet"
               size="sm"
-              title="Verbindung löschen"
+              :title="t('Tree.removeConnection')"
               @click.stop="confirmRemove('Connection', group.uid)"
             >
               <DIcon name="delete" size="sm" />
@@ -472,7 +473,7 @@ const removingUsage = computed(() => {
                 <DButton
                   intent="quiet"
                   size="sm"
-                  title="Datenquelle löschen"
+                  :title="t('Tree.removeSource')"
                   @click.stop="confirmRemove('DataSource', source.uid)"
                 >
                   <DIcon name="delete" size="sm" />
@@ -480,7 +481,7 @@ const removingUsage = computed(() => {
               </div>
             </li>
             <li v-if="!group.sources.length && !group.orphan" class="tree__none">
-              Keine Datenquelle an dieser Verbindung.
+              {{ t('Tree.noSources') }}
             </li>
           </ul>
         </li>
@@ -501,18 +502,18 @@ const removingUsage = computed(() => {
     <template #header>
       <DIcon name="warning" size="lg" tone="color-err" />
       <h2 class="confirm__title">
-        {{ removing?.type === 'Connection' ? 'Verbindung löschen' : 'Datenquelle löschen' }}
+        {{ removing?.type === 'Connection' ? t('Tree.removeConnection') : t('Tree.removeSource') }}
       </h2>
     </template>
     <p class="confirm__text">
-      „{{ removingLabel }}“ wird entfernt. Das lässt sich nicht rückgängig machen.
+      {{ t('Tree.confirm.text', { name: removingLabel }) }}
     </p>
     <p v-if="removingUsage" class="confirm__text confirm__text--warn">
-      Verwendet in {{ removingUsage }} — die lesen danach ins Leere.
+      {{ t('Tree.confirm.usage', { usage: removingUsage }) }}
     </p>
     <template #actions>
-      <DButton intent="quiet" @click="removing = undefined">Abbrechen</DButton>
-      <DButton intent="danger" @click="doRemove">Löschen</DButton>
+      <DButton intent="quiet" @click="removing = undefined">{{ t('common:Action.cancel') }}</DButton>
+      <DButton intent="danger" @click="doRemove">{{ t('common:Action.delete') }}</DButton>
     </template>
   </DModal>
 </template>

@@ -1,27 +1,27 @@
 (function(){var i="ui.vue.widget.table.data",d=document,s=d.querySelector('style[data-tsm-bundle="'+i+'"]');if(!s){s=d.createElement('style');s.setAttribute('data-tsm-bundle',i);d.head.appendChild(s);}s.textContent=".filters[data-v-055c8fbb]{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:1rem;padding:1rem;flex-grow:0}.table_container[data-v-055c8fbb]{display:flex;flex-direction:column;height:100%}.table_container .pagination[data-v-055c8fbb]{flex-grow:0;padding:1rem;display:grid;grid-template-columns:1fr 1fr 1fr;justify-items:center;align-items:end}.table_container .pagination .page_input[data-v-055c8fbb]{justify-self:start}.table_container .table[data-v-055c8fbb]{flex-grow:1;flex-shrink:1}.table[data-v-055c8fbb]{width:100%;border-collapse:collapse;font-family:var(--font-sans);font-size:var(--text-sm);color:var(--color-fg)}.table th[data-v-055c8fbb]{position:sticky;top:0;z-index:1;padding:6px 10px;text-align:left;font-weight:600;background:var(--header-background, var(--color-raised));border-bottom:1px solid var(--color-divider);cursor:pointer;white-space:nowrap}.table td[data-v-055c8fbb]{padding:5px 10px;border-bottom:1px solid var(--color-divider)}.table tbody tr[data-v-055c8fbb]:hover{background:var(--color-raised)}.loading[data-v-055c8fbb]{display:flex;height:100%}\n";})();
-import { WidgetActionInterfaceImpl as J, EVENT_ACTIONS_REGISTRY as Q, PayloadImpl as u, EVENT_REGISTRY_ID as ee, EVENT_ACTIONS_REGISTRY_ID as te } from "org.eclipse.daanse.board.app.lib.api.events";
-import { activate as ae, deactivate as ie, component as re, inject as O } from "@eclipse-daanse/tsm";
-import { defineComponent as ne, toRefs as se, inject as P, onUnmounted as le, ref as ce, watch as oe, onMounted as de, computed as E, createElementBlock as h, openBlock as m, withModifiers as f, createElementVNode as C, normalizeStyle as ge, unref as ue, Fragment as k, renderList as b, toDisplayString as G } from "vue";
-import { useVariableRepository as pe, useDatasourceRepository as he, VariableWrapper as w } from "org.eclipse.daanse.board.app.ui.vue.composables";
-import { useRoute as me } from "vue-router";
-import { WidgetAction as Te } from "org.eclipse.daanse.board.app.lib.events";
-import { BasicEFactory as _e, BasicEPackage as ve, EPackageRegistry as H, BasicEClass as fe, BasicEReference as Ce, BasicEObject as De } from "@emfts/core";
-import { WIDGET_SERVICE_ID as Ee } from "org.eclipse.daanse.board.app.lib.api.widget";
-const { identifiers: we } = __tsm__.require("org.eclipse.daanse.board.app.lib.core"), ke = "data:image/svg+xml,%3csvg%20width='120'%20height='120'%20viewBox='0%200%20120%20120'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cpath%20fill-rule='evenodd'%20clip-rule='evenodd'%20d='M105%207.5H15C10.8579%207.5%207.5%2010.8579%207.5%2015V105C7.5%20109.142%2010.8579%20112.5%2015%20112.5H105C109.142%20112.5%20112.5%20109.142%20112.5%20105V15C112.5%2010.8579%20109.142%207.5%20105%207.5ZM15%200C6.71573%200%200%206.71573%200%2015V105C0%20113.284%206.71573%20120%2015%20120H105C113.284%20120%20120%20113.284%20120%20105V15C120%206.71573%20113.284%200%20105%200H15Z'%20fill='%23606060'/%3e%3cpath%20d='M22.5%2025.5C22.5%2023.8431%2023.8431%2022.5%2025.5%2022.5H34.5C36.1569%2022.5%2037.5%2023.8431%2037.5%2025.5V34.5C37.5%2036.1569%2036.1569%2037.5%2034.5%2037.5H25.5C23.8431%2037.5%2022.5%2036.1569%2022.5%2034.5V25.5Z'%20fill='%23606060'/%3e%3cpath%20d='M22.5%2048C22.5%2046.3431%2023.8431%2045%2025.5%2045H34.5C36.1569%2045%2037.5%2046.3431%2037.5%2048V94.5C37.5%2096.1569%2036.1569%2097.5%2034.5%2097.5H25.5C23.8431%2097.5%2022.5%2096.1569%2022.5%2094.5V48Z'%20fill='%23606060'/%3e%3cpath%20d='M45%2025.5C45%2023.8431%2046.3431%2022.5%2048%2022.5H94.5C96.1569%2022.5%2097.5%2023.8431%2097.5%2025.5V34.5C97.5%2036.1569%2096.1569%2037.5%2094.5%2037.5H48C46.3431%2037.5%2045%2036.1569%2045%2034.5V25.5Z'%20fill='%23606060'/%3e%3cpath%20d='M45%2048C45%2046.3431%2046.3431%2045%2048%2045H94.5C96.1569%2045%2097.5%2046.3431%2097.5%2048V94.5C97.5%2096.1569%2096.1569%2097.5%2094.5%2097.5H48C46.3431%2097.5%2045%2096.1569%2045%2094.5V48Z'%20fill='%23606060'/%3e%3c/svg%3e";
-var be = Object.defineProperty, ye = Object.getOwnPropertyDescriptor, Ie = (n, e, a, c) => {
-  for (var r = ye(e, a), s = n.length - 1, t; s >= 0; s--)
-    (t = n[s]) && (r = t(e, a, r) || r);
-  return r && be(e, a, r), r;
+import { WidgetActionInterfaceImpl as te, EVENT_ACTIONS_REGISTRY as ae, PayloadImpl as u, EVENT_REGISTRY_ID as ie, EVENT_ACTIONS_REGISTRY_ID as re } from "org.eclipse.daanse.board.app.lib.api.events";
+import { component as V, activate as ne, deactivate as se, inject as x } from "@eclipse-daanse/tsm";
+import { defineComponent as le, toRefs as oe, inject as P, onUnmounted as ce, ref as de, watch as ge, onMounted as ue, computed as E, createElementBlock as h, openBlock as m, withModifiers as f, createElementVNode as C, normalizeStyle as pe, unref as he, Fragment as k, renderList as b, toDisplayString as F } from "vue";
+import { useVariableRepository as me, useDatasourceRepository as we, VariableWrapper as w } from "org.eclipse.daanse.board.app.ui.vue.composables";
+import { useRoute as Te } from "vue-router";
+import { WidgetAction as ve } from "org.eclipse.daanse.board.app.lib.events";
+import { BasicEFactory as fe, BasicEPackage as Ce, EPackageRegistry as U, BasicEClass as De, BasicEReference as Ee, BasicEObject as ke } from "@emfts/core";
+import { WIDGET_SERVICE_ID as be } from "org.eclipse.daanse.board.app.lib.api.widget";
+const { identifiers: _e } = __tsm__.require("org.eclipse.daanse.board.app.lib.core"), ye = "data:image/svg+xml,%3csvg%20width='120'%20height='120'%20viewBox='0%200%20120%20120'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cpath%20fill-rule='evenodd'%20clip-rule='evenodd'%20d='M105%207.5H15C10.8579%207.5%207.5%2010.8579%207.5%2015V105C7.5%20109.142%2010.8579%20112.5%2015%20112.5H105C109.142%20112.5%20112.5%20109.142%20112.5%20105V15C112.5%2010.8579%20109.142%207.5%20105%207.5ZM15%200C6.71573%200%200%206.71573%200%2015V105C0%20113.284%206.71573%20120%2015%20120H105C113.284%20120%20120%20113.284%20120%20105V15C120%206.71573%20113.284%200%20105%200H15Z'%20fill='%23606060'/%3e%3cpath%20d='M22.5%2025.5C22.5%2023.8431%2023.8431%2022.5%2025.5%2022.5H34.5C36.1569%2022.5%2037.5%2023.8431%2037.5%2025.5V34.5C37.5%2036.1569%2036.1569%2037.5%2034.5%2037.5H25.5C23.8431%2037.5%2022.5%2036.1569%2022.5%2034.5V25.5Z'%20fill='%23606060'/%3e%3cpath%20d='M22.5%2048C22.5%2046.3431%2023.8431%2045%2025.5%2045H34.5C36.1569%2045%2037.5%2046.3431%2037.5%2048V94.5C37.5%2096.1569%2036.1569%2097.5%2034.5%2097.5H25.5C23.8431%2097.5%2022.5%2096.1569%2022.5%2094.5V48Z'%20fill='%23606060'/%3e%3cpath%20d='M45%2025.5C45%2023.8431%2046.3431%2022.5%2048%2022.5H94.5C96.1569%2022.5%2097.5%2023.8431%2097.5%2025.5V34.5C97.5%2036.1569%2096.1569%2037.5%2094.5%2037.5H48C46.3431%2037.5%2045%2036.1569%2045%2034.5V25.5Z'%20fill='%23606060'/%3e%3cpath%20d='M45%2048C45%2046.3431%2046.3431%2045%2048%2045H94.5C96.1569%2045%2097.5%2046.3431%2097.5%2048V94.5C97.5%2096.1569%2096.1569%2097.5%2094.5%2097.5H48C46.3431%2097.5%2045%2096.1569%2045%2094.5V48Z'%20fill='%23606060'/%3e%3c/svg%3e";
+var Ie = Object.defineProperty, Ne = Object.getOwnPropertyDescriptor, Ae = (n, e, a, l) => {
+  for (var i = Ne(e, a), s = n.length - 1, t; s >= 0; s--)
+    (t = n[s]) && (i = t(e, a, i) || i);
+  return i && Ie(e, a, i), i;
 };
-class y extends J {
+class y extends te {
   refresh() {
     throw new Error("refresh not implemented");
   }
 }
-Ie([
-  Te({ eventType: "dataTable.refresh" })
+Ae([
+  ve({ eventType: "dataTable.refresh" })
 ], y.prototype, "refresh");
-const Ne = ["onClick", "onContextmenu"], Ae = ["onClick", "onContextmenu"], Se = ["onClick", "onContextmenu"], Re = /* @__PURE__ */ ne({
+const Se = ["onClick", "onContextmenu"], Re = ["onClick", "onContextmenu"], Be = ["onClick", "onContextmenu"], We = /* @__PURE__ */ le({
   __name: "DataTableWidget",
   props: {
     datasourceId: {},
@@ -29,123 +29,123 @@ const Ne = ["onClick", "onContextmenu"], Ae = ["onClick", "onContextmenu"], Se =
     id: {}
   },
   setup(n, { expose: e }) {
-    const { wrapParameters: a } = pe(), c = n, { datasourceId: r, config: s, id: t } = se(c), g = P(we.TINY_EMITTER), A = P(Q), U = me().params.pageid || "";
-    class F extends y {
+    const { wrapParameters: a } = me(), l = n, { datasourceId: i, config: s, id: t } = oe(l), g = P(_e.TINY_EMITTER), A = P(ae), M = Te().params.pageid || "";
+    class $ extends y {
       refresh() {
-        B(r.value, r.value);
+        B(i.value, i.value);
       }
     }
-    const S = new F();
-    e(S), le(() => {
+    const S = new $();
+    e(S), ce(() => {
       t?.value && A.unregisterInstance(t.value);
     });
-    const L = () => {
+    const K = () => {
       t?.value && g.emit("widget:DataTableWidget:click", {
         type: "widget:DataTableWidget:click",
         widgetId: t.value,
         payload: { widgetId: t.value, timestamp: Date.now() }
       });
-    }, M = () => {
+    }, j = () => {
       t?.value && g.emit("widget:DataTableWidget:right_click", {
         type: "widget:DataTableWidget:right_click",
         widgetId: t.value,
         payload: { widgetId: t.value, timestamp: Date.now() }
       });
-    }, $ = (i) => {
+    }, X = (r) => {
       t?.value && g.emit("widget:DataTableWidget:row_click", {
         type: "widget:DataTableWidget:row_click",
         widgetId: t.value,
-        payload: { widgetId: t.value, timestamp: Date.now(), rowId: i }
+        payload: { widgetId: t.value, timestamp: Date.now(), rowId: r }
       });
-    }, K = (i) => {
+    }, Z = (r) => {
       t?.value && g.emit("widget:DataTableWidget:row_right_click", {
         type: "widget:DataTableWidget:row_right_click",
         widgetId: t.value,
-        payload: { widgetId: t.value, timestamp: Date.now(), rowId: i }
+        payload: { widgetId: t.value, timestamp: Date.now(), rowId: r }
       });
-    }, j = (i) => {
+    }, Y = (r) => {
       t?.value && g.emit("widget:DataTableWidget:col_click", {
         type: "widget:DataTableWidget:col_click",
         widgetId: t.value,
-        payload: { widgetId: t.value, timestamp: Date.now(), colId: i }
+        payload: { widgetId: t.value, timestamp: Date.now(), colId: r }
       });
-    }, X = (i) => {
+    }, z = (r) => {
       t?.value && g.emit("widget:DataTableWidget:col_right_click", {
         type: "widget:DataTableWidget:col_right_click",
         widgetId: t.value,
-        payload: { widgetId: t.value, timestamp: Date.now(), colId: i }
+        payload: { widgetId: t.value, timestamp: Date.now(), colId: r }
       });
-    }, Z = (i, o) => {
+    }, q = (r, c) => {
       t?.value && g.emit("widget:DataTableWidget:cell_click", {
         type: "widget:DataTableWidget:cell_click",
         widgetId: t.value,
-        payload: { widgetId: t.value, timestamp: Date.now(), rowId: i, colId: o }
+        payload: { widgetId: t.value, timestamp: Date.now(), rowId: r, colId: c }
       });
-    }, Y = (i, o) => {
+    }, J = (r, c) => {
       t?.value && g.emit("widget:DataTableWidget:cell_right_click", {
         type: "widget:DataTableWidget:cell_right_click",
         widgetId: t.value,
-        payload: { widgetId: t.value, timestamp: Date.now(), rowId: i, colId: o }
+        payload: { widgetId: t.value, timestamp: Date.now(), rowId: r, colId: c }
       });
-    }, R = ce(null);
-    oe(r, (i, o) => {
-      B(i, o);
-    }), de(() => {
-      if (t?.value && A.registerInstance(t.value, S, "DataTableWidget", U), !s.value) return;
-      const i = s.value.headerBackground;
-      if (i == null)
+    }, R = de(null);
+    ge(i, (r, c) => {
+      B(r, c);
+    }), ue(() => {
+      if (t?.value && A.registerInstance(t.value, S, "DataTableWidget", M), !s.value) return;
+      const r = s.value.headerBackground;
+      if (r == null)
         s.value.headerBackground = new w("var(--color-raised)");
-      else if (!(i instanceof w)) if (typeof i == "object" && "value" in i) {
-        const o = new w(i.value);
-        "variable" in i && (o.variable = i.variable), s.value.headerBackground = o;
+      else if (!(r instanceof w)) if (typeof r == "object" && "value" in r) {
+        const c = new w(r.value);
+        "variable" in r && (c.variable = r.variable), s.value.headerBackground = c;
       } else
-        s.value.headerBackground = new w(i);
+        s.value.headerBackground = new w(r);
     });
     const {
-      headerBackground: z
+      headerBackground: Q
     } = a({
       headerBackground: E(() => s.value.headerBackground?.value || "var(--color-raised)")
-    }), { update: B } = he(r, "DataTable", R), W = E(() => R.value?.items ?? []), x = E(() => Object.keys(W.value[0] ?? {}));
-    return (i, o) => (m(), h("div", {
+    }), { update: B } = we(i, "DataTable", R), W = E(() => R.value?.items ?? []), O = E(() => Object.keys(W.value[0] ?? {}));
+    return (r, c) => (m(), h("div", {
       class: "w-full h-full",
-      onClick: L,
-      onContextmenu: f(M, ["prevent"])
+      onClick: K,
+      onContextmenu: f(j, ["prevent"])
     }, [
       C("table", {
         class: "table",
-        style: ge({ "--header-background": ue(z) })
+        style: pe({ "--header-background": he(Q) })
       }, [
         C("thead", null, [
           C("tr", null, [
-            (m(!0), h(k, null, b(x.value, (T) => (m(), h("th", {
+            (m(!0), h(k, null, b(O.value, (T) => (m(), h("th", {
               key: T,
-              onClick: (p) => j(T),
-              onContextmenu: f((p) => X(T), ["prevent"])
-            }, G(T), 41, Ne))), 128))
+              onClick: (p) => Y(T),
+              onContextmenu: f((p) => z(T), ["prevent"])
+            }, F(T), 41, Se))), 128))
           ])
         ]),
         C("tbody", null, [
           (m(!0), h(k, null, b(W.value, (T, p) => (m(), h("tr", {
             key: p,
-            onClick: (_) => $(String(p)),
-            onContextmenu: f((_) => K(String(p)), ["prevent"])
+            onClick: (_) => X(String(p)),
+            onContextmenu: f((_) => Z(String(p)), ["prevent"])
           }, [
-            (m(!0), h(k, null, b(x.value, (_) => (m(), h("td", {
+            (m(!0), h(k, null, b(O.value, (_) => (m(), h("td", {
               key: _,
-              onClick: (q) => Z(String(p), _),
-              onContextmenu: f((q) => Y(String(p), _), ["prevent"])
-            }, G(T[_]), 41, Se))), 128))
-          ], 40, Ae))), 128))
+              onClick: (ee) => q(String(p), _),
+              onContextmenu: f((ee) => J(String(p), _), ["prevent"])
+            }, F(T[_]), 41, Be))), 128))
+          ], 40, Re))), 128))
         ])
       ], 4)
     ], 32));
   }
-}), Be = (n, e) => {
+}), Oe = (n, e) => {
   const a = n.__vccOpts || n;
-  for (const [c, r] of e)
-    a[c] = r;
+  for (const [l, i] of e)
+    a[l] = i;
   return a;
-}, We = /* @__PURE__ */ Be(Re, [["__scopeId", "data-v-055c8fbb"]]), xe = [
+}, xe = /* @__PURE__ */ Oe(We, [["__scopeId", "data-v-055c8fbb"]]), Pe = [
   { name: "DataTable Clicked", type: "click", description: "Triggered when the datatable widget is clicked", payloadType: u },
   { name: "DataTable Right Clicked", type: "right_click", description: "Triggered when the datatable widget is right-clicked", payloadType: u },
   { name: "DataTable Row Clicked", type: "row_click", description: "Triggered when a row is clicked", payloadType: u },
@@ -155,14 +155,14 @@ const Ne = ["onClick", "onContextmenu"], Ae = ["onClick", "onContextmenu"], Se =
   { name: "DataTable Cell Clicked", type: "cell_click", description: "Triggered when a cell is clicked", payloadType: u },
   { name: "DataTable Cell Right Clicked", type: "cell_right_click", description: "Triggered when a cell is right-clicked", payloadType: u }
 ];
-class I extends _e {
+class I extends fe {
   // Lazy singleton instance
   static _instance;
   static get eINSTANCE() {
     return this._instance || (this._instance = new I()), this._instance;
   }
   constructor() {
-    super(), this.setEPackage(l.eINSTANCE);
+    super(), this.setEPackage(o.eINSTANCE);
   }
   /**
    * Create a new DataTableSettings instance
@@ -182,20 +182,20 @@ class I extends _e {
     }
   }
 }
-function Oe(n) {
-  const e = H.INSTANCE.getEPackage(n);
+function Fe(n) {
+  const e = U.INSTANCE.getEPackage(n);
   if (!e)
     throw new Error(`EPackage '${n}' is not registered. Access the eINSTANCE of that model's generated package (or register it via EPackageRegistry.INSTANCE.registerPackage) before initializing DatatablesettingsPackage.`);
   return e;
 }
-class l extends ve {
+class o extends Ce {
   static eNAME = "datatablesettings";
   static eNS_URI = "http://org.eclipse.daanse.board.app.ui.vue.widget.table.data";
   static eNS_PREFIX = "datatablesettings";
   // Singleton instance
   static _instance;
   static get eINSTANCE() {
-    return this._instance || (this._instance = new l(), this._instance.init()), this._instance;
+    return this._instance || (this._instance = new o(), this._instance.init()), this._instance;
   }
   /**
    * Literals for quick access to metaclasses and features
@@ -205,20 +205,20 @@ class l extends ve {
     DATA_TABLE_SETTINGS__HEADER_BACKGROUND: null
   };
   constructor() {
-    super(), this.setName(l.eNAME), this.setNsURI(l.eNS_URI), this.setNsPrefix(l.eNS_PREFIX);
+    super(), this.setName(o.eNAME), this.setNsURI(o.eNS_URI), this.setNsPrefix(o.eNS_PREFIX);
   }
   /**
    * Initialize package contents
    */
   init() {
-    H.INSTANCE.set(l.eNS_URI, this), this.setEFactoryInstance(I.eINSTANCE);
-    const e = new fe();
-    e.setName("DataTableSettings"), e.setAbstract(!1), e.setInterface(!1), this.getEClassifiers().push(e), e.setEPackage(this), l.Literals.DATA_TABLE_SETTINGS = e;
-    const a = new Ce();
-    a.setContainment(!1), a.setName("headerBackground"), a.setLowerBound(0), a.setUpperBound(1), e.getEStructuralFeatures().push(a), l.Literals.DATA_TABLE_SETTINGS__HEADER_BACKGROUND = a, l.Literals.DATA_TABLE_SETTINGS__HEADER_BACKGROUND.setEType(Oe("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper"));
+    U.INSTANCE.set(o.eNS_URI, this), this.setEFactoryInstance(I.eINSTANCE);
+    const e = new De();
+    e.setName("DataTableSettings"), e.setAbstract(!1), e.setInterface(!1), this.getEClassifiers().push(e), e.setEPackage(this), o.Literals.DATA_TABLE_SETTINGS = e;
+    const a = new Ee();
+    a.setContainment(!1), a.setName("headerBackground"), a.setLowerBound(0), a.setUpperBound(1), e.getEStructuralFeatures().push(a), o.Literals.DATA_TABLE_SETTINGS__HEADER_BACKGROUND = a, o.Literals.DATA_TABLE_SETTINGS__HEADER_BACKGROUND.setEType(Fe("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper"));
   }
 }
-class d extends De {
+class d extends ke {
   // Feature ID Constants (eLiterals)
   static HEADER_BACKGROUND = 0;
   // Private fields
@@ -227,7 +227,7 @@ class d extends De {
    * Returns the EClass of this object
    */
   eClass() {
-    return l.Literals.DATA_TABLE_SETTINGS;
+    return o.Literals.DATA_TABLE_SETTINGS;
   }
   // Getters and Setters
   get headerBackground() {
@@ -310,7 +310,7 @@ class d extends De {
     };
   }
 }
-const Pe = `<?xml version="1.0" encoding="UTF-8"?>
+const Ge = `<?xml version="1.0" encoding="UTF-8"?>
 <!--
 /*********************************************************************
 * Copyright (c) 2026 Contributors to the Eclipse Foundation.
@@ -338,23 +338,48 @@ the label does not already say.
 
   <components xsi:type="uimodel:FormView" name="DataTableSettingsFormView">
     <fields xsi:type="uimodel:InputWidget" name="headerBackground"
-        feature="http://org.eclipse.daanse.board.app.ui.vue.widget.table.data#//DataTableSettings/headerBackground" label="Kopfzeilenfarbe"/>
+        feature="http://org.eclipse.daanse.board.app.ui.vue.widget.table.data#//DataTableSettings/headerBackground" label="tableData:Form.headerBackground"/>
   </components>
 </uimodel:UIModel>
-`;
-var Ge = Object.defineProperty, Ve = Object.getOwnPropertyDescriptor, N = (n, e, a, c) => {
-  for (var r = c > 1 ? void 0 : c ? Ve(e, a) : e, s = n.length - 1, t; s >= 0; s--)
-    (t = n[s]) && (r = (c ? t(e, a, r) : t(r)) || r);
-  return c && r && Ge(e, a, r), r;
-}, V = (n, e) => (a, c) => e(a, c, n);
-l.eINSTANCE;
+`, He = { name: "Datentabelle" }, Ve = { headerBackground: "Kopfzeilenfarbe" }, Ue = {
+  Widget: He,
+  Form: Ve
+}, Le = { name: "Data table" }, Me = { headerBackground: "Header colour" }, $e = {
+  Widget: Le,
+  Form: Me
+};
+var Ke = Object.getOwnPropertyDescriptor, je = (n, e, a, l) => {
+  for (var i = l > 1 ? void 0 : l ? Ke(e, a) : e, s = n.length - 1, t; s >= 0; s--)
+    (t = n[s]) && (i = t(i) || i);
+  return i;
+};
+const L = "tableData";
+let G = class {
+  namespace = L;
+  resources = {
+    de: Ue,
+    en: $e
+  };
+};
+G = je([
+  V({
+    service: ["Translations"],
+    properties: { "i18n.namespace": L }
+  })
+], G);
+var Xe = Object.defineProperty, Ze = Object.getOwnPropertyDescriptor, N = (n, e, a, l) => {
+  for (var i = l > 1 ? void 0 : l ? Ze(e, a) : e, s = n.length - 1, t; s >= 0; s--)
+    (t = n[s]) && (i = (l ? t(e, a, i) : t(i)) || i);
+  return l && i && Xe(e, a, i), i;
+}, H = (n, e) => (a, l) => e(a, l, n);
+o.eINSTANCE;
 const v = "DataTableWidget";
 let D = class {
   constructor(n, e) {
     this.events = n, this.actions = e;
   }
   type = v;
-  component = We;
+  component = xe;
   /*
    * No hand-written form: the model covers all of it, so there is nothing
    * to keep beside it and no second place for the two to disagree.
@@ -364,39 +389,41 @@ let D = class {
    * exists - and the shell needs no dependency on this bundle.
    */
   settingsForm = {
-    xmi: Pe,
+    xmi: Ge,
     uri: "/data-table-settings.ui.xmi",
-    ePackage: () => l.eINSTANCE,
+    ePackage: () => o.eINSTANCE,
     create: () => new d()
   };
   supportedDSTypes = ["csv", "rest"];
-  icon = ke;
+  icon = ye;
   name = "DataTable";
+  nameKey = "tableData:Widget.name";
   register() {
-    this.events.registerWidget(v, xe), this.actions.registerWidgetType(v, y, "widget");
+    this.events.registerWidget(v, Pe), this.actions.registerWidgetType(v, y, "widget");
   }
   unregister() {
     this.events.unregisterWidget(v), this.actions.unregisterWidgetType(v);
   }
 };
 N([
-  ae()
+  ne()
 ], D.prototype, "register", 1);
 N([
-  ie()
+  se()
 ], D.prototype, "unregister", 1);
 D = N([
-  re({
-    service: [Ee],
+  V({
+    service: [be],
     properties: { "widget.type": v }
   }),
-  V(0, O(ee)),
-  V(1, O(te))
+  H(0, x(ie)),
+  H(1, x(re))
 ], D);
 export {
   d as DataTableSettingsImpl,
-  We as DataTableWidget,
+  xe as DataTableWidget,
   D as DataTableWidgetProvider,
-  l as DatatablesettingsPackage,
-  Pe as dataTableSettingsFormXmi
+  o as DatatablesettingsPackage,
+  G as TableDataTranslations,
+  Ge as dataTableSettingsFormXmi
 };

@@ -15,10 +15,10 @@
  * Which languages there are, and which one is in use.
  *
  * The list is what i18next actually holds texts for, not a table kept
- * somewhere. A language pack is a bundle and can arrive at any time, so a
- * hand-written list of languages would be wrong the moment somebody
+ * somewhere. Every bundle brings its own texts and can arrive at any time,
+ * so a hand-written list of languages would be wrong the moment somebody
  * deploys one - and would offer a language that then shows nothing but
- * keys. Reading the store means a pack that lands adds its language here
+ * keys. Reading the store means texts that land add their language here
  * by existing.
  */
 import { computed, getCurrentInstance, onMounted, type ComputedRef, type Ref } from 'vue'

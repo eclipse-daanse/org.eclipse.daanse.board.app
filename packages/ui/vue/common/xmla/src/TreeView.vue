@@ -25,6 +25,8 @@ Contributors:
  */
 import { computed, ref } from 'vue'
 import { DIcon } from 'org.eclipse.daanse.board.app.ui.vue.controls'
+import { useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables';
+const { t } = useTranslation('xmla');
 
 interface Node {
   id?: string | number
@@ -95,7 +97,7 @@ function showsOpen(node: Node): boolean {
           type="button"
           class="node__twist"
           :aria-expanded="showsOpen(node)"
-          :aria-label="showsOpen(node) ? 'Zuklappen' : 'Aufklappen'"
+          :aria-label="showsOpen(node) ? t('Tree.collapse') : t('Tree.expand')"
           @click.stop="toggle(node)"
         >
           <DIcon :name="showsOpen(node) ? 'expand_more' : 'chevron_right'" size="sm" tone="color-dim" />

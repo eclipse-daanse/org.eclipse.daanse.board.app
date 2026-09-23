@@ -7,6 +7,7 @@
   "exports": {},
   "dependencies": [
     "platform.vue",
+    "ui.vue.composables",
     "ui.vue.controls",
     "ui.vue.widget.map"
   ],
@@ -23,6 +24,22 @@
     {
       "id": "org.eclipse.daanse.board.app.ui.vue.controls",
       "versionRange": ">=0.0.1-0"
+    },
+    {
+      "id": "org.eclipse.daanse.board.app.ui.vue.composables",
+      "versionRange": ">=0.0.1-0"
+    }
+  ],
+  "capabilities": [
+    {
+      "namespace": "tsm.i18n",
+      "attributes": {
+        "namespace": "pluginsGeojsonRenderer",
+        "languages": [
+          "de",
+          "en"
+        ]
+      }
     }
   ]
 }

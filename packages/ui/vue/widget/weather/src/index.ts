@@ -46,6 +46,7 @@ export class WeatherWidgetProvider implements WidgetProvider {
   readonly supportedDSTypes = ['OGCSTAData']
   readonly icon = Icon
   readonly name = 'Weather'
+  readonly nameKey = 'weather:Widget.name'
 
   /*
    * The settings form, as a model. Carried on the registration like the
@@ -87,3 +88,6 @@ export {
   WeatherWidgetSettings,
   type IWeatherWidgetSettings
 }
+
+/* Its texts - collected by lib.i18next, see src/i18n. */
+export { WeatherTranslations } from './i18n'

@@ -33,20 +33,20 @@ that does not state its own.
 
   <components xsi:type="uimodel:FormView" name="SeriesSettingsFormView">
 
-    <fields xsi:type="uimodel:GroupWidget" name="seriesIdentity" layout="VERTICAL" label="Reihe">
+    <fields xsi:type="uimodel:GroupWidget" name="seriesIdentity" layout="VERTICAL" label="chart:FormSeries.seriesIdentity">
       <fields xsi:type="uimodel:InputWidget"
           name="label"
           feature="http://org.eclipse.daanse.board.app.ui.vue.widget.chart#//SeriesSettings/label"
-          label="Beschriftung"
+          label="chart:FormSeries.label"
           placeholder="Wie im Diagramm benannt"/>
       <fields xsi:type="uimodel:NumberWidget"
           name="seriesIndex"
           feature="http://org.eclipse.daanse.board.app.ui.vue.widget.chart#//SeriesSettings/seriesIndex"
-          label="Reihennummer" min="0" step="1"/>
+          label="chart:FormSeries.seriesIndex" min="0" step="1"/>
       <fields xsi:type="uimodel:SelectWidget"
           name="chartType"
           feature="http://org.eclipse.daanse.board.app.ui.vue.widget.chart#//SeriesSettings/chartType"
-          label="Typ">
+          label="chart:FormSeries.chartType">
         <values>line</values>
         <values>bar</values>
         <values>pie</values>
@@ -58,37 +58,37 @@ that does not state its own.
       </fields>
     </fields>
 
-    <fields xsi:type="uimodel:GroupWidget" name="seriesAxes" layout="VERTICAL" label="Achsen">
+    <fields xsi:type="uimodel:GroupWidget" name="seriesAxes" layout="VERTICAL" label="chart:FormSeries.seriesAxes">
       <fields xsi:type="uimodel:InputWidget"
           name="xAxisId"
           feature="http://org.eclipse.daanse.board.app.ui.vue.widget.chart#//SeriesSettings/xAxisId"
-          label="X-Achse"
+          label="chart:FormSeries.xAxisId"
           placeholder="x"/>
       <fields xsi:type="uimodel:InputWidget"
           name="yAxisId"
           feature="http://org.eclipse.daanse.board.app.ui.vue.widget.chart#//SeriesSettings/yAxisId"
-          label="Y-Achse"
+          label="chart:FormSeries.yAxisId"
           placeholder="y"/>
       <fields xsi:type="uimodel:InputWidget"
           name="yAxisTitle"
           feature="http://org.eclipse.daanse.board.app.ui.vue.widget.chart#//SeriesSettings/yAxisTitle"
-          label="Titel der Y-Achse"/>
+          label="chart:FormSeries.yAxisTitle"/>
     </fields>
 
-    <fields xsi:type="uimodel:GroupWidget" name="seriesLine" layout="VERTICAL" label="Linie">
+    <fields xsi:type="uimodel:GroupWidget" name="seriesLine" layout="VERTICAL" label="chart:FormSeries.seriesLine">
       <fields xsi:type="uimodel:InputWidget"
           name="borderColor"
           feature="http://org.eclipse.daanse.board.app.ui.vue.widget.chart#//SeriesSettings/borderColor"
-          label="Linien- und Randfarbe"
+          label="chart:FormSeries.borderColor"
           placeholder="sichtbar ab Stärke 1"/>
       <fields xsi:type="uimodel:NumberWidget"
           name="borderWidth"
           feature="http://org.eclipse.daanse.board.app.ui.vue.widget.chart#//SeriesSettings/borderWidth"
-          label="Stärke" min="0" max="20" step="1"/>
+          label="chart:FormSeries.borderWidth" min="0" max="20" step="1"/>
       <fields xsi:type="uimodel:SelectWidget"
           name="borderDash"
           feature="http://org.eclipse.daanse.board.app.ui.vue.widget.chart#//SeriesSettings/borderDash"
-          label="Strichmuster">
+          label="chart:FormSeries.borderDash">
         <values>durchgezogen</values>
         <values>5,5</values>
         <values>10,5</values>
@@ -98,30 +98,30 @@ that does not state its own.
       <fields xsi:type="uimodel:CheckboxWidget"
           name="fill"
           feature="http://org.eclipse.daanse.board.app.ui.vue.widget.chart#//SeriesSettings/fill"
-          label="Fläche unter der Linie füllen"/>
+          label="chart:FormSeries.fill"/>
       <!-- Always shown: see the note in the chart's own form. -->
       <fields xsi:type="uimodel:InputWidget"
           name="backgroundColor"
           feature="http://org.eclipse.daanse.board.app.ui.vue.widget.chart#//SeriesSettings/backgroundColor"
-          label="Flächenfarbe"
+          label="chart:FormSeries.backgroundColor"
           placeholder="Balken, Torte, gefüllte Fläche"/>
     </fields>
 
-    <fields xsi:type="uimodel:GroupWidget" name="seriesPoints" layout="VERTICAL" label="Punkte">
+    <fields xsi:type="uimodel:GroupWidget" name="seriesPoints" layout="VERTICAL" label="chart:FormSeries.seriesPoints">
       <fields xsi:type="uimodel:CheckboxWidget"
           name="showPoints"
           feature="http://org.eclipse.daanse.board.app.ui.vue.widget.chart#//SeriesSettings/showPoints"
-          label="Punkte zeigen"/>
+          label="chart:FormSeries.showPoints"/>
       <fields xsi:type="uimodel:InputWidget"
           name="pointColor"
           feature="http://org.eclipse.daanse.board.app.ui.vue.widget.chart#//SeriesSettings/pointColor"
-          label="Farbe">
+          label="chart:FormSeries.pointColor">
         <visibilityCondition language="JS" body="self.showPoints?.value === true || self.showPoints?.value === 'true'"/>
       </fields>
       <fields xsi:type="uimodel:NumberWidget"
           name="pointSize"
           feature="http://org.eclipse.daanse.board.app.ui.vue.widget.chart#//SeriesSettings/pointSize"
-          label="Größe" min="0" max="20" step="1">
+          label="chart:FormSeries.pointSize" min="0" max="20" step="1">
         <visibilityCondition language="JS" body="self.showPoints?.value === true || self.showPoints?.value === 'true'"/>
       </fields>
     </fields>

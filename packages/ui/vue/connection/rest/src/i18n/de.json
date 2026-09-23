@@ -1,0 +1,13 @@
+{
+  "Rest": {
+    "invalidUrl": "Keine gültige http- oder https-Adresse",
+    "minTtl": "Mindestens {{ms}} ms",
+    "unchecked": "Noch nicht geprüft",
+    "reachable": "Erreichbar ({{status}})",
+    "unreachable": "Nicht erreichbar ({{status}})",
+    "error": "Fehler",
+    "cache": "Antworten zwischenspeichern",
+    "ttl": "Haltbarkeit",
+    "ttlHint": "Wie lange eine Antwort wiederverwendet wird, bevor neu gefragt wird."
+  }
+}

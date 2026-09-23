@@ -1,8 +1,8 @@
-import { g as Ms, a as Us } from "./_commonjsHelpers-MdHo5S7N.js";
-function L(c) {
-  return c && typeof c.eProxyURI == "function" && typeof c.eSetProxyURI == "function";
+import { g as rr, a as nr } from "./_commonjsHelpers-MdHo5S7N.js";
+function ie(h) {
+  return h && typeof h.eProxyURI == "function" && typeof h.eSetProxyURI == "function";
 }
-const N = {
+const v = {
   /** A feature has been set */
   SET: 1,
   /** A feature has been unset */
@@ -21,10 +21,10 @@ const N = {
   REMOVING_ADAPTER: 8,
   /** A proxy has been resolved */
   RESOLVE: 9
-}, Pe = -1, It = -1;
-class oe {
-  constructor(e, t, s, r, n, i = Pe, u = !0) {
-    this.notifier = e, this.eventType = t, this.feature = s, this.featureID = It, this.oldValue = r, this.newValue = n, this.position = i, this.wasSetFlag = u;
+}, st = -1, Jt = -1;
+class Re {
+  constructor(e, t, s, r, n, u = st, o = !0) {
+    this.notifier = e, this.eventType = t, this.feature = s, this.featureID = Jt, this.oldValue = r, this.newValue = n, this.position = u, this.wasSetFlag = o;
   }
   getNotifier() {
     return this.notifier;
@@ -49,17 +49,17 @@ class oe {
   }
   isTouch() {
     switch (this.eventType) {
-      case N.RESOLVE:
-      case N.REMOVING_ADAPTER:
+      case v.RESOLVE:
+      case v.REMOVING_ADAPTER:
         return !0;
-      case N.ADD:
-      case N.ADD_MANY:
-      case N.REMOVE:
-      case N.REMOVE_MANY:
-      case N.MOVE:
+      case v.ADD:
+      case v.ADD_MANY:
+      case v.REMOVE:
+      case v.REMOVE_MANY:
+      case v.MOVE:
         return !1;
-      case N.SET:
-      case N.UNSET:
+      case v.SET:
+      case v.UNSET:
         return this.oldValue === this.newValue ? !0 : this.oldValue === null || this.newValue === null ? !1 : this.oldValue === this.newValue;
       default:
         return !1;
@@ -80,60 +80,60 @@ class oe {
   }
   toString() {
     const e = {
-      [N.SET]: "SET",
-      [N.UNSET]: "UNSET",
-      [N.ADD]: "ADD",
-      [N.REMOVE]: "REMOVE",
-      [N.ADD_MANY]: "ADD_MANY",
-      [N.REMOVE_MANY]: "REMOVE_MANY",
-      [N.MOVE]: "MOVE",
-      [N.REMOVING_ADAPTER]: "REMOVING_ADAPTER",
-      [N.RESOLVE]: "RESOLVE"
+      [v.SET]: "SET",
+      [v.UNSET]: "UNSET",
+      [v.ADD]: "ADD",
+      [v.REMOVE]: "REMOVE",
+      [v.ADD_MANY]: "ADD_MANY",
+      [v.REMOVE_MANY]: "REMOVE_MANY",
+      [v.MOVE]: "MOVE",
+      [v.REMOVING_ADAPTER]: "REMOVING_ADAPTER",
+      [v.RESOLVE]: "RESOLVE"
     }, t = this.feature?.getName() || "unknown";
     return `Notification(${e[this.eventType]}, feature=${t}, old=${this.oldValue}, new=${this.newValue})`;
   }
 }
-const Ge = /^(?:0|[1-9]\d*)$/, bt = Symbol.for("emfts.indexedList"), Rt = {
-  get(c, e, t) {
-    if (e === bt)
+const gt = /^(?:0|[1-9]\d*)$/, Qt = Symbol.for("emfts.indexedList"), Zt = {
+  get(h, e, t) {
+    if (e === Qt)
       return !0;
-    if (typeof e == "string" && Ge.test(e)) {
-      const s = Number(e), r = c.data;
-      return r !== void 0 ? r[s] : s < c.size() ? c.get(s) : void 0;
+    if (typeof e == "string" && gt.test(e)) {
+      const s = Number(e), r = h.data;
+      return r !== void 0 ? r[s] : s < h.size() ? h.get(s) : void 0;
     }
-    return Reflect.get(c, e, t);
+    return Reflect.get(h, e, t);
   },
-  set(c, e, t, s) {
+  set(h, e, t, s) {
     if (e === "length") {
       const r = typeof t == "number" ? t : parseInt(t, 10);
       if (isNaN(r) || r < 0)
         throw new RangeError(`Invalid list length: ${String(t)}`);
       if (r === 0)
-        c.clear();
+        h.clear();
       else
-        for (; c.size() > r; )
-          c.removeAt(c.size() - 1);
+        for (; h.size() > r; )
+          h.removeAt(h.size() - 1);
       return !0;
     }
-    if (typeof e == "string" && Ge.test(e)) {
-      const r = Number(e), n = c.size();
+    if (typeof e == "string" && gt.test(e)) {
+      const r = Number(e), n = h.size();
       if (r < n)
-        c.set(r, t);
+        h.set(r, t);
       else if (r === n)
-        c.add(t);
+        h.add(t);
       else
         throw new RangeError(`Index ${r} out of bounds for list of size ${n}. ELists do not support sparse assignment - use add() or push().`);
       return !0;
     }
-    return Reflect.set(c, e, t, s);
+    return Reflect.set(h, e, t, s);
   },
-  has(c, e) {
-    return typeof e == "string" && Ge.test(e) ? Number(e) < c.size() : Reflect.has(c, e);
+  has(h, e) {
+    return typeof e == "string" && gt.test(e) ? Number(e) < h.size() : Reflect.has(h, e);
   }
 };
-class Z {
+class de {
   constructor(e = null, t = null) {
-    return this.data = [], this.owner = e, this.feature = t, new Proxy(this, Rt);
+    return this.data = [], this.owner = e, this.feature = t, new Proxy(this, Zt);
   }
   // ===== Array-compatible properties and methods =====
   /**
@@ -178,12 +178,12 @@ class Z {
    * Sends appropriate notifications.
    */
   splice(e, t, ...s) {
-    const r = e < 0 ? Math.max(this.data.length + e, 0) : Math.min(e, this.data.length), n = t === void 0 ? this.data.length - r : Math.min(Math.max(t, 0), this.data.length - r), i = [];
-    for (let u = 0; u < n; u++)
-      r < this.data.length && i.push(this.removeAt(r));
-    for (let u = 0; u < s.length; u++)
-      this.addAt(r + u, s[u]);
-    return i;
+    const r = e < 0 ? Math.max(this.data.length + e, 0) : Math.min(e, this.data.length), n = t === void 0 ? this.data.length - r : Math.min(Math.max(t, 0), this.data.length - r), u = [];
+    for (let o = 0; o < n; o++)
+      r < this.data.length && u.push(this.removeAt(r));
+    for (let o = 0; o < s.length; o++)
+      this.addAt(r + o, s[o]);
+    return u;
   }
   /**
    * Array-compatible forEach method.
@@ -252,7 +252,7 @@ class Z {
   concat(...e) {
     const t = [...this.data];
     for (const s of e)
-      Array.isArray(s) ? t.push(...s) : s instanceof Z ? t.push(...s.data) : t.push(s);
+      Array.isArray(s) ? t.push(...s) : s instanceof de ? t.push(...s.data) : t.push(s);
     return t;
   }
   /**
@@ -402,38 +402,38 @@ class Z {
   }
   // ===== Notification hooks =====
   didAdd(e, t) {
-    this.dispatchNotification(N.ADD, null, t, e);
+    this.dispatchNotification(v.ADD, null, t, e);
   }
   didAddMany(e, t) {
-    this.dispatchNotification(N.ADD_MANY, null, t, e);
+    this.dispatchNotification(v.ADD_MANY, null, t, e);
   }
   didRemove(e, t) {
-    this.dispatchNotification(N.REMOVE, t, null, e);
+    this.dispatchNotification(v.REMOVE, t, null, e);
   }
   didClear(e) {
-    e.length === 1 ? this.dispatchNotification(N.REMOVE, e[0], null, 0) : this.dispatchNotification(N.REMOVE_MANY, e, null, Pe);
+    e.length === 1 ? this.dispatchNotification(v.REMOVE, e[0], null, 0) : this.dispatchNotification(v.REMOVE_MANY, e, null, st);
   }
   didSet(e, t, s) {
-    this.dispatchNotification(N.SET, s, t, e);
+    this.dispatchNotification(v.SET, s, t, e);
   }
   didMove(e, t, s) {
-    this.dispatchNotification(N.MOVE, s, t, e);
+    this.dispatchNotification(v.MOVE, s, t, e);
   }
   dispatchNotification(e, t, s, r) {
     const n = this.getFeature();
     if (!this.owner || !n || "eDeliver" in this.owner && !this.owner.eDeliver())
       return;
     if ("eAdapters" in this.owner) {
-      const u = this.owner.eAdapters();
-      if (!u || u.length === 0)
+      const o = this.owner.eAdapters();
+      if (!o || o.length === 0)
         return;
     } else
       return;
-    const i = new oe(this.owner, e, n, t, s, r);
-    "eNotify" in this.owner && this.owner.eNotify(i);
+    const u = new Re(this.owner, e, n, t, s, r);
+    "eNotify" in this.owner && this.owner.eNotify(u);
   }
 }
-class Se extends Z {
+class qe extends de {
   constructor(e, t) {
     super(e, t);
   }
@@ -498,7 +498,7 @@ class Se extends Z {
     }
   }
 }
-class Pt extends Se {
+class es extends qe {
   constructor(e, t, s) {
     super(e, t), this.inverseSetter = s;
   }
@@ -522,10 +522,10 @@ class Pt extends Se {
     this.inverseSetter(s, null), this.inverseSetter(t, this.owner), super.didSet(e, t, s);
   }
 }
-function Ls(c, e, t) {
-  return V(new Pt(c, e, t));
+function ir(h, e, t) {
+  return ge(new es(h, e, t));
 }
-class vt extends Se {
+class ts extends qe {
   constructor(e, t, s) {
     super(e, null), this.resolvedFeature = void 0, this.featureResolver = t, this.inverseSetter = s;
   }
@@ -552,7 +552,7 @@ class vt extends Se {
     this.inverseSetter(s, null), this.inverseSetter(t, this.owner), super.didSet(e, t, s);
   }
 }
-class xt extends Z {
+class ss extends de {
   constructor(e, t) {
     super(e, t);
   }
@@ -560,7 +560,7 @@ class xt extends Z {
     if (e < 0 || e >= this.data.length)
       throw new RangeError(`Index ${e} out of bounds for list of size ${this.data.length}`);
     let t = this.data[e];
-    if (t && L(t) && t.eIsProxy() && this.owner && "eResolveProxy" in this.owner) {
+    if (t && ie(t) && t.eIsProxy() && this.owner && "eResolveProxy" in this.owner) {
       const s = this.owner.eResolveProxy(t);
       s !== t && (this.data[e] = s, t = s);
     }
@@ -576,43 +576,43 @@ class xt extends Z {
     };
   }
 }
-function M(c) {
-  return c && typeof c.add == "function" && typeof c.size == "function" && typeof c.get == "function";
+function se(h) {
+  return h && typeof h.add == "function" && typeof h.size == "function" && typeof h.get == "function";
 }
-function V(c) {
-  return c[bt] ? c : new Proxy(c, Rt);
+function ge(h) {
+  return h[Qt] ? h : new Proxy(h, Zt);
 }
-function Dt(c, e) {
-  return V(new Se(c, e));
+function rs(h, e) {
+  return ge(new qe(h, e));
 }
-function Ft(c, e) {
-  return V(new xt(c, e));
+function ns(h, e) {
+  return ge(new ss(h, e));
 }
-function kt(c, e) {
-  return V(new Z(c, e));
+function is(h, e) {
+  return ge(new de(h, e));
 }
-class Ot extends Z {
+class as extends de {
   constructor(e) {
     super(null, null), this.resource = e;
   }
   didAdd(e, t) {
-    this.setResource(t), this.dispatchResourceNotification(N.ADD, null, t, e);
+    this.setResource(t), this.dispatchResourceNotification(v.ADD, null, t, e);
   }
   didAddMany(e, t) {
     for (const s of t)
       this.setResource(s);
-    this.dispatchResourceNotification(N.ADD_MANY, null, t, e);
+    this.dispatchResourceNotification(v.ADD_MANY, null, t, e);
   }
   didRemove(e, t) {
-    this.unsetResource(t), this.dispatchResourceNotification(N.REMOVE, t, null, e);
+    this.unsetResource(t), this.dispatchResourceNotification(v.REMOVE, t, null, e);
   }
   didClear(e) {
     for (const t of e)
       this.unsetResource(t);
-    e.length === 1 ? this.dispatchResourceNotification(N.REMOVE, e[0], null, 0) : e.length > 1 && this.dispatchResourceNotification(N.REMOVE_MANY, e, null, Pe);
+    e.length === 1 ? this.dispatchResourceNotification(v.REMOVE, e[0], null, 0) : e.length > 1 && this.dispatchResourceNotification(v.REMOVE_MANY, e, null, st);
   }
   didSet(e, t, s) {
-    this.unsetResource(s), this.setResource(t), this.dispatchResourceNotification(N.SET, s, t, e);
+    this.unsetResource(s), this.setResource(t), this.dispatchResourceNotification(v.SET, s, t, e);
   }
   setResource(e) {
     e && "eSetResource" in e && e.eSetResource(this.resource);
@@ -628,69 +628,69 @@ class Ot extends Z {
     if (!this.resource || "eDeliver" in this.resource && !this.resource.eDeliver())
       return;
     if ("eAdapters" in this.resource) {
-      const u = this.resource.eAdapters();
-      if (!u || u.length === 0)
+      const o = this.resource.eAdapters();
+      if (!o || o.length === 0)
         return;
     } else
       return;
-    const n = { getName: () => "contents" }, i = new oe(this.resource, e, n, t, s, r);
-    "eNotify" in this.resource && this.resource.eNotify(i);
+    const n = { getName: () => "contents" }, u = new Re(this.resource, e, n, t, s, r);
+    "eNotify" in this.resource && this.resource.eNotify(u);
   }
 }
-function wt(c) {
-  return V(new Ot(c));
+function os(h) {
+  return ge(new as(h));
 }
-var X;
-(function(c) {
-  c.INSTANCE = js();
-})(X || (X = {}));
-function ve(c, e) {
+var oe;
+(function(h) {
+  h.INSTANCE = ar();
+})(oe || (oe = {}));
+function rt(h, e) {
   for (const t of e.getESubpackages()) {
     const s = t.getNsURI();
-    s && c.set(s, t), ve(c, t);
+    s && h.set(s, t), rt(h, t);
   }
 }
-function xe(c) {
-  const e = c.getNsURI();
+function nt(h) {
+  const e = h.getNsURI();
   if (!e)
-    throw new Error(`Cannot register package '${c.getName() ?? "<unnamed>"}': it has no nsURI.`);
+    throw new Error(`Cannot register package '${h.getName() ?? "<unnamed>"}': it has no nsURI.`);
   return e;
 }
-function js() {
-  const c = /* @__PURE__ */ new Map();
+function ar() {
+  const h = /* @__PURE__ */ new Map();
   return {
     getEPackage(e) {
-      const t = c.get(e);
+      const t = h.get(e);
       return t ? "getEPackage" in t ? t.getEPackage() : t : null;
     },
     getEFactory(e) {
-      const t = c.get(e);
+      const t = h.get(e);
       return t ? "getEFactory" in t ? t.getEFactory() : t.getEFactoryInstance() : null;
     },
     get(e) {
-      return c.get(e) || null;
+      return h.get(e) || null;
     },
     set(e, t) {
-      c.set(e, t), "getEPackage" in t || ve(c, t);
+      h.set(e, t), "getEPackage" in t || rt(h, t);
     },
     registerPackage(e) {
-      this.set(xe(e), e);
+      this.set(nt(e), e);
     },
     delete(e) {
-      return c.delete(e);
+      return h.delete(e);
     },
     has(e) {
-      return c.has(e);
+      return h.has(e);
     },
     keys() {
-      return c.keys();
+      return h.keys();
     },
     values() {
-      return c.values();
+      return h.values();
     }
   };
 }
-class T {
+class D {
   constructor(e, t, s, r, n) {
     this._scheme = e, this._authority = t, this._path = s, this._query = r, this._fragment = n;
   }
@@ -699,43 +699,43 @@ class T {
    */
   static createURI(e) {
     if (!e)
-      return new T(null, null, "", null, null);
-    let t = null, s = null, r = null, n = null, i = null, u = 0;
+      return new D(null, null, "", null, null);
+    let t = null, s = null, r = null, n = null, u = null, o = 0;
     e.length;
-    const l = e.indexOf("#");
-    l >= 0 && (i = e.substring(l + 1), e = e.substring(0, l));
-    const h = e.indexOf("?");
-    h >= 0 && (n = e.substring(h + 1), e = e.substring(0, h));
-    const d = e.indexOf(":");
-    if (d > 0) {
-      let p = !0;
-      for (let E = 0; E < d; E++)
-        if (e.charAt(E) === "/") {
-          p = !1;
+    const p = e.indexOf("#");
+    p >= 0 && (u = e.substring(p + 1), e = e.substring(0, p));
+    const d = e.indexOf("?");
+    d >= 0 && (n = e.substring(d + 1), e = e.substring(0, d));
+    const E = e.indexOf(":");
+    if (E > 0) {
+      let T = !0;
+      for (let R = 0; R < E; R++)
+        if (e.charAt(R) === "/") {
+          T = !1;
           break;
         }
-      p && (t = e.substring(0, d), u = d + 1);
+      T && (t = e.substring(0, E), o = E + 1);
     }
-    if (e.startsWith("//", u)) {
-      const p = u + 2;
-      let E = p;
-      for (; E < e.length && e.charAt(E) !== "/"; )
-        E++;
-      s = e.substring(p, E), u = E;
+    if (e.startsWith("//", o)) {
+      const T = o + 2;
+      let R = T;
+      for (; R < e.length && e.charAt(R) !== "/"; )
+        R++;
+      s = e.substring(T, R), o = R;
     }
-    return u < e.length ? r = e.substring(u) : s !== null && (r = ""), new T(t, s, r, n, i);
+    return o < e.length ? r = e.substring(o) : s !== null && (r = ""), new D(t, s, r, n, u);
   }
   /**
    * Creates a file URI.
    */
   static createFileURI(e) {
-    return new T("file", null, e, null, null);
+    return new D("file", null, e, null, null);
   }
   /**
    * Creates a platform resource URI.
    */
   static createPlatformResourceURI(e, t = !0) {
-    return new T("platform", null, "/resource" + e, null, null);
+    return new D("platform", null, "/resource" + e, null, null);
   }
   /**
    * Returns the scheme, or null.
@@ -813,14 +813,14 @@ class T {
    * Returns a new URI with the given fragment.
    */
   appendFragment(e) {
-    return new T(this._scheme, this._authority, this._path, this._query, e);
+    return new D(this._scheme, this._authority, this._path, this._query, e);
   }
   /**
    * Returns a new URI with the given path segment appended.
    */
   appendSegment(e) {
     let t = this._path || "";
-    return !t && this._authority && (t = "/"), t && !t.endsWith("/") && (t += "/"), t += e, new T(this._scheme, this._authority, t, this._query, this._fragment);
+    return !t && this._authority && (t = "/"), t && !t.endsWith("/") && (t += "/"), t += e, new D(this._scheme, this._authority, t, this._query, this._fragment);
   }
   /**
    * Returns a new URI with the specified number of segments trimmed from the end.
@@ -830,19 +830,19 @@ class T {
       return this;
     const t = this._path.split("/").filter((n) => n.length > 0), s = t.slice(0, Math.max(0, t.length - e));
     let r = this._path.startsWith("/") ? "/" : "";
-    return r += s.join("/"), this._path.endsWith("/") && r.length > 0 && (r += "/"), new T(this._scheme, this._authority, r, this._query, this._fragment);
+    return r += s.join("/"), this._path.endsWith("/") && r.length > 0 && (r += "/"), new D(this._scheme, this._authority, r, this._query, this._fragment);
   }
   /**
    * Returns a new URI with the query removed.
    */
   trimQuery() {
-    return new T(this._scheme, this._authority, this._path, null, this._fragment);
+    return new D(this._scheme, this._authority, this._path, null, this._fragment);
   }
   /**
    * Returns a new URI with the fragment removed.
    */
   trimFragment() {
-    return new T(this._scheme, this._authority, this._path, this._query, null);
+    return new D(this._scheme, this._authority, this._path, this._query, null);
   }
   /**
    * Resolves this URI against a base URI (RFC 3986 with EMF modifications).
@@ -856,15 +856,15 @@ class T {
     else if (s = e._authority, !r || r === "") {
       if (this._query !== null) {
         if (r = e._path, r) {
-          const i = r.lastIndexOf("/");
-          i >= 0 && (r = r.substring(0, i + 1));
+          const u = r.lastIndexOf("/");
+          u >= 0 && (r = r.substring(0, u + 1));
         }
       } else
         r = e._path;
       n = this._query !== null ? this._query : e._query;
     } else
       r.startsWith("/") || (r = this.mergePaths(e._path, r), r = this.removeDotSegments(r));
-    return new T(t, s, r, n, this._fragment);
+    return new D(t, s, r, n, this._fragment);
   }
   /**
    * Deresolves this URI against a base URI.
@@ -875,25 +875,25 @@ class T {
     if (this._authority === null != (e._authority === null))
       return this;
     if (this._authority !== null && e._authority !== null && this._authority !== e._authority)
-      return new T(null, this._authority, this._path, this._query, this._fragment);
+      return new D(null, this._authority, this._path, this._query, this._fragment);
     const t = this._path || "", s = e._path || "";
     if (t === s)
-      return this._query === e._query ? new T(null, null, null, null, this._fragment) : new T(null, null, "", this._query, this._fragment);
+      return this._query === e._query ? new D(null, null, null, null, this._fragment) : new D(null, null, "", this._query, this._fragment);
     const r = t.split("/"), n = s.split("/");
-    let i = 0;
-    const u = Math.min(r.length, n.length);
-    for (let E = 0; E < u - 1 && r[E] === n[E]; E++)
-      i++;
-    const l = n.length - i - 1, h = t.includes("/./") || t.includes("/../") || t.endsWith("/.") || t.endsWith("/..");
-    if (t.startsWith("/") && (l >= 3 || h && l > 0))
-      return new T(null, null, t, this._query, this._fragment);
-    const d = [];
-    for (let E = 0; E < l; E++)
-      d.push("..");
-    for (let E = i; E < r.length; E++)
-      d.push(r[E]);
-    let p = d.join("/");
-    return p === "" && t.endsWith("/") && (p = "./"), new T(null, null, p, this._query, this._fragment);
+    let u = 0;
+    const o = Math.min(r.length, n.length);
+    for (let R = 0; R < o - 1 && r[R] === n[R]; R++)
+      u++;
+    const p = n.length - u - 1, d = t.includes("/./") || t.includes("/../") || t.endsWith("/.") || t.endsWith("/..");
+    if (t.startsWith("/") && (p >= 3 || d && p > 0))
+      return new D(null, null, t, this._query, this._fragment);
+    const E = [];
+    for (let R = 0; R < p; R++)
+      E.push("..");
+    for (let R = u; R < r.length; R++)
+      E.push(r[R]);
+    let T = E.join("/");
+    return T === "" && t.endsWith("/") && (T = "./"), new D(null, null, T, this._query, this._fragment);
   }
   /**
    * Merges a relative path with a base path.
@@ -910,8 +910,8 @@ class T {
   removeDotSegments(e) {
     const t = [], s = e.split("/"), r = s.length > 0 && (s[s.length - 1] === "." || s[s.length - 1] === "..");
     for (let n = 0; n < s.length; n++) {
-      const i = s[n];
-      i === ".." ? t.length > 0 && t[t.length - 1] !== "" && t.pop() : i !== "." && !(i === "" && n > 0 && n < s.length - 1) && t.push(i);
+      const u = s[n];
+      u === ".." ? t.length > 0 && t[t.length - 1] !== "" && t.pop() : u !== "." && !(u === "" && n > 0 && n < s.length - 1) && t.push(u);
     }
     return r && t.length > 0 && t.push(""), t.join("/");
   }
@@ -959,10 +959,10 @@ class T {
     return this._scheme === null;
   }
 }
-function tt(c) {
-  return "unsetTarget" in c && typeof c.unsetTarget == "function";
+function wt(h) {
+  return "unsetTarget" in h && typeof h.unsetTarget == "function";
 }
-class Bt {
+class us {
   constructor() {
     this.target = null;
   }
@@ -976,7 +976,7 @@ class Bt {
     return !1;
   }
 }
-class K {
+class le {
   constructor() {
     this._eResource = null, this._eContainer = null, this._eContainerFeature = null, this._eProxyURI = null, this._eAdapters = [], this._eDeliver = !0, this.eSettings = /* @__PURE__ */ new Map();
   }
@@ -1024,9 +1024,9 @@ class K {
     for (const r of s) {
       const n = this.eGet(r);
       if (n)
-        if (Array.isArray(n) || M(n))
-          for (const i of n)
-            e.push(i);
+        if (Array.isArray(n) || se(n))
+          for (const u of n)
+            e.push(u);
         else
           e.push(n);
     }
@@ -1076,29 +1076,29 @@ class K {
     const r = s.getResourceSet();
     if (!r)
       return e;
-    const n = t.toString(), i = n.indexOf("#");
-    if (i > 0) {
-      const u = n.substring(0, i), l = n.substring(i + 1);
-      let h;
-      const d = s.getURI();
-      d && !u.includes("://") ? h = d.resolve(T.createURI(u)) : h = T.createURI(u);
-      const p = r.getResource(h, !0);
-      if (p) {
-        const S = p.getEObject(l);
-        if (S)
-          return S;
+    const n = t.toString(), u = n.indexOf("#");
+    if (u > 0) {
+      const o = n.substring(0, u), p = n.substring(u + 1);
+      let d;
+      const E = s.getURI();
+      E && !o.includes("://") ? d = E.resolve(D.createURI(o)) : d = D.createURI(o);
+      const T = r.getResource(d, !0);
+      if (T) {
+        const b = T.getEObject(p);
+        if (b)
+          return b;
       }
-      const E = r.getPackageRegistry(), C = this.resolveFragmentViaPackageRegistry(E, u, l, r);
-      if (C)
-        return C;
-    } else if (i === 0) {
-      const u = n.substring(1), l = s.getEObject(u);
-      if (l)
-        return l;
+      const R = r.getPackageRegistry(), _ = this.resolveFragmentViaPackageRegistry(R, o, p, r);
+      if (_)
+        return _;
+    } else if (u === 0) {
+      const o = n.substring(1), p = s.getEObject(o);
+      if (p)
+        return p;
     } else {
-      const u = s.getEObject(n);
-      if (u)
-        return u;
+      const o = s.getEObject(n);
+      if (o)
+        return o;
     }
     return e;
   }
@@ -1111,21 +1111,21 @@ class K {
   resolveFragmentViaPackageRegistry(e, t, s, r) {
     const n = e.getEPackage(t);
     if (n) {
-      const h = this.resolveFragmentInPackage(n, s);
-      if (h)
-        return h;
+      const d = this.resolveFragmentInPackage(n, s);
+      if (d)
+        return d;
     }
-    let i = t;
-    const u = i.lastIndexOf("/");
-    u >= 0 && (i = i.substring(u + 1));
-    const l = i.indexOf(".");
-    if (l > 0 && (i = i.substring(0, l)), i)
-      for (const h of e.keys()) {
-        const d = e.getEPackage(h);
-        if (d && d.getName() === i) {
-          const p = this.resolveFragmentInPackage(d, s);
-          if (p)
-            return p;
+    let u = t;
+    const o = u.lastIndexOf("/");
+    o >= 0 && (u = u.substring(o + 1));
+    const p = u.indexOf(".");
+    if (p > 0 && (u = u.substring(0, p)), u)
+      for (const d of e.keys()) {
+        const E = e.getEPackage(d);
+        if (E && E.getName() === u) {
+          const T = this.resolveFragmentInPackage(E, s);
+          if (T)
+            return T;
         }
       }
     return null;
@@ -1141,20 +1141,20 @@ class K {
       return null;
     const r = s.split("/");
     let n = e;
-    for (let l = 0; l < r.length - 1; l++) {
-      const h = n.getESubpackages();
-      let d = null;
-      for (let p = 0; p < h.length; p++)
-        if (h.get(p).getName() === r[l]) {
-          d = h.get(p);
+    for (let p = 0; p < r.length - 1; p++) {
+      const d = n.getESubpackages();
+      let E = null;
+      for (let T = 0; T < d.length; T++)
+        if (d.get(T).getName() === r[p]) {
+          E = d.get(T);
           break;
         }
-      if (!d)
+      if (!E)
         return null;
-      n = d;
+      n = E;
     }
-    const i = r[r.length - 1];
-    return n.getEClassifier(i) ?? null;
+    const u = r[r.length - 1];
+    return n.getEClassifier(u) ?? null;
   }
   /**
    * Returns the internal resource (bypassing container navigation)
@@ -1214,10 +1214,10 @@ class K {
     const t = this._eAdapters.indexOf(e);
     if (t !== -1) {
       if (this._eDeliver) {
-        const s = new oe(this, N.REMOVING_ADAPTER, null, e, null);
+        const s = new Re(this, v.REMOVING_ADAPTER, null, e, null);
         e.notifyChanged(s);
       }
-      return this._eAdapters.splice(t, 1), tt(e) ? e.unsetTarget(this) : e.setTarget(null), !0;
+      return this._eAdapters.splice(t, 1), wt(e) ? e.unsetTarget(this) : e.setTarget(null), !0;
     }
     return !1;
   }
@@ -1231,9 +1231,9 @@ class K {
       if (!r.isContainment()) {
         const n = this.eGet(r);
         if (n)
-          if (Array.isArray(n) || M(n))
-            for (const i of n)
-              e.push(i);
+          if (Array.isArray(n) || se(n))
+            for (const u of n)
+              e.push(u);
           else
             e.push(n);
       }
@@ -1255,13 +1255,13 @@ class K {
       const n = e;
       if (n.isContainment() && (r && typeof r == "object" && "eSetContainer" in r && r.eSetContainer(null, null), t && typeof t == "object" && "eSetContainer" in t))
         if (Array.isArray(t))
-          for (const i of t)
-            i && "eSetContainer" in i && i.eSetContainer(this, n);
+          for (const u of t)
+            u && "eSetContainer" in u && u.eSetContainer(this, n);
         else
           t.eSetContainer(this, n);
     }
     if (this._eDeliver && this._eAdapters.length > 0) {
-      const n = new oe(this, N.SET, e, r, t);
+      const n = new Re(this, v.SET, e, r, t);
       this.eNotify(n);
     }
   }
@@ -1283,7 +1283,7 @@ class K {
           n && "eSetContainer" in n && n.eSetContainer(null, null);
       else typeof s == "object" && "eSetContainer" in s && s.eSetContainer(null, null);
     if (this._eDeliver && this._eAdapters.length > 0) {
-      const r = new oe(this, N.UNSET, e, s, e.getDefaultValue());
+      const r = new Re(this, v.UNSET, e, s, e.getDefaultValue());
       this.eNotify(r);
     }
   }
@@ -1318,7 +1318,7 @@ class K {
     return Math.random().toString(36).substring(7);
   }
 }
-class st extends K {
+class Ft extends le {
   constructor(e) {
     super(), this._eClass = e;
   }
@@ -1333,7 +1333,7 @@ class st extends K {
     const t = e.getName() || "";
     if (this.eSettings.has(t)) {
       let r = this.eSettings.get(t);
-      if (!e.isMany() && r && L(r) && r.eIsProxy()) {
+      if (!e.isMany() && r && ie(r) && r.eIsProxy()) {
         const n = this.eResolveProxy(r);
         if (n !== r)
           return this.eSettings.set(t, n), n;
@@ -1344,16 +1344,16 @@ class st extends K {
       let r;
       if ("isContainment" in e) {
         const n = e;
-        n.isContainment() ? r = Dt(this, n) : r = Ft(this, n);
+        n.isContainment() ? r = rs(this, n) : r = ns(this, n);
       } else
-        r = kt(this, e);
+        r = is(this, e);
       return this.eSettings.set(t, r), r;
     }
     const s = e.getDefaultValue();
     return s !== void 0 ? s : null;
   }
 }
-class Gs extends Se {
+class or extends qe {
   constructor(e, t, s) {
     super(e, t), this.eMap = s;
   }
@@ -1375,13 +1375,13 @@ class Gs extends Se {
     super.didSet(e, t, s), this.eMap.entryRemoved(s), this.eMap.entryAdded(t);
   }
 }
-class Mt {
+class cs {
   constructor(e, t, s) {
-    this.mapIndex = null, this._owner = e, this.entryEClass = s, this.delegateList = new Gs(e, t, this);
+    this.mapIndex = null, this._owner = e, this.entryEClass = s, this.delegateList = new or(e, t, this);
     const r = s.getEStructuralFeature("key"), n = s.getEStructuralFeature("value");
     if (!r || !n)
       throw new Error(`Entry EClass '${s.getName()}' must have 'key' and 'value' features`);
-    return this.keyFeature = r, this.valueFeature = n, V(this);
+    return this.keyFeature = r, this.valueFeature = n, ge(this);
   }
   /**
    * Rebuild map index from the delegate list contents.
@@ -1405,12 +1405,12 @@ class Mt {
   putByKey(e, t) {
     const r = this.ensureIndex().get(e);
     if (r) {
-      const u = r.eGet(this.valueFeature);
-      return r.eSet(this.valueFeature, t), u;
+      const o = r.eGet(this.valueFeature);
+      return r.eSet(this.valueFeature, t), o;
     }
     const n = this.entryEClass.getEPackage();
-    let i;
-    n && n.getEFactoryInstance() ? i = n.getEFactoryInstance().create(this.entryEClass) : i = new st(this.entryEClass), i.eSet(this.keyFeature, e), i.eSet(this.valueFeature, t), this.delegateList.add(i);
+    let u;
+    n && n.getEFactoryInstance() ? u = n.getEFactoryInstance().create(this.entryEClass) : u = new Ft(this.entryEClass), u.eSet(this.keyFeature, e), u.eSet(this.valueFeature, t), this.delegateList.add(u);
   }
   removeByKey(e) {
     const s = this.ensureIndex().get(e);
@@ -1560,28 +1560,28 @@ class Mt {
     return this.delegateList.toJSON();
   }
 }
-function Ut(c, e, t) {
-  return new Mt(c, e, t);
+function ls(h, e, t) {
+  return new cs(h, e, t);
 }
-function $s(c) {
-  return !!c && typeof c.getByKey == "function" && typeof c.putByKey == "function" && typeof c.size == "function" && typeof c.add == "function";
+function ur(h) {
+  return !!h && typeof h.getByKey == "function" && typeof h.putByKey == "function" && typeof h.size == "function" && typeof h.add == "function";
 }
-var fe;
-(function(c) {
-  c.INSTANCE_FACTORY_REGISTRY = Xs();
-})(fe || (fe = {}));
-function Xs() {
-  const c = /* @__PURE__ */ new Map(), e = /* @__PURE__ */ new Map(), t = /* @__PURE__ */ new Map();
+var Pe;
+(function(h) {
+  h.INSTANCE_FACTORY_REGISTRY = cr();
+})(Pe || (Pe = {}));
+function cr() {
+  const h = /* @__PURE__ */ new Map(), e = /* @__PURE__ */ new Map(), t = /* @__PURE__ */ new Map();
   return {
     getFactory(s) {
       const r = s.scheme();
       if (r && e.has(r))
         return e.get(r);
       const n = s.fileExtension();
-      return n && c.has(n) ? c.get(n) : null;
+      return n && h.has(n) ? h.get(n) : null;
     },
     getExtensionToFactoryMap() {
-      return c;
+      return h;
     },
     getProtocolToFactoryMap() {
       return e;
@@ -1591,9 +1591,9 @@ function Xs() {
     }
   };
 }
-class De {
+class it {
   constructor(e) {
-    this.resourceSet = null, this.loaded = !1, this.modified = !1, this.errors = [], this.warnings = [], this._eAdapters = [], this._eDeliver = !0, this.uri = e || null, this.contents = wt(this);
+    this.resourceSet = null, this.loaded = !1, this.modified = !1, this.errors = [], this.warnings = [], this._eAdapters = [], this._eDeliver = !0, this.uri = e || null, this.contents = os(this);
   }
   // ===== Notifier interface implementation =====
   /**
@@ -1649,15 +1649,15 @@ class De {
   }
   getEObject(e) {
     if (e.startsWith("/")) {
-      const t = e.split("/"), s = t.length >= 2 && t[0] === "" && t[1] === "", r = t.filter((u) => u.length > 0);
+      const t = e.split("/"), s = t.length >= 2 && t[0] === "" && t[1] === "", r = t.filter((o) => o.length > 0);
       if (r.length === 0)
         return this.contents.size() > 0 ? this.contents.get(0) : null;
-      let n = null, i = 0;
-      if (s && (n = this.contents.size() > 0 ? this.contents.get(0) : null, !n || (r[0].startsWith("@") ? n = this.eObjectForURIFragmentSegment(n, r[0]) : n = this.findByNameInContents(n, r[0]), i = 1, !n)))
+      let n = null, u = 0;
+      if (s && (n = this.contents.size() > 0 ? this.contents.get(0) : null, !n || (r[0].startsWith("@") ? n = this.eObjectForURIFragmentSegment(n, r[0]) : n = this.findByNameInContents(n, r[0]), u = 1, !n)))
         return null;
-      for (let u = i; u < r.length; u++) {
-        const l = r[u], h = parseInt(l, 10);
-        if (n === null ? isNaN(h) ? (n = this.findByName(this.contents.toArray(), l), !n && this.contents.size() > 0 && (n = this.findByNameInContents(this.contents.get(0), l))) : n = h < this.contents.size() ? this.contents.get(h) : null : isNaN(h) ? n = this.navigateByNameOrFeature(n, l) : n = n.eContents()[h] || null, !n)
+      for (let o = u; o < r.length; o++) {
+        const p = r[o], d = parseInt(p, 10);
+        if (n === null ? isNaN(d) ? (n = this.findByName(this.contents.toArray(), p), !n && this.contents.size() > 0 && (n = this.findByNameInContents(this.contents.get(0), p))) : n = d < this.contents.size() ? this.contents.get(d) : null : isNaN(d) ? n = this.navigateByNameOrFeature(n, p) : n = n.eContents()[d] || null, !n)
           return null;
       }
       return n;
@@ -1707,13 +1707,13 @@ class De {
     const s = e.eContents(), r = this.findByName(s, t);
     if (r)
       return r;
-    const i = e.eClass().getEStructuralFeature(t);
-    if (i) {
-      const u = e.eGet(i);
-      if (u && typeof u == "object" && "eClass" in u)
-        return u;
-      if (Array.isArray(u) && u.length > 0)
-        return u[0];
+    const u = e.eClass().getEStructuralFeature(t);
+    if (u) {
+      const o = e.eGet(u);
+      if (o && typeof o == "object" && "eClass" in o)
+        return o;
+      if (Array.isArray(o) && o.length > 0)
+        return o[0];
     }
     return null;
   }
@@ -1725,21 +1725,21 @@ class De {
    */
   eObjectForURIFragmentSegment(e, t) {
     const s = t.substring(1), r = e.eClass(), n = s.charAt(s.length - 1);
-    let i, u = -1;
+    let u, o = -1;
     if (n >= "0" && n <= "9") {
-      const d = s.lastIndexOf(".");
-      if (d > 0) {
-        const p = parseInt(s.substring(d + 1), 10);
-        isNaN(p) ? i = s : (i = s.substring(0, d), u = p);
+      const E = s.lastIndexOf(".");
+      if (E > 0) {
+        const T = parseInt(s.substring(E + 1), 10);
+        isNaN(T) ? u = s : (u = s.substring(0, E), o = T);
       } else
-        i = s;
+        u = s;
     } else
-      i = s;
-    const l = r.getEStructuralFeature(i);
-    if (!l)
+      u = s;
+    const p = r.getEStructuralFeature(u);
+    if (!p)
       return null;
-    const h = e.eGet(l);
-    return h == null ? null : u >= 0 ? Array.isArray(h) ? h[u] ?? null : typeof h == "object" && "get" in h && typeof h.get == "function" ? h.get(u) ?? null : null : typeof h == "object" && "eClass" in h ? h : null;
+    const d = e.eGet(p);
+    return d == null ? null : o >= 0 ? Array.isArray(d) ? d[o] ?? null : typeof d == "object" && "get" in d && typeof d.get == "function" ? d.get(o) ?? null : null : typeof d == "object" && "eClass" in d ? d : null;
   }
   getURIFragment(e) {
     const t = [];
@@ -1747,12 +1747,12 @@ class De {
     for (; s; ) {
       const r = s.eContainer();
       if (!r) {
-        const u = this.contents.indexOf(s);
-        u >= 0 && t.unshift(u);
+        const o = this.contents.indexOf(s);
+        o >= 0 && t.unshift(o);
         break;
       }
-      const i = r.eContents().indexOf(s);
-      i >= 0 && t.unshift(i), s = r;
+      const u = r.eContents().indexOf(s);
+      u >= 0 && t.unshift(u), s = r;
     }
     return "/" + t.join("/");
   }
@@ -1802,8 +1802,8 @@ class De {
     const t = this.getAllContents();
     let s = t.next();
     for (; !s.done; ) {
-      const r = s.value, i = r.eClass().getEIDAttribute();
-      if (i && r.eGet(i) === e)
+      const r = s.value, u = r.eClass().getEIDAttribute();
+      if (u && r.eGet(u) === e)
         return r;
       s = t.next();
     }
@@ -1826,23 +1826,1236 @@ class De {
       if (r.isTransient())
         continue;
       const n = e.eGet(r);
-      n != null && (r.isMany() && Array.isArray(n) ? s[r.getName()] = n.map((i) => typeof i == "object" && "eClass" in i ? this.serializeObject(i) : i) : s[r.getName()] = typeof n == "object" && "eClass" in n ? this.serializeObject(n) : n);
+      n != null && (r.isMany() && Array.isArray(n) ? s[r.getName()] = n.map((u) => typeof u == "object" && "eClass" in u ? this.serializeObject(u) : u) : s[r.getName()] = typeof n == "object" && "eClass" in n ? this.serializeObject(n) : n);
     }
     return s;
   }
 }
-var $e = {};
-const Ws = {}, zs = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var pt = {};
+const lr = {}, hr = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  default: Ws
-}, Symbol.toStringTag, { value: "Module" })), qs = /* @__PURE__ */ Ms(zs);
-var Nt;
-function Ys() {
-  return Nt || (Nt = 1, (function(c) {
+  default: lr
+}, Symbol.toStringTag, { value: "Module" })), fr = /* @__PURE__ */ rr(hr);
+var dt = {}, Ve = { exports: {} }, mt = {}, je = {}, $t;
+function gr() {
+  if ($t) return je;
+  $t = 1, je.byteLength = o, je.toByteArray = d, je.fromByteArray = R;
+  for (var h = [], e = [], t = typeof Uint8Array < "u" ? Uint8Array : Array, s = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/", r = 0, n = s.length; r < n; ++r)
+    h[r] = s[r], e[s.charCodeAt(r)] = r;
+  e[45] = 62, e[95] = 63;
+  function u(_) {
+    var b = _.length;
+    if (b % 4 > 0)
+      throw new Error("Invalid string. Length must be a multiple of 4");
+    var B = _.indexOf("=");
+    B === -1 && (B = b);
+    var O = B === b ? 0 : 4 - B % 4;
+    return [B, O];
+  }
+  function o(_) {
+    var b = u(_), B = b[0], O = b[1];
+    return (B + O) * 3 / 4 - O;
+  }
+  function p(_, b, B) {
+    return (b + B) * 3 / 4 - B;
+  }
+  function d(_) {
+    var b, B = u(_), O = B[0], S = B[1], x = new t(p(_, O, S)), w = 0, k = S > 0 ? O - 4 : O, F;
+    for (F = 0; F < k; F += 4)
+      b = e[_.charCodeAt(F)] << 18 | e[_.charCodeAt(F + 1)] << 12 | e[_.charCodeAt(F + 2)] << 6 | e[_.charCodeAt(F + 3)], x[w++] = b >> 16 & 255, x[w++] = b >> 8 & 255, x[w++] = b & 255;
+    return S === 2 && (b = e[_.charCodeAt(F)] << 2 | e[_.charCodeAt(F + 1)] >> 4, x[w++] = b & 255), S === 1 && (b = e[_.charCodeAt(F)] << 10 | e[_.charCodeAt(F + 1)] << 4 | e[_.charCodeAt(F + 2)] >> 2, x[w++] = b >> 8 & 255, x[w++] = b & 255), x;
+  }
+  function E(_) {
+    return h[_ >> 18 & 63] + h[_ >> 12 & 63] + h[_ >> 6 & 63] + h[_ & 63];
+  }
+  function T(_, b, B) {
+    for (var O, S = [], x = b; x < B; x += 3)
+      O = (_[x] << 16 & 16711680) + (_[x + 1] << 8 & 65280) + (_[x + 2] & 255), S.push(E(O));
+    return S.join("");
+  }
+  function R(_) {
+    for (var b, B = _.length, O = B % 3, S = [], x = 16383, w = 0, k = B - O; w < k; w += x)
+      S.push(T(_, w, w + x > k ? k : w + x));
+    return O === 1 ? (b = _[B - 1], S.push(
+      h[b >> 2] + h[b << 4 & 63] + "=="
+    )) : O === 2 && (b = (_[B - 2] << 8) + _[B - 1], S.push(
+      h[b >> 10] + h[b >> 4 & 63] + h[b << 2 & 63] + "="
+    )), S.join("");
+  }
+  return je;
+}
+var Je = {};
+/*! ieee754. BSD-3-Clause License. Feross Aboukhadijeh <https://feross.org/opensource> */
+var Xt;
+function pr() {
+  return Xt || (Xt = 1, Je.read = function(h, e, t, s, r) {
+    var n, u, o = r * 8 - s - 1, p = (1 << o) - 1, d = p >> 1, E = -7, T = t ? r - 1 : 0, R = t ? -1 : 1, _ = h[e + T];
+    for (T += R, n = _ & (1 << -E) - 1, _ >>= -E, E += o; E > 0; n = n * 256 + h[e + T], T += R, E -= 8)
+      ;
+    for (u = n & (1 << -E) - 1, n >>= -E, E += s; E > 0; u = u * 256 + h[e + T], T += R, E -= 8)
+      ;
+    if (n === 0)
+      n = 1 - d;
+    else {
+      if (n === p)
+        return u ? NaN : (_ ? -1 : 1) * (1 / 0);
+      u = u + Math.pow(2, s), n = n - d;
+    }
+    return (_ ? -1 : 1) * u * Math.pow(2, n - s);
+  }, Je.write = function(h, e, t, s, r, n) {
+    var u, o, p, d = n * 8 - r - 1, E = (1 << d) - 1, T = E >> 1, R = r === 23 ? Math.pow(2, -24) - Math.pow(2, -77) : 0, _ = s ? 0 : n - 1, b = s ? 1 : -1, B = e < 0 || e === 0 && 1 / e < 0 ? 1 : 0;
+    for (e = Math.abs(e), isNaN(e) || e === 1 / 0 ? (o = isNaN(e) ? 1 : 0, u = E) : (u = Math.floor(Math.log(e) / Math.LN2), e * (p = Math.pow(2, -u)) < 1 && (u--, p *= 2), u + T >= 1 ? e += R / p : e += R * Math.pow(2, 1 - T), e * p >= 2 && (u++, p /= 2), u + T >= E ? (o = 0, u = E) : u + T >= 1 ? (o = (e * p - 1) * Math.pow(2, r), u = u + T) : (o = e * Math.pow(2, T - 1) * Math.pow(2, r), u = 0)); r >= 8; h[t + _] = o & 255, _ += b, o /= 256, r -= 8)
+      ;
+    for (u = u << r | o, d += r; d > 0; h[t + _] = u & 255, _ += b, u /= 256, d -= 8)
+      ;
+    h[t + _ - b] |= B * 128;
+  }), Je;
+}
+/*!
+ * The buffer module from node.js, for the browser.
+ *
+ * @author   Feross Aboukhadijeh <https://feross.org>
+ * @license  MIT
+ */
+var qt;
+function dr() {
+  return qt || (qt = 1, (function(h) {
+    const e = gr(), t = pr(), s = typeof Symbol == "function" && typeof Symbol.for == "function" ? Symbol.for("nodejs.util.inspect.custom") : null;
+    h.Buffer = o, h.SlowBuffer = x, h.INSPECT_MAX_BYTES = 50;
+    const r = 2147483647;
+    h.kMaxLength = r, o.TYPED_ARRAY_SUPPORT = n(), !o.TYPED_ARRAY_SUPPORT && typeof console < "u" && typeof console.error == "function" && console.error(
+      "This browser lacks typed array (Uint8Array) support which is required by `buffer` v5.x. Use `buffer` v4.x if you require old browser support."
+    );
+    function n() {
+      try {
+        const l = new Uint8Array(1), i = { foo: function() {
+          return 42;
+        } };
+        return Object.setPrototypeOf(i, Uint8Array.prototype), Object.setPrototypeOf(l, i), l.foo() === 42;
+      } catch {
+        return !1;
+      }
+    }
+    Object.defineProperty(o.prototype, "parent", {
+      enumerable: !0,
+      get: function() {
+        if (o.isBuffer(this))
+          return this.buffer;
+      }
+    }), Object.defineProperty(o.prototype, "offset", {
+      enumerable: !0,
+      get: function() {
+        if (o.isBuffer(this))
+          return this.byteOffset;
+      }
+    });
+    function u(l) {
+      if (l > r)
+        throw new RangeError('The value "' + l + '" is invalid for option "size"');
+      const i = new Uint8Array(l);
+      return Object.setPrototypeOf(i, o.prototype), i;
+    }
+    function o(l, i, a) {
+      if (typeof l == "number") {
+        if (typeof i == "string")
+          throw new TypeError(
+            'The "string" argument must be of type string. Received type number'
+          );
+        return T(l);
+      }
+      return p(l, i, a);
+    }
+    o.poolSize = 8192;
+    function p(l, i, a) {
+      if (typeof l == "string")
+        return R(l, i);
+      if (ArrayBuffer.isView(l))
+        return b(l);
+      if (l == null)
+        throw new TypeError(
+          "The first argument must be one of type string, Buffer, ArrayBuffer, Array, or Array-like Object. Received type " + typeof l
+        );
+      if (ce(l, ArrayBuffer) || l && ce(l.buffer, ArrayBuffer) || typeof SharedArrayBuffer < "u" && (ce(l, SharedArrayBuffer) || l && ce(l.buffer, SharedArrayBuffer)))
+        return B(l, i, a);
+      if (typeof l == "number")
+        throw new TypeError(
+          'The "value" argument must not be of type number. Received type number'
+        );
+      const g = l.valueOf && l.valueOf();
+      if (g != null && g !== l)
+        return o.from(g, i, a);
+      const m = O(l);
+      if (m) return m;
+      if (typeof Symbol < "u" && Symbol.toPrimitive != null && typeof l[Symbol.toPrimitive] == "function")
+        return o.from(l[Symbol.toPrimitive]("string"), i, a);
+      throw new TypeError(
+        "The first argument must be one of type string, Buffer, ArrayBuffer, Array, or Array-like Object. Received type " + typeof l
+      );
+    }
+    o.from = function(l, i, a) {
+      return p(l, i, a);
+    }, Object.setPrototypeOf(o.prototype, Uint8Array.prototype), Object.setPrototypeOf(o, Uint8Array);
+    function d(l) {
+      if (typeof l != "number")
+        throw new TypeError('"size" argument must be of type number');
+      if (l < 0)
+        throw new RangeError('The value "' + l + '" is invalid for option "size"');
+    }
+    function E(l, i, a) {
+      return d(l), l <= 0 ? u(l) : i !== void 0 ? typeof a == "string" ? u(l).fill(i, a) : u(l).fill(i) : u(l);
+    }
+    o.alloc = function(l, i, a) {
+      return E(l, i, a);
+    };
+    function T(l) {
+      return d(l), u(l < 0 ? 0 : S(l) | 0);
+    }
+    o.allocUnsafe = function(l) {
+      return T(l);
+    }, o.allocUnsafeSlow = function(l) {
+      return T(l);
+    };
+    function R(l, i) {
+      if ((typeof i != "string" || i === "") && (i = "utf8"), !o.isEncoding(i))
+        throw new TypeError("Unknown encoding: " + i);
+      const a = w(l, i) | 0;
+      let g = u(a);
+      const m = g.write(l, i);
+      return m !== a && (g = g.slice(0, m)), g;
+    }
+    function _(l) {
+      const i = l.length < 0 ? 0 : S(l.length) | 0, a = u(i);
+      for (let g = 0; g < i; g += 1)
+        a[g] = l[g] & 255;
+      return a;
+    }
+    function b(l) {
+      if (ce(l, Uint8Array)) {
+        const i = new Uint8Array(l);
+        return B(i.buffer, i.byteOffset, i.byteLength);
+      }
+      return _(l);
+    }
+    function B(l, i, a) {
+      if (i < 0 || l.byteLength < i)
+        throw new RangeError('"offset" is outside of buffer bounds');
+      if (l.byteLength < i + (a || 0))
+        throw new RangeError('"length" is outside of buffer bounds');
+      let g;
+      return i === void 0 && a === void 0 ? g = new Uint8Array(l) : a === void 0 ? g = new Uint8Array(l, i) : g = new Uint8Array(l, i, a), Object.setPrototypeOf(g, o.prototype), g;
+    }
+    function O(l) {
+      if (o.isBuffer(l)) {
+        const i = S(l.length) | 0, a = u(i);
+        return a.length === 0 || l.copy(a, 0, 0, i), a;
+      }
+      if (l.length !== void 0)
+        return typeof l.length != "number" || ft(l.length) ? u(0) : _(l);
+      if (l.type === "Buffer" && Array.isArray(l.data))
+        return _(l.data);
+    }
+    function S(l) {
+      if (l >= r)
+        throw new RangeError("Attempt to allocate Buffer larger than maximum size: 0x" + r.toString(16) + " bytes");
+      return l | 0;
+    }
+    function x(l) {
+      return +l != l && (l = 0), o.alloc(+l);
+    }
+    o.isBuffer = function(i) {
+      return i != null && i._isBuffer === !0 && i !== o.prototype;
+    }, o.compare = function(i, a) {
+      if (ce(i, Uint8Array) && (i = o.from(i, i.offset, i.byteLength)), ce(a, Uint8Array) && (a = o.from(a, a.offset, a.byteLength)), !o.isBuffer(i) || !o.isBuffer(a))
+        throw new TypeError(
+          'The "buf1", "buf2" arguments must be one of type Buffer or Uint8Array'
+        );
+      if (i === a) return 0;
+      let g = i.length, m = a.length;
+      for (let N = 0, A = Math.min(g, m); N < A; ++N)
+        if (i[N] !== a[N]) {
+          g = i[N], m = a[N];
+          break;
+        }
+      return g < m ? -1 : m < g ? 1 : 0;
+    }, o.isEncoding = function(i) {
+      switch (String(i).toLowerCase()) {
+        case "hex":
+        case "utf8":
+        case "utf-8":
+        case "ascii":
+        case "latin1":
+        case "binary":
+        case "base64":
+        case "ucs2":
+        case "ucs-2":
+        case "utf16le":
+        case "utf-16le":
+          return !0;
+        default:
+          return !1;
+      }
+    }, o.concat = function(i, a) {
+      if (!Array.isArray(i))
+        throw new TypeError('"list" argument must be an Array of Buffers');
+      if (i.length === 0)
+        return o.alloc(0);
+      let g;
+      if (a === void 0)
+        for (a = 0, g = 0; g < i.length; ++g)
+          a += i[g].length;
+      const m = o.allocUnsafe(a);
+      let N = 0;
+      for (g = 0; g < i.length; ++g) {
+        let A = i[g];
+        if (ce(A, Uint8Array))
+          N + A.length > m.length ? (o.isBuffer(A) || (A = o.from(A)), A.copy(m, N)) : Uint8Array.prototype.set.call(
+            m,
+            A,
+            N
+          );
+        else if (o.isBuffer(A))
+          A.copy(m, N);
+        else
+          throw new TypeError('"list" argument must be an Array of Buffers');
+        N += A.length;
+      }
+      return m;
+    };
+    function w(l, i) {
+      if (o.isBuffer(l))
+        return l.length;
+      if (ArrayBuffer.isView(l) || ce(l, ArrayBuffer))
+        return l.byteLength;
+      if (typeof l != "string")
+        throw new TypeError(
+          'The "string" argument must be one of type string, Buffer, or ArrayBuffer. Received type ' + typeof l
+        );
+      const a = l.length, g = arguments.length > 2 && arguments[2] === !0;
+      if (!g && a === 0) return 0;
+      let m = !1;
+      for (; ; )
+        switch (i) {
+          case "ascii":
+          case "latin1":
+          case "binary":
+            return a;
+          case "utf8":
+          case "utf-8":
+            return Z(l).length;
+          case "ucs2":
+          case "ucs-2":
+          case "utf16le":
+          case "utf-16le":
+            return a * 2;
+          case "hex":
+            return a >>> 1;
+          case "base64":
+            return Le(l).length;
+          default:
+            if (m)
+              return g ? -1 : Z(l).length;
+            i = ("" + i).toLowerCase(), m = !0;
+        }
+    }
+    o.byteLength = w;
+    function k(l, i, a) {
+      let g = !1;
+      if ((i === void 0 || i < 0) && (i = 0), i > this.length || ((a === void 0 || a > this.length) && (a = this.length), a <= 0) || (a >>>= 0, i >>>= 0, a <= i))
+        return "";
+      for (l || (l = "utf8"); ; )
+        switch (l) {
+          case "hex":
+            return Oe(this, i, a);
+          case "utf8":
+          case "utf-8":
+            return ve(this, i, a);
+          case "ascii":
+            return L(this, i, a);
+          case "latin1":
+          case "binary":
+            return lt(this, i, a);
+          case "base64":
+            return Ie(this, i, a);
+          case "ucs2":
+          case "ucs-2":
+          case "utf16le":
+          case "utf-16le":
+            return Ue(this, i, a);
+          default:
+            if (g) throw new TypeError("Unknown encoding: " + l);
+            l = (l + "").toLowerCase(), g = !0;
+        }
+    }
+    o.prototype._isBuffer = !0;
+    function F(l, i, a) {
+      const g = l[i];
+      l[i] = l[a], l[a] = g;
+    }
+    o.prototype.swap16 = function() {
+      const i = this.length;
+      if (i % 2 !== 0)
+        throw new RangeError("Buffer size must be a multiple of 16-bits");
+      for (let a = 0; a < i; a += 2)
+        F(this, a, a + 1);
+      return this;
+    }, o.prototype.swap32 = function() {
+      const i = this.length;
+      if (i % 4 !== 0)
+        throw new RangeError("Buffer size must be a multiple of 32-bits");
+      for (let a = 0; a < i; a += 4)
+        F(this, a, a + 3), F(this, a + 1, a + 2);
+      return this;
+    }, o.prototype.swap64 = function() {
+      const i = this.length;
+      if (i % 8 !== 0)
+        throw new RangeError("Buffer size must be a multiple of 64-bits");
+      for (let a = 0; a < i; a += 8)
+        F(this, a, a + 7), F(this, a + 1, a + 6), F(this, a + 2, a + 5), F(this, a + 3, a + 4);
+      return this;
+    }, o.prototype.toString = function() {
+      const i = this.length;
+      return i === 0 ? "" : arguments.length === 0 ? ve(this, 0, i) : k.apply(this, arguments);
+    }, o.prototype.toLocaleString = o.prototype.toString, o.prototype.equals = function(i) {
+      if (!o.isBuffer(i)) throw new TypeError("Argument must be a Buffer");
+      return this === i ? !0 : o.compare(this, i) === 0;
+    }, o.prototype.inspect = function() {
+      let i = "";
+      const a = h.INSPECT_MAX_BYTES;
+      return i = this.toString("hex", 0, a).replace(/(.{2})/g, "$1 ").trim(), this.length > a && (i += " ... "), "<Buffer " + i + ">";
+    }, s && (o.prototype[s] = o.prototype.inspect), o.prototype.compare = function(i, a, g, m, N) {
+      if (ce(i, Uint8Array) && (i = o.from(i, i.offset, i.byteLength)), !o.isBuffer(i))
+        throw new TypeError(
+          'The "target" argument must be one of type Buffer or Uint8Array. Received type ' + typeof i
+        );
+      if (a === void 0 && (a = 0), g === void 0 && (g = i ? i.length : 0), m === void 0 && (m = 0), N === void 0 && (N = this.length), a < 0 || g > i.length || m < 0 || N > this.length)
+        throw new RangeError("out of range index");
+      if (m >= N && a >= g)
+        return 0;
+      if (m >= N)
+        return -1;
+      if (a >= g)
+        return 1;
+      if (a >>>= 0, g >>>= 0, m >>>= 0, N >>>= 0, this === i) return 0;
+      let A = N - m, U = g - a;
+      const J = Math.min(A, U), K = this.slice(m, N), Q = i.slice(a, g);
+      for (let G = 0; G < J; ++G)
+        if (K[G] !== Q[G]) {
+          A = K[G], U = Q[G];
+          break;
+        }
+      return A < U ? -1 : U < A ? 1 : 0;
+    };
+    function ue(l, i, a, g, m) {
+      if (l.length === 0) return -1;
+      if (typeof a == "string" ? (g = a, a = 0) : a > 2147483647 ? a = 2147483647 : a < -2147483648 && (a = -2147483648), a = +a, ft(a) && (a = m ? 0 : l.length - 1), a < 0 && (a = l.length + a), a >= l.length) {
+        if (m) return -1;
+        a = l.length - 1;
+      } else if (a < 0)
+        if (m) a = 0;
+        else return -1;
+      if (typeof i == "string" && (i = o.from(i, g)), o.isBuffer(i))
+        return i.length === 0 ? -1 : re(l, i, a, g, m);
+      if (typeof i == "number")
+        return i = i & 255, typeof Uint8Array.prototype.indexOf == "function" ? m ? Uint8Array.prototype.indexOf.call(l, i, a) : Uint8Array.prototype.lastIndexOf.call(l, i, a) : re(l, [i], a, g, m);
+      throw new TypeError("val must be string, number or Buffer");
+    }
+    function re(l, i, a, g, m) {
+      let N = 1, A = l.length, U = i.length;
+      if (g !== void 0 && (g = String(g).toLowerCase(), g === "ucs2" || g === "ucs-2" || g === "utf16le" || g === "utf-16le")) {
+        if (l.length < 2 || i.length < 2)
+          return -1;
+        N = 2, A /= 2, U /= 2, a /= 2;
+      }
+      function J(Q, G) {
+        return N === 1 ? Q[G] : Q.readUInt16BE(G * N);
+      }
+      let K;
+      if (m) {
+        let Q = -1;
+        for (K = a; K < A; K++)
+          if (J(l, K) === J(i, Q === -1 ? 0 : K - Q)) {
+            if (Q === -1 && (Q = K), K - Q + 1 === U) return Q * N;
+          } else
+            Q !== -1 && (K -= K - Q), Q = -1;
+      } else
+        for (a + U > A && (a = A - U), K = a; K >= 0; K--) {
+          let Q = !0;
+          for (let G = 0; G < U; G++)
+            if (J(l, K + G) !== J(i, G)) {
+              Q = !1;
+              break;
+            }
+          if (Q) return K;
+        }
+      return -1;
+    }
+    o.prototype.includes = function(i, a, g) {
+      return this.indexOf(i, a, g) !== -1;
+    }, o.prototype.indexOf = function(i, a, g) {
+      return ue(this, i, a, g, !0);
+    }, o.prototype.lastIndexOf = function(i, a, g) {
+      return ue(this, i, a, g, !1);
+    };
+    function Ne(l, i, a, g) {
+      a = Number(a) || 0;
+      const m = l.length - a;
+      g ? (g = Number(g), g > m && (g = m)) : g = m;
+      const N = i.length;
+      g > N / 2 && (g = N / 2);
+      let A;
+      for (A = 0; A < g; ++A) {
+        const U = parseInt(i.substr(A * 2, 2), 16);
+        if (ft(U)) return A;
+        l[a + A] = U;
+      }
+      return A;
+    }
+    function C(l, i, a, g) {
+      return Ee(Z(i, l.length - a), l, a, g);
+    }
+    function Ye(l, i, a, g) {
+      return Ee(he(i), l, a, g);
+    }
+    function Se(l, i, a, g) {
+      return Ee(Le(i), l, a, g);
+    }
+    function V(l, i, a, g) {
+      return Ee(ht(i, l.length - a), l, a, g);
+    }
+    o.prototype.write = function(i, a, g, m) {
+      if (a === void 0)
+        m = "utf8", g = this.length, a = 0;
+      else if (g === void 0 && typeof a == "string")
+        m = a, g = this.length, a = 0;
+      else if (isFinite(a))
+        a = a >>> 0, isFinite(g) ? (g = g >>> 0, m === void 0 && (m = "utf8")) : (m = g, g = void 0);
+      else
+        throw new Error(
+          "Buffer.write(string, encoding, offset[, length]) is no longer supported"
+        );
+      const N = this.length - a;
+      if ((g === void 0 || g > N) && (g = N), i.length > 0 && (g < 0 || a < 0) || a > this.length)
+        throw new RangeError("Attempt to write outside buffer bounds");
+      m || (m = "utf8");
+      let A = !1;
+      for (; ; )
+        switch (m) {
+          case "hex":
+            return Ne(this, i, a, g);
+          case "utf8":
+          case "utf-8":
+            return C(this, i, a, g);
+          case "ascii":
+          case "latin1":
+          case "binary":
+            return Ye(this, i, a, g);
+          case "base64":
+            return Se(this, i, a, g);
+          case "ucs2":
+          case "ucs-2":
+          case "utf16le":
+          case "utf-16le":
+            return V(this, i, a, g);
+          default:
+            if (A) throw new TypeError("Unknown encoding: " + m);
+            m = ("" + m).toLowerCase(), A = !0;
+        }
+    }, o.prototype.toJSON = function() {
+      return {
+        type: "Buffer",
+        data: Array.prototype.slice.call(this._arr || this, 0)
+      };
+    };
+    function Ie(l, i, a) {
+      return i === 0 && a === l.length ? e.fromByteArray(l) : e.fromByteArray(l.slice(i, a));
+    }
+    function ve(l, i, a) {
+      a = Math.min(l.length, a);
+      const g = [];
+      let m = i;
+      for (; m < a; ) {
+        const N = l[m];
+        let A = null, U = N > 239 ? 4 : N > 223 ? 3 : N > 191 ? 2 : 1;
+        if (m + U <= a) {
+          let J, K, Q, G;
+          switch (U) {
+            case 1:
+              N < 128 && (A = N);
+              break;
+            case 2:
+              J = l[m + 1], (J & 192) === 128 && (G = (N & 31) << 6 | J & 63, G > 127 && (A = G));
+              break;
+            case 3:
+              J = l[m + 1], K = l[m + 2], (J & 192) === 128 && (K & 192) === 128 && (G = (N & 15) << 12 | (J & 63) << 6 | K & 63, G > 2047 && (G < 55296 || G > 57343) && (A = G));
+              break;
+            case 4:
+              J = l[m + 1], K = l[m + 2], Q = l[m + 3], (J & 192) === 128 && (K & 192) === 128 && (Q & 192) === 128 && (G = (N & 15) << 18 | (J & 63) << 12 | (K & 63) << 6 | Q & 63, G > 65535 && G < 1114112 && (A = G));
+          }
+        }
+        A === null ? (A = 65533, U = 1) : A > 65535 && (A -= 65536, g.push(A >>> 10 & 1023 | 55296), A = 56320 | A & 1023), g.push(A), m += U;
+      }
+      return ze(g);
+    }
+    const me = 4096;
+    function ze(l) {
+      const i = l.length;
+      if (i <= me)
+        return String.fromCharCode.apply(String, l);
+      let a = "", g = 0;
+      for (; g < i; )
+        a += String.fromCharCode.apply(
+          String,
+          l.slice(g, g += me)
+        );
+      return a;
+    }
+    function L(l, i, a) {
+      let g = "";
+      a = Math.min(l.length, a);
+      for (let m = i; m < a; ++m)
+        g += String.fromCharCode(l[m] & 127);
+      return g;
+    }
+    function lt(l, i, a) {
+      let g = "";
+      a = Math.min(l.length, a);
+      for (let m = i; m < a; ++m)
+        g += String.fromCharCode(l[m]);
+      return g;
+    }
+    function Oe(l, i, a) {
+      const g = l.length;
+      (!i || i < 0) && (i = 0), (!a || a < 0 || a > g) && (a = g);
+      let m = "";
+      for (let N = i; N < a; ++N)
+        m += tr[l[N]];
+      return m;
+    }
+    function Ue(l, i, a) {
+      const g = l.slice(i, a);
+      let m = "";
+      for (let N = 0; N < g.length - 1; N += 2)
+        m += String.fromCharCode(g[N] + g[N + 1] * 256);
+      return m;
+    }
+    o.prototype.slice = function(i, a) {
+      const g = this.length;
+      i = ~~i, a = a === void 0 ? g : ~~a, i < 0 ? (i += g, i < 0 && (i = 0)) : i > g && (i = g), a < 0 ? (a += g, a < 0 && (a = 0)) : a > g && (a = g), a < i && (a = i);
+      const m = this.subarray(i, a);
+      return Object.setPrototypeOf(m, o.prototype), m;
+    };
+    function $(l, i, a) {
+      if (l % 1 !== 0 || l < 0) throw new RangeError("offset is not uint");
+      if (l + i > a) throw new RangeError("Trying to access beyond buffer length");
+    }
+    o.prototype.readUintLE = o.prototype.readUIntLE = function(i, a, g) {
+      i = i >>> 0, a = a >>> 0, g || $(i, a, this.length);
+      let m = this[i], N = 1, A = 0;
+      for (; ++A < a && (N *= 256); )
+        m += this[i + A] * N;
+      return m;
+    }, o.prototype.readUintBE = o.prototype.readUIntBE = function(i, a, g) {
+      i = i >>> 0, a = a >>> 0, g || $(i, a, this.length);
+      let m = this[i + --a], N = 1;
+      for (; a > 0 && (N *= 256); )
+        m += this[i + --a] * N;
+      return m;
+    }, o.prototype.readUint8 = o.prototype.readUInt8 = function(i, a) {
+      return i = i >>> 0, a || $(i, 1, this.length), this[i];
+    }, o.prototype.readUint16LE = o.prototype.readUInt16LE = function(i, a) {
+      return i = i >>> 0, a || $(i, 2, this.length), this[i] | this[i + 1] << 8;
+    }, o.prototype.readUint16BE = o.prototype.readUInt16BE = function(i, a) {
+      return i = i >>> 0, a || $(i, 2, this.length), this[i] << 8 | this[i + 1];
+    }, o.prototype.readUint32LE = o.prototype.readUInt32LE = function(i, a) {
+      return i = i >>> 0, a || $(i, 4, this.length), (this[i] | this[i + 1] << 8 | this[i + 2] << 16) + this[i + 3] * 16777216;
+    }, o.prototype.readUint32BE = o.prototype.readUInt32BE = function(i, a) {
+      return i = i >>> 0, a || $(i, 4, this.length), this[i] * 16777216 + (this[i + 1] << 16 | this[i + 2] << 8 | this[i + 3]);
+    }, o.prototype.readBigUInt64LE = Ce(function(i) {
+      i = i >>> 0, X(i, "offset");
+      const a = this[i], g = this[i + 7];
+      (a === void 0 || g === void 0) && ee(i, this.length - 8);
+      const m = a + this[++i] * 2 ** 8 + this[++i] * 2 ** 16 + this[++i] * 2 ** 24, N = this[++i] + this[++i] * 2 ** 8 + this[++i] * 2 ** 16 + g * 2 ** 24;
+      return BigInt(m) + (BigInt(N) << BigInt(32));
+    }), o.prototype.readBigUInt64BE = Ce(function(i) {
+      i = i >>> 0, X(i, "offset");
+      const a = this[i], g = this[i + 7];
+      (a === void 0 || g === void 0) && ee(i, this.length - 8);
+      const m = a * 2 ** 24 + this[++i] * 2 ** 16 + this[++i] * 2 ** 8 + this[++i], N = this[++i] * 2 ** 24 + this[++i] * 2 ** 16 + this[++i] * 2 ** 8 + g;
+      return (BigInt(m) << BigInt(32)) + BigInt(N);
+    }), o.prototype.readIntLE = function(i, a, g) {
+      i = i >>> 0, a = a >>> 0, g || $(i, a, this.length);
+      let m = this[i], N = 1, A = 0;
+      for (; ++A < a && (N *= 256); )
+        m += this[i + A] * N;
+      return N *= 128, m >= N && (m -= Math.pow(2, 8 * a)), m;
+    }, o.prototype.readIntBE = function(i, a, g) {
+      i = i >>> 0, a = a >>> 0, g || $(i, a, this.length);
+      let m = a, N = 1, A = this[i + --m];
+      for (; m > 0 && (N *= 256); )
+        A += this[i + --m] * N;
+      return N *= 128, A >= N && (A -= Math.pow(2, 8 * a)), A;
+    }, o.prototype.readInt8 = function(i, a) {
+      return i = i >>> 0, a || $(i, 1, this.length), this[i] & 128 ? (255 - this[i] + 1) * -1 : this[i];
+    }, o.prototype.readInt16LE = function(i, a) {
+      i = i >>> 0, a || $(i, 2, this.length);
+      const g = this[i] | this[i + 1] << 8;
+      return g & 32768 ? g | 4294901760 : g;
+    }, o.prototype.readInt16BE = function(i, a) {
+      i = i >>> 0, a || $(i, 2, this.length);
+      const g = this[i + 1] | this[i] << 8;
+      return g & 32768 ? g | 4294901760 : g;
+    }, o.prototype.readInt32LE = function(i, a) {
+      return i = i >>> 0, a || $(i, 4, this.length), this[i] | this[i + 1] << 8 | this[i + 2] << 16 | this[i + 3] << 24;
+    }, o.prototype.readInt32BE = function(i, a) {
+      return i = i >>> 0, a || $(i, 4, this.length), this[i] << 24 | this[i + 1] << 16 | this[i + 2] << 8 | this[i + 3];
+    }, o.prototype.readBigInt64LE = Ce(function(i) {
+      i = i >>> 0, X(i, "offset");
+      const a = this[i], g = this[i + 7];
+      (a === void 0 || g === void 0) && ee(i, this.length - 8);
+      const m = this[i + 4] + this[i + 5] * 2 ** 8 + this[i + 6] * 2 ** 16 + (g << 24);
+      return (BigInt(m) << BigInt(32)) + BigInt(a + this[++i] * 2 ** 8 + this[++i] * 2 ** 16 + this[++i] * 2 ** 24);
+    }), o.prototype.readBigInt64BE = Ce(function(i) {
+      i = i >>> 0, X(i, "offset");
+      const a = this[i], g = this[i + 7];
+      (a === void 0 || g === void 0) && ee(i, this.length - 8);
+      const m = (a << 24) + // Overflow
+      this[++i] * 2 ** 16 + this[++i] * 2 ** 8 + this[++i];
+      return (BigInt(m) << BigInt(32)) + BigInt(this[++i] * 2 ** 24 + this[++i] * 2 ** 16 + this[++i] * 2 ** 8 + g);
+    }), o.prototype.readFloatLE = function(i, a) {
+      return i = i >>> 0, a || $(i, 4, this.length), t.read(this, i, !0, 23, 4);
+    }, o.prototype.readFloatBE = function(i, a) {
+      return i = i >>> 0, a || $(i, 4, this.length), t.read(this, i, !1, 23, 4);
+    }, o.prototype.readDoubleLE = function(i, a) {
+      return i = i >>> 0, a || $(i, 8, this.length), t.read(this, i, !0, 52, 8);
+    }, o.prototype.readDoubleBE = function(i, a) {
+      return i = i >>> 0, a || $(i, 8, this.length), t.read(this, i, !1, 52, 8);
+    };
+    function te(l, i, a, g, m, N) {
+      if (!o.isBuffer(l)) throw new TypeError('"buffer" argument must be a Buffer instance');
+      if (i > m || i < N) throw new RangeError('"value" argument is out of bounds');
+      if (a + g > l.length) throw new RangeError("Index out of range");
+    }
+    o.prototype.writeUintLE = o.prototype.writeUIntLE = function(i, a, g, m) {
+      if (i = +i, a = a >>> 0, g = g >>> 0, !m) {
+        const U = Math.pow(2, 8 * g) - 1;
+        te(this, i, a, g, U, 0);
+      }
+      let N = 1, A = 0;
+      for (this[a] = i & 255; ++A < g && (N *= 256); )
+        this[a + A] = i / N & 255;
+      return a + g;
+    }, o.prototype.writeUintBE = o.prototype.writeUIntBE = function(i, a, g, m) {
+      if (i = +i, a = a >>> 0, g = g >>> 0, !m) {
+        const U = Math.pow(2, 8 * g) - 1;
+        te(this, i, a, g, U, 0);
+      }
+      let N = g - 1, A = 1;
+      for (this[a + N] = i & 255; --N >= 0 && (A *= 256); )
+        this[a + N] = i / A & 255;
+      return a + g;
+    }, o.prototype.writeUint8 = o.prototype.writeUInt8 = function(i, a, g) {
+      return i = +i, a = a >>> 0, g || te(this, i, a, 1, 255, 0), this[a] = i & 255, a + 1;
+    }, o.prototype.writeUint16LE = o.prototype.writeUInt16LE = function(i, a, g) {
+      return i = +i, a = a >>> 0, g || te(this, i, a, 2, 65535, 0), this[a] = i & 255, this[a + 1] = i >>> 8, a + 2;
+    }, o.prototype.writeUint16BE = o.prototype.writeUInt16BE = function(i, a, g) {
+      return i = +i, a = a >>> 0, g || te(this, i, a, 2, 65535, 0), this[a] = i >>> 8, this[a + 1] = i & 255, a + 2;
+    }, o.prototype.writeUint32LE = o.prototype.writeUInt32LE = function(i, a, g) {
+      return i = +i, a = a >>> 0, g || te(this, i, a, 4, 4294967295, 0), this[a + 3] = i >>> 24, this[a + 2] = i >>> 16, this[a + 1] = i >>> 8, this[a] = i & 255, a + 4;
+    }, o.prototype.writeUint32BE = o.prototype.writeUInt32BE = function(i, a, g) {
+      return i = +i, a = a >>> 0, g || te(this, i, a, 4, 4294967295, 0), this[a] = i >>> 24, this[a + 1] = i >>> 16, this[a + 2] = i >>> 8, this[a + 3] = i & 255, a + 4;
+    };
+    function Ke(l, i, a, g, m) {
+      z(i, g, m, l, a, 7);
+      let N = Number(i & BigInt(4294967295));
+      l[a++] = N, N = N >> 8, l[a++] = N, N = N >> 8, l[a++] = N, N = N >> 8, l[a++] = N;
+      let A = Number(i >> BigInt(32) & BigInt(4294967295));
+      return l[a++] = A, A = A >> 8, l[a++] = A, A = A >> 8, l[a++] = A, A = A >> 8, l[a++] = A, a;
+    }
+    function Me(l, i, a, g, m) {
+      z(i, g, m, l, a, 7);
+      let N = Number(i & BigInt(4294967295));
+      l[a + 7] = N, N = N >> 8, l[a + 6] = N, N = N >> 8, l[a + 5] = N, N = N >> 8, l[a + 4] = N;
+      let A = Number(i >> BigInt(32) & BigInt(4294967295));
+      return l[a + 3] = A, A = A >> 8, l[a + 2] = A, A = A >> 8, l[a + 1] = A, A = A >> 8, l[a] = A, a + 8;
+    }
+    o.prototype.writeBigUInt64LE = Ce(function(i, a = 0) {
+      return Ke(this, i, a, BigInt(0), BigInt("0xffffffffffffffff"));
+    }), o.prototype.writeBigUInt64BE = Ce(function(i, a = 0) {
+      return Me(this, i, a, BigInt(0), BigInt("0xffffffffffffffff"));
+    }), o.prototype.writeIntLE = function(i, a, g, m) {
+      if (i = +i, a = a >>> 0, !m) {
+        const J = Math.pow(2, 8 * g - 1);
+        te(this, i, a, g, J - 1, -J);
+      }
+      let N = 0, A = 1, U = 0;
+      for (this[a] = i & 255; ++N < g && (A *= 256); )
+        i < 0 && U === 0 && this[a + N - 1] !== 0 && (U = 1), this[a + N] = (i / A >> 0) - U & 255;
+      return a + g;
+    }, o.prototype.writeIntBE = function(i, a, g, m) {
+      if (i = +i, a = a >>> 0, !m) {
+        const J = Math.pow(2, 8 * g - 1);
+        te(this, i, a, g, J - 1, -J);
+      }
+      let N = g - 1, A = 1, U = 0;
+      for (this[a + N] = i & 255; --N >= 0 && (A *= 256); )
+        i < 0 && U === 0 && this[a + N + 1] !== 0 && (U = 1), this[a + N] = (i / A >> 0) - U & 255;
+      return a + g;
+    }, o.prototype.writeInt8 = function(i, a, g) {
+      return i = +i, a = a >>> 0, g || te(this, i, a, 1, 127, -128), i < 0 && (i = 255 + i + 1), this[a] = i & 255, a + 1;
+    }, o.prototype.writeInt16LE = function(i, a, g) {
+      return i = +i, a = a >>> 0, g || te(this, i, a, 2, 32767, -32768), this[a] = i & 255, this[a + 1] = i >>> 8, a + 2;
+    }, o.prototype.writeInt16BE = function(i, a, g) {
+      return i = +i, a = a >>> 0, g || te(this, i, a, 2, 32767, -32768), this[a] = i >>> 8, this[a + 1] = i & 255, a + 2;
+    }, o.prototype.writeInt32LE = function(i, a, g) {
+      return i = +i, a = a >>> 0, g || te(this, i, a, 4, 2147483647, -2147483648), this[a] = i & 255, this[a + 1] = i >>> 8, this[a + 2] = i >>> 16, this[a + 3] = i >>> 24, a + 4;
+    }, o.prototype.writeInt32BE = function(i, a, g) {
+      return i = +i, a = a >>> 0, g || te(this, i, a, 4, 2147483647, -2147483648), i < 0 && (i = 4294967295 + i + 1), this[a] = i >>> 24, this[a + 1] = i >>> 16, this[a + 2] = i >>> 8, this[a + 3] = i & 255, a + 4;
+    }, o.prototype.writeBigInt64LE = Ce(function(i, a = 0) {
+      return Ke(this, i, a, -BigInt("0x8000000000000000"), BigInt("0x7fffffffffffffff"));
+    }), o.prototype.writeBigInt64BE = Ce(function(i, a = 0) {
+      return Me(this, i, a, -BigInt("0x8000000000000000"), BigInt("0x7fffffffffffffff"));
+    });
+    function xe(l, i, a, g, m, N) {
+      if (a + g > l.length) throw new RangeError("Index out of range");
+      if (a < 0) throw new RangeError("Index out of range");
+    }
+    function He(l, i, a, g, m) {
+      return i = +i, a = a >>> 0, m || xe(l, i, a, 4), t.write(l, i, a, g, 23, 4), a + 4;
+    }
+    o.prototype.writeFloatLE = function(i, a, g) {
+      return He(this, i, a, !0, g);
+    }, o.prototype.writeFloatBE = function(i, a, g) {
+      return He(this, i, a, !1, g);
+    };
+    function f(l, i, a, g, m) {
+      return i = +i, a = a >>> 0, m || xe(l, i, a, 8), t.write(l, i, a, g, 52, 8), a + 8;
+    }
+    o.prototype.writeDoubleLE = function(i, a, g) {
+      return f(this, i, a, !0, g);
+    }, o.prototype.writeDoubleBE = function(i, a, g) {
+      return f(this, i, a, !1, g);
+    }, o.prototype.copy = function(i, a, g, m) {
+      if (!o.isBuffer(i)) throw new TypeError("argument should be a Buffer");
+      if (g || (g = 0), !m && m !== 0 && (m = this.length), a >= i.length && (a = i.length), a || (a = 0), m > 0 && m < g && (m = g), m === g || i.length === 0 || this.length === 0) return 0;
+      if (a < 0)
+        throw new RangeError("targetStart out of bounds");
+      if (g < 0 || g >= this.length) throw new RangeError("Index out of range");
+      if (m < 0) throw new RangeError("sourceEnd out of bounds");
+      m > this.length && (m = this.length), i.length - a < m - g && (m = i.length - a + g);
+      const N = m - g;
+      return this === i && typeof Uint8Array.prototype.copyWithin == "function" ? this.copyWithin(a, g, m) : Uint8Array.prototype.set.call(
+        i,
+        this.subarray(g, m),
+        a
+      ), N;
+    }, o.prototype.fill = function(i, a, g, m) {
+      if (typeof i == "string") {
+        if (typeof a == "string" ? (m = a, a = 0, g = this.length) : typeof g == "string" && (m = g, g = this.length), m !== void 0 && typeof m != "string")
+          throw new TypeError("encoding must be a string");
+        if (typeof m == "string" && !o.isEncoding(m))
+          throw new TypeError("Unknown encoding: " + m);
+        if (i.length === 1) {
+          const A = i.charCodeAt(0);
+          (m === "utf8" && A < 128 || m === "latin1") && (i = A);
+        }
+      } else typeof i == "number" ? i = i & 255 : typeof i == "boolean" && (i = Number(i));
+      if (a < 0 || this.length < a || this.length < g)
+        throw new RangeError("Out of range index");
+      if (g <= a)
+        return this;
+      a = a >>> 0, g = g === void 0 ? this.length : g >>> 0, i || (i = 0);
+      let N;
+      if (typeof i == "number")
+        for (N = a; N < g; ++N)
+          this[N] = i;
+      else {
+        const A = o.isBuffer(i) ? i : o.from(i, m), U = A.length;
+        if (U === 0)
+          throw new TypeError('The value "' + i + '" is invalid for argument "value"');
+        for (N = 0; N < g - a; ++N)
+          this[N + a] = A[N % U];
+      }
+      return this;
+    };
+    const c = {};
+    function I(l, i, a) {
+      c[l] = class extends a {
+        constructor() {
+          super(), Object.defineProperty(this, "message", {
+            value: i.apply(this, arguments),
+            writable: !0,
+            configurable: !0
+          }), this.name = `${this.name} [${l}]`, this.stack, delete this.name;
+        }
+        get code() {
+          return l;
+        }
+        set code(m) {
+          Object.defineProperty(this, "code", {
+            configurable: !0,
+            enumerable: !0,
+            value: m,
+            writable: !0
+          });
+        }
+        toString() {
+          return `${this.name} [${l}]: ${this.message}`;
+        }
+      };
+    }
+    I(
+      "ERR_BUFFER_OUT_OF_BOUNDS",
+      function(l) {
+        return l ? `${l} is outside of buffer bounds` : "Attempt to access memory outside buffer bounds";
+      },
+      RangeError
+    ), I(
+      "ERR_INVALID_ARG_TYPE",
+      function(l, i) {
+        return `The "${l}" argument must be of type number. Received type ${typeof i}`;
+      },
+      TypeError
+    ), I(
+      "ERR_OUT_OF_RANGE",
+      function(l, i, a) {
+        let g = `The value of "${l}" is out of range.`, m = a;
+        return Number.isInteger(a) && Math.abs(a) > 2 ** 32 ? m = y(String(a)) : typeof a == "bigint" && (m = String(a), (a > BigInt(2) ** BigInt(32) || a < -(BigInt(2) ** BigInt(32))) && (m = y(m)), m += "n"), g += ` It must be ${i}. Received ${m}`, g;
+      },
+      RangeError
+    );
+    function y(l) {
+      let i = "", a = l.length;
+      const g = l[0] === "-" ? 1 : 0;
+      for (; a >= g + 4; a -= 3)
+        i = `_${l.slice(a - 3, a)}${i}`;
+      return `${l.slice(0, a)}${i}`;
+    }
+    function M(l, i, a) {
+      X(i, "offset"), (l[i] === void 0 || l[i + a] === void 0) && ee(i, l.length - (a + 1));
+    }
+    function z(l, i, a, g, m, N) {
+      if (l > a || l < i) {
+        const A = typeof i == "bigint" ? "n" : "";
+        let U;
+        throw i === 0 || i === BigInt(0) ? U = `>= 0${A} and < 2${A} ** ${(N + 1) * 8}${A}` : U = `>= -(2${A} ** ${(N + 1) * 8 - 1}${A}) and < 2 ** ${(N + 1) * 8 - 1}${A}`, new c.ERR_OUT_OF_RANGE("value", U, l);
+      }
+      M(g, m, N);
+    }
+    function X(l, i) {
+      if (typeof l != "number")
+        throw new c.ERR_INVALID_ARG_TYPE(i, "number", l);
+    }
+    function ee(l, i, a) {
+      throw Math.floor(l) !== l ? (X(l, a), new c.ERR_OUT_OF_RANGE("offset", "an integer", l)) : i < 0 ? new c.ERR_BUFFER_OUT_OF_BOUNDS() : new c.ERR_OUT_OF_RANGE(
+        "offset",
+        `>= 0 and <= ${i}`,
+        l
+      );
+    }
+    const ne = /[^+/0-9A-Za-z-_]/g;
+    function ye(l) {
+      if (l = l.split("=")[0], l = l.trim().replace(ne, ""), l.length < 2) return "";
+      for (; l.length % 4 !== 0; )
+        l = l + "=";
+      return l;
+    }
+    function Z(l, i) {
+      i = i || 1 / 0;
+      let a;
+      const g = l.length;
+      let m = null;
+      const N = [];
+      for (let A = 0; A < g; ++A) {
+        if (a = l.charCodeAt(A), a > 55295 && a < 57344) {
+          if (!m) {
+            if (a > 56319) {
+              (i -= 3) > -1 && N.push(239, 191, 189);
+              continue;
+            } else if (A + 1 === g) {
+              (i -= 3) > -1 && N.push(239, 191, 189);
+              continue;
+            }
+            m = a;
+            continue;
+          }
+          if (a < 56320) {
+            (i -= 3) > -1 && N.push(239, 191, 189), m = a;
+            continue;
+          }
+          a = (m - 55296 << 10 | a - 56320) + 65536;
+        } else m && (i -= 3) > -1 && N.push(239, 191, 189);
+        if (m = null, a < 128) {
+          if ((i -= 1) < 0) break;
+          N.push(a);
+        } else if (a < 2048) {
+          if ((i -= 2) < 0) break;
+          N.push(
+            a >> 6 | 192,
+            a & 63 | 128
+          );
+        } else if (a < 65536) {
+          if ((i -= 3) < 0) break;
+          N.push(
+            a >> 12 | 224,
+            a >> 6 & 63 | 128,
+            a & 63 | 128
+          );
+        } else if (a < 1114112) {
+          if ((i -= 4) < 0) break;
+          N.push(
+            a >> 18 | 240,
+            a >> 12 & 63 | 128,
+            a >> 6 & 63 | 128,
+            a & 63 | 128
+          );
+        } else
+          throw new Error("Invalid code point");
+      }
+      return N;
+    }
+    function he(l) {
+      const i = [];
+      for (let a = 0; a < l.length; ++a)
+        i.push(l.charCodeAt(a) & 255);
+      return i;
+    }
+    function ht(l, i) {
+      let a, g, m;
+      const N = [];
+      for (let A = 0; A < l.length && !((i -= 2) < 0); ++A)
+        a = l.charCodeAt(A), g = a >> 8, m = a % 256, N.push(m), N.push(g);
+      return N;
+    }
+    function Le(l) {
+      return e.toByteArray(ye(l));
+    }
+    function Ee(l, i, a, g) {
+      let m;
+      for (m = 0; m < g && !(m + a >= i.length || m >= l.length); ++m)
+        i[m + a] = l[m];
+      return m;
+    }
+    function ce(l, i) {
+      return l instanceof i || l != null && l.constructor != null && l.constructor.name != null && l.constructor.name === i.name;
+    }
+    function ft(l) {
+      return l !== l;
+    }
+    const tr = (function() {
+      const l = "0123456789abcdef", i = new Array(256);
+      for (let a = 0; a < 16; ++a) {
+        const g = a * 16;
+        for (let m = 0; m < 16; ++m)
+          i[g + m] = l[a] + l[m];
+      }
+      return i;
+    })();
+    function Ce(l) {
+      return typeof BigInt > "u" ? sr : l;
+    }
+    function sr() {
+      throw new Error("BigInt not supported");
+    }
+  })(mt)), mt;
+}
+/*! safe-buffer. MIT License. Feross Aboukhadijeh <https://feross.org/opensource> */
+var Wt;
+function mr() {
+  return Wt || (Wt = 1, (function(h, e) {
+    var t = dr(), s = t.Buffer;
+    function r(u, o) {
+      for (var p in u)
+        o[p] = u[p];
+    }
+    s.from && s.alloc && s.allocUnsafe && s.allocUnsafeSlow ? h.exports = t : (r(t, e), e.Buffer = n);
+    function n(u, o, p) {
+      return s(u, o, p);
+    }
+    n.prototype = Object.create(s.prototype), r(s, n), n.from = function(u, o, p) {
+      if (typeof u == "number")
+        throw new TypeError("Argument must not be a number");
+      return s(u, o, p);
+    }, n.alloc = function(u, o, p) {
+      if (typeof u != "number")
+        throw new TypeError("Argument must be a number");
+      var d = s(u);
+      return o !== void 0 ? typeof p == "string" ? d.fill(o, p) : d.fill(o) : d.fill(0), d;
+    }, n.allocUnsafe = function(u) {
+      if (typeof u != "number")
+        throw new TypeError("Argument must be a number");
+      return s(u);
+    }, n.allocUnsafeSlow = function(u) {
+      if (typeof u != "number")
+        throw new TypeError("Argument must be a number");
+      return t.SlowBuffer(u);
+    };
+  })(Ve, Ve.exports)), Ve.exports;
+}
+var Yt;
+function yr() {
+  if (Yt) return dt;
+  Yt = 1;
+  var h = mr().Buffer, e = h.isEncoding || function(S) {
+    switch (S = "" + S, S && S.toLowerCase()) {
+      case "hex":
+      case "utf8":
+      case "utf-8":
+      case "ascii":
+      case "binary":
+      case "base64":
+      case "ucs2":
+      case "ucs-2":
+      case "utf16le":
+      case "utf-16le":
+      case "raw":
+        return !0;
+      default:
+        return !1;
+    }
+  };
+  function t(S) {
+    if (!S) return "utf8";
+    for (var x; ; )
+      switch (S) {
+        case "utf8":
+        case "utf-8":
+          return "utf8";
+        case "ucs2":
+        case "ucs-2":
+        case "utf16le":
+        case "utf-16le":
+          return "utf16le";
+        case "latin1":
+        case "binary":
+          return "latin1";
+        case "base64":
+        case "ascii":
+        case "hex":
+          return S;
+        default:
+          if (x) return;
+          S = ("" + S).toLowerCase(), x = !0;
+      }
+  }
+  function s(S) {
+    var x = t(S);
+    if (typeof x != "string" && (h.isEncoding === e || !e(S))) throw new Error("Unknown encoding: " + S);
+    return x || S;
+  }
+  dt.StringDecoder = r;
+  function r(S) {
+    this.encoding = s(S);
+    var x;
+    switch (this.encoding) {
+      case "utf16le":
+        this.text = T, this.end = R, x = 4;
+        break;
+      case "utf8":
+        this.fillLast = p, x = 4;
+        break;
+      case "base64":
+        this.text = _, this.end = b, x = 3;
+        break;
+      default:
+        this.write = B, this.end = O;
+        return;
+    }
+    this.lastNeed = 0, this.lastTotal = 0, this.lastChar = h.allocUnsafe(x);
+  }
+  r.prototype.write = function(S) {
+    if (S.length === 0) return "";
+    var x, w;
+    if (this.lastNeed) {
+      if (x = this.fillLast(S), x === void 0) return "";
+      w = this.lastNeed, this.lastNeed = 0;
+    } else
+      w = 0;
+    return w < S.length ? x ? x + this.text(S, w) : this.text(S, w) : x || "";
+  }, r.prototype.end = E, r.prototype.text = d, r.prototype.fillLast = function(S) {
+    if (this.lastNeed <= S.length)
+      return S.copy(this.lastChar, this.lastTotal - this.lastNeed, 0, this.lastNeed), this.lastChar.toString(this.encoding, 0, this.lastTotal);
+    S.copy(this.lastChar, this.lastTotal - this.lastNeed, 0, S.length), this.lastNeed -= S.length;
+  };
+  function n(S) {
+    return S <= 127 ? 0 : S >> 5 === 6 ? 2 : S >> 4 === 14 ? 3 : S >> 3 === 30 ? 4 : S >> 6 === 2 ? -1 : -2;
+  }
+  function u(S, x, w) {
+    var k = x.length - 1;
+    if (k < w) return 0;
+    var F = n(x[k]);
+    return F >= 0 ? (F > 0 && (S.lastNeed = F - 1), F) : --k < w || F === -2 ? 0 : (F = n(x[k]), F >= 0 ? (F > 0 && (S.lastNeed = F - 2), F) : --k < w || F === -2 ? 0 : (F = n(x[k]), F >= 0 ? (F > 0 && (F === 2 ? F = 0 : S.lastNeed = F - 3), F) : 0));
+  }
+  function o(S, x, w) {
+    if ((x[0] & 192) !== 128)
+      return S.lastNeed = 0, "�";
+    if (S.lastNeed > 1 && x.length > 1) {
+      if ((x[1] & 192) !== 128)
+        return S.lastNeed = 1, "�";
+      if (S.lastNeed > 2 && x.length > 2 && (x[2] & 192) !== 128)
+        return S.lastNeed = 2, "�";
+    }
+  }
+  function p(S) {
+    var x = this.lastTotal - this.lastNeed, w = o(this, S);
+    if (w !== void 0) return w;
+    if (this.lastNeed <= S.length)
+      return S.copy(this.lastChar, x, 0, this.lastNeed), this.lastChar.toString(this.encoding, 0, this.lastTotal);
+    S.copy(this.lastChar, x, 0, S.length), this.lastNeed -= S.length;
+  }
+  function d(S, x) {
+    var w = u(this, S, x);
+    if (!this.lastNeed) return S.toString("utf8", x);
+    this.lastTotal = w;
+    var k = S.length - (w - this.lastNeed);
+    return S.copy(this.lastChar, 0, k), S.toString("utf8", x, k);
+  }
+  function E(S) {
+    var x = S && S.length ? this.write(S) : "";
+    return this.lastNeed ? x + "�" : x;
+  }
+  function T(S, x) {
+    if ((S.length - x) % 2 === 0) {
+      var w = S.toString("utf16le", x);
+      if (w) {
+        var k = w.charCodeAt(w.length - 1);
+        if (k >= 55296 && k <= 56319)
+          return this.lastNeed = 2, this.lastTotal = 4, this.lastChar[0] = S[S.length - 2], this.lastChar[1] = S[S.length - 1], w.slice(0, -1);
+      }
+      return w;
+    }
+    return this.lastNeed = 1, this.lastTotal = 2, this.lastChar[0] = S[S.length - 1], S.toString("utf16le", x, S.length - 1);
+  }
+  function R(S) {
+    var x = S && S.length ? this.write(S) : "";
+    if (this.lastNeed) {
+      var w = this.lastTotal - this.lastNeed;
+      return x + this.lastChar.toString("utf16le", 0, w);
+    }
+    return x;
+  }
+  function _(S, x) {
+    var w = (S.length - x) % 3;
+    return w === 0 ? S.toString("base64", x) : (this.lastNeed = 3 - w, this.lastTotal = 3, w === 1 ? this.lastChar[0] = S[S.length - 1] : (this.lastChar[0] = S[S.length - 2], this.lastChar[1] = S[S.length - 1]), S.toString("base64", x, S.length - w));
+  }
+  function b(S) {
+    var x = S && S.length ? this.write(S) : "";
+    return this.lastNeed ? x + this.lastChar.toString("base64", 0, 3 - this.lastNeed) : x;
+  }
+  function B(S) {
+    return S.toString(this.encoding);
+  }
+  function O(S) {
+    return S && S.length ? this.write(S) : "";
+  }
+  return dt;
+}
+var zt;
+function Er() {
+  return zt || (zt = 1, (function(h) {
     (function(e) {
-      e.parser = function(o, a) {
-        return new s(o, a);
-      }, e.SAXParser = s, e.SAXStream = p, e.createStream = h, e.MAX_BUFFER_LENGTH = 64 * 1024;
+      e.parser = function(f, c) {
+        return new s(f, c);
+      }, e.SAXParser = s, e.SAXStream = E, e.createStream = d, e.MAX_BUFFER_LENGTH = 64 * 1024;
       var t = [
         "comment",
         "sgmlDecl",
@@ -1877,57 +3090,57 @@ function Ys() {
         "opennamespace",
         "closenamespace"
       ];
-      function s(o, a) {
+      function s(f, c) {
         if (!(this instanceof s))
-          return new s(o, a);
-        var m = this;
-        n(m), m.q = m.c = "", m.bufferCheckPosition = e.MAX_BUFFER_LENGTH, m.encoding = null, m.opt = a || {}, m.opt.lowercase = m.opt.lowercase || m.opt.lowercasetags, m.looseCase = m.opt.lowercase ? "toLowerCase" : "toUpperCase", m.opt.maxEntityCount = m.opt.maxEntityCount || 512, m.opt.maxEntityDepth = m.opt.maxEntityDepth || 4, m.entityCount = m.entityDepth = 0, m.tags = [], m.closed = m.closedRoot = m.sawRoot = !1, m.tag = m.error = null, m.strict = !!o, m.noscript = !!(o || m.opt.noscript), m.state = g.BEGIN, m.strictEntities = m.opt.strictEntities, m.ENTITIES = m.strictEntities ? Object.create(e.XML_ENTITIES) : Object.create(e.ENTITIES), m.attribList = [], m.opt.xmlns && (m.ns = Object.create(U)), m.opt.unquotedAttributeValues === void 0 && (m.opt.unquotedAttributeValues = !o), m.trackPosition = m.opt.position !== !1, m.trackPosition && (m.position = m.line = m.column = 0), Ee(m, "onready");
+          return new s(f, c);
+        var I = this;
+        n(I), I.q = I.c = "", I.bufferCheckPosition = e.MAX_BUFFER_LENGTH, I.opt = c || {}, I.opt.lowercase = I.opt.lowercase || I.opt.lowercasetags, I.looseCase = I.opt.lowercase ? "toLowerCase" : "toUpperCase", I.tags = [], I.closed = I.closedRoot = I.sawRoot = !1, I.tag = I.error = null, I.strict = !!f, I.noscript = !!(f || I.opt.noscript), I.state = C.BEGIN, I.strictEntities = I.opt.strictEntities, I.ENTITIES = I.strictEntities ? Object.create(e.XML_ENTITIES) : Object.create(e.ENTITIES), I.attribList = [], I.opt.xmlns && (I.ns = Object.create(B)), I.opt.unquotedAttributeValues === void 0 && (I.opt.unquotedAttributeValues = !f), I.trackPosition = I.opt.position !== !1, I.trackPosition && (I.position = I.line = I.column = 0), Se(I, "onready");
       }
-      Object.create || (Object.create = function(o) {
-        function a() {
+      Object.create || (Object.create = function(f) {
+        function c() {
         }
-        a.prototype = o;
-        var m = new a();
-        return m;
-      }), Object.keys || (Object.keys = function(o) {
-        var a = [];
-        for (var m in o) o.hasOwnProperty(m) && a.push(m);
-        return a;
+        c.prototype = f;
+        var I = new c();
+        return I;
+      }), Object.keys || (Object.keys = function(f) {
+        var c = [];
+        for (var I in f) f.hasOwnProperty(I) && c.push(I);
+        return c;
       });
-      function r(o) {
-        for (var a = Math.max(e.MAX_BUFFER_LENGTH, 10), m = 0, f = 0, _ = t.length; f < _; f++) {
-          var F = o[t[f]].length;
-          if (F > a)
-            switch (t[f]) {
+      function r(f) {
+        for (var c = Math.max(e.MAX_BUFFER_LENGTH, 10), I = 0, y = 0, M = t.length; y < M; y++) {
+          var z = f[t[y]].length;
+          if (z > c)
+            switch (t[y]) {
               case "textNode":
-                ye(o);
+                Ie(f);
                 break;
               case "cdata":
-                k(o, "oncdata", o.cdata), o.cdata = "";
+                V(f, "oncdata", f.cdata), f.cdata = "";
                 break;
               case "script":
-                k(o, "onscript", o.script), o.script = "";
+                V(f, "onscript", f.script), f.script = "";
                 break;
               default:
-                re(o, "Max buffer length exceeded: " + t[f]);
+                me(f, "Max buffer length exceeded: " + t[y]);
             }
-          m = Math.max(m, F);
+          I = Math.max(I, z);
         }
-        var w = e.MAX_BUFFER_LENGTH - m;
-        o.bufferCheckPosition = w + o.position;
+        var X = e.MAX_BUFFER_LENGTH - I;
+        f.bufferCheckPosition = X + f.position;
       }
-      function n(o) {
-        for (var a = 0, m = t.length; a < m; a++)
-          o[t[a]] = "";
+      function n(f) {
+        for (var c = 0, I = t.length; c < I; c++)
+          f[t[c]] = "";
       }
-      function i(o) {
-        ye(o), o.cdata !== "" && (k(o, "oncdata", o.cdata), o.cdata = ""), o.script !== "" && (k(o, "onscript", o.script), o.script = "");
+      function u(f) {
+        Ie(f), f.cdata !== "" && (V(f, "oncdata", f.cdata), f.cdata = ""), f.script !== "" && (V(f, "onscript", f.script), f.script = "");
       }
       s.prototype = {
         end: function() {
-          Et(this);
+          ze(this);
         },
-        write: ws,
+        write: He,
         resume: function() {
           return this.error = null, this;
         },
@@ -1935,191 +3148,168 @@ function Ys() {
           return this.write(null);
         },
         flush: function() {
-          i(this);
+          u(this);
         }
       };
-      var u;
+      var o;
       try {
-        u = qs.Stream;
+        o = fr.Stream;
       } catch {
-        u = function() {
+        o = function() {
         };
       }
-      u || (u = function() {
+      o || (o = function() {
       });
-      var l = e.EVENTS.filter(function(o) {
-        return o !== "error" && o !== "end";
+      var p = e.EVENTS.filter(function(f) {
+        return f !== "error" && f !== "end";
       });
-      function h(o, a) {
-        return new p(o, a);
+      function d(f, c) {
+        return new E(f, c);
       }
-      function d(o, a) {
-        if (o.length >= 2) {
-          if (o[0] === 255 && o[1] === 254)
-            return "utf-16le";
-          if (o[0] === 254 && o[1] === 255)
-            return "utf-16be";
-        }
-        return o.length >= 3 && o[0] === 239 && o[1] === 187 && o[2] === 191 ? "utf8" : o.length >= 4 ? o[0] === 60 && o[1] === 0 && o[2] === 63 && o[3] === 0 ? "utf-16le" : o[0] === 0 && o[1] === 60 && o[2] === 0 && o[3] === 63 ? "utf-16be" : "utf8" : a ? "utf8" : null;
-      }
-      function p(o, a) {
-        if (!(this instanceof p))
-          return new p(o, a);
-        u.apply(this), this._parser = new s(o, a), this.writable = !0, this.readable = !0;
-        var m = this;
+      function E(f, c) {
+        if (!(this instanceof E))
+          return new E(f, c);
+        o.apply(this), this._parser = new s(f, c), this.writable = !0, this.readable = !0;
+        var I = this;
         this._parser.onend = function() {
-          m.emit("end");
-        }, this._parser.onerror = function(f) {
-          m.emit("error", f), m._parser.error = null;
-        }, this._decoder = null, this._decoderBuffer = null, l.forEach(function(f) {
-          Object.defineProperty(m, "on" + f, {
+          I.emit("end");
+        }, this._parser.onerror = function(y) {
+          I.emit("error", y), I._parser.error = null;
+        }, this._decoder = null, p.forEach(function(y) {
+          Object.defineProperty(I, "on" + y, {
             get: function() {
-              return m._parser["on" + f];
+              return I._parser["on" + y];
             },
-            set: function(_) {
-              if (!_)
-                return m.removeAllListeners(f), m._parser["on" + f] = _, _;
-              m.on(f, _);
+            set: function(M) {
+              if (!M)
+                return I.removeAllListeners(y), I._parser["on" + y] = M, M;
+              I.on(y, M);
             },
             enumerable: !0,
             configurable: !1
           });
         });
       }
-      p.prototype = Object.create(u.prototype, {
+      E.prototype = Object.create(o.prototype, {
         constructor: {
-          value: p
+          value: E
         }
-      }), p.prototype._decodeBuffer = function(o, a) {
-        if (this._decoderBuffer && (o = Buffer.concat([this._decoderBuffer, o]), this._decoderBuffer = null), !this._decoder) {
-          var m = d(o, a);
-          if (!m)
-            return this._decoderBuffer = o, "";
-          this._parser.encoding = m, this._decoder = new TextDecoder(m);
+      }), E.prototype.write = function(f) {
+        if (typeof Buffer == "function" && typeof Buffer.isBuffer == "function" && Buffer.isBuffer(f)) {
+          if (!this._decoder) {
+            var c = yr().StringDecoder;
+            this._decoder = new c("utf8");
+          }
+          f = this._decoder.write(f);
         }
-        return this._decoder.decode(o, { stream: !a });
-      }, p.prototype.write = function(o) {
-        if (typeof Buffer == "function" && typeof Buffer.isBuffer == "function" && Buffer.isBuffer(o))
-          o = this._decodeBuffer(o, !1);
-        else if (this._decoderBuffer) {
-          var a = this._decodeBuffer(Buffer.alloc(0), !0);
-          a && (this._parser.write(a), this.emit("data", a));
-        }
-        return this._parser.write(o.toString()), this.emit("data", o), !0;
-      }, p.prototype.end = function(o) {
-        if (o && o.length && this.write(o), this._decoderBuffer) {
-          var a = this._decodeBuffer(Buffer.alloc(0), !0);
-          a && (this._parser.write(a), this.emit("data", a));
-        } else if (this._decoder) {
-          var m = this._decoder.decode();
-          m && (this._parser.write(m), this.emit("data", m));
-        }
-        return this._parser.end(), !0;
-      }, p.prototype.on = function(o, a) {
-        var m = this;
-        return !m._parser["on" + o] && l.indexOf(o) !== -1 && (m._parser["on" + o] = function() {
-          var f = arguments.length === 1 ? [arguments[0]] : Array.apply(null, arguments);
-          f.splice(0, 0, o), m.emit.apply(m, f);
-        }), u.prototype.on.call(m, o, a);
+        return this._parser.write(f.toString()), this.emit("data", f), !0;
+      }, E.prototype.end = function(f) {
+        return f && f.length && this.write(f), this._parser.end(), !0;
+      }, E.prototype.on = function(f, c) {
+        var I = this;
+        return !I._parser["on" + f] && p.indexOf(f) !== -1 && (I._parser["on" + f] = function() {
+          var y = arguments.length === 1 ? [arguments[0]] : Array.apply(null, arguments);
+          y.splice(0, 0, f), I.emit.apply(I, y);
+        }), o.prototype.on.call(I, f, c);
       };
-      var E = /^\[CDATA\[$/i, C = /^DOCTYPE$/i, S = "http://www.w3.org/XML/1998/namespace", D = "http://www.w3.org/2000/xmlns/", U = { xml: S, xmlns: D }, O = /[:_A-Za-z\u00C0-\u00D6\u00D8-\u00F6\u00F8-\u02FF\u0370-\u037D\u037F-\u1FFF\u200C-\u200D\u2070-\u218F\u2C00-\u2FEF\u3001-\uD7FF\uF900-\uFDCF\uFDF0-\uFFFD]/, q = /[:_A-Za-z\u00C0-\u00D6\u00D8-\u00F6\u00F8-\u02FF\u0370-\u037D\u037F-\u1FFF\u200C-\u200D\u2070-\u218F\u2C00-\u2FEF\u3001-\uD7FF\uF900-\uFDCF\uFDF0-\uFFFD\u00B7\u0300-\u036F\u203F-\u2040.\d-]/, Q = /[#:_A-Za-z\u00C0-\u00D6\u00D8-\u00F6\u00F8-\u02FF\u0370-\u037D\u037F-\u1FFF\u200C-\u200D\u2070-\u218F\u2C00-\u2FEF\u3001-\uD7FF\uF900-\uFDCF\uFDF0-\uFFFD]/, Y = /[#:_A-Za-z\u00C0-\u00D6\u00D8-\u00F6\u00F8-\u02FF\u0370-\u037D\u037F-\u1FFF\u200C-\u200D\u2070-\u218F\u2C00-\u2FEF\u3001-\uD7FF\uF900-\uFDCF\uFDF0-\uFFFD\u00B7\u0300-\u036F\u203F-\u2040.\d-]/;
-      function v(o) {
-        return o === " " || o === `
-` || o === "\r" || o === "	";
+      var T = "[CDATA[", R = "DOCTYPE", _ = "http://www.w3.org/XML/1998/namespace", b = "http://www.w3.org/2000/xmlns/", B = { xml: _, xmlns: b }, O = /[:_A-Za-z\u00C0-\u00D6\u00D8-\u00F6\u00F8-\u02FF\u0370-\u037D\u037F-\u1FFF\u200C-\u200D\u2070-\u218F\u2C00-\u2FEF\u3001-\uD7FF\uF900-\uFDCF\uFDF0-\uFFFD]/, S = /[:_A-Za-z\u00C0-\u00D6\u00D8-\u00F6\u00F8-\u02FF\u0370-\u037D\u037F-\u1FFF\u200C-\u200D\u2070-\u218F\u2C00-\u2FEF\u3001-\uD7FF\uF900-\uFDCF\uFDF0-\uFFFD\u00B7\u0300-\u036F\u203F-\u2040.\d-]/, x = /[#:_A-Za-z\u00C0-\u00D6\u00D8-\u00F6\u00F8-\u02FF\u0370-\u037D\u037F-\u1FFF\u200C-\u200D\u2070-\u218F\u2C00-\u2FEF\u3001-\uD7FF\uF900-\uFDCF\uFDF0-\uFFFD]/, w = /[#:_A-Za-z\u00C0-\u00D6\u00D8-\u00F6\u00F8-\u02FF\u0370-\u037D\u037F-\u1FFF\u200C-\u200D\u2070-\u218F\u2C00-\u2FEF\u3001-\uD7FF\uF900-\uFDCF\uFDF0-\uFFFD\u00B7\u0300-\u036F\u203F-\u2040.\d-]/;
+      function k(f) {
+        return f === " " || f === `
+` || f === "\r" || f === "	";
       }
-      function W(o) {
-        return o === '"' || o === "'";
+      function F(f) {
+        return f === '"' || f === "'";
       }
-      function me(o) {
-        return o === ">" || v(o);
+      function ue(f) {
+        return f === ">" || k(f);
       }
-      function z(o, a) {
-        return o.test(a);
+      function re(f, c) {
+        return f.test(c);
       }
-      function ue(o, a) {
-        return !z(o, a);
+      function Ne(f, c) {
+        return !re(f, c);
       }
-      var g = 0;
+      var C = 0;
       e.STATE = {
-        BEGIN: g++,
+        BEGIN: C++,
         // leading byte order mark or whitespace
-        BEGIN_WHITESPACE: g++,
+        BEGIN_WHITESPACE: C++,
         // leading whitespace
-        TEXT: g++,
+        TEXT: C++,
         // general stuff
-        TEXT_ENTITY: g++,
+        TEXT_ENTITY: C++,
         // &amp and such.
-        OPEN_WAKA: g++,
+        OPEN_WAKA: C++,
         // <
-        SGML_DECL: g++,
+        SGML_DECL: C++,
         // <!BLARG
-        SGML_DECL_QUOTED: g++,
+        SGML_DECL_QUOTED: C++,
         // <!BLARG foo "bar
-        DOCTYPE: g++,
+        DOCTYPE: C++,
         // <!DOCTYPE
-        DOCTYPE_QUOTED: g++,
+        DOCTYPE_QUOTED: C++,
         // <!DOCTYPE "//blah
-        DOCTYPE_DTD: g++,
+        DOCTYPE_DTD: C++,
         // <!DOCTYPE "//blah" [ ...
-        DOCTYPE_DTD_QUOTED: g++,
+        DOCTYPE_DTD_QUOTED: C++,
         // <!DOCTYPE "//blah" [ "foo
-        COMMENT_STARTING: g++,
+        COMMENT_STARTING: C++,
         // <!-
-        COMMENT: g++,
+        COMMENT: C++,
         // <!--
-        COMMENT_ENDING: g++,
+        COMMENT_ENDING: C++,
         // <!-- blah -
-        COMMENT_ENDED: g++,
+        COMMENT_ENDED: C++,
         // <!-- blah --
-        CDATA: g++,
+        CDATA: C++,
         // <![CDATA[ something
-        CDATA_ENDING: g++,
+        CDATA_ENDING: C++,
         // ]
-        CDATA_ENDING_2: g++,
+        CDATA_ENDING_2: C++,
         // ]]
-        PROC_INST: g++,
+        PROC_INST: C++,
         // <?hi
-        PROC_INST_BODY: g++,
+        PROC_INST_BODY: C++,
         // <?hi there
-        PROC_INST_ENDING: g++,
+        PROC_INST_ENDING: C++,
         // <?hi "there" ?
-        OPEN_TAG: g++,
+        OPEN_TAG: C++,
         // <strong
-        OPEN_TAG_SLASH: g++,
+        OPEN_TAG_SLASH: C++,
         // <strong /
-        ATTRIB: g++,
+        ATTRIB: C++,
         // <a
-        ATTRIB_NAME: g++,
+        ATTRIB_NAME: C++,
         // <a foo
-        ATTRIB_NAME_SAW_WHITE: g++,
+        ATTRIB_NAME_SAW_WHITE: C++,
         // <a foo _
-        ATTRIB_VALUE: g++,
+        ATTRIB_VALUE: C++,
         // <a foo=
-        ATTRIB_VALUE_QUOTED: g++,
+        ATTRIB_VALUE_QUOTED: C++,
         // <a foo="bar
-        ATTRIB_VALUE_CLOSED: g++,
+        ATTRIB_VALUE_CLOSED: C++,
         // <a foo="bar"
-        ATTRIB_VALUE_UNQUOTED: g++,
+        ATTRIB_VALUE_UNQUOTED: C++,
         // <a foo=bar
-        ATTRIB_VALUE_ENTITY_Q: g++,
+        ATTRIB_VALUE_ENTITY_Q: C++,
         // <foo bar="&quot;"
-        ATTRIB_VALUE_ENTITY_U: g++,
+        ATTRIB_VALUE_ENTITY_U: C++,
         // <foo bar=&quot
-        CLOSE_TAG: g++,
+        CLOSE_TAG: C++,
         // </a
-        CLOSE_TAG_SAW_WHITE: g++,
+        CLOSE_TAG_SAW_WHITE: C++,
         // </a   >
-        SCRIPT: g++,
+        SCRIPT: C++,
         // <script> ...
-        SCRIPT_ENDING: g++
+        SCRIPT_ENDING: C++
         // <script> ... <
-      }, e.XML_ENTITIES = Object.assign(/* @__PURE__ */ Object.create(null), {
+      }, e.XML_ENTITIES = {
         amp: "&",
         gt: ">",
         lt: "<",
         quot: '"',
         apos: "'"
-      }), e.ENTITIES = Object.assign(/* @__PURE__ */ Object.create(null), {
+      }, e.ENTITIES = {
         amp: "&",
         gt: ">",
         lt: "<",
@@ -2373,429 +3563,396 @@ function Ys() {
         clubs: 9827,
         hearts: 9829,
         diams: 9830
-      }), Object.keys(e.ENTITIES).forEach(function(o) {
-        var a = e.ENTITIES[o], m = typeof a == "number" ? String.fromCharCode(a) : a;
-        e.ENTITIES[o] = m;
+      }, Object.keys(e.ENTITIES).forEach(function(f) {
+        var c = e.ENTITIES[f], I = typeof c == "number" ? String.fromCharCode(c) : c;
+        e.ENTITIES[f] = I;
       });
-      for (var pt in e.STATE)
-        e.STATE[e.STATE[pt]] = pt;
-      g = e.STATE;
-      function Ee(o, a, m) {
-        o[a] && o[a](m);
+      for (var Ye in e.STATE)
+        e.STATE[e.STATE[Ye]] = Ye;
+      C = e.STATE;
+      function Se(f, c, I) {
+        f[c] && f[c](I);
       }
-      function vs(o) {
-        var a = o && o.match(/(?:^|\s)encoding\s*=\s*(['"])([^'"]+)\1/i);
-        return a ? a[2] : null;
+      function V(f, c, I) {
+        f.textNode && Ie(f), Se(f, c, I);
       }
-      function dt(o) {
-        return o ? o.toLowerCase().replace(/[^a-z0-9]/g, "") : null;
+      function Ie(f) {
+        f.textNode = ve(f.opt, f.textNode), f.textNode && Se(f, "ontext", f.textNode), f.textNode = "";
       }
-      function xs(o, a) {
-        const m = dt(o), f = dt(a);
-        return !m || !f ? !0 : f === "utf16" ? m === "utf16le" || m === "utf16be" : m === f;
+      function ve(f, c) {
+        return f.trim && (c = c.trim()), f.normalize && (c = c.replace(/\s+/g, " ")), c;
       }
-      function Ds(o, a) {
-        if (!(!o.strict || !o.encoding || !a || a.name !== "xml")) {
-          var m = vs(a.body);
-          m && !xs(o.encoding, m) && A(
-            o,
-            "XML declaration encoding " + m + " does not match detected stream encoding " + o.encoding.toUpperCase()
-          );
-        }
+      function me(f, c) {
+        return Ie(f), f.trackPosition && (c += `
+Line: ` + f.line + `
+Column: ` + f.column + `
+Char: ` + f.c), c = new Error(c), f.error = c, Se(f, "onerror", c), f;
       }
-      function k(o, a, m) {
-        o.textNode && ye(o), Ee(o, a, m);
+      function ze(f) {
+        return f.sawRoot && !f.closedRoot && L(f, "Unclosed root tag"), f.state !== C.BEGIN && f.state !== C.BEGIN_WHITESPACE && f.state !== C.TEXT && me(f, "Unexpected end"), Ie(f), f.c = "", f.closed = !0, Se(f, "onend"), s.call(f, f.strict, f.opt), f;
       }
-      function ye(o) {
-        o.textNode = mt(o.opt, o.textNode), o.textNode && Ee(o, "ontext", o.textNode), o.textNode = "";
-      }
-      function mt(o, a) {
-        return o.trim && (a = a.trim()), o.normalize && (a = a.replace(/\s+/g, " ")), a;
-      }
-      function re(o, a) {
-        return ye(o), o.trackPosition && (a += `
-Line: ` + o.line + `
-Column: ` + o.column + `
-Char: ` + o.c), a = new Error(a), o.error = a, Ee(o, "onerror", a), o;
-      }
-      function Et(o) {
-        return o.sawRoot && !o.closedRoot && A(o, "Unclosed root tag"), o.state !== g.BEGIN && o.state !== g.BEGIN_WHITESPACE && o.state !== g.TEXT && re(o, "Unexpected end"), ye(o), o.c = "", o.closed = !0, Ee(o, "onend"), s.call(o, o.strict, o.opt), o;
-      }
-      function A(o, a) {
-        if (typeof o != "object" || !(o instanceof s))
+      function L(f, c) {
+        if (typeof f != "object" || !(f instanceof s))
           throw new Error("bad call to strictFail");
-        o.strict && re(o, a);
+        f.strict && me(f, c);
       }
-      function Fs(o) {
-        o.strict || (o.tagName = o.tagName[o.looseCase]());
-        var a = o.tags[o.tags.length - 1] || o, m = o.tag = { name: o.tagName, attributes: {} };
-        o.opt.xmlns && (m.ns = a.ns), o.attribList.length = 0, k(o, "onopentagstart", m);
+      function lt(f) {
+        f.strict || (f.tagName = f.tagName[f.looseCase]());
+        var c = f.tags[f.tags.length - 1] || f, I = f.tag = { name: f.tagName, attributes: {} };
+        f.opt.xmlns && (I.ns = c.ns), f.attribList.length = 0, V(f, "onopentagstart", I);
       }
-      function Be(o, a) {
-        var m = o.indexOf(":"), f = m < 0 ? ["", o] : o.split(":"), _ = f[0], F = f[1];
-        return a && o === "xmlns" && (_ = "xmlns", F = ""), { prefix: _, local: F };
+      function Oe(f, c) {
+        var I = f.indexOf(":"), y = I < 0 ? ["", f] : f.split(":"), M = y[0], z = y[1];
+        return c && f === "xmlns" && (M = "xmlns", z = ""), { prefix: M, local: z };
       }
-      function Me(o) {
-        if (o.strict || (o.attribName = o.attribName[o.looseCase]()), o.attribList.indexOf(o.attribName) !== -1 || o.tag.attributes.hasOwnProperty(o.attribName)) {
-          o.attribName = o.attribValue = "";
+      function Ue(f) {
+        if (f.strict || (f.attribName = f.attribName[f.looseCase]()), f.attribList.indexOf(f.attribName) !== -1 || f.tag.attributes.hasOwnProperty(f.attribName)) {
+          f.attribName = f.attribValue = "";
           return;
         }
-        if (o.opt.xmlns) {
-          var a = Be(o.attribName, !0), m = a.prefix, f = a.local;
-          if (m === "xmlns")
-            if (f === "xml" && o.attribValue !== S)
-              A(
-                o,
-                "xml: prefix must be bound to " + S + `
-Actual: ` + o.attribValue
+        if (f.opt.xmlns) {
+          var c = Oe(f.attribName, !0), I = c.prefix, y = c.local;
+          if (I === "xmlns")
+            if (y === "xml" && f.attribValue !== _)
+              L(
+                f,
+                "xml: prefix must be bound to " + _ + `
+Actual: ` + f.attribValue
               );
-            else if (f === "xmlns" && o.attribValue !== D)
-              A(
-                o,
-                "xmlns: prefix must be bound to " + D + `
-Actual: ` + o.attribValue
+            else if (y === "xmlns" && f.attribValue !== b)
+              L(
+                f,
+                "xmlns: prefix must be bound to " + b + `
+Actual: ` + f.attribValue
               );
             else {
-              var _ = o.tag, F = o.tags[o.tags.length - 1] || o;
-              _.ns === F.ns && (_.ns = Object.create(F.ns)), _.ns[f] = o.attribValue;
+              var M = f.tag, z = f.tags[f.tags.length - 1] || f;
+              M.ns === z.ns && (M.ns = Object.create(z.ns)), M.ns[y] = f.attribValue;
             }
-          o.attribList.push([o.attribName, o.attribValue]);
+          f.attribList.push([f.attribName, f.attribValue]);
         } else
-          o.tag.attributes[o.attribName] = o.attribValue, k(o, "onattribute", {
-            name: o.attribName,
-            value: o.attribValue
+          f.tag.attributes[f.attribName] = f.attribValue, V(f, "onattribute", {
+            name: f.attribName,
+            value: f.attribValue
           });
-        o.attribName = o.attribValue = "";
+        f.attribName = f.attribValue = "";
       }
-      function ne(o, a) {
-        if (o.opt.xmlns) {
-          var m = o.tag, f = Be(o.tagName);
-          m.prefix = f.prefix, m.local = f.local, m.uri = m.ns[f.prefix] || "", m.prefix && !m.uri && (A(
-            o,
-            "Unbound namespace prefix: " + JSON.stringify(o.tagName)
-          ), m.uri = f.prefix);
-          var _ = o.tags[o.tags.length - 1] || o;
-          m.ns && _.ns !== m.ns && Object.keys(m.ns).forEach(function(Tt) {
-            k(o, "onopennamespace", {
-              prefix: Tt,
-              uri: m.ns[Tt]
+      function $(f, c) {
+        if (f.opt.xmlns) {
+          var I = f.tag, y = Oe(f.tagName);
+          I.prefix = y.prefix, I.local = y.local, I.uri = I.ns[y.prefix] || "", I.prefix && !I.uri && (L(
+            f,
+            "Unbound namespace prefix: " + JSON.stringify(f.tagName)
+          ), I.uri = y.prefix);
+          var M = f.tags[f.tags.length - 1] || f;
+          I.ns && M.ns !== I.ns && Object.keys(I.ns).forEach(function(ce) {
+            V(f, "onopennamespace", {
+              prefix: ce,
+              uri: I.ns[ce]
             });
           });
-          for (var F = 0, w = o.attribList.length; F < w; F++) {
-            var j = o.attribList[F], G = j[0], ee = j[1], B = Be(G, !0), te = B.prefix, Bs = B.local, Ct = te === "" ? "" : m.ns[te] || "", je = {
-              name: G,
-              value: ee,
-              prefix: te,
-              local: Bs,
-              uri: Ct
+          for (var z = 0, X = f.attribList.length; z < X; z++) {
+            var ee = f.attribList[z], ne = ee[0], ye = ee[1], Z = Oe(ne, !0), he = Z.prefix, ht = Z.local, Le = he === "" ? "" : I.ns[he] || "", Ee = {
+              name: ne,
+              value: ye,
+              prefix: he,
+              local: ht,
+              uri: Le
             };
-            te && te !== "xmlns" && !Ct && (A(
-              o,
-              "Unbound namespace prefix: " + JSON.stringify(te)
-            ), je.uri = te), o.tag.attributes[G] = je, k(o, "onattribute", je);
+            he && he !== "xmlns" && !Le && (L(
+              f,
+              "Unbound namespace prefix: " + JSON.stringify(he)
+            ), Ee.uri = he), f.tag.attributes[ne] = Ee, V(f, "onattribute", Ee);
           }
-          o.attribList.length = 0;
+          f.attribList.length = 0;
         }
-        o.tag.isSelfClosing = !!a, o.sawRoot = !0, o.tags.push(o.tag), k(o, "onopentag", o.tag), a || (!o.noscript && o.tagName.toLowerCase() === "script" ? o.state = g.SCRIPT : o.state = g.TEXT, o.tag = null, o.tagName = ""), o.attribName = o.attribValue = "", o.attribList.length = 0;
+        f.tag.isSelfClosing = !!c, f.sawRoot = !0, f.tags.push(f.tag), V(f, "onopentag", f.tag), c || (!f.noscript && f.tagName.toLowerCase() === "script" ? f.state = C.SCRIPT : f.state = C.TEXT, f.tag = null, f.tagName = ""), f.attribName = f.attribValue = "", f.attribList.length = 0;
       }
-      function Ue(o) {
-        if (!o.tagName) {
-          A(o, "Weird empty close tag."), o.textNode += "</>", o.state = g.TEXT;
+      function te(f) {
+        if (!f.tagName) {
+          L(f, "Weird empty close tag."), f.textNode += "</>", f.state = C.TEXT;
           return;
         }
-        if (o.script) {
-          if (o.tagName !== "script") {
-            o.script += "</" + o.tagName + ">", o.tagName = "", o.state = g.SCRIPT;
+        if (f.script) {
+          if (f.tagName !== "script") {
+            f.script += "</" + f.tagName + ">", f.tagName = "", f.state = C.SCRIPT;
             return;
           }
-          k(o, "onscript", o.script), o.script = "";
+          V(f, "onscript", f.script), f.script = "";
         }
-        var a = o.tags.length, m = o.tagName;
-        o.strict || (m = m[o.looseCase]());
-        for (var f = m; a--; ) {
-          var _ = o.tags[a];
-          if (_.name !== f)
-            A(o, "Unexpected close tag");
+        var c = f.tags.length, I = f.tagName;
+        f.strict || (I = I[f.looseCase]());
+        for (var y = I; c--; ) {
+          var M = f.tags[c];
+          if (M.name !== y)
+            L(f, "Unexpected close tag");
           else
             break;
         }
-        if (a < 0) {
-          A(o, "Unmatched closing tag: " + o.tagName), o.textNode += "</" + o.tagName + ">", o.state = g.TEXT;
+        if (c < 0) {
+          L(f, "Unmatched closing tag: " + f.tagName), f.textNode += "</" + f.tagName + ">", f.state = C.TEXT;
           return;
         }
-        o.tagName = m;
-        for (var F = o.tags.length; F-- > a; ) {
-          var w = o.tag = o.tags.pop();
-          o.tagName = o.tag.name, k(o, "onclosetag", o.tagName);
-          var j = {};
-          for (var G in w.ns)
-            j[G] = w.ns[G];
-          var ee = o.tags[o.tags.length - 1] || o;
-          o.opt.xmlns && w.ns !== ee.ns && Object.keys(w.ns).forEach(function(B) {
-            var te = w.ns[B];
-            k(o, "onclosenamespace", { prefix: B, uri: te });
+        f.tagName = I;
+        for (var z = f.tags.length; z-- > c; ) {
+          var X = f.tag = f.tags.pop();
+          f.tagName = f.tag.name, V(f, "onclosetag", f.tagName);
+          var ee = {};
+          for (var ne in X.ns)
+            ee[ne] = X.ns[ne];
+          var ye = f.tags[f.tags.length - 1] || f;
+          f.opt.xmlns && X.ns !== ye.ns && Object.keys(X.ns).forEach(function(Z) {
+            var he = X.ns[Z];
+            V(f, "onclosenamespace", { prefix: Z, uri: he });
           });
         }
-        a === 0 && (o.closedRoot = !0), o.tagName = o.attribValue = o.attribName = "", o.attribList.length = 0, o.state = g.TEXT;
+        c === 0 && (f.closedRoot = !0), f.tagName = f.attribValue = f.attribName = "", f.attribList.length = 0, f.state = C.TEXT;
       }
-      function ks(o) {
-        var a = o.entity, m = a.toLowerCase(), f, _ = "";
-        return o.ENTITIES[a] ? o.ENTITIES[a] : o.ENTITIES[m] ? o.ENTITIES[m] : (a = m, a.charAt(0) === "#" && (a.charAt(1) === "x" ? (a = a.slice(2), f = parseInt(a, 16), _ = f.toString(16)) : (a = a.slice(1), f = parseInt(a, 10), _ = f.toString(10))), a = a.replace(/^0+/, ""), isNaN(f) || _.toLowerCase() !== a || f < 0 || f > 1114111 || !Os(f) ? (A(o, "Invalid character entity"), "&" + o.entity + ";") : String.fromCodePoint(f));
+      function Ke(f) {
+        var c = f.entity, I = c.toLowerCase(), y, M = "";
+        return f.ENTITIES[c] ? f.ENTITIES[c] : f.ENTITIES[I] ? f.ENTITIES[I] : (c = I, c.charAt(0) === "#" && (c.charAt(1) === "x" ? (c = c.slice(2), y = parseInt(c, 16), M = y.toString(16)) : (c = c.slice(1), y = parseInt(c, 10), M = y.toString(10))), c = c.replace(/^0+/, ""), isNaN(y) || M.toLowerCase() !== c || y < 0 || y > 1114111 ? (L(f, "Invalid character entity"), "&" + f.entity + ";") : String.fromCodePoint(y));
       }
-      function Os(o) {
-        return o === 9 || o === 10 || o === 13 || o >= 32 && o <= 55295 || o >= 57344 && o <= 65533 || o >= 65536 && o <= 1114111;
+      function Me(f, c) {
+        c === "<" ? (f.state = C.OPEN_WAKA, f.startTagPosition = f.position) : k(c) || (L(f, "Non-whitespace before first tag."), f.textNode = c, f.state = C.TEXT);
       }
-      function yt(o, a) {
-        a === "<" ? (o.state = g.OPEN_WAKA, o.startTagPosition = o.position) : v(a) || (A(o, "Non-whitespace before first tag."), o.textNode = a, o.state = g.TEXT);
+      function xe(f, c) {
+        var I = "";
+        return c < f.length && (I = f.charAt(c)), I;
       }
-      function Le(o, a) {
-        var m = "";
-        return a < o.length && (m = o.charAt(a)), m;
-      }
-      function ws(o) {
-        var a = this;
+      function He(f) {
+        var c = this;
         if (this.error)
           throw this.error;
-        if (a.closed)
-          return re(
-            a,
+        if (c.closed)
+          return me(
+            c,
             "Cannot write after close. Assign an onready handler."
           );
-        if (o === null)
-          return Et(a);
-        typeof o == "object" && (o = o.toString());
-        for (var m = 0, f = ""; f = Le(o, m++), a.c = f, !!f; )
-          switch (a.trackPosition && (a.position++, f === `
-` ? (a.line++, a.column = 0) : a.column++), a.state) {
-            case g.BEGIN:
-              if (a.state = g.BEGIN_WHITESPACE, f === "\uFEFF")
+        if (f === null)
+          return ze(c);
+        typeof f == "object" && (f = f.toString());
+        for (var I = 0, y = ""; y = xe(f, I++), c.c = y, !!y; )
+          switch (c.trackPosition && (c.position++, y === `
+` ? (c.line++, c.column = 0) : c.column++), c.state) {
+            case C.BEGIN:
+              if (c.state = C.BEGIN_WHITESPACE, y === "\uFEFF")
                 continue;
-              yt(a, f);
+              Me(c, y);
               continue;
-            case g.BEGIN_WHITESPACE:
-              yt(a, f);
+            case C.BEGIN_WHITESPACE:
+              Me(c, y);
               continue;
-            case g.TEXT:
-              if (a.sawRoot && !a.closedRoot) {
-                for (var F = m - 1; f && f !== "<" && f !== "&"; )
-                  f = Le(o, m++), f && a.trackPosition && (a.position++, f === `
-` ? (a.line++, a.column = 0) : a.column++);
-                a.textNode += o.substring(F, m - 1);
+            case C.TEXT:
+              if (c.sawRoot && !c.closedRoot) {
+                for (var z = I - 1; y && y !== "<" && y !== "&"; )
+                  y = xe(f, I++), y && c.trackPosition && (c.position++, y === `
+` ? (c.line++, c.column = 0) : c.column++);
+                c.textNode += f.substring(z, I - 1);
               }
-              f === "<" && !(a.sawRoot && a.closedRoot && !a.strict) ? (a.state = g.OPEN_WAKA, a.startTagPosition = a.position) : (!v(f) && (!a.sawRoot || a.closedRoot) && A(a, "Text data outside of root node."), f === "&" ? a.state = g.TEXT_ENTITY : a.textNode += f);
+              y === "<" && !(c.sawRoot && c.closedRoot && !c.strict) ? (c.state = C.OPEN_WAKA, c.startTagPosition = c.position) : (!k(y) && (!c.sawRoot || c.closedRoot) && L(c, "Text data outside of root node."), y === "&" ? c.state = C.TEXT_ENTITY : c.textNode += y);
               continue;
-            case g.SCRIPT:
-              f === "<" ? a.state = g.SCRIPT_ENDING : a.script += f;
+            case C.SCRIPT:
+              y === "<" ? c.state = C.SCRIPT_ENDING : c.script += y;
               continue;
-            case g.SCRIPT_ENDING:
-              f === "/" ? a.state = g.CLOSE_TAG : (a.script += "<" + f, a.state = g.SCRIPT);
+            case C.SCRIPT_ENDING:
+              y === "/" ? c.state = C.CLOSE_TAG : (c.script += "<" + y, c.state = C.SCRIPT);
               continue;
-            case g.OPEN_WAKA:
-              if (f === "!")
-                a.state = g.SGML_DECL, a.sgmlDecl = "";
-              else if (!v(f)) if (z(O, f))
-                a.state = g.OPEN_TAG, a.tagName = f;
-              else if (f === "/")
-                a.state = g.CLOSE_TAG, a.tagName = "";
-              else if (f === "?")
-                a.state = g.PROC_INST, a.procInstName = a.procInstBody = "";
+            case C.OPEN_WAKA:
+              if (y === "!")
+                c.state = C.SGML_DECL, c.sgmlDecl = "";
+              else if (!k(y)) if (re(O, y))
+                c.state = C.OPEN_TAG, c.tagName = y;
+              else if (y === "/")
+                c.state = C.CLOSE_TAG, c.tagName = "";
+              else if (y === "?")
+                c.state = C.PROC_INST, c.procInstName = c.procInstBody = "";
               else {
-                if (A(a, "Unencoded <"), a.startTagPosition + 1 < a.position) {
-                  var _ = a.position - a.startTagPosition;
-                  f = new Array(_).join(" ") + f;
+                if (L(c, "Unencoded <"), c.startTagPosition + 1 < c.position) {
+                  var M = c.position - c.startTagPosition;
+                  y = new Array(M).join(" ") + y;
                 }
-                a.textNode += "<" + f, a.state = g.TEXT;
+                c.textNode += "<" + y, c.state = C.TEXT;
               }
               continue;
-            case g.SGML_DECL:
-              if (a.sgmlDecl + f === "--") {
-                a.state = g.COMMENT, a.comment = "", a.sgmlDecl = "";
+            case C.SGML_DECL:
+              if (c.sgmlDecl + y === "--") {
+                c.state = C.COMMENT, c.comment = "", c.sgmlDecl = "";
                 continue;
               }
-              a.doctype && a.doctype !== !0 && a.sgmlDecl ? (a.state = g.DOCTYPE_DTD, a.doctype += "<!" + a.sgmlDecl + f, a.sgmlDecl = "") : E.test(a.sgmlDecl + f) ? (k(a, "onopencdata"), a.state = g.CDATA, a.sgmlDecl = "", a.cdata = "") : C.test(a.sgmlDecl + f) ? (a.state = g.DOCTYPE, (a.doctype || a.sawRoot) && A(
-                a,
+              c.doctype && c.doctype !== !0 && c.sgmlDecl ? (c.state = C.DOCTYPE_DTD, c.doctype += "<!" + c.sgmlDecl + y, c.sgmlDecl = "") : (c.sgmlDecl + y).toUpperCase() === T ? (V(c, "onopencdata"), c.state = C.CDATA, c.sgmlDecl = "", c.cdata = "") : (c.sgmlDecl + y).toUpperCase() === R ? (c.state = C.DOCTYPE, (c.doctype || c.sawRoot) && L(
+                c,
                 "Inappropriately located doctype declaration"
-              ), a.doctype = "", a.sgmlDecl = "") : f === ">" ? (k(a, "onsgmldeclaration", a.sgmlDecl), a.sgmlDecl = "", a.state = g.TEXT) : (W(f) && (a.state = g.SGML_DECL_QUOTED), a.sgmlDecl += f);
+              ), c.doctype = "", c.sgmlDecl = "") : y === ">" ? (V(c, "onsgmldeclaration", c.sgmlDecl), c.sgmlDecl = "", c.state = C.TEXT) : (F(y) && (c.state = C.SGML_DECL_QUOTED), c.sgmlDecl += y);
               continue;
-            case g.SGML_DECL_QUOTED:
-              f === a.q && (a.state = g.SGML_DECL, a.q = ""), a.sgmlDecl += f;
+            case C.SGML_DECL_QUOTED:
+              y === c.q && (c.state = C.SGML_DECL, c.q = ""), c.sgmlDecl += y;
               continue;
-            case g.DOCTYPE:
-              f === ">" ? (a.state = g.TEXT, k(a, "ondoctype", a.doctype), a.doctype = !0) : (a.doctype += f, f === "[" ? a.state = g.DOCTYPE_DTD : W(f) && (a.state = g.DOCTYPE_QUOTED, a.q = f));
+            case C.DOCTYPE:
+              y === ">" ? (c.state = C.TEXT, V(c, "ondoctype", c.doctype), c.doctype = !0) : (c.doctype += y, y === "[" ? c.state = C.DOCTYPE_DTD : F(y) && (c.state = C.DOCTYPE_QUOTED, c.q = y));
               continue;
-            case g.DOCTYPE_QUOTED:
-              a.doctype += f, f === a.q && (a.q = "", a.state = g.DOCTYPE);
+            case C.DOCTYPE_QUOTED:
+              c.doctype += y, y === c.q && (c.q = "", c.state = C.DOCTYPE);
               continue;
-            case g.DOCTYPE_DTD:
-              f === "]" ? (a.doctype += f, a.state = g.DOCTYPE) : f === "<" ? (a.state = g.OPEN_WAKA, a.startTagPosition = a.position) : W(f) ? (a.doctype += f, a.state = g.DOCTYPE_DTD_QUOTED, a.q = f) : a.doctype += f;
+            case C.DOCTYPE_DTD:
+              y === "]" ? (c.doctype += y, c.state = C.DOCTYPE) : y === "<" ? (c.state = C.OPEN_WAKA, c.startTagPosition = c.position) : F(y) ? (c.doctype += y, c.state = C.DOCTYPE_DTD_QUOTED, c.q = y) : c.doctype += y;
               continue;
-            case g.DOCTYPE_DTD_QUOTED:
-              a.doctype += f, f === a.q && (a.state = g.DOCTYPE_DTD, a.q = "");
+            case C.DOCTYPE_DTD_QUOTED:
+              c.doctype += y, y === c.q && (c.state = C.DOCTYPE_DTD, c.q = "");
               continue;
-            case g.COMMENT:
-              f === "-" ? a.state = g.COMMENT_ENDING : a.comment += f;
+            case C.COMMENT:
+              y === "-" ? c.state = C.COMMENT_ENDING : c.comment += y;
               continue;
-            case g.COMMENT_ENDING:
-              f === "-" ? (a.state = g.COMMENT_ENDED, a.comment = mt(a.opt, a.comment), a.comment && k(a, "oncomment", a.comment), a.comment = "") : (a.comment += "-" + f, a.state = g.COMMENT);
+            case C.COMMENT_ENDING:
+              y === "-" ? (c.state = C.COMMENT_ENDED, c.comment = ve(c.opt, c.comment), c.comment && V(c, "oncomment", c.comment), c.comment = "") : (c.comment += "-" + y, c.state = C.COMMENT);
               continue;
-            case g.COMMENT_ENDED:
-              f !== ">" ? (A(a, "Malformed comment"), a.comment += "--" + f, a.state = g.COMMENT) : a.doctype && a.doctype !== !0 ? a.state = g.DOCTYPE_DTD : a.state = g.TEXT;
+            case C.COMMENT_ENDED:
+              y !== ">" ? (L(c, "Malformed comment"), c.comment += "--" + y, c.state = C.COMMENT) : c.doctype && c.doctype !== !0 ? c.state = C.DOCTYPE_DTD : c.state = C.TEXT;
               continue;
-            case g.CDATA:
-              for (var F = m - 1; f && f !== "]"; )
-                f = Le(o, m++), f && a.trackPosition && (a.position++, f === `
-` ? (a.line++, a.column = 0) : a.column++);
-              a.cdata += o.substring(F, m - 1), f === "]" && (a.state = g.CDATA_ENDING);
+            case C.CDATA:
+              for (var z = I - 1; y && y !== "]"; )
+                y = xe(f, I++), y && c.trackPosition && (c.position++, y === `
+` ? (c.line++, c.column = 0) : c.column++);
+              c.cdata += f.substring(z, I - 1), y === "]" && (c.state = C.CDATA_ENDING);
               continue;
-            case g.CDATA_ENDING:
-              f === "]" ? a.state = g.CDATA_ENDING_2 : (a.cdata += "]" + f, a.state = g.CDATA);
+            case C.CDATA_ENDING:
+              y === "]" ? c.state = C.CDATA_ENDING_2 : (c.cdata += "]" + y, c.state = C.CDATA);
               continue;
-            case g.CDATA_ENDING_2:
-              f === ">" ? (a.cdata && k(a, "oncdata", a.cdata), k(a, "onclosecdata"), a.cdata = "", a.state = g.TEXT) : f === "]" ? a.cdata += "]" : (a.cdata += "]]" + f, a.state = g.CDATA);
+            case C.CDATA_ENDING_2:
+              y === ">" ? (c.cdata && V(c, "oncdata", c.cdata), V(c, "onclosecdata"), c.cdata = "", c.state = C.TEXT) : y === "]" ? c.cdata += "]" : (c.cdata += "]]" + y, c.state = C.CDATA);
               continue;
-            case g.PROC_INST:
-              f === "?" ? a.state = g.PROC_INST_ENDING : v(f) ? a.state = g.PROC_INST_BODY : a.procInstName += f;
+            case C.PROC_INST:
+              y === "?" ? c.state = C.PROC_INST_ENDING : k(y) ? c.state = C.PROC_INST_BODY : c.procInstName += y;
               continue;
-            case g.PROC_INST_BODY:
-              if (!a.procInstBody && v(f))
+            case C.PROC_INST_BODY:
+              if (!c.procInstBody && k(y))
                 continue;
-              f === "?" ? a.state = g.PROC_INST_ENDING : a.procInstBody += f;
+              y === "?" ? c.state = C.PROC_INST_ENDING : c.procInstBody += y;
               continue;
-            case g.PROC_INST_ENDING:
-              if (f === ">") {
-                const ee = {
-                  name: a.procInstName,
-                  body: a.procInstBody
-                };
-                Ds(a, ee), k(a, "onprocessinginstruction", ee), a.procInstName = a.procInstBody = "", a.state = g.TEXT;
-              } else
-                a.procInstBody += "?" + f, a.state = g.PROC_INST_BODY;
+            case C.PROC_INST_ENDING:
+              y === ">" ? (V(c, "onprocessinginstruction", {
+                name: c.procInstName,
+                body: c.procInstBody
+              }), c.procInstName = c.procInstBody = "", c.state = C.TEXT) : (c.procInstBody += "?" + y, c.state = C.PROC_INST_BODY);
               continue;
-            case g.OPEN_TAG:
-              z(q, f) ? a.tagName += f : (Fs(a), f === ">" ? ne(a) : f === "/" ? a.state = g.OPEN_TAG_SLASH : (v(f) || A(a, "Invalid character in tag name"), a.state = g.ATTRIB));
+            case C.OPEN_TAG:
+              re(S, y) ? c.tagName += y : (lt(c), y === ">" ? $(c) : y === "/" ? c.state = C.OPEN_TAG_SLASH : (k(y) || L(c, "Invalid character in tag name"), c.state = C.ATTRIB));
               continue;
-            case g.OPEN_TAG_SLASH:
-              f === ">" ? (ne(a, !0), Ue(a)) : (A(
-                a,
+            case C.OPEN_TAG_SLASH:
+              y === ">" ? ($(c, !0), te(c)) : (L(
+                c,
                 "Forward-slash in opening tag not followed by >"
-              ), a.state = g.ATTRIB);
+              ), c.state = C.ATTRIB);
               continue;
-            case g.ATTRIB:
-              if (v(f))
+            case C.ATTRIB:
+              if (k(y))
                 continue;
-              f === ">" ? ne(a) : f === "/" ? a.state = g.OPEN_TAG_SLASH : z(O, f) ? (a.attribName = f, a.attribValue = "", a.state = g.ATTRIB_NAME) : A(a, "Invalid attribute name");
+              y === ">" ? $(c) : y === "/" ? c.state = C.OPEN_TAG_SLASH : re(O, y) ? (c.attribName = y, c.attribValue = "", c.state = C.ATTRIB_NAME) : L(c, "Invalid attribute name");
               continue;
-            case g.ATTRIB_NAME:
-              f === "=" ? a.state = g.ATTRIB_VALUE : f === ">" ? (A(a, "Attribute without value"), a.attribValue = a.attribName, Me(a), ne(a)) : v(f) ? a.state = g.ATTRIB_NAME_SAW_WHITE : z(q, f) ? a.attribName += f : A(a, "Invalid attribute name");
+            case C.ATTRIB_NAME:
+              y === "=" ? c.state = C.ATTRIB_VALUE : y === ">" ? (L(c, "Attribute without value"), c.attribValue = c.attribName, Ue(c), $(c)) : k(y) ? c.state = C.ATTRIB_NAME_SAW_WHITE : re(S, y) ? c.attribName += y : L(c, "Invalid attribute name");
               continue;
-            case g.ATTRIB_NAME_SAW_WHITE:
-              if (f === "=")
-                a.state = g.ATTRIB_VALUE;
+            case C.ATTRIB_NAME_SAW_WHITE:
+              if (y === "=")
+                c.state = C.ATTRIB_VALUE;
               else {
-                if (v(f))
+                if (k(y))
                   continue;
-                A(a, "Attribute without value"), a.tag.attributes[a.attribName] = "", a.attribValue = "", k(a, "onattribute", {
-                  name: a.attribName,
+                L(c, "Attribute without value"), c.tag.attributes[c.attribName] = "", c.attribValue = "", V(c, "onattribute", {
+                  name: c.attribName,
                   value: ""
-                }), a.attribName = "", f === ">" ? ne(a) : z(O, f) ? (a.attribName = f, a.state = g.ATTRIB_NAME) : (A(a, "Invalid attribute name"), a.state = g.ATTRIB);
+                }), c.attribName = "", y === ">" ? $(c) : re(O, y) ? (c.attribName = y, c.state = C.ATTRIB_NAME) : (L(c, "Invalid attribute name"), c.state = C.ATTRIB);
               }
               continue;
-            case g.ATTRIB_VALUE:
-              if (v(f))
+            case C.ATTRIB_VALUE:
+              if (k(y))
                 continue;
-              W(f) ? (a.q = f, a.state = g.ATTRIB_VALUE_QUOTED) : (a.opt.unquotedAttributeValues || re(a, "Unquoted attribute value"), a.state = g.ATTRIB_VALUE_UNQUOTED, a.attribValue = f);
+              F(y) ? (c.q = y, c.state = C.ATTRIB_VALUE_QUOTED) : (c.opt.unquotedAttributeValues || me(c, "Unquoted attribute value"), c.state = C.ATTRIB_VALUE_UNQUOTED, c.attribValue = y);
               continue;
-            case g.ATTRIB_VALUE_QUOTED:
-              if (f !== a.q) {
-                f === "&" ? a.state = g.ATTRIB_VALUE_ENTITY_Q : a.attribValue += f;
-                continue;
-              }
-              Me(a), a.q = "", a.state = g.ATTRIB_VALUE_CLOSED;
-              continue;
-            case g.ATTRIB_VALUE_CLOSED:
-              v(f) ? a.state = g.ATTRIB : f === ">" ? ne(a) : f === "/" ? a.state = g.OPEN_TAG_SLASH : z(O, f) ? (A(a, "No whitespace between attributes"), a.attribName = f, a.attribValue = "", a.state = g.ATTRIB_NAME) : A(a, "Invalid attribute name");
-              continue;
-            case g.ATTRIB_VALUE_UNQUOTED:
-              if (!me(f)) {
-                f === "&" ? a.state = g.ATTRIB_VALUE_ENTITY_U : a.attribValue += f;
+            case C.ATTRIB_VALUE_QUOTED:
+              if (y !== c.q) {
+                y === "&" ? c.state = C.ATTRIB_VALUE_ENTITY_Q : c.attribValue += y;
                 continue;
               }
-              Me(a), f === ">" ? ne(a) : a.state = g.ATTRIB;
+              Ue(c), c.q = "", c.state = C.ATTRIB_VALUE_CLOSED;
               continue;
-            case g.CLOSE_TAG:
-              if (a.tagName)
-                f === ">" ? Ue(a) : z(q, f) ? a.tagName += f : a.script ? (a.script += "</" + a.tagName + f, a.tagName = "", a.state = g.SCRIPT) : (v(f) || A(a, "Invalid tagname in closing tag"), a.state = g.CLOSE_TAG_SAW_WHITE);
+            case C.ATTRIB_VALUE_CLOSED:
+              k(y) ? c.state = C.ATTRIB : y === ">" ? $(c) : y === "/" ? c.state = C.OPEN_TAG_SLASH : re(O, y) ? (L(c, "No whitespace between attributes"), c.attribName = y, c.attribValue = "", c.state = C.ATTRIB_NAME) : L(c, "Invalid attribute name");
+              continue;
+            case C.ATTRIB_VALUE_UNQUOTED:
+              if (!ue(y)) {
+                y === "&" ? c.state = C.ATTRIB_VALUE_ENTITY_U : c.attribValue += y;
+                continue;
+              }
+              Ue(c), y === ">" ? $(c) : c.state = C.ATTRIB;
+              continue;
+            case C.CLOSE_TAG:
+              if (c.tagName)
+                y === ">" ? te(c) : re(S, y) ? c.tagName += y : c.script ? (c.script += "</" + c.tagName, c.tagName = "", c.state = C.SCRIPT) : (k(y) || L(c, "Invalid tagname in closing tag"), c.state = C.CLOSE_TAG_SAW_WHITE);
               else {
-                if (v(f))
+                if (k(y))
                   continue;
-                ue(O, f) ? a.script ? (a.script += "</" + f, a.state = g.SCRIPT) : A(a, "Invalid tagname in closing tag.") : a.tagName = f;
+                Ne(O, y) ? c.script ? (c.script += "</" + y, c.state = C.SCRIPT) : L(c, "Invalid tagname in closing tag.") : c.tagName = y;
               }
               continue;
-            case g.CLOSE_TAG_SAW_WHITE:
-              if (v(f))
+            case C.CLOSE_TAG_SAW_WHITE:
+              if (k(y))
                 continue;
-              f === ">" ? Ue(a) : A(a, "Invalid characters in closing tag");
+              y === ">" ? te(c) : L(c, "Invalid characters in closing tag");
               continue;
-            case g.TEXT_ENTITY:
-            case g.ATTRIB_VALUE_ENTITY_Q:
-            case g.ATTRIB_VALUE_ENTITY_U:
-              var w, j;
-              switch (a.state) {
-                case g.TEXT_ENTITY:
-                  w = g.TEXT, j = "textNode";
+            case C.TEXT_ENTITY:
+            case C.ATTRIB_VALUE_ENTITY_Q:
+            case C.ATTRIB_VALUE_ENTITY_U:
+              var X, ee;
+              switch (c.state) {
+                case C.TEXT_ENTITY:
+                  X = C.TEXT, ee = "textNode";
                   break;
-                case g.ATTRIB_VALUE_ENTITY_Q:
-                  w = g.ATTRIB_VALUE_QUOTED, j = "attribValue";
+                case C.ATTRIB_VALUE_ENTITY_Q:
+                  X = C.ATTRIB_VALUE_QUOTED, ee = "attribValue";
                   break;
-                case g.ATTRIB_VALUE_ENTITY_U:
-                  w = g.ATTRIB_VALUE_UNQUOTED, j = "attribValue";
+                case C.ATTRIB_VALUE_ENTITY_U:
+                  X = C.ATTRIB_VALUE_UNQUOTED, ee = "attribValue";
                   break;
               }
-              if (f === ";") {
-                var G = ks(a);
-                a.opt.unparsedEntities && !Object.values(e.XML_ENTITIES).includes(G) ? ((a.entityCount += 1) > a.opt.maxEntityCount && re(
-                  a,
-                  "Parsed entity count exceeds max entity count"
-                ), (a.entityDepth += 1) > a.opt.maxEntityDepth && re(
-                  a,
-                  "Parsed entity depth exceeds max entity depth"
-                ), a.entity = "", a.state = w, a.write(G), a.entityDepth -= 1) : (a[j] += G, a.entity = "", a.state = w);
-              } else z(a.entity.length ? Y : Q, f) ? a.entity += f : (A(a, "Invalid character in entity name"), a[j] += "&" + a.entity + f, a.entity = "", a.state = w);
+              if (y === ";") {
+                var ne = Ke(c);
+                c.opt.unparsedEntities && !Object.values(e.XML_ENTITIES).includes(ne) ? (c.entity = "", c.state = X, c.write(ne)) : (c[ee] += ne, c.entity = "", c.state = X);
+              } else re(c.entity.length ? w : x, y) ? c.entity += y : (L(c, "Invalid character in entity name"), c[ee] += "&" + c.entity + y, c.entity = "", c.state = X);
               continue;
             default:
-              throw new Error(a, "Unknown state: " + a.state);
+              throw new Error(c, "Unknown state: " + c.state);
           }
-        return a.position >= a.bufferCheckPosition && r(a), a;
+        return c.position >= c.bufferCheckPosition && r(c), c;
       }
       /*! http://mths.be/fromcodepoint v0.1.0 by @mathias */
       String.fromCodePoint || (function() {
-        var o = String.fromCharCode, a = Math.floor, m = function() {
-          var f = 16384, _ = [], F, w, j = -1, G = arguments.length;
-          if (!G)
+        var f = String.fromCharCode, c = Math.floor, I = function() {
+          var y = 16384, M = [], z, X, ee = -1, ne = arguments.length;
+          if (!ne)
             return "";
-          for (var ee = ""; ++j < G; ) {
-            var B = Number(arguments[j]);
-            if (!isFinite(B) || // `NaN`, `+Infinity`, or `-Infinity`
-            B < 0 || // not a valid Unicode code point
-            B > 1114111 || // not a valid Unicode code point
-            a(B) !== B)
-              throw RangeError("Invalid code point: " + B);
-            B <= 65535 ? _.push(B) : (B -= 65536, F = (B >> 10) + 55296, w = B % 1024 + 56320, _.push(F, w)), (j + 1 === G || _.length > f) && (ee += o.apply(null, _), _.length = 0);
+          for (var ye = ""; ++ee < ne; ) {
+            var Z = Number(arguments[ee]);
+            if (!isFinite(Z) || // `NaN`, `+Infinity`, or `-Infinity`
+            Z < 0 || // not a valid Unicode code point
+            Z > 1114111 || // not a valid Unicode code point
+            c(Z) !== Z)
+              throw RangeError("Invalid code point: " + Z);
+            Z <= 65535 ? M.push(Z) : (Z -= 65536, z = (Z >> 10) + 55296, X = Z % 1024 + 56320, M.push(z, X)), (ee + 1 === ne || M.length > y) && (ye += f.apply(null, M), M.length = 0);
           }
-          return ee;
+          return ye;
         };
         Object.defineProperty ? Object.defineProperty(String, "fromCodePoint", {
-          value: m,
+          value: I,
           configurable: !0,
           writable: !0
-        }) : String.fromCodePoint = m;
+        }) : String.fromCodePoint = I;
       })();
-    })(c);
-  })($e)), $e;
+    })(h);
+  })(pt)), pt;
 }
-var Ks = Ys();
-const Hs = /* @__PURE__ */ Us(Ks), We = "http:///org/eclipse/emf/ecore/util/ExtendedMetaData", Lt = 0, jt = 1, Fe = 2, Gt = 3, $t = 4, Xt = 0, Wt = 1, he = 2, ze = 3, zt = 4, qt = 5, Yt = 6;
-class qe {
+var Cr = Er();
+const Tr = /* @__PURE__ */ nr(Cr), Et = "http:///org/eclipse/emf/ecore/util/ExtendedMetaData", hs = 0, fs = 1, at = 2, gs = 3, ps = 4, ds = 0, ms = 1, Fe = 2, Ct = 3, ys = 4, Es = 5, Cs = 6;
+class Tt {
   constructor() {
     this.contentKindCache = /* @__PURE__ */ new Map(), this.featureKindCache = /* @__PURE__ */ new Map(), this.nameCache = /* @__PURE__ */ new Map(), this.namespaceCache = /* @__PURE__ */ new Map(), this.simpleContentFeatureCache = /* @__PURE__ */ new Map();
   }
@@ -2806,21 +3963,21 @@ class qe {
     let t = this.contentKindCache.get(e);
     if (t !== void 0)
       return t;
-    t = Lt;
+    t = hs;
     const s = this.getAnnotationDetail(e, "kind");
     if (s)
       switch (s) {
         case "simple":
-          t = Fe;
+          t = at;
           break;
         case "mixed":
-          t = Gt;
+          t = gs;
           break;
         case "empty":
-          t = jt;
+          t = fs;
           break;
         case "elementOnly":
-          t = $t;
+          t = ps;
           break;
       }
     return this.contentKindCache.set(e, t), t;
@@ -2832,27 +3989,27 @@ class qe {
     let t = this.featureKindCache.get(e);
     if (t !== void 0)
       return t;
-    t = Xt;
+    t = ds;
     const s = this.getAnnotationDetail(e, "kind");
     if (s)
       switch (s) {
         case "simple":
-          t = Wt;
+          t = ms;
           break;
         case "element":
-          t = he;
+          t = Fe;
           break;
         case "attribute":
-          t = ze;
+          t = Ct;
           break;
         case "elementWildcard":
-          t = zt;
+          t = ys;
           break;
         case "attributeWildcard":
-          t = qt;
+          t = Es;
           break;
         case "group":
-          t = Yt;
+          t = Cs;
           break;
       }
     return this.featureKindCache.set(e, t), t;
@@ -2902,13 +4059,13 @@ class qe {
    */
   getElementFeature(e, t, s) {
     for (const r of e.getEAllStructuralFeatures()) {
-      if (this.getFeatureKind(r) !== he)
+      if (this.getFeatureKind(r) !== Fe)
         continue;
-      const i = this.getName(r) ?? r.getName();
-      if (i !== s)
+      const u = this.getName(r) ?? r.getName();
+      if (u !== s)
         continue;
-      const u = this.getNamespace(r);
-      if (t && u && u === t || !t && !u || !u && i === s)
+      const o = this.getNamespace(r);
+      if (t && o && o === t || !t && !o || !o && u === s)
         return r;
     }
     return null;
@@ -2918,13 +4075,13 @@ class qe {
    */
   getAttributeFeature(e, t, s) {
     for (const r of e.getEAllStructuralFeatures()) {
-      if (this.getFeatureKind(r) !== ze)
+      if (this.getFeatureKind(r) !== Ct)
         continue;
-      const i = this.getName(r) ?? r.getName();
-      if (i !== s)
+      const u = this.getName(r) ?? r.getName();
+      if (u !== s)
         continue;
-      const u = this.getNamespace(r);
-      if (t && u && u === t || !t && !u || !u && i === s)
+      const o = this.getNamespace(r);
+      if (t && o && o === t || !t && !o || !o && u === s)
         return r;
     }
     return null;
@@ -2941,7 +4098,7 @@ class qe {
   getAnnotationDetail(e, t) {
     if (!e || typeof e.getEAnnotation != "function")
       return;
-    const s = e.getEAnnotation(We);
+    const s = e.getEAnnotation(Et);
     if (!s)
       return;
     const r = s.getDetails();
@@ -2954,15 +4111,15 @@ class qe {
   getAnnotation(e) {
     if (!e || typeof e.getEAnnotation != "function")
       return null;
-    const t = e.getEAnnotation(We);
+    const t = e.getEAnnotation(Et);
     if (!t)
       return null;
     const s = t.getDetails();
     return s && typeof s.getByKey == "function" ? s.toMap() : null;
   }
 }
-const Kt = "FEATURE_NAME_MAP", Ht = "EXTENDED_META_DATA", Ae = 1, Ie = 2, Ye = 3, Vt = 4, Ke = 5;
-class Vs {
+const Ts = "FEATURE_NAME_MAP", Ns = "EXTENDED_META_DATA", Qe = 1, Ze = 2, Nt = 3, Ss = 4, St = 5;
+class Nr {
   constructor() {
     this.contexts = [], this.currentContext = /* @__PURE__ */ new Map();
   }
@@ -2991,26 +4148,26 @@ class Vs {
     return null;
   }
 }
-class _e {
+class We {
   constructor(e) {
-    this.noNamespacePackage = null, this.resource = null, this.xmlResource = null, this.resourceURI = null, this.packageRegistry = X.INSTANCE, this.packages = /* @__PURE__ */ new Map(), this.featuresToKinds = /* @__PURE__ */ new Map(), this.prefixesToURIs = /* @__PURE__ */ new Map(), this.urisToPrefixes = /* @__PURE__ */ new Map(), this.namespaceSupport = new Vs(), this.allPrefixToURI = [], this.featureNameMap = /* @__PURE__ */ new Map(), this.reverseFeatureNameMap = /* @__PURE__ */ new Map(), this.extendedMetaData = null, e && this.setResource(e);
+    this.noNamespacePackage = null, this.resource = null, this.xmlResource = null, this.resourceURI = null, this.packageRegistry = oe.INSTANCE, this.packages = /* @__PURE__ */ new Map(), this.featuresToKinds = /* @__PURE__ */ new Map(), this.prefixesToURIs = /* @__PURE__ */ new Map(), this.urisToPrefixes = /* @__PURE__ */ new Map(), this.namespaceSupport = new Nr(), this.allPrefixToURI = [], this.featureNameMap = /* @__PURE__ */ new Map(), this.reverseFeatureNameMap = /* @__PURE__ */ new Map(), this.extendedMetaData = null, e && this.setResource(e);
   }
   setResource(e) {
     if (this.resource = e, this.xmlResource = e && "getID" in e ? e : null, e) {
       this.resourceURI = e.getURI();
       const t = e.getResourceSet();
-      t ? this.packageRegistry = t.getPackageRegistry() : this.packageRegistry = X.INSTANCE;
+      t ? this.packageRegistry = t.getPackageRegistry() : this.packageRegistry = oe.INSTANCE;
     }
   }
   setOptions(e) {
-    const t = e.get(Kt);
+    const t = e.get(Ts);
     if (t) {
       this.featureNameMap = new Map(t), this.reverseFeatureNameMap = /* @__PURE__ */ new Map();
       for (const [r, n] of t)
         this.reverseFeatureNameMap.set(n, r);
     }
-    const s = e.get(Ht);
-    s instanceof qe ? this.extendedMetaData = s : s === !0 && (this.extendedMetaData = new qe());
+    const s = e.get(Ns);
+    s instanceof Tt ? this.extendedMetaData = s : s === !0 && (this.extendedMetaData = new Tt());
   }
   getExtendedMetaData() {
     return this.extendedMetaData;
@@ -3126,20 +4283,20 @@ class _e {
   }
   getFeatureKind(e) {
     let t = this.featuresToKinds.get(e);
-    return t === void 0 && (this.computeFeatureKind(e), t = this.featuresToKinds.get(e)), t ?? Ke;
+    return t === void 0 && (this.computeFeatureKind(e), t = this.featuresToKinds.get(e)), t ?? St;
   }
   computeFeatureKind(e) {
     const t = e.getEType();
     if (!("isContainment" in e && typeof e.isContainment == "function") && (!t || !("getESuperTypes" in t)))
-      e.isMany() ? this.featuresToKinds.set(e, Ie) : this.featuresToKinds.set(e, Ae);
+      e.isMany() ? this.featuresToKinds.set(e, Ze) : this.featuresToKinds.set(e, Qe);
     else if (e.isMany())
       if ("getEOpposite" in e && typeof e.getEOpposite == "function") {
         const n = e.getEOpposite();
-        !n || typeof n.isTransient != "function" || n.isTransient() || !n.isMany() ? this.featuresToKinds.set(e, Ye) : this.featuresToKinds.set(e, Vt);
+        !n || typeof n.isTransient != "function" || n.isTransient() || !n.isMany() ? this.featuresToKinds.set(e, Nt) : this.featuresToKinds.set(e, Ss);
       } else
-        this.featuresToKinds.set(e, Ye);
+        this.featuresToKinds.set(e, Nt);
     else
-      this.featuresToKinds.set(e, Ke);
+      this.featuresToKinds.set(e, St);
   }
   setValue(e, t, s, r) {
     if (t.isMany()) {
@@ -3153,13 +4310,13 @@ class _e {
     }
   }
   setManyReference(e, t) {
-    const s = [], r = e.getObject(), n = e.getFeature(), i = e.getValues(), u = e.getPositions();
-    for (let l = 0; l < i.length; l++) {
-      const h = i[l], d = u[l];
+    const s = [], r = e.getObject(), n = e.getFeature(), u = e.getValues(), o = e.getPositions();
+    for (let p = 0; p < u.length; p++) {
+      const d = u[p], E = o[p];
       try {
-        this.setValue(r, n, h, d);
-      } catch (p) {
-        s.push(p instanceof Error ? p : new Error(String(p)));
+        this.setValue(r, n, d, E);
+      } catch (T) {
+        s.push(T instanceof Error ? T : new Error(String(T)));
       }
     }
     return s;
@@ -3177,7 +4334,7 @@ class _e {
     return e.convertToString(t, s);
   }
 }
-class rt {
+class Pt {
   constructor(e, t) {
     this._proxyURI = null, this._eClass = null, this._resource = null, this._proxyURI = e, this._eClass = t || null;
   }
@@ -3196,18 +4353,18 @@ class rt {
     if (t) {
       const s = t.getResourceSet();
       if (s && e.eProxyURI()) {
-        const n = e.eProxyURI().toString(), i = n.indexOf("#");
-        if (i > 0) {
-          const u = T.createURI(n.substring(0, i)), l = n.substring(i + 1), h = s.getResource(u, !0);
-          if (h) {
-            const d = h.getEObject(l);
-            if (d)
-              return d;
+        const n = e.eProxyURI().toString(), u = n.indexOf("#");
+        if (u > 0) {
+          const o = D.createURI(n.substring(0, u)), p = n.substring(u + 1), d = s.getResource(o, !0);
+          if (d) {
+            const E = d.getEObject(p);
+            if (E)
+              return E;
           }
-        } else if (i === 0) {
-          const u = n.substring(1), l = t.getEObject(u);
-          if (l)
-            return l;
+        } else if (u === 0) {
+          const o = n.substring(1), p = t.getEObject(o);
+          if (p)
+            return p;
         }
       }
     }
@@ -3271,7 +4428,7 @@ class rt {
     return `EProxy(${this._proxyURI?.toString() || "null"})`;
   }
 }
-function ge(c, e) {
+function Be(h, e) {
   let t = e;
   for (; t.startsWith("/"); )
     t = t.substring(1);
@@ -3279,16 +4436,16 @@ function ge(c, e) {
     return null;
   const s = t.split("/");
   if (s.length === 1)
-    return c.getEClassifier(s[0]);
+    return h.getEClassifier(s[0]);
   const r = s[s.length - 1];
-  let n = c;
-  for (let i = 0; i < s.length - 1; i++) {
-    const u = s[i], l = n.getESubpackages();
+  let n = h;
+  for (let u = 0; u < s.length - 1; u++) {
+    const o = s[u], p = n.getESubpackages();
     n = null;
-    for (let h = 0; h < l.length; h++) {
-      const d = l.get(h);
-      if (d.getName() === u) {
-        n = d;
+    for (let d = 0; d < p.length; d++) {
+      const E = p.get(d);
+      if (E.getName() === o) {
+        n = E;
         break;
       }
     }
@@ -3297,8 +4454,8 @@ function ge(c, e) {
   }
   return n.getEClassifier(r);
 }
-const ce = "error", ie = "object", Qs = "unknownFeature", St = "reference", Xe = "xmiWrapper", _t = "deferredType";
-class Qt {
+const be = "error", Ae = "object", Sr = "unknownFeature", Kt = "reference", yt = "xmiWrapper", Ht = "deferredType";
+class Is {
   constructor() {
     this.attrs = [];
   }
@@ -3330,10 +4487,10 @@ class Qt {
     return this.attrs.find((r) => r.uri === e && r.localName === t)?.value ?? null;
   }
 }
-const ae = "http://www.w3.org/2001/XMLSchema-instance", be = "http://www.omg.org/XMI", He = "xmlns", Js = "xsi", Zs = "xmi", Jt = "type", Zt = "nil", es = "schemaLocation", Ve = "href", ts = "id";
-class nt {
+const _e = "http://www.w3.org/2001/XMLSchema-instance", et = "http://www.omg.org/XMI", It = "xmlns", Ir = "xsi", Ar = "xmi", As = "type", _s = "nil", Rs = "schemaLocation", At = "href", xs = "id";
+class Bt {
   constructor(e, t, s) {
-    this.elements = [], this.objects = [], this.types = [], this.prefixesToFactories = /* @__PURE__ */ new Map(), this.urisToLocations = /* @__PURE__ */ new Map(), this.forwardSingleReferences = [], this.sameDocumentProxies = [], this.attribs = null, this.text = null, this.isRoot = !0, this.isNamespaceAware = !1, this.needsPushContext = !1, this.deferredFeature = null, this.deferredParent = null, this.deferredExtent = null, this.resolve = !0, this.useNewMethods = !0, this.errors = [], this.lineNumber = 0, this.columnNumber = 0, this.resource = e, this.helper = t, this.packageRegistry = e.getResourceSet()?.getPackageRegistry() || X.INSTANCE, this.extent = e.getContents(), s && this.processOptions(s);
+    this.elements = [], this.objects = [], this.types = [], this.prefixesToFactories = /* @__PURE__ */ new Map(), this.urisToLocations = /* @__PURE__ */ new Map(), this.forwardSingleReferences = [], this.sameDocumentProxies = [], this.attribs = null, this.text = null, this.isRoot = !0, this.isNamespaceAware = !1, this.needsPushContext = !1, this.deferredFeature = null, this.deferredParent = null, this.deferredExtent = null, this.resolve = !0, this.useNewMethods = !0, this.errors = [], this.lineNumber = 0, this.columnNumber = 0, this.resource = e, this.helper = t, this.packageRegistry = e.getResourceSet()?.getPackageRegistry() || oe.INSTANCE, this.extent = e.getContents(), s && this.processOptions(s);
   }
   processOptions(e) {
     this.helper.setOptions(e);
@@ -3364,10 +4521,10 @@ class nt {
   }
   processElement(e, t, s) {
     if (this.isRoot && (this.isRoot = !1, this.recordHeaderInformation()), t === "xmi" && s === "XMI") {
-      this.objects.push(null), this.types.push(Xe);
+      this.objects.push(null), this.types.push(yt);
       return;
     }
-    this.objects.length === 0 || this.objects.length === 1 && this.types[0] === Xe ? this.createTopObject(t, s) : this.handleFeature(t, s);
+    this.objects.length === 0 || this.objects.length === 1 && this.types[0] === yt ? this.createTopObject(t, s) : this.handleFeature(t, s);
   }
   /**
    * Handle end of element
@@ -3375,30 +4532,30 @@ class nt {
   endElement(e, t, s) {
     this.elements.pop();
     const r = this.types.pop();
-    if (r === ie) {
+    if (r === Ae) {
       const n = this.objects.pop();
       if (this.text !== null && this.text.length > 0 && n) {
-        const i = this.text.trim();
-        if (i.length > 0) {
-          const u = this.helper.getExtendedMetaData();
-          if (u) {
-            const l = n.eClass();
-            if (u.getContentKind(l) === Fe) {
-              const h = u.getSimpleContentFeature(l);
-              h && this.setFeatureValue(n, h, i);
+        const u = this.text.trim();
+        if (u.length > 0) {
+          const o = this.helper.getExtendedMetaData();
+          if (o) {
+            const p = n.eClass();
+            if (o.getContentKind(p) === at) {
+              const d = o.getSimpleContentFeature(p);
+              d && this.setFeatureValue(n, d, u);
             }
           }
-          this.handleProxy(n, i);
+          this.handleProxy(n, u);
         }
       }
       this.text = null;
-    } else if (r === ce)
+    } else if (r === be)
       this.objects.pop(), this.text = null;
-    else if (r === St)
+    else if (r === Kt)
       this.objects.pop(), this.text = null;
-    else if (r === _t)
+    else if (r === Ht)
       this.objects.pop(), this.deferredParent = null, this.deferredFeature = null, this.text = null;
-    else if (r === Xe)
+    else if (r === yt)
       this.objects.pop();
     else if (r !== void 0) {
       const n = this.objects.pop() || this.objects[this.objects.length - 1];
@@ -3431,7 +4588,7 @@ class nt {
     if (this.attribs)
       for (let e = 0; e < this.attribs.getLength(); e++) {
         const t = this.attribs.getQName(e);
-        if (t.startsWith(He)) {
+        if (t.startsWith(It)) {
           const s = t.length > 5 ? t.substring(6) : "", r = this.attribs.getValue(e);
           this.startPrefixMapping(s, r);
         }
@@ -3443,14 +4600,14 @@ class nt {
   handleSchemaLocation() {
     if (!this.attribs)
       return;
-    const e = this.attribs.getValueByName(ae, es);
+    const e = this.attribs.getValueByName(_e, Rs);
     e && this.handleXSISchemaLocation(e);
   }
   handleXSISchemaLocation(e) {
     const t = e.trim().split(/\s+/);
     for (let s = 0; s + 1 < t.length; s += 2) {
       const r = t[s], n = t[s + 1];
-      this.urisToLocations.set(r, T.createURI(n));
+      this.urisToLocations.set(r, D.createURI(n));
     }
   }
   /**
@@ -3472,8 +4629,8 @@ class nt {
     if (r)
       n = this.createObjectByType(e, r, !0);
     else {
-      const i = this.helper.getType(s, t);
-      i && (n = this.helper.createObject(s, i));
+      const u = this.helper.getType(s, t);
+      u && (n = this.helper.createObject(s, u));
     }
     n ? (this.processTopObject(n), this.handleObjectAttribs(n)) : (this.error(`Cannot create object for '${t}'`), this.processObject(null));
   }
@@ -3481,20 +4638,20 @@ class nt {
    * Get xsi:type attribute value
    */
   getXSIType() {
-    return this.attribs ? this.attribs.getValueByName(ae, Jt) : null;
+    return this.attribs ? this.attribs.getValueByName(_e, As) : null;
   }
   /**
    * Create object based on xsi:type
    */
   createObjectByType(e, t, s) {
     let r = e, n = t;
-    const i = t.indexOf(":");
-    i !== -1 && (r = t.substring(0, i), n = t.substring(i + 1));
-    const u = this.getFactoryForPrefix(r);
-    if (!u)
+    const u = t.indexOf(":");
+    u !== -1 && (r = t.substring(0, u), n = t.substring(u + 1));
+    const o = this.getFactoryForPrefix(r);
+    if (!o)
       return this.error(`Factory not found for type '${t}'`), null;
-    const l = this.helper.getType(u, n);
-    return l ? this.helper.createObject(u, l) : (this.error(`Type '${n}' not found`), null);
+    const p = this.helper.getType(o, n);
+    return p ? this.helper.createObject(o, p) : (this.error(`Type '${n}' not found`), null);
   }
   /**
    * Process top-level object
@@ -3506,7 +4663,7 @@ class nt {
    * Push object onto stack
    */
   processObject(e) {
-    this.objects.push(e), this.types.push(e ? ie : ce);
+    this.objects.push(e), this.types.push(e ? Ae : be);
   }
   /**
    * Handle object attributes
@@ -3514,13 +4671,13 @@ class nt {
   handleObjectAttribs(e) {
     if (this.attribs)
       for (let t = 0; t < this.attribs.getLength(); t++) {
-        const s = this.attribs.getQName(t), r = this.attribs.getValue(t), n = this.attribs.getURI(t), i = this.attribs.getLocalName(t);
-        if (!s.startsWith(He) && n !== ae) {
-          if (n === be) {
-            i === ts && this.handleId(e, r);
+        const s = this.attribs.getQName(t), r = this.attribs.getValue(t), n = this.attribs.getURI(t), u = this.attribs.getLocalName(t);
+        if (!s.startsWith(It) && n !== _e) {
+          if (n === et) {
+            u === xs && this.handleId(e, r);
             continue;
           }
-          this.setAttribValue(e, i || s, r, n || null);
+          this.setAttribValue(e, u || s, r, n || null);
         }
       }
   }
@@ -3533,8 +4690,8 @@ class nt {
    * Set attribute value on object
    */
   setAttribValue(e, t, s, r) {
-    const n = e.eClass(), i = this.helper.getFeature(n, r ?? null, t);
-    i && this.setFeatureValue(e, i, s, -2);
+    const n = e.eClass(), u = this.helper.getFeature(n, r ?? null, t);
+    u && this.setFeatureValue(e, u, s, -2);
   }
   /**
    * Handle feature (nested element)
@@ -3546,13 +4703,13 @@ class nt {
         this.handleDeferredType(e, t);
         return;
       }
-      this.objects.push(null), this.types.push(ce), this.error(`Feature '${t}' has no parent object`);
+      this.objects.push(null), this.types.push(be), this.error(`Feature '${t}' has no parent object`);
       return;
     }
-    const r = s.eClass(), n = e && this.helper.getURI(e) || null, i = this.helper.getFeatureWithElement(r, n, t, !0);
-    if (i) {
-      const u = this.helper.getFeatureKind(i);
-      u === Ae || u === Ie ? (this.objects.push(null), this.types.push(i), this.isNull() || (this.text = "")) : this.createObject(s, i);
+    const r = s.eClass(), n = e && this.helper.getURI(e) || null, u = this.helper.getFeatureWithElement(r, n, t, !0);
+    if (u) {
+      const o = this.helper.getFeatureKind(u);
+      o === Qe || o === Ze ? (this.objects.push(null), this.types.push(u), this.isNull() || (this.text = "")) : this.createObject(s, u);
     } else
       this.handleUnknownFeature(e, t, s);
   }
@@ -3560,15 +4717,15 @@ class nt {
    * Check if xsi:nil="true"
    */
   isNull() {
-    return this.attribs ? this.attribs.getValueByName(ae, Zt) === "true" : !1;
+    return this.attribs ? this.attribs.getValueByName(_e, _s) === "true" : !1;
   }
   /**
    * Create child object for reference
    */
   createObject(e, t) {
-    const s = this.attribs?.getValueByQName(Ve) || this.attribs?.getValueByName("", Ve);
+    const s = this.attribs?.getValueByQName(At) || this.attribs?.getValueByName("", At);
     if (s) {
-      this.setValueFromId(e, t, s, -1), this.objects.push(null), this.types.push(St);
+      this.setValueFromId(e, t, s, -1), this.objects.push(null), this.types.push(Kt);
       return;
     }
     const r = this.getXSIType();
@@ -3576,28 +4733,28 @@ class nt {
     if (r)
       n = this.createObjectByType("", r, !1);
     else {
-      let i = t.getEType();
-      if (i && !("getESuperTypes" in i) && typeof i.eIsProxy == "function" && i.eIsProxy()) {
-        const u = i.eProxyURI();
-        if (u) {
-          const l = u.toString(), h = l.indexOf("#");
-          if (h > 0) {
-            const d = l.substring(0, h), p = l.substring(h + 1), E = this.packageRegistry.getEPackage(d);
-            if (E) {
-              const C = ge(E, p);
-              C && (i = C, typeof t.setEType == "function" && t.setEType(C));
+      let u = t.getEType();
+      if (u && !("getESuperTypes" in u) && typeof u.eIsProxy == "function" && u.eIsProxy()) {
+        const o = u.eProxyURI();
+        if (o) {
+          const p = o.toString(), d = p.indexOf("#");
+          if (d > 0) {
+            const E = p.substring(0, d), T = p.substring(d + 1), R = this.packageRegistry.getEPackage(E);
+            if (R) {
+              const _ = Be(R, T);
+              _ && (u = _, typeof t.setEType == "function" && t.setEType(_));
             }
           }
         }
       }
-      if (i && "getESuperTypes" in i) {
-        const u = i;
-        if (u.isAbstract()) {
-          this.deferredParent = e, this.deferredFeature = t, this.objects.push(null), this.types.push(_t);
+      if (u && "getESuperTypes" in u) {
+        const o = u;
+        if (o.isAbstract()) {
+          this.deferredParent = e, this.deferredFeature = t, this.objects.push(null), this.types.push(Ht);
           return;
         } else {
-          const l = u.getEPackage()?.getEFactoryInstance();
-          l && (n = l.create(u));
+          const p = o.getEPackage()?.getEFactoryInstance();
+          p && (n = p.create(o));
         }
       }
     }
@@ -3613,47 +4770,47 @@ class nt {
   handleUnknownFeature(e, t, s) {
     const r = e && this.helper.getURI(e) || null, n = this.helper.getExtendedMetaData();
     if (n && r) {
-      const i = s.eClass(), u = n.getElementFeature(i, r, t);
-      if (u) {
-        const l = this.helper.getFeatureKind(u);
-        l === Ae || l === Ie ? (this.objects.push(null), this.types.push(u), this.isNull() || (this.text = "")) : this.createObject(s, u);
+      const u = s.eClass(), o = n.getElementFeature(u, r, t);
+      if (o) {
+        const p = this.helper.getFeatureKind(o);
+        p === Qe || p === Ze ? (this.objects.push(null), this.types.push(o), this.isNull() || (this.text = "")) : this.createObject(s, o);
         return;
       }
     }
     if (r) {
-      const i = this.packageRegistry.getEPackage(r);
-      if (i) {
-        const u = i.getEClassifier(t);
-        if (u && "getESuperTypes" in u) {
-          const l = u, h = s.eClass();
-          if (l === h) {
-            this.handleObjectAttribs(s), this.objects.push(s), this.types.push(ie);
+      const u = this.packageRegistry.getEPackage(r);
+      if (u) {
+        const o = u.getEClassifier(t);
+        if (o && "getESuperTypes" in o) {
+          const p = o, d = s.eClass();
+          if (p === d) {
+            this.handleObjectAttribs(s), this.objects.push(s), this.types.push(Ae);
             return;
           }
-          if (h.isSuperTypeOf(l) && !l.isAbstract()) {
-            const d = l.getEPackage()?.getEFactoryInstance();
-            if (d) {
-              const p = d.create(l);
-              for (const C of h.getEAllStructuralFeatures()) {
-                if (C.isTransient() || C.isDerived())
+          if (d.isSuperTypeOf(p) && !p.isAbstract()) {
+            const E = p.getEPackage()?.getEFactoryInstance();
+            if (E) {
+              const T = E.create(p);
+              for (const _ of d.getEAllStructuralFeatures()) {
+                if (_.isTransient() || _.isDerived())
                   continue;
-                const S = s.eGet(C);
-                if (S != null)
+                const b = s.eGet(_);
+                if (b != null)
                   try {
-                    p.eSet(C, S);
+                    T.eSet(_, b);
                   } catch {
                   }
               }
-              this.replaceInParentContainment(s, p);
-              const E = this.objects.length - 1;
-              this.objects[E] = p, this.handleObjectAttribs(p), this.objects.push(p), this.types.push(ie);
+              this.replaceInParentContainment(s, T);
+              const R = this.objects.length - 1;
+              this.objects[R] = T, this.handleObjectAttribs(T), this.objects.push(T), this.types.push(Ae);
               return;
             }
           }
         }
       }
     }
-    this.objects.push(null), this.types.push(ce), this.error(`Unknown feature '${t}' for type '${s.eClass().getName()}'`);
+    this.objects.push(null), this.types.push(be), this.error(`Unknown feature '${t}' for type '${s.eClass().getName()}'`);
   }
   /**
    * Replace an object in the grandparent's containment reference.
@@ -3666,22 +4823,22 @@ class nt {
     if (!r)
       return;
     const n = r.eClass();
-    for (const i of n.getEAllStructuralFeatures()) {
-      if (!("isContainment" in i))
+    for (const u of n.getEAllStructuralFeatures()) {
+      if (!("isContainment" in u))
         continue;
-      const u = i;
-      if (u.isContainment()) {
-        if (u.isMany()) {
-          const l = r.eGet(u);
-          if (l) {
-            for (let h = l.length - 1; h >= 0; h--)
-              if (l[h] === e) {
-                l[h] = t;
+      const o = u;
+      if (o.isContainment()) {
+        if (o.isMany()) {
+          const p = r.eGet(o);
+          if (p) {
+            for (let d = p.length - 1; d >= 0; d--)
+              if (p[d] === e) {
+                p[d] = t;
                 return;
               }
           }
-        } else if (r.eGet(u) === e) {
-          r.eSet(u, t);
+        } else if (r.eGet(o) === e) {
+          r.eSet(o, t);
           return;
         }
       }
@@ -3696,21 +4853,21 @@ class nt {
     const s = this.deferredParent, r = this.deferredFeature;
     this.deferredParent = null, this.deferredFeature = null;
     const n = e && this.helper.getURI(e) || null;
-    let i = null;
+    let u = null;
     if (n) {
-      const u = this.packageRegistry.getEPackage(n);
-      if (u) {
-        const l = u.getEClassifier(t);
-        if (l && "getESuperTypes" in l) {
-          const h = l;
-          if (!h.isAbstract()) {
-            const d = h.getEPackage()?.getEFactoryInstance();
-            d && (i = d.create(h));
+      const o = this.packageRegistry.getEPackage(n);
+      if (o) {
+        const p = o.getEClassifier(t);
+        if (p && "getESuperTypes" in p) {
+          const d = p;
+          if (!d.isAbstract()) {
+            const E = d.getEPackage()?.getEFactoryInstance();
+            E && (u = E.create(d));
           }
         }
       }
     }
-    i ? (this.helper.setValue(s, r, i, -1), this.handleObjectAttribs(i), this.objects[this.objects.length - 1] = i, this.types[this.types.length - 1] = ie, this.objects.push(i), this.types.push(ie)) : (this.objects.push(null), this.types.push(ce), this.error(`Cannot resolve type '${t}' for deferred containment`));
+    u ? (this.helper.setValue(s, r, u, -1), this.handleObjectAttribs(u), this.objects[this.objects.length - 1] = u, this.types[this.types.length - 1] = Ae, this.objects.push(u), this.types.push(Ae)) : (this.objects.push(null), this.types.push(be), this.error(`Cannot resolve type '${t}' for deferred containment`));
   }
   /**
    * Set feature value
@@ -3720,35 +4877,35 @@ class nt {
       return;
     if ("isContainment" in t)
       if (t.isMany()) {
-        const i = s.trim().split(/\s+/);
-        for (const u of i)
-          u && this.setValueFromId(e, t, u, -1);
+        const u = s.trim().split(/\s+/);
+        for (const o of u)
+          o && this.setValueFromId(e, t, o, -1);
       } else
         this.setValueFromId(e, t, s, r);
     else {
-      const u = t.getEType();
-      let l = null;
-      if (u && typeof u.getEPackage == "function")
-        l = u.getEPackage()?.getEFactoryInstance() ?? null;
-      else if (u && typeof u.eGet == "function" && typeof u.eClass == "function") {
-        const h = u.eClass();
-        if (h) {
-          const d = h.getEStructuralFeature?.("ePackage");
-          if (d) {
-            const p = u.eGet(d);
-            p?.getEFactoryInstance && (l = p.getEFactoryInstance());
+      const o = t.getEType();
+      let p = null;
+      if (o && typeof o.getEPackage == "function")
+        p = o.getEPackage()?.getEFactoryInstance() ?? null;
+      else if (o && typeof o.eGet == "function" && typeof o.eClass == "function") {
+        const d = o.eClass();
+        if (d) {
+          const E = d.getEStructuralFeature?.("ePackage");
+          if (E) {
+            const T = o.eGet(E);
+            T?.getEFactoryInstance && (p = T.getEFactoryInstance());
           }
         }
       }
       try {
-        if (l && u) {
-          const h = l.createFromString(u, s);
-          this.helper.setValue(e, t, h, r);
+        if (p && o) {
+          const d = p.createFromString(o, s);
+          this.helper.setValue(e, t, d, r);
         } else
           this.helper.setValue(e, t, s, r);
-      } catch (h) {
-        const d = h instanceof Error ? h.message : String(h);
-        this.error(`Invalid value for feature '${t.getName()}': ${d}`);
+      } catch (d) {
+        const E = d instanceof Error ? d.message : String(d);
+        this.error(`Invalid value for feature '${t.getName()}': ${E}`);
       }
     }
   }
@@ -3789,22 +4946,22 @@ class nt {
     let s;
     const r = this.resource.getURI(), n = t.indexOf(" ");
     n > 0 && (t = t.substring(n + 1));
-    const i = t.indexOf("#");
-    if (i > 0) {
-      const d = t.substring(0, i), p = t.substring(i + 1);
-      if (r && !d.includes("://")) {
-        const E = r.toString();
-        if (d === E || E.endsWith(d) || E.endsWith("/" + d))
-          s = T.createURI(E + "#" + p);
+    const u = t.indexOf("#");
+    if (u > 0) {
+      const E = t.substring(0, u), T = t.substring(u + 1);
+      if (r && !E.includes("://")) {
+        const R = r.toString();
+        if (E === R || R.endsWith(E) || R.endsWith("/" + E))
+          s = D.createURI(R + "#" + T);
         else {
-          const C = T.createURI(d).resolve(r);
-          s = T.createURI(C.toString() + "#" + p);
+          const _ = D.createURI(E).resolve(r);
+          s = D.createURI(_.toString() + "#" + T);
         }
       } else
-        s = T.createURI(t);
-    } else i === 0 ? r ? s = T.createURI(r.toString() + t) : s = T.createURI(t) : (t.startsWith("/"), r ? s = T.createURI(r.toString() + "#" + t) : s = T.createURI("#" + t));
-    const u = e.getEType(), l = u && "getESuperTypes" in u ? u : null, h = new rt(s, l || void 0);
-    return h.eSetResource(this.resource), h;
+        s = D.createURI(t);
+    } else u === 0 ? r ? s = D.createURI(r.toString() + t) : s = D.createURI(t) : (t.startsWith("/"), r ? s = D.createURI(r.toString() + "#" + t) : s = D.createURI("#" + t));
+    const o = e.getEType(), p = o && "getESuperTypes" in o ? o : null, d = new Pt(s, p || void 0);
+    return d.eSetResource(this.resource), d;
   }
   /**
    * Resolve a reference string.
@@ -3819,26 +4976,26 @@ class nt {
     t > 0 && (e = e.substring(t + 1));
     const s = e.indexOf("#");
     if (s > 0) {
-      const r = e.substring(0, s), n = e.substring(s + 1), u = this.resource.getURI()?.toString();
-      if (u && (u === r || u.endsWith(r) || u.endsWith("/" + r) || r.endsWith(u)))
+      const r = e.substring(0, s), n = e.substring(s + 1), o = this.resource.getURI()?.toString();
+      if (o && (o === r || o.endsWith(r) || o.endsWith("/" + r) || r.endsWith(o)))
         return this.resource.getEObject(n);
-      const l = this.packageRegistry.getEPackage(r);
-      if (l)
-        return this.resolveFragmentInPackage(l, n);
-      const h = this.resource.getContents();
-      for (let p = 0; p < h.length; p++) {
-        const E = h.get(p);
-        if (E && typeof E.getNsURI == "function") {
-          const C = E;
-          if (C.getNsURI() === r)
-            return this.resolveFragmentInPackage(C, n);
+      const p = this.packageRegistry.getEPackage(r);
+      if (p)
+        return this.resolveFragmentInPackage(p, n);
+      const d = this.resource.getContents();
+      for (let T = 0; T < d.length; T++) {
+        const R = d.get(T);
+        if (R && typeof R.getNsURI == "function") {
+          const _ = R;
+          if (_.getNsURI() === r)
+            return this.resolveFragmentInPackage(_, n);
         }
       }
-      const d = this.resource.getResourceSet();
-      if (d) {
-        const p = T.createURI(r), E = d.getResource(p, !0);
-        if (E)
-          return E.getEObject(n);
+      const E = this.resource.getResourceSet();
+      if (E) {
+        const T = D.createURI(r), R = E.getResource(T, !0);
+        if (R)
+          return R.getEObject(n);
       }
       return null;
     }
@@ -3854,28 +5011,28 @@ class nt {
       s = s.substring(1);
     if (!s)
       return e;
-    const r = s.split("/"), n = ge(e, s);
+    const r = s.split("/"), n = Be(e, s);
     if (n)
       return n;
     if (r.length >= 2) {
-      let i = e;
-      for (let h = 0; h < r.length - 2; h++) {
-        const d = i.getESubpackages();
-        let p = null;
-        for (let E = 0; E < d.length; E++)
-          if (d.get(E).getName() === r[h]) {
-            p = d.get(E);
+      let u = e;
+      for (let d = 0; d < r.length - 2; d++) {
+        const E = u.getESubpackages();
+        let T = null;
+        for (let R = 0; R < E.length; R++)
+          if (E.get(R).getName() === r[d]) {
+            T = E.get(R);
             break;
           }
-        if (!p)
+        if (!T)
           return null;
-        i = p;
+        u = T;
       }
-      const u = r[r.length - 2], l = i.getEClassifier(u);
-      if (l && "getEStructuralFeature" in l) {
-        const h = l.getEStructuralFeature(r[r.length - 1]);
-        if (h)
-          return h;
+      const o = r[r.length - 2], p = u.getEClassifier(o);
+      if (p && "getEStructuralFeature" in p) {
+        const d = p.getEStructuralFeature(r[r.length - 1]);
+        if (d)
+          return d;
       }
     }
     return null;
@@ -3914,53 +5071,53 @@ class nt {
     return this.errors;
   }
 }
-class it {
+class kt {
   constructor(e) {
-    this.helper = e || new _e();
+    this.helper = e || new We();
   }
   /**
    * Load resource from string
    */
   load(e, t, s) {
-    const r = s || /* @__PURE__ */ new Map(), n = this.makeDefaultHandler(e, r), i = Hs.parser(!0, {
+    const r = s || /* @__PURE__ */ new Map(), n = this.makeDefaultHandler(e, r), u = Tr.parser(!0, {
       xmlns: !0,
       position: !0,
       trim: !1
-    }), u = new Qt();
-    i.onprocessinginstruction = (h) => {
-      h.name;
-    }, i.onopentag = (h) => {
-      u.clear();
-      const d = h;
-      for (const [p, E] of Object.entries(d.attributes)) {
-        const C = E, S = C.prefix ? `${C.prefix}:${C.local}` : C.local;
-        if (C.prefix === "xmlns" || C.name === "xmlns") {
-          const D = C.prefix === "xmlns" ? C.local : "";
-          n.startPrefixMapping(D, C.value);
+    }), o = new Is();
+    u.onprocessinginstruction = (d) => {
+      d.name;
+    }, u.onopentag = (d) => {
+      o.clear();
+      const E = d;
+      for (const [T, R] of Object.entries(E.attributes)) {
+        const _ = R, b = _.prefix ? `${_.prefix}:${_.local}` : _.local;
+        if (_.prefix === "xmlns" || _.name === "xmlns") {
+          const B = _.prefix === "xmlns" ? _.local : "";
+          n.startPrefixMapping(B, _.value);
         }
-        u.add(S, C.local, C.uri, C.value);
+        o.add(b, _.local, _.uri, _.value);
       }
-      n.lineNumber = i.line, n.columnNumber = i.column, n.startElement(d.uri, d.local, d.name, u);
-    }, i.onclosetag = (h) => {
-      const d = h.indexOf(":"), p = d >= 0 ? h.substring(d + 1) : h;
-      n.endElement("", p, h);
-    }, i.ontext = (h) => {
-      h.trim() && n.characters(h);
-    }, i.oncdata = (h) => {
-      n.characters(h);
-    }, i.onerror = (h) => {
-      console.error("XML Parse Error:", h.message), n.error(h.message);
-    }, i.write(t).close(), n.endDocument();
-    const l = n.getErrors();
-    if (l.length > 0 && e.getErrors) {
-      const h = e.getErrors();
-      for (const d of l) {
-        const p = d.message.match(/\[Line\s*(\d+),?\s*Col\s*(\d+)\]\s*(.*)/i);
-        p ? h.push({
-          message: p[3] || d.message,
-          line: parseInt(p[1], 10),
-          column: parseInt(p[2], 10)
-        }) : h.push({ message: d.message });
+      n.lineNumber = u.line, n.columnNumber = u.column, n.startElement(E.uri, E.local, E.name, o);
+    }, u.onclosetag = (d) => {
+      const E = d.indexOf(":"), T = E >= 0 ? d.substring(E + 1) : d;
+      n.endElement("", T, d);
+    }, u.ontext = (d) => {
+      d.trim() && n.characters(d);
+    }, u.oncdata = (d) => {
+      n.characters(d);
+    }, u.onerror = (d) => {
+      console.error("XML Parse Error:", d.message), n.error(d.message);
+    }, u.write(t).close(), n.endDocument();
+    const p = n.getErrors();
+    if (p.length > 0 && e.getErrors) {
+      const d = e.getErrors();
+      for (const E of p) {
+        const T = E.message.match(/\[Line\s*(\d+),?\s*Col\s*(\d+)\]\s*(.*)/i);
+        T ? d.push({
+          message: T[3] || E.message,
+          line: parseInt(T[1], 10),
+          column: parseInt(T[2], 10)
+        }) : d.push({ message: E.message });
       }
     }
   }
@@ -3968,20 +5125,20 @@ class it {
    * Create the default handler for loading
    */
   makeDefaultHandler(e, t) {
-    return new nt(e, this.helper, t);
+    return new Bt(e, this.helper, t);
   }
 }
-class ss extends it {
+class bs extends kt {
   constructor(e) {
-    super(e || new rs());
+    super(e || new ws());
   }
   makeDefaultHandler(e, t) {
-    return new ns(e, this.helper, t);
+    return new Fs(e, this.helper, t);
   }
 }
-class rs extends _e {
+class ws extends We {
 }
-class ns extends nt {
+class Fs extends Bt {
   constructor(e, t, s) {
     super(e, t, s), this.xmiVersion = "2.0";
   }
@@ -3999,63 +5156,63 @@ class ns extends nt {
     this.resource && "setID" in this.resource && this.resource.setID(e, t);
   }
 }
-function er(c) {
-  return c !== null && typeof c == "object" && typeof c.eClass == "function" && typeof c.eGet == "function" && typeof c.eSet == "function";
+function _r(h) {
+  return h !== null && typeof h == "object" && typeof h.eClass == "function" && typeof h.eGet == "function" && typeof h.eSet == "function";
 }
-function is(c) {
-  return c != null && typeof c.getESuperTypes == "function" && typeof c.getEAllStructuralFeatures == "function";
+function Ps(h) {
+  return h != null && typeof h.getESuperTypes == "function" && typeof h.getEAllStructuralFeatures == "function";
 }
-function tr(c) {
-  return c != null && !is(c) && typeof c.isSerializable == "function";
+function Rr(h) {
+  return h != null && !Ps(h) && typeof h.isSerializable == "function";
 }
-function Te(c) {
-  return c != null && typeof c.getELiterals == "function" && typeof c.getEEnumLiteral == "function";
+function $e(h) {
+  return h != null && typeof h.getELiterals == "function" && typeof h.getEEnumLiteral == "function";
 }
-function sr(c) {
-  return c != null && typeof c.isID == "function" && typeof c.getEAttributeType == "function";
+function xr(h) {
+  return h != null && typeof h.isID == "function" && typeof h.getEAttributeType == "function";
 }
-function rr(c) {
-  return c != null && typeof c.isContainment == "function" && typeof c.getEOpposite == "function";
+function br(h) {
+  return h != null && typeof h.isContainment == "function" && typeof h.getEOpposite == "function";
 }
-function nr(c) {
-  return c !== null && typeof c == "object" && typeof c.getNsURI == "function" && typeof c.getNsPrefix == "function" && typeof c.getEClassifiers == "function";
+function wr(h) {
+  return h !== null && typeof h == "object" && typeof h.getNsURI == "function" && typeof h.getNsPrefix == "function" && typeof h.getEClassifiers == "function";
 }
-function ir(c) {
-  return c !== null && typeof c == "object" && typeof c.create == "function" && typeof c.createFromString == "function" && typeof c.convertToString == "function";
+function Fr(h) {
+  return h !== null && typeof h == "object" && typeof h.create == "function" && typeof h.createFromString == "function" && typeof h.convertToString == "function";
 }
-function ar(c) {
-  return c !== null && typeof c == "object" && typeof c.getEContainingClass == "function" && typeof c.getEParameters == "function";
+function Pr(h) {
+  return h !== null && typeof h == "object" && typeof h.getEContainingClass == "function" && typeof h.getEParameters == "function";
 }
-function or(c) {
-  return c !== null && typeof c == "object" && typeof c.getEOperation == "function";
+function Br(h) {
+  return h !== null && typeof h == "object" && typeof h.getEOperation == "function";
 }
-function ur(c) {
-  return c !== null && typeof c == "object" && typeof c.getSource == "function" && typeof c.getDetails == "function";
+function kr(h) {
+  return h !== null && typeof h == "object" && typeof h.getSource == "function" && typeof h.getDetails == "function";
 }
-function cr(c) {
-  return c !== null && typeof c == "object" && typeof c.getEContainingClass == "function" && typeof c.isTransient == "function" && typeof c.isVolatile == "function";
+function Dr(h) {
+  return h !== null && typeof h == "object" && typeof h.getEContainingClass == "function" && typeof h.isTransient == "function" && typeof h.isVolatile == "function";
 }
-function lr(c) {
-  return c !== null && typeof c == "object" && typeof c.getEPackage == "function" && typeof c.getInstanceClass == "function";
+function vr(h) {
+  return h !== null && typeof h == "object" && typeof h.getEPackage == "function" && typeof h.getInstanceClass == "function";
 }
-function at(c, e) {
-  if (!c)
+function Dt(h, e) {
+  if (!h)
     return !1;
-  const t = c.eClass();
+  const t = h.eClass();
   return t === e ? !0 : t.getEAllSuperTypes().includes(e);
 }
-function hr(c, e) {
-  return at(c, e) ? c : null;
+function Or(h, e) {
+  return Dt(h, e) ? h : null;
 }
-function fr(c, e) {
+function Ur(h, e) {
   const t = [];
-  for (const s of c)
-    at(s, e) && t.push(s);
+  for (const s of h)
+    Dt(s, e) && t.push(s);
   return t;
 }
-class ot {
+class vt {
   constructor(e) {
-    this.declaredNamespaces = /* @__PURE__ */ new Map(), this.output = [], this.indent = 0, this.indentString = "  ", this.idAttributeName = "id", this.helper = e || new _e(), this.resource = null;
+    this.declaredNamespaces = /* @__PURE__ */ new Map(), this.output = [], this.indent = 0, this.indentString = "  ", this.idAttributeName = "id", this.helper = e || new We(), this.resource = null;
   }
   /**
    * Save resource to string
@@ -4085,11 +5242,11 @@ class ot {
     for (const r of e)
       for (const n of this.collectPackages(r))
         t.add(n);
-    this.output.push("<xmi:XMI"), this.output.push(` xmlns:xmi="${be}"`), this.output.push(' xmi:version="2.0"'), this.output.push(` xmlns:xsi="${ae}"`);
+    this.output.push("<xmi:XMI"), this.output.push(` xmlns:xmi="${et}"`), this.output.push(' xmi:version="2.0"'), this.output.push(` xmlns:xsi="${_e}"`);
     const s = /* @__PURE__ */ new Set();
     for (const r of t) {
-      const n = r.getNsURI(), i = this.getPrefix(r);
-      n && i && !s.has(i) && (this.output.push(` xmlns:${i}="${n}"`), this.declaredNamespaces.set(n, i), s.add(i));
+      const n = r.getNsURI(), u = this.getPrefix(r);
+      n && u && !s.has(u) && (this.output.push(` xmlns:${u}="${n}"`), this.declaredNamespaces.set(n, u), s.add(u));
     }
     this.output.push(`>
 `), this.indent++;
@@ -4102,13 +5259,13 @@ class ot {
    * Save a single object
    */
   saveObject(e, t) {
-    const s = e.eClass(), r = s.getEPackage(), n = r ? this.getPrefix(r) : "", i = s.getName() || "Object", u = n ? `${n}:${i}` : i;
-    this.writeIndent(), this.output.push(`<${u}`), t && this.writeNamespaces(e), t || this.writeTypeAttribute(e), this.saveID(e), this.writeAttributes(e);
-    const l = this.helper.getExtendedMetaData(), h = this.getSimpleContentText(e, l), d = this.hasElementContent(e);
-    h !== null ? (this.output.push(`>${this.escapeXml(h)}`), d && (this.output.push(`
-`), this.indent++, this.writeElements(e), this.indent--, this.writeIndent()), this.output.push(`</${u}>
-`)) : d ? (this.output.push(`>
-`), this.indent++, this.writeElements(e), this.indent--, this.writeIndent(), this.output.push(`</${u}>
+    const s = e.eClass(), r = s.getEPackage(), n = r ? this.getPrefix(r) : "", u = s.getName() || "Object", o = n ? `${n}:${u}` : u;
+    this.writeIndent(), this.output.push(`<${o}`), t && this.writeNamespaces(e), t || this.writeTypeAttribute(e), this.saveID(e), this.writeAttributes(e);
+    const p = this.helper.getExtendedMetaData(), d = this.getSimpleContentText(e, p), E = this.hasElementContent(e);
+    d !== null ? (this.output.push(`>${this.escapeXml(d)}`), E && (this.output.push(`
+`), this.indent++, this.writeElements(e), this.indent--, this.writeIndent()), this.output.push(`</${o}>
+`)) : E ? (this.output.push(`>
+`), this.indent++, this.writeElements(e), this.indent--, this.writeIndent(), this.output.push(`</${o}>
 `)) : this.output.push(`/>
 `);
   }
@@ -4124,11 +5281,11 @@ class ot {
    */
   writeNamespaces(e) {
     const t = this.collectPackages(e);
-    this.output.push(` xmlns:xmi="${be}"`), this.output.push(' xmi:version="2.0"'), this.output.push(` xmlns:xsi="${ae}"`);
+    this.output.push(` xmlns:xmi="${et}"`), this.output.push(' xmi:version="2.0"'), this.output.push(` xmlns:xsi="${_e}"`);
     const s = /* @__PURE__ */ new Set();
     for (const n of t) {
-      const i = n.getNsURI(), u = this.getPrefix(n);
-      i && u && !s.has(u) && (this.output.push(` xmlns:${u}="${i}"`), this.declaredNamespaces.set(i, u), s.add(u));
+      const u = n.getNsURI(), o = this.getPrefix(n);
+      u && o && !s.has(o) && (this.output.push(` xmlns:${o}="${u}"`), this.declaredNamespaces.set(u, o), s.add(o));
     }
     const r = this.helper.getExtendedMetaData();
     r && this.collectEMDNamespaces(e, r, s);
@@ -4138,16 +5295,16 @@ class ot {
    */
   collectEMDNamespaces(e, t, s) {
     const r = (n) => {
-      const i = n.eClass();
-      for (const u of i.getEAllStructuralFeatures()) {
-        const l = t.getNamespace(u);
-        if (l && !this.declaredNamespaces.has(l) && l !== "http://www.w3.org/XML/1998/namespace") {
-          const h = this.generatePrefix(l, s);
-          h && (this.output.push(` xmlns:${h}="${l}"`), this.declaredNamespaces.set(l, h), s.add(h));
+      const u = n.eClass();
+      for (const o of u.getEAllStructuralFeatures()) {
+        const p = t.getNamespace(o);
+        if (p && !this.declaredNamespaces.has(p) && p !== "http://www.w3.org/XML/1998/namespace") {
+          const d = this.generatePrefix(p, s);
+          d && (this.output.push(` xmlns:${d}="${p}"`), this.declaredNamespaces.set(p, d), s.add(d));
         }
       }
-      for (const u of n.eContents())
-        r(u);
+      for (const o of n.eContents())
+        r(o);
     };
     r(e);
   }
@@ -4160,9 +5317,9 @@ class ot {
     if (r = r.replace(/[^a-zA-Z0-9]/g, "").toLowerCase(), r || (r = "ns"), r.length > 10 && (r = r.substring(0, 10)), !t.has(r))
       return r;
     for (let n = 1; n < 100; n++) {
-      const i = `${r}${n}`;
-      if (!t.has(i))
-        return i;
+      const u = `${r}${n}`;
+      if (!t.has(u))
+        return u;
     }
     return null;
   }
@@ -4171,10 +5328,10 @@ class ot {
    */
   collectPackages(e) {
     const t = /* @__PURE__ */ new Set(), s = (r) => {
-      const i = r.eClass().getEPackage();
-      i && t.add(i);
-      for (const u of r.eContents())
-        s(u);
+      const u = r.eClass().getEPackage();
+      u && t.add(u);
+      for (const o of r.eContents())
+        s(o);
     };
     return s(e), t;
   }
@@ -4197,52 +5354,52 @@ class ot {
     for (const r of t.getEAllStructuralFeatures())
       if (!(r.isTransient() || r.isDerived()) && !(s && s.getName(r) === ":0")) {
         if (this.isAttribute(r)) {
-          if (s && s.getFeatureKind(r) === he)
+          if (s && s.getFeatureKind(r) === Fe)
             continue;
           const n = r;
-          let i = e.eGet(n);
-          if (i != null && (i = this.resolveValue(i, e), i != null)) {
-            let u = null;
+          let u = e.eGet(n);
+          if (u != null && (u = this.resolveValue(u, e), u != null)) {
+            let o = null;
             try {
-              u = n.getDefaultValue();
+              o = n.getDefaultValue();
             } catch {
             }
-            if (i !== u) {
-              const l = this.convertToString(n, i), h = this.getSerializedAttributeName(n, s);
-              this.output.push(` ${h}="${this.escapeXml(l)}"`);
+            if (u !== o) {
+              const p = this.convertToString(n, u), d = this.getSerializedAttributeName(n, s);
+              this.output.push(` ${d}="${this.escapeXml(p)}"`);
             }
           }
         } else if ("isContainment" in r) {
           const n = r;
           if (!n.isContainment()) {
-            let i = e.eGet(n);
-            if (i != null) {
-              const u = this.helper.getSerializedFeatureName(n);
+            let u = e.eGet(n);
+            if (u != null) {
+              const o = this.helper.getSerializedFeatureName(n);
               if (r.isMany()) {
-                if (Array.isArray(i) || M(i)) {
-                  const l = [];
-                  for (const h of i) {
-                    const d = this.resolveValue(h, e);
-                    if (d == null || typeof d == "string")
+                if (Array.isArray(u) || se(u)) {
+                  const p = [];
+                  for (const d of u) {
+                    const E = this.resolveValue(d, e);
+                    if (E == null || typeof E == "string")
                       continue;
-                    const p = d.eResource?.();
-                    if (p && p === this.resource) {
-                      const E = this.getHref(d);
-                      E && l.push(E);
+                    const T = E.eResource?.();
+                    if (T && T === this.resource) {
+                      const R = this.getHref(E);
+                      R && p.push(R);
                     }
                   }
-                  l.length > 0 && this.output.push(` ${u}="${this.escapeXml(l.join(" "))}"`);
+                  p.length > 0 && this.output.push(` ${o}="${this.escapeXml(p.join(" "))}"`);
                 }
-              } else if (i = this.resolveValue(i, e), i != null)
-                if (typeof i == "string")
-                  this.output.push(` ${u}="${this.escapeXml(i)}"`);
-                else if (typeof i == "boolean")
-                  this.output.push(` ${u}="${i ? "true" : "false"}"`);
-                else if (typeof i == "number")
-                  this.output.push(` ${u}="${String(i)}"`);
+              } else if (u = this.resolveValue(u, e), u != null)
+                if (typeof u == "string")
+                  this.output.push(` ${o}="${this.escapeXml(u)}"`);
+                else if (typeof u == "boolean")
+                  this.output.push(` ${o}="${u ? "true" : "false"}"`);
+                else if (typeof u == "number")
+                  this.output.push(` ${o}="${String(u)}"`);
                 else {
-                  const l = this.getTypePrefixedHref(n, i);
-                  l && this.output.push(` ${u}="${this.escapeXml(l)}"`);
+                  const p = this.getTypePrefixedHref(n, u);
+                  p && this.output.push(` ${o}="${this.escapeXml(p)}"`);
                 }
             }
           }
@@ -4253,7 +5410,7 @@ class ot {
    * Get href for cross-reference
    */
   getHref(e) {
-    if (L(e) && e.eIsProxy()) {
+    if (ie(e) && e.eIsProxy()) {
       const r = e.eProxyURI();
       return r ? this.helper.deresolve(r).toString() : null;
     }
@@ -4273,20 +5430,20 @@ class ot {
     if ("getEContainingClass" in e && typeof e.getEContainingClass == "function") {
       const r = e.getEContainingClass();
       if (r) {
-        const n = r.getEPackage?.(), i = r.getName?.(), u = e.getName?.();
-        if (n && i && u) {
-          const l = n.getNsURI?.();
-          if (l)
-            return `${l}#//${i}/${u}`;
+        const n = r.getEPackage?.(), u = r.getName?.(), o = e.getName?.();
+        if (n && u && o) {
+          const p = n.getNsURI?.();
+          if (p)
+            return `${p}#//${u}/${o}`;
         }
       }
     }
     if ("getEPackage" in e && typeof e.getEPackage == "function") {
       const r = e.getEPackage();
       if (r) {
-        const n = r.getNsURI?.(), i = e.getName?.();
-        if (n && i)
-          return `${n}#//${i}`;
+        const n = r.getNsURI?.(), u = e.getName?.();
+        if (n && u)
+          return `${n}#//${u}`;
       }
     }
     if ("getName" in e) {
@@ -4312,10 +5469,10 @@ class ot {
       const n = e.getEContainingClass();
       if (!n)
         return null;
-      const i = e.getName?.(), u = n.getName?.();
-      if (!i || !u)
+      const u = e.getName?.(), o = n.getName?.();
+      if (!u || !o)
         return null;
-      t.push(u, i), s = n.getEPackage?.() ?? null;
+      t.push(o, u), s = n.getEPackage?.() ?? null;
     } else if ("getEPackage" in e && typeof e.getEPackage == "function") {
       const n = e.getName?.();
       if (!n)
@@ -4328,8 +5485,8 @@ class ot {
       const n = typeof s.getESuperPackage == "function" ? s.getESuperPackage() : null;
       if (!n)
         break;
-      const i = s.getName?.();
-      i && t.unshift(i), s = n;
+      const u = s.getName?.();
+      u && t.unshift(u), s = n;
     }
     const r = this.resource.getContents();
     for (const n of r)
@@ -4349,13 +5506,13 @@ class ot {
     const r = t.eResource?.();
     if (r && r === this.resource || s.startsWith("/") || s.startsWith("#"))
       return s;
-    const n = e.getEType(), i = t.eClass();
-    if (n && i && i !== n && "isAbstract" in n && n.isAbstract()) {
-      const u = i.getEPackage();
-      if (u) {
-        const l = this.getPrefix(u), h = i.getName();
-        if (l && h)
-          return `${l}:${h} ${s}`;
+    const n = e.getEType(), u = t.eClass();
+    if (n && u && u !== n && "isAbstract" in n && n.isAbstract()) {
+      const o = u.getEPackage();
+      if (o) {
+        const p = this.getPrefix(o), d = u.getName();
+        if (p && d)
+          return `${p}:${d} ${s}`;
       }
     }
     return s;
@@ -4373,27 +5530,27 @@ class ot {
     const s = e.eClass().getEAllStructuralFeatures(), r = this.helper.getExtendedMetaData();
     if (r)
       for (const n of s) {
-        if (n.isTransient() || n.isDerived() || !this.isAttribute(n) || r.getFeatureKind(n) !== he)
+        if (n.isTransient() || n.isDerived() || !this.isAttribute(n) || r.getFeatureKind(n) !== Fe)
           continue;
-        const i = e.eGet(n);
-        if (i != null)
+        const u = e.eGet(n);
+        if (u != null)
           return !0;
       }
     for (const n of s)
       if ("isContainment" in n) {
-        const i = n;
+        const u = n;
         if (n.isTransient())
           continue;
-        const u = e.eGet(i);
-        if (u == null)
+        const o = e.eGet(u);
+        if (o == null)
           continue;
-        if (i.isContainment()) {
-          if ((Array.isArray(u) || M(u)) && u.length > 0 || !Array.isArray(u) && !M(u))
+        if (u.isContainment()) {
+          if ((Array.isArray(o) || se(o)) && o.length > 0 || !Array.isArray(o) && !se(o))
             return !0;
-        } else if (n.isMany() && (Array.isArray(u) || M(u)) && u.length > 0)
-          for (const l of u) {
-            const h = l.eResource?.();
-            if (!h || h !== this.resource)
+        } else if (n.isMany() && (Array.isArray(o) || se(o)) && o.length > 0)
+          for (const p of o) {
+            const d = p.eResource?.();
+            if (!d || d !== this.resource)
               return !0;
           }
       }
@@ -4406,24 +5563,24 @@ class ot {
     const t = e.eClass(), s = this.helper.getExtendedMetaData();
     if (s)
       for (const r of t.getEAllStructuralFeatures()) {
-        if (r.isTransient() || r.isDerived() || !this.isAttribute(r) || s.getFeatureKind(r) !== he)
+        if (r.isTransient() || r.isDerived() || !this.isAttribute(r) || s.getFeatureKind(r) !== Fe)
           continue;
-        const i = e.eGet(r);
-        if (i == null)
+        const u = e.eGet(r);
+        if (u == null)
           continue;
-        const u = this.getSerializedElementName(r, s), l = r;
-        if (r.isMany() && (Array.isArray(i) || M(i))) {
-          for (const h of i)
-            if (h != null) {
+        const o = this.getSerializedElementName(r, s), p = r;
+        if (r.isMany() && (Array.isArray(u) || se(u))) {
+          for (const d of u)
+            if (d != null) {
               this.writeIndent();
-              const d = this.convertSingleValueToString(l, h);
-              this.output.push(`<${u}>${this.escapeXml(d)}</${u}>
+              const E = this.convertSingleValueToString(p, d);
+              this.output.push(`<${o}>${this.escapeXml(E)}</${o}>
 `);
             }
         } else {
           this.writeIndent();
-          const h = this.convertToString(l, i);
-          this.output.push(`<${u}>${this.escapeXml(h)}</${u}>
+          const d = this.convertToString(p, u);
+          this.output.push(`<${o}>${this.escapeXml(d)}</${o}>
 `);
         }
       }
@@ -4432,25 +5589,25 @@ class ot {
         const n = r;
         if (r.isTransient())
           continue;
-        const i = e.eGet(n);
-        if (i == null)
+        const u = e.eGet(n);
+        if (u == null)
           continue;
         if (n.isContainment())
-          if (Array.isArray(i) || M(i))
-            for (const u of i)
-              this.writeElement(n, u);
+          if (Array.isArray(u) || se(u))
+            for (const o of u)
+              this.writeElement(n, o);
           else
-            this.writeElement(n, i);
-        else if (r.isMany() && (Array.isArray(i) || M(i)) && i.length > 0)
-          for (const u of i) {
-            const l = this.resolveValue(u, e);
-            if (l == null)
+            this.writeElement(n, u);
+        else if (r.isMany() && (Array.isArray(u) || se(u)) && u.length > 0)
+          for (const o of u) {
+            const p = this.resolveValue(o, e);
+            if (p == null)
               continue;
-            const h = typeof l != "string" ? l.eResource?.() : null;
-            if (h && h === this.resource)
+            const d = typeof p != "string" ? p.eResource?.() : null;
+            if (d && d === this.resource)
               continue;
-            const d = typeof l == "string" ? l : this.getHref(l);
-            d && (this.writeIndent(), this.output.push(`<${this.helper.getSerializedFeatureName(n)} href="${this.escapeXml(d)}"/>
+            const E = typeof p == "string" ? p : this.getHref(p);
+            E && (this.writeIndent(), this.output.push(`<${this.helper.getSerializedFeatureName(n)} href="${this.escapeXml(E)}"/>
 `));
           }
       }
@@ -4461,16 +5618,16 @@ class ot {
   writeElement(e, t) {
     const s = this.helper.getExtendedMetaData(), r = this.getSerializedElementName(e, s) || "element";
     this.writeIndent(), this.output.push(`<${r}`);
-    const n = e.getEType(), i = t.eClass();
-    if (n && i && i !== n) {
-      const h = i.getEPackage(), d = h ? this.getPrefix(h) : "", p = d ? `${d}:${i.getName()}` : i.getName();
-      this.output.push(` xsi:type="${p}"`);
+    const n = e.getEType(), u = t.eClass();
+    if (n && u && u !== n) {
+      const d = u.getEPackage(), E = d ? this.getPrefix(d) : "", T = E ? `${E}:${u.getName()}` : u.getName();
+      this.output.push(` xsi:type="${T}"`);
     }
     this.saveID(t), this.writeAttributes(t);
-    const u = this.getSimpleContentText(t, s), l = this.hasElementContent(t);
-    u !== null ? (this.output.push(`>${this.escapeXml(u)}`), l && (this.output.push(`
+    const o = this.getSimpleContentText(t, s), p = this.hasElementContent(t);
+    o !== null ? (this.output.push(`>${this.escapeXml(o)}`), p && (this.output.push(`
 `), this.indent++, this.writeElements(t), this.indent--, this.writeIndent()), this.output.push(`</${r}>
-`)) : l ? (this.output.push(`>
+`)) : p ? (this.output.push(`>
 `), this.indent++, this.writeElements(t), this.indent--, this.writeIndent(), this.output.push(`</${r}>
 `)) : this.output.push(`/>
 `);
@@ -4482,28 +5639,28 @@ class ot {
   resolveValue(e, t) {
     if (e == null)
       return e;
-    if (L(e) && e.eIsProxy()) {
+    if (ie(e) && e.eIsProxy()) {
       if ("eResolveProxy" in t && typeof t.eResolveProxy == "function") {
         const r = t.eResolveProxy(e);
-        if (r !== e && !(L(r) && r.eIsProxy()))
+        if (r !== e && !(ie(r) && r.eIsProxy()))
           return r;
       }
       const s = e.eProxyURI();
       if (s && this.resource) {
         const r = this.resource.getResourceSet();
         if (r) {
-          const n = s.toString(), i = n.indexOf("#");
-          if (i >= 0) {
-            const u = n.substring(i + 1);
-            let l = this.resource;
-            if (i > 0) {
-              const h = T.createURI(n.substring(0, i));
-              l = r.getResource(h, !0) || this.resource;
+          const n = s.toString(), u = n.indexOf("#");
+          if (u >= 0) {
+            const o = n.substring(u + 1);
+            let p = this.resource;
+            if (u > 0) {
+              const d = D.createURI(n.substring(0, u));
+              p = r.getResource(d, !0) || this.resource;
             }
-            if (l) {
-              const h = l.getEObject(u);
-              if (h)
-                return h;
+            if (p) {
+              const d = p.getEObject(o);
+              if (d)
+                return d;
             }
           }
         }
@@ -4518,13 +5675,13 @@ class ot {
   convertToString(e, t) {
     if (t == null)
       return "";
-    if (Array.isArray(t) || M(t)) {
+    if (Array.isArray(t) || se(t)) {
       const r = [];
       for (const n of t)
         n != null && r.push(this.convertSingleValueToString(e, n));
       return r.join(" ");
     }
-    if (Te(e.getEType()))
+    if ($e(e.getEType()))
       return this.convertSingleValueToString(e, t);
     if (typeof t == "string")
       return t;
@@ -4551,7 +5708,7 @@ class ot {
   convertSingleValueToString(e, t) {
     if (t == null)
       return "";
-    if (!Te(e.getEType())) {
+    if (!$e(e.getEType())) {
       if (typeof t == "string")
         return t;
       if (typeof t == "boolean")
@@ -4563,9 +5720,9 @@ class ot {
     if (r && "getEPackage" in r) {
       const n = r.getEPackage();
       if (n) {
-        const i = n.getEFactoryInstance();
-        if (i)
-          return i.convertToString(r, t);
+        const u = n.getEFactoryInstance();
+        if (u)
+          return u.convertToString(r, t);
       }
     }
     return String(t);
@@ -4577,7 +5734,7 @@ class ot {
     if (!t)
       return null;
     const s = e.eClass();
-    if (t.getContentKind(s) !== Fe)
+    if (t.getContentKind(s) !== at)
       return null;
     const r = t.getSimpleContentFeature(s);
     if (!r)
@@ -4638,7 +5795,7 @@ class ot {
       this.output.push(this.indentString);
   }
 }
-class as extends ot {
+class Bs extends vt {
   constructor(e) {
     super(e), this.idAttributeName = "xmi:id";
   }
@@ -4646,13 +5803,13 @@ class as extends ot {
     super.writeNamespaces(e);
   }
 }
-const gr = "DEFER_ATTACHMENT", pr = "DEFER_IDREF_RESOLUTION", dr = "USE_DEPRECATED_METHODS", mr = "RECORD_UNKNOWN_FEATURE";
-class ut extends De {
+const Mr = "DEFER_ATTACHMENT", Lr = "DEFER_IDREF_RESOLUTION", jr = "USE_DEPRECATED_METHODS", Gr = "RECORD_UNKNOWN_FEATURE";
+class Ot extends it {
   constructor(e) {
     super(e), this.idToEObjectMap = /* @__PURE__ */ new Map(), this.eObjectToIDMap = /* @__PURE__ */ new Map(), this.xmlHelper = this.createXMLHelper();
   }
   createXMLHelper() {
-    return new _e(this);
+    return new We(this);
   }
   /**
    * Get EObject by ID
@@ -4694,8 +5851,8 @@ class ut extends De {
     const s = this.getResourceSet()?.getURIConverter(), r = this.getURI();
     if (s && r)
       try {
-        const n = await s.createInputStream(r), i = await Er(n);
-        this.loadFromString(i, e);
+        const n = await s.createInputStream(r), u = await $r(n);
+        this.loadFromString(u, e);
       } catch {
         this.loaded = !0;
       }
@@ -4714,13 +5871,13 @@ class ut extends De {
    * Create the XML loader
    */
   createXMLLoad() {
-    return new it(this.xmlHelper);
+    return new kt(this.xmlHelper);
   }
   /**
    * Create the XML saver
    */
   createXMLSave() {
-    return new ot(this.xmlHelper);
+    return new vt(this.xmlHelper);
   }
   /**
    * Save to XML string
@@ -4745,16 +5902,16 @@ class ut extends De {
     super.unload(), this.clearIdMaps();
   }
 }
-class os extends ut {
+class ks extends Ot {
   createXMLLoad() {
-    return new ss(this.xmlHelper);
+    return new bs(this.xmlHelper);
   }
   createXMLSave() {
-    return new as(this.xmlHelper);
+    return new Bs(this.xmlHelper);
   }
 }
-async function Er(c) {
-  const e = c.getReader(), t = new TextDecoder();
+async function $r(h) {
+  const e = h.getReader(), t = new TextDecoder();
   let s = "";
   for (; ; ) {
     const { done: r, value: n } = await e.read();
@@ -4764,21 +5921,21 @@ async function Er(c) {
   }
   return s += t.decode(), s;
 }
-class us {
+class Ds {
   createResource(e) {
-    return new ut(e);
+    return new Ot(e);
   }
 }
-class Ne {
+class Xe {
   createResource(e) {
-    return new os(e);
+    return new ks(e);
   }
 }
-const pe = fe.INSTANCE_FACTORY_REGISTRY.getExtensionToFactoryMap();
-pe.has("xml") || pe.set("xml", new us());
-pe.has("xmi") || pe.set("xmi", new Ne());
-pe.has("ecore") || pe.set("ecore", new Ne());
-class cs {
+const ke = Pe.INSTANCE_FACTORY_REGISTRY.getExtensionToFactoryMap();
+ke.has("xml") || ke.set("xml", new Ds());
+ke.has("xmi") || ke.set("xmi", new Xe());
+ke.has("ecore") || ke.set("ecore", new Xe());
+class vs {
   constructor() {
     this.forwardReferences = [], this.errors = [];
   }
@@ -4786,7 +5943,7 @@ class cs {
    * Load a JSON string into the resource.
    */
   load(e, t, s) {
-    this.resource = e, this.packageRegistry = e.getResourceSet()?.getPackageRegistry() || X.INSTANCE, this.forwardReferences = [], this.errors = [];
+    this.resource = e, this.packageRegistry = e.getResourceSet()?.getPackageRegistry() || oe.INSTANCE, this.forwardReferences = [], this.errors = [];
     let r;
     try {
       r = JSON.parse(t);
@@ -4796,8 +5953,8 @@ class cs {
     }
     if (Array.isArray(r))
       for (const n of r) {
-        const i = this.loadObject(n);
-        i && e.getContents().push(i);
+        const u = this.loadObject(n);
+        u && e.getContents().push(u);
       }
     else if (r && typeof r == "object") {
       const n = this.loadObject(r);
@@ -4815,23 +5972,23 @@ class cs {
     const r = s.getEPackage();
     if (!r)
       return this.error(`No package for class '${s.getName()}'`), null;
-    const i = r.getEFactoryInstance().create(s);
-    for (const [u, l] of Object.entries(e)) {
-      if (u === "eClass" || l == null)
+    const u = r.getEFactoryInstance().create(s);
+    for (const [o, p] of Object.entries(e)) {
+      if (o === "eClass" || p == null)
         continue;
-      const h = s.getEStructuralFeature(u);
-      if (!h) {
-        this.error(`Unknown feature '${u}' for type '${s.getName()}'`);
+      const d = s.getEStructuralFeature(o);
+      if (!d) {
+        this.error(`Unknown feature '${o}' for type '${s.getName()}'`);
         continue;
       }
-      if (this.isAttribute(h))
-        this.loadAttribute(i, h, l);
+      if (this.isAttribute(d))
+        this.loadAttribute(u, d, p);
       else {
-        const d = h;
-        d.isContainment() ? this.loadContainment(i, d, l) : this.loadCrossReference(i, d, l);
+        const E = d;
+        E.isContainment() ? this.loadContainment(u, E, p) : this.loadCrossReference(u, E, p);
       }
     }
-    return i;
+    return u;
   }
   /**
    * Resolve the EClass for a JSON object.
@@ -4855,8 +6012,8 @@ class cs {
     const n = this.packageRegistry.getEPackage(s);
     if (!n)
       return this.error(`Package not found for nsURI: ${s}`), null;
-    const i = n.getEClassifier(r);
-    return i ? "getESuperTypes" in i ? i : (this.error(`'${r}' is not an EClass`), null) : (this.error(`Classifier '${r}' not found in package '${s}'`), null);
+    const u = n.getEClassifier(r);
+    return u ? "getESuperTypes" in u ? u : (this.error(`'${r}' is not an EClass`), null) : (this.error(`Classifier '${r}' not found in package '${s}'`), null);
   }
   /**
    * Load an attribute value.
@@ -4864,11 +6021,11 @@ class cs {
   loadAttribute(e, t, s) {
     if (t.isMany()) {
       const r = Array.isArray(s) ? s : [s], n = e.eGet(t);
-      if (n && (Array.isArray(n) || M(n)))
-        for (const i of r)
-          n.push(this.convertAttributeValue(t, i));
+      if (n && (Array.isArray(n) || se(n)))
+        for (const u of r)
+          n.push(this.convertAttributeValue(t, u));
       else
-        e.eSet(t, r.map((i) => this.convertAttributeValue(t, i)));
+        e.eSet(t, r.map((u) => this.convertAttributeValue(t, u)));
     } else
       e.eSet(t, this.convertAttributeValue(t, s));
   }
@@ -4903,11 +6060,11 @@ class cs {
   loadContainment(e, t, s) {
     const r = t.getEType() && "getESuperTypes" in t.getEType() ? t.getEType() : void 0;
     if (t.isMany()) {
-      const n = Array.isArray(s) ? s : [s], i = e.eGet(t);
-      for (const u of n)
-        if (u && typeof u == "object") {
-          const l = this.loadObject(u, r);
-          l && i && (Array.isArray(i) || M(i)) && i.push(l);
+      const n = Array.isArray(s) ? s : [s], u = e.eGet(t);
+      for (const o of n)
+        if (o && typeof o == "object") {
+          const p = this.loadObject(o, r);
+          p && u && (Array.isArray(u) || se(u)) && u.push(p);
         }
     } else if (s && typeof s == "object" && !Array.isArray(s)) {
       const n = this.loadObject(s, r);
@@ -4954,7 +6111,7 @@ class cs {
   setReferenceValue(e, t, s) {
     if (t.isMany()) {
       const r = e.eGet(t);
-      r && (Array.isArray(r) || M(r)) && r.push(s);
+      r && (Array.isArray(r) || se(r)) && r.push(s);
     } else
       e.eSet(t, s);
   }
@@ -4967,14 +6124,14 @@ class cs {
       const s = e.substring(0, t), r = e.substring(t + 1), n = this.resource.getURI();
       if (n && n.toString() === s)
         return this.resource.getEObject(r);
-      const i = this.packageRegistry.getEPackage(s);
-      if (i)
-        return this.resolveFragmentInPackage(i, r);
-      const u = this.resource.getResourceSet();
-      if (u) {
-        const l = T.createURI(s), h = u.getResource(l, !0);
-        if (h)
-          return h.getEObject(r);
+      const u = this.packageRegistry.getEPackage(s);
+      if (u)
+        return this.resolveFragmentInPackage(u, r);
+      const o = this.resource.getResourceSet();
+      if (o) {
+        const p = D.createURI(s), d = o.getResource(p, !0);
+        if (d)
+          return d.getEObject(r);
       }
       return null;
     }
@@ -4989,28 +6146,28 @@ class cs {
       s = s.substring(1);
     if (!s)
       return e;
-    const r = s.split("/"), n = ge(e, s);
+    const r = s.split("/"), n = Be(e, s);
     if (n)
       return n;
     if (r.length >= 2) {
-      let i = e;
-      for (let h = 0; h < r.length - 2; h++) {
-        const d = i.getESubpackages();
-        let p = null;
-        for (let E = 0; E < d.length; E++)
-          if (d.get(E).getName() === r[h]) {
-            p = d.get(E);
+      let u = e;
+      for (let d = 0; d < r.length - 2; d++) {
+        const E = u.getESubpackages();
+        let T = null;
+        for (let R = 0; R < E.length; R++)
+          if (E.get(R).getName() === r[d]) {
+            T = E.get(R);
             break;
           }
-        if (!p)
+        if (!T)
           return null;
-        i = p;
+        u = T;
       }
-      const u = r[r.length - 2], l = i.getEClassifier(u);
-      if (l && "getEStructuralFeature" in l) {
-        const h = l.getEStructuralFeature(r[r.length - 1]);
-        if (h)
-          return h;
+      const o = r[r.length - 2], p = u.getEClassifier(o);
+      if (p && "getEStructuralFeature" in p) {
+        const d = p.getEStructuralFeature(r[r.length - 1]);
+        if (d)
+          return d;
       }
     }
     return null;
@@ -5022,16 +6179,16 @@ class cs {
     let s;
     const r = t.indexOf("#");
     if (r > 0)
-      s = T.createURI(t);
+      s = D.createURI(t);
     else if (r === 0) {
-      const l = this.resource.getURI();
-      l ? s = T.createURI(l.toString() + t) : s = T.createURI(t);
+      const p = this.resource.getURI();
+      p ? s = D.createURI(p.toString() + t) : s = D.createURI(t);
     } else {
-      const l = this.resource.getURI();
-      l ? s = T.createURI(l.toString() + "#" + t) : s = T.createURI("#" + t);
+      const p = this.resource.getURI();
+      p ? s = D.createURI(p.toString() + "#" + t) : s = D.createURI("#" + t);
     }
-    const n = e.getEType(), i = n && "getESuperTypes" in n ? n : null, u = new rt(s, i || void 0);
-    return u.eSetResource(this.resource), u;
+    const n = e.getEType(), u = n && "getESuperTypes" in n ? n : null, o = new Pt(s, u || void 0);
+    return o.eSetResource(this.resource), o;
   }
   /**
    * Check if a feature is an EAttribute (not an EReference).
@@ -5052,16 +6209,16 @@ class cs {
     return this.errors;
   }
 }
-const Qe = "SERIALIZE_TYPE", Je = "INDENT", ls = "always", hs = "polymorphic";
-class fs {
+const _t = "SERIALIZE_TYPE", Rt = "INDENT", Os = "always", Us = "polymorphic";
+class Ms {
   constructor() {
-    this.serializeType = hs, this.indent = 2;
+    this.serializeType = Us, this.indent = 2;
   }
   /**
    * Serialize resource contents to JSON string.
    */
   save(e, t) {
-    this.resource = e, t && (t.has(Qe) && (this.serializeType = t.get(Qe)), t.has(Je) && (this.indent = t.get(Je)));
+    this.resource = e, t && (t.has(_t) && (this.serializeType = t.get(_t)), t.has(Rt) && (this.indent = t.get(Rt)));
     const s = e.getContents();
     if (s.size() === 0)
       return "{}";
@@ -5080,16 +6237,16 @@ class fs {
   saveObject(e, t, s = !1) {
     const r = {}, n = e.eClass();
     this.shouldSaveType(e, t, s) && (r.eClass = this.getEClassURI(n));
-    for (const i of n.getEAllStructuralFeatures()) {
-      if (i.isTransient() || i.isDerived())
+    for (const u of n.getEAllStructuralFeatures()) {
+      if (u.isTransient() || u.isDerived())
         continue;
-      const u = e.eGet(i);
-      if (u != null)
-        if (this.isAttribute(i))
-          this.saveAttribute(r, e, i, u);
+      const o = e.eGet(u);
+      if (o != null)
+        if (this.isAttribute(u))
+          this.saveAttribute(r, e, u, o);
         else {
-          const l = i;
-          l.isContainment() ? this.saveContainment(r, e, l, u) : this.saveCrossReference(r, e, l, u);
+          const p = u;
+          p.isContainment() ? this.saveContainment(r, e, p, o) : this.saveCrossReference(r, e, p, o);
         }
     }
     return r;
@@ -5099,17 +6256,17 @@ class fs {
    */
   saveAttribute(e, t, s, r) {
     try {
-      const i = s.getDefaultValue();
-      if (r === i)
+      const u = s.getDefaultValue();
+      if (r === u)
         return;
     } catch {
     }
     const n = s.getName();
     if (s.isMany()) {
-      const i = Array.isArray(r) || M(r) ? [...r] : [r];
-      if (i.length === 0)
+      const u = Array.isArray(r) || se(r) ? [...r] : [r];
+      if (u.length === 0)
         return;
-      e[n] = i.map((u) => this.convertAttributeValue(s, u));
+      e[n] = u.map((o) => this.convertAttributeValue(s, o));
     } else
       e[n] = this.convertAttributeValue(s, r);
   }
@@ -5139,10 +6296,10 @@ class fs {
   saveContainment(e, t, s, r) {
     const n = s.getName();
     if (s.isMany()) {
-      const i = Array.isArray(r) || M(r) ? [...r] : [r];
-      if (i.length === 0)
+      const u = Array.isArray(r) || se(r) ? [...r] : [r];
+      if (u.length === 0)
         return;
-      e[n] = i.map((u) => this.saveContainedChild(u, s));
+      e[n] = u.map((o) => this.saveContainedChild(o, s));
     } else
       e[n] = this.saveContainedChild(r, s);
   }
@@ -5150,7 +6307,7 @@ class fs {
    * Serialize a single contained child. Proxies become `{ "$ref": "..." }`.
    */
   saveContainedChild(e, t) {
-    if (L(e) && e.eIsProxy()) {
+    if (ie(e) && e.eIsProxy()) {
       const s = e.eProxyURI()?.toString();
       if (s)
         return { $ref: s };
@@ -5163,29 +6320,29 @@ class fs {
   saveCrossReference(e, t, s, r) {
     const n = s.getName();
     if (s.isMany()) {
-      const i = Array.isArray(r) || M(r) ? [...r] : [r];
-      if (i.length === 0)
+      const u = Array.isArray(r) || se(r) ? [...r] : [r];
+      if (u.length === 0)
         return;
-      const u = [];
-      for (const l of i) {
-        const h = this.getHref(l);
-        h && u.push({ $ref: h });
+      const o = [];
+      for (const p of u) {
+        const d = this.getHref(p);
+        d && o.push({ $ref: d });
       }
-      u.length > 0 && (e[n] = u);
+      o.length > 0 && (e[n] = o);
     } else {
-      const i = this.getHref(r);
-      i && (e[n] = { $ref: i });
+      const u = this.getHref(r);
+      u && (e[n] = { $ref: u });
     }
   }
   /**
    * Determine whether the eClass type URI should be written.
    */
   shouldSaveType(e, t, s = !1) {
-    if (this.serializeType === ls || s)
+    if (this.serializeType === Os || s)
       return !0;
     if (t && "isContainment" in t) {
-      const n = t.getEType(), i = e.eClass();
-      return !!(n && i && n !== i);
+      const n = t.getEType(), u = e.eClass();
+      return !!(n && u && n !== u);
     }
     return !1;
   }
@@ -5201,7 +6358,7 @@ class fs {
    * Reuses the pattern from XMLSave.getHref().
    */
   getHref(e) {
-    if (L(e) && e.eIsProxy())
+    if (ie(e) && e.eIsProxy())
       return e.eProxyURI()?.toString() || null;
     const t = e.eResource?.();
     if (t) {
@@ -5214,11 +6371,11 @@ class fs {
     if ("getEContainingClass" in e && typeof e.getEContainingClass == "function") {
       const s = e.getEContainingClass();
       if (s) {
-        const r = s.getEPackage?.(), n = s.getName?.(), i = e.getName?.();
-        if (r && n && i) {
-          const u = r.getNsURI?.();
-          if (u)
-            return `${u}#//${n}/${i}`;
+        const r = s.getEPackage?.(), n = s.getName?.(), u = e.getName?.();
+        if (r && n && u) {
+          const o = r.getNsURI?.();
+          if (o)
+            return `${o}#//${n}/${u}`;
         }
       }
     }
@@ -5244,7 +6401,7 @@ class fs {
     return !("isContainment" in e);
   }
 }
-class gs extends De {
+class Ls extends it {
   constructor(e) {
     super(e), this.idToEObjectMap = /* @__PURE__ */ new Map(), this.eObjectToIDMap = /* @__PURE__ */ new Map();
   }
@@ -5286,9 +6443,9 @@ class gs extends De {
     r.load(this, e, s);
     const n = r.getErrors();
     if (n.length > 0) {
-      const i = this.getErrors();
-      for (const u of n)
-        i.push({ message: u.message });
+      const u = this.getErrors();
+      for (const o of n)
+        u.push({ message: o.message });
     }
     this.loaded = !0;
   }
@@ -5303,13 +6460,13 @@ class gs extends De {
    * Create the JSON loader.
    */
   createJSONLoad() {
-    return new cs();
+    return new vs();
   }
   /**
    * Create the JSON saver.
    */
   createJSONSave() {
-    return new fs();
+    return new Ms();
   }
   /**
    * Unload resource.
@@ -5318,14 +6475,14 @@ class gs extends De {
     super.unload(), this.clearIdMaps();
   }
 }
-class ps {
+class js {
   createResource(e) {
-    return new gs(e);
+    return new Ls(e);
   }
 }
-const At = fe.INSTANCE_FACTORY_REGISTRY.getExtensionToFactoryMap();
-At.has("json") || At.set("json", new ps());
-class $ {
+const Vt = Pe.INSTANCE_FACTORY_REGISTRY.getExtensionToFactoryMap();
+Vt.has("json") || Vt.set("json", new js());
+class ae {
   /**
    * Resolves the given proxy in the context of the given object.
    * If the proxy cannot be resolved, returns the proxy itself.
@@ -5335,23 +6492,23 @@ class $ {
    * @returns the resolved object, or the proxy if it cannot be resolved
    */
   static resolve(e, t) {
-    if (!e || !L(e) || !e.eIsProxy())
+    if (!e || !ie(e) || !e.eIsProxy())
       return e;
-    if (L(t))
+    if (ie(t))
       return t.eResolveProxy(e);
     if (!e.eProxyURI())
       return e;
     const r = t.eResource?.();
-    return r ? $.resolveWithResource(e, r) : e;
+    return r ? ae.resolveWithResource(e, r) : e;
   }
   /**
    * Resolves the given proxy using the given resource.
    */
   static resolveWithResource(e, t) {
-    if (!L(e) || !e.eIsProxy() || !e.eProxyURI())
+    if (!ie(e) || !e.eIsProxy() || !e.eProxyURI())
       return e;
     const r = t.getResourceSet();
-    return r ? $.resolveWithResourceSet(e, r, t.getURI() ?? void 0) : e;
+    return r ? ae.resolveWithResourceSet(e, r, t.getURI() ?? void 0) : e;
   }
   /**
    * Resolves the given proxy using the given resource set.
@@ -5361,28 +6518,28 @@ class $ {
    * @param baseURI optional base URI for resolving relative references
    */
   static resolveWithResourceSet(e, t, s) {
-    if (!L(e) || !e.eIsProxy())
+    if (!ie(e) || !e.eIsProxy())
       return e;
     const r = e.eProxyURI();
     if (!r)
       return e;
-    const n = r.toString(), i = n.indexOf("#");
-    if (i > 0) {
-      const u = n.substring(0, i), l = n.substring(i + 1);
-      let h;
-      s && !u.includes("://") ? h = s.resolve(T.createURI(u)) : h = T.createURI(u);
-      const d = t.getResource(h, !0);
-      if (d) {
-        const p = d.getEObject(l);
-        if (p)
-          return p;
+    const n = r.toString(), u = n.indexOf("#");
+    if (u > 0) {
+      const o = n.substring(0, u), p = n.substring(u + 1);
+      let d;
+      s && !o.includes("://") ? d = s.resolve(D.createURI(o)) : d = D.createURI(o);
+      const E = t.getResource(d, !0);
+      if (E) {
+        const T = E.getEObject(p);
+        if (T)
+          return T;
       }
-    } else if (i === 0) {
-      const u = n.substring(1);
-      for (const l of t.getResources()) {
-        const h = l.getEObject(u);
-        if (h)
-          return h;
+    } else if (u === 0) {
+      const o = n.substring(1);
+      for (const p of t.getResources()) {
+        const d = p.getEObject(o);
+        if (d)
+          return d;
       }
     }
     return e;
@@ -5393,14 +6550,14 @@ class $ {
   static resolveAll(e) {
     const t = e.getContents();
     for (const s of t)
-      $.resolveAllInObject(s);
+      ae.resolveAllInObject(s);
   }
   /**
    * Resolves all proxies in the given resource set.
    */
   static resolveAllInResourceSet(e) {
     for (const t of e.getResources())
-      $.resolveAll(t);
+      ae.resolveAll(t);
   }
   /**
    * Resolves all proxies in the given object and its contents.
@@ -5412,20 +6569,20 @@ class $ {
       if (r) {
         if (Array.isArray(r))
           for (let n = 0; n < r.length; n++) {
-            const i = r[n];
-            if (i && L(i) && i.eIsProxy()) {
-              const u = $.resolve(i, e);
-              u !== i && (r[n] = u);
+            const u = r[n];
+            if (u && ie(u) && u.eIsProxy()) {
+              const o = ae.resolve(u, e);
+              o !== u && (r[n] = o);
             }
           }
-        else if (L(r) && r.eIsProxy()) {
-          const n = $.resolve(r, e);
+        else if (ie(r) && r.eIsProxy()) {
+          const n = ae.resolve(r, e);
           n !== r && e.eSet(s, n);
         }
       }
     }
     for (const s of e.eContents())
-      $.resolveAllInObject(s);
+      ae.resolveAllInObject(s);
   }
   /**
    * Creates a new instance of the given EClass.
@@ -5447,7 +6604,7 @@ class $ {
     if (!t)
       return null;
     const s = t.getURI(), r = t.getURIFragment(e);
-    return s && r ? T.createURI(`${s.toString()}#${r}`) : s;
+    return s && r ? D.createURI(`${s.toString()}#${r}`) : s;
   }
   /**
    * Returns the root container of the given object.
@@ -5475,7 +6632,7 @@ class $ {
    * Note: This is a shallow copy that only copies attribute values.
    */
   static copy(e) {
-    const t = e.eClass(), s = $.create(t);
+    const t = e.eClass(), s = ae.create(t);
     for (const r of t.getEAllAttributes())
       if (!r.isDerived() && !r.isTransient()) {
         const n = e.eGet(r);
@@ -5489,9 +6646,9 @@ class $ {
   static getAllContents(e, t) {
     const s = [];
     for (const r of e.getContents()) {
-      $.isInstance(r, t) && s.push(r);
+      ae.isInstance(r, t) && s.push(r);
       for (const n of r.eAllContents())
-        $.isInstance(n, t) && s.push(n);
+        ae.isInstance(n, t) && s.push(n);
     }
     return s;
   }
@@ -5500,7 +6657,7 @@ class $ {
    */
   static isInstance(e, t) {
     const s = e.eClass();
-    return s === t || $.isSuperTypeOf(t, s);
+    return s === t || ae.isSuperTypeOf(t, s);
   }
   /**
    * Returns true if superType is a supertype of subType.
@@ -5508,12 +6665,12 @@ class $ {
   static isSuperTypeOf(e, t) {
     const s = t.getESuperTypes();
     for (const r of s)
-      if (r === e || $.isSuperTypeOf(e, r))
+      if (r === e || ae.isSuperTypeOf(e, r))
         return !0;
     return !1;
   }
 }
-class de {
+class De {
   constructor(e, t, s, r = []) {
     this.children = [], this.severity = e, this.source = t, this.message = s, this.data = r;
   }
@@ -5536,8 +6693,8 @@ class de {
     this.children.push(e), e.getSeverity() > this.severity && (this.severity = e.getSeverity());
   }
 }
-de.OK_INSTANCE = new de(0, "", "OK");
-class Re {
+De.OK_INSTANCE = new De(0, "", "OK");
+class tt {
   constructor() {
     this.validators = /* @__PURE__ */ new Map();
   }
@@ -5548,13 +6705,13 @@ class Re {
     this.validators.set(e, t);
   }
 }
-Re.INSTANCE = new Re();
-class Ze {
+tt.INSTANCE = new tt();
+class xt {
   constructor(e) {
-    this.registry = e ?? Re.INSTANCE;
+    this.registry = e ?? tt.INSTANCE;
   }
   validate(e) {
-    const t = new de(0, "org.eclipse.emf.ecore", `Diagnosis of ${this.getObjectLabel(e)}`, [e]);
+    const t = new De(0, "org.eclipse.emf.ecore", `Diagnosis of ${this.getObjectLabel(e)}`, [e]);
     return this.doValidate(e, t), this.validateContents(e, t), t;
   }
   doValidate(e, t) {
@@ -5564,8 +6721,8 @@ class Ze {
     const n = r.getNsURI();
     if (!n)
       return;
-    const i = this.registry.getValidator(n);
-    i && i.validate(e, t);
+    const u = this.registry.getValidator(n);
+    u && u.validate(e, t);
   }
   validateContents(e, t) {
     for (const s of e.eContents()) {
@@ -5583,8 +6740,8 @@ class Ze {
     return s;
   }
 }
-Ze.INSTANCE = new Ze();
-class yr {
+xt.INSTANCE = new xt();
+class Xr {
   constructor() {
     this._eAdapters = [], this._eDeliver = !0;
   }
@@ -5617,15 +6774,15 @@ class yr {
     const t = this._eAdapters.indexOf(e);
     if (t !== -1) {
       if (this._eDeliver) {
-        const s = new oe(this, N.REMOVING_ADAPTER, null, e, null);
+        const s = new Re(this, v.REMOVING_ADAPTER, null, e, null);
         e.notifyChanged(s);
       }
-      return this._eAdapters.splice(t, 1), tt(e) ? e.unsetTarget(this) : e.setTarget(null), !0;
+      return this._eAdapters.splice(t, 1), wt(e) ? e.unsetTarget(this) : e.setTarget(null), !0;
     }
     return !1;
   }
 }
-class Cr extends Bt {
+class qr extends us {
   constructor() {
     super(...arguments), this.iterating = !1;
   }
@@ -5669,7 +6826,7 @@ class Cr extends Bt {
    */
   handleContainment(e) {
     switch (e.getEventType()) {
-      case N.RESOLVE: {
+      case v.RESOLVE: {
         const t = e.getOldValue();
         if (t && this.hasAdapter(t)) {
           this.removeAdapter(t);
@@ -5678,7 +6835,7 @@ class Cr extends Bt {
         }
         break;
       }
-      case N.UNSET: {
+      case v.UNSET: {
         const t = e.getOldValue();
         if (t !== !0 && t !== !1) {
           t != null && this.removeAdapterWithChecks(t, !1, !0);
@@ -5687,26 +6844,26 @@ class Cr extends Bt {
         }
         break;
       }
-      case N.SET: {
+      case v.SET: {
         const t = e.getOldValue();
         t != null && this.removeAdapterWithChecks(t, !1, !0);
         const s = e.getNewValue();
         s != null && this.addAdapter(s);
         break;
       }
-      case N.ADD: {
+      case v.ADD: {
         const t = e.getNewValue();
         t != null && this.addAdapter(t);
         break;
       }
-      case N.ADD_MANY: {
+      case v.ADD_MANY: {
         const t = e.getNewValue();
         if (t)
           for (const s of t)
             this.addAdapter(s);
         break;
       }
-      case N.REMOVE: {
+      case v.REMOVE: {
         const t = e.getOldValue();
         if (t != null) {
           const s = this.isResource(e.getNotifier()), r = e.getFeature() != null;
@@ -5714,7 +6871,7 @@ class Cr extends Bt {
         }
         break;
       }
-      case N.REMOVE_MANY: {
+      case v.REMOVE_MANY: {
         const t = this.isResource(e.getNotifier()), s = e.getFeature() != null, r = e.getOldValue();
         if (r)
           for (const n of r)
@@ -5882,7 +7039,7 @@ class Cr extends Bt {
     return e && typeof e.isContainment == "function";
   }
 }
-class Tr {
+class Wr {
   constructor() {
     this._getEcorePackage = null;
   }
@@ -6027,8 +7184,8 @@ class Tr {
     return this._getEcorePackage !== null;
   }
 }
-const x = new Tr();
-class b extends K {
+const H = new Wr();
+class q extends le {
   constructor() {
     super(...arguments), this._name = null, this.abstract_ = !1, this.interface_ = !1, this.eSuperTypes = [], this._eStructuralFeatures = null, this.eOperations = [], this.ePackage = null, this.instanceClassName = null, this.instanceClass = null, this.featureID = 0, this.eTypeParameters = [], this.eGenericSuperTypes = [], this.eAnnotations = [], this.xmlNameToFeature = /* @__PURE__ */ new Map();
   }
@@ -6072,11 +7229,11 @@ class b extends K {
   }
   getEStructuralFeatures() {
     if (this._eStructuralFeatures === null) {
-      const e = this, t = new vt(this, () => {
-        if (x.isRegistered())
+      const e = this, t = new ts(this, () => {
+        if (H.isRegistered())
           try {
-            const s = x.getEClassClass();
-            if (s !== e && s instanceof b && s._eStructuralFeatures !== null)
+            const s = H.getEClassClass();
+            if (s !== e && s instanceof q && s._eStructuralFeatures !== null)
               return s.getEStructuralFeature("eStructuralFeatures");
           } catch {
           }
@@ -6084,7 +7241,7 @@ class b extends K {
       }, (s, r) => {
         "setEContainingClass" in s && s.setEContainingClass(r), r && "setFeatureID" in s && s.setFeatureID(this.featureID++);
       });
-      this._eStructuralFeatures = V(t);
+      this._eStructuralFeatures = ge(t);
     }
     return this._eStructuralFeatures;
   }
@@ -6127,7 +7284,7 @@ class b extends K {
       if (s)
         return s;
       for (const r of this.getEAllSuperTypes())
-        if (r instanceof b) {
+        if (r instanceof q) {
           const n = r.xmlNameToFeature.get(e);
           if (n)
             return n;
@@ -6238,7 +7395,7 @@ class b extends K {
     return this.eAnnotations.find((t) => t.getSource() === e) || null;
   }
   eClass() {
-    return x.getEClassClass();
+    return H.getEClassClass();
   }
   /**
    * Override eGet to handle class-specific features
@@ -6310,9 +7467,9 @@ class b extends K {
     }
   }
 }
-class Nr {
+class Yr {
   constructor(e) {
-    this.eClass = new b(), this.eClass.setName(e);
+    this.eClass = new q(), this.eClass.setName(e);
   }
   abstract(e = !0) {
     return this.eClass.setAbstract(e), this;
@@ -6333,7 +7490,7 @@ class Nr {
     return this.eClass;
   }
 }
-class Sr {
+class zr {
   constructor() {
     this.convertersByClassName = /* @__PURE__ */ new Map(), this.convertersByName = /* @__PURE__ */ new Map(), this.registerDefaultConverters();
   }
@@ -6342,67 +7499,67 @@ class Sr {
    */
   registerDefaultConverters() {
     const e = {
-      fromString: (p) => p.toLowerCase() === "true",
-      toString: (p) => String(p)
+      fromString: (T) => T.toLowerCase() === "true",
+      toString: (T) => String(T)
     };
     this.registerByClassName("boolean", e), this.registerByClassName("java.lang.Boolean", e), this.registerByName("EBoolean", e), this.registerByName("EBooleanObject", e);
     const t = {
-      fromString: (p) => parseInt(p, 10),
-      toString: (p) => String(p)
+      fromString: (T) => parseInt(T, 10),
+      toString: (T) => String(T)
     };
     this.registerByClassName("int", t), this.registerByClassName("java.lang.Integer", t), this.registerByClassName("short", t), this.registerByClassName("java.lang.Short", t), this.registerByClassName("byte", t), this.registerByClassName("java.lang.Byte", t), this.registerByName("EInt", t), this.registerByName("EIntegerObject", t), this.registerByName("EShort", t), this.registerByName("EShortObject", t), this.registerByName("EByte", t), this.registerByName("EByteObject", t);
     const s = {
-      fromString: (p) => {
-        const E = parseInt(p, 10);
-        return Math.abs(E) > Number.MAX_SAFE_INTEGER ? BigInt(p) : E;
+      fromString: (T) => {
+        const R = parseInt(T, 10);
+        return Math.abs(R) > Number.MAX_SAFE_INTEGER ? BigInt(T) : R;
       },
-      toString: (p) => String(p)
+      toString: (T) => String(T)
     };
     this.registerByClassName("long", s), this.registerByClassName("java.lang.Long", s), this.registerByName("ELong", s), this.registerByName("ELongObject", s);
     const r = {
-      fromString: (p) => parseFloat(p),
-      toString: (p) => String(p)
+      fromString: (T) => parseFloat(T),
+      toString: (T) => String(T)
     };
     this.registerByClassName("float", r), this.registerByClassName("java.lang.Float", r), this.registerByClassName("double", r), this.registerByClassName("java.lang.Double", r), this.registerByName("EFloat", r), this.registerByName("EFloatObject", r), this.registerByName("EDouble", r), this.registerByName("EDoubleObject", r);
     const n = {
-      fromString: (p) => p,
-      toString: (p) => p ?? ""
+      fromString: (T) => T,
+      toString: (T) => T ?? ""
     };
     this.registerByClassName("java.lang.String", n), this.registerByClassName("java.lang.Object", n), this.registerByName("EString", n);
-    const i = {
-      fromString: (p) => p.charAt(0) || "",
-      toString: (p) => p ?? ""
-    };
-    this.registerByClassName("char", i), this.registerByClassName("java.lang.Character", i), this.registerByName("EChar", i), this.registerByName("ECharacterObject", i);
     const u = {
-      fromString: (p) => new Date(p),
-      toString: (p) => p?.toISOString() ?? ""
+      fromString: (T) => T.charAt(0) || "",
+      toString: (T) => T ?? ""
     };
-    this.registerByClassName("java.util.Date", u), this.registerByName("EDate", u);
-    const l = {
-      fromString: (p) => p,
+    this.registerByClassName("char", u), this.registerByClassName("java.lang.Character", u), this.registerByName("EChar", u), this.registerByName("ECharacterObject", u);
+    const o = {
+      fromString: (T) => new Date(T),
+      toString: (T) => T?.toISOString() ?? ""
+    };
+    this.registerByClassName("java.util.Date", o), this.registerByName("EDate", o);
+    const p = {
+      fromString: (T) => T,
       // Keep as string to preserve precision
-      toString: (p) => p ?? "0"
+      toString: (T) => T ?? "0"
     };
-    this.registerByClassName("java.math.BigDecimal", l), this.registerByClassName("java.math.BigInteger", l), this.registerByName("EBigDecimal", l), this.registerByName("EBigInteger", l);
-    const h = {
-      fromString: (p) => {
-        if (typeof atob == "function") {
-          const E = atob(p), C = new Uint8Array(E.length);
-          for (let S = 0; S < E.length; S++)
-            C[S] = E.charCodeAt(S);
-          return C;
-        }
-        return new Uint8Array(Buffer.from(p, "base64"));
-      },
-      toString: (p) => typeof btoa == "function" ? btoa(String.fromCharCode(...p)) : Buffer.from(p).toString("base64")
-    };
-    this.registerByClassName("byte[]", h), this.registerByName("EByteArray", h);
+    this.registerByClassName("java.math.BigDecimal", p), this.registerByClassName("java.math.BigInteger", p), this.registerByName("EBigDecimal", p), this.registerByName("EBigInteger", p);
     const d = {
-      fromString: (p) => p,
-      toString: (p) => String(p ?? "")
+      fromString: (T) => {
+        if (typeof atob == "function") {
+          const R = atob(T), _ = new Uint8Array(R.length);
+          for (let b = 0; b < R.length; b++)
+            _[b] = R.charCodeAt(b);
+          return _;
+        }
+        return new Uint8Array(Buffer.from(T, "base64"));
+      },
+      toString: (T) => typeof btoa == "function" ? btoa(String.fromCharCode(...T)) : Buffer.from(T).toString("base64")
     };
-    this.registerByName("EFeatureMapEntry", d);
+    this.registerByClassName("byte[]", d), this.registerByName("EByteArray", d);
+    const E = {
+      fromString: (T) => T,
+      toString: (T) => String(T ?? "")
+    };
+    this.registerByName("EFeatureMapEntry", E);
   }
   /**
    * Register a converter by instanceClassName
@@ -6443,7 +7600,7 @@ class Sr {
    * attribute does not abort the document (see XMLHandler.setFeatureValue).
    */
   createFromString(e, t) {
-    if (Te(e)) {
+    if ($e(e)) {
       if (t == null)
         return null;
       const r = this.resolveEEnumLiteral(e, t);
@@ -6463,7 +7620,7 @@ class Sr {
   convertToString(e, t) {
     if (t == null)
       return "";
-    if (Te(e)) {
+    if ($e(e)) {
       const r = this.findEEnumLiteral(e, t);
       if (r)
         return r.getLiteral() ?? "";
@@ -6521,8 +7678,8 @@ class Sr {
     return Array.from(this.convertersByName.keys());
   }
 }
-const y = new Sr();
-class ke {
+const P = new zr();
+class ot {
   constructor() {
     this.ePackage = null, this.creators = /* @__PURE__ */ new Map();
   }
@@ -6546,13 +7703,13 @@ class ke {
       throw new Error(`Cannot instantiate abstract class: ${e.getName()}`);
     if (e.isInterface())
       throw new Error(`Cannot instantiate interface: ${e.getName()}`);
-    return new st(e);
+    return new Ft(e);
   }
   createFromString(e, t) {
-    return y.createFromString(e, t);
+    return P.createFromString(e, t);
   }
   convertToString(e, t) {
-    return y.convertToString(e, t);
+    return P.convertToString(e, t);
   }
   /**
    * Register a creator function for a specific EClass
@@ -6569,7 +7726,7 @@ class ke {
   }
   // EObject methods
   eClass() {
-    return x.getEFactoryClass();
+    return H.getEFactoryClass();
   }
   eResource() {
     return null;
@@ -6609,7 +7766,7 @@ class ke {
     return null;
   }
 }
-class _r extends Z {
+class Kr extends de {
   constructor(e) {
     super(e, null), this.pkg = e;
   }
@@ -6618,8 +7775,8 @@ class _r extends Z {
    * This avoids circular dependency issues during initialization.
    */
   getFeature() {
-    if (!this.feature && x.isRegistered()) {
-      const t = x.getEPackageClass();
+    if (!this.feature && H.isRegistered()) {
+      const t = H.getEPackageClass();
       this.feature = t.getEStructuralFeature("eClassifiers");
     }
     return this.feature;
@@ -6644,7 +7801,7 @@ class _r extends Z {
     "setEPackage" in s && typeof s.setEPackage == "function" && s.setEPackage(null), "setEPackage" in t && typeof t.setEPackage == "function" && t.setEPackage(this.pkg), super.didSet(e, t, s);
   }
 }
-class Ar extends Z {
+class Hr extends de {
   constructor(e) {
     super(e, null), this.pkg = e;
   }
@@ -6653,33 +7810,33 @@ class Ar extends Z {
    * This avoids circular dependency issues during initialization.
    */
   getFeature() {
-    if (!this.feature && x.isRegistered()) {
-      const e = x.getEPackageClass();
+    if (!this.feature && H.isRegistered()) {
+      const e = H.getEPackageClass();
       this.feature = e.getEStructuralFeature("eSubpackages");
     }
     return this.feature;
   }
   didAdd(e, t) {
-    t instanceof H && (t.eSuperPackage = this.pkg), super.didAdd(e, t);
+    t instanceof fe && (t.eSuperPackage = this.pkg), super.didAdd(e, t);
   }
   didAddMany(e, t) {
     for (const s of t)
-      s instanceof H && (s.eSuperPackage = this.pkg);
+      s instanceof fe && (s.eSuperPackage = this.pkg);
     super.didAddMany(e, t);
   }
   didRemove(e, t) {
-    t instanceof H && (t.eSuperPackage = null), super.didRemove(e, t);
+    t instanceof fe && (t.eSuperPackage = null), super.didRemove(e, t);
   }
   didClear(e) {
     for (const t of e)
-      t instanceof H && (t.eSuperPackage = null);
+      t instanceof fe && (t.eSuperPackage = null);
     super.didClear(e);
   }
   didSet(e, t, s) {
-    s instanceof H && (s.eSuperPackage = null), t instanceof H && (t.eSuperPackage = this.pkg), super.didSet(e, t, s);
+    s instanceof fe && (s.eSuperPackage = null), t instanceof fe && (t.eSuperPackage = this.pkg), super.didSet(e, t, s);
   }
 }
-class H extends K {
+class fe extends le {
   /**
    * Constructor
    */
@@ -6706,7 +7863,7 @@ class H extends K {
   }
   getEFactoryInstance() {
     if (!this.eFactoryInstance) {
-      const e = new ke();
+      const e = new ot();
       e.setEPackage(this), this.eFactoryInstance = e;
     }
     return this.eFactoryInstance;
@@ -6715,10 +7872,10 @@ class H extends K {
     this.eFactoryInstance = e;
   }
   getEClassifiers() {
-    return this._eClassifiers || (this._eClassifiers = V(new _r(this))), this._eClassifiers;
+    return this._eClassifiers || (this._eClassifiers = ge(new Kr(this))), this._eClassifiers;
   }
   getESubpackages() {
-    return this._eSubpackages || (this._eSubpackages = V(new Ar(this))), this._eSubpackages;
+    return this._eSubpackages || (this._eSubpackages = ge(new Hr(this))), this._eSubpackages;
   }
   getESuperPackage() {
     return this.eSuperPackage;
@@ -6759,7 +7916,7 @@ class H extends K {
     return null;
   }
   eClass() {
-    return x.getEPackageClass();
+    return H.getEPackageClass();
   }
   /**
    * Override eGet to handle package-specific features
@@ -6825,9 +7982,9 @@ class H extends K {
     }
   }
 }
-class ct extends H {
+class Ut extends fe {
   static create(e) {
-    const t = new ct(e.nsURI, e.factory);
+    const t = new Ut(e.nsURI, e.factory);
     return t.setName(e.name), t.setNsPrefix(e.nsPrefix), t;
   }
   /**
@@ -6837,7 +7994,7 @@ class ct extends H {
     return this.addClassifier(e), this;
   }
 }
-class lt extends K {
+class Mt extends le {
   constructor() {
     super(...arguments), this.name = null, this.changeable = !0, this.volatile = !1, this.transient = !1, this.defaultValueLiteral = null, this.unsettable = !1, this.derived = !1, this.eType = null, this.eGenericType = null, this.eContainingClass = null, this.lowerBound = 0, this.upperBound = 1, this.featureID = -1, this.eAnnotations = [];
   }
@@ -6884,7 +8041,7 @@ class lt extends K {
     this.derived = e;
   }
   getEType() {
-    if (this.eType && L(this.eType) && this.eType.eIsProxy()) {
+    if (this.eType && ie(this.eType) && this.eType.eIsProxy()) {
       const e = this.eType, t = e.eProxyURI();
       if (t) {
         const s = this.eResolveProxy(e);
@@ -6892,40 +8049,40 @@ class lt extends K {
           return this.eType = s, this.eType;
         const r = t.toString(), n = r.indexOf("#");
         if (n > 0) {
-          const i = r.substring(0, n), u = r.substring(n + 1), l = [X.INSTANCE];
-          let h = this.eResource()?.getResourceSet();
-          if (!h) {
-            let d = this.eContainingClass;
-            for (; d; ) {
-              if (typeof d.eResource == "function") {
-                const p = d.eResource();
-                if (p) {
-                  h = p.getResourceSet();
+          const u = r.substring(0, n), o = r.substring(n + 1), p = [oe.INSTANCE];
+          let d = this.eResource()?.getResourceSet();
+          if (!d) {
+            let E = this.eContainingClass;
+            for (; E; ) {
+              if (typeof E.eResource == "function") {
+                const T = E.eResource();
+                if (T) {
+                  d = T.getResourceSet();
                   break;
                 }
               }
-              d = d.getEPackage?.() ?? d.getESuperPackage?.() ?? d.eContainer?.();
+              E = E.getEPackage?.() ?? E.getESuperPackage?.() ?? E.eContainer?.();
             }
           }
-          h && l.push(h.getPackageRegistry());
-          for (const d of l) {
-            const p = d.getEPackage(i);
-            if (p) {
-              const D = ge(p, u);
-              if (D)
-                return this.eType = D, this.eType;
+          d && p.push(d.getPackageRegistry());
+          for (const E of p) {
+            const T = E.getEPackage(u);
+            if (T) {
+              const B = Be(T, o);
+              if (B)
+                return this.eType = B, this.eType;
             }
-            let E = i;
-            const C = E.lastIndexOf("/");
-            C >= 0 && (E = E.substring(C + 1));
-            const S = E.indexOf(".");
-            if (S > 0 && (E = E.substring(0, S)), E)
-              for (const D of d.keys()) {
-                const U = d.getEPackage(D);
-                if (U && U.getName() === E) {
-                  const O = ge(U, u);
-                  if (O)
-                    return this.eType = O, this.eType;
+            let R = u;
+            const _ = R.lastIndexOf("/");
+            _ >= 0 && (R = R.substring(_ + 1));
+            const b = R.indexOf(".");
+            if (b > 0 && (R = R.substring(0, b)), R)
+              for (const B of E.keys()) {
+                const O = E.getEPackage(B);
+                if (O && O.getName() === R) {
+                  const S = Be(O, o);
+                  if (S)
+                    return this.eType = S, this.eType;
                 }
               }
           }
@@ -6981,7 +8138,7 @@ class lt extends K {
     return this.eAnnotations.find((t) => t.getSource() === e) || null;
   }
   eClass() {
-    return x.getEStructuralFeatureClass();
+    return H.getEStructuralFeatureClass();
   }
   /**
    * Override eGet to handle feature-specific properties
@@ -7062,7 +8219,7 @@ class lt extends K {
     }
   }
 }
-class I extends lt {
+class j extends Mt {
   constructor() {
     super(...arguments), this.id = !1;
   }
@@ -7086,7 +8243,7 @@ class I extends lt {
     return s ? s.createFromString(t, e) : e;
   }
   eClass() {
-    return x.getEAttributeClass();
+    return H.getEAttributeClass();
   }
   /**
    * Override eGet to handle attribute-specific features
@@ -7112,9 +8269,9 @@ class I extends lt {
     }
   }
 }
-class Ir {
+class Vr {
   constructor(e, t) {
-    this.attr = new I(), this.attr.setName(e), this.attr.setEType(t);
+    this.attr = new j(), this.attr.setName(e), this.attr.setEType(t);
   }
   id(e = !0) {
     return this.attr.setID(e), this;
@@ -7141,7 +8298,7 @@ class Ir {
     return this.attr;
   }
 }
-class P extends lt {
+class Y extends Mt {
   constructor() {
     super(...arguments), this.containment = !1, this.resolveProxies = !0, this.eOpposite = null, this.eKeys = [];
   }
@@ -7184,7 +8341,7 @@ class P extends lt {
     return null;
   }
   eClass() {
-    return x.getEReferenceClass();
+    return H.getEReferenceClass();
   }
   /**
    * Override eGet to handle reference-specific features
@@ -7225,9 +8382,9 @@ class P extends lt {
     }
   }
 }
-class br {
+class Jr {
   constructor(e, t) {
-    this.ref = new P(), this.ref.setName(e), this.ref.setEType(t);
+    this.ref = new Y(), this.ref.setName(e), this.ref.setEType(t);
   }
   containment(e = !0) {
     return this.ref.setContainment(e), this;
@@ -7254,7 +8411,7 @@ class br {
     return this.ref;
   }
 }
-class R extends K {
+class W extends le {
   constructor() {
     super(...arguments), this.name = null, this.instanceClassName = null, this.instanceClass = null, this.ePackage = null, this.serializable = !0, this.eAnnotations = [], this.eTypeParameters = [];
   }
@@ -7358,7 +8515,7 @@ class R extends K {
     return this.eAnnotations.find((t) => t.getSource() === e) || null;
   }
   eClass() {
-    return x.getEDataTypeClass();
+    return H.getEDataTypeClass();
   }
   /**
    * Override eGet to handle datatype-specific features
@@ -7404,47 +8561,47 @@ class R extends K {
     }
   }
 }
-class se {
+class Te {
 }
-se.EString = (() => {
-  const c = new R();
-  return c.setName("EString"), c.setInstanceClassName("java.lang.String"), c;
+Te.EString = (() => {
+  const h = new W();
+  return h.setName("EString"), h.setInstanceClassName("java.lang.String"), h;
 })();
-se.EInt = (() => {
-  const c = new R();
-  return c.setName("EInt"), c.setInstanceClassName("int"), c;
+Te.EInt = (() => {
+  const h = new W();
+  return h.setName("EInt"), h.setInstanceClassName("int"), h;
 })();
-se.EBoolean = (() => {
-  const c = new R();
-  return c.setName("EBoolean"), c.setInstanceClassName("boolean"), c;
+Te.EBoolean = (() => {
+  const h = new W();
+  return h.setName("EBoolean"), h.setInstanceClassName("boolean"), h;
 })();
-se.EFloat = (() => {
-  const c = new R();
-  return c.setName("EFloat"), c.setInstanceClassName("float"), c;
+Te.EFloat = (() => {
+  const h = new W();
+  return h.setName("EFloat"), h.setInstanceClassName("float"), h;
 })();
-se.EDouble = (() => {
-  const c = new R();
-  return c.setName("EDouble"), c.setInstanceClassName("double"), c;
+Te.EDouble = (() => {
+  const h = new W();
+  return h.setName("EDouble"), h.setInstanceClassName("double"), h;
 })();
-se.ELong = (() => {
-  const c = new R();
-  return c.setName("ELong"), c.setInstanceClassName("long"), c;
+Te.ELong = (() => {
+  const h = new W();
+  return h.setName("ELong"), h.setInstanceClassName("long"), h;
 })();
-se.EDate = (() => {
-  const c = new R();
-  return c.setName("EDate"), c.setInstanceClassName("java.util.Date"), c;
+Te.EDate = (() => {
+  const h = new W();
+  return h.setName("EDate"), h.setInstanceClassName("java.util.Date"), h;
 })();
-class ds {
+class Gs {
   constructor(e, t) {
-    this.resources = [], this.packageRegistry = e || this.createDefaultPackageRegistry(), this.resourceFactoryRegistry = t || fe.INSTANCE_FACTORY_REGISTRY, this.uriConverter = this.createDefaultURIConverter();
+    this.resources = [], this.packageRegistry = e || this.createDefaultPackageRegistry(), this.resourceFactoryRegistry = t || Pe.INSTANCE_FACTORY_REGISTRY, this.uriConverter = this.createDefaultURIConverter();
   }
   getResources() {
     return this.resources;
   }
   getResource(e, t) {
-    const s = this.resources.find((i) => {
-      const u = i.getURI();
-      return u && u.toString() === e.toString();
+    const s = this.resources.find((u) => {
+      const o = u.getURI();
+      return o && o.toString() === e.toString();
     });
     if (s)
       return s;
@@ -7454,8 +8611,8 @@ class ds {
     if (!t)
       return null;
     const n = this.createResource(e);
-    return n && n.load().catch((i) => {
-      console.error(`Failed to load resource ${e}:`, i);
+    return n && n.load().catch((u) => {
+      console.error(`Failed to load resource ${e}:`, u);
     }), n;
   }
   /**
@@ -7484,7 +8641,7 @@ class ds {
     const s = this.resources.find((n) => "_syntheticPackage" in n ? n._syntheticPackage === e : !1);
     if (s)
       return s;
-    const r = new Rr(t, e);
+    const r = new Qr(t, e);
     return r.setResourceSet(this), this.resources.push(r), r;
   }
   /**
@@ -7492,9 +8649,9 @@ class ds {
    * Uses URIConverter.createInputStream() for loading.
    */
   async getResourceAsync(e, t) {
-    const s = this.resources.find((i) => {
-      const u = i.getURI();
-      return u && u.toString() === e.toString();
+    const s = this.resources.find((u) => {
+      const o = u.getURI();
+      return o && o.toString() === e.toString();
     });
     if (s)
       return s;
@@ -7509,13 +8666,13 @@ class ds {
   createResource(e) {
     const t = this.resourceFactoryRegistry.getFactory(e);
     let s;
-    return t ? s = t.createResource(e) : s = new De(e), "setResourceSet" in s && s.setResourceSet(this), this.resources.push(s), s;
+    return t ? s = t.createResource(e) : s = new it(e), "setResourceSet" in s && s.setResourceSet(this), this.resources.push(s), s;
   }
   getEObject(e, t) {
     const s = e.fragment();
     if (!s)
       return null;
-    const r = T.createURI(e.toString().split("#")[0]), n = this.getResource(r, t);
+    const r = D.createURI(e.toString().split("#")[0]), n = this.getResource(r, t);
     return n ? n.getEObject(s) : null;
   }
   getPackageRegistry() {
@@ -7547,12 +8704,12 @@ class ds {
       const n = this.collectUnresolvedNsURIs();
       if (n.size === 0)
         break;
-      for (const i of n)
+      for (const u of n)
         try {
-          const u = T.createURI(i);
-          (await this.getResourceAsync(u, !0))?.isLoaded() && (t++, s = !0);
-        } catch (u) {
-          console.warn(`[resolveProxiesAsync] Failed to resolve ${i}:`, u);
+          const o = D.createURI(u);
+          (await this.getResourceAsync(o, !0))?.isLoaded() && (t++, s = !0);
+        } catch (o) {
+          console.warn(`[resolveProxiesAsync] Failed to resolve ${u}:`, o);
         }
       r++;
     }
@@ -7580,8 +8737,8 @@ class ds {
           if (!n)
             continue;
           if (r.isMany() && Array.isArray(n))
-            for (const i of n)
-              this.checkProxy(i, t);
+            for (const u of n)
+              this.checkProxy(u, t);
           else typeof n == "object" && "eClass" in n && this.checkProxy(n, t);
         } catch {
         }
@@ -7615,26 +8772,26 @@ class ds {
     return {
       getEPackage(s) {
         const r = e.get(s);
-        return r ? "getEPackage" in r ? r.getEPackage() : r : X.INSTANCE.getEPackage(s);
+        return r ? "getEPackage" in r ? r.getEPackage() : r : oe.INSTANCE.getEPackage(s);
       },
       getEFactory(s) {
         const r = this.getEPackage(s);
         return r ? r.getEFactoryInstance() : null;
       },
       get(s) {
-        return e.get(s) || X.INSTANCE.get(s);
+        return e.get(s) || oe.INSTANCE.get(s);
       },
       set(s, r) {
         e.set(s, r), r && !("getEPackage" in r) && typeof r.getESubpackages == "function" && t(r);
       },
       registerPackage(s) {
-        this.set(xe(s), s);
+        this.set(nt(s), s);
       },
       delete(s) {
         return e.delete(s);
       },
       has(s) {
-        return e.has(s) || X.INSTANCE.has(s);
+        return e.has(s) || oe.INSTANCE.has(s);
       },
       keys() {
         return e.keys();
@@ -7652,10 +8809,10 @@ class ds {
     return {
       normalize(t) {
         for (const [s, r] of e.entries()) {
-          const n = s.toString(), i = t.toString();
-          if (i.startsWith(n)) {
-            const u = i.substring(n.length);
-            return T.createURI(r.toString() + u);
+          const n = s.toString(), u = t.toString();
+          if (u.startsWith(n)) {
+            const o = u.substring(n.length);
+            return D.createURI(r.toString() + o);
           }
         }
         return t;
@@ -7678,11 +8835,11 @@ class ds {
     };
   }
 }
-class Rr {
+class Qr {
   constructor(e, t) {
     this.resourceSet = null, this.uri = e, this._syntheticPackage = t;
-    const s = new Z(null, null);
-    s.add(t), this._contents = V(s);
+    const s = new de(null, null);
+    s.add(t), this._contents = ge(s);
   }
   getResourceSet() {
     return this.resourceSet;
@@ -7708,28 +8865,28 @@ class Rr {
       t = t.substring(1);
     if (!t)
       return this._syntheticPackage;
-    const s = t.split("/"), r = ge(this._syntheticPackage, t);
+    const s = t.split("/"), r = Be(this._syntheticPackage, t);
     if (r)
       return r;
     if (s.length >= 2) {
       let n = this._syntheticPackage;
-      for (let l = 0; l < s.length - 2; l++) {
-        const h = n.getESubpackages();
-        let d = null;
-        for (let p = 0; p < h.length; p++)
-          if (h.get(p).getName() === s[l]) {
-            d = h.get(p);
+      for (let p = 0; p < s.length - 2; p++) {
+        const d = n.getESubpackages();
+        let E = null;
+        for (let T = 0; T < d.length; T++)
+          if (d.get(T).getName() === s[p]) {
+            E = d.get(T);
             break;
           }
-        if (!d)
+        if (!E)
           return null;
-        n = d;
+        n = E;
       }
-      const i = s[s.length - 2], u = n.getEClassifier(i);
-      if (u && "getEStructuralFeature" in u) {
-        const l = u.getEStructuralFeature(s[s.length - 1]);
-        if (l)
-          return l;
+      const u = s[s.length - 2], o = n.getEClassifier(u);
+      if (o && "getEStructuralFeature" in o) {
+        const p = o.getEStructuralFeature(s[s.length - 1]);
+        if (p)
+          return p;
       }
     }
     return null;
@@ -7763,14 +8920,14 @@ class Rr {
     return [];
   }
 }
-class ms extends K {
+class $s extends le {
   constructor() {
     super(...arguments), this.source = null, this._detailsMap = null, this.eModelElement = null, this.contents = [], this.references = [];
   }
   getOrCreateDetailsMap() {
     if (!this._detailsMap) {
-      const t = x.getEAnnotationClass().getEStructuralFeature("details"), s = x.getEStringToStringMapEntryClass();
-      this._detailsMap = Ut(this, t, s);
+      const t = H.getEAnnotationClass().getEStructuralFeature("details"), s = H.getEStringToStringMapEntryClass();
+      this._detailsMap = ls(this, t, s);
     }
     return this._detailsMap;
   }
@@ -7803,7 +8960,7 @@ class ms extends K {
     return null;
   }
   eClass() {
-    return x.getEAnnotationClass();
+    return H.getEAnnotationClass();
   }
   eGet(e) {
     switch (e.getName()) {
@@ -7830,8 +8987,8 @@ class ms extends K {
         if (t instanceof Map) {
           const r = this.getOrCreateDetailsMap();
           r.clear();
-          for (const [n, i] of t)
-            r.putByKey(n, i);
+          for (const [n, u] of t)
+            r.putByKey(n, u);
         }
         super.eSet(e, t);
         break;
@@ -7849,7 +9006,7 @@ class ms extends K {
     }
   }
 }
-class ht extends K {
+class Lt extends le {
   constructor() {
     super(...arguments), this._name = null, this._value = 0, this.instance = null, this.literal = null, this.eEnum = null, this.eAnnotations = [];
   }
@@ -7896,7 +9053,7 @@ class ht extends K {
     return this.eAnnotations.find((t) => t.getSource() === e) || null;
   }
   eClass() {
-    return x.getEEnumLiteralClass();
+    return H.getEEnumLiteralClass();
   }
   eGet(e) {
     switch (e.getName()) {
@@ -7941,7 +9098,7 @@ class ht extends K {
     }
   }
 }
-class Es extends R {
+class Xs extends W {
   constructor() {
     super(...arguments), this.eLiterals = [];
   }
@@ -7967,7 +9124,7 @@ class Es extends R {
     e.setEEnum(this), this.eLiterals.push(e);
   }
   eClass() {
-    return x.getEEnumClass();
+    return H.getEEnumClass();
   }
   eGet(e) {
     switch (e.getName()) {
@@ -7983,7 +9140,7 @@ class Es extends R {
         if (Array.isArray(t)) {
           this.eLiterals = t;
           for (const r of this.eLiterals)
-            r instanceof ht && r.setEEnum(this);
+            r instanceof Lt && r.setEEnum(this);
         }
         super.eSet(e, t);
         break;
@@ -7992,7 +9149,7 @@ class Es extends R {
     }
   }
 }
-class ft extends K {
+class jt extends le {
   constructor() {
     super(...arguments), this.name = null, this.eContainingClass = null, this.eType = null, this.eParameters = [], this.eExceptions = [], this.eAnnotations = [], this.eGenericType = null, this.eTypeParameters = [], this.ordered = !0, this.unique = !0, this.lowerBound = 0, this.upperBound = 1;
   }
@@ -8063,8 +9220,8 @@ class ft extends K {
     if (t.length !== s.length)
       return !1;
     for (let r = 0; r < t.length; r++) {
-      const n = t[r].getEType(), i = s[r].getEType();
-      if (n !== i)
+      const n = t[r].getEType(), u = s[r].getEType();
+      if (n !== u)
         return !1;
     }
     return !this.eContainingClass || !e.getEContainingClass() ? !1 : this.eContainingClass.getEAllSuperTypes().includes(e.getEContainingClass());
@@ -8089,7 +9246,7 @@ class ft extends K {
     return this.eAnnotations.find((t) => t.getSource() === e) || null;
   }
   eClass() {
-    return x.getEOperationClass();
+    return H.getEOperationClass();
   }
   /**
    * Reflective get - binds the declared fields to the reflective API, so the
@@ -8162,9 +9319,9 @@ class ft extends K {
     super.eSet(e, t);
   }
 }
-class Pr {
+class Zr {
   constructor(e, t) {
-    this.op = new ft(), this.op.setName(e), t && this.op.setEType(t);
+    this.op = new jt(), this.op.setName(e), t && this.op.setEType(t);
   }
   parameter(e) {
     return this.op.addParameter(e), this;
@@ -8182,7 +9339,7 @@ class Pr {
     return this.op;
   }
 }
-class ys extends K {
+class qs extends le {
   constructor() {
     super(...arguments), this.name = null, this.eType = null, this.eOperation = null, this.eAnnotations = [], this.eGenericType = null, this.ordered = !0, this.unique = !0, this.lowerBound = 0, this.upperBound = 1;
   }
@@ -8247,7 +9404,7 @@ class ys extends K {
     return this.eAnnotations.find((t) => t.getSource() === e) || null;
   }
   eClass() {
-    return x.getEParameterClass();
+    return H.getEParameterClass();
   }
   /**
    * Reflective get - binds the declared fields to the reflective API, so the
@@ -8305,7 +9462,7 @@ class ys extends K {
     super.eSet(e, t);
   }
 }
-class Cs extends K {
+class Ws extends le {
   constructor() {
     super(...arguments), this.eClassifier = null, this.eTypeParameter = null, this.eTypeArguments = [], this.eUpperBound = null, this.eLowerBound = null;
   }
@@ -8349,10 +9506,10 @@ class Cs extends K {
       if (e.length > 0)
         return e[0].getERawType();
     }
-    return this.eUpperBound ? this.eUpperBound.getERawType() : x.getEObjectClass();
+    return this.eUpperBound ? this.eUpperBound.getERawType() : H.getEObjectClass();
   }
   eClass() {
-    return x.getEGenericTypeClass();
+    return H.getEGenericTypeClass();
   }
   eGet(e) {
     switch (e.getName()) {
@@ -8391,7 +9548,7 @@ class Cs extends K {
     super.eSet(e, t);
   }
 }
-class Ts extends K {
+class Ys extends le {
   constructor() {
     super(...arguments), this.name = null, this.eBounds = [], this.eAnnotations = [];
   }
@@ -8411,7 +9568,7 @@ class Ts extends K {
     return this.eAnnotations.find((t) => t.getSource() === e) || null;
   }
   eClass() {
-    return x.getETypeParameterClass();
+    return H.getETypeParameterClass();
   }
   eGet(e) {
     switch (e.getName()) {
@@ -8440,12 +9597,12 @@ class Ts extends K {
     super.eSet(e, t);
   }
 }
-const Ns = "ecore.xml.type";
-let Ce = null;
-function Ss() {
-  return Ce || (Ce = new _s(), Ce.initialize(), X.INSTANCE.set(gt, Ce)), Ce;
+const zs = "ecore.xml.type";
+let Ge = null;
+function Ks() {
+  return Ge || (Ge = new Hs(), Ge.initialize(), oe.INSTANCE.set(Gt, Ge)), Ge;
 }
-const vr = [
+const en = [
   // Commonly used
   ["AnySimpleType", "java.lang.Object"],
   ["AnyURI", "java.lang.String"],
@@ -8506,48 +9663,48 @@ const vr = [
   ["UnsignedShort", "int"],
   ["UnsignedShortObject", "java.lang.Integer"]
 ];
-class _s extends H {
+class Hs extends fe {
   constructor() {
-    super(), this._dataTypes = /* @__PURE__ */ new Map(), this._initialized = !1, this.setName("type"), this.setNsURI(gt), this.setNsPrefix(Ns);
+    super(), this._dataTypes = /* @__PURE__ */ new Map(), this._initialized = !1, this.setName("type"), this.setNsURI(Gt), this.setNsPrefix(zs);
   }
   initialize() {
     if (this._initialized)
       return;
     this._initialized = !0;
-    for (const [t, s] of vr) {
-      const r = new R();
+    for (const [t, s] of en) {
+      const r = new W();
       r.setName(t), r.setInstanceClassName(s), this.getEClassifiers().push(r), this._dataTypes.set(t, r);
     }
     for (const t of this.getEClassifiers())
       "setEPackage" in t && t.setEPackage(this);
-    const e = new xr(this);
+    const e = new tn(this);
     this.setEFactoryInstance(e), this.registerConverters();
   }
   registerConverters() {
-    const e = { fromString: (u) => u.toLowerCase() === "true" || u === "1", toString: (u) => String(u) };
-    y.registerByName("Boolean", e), y.registerByName("BooleanObject", e);
-    const t = { fromString: (u) => parseInt(u, 10), toString: (u) => String(u) };
-    y.registerByName("Int", t), y.registerByName("IntObject", t), y.registerByName("Short", t), y.registerByName("ShortObject", t), y.registerByName("Byte", t), y.registerByName("ByteObject", t), y.registerByName("UnsignedByte", t), y.registerByName("UnsignedByteObject", t), y.registerByName("UnsignedShort", t), y.registerByName("UnsignedShortObject", t), y.registerByName("UnsignedInt", t), y.registerByName("UnsignedIntObject", t);
+    const e = { fromString: (o) => o.toLowerCase() === "true" || o === "1", toString: (o) => String(o) };
+    P.registerByName("Boolean", e), P.registerByName("BooleanObject", e);
+    const t = { fromString: (o) => parseInt(o, 10), toString: (o) => String(o) };
+    P.registerByName("Int", t), P.registerByName("IntObject", t), P.registerByName("Short", t), P.registerByName("ShortObject", t), P.registerByName("Byte", t), P.registerByName("ByteObject", t), P.registerByName("UnsignedByte", t), P.registerByName("UnsignedByteObject", t), P.registerByName("UnsignedShort", t), P.registerByName("UnsignedShortObject", t), P.registerByName("UnsignedInt", t), P.registerByName("UnsignedIntObject", t);
     const s = {
-      fromString: (u) => {
-        const l = parseInt(u, 10);
-        return Math.abs(l) > Number.MAX_SAFE_INTEGER ? BigInt(u) : l;
+      fromString: (o) => {
+        const p = parseInt(o, 10);
+        return Math.abs(p) > Number.MAX_SAFE_INTEGER ? BigInt(o) : p;
       },
-      toString: (u) => String(u)
+      toString: (o) => String(o)
     };
-    y.registerByName("Long", s), y.registerByName("LongObject", s);
-    const r = { fromString: (u) => parseFloat(u), toString: (u) => String(u) };
-    y.registerByName("Float", r), y.registerByName("FloatObject", r), y.registerByName("Double", r), y.registerByName("DoubleObject", r);
-    const n = { fromString: (u) => u, toString: (u) => u ?? "0" };
-    y.registerByName("Decimal", n), y.registerByName("Integer", n), y.registerByName("NonNegativeInteger", n), y.registerByName("NonPositiveInteger", n), y.registerByName("NegativeInteger", n), y.registerByName("PositiveInteger", n), y.registerByName("UnsignedLong", n);
-    const i = { fromString: (u) => u, toString: (u) => u ?? "" };
-    y.registerByName("String", i), y.registerByName("AnySimpleType", i), y.registerByName("AnyURI", i), y.registerByName("NormalizedString", i), y.registerByName("Token", i), y.registerByName("Name", i), y.registerByName("NCName", i), y.registerByName("Language", i), y.registerByName("ID", i), y.registerByName("IDREF", i), y.registerByName("ENTITY", i), y.registerByName("NMTOKEN", i), y.registerByName("Date", i), y.registerByName("DateTime", i), y.registerByName("Time", i), y.registerByName("Duration", i), y.registerByName("GDay", i), y.registerByName("GMonth", i), y.registerByName("GMonthDay", i), y.registerByName("GYear", i), y.registerByName("GYearMonth", i), y.registerByName("QName", i), y.registerByName("NOTATION", i);
+    P.registerByName("Long", s), P.registerByName("LongObject", s);
+    const r = { fromString: (o) => parseFloat(o), toString: (o) => String(o) };
+    P.registerByName("Float", r), P.registerByName("FloatObject", r), P.registerByName("Double", r), P.registerByName("DoubleObject", r);
+    const n = { fromString: (o) => o, toString: (o) => o ?? "0" };
+    P.registerByName("Decimal", n), P.registerByName("Integer", n), P.registerByName("NonNegativeInteger", n), P.registerByName("NonPositiveInteger", n), P.registerByName("NegativeInteger", n), P.registerByName("PositiveInteger", n), P.registerByName("UnsignedLong", n);
+    const u = { fromString: (o) => o, toString: (o) => o ?? "" };
+    P.registerByName("String", u), P.registerByName("AnySimpleType", u), P.registerByName("AnyURI", u), P.registerByName("NormalizedString", u), P.registerByName("Token", u), P.registerByName("Name", u), P.registerByName("NCName", u), P.registerByName("Language", u), P.registerByName("ID", u), P.registerByName("IDREF", u), P.registerByName("ENTITY", u), P.registerByName("NMTOKEN", u), P.registerByName("Date", u), P.registerByName("DateTime", u), P.registerByName("Time", u), P.registerByName("Duration", u), P.registerByName("GDay", u), P.registerByName("GMonth", u), P.registerByName("GMonthDay", u), P.registerByName("GYear", u), P.registerByName("GYearMonth", u), P.registerByName("QName", u), P.registerByName("NOTATION", u);
   }
   getDataType(e) {
     return this._dataTypes.get(e) ?? null;
   }
 }
-class xr extends ke {
+class tn extends ot {
   constructor(e) {
     super(), this._ePackage = e;
   }
@@ -8558,17 +9715,17 @@ class xr extends ke {
     return super.create(e);
   }
 }
-const Oe = "http://www.eclipse.org/emf/2002/Ecore", As = "ecore", gt = "http://www.eclipse.org/emf/2003/XMLType";
-let le = null;
-function we() {
-  return le || (le = new bs(), le.initialize(), Is(), x.register(we)), le;
+const ut = "http://www.eclipse.org/emf/2002/Ecore", Vs = "ecore", Gt = "http://www.eclipse.org/emf/2003/XMLType";
+let we = null;
+function ct() {
+  return we || (we = new Qs(), we.initialize(), Js(), H.register(ct)), we;
 }
-function Is() {
-  le && (X.INSTANCE.set(Oe, le), Ss());
+function Js() {
+  we && (oe.INSTANCE.set(ut, we), Ks());
 }
-class bs extends H {
+class Qs extends fe {
   constructor() {
-    super(), this._initialized = !1, this.setName("ecore"), this.setNsURI(Oe), this.setNsPrefix(As);
+    super(), this._initialized = !1, this.setName("ecore"), this.setNsURI(ut), this.setNsPrefix(Vs);
   }
   /**
    * Initialize the package (called once)
@@ -8577,7 +9734,7 @@ class bs extends H {
     if (this._initialized)
       return;
     this._initialized = !0, this.createDataTypes(), this.createClasses(), this.createAttributes(), this.createReferences(), this.initializeClassifierPackages();
-    const e = new Rs(this);
+    const e = new Zs(this);
     this.setEFactoryInstance(e);
   }
   /**
@@ -8588,108 +9745,108 @@ class bs extends H {
       "setEPackage" in e && e.setEPackage(this);
   }
   createDataTypes() {
-    this._eBooleanDataType = new R(), this._eBooleanDataType.setName("EBoolean"), this._eBooleanDataType.setInstanceClassName("boolean"), this.getEClassifiers().push(this._eBooleanDataType), this._eIntDataType = new R(), this._eIntDataType.setName("EInt"), this._eIntDataType.setInstanceClassName("int"), this.getEClassifiers().push(this._eIntDataType), this._eStringDataType = new R(), this._eStringDataType.setName("EString"), this._eStringDataType.setInstanceClassName("java.lang.String"), this.getEClassifiers().push(this._eStringDataType), this._eDoubleDataType = new R(), this._eDoubleDataType.setName("EDouble"), this._eDoubleDataType.setInstanceClassName("double"), this.getEClassifiers().push(this._eDoubleDataType), this._eFloatDataType = new R(), this._eFloatDataType.setName("EFloat"), this._eFloatDataType.setInstanceClassName("float"), this.getEClassifiers().push(this._eFloatDataType), this._eLongDataType = new R(), this._eLongDataType.setName("ELong"), this._eLongDataType.setInstanceClassName("long"), this.getEClassifiers().push(this._eLongDataType), this._eShortDataType = new R(), this._eShortDataType.setName("EShort"), this._eShortDataType.setInstanceClassName("short"), this.getEClassifiers().push(this._eShortDataType), this._eByteDataType = new R(), this._eByteDataType.setName("EByte"), this._eByteDataType.setInstanceClassName("byte"), this.getEClassifiers().push(this._eByteDataType), this._eCharDataType = new R(), this._eCharDataType.setName("EChar"), this._eCharDataType.setInstanceClassName("char"), this.getEClassifiers().push(this._eCharDataType), this._eDateDataType = new R(), this._eDateDataType.setName("EDate"), this._eDateDataType.setInstanceClassName("java.util.Date"), this.getEClassifiers().push(this._eDateDataType), this._eBigIntegerDataType = new R(), this._eBigIntegerDataType.setName("EBigInteger"), this._eBigIntegerDataType.setInstanceClassName("java.math.BigInteger"), this.getEClassifiers().push(this._eBigIntegerDataType), this._eBigDecimalDataType = new R(), this._eBigDecimalDataType.setName("EBigDecimal"), this._eBigDecimalDataType.setInstanceClassName("java.math.BigDecimal"), this.getEClassifiers().push(this._eBigDecimalDataType), this._eFeatureMapEntryDataType = new R(), this._eFeatureMapEntryDataType.setName("EFeatureMapEntry"), this._eFeatureMapEntryDataType.setInstanceClassName("org.eclipse.emf.ecore.util.FeatureMap.Entry"), this.getEClassifiers().push(this._eFeatureMapEntryDataType), this._eJavaObjectDataType = new R(), this._eJavaObjectDataType.setName("EJavaObject"), this._eJavaObjectDataType.setInstanceClassName("java.lang.Object"), this.getEClassifiers().push(this._eJavaObjectDataType), this._eJavaClassDataType = new R(), this._eJavaClassDataType.setName("EJavaClass"), this._eJavaClassDataType.setInstanceClassName("java.lang.Class"), this.getEClassifiers().push(this._eJavaClassDataType);
+    this._eBooleanDataType = new W(), this._eBooleanDataType.setName("EBoolean"), this._eBooleanDataType.setInstanceClassName("boolean"), this.getEClassifiers().push(this._eBooleanDataType), this._eIntDataType = new W(), this._eIntDataType.setName("EInt"), this._eIntDataType.setInstanceClassName("int"), this.getEClassifiers().push(this._eIntDataType), this._eStringDataType = new W(), this._eStringDataType.setName("EString"), this._eStringDataType.setInstanceClassName("java.lang.String"), this.getEClassifiers().push(this._eStringDataType), this._eDoubleDataType = new W(), this._eDoubleDataType.setName("EDouble"), this._eDoubleDataType.setInstanceClassName("double"), this.getEClassifiers().push(this._eDoubleDataType), this._eFloatDataType = new W(), this._eFloatDataType.setName("EFloat"), this._eFloatDataType.setInstanceClassName("float"), this.getEClassifiers().push(this._eFloatDataType), this._eLongDataType = new W(), this._eLongDataType.setName("ELong"), this._eLongDataType.setInstanceClassName("long"), this.getEClassifiers().push(this._eLongDataType), this._eShortDataType = new W(), this._eShortDataType.setName("EShort"), this._eShortDataType.setInstanceClassName("short"), this.getEClassifiers().push(this._eShortDataType), this._eByteDataType = new W(), this._eByteDataType.setName("EByte"), this._eByteDataType.setInstanceClassName("byte"), this.getEClassifiers().push(this._eByteDataType), this._eCharDataType = new W(), this._eCharDataType.setName("EChar"), this._eCharDataType.setInstanceClassName("char"), this.getEClassifiers().push(this._eCharDataType), this._eDateDataType = new W(), this._eDateDataType.setName("EDate"), this._eDateDataType.setInstanceClassName("java.util.Date"), this.getEClassifiers().push(this._eDateDataType), this._eBigIntegerDataType = new W(), this._eBigIntegerDataType.setName("EBigInteger"), this._eBigIntegerDataType.setInstanceClassName("java.math.BigInteger"), this.getEClassifiers().push(this._eBigIntegerDataType), this._eBigDecimalDataType = new W(), this._eBigDecimalDataType.setName("EBigDecimal"), this._eBigDecimalDataType.setInstanceClassName("java.math.BigDecimal"), this.getEClassifiers().push(this._eBigDecimalDataType), this._eFeatureMapEntryDataType = new W(), this._eFeatureMapEntryDataType.setName("EFeatureMapEntry"), this._eFeatureMapEntryDataType.setInstanceClassName("org.eclipse.emf.ecore.util.FeatureMap.Entry"), this.getEClassifiers().push(this._eFeatureMapEntryDataType), this._eJavaObjectDataType = new W(), this._eJavaObjectDataType.setName("EJavaObject"), this._eJavaObjectDataType.setInstanceClassName("java.lang.Object"), this.getEClassifiers().push(this._eJavaObjectDataType), this._eJavaClassDataType = new W(), this._eJavaClassDataType.setName("EJavaClass"), this._eJavaClassDataType.setInstanceClassName("java.lang.Class"), this.getEClassifiers().push(this._eJavaClassDataType);
   }
   createClasses() {
-    this._eObjectClass = new b(), this._eObjectClass.setName("EObject"), this.getEClassifiers().push(this._eObjectClass), this._eModelElementClass = new b(), this._eModelElementClass.setName("EModelElement"), this._eModelElementClass.setAbstract(!0), this._eModelElementClass.getESuperTypes().push(this._eObjectClass), this.getEClassifiers().push(this._eModelElementClass), this._eNamedElementClass = new b(), this._eNamedElementClass.setName("ENamedElement"), this._eNamedElementClass.setAbstract(!0), this._eNamedElementClass.getESuperTypes().push(this._eModelElementClass), this.getEClassifiers().push(this._eNamedElementClass), this._eTypedElementClass = new b(), this._eTypedElementClass.setName("ETypedElement"), this._eTypedElementClass.setAbstract(!0), this._eTypedElementClass.getESuperTypes().push(this._eNamedElementClass), this.getEClassifiers().push(this._eTypedElementClass), this._eClassifierClass = new b(), this._eClassifierClass.setName("EClassifier"), this._eClassifierClass.setAbstract(!0), this._eClassifierClass.getESuperTypes().push(this._eNamedElementClass), this.getEClassifiers().push(this._eClassifierClass), this._eClassClass = new b(), this._eClassClass.setName("EClass"), this._eClassClass.getESuperTypes().push(this._eClassifierClass), this.getEClassifiers().push(this._eClassClass), this._eDataTypeClass = new b(), this._eDataTypeClass.setName("EDataType"), this._eDataTypeClass.getESuperTypes().push(this._eClassifierClass), this.getEClassifiers().push(this._eDataTypeClass), this._eEnumClass = new b(), this._eEnumClass.setName("EEnum"), this._eEnumClass.getESuperTypes().push(this._eDataTypeClass), this.getEClassifiers().push(this._eEnumClass), this._eEnumLiteralClass = new b(), this._eEnumLiteralClass.setName("EEnumLiteral"), this._eEnumLiteralClass.getESuperTypes().push(this._eNamedElementClass), this.getEClassifiers().push(this._eEnumLiteralClass), this._ePackageClass = new b(), this._ePackageClass.setName("EPackage"), this._ePackageClass.getESuperTypes().push(this._eNamedElementClass), this.getEClassifiers().push(this._ePackageClass), this._eFactoryClass = new b(), this._eFactoryClass.setName("EFactory"), this._eFactoryClass.getESuperTypes().push(this._eModelElementClass), this.getEClassifiers().push(this._eFactoryClass), this._eStructuralFeatureClass = new b(), this._eStructuralFeatureClass.setName("EStructuralFeature"), this._eStructuralFeatureClass.setAbstract(!0), this._eStructuralFeatureClass.getESuperTypes().push(this._eTypedElementClass), this.getEClassifiers().push(this._eStructuralFeatureClass), this._eAttributeClass = new b(), this._eAttributeClass.setName("EAttribute"), this._eAttributeClass.getESuperTypes().push(this._eStructuralFeatureClass), this.getEClassifiers().push(this._eAttributeClass), this._eReferenceClass = new b(), this._eReferenceClass.setName("EReference"), this._eReferenceClass.getESuperTypes().push(this._eStructuralFeatureClass), this.getEClassifiers().push(this._eReferenceClass), this._eOperationClass = new b(), this._eOperationClass.setName("EOperation"), this._eOperationClass.getESuperTypes().push(this._eTypedElementClass), this.getEClassifiers().push(this._eOperationClass), this._eParameterClass = new b(), this._eParameterClass.setName("EParameter"), this._eParameterClass.getESuperTypes().push(this._eTypedElementClass), this.getEClassifiers().push(this._eParameterClass), this._eAnnotationClass = new b(), this._eAnnotationClass.setName("EAnnotation"), this._eAnnotationClass.getESuperTypes().push(this._eModelElementClass), this.getEClassifiers().push(this._eAnnotationClass), this._eTypeParameterClass = new b(), this._eTypeParameterClass.setName("ETypeParameter"), this._eTypeParameterClass.getESuperTypes().push(this._eNamedElementClass), this.getEClassifiers().push(this._eTypeParameterClass), this._eGenericTypeClass = new b(), this._eGenericTypeClass.setName("EGenericType"), this._eGenericTypeClass.getESuperTypes().push(this._eObjectClass), this.getEClassifiers().push(this._eGenericTypeClass), this._eStringToStringMapEntryClass = new b(), this._eStringToStringMapEntryClass.setName("EStringToStringMapEntry"), this._eStringToStringMapEntryClass.getESuperTypes().push(this._eObjectClass), this.getEClassifiers().push(this._eStringToStringMapEntryClass);
+    this._eObjectClass = new q(), this._eObjectClass.setName("EObject"), this.getEClassifiers().push(this._eObjectClass), this._eModelElementClass = new q(), this._eModelElementClass.setName("EModelElement"), this._eModelElementClass.setAbstract(!0), this._eModelElementClass.getESuperTypes().push(this._eObjectClass), this.getEClassifiers().push(this._eModelElementClass), this._eNamedElementClass = new q(), this._eNamedElementClass.setName("ENamedElement"), this._eNamedElementClass.setAbstract(!0), this._eNamedElementClass.getESuperTypes().push(this._eModelElementClass), this.getEClassifiers().push(this._eNamedElementClass), this._eTypedElementClass = new q(), this._eTypedElementClass.setName("ETypedElement"), this._eTypedElementClass.setAbstract(!0), this._eTypedElementClass.getESuperTypes().push(this._eNamedElementClass), this.getEClassifiers().push(this._eTypedElementClass), this._eClassifierClass = new q(), this._eClassifierClass.setName("EClassifier"), this._eClassifierClass.setAbstract(!0), this._eClassifierClass.getESuperTypes().push(this._eNamedElementClass), this.getEClassifiers().push(this._eClassifierClass), this._eClassClass = new q(), this._eClassClass.setName("EClass"), this._eClassClass.getESuperTypes().push(this._eClassifierClass), this.getEClassifiers().push(this._eClassClass), this._eDataTypeClass = new q(), this._eDataTypeClass.setName("EDataType"), this._eDataTypeClass.getESuperTypes().push(this._eClassifierClass), this.getEClassifiers().push(this._eDataTypeClass), this._eEnumClass = new q(), this._eEnumClass.setName("EEnum"), this._eEnumClass.getESuperTypes().push(this._eDataTypeClass), this.getEClassifiers().push(this._eEnumClass), this._eEnumLiteralClass = new q(), this._eEnumLiteralClass.setName("EEnumLiteral"), this._eEnumLiteralClass.getESuperTypes().push(this._eNamedElementClass), this.getEClassifiers().push(this._eEnumLiteralClass), this._ePackageClass = new q(), this._ePackageClass.setName("EPackage"), this._ePackageClass.getESuperTypes().push(this._eNamedElementClass), this.getEClassifiers().push(this._ePackageClass), this._eFactoryClass = new q(), this._eFactoryClass.setName("EFactory"), this._eFactoryClass.getESuperTypes().push(this._eModelElementClass), this.getEClassifiers().push(this._eFactoryClass), this._eStructuralFeatureClass = new q(), this._eStructuralFeatureClass.setName("EStructuralFeature"), this._eStructuralFeatureClass.setAbstract(!0), this._eStructuralFeatureClass.getESuperTypes().push(this._eTypedElementClass), this.getEClassifiers().push(this._eStructuralFeatureClass), this._eAttributeClass = new q(), this._eAttributeClass.setName("EAttribute"), this._eAttributeClass.getESuperTypes().push(this._eStructuralFeatureClass), this.getEClassifiers().push(this._eAttributeClass), this._eReferenceClass = new q(), this._eReferenceClass.setName("EReference"), this._eReferenceClass.getESuperTypes().push(this._eStructuralFeatureClass), this.getEClassifiers().push(this._eReferenceClass), this._eOperationClass = new q(), this._eOperationClass.setName("EOperation"), this._eOperationClass.getESuperTypes().push(this._eTypedElementClass), this.getEClassifiers().push(this._eOperationClass), this._eParameterClass = new q(), this._eParameterClass.setName("EParameter"), this._eParameterClass.getESuperTypes().push(this._eTypedElementClass), this.getEClassifiers().push(this._eParameterClass), this._eAnnotationClass = new q(), this._eAnnotationClass.setName("EAnnotation"), this._eAnnotationClass.getESuperTypes().push(this._eModelElementClass), this.getEClassifiers().push(this._eAnnotationClass), this._eTypeParameterClass = new q(), this._eTypeParameterClass.setName("ETypeParameter"), this._eTypeParameterClass.getESuperTypes().push(this._eNamedElementClass), this.getEClassifiers().push(this._eTypeParameterClass), this._eGenericTypeClass = new q(), this._eGenericTypeClass.setName("EGenericType"), this._eGenericTypeClass.getESuperTypes().push(this._eObjectClass), this.getEClassifiers().push(this._eGenericTypeClass), this._eStringToStringMapEntryClass = new q(), this._eStringToStringMapEntryClass.setName("EStringToStringMapEntry"), this._eStringToStringMapEntryClass.getESuperTypes().push(this._eObjectClass), this.getEClassifiers().push(this._eStringToStringMapEntryClass);
   }
   createAttributes() {
-    const e = new I();
+    const e = new j();
     e.setName("name"), e.setEType(this._eStringDataType), this._eNamedElementClass.getEStructuralFeatures().push(e);
-    const t = new I();
+    const t = new j();
     t.setName("ordered"), t.setEType(this._eBooleanDataType), t.setDefaultValueLiteral("true"), this._eTypedElementClass.getEStructuralFeatures().push(t);
-    const s = new I();
+    const s = new j();
     s.setName("unique"), s.setEType(this._eBooleanDataType), s.setDefaultValueLiteral("true"), this._eTypedElementClass.getEStructuralFeatures().push(s);
-    const r = new I();
+    const r = new j();
     r.setName("lowerBound"), r.setEType(this._eIntDataType), r.setDefaultValueLiteral("0"), this._eTypedElementClass.getEStructuralFeatures().push(r);
-    const n = new I();
+    const n = new j();
     n.setName("upperBound"), n.setEType(this._eIntDataType), n.setDefaultValueLiteral("1"), this._eTypedElementClass.getEStructuralFeatures().push(n);
-    const i = new I();
-    i.setName("instanceClassName"), i.setEType(this._eStringDataType), this._eClassifierClass.getEStructuralFeatures().push(i);
-    const u = new I();
-    u.setName("abstract"), u.setEType(this._eBooleanDataType), u.setDefaultValueLiteral("false"), this._eClassClass.getEStructuralFeatures().push(u);
-    const l = new I();
-    l.setName("interface"), l.setEType(this._eBooleanDataType), l.setDefaultValueLiteral("false"), this._eClassClass.getEStructuralFeatures().push(l);
-    const h = new I();
-    h.setName("nsURI"), h.setEType(this._eStringDataType), this._ePackageClass.getEStructuralFeatures().push(h);
-    const d = new I();
-    d.setName("nsPrefix"), d.setEType(this._eStringDataType), this._ePackageClass.getEStructuralFeatures().push(d);
-    const p = new I();
-    p.setName("changeable"), p.setEType(this._eBooleanDataType), p.setDefaultValueLiteral("true"), this._eStructuralFeatureClass.getEStructuralFeatures().push(p);
-    const E = new I();
-    E.setName("volatile"), E.setEType(this._eBooleanDataType), E.setDefaultValueLiteral("false"), this._eStructuralFeatureClass.getEStructuralFeatures().push(E);
-    const C = new I();
-    C.setName("transient"), C.setEType(this._eBooleanDataType), C.setDefaultValueLiteral("false"), this._eStructuralFeatureClass.getEStructuralFeatures().push(C);
-    const S = new I();
-    S.setName("defaultValueLiteral"), S.setEType(this._eStringDataType), this._eStructuralFeatureClass.getEStructuralFeatures().push(S);
-    const D = new I();
-    D.setName("unsettable"), D.setEType(this._eBooleanDataType), D.setDefaultValueLiteral("false"), this._eStructuralFeatureClass.getEStructuralFeatures().push(D);
-    const U = new I();
-    U.setName("derived"), U.setEType(this._eBooleanDataType), U.setDefaultValueLiteral("false"), this._eStructuralFeatureClass.getEStructuralFeatures().push(U);
-    const O = new I();
-    O.setName("iD"), O.setEType(this._eBooleanDataType), O.setDefaultValueLiteral("false"), this._eAttributeClass.getEStructuralFeatures().push(O);
-    const q = new I();
-    q.setName("containment"), q.setEType(this._eBooleanDataType), q.setDefaultValueLiteral("false"), this._eReferenceClass.getEStructuralFeatures().push(q);
-    const Q = new I();
-    Q.setName("resolveProxies"), Q.setEType(this._eBooleanDataType), Q.setDefaultValueLiteral("true"), this._eReferenceClass.getEStructuralFeatures().push(Q);
-    const Y = new I();
-    Y.setName("value"), Y.setEType(this._eIntDataType), Y.setDefaultValueLiteral("0"), this._eEnumLiteralClass.getEStructuralFeatures().push(Y);
-    const v = new I();
-    v.setName("literal"), v.setEType(this._eStringDataType), this._eEnumLiteralClass.getEStructuralFeatures().push(v);
-    const W = new I();
-    W.setName("source"), W.setEType(this._eStringDataType), this._eAnnotationClass.getEStructuralFeatures().push(W);
-    const me = new I();
-    me.setName("key"), me.setEType(this._eStringDataType), this._eStringToStringMapEntryClass.getEStructuralFeatures().push(me);
-    const z = new I();
-    z.setName("value"), z.setEType(this._eStringDataType), this._eStringToStringMapEntryClass.getEStructuralFeatures().push(z);
-    const ue = new I();
-    ue.setName("serializable"), ue.setEType(this._eBooleanDataType), ue.setDefaultValueLiteral("true"), this._eDataTypeClass.getEStructuralFeatures().push(ue);
+    const u = new j();
+    u.setName("instanceClassName"), u.setEType(this._eStringDataType), this._eClassifierClass.getEStructuralFeatures().push(u);
+    const o = new j();
+    o.setName("abstract"), o.setEType(this._eBooleanDataType), o.setDefaultValueLiteral("false"), this._eClassClass.getEStructuralFeatures().push(o);
+    const p = new j();
+    p.setName("interface"), p.setEType(this._eBooleanDataType), p.setDefaultValueLiteral("false"), this._eClassClass.getEStructuralFeatures().push(p);
+    const d = new j();
+    d.setName("nsURI"), d.setEType(this._eStringDataType), this._ePackageClass.getEStructuralFeatures().push(d);
+    const E = new j();
+    E.setName("nsPrefix"), E.setEType(this._eStringDataType), this._ePackageClass.getEStructuralFeatures().push(E);
+    const T = new j();
+    T.setName("changeable"), T.setEType(this._eBooleanDataType), T.setDefaultValueLiteral("true"), this._eStructuralFeatureClass.getEStructuralFeatures().push(T);
+    const R = new j();
+    R.setName("volatile"), R.setEType(this._eBooleanDataType), R.setDefaultValueLiteral("false"), this._eStructuralFeatureClass.getEStructuralFeatures().push(R);
+    const _ = new j();
+    _.setName("transient"), _.setEType(this._eBooleanDataType), _.setDefaultValueLiteral("false"), this._eStructuralFeatureClass.getEStructuralFeatures().push(_);
+    const b = new j();
+    b.setName("defaultValueLiteral"), b.setEType(this._eStringDataType), this._eStructuralFeatureClass.getEStructuralFeatures().push(b);
+    const B = new j();
+    B.setName("unsettable"), B.setEType(this._eBooleanDataType), B.setDefaultValueLiteral("false"), this._eStructuralFeatureClass.getEStructuralFeatures().push(B);
+    const O = new j();
+    O.setName("derived"), O.setEType(this._eBooleanDataType), O.setDefaultValueLiteral("false"), this._eStructuralFeatureClass.getEStructuralFeatures().push(O);
+    const S = new j();
+    S.setName("iD"), S.setEType(this._eBooleanDataType), S.setDefaultValueLiteral("false"), this._eAttributeClass.getEStructuralFeatures().push(S);
+    const x = new j();
+    x.setName("containment"), x.setEType(this._eBooleanDataType), x.setDefaultValueLiteral("false"), this._eReferenceClass.getEStructuralFeatures().push(x);
+    const w = new j();
+    w.setName("resolveProxies"), w.setEType(this._eBooleanDataType), w.setDefaultValueLiteral("true"), this._eReferenceClass.getEStructuralFeatures().push(w);
+    const k = new j();
+    k.setName("value"), k.setEType(this._eIntDataType), k.setDefaultValueLiteral("0"), this._eEnumLiteralClass.getEStructuralFeatures().push(k);
+    const F = new j();
+    F.setName("literal"), F.setEType(this._eStringDataType), this._eEnumLiteralClass.getEStructuralFeatures().push(F);
+    const ue = new j();
+    ue.setName("source"), ue.setEType(this._eStringDataType), this._eAnnotationClass.getEStructuralFeatures().push(ue);
+    const re = new j();
+    re.setName("key"), re.setEType(this._eStringDataType), this._eStringToStringMapEntryClass.getEStructuralFeatures().push(re);
+    const Ne = new j();
+    Ne.setName("value"), Ne.setEType(this._eStringDataType), this._eStringToStringMapEntryClass.getEStructuralFeatures().push(Ne);
+    const C = new j();
+    C.setName("serializable"), C.setEType(this._eBooleanDataType), C.setDefaultValueLiteral("true"), this._eDataTypeClass.getEStructuralFeatures().push(C);
   }
   createReferences() {
-    const e = new P();
+    const e = new Y();
     e.setName("eAnnotations"), e.setEType(this._eAnnotationClass), e.setContainment(!0), e.setUpperBound(-1), this._eModelElementClass.getEStructuralFeatures().push(e);
-    const t = new P();
+    const t = new Y();
     t.setName("eType"), t.setEType(this._eClassifierClass), this._eTypedElementClass.getEStructuralFeatures().push(t);
-    const s = new P();
+    const s = new Y();
     s.setName("eSuperTypes"), s.setEType(this._eClassClass), s.setUpperBound(-1), this._eClassClass.getEStructuralFeatures().push(s);
-    const r = new P();
+    const r = new Y();
     r.setName("eStructuralFeatures"), r.setEType(this._eStructuralFeatureClass), r.setContainment(!0), r.setUpperBound(-1), this._eClassClass.getEStructuralFeatures().push(r);
-    const n = new P();
+    const n = new Y();
     n.setName("eOperations"), n.setEType(this._eOperationClass), n.setContainment(!0), n.setUpperBound(-1), this._eClassClass.getEStructuralFeatures().push(n);
-    const i = new P();
-    i.setName("eClassifiers"), i.setEType(this._eClassifierClass), i.setContainment(!0), i.setUpperBound(-1), this._ePackageClass.getEStructuralFeatures().push(i);
-    const u = new P();
-    u.setName("eSubpackages"), u.setEType(this._ePackageClass), u.setContainment(!0), u.setUpperBound(-1), this._ePackageClass.getEStructuralFeatures().push(u);
-    const l = new P();
-    l.setName("eFactoryInstance"), l.setEType(this._eFactoryClass), this._ePackageClass.getEStructuralFeatures().push(l);
-    const h = new P();
-    h.setName("eLiterals"), h.setEType(this._eEnumLiteralClass), h.setContainment(!0), h.setUpperBound(-1), this._eEnumClass.getEStructuralFeatures().push(h);
-    const d = new P();
-    d.setName("eOpposite"), d.setEType(this._eReferenceClass), this._eReferenceClass.getEStructuralFeatures().push(d);
-    const p = new P();
-    p.setName("eParameters"), p.setEType(this._eParameterClass), p.setContainment(!0), p.setUpperBound(-1), this._eOperationClass.getEStructuralFeatures().push(p);
-    const E = new P();
-    E.setName("details"), E.setEType(this._eStringToStringMapEntryClass), E.setContainment(!0), E.setUpperBound(-1), this._eAnnotationClass.getEStructuralFeatures().push(E);
-    const C = new P();
-    C.setName("eGenericType"), C.setEType(this._eGenericTypeClass), C.setContainment(!0), this._eTypedElementClass.getEStructuralFeatures().push(C);
-    const S = new P();
-    S.setName("eTypeParameters"), S.setEType(this._eTypeParameterClass), S.setContainment(!0), S.setUpperBound(-1), this._eClassifierClass.getEStructuralFeatures().push(S);
-    const D = new P();
-    D.setName("eGenericSuperTypes"), D.setEType(this._eGenericTypeClass), D.setContainment(!0), D.setUpperBound(-1), this._eClassClass.getEStructuralFeatures().push(D);
-    const U = new P();
-    U.setName("eTypeParameters"), U.setEType(this._eTypeParameterClass), U.setContainment(!0), U.setUpperBound(-1), this._eOperationClass.getEStructuralFeatures().push(U);
-    const O = new P();
-    O.setName("eBounds"), O.setEType(this._eGenericTypeClass), O.setContainment(!0), O.setUpperBound(-1), this._eTypeParameterClass.getEStructuralFeatures().push(O);
-    const q = new P();
-    q.setName("eClassifier"), q.setEType(this._eClassifierClass), this._eGenericTypeClass.getEStructuralFeatures().push(q);
-    const Q = new P();
-    Q.setName("eTypeParameter"), Q.setEType(this._eTypeParameterClass), this._eGenericTypeClass.getEStructuralFeatures().push(Q);
-    const Y = new P();
-    Y.setName("eTypeArguments"), Y.setEType(this._eGenericTypeClass), Y.setContainment(!0), Y.setUpperBound(-1), this._eGenericTypeClass.getEStructuralFeatures().push(Y);
-    const v = new P();
-    v.setName("eUpperBound"), v.setEType(this._eGenericTypeClass), v.setContainment(!0), this._eGenericTypeClass.getEStructuralFeatures().push(v);
-    const W = new P();
-    W.setName("eLowerBound"), W.setEType(this._eGenericTypeClass), W.setContainment(!0), this._eGenericTypeClass.getEStructuralFeatures().push(W);
+    const u = new Y();
+    u.setName("eClassifiers"), u.setEType(this._eClassifierClass), u.setContainment(!0), u.setUpperBound(-1), this._ePackageClass.getEStructuralFeatures().push(u);
+    const o = new Y();
+    o.setName("eSubpackages"), o.setEType(this._ePackageClass), o.setContainment(!0), o.setUpperBound(-1), this._ePackageClass.getEStructuralFeatures().push(o);
+    const p = new Y();
+    p.setName("eFactoryInstance"), p.setEType(this._eFactoryClass), this._ePackageClass.getEStructuralFeatures().push(p);
+    const d = new Y();
+    d.setName("eLiterals"), d.setEType(this._eEnumLiteralClass), d.setContainment(!0), d.setUpperBound(-1), this._eEnumClass.getEStructuralFeatures().push(d);
+    const E = new Y();
+    E.setName("eOpposite"), E.setEType(this._eReferenceClass), this._eReferenceClass.getEStructuralFeatures().push(E);
+    const T = new Y();
+    T.setName("eParameters"), T.setEType(this._eParameterClass), T.setContainment(!0), T.setUpperBound(-1), this._eOperationClass.getEStructuralFeatures().push(T);
+    const R = new Y();
+    R.setName("details"), R.setEType(this._eStringToStringMapEntryClass), R.setContainment(!0), R.setUpperBound(-1), this._eAnnotationClass.getEStructuralFeatures().push(R);
+    const _ = new Y();
+    _.setName("eGenericType"), _.setEType(this._eGenericTypeClass), _.setContainment(!0), this._eTypedElementClass.getEStructuralFeatures().push(_);
+    const b = new Y();
+    b.setName("eTypeParameters"), b.setEType(this._eTypeParameterClass), b.setContainment(!0), b.setUpperBound(-1), this._eClassifierClass.getEStructuralFeatures().push(b);
+    const B = new Y();
+    B.setName("eGenericSuperTypes"), B.setEType(this._eGenericTypeClass), B.setContainment(!0), B.setUpperBound(-1), this._eClassClass.getEStructuralFeatures().push(B);
+    const O = new Y();
+    O.setName("eTypeParameters"), O.setEType(this._eTypeParameterClass), O.setContainment(!0), O.setUpperBound(-1), this._eOperationClass.getEStructuralFeatures().push(O);
+    const S = new Y();
+    S.setName("eBounds"), S.setEType(this._eGenericTypeClass), S.setContainment(!0), S.setUpperBound(-1), this._eTypeParameterClass.getEStructuralFeatures().push(S);
+    const x = new Y();
+    x.setName("eClassifier"), x.setEType(this._eClassifierClass), this._eGenericTypeClass.getEStructuralFeatures().push(x);
+    const w = new Y();
+    w.setName("eTypeParameter"), w.setEType(this._eTypeParameterClass), this._eGenericTypeClass.getEStructuralFeatures().push(w);
+    const k = new Y();
+    k.setName("eTypeArguments"), k.setEType(this._eGenericTypeClass), k.setContainment(!0), k.setUpperBound(-1), this._eGenericTypeClass.getEStructuralFeatures().push(k);
+    const F = new Y();
+    F.setName("eUpperBound"), F.setEType(this._eGenericTypeClass), F.setContainment(!0), this._eGenericTypeClass.getEStructuralFeatures().push(F);
+    const ue = new Y();
+    ue.setName("eLowerBound"), ue.setEType(this._eGenericTypeClass), ue.setContainment(!0), this._eGenericTypeClass.getEStructuralFeatures().push(ue);
   }
   // Getters for EClasses
   getEObjectClass() {
@@ -8790,7 +9947,7 @@ class bs extends H {
     return this._eJavaObjectDataType;
   }
 }
-class Rs extends ke {
+class Zs extends ot {
   constructor(e) {
     super(), this._ePackage = e;
   }
@@ -8800,42 +9957,42 @@ class Rs extends ke {
   create(e) {
     switch (e.getName()) {
       case "EClass":
-        return new b();
+        return new q();
       case "EAttribute":
-        return new I();
+        return new j();
       case "EReference":
-        return new P();
+        return new Y();
       case "EDataType":
-        return new R();
+        return new W();
       case "EEnum":
-        return new Es();
+        return new Xs();
       case "EEnumLiteral":
-        return new ht();
+        return new Lt();
       case "EAnnotation":
-        return new ms();
+        return new $s();
       case "EPackage":
-        return new H();
+        return new fe();
       case "EOperation":
-        return new ft();
+        return new jt();
       case "EParameter":
-        return new ys();
+        return new qs();
       case "EGenericType":
-        return new Cs();
+        return new Ws();
       case "ETypeParameter":
-        return new Ts();
+        return new Ys();
       default:
         return super.create(e);
     }
   }
 }
-const Ps = "org.eclipse.emf.ecore";
-function J(c, e, t) {
-  c.add(new de(4, Ps, e, t));
+const er = "org.eclipse.emf.ecore";
+function pe(h, e, t) {
+  h.add(new De(4, er, e, t));
 }
-function Dr(c, e, t) {
-  c.add(new de(2, Ps, e, t));
+function sn(h, e, t) {
+  h.add(new De(2, er, e, t));
 }
-class et {
+class bt {
   validate(e, t) {
     const s = e.eClass();
     if (!s)
@@ -8857,11 +10014,11 @@ class et {
     const s = e;
     let r = !0;
     const n = /* @__PURE__ */ new Map();
-    for (const i of s.getEStructuralFeatures()) {
-      const u = i.getName?.();
-      u && (n.get(u) ? (J(t, `The feature '${u}' is not unique in class '${s.getName()}'`, [e]), r = !1) : n.set(u, i));
+    for (const u of s.getEStructuralFeatures()) {
+      const o = u.getName?.();
+      o && (n.get(o) ? (pe(t, `The feature '${o}' is not unique in class '${s.getName()}'`, [e]), r = !1) : n.set(o, u));
     }
-    return this.hasCircularSuperTypes(s) && (J(t, `The class '${s.getName()}' has a circular inheritance hierarchy`, [e]), r = !1), r;
+    return this.hasCircularSuperTypes(s) && (pe(t, `The class '${s.getName()}' has a circular inheritance hierarchy`, [e]), r = !1), r;
   }
   hasCircularSuperTypes(e) {
     const t = /* @__PURE__ */ new Set(), s = [...e.getESuperTypes()];
@@ -8877,18 +10034,18 @@ class et {
     const s = e;
     let r = !0;
     const n = s.getNsURI();
-    (!n || n.trim().length === 0) && (J(t, `The nsURI of package '${s.getName()}' must not be empty`, [e]), r = !1);
-    const i = s.getNsPrefix();
-    i != null && i.includes(":") && (J(t, `The nsPrefix '${i}' of package '${s.getName()}' must not contain ':'`, [e]), r = !1);
-    const u = /* @__PURE__ */ new Set();
-    for (const h of s.getEClassifiers()) {
-      const d = h.getName?.();
-      d && (u.has(d) ? (J(t, `The classifier name '${d}' is not unique in package '${s.getName()}'`, [e]), r = !1) : u.add(d));
+    (!n || n.trim().length === 0) && (pe(t, `The nsURI of package '${s.getName()}' must not be empty`, [e]), r = !1);
+    const u = s.getNsPrefix();
+    u != null && u.includes(":") && (pe(t, `The nsPrefix '${u}' of package '${s.getName()}' must not contain ':'`, [e]), r = !1);
+    const o = /* @__PURE__ */ new Set();
+    for (const d of s.getEClassifiers()) {
+      const E = d.getName?.();
+      E && (o.has(E) ? (pe(t, `The classifier name '${E}' is not unique in package '${s.getName()}'`, [e]), r = !1) : o.add(E));
     }
-    const l = /* @__PURE__ */ new Set();
-    for (const h of s.getESubpackages()) {
-      const d = h.getName?.();
-      d && (l.has(d) ? (J(t, `The subpackage name '${d}' is not unique in package '${s.getName()}'`, [e]), r = !1) : l.add(d));
+    const p = /* @__PURE__ */ new Set();
+    for (const d of s.getESubpackages()) {
+      const E = d.getName?.();
+      E && (p.has(E) ? (pe(t, `The subpackage name '${E}' is not unique in package '${s.getName()}'`, [e]), r = !1) : p.add(E));
     }
     return r;
   }
@@ -8897,24 +10054,24 @@ class et {
     let r = this.validateEStructuralFeature(e, t);
     const n = s.getEOpposite?.();
     if (n) {
-      s.isContainment?.() && n.isContainment?.() && (J(t, `The opposite of a containment reference '${s.getName()}' must not be a containment reference`, [e]), r = !1);
-      const i = n.getEOpposite?.();
-      i && i !== s && (J(t, `The opposite of reference '${s.getName()}' does not point back to this reference`, [e]), r = !1);
+      s.isContainment?.() && n.isContainment?.() && (pe(t, `The opposite of a containment reference '${s.getName()}' must not be a containment reference`, [e]), r = !1);
+      const u = n.getEOpposite?.();
+      u && u !== s && (pe(t, `The opposite of reference '${s.getName()}' does not point back to this reference`, [e]), r = !1);
     }
     return r;
   }
   validateEStructuralFeature(e, t) {
     const s = e;
     let r = !0;
-    const n = s.getLowerBound(), i = s.getUpperBound();
-    return i !== -1 && i !== -2 && n > i && (J(t, `The lower bound ${n} of feature '${s.getName()}' must not exceed the upper bound ${i}`, [e]), r = !1), n < 0 && (J(t, `The lower bound ${n} of feature '${s.getName()}' must not be negative`, [e]), r = !1), s.getEType() || Dr(t, `The feature '${s.getName()}' has no type set`, [e]), r;
+    const n = s.getLowerBound(), u = s.getUpperBound();
+    return u !== -1 && u !== -2 && n > u && (pe(t, `The lower bound ${n} of feature '${s.getName()}' must not exceed the upper bound ${u}`, [e]), r = !1), n < 0 && (pe(t, `The lower bound ${n} of feature '${s.getName()}' must not be negative`, [e]), r = !1), s.getEType() || sn(t, `The feature '${s.getName()}' has no type set`, [e]), r;
   }
 }
-et.INSTANCE = new et();
-we();
-class Fr extends ds {
+bt.INSTANCE = new bt();
+ct();
+class rn extends Gs {
   constructor() {
-    super(), this.getResourceFactoryRegistry().getExtensionToFactoryMap().set("ecore", new Ne()), this.getResourceFactoryRegistry().getExtensionToFactoryMap().set("xmi", new Ne()), this.getPackageRegistry().set(Oe, we());
+    super(), this.getResourceFactoryRegistry().getExtensionToFactoryMap().set("ecore", new Xe()), this.getResourceFactoryRegistry().getExtensionToFactoryMap().set("xmi", new Xe()), this.getPackageRegistry().set(ut, ct());
   }
   /**
    * Create resource and return with loadFromString support
@@ -8923,11 +10080,11 @@ class Fr extends ds {
     return super.createResource(e);
   }
 }
-function kr() {
-  const c = /* @__PURE__ */ new Map();
+function nn() {
+  const h = /* @__PURE__ */ new Map();
   return {
     getEPackage(t) {
-      const s = c.get(t);
+      const s = h.get(t);
       return s ? "getEPackage" in s ? s.getEPackage() : s : null;
     },
     getEFactory(t) {
@@ -8935,339 +10092,339 @@ function kr() {
       return s ? s.getEFactoryInstance() : null;
     },
     get(t) {
-      return c.get(t) || null;
+      return h.get(t) || null;
     },
     set(t, s) {
-      c.set(t, s), s && !("getEPackage" in s) && typeof s.getESubpackages == "function" && ve(c, s);
+      h.set(t, s), s && !("getEPackage" in s) && typeof s.getESubpackages == "function" && rt(h, s);
     },
     delete(t) {
-      return c.delete(t);
+      return h.delete(t);
     },
     has(t) {
-      return c.has(t);
+      return h.has(t);
     },
     keys() {
-      return c.keys();
+      return h.keys();
     },
     values() {
-      return c.values();
+      return h.values();
     },
     /**
      * Register a package by its nsURI
      */
     registerPackage(t) {
-      this.set(xe(t), t);
+      this.set(nt(t), t);
     }
   };
 }
-function Or() {
-  return X.INSTANCE;
+function an() {
+  return oe.INSTANCE;
 }
-const Br = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const cn = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  ATTRIBUTE_FEATURE: ze,
-  ATTRIBUTE_WILDCARD_FEATURE: qt,
-  AdapterImpl: Bt,
-  AttributesImpl: Qt,
-  BasicDiagnostic: de,
-  BasicEAnnotation: ms,
-  BasicEAttribute: I,
-  BasicEClass: b,
-  BasicEDataType: R,
-  BasicEEnum: Es,
-  BasicEEnumLiteral: ht,
-  BasicEFactory: ke,
-  BasicEGenericType: Cs,
-  BasicEList: Z,
-  BasicEMap: Mt,
-  BasicEObject: K,
-  BasicEOperation: ft,
-  BasicEPackage: H,
-  BasicEParameter: ys,
-  BasicEReference: P,
-  BasicEStructuralFeature: lt,
-  BasicETypeParameter: Ts,
-  BasicNotifier: yr,
-  BasicResource: De,
-  BasicResourceSet: ds,
-  DATATYPE_IS_MANY: Ie,
-  DATATYPE_SINGLE: Ae,
-  Diagnostician: Ze,
-  DynamicEObject: st,
-  EAttributeBuilder: Ir,
-  ECORE_NS_PREFIX: As,
-  ECORE_NS_URI: Oe,
-  EClassBuilder: Nr,
-  EContentAdapter: Cr,
-  ELEMENT_FEATURE: he,
-  ELEMENT_ONLY_CONTENT: $t,
-  ELEMENT_WILDCARD_FEATURE: zt,
-  EMD_ANNOTATION_URI: We,
-  EMPTY_CONTENT: jt,
-  EObjectContainmentEList: Se,
-  EObjectContainmentWithInverseEList: Pt,
-  EObjectContainmentWithInverseEListLazy: vt,
-  EObjectEList: xt,
-  EOperationBuilder: Pr,
+  ATTRIBUTE_FEATURE: Ct,
+  ATTRIBUTE_WILDCARD_FEATURE: Es,
+  AdapterImpl: us,
+  AttributesImpl: Is,
+  BasicDiagnostic: De,
+  BasicEAnnotation: $s,
+  BasicEAttribute: j,
+  BasicEClass: q,
+  BasicEDataType: W,
+  BasicEEnum: Xs,
+  BasicEEnumLiteral: Lt,
+  BasicEFactory: ot,
+  BasicEGenericType: Ws,
+  BasicEList: de,
+  BasicEMap: cs,
+  BasicEObject: le,
+  BasicEOperation: jt,
+  BasicEPackage: fe,
+  BasicEParameter: qs,
+  BasicEReference: Y,
+  BasicEStructuralFeature: Mt,
+  BasicETypeParameter: Ys,
+  BasicNotifier: Xr,
+  BasicResource: it,
+  BasicResourceSet: Gs,
+  DATATYPE_IS_MANY: Ze,
+  DATATYPE_SINGLE: Qe,
+  Diagnostician: xt,
+  DynamicEObject: Ft,
+  EAttributeBuilder: Vr,
+  ECORE_NS_PREFIX: Vs,
+  ECORE_NS_URI: ut,
+  EClassBuilder: Yr,
+  EContentAdapter: qr,
+  ELEMENT_FEATURE: Fe,
+  ELEMENT_ONLY_CONTENT: ps,
+  ELEMENT_WILDCARD_FEATURE: ys,
+  EMD_ANNOTATION_URI: Et,
+  EMPTY_CONTENT: fs,
+  EObjectContainmentEList: qe,
+  EObjectContainmentWithInverseEList: es,
+  EObjectContainmentWithInverseEListLazy: ts,
+  EObjectEList: ss,
+  EOperationBuilder: Zr,
   get EPackageRegistry() {
-    return X;
+    return oe;
   },
-  EProxyImpl: rt,
-  ERROR_TYPE: ce,
-  EReferenceBuilder: br,
-  EResourceSetImpl: Fr,
-  EValidatorRegistry: Re,
-  EcoreDataTypes: se,
-  EcoreFactory: Rs,
-  EcorePackageImpl: bs,
-  EcoreUtil: $,
-  EcoreValidator: et,
-  ExtendedMetaData: qe,
-  GROUP_FEATURE: Yt,
-  HREF_ATTRIB: Ve,
-  ID_ATTRIB: ts,
-  IS_MANY_ADD: Ye,
-  IS_MANY_MOVE: Vt,
-  JSONLoad: cs,
-  JSONResource: gs,
-  JSONResourceFactory: ps,
-  JSONSave: fs,
-  MIXED_CONTENT: Gt,
-  NIL_ATTRIB: Zt,
-  NO_FEATURE_ID: It,
-  NO_INDEX: Pe,
-  NotificationImpl: oe,
-  NotificationType: N,
-  OBJECT_TYPE: ie,
-  OPTION_DEFER_ATTACHMENT: gr,
-  OPTION_DEFER_IDREF_RESOLUTION: pr,
-  OPTION_EXTENDED_META_DATA: Ht,
-  OPTION_FEATURE_NAME_MAP: Kt,
-  OPTION_INDENT: Je,
-  OPTION_RECORD_UNKNOWN_FEATURE: mr,
-  OPTION_SERIALIZE_TYPE: Qe,
-  OPTION_USE_DEPRECATED_METHODS: dr,
-  OTHER: Ke,
+  EProxyImpl: Pt,
+  ERROR_TYPE: be,
+  EReferenceBuilder: Jr,
+  EResourceSetImpl: rn,
+  EValidatorRegistry: tt,
+  EcoreDataTypes: Te,
+  EcoreFactory: Zs,
+  EcorePackageImpl: Qs,
+  EcoreUtil: ae,
+  EcoreValidator: bt,
+  ExtendedMetaData: Tt,
+  GROUP_FEATURE: Cs,
+  HREF_ATTRIB: At,
+  ID_ATTRIB: xs,
+  IS_MANY_ADD: Nt,
+  IS_MANY_MOVE: Ss,
+  JSONLoad: vs,
+  JSONResource: Ls,
+  JSONResourceFactory: js,
+  JSONSave: Ms,
+  MIXED_CONTENT: gs,
+  NIL_ATTRIB: _s,
+  NO_FEATURE_ID: Jt,
+  NO_INDEX: st,
+  NotificationImpl: Re,
+  NotificationType: v,
+  OBJECT_TYPE: Ae,
+  OPTION_DEFER_ATTACHMENT: Mr,
+  OPTION_DEFER_IDREF_RESOLUTION: Lr,
+  OPTION_EXTENDED_META_DATA: Ns,
+  OPTION_FEATURE_NAME_MAP: Ts,
+  OPTION_INDENT: Rt,
+  OPTION_RECORD_UNKNOWN_FEATURE: Gr,
+  OPTION_SERIALIZE_TYPE: _t,
+  OPTION_USE_DEPRECATED_METHODS: jr,
+  OTHER: St,
   get Resource() {
-    return fe;
+    return Pe;
   },
-  ResourceContentsEList: Ot,
-  SCHEMA_LOCATION_ATTRIB: es,
-  SERIALIZE_TYPE_ALWAYS: ls,
-  SERIALIZE_TYPE_POLYMORPHIC: hs,
-  SIMPLE_CONTENT: Fe,
-  SIMPLE_FEATURE: Wt,
-  SimpleEPackage: ct,
-  TYPE_ATTRIB: Jt,
-  UNKNOWN_FEATURE_TYPE: Qs,
-  UNSPECIFIED_CONTENT: Lt,
-  UNSPECIFIED_FEATURE: Xt,
-  URI: T,
-  XMIHandler: ns,
-  XMIHelperImpl: rs,
-  XMILoad: ss,
-  XMIResource: os,
-  XMIResourceFactory: Ne,
-  XMISave: as,
-  XMI_NS: Zs,
-  XMI_URI: be,
-  XMLHandler: nt,
-  XMLHelperImpl: _e,
-  XMLLoad: it,
-  XMLResource: ut,
-  XMLResourceFactory: us,
-  XMLSave: ot,
-  XMLTypePackageImpl: _s,
-  XML_NS: He,
-  XML_TYPE_NS_PREFIX: Ns,
-  XML_TYPE_NS_URI: gt,
-  XSI_NS: Js,
-  XSI_URI: ae,
-  asInstanceOf: hr,
-  createBasicEList: kt,
-  createContainmentEList: Dt,
-  createContainmentWithInverseEList: Ls,
-  createEMap: Ut,
-  createEObjectEList: Ft,
-  createIndexedProxy: V,
-  createPackageRegistry: kr,
-  createResourceContentsEList: wt,
-  dataTypeRegistry: y,
-  filterByType: fr,
-  getEcorePackage: we,
-  getPackageRegistry: Or,
-  getXMLTypePackage: Ss,
-  isAdapterInternal: tt,
-  isEAnnotation: ur,
-  isEAttribute: sr,
-  isEClass: is,
-  isEClassifier: lr,
-  isEDataType: tr,
-  isEEnum: Te,
-  isEFactory: ir,
-  isEList: M,
-  isEMap: $s,
-  isEObject: er,
-  isEOperation: ar,
-  isEPackage: nr,
-  isEParameter: or,
-  isEReference: rr,
-  isEStructuralFeature: cr,
-  isInstanceOf: at,
-  isInternalEObject: L,
-  registerEcorePackage: Is,
-  registerSubpackages: ve,
-  requireNsURI: xe
+  ResourceContentsEList: as,
+  SCHEMA_LOCATION_ATTRIB: Rs,
+  SERIALIZE_TYPE_ALWAYS: Os,
+  SERIALIZE_TYPE_POLYMORPHIC: Us,
+  SIMPLE_CONTENT: at,
+  SIMPLE_FEATURE: ms,
+  SimpleEPackage: Ut,
+  TYPE_ATTRIB: As,
+  UNKNOWN_FEATURE_TYPE: Sr,
+  UNSPECIFIED_CONTENT: hs,
+  UNSPECIFIED_FEATURE: ds,
+  URI: D,
+  XMIHandler: Fs,
+  XMIHelperImpl: ws,
+  XMILoad: bs,
+  XMIResource: ks,
+  XMIResourceFactory: Xe,
+  XMISave: Bs,
+  XMI_NS: Ar,
+  XMI_URI: et,
+  XMLHandler: Bt,
+  XMLHelperImpl: We,
+  XMLLoad: kt,
+  XMLResource: Ot,
+  XMLResourceFactory: Ds,
+  XMLSave: vt,
+  XMLTypePackageImpl: Hs,
+  XML_NS: It,
+  XML_TYPE_NS_PREFIX: zs,
+  XML_TYPE_NS_URI: Gt,
+  XSI_NS: Ir,
+  XSI_URI: _e,
+  asInstanceOf: Or,
+  createBasicEList: is,
+  createContainmentEList: rs,
+  createContainmentWithInverseEList: ir,
+  createEMap: ls,
+  createEObjectEList: ns,
+  createIndexedProxy: ge,
+  createPackageRegistry: nn,
+  createResourceContentsEList: os,
+  dataTypeRegistry: P,
+  filterByType: Ur,
+  getEcorePackage: ct,
+  getPackageRegistry: an,
+  getXMLTypePackage: Ks,
+  isAdapterInternal: wt,
+  isEAnnotation: kr,
+  isEAttribute: xr,
+  isEClass: Ps,
+  isEClassifier: vr,
+  isEDataType: Rr,
+  isEEnum: $e,
+  isEFactory: Fr,
+  isEList: se,
+  isEMap: ur,
+  isEObject: _r,
+  isEOperation: Pr,
+  isEPackage: wr,
+  isEParameter: Br,
+  isEReference: br,
+  isEStructuralFeature: Dr,
+  isInstanceOf: Dt,
+  isInternalEObject: ie,
+  registerEcorePackage: Js,
+  registerSubpackages: rt,
+  requireNsURI: nt
 }, Symbol.toStringTag, { value: "Module" }));
 export {
-  ze as ATTRIBUTE_FEATURE,
-  qt as ATTRIBUTE_WILDCARD_FEATURE,
-  Bt as AdapterImpl,
-  Qt as AttributesImpl,
-  de as BasicDiagnostic,
-  ms as BasicEAnnotation,
-  I as BasicEAttribute,
-  b as BasicEClass,
-  R as BasicEDataType,
-  Es as BasicEEnum,
-  ht as BasicEEnumLiteral,
-  ke as BasicEFactory,
-  Cs as BasicEGenericType,
-  Z as BasicEList,
-  Mt as BasicEMap,
-  K as BasicEObject,
-  ft as BasicEOperation,
-  H as BasicEPackage,
-  ys as BasicEParameter,
-  P as BasicEReference,
-  lt as BasicEStructuralFeature,
-  Ts as BasicETypeParameter,
-  yr as BasicNotifier,
-  De as BasicResource,
-  ds as BasicResourceSet,
-  Ie as DATATYPE_IS_MANY,
-  Ae as DATATYPE_SINGLE,
-  Ze as Diagnostician,
-  st as DynamicEObject,
-  Ir as EAttributeBuilder,
-  As as ECORE_NS_PREFIX,
-  Oe as ECORE_NS_URI,
-  Nr as EClassBuilder,
-  Cr as EContentAdapter,
-  he as ELEMENT_FEATURE,
-  $t as ELEMENT_ONLY_CONTENT,
-  zt as ELEMENT_WILDCARD_FEATURE,
-  We as EMD_ANNOTATION_URI,
-  jt as EMPTY_CONTENT,
-  Se as EObjectContainmentEList,
-  Pt as EObjectContainmentWithInverseEList,
-  vt as EObjectContainmentWithInverseEListLazy,
-  xt as EObjectEList,
-  Pr as EOperationBuilder,
-  X as EPackageRegistry,
-  rt as EProxyImpl,
-  ce as ERROR_TYPE,
-  br as EReferenceBuilder,
-  Fr as EResourceSetImpl,
-  Re as EValidatorRegistry,
-  se as EcoreDataTypes,
-  Rs as EcoreFactory,
-  bs as EcorePackageImpl,
-  $ as EcoreUtil,
-  et as EcoreValidator,
-  qe as ExtendedMetaData,
-  Yt as GROUP_FEATURE,
-  Ve as HREF_ATTRIB,
-  ts as ID_ATTRIB,
-  Ye as IS_MANY_ADD,
-  Vt as IS_MANY_MOVE,
-  cs as JSONLoad,
-  gs as JSONResource,
-  ps as JSONResourceFactory,
-  fs as JSONSave,
-  Gt as MIXED_CONTENT,
-  Zt as NIL_ATTRIB,
-  It as NO_FEATURE_ID,
-  Pe as NO_INDEX,
-  oe as NotificationImpl,
-  N as NotificationType,
-  ie as OBJECT_TYPE,
-  gr as OPTION_DEFER_ATTACHMENT,
-  pr as OPTION_DEFER_IDREF_RESOLUTION,
-  Ht as OPTION_EXTENDED_META_DATA,
-  Kt as OPTION_FEATURE_NAME_MAP,
-  Je as OPTION_INDENT,
-  mr as OPTION_RECORD_UNKNOWN_FEATURE,
-  Qe as OPTION_SERIALIZE_TYPE,
-  dr as OPTION_USE_DEPRECATED_METHODS,
-  Ke as OTHER,
-  fe as Resource,
-  Ot as ResourceContentsEList,
-  es as SCHEMA_LOCATION_ATTRIB,
-  ls as SERIALIZE_TYPE_ALWAYS,
-  hs as SERIALIZE_TYPE_POLYMORPHIC,
-  Fe as SIMPLE_CONTENT,
-  Wt as SIMPLE_FEATURE,
-  ct as SimpleEPackage,
-  Jt as TYPE_ATTRIB,
-  Qs as UNKNOWN_FEATURE_TYPE,
-  Lt as UNSPECIFIED_CONTENT,
-  Xt as UNSPECIFIED_FEATURE,
-  T as URI,
-  ns as XMIHandler,
-  rs as XMIHelperImpl,
-  ss as XMILoad,
-  os as XMIResource,
-  Ne as XMIResourceFactory,
-  as as XMISave,
-  Zs as XMI_NS,
-  be as XMI_URI,
-  nt as XMLHandler,
-  _e as XMLHelperImpl,
-  it as XMLLoad,
-  ut as XMLResource,
-  us as XMLResourceFactory,
-  ot as XMLSave,
-  _s as XMLTypePackageImpl,
-  He as XML_NS,
-  Ns as XML_TYPE_NS_PREFIX,
-  gt as XML_TYPE_NS_URI,
-  Js as XSI_NS,
-  ae as XSI_URI,
-  hr as asInstanceOf,
-  kt as createBasicEList,
-  Dt as createContainmentEList,
-  Ls as createContainmentWithInverseEList,
-  Ut as createEMap,
-  Ft as createEObjectEList,
-  V as createIndexedProxy,
-  kr as createPackageRegistry,
-  wt as createResourceContentsEList,
-  y as dataTypeRegistry,
-  Br as default,
-  fr as filterByType,
-  we as getEcorePackage,
-  Or as getPackageRegistry,
-  Ss as getXMLTypePackage,
-  tt as isAdapterInternal,
-  ur as isEAnnotation,
-  sr as isEAttribute,
-  is as isEClass,
-  lr as isEClassifier,
-  tr as isEDataType,
-  Te as isEEnum,
-  ir as isEFactory,
-  M as isEList,
-  $s as isEMap,
-  er as isEObject,
-  ar as isEOperation,
-  nr as isEPackage,
-  or as isEParameter,
-  rr as isEReference,
-  cr as isEStructuralFeature,
-  at as isInstanceOf,
-  L as isInternalEObject,
-  Is as registerEcorePackage,
-  ve as registerSubpackages,
-  xe as requireNsURI
+  Ct as ATTRIBUTE_FEATURE,
+  Es as ATTRIBUTE_WILDCARD_FEATURE,
+  us as AdapterImpl,
+  Is as AttributesImpl,
+  De as BasicDiagnostic,
+  $s as BasicEAnnotation,
+  j as BasicEAttribute,
+  q as BasicEClass,
+  W as BasicEDataType,
+  Xs as BasicEEnum,
+  Lt as BasicEEnumLiteral,
+  ot as BasicEFactory,
+  Ws as BasicEGenericType,
+  de as BasicEList,
+  cs as BasicEMap,
+  le as BasicEObject,
+  jt as BasicEOperation,
+  fe as BasicEPackage,
+  qs as BasicEParameter,
+  Y as BasicEReference,
+  Mt as BasicEStructuralFeature,
+  Ys as BasicETypeParameter,
+  Xr as BasicNotifier,
+  it as BasicResource,
+  Gs as BasicResourceSet,
+  Ze as DATATYPE_IS_MANY,
+  Qe as DATATYPE_SINGLE,
+  xt as Diagnostician,
+  Ft as DynamicEObject,
+  Vr as EAttributeBuilder,
+  Vs as ECORE_NS_PREFIX,
+  ut as ECORE_NS_URI,
+  Yr as EClassBuilder,
+  qr as EContentAdapter,
+  Fe as ELEMENT_FEATURE,
+  ps as ELEMENT_ONLY_CONTENT,
+  ys as ELEMENT_WILDCARD_FEATURE,
+  Et as EMD_ANNOTATION_URI,
+  fs as EMPTY_CONTENT,
+  qe as EObjectContainmentEList,
+  es as EObjectContainmentWithInverseEList,
+  ts as EObjectContainmentWithInverseEListLazy,
+  ss as EObjectEList,
+  Zr as EOperationBuilder,
+  oe as EPackageRegistry,
+  Pt as EProxyImpl,
+  be as ERROR_TYPE,
+  Jr as EReferenceBuilder,
+  rn as EResourceSetImpl,
+  tt as EValidatorRegistry,
+  Te as EcoreDataTypes,
+  Zs as EcoreFactory,
+  Qs as EcorePackageImpl,
+  ae as EcoreUtil,
+  bt as EcoreValidator,
+  Tt as ExtendedMetaData,
+  Cs as GROUP_FEATURE,
+  At as HREF_ATTRIB,
+  xs as ID_ATTRIB,
+  Nt as IS_MANY_ADD,
+  Ss as IS_MANY_MOVE,
+  vs as JSONLoad,
+  Ls as JSONResource,
+  js as JSONResourceFactory,
+  Ms as JSONSave,
+  gs as MIXED_CONTENT,
+  _s as NIL_ATTRIB,
+  Jt as NO_FEATURE_ID,
+  st as NO_INDEX,
+  Re as NotificationImpl,
+  v as NotificationType,
+  Ae as OBJECT_TYPE,
+  Mr as OPTION_DEFER_ATTACHMENT,
+  Lr as OPTION_DEFER_IDREF_RESOLUTION,
+  Ns as OPTION_EXTENDED_META_DATA,
+  Ts as OPTION_FEATURE_NAME_MAP,
+  Rt as OPTION_INDENT,
+  Gr as OPTION_RECORD_UNKNOWN_FEATURE,
+  _t as OPTION_SERIALIZE_TYPE,
+  jr as OPTION_USE_DEPRECATED_METHODS,
+  St as OTHER,
+  Pe as Resource,
+  as as ResourceContentsEList,
+  Rs as SCHEMA_LOCATION_ATTRIB,
+  Os as SERIALIZE_TYPE_ALWAYS,
+  Us as SERIALIZE_TYPE_POLYMORPHIC,
+  at as SIMPLE_CONTENT,
+  ms as SIMPLE_FEATURE,
+  Ut as SimpleEPackage,
+  As as TYPE_ATTRIB,
+  Sr as UNKNOWN_FEATURE_TYPE,
+  hs as UNSPECIFIED_CONTENT,
+  ds as UNSPECIFIED_FEATURE,
+  D as URI,
+  Fs as XMIHandler,
+  ws as XMIHelperImpl,
+  bs as XMILoad,
+  ks as XMIResource,
+  Xe as XMIResourceFactory,
+  Bs as XMISave,
+  Ar as XMI_NS,
+  et as XMI_URI,
+  Bt as XMLHandler,
+  We as XMLHelperImpl,
+  kt as XMLLoad,
+  Ot as XMLResource,
+  Ds as XMLResourceFactory,
+  vt as XMLSave,
+  Hs as XMLTypePackageImpl,
+  It as XML_NS,
+  zs as XML_TYPE_NS_PREFIX,
+  Gt as XML_TYPE_NS_URI,
+  Ir as XSI_NS,
+  _e as XSI_URI,
+  Or as asInstanceOf,
+  is as createBasicEList,
+  rs as createContainmentEList,
+  ir as createContainmentWithInverseEList,
+  ls as createEMap,
+  ns as createEObjectEList,
+  ge as createIndexedProxy,
+  nn as createPackageRegistry,
+  os as createResourceContentsEList,
+  P as dataTypeRegistry,
+  cn as default,
+  Ur as filterByType,
+  ct as getEcorePackage,
+  an as getPackageRegistry,
+  Ks as getXMLTypePackage,
+  wt as isAdapterInternal,
+  kr as isEAnnotation,
+  xr as isEAttribute,
+  Ps as isEClass,
+  vr as isEClassifier,
+  Rr as isEDataType,
+  $e as isEEnum,
+  Fr as isEFactory,
+  se as isEList,
+  ur as isEMap,
+  _r as isEObject,
+  Pr as isEOperation,
+  wr as isEPackage,
+  Br as isEParameter,
+  br as isEReference,
+  Dr as isEStructuralFeature,
+  Dt as isInstanceOf,
+  ie as isInternalEObject,
+  Js as registerEcorePackage,
+  rt as registerSubpackages,
+  nt as requireNsURI
 };

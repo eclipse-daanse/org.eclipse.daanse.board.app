@@ -153,7 +153,7 @@ export async function activate({ services, log }: ActivationContext) {
 
   const configNav = new NavigationItem()
   configNav.id = 'config'
-  configNav.label = 'Environment variables'
+  configNav.label = 'shell:Nav.variables'
   configNav.icon = 'settings'
   configNav.route = '/configuration'
   configNav.routeName = 'config'
@@ -229,3 +229,6 @@ export function deactivate({ services }: ActivationContext) {
   app?.unmount()
   app = undefined
 }
+
+/* Its texts - collected by lib.i18next, see src/i18n. */
+export { ShellTranslations } from './i18n'

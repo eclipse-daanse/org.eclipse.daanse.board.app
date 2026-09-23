@@ -14,7 +14,6 @@ Contributors:
 <script setup lang="ts">
 
 import { inject, onMounted, ref, computed } from 'vue'
-import type {i18n} from "org.eclipse.daanse.board.app.lib.i18next"
 import { PageI } from './interface/PageI'
 import { useRoute } from 'vue-router'
 import { type PageRegistryI, identifier } from 'org.eclipse.daanse.board.app.lib.api.page'
@@ -22,9 +21,9 @@ import {
   DInput,
   DSelect,
 } from 'org.eclipse.daanse.board.app.ui.vue.controls'
+import { useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 
-const i18n:i18n|undefined = inject('i18n');
-const t = (key:string)=>(i18n)?i18n.t(key):key;
+const { t } = useTranslation('page')
 
 
 const widgetSettings = defineModel<PageI>({ required: true });
@@ -68,16 +67,16 @@ const isValidSelection = computed(() => {
     framing - the title switch and the background - is rendered from
     model/ui.xmi beside this.
   -->
-  <section class="settings-section" data-section="Seite wählen">
+  <section class="settings-section" data-section-id="page" :data-section="t('Settings.section')">
     <div class="settings-container">
       <DSelect
         v-model="widgetSettings.path"
-        :label="t('page:pageWidget.selectPage')"
+        :label="t('Settings.selectPage')"
         :options="availablePages"
         value-key="value"
         label-key="text"
-        :placeholder="t('page:pageWidget.selectPagePlaceholder')"
-        :error="isValidSelection ? undefined : t('page:pageWidget.selfReferenceWarning')"
+        :placeholder="t('Settings.selectPagePlaceholder')"
+        :error="isValidSelection ? undefined : t('Settings.selfReference')"
       />
 
       <!-- A page that is not in the list yet - one being built, or one from
@@ -86,8 +85,8 @@ const isValidSelection = computed(() => {
            out of a list that does not have your page in it is worth
            seeing before you need it. -->
       <div class="manual-path">
-        <p class="manual-path__note">{{ t('page:pageWidget.manualPath') }}</p>
-        <DInput v-model="widgetSettings.path" :label="t('page:pageWidget.path')" />
+        <p class="manual-path__note">{{ t('Settings.manualPath') }}</p>
+        <DInput v-model="widgetSettings.path" :label="t('Settings.path')" />
       </div>
     </div>
   </section>

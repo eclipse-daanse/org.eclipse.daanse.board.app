@@ -16,7 +16,7 @@ import { ref, computed, watch, shallowRef, nextTick } from 'vue'
 import { LMap, LTileLayer, LGeoJson, LCircleMarker, LPopup } from '@vue-leaflet/vue-leaflet'
 import type { PointExpression } from 'leaflet'
 import 'leaflet/dist/leaflet.css'
-import { useTemporaryStore } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+import { useTemporaryStore, useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import type { Waypoint, CostingModel } from 'org.eclipse.daanse.board.app.lib.datasource.valhalla'
 
 // Plain string constants of lib.datasource.valhalla, inlined to keep the
@@ -26,6 +26,7 @@ const SET_COSTING = 'SET_COSTING'
 const OPTIMIZE_ROUTE = 'OPTIMIZE_ROUTE'
 
 const props = defineProps<{ dataSource: any }>()
+const { t } = useTranslation('datasourceValhalla')
 
 const data = ref(null as any)
 const tempStore = shallowRef(null as any)
@@ -44,15 +45,13 @@ const mapZoom = ref(10)
 const draggingIndex = ref<number | null>(null)
 const calculating = ref(false)
 
-const costingOptions = [
-  { text: 'Auto', value: 'auto' },
-  { text: 'Fahrrad', value: 'bicycle' },
-  { text: 'Fußgänger', value: 'pedestrian' },
-  { text: 'LKW', value: 'truck' },
-  { text: 'Bus', value: 'bus' },
-  { text: 'Motorroller', value: 'motor_scooter' },
-  { text: 'Motorrad', value: 'motorcycle' },
-]
+const costingOptions = computed(() =>
+  ['auto', 'bicycle', 'pedestrian', 'truck', 'bus', 'motor_scooter', 'motorcycle'].map((value) => ({
+    // i18n-keys: datasourceValhalla:Valhalla.costing.*
+    text: t(`Valhalla.costing.${value}`),
+    value,
+  })),
+)
 
 const lineFeatures = computed(() => {
   if (!data.value?.geojson?.features) return []
@@ -73,9 +72,9 @@ function waypointColor(index: number): string {
 }
 
 function waypointLabel(index: number): string {
-  if (index === 0) return 'Start'
-  if (index === waypoints.value.length - 1) return 'Ziel'
-  return `Stop ${index}`
+  if (index === 0) return t('Valhalla.start')
+  if (index === waypoints.value.length - 1) return t('Valhalla.end')
+  return t('Valhalla.stop', { n: index })
 }
 
 watch(tempStore, async () => {
@@ -232,7 +231,7 @@ const maneuvers = computed(() => {
         <div class="search-box">
           <DInput
             v-model="searchQuery"
-            placeholder="Adresse suchen…"
+            :placeholder="t('Valhalla.search')"
             class="search-input"
             @input="onSearchInput"
             @keydown.enter="searchAddress"
@@ -257,18 +256,18 @@ const maneuvers = computed(() => {
           :options="costingOptions"
           label-key="text"
           value-key="value"
-          label="Modus"
+          :label="t('Valhalla.mode')"
           class="costing-select"
         />
         <DButton v-if="waypoints.length > 0" size="sm" @click="clearAllWaypoints">
-          <DIcon name="delete_sweep" size="sm" />Alle löschen
+          <DIcon name="delete_sweep" size="sm" />{{ t('Valhalla.clearAll') }}
         </DButton>
       </div>
 
       <div class="waypoints-list">
         <div class="waypoints-header">
-          <span class="section-title">Wegpunkte ({{ waypoints.length }})</span>
-          <span class="hint">Klick auf Karte = Wegpunkt hinzufügen</span>
+          <span class="section-title">{{ t('Valhalla.waypoints', { count: waypoints.length }) }}</span>
+          <span class="hint">{{ t('Valhalla.clickHint') }}</span>
         </div>
         <div
           v-for="(wp, i) in waypoints"
@@ -291,37 +290,37 @@ const maneuvers = computed(() => {
             <span class="waypoint-name">{{ wp.name || `${wp.lat.toFixed(4)}, ${wp.lon.toFixed(4)}` }}</span>
           </div>
           <div class="waypoint-actions">
-            <DButton intent="quiet" size="sm" title="Nach oben" :disabled="i === 0" @click="moveWaypoint(i, i - 1)">
+            <DButton intent="quiet" size="sm" :title="t('Valhalla.up')" :disabled="i === 0" @click="moveWaypoint(i, i - 1)">
               <DIcon name="arrow_upward" size="sm" />
             </DButton>
-            <DButton intent="quiet" size="sm" title="Nach unten" :disabled="i === waypoints.length - 1" @click="moveWaypoint(i, i + 1)">
+            <DButton intent="quiet" size="sm" :title="t('Valhalla.down')" :disabled="i === waypoints.length - 1" @click="moveWaypoint(i, i + 1)">
               <DIcon name="arrow_downward" size="sm" />
             </DButton>
-            <DButton intent="danger" size="sm" title="Entfernen" @click="removeWaypoint(i)">
+            <DButton intent="danger" size="sm" :title="t('Valhalla.remove')" @click="removeWaypoint(i)">
               <DIcon name="close" size="sm" />
             </DButton>
           </div>
         </div>
         <div v-if="waypoints.length === 0" class="no-waypoints">
-          Noch keine Wegpunkte. Klicke auf die Karte oder suche eine Adresse.
+          {{ t('Valhalla.none') }}
         </div>
       </div>
 
       <div v-if="waypoints.length >= 2" class="action-buttons">
         <DButton intent="primary" :busy="calculating" @click="calculateRoute">
-          <DIcon name="route" size="sm" />Route berechnen
+          <DIcon name="route" size="sm" />{{ t('Valhalla.calculate') }}
         </DButton>
         <DButton
           v-if="waypoints.length >= 3"
           :busy="calculating"
           @click="optimizeRoute"
         >
-          <DIcon name="auto_fix_high" size="sm" />Route optimieren
+          <DIcon name="auto_fix_high" size="sm" />{{ t('Valhalla.optimize') }}
         </DButton>
       </div>
 
       <div v-if="data?.summary" class="route-summary">
-        <div class="summary-header">Route</div>
+        <div class="summary-header">{{ t('Valhalla.route') }}</div>
         <div class="summary-stats">
           <div class="stat">
             <DIcon name="straighten" size="sm" />
@@ -333,7 +332,7 @@ const maneuvers = computed(() => {
           </div>
           <div class="stat">
             <DIcon name="turn_right" size="sm" />
-            <span>{{ maneuvers.length }} Manöver</span>
+            <span>{{ t('Valhalla.maneuvers', { count: maneuvers.length }) }}</span>
           </div>
         </div>
         <div v-if="maneuvers.length > 0" class="maneuvers-list">

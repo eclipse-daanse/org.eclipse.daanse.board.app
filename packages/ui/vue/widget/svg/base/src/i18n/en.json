@@ -1,0 +1,16 @@
+{
+  "Widget": {
+    "name": "SVG",
+    "empty": "No SVG configured"
+  },
+  "FormRule": {
+    "className": "CSS class",
+    "fill": "Fill colour",
+    "stroke": "Line colour",
+    "strokeWidth": "Line width"
+  },
+  "Form": {
+    "src": "Address of the graphic",
+    "classesConfig": "Class rules"
+  }
+}

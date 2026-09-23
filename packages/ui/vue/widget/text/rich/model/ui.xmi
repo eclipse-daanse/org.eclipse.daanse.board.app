@@ -34,9 +34,9 @@ stored it under.
   <components xsi:type="uimodel:FormView" name="RichTextSettingsFormView">
     <fields xsi:type="uimodel:NumberWidget" name="fontSize"
         feature="http://org.eclipse.daanse.board.app.ui.vue.widget.text.rich#//RichTextEditorSettings/fontSize"
-        label="Schriftgröße (px)" min="8" max="96" step="1"/>
+        label="textRich:Form.fontSize" min="8" max="96" step="1"/>
     <fields xsi:type="uimodel:InputWidget" name="fontColor"
         feature="http://org.eclipse.daanse.board.app.ui.vue.widget.text.rich#//RichTextEditorSettings/fontColor"
-        label="Schriftfarbe"/>
+        label="textRich:Form.fontColor"/>
   </components>
 </uimodel:UIModel>

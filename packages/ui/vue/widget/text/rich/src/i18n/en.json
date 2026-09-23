@@ -1,0 +1,44 @@
+{
+  "Widget": {
+    "name": "Rich text"
+  },
+  "Settings": {
+    "section": "Text and formatting",
+    "noVariables": "No variables defined"
+  },
+  "Toolbar": {
+    "fontSize": "Size of the selection",
+    "fontColor": "Colour of the selection",
+    "bold": "Bold",
+    "italic": "Italic",
+    "underline": "Underline",
+    "strike": "Strikethrough",
+    "code": "Inline code",
+    "superscript": "Superscript",
+    "subscript": "Subscript",
+    "paragraph": "Paragraph",
+    "heading": "Heading {{level}}",
+    "alignLeft": "Align left",
+    "alignCenter": "Align centre",
+    "alignRight": "Align right",
+    "justify": "Justify",
+    "bulletList": "Bullet list",
+    "orderedList": "Ordered list",
+    "outdent": "Outdent",
+    "indent": "Indent",
+    "codeBlock": "Code block",
+    "blockquote": "Blockquote",
+    "rule": "Horizontal rule",
+    "hardBreak": "Hard break",
+    "setLink": "Set link",
+    "removeLink": "Remove link",
+    "insertVariable": "Insert variable",
+    "undo": "Undo",
+    "redo": "Redo",
+    "clear": "Clear formatting"
+  },
+  "Form": {
+    "fontSize": "Font size (px)",
+    "fontColor": "Font colour"
+  }
+}

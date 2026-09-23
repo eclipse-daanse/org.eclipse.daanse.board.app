@@ -13,12 +13,15 @@ Contributors:
 <script setup lang="ts">
 import { DSelect } from 'org.eclipse.daanse.board.app.ui.vue.controls'
 import { computed } from 'vue';
+import { useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 
 const { config, connections } = defineProps<{
   config: any;
   dataSources: any;
   connections: any;
-}>();
+}>()
+
+const { t } = useTranslation('datasourceRss');
 
 
 const connectionsFiltered = computed(() => {
@@ -29,6 +32,6 @@ const connectionsFiltered = computed(() => {
 
 <template>
   <!-- eslint-disable-next-line vue/no-mutating-props -->
-  <DSelect v-model="config.connection" label="Verbindung" :options="connectionsFiltered" label-key="name"
+  <DSelect v-model="config.connection" :label="t('Settings.connection')" :options="connectionsFiltered" label-key="name"
     value-key="uid" />
 </template>

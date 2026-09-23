@@ -1,0 +1,38 @@
+{
+  "Slider": {
+    "asNumber": "{{label}} als Zahl",
+    "value": "Wert"
+  },
+  "IconPicker": {
+    "fromTypeTitle": "{{icon}} (vom Typ)",
+    "fromType": "{{icon}} — vom Typ",
+    "reset": "Zurücksetzen",
+    "choose": "Symbol wählen",
+    "search": "Symbol suchen…",
+    "none": "Kein Symbol mit diesem Namen in der Auswahl.",
+    "other": "Anderer Name",
+    "otherPlaceholder": "z. B. thermostat",
+    "take": "Übernehmen",
+    "unknown": "Dieses Symbol kennt die Schrift nicht — es würde als Text erscheinen."
+  },
+  "Color": {
+    "label": "Farbe",
+    "hexOf": "{{label}} als Hexwert",
+    "hex": "Farbe als Hexwert"
+  },
+  "Modal": {
+    "close": "Schließen"
+  },
+  "Chip": {
+    "remove": "Entfernen"
+  },
+  "Window": {
+    "move": "{{title}} verschieben - mit den Pfeiltasten bewegen",
+    "close": "{{title}} schließen",
+    "size": "Größe von {{title}}",
+    "resize": "Größe ändern"
+  },
+  "Table": {
+    "empty": "Keine Zeilen"
+  }
+}

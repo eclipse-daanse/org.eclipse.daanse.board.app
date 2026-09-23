@@ -14,11 +14,14 @@ Contributors:
 import { DInput, DSelect } from 'org.eclipse.daanse.board.app.ui.vue.controls'
 import { inject, ref, computed, watch } from 'vue'
 import { identifier, DatasourceRepository } from 'org.eclipse.daanse.board.app.lib.api.datasource'
+import { useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 
 const { config, dataSources } = defineProps<{
   config: any
   dataSources: any
 }>()
+
+const { t } = useTranslation('composerWeather')
 
 // Filter for OGC STA datasources
 const datasourcesFiltered = computed(() => {
@@ -85,16 +88,16 @@ async function loadAvailableThings() {
 const isMappingSectionExpanded = ref(false)
 
 // Custom mapping for weather parameters
-const weatherParameters = [
-  { key: 'temperature', label: 'Temperature', placeholder: 'temp, temperatur, lufttemperatur' },
-  { key: 'humidity', label: 'Humidity', placeholder: 'humidity, feuchte, luftfeuchte' },
-  { key: 'pressure', label: 'Pressure', placeholder: 'pressure, luftdruck' },
-  { key: 'windSpeed', label: 'Wind Speed', placeholder: 'windspeed, windgeschwindigkeit' },
-  { key: 'windDirection', label: 'Wind Direction', placeholder: 'winddirection, windrichtung' },
-  { key: 'precipitation', label: 'Precipitation', placeholder: 'precipitation, niederschlag, rain' },
-  { key: 'visibility', label: 'Visibility', placeholder: 'visibility, sicht' },
-  { key: 'cloudCover', label: 'Cloud Cover', placeholder: 'cloudcover, wolken, bedeckung' }
-]
+const weatherParameters = computed(() => [
+  { key: 'temperature', label: t('Weather.param.temperature'), placeholder: 'temp, temperatur, lufttemperatur' },
+  { key: 'humidity', label: t('Weather.param.humidity'), placeholder: 'humidity, feuchte, luftfeuchte' },
+  { key: 'pressure', label: t('Weather.param.pressure'), placeholder: 'pressure, luftdruck' },
+  { key: 'windSpeed', label: t('Weather.param.windSpeed'), placeholder: 'windspeed, windgeschwindigkeit' },
+  { key: 'windDirection', label: t('Weather.param.windDirection'), placeholder: 'winddirection, windrichtung' },
+  { key: 'precipitation', label: t('Weather.param.precipitation'), placeholder: 'precipitation, niederschlag, rain' },
+  { key: 'visibility', label: t('Weather.param.visibility'), placeholder: 'visibility, sicht' },
+  { key: 'cloudCover', label: t('Weather.param.cloudCover'), placeholder: 'cloudcover, wolken, bedeckung' }
+])
 
 const updateCustomMapping = (parameter: string, keywords: string) => {
   if (!config.customMapping) {
@@ -115,13 +118,13 @@ const getCustomMappingValue = (parameter: string) => {
 <template>
   <div class="weather-composer-settings">
     <!-- eslint-disable-next-line vue/no-mutating-props -->
-    <DSelect v-model="config.connectedDatasources" label="OGC-STA-Quellen" :options="datasourcesFiltered" multiple label-key="name" value-key="uid" />
+    <DSelect v-model="config.connectedDatasources" :label="t('Sta.sources')" :options="datasourcesFiltered" multiple label-key="name" value-key="uid" />
 
     <!-- eslint-disable-next-line vue/no-mutating-props -->
     <DSelect
       v-model="config.thingId"
-      label="Thing (wahlweise)"
-      placeholder="All Things"
+      :label="t('Weather.thing')"
+      :placeholder="t('Weather.allThings')"
       :options="availableThings"
       label-key="name"
       value-key="iotId"
@@ -132,12 +135,12 @@ const getCustomMappingValue = (parameter: string) => {
 
     <div class="collapsible-section">
       <div class="collapsible-header" @click="isMappingSectionExpanded = !isMappingSectionExpanded">
-        <h3>Custom Keyword Mapping (Optional)</h3>
+        <h3>{{ t('Weather.mapping') }}</h3>
         <span class="collapse-icon" :class="{ 'expanded': isMappingSectionExpanded }">▼</span>
       </div>
 
       <div v-if="isMappingSectionExpanded" class="collapsible-content">
-        <p class="section-description">Override default keywords for weather parameter detection</p>
+        <p class="section-description">{{ t('Weather.mappingHint') }}</p>
 
         <div v-for="param in weatherParameters" :key="param.key" class="mapping-item">
           <!-- eslint-disable-next-line vue/no-mutating-props -->

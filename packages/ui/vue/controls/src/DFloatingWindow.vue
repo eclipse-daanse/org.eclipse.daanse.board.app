@@ -27,6 +27,7 @@ Contributors:
  */
 import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { dockCount, dockSlot, dockWidth, joinDock, leaveDock, setDockWidth, type DockSide } from './dock'
+import { useText } from './useText'
 
 export interface Placement {
   x: number
@@ -80,6 +81,7 @@ const props = withDefaults(
 )
 
 const emit = defineEmits<{ close: [] }>()
+const t = useText()
 
 /*
  * A window that starts on an edge can return to one.
@@ -383,7 +385,7 @@ defineExpose({ placement: place, keepInView })
       class="fw__bar"
       role="toolbar"
       tabindex="0"
-      :aria-label="`${title} verschieben - mit den Pfeiltasten bewegen`"
+      :aria-label="t('Window.move', 'Move {title} - use the arrow keys', { title })"
       @pointerdown.prevent="startMove($event)"
       @keydown.left.prevent="nudge(-16, 0)"
       @keydown.right.prevent="nudge(16, 0)"
@@ -397,8 +399,8 @@ defineExpose({ placement: place, keepInView })
         v-if="closable"
         type="button"
         class="fw__act"
-        title="Schließen"
-        :aria-label="`${title} schließen`"
+        :title="t('Modal.close', 'Close')"
+        :aria-label="t('Window.close', 'Close {title}', { title })"
         @pointerdown.stop
         @click="emit('close')"
       >
@@ -414,8 +416,8 @@ defineExpose({ placement: place, keepInView })
       v-if="resizable"
       class="fw__grip"
       role="separator"
-      :aria-label="`Größe von ${title}`"
-      title="Größe ändern"
+      :aria-label="t('Window.size', 'Size of {title}', { title })"
+      :title="t('Window.resize', 'Resize')"
       @pointerdown.prevent="startResize($event)"
     ></div>
   </aside>

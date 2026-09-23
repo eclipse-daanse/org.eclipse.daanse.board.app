@@ -13,6 +13,7 @@ Contributors:
 <script setup lang="ts">
 import { DInput, DSelect } from 'org.eclipse.daanse.board.app.ui.vue.controls'
 import { computed } from 'vue';
+import { useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 
 const { config, connections } = defineProps<{
     config: any;
@@ -20,24 +21,23 @@ const { config, connections } = defineProps<{
     dataSources: any[];
 }>();
 
+const { t } = useTranslation('datasourceValhalla')
+
 const connectionsFiltered = computed(
     () => connections.filter((c: any) => c.type === 'rest'),
 );
 
-const costingOptions = [
-    { text: 'Auto', value: 'auto' },
-    { text: 'Bicycle', value: 'bicycle' },
-    { text: 'Pedestrian', value: 'pedestrian' },
-    { text: 'Truck', value: 'truck' },
-    { text: 'Bus', value: 'bus' },
-    { text: 'Motor Scooter', value: 'motor_scooter' },
-    { text: 'Motorcycle', value: 'motorcycle' },
-];
+const costingOptions = computed(() =>
+    ['auto', 'bicycle', 'pedestrian', 'truck', 'bus', 'motor_scooter', 'motorcycle'].map((value) => ({
+        text: t(`Valhalla.costing.${value}`),
+        value,
+    })),
+);
 
-const unitOptions = [
-    { text: 'Kilometers', value: 'kilometers' },
-    { text: 'Miles', value: 'miles' },
-];
+const unitOptions = computed(() => [
+    { text: t('Valhalla.units.kilometers'), value: 'kilometers' },
+    { text: t('Valhalla.units.miles'), value: 'miles' },
+]);
 
 if (!config.costing) config.costing = 'auto';
 if (!config.units) config.units = 'kilometers';
@@ -47,27 +47,27 @@ if (!config.language) config.language = 'de-DE';
 <template>
     <DSelect
         v-model="config.connection"
-        label="Valhalla-Verbindung"
+        :label="t('Valhalla.connection')"
         :options="connectionsFiltered"
         label-key="name"
         value-key="uid"
     />
     <DSelect
         v-model="config.costing"
-        label="Standard-Fortbewegung"
+        :label="t('Valhalla.defaultCosting')"
         :options="costingOptions"
         label-key="text"
         value-key="value"
     />
     <DSelect
         v-model="config.units"
-        label="Einheiten"
+        :label="t('Valhalla.units.label')"
         :options="unitOptions"
         label-key="text"
         value-key="value"
     />
     <DInput
         v-model="config.language"
-        label="Language (e.g. de-DE)"
+        :label="t('Valhalla.language')"
     />
 </template>

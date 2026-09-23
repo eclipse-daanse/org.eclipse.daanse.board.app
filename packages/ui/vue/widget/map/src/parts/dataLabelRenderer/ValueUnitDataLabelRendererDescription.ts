@@ -17,8 +17,8 @@ import ValueUnitDataLabelRendererSettings from './ValueUnitDataLabelRendererSett
 export default class ValueUnitDataLabelRendererDescription implements IDataPointDescription {
   public readonly component: any = ValueUnitDataLabelRenderer
   public readonly setupComponent: any = ValueUnitDataLabelRendererSettings
-  public readonly description: string = 'Renders a value and unit'
-  public readonly name: string = 'Value and Unit Data Point Renderer'
+  public readonly description: string = 'map:Renderer.valueUnit.description'
+  public readonly name: string = 'map:Renderer.valueUnit.name'
   public readonly namespace: string = 'general'
   public readonly qualifiedName: string = 'ValueUnitDataPointRenderer'
   public readonly example: any = ' 15'

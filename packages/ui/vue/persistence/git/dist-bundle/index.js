@@ -1,112 +1,113 @@
-(function(){var i="ui.vue.persistence.git",d=document,s=d.querySelector('style[data-tsm-bundle="'+i+'"]');if(!s){s=d.createElement('style');s.setAttribute('data-tsm-bundle',i);d.head.appendChild(s);}s.textContent=".save[data-v-316e302b]{display:flex;align-items:flex-end;gap:8px}.table[data-v-5ea0d212]{min-height:100px}.flex-nowrap[data-v-5ea0d212]{display:flex;flex-direction:row;flex-wrap:nowrap;align-items:flex-end;gap:8px}.note[data-v-5ea0d212]{margin:8px 0;font-family:var(--font-sans);font-size:var(--text-sm);color:var(--color-dim)}.note--bad[data-v-5ea0d212]{color:var(--color-err)}.token__title[data-v-5ea0d212]{margin:0;font-size:var(--text-lg);font-weight:600}\n";})();
-import { REPOSITORY_REGISTRY as H } from "org.eclipse.daanse.board.app.lib.api.persistence";
-import { AuthentificationError as J, type as Q } from "org.eclipse.daanse.board.app.lib.persistence.git";
-import { isRef as P, shallowRef as M, ref as m, watchEffect as X, computed as B, defineComponent as j, onMounted as ee, createBlock as T, openBlock as V, Teleport as I, createElementVNode as F, createVNode as d, unref as n, withCtx as b, createTextVNode as C, watch as E, createElementBlock as $, Fragment as te, createCommentVNode as ae, normalizeClass as oe, toDisplayString as ne } from "vue";
-import { DInput as Y, DButton as R, DIcon as N, DSelect as O, DTable as le, DModal as se } from "org.eclipse.daanse.board.app.ui.vue.controls";
-import { usePromisifiedModal as ie } from "org.eclipse.daanse.board.app.ui.vue.composables";
+(function(){var i="ui.vue.persistence.git",d=document,s=d.querySelector('style[data-tsm-bundle="'+i+'"]');if(!s){s=d.createElement('style');s.setAttribute('data-tsm-bundle',i);d.head.appendChild(s);}s.textContent=".save[data-v-b5d7b044]{display:flex;align-items:flex-end;gap:8px}.table[data-v-98dec67c]{min-height:100px}.flex-nowrap[data-v-98dec67c]{display:flex;flex-direction:row;flex-wrap:nowrap;align-items:flex-end;gap:8px}.note[data-v-98dec67c]{margin:8px 0;font-family:var(--font-sans);font-size:var(--text-sm);color:var(--color-dim)}.note--bad[data-v-98dec67c]{color:var(--color-err)}.token__title[data-v-98dec67c]{margin:0;font-size:var(--text-lg);font-weight:600}\n";})();
+import { REPOSITORY_REGISTRY as te } from "org.eclipse.daanse.board.app.lib.api.persistence";
+import { AuthentificationError as ae, type as oe } from "org.eclipse.daanse.board.app.lib.persistence.git";
+import { isRef as Y, shallowRef as $, ref as b, watchEffect as ne, computed as z, defineComponent as q, onMounted as le, createBlock as F, openBlock as S, Teleport as B, createElementVNode as I, createVNode as p, unref as e, withCtx as h, createTextVNode as x, toDisplayString as k, watch as A, createElementBlock as L, Fragment as ie, createCommentVNode as se, normalizeClass as re } from "vue";
+import { DInput as K, DButton as C, DIcon as O, DSelect as W, DTable as ce, DModal as ue } from "org.eclipse.daanse.board.app.ui.vue.controls";
+import { useTranslation as Z, usePromisifiedModal as de } from "org.eclipse.daanse.board.app.ui.vue.composables";
+import { component as me } from "@eclipse-daanse/tsm";
 typeof WorkerGlobalScope < "u" && globalThis instanceof WorkerGlobalScope;
-const re = () => {
+const pe = () => {
 };
-function ue(i, c, t) {
-  var p;
-  let v;
-  P(t) ? v = { evaluating: t } : v = t || {};
-  const { lazy: l = !1, flush: y = "sync", evaluating: r = void 0, shallow: w = !0, onError: f = (p = globalThis.reportError) !== null && p !== void 0 ? p : re } = v, g = M(!l), h = w ? M(c) : m(c);
-  let s = 0;
-  return X(async (u) => {
+function ve(i, c, o) {
+  var a;
+  let r;
+  Y(o) ? r = { evaluating: o } : r = o || {};
+  const { lazy: u = !1, flush: s = "sync", evaluating: d = void 0, shallow: f = !0, onError: _ = (a = globalThis.reportError) !== null && a !== void 0 ? a : pe } = r, g = $(!u), y = f ? $(c) : b(c);
+  let w = 0;
+  return ne(async (m) => {
     if (!g.value) return;
-    s++;
-    const S = s;
-    let _ = !1;
-    r && Promise.resolve().then(() => {
-      r.value = !0;
+    w++;
+    const v = w;
+    let G = !1;
+    d && Promise.resolve().then(() => {
+      d.value = !0;
     });
     try {
-      const D = await i((k) => {
-        u(() => {
-          r && (r.value = !1), _ || k();
+      const V = await i((N) => {
+        m(() => {
+          d && (d.value = !1), G || N();
         });
       });
-      S === s && (h.value = D);
-    } catch (D) {
-      f(D);
+      v === w && (y.value = V);
+    } catch (V) {
+      _(V);
     } finally {
-      r && S === s && (r.value = !1), _ = !0;
+      d && v === w && (d.value = !1), G = !0;
     }
-  }, { flush: y }), l ? B(() => (g.value = !0, h.value)) : h;
+  }, { flush: s }), u ? z(() => (g.value = !0, y.value)) : y;
 }
-const W = ue, de = { class: "save" }, ce = /* @__PURE__ */ j({
+const j = ve, fe = { class: "save" }, ge = /* @__PURE__ */ q({
   __name: "SaveInputGit",
   props: {
     repo: {}
   },
   emits: ["save", "override"],
-  setup(i, { expose: c, emit: t }) {
-    const p = t, v = i, l = m("newFile"), y = B(() => l.value == "");
-    ee(async () => {
-      r.value = await v.repo.findAll();
+  setup(i, { expose: c, emit: o }) {
+    const a = o, r = i, { t: u } = Z("persistence"), s = b("newFile"), d = z(() => s.value == "");
+    le(async () => {
+      f.value = await r.repo.findAll();
     });
-    const r = m(), w = B(() => r.value == null ? !1 : r.value.find((s) => s.name == l.value) != null), f = () => {
-      const s = new URL(v.repo.uri);
-      s.pathname = l.value + ".json", p("save", {
-        name: l.value,
-        uri: s
+    const f = b(), _ = z(() => f.value == null ? !1 : f.value.find((m) => m.name == s.value) != null), g = () => {
+      const m = new URL(r.repo.uri);
+      m.pathname = s.value + ".json", a("save", {
+        name: s.value,
+        uri: m
       });
-    }, g = () => {
-      const s = r.value.find((u) => u.name == l.value);
-      p("override", s);
+    }, y = () => {
+      const m = f.value.find((v) => v.name == s.value);
+      a("override", m);
     };
-    return c({ setNameSuggestion: (s) => {
-      l.value = s;
-    } }), (s, u) => (V(), T(I, {
+    return c({ setNameSuggestion: (m) => {
+      s.value = m;
+    } }), (m, v) => (S(), F(B, {
       defer: "",
       to: "#loadSaveModalFooter"
     }, [
-      F("div", de, [
-        d(n(Y), {
-          modelValue: l.value,
-          "onUpdate:modelValue": u[0] || (u[0] = (S) => l.value = S),
-          label: "Name",
-          placeholder: "Dateiname"
-        }, null, 8, ["modelValue"]),
-        w.value ? (V(), T(n(R), {
+      I("div", fe, [
+        p(e(K), {
+          modelValue: s.value,
+          "onUpdate:modelValue": v[0] || (v[0] = (G) => s.value = G),
+          label: e(u)("Git.name"),
+          placeholder: e(u)("Git.fileName")
+        }, null, 8, ["modelValue", "label", "placeholder"]),
+        _.value ? (S(), F(e(C), {
           key: 0,
           intent: "danger",
-          disabled: y.value,
-          onClick: g
+          disabled: d.value,
+          onClick: y
         }, {
-          default: b(() => [
-            d(n(N), {
+          default: h(() => [
+            p(e(O), {
               name: "save",
               size: "sm"
             }),
-            u[1] || (u[1] = C("Überschreiben ", -1))
+            x(k(e(u)("Git.overwrite")), 1)
           ]),
           _: 1
-        }, 8, ["disabled"])) : (V(), T(n(R), {
+        }, 8, ["disabled"])) : (S(), F(e(C), {
           key: 1,
           intent: "primary",
-          disabled: y.value,
-          onClick: f
+          disabled: d.value,
+          onClick: g
         }, {
-          default: b(() => [
-            d(n(N), {
+          default: h(() => [
+            p(e(O), {
               name: "save",
               size: "sm"
             }),
-            u[2] || (u[2] = C("Ablegen ", -1))
+            x(k(e(u)("Git.store")), 1)
           ]),
           _: 1
         }, 8, ["disabled"]))
       ])
     ]));
   }
-}), q = (i, c) => {
-  const t = i.__vccOpts || i;
-  for (const [p, v] of c)
-    t[p] = v;
-  return t;
-}, me = /* @__PURE__ */ q(ce, [["__scopeId", "data-v-316e302b"]]), pe = { class: "flex-nowrap" }, ve = /* @__PURE__ */ j({
+}), J = (i, c) => {
+  const o = i.__vccOpts || i;
+  for (const [a, r] of c)
+    o[a] = r;
+  return o;
+}, ye = /* @__PURE__ */ J(ge, [["__scopeId", "data-v-b5d7b044"]]), be = { class: "flex-nowrap" }, he = { class: "token__title" }, _e = /* @__PURE__ */ q({
   __name: "GitRepositoryV",
   props: {
     repo: {},
@@ -114,197 +115,225 @@ const W = ue, de = { class: "save" }, ce = /* @__PURE__ */ j({
   },
   emits: ["close"],
   setup(i, { emit: c }) {
-    const t = i, p = c, v = m([
-      { key: "name", label: "Datei" },
-      { key: "date", label: "Datum" },
-      { key: "size", label: "Größe" }
-    ]), l = m([]), y = m("main"), r = m(""), w = m(!1), f = m(void 0), g = m(void 0);
-    E(() => t.repo, async (a) => {
-      await u();
-    }, { immediate: !0 }), E(y, async (a) => {
-      const e = (await t.repo.getBranches()).find((o) => o.name == a);
-      e && (t.repo.setBranch(e), t.repo.getCommits(), u());
-    }), E(r, async (a) => {
-      const e = (await t.repo.getCommits()).find((o) => o.creation_date == a);
-      e && (t.repo.setCommit(e), u());
+    const o = i, { t: a } = Z("persistence"), r = c, u = z(() => [
+      { key: "name", label: a("Git.columns.name") },
+      { key: "date", label: a("Git.columns.date") },
+      { key: "size", label: a("Git.columns.size") }
+    ]), s = b([]), d = b("main"), f = b(""), _ = b(!1), g = b(void 0), y = b(void 0);
+    A(() => o.repo, async (n) => {
+      await v();
+    }, { immediate: !0 }), A(d, async (n) => {
+      const t = (await o.repo.getBranches()).find((l) => l.name == n);
+      t && (o.repo.setBranch(t), o.repo.getCommits(), v());
+    }), A(f, async (n) => {
+      const t = (await o.repo.getCommits()).find((l) => l.creation_date == n);
+      t && (o.repo.setCommit(t), v());
     });
-    const h = W(async () => (await t.repo.getBranches()).map((a) => a.name)), s = W(async () => (await t.repo.getCommits()).map((a) => a.creation_date));
-    async function u() {
-      if (t.repo != null)
+    const w = j(async () => (await o.repo.getBranches()).map((n) => n.name)), m = j(async () => (await o.repo.getCommits()).map((n) => n.creation_date));
+    async function v() {
+      if (o.repo != null)
         try {
-          w.value = !0, l.value = await t.repo.findAll();
+          _.value = !0, s.value = await o.repo.findAll();
         } catch {
-          l.value = [];
+          s.value = [];
         } finally {
-          w.value = !1;
+          _.value = !1;
         }
-      else l.value = [];
+      else s.value = [];
     }
-    const S = async (a) => {
-      if (!t.context?.state)
+    const G = async (n) => {
+      if (!o.context?.state)
         return console.log("no context"), !1;
-      a.data = t.context.state;
+      n.data = o.context.state;
       try {
-        await t.repo.update(a), x({ message: "Datei abgelegt" });
-      } catch (e) {
-        let o = await G(null);
-        o ? (await t.repo.auth({ auth: o }), S(a)) : x({ title: "Ablegen fehlgeschlagen", message: String(e) });
+        await o.repo.update(n), T({ message: a("Git.stored") });
+      } catch (t) {
+        let l = await M(null);
+        l ? (await o.repo.auth({ auth: l }), G(n)) : T({ title: a("Git.storeFailed"), message: String(t) });
       } finally {
       }
-    }, _ = async (a) => {
-      if (!t.context?.state)
+    }, V = async (n) => {
+      if (!o.context?.state)
         return console.log("no context"), !1;
-      a.data = t.context.state;
+      n.data = o.context.state;
       try {
-        await t.repo.create(a), x({ message: "Datei abgelegt" });
-      } catch (e) {
-        if (e instanceof J) {
-          let o = await G(null);
-          o ? (await t.repo.auth({ auth: o }), await _(a)) : x({ title: "Ablegen fehlgeschlagen", message: String(e) });
+        await o.repo.create(n), T({ message: a("Git.stored") });
+      } catch (t) {
+        if (t instanceof ae) {
+          let l = await M(null);
+          l ? (await o.repo.auth({ auth: l }), await V(n)) : T({ title: a("Git.storeFailed"), message: String(t) });
         } else
-          x({ title: "Ablegen fehlgeschlagen", message: String(e) }), console.log(a);
+          T({ title: a("Git.storeFailed"), message: String(t) }), console.log(n);
       } finally {
-        await u();
+        await v();
       }
-    }, D = () => f.value, k = m();
-    let z;
-    function x(a) {
-      k.value = {
-        text: a.title ? `${a.title}: ${a.message}` : a.message,
-        bad: !!a.title
-      }, z && clearTimeout(z), z = setTimeout(() => k.value = void 0, 4e3);
+    }, N = () => g.value, D = b();
+    let E;
+    function T(n) {
+      D.value = {
+        text: n.title ? `${n.title}: ${n.message}` : n.message,
+        bad: !!n.title
+      }, E && clearTimeout(E), E = setTimeout(() => D.value = void 0, 4e3);
     }
-    const { isOpened: A, run: G, close: U } = ie(D), Z = async () => {
-      const a = g.value;
+    const { isOpened: R, run: M, close: U } = de(N), ee = async () => {
+      const n = y.value;
       try {
-        let e = await t.repo.getEntityByUri(a.uri);
-        e && e.data && p("close", e?.data), x({ message: "Datei geladen" });
-      } catch (e) {
-        console.log(e);
+        let t = await o.repo.getEntityByUri(n.uri);
+        t && t.data && r("close", t?.data), T({ message: a("Git.loaded") });
+      } catch (t) {
+        console.log(t);
       }
     };
-    return (a, e) => (V(), $(te, null, [
-      F("div", pe, [
-        (V(), T(I, {
+    return (n, t) => (S(), L(ie, null, [
+      I("div", be, [
+        (S(), F(B, {
           defer: "",
           to: "#loadSaveModalFooter"
         }, [
-          d(n(O), {
-            modelValue: y.value,
-            "onUpdate:modelValue": e[0] || (e[0] = (o) => y.value = o),
-            label: "Branch",
-            options: n(h) ?? [],
+          p(e(W), {
+            modelValue: d.value,
+            "onUpdate:modelValue": t[0] || (t[0] = (l) => d.value = l),
+            label: e(a)("Git.branch"),
+            options: e(w) ?? [],
             size: "sm"
-          }, null, 8, ["modelValue", "options"]),
-          d(n(O), {
-            modelValue: r.value,
-            "onUpdate:modelValue": e[1] || (e[1] = (o) => r.value = o),
-            label: "Stand",
-            options: n(s) ?? [],
+          }, null, 8, ["modelValue", "label", "options"]),
+          p(e(W), {
+            modelValue: f.value,
+            "onUpdate:modelValue": t[1] || (t[1] = (l) => f.value = l),
+            label: e(a)("Git.commit"),
+            options: e(m) ?? [],
             size: "sm",
             clearable: ""
-          }, null, 8, ["modelValue", "options"])
+          }, null, 8, ["modelValue", "label", "options"])
         ])),
-        d(me, {
+        p(ye, {
           repo: i.repo,
-          onSave: _,
-          onOverride: S
+          onSave: V,
+          onOverride: G
         }, null, 8, ["repo"]),
-        (V(), T(I, {
+        (S(), F(B, {
           defer: "",
           to: "#loadSaveModalFooter"
         }, [
-          d(n(R), {
+          p(e(C), {
             intent: "primary",
-            disabled: !g.value,
-            onClick: Z
+            disabled: !y.value,
+            onClick: ee
           }, {
-            default: b(() => [
-              d(n(N), {
+            default: h(() => [
+              p(e(O), {
                 name: "task",
                 size: "sm"
               }),
-              e[7] || (e[7] = C("Laden ", -1))
+              x(k(e(a)("Git.load")), 1)
             ]),
             _: 1
           }, 8, ["disabled"])
         ]))
       ]),
-      k.value ? (V(), $("p", {
+      D.value ? (S(), L("p", {
         key: 0,
-        class: oe(["note", { "note--bad": k.value.bad }]),
+        class: re(["note", { "note--bad": D.value.bad }]),
         role: "status"
-      }, ne(k.value.text), 3)) : ae("", !0),
-      d(n(le), {
-        selected: g.value,
-        "onUpdate:selected": e[2] || (e[2] = (o) => g.value = o),
+      }, k(D.value.text), 3)) : se("", !0),
+      p(e(ce), {
+        selected: y.value,
+        "onUpdate:selected": t[2] || (t[2] = (l) => y.value = l),
         class: "table",
-        items: l.value,
-        columns: v.value,
+        items: s.value,
+        columns: u.value,
         selectable: "",
-        empty: w.value ? "Wird geladen…" : "Keine Datei in diesem Stand"
+        empty: _.value ? e(a)("Git.loading") : e(a)("Git.empty")
       }, null, 8, ["selected", "items", "columns", "empty"]),
-      d(n(se), {
-        modelValue: n(A),
-        "onUpdate:modelValue": e[6] || (e[6] = (o) => P(A) ? A.value = o : null),
+      p(e(ue), {
+        modelValue: e(R),
+        "onUpdate:modelValue": t[6] || (t[6] = (l) => Y(R) ? R.value = l : null),
         size: "sm"
       }, {
-        header: b(() => [...e[8] || (e[8] = [
-          F("h2", { class: "token__title" }, "Zugang zum Repository", -1)
-        ])]),
-        actions: b(() => [
-          d(n(R), {
+        header: h(() => [
+          I("h2", he, k(e(a)("Git.access")), 1)
+        ]),
+        actions: h(() => [
+          p(e(C), {
             intent: "quiet",
-            onClick: e[4] || (e[4] = () => {
-              f.value = void 0, n(U)(null);
+            onClick: t[4] || (t[4] = () => {
+              g.value = void 0, e(U)(null);
             })
           }, {
-            default: b(() => [...e[9] || (e[9] = [
-              C("Abbrechen", -1)
-            ])]),
+            default: h(() => [
+              x(k(e(a)("common:Action.cancel")), 1)
+            ]),
             _: 1
           }),
-          d(n(R), {
+          p(e(C), {
             intent: "primary",
-            onClick: e[5] || (e[5] = () => n(U)(f.value))
+            onClick: t[5] || (t[5] = () => e(U)(g.value))
           }, {
-            default: b(() => [...e[10] || (e[10] = [
-              C("Weiter", -1)
-            ])]),
+            default: h(() => [
+              x(k(e(a)("Git.continue")), 1)
+            ]),
             _: 1
           })
         ]),
-        default: b(() => [
-          d(n(Y), {
-            modelValue: f.value,
-            "onUpdate:modelValue": e[3] || (e[3] = (o) => f.value = o),
-            label: "Token",
+        default: h(() => [
+          p(e(K), {
+            modelValue: g.value,
+            "onUpdate:modelValue": t[3] || (t[3] = (l) => g.value = l),
+            label: e(a)("Git.token"),
             type: "password",
-            hint: "Wird nur für diese Sitzung behalten."
-          }, null, 8, ["modelValue"])
+            hint: e(a)("Git.tokenHint")
+          }, null, 8, ["modelValue", "label", "hint"])
         ]),
         _: 1
       }, 8, ["modelValue"])
     ], 64));
   }
-}), fe = /* @__PURE__ */ q(ve, [["__scopeId", "data-v-5ea0d212"]]);
-function K({ services: i }) {
-  i.getRequired(H).registerViewForRepoType(Q, fe);
+}), we = /* @__PURE__ */ J(_e, [["__scopeId", "data-v-98dec67c"]]), Ge = { columns: { name: "Datei", date: "Datum", size: "Größe" }, loaded: "Datei geladen", stored: "Datei abgelegt", storeFailed: "Ablegen fehlgeschlagen", loading: "Wird geladen…", empty: "Keine Datei in diesem Stand", branch: "Branch", commit: "Stand", load: "Laden", access: "Zugang zum Repository", token: "Token", tokenHint: "Wird nur für diese Sitzung behalten.", continue: "Weiter", name: "Name", fileName: "Dateiname", overwrite: "Überschreiben", store: "Ablegen" }, ke = {
+  Git: Ge
+}, Se = { columns: { name: "File", date: "Date", size: "Size" }, loaded: "File loaded", stored: "File stored", storeFailed: "Storing failed", loading: "Loading…", empty: "No file in this commit", branch: "Branch", commit: "Commit", load: "Load", access: "Access to the repository", token: "Token", tokenHint: "Kept for this session only.", continue: "Continue", name: "Name", fileName: "File name", overwrite: "Overwrite", store: "Store" }, Ve = {
+  Git: Se
+};
+var Te = Object.getOwnPropertyDescriptor, De = (i, c, o, a) => {
+  for (var r = a > 1 ? void 0 : a ? Te(c, o) : c, u = i.length - 1, s; u >= 0; u--)
+    (s = i[u]) && (r = s(r) || r);
+  return r;
+};
+const Q = "persistence";
+let P = class {
+  constructor() {
+    this.namespace = Q, this.resources = {
+      de: ke,
+      en: Ve
+    };
+  }
+};
+P = De([
+  me({
+    service: ["Translations"],
+    properties: { "i18n.namespace": Q }
+  })
+], P);
+function X({ services: i }) {
+  i.getRequired(te).registerViewForRepoType(oe, we);
 }
-const ge = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const Fe = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  activate: K
-}, Symbol.toStringTag, { value: "Module" })), L = "org.eclipse.daanse.board.app.ui.vue.persistence.git", ye = "0.0.1-next.1";
-async function he(i) {
+  get PersistenceTranslations() {
+    return P;
+  },
+  activate: X
+}, Symbol.toStringTag, { value: "Module" })), H = "org.eclipse.daanse.board.app.ui.vue.persistence.git", xe = "0.0.1-next.1";
+async function Be(i) {
   const c = globalThis.__tsm__;
   if (!c)
-    throw new Error(`${L}: tsm runtime is not initialized`);
-  c.register(L, ge, ye, "ui.vue.persistence.git"), await K?.(i);
+    throw new Error(`${H}: tsm runtime is not initialized`);
+  c.register(H, Fe, xe, "ui.vue.persistence.git"), await X?.(i);
 }
-async function xe(i) {
+async function Ie(i) {
   await void 0;
 }
 export {
-  he as activate,
-  xe as deactivate
+  P as PersistenceTranslations,
+  Be as activate,
+  Ie as deactivate
 };

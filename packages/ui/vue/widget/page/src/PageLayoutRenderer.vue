@@ -24,11 +24,13 @@ import {
   identifier as PageIdentifier,
   type PageI as RepositoryPageI
 } from 'org.eclipse.daanse.board.app.lib.api.page'
+import { useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 
 const props = defineProps<{
   pageId: string
   viewMode?: boolean
 }>()
+const { t } = useTranslation('page')
 
 const emit = defineEmits(['openWidgetSettings', 'removeWidget'])
 
@@ -83,7 +85,7 @@ onMounted(async () => {
     loadLayout()
 
   } catch (err) {
-    error.value = `Fehler beim Laden der Seite ${props.pageId}: ${err}`
+    error.value = t('Widget.loadFailed', { page: props.pageId, reason: String(err) })
     console.error('PageLayoutRenderer error:', err)
   } finally {
     isLoading.value = false
@@ -92,7 +94,7 @@ onMounted(async () => {
 
 // Error handling
 onErrorCaptured((err) => {
-  error.value = `Render-Fehler: ${err.message}`
+  error.value = t('Widget.renderFailed', { reason: err.message })
   console.error('PageLayoutRenderer render error:', err)
   return false
 })
@@ -112,7 +114,7 @@ const handleRemoveWidget = (widgetId: string) => {
     <!-- Loading State -->
     <div v-if="isLoading" class="loading-state">
       <div class="loading-spinner"></div>
-      <p>Lade Seite {{ pageId }}...</p>
+      <p>{{ t('Widget.loading', { page: pageId }) }}</p>
     </div>
 
     <!-- Error State -->
@@ -124,9 +126,9 @@ const handleRemoveWidget = (widgetId: string) => {
     <!-- Kein Layout/Component gefunden -->
     <div v-else-if="!ViewComponent && !error" class="no-layout-state">
       <div class="warning-icon">⚠️</div>
-      <p>Kein Layout-System für Seite {{ pageId }} gefunden</p>
-      <small v-if="currentPage">Page: {{ currentPage.name }}</small>
-      <small v-if="currentLayout">Layout: {{ currentLayout.id }}</small>
+      <p>{{ t('Widget.noLayout', { page: pageId }) }}</p>
+      <small v-if="currentPage">{{ t('Widget.pageName', { name: currentPage.name }) }}</small>
+      <small v-if="currentLayout">{{ t('Widget.layoutId', { id: currentLayout.id }) }}</small>
     </div>
 
     <!-- Layout Engine Rendering (wie echte Seiten) -->

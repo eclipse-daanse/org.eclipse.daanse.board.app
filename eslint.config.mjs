@@ -35,6 +35,39 @@ export default [
   ...pluginVue.configs['flat/essential'],
   ...vueTsEslintConfig(),
 
+  /*
+   * Words on screen go through a translation key (docs/i18n.md), so a
+   * literal word in a template is most likely one that was missed. A
+   * warning for now: symbols, units and names that are the same in every
+   * language are allowed, and the test harnesses are left out.
+   */
+  {
+    name: 'app/i18n',
+    files: ['packages/**/*.vue'],
+    ignores: ['packages/ui/vue/test/**'],
+    rules: {
+      'vue/no-bare-strings-in-template': [
+        'warn',
+        {
+          allowlist: [
+            '(', ')', ',', '.', '&', '+', '-', '=', '*', '/', '#', '%', '!', '?', ':', '[', ']', '{', '}', '<', '>',
+            '•', '·', '–', '—', '→', '←', '↑', '↓', '↺', '×', '✕', '▾', '▸', '▼', '…', '°', '|',
+            '{x}', 'px', 'ms', 's', 'km', 'min', 'h', 'URL', 'UID', 'ID', 'JSON', 'MDX', 'SQL', 'XMLA', 'OK',
+            /* Numbers with a unit, the Material icon names and emoji used as pictures. */
+            '/^[\\d.,]+\\s*(px|ms|s|x|×|%|°[NE]?)?$/',
+            '/^[\\p{Extended_Pictographic}\\uFE0F\\s]+$/u',
+            '/^(P|H[1-6])$/',
+          ],
+          attributes: {
+            '/.+/': ['title', 'aria-label', 'aria-placeholder', 'aria-description', 'placeholder', 'alt'],
+            '/^D[A-Z]/': ['label', 'hint', 'placeholder', 'title', 'error', 'empty'],
+          },
+          directives: ['v-text'],
+        },
+      ],
+    },
+  },
+
   {
     ...pluginVitest.configs.recommended,
     files: ['src/**/__tests__/*'],

@@ -1,9 +1,0 @@
-{
-  "ImageWidget": {
-    "title": "Image widget settings",
-    "imageUrl": "Image src",
-    "addButton": "Add image",
-    "imageFit": "Fit",
-    "imageDiashowInterval": "Diashow interval"
-  }
-}

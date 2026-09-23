@@ -14,3 +14,6 @@
 import MonacoEditor from './MonacoEditor.vue'
 
 export { MonacoEditor }
+
+/* Its texts - collected by lib.i18next, see src/i18n. */
+export { MonacoTranslations } from './i18n'

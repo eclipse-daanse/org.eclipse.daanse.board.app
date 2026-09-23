@@ -52,7 +52,7 @@ test.describe('Maps Widget - Basic Service Test', () => {
     await page.screenshot({ path: 'test-results/03-url-filled.png', fullPage: true })
 
     // Find and click Add button
-    const addButton = page.getByRole('button', { name: /^Add$/i }).first()
+    const addButton = page.getByTestId('map-add-service-confirm')
     await expect(addButton).toBeVisible({ timeout: 5000 })
 
     console.log('✓ Found Add button')

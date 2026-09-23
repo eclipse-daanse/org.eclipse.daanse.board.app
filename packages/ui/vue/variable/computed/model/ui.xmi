@@ -27,6 +27,6 @@ variable, not to this type, and the dialog asks for them once.
   <components xsi:type="uimodel:FormView" name="ComputedVariableSettingsFormView">
     <fields xsi:type="uimodel:InputWidget" name="expression"
         feature="http://org.eclipse.daanse.board.app.ui.vue.variable.computed#//ComputedVariableSettings/expression"
-        label="Ausdruck"/>
+        label="variableComputed:FormComputed.expression"/>
   </components>
 </uimodel:UIModel>

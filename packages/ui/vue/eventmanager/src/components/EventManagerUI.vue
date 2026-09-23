@@ -23,6 +23,9 @@ import {
   DModal,
   DSelect,
 } from 'org.eclipse.daanse.board.app.ui.vue.controls'
+import { useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+
+const { t } = useTranslation('eventmanager')
 
 let eventManager: EventManager
 let eventRegistry: EventRegistry
@@ -49,11 +52,17 @@ const newMapping = ref<Partial<EventActionMapping>>({
   }]
 })
 
-const contextOptions = [
-  { text: 'System', value: 'system' },
-  { text: 'Seite', value: 'page' },
-  { text: 'Widget', value: 'widget' }
-]
+const contextOptions = computed(() => [
+  { text: t('Context.system'), value: 'system' },
+  { text: t('Context.page'), value: 'page' },
+  { text: t('Context.widget'), value: 'widget' }
+])
+
+/* Every page, and the choice of none in particular. */
+const pageOptions = computed(() => [
+  { text: t('Rule.anyPage'), value: '' },
+  ...availablePages.value.map((p) => ({ text: p, value: p })),
+])
 
 const comperatorOptions = [
   { text: '==', value: Comperator.eq },
@@ -174,7 +183,7 @@ const eventOptions = computed(() =>
     return {
       value: event.type,
       text: at > -1 ? event.type.slice(at + 1) : event.type,
-      group: at > -1 ? event.type.slice(0, at) : 'Sonstige',
+      group: at > -1 ? event.type.slice(0, at) : t('Rule.otherEvents'),
     }
   }),
 )
@@ -238,7 +247,7 @@ const availableInstances = computed(() => {
   const instances = actionsRegistry?.getRegisteredInstances(selectedAction.widgetType) || []
 
   return [
-    { text: 'alle Instanzen', value: '' },
+    { text: t('Rule.allInstances'), value: '' },
     ...instances.map(inst => ({
       text: `${inst.instanceId} (${inst.widgetType})`,
       value: inst.instanceId
@@ -562,21 +571,21 @@ const formatConditions = (conditions?: Condition[]) => {
       const operator = comperatorOptions.find(o => o.value === c.comperator)?.text ?? c.comperator
       return [c.prop, operator, c.value].filter(part => part !== undefined && part !== '').join(' ')
     })
-    .join(' und ')
+    .join(t('Rule.and'))
 }
 
 /** Where the event comes from, as the second half of the sentence. */
 const sourcePhrase = (mapping: EventActionMapping) => {
-  if (mapping.context === 'system') return 'im System'
-  if (mapping.context === 'page') return mapping.contextId ? `auf Seite ${mapping.contextId}` : 'auf jeder Seite'
-  return mapping.contextId ? `an ${mapping.contextId}` : 'an jedem Widget dieser Art'
+  if (mapping.context === 'system') return t('Phrase.inSystem')
+  if (mapping.context === 'page') return mapping.contextId ? t('Phrase.onPage', { page: mapping.contextId }) : t('Phrase.onAnyPage')
+  return mapping.contextId ? t('Phrase.at', { target: mapping.contextId }) : t('Phrase.atAnyWidget')
 }
 
 /** Where the action lands, likewise. */
 const targetPhrase = (action: ActionDefinition) => {
-  if (action.targetContext === 'system') return 'im System'
-  if (action.targetContext === 'page') return action.targetContextId ? `auf Seite ${action.targetContextId}` : 'auf jeder Seite'
-  return action.targetContextId ? `an ${action.targetContextId}` : 'an allen Instanzen'
+  if (action.targetContext === 'system') return t('Phrase.inSystem')
+  if (action.targetContext === 'page') return action.targetContextId ? t('Phrase.onPage', { page: action.targetContextId }) : t('Phrase.onAnyPage')
+  return action.targetContextId ? t('Phrase.at', { target: action.targetContextId }) : t('Phrase.atAllInstances')
 }
 
 /*
@@ -618,14 +627,13 @@ onMounted(() => {
   <div class="events">
     <header class="events__head">
       <div>
-        <h1 class="events__title">Ereignisse</h1>
+        <h1 class="events__title">{{ t('Title') }}</h1>
         <p class="events__lead">
-          Eine Regel verbindet, was auf einem Board geschieht, mit dem, was daraufhin
-          geschehen soll.
+          {{ t('Lead') }}
         </p>
       </div>
       <DButton intent="primary" @click="showAddDialog = true">
-        <DIcon name="add" size="sm" />Regel anlegen
+        <DIcon name="add" size="sm" />{{ t('Rule.create') }}
       </DButton>
     </header>
 
@@ -639,34 +647,34 @@ onMounted(() => {
       <li v-for="mapping in mappings" :key="mapping.id" class="rule">
         <div class="rule__clauses">
           <p class="clause">
-            <span class="clause__word">Wenn</span>
+            <span class="clause__word">{{ t('Rule.when') }}</span>
             <span class="clause__body">
-              <span class="clause__subject">{{ mapping.eventType || 'irgendein Ereignis' }}</span>
+              <span class="clause__subject">{{ mapping.eventType || t('Rule.anyEvent') }}</span>
               <span class="clause__place">{{ sourcePhrase(mapping) }}</span>
             </span>
           </p>
 
           <p v-if="formatConditions(mapping.conditions)" class="clause">
-            <span class="clause__word">Falls</span>
+            <span class="clause__word">{{ t('Rule.if') }}</span>
             <span class="clause__body">
               <span class="clause__subject">{{ formatConditions(mapping.conditions) }}</span>
             </span>
           </p>
 
           <p v-for="(action, at) in getMappingActions(mapping)" :key="at" class="clause">
-            <span class="clause__word">{{ at === 0 ? 'Dann' : 'und' }}</span>
+            <span class="clause__word">{{ at === 0 ? t('Rule.then') : t('Rule.andWord') }}</span>
             <span class="clause__body">
-              <span class="clause__subject">{{ action.actionName || 'noch keine Aktion' }}</span>
+              <span class="clause__subject">{{ action.actionName || t('Rule.noAction') }}</span>
               <span class="clause__place">{{ targetPhrase(action) }}</span>
             </span>
           </p>
         </div>
 
         <div class="rule__tools">
-          <DButton intent="quiet" size="sm" title="Regel bearbeiten" @click="editMapping(mapping)">
+          <DButton intent="quiet" size="sm" :title="t('Rule.edit')" @click="editMapping(mapping)">
             <DIcon name="edit" size="sm" />
           </DButton>
-          <DButton intent="quiet" size="sm" title="Regel löschen" @click="removeMapping(mapping.id)">
+          <DButton intent="quiet" size="sm" :title="t('Rule.remove')" @click="removeMapping(mapping.id)">
             <DIcon name="delete" size="sm" />
           </DButton>
         </div>
@@ -674,24 +682,23 @@ onMounted(() => {
     </ul>
 
     <p v-else class="events__empty">
-      Noch keine Regel. Eine beginnt mit einem Ereignis — ein Klick auf ein Widget, eine
-      Zeile in einer Tabelle — und endet in einer Aktion auf einem anderen.
+      {{ t('Empty') }}
     </p>
 
     <DModal
       v-model="dialogOpen"
-      :title="isEditing ? 'Regel bearbeiten' : 'Regel anlegen'"
+      :title="isEditing ? t('Rule.edit') : t('Rule.create')"
       size="lg"
       @cancel="resetForm"
     >
       <!-- The same three words as the list, so both say the rule the same way -->
       <div class="form">
         <section class="part">
-          <h3 class="part__word">Wenn</h3>
+          <h3 class="part__word">{{ t('Rule.when') }}</h3>
           <div class="part__body part__body--row">
             <DSelect
               v-model="newMapping.context"
-              label="Kontext"
+              :label="t('Rule.context')"
               stacked
               :options="contextOptions"
               label-key="text"
@@ -700,9 +707,9 @@ onMounted(() => {
             <DSelect
               v-if="newMapping.context === 'page'"
               v-model="newMapping.contextId"
-              label="Seite"
+              :label="t('Context.page')"
               stacked
-              :options="[{ text: 'jede Seite', value: '' }, ...availablePages.map(p => ({ text: p, value: p }))]"
+              :options="pageOptions"
               label-key="text"
               value-key="value"
               clearable
@@ -710,13 +717,13 @@ onMounted(() => {
             <DInput
               v-else-if="newMapping.context === 'widget'"
               v-model="newMapping.contextId"
-              label="Widget"
+              :label="t('Context.widget')"
               stacked
-              placeholder="Kennung, leer für jedes"
+              :placeholder="t('Rule.widgetPlaceholder')"
             />
             <DSelect
               v-model="newMapping.eventType"
-              label="Ereignis"
+:label="t('Rule.event')"
               stacked
               :options="eventOptions"
               label-key="text"
@@ -727,7 +734,7 @@ onMounted(() => {
         </section>
 
         <section class="part">
-          <h3 class="part__word">Falls</h3>
+          <h3 class="part__word">{{ t('Rule.if') }}</h3>
           <div class="part__body">
             <div v-if="newMapping.conditions && newMapping.conditions.length" class="conditions">
               <div
@@ -737,7 +744,7 @@ onMounted(() => {
               >
                 <DSelect
                   v-model="condition.prop"
-                  placeholder="Eigenschaft"
+                  :placeholder="t('Rule.property')"
                   :options="availablePayloadProperties"
                   label-key="text"
                   value-key="value"
@@ -749,21 +756,21 @@ onMounted(() => {
                   value-key="value"
                   class="condition__operator"
                 />
-                <DInput v-model="condition.value" placeholder="Wert" />
-                <DButton intent="quiet" size="sm" title="Bedingung entfernen" @click="removeCondition(index)">
+                <DInput v-model="condition.value" :placeholder="t('Rule.value')" />
+                <DButton intent="quiet" size="sm" :title="t('Rule.removeCondition')" @click="removeCondition(index)">
                   <DIcon name="delete" size="sm" />
                 </DButton>
               </div>
             </div>
-            <p v-else class="part__none">Ohne Bedingung läuft die Regel jedes Mal.</p>
+            <p v-else class="part__none">{{ t('Rule.noCondition') }}</p>
             <DButton size="sm" intent="quiet" @click="addCondition">
-              <DIcon name="add" size="sm" />Bedingung
+              <DIcon name="add" size="sm" />{{ t('Rule.condition') }}
             </DButton>
           </div>
         </section>
 
         <section class="part">
-          <h3 class="part__word">Dann</h3>
+          <h3 class="part__word">{{ t('Rule.then') }}</h3>
           <div class="part__body">
             <div v-if="newMapping.actions && newMapping.actions.length" class="actions">
               <div
@@ -779,7 +786,7 @@ onMounted(() => {
                   @click="selectAction(idx)"
                 >
                   <span class="action__name">
-                    {{ action.actionName || 'Aktion wählen' }}
+                    {{ action.actionName || t('Rule.chooseAction') }}
                   </span>
                   <span class="action__place">{{ targetPhrase(action) }}</span>
                 </button>
@@ -787,7 +794,7 @@ onMounted(() => {
                   v-if="newMapping.actions.length > 1"
                   intent="quiet"
                   size="sm"
-                  title="Aktion entfernen"
+                  :title="t('Rule.removeAction')"
                   @click.stop="removeAction(idx)"
                 >
                   <DIcon name="close" size="sm" />
@@ -797,7 +804,7 @@ onMounted(() => {
                   <div class="part__body--row">
                     <DSelect
                       v-model="action.targetContext"
-                      label="Kontext"
+                      :label="t('Rule.context')"
                       stacked
                       :options="contextOptions"
                       label-key="text"
@@ -806,9 +813,9 @@ onMounted(() => {
                     <DSelect
                       v-if="action.targetContext === 'page'"
                       v-model="action.targetContextId"
-                      label="Seite"
+                      :label="t('Context.page')"
                       stacked
-                      :options="[{ text: 'jede Seite', value: '' }, ...availablePages.map(p => ({ text: p, value: p }))]"
+                      :options="pageOptions"
                       label-key="text"
                       value-key="value"
                       clearable
@@ -816,17 +823,17 @@ onMounted(() => {
                     <DSelect
                       v-else-if="action.targetContext === 'widget' || action.targetContext === 'system'"
                       v-model="action.targetContextId"
-                      label="Ziel"
+                      :label="t('Rule.target')"
                       stacked
                       :options="availableInstances"
                       label-key="text"
                       value-key="value"
                       clearable
-                      placeholder="alle Instanzen"
+                      :placeholder="t('Rule.allInstances')"
                     />
                     <DSelect
                       v-model="action.actionName"
-                      label="Aktion"
+                      :label="t('Rule.action')"
                       stacked
                       :options="availableActions"
                       label-key="text"
@@ -838,17 +845,17 @@ onMounted(() => {
                   <div v-if="selectedActionParameters.length" class="params">
                     <div v-for="param in selectedActionParameters" :key="param.index" class="param">
                       <span class="param__name">
-                        {{ param.name }}<span v-if="param.optional" class="param__optional">, wahlweise</span>
+                        {{ param.name }}<span v-if="param.optional" class="param__optional">, {{ t('Rule.optional') }}</span>
                       </span>
                       <div class="param__value">
-                        <div class="source" role="group" :aria-label="`Wert für ${param.name}`">
+                        <div class="source" role="group" :aria-label="t('Rule.valueFor', { name: param.name })">
                           <button
                             type="button"
                             :class="['source__side', { 'source__side--on': getParameterValueSource(param.index) === 'payload' }]"
                             :aria-pressed="getParameterValueSource(param.index) === 'payload'"
                             @click.stop="setParameterValueSource(param.index, 'payload')"
                           >
-                            aus dem Ereignis
+                            {{ t('Rule.fromEvent') }}
                           </button>
                           <button
                             type="button"
@@ -856,7 +863,7 @@ onMounted(() => {
                             :aria-pressed="getParameterValueSource(param.index) === 'manual'"
                             @click.stop="setParameterValueSource(param.index, 'manual')"
                           >
-                            fester Wert
+                            {{ t('Rule.fixedValue') }}
                           </button>
                         </div>
                         <DSelect
@@ -865,7 +872,7 @@ onMounted(() => {
                           :options="availablePayloadProperties"
                           label-key="text"
                           value-key="value"
-                          :placeholder="param.optional ? 'wahlweise' : 'Eigenschaft wählen'"
+                          :placeholder="param.optional ? t('Rule.optional') : t('Rule.chooseProperty')"
                           clearable
                           @update:model-value="updateParameterMapping(param.index, String($event ?? ''))"
                         />
@@ -882,16 +889,16 @@ onMounted(() => {
               </div>
             </div>
             <DButton size="sm" intent="quiet" @click="addAction">
-              <DIcon name="add" size="sm" />Aktion
+              <DIcon name="add" size="sm" />{{ t('Rule.action') }}
             </DButton>
           </div>
         </section>
       </div>
 
       <template #actions>
-        <DButton intent="quiet" @click="dialogOpen = false; resetForm()">Abbrechen</DButton>
+        <DButton intent="quiet" @click="dialogOpen = false; resetForm()">{{ t('common:Action.cancel') }}</DButton>
         <DButton intent="primary" @click="addMapping">
-          {{ isEditing ? 'Speichern' : 'Anlegen' }}
+          {{ isEditing ? t('common:Action.save') : t('common:Action.create') }}
         </DButton>
       </template>
     </DModal>
@@ -899,14 +906,14 @@ onMounted(() => {
     <DModal v-model="showDeleteConfirm" size="sm" @cancel="cancelRemoveMapping">
       <template #header>
         <DIcon name="warning" size="lg" tone="color-err" />
-        <h2 class="confirm__title">Regel löschen</h2>
+        <h2 class="confirm__title">{{ t('Rule.remove') }}</h2>
       </template>
       <p class="confirm__text">
-        Die Regel wird entfernt. Das lässt sich nicht rückgängig machen.
+        {{ t('Rule.confirmRemove') }}
       </p>
       <template #actions>
-        <DButton intent="quiet" @click="cancelRemoveMapping">Abbrechen</DButton>
-        <DButton intent="danger" @click="confirmRemoveMapping()">Löschen</DButton>
+        <DButton intent="quiet" @click="cancelRemoveMapping">{{ t('common:Action.cancel') }}</DButton>
+        <DButton intent="danger" @click="confirmRemoveMapping()">{{ t('common:Action.delete') }}</DButton>
       </template>
     </DModal>
   </div>

@@ -24,6 +24,7 @@
     "url": "https://github.com/eclipse-daanse/org.eclipse.daanse.board.app/issues"
   },
   "dependencies": {
+    "@eclipse-daanse/tsm": "0.1.0-next.1",
     "lodash": "^4.17.16",
     "org.eclipse.daanse.board.app.lib.variables": "^0.0.1-next.1",
     "v-tooltip": "2.1.3",
@@ -31,7 +32,8 @@
     "vue-json-pretty": "^2.4.0",
     "vue-mention": "^2.0.0-alpha.3",
     "floating-vue": "5.2.2",
-    "org.eclipse.daanse.board.app.ui.vue.controls": "^0.0.1-next.1"
+    "org.eclipse.daanse.board.app.ui.vue.controls": "^0.0.1-next.1",
+    "org.eclipse.daanse.board.app.ui.vue.composables": "^0.0.1-next.1"
   },
   "devDependencies": {
     "@types/lodash": "^4.17.16",

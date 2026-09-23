@@ -53,3 +53,6 @@ export function deactivate({ services }: ActivationContext) {
   services.unregister('CsvPreview')
   services.unregister('CsvSettings')
 }
+
+/* Its texts - collected by lib.i18next, see src/i18n. */
+export { DatasourceCsvTranslations } from './i18n'

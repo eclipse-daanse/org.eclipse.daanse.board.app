@@ -12,6 +12,7 @@ Contributors: Smart City Jena
 import { DButton, DIcon, DInput } from 'org.eclipse.daanse.board.app.ui.vue.controls'
 import { computed, onMounted, ref, watch } from 'vue'
 import type { Entity, Repository } from 'org.eclipse.daanse.board.app.lib.api.persistence'
+import { useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 
 
 const emits = defineEmits<{
@@ -20,6 +21,7 @@ const emits = defineEmits<{
 }>()
 
 const props = defineProps<{ repo: Repository }>()
+const { t } = useTranslation('persistence')
 
 const nameForSaving = ref<string>('newFile')
 
@@ -58,13 +60,13 @@ defineExpose({ setNameSuggestion })
 <template>
   <Teleport defer to="#loadSaveModalFooter">
     <div class="save">
-      <DInput v-model="nameForSaving" label="Name" placeholder="Dateiname" />
+      <DInput v-model="nameForSaving" :label="t('Git.name')" :placeholder="t('Git.fileName')" />
 
       <DButton v-if="isSameName" intent="danger" :disabled="isDisabled" @click="override">
-        <DIcon name="save" size="sm" />Überschreiben
+        <DIcon name="save" size="sm" />{{ t('Git.overwrite') }}
       </DButton>
       <DButton v-else intent="primary" :disabled="isDisabled" @click="save">
-        <DIcon name="save" size="sm" />Ablegen
+        <DIcon name="save" size="sm" />{{ t('Git.store') }}
       </DButton>
     </div>
   </Teleport>

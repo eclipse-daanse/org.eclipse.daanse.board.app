@@ -11,6 +11,7 @@
 
 
 export interface IDataPointDescription {
+  /** A translation key, like the description - both are shown in the language on screen. */
   readonly name: string
   readonly namespace: string
   readonly component: any,

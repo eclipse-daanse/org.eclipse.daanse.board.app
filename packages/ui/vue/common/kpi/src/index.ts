@@ -13,3 +13,6 @@
 import KpiTable from './KpiTable.vue'
 
 export { KpiTable }
+
+/* Its texts - collected by lib.i18next, see src/i18n. */
+export { KpiTranslations } from './i18n'

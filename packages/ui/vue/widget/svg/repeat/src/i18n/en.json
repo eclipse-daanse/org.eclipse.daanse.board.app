@@ -1,0 +1,17 @@
+{
+  "Widget": {
+    "name": "Repeated SVG"
+  },
+  "FormStyles": {
+    "fill": "Fill colour",
+    "stroke": "Line colour"
+  },
+  "Form": {
+    "sourceGroup": "Graphic",
+    "src": "Address of the graphic",
+    "repetitions": "How many times",
+    "progress": "Of which highlighted",
+    "activeGroup": "Highlighted",
+    "defaultGroup": "Others"
+  }
+}

@@ -34,6 +34,16 @@
         "library": "org.eclipse.daanse.board.app.ui.vue.uimodel",
         "version": "0.0.1-next.1"
       }
+    },
+    {
+      "namespace": "tsm.i18n",
+      "attributes": {
+        "namespace": "uimodel",
+        "languages": [
+          "de",
+          "en"
+        ]
+      }
     }
   ],
   "dependencies": [
@@ -42,5 +52,9 @@
     "ui.vue.composables",
     "ui.vue.controls"
   ],
-  "provides": []
+  "provides": [
+    {
+      "id": "Translations"
+    }
+  ]
 }

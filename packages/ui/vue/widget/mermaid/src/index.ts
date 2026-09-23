@@ -47,6 +47,7 @@ export class MermaidWidgetProvider implements WidgetProvider {
   readonly supportedDSTypes = []
   readonly icon = Icon
   readonly name = 'Mermaid'
+  readonly nameKey = 'mermaid:Widget.name'
 
   /*
    * The settings form, as a model. Carried on the registration like the
@@ -80,3 +81,6 @@ export class MermaidWidgetProvider implements WidgetProvider {
 
 export { MermaidWidget }
 export { MermaidWidgetSettingsImpl, MermaidwidgetsPackage, mermaidSettingsFormXmi }
+
+/* Its texts - collected by lib.i18next, see src/i18n. */
+export { MermaidTranslations } from './i18n'

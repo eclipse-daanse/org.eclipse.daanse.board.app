@@ -33,9 +33,9 @@ that is where there was room.
 
   <components xsi:type="uimodel:FormView" name="TextSettingsFormView">
     <fields xsi:type="uimodel:NumberWidget" name="fontSize"
-        feature="http://org.eclipse.daanse.board.app.ui.vue.widget.text.plain#//TextSettings/fontSize" label="Schriftgröße (px)"
+        feature="http://org.eclipse.daanse.board.app.ui.vue.widget.text.plain#//TextSettings/fontSize" label="textPlain:Form.fontSize"
         min="1" max="400" step="1"/>
     <fields xsi:type="uimodel:InputWidget" name="fontColor"
-        feature="http://org.eclipse.daanse.board.app.ui.vue.widget.text.plain#//TextSettings/fontColor" label="Schriftfarbe"/>
+        feature="http://org.eclipse.daanse.board.app.ui.vue.widget.text.plain#//TextSettings/fontColor" label="textPlain:Form.fontColor"/>
   </components>
 </uimodel:UIModel>

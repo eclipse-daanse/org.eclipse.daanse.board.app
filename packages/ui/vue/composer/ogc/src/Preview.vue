@@ -11,12 +11,13 @@ Contributors:
     Smart City Jena
 -->
 <script setup lang="ts">
-import { useTemporaryStore } from 'org.eclipse.daanse.board.app.ui.vue.composables';
+import { useTemporaryStore, useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables';
 import { ref, watch, shallowRef } from 'vue';
 import VueJsonPretty from 'vue-json-pretty';
 import 'vue-json-pretty/lib/styles.css';
 
 const props = defineProps<{ dataSource: any }>();
+const { t } = useTranslation('composerOgc')
 const data = ref(null as any);
 const featureCollection = ref(null as any);
 
@@ -38,6 +39,6 @@ watch(props.dataSource, () => {
       <VueJsonPretty :data="featureCollection" />
     </div>
     <div v-else>
-      <h3>OGC Feature Collection Preview</h3>
+      <h3>{{ t('Ogc.preview') }}</h3>
     </div>
 </template>

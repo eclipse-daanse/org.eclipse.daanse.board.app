@@ -29,13 +29,14 @@ export type TokenKind = 'color' | 'length' | 'shadow' | 'font'
 export interface TokenSpec {
   /** The CSS custom property, without the leading dashes. */
   name: string
-  /** What it is for, in the words someone changing it would use. */
+  /** What it is for, in the words someone changing it would use - a translation key. */
   role: string
   kind: TokenKind
 }
 
 export interface TokenGroup {
   id: string
+  /** A translation key, like every text here. */
   label: string
   /** Why these belong together - shown above the group. */
   note?: string
@@ -45,77 +46,77 @@ export interface TokenGroup {
 export const TOKEN_GROUPS: TokenGroup[] = [
   {
     id: 'surfaces',
-    label: 'Flächen',
-    note: 'Von hinten nach vorn: der Grund, die Panels darauf, die Dinge darin.',
+    label: 'shell:Tokens.group.surfaces.label',
+    note: 'shell:Tokens.group.surfaces.note',
     tokens: [
-      { name: 'color-bg', role: 'Grundfläche der App, Editorflächen, Eingabefelder', kind: 'color' },
-      { name: 'color-pane', role: 'Panels, Topbar, Aktivitätsleiste, Widgets', kind: 'color' },
-      { name: 'color-raised', role: 'Knöpfe, Tabellenköpfe, Chips, Abzeichen', kind: 'color' },
-      { name: 'color-canvas', role: 'Boardfläche hinter den Widgets', kind: 'color' },
-      { name: 'color-divider', role: 'Panelkanten, Trenner, Tabellenlinien', kind: 'color' },
-      { name: 'color-outline', role: 'Umrisse bedienbarer Dinge', kind: 'color' },
+      { name: 'color-bg', role: 'shell:Tokens.role.colorBg', kind: 'color' },
+      { name: 'color-pane', role: 'shell:Tokens.role.colorPane', kind: 'color' },
+      { name: 'color-raised', role: 'shell:Tokens.role.colorRaised', kind: 'color' },
+      { name: 'color-canvas', role: 'shell:Tokens.role.colorCanvas', kind: 'color' },
+      { name: 'color-divider', role: 'shell:Tokens.role.colorDivider', kind: 'color' },
+      { name: 'color-outline', role: 'shell:Tokens.role.colorOutline', kind: 'color' },
     ],
   },
   {
     id: 'text',
-    label: 'Text und Akzent',
-    note: 'Jede Farbe hier wurde gegen die Fläche gemessen, auf der sie sitzt.',
+    label: 'shell:Tokens.group.text.label',
+    note: 'shell:Tokens.group.text.note',
     tokens: [
-      { name: 'color-fg', role: 'Fließtext und Beschriftungen', kind: 'color' },
-      { name: 'color-dim', role: 'Zweitrangiger Text, Kennzahlen, Panelüberschriften', kind: 'color' },
-      { name: 'color-accent', role: 'Auswahl, aktive Zustände, Hauptknopf', kind: 'color' },
-      { name: 'color-onAccent', role: 'Text auf der Akzentfläche', kind: 'color' },
-      { name: 'color-brand', role: 'Daanse-Marke als Text', kind: 'color' },
-      { name: 'color-brandFill', role: 'Daanse-Marke als Fläche', kind: 'color' },
-      { name: 'color-onBrand', role: 'Text auf der Markenfläche', kind: 'color' },
+      { name: 'color-fg', role: 'shell:Tokens.role.colorFg', kind: 'color' },
+      { name: 'color-dim', role: 'shell:Tokens.role.colorDim', kind: 'color' },
+      { name: 'color-accent', role: 'shell:Tokens.role.colorAccent', kind: 'color' },
+      { name: 'color-onAccent', role: 'shell:Tokens.role.colorOnAccent', kind: 'color' },
+      { name: 'color-brand', role: 'shell:Tokens.role.colorBrand', kind: 'color' },
+      { name: 'color-brandFill', role: 'shell:Tokens.role.colorBrandFill', kind: 'color' },
+      { name: 'color-onBrand', role: 'shell:Tokens.role.colorOnBrand', kind: 'color' },
     ],
   },
   {
     id: 'state',
-    label: 'Zustand',
-    note: 'Nur für Zustände. Wer sie dekorativ verbraucht, kann später nichts mehr melden.',
+    label: 'shell:Tokens.group.state.label',
+    note: 'shell:Tokens.group.state.note',
     tokens: [
-      { name: 'color-ok', role: 'Im Rahmen, verbunden, erfolgreich', kind: 'color' },
-      { name: 'color-warn', role: 'Braucht Aufmerksamkeit', kind: 'color' },
-      { name: 'color-err', role: 'Außerhalb des Rahmens, fehlgeschlagen', kind: 'color' },
+      { name: 'color-ok', role: 'shell:Tokens.role.colorOk', kind: 'color' },
+      { name: 'color-warn', role: 'shell:Tokens.role.colorWarn', kind: 'color' },
+      { name: 'color-err', role: 'shell:Tokens.role.colorErr', kind: 'color' },
     ],
   },
   {
     id: 'syntax',
-    label: 'MDX-Syntax',
-    note: 'Hervorhebung im Abfrage-Editor und in der Workbench.',
+    label: 'shell:Tokens.group.syntax.label',
+    note: 'shell:Tokens.group.syntax.note',
     tokens: [
-      { name: 'color-kw', role: 'Schlüsselwörter', kind: 'color' },
-      { name: 'color-measure', role: 'Kennzahlen', kind: 'color' },
-      { name: 'color-member', role: 'Elemente', kind: 'color' },
-      { name: 'color-fn', role: 'Funktionen', kind: 'color' },
+      { name: 'color-kw', role: 'shell:Tokens.role.colorKw', kind: 'color' },
+      { name: 'color-measure', role: 'shell:Tokens.role.colorMeasure', kind: 'color' },
+      { name: 'color-member', role: 'shell:Tokens.role.colorMember', kind: 'color' },
+      { name: 'color-fn', role: 'shell:Tokens.role.colorFn', kind: 'color' },
     ],
   },
   {
     id: 'type',
-    label: 'Schrift',
-    note: 'Zwei Familien: eine für die Oberfläche, eine für alles, was gezählt oder gemessen wird.',
+    label: 'shell:Tokens.group.type.label',
+    note: 'shell:Tokens.group.type.note',
     tokens: [
-      { name: 'font-sans', role: 'Oberflächenschrift', kind: 'font' },
-      { name: 'font-mono', role: 'Zahlen, Namen von Ständen, Code', kind: 'font' },
-      { name: 'text-xs', role: 'Abzeichen, Zähler, Statuszeile', kind: 'length' },
-      { name: 'text-sm', role: 'Zweitrangige Oberfläche, Reiter, Tabellen', kind: 'length' },
-      { name: 'text-base', role: 'Standard: Baumzeilen, Formulare, Knöpfe', kind: 'length' },
-      { name: 'text-lg', role: 'Überschriften in Panels, Leerzustände', kind: 'length' },
-      { name: 'text-xl', role: 'Kennzahlen im Board', kind: 'length' },
+      { name: 'font-sans', role: 'shell:Tokens.role.fontSans', kind: 'font' },
+      { name: 'font-mono', role: 'shell:Tokens.role.fontMono', kind: 'font' },
+      { name: 'text-xs', role: 'shell:Tokens.role.textXs', kind: 'length' },
+      { name: 'text-sm', role: 'shell:Tokens.role.textSm', kind: 'length' },
+      { name: 'text-base', role: 'shell:Tokens.role.textBase', kind: 'length' },
+      { name: 'text-lg', role: 'shell:Tokens.role.textLg', kind: 'length' },
+      { name: 'text-xl', role: 'shell:Tokens.role.textXl', kind: 'length' },
     ],
   },
   {
     id: 'shape',
-    label: 'Form',
+    label: 'shell:Tokens.group.shape.label',
     tokens: [
-      { name: 'radius-xs', role: 'Abzeichen, kleine Knöpfe', kind: 'length' },
-      { name: 'radius-sm', role: 'Panels, Karten, Eingabefelder', kind: 'length' },
-      { name: 'radius-md', role: 'Dialoge', kind: 'length' },
-      { name: 'radius-lg', role: 'Große Flächen', kind: 'length' },
-      { name: 'shadow-e1', role: 'Angehoben: Knöpfe, Chips', kind: 'shadow' },
-      { name: 'shadow-e2', role: 'Schwebend: Menüs, Einblendungen', kind: 'shadow' },
-      { name: 'shadow-e3', role: 'Über allem: Dialoge', kind: 'shadow' },
+      { name: 'radius-xs', role: 'shell:Tokens.role.radiusXs', kind: 'length' },
+      { name: 'radius-sm', role: 'shell:Tokens.role.radiusSm', kind: 'length' },
+      { name: 'radius-md', role: 'shell:Tokens.role.radiusMd', kind: 'length' },
+      { name: 'radius-lg', role: 'shell:Tokens.role.radiusLg', kind: 'length' },
+      { name: 'shadow-e1', role: 'shell:Tokens.role.shadowE1', kind: 'shadow' },
+      { name: 'shadow-e2', role: 'shell:Tokens.role.shadowE2', kind: 'shadow' },
+      { name: 'shadow-e3', role: 'shell:Tokens.role.shadowE3', kind: 'shadow' },
     ],
   },
 ]

@@ -1,0 +1,9 @@
+{
+  "Settings": {
+    "connection": "Connection"
+  },
+  "Ws": {
+    "accumulate": "Collect messages",
+    "topic": "Topic"
+  }
+}

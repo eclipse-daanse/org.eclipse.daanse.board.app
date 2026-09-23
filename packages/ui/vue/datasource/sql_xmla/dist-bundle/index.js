@@ -1,10 +1,11 @@
-(function(){var i="ui.vue.datasource.sql_xmla",d=document,s=d.querySelector('style[data-tsm-bundle="'+i+'"]');if(!s){s=d.createElement('style');s.setAttribute('data-tsm-bundle',i);d.head.appendChild(s);}s.textContent=".tree[data-v-ca19b849]{margin:0;padding:0;list-style:none}.node__row[data-v-ca19b849]{display:flex;align-items:center;gap:5px;width:100%;padding:3px 4px;border:0;background:none;text-align:left;cursor:pointer;font-family:var(--font-sans);font-size:var(--text-sm);color:var(--color-fg)}.node__row[data-v-ca19b849]:hover{background-color:color-mix(in srgb,var(--color-pane) 70%,transparent)}.node__row[data-v-ca19b849]:focus-visible{outline:2px solid var(--color-accent);outline-offset:-2px}.node__leaf[data-v-ca19b849]{width:14px;flex:none}.node__label[data-v-ca19b849]{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.explorer[data-v-5294ffcf]{display:flex;gap:16px;width:100%;height:100%;overflow:hidden}.explorer__schema[data-v-5294ffcf]{width:320px;flex:none;overflow:auto;border-right:1px solid var(--color-divider);padding-right:8px}.explorer__title[data-v-5294ffcf]{margin:0 0 6px;font-family:var(--font-sans);font-size:var(--text-sm);font-weight:600;color:var(--color-dim)}.explorer__work[data-v-5294ffcf]{display:flex;flex-direction:column;gap:10px;flex:1 1 auto;min-width:0;overflow:hidden}.explorer__result[data-v-5294ffcf]{display:flex;flex-direction:column;flex:1 1 auto;min-height:0}.explorer__pane[data-v-5294ffcf]{flex:1 1 auto;min-height:0;overflow:auto}.messages[data-v-5294ffcf]{margin:0;padding:0;list-style:none;font-family:var(--font-sans);font-size:var(--text-sm)}.message[data-v-5294ffcf]{padding:7px 8px;border-bottom:1px solid var(--color-divider)}\n";})();
-import { DATASOURCE_REPOSITORY as N } from "org.eclipse.daanse.board.app.lib.api.datasource";
-import { defineComponent as x, ref as d, resolveComponent as G, createElementBlock as m, openBlock as r, Fragment as I, renderList as O, createElementVNode as g, createBlock as _, createCommentVNode as k, normalizeStyle as B, unref as h, toDisplayString as P, shallowRef as U, watch as T, createVNode as y, withCtx as D, createTextVNode as z, computed as Q } from "vue";
-import { DIcon as q, DButton as Y, DTabs as H, DTable as Z, DSelect as j } from "org.eclipse.daanse.board.app.ui.vue.controls";
-import { MonacoEditor as J } from "org.eclipse.daanse.board.app.ui.vue.common.monaco";
-import { useTemporaryStore as K } from "org.eclipse.daanse.board.app.ui.vue.composables";
-const W = `<?xml version="1.0" encoding="UTF-8"?>
+(function(){var i="ui.vue.datasource.sql_xmla",d=document,s=d.querySelector('style[data-tsm-bundle="'+i+'"]');if(!s){s=d.createElement('style');s.setAttribute('data-tsm-bundle',i);d.head.appendChild(s);}s.textContent=".tree[data-v-ca19b849]{margin:0;padding:0;list-style:none}.node__row[data-v-ca19b849]{display:flex;align-items:center;gap:5px;width:100%;padding:3px 4px;border:0;background:none;text-align:left;cursor:pointer;font-family:var(--font-sans);font-size:var(--text-sm);color:var(--color-fg)}.node__row[data-v-ca19b849]:hover{background-color:color-mix(in srgb,var(--color-pane) 70%,transparent)}.node__row[data-v-ca19b849]:focus-visible{outline:2px solid var(--color-accent);outline-offset:-2px}.node__leaf[data-v-ca19b849]{width:14px;flex:none}.node__label[data-v-ca19b849]{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.explorer[data-v-cfa05d7e]{display:flex;gap:16px;width:100%;height:100%;overflow:hidden}.explorer__schema[data-v-cfa05d7e]{width:320px;flex:none;overflow:auto;border-right:1px solid var(--color-divider);padding-right:8px}.explorer__title[data-v-cfa05d7e]{margin:0 0 6px;font-family:var(--font-sans);font-size:var(--text-sm);font-weight:600;color:var(--color-dim)}.explorer__work[data-v-cfa05d7e]{display:flex;flex-direction:column;gap:10px;flex:1 1 auto;min-width:0;overflow:hidden}.explorer__result[data-v-cfa05d7e]{display:flex;flex-direction:column;flex:1 1 auto;min-height:0}.explorer__pane[data-v-cfa05d7e]{flex:1 1 auto;min-height:0;overflow:auto}.messages[data-v-cfa05d7e]{margin:0;padding:0;list-style:none;font-family:var(--font-sans);font-size:var(--text-sm)}.message[data-v-cfa05d7e]{padding:7px 8px;border-bottom:1px solid var(--color-divider)}\n";})();
+import { DATASOURCE_REPOSITORY as O } from "org.eclipse.daanse.board.app.lib.api.datasource";
+import { defineComponent as C, ref as p, resolveComponent as Z, createElementBlock as h, openBlock as i, Fragment as X, renderList as P, createElementVNode as g, createBlock as S, createCommentVNode as D, normalizeStyle as I, unref as u, toDisplayString as y, shallowRef as j, watch as x, computed as B, createVNode as w, withCtx as N, createTextVNode as J } from "vue";
+import { DIcon as k, DButton as K, DTabs as W, DTable as ee, DSelect as te } from "org.eclipse.daanse.board.app.ui.vue.controls";
+import { MonacoEditor as ne } from "org.eclipse.daanse.board.app.ui.vue.common.monaco";
+import { useTranslation as V, useFormat as ae, useTemporaryStore as oe } from "org.eclipse.daanse.board.app.ui.vue.composables";
+import { component as se } from "@eclipse-daanse/tsm";
+const le = `<?xml version="1.0" encoding="UTF-8"?>
 <!--
 /*********************************************************************
 * Copyright (c) 2024 Contributors to the Eclipse Foundation.
@@ -47,74 +48,74 @@ const W = `<?xml version="1.0" encoding="UTF-8"?>
     <eSubpackages href="http://org.eclipse.daanse.board.app.lib.datasource.base#/"/>
 
 </ecore:EPackage>
-`, ee = { class: "tree" }, te = ["aria-expanded", "onClick"], ne = {
+`, re = { class: "tree" }, ce = ["aria-expanded", "onClick"], ie = {
   key: 1,
   class: "node__leaf"
-}, ae = { class: "node__label" }, oe = /* @__PURE__ */ x({
+}, ue = { class: "node__label" }, me = /* @__PURE__ */ C({
   __name: "SchemaTree",
   props: {
     nodes: {},
     depth: {}
   },
-  setup(t) {
-    const i = d({});
-    return (s, l) => {
-      const p = G("SchemaTree", !0);
-      return r(), m("ul", ee, [
-        (r(!0), m(I, null, O(t.nodes, (o) => (r(), m("li", {
-          key: o.label,
+  setup(n) {
+    const l = p({});
+    return (r, a) => {
+      const c = Z("SchemaTree", !0);
+      return i(), h("ul", re, [
+        (i(!0), h(X, null, P(n.nodes, (e) => (i(), h("li", {
+          key: e.label,
           class: "node"
         }, [
           g("button", {
             type: "button",
             class: "node__row",
-            style: B({ paddingLeft: `${(t.depth ?? 0) * 14 + 4}px` }),
-            "aria-expanded": o.children?.length ? !!i.value[o.label] : void 0,
-            onClick: (b) => o.children?.length && (i.value[o.label] = !i.value[o.label])
+            style: I({ paddingLeft: `${(n.depth ?? 0) * 14 + 4}px` }),
+            "aria-expanded": e.children?.length ? !!l.value[e.label] : void 0,
+            onClick: (f) => e.children?.length && (l.value[e.label] = !l.value[e.label])
           }, [
-            o.children?.length ? (r(), _(h(q), {
+            e.children?.length ? (i(), S(u(k), {
               key: 0,
-              name: i.value[o.label] ? "expand_more" : "chevron_right",
+              name: l.value[e.label] ? "expand_more" : "chevron_right",
               size: "sm",
               tone: "color-dim"
-            }, null, 8, ["name"])) : (r(), m("span", ne)),
-            o.icon ? (r(), _(h(q), {
+            }, null, 8, ["name"])) : (i(), h("span", ie)),
+            e.icon ? (i(), S(u(k), {
               key: 2,
-              name: o.icon,
+              name: e.icon,
               size: "sm",
               tone: "color-dim"
-            }, null, 8, ["name"])) : k("", !0),
-            g("span", ae, P(o.label), 1)
-          ], 12, te),
-          o.children?.length && i.value[o.label] ? (r(), _(p, {
+            }, null, 8, ["name"])) : D("", !0),
+            g("span", ue, y(e.label), 1)
+          ], 12, ce),
+          e.children?.length && l.value[e.label] ? (i(), S(c, {
             key: 0,
-            nodes: o.children,
-            depth: (t.depth ?? 0) + 1
-          }, null, 8, ["nodes", "depth"])) : k("", !0)
+            nodes: e.children,
+            depth: (n.depth ?? 0) + 1
+          }, null, 8, ["nodes", "depth"])) : D("", !0)
         ]))), 128))
       ]);
     };
   }
-}), R = (t, i) => {
-  const s = t.__vccOpts || t;
-  for (const [l, p] of i)
-    s[l] = p;
-  return s;
-}, le = /* @__PURE__ */ R(oe, [["__scopeId", "data-v-ca19b849"]]), re = { class: "explorer" }, se = { class: "explorer__schema" }, ie = { class: "explorer__work" }, ce = { class: "explorer__result" }, ue = { class: "explorer__pane" }, de = {
+}), F = (n, l) => {
+  const r = n.__vccOpts || n;
+  for (const [a, c] of l)
+    r[a] = c;
+  return r;
+}, de = /* @__PURE__ */ F(me, [["__scopeId", "data-v-ca19b849"]]), pe = { class: "explorer" }, he = { class: "explorer__schema" }, ge = { class: "explorer__title" }, fe = { class: "explorer__work" }, _e = { class: "explorer__result" }, Se = { class: "explorer__pane" }, be = {
   key: 1,
   class: "messages"
-}, me = /* @__PURE__ */ x({
+}, ve = /* @__PURE__ */ C({
   __name: "Preview",
   props: {
     dataSource: {}
   },
   emits: ["updateConfig"],
-  setup(t, { emit: i }) {
-    const s = t, l = U(null), p = d(s.dataSource), { update: o } = K(s.dataSource.type, p, l), b = d([]), f = d(s.dataSource.config.sql || ""), L = d(null), A = d([]), v = d([]);
-    T(s.dataSource.config, () => {
-      o();
+  setup(n, { emit: l }) {
+    const r = n, { t: a } = V("datasourceSqlXmla"), c = ae(), e = j(null), f = p(r.dataSource), { update: U } = oe(r.dataSource.type, f, e), A = p([]), _ = p(r.dataSource.config.sql || ""), L = p(null), E = p([]), b = p([]);
+    x(r.dataSource.config, () => {
+      U();
     }, { deep: !0 });
-    const V = i, X = (c) => ({
+    const $ = l, Q = (m) => ({
       130: "VARCHAR",
       // WChar
       5: "NUMERIC",
@@ -123,146 +124,173 @@ const W = `<?xml version="1.0" encoding="UTF-8"?>
       // Integer
       11: "BOOLEAN"
       // Boolean
-    })[String(c)] || "VARCHAR";
-    function F(c) {
-      const n = {};
-      return c.forEach((u) => {
-        const e = u.children?.find((a) => a.label === "Tables");
-        e && e.children.forEach((a) => {
-          if (a.TABLE_TYPE === "SYSTEM TABLE") return;
-          const M = a.TABLE_NAME, E = a.children?.find((S) => S.label === "Columns");
-          E && E.children && (n[M] = {
+    })[String(m)] || "VARCHAR";
+    function z(m) {
+      const s = {};
+      return m.forEach((d) => {
+        const t = d.children?.find((o) => o.label === "Tables");
+        t && t.children.forEach((o) => {
+          if (o.TABLE_TYPE === "SYSTEM TABLE") return;
+          const M = o.TABLE_NAME, q = o.children?.find((v) => v.label === "Columns");
+          q && q.children && (s[M] = {
             name: M,
-            description: a.DESCRIPTION || "",
-            columns: E.children.map((S) => ({
-              name: S.COLUMN_NAME,
-              type: X(S.DATA_TYPE)
+            description: o.DESCRIPTION || "",
+            columns: q.children.map((v) => ({
+              name: v.COLUMN_NAME,
+              type: Q(v.DATA_TYPE)
             }))
           });
         });
-      }), n;
+      }), s;
     }
-    T(l, async () => {
-      const { tables: c } = await l.value.getTables(), n = await l.value.getCatalogs(), u = await l.value.getColumns();
-      n.map((e) => (e.label = e.CATALOG_NAME, e.id = e.CATALOG_NAME, e.icon = "storage", e));
-      for (const e of c)
-        e.label = e.TABLE_NAME, e.id = e.TABLE_NAME, e.icon = "table_chart", e.children == null && (e.children = [{
-          label: "Columns",
+    x(e, async () => {
+      const { tables: m } = await e.value.getTables(), s = await e.value.getCatalogs(), d = await e.value.getColumns();
+      s.map((t) => (t.label = t.CATALOG_NAME, t.id = t.CATALOG_NAME, t.icon = "storage", t));
+      for (const t of m)
+        t.label = t.TABLE_NAME, t.id = t.TABLE_NAME, t.icon = "table_chart", t.children == null && (t.children = [{
+          label: a("Sql.columns"),
           icon: "view_column",
           children: []
-        }]), e.children[0].children = u.filter((a) => a.TABLE_NAME === e.TABLE_NAME && a.TABLE_CATALOG === e.TABLE_CATALOG).map((a) => (a.label = a.COLUMN_NAME, a.id = a.COLUMN_NAME, a.icon = "view_array", a));
-      for (const e of n)
-        e.children == null && (e.children = [{
-          label: "Tables",
+        }]), t.children[0].children = d.filter((o) => o.TABLE_NAME === t.TABLE_NAME && o.TABLE_CATALOG === t.TABLE_CATALOG).map((o) => (o.label = o.COLUMN_NAME, o.id = o.COLUMN_NAME, o.icon = "view_array", o));
+      for (const t of s)
+        t.children == null && (t.children = [{
+          label: a("Sql.tables"),
           icon: "backup_table",
           children: []
-        }]), e.children[0].children = c.filter((a) => a.TABLE_CATALOG === e.CATALOG_NAME);
-      console.log("catalogs", n), b.value = n, L.value = F(b.value), v.value.push({ type: "success", text: `Schema gelesen um ${(/* @__PURE__ */ new Date()).toLocaleTimeString()}` });
-    }, { deep: !0 }), T(() => f, async () => {
-      V("updateConfig", {
-        ...s.dataSource.config,
-        sql: f.value
+        }]), t.children[0].children = m.filter((o) => o.TABLE_CATALOG === t.CATALOG_NAME);
+      console.log("catalogs", s), A.value = s, L.value = z(A.value), b.value.push({ type: "success", text: a("Sql.schemaRead", { time: c.date(/* @__PURE__ */ new Date(), { timeStyle: "medium" }) }) });
+    }, { deep: !0 }), x(() => _, async () => {
+      $("updateConfig", {
+        ...r.dataSource.config,
+        sql: _.value
       });
     }, { deep: !0 });
-    const C = [
-      { id: "data", label: "Ergebnis" },
-      { id: "messages", label: "Meldungen" }
-    ], w = d(C[0].id), $ = async () => {
-      l.value.sql = f.value;
+    const Y = B(() => [
+      { id: "data", label: a("Sql.result") },
+      { id: "messages", label: a("Sql.messages") }
+    ]), T = p("data"), H = async () => {
+      e.value.sql = _.value;
       try {
-        const c = /* @__PURE__ */ new Date();
-        A.value = (await l.value.getData("DataTable")).items;
-        const n = /* @__PURE__ */ new Date();
-        v.value.push({ type: "success", text: `${A.value.length} Zeilen in ${n.getTime() - c.getTime()} ms.` });
-      } catch (c) {
-        v.value.push({ type: "error", text: `Abfrage fehlgeschlagen: ${c.message}` });
+        const m = /* @__PURE__ */ new Date();
+        E.value = (await e.value.getData("DataTable")).items;
+        const s = /* @__PURE__ */ new Date();
+        b.value.push({ type: "success", text: a("Sql.rows", { count: E.value.length, ms: s.getTime() - m.getTime() }) });
+      } catch (m) {
+        b.value.push({ type: "error", text: a("Sql.failed", { reason: m.message }) });
       }
     };
-    return (c, n) => (r(), m("div", re, [
-      g("aside", se, [
-        n[2] || (n[2] = g("h4", { class: "explorer__title" }, "Schema", -1)),
-        y(le, { nodes: b.value }, null, 8, ["nodes"])
+    return (m, s) => (i(), h("div", pe, [
+      g("aside", he, [
+        g("h4", ge, y(u(a)("Sql.schema")), 1),
+        w(de, { nodes: A.value }, null, 8, ["nodes"])
       ]),
-      g("div", ie, [
-        y(h(J), {
+      g("div", fe, [
+        w(u(ne), {
           class: "h-full",
           supportedLanguages: ["sql"],
           language: "sql",
-          modelValue: f.value,
-          "onUpdate:modelValue": n[0] || (n[0] = (u) => f.value = u),
+          modelValue: _.value,
+          "onUpdate:modelValue": s[0] || (s[0] = (d) => _.value = d),
           metadata: L.value
         }, {
-          actions: D(() => [
-            y(h(Y), {
+          actions: N(() => [
+            w(u(K), {
               intent: "primary",
               size: "sm",
-              onClick: $
+              onClick: H
             }, {
-              default: D(() => [...n[3] || (n[3] = [
-                z("Ausführen", -1)
-              ])]),
+              default: N(() => [
+                J(y(u(a)("Sql.run")), 1)
+              ]),
               _: 1
             })
           ]),
           _: 1
         }, 8, ["modelValue", "metadata"]),
-        g("div", ce, [
-          y(h(H), {
-            modelValue: w.value,
-            "onUpdate:modelValue": n[1] || (n[1] = (u) => w.value = u),
-            tabs: C,
-            label: "Ergebnis oder Meldungen"
-          }, null, 8, ["modelValue"]),
-          g("div", ue, [
-            w.value === "data" ? (r(), _(h(Z), {
+        g("div", _e, [
+          w(u(W), {
+            modelValue: T.value,
+            "onUpdate:modelValue": s[1] || (s[1] = (d) => T.value = d),
+            tabs: Y.value,
+            label: u(a)("Sql.tabs")
+          }, null, 8, ["modelValue", "tabs", "label"]),
+          g("div", Se, [
+            T.value === "data" ? (i(), S(u(ee), {
               key: 0,
-              items: A.value,
-              empty: "Noch nichts ausgeführt"
-            }, null, 8, ["items"])) : (r(), m("ul", de, [
-              (r(!0), m(I, null, O(v.value, (u, e) => (r(), m("li", {
-                key: e,
+              items: E.value,
+              empty: u(a)("Sql.nothingRun")
+            }, null, 8, ["items", "empty"])) : (i(), h("ul", be, [
+              (i(!0), h(X, null, P(b.value, (d, t) => (i(), h("li", {
+                key: t,
                 class: "message",
-                style: B({ color: u.type === "error" ? "var(--color-err)" : "var(--color-fg)" })
-              }, P(u.text), 5))), 128))
+                style: I({ color: d.type === "error" ? "var(--color-err)" : "var(--color-fg)" })
+              }, y(d.text), 5))), 128))
             ]))
           ])
         ])
       ])
     ]));
   }
-}), pe = /* @__PURE__ */ R(me, [["__scopeId", "data-v-5294ffcf"]]), ge = /* @__PURE__ */ x({
+}), we = /* @__PURE__ */ F(ve, [["__scopeId", "data-v-cfa05d7e"]]), ye = /* @__PURE__ */ C({
   __name: "Settings",
   props: {
     config: {},
     dataSources: {},
     connections: {}
   },
-  setup(t) {
-    const i = Q(() => t.connections.filter((s) => s.type === "xmla"));
-    return (s, l) => (r(), _(h(j), {
-      modelValue: t.config.connection,
-      "onUpdate:modelValue": l[0] || (l[0] = (p) => t.config.connection = p),
-      label: "Verbindung",
-      options: i.value,
+  setup(n) {
+    const { t: l } = V("datasourceSqlXmla"), r = B(() => n.connections.filter((a) => a.type === "xmla"));
+    return (a, c) => (i(), S(u(te), {
+      modelValue: n.config.connection,
+      "onUpdate:modelValue": c[0] || (c[0] = (e) => n.config.connection = e),
+      label: u(l)("Settings.connection"),
+      options: r.value,
       "label-key": "name",
       "value-key": "uid"
-    }, null, 8, ["modelValue", "options"]));
+    }, null, 8, ["modelValue", "label", "options"]));
   }
-}), he = Symbol.for("SqlXmlaStoreFactory"), fe = Symbol.for("SqlXmlaPreview"), _e = Symbol.for("SqlXmlaSettings");
-function we({ services: t }) {
-  t.register("SqlXmlaPreview", pe), t.register("SqlXmlaSettings", ge), t.getRequired(N).registerDatasourceType("sql_xmla", {
+}), Ae = { connection: "Verbindung" }, Ee = { columns: "Spalten", tables: "Tabellen", schema: "Schema", schemaRead: "Schema gelesen um {{time}}", result: "Ergebnis", messages: "Meldungen", rows_one: "{{count}} Zeile in {{ms}} ms.", rows_other: "{{count}} Zeilen in {{ms}} ms.", failed: "Abfrage fehlgeschlagen: {{reason}}", run: "Ausführen", tabs: "Ergebnis oder Meldungen", nothingRun: "Noch nichts ausgeführt" }, Te = {
+  Settings: Ae,
+  Sql: Ee
+}, qe = { connection: "Connection" }, xe = { columns: "Columns", tables: "Tables", schema: "Schema", schemaRead: "Schema read at {{time}}", result: "Result", messages: "Messages", rows_one: "{{count}} row in {{ms}} ms.", rows_other: "{{count}} rows in {{ms}} ms.", failed: "Query failed: {{reason}}", run: "Run", tabs: "Result or messages", nothingRun: "Nothing run yet" }, Ce = {
+  Settings: qe,
+  Sql: xe
+};
+var Le = Object.getOwnPropertyDescriptor, Me = (n, l, r, a) => {
+  for (var c = a > 1 ? void 0 : a ? Le(l, r) : l, e = n.length - 1, f; e >= 0; e--)
+    (f = n[e]) && (c = f(c) || c);
+  return c;
+};
+const G = "datasourceSqlXmla";
+let R = class {
+  namespace = G;
+  resources = {
+    de: Te,
+    en: Ce
+  };
+};
+R = Me([
+  se({
+    service: ["Translations"],
+    properties: { "i18n.namespace": G }
+  })
+], R);
+const De = Symbol.for("SqlXmlaStoreFactory"), Ne = Symbol.for("SqlXmlaPreview"), ke = Symbol.for("SqlXmlaSettings");
+function Ve({ services: n }) {
+  n.register("SqlXmlaPreview", we), n.register("SqlXmlaSettings", ye), n.getRequired(O).registerDatasourceType("sql_xmla", {
     icon: "storage",
     connections: ["xmla"],
-    Model: W,
-    Store: he,
-    Preview: fe,
-    Settings: _e
+    Model: le,
+    Store: De,
+    Preview: Ne,
+    Settings: ke
   });
 }
-function Ee({ services: t }) {
-  t.getRequired(N).unregisterDatasourceType("sql_xmla"), t.unregister("SqlXmlaPreview"), t.unregister("SqlXmlaSettings");
+function Fe({ services: n }) {
+  n.getRequired(O).unregisterDatasourceType("sql_xmla"), n.unregister("SqlXmlaPreview"), n.unregister("SqlXmlaSettings");
 }
 export {
-  we as activate,
-  Ee as deactivate
+  R as DatasourceSqlXmlaTranslations,
+  Ve as activate,
+  Fe as deactivate
 };

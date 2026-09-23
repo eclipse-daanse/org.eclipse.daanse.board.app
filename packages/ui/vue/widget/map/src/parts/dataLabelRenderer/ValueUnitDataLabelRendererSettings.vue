@@ -13,18 +13,20 @@ Contributors: Smart City Jena
 import type { Ref } from 'vue'
 import type { IUnitPoint } from './ValueUnitDataLabelRenderer.vue'
 import { DInput } from 'org.eclipse.daanse.board.app.ui.vue.controls'
+import { useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 
 
 const settings: Ref<IUnitPoint> = defineModel<IUnitPoint>({ required: true })
+const { t } = useTranslation('map')
 
 </script>
 
 <template>
-  <section class="settings-section" data-section="Style settings">
+  <section class="settings-section" data-section-id="style" :data-section="t('Style.section')">
     <div class="settings-container">
-      <DInput v-model="settings.unit" label="unit" />
-      <DInput v-model="settings.prefix" label="Prefix" />
-      <DInput v-model="settings.suffix" label="suffix" />
+      <DInput v-model="settings.unit" :label="t('ValueUnit.unit')" />
+      <DInput v-model="settings.prefix" :label="t('ValueUnit.prefix')" />
+      <DInput v-model="settings.suffix" :label="t('ValueUnit.suffix')" />
     </div>
   </section>
 

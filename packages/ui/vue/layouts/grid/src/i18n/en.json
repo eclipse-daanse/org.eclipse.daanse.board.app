@@ -1,0 +1,20 @@
+{
+  "Menu": {
+    "copy": "Copy",
+    "paste": "Paste"
+  },
+  "FormColumns": {
+    "lg": "from 1800 px",
+    "md": "from 1200 px",
+    "sm": "from 768 px",
+    "xs": "from 480 px",
+    "xxs": "below"
+  },
+  "Form": {
+    "rowHeight": "Row height (px)",
+    "cols": "Columns per width"
+  },
+  "Grid": {
+    "name": "Grid layout"
+  }
+}

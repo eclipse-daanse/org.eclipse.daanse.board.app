@@ -25,6 +25,7 @@ Contributors:
  */
 import { computed, ref, watch } from 'vue'
 import { DButton, DIcon, DModal } from 'org.eclipse.daanse.board.app.ui.vue.controls'
+import { useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 
 export interface TypeGroup {
   label: string
@@ -48,6 +49,7 @@ const props = defineProps<{
 }>()
 
 const emit = defineEmits<{ create: [] }>()
+const { t } = useTranslation('shell')
 
 const step = ref<1 | 2>(1)
 
@@ -101,7 +103,7 @@ function choose(each: string) {
           <span class="chosen__name">{{ type }}</span>
           <p v-if="summaryOf(type)" class="chosen__what">{{ summaryOf(type) }}</p>
         </div>
-        <DButton intent="quiet" size="sm" @click="step = 1">Anderer Typ</DButton>
+        <DButton intent="quiet" size="sm" @click="step = 1">{{ t('Wizard.otherType') }}</DButton>
       </header>
 
       <div class="fill__fields">
@@ -110,15 +112,15 @@ function choose(each: string) {
     </div>
 
     <template #actions>
-      <DButton v-if="step === 2" intent="quiet" @click="step = 1">Zurück</DButton>
-      <DButton intent="quiet" @click="open = false">Abbrechen</DButton>
+      <DButton v-if="step === 2" intent="quiet" @click="step = 1">{{ t('Wizard.back') }}</DButton>
+      <DButton intent="quiet" @click="open = false">{{ t('common:Action.cancel') }}</DButton>
       <DButton
         v-if="step === 2"
         intent="primary"
         :disabled="!ready"
         @click="emit('create')"
       >
-        {{ createLabel ?? 'Anlegen' }}
+        {{ createLabel ?? t('Wizard.create') }}
       </DButton>
     </template>
   </DModal>

@@ -16,8 +16,8 @@ import GeoJsonDataRendererSettings from './GeoJsonDataRendererSettings.vue'
 export default class GeoJsonDataRendererDescription implements IDataPointDescription {
   public readonly component: any = GeoJsonDataRenderer
   public readonly setupComponent: any = GeoJsonDataRendererSettings
-  public readonly description: string = 'Renders observations as GeoJSON features on the map'
-  public readonly name: string = 'GeoJSON Data Renderer'
+  public readonly description: string = 'pluginsGeojsonRenderer:GeoJson.description'
+  public readonly name: string = 'pluginsGeojsonRenderer:GeoJson.name'
   public readonly namespace: string = 'geojson'
   public readonly qualifiedName: string = 'GeoJsonDataRenderer'
   public readonly isLayerRenderer: boolean = true

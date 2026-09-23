@@ -1,0 +1,56 @@
+{
+  "Settings": {
+    "connection": "Connection"
+  },
+  "Ogcsta": {
+    "mqtt": "MQTT connection (optional, for real-time updates)",
+    "history": "History data",
+    "timeRange": "Time range filter",
+    "clearTimeRange": "Clear time range filter",
+    "phenomenonTime": "Phenomenon time filter",
+    "clearPhenomenonTime": "Clear phenomenon time filter",
+    "resultTime": "Result time filter",
+    "clearResultTime": "Clear result time filter",
+    "query": "Query settings",
+    "order": {
+      "phenomenonDesc": "Phenomenon time (descending)",
+      "phenomenonAsc": "Phenomenon time (ascending)",
+      "resultDesc": "Result time (descending)",
+      "resultAsc": "Result time (ascending)"
+    },
+    "orderBy": "Sort by",
+    "limit": "Limit (max records)",
+    "currentLocations": "Current instead of historical locations",
+    "currentLocationsLong": "Use current locations instead of historical locations",
+    "currentLocationsHint": "Reuse already loaded current locations instead of fetching historical locations via API",
+    "startTime": "Start time",
+    "startDate": "Start date",
+    "endTime": "End time",
+    "endDate": "End date",
+    "preview": {
+      "observations": "Observations",
+      "tree": "Tree view",
+      "json": "JSON view",
+      "showMap": "Show map",
+      "things": "Things",
+      "withLocation": "with location",
+      "hasLocation": "Has a location",
+      "description": "Description:",
+      "properties": "Properties:",
+      "viewChart": "View chart",
+      "unit": "Unit:",
+      "noObservations": "No observations loaded",
+      "more_one": "… and {{count}} more observation",
+      "more_other": "… and {{count}} more observations",
+      "datastreams_one": "{{count}} datastream",
+      "datastreams_other": "{{count}} datastreams",
+      "noLocations": "No location data available",
+      "datastream": "Datastream",
+      "noObservationData": "No observation data available",
+      "clickDatastream": "Click on a datastream to load observations",
+      "noData": "No data available",
+      "dsShort": "{{count}} DS",
+      "obsShort": "{{count}} obs"
+    }
+  }
+}

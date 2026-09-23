@@ -17,8 +17,8 @@ import TLCDataLabelRendererSettings from './TLCDataLabelRendererSettings.vue'
 export default class TLCDataLabelRendererDescription implements IDataPointDescription {
   public readonly component: any = TLCDataLabelRenderer
   public readonly setupComponent: any = TLCDataLabelRendererSettings
-  public readonly description: string = 'renders a Trafic Light DataPoint'
-  public readonly name: string = 'Traffic Light Data Point Renderer'
+  public readonly description: string = 'map:Renderer.trafficLight.description'
+  public readonly name: string = 'map:Renderer.trafficLight.name'
   public readonly qualifiedName: string = 'tlc'
   public readonly namespace: string = 'tlc'
   public readonly example: any = ' 🟢⚪⚪'

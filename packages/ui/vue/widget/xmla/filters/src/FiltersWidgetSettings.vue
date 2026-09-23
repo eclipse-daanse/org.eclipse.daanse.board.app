@@ -14,6 +14,9 @@ Contributors:
 
 <script lang="ts" setup>
 import { DCheckbox } from 'org.eclipse.daanse.board.app.ui.vue.controls';
+import { useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables';
+
+const { t } = useTranslation('xmlaFilters');
 
 const widgetSettings = defineModel() as any;
 
@@ -25,11 +28,11 @@ widgetSettings.settings.showFilters = widgetSettings.settings?.showRows ?? true;
 </script>
 
 <template>
-  <section class="settings-section" data-section="Vanta widget settings">
+  <section class="settings-section" data-section-id="filters" :data-section="t('Settings.section')">
     <div class="settings-container">
-      <DCheckbox v-model="widgetSettings.settings.showRows" label="Show rows" />
-      <DCheckbox v-model="widgetSettings.settings.showColumns" label="Show columns" />
-      <DCheckbox v-model="widgetSettings.settings.showFilters" label="Show filters" />
+      <DCheckbox v-model="widgetSettings.settings.showRows" :label="t('Settings.showRows')" />
+      <DCheckbox v-model="widgetSettings.settings.showColumns" :label="t('Settings.showColumns')" />
+      <DCheckbox v-model="widgetSettings.settings.showFilters" :label="t('Settings.showFilters')" />
     </div>
   </section>
 </template>

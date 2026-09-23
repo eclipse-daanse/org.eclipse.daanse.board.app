@@ -1,0 +1,139 @@
+{
+  "Widget": {
+    "name": "Karte"
+  },
+  "Settings": {
+    "serviceFailed": "Der Dienst ließ sich nicht laden. Die Adresse ist kein gültiger WMS- oder WFS-Dienst.",
+    "addService": "Dienst hinzufügen",
+    "serviceTypes": {
+      "wmsWfs": "WMS/WFS-Dienst",
+      "datasource": "Datenquelle"
+    },
+    "serviceUrl": "Adresse des Dienstes",
+    "selectDatasource": "Datenquelle",
+    "chooseDatasource": "Datenquelle wählen",
+    "enterDatasourceId": "Kennung der Datenquelle eingeben",
+    "datasourceId": "Kennung der Datenquelle",
+    "primaryDatasource": "Haupt-Datenquelle:",
+    "add": "Hinzufügen",
+    "addDatasource": "Datenquelle hinzufügen",
+    "serviceError": "Fehler beim Dienst",
+    "ok": "OK",
+    "sections": {
+      "layers": "Ebenen",
+      "services": "Dienste",
+      "map": "Karte"
+    },
+    "noLayers": "Noch keine Ebenen",
+    "noServices": "Noch keine Dienste",
+    "hideLayer": "Ebene ausblenden",
+    "showLayer": "Ebene zeigen",
+    "failed": "(fehlgeschlagen)",
+    "styles": "Stile",
+    "removeLayer": "Ebene entfernen",
+    "removeDatasource": "Datenquelle entfernen",
+    "baseMap": "Adresse der Grundkarte",
+    "baseMapHint": "Vorlage für die Kachel-Adresse. {z}, {x} und {y} stehen für Zoomstufe und Koordinaten.",
+    "fixed": "Karte fixiert",
+    "highlight": "Farbe für die Auswahl",
+    "highlightHint": "Farbe, mit der ausgewählte Things auf der Karte hervorgehoben werden."
+  },
+  "Renderer": {
+    "trafficLight": {
+      "name": "Ampel-Darstellung",
+      "description": "Zeigt einen Messwert als Ampel"
+    },
+    "valueUnit": {
+      "name": "Wert und Einheit",
+      "description": "Zeigt einen Wert mit seiner Einheit"
+    },
+    "tabs": {
+      "settings": "Einstellungen",
+      "conditions": "Bedingungen",
+      "points": "Punkte",
+      "areas": "Flächen",
+      "autoUpdate": "Aktualisierung",
+      "placement": "Platzierung"
+    },
+    "addStyle": "Stil hinzufügen",
+    "addDatastreamStyle": "Datenstrom-Stil hinzufügen",
+    "deleteStyle": "Stil löschen",
+    "deleteDatastreamStyle": "Datenstrom-Stil löschen",
+    "addObservation": "Beobachtung hinzufügen",
+    "deleteObservation": "Beobachtung löschen",
+    "tag": {
+      "thing": "Th",
+      "datastream": "DS",
+      "observation": "Beob."
+    },
+    "observation": "Beobachtung",
+    "settings": "Darstellungseinstellungen",
+    "create": "Neu anlegen",
+    "orSelect": "oder einen Stil zum Bearbeiten wählen",
+    "warning": "Achtung:",
+    "usedBy_one": "Der Stil „{{name}}“ wird von {{count}} Ebene verwendet:",
+    "usedBy_other": "Der Stil „{{name}}“ wird von {{count}} Ebenen verwendet:",
+    "unnamedLayer": "Ebene ohne Namen",
+    "deleteHint": "Wird der Stil gelöscht, verschwindet er aus all diesen Ebenen.",
+    "continue": "Trotzdem fortfahren?",
+    "selectObservation": "Darstellung für Beobachtungen wählen",
+    "chooseObservation": "Wie sollen Beobachtungen dargestellt werden?",
+    "newStyle": "Neuer Stil",
+    "newDatastreamStyle": "Neuer Datenstrom-Stil"
+  },
+  "Style": {
+    "section": "Stil",
+    "stroke": "Kontur",
+    "lineColor": "Linienfarbe",
+    "lineSize": "Linienstärke",
+    "lineOpacity": "Deckkraft der Linie",
+    "fill": "Füllung",
+    "fillOpacity": "Deckkraft der Füllung",
+    "fillColor": "Füllfarbe",
+    "className": "CSS-Klasse"
+  },
+  "ValueUnit": {
+    "unit": "Einheit",
+    "prefix": "Präfix",
+    "suffix": "Suffix"
+  },
+  "Observations": {
+    "renderer": "Darstellung",
+    "choose": "Darstellung wählen"
+  },
+  "Placement": {
+    "label": "Darstellen innerhalb",
+    "thing": "Thing",
+    "observedArea": "Beobachtete Fläche"
+  },
+  "Point": {
+    "renderAs": "Punkt darstellen als",
+    "as": {
+      "icon": "Symbol",
+      "prop": "Eigenschaft",
+      "image": "Bild",
+      "none": "Nichts"
+    },
+    "prop": "Eigenschaft des Datenstroms",
+    "imageUrl": "Adresse des Bildes",
+    "imageSize": "Bildgröße",
+    "pinColor": "Farbe der Stecknadel",
+    "solid": "Gefüllt",
+    "noImage": "Kein Bild"
+  },
+  "AutoUpdate": {
+    "title": "Automatische Aktualisierung",
+    "refresh": "Beobachtungen neu laden: {{time}}",
+    "never": "Nie",
+    "current": "Aktuelle Einstellung:",
+    "last": "Letzte Aktualisierung:"
+  },
+  "Conditions": {
+    "property": "Eigenschaft",
+    "is": "ist",
+    "value": "Wert",
+    "remove": "Bedingung entfernen",
+    "none": "Noch nichts, worauf geprüft wird.",
+    "add": "Hinzufügen"
+  }
+}

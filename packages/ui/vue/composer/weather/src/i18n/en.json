@@ -1,0 +1,25 @@
+{
+  "Sta": {
+    "sources": "OGC STA sources"
+  },
+  "Weather": {
+    "title": "Weather data",
+    "noData": "No weather data available",
+    "noDataHint": "Set up connected data sources to see weather data",
+    "lastUpdated": "Last updated: {{time}}",
+    "thing": "Thing (optional)",
+    "allThings": "All Things",
+    "mapping": "Custom keyword mapping (optional)",
+    "mappingHint": "Overrides the default keywords used to detect weather values",
+    "param": {
+      "temperature": "Temperature",
+      "humidity": "Humidity",
+      "pressure": "Pressure",
+      "windSpeed": "Wind speed",
+      "windDirection": "Wind direction",
+      "precipitation": "Precipitation",
+      "visibility": "Visibility",
+      "cloudCover": "Cloud cover"
+    }
+  }
+}

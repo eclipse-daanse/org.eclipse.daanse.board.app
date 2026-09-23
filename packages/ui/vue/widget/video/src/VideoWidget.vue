@@ -18,10 +18,11 @@ import { useRoute } from "vue-router";
 import type { VideoSettings } from './gen/VideoSettings'
 import { VideoSettingsImpl } from './gen/VideoSettingsImpl'
 import { ObjectFitSettingImpl } from './gen/ObjectFitSettingImpl'
-import { VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+import { VariableWrapper, useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 // import { useDatasourceRepository } from "../composables/datasourceRepository";
 
 const props = defineProps<{ datasourceId: string; id?: string }>();
+const { t } = useTranslation('video');
 import { inject, toRefs } from 'vue';
 const { id: widgetId } = toRefs(props);
 const config = defineModel<VideoSettings>('configv', { required: true });
@@ -193,7 +194,7 @@ const videoUrlParced = computed(() => {
             @timeupdate="emitVideoEvent('timeupdate', $event)"
             @ended="emitVideoEvent('ended', $event)"
             @error="emitVideoEvent('error', $event)">
-            Your browser does not support embedded videos.
+            {{ t('Widget.unsupported') }}
         </video>
     </div>
 </template>

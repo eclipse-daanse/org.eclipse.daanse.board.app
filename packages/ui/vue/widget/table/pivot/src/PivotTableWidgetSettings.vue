@@ -11,9 +11,9 @@ Contributors:
     Smart City Jena
 -->
 <script setup lang="ts">
-import { ref, onMounted, watch, markRaw } from 'vue'
+import { computed, ref, onMounted, watch, markRaw } from 'vue'
 import { VariableInput } from 'org.eclipse.daanse.board.app.ui.vue.variable.components'
-import { VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+import { VariableWrapper, useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import { PivotTable } from './gen/PivotTable'
 import type { LevelStyle } from './gen/LevelStyle'
 import { LevelStyleImpl } from './gen/LevelStyleImpl'
@@ -30,13 +30,14 @@ import {
 type ConditionType = 'greaterThan' | 'lessThan' | 'equals' | 'notEquals' | 'between' | 'contains' | 'colorScale' | 'topN' | 'bottomN'
 
 const widgetSettings = defineModel<PivotTable>({ required: true });
+const { t } = useTranslation('tablePivot');
 
 
-const textAlignOptions = [
-  { value: 'left', text: 'Links' },
-  { value: 'center', text: 'Zentriert' },
-  { value: 'right', text: 'Rechts' },
-]
+const textAlignOptions = computed(() => [
+  { value: 'left', text: t('Settings.align.left') },
+  { value: 'center', text: t('Settings.align.center') },
+  { value: 'right', text: t('Settings.align.right') },
+])
 
 /*
  * The style lists are typed in the model, so the generator gives them an
@@ -87,7 +88,8 @@ const removeColumnLevelStyle = (index: number) => {
   listRemoveAt(widgetSettings.value.columnLevelStyles, index)
 }
 
-const conditionTypeOptions = [
+// i18n-keys: tablePivot:Settings.condition.*
+const conditionTypeOptions = computed(() => [
   { value: 'greaterThan', text: 'Größer als' },
   { value: 'lessThan', text: 'Kleiner als' },
   { value: 'equals', text: 'Gleich' },
@@ -97,7 +99,7 @@ const conditionTypeOptions = [
   { value: 'colorScale', text: 'Farbskala (Min→Max)' },
   { value: 'topN', text: 'Top N Werte' },
   { value: 'bottomN', text: 'Bottom N Werte' },
-]
+].map((option) => ({ ...option, text: t(`Settings.condition.${option.value}`) })))
 
 const generateId = () => Math.random().toString(36).substring(2, 9)
 
@@ -138,63 +140,63 @@ const needsResultColors = (type?: string) => {
 </script>
 
 <template>
-  <section class="settings-section" data-section="Data settings">
+  <section class="settings-section" data-section-id="data" :data-section="t('Settings.sections.data')">
     <div class="settings-container">
-      <DCheckbox v-model="widgetSettings.showRowsProperties" label="Show rows properties" />
-      <DCheckbox v-model="widgetSettings.showColumnsProperties" label="Show columns properties" />
-      <DCheckbox v-model="widgetSettings.showSingleMeasureHeader" label="Show single measure header" />
+      <DCheckbox v-model="widgetSettings.showRowsProperties" :label="t('Settings.showRowsProperties')" />
+      <DCheckbox v-model="widgetSettings.showColumnsProperties" :label="t('Settings.showColumnsProperties')" />
+      <DCheckbox v-model="widgetSettings.showSingleMeasureHeader" :label="t('Settings.showSingleMeasureHeader')" />
     </div>
   </section>
-  <section class="settings-section" data-section="Farben">
+  <section class="settings-section" data-section-id="colors" :data-section="t('Settings.sections.colors')">
     <div class="settings-container">
       <div class="settings-block">
-        <h3>Header</h3>
-        <VariableInput v-model="(widgetSettings.headerBackgroundColor as unknown as VariableWrapper<string>)" label="Header Hintergrund">
+        <h3>{{ t('Settings.header') }}</h3>
+        <VariableInput v-model="(widgetSettings.headerBackgroundColor as unknown as VariableWrapper<string>)" :label="t('Settings.headerBackground')">
           <template #default="{ value, change }">
-            <DColorInput label="Header Hintergrund" :model-value="value" @update:model-value="change" />
+            <DColorInput :label="t('Settings.headerBackground')" :model-value="value" @update:model-value="change" />
           </template>
         </VariableInput>
 
-        <VariableInput v-model="(widgetSettings.headerTextColor as unknown as VariableWrapper<string>)" label="Header Textfarbe">
+        <VariableInput v-model="(widgetSettings.headerTextColor as unknown as VariableWrapper<string>)" :label="t('Settings.headerText')">
           <template #default="{ value, change }">
-            <DColorInput label="Header Textfarbe" :model-value="value" @update:model-value="change" />
-          </template>
-        </VariableInput>
-      </div>
-
-      <div class="settings-block">
-        <h3>Zellen</h3>
-        <VariableInput v-model="(widgetSettings.cellBackgroundColor as unknown as VariableWrapper<string>)" label="Zellen Hintergrund">
-          <template #default="{ value, change }">
-            <DColorInput label="Zellen Hintergrund" :model-value="value" @update:model-value="change" />
-          </template>
-        </VariableInput>
-
-        <VariableInput v-model="(widgetSettings.cellTextColor as unknown as VariableWrapper<string>)" label="Zellen Textfarbe">
-          <template #default="{ value, change }">
-            <DColorInput label="Zellen Textfarbe" :model-value="value" @update:model-value="change" />
+            <DColorInput :label="t('Settings.headerText')" :model-value="value" @update:model-value="change" />
           </template>
         </VariableInput>
       </div>
 
       <div class="settings-block">
-        <h3>Rahmen</h3>
-        <VariableInput v-model="(widgetSettings.borderColor as unknown as VariableWrapper<string>)" label="Rahmenfarbe">
+        <h3>{{ t('Settings.cells') }}</h3>
+        <VariableInput v-model="(widgetSettings.cellBackgroundColor as unknown as VariableWrapper<string>)" :label="t('Settings.cellBackground')">
           <template #default="{ value, change }">
-            <DColorInput label="Rahmenfarbe" :model-value="value" @update:model-value="change" />
+            <DColorInput :label="t('Settings.cellBackground')" :model-value="value" @update:model-value="change" />
+          </template>
+        </VariableInput>
+
+        <VariableInput v-model="(widgetSettings.cellTextColor as unknown as VariableWrapper<string>)" :label="t('Settings.cellText')">
+          <template #default="{ value, change }">
+            <DColorInput :label="t('Settings.cellText')" :model-value="value" @update:model-value="change" />
+          </template>
+        </VariableInput>
+      </div>
+
+      <div class="settings-block">
+        <h3>{{ t('Settings.border') }}</h3>
+        <VariableInput v-model="(widgetSettings.borderColor as unknown as VariableWrapper<string>)" :label="t('Settings.borderColor')">
+          <template #default="{ value, change }">
+            <DColorInput :label="t('Settings.borderColor')" :model-value="value" @update:model-value="change" />
           </template>
         </VariableInput>
       </div>
     </div>
   </section>
 
-  <section class="settings-section" data-section="Dimensionen">
+  <section class="settings-section" data-section-id="dimensions" :data-section="t('Settings.sections.dimensions')">
     <div class="settings-container">
       <div class="settings-block">
-        <VariableInput v-model="(widgetSettings.defaultColumnWidth as unknown as VariableWrapper<any>)" label="Standard Spaltenbreite (px)">
+        <VariableInput v-model="(widgetSettings.defaultColumnWidth as unknown as VariableWrapper<any>)" :label="t('Settings.columnWidth')">
           <template #default="{ value, change }">
             <DInput
-              label="Standard Spaltenbreite (px)"
+              :label="t('Settings.columnWidth')"
               :model-value="value"
               @update:model-value="change"
               type="number"
@@ -202,10 +204,10 @@ const needsResultColors = (type?: string) => {
               :max="500" />
           </template>
         </VariableInput>
-        <VariableInput v-model="(widgetSettings.defaultRowHeight as unknown as VariableWrapper<any>)" label="Standard Zeilenhöhe (px)">
+        <VariableInput v-model="(widgetSettings.defaultRowHeight as unknown as VariableWrapper<any>)" :label="t('Settings.rowHeight')">
           <template #default="{ value, change }">
             <DInput
-              label="Standard Zeilenhöhe (px)"
+              :label="t('Settings.rowHeight')"
               :model-value="value"
               @update:model-value="change"
               type="number"
@@ -217,13 +219,13 @@ const needsResultColors = (type?: string) => {
     </div>
   </section>
 
-  <section class="settings-section" data-section="Text">
+  <section class="settings-section" data-section-id="text" :data-section="t('Settings.sections.text')">
     <div class="settings-container">
       <div class="settings-block">
-        <VariableInput v-model="(widgetSettings.fontSize as unknown as VariableWrapper<any>)" label="Schriftgröße (px)">
+        <VariableInput v-model="(widgetSettings.fontSize as unknown as VariableWrapper<any>)" :label="t('Settings.fontSize')">
           <template #default="{ value, change }">
             <DInput
-              label="Schriftgröße (px)"
+              :label="t('Settings.fontSize')"
               :model-value="value"
               @update:model-value="change"
               type="number"
@@ -231,10 +233,10 @@ const needsResultColors = (type?: string) => {
               :max="32" />
           </template>
         </VariableInput>
-        <VariableInput v-model="(widgetSettings.headerFontWeight as unknown as VariableWrapper<any>)" label="Header Font-Weight">
+        <VariableInput v-model="(widgetSettings.headerFontWeight as unknown as VariableWrapper<any>)" :label="t('Settings.headerFontWeight')">
           <template #default="{ value, change }">
             <DInput
-              label="Header Font-Weight"
+              :label="t('Settings.headerFontWeight')"
               :model-value="value"
               @update:model-value="change"
               type="number"
@@ -244,22 +246,22 @@ const needsResultColors = (type?: string) => {
           </template>
         </VariableInput>
         <DSelect
-          label="Text-Ausrichtung (Zellen)"
+          :label="t('Settings.textAlign')"
           v-model="widgetSettings.cellTextAlign"
           :options="textAlignOptions" value-key="value" />
       </div>
     </div>
   </section>
 
-  <section class="settings-section" data-section="Zeilen-Level Styles">
+  <section class="settings-section" data-section-id="rowLevels" :data-section="t('Settings.sections.rowLevels')">
     <div class="settings-container">
       <p class="hint-text">
-        Definiere individuelle Styles für verschiedene Hierarchie-Level in den Zeilen-Headern.
+        {{ t('Settings.rowLevelsHint') }}
       </p>
 
       <div class="level-header">
-        <span>Level-Konfiguration</span>
-        <DButton size="sm" @click="addRowLevelStyle">Level hinzufügen</DButton>
+        <span>{{ t('Settings.levels') }}</span>
+        <DButton size="sm" @click="addRowLevelStyle">{{ t('Settings.addLevel') }}</DButton>
       </div>
 
       <div
@@ -268,30 +270,30 @@ const needsResultColors = (type?: string) => {
         class="level-card"
       >
         <div class="level-card-header">
-          <strong>Level {{ levelStyle.level }}</strong>
-          <DButton size="sm" intent="danger" @click="removeRowLevelStyle(index)">Entfernen</DButton>
+          <strong>{{ t('Settings.level', { level: levelStyle.level }) }}</strong>
+          <DButton size="sm" intent="danger" @click="removeRowLevelStyle(index)">{{ t('Settings.remove') }}</DButton>
         </div>
 
         <DInput
-          label="Level-Nummer"
+          :label="t('Settings.levelNumber')"
           v-model.number="levelStyle.level"
           type="number"
           :min="0" />
 
-        <VariableInput v-model="(levelStyle.backgroundColor as unknown as VariableWrapper<string>)" label="Hintergrundfarbe">
+        <VariableInput v-model="(levelStyle.backgroundColor as unknown as VariableWrapper<string>)" :label="t('Settings.background')">
           <template #default="{ value, change }">
-            <DColorInput label="Hintergrundfarbe" :model-value="value" @update:model-value="change" />
+            <DColorInput :label="t('Settings.background')" :model-value="value" @update:model-value="change" />
           </template>
         </VariableInput>
 
-        <VariableInput v-model="(levelStyle.textColor as unknown as VariableWrapper<string>)" label="Textfarbe">
+        <VariableInput v-model="(levelStyle.textColor as unknown as VariableWrapper<string>)" :label="t('Settings.textColor')">
           <template #default="{ value, change }">
-            <DColorInput label="Textfarbe" :model-value="value" @update:model-value="change" />
+            <DColorInput :label="t('Settings.textColor')" :model-value="value" @update:model-value="change" />
           </template>
         </VariableInput>
 
         <DInput
-          label="Font-Weight"
+          :label="t('Settings.fontWeight')"
           v-model.number="levelStyle.fontWeight"
           type="number"
           :min="100"
@@ -300,20 +302,20 @@ const needsResultColors = (type?: string) => {
       </div>
 
       <div v-if="!widgetSettings.rowLevelStyles?.length" class="empty-state">
-        Keine Level-Styles definiert. Klicke "Level hinzufügen" um anzufangen.
+        {{ t('Settings.noLevels') }}
       </div>
     </div>
   </section>
 
-  <section class="settings-section" data-section="Spalten-Level Styles">
+  <section class="settings-section" data-section-id="columnLevels" :data-section="t('Settings.sections.columnLevels')">
     <div class="settings-container">
       <p class="hint-text">
-        Definiere individuelle Styles für verschiedene Hierarchie-Level in den Spalten-Headern.
+        {{ t('Settings.columnLevelsHint') }}
       </p>
 
       <div class="level-header">
-        <span>Level-Konfiguration</span>
-        <DButton size="sm" @click="addColumnLevelStyle">Level hinzufügen</DButton>
+        <span>{{ t('Settings.levels') }}</span>
+        <DButton size="sm" @click="addColumnLevelStyle">{{ t('Settings.addLevel') }}</DButton>
       </div>
 
       <div
@@ -322,30 +324,30 @@ const needsResultColors = (type?: string) => {
         class="level-card"
       >
         <div class="level-card-header">
-          <strong>Level {{ levelStyle.level }}</strong>
-          <DButton size="sm" intent="danger" @click="removeColumnLevelStyle(index)">Entfernen</DButton>
+          <strong>{{ t('Settings.level', { level: levelStyle.level }) }}</strong>
+          <DButton size="sm" intent="danger" @click="removeColumnLevelStyle(index)">{{ t('Settings.remove') }}</DButton>
         </div>
 
         <DInput
-          label="Level-Nummer"
+          :label="t('Settings.levelNumber')"
           v-model.number="levelStyle.level"
           type="number"
           :min="0" />
 
-        <VariableInput v-model="(levelStyle.backgroundColor as unknown as VariableWrapper<string>)" label="Hintergrundfarbe">
+        <VariableInput v-model="(levelStyle.backgroundColor as unknown as VariableWrapper<string>)" :label="t('Settings.background')">
           <template #default="{ value, change }">
-            <DColorInput label="Hintergrundfarbe" :model-value="value" @update:model-value="change" />
+            <DColorInput :label="t('Settings.background')" :model-value="value" @update:model-value="change" />
           </template>
         </VariableInput>
 
-        <VariableInput v-model="(levelStyle.textColor as unknown as VariableWrapper<string>)" label="Textfarbe">
+        <VariableInput v-model="(levelStyle.textColor as unknown as VariableWrapper<string>)" :label="t('Settings.textColor')">
           <template #default="{ value, change }">
-            <DColorInput label="Textfarbe" :model-value="value" @update:model-value="change" />
+            <DColorInput :label="t('Settings.textColor')" :model-value="value" @update:model-value="change" />
           </template>
         </VariableInput>
 
         <DInput
-          label="Font-Weight"
+          :label="t('Settings.fontWeight')"
           v-model.number="levelStyle.fontWeight"
           type="number"
           :min="100"
@@ -354,20 +356,20 @@ const needsResultColors = (type?: string) => {
       </div>
 
       <div v-if="!widgetSettings.columnLevelStyles?.length" class="empty-state">
-        Keine Level-Styles definiert. Klicke "Level hinzufügen" um anzufangen.
+        {{ t('Settings.noLevels') }}
       </div>
     </div>
   </section>
 
-  <section class="settings-section" data-section="Bedingte Formatierung">
+  <section class="settings-section" data-section-id="conditional" :data-section="t('Settings.sections.conditional')">
     <div class="settings-container">
       <p class="hint-text">
-        Definiere Regeln zur automatischen Formatierung von Zellen basierend auf ihren Werten.
+        {{ t('Settings.rulesHint') }}
       </p>
 
       <div class="level-header">
-        <span>Formatierungsregeln</span>
-        <DButton size="sm" @click="addConditionalFormat">Regel hinzufügen</DButton>
+        <span>{{ t('Settings.rules') }}</span>
+        <DButton size="sm" @click="addConditionalFormat">{{ t('Settings.addRule') }}</DButton>
       </div>
 
       <div
@@ -376,46 +378,46 @@ const needsResultColors = (type?: string) => {
         class="level-card"
       >
         <div class="level-card-header">
-          <strong>Regel {{ index + 1 }}</strong>
-          <DButton size="sm" intent="danger" @click="removeConditionalFormat(index)">Entfernen</DButton>
+          <strong>{{ t('Settings.rule', { n: index + 1 }) }}</strong>
+          <DButton size="sm" intent="danger" @click="removeConditionalFormat(index)">{{ t('Settings.remove') }}</DButton>
         </div>
 
         <DSelect
-          label="Bedingungstyp"
+          :label="t('Settings.conditionType')"
           v-model="rule.conditionType"
           :options="conditionTypeOptions" value-key="value" />
 
         <!-- Numerische Vergleiche -->
         <DInput
           v-if="!needsTextValue(rule.conditionType) && !needsColorScale(rule.conditionType)"
-          :label="needsCountValue(rule.conditionType) ? 'Anzahl (N)' : 'Wert'"
+          :label="needsCountValue(rule.conditionType) ? t('Settings.count') : t('Settings.value')"
           v-model.number="rule.value1"
           type="number" />
 
         <!-- Zweiter Wert für "zwischen" -->
         <DInput
           v-if="needsSecondValue(rule.conditionType)"
-          label="Bis Wert"
+          :label="t('Settings.toValue')"
           v-model.number="rule.value2"
           type="number" />
 
         <!-- Text-Eingabe für "enthält" -->
         <DInput
           v-if="needsTextValue(rule.conditionType)"
-          label="Text"
+          :label="t('Settings.textValue')"
           v-model="rule.value1" />
 
         <!-- Farbskala-Einstellungen -->
         <template v-if="needsColorScale(rule.conditionType)">
           <div class="color-scale-row">
-            <VariableInput v-model="(rule.minColor as unknown as VariableWrapper<string>)" label="Min-Farbe">
+            <VariableInput v-model="(rule.minColor as unknown as VariableWrapper<string>)" :label="t('Settings.minColor')">
               <template #default="{ value, change }">
-                <DColorInput label="Min-Farbe" :model-value="value" @update:model-value="change" />
+                <DColorInput :label="t('Settings.minColor')" :model-value="value" @update:model-value="change" />
               </template>
             </VariableInput>
-            <VariableInput v-model="(rule.maxColor as unknown as VariableWrapper<string>)" label="Max-Farbe">
+            <VariableInput v-model="(rule.maxColor as unknown as VariableWrapper<string>)" :label="t('Settings.maxColor')">
               <template #default="{ value, change }">
-                <DColorInput label="Max-Farbe" :model-value="value" @update:model-value="change" />
+                <DColorInput :label="t('Settings.maxColor')" :model-value="value" @update:model-value="change" />
               </template>
             </VariableInput>
           </div>
@@ -423,18 +425,18 @@ const needsResultColors = (type?: string) => {
 
         <!-- Ergebnis-Farben für alle außer Farbskala -->
         <template v-if="needsResultColors(rule.conditionType)">
-          <VariableInput v-model="(rule.backgroundColor as unknown as VariableWrapper<string>)" label="Hintergrundfarbe">
+          <VariableInput v-model="(rule.backgroundColor as unknown as VariableWrapper<string>)" :label="t('Settings.background')">
             <template #default="{ value, change }">
-              <DColorInput label="Hintergrundfarbe" :model-value="value" @update:model-value="change" />
+              <DColorInput :label="t('Settings.background')" :model-value="value" @update:model-value="change" />
             </template>
           </VariableInput>
-          <VariableInput v-model="(rule.textColor as unknown as VariableWrapper<string>)" label="Textfarbe">
+          <VariableInput v-model="(rule.textColor as unknown as VariableWrapper<string>)" :label="t('Settings.textColor')">
             <template #default="{ value, change }">
-              <DColorInput label="Textfarbe" :model-value="value" @update:model-value="change" />
+              <DColorInput :label="t('Settings.textColor')" :model-value="value" @update:model-value="change" />
             </template>
           </VariableInput>
           <DInput
-            label="Font-Weight"
+            :label="t('Settings.fontWeight')"
             v-model.number="rule.fontWeight"
             type="number"
             :min="100"
@@ -443,14 +445,14 @@ const needsResultColors = (type?: string) => {
         </template>
 
         <DInput
-          label="Priorität (niedriger = höher)"
+          :label="t('Settings.priority')"
           v-model.number="rule.priority"
           type="number"
           :min="0" />
       </div>
 
       <div v-if="!widgetSettings.conditionalFormats?.length" class="empty-state">
-        Keine Formatierungsregeln definiert. Klicke "Regel hinzufügen" um anzufangen.
+        {{ t('Settings.noRules') }}
       </div>
     </div>
   </section>

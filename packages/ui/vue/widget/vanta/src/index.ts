@@ -61,6 +61,7 @@ export class VantaWidgetProvider implements WidgetProvider {
   readonly supportedDSTypes = []
   readonly icon = Icon
   readonly name = 'Vanta'
+  readonly nameKey = 'vanta:Widget.name'
 
   constructor(
     @inject(EVENT_REGISTRY_ID) private readonly events: EventRegistry,
@@ -79,3 +80,6 @@ export class VantaWidgetProvider implements WidgetProvider {
 
 export { VantaWidget }
 export { VantaSettingsImpl, VantasettingsPackage, vantaSettingsFormXmi }
+
+/* Its texts - collected by lib.i18next, see src/i18n. */
+export { VantaTranslations } from './i18n'

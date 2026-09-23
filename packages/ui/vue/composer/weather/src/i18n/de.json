@@ -1,0 +1,25 @@
+{
+  "Sta": {
+    "sources": "OGC-STA-Quellen"
+  },
+  "Weather": {
+    "title": "Wetterdaten",
+    "noData": "Keine Wetterdaten vorhanden",
+    "noDataHint": "Verbundene Datenquellen einrichten, um Wetterdaten zu sehen",
+    "lastUpdated": "Zuletzt aktualisiert: {{time}}",
+    "thing": "Thing (wahlweise)",
+    "allThings": "Alle Things",
+    "mapping": "Eigene Schlagwort-Zuordnung (optional)",
+    "mappingHint": "Überschreibt die Standard-Schlagworte, an denen Wetterwerte erkannt werden",
+    "param": {
+      "temperature": "Temperatur",
+      "humidity": "Luftfeuchte",
+      "pressure": "Luftdruck",
+      "windSpeed": "Windgeschwindigkeit",
+      "windDirection": "Windrichtung",
+      "precipitation": "Niederschlag",
+      "visibility": "Sichtweite",
+      "cloudCover": "Bewölkung"
+    }
+  }
+}

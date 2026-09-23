@@ -18,6 +18,7 @@ import {
   DatasourceRepository, identifier as DatasourceRepositoryIdentifier
 } from "org.eclipse.daanse.board.app.lib.repository.datasource";
 import { watch, ref, computed, onMounted } from "vue";
+import { useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 
 // Injected once at setup; the static helpers receive it as an argument
 const dsRepository = inject<DatasourceRepository>(DatasourceRepositoryIdentifier)!
@@ -27,6 +28,8 @@ const { config, dataSources, connections } = defineProps<{
   dataSources: any;
   connections: any;
 }>();
+
+const { t } = useTranslation('composerOgc')
 
 const datasourcesFiltered = computed(() => {
   return dataSources.filter((ds: any) => ds.type === 'csv' || ds.type === 'xmla');
@@ -52,34 +55,34 @@ watch(() => config.connectedDatasources, async (newValue) => {
 </script>
 <template>
     <!-- eslint-disable-next-line vue/no-mutating-props -->
-  <DSelect v-model="config.connectedDatasources" label="Quellen" :options="datasourcesFiltered" multiple label-key="name"
+  <DSelect v-model="config.connectedDatasources" :label="t('Settings.sources')" :options="datasourcesFiltered" multiple label-key="name"
     value-key="uid" />
 
 
-  <DCheckbox v-model="config.useGeometryFromData" label="Geometrie aus den Daten" style="margin: 0.5rem 0;"/>
+  <DCheckbox v-model="config.useGeometryFromData" :label="t('Ogc.geometryFromData')" style="margin: 0.5rem 0;"/>
   <template v-if="config.useGeometryFromData">
     <!-- eslint-disable-next-line vue/no-mutating-props -->
-    <DCheckbox v-model="config.useGeometryFromProps" label="Geometrie aus den Eigenschaften" style="margin: 0.5rem 0;"/>
+    <DCheckbox v-model="config.useGeometryFromProps" :label="t('Ogc.geometryFromProps')" style="margin: 0.5rem 0;"/>
 
     <template v-if="config.useGeometryFromProps">
       <!-- eslint-disable-next-line vue/no-mutating-props -->
-      <DSelect v-model="config.geometryPropsField" label="Feld der Geometrie-Eigenschaft" :options="properties" />
+      <DSelect v-model="config.geometryPropsField" :label="t('Ogc.geometryPropsField')" :options="properties" />
     </template>
 
     <template v-else>
       <!-- eslint-disable-next-line vue/no-mutating-props -->
-      <DSelect v-model="config.geometryField" label="Feld der Geometrie" :options="headers" />
+      <DSelect v-model="config.geometryField" :label="t('Ogc.geometryField')" :options="headers" />
     </template>
 
   </template>
   <!-- eslint-disable-next-line vue/no-mutating-props -->
   <template v-else>
-    <DSelect v-model="config.xField" label="Feld für die X-Koordinate" :options="headers" />
+    <DSelect v-model="config.xField" :label="t('Ogc.xField')" :options="headers" />
 
     <!-- eslint-disable-next-line vue/no-mutating-props -->
-    <DSelect v-model="config.yField" label="Feld für die Y-Koordinate" :options="headers" />
+    <DSelect v-model="config.yField" :label="t('Ogc.yField')" :options="headers" />
 
     <!-- eslint-disable-next-line vue/no-mutating-props -->
-    <DSelect v-model="config.geometryType" label="Art der Geometrie" :options="geometryTypes" />
+    <DSelect v-model="config.geometryType" :label="t('Ogc.geometryType')" :options="geometryTypes" />
   </template>
 </template>

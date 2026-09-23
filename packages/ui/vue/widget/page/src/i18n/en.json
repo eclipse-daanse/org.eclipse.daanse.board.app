@@ -1,0 +1,27 @@
+{
+  "Widget": {
+    "name": "Page",
+    "noLayout": "No layout system found for page {{page}}",
+    "loadFailed": "Failed to load page {{page}}: {{reason}}",
+    "renderFailed": "Render error: {{reason}}",
+    "loading": "Loading page {{page}}…",
+    "pageName": "Page: {{name}}",
+    "layoutId": "Layout: {{id}}",
+    "recursion": "Recursive page reference prevented: {{path}}",
+    "depth": "Depth: {{depth}}/{{max}}",
+    "chain": "Call chain: {{chain}}",
+    "target": "Page: {{page}}"
+  },
+  "Settings": {
+    "section": "Choose page",
+    "selectPage": "Page",
+    "selectPagePlaceholder": "Choose a page…",
+    "selfReference": "A page cannot reference itself.",
+    "manualPath": "Enter the path by hand",
+    "path": "Path"
+  },
+  "Form": {
+    "hideTitle": "Hide the page title",
+    "backgroundColor": "Background colour"
+  }
+}

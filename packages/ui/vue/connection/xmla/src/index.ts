@@ -47,3 +47,6 @@ export function deactivate({ services }: ActivationContext) {
     .unregisterConnectionType('xmla')
   services.unregister('XmlaConnectionSettings')
 }
+
+/* Its texts - collected by lib.i18next, see src/i18n. */
+export { ConnectionXmlaTranslations } from './i18n'

@@ -1,9 +1,10 @@
-import { VARIABLE_REPOSITORY as o } from "org.eclipse.daanse.board.app.lib.api.variable";
-import { COMPUTED_VARIABLE as c, ComputedVariableSymbol as h } from "org.eclipse.daanse.board.app.lib.variables";
-import { BasicEFactory as p, BasicEPackage as d, EPackageRegistry as S, BasicEClass as I, BasicEAttribute as m, getEcorePackage as g, BasicEObject as N } from "@emfts/core";
-class r extends p {
+import { VARIABLE_REPOSITORY as E } from "org.eclipse.daanse.board.app.lib.api.variable";
+import { COMPUTED_VARIABLE as h, ComputedVariableSymbol as g } from "org.eclipse.daanse.board.app.lib.variables";
+import { BasicEFactory as N, BasicEPackage as f, EPackageRegistry as T, BasicEClass as _, BasicEAttribute as b, getEcorePackage as v, BasicEObject as w } from "@emfts/core";
+import { component as x } from "@eclipse-daanse/tsm";
+class u extends N {
   static get eINSTANCE() {
-    return this._instance || (this._instance = new r()), this._instance;
+    return this._instance || (this._instance = new u()), this._instance;
   }
   constructor() {
     super(), this.setEPackage(s.eINSTANCE);
@@ -12,7 +13,7 @@ class r extends p {
    * Create a new ComputedVariableSettings instance
    */
   createComputedVariableSettings() {
-    return new i();
+    return new r();
   }
   /**
    * Create an instance of the given class
@@ -26,7 +27,7 @@ class r extends p {
     }
   }
 }
-class s extends d {
+class s extends f {
   static {
     this.eNAME = "computedVariable";
   }
@@ -52,14 +53,14 @@ class s extends d {
    * Initialize package contents
    */
   init() {
-    S.INSTANCE.set(s.eNS_URI, this), this.setEFactoryInstance(r.eINSTANCE);
-    const e = new I();
+    T.INSTANCE.set(s.eNS_URI, this), this.setEFactoryInstance(u.eINSTANCE);
+    const e = new _();
     e.setName("ComputedVariableSettings"), e.setAbstract(!1), e.setInterface(!1), this.getEClassifiers().push(e), e.setEPackage(this), s.Literals.COMPUTED_VARIABLE_SETTINGS = e;
-    const t = new m();
-    t.setName("expression"), t.setLowerBound(0), t.setUpperBound(1), e.getEStructuralFeatures().push(t), s.Literals.COMPUTED_VARIABLE_SETTINGS__EXPRESSION = t, s.Literals.COMPUTED_VARIABLE_SETTINGS__EXPRESSION.setEType(g().getEClassifier("EString"));
+    const t = new b();
+    t.setName("expression"), t.setLowerBound(0), t.setUpperBound(1), e.getEStructuralFeatures().push(t), s.Literals.COMPUTED_VARIABLE_SETTINGS__EXPRESSION = t, s.Literals.COMPUTED_VARIABLE_SETTINGS__EXPRESSION.setEType(v().getEClassifier("EString"));
   }
 }
-class i extends N {
+class r extends w {
   static {
     this.EXPRESSION = 0;
   }
@@ -79,14 +80,14 @@ class i extends N {
       getNotifier: () => this,
       getEventType: () => 1,
       // SET
-      getFeature: () => this.eClass().getEStructuralFeature(i.EXPRESSION),
+      getFeature: () => this.eClass().getEStructuralFeature(r.EXPRESSION),
       getOldValue: () => t,
       getNewValue: () => e,
       getPosition: () => -1,
       wasSet: () => !0,
       isTouch: () => !1,
       isReset: () => !1,
-      getFeatureID: () => i.EXPRESSION,
+      getFeatureID: () => r.EXPRESSION,
       merge: () => !1
     });
   }
@@ -96,7 +97,7 @@ class i extends N {
    */
   eGet(e) {
     switch (this.eClass().getFeatureID(e)) {
-      case i.EXPRESSION:
+      case r.EXPRESSION:
         return this.expression;
       default:
         return super.eGet(e);
@@ -107,7 +108,7 @@ class i extends N {
    */
   eSet(e, t) {
     switch (this.eClass().getFeatureID(e)) {
-      case i.EXPRESSION:
+      case r.EXPRESSION:
         this.expression = t, super.eSet(e, t);
         break;
       default:
@@ -119,7 +120,7 @@ class i extends N {
    */
   eIsSet(e) {
     switch (this.eClass().getFeatureID(e)) {
-      case i.EXPRESSION:
+      case r.EXPRESSION:
         return this._expression !== void 0;
       default:
         return super.eIsSet(e);
@@ -130,7 +131,7 @@ class i extends N {
    */
   eUnset(e) {
     switch (this.eClass().getFeatureID(e)) {
-      case i.EXPRESSION:
+      case r.EXPRESSION:
         this._expression = void 0;
         return;
       default:
@@ -150,7 +151,7 @@ class i extends N {
     };
   }
 }
-const u = `<?xml version="1.0" encoding="UTF-8"?>
+const m = `<?xml version="1.0" encoding="UTF-8"?>
 <!--
 /*********************************************************************
 * Copyright (c) 2026 Contributors to the Eclipse Foundation.
@@ -179,51 +180,79 @@ variable, not to this type, and the dialog asks for them once.
   <components xsi:type="uimodel:FormView" name="ComputedVariableSettingsFormView">
     <fields xsi:type="uimodel:InputWidget" name="expression"
         feature="http://org.eclipse.daanse.board.app.ui.vue.variable.computed#//ComputedVariableSettings/expression"
-        label="Ausdruck"/>
+        label="variableComputed:FormComputed.expression"/>
   </components>
 </uimodel:UIModel>
-`;
+`, C = { expression: "Ausdruck" }, R = {
+  FormComputed: C
+}, A = { expression: "Expression" }, O = {
+  FormComputed: A
+};
+var P = Object.getOwnPropertyDescriptor, D = (i, e, t, a) => {
+  for (var n = a > 1 ? void 0 : a ? P(e, t) : e, o = i.length - 1, l; o >= 0; o--)
+    (l = i[o]) && (n = l(n) || n);
+  return n;
+};
+const d = "variableComputed";
+let c = class {
+  constructor() {
+    this.namespace = d, this.resources = {
+      de: R,
+      en: O
+    };
+  }
+};
+c = D([
+  x({
+    service: ["Translations"],
+    properties: { "i18n.namespace": d }
+  })
+], c);
 s.eINSTANCE;
-function l({ services: a }) {
-  a.getRequired(o).registerVariableType(c, {
-    Variable: h,
+function S({ services: i }) {
+  i.getRequired(E).registerVariableType(h, {
+    Variable: g,
     /*
      * The form is a model, not a template: the fields come from the
      * Ecore beside this, so there is one description of what this type
      * needs rather than a class and a form that can drift apart.
      */
     settingsForm: {
-      xmi: u,
+      xmi: m,
       uri: "/computed-variable-settings.ui.xmi",
       ePackage: () => s.eINSTANCE,
-      create: () => new i()
+      create: () => new r()
     }
   });
 }
-function E({ services: a }) {
-  a.getRequired(o).unregisterVariableType(c);
+function I({ services: i }) {
+  i.getRequired(E).unregisterVariableType(h);
 }
-const f = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const y = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  ComputedVariableSettingsImpl: i,
+  ComputedVariableSettingsImpl: r,
   ComputedVariableSettingsPackage: s,
-  activate: l,
-  deactivate: E,
-  settingsFormXmi: u
-}, Symbol.toStringTag, { value: "Module" })), n = "org.eclipse.daanse.board.app.ui.vue.variable.computed", T = "0.0.1-next.1";
-async function _(a) {
+  get VariableComputedTranslations() {
+    return c;
+  },
+  activate: S,
+  deactivate: I,
+  settingsFormXmi: m
+}, Symbol.toStringTag, { value: "Module" })), p = "org.eclipse.daanse.board.app.ui.vue.variable.computed", F = "0.0.1-next.1";
+async function X(i) {
   const e = globalThis.__tsm__;
   if (!e)
-    throw new Error(`${n}: tsm runtime is not initialized`);
-  e.register(n, f, T, "ui.vue.variable.computed"), await l?.(a);
+    throw new Error(`${p}: tsm runtime is not initialized`);
+  e.register(p, y, F, "ui.vue.variable.computed"), await S?.(i);
 }
-async function v(a) {
-  await E?.(a);
+async function M(i) {
+  await I?.(i);
 }
 export {
-  i as ComputedVariableSettingsImpl,
+  r as ComputedVariableSettingsImpl,
   s as ComputedVariableSettingsPackage,
-  _ as activate,
-  v as deactivate,
-  u as settingsFormXmi
+  c as VariableComputedTranslations,
+  X as activate,
+  M as deactivate,
+  m as settingsFormXmi
 };

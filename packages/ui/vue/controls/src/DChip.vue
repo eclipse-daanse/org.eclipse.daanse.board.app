@@ -18,6 +18,10 @@ Contributors:
  * The tones are the state tokens, so a chip means the same thing here as a
  * coloured value does anywhere else in the app.
  */
+import { useText } from './useText'
+
+const t = useText()
+
 withDefaults(
   defineProps<{
     tone?: 'neutral' | 'accent' | 'ok' | 'warn' | 'err'
@@ -38,7 +42,7 @@ defineEmits(['remove'])
       v-if="removable"
       type="button"
       class="chip__x"
-      aria-label="Entfernen"
+      :aria-label="t('Chip.remove', 'Remove')"
       @click="$emit('remove')"
     >
       ✕

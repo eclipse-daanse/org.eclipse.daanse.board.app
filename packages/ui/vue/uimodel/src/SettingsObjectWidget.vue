@@ -32,6 +32,7 @@ import { UIModelComposer } from '@emfts/uimodel-composer'
 import { ensureWrappers } from './adopt'
 import { formFor, labelOf } from './buildForm'
 import { formForClass } from './loadUIModel'
+import { useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 
 const props = defineProps<{
   eObject?: EObject
@@ -41,6 +42,8 @@ const props = defineProps<{
     rawWidget?: any
   }
 }>()
+
+const { t } = useTranslation('uimodel')
 
 const label = computed(
   () => props.custom?.resolvedStyle?.label ?? (props.feature ? labelOf(props.feature) : ''),
@@ -108,8 +111,7 @@ const form = computed(() => {
     <span v-if="label" class="object__label">{{ label }}</span>
 
     <p v-if="!valueClass" class="object__untyped">
-      Diese Einstellung ist im Modell ohne Typ angegeben - es steht dort nur, dass etwas
-      enthalten ist, nicht was. Solange das so ist, lässt sich hier nichts zeigen.
+      {{ t('Object.untyped') }}
     </p>
 
     <div v-else class="object__body">

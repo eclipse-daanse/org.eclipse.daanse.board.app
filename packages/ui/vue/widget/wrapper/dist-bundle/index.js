@@ -1,14 +1,15 @@
-(function(){var i="ui.vue.widget.wrapper",d=document,s=d.querySelector('style[data-tsm-bundle="'+i+'"]');if(!s){s=d.createElement('style');s.setAttribute('data-tsm-bundle',i);d.head.appendChild(s);}s.textContent=".absolute[data-v-ff848c53]{position:absolute}.wrapper-container[data-v-ff848c53]{background-color:var(--v5c4aca49);border-color:var(--a8a36e08);border-width:var(--v7f74f265);border-style:solid;width:100%;height:100%;box-Shadow:var(--v8108988a);border-radius:var(--v67680318);backdrop-filter:blur(var(--blur-amount))}.sub[data-v-ff848c53]{border-radius:var(--v67680318);padding:var(--v2729c4f7)}.scroll[data-v-ff848c53]{width:100%;height:100%;overflow:auto}.confirm__title[data-v-ff848c53]{margin:0;font-family:var(--font-sans);font-size:var(--text-base);font-weight:600;color:var(--color-fg)}.confirm__text[data-v-ff848c53]{margin:0;color:var(--color-dim);line-height:1.5}.actions[data-v-ff848c53]{position:absolute;inset:0;z-index:3000;display:flex;align-items:center;justify-content:center;border-radius:inherit;background:color-mix(in srgb,var(--color-bg, #121820) 70%,transparent);opacity:0;transition:opacity .12s ease;pointer-events:none}.wrapper-container:hover .actions[data-v-ff848c53],.actions[data-v-ff848c53]:focus-within{opacity:1}.actions__row[data-v-ff848c53]{display:flex;flex-wrap:wrap;justify-content:center;gap:2px;max-width:100%;padding:0 4px;margin-bottom:6%}.action[data-v-ff848c53]{pointer-events:auto;position:relative;display:flex;align-items:center;justify-content:center;width:34px;height:34px;border:1px solid transparent;border-radius:var(--radius-md, 4px);background:transparent;color:var(--color-dim, #8b98a8);font:inherit;cursor:pointer;transition:color .1s ease,background-color .1s ease,border-color .1s ease}.action[data-v-ff848c53]:hover,.action[data-v-ff848c53]:focus-visible{color:var(--color-fg, #e6edf5);background:color-mix(in srgb,var(--color-pane, #1a222c) 88%,transparent);border-color:var(--color-divider, #2b3644)}.action[data-v-ff848c53]:focus-visible{outline:2px solid var(--color-accent, #4fa3d1);outline-offset:1px}.action--danger[data-v-ff848c53]:hover,.action--danger[data-v-ff848c53]:focus-visible{color:var(--color-err, #d1584f);border-color:color-mix(in srgb,var(--color-err, #d1584f) 40%,transparent)}.action__label[data-v-ff848c53]{position:absolute;top:calc(100% + 2px);left:50%;transform:translate(-50%);padding:2px 6px;border-radius:var(--radius-sm, 3px);background:var(--color-raised, #232d3a);color:var(--color-fg, #e6edf5);font-size:11px;line-height:1.4;letter-spacing:.01em;white-space:nowrap;opacity:0;pointer-events:none;transition:opacity 90ms ease}.action:hover .action__label[data-v-ff848c53],.action:focus-visible .action__label[data-v-ff848c53]{opacity:1}\n";})();
-import { defineComponent as se, useCssVars as re, computed as c, inject as ae, ref as U, onUnmounted as ie, createElementBlock as P, openBlock as v, normalizeStyle as x, createCommentVNode as Y, createVNode as B, toDisplayString as V, Fragment as X, createElementVNode as m, createBlock as oe, resolveDynamicComponent as ne, renderList as le, withModifiers as ue, normalizeClass as de, unref as y, withCtx as G, createTextVNode as K } from "vue";
-import { identifier as ce } from "org.eclipse.daanse.board.app.lib.api.widget";
-import { VariableWrapper as r } from "org.eclipse.daanse.board.app.ui.vue.composables";
-import { DIcon as Z, DModal as he, DButton as M } from "org.eclipse.daanse.board.app.ui.vue.controls";
-import { BasicEFactory as ge, BasicEPackage as Re, EPackageRegistry as j, BasicEClass as Ee, BasicEReference as u, BasicEObject as we } from "@emfts/core";
-const fe = { class: "scroll" }, Te = {
+(function(){var i="ui.vue.widget.wrapper",d=document,s=d.querySelector('style[data-tsm-bundle="'+i+'"]');if(!s){s=d.createElement('style');s.setAttribute('data-tsm-bundle',i);d.head.appendChild(s);}s.textContent=".absolute[data-v-40d70b59]{position:absolute}.wrapper-container[data-v-40d70b59]{background-color:var(--d4d0032e);border-color:var(--v08fa051c);border-width:var(--v28cb1685);border-style:solid;width:100%;height:100%;box-Shadow:var(--v8270104a);border-radius:var(--v78a99a94);backdrop-filter:blur(var(--blur-amount))}.sub[data-v-40d70b59]{border-radius:var(--v78a99a94);padding:var(--v5f002dd2)}.scroll[data-v-40d70b59]{width:100%;height:100%;overflow:auto}.confirm__title[data-v-40d70b59]{margin:0;font-family:var(--font-sans);font-size:var(--text-base);font-weight:600;color:var(--color-fg)}.confirm__text[data-v-40d70b59]{margin:0;color:var(--color-dim);line-height:1.5}.actions[data-v-40d70b59]{position:absolute;inset:0;z-index:3000;display:flex;align-items:center;justify-content:center;border-radius:inherit;background:color-mix(in srgb,var(--color-bg, #121820) 70%,transparent);opacity:0;transition:opacity .12s ease;pointer-events:none}.wrapper-container:hover .actions[data-v-40d70b59],.actions[data-v-40d70b59]:focus-within{opacity:1}.actions__row[data-v-40d70b59]{display:flex;flex-wrap:wrap;justify-content:center;gap:2px;max-width:100%;padding:0 4px;margin-bottom:6%}.action[data-v-40d70b59]{pointer-events:auto;position:relative;display:flex;align-items:center;justify-content:center;width:34px;height:34px;border:1px solid transparent;border-radius:var(--radius-md, 4px);background:transparent;color:var(--color-dim, #8b98a8);font:inherit;cursor:pointer;transition:color .1s ease,background-color .1s ease,border-color .1s ease}.action[data-v-40d70b59]:hover,.action[data-v-40d70b59]:focus-visible{color:var(--color-fg, #e6edf5);background:color-mix(in srgb,var(--color-pane, #1a222c) 88%,transparent);border-color:var(--color-divider, #2b3644)}.action[data-v-40d70b59]:focus-visible{outline:2px solid var(--color-accent, #4fa3d1);outline-offset:1px}.action--danger[data-v-40d70b59]:hover,.action--danger[data-v-40d70b59]:focus-visible{color:var(--color-err, #d1584f);border-color:color-mix(in srgb,var(--color-err, #d1584f) 40%,transparent)}.action__label[data-v-40d70b59]{position:absolute;top:calc(100% + 2px);left:50%;transform:translate(-50%);padding:2px 6px;border-radius:var(--radius-sm, 3px);background:var(--color-raised, #232d3a);color:var(--color-fg, #e6edf5);font-size:11px;line-height:1.4;letter-spacing:.01em;white-space:nowrap;opacity:0;pointer-events:none;transition:opacity 90ms ease}.action:hover .action__label[data-v-40d70b59],.action:focus-visible .action__label[data-v-40d70b59]{opacity:1}\n";})();
+import { defineComponent as ie, useCssVars as oe, computed as w, inject as ne, ref as x, onUnmounted as le, createElementBlock as F, openBlock as v, normalizeStyle as z, createCommentVNode as X, createVNode as G, toDisplayString as y, Fragment as K, createElementVNode as P, createBlock as ue, resolveDynamicComponent as de, renderList as ce, withModifiers as he, normalizeClass as ge, unref as C, withCtx as I, createTextVNode as Z } from "vue";
+import { identifier as we } from "org.eclipse.daanse.board.app.lib.api.widget";
+import { useTranslation as Re, VariableWrapper as r } from "org.eclipse.daanse.board.app.ui.vue.composables";
+import { DIcon as $, DModal as Ee, DButton as M } from "org.eclipse.daanse.board.app.ui.vue.controls";
+import { BasicEFactory as pe, BasicEPackage as fe, EPackageRegistry as q, BasicEClass as Ce, BasicEReference as c, BasicEObject as Te } from "@emfts/core";
+import { component as be } from "@eclipse-daanse/tsm";
+const Se = { class: "scroll" }, Ne = {
   key: 0,
   class: "actions",
   "aria-hidden": "false"
-}, Ce = { class: "actions__row" }, Ne = ["title", "onClick"], be = { class: "action__label" }, Se = { key: 2 }, pe = /* @__PURE__ */ se({
+}, _e = { class: "actions__row" }, Oe = ["title", "onClick"], Ae = { class: "action__label" }, De = { key: 2 }, Le = { class: "confirm__title" }, me = { class: "confirm__text" }, ve = /* @__PURE__ */ ie({
   __name: "WidgetWrapper",
   props: {
     widget: {},
@@ -17,42 +18,42 @@ const fe = { class: "scroll" }, Te = {
   },
   emits: ["openSettings", "removeWidget"],
   setup(a, { emit: e }) {
-    re((o) => ({
-      v5c4aca49: D.value,
-      a8a36e08: L.value,
-      v7f74f265: q.value + "px",
-      v8108988a: A.value,
-      v67680318: J.value + "px",
-      v2729c4f7: W.value + "px"
+    oe((o) => ({
+      d4d0032e: m.value,
+      v08fa051c: Q.value,
+      v28cb1685: ee.value + "px",
+      v8270104a: L.value,
+      v78a99a94: te.value + "px",
+      v5f002dd2: Y.value + "px"
     }));
-    const s = e, h = ae(ce), g = U(0), C = h.onChange?.(() => {
+    const s = e, { t: u } = Re("wrapper"), d = ne(we), g = x(0), p = d.onChange?.(() => {
       g.value++;
     });
-    ie(() => C?.());
-    const N = c(() => (g.value, h.getWidget(a.widget.type))), b = c(() => (g.value, h.getAllWidgets())), R = U(!1), E = U(null), S = (o) => {
+    le(() => p?.());
+    const S = w(() => (g.value, d.getWidget(a.widget.type))), N = w(() => (g.value, d.getAllWidgets())), R = x(!1), E = x(null), _ = (o) => {
       E.value = o, R.value = !0;
-    }, p = () => {
+    }, O = () => {
       E.value && s("removeWidget", E.value), R.value = !1, E.value = null;
-    }, f = () => {
+    }, T = () => {
       R.value = !1, E.value = null;
-    }, _ = (o) => {
+    }, A = (o) => {
       s("openSettings", o);
-    }, O = c(() => [
+    }, D = w(() => [
       {
         id: "settings",
         icon: "settings",
-        label: "Einstellungen",
-        run: () => _(a.widget.uid)
+        label: u("Actions.settings"),
+        run: () => A(a.widget.uid)
       },
       ...a.extraActions ?? [],
       {
         id: "delete",
         icon: "delete",
-        label: "Löschen",
+        label: u("common:Action.delete"),
         danger: !0,
-        run: () => S(a.widget.uid)
+        run: () => _(a.widget.uid)
       }
-    ]), w = {
+    ]), f = {
       title: "",
       backgroundColor: "#f6f7f9",
       backgroundColorTransparence: 255,
@@ -71,10 +72,10 @@ const fe = { class: "scroll" }, Te = {
       shadowTransparence: 36,
       transparency: 255
     };
-    Object.keys(w).forEach((o) => {
+    Object.keys(f).forEach((o) => {
       const n = a.widget.wrapperConfig[o];
       if (n == null)
-        a.widget.wrapperConfig[o] = new r(w[o]);
+        a.widget.wrapperConfig[o] = new r(f[o]);
       else if (typeof n != "object")
         a.widget.wrapperConfig[o] = new r(n);
       else if (!(n instanceof r))
@@ -82,69 +83,69 @@ const fe = { class: "scroll" }, Te = {
           const l = new r(n.value);
           "variable" in n && (l.variable = n.variable), a.widget.wrapperConfig[o] = l;
         } else
-          a.widget.wrapperConfig[o] = new r(w[o]);
+          a.widget.wrapperConfig[o] = new r(f[o]);
     });
-    const A = c(() => {
+    const L = w(() => {
       let o = "";
       const n = a.widget.wrapperConfig.shadowTransparence?.value;
-      F(n) && (o = n.toString(16));
+      B(n) && (o = n.toString(16));
       let l = (a.widget.wrapperConfig.shadowColor?.value || "#FFFFFF").replace("#", "");
       return l.length == 3 && (l = l[0] + l[0] + l[1] + l[1] + l[2] + l[2]), `${a.widget.wrapperConfig.shadowX?.value}px ${a.widget.wrapperConfig.shadowY?.value}px ${a.widget.wrapperConfig.shadowBlur?.value}px #${l}${o}`;
-    }), D = c(() => {
+    }), m = w(() => {
       let o = 255;
       const n = a.widget.wrapperConfig.backgroundColorTransparence?.value;
-      F(n) && (o = n);
+      B(n) && (o = n);
       const l = a.widget.wrapperConfig.transparency?.value;
-      F(l) && (o = Math.round(o * (l / 255)));
-      const I = a.widget.wrapperConfig.backgroundColor?.value;
-      if (!I) return "var(--color-pane)";
-      let T = I.replace("#", "");
-      T.length == 3 && (T = T[0] + T[0] + T[1] + T[1] + T[2] + T[2]);
-      const te = o < 255 ? o.toString(16).padStart(2, "0") : "";
-      return `#${T}${te}`;
-    }), L = c(() => a.widget.wrapperConfig.borderColor?.value || "var(--color-divider)"), q = c(() => a.widget.wrapperConfig.borderSize?.value || 0), J = c(() => a.widget.wrapperConfig.borderRadius?.value || 0), k = c(() => {
+      B(l) && (o = Math.round(o * (l / 255)));
+      const U = a.widget.wrapperConfig.backgroundColor?.value;
+      if (!U) return "var(--color-pane)";
+      let b = U.replace("#", "");
+      b.length == 3 && (b = b[0] + b[0] + b[1] + b[1] + b[2] + b[2]);
+      const ae = o < 255 ? o.toString(16).padStart(2, "0") : "";
+      return `#${b}${ae}`;
+    }), Q = w(() => a.widget.wrapperConfig.borderColor?.value || "var(--color-divider)"), ee = w(() => a.widget.wrapperConfig.borderSize?.value || 0), te = w(() => a.widget.wrapperConfig.borderRadius?.value || 0), H = w(() => {
       const o = a.widget.wrapperConfig.transparency?.value;
-      return F(o) ? o / 255 : 1;
-    }), Q = c(() => a.widget.wrapperConfig.titleFontSize?.value || 16), H = c(() => a.widget.wrapperConfig.titleColor?.value || "var(--color-divider)");
-    c(() => {
+      return B(o) ? o / 255 : 1;
+    }), se = w(() => a.widget.wrapperConfig.titleFontSize?.value || 16), W = w(() => a.widget.wrapperConfig.titleColor?.value || "var(--color-divider)");
+    w(() => {
       let o = (a.widget.wrapperConfig.shadowColor?.value || "#FFFFFF").replace("#", "");
       o.length == 3 && (o = o[0] + o[0] + o[1] + o[1] + o[2] + o[2]);
       const n = a.widget.wrapperConfig.shadowTransparence?.value;
-      return o + (F(n) ? n.toString(16) : "");
+      return o + (B(n) ? n.toString(16) : "");
     });
-    function F(o) {
+    function B(o) {
       const n = parseInt(o);
       return isNaN(n) ? !1 : n >= 0 && n <= 255;
     }
-    const ee = c(() => {
+    const re = w(() => {
       const o = a.widget.wrapperConfig.blur?.value;
-      return F(o) ? o : "";
-    }), W = c(() => {
+      return B(o) ? o : "";
+    }), Y = w(() => {
       const o = parseInt(a.widget.wrapperConfig.padding?.value);
       return isNaN(o) ? 0 : o;
     });
-    return (o, n) => (v(), P("div", {
+    return (o, n) => (v(), F("div", {
       class: "flex relative flex-col w-full h-full wrapper-container",
-      style: x({ "--blur-amount": ee.value + "px", "--title-color": H.value })
+      style: z({ "--blur-amount": re.value + "px", "--title-color": W.value })
     }, [
-      a.widget.wrapperConfig.title?.value ? (v(), P("div", {
+      a.widget.wrapperConfig.title?.value ? (v(), F("div", {
         key: 0,
         class: "font-semibold capitalize",
-        style: x({
-          fontSize: Q.value + "px",
-          color: H.value,
-          padding: W.value + "px",
+        style: z({
+          fontSize: se.value + "px",
+          color: W.value,
+          padding: Y.value + "px",
           paddingBottom: 0,
-          opacity: k.value
+          opacity: H.value
         })
-      }, V(a.widget.wrapperConfig.title.value), 5)) : Y("", !0),
-      N.value ? (v(), P(X, { key: 1 }, [
-        m("div", {
+      }, y(a.widget.wrapperConfig.title.value), 5)) : X("", !0),
+      S.value ? (v(), F(K, { key: 1 }, [
+        P("div", {
           class: "w-full h-full box-border cursor-pointer overflow-hidden sub",
-          style: x({ position: "relative", opacity: k.value })
+          style: z({ position: "relative", opacity: H.value })
         }, [
-          m("div", fe, [
-            (v(), oe(ne(b.value[a.widget.type].component), {
+          P("div", Se, [
+            (v(), ue(de(N.value[a.widget.type].component), {
               config: a.widget.config,
               configv: a.widget.config,
               "onUpdate:configv": n[0] || (n[0] = (l) => a.widget.config = l),
@@ -154,76 +155,76 @@ const fe = { class: "scroll" }, Te = {
             }, null, 40, ["config", "configv", "datasourceId", "id"]))
           ])
         ], 4),
-        a.editEnabled ? (v(), P("div", Te, [
-          m("div", Ce, [
-            (v(!0), P(X, null, le(O.value, (l) => (v(), P("button", {
+        a.editEnabled ? (v(), F("div", Ne, [
+          P("div", _e, [
+            (v(!0), F(K, null, ce(D.value, (l) => (v(), F("button", {
               key: l.id,
               type: "button",
-              class: de(["action", { "action--danger": l.danger }]),
+              class: ge(["action", { "action--danger": l.danger }]),
               title: l.label,
-              onClick: ue((I) => l.run(), ["stop"])
+              onClick: he((U) => l.run(), ["stop"])
             }, [
-              B(y(Z), {
+              G(C($), {
                 name: l.icon,
                 size: "lg"
               }, null, 8, ["name"]),
-              m("span", be, V(l.label), 1)
-            ], 10, Ne))), 128))
+              P("span", Ae, y(l.label), 1)
+            ], 10, Oe))), 128))
           ])
-        ])) : Y("", !0)
-      ], 64)) : (v(), P("div", Se, [
-        m("p", null, "Widget type " + V(a.widget.type) + " is not registered.", 1)
+        ])) : X("", !0)
+      ], 64)) : (v(), F("div", De, [
+        P("p", null, y(C(u)("NotRegistered", { type: a.widget.type })), 1)
       ])),
-      B(y(he), {
+      G(C(Ee), {
         modelValue: R.value,
         "onUpdate:modelValue": n[1] || (n[1] = (l) => R.value = l),
         size: "sm",
-        onCancel: f
+        onCancel: T
       }, {
-        header: G(() => [
-          B(y(Z), {
+        header: I(() => [
+          G(C($), {
             name: "warning",
             size: "lg",
             tone: "color-err"
           }),
-          n[2] || (n[2] = m("h2", { class: "confirm__title" }, "Widget löschen", -1))
+          P("h2", Le, y(C(u)("Delete.title")), 1)
         ]),
-        actions: G(() => [
-          B(y(M), {
+        actions: I(() => [
+          G(C(M), {
             intent: "quiet",
-            onClick: f
+            onClick: T
           }, {
-            default: G(() => [...n[3] || (n[3] = [
-              K("Abbrechen", -1)
-            ])]),
+            default: I(() => [
+              Z(y(C(u)("common:Action.cancel")), 1)
+            ]),
             _: 1
           }),
-          B(y(M), {
+          G(C(M), {
             intent: "danger",
-            onClick: p
+            onClick: O
           }, {
-            default: G(() => [...n[4] || (n[4] = [
-              K("Löschen", -1)
-            ])]),
+            default: I(() => [
+              Z(y(C(u)("common:Action.delete")), 1)
+            ]),
             _: 1
           })
         ]),
-        default: G(() => [
-          n[5] || (n[5] = m("p", { class: "confirm__text" }, " Möchtest du dieses Widget wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden. ", -1))
+        default: I(() => [
+          P("p", me, y(C(u)("Delete.text")), 1)
         ]),
         _: 1
       }, 8, ["modelValue"])
     ], 4));
   }
-}), _e = (a, e) => {
+}), Fe = (a, e) => {
   const s = a.__vccOpts || a;
-  for (const [h, g] of e)
-    s[h] = g;
+  for (const [u, d] of e)
+    s[u] = d;
   return s;
-}, Oe = /* @__PURE__ */ _e(pe, [["__scopeId", "data-v-ff848c53"]]);
-class z extends ge {
+}, ye = /* @__PURE__ */ Fe(ve, [["__scopeId", "data-v-40d70b59"]]);
+class k extends pe {
   static get eINSTANCE() {
-    return this._instance || (this._instance = new z()), this._instance;
+    return this._instance || (this._instance = new k()), this._instance;
   }
   constructor() {
     super(), this.setEPackage(i.eINSTANCE);
@@ -246,13 +247,13 @@ class z extends ge {
     }
   }
 }
-function d(a) {
-  const e = j.INSTANCE.getEPackage(a);
+function h(a) {
+  const e = q.INSTANCE.getEPackage(a);
   if (!e)
     throw new Error(`EPackage '${a}' is not registered. Access the eINSTANCE of that model's generated package (or register it via EPackageRegistry.INSTANCE.registerPackage) before initializing WrapperSettingsPackage.`);
   return e;
 }
-class i extends Re {
+class i extends fe {
   static {
     this.eNAME = "wrapperSettings";
   }
@@ -294,46 +295,46 @@ class i extends Re {
    * Initialize package contents
    */
   init() {
-    j.INSTANCE.set(i.eNS_URI, this), this.setEFactoryInstance(z.eINSTANCE);
-    const e = new Ee();
+    q.INSTANCE.set(i.eNS_URI, this), this.setEFactoryInstance(k.eINSTANCE);
+    const e = new Ce();
     e.setName("WrapperSettings"), e.setAbstract(!1), e.setInterface(!1), this.getEClassifiers().push(e), e.setEPackage(this), i.Literals.WRAPPER_SETTINGS = e;
-    const s = new u();
+    const s = new c();
     s.setContainment(!1), s.setName("title"), s.setLowerBound(0), s.setUpperBound(1), e.getEStructuralFeatures().push(s), i.Literals.WRAPPER_SETTINGS__TITLE = s;
-    const h = new u();
-    h.setContainment(!1), h.setName("backgroundColor"), h.setLowerBound(0), h.setUpperBound(1), e.getEStructuralFeatures().push(h), i.Literals.WRAPPER_SETTINGS__BACKGROUND_COLOR = h;
-    const g = new u();
-    g.setContainment(!1), g.setName("backgroundColorTransparence"), g.setLowerBound(0), g.setUpperBound(1), e.getEStructuralFeatures().push(g), i.Literals.WRAPPER_SETTINGS__BACKGROUND_COLOR_TRANSPARENCE = g;
-    const C = new u();
-    C.setContainment(!1), C.setName("titleColor"), C.setLowerBound(0), C.setUpperBound(1), e.getEStructuralFeatures().push(C), i.Literals.WRAPPER_SETTINGS__TITLE_COLOR = C;
-    const N = new u();
-    N.setContainment(!1), N.setName("padding"), N.setLowerBound(0), N.setUpperBound(1), e.getEStructuralFeatures().push(N), i.Literals.WRAPPER_SETTINGS__PADDING = N;
-    const b = new u();
-    b.setContainment(!1), b.setName("titleFontSize"), b.setLowerBound(0), b.setUpperBound(1), e.getEStructuralFeatures().push(b), i.Literals.WRAPPER_SETTINGS__TITLE_FONT_SIZE = b;
-    const R = new u();
-    R.setContainment(!1), R.setName("borderSize"), R.setLowerBound(0), R.setUpperBound(1), e.getEStructuralFeatures().push(R), i.Literals.WRAPPER_SETTINGS__BORDER_SIZE = R;
-    const E = new u();
-    E.setContainment(!1), E.setName("borderColor"), E.setLowerBound(0), E.setUpperBound(1), e.getEStructuralFeatures().push(E), i.Literals.WRAPPER_SETTINGS__BORDER_COLOR = E;
-    const S = new u();
-    S.setContainment(!1), S.setName("borderRadius"), S.setLowerBound(0), S.setUpperBound(1), e.getEStructuralFeatures().push(S), i.Literals.WRAPPER_SETTINGS__BORDER_RADIUS = S;
-    const p = new u();
-    p.setContainment(!1), p.setName("blur"), p.setLowerBound(0), p.setUpperBound(1), e.getEStructuralFeatures().push(p), i.Literals.WRAPPER_SETTINGS__BLUR = p;
-    const f = new u();
-    f.setContainment(!1), f.setName("fullscreen"), f.setLowerBound(0), f.setUpperBound(1), e.getEStructuralFeatures().push(f), i.Literals.WRAPPER_SETTINGS__FULLSCREEN = f;
-    const _ = new u();
-    _.setContainment(!1), _.setName("shadowColor"), _.setLowerBound(0), _.setUpperBound(1), e.getEStructuralFeatures().push(_), i.Literals.WRAPPER_SETTINGS__SHADOW_COLOR = _;
-    const O = new u();
-    O.setContainment(!1), O.setName("shadowBlur"), O.setLowerBound(0), O.setUpperBound(1), e.getEStructuralFeatures().push(O), i.Literals.WRAPPER_SETTINGS__SHADOW_BLUR = O;
-    const w = new u();
-    w.setContainment(!1), w.setName("shadowX"), w.setLowerBound(0), w.setUpperBound(1), e.getEStructuralFeatures().push(w), i.Literals.WRAPPER_SETTINGS__SHADOW_X = w;
-    const A = new u();
-    A.setContainment(!1), A.setName("shadowY"), A.setLowerBound(0), A.setUpperBound(1), e.getEStructuralFeatures().push(A), i.Literals.WRAPPER_SETTINGS__SHADOW_Y = A;
-    const D = new u();
-    D.setContainment(!1), D.setName("shadowTransparence"), D.setLowerBound(0), D.setUpperBound(1), e.getEStructuralFeatures().push(D), i.Literals.WRAPPER_SETTINGS__SHADOW_TRANSPARENCE = D;
-    const L = new u();
-    L.setContainment(!1), L.setName("transparency"), L.setLowerBound(0), L.setUpperBound(1), e.getEStructuralFeatures().push(L), i.Literals.WRAPPER_SETTINGS__TRANSPARENCY = L, i.Literals.WRAPPER_SETTINGS__TITLE.setEType(d("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), i.Literals.WRAPPER_SETTINGS__BACKGROUND_COLOR.setEType(d("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), i.Literals.WRAPPER_SETTINGS__BACKGROUND_COLOR_TRANSPARENCE.setEType(d("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), i.Literals.WRAPPER_SETTINGS__TITLE_COLOR.setEType(d("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), i.Literals.WRAPPER_SETTINGS__PADDING.setEType(d("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), i.Literals.WRAPPER_SETTINGS__TITLE_FONT_SIZE.setEType(d("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), i.Literals.WRAPPER_SETTINGS__BORDER_SIZE.setEType(d("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), i.Literals.WRAPPER_SETTINGS__BORDER_COLOR.setEType(d("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), i.Literals.WRAPPER_SETTINGS__BORDER_RADIUS.setEType(d("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), i.Literals.WRAPPER_SETTINGS__BLUR.setEType(d("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), i.Literals.WRAPPER_SETTINGS__FULLSCREEN.setEType(d("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), i.Literals.WRAPPER_SETTINGS__SHADOW_COLOR.setEType(d("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), i.Literals.WRAPPER_SETTINGS__SHADOW_BLUR.setEType(d("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), i.Literals.WRAPPER_SETTINGS__SHADOW_X.setEType(d("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), i.Literals.WRAPPER_SETTINGS__SHADOW_Y.setEType(d("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), i.Literals.WRAPPER_SETTINGS__SHADOW_TRANSPARENCE.setEType(d("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), i.Literals.WRAPPER_SETTINGS__TRANSPARENCY.setEType(d("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper"));
+    const u = new c();
+    u.setContainment(!1), u.setName("backgroundColor"), u.setLowerBound(0), u.setUpperBound(1), e.getEStructuralFeatures().push(u), i.Literals.WRAPPER_SETTINGS__BACKGROUND_COLOR = u;
+    const d = new c();
+    d.setContainment(!1), d.setName("backgroundColorTransparence"), d.setLowerBound(0), d.setUpperBound(1), e.getEStructuralFeatures().push(d), i.Literals.WRAPPER_SETTINGS__BACKGROUND_COLOR_TRANSPARENCE = d;
+    const g = new c();
+    g.setContainment(!1), g.setName("titleColor"), g.setLowerBound(0), g.setUpperBound(1), e.getEStructuralFeatures().push(g), i.Literals.WRAPPER_SETTINGS__TITLE_COLOR = g;
+    const p = new c();
+    p.setContainment(!1), p.setName("padding"), p.setLowerBound(0), p.setUpperBound(1), e.getEStructuralFeatures().push(p), i.Literals.WRAPPER_SETTINGS__PADDING = p;
+    const S = new c();
+    S.setContainment(!1), S.setName("titleFontSize"), S.setLowerBound(0), S.setUpperBound(1), e.getEStructuralFeatures().push(S), i.Literals.WRAPPER_SETTINGS__TITLE_FONT_SIZE = S;
+    const N = new c();
+    N.setContainment(!1), N.setName("borderSize"), N.setLowerBound(0), N.setUpperBound(1), e.getEStructuralFeatures().push(N), i.Literals.WRAPPER_SETTINGS__BORDER_SIZE = N;
+    const R = new c();
+    R.setContainment(!1), R.setName("borderColor"), R.setLowerBound(0), R.setUpperBound(1), e.getEStructuralFeatures().push(R), i.Literals.WRAPPER_SETTINGS__BORDER_COLOR = R;
+    const E = new c();
+    E.setContainment(!1), E.setName("borderRadius"), E.setLowerBound(0), E.setUpperBound(1), e.getEStructuralFeatures().push(E), i.Literals.WRAPPER_SETTINGS__BORDER_RADIUS = E;
+    const _ = new c();
+    _.setContainment(!1), _.setName("blur"), _.setLowerBound(0), _.setUpperBound(1), e.getEStructuralFeatures().push(_), i.Literals.WRAPPER_SETTINGS__BLUR = _;
+    const O = new c();
+    O.setContainment(!1), O.setName("fullscreen"), O.setLowerBound(0), O.setUpperBound(1), e.getEStructuralFeatures().push(O), i.Literals.WRAPPER_SETTINGS__FULLSCREEN = O;
+    const T = new c();
+    T.setContainment(!1), T.setName("shadowColor"), T.setLowerBound(0), T.setUpperBound(1), e.getEStructuralFeatures().push(T), i.Literals.WRAPPER_SETTINGS__SHADOW_COLOR = T;
+    const A = new c();
+    A.setContainment(!1), A.setName("shadowBlur"), A.setLowerBound(0), A.setUpperBound(1), e.getEStructuralFeatures().push(A), i.Literals.WRAPPER_SETTINGS__SHADOW_BLUR = A;
+    const D = new c();
+    D.setContainment(!1), D.setName("shadowX"), D.setLowerBound(0), D.setUpperBound(1), e.getEStructuralFeatures().push(D), i.Literals.WRAPPER_SETTINGS__SHADOW_X = D;
+    const f = new c();
+    f.setContainment(!1), f.setName("shadowY"), f.setLowerBound(0), f.setUpperBound(1), e.getEStructuralFeatures().push(f), i.Literals.WRAPPER_SETTINGS__SHADOW_Y = f;
+    const L = new c();
+    L.setContainment(!1), L.setName("shadowTransparence"), L.setLowerBound(0), L.setUpperBound(1), e.getEStructuralFeatures().push(L), i.Literals.WRAPPER_SETTINGS__SHADOW_TRANSPARENCE = L;
+    const m = new c();
+    m.setContainment(!1), m.setName("transparency"), m.setLowerBound(0), m.setUpperBound(1), e.getEStructuralFeatures().push(m), i.Literals.WRAPPER_SETTINGS__TRANSPARENCY = m, i.Literals.WRAPPER_SETTINGS__TITLE.setEType(h("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), i.Literals.WRAPPER_SETTINGS__BACKGROUND_COLOR.setEType(h("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), i.Literals.WRAPPER_SETTINGS__BACKGROUND_COLOR_TRANSPARENCE.setEType(h("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), i.Literals.WRAPPER_SETTINGS__TITLE_COLOR.setEType(h("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), i.Literals.WRAPPER_SETTINGS__PADDING.setEType(h("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), i.Literals.WRAPPER_SETTINGS__TITLE_FONT_SIZE.setEType(h("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), i.Literals.WRAPPER_SETTINGS__BORDER_SIZE.setEType(h("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), i.Literals.WRAPPER_SETTINGS__BORDER_COLOR.setEType(h("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), i.Literals.WRAPPER_SETTINGS__BORDER_RADIUS.setEType(h("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), i.Literals.WRAPPER_SETTINGS__BLUR.setEType(h("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), i.Literals.WRAPPER_SETTINGS__FULLSCREEN.setEType(h("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), i.Literals.WRAPPER_SETTINGS__SHADOW_COLOR.setEType(h("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), i.Literals.WRAPPER_SETTINGS__SHADOW_BLUR.setEType(h("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), i.Literals.WRAPPER_SETTINGS__SHADOW_X.setEType(h("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), i.Literals.WRAPPER_SETTINGS__SHADOW_Y.setEType(h("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), i.Literals.WRAPPER_SETTINGS__SHADOW_TRANSPARENCE.setEType(h("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), i.Literals.WRAPPER_SETTINGS__TRANSPARENCY.setEType(h("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper"));
   }
 }
-class t extends we {
+class t extends Te {
   constructor() {
     super(...arguments), this._title = new r(), this._backgroundColor = new r(), this._backgroundColorTransparence = new r(), this._titleColor = new r(), this._padding = new r(), this._titleFontSize = new r(), this._borderSize = new r(), this._borderColor = new r(), this._borderRadius = new r(), this._blur = new r(), this._fullscreen = new r(), this._shadowColor = new r(), this._shadowBlur = new r(), this._shadowX = new r(), this._shadowY = new r(), this._shadowTransparence = new r(), this._transparency = new r();
   }
@@ -971,7 +972,7 @@ class t extends we {
     };
   }
 }
-const Ae = `<?xml version="1.0" encoding="UTF-8"?>
+const Pe = `<?xml version="1.0" encoding="UTF-8"?>
 <!--
 /*********************************************************************
 * Copyright (c) 2026 Contributors to the Eclipse Foundation.
@@ -1006,117 +1007,151 @@ derived version can only ever list seventeen fields.
 
   <components xsi:type="uimodel:FormView" name="WrapperSettingsFormView">
 
-    <fields xsi:type="uimodel:GroupWidget" name="titleGroup" layout="VERTICAL" label="Titel">
+    <fields xsi:type="uimodel:GroupWidget" name="titleGroup" layout="VERTICAL" label="wrapper:Form.titleGroup">
       <fields xsi:type="uimodel:InputWidget"
           name="title"
           feature="http://org.eclipse.daanse.board.app.ui.vue.widget.wrapper#//WrapperSettings/title"
-          label="Text"
+          label="wrapper:Form.title"
           placeholder="Ohne Titel"/>
       <fields xsi:type="uimodel:NumberWidget"
           name="titleFontSize"
           feature="http://org.eclipse.daanse.board.app.ui.vue.widget.wrapper#//WrapperSettings/titleFontSize"
-          label="Schriftgröße" min="6" max="72" step="1"/>
+          label="wrapper:Form.titleFontSize" min="6" max="72" step="1"/>
       <fields xsi:type="uimodel:InputWidget"
           name="titleColor"
           feature="http://org.eclipse.daanse.board.app.ui.vue.widget.wrapper#//WrapperSettings/titleColor"
-          label="Schriftfarbe"/>
+          label="wrapper:Form.titleColor"/>
     </fields>
 
-    <fields xsi:type="uimodel:GroupWidget" name="surfaceGroup" layout="VERTICAL" label="Fläche">
+    <fields xsi:type="uimodel:GroupWidget" name="surfaceGroup" layout="VERTICAL" label="wrapper:Form.surfaceGroup">
       <fields xsi:type="uimodel:InputWidget"
           name="backgroundColor"
           feature="http://org.eclipse.daanse.board.app.ui.vue.widget.wrapper#//WrapperSettings/backgroundColor"
-          label="Hintergrund"/>
+          label="wrapper:Form.backgroundColor"/>
       <fields xsi:type="uimodel:NumberWidget"
           name="backgroundColorTransparence"
           feature="http://org.eclipse.daanse.board.app.ui.vue.widget.wrapper#//WrapperSettings/backgroundColorTransparence"
-          label="Deckkraft" min="0" max="255" step="1"/>
+          label="wrapper:Form.backgroundColorTransparence" min="0" max="255" step="1"/>
       <fields xsi:type="uimodel:NumberWidget"
           name="transparency"
           feature="http://org.eclipse.daanse.board.app.ui.vue.widget.wrapper#//WrapperSettings/transparency"
-          label="Gesamtdeckkraft" min="0" max="255" step="1"/>
+          label="wrapper:Form.transparency" min="0" max="255" step="1"/>
       <fields xsi:type="uimodel:NumberWidget"
           name="blur"
           feature="http://org.eclipse.daanse.board.app.ui.vue.widget.wrapper#//WrapperSettings/blur"
-          label="Weichzeichnen" min="0" max="50" step="1"/>
+          label="wrapper:Form.blur" min="0" max="50" step="1"/>
       <fields xsi:type="uimodel:NumberWidget"
           name="padding"
           feature="http://org.eclipse.daanse.board.app.ui.vue.widget.wrapper#//WrapperSettings/padding"
-          label="Innenabstand" min="0" max="200" step="1"/>
+          label="wrapper:Form.padding" min="0" max="200" step="1"/>
     </fields>
 
-    <fields xsi:type="uimodel:GroupWidget" name="borderGroup" layout="VERTICAL" label="Rand">
+    <fields xsi:type="uimodel:GroupWidget" name="borderGroup" layout="VERTICAL" label="wrapper:Form.borderGroup">
       <fields xsi:type="uimodel:NumberWidget"
           name="borderSize"
           feature="http://org.eclipse.daanse.board.app.ui.vue.widget.wrapper#//WrapperSettings/borderSize"
-          label="Stärke" min="0" max="40" step="1"/>
+          label="wrapper:Form.borderSize" min="0" max="40" step="1"/>
       <fields xsi:type="uimodel:InputWidget"
           name="borderColor"
           feature="http://org.eclipse.daanse.board.app.ui.vue.widget.wrapper#//WrapperSettings/borderColor"
-          label="Farbe"/>
+          label="wrapper:Form.borderColor"/>
       <fields xsi:type="uimodel:NumberWidget"
           name="borderRadius"
           feature="http://org.eclipse.daanse.board.app.ui.vue.widget.wrapper#//WrapperSettings/borderRadius"
-          label="Eckenradius" min="0" max="100" step="1"/>
+          label="wrapper:Form.borderRadius" min="0" max="100" step="1"/>
     </fields>
 
-    <fields xsi:type="uimodel:GroupWidget" name="shadowGroup" layout="VERTICAL" label="Schatten">
+    <fields xsi:type="uimodel:GroupWidget" name="shadowGroup" layout="VERTICAL" label="wrapper:Form.shadowGroup">
       <fields xsi:type="uimodel:InputWidget"
           name="shadowColor"
           feature="http://org.eclipse.daanse.board.app.ui.vue.widget.wrapper#//WrapperSettings/shadowColor"
-          label="Farbe"/>
+          label="wrapper:Form.shadowColor"/>
       <fields xsi:type="uimodel:NumberWidget"
           name="shadowBlur"
           feature="http://org.eclipse.daanse.board.app.ui.vue.widget.wrapper#//WrapperSettings/shadowBlur"
-          label="Weichheit" min="0" max="100" step="1"/>
+          label="wrapper:Form.shadowBlur" min="0" max="100" step="1"/>
       <fields xsi:type="uimodel:NumberWidget"
           name="shadowX"
           feature="http://org.eclipse.daanse.board.app.ui.vue.widget.wrapper#//WrapperSettings/shadowX"
-          label="Versatz X" min="-100" max="100" step="1"/>
+          label="wrapper:Form.shadowX" min="-100" max="100" step="1"/>
       <fields xsi:type="uimodel:NumberWidget"
           name="shadowY"
           feature="http://org.eclipse.daanse.board.app.ui.vue.widget.wrapper#//WrapperSettings/shadowY"
-          label="Versatz Y" min="-100" max="100" step="1"/>
+          label="wrapper:Form.shadowY" min="-100" max="100" step="1"/>
       <fields xsi:type="uimodel:NumberWidget"
           name="shadowTransparence"
           feature="http://org.eclipse.daanse.board.app.ui.vue.widget.wrapper#//WrapperSettings/shadowTransparence"
-          label="Deckkraft" min="0" max="255" step="1"/>
+          label="wrapper:Form.shadowTransparence" min="0" max="255" step="1"/>
     </fields>
 
-    <fields xsi:type="uimodel:GroupWidget" name="behaviourGroup" layout="VERTICAL" label="Verhalten">
+    <fields xsi:type="uimodel:GroupWidget" name="behaviourGroup" layout="VERTICAL" label="wrapper:Form.behaviourGroup">
       <fields xsi:type="uimodel:CheckboxWidget"
           name="fullscreen"
           feature="http://org.eclipse.daanse.board.app.ui.vue.widget.wrapper#//WrapperSettings/fullscreen"
-          label="Vollbild erlauben"/>
+          label="wrapper:Form.fullscreen"/>
     </fields>
 
   </components>
 </uimodel:UIModel>
-`;
+`, Be = { settings: "Einstellungen" }, Ge = "Der Widget-Typ {{type}} ist nicht registriert.", Ie = { title: "Widget löschen", text: "Möchtest du dieses Widget wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden." }, Ue = { titleGroup: "Titel", title: "Text", titleFontSize: "Schriftgröße", titleColor: "Schriftfarbe", surfaceGroup: "Fläche", backgroundColor: "Hintergrund", backgroundColorTransparence: "Deckkraft", transparency: "Gesamtdeckkraft", blur: "Weichzeichnen", padding: "Innenabstand", borderGroup: "Rand", borderSize: "Stärke", borderColor: "Farbe", borderRadius: "Eckenradius", shadowGroup: "Schatten", shadowColor: "Farbe", shadowBlur: "Weichheit", shadowX: "Versatz X", shadowY: "Versatz Y", shadowTransparence: "Deckkraft", behaviourGroup: "Verhalten", fullscreen: "Vollbild erlauben" }, xe = {
+  Actions: Be,
+  NotRegistered: Ge,
+  Delete: Ie,
+  Form: Ue
+}, ze = { settings: "Settings" }, Ve = "Widget type {{type}} is not registered.", ke = { title: "Delete widget", text: "Do you really want to delete this widget? This cannot be undone." }, He = { titleGroup: "Title", title: "Text", titleFontSize: "Font size", titleColor: "Font colour", surfaceGroup: "Surface", backgroundColor: "Background", backgroundColorTransparence: "Opacity", transparency: "Overall opacity", blur: "Blur", padding: "Padding", borderGroup: "Border", borderSize: "Width", borderColor: "Colour", borderRadius: "Corner radius", shadowGroup: "Shadow", shadowColor: "Colour", shadowBlur: "Softness", shadowX: "Offset X", shadowY: "Offset Y", shadowTransparence: "Opacity", behaviourGroup: "Behaviour", fullscreen: "Allow full screen" }, We = {
+  Actions: ze,
+  NotRegistered: Ve,
+  Delete: ke,
+  Form: He
+};
+var Ye = Object.getOwnPropertyDescriptor, Xe = (a, e, s, u) => {
+  for (var d = u > 1 ? void 0 : u ? Ye(e, s) : e, g = a.length - 1, p; g >= 0; g--)
+    (p = a[g]) && (d = p(d) || d);
+  return d;
+};
+const J = "wrapper";
+let V = class {
+  constructor() {
+    this.namespace = J, this.resources = {
+      de: xe,
+      en: We
+    };
+  }
+};
+V = Xe([
+  be({
+    service: ["Translations"],
+    properties: { "i18n.namespace": J }
+  })
+], V);
 i.eINSTANCE;
-const De = new t(), Le = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const Ke = new t(), Ze = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  WidgetWrapper: Oe,
+  WidgetWrapper: ye,
   WrapperSettingsImpl: t,
   WrapperSettingsPackage: i,
-  defaultConfig: De,
-  wrapperSettingsFormXmi: Ae
-}, Symbol.toStringTag, { value: "Module" })), $ = "org.eclipse.daanse.board.app.ui.vue.widget.wrapper", ve = "0.0.1-next.1";
-async function Ie(a) {
+  get WrapperTranslations() {
+    return V;
+  },
+  defaultConfig: Ke,
+  wrapperSettingsFormXmi: Pe
+}, Symbol.toStringTag, { value: "Module" })), j = "org.eclipse.daanse.board.app.ui.vue.widget.wrapper", $e = "0.0.1-next.1";
+async function st(a) {
   const e = globalThis.__tsm__;
   if (!e)
-    throw new Error(`${$}: tsm runtime is not initialized`);
-  e.register($, Le, ve, "ui.vue.widget.wrapper"), await void 0;
+    throw new Error(`${j}: tsm runtime is not initialized`);
+  e.register(j, Ze, $e, "ui.vue.widget.wrapper"), await void 0;
 }
-async function Ue(a) {
+async function rt(a) {
   await void 0;
 }
 export {
-  Oe as WidgetWrapper,
+  ye as WidgetWrapper,
   t as WrapperSettingsImpl,
   i as WrapperSettingsPackage,
-  Ie as activate,
-  Ue as deactivate,
-  De as defaultConfig,
-  Ae as wrapperSettingsFormXmi
+  V as WrapperTranslations,
+  st as activate,
+  rt as deactivate,
+  Ke as defaultConfig,
+  Pe as wrapperSettingsFormXmi
 };

@@ -1,0 +1,9 @@
+{
+  "Widget": {
+    "name": "Mermaid diagram"
+  },
+  "Form": {
+    "value": "Diagram",
+    "theme": "Colour scheme"
+  }
+}

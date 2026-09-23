@@ -29,7 +29,7 @@ size with no hint why.
     <fields xsi:type="uimodel:SelectWidget"
         name="fit"
         feature="http://org.eclipse.daanse.board.app.ui.vue.widget.image#//GallerySettings/fit"
-        label="Einpassen">
+        label="image:FormGallery.fit">
       <values>none</values>
       <values>contain</values>
       <values>cover</values>
@@ -39,6 +39,6 @@ size with no hint why.
     <fields xsi:type="uimodel:NumberWidget"
         name="diashowInterval"
         feature="http://org.eclipse.daanse.board.app.ui.vue.widget.image#//GallerySettings/diashowInterval"
-        label="Wechsel alle (Sekunden)" min="0" step="1"/>
+        label="image:FormGallery.diashowInterval" min="0" step="1"/>
   </components>
 </uimodel:UIModel>

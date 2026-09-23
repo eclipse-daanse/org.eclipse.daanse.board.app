@@ -15,3 +15,6 @@ import VariableInput from './VariableInput.vue'
 import ComplexTextInput from './ComplexTextInput.vue'
 
 export { VariableInput, ComplexTextInput }
+
+/* Its texts - collected by lib.i18next, see src/i18n. */
+export { VariableComponentsTranslations } from './i18n'

@@ -45,7 +45,7 @@ test.describe('Maps Widget - WMS Service Integration (Kommunale Wärmeplanung Je
     console.log('✓ Entered WMS URL: kartenportal.jena.de')
 
     // Click Add button in modal
-    const addButton = page.getByRole('button', { name: /^Add$/i }).first()
+    const addButton = page.getByTestId('map-add-service-confirm')
     await addButton.click()
 
     console.log('⏳ Waiting for WMS service to load (max 20s)...')
@@ -174,7 +174,7 @@ test.describe('Maps Widget - WMS Service Integration (Kommunale Wärmeplanung Je
     const urlInput = page.locator('input[placeholder*="serviceurl"]').first()
     await urlInput.fill('http://invalid-domain-xyz.com/wms')
 
-    const addButton = page.getByRole('button', { name: /^Add$/i }).first()
+    const addButton = page.getByTestId('map-add-service-confirm')
     await addButton.click()
 
     console.log('⏳ Waiting for service timeout (max 15s)...')
@@ -184,7 +184,7 @@ test.describe('Maps Widget - WMS Service Integration (Kommunale Wärmeplanung Je
 
     // Look for error indicator - check in settings panel
     const errorIcon = settingsPanel.locator('.material-icons').filter({ hasText: 'error' }).first()
-    const failedText = settingsPanel.getByText(/failed|fehler|error/i).first()
+    const failedText = settingsPanel.locator('.failed').first()
 
     const hasErrorIndicator = await errorIcon.isVisible({ timeout: 2000 }).catch(() => false)
     const hasFailedText = await failedText.isVisible({ timeout: 2000 }).catch(() => false)

@@ -1,0 +1,45 @@
+{
+  "Widget": {
+    "name": "Vanta background"
+  },
+  "Form": {
+    "effectGroup": "Effect",
+    "type": "Kind",
+    "backgroundColor": "Background colour",
+    "cloudsGroup": "Clouds",
+    "skyColor": "Sky colour",
+    "cloudColor": "Cloud colour",
+    "cloudShadowColor": "Cloud shadow",
+    "sunColor": "Sun colour",
+    "sunGlareColor": "Sun glare",
+    "sunlightColor": "Sunlight",
+    "speed": "Speed",
+    "birdsGroup": "Birds",
+    "color1": "Colour 1",
+    "color2": "Colour 2",
+    "quantity": "Quantity",
+    "birdSize": "Size",
+    "wingSpan": "Wing span",
+    "speedLimit": "Speed limit",
+    "separation": "Separation",
+    "alignment": "Alignment",
+    "cohesion": "Cohesion",
+    "netGroup": "Net",
+    "netColor": "Colour",
+    "points": "Points",
+    "maxDistance": "Maximum distance",
+    "netSpacing": "Spacing",
+    "trunkGroup": "Branches",
+    "trunkColor": "Colour",
+    "chaos": "Chaos",
+    "trunkSpacing": "Spacing"
+  },
+  "Options": {
+    "type": {
+      "clouds": "Clouds",
+      "birds": "Birds",
+      "net": "Net",
+      "trunk": "Branches"
+    }
+  }
+}

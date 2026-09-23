@@ -29,6 +29,7 @@ import { computed, ref } from 'vue'
 import type { EClass, EObject, EStructuralFeature } from '@emfts/core'
 import { UIModelComposer } from '@emfts/uimodel-composer'
 import { DButton } from 'org.eclipse.daanse.board.app.ui.vue.controls'
+import { useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import { ensureWrappers } from './adopt'
 import { formFor, labelOf } from './buildForm'
 import { formForClass } from './loadUIModel'
@@ -41,6 +42,8 @@ const props = defineProps<{
     rawWidget?: any
   }
 }>()
+
+const { t } = useTranslation('uimodel')
 
 const label = computed(
   () => props.custom?.resolvedStyle?.label ?? (props.feature ? labelOf(props.feature) : ''),
@@ -113,7 +116,7 @@ const open = ref(0)
 const NAMING = ['label', 'name', 'title', 'key', 'className', 'id']
 
 function titleOf(entry: EObject, index: number): string {
-  return nameIn(entry) ?? `${entryClass.value?.getName?.() ?? 'Eintrag'} ${index + 1}`
+  return nameIn(entry) ?? `${entryClass.value?.getName?.() ?? t('List.entry')} ${index + 1}`
 }
 
 /**
@@ -203,15 +206,14 @@ function move(index: number, by: number) {
       <span class="list__label">{{ label }}</span>
       <span class="list__count">{{ entries.length }}</span>
       <span class="list__spacer" />
-      <DButton v-if="entryClass && !readOnly" size="sm" @click="add">Hinzufügen</DButton>
+      <DButton v-if="entryClass && !readOnly" size="sm" @click="add">{{ t('List.add') }}</DButton>
     </header>
 
     <p v-if="!entryClass" class="list__untyped">
-      Diese Liste ist im Modell ohne Typ angegeben - es steht dort nur, dass es mehrere sind,
-      nicht wovon. Solange das so ist, lässt sich hier nichts zeigen.
+      {{ t('List.untyped') }}
     </p>
 
-    <p v-else-if="!entries.length" class="list__empty">Noch nichts angelegt.</p>
+    <p v-else-if="!entries.length" class="list__empty">{{ t('List.empty') }}</p>
 
     <div v-for="(entry, index) in entries" :key="index" class="entry">
       <button
@@ -225,16 +227,16 @@ function move(index: number, by: number) {
       </button>
 
       <span v-if="!readOnly" class="entry__actions">
-        <button type="button" title="Nach oben" :disabled="index === 0" @click="move(index, -1)">↑</button>
+        <button type="button" :title="t('List.up')" :disabled="index === 0" @click="move(index, -1)">↑</button>
         <button
           type="button"
-          title="Nach unten"
+          :title="t('List.down')"
           :disabled="index === entries.length - 1"
           @click="move(index, 1)"
         >
           ↓
         </button>
-        <button type="button" title="Entfernen" class="entry__remove" @click="remove(index)">✕</button>
+        <button type="button" :title="t('List.remove')" class="entry__remove" @click="remove(index)">✕</button>
       </span>
 
       <div v-if="open === index" class="entry__body">

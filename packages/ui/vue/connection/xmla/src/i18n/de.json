@@ -1,0 +1,12 @@
+{
+  "Xmla": {
+    "catalog": "Katalog",
+    "security": {
+      "label": "Anmeldung",
+      "none": "Keine",
+      "basic": "Basic"
+    },
+    "user": "Benutzer",
+    "password": "Passwort"
+  }
+}

@@ -38,8 +38,7 @@ import {
   identifier as WORKSPACE,
   type Workspace,
 } from 'org.eclipse.daanse.board.app.lib.model.workspace'
-import { useEList } from 'org.eclipse.daanse.board.app.ui.vue.composables'
-import type { i18n } from 'org.eclipse.daanse.board.app.lib.i18next'
+import { useEList, useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import { type Widget as IWidget } from 'org.eclipse.daanse.board.app.lib.api.page'
 import { WidgetRepository, identifier } from 'org.eclipse.daanse.board.app.lib.api.widget'
 
@@ -54,8 +53,15 @@ const props = defineProps<{
 const dataSources = useEList(inject<Workspace>(WORKSPACE)!, (w) => w.datasources)
 const registeredWidgets = inject<WidgetRepository>(identifier)!
 const availableWidgetsSettings = registeredWidgets.getAllWidgets()
-const i18n: i18n | undefined = inject('i18n')
-const t = (key: string) => (i18n ? i18n.t(key) : key)
+const { t, revision } = useTranslation('shell')
+
+/* What the palette calls this widget, in the language on screen. */
+const widgetName = computed(() => {
+  const type = widget.value?.type
+  const registered = type ? availableWidgetsSettings[type] : undefined
+  if (!registered) return type ?? t('WidgetSettings.widget')
+  return registered.nameKey ? t(registered.nameKey, { defaultValue: registered.name }) : registered.name
+})
 
 type TabId = 'data' | 'look' | 'rest' | 'frame' | 'variables'
 const tab = ref<TabId>('look')
@@ -141,6 +147,10 @@ function sectionElements(): HTMLElement[] {
 /**
  * What the section calls itself: the name it declares, or - for a
  * collapsible - the words in its header, without the icon ligatures.
+ *
+ * That name is in the language on screen, so it is for the tab only.
+ * Anything that picks a section out - the unmodelled ones below - goes by
+ * data-section-id, which stays the same whatever the language.
  */
 function labelOf(section: HTMLElement): string {
   const declared = section.dataset.section
@@ -175,7 +185,7 @@ function showSection(index: number) {
 async function scanSections() {
   await nextTick()
   const found = sectionElements()
-  sections.value = found.map((el, index) => ({ label: labelOf(el) || `Abschnitt ${index + 1}`, index }))
+  sections.value = found.map((el, index) => ({ label: labelOf(el) || t('WidgetSettings.section', { n: index + 1 }), index }))
   if (found.length) showSection(Math.min(activeSection.value, found.length - 1))
 }
 
@@ -199,7 +209,8 @@ async function trimRestSections() {
   if (!wanted || !host) return
   await nextTick()
   for (const section of sectionsIn(host)) {
-    section.style.display = wanted.includes(labelOf(section)) ? '' : 'none'
+    const id = section.dataset.sectionId ?? labelOf(section)
+    section.style.display = wanted.includes(id) ? '' : 'none'
   }
 }
 
@@ -329,8 +340,8 @@ const previewStyle = computed(() => {
 
 const sizeLabel = computed(() =>
   props.boardSize
-    ? `${Math.round(props.boardSize.width)} × ${Math.round(props.boardSize.height)} px, wie im Board`
-    : 'Größe des Boards nicht bekannt',
+    ? t('WidgetSettings.boardSize', { width: Math.round(props.boardSize.width), height: Math.round(props.boardSize.height) })
+    : t('WidgetSettings.boardSizeUnknown'),
 )
 
 /* -------------------------------------------------------- split handle */
@@ -375,8 +386,8 @@ function nudge(by: number) {
 const boundFields = computed(() => {
   const found: Array<{ group: string; name: string; variable: string }> = []
   const bags: Array<[string, Record<string, any> | undefined]> = [
-    ['Rahmen', widget.value?.wrapperConfig],
-    ['Darstellung', widget.value?.config],
+    [t('WidgetSettings.tabs.frame'), widget.value?.wrapperConfig],
+    [t('WidgetSettings.tabs.look'), widget.value?.config],
   ]
   for (const [group, bag] of bags) {
     for (const [name, field] of Object.entries(bag ?? {})) {
@@ -400,6 +411,9 @@ watch(tab, (value) => {
   if (value === 'look') scanSections()
 })
 
+/* The tabs carry the sections' names, which change with the language. */
+watch(revision, () => scanSections())
+
 onMounted(() => {
   takeSnapshot()
   scanSections()
@@ -422,21 +436,21 @@ onBeforeUnmount(() => {
         class="overlay"
         role="dialog"
         aria-modal="true"
-        aria-label="Widget-Einstellungen"
+        :aria-label="t('WidgetSettings.title')"
       >
         <!-- left: the widget itself -->
         <div class="stage">
           <header class="stage__head">
-            <span class="stage__name">{{ widget?.type ?? 'Widget' }}</span>
+            <span class="stage__name">{{ widgetName }}</span>
             <code class="stage__uid">{{ widget?.uid }}</code>
             <span class="stage__spacer" />
-            <div class="seg" role="group" aria-label="Vorschaugröße">
-              <button type="button" :class="{ on: !fill }" @click="fill = false">Boardgröße</button>
-              <button type="button" :class="{ on: fill }" @click="fill = true">Füllen</button>
+            <div class="seg" role="group" :aria-label="t('WidgetSettings.previewSize')">
+              <button type="button" :class="{ on: !fill }" @click="fill = false">{{ t('WidgetSettings.sizeBoard') }}</button>
+              <button type="button" :class="{ on: fill }" @click="fill = true">{{ t('WidgetSettings.sizeFill') }}</button>
             </div>
           </header>
 
-          <div class="stage__bar">{{ fill ? 'Auf die Fläche gestreckt' : sizeLabel }}</div>
+          <div class="stage__bar">{{ fill ? t('WidgetSettings.stretched') : sizeLabel }}</div>
 
           <div class="stage__body">
             <div class="preview" :style="previewStyle">
@@ -450,7 +464,7 @@ onBeforeUnmount(() => {
           class="handle"
           role="separator"
           aria-orientation="vertical"
-          aria-label="Breite der Einstellungen"
+          :aria-label="t('WidgetSettings.sideWidth')"
           tabindex="0"
           @pointerdown.prevent="startDrag"
           @keydown.left.prevent="nudge(16)"
@@ -459,7 +473,7 @@ onBeforeUnmount(() => {
 
         <!-- right: the settings -->
         <div class="side" :style="{ width: sideWidth + 'px' }">
-          <nav class="tabs" role="tablist" aria-label="Einstellungen">
+          <nav class="tabs" role="tablist" :aria-label="t('WidgetSettings.settings')">
             <button
               type="button"
               role="tab"
@@ -467,7 +481,7 @@ onBeforeUnmount(() => {
               :class="['tab', { on: tab === 'data' }]"
               @click="tab = 'data'"
             >
-              Daten <span class="tab__n">{{ dataCount }}</span>
+              {{ t('WidgetSettings.tabs.data') }} <span class="tab__n">{{ dataCount }}</span>
             </button>
             <button
               v-if="!sections.length && hasOwnSettings"
@@ -477,7 +491,7 @@ onBeforeUnmount(() => {
               :class="['tab', { on: tab === 'look' }]"
               @click="tab = 'look'"
             >
-              Darstellung
+              {{ t('WidgetSettings.tabs.look') }}
             </button>
             <button
               v-for="section in sections"
@@ -498,7 +512,7 @@ onBeforeUnmount(() => {
               :class="['tab', { on: tab === 'rest' }]"
               @click="tab = 'rest'"
             >
-              Weiteres
+              {{ t('WidgetSettings.tabs.rest') }}
             </button>
             <button
               type="button"
@@ -507,7 +521,7 @@ onBeforeUnmount(() => {
               :class="['tab', { on: tab === 'frame' }]"
               @click="tab = 'frame'"
             >
-              Rahmen <span class="tab__n">{{ frameCount }}</span>
+              {{ t('WidgetSettings.tabs.frame') }} <span class="tab__n">{{ frameCount }}</span>
             </button>
             <button
               type="button"
@@ -516,7 +530,7 @@ onBeforeUnmount(() => {
               :class="['tab', { on: tab === 'variables' }]"
               @click="tab = 'variables'"
             >
-              Variablen <span class="tab__n">{{ boundFields.length }}</span>
+              {{ t('WidgetSettings.tabs.variables') }} <span class="tab__n">{{ boundFields.length }}</span>
             </button>
           </nav>
 
@@ -524,14 +538,13 @@ onBeforeUnmount(() => {
             <template v-if="tab === 'data'">
               <DSelect
                 v-model="widget.config!.datasourceId"
-                label="Datenquelle"
+                :label="t('WidgetSettings.datasource')"
                 class="pick"
                 :options="dataSources"
                 clearable
               />
               <p class="note">
-                Woher dieses Widget seine Werte nimmt. Ohne Datenquelle zeigt es nur, was fest
-                eingestellt ist.
+                {{ t('WidgetSettings.datasourceNote') }}
               </p>
             </template>
 
@@ -566,8 +579,7 @@ onBeforeUnmount(() => {
                    editor. Naming one of them here told every other widget
                    something untrue about itself. -->
               <p class="rest__note">
-                Einstellungen, die dieses Widget selbst mitbringt und die sich nicht als Feld
-                beschreiben lassen.
+                {{ t('WidgetSettings.restNote') }}
               </p>
               <component
                 v-if="showRestTab"
@@ -595,7 +607,7 @@ onBeforeUnmount(() => {
             <template v-if="tab === 'variables'">
               <table v-if="boundFields.length" class="bound">
                 <thead>
-                  <tr><th>Feld</th><th>Bereich</th><th>Variable</th></tr>
+                  <tr><th>{{ t('WidgetSettings.bound.field') }}</th><th>{{ t('WidgetSettings.bound.group') }}</th><th>{{ t('WidgetSettings.bound.variable') }}</th></tr>
                 </thead>
                 <tbody>
                   <tr v-for="field in boundFields" :key="field.group + field.name">
@@ -606,17 +618,17 @@ onBeforeUnmount(() => {
                 </tbody>
               </table>
               <p v-else class="note">
-                Kein Feld dieses Widgets hängt an einer Variablen. Über das
-                <span class="var-mark">{x}</span> neben einem Feld lässt sich eines binden.
+                {{ t('WidgetSettings.bound.noneBefore') }}
+                <span class="var-mark">{x}</span> {{ t('WidgetSettings.bound.noneAfter') }}
               </p>
             </template>
           </div>
 
           <footer class="foot">
-            <span class="foot__hint">Änderungen greifen erst mit „Fertig“</span>
+            <span class="foot__hint">{{ t('WidgetSettings.hint') }}</span>
             <span class="stage__spacer" />
-            <DButton size="sm" @click="discard">Verwerfen</DButton>
-            <DButton intent="primary" size="sm" @click="accept">Fertig</DButton>
+            <DButton size="sm" @click="discard">{{ t('WidgetSettings.discard') }}</DButton>
+            <DButton intent="primary" size="sm" @click="accept">{{ t('WidgetSettings.done') }}</DButton>
           </footer>
         </div>
       </section>

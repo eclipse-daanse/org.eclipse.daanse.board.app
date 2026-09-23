@@ -11,7 +11,7 @@ Contributors: Smart City Jena
 
 import { LIcon, LMarker } from '@vue-leaflet/vue-leaflet'
 import MapPreviewPoint from './../../parts/MapPreviewPoint.vue'
-import { type ModelRef, reactive } from 'vue'
+import { computed, type ModelRef, reactive } from 'vue'
 
 import { Comperator, type ICondition, type IPointAndAreaSettings, type IRenderer } from './../../api/Renderer'
 import {IconWidgetSettings,IconWidget}  from 'org.eclipse.daanse.board.app.ui.vue.widget.icon'
@@ -23,6 +23,9 @@ import {
   DRadioGroup,
   DSelect,
 } from 'org.eclipse.daanse.board.app.ui.vue.controls'
+import { useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+
+const { t } = useTranslation('map')
 
 const model: ModelRef<IPointAndAreaSettings> = defineModel<IPointAndAreaSettings>({
   default: () => {
@@ -68,12 +71,12 @@ const thingsPropOptions = [{
     selector: '*'
   }]
 
-const pointSelectorOptions = [
-  { label: 'Icon', value: 'icon' },
-  { label: 'Property', value: 'prop' },
-  { label: 'Image', value: 'image' },
-  { label: 'None', value: 'none' }
-]
+const pointSelectorOptions = computed(() => [
+  { label: t('Point.as.icon'), value: 'icon' },
+  { label: t('Point.as.prop'), value: 'prop' },
+  { label: t('Point.as.image'), value: 'image' },
+  { label: t('Point.as.none'), value: 'none' }
+])
 </script>
 
 <template>
@@ -84,7 +87,7 @@ const pointSelectorOptions = [
       :options="pointSelectorOptions"
       value-key="value"
       label-key="label"
-      label="render point as"
+      :label="t('Point.renderAs')"
       inline
     />
     <template v-if="model.point_render_as=='icon'">
@@ -98,8 +101,8 @@ const pointSelectorOptions = [
       <DSelect
         v-model="model.point_prop"
         :options="thingsPropOptions"
-        label="DataStream Prop"
-        placeholder="Select an option"
+        :label="t('Point.prop')"
+        :placeholder="t('Observations.choose')"
         label-key="text"
         value-key="selector"
       />
@@ -107,13 +110,13 @@ const pointSelectorOptions = [
     <template v-if="model.point_render_as=='image'">
       <DInput
         v-model="model.point_image_url"
-        label="Image URL"
+        :label="t('Point.imageUrl')"
         placeholder="https://example.com/image.png"
       />
       <DInput
         v-model.number="model.point_image_size"
         type="number"
-        label="Image Size"
+        :label="t('Point.imageSize')"
         suffix="px"
         placeholder="32"
       />
@@ -121,8 +124,8 @@ const pointSelectorOptions = [
     <template v-if="model.point_render_as!='none'">
       <DDivider class="mb15" />
 
-      <DColorInput v-model="model.pointPin.color" class="pin-color" label="Pin colour" />
-      <DCheckbox v-model="model.pointPin.solid" label="Solid" />
+      <DColorInput v-model="model.pointPin.color" class="pin-color" :label="t('Point.pinColor')" />
+      <DCheckbox v-model="model.pointPin.solid" :label="t('Point.solid')" />
     </template>
   </div>
   <div class="flex flex-col md6 pa-3">
@@ -152,7 +155,7 @@ const pointSelectorOptions = [
           <template v-if="model.point_render_as=='image'">
             <div class="image-marker" :style="{width: (model.point_image_size || 32) + 'px', height: (model.point_image_size || 32) + 'px'}">
               <img v-if="model.point_image_url" :src="model.point_image_url" :style="{width: '100%', height: '100%', objectFit: 'contain'}" />
-              <div v-else class="placeholder">No Image</div>
+              <div v-else class="placeholder">{{ t('Point.noImage') }}</div>
             </div>
           </template>
         </l-icon>

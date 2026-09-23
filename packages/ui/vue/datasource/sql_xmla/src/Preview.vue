@@ -13,11 +13,13 @@ Contributors:
 <script setup lang="ts">
 import { DButton, DTable, DTabs } from 'org.eclipse.daanse.board.app.ui.vue.controls'
 import SchemaTree from './SchemaTree.vue'
-import { watch, ref, shallowRef } from 'vue';
+import { computed, watch, ref, shallowRef } from 'vue';
 import { MonacoEditor } from 'org.eclipse.daanse.board.app.ui.vue.common.monaco';
-import { useTemporaryStore } from 'org.eclipse.daanse.board.app.ui.vue.composables';
+import { useFormat, useTemporaryStore, useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables';
 
 const props = defineProps<{ dataSource: any }>();
+const { t } = useTranslation('datasourceSqlXmla')
+const format = useFormat()
 
 const tempStore = shallowRef(null as any)
 const settingsRef = ref(props.dataSource);
@@ -109,7 +111,7 @@ watch(tempStore, async () => {
 
     if (table.children == null) {
       table.children = [{
-        label: 'Columns',
+        label: t('Sql.columns'),
         icon: 'view_column',
         children: [],
       }];
@@ -126,7 +128,7 @@ watch(tempStore, async () => {
   for (const catalog of catalogs) {
     if (catalog.children == null) {
       catalog.children = [{
-        label: 'Tables',
+        label: t('Sql.tables'),
         icon: 'backup_table',
         children: [],
       }];
@@ -139,7 +141,7 @@ watch(tempStore, async () => {
   treeData.value = catalogs;
 
   metadata.value = transformToSchema(treeData.value);
-  messages.value.push({ type: 'success', text: `Schema gelesen um ${(new Date()).toLocaleTimeString()}` });
+  messages.value.push({ type: 'success', text: t('Sql.schemaRead', { time: format.date(new Date(), { timeStyle: 'medium' }) }) });
 }, { deep: true });
 
 
@@ -150,11 +152,11 @@ watch(() => query, async () => {
   });
 }, { deep: true });
 
-const tabs = [
-  { id: 'data', label: 'Ergebnis' },
-  { id: 'messages', label: 'Meldungen' },
-];
-const currentTab = ref(tabs[0].id);
+const tabs = computed(() => [
+  { id: 'data', label: t('Sql.result') },
+  { id: 'messages', label: t('Sql.messages') },
+]);
+const currentTab = ref('data');
 
 const run = async () => {
   tempStore.value.sql = query.value;
@@ -162,16 +164,16 @@ const run = async () => {
     const startTime = new Date();
     data.value = (await tempStore.value.getData('DataTable')).items;
     const now = new Date();
-    messages.value.push({ type: 'success', text: `${data.value.length} Zeilen in ${(now.getTime() - startTime.getTime())} ms.` });
+    messages.value.push({ type: 'success', text: t('Sql.rows', { count: data.value.length, ms: now.getTime() - startTime.getTime() }) });
   } catch (e: any) {
-    messages.value.push({ type: 'error', text: `Abfrage fehlgeschlagen: ${e.message}` });
+    messages.value.push({ type: 'error', text: t('Sql.failed', { reason: e.message }) });
   }
 };
 </script>
 <template>
   <div class="explorer">
     <aside class="explorer__schema">
-      <h4 class="explorer__title">Schema</h4>
+      <h4 class="explorer__title">{{ t('Sql.schema') }}</h4>
       <SchemaTree :nodes="treeData" />
     </aside>
 
@@ -184,15 +186,15 @@ const run = async () => {
         :metadata="metadata"
       >
         <template #actions>
-          <DButton intent="primary" size="sm" @click="run">Ausführen</DButton>
+          <DButton intent="primary" size="sm" @click="run">{{ t('Sql.run') }}</DButton>
         </template>
       </MonacoEditor>
 
       <div class="explorer__result">
-        <DTabs v-model="currentTab" :tabs="tabs" label="Ergebnis oder Meldungen" />
+        <DTabs v-model="currentTab" :tabs="tabs" :label="t('Sql.tabs')" />
 
         <div class="explorer__pane">
-          <DTable v-if="currentTab === 'data'" :items="data" empty="Noch nichts ausgeführt" />
+          <DTable v-if="currentTab === 'data'" :items="data" :empty="t('Sql.nothingRun')" />
 
           <ul v-else class="messages">
             <li

@@ -91,11 +91,24 @@
         "library": "org.eclipse.daanse.board.app.ui.vue.widget.map",
         "version": "0.0.1-next.1"
       }
+    },
+    {
+      "namespace": "tsm.i18n",
+      "attributes": {
+        "namespace": "map",
+        "languages": [
+          "de",
+          "en"
+        ]
+      }
     }
   ],
   "provides": [
     {
       "id": "daanse.widget"
+    },
+    {
+      "id": "Translations"
     }
   ]
 }

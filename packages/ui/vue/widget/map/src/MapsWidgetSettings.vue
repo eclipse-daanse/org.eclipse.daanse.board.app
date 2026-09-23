@@ -22,6 +22,7 @@ import RendererModal from './parts/RendererModal.vue'
 import { computedAsync } from '@vueuse/core'
 import { DatasourceRepository, identifier } from 'org.eclipse.daanse.board.app.lib.api.datasource'
 import { logServices, logDatasource } from './utils/logger'
+import { useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import {
   DButton,
   DCheckbox,
@@ -42,6 +43,7 @@ const props = defineProps<{
 }>()
 
 const widgetSettings = defineModel<IMapSettings>({ required: true })
+const { t } = useTranslation('map')
 const showModalSizeSmall = ref(false)
 const serviceLoading = ref(false)
 const showErrorModal = ref(false)
@@ -113,7 +115,7 @@ const addService = async () => {
   // If both failed, show error
   if (!hasService) {
     const error: any = wmsError || wfsError
-    errorMessage.value = error?.message || 'Failed to load service. The URL is not a valid WMS or WFS service.'
+    errorMessage.value = error?.message || t('Settings.serviceFailed')
     showErrorModal.value = true
   } else {
     // Close modal and reset URL on success
@@ -162,7 +164,7 @@ const services = computedAsync(async () => {
       // Add failed service to tree with error marker
       logServices('Service failed reconstruction:', service.url)
       ret.push({
-        service: { _info: { title: `${service.url} (failed)`, name: service.url } },
+        service: { _info: { title: `${service.url} ${t('Settings.failed')}`, name: service.url } },
         type: service.type,
         level: 0,
         childs: [],
@@ -401,13 +403,13 @@ const assignDatasourceToLayer = (layer: any, dsId: string) => {
 </script>
 
 <template>
-  <DModal v-model="showModalSizeSmall" size="sm" title="Add service">
+  <DModal v-model="showModalSizeSmall" size="sm" :title="t('Settings.addService')">
     <div class="settings-container">
       <DRadioGroup
         v-model="addServiceType"
         :options="[
-          { value: 'wms_wfs', label: 'WMS/WFS service' },
-          { value: 'datasource', label: 'Datasource' },
+          { value: 'wms_wfs', label: t('Settings.serviceTypes.wmsWfs') },
+          { value: 'datasource', label: t('Settings.serviceTypes.datasource') },
         ]"
         value-key="value"
         label-key="label"
@@ -415,7 +417,7 @@ const assignDatasourceToLayer = (layer: any, dsId: string) => {
       />
 
       <div v-if="addServiceType === 'wms_wfs'">
-        <DInput v-model="url" label="Service URL" placeholder="https://[serviceurl]" />
+        <DInput v-model="url" :label="t('Settings.serviceUrl')" placeholder="https://[serviceurl]" />
       </div>
 
       <div v-else>
@@ -423,29 +425,30 @@ const assignDatasourceToLayer = (layer: any, dsId: string) => {
           v-if="availableDatasources.length > 0"
           v-model="newDatasourceId"
           :options="availableDatasources"
-          label="Select datasource"
-          placeholder="Choose a datasource"
+          :label="t('Settings.selectDatasource')"
+          :placeholder="t('Settings.chooseDatasource')"
           label-key="text"
           value-key="value"
         />
         <DInput
           v-else
           v-model="newDatasourceId"
-          placeholder="Enter datasource ID"
-          label="Datasource ID"
+          :placeholder="t('Settings.enterDatasourceId')"
+          :label="t('Settings.datasourceId')"
         />
         <p class="note">
-          Primary datasource: <strong>{{ widgetSettings.datasourceId }}</strong>
+          {{ t('Settings.primaryDatasource') }} <strong>{{ widgetSettings.datasourceId }}</strong>
         </p>
       </div>
     </div>
     <template #actions>
-      <DButton intent="quiet" @click="showModalSizeSmall = false">Cancel</DButton>
+      <DButton intent="quiet" @click="showModalSizeSmall = false">{{ t('common:Action.cancel') }}</DButton>
       <DButton
         intent="primary"
+        data-testid="map-add-service-confirm"
         @click="addServiceType === 'wms_wfs' ? addService() : addServiceFromDatasource()"
       >
-        {{ addServiceType === 'wms_wfs' ? 'Add' : 'Add datasource' }}
+        {{ addServiceType === 'wms_wfs' ? t('Settings.add') : t('Settings.addDatasource') }}
       </DButton>
     </template>
   </DModal>
@@ -453,19 +456,19 @@ const assignDatasourceToLayer = (layer: any, dsId: string) => {
   <DModal v-model="showErrorModal" size="sm">
     <template #header>
       <DIcon name="error" size="lg" tone="color-err" />
-      <h2 class="dialog__title">Service error</h2>
+      <h2 class="dialog__title">{{ t('Settings.serviceError') }}</h2>
     </template>
     <p class="note note--body">{{ errorMessage }}</p>
     <template #actions>
-      <DButton @click="showErrorModal = false">OK</DButton>
+      <DButton @click="showErrorModal = false">{{ t('Settings.ok') }}</DButton>
     </template>
   </DModal>
 
   <RendererModal v-model="modelswitch" v-model:layer="selectedLayer as any" v-model:show="renderShow" :services="widgetSettings.services" :all-layers="widgetSettings.layers"></RendererModal>
-  <section class="settings-section" data-section="Layers">
+  <section class="settings-section" data-section-id="layers" :data-section="t('Settings.sections.layers')">
 
         <span v-if="!widgetSettings.layers?.length" class="empty">
-            No Layers here
+            {{ t('Settings.noLayers') }}
         </span>
 
     <Draggable v-else v-model="widgetSettings.layers" :animation="150" :component-data="{
@@ -481,11 +484,11 @@ const assignDatasourceToLayer = (layer: any, dsId: string) => {
             <DIcon
               v-else
               :name="element.checked ? 'layers' : 'layers_clear'"
-              :title="element.checked ? 'Hide layer' : 'Show layer'"
+              :title="element.checked ? t('Settings.hideLayer') : t('Settings.showLayer')"
               @click="element.checked = !element.checked"
             />
             {{ element.title }}
-            <span v-if="element.reconstructionFailed" class="failed">(failed)</span>
+            <span v-if="element.reconstructionFailed" class="failed">{{ t('Settings.failed') }}</span>
           </div>
           <div class="row nhidden options">
             <DIcon name="opacity" />
@@ -497,13 +500,13 @@ const assignDatasourceToLayer = (layer: any, dsId: string) => {
             <div v-if="element.type=='WFSLayer' || element.type=='OGCSTA' || element.type=='GEOJSON' || element.type=='REST-GEOJSON'">
               <DButton
                 intent="quiet"
-                title="Styles"
+                :title="t('Settings.styles')"
                 @click="()=>{selectedLayer=element;renderShow=true}"
               >
                 <DIcon name="settings" size="sm" />
               </DButton>
             </div>
-            <DButton intent="danger" title="Remove layer" @click.stop="removeLayer(element)">
+            <DButton intent="danger" :title="t('Settings.removeLayer')" @click.stop="removeLayer(element)">
               <DIcon name="delete" size="sm" />
             </DButton>
 
@@ -516,13 +519,13 @@ const assignDatasourceToLayer = (layer: any, dsId: string) => {
 
   </section>
 
-  <section class="settings-section bottomframe" data-section="Services">
+  <section class="settings-section bottomframe" data-section-id="services" :data-section="t('Settings.sections.services')">
     <div class="section__head">
       <DIcon name="cable" size="sm" />
-      <span class="section__title">Services</span>
+      <span class="section__title">{{ t('Settings.sections.services') }}</span>
       <DButton
         intent="quiet"
-        title="Add service"
+        :title="t('Settings.addService')"
         :busy="serviceLoading"
         @click="showModalSizeSmall = true"
       >
@@ -531,7 +534,7 @@ const assignDatasourceToLayer = (layer: any, dsId: string) => {
     </div>
 
     <span v-if="services && services.length==0" class="empty">
-      No Services here
+      {{ t('Settings.noServices') }}
     </span>
 
     <!--
@@ -553,7 +556,7 @@ const assignDatasourceToLayer = (layer: any, dsId: string) => {
             v-if="(node.type === 'OGCSTA' || node.type === 'GEOJSON' || node.type === 'REST-GEOJSON') &&
                   widgetSettings.datasourceIds?.includes(node.service._info.name)"
             intent="quiet"
-            title="Remove datasource"
+            :title="t('Settings.removeDatasource')"
             @click.stop="removeDatasource(node.service._info.name)"
           >
             <DIcon name="delete" size="sm" />
@@ -573,26 +576,26 @@ const assignDatasourceToLayer = (layer: any, dsId: string) => {
     </ul>
   </section>
 
-  <section class="settings-section bottomframe" data-section="Map">
+  <section class="settings-section bottomframe" data-section-id="map" :data-section="t('Settings.sections.map')">
     <div class="section__head">
       <DIcon name="map" size="sm" />
-      <span class="section__title">Map</span>
+      <span class="section__title">{{ t('Settings.sections.map') }}</span>
     </div>
 
     <div class="settings-container">
       <DInput
         v-model="widgetSettings.baseMapUrl"
-        label="Base map URL"
+        :label="t('Settings.baseMap')"
         placeholder="https://tile.openstreetmap.org/{z}/{x}/{y}.png"
-        hint="Tile server URL template. Use {z}, {x}, {y} placeholders for zoom and coordinates."
+        :hint="t('Settings.baseMapHint')"
       />
 
-      <DCheckbox v-model="widgetSettings.fixed" label="Map fixed" />
+      <DCheckbox v-model="widgetSettings.fixed" :label="t('Settings.fixed')" />
 
       <DColorInput
         v-model="widgetSettings.selectionHighlightColor"
-        label="Selection highlight colour"
-        hint="Colour used to highlight selected Things on the map."
+        :label="t('Settings.highlight')"
+        :hint="t('Settings.highlightHint')"
       />
     </div>
   </section>

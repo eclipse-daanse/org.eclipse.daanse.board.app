@@ -1,7 +1,8 @@
-import { DATASOURCE_REPOSITORY as p } from "org.eclipse.daanse.board.app.lib.api.datasource";
-import { defineComponent as m, shallowRef as w, ref as l, watch as u, createElementBlock as d, createCommentVNode as f, openBlock as g, toDisplayString as S, computed as h, Fragment as b, createVNode as i, unref as s } from "vue";
-import { useTemporaryStore as y } from "org.eclipse.daanse.board.app.ui.vue.composables";
-import { DSelect as v, DSwitch as E, DInput as k } from "org.eclipse.daanse.board.app.ui.vue.controls";
+import { DATASOURCE_REPOSITORY as m } from "org.eclipse.daanse.board.app.lib.api.datasource";
+import { defineComponent as d, shallowRef as S, ref as l, watch as u, createElementBlock as g, createCommentVNode as b, openBlock as w, toDisplayString as h, computed as y, Fragment as v, createVNode as i, unref as s } from "vue";
+import { useTemporaryStore as E, useTranslation as W } from "org.eclipse.daanse.board.app.ui.vue.composables";
+import { DSelect as D, DSwitch as T, DInput as A } from "org.eclipse.daanse.board.app.ui.vue.controls";
+import { component as k } from "@eclipse-daanse/tsm";
 const x = `<?xml version="1.0" encoding="UTF-8"?>
 <!--
 /*********************************************************************
@@ -45,28 +46,28 @@ const x = `<?xml version="1.0" encoding="UTF-8"?>
     <eSubpackages href="http://org.eclipse.daanse.board.app.lib.datasource.base#/"/>
 
 </ecore:EPackage>
-`, D = {
+`, C = {
   key: 0,
   style: { overflow: "hidden", height: "100%" }
-}, A = /* @__PURE__ */ m({
+}, P = /* @__PURE__ */ d({
   __name: "Preview",
   props: {
     dataSource: {}
   },
   setup(e) {
-    const a = e, t = w(null), n = l(a.dataSource);
+    const a = e, o = S(null), r = l(a.dataSource);
     u(a.dataSource, () => {
-      o();
+      n();
     }, { deep: !0 });
-    const { update: o } = y(a.dataSource.type, n, t), r = l(null);
-    return u(t, async () => {
-      console.log("tempStore changed", t.value), r.value = await t.value.getData("object"), t.value.subscribe(async () => {
-        const c = await t.value.getData("object");
-        r.value = c;
+    const { update: n } = E(a.dataSource.type, r, o), t = l(null);
+    return u(o, async () => {
+      console.log("tempStore changed", o.value), t.value = await o.value.getData("object"), o.value.subscribe(async () => {
+        const c = await o.value.getData("object");
+        t.value = c;
       });
-    }, { deep: !0 }), (c, V) => t.value && r.value ? (g(), d("div", D, S(r.value), 1)) : f("", !0);
+    }, { deep: !0 }), (c, _) => o.value && t.value ? (w(), g("div", C, h(t.value), 1)) : b("", !0);
   }
-}), T = /* @__PURE__ */ m({
+}), V = /* @__PURE__ */ d({
   __name: "Settings",
   props: {
     config: {},
@@ -74,43 +75,70 @@ const x = `<?xml version="1.0" encoding="UTF-8"?>
     dataSources: {}
   },
   setup(e) {
-    const a = h(() => e.connections.filter((t) => t.type === "ws" || t.type === "mqtt"));
-    return (t, n) => (g(), d(b, null, [
-      i(s(v), {
+    const { t: a } = W("datasourceWs"), o = y(() => e.connections.filter((r) => r.type === "ws" || r.type === "mqtt"));
+    return (r, n) => (w(), g(v, null, [
+      i(s(D), {
         modelValue: e.config.connection,
-        "onUpdate:modelValue": n[0] || (n[0] = (o) => e.config.connection = o),
-        label: "Verbindung",
-        options: a.value,
+        "onUpdate:modelValue": n[0] || (n[0] = (t) => e.config.connection = t),
+        label: s(a)("Settings.connection"),
+        options: o.value,
         "label-key": "name",
         "value-key": "uid"
-      }, null, 8, ["modelValue", "options"]),
-      i(s(E), {
+      }, null, 8, ["modelValue", "label", "options"]),
+      i(s(T), {
         modelValue: e.config.accumulate,
-        "onUpdate:modelValue": n[1] || (n[1] = (o) => e.config.accumulate = o),
-        label: "Nachrichten sammeln"
-      }, null, 8, ["modelValue"]),
-      i(s(k), {
+        "onUpdate:modelValue": n[1] || (n[1] = (t) => e.config.accumulate = t),
+        label: s(a)("Ws.accumulate")
+      }, null, 8, ["modelValue", "label"]),
+      i(s(A), {
         modelValue: e.config.topic,
-        "onUpdate:modelValue": n[2] || (n[2] = (o) => e.config.topic = o),
-        label: "Thema"
-      }, null, 8, ["modelValue"])
+        "onUpdate:modelValue": n[2] || (n[2] = (t) => e.config.topic = t),
+        label: s(a)("Ws.topic")
+      }, null, 8, ["modelValue", "label"])
     ], 64));
   }
-}), W = Symbol.for("WSStoreFactory"), C = Symbol.for("WsPreview"), P = Symbol.for("WsSettings");
-function B({ services: e }) {
-  e.register("WsPreview", A), e.register("WsSettings", T), e.getRequired(p).registerDatasourceType("ws", {
+}), F = { connection: "Verbindung" }, R = { accumulate: "Nachrichten sammeln", topic: "Thema" }, I = {
+  Settings: F,
+  Ws: R
+}, M = { connection: "Connection" }, O = { accumulate: "Collect messages", topic: "Topic" }, B = {
+  Settings: M,
+  Ws: O
+};
+var U = Object.getOwnPropertyDescriptor, L = (e, a, o, r) => {
+  for (var n = r > 1 ? void 0 : r ? U(a, o) : a, t = e.length - 1, c; t >= 0; t--)
+    (c = e[t]) && (n = c(n) || n);
+  return n;
+};
+const f = "datasourceWs";
+let p = class {
+  namespace = f;
+  resources = {
+    de: I,
+    en: B
+  };
+};
+p = L([
+  k({
+    service: ["Translations"],
+    properties: { "i18n.namespace": f }
+  })
+], p);
+const q = Symbol.for("WSStoreFactory"), G = Symbol.for("WsPreview"), N = Symbol.for("WsSettings");
+function H({ services: e }) {
+  e.register("WsPreview", P), e.register("WsSettings", V), e.getRequired(m).registerDatasourceType("ws", {
     icon: "bolt",
     connections: ["ws"],
     Model: x,
-    Store: W,
-    Preview: C,
-    Settings: P
+    Store: q,
+    Preview: G,
+    Settings: N
   });
 }
-function U({ services: e }) {
-  e.getRequired(p).unregisterDatasourceType("ws"), e.unregister("WsPreview"), e.unregister("WsSettings");
+function J({ services: e }) {
+  e.getRequired(m).unregisterDatasourceType("ws"), e.unregister("WsPreview"), e.unregister("WsSettings");
 }
 export {
-  B as activate,
-  U as deactivate
+  p as DatasourceWsTranslations,
+  H as activate,
+  J as deactivate
 };

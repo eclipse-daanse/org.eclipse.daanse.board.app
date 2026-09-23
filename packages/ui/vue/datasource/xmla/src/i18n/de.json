@@ -1,0 +1,16 @@
+{
+  "Settings": {
+    "connection": "Verbindung",
+    "polling": "Regelmäßig neu laden",
+    "intervalMs": "Abstand (ms)",
+    "cube": "Würfel"
+  },
+  "Xmla": {
+    "build": "Abfrage bauen",
+    "write": "MDX schreiben",
+    "tabs": "Abfrage bauen oder schreiben",
+    "useMdx": "MDX-Abfrage verwenden",
+    "preview": "Datenvorschau",
+    "pickConnection": "Wähle eine Verbindung, um die Metadaten zu laden"
+  }
+}

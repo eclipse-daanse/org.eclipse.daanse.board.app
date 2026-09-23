@@ -1,0 +1,19 @@
+{
+  "Settings": {
+    "connection": "Connection"
+  },
+  "Sql": {
+    "columns": "Columns",
+    "tables": "Tables",
+    "schema": "Schema",
+    "schemaRead": "Schema read at {{time}}",
+    "result": "Result",
+    "messages": "Messages",
+    "rows_one": "{{count}} row in {{ms}} ms.",
+    "rows_other": "{{count}} rows in {{ms}} ms.",
+    "failed": "Query failed: {{reason}}",
+    "run": "Run",
+    "tabs": "Result or messages",
+    "nothingRun": "Nothing run yet"
+  }
+}

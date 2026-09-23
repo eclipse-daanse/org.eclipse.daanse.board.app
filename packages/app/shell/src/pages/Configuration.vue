@@ -35,7 +35,7 @@ import {
   type Variable,
   type Workspace,
 } from 'org.eclipse.daanse.board.app.lib.model.workspace'
-import { useEList } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+import { useEList, useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import { TINY_EMITTER } from 'org.eclipse.daanse.board.app.lib.core'
 import { VariableEvents } from 'org.eclipse.daanse.board.app.lib.variables'
 import type { TinyEmitter } from 'tiny-emitter'
@@ -54,6 +54,7 @@ import {
 const repository = inject<VariableRepository>(VARIABLE_REPOSITORY)!
 const workspace = inject<Workspace>(WORKSPACE)!
 const eventBus = inject<TinyEmitter>(Symbol.for(TINY_EMITTER))
+const { t } = useTranslation('shell')
 
 const variables = useEList(workspace, (w) => w.variables)
 const pages = useEList(workspace, (w) => w.board?.pages)
@@ -77,7 +78,7 @@ function valueOf(variable: Variable): string {
     return typeof value === 'object' ? JSON.stringify(value) : String(value)
   } catch {
     /* A page-only variable read from outside its board says so by throwing. */
-    return 'nur auf seiner Seite lesbar'
+    return t('Variables.pageOnlyValue')
   }
 }
 
@@ -87,7 +88,7 @@ const sections = computed(() => {
   const byPage = pages.value
     .map((page: Page) => ({
       title: page.name as string,
-      lead: 'Nur auf diesem Board',
+      lead: t('Variables.reach.pageLead'),
       page,
       rows: variables.value.filter((v) => v.scope === 'page' && v.page === page),
     }))
@@ -96,10 +97,10 @@ const sections = computed(() => {
   const orphans = variables.value.filter((v) => v.scope === 'page' && !v.page)
 
   return [
-    { title: 'Überall', lead: 'Auf jedem Board lesbar', page: undefined, rows: global },
+    { title: t('Variables.reach.global'), lead: t('Variables.reach.globalLead'), page: undefined, rows: global },
     ...byPage,
     ...(orphans.length
-      ? [{ title: 'Ohne Board', lead: 'Das Board dazu gibt es nicht mehr', page: undefined, rows: orphans }]
+      ? [{ title: t('Variables.reach.orphan'), lead: t('Variables.reach.orphanLead'), page: undefined, rows: orphans }]
       : []),
   ]
 })
@@ -108,15 +109,15 @@ const types = ref<string[]>([])
 onMounted(() => (types.value = repository.getRegisteredVariableTypes()))
 
 const reachOptions = computed(() => [
-  { text: 'Überall', value: '' },
+  { text: t('Variables.reach.global'), value: '' },
   ...pages.value.map((page: Page) => ({ text: page.name as string, value: page.id as string })),
 ])
 
-const accessOptions = [
-  { text: 'Von außen beschreibbar', value: 'external-writable' },
-  { text: 'Nur auf seiner Seite', value: 'page-only' },
-  { text: 'Nur lesbar', value: 'readonly' },
-]
+const accessOptions = computed(() => [
+  { text: t('Variables.access.externalWritable'), value: 'external-writable' },
+  { text: t('Variables.access.pageOnly'), value: 'page-only' },
+  { text: t('Variables.access.readonly'), value: 'readonly' },
+])
 
 // ------------------------------------------------------------- the dialog
 
@@ -158,7 +159,7 @@ function openNew(): void {
   editingUid.value = null
   draftType.value = types.value[0] ?? ''
   draftReach.value = ''
-  draftName.value = 'Variable ' + Math.random().toString(36).substring(7)
+  draftName.value = t('Variables.newName', { id: Math.random().toString(36).substring(7) })
   draftAccess.value = 'external-writable'
   draft.value = {}
   dialogOpen.value = true
@@ -240,14 +241,13 @@ function confirmDelete(): void {
   <div class="variables">
     <header class="variables__head">
       <div>
-        <h1 class="variables__title">Variablen</h1>
+        <h1 class="variables__title">{{ t('Variables.title') }}</h1>
         <p class="variables__lead">
-          Ein benannter Wert, den Widgets und Datenquellen lesen. Manche gelten überall,
-          manche nur auf einem Board.
+          {{ t('Variables.lead') }}
         </p>
       </div>
       <DButton intent="primary" @click="openNew">
-        <DIcon name="add" size="sm" />Variable anlegen
+        <DIcon name="add" size="sm" />{{ t('Variables.create') }}
       </DButton>
     </header>
 
@@ -262,41 +262,41 @@ function confirmDelete(): void {
           <span class="row__type">{{ variable.type }}</span>
           <span class="row__value">{{ valueOf(variable) }}</span>
           <span class="row__tools">
-            <DButton intent="quiet" size="sm" title="Variable bearbeiten" @click="openEdit(variable)">
+            <DButton intent="quiet" size="sm" :title="t('Variables.edit')" @click="openEdit(variable)">
               <DIcon name="edit" size="sm" />
             </DButton>
-            <DButton intent="quiet" size="sm" title="Variable löschen" @click="pendingDelete = variable">
+            <DButton intent="quiet" size="sm" :title="t('Variables.remove')" @click="pendingDelete = variable">
               <DIcon name="delete" size="sm" />
             </DButton>
           </span>
         </li>
       </ul>
 
-      <p v-else class="reach__empty">Noch keine.</p>
+      <p v-else class="reach__empty">{{ t('Variables.none') }}</p>
     </section>
 
     <DModal
       v-model="dialogOpen"
-      :title="isEditing ? 'Variable bearbeiten' : 'Variable anlegen'"
+      :title="isEditing ? t('Variables.edit') : t('Variables.create')"
       size="md"
     >
       <div class="form">
         <DSelect
           v-model="draftType"
-          label="Typ"
+          :label="t('Editor.type')"
           :options="types"
           @update:model-value="onTypeChosen"
         />
         <DSelect
           v-model="draftReach"
-          label="Gilt"
+:label="t('Variables.reach.label')"
           :options="reachOptions"
           label-key="text"
           value-key="value"
         />
         <DSelect
           v-model="draftAccess"
-          label="Beschreibbar"
+:label="t('Variables.access.label')"
           :options="accessOptions"
           label-key="text"
           value-key="value"
@@ -304,7 +304,7 @@ function confirmDelete(): void {
 
         <!-- The name is every variable's, so it is asked here rather than
              three times over in three type forms. -->
-        <DInput v-model="draftName" label="Name" />
+        <DInput v-model="draftName" :label="t('Editor.name')" />
 
         <!-- And what the chosen type needs, said by the type itself. -->
         <SettingsForm
@@ -320,23 +320,22 @@ function confirmDelete(): void {
       </div>
 
       <template #actions>
-        <DButton intent="quiet" @click="dialogOpen = false">Abbrechen</DButton>
-        <DButton intent="primary" @click="save">{{ isEditing ? 'Speichern' : 'Anlegen' }}</DButton>
+        <DButton intent="quiet" @click="dialogOpen = false">{{ t('common:Action.cancel') }}</DButton>
+        <DButton intent="primary" @click="save">{{ isEditing ? t('common:Action.save') : t('Wizard.create') }}</DButton>
       </template>
     </DModal>
 
     <DModal :model-value="!!pendingDelete" size="sm" @update:model-value="pendingDelete = null">
       <template #header>
         <DIcon name="warning" size="lg" tone="color-err" />
-        <h2 class="confirm__title">Variable löschen</h2>
+        <h2 class="confirm__title">{{ t('Variables.remove') }}</h2>
       </template>
       <p class="confirm__text">
-        {{ pendingDelete?.name }} wird entfernt. Widgets, die darauf zeigen, finden sie
-        danach nicht mehr.
+        {{ t('Variables.confirmRemove', { name: pendingDelete?.name }) }}
       </p>
       <template #actions>
-        <DButton intent="quiet" @click="pendingDelete = null">Abbrechen</DButton>
-        <DButton intent="danger" @click="confirmDelete">Löschen</DButton>
+        <DButton intent="quiet" @click="pendingDelete = null">{{ t('common:Action.cancel') }}</DButton>
+        <DButton intent="danger" @click="confirmDelete">{{ t('common:Action.delete') }}</DButton>
       </template>
     </DModal>
   </div>

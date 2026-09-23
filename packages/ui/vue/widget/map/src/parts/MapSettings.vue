@@ -12,6 +12,7 @@ Contributors: Smart City Jena
 
 import { type ModelRef } from 'vue'
 import { IMapProps } from '../api/MapPreview'
+import { useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import {
   DCheckbox,
   DColorInput,
@@ -27,21 +28,22 @@ export interface IMapPrevComponent {
 }
 
 const settings: ModelRef<IMapProps> = defineModel<IMapProps>({ required: true })
+const { t } = useTranslation('map')
 //const settings:Ref<IThingWidgetSettings> = defineModel<IThingWidgetSettings>({required:true});
 
 </script>
 
 <template>
-  <section class="settings-section" data-section="Style settings">
+  <section class="settings-section" data-section-id="style" :data-section="t('Style.section')">
     <div class="settings-container">
-      <DCheckbox v-model="settings.stroke" label="stroke" />
-      <DColorInput v-model="settings.color" label="line colour" />
-      <DInput v-model="settings.weight" type="number" label="line size" suffix="px" />
-      <DSlider v-model="settings.opacity" :min="0" :max="1" :step="0.01" label="line opacity" />
-      <DCheckbox v-model="settings.fill" label="fill" />
-      <DSlider v-model="settings.fillOpacity" :min="0" :max="1" :step="0.01" label="fill opacity" />
-      <DColorInput v-model="settings.fillColor" label="fill colour" />
-      <DInput v-model="settings.className" label="class name" />
+      <DCheckbox v-model="settings.stroke" :label="t('Style.stroke')" />
+      <DColorInput v-model="settings.color" :label="t('Style.lineColor')" />
+      <DInput v-model="settings.weight" type="number" :label="t('Style.lineSize')" suffix="px" />
+      <DSlider v-model="settings.opacity" :min="0" :max="1" :step="0.01" :label="t('Style.lineOpacity')" />
+      <DCheckbox v-model="settings.fill" :label="t('Style.fill')" />
+      <DSlider v-model="settings.fillOpacity" :min="0" :max="1" :step="0.01" :label="t('Style.fillOpacity')" />
+      <DColorInput v-model="settings.fillColor" :label="t('Style.fillColor')" />
+      <DInput v-model="settings.className" :label="t('Style.className')" />
     </div>
   </section>
 

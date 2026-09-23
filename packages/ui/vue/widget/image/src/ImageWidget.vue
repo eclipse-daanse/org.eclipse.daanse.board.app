@@ -13,7 +13,7 @@ Contributors:
 
 <script lang="ts" setup>
 import { inject, onMounted, ref, watch, type Ref, computed, toRefs } from 'vue'
-import { plainSettings } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+import { plainSettings, useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import type { ImageSettings } from './gen/ImageSettings'
 // The class to instantiate: in emf mode the plain name is the interface
 import { ImageSettingsImpl } from './gen/ImageSettingsImpl'
@@ -22,6 +22,7 @@ import type { TinyEmitter } from 'tiny-emitter'
 import { DButton, DIcon } from 'org.eclipse.daanse.board.app.ui.vue.controls'
 
 const props = defineProps<{ datasourceId: string, id?: string }>()
+const { t } = useTranslation('image')
 const { id: widgetId } = toRefs(props)
 const config = defineModel<ImageSettings>('configv', { required: true })
 
@@ -158,7 +159,7 @@ watch(lastImageIndex, () => {
         <DButton
           intent="quiet"
           class="slideshow-nav__button"
-          title="Previous image"
+          :title="t('Widget.previous')"
           :disabled="currentImage === 0"
           @click="toPrev()"
         >
@@ -189,7 +190,7 @@ watch(lastImageIndex, () => {
         <DButton
           intent="quiet"
           class="slideshow-nav__button"
-          title="Next image"
+          :title="t('Widget.next')"
           :disabled="currentImage === config.images?.length - 1"
           @click="toNext()"
         >

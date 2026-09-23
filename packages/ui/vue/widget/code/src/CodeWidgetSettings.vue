@@ -14,7 +14,6 @@ Contributors:
 <script lang="ts" setup>
 import { ref, inject, watch } from 'vue';
 import type { CodeSettings } from './gen/CodeSettings';
-import type {i18n} from "org.eclipse.daanse.board.app.lib.i18next"
 import { MonacoEditor } from 'org.eclipse.daanse.board.app.ui.vue.common.monaco';
 
 // @ts-ignore
@@ -22,11 +21,11 @@ import CodeEditor from "simple-code-editor/CodeEditor.vue";
 import {
   DInput,
 } from 'org.eclipse.daanse.board.app.ui.vue.controls'
+import { useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 
 const widgetSettings = defineModel<CodeSettings>({ required: true });
 
-const i18n:i18n|undefined = inject('i18n');
-const t = (key:string)=>(i18n)?i18n.t(key):key;
+const { t } = useTranslation('code');
 
 const editorType = inject('codeEditorType', 'textarea') as 'simple' | 'textarea' | 'monaco';
 const code = ref<string>(widgetSettings.value.code || '');
@@ -44,7 +43,7 @@ watch(() => code.value, (newCode: any) => {
     a small highlighting one, or Monaco - so a form cannot offer it. The
     language and the theme are rendered from model/ui.xmi beside this.
   -->
-  <section class="settings-section" data-section="Quelltext">
+  <section class="settings-section" data-section-id="source" :data-section="t('Settings.source')">
     <div class="settings_container">
       <template v-if="editorType === 'textarea'">
         <DInput v-model="widgetSettings.code" :rows="10" />
