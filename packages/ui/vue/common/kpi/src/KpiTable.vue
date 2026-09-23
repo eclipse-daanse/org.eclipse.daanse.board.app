@@ -17,11 +17,11 @@ Contributors:
         <th v-if="showSelection" class="selection-header">
           <input type="checkbox" :checked="isAllSelected" :indeterminate="isIndeterminate" @change="toggleSelectAll" />
         </th>
-        <th>Name</th>
-        <th>Value</th>
-        <th>Goal</th>
-        <th>Status</th>
-        <th>Trend</th>
+        <th>{{ t('Table.name') }}</th>
+        <th>{{ t('Table.value') }}</th>
+        <th>{{ t('Table.goal') }}</th>
+        <th>{{ t('Table.status') }}</th>
+        <th>{{ t('Table.trend') }}</th>
       </tr>
     </thead>
     <tbody>
@@ -36,6 +36,9 @@ Contributors:
 <script lang="ts" setup>
 import { ref, computed } from 'vue'
 import KpiTableRow from './KpiTableRow.vue'
+import { useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+
+const { t } = useTranslation('kpi')
 
 const props = defineProps<{
   tableData: any[];

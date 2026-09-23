@@ -26,6 +26,7 @@
  * bookkeeping to keep in step with the first.
  */
 import { inject } from 'vue'
+import { useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import {
   identifier as PAGE_REPOSITORY,
   type PageRegistryI,
@@ -42,6 +43,7 @@ const NONE: DatasourceUsage = { boards: 0, widgets: 0 }
 
 export function useDatasourceUsage() {
   const pages = inject<PageRegistryI>(PAGE_REPOSITORY)
+  const { t } = useTranslation('shell')
 
   /** Every source that is read from, with how much reads from it. */
   function usageByDatasource(): Record<string, DatasourceUsage> {
@@ -74,9 +76,10 @@ export function useDatasourceUsage() {
    */
   function usageLabel(usage: DatasourceUsage): string {
     if (!usage.widgets) return ''
-    const boards = `${usage.boards} ${usage.boards === 1 ? 'Board' : 'Boards'}`
-    const widgets = `${usage.widgets} ${usage.widgets === 1 ? 'Widget' : 'Widgets'}`
-    return `${boards} · ${widgets}`
+    return t('Usage.label', {
+      boards: t('Usage.boards', { count: usage.boards }),
+      widgets: t('Usage.widgets', { count: usage.widgets }),
+    })
   }
 
   return { usageByDatasource, usageOf, usageLabel }

@@ -34,11 +34,11 @@ from, so they still come from the hand-written component beside this.
 
   <components xsi:type="uimodel:FormView" name="ChartSettingsFormView">
 
-    <fields xsi:type="uimodel:GroupWidget" name="typeGroup" layout="VERTICAL" label="Diagrammtyp">
+    <fields xsi:type="uimodel:GroupWidget" name="typeGroup" layout="VERTICAL" label="chart:Form.typeGroup">
       <fields xsi:type="uimodel:SelectWidget"
           name="chartType"
           feature="http://org.eclipse.daanse.board.app.ui.vue.widget.chart#//ChartSettings/chartType"
-          label="Typ">
+          label="chart:Form.chartType">
         <values>line</values>
         <values>bar</values>
         <values>pie</values>
@@ -52,7 +52,7 @@ from, so they still come from the hand-written component beside this.
       <fields xsi:type="uimodel:SelectWidget"
           name="barOrientation"
           feature="http://org.eclipse.daanse.board.app.ui.vue.widget.chart#//ChartSettings/barOrientation"
-          label="Balkenausrichtung">
+          label="chart:Form.barOrientation">
         <values>vertical</values>
         <values>horizontal</values>
         <visibilityCondition language="JS" body="self.chartType?.value === 'bar'"/>
@@ -60,32 +60,32 @@ from, so they still come from the hand-written component beside this.
       <fields xsi:type="uimodel:CheckboxWidget"
           name="stacked"
           feature="http://org.eclipse.daanse.board.app.ui.vue.widget.chart#//ChartSettings/stacked"
-          label="Gestapelt"/>
+          label="chart:Form.stacked"/>
     </fields>
 
-    <fields xsi:type="uimodel:GroupWidget" name="seriesGroup" layout="VERTICAL" label="Datenreihen">
+    <fields xsi:type="uimodel:GroupWidget" name="seriesGroup" layout="VERTICAL" label="chart:Form.seriesGroup">
       <!-- A list: each entry is a form of its own, built from SeriesSettings.
            What a series does not set falls back to the values below. -->
       <fields xsi:type="uimodel:InputWidget"
           name="seriesSettings"
           feature="http://org.eclipse.daanse.board.app.ui.vue.widget.chart#//ChartSettings/seriesSettings"
-          label="Datenreihen"/>
+          label="chart:Form.seriesSettings"/>
     </fields>
 
-    <fields xsi:type="uimodel:GroupWidget" name="lineGroup" layout="VERTICAL" label="Linie">
+    <fields xsi:type="uimodel:GroupWidget" name="lineGroup" layout="VERTICAL" label="chart:Form.lineGroup">
       <fields xsi:type="uimodel:InputWidget"
           name="borderColor"
           feature="http://org.eclipse.daanse.board.app.ui.vue.widget.chart#//ChartSettings/borderColor"
-          label="Linien- und Randfarbe"
+          label="chart:Form.borderColor"
           placeholder="sichtbar ab Stärke 1"/>
       <fields xsi:type="uimodel:NumberWidget"
           name="borderWidth"
           feature="http://org.eclipse.daanse.board.app.ui.vue.widget.chart#//ChartSettings/borderWidth"
-          label="Linienstärke" min="0" max="20" step="1"/>
+          label="chart:Form.borderWidth" min="0" max="20" step="1"/>
       <fields xsi:type="uimodel:SelectWidget"
           name="borderDash"
           feature="http://org.eclipse.daanse.board.app.ui.vue.widget.chart#//ChartSettings/borderDash"
-          label="Strichmuster">
+          label="chart:Form.borderDash">
         <values>durchgezogen</values>
         <values>5,5</values>
         <values>10,5</values>
@@ -95,84 +95,84 @@ from, so they still come from the hand-written component beside this.
       <fields xsi:type="uimodel:CheckboxWidget"
           name="fill"
           feature="http://org.eclipse.daanse.board.app.ui.vue.widget.chart#//ChartSettings/fill"
-          label="Fläche unter der Linie füllen"/>
+          label="chart:Form.fill"/>
       <!-- Always shown: this is what a bar, a pie or a doughnut is painted
            with, so hiding it behind "fill" made the colour unreachable for
            every chart type that is not a line. -->
       <fields xsi:type="uimodel:InputWidget"
           name="backgroundColor"
           feature="http://org.eclipse.daanse.board.app.ui.vue.widget.chart#//ChartSettings/backgroundColor"
-          label="Flächenfarbe"
+          label="chart:Form.backgroundColor"
           placeholder="Balken, Torte, gefüllte Fläche"/>
     </fields>
 
-    <fields xsi:type="uimodel:GroupWidget" name="pointGroup" layout="VERTICAL" label="Punkte">
+    <fields xsi:type="uimodel:GroupWidget" name="pointGroup" layout="VERTICAL" label="chart:Form.pointGroup">
       <fields xsi:type="uimodel:CheckboxWidget"
           name="showPoints"
           feature="http://org.eclipse.daanse.board.app.ui.vue.widget.chart#//ChartSettings/showPoints"
-          label="Punkte zeigen"/>
+          label="chart:Form.showPoints"/>
       <fields xsi:type="uimodel:InputWidget"
           name="pointColor"
           feature="http://org.eclipse.daanse.board.app.ui.vue.widget.chart#//ChartSettings/pointColor"
-          label="Farbe">
+          label="chart:Form.pointColor">
         <visibilityCondition language="JS" body="self.showPoints?.value === true || self.showPoints?.value === 'true'"/>
       </fields>
       <fields xsi:type="uimodel:NumberWidget"
           name="pointSize"
           feature="http://org.eclipse.daanse.board.app.ui.vue.widget.chart#//ChartSettings/pointSize"
-          label="Punktgröße" min="0" max="20" step="1">
+          label="chart:Form.pointSize" min="0" max="20" step="1">
         <visibilityCondition language="JS" body="self.showPoints?.value === true || self.showPoints?.value === 'true'"/>
       </fields>
     </fields>
 
-    <fields xsi:type="uimodel:GroupWidget" name="gridGroup" layout="VERTICAL" label="Gitterlinien">
+    <fields xsi:type="uimodel:GroupWidget" name="gridGroup" layout="VERTICAL" label="chart:Form.gridGroup">
       <fields xsi:type="uimodel:CheckboxWidget"
           name="showHorizontalGrid"
           feature="http://org.eclipse.daanse.board.app.ui.vue.widget.chart#//ChartSettings/showHorizontalGrid"
-          label="Waagerechte Linien"/>
+          label="chart:Form.showHorizontalGrid"/>
       <fields xsi:type="uimodel:InputWidget"
           name="horizontalGridColor"
           feature="http://org.eclipse.daanse.board.app.ui.vue.widget.chart#//ChartSettings/horizontalGridColor"
-          label="Farbe waagerecht">
+          label="chart:Form.horizontalGridColor">
         <visibilityCondition language="JS" body="self.showHorizontalGrid?.value === true || self.showHorizontalGrid?.value === 'true'"/>
       </fields>
       <fields xsi:type="uimodel:InputWidget"
           name="horizontalGridWidth"
           feature="http://org.eclipse.daanse.board.app.ui.vue.widget.chart#//ChartSettings/horizontalGridWidth"
-          label="Stärke waagerecht">
+          label="chart:Form.horizontalGridWidth">
         <visibilityCondition language="JS" body="self.showHorizontalGrid?.value === true || self.showHorizontalGrid?.value === 'true'"/>
       </fields>
       <fields xsi:type="uimodel:CheckboxWidget"
           name="showVerticalGrid"
           feature="http://org.eclipse.daanse.board.app.ui.vue.widget.chart#//ChartSettings/showVerticalGrid"
-          label="Senkrechte Linien"/>
+          label="chart:Form.showVerticalGrid"/>
       <fields xsi:type="uimodel:InputWidget"
           name="verticalGridColor"
           feature="http://org.eclipse.daanse.board.app.ui.vue.widget.chart#//ChartSettings/verticalGridColor"
-          label="Farbe senkrecht">
+          label="chart:Form.verticalGridColor">
         <visibilityCondition language="JS" body="self.showVerticalGrid?.value === true || self.showVerticalGrid?.value === 'true'"/>
       </fields>
       <fields xsi:type="uimodel:InputWidget"
           name="verticalGridWidth"
           feature="http://org.eclipse.daanse.board.app.ui.vue.widget.chart#//ChartSettings/verticalGridWidth"
-          label="Stärke senkrecht">
+          label="chart:Form.verticalGridWidth">
         <visibilityCondition language="JS" body="self.showVerticalGrid?.value === true || self.showVerticalGrid?.value === 'true'"/>
       </fields>
     </fields>
 
-    <fields xsi:type="uimodel:GroupWidget" name="axisGroup" layout="VERTICAL" label="Achsen">
+    <fields xsi:type="uimodel:GroupWidget" name="axisGroup" layout="VERTICAL" label="chart:Form.axisGroup">
       <fields xsi:type="uimodel:InputWidget"
           name="xAxisTitle"
           feature="http://org.eclipse.daanse.board.app.ui.vue.widget.chart#//ChartSettings/xAxisTitle"
-          label="Titel X"/>
+          label="chart:Form.xAxisTitle"/>
       <fields xsi:type="uimodel:InputWidget"
           name="yAxisTitle"
           feature="http://org.eclipse.daanse.board.app.ui.vue.widget.chart#//ChartSettings/yAxisTitle"
-          label="Titel Y"/>
+          label="chart:Form.yAxisTitle"/>
       <fields xsi:type="uimodel:SelectWidget"
           name="dateDisplayFormat"
           feature="http://org.eclipse.daanse.board.app.ui.vue.widget.chart#//ChartSettings/dateDisplayFormat"
-          label="Datumsformat">
+          label="chart:Form.dateDisplayFormat">
         <values>dd.MM.yyyy</values>
         <values>dd.MM.yyyy HH:mm</values>
         <values>dd.MM. HH:mm</values>

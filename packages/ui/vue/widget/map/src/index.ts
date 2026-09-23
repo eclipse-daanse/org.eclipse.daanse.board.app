@@ -54,6 +54,7 @@ export class MapWidgetProvider implements WidgetProvider {
   readonly supportedDSTypes = ['ogcsta', 'OGC Composer', 'rest', 'valhalla']
   readonly icon = Icon
   readonly name = 'Map'
+  readonly nameKey = 'map:Widget.name'
 
   constructor(
     @inject(EVENT_REGISTRY_ID) private readonly events: EventRegistry,
@@ -108,3 +109,6 @@ export class MapWidgetProvider implements WidgetProvider {
 
 export { MapsWidget, MapsWidgetSettings, useDataPointRegistry, MapMarker, ConditionSettings, PointStyler, AreaStyler }
 export type { IDataPointDescription } from './composables/IDataPointDescription'
+
+/* Its texts - collected by lib.i18next, see src/i18n. */
+export { MapTranslations } from './i18n'

@@ -18,6 +18,7 @@ import {
 } from 'org.eclipse.daanse.board.app.lib.api.connection'
 import { DButton, DIconPicker, DInput, DSelect } from 'org.eclipse.daanse.board.app.ui.vue.controls'
 import TagInput from '../datasources/TagInput.vue'
+import { useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 
 const props = defineProps({
   itemId: {
@@ -27,6 +28,7 @@ const props = defineProps({
 })
 
 const emit = defineEmits(['close'])
+const { t } = useTranslation('shell')
 
 const connectionProxy = ref({} as any)
 
@@ -97,25 +99,25 @@ const saveConnection = () => {
   <div class="editor">
     <div class="editor__fields">
       <DInput v-model="connectionProxy.uid" label="UID" readonly />
-      <DInput v-model="connectionProxy.name" label="Name" />
-      <DSelect v-model="connectionProxy.type" label="Typ" :options="availableConnections" />
+      <DInput v-model="connectionProxy.name" :label="t('Editor.name')" />
+      <DSelect v-model="connectionProxy.type" :label="t('Editor.type')" :options="availableConnections" />
       <DIconPicker
         v-model="connectionProxy.icon"
-        label="Symbol"
+        :label="t('Editor.icon')"
         :fallback="typeIcon"
-        hint="Ohne eigenes Symbol steht hier das des Typs."
+        :hint="t('Editor.iconHint')"
       />
       <TagInput
         v-model="connectionProxy.tags"
-        label="Schlagworte"
-        hint="Wofür diese Verbindung da ist — danach lässt sich suchen."
+        :label="t('Editor.tags')"
+        :hint="t('Connection.tagsHint')"
         :known="knownTags"
       />
       <component :is="settingsComponent" :config="connectionProxy.config" />
     </div>
     <div class="editor__actions">
-      <DButton intent="quiet" @click="$emit('close')">Schließen</DButton>
-      <DButton intent="primary" @click="saveConnection">Speichern</DButton>
+      <DButton intent="quiet" @click="$emit('close')">{{ t('common:Action.close') }}</DButton>
+      <DButton intent="primary" @click="saveConnection">{{ t('common:Action.save') }}</DButton>
     </div>
   </div>
 </template>

@@ -41,6 +41,10 @@
     {
       "id": "org.eclipse.daanse.board.app.ui.vue.controls",
       "versionRange": ">=0.0.1-0"
+    },
+    {
+      "id": "org.eclipse.daanse.board.app.ui.vue.composables",
+      "versionRange": ">=0.0.1-0"
     }
   ],
   "capabilities": [
@@ -49,6 +53,16 @@
       "attributes": {
         "library": "org.eclipse.daanse.board.app.ui.vue.eventmanager",
         "version": "0.0.1-next.1"
+      }
+    },
+    {
+      "namespace": "tsm.i18n",
+      "attributes": {
+        "namespace": "eventmanager",
+        "languages": [
+          "de",
+          "en"
+        ]
       }
     }
   ],
@@ -59,6 +73,7 @@
     "lib.api.route",
     "lib.events",
     "platform.vue",
+    "ui.vue.composables",
     "ui.vue.controls"
   ]
 }

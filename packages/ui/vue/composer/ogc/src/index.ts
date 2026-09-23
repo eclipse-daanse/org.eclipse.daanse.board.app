@@ -46,3 +46,6 @@ export function deactivate({ services }: ActivationContext) {
   services.unregister('OgcComposerPreview')
   services.unregister('OgcComposerSettings')
 }
+
+/* Its texts - collected by lib.i18next, see src/i18n. */
+export { ComposerOgcTranslations } from './i18n'

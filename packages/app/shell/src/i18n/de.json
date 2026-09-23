@@ -1,0 +1,446 @@
+{
+  "Rail": {
+    "areas": "Bereiche",
+    "board": "Board",
+    "pages": "Seiten",
+    "data": "Verbindungen & Daten"
+  },
+  "Header": {
+    "brand": "Daanse Board",
+    "crumb": {
+      "label": "Pfad",
+      "boards": "Boards",
+      "board": "Board",
+      "edit": "Bearbeiten",
+      "pages": "Seiten",
+      "data": "Verbindungen & Daten",
+      "config": "Konfiguration",
+      "storage": "Speicher",
+      "test": "Test",
+      "events": "Ereignisse"
+    },
+    "page": {
+      "fallbackName": "Seite",
+      "confirmRemove": "Seite „{{name}}“ löschen? Das lässt sich nicht rückgängig machen.",
+      "switch": "Seite wechseln",
+      "remove": "Seite „{{name}}“ löschen",
+      "add": "+ Neue Seite"
+    },
+    "undo": "Rückgängig",
+    "undoWhat": "Rückgängig: {{what}}",
+    "undoLabel": "Letzte Änderung rückgängig machen",
+    "redo": "Wiederholen",
+    "redoWhat": "Wiederholen: {{what}}",
+    "redoLabel": "Rückgängig gemachte Änderung wiederholen",
+    "snap": "Am Raster ausrichten",
+    "snapLabel": "Widgets am Raster ausrichten",
+    "backdrop": "Hintergrund der Seite zeigen",
+    "backdropLabel": "Hintergrund der Seite beim Bearbeiten zeigen oder verbergen",
+    "palette": "Widgets",
+    "paletteLabel": "Widget-Palette zeigen oder verbergen",
+    "pageSettings": "Seite einrichten",
+    "storage": "Speichern",
+    "storageLabel": "Arbeitsstand speichern oder laden",
+    "mode": "Modus",
+    "view": "Ansicht",
+    "edit": "Bearbeiten",
+    "language": "Sprache",
+    "appearance": "Erscheinungsbild",
+    "signedIn": "Angemeldet"
+  },
+  "WidgetSettings": {
+    "title": "Widget-Einstellungen",
+    "widget": "Widget",
+    "section": "Abschnitt {{n}}",
+    "boardSize": "{{width}} × {{height}} px, wie im Board",
+    "boardSizeUnknown": "Größe des Boards nicht bekannt",
+    "previewSize": "Vorschaugröße",
+    "sizeBoard": "Boardgröße",
+    "sizeFill": "Füllen",
+    "stretched": "Auf die Fläche gestreckt",
+    "sideWidth": "Breite der Einstellungen",
+    "settings": "Einstellungen",
+    "tabs": {
+      "data": "Daten",
+      "look": "Darstellung",
+      "rest": "Weiteres",
+      "frame": "Rahmen",
+      "variables": "Variablen"
+    },
+    "datasource": "Datenquelle",
+    "datasourceNote": "Woher dieses Widget seine Werte nimmt. Ohne Datenquelle zeigt es nur, was fest eingestellt ist.",
+    "restNote": "Einstellungen, die dieses Widget selbst mitbringt und die sich nicht als Feld beschreiben lassen.",
+    "bound": {
+      "field": "Feld",
+      "group": "Bereich",
+      "variable": "Variable",
+      "noneBefore": "Kein Feld dieses Widgets hängt an einer Variablen. Über das",
+      "noneAfter": "neben einem Feld lässt sich eines binden."
+    },
+    "hint": "Änderungen greifen erst mit „Fertig“",
+    "discard": "Verwerfen",
+    "done": "Fertig"
+  },
+  "Floorplan": {
+    "empty": "keine Widgets"
+  },
+  "Page": {
+    "newName": "Neue Seite"
+  },
+  "Boards": {
+    "views": "Ansicht",
+    "recent": "Oft benutzt",
+    "storage": "Speicher",
+    "empty": {
+      "title": "Noch kein Board",
+      "text": "Ein Board besteht aus Seiten, auf denen Widgets über deinen Datenquellen liegen. Lege eines an oder öffne einen gespeicherten Arbeitsstand.",
+      "create": "Board anlegen",
+      "openStored": "Aus Speicher öffnen"
+    },
+    "open": {
+      "heading": "Geöffnet",
+      "label": "Board {{name}} öffnen",
+      "fallbackName": "Board",
+      "pages_one": "{{count}} Seite",
+      "pages_other": "{{count}} Seiten",
+      "widgets_one": "{{count}} Widget",
+      "widgets_other": "{{count}} Widgets",
+      "action": "Öffnen",
+      "note": "Ein Arbeitsstand hält genau ein Board. Ein anderes bekommst du, indem du im Speicher einen anderen Stand öffnest; die Seiten dieses Boards liegen im Bereich „Seiten“."
+    }
+  },
+  "Storage": {
+    "title": "Speicher",
+    "filter": "Stände filtern",
+    "nothingFound": "Nichts gefunden",
+    "noEntry": "Noch kein Stand",
+    "storeCurrent": "Aktuellen Stand ablegen…",
+    "noPlaces": "Keine Speicherorte eingerichtet.",
+    "entry": {
+      "empty": "leer"
+    },
+    "pages_one": "{{count}} Seite",
+    "pages_other": "{{count}} Seiten",
+    "widgets_one": "{{count}} Widget",
+    "widgets_other": "{{count}} Widgets",
+    "sources_one": "{{count}} Datenquelle",
+    "sources_other": "{{count}} Datenquellen",
+    "failure": {
+      "read": "Einträge konnten nicht gelesen werden: {{reason}}",
+      "load": "Laden fehlgeschlagen: {{reason}}",
+      "save": "Speichern fehlgeschlagen: {{reason}}",
+      "create": "Anlegen fehlgeschlagen: {{reason}}",
+      "remove": "Löschen fehlgeschlagen: {{reason}}"
+    },
+    "create": {
+      "title": "Neuen Stand ablegen",
+      "in": "in {{place}}",
+      "name": "Name",
+      "placeholder": "z. B. bodenfeuchte",
+      "submit": "Ablegen",
+      "hint": "Abgelegt wird der gesamte Arbeitsstand: {{pages}} mit {{widgets}}, dazu Verbindungen, Datenquellen und Variablen."
+    },
+    "loaded": "geladen",
+    "load": "Laden",
+    "overwrite": "Überschreiben",
+    "overwriteLabel": "Aktuellen Arbeitsstand hierhin schreiben",
+    "download": "Herunterladen",
+    "noBoard": "In diesem Stand liegt kein Board - er enthält nur Verbindungen, Quellen oder Variablen.",
+    "reading": "Wird gelesen…",
+    "pick": "Wähle links einen Stand, um zu sehen, was darin liegt."
+  },
+  "Editor": {
+    "name": "Name",
+    "type": "Typ",
+    "icon": "Symbol",
+    "iconHint": "Ohne eigenes Symbol steht hier das des Typs.",
+    "tags": "Schlagworte"
+  },
+  "Connection": {
+    "tagsHint": "Wofür diese Verbindung da ist — danach lässt sich suchen.",
+    "types": "Verbindungstypen",
+    "create": "Verbindung anlegen",
+    "createLead": "Womit soll gesprochen werden? Die Beschreibungen stammen aus den Modellen der Typen.",
+    "namePlaceholder": "Wofür diese Verbindung steht",
+    "nameHint": "Unter diesem Namen wählst du die Verbindung später aus."
+  },
+  "Wizard": {
+    "otherType": "Anderer Typ",
+    "back": "Zurück",
+    "create": "Anlegen"
+  },
+  "Usage": {
+    "label": "{{boards}} · {{widgets}}",
+    "boards_one": "{{count}} Board",
+    "boards_other": "{{count}} Boards",
+    "widgets_one": "{{count}} Widget",
+    "widgets_other": "{{count}} Widgets"
+  },
+  "Tree": {
+    "title": "Verbindungen & Daten",
+    "composed": "Zusammengesetzt",
+    "loose": "Ohne Verbindung",
+    "menu": {
+      "edit": "Bearbeiten",
+      "addSourceHere": "Datenquelle hier anlegen",
+      "preview": "Daten ansehen"
+    },
+    "removeConnection": "Verbindung löschen",
+    "removeSource": "Datenquelle löschen",
+    "newConnection": "Verbindung anlegen",
+    "newSource": "Datenquelle anlegen",
+    "findEndpoints": "Endpunkte suchen",
+    "search": "Suchen…",
+    "nothingFound": "Nichts gefunden.",
+    "empty": "Noch keine Verbindung. Lege eine an, um Daten zu lesen.",
+    "collapse": "Zuklappen",
+    "expand": "Aufklappen",
+    "noSources": "Keine Datenquelle an dieser Verbindung.",
+    "confirm": {
+      "text": "„{{name}}“ wird entfernt. Das lässt sich nicht rückgängig machen.",
+      "usage": "Verwendet in {{usage}} — die lesen danach ins Leere."
+    }
+  },
+  "Datasource": {
+    "tagsHint": "Wofür diese Datenquelle da ist — danach lässt sich suchen.",
+    "groups": {
+      "connected": "Aus einer Verbindung lesen",
+      "composed": "Aus vorhandenen Datenquellen zusammensetzen"
+    },
+    "connections": {
+      "all": "Verbindungen",
+      "suited": "Passend zum Typ",
+      "other": "Weitere"
+    },
+    "createLead": "Was für Daten sollen gelesen werden? Die Beschreibungen stammen aus den Modellen der Typen.",
+    "namePlaceholder": "Wofür diese Datenquelle steht",
+    "nameHint": "Unter diesem Namen wählst du die Datenquelle im Widget aus.",
+    "noConnection": "Es gibt noch keine Verbindung. Lege zuerst eine an — ohne sie hat die Datenquelle nichts, woraus sie lesen kann.",
+    "nothingSuits": "Keine der vorhandenen Verbindungen ist von diesem Typ vorgesehen. Du kannst trotzdem eine wählen — die Angabe ist ein Hinweis, keine Regel.",
+    "connection": "Verbindung",
+    "connectionPlaceholder": "Verbindung wählen",
+    "connectionHint": "Der Endpunkt, aus dem diese Quelle liest."
+  },
+  "ModelFields": {
+    "noModel": "Dieser Typ bringt kein Modell mit — die Felder füllst du nach dem Anlegen im Editor aus.",
+    "nothing": "Dieser Typ braucht außer dem Namen nichts weiter."
+  },
+  "Tags": {
+    "placeholder": "Wort eingeben, Enter"
+  },
+  "Layout": {
+    "loading": "Layout wird geladen…",
+    "noPage": "Die Seite „{{id}}“ gibt es nicht.",
+    "noLayout": "Für „{{name}}“ ist kein Layout eingestellt.",
+    "noView": "Zu diesem Layout gibt es keine Darstellung.",
+    "noEditor": "Zu diesem Layout gibt es keinen Editor.",
+    "id": "Layout: {{id}}"
+  },
+  "PageSettings": {
+    "title": "Seite einrichten",
+    "missing": "Diese Seite ist nicht mehr da. Wähle oben eine andere.",
+    "page": "Seite",
+    "description": "Beschreibung",
+    "iconPlaceholder": "Name eines Material-Icons",
+    "layout": "Layout",
+    "background": "Hintergrund",
+    "color": "Farbe",
+    "image": "Bild",
+    "imagePlaceholder": "Adresse eines Bildes",
+    "size": {
+      "label": "Größe",
+      "auto": "Auto",
+      "cover": "Füllend",
+      "contain": "Einpassend"
+    },
+    "repeat": {
+      "label": "Wiederholung",
+      "none": "Nicht wiederholen",
+      "both": "Wiederholen",
+      "x": "Waagerecht wiederholen",
+      "y": "Senkrecht wiederholen"
+    },
+    "position": {
+      "label": "Position",
+      "center": "Mitte",
+      "top": "Oben",
+      "bottom": "Unten",
+      "left": "Links",
+      "right": "Rechts",
+      "topLeft": "Oben links",
+      "topRight": "Oben rechts",
+      "bottomLeft": "Unten links",
+      "bottomRight": "Unten rechts"
+    },
+    "navigation": "Navigation",
+    "showInNavigation": "In der Navigation zeigen",
+    "id": "Kennung"
+  },
+  "Tokens": {
+    "role": {
+      "colorBg": "Grundfläche der App, Editorflächen, Eingabefelder",
+      "colorPane": "Panels, Topbar, Aktivitätsleiste, Widgets",
+      "colorRaised": "Knöpfe, Tabellenköpfe, Chips, Abzeichen",
+      "colorCanvas": "Boardfläche hinter den Widgets",
+      "colorDivider": "Panelkanten, Trenner, Tabellenlinien",
+      "colorOutline": "Umrisse bedienbarer Dinge",
+      "colorFg": "Fließtext und Beschriftungen",
+      "colorDim": "Zweitrangiger Text, Kennzahlen, Panelüberschriften",
+      "colorAccent": "Auswahl, aktive Zustände, Hauptknopf",
+      "colorOnAccent": "Text auf der Akzentfläche",
+      "colorBrand": "Daanse-Marke als Text",
+      "colorBrandFill": "Daanse-Marke als Fläche",
+      "colorOnBrand": "Text auf der Markenfläche",
+      "colorOk": "Im Rahmen, verbunden, erfolgreich",
+      "colorWarn": "Braucht Aufmerksamkeit",
+      "colorErr": "Außerhalb des Rahmens, fehlgeschlagen",
+      "colorKw": "Schlüsselwörter",
+      "colorMeasure": "Kennzahlen",
+      "colorMember": "Elemente",
+      "colorFn": "Funktionen",
+      "fontSans": "Oberflächenschrift",
+      "fontMono": "Zahlen, Namen von Ständen, Code",
+      "textXs": "Abzeichen, Zähler, Statuszeile",
+      "textSm": "Zweitrangige Oberfläche, Reiter, Tabellen",
+      "textBase": "Standard: Baumzeilen, Formulare, Knöpfe",
+      "textLg": "Überschriften in Panels, Leerzustände",
+      "textXl": "Kennzahlen im Board",
+      "radiusXs": "Abzeichen, kleine Knöpfe",
+      "radiusSm": "Panels, Karten, Eingabefelder",
+      "radiusMd": "Dialoge",
+      "radiusLg": "Große Flächen",
+      "shadowE1": "Angehoben: Knöpfe, Chips",
+      "shadowE2": "Schwebend: Menüs, Einblendungen",
+      "shadowE3": "Über allem: Dialoge"
+    },
+    "group": {
+      "surfaces": {
+        "label": "Flächen",
+        "note": "Von hinten nach vorn: der Grund, die Panels darauf, die Dinge darin."
+      },
+      "text": {
+        "label": "Text und Akzent",
+        "note": "Jede Farbe hier wurde gegen die Fläche gemessen, auf der sie sitzt."
+      },
+      "state": {
+        "label": "Zustand",
+        "note": "Nur für Zustände. Wer sie dekorativ verbraucht, kann später nichts mehr melden."
+      },
+      "syntax": {
+        "label": "MDX-Syntax",
+        "note": "Hervorhebung im Abfrage-Editor und in der Workbench."
+      },
+      "type": {
+        "label": "Schrift",
+        "note": "Zwei Familien: eine für die Oberfläche, eine für alles, was gezählt oder gemessen wird."
+      },
+      "shape": {
+        "label": "Form"
+      }
+    }
+  },
+  "Themes": {
+    "messwarte": {
+      "name": "Messwarte",
+      "note": "Dunkler Grund, Zahlen als hellstes Element. Für Boards, die stundenlang laufen."
+    },
+    "messwarteHell": {
+      "name": "Messwarte hell",
+      "note": "Dieselbe Gestaltung auf blassem Grund - für die Stunden am Editor."
+    },
+    "kartenblatt": {
+      "name": "Kartenblatt",
+      "note": "Papierweiß mit Grünstich, Petrol statt Blau, rechte Winkel. Ein Board als Blatt."
+    },
+    "werkbank": {
+      "name": "Werkbank",
+      "note": "Warmes Papiergrau, das Daanse-Gold tragend, Blau nur für die Auswahl."
+    },
+    "customized": "{{name}} (angepasst)"
+  },
+  "Appearance": {
+    "tokens": "Tokens",
+    "controls": "Elemente",
+    "changed_one": "{{count}} Wert geändert",
+    "changed_other": "{{count}} Werte geändert",
+    "resetAll": "Alle zurücksetzen",
+    "copied": "Kopiert",
+    "copy": "Als JSON kopieren",
+    "lead": "Dieselben Elemente, aus denen die App gebaut ist. Was drüben an Tokens geändert wird, steht hier sofort.",
+    "themes": "Themen",
+    "colorOf": "Farbe für {{name}}",
+    "valueOf": "Wert für {{name}}",
+    "reset": "Auf den Wert des Themas zurücksetzen",
+    "unchanged": "Unverändert",
+    "demo": {
+      "sample": "Bodenfeuchte Feld 3",
+      "buttons": "Knöpfe",
+      "standard": "Standard",
+      "disabled": "Gesperrt",
+      "busy": "Lädt",
+      "small": "Klein",
+      "medium": "Mittel",
+      "large": "Groß",
+      "inputs": "Eingaben",
+      "title": "Titel",
+      "value": "Messwert",
+      "date": "Stichtag",
+      "coverage": "Deckung",
+      "note": "Notiz",
+      "withError": "Mit Fehler",
+      "error": "Der Name ist schon vergeben.",
+      "switches": "Schalter und Marken",
+      "showOnBoard": "Im Board zeigen",
+      "autoRefresh": "Automatisch aktualisieren",
+      "neutral": "neutral",
+      "ok": "im Rahmen",
+      "warn": "prüfen",
+      "err": "getrennt",
+      "divider": "Trenner"
+    }
+  },
+  "Pages": {
+    "title": "Seiten",
+    "of": "in {{board}}",
+    "filter": "Seiten filtern",
+    "open": "Seite {{name}} öffnen",
+    "edit": "Seite {{name}} bearbeiten",
+    "usage": "{{count}}× geöffnet · zuletzt {{last}}",
+    "startEmpty": "Leer starten",
+    "noMatch": "Keine Seite passt zu „{{query}}“."
+  },
+  "Variables": {
+    "title": "Variablen",
+    "lead": "Ein benannter Wert, den Widgets und Datenquellen lesen. Manche gelten überall, manche nur auf einem Board.",
+    "create": "Variable anlegen",
+    "edit": "Variable bearbeiten",
+    "remove": "Variable löschen",
+    "none": "Noch keine.",
+    "newName": "Variable {{id}}",
+    "pageOnlyValue": "nur auf seiner Seite lesbar",
+    "confirmRemove": "{{name}} wird entfernt. Widgets, die darauf zeigen, finden sie danach nicht mehr.",
+    "reach": {
+      "label": "Gilt",
+      "global": "Überall",
+      "globalLead": "Auf jedem Board lesbar",
+      "pageLead": "Nur auf diesem Board",
+      "orphan": "Ohne Board",
+      "orphanLead": "Das Board dazu gibt es nicht mehr"
+    },
+    "access": {
+      "label": "Beschreibbar",
+      "externalWritable": "Von außen beschreibbar",
+      "pageOnly": "Nur auf seiner Seite",
+      "readonly": "Nur lesbar"
+    }
+  },
+  "Data": {
+    "preview": "Vorschau",
+    "pick": "Wähle links eine Verbindung oder eine Datenquelle.",
+    "usedIn": "Verwendet in {{usage}}",
+    "view": "Ansicht der Auswahl"
+  },
+  "Nav": {
+    "variables": "Variablen"
+  }
+}

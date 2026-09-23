@@ -1,0 +1,26 @@
+{
+  "Finder": {
+    "title": "Datenquelle finden",
+    "steps": {
+      "label": "Schritte",
+      "search": "Suchen",
+      "connection": "Verbindung",
+      "source": "Datenquelle",
+      "widgets": "Widgets"
+    },
+    "search": "Suche",
+    "searchPlaceholder": "Wonach suchst du?",
+    "filter": "Filter",
+    "connectionLead": "Diese Verbindung wird angelegt:",
+    "connectionUnknown": "Die Verbindung lässt sich nicht automatisch bestimmen - das passiert, wenn der Typ des Datensatzes unbekannt oder nicht unterstützt ist. Du kannst sie von Hand einrichten.",
+    "sourceLead": "Diese Datenquelle wird angelegt:",
+    "widgetsLead": "Widgets zur Datenquelle auswählen",
+    "next": "Weiter",
+    "name": "Name",
+    "type": "Typ",
+    "format": "Format",
+    "onlyFormats": "Nur ausgewählte Formate",
+    "region": "Region",
+    "onlyMapSection": "Nur im Kartenausschnitt"
+  }
+}

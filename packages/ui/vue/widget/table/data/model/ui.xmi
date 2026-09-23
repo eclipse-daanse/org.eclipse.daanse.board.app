@@ -26,6 +26,6 @@ the label does not already say.
 
   <components xsi:type="uimodel:FormView" name="DataTableSettingsFormView">
     <fields xsi:type="uimodel:InputWidget" name="headerBackground"
-        feature="http://org.eclipse.daanse.board.app.ui.vue.widget.table.data#//DataTableSettings/headerBackground" label="Kopfzeilenfarbe"/>
+        feature="http://org.eclipse.daanse.board.app.ui.vue.widget.table.data#//DataTableSettings/headerBackground" label="tableData:Form.headerBackground"/>
   </components>
 </uimodel:UIModel>

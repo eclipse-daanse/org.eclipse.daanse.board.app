@@ -1,0 +1,15 @@
+{
+  "Settings": {
+    "sources": "Sources"
+  },
+  "Ogc": {
+    "geometryFromData": "Geometry from the data",
+    "geometryFromProps": "Geometry from the properties",
+    "geometryPropsField": "Field of the geometry property",
+    "geometryField": "Geometry field",
+    "xField": "Field for the X coordinate",
+    "yField": "Field for the Y coordinate",
+    "geometryType": "Geometry type",
+    "preview": "OGC feature collection preview"
+  }
+}

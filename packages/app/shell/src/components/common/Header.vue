@@ -37,7 +37,7 @@ import {
   identifier as WORKSPACE,
   type Workspace,
 } from 'org.eclipse.daanse.board.app.lib.model.workspace'
-import { useCurrentHistory, useEList, useLanguage } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+import { useCurrentHistory, useEList, useLanguage, useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import { usePages } from '@/composables/usePages'
 import { useWidgetPalette } from '@/composables/useWidgetPalette'
 import { useBoardBackdrop } from '@/composables/useBoardBackdrop'
@@ -45,6 +45,7 @@ import { useGridSnap } from '@/composables/useGridSnap'
 
 const route = useRoute()
 const router = useRouter()
+const { t } = useTranslation('shell')
 
 /** The page currently open, if any - drives both crumb and mode switch. */
 const pageId = computed(() => (route.params.pageid as string | undefined) ?? '')
@@ -96,37 +97,41 @@ const modelledPages = useEList(workspace, (w) => w.board?.pages)
 const crumb = computed<Crumb[]>(() => {
   /* Reading the pages is what makes this re-run when the board is renamed. */
   void modelledPages.value
-  const boards: Crumb = { label: 'Boards', to: '/' }
+  const boards: Crumb = { label: t('Header.crumb.boards'), to: '/' }
   /*
    * The board's own name, not the open page's id. They were the same thing
    * once - a page was a board - and the crumb said "Board 76134a0b", which
    * was the page you happened to be on.
    */
   const board: Crumb = {
-    label: (workspace.board?.name as string) || 'Board',
+    label: (workspace.board?.name as string) || t('Header.crumb.board'),
     to: pageId.value ? `/page/${pageId.value}` : undefined,
   }
   switch (route.name) {
     case 'home':
-      return [{ label: 'Boards' }]
+      return [{ label: t('Header.crumb.boards') }]
     case 'page':
       return [boards, { label: board.label }]
     case 'edit':
     case 'pageEdit':
-      return [boards, board, { label: 'Bearbeiten' }]
+      return [boards, board, { label: t('Header.crumb.edit') }]
     case 'pages':
       /* The board, then its pages - the same path as opening one. */
-      return [boards, board, { label: 'Seiten' }]
+      return [boards, board, { label: t('Header.crumb.pages') }]
     case 'data':
-      return [boards, { label: 'Verbindungen & Daten' }]
+      return [boards, { label: t('Header.crumb.data') }]
     case 'config':
-      return [boards, { label: 'Konfiguration' }]
+      return [boards, { label: t('Header.crumb.config') }]
     case 'save':
-      return [boards, { label: 'Speicher' }]
+      return [boards, { label: t('Header.crumb.storage') }]
     case 'test':
-      return [boards, { label: 'Test' }]
+      return [boards, { label: t('Header.crumb.test') }]
+    case 'appearance':
+      return [boards, { label: t('Header.appearance') }]
+    case 'events':
+      return [boards, { label: t('Header.crumb.events') }]
     default:
-      return [boards, { label: String(route.name ?? 'Board') }]
+      return [boards, { label: route.name ? String(route.name) : t('Header.crumb.board') }]
   }
 })
 
@@ -190,10 +195,10 @@ const currentPageName = computed(() => {
   void modelledPages.value
   if (!pageId.value) return ''
   try {
-    return pageRepo?.getPage(pageId.value)?.name ?? 'Seite'
+    return pageRepo?.getPage(pageId.value)?.name ?? t('Header.page.fallbackName')
   } catch {
     // A page that was removed while open - the name is gone, the id is not
-    return 'Seite'
+    return t('Header.page.fallbackName')
   }
 })
 
@@ -239,7 +244,7 @@ function addPage() {
   const id = v4()
   pageRepo?.registerPage({
     id,
-    name: 'Neue Seite',
+    name: t('Page.newName'),
     description: '',
     icon: '',
     visibleInNavigation: true,
@@ -256,7 +261,7 @@ const canRemove = computed(() => pages.value.length > 1)
 function removePage(id: string) {
   if (!canRemove.value) return
   const page = pages.value.find((p) => p.id === id)
-  if (!confirm(`Seite „${page?.name ?? id}" löschen? Das lässt sich nicht rückgängig machen.`)) return
+  if (!confirm(t('Header.page.confirmRemove', { name: page?.name ?? id }))) return
 
   pageRepo?.unregisterPage(id)
 
@@ -292,10 +297,10 @@ const openAppearance = () => router.push('/appearance')
   <header class="topbar">
     <span class="brand">
       <span class="brand-mark" aria-hidden="true">D</span>
-      <span class="brand-name">Daanse Board</span>
+      <span class="brand-name">{{ t('Header.brand') }}</span>
     </span>
 
-    <nav class="crumb" aria-label="Pfad">
+    <nav class="crumb" :aria-label="t('Header.crumb.label')">
       <template v-for="(part, i) in crumb" :key="part.label + i">
         <span v-if="i > 0" class="crumb-sep" aria-hidden="true">/</span>
         <button
@@ -323,7 +328,7 @@ const openAppearance = () => router.push('/appearance')
         class="pages__current"
         :aria-expanded="pagesOpen"
         aria-haspopup="menu"
-        title="Seite wechseln"
+        :title="t('Header.page.switch')"
         @click="pagesOpen = !pagesOpen"
       >
         <span class="pages__name">{{ currentPageName }}</span>
@@ -344,8 +349,8 @@ const openAppearance = () => router.push('/appearance')
             v-if="canRemove"
             type="button"
             class="pages__remove"
-            :title="`Seite „${page.name}“ löschen`"
-            :aria-label="`Seite ${page.name} löschen`"
+            :title="t('Header.page.remove', { name: page.name })"
+            :aria-label="t('Header.page.remove', { name: page.name })"
             @click.stop="removePage(page.id as string)"
           >
             ×
@@ -354,7 +359,7 @@ const openAppearance = () => router.push('/appearance')
         <li class="pages__sep" role="separator"></li>
         <li role="none">
           <button type="button" role="menuitem" class="pages__item pages__add" @click="addPage">
-            + Neue Seite
+            {{ t('Header.page.add') }}
           </button>
         </li>
       </ul>
@@ -365,8 +370,8 @@ const openAppearance = () => router.push('/appearance')
       type="button"
       class="icon-action"
       :disabled="!history.canUndo.value"
-      :title="history.undoLabel.value ? `Rückgängig: ${history.undoLabel.value}` : 'Rückgängig'"
-      aria-label="Letzte Änderung rückgängig machen"
+      :title="history.undoLabel.value ? t('Header.undoWhat', { what: t(history.undoLabel.value) }) : t('Header.undo')"
+      :aria-label="t('Header.undoLabel')"
       @click="history.undo()"
     >
       <DIcon name="undo" size="sm" />
@@ -377,8 +382,8 @@ const openAppearance = () => router.push('/appearance')
       type="button"
       class="icon-action"
       :disabled="!history.canRedo.value"
-      :title="history.redoLabel.value ? `Wiederholen: ${history.redoLabel.value}` : 'Wiederholen'"
-      aria-label="Rückgängig gemachte Änderung wiederholen"
+      :title="history.redoLabel.value ? t('Header.redoWhat', { what: t(history.redoLabel.value) }) : t('Header.redo')"
+      :aria-label="t('Header.redoLabel')"
       @click="history.redo()"
     >
       <DIcon name="redo" size="sm" />
@@ -389,8 +394,8 @@ const openAppearance = () => router.push('/appearance')
       type="button"
       :class="['icon-action', { on: snapping }]"
       :aria-pressed="snapping"
-      title="Am Raster ausrichten"
-      aria-label="Widgets am Raster ausrichten"
+      :title="t('Header.snap')"
+      :aria-label="t('Header.snapLabel')"
       @click="toggleSnapping"
     >
       <svg viewBox="0 0 24 24" aria-hidden="true" width="15" height="15">
@@ -410,8 +415,8 @@ const openAppearance = () => router.push('/appearance')
       type="button"
       :class="['icon-action', { on: backdropShown }]"
       :aria-pressed="backdropShown"
-      title="Hintergrund der Seite zeigen"
-      aria-label="Hintergrund der Seite beim Bearbeiten zeigen oder verbergen"
+      :title="t('Header.backdrop')"
+      :aria-label="t('Header.backdropLabel')"
       @click="toggleBackdrop"
     >
       <svg viewBox="0 0 24 24" aria-hidden="true" width="15" height="15">
@@ -426,8 +431,8 @@ const openAppearance = () => router.push('/appearance')
       type="button"
       :class="['icon-action', { on: paletteVisible }]"
       :aria-pressed="paletteVisible"
-      title="Widgets"
-      aria-label="Widget-Palette zeigen oder verbergen"
+      :title="t('Header.palette')"
+      :aria-label="t('Header.paletteLabel')"
       @click="togglePalette"
     >
       <svg viewBox="0 0 24 24" aria-hidden="true" width="15" height="15">
@@ -442,8 +447,8 @@ const openAppearance = () => router.push('/appearance')
       v-if="showModes"
       type="button"
       class="icon-action"
-      title="Seite einrichten"
-      aria-label="Seite einrichten"
+      :title="t('Header.pageSettings')"
+      :aria-label="t('Header.pageSettings')"
       @click="openPageSettings(pageId)"
     >
       <svg viewBox="0 0 24 24" aria-hidden="true" width="15" height="15">
@@ -464,20 +469,20 @@ const openAppearance = () => router.push('/appearance')
       v-if="showModes"
       type="button"
       class="action"
-      title="Arbeitsstand speichern oder laden"
+      :title="t('Header.storageLabel')"
       @click="openStorage"
     >
-      Speichern
+      {{ t('Header.storage') }}
     </button>
 
-    <div v-if="showModes" class="modes" role="group" aria-label="Modus">
+    <div v-if="showModes" class="modes" role="group" :aria-label="t('Header.mode')">
       <button
         type="button"
         :class="['mode', { on: !isEditing }]"
         :aria-pressed="!isEditing"
         @click="openView"
       >
-        Ansicht
+        {{ t('Header.view') }}
       </button>
       <button
         type="button"
@@ -485,7 +490,7 @@ const openAppearance = () => router.push('/appearance')
         :aria-pressed="isEditing"
         @click="openEdit"
       >
-        Bearbeiten
+        {{ t('Header.edit') }}
       </button>
     </div>
 
@@ -495,8 +500,8 @@ const openAppearance = () => router.push('/appearance')
         class="icon-action lang__button"
         :aria-expanded="languageOpen"
         aria-haspopup="menu"
-        title="Sprache"
-        aria-label="Sprache"
+        :title="t('Header.language')"
+        :aria-label="t('Header.language')"
         @click="languageOpen = !languageOpen"
       >
         {{ (language ?? '').slice(0, 2).toUpperCase() }}
@@ -519,8 +524,8 @@ const openAppearance = () => router.push('/appearance')
     <button
       type="button"
       class="icon-action"
-      title="Erscheinungsbild"
-      aria-label="Erscheinungsbild"
+      :title="t('Header.appearance')"
+      :aria-label="t('Header.appearance')"
       @click="openAppearance"
     >
       <svg viewBox="0 0 24 24" aria-hidden="true" width="15" height="15">
@@ -529,7 +534,7 @@ const openAppearance = () => router.push('/appearance')
       </svg>
     </button>
 
-    <span class="avatar" title="Angemeldet">MH</span>
+    <span class="avatar" :title="t('Header.signedIn')">MH</span>
   </header>
 
   <Teleport to="body">

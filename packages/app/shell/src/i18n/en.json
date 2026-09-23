@@ -1,0 +1,446 @@
+{
+  "Rail": {
+    "areas": "Areas",
+    "board": "Board",
+    "pages": "Pages",
+    "data": "Connections & data"
+  },
+  "Header": {
+    "brand": "Daanse Board",
+    "crumb": {
+      "label": "Path",
+      "boards": "Boards",
+      "board": "Board",
+      "edit": "Edit",
+      "pages": "Pages",
+      "data": "Connections & data",
+      "config": "Configuration",
+      "storage": "Storage",
+      "test": "Test",
+      "events": "Events"
+    },
+    "page": {
+      "fallbackName": "Page",
+      "confirmRemove": "Delete page “{{name}}”? This cannot be undone.",
+      "switch": "Switch page",
+      "remove": "Delete page “{{name}}”",
+      "add": "+ New page"
+    },
+    "undo": "Undo",
+    "undoWhat": "Undo: {{what}}",
+    "undoLabel": "Undo the last change",
+    "redo": "Redo",
+    "redoWhat": "Redo: {{what}}",
+    "redoLabel": "Redo the undone change",
+    "snap": "Snap to grid",
+    "snapLabel": "Snap widgets to the grid",
+    "backdrop": "Show page background",
+    "backdropLabel": "Show or hide the page background while editing",
+    "palette": "Widgets",
+    "paletteLabel": "Show or hide the widget palette",
+    "pageSettings": "Page settings",
+    "storage": "Save",
+    "storageLabel": "Save or load the workspace",
+    "mode": "Mode",
+    "view": "View",
+    "edit": "Edit",
+    "language": "Language",
+    "appearance": "Appearance",
+    "signedIn": "Signed in"
+  },
+  "WidgetSettings": {
+    "title": "Widget settings",
+    "widget": "Widget",
+    "section": "Section {{n}}",
+    "boardSize": "{{width}} × {{height}} px, as on the board",
+    "boardSizeUnknown": "Board size not known",
+    "previewSize": "Preview size",
+    "sizeBoard": "Board size",
+    "sizeFill": "Fill",
+    "stretched": "Stretched to the area",
+    "sideWidth": "Width of the settings",
+    "settings": "Settings",
+    "tabs": {
+      "data": "Data",
+      "look": "Appearance",
+      "rest": "More",
+      "frame": "Frame",
+      "variables": "Variables"
+    },
+    "datasource": "Data source",
+    "datasourceNote": "Where this widget takes its values from. Without a data source it shows only what is set here.",
+    "restNote": "Settings this widget brings itself and that cannot be described as a field.",
+    "bound": {
+      "field": "Field",
+      "group": "Area",
+      "variable": "Variable",
+      "noneBefore": "No field of this widget is bound to a variable. Use the",
+      "noneAfter": "next to a field to bind one."
+    },
+    "hint": "Changes apply only with “Done”",
+    "discard": "Discard",
+    "done": "Done"
+  },
+  "Floorplan": {
+    "empty": "no widgets"
+  },
+  "Page": {
+    "newName": "New page"
+  },
+  "Boards": {
+    "views": "View",
+    "recent": "Often used",
+    "storage": "Storage",
+    "empty": {
+      "title": "No board yet",
+      "text": "A board is made of pages on which widgets sit over your data sources. Create one or open a saved workspace.",
+      "create": "Create board",
+      "openStored": "Open from storage"
+    },
+    "open": {
+      "heading": "Open",
+      "label": "Open board {{name}}",
+      "fallbackName": "Board",
+      "pages_one": "{{count}} page",
+      "pages_other": "{{count}} pages",
+      "widgets_one": "{{count}} widget",
+      "widgets_other": "{{count}} widgets",
+      "action": "Open",
+      "note": "A workspace holds exactly one board. To get another one, open a different workspace from storage; the pages of this board are in the “Pages” area."
+    }
+  },
+  "Storage": {
+    "title": "Storage",
+    "filter": "Filter workspaces",
+    "nothingFound": "Nothing found",
+    "noEntry": "No workspace yet",
+    "storeCurrent": "Store current workspace…",
+    "noPlaces": "No storage locations set up.",
+    "entry": {
+      "empty": "empty"
+    },
+    "pages_one": "{{count}} page",
+    "pages_other": "{{count}} pages",
+    "widgets_one": "{{count}} widget",
+    "widgets_other": "{{count}} widgets",
+    "sources_one": "{{count}} data source",
+    "sources_other": "{{count}} data sources",
+    "failure": {
+      "read": "Entries could not be read: {{reason}}",
+      "load": "Loading failed: {{reason}}",
+      "save": "Saving failed: {{reason}}",
+      "create": "Creating failed: {{reason}}",
+      "remove": "Deleting failed: {{reason}}"
+    },
+    "create": {
+      "title": "Store a new workspace",
+      "in": "in {{place}}",
+      "name": "Name",
+      "placeholder": "e.g. soil-moisture",
+      "submit": "Store",
+      "hint": "The whole workspace is stored: {{pages}} with {{widgets}}, plus connections, data sources and variables."
+    },
+    "loaded": "loaded",
+    "load": "Load",
+    "overwrite": "Overwrite",
+    "overwriteLabel": "Write the current workspace here",
+    "download": "Download",
+    "noBoard": "This workspace holds no board - only connections, sources or variables.",
+    "reading": "Reading…",
+    "pick": "Pick a workspace on the left to see what it holds."
+  },
+  "Editor": {
+    "name": "Name",
+    "type": "Type",
+    "icon": "Icon",
+    "iconHint": "Without an icon of its own, the type's icon is shown here.",
+    "tags": "Tags"
+  },
+  "Connection": {
+    "tagsHint": "What this connection is for — you can search by it.",
+    "types": "Connection types",
+    "create": "Create connection",
+    "createLead": "What should be talked to? The descriptions come from the types' models.",
+    "namePlaceholder": "What this connection stands for",
+    "nameHint": "You pick the connection by this name later."
+  },
+  "Wizard": {
+    "otherType": "Other type",
+    "back": "Back",
+    "create": "Create"
+  },
+  "Usage": {
+    "label": "{{boards}} · {{widgets}}",
+    "boards_one": "{{count}} board",
+    "boards_other": "{{count}} boards",
+    "widgets_one": "{{count}} widget",
+    "widgets_other": "{{count}} widgets"
+  },
+  "Tree": {
+    "title": "Connections & data",
+    "composed": "Composed",
+    "loose": "Without connection",
+    "menu": {
+      "edit": "Edit",
+      "addSourceHere": "Create data source here",
+      "preview": "View data"
+    },
+    "removeConnection": "Delete connection",
+    "removeSource": "Delete data source",
+    "newConnection": "Create connection",
+    "newSource": "Create data source",
+    "findEndpoints": "Find endpoints",
+    "search": "Search…",
+    "nothingFound": "Nothing found.",
+    "empty": "No connection yet. Create one to read data.",
+    "collapse": "Collapse",
+    "expand": "Expand",
+    "noSources": "No data source on this connection.",
+    "confirm": {
+      "text": "“{{name}}” will be removed. This cannot be undone.",
+      "usage": "Used in {{usage}} — they will read nothing afterwards."
+    }
+  },
+  "Datasource": {
+    "tagsHint": "What this data source is for — you can search by it.",
+    "groups": {
+      "connected": "Read from a connection",
+      "composed": "Compose from existing data sources"
+    },
+    "connections": {
+      "all": "Connections",
+      "suited": "Suited to the type",
+      "other": "Other"
+    },
+    "createLead": "What kind of data should be read? The descriptions come from the types' models.",
+    "namePlaceholder": "What this data source stands for",
+    "nameHint": "You pick the data source in the widget by this name.",
+    "noConnection": "There is no connection yet. Create one first — without it the data source has nothing to read from.",
+    "nothingSuits": "None of the existing connections is intended for this type. You can still pick one — this is a hint, not a rule.",
+    "connection": "Connection",
+    "connectionPlaceholder": "Choose a connection",
+    "connectionHint": "The endpoint this source reads from."
+  },
+  "ModelFields": {
+    "noModel": "This type brings no model — you fill in the fields in the editor after creating it.",
+    "nothing": "This type needs nothing but a name."
+  },
+  "Tags": {
+    "placeholder": "Type a word, Enter"
+  },
+  "Layout": {
+    "loading": "Loading layout…",
+    "noPage": "The page “{{id}}” does not exist.",
+    "noLayout": "No layout is set for “{{name}}”.",
+    "noView": "This layout has no view.",
+    "noEditor": "This layout has no editor.",
+    "id": "Layout: {{id}}"
+  },
+  "PageSettings": {
+    "title": "Page settings",
+    "missing": "This page is gone. Pick another one above.",
+    "page": "Page",
+    "description": "Description",
+    "iconPlaceholder": "Name of a Material icon",
+    "layout": "Layout",
+    "background": "Background",
+    "color": "Colour",
+    "image": "Image",
+    "imagePlaceholder": "Address of an image",
+    "size": {
+      "label": "Size",
+      "auto": "Auto",
+      "cover": "Cover",
+      "contain": "Contain"
+    },
+    "repeat": {
+      "label": "Repeat",
+      "none": "Do not repeat",
+      "both": "Repeat",
+      "x": "Repeat horizontally",
+      "y": "Repeat vertically"
+    },
+    "position": {
+      "label": "Position",
+      "center": "Centre",
+      "top": "Top",
+      "bottom": "Bottom",
+      "left": "Left",
+      "right": "Right",
+      "topLeft": "Top left",
+      "topRight": "Top right",
+      "bottomLeft": "Bottom left",
+      "bottomRight": "Bottom right"
+    },
+    "navigation": "Navigation",
+    "showInNavigation": "Show in navigation",
+    "id": "Identifier"
+  },
+  "Tokens": {
+    "role": {
+      "colorBg": "App ground, editor areas, input fields",
+      "colorPane": "Panels, top bar, activity rail, widgets",
+      "colorRaised": "Buttons, table headers, chips, badges",
+      "colorCanvas": "Board area behind the widgets",
+      "colorDivider": "Panel edges, dividers, table lines",
+      "colorOutline": "Outlines of things you can operate",
+      "colorFg": "Body text and labels",
+      "colorDim": "Secondary text, measures, panel headings",
+      "colorAccent": "Selection, active states, main button",
+      "colorOnAccent": "Text on the accent area",
+      "colorBrand": "Daanse brand as text",
+      "colorBrandFill": "Daanse brand as area",
+      "colorOnBrand": "Text on the brand area",
+      "colorOk": "Within range, connected, successful",
+      "colorWarn": "Needs attention",
+      "colorErr": "Out of range, failed",
+      "colorKw": "Keywords",
+      "colorMeasure": "Measures",
+      "colorMember": "Members",
+      "colorFn": "Functions",
+      "fontSans": "Interface font",
+      "fontMono": "Numbers, workspace names, code",
+      "textXs": "Badges, counters, status line",
+      "textSm": "Secondary interface, tabs, tables",
+      "textBase": "Default: tree rows, forms, buttons",
+      "textLg": "Panel headings, empty states",
+      "textXl": "Measures on the board",
+      "radiusXs": "Badges, small buttons",
+      "radiusSm": "Panels, cards, input fields",
+      "radiusMd": "Dialogs",
+      "radiusLg": "Large areas",
+      "shadowE1": "Raised: buttons, chips",
+      "shadowE2": "Floating: menus, popovers",
+      "shadowE3": "Above everything: dialogs"
+    },
+    "group": {
+      "surfaces": {
+        "label": "Surfaces",
+        "note": "From back to front: the ground, the panels on it, the things in them."
+      },
+      "text": {
+        "label": "Text and accent",
+        "note": "Every colour here was measured against the surface it sits on."
+      },
+      "state": {
+        "label": "State",
+        "note": "For states only. Whoever uses them for decoration has nothing left to report with later."
+      },
+      "syntax": {
+        "label": "MDX syntax",
+        "note": "Highlighting in the query editor and in the workbench."
+      },
+      "type": {
+        "label": "Type",
+        "note": "Two families: one for the interface, one for everything counted or measured."
+      },
+      "shape": {
+        "label": "Shape"
+      }
+    }
+  },
+  "Themes": {
+    "messwarte": {
+      "name": "Control room",
+      "note": "Dark ground, numbers as the brightest element. For boards that run for hours."
+    },
+    "messwarteHell": {
+      "name": "Control room light",
+      "note": "The same design on a pale ground - for the hours at the editor."
+    },
+    "kartenblatt": {
+      "name": "Map sheet",
+      "note": "Paper white with a green tint, petrol instead of blue, right angles. A board as a sheet."
+    },
+    "werkbank": {
+      "name": "Workbench",
+      "note": "Warm paper grey carrying the Daanse gold, blue only for the selection."
+    },
+    "customized": "{{name}} (customised)"
+  },
+  "Appearance": {
+    "tokens": "Tokens",
+    "controls": "Controls",
+    "changed_one": "{{count}} value changed",
+    "changed_other": "{{count}} values changed",
+    "resetAll": "Reset all",
+    "copied": "Copied",
+    "copy": "Copy as JSON",
+    "lead": "The same controls the app is built from. Whatever is changed in the tokens shows here at once.",
+    "themes": "Themes",
+    "colorOf": "Colour for {{name}}",
+    "valueOf": "Value for {{name}}",
+    "reset": "Reset to the theme's value",
+    "unchanged": "Unchanged",
+    "demo": {
+      "sample": "Soil moisture field 3",
+      "buttons": "Buttons",
+      "standard": "Default",
+      "disabled": "Disabled",
+      "busy": "Loading",
+      "small": "Small",
+      "medium": "Medium",
+      "large": "Large",
+      "inputs": "Inputs",
+      "title": "Title",
+      "value": "Reading",
+      "date": "Reference date",
+      "coverage": "Coverage",
+      "note": "Note",
+      "withError": "With error",
+      "error": "This name is already taken.",
+      "switches": "Switches and chips",
+      "showOnBoard": "Show on board",
+      "autoRefresh": "Refresh automatically",
+      "neutral": "neutral",
+      "ok": "within range",
+      "warn": "check",
+      "err": "disconnected",
+      "divider": "Divider"
+    }
+  },
+  "Pages": {
+    "title": "Pages",
+    "of": "in {{board}}",
+    "filter": "Filter pages",
+    "open": "Open page {{name}}",
+    "edit": "Edit page {{name}}",
+    "usage": "opened {{count}}× · last {{last}}",
+    "startEmpty": "Start empty",
+    "noMatch": "No page matches “{{query}}”."
+  },
+  "Variables": {
+    "title": "Variables",
+    "lead": "A named value that widgets and data sources read. Some apply everywhere, some only on one board.",
+    "create": "Create variable",
+    "edit": "Edit variable",
+    "remove": "Delete variable",
+    "none": "None yet.",
+    "newName": "Variable {{id}}",
+    "pageOnlyValue": "readable only on its page",
+    "confirmRemove": "{{name}} will be removed. Widgets pointing at it will not find it afterwards.",
+    "reach": {
+      "label": "Applies",
+      "global": "Everywhere",
+      "globalLead": "Readable on every board",
+      "pageLead": "Only on this board",
+      "orphan": "Without board",
+      "orphanLead": "Its board no longer exists"
+    },
+    "access": {
+      "label": "Writable",
+      "externalWritable": "Writable from outside",
+      "pageOnly": "Only on its page",
+      "readonly": "Read-only"
+    }
+  },
+  "Data": {
+    "preview": "Preview",
+    "pick": "Pick a connection or a data source on the left.",
+    "usedIn": "Used in {{usage}}",
+    "view": "View of the selection"
+  },
+  "Nav": {
+    "variables": "Variables"
+  }
+}

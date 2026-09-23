@@ -27,7 +27,7 @@ import {
   identifier as WORKSPACE,
   type Workspace,
 } from 'org.eclipse.daanse.board.app.lib.model.workspace'
-import { describeModel, useEList } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+import { describeModel, useEList, useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import { DIconPicker, DInput } from 'org.eclipse.daanse.board.app.ui.vue.controls'
 import CreateWizard from '../datasources/CreateWizard.vue'
 import ModelFields from '../datasources/ModelFields.vue'
@@ -35,6 +35,7 @@ import TagInput from '../datasources/TagInput.vue'
 
 const open = defineModel<boolean>({ required: true })
 const emit = defineEmits<{ created: [uid: string] }>()
+const { t } = useTranslation('shell')
 
 const connections = inject<ConnectionRepository>(CONNECTION_REPOSITORY)!
 const workspace = inject<Workspace>(WORKSPACE)!
@@ -47,7 +48,7 @@ const tags = ref<string[]>([])
 const config = ref<Record<string, unknown>>({})
 
 const groups = computed(() => [
-  { label: 'Verbindungstypen', types: connections.registeredConnections },
+  { label: t('Connection.types'), types: connections.registeredConnections },
 ])
 
 const summaryOf = (each: string) =>
@@ -121,8 +122,8 @@ function create() {
   <CreateWizard
     v-model="open"
     v-model:type="type"
-    title="Verbindung anlegen"
-    lead="Womit soll gesprochen werden? Die Beschreibungen stammen aus den Modellen der Typen."
+    :title="t('Connection.create')"
+    :lead="t('Connection.createLead')"
     :groups="groups"
     :summary-of="summaryOf"
     :icon-of="iconOf"
@@ -132,24 +133,24 @@ function create() {
     <template #setup>
       <DInput
         v-model="name"
-        label="Name"
-        placeholder="Wofür diese Verbindung steht"
-        hint="Unter diesem Namen wählst du die Verbindung später aus."
+        :label="t('Editor.name')"
+        :placeholder="t('Connection.namePlaceholder')"
+        :hint="t('Connection.nameHint')"
         stacked
         required
       />
 
       <DIconPicker
         v-model="icon"
-        label="Symbol"
+        :label="t('Editor.icon')"
         :fallback="iconOf(type)"
-        hint="Ohne eigenes Symbol steht hier das des Typs."
+        :hint="t('Editor.iconHint')"
       />
 
       <TagInput
         v-model="tags"
-        label="Schlagworte"
-        hint="Wofür diese Verbindung da ist — danach lässt sich später suchen."
+        :label="t('Editor.tags')"
+        :hint="t('Connection.tagsHint')"
         :known="knownTags"
       />
 

@@ -53,3 +53,6 @@ export function deactivate({ services }: ActivationContext) {
   services.unregister('RestPreview')
   services.unregister('RestSettings')
 }
+
+/* Its texts - collected by lib.i18next, see src/i18n. */
+export { DatasourceRestTranslations } from './i18n'

@@ -50,4 +50,5 @@ export function activate({ services, log }: ActivationContext) {
   log.info('Endpointfinder bereit')
 }
 
-
+/* Its texts - collected by lib.i18next, see src/i18n. */
+export { PluginsEndpointfinderTranslations } from './i18n'

@@ -1,0 +1,19 @@
+{
+  "Settings": {
+    "connection": "Verbindung"
+  },
+  "Sql": {
+    "columns": "Spalten",
+    "tables": "Tabellen",
+    "schema": "Schema",
+    "schemaRead": "Schema gelesen um {{time}}",
+    "result": "Ergebnis",
+    "messages": "Meldungen",
+    "rows_one": "{{count}} Zeile in {{ms}} ms.",
+    "rows_other": "{{count}} Zeilen in {{ms}} ms.",
+    "failed": "Abfrage fehlgeschlagen: {{reason}}",
+    "run": "Ausführen",
+    "tabs": "Ergebnis oder Meldungen",
+    "nothingRun": "Noch nichts ausgeführt"
+  }
+}

@@ -28,9 +28,9 @@ come from here or from a variable.
 
   <components xsi:type="uimodel:FormView" name="SvgSettingsFormView">
     <fields xsi:type="uimodel:InputWidget" name="src"
-        feature="http://org.eclipse.daanse.board.app.ui.vue.widget.svg.base#//SvgSettings/src" label="Adresse der Grafik"
+        feature="http://org.eclipse.daanse.board.app.ui.vue.widget.svg.base#//SvgSettings/src" label="svgBase:Form.src"
         placeholder="https://… oder ein Pfad"/>
     <fields xsi:type="uimodel:InputWidget" name="classesConfig"
-        feature="http://org.eclipse.daanse.board.app.ui.vue.widget.svg.base#//SvgSettings/classesConfig" label="Klassenregeln"/>
+        feature="http://org.eclipse.daanse.board.app.ui.vue.widget.svg.base#//SvgSettings/classesConfig" label="svgBase:Form.classesConfig"/>
   </components>
 </uimodel:UIModel>

@@ -31,10 +31,11 @@ import {
   type NavigationRegistry,
   type NavigationItem,
 } from 'org.eclipse.daanse.board.app.lib.api.navigation'
-import { useGlobalLoading } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+import { useGlobalLoading, useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 
 const navigationItems = ref<NavigationItem[]>([])
 const { isLoading } = useGlobalLoading()
+const { t } = useTranslation('shell')
 /* The theme writes the tokens; everything paints from those. */
 useTheme()
 
@@ -75,38 +76,38 @@ const go = (target: string) => router.push(target)
     <Header />
 
     <div :class="['shell-body', { 'shell-body--norail': isLauncher }]">
-      <nav v-if="!isLauncher" class="rail" aria-label="Bereiche">
+      <nav v-if="!isLauncher" class="rail" :aria-label="t('Rail.areas')">
         <button
           type="button"
           :class="['ri', { on: boardActive }]"
           :aria-current="boardActive ? 'page' : undefined"
-          title="Board"
+          :title="t('Rail.board')"
           @click="go(boardTarget)"
         >
           <DIcon name="dashboard" />
-          <span class="sr-only">Board</span>
+          <span class="sr-only">{{ t('Rail.board') }}</span>
         </button>
 
         <button
           type="button"
           :class="['ri', { on: route.name === 'pages' }]"
           :aria-current="route.name === 'pages' ? 'page' : undefined"
-          title="Seiten"
+          :title="t('Rail.pages')"
           @click="go('/pages')"
         >
           <DIcon name="layers" />
-          <span class="sr-only">Seiten</span>
+          <span class="sr-only">{{ t('Rail.pages') }}</span>
         </button>
 
         <button
           type="button"
           :class="['ri', { on: route.name === 'data' }]"
           :aria-current="route.name === 'data' ? 'page' : undefined"
-          title="Verbindungen &amp; Daten"
+          :title="t('Rail.data')"
           @click="go('/datasources')"
         >
           <DIcon name="dataset" />
-          <span class="sr-only">Verbindungen &amp; Daten</span>
+          <span class="sr-only">{{ t('Rail.data') }}</span>
         </button>
 
         <button
@@ -115,11 +116,11 @@ const go = (target: string) => router.push(target)
           type="button"
           :class="['ri', { on: route.name === item.routeName }]"
           :aria-current="route.name === item.routeName ? 'page' : undefined"
-          :title="item.label"
+          :title="t(item.label)"
           @click="go(item.route)"
         >
           <DIcon :name="item.icon" />
-          <span class="sr-only">{{ item.label }}</span>
+          <span class="sr-only">{{ t(item.label) }}</span>
         </button>
 
         <span class="rail-spacer"></span>

@@ -36,6 +36,7 @@ export function activate({ services }: ActivationContext) {
   services.getRequired<LayoutRepositoryI>(LAYOUT_REPOSITORY).addLayout({
     id: LAYOUT_ID,
     name: 'GridLayout',
+    nameKey: 'layoutsGrid:Grid.name',
     description: 'responsive grid-based layout',
     component: View,
     editor: Edit,
@@ -59,3 +60,6 @@ export function deactivate({ services }: ActivationContext) {
     .getRequired<LayoutRepositoryI>(LAYOUT_REPOSITORY)
     .removeLayout(LAYOUT_ID)
 }
+
+/* Its texts - collected by lib.i18next, see src/i18n. */
+export { LayoutsGridTranslations } from './i18n'

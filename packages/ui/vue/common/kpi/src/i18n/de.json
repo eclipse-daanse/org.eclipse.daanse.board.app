@@ -1,0 +1,11 @@
+{
+  "Table": {
+    "name": "Name",
+    "value": "Wert",
+    "goal": "Ziel",
+    "status": "Status",
+    "trend": "Trend",
+    "items_one": "{{count}} Eintrag",
+    "items_other": "{{count}} Einträge"
+  }
+}

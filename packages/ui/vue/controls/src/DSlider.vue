@@ -19,8 +19,10 @@ Contributors:
  * stored configurations, so the number is shown - and can be typed.
  */
 import { useId } from 'vue'
+import { useText } from './useText'
 
 const model = defineModel<number>()
+const t = useText()
 
 withDefaults(
   defineProps<{
@@ -62,7 +64,7 @@ const id = useId()
         :max="max"
         :step="step"
         :disabled="disabled"
-        :aria-label="label ? `${label} als Zahl` : 'Wert'"
+        :aria-label="label ? t('Slider.asNumber', '{label} as a number', { label }) : t('Slider.value', 'Value')"
       />
       <span v-if="suffix" class="suffix">{{ suffix }}</span>
     </div>

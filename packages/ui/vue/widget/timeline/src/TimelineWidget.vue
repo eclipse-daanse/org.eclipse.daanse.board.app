@@ -22,7 +22,7 @@ Contributors:
           class="range-strip"
           :style="rangeStripStyle"
           @mousedown="onRangeStripMouseDown"
-          :title="config.fixStartKnob ? 'Timeline-Bereich (Start fixiert)' : 'Timeline-Bereich - ziehen zum Verschieben'"
+          :title="config.fixStartKnob ? t('Widget.rangeFixed') : t('Widget.range')"
         >
           <!-- Linker Knob (Start) -->
           <div
@@ -30,12 +30,12 @@ Contributors:
             class="timeline-knob start-knob"
             :style="{ zIndex: startKnobOnTop ? 5 : 4 }"
             @mousedown.stop="onStartKnobMouseDown"
-            title="Startzeit"
+            :title="t('Widget.startKnob')"
           ></div>
           <div
             v-else
             class="timeline-knob start-knob fixed-knob"
-            title="Startzeit (fixiert)"
+            :title="t('Widget.startKnobFixed')"
           ></div>
 
           <!-- Rechter Knob (Ende) -->
@@ -43,7 +43,7 @@ Contributors:
             class="timeline-knob end-knob"
             :style="{ zIndex: startKnobOnTop ? 3 : 4 }"
             @mousedown.stop="onEndKnobMouseDown"
-            title="Endzeit"
+            :title="t('Widget.endKnob')"
           ></div>
         </div>
       </div>
@@ -65,15 +65,15 @@ Contributors:
     <!-- Aktueller Zeitbereich-Info -->
     <div v-if="config.showTimeInfo !== false" class="time-info">
       <div class="time-display">
-        <span class="time-label">Start:</span>
+        <span class="time-label">{{ t('Widget.start') }}</span>
         <span class="time-value">{{ formatDateTime(rangeStart) }}</span>
       </div>
       <div class="time-display">
-        <span class="time-label">Ende:</span>
+        <span class="time-label">{{ t('Widget.end') }}</span>
         <span class="time-value">{{ formatDateTime(rangeEnd) }}</span>
       </div>
       <div class="time-display">
-        <span class="time-label">Dauer:</span>
+        <span class="time-label">{{ t('Widget.duration') }}</span>
         <span class="time-value">{{ formatDuration() }}</span>
       </div>
     </div>
@@ -96,7 +96,7 @@ Contributors:
       </button>
 
       <div class="speed-control">
-        <label>Geschwindigkeit:</label>
+        <label>{{ t('Widget.speed') }}</label>
         <select v-model="playbackSpeed">
           <option value="0.25">0.25x</option>
           <option value="0.5">0.5x</option>
@@ -112,16 +112,15 @@ Contributors:
 <script lang="ts" setup>
 import { ref, computed, onMounted, onUnmounted, inject, watch } from 'vue';
 import { useRoute } from 'vue-router';
-import type { i18n } from "org.eclipse.daanse.board.app.lib.i18next";
-import { VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables';
+import { VariableWrapper, useFormat, useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables';
 import {
     identifier as variableIdentifier,
     type VariableRepository
 } from 'org.eclipse.daanse.board.app.lib.api.variable';
 
 
-const i18n: i18n | undefined = inject('i18n');
-const t = (key: string) => (i18n) ? i18n.t(key) : key;
+const { t } = useTranslation('timeline');
+const format = useFormat();
 
 type RelativeTimeUnit = 'hours' | 'days' | 'weeks' | 'months' | 'years';
 
@@ -522,7 +521,7 @@ const timeAxisTicks = computed(() => {
     const tickDate = new Date(tickMs);
     const position = (i / tickCount) * 100;
 
-    const label = tickDate.toLocaleString('de-DE', {
+    const label = format.date(tickDate, {
       day: '2-digit',
       month: '2-digit',
       hour: '2-digit',
@@ -541,7 +540,7 @@ const timeAxisTicks = computed(() => {
 
 // Formatierungshelfer
 const formatDateTime = (date: Date): string => {
-  return date.toLocaleString('de-DE', {
+  return format.date(date, {
     year: 'numeric',
     month: '2-digit',
     day: '2-digit',

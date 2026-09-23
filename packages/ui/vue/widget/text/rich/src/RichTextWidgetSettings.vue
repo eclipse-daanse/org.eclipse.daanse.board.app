@@ -33,7 +33,7 @@ import { Superscript } from "@tiptap/extension-superscript";
 import { TextAlign } from "@tiptap/extension-text-align";
 import { RichTextEditorSettings } from './gen/RichTextEditorSettings'
 import { identifier as varIdentifier, type VariableRepository } from 'org.eclipse.daanse.board.app.lib.api.variable'
-import { VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+import { VariableWrapper, useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import { DButton, DIcon } from 'org.eclipse.daanse.board.app.ui.vue.controls'
 
 // Extend OrderedList to support listStyleType attribute
@@ -67,6 +67,8 @@ const CustomBulletList = BulletList.extend({
         }
     },
 })
+
+const { t } = useTranslation('textRich')
 
 const fontSize = ref('16')
 const fontColor = ref('#000000')
@@ -245,7 +247,7 @@ watch(
 </script>
 
 <template>
-    <section class="settings-section" data-section="Text und Formatierung">
+    <section class="settings-section" data-section-id="text" :data-section="t('Settings.section')">
         <div class="settings-container">
             <div v-if="editor" class="toolbar">
                 <!--
@@ -266,14 +268,14 @@ watch(
                         v-model="fontSize"
                         @change="setFontSize()"
                         min="8" max="96" step="1"
-                        title="Größe der Auswahl"
+                        :title="t('Toolbar.fontSize')"
                     />
                     <input
                         type="color"
                         class="toolbar-color-input"
                         :value="fontColor"
                         @input="setFontColor(($event.target as HTMLInputElement).value)"
-                        title="Farbe der Auswahl"
+                        :title="t('Toolbar.fontColor')"
                     />
                 </div>
 
@@ -284,7 +286,7 @@ watch(
                         @click="editor.chain().focus().toggleBold().run()"
                         :disabled="!editor.can().chain().focus().toggleBold().run()"
                         :class="{ 'is-active': editor.isActive('bold') }"
-                        title="Bold">
+                        :title="t('Toolbar.bold')">
                         <DIcon name="format_bold" size="sm" />
                     </DButton>
                     <DButton
@@ -292,7 +294,7 @@ watch(
                         @click="editor.chain().focus().toggleItalic().run()"
                         :disabled="!editor.can().chain().focus().toggleItalic().run()"
                         :class="{ 'is-active': editor.isActive('italic') }"
-                        title="Italic">
+                        :title="t('Toolbar.italic')">
                         <DIcon name="format_italic" size="sm" />
                     </DButton>
                     <DButton
@@ -300,7 +302,7 @@ watch(
                         @click="editor.chain().focus().toggleUnderline().run()"
                         :disabled="!editor.can().chain().focus().toggleUnderline().run()"
                         :class="{ 'is-active': editor.isActive('underline') }"
-                        title="Underline">
+                        :title="t('Toolbar.underline')">
                         <DIcon name="format_underlined" size="sm" />
                     </DButton>
                     <DButton
@@ -308,7 +310,7 @@ watch(
                         @click="editor.chain().focus().toggleStrike().run()"
                         :disabled="!editor.can().chain().focus().toggleStrike().run()"
                         :class="{ 'is-active': editor.isActive('strike') }"
-                        title="Strikethrough">
+                        :title="t('Toolbar.strike')">
                         <DIcon name="strikethrough_s" size="sm" />
                     </DButton>
                     <DButton
@@ -316,21 +318,21 @@ watch(
                         @click="editor.chain().focus().toggleCode().run()"
                         :disabled="!editor.can().chain().focus().toggleCode().run()"
                         :class="{ 'is-active': editor.isActive('code') }"
-                        title="Inline Code">
+                        :title="t('Toolbar.code')">
                         <DIcon name="code" size="sm" />
                     </DButton>
                     <DButton
                         class="toolbar-btn" size="sm" intent="quiet"
                         @click="editor.chain().focus().toggleSuperscript().run()"
                         :class="{ 'is-active': editor.isActive('superscript') }"
-                        title="Superscript">
+                        :title="t('Toolbar.superscript')">
                         <DIcon name="superscript" size="sm" />
                     </DButton>
                     <DButton
                         class="toolbar-btn" size="sm" intent="quiet"
                         @click="editor.chain().focus().toggleSubscript().run()"
                         :class="{ 'is-active': editor.isActive('subscript') }"
-                        title="Subscript">
+                        :title="t('Toolbar.subscript')">
                         <DIcon name="subscript" size="sm" />
                     </DButton>
                 </div>
@@ -341,37 +343,37 @@ watch(
                         class="toolbar-btn" size="sm" intent="quiet"
                         @click="editor.chain().focus().setParagraph().run()"
                         :class="{ 'is-active': editor.isActive('paragraph') }"
-                        title="Paragraph">P</DButton>
+                        :title="t('Toolbar.paragraph')">P</DButton>
                     <DButton
                         class="toolbar-btn" size="sm" intent="quiet"
                         @click="editor.chain().focus().toggleHeading({ level: 1 }).run()"
                         :class="{ 'is-active': editor.isActive('heading', { level: 1 }) }"
-                        title="Heading 1">H1</DButton>
+                        :title="t('Toolbar.heading', { level: 1 })">H1</DButton>
                     <DButton
                         class="toolbar-btn" size="sm" intent="quiet"
                         @click="editor.chain().focus().toggleHeading({ level: 2 }).run()"
                         :class="{ 'is-active': editor.isActive('heading', { level: 2 }) }"
-                        title="Heading 2">H2</DButton>
+                        :title="t('Toolbar.heading', { level: 2 })">H2</DButton>
                     <DButton
                         class="toolbar-btn" size="sm" intent="quiet"
                         @click="editor.chain().focus().toggleHeading({ level: 3 }).run()"
                         :class="{ 'is-active': editor.isActive('heading', { level: 3 }) }"
-                        title="Heading 3">H3</DButton>
+                        :title="t('Toolbar.heading', { level: 3 })">H3</DButton>
                     <DButton
                         class="toolbar-btn" size="sm" intent="quiet"
                         @click="editor.chain().focus().toggleHeading({ level: 4 }).run()"
                         :class="{ 'is-active': editor.isActive('heading', { level: 4 }) }"
-                        title="Heading 4">H4</DButton>
+                        :title="t('Toolbar.heading', { level: 4 })">H4</DButton>
                     <DButton
                         class="toolbar-btn" size="sm" intent="quiet"
                         @click="editor.chain().focus().toggleHeading({ level: 5 }).run()"
                         :class="{ 'is-active': editor.isActive('heading', { level: 5 }) }"
-                        title="Heading 5">H5</DButton>
+                        :title="t('Toolbar.heading', { level: 5 })">H5</DButton>
                     <DButton
                         class="toolbar-btn" size="sm" intent="quiet"
                         @click="editor.chain().focus().toggleHeading({ level: 6 }).run()"
                         :class="{ 'is-active': editor.isActive('heading', { level: 6 }) }"
-                        title="Heading 6">H6</DButton>
+                        :title="t('Toolbar.heading', { level: 6 })">H6</DButton>
                 </div>
 
                 <!-- Text Align -->
@@ -380,28 +382,28 @@ watch(
                         class="toolbar-btn" size="sm" intent="quiet"
                         @click="editor.chain().focus().setTextAlign('left').run()"
                         :class="{ 'is-active': editor.isActive({ textAlign: 'left' }) }"
-                        title="Align Left">
+                        :title="t('Toolbar.alignLeft')">
                         <DIcon name="format_align_left" size="sm" />
                     </DButton>
                     <DButton
                         class="toolbar-btn" size="sm" intent="quiet"
                         @click="editor.chain().focus().setTextAlign('center').run()"
                         :class="{ 'is-active': editor.isActive({ textAlign: 'center' }) }"
-                        title="Align Center">
+                        :title="t('Toolbar.alignCenter')">
                         <DIcon name="format_align_center" size="sm" />
                     </DButton>
                     <DButton
                         class="toolbar-btn" size="sm" intent="quiet"
                         @click="editor.chain().focus().setTextAlign('right').run()"
                         :class="{ 'is-active': editor.isActive({ textAlign: 'right' }) }"
-                        title="Align Right">
+                        :title="t('Toolbar.alignRight')">
                         <DIcon name="format_align_right" size="sm" />
                     </DButton>
                     <DButton
                         class="toolbar-btn" size="sm" intent="quiet"
                         @click="editor.chain().focus().setTextAlign('justify').run()"
                         :class="{ 'is-active': editor.isActive({ textAlign: 'justify' }) }"
-                        title="Justify">
+                        :title="t('Toolbar.justify')">
                         <DIcon name="format_align_justify" size="sm" />
                     </DButton>
                 </div>
@@ -413,7 +415,7 @@ watch(
                             class="toolbar-btn" size="sm" intent="quiet"
                             @click="editor.chain().focus().toggleBulletList().run()"
                             :class="{ 'is-active': editor.isActive('bulletList') }"
-                            title="Bullet List">
+                            :title="t('Toolbar.bulletList')">
                         <DIcon name="format_list_bulleted" size="sm" />
                     </DButton>
                         <button class="toolbar-dropdown-arrow"
@@ -432,7 +434,7 @@ watch(
                             class="toolbar-btn" size="sm" intent="quiet"
                             @click="editor.chain().focus().toggleOrderedList().run()"
                             :class="{ 'is-active': editor.isActive('orderedList') }"
-                            title="Ordered List">
+                            :title="t('Toolbar.orderedList')">
                         <DIcon name="format_list_numbered" size="sm" />
                     </DButton>
                         <button class="toolbar-dropdown-arrow"
@@ -450,14 +452,14 @@ watch(
                         class="toolbar-btn" size="sm" intent="quiet"
                         @click="editor.chain().focus().liftListItem('listItem').run()"
                         :disabled="!editor.can().liftListItem('listItem')"
-                        title="Outdent">
+                        :title="t('Toolbar.outdent')">
                         <DIcon name="format_indent_decrease" size="sm" />
                     </DButton>
                     <DButton
                         class="toolbar-btn" size="sm" intent="quiet"
                         @click="editor.chain().focus().sinkListItem('listItem').run()"
                         :disabled="!editor.can().sinkListItem('listItem')"
-                        title="Indent">
+                        :title="t('Toolbar.indent')">
                         <DIcon name="format_indent_increase" size="sm" />
                     </DButton>
                 </div>
@@ -468,26 +470,26 @@ watch(
                         class="toolbar-btn" size="sm" intent="quiet"
                         @click="editor.chain().focus().toggleCodeBlock().run()"
                         :class="{ 'is-active': editor.isActive('codeBlock') }"
-                        title="Code Block">
+                        :title="t('Toolbar.codeBlock')">
                         <DIcon name="data_object" size="sm" />
                     </DButton>
                     <DButton
                         class="toolbar-btn" size="sm" intent="quiet"
                         @click="editor.chain().focus().toggleBlockquote().run()"
                         :class="{ 'is-active': editor.isActive('blockquote') }"
-                        title="Blockquote">
+                        :title="t('Toolbar.blockquote')">
                         <DIcon name="format_quote" size="sm" />
                     </DButton>
                     <DButton
                         class="toolbar-btn" size="sm" intent="quiet"
                         @click="editor.chain().focus().setHorizontalRule().run()"
-                        title="Horizontal Rule">
+                        :title="t('Toolbar.rule')">
                         <DIcon name="horizontal_rule" size="sm" />
                     </DButton>
                     <DButton
                         class="toolbar-btn" size="sm" intent="quiet"
                         @click="editor.chain().focus().setHardBreak().run()"
-                        title="Hard Break">
+                        :title="t('Toolbar.hardBreak')">
                         <DIcon name="keyboard_return" size="sm" />
                     </DButton>
                 </div>
@@ -498,14 +500,14 @@ watch(
                         class="toolbar-btn" size="sm" intent="quiet"
                         @click="setLink()"
                         :class="{ 'is-active': editor.isActive('link') }"
-                        title="Set Link">
+                        :title="t('Toolbar.setLink')">
                         <DIcon name="link" size="sm" />
                     </DButton>
                     <DButton
                         class="toolbar-btn" size="sm" intent="quiet"
                         @click="editor.chain().focus().unsetLink().run()"
                         :disabled="!editor.isActive('link')"
-                        title="Remove Link">
+                        :title="t('Toolbar.removeLink')">
                         <DIcon name="link_off" size="sm" />
                     </DButton>
                 </div>
@@ -516,7 +518,7 @@ watch(
                         <DButton
                             class="toolbar-btn" size="sm" intent="quiet"
                             @click.stop="showVariableMenu = !showVariableMenu; showOlStyleMenu = false; showUlStyleMenu = false"
-                            title="Insert Variable">
+                            :title="t('Toolbar.insertVariable')">
                         <DIcon name="data_array" size="sm" />
                     </DButton>
                         <button class="toolbar-dropdown-arrow"
@@ -532,7 +534,7 @@ watch(
                                 <span class="var-value">{{ v.value }}</span>
                             </button>
                             <div v-if="availableVariables.length === 0" class="toolbar-dropdown-empty">
-                                No variables defined
+                                {{ t('Settings.noVariables') }}
                             </div>
                         </div>
                     </div>
@@ -544,20 +546,20 @@ watch(
                         class="toolbar-btn" size="sm" intent="quiet"
                         @click="editor.chain().focus().undo().run()"
                         :disabled="!editor.can().chain().focus().undo().run()"
-                        title="Undo">
+                        :title="t('Toolbar.undo')">
                         <DIcon name="undo" size="sm" />
                     </DButton>
                     <DButton
                         class="toolbar-btn" size="sm" intent="quiet"
                         @click="editor.chain().focus().redo().run()"
                         :disabled="!editor.can().chain().focus().redo().run()"
-                        title="Redo">
+                        :title="t('Toolbar.redo')">
                         <DIcon name="redo" size="sm" />
                     </DButton>
                     <DButton
                         class="toolbar-btn" size="sm" intent="quiet"
                         @click="editor.chain().focus().unsetAllMarks().run()"
-                        title="Clear Formatting">
+                        :title="t('Toolbar.clear')">
                         <DIcon name="format_clear" size="sm" />
                     </DButton>
                 </div>

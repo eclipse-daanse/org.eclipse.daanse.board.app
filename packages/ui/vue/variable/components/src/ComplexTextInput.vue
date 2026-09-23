@@ -12,7 +12,7 @@ Contributors:
 -->
 
 <script setup lang="ts">
-import { VariableComplexStringWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+import { VariableComplexStringWrapper, useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import { Mentionable } from 'vue-mention';
 import { inject, onMounted, ref, nextTick, useSlots } from 'vue';
 import { identifier, VariableRepository } from 'org.eclipse.daanse.board.app.lib.api.variable'
@@ -24,6 +24,7 @@ interface VariableOption {
 
 const model = defineModel<VariableComplexStringWrapper>({ required: true });
 const props = defineProps<{ label?: string }>();
+const { t } = useTranslation('variableComponents');
 const variableItems = ref([] as Array<VariableOption>);
 const inputRef = ref();
 // const slots = useSlots();
@@ -98,7 +99,7 @@ const updateValue = (given: unknown) => {
       </Mentionable>
     </div>
     <div class="tip">
-      Tip: format for variables is {variableName}.
+      {{ t('ComplexText.tip') }}
     </div>
   </div>
 </template>

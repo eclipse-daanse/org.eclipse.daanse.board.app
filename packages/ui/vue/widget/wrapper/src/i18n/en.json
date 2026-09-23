@@ -1,0 +1,34 @@
+{
+  "Actions": {
+    "settings": "Settings"
+  },
+  "NotRegistered": "Widget type {{type}} is not registered.",
+  "Delete": {
+    "title": "Delete widget",
+    "text": "Do you really want to delete this widget? This cannot be undone."
+  },
+  "Form": {
+    "titleGroup": "Title",
+    "title": "Text",
+    "titleFontSize": "Font size",
+    "titleColor": "Font colour",
+    "surfaceGroup": "Surface",
+    "backgroundColor": "Background",
+    "backgroundColorTransparence": "Opacity",
+    "transparency": "Overall opacity",
+    "blur": "Blur",
+    "padding": "Padding",
+    "borderGroup": "Border",
+    "borderSize": "Width",
+    "borderColor": "Colour",
+    "borderRadius": "Corner radius",
+    "shadowGroup": "Shadow",
+    "shadowColor": "Colour",
+    "shadowBlur": "Softness",
+    "shadowX": "Offset X",
+    "shadowY": "Offset Y",
+    "shadowTransparence": "Opacity",
+    "behaviourGroup": "Behaviour",
+    "fullscreen": "Allow full screen"
+  }
+}

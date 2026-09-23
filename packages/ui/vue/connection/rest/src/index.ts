@@ -49,3 +49,6 @@ export function deactivate({ services }: ActivationContext) {
     .unregisterConnectionType('rest')
   services.unregister('RestConnectionSettings')
 }
+
+/* Its texts - collected by lib.i18next, see src/i18n. */
+export { ConnectionRestTranslations } from './i18n'

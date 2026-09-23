@@ -1,0 +1,72 @@
+{
+  "Settings": {
+    "sections": {
+      "data": "Data settings",
+      "colors": "Colours",
+      "dimensions": "Dimensions",
+      "text": "Text",
+      "rowLevels": "Row level styles",
+      "columnLevels": "Column level styles",
+      "conditional": "Conditional formatting"
+    },
+    "showRowsProperties": "Show row properties",
+    "showColumnsProperties": "Show column properties",
+    "showSingleMeasureHeader": "Show single measure header",
+    "headerBackground": "Header background",
+    "headerText": "Header text colour",
+    "cellBackground": "Cell background",
+    "cellText": "Cell text colour",
+    "borderColor": "Border colour",
+    "columnWidth": "Default column width (px)",
+    "rowHeight": "Default row height (px)",
+    "fontSize": "Font size (px)",
+    "headerFontWeight": "Header font weight",
+    "textAlign": "Text alignment (cells)",
+    "levelNumber": "Level number",
+    "background": "Background colour",
+    "textColor": "Text colour",
+    "fontWeight": "Font weight",
+    "conditionType": "Condition type",
+    "toValue": "To value",
+    "textValue": "Text",
+    "minColor": "Minimum colour",
+    "maxColor": "Maximum colour",
+    "priority": "Priority (lower = higher)",
+    "header": "Header",
+    "cells": "Cells",
+    "border": "Border",
+    "levels": "Level configuration",
+    "rules": "Formatting rules",
+    "addLevel": "Add level",
+    "addRule": "Add rule",
+    "remove": "Remove",
+    "align": {
+      "left": "Left",
+      "center": "Centred",
+      "right": "Right"
+    },
+    "count": "Count (N)",
+    "value": "Value",
+    "level": "Level {{level}}",
+    "rule": "Rule {{n}}",
+    "condition": {
+      "greaterThan": "Greater than",
+      "lessThan": "Less than",
+      "equals": "Equals",
+      "notEquals": "Not equal",
+      "between": "Between",
+      "contains": "Contains (text)",
+      "colorScale": "Colour scale (min→max)",
+      "topN": "Top N values",
+      "bottomN": "Bottom N values"
+    },
+    "rowLevelsHint": "Styles of your own for the hierarchy levels in the row headers.",
+    "columnLevelsHint": "Styles of your own for the hierarchy levels in the column headers.",
+    "rulesHint": "Rules by which cells are formatted based on their values.",
+    "noLevels": "No level styles yet. “Add level” creates the first one.",
+    "noRules": "No formatting rules yet. “Add rule” creates the first one."
+  },
+  "Widget": {
+    "name": "Pivot table"
+  }
+}

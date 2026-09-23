@@ -67,6 +67,7 @@ export class ImageWidgetProvider implements WidgetProvider {
   readonly supportedDSTypes = []
   readonly icon = Icon
   readonly name = 'Image'
+  readonly nameKey = 'image:Widget.name'
 
   /*
    * The settings form, as a model. Carried on the registration like the
@@ -104,3 +105,6 @@ export class ImageWidgetProvider implements WidgetProvider {
 export { ImageWidget }
 export { ImageSettingsImpl, ImagesettingsPackage, imageSettingsFormXmi, imageItemFormXmi, galleryFormXmi }
 export type { IImageSettings }
+
+/* Its texts - collected by lib.i18next, see src/i18n. */
+export { ImageTranslations } from './i18n'

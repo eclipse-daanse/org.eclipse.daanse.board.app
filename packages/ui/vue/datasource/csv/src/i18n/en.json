@@ -1,0 +1,14 @@
+{
+  "Settings": {
+    "connection": "Connection",
+    "polling": "Reload regularly",
+    "interval": "Interval",
+    "path": "Path",
+    "pathHint": "Relative to the connection's address."
+  },
+  "Csv": {
+    "separator": "Separator",
+    "skipTop": "Skip rows at the top",
+    "skipBottom": "Skip rows at the bottom"
+  }
+}

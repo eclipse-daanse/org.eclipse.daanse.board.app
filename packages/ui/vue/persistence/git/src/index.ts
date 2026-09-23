@@ -20,3 +20,6 @@ export function activate({ services }: ActivationContext) {
     .getRequired(REPOSITORY_REGISTRY)
     .registerViewForRepoType(type, GitRepositoryV)
 }
+
+/* Its texts - collected by lib.i18next, see src/i18n. */
+export { PersistenceTranslations } from './i18n'

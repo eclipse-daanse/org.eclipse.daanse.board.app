@@ -11,16 +11,18 @@ Contributors: Smart City Jena
 <script lang="ts" setup>
 import { DTabs } from 'org.eclipse.daanse.board.app.ui.vue.controls'
 import { ref, computed } from 'vue'
+import { useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import { ConditionSettings } from 'org.eclipse.daanse.board.app.ui.vue.widget.map'
 import { PointStyler } from 'org.eclipse.daanse.board.app.ui.vue.widget.map'
 import { AreaStyler } from 'org.eclipse.daanse.board.app.ui.vue.widget.map'
 
 const model = defineModel<any>({ required: true })
-const tabs = [
-  { id: 'conditions', label: 'Bedingungen' },
-  { id: 'points', label: 'Punkte' },
-  { id: 'areas', label: 'Flächen' },
-]
+const { t } = useTranslation('pluginsGeojsonRenderer')
+const tabs = computed(() => [
+  { id: 'conditions', label: t('GeoJson.conditions') },
+  { id: 'points', label: t('GeoJson.points') },
+  { id: 'areas', label: t('GeoJson.areas') },
+])
 const tab = ref('conditions')
 
 // Initialize default values in setting
@@ -60,7 +62,7 @@ if (!model.value.renderer) {
 
 <template>
   <div class="geojson-settings">
-    <DTabs v-model="tab" :tabs="tabs" label="Was gezeichnet wird" />
+    <DTabs v-model="tab" :tabs="tabs" :label="t('GeoJson.tabs')" />
 
     <div class="tab-content">
       <div v-if="tab === 'conditions'" class="full">

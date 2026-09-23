@@ -1,0 +1,73 @@
+{
+  "Widget": {
+    "name": "Weather",
+    "loading": "Loading weather data…",
+    "loadFailed": "Failed to load weather data",
+    "noData": "No weather data available",
+    "unknownLocation": "Unknown location",
+    "from": "From: {{time}}",
+    "until": "Until: {{time}}",
+    "humidity": "Humidity:",
+    "pressure": "Pressure:",
+    "wind": "Wind:",
+    "precipitation": "Precipitation:",
+    "visibility": "Visibility:",
+    "cloudCover": "Cloud cover:",
+    "forecast": "Weather forecast",
+    "forecastOf": "{{name}} forecast",
+    "noForecast": "No forecast data available",
+    "autoRefresh_one": "Refreshes every minute",
+    "autoRefresh_other": "Refreshes every {{count}} minutes",
+    "params": {
+      "temperature": "Temperature",
+      "humidity": "Humidity",
+      "pressure": "Pressure",
+      "windSpeed": "Wind speed",
+      "windDirection": "Wind direction",
+      "precipitation": "Precipitation",
+      "visibility": "Visibility",
+      "cloudCover": "Cloud cover"
+    }
+  },
+  "Settings": {
+    "range": "Time range",
+    "latest": "Latest data",
+    "timeRange": "Time range",
+    "manual": "Manual selection",
+    "lastHour": "Last hour",
+    "last6Hours": "Last 6 hours",
+    "last24Hours": "Last 24 hours",
+    "lastWeek": "Last week",
+    "start": "Start time:",
+    "end": "End time:",
+    "now": "Set to current time",
+    "colors": "Colour per value",
+    "colorsHint": "The colour each value is drawn in in the forecast charts."
+  },
+  "Form": {
+    "refreshGroup": "Refresh",
+    "refreshInterval": "Read again",
+    "forecastGroup": "Forecast",
+    "showForecast": "Show forecast",
+    "selectedForecastParameters": "Which values",
+    "forecastPeriods": "Which periods",
+    "gridColor": "Grid line colour"
+  },
+  "Options": {
+    "refresh": {
+      "m1": "Every minute",
+      "m5": "Every 5 minutes",
+      "m10": "Every 10 minutes",
+      "m30": "Every 30 minutes",
+      "h1": "Every hour"
+    },
+    "period": {
+      "h12": "12 hours",
+      "h24": "24 hours",
+      "h36": "36 hours",
+      "h48": "48 hours",
+      "h60": "60 hours",
+      "h72": "72 hours"
+    }
+  }
+}

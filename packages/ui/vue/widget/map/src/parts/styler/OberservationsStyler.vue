@@ -12,6 +12,9 @@ Contributors: Smart City Jena
 import { ERefType, type IDSRenderer } from '../../api/Renderer'
 import { computed, type ModelRef, reactive, ref } from 'vue'
 import { useDataPointRegistry } from '../../composables/datapointRegistry'
+import { useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+
+const { t } = useTranslation('map')
 import { LIcon, LMarker } from '@vue-leaflet/vue-leaflet'
 import MapPreviewPoint from './../../parts/MapPreviewPoint.vue'
 import {IconWidget}  from 'org.eclipse.daanse.board.app.ui.vue.widget.icon'
@@ -23,7 +26,7 @@ const { getAll, getById } = useDataPointRegistry()
 
 const rendererOptions = computed(() => {
     let ret: any = []
-    getAll().forEach((val, key) => ret.push({ name: val.name, id: val.namespace + val.qualifiedName }))
+    getAll().forEach((val, key) => ret.push({ name: t(val.name), id: val.namespace + val.qualifiedName }))
     return ret
   }
 )
@@ -49,8 +52,8 @@ const value = computed({
       v-if="rendererOptions"
       v-model="value"
       :options="rendererOptions"
-      label="renderer"
-      placeholder="Select an option"
+      :label="t('Observations.renderer')"
+      :placeholder="t('Observations.choose')"
       label-key="name"
       value-key="id"
     />

@@ -101,3 +101,6 @@ export const CONTROLS = {
   DTable,
   DTabs,
 }
+
+/* Its texts - collected by lib.i18next, see src/i18n. */
+export { ControlsTranslations } from './i18n'

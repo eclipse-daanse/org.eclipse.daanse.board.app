@@ -63,5 +63,17 @@
       "id": "@emfts/core",
       "versionRange": "^0.1.1-next.18"
     }
+  ],
+  "capabilities": [
+    {
+      "namespace": "tsm.i18n",
+      "attributes": {
+        "namespace": "svgRepeat",
+        "languages": [
+          "de",
+          "en"
+        ]
+      }
+    }
   ]
 }

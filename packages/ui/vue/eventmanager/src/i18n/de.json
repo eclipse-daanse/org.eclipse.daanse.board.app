@@ -1,0 +1,54 @@
+{
+  "Nav": {
+    "label": "Ereignisse"
+  },
+  "Title": "Ereignisse",
+  "Lead": "Eine Regel verbindet, was auf einem Board geschieht, mit dem, was daraufhin geschehen soll.",
+  "Empty": "Noch keine Regel. Eine beginnt mit einem Ereignis — ein Klick auf ein Widget, eine Zeile in einer Tabelle — und endet in einer Aktion auf einem anderen.",
+  "Context": {
+    "system": "System",
+    "page": "Seite",
+    "widget": "Widget"
+  },
+  "Rule": {
+    "create": "Regel anlegen",
+    "edit": "Regel bearbeiten",
+    "remove": "Regel löschen",
+    "confirmRemove": "Die Regel wird entfernt. Das lässt sich nicht rückgängig machen.",
+    "when": "Wenn",
+    "if": "Falls",
+    "then": "Dann",
+    "andWord": "und",
+    "and": " und ",
+    "anyEvent": "irgendein Ereignis",
+    "noAction": "noch keine Aktion",
+    "anyPage": "jede Seite",
+    "otherEvents": "Sonstige",
+    "allInstances": "alle Instanzen",
+    "context": "Kontext",
+    "widgetPlaceholder": "Kennung, leer für jedes",
+    "event": "Ereignis",
+    "property": "Eigenschaft",
+    "value": "Wert",
+    "removeCondition": "Bedingung entfernen",
+    "noCondition": "Ohne Bedingung läuft die Regel jedes Mal.",
+    "condition": "Bedingung",
+    "chooseAction": "Aktion wählen",
+    "removeAction": "Aktion entfernen",
+    "target": "Ziel",
+    "action": "Aktion",
+    "optional": "wahlweise",
+    "valueFor": "Wert für {{name}}",
+    "fromEvent": "aus dem Ereignis",
+    "fixedValue": "fester Wert",
+    "chooseProperty": "Eigenschaft wählen"
+  },
+  "Phrase": {
+    "inSystem": "im System",
+    "onPage": "auf Seite {{page}}",
+    "onAnyPage": "auf jeder Seite",
+    "at": "an {{target}}",
+    "atAnyWidget": "an jedem Widget dieser Art",
+    "atAllInstances": "an allen Instanzen"
+  }
+}

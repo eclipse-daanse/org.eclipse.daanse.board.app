@@ -13,12 +13,15 @@ Contributors:
 <script setup lang="ts">
 import { DInput, DSelect, DSwitch } from 'org.eclipse.daanse.board.app.ui.vue.controls'
 import { computed } from 'vue';
+import { useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 
 const { config, connections } = defineProps<{
   config: any;
   connections: any;
   dataSources: any;
-}>();
+}>()
+
+const { t } = useTranslation('datasourceWs');
 
 const connectionsFiltered = computed(() => {
   return connections.filter((c: any) => c.type === 'ws' || c.type === 'mqtt');
@@ -28,8 +31,8 @@ const connectionsFiltered = computed(() => {
 
 <template>
   <!-- eslint-disable-next-line vue/no-mutating-props -->
-  <DSelect v-model="config.connection" label="Verbindung" :options="connectionsFiltered" label-key="name"
+  <DSelect v-model="config.connection" :label="t('Settings.connection')" :options="connectionsFiltered" label-key="name"
     value-key="uid" />
-  <DSwitch v-model="config.accumulate" label="Nachrichten sammeln" />
-  <DInput v-model="config.topic" label="Thema"/>
+  <DSwitch v-model="config.accumulate" :label="t('Ws.accumulate')" />
+  <DInput v-model="config.topic" :label="t('Ws.topic')"/>
 </template>

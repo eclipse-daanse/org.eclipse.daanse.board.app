@@ -14,6 +14,7 @@ Contributors:
 import { DButton, DColorInput, DInput, DSelect } from 'org.eclipse.daanse.board.app.ui.vue.controls'
 import { inject, ref, computed, watch, onMounted } from 'vue'
 import { OGCSTAToChartComposer } from 'org.eclipse.daanse.board.app.lib.composer.ogcsta2chart'
+import { useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import {
   DatasourceRepository, identifier as DatasourceRepositoryIdentifier
 } from 'org.eclipse.daanse.board.app.lib.api.datasource'
@@ -22,6 +23,8 @@ const { config, dataSources } = defineProps<{
   config: any
   dataSources: any
 }>()
+
+const { t } = useTranslation('composerOgcsta2chart')
 
 // Filter for OGC STA datasources
 const datasourcesFiltered = computed(() => {
@@ -218,7 +221,7 @@ onMounted(() => {
     <!-- eslint-disable-next-line vue/no-mutating-props -->
     <DSelect
       v-model="config.connectedDatasources"
-      label="OGC-STA-Quellen"
+      :label="t('Sta.sources')"
       :options="datasourcesFiltered"
       multiple
       label-key="name"
@@ -228,34 +231,34 @@ onMounted(() => {
     <!-- eslint-disable-next-line vue/no-mutating-props -->
     <DSelect
       v-model="config.thingIds"
-      label="Things (erforderlich)"
+      :label="t('Sta.things')"
       :options="availableThings"
       multiple
       label-key="name"
       value-key="id"
-      placeholder="Select one or more Things"
+      :placeholder="t('Sta.thingsPlaceholder')"
       :loading="isLoadingThings"
-      no-options-text="No things found"
+      :no-options-text="t('Sta.noThings')"
     />
 
     <div class="datastreams-section">
       <div class="section-header">
-        <h3>Selected Datastreams</h3>
+        <h3>{{ t('Sta.selected') }}</h3>
         <DButton
           size="sm"
           @click="addDatastream"
           :disabled="isLoadingDatastreams || availableDatastreams.length === 0"
         >
-          Add Datastream
+          {{ t('Sta.add') }}
         </DButton>
       </div>
 
       <div v-if="isLoadingDatastreams" class="loading-indicator">
-        Loading available datastreams...
+        {{ t('Sta.loading') }}
       </div>
 
       <div v-if="availableDatastreams.length === 0 && config.datastreams.length === 0" class="no-datastreams">
-        No datastreams available. Please select an OGC STA datasource and one or more Things first.
+        {{ t('Sta.none') }}
       </div>
 
       <div v-if="config.datastreams.length > 0" class="datastream-list">
@@ -268,27 +271,27 @@ onMounted(() => {
             <!-- eslint-disable-next-line vue/no-mutating-props -->
             <DSelect
               v-model="datastream.datastreamId"
-              label="Datenstrom"
+              :label="t('Sta.datastream')"
               :options="availableDatastreams"
               label-key="name"
               value-key="id"
               class="datastream-select"
               :loading="isLoadingDatastreams"
-              no-options-text="No datastreams found"
+              :no-options-text="t('Sta.noDatastreams')"
             />
 
             <!-- eslint-disable-next-line vue/no-mutating-props -->
             <DInput
               v-model="datastream.label"
-              label="Label (Optional)"
-              placeholder="Custom label for chart"
+              :label="t('Sta.label')"
+              :placeholder="t('Sta.labelPlaceholder')"
               class="datastream-label"
             />
 
             <!-- eslint-disable-next-line vue/no-mutating-props -->
             <DColorInput
               v-model="datastream.color"
-              label="Farbe"
+              :label="t('Sta.color')"
               class="datastream-color"
             />
           </div>

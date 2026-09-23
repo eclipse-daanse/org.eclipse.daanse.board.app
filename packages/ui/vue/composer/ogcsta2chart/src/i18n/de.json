@@ -1,0 +1,24 @@
+{
+  "Sta": {
+    "sources": "OGC-STA-Quellen",
+    "things": "Things (erforderlich)",
+    "thingsPlaceholder": "Ein oder mehrere Things wählen",
+    "noThings": "Keine Things gefunden",
+    "selected": "Gewählte Datenströme",
+    "add": "Datenstrom hinzufügen",
+    "loading": "Verfügbare Datenströme werden geladen…",
+    "none": "Keine Datenströme vorhanden. Wähle zuerst eine OGC-STA-Datenquelle und ein oder mehrere Things.",
+    "datastream": "Datenstrom",
+    "noDatastreams": "Keine Datenströme gefunden",
+    "label": "Beschriftung (optional)",
+    "labelPlaceholder": "Eigene Beschriftung für das Diagramm",
+    "color": "Farbe",
+    "columns": {
+      "datastream": "Datenstrom",
+      "value": "Wert",
+      "unit": "Einheit",
+      "timestamp": "Zeitpunkt"
+    },
+    "previewHint": "Datenquellen und Datenströme einrichten, um eine Vorschau zu sehen"
+  }
+}

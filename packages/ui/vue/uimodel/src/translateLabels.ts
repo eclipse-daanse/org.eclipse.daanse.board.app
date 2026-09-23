@@ -98,6 +98,11 @@ export function translateLabels(
   }
 }
 
+/** Whether a text is a translation key rather than a word - an option label may be either. */
+export function isTranslationKey(text: unknown): text is string {
+  return typeof text === 'string' && KEY.test(text)
+}
+
 /** Whether this model has any labels to translate at all. */
 export function hasLabelKeys(model: unknown): boolean {
   if (!model) return false

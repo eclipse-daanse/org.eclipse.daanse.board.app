@@ -13,6 +13,7 @@ Contributors:
 
 <script setup lang="ts">
 import { DSelect } from 'org.eclipse.daanse.board.app.ui.vue.controls'
+import { useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 interface IMonacoEditorProps {
     modelValue?: string;
     language?: 'sql' | 'msdax' | 'mdx';
@@ -44,6 +45,8 @@ const props = withDefaults(defineProps<IMonacoEditorProps>(), {
     supportedLanguages: () => ['sql', 'msdax', 'mdx'],
     // supportedThemes: () => ['vs-dark', 'vs-light', 'hc-black'],
 });
+
+const { t } = useTranslation('monaco')
 
 console.log(props.metadata);
 
@@ -170,7 +173,7 @@ watch(() => props.modelValue, (newValue) => {
     <div class="editor-page">
         <div class="header-container">
             <div class="toolbar" v-if="props.showToolbar">
-                <DSelect v-model="selectedLanguage" label="Sprache" :options="supportedLanguages" size="sm" />
+                <DSelect v-model="selectedLanguage" :label="t('Editor.language')" :options="supportedLanguages" size="sm" />
             </div>
             <slot name="actions">
                 <!-- Additional action buttons can be inserted here -->

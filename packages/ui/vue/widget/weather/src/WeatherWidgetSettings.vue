@@ -13,6 +13,9 @@ Contributors:
 <script setup lang="ts">
 import { ref, computed, watch, onMounted } from 'vue'
 import type { WeatherWidgetSettings } from './types/WeatherWidgetSettings'
+import { useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+
+const { t } = useTranslation('weather')
 
 const settings = defineModel<WeatherWidgetSettings>( { required: true})
 
@@ -52,16 +55,16 @@ const setTimeRange = (hours: number) => {
 }
 
 // Forecast settings
-const availableForecastParameters = [
-  { key: 'temperature', label: 'Temperature' },
-  { key: 'humidity', label: 'Humidity' },
-  { key: 'pressure', label: 'Pressure' },
-  { key: 'windSpeed', label: 'Wind Speed' },
-  { key: 'windDirection', label: 'Wind Direction' },
-  { key: 'precipitation', label: 'Precipitation' },
-  { key: 'visibility', label: 'Visibility' },
-  { key: 'cloudCover', label: 'Cloud Cover' }
-]
+const availableForecastParameters = computed(() => [
+  { key: 'temperature', label: t('Widget.params.temperature') },
+  { key: 'humidity', label: t('Widget.params.humidity') },
+  { key: 'pressure', label: t('Widget.params.pressure') },
+  { key: 'windSpeed', label: t('Widget.params.windSpeed') },
+  { key: 'windDirection', label: t('Widget.params.windDirection') },
+  { key: 'precipitation', label: t('Widget.params.precipitation') },
+  { key: 'visibility', label: t('Widget.params.visibility') },
+  { key: 'cloudCover', label: t('Widget.params.cloudCover') }
+])
 
 // Initialize forecast settings if not set
 onMounted(() => {
@@ -107,7 +110,7 @@ onMounted(() => {
       model/ui.xmi beside this.
     -->
     <div class="settings-section">
-      <h4>Zeitraum</h4>
+      <h4>{{ t('Settings.range') }}</h4>
 
       <div class="time-mode-selector">
         <label>
@@ -116,7 +119,7 @@ onMounted(() => {
             value="auto"
             v-model="timeMode"
           />
-          Latest Data
+          {{ t('Settings.latest') }}
         </label>
         <label>
           <input
@@ -124,7 +127,7 @@ onMounted(() => {
             value="range"
             v-model="timeMode"
           />
-          Time Range
+          {{ t('Settings.timeRange') }}
         </label>
         <label>
           <input
@@ -132,7 +135,7 @@ onMounted(() => {
             value="manual"
             v-model="timeMode"
           />
-          Manual Selection
+          {{ t('Settings.manual') }}
         </label>
       </div>
 
@@ -142,34 +145,34 @@ onMounted(() => {
           @click="setTimeRange(1)"
           class="btn btn-sm"
         >
-          Last Hour
+          {{ t('Settings.lastHour') }}
         </button>
         <button
           type="button"
           @click="setTimeRange(6)"
           class="btn btn-sm"
         >
-          Last 6 Hours
+          {{ t('Settings.last6Hours') }}
         </button>
         <button
           type="button"
           @click="setTimeRange(24)"
           class="btn btn-sm"
         >
-          Last 24 Hours
+          {{ t('Settings.last24Hours') }}
         </button>
         <button
           type="button"
           @click="setTimeRange(168)"
           class="btn btn-sm"
         >
-          Last Week
+          {{ t('Settings.lastWeek') }}
         </button>
       </div>
 
       <div v-if="timeMode === 'manual' || timeMode === 'range'" class="time-inputs">
         <div class="form-group">
-          <label for="startTime">Start Time:</label>
+          <label for="startTime">{{ t('Settings.start') }}</label>
           <input
             id="startTime"
             type="datetime-local"
@@ -179,7 +182,7 @@ onMounted(() => {
         </div>
 
         <div class="form-group">
-          <label for="endTime">End Time:</label>
+          <label for="endTime">{{ t('Settings.end') }}</label>
           <input
             id="endTime"
             type="datetime-local"
@@ -193,13 +196,13 @@ onMounted(() => {
           @click="setCurrentTime"
           class="btn btn-sm btn-secondary"
         >
-          Set to Current Time
+          {{ t('Settings.now') }}
         </button>
       </div>
     </div>
 
     <div class="settings-section" v-if="settings.showForecast">
-      <h4>Farbe je Wert</h4>
+      <h4>{{ t('Settings.colors') }}</h4>
 
       <div class="color-settings">
         <div
@@ -220,7 +223,7 @@ onMounted(() => {
       </div>
 
       <small class="form-text">
-        Farbe, in der jeder Wert in den Vorhersage-Diagrammen gezeichnet wird.
+        {{ t('Settings.colorsHint') }}
       </small>
     </div>
 

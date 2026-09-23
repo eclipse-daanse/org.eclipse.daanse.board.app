@@ -113,18 +113,6 @@ import b97 from 'org.eclipse.daanse.board.app.lib.repository.variable/manifest.j
 import b98 from 'org.eclipse.daanse.board.app.lib.repository.widget/manifest.json'
 import b99 from 'org.eclipse.daanse.board.app.lib.settings.manager/manifest.json'
 import b100 from 'org.eclipse.daanse.board.app.ui.vue.eventmanager/manifest.json'
-import b101 from 'org.eclipse.daanse.board.app.ui.vue.lang.common.en/manifest.json'
-import b102 from 'org.eclipse.daanse.board.app.ui.vue.lang.icon.en/manifest.json'
-import b144 from 'org.eclipse.daanse.board.app.ui.vue.lang.icon.de/manifest.json'
-import b103 from 'org.eclipse.daanse.board.app.ui.vue.lang.image.en/manifest.json'
-import b104 from 'org.eclipse.daanse.board.app.ui.vue.lang.page.en/manifest.json'
-import b105 from 'org.eclipse.daanse.board.app.ui.vue.lang.progress.en/manifest.json'
-import b106 from 'org.eclipse.daanse.board.app.ui.vue.lang.svg.base.en/manifest.json'
-import b107 from 'org.eclipse.daanse.board.app.ui.vue.lang.svg.repeat.en/manifest.json'
-import b108 from 'org.eclipse.daanse.board.app.ui.vue.lang.text.plain.en/manifest.json'
-import b109 from 'org.eclipse.daanse.board.app.ui.vue.lang.text.rich.en/manifest.json'
-import b110 from 'org.eclipse.daanse.board.app.ui.vue.lang.video.en/manifest.json'
-import b111 from 'org.eclipse.daanse.board.app.ui.vue.lang.wrapper.en/manifest.json'
 import b112 from 'org.eclipse.daanse.board.app.ui.vue.layouts.base/manifest.json'
 import b113 from 'org.eclipse.daanse.board.app.ui.vue.layouts.grid/manifest.json'
 import b114 from 'org.eclipse.daanse.board.app.ui.vue.page_provider/manifest.json'
@@ -265,17 +253,6 @@ export const bundles: ModuleManifest[] = [
   b98 as ModuleManifest,
   b99 as ModuleManifest,
   b100 as ModuleManifest,
-  b101 as ModuleManifest,
-  b102 as ModuleManifest,
-  b103 as ModuleManifest,
-  b104 as ModuleManifest,
-  b105 as ModuleManifest,
-  b106 as ModuleManifest,
-  b107 as ModuleManifest,
-  b108 as ModuleManifest,
-  b109 as ModuleManifest,
-  b110 as ModuleManifest,
-  b111 as ModuleManifest,
   b112 as ModuleManifest,
   b113 as ModuleManifest,
   b114 as ModuleManifest,
@@ -308,5 +285,4 @@ export const bundles: ModuleManifest[] = [
   b141 as ModuleManifest,
   b142 as ModuleManifest,
   b143 as ModuleManifest,
-  b144 as ModuleManifest,
 ]

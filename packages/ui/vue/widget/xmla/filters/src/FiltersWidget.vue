@@ -12,11 +12,12 @@ Contributors:
     Smart City Jena
 -->
 <script setup lang="ts">
-import { useDatasourceRepository } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+import { useDatasourceRepository, useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import { inject, toRefs, watch, ref, onMounted } from 'vue'
 import { FiltersModal } from 'org.eclipse.daanse.board.app.ui.vue.common.xmla';
 
 const props = defineProps<{ datasourceId: string, config: any; id?: string }>()
+const { t } = useTranslation('xmlaFilters')
 const { datasourceId, id: widgetId } = toRefs(props)
 
 import { identifiers } from 'org.eclipse.daanse.board.app.lib.core'
@@ -217,7 +218,7 @@ const configureFilter = async (type: string, element: any) => {
 <template>
   <div class="widget" @click="emitClick" @contextmenu.prevent="emitRightClick">
     <div class="hierarchies-section" v-if="props.config.settings.showRows && rows.length > 0">
-      <h4>Rows:</h4>
+      <h4>{{ t('Widget.rows') }}</h4>
       <div v-for="hierarchy in rows" :key="hierarchy.originalItem.HIERARCHY_UNIQUE_NAME" class="hierarchy-item">
         <p class="hierarchy-caption">{{ hierarchy.originalItem.HIERARCHY_NAME }} ({{ hierarchy.originalItem.HIERARCHY_UNIQUE_NAME }})</p>
         <p class="filter-caption">{{ hierarchy.filtersCaption }}</p>
@@ -231,7 +232,7 @@ const configureFilter = async (type: string, element: any) => {
       </div>
     </div>
     <div class="hierarchies-section" v-if="props.config.settings.showColumns && columns.length > 0">
-      <h4>Columns:</h4>
+      <h4>{{ t('Widget.columns') }}</h4>
       <div v-for="hierarchy in columns" :key="hierarchy.originalItem.HIERARCHY_UNIQUE_NAME" class="hierarchy-item">
         <p class="hierarchy-caption">{{ hierarchy.originalItem.HIERARCHY_NAME }} ({{ hierarchy.originalItem.HIERARCHY_UNIQUE_NAME }})</p>
         <p class="filter-caption">{{ hierarchy.filtersCaption }}</p>
@@ -245,7 +246,7 @@ const configureFilter = async (type: string, element: any) => {
       </div>
     </div>
     <div class="hierarchies-section" v-if="props.config.settings.showFilters && filters.length > 0">
-      <h4>Filters:</h4>
+      <h4>{{ t('Widget.filters') }}</h4>
       <div v-for="hierarchy in filters" :key="hierarchy.originalItem.HIERARCHY_UNIQUE_NAME" class="hierarchy-item">
         <p class="hierarchy-caption">{{ hierarchy.originalItem.HIERARCHY_NAME }} ({{ hierarchy.originalItem.HIERARCHY_UNIQUE_NAME }})</p>
         <p class="filter-caption">{{ hierarchy.filtersCaption }}</p>

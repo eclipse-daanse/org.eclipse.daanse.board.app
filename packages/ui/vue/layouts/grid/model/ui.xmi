@@ -26,9 +26,9 @@ width; the columns follow, one per width the layout switches at.
 
   <components xsi:type="uimodel:FormView" name="GridSettingsFormView">
     <fields xsi:type="uimodel:NumberWidget" name="rowHeight"
-        feature="http://org.eclipse.daanse.board.app.ui.vue.layouts.grid#//GridSettings/rowHeight" label="Zeilenhöhe (px)"
+        feature="http://org.eclipse.daanse.board.app.ui.vue.layouts.grid#//GridSettings/rowHeight" label="layoutsGrid:Form.rowHeight"
         min="10" max="200" step="1"/>
     <fields xsi:type="uimodel:InputWidget" name="cols"
-        feature="http://org.eclipse.daanse.board.app.ui.vue.layouts.grid#//GridSettings/cols" label="Spalten je Breite"/>
+        feature="http://org.eclipse.daanse.board.app.ui.vue.layouts.grid#//GridSettings/cols" label="layoutsGrid:Form.cols"/>
   </components>
 </uimodel:UIModel>

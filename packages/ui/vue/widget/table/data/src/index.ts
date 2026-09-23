@@ -58,6 +58,7 @@ export class DataTableWidgetProvider implements WidgetProvider {
   readonly supportedDSTypes = ['csv', 'rest']
   readonly icon = Icon
   readonly name = 'DataTable'
+  readonly nameKey = 'tableData:Widget.name'
 
   constructor(
     @inject(EVENT_REGISTRY_ID) private readonly events: EventRegistry,
@@ -79,3 +80,6 @@ export class DataTableWidgetProvider implements WidgetProvider {
 
 export { DataTableWidget }
 export { DataTableSettingsImpl, DatatablesettingsPackage, dataTableSettingsFormXmi }
+
+/* Its texts - collected by lib.i18next, see src/i18n. */
+export { TableDataTranslations } from './i18n'

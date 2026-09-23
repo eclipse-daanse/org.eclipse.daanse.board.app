@@ -11,7 +11,7 @@ Contributors: Smart City Jena
 <script setup lang="ts">
 import { DButton, DCheckbox, DDateInput, DInput, DSelect } from 'org.eclipse.daanse.board.app.ui.vue.controls'
 import { inject, computed, reactive, watch, ref } from 'vue';
-import { VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables';
+import { VariableWrapper, useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables';
 import {
   identifier as variableIdentifier,
   type VariableRepository
@@ -23,6 +23,8 @@ const { config, connections } = defineProps<{
   dataSources: any;
   connections: any;
 }>();
+
+const { t } = useTranslation('datasourceOgcsta')
 
 const connectionsFiltered = computed(() => {
   return connections.filter((c: any) => c.type === 'rest');
@@ -201,7 +203,7 @@ const resultTimeEndDT = createDateTimeComputed(() => timeWrappers.resultTimeEnd)
         <div class="setting-group">
           <DSelect
             v-model="config.connection"
-            label="Verbindung"
+            :label="t('Settings.connection')"
             :options="connectionsFiltered"
             label-key="name"
             value-key="uid"
@@ -213,7 +215,7 @@ const resultTimeEndDT = createDateTimeComputed(() => timeWrappers.resultTimeEnd)
         <div class="setting-group">
           <DSelect
             v-model="config.mqttConnection"
-            label="MQTT Connection (optional, for realtime updates)"
+            :label="t('Ogcsta.mqtt')"
             :options="mqttConnectionsFiltered"
             label-key="name"
             value-key="uid"
@@ -226,50 +228,50 @@ const resultTimeEndDT = createDateTimeComputed(() => timeWrappers.resultTimeEnd)
              the setting it guards, so opening it turns history on. -->
         <details class="history" :open="config.history.enabled">
           <summary class="history__head" @click.prevent="config.history.enabled = !config.history.enabled">
-            <DIcon name="history" size="sm" tone="color-dim" />Verlaufsdaten
+            <DIcon name="history" size="sm" tone="color-dim" />{{ t('Ogcsta.history') }}
           </summary>
           <div class="history-settings">
 
         <!-- Time Range Configuration -->
         <div class="setting-group">
           <div class="filter-header">
-            <h4>Time Range Filter</h4>
+            <h4>{{ t('Ogcsta.timeRange') }}</h4>
             <DButton intent="danger"
               size="sm"
               @click="clearTimeRange"
-              title="Clear Time Range Filter">
+              :title="t('Ogcsta.clearTimeRange')">
   <DIcon name="delete" size="sm" />
 </DButton>
           </div>
 
-          <VariableInput v-model="timeWrappers.timeRangeStart" label="Startzeit">
+          <VariableInput v-model="timeWrappers.timeRangeStart" :label="t('Ogcsta.startTime')">
             <template #default="{ value, change }">
               <div class="datetime-picker-group">
                 <DDateInput
                   v-model="timeRangeStartDT.dateValue.value"
-                  label="Startdatum"
+                  :label="t('Ogcsta.startDate')"
                   @update:model-value="timeRangeStartDT.updateWrapper()"
                 />
                 <DDateInput mode="time"
                   v-model="timeRangeStartDT.timeValue.value"
-                  label="Startzeit"
+                  :label="t('Ogcsta.startTime')"
                   @update:model-value="timeRangeStartDT.updateWrapper()"
                 />
               </div>
             </template>
           </VariableInput>
 
-          <VariableInput v-model="timeWrappers.timeRangeEnd" label="Endzeit">
+          <VariableInput v-model="timeWrappers.timeRangeEnd" :label="t('Ogcsta.endTime')">
             <template #default="{ value, change }">
               <div class="datetime-picker-group">
                 <DDateInput
                   v-model="timeRangeEndDT.dateValue.value"
-                  label="Enddatum"
+                  :label="t('Ogcsta.endDate')"
                   @update:model-value="timeRangeEndDT.updateWrapper()"
                 />
                 <DDateInput mode="time"
                   v-model="timeRangeEndDT.timeValue.value"
-                  label="Endzeit"
+                  :label="t('Ogcsta.endTime')"
                   @update:model-value="timeRangeEndDT.updateWrapper()"
                 />
               </div>
@@ -280,43 +282,43 @@ const resultTimeEndDT = createDateTimeComputed(() => timeWrappers.resultTimeEnd)
         <!-- Phenomenon Time Configuration -->
         <div class="setting-group">
           <div class="filter-header">
-            <h4>Phenomenon Time Filter</h4>
+            <h4>{{ t('Ogcsta.phenomenonTime') }}</h4>
             <DButton intent="danger"
               size="sm"
               @click="clearPhenomenonTime"
-              title="Clear Phenomenon Time Filter">
+              :title="t('Ogcsta.clearPhenomenonTime')">
   <DIcon name="delete" size="sm" />
 </DButton>
           </div>
 
-          <VariableInput v-model="timeWrappers.phenomenonTimeStart" label="Startzeit">
+          <VariableInput v-model="timeWrappers.phenomenonTimeStart" :label="t('Ogcsta.startTime')">
             <template #default="{ value, change }">
               <div class="datetime-picker-group">
                 <DDateInput
                   v-model="phenomenonTimeStartDT.dateValue.value"
-                  label="Startdatum"
+                  :label="t('Ogcsta.startDate')"
                   @update:model-value="phenomenonTimeStartDT.updateWrapper()"
                 />
                 <DDateInput mode="time"
                   v-model="phenomenonTimeStartDT.timeValue.value"
-                  label="Startzeit"
+                  :label="t('Ogcsta.startTime')"
                   @update:model-value="phenomenonTimeStartDT.updateWrapper()"
                 />
               </div>
             </template>
           </VariableInput>
 
-          <VariableInput v-model="timeWrappers.phenomenonTimeEnd" label="Endzeit">
+          <VariableInput v-model="timeWrappers.phenomenonTimeEnd" :label="t('Ogcsta.endTime')">
             <template #default="{ value, change }">
               <div class="datetime-picker-group">
                 <DDateInput
                   v-model="phenomenonTimeEndDT.dateValue.value"
-                  label="Enddatum"
+                  :label="t('Ogcsta.endDate')"
                   @update:model-value="phenomenonTimeEndDT.updateWrapper()"
                 />
                 <DDateInput mode="time"
                   v-model="phenomenonTimeEndDT.timeValue.value"
-                  label="Endzeit"
+                  :label="t('Ogcsta.endTime')"
                   @update:model-value="phenomenonTimeEndDT.updateWrapper()"
                 />
               </div>
@@ -327,43 +329,43 @@ const resultTimeEndDT = createDateTimeComputed(() => timeWrappers.resultTimeEnd)
         <!-- Result Time Configuration -->
         <div class="setting-group">
           <div class="filter-header">
-            <h4>Result Time Filter</h4>
+            <h4>{{ t('Ogcsta.resultTime') }}</h4>
             <DButton intent="danger"
               size="sm"
               @click="clearResultTime"
-              title="Clear Result Time Filter">
+              :title="t('Ogcsta.clearResultTime')">
   <DIcon name="delete" size="sm" />
 </DButton>
           </div>
 
-          <VariableInput v-model="timeWrappers.resultTimeStart" label="Startzeit">
+          <VariableInput v-model="timeWrappers.resultTimeStart" :label="t('Ogcsta.startTime')">
             <template #default="{ value, change }">
               <div class="datetime-picker-group">
                 <DDateInput
                   v-model="resultTimeStartDT.dateValue.value"
-                  label="Startdatum"
+                  :label="t('Ogcsta.startDate')"
                   @update:model-value="resultTimeStartDT.updateWrapper()"
                 />
                 <DDateInput mode="time"
                   v-model="resultTimeStartDT.timeValue.value"
-                  label="Startzeit"
+                  :label="t('Ogcsta.startTime')"
                   @update:model-value="resultTimeStartDT.updateWrapper()"
                 />
               </div>
             </template>
           </VariableInput>
 
-          <VariableInput v-model="timeWrappers.resultTimeEnd" label="Endzeit">
+          <VariableInput v-model="timeWrappers.resultTimeEnd" :label="t('Ogcsta.endTime')">
             <template #default="{ value, change }">
               <div class="datetime-picker-group">
                 <DDateInput
                   v-model="resultTimeEndDT.dateValue.value"
-                  label="Enddatum"
+                  :label="t('Ogcsta.endDate')"
                   @update:model-value="resultTimeEndDT.updateWrapper()"
                 />
                 <DDateInput mode="time"
                   v-model="resultTimeEndDT.timeValue.value"
-                  label="Endzeit"
+                  :label="t('Ogcsta.endTime')"
                   @update:model-value="resultTimeEndDT.updateWrapper()"
                 />
               </div>
@@ -373,23 +375,23 @@ const resultTimeEndDT = createDateTimeComputed(() => timeWrappers.resultTimeEnd)
 
         <!-- Additional History Settings -->
         <div class="setting-group">
-          <h4>Query Settings</h4>
+          <h4>{{ t('Ogcsta.query') }}</h4>
 
           <DSelect
             v-model="config.history.orderBy"
             :options="[
-              { text: 'Phenomenon Time (Descending)', value: 'phenomenonTime desc' },
-              { text: 'Phenomenon Time (Ascending)', value: 'phenomenonTime asc' },
-              { text: 'Result Time (Descending)', value: 'resultTime desc' },
-              { text: 'Result Time (Ascending)', value: 'resultTime asc' }
+              { text: t('Ogcsta.order.phenomenonDesc'), value: 'phenomenonTime desc' },
+              { text: t('Ogcsta.order.phenomenonAsc'), value: 'phenomenonTime asc' },
+              { text: t('Ogcsta.order.resultDesc'), value: 'resultTime desc' },
+              { text: t('Ogcsta.order.resultAsc'), value: 'resultTime asc' }
             ]"
-            label="Sortieren nach"
+            :label="t('Ogcsta.orderBy')"
             clearable
           />
 
           <DInput
             v-model.number="config.history.limit"
-            label="Limit (max records)"
+            :label="t('Ogcsta.limit')"
             type="number"
             :min="1"
             :max="10000"
@@ -398,12 +400,12 @@ const resultTimeEndDT = createDateTimeComputed(() => timeWrappers.resultTimeEnd)
 
           <DCheckbox
             v-model="config.useCurrentLocationInsteadOfHistorical"
-            label="Aktuelle statt historische Orte"
+            :label="t('Ogcsta.currentLocations')"
           >
             <template #label>
-              <span>Use current locations instead of historical locations</span>
+              <span>{{ t('Ogcsta.currentLocationsLong') }}</span>
               <div style="font-size: 0.75rem; color: var(--color-dim); margin-top: 0.25rem;">
-                Reuse already loaded current locations instead of fetching historical locations via API
+                {{ t('Ogcsta.currentLocationsHint') }}
               </div>
             </template>
           </DCheckbox>

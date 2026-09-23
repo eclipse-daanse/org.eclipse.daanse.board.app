@@ -28,8 +28,10 @@ Contributors:
 import { computed, nextTick, onBeforeUnmount, ref, watch } from 'vue'
 import DIcon from './DIcon.vue'
 import DField from './DField.vue'
+import { useText } from './useText'
 
 const model = defineModel<string>({ default: '' })
+const t = useText()
 
 const props = withDefaults(
   defineProps<{
@@ -180,23 +182,23 @@ function commitTyped() {
         type="button"
         class="picker__current"
         :disabled="disabled"
-        :title="model || `${fallback} (vom Typ)`"
+        :title="model || t('IconPicker.fromTypeTitle', '{icon} (from the type)', { icon: fallback })"
         @click="open = !open"
       >
         <DIcon :name="model || fallback" size="lg" />
       </button>
-      <span class="picker__name">{{ model || `${fallback} — vom Typ` }}</span>
+      <span class="picker__name">{{ model || t('IconPicker.fromType', '{icon} — from the type', { icon: fallback }) }}</span>
       <button v-if="model" type="button" class="picker__clear" @click="clear">
-        Zurücksetzen
+        {{ t('IconPicker.reset', 'Reset') }}
       </button>
     </div>
 
     <Teleport to="body">
       <template v-if="open">
         <div class="picker__catch" @click="open = false" />
-        <div ref="panel" class="sheet" role="dialog" aria-label="Symbol wählen">
+        <div ref="panel" class="sheet" role="dialog" :aria-label="t('IconPicker.choose', 'Choose icon')">
           <div class="sheet__search">
-            <input v-model="search" type="search" placeholder="Symbol suchen…" autofocus />
+            <input v-model="search" type="search" :placeholder="t('IconPicker.search', 'Search icon…')" autofocus />
           </div>
 
           <ul v-if="shown.length" class="sheet__grid">
@@ -211,15 +213,15 @@ function commitTyped() {
               </button>
             </li>
           </ul>
-          <p v-else class="sheet__none">Kein Symbol mit diesem Namen in der Auswahl.</p>
+          <p v-else class="sheet__none">{{ t('IconPicker.none', 'No icon with this name in the selection.') }}</p>
 
           <div class="sheet__own">
-            <label class="sheet__own-label" for="icon-own">Anderer Name</label>
+            <label class="sheet__own-label" for="icon-own">{{ t('IconPicker.other', 'Other name') }}</label>
             <input
               id="icon-own"
               v-model="draft"
               type="text"
-              placeholder="z. B. thermostat"
+              :placeholder="t('IconPicker.otherPlaceholder', 'e.g. thermostat')"
               @keydown.enter.prevent="commitTyped"
             />
             <span class="sheet__preview" aria-hidden="true">
@@ -231,11 +233,11 @@ function commitTyped() {
               :disabled="!typedIsReal || !draft.trim()"
               @click="commitTyped"
             >
-              Übernehmen
+              {{ t('IconPicker.take', 'Apply') }}
             </button>
           </div>
           <p v-if="draft.trim() && !typedIsReal" class="sheet__warn">
-            Dieses Symbol kennt die Schrift nicht — es würde als Text erscheinen.
+            {{ t('IconPicker.unknown', 'The font does not know this icon — it would appear as text.') }}
           </p>
         </div>
       </template>

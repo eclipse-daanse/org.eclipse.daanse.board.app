@@ -25,6 +25,7 @@
  * stored state.
  */
 import { computed, ref } from 'vue'
+import { useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import { TOKEN_ALIASES, TOKEN_NAMES } from './tokens'
 import { DEFAULT_THEME_ID, THEMES, themeById, type Theme } from './themes'
 
@@ -95,6 +96,7 @@ function paint() {
 const allThemes = computed<Theme[]>(() => [...THEMES, ...added.value])
 
 export function useTheme() {
+  const { t } = useTranslation('shell')
   const activeTheme = computed(
     () => allThemes.value.find((t) => t.id === choice.value.themeId) ?? THEMES[0],
   )
@@ -151,7 +153,9 @@ export function useTheme() {
     return {
       ...activeTheme.value,
       id: `${activeTheme.value.id}-eigen`,
-      name: `${activeTheme.value.name} (angepasst)`,
+      /* Words, not keys: an exported theme is read outside this app. */
+      name: t('Themes.customized', { name: t(activeTheme.value.name) }),
+      note: t(activeTheme.value.note),
       tokens: { ...activeTheme.value.tokens, ...choice.value.overrides },
     }
   }

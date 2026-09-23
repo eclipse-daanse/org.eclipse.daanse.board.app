@@ -53,3 +53,6 @@ export function deactivate({ services }: ActivationContext) {
   services.unregister('WsPreview')
   services.unregister('WsSettings')
 }
+
+/* Its texts - collected by lib.i18next, see src/i18n. */
+export { DatasourceWsTranslations } from './i18n'

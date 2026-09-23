@@ -30,20 +30,20 @@ one that was always there.
 
   <components xsi:type="uimodel:FormView" name="ImageSettingsFormView">
 
-    <fields xsi:type="uimodel:GroupWidget" name="picturesGroup" layout="VERTICAL" label="Bilder">
+    <fields xsi:type="uimodel:GroupWidget" name="picturesGroup" layout="VERTICAL" label="image:Form.picturesGroup">
       <!-- A list: each entry is a form of its own, built from
            ImageGalleryItem. -->
       <fields xsi:type="uimodel:InputWidget"
           name="images"
           feature="http://org.eclipse.daanse.board.app.ui.vue.widget.image#//ImageSettings/images"
-          label="Bilder"/>
+          label="image:Form.images"/>
     </fields>
 
-    <fields xsi:type="uimodel:GroupWidget" name="displayGroup" layout="VERTICAL" label="Darstellung">
+    <fields xsi:type="uimodel:GroupWidget" name="displayGroup" layout="VERTICAL" label="image:Form.displayGroup">
       <fields xsi:type="uimodel:InputWidget"
           name="imagesSettings"
           feature="http://org.eclipse.daanse.board.app.ui.vue.widget.image#//ImageSettings/imagesSettings"
-          label="Anzeige"/>
+          label="image:Form.imagesSettings"/>
     </fields>
 
   </components>

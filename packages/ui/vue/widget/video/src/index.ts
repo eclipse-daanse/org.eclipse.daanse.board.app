@@ -57,6 +57,7 @@ export class VideoWidgetProvider implements WidgetProvider {
   readonly supportedDSTypes = []
   readonly icon = Icon
   readonly name = 'Video'
+  readonly nameKey = 'video:Widget.name'
 
   /*
    * The settings form, as a model. Carried on the registration like the
@@ -93,3 +94,6 @@ export class VideoWidgetProvider implements WidgetProvider {
 export { VideoWidget }
 export { VideoSettingsImpl, VideoSettingsPackage, videoSettingsFormXmi, videoFitFormXmi }
 export type { IVideoSettings }
+
+/* Its texts - collected by lib.i18next, see src/i18n. */
+export { VideoTranslations } from './i18n'

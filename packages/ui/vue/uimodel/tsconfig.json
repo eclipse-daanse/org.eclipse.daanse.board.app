@@ -9,6 +9,7 @@
     "module": "commonjs",
     "declaration": true,
     "outDir": "./dist/types",
+    "resolveJsonModule": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "strict": true,

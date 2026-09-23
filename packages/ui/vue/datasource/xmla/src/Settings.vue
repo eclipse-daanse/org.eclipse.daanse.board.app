@@ -18,6 +18,7 @@ import { computed, onMounted, ref, watch } from 'vue';
 import { XmlaStore } from 'org.eclipse.daanse.board.app.lib.datasource.xmla';
 import { inject } from 'vue'
 import { type ConnectionRepository, identifier as connectionIdentifier } from 'org.eclipse.daanse.board.app.lib.api.connection'
+import { useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 
 const connectionRepository = inject<ConnectionRepository>(connectionIdentifier)!
 
@@ -25,7 +26,9 @@ const { config, connections } = defineProps<{
     config: any;
     connections: any;
     dataSources: any;
-}>();
+}>()
+
+const { t } = useTranslation('datasourceXmla');
 
 const innerInterval = ref(config.pollingInterval ?? 5000);
 const cubes = ref([] as any[]);
@@ -62,11 +65,11 @@ onMounted(async () => {
 
 <template>
     <!-- eslint-disable-next-line vue/no-mutating-props -->
-    <DSelect v-model="config.connection" label="Verbindung" :options="connectionsFiltered" label-key="name"
+    <DSelect v-model="config.connection" :label="t('Settings.connection')" :options="connectionsFiltered" label-key="name"
         value-key="uid" />
-    <DSelect v-model="config.cube" label="Würfel" :options="cubes" label-key="CUBE_NAME" value-key="CUBE_NAME" />
-    <DSwitch v-model="config.pollingEnabled" label="Regelmäßig neu laden" />
-    <DInput v-if="config.pollingEnabled" v-model="innerInterval" label="Abstand (ms)" />
+    <DSelect v-model="config.cube" :label="t('Settings.cube')" :options="cubes" label-key="CUBE_NAME" value-key="CUBE_NAME" />
+    <DSwitch v-model="config.pollingEnabled" :label="t('Settings.polling')" />
+    <DInput v-if="config.pollingEnabled" v-model="innerInterval" :label="t('Settings.intervalMs')" />
     <!-- eslint-disable-next-line vue/no-mutating-props -->
     <!-- <DInput v-model="config.resourceUrl" label="Pfad" /> -->
 </template>

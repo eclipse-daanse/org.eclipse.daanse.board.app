@@ -1,0 +1,45 @@
+{
+  "Widget": {
+    "name": "Vanta-Hintergrund"
+  },
+  "Form": {
+    "effectGroup": "Effekt",
+    "type": "Art",
+    "backgroundColor": "Hintergrundfarbe",
+    "cloudsGroup": "Wolken",
+    "skyColor": "Himmelsfarbe",
+    "cloudColor": "Wolkenfarbe",
+    "cloudShadowColor": "Wolkenschatten",
+    "sunColor": "Sonnenfarbe",
+    "sunGlareColor": "Sonnenblendung",
+    "sunlightColor": "Sonnenlicht",
+    "speed": "Geschwindigkeit",
+    "birdsGroup": "Vögel",
+    "color1": "Farbe 1",
+    "color2": "Farbe 2",
+    "quantity": "Anzahl",
+    "birdSize": "Größe",
+    "wingSpan": "Flügelspanne",
+    "speedLimit": "Höchstgeschwindigkeit",
+    "separation": "Abstand",
+    "alignment": "Ausrichtung",
+    "cohesion": "Zusammenhalt",
+    "netGroup": "Netz",
+    "netColor": "Farbe",
+    "points": "Punkte",
+    "maxDistance": "Größter Abstand",
+    "netSpacing": "Abstand",
+    "trunkGroup": "Geäst",
+    "trunkColor": "Farbe",
+    "chaos": "Unordnung",
+    "trunkSpacing": "Abstand"
+  },
+  "Options": {
+    "type": {
+      "clouds": "Wolken",
+      "birds": "Vögel",
+      "net": "Netz",
+      "trunk": "Geäst"
+    }
+  }
+}

@@ -39,15 +39,25 @@ import {
   DSwitch,
 } from 'org.eclipse.daanse.board.app.ui.vue.controls'
 import { SettingsForm } from 'org.eclipse.daanse.board.app.ui.vue.uimodel'
+import { useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 
 const pageid = defineModel<string>({ required: true })
 const emit = defineEmits(['close'])
+const { t } = useTranslation('shell')
 
 const pageRepo = inject<PageRegistryI>(PageIdentifier)
 const layoutRepo = inject<LayoutRepositoryI>(LayoutRepositoryIdentifier)
 const pageSettings = ref<StoredPage | null>(null)
 
 const availableLayouts = computed(() => layoutRepo?.getAllLayouts() ?? [])
+
+/* The same layouts, named in the language on screen. */
+const layoutOptions = computed(() =>
+  availableLayouts.value.map((layout) => ({
+    id: layout.id,
+    name: layout.nameKey ? t(layout.nameKey, { defaultValue: layout.name }) : layout.name,
+  })),
+)
 
 const defaultLayout = computed(
   () =>
@@ -72,30 +82,30 @@ const chosenLayout = computed(() =>
   pageSettings.value?.layoutId ? layoutRepo?.getLayout(pageSettings.value.layoutId) : undefined,
 )
 
-const backgroundSizes = [
-  { uid: 'auto', name: 'Auto' },
-  { uid: 'cover', name: 'Füllend' },
-  { uid: 'contain', name: 'Einpassend' },
-]
+const backgroundSizes = computed(() => [
+  { uid: 'auto', name: t('PageSettings.size.auto') },
+  { uid: 'cover', name: t('PageSettings.size.cover') },
+  { uid: 'contain', name: t('PageSettings.size.contain') },
+])
 
-const backgroundRepeats = [
-  { uid: 'no-repeat', name: 'Nicht wiederholen' },
-  { uid: 'repeat', name: 'Wiederholen' },
-  { uid: 'repeat-x', name: 'Waagerecht wiederholen' },
-  { uid: 'repeat-y', name: 'Senkrecht wiederholen' },
-]
+const backgroundRepeats = computed(() => [
+  { uid: 'no-repeat', name: t('PageSettings.repeat.none') },
+  { uid: 'repeat', name: t('PageSettings.repeat.both') },
+  { uid: 'repeat-x', name: t('PageSettings.repeat.x') },
+  { uid: 'repeat-y', name: t('PageSettings.repeat.y') },
+])
 
-const backgroundPositions = [
-  { uid: 'center', name: 'Mitte' },
-  { uid: 'top', name: 'Oben' },
-  { uid: 'bottom', name: 'Unten' },
-  { uid: 'left', name: 'Links' },
-  { uid: 'right', name: 'Rechts' },
-  { uid: 'top left', name: 'Oben links' },
-  { uid: 'top right', name: 'Oben rechts' },
-  { uid: 'bottom left', name: 'Unten links' },
-  { uid: 'bottom right', name: 'Unten rechts' },
-]
+const backgroundPositions = computed(() => [
+  { uid: 'center', name: t('PageSettings.position.center') },
+  { uid: 'top', name: t('PageSettings.position.top') },
+  { uid: 'bottom', name: t('PageSettings.position.bottom') },
+  { uid: 'left', name: t('PageSettings.position.left') },
+  { uid: 'right', name: t('PageSettings.position.right') },
+  { uid: 'top left', name: t('PageSettings.position.topLeft') },
+  { uid: 'top right', name: t('PageSettings.position.topRight') },
+  { uid: 'bottom left', name: t('PageSettings.position.bottomLeft') },
+  { uid: 'bottom right', name: t('PageSettings.position.bottomRight') },
+])
 
 /* Only worth asking about once there is an image to place */
 const hasBackgroundImage = computed(() => Boolean(pageSettings.value?.backgroundImage?.trim()))
@@ -158,10 +168,10 @@ watch(
 </script>
 
 <template>
-  <aside class="page-settings" aria-label="Seite einrichten">
+  <aside class="page-settings" :aria-label="t('PageSettings.title')">
     <header class="head">
-      <h2 class="head__title">Seite einrichten</h2>
-      <button type="button" class="head__close" aria-label="Schließen" @click="emit('close')">
+      <h2 class="head__title">{{ t('PageSettings.title') }}</h2>
+      <button type="button" class="head__close" :aria-label="t('common:Action.close')" @click="emit('close')">
         ×
       </button>
     </header>
@@ -170,20 +180,20 @@ watch(
       <!-- Said out loud rather than rendering nothing: a panel that opens
            empty looks like a fault in the button that opened it -->
       <p v-if="!pageSettings" class="missing">
-        Diese Seite ist nicht mehr da. Wähle oben eine andere.
+        {{ t('PageSettings.missing') }}
       </p>
 
       <template v-else>
       <section class="group">
-        <h3 class="group__label">Seite</h3>
-        <DInput v-model="pageSettings.name" label="Name" />
-        <DInput v-model="pageSettings.description" label="Beschreibung" />
-        <DInput v-model="pageSettings.icon" label="Symbol" placeholder="Name eines Material-Icons" />
+        <h3 class="group__label">{{ t('PageSettings.page') }}</h3>
+        <DInput v-model="pageSettings.name" :label="t('Editor.name')" />
+        <DInput v-model="pageSettings.description" :label="t('PageSettings.description')" />
+        <DInput v-model="pageSettings.icon" :label="t('Editor.icon')" :placeholder="t('PageSettings.iconPlaceholder')" />
       </section>
 
       <section class="group">
-        <h3 class="group__label">Layout</h3>
-        <DSelect v-model="layoutId" label="Layout" :options="availableLayouts" value-key="id" label-key="name" />
+        <h3 class="group__label">{{ t('PageSettings.layout') }}</h3>
+        <DSelect v-model="layoutId" :label="t('PageSettings.layout')" :options="layoutOptions" value-key="id" label-key="name" />
         <!--
           What a layout itself offers. A model where the layout carries one -
           the form is a model beside its Ecore, the same way a widget's is -
@@ -206,44 +216,44 @@ watch(
       </section>
 
       <section class="group">
-        <h3 class="group__label">Hintergrund</h3>
+        <h3 class="group__label">{{ t('PageSettings.background') }}</h3>
         <!-- Stacked: swatch and hex field together are wider than a label
              plus a control fits in a panel this narrow -->
-        <DColorInput v-model="pageSettings.backgroundColor" label="Farbe" stacked />
+        <DColorInput v-model="pageSettings.backgroundColor" :label="t('PageSettings.color')" stacked />
         <DInput
           v-model="pageSettings.backgroundImage"
-          label="Bild"
-          placeholder="Adresse eines Bildes"
+          :label="t('PageSettings.image')"
+          :placeholder="t('PageSettings.imagePlaceholder')"
         />
         <template v-if="hasBackgroundImage">
-          <DSelect v-model="pageSettings.backgroundSize" label="Größe" :options="backgroundSizes" />
+          <DSelect v-model="pageSettings.backgroundSize" :label="t('PageSettings.size.label')" :options="backgroundSizes" />
           <DSelect
             v-model="pageSettings.backgroundRepeat"
-            label="Wiederholung"
+:label="t('PageSettings.repeat.label')"
             :options="backgroundRepeats"
           />
           <DSelect
             v-model="pageSettings.backgroundPosition"
-            label="Position"
+:label="t('PageSettings.position.label')"
             :options="backgroundPositions"
           />
         </template>
       </section>
 
       <section class="group">
-        <h3 class="group__label">Navigation</h3>
-        <DSwitch v-model="pageSettings.visibleInNavigation" label="In der Navigation zeigen" />
+        <h3 class="group__label">{{ t('PageSettings.navigation') }}</h3>
+        <DSwitch v-model="pageSettings.visibleInNavigation" :label="t('PageSettings.showInNavigation')" />
       </section>
 
       <!-- Not a field: changing it would break the address this page is open at -->
       <p class="ident">
-        Kennung <code>{{ pageSettings.id }}</code>
+        {{ t('PageSettings.id') }} <code>{{ pageSettings.id }}</code>
       </p>
       </template>
     </div>
 
     <footer class="foot">
-      <DButton intent="primary" @click="emit('close')">Fertig</DButton>
+      <DButton intent="primary" @click="emit('close')">{{ t('common:Action.done') }}</DButton>
     </footer>
   </aside>
 </template>

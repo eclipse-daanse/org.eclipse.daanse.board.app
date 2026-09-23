@@ -24,6 +24,7 @@ import {
   Filler
 } from 'chart.js'
 import { Line } from 'vue-chartjs'
+import { useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 
 // Register Chart.js components
 ChartJS.register(
@@ -52,6 +53,15 @@ const props = defineProps<{
 }>()
 
 const { data, parameter, color, fontColor, gridColor } = toRefs(props)
+const { t } = useTranslation('weather')
+
+/* The parameter's name in the language on screen; an unknown one as it is spelled. */
+// i18n-keys: weather:Widget.params.*
+const parameterName = computed(() =>
+  t(`Widget.params.${parameter.value}`, {
+    defaultValue: parameter.value.charAt(0).toUpperCase() + parameter.value.slice(1),
+  }),
+)
 
 const chartContainer = ref<HTMLElement>()
 const resolvedFontColor = ref('#495057')
@@ -108,7 +118,7 @@ const chartData = computed(() => {
     labels: data.value.map(point => point.period),
     datasets: [
       {
-        label: `${parameter.value.charAt(0).toUpperCase() + parameter.value.slice(1)}`,
+        label: parameterName.value,
         data: data.value.map(point => point.value),
         borderColor: color.value,
         backgroundColor: createGradient,
@@ -220,7 +230,7 @@ const chartOptions = computed(() => ({
 
 <template>
   <div class="forecast-chart" ref="chartContainer">
-    <h4>{{ parameter.charAt(0).toUpperCase() + parameter.slice(1) }} Forecast</h4>
+    <h4>{{ t('Widget.forecastOf', { name: parameterName }) }}</h4>
     <div class="chart-container">
       <Line
         v-if="data && data.length > 0"
@@ -229,7 +239,7 @@ const chartOptions = computed(() => ({
         :options="chartOptions"
       />
       <div v-else class="no-data">
-        <p>No forecast data available</p>
+        <p>{{ t('Widget.noForecast') }}</p>
       </div>
     </div>
   </div>

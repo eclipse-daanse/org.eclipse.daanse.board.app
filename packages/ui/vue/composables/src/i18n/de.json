@@ -1,0 +1,13 @@
+{
+  "Action": {
+    "cancel": "Abbrechen",
+    "delete": "Löschen",
+    "close": "Schließen",
+    "save": "Speichern",
+    "done": "Fertig",
+    "create": "Anlegen"
+  },
+  "History": {
+    "change": "Änderung"
+  }
+}

@@ -22,7 +22,7 @@ Contributors:
 <script setup lang="ts">
 import { ref, computed, inject } from 'vue'
 
-import { useBoard } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+import { useBoard, useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import type { Widget as IWidget } from 'org.eclipse.daanse.board.app.lib.api.page'
 import AddWidgetWindow from '@/components/common/AddWidgetWindow.vue'
 import WidgetSettingsOverlay from '@/components/common/WidgetSettingsOverlay.vue'
@@ -35,6 +35,7 @@ import { DFloatingWindow, DIcon } from 'org.eclipse.daanse.board.app.ui.vue.cont
 import LayoutRenderer from '@/components/pageEditor/LayoutRenderer.vue'
 
 const widgetSettingsOpenedId = ref('')
+const { t } = useTranslation('shell')
 const route = useRoute()
 
 const pageID = route.params.pageid ?? ''
@@ -100,7 +101,7 @@ const { visible: paletteVisible, hide: hidePalette } = useWidgetPalette()
     -->
     <DFloatingWindow
       v-if="paletteVisible"
-      title="Widgets"
+      :title="t('Header.palette')"
       remember-as="daanse.board.palette"
       :initial="{ x: 0, y: 0, w: 240, h: 460, dock: 'left' }"
       :min-width="180"
@@ -114,7 +115,7 @@ const { visible: paletteVisible, hide: hidePalette } = useWidgetPalette()
           v-if="endpointfinder_present"
           type="button"
           class="palette__act"
-          title="Endpunkte suchen"
+          :title="t('Tree.findEndpoints')"
           @pointerdown.stop
           @click="endPointFinder()"
         >

@@ -1,0 +1,9 @@
+{
+  "Settings": {
+    "connection": "Verbindung"
+  },
+  "Ws": {
+    "accumulate": "Nachrichten sammeln",
+    "topic": "Thema"
+  }
+}

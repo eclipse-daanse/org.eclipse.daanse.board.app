@@ -38,3 +38,6 @@ export { wrapperSettingsFormXmi }
 export { WrapperSettingsImpl } from './gen/WrapperSettingsImpl'
 export { WrapperSettingsPackage }
 export type { WrapperSettings } from './gen/WrapperSettings'
+
+/* Its texts - collected by lib.i18next, see src/i18n. */
+export { WrapperTranslations } from './i18n'

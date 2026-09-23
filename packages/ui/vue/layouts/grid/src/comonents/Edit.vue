@@ -50,7 +50,7 @@ Contributors:
           >
             <DButton intent="quiet" size="sm" class="menu__item" @click="copyWidgetFromMenu">
               <DIcon name="content_copy" size="sm" />
-              Kopieren
+              {{ t('Menu.copy') }}
             </DButton>
           </div>
 
@@ -79,7 +79,7 @@ Contributors:
       >
         <DButton intent="quiet" size="sm" class="menu__item" @click="pasteWidgetFromMenu">
           <DIcon name="content_paste" size="sm" />
-          Einfügen
+          {{ t('Menu.paste') }}
         </DButton>
       </div>
     </div>
@@ -89,7 +89,7 @@ Contributors:
 <script setup lang="ts">
 import { inject, ref, computed, watch, nextTick, onMounted, onBeforeUnmount } from 'vue'
 import { GridLayout, type LayoutItem } from 'grid-layout-plus'
-import { useBoard } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+import { useBoard, useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import type { StoredWidget } from 'org.eclipse.daanse.board.app.lib.api.page'
 import { WidgetWrapper, defaultConfig } from 'org.eclipse.daanse.board.app.ui.vue.widget.wrapper'
 import { useRoute } from 'vue-router'
@@ -97,6 +97,8 @@ import Draggable from 'vuedraggable'
 import { cloneDeep, isEqual } from 'lodash'
 import throttle from 'lodash/throttle'
 import { useClipboardStore } from 'org.eclipse.daanse.board.app.ui.vue.layouts.base'
+
+const { t } = useTranslation('layoutsGrid')
 import { BREAKPOINTS, resolveGridSettings } from '../GridSettings'
 import { plainSettings } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import { identifier as PageIdentifier, type PageRegistryI } from 'org.eclipse.daanse.board.app.lib.api.page'

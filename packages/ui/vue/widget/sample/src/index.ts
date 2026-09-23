@@ -36,6 +36,7 @@ export class SampleWidgetProvider implements WidgetProvider {
   readonly supportedDSTypes = ['csv']
   readonly icon = Icon
   readonly name = 'Sample'
+  readonly nameKey = 'sample:Widget.name'
 
   constructor(
     @inject(EVENT_REGISTRY_ID) private readonly events: EventRegistry,
@@ -53,3 +54,6 @@ export class SampleWidgetProvider implements WidgetProvider {
 }
 
 export { SampleWidget }
+
+/* Its texts - collected by lib.i18next, see src/i18n. */
+export { SampleTranslations } from './i18n'

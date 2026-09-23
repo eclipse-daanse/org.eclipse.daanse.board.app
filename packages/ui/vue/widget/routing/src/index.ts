@@ -52,6 +52,7 @@ export class RoutingWidgetProvider implements WidgetProvider {
   readonly supportedDSTypes = ['valhalla']
   readonly icon = Icon
   readonly name = 'Routing'
+  readonly nameKey = 'routing:Widget.name'
 
   /*
    * The settings form, as a model. Carried on the registration like the
@@ -82,3 +83,6 @@ export class RoutingWidgetProvider implements WidgetProvider {
 
 export { RoutingWidget }
 export { RoutingWidgetSettingsImpl, RoutingSettingsPackage, routingSettingsFormXmi }
+
+/* Its texts - collected by lib.i18next, see src/i18n. */
+export { RoutingTranslations } from './i18n'

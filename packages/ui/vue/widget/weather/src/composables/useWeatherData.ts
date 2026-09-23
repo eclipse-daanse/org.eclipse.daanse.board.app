@@ -13,8 +13,11 @@ Contributors:
 
 import { ref, computed, watch } from 'vue'
 import type { WeatherWidgetSettings } from '../types/WeatherWidgetSettings'
+import { useFormat, useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 
 export function useWeatherData(settings: WeatherWidgetSettings, datasourceId: string) {
+  const { t } = useTranslation('weather')
+  const format = useFormat()
   const weatherData = ref<any>(null)
   const loading = ref(false)
   const error = ref<string | null>(null)
@@ -130,7 +133,7 @@ export function useWeatherData(settings: WeatherWidgetSettings, datasourceId: st
     const location = thing.Locations?.[0]
 
     return {
-      name: thing.name || 'Unknown Location',
+      name: thing.name || t('Widget.unknownLocation'),
       description: thing.description,
       coordinates: location?.location ? {
         latitude: location.location.coordinates?.[1],
@@ -155,15 +158,16 @@ export function useWeatherData(settings: WeatherWidgetSettings, datasourceId: st
   const formatTimeRange = () => {
     if (!settings.useTimeRange) return ''
 
-    const start = settings.startTime ? new Date(settings.startTime).toLocaleString() : ''
-    const end = settings.endTime ? new Date(settings.endTime).toLocaleString() : ''
+    const moment = { dateStyle: 'short', timeStyle: 'short' } as const
+    const start = settings.startTime ? format.date(settings.startTime, moment) : ''
+    const end = settings.endTime ? format.date(settings.endTime, moment) : ''
 
     if (start && end) {
       return `${start} - ${end}`
     } else if (start) {
-      return `From: ${start}`
+      return t('Widget.from', { time: start })
     } else if (end) {
-      return `Until: ${end}`
+      return t('Widget.until', { time: end })
     }
 
     return ''

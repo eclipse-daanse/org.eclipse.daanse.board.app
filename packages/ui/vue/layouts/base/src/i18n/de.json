@@ -1,0 +1,43 @@
+{
+  "Menu": {
+    "forward": "Nach vorn",
+    "backward": "Nach hinten",
+    "toFront": "Ganz vorn",
+    "toBack": "Ganz hinten",
+    "copy": "Kopieren",
+    "paste": "Einfügen"
+  },
+  "Align": {
+    "inGroup": "{{count}} in einer Gruppe",
+    "selected": "{{count}} gewählt",
+    "left": "Links bündig",
+    "hcenter": "Waagerecht mittig",
+    "right": "Rechts bündig",
+    "top": "Oben bündig",
+    "vcenter": "Senkrecht mittig",
+    "bottom": "Unten bündig",
+    "distributeX": "Waagerecht gleichmäßig verteilen",
+    "distributeY": "Senkrecht gleichmäßig verteilen",
+    "group": "Gruppieren - zusammen bewegen und wählen",
+    "ungroup": "Gruppierung aufheben",
+    "clear": "Auswahl aufheben"
+  },
+  "Minimap": {
+    "title": "Übersicht"
+  },
+  "History": {
+    "forward": "Nach vorn",
+    "toFront": "Ganz nach vorn",
+    "backward": "Nach hinten",
+    "toBack": "Ganz nach hinten",
+    "added": "Widget hinzugefügt",
+    "removed": "Widget gelöscht",
+    "pasted": "Widget eingefügt",
+    "moved": "Widget verschoben",
+    "resized": "Größe geändert",
+    "selectionMoved": "Auswahl verschoben"
+  },
+  "Base": {
+    "name": "Freies Layout (pixelgenau)"
+  }
+}

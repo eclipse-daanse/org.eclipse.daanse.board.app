@@ -47,3 +47,6 @@ export function deactivate({ services }: ActivationContext) {
   services.unregister('DatatablePreview')
   services.unregister('DatatableSettings')
 }
+
+/* Its texts - collected by lib.i18next, see src/i18n. */
+export { ComposerDatatableTranslations } from './i18n'

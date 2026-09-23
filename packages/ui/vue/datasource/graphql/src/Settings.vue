@@ -14,12 +14,15 @@ Contributors:
 import { DInput, DSelect, DSwitch } from 'org.eclipse.daanse.board.app.ui.vue.controls'
 import { debounce } from 'lodash';
 import { computed, ref, watch } from 'vue';
+import { useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 
 const { config, connections } = defineProps<{
     config: any;
     dataSources: any;
     connections: any;
-}>();
+}>()
+
+const { t } = useTranslation('datasourceGraphql');
 
 const innerInterval = ref(config.pollingInterval ?? 5000);
 
@@ -43,8 +46,8 @@ watch(() => innerInterval.value, (nv) => {
 
 <template>
     <!-- eslint-disable-next-line vue/no-mutating-props -->
-    <DSelect v-model="config.connection" label="Verbindung" :options="connectionsFiltered" label-key="name"
+    <DSelect v-model="config.connection" :label="t('Settings.connection')" :options="connectionsFiltered" label-key="name"
         value-key="uid" />
-    <DSwitch v-model="config.pollingEnabled" label="Regelmäßig neu laden" />
-    <DInput v-if="config.pollingEnabled" v-model="innerInterval" label="Abstand (ms)" />
+    <DSwitch v-model="config.pollingEnabled" :label="t('Settings.polling')" />
+    <DInput v-if="config.pollingEnabled" v-model="innerInterval" :label="t('Settings.intervalMs')" />
 </template>

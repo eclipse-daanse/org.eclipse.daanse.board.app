@@ -38,7 +38,7 @@ export function activate({ services }: ActivationContext) {
   const navRegistry = services.getRequired<NavigationRegistry>(NAVIGATION_REGISTRY_ID)
   const eventManagerNav = new NavigationItem()
   eventManagerNav.id = NAV_ID
-  eventManagerNav.label = 'Event Manager'
+  eventManagerNav.label = 'eventmanager:Nav.label'
   eventManagerNav.icon = 'event'
   eventManagerNav.route = '/events'
   eventManagerNav.routeName = ROUTE_NAME
@@ -55,3 +55,6 @@ export function deactivate({ services }: ActivationContext) {
 }
 
 export { EventManagerUI }
+
+/* Its texts - collected by lib.i18next, see src/i18n. */
+export { EventmanagerTranslations } from './i18n'

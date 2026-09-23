@@ -1,0 +1,36 @@
+{
+  "Widget": {
+    "name": "Routing"
+  },
+  "Costing": {
+    "auto": "Auto",
+    "bicycle": "Fahrrad",
+    "pedestrian": "Zu Fuß",
+    "truck": "LKW",
+    "bus": "Bus",
+    "motor_scooter": "Roller",
+    "motorcycle": "Motorrad"
+  },
+  "Waypoint": {
+    "start": "Start",
+    "end": "Ziel",
+    "stop": "Halt {{n}}",
+    "remove": "Entfernen",
+    "placeholder": "Adresse eingeben…"
+  },
+  "Actions": {
+    "calculating": "Berechne…",
+    "calculate": "Route berechnen",
+    "addStop": "+ Zwischenhalt",
+    "clear": "Löschen"
+  },
+  "Summary": {
+    "distance": "Distanz",
+    "duration": "Dauer",
+    "costing": "Verkehrsart",
+    "maneuvers": "Manöver ({{count}})"
+  },
+  "Form": {
+    "defaultCosting": "Verkehrsart"
+  }
+}

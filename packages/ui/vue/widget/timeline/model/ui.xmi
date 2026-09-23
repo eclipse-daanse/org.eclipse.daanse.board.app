@@ -31,38 +31,38 @@ them the words. The speed is a factor, so its labels are the factors.
 
   <components xsi:type="uimodel:FormView" name="TimelineSettingsFormView">
 
-    <fields xsi:type="uimodel:GroupWidget" name="playbackGroup" layout="VERTICAL" label="Wiedergabe">
+    <fields xsi:type="uimodel:GroupWidget" name="playbackGroup" layout="VERTICAL" label="timeline:Form.playbackGroup">
       <fields xsi:type="uimodel:SelectWidget" name="stepSize"
-          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.timeline#//TimelineSettings/stepSize" label="Schrittweite">
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.timeline#//TimelineSettings/stepSize" label="timeline:Form.stepSize">
         <values>minute</values>
         <values>hour</values>
         <values>day</values>
         <values>week</values>
         <values>month</values>
-        <optionLabel language="JS" body="({ minute: 'Eine Minute', hour: 'Eine Stunde', day: 'Ein Tag', week: 'Eine Woche', month: 'Ein Monat' })[option] ?? option"/>
+        <optionLabel language="JS" body="({ minute: 'timeline:Options.step.minute', hour: 'timeline:Options.step.hour', day: 'timeline:Options.step.day', week: 'timeline:Options.step.week', month: 'timeline:Options.step.month' })[option] ?? option"/>
       </fields>
       <fields xsi:type="uimodel:SelectWidget" name="playbackSpeed"
-          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.timeline#//TimelineSettings/playbackSpeed" label="Geschwindigkeit">
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.timeline#//TimelineSettings/playbackSpeed" label="timeline:Form.playbackSpeed">
         <values>0.25</values>
         <values>0.5</values>
         <values>1</values>
         <values>2</values>
         <values>4</values>
-        <optionLabel language="JS" body="option + '-fach'"/>
+        <optionLabel language="JS" body="({ '0.25': 'timeline:Options.speed.x025', '0.5': 'timeline:Options.speed.x05', '1': 'timeline:Options.speed.x1', '2': 'timeline:Options.speed.x2', '4': 'timeline:Options.speed.x4' })[option] ?? option"/>
       </fields>
       <fields xsi:type="uimodel:CheckboxWidget" name="autoPlay"
-          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.timeline#//TimelineSettings/autoPlay" label="Beim Laden starten"/>
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.timeline#//TimelineSettings/autoPlay" label="timeline:Form.autoPlay"/>
       <fields xsi:type="uimodel:CheckboxWidget" name="fixStartKnob"
-          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.timeline#//TimelineSettings/fixStartKnob" label="Anfang festhalten"/>
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.timeline#//TimelineSettings/fixStartKnob" label="timeline:Form.fixStartKnob"/>
       <fields xsi:type="uimodel:CheckboxWidget" name="showControls"
-          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.timeline#//TimelineSettings/showControls" label="Bedienelemente zeigen"/>
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.timeline#//TimelineSettings/showControls" label="timeline:Form.showControls"/>
     </fields>
 
-    <fields xsi:type="uimodel:GroupWidget" name="lookGroup" layout="VERTICAL" label="Darstellung">
+    <fields xsi:type="uimodel:GroupWidget" name="lookGroup" layout="VERTICAL" label="timeline:Form.lookGroup">
       <fields xsi:type="uimodel:InputWidget" name="rangeStripColor"
-          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.timeline#//TimelineSettings/rangeStripColor" label="Farbe des Ausschnitts"/>
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.timeline#//TimelineSettings/rangeStripColor" label="timeline:Form.rangeStripColor"/>
       <fields xsi:type="uimodel:CheckboxWidget" name="showTimeInfo"
-          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.timeline#//TimelineSettings/showTimeInfo" label="Zeitangaben zeigen"/>
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.timeline#//TimelineSettings/showTimeInfo" label="timeline:Form.showTimeInfo"/>
     </fields>
 
   </components>

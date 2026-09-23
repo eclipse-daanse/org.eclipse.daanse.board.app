@@ -1,0 +1,37 @@
+{
+  "Valhalla": {
+    "costing": {
+      "auto": "Auto",
+      "bicycle": "Fahrrad",
+      "pedestrian": "Fußgänger",
+      "truck": "LKW",
+      "bus": "Bus",
+      "motor_scooter": "Motorroller",
+      "motorcycle": "Motorrad"
+    },
+    "start": "Start",
+    "end": "Ziel",
+    "stop": "Stopp {{n}}",
+    "search": "Adresse suchen…",
+    "mode": "Modus",
+    "clearAll": "Alle löschen",
+    "waypoints": "Wegpunkte ({{count}})",
+    "clickHint": "Klick auf Karte = Wegpunkt hinzufügen",
+    "up": "Nach oben",
+    "down": "Nach unten",
+    "remove": "Entfernen",
+    "none": "Noch keine Wegpunkte. Klicke auf die Karte oder suche eine Adresse.",
+    "calculate": "Route berechnen",
+    "optimize": "Route optimieren",
+    "route": "Route",
+    "maneuvers": "{{count}} Manöver",
+    "connection": "Valhalla-Verbindung",
+    "defaultCosting": "Standard-Fortbewegung",
+    "units": {
+      "label": "Einheiten",
+      "kilometers": "Kilometer",
+      "miles": "Meilen"
+    },
+    "language": "Sprache der Wegbeschreibung (z. B. de-DE)"
+  }
+}

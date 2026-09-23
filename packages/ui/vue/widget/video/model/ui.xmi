@@ -29,11 +29,11 @@ whatever a variable points at rather than one fixed file.
     <fields xsi:type="uimodel:InputWidget"
         name="videoUrl"
         feature="http://org.eclipse.daanse.board.app.ui.vue.widget.video#//VideoSettings/videoUrl"
-        label="Adresse"
+        label="video:Form.videoUrl"
         placeholder="https://…"/>
     <fields xsi:type="uimodel:InputWidget"
         name="videoFitSettings"
         feature="http://org.eclipse.daanse.board.app.ui.vue.widget.video#//VideoSettings/videoFitSettings"
-        label="Darstellung"/>
+        label="video:Form.videoFitSettings"/>
   </components>
 </uimodel:UIModel>

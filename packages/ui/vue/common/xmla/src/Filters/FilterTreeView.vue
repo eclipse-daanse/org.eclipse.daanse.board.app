@@ -18,6 +18,8 @@ import { useFilterTreeDataSource } from "../Composables/filterTreeDataSource";
 import { useSearchResultTreeData } from "../Composables/searchResultTreeData";
 import { debounce } from "lodash";
 import { computed, onMounted, ref, watch } from "vue";
+import { useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables';
+const { t } = useTranslation('xmla');
 
 type RootHierarchy = any;
 
@@ -161,19 +163,19 @@ onMounted(() => {
       <DInput
         v-model="searchValue"
         class="mr-3"
-        placeholder="Suchen"
+        :placeholder="t('Filter.search')"
         style="width: 100%"
       />
       <DSelect
         v-model="searchBy"
-        label="Suchen in"
+        :label="t('Filter.searchIn')"
         :options="levels"
         value-key="LEVEL_UNIQUE_NAME"
         label-key="LEVEL_CAPTION"
       />
     </div>
     <div class="mt-3 mb-2">
-      <DCheckbox v-model="multipleChoise" label="Mehrere wählen" />
+      <DCheckbox v-model="multipleChoise" :label="t('Filter.multiple')" />
     </div>
     <div class="mb-3" style="overflow: auto; height: 100%">
       <template v-if="multipleChoise">
@@ -181,14 +183,14 @@ onMounted(() => {
           v-if="emptySelection"
           v-model="treeData.selectAll"
           class="mt-3 ml-2 selectAll"
-          label="Alle wählen"
+          :label="t('Filter.all')"
         />
         <DCheckbox
           v-else
           class="mt-3 ml-2 selectAll"
           :model-value="true"
           indeterminate
-          label="Alle wählen"
+          :label="t('Filter.all')"
           @click.prevent.stop="treeData.setSelectAll"
         />
       </template>
@@ -203,7 +205,7 @@ onMounted(() => {
       >
         <template #content="node">
           <div v-if="node.isLoading" class="flex align-center">
-            <span class="spinner" aria-label="Wird geladen" />
+            <span class="spinner" :aria-label="t('Loading')" />
           </div>
           <div
             v-else

@@ -42,6 +42,9 @@ jobs:
       #  run: |
       #    npm_config_yes=true npx github:10up/eslint-json-to-md#82ff16b --path ./eslint_report.json --output ./eslint_report.md
       #   cat eslint_report.md >> $GITHUB_STEP_SUMMARY
+      - name: Check translations
+        run: node scripts/i18n.mjs check
+
       - name: Build all Modules
         run: yarn run build
         env:

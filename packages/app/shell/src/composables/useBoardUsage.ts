@@ -22,6 +22,7 @@
  * state.
  */
 import { ref } from 'vue'
+import { useFormat } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 
 const KEY = 'daanse.board.usage'
 
@@ -45,6 +46,7 @@ function read(): Record<string, BoardUsage> {
 const usage = ref<Record<string, BoardUsage>>(read())
 
 export function useBoardUsage() {
+  const format = useFormat()
   function recordOpened(id: string) {
     if (!id) return
     const previous = usage.value[id]
@@ -71,15 +73,11 @@ export function useBoardUsage() {
     return (right?.lastOpened ?? 0) - (left?.lastOpened ?? 0)
   }
 
-  /** "heute", "gestern", "vor 3 Tagen" - the resolution the number is worth. */
+  /** "today", "yesterday", "3 days ago" - the resolution the number is worth. */
   function lastOpenedLabel(id: string): string {
     const at = usage.value[id]?.lastOpened
     if (!at) return ''
-    const days = Math.floor((Date.now() - at) / 86_400_000)
-    if (days <= 0) return 'heute'
-    if (days === 1) return 'gestern'
-    if (days < 31) return `vor ${days} Tagen`
-    return new Date(at).toLocaleDateString('de-DE', { day: 'numeric', month: 'short', year: 'numeric' })
+    return format.relativeDays(at)
   }
 
   return { usage, recordOpened, usageOf, byUsage, lastOpenedLabel }

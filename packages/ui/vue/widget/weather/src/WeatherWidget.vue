@@ -13,7 +13,7 @@ Contributors:
 <script setup lang="ts">
 import { inject, computed, ref, watch, onMounted, onUnmounted } from 'vue'
 import { useRoute } from 'vue-router'
-import { useDatasourceRepository } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+import { useDatasourceRepository, useFormat, useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import type { WeatherWidgetSettings } from './types/WeatherWidgetSettings'
 import { useWeatherData } from './composables/useWeatherData'
 import ForecastChart from './components/ForecastChart.vue'
@@ -22,6 +22,9 @@ const props = defineProps<{
   datasourceId: string;
   id?: string;
 }>()
+
+const { t } = useTranslation('weather')
+const format = useFormat()
 
 import { toRefs } from 'vue';
 const { id: widgetId } = toRefs(props);
@@ -96,7 +99,7 @@ const refreshData = async (newVal?: string, oldVal?: string) => {
       await getDataWithOptions()
     }
   } catch (e) {
-    error.value = 'Failed to load weather data'
+    error.value = t('Widget.loadFailed')
     console.error('Weather widget error:', e)
   } finally {
     loading.value = false
@@ -186,7 +189,7 @@ const getWindDirection = (degrees: number) => {
 
 const formatTimestamp = (timestamp?: string) => {
   if (!timestamp) return ''
-  return new Date(timestamp).toLocaleString()
+  return format.date(timestamp, { dateStyle: 'short', timeStyle: 'short' })
 }
 
 // WMO Weather Codes to icons mapping
@@ -471,7 +474,7 @@ const processedLocationInfo = computed(() => {
   const location = thing.Locations?.[0]
 
   return {
-    name: thing.name || 'Unknown Location',
+    name: thing.name || t('Widget.unknownLocation'),
     description: thing.description,
     coordinates: location?.location ? {
       latitude: location.location.coordinates?.[1],
@@ -485,7 +488,7 @@ const processedLocationInfo = computed(() => {
   <div class="weather-widget" @click="emitClick" @contextmenu.prevent="emitRightClick">
     <div v-if="loading" class="weather-loading">
       <div class="spinner"></div>
-      <p>Loading weather data...</p>
+      <p>{{ t('Widget.loading') }}</p>
     </div>
 
     <div v-else-if="error" class="weather-error">
@@ -515,17 +518,17 @@ const processedLocationInfo = computed(() => {
 
         <div class="weather-details">
           <div v-if="processedWeather.humidity" class="weather-item">
-            <span class="label">Humidity:</span>
+            <span class="label">{{ t('Widget.humidity') }}</span>
             <span class="value">{{ formatValue(processedWeather.humidity) }}</span>
           </div>
 
           <div v-if="processedWeather.pressure" class="weather-item">
-            <span class="label">Pressure:</span>
+            <span class="label">{{ t('Widget.pressure') }}</span>
             <span class="value">{{ formatValue(processedWeather.pressure) }}</span>
           </div>
 
           <div v-if="processedWeather.windSpeed" class="weather-item">
-            <span class="label">Wind:</span>
+            <span class="label">{{ t('Widget.wind') }}</span>
             <span class="value">
               {{ formatValue(processedWeather.windSpeed) }}
               <span v-if="processedWeather.windDirection">
@@ -535,17 +538,17 @@ const processedLocationInfo = computed(() => {
           </div>
 
           <div v-if="processedWeather.precipitation" class="weather-item">
-            <span class="label">Precipitation:</span>
+            <span class="label">{{ t('Widget.precipitation') }}</span>
             <span class="value">{{ formatValue(processedWeather.precipitation) }}</span>
           </div>
 
           <div v-if="processedWeather.visibility" class="weather-item">
-            <span class="label">Visibility:</span>
+            <span class="label">{{ t('Widget.visibility') }}</span>
             <span class="value">{{ formatValue(processedWeather.visibility) }}</span>
           </div>
 
           <div v-if="processedWeather.cloudCover" class="weather-item">
-            <span class="label">Cloud Cover:</span>
+            <span class="label">{{ t('Widget.cloudCover') }}</span>
             <span class="value">{{ formatValue(processedWeather.cloudCover) }}</span>
           </div>
         </div>
@@ -553,7 +556,7 @@ const processedLocationInfo = computed(() => {
 
       <!-- Forecast Charts -->
       <div v-if="settings.showForecast && hasForecastData" class="forecast-section">
-        <h3 class="forecast-title">Weather Forecast</h3>
+        <h3 class="forecast-title">{{ t('Widget.forecast') }}</h3>
         <div class="forecast-charts">
           <ForecastChart
             v-for="parameter in enabledForecastParameters"
@@ -568,12 +571,12 @@ const processedLocationInfo = computed(() => {
       </div>
 
       <div v-if="settings.refreshInterval" class="refresh-info">
-        <small>Auto-refresh every {{ Math.round(settings.refreshInterval / 60000) }} minutes</small>
+        <small>{{ t('Widget.autoRefresh', { count: Math.round(settings.refreshInterval / 60000) }) }}</small>
       </div>
     </div>
 
     <div v-else class="weather-empty">
-      <p>No weather data available</p>
+      <p>{{ t('Widget.noData') }}</p>
     </div>
   </div>
 </template>

@@ -64,6 +64,7 @@ export class RepeatableSVGWidgetProvider implements WidgetProvider {
   readonly supportedDSTypes = []
   readonly icon = Icon
   readonly name = 'RepeatableSVG'
+  readonly nameKey = 'svgRepeat:Widget.name'
 
   /*
    * The settings form, as a model. Carried on the registration like the
@@ -100,3 +101,6 @@ export class RepeatableSVGWidgetProvider implements WidgetProvider {
 export { RepeatableSvgWidget }
 export { RepeatableSVGSettingsImpl, RepeatableSvgWidgetsPackage, repeatSettingsFormXmi }
 export type { IRepeatableSVGSettings }
+
+/* Its texts - collected by lib.i18next, see src/i18n. */
+export { SvgRepeatTranslations } from './i18n'

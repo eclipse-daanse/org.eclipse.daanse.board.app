@@ -1,0 +1,20 @@
+{
+  "Widget": {
+    "name": "Image",
+    "previous": "Previous image",
+    "next": "Next image"
+  },
+  "FormGallery": {
+    "fit": "Fit",
+    "diashowInterval": "Change every (seconds)"
+  },
+  "FormItem": {
+    "url": "Address"
+  },
+  "Form": {
+    "picturesGroup": "Images",
+    "images": "Images",
+    "displayGroup": "Display",
+    "imagesSettings": "Display"
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "Actions": {
+    "settings": "Einstellungen"
+  },
+  "NotRegistered": "Der Widget-Typ {{type}} ist nicht registriert.",
+  "Delete": {
+    "title": "Widget löschen",
+    "text": "Möchtest du dieses Widget wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden."
+  },
+  "Form": {
+    "titleGroup": "Titel",
+    "title": "Text",
+    "titleFontSize": "Schriftgröße",
+    "titleColor": "Schriftfarbe",
+    "surfaceGroup": "Fläche",
+    "backgroundColor": "Hintergrund",
+    "backgroundColorTransparence": "Deckkraft",
+    "transparency": "Gesamtdeckkraft",
+    "blur": "Weichzeichnen",
+    "padding": "Innenabstand",
+    "borderGroup": "Rand",
+    "borderSize": "Stärke",
+    "borderColor": "Farbe",
+    "borderRadius": "Eckenradius",
+    "shadowGroup": "Schatten",
+    "shadowColor": "Farbe",
+    "shadowBlur": "Weichheit",
+    "shadowX": "Versatz X",
+    "shadowY": "Versatz Y",
+    "shadowTransparence": "Deckkraft",
+    "behaviourGroup": "Verhalten",
+    "fullscreen": "Vollbild erlauben"
+  }
+}

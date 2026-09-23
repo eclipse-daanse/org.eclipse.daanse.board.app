@@ -33,3 +33,6 @@ export class GeoJsonRendererComponent {
 }
 
 export { GeoJsonDataRendererDescription }
+
+/* Its texts - collected by lib.i18next, see src/i18n. */
+export { PluginsGeojsonRendererTranslations } from './i18n'

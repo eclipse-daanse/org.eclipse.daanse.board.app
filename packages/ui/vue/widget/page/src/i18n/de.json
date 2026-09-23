@@ -1,0 +1,27 @@
+{
+  "Widget": {
+    "name": "Seite",
+    "noLayout": "Kein Layout-System für Seite {{page}} gefunden",
+    "loadFailed": "Fehler beim Laden der Seite {{page}}: {{reason}}",
+    "renderFailed": "Render-Fehler: {{reason}}",
+    "loading": "Seite {{page}} wird geladen…",
+    "pageName": "Seite: {{name}}",
+    "layoutId": "Layout: {{id}}",
+    "recursion": "Rekursiver Seitenverweis verhindert: {{path}}",
+    "depth": "Tiefe: {{depth}}/{{max}}",
+    "chain": "Aufrufkette: {{chain}}",
+    "target": "Seite: {{page}}"
+  },
+  "Settings": {
+    "section": "Seite wählen",
+    "selectPage": "Seite",
+    "selectPagePlaceholder": "Seite wählen…",
+    "selfReference": "Eine Seite kann nicht auf sich selbst verweisen.",
+    "manualPath": "Pfad von Hand eingeben",
+    "path": "Pfad"
+  },
+  "Form": {
+    "hideTitle": "Titel der Seite verbergen",
+    "backgroundColor": "Hintergrundfarbe"
+  }
+}
