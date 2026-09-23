@@ -20,7 +20,7 @@ Contributors:
  */
 import { inject, onMounted, ref, computed, watch } from 'vue'
 import { identifier, VariableRepository } from 'org.eclipse.daanse.board.app.lib.api.variable'
-import { VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+import { VariableWrapper, useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import { DIcon, DSelect } from 'org.eclipse.daanse.board.app.ui.vue.controls'
 
 /*
@@ -32,6 +32,7 @@ const variableRepository = inject<VariableRepository>(identifier)!
 
 const model = defineModel<VariableWrapper<any>>({ required: true })
 const props = defineProps<{ label?: string }>()
+const { t } = useTranslation('variableComponents')
 
 interface VariableOption {
   /** What the variable is called - what a binding is stored as. */
@@ -109,7 +110,7 @@ const onChange = (given: unknown) => {
         :options="options"
         label-key="text"
         value-key="name"
-        placeholder="Variable wählen"
+        :placeholder="t('Input.choose')"
       />
     </div>
 
@@ -119,7 +120,7 @@ const onChange = (given: unknown) => {
       type="button"
       class="toggle"
       :aria-pressed="usesVariable"
-      :title="usesVariable ? 'Wert selbst eingeben' : 'An eine Variable binden'"
+      :title="usesVariable ? t('Input.ownValue') : t('Input.bind')"
       @click="usesVariable = !usesVariable"
     >
       <DIcon name="code" size="sm" :tone="usesVariable ? 'color-accent' : 'color-dim'" />

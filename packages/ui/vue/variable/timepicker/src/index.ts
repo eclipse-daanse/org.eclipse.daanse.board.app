@@ -60,3 +60,6 @@ export function deactivate({ services }: ActivationContext) {
 }
 
 export { DateTimePickerVariableSettingsImpl, DateTimePickerVariableSettingsPackage, settingsFormXmi }
+
+/* Its texts - collected by lib.i18next, see src/i18n. */
+export { VariableTimepickerTranslations } from './i18n'

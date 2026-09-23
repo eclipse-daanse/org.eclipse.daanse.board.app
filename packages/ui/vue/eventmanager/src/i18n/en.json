@@ -1,0 +1,54 @@
+{
+  "Nav": {
+    "label": "Events"
+  },
+  "Title": "Events",
+  "Lead": "A rule connects what happens on a board with what should happen in response.",
+  "Empty": "No rule yet. A rule starts with an event — a click on a widget, a row in a table — and ends in an action on another one.",
+  "Context": {
+    "system": "System",
+    "page": "Page",
+    "widget": "Widget"
+  },
+  "Rule": {
+    "create": "Create rule",
+    "edit": "Edit rule",
+    "remove": "Delete rule",
+    "confirmRemove": "The rule will be removed. This cannot be undone.",
+    "when": "When",
+    "if": "If",
+    "then": "Then",
+    "andWord": "and",
+    "and": " and ",
+    "anyEvent": "any event",
+    "noAction": "no action yet",
+    "anyPage": "any page",
+    "otherEvents": "Other",
+    "allInstances": "all instances",
+    "context": "Context",
+    "widgetPlaceholder": "Identifier, empty for any",
+    "event": "Event",
+    "property": "Property",
+    "value": "Value",
+    "removeCondition": "Remove condition",
+    "noCondition": "Without a condition the rule runs every time.",
+    "condition": "Condition",
+    "chooseAction": "Choose action",
+    "removeAction": "Remove action",
+    "target": "Target",
+    "action": "Action",
+    "optional": "optional",
+    "valueFor": "Value for {{name}}",
+    "fromEvent": "from the event",
+    "fixedValue": "fixed value",
+    "chooseProperty": "Choose property"
+  },
+  "Phrase": {
+    "inSystem": "in the system",
+    "onPage": "on page {{page}}",
+    "onAnyPage": "on any page",
+    "at": "at {{target}}",
+    "atAnyWidget": "at any widget of this kind",
+    "atAllInstances": "at all instances"
+  }
+}

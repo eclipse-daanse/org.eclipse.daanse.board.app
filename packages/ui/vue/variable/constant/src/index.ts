@@ -60,3 +60,6 @@ export function deactivate({ services }: ActivationContext) {
 }
 
 export { ConstantVariableSettingsImpl, ConstantVariableSettingsPackage, settingsFormXmi }
+
+/* Its texts - collected by lib.i18next, see src/i18n. */
+export { VariableConstantTranslations } from './i18n'

@@ -18,13 +18,15 @@ Contributors:
 
 <script lang="ts" setup>
 import { computed } from 'vue'
+import { useFormat } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 
 const props = defineProps<{
   goal: any
 }>()
+const format = useFormat()
 
 const formattedGoal = computed(() => {
   if (props.goal == null) return '-'
-  return typeof props.goal === 'number' ? props.goal.toLocaleString() : props.goal.toString()
+  return typeof props.goal === 'number' ? format.number(props.goal) : props.goal.toString()
 })
 </script>

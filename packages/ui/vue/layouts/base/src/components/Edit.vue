@@ -21,6 +21,7 @@ import { WidgetWrapper,defaultConfig } from 'org.eclipse.daanse.board.app.ui.vue
 import { cloneDeep } from 'lodash'
 import { useRouter, useRoute } from 'vue-router'
 import { DButton, DIcon } from 'org.eclipse.daanse.board.app.ui.vue.controls'
+import { useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 
 /* ---- snapping ---------------------------------------------------------- */
 
@@ -55,6 +56,7 @@ onMounted(() => {
 onUnmounted(() => snapWatcher?.disconnect())
 
 const emit = defineEmits(['openSettings', 'removeWidget'])
+const { t } = useTranslation('layoutsBase')
 
 const route = useRoute()
 const router = useRouter()
@@ -106,9 +108,9 @@ const {
  * stops, so taking it back takes back the whole move and not the last
  * pixel of it.
  */
-const beginDrag = () => history.begin('Widget verschoben')
-const beginResize = () => history.begin('Größe geändert')
-const beginGroupDrag = () => history.begin('Auswahl verschoben')
+const beginDrag = () => history.begin('layoutsBase:History.moved')
+const beginResize = () => history.begin('layoutsBase:History.resized')
+const beginGroupDrag = () => history.begin('layoutsBase:History.selectionMoved')
 const endGesture = () => history.end()
 
 function onHistoryKey(event: KeyboardEvent) {
@@ -253,11 +255,11 @@ const captureMousePosition = (event: MouseEvent) => {
  * z order, not the position, which "Move up" rather suggested they did.
  */
 const stackActions = (uid: string) => [
-  { id: 'front', icon: 'flip_to_front', label: 'Nach vorn', run: () => moveUp(uid) },
-  { id: 'back', icon: 'flip_to_back', label: 'Nach hinten', run: () => moveDown(uid) },
-  { id: 'top', icon: 'vertical_align_top', label: 'Ganz vorn', run: () => moveToTop(uid) },
-  { id: 'bottom', icon: 'vertical_align_bottom', label: 'Ganz hinten', run: () => moveToBottom(uid) },
-  { id: 'copy', icon: 'content_copy', label: 'Kopieren', run: () => copyWidget(uid) },
+  { id: 'front', icon: 'flip_to_front', label: t('Menu.forward'), run: () => moveUp(uid) },
+  { id: 'back', icon: 'flip_to_back', label: t('Menu.backward'), run: () => moveDown(uid) },
+  { id: 'top', icon: 'vertical_align_top', label: t('Menu.toFront'), run: () => moveToTop(uid) },
+  { id: 'bottom', icon: 'vertical_align_bottom', label: t('Menu.toBack'), run: () => moveToBottom(uid) },
+  { id: 'copy', icon: 'content_copy', label: t('Menu.copy'), run: () => copyWidget(uid) },
 ]
 
 const copyWidget = (widgetId: string) => {
@@ -781,25 +783,25 @@ const change = (e: any) => {
       -->
       <div v-if="selectionActive" class="align-bar" @pointerdown.stop>
         <span class="align-bar__count">
-          {{ selected.length }} {{ selectionIsGroup ? 'in einer Gruppe' : 'gewählt' }}
+          {{ selectionIsGroup ? t('Align.inGroup', { count: selected.length }) : t('Align.selected', { count: selected.length }) }}
         </span>
 
         <span class="align-bar__group">
-          <button type="button" class="align-bar__btn" title="Links bündig" @click="align('left')">
+          <button type="button" class="align-bar__btn" :title="t('Align.left')" @click="align('left')">
             <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true">
               <path d="M2 2v12" stroke="currentColor" stroke-width="1.6" />
               <rect x="4" y="3.5" width="9" height="3" fill="currentColor" />
               <rect x="4" y="9.5" width="5.5" height="3" fill="currentColor" />
             </svg>
           </button>
-          <button type="button" class="align-bar__btn" title="Waagerecht mittig" @click="align('hcenter')">
+          <button type="button" class="align-bar__btn" :title="t('Align.hcenter')" @click="align('hcenter')">
             <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true">
               <path d="M8 2v12" stroke="currentColor" stroke-width="1.6" />
               <rect x="3" y="3.5" width="10" height="3" fill="currentColor" />
               <rect x="5" y="9.5" width="6" height="3" fill="currentColor" />
             </svg>
           </button>
-          <button type="button" class="align-bar__btn" title="Rechts bündig" @click="align('right')">
+          <button type="button" class="align-bar__btn" :title="t('Align.right')" @click="align('right')">
             <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true">
               <path d="M14 2v12" stroke="currentColor" stroke-width="1.6" />
               <rect x="3" y="3.5" width="9" height="3" fill="currentColor" />
@@ -809,21 +811,21 @@ const change = (e: any) => {
         </span>
 
         <span class="align-bar__group">
-          <button type="button" class="align-bar__btn" title="Oben bündig" @click="align('top')">
+          <button type="button" class="align-bar__btn" :title="t('Align.top')" @click="align('top')">
             <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true">
               <path d="M2 2h12" stroke="currentColor" stroke-width="1.6" />
               <rect x="3.5" y="4" width="3" height="9" fill="currentColor" />
               <rect x="9.5" y="4" width="3" height="5.5" fill="currentColor" />
             </svg>
           </button>
-          <button type="button" class="align-bar__btn" title="Senkrecht mittig" @click="align('vcenter')">
+          <button type="button" class="align-bar__btn" :title="t('Align.vcenter')" @click="align('vcenter')">
             <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true">
               <path d="M2 8h12" stroke="currentColor" stroke-width="1.6" />
               <rect x="3.5" y="3" width="3" height="10" fill="currentColor" />
               <rect x="9.5" y="5" width="3" height="6" fill="currentColor" />
             </svg>
           </button>
-          <button type="button" class="align-bar__btn" title="Unten bündig" @click="align('bottom')">
+          <button type="button" class="align-bar__btn" :title="t('Align.bottom')" @click="align('bottom')">
             <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true">
               <path d="M2 14h12" stroke="currentColor" stroke-width="1.6" />
               <rect x="3.5" y="3" width="3" height="9" fill="currentColor" />
@@ -834,14 +836,14 @@ const change = (e: any) => {
 
         <!-- Evening out gaps needs a middle one to move -->
         <span v-if="selected.length > 2" class="align-bar__group">
-          <button type="button" class="align-bar__btn" title="Waagerecht gleichmäßig verteilen" @click="distribute('x')">
+          <button type="button" class="align-bar__btn" :title="t('Align.distributeX')" @click="distribute('x')">
             <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true">
               <rect x="1.5" y="4" width="2.5" height="8" fill="currentColor" />
               <rect x="6.75" y="4" width="2.5" height="8" fill="currentColor" />
               <rect x="12" y="4" width="2.5" height="8" fill="currentColor" />
             </svg>
           </button>
-          <button type="button" class="align-bar__btn" title="Senkrecht gleichmäßig verteilen" @click="distribute('y')">
+          <button type="button" class="align-bar__btn" :title="t('Align.distributeY')" @click="distribute('y')">
             <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true">
               <rect x="4" y="1.5" width="8" height="2.5" fill="currentColor" />
               <rect x="4" y="6.75" width="8" height="2.5" fill="currentColor" />
@@ -855,7 +857,7 @@ const change = (e: any) => {
             v-if="!selectionIsGroup"
             type="button"
             class="align-bar__btn"
-            title="Gruppieren - zusammen bewegen und wählen"
+            :title="t('Align.group')"
             @click="groupSelection"
           >
             <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true">
@@ -869,7 +871,7 @@ const change = (e: any) => {
             v-else
             type="button"
             class="align-bar__btn"
-            title="Gruppierung aufheben"
+            :title="t('Align.ungroup')"
             @click="ungroupSelection"
           >
             <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true">
@@ -880,7 +882,7 @@ const change = (e: any) => {
           </button>
         </span>
 
-        <button type="button" class="align-bar__btn align-bar__btn--quiet" title="Auswahl aufheben" @click="clearSelection">
+        <button type="button" class="align-bar__btn align-bar__btn--quiet" :title="t('Align.clear')" @click="clearSelection">
           ×
         </button>
       </div>
@@ -915,7 +917,7 @@ const change = (e: any) => {
         <div class="dropdown-buttons-container">
           <DButton intent="quiet" size="sm" class="menu__item" @click="pasteWidgetFromMenu">
             <DIcon name="content_paste" size="sm" />
-            Einfügen
+            {{ t('Menu.paste') }}
           </DButton>
         </div>
       </div><!-- end canvas-context-menu -->
@@ -931,7 +933,7 @@ const change = (e: any) => {
     -->
     <DFloatingWindow
       v-if="showMinimap"
-      title="Übersicht"
+      :title="t('Minimap.title')"
       remember-as="daanse.board.minimap"
       :initial="{ x: 0, y: 420, w: 240, h: 168, dock: 'left' }"
       :min-width="140"

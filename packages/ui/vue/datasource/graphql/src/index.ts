@@ -53,3 +53,6 @@ export function deactivate({ services }: ActivationContext) {
   services.unregister('GraphqlPreview')
   services.unregister('GraphqlSettings')
 }
+
+/* Its texts - collected by lib.i18next, see src/i18n. */
+export { DatasourceGraphqlTranslations } from './i18n'

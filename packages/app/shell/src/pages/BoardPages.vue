@@ -29,7 +29,7 @@ import {
   identifier as WORKSPACE,
   type Workspace,
 } from 'org.eclipse.daanse.board.app.lib.model.workspace'
-import { useEList } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+import { useEList, useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import {
   identifier as PageIdentifier,
   type PageRegistryI,
@@ -37,6 +37,7 @@ import {
 } from 'org.eclipse.daanse.board.app.lib.api.page'
 
 const router = useRouter()
+const { t } = useTranslation('shell')
 const query = ref('')
 
 const { usageOf, byUsage, lastOpenedLabel } = useBoardUsage()
@@ -94,7 +95,7 @@ function createPage() {
   const id = uuidv4()
   pageRepo.registerPage({
     id,
-    name: 'Neue Seite',
+    name: t('Page.newName'),
     description: '',
     icon: '',
     visibleInNavigation: true,
@@ -109,20 +110,20 @@ function createPage() {
     <div class="pages__panel">
       <header class="pages__bar">
         <h1 class="pages__title">
-          Seiten
+          {{ t('Pages.title') }}
           <span v-if="pages.length" class="pages__count">{{ pages.length }}</span>
         </h1>
-        <p v-if="board?.name" class="pages__of">in {{ board.name }}</p>
+        <p v-if="board?.name" class="pages__of">{{ t('Pages.of', { board: board.name }) }}</p>
 
         <div class="pages__tools">
           <input
             v-model="query"
             class="pages__search"
             type="search"
-            placeholder="Seiten filtern"
-            aria-label="Seiten filtern"
+            :placeholder="t('Pages.filter')"
+            :aria-label="t('Pages.filter')"
           />
-          <DButton intent="primary" size="sm" @click="createPage">Neue Seite</DButton>
+          <DButton intent="primary" size="sm" @click="createPage">{{ t('Page.newName') }}</DButton>
         </div>
       </header>
 
@@ -134,7 +135,7 @@ function createPage() {
             class="page"
             tabindex="0"
             role="button"
-            :aria-label="`Seite ${page.name} öffnen`"
+            :aria-label="t('Pages.open', { name: page.name })"
             @click="openPage(page.id)"
             @keydown.enter="openPage(page.id)"
             @keydown.space.prevent="openPage(page.id)"
@@ -144,14 +145,13 @@ function createPage() {
             <div class="page__body">
               <h2 class="page__name">{{ page.name }}</h2>
               <p class="page__meta">
-                {{ page.widgetCount }} {{ page.widgetCount === 1 ? 'Widget' : 'Widgets' }}
+                {{ t('Storage.widgets', { count: page.widgetCount }) }}
                 <template v-if="page.sourceCount">
-                  · {{ page.sourceCount }}
-                  {{ page.sourceCount === 1 ? 'Datenquelle' : 'Datenquellen' }}
+                  · {{ t('Storage.sources', { count: page.sourceCount }) }}
                 </template>
               </p>
               <p v-if="usageOf(page.id)" class="page__usage">
-                {{ usageOf(page.id)?.count }}× geöffnet · zuletzt {{ lastOpenedLabel(page.id) }}
+                {{ t('Pages.usage', { count: usageOf(page.id)?.count ?? 0, last: lastOpenedLabel(page.id) }) }}
               </p>
 
               <ul v-if="page.kinds.length" class="page__kinds">
@@ -167,21 +167,21 @@ function createPage() {
             <button
               class="page__edit"
               type="button"
-              :aria-label="`Seite ${page.name} bearbeiten`"
+              :aria-label="t('Pages.edit', { name: page.name })"
               @click.stop="editPage(page.id)"
             >
-              Bearbeiten
+              {{ t('Header.edit') }}
             </button>
           </article>
 
           <button class="page page--new" type="button" @click="createPage">
             <span class="page__plus" aria-hidden="true">+</span>
-            <span class="page__name">Neue Seite</span>
-            <span class="page__meta">Leer starten</span>
+            <span class="page__name">{{ t('Page.newName') }}</span>
+            <span class="page__meta">{{ t('Pages.startEmpty') }}</span>
           </button>
 
           <p v-if="pages.length && visiblePages.length === 0" class="pages__nomatch">
-            Keine Seite passt zu „{{ query }}“.
+            {{ t('Pages.noMatch', { query }) }}
           </p>
         </div>
       </div>

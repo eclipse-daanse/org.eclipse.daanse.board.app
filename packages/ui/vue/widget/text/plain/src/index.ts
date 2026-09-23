@@ -51,6 +51,7 @@ export class TextWidgetProvider implements WidgetProvider {
   readonly supportedDSTypes = []
   readonly icon = Icon
   readonly name = 'Text'
+  readonly nameKey = 'textPlain:Widget.name'
 
   /*
    * The settings form, as a model. Carried on the registration like the
@@ -91,3 +92,6 @@ export class TextWidgetProvider implements WidgetProvider {
 
 export { TextWidget, TextWidgetSettings }
 export { TextSettingsImpl, TextsettingsPackage, textSettingsFormXmi }
+
+/* Its texts - collected by lib.i18next, see src/i18n. */
+export { TextPlainTranslations } from './i18n'

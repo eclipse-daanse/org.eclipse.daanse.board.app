@@ -12,6 +12,9 @@
 import { Comperator, type ICondition } from './../../api/Renderer'
 import { computed, type ModelRef, reactive, ref, useId } from 'vue'
 import { DButton, DIcon, DSelect } from 'org.eclipse.daanse.board.app.ui.vue.controls'
+import { useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+
+const { t } = useTranslation('map')
 
 export interface ThingProp {
   text: string,
@@ -142,9 +145,9 @@ const setProp = (condition: ICondition, selector: string) => {
   <table class="conditions">
     <thead>
       <tr>
-        <th class="conditions__head">Property</th>
-        <th class="conditions__head">Is</th>
-        <th class="conditions__head">Value</th>
+        <th class="conditions__head">{{ t('Conditions.property') }}</th>
+        <th class="conditions__head">{{ t('Conditions.is') }}</th>
+        <th class="conditions__head">{{ t('Conditions.value') }}</th>
         <th class="conditions__head conditions__head--end"></th>
       </tr>
       <tr class="conditions__new">
@@ -153,7 +156,7 @@ const setProp = (condition: ICondition, selector: string) => {
             v-model="newCreateProp"
             :list="propListId"
             class="cell__input"
-            placeholder="Property"
+            :placeholder="t('Conditions.property')"
           >
           <datalist :id="propListId">
             <option v-for="option in thingsPropOptions" :key="option.selector" :value="option.selector">
@@ -175,7 +178,7 @@ const setProp = (condition: ICondition, selector: string) => {
             v-model="newCreateValue"
             :list="valueListId"
             class="cell__input"
-            placeholder="Value"
+            :placeholder="t('Conditions.value')"
           >
           <datalist :id="valueListId">
             <option v-for="(suggestion, at) in newValueSuggestions" :key="at" :value="suggestion" />
@@ -187,7 +190,7 @@ const setProp = (condition: ICondition, selector: string) => {
             :disabled="!newCreateProp || !newCreateValue"
             @click="addContition"
           >
-            Add
+            {{ t('Conditions.add') }}
           </DButton>
         </td>
       </tr>
@@ -232,13 +235,13 @@ const setProp = (condition: ICondition, selector: string) => {
           <span v-else class="cell__text" @click="edit(index, 'value')">{{ condition.value }}</span>
         </td>
         <td class="conditions__end">
-          <DButton intent="quiet" title="Remove condition" @click="model.splice(index, 1)">
+          <DButton intent="quiet" :title="t('Conditions.remove')" @click="model.splice(index, 1)">
             <DIcon name="delete" size="sm" />
           </DButton>
         </td>
       </tr>
       <tr v-if="model.length === 0">
-        <td class="conditions__empty" colspan="4">Nothing to match on yet.</td>
+        <td class="conditions__empty" colspan="4">{{ t('Conditions.none') }}</td>
       </tr>
     </tbody>
   </table>

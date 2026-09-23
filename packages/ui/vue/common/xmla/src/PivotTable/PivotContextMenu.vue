@@ -14,6 +14,7 @@ Contributors:
 <script setup lang="ts">
 import { computed, nextTick, onBeforeUnmount, ref, watch } from "vue";
 import type { MenuAction, MenuTarget } from "./context";
+import { useTranslation } from "org.eclipse.daanse.board.app.ui.vue.composables";
 
 // One right-click menu for the whole table, opened at the pointer
 const props = defineProps<{
@@ -28,7 +29,7 @@ const emit = defineEmits<{
 }>();
 
 // const { t } = useI18n();
-const t = (string: string) => string;
+const { t } = useTranslation("xmla");
 
 const items = computed((): { action: MenuAction; label: string }[] => {
   const target = props.target;

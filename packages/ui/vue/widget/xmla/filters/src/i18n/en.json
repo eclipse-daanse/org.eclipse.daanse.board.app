@@ -1,0 +1,14 @@
+{
+  "Widget": {
+    "name": "XMLA filters",
+    "rows": "Rows:",
+    "columns": "Columns:",
+    "filters": "Filters:"
+  },
+  "Settings": {
+    "section": "Filters widget",
+    "showRows": "Show rows",
+    "showColumns": "Show columns",
+    "showFilters": "Show filters"
+  }
+}

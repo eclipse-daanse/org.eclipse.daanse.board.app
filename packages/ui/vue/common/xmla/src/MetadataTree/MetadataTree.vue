@@ -18,6 +18,8 @@ import { ref, onMounted } from 'vue';
 import { getTreeViewNodes } from './XMLAMetadataTree';
 import { TreeItemTypesEnum } from './TreeViewItems';
 import XMLAIconVue from './XMLAIcon.vue';
+import { useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables';
+const { t } = useTranslation('xmla');
 import draggable from 'vuedraggable'
 
 const { metadata } = defineProps(['metadata'])
@@ -126,12 +128,12 @@ const populateDragEvent = (e: any, element: any) => {
 </script>
 
 <template>
-  <h1 class="area-header">Cube Explorer</h1>
+  <h1 class="area-header">{{ t('Metadata.title') }}</h1>
   <div class="metadata_tree-container" ref="treeContainer">
     <div v-if="treeViewData">
       <div class="tree-container">
         <div class="tree-header mb-2">
-          <DInput v-model="filter" placeholder="Filtern…" class="filter-input" />
+          <DInput v-model="filter" :placeholder="t('Metadata.filter')" class="filter-input" />
         </div>
         <TreeView :nodes="treeViewData" class="tree-view overflow-auto" :filter="filter" text-by="caption">
           <!-- @update:expanded="triggerExpanded" -->
@@ -172,7 +174,7 @@ const populateDragEvent = (e: any, element: any) => {
       </div>
     </div>
     <div v-else class="progress-circle">
-      <span class="spinner" aria-label="Wird geladen" />
+      <span class="spinner" :aria-label="t('Loading')" />
     </div>
   </div>
 </template>

@@ -69,15 +69,16 @@ const isNumericValue = (value: unknown) =>
 
 const numberFormat = new Intl.NumberFormat('de-DE')
 
-// Formatted text of a cell: FmtValue when the server sent one, numbers in German notation
-export const cellText = (cell: PivotCell): string => {
+// Formatted text of a cell: FmtValue when the server sent one, numbers as the
+// caller formats them - the table passes the language on screen
+export const cellText = (cell: PivotCell, formatNumber: (value: number) => string = numberFormat.format): string => {
   let value = typeof cell.FmtValue === 'string' ? cell.FmtValue : cell.Value
   if (value === undefined || value === null) return ''
   if (typeof value === 'string') {
     if (value.trim() === '' || Number.isNaN(Number(value))) return value
     value = Number(value)
   }
-  return typeof value === 'number' ? numberFormat.format(value) : String(value)
+  return typeof value === 'number' ? formatNumber(value) : String(value)
 }
 
 // Write-back: UPDATEABLE is CELL_UPDATE_ENABLED (1) or CELL_UPDATE_ENABLED_WITH_UPDATE (2)

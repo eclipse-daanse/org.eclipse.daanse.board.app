@@ -1,0 +1,10 @@
+{
+  "GeoJson": {
+    "conditions": "Bedingungen",
+    "points": "Punkte",
+    "areas": "Flächen",
+    "tabs": "Was gezeichnet wird",
+    "name": "GeoJSON-Darstellung",
+    "description": "Zeigt Beobachtungen als GeoJSON-Features auf der Karte"
+  }
+}

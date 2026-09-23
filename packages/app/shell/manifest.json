@@ -170,5 +170,17 @@
       "id": "vuedraggable",
       "versionRange": "^4.0.0"
     }
+  ],
+  "capabilities": [
+    {
+      "namespace": "tsm.i18n",
+      "attributes": {
+        "namespace": "shell",
+        "languages": [
+          "de",
+          "en"
+        ]
+      }
+    }
   ]
 }

@@ -9,6 +9,7 @@
     "lib.api.connection",
     "lib.connection.xmla",
     "platform.vue",
+    "ui.vue.composables",
     "ui.vue.controls"
   ],
   "requiresService": [
@@ -35,6 +36,22 @@
     {
       "id": "org.eclipse.daanse.board.app.ui.vue.controls",
       "versionRange": ">=0.0.1-0"
+    },
+    {
+      "id": "org.eclipse.daanse.board.app.ui.vue.composables",
+      "versionRange": ">=0.0.1-0"
+    }
+  ],
+  "capabilities": [
+    {
+      "namespace": "tsm.i18n",
+      "attributes": {
+        "namespace": "connectionXmla",
+        "languages": [
+          "de",
+          "en"
+        ]
+      }
     }
   ]
 }

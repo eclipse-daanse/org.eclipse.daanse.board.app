@@ -145,7 +145,7 @@ export function useMoveableLayout(pageId: string = '', gridSize: () => number = 
     const item = board.layout.value.find((item: ILayoutItem) => item.id === id)
     if (!item) return
 
-    history.record('Nach vorn', () => {
+    history.record('layoutsBase:History.forward', () => {
       item.z += 1
     })
   }
@@ -155,7 +155,7 @@ export function useMoveableLayout(pageId: string = '', gridSize: () => number = 
     const item = board.layout.value.find((item: ILayoutItem) => item.id === id)
     if (!item) return
 
-    history.record('Ganz nach vorn', () => {
+    history.record('layoutsBase:History.toFront', () => {
       item.z = zIndexMax + 1
     })
   }
@@ -164,7 +164,7 @@ export function useMoveableLayout(pageId: string = '', gridSize: () => number = 
     const item = board.layout.value.find((item: ILayoutItem) => item.id === id)
     if (!item) return
 
-    history.record('Nach hinten', () => {
+    history.record('layoutsBase:History.backward', () => {
       item.z -= 1
     })
   }
@@ -174,7 +174,7 @@ export function useMoveableLayout(pageId: string = '', gridSize: () => number = 
     const item = board.layout.value.find((item: ILayoutItem) => item.id === id)
     if (!item) return
 
-    history.record('Ganz nach hinten', () => {
+    history.record('layoutsBase:History.toBack', () => {
       item.z = zIndexMin - 1
     })
   }
@@ -186,12 +186,12 @@ export function useMoveableLayout(pageId: string = '', gridSize: () => number = 
       config: { datasourceId: config?.datasourceId, settings: { ...(config?.settings ?? {}) } },
       wrapperConfig,
     }
-    return history.record('Widget hinzugefügt', () => board.addWidget(widget, layoutConfig))
+    return history.record('layoutsBase:History.added', () => board.addWidget(widget, layoutConfig))
   }
 
   /* The placement goes with it - that is one call now, not two. */
   const removeWidget = (id: string) => {
-    history.record('Widget gelöscht', () => board.removeWidget(id))
+    history.record('layoutsBase:History.removed', () => board.removeWidget(id))
   }
 
   const copyWidget = (widgetId: string) => {
@@ -228,7 +228,7 @@ export function useMoveableLayout(pageId: string = '', gridSize: () => number = 
     const copied = cloneDeep(clipboard.widget)
     const settings = { ...(copied.config?.settings ?? {}), name: 'widget_' + newUid }
 
-    history.record('Widget eingefügt', () =>
+    history.record('layoutsBase:History.pasted', () =>
       board.addWidget(
         {
           uid: newUid,

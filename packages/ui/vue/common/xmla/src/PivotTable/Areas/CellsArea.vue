@@ -19,6 +19,7 @@ import { type CellDefaults, cellStyle, cellText, isCellEditable } from "../logic
 import type { FormatEvaluator } from "../logic/conditionalFormat";
 import { directionOf, findNextEditableCell } from "../logic/navigation";
 import type { PivotCell } from "../logic/types";
+import { useFormat } from "org.eclipse.daanse.board.app.ui.vue.composables";
 
 const props = defineProps<{
   cells: PivotCell[][];
@@ -37,6 +38,9 @@ const emit = defineEmits<{
 
 const bus = usePivotBus();
 const actions = usePivotActions();
+
+/* Numbers in the language on screen, not always German. */
+const numbers = useFormat();
 
 // Typed but not yet committed values, so they survive the cell scrolling out of view
 const drafts = shallowReactive(new Map<string, string>());
@@ -70,7 +74,7 @@ const visibleCells = computed(() => {
         i,
         j,
         cell,
-        text: cellText(cell),
+        text: cellText(cell, numbers.number),
         editable: isCellEditable(cell),
         lastColumn: i === colAxis.count - 1,
         lastRow: j === rowAxis.count - 1,

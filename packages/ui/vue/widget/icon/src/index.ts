@@ -56,6 +56,7 @@ export class IconWidgetProvider implements WidgetProvider {
   readonly supportedDSTypes = []
   readonly icon = Icon
   readonly name = 'Icon'
+  readonly nameKey = 'icon:Widget.name'
 
   /*
    * The settings form, as a model. Carried on the registration like the
@@ -108,3 +109,6 @@ export class IconWidgetProvider implements WidgetProvider {
 export { IconWidget, IconWidgetSettings }
 export { IconSettingsImpl, IconSettingsPackage, iconSettingsFormXmi }
 export type { IconSettings }
+
+/* Its texts - collected by lib.i18next, see src/i18n. */
+export { IconTranslations } from './i18n'

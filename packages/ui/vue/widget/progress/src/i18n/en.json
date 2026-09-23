@@ -1,0 +1,42 @@
+{
+  "Widget": {
+    "name": "Progress"
+  },
+  "Settings": {
+    "stops": "Colour stops",
+    "gradientOff": "The gradient is switched off. It can be switched on under “Appearance”.",
+    "add": "Add colour stop",
+    "remove": "Remove colour stop"
+  },
+  "Form": {
+    "valueGroup": "Value",
+    "progress": "Progress",
+    "min": "Minimum",
+    "max": "Maximum",
+    "barGroup": "Bar",
+    "isVertical": "Vertical",
+    "fillColor": "Bar colour",
+    "backgroundColor": "Background colour",
+    "barThickness": "Thickness",
+    "borderRadius": "Corner radius",
+    "gradientGroup": "Gradient",
+    "isGradient": "Gradient instead of a single colour",
+    "rotation": "Direction (degrees)",
+    "labelGroup": "Label",
+    "textColor": "Text colour",
+    "valueAlign": "Horizontal",
+    "valueJustify": "Vertical"
+  },
+  "Options": {
+    "align": {
+      "left": "Left",
+      "center": "Centre",
+      "right": "Right"
+    },
+    "justify": {
+      "top": "Top",
+      "center": "Middle",
+      "bottom": "Bottom"
+    }
+  }
+}

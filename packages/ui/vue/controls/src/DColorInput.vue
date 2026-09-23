@@ -20,6 +20,7 @@ Contributors:
  * opening anything.
  */
 import { computed, useId } from 'vue'
+import { useText } from './useText'
 
 const model = defineModel<string>()
 
@@ -29,6 +30,7 @@ withDefaults(
 )
 
 const id = useId()
+const t = useText()
 
 /** The native picker only speaks #rrggbb; anything else keeps it from opening. */
 const pickable = computed(() => {
@@ -53,7 +55,7 @@ const pickable = computed(() => {
           type="color"
           :value="pickable"
           :disabled="disabled"
-          :aria-label="label ?? 'Farbe'"
+          :aria-label="label ?? t('Color.label', 'Colour')"
           @input="model = ($event.target as HTMLInputElement).value"
         />
         <input
@@ -62,7 +64,7 @@ const pickable = computed(() => {
           type="text"
           spellcheck="false"
           :disabled="disabled"
-          :aria-label="label ? `${label} als Hexwert` : 'Farbe als Hexwert'"
+          :aria-label="label ? t('Color.hexOf', '{label} as hex value', { label }) : t('Color.hex', 'Colour as hex value')"
         />
       </div>
       <p v-if="hint" class="field__hint">{{ hint }}</p>

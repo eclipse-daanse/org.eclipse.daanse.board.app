@@ -1,0 +1,25 @@
+{
+  "Git": {
+    "columns": {
+      "name": "File",
+      "date": "Date",
+      "size": "Size"
+    },
+    "loaded": "File loaded",
+    "stored": "File stored",
+    "storeFailed": "Storing failed",
+    "loading": "Loading…",
+    "empty": "No file in this commit",
+    "branch": "Branch",
+    "commit": "Commit",
+    "load": "Load",
+    "access": "Access to the repository",
+    "token": "Token",
+    "tokenHint": "Kept for this session only.",
+    "continue": "Continue",
+    "name": "Name",
+    "fileName": "File name",
+    "overwrite": "Overwrite",
+    "store": "Store"
+  }
+}

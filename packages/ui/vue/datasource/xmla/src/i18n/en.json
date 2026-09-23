@@ -1,0 +1,16 @@
+{
+  "Settings": {
+    "connection": "Connection",
+    "polling": "Reload regularly",
+    "intervalMs": "Interval (ms)",
+    "cube": "Cube"
+  },
+  "Xmla": {
+    "build": "Build query",
+    "write": "Write MDX",
+    "tabs": "Build or write the query",
+    "useMdx": "Use MDX query",
+    "preview": "Data preview",
+    "pickConnection": "Select a connection to load the metadata"
+  }
+}

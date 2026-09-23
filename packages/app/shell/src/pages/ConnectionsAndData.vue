@@ -31,7 +31,7 @@ import {
   identifier as WORKSPACE,
   type Workspace,
 } from 'org.eclipse.daanse.board.app.lib.model.workspace'
-import { useEList, useEObject } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+import { useEList, useEObject, useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import DataTree, { type Selection } from '@/components/datasources/DataTree.vue'
 import DatasourceEditor from '@/components/datasources/DatasourceEditor.vue'
 import ConnectionEditor from '@/components/connections/ConnectionEditor.vue'
@@ -42,6 +42,7 @@ const connections = useEList(workspace, (w) => w.connections)
 const dataSources = useEList(workspace, (w) => w.datasources)
 
 const { usageOf, usageLabel } = useDatasourceUsage()
+const { t } = useTranslation('shell')
 
 const selected = ref<Selection | undefined>(undefined)
 const tab = ref('preview')
@@ -85,10 +86,10 @@ const usage = computed(() => {
 const tabs = computed(() =>
   selected.value?.type === 'DataSource'
     ? [
-        { id: 'preview', label: 'Vorschau' },
-        { id: 'settings', label: 'Einstellungen' },
+        { id: 'preview', label: t('Data.preview') },
+        { id: 'settings', label: t('WidgetSettings.settings') },
       ]
-    : [{ id: 'settings', label: 'Einstellungen' }],
+    : [{ id: 'settings', label: t('WidgetSettings.settings') }],
 )
 
 watch(selected, (at) => {
@@ -104,7 +105,7 @@ watch(selected, (at) => {
 
     <section class="data-page__detail">
       <p v-if="!selected" class="data-page__nothing">
-        Wähle links eine Verbindung oder eine Datenquelle.
+        {{ t('Data.pick') }}
       </p>
 
       <template v-else>
@@ -113,10 +114,10 @@ watch(selected, (at) => {
             <h1 class="detail__name">{{ (held as any)?.name ?? selected.itemId }}</h1>
             <span v-if="subtitle" class="detail__sub">{{ subtitle }}</span>
           </div>
-          <span v-if="usage" class="detail__usage">Verwendet in {{ usage }}</span>
+          <span v-if="usage" class="detail__usage">{{ t('Data.usedIn', { usage }) }}</span>
         </header>
 
-        <DTabs v-model="tab" :tabs="tabs" label="Ansicht der Auswahl" />
+        <DTabs v-model="tab" :tabs="tabs" :label="t('Data.view')" />
 
         <div class="detail__body">
           <ConnectionEditor

@@ -52,6 +52,7 @@ export class CodeWidgetProvider implements WidgetProvider {
   readonly supportedDSTypes = []
   readonly icon = Icon
   readonly name = 'Code'
+  readonly nameKey = 'code:Widget.name'
 
   /*
    * The settings form, as a model. Carried on the registration like the
@@ -69,7 +70,7 @@ export class CodeWidgetProvider implements WidgetProvider {
      * there are three of them. Named so that what is modelled is not
      * offered twice.
      */
-    unmodelledSections: ['Quelltext'],
+    unmodelledSections: ['source'],
   }
 
   constructor(
@@ -93,3 +94,6 @@ export class CodeWidgetProvider implements WidgetProvider {
 export { CodeWidget, CodeWidgetSettings }
 export { CodeSettingsImpl, CodesettingsPackage, codeSettingsFormXmi }
 export type { CodeSettings }
+
+/* Its texts - collected by lib.i18next, see src/i18n. */
+export { CodeTranslations } from './i18n'

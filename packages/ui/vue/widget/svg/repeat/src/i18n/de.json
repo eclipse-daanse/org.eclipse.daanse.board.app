@@ -1,0 +1,17 @@
+{
+  "Widget": {
+    "name": "Wiederholtes SVG"
+  },
+  "FormStyles": {
+    "fill": "Füllfarbe",
+    "stroke": "Linienfarbe"
+  },
+  "Form": {
+    "sourceGroup": "Grafik",
+    "src": "Adresse der Grafik",
+    "repetitions": "Wie oft",
+    "progress": "Davon hervorgehoben",
+    "activeGroup": "Hervorgehoben",
+    "defaultGroup": "Übrige"
+  }
+}

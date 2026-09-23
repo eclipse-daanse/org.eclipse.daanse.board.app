@@ -38,6 +38,9 @@ import {
   DModal,
   DTabs,
 } from 'org.eclipse.daanse.board.app.ui.vue.controls'
+import { useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+
+const { t } = useTranslation('map')
 
 
 const model: ModelRef<(IDSRenderer | IRenderer)[]> = defineModel<(IDSRenderer | IRenderer)[]>({
@@ -125,7 +128,7 @@ const cancelDelete = () => {
 const addStyle = () => {
   if (layerModel.value?.type == 'OGCSTA') {
     model.value.push({
-      name: 'new Style',
+      name: t('Renderer.newStyle'),
       thing: [
         {
           prop: 'name',
@@ -166,7 +169,7 @@ const addStyle = () => {
     } as IRenderer)
   } else {
     model.value.push({
-      name: 'new Style',
+      name: t('Renderer.newStyle'),
       datastream: [
         {
           prop: 'name',
@@ -210,7 +213,7 @@ const addStyle = () => {
 }
 const addDSStyle = () => {
   selection.value.ds_renderer.push({
-    name: 'new DS Style',
+    name: t('Renderer.newDatastreamStyle'),
     datastream: [
       {
         prop: 'name',
@@ -402,7 +405,19 @@ const tabNames = computed<string[]>(() => {
   return ['Conditions', 'Points', 'Areas']
 })
 
-const tabs = computed(() => tabNames.value.map((label) => ({ id: label, label })))
+/* Addressed by name, shown in the language on screen. */
+const TAB_KEYS: Record<string, string> = {
+  Settings: 'settings',
+  Conditions: 'conditions',
+  Points: 'points',
+  Areas: 'areas',
+  'Auto-update': 'autoUpdate',
+  Placement: 'placement',
+}
+// i18n-keys: map:Renderer.tabs.*
+const tabs = computed(() =>
+  tabNames.value.map((name) => ({ id: name, label: t(`Renderer.tabs.${TAB_KEYS[name] ?? name}`) })),
+)
 
 /* The tabs are addressed by name; everything below still counts them. */
 const activeTab = computed<string>({
@@ -416,14 +431,14 @@ const activeTab = computed<string>({
 
 <template>
 
-  <DModal v-model="showModal" size="lg" title="Styles">
+  <DModal v-model="showModal" size="lg" :title="t('Settings.styles')">
     <div class="tree_detail">
       <div class="tree">
         <div class="menu">
 
           <div class="menuitem">
             <div class="checked">
-              <DButton intent="quiet" title="Add style" @click="addStyle">
+              <DButton intent="quiet" :title="t('Renderer.addStyle')" @click="addStyle">
                 <DIcon name="add" size="sm" />
               </DButton>
             </div>
@@ -449,7 +464,7 @@ const activeTab = computed<string>({
               <div class="icon">
                 <span class="marked">
                   <DIcon name="style" size="sm" />
-                  <span class="marked__tag">Th</span>
+                  <span class="marked__tag">{{ t('Renderer.tag.thing') }}</span>
                 </span>
               </div>
               <div class="text">
@@ -465,11 +480,11 @@ const activeTab = computed<string>({
               </div>
               <div class="options">
                 <template v-if="layerModel?.type =='OGCSTA' && (style as IRenderer)?.thing">
-                  <DButton intent="quiet" title="Add datastream style" @click="addDSStyle">
+                  <DButton intent="quiet" :title="t('Renderer.addDatastreamStyle')" @click="addDSStyle">
                     <DIcon name="add" size="sm" />
                   </DButton>
                 </template>
-                <DButton intent="quiet" title="Delete style" @click="confirmDeleteStyle(style)">
+                <DButton intent="quiet" :title="t('Renderer.deleteStyle')" @click="confirmDeleteStyle(style)">
                   <DIcon name="delete" size="sm" />
                 </DButton>
               </div>
@@ -482,7 +497,7 @@ const activeTab = computed<string>({
                   <div class="icon">
                     <span class="marked">
                       <DIcon name="settings" size="sm" />
-                      <span class="marked__tag">DS</span>
+                      <span class="marked__tag">{{ t('Renderer.tag.datastream') }}</span>
                     </span>
                   </div>
                   <div class="text">
@@ -497,10 +512,10 @@ const activeTab = computed<string>({
 
                   </div>
                   <div class="options">
-                    <DButton intent="quiet" title="Add observation" @click="promptAddObservation(substyle)">
+                    <DButton intent="quiet" :title="t('Renderer.addObservation')" @click="promptAddObservation(substyle)">
                       <DIcon name="add" size="sm" />
                     </DButton>
-                    <DButton intent="quiet" title="Delete datastream style" @click="()=>{
+                    <DButton intent="quiet" :title="t('Renderer.deleteDatastreamStyle')" @click="()=>{
                         const parentStyle = style as IRenderer;
                         const index = parentStyle.ds_renderer.indexOf(substyle);
                         if(index !== -1){
@@ -522,14 +537,14 @@ const activeTab = computed<string>({
                       <div class="icon">
                         <span class="marked">
                           <DIcon name="visibility" size="sm" />
-                          <span class="marked__tag">Obs</span>
+                          <span class="marked__tag">{{ t('Renderer.tag.observation') }}</span>
                         </span>
                       </div>
                       <div class="text">
-                        {{ obs.component || 'Observation' }}
+                        {{ obs.component || t('Renderer.observation') }}
                       </div>
                       <div class="options">
-                        <DButton intent="quiet" title="Delete observation" @click="()=>{
+                        <DButton intent="quiet" :title="t('Renderer.deleteObservation')" @click="()=>{
                             if (!substyle.observations) return;
                             const index = substyle.observations.indexOf(obs);
                             if(index !== -1){
@@ -553,7 +568,7 @@ const activeTab = computed<string>({
 
       </div>
       <div class="detail">
-        <DTabs v-model="activeTab" :tabs="tabs" label="Renderer settings" />
+        <DTabs v-model="activeTab" :tabs="tabs" :label="t('Renderer.settings')" />
         <!--<RenderPropertyListItemDataStream v-model="model"></RenderPropertyListItemDataStream>-->
         <div v-if="selection" class="content">
           <div class="scroller">
@@ -600,47 +615,47 @@ const activeTab = computed<string>({
         </div>
         <div v-else class="content center">
           <DIcon name="style" size="lg" class="empty__icon" />
-          <span><span class="underline blue" @click="addStyle">create</span> or select Sytle to edit</span>
+          <span><span class="underline blue" @click="addStyle">{{ t('Renderer.create') }}</span> {{ t('Renderer.orSelect') }}</span>
         </div>
 
       </div>
     </div>
     <template #actions>
-      <DButton @click="showModal = false">Close</DButton>
+      <DButton @click="showModal = false">{{ t('common:Action.close') }}</DButton>
     </template>
   </DModal>
 
   <!-- Delete Confirmation Modal -->
   <DModal
     v-model="showDeleteConfirmation"
-    title="Delete style"
+    :title="t('Renderer.deleteStyle')"
     size="sm"
     @cancel="cancelDelete"
   >
     <div class="prose">
-      <p><strong>Warning:</strong> This style "{{ styleToDelete?.name }}" is used by {{ affectedLayers.length }} layer(s):</p>
+      <p><strong>{{ t('Renderer.warning') }}</strong> {{ t('Renderer.usedBy', { name: styleToDelete?.name, count: affectedLayers.length }) }}</p>
       <ul style="margin: 10px 0; padding-left: 20px;">
         <li v-for="(layer, index) in affectedLayers" :key="index">
-          {{ layer.name || layer.title || 'Unnamed Layer' }}
+          {{ layer.name || layer.title || t('Renderer.unnamedLayer') }}
         </li>
       </ul>
-      <p>If you delete this style, it will be removed from all these layers.</p>
-      <p><strong>Do you want to continue?</strong></p>
+      <p>{{ t('Renderer.deleteHint') }}</p>
+      <p><strong>{{ t('Renderer.continue') }}</strong></p>
     </div>
     <template #actions>
-      <DButton intent="quiet" @click="cancelDelete">Cancel</DButton>
-      <DButton intent="danger" @click="performDelete(styleToDelete)">Delete</DButton>
+      <DButton intent="quiet" @click="cancelDelete">{{ t('common:Action.cancel') }}</DButton>
+      <DButton intent="danger" @click="performDelete(styleToDelete)">{{ t('common:Action.delete') }}</DButton>
     </template>
   </DModal>
 
   <!-- Observation Renderer Type Selection Modal -->
   <DModal
     v-model="showObservationTypeDialog"
-    title="Select observation renderer"
+    :title="t('Renderer.selectObservation')"
     size="md"
   >
     <div class="prose">
-      <p>Choose which type of renderer to use for observations:</p>
+      <p>{{ t('Renderer.chooseObservation') }}</p>
       <div class="choices">
         <DButton
           v-for="[id, desc] in getAllDataPointRenderers()"
@@ -649,8 +664,8 @@ const activeTab = computed<string>({
           @click="addObservationRenderer(id)"
         >
           <span class="choice__text">
-            <span class="choice__name">{{ desc.name }}</span>
-            <span class="choice__what">{{ desc.description }}</span>
+            <span class="choice__name">{{ t(desc.name) }}</span>
+            <span class="choice__what">{{ t(desc.description) }}</span>
           </span>
         </DButton>
       </div>

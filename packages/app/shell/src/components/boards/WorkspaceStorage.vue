@@ -23,6 +23,7 @@ Contributors:
  */
 import { computed, inject, onMounted, ref, watch } from 'vue'
 import { DButton } from 'org.eclipse.daanse.board.app.ui.vue.controls'
+import { useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import BoardFloorplan from './BoardFloorplan.vue'
 import {
   parseWorkspace,
@@ -47,6 +48,7 @@ const emit = defineEmits<{ restored: [ids: string[]] }>()
 
 const repoManager = inject<RepositoryRegistryI>(RepoManagerId)
 const { save, load } = useWorkspaceFile()
+const { t } = useTranslation('shell')
 
 const places = ref<Repository[]>([])
 const entriesByPlace = ref<Record<string, Entity[]>>({})
@@ -160,7 +162,7 @@ async function readEntries(place: Repository) {
     entriesByPlace.value = { ...entriesByPlace.value, [key(place)]: await place.findAll() }
   } catch (error) {
     entriesByPlace.value = { ...entriesByPlace.value, [key(place)]: [] }
-    failure.value = `Einträge konnten nicht gelesen werden: ${reason(error)}`
+    failure.value = t('Storage.failure.read', { reason: reason(error) })
   } finally {
     busy.value = false
   }
@@ -300,10 +302,10 @@ const totals = computed(() => ({
 /** Short summary for a tree row, so the tree says what is inside each state. */
 function entrySummary(entry: Entity): string {
   const list = boardsIn(entry)
-  if (list.length === 0) return 'leer'
+  if (list.length === 0) return t('Storage.entry.empty')
   /* Pages, not boards: a stored state holds one board, and what is counted
     here is what is inside it. */
-  return `${list.length} ${list.length === 1 ? 'Seite' : 'Seiten'}`
+  return t('Storage.pages', { count: list.length })
 }
 
 /** What the current workspace would be stored as, shown before storing it. */
@@ -326,7 +328,7 @@ async function open(entry: Entity) {
     remember(entry, label(entry))
     emit('restored', ids)
   } catch (error) {
-    failure.value = `Laden fehlgeschlagen: ${reason(error)}`
+    failure.value = t('Storage.failure.load', { reason: reason(error) })
   }
 }
 
@@ -340,7 +342,7 @@ async function overwrite(entry: Entity) {
     await readEntries(place)
     selectedEntry.value = entriesOf(place).find((e) => String(e.uri) === String(entry.uri))
   } catch (error) {
-    failure.value = `Speichern fehlgeschlagen: ${reason(error)}`
+    failure.value = t('Storage.failure.save', { reason: reason(error) })
   }
 }
 
@@ -365,7 +367,7 @@ async function createEntry() {
     creating.value = false
     selectedEntry.value = entriesOf(place).find((e) => label(e) === name)
   } catch (error) {
-    failure.value = `Anlegen fehlgeschlagen: ${reason(error)}`
+    failure.value = t('Storage.failure.create', { reason: reason(error) })
   }
 }
 
@@ -379,7 +381,7 @@ async function remove(entry: Entity) {
     if (selectedEntry.value === entry) selectedEntry.value = undefined
     await readEntries(place)
   } catch (error) {
-    failure.value = `Löschen fehlgeschlagen: ${reason(error)}`
+    failure.value = t('Storage.failure.remove', { reason: reason(error) })
   }
 }
 
@@ -399,13 +401,13 @@ watch(() => repoManager, loadPlaces)
 
 <template>
   <div class="storage">
-    <aside class="tree" aria-label="Speicher">
+    <aside class="tree" :aria-label="t('Storage.title')">
       <input
         v-model="query"
         class="tree__search"
         type="search"
-        placeholder="Stände filtern"
-        aria-label="Stände filtern"
+        :placeholder="t('Storage.filter')"
+        :aria-label="t('Storage.filter')"
       />
 
       <div class="tree__body" role="tree">
@@ -454,7 +456,7 @@ watch(() => repoManager, loadPlaces)
             </template>
 
             <p v-if="entriesOf(place).length === 0" class="row row--hint">
-              {{ query ? 'Nichts gefunden' : 'Noch kein Stand' }}
+              {{ query ? t('Storage.nothingFound') : t('Storage.noEntry') }}
             </p>
 
             <button
@@ -464,12 +466,12 @@ watch(() => repoManager, loadPlaces)
               @click="startCreating(place)"
             >
               <span class="row__twist">＋</span>
-              <span class="row__name">Aktuellen Stand ablegen…</span>
+              <span class="row__name">{{ t('Storage.storeCurrent') }}</span>
             </button>
           </template>
         </template>
 
-        <p v-if="!places.length" class="row row--hint">Keine Speicherorte eingerichtet.</p>
+        <p v-if="!places.length" class="row row--hint">{{ t('Storage.noPlaces') }}</p>
 
         <button
           v-if="canUseFolders"
@@ -478,10 +480,10 @@ watch(() => repoManager, loadPlaces)
           @click="connectFolder"
         >
           <span class="row__twist">＋</span>
-          <span class="row__name">Ordner verbinden…</span>
+          <span class="row__name">{{ t('Storage.connectFolder') }}</span>
         </button>
         <p v-else class="row row--hint">
-          Dieser Browser kann keinen Ordner öffnen. Stände lassen sich herunterladen und wieder hochladen.
+          {{ t('Storage.noFolderSupport') }}
         </p>
       </div>
     </aside>
@@ -491,24 +493,22 @@ watch(() => repoManager, loadPlaces)
 
       <template v-if="creating">
         <header class="detail__head">
-          <h2 class="detail__name">Neuen Stand ablegen</h2>
-          <span class="detail__facts">in {{ selectedPlace?.name }}</span>
+          <h2 class="detail__name">{{ t('Storage.create.title') }}</h2>
+          <span class="detail__facts">{{ t('Storage.create.in', { place: selectedPlace?.name }) }}</span>
         </header>
         <form class="create" @submit.prevent="createEntry">
-          <label class="create__label" for="storage-name">Name</label>
+          <label class="create__label" for="storage-name">{{ t('Storage.create.name') }}</label>
           <input
             id="storage-name"
             v-model="newName"
             class="create__input"
             type="text"
-            placeholder="z. B. bodenfeuchte"
+            :placeholder="t('Storage.create.placeholder')"
           />
-          <DButton intent="primary" size="sm" type="submit" :disabled="!newName.trim()">Ablegen</DButton>
-          <DButton size="sm" @click="creating = false">Abbrechen</DButton>
+          <DButton intent="primary" size="sm" type="submit" :disabled="!newName.trim()">{{ t('Storage.create.submit') }}</DButton>
+          <DButton size="sm" @click="creating = false">{{ t('common:Action.cancel') }}</DButton>
           <p class="create__hint">
-            Abgelegt wird der gesamte Arbeitsstand: {{ pending.boards }}
-            {{ pending.boards === 1 ? 'Seite' : 'Seiten' }} mit {{ pending.widgets }} Widgets, dazu
-            Verbindungen, Datenquellen und Variablen.
+            {{ t('Storage.create.hint', { pages: t('Storage.pages', { count: pending.boards }), widgets: t('Storage.widgets', { count: pending.widgets }) }) }}
           </p>
         </form>
       </template>
@@ -524,30 +524,30 @@ watch(() => repoManager, loadPlaces)
       <template v-else-if="selectedEntry">
         <header class="detail__head">
           <h2 class="detail__name">{{ label(selectedEntry) }}</h2>
-          <span v-if="isOpen(selectedEntry)" class="detail__badge">geladen</span>
+          <span v-if="isOpen(selectedEntry)" class="detail__badge">{{ t('Storage.loaded') }}</span>
           <span class="detail__facts">
-            {{ selectedPlace?.name }} · {{ totals.boards }}
-            {{ totals.boards === 1 ? 'Seite' : 'Seiten' }} · {{ totals.widgets }} Widgets ·
-            {{ totals.sources }} Datenquellen
+            {{ selectedPlace?.name }} · {{ t('Storage.pages', { count: totals.boards }) }} ·
+            {{ t('Storage.widgets', { count: totals.widgets }) }} ·
+            {{ t('Storage.sources', { count: totals.sources }) }}
           </span>
           <span class="detail__spacer" />
-          <DButton intent="primary" size="sm" @click="open(selectedEntry)">Laden</DButton>
+          <DButton intent="primary" size="sm" @click="open(selectedEntry)">{{ t('Storage.load') }}</DButton>
           <DButton
             v-if="isWritable(selectedPlace)"
             size="sm"
-            title="Aktuellen Arbeitsstand hierhin schreiben"
+            :title="t('Storage.overwriteLabel')"
             @click="overwrite(selectedEntry)"
           >
-            Überschreiben
+            {{ t('Storage.overwrite') }}
           </DButton>
-          <DButton size="sm" @click="download(selectedEntry)">Herunterladen</DButton>
+          <DButton size="sm" @click="download(selectedEntry)">{{ t('Storage.download') }}</DButton>
           <DButton
             v-if="isWritable(selectedPlace)"
             intent="danger"
             size="sm"
             @click="remove(selectedEntry)"
           >
-            Löschen
+            {{ t('common:Action.delete') }}
           </DButton>
         </header>
 
@@ -557,20 +557,20 @@ watch(() => repoManager, loadPlaces)
             <div class="board__text">
               <h3 class="board__name">{{ board.name }}</h3>
               <p class="board__facts">
-                {{ board.widgetCount }} Widgets · {{ board.sourceCount }}
-                {{ board.sourceCount === 1 ? 'Datenquelle' : 'Datenquellen' }}
+                {{ t('Storage.widgets', { count: board.widgetCount }) }} ·
+                {{ t('Storage.sources', { count: board.sourceCount }) }}
               </p>
               <p v-if="board.kinds.length" class="board__kinds">{{ board.kinds.join(' · ') }}</p>
             </div>
           </article>
         </div>
         <p v-else class="detail__hint">
-          In diesem Stand liegt kein Board - er enthält nur Verbindungen, Quellen oder Variablen.
+          {{ t('Storage.noBoard') }}
         </p>
       </template>
 
-      <p v-else-if="busy" class="detail__hint">Wird gelesen…</p>
-      <p v-else class="detail__hint">Wähle links einen Stand, um zu sehen, was darin liegt.</p>
+      <p v-else-if="busy" class="detail__hint">{{ t('Storage.reading') }}</p>
+      <p v-else class="detail__hint">{{ t('Storage.pick') }}</p>
     </section>
   </div>
 </template>

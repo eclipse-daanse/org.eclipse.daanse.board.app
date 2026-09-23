@@ -1,0 +1,13 @@
+{
+  "Rest": {
+    "invalidUrl": "Not a valid http or https address",
+    "minTtl": "At least {{ms}} ms",
+    "unchecked": "Not checked yet",
+    "reachable": "Reachable ({{status}})",
+    "unreachable": "Not reachable ({{status}})",
+    "error": "Error",
+    "cache": "Cache responses",
+    "ttl": "Lifetime",
+    "ttlHint": "How long a response is reused before asking again."
+  }
+}

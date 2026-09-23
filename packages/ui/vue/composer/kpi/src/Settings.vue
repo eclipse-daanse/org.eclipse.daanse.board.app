@@ -17,6 +17,7 @@ import {
   DatasourceRepository, identifier as DatasourceRepositoryIdentifier
 } from "org.eclipse.daanse.board.app.lib.repository.datasource";
 import { watch, ref, computed } from "vue";
+import { useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 
 const { config, dataSources } = defineProps<{
   config: any;
@@ -24,12 +25,14 @@ const { config, dataSources } = defineProps<{
   connections: any;
 }>();
 
+const { t } = useTranslation('composerKpi')
+
 const datasourcesFiltered = computed(() => {
   return dataSources.filter((ds: any) => KpiComposer.availableTypes.includes(ds.type));
 });
 </script>
 <template>
   <!-- eslint-disable-next-line vue/no-mutating-props -->
-  <DSelect v-model="config.connectedDatasources" label="KPI Sources" :options="datasourcesFiltered" multiple label-key="name"
+  <DSelect v-model="config.connectedDatasources" :label="t('Kpi.sources')" :options="datasourcesFiltered" multiple label-key="name"
     value-key="uid" />
 </template>

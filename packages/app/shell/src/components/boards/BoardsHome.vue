@@ -33,7 +33,7 @@ import {
   identifier as WORKSPACE,
   type Workspace,
 } from 'org.eclipse.daanse.board.app.lib.model.workspace'
-import { useEList } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+import { useEList, useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import type { PageRegistryI, PageI } from 'org.eclipse.daanse.board.app.lib.api.page'
 import type { LayoutRepositoryI } from 'org.eclipse.daanse.board.app.lib.api.layout.page'
 
@@ -44,6 +44,7 @@ const props = defineProps<{
 
 const router = useRouter()
 const route = useRoute()
+const { t } = useTranslation('shell')
 
 /* Used for the order the pages are counted in, nothing more. */
 const { byUsage } = useBoardUsage()
@@ -129,7 +130,7 @@ function createPage() {
   const id = uuidv4()
   repo.registerPage({
     id,
-    name: 'Neue Seite',
+    name: t('Page.newName'),
     description: '',
     icon: '',
     visibleInNavigation: true,
@@ -161,7 +162,7 @@ function openRestored(ids: string[]) {
   <div class="boards">
    <div class="boards__panel">
     <header class="boards__bar">
-      <div class="boards__views" role="tablist" aria-label="Ansicht">
+      <div class="boards__views" role="tablist" :aria-label="t('Boards.views')">
         <button
           type="button"
           role="tab"
@@ -169,7 +170,7 @@ function openRestored(ids: string[]) {
           :class="['boards__view', { on: view === 'recent' }]"
           @click="view = 'recent'"
         >
-          Oft benutzt
+          {{ t('Boards.recent') }}
         </button>
         <button
           type="button"
@@ -178,7 +179,7 @@ function openRestored(ids: string[]) {
           :class="['boards__view', { on: view === 'storage' }]"
           @click="view = 'storage'"
         >
-          Speicher
+          {{ t('Boards.storage') }}
         </button>
       </div>
 
@@ -197,25 +198,24 @@ function openRestored(ids: string[]) {
         ]"
         :type-by-id="{ a: 'chart', b: 'map', c: 'table', d: 'text' }"
       />
-      <h2 class="boards__empty-title">Noch kein Board</h2>
+      <h2 class="boards__empty-title">{{ t('Boards.empty.title') }}</h2>
       <p class="boards__empty-text">
-        Ein Board besteht aus Seiten, auf denen Widgets über deinen Datenquellen liegen.
-        Lege eines an oder öffne einen gespeicherten Arbeitsstand.
+        {{ t('Boards.empty.text') }}
       </p>
       <div class="boards__empty-actions">
-        <DButton intent="primary" size="sm" @click="createPage">Board anlegen</DButton>
-        <DButton size="sm" @click="openStorage">Aus Speicher öffnen</DButton>
+        <DButton intent="primary" size="sm" @click="createPage">{{ t('Boards.empty.create') }}</DButton>
+        <DButton size="sm" @click="openStorage">{{ t('Boards.empty.openStored') }}</DButton>
       </div>
     </div>
 
     <!-- The board this workspace holds: one, so one card rather than a grid -->
     <div v-else-if="view === 'recent'" class="single">
-      <h2 class="single__heading">Geöffnet</h2>
+      <h2 class="single__heading">{{ t('Boards.open.heading') }}</h2>
       <article
         class="single__card"
         tabindex="0"
         role="button"
-        :aria-label="`Board ${board?.name ?? ''} öffnen`"
+        :aria-label="t('Boards.open.label', { name: board?.name ?? '' })"
         @click="openBoard"
         @keydown.enter="openBoard"
         @keydown.space.prevent="openBoard"
@@ -224,23 +224,20 @@ function openRestored(ids: string[]) {
           <DIcon :name="board?.icon || 'dashboard'" size="lg" />
         </span>
         <div class="single__text">
-          <h3 class="single__name">{{ board?.name || 'Board' }}</h3>
+          <h3 class="single__name">{{ board?.name || t('Boards.open.fallbackName') }}</h3>
           <p v-if="board?.description" class="single__desc">{{ board.description }}</p>
           <p class="single__meta">
-            {{ boardTotals.pages }} {{ boardTotals.pages === 1 ? 'Seite' : 'Seiten' }}
-            · {{ boardTotals.widgets }}
-            {{ boardTotals.widgets === 1 ? 'Widget' : 'Widgets' }}
+            {{ t('Boards.open.pages', { count: boardTotals.pages }) }}
+            · {{ t('Boards.open.widgets', { count: boardTotals.widgets }) }}
           </p>
         </div>
         <div class="single__actions">
-          <DButton intent="primary" size="sm" @click.stop="openBoard">Öffnen</DButton>
+          <DButton intent="primary" size="sm" @click.stop="openBoard">{{ t('Boards.open.action') }}</DButton>
         </div>
       </article>
 
       <p class="single__note">
-        Ein Arbeitsstand hält genau ein Board. Ein anderes bekommst du, indem du im
-        Speicher einen anderen Stand öffnest; die Seiten dieses Boards liegen im
-        Bereich „Seiten“.
+        {{ t('Boards.open.note') }}
       </p>
     </div>
 

@@ -21,13 +21,13 @@ Contributors:
     apart - none of which is a field. Playing the timeline and drawing it
     are rendered from model/ui.xmi beside this.
   -->
-  <section class="settings-section" data-section="Zeitraum">
+  <section class="settings-section" data-section-id="range" :data-section="t('Settings.section')">
     <div class="settings-container">
       <!-- Time Range Mode -->
       <div class="setting-group">
         <DSelect
           v-model="timeRangeMode"
-          :label="t('Time Range Mode')"
+          :label="t('Settings.mode')"
           :options="timeRangeModeOptions"
           label-key="label"
           value-key="value"
@@ -37,12 +37,12 @@ Contributors:
 
       <!-- Relative Time Configuration -->
       <div v-if="timeRangeMode === 'relative' && settings.relativeTime" class="setting-group">
-        <label>{{ t('Relative Time Range') }}</label>
+        <label>{{ t('Settings.relative') }}</label>
         <div class="relative-time-config">
           <div class="relative-time-row">
             <DInput
               v-model.number="settings.relativeTime.offset"
-              :label="t('Offset')"
+              :label="t('Settings.offset')"
               type="number"
               :min="1"
               :max="10000"
@@ -52,7 +52,7 @@ Contributors:
             <DSelect
               v-model="settings.relativeTime.unit"
               :options="timeUnitOptions"
-              :label="t('Unit')"
+              :label="t('Settings.unit')"
               label-key="text"
               value-key="value"
               class="unit-select"
@@ -60,7 +60,7 @@ Contributors:
             />
           </div>
           <div class="relative-time-preview">
-            {{ t('Now') }} - {{ settings.relativeTime.offset }} {{ t(settings.relativeTime.unit) }} → {{ t('Now') }}
+            {{ t('Settings.relativePreview', { offset: settings.relativeTime.offset, unit: t(`Settings.units.${settings.relativeTime.unit}`) }) }}
           </div>
         </div>
       </div>
@@ -69,18 +69,18 @@ Contributors:
       <template v-if="timeRangeMode === 'absolute'">
         <!-- Timeline Start (earliest time) -->
         <div class="setting-group">
-          <label>{{ t('Timeline Start') }}</label>
+          <label>{{ t('Settings.start') }}</label>
           <div class="datetime-group">
             <DDateInput
               v-model="timelineMinDateText"
               mode="date"
-              :label="t('Date')"
+              :label="t('Settings.date')"
               @update:modelValue="onTimelineMinDateChange"
             />
             <DDateInput
               v-model="timelineMinTimeText"
               mode="time"
-              :label="t('Time')"
+              :label="t('Settings.time')"
               @update:modelValue="onTimelineMinTimeChange"
             />
           </div>
@@ -88,23 +88,23 @@ Contributors:
 
         <!-- Timeline End (latest time) -->
         <div class="setting-group">
-          <label>{{ t('Timeline End') }}</label>
+          <label>{{ t('Settings.end') }}</label>
           <DCheckbox
             v-model="useCurrentTimeAsMax"
-            :label="t('Use current time')"
+            :label="t('Settings.useNow')"
             @update:modelValue="onTimelineEndTypeChange"
           />
           <div v-if="!useCurrentTimeAsMax" class="datetime-group">
             <DDateInput
               v-model="timelineMaxDateText"
               mode="date"
-              :label="t('Date')"
+              :label="t('Settings.date')"
               @update:modelValue="onTimelineMaxDateChange"
             />
             <DDateInput
               v-model="timelineMaxTimeText"
               mode="time"
-              :label="t('Time')"
+              :label="t('Settings.time')"
               @update:modelValue="onTimelineMaxTimeChange"
             />
           </div>
@@ -114,18 +114,18 @@ Contributors:
 
       <!-- Variable Configuration -->
       <div class="setting-group">
-        <label>{{ t('Variable Binding') }}</label>
+        <label>{{ t('Settings.variables') }}</label>
         <div class="variable-config">
           <DCheckbox
             v-model="useStartVariable"
-            :label="t('Start time from variable')"
+            :label="t('Settings.startFromVariable')"
             @update:modelValue="onStartVariableToggle"
           />
           <DSelect
             v-if="useStartVariable"
             v-model="settings.rangeStartVariable"
             :options="availableVariables"
-            :label="t('Start variable')"
+            :label="t('Settings.startVariable')"
             label-key="name"
             value-key="name"
             @update:modelValue="onVariableChange"
@@ -134,14 +134,14 @@ Contributors:
         <div class="variable-config">
           <DCheckbox
             v-model="useEndVariable"
-            :label="t('End time from variable')"
+            :label="t('Settings.endFromVariable')"
             @update:modelValue="onEndVariableToggle"
           />
           <DSelect
             v-if="useEndVariable"
             v-model="settings.rangeEndVariable"
             :options="availableVariables"
-            :label="t('End variable')"
+            :label="t('Settings.endVariable')"
             label-key="name"
             value-key="name"
             @update:modelValue="onVariableChange"
@@ -156,8 +156,7 @@ Contributors:
 
 <script lang="ts" setup>
 import { ref, computed, watch, onMounted, inject, type Ref } from 'vue';
-import type { i18n } from "org.eclipse.daanse.board.app.lib.i18next";
-import { VariableWrapper, plainSettings } from 'org.eclipse.daanse.board.app.ui.vue.composables';
+import { VariableWrapper, plainSettings, useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables';
 import {
   identifier as variableIdentifier,
   type VariableRepository
@@ -170,8 +169,7 @@ import {
 } from 'org.eclipse.daanse.board.app.ui.vue.controls'
 import { TimelinesettingsFactory } from './gen/TimelinesettingsFactory';
 
-const i18n: i18n | undefined = inject('i18n');
-const t = (key: string) => (i18n) ? i18n.t(key) : key;
+const { t } = useTranslation('timeline');
 
 type RelativeTimeUnit = 'hours' | 'days' | 'weeks' | 'months' | 'years';
 
@@ -207,10 +205,10 @@ const widgetSettings = defineModel<TimelineSettings>({ required: true });
 // Time range mode: 'relative' or 'absolute'
 const timeRangeMode = ref<'relative' | 'absolute'>('absolute');
 
-const timeRangeModeOptions = [
-  { label: 'Relative', value: 'relative' },
-  { label: 'Absolute', value: 'absolute' }
-];
+const timeRangeModeOptions = computed(() => [
+  { label: t('Settings.modes.relative'), value: 'relative' },
+  { label: t('Settings.modes.absolute'), value: 'absolute' }
+]);
 
 // Default values
 const now = new Date();
@@ -305,13 +303,10 @@ const availableVariables = computed(() => {
     .map((v: any) => ({ name: v.name, value: v.value }));
 });
 
-const timeUnitOptions = [
-  { text: 'Hours', value: 'hours' },
-  { text: 'Days', value: 'days' },
-  { text: 'Weeks', value: 'weeks' },
-  { text: 'Months', value: 'months' },
-  { text: 'Years', value: 'years' }
-];
+// i18n-keys: timeline:Settings.units.*
+const timeUnitOptions = computed(() =>
+  (['hours', 'days', 'weeks', 'months', 'years'] as const).map((value) => ({ text: t(`Settings.units.${value}`), value })),
+);
 
 // Time range mode change handler
 const onTimeRangeModeChange = () => {

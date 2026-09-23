@@ -28,7 +28,7 @@ widget's own bookkeeping, and nobody types one.
     <fields xsi:type="uimodel:InputWidget"
         name="url"
         feature="http://org.eclipse.daanse.board.app.ui.vue.widget.image#//ImageGalleryItem/url"
-        label="Adresse"
+        label="image:FormItem.url"
         placeholder="https://…"/>
   </components>
 </uimodel:UIModel>

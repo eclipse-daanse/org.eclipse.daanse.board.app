@@ -1,0 +1,43 @@
+{
+  "Menu": {
+    "forward": "Bring forward",
+    "backward": "Send backward",
+    "toFront": "To the front",
+    "toBack": "To the back",
+    "copy": "Copy",
+    "paste": "Paste"
+  },
+  "Align": {
+    "inGroup": "{{count}} in a group",
+    "selected": "{{count}} selected",
+    "left": "Align left",
+    "hcenter": "Centre horizontally",
+    "right": "Align right",
+    "top": "Align top",
+    "vcenter": "Centre vertically",
+    "bottom": "Align bottom",
+    "distributeX": "Distribute horizontally",
+    "distributeY": "Distribute vertically",
+    "group": "Group - move and select together",
+    "ungroup": "Ungroup",
+    "clear": "Clear selection"
+  },
+  "Minimap": {
+    "title": "Overview"
+  },
+  "History": {
+    "forward": "Bring forward",
+    "toFront": "Bring to front",
+    "backward": "Send backward",
+    "toBack": "Send to back",
+    "added": "Widget added",
+    "removed": "Widget deleted",
+    "pasted": "Widget pasted",
+    "moved": "Widget moved",
+    "resized": "Size changed",
+    "selectionMoved": "Selection moved"
+  },
+  "Base": {
+    "name": "Free layout (pixel based)"
+  }
+}

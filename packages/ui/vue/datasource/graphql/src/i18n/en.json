@@ -1,0 +1,7 @@
+{
+  "Settings": {
+    "connection": "Connection",
+    "polling": "Reload regularly",
+    "intervalMs": "Interval (ms)"
+  }
+}

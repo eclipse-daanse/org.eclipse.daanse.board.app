@@ -30,6 +30,16 @@
         "library": "org.eclipse.daanse.board.app.ui.vue.variable.components",
         "version": "0.0.1-next.1"
       }
+    },
+    {
+      "namespace": "tsm.i18n",
+      "attributes": {
+        "namespace": "variableComponents",
+        "languages": [
+          "de",
+          "en"
+        ]
+      }
     }
   ],
   "dependencies": [

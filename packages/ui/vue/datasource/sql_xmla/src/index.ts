@@ -54,3 +54,6 @@ export function deactivate({ services }: ActivationContext) {
   services.unregister('SqlXmlaPreview')
   services.unregister('SqlXmlaSettings')
 }
+
+/* Its texts - collected by lib.i18next, see src/i18n. */
+export { DatasourceSqlXmlaTranslations } from './i18n'

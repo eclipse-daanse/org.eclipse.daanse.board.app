@@ -15,7 +15,7 @@ import { Chart, registerables } from 'chart.js';
 import { LMap, LTileLayer, LMarker, LPopup, LIcon, LCircleMarker } from '@vue-leaflet/vue-leaflet';
 import type { PointExpression } from 'leaflet';
 
-import { useTemporaryStore } from 'org.eclipse.daanse.board.app.ui.vue.composables';
+import { useFormat, useTemporaryStore, useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables';
 import VueJsonPretty from 'vue-json-pretty';
 import 'vue-json-pretty/lib/styles.css';
 import 'leaflet/dist/leaflet.css';
@@ -23,6 +23,8 @@ import 'leaflet/dist/leaflet.css';
 // Register Chart.js components
 Chart.register(...registerables);
 const props = defineProps<{ dataSource: any }>();
+const { t } = useTranslation('datasourceOgcsta')
+const format = useFormat()
 
 const data = ref(null as any);
 const originalData = ref(null as any);
@@ -340,14 +342,14 @@ const chartData = computed(() => {
   });
 
   const chartDataResult = {
-    labels: observations.map((obs: any) => new Date(obs.phenomenonTime).toLocaleString('de-DE', {
+    labels: observations.map((obs: any) => format.date(obs.phenomenonTime, {
       month: 'short',
       day: 'numeric',
       hour: '2-digit',
       minute: '2-digit'
     })),
     datasets: [{
-      label: selectedDatastream.value.name || 'Observations',
+      label: selectedDatastream.value.name || t('Ogcsta.preview.observations'),
       data: observations.map((obs: any) => obs.result),
       borderColor: '#3b82f6',
       backgroundColor: 'rgba(59, 130, 246, 0.1)',
@@ -432,24 +434,24 @@ watch([chartData, chartCanvas], async () => {
           size="sm"
           @click="viewMode = 'tree'"
         >
-          Tree View
+          {{ t('Ogcsta.preview.tree') }}
         </DButton>
         <DButton
           :intent="viewMode === 'json' ? 'primary' : 'default'"
           size="sm"
           @click="viewMode = 'json'"
         >
-          JSON View
+          {{ t('Ogcsta.preview.json') }}
         </DButton>
         <DDivider vertical />
         <DCheckbox
           v-model="showMap"
-          label="Karte zeigen"
+          :label="t('Ogcsta.preview.showMap')"
           size="sm"
         />
         <div style="margin-left: auto; display: flex; gap: 1rem; font-size: 0.85rem; color: #6b7280;">
-          <span><strong>{{ hierarchicalData.length }}</strong> Things</span>
-          <span><strong>{{ thingLocations.length }}</strong> with Location</span>
+          <span><strong>{{ hierarchicalData.length }}</strong> {{ t('Ogcsta.preview.things') }}</span>
+          <span><strong>{{ thingLocations.length }}</strong> {{ t('Ogcsta.preview.withLocation') }}</span>
         </div>
       </div>
 
@@ -458,7 +460,7 @@ watch([chartData, chartCanvas], async () => {
         <!-- Left Panel: Tree -->
         <div class="tree-view" :style="{ width: (showMap || selectedDatastream) ? '45%' : '100%', minWidth: '300px' }">
           <div v-if="hierarchicalData.length === 0" style="padding: 1rem; color: #6b7280;">
-            No data available
+            {{ t('Ogcsta.preview.noData') }}
           </div>
 
           <div
@@ -472,19 +474,19 @@ watch([chartData, chartCanvas], async () => {
               <DIcon :name="expandedThings.has(thing.iotId || thing['@iot.id']) ? 'expand_more' : 'chevron_right'" size="sm" />
               <DIcon name="sensors" size="sm" tone="color-accent" />
               <span class="node-label">{{ thing.name || thing.iotId || thing['@iot.id'] }}</span>
-              <DIcon v-if="thing.Locations?.[0]?.location || thing.location" name="location_on" size="sm" tone="color-warn" title="Has location" />
-              <span class="node-count">({{ thing.datastreams?.length || 0 }} DS)</span>
+              <DIcon v-if="thing.Locations?.[0]?.location || thing.location" name="location_on" size="sm" tone="color-warn" :title="t('Ogcsta.preview.hasLocation')" />
+              <span class="node-count">({{ t('Ogcsta.preview.dsShort', { count: thing.datastreams?.length || 0 }) }})</span>
             </div>
 
             <!-- Thing Details (when expanded) -->
             <div v-if="expandedThings.has(thing.iotId || thing['@iot.id'])" class="children">
               <!-- Thing Info -->
               <div v-if="thing.description" class="thing-info">
-                <span class="info-label">Description:</span>
+                <span class="info-label">{{ t('Ogcsta.preview.description') }}</span>
                 <span class="info-value">{{ thing.description }}</span>
               </div>
               <div v-if="thing.properties && Object.keys(thing.properties).length > 0" class="thing-info">
-                <span class="info-label">Properties:</span>
+                <span class="info-label">{{ t('Ogcsta.preview.properties') }}</span>
                 <div class="properties-list">
                   <span v-for="(value, key) in thing.properties" :key="key" class="property-tag">
                     {{ key }}: {{ typeof value === 'object' ? JSON.stringify(value) : value }}
@@ -507,13 +509,13 @@ watch([chartData, chartCanvas], async () => {
                   <DIcon name="timeline" size="sm" tone="color-ok" />
                   <span class="node-label">{{ ds.name || ds.iotId || ds['@iot.id'] }}</span>
                   <span v-if="ds.unitOfMeasurement?.symbol" class="unit-badge">{{ ds.unitOfMeasurement.symbol }}</span>
-                  <span class="node-count">({{ ds.observations?.length || 0 }} obs)</span>
+                  <span class="node-count">({{ t('Ogcsta.preview.obsShort', { count: ds.observations?.length || 0 }) }})</span>
                   <DIcon
                     v-if="ds.observations && ds.observations.length > 0"
                     name="show_chart"
                     size="small"
                     color="info"
-                    title="View chart"
+                    :title="t('Ogcsta.preview.viewChart')"
                   />
                 </div>
 
@@ -523,21 +525,21 @@ watch([chartData, chartCanvas], async () => {
                     <span class="info-value-small">{{ ds.description }}</span>
                   </div>
                   <div v-if="ds.unitOfMeasurement" class="ds-info">
-                    <span class="info-label-small">Unit:</span>
+                    <span class="info-label-small">{{ t('Ogcsta.preview.unit') }}</span>
                     <span class="info-value-small">{{ ds.unitOfMeasurement.name }} ({{ ds.unitOfMeasurement.symbol }})</span>
                   </div>
 
                   <!-- Observations List -->
                   <div v-if="!ds.observations || ds.observations.length === 0" class="observation-item empty">
-                    No observations loaded
+                    {{ t('Ogcsta.preview.noObservations') }}
                   </div>
                   <div v-for="(obs, idx) in (ds.observations || []).slice(0, 10)" :key="obs['@iot.id'] || idx" class="observation-item">
                     <DIcon name="circle" size="12px" tone="color-accent" />
-                    <span class="observation-time">{{ new Date(obs.phenomenonTime).toLocaleString('de-DE') }}</span>
+                    <span class="observation-time">{{ format.date(obs.phenomenonTime, { dateStyle: 'short', timeStyle: 'medium' }) }}</span>
                     <span class="observation-result">{{ obs.result }} {{ ds.unitOfMeasurement?.symbol || '' }}</span>
                   </div>
                   <div v-if="ds.observations && ds.observations.length > 10" class="observation-item more">
-                    ... and {{ ds.observations.length - 10 }} more observations
+                    {{ t('Ogcsta.preview.more', { count: ds.observations.length - 10 }) }}
                   </div>
                 </div>
               </div>
@@ -579,7 +581,7 @@ watch([chartData, chartCanvas], async () => {
                   <div class="map-popup">
                     <strong>{{ loc.name }}</strong>
                     <p v-if="loc.description">{{ loc.description }}</p>
-                    <small>{{ loc.datastreamCount }} Datastreams</small>
+                    <small>{{ t('Ogcsta.preview.datastreams', { count: loc.datastreamCount }) }}</small>
                   </div>
                 </l-popup>
               </l-marker>
@@ -589,14 +591,14 @@ watch([chartData, chartCanvas], async () => {
           <!-- No locations hint -->
           <div v-else-if="showMap && thingLocations.length === 0" class="no-locations">
             <DIcon name="location_off" size="lg" tone="color-dim" />
-            <p>No location data available</p>
+            <p>{{ t('Ogcsta.preview.noLocations') }}</p>
           </div>
 
           <!-- Chart Panel -->
           <div v-if="selectedDatastream" class="chart-panel" :class="{ 'half-height': showMap && thingLocations.length > 0 }">
             <div class="chart-header">
               <div>
-                <h3>{{ selectedDatastream.name || 'Datastream' }}</h3>
+                <h3>{{ selectedDatastream.name || t('Ogcsta.preview.datastream') }}</h3>
                 <p v-if="selectedDatastream.description">{{ selectedDatastream.description }}</p>
               </div>
               <DButton
@@ -609,8 +611,8 @@ watch([chartData, chartCanvas], async () => {
             <div class="chart-container">
               <canvas v-if="chartData" ref="chartCanvas"></canvas>
               <div v-else class="no-chart-data">
-                <p>No observation data available</p>
-                <small>Click on a datastream to load observations</small>
+                <p>{{ t('Ogcsta.preview.noObservationData') }}</p>
+                <small>{{ t('Ogcsta.preview.clickDatastream') }}</small>
               </div>
             </div>
           </div>

@@ -29,19 +29,19 @@ to the widget, while the theme only changes what it looks like.
 
   <components xsi:type="uimodel:FormView" name="CodeSettingsFormView">
     <fields xsi:type="uimodel:SelectWidget" name="language"
-        feature="http://org.eclipse.daanse.board.app.ui.vue.widget.code#//CodeSettings/language" label="Sprache">
+        feature="http://org.eclipse.daanse.board.app.ui.vue.widget.code#//CodeSettings/language" label="code:Form.language">
       <values>typescript</values>
       <values>vue</values>
       <values>php</values>
       <optionLabel language="JS" body="({ typescript: 'TypeScript', vue: 'Vue', php: 'PHP' })[option] ?? option"/>
     </fields>
     <fields xsi:type="uimodel:SelectWidget" name="theme"
-        feature="http://org.eclipse.daanse.board.app.ui.vue.widget.code#//CodeSettings/theme" label="Farbschema">
+        feature="http://org.eclipse.daanse.board.app.ui.vue.widget.code#//CodeSettings/theme" label="code:Form.theme">
       <values>github-light</values>
       <values>vitesse-dark</values>
       <values>catppuccin-mocha</values>
       <values>min-dark</values>
-      <optionLabel language="JS" body="({ 'github-light': 'GitHub, hell', 'vitesse-dark': 'Vitesse, dunkel', 'catppuccin-mocha': 'Catppuccin Mocha', 'min-dark': 'Min, dunkel' })[option] ?? option"/>
+      <optionLabel language="JS" body="({ 'github-light': 'code:Options.theme.githubLight', 'vitesse-dark': 'code:Options.theme.vitesseDark', 'catppuccin-mocha': 'code:Options.theme.catppuccinMocha', 'min-dark': 'code:Options.theme.minDark' })[option] ?? option"/>
     </fields>
   </components>
 </uimodel:UIModel>

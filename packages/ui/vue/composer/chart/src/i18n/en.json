@@ -1,0 +1,10 @@
+{
+  "Settings": {
+    "sources": "Sources",
+    "composeBy": "Compose by"
+  },
+  "Chart": {
+    "series": "Series",
+    "labelColumn": "Column for the labels"
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "Menu": {
+    "copy": "Kopieren",
+    "paste": "Einfügen"
+  },
+  "FormColumns": {
+    "lg": "ab 1800 px",
+    "md": "ab 1200 px",
+    "sm": "ab 768 px",
+    "xs": "ab 480 px",
+    "xxs": "darunter"
+  },
+  "Form": {
+    "rowHeight": "Zeilenhöhe (px)",
+    "cols": "Spalten je Breite"
+  },
+  "Grid": {
+    "name": "Raster-Layout"
+  }
+}

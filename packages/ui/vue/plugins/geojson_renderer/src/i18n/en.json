@@ -1,0 +1,10 @@
+{
+  "GeoJson": {
+    "conditions": "Conditions",
+    "points": "Points",
+    "areas": "Areas",
+    "tabs": "What is drawn",
+    "name": "GeoJSON data renderer",
+    "description": "Renders observations as GeoJSON features on the map"
+  }
+}

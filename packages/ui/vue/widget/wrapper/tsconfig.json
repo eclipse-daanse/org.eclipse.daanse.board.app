@@ -5,6 +5,7 @@
     "inlineSources": true,
     "target": "es2016",
     "module": "commonjs",
+    "resolveJsonModule": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "strict": true,

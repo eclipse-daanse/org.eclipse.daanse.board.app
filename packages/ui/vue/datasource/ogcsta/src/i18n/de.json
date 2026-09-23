@@ -1,0 +1,56 @@
+{
+  "Settings": {
+    "connection": "Verbindung"
+  },
+  "Ogcsta": {
+    "mqtt": "MQTT-Verbindung (optional, für Echtzeit-Aktualisierungen)",
+    "history": "Verlaufsdaten",
+    "timeRange": "Zeitraum-Filter",
+    "clearTimeRange": "Zeitraum-Filter leeren",
+    "phenomenonTime": "Filter nach Messzeit",
+    "clearPhenomenonTime": "Messzeit-Filter leeren",
+    "resultTime": "Filter nach Ergebniszeit",
+    "clearResultTime": "Ergebniszeit-Filter leeren",
+    "query": "Abfrage-Einstellungen",
+    "order": {
+      "phenomenonDesc": "Messzeit (absteigend)",
+      "phenomenonAsc": "Messzeit (aufsteigend)",
+      "resultDesc": "Ergebniszeit (absteigend)",
+      "resultAsc": "Ergebniszeit (aufsteigend)"
+    },
+    "orderBy": "Sortieren nach",
+    "limit": "Limit (max. Datensätze)",
+    "currentLocations": "Aktuelle statt historische Orte",
+    "currentLocationsLong": "Aktuelle Orte statt historischer Orte verwenden",
+    "currentLocationsHint": "Bereits geladene aktuelle Orte wiederverwenden, statt historische Orte über die API abzurufen",
+    "startTime": "Startzeit",
+    "startDate": "Startdatum",
+    "endTime": "Endzeit",
+    "endDate": "Enddatum",
+    "preview": {
+      "observations": "Beobachtungen",
+      "tree": "Baumansicht",
+      "json": "JSON-Ansicht",
+      "showMap": "Karte zeigen",
+      "things": "Things",
+      "withLocation": "mit Ort",
+      "hasLocation": "Hat einen Ort",
+      "description": "Beschreibung:",
+      "properties": "Eigenschaften:",
+      "viewChart": "Diagramm zeigen",
+      "unit": "Einheit:",
+      "noObservations": "Keine Beobachtungen geladen",
+      "more_one": "… und {{count}} weitere Beobachtung",
+      "more_other": "… und {{count}} weitere Beobachtungen",
+      "datastreams_one": "{{count}} Datastream",
+      "datastreams_other": "{{count}} Datastreams",
+      "noLocations": "Keine Ortsdaten vorhanden",
+      "datastream": "Datastream",
+      "noObservationData": "Keine Beobachtungsdaten vorhanden",
+      "clickDatastream": "Klicke auf einen Datastream, um Beobachtungen zu laden",
+      "noData": "Keine Daten vorhanden",
+      "dsShort": "{{count}} DS",
+      "obsShort": "{{count}} Beob."
+    }
+  }
+}

@@ -21,7 +21,7 @@ import { inject,
   watch,
 } from 'vue'
 import { useRoute } from 'vue-router'
-import { useDatasourceRepository } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+import { useDatasourceRepository, useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import { identifiers } from 'org.eclipse.daanse.board.app.lib.core'
 import type { TinyEmitter } from 'tiny-emitter'
 import {
@@ -109,18 +109,23 @@ watch(data, (newData) => {
   }
 })
 
-const costingOptions = [
-  { text: 'Auto', value: 'auto', icon: '🚗' },
-  { text: 'Fahrrad', value: 'bicycle', icon: '🚲' },
-  { text: 'Zu Fuß', value: 'pedestrian', icon: '🚶' },
-  { text: 'LKW', value: 'truck', icon: '🚛' },
-  { text: 'Bus', value: 'bus', icon: '🚌' },
-  { text: 'Roller', value: 'motor_scooter', icon: '🛵' },
-  { text: 'Motorrad', value: 'motorcycle', icon: '🏍️' },
-]
+const { t } = useTranslation('routing')
+
+// i18n-keys: routing:Costing.*
+const costingOptions = computed(() =>
+  [
+    { value: 'auto', icon: '🚗' },
+    { value: 'bicycle', icon: '🚲' },
+    { value: 'pedestrian', icon: '🚶' },
+    { value: 'truck', icon: '🚛' },
+    { value: 'bus', icon: '🚌' },
+    { value: 'motor_scooter', icon: '🛵' },
+    { value: 'motorcycle', icon: '🏍️' },
+  ].map((option) => ({ ...option, text: t(`Costing.${option.value}`) })),
+)
 
 const selectedCostingLabel = computed(() => {
-  const opt = costingOptions.find((o) => o.value === costing.value)
+  const opt = costingOptions.value.find((o) => o.value === costing.value)
   return opt ? `${opt.icon} ${opt.text}` : costing.value
 })
 
@@ -214,10 +219,10 @@ function removeWaypointAt(index: number) {
 }
 
 function waypointLabel(index: number): string {
-  if (index === 0) return 'Start'
+  if (index === 0) return t('Waypoint.start')
   if (index === waypoints.value.length - 1 && waypoints.value.length > 1)
-    return 'Ziel'
-  return `Halt ${index}`
+    return t('Waypoint.end')
+  return t('Waypoint.stop', { n: index })
 }
 
 function waypointColor(index: number): string {
@@ -379,7 +384,7 @@ onUnmounted(() => {
   <div class="routing-widget">
     <!-- Header -->
     <div class="routing-header">
-      <span class="routing-title">Routing</span>
+      <span class="routing-title">{{ t('Widget.name') }}</span>
       <select v-model="costing" class="costing-select">
         <option
           v-for="opt in costingOptions"
@@ -410,7 +415,7 @@ onUnmounted(() => {
           <input
             v-model="addressInputs[i]"
             class="waypoint-input"
-            :placeholder="'Adresse eingeben...'"
+            :placeholder="t('Waypoint.placeholder')"
             @input="onAddressInput(i)"
             @focus="activeSuggestionIndex = i"
           />
@@ -435,7 +440,7 @@ onUnmounted(() => {
         <button
           v-if="i >= 2"
           class="remove-btn"
-          title="Entfernen"
+          :title="t('Waypoint.remove')"
           @click="removeWaypointAt(i)"
         >
           &times;
@@ -446,21 +451,21 @@ onUnmounted(() => {
     <!-- Actions -->
     <div class="routing-actions">
       <button class="btn-secondary" @click="addIntermediateStop">
-        + Zwischenhalt
+        {{ t('Actions.addStop') }}
       </button>
       <button
         class="btn-primary"
         :disabled="isCalculating"
         @click="doCalculateRoute"
       >
-        {{ isCalculating ? 'Berechne...' : 'Route berechnen' }}
+        {{ isCalculating ? t('Actions.calculating') : t('Actions.calculate') }}
       </button>
       <button
         v-if="routeResult || waypoints.length > 0"
         class="btn-clear"
         @click="clearAll"
       >
-        Löschen
+        {{ t('Actions.clear') }}
       </button>
     </div>
 
@@ -471,19 +476,19 @@ onUnmounted(() => {
           <span class="summary-value">
             {{ routeResult.summary.distance_km.toFixed(1) }} km
           </span>
-          <span class="summary-label">Distanz</span>
+          <span class="summary-label">{{ t('Summary.distance') }}</span>
         </div>
         <div class="summary-item">
           <span class="summary-value">
             {{ formattedDuration }}
           </span>
-          <span class="summary-label">Dauer</span>
+          <span class="summary-label">{{ t('Summary.duration') }}</span>
         </div>
         <div class="summary-item">
           <span class="summary-value">
             {{ selectedCostingLabel }}
           </span>
-          <span class="summary-label">Verkehrsart</span>
+          <span class="summary-label">{{ t('Summary.costing') }}</span>
         </div>
       </div>
 
@@ -494,7 +499,7 @@ onUnmounted(() => {
           @click="showManeuvers = !showManeuvers"
         >
           {{ showManeuvers ? '▾' : '▸' }}
-          Manöver ({{ allManeuvers.length }})
+          {{ t('Summary.maneuvers', { count: allManeuvers.length }) }}
         </button>
         <div v-if="showManeuvers" class="maneuvers-list">
           <div

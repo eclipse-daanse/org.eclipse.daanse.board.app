@@ -53,6 +53,7 @@ export class RichTextWidgetProvider implements WidgetProvider {
   readonly supportedDSTypes = []
   readonly icon = Icon
   readonly name = 'RichText'
+  readonly nameKey = 'textRich:Widget.name'
 
   /**
    * The form for this widget's settings, as a model rather than a
@@ -94,3 +95,6 @@ export class RichTextWidgetProvider implements WidgetProvider {
 export { RichTextWidget, RichTextWidgetSettings }
 export { RichTextEditorSettingsImpl, RichTextEditorPackage, richTextSettingsFormXmi }
 export type { RichTextEditorSettings }
+
+/* Its texts - collected by lib.i18next, see src/i18n. */
+export { TextRichTranslations } from './i18n'

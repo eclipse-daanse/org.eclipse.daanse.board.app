@@ -1,0 +1,70 @@
+{
+  "Widget": {
+    "name": "Zeitleiste",
+    "range": "Zeitleisten-Bereich - ziehen zum Verschieben",
+    "rangeFixed": "Zeitleisten-Bereich (Beginn fixiert)",
+    "startKnob": "Beginn",
+    "startKnobFixed": "Beginn (fixiert)",
+    "endKnob": "Ende",
+    "start": "Beginn:",
+    "end": "Ende:",
+    "duration": "Dauer:",
+    "speed": "Geschwindigkeit:"
+  },
+  "Settings": {
+    "section": "Zeitraum",
+    "mode": "Art des Zeitraums",
+    "modes": {
+      "relative": "Relativ",
+      "absolute": "Absolut"
+    },
+    "relative": "Relativer Zeitraum",
+    "offset": "Abstand",
+    "unit": "Einheit",
+    "units": {
+      "hours": "Stunden",
+      "days": "Tage",
+      "weeks": "Wochen",
+      "months": "Monate",
+      "years": "Jahre"
+    },
+    "relativePreview": "Jetzt - {{offset}} {{unit}} → Jetzt",
+    "start": "Beginn der Zeitleiste",
+    "end": "Ende der Zeitleiste",
+    "useNow": "Aktuelle Zeit verwenden",
+    "date": "Datum",
+    "time": "Uhrzeit",
+    "variables": "Bindung an Variablen",
+    "startFromVariable": "Beginn aus einer Variable",
+    "startVariable": "Variable für den Beginn",
+    "endFromVariable": "Ende aus einer Variable",
+    "endVariable": "Variable für das Ende"
+  },
+  "Form": {
+    "playbackGroup": "Wiedergabe",
+    "stepSize": "Schrittweite",
+    "playbackSpeed": "Geschwindigkeit",
+    "autoPlay": "Beim Laden starten",
+    "fixStartKnob": "Anfang festhalten",
+    "showControls": "Bedienelemente zeigen",
+    "lookGroup": "Darstellung",
+    "rangeStripColor": "Farbe des Ausschnitts",
+    "showTimeInfo": "Zeitangaben zeigen"
+  },
+  "Options": {
+    "step": {
+      "minute": "Eine Minute",
+      "hour": "Eine Stunde",
+      "day": "Ein Tag",
+      "week": "Eine Woche",
+      "month": "Ein Monat"
+    },
+    "speed": {
+      "x025": "0,25-fach",
+      "x05": "0,5-fach",
+      "x1": "1-fach",
+      "x2": "2-fach",
+      "x4": "4-fach"
+    }
+  }
+}

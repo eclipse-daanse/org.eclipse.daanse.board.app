@@ -1,0 +1,44 @@
+{
+  "Widget": {
+    "name": "Formatierter Text"
+  },
+  "Settings": {
+    "section": "Text und Formatierung",
+    "noVariables": "Keine Variablen angelegt"
+  },
+  "Toolbar": {
+    "fontSize": "Größe der Auswahl",
+    "fontColor": "Farbe der Auswahl",
+    "bold": "Fett",
+    "italic": "Kursiv",
+    "underline": "Unterstrichen",
+    "strike": "Durchgestrichen",
+    "code": "Code im Text",
+    "superscript": "Hochgestellt",
+    "subscript": "Tiefgestellt",
+    "paragraph": "Absatz",
+    "heading": "Überschrift {{level}}",
+    "alignLeft": "Linksbündig",
+    "alignCenter": "Zentriert",
+    "alignRight": "Rechtsbündig",
+    "justify": "Blocksatz",
+    "bulletList": "Aufzählung",
+    "orderedList": "Nummerierte Liste",
+    "outdent": "Einzug verkleinern",
+    "indent": "Einzug vergrößern",
+    "codeBlock": "Codeblock",
+    "blockquote": "Zitat",
+    "rule": "Trennlinie",
+    "hardBreak": "Zeilenumbruch",
+    "setLink": "Link setzen",
+    "removeLink": "Link entfernen",
+    "insertVariable": "Variable einfügen",
+    "undo": "Rückgängig",
+    "redo": "Wiederholen",
+    "clear": "Formatierung entfernen"
+  },
+  "Form": {
+    "fontSize": "Schriftgröße (px)",
+    "fontColor": "Schriftfarbe"
+  }
+}

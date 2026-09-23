@@ -20,6 +20,7 @@
     "outDir": "./dist/types"
     /* Specify an output folder for all emitted files. */,
     /* Interop Constraints */
+    "resolveJsonModule": true,
     "esModuleInterop": true
     /* Emit additional JavaScript to ease support for importing CommonJS modules. This enables 'allowSyntheticDefaultImports' for type compatibility. */,
     "forceConsistentCasingInFileNames": true

@@ -33,7 +33,7 @@ sent and stored; optionLabel gives them the words a reader picks from.
     <fields xsi:type="uimodel:SelectWidget"
         name="defaultCosting"
         feature="http://org.eclipse.daanse.board.app.ui.vue.widget.routing#//RoutingWidgetSettings/defaultCosting"
-        label="Verkehrsart">
+        label="routing:Form.defaultCosting">
       <values>auto</values>
       <values>bicycle</values>
       <values>pedestrian</values>
@@ -41,7 +41,7 @@ sent and stored; optionLabel gives them the words a reader picks from.
       <values>bus</values>
       <values>motor_scooter</values>
       <values>motorcycle</values>
-      <optionLabel language="JS" body="({ auto: 'Auto', bicycle: 'Fahrrad', pedestrian: 'Zu Fuß', truck: 'LKW', bus: 'Bus', motor_scooter: 'Roller', motorcycle: 'Motorrad' })[option] ?? option"/>
+      <optionLabel language="JS" body="({ auto: 'routing:Costing.auto', bicycle: 'routing:Costing.bicycle', pedestrian: 'routing:Costing.pedestrian', truck: 'routing:Costing.truck', bus: 'routing:Costing.bus', motor_scooter: 'routing:Costing.motor_scooter', motorcycle: 'routing:Costing.motorcycle' })[option] ?? option"/>
     </fields>
   </components>
 </uimodel:UIModel>

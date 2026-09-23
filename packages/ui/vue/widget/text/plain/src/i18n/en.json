@@ -1,0 +1,23 @@
+{
+  "Widget": {
+    "name": "Text"
+  },
+  "Settings": {
+    "section": "Text and formatting",
+    "text": "Text",
+    "textPlaceholder": "Revenue: $value.total",
+    "bold": "Bold",
+    "italic": "Italic",
+    "underline": "Underline",
+    "left": "Left",
+    "center": "Centre",
+    "right": "Right",
+    "top": "Top",
+    "bottom": "Bottom",
+    "textHint": "$value inserts the assigned datasource - $value on its own the whole object, $value.name a field. {variable} inserts a board variable."
+  },
+  "Form": {
+    "fontSize": "Font size (px)",
+    "fontColor": "Font colour"
+  }
+}

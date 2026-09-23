@@ -14,12 +14,15 @@ Contributors:
 import { debounce } from 'lodash';
 import { computed, onMounted, reactive, ref, watch } from 'vue';
 import { DInput, DSelect, DSwitch } from 'org.eclipse.daanse.board.app.ui.vue.controls';
+import { useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 
 const { config, connections } = defineProps<{
     config: any;
     dataSources: any;
     connections: any;
-}>();
+}>()
+
+const { t } = useTranslation('datasourceCsv');
 
 const tempResourceUrl = ref(config.resourceUrl);
 const innerInterval = ref(config.pollingInterval ?? 5000);
@@ -126,19 +129,19 @@ onMounted(async () => {
 <template>
   <div class="settings">
     <!-- eslint-disable-next-line vue/no-mutating-props -->
-    <DSelect v-model="config.connection" label="Verbindung" :options="connectionsFiltered" />
+    <DSelect v-model="config.connection" :label="t('Settings.connection')" :options="connectionsFiltered" />
 
     <!-- eslint-disable-next-line vue/no-mutating-props -->
     <DInput
       v-model="tempResourceUrl"
-      label="Pfad"
+      :label="t('Settings.path')"
       :error="urlError"
-      hint="Relativ zur Adresse der Verbindung."
+      :hint="t('Settings.pathHint')"
     />
 
     <DSelect
       v-model="config.separators"
-      label="Trennzeichen"
+      :label="t('Csv.separator')"
       :options="separatorOptions"
       label-key="label"
       value-key="value"
@@ -147,7 +150,7 @@ onMounted(async () => {
     <DInput
       v-model.number="config.skipRowsFromStart"
       type="number"
-      label="Zeilen oben überspringen"
+      :label="t('Csv.skipTop')"
       :min="0"
       placeholder="0"
     />
@@ -155,17 +158,17 @@ onMounted(async () => {
     <DInput
       v-model.number="config.skipRowsFromEnd"
       type="number"
-      label="Zeilen unten überspringen"
+      :label="t('Csv.skipBottom')"
       :min="0"
       placeholder="0"
     />
 
-    <DSwitch v-model="config.pollingEnabled" label="Regelmäßig neu laden" />
+    <DSwitch v-model="config.pollingEnabled" :label="t('Settings.polling')" />
 
     <DInput
       v-if="config.pollingEnabled"
       v-model="innerInterval"
-      label="Abstand"
+      :label="t('Settings.interval')"
       type="number"
       suffix="ms"
     />

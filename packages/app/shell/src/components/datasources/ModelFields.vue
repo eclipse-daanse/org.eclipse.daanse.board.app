@@ -26,6 +26,7 @@ Contributors:
 import { computed } from 'vue'
 import type { ClassDoc, FeatureDoc } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import { DField, DInput, DSwitch } from 'org.eclipse.daanse.board.app.ui.vue.controls'
+import { useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 
 const props = withDefaults(
   defineProps<{
@@ -37,6 +38,8 @@ const props = withDefaults(
   }>(),
   { omit: () => [] },
 )
+
+const { t } = useTranslation('shell')
 
 /** Held by the dialog around this, never by the model's own fields. */
 const IDENTITY = new Set(['name', 'type', 'uid'])
@@ -67,11 +70,11 @@ function asNumber(feature: FeatureDoc, value: string | number) {
 
 <template>
   <p v-if="!doc" class="model__none">
-    Dieser Typ bringt kein Modell mit — die Felder füllst du nach dem Anlegen im Editor aus.
+    {{ t('ModelFields.noModel') }}
   </p>
 
   <p v-else-if="!fields.length" class="model__none">
-    Dieser Typ braucht außer dem Namen nichts weiter.
+    {{ t('ModelFields.nothing') }}
   </p>
 
   <template v-else>

@@ -27,6 +27,6 @@ variable, not to this type, and the dialog asks for them once.
   <components xsi:type="uimodel:FormView" name="DateTimePickerVariableSettingsFormView">
     <fields xsi:type="uimodel:InputWidget" name="datetime"
         feature="http://org.eclipse.daanse.board.app.ui.vue.variable.timepicker#//DateTimePickerVariableSettings/datetime"
-        label="Zeitpunkt"/>
+        label="variableTimepicker:FormTimepicker.datetime"/>
   </components>
 </uimodel:UIModel>

@@ -1,0 +1,20 @@
+{
+  "Widget": {
+    "name": "Code"
+  },
+  "Settings": {
+    "source": "Quelltext"
+  },
+  "Form": {
+    "language": "Sprache",
+    "theme": "Farbschema"
+  },
+  "Options": {
+    "theme": {
+      "githubLight": "GitHub, hell",
+      "vitesseDark": "Vitesse, dunkel",
+      "catppuccinMocha": "Catppuccin Mocha",
+      "minDark": "Min, dunkel"
+    }
+  }
+}

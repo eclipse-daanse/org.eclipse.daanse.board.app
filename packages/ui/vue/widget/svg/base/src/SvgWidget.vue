@@ -23,10 +23,11 @@ import {
     watch,
 } from "vue";
 import { useRoute } from 'vue-router';
-import { VariableWrapper, plainSettings, sanitizeSvg, sanitizeStyleBlock } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+import { VariableWrapper, plainSettings, sanitizeSvg, sanitizeStyleBlock, useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 // import { useDatasourceRepository } from "../composables/datasourceRepository";
 
 const props = defineProps<{ datasourceId: string, id?: string }>();
+const { t } = useTranslation('svgBase');
 import { inject, toRefs } from 'vue';
 const { id: widgetId } = toRefs(props);
 const config = defineModel<SvgSettings>('configv', { required: true });
@@ -234,7 +235,7 @@ const svgSourceParced = computed(() => {
     <!-- eslint-disable-next-line vue/no-v-html -- SVG fetched from an asset host. -->
     <div v-bind="$attrs" class="svg" v-html="svgSourceParced" @click="emitClick" @contextmenu.prevent="emitRightClick" ref="svgContainerRef"></div>
     <div v-if="!svgSourceParced && !((config?.src as any)?.value)" class="fallback" @click="emitClick" @contextmenu.prevent="emitRightClick">
-        No SVG configured
+        {{ t('Widget.empty') }}
     </div>
 </template>
 

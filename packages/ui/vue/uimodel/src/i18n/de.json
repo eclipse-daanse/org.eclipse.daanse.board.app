@@ -1,0 +1,24 @@
+{
+  "Form": {
+    "empty": "Für dieses Widget sind keine Einstellungen modelliert."
+  },
+  "Field": {
+    "boundFrom": "Von „{{name}}“",
+    "noVariable": "Keine Variable",
+    "noVariables": "Es sind noch keine Variablen angelegt.",
+    "unbind": "Bindung an „{{name}}“ lösen",
+    "bind": "An eine Variable binden"
+  },
+  "List": {
+    "entry": "Eintrag",
+    "add": "Hinzufügen",
+    "untyped": "Diese Liste ist im Modell ohne Typ angegeben - es steht dort nur, dass es mehrere sind, nicht wovon. Solange das so ist, lässt sich hier nichts zeigen.",
+    "empty": "Noch nichts angelegt.",
+    "up": "Nach oben",
+    "down": "Nach unten",
+    "remove": "Entfernen"
+  },
+  "Object": {
+    "untyped": "Diese Einstellung ist im Modell ohne Typ angegeben - es steht dort nur, dass etwas enthalten ist, nicht was. Solange das so ist, lässt sich hier nichts zeigen."
+  }
+}

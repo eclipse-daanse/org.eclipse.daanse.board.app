@@ -46,5 +46,17 @@
       "id": "org.eclipse.daanse.board.app.ui.vue.controls",
       "versionRange": ">=0.0.1-0"
     }
+  ],
+  "capabilities": [
+    {
+      "namespace": "tsm.i18n",
+      "attributes": {
+        "namespace": "composerOgc",
+        "languages": [
+          "de",
+          "en"
+        ]
+      }
+    }
   ]
 }

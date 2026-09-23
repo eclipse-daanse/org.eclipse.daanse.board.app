@@ -45,3 +45,6 @@ export function deactivate({ services }: ActivationContext) {
   services.unregister('KpiPreview')
   services.unregister('KpiSettings')
 }
+
+/* Its texts - collected by lib.i18next, see src/i18n. */
+export { DatasourceKpiTranslations } from './i18n'

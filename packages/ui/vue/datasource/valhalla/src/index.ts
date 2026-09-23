@@ -46,3 +46,6 @@ export function deactivate({ services }: ActivationContext) {
   services.unregister('ValhallaPreview')
   services.unregister('ValhallaSettings')
 }
+
+/* Its texts - collected by lib.i18next, see src/i18n. */
+export { DatasourceValhallaTranslations } from './i18n'

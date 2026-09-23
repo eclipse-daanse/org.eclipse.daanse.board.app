@@ -10,10 +10,10 @@ Contributors: Smart City Jena
 
 <template>
   <div class="auto-update-settings">
-    <h3>Auto-update Configuration</h3>
+    <h3>{{ t('AutoUpdate.title') }}</h3>
 
     <div class="refresh-setting">
-      <label>Observation Refresh Time: {{ getRefreshTimeLabel(renderer.ObservationrefreshTime || 0) }}</label>
+      <label>{{ t('AutoUpdate.refresh', { time: getRefreshTimeLabel(renderer.ObservationrefreshTime || 0) }) }}</label>
 
       <DSlider
         :model-value="renderer.ObservationrefreshTime || 0"
@@ -26,7 +26,7 @@ Contributors: Smart City Jena
       />
 
       <div class="slider-labels">
-        <span>Never</span>
+        <span>{{ t('AutoUpdate.never') }}</span>
         <span>1s</span>
         <span>15s</span>
         <span>30s</span>
@@ -35,12 +35,12 @@ Contributors: Smart City Jena
 
     <div class="refresh-info">
       <div class="info-item">
-        <span class="label">Current Setting:</span>
+        <span class="label">{{ t('AutoUpdate.current') }}</span>
         <span class="value">{{ getRefreshTimeLabel(renderer.ObservationrefreshTime || 0) }}</span>
       </div>
 
       <div class="info-item" v-if="renderer.lastUpdate">
-        <span class="label">Last Update:</span>
+        <span class="label">{{ t('AutoUpdate.last') }}</span>
         <span class="value">{{ formatLastUpdate(renderer.lastUpdate) }}</span>
       </div>
     </div>
@@ -51,8 +51,11 @@ Contributors: Smart City Jena
 import { computed, ref } from 'vue';
 import type { IRenderer } from '../../api/Renderer';
 import { DSlider } from 'org.eclipse.daanse.board.app.ui.vue.controls';
+import { useFormat, useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables';
 
 const renderer = defineModel<IRenderer>({ required: true });
+const { t } = useTranslation('map');
+const format = useFormat();
 
 let debounceTimeout: NodeJS.Timeout | null = null;
 
@@ -67,12 +70,12 @@ const updateRefreshTime = (value: number) => {
 };
 
 const getRefreshTimeLabel = (seconds: number): string => {
-  if (seconds === 0) return 'Never';
+  if (seconds === 0) return t('AutoUpdate.never');
   return `${seconds}s`;
 };
 
 const formatLastUpdate = (timestamp: number): string => {
-  return new Date(timestamp).toLocaleString('de-DE', {
+  return format.date(timestamp, {
     year: 'numeric',
     month: '2-digit',
     day: '2-digit',

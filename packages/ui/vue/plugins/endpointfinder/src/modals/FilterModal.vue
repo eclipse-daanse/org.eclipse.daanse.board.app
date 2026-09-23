@@ -16,6 +16,9 @@ import { DChip, DDivider, DModal, DSwitch } from 'org.eclipse.daanse.board.app.u
 import { LMap, LTileLayer } from '@vue-leaflet/vue-leaflet'
 import { reactive, ref, watch } from 'vue'
 import { type Filter, type Format, Formats, type MapSection } from '../queryBuilder/FilterAPI'
+import { useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+
+const { t } = useTranslation('pluginsEndpointfinder')
 
 const toogle = ref<boolean>(false)
 const run = () => {
@@ -148,11 +151,11 @@ const toogleFormat = (format: any) => {
 </script>
 
 <template>
-  <DModal v-model="toogle" title="Filter" size="md" @open="init">
+  <DModal v-model="toogle" :title="t('Finder.filter')" size="md" @open="init">
     <div class="filters">
       <div class="line">
-        <span class="line__label">Format</span>
-        <DSwitch v-model="formatFilter" label="Nur ausgewählte Formate" />
+        <span class="line__label">{{ t('Finder.format') }}</span>
+        <DSwitch v-model="formatFilter" :label="t('Finder.onlyFormats')" />
       </div>
 
       <!-- A chip per format, dimmed when it is not in the filter. It used
@@ -172,8 +175,8 @@ const toogleFormat = (format: any) => {
       <DDivider />
 
       <div class="line">
-        <span class="line__label">Region</span>
-        <DSwitch v-model="mapSettings.map_filter_on" label="Nur im Kartenausschnitt" />
+        <span class="line__label">{{ t('Finder.region') }}</span>
+        <DSwitch v-model="mapSettings.map_filter_on" :label="t('Finder.onlyMapSection')" />
       </div>
 
       <div class="map">

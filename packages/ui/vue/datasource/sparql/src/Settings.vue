@@ -17,13 +17,16 @@ import Yasgui from "@triply/yasgui";
 import "@triply/yasgui/build/yasgui.min.css";
 import type Tab from "@triply/yasgui/build/ts/src/Tab";
 import type { ISparqlStoreConfiguration } from 'org.eclipse.daanse.board.app.lib.datasource.sparql'
+import { useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 
 
 const { config, connections } = defineProps<{
   config: ISparqlStoreConfiguration;
   dataSources: any;
   connections: any;
-}>();
+}>()
+
+const { t } = useTranslation('datasourceSparql');
 
 
 const connectionsFiltered = computed(() => {
@@ -83,10 +86,10 @@ onMounted(() => {
 
 <template>
   <div>
-    <DSelect v-model="config.connection" label="Verbindung" :options="connectionsFiltered" />
+    <DSelect v-model="config.connection" :label="t('Settings.connection')" :options="connectionsFiltered" />
     <!-- A label copied out of the framework's own markup once, down to the
          id of the field it belonged to. It is a label. -->
-    <label class="query__label" for="yasgui">Abfrage</label>
+    <label class="query__label" for="yasgui">{{ t('Sparql.query') }}</label>
     <div id="yasgui" ref="yasgui"></div>
   </div>
 </template>

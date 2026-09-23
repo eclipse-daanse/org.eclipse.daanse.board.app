@@ -1,0 +1,14 @@
+{
+  "Settings": {
+    "connection": "Verbindung",
+    "polling": "Regelmäßig neu laden",
+    "interval": "Abstand",
+    "path": "Pfad",
+    "pathHint": "Relativ zur Adresse der Verbindung."
+  },
+  "Csv": {
+    "separator": "Trennzeichen",
+    "skipTop": "Zeilen oben überspringen",
+    "skipBottom": "Zeilen unten überspringen"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "Action": {
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "close": "Close",
+    "save": "Save",
+    "done": "Done",
+    "create": "Create"
+  },
+  "History": {
+    "change": "Change"
+  }
+}

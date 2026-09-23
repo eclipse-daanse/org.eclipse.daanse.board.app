@@ -17,3 +17,6 @@ import PivotTable from './PivotTable/PivotTable.vue'
 import FiltersModal from './Modals/FiltersModal.vue'
 
 export { MetadataTree, QueryDesigner, PivotTable, FiltersModal }
+
+/* Its texts - collected by lib.i18next, see src/i18n. */
+export { XmlaTranslations } from './i18n'

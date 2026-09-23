@@ -22,6 +22,7 @@ Contributors:
  * this is as well as how it is arranged.
  */
 import { computed } from 'vue'
+import { useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 
 const props = defineProps<{
   /** Layout items as stored: id, x, y, width, height. */
@@ -30,11 +31,13 @@ const props = defineProps<{
   typeById?: Record<string, string>
 }>()
 
+const { t } = useTranslation('shell')
+
 /** Which family a widget type belongs to - substring match, so new types land sensibly. */
 function familyOf(type: string | undefined): 'data' | 'visual' | 'text' {
-  const t = (type ?? '').toLowerCase()
-  if (/chart|table|pivot|kpi|progress|timeline|filter|rss|weather/.test(t)) return 'data'
-  if (/map|routing|image|video|vanta|svg|icon|mermaid|geo/.test(t)) return 'visual'
+  const name = (type ?? '').toLowerCase()
+  if (/chart|table|pivot|kpi|progress|timeline|filter|rss|weather/.test(name)) return 'data'
+  if (/map|routing|image|video|vanta|svg|icon|mermaid|geo/.test(name)) return 'visual'
   return 'text'
 }
 
@@ -76,7 +79,7 @@ const blocks = computed(() => {
       :class="`floorplan__block--${block.family}`"
       :style="block.style"
     />
-    <span v-if="blocks.length === 0" class="floorplan__empty">keine Widgets</span>
+    <span v-if="blocks.length === 0" class="floorplan__empty">{{ t('Floorplan.empty') }}</span>
   </div>
 </template>
 

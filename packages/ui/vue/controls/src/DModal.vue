@@ -20,6 +20,7 @@ Contributors:
  * own words rather than relying on the dialog to be careful.
  */
 import { onBeforeUnmount, onMounted, watch } from 'vue'
+import { useText } from './useText'
 
 const open = defineModel<boolean>({ default: false })
 
@@ -35,6 +36,7 @@ const props = withDefaults(
 )
 
 const emit = defineEmits(['cancel'])
+const t = useText()
 
 function close() {
   if (props.persistent) return
@@ -69,7 +71,7 @@ onBeforeUnmount(() => {
             v-if="!persistent"
             type="button"
             class="dialog__close"
-            aria-label="Schließen"
+            :aria-label="t('Modal.close', 'Close')"
             @click="close"
           >
             ✕

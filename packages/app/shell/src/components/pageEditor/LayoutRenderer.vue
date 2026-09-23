@@ -19,7 +19,7 @@ import {
   identifier as LayoutRepositoryIdentifier,
   type LayoutI
 } from 'org.eclipse.daanse.board.app.lib.api.layout.page'
-import { useEObject, useFeature } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+import { useEObject, useFeature, useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import {
   type PageRegistryI,
   identifier as PageIdentifier,
@@ -32,6 +32,7 @@ const props = defineProps<{
 }>()
 
 const emit = defineEmits(['openWidgetSettings', 'removeWidget'])
+const { t } = useTranslation('shell')
 
 const layoutRepo = inject<LayoutRepositoryI>(LayoutRepositoryIdentifier)
 const pageRepo = inject<PageRegistryI>(PageIdentifier)
@@ -146,7 +147,7 @@ onMounted(async () => {
     <!-- Loading state -->
     <div v-if="isLoading" class="loading-state">
       <span class="spinner" aria-hidden="true" />
-      <p>Layout wird geladen…</p>
+      <p>{{ t('Layout.loading') }}</p>
     </div>
 
     <!-- View mode - only render if all components are ready -->
@@ -178,16 +179,14 @@ onMounted(async () => {
       <p class="no-layout-message__text">
         <DIcon name="warning" size="lg" tone="color-warn" />
         <span v-if="!currentPage">
-          Die Seite „{{ props.pageId }}" gibt es nicht.
+          {{ t('Layout.noPage', { id: props.pageId }) }}
         </span>
         <span v-else-if="!currentLayout">
-          Für „{{ currentPage.name || props.pageId }}" ist kein Layout eingestellt.
+          {{ t('Layout.noLayout', { name: currentPage.name || props.pageId }) }}
         </span>
         <span v-else>
-          {{ props.viewMode
-            ? 'Zu diesem Layout gibt es keine Darstellung.'
-            : 'Zu diesem Layout gibt es keinen Editor.' }}
-          <br /><small>Layout: {{ currentLayout.id }}</small>
+          {{ props.viewMode ? t('Layout.noView') : t('Layout.noEditor') }}
+          <br /><small>{{ t('Layout.id', { id: currentLayout.id }) }}</small>
         </span>
       </p>
     </div>

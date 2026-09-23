@@ -1,0 +1,10 @@
+{
+  "ComplexText": {
+    "tip": "Tip: variables are written as {variableName}."
+  },
+  "Input": {
+    "choose": "Choose variable",
+    "ownValue": "Enter the value yourself",
+    "bind": "Bind to a variable"
+  }
+}

@@ -28,10 +28,11 @@ import {
 import { useEList } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import FilterModal from './FilterModal.vue'
 import { WidgetRepository, identifier as widgetRepoIdentifier } from 'org.eclipse.daanse.board.app.lib.api.widget'
-import { useBoard } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+import { useBoard, useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import { useRoute } from 'vue-router'
 
 const route = useRoute();
+const { t } = useTranslation('pluginsEndpointfinder')
 const toogle = ref(false)
 
 /* The board the route points at - widgets and their placement together. */
@@ -64,12 +65,12 @@ const stepsVailid = reactive({
  * hasError flag nothing ever read; whether a step may be left is the
  * stepsVailid entry beside it, which the Weiter button already asks.
  */
-const steps = [
-  { label: 'Suchen', icon: 'travel_explore' },
-  { label: 'Verbindung', icon: 'polyline' },
-  { label: 'Datenquelle', icon: 'store' },
-  { label: 'Widgets', icon: 'widgets' },
-]
+const steps = computed(() => [
+  { label: t('Finder.steps.search'), icon: 'travel_explore' },
+  { label: t('Finder.steps.connection'), icon: 'polyline' },
+  { label: t('Finder.steps.source'), icon: 'store' },
+  { label: t('Finder.steps.widgets'), icon: 'widgets' },
+])
 
 const form = reactive({
   searchString: '',
@@ -290,13 +291,13 @@ defineExpose({
 <template>
   <DModal v-model="toogle" size="lg" @cancel="finish()">
     <template #header>
-      <h2 class="finder__title">Datenquelle finden</h2>
+      <h2 class="finder__title">{{ t('Finder.title') }}</h2>
     </template>
 
     <!-- Four steps, taken in order, so they are numbered and the one being
          taken is marked. The framework's stepper did the same and brought
          a controls bar that had to be hidden. -->
-    <ol class="steps" aria-label="Schritte">
+    <ol class="steps" :aria-label="t('Finder.steps.label')">
       <li
         v-for="(entry, index) in steps"
         :key="entry.label"
@@ -314,12 +315,12 @@ defineExpose({
         <div class="search">
           <DInput
             v-model="form.searchString"
-            label="Suche"
-            placeholder="Wonach suchst du?"
+            :label="t('Finder.search')"
+            :placeholder="t('Finder.searchPlaceholder')"
             @keyup="(e: any) => { if (e.key == 'Enter') search() }"
           />
-          <DButton title="Filter" @click="openFilterModal">
-            <DIcon name="filter_alt" size="sm" />Filter<DChip v-if="filterCount" numeric>{{ filterCount }}</DChip>
+          <DButton :title="t('Finder.filter')" @click="openFilterModal">
+            <DIcon name="filter_alt" size="sm" />{{ t('Finder.filter') }}<DChip v-if="filterCount" numeric>{{ filterCount }}</DChip>
           </DButton>
         </div>
 
@@ -336,16 +337,15 @@ defineExpose({
 
       <!-- 2. the connection that will be made -->
       <template v-else-if="step === 1">
-        <h3 v-if="!ds_notFountInfo" class="finder__lead">Diese Verbindung wird angelegt:</h3>
+        <h3 v-if="!ds_notFountInfo" class="finder__lead">{{ t('Finder.connectionLead') }}</h3>
         <p v-else class="finder__warn">
           <DIcon name="warning" size="lg" tone="color-warn" />
-          Die Verbindung lässt sich nicht automatisch bestimmen - das passiert, wenn der Typ
-          des Datensatzes unbekannt oder nicht unterstützt ist. Du kannst sie von Hand einrichten.
+          {{ t('Finder.connectionUnknown') }}
         </p>
 
         <div class="pair">
-          <DInput v-if="ds" :model-value="ds?.name" label="Name" readonly />
-          <DInput :model-value="ds?.type" label="Typ" readonly />
+          <DInput v-if="ds" :model-value="ds?.name" :label="t('Finder.name')" readonly />
+          <DInput :model-value="ds?.type" :label="t('Finder.type')" readonly />
         </div>
 
         <component :is="getComponentConnection" :config="ds?.config" />
@@ -353,11 +353,11 @@ defineExpose({
 
       <!-- 3. the data source that will be made -->
       <template v-else-if="step === 2">
-        <h3 class="finder__lead">Diese Datenquelle wird angelegt:</h3>
+        <h3 class="finder__lead">{{ t('Finder.sourceLead') }}</h3>
 
         <div class="pair">
-          <DInput v-if="ds" :model-value="store?.name" label="Name" readonly />
-          <DInput :model-value="store?.type" label="Typ" readonly />
+          <DInput v-if="ds" :model-value="store?.name" :label="t('Finder.name')" readonly />
+          <DInput :model-value="store?.type" :label="t('Finder.type')" readonly />
         </div>
 
         <component
@@ -370,7 +370,7 @@ defineExpose({
 
       <!-- 4. what to put on the board -->
       <template v-else>
-        <h3 class="finder__lead">Widgets zur Datenquelle auswählen</h3>
+        <h3 class="finder__lead">{{ t('Finder.widgetsLead') }}</h3>
 
         <div class="widgets_grid">
           <button
@@ -401,7 +401,7 @@ defineExpose({
         :disabled="!(stepsVailid as any)['step' + step]"
         @click="step++"
       >
-        Weiter
+        {{ t('Finder.next') }}
       </DButton>
       <DButton
         v-else
@@ -409,7 +409,7 @@ defineExpose({
         :disabled="!(stepsVailid as any)['step' + step]"
         @click="finish"
       >
-        Fertig
+        {{ t('common:Action.done') }}
       </DButton>
     </template>
   </DModal>

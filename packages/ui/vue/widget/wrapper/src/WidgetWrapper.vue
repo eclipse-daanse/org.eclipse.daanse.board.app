@@ -22,7 +22,7 @@ import {
   identifier as WidgetIdentifier,
 } from 'org.eclipse.daanse.board.app.lib.api.widget'
 
-import { useEObject, VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+import { useEObject, VariableWrapper, useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import type { EObject } from '@emfts/core'
 import {
   DButton,
@@ -88,6 +88,7 @@ const config = computed({
 })
 
 const emit = defineEmits(['openSettings', 'removeWidget'])
+const { t } = useTranslation('wrapper')
 
 const registeredWidgets = inject<WidgetRepository>(WidgetIdentifier)!
 
@@ -154,14 +155,14 @@ const actions = computed(() => [
   {
     id: 'settings',
     icon: 'settings',
-    label: 'Einstellungen',
+    label: t('Actions.settings'),
     run: () => openSettings(widget.uid),
   },
   ...(extraActions ?? []),
   {
     id: 'delete',
     icon: 'delete',
-    label: 'Löschen',
+    label: t('common:Action.delete'),
     danger: true,
     run: () => deleteWidget(widget.uid),
   },
@@ -385,23 +386,22 @@ const getpadding = computed(() => {
       </div>
     </template>
     <div v-else>
-      <p>Widget type {{ widget.type }} is not registered.</p>
+      <p>{{ t('NotRegistered', { type: widget.type }) }}</p>
     </div>
 
     <DModal v-model="showDeleteConfirm" size="sm" @cancel="cancelDelete">
       <template #header>
         <DIcon name="warning" size="lg" tone="color-err" />
-        <h2 class="confirm__title">Widget löschen</h2>
+        <h2 class="confirm__title">{{ t('Delete.title') }}</h2>
       </template>
 
       <p class="confirm__text">
-        Möchtest du dieses Widget wirklich löschen? Diese Aktion kann nicht rückgängig gemacht
-        werden.
+        {{ t('Delete.text') }}
       </p>
 
       <template #actions>
-        <DButton intent="quiet" @click="cancelDelete">Abbrechen</DButton>
-        <DButton intent="danger" @click="confirmDelete">Löschen</DButton>
+        <DButton intent="quiet" @click="cancelDelete">{{ t('common:Action.cancel') }}</DButton>
+        <DButton intent="danger" @click="confirmDelete">{{ t('common:Action.delete') }}</DButton>
       </template>
     </DModal>
   </div>
