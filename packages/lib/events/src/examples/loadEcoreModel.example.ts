@@ -23,7 +23,6 @@ import {
   EcoreMetadataService,
   ECORE_METADATA_SERVICE
 } from '../index';
-import { getEcorePackage } from 'org.eclipse.daanse.board.app.lib.ecore';
 
 export async function loadWidgetActionsFromEcore() {
   // Get the services from the container
@@ -44,10 +43,8 @@ export async function loadWidgetActionsFromEcore() {
     const dataAsText = await data.text();
     console.log(dataAsText);
 
-    // Get the ResourceSet and register Ecore package
-    const ecorePackage = getEcorePackage();
-    const resourceSet = ecoreService.getResourceSet();
-    resourceSet.getPackageRegistry().registerPackage(ecorePackage);
+    // The Ecore package is already registered in the ResourceSet — the
+    // ResourceSet created by EcoreMetadataService registers it on construction.
 
     // Load the model from string
     await actionsRegistry.registerWidgetTypeFromEcoreString(
