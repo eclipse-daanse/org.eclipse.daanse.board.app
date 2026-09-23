@@ -58,6 +58,7 @@ export class KpiTableWidgetProvider implements WidgetProvider {
   readonly supportedDSTypes = ['csv', 'rest']
   readonly icon = Icon
   readonly name = 'KpiTable'
+  readonly nameKey = 'tableKpi:Widget.name'
 
   constructor(
     @inject(EVENT_REGISTRY_ID) private readonly events: EventRegistry,
@@ -79,3 +80,6 @@ export class KpiTableWidgetProvider implements WidgetProvider {
 
 export { KpiTableWidget }
 export { KpiTableSettingsImpl, KpitablesettingsPackage, kpiTableSettingsFormXmi }
+
+/* Its texts - collected by lib.i18next, see src/i18n. */
+export { TableKpiTranslations } from './i18n'

@@ -14,12 +14,15 @@ Contributors:
 import { DInput, DSelect, DSwitch } from 'org.eclipse.daanse.board.app.ui.vue.controls'
 import { computed, onMounted, reactive, ref, watch } from 'vue';
 import { debounce } from 'lodash';
+import { useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 
 const { config, connections } = defineProps<{
     config: any;
     connections: any[];
     dataSources: any[];
-}>();
+}>()
+
+const { t } = useTranslation('datasourceRest');
 
 const tempResourceUrl = ref(config.resourceUrl);
 const innerInterval = ref(config.pollingInterval ?? 5000);
@@ -97,13 +100,13 @@ onMounted(async () => {
 
 <template>
     <!-- eslint-disable-next-line vue/no-mutating-props -->
-    <DSelect v-model="config.connection" label="Verbindung" :options="connectionsFiltered" label-key="name"
+    <DSelect v-model="config.connection" :label="t('Settings.connection')" :options="connectionsFiltered" label-key="name"
         value-key="uid" />
 
     <!-- eslint-disable-next-line vue/no-mutating-props -->
-    <DInput v-model="tempResourceUrl" label="Pfad"
+    <DInput v-model="tempResourceUrl" :label="t('Settings.path')"
         :rules="[() => !tempResourceUrl || available || `Invalid resource URL`]" />
-    <DInput v-model="config.selectedJSONValue" label="Ausgewählter Wert" />
-    <DSwitch class="m-2" v-model="config.pollingEnabled" label="Regelmäßig neu laden" />
-    <DInput v-if="config.pollingEnabled" v-model="innerInterval" label="Abstand (ms)" />
+    <DInput v-model="config.selectedJSONValue" :label="t('Rest.selectedValue')" />
+    <DSwitch class="m-2" v-model="config.pollingEnabled" :label="t('Settings.polling')" />
+    <DInput v-if="config.pollingEnabled" v-model="innerInterval" :label="t('Settings.intervalMs')" />
 </template>

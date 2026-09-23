@@ -69,6 +69,7 @@ export class SVGWidgetProvider implements WidgetProvider {
   readonly supportedDSTypes = []
   readonly icon = Icon
   readonly name = 'SVG'
+  readonly nameKey = 'svgBase:Widget.name'
 
   /*
    * The settings form, as a model. Carried on the registration like the
@@ -108,3 +109,6 @@ export class SVGWidgetProvider implements WidgetProvider {
 export { SvgWidget }
 export { SvgSettingsImpl, SvgwidgetsPackage, svgSettingsFormXmi }
 export type { ISvgSettings, Config, ConfigItem }
+
+/* Its texts - collected by lib.i18next, see src/i18n. */
+export { SvgBaseTranslations } from './i18n'

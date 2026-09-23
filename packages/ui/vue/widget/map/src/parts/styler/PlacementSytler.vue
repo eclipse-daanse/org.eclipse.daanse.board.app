@@ -10,8 +10,16 @@ Contributors: Smart City Jena
 <script lang="ts" setup>
 
 import { ERefType, IDSRenderer, type PlacementI } from './../../api/Renderer'
-import { type ModelRef, reactive } from 'vue'
+import { computed, type ModelRef, reactive } from 'vue'
 import { DRadioGroup } from 'org.eclipse.daanse.board.app.ui.vue.controls'
+import { useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+
+const { t } = useTranslation('map')
+
+const placementOptions = computed(() => [
+  { value: ERefType.Thing, label: t('Placement.thing') },
+  { value: ERefType.OberservedArea, label: t('Placement.observedArea') },
+])
 
 const model: ModelRef<PlacementI> = defineModel<PlacementI>({
   default: () => {
@@ -26,8 +34,10 @@ const model: ModelRef<PlacementI> = defineModel<PlacementI>({
   <div>
     <DRadioGroup
       v-model="model.placement"
-      :options="[ERefType.Thing, ERefType.OberservedArea]"
-      label="render within"
+      :options="placementOptions"
+      value-key="value"
+      label-key="label"
+      :label="t('Placement.label')"
       stacked
     />
   </div>

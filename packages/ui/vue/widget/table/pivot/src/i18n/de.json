@@ -1,0 +1,72 @@
+{
+  "Settings": {
+    "sections": {
+      "data": "Datendarstellung",
+      "colors": "Farben",
+      "dimensions": "Maße",
+      "text": "Text",
+      "rowLevels": "Stile je Zeilenebene",
+      "columnLevels": "Stile je Spaltenebene",
+      "conditional": "Bedingte Formatierung"
+    },
+    "showRowsProperties": "Zeileneigenschaften zeigen",
+    "showColumnsProperties": "Spalteneigenschaften zeigen",
+    "showSingleMeasureHeader": "Kopf bei nur einer Kennzahl zeigen",
+    "headerBackground": "Kopf: Hintergrund",
+    "headerText": "Kopf: Textfarbe",
+    "cellBackground": "Zellen: Hintergrund",
+    "cellText": "Zellen: Textfarbe",
+    "borderColor": "Rahmenfarbe",
+    "columnWidth": "Standard-Spaltenbreite (px)",
+    "rowHeight": "Standard-Zeilenhöhe (px)",
+    "fontSize": "Schriftgröße (px)",
+    "headerFontWeight": "Kopf: Schriftstärke",
+    "textAlign": "Textausrichtung (Zellen)",
+    "levelNumber": "Ebene",
+    "background": "Hintergrundfarbe",
+    "textColor": "Textfarbe",
+    "fontWeight": "Schriftstärke",
+    "conditionType": "Art der Bedingung",
+    "toValue": "Bis Wert",
+    "textValue": "Text",
+    "minColor": "Farbe für das Minimum",
+    "maxColor": "Farbe für das Maximum",
+    "priority": "Priorität (niedriger = höher)",
+    "header": "Kopf",
+    "cells": "Zellen",
+    "border": "Rahmen",
+    "levels": "Ebenen",
+    "rules": "Formatierungsregeln",
+    "addLevel": "Ebene hinzufügen",
+    "addRule": "Regel hinzufügen",
+    "remove": "Entfernen",
+    "align": {
+      "left": "Links",
+      "center": "Zentriert",
+      "right": "Rechts"
+    },
+    "count": "Anzahl (N)",
+    "value": "Wert",
+    "level": "Ebene {{level}}",
+    "rule": "Regel {{n}}",
+    "condition": {
+      "greaterThan": "Größer als",
+      "lessThan": "Kleiner als",
+      "equals": "Gleich",
+      "notEquals": "Ungleich",
+      "between": "Zwischen",
+      "contains": "Enthält (Text)",
+      "colorScale": "Farbskala (Min→Max)",
+      "topN": "Größte N Werte",
+      "bottomN": "Kleinste N Werte"
+    },
+    "rowLevelsHint": "Eigene Stile für die Hierarchieebenen in den Zeilenköpfen.",
+    "columnLevelsHint": "Eigene Stile für die Hierarchieebenen in den Spaltenköpfen.",
+    "rulesHint": "Regeln, nach denen Zellen anhand ihrer Werte formatiert werden.",
+    "noLevels": "Noch keine Stile je Ebene. „Ebene hinzufügen“ legt den ersten an.",
+    "noRules": "Noch keine Formatierungsregeln. „Regel hinzufügen“ legt die erste an."
+  },
+  "Widget": {
+    "name": "Pivot-Tabelle"
+  }
+}

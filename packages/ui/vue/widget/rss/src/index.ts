@@ -41,6 +41,7 @@ export class RssWidgetProvider implements WidgetProvider {
   readonly supportedDSTypes = []
   readonly icon = Icon
   readonly name = 'RSS'
+  readonly nameKey = 'rss:Widget.name'
 
   constructor(
     @inject(EVENT_REGISTRY_ID) private readonly events: EventRegistry,
@@ -61,3 +62,6 @@ export class RssWidgetProvider implements WidgetProvider {
 }
 
 export { RssWidget }
+
+/* Its texts - collected by lib.i18next, see src/i18n. */
+export { RssTranslations } from './i18n'

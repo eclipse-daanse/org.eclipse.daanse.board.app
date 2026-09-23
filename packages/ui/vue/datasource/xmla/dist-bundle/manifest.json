@@ -57,5 +57,21 @@
       "versionRange": ">=0.0.1-0"
     }
   ],
-  "provides": []
+  "capabilities": [
+    {
+      "namespace": "tsm.i18n",
+      "attributes": {
+        "namespace": "datasourceXmla",
+        "languages": [
+          "de",
+          "en"
+        ]
+      }
+    }
+  ],
+  "provides": [
+    {
+      "id": "Translations"
+    }
+  ]
 }

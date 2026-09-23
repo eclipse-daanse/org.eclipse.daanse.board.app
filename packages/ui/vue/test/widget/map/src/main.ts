@@ -15,6 +15,13 @@ import App from './App.vue'
 import 'leaflet/dist/leaflet.css'
 
 import { APP, services } from 'org.eclipse.daanse.board.app.lib.core'
+import { activate as startI18n, addTranslations, I18NEXT } from 'org.eclipse.daanse.board.app.lib.i18next'
+/* Each package brings its own texts; without the loader, nobody collects them - so here, by hand. */
+import { MapTranslations } from 'org.eclipse.daanse.board.app.ui.vue.widget.map/src/i18n'
+import { IconTranslations } from 'org.eclipse.daanse.board.app.ui.vue.widget.icon/src/i18n'
+import { DatasourceOgcstaTranslations } from 'org.eclipse.daanse.board.app.ui.vue.datasource.ogcsta/src/i18n'
+import { CommonTranslations } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+import { ControlsTranslations } from 'org.eclipse.daanse.board.app.ui.vue.controls/src/i18n'
 
 
 // Import required modules for Maps Widget
@@ -23,6 +30,13 @@ import 'org.eclipse.daanse.board.app.ui.vue.datasource.ogcsta'
 import 'org.eclipse.daanse.board.app.ui.vue.widget.icon'
 
 const app = createApp(App)
+
+/* The widgets speak through i18next; without it they show their keys. */
+startI18n({ services } as never)
+for (const Texts of [MapTranslations, IconTranslations, DatasourceOgcstaTranslations, CommonTranslations, ControlsTranslations]) {
+  addTranslations(new Texts())
+}
+app.provide('i18n', services.getRequired(I18NEXT))
 
 // Setup global properties
 services.register(APP, app)

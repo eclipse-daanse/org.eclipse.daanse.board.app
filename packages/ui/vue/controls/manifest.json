@@ -18,6 +18,16 @@
         "library": "org.eclipse.daanse.board.app.ui.vue.controls",
         "version": "0.0.1-next.1"
       }
+    },
+    {
+      "namespace": "tsm.i18n",
+      "attributes": {
+        "namespace": "controls",
+        "languages": [
+          "de",
+          "en"
+        ]
+      }
     }
   ],
   "dependencies": [

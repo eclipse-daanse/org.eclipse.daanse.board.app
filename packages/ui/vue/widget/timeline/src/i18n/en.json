@@ -1,0 +1,70 @@
+{
+  "Widget": {
+    "name": "Timeline",
+    "range": "Timeline range - drag to move",
+    "rangeFixed": "Timeline range (start fixed)",
+    "startKnob": "Start time",
+    "startKnobFixed": "Start time (fixed)",
+    "endKnob": "End time",
+    "start": "Start:",
+    "end": "End:",
+    "duration": "Duration:",
+    "speed": "Speed:"
+  },
+  "Settings": {
+    "section": "Time range",
+    "mode": "Time range mode",
+    "modes": {
+      "relative": "Relative",
+      "absolute": "Absolute"
+    },
+    "relative": "Relative time range",
+    "offset": "Offset",
+    "unit": "Unit",
+    "units": {
+      "hours": "hours",
+      "days": "days",
+      "weeks": "weeks",
+      "months": "months",
+      "years": "years"
+    },
+    "relativePreview": "Now - {{offset}} {{unit}} → Now",
+    "start": "Timeline start",
+    "end": "Timeline end",
+    "useNow": "Use current time",
+    "date": "Date",
+    "time": "Time",
+    "variables": "Variable binding",
+    "startFromVariable": "Start time from variable",
+    "startVariable": "Start variable",
+    "endFromVariable": "End time from variable",
+    "endVariable": "End variable"
+  },
+  "Form": {
+    "playbackGroup": "Playback",
+    "stepSize": "Step size",
+    "playbackSpeed": "Speed",
+    "autoPlay": "Start on load",
+    "fixStartKnob": "Fix the start",
+    "showControls": "Show controls",
+    "lookGroup": "Appearance",
+    "rangeStripColor": "Range colour",
+    "showTimeInfo": "Show time information"
+  },
+  "Options": {
+    "step": {
+      "minute": "One minute",
+      "hour": "One hour",
+      "day": "One day",
+      "week": "One week",
+      "month": "One month"
+    },
+    "speed": {
+      "x025": "0.25×",
+      "x05": "0.5×",
+      "x1": "1×",
+      "x2": "2×",
+      "x4": "4×"
+    }
+  }
+}

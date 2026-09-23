@@ -16,6 +16,8 @@ import { DButton, DModal } from "org.eclipse.daanse.board.app.ui.vue.controls";
 import { ref } from "vue";
 import { usePromisifiedModal } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import FilterTreeView from "../Filters/FilterTreeView.vue";
+import { useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables';
+const { t } = useTranslation('xmla');
 
 type SelectionPayload = {
   enabled: boolean;
@@ -129,7 +131,7 @@ function resetSelection() {
 <template>
   <DModal :model-value="isOpened" size="lg" @cancel="cancel">
     <template #header>
-      <h2 class="filter-modal__title">Filter setzen</h2>
+      <h2 class="filter-modal__title">{{ t('FilterModal.title') }}</h2>
     </template>
 
     <Suspense>
@@ -144,11 +146,11 @@ function resetSelection() {
 
     <template #actions>
       <div v-if="!multipleChoise && currentlySelected && currentlySelected.id" class="chosen">
-        Gewählt: {{ currentlySelected.Caption }}
-        <button type="button" class="reset-button" @click="resetSelection">zurücksetzen</button>
+        {{ t('FilterModal.chosen', { name: currentlySelected.Caption }) }}
+        <button type="button" class="reset-button" @click="resetSelection">{{ t('FilterModal.reset') }}</button>
       </div>
-      <DButton intent="quiet" @click="cancel">Abbrechen</DButton>
-      <DButton intent="primary" @click="ok">Übernehmen</DButton>
+      <DButton intent="quiet" @click="cancel">{{ t('common:Action.cancel') }}</DButton>
+      <DButton intent="primary" @click="ok">{{ t('FilterModal.apply') }}</DButton>
     </template>
   </DModal>
 </template>

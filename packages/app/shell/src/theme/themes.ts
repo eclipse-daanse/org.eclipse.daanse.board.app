@@ -23,6 +23,7 @@
 
 export interface Theme {
   id: string
+  /** Translation key of the name, like the note below. */
   name: string
   /** One line: what this theme is for. */
   note: string
@@ -47,8 +48,8 @@ const TYPE_SCALE = {
 export const THEMES: Theme[] = [
   {
     id: 'messwarte',
-    name: 'Messwarte',
-    note: 'Dunkler Grund, Zahlen als hellstes Element. Für Boards, die stundenlang laufen.',
+    name: 'shell:Themes.messwarte.name',
+    note: 'shell:Themes.messwarte.note',
     dark: true,
     tokens: {
       ...TYPE_SCALE,
@@ -89,8 +90,8 @@ export const THEMES: Theme[] = [
   },
   {
     id: 'messwarte-hell',
-    name: 'Messwarte hell',
-    note: 'Dieselbe Gestaltung auf blassem Grund - für die Stunden am Editor.',
+    name: 'shell:Themes.messwarteHell.name',
+    note: 'shell:Themes.messwarteHell.note',
     dark: false,
     tokens: {
       ...TYPE_SCALE,
@@ -131,8 +132,8 @@ export const THEMES: Theme[] = [
   },
   {
     id: 'kartenblatt',
-    name: 'Kartenblatt',
-    note: 'Papierweiß mit Grünstich, Petrol statt Blau, rechte Winkel. Ein Board als Blatt.',
+    name: 'shell:Themes.kartenblatt.name',
+    note: 'shell:Themes.kartenblatt.note',
     dark: false,
     tokens: {
       ...TYPE_SCALE,
@@ -173,8 +174,8 @@ export const THEMES: Theme[] = [
   },
   {
     id: 'werkbank',
-    name: 'Werkbank',
-    note: 'Warmes Papiergrau, das Daanse-Gold tragend, Blau nur für die Auswahl.',
+    name: 'shell:Themes.werkbank.name',
+    note: 'shell:Themes.werkbank.note',
     dark: false,
     tokens: {
       ...TYPE_SCALE,

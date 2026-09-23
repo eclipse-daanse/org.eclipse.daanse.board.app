@@ -30,22 +30,22 @@ is what makes the pair readable.
 
   <components xsi:type="uimodel:FormView" name="RepeatableSVGSettingsFormView">
 
-    <fields xsi:type="uimodel:GroupWidget" name="sourceGroup" layout="VERTICAL" label="Grafik">
+    <fields xsi:type="uimodel:GroupWidget" name="sourceGroup" layout="VERTICAL" label="svgRepeat:Form.sourceGroup">
       <fields xsi:type="uimodel:InputWidget" name="src"
-          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.svg.repeat#//RepeatableSVGSettings/src" label="Adresse der Grafik"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.svg.repeat#//RepeatableSVGSettings/src" label="svgRepeat:Form.src"
           placeholder="https://… oder ein Pfad"/>
       <fields xsi:type="uimodel:NumberWidget" name="repetitions"
-          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.svg.repeat#//RepeatableSVGSettings/repetitions" label="Wie oft" min="1" step="1"/>
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.svg.repeat#//RepeatableSVGSettings/repetitions" label="svgRepeat:Form.repetitions" min="1" step="1"/>
       <fields xsi:type="uimodel:NumberWidget" name="progress"
-          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.svg.repeat#//RepeatableSVGSettings/progress" label="Davon hervorgehoben" min="0" step="1"/>
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.svg.repeat#//RepeatableSVGSettings/progress" label="svgRepeat:Form.progress" min="0" step="1"/>
     </fields>
 
-    <fields xsi:type="uimodel:GroupWidget" name="activeGroup" layout="VERTICAL" label="Hervorgehoben">
+    <fields xsi:type="uimodel:GroupWidget" name="activeGroup" layout="VERTICAL" label="svgRepeat:Form.activeGroup">
       <fields xsi:type="uimodel:InputWidget" name="activeItemStyles"
           feature="http://org.eclipse.daanse.board.app.ui.vue.widget.svg.repeat#//RepeatableSVGSettings/activeItemStyles" label=""/>
     </fields>
 
-    <fields xsi:type="uimodel:GroupWidget" name="defaultGroup" layout="VERTICAL" label="Übrige">
+    <fields xsi:type="uimodel:GroupWidget" name="defaultGroup" layout="VERTICAL" label="svgRepeat:Form.defaultGroup">
       <fields xsi:type="uimodel:InputWidget" name="defaultItemStyles"
           feature="http://org.eclipse.daanse.board.app.ui.vue.widget.svg.repeat#//RepeatableSVGSettings/defaultItemStyles" label=""/>
     </fields>

@@ -12,15 +12,24 @@ Contributors:
 -->
 
 <script setup lang="ts">
-import { watch, onMounted, ref } from 'vue';
+import { computed, watch, onMounted, ref } from 'vue';
 import { XmlaConnection } from 'org.eclipse.daanse.board.app.lib.connection.xmla';
 import { DInput, DSelect } from 'org.eclipse.daanse.board.app.ui.vue.controls';
+import { useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 
 const catalogs = ref([] as any[]);
 
 const { config } = defineProps<{
   config: any;
 }>();
+
+const { t } = useTranslation('connectionXmla')
+
+/* The stored values stay as they were; only what is shown is translated. */
+const securityOptions = computed(() => [
+  { uid: 'None', name: t('Xmla.security.none') },
+  { uid: 'Basic', name: t('Xmla.security.basic') },
+])
 
 onMounted(async () => {
   if (config.url) {
@@ -62,18 +71,18 @@ watch(async () => config.password, async () => {
   <!-- eslint-disable-next-line vue/no-mutating-props -->
   <DSelect
     v-model="config.catalogName"
-    label="Katalog"
+    :label="t('Xmla.catalog')"
     :options="catalogs"
     label-key="CATALOG_NAME"
     value-key="CATALOG_NAME"
   />
 
-  <DSelect v-model="config.security" label="Anmeldung" :options="['None', 'Basic']" />
-  <DInput v-if="config.security === 'Basic'" v-model="config.user" label="Benutzer" />
+  <DSelect v-model="config.security" :label="t('Xmla.security.label')" :options="securityOptions" />
+  <DInput v-if="config.security === 'Basic'" v-model="config.user" :label="t('Xmla.user')" />
   <DInput
     v-if="config.security === 'Basic'"
     v-model="config.password"
-    label="Passwort"
+    :label="t('Xmla.password')"
     type="password"
   />
 </template>

@@ -21,6 +21,7 @@ Contributors:
  */
 import { computed, ref } from 'vue'
 import { DChip, DField, DInput } from 'org.eclipse.daanse.board.app.ui.vue.controls'
+import { useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 
 const model = defineModel<string[]>({ default: () => [] })
 
@@ -34,6 +35,7 @@ const props = withDefaults(
   { known: () => [] },
 )
 
+const { t } = useTranslation('shell')
 const draft = ref('')
 
 const suggestions = computed(() => {
@@ -83,7 +85,7 @@ function onKey(event: KeyboardEvent) {
            frame are the ones every other field has. -->
       <DInput
         v-model="draft"
-        placeholder="Wort eingeben, Enter"
+        :placeholder="t('Tags.placeholder')"
         stacked
         @keydown="onKey"
         @blur="add(draft)"

@@ -16,12 +16,11 @@ import type { TinyEmitter } from "tiny-emitter";
 import { inject, ref, watch } from "vue";
 import { v4 } from "uuid";
 import ContextMenu from "./ContextMenu.vue";
-// import { useI18n } from 'vue-i18n';
+import { useTranslation } from "org.eclipse.daanse.board.app.ui.vue.composables";
 
 defineEmits(["openCellProperties", "drillthrough"]);
 
-// const { t } = useI18n();
-const t = (string: string) => string;
+const { t } = useTranslation("xmla");
 const opened = ref(false);
 const eventBus = inject("pivotTableEventBus") as TinyEmitter;
 const uid = "id" + v4();

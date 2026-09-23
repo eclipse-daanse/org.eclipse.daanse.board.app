@@ -15,13 +15,15 @@ Contributors:
 import { onMounted, computed } from 'vue'
 import { ChartSettings } from './gen/ChartSettings'
 import type { SeriesSettings } from './gen/SeriesSettings'
-import { VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+import { VariableWrapper, useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import {
   DButton,
   DCheckbox,
   DColorInput,
   DInput,
 } from 'org.eclipse.daanse.board.app.ui.vue.controls'
+
+const { t } = useTranslation('chart')
 
 
 const widgetSettings = defineModel<ChartSettings>({ required: true })
@@ -169,7 +171,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <section class="settings-section" data-section="Reference Lines & Areas">
+  <section class="settings-section" data-section-id="referenceLines" :data-section="t('Reference.section')">
     <div class="settings-container">
       <!--
         Written through the wrapper, not over it: the setting is a
@@ -180,41 +182,41 @@ onMounted(() => {
       <div class="settings-block">
         <DCheckbox
           v-if="widgetSettings.annotationsEditMode"
-          label="Enable Drag & Drop (Move annotations in chart)"
+          :label="t('Reference.dragDrop')"
           v-model="widgetSettings.annotationsEditMode!.value" />
       </div>
 
       <!-- Horizontal Lines (Y-Axis) -->
       <div class="settings-block">
         <div class="block__head">
-          <h3>Horizontal Lines (Y-Axis)</h3>
-          <DButton size="sm" @click="addHorizontalLine">Add Line</DButton>
+          <h3>{{ t('Reference.hLines') }}</h3>
+          <DButton size="sm" @click="addHorizontalLine">{{ t('Reference.addLine') }}</DButton>
         </div>
 
         <div v-for="(line, index) in horizontalLineList" :key="`hline_${index}`" class="entry">
           <div class="entry__head">
-            <strong>Line {{ index + 1 }}</strong>
-            <DButton size="sm" intent="danger" @click="removeHorizontalLine(index)">Remove</DButton>
+            <strong>{{ t('Reference.line', { n: index + 1 }) }}</strong>
+            <DButton size="sm" intent="danger" @click="removeHorizontalLine(index)">{{ t('Reference.remove') }}</DButton>
           </div>
 
           <DInput
-            label="Y-Value"
+            :label="t('Reference.yValue')"
             v-model.number="line.value"
             type="number" />
 
           <DColorInput
-            label="Color"
+            :label="t('Reference.color')"
             v-model="line.color" />
 
           <DInput
-            label="Line Width (px)"
+            :label="t('Reference.lineWidth')"
             v-model.number="line.width"
             type="number"
             :min="1"
             :max="10" />
 
           <DInput
-            label="Label (optional)"
+            :label="t('Reference.label')"
             v-model="line.label" />
         </div>
       </div>
@@ -222,33 +224,33 @@ onMounted(() => {
       <!-- Vertical Lines (X-Axis) -->
       <div class="settings-block">
         <div class="block__head">
-          <h3>Vertical Lines (X-Axis)</h3>
-          <DButton size="sm" @click="addVerticalLine">Add Line</DButton>
+          <h3>{{ t('Reference.vLines') }}</h3>
+          <DButton size="sm" @click="addVerticalLine">{{ t('Reference.addLine') }}</DButton>
         </div>
 
         <div v-for="(line, index) in verticalLineList" :key="`vline_${index}`" class="entry">
           <div class="entry__head">
-            <strong>Line {{ index + 1 }}</strong>
-            <DButton size="sm" intent="danger" @click="removeVerticalLine(index)">Remove</DButton>
+            <strong>{{ t('Reference.line', { n: index + 1 }) }}</strong>
+            <DButton size="sm" intent="danger" @click="removeVerticalLine(index)">{{ t('Reference.remove') }}</DButton>
           </div>
 
           <DInput
-            label="X-Value"
+            :label="t('Reference.xValue')"
             v-model="line.value" />
 
           <DColorInput
-            label="Color"
+            :label="t('Reference.color')"
             v-model="line.color" />
 
           <DInput
-            label="Line Width (px)"
+            :label="t('Reference.lineWidth')"
             v-model.number="line.width"
             type="number"
             :min="1"
             :max="10" />
 
           <DInput
-            label="Label (optional)"
+            :label="t('Reference.label')"
             v-model="line.label" />
         </div>
       </div>
@@ -256,32 +258,32 @@ onMounted(() => {
       <!-- Horizontal Boxes (Y-Axis Ranges) -->
       <div class="settings-block">
         <div class="block__head">
-          <h3>Horizontal Areas (Y-Axis Ranges)</h3>
-          <DButton size="sm" @click="addHorizontalBox">Add Area</DButton>
+          <h3>{{ t('Reference.hAreas') }}</h3>
+          <DButton size="sm" @click="addHorizontalBox">{{ t('Reference.addArea') }}</DButton>
         </div>
 
         <div v-for="(box, index) in horizontalBoxList" :key="`hbox_${index}`" class="entry">
           <div class="entry__head">
-            <strong>Area {{ index + 1 }}</strong>
-            <DButton size="sm" intent="danger" @click="removeHorizontalBox(index)">Remove</DButton>
+            <strong>{{ t('Reference.area', { n: index + 1 }) }}</strong>
+            <DButton size="sm" intent="danger" @click="removeHorizontalBox(index)">{{ t('Reference.remove') }}</DButton>
           </div>
 
           <DInput
-            label="Y-Min"
+            :label="t('Reference.yMin')"
             v-model.number="box.yMin"
             type="number" />
 
           <DInput
-            label="Y-Max"
+            :label="t('Reference.yMax')"
             v-model.number="box.yMax"
             type="number" />
 
           <DColorInput
-            label="Fill Color"
+            :label="t('Reference.fillColor')"
             v-model="box.color" />
 
           <DInput
-            label="Label (optional)"
+            :label="t('Reference.label')"
             v-model="box.label" />
         </div>
       </div>
@@ -289,30 +291,30 @@ onMounted(() => {
       <!-- Vertical Boxes (X-Axis Ranges) -->
       <div class="settings-block">
         <div class="block__head">
-          <h3>Vertical Areas (X-Axis Ranges)</h3>
-          <DButton size="sm" @click="addVerticalBox">Add Area</DButton>
+          <h3>{{ t('Reference.vAreas') }}</h3>
+          <DButton size="sm" @click="addVerticalBox">{{ t('Reference.addArea') }}</DButton>
         </div>
 
         <div v-for="(box, index) in verticalBoxList" :key="`vbox_${index}`" class="entry">
           <div class="entry__head">
-            <strong>Area {{ index + 1 }}</strong>
-            <DButton size="sm" intent="danger" @click="removeVerticalBox(index)">Remove</DButton>
+            <strong>{{ t('Reference.area', { n: index + 1 }) }}</strong>
+            <DButton size="sm" intent="danger" @click="removeVerticalBox(index)">{{ t('Reference.remove') }}</DButton>
           </div>
 
           <DInput
-            label="X-Min"
+            :label="t('Reference.xMin')"
             v-model="box.xMin" />
 
           <DInput
-            label="X-Max"
+            :label="t('Reference.xMax')"
             v-model="box.xMax" />
 
           <DColorInput
-            label="Fill Color"
+            :label="t('Reference.fillColor')"
             v-model="box.color" />
 
           <DInput
-            label="Label (optional)"
+            :label="t('Reference.label')"
             v-model="box.label" />
         </div>
       </div>

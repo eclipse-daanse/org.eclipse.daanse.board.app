@@ -57,3 +57,6 @@ export function deactivate({ services }: ActivationContext) {
 }
 
 export { ComputedVariableSettingsImpl, ComputedVariableSettingsPackage, settingsFormXmi }
+
+/* Its texts - collected by lib.i18next, see src/i18n. */
+export { VariableComputedTranslations } from './i18n'

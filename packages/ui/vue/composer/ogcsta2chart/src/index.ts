@@ -48,3 +48,6 @@ export function deactivate({ services }: ActivationContext) {
   services.unregister('OGCSTAToChartComposerPreview')
   services.unregister('OGCSTAToChartComposerSettings')
 }
+
+/* Its texts - collected by lib.i18next, see src/i18n. */
+export { ComposerOgcsta2chartTranslations } from './i18n'

@@ -1,8 +1,10 @@
-import { CONNECTION_REPOSITORY as d } from "org.eclipse.daanse.board.app.lib.api.connection";
-import { XmlaConnection as f, factorySymbol as w } from "org.eclipse.daanse.board.app.lib.connection.xmla";
-import { defineComponent as y, ref as p, onMounted as b, watch as i, createElementBlock as E, openBlock as l, Fragment as h, createVNode as c, createBlock as u, createCommentVNode as m, unref as a } from "vue";
-import { DInput as r, DSelect as g } from "org.eclipse.daanse.board.app.ui.vue.controls";
-const C = `<?xml version="1.0" encoding="UTF-8"?>
+import { CONNECTION_REPOSITORY as y } from "org.eclipse.daanse.board.app.lib.api.connection";
+import { XmlaConnection as C, factorySymbol as E } from "org.eclipse.daanse.board.app.lib.connection.xmla";
+import { defineComponent as h, ref as A, computed as S, onMounted as X, watch as r, createElementBlock as T, openBlock as u, Fragment as v, createVNode as m, createBlock as d, createCommentVNode as f, unref as o } from "vue";
+import { DInput as g, DSelect as p } from "org.eclipse.daanse.board.app.ui.vue.controls";
+import { useTranslation as x } from "org.eclipse.daanse.board.app.ui.vue.composables";
+import { component as V } from "@eclipse-daanse/tsm";
+const M = `<?xml version="1.0" encoding="UTF-8"?>
 <!--
 /*********************************************************************
 * Copyright (c) 2024 Contributors to the Eclipse Foundation.
@@ -48,79 +50,107 @@ const C = `<?xml version="1.0" encoding="UTF-8"?>
     <eSubpackages href="http://org.eclipse.daanse.board.app.lib.connection.base#/"/>
 
 </ecore:EPackage>
-`, A = /* @__PURE__ */ y({
+`, N = /* @__PURE__ */ h({
   __name: "Settings",
   props: {
     config: {}
   },
   setup(e) {
-    const s = p([]);
-    b(async () => {
-      e.config.url && await o();
+    const l = A([]), { t: i } = x("connectionXmla"), c = S(() => [
+      { uid: "None", name: i("Xmla.security.none") },
+      { uid: "Basic", name: i("Xmla.security.basic") }
+    ]);
+    X(async () => {
+      e.config.url && await t();
     });
-    const o = async () => {
-      s.value = await f.getCatalogs(e.config.url, {
+    const t = async () => {
+      l.value = await C.getCatalogs(e.config.url, {
         type: e.config.security,
         user: e.config.user,
         password: e.config.password
       });
     };
-    return i(async () => e.config.url, async () => {
-      await o();
-    }), i(async () => e.config.security, async () => {
-      await o();
-    }), i(async () => e.config.user, async () => {
-      await o();
-    }), i(async () => e.config.password, async () => {
-      await o();
-    }), (x, n) => (l(), E(h, null, [
-      c(a(r), {
+    return r(async () => e.config.url, async () => {
+      await t();
+    }), r(async () => e.config.security, async () => {
+      await t();
+    }), r(async () => e.config.user, async () => {
+      await t();
+    }), r(async () => e.config.password, async () => {
+      await t();
+    }), (s, n) => (u(), T(v, null, [
+      m(o(g), {
         modelValue: e.config.url,
-        "onUpdate:modelValue": n[0] || (n[0] = (t) => e.config.url = t),
+        "onUpdate:modelValue": n[0] || (n[0] = (a) => e.config.url = a),
         label: "URL"
       }, null, 8, ["modelValue"]),
-      c(a(g), {
+      m(o(p), {
         modelValue: e.config.catalogName,
-        "onUpdate:modelValue": n[1] || (n[1] = (t) => e.config.catalogName = t),
-        label: "Katalog",
-        options: s.value,
+        "onUpdate:modelValue": n[1] || (n[1] = (a) => e.config.catalogName = a),
+        label: o(i)("Xmla.catalog"),
+        options: l.value,
         "label-key": "CATALOG_NAME",
         "value-key": "CATALOG_NAME"
-      }, null, 8, ["modelValue", "options"]),
-      c(a(g), {
+      }, null, 8, ["modelValue", "label", "options"]),
+      m(o(p), {
         modelValue: e.config.security,
-        "onUpdate:modelValue": n[2] || (n[2] = (t) => e.config.security = t),
-        label: "Anmeldung",
-        options: ["None", "Basic"]
-      }, null, 8, ["modelValue"]),
-      e.config.security === "Basic" ? (l(), u(a(r), {
+        "onUpdate:modelValue": n[2] || (n[2] = (a) => e.config.security = a),
+        label: o(i)("Xmla.security.label"),
+        options: c.value
+      }, null, 8, ["modelValue", "label", "options"]),
+      e.config.security === "Basic" ? (u(), d(o(g), {
         key: 0,
         modelValue: e.config.user,
-        "onUpdate:modelValue": n[3] || (n[3] = (t) => e.config.user = t),
-        label: "Benutzer"
-      }, null, 8, ["modelValue"])) : m("", !0),
-      e.config.security === "Basic" ? (l(), u(a(r), {
+        "onUpdate:modelValue": n[3] || (n[3] = (a) => e.config.user = a),
+        label: o(i)("Xmla.user")
+      }, null, 8, ["modelValue", "label"])) : f("", !0),
+      e.config.security === "Basic" ? (u(), d(o(g), {
         key: 1,
         modelValue: e.config.password,
-        "onUpdate:modelValue": n[4] || (n[4] = (t) => e.config.password = t),
-        label: "Passwort",
+        "onUpdate:modelValue": n[4] || (n[4] = (a) => e.config.password = a),
+        label: o(i)("Xmla.password"),
         type: "password"
-      }, null, 8, ["modelValue"])) : m("", !0)
+      }, null, 8, ["modelValue", "label"])) : f("", !0)
     ], 64));
   }
-}), S = Symbol.for("XmlaConnectionSettings");
-function v({ services: e }) {
-  e.register("XmlaConnectionSettings", A), e.getRequired(d).registerConnectionType("xmla", {
+}), O = { catalog: "Katalog", security: { label: "Anmeldung", none: "Keine", basic: "Basic" }, user: "Benutzer", password: "Passwort" }, P = {
+  Xmla: O
+}, k = { catalog: "Catalogue", security: { label: "Authentication", none: "None", basic: "Basic" }, user: "User", password: "Password" }, L = {
+  Xmla: k
+};
+var D = Object.getOwnPropertyDescriptor, B = (e, l, i, c) => {
+  for (var t = c > 1 ? void 0 : c ? D(l, i) : l, s = e.length - 1, n; s >= 0; s--)
+    (n = e[s]) && (t = n(t) || t);
+  return t;
+};
+const b = "connectionXmla";
+let w = class {
+  namespace = b;
+  resources = {
+    de: P,
+    en: L
+  };
+};
+w = B([
+  V({
+    service: ["Translations"],
+    properties: { "i18n.namespace": b }
+  })
+], w);
+const U = Symbol.for("XmlaConnectionSettings");
+function j({ services: e }) {
+  e.register("XmlaConnectionSettings", N), e.getRequired(y).registerConnectionType("xmla", {
     icon: "dataset",
-    Model: C,
-    Connection: w,
-    Settings: S
+    Model: M,
+    Connection: E,
+    Settings: U
   });
 }
-function L({ services: e }) {
-  e.getRequired(d).unregisterConnectionType("xmla"), e.unregister("XmlaConnectionSettings");
+function z({ services: e }) {
+  e.getRequired(y).unregisterConnectionType("xmla"), e.unregister("XmlaConnectionSettings");
 }
 export {
-  v as activate,
-  L as deactivate
+  w as ConnectionXmlaTranslations,
+  j as activate,
+  z as deactivate
 };

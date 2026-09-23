@@ -1,21 +1,21 @@
-(function(){var i="ui.vue.widget.timeline",d=document,s=d.querySelector('style[data-tsm-bundle="'+i+'"]');if(!s){s=d.createElement('style');s.setAttribute('data-tsm-bundle',i);d.head.appendChild(s);}s.textContent=".timeline-widget[data-v-7adbe107]{display:flex;flex-direction:column;gap:1rem;padding:1rem}.timeline-container[data-v-7adbe107]{overflow:hidden;position:relative;background:var(--color-bg);border:1px solid var(--color-divider);border-radius:8px;padding:1rem;min-height:80px}.timeline-track[data-v-7adbe107]{position:relative;height:40px;border-radius:20px;margin-bottom:1rem;cursor:pointer;transition:background-color .2s ease}.range-strip[data-v-7adbe107]{position:absolute;top:0;height:100%;border-width:1px;border-style:solid;border-radius:20px;cursor:grab;transition:background-color .2s ease,border-color .2s ease;z-index:1}.range-strip[data-v-7adbe107]:hover{filter:brightness(1.1)}.range-strip[data-v-7adbe107]:active{cursor:grabbing}.timeline-knob[data-v-7adbe107]{position:absolute;top:50%;width:24px;height:24px;background:var(--color-accent);border:3px solid white;border-radius:50%;cursor:grab;transform:translate(-50%,-50%);box-shadow:0 2px 8px #0003;transition:all .2s ease;z-index:3}.timeline-knob[data-v-7adbe107]:hover{background:var(--color-accent);transform:translate(-50%,-50%) scale(1.1);box-shadow:0 4px 12px #0000004d}.timeline-knob[data-v-7adbe107]:active{cursor:grabbing;transform:translate(-50%,-50%) scale(1.2)}.start-knob[data-v-7adbe107]{left:0;z-index:4}.fixed-knob[data-v-7adbe107]{cursor:not-allowed!important;opacity:.7}.fixed-knob[data-v-7adbe107]:hover{transform:translate(-50%,-50%)!important;background:var(--color-divider)!important}.end-knob[data-v-7adbe107]{right:-24px;z-index:4}.time-axis[data-v-7adbe107]{position:relative;height:30px;background:var(--color-pane);border-top:1px solid var(--color-divider);border-radius:0 0 8px 8px;margin:0 -1rem -1rem;padding:0 1rem}.time-tick[data-v-7adbe107]{position:absolute;top:0;height:100%;display:flex;flex-direction:column;align-items:center;transform:translate(-50%);pointer-events:none;z-index:2}.tick-mark[data-v-7adbe107]{width:1px;height:8px;background:var(--color-dim);margin-top:2px}.tick-label[data-v-7adbe107]{font-size:.7rem;color:var(--color-dim);margin-top:4px;white-space:nowrap;user-select:none}.time-info[data-v-7adbe107]{display:flex;justify-content:space-between;align-items:center;gap:1rem;font-size:.9rem;background:var(--color-bg);border:1px solid var(--color-divider);border-radius:6px;padding:.75rem}.time-display[data-v-7adbe107]{display:flex;flex-direction:column;gap:.25rem;flex:1;text-align:center}.time-label[data-v-7adbe107]{font-size:.8rem;font-weight:500;color:var(--color-dim)}.time-value[data-v-7adbe107]{font-size:.9rem;font-weight:600;color:var(--color-fg);word-wrap:break-word}.controls[data-v-7adbe107]{display:flex;align-items:center;gap:1rem;justify-content:center;flex-wrap:wrap}.play-button[data-v-7adbe107]{display:flex;align-items:center;justify-content:center;width:56px;height:56px;border:none;border-radius:50%;background:var(--play-button-bg, var(--color-accent));color:#fff;cursor:pointer;transition:all .2s ease;box-shadow:0 2px 8px #0003}.play-button[data-v-7adbe107]:hover:not(:disabled){background:var(--color-accent);transform:scale(1.05);box-shadow:0 4px 12px #0000004d}.play-button[data-v-7adbe107]:disabled{background:var(--color-divider);color:var(--color-dim);cursor:not-allowed;transform:none}.play-button.playing[data-v-7adbe107]{background:var(--play-button-playing, #ff6b35);animation:pulse-7adbe107 2s infinite}.play-button.playing[data-v-7adbe107]:hover{filter:brightness(.9)}@keyframes pulse-7adbe107{0%{box-shadow:0 2px 8px var(--play-button-bg, rgba(255, 107, 53, .4))}50%{box-shadow:0 4px 16px var(--play-button-bg, rgba(255, 107, 53, .8))}to{box-shadow:0 2px 8px var(--play-button-bg, rgba(255, 107, 53, .4))}}.speed-control[data-v-7adbe107]{display:flex;align-items:center;gap:.5rem;font-size:.9rem}.speed-control label[data-v-7adbe107]{font-weight:500;color:var(--color-fg);min-width:fit-content}.speed-control select[data-v-7adbe107]{padding:.5rem;border:1px solid var(--color-divider);border-radius:4px;background:var(--color-bg);color:var(--color-fg);font-size:.9rem;cursor:pointer}@media(max-width:768px){.time-info[data-v-7adbe107]{flex-direction:column;gap:.75rem}.time-display[data-v-7adbe107]{text-align:left}.controls[data-v-7adbe107]{flex-direction:column;gap:.75rem}.timeline-knob[data-v-7adbe107]{width:28px;height:28px}.tick-label[data-v-7adbe107]{font-size:.6rem}.timeline-container[data-v-7adbe107]{min-height:70px}.timeline-track[data-v-7adbe107]{height:35px}}.settings-container[data-v-f4cd827c]{display:flex;flex-direction:column;gap:1rem;padding:1rem;overflow-x:hidden}.setting-group[data-v-f4cd827c]{display:flex;flex-direction:column;gap:.5rem;min-width:0}.setting-group>label[data-v-f4cd827c]{font-weight:600;color:var(--color-fg);font-size:.9rem}.datetime-group[data-v-f4cd827c]{display:flex;flex-direction:row;gap:.5rem;align-items:flex-start}.datetime-group[data-v-f4cd827c]>*{flex:1;min-width:0}.relative-time-config[data-v-f4cd827c]{display:flex;flex-direction:column;gap:.75rem;padding:.75rem;background:var(--color-raised);border-radius:4px;min-width:0;overflow:hidden}.relative-time-row[data-v-f4cd827c]{display:flex;gap:.5rem;align-items:flex-end;min-width:0}.offset-input[data-v-f4cd827c]{flex:1;min-width:60px;max-width:100px}.unit-select[data-v-f4cd827c]{flex:2;min-width:80px}.relative-time-preview[data-v-f4cd827c]{font-size:.85rem;color:var(--color-accent);padding:.5rem;background:var(--color-pane);border-radius:4px;text-align:center;word-break:break-word}.variable-config[data-v-f4cd827c]{display:flex;flex-direction:column;gap:.5rem;margin-bottom:.5rem}\n";})();
-import { WidgetActionInterfaceImpl as St, EVENT_ACTIONS_REGISTRY as ht, PayloadImpl as at, EVENT_REGISTRY_ID as ft, EVENT_ACTIONS_REGISTRY_ID as mt } from "org.eclipse.daanse.board.app.lib.api.events";
-import { activate as _t, deactivate as pt, component as It, inject as rt } from "@eclipse-daanse/tsm";
-import { defineComponent as ot, mergeModels as Nt, inject as Me, toRefs as bt, useModel as ut, ref as p, computed as k, watch as De, onMounted as ct, onUnmounted as Mt, createElementBlock as H, openBlock as P, withModifiers as qe, createElementVNode as T, createCommentVNode as he, normalizeStyle as Ne, Fragment as dt, renderList as wt, toDisplayString as Y, normalizeClass as Rt, withDirectives as Dt, createStaticVNode as Lt, vModelSelect as yt, createVNode as ee, unref as B, isRef as xe, createBlock as st } from "vue";
-import { useRoute as At } from "vue-router";
-import { VariableWrapper as Be, plainSettings as nt } from "org.eclipse.daanse.board.app.ui.vue.composables";
-import { identifier as Et } from "org.eclipse.daanse.board.app.lib.api.variable";
-import { WidgetAction as Pe } from "org.eclipse.daanse.board.app.lib.events";
-import { DSelect as Fe, DInput as Ct, DDateInput as Ge, DCheckbox as Je } from "org.eclipse.daanse.board.app.ui.vue.controls";
-import { BasicEPackage as Ot, EPackageRegistry as xt, BasicEClass as it, BasicEAttribute as R, BasicEReference as Ft, getEcorePackage as D, BasicEObject as vt, BasicEFactory as Gt } from "@emfts/core";
-import { WIDGET_SERVICE_ID as Bt } from "org.eclipse.daanse.board.app.lib.api.widget";
-const { identifiers: Vt } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
-var kt = Object.defineProperty, Pt = Object.getOwnPropertyDescriptor, Ue = (L, e, t, g) => {
-  for (var a = Pt(e, t), S = L.length - 1, M; S >= 0; S--)
-    (M = L[S]) && (a = M(e, t, a) || a);
-  return a && kt(e, t, a), a;
+(function(){var i="ui.vue.widget.timeline",d=document,s=d.querySelector('style[data-tsm-bundle="'+i+'"]');if(!s){s=d.createElement('style');s.setAttribute('data-tsm-bundle',i);d.head.appendChild(s);}s.textContent=".timeline-widget[data-v-22341954]{display:flex;flex-direction:column;gap:1rem;padding:1rem}.timeline-container[data-v-22341954]{overflow:hidden;position:relative;background:var(--color-bg);border:1px solid var(--color-divider);border-radius:8px;padding:1rem;min-height:80px}.timeline-track[data-v-22341954]{position:relative;height:40px;border-radius:20px;margin-bottom:1rem;cursor:pointer;transition:background-color .2s ease}.range-strip[data-v-22341954]{position:absolute;top:0;height:100%;border-width:1px;border-style:solid;border-radius:20px;cursor:grab;transition:background-color .2s ease,border-color .2s ease;z-index:1}.range-strip[data-v-22341954]:hover{filter:brightness(1.1)}.range-strip[data-v-22341954]:active{cursor:grabbing}.timeline-knob[data-v-22341954]{position:absolute;top:50%;width:24px;height:24px;background:var(--color-accent);border:3px solid white;border-radius:50%;cursor:grab;transform:translate(-50%,-50%);box-shadow:0 2px 8px #0003;transition:all .2s ease;z-index:3}.timeline-knob[data-v-22341954]:hover{background:var(--color-accent);transform:translate(-50%,-50%) scale(1.1);box-shadow:0 4px 12px #0000004d}.timeline-knob[data-v-22341954]:active{cursor:grabbing;transform:translate(-50%,-50%) scale(1.2)}.start-knob[data-v-22341954]{left:0;z-index:4}.fixed-knob[data-v-22341954]{cursor:not-allowed!important;opacity:.7}.fixed-knob[data-v-22341954]:hover{transform:translate(-50%,-50%)!important;background:var(--color-divider)!important}.end-knob[data-v-22341954]{right:-24px;z-index:4}.time-axis[data-v-22341954]{position:relative;height:30px;background:var(--color-pane);border-top:1px solid var(--color-divider);border-radius:0 0 8px 8px;margin:0 -1rem -1rem;padding:0 1rem}.time-tick[data-v-22341954]{position:absolute;top:0;height:100%;display:flex;flex-direction:column;align-items:center;transform:translate(-50%);pointer-events:none;z-index:2}.tick-mark[data-v-22341954]{width:1px;height:8px;background:var(--color-dim);margin-top:2px}.tick-label[data-v-22341954]{font-size:.7rem;color:var(--color-dim);margin-top:4px;white-space:nowrap;user-select:none}.time-info[data-v-22341954]{display:flex;justify-content:space-between;align-items:center;gap:1rem;font-size:.9rem;background:var(--color-bg);border:1px solid var(--color-divider);border-radius:6px;padding:.75rem}.time-display[data-v-22341954]{display:flex;flex-direction:column;gap:.25rem;flex:1;text-align:center}.time-label[data-v-22341954]{font-size:.8rem;font-weight:500;color:var(--color-dim)}.time-value[data-v-22341954]{font-size:.9rem;font-weight:600;color:var(--color-fg);word-wrap:break-word}.controls[data-v-22341954]{display:flex;align-items:center;gap:1rem;justify-content:center;flex-wrap:wrap}.play-button[data-v-22341954]{display:flex;align-items:center;justify-content:center;width:56px;height:56px;border:none;border-radius:50%;background:var(--play-button-bg, var(--color-accent));color:#fff;cursor:pointer;transition:all .2s ease;box-shadow:0 2px 8px #0003}.play-button[data-v-22341954]:hover:not(:disabled){background:var(--color-accent);transform:scale(1.05);box-shadow:0 4px 12px #0000004d}.play-button[data-v-22341954]:disabled{background:var(--color-divider);color:var(--color-dim);cursor:not-allowed;transform:none}.play-button.playing[data-v-22341954]{background:var(--play-button-playing, #ff6b35);animation:pulse-22341954 2s infinite}.play-button.playing[data-v-22341954]:hover{filter:brightness(.9)}@keyframes pulse-22341954{0%{box-shadow:0 2px 8px var(--play-button-bg, rgba(255, 107, 53, .4))}50%{box-shadow:0 4px 16px var(--play-button-bg, rgba(255, 107, 53, .8))}to{box-shadow:0 2px 8px var(--play-button-bg, rgba(255, 107, 53, .4))}}.speed-control[data-v-22341954]{display:flex;align-items:center;gap:.5rem;font-size:.9rem}.speed-control label[data-v-22341954]{font-weight:500;color:var(--color-fg);min-width:fit-content}.speed-control select[data-v-22341954]{padding:.5rem;border:1px solid var(--color-divider);border-radius:4px;background:var(--color-bg);color:var(--color-fg);font-size:.9rem;cursor:pointer}@media(max-width:768px){.time-info[data-v-22341954]{flex-direction:column;gap:.75rem}.time-display[data-v-22341954]{text-align:left}.controls[data-v-22341954]{flex-direction:column;gap:.75rem}.timeline-knob[data-v-22341954]{width:28px;height:28px}.tick-label[data-v-22341954]{font-size:.6rem}.timeline-container[data-v-22341954]{min-height:70px}.timeline-track[data-v-22341954]{height:35px}}.settings-container[data-v-3deaaa09]{display:flex;flex-direction:column;gap:1rem;padding:1rem;overflow-x:hidden}.setting-group[data-v-3deaaa09]{display:flex;flex-direction:column;gap:.5rem;min-width:0}.setting-group>label[data-v-3deaaa09]{font-weight:600;color:var(--color-fg);font-size:.9rem}.datetime-group[data-v-3deaaa09]{display:flex;flex-direction:row;gap:.5rem;align-items:flex-start}.datetime-group[data-v-3deaaa09]>*{flex:1;min-width:0}.relative-time-config[data-v-3deaaa09]{display:flex;flex-direction:column;gap:.75rem;padding:.75rem;background:var(--color-raised);border-radius:4px;min-width:0;overflow:hidden}.relative-time-row[data-v-3deaaa09]{display:flex;gap:.5rem;align-items:flex-end;min-width:0}.offset-input[data-v-3deaaa09]{flex:1;min-width:60px;max-width:100px}.unit-select[data-v-3deaaa09]{flex:2;min-width:80px}.relative-time-preview[data-v-3deaaa09]{font-size:.85rem;color:var(--color-accent);padding:.5rem;background:var(--color-pane);border-radius:4px;text-align:center;word-break:break-word}.variable-config[data-v-3deaaa09]{display:flex;flex-direction:column;gap:.5rem;margin-bottom:.5rem}\n";})();
+import { WidgetActionInterfaceImpl as It, EVENT_ACTIONS_REGISTRY as Nt, PayloadImpl as at, EVENT_REGISTRY_ID as bt, EVENT_ACTIONS_REGISTRY_ID as Mt } from "org.eclipse.daanse.board.app.lib.api.events";
+import { component as ut, activate as wt, deactivate as yt, inject as st } from "@eclipse-daanse/tsm";
+import { defineComponent as dt, mergeModels as Rt, toRefs as Dt, useModel as ct, inject as Fe, ref as N, computed as C, watch as be, onMounted as Et, onUnmounted as Lt, createElementBlock as z, openBlock as k, withModifiers as Je, createElementVNode as T, createCommentVNode as Se, normalizeStyle as pe, unref as S, Fragment as gt, renderList as At, toDisplayString as $, normalizeClass as Vt, withDirectives as Ct, createStaticVNode as Ot, vModelSelect as xt, createVNode as ne, isRef as Ce, createBlock as it } from "vue";
+import { useRoute as Ft } from "vue-router";
+import { useTranslation as vt, useFormat as Gt, VariableWrapper as Ge, plainSettings as nt } from "org.eclipse.daanse.board.app.ui.vue.composables";
+import { identifier as St } from "org.eclipse.daanse.board.app.lib.api.variable";
+import { WidgetAction as ke } from "org.eclipse.daanse.board.app.lib.events";
+import { DSelect as Oe, DInput as kt, DDateInput as xe, DCheckbox as qe } from "org.eclipse.daanse.board.app.ui.vue.controls";
+import { BasicEPackage as Pt, EPackageRegistry as Ut, BasicEClass as rt, BasicEAttribute as A, BasicEReference as Wt, getEcorePackage as V, BasicEObject as Tt, BasicEFactory as Kt } from "@emfts/core";
+import { WIDGET_SERVICE_ID as zt } from "org.eclipse.daanse.board.app.lib.api.widget";
+const { identifiers: Bt } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
+var $t = Object.defineProperty, Ht = Object.getOwnPropertyDescriptor, Pe = (b, e, t, _) => {
+  for (var I = Ht(e, t), E = b.length - 1, a; E >= 0; E--)
+    (a = b[E]) && (I = a(e, t, I) || I);
+  return I && $t(e, t, I), I;
 };
-class we extends St {
+class Ie extends It {
   zoomIn() {
     throw new Error("zoomIn not implemented");
   }
@@ -29,43 +29,39 @@ class we extends St {
     throw new Error("jumpToNow not implemented");
   }
 }
-Ue([
-  Pe({ eventType: "timeline.zoomIn" })
-], we.prototype, "zoomIn");
-Ue([
-  Pe({ eventType: "timeline.zoomOut" })
-], we.prototype, "zoomOut");
-Ue([
-  Pe({ eventType: "timeline.setDateRange" })
-], we.prototype, "setDateRange");
-Ue([
-  Pe({ eventType: "timeline.jumpToNow" })
-], we.prototype, "jumpToNow");
-const Ut = { class: "timeline-container" }, Wt = ["title"], zt = {
-  key: 1,
-  class: "timeline-knob start-knob fixed-knob",
-  title: "Startzeit (fixiert)"
-}, Kt = { class: "time-axis" }, Ht = { class: "tick-label" }, $t = {
+Pe([
+  ke({ eventType: "timeline.zoomIn" })
+], Ie.prototype, "zoomIn");
+Pe([
+  ke({ eventType: "timeline.zoomOut" })
+], Ie.prototype, "zoomOut");
+Pe([
+  ke({ eventType: "timeline.setDateRange" })
+], Ie.prototype, "setDateRange");
+Pe([
+  ke({ eventType: "timeline.jumpToNow" })
+], Ie.prototype, "jumpToNow");
+const Xt = { class: "timeline-container" }, Yt = ["title"], Zt = ["title"], jt = ["title"], Jt = ["title"], qt = { class: "time-axis" }, Qt = { class: "tick-label" }, ea = {
   key: 0,
   class: "time-info"
-}, Xt = { class: "time-display" }, Yt = { class: "time-value" }, jt = { class: "time-display" }, Zt = { class: "time-value" }, qt = { class: "time-display" }, Jt = { class: "time-value" }, Qt = {
+}, ta = { class: "time-display" }, aa = { class: "time-label" }, sa = { class: "time-value" }, ia = { class: "time-display" }, na = { class: "time-label" }, ra = { class: "time-value" }, oa = { class: "time-display" }, la = { class: "time-label" }, ua = { class: "time-value" }, da = {
   key: 1,
   class: "controls"
-}, ea = ["disabled"], ta = {
+}, ca = ["disabled"], Ea = {
   key: 0,
   width: "24",
   height: "24",
   viewBox: "0 0 24 24",
   fill: "currentColor"
-}, aa = {
+}, ga = {
   key: 1,
   width: "24",
   height: "24",
   viewBox: "0 0 24 24",
   fill: "currentColor"
-}, ra = { class: "speed-control" }, sa = /* @__PURE__ */ ot({
+}, va = { class: "speed-control" }, Sa = /* @__PURE__ */ dt({
   __name: "TimelineWidget",
-  props: /* @__PURE__ */ Nt({
+  props: /* @__PURE__ */ Rt({
     datasourceId: {},
     id: {}
   }, {
@@ -73,133 +69,132 @@ const Ut = { class: "timeline-container" }, Wt = ["title"], zt = {
     configvModifiers: {}
   }),
   emits: ["update:configv"],
-  setup(L, { expose: e }) {
-    Me("i18n");
-    const t = L, { id: g } = bt(t), a = ut(L, "configv"), S = Me(Vt.TINY_EMITTER), M = Me(ht), te = At().params.pageid || "";
-    class ae extends we {
+  setup(b, { expose: e }) {
+    const { t } = vt("timeline"), _ = Gt(), I = b, { id: E } = Dt(I), a = ct(b, "configv"), ae = Fe(Bt.TINY_EMITTER), se = Fe(Nt), i = Ft().params.pageid || "";
+    class O extends Ie {
       zoomIn() {
-        const s = new Date(a.value.rangeStart || Date.now() - 864e5), v = new Date(a.value.rangeEnd || Date.now()), E = (v.getTime() - s.getTime()) * 0.25, h = new Date(s.getTime() + E), f = new Date(v.getTime() - E);
+        const r = new Date(a.value.rangeStart || Date.now() - 864e5), v = new Date(a.value.rangeEnd || Date.now()), g = (v.getTime() - r.getTime()) * 0.25, h = new Date(r.getTime() + g), f = new Date(v.getTime() - g);
         f.getTime() - h.getTime() > 6e4 && (a.value.rangeStart = h.toISOString(), a.value.rangeEnd = f.toISOString());
       }
       zoomOut() {
-        const s = new Date(a.value.rangeStart || Date.now() - 864e5), v = new Date(a.value.rangeEnd || Date.now()), E = (v.getTime() - s.getTime()) * 0.5, h = new Date(Math.max(
-          s.getTime() - E,
+        const r = new Date(a.value.rangeStart || Date.now() - 864e5), v = new Date(a.value.rangeEnd || Date.now()), g = (v.getTime() - r.getTime()) * 0.5, h = new Date(Math.max(
+          r.getTime() - g,
           new Date(a.value.timelineMin || 0).getTime()
         )), f = new Date(Math.min(
-          v.getTime() + E,
+          v.getTime() + g,
           new Date(a.value.timelineMax || Date.now() + 864e5 * 7).getTime()
         ));
         a.value.rangeStart = h.toISOString(), a.value.rangeEnd = f.toISOString();
       }
-      setDateRange(s, v) {
-        a.value.rangeStart = s, a.value.rangeEnd = v;
+      setDateRange(r, v) {
+        a.value.rangeStart = r, a.value.rangeEnd = v;
       }
       jumpToNow() {
-        const s = /* @__PURE__ */ new Date(), v = new Date(a.value.rangeEnd || s).getTime() - new Date(a.value.rangeStart || s).getTime(), u = s, E = new Date(s.getTime() - v);
-        a.value.rangeStart = E.toISOString(), a.value.rangeEnd = u.toISOString();
+        const r = /* @__PURE__ */ new Date(), v = new Date(a.value.rangeEnd || r).getTime() - new Date(a.value.rangeStart || r).getTime(), u = r, g = new Date(r.getTime() - v);
+        a.value.rangeStart = g.toISOString(), a.value.rangeEnd = u.toISOString();
       }
     }
-    const j = new ae();
-    e(j);
-    const i = () => {
-      g?.value && S.emit("widget:TimelineWidget:click", {
+    const W = new O();
+    e(W);
+    const H = () => {
+      E?.value && ae.emit("widget:TimelineWidget:click", {
         type: "widget:TimelineWidget:click",
-        widgetId: g.value,
-        payload: { widgetId: g.value, timestamp: Date.now() }
+        widgetId: E.value,
+        payload: { widgetId: E.value, timestamp: Date.now() }
       });
-    }, O = () => {
-      g?.value && S.emit("widget:TimelineWidget:right_click", {
+    }, X = () => {
+      E?.value && ae.emit("widget:TimelineWidget:right_click", {
         type: "widget:TimelineWidget:right_click",
-        widgetId: g.value,
-        payload: { widgetId: g.value, timestamp: Date.now() }
+        widgetId: E.value,
+        payload: { widgetId: E.value, timestamp: Date.now() }
       });
-    }, m = p(null), U = p(new Be("")), W = p(new Be("")), y = p(!1), C = p(a.value.playbackSpeed || 1), A = p(!1), Z = p(), x = p(null), F = p(null), V = p(null);
-    let oe = null, G = 0;
-    const re = new Date(Date.now() - 720 * 60 * 60 * 1e3), se = new Date(Date.now() + 10080 * 60 * 1e3), Ee = new Date(Date.now() - 1440 * 60 * 1e3), ve = /* @__PURE__ */ new Date(), Le = (n, s) => {
-      const v = /* @__PURE__ */ new Date(), u = new Date(v), E = Number(n) || 24;
-      switch (typeof s == "object" && s !== null ? s.value : s) {
+    }, m = N(null), P = N(new Ge("")), Y = N(new Ge("")), x = N(!1), F = N(a.value.playbackSpeed || 1), R = N(!1), Z = N(), G = N(null), D = N(null), B = N(null);
+    let J = null, le = 0;
+    const ce = new Date(Date.now() - 720 * 60 * 60 * 1e3), Ne = new Date(Date.now() + 10080 * 60 * 1e3), Me = new Date(Date.now() - 1440 * 60 * 1e3), we = /* @__PURE__ */ new Date(), ye = (n, r) => {
+      const v = /* @__PURE__ */ new Date(), u = new Date(v), g = Number(n) || 24;
+      switch (typeof r == "object" && r !== null ? r.value : r) {
         case "hours":
-          u.setHours(u.getHours() - E);
+          u.setHours(u.getHours() - g);
           break;
         case "days":
-          u.setDate(u.getDate() - E);
+          u.setDate(u.getDate() - g);
           break;
         case "weeks":
-          u.setDate(u.getDate() - E * 7);
+          u.setDate(u.getDate() - g * 7);
           break;
         case "months":
-          u.setMonth(u.getMonth() - E);
+          u.setMonth(u.getMonth() - g);
           break;
         case "years":
-          u.setFullYear(u.getFullYear() - E);
+          u.setFullYear(u.getFullYear() - g);
           break;
         default:
-          u.setHours(u.getHours() - E);
+          u.setHours(u.getHours() - g);
       }
       return { start: u, end: v };
-    }, ze = () => {
+    }, We = () => {
       if (!a.value.relativeTime?.enabled) return;
-      const { start: n, end: s } = Le(
+      const { start: n, end: r } = ye(
         a.value.relativeTime.offset,
         a.value.relativeTime.unit
       );
-      a.value.timelineMin = n.toISOString(), a.value.timelineMax = s.toISOString();
-      const u = (s.getTime() - n.getTime()) * 0.2, E = s, h = new Date(s.getTime() - u);
-      if (a.value.rangeStart = h.toISOString(), a.value.rangeEnd = E.toISOString(), a.value.rangeStartVariable && m.value) {
+      a.value.timelineMin = n.toISOString(), a.value.timelineMax = r.toISOString();
+      const u = (r.getTime() - n.getTime()) * 0.2, g = r, h = new Date(r.getTime() - u);
+      if (a.value.rangeStart = h.toISOString(), a.value.rangeEnd = g.toISOString(), a.value.rangeStartVariable && m.value) {
         const f = m.value.getVariable(a.value.rangeStartVariable);
         f && (f.value = h.toISOString());
       }
       if (a.value.rangeEndVariable && m.value) {
         const f = m.value.getVariable(a.value.rangeEndVariable);
-        f && (f.value = E.toISOString());
+        f && (f.value = g.toISOString());
       }
-    }, ne = k(() => a.value.timelineMin ? new Date(a.value.timelineMin) : re), $ = k(() => a.value.timelineMax ? new Date(a.value.timelineMax) : se), q = k(() => {
+    }, ie = C(() => a.value.timelineMin ? new Date(a.value.timelineMin) : ce), q = C(() => a.value.timelineMax ? new Date(a.value.timelineMax) : Ne), Q = C(() => {
       if (a.value.rangeStartVariable && m.value) {
         const n = m.value.getVariable(a.value.rangeStartVariable);
         if (n && n.value)
           return new Date(n.value);
       }
-      return a.value.rangeStart ? new Date(a.value.rangeStart) : Ee;
-    }), K = k(() => {
+      return a.value.rangeStart ? new Date(a.value.rangeStart) : Me;
+    }), K = C(() => {
       if (a.value.rangeEndVariable && m.value) {
         const n = m.value.getVariable(a.value.rangeEndVariable);
         if (n && n.value)
           return new Date(n.value);
       }
-      return a.value.rangeEnd ? new Date(a.value.rangeEnd) : ve;
-    }), fe = k(() => {
+      return a.value.rangeEnd ? new Date(a.value.rangeEnd) : we;
+    }), re = C(() => {
       if (a.value.fixStartKnob)
         return 0;
-      if (x.value !== null)
-        return x.value;
-      const n = ne.value.getTime(), s = $.value.getTime(), v = q.value.getTime();
-      return Math.max(0, Math.min(100, (v - n) / (s - n) * 100));
-    }), ye = k(() => {
-      if (F.value !== null)
-        return F.value;
-      const n = ne.value.getTime(), s = $.value.getTime(), v = K.value.getTime();
-      return Math.max(0, Math.min(100, (v - n) / (s - n) * 100));
-    }), Ae = k(() => V.value ? {
-      ...V.value,
-      background: ge(0.5),
+      if (G.value !== null)
+        return G.value;
+      const n = ie.value.getTime(), r = q.value.getTime(), v = Q.value.getTime();
+      return Math.max(0, Math.min(100, (v - n) / (r - n) * 100));
+    }), Re = C(() => {
+      if (D.value !== null)
+        return D.value;
+      const n = ie.value.getTime(), r = q.value.getTime(), v = K.value.getTime();
+      return Math.max(0, Math.min(100, (v - n) / (r - n) * 100));
+    }), Ke = C(() => B.value ? {
+      ...B.value,
+      background: De(0.5),
       borderColor: a.value.rangeStripColor || "#d17600"
     } : {
-      left: fe.value + "%",
-      width: ye.value - fe.value + "%",
-      background: ge(0.5),
+      left: re.value + "%",
+      width: Re.value - re.value + "%",
+      background: De(0.5),
       borderColor: a.value.rangeStripColor || "#d17600"
-    }), ge = (n) => {
-      const v = (a.value.rangeStripColor || "#d17600").replace("#", ""), u = parseInt(v.substr(0, 2), 16), E = parseInt(v.substr(2, 2), 16), h = parseInt(v.substr(4, 2), 16);
-      return `rgba(${u}, ${E}, ${h}, ${n})`;
-    }, Ke = k(() => {
+    }), De = (n) => {
+      const v = (a.value.rangeStripColor || "#d17600").replace("#", ""), u = parseInt(v.substr(0, 2), 16), g = parseInt(v.substr(2, 2), 16), h = parseInt(v.substr(4, 2), 16);
+      return `rgba(${u}, ${g}, ${h}, ${n})`;
+    }, ze = C(() => {
       const n = a.value.rangeStripColor || "#d17600";
       return {
-        backgroundColor: He(n)
+        backgroundColor: U(n)
       };
-    }), He = (n) => {
-      const s = n.replace("#", ""), v = parseInt(s.substr(0, 2), 16), u = parseInt(s.substr(2, 2), 16), E = parseInt(s.substr(4, 2), 16), h = 0.6, f = Math.min(255, Math.round(v + (255 - v) * h)), I = Math.min(255, Math.round(u + (255 - u) * h)), w = Math.min(255, Math.round(E + (255 - E) * h));
-      return `rgb(${f}, ${I}, ${w})`;
-    }, $e = () => {
+    }), U = (n) => {
+      const r = n.replace("#", ""), v = parseInt(r.substr(0, 2), 16), u = parseInt(r.substr(2, 2), 16), g = parseInt(r.substr(4, 2), 16), h = 0.6, f = Math.min(255, Math.round(v + (255 - v) * h)), M = Math.min(255, Math.round(u + (255 - u) * h)), L = Math.min(255, Math.round(g + (255 - g) * h));
+      return `rgb(${f}, ${M}, ${L})`;
+    }, Le = () => {
       switch (a.value.stepSize || "hour") {
         case "minute":
           return 60 * 1e3;
@@ -219,288 +214,292 @@ const Ut = { class: "timeline-container" }, Wt = ["title"], zt = {
         default:
           return 3600 * 1e3;
       }
-    }, Xe = k(() => {
-      const n = a.value.rangeStripColor || "#d17600", s = z(n);
+    }, $e = C(() => {
+      const n = a.value.rangeStripColor || "#d17600", r = He(n);
       return {
         "--play-button-bg": n,
-        "--play-button-playing": s
+        "--play-button-playing": r
       };
-    }), z = (n) => {
-      const s = n.replace("#", ""), v = parseInt(s.substr(0, 2), 16), u = parseInt(s.substr(2, 2), 16), E = parseInt(s.substr(4, 2), 16), h = 0.8, I = Math.min(255, Math.round(v * h * 1.1)), w = Math.round(u * h), X = Math.round(E * h);
-      return `rgb(${I}, ${w}, ${X})`;
-    }, Ve = k(() => K.value.getTime() >= $.value.getTime()), Ce = k(() => ye.value - fe.value >= 10 ? !1 : fe.value > 50), Ye = k(() => {
-      const n = [], s = ne.value.getTime(), u = $.value.getTime() - s, E = 8;
-      for (let h = 0; h <= E; h++) {
-        const f = s + u / E * h, I = new Date(f), w = h / E * 100, X = I.toLocaleString("de-DE", {
+    }), He = (n) => {
+      const r = n.replace("#", ""), v = parseInt(r.substr(0, 2), 16), u = parseInt(r.substr(2, 2), 16), g = parseInt(r.substr(4, 2), 16), h = 0.8, M = Math.min(255, Math.round(v * h * 1.1)), L = Math.round(u * h), j = Math.round(g * h);
+      return `rgb(${M}, ${L}, ${j})`;
+    }, Xe = C(() => K.value.getTime() >= q.value.getTime()), Ae = C(() => Re.value - re.value >= 10 ? !1 : re.value > 50), Ye = C(() => {
+      const n = [], r = ie.value.getTime(), u = q.value.getTime() - r, g = 8;
+      for (let h = 0; h <= g; h++) {
+        const f = r + u / g * h, M = new Date(f), L = h / g * 100, j = _.date(M, {
           day: "2-digit",
           month: "2-digit",
           hour: "2-digit",
           minute: "2-digit"
         });
         n.push({
-          timestamp: I.toISOString(),
-          position: w,
-          label: X
+          timestamp: M.toISOString(),
+          position: L,
+          label: j
         });
       }
       return n;
-    }), Oe = (n) => n.toLocaleString("de-DE", {
+    }), Ve = (n) => _.date(n, {
       year: "numeric",
       month: "2-digit",
       day: "2-digit",
       hour: "2-digit",
       minute: "2-digit"
-    }), je = () => {
-      const n = K.value.getTime() - q.value.getTime(), s = Math.floor(n / (1e3 * 60 * 60)), v = Math.floor(s / 24);
-      return v > 0 ? `${v}d ${s % 24}h` : s > 0 ? `${s}h` : `${Math.floor(n / (1e3 * 60))}min`;
-    }, Re = () => Z.value?.getBoundingClientRect();
-    let ue = null;
-    const l = (n, s, v = !1) => {
-      const u = a.value.fixStartKnob ? ne.value : n || q.value, E = s || K.value;
-      if (!u || isNaN(u.getTime()) || !E || isNaN(E.getTime())) {
-        console.warn("Invalid date values in updateConfig:", { actualStart: u, actualEnd: E });
+    }), l = () => {
+      const n = K.value.getTime() - Q.value.getTime(), r = Math.floor(n / (1e3 * 60 * 60)), v = Math.floor(r / 24);
+      return v > 0 ? `${v}d ${r % 24}h` : r > 0 ? `${r}h` : `${Math.floor(n / (1e3 * 60))}min`;
+    }, o = () => Z.value?.getBoundingClientRect();
+    let c = null;
+    const p = (n, r, v = !1) => {
+      const u = a.value.fixStartKnob ? ie.value : n || Q.value, g = r || K.value;
+      if (!u || isNaN(u.getTime()) || !g || isNaN(g.getTime())) {
+        console.warn("Invalid date values in updateConfig:", { actualStart: u, actualEnd: g });
         return;
       }
       const h = () => {
-        if (a.value.rangeStart = u.toISOString(), a.value.rangeEnd = E.toISOString(), a.value.playbackSpeed = C.value, a.value.rangeStartVariable && m.value) {
+        if (a.value.rangeStart = u.toISOString(), a.value.rangeEnd = g.toISOString(), a.value.playbackSpeed = F.value, a.value.rangeStartVariable && m.value) {
           const f = m.value.getVariable(a.value.rangeStartVariable);
           f && (f.value = u.toISOString());
         }
         if (a.value.rangeEndVariable && m.value) {
           const f = m.value.getVariable(a.value.rangeEndVariable);
-          f && (f.value = E.toISOString());
+          f && (f.value = g.toISOString());
         }
       };
-      v ? (ue && (clearTimeout(ue), ue = null), h()) : (ue && clearTimeout(ue), ue = setTimeout(h, 300));
-    }, o = (n) => {
+      v ? (c && (clearTimeout(c), c = null), h()) : (c && clearTimeout(c), c = setTimeout(h, 300));
+    }, w = (n) => {
       if (a.value.fixStartKnob)
         return;
-      n.preventDefault(), A.value = !0;
-      const s = Re();
-      if (!s) return;
-      const v = n.clientX, u = ne.value.getTime(), E = $.value.getTime(), h = (E - u) / s.width, f = q.value.getTime(), I = K.value.getTime(), w = E - u;
-      let X = f;
-      const ce = (me) => {
-        if (!A.value) return;
-        const _e = me.clientX - v;
-        let J = f + _e * h;
-        J = Math.max(u, Math.min(J, I - 6e4)), X = J;
-        const Te = Math.max(0, Math.min(100, (J - u) / w * 100)), pe = Math.max(0, Math.min(100, (I - u) / w * 100));
-        x.value = Te, V.value = {
-          left: Te + "%",
-          width: pe - Te + "%"
+      n.preventDefault(), R.value = !0;
+      const r = o();
+      if (!r) return;
+      const v = n.clientX, u = ie.value.getTime(), g = q.value.getTime(), h = (g - u) / r.width, f = Q.value.getTime(), M = K.value.getTime(), L = g - u;
+      let j = f;
+      const ue = (Te) => {
+        if (!R.value) return;
+        const he = Te.clientX - v;
+        let te = f + he * h;
+        te = Math.max(u, Math.min(te, M - 6e4)), j = te;
+        const ge = Math.max(0, Math.min(100, (te - u) / L * 100)), fe = Math.max(0, Math.min(100, (M - u) / L * 100));
+        G.value = ge, B.value = {
+          left: ge + "%",
+          width: fe - ge + "%"
         };
       }, de = () => {
-        A.value = !1, x.value = null, V.value = null, l(new Date(X), new Date(I), !0), document.removeEventListener("mousemove", ce), document.removeEventListener("mouseup", de);
+        R.value = !1, G.value = null, B.value = null, p(new Date(j), new Date(M), !0), document.removeEventListener("mousemove", ue), document.removeEventListener("mouseup", de);
       };
-      document.addEventListener("mousemove", ce), document.addEventListener("mouseup", de);
-    }, d = (n) => {
-      n.preventDefault(), A.value = !0;
-      const s = Re();
-      if (!s) return;
-      const v = n.clientX, u = ne.value.getTime(), E = $.value.getTime(), h = (E - u) / s.width, f = K.value.getTime(), I = q.value.getTime(), w = E - u;
-      let X = f;
-      const ce = (me) => {
-        if (!A.value) return;
-        const _e = me.clientX - v;
-        let J = f + _e * h;
-        J = Math.min(E, Math.max(J, I + 6e4)), X = J;
-        const Te = Math.max(0, Math.min(100, (I - u) / w * 100)), pe = Math.max(0, Math.min(100, (J - u) / w * 100));
-        F.value = pe, V.value = {
-          left: Te + "%",
-          width: pe - Te + "%"
+      document.addEventListener("mousemove", ue), document.addEventListener("mouseup", de);
+    }, ee = (n) => {
+      n.preventDefault(), R.value = !0;
+      const r = o();
+      if (!r) return;
+      const v = n.clientX, u = ie.value.getTime(), g = q.value.getTime(), h = (g - u) / r.width, f = K.value.getTime(), M = Q.value.getTime(), L = g - u;
+      let j = f;
+      const ue = (Te) => {
+        if (!R.value) return;
+        const he = Te.clientX - v;
+        let te = f + he * h;
+        te = Math.min(g, Math.max(te, M + 6e4)), j = te;
+        const ge = Math.max(0, Math.min(100, (M - u) / L * 100)), fe = Math.max(0, Math.min(100, (te - u) / L * 100));
+        D.value = fe, B.value = {
+          left: ge + "%",
+          width: fe - ge + "%"
         };
       }, de = () => {
-        A.value = !1, F.value = null, V.value = null, l(new Date(I), new Date(X), !0), document.removeEventListener("mousemove", ce), document.removeEventListener("mouseup", de);
+        R.value = !1, D.value = null, B.value = null, p(new Date(M), new Date(j), !0), document.removeEventListener("mousemove", ue), document.removeEventListener("mouseup", de);
       };
-      document.addEventListener("mousemove", ce), document.addEventListener("mouseup", de);
-    }, _ = (n) => {
+      document.addEventListener("mousemove", ue), document.addEventListener("mouseup", de);
+    }, Ee = (n) => {
       if (a.value.fixStartKnob) {
-        d(n);
+        ee(n);
         return;
       }
-      n.preventDefault(), A.value = !0;
-      const s = Re();
-      if (!s) return;
-      const v = n.clientX, u = ne.value.getTime(), E = $.value.getTime(), h = (E - u) / s.width, f = q.value.getTime(), I = K.value.getTime(), w = I - f, X = E - u;
-      let ce = f, de = I;
-      const me = (J) => {
-        if (!A.value) return;
-        const pe = (J.clientX - v) * h;
-        let Se = f + pe, Ie = Se + w;
-        Se < u && (Se = u, Ie = Se + w), Ie > E && (Ie = E, Se = Ie - w), ce = Se, de = Ie;
-        const Ze = Math.max(0, Math.min(100, (Se - u) / X * 100)), tt = Math.max(0, Math.min(100, (Ie - u) / X * 100));
-        x.value = Ze, F.value = tt, V.value = {
-          left: Ze + "%",
-          width: tt - Ze + "%"
+      n.preventDefault(), R.value = !0;
+      const r = o();
+      if (!r) return;
+      const v = n.clientX, u = ie.value.getTime(), g = q.value.getTime(), h = (g - u) / r.width, f = Q.value.getTime(), M = K.value.getTime(), L = M - f, j = g - u;
+      let ue = f, de = M;
+      const Te = (te) => {
+        if (!R.value) return;
+        const fe = (te.clientX - v) * h;
+        let ve = f + fe, me = ve + L;
+        ve < u && (ve = u, me = ve + L), me > g && (me = g, ve = me - L), ue = ve, de = me;
+        const je = Math.max(0, Math.min(100, (ve - u) / j * 100)), tt = Math.max(0, Math.min(100, (me - u) / j * 100));
+        G.value = je, D.value = tt, B.value = {
+          left: je + "%",
+          width: tt - je + "%"
         };
-      }, _e = () => {
-        A.value = !1, x.value = null, F.value = null, V.value = null, l(new Date(ce), new Date(de), !0), document.removeEventListener("mousemove", me), document.removeEventListener("mouseup", _e);
+      }, he = () => {
+        R.value = !1, G.value = null, D.value = null, B.value = null, p(new Date(ue), new Date(de), !0), document.removeEventListener("mousemove", Te), document.removeEventListener("mouseup", he);
       };
-      document.addEventListener("mousemove", me), document.addEventListener("mouseup", _e);
-    }, N = () => {
-      y.value = !y.value, y.value ? Q() : ie();
-    }, Q = () => {
-      G = performance.now(), et();
-    }, ie = () => {
-      oe && (cancelAnimationFrame(oe), oe = null);
+      document.addEventListener("mousemove", Te), document.addEventListener("mouseup", he);
+    }, mt = () => {
+      x.value = !x.value, x.value ? pt() : Ze();
+    }, pt = () => {
+      le = performance.now(), et();
+    }, Ze = () => {
+      J && (cancelAnimationFrame(J), J = null);
     }, et = () => {
-      if (!y.value) return;
-      const n = performance.now(), s = n - G, v = 1e3 / C.value;
-      if (s >= v) {
-        const u = q.value.getTime(), E = K.value.getTime(), h = E - u, f = $e();
+      if (!x.value) return;
+      const n = performance.now(), r = n - le, v = 1e3 / F.value;
+      if (r >= v) {
+        const u = Q.value.getTime(), g = K.value.getTime(), h = g - u, f = Le();
         console.log("Playback step:", {
           stepSize: a.value.stepSize,
           stepSizeMs: f,
           currentStart: new Date(u).toISOString(),
-          currentEnd: new Date(E).toISOString(),
+          currentEnd: new Date(g).toISOString(),
           rangeDuration: h
         });
-        const I = u + f, w = I + h;
+        const M = u + f, L = M + h;
         if (console.log("New times:", {
-          newStart: new Date(I).toISOString(),
-          newEnd: new Date(w).toISOString(),
-          timelineMax: $.value.toISOString()
-        }), w >= $.value.getTime()) {
-          ie(), y.value = !1;
+          newStart: new Date(M).toISOString(),
+          newEnd: new Date(L).toISOString(),
+          timelineMax: q.value.toISOString()
+        }), L >= q.value.getTime()) {
+          Ze(), x.value = !1;
           return;
         }
-        l(new Date(I), new Date(w)), G = n;
+        p(new Date(M), new Date(L)), le = n;
       }
-      oe = requestAnimationFrame(et);
+      J = requestAnimationFrame(et);
     };
-    De(() => a.value.rangeStartVariable, (n) => {
+    be(() => a.value.rangeStartVariable, (n) => {
       if (n && m.value) {
-        const s = m.value.getVariable(n);
-        s && U.value.setTo(s);
+        const r = m.value.getVariable(n);
+        r && P.value.setTo(r);
       }
-    }), De(() => a.value.rangeEndVariable, (n) => {
+    }), be(() => a.value.rangeEndVariable, (n) => {
       if (n && m.value) {
-        const s = m.value.getVariable(n);
-        s && W.value.setTo(s);
+        const r = m.value.getVariable(n);
+        r && Y.value.setTo(r);
       }
-    }), De(() => U.value.value, (n) => {
-      n && a.value.rangeStartVariable && new Date(n).getTime() !== q.value.getTime() && (a.value.rangeStart = n);
-    }), De(() => W.value.value, (n) => {
+    }), be(() => P.value.value, (n) => {
+      n && a.value.rangeStartVariable && new Date(n).getTime() !== Q.value.getTime() && (a.value.rangeStart = n);
+    }), be(() => Y.value.value, (n) => {
       n && a.value.rangeEndVariable && new Date(n).getTime() !== K.value.getTime() && (a.value.rangeEnd = n);
     });
-    const Tt = Me(Et);
-    return ct(() => {
-      g?.value && M.registerInstance(g.value, j, "TimelineWidget", te);
+    const _t = Fe(St);
+    return Et(() => {
+      E?.value && se.registerInstance(E.value, W, "TimelineWidget", i);
       try {
-        if (m.value = Tt ?? null, !m.value) throw new Error("VariableRepository not provided");
+        if (m.value = _t ?? null, !m.value) throw new Error("VariableRepository not provided");
       } catch (n) {
         console.warn("VariableRepository not found in container:", n);
       }
-      if (a.value.timelineMin || (a.value.timelineMin = re.toISOString()), a.value.timelineMax || (a.value.timelineMax = se.toISOString()), a.value.rangeStart || (a.value.rangeStart = Ee.toISOString()), a.value.rangeEnd || (a.value.rangeEnd = ve.toISOString()), a.value.playbackSpeed ? C.value = a.value.playbackSpeed : (a.value.playbackSpeed = 1, C.value = 1), a.value.rangeStripColor || (a.value.rangeStripColor = "#d17600"), a.value.fixStartKnob === void 0 && (a.value.fixStartKnob = !1), a.value.showTimeInfo === void 0 && (a.value.showTimeInfo = !0), a.value.showControls === void 0 && (a.value.showControls = !0), a.value.stepSize === void 0 && (a.value.stepSize = "hour"), a.value.rangeStartVariable && m.value) {
+      if (a.value.timelineMin || (a.value.timelineMin = ce.toISOString()), a.value.timelineMax || (a.value.timelineMax = Ne.toISOString()), a.value.rangeStart || (a.value.rangeStart = Me.toISOString()), a.value.rangeEnd || (a.value.rangeEnd = we.toISOString()), a.value.playbackSpeed ? F.value = a.value.playbackSpeed : (a.value.playbackSpeed = 1, F.value = 1), a.value.rangeStripColor || (a.value.rangeStripColor = "#d17600"), a.value.fixStartKnob === void 0 && (a.value.fixStartKnob = !1), a.value.showTimeInfo === void 0 && (a.value.showTimeInfo = !0), a.value.showControls === void 0 && (a.value.showControls = !0), a.value.stepSize === void 0 && (a.value.stepSize = "hour"), a.value.rangeStartVariable && m.value) {
         const n = m.value.getVariable(a.value.rangeStartVariable);
-        n && U.value.setTo(n);
+        n && P.value.setTo(n);
       }
       if (a.value.rangeEndVariable && m.value) {
         const n = m.value.getVariable(a.value.rangeEndVariable);
-        n && W.value.setTo(n);
+        n && Y.value.setTo(n);
       }
-      a.value.relativeTime?.enabled && ze();
-    }), Mt(() => {
-      g?.value && M.unregisterInstance(g.value), ie();
-    }), (n, s) => (P(), H("div", {
+      a.value.relativeTime?.enabled && We();
+    }), Lt(() => {
+      E?.value && se.unregisterInstance(E.value), Ze();
+    }), (n, r) => (k(), z("div", {
       class: "timeline-widget",
-      onClick: i,
-      onContextmenu: qe(O, ["prevent"])
+      onClick: H,
+      onContextmenu: Je(X, ["prevent"])
     }, [
-      T("div", Ut, [
+      T("div", Xt, [
         T("div", {
           class: "timeline-track",
           ref_key: "trackRef",
           ref: Z,
-          style: Ne(Ke.value)
+          style: pe(ze.value)
         }, [
           T("div", {
             class: "range-strip",
-            style: Ne(Ae.value),
-            onMousedown: _,
-            title: a.value.fixStartKnob ? "Timeline-Bereich (Start fixiert)" : "Timeline-Bereich - ziehen zum Verschieben"
+            style: pe(Ke.value),
+            onMousedown: Ee,
+            title: a.value.fixStartKnob ? S(t)("Widget.rangeFixed") : S(t)("Widget.range")
           }, [
-            a.value.fixStartKnob ? (P(), H("div", zt)) : (P(), H("div", {
+            a.value.fixStartKnob ? (k(), z("div", {
+              key: 1,
+              class: "timeline-knob start-knob fixed-knob",
+              title: S(t)("Widget.startKnobFixed")
+            }, null, 8, jt)) : (k(), z("div", {
               key: 0,
               class: "timeline-knob start-knob",
-              style: Ne({ zIndex: Ce.value ? 5 : 4 }),
-              onMousedown: qe(o, ["stop"]),
-              title: "Startzeit"
-            }, null, 36)),
+              style: pe({ zIndex: Ae.value ? 5 : 4 }),
+              onMousedown: Je(w, ["stop"]),
+              title: S(t)("Widget.startKnob")
+            }, null, 44, Zt)),
             T("div", {
               class: "timeline-knob end-knob",
-              style: Ne({ zIndex: Ce.value ? 3 : 4 }),
-              onMousedown: qe(d, ["stop"]),
-              title: "Endzeit"
-            }, null, 36)
-          ], 44, Wt)
+              style: pe({ zIndex: Ae.value ? 3 : 4 }),
+              onMousedown: Je(ee, ["stop"]),
+              title: S(t)("Widget.endKnob")
+            }, null, 44, Jt)
+          ], 44, Yt)
         ], 4),
-        T("div", Kt, [
-          (P(!0), H(dt, null, wt(Ye.value, (v) => (P(), H("div", {
+        T("div", qt, [
+          (k(!0), z(gt, null, At(Ye.value, (v) => (k(), z("div", {
             key: v.timestamp,
             class: "time-tick",
-            style: Ne({ left: v.position + "%" })
+            style: pe({ left: v.position + "%" })
           }, [
-            s[1] || (s[1] = T("div", { class: "tick-mark" }, null, -1)),
-            T("div", Ht, Y(v.label), 1)
+            r[1] || (r[1] = T("div", { class: "tick-mark" }, null, -1)),
+            T("div", Qt, $(v.label), 1)
           ], 4))), 128))
         ])
       ]),
-      a.value.showTimeInfo !== !1 ? (P(), H("div", $t, [
-        T("div", Xt, [
-          s[2] || (s[2] = T("span", { class: "time-label" }, "Start:", -1)),
-          T("span", Yt, Y(Oe(q.value)), 1)
+      a.value.showTimeInfo !== !1 ? (k(), z("div", ea, [
+        T("div", ta, [
+          T("span", aa, $(S(t)("Widget.start")), 1),
+          T("span", sa, $(Ve(Q.value)), 1)
         ]),
-        T("div", jt, [
-          s[3] || (s[3] = T("span", { class: "time-label" }, "Ende:", -1)),
-          T("span", Zt, Y(Oe(K.value)), 1)
+        T("div", ia, [
+          T("span", na, $(S(t)("Widget.end")), 1),
+          T("span", ra, $(Ve(K.value)), 1)
         ]),
-        T("div", qt, [
-          s[4] || (s[4] = T("span", { class: "time-label" }, "Dauer:", -1)),
-          T("span", Jt, Y(je()), 1)
+        T("div", oa, [
+          T("span", la, $(S(t)("Widget.duration")), 1),
+          T("span", ua, $(l()), 1)
         ])
-      ])) : he("", !0),
-      a.value.showControls !== !1 ? (P(), H("div", Qt, [
+      ])) : Se("", !0),
+      a.value.showControls !== !1 ? (k(), z("div", da, [
         T("button", {
-          class: Rt(["play-button", { playing: y.value }]),
-          style: Ne(Xe.value),
-          onClick: N,
-          disabled: Ve.value
+          class: Vt(["play-button", { playing: x.value }]),
+          style: pe($e.value),
+          onClick: mt,
+          disabled: Xe.value
         }, [
-          y.value ? (P(), H("svg", aa, [...s[6] || (s[6] = [
+          x.value ? (k(), z("svg", ga, [...r[3] || (r[3] = [
             T("path", { d: "M6 19h4V5H6v14zm8-14v14h4V5h-4z" }, null, -1)
-          ])])) : (P(), H("svg", ta, [...s[5] || (s[5] = [
+          ])])) : (k(), z("svg", Ea, [...r[2] || (r[2] = [
             T("path", { d: "M8 5v14l11-7z" }, null, -1)
           ])]))
-        ], 14, ea),
-        T("div", ra, [
-          s[8] || (s[8] = T("label", null, "Geschwindigkeit:", -1)),
-          Dt(T("select", {
-            "onUpdate:modelValue": s[0] || (s[0] = (v) => C.value = v)
-          }, [...s[7] || (s[7] = [
-            Lt('<option value="0.25" data-v-7adbe107>0.25x</option><option value="0.5" data-v-7adbe107>0.5x</option><option value="1" data-v-7adbe107>1x</option><option value="2" data-v-7adbe107>2x</option><option value="4" data-v-7adbe107>4x</option>', 5)
+        ], 14, ca),
+        T("div", va, [
+          T("label", null, $(S(t)("Widget.speed")), 1),
+          Ct(T("select", {
+            "onUpdate:modelValue": r[0] || (r[0] = (v) => F.value = v)
+          }, [...r[4] || (r[4] = [
+            Ot('<option value="0.25" data-v-22341954>0.25x</option><option value="0.5" data-v-22341954>0.5x</option><option value="1" data-v-22341954>1x</option><option value="2" data-v-22341954>2x</option><option value="4" data-v-22341954>4x</option>', 5)
           ])], 512), [
-            [yt, C.value]
+            [xt, F.value]
           ])
         ])
-      ])) : he("", !0)
+      ])) : Se("", !0)
     ], 32));
   }
-}), gt = (L, e) => {
-  const t = L.__vccOpts || L;
-  for (const [g, a] of e)
-    t[g] = a;
+}), ht = (b, e) => {
+  const t = b.__vccOpts || b;
+  for (const [_, I] of e)
+    t[_] = I;
   return t;
-}, na = /* @__PURE__ */ gt(sa, [["__scopeId", "data-v-7adbe107"]]);
-class c extends Ot {
+}, Ta = /* @__PURE__ */ ht(Sa, [["__scopeId", "data-v-22341954"]]);
+class d extends Pt {
   static eNAME = "timelinesettings";
   static eNS_URI = "http://org.eclipse.daanse.board.app.ui.vue.widget.timeline";
   static eNS_PREFIX = "timelinesettings";
   // Singleton instance
   static _instance;
   static get eINSTANCE() {
-    return this._instance || (this._instance = new c(), this._instance.init()), this._instance;
+    return this._instance || (this._instance = new d(), this._instance.init()), this._instance;
   }
   /**
    * Literals for quick access to metaclasses and features
@@ -530,60 +529,60 @@ class c extends Ot {
     TIMELINE_SETTINGS__SHOW_TIME_INFO: null
   };
   constructor() {
-    super(), this.setName(c.eNAME), this.setNsURI(c.eNS_URI), this.setNsPrefix(c.eNS_PREFIX);
+    super(), this.setName(d.eNAME), this.setNsURI(d.eNS_URI), this.setNsPrefix(d.eNS_PREFIX);
   }
   /**
    * Initialize package contents
    */
   init() {
-    xt.INSTANCE.set(c.eNS_URI, this), this.setEFactoryInstance(We.eINSTANCE);
-    const e = new it();
-    e.setName("RelativeTimeConfig"), e.setAbstract(!1), e.setInterface(!1), this.getEClassifiers().push(e), e.setEPackage(this), c.Literals.RELATIVE_TIME_CONFIG = e;
-    const t = new R();
-    t.setName("enabled"), t.setLowerBound(0), t.setUpperBound(1), e.getEStructuralFeatures().push(t), c.Literals.RELATIVE_TIME_CONFIG__ENABLED = t;
-    const g = new R();
-    g.setName("offset"), g.setLowerBound(0), g.setUpperBound(1), e.getEStructuralFeatures().push(g), c.Literals.RELATIVE_TIME_CONFIG__OFFSET = g;
-    const a = new R();
-    a.setName("unit"), a.setLowerBound(0), a.setUpperBound(1), e.getEStructuralFeatures().push(a), c.Literals.RELATIVE_TIME_CONFIG__UNIT = a;
-    const S = new it();
-    S.setName("TimelineSettings"), S.setAbstract(!1), S.setInterface(!1), this.getEClassifiers().push(S), S.setEPackage(this), c.Literals.TIMELINE_SETTINGS = S;
-    const M = new R();
-    M.setName("timelineMin"), M.setLowerBound(0), M.setUpperBound(1), S.getEStructuralFeatures().push(M), c.Literals.TIMELINE_SETTINGS__TIMELINE_MIN = M;
-    const le = new R();
-    le.setName("timelineMax"), le.setLowerBound(0), le.setUpperBound(1), S.getEStructuralFeatures().push(le), c.Literals.TIMELINE_SETTINGS__TIMELINE_MAX = le;
-    const te = new R();
-    te.setName("rangeStart"), te.setLowerBound(0), te.setUpperBound(1), S.getEStructuralFeatures().push(te), c.Literals.TIMELINE_SETTINGS__RANGE_START = te;
-    const ae = new R();
-    ae.setName("rangeEnd"), ae.setLowerBound(0), ae.setUpperBound(1), S.getEStructuralFeatures().push(ae), c.Literals.TIMELINE_SETTINGS__RANGE_END = ae;
-    const j = new Ft();
-    j.setContainment(!0), j.setName("relativeTime"), j.setLowerBound(0), j.setUpperBound(1), S.getEStructuralFeatures().push(j), c.Literals.TIMELINE_SETTINGS__RELATIVE_TIME = j;
-    const i = new R();
-    i.setName("rangeStartVariable"), i.setLowerBound(0), i.setUpperBound(1), S.getEStructuralFeatures().push(i), c.Literals.TIMELINE_SETTINGS__RANGE_START_VARIABLE = i;
-    const O = new R();
-    O.setName("rangeEndVariable"), O.setLowerBound(0), O.setUpperBound(1), S.getEStructuralFeatures().push(O), c.Literals.TIMELINE_SETTINGS__RANGE_END_VARIABLE = O;
-    const m = new R();
-    m.setName("startTime"), m.setLowerBound(0), m.setUpperBound(1), S.getEStructuralFeatures().push(m), c.Literals.TIMELINE_SETTINGS__START_TIME = m;
-    const U = new R();
-    U.setName("endTime"), U.setLowerBound(0), U.setUpperBound(1), S.getEStructuralFeatures().push(U), c.Literals.TIMELINE_SETTINGS__END_TIME = U;
-    const W = new R();
-    W.setName("currentTime"), W.setLowerBound(0), W.setUpperBound(1), S.getEStructuralFeatures().push(W), c.Literals.TIMELINE_SETTINGS__CURRENT_TIME = W;
-    const y = new R();
-    y.setName("stepSize"), y.setLowerBound(0), y.setUpperBound(1), S.getEStructuralFeatures().push(y), c.Literals.TIMELINE_SETTINGS__STEP_SIZE = y;
-    const C = new R();
-    C.setName("playbackSpeed"), C.setLowerBound(0), C.setUpperBound(1), S.getEStructuralFeatures().push(C), c.Literals.TIMELINE_SETTINGS__PLAYBACK_SPEED = C;
-    const A = new R();
-    A.setName("autoPlay"), A.setLowerBound(0), A.setUpperBound(1), S.getEStructuralFeatures().push(A), c.Literals.TIMELINE_SETTINGS__AUTO_PLAY = A;
-    const Z = new R();
-    Z.setName("fixStartKnob"), Z.setLowerBound(0), Z.setUpperBound(1), S.getEStructuralFeatures().push(Z), c.Literals.TIMELINE_SETTINGS__FIX_START_KNOB = Z;
-    const x = new R();
-    x.setName("showControls"), x.setLowerBound(0), x.setUpperBound(1), S.getEStructuralFeatures().push(x), c.Literals.TIMELINE_SETTINGS__SHOW_CONTROLS = x;
-    const F = new R();
-    F.setName("rangeStripColor"), F.setLowerBound(0), F.setUpperBound(1), S.getEStructuralFeatures().push(F), c.Literals.TIMELINE_SETTINGS__RANGE_STRIP_COLOR = F;
-    const V = new R();
-    V.setName("showTimeInfo"), V.setLowerBound(0), V.setUpperBound(1), S.getEStructuralFeatures().push(V), c.Literals.TIMELINE_SETTINGS__SHOW_TIME_INFO = V, c.Literals.RELATIVE_TIME_CONFIG__ENABLED.setEType(D().getEClassifier("EBoolean")), c.Literals.RELATIVE_TIME_CONFIG__OFFSET.setEType(D().getEClassifier("EInt")), c.Literals.RELATIVE_TIME_CONFIG__UNIT.setEType(D().getEClassifier("EString")), c.Literals.TIMELINE_SETTINGS__TIMELINE_MIN.setEType(D().getEClassifier("EString")), c.Literals.TIMELINE_SETTINGS__TIMELINE_MAX.setEType(D().getEClassifier("EString")), c.Literals.TIMELINE_SETTINGS__RANGE_START.setEType(D().getEClassifier("EString")), c.Literals.TIMELINE_SETTINGS__RANGE_END.setEType(D().getEClassifier("EString")), c.Literals.TIMELINE_SETTINGS__RELATIVE_TIME.setEType(c.Literals.RELATIVE_TIME_CONFIG), c.Literals.TIMELINE_SETTINGS__RANGE_START_VARIABLE.setEType(D().getEClassifier("EString")), c.Literals.TIMELINE_SETTINGS__RANGE_END_VARIABLE.setEType(D().getEClassifier("EString")), c.Literals.TIMELINE_SETTINGS__START_TIME.setEType(D().getEClassifier("EString")), c.Literals.TIMELINE_SETTINGS__END_TIME.setEType(D().getEClassifier("EString")), c.Literals.TIMELINE_SETTINGS__CURRENT_TIME.setEType(D().getEClassifier("EString")), c.Literals.TIMELINE_SETTINGS__STEP_SIZE.setEType(D().getEClassifier("EString")), c.Literals.TIMELINE_SETTINGS__PLAYBACK_SPEED.setEType(D().getEClassifier("EDouble")), c.Literals.TIMELINE_SETTINGS__AUTO_PLAY.setEType(D().getEClassifier("EBoolean")), c.Literals.TIMELINE_SETTINGS__FIX_START_KNOB.setEType(D().getEClassifier("EBoolean")), c.Literals.TIMELINE_SETTINGS__SHOW_CONTROLS.setEType(D().getEClassifier("EBoolean")), c.Literals.TIMELINE_SETTINGS__RANGE_STRIP_COLOR.setEType(D().getEClassifier("EString")), c.Literals.TIMELINE_SETTINGS__SHOW_TIME_INFO.setEType(D().getEClassifier("EBoolean"));
+    Ut.INSTANCE.set(d.eNS_URI, this), this.setEFactoryInstance(Ue.eINSTANCE);
+    const e = new rt();
+    e.setName("RelativeTimeConfig"), e.setAbstract(!1), e.setInterface(!1), this.getEClassifiers().push(e), e.setEPackage(this), d.Literals.RELATIVE_TIME_CONFIG = e;
+    const t = new A();
+    t.setName("enabled"), t.setLowerBound(0), t.setUpperBound(1), e.getEStructuralFeatures().push(t), d.Literals.RELATIVE_TIME_CONFIG__ENABLED = t;
+    const _ = new A();
+    _.setName("offset"), _.setLowerBound(0), _.setUpperBound(1), e.getEStructuralFeatures().push(_), d.Literals.RELATIVE_TIME_CONFIG__OFFSET = _;
+    const I = new A();
+    I.setName("unit"), I.setLowerBound(0), I.setUpperBound(1), e.getEStructuralFeatures().push(I), d.Literals.RELATIVE_TIME_CONFIG__UNIT = I;
+    const E = new rt();
+    E.setName("TimelineSettings"), E.setAbstract(!1), E.setInterface(!1), this.getEClassifiers().push(E), E.setEPackage(this), d.Literals.TIMELINE_SETTINGS = E;
+    const a = new A();
+    a.setName("timelineMin"), a.setLowerBound(0), a.setUpperBound(1), E.getEStructuralFeatures().push(a), d.Literals.TIMELINE_SETTINGS__TIMELINE_MIN = a;
+    const ae = new A();
+    ae.setName("timelineMax"), ae.setLowerBound(0), ae.setUpperBound(1), E.getEStructuralFeatures().push(ae), d.Literals.TIMELINE_SETTINGS__TIMELINE_MAX = ae;
+    const se = new A();
+    se.setName("rangeStart"), se.setLowerBound(0), se.setUpperBound(1), E.getEStructuralFeatures().push(se), d.Literals.TIMELINE_SETTINGS__RANGE_START = se;
+    const oe = new A();
+    oe.setName("rangeEnd"), oe.setLowerBound(0), oe.setUpperBound(1), E.getEStructuralFeatures().push(oe), d.Literals.TIMELINE_SETTINGS__RANGE_END = oe;
+    const i = new Wt();
+    i.setContainment(!0), i.setName("relativeTime"), i.setLowerBound(0), i.setUpperBound(1), E.getEStructuralFeatures().push(i), d.Literals.TIMELINE_SETTINGS__RELATIVE_TIME = i;
+    const O = new A();
+    O.setName("rangeStartVariable"), O.setLowerBound(0), O.setUpperBound(1), E.getEStructuralFeatures().push(O), d.Literals.TIMELINE_SETTINGS__RANGE_START_VARIABLE = O;
+    const W = new A();
+    W.setName("rangeEndVariable"), W.setLowerBound(0), W.setUpperBound(1), E.getEStructuralFeatures().push(W), d.Literals.TIMELINE_SETTINGS__RANGE_END_VARIABLE = W;
+    const H = new A();
+    H.setName("startTime"), H.setLowerBound(0), H.setUpperBound(1), E.getEStructuralFeatures().push(H), d.Literals.TIMELINE_SETTINGS__START_TIME = H;
+    const X = new A();
+    X.setName("endTime"), X.setLowerBound(0), X.setUpperBound(1), E.getEStructuralFeatures().push(X), d.Literals.TIMELINE_SETTINGS__END_TIME = X;
+    const m = new A();
+    m.setName("currentTime"), m.setLowerBound(0), m.setUpperBound(1), E.getEStructuralFeatures().push(m), d.Literals.TIMELINE_SETTINGS__CURRENT_TIME = m;
+    const P = new A();
+    P.setName("stepSize"), P.setLowerBound(0), P.setUpperBound(1), E.getEStructuralFeatures().push(P), d.Literals.TIMELINE_SETTINGS__STEP_SIZE = P;
+    const Y = new A();
+    Y.setName("playbackSpeed"), Y.setLowerBound(0), Y.setUpperBound(1), E.getEStructuralFeatures().push(Y), d.Literals.TIMELINE_SETTINGS__PLAYBACK_SPEED = Y;
+    const x = new A();
+    x.setName("autoPlay"), x.setLowerBound(0), x.setUpperBound(1), E.getEStructuralFeatures().push(x), d.Literals.TIMELINE_SETTINGS__AUTO_PLAY = x;
+    const F = new A();
+    F.setName("fixStartKnob"), F.setLowerBound(0), F.setUpperBound(1), E.getEStructuralFeatures().push(F), d.Literals.TIMELINE_SETTINGS__FIX_START_KNOB = F;
+    const R = new A();
+    R.setName("showControls"), R.setLowerBound(0), R.setUpperBound(1), E.getEStructuralFeatures().push(R), d.Literals.TIMELINE_SETTINGS__SHOW_CONTROLS = R;
+    const Z = new A();
+    Z.setName("rangeStripColor"), Z.setLowerBound(0), Z.setUpperBound(1), E.getEStructuralFeatures().push(Z), d.Literals.TIMELINE_SETTINGS__RANGE_STRIP_COLOR = Z;
+    const G = new A();
+    G.setName("showTimeInfo"), G.setLowerBound(0), G.setUpperBound(1), E.getEStructuralFeatures().push(G), d.Literals.TIMELINE_SETTINGS__SHOW_TIME_INFO = G, d.Literals.RELATIVE_TIME_CONFIG__ENABLED.setEType(V().getEClassifier("EBoolean")), d.Literals.RELATIVE_TIME_CONFIG__OFFSET.setEType(V().getEClassifier("EInt")), d.Literals.RELATIVE_TIME_CONFIG__UNIT.setEType(V().getEClassifier("EString")), d.Literals.TIMELINE_SETTINGS__TIMELINE_MIN.setEType(V().getEClassifier("EString")), d.Literals.TIMELINE_SETTINGS__TIMELINE_MAX.setEType(V().getEClassifier("EString")), d.Literals.TIMELINE_SETTINGS__RANGE_START.setEType(V().getEClassifier("EString")), d.Literals.TIMELINE_SETTINGS__RANGE_END.setEType(V().getEClassifier("EString")), d.Literals.TIMELINE_SETTINGS__RELATIVE_TIME.setEType(d.Literals.RELATIVE_TIME_CONFIG), d.Literals.TIMELINE_SETTINGS__RANGE_START_VARIABLE.setEType(V().getEClassifier("EString")), d.Literals.TIMELINE_SETTINGS__RANGE_END_VARIABLE.setEType(V().getEClassifier("EString")), d.Literals.TIMELINE_SETTINGS__START_TIME.setEType(V().getEClassifier("EString")), d.Literals.TIMELINE_SETTINGS__END_TIME.setEType(V().getEClassifier("EString")), d.Literals.TIMELINE_SETTINGS__CURRENT_TIME.setEType(V().getEClassifier("EString")), d.Literals.TIMELINE_SETTINGS__STEP_SIZE.setEType(V().getEClassifier("EString")), d.Literals.TIMELINE_SETTINGS__PLAYBACK_SPEED.setEType(V().getEClassifier("EDouble")), d.Literals.TIMELINE_SETTINGS__AUTO_PLAY.setEType(V().getEClassifier("EBoolean")), d.Literals.TIMELINE_SETTINGS__FIX_START_KNOB.setEType(V().getEClassifier("EBoolean")), d.Literals.TIMELINE_SETTINGS__SHOW_CONTROLS.setEType(V().getEClassifier("EBoolean")), d.Literals.TIMELINE_SETTINGS__RANGE_STRIP_COLOR.setEType(V().getEClassifier("EString")), d.Literals.TIMELINE_SETTINGS__SHOW_TIME_INFO.setEType(V().getEClassifier("EBoolean"));
   }
 }
-class b extends vt {
+class y extends Tt {
   // Feature ID Constants (eLiterals)
   static ENABLED = 0;
   static OFFSET = 1;
@@ -596,7 +595,7 @@ class b extends vt {
    * Returns the EClass of this object
    */
   eClass() {
-    return c.Literals.RELATIVE_TIME_CONFIG;
+    return d.Literals.RELATIVE_TIME_CONFIG;
   }
   // Getters and Setters
   get enabled() {
@@ -608,14 +607,14 @@ class b extends vt {
       getNotifier: () => this,
       getEventType: () => 1,
       // SET
-      getFeature: () => this.eClass().getEStructuralFeature(b.ENABLED),
+      getFeature: () => this.eClass().getEStructuralFeature(y.ENABLED),
       getOldValue: () => t,
       getNewValue: () => e,
       getPosition: () => -1,
       wasSet: () => !0,
       isTouch: () => !1,
       isReset: () => !1,
-      getFeatureID: () => b.ENABLED,
+      getFeatureID: () => y.ENABLED,
       merge: () => !1
     });
   }
@@ -628,14 +627,14 @@ class b extends vt {
       getNotifier: () => this,
       getEventType: () => 1,
       // SET
-      getFeature: () => this.eClass().getEStructuralFeature(b.OFFSET),
+      getFeature: () => this.eClass().getEStructuralFeature(y.OFFSET),
       getOldValue: () => t,
       getNewValue: () => e,
       getPosition: () => -1,
       wasSet: () => !0,
       isTouch: () => !1,
       isReset: () => !1,
-      getFeatureID: () => b.OFFSET,
+      getFeatureID: () => y.OFFSET,
       merge: () => !1
     });
   }
@@ -648,14 +647,14 @@ class b extends vt {
       getNotifier: () => this,
       getEventType: () => 1,
       // SET
-      getFeature: () => this.eClass().getEStructuralFeature(b.UNIT),
+      getFeature: () => this.eClass().getEStructuralFeature(y.UNIT),
       getOldValue: () => t,
       getNewValue: () => e,
       getPosition: () => -1,
       wasSet: () => !0,
       isTouch: () => !1,
       isReset: () => !1,
-      getFeatureID: () => b.UNIT,
+      getFeatureID: () => y.UNIT,
       merge: () => !1
     });
   }
@@ -665,11 +664,11 @@ class b extends vt {
    */
   eGet(e) {
     switch (this.eClass().getFeatureID(e)) {
-      case b.ENABLED:
+      case y.ENABLED:
         return this.enabled;
-      case b.OFFSET:
+      case y.OFFSET:
         return this.offset;
-      case b.UNIT:
+      case y.UNIT:
         return this.unit;
       default:
         return super.eGet(e);
@@ -680,13 +679,13 @@ class b extends vt {
    */
   eSet(e, t) {
     switch (this.eClass().getFeatureID(e)) {
-      case b.ENABLED:
+      case y.ENABLED:
         this.enabled = t, super.eSet(e, t);
         break;
-      case b.OFFSET:
+      case y.OFFSET:
         this.offset = t, super.eSet(e, t);
         break;
-      case b.UNIT:
+      case y.UNIT:
         this.unit = t, super.eSet(e, t);
         break;
       default:
@@ -698,11 +697,11 @@ class b extends vt {
    */
   eIsSet(e) {
     switch (this.eClass().getFeatureID(e)) {
-      case b.ENABLED:
+      case y.ENABLED:
         return this._enabled !== !1;
-      case b.OFFSET:
+      case y.OFFSET:
         return this._offset !== 24;
-      case b.UNIT:
+      case y.UNIT:
         return this._unit !== "hours";
       default:
         return super.eIsSet(e);
@@ -713,13 +712,13 @@ class b extends vt {
    */
   eUnset(e) {
     switch (this.eClass().getFeatureID(e)) {
-      case b.ENABLED:
+      case y.ENABLED:
         this._enabled = !1;
         return;
-      case b.OFFSET:
+      case y.OFFSET:
         this._offset = 24;
         return;
-      case b.UNIT:
+      case y.UNIT:
         this._unit = "hours";
         return;
       default:
@@ -741,7 +740,7 @@ class b extends vt {
     };
   }
 }
-class r extends vt {
+class s extends Tt {
   // Feature ID Constants (eLiterals)
   static TIMELINE_MIN = 0;
   static TIMELINE_MAX = 1;
@@ -782,7 +781,7 @@ class r extends vt {
    * Returns the EClass of this object
    */
   eClass() {
-    return c.Literals.TIMELINE_SETTINGS;
+    return d.Literals.TIMELINE_SETTINGS;
   }
   // Getters and Setters
   get timelineMin() {
@@ -794,14 +793,14 @@ class r extends vt {
       getNotifier: () => this,
       getEventType: () => 1,
       // SET
-      getFeature: () => this.eClass().getEStructuralFeature(r.TIMELINE_MIN),
+      getFeature: () => this.eClass().getEStructuralFeature(s.TIMELINE_MIN),
       getOldValue: () => t,
       getNewValue: () => e,
       getPosition: () => -1,
       wasSet: () => !0,
       isTouch: () => !1,
       isReset: () => !1,
-      getFeatureID: () => r.TIMELINE_MIN,
+      getFeatureID: () => s.TIMELINE_MIN,
       merge: () => !1
     });
   }
@@ -814,14 +813,14 @@ class r extends vt {
       getNotifier: () => this,
       getEventType: () => 1,
       // SET
-      getFeature: () => this.eClass().getEStructuralFeature(r.TIMELINE_MAX),
+      getFeature: () => this.eClass().getEStructuralFeature(s.TIMELINE_MAX),
       getOldValue: () => t,
       getNewValue: () => e,
       getPosition: () => -1,
       wasSet: () => !0,
       isTouch: () => !1,
       isReset: () => !1,
-      getFeatureID: () => r.TIMELINE_MAX,
+      getFeatureID: () => s.TIMELINE_MAX,
       merge: () => !1
     });
   }
@@ -834,14 +833,14 @@ class r extends vt {
       getNotifier: () => this,
       getEventType: () => 1,
       // SET
-      getFeature: () => this.eClass().getEStructuralFeature(r.RANGE_START),
+      getFeature: () => this.eClass().getEStructuralFeature(s.RANGE_START),
       getOldValue: () => t,
       getNewValue: () => e,
       getPosition: () => -1,
       wasSet: () => !0,
       isTouch: () => !1,
       isReset: () => !1,
-      getFeatureID: () => r.RANGE_START,
+      getFeatureID: () => s.RANGE_START,
       merge: () => !1
     });
   }
@@ -854,14 +853,14 @@ class r extends vt {
       getNotifier: () => this,
       getEventType: () => 1,
       // SET
-      getFeature: () => this.eClass().getEStructuralFeature(r.RANGE_END),
+      getFeature: () => this.eClass().getEStructuralFeature(s.RANGE_END),
       getOldValue: () => t,
       getNewValue: () => e,
       getPosition: () => -1,
       wasSet: () => !0,
       isTouch: () => !1,
       isReset: () => !1,
-      getFeatureID: () => r.RANGE_END,
+      getFeatureID: () => s.RANGE_END,
       merge: () => !1
     });
   }
@@ -874,14 +873,14 @@ class r extends vt {
       getNotifier: () => this,
       getEventType: () => 1,
       // SET
-      getFeature: () => this.eClass().getEStructuralFeature(r.RELATIVE_TIME),
+      getFeature: () => this.eClass().getEStructuralFeature(s.RELATIVE_TIME),
       getOldValue: () => t,
       getNewValue: () => e,
       getPosition: () => -1,
       wasSet: () => !0,
       isTouch: () => !1,
       isReset: () => !1,
-      getFeatureID: () => r.RELATIVE_TIME,
+      getFeatureID: () => s.RELATIVE_TIME,
       merge: () => !1
     });
   }
@@ -894,14 +893,14 @@ class r extends vt {
       getNotifier: () => this,
       getEventType: () => 1,
       // SET
-      getFeature: () => this.eClass().getEStructuralFeature(r.RANGE_START_VARIABLE),
+      getFeature: () => this.eClass().getEStructuralFeature(s.RANGE_START_VARIABLE),
       getOldValue: () => t,
       getNewValue: () => e,
       getPosition: () => -1,
       wasSet: () => !0,
       isTouch: () => !1,
       isReset: () => !1,
-      getFeatureID: () => r.RANGE_START_VARIABLE,
+      getFeatureID: () => s.RANGE_START_VARIABLE,
       merge: () => !1
     });
   }
@@ -914,14 +913,14 @@ class r extends vt {
       getNotifier: () => this,
       getEventType: () => 1,
       // SET
-      getFeature: () => this.eClass().getEStructuralFeature(r.RANGE_END_VARIABLE),
+      getFeature: () => this.eClass().getEStructuralFeature(s.RANGE_END_VARIABLE),
       getOldValue: () => t,
       getNewValue: () => e,
       getPosition: () => -1,
       wasSet: () => !0,
       isTouch: () => !1,
       isReset: () => !1,
-      getFeatureID: () => r.RANGE_END_VARIABLE,
+      getFeatureID: () => s.RANGE_END_VARIABLE,
       merge: () => !1
     });
   }
@@ -934,14 +933,14 @@ class r extends vt {
       getNotifier: () => this,
       getEventType: () => 1,
       // SET
-      getFeature: () => this.eClass().getEStructuralFeature(r.START_TIME),
+      getFeature: () => this.eClass().getEStructuralFeature(s.START_TIME),
       getOldValue: () => t,
       getNewValue: () => e,
       getPosition: () => -1,
       wasSet: () => !0,
       isTouch: () => !1,
       isReset: () => !1,
-      getFeatureID: () => r.START_TIME,
+      getFeatureID: () => s.START_TIME,
       merge: () => !1
     });
   }
@@ -954,14 +953,14 @@ class r extends vt {
       getNotifier: () => this,
       getEventType: () => 1,
       // SET
-      getFeature: () => this.eClass().getEStructuralFeature(r.END_TIME),
+      getFeature: () => this.eClass().getEStructuralFeature(s.END_TIME),
       getOldValue: () => t,
       getNewValue: () => e,
       getPosition: () => -1,
       wasSet: () => !0,
       isTouch: () => !1,
       isReset: () => !1,
-      getFeatureID: () => r.END_TIME,
+      getFeatureID: () => s.END_TIME,
       merge: () => !1
     });
   }
@@ -974,14 +973,14 @@ class r extends vt {
       getNotifier: () => this,
       getEventType: () => 1,
       // SET
-      getFeature: () => this.eClass().getEStructuralFeature(r.CURRENT_TIME),
+      getFeature: () => this.eClass().getEStructuralFeature(s.CURRENT_TIME),
       getOldValue: () => t,
       getNewValue: () => e,
       getPosition: () => -1,
       wasSet: () => !0,
       isTouch: () => !1,
       isReset: () => !1,
-      getFeatureID: () => r.CURRENT_TIME,
+      getFeatureID: () => s.CURRENT_TIME,
       merge: () => !1
     });
   }
@@ -994,14 +993,14 @@ class r extends vt {
       getNotifier: () => this,
       getEventType: () => 1,
       // SET
-      getFeature: () => this.eClass().getEStructuralFeature(r.STEP_SIZE),
+      getFeature: () => this.eClass().getEStructuralFeature(s.STEP_SIZE),
       getOldValue: () => t,
       getNewValue: () => e,
       getPosition: () => -1,
       wasSet: () => !0,
       isTouch: () => !1,
       isReset: () => !1,
-      getFeatureID: () => r.STEP_SIZE,
+      getFeatureID: () => s.STEP_SIZE,
       merge: () => !1
     });
   }
@@ -1014,14 +1013,14 @@ class r extends vt {
       getNotifier: () => this,
       getEventType: () => 1,
       // SET
-      getFeature: () => this.eClass().getEStructuralFeature(r.PLAYBACK_SPEED),
+      getFeature: () => this.eClass().getEStructuralFeature(s.PLAYBACK_SPEED),
       getOldValue: () => t,
       getNewValue: () => e,
       getPosition: () => -1,
       wasSet: () => !0,
       isTouch: () => !1,
       isReset: () => !1,
-      getFeatureID: () => r.PLAYBACK_SPEED,
+      getFeatureID: () => s.PLAYBACK_SPEED,
       merge: () => !1
     });
   }
@@ -1034,14 +1033,14 @@ class r extends vt {
       getNotifier: () => this,
       getEventType: () => 1,
       // SET
-      getFeature: () => this.eClass().getEStructuralFeature(r.AUTO_PLAY),
+      getFeature: () => this.eClass().getEStructuralFeature(s.AUTO_PLAY),
       getOldValue: () => t,
       getNewValue: () => e,
       getPosition: () => -1,
       wasSet: () => !0,
       isTouch: () => !1,
       isReset: () => !1,
-      getFeatureID: () => r.AUTO_PLAY,
+      getFeatureID: () => s.AUTO_PLAY,
       merge: () => !1
     });
   }
@@ -1054,14 +1053,14 @@ class r extends vt {
       getNotifier: () => this,
       getEventType: () => 1,
       // SET
-      getFeature: () => this.eClass().getEStructuralFeature(r.FIX_START_KNOB),
+      getFeature: () => this.eClass().getEStructuralFeature(s.FIX_START_KNOB),
       getOldValue: () => t,
       getNewValue: () => e,
       getPosition: () => -1,
       wasSet: () => !0,
       isTouch: () => !1,
       isReset: () => !1,
-      getFeatureID: () => r.FIX_START_KNOB,
+      getFeatureID: () => s.FIX_START_KNOB,
       merge: () => !1
     });
   }
@@ -1074,14 +1073,14 @@ class r extends vt {
       getNotifier: () => this,
       getEventType: () => 1,
       // SET
-      getFeature: () => this.eClass().getEStructuralFeature(r.SHOW_CONTROLS),
+      getFeature: () => this.eClass().getEStructuralFeature(s.SHOW_CONTROLS),
       getOldValue: () => t,
       getNewValue: () => e,
       getPosition: () => -1,
       wasSet: () => !0,
       isTouch: () => !1,
       isReset: () => !1,
-      getFeatureID: () => r.SHOW_CONTROLS,
+      getFeatureID: () => s.SHOW_CONTROLS,
       merge: () => !1
     });
   }
@@ -1094,14 +1093,14 @@ class r extends vt {
       getNotifier: () => this,
       getEventType: () => 1,
       // SET
-      getFeature: () => this.eClass().getEStructuralFeature(r.RANGE_STRIP_COLOR),
+      getFeature: () => this.eClass().getEStructuralFeature(s.RANGE_STRIP_COLOR),
       getOldValue: () => t,
       getNewValue: () => e,
       getPosition: () => -1,
       wasSet: () => !0,
       isTouch: () => !1,
       isReset: () => !1,
-      getFeatureID: () => r.RANGE_STRIP_COLOR,
+      getFeatureID: () => s.RANGE_STRIP_COLOR,
       merge: () => !1
     });
   }
@@ -1114,14 +1113,14 @@ class r extends vt {
       getNotifier: () => this,
       getEventType: () => 1,
       // SET
-      getFeature: () => this.eClass().getEStructuralFeature(r.SHOW_TIME_INFO),
+      getFeature: () => this.eClass().getEStructuralFeature(s.SHOW_TIME_INFO),
       getOldValue: () => t,
       getNewValue: () => e,
       getPosition: () => -1,
       wasSet: () => !0,
       isTouch: () => !1,
       isReset: () => !1,
-      getFeatureID: () => r.SHOW_TIME_INFO,
+      getFeatureID: () => s.SHOW_TIME_INFO,
       merge: () => !1
     });
   }
@@ -1131,39 +1130,39 @@ class r extends vt {
    */
   eGet(e) {
     switch (this.eClass().getFeatureID(e)) {
-      case r.TIMELINE_MIN:
+      case s.TIMELINE_MIN:
         return this.timelineMin;
-      case r.TIMELINE_MAX:
+      case s.TIMELINE_MAX:
         return this.timelineMax;
-      case r.RANGE_START:
+      case s.RANGE_START:
         return this.rangeStart;
-      case r.RANGE_END:
+      case s.RANGE_END:
         return this.rangeEnd;
-      case r.RELATIVE_TIME:
+      case s.RELATIVE_TIME:
         return this.relativeTime;
-      case r.RANGE_START_VARIABLE:
+      case s.RANGE_START_VARIABLE:
         return this.rangeStartVariable;
-      case r.RANGE_END_VARIABLE:
+      case s.RANGE_END_VARIABLE:
         return this.rangeEndVariable;
-      case r.START_TIME:
+      case s.START_TIME:
         return this.startTime;
-      case r.END_TIME:
+      case s.END_TIME:
         return this.endTime;
-      case r.CURRENT_TIME:
+      case s.CURRENT_TIME:
         return this.currentTime;
-      case r.STEP_SIZE:
+      case s.STEP_SIZE:
         return this.stepSize;
-      case r.PLAYBACK_SPEED:
+      case s.PLAYBACK_SPEED:
         return this.playbackSpeed;
-      case r.AUTO_PLAY:
+      case s.AUTO_PLAY:
         return this.autoPlay;
-      case r.FIX_START_KNOB:
+      case s.FIX_START_KNOB:
         return this.fixStartKnob;
-      case r.SHOW_CONTROLS:
+      case s.SHOW_CONTROLS:
         return this.showControls;
-      case r.RANGE_STRIP_COLOR:
+      case s.RANGE_STRIP_COLOR:
         return this.rangeStripColor;
-      case r.SHOW_TIME_INFO:
+      case s.SHOW_TIME_INFO:
         return this.showTimeInfo;
       default:
         return super.eGet(e);
@@ -1174,55 +1173,55 @@ class r extends vt {
    */
   eSet(e, t) {
     switch (this.eClass().getFeatureID(e)) {
-      case r.TIMELINE_MIN:
+      case s.TIMELINE_MIN:
         this.timelineMin = t, super.eSet(e, t);
         break;
-      case r.TIMELINE_MAX:
+      case s.TIMELINE_MAX:
         this.timelineMax = t, super.eSet(e, t);
         break;
-      case r.RANGE_START:
+      case s.RANGE_START:
         this.rangeStart = t, super.eSet(e, t);
         break;
-      case r.RANGE_END:
+      case s.RANGE_END:
         this.rangeEnd = t, super.eSet(e, t);
         break;
-      case r.RELATIVE_TIME:
+      case s.RELATIVE_TIME:
         this.relativeTime = t, super.eSet(e, t);
         break;
-      case r.RANGE_START_VARIABLE:
+      case s.RANGE_START_VARIABLE:
         this.rangeStartVariable = t, super.eSet(e, t);
         break;
-      case r.RANGE_END_VARIABLE:
+      case s.RANGE_END_VARIABLE:
         this.rangeEndVariable = t, super.eSet(e, t);
         break;
-      case r.START_TIME:
+      case s.START_TIME:
         this.startTime = t, super.eSet(e, t);
         break;
-      case r.END_TIME:
+      case s.END_TIME:
         this.endTime = t, super.eSet(e, t);
         break;
-      case r.CURRENT_TIME:
+      case s.CURRENT_TIME:
         this.currentTime = t, super.eSet(e, t);
         break;
-      case r.STEP_SIZE:
+      case s.STEP_SIZE:
         this.stepSize = t, super.eSet(e, t);
         break;
-      case r.PLAYBACK_SPEED:
+      case s.PLAYBACK_SPEED:
         this.playbackSpeed = t, super.eSet(e, t);
         break;
-      case r.AUTO_PLAY:
+      case s.AUTO_PLAY:
         this.autoPlay = t, super.eSet(e, t);
         break;
-      case r.FIX_START_KNOB:
+      case s.FIX_START_KNOB:
         this.fixStartKnob = t, super.eSet(e, t);
         break;
-      case r.SHOW_CONTROLS:
+      case s.SHOW_CONTROLS:
         this.showControls = t, super.eSet(e, t);
         break;
-      case r.RANGE_STRIP_COLOR:
+      case s.RANGE_STRIP_COLOR:
         this.rangeStripColor = t, super.eSet(e, t);
         break;
-      case r.SHOW_TIME_INFO:
+      case s.SHOW_TIME_INFO:
         this.showTimeInfo = t, super.eSet(e, t);
         break;
       default:
@@ -1234,39 +1233,39 @@ class r extends vt {
    */
   eIsSet(e) {
     switch (this.eClass().getFeatureID(e)) {
-      case r.TIMELINE_MIN:
+      case s.TIMELINE_MIN:
         return this._timelineMin !== void 0;
-      case r.TIMELINE_MAX:
+      case s.TIMELINE_MAX:
         return this._timelineMax !== void 0;
-      case r.RANGE_START:
+      case s.RANGE_START:
         return this._rangeStart !== void 0;
-      case r.RANGE_END:
+      case s.RANGE_END:
         return this._rangeEnd !== void 0;
-      case r.RELATIVE_TIME:
+      case s.RELATIVE_TIME:
         return this._relativeTime !== void 0;
-      case r.RANGE_START_VARIABLE:
+      case s.RANGE_START_VARIABLE:
         return this._rangeStartVariable !== void 0;
-      case r.RANGE_END_VARIABLE:
+      case s.RANGE_END_VARIABLE:
         return this._rangeEndVariable !== void 0;
-      case r.START_TIME:
+      case s.START_TIME:
         return this._startTime !== void 0;
-      case r.END_TIME:
+      case s.END_TIME:
         return this._endTime !== void 0;
-      case r.CURRENT_TIME:
+      case s.CURRENT_TIME:
         return this._currentTime !== void 0;
-      case r.STEP_SIZE:
+      case s.STEP_SIZE:
         return this._stepSize !== "hour";
-      case r.PLAYBACK_SPEED:
+      case s.PLAYBACK_SPEED:
         return this._playbackSpeed !== 1;
-      case r.AUTO_PLAY:
+      case s.AUTO_PLAY:
         return this._autoPlay !== !1;
-      case r.FIX_START_KNOB:
+      case s.FIX_START_KNOB:
         return this._fixStartKnob !== !1;
-      case r.SHOW_CONTROLS:
+      case s.SHOW_CONTROLS:
         return this._showControls !== !0;
-      case r.RANGE_STRIP_COLOR:
+      case s.RANGE_STRIP_COLOR:
         return this._rangeStripColor !== "#d17600";
-      case r.SHOW_TIME_INFO:
+      case s.SHOW_TIME_INFO:
         return this._showTimeInfo !== !0;
       default:
         return super.eIsSet(e);
@@ -1277,55 +1276,55 @@ class r extends vt {
    */
   eUnset(e) {
     switch (this.eClass().getFeatureID(e)) {
-      case r.TIMELINE_MIN:
+      case s.TIMELINE_MIN:
         this._timelineMin = void 0;
         return;
-      case r.TIMELINE_MAX:
+      case s.TIMELINE_MAX:
         this._timelineMax = void 0;
         return;
-      case r.RANGE_START:
+      case s.RANGE_START:
         this._rangeStart = void 0;
         return;
-      case r.RANGE_END:
+      case s.RANGE_END:
         this._rangeEnd = void 0;
         return;
-      case r.RELATIVE_TIME:
+      case s.RELATIVE_TIME:
         this._relativeTime = void 0;
         return;
-      case r.RANGE_START_VARIABLE:
+      case s.RANGE_START_VARIABLE:
         this._rangeStartVariable = void 0;
         return;
-      case r.RANGE_END_VARIABLE:
+      case s.RANGE_END_VARIABLE:
         this._rangeEndVariable = void 0;
         return;
-      case r.START_TIME:
+      case s.START_TIME:
         this._startTime = void 0;
         return;
-      case r.END_TIME:
+      case s.END_TIME:
         this._endTime = void 0;
         return;
-      case r.CURRENT_TIME:
+      case s.CURRENT_TIME:
         this._currentTime = void 0;
         return;
-      case r.STEP_SIZE:
+      case s.STEP_SIZE:
         this._stepSize = "hour";
         return;
-      case r.PLAYBACK_SPEED:
+      case s.PLAYBACK_SPEED:
         this._playbackSpeed = 1;
         return;
-      case r.AUTO_PLAY:
+      case s.AUTO_PLAY:
         this._autoPlay = !1;
         return;
-      case r.FIX_START_KNOB:
+      case s.FIX_START_KNOB:
         this._fixStartKnob = !1;
         return;
-      case r.SHOW_CONTROLS:
+      case s.SHOW_CONTROLS:
         this._showControls = !0;
         return;
-      case r.RANGE_STRIP_COLOR:
+      case s.RANGE_STRIP_COLOR:
         this._rangeStripColor = "#d17600";
         return;
-      case r.SHOW_TIME_INFO:
+      case s.SHOW_TIME_INFO:
         this._showTimeInfo = !0;
         return;
       default:
@@ -1361,26 +1360,26 @@ class r extends vt {
     };
   }
 }
-class We extends Gt {
+class Ue extends Kt {
   // Lazy singleton instance
   static _instance;
   static get eINSTANCE() {
-    return this._instance || (this._instance = new We()), this._instance;
+    return this._instance || (this._instance = new Ue()), this._instance;
   }
   constructor() {
-    super(), this.setEPackage(c.eINSTANCE);
+    super(), this.setEPackage(d.eINSTANCE);
   }
   /**
    * Create a new RelativeTimeConfig instance
    */
   createRelativeTimeConfig() {
-    return new b();
+    return new y();
   }
   /**
    * Create a new TimelineSettings instance
    */
   createTimelineSettings() {
-    return new r();
+    return new s();
   }
   /**
    * Create an instance of the given class
@@ -1396,31 +1395,28 @@ class We extends Gt {
     }
   }
 }
-const ia = {
-  class: "settings-section",
-  "data-section": "Zeitraum"
-}, la = { class: "settings-container" }, oa = { class: "setting-group" }, ua = {
+const ha = ["data-section"], fa = { class: "settings-container" }, ma = { class: "setting-group" }, pa = {
   key: 0,
   class: "setting-group"
-}, ca = { class: "relative-time-config" }, da = { class: "relative-time-row" }, Ea = { class: "relative-time-preview" }, va = { class: "setting-group" }, ga = { class: "datetime-group" }, Ta = { class: "setting-group" }, Sa = {
+}, _a = { class: "relative-time-config" }, Ia = { class: "relative-time-row" }, Na = { class: "relative-time-preview" }, ba = { class: "setting-group" }, Ma = { class: "datetime-group" }, wa = { class: "setting-group" }, ya = {
   key: 0,
   class: "datetime-group"
-}, ha = { class: "setting-group" }, fa = { class: "variable-config" }, ma = { class: "variable-config" }, _a = /* @__PURE__ */ ot({
+}, Ra = { class: "setting-group" }, Da = { class: "variable-config" }, La = { class: "variable-config" }, Aa = /* @__PURE__ */ dt({
   __name: "TimelineWidgetSettings",
   props: {
     modelValue: { required: !0 },
     modelModifiers: {}
   },
   emits: ["update:modelValue"],
-  setup(L) {
-    const e = Me("i18n"), t = (l) => e ? e.t(l) : l, g = ut(L, "modelValue"), a = p("absolute"), S = [
-      { label: "Relative", value: "relative" },
-      { label: "Absolute", value: "absolute" }
-    ], M = /* @__PURE__ */ new Date(), le = new Date(M.getTime() - 720 * 60 * 60 * 1e3), te = new Date(M.getTime() + 10080 * 60 * 1e3), ae = new Date(M.getTime() - 1440 * 60 * 1e3), j = /* @__PURE__ */ new Date(), i = p({
-      timelineMin: le.toISOString(),
-      timelineMax: te.toISOString(),
-      rangeStart: ae.toISOString(),
-      rangeEnd: j.toISOString(),
+  setup(b) {
+    const { t: e } = vt("timeline"), t = ct(b, "modelValue"), _ = N("absolute"), I = C(() => [
+      { label: e("Settings.modes.relative"), value: "relative" },
+      { label: e("Settings.modes.absolute"), value: "absolute" }
+    ]), E = /* @__PURE__ */ new Date(), a = new Date(E.getTime() - 720 * 60 * 60 * 1e3), ae = new Date(E.getTime() + 10080 * 60 * 1e3), se = new Date(E.getTime() - 1440 * 60 * 1e3), oe = /* @__PURE__ */ new Date(), i = N({
+      timelineMin: a.toISOString(),
+      timelineMax: ae.toISOString(),
+      rangeStart: se.toISOString(),
+      rangeEnd: oe.toISOString(),
       relativeTime: {
         enabled: !1,
         offset: 24,
@@ -1433,102 +1429,98 @@ const ia = {
       fixStartKnob: !1,
       showTimeInfo: !0,
       showControls: !0
-    }), O = p(!1), m = p(), U = p(), W = p(), y = p(), C = (l) => String(l).padStart(2, "0"), A = (l) => k({
+    }), O = N(!1), W = N(), H = N(), X = N(), m = N(), P = (l) => String(l).padStart(2, "0"), Y = (l) => C({
       get: () => {
         const o = l.value;
-        return o ? `${o.getFullYear()}-${C(o.getMonth() + 1)}-${C(o.getDate())}` : "";
+        return o ? `${o.getFullYear()}-${P(o.getMonth() + 1)}-${P(o.getDate())}` : "";
       },
       set: (o) => {
         if (!o) return void (l.value = void 0);
-        const [d, _, N] = o.split("-").map(Number), Q = l.value ? new Date(l.value) : /* @__PURE__ */ new Date();
-        Q.setFullYear(d, _ - 1, N), l.value = Q;
+        const [c, p, w] = o.split("-").map(Number), ee = l.value ? new Date(l.value) : /* @__PURE__ */ new Date();
+        ee.setFullYear(c, p - 1, w), l.value = ee;
       }
-    }), Z = (l) => k({
+    }), x = (l) => C({
       get: () => {
         const o = l.value;
-        return o ? `${C(o.getHours())}:${C(o.getMinutes())}` : "";
+        return o ? `${P(o.getHours())}:${P(o.getMinutes())}` : "";
       },
       set: (o) => {
         if (!o) return void (l.value = void 0);
-        const [d, _] = o.split(":").map(Number), N = l.value ? new Date(l.value) : /* @__PURE__ */ new Date();
-        N.setHours(d, _, 0, 0), l.value = N;
+        const [c, p] = o.split(":").map(Number), w = l.value ? new Date(l.value) : /* @__PURE__ */ new Date();
+        w.setHours(c, p, 0, 0), l.value = w;
       }
-    }), x = A(m), F = Z(U), V = A(W), oe = Z(y), G = p(null), re = p(!1), se = p(!1), Ee = p(new Be("")), ve = p(new Be("")), Le = k(() => G.value ? G.value.getAllVariables().map(([l, o]) => o).filter((l) => l.value && typeof l.value == "string").map((l) => ({ name: l.name, value: l.value })) : []), ze = [
-      { text: "Hours", value: "hours" },
-      { text: "Days", value: "days" },
-      { text: "Weeks", value: "weeks" },
-      { text: "Months", value: "months" },
-      { text: "Years", value: "years" }
-    ], ne = () => {
-      a.value === "relative" ? (i.value.relativeTime.enabled = !0, K()) : i.value.relativeTime.enabled = !1, z();
-    }, $ = () => {
-      i.value.relativeTime?.enabled && K(), z();
-    }, q = (l, o) => {
-      const d = /* @__PURE__ */ new Date(), _ = new Date(d), N = Number(l) || 24;
+    }), F = Y(W), R = x(H), Z = Y(X), G = x(m), D = N(null), B = N(!1), J = N(!1), le = N(new Ge("")), ce = N(new Ge("")), Ne = C(() => D.value ? D.value.getAllVariables().map(([l, o]) => o).filter((l) => l.value && typeof l.value == "string").map((l) => ({ name: l.name, value: l.value })) : []), Me = C(
+      () => ["hours", "days", "weeks", "months", "years"].map((l) => ({ text: e(`Settings.units.${l}`), value: l }))
+    ), we = () => {
+      _.value === "relative" ? (i.value.relativeTime.enabled = !0, ie()) : i.value.relativeTime.enabled = !1, U();
+    }, ye = () => {
+      i.value.relativeTime?.enabled && ie(), U();
+    }, We = (l, o) => {
+      const c = /* @__PURE__ */ new Date(), p = new Date(c), w = Number(l) || 24;
       switch (typeof o == "object" && o !== null ? o.value : o) {
         case "hours":
-          _.setHours(_.getHours() - N);
+          p.setHours(p.getHours() - w);
           break;
         case "days":
-          _.setDate(_.getDate() - N);
+          p.setDate(p.getDate() - w);
           break;
         case "weeks":
-          _.setDate(_.getDate() - N * 7);
+          p.setDate(p.getDate() - w * 7);
           break;
         case "months":
-          _.setMonth(_.getMonth() - N);
+          p.setMonth(p.getMonth() - w);
           break;
         case "years":
-          _.setFullYear(_.getFullYear() - N);
+          p.setFullYear(p.getFullYear() - w);
           break;
         default:
-          _.setHours(_.getHours() - N);
+          p.setHours(p.getHours() - w);
       }
-      return { start: _, end: d };
-    }, K = () => {
+      return { start: p, end: c };
+    }, ie = () => {
       if (!i.value.relativeTime?.enabled) return;
-      const { start: l, end: o } = q(
+      const { start: l, end: o } = We(
         i.value.relativeTime.offset,
         i.value.relativeTime.unit
-      ), _ = (o.getTime() - l.getTime()) * 0.2, N = o, Q = new Date(o.getTime() - _);
-      if (i.value.timelineMin = l.toISOString(), i.value.timelineMax = o.toISOString(), i.value.rangeStart = Q.toISOString(), i.value.rangeEnd = N.toISOString(), g.value.timelineMin = i.value.timelineMin, g.value.timelineMax = i.value.timelineMax, g.value.rangeStart = i.value.rangeStart, g.value.rangeEnd = i.value.rangeEnd, i.value.rangeStartVariable && G.value) {
-        const ie = G.value.getVariable(i.value.rangeStartVariable);
-        ie && (ie.value = i.value.rangeStart);
+      ), p = (o.getTime() - l.getTime()) * 0.2, w = o, ee = new Date(o.getTime() - p);
+      if (i.value.timelineMin = l.toISOString(), i.value.timelineMax = o.toISOString(), i.value.rangeStart = ee.toISOString(), i.value.rangeEnd = w.toISOString(), t.value.timelineMin = i.value.timelineMin, t.value.timelineMax = i.value.timelineMax, t.value.rangeStart = i.value.rangeStart, t.value.rangeEnd = i.value.rangeEnd, i.value.rangeStartVariable && D.value) {
+        const Ee = D.value.getVariable(i.value.rangeStartVariable);
+        Ee && (Ee.value = i.value.rangeStart);
       }
-      if (i.value.rangeEndVariable && G.value) {
-        const ie = G.value.getVariable(i.value.rangeEndVariable);
-        ie && (ie.value = i.value.rangeEnd);
+      if (i.value.rangeEndVariable && D.value) {
+        const Ee = D.value.getVariable(i.value.rangeEndVariable);
+        Ee && (Ee.value = i.value.rangeEnd);
       }
-    }, fe = () => {
-      re.value || (i.value.rangeStartVariable = void 0), z();
-    }, ye = () => {
-      se.value || (i.value.rangeEndVariable = void 0), z();
-    }, Ae = () => {
-      if (i.value.rangeStartVariable && G.value) {
-        const l = G.value.getVariable(i.value.rangeStartVariable);
-        l && (Ee.value.setTo(l), i.value.rangeStart = Ee.value.value);
+    }, q = () => {
+      B.value || (i.value.rangeStartVariable = void 0), U();
+    }, Q = () => {
+      J.value || (i.value.rangeEndVariable = void 0), U();
+    }, K = () => {
+      if (i.value.rangeStartVariable && D.value) {
+        const l = D.value.getVariable(i.value.rangeStartVariable);
+        l && (le.value.setTo(l), i.value.rangeStart = le.value.value);
       }
-      if (i.value.rangeEndVariable && G.value) {
-        const l = G.value.getVariable(i.value.rangeEndVariable);
-        l && (ve.value.setTo(l), i.value.rangeEnd = ve.value.value);
+      if (i.value.rangeEndVariable && D.value) {
+        const l = D.value.getVariable(i.value.rangeEndVariable);
+        l && (ce.value.setTo(l), i.value.rangeEnd = ce.value.value);
       }
-      z();
-    }, ge = (l, o) => {
+      U();
+    }, re = (l, o) => {
       if (!l) return;
-      const d = new Date(l);
-      return o && (d.setHours(o.getHours()), d.setMinutes(o.getMinutes()), d.setSeconds(o.getSeconds())), d.toISOString();
+      const c = new Date(l);
+      return o && (c.setHours(o.getHours()), c.setMinutes(o.getMinutes()), c.setSeconds(o.getSeconds())), c.toISOString();
+    }, Re = () => {
+      i.value.timelineMin = re(W.value, H.value), U();
     }, Ke = () => {
-      i.value.timelineMin = ge(m.value, U.value), z();
-    }, He = () => {
-      i.value.timelineMin = ge(m.value, U.value), z();
-    }, $e = () => {
-      i.value.timelineMax = ge(W.value, y.value), z();
-    }, Xe = () => {
-      i.value.timelineMax = ge(W.value, y.value), z();
-    }, z = () => {
+      i.value.timelineMin = re(W.value, H.value), U();
+    }, De = () => {
+      i.value.timelineMax = re(X.value, m.value), U();
+    }, ze = () => {
+      i.value.timelineMax = re(X.value, m.value), U();
+    }, U = () => {
       let l = i.value.rangeStart, o = i.value.rangeEnd;
-      re.value && Ee.value.value && (l = Ee.value.value), se.value && ve.value.value && (o = ve.value.value);
-      const d = {
+      B.value && le.value.value && (l = le.value.value), J.value && ce.value.value && (o = ce.value.value);
+      const c = {
         ...i.value,
         timelineMin: i.value.timelineMin,
         timelineMax: O.value ? (/* @__PURE__ */ new Date()).toISOString() : i.value.timelineMax,
@@ -1545,12 +1537,12 @@ const ia = {
         showTimeInfo: i.value.showTimeInfo,
         showControls: i.value.showControls
       };
-      Ye(d);
+      He(c);
     };
-    function Ve() {
+    function Le() {
       return i.value.relativeTime || (i.value.relativeTime = { enabled: !1, offset: 24, unit: "hours" }), i.value.relativeTime;
     }
-    const Ce = [
+    const $e = [
       "timelineMin",
       "timelineMax",
       "rangeStart",
@@ -1568,32 +1560,32 @@ const ia = {
       "rangeStripColor",
       "showTimeInfo"
     ];
-    function Ye(l) {
-      const o = g.value;
-      for (const N of Ce) {
-        const Q = l[N];
-        Q !== void 0 && (o[N] = Q);
+    function He(l) {
+      const o = t.value;
+      for (const w of $e) {
+        const ee = l[w];
+        ee !== void 0 && (o[w] = ee);
       }
-      const d = l.relativeTime;
-      if (!d) return;
-      const _ = Oe(o);
-      _.enabled = d.enabled, _.offset = d.offset, _.unit = d.unit;
+      const c = l.relativeTime;
+      if (!c) return;
+      const p = Xe(o);
+      p.enabled = c.enabled, p.offset = c.offset, p.unit = c.unit;
     }
-    function Oe(l) {
+    function Xe(l) {
       const o = l.relativeTime;
       if (o) return o;
-      const _ = typeof l.eClass == "function" ? We.eINSTANCE.createRelativeTimeConfig() : { enabled: !1, offset: 24, unit: "hours" };
-      return l.relativeTime = _, _;
+      const p = typeof l.eClass == "function" ? Ue.eINSTANCE.createRelativeTimeConfig() : { enabled: !1, offset: 24, unit: "hours" };
+      return l.relativeTime = p, p;
     }
-    const je = () => {
-      O.value || i.value.timelineMax || (i.value.timelineMax = new Date(Date.now() + 10080 * 60 * 1e3).toISOString()), z();
-    }, Re = () => {
-      const l = /* @__PURE__ */ new Date(), o = new Date(l.getTime() - 720 * 60 * 60 * 1e3), d = new Date(l.getTime() + 10080 * 60 * 1e3), _ = new Date(l.getTime() - 1440 * 60 * 1e3), N = /* @__PURE__ */ new Date();
+    const Ae = () => {
+      O.value || i.value.timelineMax || (i.value.timelineMax = new Date(Date.now() + 10080 * 60 * 1e3).toISOString()), U();
+    }, Ye = () => {
+      const l = /* @__PURE__ */ new Date(), o = new Date(l.getTime() - 720 * 60 * 60 * 1e3), c = new Date(l.getTime() + 10080 * 60 * 1e3), p = new Date(l.getTime() - 1440 * 60 * 1e3), w = /* @__PURE__ */ new Date();
       i.value = {
         timelineMin: o.toISOString(),
-        timelineMax: d.toISOString(),
-        rangeStart: _.toISOString(),
-        rangeEnd: N.toISOString(),
+        timelineMax: c.toISOString(),
+        rangeStart: p.toISOString(),
+        rangeEnd: w.toISOString(),
         relativeTime: {
           enabled: !1,
           offset: 24,
@@ -1606,186 +1598,190 @@ const ia = {
         fixStartKnob: !1,
         showTimeInfo: !0,
         showControls: !0
-      }, a.value = "absolute", O.value = !1, z();
-    }, ue = Me(Et);
-    return ct(() => {
+      }, _.value = "absolute", O.value = !1, U();
+    }, Ve = Fe(St);
+    return Et(() => {
       try {
-        if (G.value = ue ?? null, !G.value) throw new Error("VariableRepository not provided");
+        if (D.value = Ve ?? null, !D.value) throw new Error("VariableRepository not provided");
       } catch (l) {
         console.warn("VariableRepository not found in container:", l);
       }
-      if (g.value && g.value.timelineMin) {
-        if (Object.assign(i.value, nt(g.value)), O.value = !g.value.timelineMax, re.value = !!g.value.rangeStartVariable, se.value = !!g.value.rangeEndVariable, a.value = Ve().enabled ? "relative" : "absolute", i.value.timelineMin) {
+      if (t.value && t.value.timelineMin) {
+        if (Object.assign(i.value, nt(t.value)), O.value = !t.value.timelineMax, B.value = !!t.value.rangeStartVariable, J.value = !!t.value.rangeEndVariable, _.value = Le().enabled ? "relative" : "absolute", i.value.timelineMin) {
           const l = new Date(i.value.timelineMin);
-          m.value = l, U.value = l;
+          W.value = l, H.value = l;
         }
         if (i.value.timelineMax) {
           const l = new Date(i.value.timelineMax);
-          W.value = l, y.value = l;
+          X.value = l, m.value = l;
         }
       } else
-        Re();
-      z();
-    }), De(() => g.value, (l) => {
-      l && (Object.assign(i.value, nt(l)), Ve(), O.value = !l.timelineMax, l.relativeTime && (a.value = l.relativeTime.enabled ? "relative" : "absolute"));
-    }, { deep: !0 }), (l, o) => (P(), H("section", ia, [
-      T("div", la, [
-        T("div", oa, [
-          ee(B(Fe), {
-            modelValue: a.value,
+        Ye();
+      U();
+    }), be(() => t.value, (l) => {
+      l && (Object.assign(i.value, nt(l)), Le(), O.value = !l.timelineMax, l.relativeTime && (_.value = l.relativeTime.enabled ? "relative" : "absolute"));
+    }, { deep: !0 }), (l, o) => (k(), z("section", {
+      class: "settings-section",
+      "data-section-id": "range",
+      "data-section": S(e)("Settings.section")
+    }, [
+      T("div", fa, [
+        T("div", ma, [
+          ne(S(Oe), {
+            modelValue: _.value,
             "onUpdate:modelValue": [
-              o[0] || (o[0] = (d) => a.value = d),
-              ne
+              o[0] || (o[0] = (c) => _.value = c),
+              we
             ],
-            label: t("Time Range Mode"),
-            options: S,
+            label: S(e)("Settings.mode"),
+            options: I.value,
             "label-key": "label",
             "value-key": "value"
-          }, null, 8, ["modelValue", "label"])
+          }, null, 8, ["modelValue", "label", "options"])
         ]),
-        a.value === "relative" && i.value.relativeTime ? (P(), H("div", ua, [
-          T("label", null, Y(t("Relative Time Range")), 1),
-          T("div", ca, [
-            T("div", da, [
-              ee(B(Ct), {
+        _.value === "relative" && i.value.relativeTime ? (k(), z("div", pa, [
+          T("label", null, $(S(e)("Settings.relative")), 1),
+          T("div", _a, [
+            T("div", Ia, [
+              ne(S(kt), {
                 modelValue: i.value.relativeTime.offset,
                 "onUpdate:modelValue": [
-                  o[1] || (o[1] = (d) => i.value.relativeTime.offset = d),
-                  $
+                  o[1] || (o[1] = (c) => i.value.relativeTime.offset = c),
+                  ye
                 ],
                 modelModifiers: { number: !0 },
-                label: t("Offset"),
+                label: S(e)("Settings.offset"),
                 type: "number",
                 min: 1,
                 max: 1e4,
                 class: "offset-input"
               }, null, 8, ["modelValue", "label"]),
-              ee(B(Fe), {
+              ne(S(Oe), {
                 modelValue: i.value.relativeTime.unit,
                 "onUpdate:modelValue": [
-                  o[2] || (o[2] = (d) => i.value.relativeTime.unit = d),
-                  $
+                  o[2] || (o[2] = (c) => i.value.relativeTime.unit = c),
+                  ye
                 ],
-                options: ze,
-                label: t("Unit"),
+                options: Me.value,
+                label: S(e)("Settings.unit"),
                 "label-key": "text",
                 "value-key": "value",
                 class: "unit-select"
-              }, null, 8, ["modelValue", "label"])
+              }, null, 8, ["modelValue", "options", "label"])
             ]),
-            T("div", Ea, Y(t("Now")) + " - " + Y(i.value.relativeTime.offset) + " " + Y(t(i.value.relativeTime.unit)) + " → " + Y(t("Now")), 1)
+            T("div", Na, $(S(e)("Settings.relativePreview", { offset: i.value.relativeTime.offset, unit: S(e)(`Settings.units.${i.value.relativeTime.unit}`) })), 1)
           ])
-        ])) : he("", !0),
-        a.value === "absolute" ? (P(), H(dt, { key: 1 }, [
-          T("div", va, [
-            T("label", null, Y(t("Timeline Start")), 1),
-            T("div", ga, [
-              ee(B(Ge), {
-                modelValue: B(x),
+        ])) : Se("", !0),
+        _.value === "absolute" ? (k(), z(gt, { key: 1 }, [
+          T("div", ba, [
+            T("label", null, $(S(e)("Settings.start")), 1),
+            T("div", Ma, [
+              ne(S(xe), {
+                modelValue: S(F),
                 "onUpdate:modelValue": [
-                  o[3] || (o[3] = (d) => xe(x) ? x.value = d : null),
-                  Ke
+                  o[3] || (o[3] = (c) => Ce(F) ? F.value = c : null),
+                  Re
                 ],
                 mode: "date",
-                label: t("Date")
+                label: S(e)("Settings.date")
               }, null, 8, ["modelValue", "label"]),
-              ee(B(Ge), {
-                modelValue: B(F),
+              ne(S(xe), {
+                modelValue: S(R),
                 "onUpdate:modelValue": [
-                  o[4] || (o[4] = (d) => xe(F) ? F.value = d : null),
-                  He
+                  o[4] || (o[4] = (c) => Ce(R) ? R.value = c : null),
+                  Ke
                 ],
                 mode: "time",
-                label: t("Time")
+                label: S(e)("Settings.time")
               }, null, 8, ["modelValue", "label"])
             ])
           ]),
-          T("div", Ta, [
-            T("label", null, Y(t("Timeline End")), 1),
-            ee(B(Je), {
+          T("div", wa, [
+            T("label", null, $(S(e)("Settings.end")), 1),
+            ne(S(qe), {
               modelValue: O.value,
               "onUpdate:modelValue": [
-                o[5] || (o[5] = (d) => O.value = d),
-                je
+                o[5] || (o[5] = (c) => O.value = c),
+                Ae
               ],
-              label: t("Use current time")
+              label: S(e)("Settings.useNow")
             }, null, 8, ["modelValue", "label"]),
-            O.value ? he("", !0) : (P(), H("div", Sa, [
-              ee(B(Ge), {
-                modelValue: B(V),
+            O.value ? Se("", !0) : (k(), z("div", ya, [
+              ne(S(xe), {
+                modelValue: S(Z),
                 "onUpdate:modelValue": [
-                  o[6] || (o[6] = (d) => xe(V) ? V.value = d : null),
-                  $e
+                  o[6] || (o[6] = (c) => Ce(Z) ? Z.value = c : null),
+                  De
                 ],
                 mode: "date",
-                label: t("Date")
+                label: S(e)("Settings.date")
               }, null, 8, ["modelValue", "label"]),
-              ee(B(Ge), {
-                modelValue: B(oe),
+              ne(S(xe), {
+                modelValue: S(G),
                 "onUpdate:modelValue": [
-                  o[7] || (o[7] = (d) => xe(oe) ? oe.value = d : null),
-                  Xe
+                  o[7] || (o[7] = (c) => Ce(G) ? G.value = c : null),
+                  ze
                 ],
                 mode: "time",
-                label: t("Time")
+                label: S(e)("Settings.time")
               }, null, 8, ["modelValue", "label"])
             ]))
           ])
-        ], 64)) : he("", !0),
-        T("div", ha, [
-          T("label", null, Y(t("Variable Binding")), 1),
-          T("div", fa, [
-            ee(B(Je), {
-              modelValue: re.value,
+        ], 64)) : Se("", !0),
+        T("div", Ra, [
+          T("label", null, $(S(e)("Settings.variables")), 1),
+          T("div", Da, [
+            ne(S(qe), {
+              modelValue: B.value,
               "onUpdate:modelValue": [
-                o[8] || (o[8] = (d) => re.value = d),
-                fe
+                o[8] || (o[8] = (c) => B.value = c),
+                q
               ],
-              label: t("Start time from variable")
+              label: S(e)("Settings.startFromVariable")
             }, null, 8, ["modelValue", "label"]),
-            re.value ? (P(), st(B(Fe), {
+            B.value ? (k(), it(S(Oe), {
               key: 0,
               modelValue: i.value.rangeStartVariable,
               "onUpdate:modelValue": [
-                o[9] || (o[9] = (d) => i.value.rangeStartVariable = d),
-                Ae
+                o[9] || (o[9] = (c) => i.value.rangeStartVariable = c),
+                K
               ],
-              options: Le.value,
-              label: t("Start variable"),
+              options: Ne.value,
+              label: S(e)("Settings.startVariable"),
               "label-key": "name",
               "value-key": "name"
-            }, null, 8, ["modelValue", "options", "label"])) : he("", !0)
+            }, null, 8, ["modelValue", "options", "label"])) : Se("", !0)
           ]),
-          T("div", ma, [
-            ee(B(Je), {
-              modelValue: se.value,
+          T("div", La, [
+            ne(S(qe), {
+              modelValue: J.value,
               "onUpdate:modelValue": [
-                o[10] || (o[10] = (d) => se.value = d),
-                ye
+                o[10] || (o[10] = (c) => J.value = c),
+                Q
               ],
-              label: t("End time from variable")
+              label: S(e)("Settings.endFromVariable")
             }, null, 8, ["modelValue", "label"]),
-            se.value ? (P(), st(B(Fe), {
+            J.value ? (k(), it(S(Oe), {
               key: 0,
               modelValue: i.value.rangeEndVariable,
               "onUpdate:modelValue": [
-                o[11] || (o[11] = (d) => i.value.rangeEndVariable = d),
-                Ae
+                o[11] || (o[11] = (c) => i.value.rangeEndVariable = c),
+                K
               ],
-              options: Le.value,
-              label: t("End variable"),
+              options: Ne.value,
+              label: S(e)("Settings.endVariable"),
               "label-key": "name",
               "value-key": "name"
-            }, null, 8, ["modelValue", "options", "label"])) : he("", !0)
+            }, null, 8, ["modelValue", "options", "label"])) : Se("", !0)
           ])
         ])
       ])
-    ]));
+    ], 8, ha));
   }
-}), pa = /* @__PURE__ */ gt(_a, [["__scopeId", "data-v-f4cd827c"]]), Ia = "data:image/svg+xml,%3csvg%20width='120'%20height='120'%20viewBox='0%200%20120%20120'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cpath%20fill-rule='evenodd'%20clip-rule='evenodd'%20d='M105%207.5H15C10.8579%207.5%207.5%2010.8579%207.5%2015V105C7.5%20109.142%2010.8579%20112.5%2015%20112.5H105C109.142%20112.5%20112.5%20109.142%20112.5%20105V15C112.5%2010.8579%20109.142%207.5%20105%207.5ZM15%200C6.71573%200%200%206.71573%200%2015V105C0%20113.284%206.71573%20120%2015%20120H105C113.284%20120%20120%20113.284%20120%20105V15C120%206.71573%20113.284%200%20105%200H15Z'%20fill='%23606060'/%3e%3crect%20x='18'%20y='56'%20width='84'%20height='8'%20rx='4'%20fill='%23606060'/%3e%3ccircle%20cx='30'%20cy='60'%20r='10'%20fill='%23606060'/%3e%3ccircle%20cx='60'%20cy='60'%20r='10'%20fill='%23606060'/%3e%3ccircle%20cx='90'%20cy='60'%20r='10'%20fill='%23606060'/%3e%3crect%20x='25'%20y='32'%20width='10'%20height='16'%20rx='2'%20fill='%23606060'/%3e%3crect%20x='55'%20y='32'%20width='10'%20height='16'%20rx='2'%20fill='%23606060'/%3e%3crect%20x='85'%20y='72'%20width='10'%20height='16'%20rx='2'%20fill='%23606060'/%3e%3c/svg%3e", Na = [
+}), Va = /* @__PURE__ */ ht(Aa, [["__scopeId", "data-v-3deaaa09"]]), Ca = "data:image/svg+xml,%3csvg%20width='120'%20height='120'%20viewBox='0%200%20120%20120'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cpath%20fill-rule='evenodd'%20clip-rule='evenodd'%20d='M105%207.5H15C10.8579%207.5%207.5%2010.8579%207.5%2015V105C7.5%20109.142%2010.8579%20112.5%2015%20112.5H105C109.142%20112.5%20112.5%20109.142%20112.5%20105V15C112.5%2010.8579%20109.142%207.5%20105%207.5ZM15%200C6.71573%200%200%206.71573%200%2015V105C0%20113.284%206.71573%20120%2015%20120H105C113.284%20120%20120%20113.284%20120%20105V15C120%206.71573%20113.284%200%20105%200H15Z'%20fill='%23606060'/%3e%3crect%20x='18'%20y='56'%20width='84'%20height='8'%20rx='4'%20fill='%23606060'/%3e%3ccircle%20cx='30'%20cy='60'%20r='10'%20fill='%23606060'/%3e%3ccircle%20cx='60'%20cy='60'%20r='10'%20fill='%23606060'/%3e%3ccircle%20cx='90'%20cy='60'%20r='10'%20fill='%23606060'/%3e%3crect%20x='25'%20y='32'%20width='10'%20height='16'%20rx='2'%20fill='%23606060'/%3e%3crect%20x='55'%20y='32'%20width='10'%20height='16'%20rx='2'%20fill='%23606060'/%3e%3crect%20x='85'%20y='72'%20width='10'%20height='16'%20rx='2'%20fill='%23606060'/%3e%3c/svg%3e", Oa = [
   { name: "Timeline Clicked", type: "click", description: "Triggered when the timeline widget is clicked", payloadType: at },
   { name: "Timeline Right Clicked", type: "right_click", description: "Triggered when the timeline widget is right-clicked", payloadType: at }
-], ba = `<?xml version="1.0" encoding="UTF-8"?>
+], xa = `<?xml version="1.0" encoding="UTF-8"?>
 <!--
 /*********************************************************************
 * Copyright (c) 2026 Contributors to the Eclipse Foundation.
@@ -1818,70 +1814,100 @@ them the words. The speed is a factor, so its labels are the factors.
 
   <components xsi:type="uimodel:FormView" name="TimelineSettingsFormView">
 
-    <fields xsi:type="uimodel:GroupWidget" name="playbackGroup" layout="VERTICAL" label="Wiedergabe">
+    <fields xsi:type="uimodel:GroupWidget" name="playbackGroup" layout="VERTICAL" label="timeline:Form.playbackGroup">
       <fields xsi:type="uimodel:SelectWidget" name="stepSize"
-          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.timeline#//TimelineSettings/stepSize" label="Schrittweite">
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.timeline#//TimelineSettings/stepSize" label="timeline:Form.stepSize">
         <values>minute</values>
         <values>hour</values>
         <values>day</values>
         <values>week</values>
         <values>month</values>
-        <optionLabel language="JS" body="({ minute: 'Eine Minute', hour: 'Eine Stunde', day: 'Ein Tag', week: 'Eine Woche', month: 'Ein Monat' })[option] ?? option"/>
+        <optionLabel language="JS" body="({ minute: 'timeline:Options.step.minute', hour: 'timeline:Options.step.hour', day: 'timeline:Options.step.day', week: 'timeline:Options.step.week', month: 'timeline:Options.step.month' })[option] ?? option"/>
       </fields>
       <fields xsi:type="uimodel:SelectWidget" name="playbackSpeed"
-          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.timeline#//TimelineSettings/playbackSpeed" label="Geschwindigkeit">
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.timeline#//TimelineSettings/playbackSpeed" label="timeline:Form.playbackSpeed">
         <values>0.25</values>
         <values>0.5</values>
         <values>1</values>
         <values>2</values>
         <values>4</values>
-        <optionLabel language="JS" body="option + '-fach'"/>
+        <optionLabel language="JS" body="({ '0.25': 'timeline:Options.speed.x025', '0.5': 'timeline:Options.speed.x05', '1': 'timeline:Options.speed.x1', '2': 'timeline:Options.speed.x2', '4': 'timeline:Options.speed.x4' })[option] ?? option"/>
       </fields>
       <fields xsi:type="uimodel:CheckboxWidget" name="autoPlay"
-          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.timeline#//TimelineSettings/autoPlay" label="Beim Laden starten"/>
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.timeline#//TimelineSettings/autoPlay" label="timeline:Form.autoPlay"/>
       <fields xsi:type="uimodel:CheckboxWidget" name="fixStartKnob"
-          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.timeline#//TimelineSettings/fixStartKnob" label="Anfang festhalten"/>
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.timeline#//TimelineSettings/fixStartKnob" label="timeline:Form.fixStartKnob"/>
       <fields xsi:type="uimodel:CheckboxWidget" name="showControls"
-          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.timeline#//TimelineSettings/showControls" label="Bedienelemente zeigen"/>
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.timeline#//TimelineSettings/showControls" label="timeline:Form.showControls"/>
     </fields>
 
-    <fields xsi:type="uimodel:GroupWidget" name="lookGroup" layout="VERTICAL" label="Darstellung">
+    <fields xsi:type="uimodel:GroupWidget" name="lookGroup" layout="VERTICAL" label="timeline:Form.lookGroup">
       <fields xsi:type="uimodel:InputWidget" name="rangeStripColor"
-          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.timeline#//TimelineSettings/rangeStripColor" label="Farbe des Ausschnitts"/>
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.timeline#//TimelineSettings/rangeStripColor" label="timeline:Form.rangeStripColor"/>
       <fields xsi:type="uimodel:CheckboxWidget" name="showTimeInfo"
-          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.timeline#//TimelineSettings/showTimeInfo" label="Zeitangaben zeigen"/>
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.timeline#//TimelineSettings/showTimeInfo" label="timeline:Form.showTimeInfo"/>
     </fields>
 
   </components>
 </uimodel:UIModel>
-`;
-var Ma = Object.defineProperty, wa = Object.getOwnPropertyDescriptor, Qe = (L, e, t, g) => {
-  for (var a = g > 1 ? void 0 : g ? wa(e, t) : e, S = L.length - 1, M; S >= 0; S--)
-    (M = L[S]) && (a = (g ? M(e, t, a) : M(a)) || a);
-  return g && a && Ma(e, t, a), a;
-}, lt = (L, e) => (t, g) => e(t, g, L);
-c.eINSTANCE;
-const be = "TimelineWidget";
-let ke = class {
-  constructor(L, e) {
-    this.events = L, this.actions = e;
+`, Fa = { name: "Zeitleiste", range: "Zeitleisten-Bereich - ziehen zum Verschieben", rangeFixed: "Zeitleisten-Bereich (Beginn fixiert)", startKnob: "Beginn", startKnobFixed: "Beginn (fixiert)", endKnob: "Ende", start: "Beginn:", end: "Ende:", duration: "Dauer:", speed: "Geschwindigkeit:" }, Ga = { section: "Zeitraum", mode: "Art des Zeitraums", modes: { relative: "Relativ", absolute: "Absolut" }, relative: "Relativer Zeitraum", offset: "Abstand", unit: "Einheit", units: { hours: "Stunden", days: "Tage", weeks: "Wochen", months: "Monate", years: "Jahre" }, relativePreview: "Jetzt - {{offset}} {{unit}} → Jetzt", start: "Beginn der Zeitleiste", end: "Ende der Zeitleiste", useNow: "Aktuelle Zeit verwenden", date: "Datum", time: "Uhrzeit", variables: "Bindung an Variablen", startFromVariable: "Beginn aus einer Variable", startVariable: "Variable für den Beginn", endFromVariable: "Ende aus einer Variable", endVariable: "Variable für das Ende" }, Ba = { playbackGroup: "Wiedergabe", stepSize: "Schrittweite", playbackSpeed: "Geschwindigkeit", autoPlay: "Beim Laden starten", fixStartKnob: "Anfang festhalten", showControls: "Bedienelemente zeigen", lookGroup: "Darstellung", rangeStripColor: "Farbe des Ausschnitts", showTimeInfo: "Zeitangaben zeigen" }, ka = { step: { minute: "Eine Minute", hour: "Eine Stunde", day: "Ein Tag", week: "Eine Woche", month: "Ein Monat" }, speed: { x025: "0,25-fach", x05: "0,5-fach", x1: "1-fach", x2: "2-fach", x4: "4-fach" } }, Pa = {
+  Widget: Fa,
+  Settings: Ga,
+  Form: Ba,
+  Options: ka
+}, Ua = { name: "Timeline", range: "Timeline range - drag to move", rangeFixed: "Timeline range (start fixed)", startKnob: "Start time", startKnobFixed: "Start time (fixed)", endKnob: "End time", start: "Start:", end: "End:", duration: "Duration:", speed: "Speed:" }, Wa = { section: "Time range", mode: "Time range mode", modes: { relative: "Relative", absolute: "Absolute" }, relative: "Relative time range", offset: "Offset", unit: "Unit", units: { hours: "hours", days: "days", weeks: "weeks", months: "months", years: "years" }, relativePreview: "Now - {{offset}} {{unit}} → Now", start: "Timeline start", end: "Timeline end", useNow: "Use current time", date: "Date", time: "Time", variables: "Variable binding", startFromVariable: "Start time from variable", startVariable: "Start variable", endFromVariable: "End time from variable", endVariable: "End variable" }, Ka = { playbackGroup: "Playback", stepSize: "Step size", playbackSpeed: "Speed", autoPlay: "Start on load", fixStartKnob: "Fix the start", showControls: "Show controls", lookGroup: "Appearance", rangeStripColor: "Range colour", showTimeInfo: "Show time information" }, za = { step: { minute: "One minute", hour: "One hour", day: "One day", week: "One week", month: "One month" }, speed: { x025: "0.25×", x05: "0.5×", x1: "1×", x2: "2×", x4: "4×" } }, $a = {
+  Widget: Ua,
+  Settings: Wa,
+  Form: Ka,
+  Options: za
+};
+var Ha = Object.getOwnPropertyDescriptor, Xa = (b, e, t, _) => {
+  for (var I = _ > 1 ? void 0 : _ ? Ha(e, t) : e, E = b.length - 1, a; E >= 0; E--)
+    (a = b[E]) && (I = a(I) || I);
+  return I;
+};
+const ft = "timeline";
+let ot = class {
+  namespace = ft;
+  resources = {
+    de: Pa,
+    en: $a
+  };
+};
+ot = Xa([
+  ut({
+    service: ["Translations"],
+    properties: { "i18n.namespace": ft }
+  })
+], ot);
+var Ya = Object.defineProperty, Za = Object.getOwnPropertyDescriptor, Qe = (b, e, t, _) => {
+  for (var I = _ > 1 ? void 0 : _ ? Za(e, t) : e, E = b.length - 1, a; E >= 0; E--)
+    (a = b[E]) && (I = (_ ? a(e, t, I) : a(I)) || I);
+  return _ && I && Ya(e, t, I), I;
+}, lt = (b, e) => (t, _) => e(t, _, b);
+d.eINSTANCE;
+const _e = "TimelineWidget";
+let Be = class {
+  constructor(b, e) {
+    this.events = b, this.actions = e;
   }
-  type = be;
-  component = na;
-  settingsComponent = pa;
+  type = _e;
+  component = Ta;
+  settingsComponent = Va;
   supportedDSTypes = [];
-  icon = Ia;
+  icon = Ca;
   name = "Timeline";
+  nameKey = "timeline:Widget.name";
   /*
    * The settings form, as a model. Carried on the registration like the
    * icon, so whoever shows the settings does not have to know this widget
    * exists - and the shell needs no dependency on this bundle.
    */
   settingsForm = {
-    xmi: ba,
+    xmi: xa,
     uri: "/timeline-settings.ui.xmi",
-    ePackage: () => c.eINSTANCE,
-    create: () => new r(),
+    ePackage: () => d.eINSTANCE,
+    create: () => new s(),
     /*
      * Which stretch of time the timeline covers is not a field: it is two
      * moments or an offset from now, typed or taken from a variable, with
@@ -1890,31 +1916,32 @@ let ke = class {
     unmodelledSections: ["Zeitraum"]
   };
   register() {
-    this.events.registerWidget(be, Na), this.actions.registerWidgetType(be, we, "widget");
+    this.events.registerWidget(_e, Oa), this.actions.registerWidgetType(_e, Ie, "widget");
   }
   unregister() {
-    this.events.unregisterWidget(be), this.actions.unregisterWidgetType(be);
+    this.events.unregisterWidget(_e), this.actions.unregisterWidgetType(_e);
   }
 };
 Qe([
-  _t()
-], ke.prototype, "register", 1);
+  wt()
+], Be.prototype, "register", 1);
 Qe([
-  pt()
-], ke.prototype, "unregister", 1);
-ke = Qe([
-  It({
-    service: [Bt],
-    properties: { "widget.type": be }
+  yt()
+], Be.prototype, "unregister", 1);
+Be = Qe([
+  ut({
+    service: [zt],
+    properties: { "widget.type": _e }
   }),
-  lt(0, rt(ft)),
-  lt(1, rt(mt))
-], ke);
+  lt(0, st(bt)),
+  lt(1, st(Mt))
+], Be);
 export {
-  r as TimelineSettingsImpl,
-  na as TimelineWidget,
-  ke as TimelineWidgetProvider,
-  pa as TimelineWidgetSettings,
-  c as TimelinesettingsPackage,
-  ba as timelineSettingsFormXmi
+  s as TimelineSettingsImpl,
+  ot as TimelineTranslations,
+  Ta as TimelineWidget,
+  Be as TimelineWidgetProvider,
+  Va as TimelineWidgetSettings,
+  d as TimelinesettingsPackage,
+  xa as timelineSettingsFormXmi
 };

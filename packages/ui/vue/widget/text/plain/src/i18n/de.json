@@ -1,0 +1,22 @@
+{
+  "Widget": {
+    "name": "Text"
+  },
+  "Settings": {
+    "section": "Text und Formatierung",
+    "text": "Text",
+    "textPlaceholder": "Text mit Variablen eingeben…",
+    "bold": "Fett",
+    "italic": "Kursiv",
+    "underline": "Unterstrichen",
+    "left": "Links",
+    "center": "Mittig",
+    "right": "Rechts",
+    "top": "Oben",
+    "bottom": "Unten"
+  },
+  "Form": {
+    "fontSize": "Schriftgröße (px)",
+    "fontColor": "Schriftfarbe"
+  }
+}

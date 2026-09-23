@@ -49,5 +49,17 @@
       "id": "org.eclipse.daanse.board.app.lib.events",
       "versionRange": ">=0.0.1-0"
     }
+  ],
+  "capabilities": [
+    {
+      "namespace": "tsm.i18n",
+      "attributes": {
+        "namespace": "markdown",
+        "languages": [
+          "de",
+          "en"
+        ]
+      }
+    }
   ]
 }

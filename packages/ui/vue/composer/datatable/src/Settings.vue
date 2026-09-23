@@ -18,6 +18,7 @@ import {
   DatasourceRepository, identifier as DatasourceRepositoryIdentifier
 } from "org.eclipse.daanse.board.app.lib.repository.datasource";
 import { watch, ref, computed } from "vue";
+import { useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 
 // Injected once at setup; the static helpers receive it as an argument
 const dsRepository = inject<DatasourceRepository>(DatasourceRepositoryIdentifier)!
@@ -27,6 +28,8 @@ const { config, dataSources } = defineProps<{
   dataSources: any;
   connections: any;
 }>();
+
+const { t } = useTranslation('composerDatatable')
 
 const datasourcesFiltered = computed(() => {
   return dataSources.filter((ds: any) => DataTableComposer.availableTypes.includes(ds.type));
@@ -43,9 +46,9 @@ watch(() => config.connectedDatasources, async (newValue) => {
 </script>
 <template>
   <!-- eslint-disable-next-line vue/no-mutating-props -->
-  <DSelect v-model="config.connectedDatasources" label="Quellen" :options="datasourcesFiltered" multiple label-key="name"
+  <DSelect v-model="config.connectedDatasources" :label="t('Settings.sources')" :options="datasourcesFiltered" multiple label-key="name"
     value-key="uid" />
 
   <!-- eslint-disable-next-line vue/no-mutating-props -->
-  <DSelect v-model="config.composeBy" label="Zusammensetzen nach" :options="composeByOptions" />
+  <DSelect v-model="config.composeBy" :label="t('Settings.composeBy')" :options="composeByOptions" />
 </template>

@@ -179,7 +179,7 @@ const hasFields = computed(() => (model.value?.eClass?.().getEStructuralFeatures
       :model="model"
     />
     <p v-else class="settings-form__empty">
-      {{ emptyText ?? 'Für dieses Widget sind keine Einstellungen modelliert.' }}
+      {{ emptyText ?? translate('uimodel:Form.empty') }}
     </p>
   </div>
 </template>

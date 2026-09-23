@@ -64,6 +64,7 @@ interface Change {
 
 /** What one thing a person did comes to. */
 interface Step {
+  /** A translation key - the topbar shows it in the language on screen. */
   label: string
   changes: Change[]
 }
@@ -95,7 +96,10 @@ export interface History {
   redoLabel: Readonly<{ value: string | undefined }>
   undo(): void
   redo(): void
-  /** Opens a step that spans a gesture - a drag, a resize. */
+  /**
+   * Opens a step that spans a gesture - a drag, a resize. The label is a
+   * translation key, such as 'layout:History.moved'.
+   */
   begin(label: string): void
   /** Closes it. A step that recorded nothing is dropped. */
   end(): void
@@ -139,7 +143,7 @@ export function useHistory(root: MaybeRefOrGetter<EObject | undefined>): History
     }
 
     if (!open) {
-      open = { label: 'Änderung', changes: [] }
+      open = { label: 'common:History.change', changes: [] }
       /*
        * Outside a gesture the step closes by itself at the end of the
        * turn, so a call that sets three features is one step and not

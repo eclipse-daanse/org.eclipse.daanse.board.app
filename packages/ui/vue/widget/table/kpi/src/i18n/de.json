@@ -1,0 +1,27 @@
+{
+  "Widget": {
+    "name": "KPI-Tabelle"
+  },
+  "Form": {
+    "marksGroup": "Kennzeichen",
+    "trendVisualType": "Trend",
+    "statusVisualType": "Status",
+    "shapeGroup": "Aufbau",
+    "showFolders": "Ordner zeigen",
+    "showParentChild": "Über- und Untereinträge zeigen",
+    "headerBackground": "Kopfzeilenfarbe"
+  },
+  "Options": {
+    "trend": {
+      "emoji": "Emoji",
+      "arrow": "Pfeil",
+      "chart": "Kurve",
+      "badge": "Plakette"
+    },
+    "status": {
+      "emoji": "Emoji",
+      "lights": "Ampel",
+      "badge": "Plakette"
+    }
+  }
+}

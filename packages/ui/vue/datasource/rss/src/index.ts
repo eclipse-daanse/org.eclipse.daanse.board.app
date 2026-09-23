@@ -54,3 +54,6 @@ export function deactivate({ services }: ActivationContext) {
   services.unregister('RssPreview')
   services.unregister('RssSettings')
 }
+
+/* Its texts - collected by lib.i18next, see src/i18n. */
+export { DatasourceRssTranslations } from './i18n'

@@ -20,7 +20,7 @@ import {
   identifier as WORKSPACE,
   type Workspace,
 } from 'org.eclipse.daanse.board.app.lib.model.workspace'
-import { useEList } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+import { useEList, useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import { cloneDeep } from 'lodash'
 import { DButton, DIconPicker, DInput, DSelect } from 'org.eclipse.daanse.board.app.ui.vue.controls'
 import TagInput from './TagInput.vue'
@@ -128,24 +128,25 @@ const updateConfig = (config: any) => {
 }
 
 const emit = defineEmits(['close'])
+const { t } = useTranslation('shell')
 </script>
 <template>
   <div class="editor">
     <template v-if="view === 'settings'">
       <div class="editor__fields">
         <DInput v-model="datasourceProxy.uid" label="UID" readonly />
-        <DInput v-model="datasourceProxy.name" label="Name" />
-        <DSelect v-model="datasourceProxy.type" label="Typ" :options="availableDatasources" />
+        <DInput v-model="datasourceProxy.name" :label="t('Editor.name')" />
+        <DSelect v-model="datasourceProxy.type" :label="t('Editor.type')" :options="availableDatasources" />
         <DIconPicker
           v-model="datasourceProxy.icon"
-          label="Symbol"
+          :label="t('Editor.icon')"
           :fallback="typeIcon"
-          hint="Ohne eigenes Symbol steht hier das des Typs."
+          :hint="t('Editor.iconHint')"
         />
         <TagInput
           v-model="datasourceProxy.tags"
-          label="Schlagworte"
-          hint="Wofür diese Datenquelle da ist — danach lässt sich suchen."
+          :label="t('Editor.tags')"
+          :hint="t('Datasource.tagsHint')"
           :known="knownTags"
         />
         <component
@@ -156,8 +157,8 @@ const emit = defineEmits(['close'])
         />
       </div>
       <div class="editor__actions">
-        <DButton intent="quiet" @click="$emit('close')">Schließen</DButton>
-        <DButton intent="primary" @click="saveDataSource">Speichern</DButton>
+        <DButton intent="quiet" @click="$emit('close')">{{ t('common:Action.close') }}</DButton>
+        <DButton intent="primary" @click="saveDataSource">{{ t('common:Action.save') }}</DButton>
       </div>
     </template>
 

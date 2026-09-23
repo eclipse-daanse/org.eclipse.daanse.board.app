@@ -1,13 +1,13 @@
-(function(){var i="ui.vue.widget.image",d=document,s=d.querySelector('style[data-tsm-bundle="'+i+'"]');if(!s){s=d.createElement('style');s.setAttribute('data-tsm-bundle',i);d.head.appendChild(s);}s.textContent=".slideshow-container[data-v-a4f596a6]{width:100%;height:100%;overflow:hidden;position:relative}.slideshow-track[data-v-a4f596a6]{width:100%;height:100%;overflow:visible;position:relative;transition:transform .3s ease-in-out}.slideshow-slide[data-v-a4f596a6]{width:100%;height:100%;position:absolute;top:0;left:0}.slideshow-nav[data-v-a4f596a6]{position:absolute;top:50%;width:32px;height:32px;transform:translateY(-50%);z-index:10;background:#0009;border-radius:50%;display:flex;align-items:center;justify-content:center}.slideshow-nav--prev[data-v-a4f596a6]{left:40px}.slideshow-nav--next[data-v-a4f596a6]{right:40px}.slideshow-nav__button[data-v-a4f596a6]{width:100%;height:100%;min-width:0;padding:0;color:#fff}.slideshow-nav__button[data-v-a4f596a6]:hover:not(:disabled){color:#fff;background:#ffffff26}\n";})();
-import { PayloadImpl as Z, EventsPackage as ie, EVENT_REGISTRY_ID as ae } from "org.eclipse.daanse.board.app.lib.api.events";
-import { activate as re, deactivate as ne, component as le, inject as oe } from "@eclipse-daanse/tsm";
-import { defineComponent as ue, mergeModels as ce, toRefs as he, useModel as ge, inject as de, onMounted as k, computed as T, ref as Ie, watch as O, createElementBlock as C, openBlock as G, withModifiers as X, normalizeClass as K, createElementVNode as D, createVNode as N, unref as M, withCtx as j, normalizeStyle as $, Fragment as Ee, renderList as me } from "vue";
-import { VariableWrapper as A, plainSettings as q } from "org.eclipse.daanse.board.app.ui.vue.composables";
-import { BasicEObject as Y, BasicEFactory as pe, BasicEPackage as fe, EPackageRegistry as Q, BasicEClass as L, BasicEReference as y, BasicEAttribute as R, getEcorePackage as U, createContainmentEList as Se } from "@emfts/core";
-import { DButton as z, DIcon as J } from "org.eclipse.daanse.board.app.ui.vue.controls";
-import { WIDGET_SERVICE_ID as ve } from "org.eclipse.daanse.board.app.lib.api.widget";
-const { identifiers: _e } = __tsm__.require("org.eclipse.daanse.board.app.lib.core"), we = "data:image/svg+xml,%3csvg%20width='120'%20height='120'%20viewBox='0%200%20120%20120'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cpath%20fill-rule='evenodd'%20clip-rule='evenodd'%20d='M105%207.5H15C10.8579%207.5%207.5%2010.8579%207.5%2015V105C7.5%20109.142%2010.8579%20112.5%2015%20112.5H105C109.142%20112.5%20112.5%20109.142%20112.5%20105V15C112.5%2010.8579%20109.142%207.5%20105%207.5ZM15%200C6.71573%200%200%206.71573%200%2015V105C0%20113.284%206.71573%20120%2015%20120H105C113.284%20120%20120%20113.284%20120%20105V15C120%206.71573%20113.284%200%20105%200H15Z'%20fill='%23606060'/%3e%3cpath%20d='M22.5%2061.5C22.5%2060.6716%2023.1716%2060%2024%2060H29.5458C29.842%2060%2030.1315%2059.9123%2030.3779%2059.7481L40.4179%2053.0547C40.9218%2052.7188%2041.5782%2052.7188%2042.0821%2053.0547L51.5874%2059.3916C52.1309%2059.7539%2052.8464%2059.7229%2053.3565%2059.3148L70.28%2045.776C70.8427%2045.3258%2071.646%2045.3395%2072.1932%2045.8085L96.9762%2067.051C97.3087%2067.336%2097.5%2067.752%2097.5%2068.1899V90.75C97.5%2094.0637%2094.8137%2096.75%2091.5%2096.75H28.5C25.1863%2096.75%2022.5%2094.0637%2022.5%2090.75V61.5Z'%20fill='%23606060'/%3e%3cpath%20d='M37.5%2030C37.5%2034.1421%2034.1421%2037.5%2030%2037.5C25.8579%2037.5%2022.5%2034.1421%2022.5%2030C22.5%2025.8579%2025.8579%2022.5%2030%2022.5C34.1421%2022.5%2037.5%2025.8579%2037.5%2030Z'%20fill='%23606060'/%3e%3c/svg%3e";
-class l extends Y {
+(function(){var i="ui.vue.widget.image",d=document,s=d.querySelector('style[data-tsm-bundle="'+i+'"]');if(!s){s=d.createElement('style');s.setAttribute('data-tsm-bundle',i);d.head.appendChild(s);}s.textContent=".slideshow-container[data-v-9d924243]{width:100%;height:100%;overflow:hidden;position:relative}.slideshow-track[data-v-9d924243]{width:100%;height:100%;overflow:visible;position:relative;transition:transform .3s ease-in-out}.slideshow-slide[data-v-9d924243]{width:100%;height:100%;position:absolute;top:0;left:0}.slideshow-nav[data-v-9d924243]{position:absolute;top:50%;width:32px;height:32px;transform:translateY(-50%);z-index:10;background:#0009;border-radius:50%;display:flex;align-items:center;justify-content:center}.slideshow-nav--prev[data-v-9d924243]{left:40px}.slideshow-nav--next[data-v-9d924243]{right:40px}.slideshow-nav__button[data-v-9d924243]{width:100%;height:100%;min-width:0;padding:0;color:#fff}.slideshow-nav__button[data-v-9d924243]:hover:not(:disabled){color:#fff;background:#ffffff26}\n";})();
+import { PayloadImpl as ee, EventsPackage as le, EVENT_REGISTRY_ID as oe } from "org.eclipse.daanse.board.app.lib.api.events";
+import { component as te, activate as ue, deactivate as ce, inject as ge } from "@eclipse-daanse/tsm";
+import { defineComponent as de, mergeModels as he, toRefs as me, useModel as Ie, inject as pe, onMounted as $, computed as G, ref as Ee, watch as O, createElementBlock as C, openBlock as D, withModifiers as X, normalizeClass as K, createElementVNode as N, createVNode as M, unref as A, withCtx as j, normalizeStyle as q, Fragment as fe, renderList as Se } from "vue";
+import { VariableWrapper as L, useTranslation as _e, plainSettings as z } from "org.eclipse.daanse.board.app.ui.vue.composables";
+import { BasicEObject as W, BasicEFactory as ve, BasicEPackage as we, EPackageRegistry as se, BasicEClass as T, BasicEReference as y, BasicEAttribute as F, getEcorePackage as R, createContainmentEList as Ae } from "@emfts/core";
+import { DButton as J, DIcon as Z } from "org.eclipse.daanse.board.app.ui.vue.controls";
+import { WIDGET_SERVICE_ID as Te } from "org.eclipse.daanse.board.app.lib.api.widget";
+const { identifiers: Le } = __tsm__.require("org.eclipse.daanse.board.app.lib.core"), Ge = "data:image/svg+xml,%3csvg%20width='120'%20height='120'%20viewBox='0%200%20120%20120'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cpath%20fill-rule='evenodd'%20clip-rule='evenodd'%20d='M105%207.5H15C10.8579%207.5%207.5%2010.8579%207.5%2015V105C7.5%20109.142%2010.8579%20112.5%2015%20112.5H105C109.142%20112.5%20112.5%20109.142%20112.5%20105V15C112.5%2010.8579%20109.142%207.5%20105%207.5ZM15%200C6.71573%200%200%206.71573%200%2015V105C0%20113.284%206.71573%20120%2015%20120H105C113.284%20120%20120%20113.284%20120%20105V15C120%206.71573%20113.284%200%20105%200H15Z'%20fill='%23606060'/%3e%3cpath%20d='M22.5%2061.5C22.5%2060.6716%2023.1716%2060%2024%2060H29.5458C29.842%2060%2030.1315%2059.9123%2030.3779%2059.7481L40.4179%2053.0547C40.9218%2052.7188%2041.5782%2052.7188%2042.0821%2053.0547L51.5874%2059.3916C52.1309%2059.7539%2052.8464%2059.7229%2053.3565%2059.3148L70.28%2045.776C70.8427%2045.3258%2071.646%2045.3395%2072.1932%2045.8085L96.9762%2067.051C97.3087%2067.336%2097.5%2067.752%2097.5%2068.1899V90.75C97.5%2094.0637%2094.8137%2096.75%2091.5%2096.75H28.5C25.1863%2096.75%2022.5%2094.0637%2022.5%2090.75V61.5Z'%20fill='%23606060'/%3e%3cpath%20d='M37.5%2030C37.5%2034.1421%2034.1421%2037.5%2030%2037.5C25.8579%2037.5%2022.5%2034.1421%2022.5%2030C22.5%2025.8579%2025.8579%2022.5%2030%2022.5C34.1421%2022.5%2037.5%2025.8579%2037.5%2030Z'%20fill='%23606060'/%3e%3c/svg%3e";
+class u extends W {
   // Feature ID Constants (eLiterals)
   static ID = 0;
   static URL = 1;
@@ -18,7 +18,7 @@ class l extends Y {
    * Returns the EClass of this object
    */
   eClass() {
-    return s.Literals.IMAGE_GALLERY_ITEM;
+    return i.Literals.IMAGE_GALLERY_ITEM;
   }
   // Getters and Setters
   get id() {
@@ -30,14 +30,14 @@ class l extends Y {
       getNotifier: () => this,
       getEventType: () => 1,
       // SET
-      getFeature: () => this.eClass().getEStructuralFeature(l.ID),
+      getFeature: () => this.eClass().getEStructuralFeature(u.ID),
       getOldValue: () => t,
       getNewValue: () => e,
       getPosition: () => -1,
       wasSet: () => !0,
       isTouch: () => !1,
       isReset: () => !1,
-      getFeatureID: () => l.ID,
+      getFeatureID: () => u.ID,
       merge: () => !1
     });
   }
@@ -50,14 +50,14 @@ class l extends Y {
       getNotifier: () => this,
       getEventType: () => 1,
       // SET
-      getFeature: () => this.eClass().getEStructuralFeature(l.URL),
+      getFeature: () => this.eClass().getEStructuralFeature(u.URL),
       getOldValue: () => t,
       getNewValue: () => e,
       getPosition: () => -1,
       wasSet: () => !0,
       isTouch: () => !1,
       isReset: () => !1,
-      getFeatureID: () => l.URL,
+      getFeatureID: () => u.URL,
       merge: () => !1
     });
   }
@@ -67,9 +67,9 @@ class l extends Y {
    */
   eGet(e) {
     switch (this.eClass().getFeatureID(e)) {
-      case l.ID:
+      case u.ID:
         return this.id;
-      case l.URL:
+      case u.URL:
         return this.url;
       default:
         return super.eGet(e);
@@ -80,10 +80,10 @@ class l extends Y {
    */
   eSet(e, t) {
     switch (this.eClass().getFeatureID(e)) {
-      case l.ID:
+      case u.ID:
         this.id = t, super.eSet(e, t);
         break;
-      case l.URL:
+      case u.URL:
         this.url = t, super.eSet(e, t);
         break;
       default:
@@ -95,9 +95,9 @@ class l extends Y {
    */
   eIsSet(e) {
     switch (this.eClass().getFeatureID(e)) {
-      case l.ID:
+      case u.ID:
         return this._id !== void 0;
-      case l.URL:
+      case u.URL:
         return this._url !== void 0;
       default:
         return super.eIsSet(e);
@@ -108,10 +108,10 @@ class l extends Y {
    */
   eUnset(e) {
     switch (this.eClass().getFeatureID(e)) {
-      case l.ID:
+      case u.ID:
         this._id = void 0;
         return;
-      case l.URL:
+      case u.URL:
         this._url = void 0;
         return;
       default:
@@ -132,18 +132,18 @@ class l extends Y {
     };
   }
 }
-class o extends Y {
+class c extends W {
   // Feature ID Constants (eLiterals)
   static FIT = 0;
   static DIASHOW_INTERVAL = 1;
   // Private fields
-  _fit = new A();
-  _diashowInterval = new A();
+  _fit = new L();
+  _diashowInterval = new L();
   /**
    * Returns the EClass of this object
    */
   eClass() {
-    return s.Literals.GALLERY_SETTINGS;
+    return i.Literals.GALLERY_SETTINGS;
   }
   // Getters and Setters
   get fit() {
@@ -155,14 +155,14 @@ class o extends Y {
       getNotifier: () => this,
       getEventType: () => 1,
       // SET
-      getFeature: () => this.eClass().getEStructuralFeature(o.FIT),
+      getFeature: () => this.eClass().getEStructuralFeature(c.FIT),
       getOldValue: () => t,
       getNewValue: () => e,
       getPosition: () => -1,
       wasSet: () => !0,
       isTouch: () => !1,
       isReset: () => !1,
-      getFeatureID: () => o.FIT,
+      getFeatureID: () => c.FIT,
       merge: () => !1
     });
   }
@@ -175,14 +175,14 @@ class o extends Y {
       getNotifier: () => this,
       getEventType: () => 1,
       // SET
-      getFeature: () => this.eClass().getEStructuralFeature(o.DIASHOW_INTERVAL),
+      getFeature: () => this.eClass().getEStructuralFeature(c.DIASHOW_INTERVAL),
       getOldValue: () => t,
       getNewValue: () => e,
       getPosition: () => -1,
       wasSet: () => !0,
       isTouch: () => !1,
       isReset: () => !1,
-      getFeatureID: () => o.DIASHOW_INTERVAL,
+      getFeatureID: () => c.DIASHOW_INTERVAL,
       merge: () => !1
     });
   }
@@ -192,9 +192,9 @@ class o extends Y {
    */
   eGet(e) {
     switch (this.eClass().getFeatureID(e)) {
-      case o.FIT:
+      case c.FIT:
         return this.fit;
-      case o.DIASHOW_INTERVAL:
+      case c.DIASHOW_INTERVAL:
         return this.diashowInterval;
       default:
         return super.eGet(e);
@@ -205,10 +205,10 @@ class o extends Y {
    */
   eSet(e, t) {
     switch (this.eClass().getFeatureID(e)) {
-      case o.FIT:
+      case c.FIT:
         this.fit = t, super.eSet(e, t);
         break;
-      case o.DIASHOW_INTERVAL:
+      case c.DIASHOW_INTERVAL:
         this.diashowInterval = t, super.eSet(e, t);
         break;
       default:
@@ -220,10 +220,10 @@ class o extends Y {
    */
   eIsSet(e) {
     switch (this.eClass().getFeatureID(e)) {
-      case o.FIT:
-        return this._fit !== new A();
-      case o.DIASHOW_INTERVAL:
-        return this._diashowInterval !== new A();
+      case c.FIT:
+        return this._fit !== new L();
+      case c.DIASHOW_INTERVAL:
+        return this._diashowInterval !== new L();
       default:
         return super.eIsSet(e);
     }
@@ -233,11 +233,11 @@ class o extends Y {
    */
   eUnset(e) {
     switch (this.eClass().getFeatureID(e)) {
-      case o.FIT:
-        this._fit = new A();
+      case c.FIT:
+        this._fit = new L();
         return;
-      case o.DIASHOW_INTERVAL:
-        this._diashowInterval = new A();
+      case c.DIASHOW_INTERVAL:
+        this._diashowInterval = new L();
         return;
       default:
         super.eUnset(e);
@@ -257,7 +257,7 @@ class o extends Y {
     };
   }
 }
-class f extends Z {
+class E extends ee {
   // Feature ID Constants (eLiterals)
   static IMAGE_URL = 4;
   // Private fields
@@ -266,7 +266,99 @@ class f extends Z {
    * Returns the EClass of this object
    */
   eClass() {
-    return s.Literals.IMAGE_CLICK_PAYLOAD;
+    return i.Literals.IMAGE_CLICK_PAYLOAD;
+  }
+  // Getters and Setters
+  get imageUrl() {
+    return this._imageUrl;
+  }
+  set imageUrl(e) {
+    const t = this._imageUrl;
+    this._imageUrl = e, this.eDeliver() && this.eNotify({
+      getNotifier: () => this,
+      getEventType: () => 1,
+      // SET
+      getFeature: () => this.eClass().getEStructuralFeature(E.IMAGE_URL),
+      getOldValue: () => t,
+      getNewValue: () => e,
+      getPosition: () => -1,
+      wasSet: () => !0,
+      isTouch: () => !1,
+      isReset: () => !1,
+      getFeatureID: () => E.IMAGE_URL,
+      merge: () => !1
+    });
+  }
+  // Reflective API
+  /**
+   * Returns the value of the given feature
+   */
+  eGet(e) {
+    switch (this.eClass().getFeatureID(e)) {
+      case E.IMAGE_URL:
+        return this.imageUrl;
+      default:
+        return super.eGet(e);
+    }
+  }
+  /**
+   * Sets the value of the given feature
+   */
+  eSet(e, t) {
+    switch (this.eClass().getFeatureID(e)) {
+      case E.IMAGE_URL:
+        this.imageUrl = t, super.eSet(e, t);
+        break;
+      default:
+        super.eSet(e, t);
+    }
+  }
+  /**
+   * Returns whether the feature has been set
+   */
+  eIsSet(e) {
+    switch (this.eClass().getFeatureID(e)) {
+      case E.IMAGE_URL:
+        return this._imageUrl !== void 0;
+      default:
+        return super.eIsSet(e);
+    }
+  }
+  /**
+   * Unsets the given feature
+   */
+  eUnset(e) {
+    switch (this.eClass().getFeatureID(e)) {
+      case E.IMAGE_URL:
+        this._imageUrl = void 0;
+        return;
+      default:
+        super.eUnset(e);
+    }
+  }
+  /**
+   * What this object is when it is stored.
+   *
+   * The plain names, not the private fields the getters sit in: those
+   * are this class's business, and a stored board is read by things
+   * that only know the model.
+   */
+  toJSON() {
+    return {
+      imageUrl: this.imageUrl
+    };
+  }
+}
+class f extends ee {
+  // Feature ID Constants (eLiterals)
+  static IMAGE_URL = 4;
+  // Private fields
+  _imageUrl;
+  /**
+   * Returns the EClass of this object
+   */
+  eClass() {
+    return i.Literals.IMAGE_RIGHT_CLICK_PAYLOAD;
   }
   // Getters and Setters
   get imageUrl() {
@@ -349,136 +441,44 @@ class f extends Z {
     };
   }
 }
-class S extends Z {
-  // Feature ID Constants (eLiterals)
-  static IMAGE_URL = 4;
-  // Private fields
-  _imageUrl;
-  /**
-   * Returns the EClass of this object
-   */
-  eClass() {
-    return s.Literals.IMAGE_RIGHT_CLICK_PAYLOAD;
-  }
-  // Getters and Setters
-  get imageUrl() {
-    return this._imageUrl;
-  }
-  set imageUrl(e) {
-    const t = this._imageUrl;
-    this._imageUrl = e, this.eDeliver() && this.eNotify({
-      getNotifier: () => this,
-      getEventType: () => 1,
-      // SET
-      getFeature: () => this.eClass().getEStructuralFeature(S.IMAGE_URL),
-      getOldValue: () => t,
-      getNewValue: () => e,
-      getPosition: () => -1,
-      wasSet: () => !0,
-      isTouch: () => !1,
-      isReset: () => !1,
-      getFeatureID: () => S.IMAGE_URL,
-      merge: () => !1
-    });
-  }
-  // Reflective API
-  /**
-   * Returns the value of the given feature
-   */
-  eGet(e) {
-    switch (this.eClass().getFeatureID(e)) {
-      case S.IMAGE_URL:
-        return this.imageUrl;
-      default:
-        return super.eGet(e);
-    }
-  }
-  /**
-   * Sets the value of the given feature
-   */
-  eSet(e, t) {
-    switch (this.eClass().getFeatureID(e)) {
-      case S.IMAGE_URL:
-        this.imageUrl = t, super.eSet(e, t);
-        break;
-      default:
-        super.eSet(e, t);
-    }
-  }
-  /**
-   * Returns whether the feature has been set
-   */
-  eIsSet(e) {
-    switch (this.eClass().getFeatureID(e)) {
-      case S.IMAGE_URL:
-        return this._imageUrl !== void 0;
-      default:
-        return super.eIsSet(e);
-    }
-  }
-  /**
-   * Unsets the given feature
-   */
-  eUnset(e) {
-    switch (this.eClass().getFeatureID(e)) {
-      case S.IMAGE_URL:
-        this._imageUrl = void 0;
-        return;
-      default:
-        super.eUnset(e);
-    }
-  }
-  /**
-   * What this object is when it is stored.
-   *
-   * The plain names, not the private fields the getters sit in: those
-   * are this class's business, and a stored board is read by things
-   * that only know the model.
-   */
-  toJSON() {
-    return {
-      imageUrl: this.imageUrl
-    };
-  }
-}
-class V extends pe {
+class P extends ve {
   // Lazy singleton instance
   static _instance;
   static get eINSTANCE() {
-    return this._instance || (this._instance = new V()), this._instance;
+    return this._instance || (this._instance = new P()), this._instance;
   }
   constructor() {
-    super(), this.setEPackage(s.eINSTANCE);
+    super(), this.setEPackage(i.eINSTANCE);
   }
   /**
    * Create a new ImageSettings instance
    */
   createImageSettings() {
-    return new u();
+    return new g();
   }
   /**
    * Create a new ImageGalleryItem instance
    */
   createImageGalleryItem() {
-    return new l();
+    return new u();
   }
   /**
    * Create a new GallerySettings instance
    */
   createGallerySettings() {
-    return new o();
+    return new c();
   }
   /**
    * Create a new ImageClickPayload instance
    */
   createImageClickPayload() {
-    return new f();
+    return new E();
   }
   /**
    * Create a new ImageRightClickPayload instance
    */
   createImageRightClickPayload() {
-    return new S();
+    return new f();
   }
   /**
    * Create an instance of the given class
@@ -500,20 +500,20 @@ class V extends pe {
     }
   }
 }
-function F(n) {
-  const e = Q.INSTANCE.getEPackage(n);
+function U(r) {
+  const e = se.INSTANCE.getEPackage(r);
   if (!e)
-    throw new Error(`EPackage '${n}' is not registered. Access the eINSTANCE of that model's generated package (or register it via EPackageRegistry.INSTANCE.registerPackage) before initializing ImagesettingsPackage.`);
+    throw new Error(`EPackage '${r}' is not registered. Access the eINSTANCE of that model's generated package (or register it via EPackageRegistry.INSTANCE.registerPackage) before initializing ImagesettingsPackage.`);
   return e;
 }
-class s extends fe {
+class i extends we {
   static eNAME = "imagesettings";
   static eNS_URI = "http://org.eclipse.daanse.board.app.ui.vue.widget.image";
   static eNS_PREFIX = "imagesettings";
   // Singleton instance
   static _instance;
   static get eINSTANCE() {
-    return this._instance || (this._instance = new s(), this._instance.init()), this._instance;
+    return this._instance || (this._instance = new i(), this._instance.init()), this._instance;
   }
   /**
    * Literals for quick access to metaclasses and features
@@ -534,42 +534,42 @@ class s extends fe {
     IMAGE_RIGHT_CLICK_PAYLOAD__IMAGE_URL: null
   };
   constructor() {
-    super(), this.setName(s.eNAME), this.setNsURI(s.eNS_URI), this.setNsPrefix(s.eNS_PREFIX);
+    super(), this.setName(i.eNAME), this.setNsURI(i.eNS_URI), this.setNsPrefix(i.eNS_PREFIX);
   }
   /**
    * Initialize package contents
    */
   init() {
-    Q.INSTANCE.set(s.eNS_URI, this), this.setEFactoryInstance(V.eINSTANCE);
-    const e = new L();
-    e.setName("ImageSettings"), e.setAbstract(!1), e.setInterface(!1), this.getEClassifiers().push(e), e.setEPackage(this), s.Literals.IMAGE_SETTINGS = e;
+    se.INSTANCE.set(i.eNS_URI, this), this.setEFactoryInstance(P.eINSTANCE);
+    const e = new T();
+    e.setName("ImageSettings"), e.setAbstract(!1), e.setInterface(!1), this.getEClassifiers().push(e), e.setEPackage(this), i.Literals.IMAGE_SETTINGS = e;
     const t = new y();
-    t.setContainment(!0), t.setName("imagesSettings"), t.setLowerBound(0), t.setUpperBound(1), e.getEStructuralFeatures().push(t), s.Literals.IMAGE_SETTINGS__IMAGES_SETTINGS = t;
-    const i = new y();
-    i.setContainment(!0), i.setName("images"), i.setLowerBound(0), i.setUpperBound(-1), e.getEStructuralFeatures().push(i), s.Literals.IMAGE_SETTINGS__IMAGES = i;
-    const a = new L();
-    a.setName("ImageGalleryItem"), a.setAbstract(!1), a.setInterface(!1), this.getEClassifiers().push(a), a.setEPackage(this), s.Literals.IMAGE_GALLERY_ITEM = a;
-    const c = new R();
-    c.setName("id"), c.setLowerBound(0), c.setUpperBound(1), a.getEStructuralFeatures().push(c), s.Literals.IMAGE_GALLERY_ITEM__ID = c;
-    const h = new R();
-    h.setName("url"), h.setLowerBound(0), h.setUpperBound(1), a.getEStructuralFeatures().push(h), s.Literals.IMAGE_GALLERY_ITEM__URL = h;
-    const d = new L();
-    d.setName("GallerySettings"), d.setAbstract(!1), d.setInterface(!1), this.getEClassifiers().push(d), d.setEPackage(this), s.Literals.GALLERY_SETTINGS = d;
+    t.setContainment(!0), t.setName("imagesSettings"), t.setLowerBound(0), t.setUpperBound(1), e.getEStructuralFeatures().push(t), i.Literals.IMAGE_SETTINGS__IMAGES_SETTINGS = t;
+    const a = new y();
+    a.setContainment(!0), a.setName("images"), a.setLowerBound(0), a.setUpperBound(-1), e.getEStructuralFeatures().push(a), i.Literals.IMAGE_SETTINGS__IMAGES = a;
+    const s = new T();
+    s.setName("ImageGalleryItem"), s.setAbstract(!1), s.setInterface(!1), this.getEClassifiers().push(s), s.setEPackage(this), i.Literals.IMAGE_GALLERY_ITEM = s;
+    const l = new F();
+    l.setName("id"), l.setLowerBound(0), l.setUpperBound(1), s.getEStructuralFeatures().push(l), i.Literals.IMAGE_GALLERY_ITEM__ID = l;
+    const o = new F();
+    o.setName("url"), o.setLowerBound(0), o.setUpperBound(1), s.getEStructuralFeatures().push(o), i.Literals.IMAGE_GALLERY_ITEM__URL = o;
+    const d = new T();
+    d.setName("GallerySettings"), d.setAbstract(!1), d.setInterface(!1), this.getEClassifiers().push(d), d.setEPackage(this), i.Literals.GALLERY_SETTINGS = d;
+    const S = new y();
+    S.setContainment(!1), S.setName("fit"), S.setLowerBound(0), S.setUpperBound(1), d.getEStructuralFeatures().push(S), i.Literals.GALLERY_SETTINGS__FIT = S;
     const _ = new y();
-    _.setContainment(!1), _.setName("fit"), _.setLowerBound(0), _.setUpperBound(1), d.getEStructuralFeatures().push(_), s.Literals.GALLERY_SETTINGS__FIT = _;
-    const I = new y();
-    I.setContainment(!1), I.setName("diashowInterval"), I.setLowerBound(0), I.setUpperBound(1), d.getEStructuralFeatures().push(I), s.Literals.GALLERY_SETTINGS__DIASHOW_INTERVAL = I;
-    const E = new L();
-    E.setName("ImageClickPayload"), E.setAbstract(!1), E.setInterface(!1), this.getEClassifiers().push(E), E.setEPackage(this), s.Literals.IMAGE_CLICK_PAYLOAD = E;
-    const p = new R();
-    p.setName("imageUrl"), p.setLowerBound(0), p.setUpperBound(1), E.getEStructuralFeatures().push(p), s.Literals.IMAGE_CLICK_PAYLOAD__IMAGE_URL = p;
-    const r = new L();
-    r.setName("ImageRightClickPayload"), r.setAbstract(!1), r.setInterface(!1), this.getEClassifiers().push(r), r.setEPackage(this), s.Literals.IMAGE_RIGHT_CLICK_PAYLOAD = r;
-    const v = new R();
-    v.setName("imageUrl"), v.setLowerBound(0), v.setUpperBound(1), r.getEStructuralFeatures().push(v), s.Literals.IMAGE_RIGHT_CLICK_PAYLOAD__IMAGE_URL = v, s.Literals.IMAGE_CLICK_PAYLOAD.getESuperTypes().push(F("http://org.eclipse.daanse.board.app.lib.events").getEClassifier("Payload")), s.Literals.IMAGE_RIGHT_CLICK_PAYLOAD.getESuperTypes().push(F("http://org.eclipse.daanse.board.app.lib.events").getEClassifier("Payload")), s.Literals.IMAGE_SETTINGS__IMAGES_SETTINGS.setEType(s.Literals.GALLERY_SETTINGS), s.Literals.IMAGE_SETTINGS__IMAGES.setEType(s.Literals.IMAGE_GALLERY_ITEM), s.Literals.IMAGE_GALLERY_ITEM__ID.setEType(U().getEClassifier("EString")), s.Literals.IMAGE_GALLERY_ITEM__URL.setEType(U().getEClassifier("EString")), s.Literals.GALLERY_SETTINGS__FIT.setEType(F("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), s.Literals.GALLERY_SETTINGS__DIASHOW_INTERVAL.setEType(F("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), s.Literals.IMAGE_CLICK_PAYLOAD__IMAGE_URL.setEType(U().getEClassifier("EString")), s.Literals.IMAGE_RIGHT_CLICK_PAYLOAD__IMAGE_URL.setEType(U().getEClassifier("EString"));
+    _.setContainment(!1), _.setName("diashowInterval"), _.setLowerBound(0), _.setUpperBound(1), d.getEStructuralFeatures().push(_), i.Literals.GALLERY_SETTINGS__DIASHOW_INTERVAL = _;
+    const h = new T();
+    h.setName("ImageClickPayload"), h.setAbstract(!1), h.setInterface(!1), this.getEClassifiers().push(h), h.setEPackage(this), i.Literals.IMAGE_CLICK_PAYLOAD = h;
+    const v = new F();
+    v.setName("imageUrl"), v.setLowerBound(0), v.setUpperBound(1), h.getEStructuralFeatures().push(v), i.Literals.IMAGE_CLICK_PAYLOAD__IMAGE_URL = v;
+    const m = new T();
+    m.setName("ImageRightClickPayload"), m.setAbstract(!1), m.setInterface(!1), this.getEClassifiers().push(m), m.setEPackage(this), i.Literals.IMAGE_RIGHT_CLICK_PAYLOAD = m;
+    const n = new F();
+    n.setName("imageUrl"), n.setLowerBound(0), n.setUpperBound(1), m.getEStructuralFeatures().push(n), i.Literals.IMAGE_RIGHT_CLICK_PAYLOAD__IMAGE_URL = n, i.Literals.IMAGE_CLICK_PAYLOAD.getESuperTypes().push(U("http://org.eclipse.daanse.board.app.lib.events").getEClassifier("Payload")), i.Literals.IMAGE_RIGHT_CLICK_PAYLOAD.getESuperTypes().push(U("http://org.eclipse.daanse.board.app.lib.events").getEClassifier("Payload")), i.Literals.IMAGE_SETTINGS__IMAGES_SETTINGS.setEType(i.Literals.GALLERY_SETTINGS), i.Literals.IMAGE_SETTINGS__IMAGES.setEType(i.Literals.IMAGE_GALLERY_ITEM), i.Literals.IMAGE_GALLERY_ITEM__ID.setEType(R().getEClassifier("EString")), i.Literals.IMAGE_GALLERY_ITEM__URL.setEType(R().getEClassifier("EString")), i.Literals.GALLERY_SETTINGS__FIT.setEType(U("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), i.Literals.GALLERY_SETTINGS__DIASHOW_INTERVAL.setEType(U("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), i.Literals.IMAGE_CLICK_PAYLOAD__IMAGE_URL.setEType(R().getEClassifier("EString")), i.Literals.IMAGE_RIGHT_CLICK_PAYLOAD__IMAGE_URL.setEType(R().getEClassifier("EString"));
   }
 }
-class u extends Y {
+class g extends W {
   // Feature ID Constants (eLiterals)
   static IMAGES_SETTINGS = 0;
   static IMAGES = 1;
@@ -580,7 +580,7 @@ class u extends Y {
    * Returns the EClass of this object
    */
   eClass() {
-    return s.Literals.IMAGE_SETTINGS;
+    return i.Literals.IMAGE_SETTINGS;
   }
   // Getters and Setters
   get imagesSettings() {
@@ -592,19 +592,19 @@ class u extends Y {
       getNotifier: () => this,
       getEventType: () => 1,
       // SET
-      getFeature: () => this.eClass().getEStructuralFeature(u.IMAGES_SETTINGS),
+      getFeature: () => this.eClass().getEStructuralFeature(g.IMAGES_SETTINGS),
       getOldValue: () => t,
       getNewValue: () => e,
       getPosition: () => -1,
       wasSet: () => !0,
       isTouch: () => !1,
       isReset: () => !1,
-      getFeatureID: () => u.IMAGES_SETTINGS,
+      getFeatureID: () => g.IMAGES_SETTINGS,
       merge: () => !1
     });
   }
   get images() {
-    return this._images || (this._images = Se(this, this.eClass().getEStructuralFeature("images"))), this._images;
+    return this._images || (this._images = Ae(this, this.eClass().getEStructuralFeature("images"))), this._images;
   }
   // Reflective API
   /**
@@ -612,9 +612,9 @@ class u extends Y {
    */
   eGet(e) {
     switch (this.eClass().getFeatureID(e)) {
-      case u.IMAGES_SETTINGS:
+      case g.IMAGES_SETTINGS:
         return this.imagesSettings;
-      case u.IMAGES:
+      case g.IMAGES:
         return this.images;
       default:
         return super.eGet(e);
@@ -625,10 +625,10 @@ class u extends Y {
    */
   eSet(e, t) {
     switch (this.eClass().getFeatureID(e)) {
-      case u.IMAGES_SETTINGS:
+      case g.IMAGES_SETTINGS:
         this.imagesSettings = t, super.eSet(e, t);
         break;
-      case u.IMAGES:
+      case g.IMAGES:
         this.images.clear(), this.images.addAll(t), super.eSet(e, t);
         break;
       default:
@@ -640,9 +640,9 @@ class u extends Y {
    */
   eIsSet(e) {
     switch (this.eClass().getFeatureID(e)) {
-      case u.IMAGES_SETTINGS:
+      case g.IMAGES_SETTINGS:
         return this._imagesSettings !== void 0;
-      case u.IMAGES:
+      case g.IMAGES:
         return this._images !== void 0 && !this._images.isEmpty();
       default:
         return super.eIsSet(e);
@@ -653,10 +653,10 @@ class u extends Y {
    */
   eUnset(e) {
     switch (this.eClass().getFeatureID(e)) {
-      case u.IMAGES_SETTINGS:
+      case g.IMAGES_SETTINGS:
         this._imagesSettings = void 0;
         return;
-      case u.IMAGES:
+      case g.IMAGES:
         this._images && this._images.clear();
         return;
       default:
@@ -677,12 +677,12 @@ class u extends Y {
     };
   }
 }
-const Ae = ["src"], Le = {
+const Ce = ["src"], De = {
   key: 1,
   class: "slideshow-container"
-}, Te = { class: "slideshow-nav slideshow-nav--prev" }, Ce = ["src", "onClick", "onContextmenu"], Ge = { class: "slideshow-nav slideshow-nav--next" }, De = /* @__PURE__ */ ue({
+}, Ne = { class: "slideshow-nav slideshow-nav--prev" }, Me = ["src", "onClick", "onContextmenu"], ye = { class: "slideshow-nav slideshow-nav--next" }, Fe = /* @__PURE__ */ de({
   __name: "ImageWidget",
-  props: /* @__PURE__ */ ce({
+  props: /* @__PURE__ */ he({
     datasourceId: {},
     id: {}
   }, {
@@ -690,133 +690,133 @@ const Ae = ["src"], Le = {
     configvModifiers: {}
   }),
   emits: ["update:configv"],
-  setup(n) {
-    const e = n, { id: t } = he(e), i = ge(n, "configv"), a = de(_e.TINY_EMITTER), c = (g) => {
-      t?.value && a.emit("widget:ImageWidget:click", {
+  setup(r) {
+    const e = r, { t } = _e("image"), { id: a } = me(e), s = Ie(r, "configv"), l = pe(Le.TINY_EMITTER), o = (I) => {
+      a?.value && l.emit("widget:ImageWidget:click", {
         type: "widget:ImageWidget:click",
-        widgetId: t.value,
-        payload: { imageUrl: g, widgetId: t.value, timestamp: Date.now() }
+        widgetId: a.value,
+        payload: { imageUrl: I, widgetId: a.value, timestamp: Date.now() }
       });
-    }, h = (g) => {
-      t?.value && a.emit("widget:ImageWidget:right_click", {
+    }, d = (I) => {
+      a?.value && l.emit("widget:ImageWidget:right_click", {
         type: "widget:ImageWidget:right_click",
-        widgetId: t.value,
-        payload: { imageUrl: g, widgetId: t.value, timestamp: Date.now() }
+        widgetId: a.value,
+        payload: { imageUrl: I, widgetId: a.value, timestamp: Date.now() }
       });
-    }, d = new u();
-    k(() => {
-      i.value && Object.assign(i.value, {
-        ...q(d),
-        ...q(i.value)
+    }, S = new g();
+    $(() => {
+      s.value && Object.assign(s.value, {
+        ...z(S),
+        ...z(s.value)
       });
     });
-    const _ = T(() => i.value.imagesSettings?.fit?.value), I = T(() => i.value.imagesSettings?.diashowInterval?.value), E = T(() => ({
+    const _ = G(() => s.value.imagesSettings?.fit?.value), h = G(() => s.value.imagesSettings?.diashowInterval?.value), v = G(() => ({
       none: "",
       contain: "object-contain",
       cover: "object-cover",
       fill: "object-fill",
       "scale-down": "object-scale-down"
     })[_.value?.toLowerCase() || "none"] || "");
-    let p = null;
-    const r = Ie(0), v = () => {
-      r.value < i.value.images.length - 1 && r.value++;
-    }, ee = () => {
-      r.value > 0 && r.value--;
-    }, W = () => {
-      p && clearInterval(p), (I.value ?? 0) > 0 && (p = setInterval(() => {
-        if (r.value === i.value.images.length - 1) {
-          r.value = 0;
+    let m = null;
+    const n = Ee(0), Y = () => {
+      n.value < s.value.images.length - 1 && n.value++;
+    }, ae = () => {
+      n.value > 0 && n.value--;
+    }, B = () => {
+      m && clearInterval(m), (h.value ?? 0) > 0 && (m = setInterval(() => {
+        if (n.value === s.value.images.length - 1) {
+          n.value = 0;
           return;
         }
-        v();
-      }, (I.value ?? 1) * 1e3));
+        Y();
+      }, (h.value ?? 1) * 1e3));
     };
-    k(() => {
-      W();
-    }), O(() => I.value, W);
-    const B = (g) => g;
+    $(() => {
+      B();
+    }), O(() => h.value, B);
+    const H = (I) => I;
     O(
-      () => i.value.images?.length,
-      (g, m) => {
-        m > g && r.value >= g && (r.value = g - 1);
+      () => s.value.images?.length,
+      (I, p) => {
+        p > I && n.value >= I && (n.value = I - 1);
       }
     );
-    const H = T(() => i.value.images?.length > 0 ? i.value.images.length - 1 : 0);
-    return O(H, () => {
-      r.value = H.value;
-    }), (g, m) => i.value.images?.length <= 1 ? (G(), C("img", {
+    const k = G(() => s.value.images?.length > 0 ? s.value.images.length - 1 : 0);
+    return O(k, () => {
+      n.value = k.value;
+    }), (I, p) => s.value.images?.length <= 1 ? (D(), C("img", {
       key: 0,
-      class: K(["w-full h-full cursor-pointer", E.value]),
-      src: B(i.value.images[0]?.url ?? ""),
-      onClick: m[0] || (m[0] = (w) => c(i.value.images[0]?.url ?? "")),
-      onContextmenu: m[1] || (m[1] = X((w) => h(i.value.images[0]?.url ?? ""), ["prevent"]))
-    }, null, 42, Ae)) : (G(), C("div", Le, [
-      D("div", Te, [
-        N(M(z), {
+      class: K(["w-full h-full cursor-pointer", v.value]),
+      src: H(s.value.images[0]?.url ?? ""),
+      onClick: p[0] || (p[0] = (w) => o(s.value.images[0]?.url ?? "")),
+      onContextmenu: p[1] || (p[1] = X((w) => d(s.value.images[0]?.url ?? ""), ["prevent"]))
+    }, null, 42, Ce)) : (D(), C("div", De, [
+      N("div", Ne, [
+        M(A(J), {
           intent: "quiet",
           class: "slideshow-nav__button",
-          title: "Previous image",
-          disabled: r.value === 0,
-          onClick: m[2] || (m[2] = (w) => ee())
+          title: A(t)("Widget.previous"),
+          disabled: n.value === 0,
+          onClick: p[2] || (p[2] = (w) => ae())
         }, {
           default: j(() => [
-            N(M(J), { name: "chevron_left" })
+            M(A(Z), { name: "chevron_left" })
           ]),
           _: 1
-        }, 8, ["disabled"])
+        }, 8, ["title", "disabled"])
       ]),
-      D("div", {
+      N("div", {
         class: "slideshow-track",
-        style: $({ transform: `translateX(-${100 * r.value}%)` })
+        style: q({ transform: `translateX(-${100 * n.value}%)` })
       }, [
-        (G(!0), C(Ee, null, me(i.value.images, (w, te) => (G(), C("div", {
+        (D(!0), C(fe, null, Se(s.value.images, (w, re) => (D(), C("div", {
           key: w.id,
           class: "slideshow-slide",
-          style: $({ transform: `translateX(${100 * te}%)` })
+          style: q({ transform: `translateX(${100 * re}%)` })
         }, [
-          D("img", {
-            class: K(["w-full h-full cursor-pointer", E.value]),
-            src: B(w.url ?? ""),
-            onClick: (se) => c(w.url ?? ""),
-            onContextmenu: X((se) => h(w.url ?? ""), ["prevent"])
-          }, null, 42, Ce)
+          N("img", {
+            class: K(["w-full h-full cursor-pointer", v.value]),
+            src: H(w.url ?? ""),
+            onClick: (ne) => o(w.url ?? ""),
+            onContextmenu: X((ne) => d(w.url ?? ""), ["prevent"])
+          }, null, 42, Me)
         ], 4))), 128))
       ], 4),
-      D("div", Ge, [
-        N(M(z), {
+      N("div", ye, [
+        M(A(J), {
           intent: "quiet",
           class: "slideshow-nav__button",
-          title: "Next image",
-          disabled: r.value === i.value.images?.length - 1,
-          onClick: m[3] || (m[3] = (w) => v())
+          title: A(t)("Widget.next"),
+          disabled: n.value === s.value.images?.length - 1,
+          onClick: p[3] || (p[3] = (w) => Y())
         }, {
           default: j(() => [
-            N(M(J), { name: "chevron_right" })
+            M(A(Z), { name: "chevron_right" })
           ]),
           _: 1
-        }, 8, ["disabled"])
+        }, 8, ["title", "disabled"])
       ])
     ]));
   }
-}), Ne = (n, e) => {
-  const t = n.__vccOpts || n;
-  for (const [i, a] of e)
-    t[i] = a;
+}), Re = (r, e) => {
+  const t = r.__vccOpts || r;
+  for (const [a, s] of e)
+    t[a] = s;
   return t;
-}, Me = /* @__PURE__ */ Ne(De, [["__scopeId", "data-v-a4f596a6"]]), ye = [
+}, Ue = /* @__PURE__ */ Re(Fe, [["__scopeId", "data-v-9d924243"]]), be = [
   {
     name: "Image Clicked",
     type: "click",
     description: "Triggered when the image is clicked",
-    payloadType: f
+    payloadType: E
   },
   {
     name: "Image Right Clicked",
     type: "right_click",
     description: "Triggered when the image is right-clicked",
-    payloadType: S
+    payloadType: f
   }
-], Re = `<?xml version="1.0" encoding="UTF-8"?>
+], xe = `<?xml version="1.0" encoding="UTF-8"?>
 <!--
 /*********************************************************************
 * Copyright (c) 2026 Contributors to the Eclipse Foundation.
@@ -848,25 +848,25 @@ one that was always there.
 
   <components xsi:type="uimodel:FormView" name="ImageSettingsFormView">
 
-    <fields xsi:type="uimodel:GroupWidget" name="picturesGroup" layout="VERTICAL" label="Bilder">
+    <fields xsi:type="uimodel:GroupWidget" name="picturesGroup" layout="VERTICAL" label="image:Form.picturesGroup">
       <!-- A list: each entry is a form of its own, built from
            ImageGalleryItem. -->
       <fields xsi:type="uimodel:InputWidget"
           name="images"
           feature="http://org.eclipse.daanse.board.app.ui.vue.widget.image#//ImageSettings/images"
-          label="Bilder"/>
+          label="image:Form.images"/>
     </fields>
 
-    <fields xsi:type="uimodel:GroupWidget" name="displayGroup" layout="VERTICAL" label="Darstellung">
+    <fields xsi:type="uimodel:GroupWidget" name="displayGroup" layout="VERTICAL" label="image:Form.displayGroup">
       <fields xsi:type="uimodel:InputWidget"
           name="imagesSettings"
           feature="http://org.eclipse.daanse.board.app.ui.vue.widget.image#//ImageSettings/imagesSettings"
-          label="Anzeige"/>
+          label="image:Form.imagesSettings"/>
     </fields>
 
   </components>
 </uimodel:UIModel>
-`, Ue = `<?xml version="1.0" encoding="UTF-8"?>
+`, Oe = `<?xml version="1.0" encoding="UTF-8"?>
 <!--
 /*********************************************************************
 * Copyright (c) 2026 Contributors to the Eclipse Foundation.
@@ -896,11 +896,11 @@ widget's own bookkeeping, and nobody types one.
     <fields xsi:type="uimodel:InputWidget"
         name="url"
         feature="http://org.eclipse.daanse.board.app.ui.vue.widget.image#//ImageGalleryItem/url"
-        label="Adresse"
+        label="image:FormItem.url"
         placeholder="https://…"/>
   </components>
 </uimodel:UIModel>
-`, Fe = `<?xml version="1.0" encoding="UTF-8"?>
+`, We = `<?xml version="1.0" encoding="UTF-8"?>
 <!--
 /*********************************************************************
 * Copyright (c) 2026 Contributors to the Eclipse Foundation.
@@ -931,7 +931,7 @@ size with no hint why.
     <fields xsi:type="uimodel:SelectWidget"
         name="fit"
         feature="http://org.eclipse.daanse.board.app.ui.vue.widget.image#//GallerySettings/fit"
-        label="Einpassen">
+        label="image:FormGallery.fit">
       <values>none</values>
       <values>contain</values>
       <values>cover</values>
@@ -941,70 +941,101 @@ size with no hint why.
     <fields xsi:type="uimodel:NumberWidget"
         name="diashowInterval"
         feature="http://org.eclipse.daanse.board.app.ui.vue.widget.image#//GallerySettings/diashowInterval"
-        label="Wechsel alle (Sekunden)" min="0" step="1"/>
+        label="image:FormGallery.diashowInterval" min="0" step="1"/>
   </components>
 </uimodel:UIModel>
-`;
-var be = Object.defineProperty, xe = Object.getOwnPropertyDescriptor, P = (n, e, t, i) => {
-  for (var a = i > 1 ? void 0 : i ? xe(e, t) : e, c = n.length - 1, h; c >= 0; c--)
-    (h = n[c]) && (a = (i ? h(e, t, a) : h(a)) || a);
-  return i && a && be(e, t, a), a;
-}, Oe = (n, e) => (t, i) => e(t, i, n);
-ie.eINSTANCE;
-s.eINSTANCE;
+`, Pe = { name: "Bild", previous: "Vorheriges Bild", next: "Nächstes Bild" }, Ve = { fit: "Einpassen", diashowInterval: "Wechsel alle (Sekunden)" }, Ye = { url: "Adresse" }, Be = { picturesGroup: "Bilder", images: "Bilder", displayGroup: "Darstellung", imagesSettings: "Anzeige" }, He = {
+  Widget: Pe,
+  FormGallery: Ve,
+  FormItem: Ye,
+  Form: Be
+}, ke = { name: "Image", previous: "Previous image", next: "Next image" }, $e = { fit: "Fit", diashowInterval: "Change every (seconds)" }, Xe = { url: "Address" }, Ke = { picturesGroup: "Images", images: "Images", displayGroup: "Display", imagesSettings: "Display" }, je = {
+  Widget: ke,
+  FormGallery: $e,
+  FormItem: Xe,
+  Form: Ke
+};
+var qe = Object.getOwnPropertyDescriptor, ze = (r, e, t, a) => {
+  for (var s = a > 1 ? void 0 : a ? qe(e, t) : e, l = r.length - 1, o; l >= 0; l--)
+    (o = r[l]) && (s = o(s) || s);
+  return s;
+};
+const ie = "image";
+let Q = class {
+  namespace = ie;
+  resources = {
+    de: He,
+    en: je
+  };
+};
+Q = ze([
+  te({
+    service: ["Translations"],
+    properties: { "i18n.namespace": ie }
+  })
+], Q);
+var Je = Object.defineProperty, Ze = Object.getOwnPropertyDescriptor, V = (r, e, t, a) => {
+  for (var s = a > 1 ? void 0 : a ? Ze(e, t) : e, l = r.length - 1, o; l >= 0; l--)
+    (o = r[l]) && (s = (a ? o(e, t, s) : o(s)) || s);
+  return a && s && Je(e, t, s), s;
+}, Qe = (r, e) => (t, a) => e(t, a, r);
+le.eINSTANCE;
+i.eINSTANCE;
 const b = "ImageWidget";
 let x = class {
-  constructor(n) {
-    this.events = n;
+  constructor(r) {
+    this.events = r;
   }
   type = b;
-  component = Me;
+  component = Ue;
   supportedDSTypes = [];
-  icon = we;
+  icon = Ge;
   name = "Image";
+  nameKey = "image:Widget.name";
   /*
    * The settings form, as a model. Carried on the registration like the
    * icon, so whoever shows the settings does not have to know this widget
    * exists - and the shell needs no dependency on this bundle.
    */
   settingsForm = {
-    xmi: Re,
+    xmi: xe,
     uri: "/image-settings.ui.xmi",
-    ePackage: () => s.eINSTANCE,
-    create: () => new u(),
+    ePackage: () => i.eINSTANCE,
+    create: () => new g(),
     /* Forms for the classes that appear inside this one - the pictures of
      * the list, and the display options it contains. */
     entryForms: [
-      { xmi: Ue, uri: "/image-item.ui.xmi" },
-      { xmi: Fe, uri: "/image-gallery.ui.xmi" }
+      { xmi: Oe, uri: "/image-item.ui.xmi" },
+      { xmi: We, uri: "/image-gallery.ui.xmi" }
     ]
   };
   register() {
-    this.events.registerWidget(b, ye);
+    this.events.registerWidget(b, be);
   }
   unregister() {
     this.events.unregisterWidget(b);
   }
 };
-P([
-  re()
+V([
+  ue()
 ], x.prototype, "register", 1);
-P([
-  ne()
+V([
+  ce()
 ], x.prototype, "unregister", 1);
-x = P([
-  le({
-    service: [ve],
+x = V([
+  te({
+    service: [Te],
     properties: { "widget.type": b }
   }),
-  Oe(0, oe(ae))
+  Qe(0, ge(oe))
 ], x);
 export {
-  u as ImageSettingsImpl,
-  Me as ImageWidget,
+  g as ImageSettingsImpl,
+  Q as ImageTranslations,
+  Ue as ImageWidget,
   x as ImageWidgetProvider,
-  s as ImagesettingsPackage,
-  Fe as galleryFormXmi,
-  Ue as imageItemFormXmi,
-  Re as imageSettingsFormXmi
+  i as ImagesettingsPackage,
+  We as galleryFormXmi,
+  Oe as imageItemFormXmi,
+  xe as imageSettingsFormXmi
 };

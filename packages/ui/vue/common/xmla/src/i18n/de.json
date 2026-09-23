@@ -1,0 +1,38 @@
+{
+  "Loading": "Wird geladen",
+  "Filter": {
+    "search": "Suchen",
+    "searchIn": "Suchen in",
+    "multiple": "Mehrere wählen",
+    "all": "Alle wählen"
+  },
+  "Metadata": {
+    "title": "Würfel-Explorer",
+    "filter": "Filtern…"
+  },
+  "FilterModal": {
+    "title": "Filter setzen",
+    "reset": "zurücksetzen",
+    "apply": "Übernehmen",
+    "chosen": "Gewählt: {{name}}"
+  },
+  "Tree": {
+    "collapse": "Zuklappen",
+    "expand": "Aufklappen"
+  },
+  "PivotTable": {
+    "openCellPropertiesButton": "Zelleigenschaften öffnen",
+    "drillthroughButton": "Drillthrough",
+    "drillDownButton": "Drilldown",
+    "drillUpButton": "Drillup",
+    "openButton": "Elementeigenschaften öffnen",
+    "hideButton": "Hierarchie-Eigenschaften ausblenden",
+    "showButton": "Hierarchie-Eigenschaften zeigen"
+  },
+  "QueryDesigner": {
+    "filters": "Filter",
+    "columns": "Spalten",
+    "rows": "Zeilen",
+    "data": "Daten"
+  }
+}

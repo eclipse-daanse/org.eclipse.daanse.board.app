@@ -1,0 +1,26 @@
+{
+  "Finder": {
+    "title": "Find a data source",
+    "steps": {
+      "label": "Steps",
+      "search": "Search",
+      "connection": "Connection",
+      "source": "Data source",
+      "widgets": "Widgets"
+    },
+    "search": "Search",
+    "searchPlaceholder": "What are you looking for?",
+    "filter": "Filter",
+    "connectionLead": "This connection will be created:",
+    "connectionUnknown": "The connection cannot be determined automatically - this happens when the type of the dataset is unknown or not supported. You can set it up by hand.",
+    "sourceLead": "This data source will be created:",
+    "widgetsLead": "Choose widgets for the data source",
+    "next": "Next",
+    "name": "Name",
+    "type": "Type",
+    "format": "Format",
+    "onlyFormats": "Only selected formats",
+    "region": "Region",
+    "onlyMapSection": "Only within the map section"
+  }
+}

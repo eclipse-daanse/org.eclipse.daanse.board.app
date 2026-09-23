@@ -52,5 +52,21 @@
       "versionRange": ">=0.0.1-0"
     }
   ],
-  "provides": []
+  "capabilities": [
+    {
+      "namespace": "tsm.i18n",
+      "attributes": {
+        "namespace": "composerKpi",
+        "languages": [
+          "de",
+          "en"
+        ]
+      }
+    }
+  ],
+  "provides": [
+    {
+      "id": "Translations"
+    }
+  ]
 }

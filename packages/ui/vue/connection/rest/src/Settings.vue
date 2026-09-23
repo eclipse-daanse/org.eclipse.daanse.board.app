@@ -14,10 +14,13 @@ Contributors:
 import { computed, onMounted, ref, watch } from 'vue'
 import { debounce } from 'lodash'
 import { DCheckbox, DInput } from 'org.eclipse.daanse.board.app.ui.vue.controls'
+import { useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 
 const { config } = defineProps<{
   config: any
 }>()
+
+const { t } = useTranslation('connectionRest')
 
 const available = ref(false)
 const url = ref(config.url)
@@ -28,8 +31,8 @@ const cacheTTL = ref(config.cacheTTL ?? 30000)
 /** The smallest cache lifetime that is worth keeping one for. */
 const MIN_TTL = 1000
 
-const urlError = computed(() => (!url.value || isValidUrl(url.value) ? undefined : 'Keine gültige http- oder https-Adresse'))
-const ttlError = computed(() => (cacheTTL.value >= MIN_TTL ? undefined : `Mindestens ${MIN_TTL} ms`))
+const urlError = computed(() => (!url.value || isValidUrl(url.value) ? undefined : t('Rest.invalidUrl')))
+const ttlError = computed(() => (cacheTTL.value >= MIN_TTL ? undefined : t('Rest.minTtl', { ms: MIN_TTL })))
 
 /**
  * What the endpoint answered, as a word rather than a colour alone.
@@ -40,9 +43,9 @@ const ttlError = computed(() => (cacheTTL.value >= MIN_TTL ? undefined : `Mindes
  */
 const reach = computed(() => {
   if (!url.value) return undefined
-  if (!statusCode.value) return { tone: 'color-dim', text: 'Noch nicht geprüft' }
-  if (available.value) return { tone: 'color-ok', text: `Erreichbar (${statusCode.value})` }
-  return { tone: 'color-err', text: `Nicht erreichbar (${statusCode.value})` }
+  if (!statusCode.value) return { tone: 'color-dim', text: t('Rest.unchecked') }
+  if (available.value) return { tone: 'color-ok', text: t('Rest.reachable', { status: statusCode.value }) }
+  return { tone: 'color-err', text: t('Rest.unreachable', { status: statusCode.value }) }
 })
 
 const updateUrl = debounce((newUrl: string) => {
@@ -65,7 +68,7 @@ async function ifUrlExist(value: string) {
     return { available: response.ok, statusCode: response.status.toString() }
   } catch (error: any) {
     console.warn('Network error:', error.name)
-    return { available: false, statusCode: 'Fehler' }
+    return { available: false, statusCode: t('Rest.error') }
   }
 }
 
@@ -116,18 +119,18 @@ onMounted(async () => {
       {{ reach.text }}
     </p>
 
-    <DCheckbox v-model="cacheEnabled" label="Antworten zwischenspeichern" />
+    <DCheckbox v-model="cacheEnabled" :label="t('Rest.cache')" />
 
     <DInput
       v-if="cacheEnabled"
       v-model.number="cacheTTL"
-      label="Haltbarkeit"
+      :label="t('Rest.ttl')"
       type="number"
       suffix="ms"
       :min="MIN_TTL"
       :max="3600000"
       :error="ttlError"
-      hint="Wie lange eine Antwort wiederverwendet wird, bevor neu gefragt wird."
+      :hint="t('Rest.ttlHint')"
     />
   </div>
 </template>

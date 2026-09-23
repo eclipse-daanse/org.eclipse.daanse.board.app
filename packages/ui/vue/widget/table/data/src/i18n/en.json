@@ -1,0 +1,8 @@
+{
+  "Widget": {
+    "name": "Data table"
+  },
+  "Form": {
+    "headerBackground": "Header colour"
+  }
+}

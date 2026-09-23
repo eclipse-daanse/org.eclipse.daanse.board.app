@@ -48,6 +48,7 @@ export class PageWidgetProvider implements WidgetProvider {
   readonly supportedDSTypes = []
   readonly icon = Icon
   readonly name = 'Page'
+  readonly nameKey = 'page:Widget.name'
 
   /*
    * The settings form, as a model. Carried on the registration like the
@@ -71,3 +72,6 @@ export class PageWidgetProvider implements WidgetProvider {
 export { PageWidget, PageWidgetSettings }
 export { PageWidgetSettingsImpl, PagesettingsPackage, pageSettingsFormXmi }
 export { type PageI }
+
+/* Its texts - collected by lib.i18next, see src/i18n. */
+export { PageTranslations } from './i18n'

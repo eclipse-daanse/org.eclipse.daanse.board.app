@@ -12,15 +12,16 @@ Contributors:
 -->
 <script setup lang="ts">
 import { DTable } from 'org.eclipse.daanse.board.app.ui.vue.controls'
-import { useTemporaryStore } from 'org.eclipse.daanse.board.app.ui.vue.composables';
+import { useTemporaryStore, useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables';
 import { Bar } from 'vue-chartjs'
 import {
   Chart as ChartJS, Title, Tooltip,
   Legend, BarElement, CategoryScale, LinearScale
 } from 'chart.js'
-import { ref, watch, shallowRef } from 'vue';
+import { computed, ref, watch, shallowRef } from 'vue';
 
 const props = defineProps<{ dataSource: any }>();
+const { t } = useTranslation('composerOgcsta2chart')
 const data = ref(null as any);
 const chartData = ref(null as unknown as any);
 const chartOptions = ref({
@@ -37,11 +38,11 @@ const tempStore = shallowRef(null as any)
 const settingsRef = ref(props.dataSource);
 const { update } = useTemporaryStore(props.dataSource.type, settingsRef, tempStore);
 
-const columns = ref([
-  { key: 'datastream', label: 'Datastream', sortable: true },
-  { key: 'value', label: 'Value', sortable: true },
-  { key: 'unit', label: 'Unit', sortable: true },
-  { key: 'timestamp', label: 'Timestamp', sortable: true }
+const columns = computed(() => [
+  { key: 'datastream', label: t('Sta.columns.datastream'), sortable: true },
+  { key: 'value', label: t('Sta.columns.value'), sortable: true },
+  { key: 'unit', label: t('Sta.columns.unit'), sortable: true },
+  { key: 'timestamp', label: t('Sta.columns.timestamp'), sortable: true }
 ])
 
 watch(tempStore, async () => {
@@ -61,7 +62,7 @@ watch(tempStore, async () => {
     </div>
   </div>
   <div v-else class="preview-placeholder">
-    <p>Configure datasources and datastreams to see preview</p>
+    <p>{{ t('Sta.previewHint') }}</p>
   </div>
 </template>
 <style scoped>

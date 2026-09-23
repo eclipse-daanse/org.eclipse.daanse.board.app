@@ -1,0 +1,38 @@
+{
+  "Loading": "Loading",
+  "Filter": {
+    "search": "Search",
+    "searchIn": "Search in",
+    "multiple": "Select several",
+    "all": "Select all"
+  },
+  "Metadata": {
+    "title": "Cube explorer",
+    "filter": "Filter…"
+  },
+  "FilterModal": {
+    "title": "Set filter",
+    "reset": "reset",
+    "apply": "Apply",
+    "chosen": "Selected: {{name}}"
+  },
+  "Tree": {
+    "collapse": "Collapse",
+    "expand": "Expand"
+  },
+  "PivotTable": {
+    "openCellPropertiesButton": "Open cell properties",
+    "drillthroughButton": "Drillthrough",
+    "drillDownButton": "Drilldown",
+    "drillUpButton": "Drillup",
+    "openButton": "Open member properties",
+    "hideButton": "Hide hierarchy properties",
+    "showButton": "Show hierarchy properties"
+  },
+  "QueryDesigner": {
+    "filters": "Filters",
+    "columns": "Columns",
+    "rows": "Rows",
+    "data": "Data"
+  }
+}

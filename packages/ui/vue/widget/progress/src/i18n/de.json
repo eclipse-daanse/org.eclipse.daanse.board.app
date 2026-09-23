@@ -1,0 +1,42 @@
+{
+  "Widget": {
+    "name": "Fortschritt"
+  },
+  "Settings": {
+    "stops": "Farbstopps",
+    "gradientOff": "Der Farbverlauf ist ausgeschaltet. Er lässt sich unter „Darstellung“ einschalten.",
+    "add": "Farbstopp hinzufügen",
+    "remove": "Farbstopp entfernen"
+  },
+  "Form": {
+    "valueGroup": "Wert",
+    "progress": "Fortschritt",
+    "min": "Kleinster Wert",
+    "max": "Größter Wert",
+    "barGroup": "Balken",
+    "isVertical": "Senkrecht",
+    "fillColor": "Balkenfarbe",
+    "backgroundColor": "Hintergrundfarbe",
+    "barThickness": "Dicke",
+    "borderRadius": "Eckenradius",
+    "gradientGroup": "Farbverlauf",
+    "isGradient": "Farbverlauf statt einer Farbe",
+    "rotation": "Richtung (Grad)",
+    "labelGroup": "Beschriftung",
+    "textColor": "Schriftfarbe",
+    "valueAlign": "Waagerecht",
+    "valueJustify": "Senkrecht"
+  },
+  "Options": {
+    "align": {
+      "left": "Links",
+      "center": "Mittig",
+      "right": "Rechts"
+    },
+    "justify": {
+      "top": "Oben",
+      "center": "Mittig",
+      "bottom": "Unten"
+    }
+  }
+}

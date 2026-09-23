@@ -82,12 +82,12 @@ const iconStyle = computed(() => {
     widget, which renders this component whole to style its points and has
     no model form beside it.
   -->
-  <section class="settings-section" data-section="Symbol wählen">
+  <section class="settings-section" data-section-id="symbol" :data-section="t('IconWidget.chooseSymbol')">
     <div class="settings-container">
       <DInput
         v-model="searchQuery"
         type="search"
-        placeholder="Search icon..."
+        :placeholder="t('IconWidget.searchPlaceholder')"
         :label="t('IconWidget.iconSearch')"
       />
       <div class="icons-container" :style="iconStyle">

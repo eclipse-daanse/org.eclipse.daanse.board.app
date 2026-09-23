@@ -1,0 +1,24 @@
+{
+  "Form": {
+    "empty": "No settings are modelled for this widget."
+  },
+  "Field": {
+    "boundFrom": "From “{{name}}”",
+    "noVariable": "No variable",
+    "noVariables": "No variables have been created yet.",
+    "unbind": "Unbind from “{{name}}”",
+    "bind": "Bind to a variable"
+  },
+  "List": {
+    "entry": "Entry",
+    "add": "Add",
+    "untyped": "This list has no type in the model - it only says there are several, not of what. As long as that is so, nothing can be shown here.",
+    "empty": "Nothing created yet.",
+    "up": "Move up",
+    "down": "Move down",
+    "remove": "Remove"
+  },
+  "Object": {
+    "untyped": "This setting has no type in the model - it only says something is contained, not what. As long as that is so, nothing can be shown here."
+  }
+}

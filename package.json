@@ -20,6 +20,8 @@
     "generate_models": "cd tools/generator && node scan-and-generate.js",
     "bundles": "node scripts/build-bundles.mjs",
     "bundles:watch": "node scripts/watch-bundles.mjs",
+    "i18n:sync": "node scripts/i18n.mjs sync",
+    "i18n:check": "node scripts/i18n.mjs check",
     "start": "node scripts/dev.mjs"
   },
   "devDependencies": {

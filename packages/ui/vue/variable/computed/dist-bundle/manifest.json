@@ -31,11 +31,25 @@
         "library": "org.eclipse.daanse.board.app.ui.vue.variable.computed",
         "version": "0.0.1-next.1"
       }
+    },
+    {
+      "namespace": "tsm.i18n",
+      "attributes": {
+        "namespace": "variableComputed",
+        "languages": [
+          "de",
+          "en"
+        ]
+      }
     }
   ],
   "dependencies": [
     "lib.api.variable",
     "lib.variables"
   ],
-  "provides": []
+  "provides": [
+    {
+      "id": "Translations"
+    }
+  ]
 }

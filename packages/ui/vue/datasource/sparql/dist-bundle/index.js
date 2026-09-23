@@ -1,8 +1,9 @@
 (function(){var i="ui.vue.datasource.sparql",d=document,s=d.querySelector('style[data-tsm-bundle="'+i+'"]');if(!s){s=d.createElement('style');s.setAttribute('data-tsm-bundle',i);d.head.appendChild(s);}s.textContent=".yasr .dataTables_wrapper .dataTable thead .sorting{background-image:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABMAAAATCAQAAADYWf5HAAAAkElEQVQoz7XQMQ5AQBCF4dWQSJxC5wwax1Cq1e7BAdxD5SL+Tq/QCM1oNiJidwox0355mXnG/DrEtIQ6azioNZQxI0ykPhTQIwhCR+BmBYtlK7kLJYwWCcJA9M4qdrZrd8pPjZWPtOqdRQy320YSV17OatFC4euts6z39GYMKRPCTKY9UnPQ6P+GtMRfGtPnBCiqhAeJPmkqAAAAAElFTkSuQmCC)}.yasr .dataTables_wrapper .dataTable thead .sorting_asc{background-image:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABMAAAATCAYAAAByUDbMAAAAZ0lEQVQ4y2NgGLKgquEuFxBPAGI2ahhWCsS/gDibUoO0gPgxEP8H4ttArEyuQYxAPBdqEAxPBImTY5gjEL9DM+wTENuQahAvEO9DMwiGdwAxOymGJQLxTyD+jgWDxCMZRsEoGAVoAADeemwtPcZI2wAAAABJRU5ErkJggg==)}.yasr .dataTables_wrapper .dataTable thead .sorting_desc{background-image:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABMAAAATCAYAAAByUDbMAAAAZUlEQVQ4y2NgGAWjYBSggaqGu5FA/BOIv2PBIPFEUgxjB+IdQPwfC94HxLykus4GiD+hGfQOiB3J8SojEE9EM2wuSJzcsFMG4ttQgx4DsRalkZENxL+AuJQaMcsGxBOAmGvopk8AVz1sLZgg0bsAAAAASUVORK5CYII=)}.yasr .dataTables_wrapper .dataTable thead .sorting_asc_disabled{background-image:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABMAAAATCAQAAADYWf5HAAAAW0lEQVQoz2NgoCm4w3Vnwh02wspK7/y6k01Ikdadx3f+37l9RxmfIsY7c4GKQHDiHUbcyhzvvIMq+3THBpci3jv7oIpAcMcdduzKEu/8vPMdDn/eiWQYBYMKAAC3ykIEuYQJUgAAAABJRU5ErkJggg==)}.yasr .dataTables_wrapper .dataTable thead .sorting_desc_disabled{background-image:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABMAAAATCAQAAADYWf5HAAAAWUlEQVQoz2NgGAWDCtyJvPPzznc4/HknEbsy9js77vyHw313eHGZZ3PnE1TRuzuOuK1lvDMRqmzuHUZ87lO+cxuo6PEdLUIeyb7z604pYf+y3Zlwh4u2YQoAc7ZCBHH4jigAAAAASUVORK5CYII=)}.yasqe .CodeMirror{min-height:60px}.yasqe .svgImg{display:inline-block}.yasqe span.shortlinkErr{font-size:small;color:red;font-weight:700;float:left}.yasqe .CodeMirror-hint{max-width:30em}.yasqe .notificationContainer{width:100%;display:flex;justify-content:center;position:absolute;bottom:0}.yasqe .notification{z-index:4;padding:0 5px;max-height:0;color:#999;background-color:#eee;font-size:90%;text-align:center;transition:max-height .2s ease-in;border-top-right-radius:2px;border-top-left-radius:2px}.yasqe .notification.active{max-height:3rem}.yasqe .parseErrorIcon{width:13px;height:13px;margin-top:2px;margin-left:2px}.yasqe .parseErrorIcon svg g{fill:red}.yasqe .yasqe_tooltip{background:#333;background:#000c;border-radius:5px;color:#fff;padding:5px 15px;width:220px;white-space:pre-wrap;white-space:normal;margin-top:5px}.yasqe .notificationLoader{width:18px;height:18px;vertical-align:middle}.yasqe .resizeWrapper{width:100%;height:10px;display:flex;align-items:center;justify-content:center;cursor:row-resize}.yasqe .resizeChip{width:20%;height:4px;background-color:#d1d1d1;visibility:hidden;border-radius:2px}.yasqe:hover .resizeChip{visibility:visible}.yasqe .yasqe_btn{color:#333;background-color:#fff;border:1px solid #ccc;display:inline-block;text-align:center;vertical-align:middle;cursor:pointer;white-space:nowrap;padding:6px 12px;border-radius:2px;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;overflow:visible;box-sizing:border-box}.yasqe .yasqe_btn.btn_icon{padding:4px 8px}.yasqe .yasqe_btn.disabled,.yasqe .yasqe_btn[disabled]{cursor:default;opacity:.5;filter:alpha(opacity=50);box-shadow:none}.yasqe .yasqe_btn:hover{outline:0;background-color:#ebebeb;border-color:#adadad}.yasqe .yasqe_btn.selected,.yasqe .yasqe_btn:focus{color:#fff;outline:0;background-color:#337ab7;border-color:#337ab7}.yasqe .yasqe_btn.btn_icon:focus{color:#333;background-color:#fff;border:1px solid #ccc}.yasqe .yasqe_btn.yasqe_btn-sm{padding:1px 5px;font-size:12px;line-height:1.5;border-radius:3px}.yasqe .yasqe_buttons{position:absolute;top:10px;right:20px;z-index:5}.yasqe .yasqe_buttons svg{fill:#505050}.yasqe .yasqe_buttons .yasqe_share{cursor:pointer;margin-top:3px;display:inline-block;border:none;background:none}.yasqe .yasqe_buttons .yasqe_share svg{height:25px;width:25px}.yasqe .yasqe_buttons button{vertical-align:top;margin-left:5px}.yasqe .yasqe_buttons .yasqe_sharePopup{position:absolute;padding:4px;margin-left:0;background-color:#fff;border:1px solid #e3e3e3;border-radius:2px;box-shadow:inset 0 1px 1px #0000000d;width:600px;height:auto;display:flex}.yasqe .yasqe_buttons .yasqe_sharePopup .inputWrapper{flex-grow:100}.yasqe .yasqe_buttons .yasqe_sharePopup input{float:left;width:100%;border:0;-ms-box-sizing:border-box;-khtml-box-sizing:border-box;box-sizing:border-box}.yasqe .yasqe_buttons .yasqe_sharePopup button{float:right;margin-left:5px}.yasqe .yasqe_buttons .yasqe_sharePopup textarea{width:100%}.yasqe .yasqe_buttons .yasqe_queryButton{display:inline-block;position:relative;border:none;background:none;padding:0;cursor:pointer;width:40px;height:40px}.yasqe .yasqe_buttons .yasqe_queryButton .queryIcon{display:block}.yasqe .yasqe_buttons .yasqe_queryButton .queryIcon svg{width:40px;height:40px}.yasqe .yasqe_buttons .yasqe_queryButton .svgImg{position:absolute;height:inherit;top:0}.yasqe .yasqe_buttons .yasqe_queryButton.busy svg #loadingIcon{stroke-dasharray:100;-webkit-animation:dash 1.5s linear infinite;animation:dash 1.5s linear infinite;stroke-width:8px;stroke:#fff}@-webkit-keyframes dash{to{stroke-dashoffset:200}}@keyframes dash{to{stroke-dashoffset:200}}@-webkit-keyframes rotate{to{transform:rotate(1turn)}}@keyframes rotate{to{transform:rotate(1turn)}}.yasqe .yasqe_buttons .yasqe_queryButton .warningIcon{display:none}.yasqe .yasqe_buttons .yasqe_queryButton.query_error .warningIcon{display:block;top:5px;right:0}.yasqe .yasqe_buttons .yasqe_queryButton.query_error .warningIcon svg{width:15px;height:15px}.yasqe .yasqe_buttons .yasqe_queryButton.query_error .warningIcon svg g{fill:red}.yasqe .yasqe_buttons .yasqe_queryButton.query_disabled{cursor:not-allowed}.yasqe .yasqe_buttons .yasqe_queryButton.query_disabled .queryIcon{opacity:.5;filter:alpha(opacity=50)}@-webkit-keyframes spin{to{transform:rotate(1turn)}}.CodeMirror-hints{position:absolute;z-index:10;overflow:hidden;list-style:none;margin:0;padding:2px;box-shadow:2px 3px 5px #0003;border-radius:3px;border:1px solid silver;background:#fff;font-size:90%;font-family:monospace;max-height:20em;overflow-y:auto}.CodeMirror-hint{margin:0;padding:0 4px;border-radius:2px;white-space:pre;color:#000;cursor:pointer}li.CodeMirror-hint-active{background:#08f;color:#fff}.CodeMirror-foldmarker{color:#00f;text-shadow:#b9f 1px 1px 2px,#b9f -1px -1px 2px,#b9f 1px -1px 2px,#b9f -1px 1px 2px;font-family:arial;line-height:.3;cursor:pointer}.CodeMirror-foldgutter{width:.7em}.CodeMirror-foldgutter-folded,.CodeMirror-foldgutter-open{cursor:pointer}.CodeMirror-foldgutter-open:after{content:\"▾\"}.CodeMirror-foldgutter-folded:after{content:\"▸\"}.yasqe .CodeMirror{line-height:1.5em;font-size:14px;border:1px solid #d1d1d1}.yasqe span.cm-error{border-bottom:2px dotted red}.yasqe .gutterErrorBar{width:4px}.yasqe .CodeMirror-foldmarker{color:#6e2500;text-shadow:#ff935e 1px 1px 2px,#ff935e -1px -1px 2px,#ff935e 1px -1px 2px,#ff935e -1px 1px 2px;font-size:19px}.yasqe .cm-matchhighlight{background-color:#dbdeed}.CodeMirror-hints.default{max-width:1000px}.CodeMirror-hints.default li{text-overflow:ellipsis;overflow:hidden}@media only screen and (max-width:1000px){.CodeMirror-hints.default{max-width:800px}}.yasgui .tabMenu{background:#f5f5f5;z-index:7;transition:all .5s;transform:translate3d(-100%,0,0) rotateY(90deg);transform-origin:100% 50%;visibility:hidden;width:600px;border:1px solid #ccc;position:absolute;top:35px;left:0;perspective:1500px;perspective-origin:0 50%;transform-style:preserve-3d}.yasgui .tabMenu.open{visibility:visible;transform:translate3d(-100%,0,0) rotateY(0);transition:all .5s;left:600px}@media(-ms-high-contrast:active),(-ms-high-contrast:none){.yasgui .tabMenu.open{min-width:600px}}@media(-ms-high-contrast:active),(-ms-high-contrast:none){.yasgui .tabMenu{height:0}}.yasgui .tabMenu .requestConfigWrapper{padding:10px;overflow:hidden;display:flex;flex-wrap:nowrap;background:#f5f5f5}.yasgui .tabMenu .requestConfigWrapper .selectorButton{background-color:transparent;border:none;border-bottom:1px solid #d1d1d1;height:30px;color:#505050;cursor:pointer}.yasgui .tabMenu .requestConfigWrapper .selectorButton:hover{color:#000;border-color:#000}.yasgui .tabMenu .requestConfigWrapper .selectorButton.selected{color:#337ab7;border-bottom:2px solid #337ab7}.yasgui .tabMenu .requestConfigWrapper .selectorButton:focus{outline:none}.yasgui .tabMenu .requestConfigWrapper .selectorButton:focus-visible{color:#000;border-color:#000}.yasgui .tabMenu .acceptWrapper{flex-direction:row}.yasgui .tabMenu .acceptWrapper .acceptLabel{justify-self:center}.yasgui .tabMenu .acceptWrapper .selector{flex-direction:column;display:flex;padding:2.5px 5px;flex-grow:1;width:100%}.yasgui .tabMenu .acceptWrapper .selector .selectorLabel{align-self:center;font-weight:700;font-size:small}.yasgui .tabMenu .textSetting{display:flex;flex-direction:column}.yasgui .tabMenu .textSetting .label{align-self:flex-start}.yasgui .tabMenu .textSetting .graphInput{white-space:nowrap}.yasgui .tabMenu .textSetting .textRow{flex-direction:row;flex-wrap:nowrap;white-space:nowrap}.yasgui .tabMenu .textSetting .removeButton{border:none;background:transparent;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}.yasgui .tabMenu .textSetting .removeButton:hover{background:transparent;border-color:#000;color:#000;cursor:pointer}.yasgui .tabMenu .label{-webkit-text-decoration:#000;text-decoration:#000;font-weight:700;white-space:nowrap;padding-right:5px;align-self:center}.yasgui .autocomplete{padding:3px 6px;margin:4px 0;border:2px solid #ccc;width:100%;box-sizing:border-box;transition:border-color .2s ease-in}.yasgui .autocomplete:hover{border-color:#bbb}.yasgui .autocomplete:focus{border-color:#337ab7;background:none;outline:none}.yasgui .autocompleteWrapper{width:100%;max-width:700px;margin-left:10px;position:relative}.yasgui .autocompleteList{position:absolute;max-height:300px;overflow-y:auto;z-index:6;margin:-4px 0 0;padding:0;list-style:none;background:#fff;border:1px solid #aaa;box-sizing:border-box;left:0;right:0}.yasgui .autocompleteList:hover .autoComplete_result.autoComplete_selected:not(:hover){background:unset}.yasgui .autocompleteList:hover .autoComplete_result.autoComplete_selected:not(:hover) .removeItem{visibility:hidden}.yasgui .autocompleteList .autoComplete_result{cursor:pointer;padding:5px 10px;margin:0;overflow:hidden;display:flex;transition:background visibility .2s ease-in}.yasgui .autocompleteList .autoComplete_result b{color:#1f49a3}.yasgui .autocompleteList .autoComplete_result .autoComplete_highlighted{font-weight:700}.yasgui .autocompleteList .autoComplete_result.autoComplete_selected{background:#ccc}.yasgui .autocompleteList .autoComplete_result.autoComplete_selected .removeItem{visibility:visible}.yasgui .autocompleteList .autoComplete_result:hover{background:#ccc}.yasgui .autocompleteList .autoComplete_result:hover .removeItem{visibility:visible}.yasgui .autocompleteList .noResults{padding:5px 10px;margin:0}.yasgui .autocompleteList .removeItem{color:#000;font-size:15px;text-shadow:0 1px 0 #fff;opacity:.5;font-weight:700;text-align:end;margin-left:auto;visibility:hidden;background:none;border:none;cursor:pointer;margin-right:-10px;padding-right:20px}.yasgui .autocompleteList .removeItem:hover{opacity:.8;color:#1f49a3}.yasgui .autocompleteList:empty{display:none}.yasgui .tabPanel{display:none;position:relative}.yasgui .tabPanel.active{display:block}.yasgui .yasr{margin-top:5px}.yasgui .tabContextButton{border:none;background:none;align-self:center;padding-left:10px;cursor:pointer;color:#505050;fill:#505050}.yasgui .tabContextButton .svgImg{width:15px;height:15px;font-family:initial}.yasgui .tabContextButton svg{max-width:15px;max-height:15px}.yasgui .tabContextButton:hover{color:#000;fill:#000}.yasgui .controlbar{display:flex;align-content:center;max-height:35px}.yasgui.context-menu{position:absolute;z-index:10;background:#fff;min-width:160px;font-size:14px;border:1px solid rgba(0,0,0,.15);border-bottom-right-radius:4px;border-bottom-left-radius:4px;box-shadow:0 6px 12px #0000002d;background-clip:padding-box}.yasgui.context-menu hr{margin:8px auto;border:none;border-top:1px solid #aaa;border-bottom:1px solid #fff}.yasgui.context-menu .context-menu-list{padding:0}.yasgui.context-menu .context-menu-item{display:block;padding:3px 20px;clear:both;font-weight:400;line-height:1.42857;color:#333;white-space:nowrap;cursor:pointer}.yasgui.context-menu .context-menu-item:hover{text-decoration:none;color:#000;background-color:#f5f5f5}.yasgui.context-menu .context-menu-item.disabled{text-decoration:none;color:gray;background-color:#e5e5e5;cursor:not-allowed}.yasgui .tabsList{display:flex;flex-wrap:wrap}.yasgui .tabsList .sortable-placeholder{min-width:100px;min-height:35px;border:2px dotted #888}.yasgui .tabsList a{cursor:pointer;display:flex;align-items:center;justify-content:center;min-height:35px;border-bottom:2px solid transparent;box-sizing:border-box}.yasgui .tabsList .addTab{cursor:pointer;height:100%;font-size:120%;font-weight:800;margin-left:15px;padding:0 5px 2px;background:inherit;border:none;color:#337ab7}.yasgui .tabsList .addTab:focus-visible,.yasgui .tabsList .addTab:hover{transform:scale(1.1)}.yasgui .tabsList .addTab:focus{color:#faa857}.yasgui .tabsList .tab{position:relative}.yasgui .tabsList .tab .loader{display:none;background-color:#d5d5d5;height:2px;position:absolute;bottom:0;left:0;right:100%;-webkit-animation-name:slide;animation-name:slide;-webkit-animation-duration:2s;animation-duration:2s;-webkit-animation-timing-function:ease;animation-timing-function:ease;-webkit-animation-iteration-count:infinite;animation-iteration-count:infinite}@-webkit-keyframes slide{0%{left:0;right:100%}70%{left:0;right:0}to{left:100%;right:0}}@keyframes slide{0%{left:0;right:100%}70%{left:0;right:0}to{left:100%;right:0}}.yasgui .tabsList .tab.active .loader{background-color:#9fc4e4}.yasgui .tabsList .tab:hover .loader{background-color:#337ab7}.yasgui .tabsList .tab.querying .loader{display:block}.yasgui .tabsList .tab.active a{border-bottom-color:#337ab7;color:#555}.yasgui .tabsList .tab input{display:none;outline:none;border:none}.yasgui .tabsList .tab.renaming .closeTab,.yasgui .tabsList .tab.renaming span{display:none}.yasgui .tabsList .tab.renaming input{display:block}.yasgui .tabsList .tab a{font-weight:600;color:#888;font-size:15px;line-height:1.5rem;font-weight:500;min-width:120px;padding:0 24px 0 30px;white-space:nowrap;overflow:hidden}.yasgui .tabsList .tab a:hover{border-bottom-color:#9fc4e4;color:#555}.yasgui .tabsList .tab a:focus{border-bottom-color:#faa857;color:#555}.yasgui .tabsList .tab a .closeTab{color:#000;margin-left:7px;font-size:15px;text-shadow:0 1px 0 #fff;opacity:.2;font-weight:700;padding:2px}.yasgui .tabsList .tab a .closeTab:hover{opacity:.5}.yasgui a{color:#337ab7;text-decoration:none}.yasgui .yasgui_textfield{display:block;padding-top:18.75px;position:relative}.yasgui .yasgui_textfield>label{position:absolute;top:0;display:block;width:100%;color:#0000008a;font-size:12px;font-weight:400;line-height:15px;overflow-x:hidden;text-overflow:ellipsis;white-space:nowrap}.yasgui .yasgui_textfield>input,.yasgui .yasgui_textfield>textarea{box-sizing:border-box;display:block;color:#000000de;border:none;border-bottom:1px solid rgba(0,0,0,.26);outline:none;width:100%;padding:0;box-shadow:none;border-radius:0;font-size:15px;font-family:inherit;line-height:inherit;background-image:none}.yasgui .yasgui_textfield>input:focus,.yasgui .yasgui_textfield>textarea:focus{border-color:#337ab7;border-width:2px}.yasgui .yasgui_textfield>input:focus~label,.yasgui .yasgui_textfield>textarea:focus~label{color:#337ab7}.modal-dialog.google-visualization-charteditor-dialog{z-index:11;width:auto;margin:inherit}.modal-dialog.google-visualization-charteditor-dialog .charts-flat-menu-button{box-sizing:content-box}.query__label{display:block;margin:10px 0 3px;font-family:var(--font-sans);font-size:var(--text-sm);color:var(--color-dim)}.store-item .flex ul{display:flex;flex-direction:row;justify-content:flex-start}.pad{padding:15px 0 25px}.yasgui .autocompleteWrapper{display:none!important}.yasgui .tabsList,.yasgui .controlbar,.yasgui .errorHeader,.yasgui .tableControls,.yasgui .yasr_btn.yasr_external_ref_btn{display:none}.yasgui .yasr,.yasgui .yasgui__tabpanel,.yasgui .yasgui__tabs{display:none!important}#yasgui .yasqe{height:100%!important}.yasr .yasr_btn{border:none;background:inherit}.yasr .svgImg{display:flex;flex-direction:row}.yasr .svgImg svg{max-width:100%;max-height:100%;width:15px;height:15px;align-self:center}.yasr .yasr_btn.yasr_external_ref_btn{font-weight:600;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}.yasr .yasr_btn.yasr_external_ref_btn:active,.yasr .yasr_btn.yasr_external_ref_btn:focus{color:inherit;-webkit-text-decoration-color:inherit;text-decoration-color:inherit}.yasr .yasr_btn.yasr_external_ref_btn .svgImg svg{width:18px;height:18px}.yasr a{color:#428bca;text-decoration:none}.yasr a:active,.yasr a:hover{outline:0;color:#2a6496;text-decoration:underline}.yasr .yasr_btnGroup{margin:0;padding:0;list-style:none;display:flex;overflow-x:auto;overflow-y:hidden}.yasr .yasr_btnGroup .plugin_icon{height:15px;width:15px;margin-right:5px;text-align:center}.yasr .yasr_btnGroup .yasr_btn{border-bottom:2px solid transparent;padding-left:6px;padding-right:6px;margin-left:6px;margin-right:6px}.yasr .yasr_btnGroup .yasr_btn.selected{border-bottom:2px solid #337ab7}@media(max-width:768px){.yasr .yasr_btn span{display:none}.yasr .yasr_btn .plugin_icon{margin-right:0}}.yasr .yasr_header{display:flex;flex-wrap:wrap}.yasr .yasr_fallback_info:not(:empty){margin-top:5px;border:1px solid #d1d1d1;padding:.5rem;background:#f7f7f7}.yasr .yasr_fallback_info:not(:empty) p{margin:0}.yasr .yasr_help_variable{background:#dff0ff;color:#428bca}.yasr .yasr_response_chip{color:#505050;background:#f5f5f5;border-radius:6px;display:flex;font-size:11pt;max-height:16pt;align-self:center;align-items:center;justify-content:center;white-space:nowrap;padding:6px;margin-left:5px;overflow:visible;box-sizing:border-box}.yasr .yasr_response_chip.empty{display:none}.yasr .yasr_plugin_control{display:flex;margin-left:auto;align-items:center}.yasr .yasr_plugin_control:empty{display:none}.yasr .yasr_btn{color:#505050;fill:#505050;display:flex;align-items:center;justify-content:center;cursor:pointer;white-space:nowrap;padding:6px 12px;overflow:visible;box-sizing:border-box}.yasr .yasr_btn.btn_icon{padding:4px 8px}.yasr .yasr_btn.disabled,.yasr .yasr_btn[disabled]{cursor:default;opacity:.5;box-shadow:none}.yasr .yasr_btn:not(.disabled):hover{fill:#000;color:#000}.yasr .yasr_btn.selected,.yasr .yasr_btn:focus{color:#337ab7;fill:#337ab7}.yasr .space_element{flex-grow:1;min-width:10px}.yasr .tableControls{display:flex;align-items:center;padding:0 5px 0 0;flex-wrap:wrap}.yasr .tableControls .tableFilter{margin-right:10px;height:100%}.yasr .tableControls .tableSizer{height:100%}.yasr .tableControls .switch{display:flex;align-items:center;margin-right:10px}.yasr .dataTable.ellipseTable{white-space:nowrap}.yasr .dataTable.ellipseTable div:not(.expanded){overflow:hidden;text-overflow:ellipsis}.yasr .dataTable:not(.ellipseTable) div:not(.expanded),.yasr .expanded{word-break:break-all}.yasr .expanded{white-space:normal}.yasr .expandable:not(.expanded){cursor:pointer}.yasr .expandable:not(.expanded) a{pointer-events:none}.yasr .dataTables_wrapper{font-size:.9em;min-width:100%}.yasr .dataTables_wrapper .grip-container{max-width:100%}.yasr .dataTables_wrapper .grip-padding>tbody>tr>td,.yasr .dataTables_wrapper .grip-padding>tbody>tr>th{padding-left:7px!important;padding-right:5px!important}.yasr .dataTables_wrapper .dataTable{min-width:100%;box-sizing:border-box}.yasr .dataTables_wrapper .dataTable.no-footer{border-bottom:none}.yasr .dataTables_wrapper .dataTable thead .sorting{background-image:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABMAAAATCAQAAADYWf5HAAAAkElEQVQoz7XQMQ5AQBCF4dWQSJxC5wwax1Cq1e7BAdxD5SL+Tq/QCM1oNiJidwox0355mXnG/DrEtIQ6azioNZQxI0ykPhTQIwhCR+BmBYtlK7kLJYwWCcJA9M4qdrZrd8pPjZWPtOqdRQy320YSV17OatFC4euts6z39GYMKRPCTKY9UnPQ6P+GtMRfGtPnBCiqhAeJPmkqAAAAAElFTkSuQmCC)}.yasr .dataTables_wrapper .dataTable thead .sorting_asc{background-image:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABMAAAATCAYAAAByUDbMAAAAZ0lEQVQ4y2NgGLKgquEuFxBPAGI2ahhWCsS/gDibUoO0gPgxEP8H4ttArEyuQYxAPBdqEAxPBImTY5gjEL9DM+wTENuQahAvEO9DMwiGdwAxOymGJQLxTyD+jgWDxCMZRsEoGAVoAADeemwtPcZI2wAAAABJRU5ErkJggg==)}.yasr .dataTables_wrapper .dataTable thead .sorting_desc{background-image:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABMAAAATCAYAAAByUDbMAAAAZUlEQVQ4y2NgGAWjYBSggaqGu5FA/BOIv2PBIPFEUgxjB+IdQPwfC94HxLykus4GiD+hGfQOiB3J8SojEE9EM2wuSJzcsFMG4ttQgx4DsRalkZENxL+AuJQaMcsGxBOAmGvopk8AVz1sLZgg0bsAAAAASUVORK5CYII=)}.yasr .dataTables_wrapper .dataTable thead .sorting_asc_disabled{background-image:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABMAAAATCAQAAADYWf5HAAAAW0lEQVQoz2NgoCm4w3Vnwh02wspK7/y6k01Ikdadx3f+37l9RxmfIsY7c4GKQHDiHUbcyhzvvIMq+3THBpci3jv7oIpAcMcdduzKEu/8vPMdDn/eiWQYBYMKAAC3ykIEuYQJUgAAAABJRU5ErkJggg==)}.yasr .dataTables_wrapper .dataTable thead .sorting_desc_disabled{background-image:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABMAAAATCAQAAADYWf5HAAAAWUlEQVQoz2NgGAWDCtyJvPPzznc4/HknEbsy9js77vyHw313eHGZZ3PnE1TRuzuOuK1lvDMRqmzuHUZ87lO+cxuo6PEdLUIeyb7z604pYf+y3Zlwh4u2YQoAc7ZCBHH4jigAAAAASUVORK5CYII=)}.yasr .dataTables_wrapper .dataTable tbody tr:hover{background-color:#f9f9f9}.yasr .dataTables_wrapper .dataTable thead tr th{-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;font-weight:700;text-align:start;overflow:hidden;text-overflow:ellipsis;border:none;padding:5px 5px 5px 7px;min-width:28px}.yasr .dataTables_wrapper .dataTable thead tr th.sorting{min-width:10px;padding-right:18px}.yasr .dataTables_wrapper .dataTable thead tr th:hover{background-color:#f9f9f9}.yasr .dataTables_wrapper .dataTable td{padding:5px}.yasr .dataTables_wrapper .dataTable td>div{-webkit-hyphens:auto;-ms-hyphens:auto;hyphens:auto}.yasr .dataTables_wrapper .dataTable td>div.rowNumber{word-break:keep-all;overflow:visible}.yasr .dataTables_wrapper .dataTable td .tableEllipse{cursor:pointer;font-weight:700;padding:0 2px;background-color:#428bca33;border-radius:2px;margin:0 3px}.yasr .dataTables_wrapper div.dataTables_paginate.paging_simple_numbers a.paginate_button{border:none;background:transparent}.yasr .dataTables_wrapper div.dataTables_paginate.paging_simple_numbers a.paginate_button .disabled{color:#505050}.yasr .dataTables_wrapper div.dataTables_paginate.paging_simple_numbers a.paginate_button.current{border:none;background:transparent;text-decoration:underline!important}.yasr .dataTables_wrapper div.dataTables_paginate.paging_simple_numbers a.paginate_button:hover{border:none;background:transparent}.yasr .dataTables_wrapper div.dataTables_paginate.paging_simple_numbers a.paginate_button:hover:not(.disabled){color:#000!important}.yasr .dataTables_wrapper div.dataTables_paginate.paging_simple_numbers a.paginate_button:active{box-shadow:none}table.dataTable{width:100%;margin:0 auto;clear:both;border-collapse:separate;border-spacing:0}table.dataTable tfoot th,table.dataTable thead th{font-weight:700}table.dataTable thead td,table.dataTable thead th{padding:10px 18px;border-bottom:1px solid #111}table.dataTable thead td:active,table.dataTable thead th:active{outline:none}table.dataTable tfoot td,table.dataTable tfoot th{padding:10px 18px 6px;border-top:1px solid #111}table.dataTable thead .sorting,table.dataTable thead .sorting_asc,table.dataTable thead .sorting_asc_disabled,table.dataTable thead .sorting_desc,table.dataTable thead .sorting_desc_disabled{cursor:pointer;*cursor:hand;background-repeat:no-repeat;background-position:100%}table.dataTable tbody tr{background-color:#fff}table.dataTable tbody tr.selected{background-color:#b0bed9}table.dataTable tbody td,table.dataTable tbody th{padding:8px 10px}table.dataTable.display tbody td,table.dataTable.display tbody th,table.dataTable.row-border tbody td,table.dataTable.row-border tbody th{border-top:1px solid #ddd}table.dataTable.display tbody tr:first-child td,table.dataTable.display tbody tr:first-child th,table.dataTable.row-border tbody tr:first-child td,table.dataTable.row-border tbody tr:first-child th{border-top:none}table.dataTable.cell-border tbody td,table.dataTable.cell-border tbody th{border-top:1px solid #ddd;border-right:1px solid #ddd}table.dataTable.cell-border tbody tr td:first-child,table.dataTable.cell-border tbody tr th:first-child{border-left:1px solid #ddd}table.dataTable.cell-border tbody tr:first-child td,table.dataTable.cell-border tbody tr:first-child th{border-top:none}table.dataTable.display tbody tr.odd,table.dataTable.stripe tbody tr.odd{background-color:#f9f9f9}table.dataTable.display tbody tr.odd.selected,table.dataTable.stripe tbody tr.odd.selected{background-color:#acbad4}table.dataTable.display tbody tr:hover,table.dataTable.hover tbody tr:hover{background-color:#f6f6f6}table.dataTable.display tbody tr:hover.selected,table.dataTable.hover tbody tr:hover.selected{background-color:#aab7d1}table.dataTable.display tbody tr>.sorting_1,table.dataTable.display tbody tr>.sorting_2,table.dataTable.display tbody tr>.sorting_3,table.dataTable.order-column tbody tr>.sorting_1,table.dataTable.order-column tbody tr>.sorting_2,table.dataTable.order-column tbody tr>.sorting_3{background-color:#fafafa}table.dataTable.display tbody tr.selected>.sorting_1,table.dataTable.display tbody tr.selected>.sorting_2,table.dataTable.display tbody tr.selected>.sorting_3,table.dataTable.order-column tbody tr.selected>.sorting_1,table.dataTable.order-column tbody tr.selected>.sorting_2,table.dataTable.order-column tbody tr.selected>.sorting_3{background-color:#acbad5}table.dataTable.display tbody tr.odd>.sorting_1,table.dataTable.order-column.stripe tbody tr.odd>.sorting_1{background-color:#f1f1f1}table.dataTable.display tbody tr.odd>.sorting_2,table.dataTable.order-column.stripe tbody tr.odd>.sorting_2{background-color:#f3f3f3}table.dataTable.display tbody tr.odd>.sorting_3,table.dataTable.order-column.stripe tbody tr.odd>.sorting_3{background-color:#f5f5f5}table.dataTable.display tbody tr.odd.selected>.sorting_1,table.dataTable.order-column.stripe tbody tr.odd.selected>.sorting_1{background-color:#a6b4cd}table.dataTable.display tbody tr.odd.selected>.sorting_2,table.dataTable.order-column.stripe tbody tr.odd.selected>.sorting_2{background-color:#a8b5cf}table.dataTable.display tbody tr.odd.selected>.sorting_3,table.dataTable.order-column.stripe tbody tr.odd.selected>.sorting_3{background-color:#a9b7d1}table.dataTable.display tbody tr.even>.sorting_1,table.dataTable.order-column.stripe tbody tr.even>.sorting_1{background-color:#fafafa}table.dataTable.display tbody tr.even>.sorting_2,table.dataTable.order-column.stripe tbody tr.even>.sorting_2{background-color:#fcfcfc}table.dataTable.display tbody tr.even>.sorting_3,table.dataTable.order-column.stripe tbody tr.even>.sorting_3{background-color:#fefefe}table.dataTable.display tbody tr.even.selected>.sorting_1,table.dataTable.order-column.stripe tbody tr.even.selected>.sorting_1{background-color:#acbad5}table.dataTable.display tbody tr.even.selected>.sorting_2,table.dataTable.order-column.stripe tbody tr.even.selected>.sorting_2{background-color:#aebcd6}table.dataTable.display tbody tr.even.selected>.sorting_3,table.dataTable.order-column.stripe tbody tr.even.selected>.sorting_3{background-color:#afbdd8}table.dataTable.display tbody tr:hover>.sorting_1,table.dataTable.order-column.hover tbody tr:hover>.sorting_1{background-color:#eaeaea}table.dataTable.display tbody tr:hover>.sorting_2,table.dataTable.order-column.hover tbody tr:hover>.sorting_2{background-color:#ececec}table.dataTable.display tbody tr:hover>.sorting_3,table.dataTable.order-column.hover tbody tr:hover>.sorting_3{background-color:#efefef}table.dataTable.display tbody tr:hover.selected>.sorting_1,table.dataTable.order-column.hover tbody tr:hover.selected>.sorting_1{background-color:#a2aec7}table.dataTable.display tbody tr:hover.selected>.sorting_2,table.dataTable.order-column.hover tbody tr:hover.selected>.sorting_2{background-color:#a3b0c9}table.dataTable.display tbody tr:hover.selected>.sorting_3,table.dataTable.order-column.hover tbody tr:hover.selected>.sorting_3{background-color:#a5b2cb}table.dataTable.no-footer{border-bottom:1px solid #111}table.dataTable.nowrap td,table.dataTable.nowrap th{white-space:nowrap}table.dataTable.compact thead td,table.dataTable.compact thead th{padding:4px 17px}table.dataTable.compact tbody td,table.dataTable.compact tbody th,table.dataTable.compact tfoot td,table.dataTable.compact tfoot th{padding:4px}table.dataTable td.dt-left,table.dataTable th.dt-left{text-align:left}table.dataTable td.dataTables_empty,table.dataTable td.dt-center,table.dataTable th.dt-center{text-align:center}table.dataTable td.dt-right,table.dataTable th.dt-right{text-align:right}table.dataTable td.dt-justify,table.dataTable th.dt-justify{text-align:justify}table.dataTable td.dt-nowrap,table.dataTable th.dt-nowrap{white-space:nowrap}table.dataTable tfoot td.dt-head-left,table.dataTable tfoot th.dt-head-left,table.dataTable thead td.dt-head-left,table.dataTable thead th.dt-head-left{text-align:left}table.dataTable tfoot td.dt-head-center,table.dataTable tfoot th.dt-head-center,table.dataTable thead td.dt-head-center,table.dataTable thead th.dt-head-center{text-align:center}table.dataTable tfoot td.dt-head-right,table.dataTable tfoot th.dt-head-right,table.dataTable thead td.dt-head-right,table.dataTable thead th.dt-head-right{text-align:right}table.dataTable tfoot td.dt-head-justify,table.dataTable tfoot th.dt-head-justify,table.dataTable thead td.dt-head-justify,table.dataTable thead th.dt-head-justify{text-align:justify}table.dataTable tfoot td.dt-head-nowrap,table.dataTable tfoot th.dt-head-nowrap,table.dataTable thead td.dt-head-nowrap,table.dataTable thead th.dt-head-nowrap{white-space:nowrap}table.dataTable tbody td.dt-body-left,table.dataTable tbody th.dt-body-left{text-align:left}table.dataTable tbody td.dt-body-center,table.dataTable tbody th.dt-body-center{text-align:center}table.dataTable tbody td.dt-body-right,table.dataTable tbody th.dt-body-right{text-align:right}table.dataTable tbody td.dt-body-justify,table.dataTable tbody th.dt-body-justify{text-align:justify}table.dataTable tbody td.dt-body-nowrap,table.dataTable tbody th.dt-body-nowrap{white-space:nowrap}table.dataTable,table.dataTable td,table.dataTable th{box-sizing:content-box}.dataTables_wrapper{position:relative;clear:both;*zoom:1;zoom:1}.dataTables_wrapper .dataTables_length{float:left}.dataTables_wrapper .dataTables_length select{border:1px solid #aaa;border-radius:3px;background-color:transparent;padding:4px}.dataTables_wrapper .dataTables_filter{float:right;text-align:right}.dataTables_wrapper .dataTables_filter input{border:1px solid #aaa;border-radius:3px;padding:5px;background-color:transparent;margin-left:3px}.dataTables_wrapper .dataTables_info{clear:both;float:left;padding-top:.755em}.dataTables_wrapper .dataTables_paginate{float:right;text-align:right;padding-top:.25em}.dataTables_wrapper .dataTables_paginate .paginate_button{box-sizing:border-box;display:inline-block;min-width:1.5em;padding:.5em 1em;margin-left:2px;text-align:center;text-decoration:none!important;cursor:pointer;*cursor:hand;color:#333!important;border:1px solid transparent;border-radius:2px}.dataTables_wrapper .dataTables_paginate .paginate_button.current,.dataTables_wrapper .dataTables_paginate .paginate_button.current:hover{color:#333!important;border:1px solid #979797;background-color:#fff;background:-webkit-gradient(linear,left top,left bottom,color-stop(0,#fff),color-stop(100%,#dcdcdc));background:-webkit-linear-gradient(top,#fff,#dcdcdc);background:-moz-linear-gradient(top,#fff 0,#dcdcdc 100%);background:-ms-linear-gradient(top,#fff 0,#dcdcdc 100%);background:-o-linear-gradient(top,#fff 0,#dcdcdc 100%);background:linear-gradient(180deg,#fff 0,#dcdcdc)}.dataTables_wrapper .dataTables_paginate .paginate_button.disabled,.dataTables_wrapper .dataTables_paginate .paginate_button.disabled:active,.dataTables_wrapper .dataTables_paginate .paginate_button.disabled:hover{cursor:default;color:#666!important;border:1px solid transparent;background:transparent;box-shadow:none}.dataTables_wrapper .dataTables_paginate .paginate_button:hover{color:#fff!important;border:1px solid #111;background-color:#585858;background:-webkit-gradient(linear,left top,left bottom,color-stop(0,#585858),color-stop(100%,#111));background:-webkit-linear-gradient(top,#585858,#111);background:-moz-linear-gradient(top,#585858 0,#111 100%);background:-ms-linear-gradient(top,#585858 0,#111 100%);background:-o-linear-gradient(top,#585858 0,#111 100%);background:linear-gradient(180deg,#585858 0,#111)}.dataTables_wrapper .dataTables_paginate .paginate_button:active{outline:none;background-color:#2b2b2b;background:-webkit-gradient(linear,left top,left bottom,color-stop(0,#2b2b2b),color-stop(100%,#0c0c0c));background:-webkit-linear-gradient(top,#2b2b2b,#0c0c0c);background:-moz-linear-gradient(top,#2b2b2b 0,#0c0c0c 100%);background:-ms-linear-gradient(top,#2b2b2b 0,#0c0c0c 100%);background:-o-linear-gradient(top,#2b2b2b 0,#0c0c0c 100%);background:linear-gradient(180deg,#2b2b2b 0,#0c0c0c);box-shadow:inset 0 0 3px #111}.dataTables_wrapper .dataTables_paginate .ellipsis{padding:0 1em}.dataTables_wrapper .dataTables_processing{position:absolute;top:50%;left:50%;width:100%;height:40px;margin-left:-50%;margin-top:-25px;padding-top:20px;text-align:center;font-size:1.2em;background-color:#fff;background:-webkit-gradient(linear,left top,right top,color-stop(0,hsla(0,0%,100%,0)),color-stop(25%,hsla(0,0%,100%,.9)),color-stop(75%,hsla(0,0%,100%,.9)),color-stop(100%,hsla(0,0%,100%,0)));background:-webkit-linear-gradient(left,hsla(0,0%,100%,0),hsla(0,0%,100%,.9) 25%,hsla(0,0%,100%,.9) 75%,hsla(0,0%,100%,0));background:-moz-linear-gradient(left,hsla(0,0%,100%,0) 0,hsla(0,0%,100%,.9) 25%,hsla(0,0%,100%,.9) 75%,hsla(0,0%,100%,0) 100%);background:-ms-linear-gradient(left,hsla(0,0%,100%,0) 0,hsla(0,0%,100%,.9) 25%,hsla(0,0%,100%,.9) 75%,hsla(0,0%,100%,0) 100%);background:-o-linear-gradient(left,hsla(0,0%,100%,0) 0,hsla(0,0%,100%,.9) 25%,hsla(0,0%,100%,.9) 75%,hsla(0,0%,100%,0) 100%);background:linear-gradient(90deg,#fff0 0,#ffffffe6 25% 75%,#fff0)}.dataTables_wrapper .dataTables_filter,.dataTables_wrapper .dataTables_info,.dataTables_wrapper .dataTables_length,.dataTables_wrapper .dataTables_paginate,.dataTables_wrapper .dataTables_processing{color:#333}.dataTables_wrapper .dataTables_scroll{clear:both}.dataTables_wrapper .dataTables_scroll div.dataTables_scrollBody{*margin-top:-1px;-webkit-overflow-scrolling:touch}.dataTables_wrapper .dataTables_scroll div.dataTables_scrollBody>table>tbody>tr>td,.dataTables_wrapper .dataTables_scroll div.dataTables_scrollBody>table>tbody>tr>th,.dataTables_wrapper .dataTables_scroll div.dataTables_scrollBody>table>thead>tr>td,.dataTables_wrapper .dataTables_scroll div.dataTables_scrollBody>table>thead>tr>th{vertical-align:middle}.dataTables_wrapper .dataTables_scroll div.dataTables_scrollBody>table>tbody>tr>td>div.dataTables_sizing,.dataTables_wrapper .dataTables_scroll div.dataTables_scrollBody>table>tbody>tr>th>div.dataTables_sizing,.dataTables_wrapper .dataTables_scroll div.dataTables_scrollBody>table>thead>tr>td>div.dataTables_sizing,.dataTables_wrapper .dataTables_scroll div.dataTables_scrollBody>table>thead>tr>th>div.dataTables_sizing{height:0;overflow:hidden;margin:0!important;padding:0!important}.dataTables_wrapper.no-footer .dataTables_scrollBody{border-bottom:1px solid #111}.dataTables_wrapper.no-footer div.dataTables_scrollBody>table,.dataTables_wrapper.no-footer div.dataTables_scrollHead table.dataTable{border-bottom:none}.dataTables_wrapper:after{visibility:hidden;display:block;content:\"\";clear:both;height:0}@media screen and (max-width:767px){.dataTables_wrapper .dataTables_info,.dataTables_wrapper .dataTables_paginate{float:none;text-align:center}.dataTables_wrapper .dataTables_paginate{margin-top:.5em}}@media screen and (max-width:640px){.dataTables_wrapper .dataTables_filter,.dataTables_wrapper .dataTables_length{float:none;text-align:center}.dataTables_wrapper .dataTables_filter{margin-top:.5em}}.yasr .booleanResult{display:flex;align-items:center;justify-content:center}.yasr .booleanResult svg{margin-bottom:-10px;margin-right:7px}.yasr .yasr_results{position:relative}.yasr .yasr_results .CodeMirror{border:1px solid #d1d1d1;margin-top:5px;height:100%}.yasr .yasr_results .CodeMirror.overflow:before{background:linear-gradient(transparent,#fffa 75%,#fff);content:\"\";width:100%;height:100%;z-index:1200;position:absolute;pointer-events:none}.yasr .yasr_results .overlay{width:100%;position:absolute;bottom:0;z-index:1201;display:flex;pointer-events:none}.yasr .yasr_results .overlay:after,.yasr .yasr_results .overlay:before{content:\"\";flex-grow:1}.yasr .yasr_results .overlay_content{display:flex;align-content:center;justify-content:center;align-items:center;background:#fff;pointer-events:all;background:linear-gradient(90deg,transparent,#fff 5%,#fff 95%,transparent)}.yasr .yasr_results .yasr_btn.overlay_btn{border:1px solid #337ab7;background:#fff;color:#337ab7;padding:10px;margin:10px}.yasr .yasr_results .yasr_btn.overlay_btn svg{margin-left:.5rem;fill:#337ab7;color:#337ab7}.yasr .yasr_results .yasr_btn.overlay_btn:hover{color:#255681;border-color:#337ab7;fill:#255681}.yasr .yasr_results .yasr_btn.overlay_btn:hover svg{color:#255681;fill:#255681}.CodeMirror{font-family:monospace;height:300px;color:#000;direction:ltr}.CodeMirror-lines{padding:4px 0}.CodeMirror pre.CodeMirror-line,.CodeMirror pre.CodeMirror-line-like{padding:0 4px}.CodeMirror-gutter-filler,.CodeMirror-scrollbar-filler{background-color:#fff}.CodeMirror-gutters{border-right:1px solid #ddd;background-color:#f7f7f7;white-space:nowrap}.CodeMirror-linenumber{padding:0 3px 0 5px;min-width:20px;text-align:right;color:#999;white-space:nowrap}.CodeMirror-guttermarker{color:#000}.CodeMirror-guttermarker-subtle{color:#999}.CodeMirror-cursor{border-left:1px solid #000;border-right:none;width:0}.CodeMirror div.CodeMirror-secondarycursor{border-left:1px solid silver}.cm-fat-cursor .CodeMirror-cursor{width:auto;border:0!important;background:#7e7}.cm-fat-cursor div.CodeMirror-cursors{z-index:1}.cm-fat-cursor-mark{background-color:#14ff1480}.cm-animate-fat-cursor,.cm-fat-cursor-mark{-webkit-animation:blink 1.06s steps(1) infinite;-moz-animation:blink 1.06s steps(1) infinite;animation:blink 1.06s steps(1) infinite}.cm-animate-fat-cursor{width:auto;border:0;background-color:#7e7}@-moz-keyframes blink{50%{background-color:transparent}}@-webkit-keyframes blink{50%{background-color:transparent}}@keyframes blink{50%{background-color:transparent}}.cm-tab{display:inline-block;text-decoration:inherit}.CodeMirror-rulers{position:absolute;inset:-50px 0 0;overflow:hidden}.CodeMirror-ruler{border-left:1px solid #ccc;top:0;bottom:0;position:absolute}.cm-s-default .cm-header{color:#00f}.cm-s-default .cm-quote{color:#090}.cm-negative{color:#d44}.cm-positive{color:#292}.cm-header,.cm-strong{font-weight:700}.cm-em{font-style:italic}.cm-link{text-decoration:underline}.cm-strikethrough{text-decoration:line-through}.cm-s-default .cm-keyword{color:#708}.cm-s-default .cm-atom{color:#219}.cm-s-default .cm-number{color:#164}.cm-s-default .cm-def{color:#00f}.cm-s-default .cm-variable-2{color:#05a}.cm-s-default .cm-type,.cm-s-default .cm-variable-3{color:#085}.cm-s-default .cm-comment{color:#a50}.cm-s-default .cm-string{color:#a11}.cm-s-default .cm-string-2{color:#f50}.cm-s-default .cm-meta,.cm-s-default .cm-qualifier{color:#555}.cm-s-default .cm-builtin{color:#30a}.cm-s-default .cm-bracket{color:#997}.cm-s-default .cm-tag{color:#170}.cm-s-default .cm-attribute{color:#00c}.cm-s-default .cm-hr{color:#999}.cm-s-default .cm-link{color:#00c}.cm-invalidchar,.cm-s-default .cm-error{color:red}.CodeMirror-composing{border-bottom:2px solid}div.CodeMirror span.CodeMirror-matchingbracket{color:#0b0}div.CodeMirror span.CodeMirror-nonmatchingbracket{color:#a22}.CodeMirror-matchingtag{background:#ff96004d}.CodeMirror-activeline-background{background:#e8f2ff}.CodeMirror{position:relative;overflow:hidden;background:#fff}.CodeMirror-scroll{overflow:scroll!important;margin-bottom:-50px;margin-right:-50px;padding-bottom:50px;height:100%;outline:none;position:relative}.CodeMirror-sizer{position:relative;border-right:50px solid transparent}.CodeMirror-gutter-filler,.CodeMirror-hscrollbar,.CodeMirror-scrollbar-filler,.CodeMirror-vscrollbar{position:absolute;z-index:6;display:none}.CodeMirror-vscrollbar{right:0;top:0;overflow-x:hidden;overflow-y:scroll}.CodeMirror-hscrollbar{bottom:0;left:0;overflow-y:hidden;overflow-x:scroll}.CodeMirror-scrollbar-filler{right:0;bottom:0}.CodeMirror-gutter-filler{left:0;bottom:0}.CodeMirror-gutters{position:absolute;left:0;top:0;min-height:100%;z-index:3}.CodeMirror-gutter{white-space:normal;height:100%;display:inline-block;vertical-align:top;margin-bottom:-50px}.CodeMirror-gutter-wrapper{position:absolute;z-index:4;background:none!important;border:none!important}.CodeMirror-gutter-background{position:absolute;top:0;bottom:0;z-index:4}.CodeMirror-gutter-elt{position:absolute;cursor:default;z-index:4}.CodeMirror-gutter-wrapper ::selection{background-color:transparent}.CodeMirror-gutter-wrapper ::-moz-selection{background-color:transparent}.CodeMirror-lines{cursor:text;min-height:1px}.CodeMirror pre.CodeMirror-line,.CodeMirror pre.CodeMirror-line-like{-moz-border-radius:0;-webkit-border-radius:0;border-radius:0;border-width:0;background:transparent;font-family:inherit;font-size:inherit;margin:0;white-space:pre;word-wrap:normal;line-height:inherit;color:inherit;z-index:2;position:relative;overflow:visible;-webkit-tap-highlight-color:transparent;-webkit-font-variant-ligatures:contextual;font-variant-ligatures:contextual}.CodeMirror-wrap pre.CodeMirror-line,.CodeMirror-wrap pre.CodeMirror-line-like{word-wrap:break-word;white-space:pre-wrap;word-break:normal}.CodeMirror-linebackground{position:absolute;inset:0;z-index:0}.CodeMirror-linewidget{position:relative;z-index:2;padding:.1px}.CodeMirror-rtl pre{direction:rtl}.CodeMirror-code{outline:none}.CodeMirror-gutter,.CodeMirror-gutters,.CodeMirror-linenumber,.CodeMirror-scroll,.CodeMirror-sizer{-moz-box-sizing:content-box;box-sizing:content-box}.CodeMirror-measure{position:absolute;width:100%;height:0;overflow:hidden;visibility:hidden}.CodeMirror-cursor{position:absolute;pointer-events:none}.CodeMirror-measure pre{position:static}div.CodeMirror-cursors{visibility:hidden;position:relative;z-index:3}.CodeMirror-focused div.CodeMirror-cursors,div.CodeMirror-dragcursors{visibility:visible}.CodeMirror-selected{background:#d9d9d9}.CodeMirror-focused .CodeMirror-selected{background:#d7d4f0}.CodeMirror-crosshair{cursor:crosshair}.CodeMirror-line::selection,.CodeMirror-line>span::selection,.CodeMirror-line>span>span::selection{background:#d7d4f0}.CodeMirror-line::-moz-selection,.CodeMirror-line>span::-moz-selection,.CodeMirror-line>span>span::-moz-selection{background:#d7d4f0}.cm-searching{background-color:#ffa;background-color:#ff06}.cm-force-border{padding-right:.1px}@media print{.CodeMirror div.CodeMirror-cursors{visibility:hidden}}.cm-tab-wrap-hack:after{content:\"\"}span.CodeMirror-selectedtext{background:none}.yasr .errorResult{padding:10px}.yasr .errorResult .errorHeader{overflow:hidden}.yasr .errorResult .errorHeader .yasr_tryQuery{float:right;text-decoration:none;padding-top:3px;padding-bottom:3px}.yasr .errorResult .errorHeader span.status{display:inline-block;padding:.35em .5rem;font-size:75%;font-weight:600;line-height:1.35;text-align:center;white-space:nowrap;vertical-align:baseline;border-radius:.25em;color:#fff;background-color:#dc3545}.yasr .errorResult .errorMessageContainer{display:flex}.yasr .errorResult .errorMessageContainer .errorMessage{flex-grow:1;width:0;min-width:100px;overflow:auto;display:block;padding:10px;margin:10px 0;font-size:13px;line-height:1.42857;word-break:break-all;word-wrap:break-word;color:#333;background-color:#f5f5f5;border:1px solid #ccc;border-radius:4px}.yasr .errorResult .redOutline{color:#a94442;background-color:#f2dede;margin-top:10px;padding:5px 1em;border:1px solid #ebccd1;border-radius:4px}#yasr table.dataTable tbody tr.odd{background-color:#f6f6f6}\n";})();
 import { DATASOURCE_REPOSITORY } from "org.eclipse.daanse.board.app.lib.api.datasource";
-import { defineComponent, computed, ref, onMounted, createElementBlock, openBlock, createVNode, createElementVNode, unref, shallowRef, watch } from "vue";
+import { defineComponent, computed, ref, onMounted, createElementBlock, openBlock, createVNode, createElementVNode, unref, toDisplayString, shallowRef, watch } from "vue";
 import { DSelect } from "org.eclipse.daanse.board.app.ui.vue.controls";
-import { useTemporaryStore } from "org.eclipse.daanse.board.app.ui.vue.composables";
+import { useTranslation, useTemporaryStore } from "org.eclipse.daanse.board.app.ui.vue.composables";
+import { component } from "@eclipse-daanse/tsm";
 const MODEL_ECORE = `<?xml version="1.0" encoding="UTF-8"?>
 <!--
 /*********************************************************************
@@ -57,29 +58,29 @@ function requireYasgui_min() {
         var pe = {};
         function x(T) {
           if (pe[T]) return pe[T].exports;
-          var N = pe[T] = { i: T, l: !1, exports: {} };
-          return Ne[T].call(N.exports, N, N.exports, x), N.l = !0, N.exports;
+          var L = pe[T] = { i: T, l: !1, exports: {} };
+          return Ne[T].call(L.exports, L, L.exports, x), L.l = !0, L.exports;
         }
-        return x.m = Ne, x.c = pe, x.d = function(T, N, Y) {
-          x.o(T, N) || Object.defineProperty(T, N, { enumerable: !0, get: Y });
+        return x.m = Ne, x.c = pe, x.d = function(T, L, Y) {
+          x.o(T, L) || Object.defineProperty(T, L, { enumerable: !0, get: Y });
         }, x.r = function(T) {
           typeof Symbol < "u" && Symbol.toStringTag && Object.defineProperty(T, Symbol.toStringTag, { value: "Module" }), Object.defineProperty(T, "__esModule", { value: !0 });
-        }, x.t = function(T, N) {
-          if (1 & N && (T = x(T)), 8 & N || 4 & N && typeof T == "object" && T && T.__esModule) return T;
+        }, x.t = function(T, L) {
+          if (1 & L && (T = x(T)), 8 & L || 4 & L && typeof T == "object" && T && T.__esModule) return T;
           var Y = /* @__PURE__ */ Object.create(null);
-          if (x.r(Y), Object.defineProperty(Y, "default", { enumerable: !0, value: T }), 2 & N && typeof T != "string") for (var B in T) x.d(Y, B, function(g) {
+          if (x.r(Y), Object.defineProperty(Y, "default", { enumerable: !0, value: T }), 2 & L && typeof T != "string") for (var B in T) x.d(Y, B, function(g) {
             return T[g];
           }.bind(null, B));
           return Y;
         }, x.n = function(T) {
-          var N = T && T.__esModule ? function() {
+          var L = T && T.__esModule ? function() {
             return T.default;
           } : function() {
             return T;
           };
-          return x.d(N, "a", N), N;
-        }, x.o = function(T, N) {
-          return Object.prototype.hasOwnProperty.call(T, N);
+          return x.d(L, "a", L), L;
+        }, x.o = function(T, L) {
+          return Object.prototype.hasOwnProperty.call(T, L);
         }, x.p = "/", x(x.s = 174);
       })([function(Ne, pe, x) {
         x.d(pe, "a", (function() {
@@ -97,9 +98,9 @@ function requireYasgui_min() {
         })), x.d(pe, "e", (function() {
           return ge;
         }));
-        var T = x(4), N = x.n(T), Y = x(5), B = x.n(Y), g = x(106), W = (function() {
+        var T = x(4), L = x.n(T), Y = x(5), B = x.n(Y), g = x(106), W = (function() {
           function K(Z) {
-            N()(this, K), this.namespace = Z;
+            L()(this, K), this.namespace = Z;
           }
           return B()(K, [{ key: "set", value: function(Z, te, b, w) {
             if (g.enabled && (this.removeExpiredKeys(), Z && te !== void 0)) {
@@ -188,25 +189,25 @@ function requireYasgui_min() {
         pe.a = T;
       }, function(Ne, pe, x) {
         pe.a = function(T) {
-          var N = typeof T;
-          return T != null && (N == "object" || N == "function");
+          var L = typeof T;
+          return T != null && (L == "object" || L == "function");
         };
       }, function(Ne, pe, x) {
-        var T = x(63), N = typeof self == "object" && self && self.Object === Object && self, Y = T.a || N || Function("return this")();
+        var T = x(63), L = typeof self == "object" && self && self.Object === Object && self, Y = T.a || L || Function("return this")();
         pe.a = Y;
       }, function(Ne, pe) {
         Ne.exports = function(x, T) {
           if (!(x instanceof T)) throw new TypeError("Cannot call a class as a function");
         };
       }, function(Ne, pe) {
-        function x(T, N) {
-          for (var Y = 0; Y < N.length; Y++) {
-            var B = N[Y];
+        function x(T, L) {
+          for (var Y = 0; Y < L.length; Y++) {
+            var B = L[Y];
             B.enumerable = B.enumerable || !1, B.configurable = !0, "value" in B && (B.writable = !0), Object.defineProperty(T, B.key, B);
           }
         }
-        Ne.exports = function(T, N, Y) {
-          return N && x(T.prototype, N), Y && x(T, Y), T;
+        Ne.exports = function(T, L, Y) {
+          return L && x(T.prototype, L), Y && x(T, Y), T;
         };
       }, function(Ne, pe, x) {
         pe.a = function(T) {
@@ -214,7 +215,7 @@ function requireYasgui_min() {
         };
       }, function(Ne, pe, x) {
         Ne.exports = (function() {
-          var T = navigator.userAgent, N = navigator.platform, Y = /gecko\/\d/i.test(T), B = /MSIE \d/.test(T), g = /Trident\/(?:[7-9]|\d{2,})\..*rv:(\d+)/.exec(T), W = /Edge\/(\d+)/.exec(T), R = B || g || W, H = R && (B ? document.documentMode || 6 : +(W || g)[1]), fe = !W && /WebKit\//.test(T), C = fe && /Qt\/\d+\.\d+/.test(T), Q = !W && /Chrome\//.test(T), ge = /Opera\//.test(T), K = /Apple Computer/.test(navigator.vendor), Z = /Mac OS X 1\d\D([8-9]|\d\d)\D/.test(T), te = /PhantomJS/.test(T), b = !W && /AppleWebKit/.test(T) && /Mobile\/\w+/.test(T), w = /Android/.test(T), U = b || w || /webOS|BlackBerry|Opera Mini|Opera Mobi|IEMobile/i.test(T), re = b || /Mac/.test(N), de = /\bCrOS\b/.test(T), he = /win/i.test(N), p = ge && T.match(/Version\/(\d*\.\d*)/);
+          var T = navigator.userAgent, L = navigator.platform, Y = /gecko\/\d/i.test(T), B = /MSIE \d/.test(T), g = /Trident\/(?:[7-9]|\d{2,})\..*rv:(\d+)/.exec(T), W = /Edge\/(\d+)/.exec(T), R = B || g || W, H = R && (B ? document.documentMode || 6 : +(W || g)[1]), fe = !W && /WebKit\//.test(T), C = fe && /Qt\/\d+\.\d+/.test(T), Q = !W && /Chrome\//.test(T), ge = /Opera\//.test(T), K = /Apple Computer/.test(navigator.vendor), Z = /Mac OS X 1\d\D([8-9]|\d\d)\D/.test(T), te = /PhantomJS/.test(T), b = !W && /AppleWebKit/.test(T) && /Mobile\/\w+/.test(T), w = /Android/.test(T), U = b || w || /webOS|BlackBerry|Opera Mini|Opera Mobi|IEMobile/i.test(T), re = b || /Mac/.test(L), de = /\bCrOS\b/.test(T), he = /win/i.test(L), p = ge && T.match(/Version\/(\d*\.\d*)/);
           p && (p = Number(p[1])), p && p >= 15 && (ge = !1, fe = !0);
           var ae = re && (C || ge && (p == null || p < 12.11)), Ge = Y || R && H >= 9;
           function me(e) {
@@ -1064,7 +1065,7 @@ b`.split(/\n/).length != 3 ? function(e) {
             }
             return o;
           }
-          function L(e) {
+          function N(e) {
             var t = e.display, o = e.doc;
             t.maxLine = Jt(o, o.first), t.maxLineLength = _(t.maxLine), t.maxLineChanged = !0, o.iter((function(i) {
               var a = _(i);
@@ -1970,7 +1971,7 @@ b`.split(/\n/).length != 3 ? function(e) {
             (function(i) {
               var a = i.display;
               !a.scrollbarsClipped && a.scroller.offsetWidth && (a.nativeBarWidth = a.scroller.offsetWidth - a.scroller.clientWidth, a.heightForcer.style.height = ri(i) + "px", a.sizer.style.marginBottom = -a.nativeBarWidth + "px", a.sizer.style.borderRightWidth = ri(i) + "px", a.scrollbarsClipped = !0);
-            })(t), e.updateMaxLine && L(t), e.mustUpdate = e.viewChanged || e.forceUpdate || e.scrollTop != null || e.scrollToPos && (e.scrollToPos.from.line < o.viewFrom || e.scrollToPos.to.line >= o.viewTo) || o.maxLineChanged && t.options.lineWrapping, e.update = e.mustUpdate && new F(t, e.mustUpdate && { top: e.scrollTop, ensure: e.scrollToPos }, e.forceUpdate);
+            })(t), e.updateMaxLine && N(t), e.mustUpdate = e.viewChanged || e.forceUpdate || e.scrollTop != null || e.scrollToPos && (e.scrollToPos.from.line < o.viewFrom || e.scrollToPos.to.line >= o.viewTo) || o.maxLineChanged && t.options.lineWrapping, e.update = e.mustUpdate && new F(t, e.mustUpdate && { top: e.scrollTop, ensure: e.scrollToPos }, e.forceUpdate);
           }
           function Do(e) {
             e.updatedDisplay = e.mustUpdate && J(e.cm, e.update);
@@ -2367,7 +2368,7 @@ b`.split(/\n/).length != 3 ? function(e) {
           }
           function Wa(e, t) {
             if (t.cm) throw new Error("This document is already in use.");
-            e.doc = t, t.cm = e, Ii(e), _a(e), Ya(e), e.options.lineWrapping || L(e), e.options.mode = t.modeOption, Si(e);
+            e.doc = t, t.cm = e, Ii(e), _a(e), Ya(e), e.options.lineWrapping || N(e), e.options.mode = t.modeOption, Si(e);
           }
           function Ya(e) {
             (e.doc.direction == "rtl" ? ct : O)(e.display.lineDiv, "CodeMirror-rtl");
@@ -3807,7 +3808,7 @@ b`.split(/\n/).length != 3 ? function(e) {
             }
           }
           function il(e) {
-            e.options.lineWrapping ? (ct(e.display.wrapper, "CodeMirror-wrap"), e.display.sizer.style.minWidth = "", e.display.sizerWidth = null) : (O(e.display.wrapper, "CodeMirror-wrap"), L(e)), Ii(e), Si(e), di(e), setTimeout((function() {
+            e.options.lineWrapping ? (ct(e.display.wrapper, "CodeMirror-wrap"), e.display.sizer.style.minWidth = "", e.display.sizerWidth = null) : (O(e.display.wrapper, "CodeMirror-wrap"), N(e)), Ii(e), Si(e), di(e), setTimeout((function() {
               return An(e);
             }), 100);
           }
@@ -4830,10 +4831,10 @@ b`.split(/\n/).length != 3 ? function(e) {
         var T = x(3).a.Symbol;
         pe.a = T;
       }, function(Ne, pe, x) {
-        var T, N = x(44), Y = x(3).a["__core-js_shared__"], B = (T = /[^.]+$/.exec(Y && Y.keys && Y.keys.IE_PROTO || "")) ? "Symbol(src)_1." + T : "", g = function(b) {
+        var T, L = x(44), Y = x(3).a["__core-js_shared__"], B = (T = /[^.]+$/.exec(Y && Y.keys && Y.keys.IE_PROTO || "")) ? "Symbol(src)_1." + T : "", g = function(b) {
           return !!B && B in b;
         }, W = x(2), R = x(22), H = /^\[object .+?Constructor\]$/, fe = Function.prototype, C = Object.prototype, Q = fe.toString, ge = C.hasOwnProperty, K = RegExp("^" + Q.call(ge).replace(/[\\^$.*+?()[\]{}|]/g, "\\$&").replace(/hasOwnProperty|(function).*?(?=\\\()| for .+?(?=\\\])/g, "$1.*?") + "$"), Z = function(b) {
-          return !(!Object(W.a)(b) || g(b)) && (Object(N.a)(b) ? K : H).test(Object(R.a)(b));
+          return !(!Object(W.a)(b) || g(b)) && (Object(L.a)(b) ? K : H).test(Object(R.a)(b));
         }, te = function(b, w) {
           return b?.[w];
         };
@@ -4842,12 +4843,12 @@ b`.split(/\n/).length != 3 ? function(e) {
           return Z(U) ? U : void 0;
         };
       }, function(Ne, pe, x) {
-        var T = x(44), N = x(43);
+        var T = x(44), L = x(43);
         pe.a = function(Y) {
-          return Y != null && Object(N.a)(Y.length) && !Object(T.a)(Y);
+          return Y != null && Object(L.a)(Y.length) && !Object(T.a)(Y);
         };
       }, function(Ne, pe, x) {
-        var T = x(8), N = Object.prototype, Y = N.hasOwnProperty, B = N.toString, g = T.a ? T.a.toStringTag : void 0, W = function(C) {
+        var T = x(8), L = Object.prototype, Y = L.hasOwnProperty, B = L.toString, g = T.a ? T.a.toStringTag : void 0, W = function(C) {
           var Q = Y.call(C, g), ge = C[g];
           try {
             C[g] = void 0;
@@ -4863,26 +4864,26 @@ b`.split(/\n/).length != 3 ? function(e) {
           return C == null ? C === void 0 ? "[object Undefined]" : "[object Null]" : fe && fe in Object(C) ? W(C) : H(C);
         };
       }, function(Ne, pe, x) {
-        pe.a = function(T, N) {
-          return T === N || T != T && N != N;
+        pe.a = function(T, L) {
+          return T === L || T != T && L != L;
         };
       }, function(Ne, pe, x) {
-        var T = x(68), N = x(80), Y = x(10);
+        var T = x(68), L = x(80), Y = x(10);
         pe.a = function(B) {
-          return Object(Y.a)(B) ? Object(T.a)(B) : Object(N.a)(B);
+          return Object(Y.a)(B) ? Object(T.a)(B) : Object(L.a)(B);
         };
       }, function(Ne, pe, x) {
         (function(T) {
-          var N = x(3), Y = x(93), B = exports$1 && !exports$1.nodeType && exports$1, g = B && typeof T == "object" && T && !T.nodeType && T, W = g && g.exports === B ? N.a.Buffer : void 0, R = (W ? W.isBuffer : void 0) || Y.a;
+          var L = x(3), Y = x(93), B = exports$1 && !exports$1.nodeType && exports$1, g = B && typeof T == "object" && T && !T.nodeType && T, W = g && g.exports === B ? L.a.Buffer : void 0, R = (W ? W.isBuffer : void 0) || Y.a;
           pe.a = R;
         }).call(this, x(83)(Ne));
       }, function(Ne, pe, x) {
-        var T = x(11), N = x(6), Y = function(H) {
-          return Object(N.a)(H) && Object(T.a)(H) == "[object Arguments]";
+        var T = x(11), L = x(6), Y = function(H) {
+          return Object(L.a)(H) && Object(T.a)(H) == "[object Arguments]";
         }, B = Object.prototype, g = B.hasOwnProperty, W = B.propertyIsEnumerable, R = Y(/* @__PURE__ */ (function() {
           return arguments;
         })()) ? Y : function(H) {
-          return Object(N.a)(H) && g.call(H, "callee") && !W.call(H, "callee");
+          return Object(L.a)(H) && g.call(H, "callee") && !W.call(H, "callee");
         };
         pe.a = R;
       }, function(Ne, pe) {
@@ -4891,12 +4892,12 @@ b`.split(/\n/).length != 3 ? function(e) {
           return x;
         };
       }, function(Ne, pe, x) {
-        var T = x(11), N = x(6);
+        var T = x(11), L = x(6);
         pe.a = function(Y) {
-          return typeof Y == "symbol" || Object(N.a)(Y) && Object(T.a)(Y) == "[object Symbol]";
+          return typeof Y == "symbol" || Object(L.a)(Y) && Object(T.a)(Y) == "[object Symbol]";
         };
       }, function(Ne, pe, x) {
-        var T = x(26), N = function() {
+        var T = x(26), L = function() {
           this.__data__ = new T.a(), this.size = 0;
         }, Y = function(C) {
           var Q = this.__data__, ge = Q.delete(C);
@@ -4918,11 +4919,11 @@ b`.split(/\n/).length != 3 ? function(e) {
           var Q = this.__data__ = new T.a(C);
           this.size = Q.size;
         }
-        fe.prototype.clear = N, fe.prototype.delete = Y, fe.prototype.get = B, fe.prototype.has = g, fe.prototype.set = H, pe.a = fe;
+        fe.prototype.clear = L, fe.prototype.delete = Y, fe.prototype.get = B, fe.prototype.has = g, fe.prototype.set = H, pe.a = fe;
       }, function(Ne, pe, x) {
         Ne.exports = x(105);
       }, function(Ne, pe, x) {
-        var T = x(9), N = x(3), Y = Object(T.a)(N.a, "DataView"), B = x(28), g = Object(T.a)(N.a, "Promise"), W = Object(T.a)(N.a, "Set"), R = Object(T.a)(N.a, "WeakMap"), H = x(11), fe = x(22), C = Object(fe.a)(Y), Q = Object(fe.a)(B.a), ge = Object(fe.a)(g), K = Object(fe.a)(W), Z = Object(fe.a)(R), te = H.a;
+        var T = x(9), L = x(3), Y = Object(T.a)(L.a, "DataView"), B = x(28), g = Object(T.a)(L.a, "Promise"), W = Object(T.a)(L.a, "Set"), R = Object(T.a)(L.a, "WeakMap"), H = x(11), fe = x(22), C = Object(fe.a)(Y), Q = Object(fe.a)(B.a), ge = Object(fe.a)(g), K = Object(fe.a)(W), Z = Object(fe.a)(R), te = H.a;
         (Y && te(new Y(new ArrayBuffer(1))) != "[object DataView]" || B.a && te(new B.a()) != "[object Map]" || g && te(g.resolve()) != "[object Promise]" || W && te(new W()) != "[object Set]" || R && te(new R()) != "[object WeakMap]") && (te = function(b) {
           var w = Object(H.a)(b), U = w == "[object Object]" ? b.constructor : void 0, re = U ? Object(fe.a)(U) : "";
           if (re) switch (re) {
@@ -4941,35 +4942,35 @@ b`.split(/\n/).length != 3 ? function(e) {
         }), pe.a = te;
       }, function(Ne, pe) {
         function x(T) {
-          return Ne.exports = x = Object.setPrototypeOf ? Object.getPrototypeOf : function(N) {
-            return N.__proto__ || Object.getPrototypeOf(N);
+          return Ne.exports = x = Object.setPrototypeOf ? Object.getPrototypeOf : function(L) {
+            return L.__proto__ || Object.getPrototypeOf(L);
           }, x(T);
         }
         Ne.exports = x;
       }, function(Ne, pe, x) {
         var T = Function.prototype.toString;
-        pe.a = function(N) {
-          if (N != null) {
+        pe.a = function(L) {
+          if (L != null) {
             try {
-              return T.call(N);
+              return T.call(L);
             } catch {
             }
             try {
-              return N + "";
+              return L + "";
             } catch {
             }
           }
           return "";
         };
       }, function(Ne, pe, x) {
-        var T = "http://www.w3.org/1999/02/22-rdf-syntax-ns#", N = "http://www.w3.org/2001/XMLSchema#", Y = "http://www.w3.org/2000/10/swap/";
-        pe.a = { xsd: { decimal: N + "decimal", boolean: N + "boolean", double: N + "double", integer: N + "integer", string: N + "string" }, rdf: { type: T + "type", nil: T + "nil", first: T + "first", rest: T + "rest", langString: T + "langString" }, owl: { sameAs: "http://www.w3.org/2002/07/owl#sameAs" }, r: { forSome: Y + "reify#forSome", forAll: Y + "reify#forAll" }, log: { implies: Y + "log#implies" } };
+        var T = "http://www.w3.org/1999/02/22-rdf-syntax-ns#", L = "http://www.w3.org/2001/XMLSchema#", Y = "http://www.w3.org/2000/10/swap/";
+        pe.a = { xsd: { decimal: L + "decimal", boolean: L + "boolean", double: L + "double", integer: L + "integer", string: L + "string" }, rdf: { type: T + "type", nil: T + "nil", first: T + "first", rest: T + "rest", langString: T + "langString" }, owl: { sameAs: "http://www.w3.org/2002/07/owl#sameAs" }, r: { forSome: Y + "reify#forSome", forAll: Y + "reify#forAll" }, log: { implies: Y + "log#implies" } };
       }, function(Ne, pe, x) {
         var T = x(17);
-        pe.a = function(N) {
-          if (typeof N == "string" || Object(T.a)(N)) return N;
-          var Y = N + "";
-          return Y == "0" && 1 / N == -1 / 0 ? "-0" : Y;
+        pe.a = function(L) {
+          if (typeof L == "string" || Object(T.a)(L)) return L;
+          var Y = L + "";
+          return Y == "0" && 1 / L == -1 / 0 ? "-0" : Y;
         };
       }, function(Ne, pe, x) {
         pe.a = function(T) {
@@ -4978,8 +4979,8 @@ b`.split(/\n/).length != 3 ? function(e) {
       }, function(Ne, pe, x) {
         var T = function() {
           this.__data__ = [], this.size = 0;
-        }, N = x(12), Y = function(C, Q) {
-          for (var ge = C.length; ge--; ) if (Object(N.a)(C[ge][0], Q)) return ge;
+        }, L = x(12), Y = function(C, Q) {
+          for (var ge = C.length; ge--; ) if (Object(L.a)(C[ge][0], Q)) return ge;
           return -1;
         }, B = Array.prototype.splice, g = function(C) {
           var Q = this.__data__, ge = Y(Q, C);
@@ -5002,9 +5003,9 @@ b`.split(/\n/).length != 3 ? function(e) {
         }
         fe.prototype.clear = T, fe.prototype.delete = g, fe.prototype.get = W, fe.prototype.has = R, fe.prototype.set = H, pe.a = fe;
       }, function(Ne, pe, x) {
-        var T = x(8), N = x(60), Y = x(1), B = x(17), g = T.a ? T.a.prototype : void 0, W = g ? g.toString : void 0, R = function H(fe) {
+        var T = x(8), L = x(60), Y = x(1), B = x(17), g = T.a ? T.a.prototype : void 0, W = g ? g.toString : void 0, R = function H(fe) {
           if (typeof fe == "string") return fe;
-          if (Object(Y.a)(fe)) return Object(N.a)(fe, H) + "";
+          if (Object(Y.a)(fe)) return Object(L.a)(fe, H) + "";
           if (Object(B.a)(fe)) return W ? W.call(fe) : "";
           var C = fe + "";
           return C == "0" && 1 / fe == -1 / 0 ? "-0" : C;
@@ -5013,56 +5014,56 @@ b`.split(/\n/).length != 3 ? function(e) {
           return H == null ? "" : R(H);
         };
       }, function(Ne, pe, x) {
-        var T = x(9), N = x(3), Y = Object(T.a)(N.a, "Map");
+        var T = x(9), L = x(3), Y = Object(T.a)(L.a, "Map");
         pe.a = Y;
       }, , function(Ne, pe, x) {
         var T = Object.prototype;
-        pe.a = function(N) {
-          var Y = N && N.constructor;
-          return N === (typeof Y == "function" && Y.prototype || T);
+        pe.a = function(L) {
+          var Y = L && L.constructor;
+          return L === (typeof Y == "function" && Y.prototype || T);
         };
       }, function(Ne, pe, x) {
         var T = x(48);
-        pe.a = function(N, Y, B) {
-          Y == "__proto__" && T.a ? Object(T.a)(N, Y, { configurable: !0, enumerable: !0, value: B, writable: !0 }) : N[Y] = B;
+        pe.a = function(L, Y, B) {
+          Y == "__proto__" && T.a ? Object(T.a)(L, Y, { configurable: !0, enumerable: !0, value: B, writable: !0 }) : L[Y] = B;
         };
       }, function(Ne, pe, x) {
-        var T = x(67), N = x(31);
+        var T = x(67), L = x(31);
         pe.a = function(Y, B, g, W) {
           var R = !g;
           g || (g = {});
           for (var H = -1, fe = B.length; ++H < fe; ) {
             var C = B[H], Q = W ? W(g[C], Y[C], C, g, Y) : void 0;
-            Q === void 0 && (Q = Y[C]), R ? Object(N.a)(g, C, Q) : Object(T.a)(g, C, Q);
+            Q === void 0 && (Q = Y[C]), R ? Object(L.a)(g, C, Q) : Object(T.a)(g, C, Q);
           }
           return g;
         };
       }, function(Ne, pe, x) {
-        var T = x(11), N = x(43), Y = x(6), B = {};
+        var T = x(11), L = x(43), Y = x(6), B = {};
         B["[object Float32Array]"] = B["[object Float64Array]"] = B["[object Int8Array]"] = B["[object Int16Array]"] = B["[object Int32Array]"] = B["[object Uint8Array]"] = B["[object Uint8ClampedArray]"] = B["[object Uint16Array]"] = B["[object Uint32Array]"] = !0, B["[object Arguments]"] = B["[object Array]"] = B["[object ArrayBuffer]"] = B["[object Boolean]"] = B["[object DataView]"] = B["[object Date]"] = B["[object Error]"] = B["[object Function]"] = B["[object Map]"] = B["[object Number]"] = B["[object Object]"] = B["[object RegExp]"] = B["[object Set]"] = B["[object String]"] = B["[object WeakMap]"] = !1;
         var g = function(C) {
-          return Object(Y.a)(C) && Object(N.a)(C.length) && !!B[Object(T.a)(C)];
+          return Object(Y.a)(C) && Object(L.a)(C.length) && !!B[Object(T.a)(C)];
         }, W = x(45), R = x(35), H = R.a && R.a.isTypedArray, fe = H ? Object(W.a)(H) : g;
         pe.a = fe;
       }, function(Ne, pe, x) {
-        var T = x(9), N = Object(T.a)(Object, "create"), Y = function() {
-          this.__data__ = N ? N(null) : {}, this.size = 0;
+        var T = x(9), L = Object(T.a)(Object, "create"), Y = function() {
+          this.__data__ = L ? L(null) : {}, this.size = 0;
         }, B = function(p) {
           var ae = this.has(p) && delete this.__data__[p];
           return this.size -= ae ? 1 : 0, ae;
         }, g = Object.prototype.hasOwnProperty, W = function(p) {
           var ae = this.__data__;
-          if (N) {
+          if (L) {
             var Ge = ae[p];
             return Ge === "__lodash_hash_undefined__" ? void 0 : Ge;
           }
           return g.call(ae, p) ? ae[p] : void 0;
         }, R = Object.prototype.hasOwnProperty, H = function(p) {
           var ae = this.__data__;
-          return N ? ae[p] !== void 0 : R.call(ae, p);
+          return L ? ae[p] !== void 0 : R.call(ae, p);
         }, fe = function(p, ae) {
           var Ge = this.__data__;
-          return this.size += this.has(p) ? 0 : 1, Ge[p] = N && ae === void 0 ? "__lodash_hash_undefined__" : ae, this;
+          return this.size += this.has(p) ? 0 : 1, Ge[p] = L && ae === void 0 ? "__lodash_hash_undefined__" : ae, this;
         };
         function C(p) {
           var ae = -1, Ge = p == null ? 0 : p.length;
@@ -5101,7 +5102,7 @@ b`.split(/\n/).length != 3 ? function(e) {
         he.prototype.clear = Z, he.prototype.delete = w, he.prototype.get = U, he.prototype.has = re, he.prototype.set = de, pe.a = he;
       }, function(Ne, pe, x) {
         (function(T) {
-          var N = x(63), Y = exports$1 && !exports$1.nodeType && exports$1, B = Y && typeof T == "object" && T && !T.nodeType && T, g = B && B.exports === Y && N.a.process, W = (function() {
+          var L = x(63), Y = exports$1 && !exports$1.nodeType && exports$1, B = Y && typeof T == "object" && T && !T.nodeType && T, g = B && B.exports === Y && L.a.process, W = (function() {
             try {
               var R = B && B.require && B.require("util").types;
               return R || g && g.binding && g.binding("util");
@@ -5111,23 +5112,23 @@ b`.split(/\n/).length != 3 ? function(e) {
           pe.a = W;
         }).call(this, x(83)(Ne));
       }, function(Ne, pe, x) {
-        var T = x(138), N = x(120), Y = x(94), B = x(139);
+        var T = x(138), L = x(120), Y = x(94), B = x(139);
         Ne.exports = function(g) {
-          return T(g) || N(g) || Y(g) || B();
+          return T(g) || L(g) || Y(g) || B();
         };
       }, function(Ne, pe, x) {
         var T = /^(?:0|[1-9]\d*)$/;
-        pe.a = function(N, Y) {
-          var B = typeof N;
-          return !!(Y = Y ?? 9007199254740991) && (B == "number" || B != "symbol" && T.test(N)) && N > -1 && N % 1 == 0 && N < Y;
+        pe.a = function(L, Y) {
+          var B = typeof L;
+          return !!(Y = Y ?? 9007199254740991) && (B == "number" || B != "symbol" && T.test(L)) && L > -1 && L % 1 == 0 && L < Y;
         };
       }, function(Ne, pe, x) {
-        var T = x(68), N = x(2), Y = x(30), B = function(H) {
+        var T = x(68), L = x(2), Y = x(30), B = function(H) {
           var fe = [];
           if (H != null) for (var C in Object(H)) fe.push(C);
           return fe;
         }, g = Object.prototype.hasOwnProperty, W = function(H) {
-          if (!Object(N.a)(H)) return B(H);
+          if (!Object(L.a)(H)) return B(H);
           var fe = Object(Y.a)(H), C = [];
           for (var Q in H) (Q != "constructor" || !fe && g.call(H, Q)) && C.push(Q);
           return C;
@@ -5143,8 +5144,8 @@ b`.split(/\n/).length != 3 ? function(e) {
             return de && typeof Symbol == "function" && de.constructor === Symbol && de !== Symbol.prototype ? "symbol" : typeof de;
           })(re);
         }
-        var N;
-        typeof window < "u" ? N = window : typeof self > "u" ? (console.warn("Using browser-only version of superagent in non-browser environment"), N = void 0) : N = self;
+        var L;
+        typeof window < "u" ? L = window : typeof self > "u" ? (console.warn("Using browser-only version of superagent in non-browser environment"), L = void 0) : L = self;
         var Y = x(151), B = x(152), g = x(153), W = x(121), R = x(154), H = x(156);
         function fe() {
         }
@@ -5153,7 +5154,7 @@ b`.split(/\n/).length != 3 ? function(e) {
         };
         var C = pe = Ne.exports;
         pe.Request = w, C.getXHR = function() {
-          if (N.XMLHttpRequest && (!N.location || N.location.protocol !== "file:" || !N.ActiveXObject)) return new XMLHttpRequest();
+          if (L.XMLHttpRequest && (!L.location || L.location.protocol !== "file:" || !L.ActiveXObject)) return new XMLHttpRequest();
           try {
             return new ActiveXObject("Microsoft.XMLHTTP");
           } catch {
@@ -5254,7 +5255,7 @@ b`.split(/\n/).length != 3 ? function(e) {
           }
           return this;
         }, w.prototype._getFormData = function() {
-          return this._formData || (this._formData = new N.FormData()), this._formData;
+          return this._formData || (this._formData = new L.FormData()), this._formData;
         }, w.prototype.callback = function(re, de) {
           if (this._shouldRetry(re, de)) return this._retry();
           var he = this._callback;
@@ -5342,7 +5343,7 @@ Possible causes: the network is offline, Origin is not allowed by Access-Control
         };
       }, function(Ne, pe, x) {
         (function(T) {
-          var N = Object.assign ? Object.assign : function(C, Q, ge, K) {
+          var L = Object.assign ? Object.assign : function(C, Q, ge, K) {
             for (var Z = 1; Z < arguments.length; Z++) R(Object(arguments[Z]), (function(te, b) {
               C[b] = te;
             }));
@@ -5350,14 +5351,14 @@ Possible causes: the network is offline, Origin is not allowed by Access-Control
           }, Y = (function() {
             if (Object.create) return function(C, Q, ge, K) {
               var Z = W(arguments, 1);
-              return N.apply(this, [Object.create(C)].concat(Z));
+              return L.apply(this, [Object.create(C)].concat(Z));
             };
             {
               let C = function() {
               };
               return function(Q, ge, K, Z) {
                 var te = W(arguments, 1);
-                return C.prototype = Q, N.apply(this, [new C()].concat(te));
+                return C.prototype = Q, L.apply(this, [new C()].concat(te));
               };
             }
           })(), B = String.prototype.trim ? function(C) {
@@ -5381,7 +5382,7 @@ Possible causes: the network is offline, Origin is not allowed by Access-Control
           function fe(C) {
             return C != null && typeof C != "function" && typeof C.length == "number";
           }
-          Ne.exports = { assign: N, create: Y, trim: B, bind: function(C, Q) {
+          Ne.exports = { assign: L, create: Y, trim: B, bind: function(C, Q) {
             return function() {
               return Q.apply(C, Array.prototype.slice.call(arguments, 0));
             };
@@ -5398,57 +5399,57 @@ Possible causes: the network is offline, Origin is not allowed by Access-Control
         }).call(this, x(72));
       }, function(Ne, pe, x) {
         var T = x(104);
-        Ne.exports = function(N, Y) {
+        Ne.exports = function(L, Y) {
           if (typeof Y != "function" && Y !== null) throw new TypeError("Super expression must either be null or a function");
-          N.prototype = Object.create(Y && Y.prototype, { constructor: { value: N, writable: !0, configurable: !0 } }), Y && T(N, Y);
+          L.prototype = Object.create(Y && Y.prototype, { constructor: { value: L, writable: !0, configurable: !0 } }), Y && T(L, Y);
         };
       }, function(Ne, pe, x) {
-        var T = x(49), N = x(16);
+        var T = x(49), L = x(16);
         Ne.exports = function(Y, B) {
-          return !B || T(B) !== "object" && typeof B != "function" ? N(Y) : B;
+          return !B || T(B) !== "object" && typeof B != "function" ? L(Y) : B;
         };
       }, function(Ne, pe, x) {
         pe.a = function(T) {
           return typeof T == "number" && T > -1 && T % 1 == 0 && T <= 9007199254740991;
         };
       }, function(Ne, pe, x) {
-        var T = x(11), N = x(2);
+        var T = x(11), L = x(2);
         pe.a = function(Y) {
-          if (!Object(N.a)(Y)) return !1;
+          if (!Object(L.a)(Y)) return !1;
           var B = Object(T.a)(Y);
           return B == "[object Function]" || B == "[object GeneratorFunction]" || B == "[object AsyncFunction]" || B == "[object Proxy]";
         };
       }, function(Ne, pe, x) {
         pe.a = function(T) {
-          return function(N) {
-            return T(N);
+          return function(L) {
+            return T(L);
           };
         };
       }, function(Ne, pe, x) {
-        var T = x(1), N = x(17), Y = /\.|\[(?:[^[\]]*|(["'])(?:(?!\1)[^\\]|\\.)*?\1)\]/, B = /^\w*$/;
+        var T = x(1), L = x(17), Y = /\.|\[(?:[^[\]]*|(["'])(?:(?!\1)[^\\]|\\.)*?\1)\]/, B = /^\w*$/;
         pe.a = function(g, W) {
           if (Object(T.a)(g)) return !1;
           var R = typeof g;
-          return !(R != "number" && R != "symbol" && R != "boolean" && g != null && !Object(N.a)(g)) || B.test(g) || !Y.test(g) || W != null && g in Object(W);
+          return !(R != "number" && R != "symbol" && R != "boolean" && g != null && !Object(L.a)(g)) || B.test(g) || !Y.test(g) || W != null && g in Object(W);
         };
       }, function(Ne, pe, x) {
         var T = x(3).a.Uint8Array;
         pe.a = T;
       }, function(Ne, pe, x) {
-        var T = x(9), N = (function() {
+        var T = x(9), L = (function() {
           try {
             var Y = Object(T.a)(Object, "defineProperty");
             return Y({}, "", {}), Y;
           } catch {
           }
         })();
-        pe.a = N;
+        pe.a = L;
       }, function(Ne, pe) {
         function x(T) {
-          return typeof Symbol == "function" && typeof Symbol.iterator == "symbol" ? Ne.exports = x = function(N) {
-            return typeof N;
-          } : Ne.exports = x = function(N) {
-            return N && typeof Symbol == "function" && N.constructor === Symbol && N !== Symbol.prototype ? "symbol" : typeof N;
+          return typeof Symbol == "function" && typeof Symbol.iterator == "symbol" ? Ne.exports = x = function(L) {
+            return typeof L;
+          } : Ne.exports = x = function(L) {
+            return L && typeof Symbol == "function" && L.constructor === Symbol && L !== Symbol.prototype ? "symbol" : typeof L;
           }, x(T);
         }
         Ne.exports = x;
@@ -5477,8 +5478,8 @@ Possible causes: the network is offline, Origin is not allowed by Access-Control
 In order to be iterable, non-array objects must have a [Symbol.iterator]() method.`);
           })();
         }
-        function N(b) {
-          return (N = typeof Symbol == "function" && typeof Symbol.iterator == "symbol" ? function(w) {
+        function L(b) {
+          return (L = typeof Symbol == "function" && typeof Symbol.iterator == "symbol" ? function(w) {
             return typeof w;
           } : function(w) {
             return w && typeof Symbol == "function" && w.constructor === Symbol && w !== Symbol.prototype ? "symbol" : typeof w;
@@ -5599,7 +5600,7 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
           }
           for (var Te = 0, O = Object.keys(re); Te < O.length; Te++) {
             var ce = O[Te], X = re[ce];
-            if (N(X) === "object" && X !== null) for (var be = 0, qe = Object.keys(X); be < qe.length; be++) {
+            if (L(X) === "object" && X !== null) for (var be = 0, qe = Object.keys(X); be < qe.length; be++) {
               var ut = qe[be];
               X[ut] = Z(X[ut], w);
             }
@@ -5607,8 +5608,8 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
           }
           return w.sort === !1 ? re : (w.sort === !0 ? Object.keys(re).sort() : Object.keys(re).sort(w.sort)).reduce((function(_t, ct) {
             var Ye = re[ct];
-            return Ye && N(Ye) === "object" && !Array.isArray(Ye) ? _t[ct] = (function Je(mt) {
-              return Array.isArray(mt) ? mt.sort() : N(mt) === "object" ? Je(Object.keys(mt)).sort((function(dt, Ct) {
+            return Ye && L(Ye) === "object" && !Array.isArray(Ye) ? _t[ct] = (function Je(mt) {
+              return Array.isArray(mt) ? mt.sort() : L(mt) === "object" ? Je(Object.keys(mt)).sort((function(dt, Ct) {
                 return Number(dt) - Number(Ct);
               })).map((function(dt) {
                 return mt[dt];
@@ -5676,10 +5677,10 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
           return b.fragmentIdentifier && (ae = "#".concat(C(b.fragmentIdentifier, w))), "".concat(U).concat(p).concat(ae);
         };
       }, function(Ne, pe, x) {
-        var T = x(65), N = Object(T.a)(Object.getPrototypeOf, Object);
-        pe.a = N;
+        var T = x(65), L = Object(T.a)(Object.getPrototypeOf, Object);
+        pe.a = L;
       }, function(Ne, pe, x) {
-        var T = x(18), N = x(59), Y = function(he, p, ae, Ge) {
+        var T = x(18), L = x(59), Y = function(he, p, ae, Ge) {
           var me = ae.length, Te = me;
           if (he == null) return !Te;
           for (he = Object(he); me--; ) {
@@ -5692,7 +5693,7 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
               if (X === void 0 && !(ce in he)) return !1;
             } else {
               var qe = new T.a(), ut;
-              if (!(ut === void 0 ? Object(N.a)(be, X, 3, Ge, qe) : ut)) return !1;
+              if (!(ut === void 0 ? Object(L.a)(be, X, 3, Ge, qe) : ut)) return !1;
             }
           }
           return !0;
@@ -5719,7 +5720,7 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
         }, ge = x(88), K = x(46), Z = x(24), te = function(he, p) {
           return Object(K.a)(he) && g(p) ? H(Object(Z.a)(he), p) : function(ae) {
             var Ge = Q(ae, he);
-            return Ge === void 0 && Ge === p ? Object(ge.a)(ae, he) : Object(N.a)(p, Ge, 3);
+            return Ge === void 0 && Ge === p ? Object(ge.a)(ae, he) : Object(L.a)(p, Ge, 3);
           };
         }, b = x(25), w = x(1), U = function(he) {
           return function(p) {
@@ -5736,7 +5737,7 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
           return typeof he == "function" ? he : he == null ? b.a : typeof he == "object" ? Object(w.a)(he) ? te(he[0], he[1]) : fe(he) : de(he);
         };
       }, function(Ne, pe, x) {
-        var T = x(1), N = x(46), Y = x(34);
+        var T = x(1), L = x(46), Y = x(34);
         function B(C, Q) {
           if (typeof C != "function" || Q != null && typeof Q != "function") throw new TypeError("Expected a function");
           var ge = function() {
@@ -5760,13 +5761,13 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
           })), Q;
         })), fe = x(27);
         pe.a = function(C, Q) {
-          return Object(T.a)(C) ? C : Object(N.a)(C, Q) ? [C] : H(Object(fe.a)(C));
+          return Object(T.a)(C) ? C : Object(L.a)(C, Q) ? [C] : H(Object(fe.a)(C));
         };
       }, function(Ne, pe, x) {
-        var T, N = typeof Reflect == "object" ? Reflect : null, Y = N && typeof N.apply == "function" ? N.apply : function(te, b, w) {
+        var T, L = typeof Reflect == "object" ? Reflect : null, Y = L && typeof L.apply == "function" ? L.apply : function(te, b, w) {
           return Function.prototype.apply.call(te, b, w);
         };
-        T = N && typeof N.ownKeys == "function" ? N.ownKeys : Object.getOwnPropertySymbols ? function(te) {
+        T = L && typeof L.ownKeys == "function" ? L.ownKeys : Object.getOwnPropertySymbols ? function(te) {
           return Object.getOwnPropertyNames(te).concat(Object.getOwnPropertySymbols(te));
         } : function(te) {
           return Object.getOwnPropertyNames(te);
@@ -5902,38 +5903,38 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
           return this._eventsCount > 0 ? T(this._events) : [];
         };
       }, function(Ne, pe, x) {
-        var T = x(53), N = x(24);
+        var T = x(53), L = x(24);
         pe.a = function(Y, B) {
-          for (var g = 0, W = (B = Object(T.a)(B, Y)).length; Y != null && g < W; ) Y = Y[Object(N.a)(B[g++])];
+          for (var g = 0, W = (B = Object(T.a)(B, Y)).length; Y != null && g < W; ) Y = Y[Object(L.a)(B[g++])];
           return g && g == W ? Y : void 0;
         };
       }, function(Ne, pe, x) {
-        pe.a = function(T, N) {
-          for (var Y = -1, B = N.length, g = T.length; ++Y < B; ) T[g + Y] = N[Y];
+        pe.a = function(T, L) {
+          for (var Y = -1, B = L.length, g = T.length; ++Y < B; ) T[g + Y] = L[Y];
           return T;
         };
       }, function(Ne, pe, x) {
-        var T = x(75), N = x(74), Y = Object.prototype.propertyIsEnumerable, B = Object.getOwnPropertySymbols, g = B ? function(W) {
+        var T = x(75), L = x(74), Y = Object.prototype.propertyIsEnumerable, B = Object.getOwnPropertySymbols, g = B ? function(W) {
           return W == null ? [] : (W = Object(W), Object(T.a)(B(W), (function(R) {
             return Y.call(W, R);
           })));
-        } : N.a;
+        } : L.a;
         pe.a = g;
       }, function(Ne, pe, x) {
         var T = x(47);
-        pe.a = function(N) {
-          var Y = new N.constructor(N.byteLength);
-          return new T.a(Y).set(new T.a(N)), Y;
+        pe.a = function(L) {
+          var Y = new L.constructor(L.byteLength);
+          return new T.a(Y).set(new T.a(L)), Y;
         };
       }, function(Ne, pe, x) {
-        var T = x(18), N = x(34), Y = function(X) {
+        var T = x(18), L = x(34), Y = function(X) {
           return this.__data__.set(X, "__lodash_hash_undefined__"), this;
         }, B = function(X) {
           return this.__data__.has(X);
         };
         function g(X) {
           var be = -1, qe = X == null ? 0 : X.length;
-          for (this.__data__ = new N.a(); ++be < qe; ) this.add(X[be]);
+          for (this.__data__ = new L.a(); ++be < qe; ) this.add(X[be]);
         }
         g.prototype.add = g.prototype.push = Y, g.prototype.has = B;
         var W = g, R = function(X, be) {
@@ -6048,14 +6049,14 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
           return be === qe || (be == null || qe == null || !Object(ce.a)(be) && !Object(ce.a)(qe) ? be != be && qe != qe : O(be, qe, ut, _t, X, ct));
         };
       }, function(Ne, pe, x) {
-        pe.a = function(T, N) {
-          for (var Y = -1, B = T == null ? 0 : T.length, g = Array(B); ++Y < B; ) g[Y] = N(T[Y], Y, T);
+        pe.a = function(T, L) {
+          for (var Y = -1, B = T == null ? 0 : T.length, g = Array(B); ++Y < B; ) g[Y] = L(T[Y], Y, T);
           return g;
         };
       }, function(Ne, pe, x) {
-        var T = x(73), N = x(57), Y = x(13);
+        var T = x(73), L = x(57), Y = x(13);
         pe.a = function(B) {
-          return Object(T.a)(B, Y.a, N.a);
+          return Object(T.a)(B, Y.a, L.a);
         };
       }, function(Ne, pe, x) {
         x.r(pe), x.d(pe, "Parser", (function() {
@@ -6065,7 +6066,7 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
         })), x.d(pe, "registerPlugin", (function() {
           return Yn;
         }));
-        var T = x(49), N = x.n(T), Y = x(19), B = x.n(Y), g = x(4), W = x.n(g), R = x(5), H = x.n(R), fe = x(41), C = x.n(fe), Q = x(42), ge = x.n(Q), K = x(21), Z = x.n(K), te = x(54), b = x(170), w = x(27), U = 0, re = function(Pe) {
+        var T = x(49), L = x.n(T), Y = x(19), B = x.n(Y), g = x(4), W = x.n(g), R = x(5), H = x.n(R), fe = x(41), C = x.n(fe), Q = x(42), ge = x.n(Q), K = x(21), Z = x.n(K), te = x(54), b = x(170), w = x(27), U = 0, re = function(Pe) {
           var ve = ++U;
           return Object(w.a)(Pe) + ve;
         }, de = x(75), he = x(90), p = function(Pe, ve) {
@@ -6081,7 +6082,7 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
             if (ve) for (var q in we.results.bindings) we.results.bindings[q] = ve(we.results.bindings[q]);
             return we;
           }
-          if (N()(Pe) == "object" && Pe.constructor === {}.constructor) {
+          if (L()(Pe) == "object" && Pe.constructor === {}.constructor) {
             if (ve && Pe.results) for (var D in Pe.results.bindings) Pe.results.bindings[D] = ve(Pe.results.bindings[D]);
             return Pe;
           }
@@ -6770,7 +6771,7 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
           } }, { key: "hasError", value: function() {
             return !!(this.res && this.res.status >= 400) || !!this.errorSummary || !!this.error || !(!this.summary || !this.summary.error);
           } }, { key: "getError", value: function() {
-            return this.errorSummary || (this.res && this.res.status >= 400 && (this.errorSummary = { text: this.res.text, status: this.res.status, statusText: this.res.error ? this.res.error.text : void 0 }), this.summary && this.summary.error && (this.errorSummary = this.summary.error), this.error && ("response" in this.error && this.error.response !== void 0 ? (this.errorSummary = { text: this.error.response.text, status: this.error.response.status, statusText: this.error.response.statusText }, this.error.response.body && N()(this.error.response.body) === "object" && "message" in this.error.response.body && (this.errorSummary.text = this.error.response.body.message)) : this.errorSummary = { text: this.error.message })), this.errorSummary;
+            return this.errorSummary || (this.res && this.res.status >= 400 && (this.errorSummary = { text: this.res.text, status: this.res.status, statusText: this.res.error ? this.res.error.text : void 0 }), this.summary && this.summary.error && (this.errorSummary = this.summary.error), this.error && ("response" in this.error && this.error.response !== void 0 ? (this.errorSummary = { text: this.error.response.text, status: this.error.response.status, statusText: this.error.response.statusText }, this.error.response.body && L()(this.error.response.body) === "object" && "message" in this.error.response.body && (this.errorSummary.text = this.error.response.body.message)) : this.errorSummary = { text: this.error.message })), this.errorSummary;
           } }, { key: "getContentType", value: function() {
             return this.res ? this.res.header["content-type"] : this.summary ? this.summary.contentType : void 0;
           } }, { key: "getAsJson", value: function() {
@@ -7371,7 +7372,7 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
             }
           } }, { key: "getCompatiblePlugins", value: function() {
             if (!this.results) return Object.keys(me(this.config.plugins, (function(xe) {
-              return N()(xe) === "object" && xe.enabled || xe === !0;
+              return L()(xe) === "object" && xe.enabled || xe === !0;
             })));
             var q = [];
             for (var D in this.plugins) this.plugins[D].canHandleResults() && q.push({ name: D, priority: this.plugins[D].priority });
@@ -7581,44 +7582,44 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
         }, getPlainQueryLinkToEndpoint: void 0, persistencyExpire: 2592e3, persistenceLabelResponse: "response", persistenceLabelConfig: "config", maxPersistentResponseSize: 1e5, prefixes: {}, plugins: {}, pluginOrder: ["table", "response"], defaultPlugin: "table" }, qr.plugins = {}, qr.Dependencies = {}, qr.storageNamespace = "triply", qr.registerPlugin("table", vt), qr.registerPlugin("boolean", pt), qr.registerPlugin("response", Pt), qr.registerPlugin("error", Jr), pe.default = qr;
       }, function(Ne, pe, x) {
         (function(T) {
-          var N = typeof T == "object" && T && T.Object === Object && T;
-          pe.a = N;
+          var L = typeof T == "object" && T && T.Object === Object && T;
+          pe.a = L;
         }).call(this, x(72));
       }, function(Ne, pe, x) {
         pe.a = function(T) {
-          return function(N) {
-            return T?.[N];
+          return function(L) {
+            return T?.[L];
           };
         };
       }, function(Ne, pe, x) {
-        pe.a = function(T, N) {
+        pe.a = function(T, L) {
           return function(Y) {
-            return T(N(Y));
+            return T(L(Y));
           };
         };
       }, function(Ne, pe, x) {
-        var T = x(69), N = x(13);
+        var T = x(69), L = x(13);
         pe.a = function(Y, B) {
-          return Y && Object(T.a)(Y, B, N.a);
+          return Y && Object(T.a)(Y, B, L.a);
         };
       }, function(Ne, pe, x) {
-        var T = x(31), N = x(12), Y = Object.prototype.hasOwnProperty;
+        var T = x(31), L = x(12), Y = Object.prototype.hasOwnProperty;
         pe.a = function(B, g, W) {
           var R = B[g];
-          Y.call(B, g) && Object(N.a)(R, W) && (W !== void 0 || g in B) || Object(T.a)(B, g, W);
+          Y.call(B, g) && Object(L.a)(R, W) && (W !== void 0 || g in B) || Object(T.a)(B, g, W);
         };
       }, function(Ne, pe, x) {
         var T = function(H, fe) {
           for (var C = -1, Q = Array(H); ++C < H; ) Q[C] = fe(C);
           return Q;
-        }, N = x(15), Y = x(1), B = x(14), g = x(37), W = x(33), R = Object.prototype.hasOwnProperty;
+        }, L = x(15), Y = x(1), B = x(14), g = x(37), W = x(33), R = Object.prototype.hasOwnProperty;
         pe.a = function(H, fe) {
-          var C = Object(Y.a)(H), Q = !C && Object(N.a)(H), ge = !C && !Q && Object(B.a)(H), K = !C && !Q && !ge && Object(W.a)(H), Z = C || Q || ge || K, te = Z ? T(H.length, String) : [], b = te.length;
+          var C = Object(Y.a)(H), Q = !C && Object(L.a)(H), ge = !C && !Q && Object(B.a)(H), K = !C && !Q && !ge && Object(W.a)(H), Z = C || Q || ge || K, te = Z ? T(H.length, String) : [], b = te.length;
           for (var w in H) !fe && !R.call(H, w) || Z && (w == "length" || ge && (w == "offset" || w == "parent") || K && (w == "buffer" || w == "byteLength" || w == "byteOffset") || Object(g.a)(w, b)) || te.push(w);
           return te;
         };
       }, function(Ne, pe, x) {
-        var T = /* @__PURE__ */ (function(N) {
+        var T = /* @__PURE__ */ (function(L) {
           return function(Y, B, g) {
             for (var W = -1, R = Object(Y), H = g(Y), fe = H.length; fe--; ) {
               var C = H[++W];
@@ -7629,16 +7630,16 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
         })();
         pe.a = T;
       }, function(Ne, pe, x) {
-        var T = x(12), N = x(10), Y = x(37), B = x(2);
+        var T = x(12), L = x(10), Y = x(37), B = x(2);
         pe.a = function(g, W, R) {
           if (!Object(B.a)(R)) return !1;
           var H = typeof W;
-          return !!(H == "number" ? Object(N.a)(R) && Object(Y.a)(W, R.length) : H == "string" && W in R) && Object(T.a)(R[W], g);
+          return !!(H == "number" ? Object(L.a)(R) && Object(Y.a)(W, R.length) : H == "string" && W in R) && Object(T.a)(R[W], g);
         };
       }, function(Ne, pe, x) {
-        var T = x(117), N = x(136), Y = x(94), B = x(119);
+        var T = x(117), L = x(136), Y = x(94), B = x(119);
         Ne.exports = function(g, W) {
-          return T(g) || N(g, W) || Y(g, W) || B();
+          return T(g) || L(g, W) || Y(g, W) || B();
         };
       }, function(Ne, pe) {
         var x;
@@ -7652,32 +7653,32 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
         }
         Ne.exports = x;
       }, function(Ne, pe, x) {
-        var T = x(56), N = x(1);
+        var T = x(56), L = x(1);
         pe.a = function(Y, B, g) {
           var W = B(Y);
-          return Object(N.a)(Y) ? W : Object(T.a)(W, g(Y));
+          return Object(L.a)(Y) ? W : Object(T.a)(W, g(Y));
         };
       }, function(Ne, pe, x) {
         pe.a = function() {
           return [];
         };
       }, function(Ne, pe, x) {
-        pe.a = function(T, N) {
+        pe.a = function(T, L) {
           for (var Y = -1, B = T == null ? 0 : T.length, g = 0, W = []; ++Y < B; ) {
             var R = T[Y];
-            N(R, Y, T) && (W[g++] = R);
+            L(R, Y, T) && (W[g++] = R);
           }
           return W;
         };
       }, function(Ne, pe, x) {
-        pe.a = function(T, N) {
+        pe.a = function(T, L) {
           var Y = -1, B = T.length;
-          for (N || (N = Array(B)); ++Y < B; ) N[Y] = T[Y];
-          return N;
+          for (L || (L = Array(B)); ++Y < B; ) L[Y] = T[Y];
+          return L;
         };
       }, function(Ne, pe, x) {
         (function(T) {
-          var N = x(3), Y = exports$1 && !exports$1.nodeType && exports$1, B = Y && typeof T == "object" && T && !T.nodeType && T, g = B && B.exports === Y ? N.a.Buffer : void 0, W = g ? g.allocUnsafe : void 0;
+          var L = x(3), Y = exports$1 && !exports$1.nodeType && exports$1, B = Y && typeof T == "object" && T && !T.nodeType && T, g = B && B.exports === Y ? L.a.Buffer : void 0, W = g ? g.allocUnsafe : void 0;
           pe.a = function(R, H) {
             if (H) return R.slice();
             var fe = R.length, C = W ? W(fe) : new R.constructor(fe);
@@ -7686,17 +7687,17 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
         }).call(this, x(83)(Ne));
       }, function(Ne, pe, x) {
         var T = x(58);
-        pe.a = function(N, Y) {
-          var B = Y ? Object(T.a)(N.buffer) : N.buffer;
-          return new N.constructor(B, N.byteOffset, N.length);
+        pe.a = function(L, Y) {
+          var B = Y ? Object(T.a)(L.buffer) : L.buffer;
+          return new L.constructor(B, L.byteOffset, L.length);
         };
       }, function(Ne, pe, x) {
-        var T = x(25), N = x(91), Y = x(89);
+        var T = x(25), L = x(91), Y = x(89);
         pe.a = function(B, g) {
-          return Object(Y.a)(Object(N.a)(B, g, T.a), B + "");
+          return Object(Y.a)(Object(L.a)(B, g, T.a), B + "");
         };
       }, function(Ne, pe, x) {
-        var T = x(30), N = x(65), Y = Object(N.a)(Object.keys, Object), B = Object.prototype.hasOwnProperty;
+        var T = x(30), L = x(65), Y = Object(L.a)(Object.keys, Object), B = Object.prototype.hasOwnProperty;
         pe.a = function(g) {
           if (!Object(T.a)(g)) return Y(g);
           var W = [];
@@ -7704,12 +7705,12 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
           return W;
         };
       }, function(Ne, pe, x) {
-        var T = x(2), N = Object.create, Y = /* @__PURE__ */ (function() {
+        var T = x(2), L = Object.create, Y = /* @__PURE__ */ (function() {
           function W() {
           }
           return function(R) {
             if (!Object(T.a)(R)) return {};
-            if (N) return N(R);
+            if (L) return L(R);
             W.prototype = R;
             var H = new W();
             return W.prototype = void 0, H;
@@ -7734,7 +7735,7 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
         })), x.d(T, "getAsCurlString", (function() {
           return Ye;
         }));
-        var N = x(4), Y = x.n(N), B = x(5), g = x.n(B), W = x(16), R = x.n(W), H = x(41), fe = x.n(H), C = x(42), Q = x.n(C), ge = x(21), K = x.n(ge), Z = x(39), te = x(7), b = x.n(te);
+        var L = x(4), Y = x.n(L), B = x(5), g = x.n(B), W = x(16), R = x.n(W), H = x(41), fe = x.n(H), C = x(42), Q = x.n(C), ge = x(21), K = x.n(ge), Z = x(39), te = x(7), b = x.n(te);
         function w(bt, wt, ht) {
           return ht || (ht = bt.getDoc().getCursor()), wt || (wt = bt.getTokenAt(ht)), (function $e(st, Lt, $t) {
             if (Lt.string.indexOf(" ") >= 0) {
@@ -8854,17 +8855,17 @@ SELECT * WHERE {
         };
       }, function(Ne, pe, x) {
         pe.a = function(T) {
-          var N = -1, Y = Array(T.size);
+          var L = -1, Y = Array(T.size);
           return T.forEach((function(B, g) {
-            Y[++N] = [g, B];
+            Y[++L] = [g, B];
           })), Y;
         };
       }, function(Ne, pe, x) {
-        var T = x(79), N = x(70);
+        var T = x(79), L = x(70);
         pe.a = function(Y) {
           return Object(T.a)((function(B, g) {
             var W = -1, R = g.length, H = R > 1 ? g[R - 1] : void 0, fe = R > 2 ? g[2] : void 0;
-            for (H = Y.length > 3 && typeof H == "function" ? (R--, H) : void 0, fe && Object(N.a)(g[0], g[1], fe) && (H = R < 3 ? void 0 : H, R = 1), B = Object(B); ++W < R; ) {
+            for (H = Y.length > 3 && typeof H == "function" ? (R--, H) : void 0, fe && Object(L.a)(g[0], g[1], fe) && (H = R < 3 ? void 0 : H, R = 1), B = Object(B); ++W < R; ) {
               var C = g[W];
               C && Y(B, C, W, H);
             }
@@ -8878,8 +8879,8 @@ SELECT * WHERE {
           };
         };
       }, function(Ne, pe, x) {
-        var T = x(18), N = x(31), Y = x(12), B = function(ut, _t, ct) {
-          (ct !== void 0 && !Object(Y.a)(ut[_t], ct) || ct === void 0 && !(_t in ut)) && Object(N.a)(ut, _t, ct);
+        var T = x(18), L = x(31), Y = x(12), B = function(ut, _t, ct) {
+          (ct !== void 0 && !Object(Y.a)(ut[_t], ct) || ct === void 0 && !(_t in ut)) && Object(L.a)(ut, _t, ct);
         }, g = x(69), W = x(77), R = x(78), H = x(76), fe = x(81), C = x(15), Q = x(1), ge = x(10), K = x(6), Z = function(ut) {
           return Object(K.a)(ut) && Object(ge.a)(ut);
         }, te = x(14), b = x(44), w = x(2), U = x(11), re = x(51), de = Function.prototype, he = Object.prototype, p = de.toString, ae = he.hasOwnProperty, Ge = p.call(Object), me = function(ut) {
@@ -8916,8 +8917,8 @@ SELECT * WHERE {
       }, function(Ne, pe, x) {
         var T = function(fe, C) {
           return fe != null && C in Object(fe);
-        }, N = x(53), Y = x(15), B = x(1), g = x(37), W = x(43), R = x(24), H = function(fe, C, Q) {
-          for (var ge = -1, K = (C = Object(N.a)(C, fe)).length, Z = !1; ++ge < K; ) {
+        }, L = x(53), Y = x(15), B = x(1), g = x(37), W = x(43), R = x(24), H = function(fe, C, Q) {
+          for (var ge = -1, K = (C = Object(L.a)(C, fe)).length, Z = !1; ++ge < K; ) {
             var te = Object(R.a)(C[ge]);
             if (!(Z = fe != null && Q(fe, te))) break;
             fe = fe[te];
@@ -8928,8 +8929,8 @@ SELECT * WHERE {
           return fe != null && H(fe, C, T);
         };
       }, function(Ne, pe, x) {
-        var T = x(86), N = x(48), Y = x(25), B = N.a ? function(R, H) {
-          return Object(N.a)(R, "toString", { configurable: !0, enumerable: !1, value: Object(T.a)(H), writable: !0 });
+        var T = x(86), L = x(48), Y = x(25), B = L.a ? function(R, H) {
+          return Object(L.a)(R, "toString", { configurable: !0, enumerable: !1, value: Object(T.a)(H), writable: !0 });
         } : Y.a, g = Date.now, W = /* @__PURE__ */ (function(R) {
           var H = 0, fe = 0;
           return function() {
@@ -8942,10 +8943,10 @@ SELECT * WHERE {
         })(B);
         pe.a = W;
       }, function(Ne, pe, x) {
-        var T = x(66), N = x(10), Y = /* @__PURE__ */ (function(B, g) {
+        var T = x(66), L = x(10), Y = /* @__PURE__ */ (function(B, g) {
           return function(W, R) {
             if (W == null) return W;
-            if (!Object(N.a)(W)) return B(W, R);
+            if (!Object(L.a)(W)) return B(W, R);
             for (var H = W.length, fe = -1, C = Object(W); ++fe < H && R(C[fe], fe, C) !== !1; ) ;
             return W;
           };
@@ -8964,10 +8965,10 @@ SELECT * WHERE {
               return Y.call(B, g[0], g[1], g[2]);
           }
           return Y.apply(B, g);
-        }, N = Math.max;
+        }, L = Math.max;
         pe.a = function(Y, B, g) {
-          return B = N(B === void 0 ? Y.length - 1 : B, 0), function() {
-            for (var W = arguments, R = -1, H = N(W.length - B, 0), fe = Array(H); ++R < H; ) fe[R] = W[B + R];
+          return B = L(B === void 0 ? Y.length - 1 : B, 0), function() {
+            for (var W = arguments, R = -1, H = L(W.length - B, 0), fe = Array(H); ++R < H; ) fe[R] = W[B + R];
             R = -1;
             for (var C = Array(B + 1); ++R < B; ) C[R] = W[R];
             return C[B] = g(fe), T(Y, this, C);
@@ -8975,7 +8976,7 @@ SELECT * WHERE {
         };
       }, function(Ne, pe, x) {
         (function(T) {
-          function N(g, W, R, H) {
+          function L(g, W, R, H) {
             if (R && R.call) {
               var fe = R;
               R = null;
@@ -9013,10 +9014,10 @@ SELECT * WHERE {
           }
           T.newFoldFunction = function(g, W) {
             return function(R, H) {
-              N(R, H, { rangeFinder: g, widget: W });
+              L(R, H, { rangeFinder: g, widget: W });
             };
           }, T.defineExtension("foldCode", (function(g, W, R) {
-            N(this, g, W, R);
+            L(this, g, W, R);
           })), T.defineExtension("isFolded", (function(g) {
             for (var W = this.findMarksAt(g), R = 0; R < W.length; ++R) if (W[R].__isFold) return !0;
           })), T.commands.toggleFold = function(g) {
@@ -9063,21 +9064,21 @@ SELECT * WHERE {
         };
       }, function(Ne, pe, x) {
         var T = x(118);
-        Ne.exports = function(N, Y) {
-          if (N) {
-            if (typeof N == "string") return T(N, Y);
-            var B = Object.prototype.toString.call(N).slice(8, -1);
-            return B === "Object" && N.constructor && (B = N.constructor.name), B === "Map" || B === "Set" ? Array.from(N) : B === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(B) ? T(N, Y) : void 0;
+        Ne.exports = function(L, Y) {
+          if (L) {
+            if (typeof L == "string") return T(L, Y);
+            var B = Object.prototype.toString.call(L).slice(8, -1);
+            return B === "Object" && L.constructor && (B = L.constructor.name), B === "Map" || B === "Set" ? Array.from(L) : B === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(B) ? T(L, Y) : void 0;
           }
         };
       }, function(Ne, pe, x) {
         var T;
-        (function(N, Y) {
-          typeof Ne.exports == "object" ? Ne.exports = N.document ? Y(N, !0) : function(B) {
+        (function(L, Y) {
+          typeof Ne.exports == "object" ? Ne.exports = L.document ? Y(L, !0) : function(B) {
             if (!B.document) throw new Error("jQuery requires a window with a document");
             return Y(B);
-          } : Y(N);
-        })(typeof window < "u" ? window : this, (function(N, Y) {
+          } : Y(L);
+        })(typeof window < "u" ? window : this, (function(L, Y) {
           var B = [], g = Object.getPrototypeOf, W = B.slice, R = B.flat ? function(n) {
             return B.flat.call(n);
           } : function(n) {
@@ -9086,7 +9087,7 @@ SELECT * WHERE {
             return typeof n == "function" && typeof n.nodeType != "number";
           }, w = function(n) {
             return n != null && n === n.window;
-          }, U = N.document, re = { type: !0, src: !0, nonce: !0, noModule: !0 };
+          }, U = L.document, re = { type: !0, src: !0, nonce: !0, noModule: !0 };
           function de(n, c, m) {
             var E, M, P = (m = m || U).createElement("script");
             if (P.text = n, c) for (E in re) (M = c[E] || c.getAttribute && c.getAttribute(E)) && P.setAttribute(E, M);
@@ -9662,7 +9663,7 @@ SELECT * WHERE {
               var kt;
               if (!Xe) return Ee[He] === !0 ? He.toLowerCase() : (kt = Ee.getAttributeNode(He)) && kt.specified ? kt.value : null;
             })), gn;
-          })(N);
+          })(L);
           p.find = Ge, p.expr = Ge.selectors, p.expr[":"] = p.expr.pseudos, p.uniqueSort = p.unique = Ge.uniqueSort, p.text = Ge.getText, p.isXMLDoc = Ge.isXML, p.contains = Ge.contains, p.escapeSelector = Ge.escape;
           var me = function(n, c, m) {
             for (var E = [], M = m !== void 0; (n = n[c]) && n.nodeType !== 9; ) if (n.nodeType === 1) {
@@ -9866,7 +9867,7 @@ SELECT * WHERE {
                       p.Deferred.exceptionHook && p.Deferred.exceptionHook(zr, hr.stackTrace), ot + 1 >= ke && (at !== dt && (rr = void 0, ar = [zr]), Tt.rejectWith(rr, ar));
                     }
                   };
-                  ot ? hr() : (p.Deferred.getStackHook && (hr.stackTrace = p.Deferred.getStackHook()), N.setTimeout(hr));
+                  ot ? hr() : (p.Deferred.getStackHook && (hr.stackTrace = p.Deferred.getStackHook()), L.setTimeout(hr));
                 };
               }
               return p.Deferred((function(ot) {
@@ -9895,15 +9896,15 @@ SELECT * WHERE {
           } });
           var Qe = /^(Eval|Internal|Range|Reference|Syntax|Type|URI)Error$/;
           p.Deferred.exceptionHook = function(n, c) {
-            N.console && N.console.warn && n && Qe.test(n.name) && N.console.warn("jQuery.Deferred exception: " + n.message, n.stack, c);
+            L.console && L.console.warn && n && Qe.test(n.name) && L.console.warn("jQuery.Deferred exception: " + n.message, n.stack, c);
           }, p.readyException = function(n) {
-            N.setTimeout((function() {
+            L.setTimeout((function() {
               throw n;
             }));
           };
           var Dt = p.Deferred();
           function I() {
-            U.removeEventListener("DOMContentLoaded", I), N.removeEventListener("load", I), p.ready();
+            U.removeEventListener("DOMContentLoaded", I), L.removeEventListener("load", I), p.ready();
           }
           p.fn.ready = function(n) {
             return Dt.then(n).catch((function(c) {
@@ -9911,7 +9912,7 @@ SELECT * WHERE {
             })), this;
           }, p.extend({ isReady: !1, readyWait: 1, ready: function(n) {
             (n === !0 ? --p.readyWait : p.isReady) || (p.isReady = !0, n !== !0 && --p.readyWait > 0 || Dt.resolveWith(U, [p]));
-          } }), p.ready.then = Dt.then, U.readyState === "complete" || U.readyState !== "loading" && !U.documentElement.doScroll ? N.setTimeout(p.ready) : (U.addEventListener("DOMContentLoaded", I), N.addEventListener("load", I));
+          } }), p.ready.then = Dt.then, U.readyState === "complete" || U.readyState !== "loading" && !U.documentElement.doScroll ? L.setTimeout(p.ready) : (U.addEventListener("DOMContentLoaded", I), L.addEventListener("load", I));
           var G = function(n, c, m, E, M, P, ee) {
             var _e = 0, ke = n.length, Ue = m == null;
             if (he(m) === "object") for (_e in M = !0, m) G(n, c, _e, m[_e], !0, P, ee);
@@ -10346,7 +10347,7 @@ SELECT * WHERE {
           }));
           var kr = new RegExp("^(" + Sr + ")(?!px)[a-z%]+$", "i"), Nr = function(n) {
             var c = n.ownerDocument.defaultView;
-            return c && c.opener || (c = N), c.getComputedStyle(n);
+            return c && c.opener || (c = L), c.getComputedStyle(n);
           }, xn = function(n, c, m) {
             var E, M, P = {};
             for (M in c) P[M] = n.style[M], n.style[M] = c[M];
@@ -10367,7 +10368,7 @@ SELECT * WHERE {
             function n() {
               if (Ue) {
                 ke.style.cssText = "position:absolute;left:-11111px;width:60px;margin-top:1px;padding:0;border:0", Ue.style.cssText = "position:relative;display:block;box-sizing:border-box;overflow:scroll;margin:auto;border:1px;padding:1px;width:60%;top:1%", br.appendChild(ke).appendChild(Ue);
-                var ot = N.getComputedStyle(Ue);
+                var ot = L.getComputedStyle(Ue);
                 m = ot.top !== "1%", _e = c(ot.marginLeft) === 12, Ue.style.right = "60%", P = c(ot.right) === 36, E = c(ot.width) === 36, Ue.style.position = "absolute", M = c(Ue.offsetWidth / 3) === 12, br.removeChild(ke), Ue = null;
               }
             }
@@ -10387,7 +10388,7 @@ SELECT * WHERE {
               return n(), M;
             }, reliableTrDimensions: function() {
               var ot, Tt, at, gt;
-              return ee == null && (ot = U.createElement("table"), Tt = U.createElement("tr"), at = U.createElement("div"), ot.style.cssText = "position:absolute;left:-11111px", Tt.style.height = "1px", at.style.height = "9px", br.appendChild(ot).appendChild(Tt).appendChild(at), gt = N.getComputedStyle(Tt), ee = parseInt(gt.height) > 3, br.removeChild(ot)), ee;
+              return ee == null && (ot = U.createElement("table"), Tt = U.createElement("tr"), at = U.createElement("div"), ot.style.cssText = "position:absolute;left:-11111px", Tt.style.height = "1px", at.style.height = "9px", br.appendChild(ot).appendChild(Tt).appendChild(at), gt = L.getComputedStyle(Tt), ee = parseInt(gt.height) > 3, br.removeChild(ot)), ee;
             } }));
           })();
           var xr = ["Webkit", "Moz", "ms"], Jt = U.createElement("div").style, Sn = {};
@@ -10482,10 +10483,10 @@ SELECT * WHERE {
           }, _default: "swing" }, p.fx = qt.prototype.init, p.fx.step = {};
           var Jr, Gr, ei = /^(?:toggle|show|hide)$/, mi = /queueHooks$/;
           function sr() {
-            Gr && (U.hidden === !1 && N.requestAnimationFrame ? N.requestAnimationFrame(sr) : N.setTimeout(sr, p.fx.interval), p.fx.tick());
+            Gr && (U.hidden === !1 && L.requestAnimationFrame ? L.requestAnimationFrame(sr) : L.setTimeout(sr, p.fx.interval), p.fx.tick());
           }
           function qr() {
-            return N.setTimeout((function() {
+            return L.setTimeout((function() {
               Jr = void 0;
             })), Jr = Date.now();
           }
@@ -10603,9 +10604,9 @@ SELECT * WHERE {
             Gr = null;
           }, p.fx.speeds = { slow: 600, fast: 200, _default: 400 }, p.fn.delay = function(n, c) {
             return n = p.fx && p.fx.speeds[n] || n, c = c || "fx", this.queue(c, (function(m, E) {
-              var M = N.setTimeout(m, n);
+              var M = L.setTimeout(m, n);
               E.stop = function() {
-                N.clearTimeout(M);
+                L.clearTimeout(M);
               };
             }));
           }, (function() {
@@ -10736,7 +10737,7 @@ SELECT * WHERE {
             } }, te.checkOn || (p.valHooks[this].get = function(n) {
               return n.getAttribute("value") === null ? "on" : n.value;
             });
-          })), te.focusin = "onfocusin" in N;
+          })), te.focusin = "onfocusin" in L;
           var le = /^(?:focusinfocus|focusoutblur)$/, Ie = function(n) {
             n.stopPropagation();
           };
@@ -10745,7 +10746,7 @@ SELECT * WHERE {
             if (P = Tt = ee = m = m || U, m.nodeType !== 3 && m.nodeType !== 8 && !le.test(gt + p.event.triggered) && (gt.indexOf(".") > -1 && (rr = gt.split("."), gt = rr.shift(), rr.sort()), ke = gt.indexOf(":") < 0 && "on" + gt, (n = n[p.expando] ? n : new p.Event(gt, typeof n == "object" && n)).isTrigger = E ? 2 : 3, n.namespace = rr.join("."), n.rnamespace = n.namespace ? new RegExp("(^|\\.)" + rr.join("\\.(?:.*\\.|)") + "(\\.|$)") : null, n.result = void 0, n.target || (n.target = m), c = c == null ? [n] : p.makeArray(c, [n]), ot = p.event.special[gt] || {}, E || !ot.trigger || ot.trigger.apply(m, c) !== !1)) {
               if (!E && !ot.noBubble && !w(m)) {
                 for (_e = ot.delegateType || gt, le.test(_e + gt) || (P = P.parentNode); P; P = P.parentNode) at.push(P), ee = P;
-                ee === (m.ownerDocument || U) && at.push(ee.defaultView || ee.parentWindow || N);
+                ee === (m.ownerDocument || U) && at.push(ee.defaultView || ee.parentWindow || L);
               }
               for (M = 0; (P = at[M++]) && !n.isPropagationStopped(); ) Tt = P, n.type = M > 1 ? _e : ot.bindType || gt, (Ue = (We.get(P, "events") || /* @__PURE__ */ Object.create(null))[n.type] && We.get(P, "handle")) && Ue.apply(P, c), (Ue = ke && P[ke]) && Ue.apply && ze(P) && (n.result = Ue.apply(P, c), n.result === !1 && n.preventDefault());
               return n.type = gt, E || n.isDefaultPrevented() || ot._default && ot._default.apply(at.pop(), c) !== !1 || !ze(m) || ke && b(m[gt]) && !w(m) && ((ee = m[ke]) && (m[ke] = null), p.event.triggered = gt, n.isPropagationStopped() && Tt.addEventListener(gt, Ie), m[gt](), n.isPropagationStopped() && Tt.removeEventListener(gt, Ie), p.event.triggered = void 0, ee && (m[ke] = ee)), n.result;
@@ -10772,12 +10773,12 @@ SELECT * WHERE {
               M ? We.access(E, c, M) : (E.removeEventListener(n, m, !0), We.remove(E, c));
             } };
           }));
-          var et = N.location, St = { guid: Date.now() }, Ht = /\?/;
+          var et = L.location, St = { guid: Date.now() }, Ht = /\?/;
           p.parseXML = function(n) {
             var c;
             if (!n || typeof n != "string") return null;
             try {
-              c = new N.DOMParser().parseFromString(n, "text/xml");
+              c = new L.DOMParser().parseFromString(n, "text/xml");
             } catch {
               c = void 0;
             }
@@ -10884,7 +10885,7 @@ SELECT * WHERE {
             if (at.beforeSend && (at.beforeSend.call(gt, fr, at) === !1 || ke)) return fr.abort();
             if (Yr = "abort", nr.add(at.complete), fr.done(at.success), fr.fail(at.error), m = u(Wn, at, c, fr)) {
               if (fr.readyState = 1, Ue && rr.trigger("ajaxSend", [fr, at]), ke) return fr;
-              at.async && at.timeout > 0 && (ee = N.setTimeout((function() {
+              at.async && at.timeout > 0 && (ee = L.setTimeout((function() {
                 fr.abort("timeout");
               }), at.timeout));
               try {
@@ -10896,7 +10897,7 @@ SELECT * WHERE {
             } else Jn(-1, "No Transport");
             function Jn(Wr, Zr, ui, Ai) {
               var ti, ri, Li, Kn, dn, Nn = Zr;
-              ke || (ke = !0, ee && N.clearTimeout(ee), m = void 0, M = Ai || "", fr.readyState = Wr > 0 ? 4 : 0, ti = Wr >= 200 && Wr < 300 || Wr === 304, ui && (Kn = (function(qn, oi, $n) {
+              ke || (ke = !0, ee && L.clearTimeout(ee), m = void 0, M = Ai || "", fr.readyState = Wr > 0 ? 4 : 0, ti = Wr >= 200 && Wr < 300 || Wr === 304, ui && (Kn = (function(qn, oi, $n) {
                 for (var yi, Hr, bn, ci, xi = qn.contents, Xn = qn.dataTypes; Xn[0] === "*"; ) Xn.shift(), yi === void 0 && (yi = qn.mimeType || oi.getResponseHeader("Content-Type"));
                 if (yi) {
                   for (Hr in xi) if (xi[Hr] && xi[Hr].test(yi)) {
@@ -10985,7 +10986,7 @@ SELECT * WHERE {
             return !!(n.offsetWidth || n.offsetHeight || n.getClientRects().length);
           }, p.ajaxSettings.xhr = function() {
             try {
-              return new N.XMLHttpRequest();
+              return new L.XMLHttpRequest();
             } catch {
             }
           };
@@ -11001,7 +11002,7 @@ SELECT * WHERE {
                   c && (c = m = ee.onload = ee.onerror = ee.onabort = ee.ontimeout = ee.onreadystatechange = null, _e === "abort" ? ee.abort() : _e === "error" ? typeof ee.status != "number" ? M(0, "error") : M(ee.status, ee.statusText) : M(y[ee.status] || ee.status, ee.statusText, (ee.responseType || "text") !== "text" || typeof ee.responseText != "string" ? { binary: ee.response } : { text: ee.responseText }, ee.getAllResponseHeaders()));
                 };
               }, ee.onload = c(), m = ee.onerror = ee.ontimeout = c("error"), ee.onabort !== void 0 ? ee.onabort = m : ee.onreadystatechange = function() {
-                ee.readyState === 4 && N.setTimeout((function() {
+                ee.readyState === 4 && L.setTimeout((function() {
                   c && m();
                 }));
               }, c = c("abort");
@@ -11029,7 +11030,7 @@ SELECT * WHERE {
               m && m();
             } };
           }));
-          var L, k = [], $ = /(=)\?(?=&|$)|\?\?/;
+          var N, k = [], $ = /(=)\?(?=&|$)|\?\?/;
           p.ajaxSetup({ jsonp: "callback", jsonpCallback: function() {
             var n = k.pop() || p.expando + "_" + St.guid++;
             return this[n] = !0, n;
@@ -11037,12 +11038,12 @@ SELECT * WHERE {
             var E, M, P, ee = n.jsonp !== !1 && ($.test(n.url) ? "url" : typeof n.data == "string" && (n.contentType || "").indexOf("application/x-www-form-urlencoded") === 0 && $.test(n.data) && "data");
             if (ee || n.dataTypes[0] === "jsonp") return E = n.jsonpCallback = b(n.jsonpCallback) ? n.jsonpCallback() : n.jsonpCallback, ee ? n[ee] = n[ee].replace($, "$1" + E) : n.jsonp !== !1 && (n.url += (Ht.test(n.url) ? "&" : "?") + n.jsonp + "=" + E), n.converters["script json"] = function() {
               return P || p.error(E + " was not called"), P[0];
-            }, n.dataTypes[0] = "json", M = N[E], N[E] = function() {
+            }, n.dataTypes[0] = "json", M = L[E], L[E] = function() {
               P = arguments;
             }, m.always((function() {
-              M === void 0 ? p(N).removeProp(E) : N[E] = M, n[E] && (n.jsonpCallback = c.jsonpCallback, k.push(E)), P && b(M) && M(P[0]), P = M = void 0;
+              M === void 0 ? p(L).removeProp(E) : L[E] = M, n[E] && (n.jsonpCallback = c.jsonpCallback, k.push(E)), P && b(M) && M(P[0]), P = M = void 0;
             })), "script";
-          })), te.createHTMLDocument = ((L = U.implementation.createHTMLDocument("").body).innerHTML = "<form></form><form></form>", L.childNodes.length === 2), p.parseHTML = function(n, c, m) {
+          })), te.createHTMLDocument = ((N = U.implementation.createHTMLDocument("").body).innerHTML = "<form></form><form></form>", N.childNodes.length === 2), p.parseHTML = function(n, c, m) {
             return typeof n != "string" ? [] : (typeof c == "boolean" && (m = c, c = !1), c || (te.createHTMLDocument ? ((E = (c = U.implementation.createHTMLDocument("")).createElement("base")).href = U.location.href, c.head.appendChild(E)) : c = U), P = !m && [], (M = X.exec(n)) ? [c.createElement(M[1])] : (M = ii([n], c, P), P && P.length && p(P).remove(), p.merge([], M.childNodes)));
             var E, M, P;
           }, p.fn.load = function(n, c, m) {
@@ -11140,15 +11141,15 @@ SELECT * WHERE {
           }, (T = function() {
             return p;
           }.apply(pe, [])) === void 0 || (Ne.exports = T);
-          var Fe = N.jQuery, Ce = N.$;
+          var Fe = L.jQuery, Ce = L.$;
           return p.noConflict = function(n) {
-            return N.$ === p && (N.$ = Ce), n && N.jQuery === p && (N.jQuery = Fe), p;
-          }, Y === void 0 && (N.jQuery = N.$ = p), p;
+            return L.$ === p && (L.$ = Ce), n && L.jQuery === p && (L.jQuery = Fe), p;
+          }, Y === void 0 && (L.jQuery = L.$ = p), p;
         }));
       }, function(Ne, pe, x) {
-        var T = x(2), N = x(17), Y = /^\s+|\s+$/g, B = /^[-+]0x[0-9a-f]+$/i, g = /^0b[01]+$/i, W = /^0o[0-7]+$/i, R = parseInt, H = function(C) {
+        var T = x(2), L = x(17), Y = /^\s+|\s+$/g, B = /^[-+]0x[0-9a-f]+$/i, g = /^0b[01]+$/i, W = /^0o[0-7]+$/i, R = parseInt, H = function(C) {
           if (typeof C == "number") return C;
-          if (Object(N.a)(C)) return NaN;
+          if (Object(L.a)(C)) return NaN;
           if (Object(T.a)(C)) {
             var Q = typeof C.valueOf == "function" ? C.valueOf() : C;
             C = Object(T.a)(Q) ? Q + "" : Q;
@@ -11165,7 +11166,7 @@ SELECT * WHERE {
           return Q == Q ? ge ? Q - ge : Q : 0;
         };
       }, function(Ne, pe, x) {
-        var T = x(56), N = x(8), Y = x(15), B = x(1), g = N.a ? N.a.isConcatSpreadable : void 0, W = function(R) {
+        var T = x(56), L = x(8), Y = x(15), B = x(1), g = L.a ? L.a.isConcatSpreadable : void 0, W = function(R) {
           return Object(B.a)(R) || Object(Y.a)(R) || !!(g && R && R[g]);
         };
         pe.a = function R(H, fe, C, Q, ge) {
@@ -11178,7 +11179,7 @@ SELECT * WHERE {
         };
       }, function(Ne, pe, x) {
         Ne.exports = (function() {
-          var T = Object.hasOwnProperty, N = Object.setPrototypeOf, Y = Object.isFrozen, B = Object.keys, g = Object.freeze, W = Object.seal, R = typeof Reflect < "u" && Reflect, H = R.apply, fe = R.construct;
+          var T = Object.hasOwnProperty, L = Object.setPrototypeOf, Y = Object.isFrozen, B = Object.keys, g = Object.freeze, W = Object.seal, R = typeof Reflect < "u" && Reflect, H = R.apply, fe = R.construct;
           H || (H = function(ze, tt, We) {
             return ze.apply(tt, We);
           }), g || (g = function(ze) {
@@ -11208,7 +11209,7 @@ SELECT * WHERE {
             };
           }
           function Te(ze, tt) {
-            N && N(ze, null);
+            L && L(ze, null);
             for (var We = tt.length; We--; ) {
               var Rt = tt[We];
               if (typeof Rt == "string") {
@@ -11431,12 +11432,12 @@ SELECT * WHERE {
             var b;
             te && te != T.Init && (K.clearGutter(K.state.foldGutter.options.gutter), K.state.foldGutter = null, K.off("gutterClick", fe), K.off("changes", C), K.off("viewportChange", Q), K.off("fold", ge), K.off("unfold", ge), K.off("swapDoc", C)), Z && (K.state.foldGutter = new Y(((b = Z) === !0 && (b = {}), b.gutter == null && (b.gutter = "CodeMirror-foldgutter"), b.indicatorOpen == null && (b.indicatorOpen = "CodeMirror-foldgutter-open"), b.indicatorFolded == null && (b.indicatorFolded = "CodeMirror-foldgutter-folded"), b)), H(K), K.on("gutterClick", fe), K.on("changes", C), K.on("viewportChange", Q), K.on("fold", ge), K.on("unfold", ge), K.on("swapDoc", C));
           }));
-          var N = T.Pos;
+          var L = T.Pos;
           function Y(K) {
             this.options = K, this.from = this.to = 0;
           }
           function B(K, Z) {
-            for (var te = K.findMarks(N(Z, 0), N(Z + 1, 0)), b = 0; b < te.length; ++b) if (te[b].__isFold) {
+            for (var te = K.findMarks(L(Z, 0), L(Z + 1, 0)), b = 0; b < te.length; ++b) if (te[b].__isFold) {
               var w = te[b].find(-1);
               if (w && w.line === Z) return te[b];
             }
@@ -11457,7 +11458,7 @@ SELECT * WHERE {
                 if (de && Ge && de.test(Ge.className)) return;
                 ae = g(b.indicatorFolded);
               } else {
-                var me = N(w, 0), Te = re && re(K, me);
+                var me = L(w, 0), Te = re && re(K, me);
                 if (Te && Te.to.line - Te.from.line >= U) {
                   if (he && Ge && he.test(Ge.className)) return;
                   ae = g(b.indicatorOpen);
@@ -11481,7 +11482,7 @@ SELECT * WHERE {
               var w = b.options;
               if (te == w.gutter) {
                 var U = B(K, Z);
-                U ? U.clear() : K.foldCode(N(Z, 0), w);
+                U ? U.clear() : K.foldCode(L(Z, 0), w);
               }
             }
           }
@@ -11516,7 +11517,7 @@ SELECT * WHERE {
         })(x(7), x(92));
       }, function(Ne, pe, x) {
         (function(T) {
-          var N = T.Pos;
+          var L = T.Pos;
           function Y(b, w) {
             return b.line - w.line || b.ch - w.ch;
           }
@@ -11525,7 +11526,7 @@ SELECT * WHERE {
             this.line = w, this.ch = U, this.cm = b, this.text = b.getLine(w), this.min = re ? Math.max(re.from, b.firstLine()) : b.firstLine(), this.max = re ? Math.min(re.to - 1, b.lastLine()) : b.lastLine();
           }
           function R(b, w) {
-            var U = b.cm.getTokenTypeAt(N(b.line, w));
+            var U = b.cm.getTokenTypeAt(L(b.line, w));
             return U && /\btag\b/.test(U);
           }
           function H(b) {
@@ -11597,7 +11598,7 @@ SELECT * WHERE {
                   U.length = ae;
                   break;
                 }
-                if (ae < 0 && (!w || w == de[2])) return { tag: de[2], from: N(he, p), to: N(b.line, b.ch) };
+                if (ae < 0 && (!w || w == de[2])) return { tag: de[2], from: L(he, p), to: L(b.line, b.ch) };
               } else U.push(de[2]);
             }
           }
@@ -11614,7 +11615,7 @@ SELECT * WHERE {
                     U.length = ae;
                     break;
                   }
-                  if (ae < 0 && (!w || w == p[2])) return { tag: p[2], from: N(b.line, b.ch), to: N(de, he) };
+                  if (ae < 0 && (!w || w == p[2])) return { tag: p[2], from: L(b.line, b.ch), to: L(de, he) };
                 }
               } else Q(b);
             }
@@ -11626,16 +11627,16 @@ SELECT * WHERE {
               var de = C(U);
               if (!de) return;
               if (!re[1] && de != "selfClose") {
-                var he = N(U.line, U.ch), p = Z(U, re[2]);
+                var he = L(U.line, U.ch), p = Z(U, re[2]);
                 return p && Y(p.from, he) > 0 ? { from: he, to: p.from } : null;
               }
             }
           })), T.findMatchingTag = function(b, w, U) {
             var re = new W(b, w.line, w.ch, U);
             if (re.text.indexOf(">") != -1 || re.text.indexOf("<") != -1) {
-              var de = C(re), he = de && N(re.line, re.ch), p = de && Q(re);
+              var de = C(re), he = de && L(re.line, re.ch), p = de && Q(re);
               if (de && p && !(Y(re, w) > 0)) {
-                var ae = { from: N(re.line, re.ch), to: he, tag: p[2] };
+                var ae = { from: L(re.line, re.ch), to: he, tag: p[2] };
                 return de == "selfClose" ? { open: ae, close: null, at: "open" } : p[1] ? { open: te(re, p[2]), close: ae, at: "close" } : { open: ae, close: Z(re = new W(b, he.line, he.ch, U), p[2]), at: "open" };
               }
             }
@@ -11652,14 +11653,14 @@ SELECT * WHERE {
         })(x(7));
       }, function(Ne, pe, x) {
         (function(T) {
-          T.registerHelper("fold", "brace", (function(N, Y) {
-            var B, g = Y.line, W = N.getLine(g);
+          T.registerHelper("fold", "brace", (function(L, Y) {
+            var B, g = Y.line, W = L.getLine(g);
             function R(de) {
               for (var he = Y.ch, p = 0; ; ) {
                 var ae = he <= 0 ? -1 : W.lastIndexOf(de, he - 1);
                 if (ae != -1) {
                   if (p == 1 && ae < Y.ch) break;
-                  if (B = N.getTokenTypeAt(T.Pos(g, ae + 1)), !/^(comment|string)/.test(B)) return ae + 1;
+                  if (B = L.getTokenTypeAt(T.Pos(g, ae + 1)), !/^(comment|string)/.test(B)) return ae + 1;
                   he = ae - 1;
                 } else {
                   if (p == 1) break;
@@ -11669,11 +11670,11 @@ SELECT * WHERE {
             }
             var H = "{", fe = "}", C = R("{");
             if (C == null && (H = "[", fe = "]", C = R("[")), C != null) {
-              var Q, ge, K = 1, Z = N.lastLine();
-              e: for (var te = g; te <= Z; ++te) for (var b = N.getLine(te), w = te == g ? C : 0; ; ) {
+              var Q, ge, K = 1, Z = L.lastLine();
+              e: for (var te = g; te <= Z; ++te) for (var b = L.getLine(te), w = te == g ? C : 0; ; ) {
                 var U = b.indexOf(H, w), re = b.indexOf(fe, w);
                 if (U < 0 && (U = b.length), re < 0 && (re = b.length), (w = Math.min(U, re)) == b.length) break;
-                if (N.getTokenTypeAt(T.Pos(te, w + 1)) == B) {
+                if (L.getTokenTypeAt(T.Pos(te, w + 1)) == B) {
                   if (w == U) ++K;
                   else if (!--K) {
                     Q = te, ge = w;
@@ -11684,13 +11685,13 @@ SELECT * WHERE {
               }
               if (Q != null && g != Q) return { from: T.Pos(g, C), to: T.Pos(Q, ge) };
             }
-          })), T.registerHelper("fold", "import", (function(N, Y) {
+          })), T.registerHelper("fold", "import", (function(L, Y) {
             function B(C) {
-              if (C < N.firstLine() || C > N.lastLine()) return null;
-              var Q = N.getTokenAt(T.Pos(C, 1));
-              if (/\S/.test(Q.string) || (Q = N.getTokenAt(T.Pos(C, Q.end + 1))), Q.type != "keyword" || Q.string != "import") return null;
-              for (var ge = C, K = Math.min(N.lastLine(), C + 10); ge <= K; ++ge) {
-                var Z = N.getLine(ge).indexOf(";");
+              if (C < L.firstLine() || C > L.lastLine()) return null;
+              var Q = L.getTokenAt(T.Pos(C, 1));
+              if (/\S/.test(Q.string) || (Q = L.getTokenAt(T.Pos(C, Q.end + 1))), Q.type != "keyword" || Q.string != "import") return null;
+              for (var ge = C, K = Math.min(L.lastLine(), C + 10); ge <= K; ++ge) {
+                var Z = L.getLine(ge).indexOf(";");
                 if (Z != -1) return { startCh: Q.end, end: T.Pos(ge, Z) };
               }
             }
@@ -11701,22 +11702,22 @@ SELECT * WHERE {
               if (fe == null) break;
               H = fe.end;
             }
-            return { from: N.clipPos(T.Pos(W, R.startCh + 1)), to: H };
-          })), T.registerHelper("fold", "include", (function(N, Y) {
+            return { from: L.clipPos(T.Pos(W, R.startCh + 1)), to: H };
+          })), T.registerHelper("fold", "include", (function(L, Y) {
             function B(H) {
-              if (H < N.firstLine() || H > N.lastLine()) return null;
-              var fe = N.getTokenAt(T.Pos(H, 1));
-              return /\S/.test(fe.string) || (fe = N.getTokenAt(T.Pos(H, fe.end + 1))), fe.type == "meta" && fe.string.slice(0, 8) == "#include" ? fe.start + 8 : void 0;
+              if (H < L.firstLine() || H > L.lastLine()) return null;
+              var fe = L.getTokenAt(T.Pos(H, 1));
+              return /\S/.test(fe.string) || (fe = L.getTokenAt(T.Pos(H, fe.end + 1))), fe.type == "meta" && fe.string.slice(0, 8) == "#include" ? fe.start + 8 : void 0;
             }
             var g = Y.line, W = B(g);
             if (W == null || B(g - 1) != null) return null;
             for (var R = g; B(R + 1) != null; ) ++R;
-            return { from: T.Pos(g, W + 1), to: N.clipPos(T.Pos(R)) };
+            return { from: T.Pos(g, W + 1), to: L.clipPos(T.Pos(R)) };
           }));
         })(x(7));
       }, function(Ne, pe, x) {
         (function(T) {
-          var N = /MSIE \d/.test(navigator.userAgent) && (document.documentMode == null || document.documentMode < 8), Y = T.Pos, B = { "(": ")>", ")": "(<", "[": "]>", "]": "[<", "{": "}>", "}": "{<", "<": ">>", ">": "<<" };
+          var L = /MSIE \d/.test(navigator.userAgent) && (document.documentMode == null || document.documentMode < 8), Y = T.Pos, B = { "(": ")>", ")": "(<", "[": "]>", "]": "[<", "{": "}>", "}": "{<", "<": ">>", ">": "<<" };
           function g(C) {
             return C && C.bracketRegex || /[(){}[\]]/;
           }
@@ -11759,7 +11760,7 @@ SELECT * WHERE {
               }
             }
             if (Z.length) {
-              N && C.state.focused && C.focus();
+              L && C.state.focused && C.focus();
               var re = function() {
                 C.operation((function() {
                   for (var de = 0; de < Z.length; de++) Z[de].clear();
@@ -11789,14 +11790,14 @@ SELECT * WHERE {
         })(x(7));
       }, function(Ne, pe, x) {
       }, function(Ne, pe) {
-        function x(T, N) {
+        function x(T, L) {
           return Ne.exports = x = Object.setPrototypeOf || function(Y, B) {
             return Y.__proto__ = B, Y;
-          }, x(T, N);
+          }, x(T, L);
         }
         Ne.exports = x;
       }, function(Ne, pe, x) {
-        var T = (function(N) {
+        var T = (function(L) {
           var Y = Object.prototype, B = Y.hasOwnProperty, g = typeof Symbol == "function" ? Symbol : {}, W = g.iterator || "@@iterator", R = g.asyncIterator || "@@asyncIterator", H = g.toStringTag || "@@toStringTag";
           function fe(O, ce, X, be) {
             var qe = ce && ce.prototype instanceof ge ? ce : ge, ut = Object.create(qe.prototype), _t = new Ge(be || []);
@@ -11840,7 +11841,7 @@ SELECT * WHERE {
               return { type: "throw", arg: be };
             }
           }
-          N.wrap = fe;
+          L.wrap = fe;
           var Q = {};
           function ge() {
           }
@@ -11931,26 +11932,26 @@ SELECT * WHERE {
           function Te() {
             return { value: void 0, done: !0 };
           }
-          return K.prototype = U.constructor = Z, Z.constructor = K, Z[H] = K.displayName = "GeneratorFunction", N.isGeneratorFunction = function(O) {
+          return K.prototype = U.constructor = Z, Z.constructor = K, Z[H] = K.displayName = "GeneratorFunction", L.isGeneratorFunction = function(O) {
             var ce = typeof O == "function" && O.constructor;
             return !!ce && (ce === K || (ce.displayName || ce.name) === "GeneratorFunction");
-          }, N.mark = function(O) {
+          }, L.mark = function(O) {
             return Object.setPrototypeOf ? Object.setPrototypeOf(O, Z) : (O.__proto__ = Z, H in O || (O[H] = "GeneratorFunction")), O.prototype = Object.create(U), O;
-          }, N.awrap = function(O) {
+          }, L.awrap = function(O) {
             return { __await: O };
           }, re(de.prototype), de.prototype[R] = function() {
             return this;
-          }, N.AsyncIterator = de, N.async = function(O, ce, X, be, qe) {
+          }, L.AsyncIterator = de, L.async = function(O, ce, X, be, qe) {
             qe === void 0 && (qe = Promise);
             var ut = new de(fe(O, ce, X, be), qe);
-            return N.isGeneratorFunction(ce) ? ut : ut.next().then((function(_t) {
+            return L.isGeneratorFunction(ce) ? ut : ut.next().then((function(_t) {
               return _t.done ? _t.value : ut.next();
             }));
           }, re(U), U[H] = "Generator", U[W] = function() {
             return this;
           }, U.toString = function() {
             return "[object Generator]";
-          }, N.keys = function(O) {
+          }, L.keys = function(O) {
             var ce = [];
             for (var X in O) ce.push(X);
             return ce.reverse(), function be() {
@@ -11960,7 +11961,7 @@ SELECT * WHERE {
               }
               return be.done = !0, be;
             };
-          }, N.values = me, Ge.prototype = { constructor: Ge, reset: function(O) {
+          }, L.values = me, Ge.prototype = { constructor: Ge, reset: function(O) {
             if (this.prev = 0, this.next = 0, this.sent = this._sent = void 0, this.done = !1, this.delegate = null, this.method = "next", this.arg = void 0, this.tryEntries.forEach(ae), !O) for (var ce in this) ce.charAt(0) === "t" && B.call(this, ce) && !isNaN(+ce.slice(1)) && (this[ce] = void 0);
           }, stop: function() {
             this.done = !0;
@@ -12023,7 +12024,7 @@ SELECT * WHERE {
             throw new Error("illegal catch attempt");
           }, delegateYield: function(O, ce, X) {
             return this.delegate = { iterator: me(O), resultName: ce, nextLoc: X }, this.method === "next" && (this.arg = void 0), Q;
-          } }, N;
+          } }, L;
         })(Ne.exports);
         try {
           regeneratorRuntime = T;
@@ -12031,10 +12032,10 @@ SELECT * WHERE {
           Function("r", "regeneratorRuntime = r")(T);
         }
       }, function(Ne, pe, x) {
-        var T = x(107), N = x(108), Y = [x(115)];
-        Ne.exports = T.createStore(N, Y);
+        var T = x(107), L = x(108), Y = [x(115)];
+        Ne.exports = T.createStore(L, Y);
       }, function(Ne, pe, x) {
-        var T = x(40), N = T.slice, Y = T.pluck, B = T.each, g = T.bind, W = T.create, R = T.isList, H = T.isFunction, fe = T.isObject;
+        var T = x(40), L = T.slice, Y = T.pluck, B = T.each, g = T.bind, W = T.create, R = T.isList, H = T.isFunction, fe = T.isObject;
         Ne.exports = { createStore: Q };
         var C = { version: "2.0.12", enabled: !1, get: function(ge, K) {
           var Z = this.storage.read(this._namespacePrefix + ge);
@@ -12075,7 +12076,7 @@ SELECT * WHERE {
           }, _assignPluginFnProp: function(U, re) {
             var de = this[re];
             this[re] = function() {
-              var he = N(arguments, 0), p = this;
+              var he = L(arguments, 0), p = this;
               function ae() {
                 if (de) return B(arguments, (function(me, Te) {
                   he[Te] = me;
@@ -12134,42 +12135,42 @@ SELECT * WHERE {
         Ne.exports = [x(109), x(110), x(111), x(112), x(113), x(114)];
       }, function(Ne, pe, x) {
         var T = x(40).Global;
-        function N() {
+        function L() {
           return T.localStorage;
         }
         function Y(B) {
-          return N().getItem(B);
+          return L().getItem(B);
         }
         Ne.exports = { name: "localStorage", read: Y, write: function(B, g) {
-          return N().setItem(B, g);
+          return L().setItem(B, g);
         }, each: function(B) {
-          for (var g = N().length - 1; g >= 0; g--) {
-            var W = N().key(g);
+          for (var g = L().length - 1; g >= 0; g--) {
+            var W = L().key(g);
             B(Y(W), W);
           }
         }, remove: function(B) {
-          return N().removeItem(B);
+          return L().removeItem(B);
         }, clearAll: function() {
-          return N().clear();
+          return L().clear();
         } };
       }, function(Ne, pe, x) {
         var T = x(40).Global;
         Ne.exports = { name: "oldFF-globalStorage", read: function(B) {
-          return N[B];
+          return L[B];
         }, write: function(B, g) {
-          N[B] = g;
+          L[B] = g;
         }, each: Y, remove: function(B) {
-          return N.removeItem(B);
+          return L.removeItem(B);
         }, clearAll: function() {
           Y((function(B, g) {
-            delete N[B];
+            delete L[B];
           }));
         } };
-        var N = T.globalStorage;
+        var L = T.globalStorage;
         function Y(B) {
-          for (var g = N.length - 1; g >= 0; g--) {
-            var W = N.key(g);
-            B(N[W], W);
+          for (var g = L.length - 1; g >= 0; g--) {
+            var W = L.key(g);
+            B(L[W], W);
           }
         }
       }, function(Ne, pe, x) {
@@ -12208,13 +12209,13 @@ SELECT * WHERE {
             R.save("storejs");
           }));
         } };
-        var N = T.document, Y = (function() {
-          if (!N || !N.documentElement || !N.documentElement.addBehavior) return null;
+        var L = T.document, Y = (function() {
+          if (!L || !L.documentElement || !L.documentElement.addBehavior) return null;
           var R, H, fe;
           try {
             (H = new ActiveXObject("htmlfile")).open(), H.write('<script>document.w=window<\/script><iframe src="/favicon.ico"></iframe>'), H.close(), R = H.w.frames[0].document, fe = R.createElement("div");
           } catch {
-            fe = N.createElement("div"), R = N.body;
+            fe = L.createElement("div"), R = L.body;
           }
           return function(C) {
             var Q = [].slice.call(arguments, 0);
@@ -12225,7 +12226,7 @@ SELECT * WHERE {
           return R.replace(/^\d/, "___$&").replace(g, "___");
         }
       }, function(Ne, pe, x) {
-        var T = x(40), N = T.Global, Y = T.trim;
+        var T = x(40), L = T.Global, Y = T.trim;
         Ne.exports = { name: "cookieStorage", read: function(H) {
           if (!H || !R(H)) return null;
           var fe = "(?:^|.*;\\s*)" + escape(H).replace(/[\-\.\+\*]/g, "\\$&") + "\\s*\\=\\s*((?:[^;](?!;))*[^;]?).*";
@@ -12237,7 +12238,7 @@ SELECT * WHERE {
             W(fe);
           }));
         } };
-        var B = N.document;
+        var B = L.document;
         function g(H) {
           for (var fe = B.cookie.split(/; ?/g), C = fe.length - 1; C >= 0; C--) if (Y(fe[C])) {
             var Q = fe[C].split("="), ge = unescape(Q[0]);
@@ -12252,31 +12253,31 @@ SELECT * WHERE {
         }
       }, function(Ne, pe, x) {
         var T = x(40).Global;
-        function N() {
+        function L() {
           return T.sessionStorage;
         }
         function Y(B) {
-          return N().getItem(B);
+          return L().getItem(B);
         }
         Ne.exports = { name: "sessionStorage", read: Y, write: function(B, g) {
-          return N().setItem(B, g);
+          return L().setItem(B, g);
         }, each: function(B) {
-          for (var g = N().length - 1; g >= 0; g--) {
-            var W = N().key(g);
+          for (var g = L().length - 1; g >= 0; g--) {
+            var W = L().key(g);
             B(Y(W), W);
           }
         }, remove: function(B) {
-          return N().removeItem(B);
+          return L().removeItem(B);
         }, clearAll: function() {
-          return N().clear();
+          return L().clear();
         } };
       }, function(Ne, pe) {
         Ne.exports = { name: "memoryStorage", read: function(T) {
           return x[T];
-        }, write: function(T, N) {
-          x[T] = N;
+        }, write: function(T, L) {
+          x[T] = L;
         }, each: function(T) {
-          for (var N in x) x.hasOwnProperty(N) && T(x[N], N);
+          for (var L in x) x.hasOwnProperty(L) && T(x[L], L);
         }, remove: function(T) {
           delete x[T];
         }, clearAll: function(T) {
@@ -12303,7 +12304,7 @@ SELECT * WHERE {
             })) + '"' : '"' + Ne + '"';
           }
           function str(Ne, pe) {
-            var x, T, N, Y, B, g = gap, W = pe[Ne];
+            var x, T, L, Y, B, g = gap, W = pe[Ne];
             switch (W && typeof W == "object" && typeof W.toJSON == "function" && (W = W.toJSON(Ne)), typeof rep == "function" && (W = rep.call(pe, Ne, W)), typeof W) {
               case "string":
                 return quote(W);
@@ -12316,17 +12317,17 @@ SELECT * WHERE {
                 if (!W) return "null";
                 if (gap += indent, B = [], Object.prototype.toString.apply(W) === "[object Array]") {
                   for (Y = W.length, x = 0; x < Y; x += 1) B[x] = str(x, W) || "null";
-                  return N = B.length === 0 ? "[]" : gap ? `[
+                  return L = B.length === 0 ? "[]" : gap ? `[
 ` + gap + B.join(`,
 ` + gap) + `
-` + g + "]" : "[" + B.join(",") + "]", gap = g, N;
+` + g + "]" : "[" + B.join(",") + "]", gap = g, L;
                 }
-                if (rep && typeof rep == "object") for (Y = rep.length, x = 0; x < Y; x += 1) typeof rep[x] == "string" && (N = str(T = rep[x], W)) && B.push(quote(T) + (gap ? ": " : ":") + N);
-                else for (T in W) Object.prototype.hasOwnProperty.call(W, T) && (N = str(T, W)) && B.push(quote(T) + (gap ? ": " : ":") + N);
-                return N = B.length === 0 ? "{}" : gap ? `{
+                if (rep && typeof rep == "object") for (Y = rep.length, x = 0; x < Y; x += 1) typeof rep[x] == "string" && (L = str(T = rep[x], W)) && B.push(quote(T) + (gap ? ": " : ":") + L);
+                else for (T in W) Object.prototype.hasOwnProperty.call(W, T) && (L = str(T, W)) && B.push(quote(T) + (gap ? ": " : ":") + L);
+                return L = B.length === 0 ? "{}" : gap ? `{
 ` + gap + B.join(`,
 ` + gap) + `
-` + g + "}" : "{" + B.join(",") + "}", gap = g, N;
+` + g + "}" : "{" + B.join(",") + "}", gap = g, L;
             }
           }
           typeof Date.prototype.toJSON != "function" && (Date.prototype.toJSON = function() {
@@ -12340,9 +12341,9 @@ SELECT * WHERE {
           }), typeof JSON.parse != "function" && (JSON.parse = function(text, reviver) {
             var j;
             function walk(Ne, pe) {
-              var x, T, N = Ne[pe];
-              if (N && typeof N == "object") for (x in N) Object.prototype.hasOwnProperty.call(N, x) && ((T = walk(N, x)) !== void 0 ? N[x] = T : delete N[x]);
-              return reviver.call(Ne, pe, N);
+              var x, T, L = Ne[pe];
+              if (L && typeof L == "object") for (x in L) Object.prototype.hasOwnProperty.call(L, x) && ((T = walk(L, x)) !== void 0 ? L[x] = T : delete L[x]);
+              return reviver.call(Ne, pe, L);
             }
             if (text = String(text), rx_dangerous.lastIndex = 0, rx_dangerous.test(text) && (text = text.replace(rx_dangerous, (function(Ne) {
               return "\\u" + ("0000" + Ne.charCodeAt(0).toString(16)).slice(-4);
@@ -12357,7 +12358,7 @@ SELECT * WHERE {
       }, function(Ne, pe) {
         Ne.exports = function(x, T) {
           (T == null || T > x.length) && (T = x.length);
-          for (var N = 0, Y = new Array(T); N < T; N++) Y[N] = x[N];
+          for (var L = 0, Y = new Array(T); L < T; L++) Y[L] = x[L];
           return Y;
         };
       }, function(Ne, pe) {
@@ -12370,19 +12371,19 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
           if (typeof Symbol < "u" && Symbol.iterator in Object(x)) return Array.from(x);
         };
       }, function(Ne, pe, x) {
-        function T(N) {
+        function T(L) {
           return (T = typeof Symbol == "function" && typeof Symbol.iterator == "symbol" ? function(Y) {
             return typeof Y;
           } : function(Y) {
             return Y && typeof Symbol == "function" && Y.constructor === Symbol && Y !== Symbol.prototype ? "symbol" : typeof Y;
-          })(N);
+          })(L);
         }
-        Ne.exports = function(N) {
-          return N !== null && T(N) === "object";
+        Ne.exports = function(L) {
+          return L !== null && T(L) === "object";
         };
       }, function(Ne, pe, x) {
         (function(T) {
-          var N, Y, B = T.Pos;
+          var L, Y, B = T.Pos;
           function g(b, w) {
             for (var U = (function(he) {
               var p = he.flags;
@@ -12468,7 +12469,7 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
           }
           function K(b, w, U, re) {
             if (!w.length) return null;
-            var de = re ? N : Y, he = de(w).split(/\r|\n\r?/);
+            var de = re ? L : Y, he = de(w).split(/\r|\n\r?/);
             e: for (var p = U.line, ae = U.ch, Ge = b.lastLine() + 1 - he.length; p <= Ge; p++, ae = 0) {
               var me = b.getLine(p).slice(ae), Te = de(me);
               if (he.length == 1) {
@@ -12486,7 +12487,7 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
           }
           function Z(b, w, U, re) {
             if (!w.length) return null;
-            var de = re ? N : Y, he = de(w).split(/\r|\n\r?/);
+            var de = re ? L : Y, he = de(w).split(/\r|\n\r?/);
             e: for (var p = U.line, ae = U.ch, Ge = b.firstLine() - 1 + he.length; p >= Ge; p--, ae = -1) {
               var me = b.getLine(p);
               ae > -1 && (me = me.slice(0, ae));
@@ -12515,11 +12516,11 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
               return (he ? Q : H)(b, w, p);
             });
           }
-          String.prototype.normalize ? (N = function(b) {
+          String.prototype.normalize ? (L = function(b) {
             return b.normalize("NFD").toLowerCase();
           }, Y = function(b) {
             return b.normalize("NFD");
-          }) : (N = function(b) {
+          }) : (L = function(b) {
             return b.toLowerCase();
           }, Y = function(b) {
             return b;
@@ -12555,14 +12556,14 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
           x.d(pe, "a", (function() {
             return ge;
           }));
-          var N = x(23), Y = x(124), B = x.n(Y);
+          var L = x(23), Y = x(124), B = x.n(Y);
           function g(K, Z) {
             for (var te = 0; te < Z.length; te++) {
               var b = Z[te];
               b.enumerable = b.enumerable || !1, b.configurable = !0, "value" in b && (b.writable = !0), Object.defineProperty(K, b.key, b);
             }
           }
-          var W = N.a.xsd, R = /\\u([a-fA-F0-9]{4})|\\U([a-fA-F0-9]{8})|\\([^])/g, H = { "\\": "\\", "'": "'", '"': '"', n: `
+          var W = L.a.xsd, R = /\\u([a-fA-F0-9]{4})|\\U([a-fA-F0-9]{8})|\\([^])/g, H = { "\\": "\\", "'": "'", '"': '"', n: `
 `, r: "\r", t: "	", f: "\f", b: "\b", _: "_", "~": "~", ".": ".", "-": "-", "!": "!", $: "$", "&": "&", "(": "(", ")": ")", "*": "*", "+": "+", ",": ",", ";": ";", "=": "=", "/": "/", "?": "?", "#": "#", "@": "@", "%": "%" }, fe = /[\x00-\x20<>\\"\{\}\|\^\`]/, C = { _iri: !0, _unescapedIri: !0, _simpleQuotedString: !0, _langcode: !0, _blank: !0, _newline: !0, _comment: !0, _whitespace: !0, _endOfFile: !0 }, Q = /$0^/, ge = (function() {
             function K(b) {
               if ((function(U, re) {
@@ -12742,12 +12743,12 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
         }).call(this, x(132).Buffer);
       }, function(Ne, pe) {
         let x;
-        Ne.exports = typeof queueMicrotask == "function" ? queueMicrotask : (T) => (x || (x = Promise.resolve())).then(T).catch((N) => setTimeout(() => {
-          throw N;
+        Ne.exports = typeof queueMicrotask == "function" ? queueMicrotask : (T) => (x || (x = Promise.resolve())).then(T).catch((L) => setTimeout(() => {
+          throw L;
         }, 0));
       }, function(Ne, pe, x) {
-        var T, N, Y;
-        N = [], (Y = typeof (T = function B() {
+        var T, L, Y;
+        L = [], (Y = typeof (T = function B() {
           var g = typeof self < "u" ? self : typeof window < "u" ? window : g !== void 0 ? g : {}, W = !g.document && !!g.postMessage, R = W && /blob:/i.test((g.location || {}).protocol), H = {}, fe = 0, C = { parse: function(Te, O) {
             var ce = (O = O || {}).dynamicTyping || !1;
             if (me(ce) && (O.dynamicTypingFunction = ce, ce = {}), O.dynamicTyping = ce, O.transform = !!me(O.transform) && O.transform, O.worker && C.WORKERS_SUPPORTED) {
@@ -13207,15 +13208,15 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
               ce && g.postMessage({ workerId: C.WORKER_ID, results: ce, finished: !0 });
             }
           }), (K.prototype = Object.create(ge.prototype)).constructor = K, (Z.prototype = Object.create(ge.prototype)).constructor = Z, (te.prototype = Object.create(te.prototype)).constructor = te, (b.prototype = Object.create(ge.prototype)).constructor = b, C;
-        }) == "function" ? T.apply(pe, N) : T) === void 0 || (Ne.exports = Y);
+        }) == "function" ? T.apply(pe, L) : T) === void 0 || (Ne.exports = Y);
       }, function(Ne, pe, x) {
-        var T = x(117), N = x(120), Y = x(94), B = x(119);
+        var T = x(117), L = x(120), Y = x(94), B = x(119);
         Ne.exports = function(g) {
-          return T(g) || N(g) || Y(g) || B();
+          return T(g) || L(g) || Y(g) || B();
         };
       }, function(Ne, pe, x) {
         (function(T) {
-          (function(N) {
+          (function(L) {
             function Y() {
             }
             function B() {
@@ -14770,15 +14771,15 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
             }
             function y(s, l) {
               if (typeof l != "function" && l !== null) throw new TypeError("Super expression must either be null or a function");
-              s.prototype = Object.create(l && l.prototype, { constructor: { value: s, writable: !0, configurable: !0 } }), l && L(s, l);
+              s.prototype = Object.create(l && l.prototype, { constructor: { value: s, writable: !0, configurable: !0 } }), l && N(s, l);
             }
             function _(s) {
               return (_ = Object.setPrototypeOf ? Object.getPrototypeOf : function(l) {
                 return l.__proto__ || Object.getPrototypeOf(l);
               })(s);
             }
-            function L(s, l) {
-              return (L = Object.setPrototypeOf || function(h, F) {
+            function N(s, l) {
+              return (N = Object.setPrototypeOf || function(h, F) {
                 return h.__proto__ = F, h;
               })(s, l);
             }
@@ -15414,28 +15415,28 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
                 return Promise.reject(se);
               }
             }, gi = { flatten: bi, unwind: Qi }, Oi = { Parser: Do, AsyncParser: la, Transform: ua, parse: ca, parseAsync: ki, transforms: gi };
-            N.AsyncParser = la, N.Parser = Do, N.Transform = ua, N.default = Oi, N.parse = ca, N.parseAsync = ki, N.transforms = gi, Object.defineProperty(N, "__esModule", { value: !0 });
+            L.AsyncParser = la, L.Parser = Do, L.Transform = ua, L.default = Oi, L.parse = ca, L.parseAsync = ki, L.transforms = gi, Object.defineProperty(L, "__esModule", { value: !0 });
           })(pe);
         }).call(this, x(72));
       }, function(Ne, pe, x) {
         Object.defineProperty(pe, "__esModule", { value: !0 });
-        var T = [], N = "M216 0h80c13.3 0 24 10.7 24 24v168h87.7c17.8 0 26.7 21.5 14.1 34.1L269.7 378.3c-7.5 7.5-19.8 7.5-27.3 0L90.1 226.1c-12.6-12.6-3.7-34.1 14.1-34.1H192V24c0-13.3 10.7-24 24-24zm296 376v112c0 13.3-10.7 24-24 24H24c-13.3 0-24-10.7-24-24V376c0-13.3 10.7-24 24-24h146.7l49 49c20.1 20.1 52.5 20.1 72.6 0l49-49H488c13.3 0 24 10.7 24 24zm-124 88c0-11-9-20-20-20s-20 9-20 20 9 20 20 20 20-9 20-20zm64 0c0-11-9-20-20-20s-20 9-20 20 9 20 20 20 20-9 20-20z";
-        pe.definition = { prefix: "fas", iconName: "download", icon: [512, 512, T, "f019", N] }, pe.faDownload = pe.definition, pe.prefix = "fas", pe.iconName = "download", pe.width = 512, pe.height = 512, pe.ligatures = T, pe.unicode = "f019", pe.svgPathData = N;
+        var T = [], L = "M216 0h80c13.3 0 24 10.7 24 24v168h87.7c17.8 0 26.7 21.5 14.1 34.1L269.7 378.3c-7.5 7.5-19.8 7.5-27.3 0L90.1 226.1c-12.6-12.6-3.7-34.1 14.1-34.1H192V24c0-13.3 10.7-24 24-24zm296 376v112c0 13.3-10.7 24-24 24H24c-13.3 0-24-10.7-24-24V376c0-13.3 10.7-24 24-24h146.7l49 49c20.1 20.1 52.5 20.1 72.6 0l49-49H488c13.3 0 24 10.7 24 24zm-124 88c0-11-9-20-20-20s-20 9-20 20 9 20 20 20 20-9 20-20zm64 0c0-11-9-20-20-20s-20 9-20 20 9 20 20 20 20-9 20-20z";
+        pe.definition = { prefix: "fas", iconName: "download", icon: [512, 512, T, "f019", L] }, pe.faDownload = pe.definition, pe.prefix = "fas", pe.iconName = "download", pe.width = 512, pe.height = 512, pe.ligatures = T, pe.unicode = "f019", pe.svgPathData = L;
       }, function(Ne, pe, x) {
         Object.defineProperty(pe, "__esModule", { value: !0 });
-        var T = [], N = "M504 256c0 136.997-111.043 248-248 248S8 392.997 8 256C8 119.083 119.043 8 256 8s248 111.083 248 248zM262.655 90c-54.497 0-89.255 22.957-116.549 63.758-3.536 5.286-2.353 12.415 2.715 16.258l34.699 26.31c5.205 3.947 12.621 3.008 16.665-2.122 17.864-22.658 30.113-35.797 57.303-35.797 20.429 0 45.698 13.148 45.698 32.958 0 14.976-12.363 22.667-32.534 33.976C247.128 238.528 216 254.941 216 296v4c0 6.627 5.373 12 12 12h56c6.627 0 12-5.373 12-12v-1.333c0-28.462 83.186-29.647 83.186-106.667 0-58.002-60.165-102-116.531-102zM256 338c-25.365 0-46 20.635-46 46 0 25.364 20.635 46 46 46s46-20.636 46-46c0-25.365-20.635-46-46-46z";
-        pe.definition = { prefix: "fas", iconName: "question-circle", icon: [512, 512, T, "f059", N] }, pe.faQuestionCircle = pe.definition, pe.prefix = "fas", pe.iconName = "question-circle", pe.width = 512, pe.height = 512, pe.ligatures = T, pe.unicode = "f059", pe.svgPathData = N;
+        var T = [], L = "M504 256c0 136.997-111.043 248-248 248S8 392.997 8 256C8 119.083 119.043 8 256 8s248 111.083 248 248zM262.655 90c-54.497 0-89.255 22.957-116.549 63.758-3.536 5.286-2.353 12.415 2.715 16.258l34.699 26.31c5.205 3.947 12.621 3.008 16.665-2.122 17.864-22.658 30.113-35.797 57.303-35.797 20.429 0 45.698 13.148 45.698 32.958 0 14.976-12.363 22.667-32.534 33.976C247.128 238.528 216 254.941 216 296v4c0 6.627 5.373 12 12 12h56c6.627 0 12-5.373 12-12v-1.333c0-28.462 83.186-29.647 83.186-106.667 0-58.002-60.165-102-116.531-102zM256 338c-25.365 0-46 20.635-46 46 0 25.364 20.635 46 46 46s46-20.636 46-46c0-25.365-20.635-46-46-46z";
+        pe.definition = { prefix: "fas", iconName: "question-circle", icon: [512, 512, T, "f059", L] }, pe.faQuestionCircle = pe.definition, pe.prefix = "fas", pe.iconName = "question-circle", pe.width = 512, pe.height = 512, pe.ligatures = T, pe.unicode = "f059", pe.svgPathData = L;
       }, function(Ne, pe, x) {
         Object.defineProperty(pe, "__esModule", { value: !0 });
-        var T = [], N = "M464 32H48C21.49 32 0 53.49 0 80v352c0 26.51 21.49 48 48 48h416c26.51 0 48-21.49 48-48V80c0-26.51-21.49-48-48-48zM224 416H64v-96h160v96zm0-160H64v-96h160v96zm224 160H288v-96h160v96zm0-160H288v-96h160v96z";
-        pe.definition = { prefix: "fas", iconName: "table", icon: [512, 512, T, "f0ce", N] }, pe.faTable = pe.definition, pe.prefix = "fas", pe.iconName = "table", pe.width = 512, pe.height = 512, pe.ligatures = T, pe.unicode = "f0ce", pe.svgPathData = N;
+        var T = [], L = "M464 32H48C21.49 32 0 53.49 0 80v352c0 26.51 21.49 48 48 48h416c26.51 0 48-21.49 48-48V80c0-26.51-21.49-48-48-48zM224 416H64v-96h160v96zm0-160H64v-96h160v96zm224 160H288v-96h160v96zm0-160H288v-96h160v96z";
+        pe.definition = { prefix: "fas", iconName: "table", icon: [512, 512, T, "f0ce", L] }, pe.faTable = pe.definition, pe.prefix = "fas", pe.iconName = "table", pe.width = 512, pe.height = 512, pe.ligatures = T, pe.unicode = "f0ce", pe.svgPathData = L;
       }, function(Ne, pe, x) {
         Object.defineProperty(pe, "__esModule", { value: !0 });
-        var T = [], N = "M12.83 352h262.34A12.82 12.82 0 0 0 288 339.17v-38.34A12.82 12.82 0 0 0 275.17 288H12.83A12.82 12.82 0 0 0 0 300.83v38.34A12.82 12.82 0 0 0 12.83 352zm0-256h262.34A12.82 12.82 0 0 0 288 83.17V44.83A12.82 12.82 0 0 0 275.17 32H12.83A12.82 12.82 0 0 0 0 44.83v38.34A12.82 12.82 0 0 0 12.83 96zM432 160H16a16 16 0 0 0-16 16v32a16 16 0 0 0 16 16h416a16 16 0 0 0 16-16v-32a16 16 0 0 0-16-16zm0 256H16a16 16 0 0 0-16 16v32a16 16 0 0 0 16 16h416a16 16 0 0 0 16-16v-32a16 16 0 0 0-16-16z";
-        pe.definition = { prefix: "fas", iconName: "align-left", icon: [448, 512, T, "f036", N] }, pe.faAlignLeft = pe.definition, pe.prefix = "fas", pe.iconName = "align-left", pe.width = 448, pe.height = 512, pe.ligatures = T, pe.unicode = "f036", pe.svgPathData = N;
+        var T = [], L = "M12.83 352h262.34A12.82 12.82 0 0 0 288 339.17v-38.34A12.82 12.82 0 0 0 275.17 288H12.83A12.82 12.82 0 0 0 0 300.83v38.34A12.82 12.82 0 0 0 12.83 352zm0-256h262.34A12.82 12.82 0 0 0 288 83.17V44.83A12.82 12.82 0 0 0 275.17 32H12.83A12.82 12.82 0 0 0 0 44.83v38.34A12.82 12.82 0 0 0 12.83 96zM432 160H16a16 16 0 0 0-16 16v32a16 16 0 0 0 16 16h416a16 16 0 0 0 16-16v-32a16 16 0 0 0-16-16zm0 256H16a16 16 0 0 0-16 16v32a16 16 0 0 0 16 16h416a16 16 0 0 0 16-16v-32a16 16 0 0 0-16-16z";
+        pe.definition = { prefix: "fas", iconName: "align-left", icon: [448, 512, T, "f036", L] }, pe.faAlignLeft = pe.definition, pe.prefix = "fas", pe.iconName = "align-left", pe.width = 448, pe.height = 512, pe.ligatures = T, pe.unicode = "f036", pe.svgPathData = L;
       }, function(Ne, pe, x) {
         (function(T) {
-          var N = x(133), Y = x(134), B = x(135);
+          var L = x(133), Y = x(134), B = x(135);
           function g() {
             return R.TYPED_ARRAY_SUPPORT ? 2147483647 : 1073741823;
           }
@@ -15623,7 +15624,7 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
             })(G, I.length - ne), I, ne, Le);
           }
           function Ge(I, G, ne) {
-            return G === 0 && ne === I.length ? N.fromByteArray(I) : N.fromByteArray(I.slice(G, ne));
+            return G === 0 && ne === I.length ? L.fromByteArray(I) : L.fromByteArray(I.slice(G, ne));
           }
           function me(I, G, ne) {
             ne = Math.min(I.length, ne);
@@ -16025,7 +16026,7 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
             return Re;
           }
           function Qe(I) {
-            return N.toByteArray((function(G) {
+            return L.toByteArray((function(G) {
               if ((G = (function(ne) {
                 return ne.trim ? ne.trim() : ne.replace(/^\s+|\s+$/g, "");
               })(G).replace(mt, "")).length < 2) return "";
@@ -16046,13 +16047,13 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
           var C, Q, ge = R(fe), K = ge[0], Z = ge[1], te = new Y((function(U, re, de) {
             return 3 * (re + de) / 4 - de;
           })(0, K, Z)), b = 0, w = Z > 0 ? K - 4 : K;
-          for (Q = 0; Q < w; Q += 4) C = N[fe.charCodeAt(Q)] << 18 | N[fe.charCodeAt(Q + 1)] << 12 | N[fe.charCodeAt(Q + 2)] << 6 | N[fe.charCodeAt(Q + 3)], te[b++] = C >> 16 & 255, te[b++] = C >> 8 & 255, te[b++] = 255 & C;
-          return Z === 2 && (C = N[fe.charCodeAt(Q)] << 2 | N[fe.charCodeAt(Q + 1)] >> 4, te[b++] = 255 & C), Z === 1 && (C = N[fe.charCodeAt(Q)] << 10 | N[fe.charCodeAt(Q + 1)] << 4 | N[fe.charCodeAt(Q + 2)] >> 2, te[b++] = C >> 8 & 255, te[b++] = 255 & C), te;
+          for (Q = 0; Q < w; Q += 4) C = L[fe.charCodeAt(Q)] << 18 | L[fe.charCodeAt(Q + 1)] << 12 | L[fe.charCodeAt(Q + 2)] << 6 | L[fe.charCodeAt(Q + 3)], te[b++] = C >> 16 & 255, te[b++] = C >> 8 & 255, te[b++] = 255 & C;
+          return Z === 2 && (C = L[fe.charCodeAt(Q)] << 2 | L[fe.charCodeAt(Q + 1)] >> 4, te[b++] = 255 & C), Z === 1 && (C = L[fe.charCodeAt(Q)] << 10 | L[fe.charCodeAt(Q + 1)] << 4 | L[fe.charCodeAt(Q + 2)] >> 2, te[b++] = C >> 8 & 255, te[b++] = 255 & C), te;
         }, pe.fromByteArray = function(fe) {
           for (var C, Q = fe.length, ge = Q % 3, K = [], Z = 0, te = Q - ge; Z < te; Z += 16383) K.push(H(fe, Z, Z + 16383 > te ? te : Z + 16383));
           return ge === 1 ? (C = fe[Q - 1], K.push(T[C >> 2] + T[C << 4 & 63] + "==")) : ge === 2 && (C = (fe[Q - 2] << 8) + fe[Q - 1], K.push(T[C >> 10] + T[C >> 4 & 63] + T[C << 2 & 63] + "=")), K.join("");
         };
-        for (var T = [], N = [], Y = typeof Uint8Array < "u" ? Uint8Array : Array, B = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/", g = 0, W = B.length; g < W; ++g) T[g] = B[g], N[B.charCodeAt(g)] = g;
+        for (var T = [], L = [], Y = typeof Uint8Array < "u" ? Uint8Array : Array, B = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/", g = 0, W = B.length; g < W; ++g) T[g] = B[g], L[B.charCodeAt(g)] = g;
         function R(fe) {
           var C = fe.length;
           if (C % 4 > 0) throw new Error("Invalid string. Length must be a multiple of 4");
@@ -16063,10 +16064,10 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
           for (var ge, K, Z = [], te = C; te < Q; te += 3) ge = (fe[te] << 16 & 16711680) + (fe[te + 1] << 8 & 65280) + (255 & fe[te + 2]), Z.push(T[(K = ge) >> 18 & 63] + T[K >> 12 & 63] + T[K >> 6 & 63] + T[63 & K]);
           return Z.join("");
         }
-        N[45] = 62, N[95] = 63;
+        L[45] = 62, L[95] = 63;
       }, function(Ne, pe) {
-        pe.read = function(x, T, N, Y, B) {
-          var g, W, R = 8 * B - Y - 1, H = (1 << R) - 1, fe = H >> 1, C = -7, Q = N ? B - 1 : 0, ge = N ? -1 : 1, K = x[T + Q];
+        pe.read = function(x, T, L, Y, B) {
+          var g, W, R = 8 * B - Y - 1, H = (1 << R) - 1, fe = H >> 1, C = -7, Q = L ? B - 1 : 0, ge = L ? -1 : 1, K = x[T + Q];
           for (Q += ge, g = K & (1 << -C) - 1, K >>= -C, C += R; C > 0; g = 256 * g + x[T + Q], Q += ge, C -= 8) ;
           for (W = g & (1 << -C) - 1, g >>= -C, C += Y; C > 0; W = 256 * W + x[T + Q], Q += ge, C -= 8) ;
           if (g === 0) g = 1 - fe;
@@ -16075,11 +16076,11 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
             W += Math.pow(2, Y), g -= fe;
           }
           return (K ? -1 : 1) * W * Math.pow(2, g - Y);
-        }, pe.write = function(x, T, N, Y, B, g) {
+        }, pe.write = function(x, T, L, Y, B, g) {
           var W, R, H, fe = 8 * g - B - 1, C = (1 << fe) - 1, Q = C >> 1, ge = B === 23 ? Math.pow(2, -24) - Math.pow(2, -77) : 0, K = Y ? 0 : g - 1, Z = Y ? 1 : -1, te = T < 0 || T === 0 && 1 / T < 0 ? 1 : 0;
-          for (T = Math.abs(T), isNaN(T) || T === 1 / 0 ? (R = isNaN(T) ? 1 : 0, W = C) : (W = Math.floor(Math.log(T) / Math.LN2), T * (H = Math.pow(2, -W)) < 1 && (W--, H *= 2), (T += W + Q >= 1 ? ge / H : ge * Math.pow(2, 1 - Q)) * H >= 2 && (W++, H /= 2), W + Q >= C ? (R = 0, W = C) : W + Q >= 1 ? (R = (T * H - 1) * Math.pow(2, B), W += Q) : (R = T * Math.pow(2, Q - 1) * Math.pow(2, B), W = 0)); B >= 8; x[N + K] = 255 & R, K += Z, R /= 256, B -= 8) ;
-          for (W = W << B | R, fe += B; fe > 0; x[N + K] = 255 & W, K += Z, W /= 256, fe -= 8) ;
-          x[N + K - Z] |= 128 * te;
+          for (T = Math.abs(T), isNaN(T) || T === 1 / 0 ? (R = isNaN(T) ? 1 : 0, W = C) : (W = Math.floor(Math.log(T) / Math.LN2), T * (H = Math.pow(2, -W)) < 1 && (W--, H *= 2), (T += W + Q >= 1 ? ge / H : ge * Math.pow(2, 1 - Q)) * H >= 2 && (W++, H /= 2), W + Q >= C ? (R = 0, W = C) : W + Q >= 1 ? (R = (T * H - 1) * Math.pow(2, B), W += Q) : (R = T * Math.pow(2, Q - 1) * Math.pow(2, B), W = 0)); B >= 8; x[L + K] = 255 & R, K += Z, R /= 256, B -= 8) ;
+          for (W = W << B | R, fe += B; fe > 0; x[L + K] = 255 & W, K += Z, W /= 256, fe -= 8) ;
+          x[L + K - Z] |= 128 * te;
         };
       }, function(Ne, pe) {
         var x = {}.toString;
@@ -16089,9 +16090,9 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
       }, function(Ne, pe) {
         Ne.exports = function(x, T) {
           if (typeof Symbol < "u" && Symbol.iterator in Object(x)) {
-            var N = [], Y = !0, B = !1, g = void 0;
+            var L = [], Y = !0, B = !1, g = void 0;
             try {
-              for (var W, R = x[Symbol.iterator](); !(Y = (W = R.next()).done) && (N.push(W.value), !T || N.length !== T); Y = !0) ;
+              for (var W, R = x[Symbol.iterator](); !(Y = (W = R.next()).done) && (L.push(W.value), !T || L.length !== T); Y = !0) ;
             } catch (H) {
               B = !0, g = H;
             } finally {
@@ -16101,14 +16102,14 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
                 if (B) throw g;
               }
             }
-            return N;
+            return L;
           }
         };
       }, function(Ne, pe, x) {
       }, function(Ne, pe, x) {
         var T = x(118);
-        Ne.exports = function(N) {
-          if (Array.isArray(N)) return T(N);
+        Ne.exports = function(L) {
+          if (Array.isArray(L)) return T(L);
         };
       }, function(Ne, pe) {
         Ne.exports = function() {
@@ -16118,84 +16119,84 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
       }, function(Ne, pe, x) {
       }, function(Ne, pe, x) {
       }, function(Ne, pe, x) {
-        var T, N;
+        var T, L;
         (function(Y) {
-          T = [x(95)], (N = function(B) {
+          T = [x(95)], (L = function(B) {
             return (function(g, W, R, H) {
               var fe, C, Q, ge, K = function(r) {
-                this.$ = function(L, k) {
-                  return this.api(!0).$(L, k);
-                }, this._ = function(L, k) {
-                  return this.api(!0).rows(L, k).data();
-                }, this.api = function(L) {
-                  return new C(L ? ve(this[fe.iApiIndex]) : this);
-                }, this.fnAddData = function(L, k) {
-                  var $ = this.api(!0), ue = Array.isArray(L) && (Array.isArray(L[0]) || g.isPlainObject(L[0])) ? $.rows.add(L) : $.row.add(L);
+                this.$ = function(N, k) {
+                  return this.api(!0).$(N, k);
+                }, this._ = function(N, k) {
+                  return this.api(!0).rows(N, k).data();
+                }, this.api = function(N) {
+                  return new C(N ? ve(this[fe.iApiIndex]) : this);
+                }, this.fnAddData = function(N, k) {
+                  var $ = this.api(!0), ue = Array.isArray(N) && (Array.isArray(N[0]) || g.isPlainObject(N[0])) ? $.rows.add(N) : $.row.add(N);
                   return (k === H || k) && $.draw(), ue.flatten().toArray();
-                }, this.fnAdjustColumnSizing = function(L) {
+                }, this.fnAdjustColumnSizing = function(N) {
                   var k = this.api(!0).columns.adjust(), $ = k.settings()[0], ue = $.oScroll;
-                  L === H || L ? k.draw(!1) : ue.sX === "" && ue.sY === "" || Sn($);
-                }, this.fnClearTable = function(L) {
+                  N === H || N ? k.draw(!1) : ue.sX === "" && ue.sY === "" || Sn($);
+                }, this.fnClearTable = function(N) {
                   var k = this.api(!0).clear();
-                  (L === H || L) && k.draw();
-                }, this.fnClose = function(L) {
-                  this.api(!0).row(L).child.hide();
-                }, this.fnDeleteRow = function(L, k, $) {
-                  var ue = this.api(!0), Fe = ue.rows(L), Ce = Fe.settings()[0], n = Ce.aoData[Fe[0][0]];
+                  (N === H || N) && k.draw();
+                }, this.fnClose = function(N) {
+                  this.api(!0).row(N).child.hide();
+                }, this.fnDeleteRow = function(N, k, $) {
+                  var ue = this.api(!0), Fe = ue.rows(N), Ce = Fe.settings()[0], n = Ce.aoData[Fe[0][0]];
                   return Fe.remove(), k && k.call(this, Ce, n), ($ === H || $) && ue.draw(), n;
-                }, this.fnDestroy = function(L) {
-                  this.api(!0).destroy(L);
-                }, this.fnDraw = function(L) {
-                  this.api(!0).draw(L);
-                }, this.fnFilter = function(L, k, $, ue, Fe, Ce) {
+                }, this.fnDestroy = function(N) {
+                  this.api(!0).destroy(N);
+                }, this.fnDraw = function(N) {
+                  this.api(!0).draw(N);
+                }, this.fnFilter = function(N, k, $, ue, Fe, Ce) {
                   var n = this.api(!0);
-                  k === null || k === H ? n.search(L, $, ue, Ce) : n.column(k).search(L, $, ue, Ce), n.draw();
-                }, this.fnGetData = function(L, k) {
+                  k === null || k === H ? n.search(N, $, ue, Ce) : n.column(k).search(N, $, ue, Ce), n.draw();
+                }, this.fnGetData = function(N, k) {
                   var $ = this.api(!0);
-                  if (L !== H) {
-                    var ue = L.nodeName ? L.nodeName.toLowerCase() : "";
-                    return k !== H || ue == "td" || ue == "th" ? $.cell(L, k).data() : $.row(L).data() || null;
+                  if (N !== H) {
+                    var ue = N.nodeName ? N.nodeName.toLowerCase() : "";
+                    return k !== H || ue == "td" || ue == "th" ? $.cell(N, k).data() : $.row(N).data() || null;
                   }
                   return $.data().toArray();
-                }, this.fnGetNodes = function(L) {
+                }, this.fnGetNodes = function(N) {
                   var k = this.api(!0);
-                  return L !== H ? k.row(L).node() : k.rows().nodes().flatten().toArray();
-                }, this.fnGetPosition = function(L) {
-                  var k = this.api(!0), $ = L.nodeName.toUpperCase();
-                  if ($ == "TR") return k.row(L).index();
+                  return N !== H ? k.row(N).node() : k.rows().nodes().flatten().toArray();
+                }, this.fnGetPosition = function(N) {
+                  var k = this.api(!0), $ = N.nodeName.toUpperCase();
+                  if ($ == "TR") return k.row(N).index();
                   if ($ == "TD" || $ == "TH") {
-                    var ue = k.cell(L).index();
+                    var ue = k.cell(N).index();
                     return [ue.row, ue.columnVisible, ue.column];
                   }
                   return null;
-                }, this.fnIsOpen = function(L) {
-                  return this.api(!0).row(L).child.isShown();
-                }, this.fnOpen = function(L, k, $) {
-                  return this.api(!0).row(L).child(k, $).show().child()[0];
-                }, this.fnPageChange = function(L, k) {
-                  var $ = this.api(!0).page(L);
+                }, this.fnIsOpen = function(N) {
+                  return this.api(!0).row(N).child.isShown();
+                }, this.fnOpen = function(N, k, $) {
+                  return this.api(!0).row(N).child(k, $).show().child()[0];
+                }, this.fnPageChange = function(N, k) {
+                  var $ = this.api(!0).page(N);
                   (k === H || k) && $.draw(!1);
-                }, this.fnSetColumnVis = function(L, k, $) {
-                  var ue = this.api(!0).column(L).visible(k);
+                }, this.fnSetColumnVis = function(N, k, $) {
+                  var ue = this.api(!0).column(N).visible(k);
                   ($ === H || $) && ue.columns.adjust().draw();
                 }, this.fnSettings = function() {
                   return ve(this[fe.iApiIndex]);
-                }, this.fnSort = function(L) {
-                  this.api(!0).order(L).draw();
-                }, this.fnSortListener = function(L, k, $) {
-                  this.api(!0).order.listener(L, k, $);
-                }, this.fnUpdate = function(L, k, $, ue, Fe) {
+                }, this.fnSort = function(N) {
+                  this.api(!0).order(N).draw();
+                }, this.fnSortListener = function(N, k, $) {
+                  this.api(!0).order.listener(N, k, $);
+                }, this.fnUpdate = function(N, k, $, ue, Fe) {
                   var Ce = this.api(!0);
-                  return $ === H || $ === null ? Ce.row(k).data(L) : Ce.cell(k, $).data(L), (Fe === H || Fe) && Ce.columns.adjust(), (ue === H || ue) && Ce.draw(), 0;
+                  return $ === H || $ === null ? Ce.row(k).data(N) : Ce.cell(k, $).data(N), (Fe === H || Fe) && Ce.columns.adjust(), (ue === H || ue) && Ce.draw(), 0;
                 }, this.fnVersionCheck = fe.fnVersionCheck;
                 var u = this, v = r === H, y = this.length;
                 for (var _ in v && (r = {}), this.oApi = this.internal = fe.internal, K.ext.internal) _ && (this[_] = lt(_));
                 return this.each((function() {
-                  var L, k = y > 1 ? D({}, r, !0) : r, $ = 0, ue = this.getAttribute("id"), Fe = !1, Ce = K.defaults, n = g(this);
+                  var N, k = y > 1 ? D({}, r, !0) : r, $ = 0, ue = this.getAttribute("id"), Fe = !1, Ce = K.defaults, n = g(this);
                   if (this.nodeName.toLowerCase() == "table") {
                     Je(Ce), mt(Ce.column), _t(Ce, Ce, !0), _t(Ce.column, Ce.column, !0), _t(Ce, g.extend(k, n.data()), !0);
                     var c = K.settings;
-                    for ($ = 0, L = c.length; $ < L; $++) {
+                    for ($ = 0, N = c.length; $ < N; $++) {
                       var m = c[$];
                       if (m.nTable == this || m.nTHead && m.nTHead.parentNode == this || m.nTFoot && m.nTFoot.parentNode == this) {
                         var E = k.bRetrieve !== H ? k.bRetrieve : Ce.bRetrieve, M = k.bDestroy !== H ? k.bDestroy : Ce.bDestroy;
@@ -16231,9 +16232,9 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
                       return ot.hasClass(hr);
                     }))) !== -1 && (g("tbody tr", this).removeClass(Ue.join(" ")), P.asDestroyStripes = Ue.slice());
                     var Tt, at = [], gt = this.getElementsByTagName("thead");
-                    if (gt.length !== 0 && (an(P.aoHeader, gt[0]), at = Cr(P)), k.aoColumns === null) for (Tt = [], $ = 0, L = at.length; $ < L; $++) Tt.push(null);
+                    if (gt.length !== 0 && (an(P.aoHeader, gt[0]), at = Cr(P)), k.aoColumns === null) for (Tt = [], $ = 0, N = at.length; $ < N; $++) Tt.push(null);
                     else Tt = k.aoColumns;
-                    for ($ = 0, L = Tt.length; $ < L; $++) Qe(P, at ? at[$] : null);
+                    for ($ = 0, N = Tt.length; $ < N; $++) Qe(P, at ? at[$] : null);
                     if (ze(P, k.aoColumnDefs, Tt, (function(hr, zr) {
                       Dt(P, hr, zr);
                     })), ot.length) {
@@ -16251,7 +16252,7 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
                     var ar = P.oFeatures, nr = function() {
                       if (k.aaSorting === H) {
                         var hr = P.aaSorting;
-                        for ($ = 0, L = hr.length; $ < L; $++) hr[$][1] = P.aoColumns[$].asSorting[0];
+                        for ($ = 0, N = hr.length; $ < N; $++) hr[$][1] = P.aoColumns[$].asSorting[0];
                       }
                       sr(P), ar.bSort && Be(P, "aoDrawCallback", (function() {
                         if (P.bSorted) {
@@ -16292,14 +16293,14 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
                   return de(y) || typeof y == "string";
                 })(r) && !!ae(X(r), u, v) || null;
               }, me = function(r, u, v) {
-                var y = [], _ = 0, L = r.length;
-                if (v !== H) for (; _ < L; _++) r[_] && r[_][u] && y.push(r[_][u][v]);
-                else for (; _ < L; _++) r[_] && y.push(r[_][u]);
+                var y = [], _ = 0, N = r.length;
+                if (v !== H) for (; _ < N; _++) r[_] && r[_][u] && y.push(r[_][u][v]);
+                else for (; _ < N; _++) r[_] && y.push(r[_][u]);
                 return y;
               }, Te = function(r, u, v, y) {
-                var _ = [], L = 0, k = u.length;
-                if (y !== H) for (; L < k; L++) r[u[L]][v] && _.push(r[u[L]][v][y]);
-                else for (; L < k; L++) _.push(r[u[L]][v]);
+                var _ = [], N = 0, k = u.length;
+                if (y !== H) for (; N < k; N++) r[u[N]][v] && _.push(r[u[N]][v][y]);
+                else for (; N < k; N++) _.push(r[u[N]][v]);
                 return _;
               }, O = function(r, u) {
                 var v, y = [];
@@ -16320,8 +16321,8 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
                   }
                   return !0;
                 })(r)) return r.slice();
-                var u, v, y, _ = [], L = r.length, k = 0;
-                e: for (v = 0; v < L; v++) {
+                var u, v, y, _ = [], N = r.length, k = 0;
+                e: for (v = 0; v < N; v++) {
                   for (u = r[v], y = 0; y < k; y++) if (_[y] === u) continue e;
                   _.push(u), k++;
                 }
@@ -16338,13 +16339,13 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
               });
               function ut(r) {
                 var u, v, y = {};
-                g.each(r, (function(_, L) {
+                g.each(r, (function(_, N) {
                   (u = _.match(/^([^A-Z]+?)([A-Z])/)) && "a aa ai ao as b fn i m o s ".indexOf(u[1] + " ") !== -1 && (v = _.replace(u[0], u[2].toLowerCase()), y[v] = _, u[1] === "o" && ut(r[_]));
                 })), r._hungarianMap = y;
               }
               function _t(r, u, v) {
                 var y;
-                r._hungarianMap || ut(r), g.each(u, (function(_, L) {
+                r._hungarianMap || ut(r), g.each(u, (function(_, N) {
                   (y = r._hungarianMap[_]) === H || !v && u[y] !== H || (y.charAt(0) === "o" ? (u[y] || (u[y] = {}), g.extend(!0, u[y], u[_]), _t(r[y], u[y], v)) : u[y] = u[_]);
                 }));
               }
@@ -16360,10 +16361,10 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
               K.util = { throttle: function(r, u) {
                 var v, y, _ = u !== H ? u : 200;
                 return function() {
-                  var L = this, k = +/* @__PURE__ */ new Date(), $ = arguments;
+                  var N = this, k = +/* @__PURE__ */ new Date(), $ = arguments;
                   v && k < v + _ ? (clearTimeout(y), y = setTimeout((function() {
-                    v = H, r.apply(L, $);
-                  }), _)) : (v = k, r.apply(L, $));
+                    v = H, r.apply(N, $);
+                  }), _)) : (v = k, r.apply(N, $));
                 };
               }, escapeRegex: function(r) {
                 return r.replace(U, "\\$1");
@@ -16390,25 +16391,25 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
                 }
                 g.extend(r.oBrowser, K.__browser), r.oScroll.iBarWidth = K.__browser.barWidth;
               }
-              function Ct(r, u, v, y, _, L) {
+              function Ct(r, u, v, y, _, N) {
                 var k, $ = y, ue = !1;
-                for (v !== H && (k = v, ue = !0); $ !== _; ) r.hasOwnProperty($) && (k = ue ? u(k, r[$], $, r) : r[$], ue = !0, $ += L);
+                for (v !== H && (k = v, ue = !0); $ !== _; ) r.hasOwnProperty($) && (k = ue ? u(k, r[$], $, r) : r[$], ue = !0, $ += N);
                 return k;
               }
               function Qe(r, u) {
                 var v = K.defaults.column, y = r.aoColumns.length, _ = g.extend({}, K.models.oColumn, v, { nTh: u || R.createElement("th"), sTitle: v.sTitle ? v.sTitle : u ? u.innerHTML : "", aDataSort: v.aDataSort ? v.aDataSort : [y], mData: v.mData ? v.mData : y, idx: y });
                 r.aoColumns.push(_);
-                var L = r.aoPreSearchCols;
-                L[y] = g.extend({}, K.models.oSearch, L[y]), Dt(r, y, g(u).data());
+                var N = r.aoPreSearchCols;
+                N[y] = g.extend({}, K.models.oSearch, N[y]), Dt(r, y, g(u).data());
               }
               function Dt(r, u, v) {
-                var y = r.aoColumns[u], _ = r.oClasses, L = g(y.nTh);
+                var y = r.aoColumns[u], _ = r.oClasses, N = g(y.nTh);
                 if (!y.sWidthOrig) {
-                  y.sWidthOrig = L.attr("width") || null;
-                  var k = (L.attr("style") || "").match(/width:\s*(\d+[pxem%]+)/);
+                  y.sWidthOrig = N.attr("width") || null;
+                  var k = (N.attr("style") || "").match(/width:\s*(\d+[pxem%]+)/);
                   k && (y.sWidthOrig = k[1]);
                 }
-                v !== H && v !== null && (mt(v), _t(K.defaults.column, v, !0), v.mDataProp === H || v.mData || (v.mData = v.mDataProp), v.sType && (y._sManualType = v.sType), v.className && !v.sClass && (v.sClass = v.className), v.sClass && L.addClass(v.sClass), g.extend(y, v), q(y, v, "sWidth", "sWidthOrig"), v.iDataSort !== H && (y.aDataSort = [v.iDataSort]), q(y, v, "aDataSort"));
+                v !== H && v !== null && (mt(v), _t(K.defaults.column, v, !0), v.mDataProp === H || v.mData || (v.mData = v.mDataProp), v.sType && (y._sManualType = v.sType), v.className && !v.sClass && (v.sClass = v.className), v.sClass && N.addClass(v.sClass), g.extend(y, v), q(y, v, "sWidth", "sWidthOrig"), v.iDataSort !== H && (y.aDataSort = [v.iDataSort]), q(y, v, "aDataSort"));
                 var $ = y.mData, ue = dr($), Fe = y.mRender ? dr(y.mRender) : null, Ce = function(m) {
                   return typeof m == "string" && m.indexOf("@") !== -1;
                 };
@@ -16417,7 +16418,7 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
                   return Fe && E ? Fe(P, E, m, M) : P;
                 }, y.fnSetData = function(m, E, M) {
                   return br($)(m, E, M);
-                }, typeof $ != "number" && (r._rowReadObject = !0), r.oFeatures.bSort || (y.bSortable = !1, L.addClass(_.sSortableNone));
+                }, typeof $ != "number" && (r._rowReadObject = !0), r.oFeatures.bSort || (y.bSortable = !1, N.addClass(_.sSortableNone));
                 var n = g.inArray("asc", y.asSorting) !== -1, c = g.inArray("desc", y.asSorting) !== -1;
                 y.bSortable && (n || c) ? n && !c ? (y.sSortingClass = _.sSortableAsc, y.sSortingClassJUI = _.sSortJUIAscAllowed) : !n && c ? (y.sSortingClass = _.sSortableDesc, y.sSortingClassJUI = _.sSortJUIDescAllowed) : (y.sSortingClass = _.sSortable, y.sSortingClassJUI = _.sSortJUI) : (y.sSortingClass = _.sSortableNone, y.sSortingClassJUI = "");
               }
@@ -16451,11 +16452,11 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
                 })), v;
               }
               function Re(r) {
-                var u, v, y, _, L, k, $, ue, Fe, Ce = r.aoColumns, n = r.aoData, c = K.ext.type.detect;
+                var u, v, y, _, N, k, $, ue, Fe, Ce = r.aoColumns, n = r.aoData, c = K.ext.type.detect;
                 for (u = 0, v = Ce.length; u < v; u++) if (Fe = [], !($ = Ce[u]).sType && $._sManualType) $.sType = $._sManualType;
                 else if (!$.sType) {
                   for (y = 0, _ = c.length; y < _; y++) {
-                    for (L = 0, k = n.length; L < k && (Fe[L] === H && (Fe[L] = It(r, L, u, "type")), (ue = c[y](Fe[L], r)) || y === c.length - 1) && ue !== "html"; L++) ;
+                    for (N = 0, k = n.length; N < k && (Fe[N] === H && (Fe[N] = It(r, N, u, "type")), (ue = c[y](Fe[N], r)) || y === c.length - 1) && ue !== "html"; N++) ;
                     if (ue) {
                       $.sType = ue;
                       break;
@@ -16465,7 +16466,7 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
                 }
               }
               function ze(r, u, v, y) {
-                var _, L, k, $, ue, Fe, Ce, n = r.aoColumns;
+                var _, N, k, $, ue, Fe, Ce, n = r.aoColumns;
                 if (u) for (_ = u.length - 1; _ >= 0; _--) {
                   var c = (Ce = u[_]).targets !== H ? Ce.targets : Ce.aTargets;
                   for (Array.isArray(c) || (c = [c]), k = 0, $ = c.length; k < $; k++) if (typeof c[k] == "number" && c[k] >= 0) {
@@ -16474,15 +16475,15 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
                   } else if (typeof c[k] == "number" && c[k] < 0) y(n.length + c[k], Ce);
                   else if (typeof c[k] == "string") for (ue = 0, Fe = n.length; ue < Fe; ue++) (c[k] == "_all" || g(n[ue].nTh).hasClass(c[k])) && y(ue, Ce);
                 }
-                if (v) for (_ = 0, L = v.length; _ < L; _++) y(_, v[_]);
+                if (v) for (_ = 0, N = v.length; _ < N; _++) y(_, v[_]);
               }
               function tt(r, u, v, y) {
-                var _ = r.aoData.length, L = g.extend(!0, {}, K.models.oRow, { src: v ? "dom" : "data", idx: _ });
-                L._aData = u, r.aoData.push(L);
+                var _ = r.aoData.length, N = g.extend(!0, {}, K.models.oRow, { src: v ? "dom" : "data", idx: _ });
+                N._aData = u, r.aoData.push(N);
                 for (var k = r.aoColumns, $ = 0, ue = k.length; $ < ue; $++) k[$].sType = null;
                 r.aiDisplayMaster.push(_);
                 var Fe = r.rowIdFn(u);
-                return Fe !== H && (r.aIds[Fe] = L), !v && r.oFeatures.bDeferRender || mn(r, _, v, y), _;
+                return Fe !== H && (r.aIds[Fe] = N), !v && r.oFeatures.bDeferRender || mn(r, _, v, y), _;
               }
               function We(r, u) {
                 var v;
@@ -16494,16 +16495,16 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
                 return g.inArray(v, r.aoData[u].anCells);
               }
               function It(r, u, v, y) {
-                var _ = r.iDraw, L = r.aoColumns[v], k = r.aoData[u]._aData, $ = L.sDefaultContent, ue = L.fnGetData(k, y, { settings: r, row: u, col: v });
-                if (ue === H) return r.iDrawError != _ && $ === null && (we(r, 0, "Requested unknown parameter " + (typeof L.mData == "function" ? "{function}" : "'" + L.mData + "'") + " for row " + u + ", column " + v, 4), r.iDrawError = _), $;
+                var _ = r.iDraw, N = r.aoColumns[v], k = r.aoData[u]._aData, $ = N.sDefaultContent, ue = N.fnGetData(k, y, { settings: r, row: u, col: v });
+                if (ue === H) return r.iDrawError != _ && $ === null && (we(r, 0, "Requested unknown parameter " + (typeof N.mData == "function" ? "{function}" : "'" + N.mData + "'") + " for row " + u + ", column " + v, 4), r.iDrawError = _), $;
                 if (ue !== k && ue !== null || $ === null || y === H) {
                   if (typeof ue == "function") return ue.call(k);
                 } else ue = $;
                 return ue === null && y == "display" ? "" : ue;
               }
               function er(r, u, v, y) {
-                var _ = r.aoColumns[v], L = r.aoData[u]._aData;
-                _.fnSetData(L, y, { settings: r, row: u, col: v });
+                var _ = r.aoColumns[v], N = r.aoData[u]._aData;
+                _.fnSetData(N, y, { settings: r, row: u, col: v });
               }
               var Ut = /\[.*?\]$/, Sr = /\(\)$/;
               function Dr(r) {
@@ -16516,23 +16517,23 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
                   var u = {};
                   return g.each(r, (function(y, _) {
                     _ && (u[y] = dr(_));
-                  })), function(y, _, L, k) {
+                  })), function(y, _, N, k) {
                     var $ = u[_] || u._;
-                    return $ !== H ? $(y, _, L, k) : y;
+                    return $ !== H ? $(y, _, N, k) : y;
                   };
                 }
                 if (r === null) return function(y) {
                   return y;
                 };
-                if (typeof r == "function") return function(y, _, L, k) {
-                  return r(y, _, L, k);
+                if (typeof r == "function") return function(y, _, N, k) {
+                  return r(y, _, N, k);
                 };
                 if (typeof r != "string" || r.indexOf(".") === -1 && r.indexOf("[") === -1 && r.indexOf("(") === -1) return function(y, _) {
                   return y[r];
                 };
-                var v = function(y, _, L) {
+                var v = function(y, _, N) {
                   var k, $, ue, Fe;
-                  if (L !== "") for (var Ce = Dr(L), n = 0, c = Ce.length; n < c; n++) {
+                  if (N !== "") for (var Ce = Dr(N), n = 0, c = Ce.length; n < c; n++) {
                     if (k = Ce[n].match(Ut), $ = Ce[n].match(Sr), k) {
                       if (Ce[n] = Ce[n].replace(Ut, ""), Ce[n] !== "" && (y = y[Ce[n]]), ue = [], Ce.splice(0, n + 1), Fe = Ce.join("."), Array.isArray(y)) for (var m = 0, E = y.length; m < E; m++) ue.push(v(y[m], _, Fe));
                       var M = k[0].substring(1, k[0].length - 1);
@@ -16562,10 +16563,10 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
                   v[r] = y;
                 };
                 var u = function(v, y, _) {
-                  for (var L, k, $, ue, Fe, Ce = Dr(_), n = Ce[Ce.length - 1], c = 0, m = Ce.length - 1; c < m; c++) {
+                  for (var N, k, $, ue, Fe, Ce = Dr(_), n = Ce[Ce.length - 1], c = 0, m = Ce.length - 1; c < m; c++) {
                     if (Ce[c] === "__proto__" || Ce[c] === "constructor") throw new Error("Cannot set prototype values");
                     if (k = Ce[c].match(Ut), $ = Ce[c].match(Sr), k) {
-                      if (Ce[c] = Ce[c].replace(Ut, ""), v[Ce[c]] = [], (L = Ce.slice()).splice(0, c + 1), Fe = L.join("."), Array.isArray(y)) for (var E = 0, M = y.length; E < M; E++) u(ue = {}, y[E], Fe), v[Ce[c]].push(ue);
+                      if (Ce[c] = Ce[c].replace(Ut, ""), v[Ce[c]] = [], (N = Ce.slice()).splice(0, c + 1), Fe = N.join("."), Array.isArray(y)) for (var E = 0, M = y.length; E < M; E++) u(ue = {}, y[E], Fe), v[Ce[c]].push(ue);
                       else v[Ce[c]] = y;
                       return;
                     }
@@ -16584,29 +16585,29 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
                 r.aoData.length = 0, r.aiDisplayMaster.length = 0, r.aiDisplay.length = 0, r.aIds = {};
               }
               function wr(r, u, v) {
-                for (var y = -1, _ = 0, L = r.length; _ < L; _++) r[_] == u ? y = _ : r[_] > u && r[_]--;
+                for (var y = -1, _ = 0, N = r.length; _ < N; _++) r[_] == u ? y = _ : r[_] > u && r[_]--;
                 y != -1 && v === H && r.splice(y, 1);
               }
               function pn(r, u, v, y) {
-                var _, L, k = r.aoData[u], $ = function(Ce, n) {
+                var _, N, k = r.aoData[u], $ = function(Ce, n) {
                   for (; Ce.childNodes.length; ) Ce.removeChild(Ce.firstChild);
                   Ce.innerHTML = It(r, u, n, "display");
                 };
                 if (v !== "dom" && (v && v !== "auto" || k.src !== "dom")) {
                   var ue = k.anCells;
                   if (ue) if (y !== H) $(ue[y], y);
-                  else for (_ = 0, L = ue.length; _ < L; _++) $(ue[_], _);
+                  else for (_ = 0, N = ue.length; _ < N; _++) $(ue[_], _);
                 } else k._aData = Kr(r, k, y, y === H ? H : k._aData).data;
                 k._aSortData = null, k._aFilterData = null;
                 var Fe = r.aoColumns;
                 if (y !== H) Fe[y].sType = null;
                 else {
-                  for (_ = 0, L = Fe.length; _ < L; _++) Fe[_].sType = null;
+                  for (_ = 0, N = Fe.length; _ < N; _++) Fe[_].sType = null;
                   ur(r, k);
                 }
               }
               function Kr(r, u, v, y) {
-                var _, L, k, $ = [], ue = u.firstChild, Fe = 0, Ce = r.aoColumns, n = r._rowReadObject;
+                var _, N, k, $ = [], ue = u.firstChild, Fe = 0, Ce = r.aoColumns, n = r._rowReadObject;
                 y = y !== H ? y : n ? {} : [];
                 var c = function(_e, ke) {
                   if (typeof _e == "string") {
@@ -16617,7 +16618,7 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
                     }
                   }
                 }, m = function(_e) {
-                  v !== H && v !== Fe || (L = Ce[Fe], k = _e.innerHTML.trim(), L && L._bAttrSrc ? (br(L.mData._)(y, k), c(L.mData.sort, _e), c(L.mData.type, _e), c(L.mData.filter, _e)) : n ? (L._setter || (L._setter = br(L.mData)), L._setter(y, k)) : y[Fe] = k), Fe++;
+                  v !== H && v !== Fe || (N = Ce[Fe], k = _e.innerHTML.trim(), N && N._bAttrSrc ? (br(N.mData._)(y, k), c(N.mData.sort, _e), c(N.mData.type, _e), c(N.mData.filter, _e)) : n ? (N._setter || (N._setter = br(N.mData)), N._setter(y, k)) : y[Fe] = k), Fe++;
                 };
                 if (ue) for (; ue; ) (_ = ue.nodeName.toUpperCase()) != "TD" && _ != "TH" || (m(ue), $.push(ue)), ue = ue.nextSibling;
                 else for (var E = 0, M = ($ = u.anCells).length; E < M; E++) m($[E]);
@@ -16629,9 +16630,9 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
                 return { data: y, cells: $ };
               }
               function mn(r, u, v, y) {
-                var _, L, k, $, ue, Fe, Ce = r.aoData[u], n = Ce._aData, c = [];
+                var _, N, k, $, ue, Fe, Ce = r.aoData[u], n = Ce._aData, c = [];
                 if (Ce.nTr === null) {
-                  for (_ = v || R.createElement("tr"), Ce.nTr = _, Ce.anCells = c, _._DT_RowIndex = u, ur(r, Ce), $ = 0, ue = r.aoColumns.length; $ < ue; $++) k = r.aoColumns[$], (L = (Fe = !v) ? R.createElement(k.sCellType) : y[$])._DT_CellIndex = { row: u, column: $ }, c.push(L), !Fe && (!k.mRender && k.mData === $ || g.isPlainObject(k.mData) && k.mData._ === $ + ".display") || (L.innerHTML = It(r, u, $, "display")), k.sClass && (L.className += " " + k.sClass), k.bVisible && !v ? _.appendChild(L) : !k.bVisible && v && L.parentNode.removeChild(L), k.fnCreatedCell && k.fnCreatedCell.call(r.oInstance, L, It(r, u, $), n, u, $);
+                  for (_ = v || R.createElement("tr"), Ce.nTr = _, Ce.anCells = c, _._DT_RowIndex = u, ur(r, Ce), $ = 0, ue = r.aoColumns.length; $ < ue; $++) k = r.aoColumns[$], (N = (Fe = !v) ? R.createElement(k.sCellType) : y[$])._DT_CellIndex = { row: u, column: $ }, c.push(N), !Fe && (!k.mRender && k.mData === $ || g.isPlainObject(k.mData) && k.mData._ === $ + ".display") || (N.innerHTML = It(r, u, $, "display")), k.sClass && (N.className += " " + k.sClass), k.bVisible && !v ? _.appendChild(N) : !k.bVisible && v && N.parentNode.removeChild(N), k.fnCreatedCell && k.fnCreatedCell.call(r.oInstance, N, It(r, u, $), n, u, $);
                   Ze(r, "aoRowCreatedCallback", null, [_, n, u, c]);
                 }
               }
@@ -16640,36 +16641,36 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
                 if (v) {
                   var _ = r.rowIdFn(y);
                   if (_ && (v.id = _), y.DT_RowClass) {
-                    var L = y.DT_RowClass.split(" ");
-                    u.__rowc = u.__rowc ? be(u.__rowc.concat(L)) : L, g(v).removeClass(u.__rowc.join(" ")).addClass(y.DT_RowClass);
+                    var N = y.DT_RowClass.split(" ");
+                    u.__rowc = u.__rowc ? be(u.__rowc.concat(N)) : N, g(v).removeClass(u.__rowc.join(" ")).addClass(y.DT_RowClass);
                   }
                   y.DT_RowAttr && g(v).attr(y.DT_RowAttr), y.DT_RowData && g(v).data(y.DT_RowData);
                 }
               }
               function or(r) {
-                var u, v, y, _, L, k = r.nTHead, $ = r.nTFoot, ue = g("th, td", k).length === 0, Fe = r.oClasses, Ce = r.aoColumns;
-                for (ue && (_ = g("<tr/>").appendTo(k)), u = 0, v = Ce.length; u < v; u++) L = Ce[u], y = g(L.nTh).addClass(L.sClass), ue && y.appendTo(_), r.oFeatures.bSort && (y.addClass(L.sSortingClass), L.bSortable !== !1 && (y.attr("tabindex", r.iTabIndex).attr("aria-controls", r.sTableId), mi(r, L.nTh, u))), L.sTitle != y[0].innerHTML && y.html(L.sTitle), ie(r, "header")(r, y, L, Fe);
+                var u, v, y, _, N, k = r.nTHead, $ = r.nTFoot, ue = g("th, td", k).length === 0, Fe = r.oClasses, Ce = r.aoColumns;
+                for (ue && (_ = g("<tr/>").appendTo(k)), u = 0, v = Ce.length; u < v; u++) N = Ce[u], y = g(N.nTh).addClass(N.sClass), ue && y.appendTo(_), r.oFeatures.bSort && (y.addClass(N.sSortingClass), N.bSortable !== !1 && (y.attr("tabindex", r.iTabIndex).attr("aria-controls", r.sTableId), mi(r, N.nTh, u))), N.sTitle != y[0].innerHTML && y.html(N.sTitle), ie(r, "header")(r, y, N, Fe);
                 if (ue && an(r.aoHeader, k), g(k).children("tr").attr("role", "row"), g(k).children("tr").children("th, td").addClass(Fe.sHeaderTH), g($).children("tr").children("th, td").addClass(Fe.sFooterTH), $ !== null) {
                   var n = r.aoFooter[0];
-                  for (u = 0, v = n.length; u < v; u++) (L = Ce[u]).nTf = n[u].cell, L.sClass && g(L.nTf).addClass(L.sClass);
+                  for (u = 0, v = n.length; u < v; u++) (N = Ce[u]).nTf = n[u].cell, N.sClass && g(N.nTf).addClass(N.sClass);
                 }
               }
               function fn(r, u, v) {
-                var y, _, L, k, $, ue, Fe, Ce, n, c = [], m = [], E = r.aoColumns.length;
+                var y, _, N, k, $, ue, Fe, Ce, n, c = [], m = [], E = r.aoColumns.length;
                 if (u) {
                   for (v === H && (v = !1), y = 0, _ = u.length; y < _; y++) {
-                    for (c[y] = u[y].slice(), c[y].nTr = u[y].nTr, L = E - 1; L >= 0; L--) r.aoColumns[L].bVisible || v || c[y].splice(L, 1);
+                    for (c[y] = u[y].slice(), c[y].nTr = u[y].nTr, N = E - 1; N >= 0; N--) r.aoColumns[N].bVisible || v || c[y].splice(N, 1);
                     m.push([]);
                   }
                   for (y = 0, _ = c.length; y < _; y++) {
                     if (Fe = c[y].nTr) for (; ue = Fe.firstChild; ) Fe.removeChild(ue);
-                    for (L = 0, k = c[y].length; L < k; L++) if (Ce = 1, n = 1, m[y][L] === H) {
-                      for (Fe.appendChild(c[y][L].cell), m[y][L] = 1; c[y + Ce] !== H && c[y][L].cell == c[y + Ce][L].cell; ) m[y + Ce][L] = 1, Ce++;
-                      for (; c[y][L + n] !== H && c[y][L].cell == c[y][L + n].cell; ) {
-                        for ($ = 0; $ < Ce; $++) m[y + $][L + n] = 1;
+                    for (N = 0, k = c[y].length; N < k; N++) if (Ce = 1, n = 1, m[y][N] === H) {
+                      for (Fe.appendChild(c[y][N].cell), m[y][N] = 1; c[y + Ce] !== H && c[y][N].cell == c[y + Ce][N].cell; ) m[y + Ce][N] = 1, Ce++;
+                      for (; c[y][N + n] !== H && c[y][N].cell == c[y][N + n].cell; ) {
+                        for ($ = 0; $ < Ce; $++) m[y + $][N + n] = 1;
                         n++;
                       }
-                      g(c[y][L].cell).attr("rowspan", Ce).attr("colspan", n);
+                      g(c[y][N].cell).attr("rowspan", Ce).attr("colspan", n);
                     }
                   }
                 }
@@ -16677,7 +16678,7 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
               function Ar(r) {
                 var u = Ze(r, "aoPreDrawCallback", "preDraw", [r]);
                 if (g.inArray(!1, u) === -1) {
-                  var v = [], y = 0, _ = r.asStripeClasses, L = _.length, k = (r.aoOpenRows.length, r.oLanguage), $ = r.iInitDisplayStart, ue = le(r) == "ssp", Fe = r.aiDisplay;
+                  var v = [], y = 0, _ = r.asStripeClasses, N = _.length, k = (r.aoOpenRows.length, r.oLanguage), $ = r.iInitDisplayStart, ue = le(r) == "ssp", Fe = r.aiDisplay;
                   r.bDrawing = !0, $ !== H && $ !== -1 && (r._iDisplayStart = ue ? $ : $ >= r.fnRecordsDisplay() ? 0 : $, r.iInitDisplayStart = -1);
                   var Ce = r._iDisplayStart, n = r.fnDisplayEnd();
                   if (r.bDeferLoading) r.bDeferLoading = !1, r.iDraw++, xr(r, !1);
@@ -16688,15 +16689,15 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
                     var M = Fe[E], P = r.aoData[M];
                     P.nTr === null && mn(r, M);
                     var ee = P.nTr;
-                    if (L !== 0) {
-                      var _e = _[y % L];
+                    if (N !== 0) {
+                      var _e = _[y % N];
                       P._sRowStripe != _e && (g(ee).removeClass(P._sRowStripe).addClass(_e), P._sRowStripe = _e);
                     }
                     Ze(r, "aoRowCallback", null, [ee, P._aData, y, E, M]), v.push(ee), y++;
                   }
                   else {
                     var ke = k.sZeroRecords;
-                    r.iDraw == 1 && le(r) == "ajax" ? ke = k.sLoadingRecords : k.sEmptyTable && r.fnRecordsTotal() === 0 && (ke = k.sEmptyTable), v[0] = g("<tr/>", { class: L ? _[0] : "" }).append(g("<td />", { valign: "top", colSpan: Le(r), class: r.oClasses.sRowEmpty }).html(ke))[0];
+                    r.iDraw == 1 && le(r) == "ajax" ? ke = k.sLoadingRecords : k.sEmptyTable && r.fnRecordsTotal() === 0 && (ke = k.sEmptyTable), v[0] = g("<tr/>", { class: N ? _[0] : "" }).append(g("<td />", { valign: "top", colSpan: Le(r), class: r.oClasses.sRowEmpty }).html(ke))[0];
                   }
                   Ze(r, "aoHeaderCallback", "header", [g(r.nTHead).children("tr")[0], $r(r), Ce, n, Fe]), Ze(r, "aoFooterCallback", "footer", [g(r.nTFoot).children("tr")[0], $r(r), Ce, n, Fe]);
                   var Ue = g(r.nTBody);
@@ -16708,8 +16709,8 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
                 y && Jr(r), _ ? _n(r, r.oPreviousSearch) : r.aiDisplay = r.aiDisplayMaster.slice(), u !== !0 && (r._iDisplayStart = 0), r._drawHold = u, Ar(r), r._drawHold = !1;
               }
               function hn(r) {
-                var u = r.oClasses, v = g(r.nTable), y = g("<div/>").insertBefore(v), _ = r.oFeatures, L = g("<div/>", { id: r.sTableId + "_wrapper", class: u.sWrapper + (r.nTFoot ? "" : " " + u.sNoFooter) });
-                r.nHolding = y[0], r.nTableWrapper = L[0], r.nTableReinsertBefore = r.nTable.nextSibling;
+                var u = r.oClasses, v = g(r.nTable), y = g("<div/>").insertBefore(v), _ = r.oFeatures, N = g("<div/>", { id: r.sTableId + "_wrapper", class: u.sWrapper + (r.nTFoot ? "" : " " + u.sNoFooter) });
+                r.nHolding = y[0], r.nTableWrapper = N[0], r.nTableReinsertBefore = r.nTable.nextSibling;
                 for (var k, $, ue, Fe, Ce, n, c = r.sDom.split(""), m = 0; m < c.length; m++) {
                   if (k = null, ($ = c[m]) == "<") {
                     if (ue = g("<div/>")[0], (Fe = c[m + 1]) == "'" || Fe == '"') {
@@ -16720,8 +16721,8 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
                       } else Ce.charAt(0) == "#" ? ue.id = Ce.substr(1, Ce.length - 1) : ue.className = Ce;
                       m += n;
                     }
-                    L.append(ue), L = g(ue);
-                  } else if ($ == ">") L = L.parent();
+                    N.append(ue), N = g(ue);
+                  } else if ($ == ">") N = N.parent();
                   else if ($ == "l" && _.bPaginate && _.bLengthChange) k = xn(r);
                   else if ($ == "f" && _.bFilter) k = li(r);
                   else if ($ == "r" && _.bProcessing) k = Rn(r);
@@ -16736,26 +16737,26 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
                   }
                   if (k) {
                     var _e = r.aanFeatures;
-                    _e[$] || (_e[$] = []), _e[$].push(k), L.append(k);
+                    _e[$] || (_e[$] = []), _e[$].push(k), N.append(k);
                   }
                 }
-                y.replaceWith(L), r.nHolding = null;
+                y.replaceWith(N), r.nHolding = null;
               }
               function an(r, u) {
-                var v, y, _, L, k, $, ue, Fe, Ce, n, c = g(u).children("tr"), m = function(E, M, P) {
+                var v, y, _, N, k, $, ue, Fe, Ce, n, c = g(u).children("tr"), m = function(E, M, P) {
                   for (var ee = E[M]; ee[P]; ) P++;
                   return P;
                 };
                 for (r.splice(0, r.length), _ = 0, $ = c.length; _ < $; _++) r.push([]);
                 for (_ = 0, $ = c.length; _ < $; _++) for (y = (v = c[_]).firstChild; y; ) {
-                  if (y.nodeName.toUpperCase() == "TD" || y.nodeName.toUpperCase() == "TH") for (Fe = (Fe = 1 * y.getAttribute("colspan")) && Fe !== 0 && Fe !== 1 ? Fe : 1, Ce = (Ce = 1 * y.getAttribute("rowspan")) && Ce !== 0 && Ce !== 1 ? Ce : 1, ue = m(r, _, 0), n = Fe === 1, k = 0; k < Fe; k++) for (L = 0; L < Ce; L++) r[_ + L][ue + k] = { cell: y, unique: n }, r[_ + L].nTr = v;
+                  if (y.nodeName.toUpperCase() == "TD" || y.nodeName.toUpperCase() == "TH") for (Fe = (Fe = 1 * y.getAttribute("colspan")) && Fe !== 0 && Fe !== 1 ? Fe : 1, Ce = (Ce = 1 * y.getAttribute("rowspan")) && Ce !== 0 && Ce !== 1 ? Ce : 1, ue = m(r, _, 0), n = Fe === 1, k = 0; k < Fe; k++) for (N = 0; N < Ce; N++) r[_ + N][ue + k] = { cell: y, unique: n }, r[_ + N].nTr = v;
                   y = y.nextSibling;
                 }
               }
               function Cr(r, u, v) {
                 var y = [];
                 v || (v = r.aoHeader, u && an(v = [], u));
-                for (var _ = 0, L = v.length; _ < L; _++) for (var k = 0, $ = v[_].length; k < $; k++) !v[_][k].unique || y[k] && r.bSortCellsTop || (y[k] = v[_][k].cell);
+                for (var _ = 0, N = v.length; _ < N; _++) for (var k = 0, $ = v[_].length; k < $; k++) !v[_][k].unique || y[k] && r.bSortCellsTop || (y[k] = v[_][k].cell);
                 return y;
               }
               function Qr(r, u, v) {
@@ -16769,12 +16770,12 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
                     } else y[c.name] = c.value;
                   })), u = y;
                 }
-                var L, k = r.ajax, $ = r.oInstance, ue = function(n) {
+                var N, k = r.ajax, $ = r.oInstance, ue = function(n) {
                   Ze(r, null, "xhr", [r, n, r.jqXHR]), v(n);
                 };
                 if (g.isPlainObject(k) && k.data) {
-                  var Fe = typeof (L = k.data) == "function" ? L(u, r) : L;
-                  u = typeof L == "function" && Fe ? Fe : g.extend(!0, u, Fe), delete k.data;
+                  var Fe = typeof (N = k.data) == "function" ? N(u, r) : N;
+                  u = typeof N == "function" && Fe ? Fe : g.extend(!0, u, Fe), delete k.data;
                 }
                 var Ce = { data: u, success: function(n) {
                   var c = n.error || n.sError;
@@ -16785,7 +16786,7 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
                 } };
                 r.oAjaxData = u, Ze(r, null, "preXhr", [r, u]), r.fnServerData ? r.fnServerData.call($, r.sAjaxSource, g.map(u, (function(n, c) {
                   return { name: c, value: n };
-                })), ue, r) : r.sAjaxSource || typeof k == "string" ? r.jqXHR = g.ajax(g.extend(Ce, { url: k || r.sAjaxSource })) : typeof k == "function" ? r.jqXHR = k.call($, u, ue, r) : (r.jqXHR = g.ajax(g.extend(Ce, k)), k.data = L);
+                })), ue, r) : r.sAjaxSource || typeof k == "string" ? r.jqXHR = g.ajax(g.extend(Ce, { url: k || r.sAjaxSource })) : typeof k == "function" ? r.jqXHR = k.call($, u, ue, r) : (r.jqXHR = g.ajax(g.extend(Ce, k)), k.data = N);
               }
               function Ur(r) {
                 return !r.bAjaxDataGet || (r.iDraw++, xr(r, !0), Qr(r, ii(r), (function(u) {
@@ -16793,12 +16794,12 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
                 })), !1);
               }
               function ii(r) {
-                var u, v, y, _, L = r.aoColumns, k = L.length, $ = r.oFeatures, ue = r.oPreviousSearch, Fe = r.aoPreSearchCols, Ce = [], n = qt(r), c = r._iDisplayStart, m = $.bPaginate !== !1 ? r._iDisplayLength : -1, E = function(ee, _e) {
+                var u, v, y, _, N = r.aoColumns, k = N.length, $ = r.oFeatures, ue = r.oPreviousSearch, Fe = r.aoPreSearchCols, Ce = [], n = qt(r), c = r._iDisplayStart, m = $.bPaginate !== !1 ? r._iDisplayLength : -1, E = function(ee, _e) {
                   Ce.push({ name: ee, value: _e });
                 };
-                E("sEcho", r.iDraw), E("iColumns", k), E("sColumns", me(L, "sName").join(",")), E("iDisplayStart", c), E("iDisplayLength", m);
+                E("sEcho", r.iDraw), E("iColumns", k), E("sColumns", me(N, "sName").join(",")), E("iDisplayStart", c), E("iDisplayLength", m);
                 var M = { draw: r.iDraw, columns: [], order: [], start: c, length: m, search: { value: ue.sSearch, regex: ue.bRegex } };
-                for (u = 0; u < k; u++) y = L[u], _ = Fe[u], v = typeof y.mData == "function" ? "function" : y.mData, M.columns.push({ data: v, name: y.sName, searchable: y.bSearchable, orderable: y.bSortable, search: { value: _.sSearch, regex: _.bRegex } }), E("mDataProp_" + u, v), $.bFilter && (E("sSearch_" + u, _.sSearch), E("bRegex_" + u, _.bRegex), E("bSearchable_" + u, y.bSearchable)), $.bSort && E("bSortable_" + u, y.bSortable);
+                for (u = 0; u < k; u++) y = N[u], _ = Fe[u], v = typeof y.mData == "function" ? "function" : y.mData, M.columns.push({ data: v, name: y.sName, searchable: y.bSearchable, orderable: y.bSortable, search: { value: _.sSearch, regex: _.bRegex } }), E("mDataProp_" + u, v), $.bFilter && (E("sSearch_" + u, _.sSearch), E("bRegex_" + u, _.bRegex), E("bSearchable_" + u, y.bSearchable)), $.bSort && E("bSortable_" + u, y.bSortable);
                 $.bFilter && (E("sSearch", ue.sSearch), E("bRegex", ue.bRegex)), $.bSort && (g.each(n, (function(ee, _e) {
                   M.order.push({ column: _e.col, dir: _e.dir }), E("iSortCol_" + ee, _e.col), E("sSortDir_" + ee, _e.dir);
                 })), E("iSortingCols", n.length));
@@ -16808,12 +16809,12 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
               function si(r, u) {
                 var v = function(Fe, Ce) {
                   return u[Fe] !== H ? u[Fe] : u[Ce];
-                }, y = sn(r, u), _ = v("sEcho", "draw"), L = v("iTotalRecords", "recordsTotal"), k = v("iTotalDisplayRecords", "recordsFiltered");
+                }, y = sn(r, u), _ = v("sEcho", "draw"), N = v("iTotalRecords", "recordsTotal"), k = v("iTotalDisplayRecords", "recordsFiltered");
                 if (_ !== H) {
                   if (1 * _ < r.iDraw) return;
                   r.iDraw = 1 * _;
                 }
-                on(r), r._iRecordsTotal = parseInt(L, 10), r._iRecordsDisplay = parseInt(k, 10);
+                on(r), r._iRecordsTotal = parseInt(N, 10), r._iRecordsDisplay = parseInt(k, 10);
                 for (var $ = 0, ue = y.length; $ < ue; $++) tt(r, y[$]);
                 r.aiDisplay = r.aiDisplayMaster.slice(), r.bAjaxDataGet = !1, Ar(r), r._bInitComplete || kr(r, u), r.bAjaxDataGet = !0, xr(r, !1);
               }
@@ -16822,10 +16823,10 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
                 return v === "data" ? u.aaData || u[v] : v !== "" ? dr(v)(u) : u;
               }
               function li(r) {
-                var u = r.oClasses, v = r.sTableId, y = r.oLanguage, _ = r.oPreviousSearch, L = r.aanFeatures, k = '<input type="search" class="' + u.sFilterInput + '"/>', $ = y.sSearch;
+                var u = r.oClasses, v = r.sTableId, y = r.oLanguage, _ = r.oPreviousSearch, N = r.aanFeatures, k = '<input type="search" class="' + u.sFilterInput + '"/>', $ = y.sSearch;
                 $ = $.match(/_INPUT_/) ? $.replace("_INPUT_", k) : $ + k;
-                var ue = g("<div/>", { id: L.f ? null : v + "_filter", class: u.sFilter }).append(g("<label/>").append($)), Fe = function() {
-                  L.f;
+                var ue = g("<div/>", { id: N.f ? null : v + "_filter", class: u.sFilter }).append(g("<label/>").append($)), Fe = function() {
+                  N.f;
                   var c = this.value ? this.value : "";
                   c != _.sSearch && (_n(r, { sSearch: c, bRegex: _.bRegex, bSmart: _.bSmart, bCaseInsensitive: _.bCaseInsensitive }), r._iDisplayStart = 0, Ar(r));
                 }, Ce = r.searchDelay !== null ? r.searchDelay : le(r) === "ssp" ? 400 : 0, n = g("input", ue).val(_.sSearch).attr("placeholder", y.sSearchPlaceholder).on("keyup.DT search.DT input.DT paste.DT cut.DT", Ce ? pt(Fe, Ce) : Fe).on("mouseup", (function(c) {
@@ -16843,32 +16844,32 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
                 })), ue[0];
               }
               function _n(r, u, v) {
-                var y = r.oPreviousSearch, _ = r.aoPreSearchCols, L = function(ue) {
+                var y = r.oPreviousSearch, _ = r.aoPreSearchCols, N = function(ue) {
                   y.sSearch = ue.sSearch, y.bRegex = ue.bRegex, y.bSmart = ue.bSmart, y.bCaseInsensitive = ue.bCaseInsensitive;
                 }, k = function(ue) {
                   return ue.bEscapeRegex !== H ? !ue.bEscapeRegex : ue.bRegex;
                 };
                 if (Re(r), le(r) != "ssp") {
-                  Dn(r, u.sSearch, v, k(u), u.bSmart, u.bCaseInsensitive), L(u);
+                  Dn(r, u.sSearch, v, k(u), u.bSmart, u.bCaseInsensitive), N(u);
                   for (var $ = 0; $ < _.length; $++) Tn(r, _[$].sSearch, $, k(_[$]), _[$].bSmart, _[$].bCaseInsensitive);
                   On(r);
-                } else L(u);
+                } else N(u);
                 r.bFiltered = !0, Ze(r, null, "search", [r]);
               }
               function On(r) {
-                for (var u, v, y = K.ext.search, _ = r.aiDisplay, L = 0, k = y.length; L < k; L++) {
-                  for (var $ = [], ue = 0, Fe = _.length; ue < Fe; ue++) v = _[ue], u = r.aoData[v], y[L](r, u._aFilterData, v, u._aData, ue) && $.push(v);
+                for (var u, v, y = K.ext.search, _ = r.aiDisplay, N = 0, k = y.length; N < k; N++) {
+                  for (var $ = [], ue = 0, Fe = _.length; ue < Fe; ue++) v = _[ue], u = r.aoData[v], y[N](r, u._aFilterData, v, u._aData, ue) && $.push(v);
                   _.length = 0, g.merge(_, $);
                 }
               }
-              function Tn(r, u, v, y, _, L) {
+              function Tn(r, u, v, y, _, N) {
                 if (u !== "") {
-                  for (var k, $ = [], ue = r.aiDisplay, Fe = bt(u, y, _, L), Ce = 0; Ce < ue.length; Ce++) k = r.aoData[ue[Ce]]._aFilterData[v], Fe.test(k) && $.push(ue[Ce]);
+                  for (var k, $ = [], ue = r.aiDisplay, Fe = bt(u, y, _, N), Ce = 0; Ce < ue.length; Ce++) k = r.aoData[ue[Ce]]._aFilterData[v], Fe.test(k) && $.push(ue[Ce]);
                   r.aiDisplay = $;
                 }
               }
-              function Dn(r, u, v, y, _, L) {
-                var k, $, ue, Fe = bt(u, y, _, L), Ce = r.oPreviousSearch.sSearch, n = r.aiDisplayMaster, c = [];
+              function Dn(r, u, v, y, _, N) {
+                var k, $, ue, Fe = bt(u, y, _, N), Ce = r.oPreviousSearch.sSearch, n = r.aiDisplayMaster, c = [];
                 if (K.ext.search.length !== 0 && (v = !0), $ = st(r), u.length <= 0) r.aiDisplay = n.slice();
                 else {
                   for (($ || v || y || Ce.length > u.length || u.indexOf(Ce) !== 0 || r.bSorted) && (r.aiDisplay = n.slice()), k = r.aiDisplay, ue = 0; ue < k.length; ue++) Fe.test(r.aoData[k[ue]]._sFilterRow) && c.push(k[ue]);
@@ -16877,12 +16878,12 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
               }
               function bt(r, u, v, y) {
                 if (r = u ? r : wt(r), v) {
-                  var _ = g.map(r.match(/"[^"]+"|[^ ]+/g) || [""], (function(L) {
-                    if (L.charAt(0) === '"') {
-                      var k = L.match(/^"(.*)"$/);
-                      L = k ? k[1] : L;
+                  var _ = g.map(r.match(/"[^"]+"|[^ ]+/g) || [""], (function(N) {
+                    if (N.charAt(0) === '"') {
+                      var k = N.match(/^"(.*)"$/);
+                      N = k ? k[1] : N;
                     }
-                    return L.replace('"', "");
+                    return N.replace('"', "");
                   }));
                   r = "^(?=.*?" + _.join(")(?=.*?") + ").*$";
                 }
@@ -16890,9 +16891,9 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
               }
               var wt = K.util.escapeRegex, ht = g("<div>")[0], $e = ht.textContent !== H;
               function st(r) {
-                var u, v, y, _, L, k, $, ue, Fe = r.aoColumns, Ce = K.ext.type.search, n = !1;
+                var u, v, y, _, N, k, $, ue, Fe = r.aoColumns, Ce = K.ext.type.search, n = !1;
                 for (v = 0, _ = r.aoData.length; v < _; v++) if (!(ue = r.aoData[v])._aFilterData) {
-                  for (k = [], y = 0, L = Fe.length; y < L; y++) (u = Fe[y]).bSearchable ? ($ = It(r, v, y, "filter"), Ce[u.sType] && ($ = Ce[u.sType]($)), $ === null && ($ = ""), typeof $ != "string" && $.toString && ($ = $.toString())) : $ = "", $.indexOf && $.indexOf("&") !== -1 && (ht.innerHTML = $, $ = $e ? ht.textContent : ht.innerText), $.replace && ($ = $.replace(/[\r\n\u2028]/g, "")), k.push($);
+                  for (k = [], y = 0, N = Fe.length; y < N; y++) (u = Fe[y]).bSearchable ? ($ = It(r, v, y, "filter"), Ce[u.sType] && ($ = Ce[u.sType]($)), $ === null && ($ = ""), typeof $ != "string" && $.toString && ($ = $.toString())) : $ = "", $.indexOf && $.indexOf("&") !== -1 && (ht.innerHTML = $, $ = $e ? ht.textContent : ht.innerText), $.replace && ($ = $.replace(/[\r\n\u2028]/g, "")), k.push($);
                   ue._aFilterData = k, ue._sFilterRow = k.join("  "), n = !0;
                 }
                 return n;
@@ -16910,20 +16911,20 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
               function Kt(r) {
                 var u = r.aanFeatures.i;
                 if (u.length !== 0) {
-                  var v = r.oLanguage, y = r._iDisplayStart + 1, _ = r.fnDisplayEnd(), L = r.fnRecordsTotal(), k = r.fnRecordsDisplay(), $ = k ? v.sInfo : v.sInfoEmpty;
-                  k !== L && ($ += " " + v.sInfoFiltered), $ = Zt(r, $ += v.sInfoPostFix);
+                  var v = r.oLanguage, y = r._iDisplayStart + 1, _ = r.fnDisplayEnd(), N = r.fnRecordsTotal(), k = r.fnRecordsDisplay(), $ = k ? v.sInfo : v.sInfoEmpty;
+                  k !== N && ($ += " " + v.sInfoFiltered), $ = Zt(r, $ += v.sInfoPostFix);
                   var ue = v.fnInfoCallback;
-                  ue !== null && ($ = ue.call(r.oInstance, r, y, _, L, k, $)), g(u).html($);
+                  ue !== null && ($ = ue.call(r.oInstance, r, y, _, N, k, $)), g(u).html($);
                 }
               }
               function Zt(r, u) {
-                var v = r.fnFormatNumber, y = r._iDisplayStart + 1, _ = r._iDisplayLength, L = r.fnRecordsDisplay(), k = _ === -1;
-                return u.replace(/_START_/g, v.call(r, y)).replace(/_END_/g, v.call(r, r.fnDisplayEnd())).replace(/_MAX_/g, v.call(r, r.fnRecordsTotal())).replace(/_TOTAL_/g, v.call(r, L)).replace(/_PAGE_/g, v.call(r, k ? 1 : Math.ceil(y / _))).replace(/_PAGES_/g, v.call(r, k ? 1 : Math.ceil(L / _)));
+                var v = r.fnFormatNumber, y = r._iDisplayStart + 1, _ = r._iDisplayLength, N = r.fnRecordsDisplay(), k = _ === -1;
+                return u.replace(/_START_/g, v.call(r, y)).replace(/_END_/g, v.call(r, r.fnDisplayEnd())).replace(/_MAX_/g, v.call(r, r.fnRecordsTotal())).replace(/_TOTAL_/g, v.call(r, N)).replace(/_PAGE_/g, v.call(r, k ? 1 : Math.ceil(y / _))).replace(/_PAGES_/g, v.call(r, k ? 1 : Math.ceil(N / _)));
               }
               function Er(r) {
-                var u, v, y, _ = r.iInitDisplayStart, L = r.aoColumns, k = r.oFeatures, $ = r.bDeferLoading;
+                var u, v, y, _ = r.iInitDisplayStart, N = r.aoColumns, k = r.oFeatures, $ = r.bDeferLoading;
                 if (r.bInitialised) {
-                  for (hn(r), or(r), fn(r, r.aoHeader), fn(r, r.aoFooter), xr(r, !0), k.bAutoWidth && vt(r), u = 0, v = L.length; u < v; u++) (y = L[u]).sWidth && (y.nTh.style.width = Pt(y.sWidth));
+                  for (hn(r), or(r), fn(r, r.aoHeader), fn(r, r.aoFooter), xr(r, !0), k.bAutoWidth && vt(r), u = 0, v = N.length; u < v; u++) (y = N[u]).sWidth && (y.nTh.style.width = Pt(y.sWidth));
                   Ze(r, null, "preInit", [r]), gr(r);
                   var ue = le(r);
                   (ue != "ssp" || $) && (ue == "ajax" ? Qr(r, [], (function(Fe) {
@@ -16943,7 +16944,7 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
                 r._iDisplayLength = v, Et(r), Ze(r, null, "length", [r, v]);
               }
               function xn(r) {
-                for (var u = r.oClasses, v = r.sTableId, y = r.aLengthMenu, _ = Array.isArray(y[0]), L = _ ? y[0] : y, k = _ ? y[1] : y, $ = g("<select/>", { name: v + "_length", "aria-controls": v, class: u.sLengthSelect }), ue = 0, Fe = L.length; ue < Fe; ue++) $[0][ue] = new Option(typeof k[ue] == "number" ? r.fnFormatNumber(k[ue]) : k[ue], L[ue]);
+                for (var u = r.oClasses, v = r.sTableId, y = r.aLengthMenu, _ = Array.isArray(y[0]), N = _ ? y[0] : y, k = _ ? y[1] : y, $ = g("<select/>", { name: v + "_length", "aria-controls": v, class: u.sLengthSelect }), ue = 0, Fe = N.length; ue < Fe; ue++) $[0][ue] = new Option(typeof k[ue] == "number" ? r.fnFormatNumber(k[ue]) : k[ue], N[ue]);
                 var Ce = g("<div><label/></div>").addClass(u.sLength);
                 return r.aanFeatures.l || (Ce[0].id = v + "_length"), Ce.children().append(r.oLanguage.sLengthMenu.replace("_MENU_", $[0].outerHTML)), g("select", Ce).val(r._iDisplayLength).on("change.DT", (function(n) {
                   Nr(r, g(this).val()), Ar(r);
@@ -16954,17 +16955,17 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
               function cn(r) {
                 var u = r.sPaginationType, v = K.ext.pager[u], y = typeof v == "function", _ = function($) {
                   Ar($);
-                }, L = g("<div/>").addClass(r.oClasses.sPaging + u)[0], k = r.aanFeatures;
-                return y || v.fnInit(r, L, _), k.p || (L.id = r.sTableId + "_paginate", r.aoDrawCallback.push({ fn: function($) {
+                }, N = g("<div/>").addClass(r.oClasses.sPaging + u)[0], k = r.aanFeatures;
+                return y || v.fnInit(r, N, _), k.p || (N.id = r.sTableId + "_paginate", r.aoDrawCallback.push({ fn: function($) {
                   if (y) {
                     var ue, Fe, Ce = $._iDisplayStart, n = $._iDisplayLength, c = $.fnRecordsDisplay(), m = n === -1, E = m ? 0 : Math.ceil(Ce / n), M = m ? 1 : Math.ceil(c / n), P = v(E, M);
                     for (ue = 0, Fe = k.p.length; ue < Fe; ue++) ie($, "pageButton")($, k.p[ue], ue, P, E, M);
                   } else v.fnUpdate($, _);
-                }, sName: "pagination" })), L;
+                }, sName: "pagination" })), N;
               }
               function Xr(r, u, v) {
-                var y = r._iDisplayStart, _ = r._iDisplayLength, L = r.fnRecordsDisplay();
-                L === 0 || _ === -1 ? y = 0 : typeof u == "number" ? (y = u * _) > L && (y = 0) : u == "first" ? y = 0 : u == "previous" ? (y = _ >= 0 ? y - _ : 0) < 0 && (y = 0) : u == "next" ? y + _ < L && (y += _) : u == "last" ? y = Math.floor((L - 1) / _) * _ : we(r, 0, "Unknown paging action: " + u, 5);
+                var y = r._iDisplayStart, _ = r._iDisplayLength, N = r.fnRecordsDisplay();
+                N === 0 || _ === -1 ? y = 0 : typeof u == "number" ? (y = u * _) > N && (y = 0) : u == "first" ? y = 0 : u == "previous" ? (y = _ >= 0 ? y - _ : 0) < 0 && (y = 0) : u == "next" ? y + _ < N && (y += _) : u == "last" ? y = Math.floor((N - 1) / _) * _ : we(r, 0, "Unknown paging action: " + u, 5);
                 var k = r._iDisplayStart !== y;
                 return r._iDisplayStart = y, k && (Ze(r, null, "page", [r]), v && Ar(r)), k;
               }
@@ -16979,12 +16980,12 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
                 u.attr("role", "grid");
                 var v = r.oScroll;
                 if (v.sX === "" && v.sY === "") return r.nTable;
-                var y = v.sX, _ = v.sY, L = r.oClasses, k = u.children("caption"), $ = k.length ? k[0]._captionSide : null, ue = g(u[0].cloneNode(!1)), Fe = g(u[0].cloneNode(!1)), Ce = u.children("tfoot"), n = "<div/>", c = function(_e) {
+                var y = v.sX, _ = v.sY, N = r.oClasses, k = u.children("caption"), $ = k.length ? k[0]._captionSide : null, ue = g(u[0].cloneNode(!1)), Fe = g(u[0].cloneNode(!1)), Ce = u.children("tfoot"), n = "<div/>", c = function(_e) {
                   return _e ? Pt(_e) : null;
                 };
                 Ce.length || (Ce = null);
-                var m = g(n, { class: L.sScrollWrapper }).append(g(n, { class: L.sScrollHead }).css({ overflow: "hidden", position: "relative", border: 0, width: y ? c(y) : "100%" }).append(g(n, { class: L.sScrollHeadInner }).css({ "box-sizing": "content-box", width: v.sXInner || "100%" }).append(ue.removeAttr("id").css("margin-left", 0).append($ === "top" ? k : null).append(u.children("thead"))))).append(g(n, { class: L.sScrollBody }).css({ position: "relative", overflow: "auto", width: c(y) }).append(u));
-                Ce && m.append(g(n, { class: L.sScrollFoot }).css({ overflow: "hidden", border: 0, width: y ? c(y) : "100%" }).append(g(n, { class: L.sScrollFootInner }).append(Fe.removeAttr("id").css("margin-left", 0).append($ === "bottom" ? k : null).append(u.children("tfoot")))));
+                var m = g(n, { class: N.sScrollWrapper }).append(g(n, { class: N.sScrollHead }).css({ overflow: "hidden", position: "relative", border: 0, width: y ? c(y) : "100%" }).append(g(n, { class: N.sScrollHeadInner }).css({ "box-sizing": "content-box", width: v.sXInner || "100%" }).append(ue.removeAttr("id").css("margin-left", 0).append($ === "top" ? k : null).append(u.children("thead"))))).append(g(n, { class: N.sScrollBody }).css({ position: "relative", overflow: "auto", width: c(y) }).append(u));
+                Ce && m.append(g(n, { class: N.sScrollFoot }).css({ overflow: "hidden", border: 0, width: y ? c(y) : "100%" }).append(g(n, { class: N.sScrollFootInner }).append(Fe.removeAttr("id").css("margin-left", 0).append($ === "bottom" ? k : null).append(u.children("tfoot")))));
                 var E = m.children(), M = E[0], P = E[1], ee = Ce ? E[2] : null;
                 return y && g(P).on("scroll.DT", (function(_e) {
                   var ke = this.scrollLeft;
@@ -16992,12 +16993,12 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
                 })), g(P).css("max-height", _), v.bCollapse || g(P).css("height", _), r.nScrollHead = M, r.nScrollBody = P, r.nScrollFoot = ee, r.aoDrawCallback.push({ fn: Sn, sName: "scrolling" }), m[0];
               }
               function Sn(r) {
-                var u, v, y, _, L, k, $, ue, Fe, Ce = r.oScroll, n = Ce.sX, c = Ce.sXInner, m = Ce.sY, E = Ce.iBarWidth, M = g(r.nScrollHead), P = M[0].style, ee = M.children("div"), _e = ee[0].style, ke = ee.children("table"), Ue = r.nScrollBody, ot = g(Ue), Tt = Ue.style, at = g(r.nScrollFoot).children("div"), gt = at.children("table"), rr = g(r.nTHead), ar = g(r.nTable), nr = ar[0], hr = nr.style, zr = r.nTFoot ? g(r.nTFoot) : null, Bn = r.oBrowser, Yr = Bn.bScrollOversize, fr = me(r.aoColumns, "nTh"), Jn = [], Wr = [], Zr = [], ui = [], Ai = function(dn) {
+                var u, v, y, _, N, k, $, ue, Fe, Ce = r.oScroll, n = Ce.sX, c = Ce.sXInner, m = Ce.sY, E = Ce.iBarWidth, M = g(r.nScrollHead), P = M[0].style, ee = M.children("div"), _e = ee[0].style, ke = ee.children("table"), Ue = r.nScrollBody, ot = g(Ue), Tt = Ue.style, at = g(r.nScrollFoot).children("div"), gt = at.children("table"), rr = g(r.nTHead), ar = g(r.nTable), nr = ar[0], hr = nr.style, zr = r.nTFoot ? g(r.nTFoot) : null, Bn = r.oBrowser, Yr = Bn.bScrollOversize, fr = me(r.aoColumns, "nTh"), Jn = [], Wr = [], Zr = [], ui = [], Ai = function(dn) {
                   var Nn = dn.style;
                   Nn.paddingTop = "0", Nn.paddingBottom = "0", Nn.borderTopWidth = "0", Nn.borderBottomWidth = "0", Nn.height = 0;
                 }, ti = Ue.scrollHeight > Ue.clientHeight;
                 if (r.scrollBarVis !== ti && r.scrollBarVis !== H) return r.scrollBarVis = ti, void I(r);
-                r.scrollBarVis = ti, ar.children("thead, tfoot").remove(), zr && (k = zr.clone().prependTo(ar), v = zr.find("tr"), _ = k.find("tr")), L = rr.clone().prependTo(ar), u = rr.find("tr"), y = L.find("tr"), L.find("th, td").removeAttr("tabindex"), n || (Tt.width = "100%", M[0].style.width = "100%"), g.each(Cr(r, L), (function(dn, Nn) {
+                r.scrollBarVis = ti, ar.children("thead, tfoot").remove(), zr && (k = zr.clone().prependTo(ar), v = zr.find("tr"), _ = k.find("tr")), N = rr.clone().prependTo(ar), u = rr.find("tr"), y = N.find("tr"), N.find("th, td").removeAttr("tabindex"), n || (Tt.width = "100%", M[0].style.width = "100%"), g.each(Cr(r, N), (function(dn, Nn) {
                   $ = G(r, dn), Nn.style.width = r.aoColumns[$].sWidth;
                 })), zr && oe((function(dn) {
                   dn.style.width = "";
@@ -17020,32 +17021,32 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
                 _e[Kn] = Li ? E + "px" : "0px", zr && (gt[0].style.width = Pt(ri), at[0].style.width = Pt(ri), at[0].style[Kn] = Li ? E + "px" : "0px"), ar.children("colgroup").insertBefore(ar.children("thead")), ot.trigger("scroll"), !r.bSorted && !r.bFiltered || r._drawHold || (Ue.scrollTop = 0);
               }
               function oe(r, u, v) {
-                for (var y, _, L = 0, k = 0, $ = u.length; k < $; ) {
-                  for (y = u[k].firstChild, _ = v ? v[k].firstChild : null; y; ) y.nodeType === 1 && (v ? r(y, _, L) : r(y, L), L++), y = y.nextSibling, _ = v ? _.nextSibling : null;
+                for (var y, _, N = 0, k = 0, $ = u.length; k < $; ) {
+                  for (y = u[k].firstChild, _ = v ? v[k].firstChild : null; y; ) y.nodeType === 1 && (v ? r(y, _, N) : r(y, N), N++), y = y.nextSibling, _ = v ? _.nextSibling : null;
                   k++;
                 }
               }
               var Oe = /<.*?>/g;
               function vt(r) {
-                var u, v, y, _ = r.nTable, L = r.aoColumns, k = r.oScroll, $ = k.sY, ue = k.sX, Fe = k.sXInner, Ce = L.length, n = je(r, "bVisible"), c = g("th", r.nTHead), m = _.getAttribute("width"), E = _.parentNode, M = !1, P = r.oBrowser, ee = P.bScrollOversize, _e = _.style.width;
-                for (_e && _e.indexOf("%") !== -1 && (m = _e), u = 0; u < n.length; u++) (v = L[n[u]]).sWidth !== null && (v.sWidth = Wt(v.sWidthOrig, E), M = !0);
+                var u, v, y, _ = r.nTable, N = r.aoColumns, k = r.oScroll, $ = k.sY, ue = k.sX, Fe = k.sXInner, Ce = N.length, n = je(r, "bVisible"), c = g("th", r.nTHead), m = _.getAttribute("width"), E = _.parentNode, M = !1, P = r.oBrowser, ee = P.bScrollOversize, _e = _.style.width;
+                for (_e && _e.indexOf("%") !== -1 && (m = _e), u = 0; u < n.length; u++) (v = N[n[u]]).sWidth !== null && (v.sWidth = Wt(v.sWidthOrig, E), M = !0);
                 if (ee || !M && !ue && !$ && Ce == Le(r) && Ce == c.length) for (u = 0; u < Ce; u++) {
                   var ke = G(r, u);
-                  ke !== null && (L[ke].sWidth = Pt(c.eq(u).width()));
+                  ke !== null && (N[ke].sWidth = Pt(c.eq(u).width()));
                 }
                 else {
                   var Ue = g(_).clone().css("visibility", "hidden").removeAttr("id");
                   Ue.find("tbody tr").remove();
                   var ot = g("<tr/>").appendTo(Ue.find("tbody"));
-                  for (Ue.find("thead, tfoot").remove(), Ue.append(g(r.nTHead).clone()).append(g(r.nTFoot).clone()), Ue.find("tfoot th, tfoot td").css("width", ""), c = Cr(r, Ue.find("thead")[0]), u = 0; u < n.length; u++) v = L[n[u]], c[u].style.width = v.sWidthOrig !== null && v.sWidthOrig !== "" ? Pt(v.sWidthOrig) : "", v.sWidthOrig && ue && g(c[u]).append(g("<div/>").css({ width: v.sWidthOrig, margin: 0, padding: 0, border: 0, height: 1 }));
-                  if (r.aoData.length) for (u = 0; u < n.length; u++) v = L[y = n[u]], g(lr(r, y)).clone(!1).append(v.sContentPadding).appendTo(ot);
+                  for (Ue.find("thead, tfoot").remove(), Ue.append(g(r.nTHead).clone()).append(g(r.nTFoot).clone()), Ue.find("tfoot th, tfoot td").css("width", ""), c = Cr(r, Ue.find("thead")[0]), u = 0; u < n.length; u++) v = N[n[u]], c[u].style.width = v.sWidthOrig !== null && v.sWidthOrig !== "" ? Pt(v.sWidthOrig) : "", v.sWidthOrig && ue && g(c[u]).append(g("<div/>").css({ width: v.sWidthOrig, margin: 0, padding: 0, border: 0, height: 1 }));
+                  if (r.aoData.length) for (u = 0; u < n.length; u++) v = N[y = n[u]], g(lr(r, y)).clone(!1).append(v.sContentPadding).appendTo(ot);
                   g("[name]", Ue).removeAttr("name");
                   var Tt = g("<div/>").css(ue || $ ? { position: "absolute", top: 0, left: 0, height: 1, right: 0, overflow: "hidden" } : {}).append(Ue).appendTo(E);
                   ue && Fe ? Ue.width(Fe) : ue ? (Ue.css("width", "auto"), Ue.removeAttr("width"), Ue.width() < E.clientWidth && m && Ue.width(E.clientWidth)) : $ ? Ue.width(E.clientWidth) : m && Ue.width(m);
                   var at = 0;
                   for (u = 0; u < n.length; u++) {
                     var gt = g(c[u]), rr = gt.outerWidth() - gt.width(), ar = P.bBounding ? Math.ceil(c[u].getBoundingClientRect().width) : gt.outerWidth();
-                    at += ar, L[n[u]].sWidth = Pt(ar - rr);
+                    at += ar, N[n[u]].sWidth = Pt(ar - rr);
                   }
                   _.style.width = Pt(at), Tt.remove();
                 }
@@ -17071,44 +17072,44 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
                 return y.nTr ? y.anCells[u] : g("<td/>").html(It(r, v, u, "display"))[0];
               }
               function ft(r, u) {
-                for (var v, y = -1, _ = -1, L = 0, k = r.aoData.length; L < k; L++) (v = (v = (v = It(r, L, u, "display") + "").replace(Oe, "")).replace(/&nbsp;/g, " ")).length > y && (y = v.length, _ = L);
+                for (var v, y = -1, _ = -1, N = 0, k = r.aoData.length; N < k; N++) (v = (v = (v = It(r, N, u, "display") + "").replace(Oe, "")).replace(/&nbsp;/g, " ")).length > y && (y = v.length, _ = N);
                 return _;
               }
               function Pt(r) {
                 return r === null ? "0px" : typeof r == "number" ? r < 0 ? "0px" : r + "px" : r.match(/\d$/) ? r + "px" : r;
               }
               function qt(r) {
-                var u, v, y, _, L, k, $, ue = [], Fe = r.aoColumns, Ce = r.aaSortingFixed, n = g.isPlainObject(Ce), c = [], m = function(E) {
+                var u, v, y, _, N, k, $, ue = [], Fe = r.aoColumns, Ce = r.aaSortingFixed, n = g.isPlainObject(Ce), c = [], m = function(E) {
                   E.length && !Array.isArray(E[0]) ? c.push(E) : g.merge(c, E);
                 };
-                for (Array.isArray(Ce) && m(Ce), n && Ce.pre && m(Ce.pre), m(r.aaSorting), n && Ce.post && m(Ce.post), u = 0; u < c.length; u++) for (v = 0, y = (_ = Fe[$ = c[u][0]].aDataSort).length; v < y; v++) k = Fe[L = _[v]].sType || "string", c[u]._idx === H && (c[u]._idx = g.inArray(c[u][1], Fe[L].asSorting)), ue.push({ src: $, col: L, dir: c[u][1], index: c[u]._idx, type: k, formatter: K.ext.type.order[k + "-pre"] });
+                for (Array.isArray(Ce) && m(Ce), n && Ce.pre && m(Ce.pre), m(r.aaSorting), n && Ce.post && m(Ce.post), u = 0; u < c.length; u++) for (v = 0, y = (_ = Fe[$ = c[u][0]].aDataSort).length; v < y; v++) k = Fe[N = _[v]].sType || "string", c[u]._idx === H && (c[u]._idx = g.inArray(c[u][1], Fe[N].asSorting)), ue.push({ src: $, col: N, dir: c[u][1], index: c[u]._idx, type: k, formatter: K.ext.type.order[k + "-pre"] });
                 return ue;
               }
               function Jr(r) {
-                var u, v, y, _, L, k = [], $ = K.ext.type.order, ue = r.aoData, Fe = (r.aoColumns, 0), Ce = r.aiDisplayMaster;
-                for (Re(r), u = 0, v = (L = qt(r)).length; u < v; u++) (_ = L[u]).formatter && Fe++, qr(r, _.col);
-                if (le(r) != "ssp" && L.length !== 0) {
+                var u, v, y, _, N, k = [], $ = K.ext.type.order, ue = r.aoData, Fe = (r.aoColumns, 0), Ce = r.aiDisplayMaster;
+                for (Re(r), u = 0, v = (N = qt(r)).length; u < v; u++) (_ = N[u]).formatter && Fe++, qr(r, _.col);
+                if (le(r) != "ssp" && N.length !== 0) {
                   for (u = 0, y = Ce.length; u < y; u++) k[Ce[u]] = u;
-                  Fe === L.length ? Ce.sort((function(n, c) {
-                    var m, E, M, P, ee, _e = L.length, ke = ue[n]._aSortData, Ue = ue[c]._aSortData;
-                    for (M = 0; M < _e; M++) if ((P = (m = ke[(ee = L[M]).col]) < (E = Ue[ee.col]) ? -1 : m > E ? 1 : 0) != 0) return ee.dir === "asc" ? P : -P;
+                  Fe === N.length ? Ce.sort((function(n, c) {
+                    var m, E, M, P, ee, _e = N.length, ke = ue[n]._aSortData, Ue = ue[c]._aSortData;
+                    for (M = 0; M < _e; M++) if ((P = (m = ke[(ee = N[M]).col]) < (E = Ue[ee.col]) ? -1 : m > E ? 1 : 0) != 0) return ee.dir === "asc" ? P : -P;
                     return (m = k[n]) < (E = k[c]) ? -1 : m > E ? 1 : 0;
                   })) : Ce.sort((function(n, c) {
-                    var m, E, M, P, ee, _e = L.length, ke = ue[n]._aSortData, Ue = ue[c]._aSortData;
-                    for (M = 0; M < _e; M++) if (m = ke[(ee = L[M]).col], E = Ue[ee.col], (P = ($[ee.type + "-" + ee.dir] || $["string-" + ee.dir])(m, E)) !== 0) return P;
+                    var m, E, M, P, ee, _e = N.length, ke = ue[n]._aSortData, Ue = ue[c]._aSortData;
+                    for (M = 0; M < _e; M++) if (m = ke[(ee = N[M]).col], E = Ue[ee.col], (P = ($[ee.type + "-" + ee.dir] || $["string-" + ee.dir])(m, E)) !== 0) return P;
                     return (m = k[n]) < (E = k[c]) ? -1 : m > E ? 1 : 0;
                   }));
                 }
                 r.bSorted = !0;
               }
               function Gr(r) {
-                for (var u, v, y = r.aoColumns, _ = qt(r), L = r.oLanguage.oAria, k = 0, $ = y.length; k < $; k++) {
+                for (var u, v, y = r.aoColumns, _ = qt(r), N = r.oLanguage.oAria, k = 0, $ = y.length; k < $; k++) {
                   var ue = y[k], Fe = ue.asSorting, Ce = ue.sTitle.replace(/<.*?>/g, ""), n = ue.nTh;
-                  n.removeAttribute("aria-sort"), ue.bSortable ? (_.length > 0 && _[0].col == k ? (n.setAttribute("aria-sort", _[0].dir == "asc" ? "ascending" : "descending"), v = Fe[_[0].index + 1] || Fe[0]) : v = Fe[0], u = Ce + (v === "asc" ? L.sSortAscending : L.sSortDescending)) : u = Ce, n.setAttribute("aria-label", u);
+                  n.removeAttribute("aria-sort"), ue.bSortable ? (_.length > 0 && _[0].col == k ? (n.setAttribute("aria-sort", _[0].dir == "asc" ? "ascending" : "descending"), v = Fe[_[0].index + 1] || Fe[0]) : v = Fe[0], u = Ce + (v === "asc" ? N.sSortAscending : N.sSortDescending)) : u = Ce, n.setAttribute("aria-label", u);
                 }
               }
               function ei(r, u, v, y) {
-                var _, L = r.aoColumns[u], k = r.aaSorting, $ = L.asSorting, ue = function(Ce, n) {
+                var _, N = r.aoColumns[u], k = r.aaSorting, $ = N.asSorting, ue = function(Ce, n) {
                   var c = Ce._idx;
                   return c === H && (c = g.inArray(Ce[1], $)), c + 1 < $.length ? c + 1 : n ? null : 0;
                 };
@@ -17120,24 +17121,24 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
               }
               function mi(r, u, v, y) {
                 var _ = r.aoColumns[v];
-                xe(u, {}, (function(L) {
+                xe(u, {}, (function(N) {
                   _.bSortable !== !1 && (r.oFeatures.bProcessing ? (xr(r, !0), setTimeout((function() {
-                    ei(r, v, L.shiftKey, y), le(r) !== "ssp" && xr(r, !1);
-                  }), 0)) : ei(r, v, L.shiftKey, y));
+                    ei(r, v, N.shiftKey, y), le(r) !== "ssp" && xr(r, !1);
+                  }), 0)) : ei(r, v, N.shiftKey, y));
                 }));
               }
               function sr(r) {
-                var u, v, y, _ = r.aLastSort, L = r.oClasses.sSortColumn, k = qt(r), $ = r.oFeatures;
+                var u, v, y, _ = r.aLastSort, N = r.oClasses.sSortColumn, k = qt(r), $ = r.oFeatures;
                 if ($.bSort && $.bSortClasses) {
-                  for (u = 0, v = _.length; u < v; u++) y = _[u].src, g(me(r.aoData, "anCells", y)).removeClass(L + (u < 2 ? u + 1 : 3));
-                  for (u = 0, v = k.length; u < v; u++) y = k[u].src, g(me(r.aoData, "anCells", y)).addClass(L + (u < 2 ? u + 1 : 3));
+                  for (u = 0, v = _.length; u < v; u++) y = _[u].src, g(me(r.aoData, "anCells", y)).removeClass(N + (u < 2 ? u + 1 : 3));
+                  for (u = 0, v = k.length; u < v; u++) y = k[u].src, g(me(r.aoData, "anCells", y)).addClass(N + (u < 2 ? u + 1 : 3));
                 }
                 r.aLastSort = k;
               }
               function qr(r, u) {
-                var v, y, _, L = r.aoColumns[u], k = K.ext.order[L.sSortDataType];
+                var v, y, _, N = r.aoColumns[u], k = K.ext.order[N.sSortDataType];
                 k && (v = k.call(r.oInstance, r, u, ne(r, u)));
-                for (var $ = K.ext.type.order[L.sType + "-pre"], ue = 0, Fe = r.aoData.length; ue < Fe; ue++) (y = r.aoData[ue])._aSortData || (y._aSortData = []), y._aSortData[u] && !k || (_ = k ? v[ue] : It(r, ue, u, "sort"), y._aSortData[u] = $ ? $(_) : _);
+                for (var $ = K.ext.type.order[N.sType + "-pre"], ue = 0, Fe = r.aoData.length; ue < Fe; ue++) (y = r.aoData[ue])._aSortData || (y._aSortData = []), y._aSortData[u] && !k || (_ = k ? v[ue] : It(r, ue, u, "sort"), y._aSortData[u] = $ ? $(_) : _);
               }
               function Yn(r) {
                 if (r.oFeatures.bStateSave && !r.bDestroying) {
@@ -17148,19 +17149,19 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
                 }
               }
               function Pe(r, u, v) {
-                var y, _, L = r.aoColumns, k = function(ue) {
+                var y, _, N = r.aoColumns, k = function(ue) {
                   if (ue && ue.time) {
                     var Fe = Ze(r, "aoStateLoadParams", "stateLoadParams", [r, ue]);
                     if (g.inArray(!1, Fe) === -1) {
                       var Ce = r.iStateDuration;
                       if (Ce > 0 && ue.time < +/* @__PURE__ */ new Date() - 1e3 * Ce) v();
-                      else if (ue.columns && L.length !== ue.columns.length) v();
+                      else if (ue.columns && N.length !== ue.columns.length) v();
                       else {
                         if (r.oLoadedState = g.extend(!0, {}, ue), ue.start !== H && (r._iDisplayStart = ue.start, r.iInitDisplayStart = ue.start), ue.length !== H && (r._iDisplayLength = ue.length), ue.order !== H && (r.aaSorting = [], g.each(ue.order, (function(c, m) {
-                          r.aaSorting.push(m[0] >= L.length ? [0, m[1]] : m);
+                          r.aaSorting.push(m[0] >= N.length ? [0, m[1]] : m);
                         }))), ue.search !== H && g.extend(r.oPreviousSearch, $t(ue.search)), ue.columns) for (y = 0, _ = ue.columns.length; y < _; y++) {
                           var n = ue.columns[y];
-                          n.visible !== H && (L[y].bVisible = n.visible), n.search !== H && g.extend(r.aoPreSearchCols[y], $t(n.search));
+                          n.visible !== H && (N[y].bVisible = n.visible), n.search !== H && g.extend(r.aoPreSearchCols[y], $t(n.search));
                         }
                         Ze(r, "aoStateLoaded", "stateLoaded", [r, ue]), v();
                       }
@@ -17179,17 +17180,17 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
               function we(r, u, v, y) {
                 if (v = "DataTables warning: " + (r ? "table id=" + r.sTableId + " - " : "") + v, y && (v += ". For more information about this error, please see http://datatables.net/tn/" + y), u) W.console && console.log && console.log(v);
                 else {
-                  var _ = K.ext, L = _.sErrMode || _.errMode;
-                  if (r && Ze(r, null, "error", [r, y, v]), L == "alert") alert(v);
+                  var _ = K.ext, N = _.sErrMode || _.errMode;
+                  if (r && Ze(r, null, "error", [r, y, v]), N == "alert") alert(v);
                   else {
-                    if (L == "throw") throw new Error(v);
-                    typeof L == "function" && L(r, y, v);
+                    if (N == "throw") throw new Error(v);
+                    typeof N == "function" && N(r, y, v);
                   }
                 }
               }
               function q(r, u, v, y) {
-                Array.isArray(v) ? g.each(v, (function(_, L) {
-                  Array.isArray(L) ? q(r, u, L[0], L[1]) : q(r, u, L);
+                Array.isArray(v) ? g.each(v, (function(_, N) {
+                  Array.isArray(N) ? q(r, u, N[0], N[1]) : q(r, u, N);
                 })) : (y === H && (y = v), u[v] !== H && (r[y] = u[v]));
               }
               function D(r, u, v) {
@@ -17214,8 +17215,8 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
                 if (u && (_ = g.map(r[u].slice().reverse(), (function(k, $) {
                   return k.fn.apply(r.oInstance, y);
                 }))), v !== null) {
-                  var L = g.Event(v + ".dt");
-                  g(r.nTable).trigger(L, y), _.push(L.result);
+                  var N = g.Event(v + ".dt");
+                  g(r.nTable).trigger(N, y), _.push(N.result);
                 }
                 return _;
               }
@@ -17244,7 +17245,7 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
                   })(k);
                   $ && v.push.apply(v, $);
                 };
-                if (Array.isArray(r)) for (var _ = 0, L = r.length; _ < L; _++) y(r[_]);
+                if (Array.isArray(r)) for (var _ = 0, N = r.length; _ < N; _++) y(r[_]);
                 else y(r);
                 this.context = be(v), u && g.merge(this, u), this.selector = { rows: null, cols: null, opts: null }, C.extend(this, this, Ie);
               }, K.Api = C, g.extend(C.prototype, { any: function() {
@@ -17269,12 +17270,12 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
                 for (var v = u || 0, y = this.length; v < y; v++) if (this[v] === r) return v;
                 return -1;
               }, iterator: function(r, u, v, y) {
-                var _, L, k, $, ue, Fe, Ce, n, c = [], m = this.context, E = this.selector;
-                for (typeof r == "string" && (y = v, v = u, u = r, r = !1), L = 0, k = m.length; L < k; L++) {
-                  var M = new C(m[L]);
-                  if (u === "table") (_ = v.call(M, m[L], L)) !== H && c.push(_);
-                  else if (u === "columns" || u === "rows") (_ = v.call(M, m[L], this[L], L)) !== H && c.push(_);
-                  else if (u === "column" || u === "column-rows" || u === "row" || u === "cell") for (Ce = this[L], u === "column-rows" && (Fe = Lr(m[L], E.opts)), $ = 0, ue = Ce.length; $ < ue; $++) n = Ce[$], (_ = u === "cell" ? v.call(M, m[L], n.row, n.column, L, $) : v.call(M, m[L], n, L, $, Fe)) !== H && c.push(_);
+                var _, N, k, $, ue, Fe, Ce, n, c = [], m = this.context, E = this.selector;
+                for (typeof r == "string" && (y = v, v = u, u = r, r = !1), N = 0, k = m.length; N < k; N++) {
+                  var M = new C(m[N]);
+                  if (u === "table") (_ = v.call(M, m[N], N)) !== H && c.push(_);
+                  else if (u === "columns" || u === "rows") (_ = v.call(M, m[N], this[N], N)) !== H && c.push(_);
+                  else if (u === "column" || u === "column-rows" || u === "row" || u === "cell") for (Ce = this[N], u === "column-rows" && (Fe = Lr(m[N], E.opts)), $ = 0, ue = Ce.length; $ < ue; $++) n = Ce[$], (_ = u === "cell" ? v.call(M, m[N], n.row, n.column, N, $) : v.call(M, m[N], n, N, $, Fe)) !== H && c.push(_);
                 }
                 if (c.length || y) {
                   var P = new C(m, r ? c.concat.apply([], c) : c), ee = P.selector;
@@ -17308,24 +17309,24 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
                 return new C(this.context, be(this));
               }, unshift: et.unshift }), C.extend = function(r, u, v) {
                 if (v.length && u && (u instanceof C || u.__dt_wrapper)) {
-                  var y, _, L, k = function($, ue, Fe) {
+                  var y, _, N, k = function($, ue, Fe) {
                     return function() {
                       var Ce = ue.apply($, arguments);
                       return C.extend(Ce, Ce, Fe.methodExt), Ce;
                     };
                   };
-                  for (y = 0, _ = v.length; y < _; y++) u[(L = v[y]).name] = L.type === "function" ? k(r, L.val, L) : L.type === "object" ? {} : L.val, u[L.name].__dt_wrapper = !0, C.extend(r, u[L.name], L.propExt);
+                  for (y = 0, _ = v.length; y < _; y++) u[(N = v[y]).name] = N.type === "function" ? k(r, N.val, N) : N.type === "object" ? {} : N.val, u[N.name].__dt_wrapper = !0, C.extend(r, u[N.name], N.propExt);
                 }
               }, C.register = Q = function(r, u) {
                 if (Array.isArray(r)) for (var v = 0, y = r.length; v < y; v++) C.register(r[v], u);
                 else {
-                  var _, L, k, $, ue = r.split("."), Fe = Ie, Ce = function(c, m) {
+                  var _, N, k, $, ue = r.split("."), Fe = Ie, Ce = function(c, m) {
                     for (var E = 0, M = c.length; E < M; E++) if (c[E].name === m) return c[E];
                     return null;
                   };
-                  for (_ = 0, L = ue.length; _ < L; _++) {
+                  for (_ = 0, N = ue.length; _ < N; _++) {
                     var n = Ce(Fe, k = ($ = ue[_].indexOf("()") !== -1) ? ue[_].replace("()", "") : ue[_]);
-                    n || (n = { name: k, val: {}, methodExt: [], propExt: [], type: "object" }, Fe.push(n)), _ === L - 1 ? (n.val = u, n.type = typeof u == "function" ? "function" : g.isPlainObject(u) ? "object" : "other") : Fe = $ ? n.methodExt : n.propExt;
+                    n || (n = { name: k, val: {}, methodExt: [], propExt: [], type: "object" }, Fe.push(n)), _ === N - 1 ? (n.val = u, n.type = typeof u == "function" ? "function" : g.isPlainObject(u) ? "object" : "other") : Fe = $ ? n.methodExt : n.propExt;
                   }
                 }
               }, C.registerPlural = ge = function(r, u, v) {
@@ -17382,8 +17383,8 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
                 }));
               })), Q("page.info()", (function(r) {
                 if (this.context.length === 0) return H;
-                var u = this.context[0], v = u._iDisplayStart, y = u.oFeatures.bPaginate ? u._iDisplayLength : -1, _ = u.fnRecordsDisplay(), L = y === -1;
-                return { page: L ? 0 : Math.floor(v / y), pages: L ? 1 : Math.ceil(_ / y), start: v, end: u.fnDisplayEnd(), length: y, recordsTotal: u.fnRecordsTotal(), recordsDisplay: _, serverSide: le(u) === "ssp" };
+                var u = this.context[0], v = u._iDisplayStart, y = u.oFeatures.bPaginate ? u._iDisplayLength : -1, _ = u.fnRecordsDisplay(), N = y === -1;
+                return { page: N ? 0 : Math.floor(v / y), pages: N ? 1 : Math.ceil(_ / y), start: v, end: u.fnDisplayEnd(), length: y, recordsTotal: u.fnRecordsTotal(), recordsDisplay: _, serverSide: le(u) === "ssp" };
               })), Q("page.len()", (function(r) {
                 return r === H ? this.context.length !== 0 ? this.context[0]._iDisplayLength : H : this.iterator("table", (function(u) {
                   Nr(u, r);
@@ -17400,9 +17401,9 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
                 else {
                   xr(r, !0);
                   var _ = r.jqXHR;
-                  _ && _.readyState !== 4 && _.abort(), Qr(r, [], (function(L) {
+                  _ && _.readyState !== 4 && _.abort(), Qr(r, [], (function(N) {
                     on(r);
-                    for (var k = sn(r, L), $ = 0, ue = k.length; $ < ue; $++) tt(r, k[$]);
+                    for (var k = sn(r, N), $ = 0, ue = k.length; $ < ue; $++) tt(r, k[$]);
                     gr(r, u), xr(r, !1);
                   }));
                 }
@@ -17428,8 +17429,8 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
                 }));
               }));
               var Yt = function(r, u, v, y, _) {
-                var L, k, $, ue, Fe, Ce, n = [], c = typeof u;
-                for (u && c !== "string" && c !== "function" && u.length !== H || (u = [u]), $ = 0, ue = u.length; $ < ue; $++) for (Fe = 0, Ce = (k = u[$] && u[$].split && !u[$].match(/[\[\(:]/) ? u[$].split(",") : [u[$]]).length; Fe < Ce; Fe++) (L = v(typeof k[Fe] == "string" ? k[Fe].trim() : k[Fe])) && L.length && (n = n.concat(L));
+                var N, k, $, ue, Fe, Ce, n = [], c = typeof u;
+                for (u && c !== "string" && c !== "function" && u.length !== H || (u = [u]), $ = 0, ue = u.length; $ < ue; $++) for (Fe = 0, Ce = (k = u[$] && u[$].split && !u[$].match(/[\[\(:]/) ? u[$].split(",") : [u[$]]).length; Fe < Ce; Fe++) (N = v(typeof k[Fe] == "string" ? k[Fe].trim() : k[Fe])) && N.length && (n = n.concat(N));
                 var m = fe.selector[r];
                 if (m.length) for ($ = 0, ue = m.length; $ < ue; $++) n = m[$](y, _, n);
                 return be(n);
@@ -17439,15 +17440,15 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
                 for (var u = 0, v = r.length; u < v; u++) if (r[u].length > 0) return r[0] = r[u], r[0].length = 1, r.length = 1, r.context = [r.context[u]], r;
                 return r.length = 0, r;
               }, Lr = function(r, u) {
-                var v, y = [], _ = r.aiDisplay, L = r.aiDisplayMaster, k = u.search, $ = u.order, ue = u.page;
-                if (le(r) == "ssp") return k === "removed" ? [] : O(0, L.length);
+                var v, y = [], _ = r.aiDisplay, N = r.aiDisplayMaster, k = u.search, $ = u.order, ue = u.page;
+                if (le(r) == "ssp") return k === "removed" ? [] : O(0, N.length);
                 if (ue == "current") for (Ce = r._iDisplayStart, n = r.fnDisplayEnd(); Ce < n; Ce++) y.push(_[Ce]);
                 else if ($ == "current" || $ == "applied") {
-                  if (k == "none") y = L.slice();
+                  if (k == "none") y = N.slice();
                   else if (k == "applied") y = _.slice();
                   else if (k == "removed") {
                     for (var Fe = {}, Ce = 0, n = _.length; Ce < n; Ce++) Fe[_[Ce]] = null;
-                    y = g.map(L, (function(c) {
+                    y = g.map(N, (function(c) {
                       return Fe.hasOwnProperty(c) ? null : c;
                     }));
                   }
@@ -17457,9 +17458,9 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
               Q("rows()", (function(r, u) {
                 r === H ? r = "" : g.isPlainObject(r) && (u = r, r = ""), u = tr(u);
                 var v = this.iterator("table", (function(y) {
-                  return (function(_, L, k) {
+                  return (function(_, N, k) {
                     var $;
-                    return Yt("row", L, (function(ue) {
+                    return Yt("row", N, (function(ue) {
                       var Fe = he(ue), Ce = _.aoData;
                       if (Fe !== null && !k) return [Fe];
                       if ($ || ($ = Lr(_, k)), Fe !== null && g.inArray(Fe, $) !== -1) return [Fe];
@@ -17509,16 +17510,16 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
                   return u;
                 }), 1);
               })), ge("rows().ids()", "row().id()", (function(r) {
-                for (var u = [], v = this.context, y = 0, _ = v.length; y < _; y++) for (var L = 0, k = this[y].length; L < k; L++) {
-                  var $ = v[y].rowIdFn(v[y].aoData[this[y][L]]._aData);
+                for (var u = [], v = this.context, y = 0, _ = v.length; y < _; y++) for (var N = 0, k = this[y].length; N < k; N++) {
+                  var $ = v[y].rowIdFn(v[y].aoData[this[y][N]]._aData);
                   u.push((r === !0 ? "#" : "") + $);
                 }
                 return new C(v, u);
               })), ge("rows().remove()", "row().remove()", (function() {
                 var r = this;
                 return this.iterator("row", (function(u, v, y) {
-                  var _, L, k, $, ue, Fe, Ce = u.aoData, n = Ce[v];
-                  for (Ce.splice(v, 1), _ = 0, L = Ce.length; _ < L; _++) if (Fe = (ue = Ce[_]).anCells, ue.nTr !== null && (ue.nTr._DT_RowIndex = _), Fe !== null) for (k = 0, $ = Fe.length; k < $; k++) Fe[k]._DT_CellIndex.row = _;
+                  var _, N, k, $, ue, Fe, Ce = u.aoData, n = Ce[v];
+                  for (Ce.splice(v, 1), _ = 0, N = Ce.length; _ < N; _++) if (Fe = (ue = Ce[_]).anCells, ue.nTr !== null && (ue.nTr._DT_RowIndex = _), Fe !== null) for (k = 0, $ = Fe.length; k < $; k++) Fe[k]._DT_CellIndex.row = _;
                   wr(u.aiDisplayMaster, v), wr(u.aiDisplay, v), wr(r[y], v, !1), u._iRecordsDisplay > 0 && u._iRecordsDisplay--, Et(u);
                   var c = u.rowIdFn(n._aData);
                   c !== H && delete u.aIds[c];
@@ -17527,8 +17528,8 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
                 })), this;
               })), Q("rows.add()", (function(r) {
                 var u = this.iterator("table", (function(y) {
-                  var _, L, k, $ = [];
-                  for (L = 0, k = r.length; L < k; L++) (_ = r[L]).nodeName && _.nodeName.toUpperCase() === "TR" ? $.push(We(y, _)[0]) : $.push(tt(y, _));
+                  var _, N, k, $ = [];
+                  for (N = 0, k = r.length; N < k; N++) (_ = r[N]).nodeName && _.nodeName.toUpperCase() === "TR" ? $.push(We(y, _)[0]) : $.push(tt(y, _));
                   return $;
                 }), 1), v = this.rows(-1);
                 return v.pop(), g.merge(v, u), v;
@@ -17564,19 +17565,19 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
               }, ln = function(r) {
                 var u = new C(r), v = r.aoData;
                 u.off("draw.dt.DT_details column-visibility.dt.DT_details destroy.dt.DT_details"), me(v, "_details").length > 0 && (u.on("draw.dt.DT_details", (function(y, _) {
-                  r === _ && u.rows({ page: "current" }).eq(0).each((function(L) {
-                    var k = v[L];
+                  r === _ && u.rows({ page: "current" }).eq(0).each((function(N) {
+                    var k = v[N];
                     k._detailsShow && k._details.insertAfter(k.nTr);
                   }));
-                })), u.on("column-visibility.dt.DT_details", (function(y, _, L, k) {
+                })), u.on("column-visibility.dt.DT_details", (function(y, _, N, k) {
                   if (r === _) for (var $, ue = Le(_), Fe = 0, Ce = v.length; Fe < Ce; Fe++) ($ = v[Fe])._details && $._details.children("td[colspan]").attr("colspan", ue);
                 })), u.on("destroy.dt.DT_details", (function(y, _) {
-                  if (r === _) for (var L = 0, k = v.length; L < k; L++) v[L]._details && Ir(u, L);
+                  if (r === _) for (var N = 0, k = v.length; N < k; N++) v[N]._details && Ir(u, N);
                 })));
               };
               Q("row().child()", (function(r, u) {
                 var v = this.context;
-                return r === H ? v.length && this.length ? v[0].aoData[this[0]]._details : H : (r === !0 ? this.child.show() : r === !1 ? Ir(this) : v.length && this.length && (function(y, _, L, k) {
+                return r === H ? v.length && this.length ? v[0].aoData[this[0]]._details : H : (r === !0 ? this.child.show() : r === !1 ? Ir(this) : v.length && this.length && (function(y, _, N, k) {
                   var $ = [], ue = function(Fe, Ce) {
                     if (Array.isArray(Fe) || Fe instanceof g) for (var n = 0, c = Fe.length; n < c; n++) ue(Fe[n], Ce);
                     else if (Fe.nodeName && Fe.nodeName.toLowerCase() === "tr") $.push(Fe);
@@ -17585,7 +17586,7 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
                       g("td", m).addClass(Ce).html(Fe)[0].colSpan = Le(y), $.push(m[0]);
                     }
                   };
-                  ue(L, k), _._details && _._details.detach(), _._details = g($), _._detailsShow && _._details.insertAfter(_.nTr);
+                  ue(N, k), _._details && _._details.detach(), _._details = g($), _._detailsShow && _._details.insertAfter(_.nTr);
                 })(v[0], v[0].aoData[this[0]], r, u), this);
               })), Q(["row().child.show()", "row().child().show()"], (function(r) {
                 return Vr(this, !0), this;
@@ -17598,15 +17599,15 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
                 return r.length && this.length && r[0].aoData[this[0]]._detailsShow || !1;
               }));
               var yn = /^([^:]+):(name|visIdx|visible)$/, ai = function(r, u, v, y, _) {
-                for (var L = [], k = 0, $ = _.length; k < $; k++) L.push(It(r, _[k], u));
-                return L;
+                for (var N = [], k = 0, $ = _.length; k < $; k++) N.push(It(r, _[k], u));
+                return N;
               };
               Q("columns()", (function(r, u) {
                 r === H ? r = "" : g.isPlainObject(r) && (u = r, r = ""), u = tr(u);
                 var v = this.iterator("table", (function(y) {
-                  return (function(_, L, k) {
+                  return (function(_, N, k) {
                     var $ = _.aoColumns, ue = me($, "sName"), Fe = me($, "nTh");
-                    return Yt("column", L, (function(Ce) {
+                    return Yt("column", N, (function(Ce) {
                       var n = he(Ce);
                       if (Ce === "") return O($.length);
                       if (n !== null) return [n >= 0 ? n : $.length + n];
@@ -17661,16 +17662,16 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
                   return r.aoColumns[u].mData;
                 }), 1);
               })), ge("columns().cache()", "column().cache()", (function(r) {
-                return this.iterator("column-rows", (function(u, v, y, _, L) {
-                  return Te(u.aoData, L, r === "search" ? "_aFilterData" : "_aSortData", v);
+                return this.iterator("column-rows", (function(u, v, y, _, N) {
+                  return Te(u.aoData, N, r === "search" ? "_aFilterData" : "_aSortData", v);
                 }), 1);
               })), ge("columns().nodes()", "column().nodes()", (function() {
                 return this.iterator("column-rows", (function(r, u, v, y, _) {
                   return Te(r.aoData, _, "anCells", u);
                 }), 1);
               })), ge("columns().visible()", "column().visible()", (function(r, u) {
-                var v = this, y = this.iterator("column", (function(_, L) {
-                  if (r === H) return _.aoColumns[L].bVisible;
+                var v = this, y = this.iterator("column", (function(_, N) {
+                  if (r === H) return _.aoColumns[N].bVisible;
                   (function(k, $, ue) {
                     var Fe, Ce, n, c, m = k.aoColumns, E = m[$], M = k.aoData;
                     if (ue === H) return E.bVisible;
@@ -17681,11 +17682,11 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
                       } else g(me(k.aoData, "anCells", $)).detach();
                       E.bVisible = ue;
                     }
-                  })(_, L, r);
+                  })(_, N, r);
                 }));
                 return r !== H && this.iterator("table", (function(_) {
-                  fn(_, _.aoHeader), fn(_, _.aoFooter), _.aiDisplay.length || g(_.nTBody).find("td[colspan]").attr("colspan", Le(_)), Yn(_), v.iterator("column", (function(L, k) {
-                    Ze(L, null, "column-visibility", [L, k, r, u]);
+                  fn(_, _.aoHeader), fn(_, _.aoFooter), _.aiDisplay.length || g(_.nTBody).find("td[colspan]").attr("colspan", Le(_)), Yn(_), v.iterator("column", (function(N, k) {
+                    Ze(N, null, "column-visibility", [N, k, r, u]);
                   })), (u === H || u) && v.columns.adjust();
                 })), y;
               })), ge("columns().indexes()", "column().index()", (function(r) {
@@ -17722,9 +17723,9 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
                     }), m, M);
                   })(c, r, tr(v));
                 }));
-                var y, _, L, k, $ = v ? { page: v.page, order: v.order, search: v.search } : {}, ue = this.columns(u, $), Fe = this.rows(r, $), Ce = this.iterator("table", (function(c, m) {
+                var y, _, N, k, $ = v ? { page: v.page, order: v.order, search: v.search } : {}, ue = this.columns(u, $), Fe = this.rows(r, $), Ce = this.iterator("table", (function(c, m) {
                   var E = [];
-                  for (y = 0, _ = Fe[m].length; y < _; y++) for (L = 0, k = ue[m].length; L < k; L++) E.push({ row: Fe[m][y], column: ue[m][L] });
+                  for (y = 0, _ = Fe[m].length; y < _; y++) for (N = 0, k = ue[m].length; N < k; N++) E.push({ row: Fe[m][y], column: ue[m][N] });
                   return E;
                 }), 1), n = v && v.selected ? this.cells(Ce, v) : Ce;
                 return g.extend(n.selector, { cols: u, rows: r, opts: v }), n;
@@ -17779,20 +17780,20 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
                 var u = this;
                 return this.iterator("table", (function(v, y) {
                   var _ = [];
-                  g.each(u[y], (function(L, k) {
+                  g.each(u[y], (function(N, k) {
                     _.push([k, r]);
                   })), v.aaSorting = _;
                 }));
               })), Q("search()", (function(r, u, v, y) {
                 var _ = this.context;
-                return r === H ? _.length !== 0 ? _[0].oPreviousSearch.sSearch : H : this.iterator("table", (function(L) {
-                  L.oFeatures.bFilter && _n(L, g.extend({}, L.oPreviousSearch, { sSearch: r + "", bRegex: u !== null && u, bSmart: v === null || v, bCaseInsensitive: y === null || y }), 1);
+                return r === H ? _.length !== 0 ? _[0].oPreviousSearch.sSearch : H : this.iterator("table", (function(N) {
+                  N.oFeatures.bFilter && _n(N, g.extend({}, N.oPreviousSearch, { sSearch: r + "", bRegex: u !== null && u, bSmart: v === null || v, bCaseInsensitive: y === null || y }), 1);
                 }));
               })), ge("columns().search()", "column().search()", (function(r, u, v, y) {
-                return this.iterator("column", (function(_, L) {
+                return this.iterator("column", (function(_, N) {
                   var k = _.aoPreSearchCols;
-                  if (r === H) return k[L].sSearch;
-                  _.oFeatures.bFilter && (g.extend(k[L], { sSearch: r + "", bRegex: u !== null && u, bSmart: v === null || v, bCaseInsensitive: y === null || y }), _n(_, _.oPreviousSearch, 1));
+                  if (r === H) return k[N].sSearch;
+                  _.oFeatures.bFilter && (g.extend(k[N], { sSearch: r + "", bRegex: u !== null && u, bSmart: v === null || v, bCaseInsensitive: y === null || y }), _n(_, _.oPreviousSearch, 1));
                 }));
               })), Q("state()", (function() {
                 return this.context.length ? this.context[0].oSavedState : null;
@@ -17807,13 +17808,13 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
                   Yn(r);
                 }));
               })), K.versionCheck = K.fnVersionCheck = function(r) {
-                for (var u, v, y = K.version.split("."), _ = r.split("."), L = 0, k = _.length; L < k; L++) if ((u = parseInt(y[L], 10) || 0) !== (v = parseInt(_[L], 10) || 0)) return u > v;
+                for (var u, v, y = K.version.split("."), _ = r.split("."), N = 0, k = _.length; N < k; N++) if ((u = parseInt(y[N], 10) || 0) !== (v = parseInt(_[N], 10) || 0)) return u > v;
                 return !0;
               }, K.isDataTable = K.fnIsDataTable = function(r) {
                 var u = g(r).get(0), v = !1;
                 return r instanceof K.Api || (g.each(K.settings, (function(y, _) {
-                  var L = _.nScrollHead ? g("table", _.nScrollHead)[0] : null, k = _.nScrollFoot ? g("table", _.nScrollFoot)[0] : null;
-                  _.nTable !== u && L !== u && k !== u || (v = !0);
+                  var N = _.nScrollHead ? g("table", _.nScrollHead)[0] : null, k = _.nScrollFoot ? g("table", _.nScrollFoot)[0] : null;
+                  _.nTable !== u && N !== u && k !== u || (v = !0);
                 })), v);
               }, K.tables = K.fnTables = function(r) {
                 var u = !1;
@@ -17849,12 +17850,12 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
                 })).flatten();
               })), Q("destroy()", (function(r) {
                 return r = r || !1, this.iterator("table", (function(u) {
-                  var v, y = u.nTableWrapper.parentNode, _ = u.oClasses, L = u.nTable, k = u.nTBody, $ = u.nTHead, ue = u.nTFoot, Fe = g(L), Ce = g(k), n = g(u.nTableWrapper), c = g.map(u.aoData, (function(M) {
+                  var v, y = u.nTableWrapper.parentNode, _ = u.oClasses, N = u.nTable, k = u.nTBody, $ = u.nTHead, ue = u.nTFoot, Fe = g(N), Ce = g(k), n = g(u.nTableWrapper), c = g.map(u.aoData, (function(M) {
                     return M.nTr;
                   }));
-                  u.bDestroying = !0, Ze(u, "aoDestroyCallback", "destroy", [u]), r || new C(u).columns().visible(!0), n.off(".DT").find(":not(tbody *)").off(".DT"), g(W).off(".DT-" + u.sInstance), L != $.parentNode && (Fe.children("thead").detach(), Fe.append($)), ue && L != ue.parentNode && (Fe.children("tfoot").detach(), Fe.append(ue)), u.aaSorting = [], u.aaSortingFixed = [], sr(u), g(c).removeClass(u.asStripeClasses.join(" ")), g("th, td", $).removeClass(_.sSortable + " " + _.sSortableAsc + " " + _.sSortableDesc + " " + _.sSortableNone), Ce.children().detach(), Ce.append(c);
+                  u.bDestroying = !0, Ze(u, "aoDestroyCallback", "destroy", [u]), r || new C(u).columns().visible(!0), n.off(".DT").find(":not(tbody *)").off(".DT"), g(W).off(".DT-" + u.sInstance), N != $.parentNode && (Fe.children("thead").detach(), Fe.append($)), ue && N != ue.parentNode && (Fe.children("tfoot").detach(), Fe.append(ue)), u.aaSorting = [], u.aaSortingFixed = [], sr(u), g(c).removeClass(u.asStripeClasses.join(" ")), g("th, td", $).removeClass(_.sSortable + " " + _.sSortableAsc + " " + _.sSortableDesc + " " + _.sSortableNone), Ce.children().detach(), Ce.append(c);
                   var m = r ? "remove" : "detach";
-                  Fe[m](), n[m](), !r && y && (y.insertBefore(L, u.nTableReinsertBefore), Fe.css("width", u.sDestroyWidth).removeClass(_.sTable), (v = u.asDestroyStripes.length) && Ce.children().each((function(M) {
+                  Fe[m](), n[m](), !r && y && (y.insertBefore(N, u.nTableReinsertBefore), Fe.css("width", u.sDestroyWidth).removeClass(_.sTable), (v = u.asDestroyStripes.length) && Ce.children().each((function(M) {
                     g(this).addClass(u.asDestroyStripes[M % v]);
                   })));
                   var E = g.inArray(u, K.settings);
@@ -17863,7 +17864,7 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
               })), g.each(["column", "row", "cell"], (function(r, u) {
                 Q(u + "s().every()", (function(v) {
                   var y = this.selector.opts, _ = this;
-                  return this.iterator(u, (function(L, k, $, ue, Fe) {
+                  return this.iterator(u, (function(N, k, $, ue, Fe) {
                     v.call(_[u](k, u === "cell" ? $ : y, u === "cell" ? y : H), k, $, ue, Fe);
                   }));
                 }));
@@ -17888,8 +17889,8 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
               }, fnRecordsDisplay: function() {
                 return le(this) == "ssp" ? 1 * this._iRecordsDisplay : this.aiDisplay.length;
               }, fnDisplayEnd: function() {
-                var r = this._iDisplayLength, u = this._iDisplayStart, v = u + r, y = this.aiDisplay.length, _ = this.oFeatures, L = _.bPaginate;
-                return _.bServerSide ? L === !1 || r === -1 ? u + y : Math.min(u + r, this._iRecordsDisplay) : !L || v > y || r === -1 ? y : v;
+                var r = this._iDisplayLength, u = this._iDisplayStart, v = u + r, y = this.aiDisplay.length, _ = this.oFeatures, N = _.bPaginate;
+                return _.bServerSide ? N === !1 || r === -1 ? u + y : Math.min(u + r, this._iRecordsDisplay) : !N || v > y || r === -1 ? y : v;
               }, oInstance: null, sInstance: null, iTabIndex: 0, nScrollHead: null, nScrollFoot: null, aLastSort: [], oPlugins: {}, rowIdFn: null, rowId: null }, K.ext = fe = { buttons: {}, classes: {}, builder: "-source-", errMode: "alert", feature: [], search: [], selector: { cell: [], column: [], row: [] }, internal: {}, legacy: { ajax: null }, pager: {}, renderer: { pageButton: {}, header: {} }, order: {}, type: { detect: [], search: {}, order: {} }, _unique: 0, fnVersionCheck: K.fnVersionCheck, iApiIndex: 0, oJUIClasses: {}, sVersion: K.version }, g.extend(fe, { afnFiltering: fe.search, aTypes: fe.type.detect, ofnSearch: fe.type.search, oSort: fe.type.order, afnSortData: fe.order, aoFeatures: fe.feature, oApi: fe.internal, oStdClasses: fe.classes, oPagination: fe.pager }), g.extend(K.ext.classes, { sTable: "dataTable", sNoFooter: "no-footer", sPageButton: "paginate_button", sPageButtonActive: "current", sPageButtonDisabled: "disabled", sStripeOdd: "odd", sStripeEven: "even", sRowEmpty: "dataTables_empty", sWrapper: "dataTables_wrapper", sFilter: "dataTables_filter", sInfo: "dataTables_info", sPaging: "dataTables_paginate paging_", sLength: "dataTables_length", sProcessing: "dataTables_processing", sSortAsc: "sorting_asc", sSortDesc: "sorting_desc", sSortable: "sorting", sSortableAsc: "sorting_desc_disabled", sSortableDesc: "sorting_asc_disabled", sSortableNone: "sorting_disabled", sSortColumn: "sorting_", sFilterInput: "", sLengthSelect: "", sScrollWrapper: "dataTables_scroll", sScrollHead: "dataTables_scrollHead", sScrollHeadInner: "dataTables_scrollHeadInner", sScrollBody: "dataTables_scrollBody", sScrollFoot: "dataTables_scrollFoot", sScrollFootInner: "dataTables_scrollFootInner", sHeaderTH: "", sFooterTH: "", sSortJUIAsc: "", sSortJUIDesc: "", sSortJUI: "", sSortJUIAscAllowed: "", sSortJUIDescAllowed: "", sSortJUIWrapper: "", sSortIcon: "", sJUIHeader: "", sJUIFooter: "" });
               var zn = K.ext.pager;
               function wn(r, u) {
@@ -17908,7 +17909,7 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
                 return ["first", "previous", wn(r, u), "next", "last"];
               }, first_last_numbers: function(r, u) {
                 return ["first", wn(r, u), "last"];
-              }, _numbers: wn, numbers_length: 7 }), g.extend(!0, K.ext.renderer, { pageButton: { _: function(r, u, v, y, _, L) {
+              }, _numbers: wn, numbers_length: 7 }), g.extend(!0, K.ext.renderer, { pageButton: { _: function(r, u, v, y, _, N) {
                 var k, $, ue, Fe = r.oClasses, Ce = r.oLanguage.oPaginate, n = r.oLanguage.oAria.paginate || {}, c = 0, m = function(E, M) {
                   var P, ee, _e, ke, Ue = Fe.sPageButtonDisabled, ot = function(at) {
                     Xr(r, at.data.action, !0);
@@ -17928,10 +17929,10 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
                         k = Ce.sPrevious, _ === 0 && (ke = -1, $ += " " + Ue);
                         break;
                       case "next":
-                        k = Ce.sNext, L !== 0 && _ !== L - 1 || (ke = -1, $ += " " + Ue);
+                        k = Ce.sNext, N !== 0 && _ !== N - 1 || (ke = -1, $ += " " + Ue);
                         break;
                       case "last":
-                        k = Ce.sLast, L !== 0 && _ !== L - 1 || (ke = -1, $ += " " + Ue);
+                        k = Ce.sLast, N !== 0 && _ !== N - 1 || (ke = -1, $ += " " + Ue);
                         break;
                       default:
                         k = r.fnFormatNumber(_e + 1), $ = _ === _e ? Fe.sPageButtonActive : "";
@@ -17995,15 +17996,15 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
               }, "string-desc": function(r, u) {
                 return r < u ? 1 : r > u ? -1 : 0;
               } }), Wn(""), g.extend(!0, K.ext.renderer, { header: { _: function(r, u, v, y) {
-                g(r.nTable).on("order.dt.DT", (function(_, L, k, $) {
-                  if (r === L) {
+                g(r.nTable).on("order.dt.DT", (function(_, N, k, $) {
+                  if (r === N) {
                     var ue = v.idx;
                     u.removeClass(y.sSortAsc + " " + y.sSortDesc).addClass($[ue] == "asc" ? y.sSortAsc : $[ue] == "desc" ? y.sSortDesc : v.sSortingClass);
                   }
                 }));
               }, jqueryui: function(r, u, v, y) {
-                g("<div/>").addClass(y.sSortJUIWrapper).append(u.contents()).append(g("<span/>").addClass(y.sSortIcon + " " + v.sSortingClassJUI)).appendTo(u), g(r.nTable).on("order.dt.DT", (function(_, L, k, $) {
-                  if (r === L) {
+                g("<div/>").addClass(y.sSortJUIWrapper).append(u.contents()).append(g("<span/>").addClass(y.sSortIcon + " " + v.sSortingClassJUI)).appendTo(u), g(r.nTable).on("order.dt.DT", (function(_, N, k, $) {
+                  if (r === N) {
                     var ue = v.idx;
                     u.removeClass(y.sSortAsc + " " + y.sSortDesc).addClass($[ue] == "asc" ? y.sSortAsc : $[ue] == "desc" ? y.sSortDesc : v.sSortingClass), u.find("span." + y.sSortIcon).removeClass(y.sSortJUIAsc + " " + y.sSortJUIDesc + " " + y.sSortJUI + " " + y.sSortJUIAscAllowed + " " + y.sSortJUIDescAllowed).addClass($[ue] == "asc" ? y.sSortJUIAsc : $[ue] == "desc" ? y.sSortJUIDesc : v.sSortingClassJUI);
                   }
@@ -18019,12 +18020,12 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
                 };
               }
               return K.render = { number: function(r, u, v, y, _) {
-                return { display: function(L) {
-                  if (typeof L != "number" && typeof L != "string") return L;
-                  var k = L < 0 ? "-" : "", $ = parseFloat(L);
-                  if (isNaN($)) return yt(L);
-                  $ = $.toFixed(v), L = Math.abs($);
-                  var ue = parseInt(L, 10), Fe = v ? u + (L - ue).toFixed(v).substring(2) : "";
+                return { display: function(N) {
+                  if (typeof N != "number" && typeof N != "string") return N;
+                  var k = N < 0 ? "-" : "", $ = parseFloat(N);
+                  if (isNaN($)) return yt(N);
+                  $ = $.toFixed(v), N = Math.abs($);
+                  var ue = parseInt(N, 10), Fe = v ? u + (N - ue).toFixed(v).substring(2) : "";
                   return k + (y || "") + ue.toString().replace(/\B(?=(\d{3})+(?!\d))/g, r) + Fe + (_ || "");
                 } };
               }, text: function() {
@@ -18038,19 +18039,19 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
                 g.fn.DataTable[r] = u;
               })), g.fn.dataTable;
             })(B, window, document);
-          }.apply(pe, T)) === void 0 || (Ne.exports = N);
+          }.apply(pe, T)) === void 0 || (Ne.exports = L);
         })();
       }, function(Ne, pe, x) {
         var T;
         T = function() {
-          return (function(N) {
+          return (function(L) {
             var Y = {};
             function B(g) {
               if (Y[g]) return Y[g].exports;
               var W = Y[g] = { i: g, l: !1, exports: {} };
-              return N[g].call(W.exports, W, W.exports, B), W.l = !0, W.exports;
+              return L[g].call(W.exports, W, W.exports, B), W.l = !0, W.exports;
             }
-            return B.m = N, B.c = Y, B.d = function(g, W, R) {
+            return B.m = L, B.c = Y, B.d = function(g, W, R) {
               B.o(g, W) || Object.defineProperty(g, W, { enumerable: !0, get: R });
             }, B.r = function(g) {
               typeof Symbol < "u" && Symbol.toStringTag && Object.defineProperty(g, Symbol.toStringTag, { value: "Module" }), Object.defineProperty(g, "__esModule", { value: !0 });
@@ -18071,12 +18072,12 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
             }, B.o = function(g, W) {
               return Object.prototype.hasOwnProperty.call(g, W);
             }, B.p = "/", B(B.s = 1);
-          })([function(N, Y, B) {
-            N.exports = function(g) {
+          })([function(L, Y, B) {
+            L.exports = function(g) {
               for (var W = 5381, R = g.length; R; ) W = 33 * W ^ g.charCodeAt(--R);
               return W >>> 0;
             };
-          }, function(N, Y, B) {
+          }, function(L, Y, B) {
             B.r(Y), B.d(Y, "default", (function() {
               return Q;
             }));
@@ -18271,9 +18272,9 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
       }, function(Ne, pe, x) {
       }, function(Ne, pe, x) {
         (function(T) {
-          var N = { autoSelfClosers: { area: !0, base: !0, br: !0, col: !0, command: !0, embed: !0, frame: !0, hr: !0, img: !0, input: !0, keygen: !0, link: !0, meta: !0, param: !0, source: !0, track: !0, wbr: !0, menuitem: !0 }, implicitlyClosed: { dd: !0, li: !0, optgroup: !0, option: !0, p: !0, rp: !0, rt: !0, tbody: !0, td: !0, tfoot: !0, th: !0, tr: !0 }, contextGrabbers: { dd: { dd: !0, dt: !0 }, dt: { dd: !0, dt: !0 }, li: { li: !0 }, option: { option: !0, optgroup: !0 }, optgroup: { optgroup: !0 }, p: { address: !0, article: !0, aside: !0, blockquote: !0, dir: !0, div: !0, dl: !0, fieldset: !0, footer: !0, form: !0, h1: !0, h2: !0, h3: !0, h4: !0, h5: !0, h6: !0, header: !0, hgroup: !0, hr: !0, menu: !0, nav: !0, ol: !0, p: !0, pre: !0, section: !0, table: !0, ul: !0 }, rp: { rp: !0, rt: !0 }, rt: { rp: !0, rt: !0 }, tbody: { tbody: !0, tfoot: !0 }, td: { td: !0, th: !0 }, tfoot: { tbody: !0 }, th: { td: !0, th: !0 }, thead: { tbody: !0, tfoot: !0 }, tr: { tr: !0 } }, doNotIndent: { pre: !0 }, allowUnquoted: !0, allowMissing: !0, caseFold: !0 }, Y = { autoSelfClosers: {}, implicitlyClosed: {}, contextGrabbers: {}, doNotIndent: {}, allowUnquoted: !1, allowMissing: !1, allowMissingTagName: !1, caseFold: !1 };
+          var L = { autoSelfClosers: { area: !0, base: !0, br: !0, col: !0, command: !0, embed: !0, frame: !0, hr: !0, img: !0, input: !0, keygen: !0, link: !0, meta: !0, param: !0, source: !0, track: !0, wbr: !0, menuitem: !0 }, implicitlyClosed: { dd: !0, li: !0, optgroup: !0, option: !0, p: !0, rp: !0, rt: !0, tbody: !0, td: !0, tfoot: !0, th: !0, tr: !0 }, contextGrabbers: { dd: { dd: !0, dt: !0 }, dt: { dd: !0, dt: !0 }, li: { li: !0 }, option: { option: !0, optgroup: !0 }, optgroup: { optgroup: !0 }, p: { address: !0, article: !0, aside: !0, blockquote: !0, dir: !0, div: !0, dl: !0, fieldset: !0, footer: !0, form: !0, h1: !0, h2: !0, h3: !0, h4: !0, h5: !0, h6: !0, header: !0, hgroup: !0, hr: !0, menu: !0, nav: !0, ol: !0, p: !0, pre: !0, section: !0, table: !0, ul: !0 }, rp: { rp: !0, rt: !0 }, rt: { rp: !0, rt: !0 }, tbody: { tbody: !0, tfoot: !0 }, td: { td: !0, th: !0 }, tfoot: { tbody: !0 }, th: { td: !0, th: !0 }, thead: { tbody: !0, tfoot: !0 }, tr: { tr: !0 } }, doNotIndent: { pre: !0 }, allowUnquoted: !0, allowMissing: !0, caseFold: !0 }, Y = { autoSelfClosers: {}, implicitlyClosed: {}, contextGrabbers: {}, doNotIndent: {}, allowUnquoted: !1, allowMissing: !1, allowMissingTagName: !1, caseFold: !1 };
           T.defineMode("xml", (function(B, g) {
-            var W, R, H = B.indentUnit, fe = {}, C = g.htmlMode ? N : Y;
+            var W, R, H = B.indentUnit, fe = {}, C = g.htmlMode ? L : Y;
             for (var Q in C) fe[Q] = C[Q];
             for (var Q in g) fe[Q] = g[Q];
             function ge(O, ce) {
@@ -18417,8 +18418,8 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
         })(x(7));
       }, function(Ne, pe, x) {
         (function(T) {
-          T.defineMode("javascript", (function(N, Y) {
-            var B, g, W = N.indentUnit, R = Y.statementIndent, H = Y.jsonld, fe = Y.json || H, C = Y.typescript, Q = Y.wordCharacters || /[\w$\xa1-\uffff]/, ge = (function() {
+          T.defineMode("javascript", (function(L, Y) {
+            var B, g, W = L.indentUnit, R = Y.statementIndent, H = Y.jsonld, fe = Y.json || H, C = Y.typescript, Q = Y.wordCharacters || /[\w$\xa1-\uffff]/, ge = (function() {
               function oe(Pt) {
                 return { type: Pt, style: "keyword" };
               }
@@ -18864,46 +18865,46 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
       }, function(Ne, pe, x) {
       }, function(Ne, pe, x) {
       }, function(Ne, pe, x) {
-        function T(N) {
-          if (N) return (function(Y) {
+        function T(L) {
+          if (L) return (function(Y) {
             for (var B in T.prototype) Y[B] = T.prototype[B];
             return Y;
-          })(N);
+          })(L);
         }
-        Ne.exports = T, T.prototype.on = T.prototype.addEventListener = function(N, Y) {
-          return this._callbacks = this._callbacks || {}, (this._callbacks["$" + N] = this._callbacks["$" + N] || []).push(Y), this;
-        }, T.prototype.once = function(N, Y) {
+        Ne.exports = T, T.prototype.on = T.prototype.addEventListener = function(L, Y) {
+          return this._callbacks = this._callbacks || {}, (this._callbacks["$" + L] = this._callbacks["$" + L] || []).push(Y), this;
+        }, T.prototype.once = function(L, Y) {
           function B() {
-            this.off(N, B), Y.apply(this, arguments);
+            this.off(L, B), Y.apply(this, arguments);
           }
-          return B.fn = Y, this.on(N, B), this;
-        }, T.prototype.off = T.prototype.removeListener = T.prototype.removeAllListeners = T.prototype.removeEventListener = function(N, Y) {
+          return B.fn = Y, this.on(L, B), this;
+        }, T.prototype.off = T.prototype.removeListener = T.prototype.removeAllListeners = T.prototype.removeEventListener = function(L, Y) {
           if (this._callbacks = this._callbacks || {}, arguments.length == 0) return this._callbacks = {}, this;
-          var B, g = this._callbacks["$" + N];
+          var B, g = this._callbacks["$" + L];
           if (!g) return this;
-          if (arguments.length == 1) return delete this._callbacks["$" + N], this;
+          if (arguments.length == 1) return delete this._callbacks["$" + L], this;
           for (var W = 0; W < g.length; W++) if ((B = g[W]) === Y || B.fn === Y) {
             g.splice(W, 1);
             break;
           }
-          return g.length === 0 && delete this._callbacks["$" + N], this;
-        }, T.prototype.emit = function(N) {
+          return g.length === 0 && delete this._callbacks["$" + L], this;
+        }, T.prototype.emit = function(L) {
           this._callbacks = this._callbacks || {};
-          for (var Y = new Array(arguments.length - 1), B = this._callbacks["$" + N], g = 1; g < arguments.length; g++) Y[g - 1] = arguments[g];
+          for (var Y = new Array(arguments.length - 1), B = this._callbacks["$" + L], g = 1; g < arguments.length; g++) Y[g - 1] = arguments[g];
           if (B) {
             g = 0;
             for (var W = (B = B.slice(0)).length; g < W; ++g) B[g].apply(this, Y);
           }
           return this;
-        }, T.prototype.listeners = function(N) {
-          return this._callbacks = this._callbacks || {}, this._callbacks["$" + N] || [];
-        }, T.prototype.hasListeners = function(N) {
-          return !!this.listeners(N).length;
+        }, T.prototype.listeners = function(L) {
+          return this._callbacks = this._callbacks || {}, this._callbacks["$" + L] || [];
+        }, T.prototype.hasListeners = function(L) {
+          return !!this.listeners(L).length;
         };
       }, function(Ne, pe) {
-        Ne.exports = N, N.default = N, N.stable = B, N.stableStringify = B;
+        Ne.exports = L, L.default = L, L.stable = B, L.stableStringify = B;
         var x = [], T = [];
-        function N(W, R, H) {
+        function L(W, R, H) {
           var fe;
           for ((function Q(ge, K, Z, te) {
             var b;
@@ -18981,7 +18982,7 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
             return W && typeof Symbol == "function" && W.constructor === Symbol && W !== Symbol.prototype ? "symbol" : typeof W;
           })(g);
         }
-        var N = x(121);
+        var L = x(121);
         function Y(g) {
           if (g) return (function(W) {
             for (var R in Y.prototype) Object.prototype.hasOwnProperty.call(Y.prototype, R) && (W[R] = Y.prototype[R]);
@@ -19057,7 +19058,7 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
         }, Y.prototype.get = function(g) {
           return this._header[g.toLowerCase()];
         }, Y.prototype.getHeader = Y.prototype.get, Y.prototype.set = function(g, W) {
-          if (N(g)) {
+          if (L(g)) {
             for (var R in g) Object.prototype.hasOwnProperty.call(g, R) && this.set(R, g[R]);
             return this;
           }
@@ -19067,7 +19068,7 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
         }, Y.prototype.field = function(g, W) {
           if (g == null) throw new Error(".field(name, val) name can not be empty");
           if (this._data) throw new Error(".field() can't be used if .send() is used. Please use only .send() or only .field() & .attach()");
-          if (N(g)) {
+          if (L(g)) {
             for (var R in g) Object.prototype.hasOwnProperty.call(g, R) && this.field(R, g[R]);
             return this;
           }
@@ -19101,11 +19102,11 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
         }, Y.prototype.toJSON = function() {
           return { method: this.method, url: this.url, data: this._data, headers: this._header };
         }, Y.prototype.send = function(g) {
-          var W = N(g), R = this._header["content-type"];
+          var W = L(g), R = this._header["content-type"];
           if (this._formData) throw new Error(".send() can't be used if .attach() or .field() is used. Please use only .send() or only .field() & .attach()");
           if (W && !this._data) Array.isArray(g) ? this._data = [] : this._isHost(g) || (this._data = {});
           else if (g && this._data && this._isHost(this._data)) throw new Error("Can't merge these send calls");
-          if (W && N(this._data)) for (var H in g) Object.prototype.hasOwnProperty.call(g, H) && (this._data[H] = g[H]);
+          if (W && L(this._data)) for (var H in g) Object.prototype.hasOwnProperty.call(g, H) && (this._data[H] = g[H]);
           else typeof g == "string" ? (R || this.type("form"), R = this._header["content-type"], this._data = R === "application/x-www-form-urlencoded" ? this._data ? "".concat(this._data, "&").concat(g) : g : (this._data || "") + g) : this._data = g;
           return !W || this._isHost(g) || R || this.type("json"), this;
         }, Y.prototype.sortQuery = function(g) {
@@ -19136,15 +19137,15 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
         };
       }, function(Ne, pe, x) {
         var T = x(155);
-        function N(Y) {
+        function L(Y) {
           if (Y) return (function(B) {
-            for (var g in N.prototype) Object.prototype.hasOwnProperty.call(N.prototype, g) && (B[g] = N.prototype[g]);
+            for (var g in L.prototype) Object.prototype.hasOwnProperty.call(L.prototype, g) && (B[g] = L.prototype[g]);
             return B;
           })(Y);
         }
-        Ne.exports = N, N.prototype.get = function(Y) {
+        Ne.exports = L, L.prototype.get = function(Y) {
           return this.header[Y.toLowerCase()];
-        }, N.prototype._setHeaderProperties = function(Y) {
+        }, L.prototype._setHeaderProperties = function(Y) {
           var B = Y["content-type"] || "";
           this.type = T.type(B);
           var g = T.params(B);
@@ -19154,7 +19155,7 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
             Y.link && (this.links = T.parseLinks(Y.link));
           } catch {
           }
-        }, N.prototype._setStatusProperties = function(Y) {
+        }, L.prototype._setStatusProperties = function(Y) {
           var B = Y / 100 | 0;
           this.statusCode = Y, this.status = this.statusCode, this.statusType = B, this.info = B === 1, this.ok = B === 2, this.redirect = B === 3, this.clientError = B === 4, this.serverError = B === 5, this.error = (B === 4 || B === 5) && this.toError(), this.created = Y === 201, this.accepted = Y === 202, this.noContent = Y === 204, this.badRequest = Y === 400, this.unauthorized = Y === 401, this.notAcceptable = Y === 406, this.forbidden = Y === 403, this.notFound = Y === 404, this.unprocessableEntity = Y === 422;
         };
@@ -19162,37 +19163,37 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
         pe.type = function(T) {
           return T.split(/ *; */).shift();
         }, pe.params = function(T) {
-          return T.split(/ *; */).reduce((function(N, Y) {
+          return T.split(/ *; */).reduce((function(L, Y) {
             var B = Y.split(/ *= */), g = B.shift(), W = B.shift();
-            return g && W && (N[g] = W), N;
+            return g && W && (L[g] = W), L;
           }), {});
         }, pe.parseLinks = function(T) {
-          return T.split(/ *, */).reduce((function(N, Y) {
+          return T.split(/ *, */).reduce((function(L, Y) {
             var B = Y.split(/ *; */), g = B[0].slice(1, -1);
-            return N[B[1].split(/ *= */)[1].slice(1, -1)] = g, N;
+            return L[B[1].split(/ *= */)[1].slice(1, -1)] = g, L;
           }), {});
-        }, pe.cleanHeader = function(T, N) {
-          return delete T["content-type"], delete T["content-length"], delete T["transfer-encoding"], delete T.host, N && (delete T.authorization, delete T.cookie), T;
+        }, pe.cleanHeader = function(T, L) {
+          return delete T["content-type"], delete T["content-length"], delete T["transfer-encoding"], delete T.host, L && (delete T.authorization, delete T.cookie), T;
         };
       }, function(Ne, pe, x) {
         function T(B) {
           return (function(g) {
-            if (Array.isArray(g)) return N(g);
+            if (Array.isArray(g)) return L(g);
           })(B) || (function(g) {
             if (typeof Symbol < "u" && Symbol.iterator in Object(g)) return Array.from(g);
           })(B) || (function(g, W) {
             if (g) {
-              if (typeof g == "string") return N(g, W);
+              if (typeof g == "string") return L(g, W);
               var R = Object.prototype.toString.call(g).slice(8, -1);
               if (R === "Object" && g.constructor && (R = g.constructor.name), R === "Map" || R === "Set") return Array.from(g);
-              if (R === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(R)) return N(g, W);
+              if (R === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(R)) return L(g, W);
             }
           })(B) || (function() {
             throw new TypeError(`Invalid attempt to spread non-iterable instance.
 In order to be iterable, non-array objects must have a [Symbol.iterator]() method.`);
           })();
         }
-        function N(B, g) {
+        function L(B, g) {
           (g == null || g > B.length) && (g = B.length);
           for (var W = 0, R = new Array(g); W < g; W++) R[W] = B[W];
           return R;
@@ -19212,12 +19213,12 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
         }, Ne.exports = Y;
       }, function(Ne, pe, x) {
         Ne.exports = function(T) {
-          return encodeURIComponent(T).replace(/[!'()*]/g, (function(N) {
-            return "%" + N.charCodeAt(0).toString(16).toUpperCase();
+          return encodeURIComponent(T).replace(/[!'()*]/g, (function(L) {
+            return "%" + L.charCodeAt(0).toString(16).toUpperCase();
           }));
         };
       }, function(Ne, pe, x) {
-        var T = new RegExp("%[a-f0-9]{2}", "gi"), N = new RegExp("(%[a-f0-9]{2})+", "gi");
+        var T = new RegExp("%[a-f0-9]{2}", "gi"), L = new RegExp("(%[a-f0-9]{2})+", "gi");
         function Y(g, W) {
           try {
             return decodeURIComponent(g.join(""));
@@ -19242,14 +19243,14 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
             return g = g.replace(/\+/g, " "), decodeURIComponent(g);
           } catch {
             return (function(R) {
-              for (var H = { "%FE%FF": "��", "%FF%FE": "��" }, fe = N.exec(R); fe; ) {
+              for (var H = { "%FE%FF": "��", "%FF%FE": "��" }, fe = L.exec(R); fe; ) {
                 try {
                   H[fe[0]] = decodeURIComponent(fe[0]);
                 } catch {
                   var C = B(fe[0]);
                   C !== fe[0] && (H[fe[0]] = C);
                 }
-                fe = N.exec(R);
+                fe = L.exec(R);
               }
               H["%C2"] = "�";
               for (var Q = Object.keys(H), ge = 0; ge < Q.length; ge++) {
@@ -19261,18 +19262,18 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
           }
         };
       }, function(Ne, pe, x) {
-        Ne.exports = function(T, N) {
-          if (typeof T != "string" || typeof N != "string") throw new TypeError("Expected the arguments to be of type `string`");
-          if (N === "") return [T];
-          var Y = T.indexOf(N);
-          return Y === -1 ? [T] : [T.slice(0, Y), T.slice(Y + N.length)];
+        Ne.exports = function(T, L) {
+          if (typeof T != "string" || typeof L != "string") throw new TypeError("Expected the arguments to be of type `string`");
+          if (L === "") return [T];
+          var Y = T.indexOf(L);
+          return Y === -1 ? [T] : [T.slice(0, Y), T.slice(Y + L.length)];
         };
       }, function(Ne, pe, x) {
       }, function(Ne, pe) {
         Ne.exports = { table: { "*[&&,valueLogical]": { "&&": ["[&&,valueLogical]", "*[&&,valueLogical]"], AS: [], ")": [], ",": [], "||": [], ";": [] }, "*[,,expression]": { ",": ["[,,expression]", "*[,,expression]"], ")": [] }, "*[,,objectPath]": { ",": ["[,,objectPath]", "*[,,objectPath]"], ".": [], ";": [], "]": [], "{": [], OPTIONAL: [], MINUS: [], GRAPH: [], SERVICE: [], FILTER: [], BIND: [], VALUES: [], "}": [] }, "*[,,object]": { ",": ["[,,object]", "*[,,object]"], ".": [], ";": [], "]": [], "}": [], GRAPH: [], "{": [], OPTIONAL: [], MINUS: [], SERVICE: [], FILTER: [], BIND: [], VALUES: [] }, "*[/,pathEltOrInverse]": { "/": ["[/,pathEltOrInverse]", "*[/,pathEltOrInverse]"], "|": [], ")": [], "(": [], "[": [], VAR1: [], VAR2: [], NIL: [], IRI_REF: [], TRUE: [], FALSE: [], BLANK_NODE_LABEL: [], ANON: [], PNAME_LN: [], PNAME_NS: [], STRING_LITERAL1: [], STRING_LITERAL2: [], STRING_LITERAL_LONG1: [], STRING_LITERAL_LONG2: [], INTEGER: [], DECIMAL: [], DOUBLE: [], INTEGER_POSITIVE: [], DECIMAL_POSITIVE: [], DOUBLE_POSITIVE: [], INTEGER_NEGATIVE: [], DECIMAL_NEGATIVE: [], DOUBLE_NEGATIVE: [] }, "*[;,?[or([verbPath,verbSimple]),objectListPath]]": { ";": ["[;,?[or([verbPath,verbSimple]),objectListPath]]", "*[;,?[or([verbPath,verbSimple]),objectListPath]]"], ".": [], "]": [], "{": [], OPTIONAL: [], MINUS: [], GRAPH: [], SERVICE: [], FILTER: [], BIND: [], VALUES: [], "}": [] }, "*[;,?[verb,objectList]]": { ";": ["[;,?[verb,objectList]]", "*[;,?[verb,objectList]]"], ".": [], "]": [], "}": [], GRAPH: [], "{": [], OPTIONAL: [], MINUS: [], SERVICE: [], FILTER: [], BIND: [], VALUES: [] }, "*[UNION,groupGraphPattern]": { UNION: ["[UNION,groupGraphPattern]", "*[UNION,groupGraphPattern]"], VAR1: [], VAR2: [], NIL: [], "(": [], "[": [], IRI_REF: [], TRUE: [], FALSE: [], BLANK_NODE_LABEL: [], ANON: [], PNAME_LN: [], PNAME_NS: [], STRING_LITERAL1: [], STRING_LITERAL2: [], STRING_LITERAL_LONG1: [], STRING_LITERAL_LONG2: [], INTEGER: [], DECIMAL: [], DOUBLE: [], INTEGER_POSITIVE: [], DECIMAL_POSITIVE: [], DOUBLE_POSITIVE: [], INTEGER_NEGATIVE: [], DECIMAL_NEGATIVE: [], DOUBLE_NEGATIVE: [], ".": [], "{": [], OPTIONAL: [], MINUS: [], GRAPH: [], SERVICE: [], FILTER: [], BIND: [], VALUES: [], "}": [] }, "*[graphPatternNotTriples,?.,?triplesBlock]": { "{": ["[graphPatternNotTriples,?.,?triplesBlock]", "*[graphPatternNotTriples,?.,?triplesBlock]"], OPTIONAL: ["[graphPatternNotTriples,?.,?triplesBlock]", "*[graphPatternNotTriples,?.,?triplesBlock]"], MINUS: ["[graphPatternNotTriples,?.,?triplesBlock]", "*[graphPatternNotTriples,?.,?triplesBlock]"], GRAPH: ["[graphPatternNotTriples,?.,?triplesBlock]", "*[graphPatternNotTriples,?.,?triplesBlock]"], SERVICE: ["[graphPatternNotTriples,?.,?triplesBlock]", "*[graphPatternNotTriples,?.,?triplesBlock]"], FILTER: ["[graphPatternNotTriples,?.,?triplesBlock]", "*[graphPatternNotTriples,?.,?triplesBlock]"], BIND: ["[graphPatternNotTriples,?.,?triplesBlock]", "*[graphPatternNotTriples,?.,?triplesBlock]"], VALUES: ["[graphPatternNotTriples,?.,?triplesBlock]", "*[graphPatternNotTriples,?.,?triplesBlock]"], "}": [] }, "*[quadsNotTriples,?.,?triplesTemplate]": { GRAPH: ["[quadsNotTriples,?.,?triplesTemplate]", "*[quadsNotTriples,?.,?triplesTemplate]"], "}": [] }, "*[|,pathOneInPropertySet]": { "|": ["[|,pathOneInPropertySet]", "*[|,pathOneInPropertySet]"], ")": [] }, "*[|,pathSequence]": { "|": ["[|,pathSequence]", "*[|,pathSequence]"], ")": [], "(": [], "[": [], VAR1: [], VAR2: [], NIL: [], IRI_REF: [], TRUE: [], FALSE: [], BLANK_NODE_LABEL: [], ANON: [], PNAME_LN: [], PNAME_NS: [], STRING_LITERAL1: [], STRING_LITERAL2: [], STRING_LITERAL_LONG1: [], STRING_LITERAL_LONG2: [], INTEGER: [], DECIMAL: [], DOUBLE: [], INTEGER_POSITIVE: [], DECIMAL_POSITIVE: [], DOUBLE_POSITIVE: [], INTEGER_NEGATIVE: [], DECIMAL_NEGATIVE: [], DOUBLE_NEGATIVE: [] }, "*[||,conditionalAndExpression]": { "||": ["[||,conditionalAndExpression]", "*[||,conditionalAndExpression]"], AS: [], ")": [], ",": [], ";": [] }, "*dataBlockValue": { UNDEF: ["dataBlockValue", "*dataBlockValue"], IRI_REF: ["dataBlockValue", "*dataBlockValue"], TRUE: ["dataBlockValue", "*dataBlockValue"], FALSE: ["dataBlockValue", "*dataBlockValue"], PNAME_LN: ["dataBlockValue", "*dataBlockValue"], PNAME_NS: ["dataBlockValue", "*dataBlockValue"], STRING_LITERAL1: ["dataBlockValue", "*dataBlockValue"], STRING_LITERAL2: ["dataBlockValue", "*dataBlockValue"], STRING_LITERAL_LONG1: ["dataBlockValue", "*dataBlockValue"], STRING_LITERAL_LONG2: ["dataBlockValue", "*dataBlockValue"], INTEGER: ["dataBlockValue", "*dataBlockValue"], DECIMAL: ["dataBlockValue", "*dataBlockValue"], DOUBLE: ["dataBlockValue", "*dataBlockValue"], INTEGER_POSITIVE: ["dataBlockValue", "*dataBlockValue"], DECIMAL_POSITIVE: ["dataBlockValue", "*dataBlockValue"], DOUBLE_POSITIVE: ["dataBlockValue", "*dataBlockValue"], INTEGER_NEGATIVE: ["dataBlockValue", "*dataBlockValue"], DECIMAL_NEGATIVE: ["dataBlockValue", "*dataBlockValue"], DOUBLE_NEGATIVE: ["dataBlockValue", "*dataBlockValue"], "}": [], ")": [] }, "*datasetClause": { FROM: ["datasetClause", "*datasetClause"], WHERE: [], "{": [] }, "*describeDatasetClause": { FROM: ["describeDatasetClause", "*describeDatasetClause"], ORDER: [], HAVING: [], GROUP: [], LIMIT: [], OFFSET: [], WHERE: [], "{": [], VALUES: [], $: [] }, "*graphNode": { "(": ["graphNode", "*graphNode"], "[": ["graphNode", "*graphNode"], VAR1: ["graphNode", "*graphNode"], VAR2: ["graphNode", "*graphNode"], NIL: ["graphNode", "*graphNode"], IRI_REF: ["graphNode", "*graphNode"], TRUE: ["graphNode", "*graphNode"], FALSE: ["graphNode", "*graphNode"], BLANK_NODE_LABEL: ["graphNode", "*graphNode"], ANON: ["graphNode", "*graphNode"], PNAME_LN: ["graphNode", "*graphNode"], PNAME_NS: ["graphNode", "*graphNode"], STRING_LITERAL1: ["graphNode", "*graphNode"], STRING_LITERAL2: ["graphNode", "*graphNode"], STRING_LITERAL_LONG1: ["graphNode", "*graphNode"], STRING_LITERAL_LONG2: ["graphNode", "*graphNode"], INTEGER: ["graphNode", "*graphNode"], DECIMAL: ["graphNode", "*graphNode"], DOUBLE: ["graphNode", "*graphNode"], INTEGER_POSITIVE: ["graphNode", "*graphNode"], DECIMAL_POSITIVE: ["graphNode", "*graphNode"], DOUBLE_POSITIVE: ["graphNode", "*graphNode"], INTEGER_NEGATIVE: ["graphNode", "*graphNode"], DECIMAL_NEGATIVE: ["graphNode", "*graphNode"], DOUBLE_NEGATIVE: ["graphNode", "*graphNode"], ")": [] }, "*graphNodePath": { "(": ["graphNodePath", "*graphNodePath"], "[": ["graphNodePath", "*graphNodePath"], VAR1: ["graphNodePath", "*graphNodePath"], VAR2: ["graphNodePath", "*graphNodePath"], NIL: ["graphNodePath", "*graphNodePath"], IRI_REF: ["graphNodePath", "*graphNodePath"], TRUE: ["graphNodePath", "*graphNodePath"], FALSE: ["graphNodePath", "*graphNodePath"], BLANK_NODE_LABEL: ["graphNodePath", "*graphNodePath"], ANON: ["graphNodePath", "*graphNodePath"], PNAME_LN: ["graphNodePath", "*graphNodePath"], PNAME_NS: ["graphNodePath", "*graphNodePath"], STRING_LITERAL1: ["graphNodePath", "*graphNodePath"], STRING_LITERAL2: ["graphNodePath", "*graphNodePath"], STRING_LITERAL_LONG1: ["graphNodePath", "*graphNodePath"], STRING_LITERAL_LONG2: ["graphNodePath", "*graphNodePath"], INTEGER: ["graphNodePath", "*graphNodePath"], DECIMAL: ["graphNodePath", "*graphNodePath"], DOUBLE: ["graphNodePath", "*graphNodePath"], INTEGER_POSITIVE: ["graphNodePath", "*graphNodePath"], DECIMAL_POSITIVE: ["graphNodePath", "*graphNodePath"], DOUBLE_POSITIVE: ["graphNodePath", "*graphNodePath"], INTEGER_NEGATIVE: ["graphNodePath", "*graphNodePath"], DECIMAL_NEGATIVE: ["graphNodePath", "*graphNodePath"], DOUBLE_NEGATIVE: ["graphNodePath", "*graphNodePath"], ")": [] }, "*groupCondition": { "(": ["groupCondition", "*groupCondition"], STR: ["groupCondition", "*groupCondition"], LANG: ["groupCondition", "*groupCondition"], LANGMATCHES: ["groupCondition", "*groupCondition"], DATATYPE: ["groupCondition", "*groupCondition"], BOUND: ["groupCondition", "*groupCondition"], IRI: ["groupCondition", "*groupCondition"], URI: ["groupCondition", "*groupCondition"], BNODE: ["groupCondition", "*groupCondition"], RAND: ["groupCondition", "*groupCondition"], ABS: ["groupCondition", "*groupCondition"], CEIL: ["groupCondition", "*groupCondition"], FLOOR: ["groupCondition", "*groupCondition"], ROUND: ["groupCondition", "*groupCondition"], CONCAT: ["groupCondition", "*groupCondition"], STRLEN: ["groupCondition", "*groupCondition"], UCASE: ["groupCondition", "*groupCondition"], LCASE: ["groupCondition", "*groupCondition"], ENCODE_FOR_URI: ["groupCondition", "*groupCondition"], CONTAINS: ["groupCondition", "*groupCondition"], STRSTARTS: ["groupCondition", "*groupCondition"], STRENDS: ["groupCondition", "*groupCondition"], STRBEFORE: ["groupCondition", "*groupCondition"], STRAFTER: ["groupCondition", "*groupCondition"], YEAR: ["groupCondition", "*groupCondition"], MONTH: ["groupCondition", "*groupCondition"], DAY: ["groupCondition", "*groupCondition"], HOURS: ["groupCondition", "*groupCondition"], MINUTES: ["groupCondition", "*groupCondition"], SECONDS: ["groupCondition", "*groupCondition"], TIMEZONE: ["groupCondition", "*groupCondition"], TZ: ["groupCondition", "*groupCondition"], NOW: ["groupCondition", "*groupCondition"], UUID: ["groupCondition", "*groupCondition"], STRUUID: ["groupCondition", "*groupCondition"], MD5: ["groupCondition", "*groupCondition"], SHA1: ["groupCondition", "*groupCondition"], SHA256: ["groupCondition", "*groupCondition"], SHA384: ["groupCondition", "*groupCondition"], SHA512: ["groupCondition", "*groupCondition"], COALESCE: ["groupCondition", "*groupCondition"], IF: ["groupCondition", "*groupCondition"], STRLANG: ["groupCondition", "*groupCondition"], STRDT: ["groupCondition", "*groupCondition"], SAMETERM: ["groupCondition", "*groupCondition"], ISIRI: ["groupCondition", "*groupCondition"], ISURI: ["groupCondition", "*groupCondition"], ISBLANK: ["groupCondition", "*groupCondition"], ISLITERAL: ["groupCondition", "*groupCondition"], ISNUMERIC: ["groupCondition", "*groupCondition"], VAR1: ["groupCondition", "*groupCondition"], VAR2: ["groupCondition", "*groupCondition"], SUBSTR: ["groupCondition", "*groupCondition"], REPLACE: ["groupCondition", "*groupCondition"], REGEX: ["groupCondition", "*groupCondition"], EXISTS: ["groupCondition", "*groupCondition"], NOT: ["groupCondition", "*groupCondition"], IRI_REF: ["groupCondition", "*groupCondition"], PNAME_LN: ["groupCondition", "*groupCondition"], PNAME_NS: ["groupCondition", "*groupCondition"], VALUES: [], LIMIT: [], OFFSET: [], ORDER: [], HAVING: [], $: [], "}": [] }, "*havingCondition": { "(": ["havingCondition", "*havingCondition"], STR: ["havingCondition", "*havingCondition"], LANG: ["havingCondition", "*havingCondition"], LANGMATCHES: ["havingCondition", "*havingCondition"], DATATYPE: ["havingCondition", "*havingCondition"], BOUND: ["havingCondition", "*havingCondition"], IRI: ["havingCondition", "*havingCondition"], URI: ["havingCondition", "*havingCondition"], BNODE: ["havingCondition", "*havingCondition"], RAND: ["havingCondition", "*havingCondition"], ABS: ["havingCondition", "*havingCondition"], CEIL: ["havingCondition", "*havingCondition"], FLOOR: ["havingCondition", "*havingCondition"], ROUND: ["havingCondition", "*havingCondition"], CONCAT: ["havingCondition", "*havingCondition"], STRLEN: ["havingCondition", "*havingCondition"], UCASE: ["havingCondition", "*havingCondition"], LCASE: ["havingCondition", "*havingCondition"], ENCODE_FOR_URI: ["havingCondition", "*havingCondition"], CONTAINS: ["havingCondition", "*havingCondition"], STRSTARTS: ["havingCondition", "*havingCondition"], STRENDS: ["havingCondition", "*havingCondition"], STRBEFORE: ["havingCondition", "*havingCondition"], STRAFTER: ["havingCondition", "*havingCondition"], YEAR: ["havingCondition", "*havingCondition"], MONTH: ["havingCondition", "*havingCondition"], DAY: ["havingCondition", "*havingCondition"], HOURS: ["havingCondition", "*havingCondition"], MINUTES: ["havingCondition", "*havingCondition"], SECONDS: ["havingCondition", "*havingCondition"], TIMEZONE: ["havingCondition", "*havingCondition"], TZ: ["havingCondition", "*havingCondition"], NOW: ["havingCondition", "*havingCondition"], UUID: ["havingCondition", "*havingCondition"], STRUUID: ["havingCondition", "*havingCondition"], MD5: ["havingCondition", "*havingCondition"], SHA1: ["havingCondition", "*havingCondition"], SHA256: ["havingCondition", "*havingCondition"], SHA384: ["havingCondition", "*havingCondition"], SHA512: ["havingCondition", "*havingCondition"], COALESCE: ["havingCondition", "*havingCondition"], IF: ["havingCondition", "*havingCondition"], STRLANG: ["havingCondition", "*havingCondition"], STRDT: ["havingCondition", "*havingCondition"], SAMETERM: ["havingCondition", "*havingCondition"], ISIRI: ["havingCondition", "*havingCondition"], ISURI: ["havingCondition", "*havingCondition"], ISBLANK: ["havingCondition", "*havingCondition"], ISLITERAL: ["havingCondition", "*havingCondition"], ISNUMERIC: ["havingCondition", "*havingCondition"], SUBSTR: ["havingCondition", "*havingCondition"], REPLACE: ["havingCondition", "*havingCondition"], REGEX: ["havingCondition", "*havingCondition"], EXISTS: ["havingCondition", "*havingCondition"], NOT: ["havingCondition", "*havingCondition"], IRI_REF: ["havingCondition", "*havingCondition"], PNAME_LN: ["havingCondition", "*havingCondition"], PNAME_NS: ["havingCondition", "*havingCondition"], VALUES: [], LIMIT: [], OFFSET: [], ORDER: [], $: [], "}": [] }, "*or([[(,*dataBlockValue,)],NIL])": { "(": ["or([[(,*dataBlockValue,)],NIL])", "*or([[(,*dataBlockValue,)],NIL])"], NIL: ["or([[(,*dataBlockValue,)],NIL])", "*or([[(,*dataBlockValue,)],NIL])"], "}": [] }, "*or([[*,unaryExpression],[/,unaryExpression]])": { "*": ["or([[*,unaryExpression],[/,unaryExpression]])", "*or([[*,unaryExpression],[/,unaryExpression]])"], "/": ["or([[*,unaryExpression],[/,unaryExpression]])", "*or([[*,unaryExpression],[/,unaryExpression]])"], AS: [], ")": [], ",": [], "||": [], "&&": [], "=": [], "!=": [], "<": [], ">": [], "<=": [], ">=": [], IN: [], NOT: [], "+": [], "-": [], INTEGER_POSITIVE: [], DECIMAL_POSITIVE: [], DOUBLE_POSITIVE: [], INTEGER_NEGATIVE: [], DECIMAL_NEGATIVE: [], DOUBLE_NEGATIVE: [], ";": [] }, "*or([[+,multiplicativeExpression],[-,multiplicativeExpression],[or([numericLiteralPositive,numericLiteralNegative]),?or([[*,unaryExpression],[/,unaryExpression]])]])": { "+": ["or([[+,multiplicativeExpression],[-,multiplicativeExpression],[or([numericLiteralPositive,numericLiteralNegative]),?or([[*,unaryExpression],[/,unaryExpression]])]])", "*or([[+,multiplicativeExpression],[-,multiplicativeExpression],[or([numericLiteralPositive,numericLiteralNegative]),?or([[*,unaryExpression],[/,unaryExpression]])]])"], "-": ["or([[+,multiplicativeExpression],[-,multiplicativeExpression],[or([numericLiteralPositive,numericLiteralNegative]),?or([[*,unaryExpression],[/,unaryExpression]])]])", "*or([[+,multiplicativeExpression],[-,multiplicativeExpression],[or([numericLiteralPositive,numericLiteralNegative]),?or([[*,unaryExpression],[/,unaryExpression]])]])"], INTEGER_POSITIVE: ["or([[+,multiplicativeExpression],[-,multiplicativeExpression],[or([numericLiteralPositive,numericLiteralNegative]),?or([[*,unaryExpression],[/,unaryExpression]])]])", "*or([[+,multiplicativeExpression],[-,multiplicativeExpression],[or([numericLiteralPositive,numericLiteralNegative]),?or([[*,unaryExpression],[/,unaryExpression]])]])"], DECIMAL_POSITIVE: ["or([[+,multiplicativeExpression],[-,multiplicativeExpression],[or([numericLiteralPositive,numericLiteralNegative]),?or([[*,unaryExpression],[/,unaryExpression]])]])", "*or([[+,multiplicativeExpression],[-,multiplicativeExpression],[or([numericLiteralPositive,numericLiteralNegative]),?or([[*,unaryExpression],[/,unaryExpression]])]])"], DOUBLE_POSITIVE: ["or([[+,multiplicativeExpression],[-,multiplicativeExpression],[or([numericLiteralPositive,numericLiteralNegative]),?or([[*,unaryExpression],[/,unaryExpression]])]])", "*or([[+,multiplicativeExpression],[-,multiplicativeExpression],[or([numericLiteralPositive,numericLiteralNegative]),?or([[*,unaryExpression],[/,unaryExpression]])]])"], INTEGER_NEGATIVE: ["or([[+,multiplicativeExpression],[-,multiplicativeExpression],[or([numericLiteralPositive,numericLiteralNegative]),?or([[*,unaryExpression],[/,unaryExpression]])]])", "*or([[+,multiplicativeExpression],[-,multiplicativeExpression],[or([numericLiteralPositive,numericLiteralNegative]),?or([[*,unaryExpression],[/,unaryExpression]])]])"], DECIMAL_NEGATIVE: ["or([[+,multiplicativeExpression],[-,multiplicativeExpression],[or([numericLiteralPositive,numericLiteralNegative]),?or([[*,unaryExpression],[/,unaryExpression]])]])", "*or([[+,multiplicativeExpression],[-,multiplicativeExpression],[or([numericLiteralPositive,numericLiteralNegative]),?or([[*,unaryExpression],[/,unaryExpression]])]])"], DOUBLE_NEGATIVE: ["or([[+,multiplicativeExpression],[-,multiplicativeExpression],[or([numericLiteralPositive,numericLiteralNegative]),?or([[*,unaryExpression],[/,unaryExpression]])]])", "*or([[+,multiplicativeExpression],[-,multiplicativeExpression],[or([numericLiteralPositive,numericLiteralNegative]),?or([[*,unaryExpression],[/,unaryExpression]])]])"], AS: [], ")": [], ",": [], "||": [], "&&": [], "=": [], "!=": [], "<": [], ">": [], "<=": [], ">=": [], IN: [], NOT: [], ";": [] }, "*or([baseDecl,prefixDecl])": { BASE: ["or([baseDecl,prefixDecl])", "*or([baseDecl,prefixDecl])"], PREFIX: ["or([baseDecl,prefixDecl])", "*or([baseDecl,prefixDecl])"], $: [], CONSTRUCT: [], DESCRIBE: [], ASK: [], INSERT: [], DELETE: [], SELECT: [], LOAD: [], CLEAR: [], DROP: [], ADD: [], MOVE: [], COPY: [], CREATE: [], WITH: [] }, "*or([var,[(,expression,AS,var,)]])": { "(": ["or([var,[(,expression,AS,var,)]])", "*or([var,[(,expression,AS,var,)]])"], VAR1: ["or([var,[(,expression,AS,var,)]])", "*or([var,[(,expression,AS,var,)]])"], VAR2: ["or([var,[(,expression,AS,var,)]])", "*or([var,[(,expression,AS,var,)]])"], WHERE: [], "{": [], FROM: [] }, "*orderCondition": { ASC: ["orderCondition", "*orderCondition"], DESC: ["orderCondition", "*orderCondition"], VAR1: ["orderCondition", "*orderCondition"], VAR2: ["orderCondition", "*orderCondition"], "(": ["orderCondition", "*orderCondition"], STR: ["orderCondition", "*orderCondition"], LANG: ["orderCondition", "*orderCondition"], LANGMATCHES: ["orderCondition", "*orderCondition"], DATATYPE: ["orderCondition", "*orderCondition"], BOUND: ["orderCondition", "*orderCondition"], IRI: ["orderCondition", "*orderCondition"], URI: ["orderCondition", "*orderCondition"], BNODE: ["orderCondition", "*orderCondition"], RAND: ["orderCondition", "*orderCondition"], ABS: ["orderCondition", "*orderCondition"], CEIL: ["orderCondition", "*orderCondition"], FLOOR: ["orderCondition", "*orderCondition"], ROUND: ["orderCondition", "*orderCondition"], CONCAT: ["orderCondition", "*orderCondition"], STRLEN: ["orderCondition", "*orderCondition"], UCASE: ["orderCondition", "*orderCondition"], LCASE: ["orderCondition", "*orderCondition"], ENCODE_FOR_URI: ["orderCondition", "*orderCondition"], CONTAINS: ["orderCondition", "*orderCondition"], STRSTARTS: ["orderCondition", "*orderCondition"], STRENDS: ["orderCondition", "*orderCondition"], STRBEFORE: ["orderCondition", "*orderCondition"], STRAFTER: ["orderCondition", "*orderCondition"], YEAR: ["orderCondition", "*orderCondition"], MONTH: ["orderCondition", "*orderCondition"], DAY: ["orderCondition", "*orderCondition"], HOURS: ["orderCondition", "*orderCondition"], MINUTES: ["orderCondition", "*orderCondition"], SECONDS: ["orderCondition", "*orderCondition"], TIMEZONE: ["orderCondition", "*orderCondition"], TZ: ["orderCondition", "*orderCondition"], NOW: ["orderCondition", "*orderCondition"], UUID: ["orderCondition", "*orderCondition"], STRUUID: ["orderCondition", "*orderCondition"], MD5: ["orderCondition", "*orderCondition"], SHA1: ["orderCondition", "*orderCondition"], SHA256: ["orderCondition", "*orderCondition"], SHA384: ["orderCondition", "*orderCondition"], SHA512: ["orderCondition", "*orderCondition"], COALESCE: ["orderCondition", "*orderCondition"], IF: ["orderCondition", "*orderCondition"], STRLANG: ["orderCondition", "*orderCondition"], STRDT: ["orderCondition", "*orderCondition"], SAMETERM: ["orderCondition", "*orderCondition"], ISIRI: ["orderCondition", "*orderCondition"], ISURI: ["orderCondition", "*orderCondition"], ISBLANK: ["orderCondition", "*orderCondition"], ISLITERAL: ["orderCondition", "*orderCondition"], ISNUMERIC: ["orderCondition", "*orderCondition"], SUBSTR: ["orderCondition", "*orderCondition"], REPLACE: ["orderCondition", "*orderCondition"], REGEX: ["orderCondition", "*orderCondition"], EXISTS: ["orderCondition", "*orderCondition"], NOT: ["orderCondition", "*orderCondition"], IRI_REF: ["orderCondition", "*orderCondition"], PNAME_LN: ["orderCondition", "*orderCondition"], PNAME_NS: ["orderCondition", "*orderCondition"], VALUES: [], LIMIT: [], OFFSET: [], $: [], "}": [] }, "*usingClause": { USING: ["usingClause", "*usingClause"], WHERE: [] }, "*var": { VAR1: ["var", "*var"], VAR2: ["var", "*var"], ")": [] }, "*varOrIRIref": { VAR1: ["varOrIRIref", "*varOrIRIref"], VAR2: ["varOrIRIref", "*varOrIRIref"], IRI_REF: ["varOrIRIref", "*varOrIRIref"], PNAME_LN: ["varOrIRIref", "*varOrIRIref"], PNAME_NS: ["varOrIRIref", "*varOrIRIref"], ORDER: [], HAVING: [], GROUP: [], LIMIT: [], OFFSET: [], WHERE: [], "{": [], FROM: [], VALUES: [], $: [] }, "+graphNode": { "(": ["graphNode", "*graphNode"], "[": ["graphNode", "*graphNode"], VAR1: ["graphNode", "*graphNode"], VAR2: ["graphNode", "*graphNode"], NIL: ["graphNode", "*graphNode"], IRI_REF: ["graphNode", "*graphNode"], TRUE: ["graphNode", "*graphNode"], FALSE: ["graphNode", "*graphNode"], BLANK_NODE_LABEL: ["graphNode", "*graphNode"], ANON: ["graphNode", "*graphNode"], PNAME_LN: ["graphNode", "*graphNode"], PNAME_NS: ["graphNode", "*graphNode"], STRING_LITERAL1: ["graphNode", "*graphNode"], STRING_LITERAL2: ["graphNode", "*graphNode"], STRING_LITERAL_LONG1: ["graphNode", "*graphNode"], STRING_LITERAL_LONG2: ["graphNode", "*graphNode"], INTEGER: ["graphNode", "*graphNode"], DECIMAL: ["graphNode", "*graphNode"], DOUBLE: ["graphNode", "*graphNode"], INTEGER_POSITIVE: ["graphNode", "*graphNode"], DECIMAL_POSITIVE: ["graphNode", "*graphNode"], DOUBLE_POSITIVE: ["graphNode", "*graphNode"], INTEGER_NEGATIVE: ["graphNode", "*graphNode"], DECIMAL_NEGATIVE: ["graphNode", "*graphNode"], DOUBLE_NEGATIVE: ["graphNode", "*graphNode"] }, "+graphNodePath": { "(": ["graphNodePath", "*graphNodePath"], "[": ["graphNodePath", "*graphNodePath"], VAR1: ["graphNodePath", "*graphNodePath"], VAR2: ["graphNodePath", "*graphNodePath"], NIL: ["graphNodePath", "*graphNodePath"], IRI_REF: ["graphNodePath", "*graphNodePath"], TRUE: ["graphNodePath", "*graphNodePath"], FALSE: ["graphNodePath", "*graphNodePath"], BLANK_NODE_LABEL: ["graphNodePath", "*graphNodePath"], ANON: ["graphNodePath", "*graphNodePath"], PNAME_LN: ["graphNodePath", "*graphNodePath"], PNAME_NS: ["graphNodePath", "*graphNodePath"], STRING_LITERAL1: ["graphNodePath", "*graphNodePath"], STRING_LITERAL2: ["graphNodePath", "*graphNodePath"], STRING_LITERAL_LONG1: ["graphNodePath", "*graphNodePath"], STRING_LITERAL_LONG2: ["graphNodePath", "*graphNodePath"], INTEGER: ["graphNodePath", "*graphNodePath"], DECIMAL: ["graphNodePath", "*graphNodePath"], DOUBLE: ["graphNodePath", "*graphNodePath"], INTEGER_POSITIVE: ["graphNodePath", "*graphNodePath"], DECIMAL_POSITIVE: ["graphNodePath", "*graphNodePath"], DOUBLE_POSITIVE: ["graphNodePath", "*graphNodePath"], INTEGER_NEGATIVE: ["graphNodePath", "*graphNodePath"], DECIMAL_NEGATIVE: ["graphNodePath", "*graphNodePath"], DOUBLE_NEGATIVE: ["graphNodePath", "*graphNodePath"] }, "+groupCondition": { "(": ["groupCondition", "*groupCondition"], STR: ["groupCondition", "*groupCondition"], LANG: ["groupCondition", "*groupCondition"], LANGMATCHES: ["groupCondition", "*groupCondition"], DATATYPE: ["groupCondition", "*groupCondition"], BOUND: ["groupCondition", "*groupCondition"], IRI: ["groupCondition", "*groupCondition"], URI: ["groupCondition", "*groupCondition"], BNODE: ["groupCondition", "*groupCondition"], RAND: ["groupCondition", "*groupCondition"], ABS: ["groupCondition", "*groupCondition"], CEIL: ["groupCondition", "*groupCondition"], FLOOR: ["groupCondition", "*groupCondition"], ROUND: ["groupCondition", "*groupCondition"], CONCAT: ["groupCondition", "*groupCondition"], STRLEN: ["groupCondition", "*groupCondition"], UCASE: ["groupCondition", "*groupCondition"], LCASE: ["groupCondition", "*groupCondition"], ENCODE_FOR_URI: ["groupCondition", "*groupCondition"], CONTAINS: ["groupCondition", "*groupCondition"], STRSTARTS: ["groupCondition", "*groupCondition"], STRENDS: ["groupCondition", "*groupCondition"], STRBEFORE: ["groupCondition", "*groupCondition"], STRAFTER: ["groupCondition", "*groupCondition"], YEAR: ["groupCondition", "*groupCondition"], MONTH: ["groupCondition", "*groupCondition"], DAY: ["groupCondition", "*groupCondition"], HOURS: ["groupCondition", "*groupCondition"], MINUTES: ["groupCondition", "*groupCondition"], SECONDS: ["groupCondition", "*groupCondition"], TIMEZONE: ["groupCondition", "*groupCondition"], TZ: ["groupCondition", "*groupCondition"], NOW: ["groupCondition", "*groupCondition"], UUID: ["groupCondition", "*groupCondition"], STRUUID: ["groupCondition", "*groupCondition"], MD5: ["groupCondition", "*groupCondition"], SHA1: ["groupCondition", "*groupCondition"], SHA256: ["groupCondition", "*groupCondition"], SHA384: ["groupCondition", "*groupCondition"], SHA512: ["groupCondition", "*groupCondition"], COALESCE: ["groupCondition", "*groupCondition"], IF: ["groupCondition", "*groupCondition"], STRLANG: ["groupCondition", "*groupCondition"], STRDT: ["groupCondition", "*groupCondition"], SAMETERM: ["groupCondition", "*groupCondition"], ISIRI: ["groupCondition", "*groupCondition"], ISURI: ["groupCondition", "*groupCondition"], ISBLANK: ["groupCondition", "*groupCondition"], ISLITERAL: ["groupCondition", "*groupCondition"], ISNUMERIC: ["groupCondition", "*groupCondition"], VAR1: ["groupCondition", "*groupCondition"], VAR2: ["groupCondition", "*groupCondition"], SUBSTR: ["groupCondition", "*groupCondition"], REPLACE: ["groupCondition", "*groupCondition"], REGEX: ["groupCondition", "*groupCondition"], EXISTS: ["groupCondition", "*groupCondition"], NOT: ["groupCondition", "*groupCondition"], IRI_REF: ["groupCondition", "*groupCondition"], PNAME_LN: ["groupCondition", "*groupCondition"], PNAME_NS: ["groupCondition", "*groupCondition"] }, "+havingCondition": { "(": ["havingCondition", "*havingCondition"], STR: ["havingCondition", "*havingCondition"], LANG: ["havingCondition", "*havingCondition"], LANGMATCHES: ["havingCondition", "*havingCondition"], DATATYPE: ["havingCondition", "*havingCondition"], BOUND: ["havingCondition", "*havingCondition"], IRI: ["havingCondition", "*havingCondition"], URI: ["havingCondition", "*havingCondition"], BNODE: ["havingCondition", "*havingCondition"], RAND: ["havingCondition", "*havingCondition"], ABS: ["havingCondition", "*havingCondition"], CEIL: ["havingCondition", "*havingCondition"], FLOOR: ["havingCondition", "*havingCondition"], ROUND: ["havingCondition", "*havingCondition"], CONCAT: ["havingCondition", "*havingCondition"], STRLEN: ["havingCondition", "*havingCondition"], UCASE: ["havingCondition", "*havingCondition"], LCASE: ["havingCondition", "*havingCondition"], ENCODE_FOR_URI: ["havingCondition", "*havingCondition"], CONTAINS: ["havingCondition", "*havingCondition"], STRSTARTS: ["havingCondition", "*havingCondition"], STRENDS: ["havingCondition", "*havingCondition"], STRBEFORE: ["havingCondition", "*havingCondition"], STRAFTER: ["havingCondition", "*havingCondition"], YEAR: ["havingCondition", "*havingCondition"], MONTH: ["havingCondition", "*havingCondition"], DAY: ["havingCondition", "*havingCondition"], HOURS: ["havingCondition", "*havingCondition"], MINUTES: ["havingCondition", "*havingCondition"], SECONDS: ["havingCondition", "*havingCondition"], TIMEZONE: ["havingCondition", "*havingCondition"], TZ: ["havingCondition", "*havingCondition"], NOW: ["havingCondition", "*havingCondition"], UUID: ["havingCondition", "*havingCondition"], STRUUID: ["havingCondition", "*havingCondition"], MD5: ["havingCondition", "*havingCondition"], SHA1: ["havingCondition", "*havingCondition"], SHA256: ["havingCondition", "*havingCondition"], SHA384: ["havingCondition", "*havingCondition"], SHA512: ["havingCondition", "*havingCondition"], COALESCE: ["havingCondition", "*havingCondition"], IF: ["havingCondition", "*havingCondition"], STRLANG: ["havingCondition", "*havingCondition"], STRDT: ["havingCondition", "*havingCondition"], SAMETERM: ["havingCondition", "*havingCondition"], ISIRI: ["havingCondition", "*havingCondition"], ISURI: ["havingCondition", "*havingCondition"], ISBLANK: ["havingCondition", "*havingCondition"], ISLITERAL: ["havingCondition", "*havingCondition"], ISNUMERIC: ["havingCondition", "*havingCondition"], SUBSTR: ["havingCondition", "*havingCondition"], REPLACE: ["havingCondition", "*havingCondition"], REGEX: ["havingCondition", "*havingCondition"], EXISTS: ["havingCondition", "*havingCondition"], NOT: ["havingCondition", "*havingCondition"], IRI_REF: ["havingCondition", "*havingCondition"], PNAME_LN: ["havingCondition", "*havingCondition"], PNAME_NS: ["havingCondition", "*havingCondition"] }, "+or([var,[(,expression,AS,var,)]])": { "(": ["or([var,[(,expression,AS,var,)]])", "*or([var,[(,expression,AS,var,)]])"], VAR1: ["or([var,[(,expression,AS,var,)]])", "*or([var,[(,expression,AS,var,)]])"], VAR2: ["or([var,[(,expression,AS,var,)]])", "*or([var,[(,expression,AS,var,)]])"] }, "+orderCondition": { ASC: ["orderCondition", "*orderCondition"], DESC: ["orderCondition", "*orderCondition"], VAR1: ["orderCondition", "*orderCondition"], VAR2: ["orderCondition", "*orderCondition"], "(": ["orderCondition", "*orderCondition"], STR: ["orderCondition", "*orderCondition"], LANG: ["orderCondition", "*orderCondition"], LANGMATCHES: ["orderCondition", "*orderCondition"], DATATYPE: ["orderCondition", "*orderCondition"], BOUND: ["orderCondition", "*orderCondition"], IRI: ["orderCondition", "*orderCondition"], URI: ["orderCondition", "*orderCondition"], BNODE: ["orderCondition", "*orderCondition"], RAND: ["orderCondition", "*orderCondition"], ABS: ["orderCondition", "*orderCondition"], CEIL: ["orderCondition", "*orderCondition"], FLOOR: ["orderCondition", "*orderCondition"], ROUND: ["orderCondition", "*orderCondition"], CONCAT: ["orderCondition", "*orderCondition"], STRLEN: ["orderCondition", "*orderCondition"], UCASE: ["orderCondition", "*orderCondition"], LCASE: ["orderCondition", "*orderCondition"], ENCODE_FOR_URI: ["orderCondition", "*orderCondition"], CONTAINS: ["orderCondition", "*orderCondition"], STRSTARTS: ["orderCondition", "*orderCondition"], STRENDS: ["orderCondition", "*orderCondition"], STRBEFORE: ["orderCondition", "*orderCondition"], STRAFTER: ["orderCondition", "*orderCondition"], YEAR: ["orderCondition", "*orderCondition"], MONTH: ["orderCondition", "*orderCondition"], DAY: ["orderCondition", "*orderCondition"], HOURS: ["orderCondition", "*orderCondition"], MINUTES: ["orderCondition", "*orderCondition"], SECONDS: ["orderCondition", "*orderCondition"], TIMEZONE: ["orderCondition", "*orderCondition"], TZ: ["orderCondition", "*orderCondition"], NOW: ["orderCondition", "*orderCondition"], UUID: ["orderCondition", "*orderCondition"], STRUUID: ["orderCondition", "*orderCondition"], MD5: ["orderCondition", "*orderCondition"], SHA1: ["orderCondition", "*orderCondition"], SHA256: ["orderCondition", "*orderCondition"], SHA384: ["orderCondition", "*orderCondition"], SHA512: ["orderCondition", "*orderCondition"], COALESCE: ["orderCondition", "*orderCondition"], IF: ["orderCondition", "*orderCondition"], STRLANG: ["orderCondition", "*orderCondition"], STRDT: ["orderCondition", "*orderCondition"], SAMETERM: ["orderCondition", "*orderCondition"], ISIRI: ["orderCondition", "*orderCondition"], ISURI: ["orderCondition", "*orderCondition"], ISBLANK: ["orderCondition", "*orderCondition"], ISLITERAL: ["orderCondition", "*orderCondition"], ISNUMERIC: ["orderCondition", "*orderCondition"], SUBSTR: ["orderCondition", "*orderCondition"], REPLACE: ["orderCondition", "*orderCondition"], REGEX: ["orderCondition", "*orderCondition"], EXISTS: ["orderCondition", "*orderCondition"], NOT: ["orderCondition", "*orderCondition"], IRI_REF: ["orderCondition", "*orderCondition"], PNAME_LN: ["orderCondition", "*orderCondition"], PNAME_NS: ["orderCondition", "*orderCondition"] }, "+varOrIRIref": { VAR1: ["varOrIRIref", "*varOrIRIref"], VAR2: ["varOrIRIref", "*varOrIRIref"], IRI_REF: ["varOrIRIref", "*varOrIRIref"], PNAME_LN: ["varOrIRIref", "*varOrIRIref"], PNAME_NS: ["varOrIRIref", "*varOrIRIref"] }, "?.": { ".": ["."], VAR1: [], VAR2: [], NIL: [], "(": [], "[": [], IRI_REF: [], TRUE: [], FALSE: [], BLANK_NODE_LABEL: [], ANON: [], PNAME_LN: [], PNAME_NS: [], STRING_LITERAL1: [], STRING_LITERAL2: [], STRING_LITERAL_LONG1: [], STRING_LITERAL_LONG2: [], INTEGER: [], DECIMAL: [], DOUBLE: [], INTEGER_POSITIVE: [], DECIMAL_POSITIVE: [], DOUBLE_POSITIVE: [], INTEGER_NEGATIVE: [], DECIMAL_NEGATIVE: [], DOUBLE_NEGATIVE: [], GRAPH: [], "{": [], OPTIONAL: [], MINUS: [], SERVICE: [], FILTER: [], BIND: [], VALUES: [], "}": [] }, "?DISTINCT": { DISTINCT: ["DISTINCT"], "!": [], "+": [], "-": [], VAR1: [], VAR2: [], "(": [], STR: [], LANG: [], LANGMATCHES: [], DATATYPE: [], BOUND: [], IRI: [], URI: [], BNODE: [], RAND: [], ABS: [], CEIL: [], FLOOR: [], ROUND: [], CONCAT: [], STRLEN: [], UCASE: [], LCASE: [], ENCODE_FOR_URI: [], CONTAINS: [], STRSTARTS: [], STRENDS: [], STRBEFORE: [], STRAFTER: [], YEAR: [], MONTH: [], DAY: [], HOURS: [], MINUTES: [], SECONDS: [], TIMEZONE: [], TZ: [], NOW: [], UUID: [], STRUUID: [], MD5: [], SHA1: [], SHA256: [], SHA384: [], SHA512: [], COALESCE: [], IF: [], STRLANG: [], STRDT: [], SAMETERM: [], ISIRI: [], ISURI: [], ISBLANK: [], ISLITERAL: [], ISNUMERIC: [], TRUE: [], FALSE: [], COUNT: [], SUM: [], MIN: [], MAX: [], AVG: [], SAMPLE: [], GROUP_CONCAT: [], SUBSTR: [], REPLACE: [], REGEX: [], EXISTS: [], NOT: [], IRI_REF: [], STRING_LITERAL1: [], STRING_LITERAL2: [], STRING_LITERAL_LONG1: [], STRING_LITERAL_LONG2: [], INTEGER: [], DECIMAL: [], DOUBLE: [], INTEGER_POSITIVE: [], DECIMAL_POSITIVE: [], DOUBLE_POSITIVE: [], INTEGER_NEGATIVE: [], DECIMAL_NEGATIVE: [], DOUBLE_NEGATIVE: [], PNAME_LN: [], PNAME_NS: [], "*": [] }, "?GRAPH": { GRAPH: ["GRAPH"], IRI_REF: [], PNAME_LN: [], PNAME_NS: [] }, "?SILENT": { SILENT: ["SILENT"], VAR1: [], VAR2: [], IRI_REF: [], PNAME_LN: [], PNAME_NS: [] }, "?SILENT_1": { SILENT: ["SILENT"], IRI_REF: [], PNAME_LN: [], PNAME_NS: [] }, "?SILENT_2": { SILENT: ["SILENT"], GRAPH: [], DEFAULT: [], NAMED: [], ALL: [] }, "?SILENT_3": { SILENT: ["SILENT"], GRAPH: [] }, "?SILENT_4": { SILENT: ["SILENT"], DEFAULT: [], GRAPH: [], IRI_REF: [], PNAME_LN: [], PNAME_NS: [] }, "?WHERE": { WHERE: ["WHERE"], "{": [] }, "?[,,expression]": { ",": ["[,,expression]"], ")": [] }, "?[.,?constructTriples]": { ".": ["[.,?constructTriples]"], "}": [] }, "?[.,?triplesBlock]": { ".": ["[.,?triplesBlock]"], "{": [], OPTIONAL: [], MINUS: [], GRAPH: [], SERVICE: [], FILTER: [], BIND: [], VALUES: [], "}": [] }, "?[.,?triplesTemplate]": { ".": ["[.,?triplesTemplate]"], "}": [], GRAPH: [] }, "?[;,SEPARATOR,=,string]": { ";": ["[;,SEPARATOR,=,string]"], ")": [] }, "?[;,update]": { ";": ["[;,update]"], $: [] }, "?[AS,var]": { AS: ["[AS,var]"], ")": [] }, "?[INTO,graphRef]": { INTO: ["[INTO,graphRef]"], ";": [], $: [] }, "?[or([verbPath,verbSimple]),objectListPath]": { VAR1: ["[or([verbPath,verbSimple]),objectListPath]"], VAR2: ["[or([verbPath,verbSimple]),objectListPath]"], "^": ["[or([verbPath,verbSimple]),objectListPath]"], a: ["[or([verbPath,verbSimple]),objectListPath]"], "!": ["[or([verbPath,verbSimple]),objectListPath]"], "(": ["[or([verbPath,verbSimple]),objectListPath]"], IRI_REF: ["[or([verbPath,verbSimple]),objectListPath]"], PNAME_LN: ["[or([verbPath,verbSimple]),objectListPath]"], PNAME_NS: ["[or([verbPath,verbSimple]),objectListPath]"], ";": [], ".": [], "]": [], "{": [], OPTIONAL: [], MINUS: [], GRAPH: [], SERVICE: [], FILTER: [], BIND: [], VALUES: [], "}": [] }, "?[pathOneInPropertySet,*[|,pathOneInPropertySet]]": { a: ["[pathOneInPropertySet,*[|,pathOneInPropertySet]]"], "^": ["[pathOneInPropertySet,*[|,pathOneInPropertySet]]"], IRI_REF: ["[pathOneInPropertySet,*[|,pathOneInPropertySet]]"], PNAME_LN: ["[pathOneInPropertySet,*[|,pathOneInPropertySet]]"], PNAME_NS: ["[pathOneInPropertySet,*[|,pathOneInPropertySet]]"], ")": [] }, "?[update1,?[;,update]]": { INSERT: ["[update1,?[;,update]]"], DELETE: ["[update1,?[;,update]]"], LOAD: ["[update1,?[;,update]]"], CLEAR: ["[update1,?[;,update]]"], DROP: ["[update1,?[;,update]]"], ADD: ["[update1,?[;,update]]"], MOVE: ["[update1,?[;,update]]"], COPY: ["[update1,?[;,update]]"], CREATE: ["[update1,?[;,update]]"], WITH: ["[update1,?[;,update]]"], $: [] }, "?[verb,objectList]": { a: ["[verb,objectList]"], VAR1: ["[verb,objectList]"], VAR2: ["[verb,objectList]"], IRI_REF: ["[verb,objectList]"], PNAME_LN: ["[verb,objectList]"], PNAME_NS: ["[verb,objectList]"], ";": [], ".": [], "]": [], "}": [], GRAPH: [], "{": [], OPTIONAL: [], MINUS: [], SERVICE: [], FILTER: [], BIND: [], VALUES: [] }, "?argList": { NIL: ["argList"], "(": ["argList"], AS: [], ")": [], ",": [], "||": [], "&&": [], "=": [], "!=": [], "<": [], ">": [], "<=": [], ">=": [], IN: [], NOT: [], "+": [], "-": [], INTEGER_POSITIVE: [], DECIMAL_POSITIVE: [], DOUBLE_POSITIVE: [], INTEGER_NEGATIVE: [], DECIMAL_NEGATIVE: [], DOUBLE_NEGATIVE: [], "*": [], "/": [], ";": [] }, "?constructTriples": { VAR1: ["constructTriples"], VAR2: ["constructTriples"], NIL: ["constructTriples"], "(": ["constructTriples"], "[": ["constructTriples"], IRI_REF: ["constructTriples"], TRUE: ["constructTriples"], FALSE: ["constructTriples"], BLANK_NODE_LABEL: ["constructTriples"], ANON: ["constructTriples"], PNAME_LN: ["constructTriples"], PNAME_NS: ["constructTriples"], STRING_LITERAL1: ["constructTriples"], STRING_LITERAL2: ["constructTriples"], STRING_LITERAL_LONG1: ["constructTriples"], STRING_LITERAL_LONG2: ["constructTriples"], INTEGER: ["constructTriples"], DECIMAL: ["constructTriples"], DOUBLE: ["constructTriples"], INTEGER_POSITIVE: ["constructTriples"], DECIMAL_POSITIVE: ["constructTriples"], DOUBLE_POSITIVE: ["constructTriples"], INTEGER_NEGATIVE: ["constructTriples"], DECIMAL_NEGATIVE: ["constructTriples"], DOUBLE_NEGATIVE: ["constructTriples"], "}": [] }, "?groupClause": { GROUP: ["groupClause"], VALUES: [], LIMIT: [], OFFSET: [], ORDER: [], HAVING: [], $: [], "}": [] }, "?havingClause": { HAVING: ["havingClause"], VALUES: [], LIMIT: [], OFFSET: [], ORDER: [], $: [], "}": [] }, "?insertClause": { INSERT: ["insertClause"], WHERE: [], USING: [] }, "?limitClause": { LIMIT: ["limitClause"], VALUES: [], $: [], "}": [] }, "?limitOffsetClauses": { LIMIT: ["limitOffsetClauses"], OFFSET: ["limitOffsetClauses"], VALUES: [], $: [], "}": [] }, "?offsetClause": { OFFSET: ["offsetClause"], VALUES: [], $: [], "}": [] }, "?or([DISTINCT,REDUCED])": { DISTINCT: ["or([DISTINCT,REDUCED])"], REDUCED: ["or([DISTINCT,REDUCED])"], "*": [], "(": [], VAR1: [], VAR2: [] }, "?or([LANGTAG,[^^,iriRef]])": { LANGTAG: ["or([LANGTAG,[^^,iriRef]])"], "^^": ["or([LANGTAG,[^^,iriRef]])"], UNDEF: [], IRI_REF: [], TRUE: [], FALSE: [], PNAME_LN: [], PNAME_NS: [], STRING_LITERAL1: [], STRING_LITERAL2: [], STRING_LITERAL_LONG1: [], STRING_LITERAL_LONG2: [], INTEGER: [], DECIMAL: [], DOUBLE: [], INTEGER_POSITIVE: [], DECIMAL_POSITIVE: [], DOUBLE_POSITIVE: [], INTEGER_NEGATIVE: [], DECIMAL_NEGATIVE: [], DOUBLE_NEGATIVE: [], a: [], VAR1: [], VAR2: [], "^": [], "!": [], "(": [], ".": [], ";": [], ",": [], AS: [], ")": [], "||": [], "&&": [], "=": [], "!=": [], "<": [], ">": [], "<=": [], ">=": [], IN: [], NOT: [], "+": [], "-": [], "*": [], "/": [], "}": [], "[": [], NIL: [], BLANK_NODE_LABEL: [], ANON: [], "]": [], GRAPH: [], "{": [], OPTIONAL: [], MINUS: [], SERVICE: [], FILTER: [], BIND: [], VALUES: [] }, "?or([[*,unaryExpression],[/,unaryExpression]])": { "*": ["or([[*,unaryExpression],[/,unaryExpression]])"], "/": ["or([[*,unaryExpression],[/,unaryExpression]])"], "+": [], "-": [], INTEGER_POSITIVE: [], DECIMAL_POSITIVE: [], DOUBLE_POSITIVE: [], INTEGER_NEGATIVE: [], DECIMAL_NEGATIVE: [], DOUBLE_NEGATIVE: [], AS: [], ")": [], ",": [], "||": [], "&&": [], "=": [], "!=": [], "<": [], ">": [], "<=": [], ">=": [], IN: [], NOT: [], ";": [] }, "?or([[=,numericExpression],[!=,numericExpression],[<,numericExpression],[>,numericExpression],[<=,numericExpression],[>=,numericExpression],[IN,expressionList],[NOT,IN,expressionList]])": { "=": ["or([[=,numericExpression],[!=,numericExpression],[<,numericExpression],[>,numericExpression],[<=,numericExpression],[>=,numericExpression],[IN,expressionList],[NOT,IN,expressionList]])"], "!=": ["or([[=,numericExpression],[!=,numericExpression],[<,numericExpression],[>,numericExpression],[<=,numericExpression],[>=,numericExpression],[IN,expressionList],[NOT,IN,expressionList]])"], "<": ["or([[=,numericExpression],[!=,numericExpression],[<,numericExpression],[>,numericExpression],[<=,numericExpression],[>=,numericExpression],[IN,expressionList],[NOT,IN,expressionList]])"], ">": ["or([[=,numericExpression],[!=,numericExpression],[<,numericExpression],[>,numericExpression],[<=,numericExpression],[>=,numericExpression],[IN,expressionList],[NOT,IN,expressionList]])"], "<=": ["or([[=,numericExpression],[!=,numericExpression],[<,numericExpression],[>,numericExpression],[<=,numericExpression],[>=,numericExpression],[IN,expressionList],[NOT,IN,expressionList]])"], ">=": ["or([[=,numericExpression],[!=,numericExpression],[<,numericExpression],[>,numericExpression],[<=,numericExpression],[>=,numericExpression],[IN,expressionList],[NOT,IN,expressionList]])"], IN: ["or([[=,numericExpression],[!=,numericExpression],[<,numericExpression],[>,numericExpression],[<=,numericExpression],[>=,numericExpression],[IN,expressionList],[NOT,IN,expressionList]])"], NOT: ["or([[=,numericExpression],[!=,numericExpression],[<,numericExpression],[>,numericExpression],[<=,numericExpression],[>=,numericExpression],[IN,expressionList],[NOT,IN,expressionList]])"], AS: [], ")": [], ",": [], "||": [], "&&": [], ";": [] }, "?orderClause": { ORDER: ["orderClause"], VALUES: [], LIMIT: [], OFFSET: [], $: [], "}": [] }, "?pathMod": { "*": ["pathMod"], "?": ["pathMod"], "+": ["pathMod"], "{": ["pathMod"], "|": [], "/": [], ")": [], "(": [], "[": [], VAR1: [], VAR2: [], NIL: [], IRI_REF: [], TRUE: [], FALSE: [], BLANK_NODE_LABEL: [], ANON: [], PNAME_LN: [], PNAME_NS: [], STRING_LITERAL1: [], STRING_LITERAL2: [], STRING_LITERAL_LONG1: [], STRING_LITERAL_LONG2: [], INTEGER: [], DECIMAL: [], DOUBLE: [], INTEGER_POSITIVE: [], DECIMAL_POSITIVE: [], DOUBLE_POSITIVE: [], INTEGER_NEGATIVE: [], DECIMAL_NEGATIVE: [], DOUBLE_NEGATIVE: [] }, "?triplesBlock": { VAR1: ["triplesBlock"], VAR2: ["triplesBlock"], NIL: ["triplesBlock"], "(": ["triplesBlock"], "[": ["triplesBlock"], IRI_REF: ["triplesBlock"], TRUE: ["triplesBlock"], FALSE: ["triplesBlock"], BLANK_NODE_LABEL: ["triplesBlock"], ANON: ["triplesBlock"], PNAME_LN: ["triplesBlock"], PNAME_NS: ["triplesBlock"], STRING_LITERAL1: ["triplesBlock"], STRING_LITERAL2: ["triplesBlock"], STRING_LITERAL_LONG1: ["triplesBlock"], STRING_LITERAL_LONG2: ["triplesBlock"], INTEGER: ["triplesBlock"], DECIMAL: ["triplesBlock"], DOUBLE: ["triplesBlock"], INTEGER_POSITIVE: ["triplesBlock"], DECIMAL_POSITIVE: ["triplesBlock"], DOUBLE_POSITIVE: ["triplesBlock"], INTEGER_NEGATIVE: ["triplesBlock"], DECIMAL_NEGATIVE: ["triplesBlock"], DOUBLE_NEGATIVE: ["triplesBlock"], "{": [], OPTIONAL: [], MINUS: [], GRAPH: [], SERVICE: [], FILTER: [], BIND: [], VALUES: [], "}": [] }, "?triplesTemplate": { VAR1: ["triplesTemplate"], VAR2: ["triplesTemplate"], NIL: ["triplesTemplate"], "(": ["triplesTemplate"], "[": ["triplesTemplate"], IRI_REF: ["triplesTemplate"], TRUE: ["triplesTemplate"], FALSE: ["triplesTemplate"], BLANK_NODE_LABEL: ["triplesTemplate"], ANON: ["triplesTemplate"], PNAME_LN: ["triplesTemplate"], PNAME_NS: ["triplesTemplate"], STRING_LITERAL1: ["triplesTemplate"], STRING_LITERAL2: ["triplesTemplate"], STRING_LITERAL_LONG1: ["triplesTemplate"], STRING_LITERAL_LONG2: ["triplesTemplate"], INTEGER: ["triplesTemplate"], DECIMAL: ["triplesTemplate"], DOUBLE: ["triplesTemplate"], INTEGER_POSITIVE: ["triplesTemplate"], DECIMAL_POSITIVE: ["triplesTemplate"], DOUBLE_POSITIVE: ["triplesTemplate"], INTEGER_NEGATIVE: ["triplesTemplate"], DECIMAL_NEGATIVE: ["triplesTemplate"], DOUBLE_NEGATIVE: ["triplesTemplate"], "}": [], GRAPH: [] }, "?whereClause": { WHERE: ["whereClause"], "{": ["whereClause"], ORDER: [], HAVING: [], GROUP: [], LIMIT: [], OFFSET: [], VALUES: [], $: [] }, "[!=,numericExpression]": { "!=": ["!=", "numericExpression"] }, "[&&,valueLogical]": { "&&": ["&&", "valueLogical"] }, "[(,*dataBlockValue,)]": { "(": ["(", "*dataBlockValue", ")"] }, "[(,*var,)]": { "(": ["(", "*var", ")"] }, "[(,expression,)]": { "(": ["(", "expression", ")"] }, "[(,expression,AS,var,)]": { "(": ["(", "expression", "AS", "var", ")"] }, "[*,unaryExpression]": { "*": ["*", "unaryExpression"] }, "[*datasetClause,WHERE,{,?triplesTemplate,},solutionModifier]": { WHERE: ["*datasetClause", "WHERE", "{", "?triplesTemplate", "}", "solutionModifier"], FROM: ["*datasetClause", "WHERE", "{", "?triplesTemplate", "}", "solutionModifier"] }, "[+,multiplicativeExpression]": { "+": ["+", "multiplicativeExpression"] }, "[,,expression]": { ",": [",", "expression"] }, "[,,integer,}]": { ",": [",", "integer", "}"] }, "[,,objectPath]": { ",": [",", "objectPath"] }, "[,,object]": { ",": [",", "object"] }, "[,,or([},[integer,}]])]": { ",": [",", "or([},[integer,}]])"] }, "[-,multiplicativeExpression]": { "-": ["-", "multiplicativeExpression"] }, "[.,?constructTriples]": { ".": [".", "?constructTriples"] }, "[.,?triplesBlock]": { ".": [".", "?triplesBlock"] }, "[.,?triplesTemplate]": { ".": [".", "?triplesTemplate"] }, "[/,pathEltOrInverse]": { "/": ["/", "pathEltOrInverse"] }, "[/,unaryExpression]": { "/": ["/", "unaryExpression"] }, "[;,?[or([verbPath,verbSimple]),objectListPath]]": { ";": [";", "?[or([verbPath,verbSimple]),objectListPath]"] }, "[;,?[verb,objectList]]": { ";": [";", "?[verb,objectList]"] }, "[;,SEPARATOR,=,string]": { ";": [";", "SEPARATOR", "=", "string"] }, "[;,update]": { ";": [";", "update"] }, "[<,numericExpression]": { "<": ["<", "numericExpression"] }, "[<=,numericExpression]": { "<=": ["<=", "numericExpression"] }, "[=,numericExpression]": { "=": ["=", "numericExpression"] }, "[>,numericExpression]": { ">": [">", "numericExpression"] }, "[>=,numericExpression]": { ">=": [">=", "numericExpression"] }, "[AS,var]": { AS: ["AS", "var"] }, "[IN,expressionList]": { IN: ["IN", "expressionList"] }, "[INTO,graphRef]": { INTO: ["INTO", "graphRef"] }, "[NAMED,iriRef]": { NAMED: ["NAMED", "iriRef"] }, "[NOT,IN,expressionList]": { NOT: ["NOT", "IN", "expressionList"] }, "[UNION,groupGraphPattern]": { UNION: ["UNION", "groupGraphPattern"] }, "[^^,iriRef]": { "^^": ["^^", "iriRef"] }, "[constructTemplate,*datasetClause,whereClause,solutionModifier]": { "{": ["constructTemplate", "*datasetClause", "whereClause", "solutionModifier"] }, "[deleteClause,?insertClause]": { DELETE: ["deleteClause", "?insertClause"] }, "[graphPatternNotTriples,?.,?triplesBlock]": { "{": ["graphPatternNotTriples", "?.", "?triplesBlock"], OPTIONAL: ["graphPatternNotTriples", "?.", "?triplesBlock"], MINUS: ["graphPatternNotTriples", "?.", "?triplesBlock"], GRAPH: ["graphPatternNotTriples", "?.", "?triplesBlock"], SERVICE: ["graphPatternNotTriples", "?.", "?triplesBlock"], FILTER: ["graphPatternNotTriples", "?.", "?triplesBlock"], BIND: ["graphPatternNotTriples", "?.", "?triplesBlock"], VALUES: ["graphPatternNotTriples", "?.", "?triplesBlock"] }, "[integer,or([[,,or([},[integer,}]])],}])]": { INTEGER: ["integer", "or([[,,or([},[integer,}]])],}])"] }, "[integer,}]": { INTEGER: ["integer", "}"] }, "[or([numericLiteralPositive,numericLiteralNegative]),?or([[*,unaryExpression],[/,unaryExpression]])]": { INTEGER_POSITIVE: ["or([numericLiteralPositive,numericLiteralNegative])", "?or([[*,unaryExpression],[/,unaryExpression]])"], DECIMAL_POSITIVE: ["or([numericLiteralPositive,numericLiteralNegative])", "?or([[*,unaryExpression],[/,unaryExpression]])"], DOUBLE_POSITIVE: ["or([numericLiteralPositive,numericLiteralNegative])", "?or([[*,unaryExpression],[/,unaryExpression]])"], INTEGER_NEGATIVE: ["or([numericLiteralPositive,numericLiteralNegative])", "?or([[*,unaryExpression],[/,unaryExpression]])"], DECIMAL_NEGATIVE: ["or([numericLiteralPositive,numericLiteralNegative])", "?or([[*,unaryExpression],[/,unaryExpression]])"], DOUBLE_NEGATIVE: ["or([numericLiteralPositive,numericLiteralNegative])", "?or([[*,unaryExpression],[/,unaryExpression]])"] }, "[or([verbPath,verbSimple]),objectListPath]": { VAR1: ["or([verbPath,verbSimple])", "objectListPath"], VAR2: ["or([verbPath,verbSimple])", "objectListPath"], "^": ["or([verbPath,verbSimple])", "objectListPath"], a: ["or([verbPath,verbSimple])", "objectListPath"], "!": ["or([verbPath,verbSimple])", "objectListPath"], "(": ["or([verbPath,verbSimple])", "objectListPath"], IRI_REF: ["or([verbPath,verbSimple])", "objectListPath"], PNAME_LN: ["or([verbPath,verbSimple])", "objectListPath"], PNAME_NS: ["or([verbPath,verbSimple])", "objectListPath"] }, "[pathOneInPropertySet,*[|,pathOneInPropertySet]]": { a: ["pathOneInPropertySet", "*[|,pathOneInPropertySet]"], "^": ["pathOneInPropertySet", "*[|,pathOneInPropertySet]"], IRI_REF: ["pathOneInPropertySet", "*[|,pathOneInPropertySet]"], PNAME_LN: ["pathOneInPropertySet", "*[|,pathOneInPropertySet]"], PNAME_NS: ["pathOneInPropertySet", "*[|,pathOneInPropertySet]"] }, "[quadsNotTriples,?.,?triplesTemplate]": { GRAPH: ["quadsNotTriples", "?.", "?triplesTemplate"] }, "[update1,?[;,update]]": { INSERT: ["update1", "?[;,update]"], DELETE: ["update1", "?[;,update]"], LOAD: ["update1", "?[;,update]"], CLEAR: ["update1", "?[;,update]"], DROP: ["update1", "?[;,update]"], ADD: ["update1", "?[;,update]"], MOVE: ["update1", "?[;,update]"], COPY: ["update1", "?[;,update]"], CREATE: ["update1", "?[;,update]"], WITH: ["update1", "?[;,update]"] }, "[verb,objectList]": { a: ["verb", "objectList"], VAR1: ["verb", "objectList"], VAR2: ["verb", "objectList"], IRI_REF: ["verb", "objectList"], PNAME_LN: ["verb", "objectList"], PNAME_NS: ["verb", "objectList"] }, "[|,pathOneInPropertySet]": { "|": ["|", "pathOneInPropertySet"] }, "[|,pathSequence]": { "|": ["|", "pathSequence"] }, "[||,conditionalAndExpression]": { "||": ["||", "conditionalAndExpression"] }, add: { ADD: ["ADD", "?SILENT_4", "graphOrDefault", "TO", "graphOrDefault"] }, additiveExpression: { "!": ["multiplicativeExpression", "*or([[+,multiplicativeExpression],[-,multiplicativeExpression],[or([numericLiteralPositive,numericLiteralNegative]),?or([[*,unaryExpression],[/,unaryExpression]])]])"], "+": ["multiplicativeExpression", "*or([[+,multiplicativeExpression],[-,multiplicativeExpression],[or([numericLiteralPositive,numericLiteralNegative]),?or([[*,unaryExpression],[/,unaryExpression]])]])"], "-": ["multiplicativeExpression", "*or([[+,multiplicativeExpression],[-,multiplicativeExpression],[or([numericLiteralPositive,numericLiteralNegative]),?or([[*,unaryExpression],[/,unaryExpression]])]])"], VAR1: ["multiplicativeExpression", "*or([[+,multiplicativeExpression],[-,multiplicativeExpression],[or([numericLiteralPositive,numericLiteralNegative]),?or([[*,unaryExpression],[/,unaryExpression]])]])"], VAR2: ["multiplicativeExpression", "*or([[+,multiplicativeExpression],[-,multiplicativeExpression],[or([numericLiteralPositive,numericLiteralNegative]),?or([[*,unaryExpression],[/,unaryExpression]])]])"], "(": ["multiplicativeExpression", "*or([[+,multiplicativeExpression],[-,multiplicativeExpression],[or([numericLiteralPositive,numericLiteralNegative]),?or([[*,unaryExpression],[/,unaryExpression]])]])"], STR: ["multiplicativeExpression", "*or([[+,multiplicativeExpression],[-,multiplicativeExpression],[or([numericLiteralPositive,numericLiteralNegative]),?or([[*,unaryExpression],[/,unaryExpression]])]])"], LANG: ["multiplicativeExpression", "*or([[+,multiplicativeExpression],[-,multiplicativeExpression],[or([numericLiteralPositive,numericLiteralNegative]),?or([[*,unaryExpression],[/,unaryExpression]])]])"], LANGMATCHES: ["multiplicativeExpression", "*or([[+,multiplicativeExpression],[-,multiplicativeExpression],[or([numericLiteralPositive,numericLiteralNegative]),?or([[*,unaryExpression],[/,unaryExpression]])]])"], DATATYPE: ["multiplicativeExpression", "*or([[+,multiplicativeExpression],[-,multiplicativeExpression],[or([numericLiteralPositive,numericLiteralNegative]),?or([[*,unaryExpression],[/,unaryExpression]])]])"], BOUND: ["multiplicativeExpression", "*or([[+,multiplicativeExpression],[-,multiplicativeExpression],[or([numericLiteralPositive,numericLiteralNegative]),?or([[*,unaryExpression],[/,unaryExpression]])]])"], IRI: ["multiplicativeExpression", "*or([[+,multiplicativeExpression],[-,multiplicativeExpression],[or([numericLiteralPositive,numericLiteralNegative]),?or([[*,unaryExpression],[/,unaryExpression]])]])"], URI: ["multiplicativeExpression", "*or([[+,multiplicativeExpression],[-,multiplicativeExpression],[or([numericLiteralPositive,numericLiteralNegative]),?or([[*,unaryExpression],[/,unaryExpression]])]])"], BNODE: ["multiplicativeExpression", "*or([[+,multiplicativeExpression],[-,multiplicativeExpression],[or([numericLiteralPositive,numericLiteralNegative]),?or([[*,unaryExpression],[/,unaryExpression]])]])"], RAND: ["multiplicativeExpression", "*or([[+,multiplicativeExpression],[-,multiplicativeExpression],[or([numericLiteralPositive,numericLiteralNegative]),?or([[*,unaryExpression],[/,unaryExpression]])]])"], ABS: ["multiplicativeExpression", "*or([[+,multiplicativeExpression],[-,multiplicativeExpression],[or([numericLiteralPositive,numericLiteralNegative]),?or([[*,unaryExpression],[/,unaryExpression]])]])"], CEIL: ["multiplicativeExpression", "*or([[+,multiplicativeExpression],[-,multiplicativeExpression],[or([numericLiteralPositive,numericLiteralNegative]),?or([[*,unaryExpression],[/,unaryExpression]])]])"], FLOOR: ["multiplicativeExpression", "*or([[+,multiplicativeExpression],[-,multiplicativeExpression],[or([numericLiteralPositive,numericLiteralNegative]),?or([[*,unaryExpression],[/,unaryExpression]])]])"], ROUND: ["multiplicativeExpression", "*or([[+,multiplicativeExpression],[-,multiplicativeExpression],[or([numericLiteralPositive,numericLiteralNegative]),?or([[*,unaryExpression],[/,unaryExpression]])]])"], CONCAT: ["multiplicativeExpression", "*or([[+,multiplicativeExpression],[-,multiplicativeExpression],[or([numericLiteralPositive,numericLiteralNegative]),?or([[*,unaryExpression],[/,unaryExpression]])]])"], STRLEN: ["multiplicativeExpression", "*or([[+,multiplicativeExpression],[-,multiplicativeExpression],[or([numericLiteralPositive,numericLiteralNegative]),?or([[*,unaryExpression],[/,unaryExpression]])]])"], UCASE: ["multiplicativeExpression", "*or([[+,multiplicativeExpression],[-,multiplicativeExpression],[or([numericLiteralPositive,numericLiteralNegative]),?or([[*,unaryExpression],[/,unaryExpression]])]])"], LCASE: ["multiplicativeExpression", "*or([[+,multiplicativeExpression],[-,multiplicativeExpression],[or([numericLiteralPositive,numericLiteralNegative]),?or([[*,unaryExpression],[/,unaryExpression]])]])"], ENCODE_FOR_URI: ["multiplicativeExpression", "*or([[+,multiplicativeExpression],[-,multiplicativeExpression],[or([numericLiteralPositive,numericLiteralNegative]),?or([[*,unaryExpression],[/,unaryExpression]])]])"], CONTAINS: ["multiplicativeExpression", "*or([[+,multiplicativeExpression],[-,multiplicativeExpression],[or([numericLiteralPositive,numericLiteralNegative]),?or([[*,unaryExpression],[/,unaryExpression]])]])"], STRSTARTS: ["multiplicativeExpression", "*or([[+,multiplicativeExpression],[-,multiplicativeExpression],[or([numericLiteralPositive,numericLiteralNegative]),?or([[*,unaryExpression],[/,unaryExpression]])]])"], STRENDS: ["multiplicativeExpression", "*or([[+,multiplicativeExpression],[-,multiplicativeExpression],[or([numericLiteralPositive,numericLiteralNegative]),?or([[*,unaryExpression],[/,unaryExpression]])]])"], STRBEFORE: ["multiplicativeExpression", "*or([[+,multiplicativeExpression],[-,multiplicativeExpression],[or([numericLiteralPositive,numericLiteralNegative]),?or([[*,unaryExpression],[/,unaryExpression]])]])"], STRAFTER: ["multiplicativeExpression", "*or([[+,multiplicativeExpression],[-,multiplicativeExpression],[or([numericLiteralPositive,numericLiteralNegative]),?or([[*,unaryExpression],[/,unaryExpression]])]])"], YEAR: ["multiplicativeExpression", "*or([[+,multiplicativeExpression],[-,multiplicativeExpression],[or([numericLiteralPositive,numericLiteralNegative]),?or([[*,unaryExpression],[/,unaryExpression]])]])"], MONTH: ["multiplicativeExpression", "*or([[+,multiplicativeExpression],[-,multiplicativeExpression],[or([numericLiteralPositive,numericLiteralNegative]),?or([[*,unaryExpression],[/,unaryExpression]])]])"], DAY: ["multiplicativeExpression", "*or([[+,multiplicativeExpression],[-,multiplicativeExpression],[or([numericLiteralPositive,numericLiteralNegative]),?or([[*,unaryExpression],[/,unaryExpression]])]])"], HOURS: ["multiplicativeExpression", "*or([[+,multiplicativeExpression],[-,multiplicativeExpression],[or([numericLiteralPositive,numericLiteralNegative]),?or([[*,unaryExpression],[/,unaryExpression]])]])"], MINUTES: ["multiplicativeExpression", "*or([[+,multiplicativeExpression],[-,multiplicativeExpression],[or([numericLiteralPositive,numericLiteralNegative]),?or([[*,unaryExpression],[/,unaryExpression]])]])"], SECONDS: ["multiplicativeExpression", "*or([[+,multiplicativeExpression],[-,multiplicativeExpression],[or([numericLiteralPositive,numericLiteralNegative]),?or([[*,unaryExpression],[/,unaryExpression]])]])"], TIMEZONE: ["multiplicativeExpression", "*or([[+,multiplicativeExpression],[-,multiplicativeExpression],[or([numericLiteralPositive,numericLiteralNegative]),?or([[*,unaryExpression],[/,unaryExpression]])]])"], TZ: ["multiplicativeExpression", "*or([[+,multiplicativeExpression],[-,multiplicativeExpression],[or([numericLiteralPositive,numericLiteralNegative]),?or([[*,unaryExpression],[/,unaryExpression]])]])"], NOW: ["multiplicativeExpression", "*or([[+,multiplicativeExpression],[-,multiplicativeExpression],[or([numericLiteralPositive,numericLiteralNegative]),?or([[*,unaryExpression],[/,unaryExpression]])]])"], UUID: ["multiplicativeExpression", "*or([[+,multiplicativeExpression],[-,multiplicativeExpression],[or([numericLiteralPositive,numericLiteralNegative]),?or([[*,unaryExpression],[/,unaryExpression]])]])"], STRUUID: ["multiplicativeExpression", "*or([[+,multiplicativeExpression],[-,multiplicativeExpression],[or([numericLiteralPositive,numericLiteralNegative]),?or([[*,unaryExpression],[/,unaryExpression]])]])"], MD5: ["multiplicativeExpression", "*or([[+,multiplicativeExpression],[-,multiplicativeExpression],[or([numericLiteralPositive,numericLiteralNegative]),?or([[*,unaryExpression],[/,unaryExpression]])]])"], SHA1: ["multiplicativeExpression", "*or([[+,multiplicativeExpression],[-,multiplicativeExpression],[or([numericLiteralPositive,numericLiteralNegative]),?or([[*,unaryExpression],[/,unaryExpression]])]])"], SHA256: ["multiplicativeExpression", "*or([[+,multiplicativeExpression],[-,multiplicativeExpression],[or([numericLiteralPositive,numericLiteralNegative]),?or([[*,unaryExpression],[/,unaryExpression]])]])"], SHA384: ["multiplicativeExpression", "*or([[+,multiplicativeExpression],[-,multiplicativeExpression],[or([numericLiteralPositive,numericLiteralNegative]),?or([[*,unaryExpression],[/,unaryExpression]])]])"], SHA512: ["multiplicativeExpression", "*or([[+,multiplicativeExpression],[-,multiplicativeExpression],[or([numericLiteralPositive,numericLiteralNegative]),?or([[*,unaryExpression],[/,unaryExpression]])]])"], COALESCE: ["multiplicativeExpression", "*or([[+,multiplicativeExpression],[-,multiplicativeExpression],[or([numericLiteralPositive,numericLiteralNegative]),?or([[*,unaryExpression],[/,unaryExpression]])]])"], IF: ["multiplicativeExpression", "*or([[+,multiplicativeExpression],[-,multiplicativeExpression],[or([numericLiteralPositive,numericLiteralNegative]),?or([[*,unaryExpression],[/,unaryExpression]])]])"], STRLANG: ["multiplicativeExpression", "*or([[+,multiplicativeExpression],[-,multiplicativeExpression],[or([numericLiteralPositive,numericLiteralNegative]),?or([[*,unaryExpression],[/,unaryExpression]])]])"], STRDT: ["multiplicativeExpression", "*or([[+,multiplicativeExpression],[-,multiplicativeExpression],[or([numericLiteralPositive,numericLiteralNegative]),?or([[*,unaryExpression],[/,unaryExpression]])]])"], SAMETERM: ["multiplicativeExpression", "*or([[+,multiplicativeExpression],[-,multiplicativeExpression],[or([numericLiteralPositive,numericLiteralNegative]),?or([[*,unaryExpression],[/,unaryExpression]])]])"], ISIRI: ["multiplicativeExpression", "*or([[+,multiplicativeExpression],[-,multiplicativeExpression],[or([numericLiteralPositive,numericLiteralNegative]),?or([[*,unaryExpression],[/,unaryExpression]])]])"], ISURI: ["multiplicativeExpression", "*or([[+,multiplicativeExpression],[-,multiplicativeExpression],[or([numericLiteralPositive,numericLiteralNegative]),?or([[*,unaryExpression],[/,unaryExpression]])]])"], ISBLANK: ["multiplicativeExpression", "*or([[+,multiplicativeExpression],[-,multiplicativeExpression],[or([numericLiteralPositive,numericLiteralNegative]),?or([[*,unaryExpression],[/,unaryExpression]])]])"], ISLITERAL: ["multiplicativeExpression", "*or([[+,multiplicativeExpression],[-,multiplicativeExpression],[or([numericLiteralPositive,numericLiteralNegative]),?or([[*,unaryExpression],[/,unaryExpression]])]])"], ISNUMERIC: ["multiplicativeExpression", "*or([[+,multiplicativeExpression],[-,multiplicativeExpression],[or([numericLiteralPositive,numericLiteralNegative]),?or([[*,unaryExpression],[/,unaryExpression]])]])"], TRUE: ["multiplicativeExpression", "*or([[+,multiplicativeExpression],[-,multiplicativeExpression],[or([numericLiteralPositive,numericLiteralNegative]),?or([[*,unaryExpression],[/,unaryExpression]])]])"], FALSE: ["multiplicativeExpression", "*or([[+,multiplicativeExpression],[-,multiplicativeExpression],[or([numericLiteralPositive,numericLiteralNegative]),?or([[*,unaryExpression],[/,unaryExpression]])]])"], COUNT: ["multiplicativeExpression", "*or([[+,multiplicativeExpression],[-,multiplicativeExpression],[or([numericLiteralPositive,numericLiteralNegative]),?or([[*,unaryExpression],[/,unaryExpression]])]])"], SUM: ["multiplicativeExpression", "*or([[+,multiplicativeExpression],[-,multiplicativeExpression],[or([numericLiteralPositive,numericLiteralNegative]),?or([[*,unaryExpression],[/,unaryExpression]])]])"], MIN: ["multiplicativeExpression", "*or([[+,multiplicativeExpression],[-,multiplicativeExpression],[or([numericLiteralPositive,numericLiteralNegative]),?or([[*,unaryExpression],[/,unaryExpression]])]])"], MAX: ["multiplicativeExpression", "*or([[+,multiplicativeExpression],[-,multiplicativeExpression],[or([numericLiteralPositive,numericLiteralNegative]),?or([[*,unaryExpression],[/,unaryExpression]])]])"], AVG: ["multiplicativeExpression", "*or([[+,multiplicativeExpression],[-,multiplicativeExpression],[or([numericLiteralPositive,numericLiteralNegative]),?or([[*,unaryExpression],[/,unaryExpression]])]])"], SAMPLE: ["multiplicativeExpression", "*or([[+,multiplicativeExpression],[-,multiplicativeExpression],[or([numericLiteralPositive,numericLiteralNegative]),?or([[*,unaryExpression],[/,unaryExpression]])]])"], GROUP_CONCAT: ["multiplicativeExpression", "*or([[+,multiplicativeExpression],[-,multiplicativeExpression],[or([numericLiteralPositive,numericLiteralNegative]),?or([[*,unaryExpression],[/,unaryExpression]])]])"], SUBSTR: ["multiplicativeExpression", "*or([[+,multiplicativeExpression],[-,multiplicativeExpression],[or([numericLiteralPositive,numericLiteralNegative]),?or([[*,unaryExpression],[/,unaryExpression]])]])"], REPLACE: ["multiplicativeExpression", "*or([[+,multiplicativeExpression],[-,multiplicativeExpression],[or([numericLiteralPositive,numericLiteralNegative]),?or([[*,unaryExpression],[/,unaryExpression]])]])"], REGEX: ["multiplicativeExpression", "*or([[+,multiplicativeExpression],[-,multiplicativeExpression],[or([numericLiteralPositive,numericLiteralNegative]),?or([[*,unaryExpression],[/,unaryExpression]])]])"], EXISTS: ["multiplicativeExpression", "*or([[+,multiplicativeExpression],[-,multiplicativeExpression],[or([numericLiteralPositive,numericLiteralNegative]),?or([[*,unaryExpression],[/,unaryExpression]])]])"], NOT: ["multiplicativeExpression", "*or([[+,multiplicativeExpression],[-,multiplicativeExpression],[or([numericLiteralPositive,numericLiteralNegative]),?or([[*,unaryExpression],[/,unaryExpression]])]])"], IRI_REF: ["multiplicativeExpression", "*or([[+,multiplicativeExpression],[-,multiplicativeExpression],[or([numericLiteralPositive,numericLiteralNegative]),?or([[*,unaryExpression],[/,unaryExpression]])]])"], STRING_LITERAL1: ["multiplicativeExpression", "*or([[+,multiplicativeExpression],[-,multiplicativeExpression],[or([numericLiteralPositive,numericLiteralNegative]),?or([[*,unaryExpression],[/,unaryExpression]])]])"], STRING_LITERAL2: ["multiplicativeExpression", "*or([[+,multiplicativeExpression],[-,multiplicativeExpression],[or([numericLiteralPositive,numericLiteralNegative]),?or([[*,unaryExpression],[/,unaryExpression]])]])"], STRING_LITERAL_LONG1: ["multiplicativeExpression", "*or([[+,multiplicativeExpression],[-,multiplicativeExpression],[or([numericLiteralPositive,numericLiteralNegative]),?or([[*,unaryExpression],[/,unaryExpression]])]])"], STRING_LITERAL_LONG2: ["multiplicativeExpression", "*or([[+,multiplicativeExpression],[-,multiplicativeExpression],[or([numericLiteralPositive,numericLiteralNegative]),?or([[*,unaryExpression],[/,unaryExpression]])]])"], INTEGER: ["multiplicativeExpression", "*or([[+,multiplicativeExpression],[-,multiplicativeExpression],[or([numericLiteralPositive,numericLiteralNegative]),?or([[*,unaryExpression],[/,unaryExpression]])]])"], DECIMAL: ["multiplicativeExpression", "*or([[+,multiplicativeExpression],[-,multiplicativeExpression],[or([numericLiteralPositive,numericLiteralNegative]),?or([[*,unaryExpression],[/,unaryExpression]])]])"], DOUBLE: ["multiplicativeExpression", "*or([[+,multiplicativeExpression],[-,multiplicativeExpression],[or([numericLiteralPositive,numericLiteralNegative]),?or([[*,unaryExpression],[/,unaryExpression]])]])"], INTEGER_POSITIVE: ["multiplicativeExpression", "*or([[+,multiplicativeExpression],[-,multiplicativeExpression],[or([numericLiteralPositive,numericLiteralNegative]),?or([[*,unaryExpression],[/,unaryExpression]])]])"], DECIMAL_POSITIVE: ["multiplicativeExpression", "*or([[+,multiplicativeExpression],[-,multiplicativeExpression],[or([numericLiteralPositive,numericLiteralNegative]),?or([[*,unaryExpression],[/,unaryExpression]])]])"], DOUBLE_POSITIVE: ["multiplicativeExpression", "*or([[+,multiplicativeExpression],[-,multiplicativeExpression],[or([numericLiteralPositive,numericLiteralNegative]),?or([[*,unaryExpression],[/,unaryExpression]])]])"], INTEGER_NEGATIVE: ["multiplicativeExpression", "*or([[+,multiplicativeExpression],[-,multiplicativeExpression],[or([numericLiteralPositive,numericLiteralNegative]),?or([[*,unaryExpression],[/,unaryExpression]])]])"], DECIMAL_NEGATIVE: ["multiplicativeExpression", "*or([[+,multiplicativeExpression],[-,multiplicativeExpression],[or([numericLiteralPositive,numericLiteralNegative]),?or([[*,unaryExpression],[/,unaryExpression]])]])"], DOUBLE_NEGATIVE: ["multiplicativeExpression", "*or([[+,multiplicativeExpression],[-,multiplicativeExpression],[or([numericLiteralPositive,numericLiteralNegative]),?or([[*,unaryExpression],[/,unaryExpression]])]])"], PNAME_LN: ["multiplicativeExpression", "*or([[+,multiplicativeExpression],[-,multiplicativeExpression],[or([numericLiteralPositive,numericLiteralNegative]),?or([[*,unaryExpression],[/,unaryExpression]])]])"], PNAME_NS: ["multiplicativeExpression", "*or([[+,multiplicativeExpression],[-,multiplicativeExpression],[or([numericLiteralPositive,numericLiteralNegative]),?or([[*,unaryExpression],[/,unaryExpression]])]])"] }, aggregate: { COUNT: ["COUNT", "(", "?DISTINCT", "or([*,expression])", ")"], SUM: ["SUM", "(", "?DISTINCT", "expression", ")"], MIN: ["MIN", "(", "?DISTINCT", "expression", ")"], MAX: ["MAX", "(", "?DISTINCT", "expression", ")"], AVG: ["AVG", "(", "?DISTINCT", "expression", ")"], SAMPLE: ["SAMPLE", "(", "?DISTINCT", "expression", ")"], GROUP_CONCAT: ["GROUP_CONCAT", "(", "?DISTINCT", "expression", "?[;,SEPARATOR,=,string]", ")"] }, allowBnodes: { "}": [] }, allowVars: { "}": [] }, argList: { NIL: ["NIL"], "(": ["(", "?DISTINCT", "expression", "*[,,expression]", ")"] }, askQuery: { ASK: ["ASK", "*datasetClause", "whereClause", "solutionModifier"] }, baseDecl: { BASE: ["BASE", "IRI_REF"] }, bind: { BIND: ["BIND", "(", "expression", "AS", "var", ")"] }, blankNode: { BLANK_NODE_LABEL: ["BLANK_NODE_LABEL"], ANON: ["ANON"] }, blankNodePropertyList: { "[": ["[", "propertyListNotEmpty", "]"] }, blankNodePropertyListPath: { "[": ["[", "propertyListPathNotEmpty", "]"] }, booleanLiteral: { TRUE: ["TRUE"], FALSE: ["FALSE"] }, brackettedExpression: { "(": ["(", "expression", ")"] }, builtInCall: { STR: ["STR", "(", "expression", ")"], LANG: ["LANG", "(", "expression", ")"], LANGMATCHES: ["LANGMATCHES", "(", "expression", ",", "expression", ")"], DATATYPE: ["DATATYPE", "(", "expression", ")"], BOUND: ["BOUND", "(", "var", ")"], IRI: ["IRI", "(", "expression", ")"], URI: ["URI", "(", "expression", ")"], BNODE: ["BNODE", "or([[(,expression,)],NIL])"], RAND: ["RAND", "or([[(,expression,)],NIL])"], ABS: ["ABS", "(", "expression", ")"], CEIL: ["CEIL", "(", "expression", ")"], FLOOR: ["FLOOR", "(", "expression", ")"], ROUND: ["ROUND", "(", "expression", ")"], CONCAT: ["CONCAT", "expressionList"], SUBSTR: ["substringExpression"], STRLEN: ["STRLEN", "(", "expression", ")"], REPLACE: ["strReplaceExpression"], UCASE: ["UCASE", "(", "expression", ")"], LCASE: ["LCASE", "(", "expression", ")"], ENCODE_FOR_URI: ["ENCODE_FOR_URI", "(", "expression", ")"], CONTAINS: ["CONTAINS", "(", "expression", ",", "expression", ")"], STRSTARTS: ["STRSTARTS", "(", "expression", ",", "expression", ")"], STRENDS: ["STRENDS", "(", "expression", ",", "expression", ")"], STRBEFORE: ["STRBEFORE", "(", "expression", ",", "expression", ")"], STRAFTER: ["STRAFTER", "(", "expression", ",", "expression", ")"], YEAR: ["YEAR", "(", "expression", ")"], MONTH: ["MONTH", "(", "expression", ")"], DAY: ["DAY", "(", "expression", ")"], HOURS: ["HOURS", "(", "expression", ")"], MINUTES: ["MINUTES", "(", "expression", ")"], SECONDS: ["SECONDS", "(", "expression", ")"], TIMEZONE: ["TIMEZONE", "(", "expression", ")"], TZ: ["TZ", "(", "expression", ")"], NOW: ["NOW", "NIL"], UUID: ["UUID", "NIL"], STRUUID: ["STRUUID", "NIL"], MD5: ["MD5", "(", "expression", ")"], SHA1: ["SHA1", "(", "expression", ")"], SHA256: ["SHA256", "(", "expression", ")"], SHA384: ["SHA384", "(", "expression", ")"], SHA512: ["SHA512", "(", "expression", ")"], COALESCE: ["COALESCE", "expressionList"], IF: ["IF", "(", "expression", ",", "expression", ",", "expression", ")"], STRLANG: ["STRLANG", "(", "expression", ",", "expression", ")"], STRDT: ["STRDT", "(", "expression", ",", "expression", ")"], SAMETERM: ["SAMETERM", "(", "expression", ",", "expression", ")"], ISIRI: ["ISIRI", "(", "expression", ")"], ISURI: ["ISURI", "(", "expression", ")"], ISBLANK: ["ISBLANK", "(", "expression", ")"], ISLITERAL: ["ISLITERAL", "(", "expression", ")"], ISNUMERIC: ["ISNUMERIC", "(", "expression", ")"], REGEX: ["regexExpression"], EXISTS: ["existsFunc"], NOT: ["notExistsFunc"] }, clear: { CLEAR: ["CLEAR", "?SILENT_2", "graphRefAll"] }, collection: { "(": ["(", "+graphNode", ")"] }, collectionPath: { "(": ["(", "+graphNodePath", ")"] }, conditionalAndExpression: { "!": ["valueLogical", "*[&&,valueLogical]"], "+": ["valueLogical", "*[&&,valueLogical]"], "-": ["valueLogical", "*[&&,valueLogical]"], VAR1: ["valueLogical", "*[&&,valueLogical]"], VAR2: ["valueLogical", "*[&&,valueLogical]"], "(": ["valueLogical", "*[&&,valueLogical]"], STR: ["valueLogical", "*[&&,valueLogical]"], LANG: ["valueLogical", "*[&&,valueLogical]"], LANGMATCHES: ["valueLogical", "*[&&,valueLogical]"], DATATYPE: ["valueLogical", "*[&&,valueLogical]"], BOUND: ["valueLogical", "*[&&,valueLogical]"], IRI: ["valueLogical", "*[&&,valueLogical]"], URI: ["valueLogical", "*[&&,valueLogical]"], BNODE: ["valueLogical", "*[&&,valueLogical]"], RAND: ["valueLogical", "*[&&,valueLogical]"], ABS: ["valueLogical", "*[&&,valueLogical]"], CEIL: ["valueLogical", "*[&&,valueLogical]"], FLOOR: ["valueLogical", "*[&&,valueLogical]"], ROUND: ["valueLogical", "*[&&,valueLogical]"], CONCAT: ["valueLogical", "*[&&,valueLogical]"], STRLEN: ["valueLogical", "*[&&,valueLogical]"], UCASE: ["valueLogical", "*[&&,valueLogical]"], LCASE: ["valueLogical", "*[&&,valueLogical]"], ENCODE_FOR_URI: ["valueLogical", "*[&&,valueLogical]"], CONTAINS: ["valueLogical", "*[&&,valueLogical]"], STRSTARTS: ["valueLogical", "*[&&,valueLogical]"], STRENDS: ["valueLogical", "*[&&,valueLogical]"], STRBEFORE: ["valueLogical", "*[&&,valueLogical]"], STRAFTER: ["valueLogical", "*[&&,valueLogical]"], YEAR: ["valueLogical", "*[&&,valueLogical]"], MONTH: ["valueLogical", "*[&&,valueLogical]"], DAY: ["valueLogical", "*[&&,valueLogical]"], HOURS: ["valueLogical", "*[&&,valueLogical]"], MINUTES: ["valueLogical", "*[&&,valueLogical]"], SECONDS: ["valueLogical", "*[&&,valueLogical]"], TIMEZONE: ["valueLogical", "*[&&,valueLogical]"], TZ: ["valueLogical", "*[&&,valueLogical]"], NOW: ["valueLogical", "*[&&,valueLogical]"], UUID: ["valueLogical", "*[&&,valueLogical]"], STRUUID: ["valueLogical", "*[&&,valueLogical]"], MD5: ["valueLogical", "*[&&,valueLogical]"], SHA1: ["valueLogical", "*[&&,valueLogical]"], SHA256: ["valueLogical", "*[&&,valueLogical]"], SHA384: ["valueLogical", "*[&&,valueLogical]"], SHA512: ["valueLogical", "*[&&,valueLogical]"], COALESCE: ["valueLogical", "*[&&,valueLogical]"], IF: ["valueLogical", "*[&&,valueLogical]"], STRLANG: ["valueLogical", "*[&&,valueLogical]"], STRDT: ["valueLogical", "*[&&,valueLogical]"], SAMETERM: ["valueLogical", "*[&&,valueLogical]"], ISIRI: ["valueLogical", "*[&&,valueLogical]"], ISURI: ["valueLogical", "*[&&,valueLogical]"], ISBLANK: ["valueLogical", "*[&&,valueLogical]"], ISLITERAL: ["valueLogical", "*[&&,valueLogical]"], ISNUMERIC: ["valueLogical", "*[&&,valueLogical]"], TRUE: ["valueLogical", "*[&&,valueLogical]"], FALSE: ["valueLogical", "*[&&,valueLogical]"], COUNT: ["valueLogical", "*[&&,valueLogical]"], SUM: ["valueLogical", "*[&&,valueLogical]"], MIN: ["valueLogical", "*[&&,valueLogical]"], MAX: ["valueLogical", "*[&&,valueLogical]"], AVG: ["valueLogical", "*[&&,valueLogical]"], SAMPLE: ["valueLogical", "*[&&,valueLogical]"], GROUP_CONCAT: ["valueLogical", "*[&&,valueLogical]"], SUBSTR: ["valueLogical", "*[&&,valueLogical]"], REPLACE: ["valueLogical", "*[&&,valueLogical]"], REGEX: ["valueLogical", "*[&&,valueLogical]"], EXISTS: ["valueLogical", "*[&&,valueLogical]"], NOT: ["valueLogical", "*[&&,valueLogical]"], IRI_REF: ["valueLogical", "*[&&,valueLogical]"], STRING_LITERAL1: ["valueLogical", "*[&&,valueLogical]"], STRING_LITERAL2: ["valueLogical", "*[&&,valueLogical]"], STRING_LITERAL_LONG1: ["valueLogical", "*[&&,valueLogical]"], STRING_LITERAL_LONG2: ["valueLogical", "*[&&,valueLogical]"], INTEGER: ["valueLogical", "*[&&,valueLogical]"], DECIMAL: ["valueLogical", "*[&&,valueLogical]"], DOUBLE: ["valueLogical", "*[&&,valueLogical]"], INTEGER_POSITIVE: ["valueLogical", "*[&&,valueLogical]"], DECIMAL_POSITIVE: ["valueLogical", "*[&&,valueLogical]"], DOUBLE_POSITIVE: ["valueLogical", "*[&&,valueLogical]"], INTEGER_NEGATIVE: ["valueLogical", "*[&&,valueLogical]"], DECIMAL_NEGATIVE: ["valueLogical", "*[&&,valueLogical]"], DOUBLE_NEGATIVE: ["valueLogical", "*[&&,valueLogical]"], PNAME_LN: ["valueLogical", "*[&&,valueLogical]"], PNAME_NS: ["valueLogical", "*[&&,valueLogical]"] }, conditionalOrExpression: { "!": ["conditionalAndExpression", "*[||,conditionalAndExpression]"], "+": ["conditionalAndExpression", "*[||,conditionalAndExpression]"], "-": ["conditionalAndExpression", "*[||,conditionalAndExpression]"], VAR1: ["conditionalAndExpression", "*[||,conditionalAndExpression]"], VAR2: ["conditionalAndExpression", "*[||,conditionalAndExpression]"], "(": ["conditionalAndExpression", "*[||,conditionalAndExpression]"], STR: ["conditionalAndExpression", "*[||,conditionalAndExpression]"], LANG: ["conditionalAndExpression", "*[||,conditionalAndExpression]"], LANGMATCHES: ["conditionalAndExpression", "*[||,conditionalAndExpression]"], DATATYPE: ["conditionalAndExpression", "*[||,conditionalAndExpression]"], BOUND: ["conditionalAndExpression", "*[||,conditionalAndExpression]"], IRI: ["conditionalAndExpression", "*[||,conditionalAndExpression]"], URI: ["conditionalAndExpression", "*[||,conditionalAndExpression]"], BNODE: ["conditionalAndExpression", "*[||,conditionalAndExpression]"], RAND: ["conditionalAndExpression", "*[||,conditionalAndExpression]"], ABS: ["conditionalAndExpression", "*[||,conditionalAndExpression]"], CEIL: ["conditionalAndExpression", "*[||,conditionalAndExpression]"], FLOOR: ["conditionalAndExpression", "*[||,conditionalAndExpression]"], ROUND: ["conditionalAndExpression", "*[||,conditionalAndExpression]"], CONCAT: ["conditionalAndExpression", "*[||,conditionalAndExpression]"], STRLEN: ["conditionalAndExpression", "*[||,conditionalAndExpression]"], UCASE: ["conditionalAndExpression", "*[||,conditionalAndExpression]"], LCASE: ["conditionalAndExpression", "*[||,conditionalAndExpression]"], ENCODE_FOR_URI: ["conditionalAndExpression", "*[||,conditionalAndExpression]"], CONTAINS: ["conditionalAndExpression", "*[||,conditionalAndExpression]"], STRSTARTS: ["conditionalAndExpression", "*[||,conditionalAndExpression]"], STRENDS: ["conditionalAndExpression", "*[||,conditionalAndExpression]"], STRBEFORE: ["conditionalAndExpression", "*[||,conditionalAndExpression]"], STRAFTER: ["conditionalAndExpression", "*[||,conditionalAndExpression]"], YEAR: ["conditionalAndExpression", "*[||,conditionalAndExpression]"], MONTH: ["conditionalAndExpression", "*[||,conditionalAndExpression]"], DAY: ["conditionalAndExpression", "*[||,conditionalAndExpression]"], HOURS: ["conditionalAndExpression", "*[||,conditionalAndExpression]"], MINUTES: ["conditionalAndExpression", "*[||,conditionalAndExpression]"], SECONDS: ["conditionalAndExpression", "*[||,conditionalAndExpression]"], TIMEZONE: ["conditionalAndExpression", "*[||,conditionalAndExpression]"], TZ: ["conditionalAndExpression", "*[||,conditionalAndExpression]"], NOW: ["conditionalAndExpression", "*[||,conditionalAndExpression]"], UUID: ["conditionalAndExpression", "*[||,conditionalAndExpression]"], STRUUID: ["conditionalAndExpression", "*[||,conditionalAndExpression]"], MD5: ["conditionalAndExpression", "*[||,conditionalAndExpression]"], SHA1: ["conditionalAndExpression", "*[||,conditionalAndExpression]"], SHA256: ["conditionalAndExpression", "*[||,conditionalAndExpression]"], SHA384: ["conditionalAndExpression", "*[||,conditionalAndExpression]"], SHA512: ["conditionalAndExpression", "*[||,conditionalAndExpression]"], COALESCE: ["conditionalAndExpression", "*[||,conditionalAndExpression]"], IF: ["conditionalAndExpression", "*[||,conditionalAndExpression]"], STRLANG: ["conditionalAndExpression", "*[||,conditionalAndExpression]"], STRDT: ["conditionalAndExpression", "*[||,conditionalAndExpression]"], SAMETERM: ["conditionalAndExpression", "*[||,conditionalAndExpression]"], ISIRI: ["conditionalAndExpression", "*[||,conditionalAndExpression]"], ISURI: ["conditionalAndExpression", "*[||,conditionalAndExpression]"], ISBLANK: ["conditionalAndExpression", "*[||,conditionalAndExpression]"], ISLITERAL: ["conditionalAndExpression", "*[||,conditionalAndExpression]"], ISNUMERIC: ["conditionalAndExpression", "*[||,conditionalAndExpression]"], TRUE: ["conditionalAndExpression", "*[||,conditionalAndExpression]"], FALSE: ["conditionalAndExpression", "*[||,conditionalAndExpression]"], COUNT: ["conditionalAndExpression", "*[||,conditionalAndExpression]"], SUM: ["conditionalAndExpression", "*[||,conditionalAndExpression]"], MIN: ["conditionalAndExpression", "*[||,conditionalAndExpression]"], MAX: ["conditionalAndExpression", "*[||,conditionalAndExpression]"], AVG: ["conditionalAndExpression", "*[||,conditionalAndExpression]"], SAMPLE: ["conditionalAndExpression", "*[||,conditionalAndExpression]"], GROUP_CONCAT: ["conditionalAndExpression", "*[||,conditionalAndExpression]"], SUBSTR: ["conditionalAndExpression", "*[||,conditionalAndExpression]"], REPLACE: ["conditionalAndExpression", "*[||,conditionalAndExpression]"], REGEX: ["conditionalAndExpression", "*[||,conditionalAndExpression]"], EXISTS: ["conditionalAndExpression", "*[||,conditionalAndExpression]"], NOT: ["conditionalAndExpression", "*[||,conditionalAndExpression]"], IRI_REF: ["conditionalAndExpression", "*[||,conditionalAndExpression]"], STRING_LITERAL1: ["conditionalAndExpression", "*[||,conditionalAndExpression]"], STRING_LITERAL2: ["conditionalAndExpression", "*[||,conditionalAndExpression]"], STRING_LITERAL_LONG1: ["conditionalAndExpression", "*[||,conditionalAndExpression]"], STRING_LITERAL_LONG2: ["conditionalAndExpression", "*[||,conditionalAndExpression]"], INTEGER: ["conditionalAndExpression", "*[||,conditionalAndExpression]"], DECIMAL: ["conditionalAndExpression", "*[||,conditionalAndExpression]"], DOUBLE: ["conditionalAndExpression", "*[||,conditionalAndExpression]"], INTEGER_POSITIVE: ["conditionalAndExpression", "*[||,conditionalAndExpression]"], DECIMAL_POSITIVE: ["conditionalAndExpression", "*[||,conditionalAndExpression]"], DOUBLE_POSITIVE: ["conditionalAndExpression", "*[||,conditionalAndExpression]"], INTEGER_NEGATIVE: ["conditionalAndExpression", "*[||,conditionalAndExpression]"], DECIMAL_NEGATIVE: ["conditionalAndExpression", "*[||,conditionalAndExpression]"], DOUBLE_NEGATIVE: ["conditionalAndExpression", "*[||,conditionalAndExpression]"], PNAME_LN: ["conditionalAndExpression", "*[||,conditionalAndExpression]"], PNAME_NS: ["conditionalAndExpression", "*[||,conditionalAndExpression]"] }, constraint: { "(": ["brackettedExpression"], STR: ["builtInCall"], LANG: ["builtInCall"], LANGMATCHES: ["builtInCall"], DATATYPE: ["builtInCall"], BOUND: ["builtInCall"], IRI: ["builtInCall"], URI: ["builtInCall"], BNODE: ["builtInCall"], RAND: ["builtInCall"], ABS: ["builtInCall"], CEIL: ["builtInCall"], FLOOR: ["builtInCall"], ROUND: ["builtInCall"], CONCAT: ["builtInCall"], STRLEN: ["builtInCall"], UCASE: ["builtInCall"], LCASE: ["builtInCall"], ENCODE_FOR_URI: ["builtInCall"], CONTAINS: ["builtInCall"], STRSTARTS: ["builtInCall"], STRENDS: ["builtInCall"], STRBEFORE: ["builtInCall"], STRAFTER: ["builtInCall"], YEAR: ["builtInCall"], MONTH: ["builtInCall"], DAY: ["builtInCall"], HOURS: ["builtInCall"], MINUTES: ["builtInCall"], SECONDS: ["builtInCall"], TIMEZONE: ["builtInCall"], TZ: ["builtInCall"], NOW: ["builtInCall"], UUID: ["builtInCall"], STRUUID: ["builtInCall"], MD5: ["builtInCall"], SHA1: ["builtInCall"], SHA256: ["builtInCall"], SHA384: ["builtInCall"], SHA512: ["builtInCall"], COALESCE: ["builtInCall"], IF: ["builtInCall"], STRLANG: ["builtInCall"], STRDT: ["builtInCall"], SAMETERM: ["builtInCall"], ISIRI: ["builtInCall"], ISURI: ["builtInCall"], ISBLANK: ["builtInCall"], ISLITERAL: ["builtInCall"], ISNUMERIC: ["builtInCall"], SUBSTR: ["builtInCall"], REPLACE: ["builtInCall"], REGEX: ["builtInCall"], EXISTS: ["builtInCall"], NOT: ["builtInCall"], IRI_REF: ["functionCall"], PNAME_LN: ["functionCall"], PNAME_NS: ["functionCall"] }, constructQuery: { CONSTRUCT: ["CONSTRUCT", "or([[constructTemplate,*datasetClause,whereClause,solutionModifier],[*datasetClause,WHERE,{,?triplesTemplate,},solutionModifier]])"] }, constructTemplate: { "{": ["{", "?constructTriples", "}"] }, constructTriples: { VAR1: ["triplesSameSubject", "?[.,?constructTriples]"], VAR2: ["triplesSameSubject", "?[.,?constructTriples]"], NIL: ["triplesSameSubject", "?[.,?constructTriples]"], "(": ["triplesSameSubject", "?[.,?constructTriples]"], "[": ["triplesSameSubject", "?[.,?constructTriples]"], IRI_REF: ["triplesSameSubject", "?[.,?constructTriples]"], TRUE: ["triplesSameSubject", "?[.,?constructTriples]"], FALSE: ["triplesSameSubject", "?[.,?constructTriples]"], BLANK_NODE_LABEL: ["triplesSameSubject", "?[.,?constructTriples]"], ANON: ["triplesSameSubject", "?[.,?constructTriples]"], PNAME_LN: ["triplesSameSubject", "?[.,?constructTriples]"], PNAME_NS: ["triplesSameSubject", "?[.,?constructTriples]"], STRING_LITERAL1: ["triplesSameSubject", "?[.,?constructTriples]"], STRING_LITERAL2: ["triplesSameSubject", "?[.,?constructTriples]"], STRING_LITERAL_LONG1: ["triplesSameSubject", "?[.,?constructTriples]"], STRING_LITERAL_LONG2: ["triplesSameSubject", "?[.,?constructTriples]"], INTEGER: ["triplesSameSubject", "?[.,?constructTriples]"], DECIMAL: ["triplesSameSubject", "?[.,?constructTriples]"], DOUBLE: ["triplesSameSubject", "?[.,?constructTriples]"], INTEGER_POSITIVE: ["triplesSameSubject", "?[.,?constructTriples]"], DECIMAL_POSITIVE: ["triplesSameSubject", "?[.,?constructTriples]"], DOUBLE_POSITIVE: ["triplesSameSubject", "?[.,?constructTriples]"], INTEGER_NEGATIVE: ["triplesSameSubject", "?[.,?constructTriples]"], DECIMAL_NEGATIVE: ["triplesSameSubject", "?[.,?constructTriples]"], DOUBLE_NEGATIVE: ["triplesSameSubject", "?[.,?constructTriples]"] }, copy: { COPY: ["COPY", "?SILENT_4", "graphOrDefault", "TO", "graphOrDefault"] }, create: { CREATE: ["CREATE", "?SILENT_3", "graphRef"] }, dataBlock: { NIL: ["or([inlineDataOneVar,inlineDataFull])"], "(": ["or([inlineDataOneVar,inlineDataFull])"], VAR1: ["or([inlineDataOneVar,inlineDataFull])"], VAR2: ["or([inlineDataOneVar,inlineDataFull])"] }, dataBlockValue: { IRI_REF: ["iriRef"], PNAME_LN: ["iriRef"], PNAME_NS: ["iriRef"], STRING_LITERAL1: ["rdfLiteral"], STRING_LITERAL2: ["rdfLiteral"], STRING_LITERAL_LONG1: ["rdfLiteral"], STRING_LITERAL_LONG2: ["rdfLiteral"], INTEGER: ["numericLiteral"], DECIMAL: ["numericLiteral"], DOUBLE: ["numericLiteral"], INTEGER_POSITIVE: ["numericLiteral"], DECIMAL_POSITIVE: ["numericLiteral"], DOUBLE_POSITIVE: ["numericLiteral"], INTEGER_NEGATIVE: ["numericLiteral"], DECIMAL_NEGATIVE: ["numericLiteral"], DOUBLE_NEGATIVE: ["numericLiteral"], TRUE: ["booleanLiteral"], FALSE: ["booleanLiteral"], UNDEF: ["UNDEF"] }, datasetClause: { FROM: ["FROM", "or([defaultGraphClause,namedGraphClause])"] }, defaultGraphClause: { IRI_REF: ["sourceSelector"], PNAME_LN: ["sourceSelector"], PNAME_NS: ["sourceSelector"] }, delete1: { DATA: ["DATA", "quadDataNoBnodes"], WHERE: ["WHERE", "quadPatternNoBnodes"], "{": ["quadPatternNoBnodes", "?insertClause", "*usingClause", "WHERE", "groupGraphPattern"] }, deleteClause: { DELETE: ["DELETE", "quadPattern"] }, describeDatasetClause: { FROM: ["FROM", "or([defaultGraphClause,namedGraphClause])"] }, describeQuery: { DESCRIBE: ["DESCRIBE", "or([+varOrIRIref,*])", "*describeDatasetClause", "?whereClause", "solutionModifier"] }, disallowBnodes: { "}": [], GRAPH: [], VAR1: [], VAR2: [], NIL: [], "(": [], "[": [], IRI_REF: [], TRUE: [], FALSE: [], BLANK_NODE_LABEL: [], ANON: [], PNAME_LN: [], PNAME_NS: [], STRING_LITERAL1: [], STRING_LITERAL2: [], STRING_LITERAL_LONG1: [], STRING_LITERAL_LONG2: [], INTEGER: [], DECIMAL: [], DOUBLE: [], INTEGER_POSITIVE: [], DECIMAL_POSITIVE: [], DOUBLE_POSITIVE: [], INTEGER_NEGATIVE: [], DECIMAL_NEGATIVE: [], DOUBLE_NEGATIVE: [] }, disallowVars: { "}": [], GRAPH: [], VAR1: [], VAR2: [], NIL: [], "(": [], "[": [], IRI_REF: [], TRUE: [], FALSE: [], BLANK_NODE_LABEL: [], ANON: [], PNAME_LN: [], PNAME_NS: [], STRING_LITERAL1: [], STRING_LITERAL2: [], STRING_LITERAL_LONG1: [], STRING_LITERAL_LONG2: [], INTEGER: [], DECIMAL: [], DOUBLE: [], INTEGER_POSITIVE: [], DECIMAL_POSITIVE: [], DOUBLE_POSITIVE: [], INTEGER_NEGATIVE: [], DECIMAL_NEGATIVE: [], DOUBLE_NEGATIVE: [] }, drop: { DROP: ["DROP", "?SILENT_2", "graphRefAll"] }, existsFunc: { EXISTS: ["EXISTS", "groupGraphPattern"] }, expression: { "!": ["conditionalOrExpression"], "+": ["conditionalOrExpression"], "-": ["conditionalOrExpression"], VAR1: ["conditionalOrExpression"], VAR2: ["conditionalOrExpression"], "(": ["conditionalOrExpression"], STR: ["conditionalOrExpression"], LANG: ["conditionalOrExpression"], LANGMATCHES: ["conditionalOrExpression"], DATATYPE: ["conditionalOrExpression"], BOUND: ["conditionalOrExpression"], IRI: ["conditionalOrExpression"], URI: ["conditionalOrExpression"], BNODE: ["conditionalOrExpression"], RAND: ["conditionalOrExpression"], ABS: ["conditionalOrExpression"], CEIL: ["conditionalOrExpression"], FLOOR: ["conditionalOrExpression"], ROUND: ["conditionalOrExpression"], CONCAT: ["conditionalOrExpression"], STRLEN: ["conditionalOrExpression"], UCASE: ["conditionalOrExpression"], LCASE: ["conditionalOrExpression"], ENCODE_FOR_URI: ["conditionalOrExpression"], CONTAINS: ["conditionalOrExpression"], STRSTARTS: ["conditionalOrExpression"], STRENDS: ["conditionalOrExpression"], STRBEFORE: ["conditionalOrExpression"], STRAFTER: ["conditionalOrExpression"], YEAR: ["conditionalOrExpression"], MONTH: ["conditionalOrExpression"], DAY: ["conditionalOrExpression"], HOURS: ["conditionalOrExpression"], MINUTES: ["conditionalOrExpression"], SECONDS: ["conditionalOrExpression"], TIMEZONE: ["conditionalOrExpression"], TZ: ["conditionalOrExpression"], NOW: ["conditionalOrExpression"], UUID: ["conditionalOrExpression"], STRUUID: ["conditionalOrExpression"], MD5: ["conditionalOrExpression"], SHA1: ["conditionalOrExpression"], SHA256: ["conditionalOrExpression"], SHA384: ["conditionalOrExpression"], SHA512: ["conditionalOrExpression"], COALESCE: ["conditionalOrExpression"], IF: ["conditionalOrExpression"], STRLANG: ["conditionalOrExpression"], STRDT: ["conditionalOrExpression"], SAMETERM: ["conditionalOrExpression"], ISIRI: ["conditionalOrExpression"], ISURI: ["conditionalOrExpression"], ISBLANK: ["conditionalOrExpression"], ISLITERAL: ["conditionalOrExpression"], ISNUMERIC: ["conditionalOrExpression"], TRUE: ["conditionalOrExpression"], FALSE: ["conditionalOrExpression"], COUNT: ["conditionalOrExpression"], SUM: ["conditionalOrExpression"], MIN: ["conditionalOrExpression"], MAX: ["conditionalOrExpression"], AVG: ["conditionalOrExpression"], SAMPLE: ["conditionalOrExpression"], GROUP_CONCAT: ["conditionalOrExpression"], SUBSTR: ["conditionalOrExpression"], REPLACE: ["conditionalOrExpression"], REGEX: ["conditionalOrExpression"], EXISTS: ["conditionalOrExpression"], NOT: ["conditionalOrExpression"], IRI_REF: ["conditionalOrExpression"], STRING_LITERAL1: ["conditionalOrExpression"], STRING_LITERAL2: ["conditionalOrExpression"], STRING_LITERAL_LONG1: ["conditionalOrExpression"], STRING_LITERAL_LONG2: ["conditionalOrExpression"], INTEGER: ["conditionalOrExpression"], DECIMAL: ["conditionalOrExpression"], DOUBLE: ["conditionalOrExpression"], INTEGER_POSITIVE: ["conditionalOrExpression"], DECIMAL_POSITIVE: ["conditionalOrExpression"], DOUBLE_POSITIVE: ["conditionalOrExpression"], INTEGER_NEGATIVE: ["conditionalOrExpression"], DECIMAL_NEGATIVE: ["conditionalOrExpression"], DOUBLE_NEGATIVE: ["conditionalOrExpression"], PNAME_LN: ["conditionalOrExpression"], PNAME_NS: ["conditionalOrExpression"] }, expressionList: { NIL: ["NIL"], "(": ["(", "expression", "*[,,expression]", ")"] }, filter: { FILTER: ["FILTER", "constraint"] }, functionCall: { IRI_REF: ["iriRef", "argList"], PNAME_LN: ["iriRef", "argList"], PNAME_NS: ["iriRef", "argList"] }, graphGraphPattern: { GRAPH: ["GRAPH", "varOrIRIref", "groupGraphPattern"] }, graphNode: { VAR1: ["varOrTerm"], VAR2: ["varOrTerm"], NIL: ["varOrTerm"], IRI_REF: ["varOrTerm"], TRUE: ["varOrTerm"], FALSE: ["varOrTerm"], BLANK_NODE_LABEL: ["varOrTerm"], ANON: ["varOrTerm"], PNAME_LN: ["varOrTerm"], PNAME_NS: ["varOrTerm"], STRING_LITERAL1: ["varOrTerm"], STRING_LITERAL2: ["varOrTerm"], STRING_LITERAL_LONG1: ["varOrTerm"], STRING_LITERAL_LONG2: ["varOrTerm"], INTEGER: ["varOrTerm"], DECIMAL: ["varOrTerm"], DOUBLE: ["varOrTerm"], INTEGER_POSITIVE: ["varOrTerm"], DECIMAL_POSITIVE: ["varOrTerm"], DOUBLE_POSITIVE: ["varOrTerm"], INTEGER_NEGATIVE: ["varOrTerm"], DECIMAL_NEGATIVE: ["varOrTerm"], DOUBLE_NEGATIVE: ["varOrTerm"], "(": ["triplesNode"], "[": ["triplesNode"] }, graphNodePath: { VAR1: ["varOrTerm"], VAR2: ["varOrTerm"], NIL: ["varOrTerm"], IRI_REF: ["varOrTerm"], TRUE: ["varOrTerm"], FALSE: ["varOrTerm"], BLANK_NODE_LABEL: ["varOrTerm"], ANON: ["varOrTerm"], PNAME_LN: ["varOrTerm"], PNAME_NS: ["varOrTerm"], STRING_LITERAL1: ["varOrTerm"], STRING_LITERAL2: ["varOrTerm"], STRING_LITERAL_LONG1: ["varOrTerm"], STRING_LITERAL_LONG2: ["varOrTerm"], INTEGER: ["varOrTerm"], DECIMAL: ["varOrTerm"], DOUBLE: ["varOrTerm"], INTEGER_POSITIVE: ["varOrTerm"], DECIMAL_POSITIVE: ["varOrTerm"], DOUBLE_POSITIVE: ["varOrTerm"], INTEGER_NEGATIVE: ["varOrTerm"], DECIMAL_NEGATIVE: ["varOrTerm"], DOUBLE_NEGATIVE: ["varOrTerm"], "(": ["triplesNodePath"], "[": ["triplesNodePath"] }, graphOrDefault: { DEFAULT: ["DEFAULT"], IRI_REF: ["?GRAPH", "iriRef"], PNAME_LN: ["?GRAPH", "iriRef"], PNAME_NS: ["?GRAPH", "iriRef"], GRAPH: ["?GRAPH", "iriRef"] }, graphPatternNotTriples: { "{": ["groupOrUnionGraphPattern"], OPTIONAL: ["optionalGraphPattern"], MINUS: ["minusGraphPattern"], GRAPH: ["graphGraphPattern"], SERVICE: ["serviceGraphPattern"], FILTER: ["filter"], BIND: ["bind"], VALUES: ["inlineData"] }, graphRef: { GRAPH: ["GRAPH", "iriRef"] }, graphRefAll: { GRAPH: ["graphRef"], DEFAULT: ["DEFAULT"], NAMED: ["NAMED"], ALL: ["ALL"] }, graphTerm: { IRI_REF: ["iriRef"], PNAME_LN: ["iriRef"], PNAME_NS: ["iriRef"], STRING_LITERAL1: ["rdfLiteral"], STRING_LITERAL2: ["rdfLiteral"], STRING_LITERAL_LONG1: ["rdfLiteral"], STRING_LITERAL_LONG2: ["rdfLiteral"], INTEGER: ["numericLiteral"], DECIMAL: ["numericLiteral"], DOUBLE: ["numericLiteral"], INTEGER_POSITIVE: ["numericLiteral"], DECIMAL_POSITIVE: ["numericLiteral"], DOUBLE_POSITIVE: ["numericLiteral"], INTEGER_NEGATIVE: ["numericLiteral"], DECIMAL_NEGATIVE: ["numericLiteral"], DOUBLE_NEGATIVE: ["numericLiteral"], TRUE: ["booleanLiteral"], FALSE: ["booleanLiteral"], BLANK_NODE_LABEL: ["blankNode"], ANON: ["blankNode"], NIL: ["NIL"] }, groupClause: { GROUP: ["GROUP", "BY", "+groupCondition"] }, groupCondition: { STR: ["builtInCall"], LANG: ["builtInCall"], LANGMATCHES: ["builtInCall"], DATATYPE: ["builtInCall"], BOUND: ["builtInCall"], IRI: ["builtInCall"], URI: ["builtInCall"], BNODE: ["builtInCall"], RAND: ["builtInCall"], ABS: ["builtInCall"], CEIL: ["builtInCall"], FLOOR: ["builtInCall"], ROUND: ["builtInCall"], CONCAT: ["builtInCall"], STRLEN: ["builtInCall"], UCASE: ["builtInCall"], LCASE: ["builtInCall"], ENCODE_FOR_URI: ["builtInCall"], CONTAINS: ["builtInCall"], STRSTARTS: ["builtInCall"], STRENDS: ["builtInCall"], STRBEFORE: ["builtInCall"], STRAFTER: ["builtInCall"], YEAR: ["builtInCall"], MONTH: ["builtInCall"], DAY: ["builtInCall"], HOURS: ["builtInCall"], MINUTES: ["builtInCall"], SECONDS: ["builtInCall"], TIMEZONE: ["builtInCall"], TZ: ["builtInCall"], NOW: ["builtInCall"], UUID: ["builtInCall"], STRUUID: ["builtInCall"], MD5: ["builtInCall"], SHA1: ["builtInCall"], SHA256: ["builtInCall"], SHA384: ["builtInCall"], SHA512: ["builtInCall"], COALESCE: ["builtInCall"], IF: ["builtInCall"], STRLANG: ["builtInCall"], STRDT: ["builtInCall"], SAMETERM: ["builtInCall"], ISIRI: ["builtInCall"], ISURI: ["builtInCall"], ISBLANK: ["builtInCall"], ISLITERAL: ["builtInCall"], ISNUMERIC: ["builtInCall"], SUBSTR: ["builtInCall"], REPLACE: ["builtInCall"], REGEX: ["builtInCall"], EXISTS: ["builtInCall"], NOT: ["builtInCall"], IRI_REF: ["functionCall"], PNAME_LN: ["functionCall"], PNAME_NS: ["functionCall"], "(": ["(", "expression", "?[AS,var]", ")"], VAR1: ["var"], VAR2: ["var"] }, groupGraphPattern: { "{": ["{", "or([subSelect,groupGraphPatternSub])", "}"] }, groupGraphPatternSub: { "{": ["?triplesBlock", "*[graphPatternNotTriples,?.,?triplesBlock]"], OPTIONAL: ["?triplesBlock", "*[graphPatternNotTriples,?.,?triplesBlock]"], MINUS: ["?triplesBlock", "*[graphPatternNotTriples,?.,?triplesBlock]"], GRAPH: ["?triplesBlock", "*[graphPatternNotTriples,?.,?triplesBlock]"], SERVICE: ["?triplesBlock", "*[graphPatternNotTriples,?.,?triplesBlock]"], FILTER: ["?triplesBlock", "*[graphPatternNotTriples,?.,?triplesBlock]"], BIND: ["?triplesBlock", "*[graphPatternNotTriples,?.,?triplesBlock]"], VALUES: ["?triplesBlock", "*[graphPatternNotTriples,?.,?triplesBlock]"], VAR1: ["?triplesBlock", "*[graphPatternNotTriples,?.,?triplesBlock]"], VAR2: ["?triplesBlock", "*[graphPatternNotTriples,?.,?triplesBlock]"], NIL: ["?triplesBlock", "*[graphPatternNotTriples,?.,?triplesBlock]"], "(": ["?triplesBlock", "*[graphPatternNotTriples,?.,?triplesBlock]"], "[": ["?triplesBlock", "*[graphPatternNotTriples,?.,?triplesBlock]"], IRI_REF: ["?triplesBlock", "*[graphPatternNotTriples,?.,?triplesBlock]"], TRUE: ["?triplesBlock", "*[graphPatternNotTriples,?.,?triplesBlock]"], FALSE: ["?triplesBlock", "*[graphPatternNotTriples,?.,?triplesBlock]"], BLANK_NODE_LABEL: ["?triplesBlock", "*[graphPatternNotTriples,?.,?triplesBlock]"], ANON: ["?triplesBlock", "*[graphPatternNotTriples,?.,?triplesBlock]"], PNAME_LN: ["?triplesBlock", "*[graphPatternNotTriples,?.,?triplesBlock]"], PNAME_NS: ["?triplesBlock", "*[graphPatternNotTriples,?.,?triplesBlock]"], STRING_LITERAL1: ["?triplesBlock", "*[graphPatternNotTriples,?.,?triplesBlock]"], STRING_LITERAL2: ["?triplesBlock", "*[graphPatternNotTriples,?.,?triplesBlock]"], STRING_LITERAL_LONG1: ["?triplesBlock", "*[graphPatternNotTriples,?.,?triplesBlock]"], STRING_LITERAL_LONG2: ["?triplesBlock", "*[graphPatternNotTriples,?.,?triplesBlock]"], INTEGER: ["?triplesBlock", "*[graphPatternNotTriples,?.,?triplesBlock]"], DECIMAL: ["?triplesBlock", "*[graphPatternNotTriples,?.,?triplesBlock]"], DOUBLE: ["?triplesBlock", "*[graphPatternNotTriples,?.,?triplesBlock]"], INTEGER_POSITIVE: ["?triplesBlock", "*[graphPatternNotTriples,?.,?triplesBlock]"], DECIMAL_POSITIVE: ["?triplesBlock", "*[graphPatternNotTriples,?.,?triplesBlock]"], DOUBLE_POSITIVE: ["?triplesBlock", "*[graphPatternNotTriples,?.,?triplesBlock]"], INTEGER_NEGATIVE: ["?triplesBlock", "*[graphPatternNotTriples,?.,?triplesBlock]"], DECIMAL_NEGATIVE: ["?triplesBlock", "*[graphPatternNotTriples,?.,?triplesBlock]"], DOUBLE_NEGATIVE: ["?triplesBlock", "*[graphPatternNotTriples,?.,?triplesBlock]"], "}": ["?triplesBlock", "*[graphPatternNotTriples,?.,?triplesBlock]"] }, groupOrUnionGraphPattern: { "{": ["groupGraphPattern", "*[UNION,groupGraphPattern]"] }, havingClause: { HAVING: ["HAVING", "+havingCondition"] }, havingCondition: { "(": ["constraint"], STR: ["constraint"], LANG: ["constraint"], LANGMATCHES: ["constraint"], DATATYPE: ["constraint"], BOUND: ["constraint"], IRI: ["constraint"], URI: ["constraint"], BNODE: ["constraint"], RAND: ["constraint"], ABS: ["constraint"], CEIL: ["constraint"], FLOOR: ["constraint"], ROUND: ["constraint"], CONCAT: ["constraint"], STRLEN: ["constraint"], UCASE: ["constraint"], LCASE: ["constraint"], ENCODE_FOR_URI: ["constraint"], CONTAINS: ["constraint"], STRSTARTS: ["constraint"], STRENDS: ["constraint"], STRBEFORE: ["constraint"], STRAFTER: ["constraint"], YEAR: ["constraint"], MONTH: ["constraint"], DAY: ["constraint"], HOURS: ["constraint"], MINUTES: ["constraint"], SECONDS: ["constraint"], TIMEZONE: ["constraint"], TZ: ["constraint"], NOW: ["constraint"], UUID: ["constraint"], STRUUID: ["constraint"], MD5: ["constraint"], SHA1: ["constraint"], SHA256: ["constraint"], SHA384: ["constraint"], SHA512: ["constraint"], COALESCE: ["constraint"], IF: ["constraint"], STRLANG: ["constraint"], STRDT: ["constraint"], SAMETERM: ["constraint"], ISIRI: ["constraint"], ISURI: ["constraint"], ISBLANK: ["constraint"], ISLITERAL: ["constraint"], ISNUMERIC: ["constraint"], SUBSTR: ["constraint"], REPLACE: ["constraint"], REGEX: ["constraint"], EXISTS: ["constraint"], NOT: ["constraint"], IRI_REF: ["constraint"], PNAME_LN: ["constraint"], PNAME_NS: ["constraint"] }, inlineData: { VALUES: ["VALUES", "dataBlock"] }, inlineDataFull: { NIL: ["or([NIL,[(,*var,)]])", "{", "*or([[(,*dataBlockValue,)],NIL])", "}"], "(": ["or([NIL,[(,*var,)]])", "{", "*or([[(,*dataBlockValue,)],NIL])", "}"] }, inlineDataOneVar: { VAR1: ["var", "{", "*dataBlockValue", "}"], VAR2: ["var", "{", "*dataBlockValue", "}"] }, insert1: { DATA: ["DATA", "quadData"], "{": ["quadPattern", "*usingClause", "WHERE", "groupGraphPattern"] }, insertClause: { INSERT: ["INSERT", "quadPattern"] }, integer: { INTEGER: ["INTEGER"] }, iriRef: { IRI_REF: ["IRI_REF"], PNAME_LN: ["prefixedName"], PNAME_NS: ["prefixedName"] }, iriRefOrFunction: { IRI_REF: ["iriRef", "?argList"], PNAME_LN: ["iriRef", "?argList"], PNAME_NS: ["iriRef", "?argList"] }, limitClause: { LIMIT: ["LIMIT", "INTEGER"] }, limitOffsetClauses: { LIMIT: ["limitClause", "?offsetClause"], OFFSET: ["offsetClause", "?limitClause"] }, load: { LOAD: ["LOAD", "?SILENT_1", "iriRef", "?[INTO,graphRef]"] }, minusGraphPattern: { MINUS: ["MINUS", "groupGraphPattern"] }, modify: { WITH: ["WITH", "iriRef", "or([[deleteClause,?insertClause],insertClause])", "*usingClause", "WHERE", "groupGraphPattern"] }, move: { MOVE: ["MOVE", "?SILENT_4", "graphOrDefault", "TO", "graphOrDefault"] }, multiplicativeExpression: { "!": ["unaryExpression", "*or([[*,unaryExpression],[/,unaryExpression]])"], "+": ["unaryExpression", "*or([[*,unaryExpression],[/,unaryExpression]])"], "-": ["unaryExpression", "*or([[*,unaryExpression],[/,unaryExpression]])"], VAR1: ["unaryExpression", "*or([[*,unaryExpression],[/,unaryExpression]])"], VAR2: ["unaryExpression", "*or([[*,unaryExpression],[/,unaryExpression]])"], "(": ["unaryExpression", "*or([[*,unaryExpression],[/,unaryExpression]])"], STR: ["unaryExpression", "*or([[*,unaryExpression],[/,unaryExpression]])"], LANG: ["unaryExpression", "*or([[*,unaryExpression],[/,unaryExpression]])"], LANGMATCHES: ["unaryExpression", "*or([[*,unaryExpression],[/,unaryExpression]])"], DATATYPE: ["unaryExpression", "*or([[*,unaryExpression],[/,unaryExpression]])"], BOUND: ["unaryExpression", "*or([[*,unaryExpression],[/,unaryExpression]])"], IRI: ["unaryExpression", "*or([[*,unaryExpression],[/,unaryExpression]])"], URI: ["unaryExpression", "*or([[*,unaryExpression],[/,unaryExpression]])"], BNODE: ["unaryExpression", "*or([[*,unaryExpression],[/,unaryExpression]])"], RAND: ["unaryExpression", "*or([[*,unaryExpression],[/,unaryExpression]])"], ABS: ["unaryExpression", "*or([[*,unaryExpression],[/,unaryExpression]])"], CEIL: ["unaryExpression", "*or([[*,unaryExpression],[/,unaryExpression]])"], FLOOR: ["unaryExpression", "*or([[*,unaryExpression],[/,unaryExpression]])"], ROUND: ["unaryExpression", "*or([[*,unaryExpression],[/,unaryExpression]])"], CONCAT: ["unaryExpression", "*or([[*,unaryExpression],[/,unaryExpression]])"], STRLEN: ["unaryExpression", "*or([[*,unaryExpression],[/,unaryExpression]])"], UCASE: ["unaryExpression", "*or([[*,unaryExpression],[/,unaryExpression]])"], LCASE: ["unaryExpression", "*or([[*,unaryExpression],[/,unaryExpression]])"], ENCODE_FOR_URI: ["unaryExpression", "*or([[*,unaryExpression],[/,unaryExpression]])"], CONTAINS: ["unaryExpression", "*or([[*,unaryExpression],[/,unaryExpression]])"], STRSTARTS: ["unaryExpression", "*or([[*,unaryExpression],[/,unaryExpression]])"], STRENDS: ["unaryExpression", "*or([[*,unaryExpression],[/,unaryExpression]])"], STRBEFORE: ["unaryExpression", "*or([[*,unaryExpression],[/,unaryExpression]])"], STRAFTER: ["unaryExpression", "*or([[*,unaryExpression],[/,unaryExpression]])"], YEAR: ["unaryExpression", "*or([[*,unaryExpression],[/,unaryExpression]])"], MONTH: ["unaryExpression", "*or([[*,unaryExpression],[/,unaryExpression]])"], DAY: ["unaryExpression", "*or([[*,unaryExpression],[/,unaryExpression]])"], HOURS: ["unaryExpression", "*or([[*,unaryExpression],[/,unaryExpression]])"], MINUTES: ["unaryExpression", "*or([[*,unaryExpression],[/,unaryExpression]])"], SECONDS: ["unaryExpression", "*or([[*,unaryExpression],[/,unaryExpression]])"], TIMEZONE: ["unaryExpression", "*or([[*,unaryExpression],[/,unaryExpression]])"], TZ: ["unaryExpression", "*or([[*,unaryExpression],[/,unaryExpression]])"], NOW: ["unaryExpression", "*or([[*,unaryExpression],[/,unaryExpression]])"], UUID: ["unaryExpression", "*or([[*,unaryExpression],[/,unaryExpression]])"], STRUUID: ["unaryExpression", "*or([[*,unaryExpression],[/,unaryExpression]])"], MD5: ["unaryExpression", "*or([[*,unaryExpression],[/,unaryExpression]])"], SHA1: ["unaryExpression", "*or([[*,unaryExpression],[/,unaryExpression]])"], SHA256: ["unaryExpression", "*or([[*,unaryExpression],[/,unaryExpression]])"], SHA384: ["unaryExpression", "*or([[*,unaryExpression],[/,unaryExpression]])"], SHA512: ["unaryExpression", "*or([[*,unaryExpression],[/,unaryExpression]])"], COALESCE: ["unaryExpression", "*or([[*,unaryExpression],[/,unaryExpression]])"], IF: ["unaryExpression", "*or([[*,unaryExpression],[/,unaryExpression]])"], STRLANG: ["unaryExpression", "*or([[*,unaryExpression],[/,unaryExpression]])"], STRDT: ["unaryExpression", "*or([[*,unaryExpression],[/,unaryExpression]])"], SAMETERM: ["unaryExpression", "*or([[*,unaryExpression],[/,unaryExpression]])"], ISIRI: ["unaryExpression", "*or([[*,unaryExpression],[/,unaryExpression]])"], ISURI: ["unaryExpression", "*or([[*,unaryExpression],[/,unaryExpression]])"], ISBLANK: ["unaryExpression", "*or([[*,unaryExpression],[/,unaryExpression]])"], ISLITERAL: ["unaryExpression", "*or([[*,unaryExpression],[/,unaryExpression]])"], ISNUMERIC: ["unaryExpression", "*or([[*,unaryExpression],[/,unaryExpression]])"], TRUE: ["unaryExpression", "*or([[*,unaryExpression],[/,unaryExpression]])"], FALSE: ["unaryExpression", "*or([[*,unaryExpression],[/,unaryExpression]])"], COUNT: ["unaryExpression", "*or([[*,unaryExpression],[/,unaryExpression]])"], SUM: ["unaryExpression", "*or([[*,unaryExpression],[/,unaryExpression]])"], MIN: ["unaryExpression", "*or([[*,unaryExpression],[/,unaryExpression]])"], MAX: ["unaryExpression", "*or([[*,unaryExpression],[/,unaryExpression]])"], AVG: ["unaryExpression", "*or([[*,unaryExpression],[/,unaryExpression]])"], SAMPLE: ["unaryExpression", "*or([[*,unaryExpression],[/,unaryExpression]])"], GROUP_CONCAT: ["unaryExpression", "*or([[*,unaryExpression],[/,unaryExpression]])"], SUBSTR: ["unaryExpression", "*or([[*,unaryExpression],[/,unaryExpression]])"], REPLACE: ["unaryExpression", "*or([[*,unaryExpression],[/,unaryExpression]])"], REGEX: ["unaryExpression", "*or([[*,unaryExpression],[/,unaryExpression]])"], EXISTS: ["unaryExpression", "*or([[*,unaryExpression],[/,unaryExpression]])"], NOT: ["unaryExpression", "*or([[*,unaryExpression],[/,unaryExpression]])"], IRI_REF: ["unaryExpression", "*or([[*,unaryExpression],[/,unaryExpression]])"], STRING_LITERAL1: ["unaryExpression", "*or([[*,unaryExpression],[/,unaryExpression]])"], STRING_LITERAL2: ["unaryExpression", "*or([[*,unaryExpression],[/,unaryExpression]])"], STRING_LITERAL_LONG1: ["unaryExpression", "*or([[*,unaryExpression],[/,unaryExpression]])"], STRING_LITERAL_LONG2: ["unaryExpression", "*or([[*,unaryExpression],[/,unaryExpression]])"], INTEGER: ["unaryExpression", "*or([[*,unaryExpression],[/,unaryExpression]])"], DECIMAL: ["unaryExpression", "*or([[*,unaryExpression],[/,unaryExpression]])"], DOUBLE: ["unaryExpression", "*or([[*,unaryExpression],[/,unaryExpression]])"], INTEGER_POSITIVE: ["unaryExpression", "*or([[*,unaryExpression],[/,unaryExpression]])"], DECIMAL_POSITIVE: ["unaryExpression", "*or([[*,unaryExpression],[/,unaryExpression]])"], DOUBLE_POSITIVE: ["unaryExpression", "*or([[*,unaryExpression],[/,unaryExpression]])"], INTEGER_NEGATIVE: ["unaryExpression", "*or([[*,unaryExpression],[/,unaryExpression]])"], DECIMAL_NEGATIVE: ["unaryExpression", "*or([[*,unaryExpression],[/,unaryExpression]])"], DOUBLE_NEGATIVE: ["unaryExpression", "*or([[*,unaryExpression],[/,unaryExpression]])"], PNAME_LN: ["unaryExpression", "*or([[*,unaryExpression],[/,unaryExpression]])"], PNAME_NS: ["unaryExpression", "*or([[*,unaryExpression],[/,unaryExpression]])"] }, namedGraphClause: { NAMED: ["NAMED", "sourceSelector"] }, notExistsFunc: { NOT: ["NOT", "EXISTS", "groupGraphPattern"] }, numericExpression: { "!": ["additiveExpression"], "+": ["additiveExpression"], "-": ["additiveExpression"], VAR1: ["additiveExpression"], VAR2: ["additiveExpression"], "(": ["additiveExpression"], STR: ["additiveExpression"], LANG: ["additiveExpression"], LANGMATCHES: ["additiveExpression"], DATATYPE: ["additiveExpression"], BOUND: ["additiveExpression"], IRI: ["additiveExpression"], URI: ["additiveExpression"], BNODE: ["additiveExpression"], RAND: ["additiveExpression"], ABS: ["additiveExpression"], CEIL: ["additiveExpression"], FLOOR: ["additiveExpression"], ROUND: ["additiveExpression"], CONCAT: ["additiveExpression"], STRLEN: ["additiveExpression"], UCASE: ["additiveExpression"], LCASE: ["additiveExpression"], ENCODE_FOR_URI: ["additiveExpression"], CONTAINS: ["additiveExpression"], STRSTARTS: ["additiveExpression"], STRENDS: ["additiveExpression"], STRBEFORE: ["additiveExpression"], STRAFTER: ["additiveExpression"], YEAR: ["additiveExpression"], MONTH: ["additiveExpression"], DAY: ["additiveExpression"], HOURS: ["additiveExpression"], MINUTES: ["additiveExpression"], SECONDS: ["additiveExpression"], TIMEZONE: ["additiveExpression"], TZ: ["additiveExpression"], NOW: ["additiveExpression"], UUID: ["additiveExpression"], STRUUID: ["additiveExpression"], MD5: ["additiveExpression"], SHA1: ["additiveExpression"], SHA256: ["additiveExpression"], SHA384: ["additiveExpression"], SHA512: ["additiveExpression"], COALESCE: ["additiveExpression"], IF: ["additiveExpression"], STRLANG: ["additiveExpression"], STRDT: ["additiveExpression"], SAMETERM: ["additiveExpression"], ISIRI: ["additiveExpression"], ISURI: ["additiveExpression"], ISBLANK: ["additiveExpression"], ISLITERAL: ["additiveExpression"], ISNUMERIC: ["additiveExpression"], TRUE: ["additiveExpression"], FALSE: ["additiveExpression"], COUNT: ["additiveExpression"], SUM: ["additiveExpression"], MIN: ["additiveExpression"], MAX: ["additiveExpression"], AVG: ["additiveExpression"], SAMPLE: ["additiveExpression"], GROUP_CONCAT: ["additiveExpression"], SUBSTR: ["additiveExpression"], REPLACE: ["additiveExpression"], REGEX: ["additiveExpression"], EXISTS: ["additiveExpression"], NOT: ["additiveExpression"], IRI_REF: ["additiveExpression"], STRING_LITERAL1: ["additiveExpression"], STRING_LITERAL2: ["additiveExpression"], STRING_LITERAL_LONG1: ["additiveExpression"], STRING_LITERAL_LONG2: ["additiveExpression"], INTEGER: ["additiveExpression"], DECIMAL: ["additiveExpression"], DOUBLE: ["additiveExpression"], INTEGER_POSITIVE: ["additiveExpression"], DECIMAL_POSITIVE: ["additiveExpression"], DOUBLE_POSITIVE: ["additiveExpression"], INTEGER_NEGATIVE: ["additiveExpression"], DECIMAL_NEGATIVE: ["additiveExpression"], DOUBLE_NEGATIVE: ["additiveExpression"], PNAME_LN: ["additiveExpression"], PNAME_NS: ["additiveExpression"] }, numericLiteral: { INTEGER: ["numericLiteralUnsigned"], DECIMAL: ["numericLiteralUnsigned"], DOUBLE: ["numericLiteralUnsigned"], INTEGER_POSITIVE: ["numericLiteralPositive"], DECIMAL_POSITIVE: ["numericLiteralPositive"], DOUBLE_POSITIVE: ["numericLiteralPositive"], INTEGER_NEGATIVE: ["numericLiteralNegative"], DECIMAL_NEGATIVE: ["numericLiteralNegative"], DOUBLE_NEGATIVE: ["numericLiteralNegative"] }, numericLiteralNegative: { INTEGER_NEGATIVE: ["INTEGER_NEGATIVE"], DECIMAL_NEGATIVE: ["DECIMAL_NEGATIVE"], DOUBLE_NEGATIVE: ["DOUBLE_NEGATIVE"] }, numericLiteralPositive: { INTEGER_POSITIVE: ["INTEGER_POSITIVE"], DECIMAL_POSITIVE: ["DECIMAL_POSITIVE"], DOUBLE_POSITIVE: ["DOUBLE_POSITIVE"] }, numericLiteralUnsigned: { INTEGER: ["INTEGER"], DECIMAL: ["DECIMAL"], DOUBLE: ["DOUBLE"] }, object: { "(": ["graphNode"], "[": ["graphNode"], VAR1: ["graphNode"], VAR2: ["graphNode"], NIL: ["graphNode"], IRI_REF: ["graphNode"], TRUE: ["graphNode"], FALSE: ["graphNode"], BLANK_NODE_LABEL: ["graphNode"], ANON: ["graphNode"], PNAME_LN: ["graphNode"], PNAME_NS: ["graphNode"], STRING_LITERAL1: ["graphNode"], STRING_LITERAL2: ["graphNode"], STRING_LITERAL_LONG1: ["graphNode"], STRING_LITERAL_LONG2: ["graphNode"], INTEGER: ["graphNode"], DECIMAL: ["graphNode"], DOUBLE: ["graphNode"], INTEGER_POSITIVE: ["graphNode"], DECIMAL_POSITIVE: ["graphNode"], DOUBLE_POSITIVE: ["graphNode"], INTEGER_NEGATIVE: ["graphNode"], DECIMAL_NEGATIVE: ["graphNode"], DOUBLE_NEGATIVE: ["graphNode"] }, objectList: { "(": ["object", "*[,,object]"], "[": ["object", "*[,,object]"], VAR1: ["object", "*[,,object]"], VAR2: ["object", "*[,,object]"], NIL: ["object", "*[,,object]"], IRI_REF: ["object", "*[,,object]"], TRUE: ["object", "*[,,object]"], FALSE: ["object", "*[,,object]"], BLANK_NODE_LABEL: ["object", "*[,,object]"], ANON: ["object", "*[,,object]"], PNAME_LN: ["object", "*[,,object]"], PNAME_NS: ["object", "*[,,object]"], STRING_LITERAL1: ["object", "*[,,object]"], STRING_LITERAL2: ["object", "*[,,object]"], STRING_LITERAL_LONG1: ["object", "*[,,object]"], STRING_LITERAL_LONG2: ["object", "*[,,object]"], INTEGER: ["object", "*[,,object]"], DECIMAL: ["object", "*[,,object]"], DOUBLE: ["object", "*[,,object]"], INTEGER_POSITIVE: ["object", "*[,,object]"], DECIMAL_POSITIVE: ["object", "*[,,object]"], DOUBLE_POSITIVE: ["object", "*[,,object]"], INTEGER_NEGATIVE: ["object", "*[,,object]"], DECIMAL_NEGATIVE: ["object", "*[,,object]"], DOUBLE_NEGATIVE: ["object", "*[,,object]"] }, objectListPath: { "(": ["objectPath", "*[,,objectPath]"], "[": ["objectPath", "*[,,objectPath]"], VAR1: ["objectPath", "*[,,objectPath]"], VAR2: ["objectPath", "*[,,objectPath]"], NIL: ["objectPath", "*[,,objectPath]"], IRI_REF: ["objectPath", "*[,,objectPath]"], TRUE: ["objectPath", "*[,,objectPath]"], FALSE: ["objectPath", "*[,,objectPath]"], BLANK_NODE_LABEL: ["objectPath", "*[,,objectPath]"], ANON: ["objectPath", "*[,,objectPath]"], PNAME_LN: ["objectPath", "*[,,objectPath]"], PNAME_NS: ["objectPath", "*[,,objectPath]"], STRING_LITERAL1: ["objectPath", "*[,,objectPath]"], STRING_LITERAL2: ["objectPath", "*[,,objectPath]"], STRING_LITERAL_LONG1: ["objectPath", "*[,,objectPath]"], STRING_LITERAL_LONG2: ["objectPath", "*[,,objectPath]"], INTEGER: ["objectPath", "*[,,objectPath]"], DECIMAL: ["objectPath", "*[,,objectPath]"], DOUBLE: ["objectPath", "*[,,objectPath]"], INTEGER_POSITIVE: ["objectPath", "*[,,objectPath]"], DECIMAL_POSITIVE: ["objectPath", "*[,,objectPath]"], DOUBLE_POSITIVE: ["objectPath", "*[,,objectPath]"], INTEGER_NEGATIVE: ["objectPath", "*[,,objectPath]"], DECIMAL_NEGATIVE: ["objectPath", "*[,,objectPath]"], DOUBLE_NEGATIVE: ["objectPath", "*[,,objectPath]"] }, objectPath: { "(": ["graphNodePath"], "[": ["graphNodePath"], VAR1: ["graphNodePath"], VAR2: ["graphNodePath"], NIL: ["graphNodePath"], IRI_REF: ["graphNodePath"], TRUE: ["graphNodePath"], FALSE: ["graphNodePath"], BLANK_NODE_LABEL: ["graphNodePath"], ANON: ["graphNodePath"], PNAME_LN: ["graphNodePath"], PNAME_NS: ["graphNodePath"], STRING_LITERAL1: ["graphNodePath"], STRING_LITERAL2: ["graphNodePath"], STRING_LITERAL_LONG1: ["graphNodePath"], STRING_LITERAL_LONG2: ["graphNodePath"], INTEGER: ["graphNodePath"], DECIMAL: ["graphNodePath"], DOUBLE: ["graphNodePath"], INTEGER_POSITIVE: ["graphNodePath"], DECIMAL_POSITIVE: ["graphNodePath"], DOUBLE_POSITIVE: ["graphNodePath"], INTEGER_NEGATIVE: ["graphNodePath"], DECIMAL_NEGATIVE: ["graphNodePath"], DOUBLE_NEGATIVE: ["graphNodePath"] }, offsetClause: { OFFSET: ["OFFSET", "INTEGER"] }, optionalGraphPattern: { OPTIONAL: ["OPTIONAL", "groupGraphPattern"] }, "or([*,expression])": { "*": ["*"], "!": ["expression"], "+": ["expression"], "-": ["expression"], VAR1: ["expression"], VAR2: ["expression"], "(": ["expression"], STR: ["expression"], LANG: ["expression"], LANGMATCHES: ["expression"], DATATYPE: ["expression"], BOUND: ["expression"], IRI: ["expression"], URI: ["expression"], BNODE: ["expression"], RAND: ["expression"], ABS: ["expression"], CEIL: ["expression"], FLOOR: ["expression"], ROUND: ["expression"], CONCAT: ["expression"], STRLEN: ["expression"], UCASE: ["expression"], LCASE: ["expression"], ENCODE_FOR_URI: ["expression"], CONTAINS: ["expression"], STRSTARTS: ["expression"], STRENDS: ["expression"], STRBEFORE: ["expression"], STRAFTER: ["expression"], YEAR: ["expression"], MONTH: ["expression"], DAY: ["expression"], HOURS: ["expression"], MINUTES: ["expression"], SECONDS: ["expression"], TIMEZONE: ["expression"], TZ: ["expression"], NOW: ["expression"], UUID: ["expression"], STRUUID: ["expression"], MD5: ["expression"], SHA1: ["expression"], SHA256: ["expression"], SHA384: ["expression"], SHA512: ["expression"], COALESCE: ["expression"], IF: ["expression"], STRLANG: ["expression"], STRDT: ["expression"], SAMETERM: ["expression"], ISIRI: ["expression"], ISURI: ["expression"], ISBLANK: ["expression"], ISLITERAL: ["expression"], ISNUMERIC: ["expression"], TRUE: ["expression"], FALSE: ["expression"], COUNT: ["expression"], SUM: ["expression"], MIN: ["expression"], MAX: ["expression"], AVG: ["expression"], SAMPLE: ["expression"], GROUP_CONCAT: ["expression"], SUBSTR: ["expression"], REPLACE: ["expression"], REGEX: ["expression"], EXISTS: ["expression"], NOT: ["expression"], IRI_REF: ["expression"], STRING_LITERAL1: ["expression"], STRING_LITERAL2: ["expression"], STRING_LITERAL_LONG1: ["expression"], STRING_LITERAL_LONG2: ["expression"], INTEGER: ["expression"], DECIMAL: ["expression"], DOUBLE: ["expression"], INTEGER_POSITIVE: ["expression"], DECIMAL_POSITIVE: ["expression"], DOUBLE_POSITIVE: ["expression"], INTEGER_NEGATIVE: ["expression"], DECIMAL_NEGATIVE: ["expression"], DOUBLE_NEGATIVE: ["expression"], PNAME_LN: ["expression"], PNAME_NS: ["expression"] }, "or([+or([var,[(,expression,AS,var,)]]),*])": { "(": ["+or([var,[(,expression,AS,var,)]])"], VAR1: ["+or([var,[(,expression,AS,var,)]])"], VAR2: ["+or([var,[(,expression,AS,var,)]])"], "*": ["*"] }, "or([+varOrIRIref,*])": { VAR1: ["+varOrIRIref"], VAR2: ["+varOrIRIref"], IRI_REF: ["+varOrIRIref"], PNAME_LN: ["+varOrIRIref"], PNAME_NS: ["+varOrIRIref"], "*": ["*"] }, "or([ASC,DESC])": { ASC: ["ASC"], DESC: ["DESC"] }, "or([DISTINCT,REDUCED])": { DISTINCT: ["DISTINCT"], REDUCED: ["REDUCED"] }, "or([LANGTAG,[^^,iriRef]])": { LANGTAG: ["LANGTAG"], "^^": ["[^^,iriRef]"] }, "or([NIL,[(,*var,)]])": { NIL: ["NIL"], "(": ["[(,*var,)]"] }, "or([[(,*dataBlockValue,)],NIL])": { "(": ["[(,*dataBlockValue,)]"], NIL: ["NIL"] }, "or([[(,expression,)],NIL])": { "(": ["[(,expression,)]"], NIL: ["NIL"] }, "or([[*,unaryExpression],[/,unaryExpression]])": { "*": ["[*,unaryExpression]"], "/": ["[/,unaryExpression]"] }, "or([[+,multiplicativeExpression],[-,multiplicativeExpression],[or([numericLiteralPositive,numericLiteralNegative]),?or([[*,unaryExpression],[/,unaryExpression]])]])": { "+": ["[+,multiplicativeExpression]"], "-": ["[-,multiplicativeExpression]"], INTEGER_POSITIVE: ["[or([numericLiteralPositive,numericLiteralNegative]),?or([[*,unaryExpression],[/,unaryExpression]])]"], DECIMAL_POSITIVE: ["[or([numericLiteralPositive,numericLiteralNegative]),?or([[*,unaryExpression],[/,unaryExpression]])]"], DOUBLE_POSITIVE: ["[or([numericLiteralPositive,numericLiteralNegative]),?or([[*,unaryExpression],[/,unaryExpression]])]"], INTEGER_NEGATIVE: ["[or([numericLiteralPositive,numericLiteralNegative]),?or([[*,unaryExpression],[/,unaryExpression]])]"], DECIMAL_NEGATIVE: ["[or([numericLiteralPositive,numericLiteralNegative]),?or([[*,unaryExpression],[/,unaryExpression]])]"], DOUBLE_NEGATIVE: ["[or([numericLiteralPositive,numericLiteralNegative]),?or([[*,unaryExpression],[/,unaryExpression]])]"] }, "or([[,,or([},[integer,}]])],}])": { ",": ["[,,or([},[integer,}]])]"], "}": ["}"] }, "or([[=,numericExpression],[!=,numericExpression],[<,numericExpression],[>,numericExpression],[<=,numericExpression],[>=,numericExpression],[IN,expressionList],[NOT,IN,expressionList]])": { "=": ["[=,numericExpression]"], "!=": ["[!=,numericExpression]"], "<": ["[<,numericExpression]"], ">": ["[>,numericExpression]"], "<=": ["[<=,numericExpression]"], ">=": ["[>=,numericExpression]"], IN: ["[IN,expressionList]"], NOT: ["[NOT,IN,expressionList]"] }, "or([[constructTemplate,*datasetClause,whereClause,solutionModifier],[*datasetClause,WHERE,{,?triplesTemplate,},solutionModifier]])": { "{": ["[constructTemplate,*datasetClause,whereClause,solutionModifier]"], WHERE: ["[*datasetClause,WHERE,{,?triplesTemplate,},solutionModifier]"], FROM: ["[*datasetClause,WHERE,{,?triplesTemplate,},solutionModifier]"] }, "or([[deleteClause,?insertClause],insertClause])": { DELETE: ["[deleteClause,?insertClause]"], INSERT: ["insertClause"] }, "or([[integer,or([[,,or([},[integer,}]])],}])],[,,integer,}]])": { INTEGER: ["[integer,or([[,,or([},[integer,}]])],}])]"], ",": ["[,,integer,}]"] }, "or([baseDecl,prefixDecl])": { BASE: ["baseDecl"], PREFIX: ["prefixDecl"] }, "or([defaultGraphClause,namedGraphClause])": { IRI_REF: ["defaultGraphClause"], PNAME_LN: ["defaultGraphClause"], PNAME_NS: ["defaultGraphClause"], NAMED: ["namedGraphClause"] }, "or([inlineDataOneVar,inlineDataFull])": { VAR1: ["inlineDataOneVar"], VAR2: ["inlineDataOneVar"], NIL: ["inlineDataFull"], "(": ["inlineDataFull"] }, "or([iriRef,[NAMED,iriRef]])": { IRI_REF: ["iriRef"], PNAME_LN: ["iriRef"], PNAME_NS: ["iriRef"], NAMED: ["[NAMED,iriRef]"] }, "or([iriRef,a])": { IRI_REF: ["iriRef"], PNAME_LN: ["iriRef"], PNAME_NS: ["iriRef"], a: ["a"] }, "or([numericLiteralPositive,numericLiteralNegative])": { INTEGER_POSITIVE: ["numericLiteralPositive"], DECIMAL_POSITIVE: ["numericLiteralPositive"], DOUBLE_POSITIVE: ["numericLiteralPositive"], INTEGER_NEGATIVE: ["numericLiteralNegative"], DECIMAL_NEGATIVE: ["numericLiteralNegative"], DOUBLE_NEGATIVE: ["numericLiteralNegative"] }, "or([queryAll,updateAll])": { CONSTRUCT: ["queryAll"], DESCRIBE: ["queryAll"], ASK: ["queryAll"], SELECT: ["queryAll"], INSERT: ["updateAll"], DELETE: ["updateAll"], LOAD: ["updateAll"], CLEAR: ["updateAll"], DROP: ["updateAll"], ADD: ["updateAll"], MOVE: ["updateAll"], COPY: ["updateAll"], CREATE: ["updateAll"], WITH: ["updateAll"], $: ["updateAll"] }, "or([selectQuery,constructQuery,describeQuery,askQuery])": { SELECT: ["selectQuery"], CONSTRUCT: ["constructQuery"], DESCRIBE: ["describeQuery"], ASK: ["askQuery"] }, "or([subSelect,groupGraphPatternSub])": { SELECT: ["subSelect"], "{": ["groupGraphPatternSub"], OPTIONAL: ["groupGraphPatternSub"], MINUS: ["groupGraphPatternSub"], GRAPH: ["groupGraphPatternSub"], SERVICE: ["groupGraphPatternSub"], FILTER: ["groupGraphPatternSub"], BIND: ["groupGraphPatternSub"], VALUES: ["groupGraphPatternSub"], VAR1: ["groupGraphPatternSub"], VAR2: ["groupGraphPatternSub"], NIL: ["groupGraphPatternSub"], "(": ["groupGraphPatternSub"], "[": ["groupGraphPatternSub"], IRI_REF: ["groupGraphPatternSub"], TRUE: ["groupGraphPatternSub"], FALSE: ["groupGraphPatternSub"], BLANK_NODE_LABEL: ["groupGraphPatternSub"], ANON: ["groupGraphPatternSub"], PNAME_LN: ["groupGraphPatternSub"], PNAME_NS: ["groupGraphPatternSub"], STRING_LITERAL1: ["groupGraphPatternSub"], STRING_LITERAL2: ["groupGraphPatternSub"], STRING_LITERAL_LONG1: ["groupGraphPatternSub"], STRING_LITERAL_LONG2: ["groupGraphPatternSub"], INTEGER: ["groupGraphPatternSub"], DECIMAL: ["groupGraphPatternSub"], DOUBLE: ["groupGraphPatternSub"], INTEGER_POSITIVE: ["groupGraphPatternSub"], DECIMAL_POSITIVE: ["groupGraphPatternSub"], DOUBLE_POSITIVE: ["groupGraphPatternSub"], INTEGER_NEGATIVE: ["groupGraphPatternSub"], DECIMAL_NEGATIVE: ["groupGraphPatternSub"], DOUBLE_NEGATIVE: ["groupGraphPatternSub"], "}": ["groupGraphPatternSub"] }, "or([var,[(,expression,AS,var,)]])": { VAR1: ["var"], VAR2: ["var"], "(": ["[(,expression,AS,var,)]"] }, "or([verbPath,verbSimple])": { "^": ["verbPath"], a: ["verbPath"], "!": ["verbPath"], "(": ["verbPath"], IRI_REF: ["verbPath"], PNAME_LN: ["verbPath"], PNAME_NS: ["verbPath"], VAR1: ["verbSimple"], VAR2: ["verbSimple"] }, "or([},[integer,}]])": { "}": ["}"], INTEGER: ["[integer,}]"] }, orderClause: { ORDER: ["ORDER", "BY", "+orderCondition"] }, orderCondition: { ASC: ["or([ASC,DESC])", "brackettedExpression"], DESC: ["or([ASC,DESC])", "brackettedExpression"], "(": ["constraint"], STR: ["constraint"], LANG: ["constraint"], LANGMATCHES: ["constraint"], DATATYPE: ["constraint"], BOUND: ["constraint"], IRI: ["constraint"], URI: ["constraint"], BNODE: ["constraint"], RAND: ["constraint"], ABS: ["constraint"], CEIL: ["constraint"], FLOOR: ["constraint"], ROUND: ["constraint"], CONCAT: ["constraint"], STRLEN: ["constraint"], UCASE: ["constraint"], LCASE: ["constraint"], ENCODE_FOR_URI: ["constraint"], CONTAINS: ["constraint"], STRSTARTS: ["constraint"], STRENDS: ["constraint"], STRBEFORE: ["constraint"], STRAFTER: ["constraint"], YEAR: ["constraint"], MONTH: ["constraint"], DAY: ["constraint"], HOURS: ["constraint"], MINUTES: ["constraint"], SECONDS: ["constraint"], TIMEZONE: ["constraint"], TZ: ["constraint"], NOW: ["constraint"], UUID: ["constraint"], STRUUID: ["constraint"], MD5: ["constraint"], SHA1: ["constraint"], SHA256: ["constraint"], SHA384: ["constraint"], SHA512: ["constraint"], COALESCE: ["constraint"], IF: ["constraint"], STRLANG: ["constraint"], STRDT: ["constraint"], SAMETERM: ["constraint"], ISIRI: ["constraint"], ISURI: ["constraint"], ISBLANK: ["constraint"], ISLITERAL: ["constraint"], ISNUMERIC: ["constraint"], SUBSTR: ["constraint"], REPLACE: ["constraint"], REGEX: ["constraint"], EXISTS: ["constraint"], NOT: ["constraint"], IRI_REF: ["constraint"], PNAME_LN: ["constraint"], PNAME_NS: ["constraint"], VAR1: ["var"], VAR2: ["var"] }, path: { "^": ["pathAlternative"], a: ["pathAlternative"], "!": ["pathAlternative"], "(": ["pathAlternative"], IRI_REF: ["pathAlternative"], PNAME_LN: ["pathAlternative"], PNAME_NS: ["pathAlternative"] }, pathAlternative: { "^": ["pathSequence", "*[|,pathSequence]"], a: ["pathSequence", "*[|,pathSequence]"], "!": ["pathSequence", "*[|,pathSequence]"], "(": ["pathSequence", "*[|,pathSequence]"], IRI_REF: ["pathSequence", "*[|,pathSequence]"], PNAME_LN: ["pathSequence", "*[|,pathSequence]"], PNAME_NS: ["pathSequence", "*[|,pathSequence]"] }, pathElt: { a: ["pathPrimary", "?pathMod"], "!": ["pathPrimary", "?pathMod"], "(": ["pathPrimary", "?pathMod"], IRI_REF: ["pathPrimary", "?pathMod"], PNAME_LN: ["pathPrimary", "?pathMod"], PNAME_NS: ["pathPrimary", "?pathMod"] }, pathEltOrInverse: { a: ["pathElt"], "!": ["pathElt"], "(": ["pathElt"], IRI_REF: ["pathElt"], PNAME_LN: ["pathElt"], PNAME_NS: ["pathElt"], "^": ["^", "pathElt"] }, pathMod: { "*": ["*"], "?": ["?"], "+": ["+"], "{": ["{", "or([[integer,or([[,,or([},[integer,}]])],}])],[,,integer,}]])"] }, pathNegatedPropertySet: { a: ["pathOneInPropertySet"], "^": ["pathOneInPropertySet"], IRI_REF: ["pathOneInPropertySet"], PNAME_LN: ["pathOneInPropertySet"], PNAME_NS: ["pathOneInPropertySet"], "(": ["(", "?[pathOneInPropertySet,*[|,pathOneInPropertySet]]", ")"] }, pathOneInPropertySet: { IRI_REF: ["iriRef"], PNAME_LN: ["iriRef"], PNAME_NS: ["iriRef"], a: ["a"], "^": ["^", "or([iriRef,a])"] }, pathPrimary: { IRI_REF: ["storeProperty", "iriRef"], PNAME_LN: ["storeProperty", "iriRef"], PNAME_NS: ["storeProperty", "iriRef"], a: ["storeProperty", "a"], "!": ["!", "pathNegatedPropertySet"], "(": ["(", "path", ")"] }, pathSequence: { "^": ["pathEltOrInverse", "*[/,pathEltOrInverse]"], a: ["pathEltOrInverse", "*[/,pathEltOrInverse]"], "!": ["pathEltOrInverse", "*[/,pathEltOrInverse]"], "(": ["pathEltOrInverse", "*[/,pathEltOrInverse]"], IRI_REF: ["pathEltOrInverse", "*[/,pathEltOrInverse]"], PNAME_LN: ["pathEltOrInverse", "*[/,pathEltOrInverse]"], PNAME_NS: ["pathEltOrInverse", "*[/,pathEltOrInverse]"] }, prefixDecl: { PREFIX: ["PREFIX", "PNAME_NS", "IRI_REF"] }, prefixedName: { PNAME_LN: ["PNAME_LN"], PNAME_NS: ["PNAME_NS"] }, primaryExpression: { "(": ["brackettedExpression"], STR: ["builtInCall"], LANG: ["builtInCall"], LANGMATCHES: ["builtInCall"], DATATYPE: ["builtInCall"], BOUND: ["builtInCall"], IRI: ["builtInCall"], URI: ["builtInCall"], BNODE: ["builtInCall"], RAND: ["builtInCall"], ABS: ["builtInCall"], CEIL: ["builtInCall"], FLOOR: ["builtInCall"], ROUND: ["builtInCall"], CONCAT: ["builtInCall"], STRLEN: ["builtInCall"], UCASE: ["builtInCall"], LCASE: ["builtInCall"], ENCODE_FOR_URI: ["builtInCall"], CONTAINS: ["builtInCall"], STRSTARTS: ["builtInCall"], STRENDS: ["builtInCall"], STRBEFORE: ["builtInCall"], STRAFTER: ["builtInCall"], YEAR: ["builtInCall"], MONTH: ["builtInCall"], DAY: ["builtInCall"], HOURS: ["builtInCall"], MINUTES: ["builtInCall"], SECONDS: ["builtInCall"], TIMEZONE: ["builtInCall"], TZ: ["builtInCall"], NOW: ["builtInCall"], UUID: ["builtInCall"], STRUUID: ["builtInCall"], MD5: ["builtInCall"], SHA1: ["builtInCall"], SHA256: ["builtInCall"], SHA384: ["builtInCall"], SHA512: ["builtInCall"], COALESCE: ["builtInCall"], IF: ["builtInCall"], STRLANG: ["builtInCall"], STRDT: ["builtInCall"], SAMETERM: ["builtInCall"], ISIRI: ["builtInCall"], ISURI: ["builtInCall"], ISBLANK: ["builtInCall"], ISLITERAL: ["builtInCall"], ISNUMERIC: ["builtInCall"], SUBSTR: ["builtInCall"], REPLACE: ["builtInCall"], REGEX: ["builtInCall"], EXISTS: ["builtInCall"], NOT: ["builtInCall"], IRI_REF: ["iriRefOrFunction"], PNAME_LN: ["iriRefOrFunction"], PNAME_NS: ["iriRefOrFunction"], STRING_LITERAL1: ["rdfLiteral"], STRING_LITERAL2: ["rdfLiteral"], STRING_LITERAL_LONG1: ["rdfLiteral"], STRING_LITERAL_LONG2: ["rdfLiteral"], INTEGER: ["numericLiteral"], DECIMAL: ["numericLiteral"], DOUBLE: ["numericLiteral"], INTEGER_POSITIVE: ["numericLiteral"], DECIMAL_POSITIVE: ["numericLiteral"], DOUBLE_POSITIVE: ["numericLiteral"], INTEGER_NEGATIVE: ["numericLiteral"], DECIMAL_NEGATIVE: ["numericLiteral"], DOUBLE_NEGATIVE: ["numericLiteral"], TRUE: ["booleanLiteral"], FALSE: ["booleanLiteral"], VAR1: ["var"], VAR2: ["var"], COUNT: ["aggregate"], SUM: ["aggregate"], MIN: ["aggregate"], MAX: ["aggregate"], AVG: ["aggregate"], SAMPLE: ["aggregate"], GROUP_CONCAT: ["aggregate"] }, prologue: { BASE: ["*or([baseDecl,prefixDecl])"], PREFIX: ["*or([baseDecl,prefixDecl])"], $: ["*or([baseDecl,prefixDecl])"], CONSTRUCT: ["*or([baseDecl,prefixDecl])"], DESCRIBE: ["*or([baseDecl,prefixDecl])"], ASK: ["*or([baseDecl,prefixDecl])"], INSERT: ["*or([baseDecl,prefixDecl])"], DELETE: ["*or([baseDecl,prefixDecl])"], SELECT: ["*or([baseDecl,prefixDecl])"], LOAD: ["*or([baseDecl,prefixDecl])"], CLEAR: ["*or([baseDecl,prefixDecl])"], DROP: ["*or([baseDecl,prefixDecl])"], ADD: ["*or([baseDecl,prefixDecl])"], MOVE: ["*or([baseDecl,prefixDecl])"], COPY: ["*or([baseDecl,prefixDecl])"], CREATE: ["*or([baseDecl,prefixDecl])"], WITH: ["*or([baseDecl,prefixDecl])"] }, propertyList: { a: ["propertyListNotEmpty"], VAR1: ["propertyListNotEmpty"], VAR2: ["propertyListNotEmpty"], IRI_REF: ["propertyListNotEmpty"], PNAME_LN: ["propertyListNotEmpty"], PNAME_NS: ["propertyListNotEmpty"], ".": [], "}": [], GRAPH: [] }, propertyListNotEmpty: { a: ["verb", "objectList", "*[;,?[verb,objectList]]"], VAR1: ["verb", "objectList", "*[;,?[verb,objectList]]"], VAR2: ["verb", "objectList", "*[;,?[verb,objectList]]"], IRI_REF: ["verb", "objectList", "*[;,?[verb,objectList]]"], PNAME_LN: ["verb", "objectList", "*[;,?[verb,objectList]]"], PNAME_NS: ["verb", "objectList", "*[;,?[verb,objectList]]"] }, propertyListPath: { a: ["propertyListNotEmpty"], VAR1: ["propertyListNotEmpty"], VAR2: ["propertyListNotEmpty"], IRI_REF: ["propertyListNotEmpty"], PNAME_LN: ["propertyListNotEmpty"], PNAME_NS: ["propertyListNotEmpty"], ".": [], "{": [], OPTIONAL: [], MINUS: [], GRAPH: [], SERVICE: [], FILTER: [], BIND: [], VALUES: [], "}": [] }, propertyListPathNotEmpty: { VAR1: ["or([verbPath,verbSimple])", "objectListPath", "*[;,?[or([verbPath,verbSimple]),objectListPath]]"], VAR2: ["or([verbPath,verbSimple])", "objectListPath", "*[;,?[or([verbPath,verbSimple]),objectListPath]]"], "^": ["or([verbPath,verbSimple])", "objectListPath", "*[;,?[or([verbPath,verbSimple]),objectListPath]]"], a: ["or([verbPath,verbSimple])", "objectListPath", "*[;,?[or([verbPath,verbSimple]),objectListPath]]"], "!": ["or([verbPath,verbSimple])", "objectListPath", "*[;,?[or([verbPath,verbSimple]),objectListPath]]"], "(": ["or([verbPath,verbSimple])", "objectListPath", "*[;,?[or([verbPath,verbSimple]),objectListPath]]"], IRI_REF: ["or([verbPath,verbSimple])", "objectListPath", "*[;,?[or([verbPath,verbSimple]),objectListPath]]"], PNAME_LN: ["or([verbPath,verbSimple])", "objectListPath", "*[;,?[or([verbPath,verbSimple]),objectListPath]]"], PNAME_NS: ["or([verbPath,verbSimple])", "objectListPath", "*[;,?[or([verbPath,verbSimple]),objectListPath]]"] }, quadData: { "{": ["{", "disallowVars", "quads", "allowVars", "}"] }, quadDataNoBnodes: { "{": ["{", "disallowBnodes", "disallowVars", "quads", "allowVars", "allowBnodes", "}"] }, quadPattern: { "{": ["{", "quads", "}"] }, quadPatternNoBnodes: { "{": ["{", "disallowBnodes", "quads", "allowBnodes", "}"] }, quads: { GRAPH: ["?triplesTemplate", "*[quadsNotTriples,?.,?triplesTemplate]"], VAR1: ["?triplesTemplate", "*[quadsNotTriples,?.,?triplesTemplate]"], VAR2: ["?triplesTemplate", "*[quadsNotTriples,?.,?triplesTemplate]"], NIL: ["?triplesTemplate", "*[quadsNotTriples,?.,?triplesTemplate]"], "(": ["?triplesTemplate", "*[quadsNotTriples,?.,?triplesTemplate]"], "[": ["?triplesTemplate", "*[quadsNotTriples,?.,?triplesTemplate]"], IRI_REF: ["?triplesTemplate", "*[quadsNotTriples,?.,?triplesTemplate]"], TRUE: ["?triplesTemplate", "*[quadsNotTriples,?.,?triplesTemplate]"], FALSE: ["?triplesTemplate", "*[quadsNotTriples,?.,?triplesTemplate]"], BLANK_NODE_LABEL: ["?triplesTemplate", "*[quadsNotTriples,?.,?triplesTemplate]"], ANON: ["?triplesTemplate", "*[quadsNotTriples,?.,?triplesTemplate]"], PNAME_LN: ["?triplesTemplate", "*[quadsNotTriples,?.,?triplesTemplate]"], PNAME_NS: ["?triplesTemplate", "*[quadsNotTriples,?.,?triplesTemplate]"], STRING_LITERAL1: ["?triplesTemplate", "*[quadsNotTriples,?.,?triplesTemplate]"], STRING_LITERAL2: ["?triplesTemplate", "*[quadsNotTriples,?.,?triplesTemplate]"], STRING_LITERAL_LONG1: ["?triplesTemplate", "*[quadsNotTriples,?.,?triplesTemplate]"], STRING_LITERAL_LONG2: ["?triplesTemplate", "*[quadsNotTriples,?.,?triplesTemplate]"], INTEGER: ["?triplesTemplate", "*[quadsNotTriples,?.,?triplesTemplate]"], DECIMAL: ["?triplesTemplate", "*[quadsNotTriples,?.,?triplesTemplate]"], DOUBLE: ["?triplesTemplate", "*[quadsNotTriples,?.,?triplesTemplate]"], INTEGER_POSITIVE: ["?triplesTemplate", "*[quadsNotTriples,?.,?triplesTemplate]"], DECIMAL_POSITIVE: ["?triplesTemplate", "*[quadsNotTriples,?.,?triplesTemplate]"], DOUBLE_POSITIVE: ["?triplesTemplate", "*[quadsNotTriples,?.,?triplesTemplate]"], INTEGER_NEGATIVE: ["?triplesTemplate", "*[quadsNotTriples,?.,?triplesTemplate]"], DECIMAL_NEGATIVE: ["?triplesTemplate", "*[quadsNotTriples,?.,?triplesTemplate]"], DOUBLE_NEGATIVE: ["?triplesTemplate", "*[quadsNotTriples,?.,?triplesTemplate]"], "}": ["?triplesTemplate", "*[quadsNotTriples,?.,?triplesTemplate]"] }, quadsNotTriples: { GRAPH: ["GRAPH", "varOrIRIref", "{", "?triplesTemplate", "}"] }, queryAll: { CONSTRUCT: ["or([selectQuery,constructQuery,describeQuery,askQuery])", "valuesClause"], DESCRIBE: ["or([selectQuery,constructQuery,describeQuery,askQuery])", "valuesClause"], ASK: ["or([selectQuery,constructQuery,describeQuery,askQuery])", "valuesClause"], SELECT: ["or([selectQuery,constructQuery,describeQuery,askQuery])", "valuesClause"] }, rdfLiteral: { STRING_LITERAL1: ["string", "?or([LANGTAG,[^^,iriRef]])"], STRING_LITERAL2: ["string", "?or([LANGTAG,[^^,iriRef]])"], STRING_LITERAL_LONG1: ["string", "?or([LANGTAG,[^^,iriRef]])"], STRING_LITERAL_LONG2: ["string", "?or([LANGTAG,[^^,iriRef]])"] }, regexExpression: { REGEX: ["REGEX", "(", "expression", ",", "expression", "?[,,expression]", ")"] }, relationalExpression: { "!": ["numericExpression", "?or([[=,numericExpression],[!=,numericExpression],[<,numericExpression],[>,numericExpression],[<=,numericExpression],[>=,numericExpression],[IN,expressionList],[NOT,IN,expressionList]])"], "+": ["numericExpression", "?or([[=,numericExpression],[!=,numericExpression],[<,numericExpression],[>,numericExpression],[<=,numericExpression],[>=,numericExpression],[IN,expressionList],[NOT,IN,expressionList]])"], "-": ["numericExpression", "?or([[=,numericExpression],[!=,numericExpression],[<,numericExpression],[>,numericExpression],[<=,numericExpression],[>=,numericExpression],[IN,expressionList],[NOT,IN,expressionList]])"], VAR1: ["numericExpression", "?or([[=,numericExpression],[!=,numericExpression],[<,numericExpression],[>,numericExpression],[<=,numericExpression],[>=,numericExpression],[IN,expressionList],[NOT,IN,expressionList]])"], VAR2: ["numericExpression", "?or([[=,numericExpression],[!=,numericExpression],[<,numericExpression],[>,numericExpression],[<=,numericExpression],[>=,numericExpression],[IN,expressionList],[NOT,IN,expressionList]])"], "(": ["numericExpression", "?or([[=,numericExpression],[!=,numericExpression],[<,numericExpression],[>,numericExpression],[<=,numericExpression],[>=,numericExpression],[IN,expressionList],[NOT,IN,expressionList]])"], STR: ["numericExpression", "?or([[=,numericExpression],[!=,numericExpression],[<,numericExpression],[>,numericExpression],[<=,numericExpression],[>=,numericExpression],[IN,expressionList],[NOT,IN,expressionList]])"], LANG: ["numericExpression", "?or([[=,numericExpression],[!=,numericExpression],[<,numericExpression],[>,numericExpression],[<=,numericExpression],[>=,numericExpression],[IN,expressionList],[NOT,IN,expressionList]])"], LANGMATCHES: ["numericExpression", "?or([[=,numericExpression],[!=,numericExpression],[<,numericExpression],[>,numericExpression],[<=,numericExpression],[>=,numericExpression],[IN,expressionList],[NOT,IN,expressionList]])"], DATATYPE: ["numericExpression", "?or([[=,numericExpression],[!=,numericExpression],[<,numericExpression],[>,numericExpression],[<=,numericExpression],[>=,numericExpression],[IN,expressionList],[NOT,IN,expressionList]])"], BOUND: ["numericExpression", "?or([[=,numericExpression],[!=,numericExpression],[<,numericExpression],[>,numericExpression],[<=,numericExpression],[>=,numericExpression],[IN,expressionList],[NOT,IN,expressionList]])"], IRI: ["numericExpression", "?or([[=,numericExpression],[!=,numericExpression],[<,numericExpression],[>,numericExpression],[<=,numericExpression],[>=,numericExpression],[IN,expressionList],[NOT,IN,expressionList]])"], URI: ["numericExpression", "?or([[=,numericExpression],[!=,numericExpression],[<,numericExpression],[>,numericExpression],[<=,numericExpression],[>=,numericExpression],[IN,expressionList],[NOT,IN,expressionList]])"], BNODE: ["numericExpression", "?or([[=,numericExpression],[!=,numericExpression],[<,numericExpression],[>,numericExpression],[<=,numericExpression],[>=,numericExpression],[IN,expressionList],[NOT,IN,expressionList]])"], RAND: ["numericExpression", "?or([[=,numericExpression],[!=,numericExpression],[<,numericExpression],[>,numericExpression],[<=,numericExpression],[>=,numericExpression],[IN,expressionList],[NOT,IN,expressionList]])"], ABS: ["numericExpression", "?or([[=,numericExpression],[!=,numericExpression],[<,numericExpression],[>,numericExpression],[<=,numericExpression],[>=,numericExpression],[IN,expressionList],[NOT,IN,expressionList]])"], CEIL: ["numericExpression", "?or([[=,numericExpression],[!=,numericExpression],[<,numericExpression],[>,numericExpression],[<=,numericExpression],[>=,numericExpression],[IN,expressionList],[NOT,IN,expressionList]])"], FLOOR: ["numericExpression", "?or([[=,numericExpression],[!=,numericExpression],[<,numericExpression],[>,numericExpression],[<=,numericExpression],[>=,numericExpression],[IN,expressionList],[NOT,IN,expressionList]])"], ROUND: ["numericExpression", "?or([[=,numericExpression],[!=,numericExpression],[<,numericExpression],[>,numericExpression],[<=,numericExpression],[>=,numericExpression],[IN,expressionList],[NOT,IN,expressionList]])"], CONCAT: ["numericExpression", "?or([[=,numericExpression],[!=,numericExpression],[<,numericExpression],[>,numericExpression],[<=,numericExpression],[>=,numericExpression],[IN,expressionList],[NOT,IN,expressionList]])"], STRLEN: ["numericExpression", "?or([[=,numericExpression],[!=,numericExpression],[<,numericExpression],[>,numericExpression],[<=,numericExpression],[>=,numericExpression],[IN,expressionList],[NOT,IN,expressionList]])"], UCASE: ["numericExpression", "?or([[=,numericExpression],[!=,numericExpression],[<,numericExpression],[>,numericExpression],[<=,numericExpression],[>=,numericExpression],[IN,expressionList],[NOT,IN,expressionList]])"], LCASE: ["numericExpression", "?or([[=,numericExpression],[!=,numericExpression],[<,numericExpression],[>,numericExpression],[<=,numericExpression],[>=,numericExpression],[IN,expressionList],[NOT,IN,expressionList]])"], ENCODE_FOR_URI: ["numericExpression", "?or([[=,numericExpression],[!=,numericExpression],[<,numericExpression],[>,numericExpression],[<=,numericExpression],[>=,numericExpression],[IN,expressionList],[NOT,IN,expressionList]])"], CONTAINS: ["numericExpression", "?or([[=,numericExpression],[!=,numericExpression],[<,numericExpression],[>,numericExpression],[<=,numericExpression],[>=,numericExpression],[IN,expressionList],[NOT,IN,expressionList]])"], STRSTARTS: ["numericExpression", "?or([[=,numericExpression],[!=,numericExpression],[<,numericExpression],[>,numericExpression],[<=,numericExpression],[>=,numericExpression],[IN,expressionList],[NOT,IN,expressionList]])"], STRENDS: ["numericExpression", "?or([[=,numericExpression],[!=,numericExpression],[<,numericExpression],[>,numericExpression],[<=,numericExpression],[>=,numericExpression],[IN,expressionList],[NOT,IN,expressionList]])"], STRBEFORE: ["numericExpression", "?or([[=,numericExpression],[!=,numericExpression],[<,numericExpression],[>,numericExpression],[<=,numericExpression],[>=,numericExpression],[IN,expressionList],[NOT,IN,expressionList]])"], STRAFTER: ["numericExpression", "?or([[=,numericExpression],[!=,numericExpression],[<,numericExpression],[>,numericExpression],[<=,numericExpression],[>=,numericExpression],[IN,expressionList],[NOT,IN,expressionList]])"], YEAR: ["numericExpression", "?or([[=,numericExpression],[!=,numericExpression],[<,numericExpression],[>,numericExpression],[<=,numericExpression],[>=,numericExpression],[IN,expressionList],[NOT,IN,expressionList]])"], MONTH: ["numericExpression", "?or([[=,numericExpression],[!=,numericExpression],[<,numericExpression],[>,numericExpression],[<=,numericExpression],[>=,numericExpression],[IN,expressionList],[NOT,IN,expressionList]])"], DAY: ["numericExpression", "?or([[=,numericExpression],[!=,numericExpression],[<,numericExpression],[>,numericExpression],[<=,numericExpression],[>=,numericExpression],[IN,expressionList],[NOT,IN,expressionList]])"], HOURS: ["numericExpression", "?or([[=,numericExpression],[!=,numericExpression],[<,numericExpression],[>,numericExpression],[<=,numericExpression],[>=,numericExpression],[IN,expressionList],[NOT,IN,expressionList]])"], MINUTES: ["numericExpression", "?or([[=,numericExpression],[!=,numericExpression],[<,numericExpression],[>,numericExpression],[<=,numericExpression],[>=,numericExpression],[IN,expressionList],[NOT,IN,expressionList]])"], SECONDS: ["numericExpression", "?or([[=,numericExpression],[!=,numericExpression],[<,numericExpression],[>,numericExpression],[<=,numericExpression],[>=,numericExpression],[IN,expressionList],[NOT,IN,expressionList]])"], TIMEZONE: ["numericExpression", "?or([[=,numericExpression],[!=,numericExpression],[<,numericExpression],[>,numericExpression],[<=,numericExpression],[>=,numericExpression],[IN,expressionList],[NOT,IN,expressionList]])"], TZ: ["numericExpression", "?or([[=,numericExpression],[!=,numericExpression],[<,numericExpression],[>,numericExpression],[<=,numericExpression],[>=,numericExpression],[IN,expressionList],[NOT,IN,expressionList]])"], NOW: ["numericExpression", "?or([[=,numericExpression],[!=,numericExpression],[<,numericExpression],[>,numericExpression],[<=,numericExpression],[>=,numericExpression],[IN,expressionList],[NOT,IN,expressionList]])"], UUID: ["numericExpression", "?or([[=,numericExpression],[!=,numericExpression],[<,numericExpression],[>,numericExpression],[<=,numericExpression],[>=,numericExpression],[IN,expressionList],[NOT,IN,expressionList]])"], STRUUID: ["numericExpression", "?or([[=,numericExpression],[!=,numericExpression],[<,numericExpression],[>,numericExpression],[<=,numericExpression],[>=,numericExpression],[IN,expressionList],[NOT,IN,expressionList]])"], MD5: ["numericExpression", "?or([[=,numericExpression],[!=,numericExpression],[<,numericExpression],[>,numericExpression],[<=,numericExpression],[>=,numericExpression],[IN,expressionList],[NOT,IN,expressionList]])"], SHA1: ["numericExpression", "?or([[=,numericExpression],[!=,numericExpression],[<,numericExpression],[>,numericExpression],[<=,numericExpression],[>=,numericExpression],[IN,expressionList],[NOT,IN,expressionList]])"], SHA256: ["numericExpression", "?or([[=,numericExpression],[!=,numericExpression],[<,numericExpression],[>,numericExpression],[<=,numericExpression],[>=,numericExpression],[IN,expressionList],[NOT,IN,expressionList]])"], SHA384: ["numericExpression", "?or([[=,numericExpression],[!=,numericExpression],[<,numericExpression],[>,numericExpression],[<=,numericExpression],[>=,numericExpression],[IN,expressionList],[NOT,IN,expressionList]])"], SHA512: ["numericExpression", "?or([[=,numericExpression],[!=,numericExpression],[<,numericExpression],[>,numericExpression],[<=,numericExpression],[>=,numericExpression],[IN,expressionList],[NOT,IN,expressionList]])"], COALESCE: ["numericExpression", "?or([[=,numericExpression],[!=,numericExpression],[<,numericExpression],[>,numericExpression],[<=,numericExpression],[>=,numericExpression],[IN,expressionList],[NOT,IN,expressionList]])"], IF: ["numericExpression", "?or([[=,numericExpression],[!=,numericExpression],[<,numericExpression],[>,numericExpression],[<=,numericExpression],[>=,numericExpression],[IN,expressionList],[NOT,IN,expressionList]])"], STRLANG: ["numericExpression", "?or([[=,numericExpression],[!=,numericExpression],[<,numericExpression],[>,numericExpression],[<=,numericExpression],[>=,numericExpression],[IN,expressionList],[NOT,IN,expressionList]])"], STRDT: ["numericExpression", "?or([[=,numericExpression],[!=,numericExpression],[<,numericExpression],[>,numericExpression],[<=,numericExpression],[>=,numericExpression],[IN,expressionList],[NOT,IN,expressionList]])"], SAMETERM: ["numericExpression", "?or([[=,numericExpression],[!=,numericExpression],[<,numericExpression],[>,numericExpression],[<=,numericExpression],[>=,numericExpression],[IN,expressionList],[NOT,IN,expressionList]])"], ISIRI: ["numericExpression", "?or([[=,numericExpression],[!=,numericExpression],[<,numericExpression],[>,numericExpression],[<=,numericExpression],[>=,numericExpression],[IN,expressionList],[NOT,IN,expressionList]])"], ISURI: ["numericExpression", "?or([[=,numericExpression],[!=,numericExpression],[<,numericExpression],[>,numericExpression],[<=,numericExpression],[>=,numericExpression],[IN,expressionList],[NOT,IN,expressionList]])"], ISBLANK: ["numericExpression", "?or([[=,numericExpression],[!=,numericExpression],[<,numericExpression],[>,numericExpression],[<=,numericExpression],[>=,numericExpression],[IN,expressionList],[NOT,IN,expressionList]])"], ISLITERAL: ["numericExpression", "?or([[=,numericExpression],[!=,numericExpression],[<,numericExpression],[>,numericExpression],[<=,numericExpression],[>=,numericExpression],[IN,expressionList],[NOT,IN,expressionList]])"], ISNUMERIC: ["numericExpression", "?or([[=,numericExpression],[!=,numericExpression],[<,numericExpression],[>,numericExpression],[<=,numericExpression],[>=,numericExpression],[IN,expressionList],[NOT,IN,expressionList]])"], TRUE: ["numericExpression", "?or([[=,numericExpression],[!=,numericExpression],[<,numericExpression],[>,numericExpression],[<=,numericExpression],[>=,numericExpression],[IN,expressionList],[NOT,IN,expressionList]])"], FALSE: ["numericExpression", "?or([[=,numericExpression],[!=,numericExpression],[<,numericExpression],[>,numericExpression],[<=,numericExpression],[>=,numericExpression],[IN,expressionList],[NOT,IN,expressionList]])"], COUNT: ["numericExpression", "?or([[=,numericExpression],[!=,numericExpression],[<,numericExpression],[>,numericExpression],[<=,numericExpression],[>=,numericExpression],[IN,expressionList],[NOT,IN,expressionList]])"], SUM: ["numericExpression", "?or([[=,numericExpression],[!=,numericExpression],[<,numericExpression],[>,numericExpression],[<=,numericExpression],[>=,numericExpression],[IN,expressionList],[NOT,IN,expressionList]])"], MIN: ["numericExpression", "?or([[=,numericExpression],[!=,numericExpression],[<,numericExpression],[>,numericExpression],[<=,numericExpression],[>=,numericExpression],[IN,expressionList],[NOT,IN,expressionList]])"], MAX: ["numericExpression", "?or([[=,numericExpression],[!=,numericExpression],[<,numericExpression],[>,numericExpression],[<=,numericExpression],[>=,numericExpression],[IN,expressionList],[NOT,IN,expressionList]])"], AVG: ["numericExpression", "?or([[=,numericExpression],[!=,numericExpression],[<,numericExpression],[>,numericExpression],[<=,numericExpression],[>=,numericExpression],[IN,expressionList],[NOT,IN,expressionList]])"], SAMPLE: ["numericExpression", "?or([[=,numericExpression],[!=,numericExpression],[<,numericExpression],[>,numericExpression],[<=,numericExpression],[>=,numericExpression],[IN,expressionList],[NOT,IN,expressionList]])"], GROUP_CONCAT: ["numericExpression", "?or([[=,numericExpression],[!=,numericExpression],[<,numericExpression],[>,numericExpression],[<=,numericExpression],[>=,numericExpression],[IN,expressionList],[NOT,IN,expressionList]])"], SUBSTR: ["numericExpression", "?or([[=,numericExpression],[!=,numericExpression],[<,numericExpression],[>,numericExpression],[<=,numericExpression],[>=,numericExpression],[IN,expressionList],[NOT,IN,expressionList]])"], REPLACE: ["numericExpression", "?or([[=,numericExpression],[!=,numericExpression],[<,numericExpression],[>,numericExpression],[<=,numericExpression],[>=,numericExpression],[IN,expressionList],[NOT,IN,expressionList]])"], REGEX: ["numericExpression", "?or([[=,numericExpression],[!=,numericExpression],[<,numericExpression],[>,numericExpression],[<=,numericExpression],[>=,numericExpression],[IN,expressionList],[NOT,IN,expressionList]])"], EXISTS: ["numericExpression", "?or([[=,numericExpression],[!=,numericExpression],[<,numericExpression],[>,numericExpression],[<=,numericExpression],[>=,numericExpression],[IN,expressionList],[NOT,IN,expressionList]])"], NOT: ["numericExpression", "?or([[=,numericExpression],[!=,numericExpression],[<,numericExpression],[>,numericExpression],[<=,numericExpression],[>=,numericExpression],[IN,expressionList],[NOT,IN,expressionList]])"], IRI_REF: ["numericExpression", "?or([[=,numericExpression],[!=,numericExpression],[<,numericExpression],[>,numericExpression],[<=,numericExpression],[>=,numericExpression],[IN,expressionList],[NOT,IN,expressionList]])"], STRING_LITERAL1: ["numericExpression", "?or([[=,numericExpression],[!=,numericExpression],[<,numericExpression],[>,numericExpression],[<=,numericExpression],[>=,numericExpression],[IN,expressionList],[NOT,IN,expressionList]])"], STRING_LITERAL2: ["numericExpression", "?or([[=,numericExpression],[!=,numericExpression],[<,numericExpression],[>,numericExpression],[<=,numericExpression],[>=,numericExpression],[IN,expressionList],[NOT,IN,expressionList]])"], STRING_LITERAL_LONG1: ["numericExpression", "?or([[=,numericExpression],[!=,numericExpression],[<,numericExpression],[>,numericExpression],[<=,numericExpression],[>=,numericExpression],[IN,expressionList],[NOT,IN,expressionList]])"], STRING_LITERAL_LONG2: ["numericExpression", "?or([[=,numericExpression],[!=,numericExpression],[<,numericExpression],[>,numericExpression],[<=,numericExpression],[>=,numericExpression],[IN,expressionList],[NOT,IN,expressionList]])"], INTEGER: ["numericExpression", "?or([[=,numericExpression],[!=,numericExpression],[<,numericExpression],[>,numericExpression],[<=,numericExpression],[>=,numericExpression],[IN,expressionList],[NOT,IN,expressionList]])"], DECIMAL: ["numericExpression", "?or([[=,numericExpression],[!=,numericExpression],[<,numericExpression],[>,numericExpression],[<=,numericExpression],[>=,numericExpression],[IN,expressionList],[NOT,IN,expressionList]])"], DOUBLE: ["numericExpression", "?or([[=,numericExpression],[!=,numericExpression],[<,numericExpression],[>,numericExpression],[<=,numericExpression],[>=,numericExpression],[IN,expressionList],[NOT,IN,expressionList]])"], INTEGER_POSITIVE: ["numericExpression", "?or([[=,numericExpression],[!=,numericExpression],[<,numericExpression],[>,numericExpression],[<=,numericExpression],[>=,numericExpression],[IN,expressionList],[NOT,IN,expressionList]])"], DECIMAL_POSITIVE: ["numericExpression", "?or([[=,numericExpression],[!=,numericExpression],[<,numericExpression],[>,numericExpression],[<=,numericExpression],[>=,numericExpression],[IN,expressionList],[NOT,IN,expressionList]])"], DOUBLE_POSITIVE: ["numericExpression", "?or([[=,numericExpression],[!=,numericExpression],[<,numericExpression],[>,numericExpression],[<=,numericExpression],[>=,numericExpression],[IN,expressionList],[NOT,IN,expressionList]])"], INTEGER_NEGATIVE: ["numericExpression", "?or([[=,numericExpression],[!=,numericExpression],[<,numericExpression],[>,numericExpression],[<=,numericExpression],[>=,numericExpression],[IN,expressionList],[NOT,IN,expressionList]])"], DECIMAL_NEGATIVE: ["numericExpression", "?or([[=,numericExpression],[!=,numericExpression],[<,numericExpression],[>,numericExpression],[<=,numericExpression],[>=,numericExpression],[IN,expressionList],[NOT,IN,expressionList]])"], DOUBLE_NEGATIVE: ["numericExpression", "?or([[=,numericExpression],[!=,numericExpression],[<,numericExpression],[>,numericExpression],[<=,numericExpression],[>=,numericExpression],[IN,expressionList],[NOT,IN,expressionList]])"], PNAME_LN: ["numericExpression", "?or([[=,numericExpression],[!=,numericExpression],[<,numericExpression],[>,numericExpression],[<=,numericExpression],[>=,numericExpression],[IN,expressionList],[NOT,IN,expressionList]])"], PNAME_NS: ["numericExpression", "?or([[=,numericExpression],[!=,numericExpression],[<,numericExpression],[>,numericExpression],[<=,numericExpression],[>=,numericExpression],[IN,expressionList],[NOT,IN,expressionList]])"] }, selectClause: { SELECT: ["SELECT", "?or([DISTINCT,REDUCED])", "or([+or([var,[(,expression,AS,var,)]]),*])"] }, selectQuery: { SELECT: ["selectClause", "*datasetClause", "whereClause", "solutionModifier"] }, serviceGraphPattern: { SERVICE: ["SERVICE", "?SILENT", "varOrIRIref", "groupGraphPattern"] }, solutionModifier: { LIMIT: ["?groupClause", "?havingClause", "?orderClause", "?limitOffsetClauses"], OFFSET: ["?groupClause", "?havingClause", "?orderClause", "?limitOffsetClauses"], ORDER: ["?groupClause", "?havingClause", "?orderClause", "?limitOffsetClauses"], HAVING: ["?groupClause", "?havingClause", "?orderClause", "?limitOffsetClauses"], GROUP: ["?groupClause", "?havingClause", "?orderClause", "?limitOffsetClauses"], VALUES: ["?groupClause", "?havingClause", "?orderClause", "?limitOffsetClauses"], $: ["?groupClause", "?havingClause", "?orderClause", "?limitOffsetClauses"], "}": ["?groupClause", "?havingClause", "?orderClause", "?limitOffsetClauses"] }, sourceSelector: { IRI_REF: ["iriRef"], PNAME_LN: ["iriRef"], PNAME_NS: ["iriRef"] }, sparql11: { $: ["prologue", "or([queryAll,updateAll])", "$"], CONSTRUCT: ["prologue", "or([queryAll,updateAll])", "$"], DESCRIBE: ["prologue", "or([queryAll,updateAll])", "$"], ASK: ["prologue", "or([queryAll,updateAll])", "$"], INSERT: ["prologue", "or([queryAll,updateAll])", "$"], DELETE: ["prologue", "or([queryAll,updateAll])", "$"], SELECT: ["prologue", "or([queryAll,updateAll])", "$"], LOAD: ["prologue", "or([queryAll,updateAll])", "$"], CLEAR: ["prologue", "or([queryAll,updateAll])", "$"], DROP: ["prologue", "or([queryAll,updateAll])", "$"], ADD: ["prologue", "or([queryAll,updateAll])", "$"], MOVE: ["prologue", "or([queryAll,updateAll])", "$"], COPY: ["prologue", "or([queryAll,updateAll])", "$"], CREATE: ["prologue", "or([queryAll,updateAll])", "$"], WITH: ["prologue", "or([queryAll,updateAll])", "$"], BASE: ["prologue", "or([queryAll,updateAll])", "$"], PREFIX: ["prologue", "or([queryAll,updateAll])", "$"] }, storeProperty: { VAR1: [], VAR2: [], IRI_REF: [], PNAME_LN: [], PNAME_NS: [], a: [] }, strReplaceExpression: { REPLACE: ["REPLACE", "(", "expression", ",", "expression", ",", "expression", "?[,,expression]", ")"] }, string: { STRING_LITERAL1: ["STRING_LITERAL1"], STRING_LITERAL2: ["STRING_LITERAL2"], STRING_LITERAL_LONG1: ["STRING_LITERAL_LONG1"], STRING_LITERAL_LONG2: ["STRING_LITERAL_LONG2"] }, subSelect: { SELECT: ["selectClause", "whereClause", "solutionModifier", "valuesClause"] }, substringExpression: { SUBSTR: ["SUBSTR", "(", "expression", ",", "expression", "?[,,expression]", ")"] }, triplesBlock: { VAR1: ["triplesSameSubjectPath", "?[.,?triplesBlock]"], VAR2: ["triplesSameSubjectPath", "?[.,?triplesBlock]"], NIL: ["triplesSameSubjectPath", "?[.,?triplesBlock]"], "(": ["triplesSameSubjectPath", "?[.,?triplesBlock]"], "[": ["triplesSameSubjectPath", "?[.,?triplesBlock]"], IRI_REF: ["triplesSameSubjectPath", "?[.,?triplesBlock]"], TRUE: ["triplesSameSubjectPath", "?[.,?triplesBlock]"], FALSE: ["triplesSameSubjectPath", "?[.,?triplesBlock]"], BLANK_NODE_LABEL: ["triplesSameSubjectPath", "?[.,?triplesBlock]"], ANON: ["triplesSameSubjectPath", "?[.,?triplesBlock]"], PNAME_LN: ["triplesSameSubjectPath", "?[.,?triplesBlock]"], PNAME_NS: ["triplesSameSubjectPath", "?[.,?triplesBlock]"], STRING_LITERAL1: ["triplesSameSubjectPath", "?[.,?triplesBlock]"], STRING_LITERAL2: ["triplesSameSubjectPath", "?[.,?triplesBlock]"], STRING_LITERAL_LONG1: ["triplesSameSubjectPath", "?[.,?triplesBlock]"], STRING_LITERAL_LONG2: ["triplesSameSubjectPath", "?[.,?triplesBlock]"], INTEGER: ["triplesSameSubjectPath", "?[.,?triplesBlock]"], DECIMAL: ["triplesSameSubjectPath", "?[.,?triplesBlock]"], DOUBLE: ["triplesSameSubjectPath", "?[.,?triplesBlock]"], INTEGER_POSITIVE: ["triplesSameSubjectPath", "?[.,?triplesBlock]"], DECIMAL_POSITIVE: ["triplesSameSubjectPath", "?[.,?triplesBlock]"], DOUBLE_POSITIVE: ["triplesSameSubjectPath", "?[.,?triplesBlock]"], INTEGER_NEGATIVE: ["triplesSameSubjectPath", "?[.,?triplesBlock]"], DECIMAL_NEGATIVE: ["triplesSameSubjectPath", "?[.,?triplesBlock]"], DOUBLE_NEGATIVE: ["triplesSameSubjectPath", "?[.,?triplesBlock]"] }, triplesNode: { "(": ["collection"], "[": ["blankNodePropertyList"] }, triplesNodePath: { "(": ["collectionPath"], "[": ["blankNodePropertyListPath"] }, triplesSameSubject: { VAR1: ["varOrTerm", "propertyListNotEmpty"], VAR2: ["varOrTerm", "propertyListNotEmpty"], NIL: ["varOrTerm", "propertyListNotEmpty"], IRI_REF: ["varOrTerm", "propertyListNotEmpty"], TRUE: ["varOrTerm", "propertyListNotEmpty"], FALSE: ["varOrTerm", "propertyListNotEmpty"], BLANK_NODE_LABEL: ["varOrTerm", "propertyListNotEmpty"], ANON: ["varOrTerm", "propertyListNotEmpty"], PNAME_LN: ["varOrTerm", "propertyListNotEmpty"], PNAME_NS: ["varOrTerm", "propertyListNotEmpty"], STRING_LITERAL1: ["varOrTerm", "propertyListNotEmpty"], STRING_LITERAL2: ["varOrTerm", "propertyListNotEmpty"], STRING_LITERAL_LONG1: ["varOrTerm", "propertyListNotEmpty"], STRING_LITERAL_LONG2: ["varOrTerm", "propertyListNotEmpty"], INTEGER: ["varOrTerm", "propertyListNotEmpty"], DECIMAL: ["varOrTerm", "propertyListNotEmpty"], DOUBLE: ["varOrTerm", "propertyListNotEmpty"], INTEGER_POSITIVE: ["varOrTerm", "propertyListNotEmpty"], DECIMAL_POSITIVE: ["varOrTerm", "propertyListNotEmpty"], DOUBLE_POSITIVE: ["varOrTerm", "propertyListNotEmpty"], INTEGER_NEGATIVE: ["varOrTerm", "propertyListNotEmpty"], DECIMAL_NEGATIVE: ["varOrTerm", "propertyListNotEmpty"], DOUBLE_NEGATIVE: ["varOrTerm", "propertyListNotEmpty"], "(": ["triplesNode", "propertyList"], "[": ["triplesNode", "propertyList"] }, triplesSameSubjectPath: { VAR1: ["varOrTerm", "propertyListPathNotEmpty"], VAR2: ["varOrTerm", "propertyListPathNotEmpty"], NIL: ["varOrTerm", "propertyListPathNotEmpty"], IRI_REF: ["varOrTerm", "propertyListPathNotEmpty"], TRUE: ["varOrTerm", "propertyListPathNotEmpty"], FALSE: ["varOrTerm", "propertyListPathNotEmpty"], BLANK_NODE_LABEL: ["varOrTerm", "propertyListPathNotEmpty"], ANON: ["varOrTerm", "propertyListPathNotEmpty"], PNAME_LN: ["varOrTerm", "propertyListPathNotEmpty"], PNAME_NS: ["varOrTerm", "propertyListPathNotEmpty"], STRING_LITERAL1: ["varOrTerm", "propertyListPathNotEmpty"], STRING_LITERAL2: ["varOrTerm", "propertyListPathNotEmpty"], STRING_LITERAL_LONG1: ["varOrTerm", "propertyListPathNotEmpty"], STRING_LITERAL_LONG2: ["varOrTerm", "propertyListPathNotEmpty"], INTEGER: ["varOrTerm", "propertyListPathNotEmpty"], DECIMAL: ["varOrTerm", "propertyListPathNotEmpty"], DOUBLE: ["varOrTerm", "propertyListPathNotEmpty"], INTEGER_POSITIVE: ["varOrTerm", "propertyListPathNotEmpty"], DECIMAL_POSITIVE: ["varOrTerm", "propertyListPathNotEmpty"], DOUBLE_POSITIVE: ["varOrTerm", "propertyListPathNotEmpty"], INTEGER_NEGATIVE: ["varOrTerm", "propertyListPathNotEmpty"], DECIMAL_NEGATIVE: ["varOrTerm", "propertyListPathNotEmpty"], DOUBLE_NEGATIVE: ["varOrTerm", "propertyListPathNotEmpty"], "(": ["triplesNodePath", "propertyListPath"], "[": ["triplesNodePath", "propertyListPath"] }, triplesTemplate: { VAR1: ["triplesSameSubject", "?[.,?triplesTemplate]"], VAR2: ["triplesSameSubject", "?[.,?triplesTemplate]"], NIL: ["triplesSameSubject", "?[.,?triplesTemplate]"], "(": ["triplesSameSubject", "?[.,?triplesTemplate]"], "[": ["triplesSameSubject", "?[.,?triplesTemplate]"], IRI_REF: ["triplesSameSubject", "?[.,?triplesTemplate]"], TRUE: ["triplesSameSubject", "?[.,?triplesTemplate]"], FALSE: ["triplesSameSubject", "?[.,?triplesTemplate]"], BLANK_NODE_LABEL: ["triplesSameSubject", "?[.,?triplesTemplate]"], ANON: ["triplesSameSubject", "?[.,?triplesTemplate]"], PNAME_LN: ["triplesSameSubject", "?[.,?triplesTemplate]"], PNAME_NS: ["triplesSameSubject", "?[.,?triplesTemplate]"], STRING_LITERAL1: ["triplesSameSubject", "?[.,?triplesTemplate]"], STRING_LITERAL2: ["triplesSameSubject", "?[.,?triplesTemplate]"], STRING_LITERAL_LONG1: ["triplesSameSubject", "?[.,?triplesTemplate]"], STRING_LITERAL_LONG2: ["triplesSameSubject", "?[.,?triplesTemplate]"], INTEGER: ["triplesSameSubject", "?[.,?triplesTemplate]"], DECIMAL: ["triplesSameSubject", "?[.,?triplesTemplate]"], DOUBLE: ["triplesSameSubject", "?[.,?triplesTemplate]"], INTEGER_POSITIVE: ["triplesSameSubject", "?[.,?triplesTemplate]"], DECIMAL_POSITIVE: ["triplesSameSubject", "?[.,?triplesTemplate]"], DOUBLE_POSITIVE: ["triplesSameSubject", "?[.,?triplesTemplate]"], INTEGER_NEGATIVE: ["triplesSameSubject", "?[.,?triplesTemplate]"], DECIMAL_NEGATIVE: ["triplesSameSubject", "?[.,?triplesTemplate]"], DOUBLE_NEGATIVE: ["triplesSameSubject", "?[.,?triplesTemplate]"] }, unaryExpression: { "!": ["!", "primaryExpression"], "+": ["+", "primaryExpression"], "-": ["-", "primaryExpression"], VAR1: ["primaryExpression"], VAR2: ["primaryExpression"], "(": ["primaryExpression"], STR: ["primaryExpression"], LANG: ["primaryExpression"], LANGMATCHES: ["primaryExpression"], DATATYPE: ["primaryExpression"], BOUND: ["primaryExpression"], IRI: ["primaryExpression"], URI: ["primaryExpression"], BNODE: ["primaryExpression"], RAND: ["primaryExpression"], ABS: ["primaryExpression"], CEIL: ["primaryExpression"], FLOOR: ["primaryExpression"], ROUND: ["primaryExpression"], CONCAT: ["primaryExpression"], STRLEN: ["primaryExpression"], UCASE: ["primaryExpression"], LCASE: ["primaryExpression"], ENCODE_FOR_URI: ["primaryExpression"], CONTAINS: ["primaryExpression"], STRSTARTS: ["primaryExpression"], STRENDS: ["primaryExpression"], STRBEFORE: ["primaryExpression"], STRAFTER: ["primaryExpression"], YEAR: ["primaryExpression"], MONTH: ["primaryExpression"], DAY: ["primaryExpression"], HOURS: ["primaryExpression"], MINUTES: ["primaryExpression"], SECONDS: ["primaryExpression"], TIMEZONE: ["primaryExpression"], TZ: ["primaryExpression"], NOW: ["primaryExpression"], UUID: ["primaryExpression"], STRUUID: ["primaryExpression"], MD5: ["primaryExpression"], SHA1: ["primaryExpression"], SHA256: ["primaryExpression"], SHA384: ["primaryExpression"], SHA512: ["primaryExpression"], COALESCE: ["primaryExpression"], IF: ["primaryExpression"], STRLANG: ["primaryExpression"], STRDT: ["primaryExpression"], SAMETERM: ["primaryExpression"], ISIRI: ["primaryExpression"], ISURI: ["primaryExpression"], ISBLANK: ["primaryExpression"], ISLITERAL: ["primaryExpression"], ISNUMERIC: ["primaryExpression"], TRUE: ["primaryExpression"], FALSE: ["primaryExpression"], COUNT: ["primaryExpression"], SUM: ["primaryExpression"], MIN: ["primaryExpression"], MAX: ["primaryExpression"], AVG: ["primaryExpression"], SAMPLE: ["primaryExpression"], GROUP_CONCAT: ["primaryExpression"], SUBSTR: ["primaryExpression"], REPLACE: ["primaryExpression"], REGEX: ["primaryExpression"], EXISTS: ["primaryExpression"], NOT: ["primaryExpression"], IRI_REF: ["primaryExpression"], STRING_LITERAL1: ["primaryExpression"], STRING_LITERAL2: ["primaryExpression"], STRING_LITERAL_LONG1: ["primaryExpression"], STRING_LITERAL_LONG2: ["primaryExpression"], INTEGER: ["primaryExpression"], DECIMAL: ["primaryExpression"], DOUBLE: ["primaryExpression"], INTEGER_POSITIVE: ["primaryExpression"], DECIMAL_POSITIVE: ["primaryExpression"], DOUBLE_POSITIVE: ["primaryExpression"], INTEGER_NEGATIVE: ["primaryExpression"], DECIMAL_NEGATIVE: ["primaryExpression"], DOUBLE_NEGATIVE: ["primaryExpression"], PNAME_LN: ["primaryExpression"], PNAME_NS: ["primaryExpression"] }, update: { INSERT: ["prologue", "?[update1,?[;,update]]"], DELETE: ["prologue", "?[update1,?[;,update]]"], LOAD: ["prologue", "?[update1,?[;,update]]"], CLEAR: ["prologue", "?[update1,?[;,update]]"], DROP: ["prologue", "?[update1,?[;,update]]"], ADD: ["prologue", "?[update1,?[;,update]]"], MOVE: ["prologue", "?[update1,?[;,update]]"], COPY: ["prologue", "?[update1,?[;,update]]"], CREATE: ["prologue", "?[update1,?[;,update]]"], WITH: ["prologue", "?[update1,?[;,update]]"], BASE: ["prologue", "?[update1,?[;,update]]"], PREFIX: ["prologue", "?[update1,?[;,update]]"], $: ["prologue", "?[update1,?[;,update]]"] }, update1: { LOAD: ["load"], CLEAR: ["clear"], DROP: ["drop"], ADD: ["add"], MOVE: ["move"], COPY: ["copy"], CREATE: ["create"], INSERT: ["INSERT", "insert1"], DELETE: ["DELETE", "delete1"], WITH: ["modify"] }, updateAll: { INSERT: ["?[update1,?[;,update]]"], DELETE: ["?[update1,?[;,update]]"], LOAD: ["?[update1,?[;,update]]"], CLEAR: ["?[update1,?[;,update]]"], DROP: ["?[update1,?[;,update]]"], ADD: ["?[update1,?[;,update]]"], MOVE: ["?[update1,?[;,update]]"], COPY: ["?[update1,?[;,update]]"], CREATE: ["?[update1,?[;,update]]"], WITH: ["?[update1,?[;,update]]"], $: ["?[update1,?[;,update]]"] }, usingClause: { USING: ["USING", "or([iriRef,[NAMED,iriRef]])"] }, valueLogical: { "!": ["relationalExpression"], "+": ["relationalExpression"], "-": ["relationalExpression"], VAR1: ["relationalExpression"], VAR2: ["relationalExpression"], "(": ["relationalExpression"], STR: ["relationalExpression"], LANG: ["relationalExpression"], LANGMATCHES: ["relationalExpression"], DATATYPE: ["relationalExpression"], BOUND: ["relationalExpression"], IRI: ["relationalExpression"], URI: ["relationalExpression"], BNODE: ["relationalExpression"], RAND: ["relationalExpression"], ABS: ["relationalExpression"], CEIL: ["relationalExpression"], FLOOR: ["relationalExpression"], ROUND: ["relationalExpression"], CONCAT: ["relationalExpression"], STRLEN: ["relationalExpression"], UCASE: ["relationalExpression"], LCASE: ["relationalExpression"], ENCODE_FOR_URI: ["relationalExpression"], CONTAINS: ["relationalExpression"], STRSTARTS: ["relationalExpression"], STRENDS: ["relationalExpression"], STRBEFORE: ["relationalExpression"], STRAFTER: ["relationalExpression"], YEAR: ["relationalExpression"], MONTH: ["relationalExpression"], DAY: ["relationalExpression"], HOURS: ["relationalExpression"], MINUTES: ["relationalExpression"], SECONDS: ["relationalExpression"], TIMEZONE: ["relationalExpression"], TZ: ["relationalExpression"], NOW: ["relationalExpression"], UUID: ["relationalExpression"], STRUUID: ["relationalExpression"], MD5: ["relationalExpression"], SHA1: ["relationalExpression"], SHA256: ["relationalExpression"], SHA384: ["relationalExpression"], SHA512: ["relationalExpression"], COALESCE: ["relationalExpression"], IF: ["relationalExpression"], STRLANG: ["relationalExpression"], STRDT: ["relationalExpression"], SAMETERM: ["relationalExpression"], ISIRI: ["relationalExpression"], ISURI: ["relationalExpression"], ISBLANK: ["relationalExpression"], ISLITERAL: ["relationalExpression"], ISNUMERIC: ["relationalExpression"], TRUE: ["relationalExpression"], FALSE: ["relationalExpression"], COUNT: ["relationalExpression"], SUM: ["relationalExpression"], MIN: ["relationalExpression"], MAX: ["relationalExpression"], AVG: ["relationalExpression"], SAMPLE: ["relationalExpression"], GROUP_CONCAT: ["relationalExpression"], SUBSTR: ["relationalExpression"], REPLACE: ["relationalExpression"], REGEX: ["relationalExpression"], EXISTS: ["relationalExpression"], NOT: ["relationalExpression"], IRI_REF: ["relationalExpression"], STRING_LITERAL1: ["relationalExpression"], STRING_LITERAL2: ["relationalExpression"], STRING_LITERAL_LONG1: ["relationalExpression"], STRING_LITERAL_LONG2: ["relationalExpression"], INTEGER: ["relationalExpression"], DECIMAL: ["relationalExpression"], DOUBLE: ["relationalExpression"], INTEGER_POSITIVE: ["relationalExpression"], DECIMAL_POSITIVE: ["relationalExpression"], DOUBLE_POSITIVE: ["relationalExpression"], INTEGER_NEGATIVE: ["relationalExpression"], DECIMAL_NEGATIVE: ["relationalExpression"], DOUBLE_NEGATIVE: ["relationalExpression"], PNAME_LN: ["relationalExpression"], PNAME_NS: ["relationalExpression"] }, valuesClause: { VALUES: ["VALUES", "dataBlock"], $: [], "}": [] }, var: { VAR1: ["VAR1"], VAR2: ["VAR2"] }, varOrIRIref: { VAR1: ["var"], VAR2: ["var"], IRI_REF: ["iriRef"], PNAME_LN: ["iriRef"], PNAME_NS: ["iriRef"] }, varOrTerm: { VAR1: ["var"], VAR2: ["var"], NIL: ["graphTerm"], IRI_REF: ["graphTerm"], TRUE: ["graphTerm"], FALSE: ["graphTerm"], BLANK_NODE_LABEL: ["graphTerm"], ANON: ["graphTerm"], PNAME_LN: ["graphTerm"], PNAME_NS: ["graphTerm"], STRING_LITERAL1: ["graphTerm"], STRING_LITERAL2: ["graphTerm"], STRING_LITERAL_LONG1: ["graphTerm"], STRING_LITERAL_LONG2: ["graphTerm"], INTEGER: ["graphTerm"], DECIMAL: ["graphTerm"], DOUBLE: ["graphTerm"], INTEGER_POSITIVE: ["graphTerm"], DECIMAL_POSITIVE: ["graphTerm"], DOUBLE_POSITIVE: ["graphTerm"], INTEGER_NEGATIVE: ["graphTerm"], DECIMAL_NEGATIVE: ["graphTerm"], DOUBLE_NEGATIVE: ["graphTerm"] }, verb: { VAR1: ["storeProperty", "varOrIRIref"], VAR2: ["storeProperty", "varOrIRIref"], IRI_REF: ["storeProperty", "varOrIRIref"], PNAME_LN: ["storeProperty", "varOrIRIref"], PNAME_NS: ["storeProperty", "varOrIRIref"], a: ["storeProperty", "a"] }, verbPath: { "^": ["path"], a: ["path"], "!": ["path"], "(": ["path"], IRI_REF: ["path"], PNAME_LN: ["path"], PNAME_NS: ["path"] }, verbSimple: { VAR1: ["var"], VAR2: ["var"] }, whereClause: { "{": ["?WHERE", "groupGraphPattern"], WHERE: ["?WHERE", "groupGraphPattern"] } }, keywords: /^(GROUP_CONCAT|DATATYPE|BASE|PREFIX|SELECT|CONSTRUCT|DESCRIBE|ASK|FROM|NAMED|ORDER|BY|LIMIT|ASC|DESC|OFFSET|DISTINCT|REDUCED|WHERE|GRAPH|OPTIONAL|UNION|FILTER|GROUP|HAVING|AS|VALUES|LOAD|CLEAR|DROP|CREATE|MOVE|COPY|SILENT|INSERT|DELETE|DATA|WITH|TO|USING|NAMED|MINUS|BIND|LANGMATCHES|LANG|BOUND|SAMETERM|ISIRI|ISURI|ISBLANK|ISLITERAL|REGEX|TRUE|FALSE|UNDEF|ADD|DEFAULT|ALL|SERVICE|INTO|IN|NOT|IRI|URI|BNODE|RAND|ABS|CEIL|FLOOR|ROUND|CONCAT|STRLEN|UCASE|LCASE|ENCODE_FOR_URI|CONTAINS|STRSTARTS|STRENDS|STRBEFORE|STRAFTER|YEAR|MONTH|DAY|HOURS|MINUTES|SECONDS|TIMEZONE|TZ|NOW|UUID|STRUUID|MD5|SHA1|SHA256|SHA384|SHA512|COALESCE|IF|STRLANG|STRDT|ISNUMERIC|SUBSTR|REPLACE|EXISTS|COUNT|SUM|MIN|MAX|AVG|SAMPLE|SEPARATOR|STR)/i, punct: /^(\*|a|\.|\{|\}|,|\(|\)|;|\[|\]|\|\||&&|=|!=|!|<=|>=|<|>|\+|-|\/|\^\^|\?|\||\^)/, startSymbol: "sparql11", acceptEmpty: !0 };
       }, function(Ne, pe, x) {
         (function(T) {
-          function N(C, Q) {
+          function L(C, Q) {
             this.cm = C, this.options = Q, this.widget = null, this.debounce = 0, this.tick = 0, this.startPos = this.cm.getCursor("start"), this.startLen = this.cm.getLine(this.startPos.line).length - this.cm.getSelection().length;
             var ge = this;
             C.on("cursorActivity", this.activityFunc = function() {
@@ -19300,7 +19301,7 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
                 for (var ge = 0; ge < Q.length; ge++) if (Q[ge].head.line != Q[ge].anchor.line) return;
               }
               this.state.completionActive && this.state.completionActive.close();
-              var K = this.state.completionActive = new N(this, C);
+              var K = this.state.completionActive = new L(this, C);
               K.options.hint && (T.signal(this, "startCompletion", this), K.update(!0));
             }
           })), T.defineExtension("closeHint", (function() {
@@ -19415,7 +19416,7 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
               Z && Z.then ? Z.then(K) : K(Z);
             }
           }
-          N.prototype = { close: function() {
+          L.prototype = { close: function() {
             this.active() && (this.cm.state.completionActive = null, this.tick = null, this.cm.off("cursorActivity", this.activityFunc), this.widget && this.data && T.signal(this.data, "close"), this.widget && this.widget.close(), T.signal(this.cm, "endCompletion", this.cm));
           }, active: function() {
             return this.cm.state.completionActive == this;
@@ -19509,9 +19510,9 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
         })(x(7));
       }, function(Ne, pe, x) {
         (function(T) {
-          var N = { style: "matchhighlight", minChars: 2, delay: 100, wordsOnly: !1, annotateScrollbar: !1, showToken: !1, trim: !0 };
+          var L = { style: "matchhighlight", minChars: 2, delay: 100, wordsOnly: !1, annotateScrollbar: !1, showToken: !1, trim: !0 };
           function Y(C) {
-            for (var Q in this.options = {}, N) this.options[Q] = (C && C.hasOwnProperty(Q) ? C : N)[Q];
+            for (var Q in this.options = {}, L) this.options[Q] = (C && C.hasOwnProperty(Q) ? C : L)[Q];
             this.overlay = this.timeout = null, this.matchesonscroll = null, this.active = !1;
           }
           function B(C) {
@@ -19579,7 +19580,7 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
         })(x(7), x(164));
       }, function(Ne, pe, x) {
         (function(T) {
-          function N(B, g, W, R) {
+          function L(B, g, W, R) {
             this.cm = B, this.options = R;
             var H = { listenForChanges: !1 };
             for (var fe in R) H[fe] = R[fe];
@@ -19593,8 +19594,8 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
             return B <= g ? B : Math.max(g, B + W);
           }
           T.defineExtension("showMatchesOnScrollbar", (function(B, g, W) {
-            return typeof W == "string" && (W = { className: W }), W || (W = {}), new N(this, B, g, W);
-          })), N.prototype.findMatches = function() {
+            return typeof W == "string" && (W = { className: W }), W || (W = {}), new L(this, B, g, W);
+          })), L.prototype.findMatches = function() {
             if (this.gap) {
               for (var B = 0; B < this.matches.length && !((R = this.matches[B]).from.line >= this.gap.to); B++) R.to.line >= this.gap.from && this.matches.splice(B--, 1);
               for (var g = this.cm.getSearchCursor(this.query, T.Pos(this.gap.from, 0), { caseFold: this.caseFold, multiline: this.options.multiline }), W = this.options && this.options.maxMatches || 1e3; g.findNext(); ) {
@@ -19603,7 +19604,7 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
               }
               this.gap = null;
             }
-          }, N.prototype.onChange = function(B) {
+          }, L.prototype.onChange = function(B) {
             var g = B.from.line, W = T.changeEnd(B).line, R = W - B.to.line;
             if (this.gap ? (this.gap.from = Math.min(Y(this.gap.from, g, R), B.from.line), this.gap.to = Math.max(Y(this.gap.to, g, R), B.from.line)) : this.gap = { from: B.from.line, to: W + 1 }, R) for (var H = 0; H < this.matches.length; H++) {
               var fe = this.matches[H], C = Y(fe.from.line, g, R);
@@ -19616,15 +19617,15 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
             this.update = setTimeout((function() {
               ge.updateAfterChange();
             }), 250);
-          }, N.prototype.updateAfterChange = function() {
+          }, L.prototype.updateAfterChange = function() {
             this.findMatches(), this.annotation.update(this.matches);
-          }, N.prototype.clear = function() {
+          }, L.prototype.clear = function() {
             this.cm.off("change", this.changeHandler), this.annotation.clear();
           };
         })(x(7), x(122), x(165));
       }, function(Ne, pe, x) {
         (function(T) {
-          function N(Y, B) {
+          function L(Y, B) {
             function g(R) {
               clearTimeout(W.doRedraw), W.doRedraw = setTimeout((function() {
                 W.redraw();
@@ -19641,13 +19642,13 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
             });
           }
           T.defineExtension("annotateScrollbar", (function(Y) {
-            return typeof Y == "string" && (Y = { className: Y }), new N(this, Y);
-          })), T.defineOption("scrollButtonHeight", 0), N.prototype.computeScale = function() {
+            return typeof Y == "string" && (Y = { className: Y }), new L(this, Y);
+          })), T.defineOption("scrollButtonHeight", 0), L.prototype.computeScale = function() {
             var Y = this.cm, B = (Y.getWrapperElement().clientHeight - Y.display.barHeight - 2 * this.buttonHeight) / Y.getScrollerElement().scrollHeight;
             if (B != this.hScale) return this.hScale = B, !0;
-          }, N.prototype.update = function(Y) {
+          }, L.prototype.update = function(Y) {
             this.annotations = Y, this.redraw();
-          }, N.prototype.redraw = function(Y) {
+          }, L.prototype.redraw = function(Y) {
             Y !== !1 && this.computeScale();
             var B = this.cm, g = this.hScale, W = document.createDocumentFragment(), R = this.annotations, H = B.getOption("lineWrapping"), fe = H && 1.5 * B.defaultTextHeight(), C = null, Q = null;
             function ge(he, p) {
@@ -19665,13 +19666,13 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
               }
             }
             this.div.textContent = "", this.div.appendChild(W);
-          }, N.prototype.clear = function() {
+          }, L.prototype.clear = function() {
             this.cm.off("refresh", this.resizeHandler), this.cm.off("markerAdded", this.resizeHandler), this.cm.off("markerCleared", this.resizeHandler), this.changeHandler && this.cm.off("changes", this.changeHandler), this.div.parentNode.removeChild(this.div);
           };
         })(x(7));
       }, function(Ne, pe, x) {
         (function(T) {
-          T.runMode = function(N, Y, B, g) {
+          T.runMode = function(L, Y, B, g) {
             var W = T.getMode(T.defaults, Y), R = g && g.tabSize || T.defaults.tabSize;
             if (B.appendChild) {
               var H = /MSIE \d/.test(navigator.userAgent) && (document.documentMode == null || document.documentMode < 9), fe = B, C = 0;
@@ -19696,7 +19697,7 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
                 } else fe.appendChild(document.createTextNode(re));
               };
             }
-            for (var Q = T.splitLines(N), ge = g && g.state || T.startState(W), K = 0, Z = Q.length; K < Z; ++K) {
+            for (var Q = T.splitLines(L), ge = g && g.state || T.startState(W), K = 0, Z = Q.length; K < Z; ++K) {
               K && B(`
 `);
               var te = new T.StringStream(Q[K], null, { lookAhead: function(w) {
@@ -19714,26 +19715,26 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
       }, function(Ne, pe, x) {
       }, function(Ne, pe) {
         Ne.exports = function(x, T) {
-          var N = [];
-          return T.length === 0 ? N.push({ text: x, highlight: !1 }) : T[0][0] > 0 && N.push({ text: x.slice(0, T[0][0]), highlight: !1 }), T.forEach((function(Y, B) {
+          var L = [];
+          return T.length === 0 ? L.push({ text: x, highlight: !1 }) : T[0][0] > 0 && L.push({ text: x.slice(0, T[0][0]), highlight: !1 }), T.forEach((function(Y, B) {
             var g = Y[0], W = Y[1];
-            N.push({ text: x.slice(g, W), highlight: !0 }), B === T.length - 1 ? W < x.length && N.push({ text: x.slice(W, x.length), highlight: !1 }) : W < T[B + 1][0] && N.push({ text: x.slice(W, T[B + 1][0]), highlight: !1 });
-          })), N;
+            L.push({ text: x.slice(g, W), highlight: !0 }), B === T.length - 1 ? W < x.length && L.push({ text: x.slice(W, x.length), highlight: !1 }) : W < T[B + 1][0] && L.push({ text: x.slice(W, T[B + 1][0]), highlight: !1 });
+          })), L;
         };
       }, function(Ne, pe, x) {
-        var T = x(87), N = x(85), Y = Object(N.a)((function(B, g, W) {
+        var T = x(87), L = x(85), Y = Object(L.a)((function(B, g, W) {
           Object(T.a)(B, g, W);
         }));
         pe.a = Y;
       }, function(Ne, pe, x) {
-        var T = x(64), N = Object(T.a)({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }), Y = x(27), B = /[&<>"']/g, g = RegExp(B.source);
+        var T = x(64), L = Object(T.a)({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }), Y = x(27), B = /[&<>"']/g, g = RegExp(B.source);
         pe.a = function(W) {
-          return (W = Object(Y.a)(W)) && g.test(W) ? W.replace(B, N) : W;
+          return (W = Object(Y.a)(W)) && g.test(W) ? W.replace(B, L) : W;
         };
       }, function(Ne, pe, x) {
         var T;
         T = function() {
-          function N(te, b) {
+          function L(te, b) {
             for (var w = 0; w < b.length; w++) {
               var U = b[w];
               U.enumerable = U.enumerable || !1, U.configurable = !0, "value" in U && (U.writable = !0), Object.defineProperty(te, U.key, U);
@@ -19790,7 +19791,7 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
               }, key: de, cache: ae }, this.query = Ge, this.trigger = { event: O, condition: X }, this.searchEngine = qe === "loose" ? "loose" : typeof qe == "function" ? qe : "strict", this.threshold = _t, this.debounce = Ye, this.resultsList = { render: dt, view: pn, navigation: Re }, this.sort = tt, this.placeHolder = We, this.maxResults = It, this.resultItem = { content: Sr, element: dr }, this.noResults = br, this.highlight = on, this.onSelection = wr, this.init();
             }
             return (function(b, w, U) {
-              w && N(b.prototype, w);
+              w && L(b.prototype, w);
             })(te, [{ key: "search", value: function(b, w) {
               var U = w.toLowerCase();
               if (this.searchEngine === "loose") {
@@ -19900,17 +19901,17 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
       }, , function(Ne, pe, x) {
         Ne.exports = x(185);
       }, function(Ne, pe, x) {
-        var T = x(31), N = x(66), Y = x(52);
+        var T = x(31), L = x(66), Y = x(52);
         pe.a = function(B, g) {
           var W = {};
-          return g = Object(Y.a)(g, 3), Object(N.a)(B, (function(R, H, fe) {
+          return g = Object(Y.a)(g, 3), Object(L.a)(B, (function(R, H, fe) {
             Object(T.a)(W, H, g(R, H, fe));
           })), W;
         };
       }, function(Ne, pe, x) {
       }, function(Ne, pe, x) {
         var T;
-        (function(N) {
+        (function(L) {
           var Y = { starts_with_slashes: /^\/+/, ends_with_slashes: /\/+$/, pluses: /\+/g, query_separator: /[&;]/, uri_parser: /^(?:(?![^:@]+:[^:@\/]*@)([^:\/?#.]+):)?(?:\/\/)?((?:(([^:@\/]*)(?::([^:@]*))?)?@)?(\[[0-9a-fA-F:.]+\]|[^:\/?#]*)(?::(\d+|(?=:)))?(:)?)((((?:[^?#](?![^?#\/]*\.[^?#\/.]+(?:[?#]|$)))*\/?)?([^?#\/]*))(?:\?([^#]*))?(?:#(.*))?)/ };
           function B(R) {
             return R && (R = R.toString().replace(Y.pluses, "%20"), R = decodeURIComponent(R)), R;
@@ -20018,7 +20019,7 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
             return le && typeof Symbol == "function" && le.constructor === Symbol && le !== Symbol.prototype ? "symbol" : typeof le;
           })(ie);
         }
-        function N(ie, le, Ie) {
+        function L(ie, le, Ie) {
           return le in ie ? Object.defineProperty(ie, le, { value: Ie, enumerable: !0, configurable: !0, writable: !0 }) : ie[le] = Ie, ie;
         }
         function Y() {
@@ -20036,7 +20037,7 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
             typeof Object.getOwnPropertySymbols == "function" && (et = et.concat(Object.getOwnPropertySymbols(Ie).filter((function(St) {
               return Object.getOwnPropertyDescriptor(Ie, St).enumerable;
             })))), et.forEach((function(St) {
-              N(ie, St, Ie[St]);
+              L(ie, St, Ie[St]);
             }));
           }
           return ie;
@@ -20573,8 +20574,8 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
                 }
                 if (wn === 0 || Wn === Yt) return Fe(!1);
                 gr = Yt, hn = wn;
-                var _ = Yt.nextElementSibling, L = !1, k = Er(Rt, Ht, ze, le, Yt, Ie, ie, L = wn === 1);
-                if (k !== !1) return k !== 1 && k !== -1 || (L = k === 1), _n = !0, setTimeout(Nr, 30), ue(), L && !_ ? Ht.appendChild(ze) : Yt.parentNode.insertBefore(ze, L ? _ : Yt), u && Je(u, 0, v - u.scrollTop), tt = ze.parentNode, pi === void 0 || sn || (an = Math.abs(pi - O(Yt)[r])), Ce(), Fe(!0);
+                var _ = Yt.nextElementSibling, N = !1, k = Er(Rt, Ht, ze, le, Yt, Ie, ie, N = wn === 1);
+                if (k !== !1) return k !== 1 && k !== -1 || (N = k === 1), _n = !0, setTimeout(Nr, 30), ue(), N && !_ ? Ht.appendChild(ze) : Yt.parentNode.insertBefore(ze, N ? _ : Yt), u && Je(u, 0, v - u.scrollTop), tt = ze.parentNode, pi === void 0 || sn || (an = Math.abs(pi - O(Yt)[r])), Ce(), Fe(!0);
               }
               if (Ht.contains(ze)) return Fe(!1);
             }
@@ -20695,9 +20696,9 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
             xr !== Ie && (xr = Ie, Wt(), Rn = le.scroll, St = le.scrollFn, Rn === !0 && (Rn = _t(Ie, !0)));
             var Vr = 0, ln = Rn;
             do {
-              var yn = ln, ai = O(yn), zn = ai.top, wn = ai.bottom, pi = ai.left, Wn = ai.right, yt = ai.width, lt = ai.height, r = void 0, u = void 0, v = yn.scrollWidth, y = yn.scrollHeight, _ = ae(yn), L = yn.scrollLeft, k = yn.scrollTop;
+              var yn = ln, ai = O(yn), zn = ai.top, wn = ai.bottom, pi = ai.left, Wn = ai.right, yt = ai.width, lt = ai.height, r = void 0, u = void 0, v = yn.scrollWidth, y = yn.scrollHeight, _ = ae(yn), N = yn.scrollLeft, k = yn.scrollTop;
               yn === Lr ? (r = yt < v && (_.overflowX === "auto" || _.overflowX === "scroll" || _.overflowX === "visible"), u = lt < y && (_.overflowY === "auto" || _.overflowY === "scroll" || _.overflowY === "visible")) : (r = yt < v && (_.overflowX === "auto" || _.overflowX === "scroll"), u = lt < y && (_.overflowY === "auto" || _.overflowY === "scroll"));
-              var $ = r && (Math.abs(Wn - Ht) <= tr && L + yt < v) - (Math.abs(pi - Ht) <= tr && !!L), ue = u && (Math.abs(wn - Yt) <= tr && k + lt < y) - (Math.abs(zn - Yt) <= tr && !!k);
+              var $ = r && (Math.abs(Wn - Ht) <= tr && N + yt < v) - (Math.abs(pi - Ht) <= tr && !!N), ue = u && (Math.abs(wn - Yt) <= tr && k + lt < y) - (Math.abs(zn - Yt) <= tr && !!k);
               if (!vt[Vr]) for (var Fe = 0; Fe <= Vr; Fe++) vt[Fe] || (vt[Fe] = {});
               vt[Vr].vx == $ && vt[Vr].vy == ue && vt[Vr].el === yn || (vt[Vr].el = yn, vt[Vr].vx = $, vt[Vr].vy = ue, clearInterval(vt[Vr].pid), $ == 0 && ue == 0 || (Ir = !0, vt[Vr].pid = setInterval(function() {
                 et && this.layer === 0 && Zt.active._onTouchMove(oe);
@@ -20990,13 +20991,13 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
         })), x.d(T, "queryCatalogConfigToTabConfig", (function() {
           return pt;
         }));
-        var N = x(4), Y = x.n(N), B = x(5), g = x.n(B), W = x(16), R = x.n(W), H = x(41), fe = x.n(H), C = x(42), Q = x.n(C), ge = x(21), K = x.n(ge), Z = x(54), te = x(170), b = x(52), w = x(10), U = x(13), re = function(yt) {
+        var L = x(4), Y = x.n(L), B = x(5), g = x.n(B), W = x(16), R = x.n(W), H = x(41), fe = x.n(H), C = x(42), Q = x.n(C), ge = x(21), K = x.n(ge), Z = x(54), te = x(170), b = x(52), w = x(10), U = x(13), re = function(yt) {
           return function(lt, r, u) {
             var v = Object(lt);
             if (!Object(w.a)(lt)) {
               var y = Object(b.a)(r, 3);
-              lt = Object(U.a)(lt), r = function(L) {
-                return y(v[L], L, v);
+              lt = Object(U.a)(lt), r = function(N) {
+                return y(v[N], N, v);
               };
             }
             var _ = yt(lt, r, u);
@@ -21104,19 +21105,19 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
             throw new TypeError(`Invalid attempt to iterate non-iterable instance.
 In order to be iterable, non-array objects must have a [Symbol.iterator]() method.`);
           }
-          var y, _ = !0, L = !1;
+          var y, _ = !0, N = !1;
           return { s: function() {
             r = yt[Symbol.iterator]();
           }, n: function() {
             var k = r.next();
             return _ = k.done, k;
           }, e: function(k) {
-            L = !0, y = k;
+            N = !0, y = k;
           }, f: function() {
             try {
               _ || r.return == null || r.return();
             } finally {
-              if (L) throw y;
+              if (N) throw y;
             }
           } };
         }
@@ -21191,18 +21192,18 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
             var lt = this, r = function() {
               var v = [];
               u.querySelectorAll(".textRow").forEach((function(y) {
-                var _ = Ye()(y.children, 2), L = _[0], k = _[1];
-                L instanceof HTMLInputElement && k instanceof HTMLInputElement && L.value.length && v.push({ name: L.value, value: k.value });
+                var _ = Ye()(y.children, 2), N = _[0], k = _[1];
+                N instanceof HTMLInputElement && k instanceof HTMLInputElement && N.value.length && v.push({ name: N.value, value: k.value });
               })), lt.tab.setRequestConfig({ args: v });
             }, u = document.createElement("div");
             Object(ce.b)(u, "requestConfigWrapper", "textSetting"), We("Arguments", u), this.menuElement.appendChild(u), this.setArguments = function(v) {
-              u.querySelectorAll(".textRow").forEach((function(L) {
-                u.removeChild(L);
+              u.querySelectorAll(".textRow").forEach((function(N) {
+                u.removeChild(N);
               }));
-              for (var y = function(L) {
+              for (var y = function(N) {
                 It((function() {
-                  v.splice(L, 1), lt.tab.setRequestConfig({ args: v }), lt.setArguments(v);
-                }), Dr(u, L, v, r));
+                  v.splice(N, 1), lt.tab.setRequestConfig({ args: v }), lt.setArguments(v);
+                }), Dr(u, N, v, r));
               }, _ = 0; _ < v.length; _++) y(_);
               Sr(u, v, r);
             };
@@ -21210,7 +21211,7 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
             var lt = this, r = function() {
               var y = {};
               u.querySelectorAll(".textRow").forEach((function(_) {
-                var L = Ye()(_.children, 2), k = L[0], $ = L[1];
+                var N = Ye()(_.children, 2), k = N[0], $ = N[1];
                 k instanceof HTMLInputElement && $ instanceof HTMLInputElement && k.value.length && (y[k.value] = $.value);
               })), lt.tab.setRequestConfig({ headers: y });
             }, u = document.createElement("div");
@@ -21226,7 +21227,7 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
                     return [$.name, $.value];
                   }))) }), lt.setHeaders(y);
                 }), Dr(u, k, y, r));
-              }, L = 0; L < y.length; L++) _(L);
+              }, N = 0; N < y.length; N++) _(N);
               Sr(u, y, r);
             };
           } }, { key: "drawDefaultGraphInput", value: function() {
@@ -21237,8 +21238,8 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
             var v = function() {
               var y = [];
               r.querySelectorAll(".graphInput").forEach((function(_) {
-                var L = Ye()(_.children, 1)[0];
-                L instanceof HTMLInputElement && L.value.length && y.push(L.value);
+                var N = Ye()(_.children, 1)[0];
+                N instanceof HTMLInputElement && N.value.length && y.push(N.value);
               })), lt.tab.setRequestConfig({ defaultGraphs: y });
             };
             this.setDefaultGraphs = function(y) {
@@ -21249,7 +21250,7 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
                 It((function() {
                   return y[k] = void 0;
                 }), Ut(r, k, y, v));
-              }, L = 0; L < y.length; L++) _(L);
+              }, N = 0; N < y.length; N++) _(N);
               er(r, y, v);
             };
           } }, { key: "drawNamedGraphInput", value: function() {
@@ -21260,8 +21261,8 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
             var v = function() {
               var y = [];
               r.querySelectorAll(".graphInput").forEach((function(_) {
-                var L = Ye()(_.children, 1)[0];
-                L instanceof HTMLInputElement && L.value.length && y.push(L.value);
+                var N = Ye()(_.children, 1)[0];
+                N instanceof HTMLInputElement && N.value.length && y.push(N.value);
               })), lt.tab.setRequestConfig({ namedGraphs: y });
             };
             this.setNamedGraphs = function(y) {
@@ -21272,7 +21273,7 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
                 It((function() {
                   return y[k] = void 0;
                 }), Ut(r, k, y, v));
-              }, L = 0; L < y.length; L++) _(L);
+              }, N = 0; N < y.length; N++) _(N);
               er(r, y, v);
             };
           } }, { key: "drawBody", value: function() {
@@ -21289,7 +21290,7 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
           Object(ce.b)(y, "selectorLabel");
           var _ = document.createElement("select");
           _.onchange = lt, v.appendChild(_);
-          var L = yt.map((function(k) {
+          var N = yt.map((function(k) {
             return (function($, ue) {
               var Fe = document.createElement("option");
               return Fe.textContent = $.key, Fe.value = $.value, ue.appendChild(Fe), Fe;
@@ -21297,7 +21298,7 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
           }));
           return u.appendChild(v), function(k) {
             if (typeof k == "string") {
-              var $, ue = G(L);
+              var $, ue = G(N);
               try {
                 for (ue.s(); !($ = ue.n()).done; ) {
                   var Fe = $.value;
@@ -21370,14 +21371,14 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
         function Dr(yt, lt, r, u) {
           var v = document.createElement("div");
           Object(ce.b)(v, "textRow");
-          var y = r[lt], _ = Rt(y ? y.name : "", v), L = Rt(y ? y.value : "", v);
+          var y = r[lt], _ = Rt(y ? y.name : "", v), N = Rt(y ? y.value : "", v);
           return _.onkeyup = function(k) {
             var $ = r[lt];
             $ ? $.name = k.target.value : r.push({ name: k.target.value, value: "" }), Sr(yt, r, u);
-          }, _.onblur = u, L.onkeyup = function(k) {
+          }, _.onblur = u, N.onkeyup = function(k) {
             var $ = r[lt];
             $ ? $.value = k.target.value : r.push({ value: k.target.value, name: "" }), Sr(yt, r, u);
-          }, L.onblur = u, yt.appendChild(v), v;
+          }, N.onblur = u, yt.appendChild(v), v;
         }
         var dr = x(12), br = x(87), $r = x(85), on = Object($r.a)((function(yt, lt, r, u) {
           Object(br.a)(yt, lt, r, u);
@@ -21425,19 +21426,19 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
             throw new TypeError(`Invalid attempt to iterate non-iterable instance.
 In order to be iterable, non-array objects must have a [Symbol.iterator]() method.`);
           }
-          var y, _ = !0, L = !1;
+          var y, _ = !0, N = !1;
           return { s: function() {
             r = yt[Symbol.iterator]();
           }, n: function() {
             var k = r.next();
             return _ = k.done, k;
           }, e: function(k) {
-            L = !0, y = k;
+            N = !0, y = k;
           }, f: function() {
             try {
               _ || r.return == null || r.return();
             } finally {
-              if (L) throw y;
+              if (N) throw y;
             }
           } };
         }
@@ -21460,8 +21461,8 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
               var y, _ = Xr(v);
               try {
                 for (_.s(); !(y = _.n()).done; ) {
-                  var L = y.value;
-                  r.addQueryParam(u, L);
+                  var N = y.value;
+                  r.addQueryParam(u, N);
                 }
               } catch (k) {
                 _.e(k);
@@ -21492,7 +21493,7 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
         function vt(yt, lt) {
           var r, u = yt, v = Jt(lt), y = !1;
           if (v.queryPairs.forEach((function(_) {
-            var L = Ye()(_, 2), k = L[0], $ = L[1];
+            var N = Ye()(_, 2), k = N[0], $ = N[1];
             k === "query" ? (y = !0, u.yasqe.value = $) : k === "outputFormat" && $.length ? Te.default.plugins[$] ? u.yasr.settings.selectedPlugin = $ : console.warn('Output format plugin "'.concat($, '" not found')) : k == "outputSettings" ? r = JSON.parse($) : k == "contentTypeConstruct" ? u.requestConfig.acceptHeaderGraph = $ : k == "contentTypeSelect" ? u.requestConfig.acceptHeaderSelect = $ : k == "endpoint" ? u.requestConfig.endpoint = $ : k == "requestMethod" ? u.requestConfig.method = $ : k == "tabTitle" ? u.name = $ : k == "namedGraph" ? (Array.isArray(u.requestConfig.namedGraphs) || (u.requestConfig.namedGraphs = []), u.requestConfig.namedGraphs.push($)) : k == "defaultGraph" ? (Array.isArray(u.requestConfig.defaultGraphs) || (u.requestConfig.defaultGraphs = []), u.requestConfig.defaultGraphs.push($)) : k == "headers" ? (u.requestConfig.headers || (u.requestConfig.headers = {}), u.requestConfig.headers = JSON.parse($)) : (u.requestConfig.args || (u.requestConfig.args = []), u.requestConfig.args.push({ name: k, value: $ }));
           })), r && u.yasr.settings.selectedPlugin && u.yasr.settings.pluginsConfig && (u.yasr.settings.pluginsConfig[u.yasr.settings.selectedPlugin] = r), y) return u;
         }
@@ -21502,19 +21503,19 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
         }
         var Wt = x(172), lr = x.n(Wt), ft = x(55), Pt = x(67), qt = x(53), Jr = x(37), Gr = x(2), ei = x(24), mi = function(yt, lt, r, u) {
           if (!Object(Gr.a)(yt)) return yt;
-          for (var v = -1, y = (lt = Object(qt.a)(lt, yt)).length, _ = y - 1, L = yt; L != null && ++v < y; ) {
+          for (var v = -1, y = (lt = Object(qt.a)(lt, yt)).length, _ = y - 1, N = yt; N != null && ++v < y; ) {
             var k = Object(ei.a)(lt[v]), $ = r;
             if (v != _) {
-              var ue = L[k];
+              var ue = N[k];
               ($ = void 0) == void 0 && ($ = Object(Gr.a)(ue) ? ue : Object(Jr.a)(lt[v + 1]) ? [] : {});
             }
-            Object(Pt.a)(L, k, $), L = L[k];
+            Object(Pt.a)(N, k, $), N = N[k];
           }
           return yt;
         }, sr = function(yt, lt, r) {
           for (var u = -1, v = lt.length, y = {}; ++u < v; ) {
-            var _ = lt[u], L = Object(ft.a)(yt, _);
-            r(L, _) && mi(y, Object(qt.a)(_, yt), L);
+            var _ = lt[u], N = Object(ft.a)(yt, _);
+            r(N, _) && mi(y, Object(qt.a)(_, yt), N);
           }
           return y;
         }, qr = x(88), Yn = function(yt, lt) {
@@ -21557,7 +21558,7 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
                 y(ue);
               }
             }
-            function L($) {
+            function N($) {
               try {
                 k(u.throw($));
               } catch (ue) {
@@ -21568,7 +21569,7 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
               var ue;
               $.done ? v($.value) : (ue = $.value, ue instanceof r ? ue : new r((function(Fe) {
                 Fe(ue);
-              }))).then(_, L);
+              }))).then(_, N);
             }
             k((u = u.apply(yt, [])).next());
           }));
@@ -21590,34 +21591,34 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
           fe()(r, yt);
           var lt = Ze(r);
           function r(u, v, y, _) {
-            var L;
-            return Y()(this, r), (L = lt.call(this)).clearListSuggestionList = function() {
-              var k = L.container.querySelector(".autocompleteList");
+            var N;
+            return Y()(this, r), (N = lt.call(this)).clearListSuggestionList = function() {
+              var k = N.container.querySelector(".autocompleteList");
               k && (k.innerHTML = "");
-            }, L.container = v, L.options = y, L.value = u, L.history = _.map((function(k) {
+            }, N.container = v, N.options = y, N.value = u, N.history = _.map((function(k) {
               return { endpoint: k, type: "history" };
-            })), L.options.keys.indexOf("endpoint") <= 0 && L.options.keys.push("endpoint"), L.draw(), L;
+            })), N.options.keys.indexOf("endpoint") <= 0 && N.options.keys.push("endpoint"), N.draw(), N;
           }
           return g()(r, [{ key: "draw", value: function() {
             var u = this, v = document.createElement("div");
             Object(ce.b)(v, "autocompleteWrapper"), this.container.appendChild(v), this.inputField = document.createElement("input"), Object(ce.b)(this.inputField, "autocomplete"), this.inputField.value = this.value, v.appendChild(this.inputField), new lr.a({ placeholder: "Search or add an endpoint", highlight: !1, maxResults: 100, trigger: { event: ["input", "focusin"], condition: function() {
               return !0;
             } }, searchEngine: function(y, _) {
-              return !y || y.trim().length === 0 || ie(y).every((function(L) {
-                return _.indexOf(L) >= 0;
+              return !y || y.trim().length === 0 || ie(y).every((function(N) {
+                return _.indexOf(N) >= 0;
               }));
             }, data: { src: function() {
               return Et(u, void 0, void 0, qe.a.mark((function y() {
                 var _ = this;
-                return qe.a.wrap((function(L) {
-                  for (; ; ) switch (L.prev = L.next) {
+                return qe.a.wrap((function(N) {
+                  for (; ; ) switch (N.prev = N.next) {
                     case 0:
-                      return L.abrupt("return", [].concat(_t()(this.history), _t()(this.options.getData())).map((function(k) {
+                      return N.abrupt("return", [].concat(_t()(this.history), _t()(this.options.getData())).map((function(k) {
                         return Object.assign(Object.assign({}, k), { all: Object.values(D(k, ["endpoint"].concat(_t()(_.options.keys)))).join(" ") });
                       })));
                     case 1:
                     case "end":
-                      return L.stop();
+                      return N.stop();
                   }
                 }), y, this);
               })));
@@ -21627,10 +21628,10 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
               y.id = "", Object(ce.b)(y, "autocompleteList");
             } }, resultItem: { content: function(y, _) {
               if (y.value.type && y.value.type === "history") {
-                var L = document.createElement("div");
-                L.innerHTML = Be()(y.value.endpoint, le(y.value.endpoint, u.inputField.value)).reduce((function(c, m) {
+                var N = document.createElement("div");
+                N.innerHTML = Be()(y.value.endpoint, le(y.value.endpoint, u.inputField.value)).reduce((function(c, m) {
                   return m.highlight ? c + m.text.bold() : c + m.text;
-                }), ""), _.append(L);
+                }), ""), _.append(N);
                 var k = document.createElement("button");
                 k.textContent = "✖", Object(ce.b)(k, "removeItem"), k.addEventListener("mousedown", (function(c) {
                   u.history = u.history.filter((function(m) {
@@ -21648,8 +21649,8 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
               }
             }, element: "li" }, onSelection: function(y) {
               var _ = y.selection.value;
-              u.value = _.endpoint, u.inputField.value = u.value, u.emit("select", u.value, u.history.map((function(L) {
-                return L.endpoint;
+              u.value = _.endpoint, u.inputField.value = u.value, u.emit("select", u.value, u.history.map((function(N) {
+                return N.endpoint;
               })));
             }, noResults: function() {
               var y = u.container.querySelector(".autocompleteList");
@@ -21674,13 +21675,13 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
               }
               if (y.keyCode === 27 && (u.inputField.blur(), u.inputField.value = u.value, u.clearListSuggestionList()), y.keyCode === 38 || y.keyCode === 40) {
                 y.stopPropagation();
-                var L = u.container.querySelector(".autocompleteList .autoComplete_result.autoComplete_selected");
-                L && !(function(k) {
+                var N = u.container.querySelector(".autocompleteList .autoComplete_result.autoComplete_selected");
+                N && !(function(k) {
                   var $ = k.getBoundingClientRect(), ue = $.top, Fe = $.bottom;
                   if (Fe < 0 || ue > document.documentElement.clientHeight) return !1;
                   var Ce = k.parentNode.getBoundingClientRect();
                   return Fe <= Ce.bottom && !(ue <= Ce.top);
-                })(L) && L.scrollIntoView(!1);
+                })(N) && N.scrollIntoView(!1);
               }
             })), this.inputField.addEventListener("blur", (function(y) {
               y.target.className === u.inputField.className && y.relatedTarget && (u.clearListSuggestionList(), u.inputField.value = u.value);
@@ -21728,7 +21729,7 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
                 y(ue);
               }
             }
-            function L($) {
+            function N($) {
               try {
                 k(u.throw($));
               } catch (ue) {
@@ -21739,7 +21740,7 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
               var ue;
               $.done ? v($.value) : (ue = $.value, ue instanceof r ? ue : new r((function(Fe) {
                 Fe(ue);
-              }))).then(_, L);
+              }))).then(_, N);
             }
             k((u = u.apply(yt, [])).next());
           }));
@@ -21756,15 +21757,15 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
               _.getValue() !== y.persistentJson.yasqe.value && (y.persistentJson.yasqe.value = _.getValue(), y.emit("change", R()(y), y.persistentJson)), y.emit("query", R()(y));
             }, y.handleYasqeQueryAbort = function() {
               y.emit("queryAbort", R()(y));
-            }, y.handleYasqeResize = function(_, L) {
-              y.persistentJson.yasqe.editorHeight = L, y.emit("change", R()(y), y.persistentJson);
-            }, y.handleAutocompletionShown = function(_, L) {
-              y.emit("autocompletionShown", R()(y), L);
+            }, y.handleYasqeResize = function(_, N) {
+              y.persistentJson.yasqe.editorHeight = N, y.emit("change", R()(y), y.persistentJson);
+            }, y.handleAutocompletionShown = function(_, N) {
+              y.emit("autocompletionShown", R()(y), N);
             }, y.handleAutocompletionClose = function(_) {
               y.emit("autocompletionClose", R()(y));
-            }, y.handleQueryResponse = function(_, L, k) {
+            }, y.handleQueryResponse = function(_, N, k) {
               if (y.emit("queryResponse", R()(y)), !y.yasr) throw new Error("Resultset visualizer not initialized. Cannot draw results");
-              y.yasr.setResponse(L, k), y.yasr.results && (y.yasr.results.hasError() ? y.persistentJson.yasr.response = void 0 : y.persistentJson.yasr.response = y.yasr.results.getAsStoreObject(y.yasgui.config.yasr.maxPersistentResponseSize), y.emit("change", R()(y), y.persistentJson));
+              y.yasr.setResponse(N, k), y.yasr.results && (y.yasr.results.hasError() ? y.persistentJson.yasr.response = void 0 : y.persistentJson.yasr.response = y.yasr.results.getAsStoreObject(y.yasgui.config.yasr.maxPersistentResponseSize), y.emit("change", R()(y), y.persistentJson));
             }, !v || v.id === void 0) throw new Error("Expected a valid configuration to initialize tab with");
             return y.yasgui = u, y.persistentJson = v, y;
           }
@@ -21858,22 +21859,22 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
             var u = this, v = Object.assign(Object.assign({}, this.yasgui.config.yasqe), { value: this.persistentJson.yasqe.value, editorHeight: this.persistentJson.yasqe.editorHeight ? this.persistentJson.yasqe.editorHeight : void 0, persistenceId: null, consumeShareLink: null, createShareableLink: function() {
               return u.getShareableLink();
             }, requestConfig: function() {
-              var y = Object.assign(Object.assign({ acceptHeaderGraph: "text/turtle", acceptHeaderSelect: "application/sparql-results+json" }, on({}, u.persistentJson.requestConfig, u.getStaticRequestConfig(), (function(_, L) {
-                if (Array.isArray(_) || Array.isArray(L)) return [].concat(_t()(_ || []), _t()(L || []));
+              var y = Object.assign(Object.assign({ acceptHeaderGraph: "text/turtle", acceptHeaderSelect: "application/sparql-results+json" }, on({}, u.persistentJson.requestConfig, u.getStaticRequestConfig(), (function(_, N) {
+                if (Array.isArray(_) || Array.isArray(N)) return [].concat(_t()(_ || []), _t()(N || []));
               }))), { adjustQueryBeforeRequest: u.yasgui.config.requestConfig.adjustQueryBeforeRequest });
               return u.yasgui.config.corsProxy && !Wn.corsEnabled[u.getEndpoint()] ? Object.assign(Object.assign({}, y), { args: [].concat(_t()(Array.isArray(y.args) ? y.args : []), [{ name: "endpoint", value: u.getEndpoint() }, { name: "method", value: u.persistentJson.requestConfig.method }]), method: "POST", endpoint: u.yasgui.config.corsProxy }) : y;
             } });
             if (v.hintConfig || (v.hintConfig = {}), v.hintConfig.container || (v.hintConfig.container = this.yasgui.rootEl), !this.yasqeWrapperEl) throw new Error("Expected a wrapper element before instantiating yasqe");
             this.yasqe = new O.default(this.yasqeWrapperEl, v), this.yasqe.on("blur", this.handleYasqeBlur), this.yasqe.on("query", this.handleYasqeQuery), this.yasqe.on("queryAbort", this.handleYasqeQueryAbort), this.yasqe.on("resize", this.handleYasqeResize), this.yasqe.on("autocompletionShown", this.handleAutocompletionShown), this.yasqe.on("autocompletionClose", this.handleAutocompletionClose), this.yasqe.on("queryResponse", this.handleQueryResponse);
           } }, { key: "destroyYasqe", value: function() {
-            var u, v, y, _, L, k, $, ue;
-            (u = this.yasqe) === null || u === void 0 || u.off("blur", this.handleYasqeBlur), (v = this.yasqe) === null || v === void 0 || v.off("query", this.handleYasqeQuery), (y = this.yasqe) === null || y === void 0 || y.off("queryAbort", this.handleYasqeQueryAbort), (_ = this.yasqe) === null || _ === void 0 || _.off("resize", this.handleYasqeResize), (L = this.yasqe) === null || L === void 0 || L.off("autocompletionShown", this.handleAutocompletionShown), (k = this.yasqe) === null || k === void 0 || k.off("autocompletionClose", this.handleAutocompletionClose), ($ = this.yasqe) === null || $ === void 0 || $.off("queryResponse", this.handleQueryResponse), (ue = this.yasqe) === null || ue === void 0 || ue.destroy(), this.yasqe = void 0;
+            var u, v, y, _, N, k, $, ue;
+            (u = this.yasqe) === null || u === void 0 || u.off("blur", this.handleYasqeBlur), (v = this.yasqe) === null || v === void 0 || v.off("query", this.handleYasqeQuery), (y = this.yasqe) === null || y === void 0 || y.off("queryAbort", this.handleYasqeQueryAbort), (_ = this.yasqe) === null || _ === void 0 || _.off("resize", this.handleYasqeResize), (N = this.yasqe) === null || N === void 0 || N.off("autocompletionShown", this.handleAutocompletionShown), (k = this.yasqe) === null || k === void 0 || k.off("autocompletionClose", this.handleAutocompletionClose), ($ = this.yasqe) === null || $ === void 0 || $.off("queryResponse", this.handleQueryResponse), (ue = this.yasqe) === null || ue === void 0 || ue.destroy(), this.yasqe = void 0;
           } }, { key: "initYasr", value: function() {
             var u = this;
             if (!this.yasrWrapperEl) throw new Error("Wrapper for yasr does not exist");
             var v = { persistenceId: null, prefixes: function(y) {
-              var _, L = typeof u.yasgui.config.yasr.prefixes == "function" ? u.yasgui.config.yasr.prefixes(y) : u.yasgui.config.yasr.prefixes, k = (_ = u.yasqe) === null || _ === void 0 ? void 0 : _.getPrefixesFromQuery();
-              return fn(fn(Object.assign(Object.assign({}, L), k)));
+              var _, N = typeof u.yasgui.config.yasr.prefixes == "function" ? u.yasgui.config.yasr.prefixes(y) : u.yasgui.config.yasr.prefixes, k = (_ = u.yasqe) === null || _ === void 0 ? void 0 : _.getPrefixesFromQuery();
+              return fn(fn(Object.assign(Object.assign({}, N), k)));
             }, defaultPlugin: this.persistentJson.yasr.settings.selectedPlugin, getPlainQueryLinkToEndpoint: function() {
               if (u.yasqe) return Sn(u.getEndpoint(), O.default.Sparql.getUrlArguments(u.yasqe, u.persistentJson.requestConfig));
             }, plugins: Object(Ar.a)(this.persistentJson.yasr.settings.pluginsConfig, (function(y) {
@@ -21896,21 +21897,21 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
           return function(r) {
             return Ht(lt, void 0, void 0, qe.a.mark((function u() {
               var v, y, _;
-              return qe.a.wrap((function(L) {
-                for (; ; ) switch (L.prev = L.next) {
+              return qe.a.wrap((function(N) {
+                for (; ; ) switch (N.prev = N.next) {
                   case 0:
                     if (r.status) {
-                      L.next = 9;
+                      N.next = 9;
                       break;
                     }
                     if (!(new URL(yt.getEndpoint()).protocol === "http:" && window.location.protocol === "https:")) {
-                      L.next = 9;
+                      N.next = 9;
                       break;
                     }
-                    return v = document.createElement("div"), (y = document.createElement("p")).innerHTML = 'You are trying to query an HTTP endpoint (<a href="'.concat(yt.getEndpoint(), '" target="_blank" rel="noopener noreferrer">').concat(yt.getEndpoint(), '</a>) from an HTTP<strong>S</strong> website (<a href="').concat(window.location.href, '">').concat(window.location.href, '</a>).<br>This is not allowed in modern browsers, see <a target="_blank" rel="noopener noreferrer" href="https://developer.mozilla.org/en-US/docs/Web/Security/Same-origin_policy">https://developer.mozilla.org/en-US/docs/Web/Security/Same-origin_policy</a>.'), yt.yasgui.config.nonSslDomain && ((_ = document.createElement("p")).innerHTML = 'As a workaround, you can use the HTTP version of Yasgui instead: <a href="'.concat(yt.getShareableLink(yt.yasgui.config.nonSslDomain), '" target="_blank">').concat(yt.yasgui.config.nonSslDomain, "</a>"), y.appendChild(_)), v.appendChild(y), L.abrupt("return", v);
+                    return v = document.createElement("div"), (y = document.createElement("p")).innerHTML = 'You are trying to query an HTTP endpoint (<a href="'.concat(yt.getEndpoint(), '" target="_blank" rel="noopener noreferrer">').concat(yt.getEndpoint(), '</a>) from an HTTP<strong>S</strong> website (<a href="').concat(window.location.href, '">').concat(window.location.href, '</a>).<br>This is not allowed in modern browsers, see <a target="_blank" rel="noopener noreferrer" href="https://developer.mozilla.org/en-US/docs/Web/Security/Same-origin_policy">https://developer.mozilla.org/en-US/docs/Web/Security/Same-origin_policy</a>.'), yt.yasgui.config.nonSslDomain && ((_ = document.createElement("p")).innerHTML = 'As a workaround, you can use the HTTP version of Yasgui instead: <a href="'.concat(yt.getShareableLink(yt.yasgui.config.nonSslDomain), '" target="_blank">').concat(yt.yasgui.config.nonSslDomain, "</a>"), y.appendChild(_)), v.appendChild(y), N.abrupt("return", v);
                   case 9:
                   case "end":
-                    return L.stop();
+                    return N.stop();
                 }
               }), u);
             })));
@@ -21954,14 +21955,14 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
                 return r.startRename();
               }, this.copyTabEl.onclick = function() {
                 if (y) {
-                  var L = Object(cr.a)(y.getPersistedJson());
-                  L.id = pi(), v.yasgui.addTab(!0, L);
+                  var N = Object(cr.a)(y.getPersistedJson());
+                  N.id = pi(), v.yasgui.addTab(!0, N);
                 }
               }, this.closeTabEl.onclick = function() {
                 return y?.close();
               }, Object.keys(this.yasgui._tabs).length === 1 ? Object(ce.b)(this.closeOtherTabsEl, "disabled") : this.closeOtherTabsEl.onclick = function() {
-                for (var L = 0, k = Object.keys(v.yasgui._tabs); L < k.length; L++) {
-                  var $ = k[L];
+                for (var N = 0, k = Object.keys(v.yasgui._tabs); N < k.length; N++) {
+                  var $ = k[N];
                   $ !== lt && v.yasgui.getTab($).close();
                 }
               }, this.yasgui.persistentConfig && this.yasgui.persistentConfig.hasLastClosedTab() ? this.reOpenOldTab.onclick = function() {
@@ -22029,8 +22030,8 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
               var $;
               ($ = r.tabList.tabContextMenu) === null || $ === void 0 || $.closeConfigMenu(), r.openTabConfigMenu(k), k.preventDefault(), k.stopPropagation();
             }, this.tabEl.appendChild(v);
-            var L = document.createElement("div");
-            return Object(ce.b)(L, "loader"), this.tabEl.appendChild(L), this.tabEl;
+            var N = document.createElement("div");
+            return Object(ce.b)(N, "loader"), this.tabEl.appendChild(N), this.tabEl;
           } }, { key: "openTabConfigMenu", value: function(lt) {
             var r;
             (r = this.tabList.tabContextMenu) === null || r === void 0 || r.openConfigMenu(this.tabId, this, lt);
@@ -22134,19 +22135,19 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
             throw new TypeError(`Invalid attempt to iterate non-iterable instance.
 In order to be iterable, non-array objects must have a [Symbol.iterator]() method.`);
           }
-          var y, _ = !0, L = !1;
+          var y, _ = !0, N = !1;
           return { s: function() {
             r = yt[Symbol.iterator]();
           }, n: function() {
             var k = r.next();
             return _ = k.done, k;
           }, e: function(k) {
-            L = !0, y = k;
+            N = !0, y = k;
           }, f: function() {
             try {
               _ || r.return == null || r.return();
             } finally {
-              if (L) throw y;
+              if (N) throw y;
             }
           } };
         }
@@ -22180,13 +22181,13 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
           fe()(r, yt);
           var lt = zn(r);
           function r(u, v) {
-            var y, _, L;
-            if (Y()(this, r), (y = lt.call(this))._tabs = {}, y.rootEl = document.createElement("div"), Object(ce.b)(y.rootEl, "yasgui"), u.appendChild(y.rootEl), y.config = Object(te.a)({}, r.defaults, v), y.persistentConfig = new X(R()(y)), y.tabElements = new ln(R()(y)), y.tabPanelsEl = document.createElement("div"), y.rootEl.appendChild(y.tabElements.drawTabsList()), y.rootEl.appendChild(y.tabPanelsEl), y.config.populateFromUrl && (L = vt(Yt.getDefaults(R()(y))))) {
-              var k = y.findTabIdForConfig(L);
+            var y, _, N;
+            if (Y()(this, r), (y = lt.call(this))._tabs = {}, y.rootEl = document.createElement("div"), Object(ce.b)(y.rootEl, "yasgui"), u.appendChild(y.rootEl), y.config = Object(te.a)({}, r.defaults, v), y.persistentConfig = new X(R()(y)), y.tabElements = new ln(R()(y)), y.tabPanelsEl = document.createElement("div"), y.rootEl.appendChild(y.tabElements.drawTabsList()), y.rootEl.appendChild(y.tabPanelsEl), y.config.populateFromUrl && (N = vt(Yt.getDefaults(R()(y))))) {
+              var k = y.findTabIdForConfig(N);
               if (k) {
                 var $ = y.persistentConfig.getTab(k).yasr;
-                y.persistentConfig.getTab(k).yasr = { settings: L.yasr.settings, response: $.response }, y.persistentConfig.setActive(k), $.response || (_ = k);
-              } else y.persistentConfig.setTab(L.id, typeof y.config.populateFromUrl == "function" ? y.config.populateFromUrl(L) : L), _ = L.id;
+                y.persistentConfig.getTab(k).yasr = { settings: N.yasr.settings, response: $.response }, y.persistentConfig.setActive(k), $.response || (_ = k);
+              } else y.persistentConfig.setTab(N.id, typeof y.config.populateFromUrl == "function" ? y.config.populateFromUrl(N) : N), _ = N.id;
             }
             var ue = y.persistentConfig.getTabs();
             if (!ue.length && y.config.autoAddOnInit) {
@@ -22236,11 +22237,11 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
             var v = this.getTab();
             return v && v.getId() !== u && this.markTabSelected(u) && (this.emit("tabSelect", this, u), this.persistentConfig.setActive(u)), v;
           } }, { key: "tabConfigEquals", value: function(u, v) {
-            var y, _, L, k, $, ue = !0;
+            var y, _, N, k, $, ue = !0;
             for ($ in u.requestConfig) u.requestConfig[$] && (me(v.requestConfig[$], u.requestConfig[$]) || (ue = !1));
             return ue && (ue = ["endpoint", "value"].every((function(Fe) {
               return u.yasqe[Fe] === v.yasqe[Fe];
-            }))), ue && (ue = u.yasr.settings.selectedPlugin === v.yasr.settings.selectedPlugin && me((y = u.yasr.settings.pluginsConfig) === null || y === void 0 ? void 0 : y[((_ = u.yasr.settings) === null || _ === void 0 ? void 0 : _.selectedPlugin) || ""], (L = v.yasr.settings.pluginsConfig) === null || L === void 0 ? void 0 : L[((k = v.yasr.settings) === null || k === void 0 ? void 0 : k.selectedPlugin) || ""])), ue && u.name === v.name;
+            }))), ue && (ue = u.yasr.settings.selectedPlugin === v.yasr.settings.selectedPlugin && me((y = u.yasr.settings.pluginsConfig) === null || y === void 0 ? void 0 : y[((_ = u.yasr.settings) === null || _ === void 0 ? void 0 : _.selectedPlugin) || ""], (N = v.yasr.settings.pluginsConfig) === null || N === void 0 ? void 0 : N[((k = v.yasr.settings) === null || k === void 0 ? void 0 : k.selectedPlugin) || ""])), ue && u.name === v.name;
           } }, { key: "findTabIdForConfig", value: function(u) {
             var v = this;
             return this.persistentConfig.getTabs().find((function(y) {
@@ -22268,18 +22269,18 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
           } }, { key: "_removePanel", value: function(u) {
             u && this.tabPanelsEl.removeChild(u);
           } }, { key: "addTab", value: function(u, v) {
-            var y, _ = arguments.length > 2 && arguments[2] !== void 0 ? arguments[2] : {}, L = Object(te.a)({}, Yt.getDefaults(this), v);
-            if (L.id && this.getTab(L.id)) throw new Error("Duplicate tab ID");
+            var y, _ = arguments.length > 2 && arguments[2] !== void 0 ? arguments[2] : {}, N = Object(te.a)({}, Yt.getDefaults(this), v);
+            if (N.id && this.getTab(N.id)) throw new Error("Duplicate tab ID");
             if (this.config.copyEndpointOnNewTab && !(!((y = v?.requestConfig) === null || y === void 0) && y.endpoint)) {
               var k = this.getTab();
-              k && (L.requestConfig.endpoint = k.getEndpoint());
+              k && (N.requestConfig.endpoint = k.getEndpoint());
             }
             if (_.avoidDuplicateTabs) {
-              var $ = this.findTabIdForConfig(L);
+              var $ = this.findTabIdForConfig(N);
               if ($) return this.selectTabId($);
             }
-            var ue = L.id, Fe = _.atIndex;
-            return this.persistentConfig.addToTabList(ue, Fe), this.emit("tabAdd", this, ue), this._tabs[ue] = new Yt(this, L), this.emit("tabChange", this, this._tabs[ue]), this.tabElements.addTab(ue, Fe), this._registerTabListeners(this._tabs[ue]), u && (this.persistentConfig.setActive(ue), this._tabs[ue].show()), this._tabs[ue];
+            var ue = N.id, Fe = _.atIndex;
+            return this.persistentConfig.addToTabList(ue, Fe), this.emit("tabAdd", this, ue), this._tabs[ue] = new Yt(this, N), this.emit("tabChange", this, this._tabs[ue]), this.tabElements.addTab(ue, Fe), this._registerTabListeners(this._tabs[ue]), u && (this.persistentConfig.setActive(ue), this._tabs[ue].show()), this._tabs[ue];
           } }, { key: "restoreLastTab", value: function() {
             var u = this.persistentConfig.retrieveLastClosedTab();
             u && this.addTab(!0, u.tab, { atIndex: u.index });
@@ -22311,7 +22312,7 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
         } }, copyEndpointOnNewTab: !0, populateFromUrl: !0, autoAddOnInit: !0, requestConfig: O.default.defaults.requestConfig, contextMenuContainer: void 0 }, wn.corsEnabled = {};
         var Wn = pe.default = wn;
       }, function(Ne, pe, x) {
-        var T = x(18), N = function(dt, Ct) {
+        var T = x(18), L = function(dt, Ct) {
           for (var Qe = -1, Dt = dt == null ? 0 : dt.length; ++Qe < Dt && Ct(dt[Qe], Qe, dt) !== !1; ) ;
           return dt;
         }, Y = x(67);
@@ -22397,7 +22398,7 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
             Le.set(Ut, dt(er, Qe, Dt, Ut, Ct, ne));
           }));
           var Rt = fe.a, It = Re ? void 0 : Rt(Ct);
-          return N(It || Ct, (function(er, Ut) {
+          return L(It || Ct, (function(er, Ut) {
             It && (er = Ct[Ut = er]), Object(Y.a)(Le, Ut, dt(er, Qe, Dt, Ut, Ct, ne));
           })), Le;
         };
@@ -22409,7 +22410,10 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
   })(yasgui_min, yasgui_min.exports)), yasgui_min.exports;
 }
 var yasgui_minExports = requireYasgui_min();
-const Yasgui = /* @__PURE__ */ getDefaultExportFromCjs(yasgui_minExports), _sfc_main$1 = /* @__PURE__ */ defineComponent({
+const Yasgui = /* @__PURE__ */ getDefaultExportFromCjs(yasgui_minExports), _hoisted_1 = {
+  class: "query__label",
+  for: "yasgui"
+}, _sfc_main$1 = /* @__PURE__ */ defineComponent({
   __name: "Settings",
   props: {
     config: {},
@@ -22417,10 +22421,10 @@ const Yasgui = /* @__PURE__ */ getDefaultExportFromCjs(yasgui_minExports), _sfc_
     connections: {}
   },
   setup(Ne) {
-    const pe = computed(() => Ne.connections.filter((Y) => Y.type === "rest")), x = ref(null);
-    let T, N;
+    const { t: pe } = useTranslation("datasourceSparql"), x = computed(() => Ne.connections.filter((B) => B.type === "rest")), T = ref(null);
+    let L, Y;
     return onMounted(() => {
-      T = new Yasgui(x.value, {
+      L = new Yasgui(T.value, {
         requestConfig: { endpoint: "http://example.com/sparql" },
         copyEndpointOnNewTab: !1,
         persistencyExpire: -1,
@@ -22437,30 +22441,27 @@ const Yasgui = /* @__PURE__ */ getDefaultExportFromCjs(yasgui_minExports), _sfc_
           // Leere Plugin-Liste: keine Ergebnisse anzeigen
           plugins: {}
         }
-      }), N = T.addTab(
+      }), Y = L.addTab(
         !0,
         // set as active tab
         {
           name: "my new tab"
         }
-      ), Ne.config.query && N.setQuery(Ne.config.query), Ne.config.query = N.getQuery(), N.on("change", (Y, B) => {
-        Ne.config.query = B.yasqe.value;
+      ), Ne.config.query && Y.setQuery(Ne.config.query), Ne.config.query = Y.getQuery(), Y.on("change", (B, g) => {
+        Ne.config.query = g.yasqe.value;
       });
-    }), (Y, B) => (openBlock(), createElementBlock("div", null, [
+    }), (B, g) => (openBlock(), createElementBlock("div", null, [
       createVNode(unref(DSelect), {
         modelValue: Ne.config.connection,
-        "onUpdate:modelValue": B[0] || (B[0] = (g) => Ne.config.connection = g),
-        label: "Verbindung",
-        options: pe.value
-      }, null, 8, ["modelValue", "options"]),
-      B[1] || (B[1] = createElementVNode("label", {
-        class: "query__label",
-        for: "yasgui"
-      }, "Abfrage", -1)),
+        "onUpdate:modelValue": g[0] || (g[0] = (W) => Ne.config.connection = W),
+        label: unref(pe)("Settings.connection"),
+        options: x.value
+      }, null, 8, ["modelValue", "label", "options"]),
+      createElementVNode("label", _hoisted_1, toDisplayString(unref(pe)("Sparql.query")), 1),
       createElementVNode("div", {
         id: "yasgui",
         ref_key: "yasgui",
-        ref: x
+        ref: T
       }, null, 512)
     ]));
   }
@@ -22477,29 +22478,29 @@ function requireYasr_min() {
         var pe = {};
         function x(T) {
           if (pe[T]) return pe[T].exports;
-          var N = pe[T] = { i: T, l: !1, exports: {} };
-          return Ne[T].call(N.exports, N, N.exports, x), N.l = !0, N.exports;
+          var L = pe[T] = { i: T, l: !1, exports: {} };
+          return Ne[T].call(L.exports, L, L.exports, x), L.l = !0, L.exports;
         }
-        return x.m = Ne, x.c = pe, x.d = function(T, N, Y) {
-          x.o(T, N) || Object.defineProperty(T, N, { enumerable: !0, get: Y });
+        return x.m = Ne, x.c = pe, x.d = function(T, L, Y) {
+          x.o(T, L) || Object.defineProperty(T, L, { enumerable: !0, get: Y });
         }, x.r = function(T) {
           typeof Symbol < "u" && Symbol.toStringTag && Object.defineProperty(T, Symbol.toStringTag, { value: "Module" }), Object.defineProperty(T, "__esModule", { value: !0 });
-        }, x.t = function(T, N) {
-          if (1 & N && (T = x(T)), 8 & N || 4 & N && typeof T == "object" && T && T.__esModule) return T;
+        }, x.t = function(T, L) {
+          if (1 & L && (T = x(T)), 8 & L || 4 & L && typeof T == "object" && T && T.__esModule) return T;
           var Y = /* @__PURE__ */ Object.create(null);
-          if (x.r(Y), Object.defineProperty(Y, "default", { enumerable: !0, value: T }), 2 & N && typeof T != "string") for (var B in T) x.d(Y, B, function(g) {
+          if (x.r(Y), Object.defineProperty(Y, "default", { enumerable: !0, value: T }), 2 & L && typeof T != "string") for (var B in T) x.d(Y, B, function(g) {
             return T[g];
           }.bind(null, B));
           return Y;
         }, x.n = function(T) {
-          var N = T && T.__esModule ? function() {
+          var L = T && T.__esModule ? function() {
             return T.default;
           } : function() {
             return T;
           };
-          return x.d(N, "a", N), N;
-        }, x.o = function(T, N) {
-          return Object.prototype.hasOwnProperty.call(T, N);
+          return x.d(L, "a", L), L;
+        }, x.o = function(T, L) {
+          return Object.prototype.hasOwnProperty.call(T, L);
         }, x.p = "/", x(x.s = 62);
       })([function(Ne, pe, x) {
         x.d(pe, "a", (function() {
@@ -22517,9 +22518,9 @@ function requireYasr_min() {
         })), x.d(pe, "e", (function() {
           return ge;
         }));
-        var T = x(4), N = x.n(T), Y = x(5), B = x.n(Y), g = x(106), W = (function() {
+        var T = x(4), L = x.n(T), Y = x(5), B = x.n(Y), g = x(106), W = (function() {
           function K(Z) {
-            N()(this, K), this.namespace = Z;
+            L()(this, K), this.namespace = Z;
           }
           return B()(K, [{ key: "set", value: function(Z, te, b, w) {
             if (g.enabled && (this.removeExpiredKeys(), Z && te !== void 0)) {
@@ -22608,25 +22609,25 @@ function requireYasr_min() {
         pe.a = T;
       }, function(Ne, pe, x) {
         pe.a = function(T) {
-          var N = typeof T;
-          return T != null && (N == "object" || N == "function");
+          var L = typeof T;
+          return T != null && (L == "object" || L == "function");
         };
       }, function(Ne, pe, x) {
-        var T = x(63), N = typeof self == "object" && self && self.Object === Object && self, Y = T.a || N || Function("return this")();
+        var T = x(63), L = typeof self == "object" && self && self.Object === Object && self, Y = T.a || L || Function("return this")();
         pe.a = Y;
       }, function(Ne, pe) {
         Ne.exports = function(x, T) {
           if (!(x instanceof T)) throw new TypeError("Cannot call a class as a function");
         };
       }, function(Ne, pe) {
-        function x(T, N) {
-          for (var Y = 0; Y < N.length; Y++) {
-            var B = N[Y];
+        function x(T, L) {
+          for (var Y = 0; Y < L.length; Y++) {
+            var B = L[Y];
             B.enumerable = B.enumerable || !1, B.configurable = !0, "value" in B && (B.writable = !0), Object.defineProperty(T, B.key, B);
           }
         }
-        Ne.exports = function(T, N, Y) {
-          return N && x(T.prototype, N), Y && x(T, Y), T;
+        Ne.exports = function(T, L, Y) {
+          return L && x(T.prototype, L), Y && x(T, Y), T;
         };
       }, function(Ne, pe, x) {
         pe.a = function(T) {
@@ -22634,7 +22635,7 @@ function requireYasr_min() {
         };
       }, function(Ne, pe, x) {
         Ne.exports = (function() {
-          var T = navigator.userAgent, N = navigator.platform, Y = /gecko\/\d/i.test(T), B = /MSIE \d/.test(T), g = /Trident\/(?:[7-9]|\d{2,})\..*rv:(\d+)/.exec(T), W = /Edge\/(\d+)/.exec(T), R = B || g || W, H = R && (B ? document.documentMode || 6 : +(W || g)[1]), fe = !W && /WebKit\//.test(T), C = fe && /Qt\/\d+\.\d+/.test(T), Q = !W && /Chrome\//.test(T), ge = /Opera\//.test(T), K = /Apple Computer/.test(navigator.vendor), Z = /Mac OS X 1\d\D([8-9]|\d\d)\D/.test(T), te = /PhantomJS/.test(T), b = !W && /AppleWebKit/.test(T) && /Mobile\/\w+/.test(T), w = /Android/.test(T), U = b || w || /webOS|BlackBerry|Opera Mini|Opera Mobi|IEMobile/i.test(T), re = b || /Mac/.test(N), de = /\bCrOS\b/.test(T), he = /win/i.test(N), p = ge && T.match(/Version\/(\d*\.\d*)/);
+          var T = navigator.userAgent, L = navigator.platform, Y = /gecko\/\d/i.test(T), B = /MSIE \d/.test(T), g = /Trident\/(?:[7-9]|\d{2,})\..*rv:(\d+)/.exec(T), W = /Edge\/(\d+)/.exec(T), R = B || g || W, H = R && (B ? document.documentMode || 6 : +(W || g)[1]), fe = !W && /WebKit\//.test(T), C = fe && /Qt\/\d+\.\d+/.test(T), Q = !W && /Chrome\//.test(T), ge = /Opera\//.test(T), K = /Apple Computer/.test(navigator.vendor), Z = /Mac OS X 1\d\D([8-9]|\d\d)\D/.test(T), te = /PhantomJS/.test(T), b = !W && /AppleWebKit/.test(T) && /Mobile\/\w+/.test(T), w = /Android/.test(T), U = b || w || /webOS|BlackBerry|Opera Mini|Opera Mobi|IEMobile/i.test(T), re = b || /Mac/.test(L), de = /\bCrOS\b/.test(T), he = /win/i.test(L), p = ge && T.match(/Version\/(\d*\.\d*)/);
           p && (p = Number(p[1])), p && p >= 15 && (ge = !1, fe = !0);
           var ae = re && (C || ge && (p == null || p < 12.11)), Ge = Y || R && H >= 9;
           function me(e) {
@@ -23484,7 +23485,7 @@ b`.split(/\n/).length != 3 ? function(e) {
             }
             return o;
           }
-          function L(e) {
+          function N(e) {
             var t = e.display, o = e.doc;
             t.maxLine = Jt(o, o.first), t.maxLineLength = _(t.maxLine), t.maxLineChanged = !0, o.iter((function(i) {
               var a = _(i);
@@ -24390,7 +24391,7 @@ b`.split(/\n/).length != 3 ? function(e) {
             (function(i) {
               var a = i.display;
               !a.scrollbarsClipped && a.scroller.offsetWidth && (a.nativeBarWidth = a.scroller.offsetWidth - a.scroller.clientWidth, a.heightForcer.style.height = ri(i) + "px", a.sizer.style.marginBottom = -a.nativeBarWidth + "px", a.sizer.style.borderRightWidth = ri(i) + "px", a.scrollbarsClipped = !0);
-            })(t), e.updateMaxLine && L(t), e.mustUpdate = e.viewChanged || e.forceUpdate || e.scrollTop != null || e.scrollToPos && (e.scrollToPos.from.line < o.viewFrom || e.scrollToPos.to.line >= o.viewTo) || o.maxLineChanged && t.options.lineWrapping, e.update = e.mustUpdate && new F(t, e.mustUpdate && { top: e.scrollTop, ensure: e.scrollToPos }, e.forceUpdate);
+            })(t), e.updateMaxLine && N(t), e.mustUpdate = e.viewChanged || e.forceUpdate || e.scrollTop != null || e.scrollToPos && (e.scrollToPos.from.line < o.viewFrom || e.scrollToPos.to.line >= o.viewTo) || o.maxLineChanged && t.options.lineWrapping, e.update = e.mustUpdate && new F(t, e.mustUpdate && { top: e.scrollTop, ensure: e.scrollToPos }, e.forceUpdate);
           }
           function Do(e) {
             e.updatedDisplay = e.mustUpdate && J(e.cm, e.update);
@@ -24787,7 +24788,7 @@ b`.split(/\n/).length != 3 ? function(e) {
           }
           function Wa(e, t) {
             if (t.cm) throw new Error("This document is already in use.");
-            e.doc = t, t.cm = e, Ii(e), _a(e), Ya(e), e.options.lineWrapping || L(e), e.options.mode = t.modeOption, Si(e);
+            e.doc = t, t.cm = e, Ii(e), _a(e), Ya(e), e.options.lineWrapping || N(e), e.options.mode = t.modeOption, Si(e);
           }
           function Ya(e) {
             (e.doc.direction == "rtl" ? ct : O)(e.display.lineDiv, "CodeMirror-rtl");
@@ -26227,7 +26228,7 @@ b`.split(/\n/).length != 3 ? function(e) {
             }
           }
           function il(e) {
-            e.options.lineWrapping ? (ct(e.display.wrapper, "CodeMirror-wrap"), e.display.sizer.style.minWidth = "", e.display.sizerWidth = null) : (O(e.display.wrapper, "CodeMirror-wrap"), L(e)), Ii(e), Si(e), di(e), setTimeout((function() {
+            e.options.lineWrapping ? (ct(e.display.wrapper, "CodeMirror-wrap"), e.display.sizer.style.minWidth = "", e.display.sizerWidth = null) : (O(e.display.wrapper, "CodeMirror-wrap"), N(e)), Ii(e), Si(e), di(e), setTimeout((function() {
               return An(e);
             }), 100);
           }
@@ -27250,10 +27251,10 @@ b`.split(/\n/).length != 3 ? function(e) {
         var T = x(3).a.Symbol;
         pe.a = T;
       }, function(Ne, pe, x) {
-        var T, N = x(44), Y = x(3).a["__core-js_shared__"], B = (T = /[^.]+$/.exec(Y && Y.keys && Y.keys.IE_PROTO || "")) ? "Symbol(src)_1." + T : "", g = function(b) {
+        var T, L = x(44), Y = x(3).a["__core-js_shared__"], B = (T = /[^.]+$/.exec(Y && Y.keys && Y.keys.IE_PROTO || "")) ? "Symbol(src)_1." + T : "", g = function(b) {
           return !!B && B in b;
         }, W = x(2), R = x(22), H = /^\[object .+?Constructor\]$/, fe = Function.prototype, C = Object.prototype, Q = fe.toString, ge = C.hasOwnProperty, K = RegExp("^" + Q.call(ge).replace(/[\\^$.*+?()[\]{}|]/g, "\\$&").replace(/hasOwnProperty|(function).*?(?=\\\()| for .+?(?=\\\])/g, "$1.*?") + "$"), Z = function(b) {
-          return !(!Object(W.a)(b) || g(b)) && (Object(N.a)(b) ? K : H).test(Object(R.a)(b));
+          return !(!Object(W.a)(b) || g(b)) && (Object(L.a)(b) ? K : H).test(Object(R.a)(b));
         }, te = function(b, w) {
           return b?.[w];
         };
@@ -27262,12 +27263,12 @@ b`.split(/\n/).length != 3 ? function(e) {
           return Z(U) ? U : void 0;
         };
       }, function(Ne, pe, x) {
-        var T = x(44), N = x(43);
+        var T = x(44), L = x(43);
         pe.a = function(Y) {
-          return Y != null && Object(N.a)(Y.length) && !Object(T.a)(Y);
+          return Y != null && Object(L.a)(Y.length) && !Object(T.a)(Y);
         };
       }, function(Ne, pe, x) {
-        var T = x(8), N = Object.prototype, Y = N.hasOwnProperty, B = N.toString, g = T.a ? T.a.toStringTag : void 0, W = function(C) {
+        var T = x(8), L = Object.prototype, Y = L.hasOwnProperty, B = L.toString, g = T.a ? T.a.toStringTag : void 0, W = function(C) {
           var Q = Y.call(C, g), ge = C[g];
           try {
             C[g] = void 0;
@@ -27283,26 +27284,26 @@ b`.split(/\n/).length != 3 ? function(e) {
           return C == null ? C === void 0 ? "[object Undefined]" : "[object Null]" : fe && fe in Object(C) ? W(C) : H(C);
         };
       }, function(Ne, pe, x) {
-        pe.a = function(T, N) {
-          return T === N || T != T && N != N;
+        pe.a = function(T, L) {
+          return T === L || T != T && L != L;
         };
       }, function(Ne, pe, x) {
-        var T = x(68), N = x(80), Y = x(10);
+        var T = x(68), L = x(80), Y = x(10);
         pe.a = function(B) {
-          return Object(Y.a)(B) ? Object(T.a)(B) : Object(N.a)(B);
+          return Object(Y.a)(B) ? Object(T.a)(B) : Object(L.a)(B);
         };
       }, function(Ne, pe, x) {
         (function(T) {
-          var N = x(3), Y = x(93), B = exports$1 && !exports$1.nodeType && exports$1, g = B && typeof T == "object" && T && !T.nodeType && T, W = g && g.exports === B ? N.a.Buffer : void 0, R = (W ? W.isBuffer : void 0) || Y.a;
+          var L = x(3), Y = x(93), B = exports$1 && !exports$1.nodeType && exports$1, g = B && typeof T == "object" && T && !T.nodeType && T, W = g && g.exports === B ? L.a.Buffer : void 0, R = (W ? W.isBuffer : void 0) || Y.a;
           pe.a = R;
         }).call(this, x(83)(Ne));
       }, function(Ne, pe, x) {
-        var T = x(11), N = x(6), Y = function(H) {
-          return Object(N.a)(H) && Object(T.a)(H) == "[object Arguments]";
+        var T = x(11), L = x(6), Y = function(H) {
+          return Object(L.a)(H) && Object(T.a)(H) == "[object Arguments]";
         }, B = Object.prototype, g = B.hasOwnProperty, W = B.propertyIsEnumerable, R = Y(/* @__PURE__ */ (function() {
           return arguments;
         })()) ? Y : function(H) {
-          return Object(N.a)(H) && g.call(H, "callee") && !W.call(H, "callee");
+          return Object(L.a)(H) && g.call(H, "callee") && !W.call(H, "callee");
         };
         pe.a = R;
       }, function(Ne, pe) {
@@ -27311,12 +27312,12 @@ b`.split(/\n/).length != 3 ? function(e) {
           return x;
         };
       }, function(Ne, pe, x) {
-        var T = x(11), N = x(6);
+        var T = x(11), L = x(6);
         pe.a = function(Y) {
-          return typeof Y == "symbol" || Object(N.a)(Y) && Object(T.a)(Y) == "[object Symbol]";
+          return typeof Y == "symbol" || Object(L.a)(Y) && Object(T.a)(Y) == "[object Symbol]";
         };
       }, function(Ne, pe, x) {
-        var T = x(26), N = function() {
+        var T = x(26), L = function() {
           this.__data__ = new T.a(), this.size = 0;
         }, Y = function(C) {
           var Q = this.__data__, ge = Q.delete(C);
@@ -27338,11 +27339,11 @@ b`.split(/\n/).length != 3 ? function(e) {
           var Q = this.__data__ = new T.a(C);
           this.size = Q.size;
         }
-        fe.prototype.clear = N, fe.prototype.delete = Y, fe.prototype.get = B, fe.prototype.has = g, fe.prototype.set = H, pe.a = fe;
+        fe.prototype.clear = L, fe.prototype.delete = Y, fe.prototype.get = B, fe.prototype.has = g, fe.prototype.set = H, pe.a = fe;
       }, function(Ne, pe, x) {
         Ne.exports = x(105);
       }, function(Ne, pe, x) {
-        var T = x(9), N = x(3), Y = Object(T.a)(N.a, "DataView"), B = x(28), g = Object(T.a)(N.a, "Promise"), W = Object(T.a)(N.a, "Set"), R = Object(T.a)(N.a, "WeakMap"), H = x(11), fe = x(22), C = Object(fe.a)(Y), Q = Object(fe.a)(B.a), ge = Object(fe.a)(g), K = Object(fe.a)(W), Z = Object(fe.a)(R), te = H.a;
+        var T = x(9), L = x(3), Y = Object(T.a)(L.a, "DataView"), B = x(28), g = Object(T.a)(L.a, "Promise"), W = Object(T.a)(L.a, "Set"), R = Object(T.a)(L.a, "WeakMap"), H = x(11), fe = x(22), C = Object(fe.a)(Y), Q = Object(fe.a)(B.a), ge = Object(fe.a)(g), K = Object(fe.a)(W), Z = Object(fe.a)(R), te = H.a;
         (Y && te(new Y(new ArrayBuffer(1))) != "[object DataView]" || B.a && te(new B.a()) != "[object Map]" || g && te(g.resolve()) != "[object Promise]" || W && te(new W()) != "[object Set]" || R && te(new R()) != "[object WeakMap]") && (te = function(b) {
           var w = Object(H.a)(b), U = w == "[object Object]" ? b.constructor : void 0, re = U ? Object(fe.a)(U) : "";
           if (re) switch (re) {
@@ -27361,35 +27362,35 @@ b`.split(/\n/).length != 3 ? function(e) {
         }), pe.a = te;
       }, function(Ne, pe) {
         function x(T) {
-          return Ne.exports = x = Object.setPrototypeOf ? Object.getPrototypeOf : function(N) {
-            return N.__proto__ || Object.getPrototypeOf(N);
+          return Ne.exports = x = Object.setPrototypeOf ? Object.getPrototypeOf : function(L) {
+            return L.__proto__ || Object.getPrototypeOf(L);
           }, x(T);
         }
         Ne.exports = x;
       }, function(Ne, pe, x) {
         var T = Function.prototype.toString;
-        pe.a = function(N) {
-          if (N != null) {
+        pe.a = function(L) {
+          if (L != null) {
             try {
-              return T.call(N);
+              return T.call(L);
             } catch {
             }
             try {
-              return N + "";
+              return L + "";
             } catch {
             }
           }
           return "";
         };
       }, function(Ne, pe, x) {
-        var T = "http://www.w3.org/1999/02/22-rdf-syntax-ns#", N = "http://www.w3.org/2001/XMLSchema#", Y = "http://www.w3.org/2000/10/swap/";
-        pe.a = { xsd: { decimal: N + "decimal", boolean: N + "boolean", double: N + "double", integer: N + "integer", string: N + "string" }, rdf: { type: T + "type", nil: T + "nil", first: T + "first", rest: T + "rest", langString: T + "langString" }, owl: { sameAs: "http://www.w3.org/2002/07/owl#sameAs" }, r: { forSome: Y + "reify#forSome", forAll: Y + "reify#forAll" }, log: { implies: Y + "log#implies" } };
+        var T = "http://www.w3.org/1999/02/22-rdf-syntax-ns#", L = "http://www.w3.org/2001/XMLSchema#", Y = "http://www.w3.org/2000/10/swap/";
+        pe.a = { xsd: { decimal: L + "decimal", boolean: L + "boolean", double: L + "double", integer: L + "integer", string: L + "string" }, rdf: { type: T + "type", nil: T + "nil", first: T + "first", rest: T + "rest", langString: T + "langString" }, owl: { sameAs: "http://www.w3.org/2002/07/owl#sameAs" }, r: { forSome: Y + "reify#forSome", forAll: Y + "reify#forAll" }, log: { implies: Y + "log#implies" } };
       }, function(Ne, pe, x) {
         var T = x(17);
-        pe.a = function(N) {
-          if (typeof N == "string" || Object(T.a)(N)) return N;
-          var Y = N + "";
-          return Y == "0" && 1 / N == -1 / 0 ? "-0" : Y;
+        pe.a = function(L) {
+          if (typeof L == "string" || Object(T.a)(L)) return L;
+          var Y = L + "";
+          return Y == "0" && 1 / L == -1 / 0 ? "-0" : Y;
         };
       }, function(Ne, pe, x) {
         pe.a = function(T) {
@@ -27398,8 +27399,8 @@ b`.split(/\n/).length != 3 ? function(e) {
       }, function(Ne, pe, x) {
         var T = function() {
           this.__data__ = [], this.size = 0;
-        }, N = x(12), Y = function(C, Q) {
-          for (var ge = C.length; ge--; ) if (Object(N.a)(C[ge][0], Q)) return ge;
+        }, L = x(12), Y = function(C, Q) {
+          for (var ge = C.length; ge--; ) if (Object(L.a)(C[ge][0], Q)) return ge;
           return -1;
         }, B = Array.prototype.splice, g = function(C) {
           var Q = this.__data__, ge = Y(Q, C);
@@ -27422,9 +27423,9 @@ b`.split(/\n/).length != 3 ? function(e) {
         }
         fe.prototype.clear = T, fe.prototype.delete = g, fe.prototype.get = W, fe.prototype.has = R, fe.prototype.set = H, pe.a = fe;
       }, function(Ne, pe, x) {
-        var T = x(8), N = x(60), Y = x(1), B = x(17), g = T.a ? T.a.prototype : void 0, W = g ? g.toString : void 0, R = function H(fe) {
+        var T = x(8), L = x(60), Y = x(1), B = x(17), g = T.a ? T.a.prototype : void 0, W = g ? g.toString : void 0, R = function H(fe) {
           if (typeof fe == "string") return fe;
-          if (Object(Y.a)(fe)) return Object(N.a)(fe, H) + "";
+          if (Object(Y.a)(fe)) return Object(L.a)(fe, H) + "";
           if (Object(B.a)(fe)) return W ? W.call(fe) : "";
           var C = fe + "";
           return C == "0" && 1 / fe == -1 / 0 ? "-0" : C;
@@ -27433,56 +27434,56 @@ b`.split(/\n/).length != 3 ? function(e) {
           return H == null ? "" : R(H);
         };
       }, function(Ne, pe, x) {
-        var T = x(9), N = x(3), Y = Object(T.a)(N.a, "Map");
+        var T = x(9), L = x(3), Y = Object(T.a)(L.a, "Map");
         pe.a = Y;
       }, , function(Ne, pe, x) {
         var T = Object.prototype;
-        pe.a = function(N) {
-          var Y = N && N.constructor;
-          return N === (typeof Y == "function" && Y.prototype || T);
+        pe.a = function(L) {
+          var Y = L && L.constructor;
+          return L === (typeof Y == "function" && Y.prototype || T);
         };
       }, function(Ne, pe, x) {
         var T = x(48);
-        pe.a = function(N, Y, B) {
-          Y == "__proto__" && T.a ? Object(T.a)(N, Y, { configurable: !0, enumerable: !0, value: B, writable: !0 }) : N[Y] = B;
+        pe.a = function(L, Y, B) {
+          Y == "__proto__" && T.a ? Object(T.a)(L, Y, { configurable: !0, enumerable: !0, value: B, writable: !0 }) : L[Y] = B;
         };
       }, function(Ne, pe, x) {
-        var T = x(67), N = x(31);
+        var T = x(67), L = x(31);
         pe.a = function(Y, B, g, W) {
           var R = !g;
           g || (g = {});
           for (var H = -1, fe = B.length; ++H < fe; ) {
             var C = B[H], Q = W ? W(g[C], Y[C], C, g, Y) : void 0;
-            Q === void 0 && (Q = Y[C]), R ? Object(N.a)(g, C, Q) : Object(T.a)(g, C, Q);
+            Q === void 0 && (Q = Y[C]), R ? Object(L.a)(g, C, Q) : Object(T.a)(g, C, Q);
           }
           return g;
         };
       }, function(Ne, pe, x) {
-        var T = x(11), N = x(43), Y = x(6), B = {};
+        var T = x(11), L = x(43), Y = x(6), B = {};
         B["[object Float32Array]"] = B["[object Float64Array]"] = B["[object Int8Array]"] = B["[object Int16Array]"] = B["[object Int32Array]"] = B["[object Uint8Array]"] = B["[object Uint8ClampedArray]"] = B["[object Uint16Array]"] = B["[object Uint32Array]"] = !0, B["[object Arguments]"] = B["[object Array]"] = B["[object ArrayBuffer]"] = B["[object Boolean]"] = B["[object DataView]"] = B["[object Date]"] = B["[object Error]"] = B["[object Function]"] = B["[object Map]"] = B["[object Number]"] = B["[object Object]"] = B["[object RegExp]"] = B["[object Set]"] = B["[object String]"] = B["[object WeakMap]"] = !1;
         var g = function(C) {
-          return Object(Y.a)(C) && Object(N.a)(C.length) && !!B[Object(T.a)(C)];
+          return Object(Y.a)(C) && Object(L.a)(C.length) && !!B[Object(T.a)(C)];
         }, W = x(45), R = x(35), H = R.a && R.a.isTypedArray, fe = H ? Object(W.a)(H) : g;
         pe.a = fe;
       }, function(Ne, pe, x) {
-        var T = x(9), N = Object(T.a)(Object, "create"), Y = function() {
-          this.__data__ = N ? N(null) : {}, this.size = 0;
+        var T = x(9), L = Object(T.a)(Object, "create"), Y = function() {
+          this.__data__ = L ? L(null) : {}, this.size = 0;
         }, B = function(p) {
           var ae = this.has(p) && delete this.__data__[p];
           return this.size -= ae ? 1 : 0, ae;
         }, g = Object.prototype.hasOwnProperty, W = function(p) {
           var ae = this.__data__;
-          if (N) {
+          if (L) {
             var Ge = ae[p];
             return Ge === "__lodash_hash_undefined__" ? void 0 : Ge;
           }
           return g.call(ae, p) ? ae[p] : void 0;
         }, R = Object.prototype.hasOwnProperty, H = function(p) {
           var ae = this.__data__;
-          return N ? ae[p] !== void 0 : R.call(ae, p);
+          return L ? ae[p] !== void 0 : R.call(ae, p);
         }, fe = function(p, ae) {
           var Ge = this.__data__;
-          return this.size += this.has(p) ? 0 : 1, Ge[p] = N && ae === void 0 ? "__lodash_hash_undefined__" : ae, this;
+          return this.size += this.has(p) ? 0 : 1, Ge[p] = L && ae === void 0 ? "__lodash_hash_undefined__" : ae, this;
         };
         function C(p) {
           var ae = -1, Ge = p == null ? 0 : p.length;
@@ -27521,7 +27522,7 @@ b`.split(/\n/).length != 3 ? function(e) {
         he.prototype.clear = Z, he.prototype.delete = w, he.prototype.get = U, he.prototype.has = re, he.prototype.set = de, pe.a = he;
       }, function(Ne, pe, x) {
         (function(T) {
-          var N = x(63), Y = exports$1 && !exports$1.nodeType && exports$1, B = Y && typeof T == "object" && T && !T.nodeType && T, g = B && B.exports === Y && N.a.process, W = (function() {
+          var L = x(63), Y = exports$1 && !exports$1.nodeType && exports$1, B = Y && typeof T == "object" && T && !T.nodeType && T, g = B && B.exports === Y && L.a.process, W = (function() {
             try {
               var R = B && B.require && B.require("util").types;
               return R || g && g.binding && g.binding("util");
@@ -27531,23 +27532,23 @@ b`.split(/\n/).length != 3 ? function(e) {
           pe.a = W;
         }).call(this, x(83)(Ne));
       }, function(Ne, pe, x) {
-        var T = x(138), N = x(120), Y = x(94), B = x(139);
+        var T = x(138), L = x(120), Y = x(94), B = x(139);
         Ne.exports = function(g) {
-          return T(g) || N(g) || Y(g) || B();
+          return T(g) || L(g) || Y(g) || B();
         };
       }, function(Ne, pe, x) {
         var T = /^(?:0|[1-9]\d*)$/;
-        pe.a = function(N, Y) {
-          var B = typeof N;
-          return !!(Y = Y ?? 9007199254740991) && (B == "number" || B != "symbol" && T.test(N)) && N > -1 && N % 1 == 0 && N < Y;
+        pe.a = function(L, Y) {
+          var B = typeof L;
+          return !!(Y = Y ?? 9007199254740991) && (B == "number" || B != "symbol" && T.test(L)) && L > -1 && L % 1 == 0 && L < Y;
         };
       }, function(Ne, pe, x) {
-        var T = x(68), N = x(2), Y = x(30), B = function(H) {
+        var T = x(68), L = x(2), Y = x(30), B = function(H) {
           var fe = [];
           if (H != null) for (var C in Object(H)) fe.push(C);
           return fe;
         }, g = Object.prototype.hasOwnProperty, W = function(H) {
-          if (!Object(N.a)(H)) return B(H);
+          if (!Object(L.a)(H)) return B(H);
           var fe = Object(Y.a)(H), C = [];
           for (var Q in H) (Q != "constructor" || !fe && g.call(H, Q)) && C.push(Q);
           return C;
@@ -27557,7 +27558,7 @@ b`.split(/\n/).length != 3 ? function(e) {
         };
       }, , function(Ne, pe, x) {
         (function(T) {
-          var N = Object.assign ? Object.assign : function(C, Q, ge, K) {
+          var L = Object.assign ? Object.assign : function(C, Q, ge, K) {
             for (var Z = 1; Z < arguments.length; Z++) R(Object(arguments[Z]), (function(te, b) {
               C[b] = te;
             }));
@@ -27565,14 +27566,14 @@ b`.split(/\n/).length != 3 ? function(e) {
           }, Y = (function() {
             if (Object.create) return function(C, Q, ge, K) {
               var Z = W(arguments, 1);
-              return N.apply(this, [Object.create(C)].concat(Z));
+              return L.apply(this, [Object.create(C)].concat(Z));
             };
             {
               let C = function() {
               };
               return function(Q, ge, K, Z) {
                 var te = W(arguments, 1);
-                return C.prototype = Q, N.apply(this, [new C()].concat(te));
+                return C.prototype = Q, L.apply(this, [new C()].concat(te));
               };
             }
           })(), B = String.prototype.trim ? function(C) {
@@ -27596,7 +27597,7 @@ b`.split(/\n/).length != 3 ? function(e) {
           function fe(C) {
             return C != null && typeof C != "function" && typeof C.length == "number";
           }
-          Ne.exports = { assign: N, create: Y, trim: B, bind: function(C, Q) {
+          Ne.exports = { assign: L, create: Y, trim: B, bind: function(C, Q) {
             return function() {
               return Q.apply(C, Array.prototype.slice.call(arguments, 0));
             };
@@ -27613,65 +27614,65 @@ b`.split(/\n/).length != 3 ? function(e) {
         }).call(this, x(72));
       }, function(Ne, pe, x) {
         var T = x(104);
-        Ne.exports = function(N, Y) {
+        Ne.exports = function(L, Y) {
           if (typeof Y != "function" && Y !== null) throw new TypeError("Super expression must either be null or a function");
-          N.prototype = Object.create(Y && Y.prototype, { constructor: { value: N, writable: !0, configurable: !0 } }), Y && T(N, Y);
+          L.prototype = Object.create(Y && Y.prototype, { constructor: { value: L, writable: !0, configurable: !0 } }), Y && T(L, Y);
         };
       }, function(Ne, pe, x) {
-        var T = x(49), N = x(16);
+        var T = x(49), L = x(16);
         Ne.exports = function(Y, B) {
-          return !B || T(B) !== "object" && typeof B != "function" ? N(Y) : B;
+          return !B || T(B) !== "object" && typeof B != "function" ? L(Y) : B;
         };
       }, function(Ne, pe, x) {
         pe.a = function(T) {
           return typeof T == "number" && T > -1 && T % 1 == 0 && T <= 9007199254740991;
         };
       }, function(Ne, pe, x) {
-        var T = x(11), N = x(2);
+        var T = x(11), L = x(2);
         pe.a = function(Y) {
-          if (!Object(N.a)(Y)) return !1;
+          if (!Object(L.a)(Y)) return !1;
           var B = Object(T.a)(Y);
           return B == "[object Function]" || B == "[object GeneratorFunction]" || B == "[object AsyncFunction]" || B == "[object Proxy]";
         };
       }, function(Ne, pe, x) {
         pe.a = function(T) {
-          return function(N) {
-            return T(N);
+          return function(L) {
+            return T(L);
           };
         };
       }, function(Ne, pe, x) {
-        var T = x(1), N = x(17), Y = /\.|\[(?:[^[\]]*|(["'])(?:(?!\1)[^\\]|\\.)*?\1)\]/, B = /^\w*$/;
+        var T = x(1), L = x(17), Y = /\.|\[(?:[^[\]]*|(["'])(?:(?!\1)[^\\]|\\.)*?\1)\]/, B = /^\w*$/;
         pe.a = function(g, W) {
           if (Object(T.a)(g)) return !1;
           var R = typeof g;
-          return !(R != "number" && R != "symbol" && R != "boolean" && g != null && !Object(N.a)(g)) || B.test(g) || !Y.test(g) || W != null && g in Object(W);
+          return !(R != "number" && R != "symbol" && R != "boolean" && g != null && !Object(L.a)(g)) || B.test(g) || !Y.test(g) || W != null && g in Object(W);
         };
       }, function(Ne, pe, x) {
         var T = x(3).a.Uint8Array;
         pe.a = T;
       }, function(Ne, pe, x) {
-        var T = x(9), N = (function() {
+        var T = x(9), L = (function() {
           try {
             var Y = Object(T.a)(Object, "defineProperty");
             return Y({}, "", {}), Y;
           } catch {
           }
         })();
-        pe.a = N;
+        pe.a = L;
       }, function(Ne, pe) {
         function x(T) {
-          return typeof Symbol == "function" && typeof Symbol.iterator == "symbol" ? Ne.exports = x = function(N) {
-            return typeof N;
-          } : Ne.exports = x = function(N) {
-            return N && typeof Symbol == "function" && N.constructor === Symbol && N !== Symbol.prototype ? "symbol" : typeof N;
+          return typeof Symbol == "function" && typeof Symbol.iterator == "symbol" ? Ne.exports = x = function(L) {
+            return typeof L;
+          } : Ne.exports = x = function(L) {
+            return L && typeof Symbol == "function" && L.constructor === Symbol && L !== Symbol.prototype ? "symbol" : typeof L;
           }, x(T);
         }
         Ne.exports = x;
       }, , function(Ne, pe, x) {
-        var T = x(65), N = Object(T.a)(Object.getPrototypeOf, Object);
-        pe.a = N;
+        var T = x(65), L = Object(T.a)(Object.getPrototypeOf, Object);
+        pe.a = L;
       }, function(Ne, pe, x) {
-        var T = x(18), N = x(59), Y = function(he, p, ae, Ge) {
+        var T = x(18), L = x(59), Y = function(he, p, ae, Ge) {
           var me = ae.length, Te = me;
           if (he == null) return !Te;
           for (he = Object(he); me--; ) {
@@ -27684,7 +27685,7 @@ b`.split(/\n/).length != 3 ? function(e) {
               if (X === void 0 && !(ce in he)) return !1;
             } else {
               var qe = new T.a(), ut;
-              if (!(ut === void 0 ? Object(N.a)(be, X, 3, Ge, qe) : ut)) return !1;
+              if (!(ut === void 0 ? Object(L.a)(be, X, 3, Ge, qe) : ut)) return !1;
             }
           }
           return !0;
@@ -27711,7 +27712,7 @@ b`.split(/\n/).length != 3 ? function(e) {
         }, ge = x(88), K = x(46), Z = x(24), te = function(he, p) {
           return Object(K.a)(he) && g(p) ? H(Object(Z.a)(he), p) : function(ae) {
             var Ge = Q(ae, he);
-            return Ge === void 0 && Ge === p ? Object(ge.a)(ae, he) : Object(N.a)(p, Ge, 3);
+            return Ge === void 0 && Ge === p ? Object(ge.a)(ae, he) : Object(L.a)(p, Ge, 3);
           };
         }, b = x(25), w = x(1), U = function(he) {
           return function(p) {
@@ -27728,7 +27729,7 @@ b`.split(/\n/).length != 3 ? function(e) {
           return typeof he == "function" ? he : he == null ? b.a : typeof he == "object" ? Object(w.a)(he) ? te(he[0], he[1]) : fe(he) : de(he);
         };
       }, function(Ne, pe, x) {
-        var T = x(1), N = x(46), Y = x(34);
+        var T = x(1), L = x(46), Y = x(34);
         function B(C, Q) {
           if (typeof C != "function" || Q != null && typeof Q != "function") throw new TypeError("Expected a function");
           var ge = function() {
@@ -27752,13 +27753,13 @@ b`.split(/\n/).length != 3 ? function(e) {
           })), Q;
         })), fe = x(27);
         pe.a = function(C, Q) {
-          return Object(T.a)(C) ? C : Object(N.a)(C, Q) ? [C] : H(Object(fe.a)(C));
+          return Object(T.a)(C) ? C : Object(L.a)(C, Q) ? [C] : H(Object(fe.a)(C));
         };
       }, function(Ne, pe, x) {
-        var T, N = typeof Reflect == "object" ? Reflect : null, Y = N && typeof N.apply == "function" ? N.apply : function(te, b, w) {
+        var T, L = typeof Reflect == "object" ? Reflect : null, Y = L && typeof L.apply == "function" ? L.apply : function(te, b, w) {
           return Function.prototype.apply.call(te, b, w);
         };
-        T = N && typeof N.ownKeys == "function" ? N.ownKeys : Object.getOwnPropertySymbols ? function(te) {
+        T = L && typeof L.ownKeys == "function" ? L.ownKeys : Object.getOwnPropertySymbols ? function(te) {
           return Object.getOwnPropertyNames(te).concat(Object.getOwnPropertySymbols(te));
         } : function(te) {
           return Object.getOwnPropertyNames(te);
@@ -27894,38 +27895,38 @@ b`.split(/\n/).length != 3 ? function(e) {
           return this._eventsCount > 0 ? T(this._events) : [];
         };
       }, function(Ne, pe, x) {
-        var T = x(53), N = x(24);
+        var T = x(53), L = x(24);
         pe.a = function(Y, B) {
-          for (var g = 0, W = (B = Object(T.a)(B, Y)).length; Y != null && g < W; ) Y = Y[Object(N.a)(B[g++])];
+          for (var g = 0, W = (B = Object(T.a)(B, Y)).length; Y != null && g < W; ) Y = Y[Object(L.a)(B[g++])];
           return g && g == W ? Y : void 0;
         };
       }, function(Ne, pe, x) {
-        pe.a = function(T, N) {
-          for (var Y = -1, B = N.length, g = T.length; ++Y < B; ) T[g + Y] = N[Y];
+        pe.a = function(T, L) {
+          for (var Y = -1, B = L.length, g = T.length; ++Y < B; ) T[g + Y] = L[Y];
           return T;
         };
       }, function(Ne, pe, x) {
-        var T = x(75), N = x(74), Y = Object.prototype.propertyIsEnumerable, B = Object.getOwnPropertySymbols, g = B ? function(W) {
+        var T = x(75), L = x(74), Y = Object.prototype.propertyIsEnumerable, B = Object.getOwnPropertySymbols, g = B ? function(W) {
           return W == null ? [] : (W = Object(W), Object(T.a)(B(W), (function(R) {
             return Y.call(W, R);
           })));
-        } : N.a;
+        } : L.a;
         pe.a = g;
       }, function(Ne, pe, x) {
         var T = x(47);
-        pe.a = function(N) {
-          var Y = new N.constructor(N.byteLength);
-          return new T.a(Y).set(new T.a(N)), Y;
+        pe.a = function(L) {
+          var Y = new L.constructor(L.byteLength);
+          return new T.a(Y).set(new T.a(L)), Y;
         };
       }, function(Ne, pe, x) {
-        var T = x(18), N = x(34), Y = function(X) {
+        var T = x(18), L = x(34), Y = function(X) {
           return this.__data__.set(X, "__lodash_hash_undefined__"), this;
         }, B = function(X) {
           return this.__data__.has(X);
         };
         function g(X) {
           var be = -1, qe = X == null ? 0 : X.length;
-          for (this.__data__ = new N.a(); ++be < qe; ) this.add(X[be]);
+          for (this.__data__ = new L.a(); ++be < qe; ) this.add(X[be]);
         }
         g.prototype.add = g.prototype.push = Y, g.prototype.has = B;
         var W = g, R = function(X, be) {
@@ -28040,14 +28041,14 @@ b`.split(/\n/).length != 3 ? function(e) {
           return be === qe || (be == null || qe == null || !Object(ce.a)(be) && !Object(ce.a)(qe) ? be != be && qe != qe : O(be, qe, ut, _t, X, ct));
         };
       }, function(Ne, pe, x) {
-        pe.a = function(T, N) {
-          for (var Y = -1, B = T == null ? 0 : T.length, g = Array(B); ++Y < B; ) g[Y] = N(T[Y], Y, T);
+        pe.a = function(T, L) {
+          for (var Y = -1, B = T == null ? 0 : T.length, g = Array(B); ++Y < B; ) g[Y] = L(T[Y], Y, T);
           return g;
         };
       }, function(Ne, pe, x) {
-        var T = x(73), N = x(57), Y = x(13);
+        var T = x(73), L = x(57), Y = x(13);
         pe.a = function(B) {
-          return Object(T.a)(B, Y.a, N.a);
+          return Object(T.a)(B, Y.a, L.a);
         };
       }, function(Ne, pe, x) {
         x.r(pe), x.d(pe, "Parser", (function() {
@@ -28057,7 +28058,7 @@ b`.split(/\n/).length != 3 ? function(e) {
         })), x.d(pe, "registerPlugin", (function() {
           return Yn;
         }));
-        var T = x(49), N = x.n(T), Y = x(19), B = x.n(Y), g = x(4), W = x.n(g), R = x(5), H = x.n(R), fe = x(41), C = x.n(fe), Q = x(42), ge = x.n(Q), K = x(21), Z = x.n(K), te = x(54), b = x(170), w = x(27), U = 0, re = function(Pe) {
+        var T = x(49), L = x.n(T), Y = x(19), B = x.n(Y), g = x(4), W = x.n(g), R = x(5), H = x.n(R), fe = x(41), C = x.n(fe), Q = x(42), ge = x.n(Q), K = x(21), Z = x.n(K), te = x(54), b = x(170), w = x(27), U = 0, re = function(Pe) {
           var ve = ++U;
           return Object(w.a)(Pe) + ve;
         }, de = x(75), he = x(90), p = function(Pe, ve) {
@@ -28073,7 +28074,7 @@ b`.split(/\n/).length != 3 ? function(e) {
             if (ve) for (var q in we.results.bindings) we.results.bindings[q] = ve(we.results.bindings[q]);
             return we;
           }
-          if (N()(Pe) == "object" && Pe.constructor === {}.constructor) {
+          if (L()(Pe) == "object" && Pe.constructor === {}.constructor) {
             if (ve && Pe.results) for (var D in Pe.results.bindings) Pe.results.bindings[D] = ve(Pe.results.bindings[D]);
             return Pe;
           }
@@ -28762,7 +28763,7 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
           } }, { key: "hasError", value: function() {
             return !!(this.res && this.res.status >= 400) || !!this.errorSummary || !!this.error || !(!this.summary || !this.summary.error);
           } }, { key: "getError", value: function() {
-            return this.errorSummary || (this.res && this.res.status >= 400 && (this.errorSummary = { text: this.res.text, status: this.res.status, statusText: this.res.error ? this.res.error.text : void 0 }), this.summary && this.summary.error && (this.errorSummary = this.summary.error), this.error && ("response" in this.error && this.error.response !== void 0 ? (this.errorSummary = { text: this.error.response.text, status: this.error.response.status, statusText: this.error.response.statusText }, this.error.response.body && N()(this.error.response.body) === "object" && "message" in this.error.response.body && (this.errorSummary.text = this.error.response.body.message)) : this.errorSummary = { text: this.error.message })), this.errorSummary;
+            return this.errorSummary || (this.res && this.res.status >= 400 && (this.errorSummary = { text: this.res.text, status: this.res.status, statusText: this.res.error ? this.res.error.text : void 0 }), this.summary && this.summary.error && (this.errorSummary = this.summary.error), this.error && ("response" in this.error && this.error.response !== void 0 ? (this.errorSummary = { text: this.error.response.text, status: this.error.response.status, statusText: this.error.response.statusText }, this.error.response.body && L()(this.error.response.body) === "object" && "message" in this.error.response.body && (this.errorSummary.text = this.error.response.body.message)) : this.errorSummary = { text: this.error.message })), this.errorSummary;
           } }, { key: "getContentType", value: function() {
             return this.res ? this.res.header["content-type"] : this.summary ? this.summary.contentType : void 0;
           } }, { key: "getAsJson", value: function() {
@@ -29363,7 +29364,7 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
             }
           } }, { key: "getCompatiblePlugins", value: function() {
             if (!this.results) return Object.keys(me(this.config.plugins, (function(xe) {
-              return N()(xe) === "object" && xe.enabled || xe === !0;
+              return L()(xe) === "object" && xe.enabled || xe === !0;
             })));
             var q = [];
             for (var D in this.plugins) this.plugins[D].canHandleResults() && q.push({ name: D, priority: this.plugins[D].priority });
@@ -29573,44 +29574,44 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
         }, getPlainQueryLinkToEndpoint: void 0, persistencyExpire: 2592e3, persistenceLabelResponse: "response", persistenceLabelConfig: "config", maxPersistentResponseSize: 1e5, prefixes: {}, plugins: {}, pluginOrder: ["table", "response"], defaultPlugin: "table" }, qr.plugins = {}, qr.Dependencies = {}, qr.storageNamespace = "triply", qr.registerPlugin("table", vt), qr.registerPlugin("boolean", pt), qr.registerPlugin("response", Pt), qr.registerPlugin("error", Jr), pe.default = qr;
       }, function(Ne, pe, x) {
         (function(T) {
-          var N = typeof T == "object" && T && T.Object === Object && T;
-          pe.a = N;
+          var L = typeof T == "object" && T && T.Object === Object && T;
+          pe.a = L;
         }).call(this, x(72));
       }, function(Ne, pe, x) {
         pe.a = function(T) {
-          return function(N) {
-            return T?.[N];
+          return function(L) {
+            return T?.[L];
           };
         };
       }, function(Ne, pe, x) {
-        pe.a = function(T, N) {
+        pe.a = function(T, L) {
           return function(Y) {
-            return T(N(Y));
+            return T(L(Y));
           };
         };
       }, function(Ne, pe, x) {
-        var T = x(69), N = x(13);
+        var T = x(69), L = x(13);
         pe.a = function(Y, B) {
-          return Y && Object(T.a)(Y, B, N.a);
+          return Y && Object(T.a)(Y, B, L.a);
         };
       }, function(Ne, pe, x) {
-        var T = x(31), N = x(12), Y = Object.prototype.hasOwnProperty;
+        var T = x(31), L = x(12), Y = Object.prototype.hasOwnProperty;
         pe.a = function(B, g, W) {
           var R = B[g];
-          Y.call(B, g) && Object(N.a)(R, W) && (W !== void 0 || g in B) || Object(T.a)(B, g, W);
+          Y.call(B, g) && Object(L.a)(R, W) && (W !== void 0 || g in B) || Object(T.a)(B, g, W);
         };
       }, function(Ne, pe, x) {
         var T = function(H, fe) {
           for (var C = -1, Q = Array(H); ++C < H; ) Q[C] = fe(C);
           return Q;
-        }, N = x(15), Y = x(1), B = x(14), g = x(37), W = x(33), R = Object.prototype.hasOwnProperty;
+        }, L = x(15), Y = x(1), B = x(14), g = x(37), W = x(33), R = Object.prototype.hasOwnProperty;
         pe.a = function(H, fe) {
-          var C = Object(Y.a)(H), Q = !C && Object(N.a)(H), ge = !C && !Q && Object(B.a)(H), K = !C && !Q && !ge && Object(W.a)(H), Z = C || Q || ge || K, te = Z ? T(H.length, String) : [], b = te.length;
+          var C = Object(Y.a)(H), Q = !C && Object(L.a)(H), ge = !C && !Q && Object(B.a)(H), K = !C && !Q && !ge && Object(W.a)(H), Z = C || Q || ge || K, te = Z ? T(H.length, String) : [], b = te.length;
           for (var w in H) !fe && !R.call(H, w) || Z && (w == "length" || ge && (w == "offset" || w == "parent") || K && (w == "buffer" || w == "byteLength" || w == "byteOffset") || Object(g.a)(w, b)) || te.push(w);
           return te;
         };
       }, function(Ne, pe, x) {
-        var T = /* @__PURE__ */ (function(N) {
+        var T = /* @__PURE__ */ (function(L) {
           return function(Y, B, g) {
             for (var W = -1, R = Object(Y), H = g(Y), fe = H.length; fe--; ) {
               var C = H[++W];
@@ -29621,16 +29622,16 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
         })();
         pe.a = T;
       }, function(Ne, pe, x) {
-        var T = x(12), N = x(10), Y = x(37), B = x(2);
+        var T = x(12), L = x(10), Y = x(37), B = x(2);
         pe.a = function(g, W, R) {
           if (!Object(B.a)(R)) return !1;
           var H = typeof W;
-          return !!(H == "number" ? Object(N.a)(R) && Object(Y.a)(W, R.length) : H == "string" && W in R) && Object(T.a)(R[W], g);
+          return !!(H == "number" ? Object(L.a)(R) && Object(Y.a)(W, R.length) : H == "string" && W in R) && Object(T.a)(R[W], g);
         };
       }, function(Ne, pe, x) {
-        var T = x(117), N = x(136), Y = x(94), B = x(119);
+        var T = x(117), L = x(136), Y = x(94), B = x(119);
         Ne.exports = function(g, W) {
-          return T(g) || N(g, W) || Y(g, W) || B();
+          return T(g) || L(g, W) || Y(g, W) || B();
         };
       }, function(Ne, pe) {
         var x;
@@ -29644,32 +29645,32 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
         }
         Ne.exports = x;
       }, function(Ne, pe, x) {
-        var T = x(56), N = x(1);
+        var T = x(56), L = x(1);
         pe.a = function(Y, B, g) {
           var W = B(Y);
-          return Object(N.a)(Y) ? W : Object(T.a)(W, g(Y));
+          return Object(L.a)(Y) ? W : Object(T.a)(W, g(Y));
         };
       }, function(Ne, pe, x) {
         pe.a = function() {
           return [];
         };
       }, function(Ne, pe, x) {
-        pe.a = function(T, N) {
+        pe.a = function(T, L) {
           for (var Y = -1, B = T == null ? 0 : T.length, g = 0, W = []; ++Y < B; ) {
             var R = T[Y];
-            N(R, Y, T) && (W[g++] = R);
+            L(R, Y, T) && (W[g++] = R);
           }
           return W;
         };
       }, function(Ne, pe, x) {
-        pe.a = function(T, N) {
+        pe.a = function(T, L) {
           var Y = -1, B = T.length;
-          for (N || (N = Array(B)); ++Y < B; ) N[Y] = T[Y];
-          return N;
+          for (L || (L = Array(B)); ++Y < B; ) L[Y] = T[Y];
+          return L;
         };
       }, function(Ne, pe, x) {
         (function(T) {
-          var N = x(3), Y = exports$1 && !exports$1.nodeType && exports$1, B = Y && typeof T == "object" && T && !T.nodeType && T, g = B && B.exports === Y ? N.a.Buffer : void 0, W = g ? g.allocUnsafe : void 0;
+          var L = x(3), Y = exports$1 && !exports$1.nodeType && exports$1, B = Y && typeof T == "object" && T && !T.nodeType && T, g = B && B.exports === Y ? L.a.Buffer : void 0, W = g ? g.allocUnsafe : void 0;
           pe.a = function(R, H) {
             if (H) return R.slice();
             var fe = R.length, C = W ? W(fe) : new R.constructor(fe);
@@ -29678,17 +29679,17 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
         }).call(this, x(83)(Ne));
       }, function(Ne, pe, x) {
         var T = x(58);
-        pe.a = function(N, Y) {
-          var B = Y ? Object(T.a)(N.buffer) : N.buffer;
-          return new N.constructor(B, N.byteOffset, N.length);
+        pe.a = function(L, Y) {
+          var B = Y ? Object(T.a)(L.buffer) : L.buffer;
+          return new L.constructor(B, L.byteOffset, L.length);
         };
       }, function(Ne, pe, x) {
-        var T = x(25), N = x(91), Y = x(89);
+        var T = x(25), L = x(91), Y = x(89);
         pe.a = function(B, g) {
-          return Object(Y.a)(Object(N.a)(B, g, T.a), B + "");
+          return Object(Y.a)(Object(L.a)(B, g, T.a), B + "");
         };
       }, function(Ne, pe, x) {
-        var T = x(30), N = x(65), Y = Object(N.a)(Object.keys, Object), B = Object.prototype.hasOwnProperty;
+        var T = x(30), L = x(65), Y = Object(L.a)(Object.keys, Object), B = Object.prototype.hasOwnProperty;
         pe.a = function(g) {
           if (!Object(T.a)(g)) return Y(g);
           var W = [];
@@ -29696,12 +29697,12 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
           return W;
         };
       }, function(Ne, pe, x) {
-        var T = x(2), N = Object.create, Y = /* @__PURE__ */ (function() {
+        var T = x(2), L = Object.create, Y = /* @__PURE__ */ (function() {
           function W() {
           }
           return function(R) {
             if (!Object(T.a)(R)) return {};
-            if (N) return N(R);
+            if (L) return L(R);
             W.prototype = R;
             var H = new W();
             return W.prototype = void 0, H;
@@ -29724,17 +29725,17 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
         };
       }, function(Ne, pe, x) {
         pe.a = function(T) {
-          var N = -1, Y = Array(T.size);
+          var L = -1, Y = Array(T.size);
           return T.forEach((function(B, g) {
-            Y[++N] = [g, B];
+            Y[++L] = [g, B];
           })), Y;
         };
       }, function(Ne, pe, x) {
-        var T = x(79), N = x(70);
+        var T = x(79), L = x(70);
         pe.a = function(Y) {
           return Object(T.a)((function(B, g) {
             var W = -1, R = g.length, H = R > 1 ? g[R - 1] : void 0, fe = R > 2 ? g[2] : void 0;
-            for (H = Y.length > 3 && typeof H == "function" ? (R--, H) : void 0, fe && Object(N.a)(g[0], g[1], fe) && (H = R < 3 ? void 0 : H, R = 1), B = Object(B); ++W < R; ) {
+            for (H = Y.length > 3 && typeof H == "function" ? (R--, H) : void 0, fe && Object(L.a)(g[0], g[1], fe) && (H = R < 3 ? void 0 : H, R = 1), B = Object(B); ++W < R; ) {
               var C = g[W];
               C && Y(B, C, W, H);
             }
@@ -29748,8 +29749,8 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
           };
         };
       }, function(Ne, pe, x) {
-        var T = x(18), N = x(31), Y = x(12), B = function(ut, _t, ct) {
-          (ct !== void 0 && !Object(Y.a)(ut[_t], ct) || ct === void 0 && !(_t in ut)) && Object(N.a)(ut, _t, ct);
+        var T = x(18), L = x(31), Y = x(12), B = function(ut, _t, ct) {
+          (ct !== void 0 && !Object(Y.a)(ut[_t], ct) || ct === void 0 && !(_t in ut)) && Object(L.a)(ut, _t, ct);
         }, g = x(69), W = x(77), R = x(78), H = x(76), fe = x(81), C = x(15), Q = x(1), ge = x(10), K = x(6), Z = function(ut) {
           return Object(K.a)(ut) && Object(ge.a)(ut);
         }, te = x(14), b = x(44), w = x(2), U = x(11), re = x(51), de = Function.prototype, he = Object.prototype, p = de.toString, ae = he.hasOwnProperty, Ge = p.call(Object), me = function(ut) {
@@ -29786,8 +29787,8 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
       }, function(Ne, pe, x) {
         var T = function(fe, C) {
           return fe != null && C in Object(fe);
-        }, N = x(53), Y = x(15), B = x(1), g = x(37), W = x(43), R = x(24), H = function(fe, C, Q) {
-          for (var ge = -1, K = (C = Object(N.a)(C, fe)).length, Z = !1; ++ge < K; ) {
+        }, L = x(53), Y = x(15), B = x(1), g = x(37), W = x(43), R = x(24), H = function(fe, C, Q) {
+          for (var ge = -1, K = (C = Object(L.a)(C, fe)).length, Z = !1; ++ge < K; ) {
             var te = Object(R.a)(C[ge]);
             if (!(Z = fe != null && Q(fe, te))) break;
             fe = fe[te];
@@ -29798,8 +29799,8 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
           return fe != null && H(fe, C, T);
         };
       }, function(Ne, pe, x) {
-        var T = x(86), N = x(48), Y = x(25), B = N.a ? function(R, H) {
-          return Object(N.a)(R, "toString", { configurable: !0, enumerable: !1, value: Object(T.a)(H), writable: !0 });
+        var T = x(86), L = x(48), Y = x(25), B = L.a ? function(R, H) {
+          return Object(L.a)(R, "toString", { configurable: !0, enumerable: !1, value: Object(T.a)(H), writable: !0 });
         } : Y.a, g = Date.now, W = /* @__PURE__ */ (function(R) {
           var H = 0, fe = 0;
           return function() {
@@ -29812,10 +29813,10 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
         })(B);
         pe.a = W;
       }, function(Ne, pe, x) {
-        var T = x(66), N = x(10), Y = /* @__PURE__ */ (function(B, g) {
+        var T = x(66), L = x(10), Y = /* @__PURE__ */ (function(B, g) {
           return function(W, R) {
             if (W == null) return W;
-            if (!Object(N.a)(W)) return B(W, R);
+            if (!Object(L.a)(W)) return B(W, R);
             for (var H = W.length, fe = -1, C = Object(W); ++fe < H && R(C[fe], fe, C) !== !1; ) ;
             return W;
           };
@@ -29834,10 +29835,10 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
               return Y.call(B, g[0], g[1], g[2]);
           }
           return Y.apply(B, g);
-        }, N = Math.max;
+        }, L = Math.max;
         pe.a = function(Y, B, g) {
-          return B = N(B === void 0 ? Y.length - 1 : B, 0), function() {
-            for (var W = arguments, R = -1, H = N(W.length - B, 0), fe = Array(H); ++R < H; ) fe[R] = W[B + R];
+          return B = L(B === void 0 ? Y.length - 1 : B, 0), function() {
+            for (var W = arguments, R = -1, H = L(W.length - B, 0), fe = Array(H); ++R < H; ) fe[R] = W[B + R];
             R = -1;
             for (var C = Array(B + 1); ++R < B; ) C[R] = W[R];
             return C[B] = g(fe), T(Y, this, C);
@@ -29845,7 +29846,7 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
         };
       }, function(Ne, pe, x) {
         (function(T) {
-          function N(g, W, R, H) {
+          function L(g, W, R, H) {
             if (R && R.call) {
               var fe = R;
               R = null;
@@ -29883,10 +29884,10 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
           }
           T.newFoldFunction = function(g, W) {
             return function(R, H) {
-              N(R, H, { rangeFinder: g, widget: W });
+              L(R, H, { rangeFinder: g, widget: W });
             };
           }, T.defineExtension("foldCode", (function(g, W, R) {
-            N(this, g, W, R);
+            L(this, g, W, R);
           })), T.defineExtension("isFolded", (function(g) {
             for (var W = this.findMarksAt(g), R = 0; R < W.length; ++R) if (W[R].__isFold) return !0;
           })), T.commands.toggleFold = function(g) {
@@ -29933,21 +29934,21 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
         };
       }, function(Ne, pe, x) {
         var T = x(118);
-        Ne.exports = function(N, Y) {
-          if (N) {
-            if (typeof N == "string") return T(N, Y);
-            var B = Object.prototype.toString.call(N).slice(8, -1);
-            return B === "Object" && N.constructor && (B = N.constructor.name), B === "Map" || B === "Set" ? Array.from(N) : B === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(B) ? T(N, Y) : void 0;
+        Ne.exports = function(L, Y) {
+          if (L) {
+            if (typeof L == "string") return T(L, Y);
+            var B = Object.prototype.toString.call(L).slice(8, -1);
+            return B === "Object" && L.constructor && (B = L.constructor.name), B === "Map" || B === "Set" ? Array.from(L) : B === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(B) ? T(L, Y) : void 0;
           }
         };
       }, function(Ne, pe, x) {
         var T;
-        (function(N, Y) {
-          typeof Ne.exports == "object" ? Ne.exports = N.document ? Y(N, !0) : function(B) {
+        (function(L, Y) {
+          typeof Ne.exports == "object" ? Ne.exports = L.document ? Y(L, !0) : function(B) {
             if (!B.document) throw new Error("jQuery requires a window with a document");
             return Y(B);
-          } : Y(N);
-        })(typeof window < "u" ? window : this, (function(N, Y) {
+          } : Y(L);
+        })(typeof window < "u" ? window : this, (function(L, Y) {
           var B = [], g = Object.getPrototypeOf, W = B.slice, R = B.flat ? function(n) {
             return B.flat.call(n);
           } : function(n) {
@@ -29956,7 +29957,7 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
             return typeof n == "function" && typeof n.nodeType != "number";
           }, w = function(n) {
             return n != null && n === n.window;
-          }, U = N.document, re = { type: !0, src: !0, nonce: !0, noModule: !0 };
+          }, U = L.document, re = { type: !0, src: !0, nonce: !0, noModule: !0 };
           function de(n, c, m) {
             var E, M, P = (m = m || U).createElement("script");
             if (P.text = n, c) for (E in re) (M = c[E] || c.getAttribute && c.getAttribute(E)) && P.setAttribute(E, M);
@@ -30532,7 +30533,7 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
               var kt;
               if (!Xe) return Ee[He] === !0 ? He.toLowerCase() : (kt = Ee.getAttributeNode(He)) && kt.specified ? kt.value : null;
             })), gn;
-          })(N);
+          })(L);
           p.find = Ge, p.expr = Ge.selectors, p.expr[":"] = p.expr.pseudos, p.uniqueSort = p.unique = Ge.uniqueSort, p.text = Ge.getText, p.isXMLDoc = Ge.isXML, p.contains = Ge.contains, p.escapeSelector = Ge.escape;
           var me = function(n, c, m) {
             for (var E = [], M = m !== void 0; (n = n[c]) && n.nodeType !== 9; ) if (n.nodeType === 1) {
@@ -30736,7 +30737,7 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
                       p.Deferred.exceptionHook && p.Deferred.exceptionHook(zr, hr.stackTrace), ot + 1 >= ke && (at !== dt && (rr = void 0, ar = [zr]), Tt.rejectWith(rr, ar));
                     }
                   };
-                  ot ? hr() : (p.Deferred.getStackHook && (hr.stackTrace = p.Deferred.getStackHook()), N.setTimeout(hr));
+                  ot ? hr() : (p.Deferred.getStackHook && (hr.stackTrace = p.Deferred.getStackHook()), L.setTimeout(hr));
                 };
               }
               return p.Deferred((function(ot) {
@@ -30765,15 +30766,15 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
           } });
           var Qe = /^(Eval|Internal|Range|Reference|Syntax|Type|URI)Error$/;
           p.Deferred.exceptionHook = function(n, c) {
-            N.console && N.console.warn && n && Qe.test(n.name) && N.console.warn("jQuery.Deferred exception: " + n.message, n.stack, c);
+            L.console && L.console.warn && n && Qe.test(n.name) && L.console.warn("jQuery.Deferred exception: " + n.message, n.stack, c);
           }, p.readyException = function(n) {
-            N.setTimeout((function() {
+            L.setTimeout((function() {
               throw n;
             }));
           };
           var Dt = p.Deferred();
           function I() {
-            U.removeEventListener("DOMContentLoaded", I), N.removeEventListener("load", I), p.ready();
+            U.removeEventListener("DOMContentLoaded", I), L.removeEventListener("load", I), p.ready();
           }
           p.fn.ready = function(n) {
             return Dt.then(n).catch((function(c) {
@@ -30781,7 +30782,7 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
             })), this;
           }, p.extend({ isReady: !1, readyWait: 1, ready: function(n) {
             (n === !0 ? --p.readyWait : p.isReady) || (p.isReady = !0, n !== !0 && --p.readyWait > 0 || Dt.resolveWith(U, [p]));
-          } }), p.ready.then = Dt.then, U.readyState === "complete" || U.readyState !== "loading" && !U.documentElement.doScroll ? N.setTimeout(p.ready) : (U.addEventListener("DOMContentLoaded", I), N.addEventListener("load", I));
+          } }), p.ready.then = Dt.then, U.readyState === "complete" || U.readyState !== "loading" && !U.documentElement.doScroll ? L.setTimeout(p.ready) : (U.addEventListener("DOMContentLoaded", I), L.addEventListener("load", I));
           var G = function(n, c, m, E, M, P, ee) {
             var _e = 0, ke = n.length, Ue = m == null;
             if (he(m) === "object") for (_e in M = !0, m) G(n, c, _e, m[_e], !0, P, ee);
@@ -31216,7 +31217,7 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
           }));
           var kr = new RegExp("^(" + Sr + ")(?!px)[a-z%]+$", "i"), Nr = function(n) {
             var c = n.ownerDocument.defaultView;
-            return c && c.opener || (c = N), c.getComputedStyle(n);
+            return c && c.opener || (c = L), c.getComputedStyle(n);
           }, xn = function(n, c, m) {
             var E, M, P = {};
             for (M in c) P[M] = n.style[M], n.style[M] = c[M];
@@ -31237,7 +31238,7 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
             function n() {
               if (Ue) {
                 ke.style.cssText = "position:absolute;left:-11111px;width:60px;margin-top:1px;padding:0;border:0", Ue.style.cssText = "position:relative;display:block;box-sizing:border-box;overflow:scroll;margin:auto;border:1px;padding:1px;width:60%;top:1%", br.appendChild(ke).appendChild(Ue);
-                var ot = N.getComputedStyle(Ue);
+                var ot = L.getComputedStyle(Ue);
                 m = ot.top !== "1%", _e = c(ot.marginLeft) === 12, Ue.style.right = "60%", P = c(ot.right) === 36, E = c(ot.width) === 36, Ue.style.position = "absolute", M = c(Ue.offsetWidth / 3) === 12, br.removeChild(ke), Ue = null;
               }
             }
@@ -31257,7 +31258,7 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
               return n(), M;
             }, reliableTrDimensions: function() {
               var ot, Tt, at, gt;
-              return ee == null && (ot = U.createElement("table"), Tt = U.createElement("tr"), at = U.createElement("div"), ot.style.cssText = "position:absolute;left:-11111px", Tt.style.height = "1px", at.style.height = "9px", br.appendChild(ot).appendChild(Tt).appendChild(at), gt = N.getComputedStyle(Tt), ee = parseInt(gt.height) > 3, br.removeChild(ot)), ee;
+              return ee == null && (ot = U.createElement("table"), Tt = U.createElement("tr"), at = U.createElement("div"), ot.style.cssText = "position:absolute;left:-11111px", Tt.style.height = "1px", at.style.height = "9px", br.appendChild(ot).appendChild(Tt).appendChild(at), gt = L.getComputedStyle(Tt), ee = parseInt(gt.height) > 3, br.removeChild(ot)), ee;
             } }));
           })();
           var xr = ["Webkit", "Moz", "ms"], Jt = U.createElement("div").style, Sn = {};
@@ -31352,10 +31353,10 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
           }, _default: "swing" }, p.fx = qt.prototype.init, p.fx.step = {};
           var Jr, Gr, ei = /^(?:toggle|show|hide)$/, mi = /queueHooks$/;
           function sr() {
-            Gr && (U.hidden === !1 && N.requestAnimationFrame ? N.requestAnimationFrame(sr) : N.setTimeout(sr, p.fx.interval), p.fx.tick());
+            Gr && (U.hidden === !1 && L.requestAnimationFrame ? L.requestAnimationFrame(sr) : L.setTimeout(sr, p.fx.interval), p.fx.tick());
           }
           function qr() {
-            return N.setTimeout((function() {
+            return L.setTimeout((function() {
               Jr = void 0;
             })), Jr = Date.now();
           }
@@ -31473,9 +31474,9 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
             Gr = null;
           }, p.fx.speeds = { slow: 600, fast: 200, _default: 400 }, p.fn.delay = function(n, c) {
             return n = p.fx && p.fx.speeds[n] || n, c = c || "fx", this.queue(c, (function(m, E) {
-              var M = N.setTimeout(m, n);
+              var M = L.setTimeout(m, n);
               E.stop = function() {
-                N.clearTimeout(M);
+                L.clearTimeout(M);
               };
             }));
           }, (function() {
@@ -31606,7 +31607,7 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
             } }, te.checkOn || (p.valHooks[this].get = function(n) {
               return n.getAttribute("value") === null ? "on" : n.value;
             });
-          })), te.focusin = "onfocusin" in N;
+          })), te.focusin = "onfocusin" in L;
           var le = /^(?:focusinfocus|focusoutblur)$/, Ie = function(n) {
             n.stopPropagation();
           };
@@ -31615,7 +31616,7 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
             if (P = Tt = ee = m = m || U, m.nodeType !== 3 && m.nodeType !== 8 && !le.test(gt + p.event.triggered) && (gt.indexOf(".") > -1 && (rr = gt.split("."), gt = rr.shift(), rr.sort()), ke = gt.indexOf(":") < 0 && "on" + gt, (n = n[p.expando] ? n : new p.Event(gt, typeof n == "object" && n)).isTrigger = E ? 2 : 3, n.namespace = rr.join("."), n.rnamespace = n.namespace ? new RegExp("(^|\\.)" + rr.join("\\.(?:.*\\.|)") + "(\\.|$)") : null, n.result = void 0, n.target || (n.target = m), c = c == null ? [n] : p.makeArray(c, [n]), ot = p.event.special[gt] || {}, E || !ot.trigger || ot.trigger.apply(m, c) !== !1)) {
               if (!E && !ot.noBubble && !w(m)) {
                 for (_e = ot.delegateType || gt, le.test(_e + gt) || (P = P.parentNode); P; P = P.parentNode) at.push(P), ee = P;
-                ee === (m.ownerDocument || U) && at.push(ee.defaultView || ee.parentWindow || N);
+                ee === (m.ownerDocument || U) && at.push(ee.defaultView || ee.parentWindow || L);
               }
               for (M = 0; (P = at[M++]) && !n.isPropagationStopped(); ) Tt = P, n.type = M > 1 ? _e : ot.bindType || gt, (Ue = (We.get(P, "events") || /* @__PURE__ */ Object.create(null))[n.type] && We.get(P, "handle")) && Ue.apply(P, c), (Ue = ke && P[ke]) && Ue.apply && ze(P) && (n.result = Ue.apply(P, c), n.result === !1 && n.preventDefault());
               return n.type = gt, E || n.isDefaultPrevented() || ot._default && ot._default.apply(at.pop(), c) !== !1 || !ze(m) || ke && b(m[gt]) && !w(m) && ((ee = m[ke]) && (m[ke] = null), p.event.triggered = gt, n.isPropagationStopped() && Tt.addEventListener(gt, Ie), m[gt](), n.isPropagationStopped() && Tt.removeEventListener(gt, Ie), p.event.triggered = void 0, ee && (m[ke] = ee)), n.result;
@@ -31642,12 +31643,12 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
               M ? We.access(E, c, M) : (E.removeEventListener(n, m, !0), We.remove(E, c));
             } };
           }));
-          var et = N.location, St = { guid: Date.now() }, Ht = /\?/;
+          var et = L.location, St = { guid: Date.now() }, Ht = /\?/;
           p.parseXML = function(n) {
             var c;
             if (!n || typeof n != "string") return null;
             try {
-              c = new N.DOMParser().parseFromString(n, "text/xml");
+              c = new L.DOMParser().parseFromString(n, "text/xml");
             } catch {
               c = void 0;
             }
@@ -31754,7 +31755,7 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
             if (at.beforeSend && (at.beforeSend.call(gt, fr, at) === !1 || ke)) return fr.abort();
             if (Yr = "abort", nr.add(at.complete), fr.done(at.success), fr.fail(at.error), m = u(Wn, at, c, fr)) {
               if (fr.readyState = 1, Ue && rr.trigger("ajaxSend", [fr, at]), ke) return fr;
-              at.async && at.timeout > 0 && (ee = N.setTimeout((function() {
+              at.async && at.timeout > 0 && (ee = L.setTimeout((function() {
                 fr.abort("timeout");
               }), at.timeout));
               try {
@@ -31766,7 +31767,7 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
             } else Jn(-1, "No Transport");
             function Jn(Wr, Zr, ui, Ai) {
               var ti, ri, Li, Kn, dn, Nn = Zr;
-              ke || (ke = !0, ee && N.clearTimeout(ee), m = void 0, M = Ai || "", fr.readyState = Wr > 0 ? 4 : 0, ti = Wr >= 200 && Wr < 300 || Wr === 304, ui && (Kn = (function(qn, oi, $n) {
+              ke || (ke = !0, ee && L.clearTimeout(ee), m = void 0, M = Ai || "", fr.readyState = Wr > 0 ? 4 : 0, ti = Wr >= 200 && Wr < 300 || Wr === 304, ui && (Kn = (function(qn, oi, $n) {
                 for (var yi, Hr, bn, ci, xi = qn.contents, Xn = qn.dataTypes; Xn[0] === "*"; ) Xn.shift(), yi === void 0 && (yi = qn.mimeType || oi.getResponseHeader("Content-Type"));
                 if (yi) {
                   for (Hr in xi) if (xi[Hr] && xi[Hr].test(yi)) {
@@ -31855,7 +31856,7 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
             return !!(n.offsetWidth || n.offsetHeight || n.getClientRects().length);
           }, p.ajaxSettings.xhr = function() {
             try {
-              return new N.XMLHttpRequest();
+              return new L.XMLHttpRequest();
             } catch {
             }
           };
@@ -31871,7 +31872,7 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
                   c && (c = m = ee.onload = ee.onerror = ee.onabort = ee.ontimeout = ee.onreadystatechange = null, _e === "abort" ? ee.abort() : _e === "error" ? typeof ee.status != "number" ? M(0, "error") : M(ee.status, ee.statusText) : M(y[ee.status] || ee.status, ee.statusText, (ee.responseType || "text") !== "text" || typeof ee.responseText != "string" ? { binary: ee.response } : { text: ee.responseText }, ee.getAllResponseHeaders()));
                 };
               }, ee.onload = c(), m = ee.onerror = ee.ontimeout = c("error"), ee.onabort !== void 0 ? ee.onabort = m : ee.onreadystatechange = function() {
-                ee.readyState === 4 && N.setTimeout((function() {
+                ee.readyState === 4 && L.setTimeout((function() {
                   c && m();
                 }));
               }, c = c("abort");
@@ -31899,7 +31900,7 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
               m && m();
             } };
           }));
-          var L, k = [], $ = /(=)\?(?=&|$)|\?\?/;
+          var N, k = [], $ = /(=)\?(?=&|$)|\?\?/;
           p.ajaxSetup({ jsonp: "callback", jsonpCallback: function() {
             var n = k.pop() || p.expando + "_" + St.guid++;
             return this[n] = !0, n;
@@ -31907,12 +31908,12 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
             var E, M, P, ee = n.jsonp !== !1 && ($.test(n.url) ? "url" : typeof n.data == "string" && (n.contentType || "").indexOf("application/x-www-form-urlencoded") === 0 && $.test(n.data) && "data");
             if (ee || n.dataTypes[0] === "jsonp") return E = n.jsonpCallback = b(n.jsonpCallback) ? n.jsonpCallback() : n.jsonpCallback, ee ? n[ee] = n[ee].replace($, "$1" + E) : n.jsonp !== !1 && (n.url += (Ht.test(n.url) ? "&" : "?") + n.jsonp + "=" + E), n.converters["script json"] = function() {
               return P || p.error(E + " was not called"), P[0];
-            }, n.dataTypes[0] = "json", M = N[E], N[E] = function() {
+            }, n.dataTypes[0] = "json", M = L[E], L[E] = function() {
               P = arguments;
             }, m.always((function() {
-              M === void 0 ? p(N).removeProp(E) : N[E] = M, n[E] && (n.jsonpCallback = c.jsonpCallback, k.push(E)), P && b(M) && M(P[0]), P = M = void 0;
+              M === void 0 ? p(L).removeProp(E) : L[E] = M, n[E] && (n.jsonpCallback = c.jsonpCallback, k.push(E)), P && b(M) && M(P[0]), P = M = void 0;
             })), "script";
-          })), te.createHTMLDocument = ((L = U.implementation.createHTMLDocument("").body).innerHTML = "<form></form><form></form>", L.childNodes.length === 2), p.parseHTML = function(n, c, m) {
+          })), te.createHTMLDocument = ((N = U.implementation.createHTMLDocument("").body).innerHTML = "<form></form><form></form>", N.childNodes.length === 2), p.parseHTML = function(n, c, m) {
             return typeof n != "string" ? [] : (typeof c == "boolean" && (m = c, c = !1), c || (te.createHTMLDocument ? ((E = (c = U.implementation.createHTMLDocument("")).createElement("base")).href = U.location.href, c.head.appendChild(E)) : c = U), P = !m && [], (M = X.exec(n)) ? [c.createElement(M[1])] : (M = ii([n], c, P), P && P.length && p(P).remove(), p.merge([], M.childNodes)));
             var E, M, P;
           }, p.fn.load = function(n, c, m) {
@@ -32010,14 +32011,14 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
           }, (T = function() {
             return p;
           }.apply(pe, [])) === void 0 || (Ne.exports = T);
-          var Fe = N.jQuery, Ce = N.$;
+          var Fe = L.jQuery, Ce = L.$;
           return p.noConflict = function(n) {
-            return N.$ === p && (N.$ = Ce), n && N.jQuery === p && (N.jQuery = Fe), p;
-          }, Y === void 0 && (N.jQuery = N.$ = p), p;
+            return L.$ === p && (L.$ = Ce), n && L.jQuery === p && (L.jQuery = Fe), p;
+          }, Y === void 0 && (L.jQuery = L.$ = p), p;
         }));
       }, , , function(Ne, pe, x) {
         Ne.exports = (function() {
-          var T = Object.hasOwnProperty, N = Object.setPrototypeOf, Y = Object.isFrozen, B = Object.keys, g = Object.freeze, W = Object.seal, R = typeof Reflect < "u" && Reflect, H = R.apply, fe = R.construct;
+          var T = Object.hasOwnProperty, L = Object.setPrototypeOf, Y = Object.isFrozen, B = Object.keys, g = Object.freeze, W = Object.seal, R = typeof Reflect < "u" && Reflect, H = R.apply, fe = R.construct;
           H || (H = function(ze, tt, We) {
             return ze.apply(tt, We);
           }), g || (g = function(ze) {
@@ -32047,7 +32048,7 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
             };
           }
           function Te(ze, tt) {
-            N && N(ze, null);
+            L && L(ze, null);
             for (var We = tt.length; We--; ) {
               var Rt = tt[We];
               if (typeof Rt == "string") {
@@ -32270,12 +32271,12 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
             var b;
             te && te != T.Init && (K.clearGutter(K.state.foldGutter.options.gutter), K.state.foldGutter = null, K.off("gutterClick", fe), K.off("changes", C), K.off("viewportChange", Q), K.off("fold", ge), K.off("unfold", ge), K.off("swapDoc", C)), Z && (K.state.foldGutter = new Y(((b = Z) === !0 && (b = {}), b.gutter == null && (b.gutter = "CodeMirror-foldgutter"), b.indicatorOpen == null && (b.indicatorOpen = "CodeMirror-foldgutter-open"), b.indicatorFolded == null && (b.indicatorFolded = "CodeMirror-foldgutter-folded"), b)), H(K), K.on("gutterClick", fe), K.on("changes", C), K.on("viewportChange", Q), K.on("fold", ge), K.on("unfold", ge), K.on("swapDoc", C));
           }));
-          var N = T.Pos;
+          var L = T.Pos;
           function Y(K) {
             this.options = K, this.from = this.to = 0;
           }
           function B(K, Z) {
-            for (var te = K.findMarks(N(Z, 0), N(Z + 1, 0)), b = 0; b < te.length; ++b) if (te[b].__isFold) {
+            for (var te = K.findMarks(L(Z, 0), L(Z + 1, 0)), b = 0; b < te.length; ++b) if (te[b].__isFold) {
               var w = te[b].find(-1);
               if (w && w.line === Z) return te[b];
             }
@@ -32296,7 +32297,7 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
                 if (de && Ge && de.test(Ge.className)) return;
                 ae = g(b.indicatorFolded);
               } else {
-                var me = N(w, 0), Te = re && re(K, me);
+                var me = L(w, 0), Te = re && re(K, me);
                 if (Te && Te.to.line - Te.from.line >= U) {
                   if (he && Ge && he.test(Ge.className)) return;
                   ae = g(b.indicatorOpen);
@@ -32320,7 +32321,7 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
               var w = b.options;
               if (te == w.gutter) {
                 var U = B(K, Z);
-                U ? U.clear() : K.foldCode(N(Z, 0), w);
+                U ? U.clear() : K.foldCode(L(Z, 0), w);
               }
             }
           }
@@ -32355,7 +32356,7 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
         })(x(7), x(92));
       }, function(Ne, pe, x) {
         (function(T) {
-          var N = T.Pos;
+          var L = T.Pos;
           function Y(b, w) {
             return b.line - w.line || b.ch - w.ch;
           }
@@ -32364,7 +32365,7 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
             this.line = w, this.ch = U, this.cm = b, this.text = b.getLine(w), this.min = re ? Math.max(re.from, b.firstLine()) : b.firstLine(), this.max = re ? Math.min(re.to - 1, b.lastLine()) : b.lastLine();
           }
           function R(b, w) {
-            var U = b.cm.getTokenTypeAt(N(b.line, w));
+            var U = b.cm.getTokenTypeAt(L(b.line, w));
             return U && /\btag\b/.test(U);
           }
           function H(b) {
@@ -32436,7 +32437,7 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
                   U.length = ae;
                   break;
                 }
-                if (ae < 0 && (!w || w == de[2])) return { tag: de[2], from: N(he, p), to: N(b.line, b.ch) };
+                if (ae < 0 && (!w || w == de[2])) return { tag: de[2], from: L(he, p), to: L(b.line, b.ch) };
               } else U.push(de[2]);
             }
           }
@@ -32453,7 +32454,7 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
                     U.length = ae;
                     break;
                   }
-                  if (ae < 0 && (!w || w == p[2])) return { tag: p[2], from: N(b.line, b.ch), to: N(de, he) };
+                  if (ae < 0 && (!w || w == p[2])) return { tag: p[2], from: L(b.line, b.ch), to: L(de, he) };
                 }
               } else Q(b);
             }
@@ -32465,16 +32466,16 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
               var de = C(U);
               if (!de) return;
               if (!re[1] && de != "selfClose") {
-                var he = N(U.line, U.ch), p = Z(U, re[2]);
+                var he = L(U.line, U.ch), p = Z(U, re[2]);
                 return p && Y(p.from, he) > 0 ? { from: he, to: p.from } : null;
               }
             }
           })), T.findMatchingTag = function(b, w, U) {
             var re = new W(b, w.line, w.ch, U);
             if (re.text.indexOf(">") != -1 || re.text.indexOf("<") != -1) {
-              var de = C(re), he = de && N(re.line, re.ch), p = de && Q(re);
+              var de = C(re), he = de && L(re.line, re.ch), p = de && Q(re);
               if (de && p && !(Y(re, w) > 0)) {
-                var ae = { from: N(re.line, re.ch), to: he, tag: p[2] };
+                var ae = { from: L(re.line, re.ch), to: he, tag: p[2] };
                 return de == "selfClose" ? { open: ae, close: null, at: "open" } : p[1] ? { open: te(re, p[2]), close: ae, at: "close" } : { open: ae, close: Z(re = new W(b, he.line, he.ch, U), p[2]), at: "open" };
               }
             }
@@ -32491,14 +32492,14 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
         })(x(7));
       }, function(Ne, pe, x) {
         (function(T) {
-          T.registerHelper("fold", "brace", (function(N, Y) {
-            var B, g = Y.line, W = N.getLine(g);
+          T.registerHelper("fold", "brace", (function(L, Y) {
+            var B, g = Y.line, W = L.getLine(g);
             function R(de) {
               for (var he = Y.ch, p = 0; ; ) {
                 var ae = he <= 0 ? -1 : W.lastIndexOf(de, he - 1);
                 if (ae != -1) {
                   if (p == 1 && ae < Y.ch) break;
-                  if (B = N.getTokenTypeAt(T.Pos(g, ae + 1)), !/^(comment|string)/.test(B)) return ae + 1;
+                  if (B = L.getTokenTypeAt(T.Pos(g, ae + 1)), !/^(comment|string)/.test(B)) return ae + 1;
                   he = ae - 1;
                 } else {
                   if (p == 1) break;
@@ -32508,11 +32509,11 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
             }
             var H = "{", fe = "}", C = R("{");
             if (C == null && (H = "[", fe = "]", C = R("[")), C != null) {
-              var Q, ge, K = 1, Z = N.lastLine();
-              e: for (var te = g; te <= Z; ++te) for (var b = N.getLine(te), w = te == g ? C : 0; ; ) {
+              var Q, ge, K = 1, Z = L.lastLine();
+              e: for (var te = g; te <= Z; ++te) for (var b = L.getLine(te), w = te == g ? C : 0; ; ) {
                 var U = b.indexOf(H, w), re = b.indexOf(fe, w);
                 if (U < 0 && (U = b.length), re < 0 && (re = b.length), (w = Math.min(U, re)) == b.length) break;
-                if (N.getTokenTypeAt(T.Pos(te, w + 1)) == B) {
+                if (L.getTokenTypeAt(T.Pos(te, w + 1)) == B) {
                   if (w == U) ++K;
                   else if (!--K) {
                     Q = te, ge = w;
@@ -32523,13 +32524,13 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
               }
               if (Q != null && g != Q) return { from: T.Pos(g, C), to: T.Pos(Q, ge) };
             }
-          })), T.registerHelper("fold", "import", (function(N, Y) {
+          })), T.registerHelper("fold", "import", (function(L, Y) {
             function B(C) {
-              if (C < N.firstLine() || C > N.lastLine()) return null;
-              var Q = N.getTokenAt(T.Pos(C, 1));
-              if (/\S/.test(Q.string) || (Q = N.getTokenAt(T.Pos(C, Q.end + 1))), Q.type != "keyword" || Q.string != "import") return null;
-              for (var ge = C, K = Math.min(N.lastLine(), C + 10); ge <= K; ++ge) {
-                var Z = N.getLine(ge).indexOf(";");
+              if (C < L.firstLine() || C > L.lastLine()) return null;
+              var Q = L.getTokenAt(T.Pos(C, 1));
+              if (/\S/.test(Q.string) || (Q = L.getTokenAt(T.Pos(C, Q.end + 1))), Q.type != "keyword" || Q.string != "import") return null;
+              for (var ge = C, K = Math.min(L.lastLine(), C + 10); ge <= K; ++ge) {
+                var Z = L.getLine(ge).indexOf(";");
                 if (Z != -1) return { startCh: Q.end, end: T.Pos(ge, Z) };
               }
             }
@@ -32540,22 +32541,22 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
               if (fe == null) break;
               H = fe.end;
             }
-            return { from: N.clipPos(T.Pos(W, R.startCh + 1)), to: H };
-          })), T.registerHelper("fold", "include", (function(N, Y) {
+            return { from: L.clipPos(T.Pos(W, R.startCh + 1)), to: H };
+          })), T.registerHelper("fold", "include", (function(L, Y) {
             function B(H) {
-              if (H < N.firstLine() || H > N.lastLine()) return null;
-              var fe = N.getTokenAt(T.Pos(H, 1));
-              return /\S/.test(fe.string) || (fe = N.getTokenAt(T.Pos(H, fe.end + 1))), fe.type == "meta" && fe.string.slice(0, 8) == "#include" ? fe.start + 8 : void 0;
+              if (H < L.firstLine() || H > L.lastLine()) return null;
+              var fe = L.getTokenAt(T.Pos(H, 1));
+              return /\S/.test(fe.string) || (fe = L.getTokenAt(T.Pos(H, fe.end + 1))), fe.type == "meta" && fe.string.slice(0, 8) == "#include" ? fe.start + 8 : void 0;
             }
             var g = Y.line, W = B(g);
             if (W == null || B(g - 1) != null) return null;
             for (var R = g; B(R + 1) != null; ) ++R;
-            return { from: T.Pos(g, W + 1), to: N.clipPos(T.Pos(R)) };
+            return { from: T.Pos(g, W + 1), to: L.clipPos(T.Pos(R)) };
           }));
         })(x(7));
       }, function(Ne, pe, x) {
         (function(T) {
-          var N = /MSIE \d/.test(navigator.userAgent) && (document.documentMode == null || document.documentMode < 8), Y = T.Pos, B = { "(": ")>", ")": "(<", "[": "]>", "]": "[<", "{": "}>", "}": "{<", "<": ">>", ">": "<<" };
+          var L = /MSIE \d/.test(navigator.userAgent) && (document.documentMode == null || document.documentMode < 8), Y = T.Pos, B = { "(": ")>", ")": "(<", "[": "]>", "]": "[<", "{": "}>", "}": "{<", "<": ">>", ">": "<<" };
           function g(C) {
             return C && C.bracketRegex || /[(){}[\]]/;
           }
@@ -32598,7 +32599,7 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
               }
             }
             if (Z.length) {
-              N && C.state.focused && C.focus();
+              L && C.state.focused && C.focus();
               var re = function() {
                 C.operation((function() {
                   for (var de = 0; de < Z.length; de++) Z[de].clear();
@@ -32628,14 +32629,14 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
         })(x(7));
       }, function(Ne, pe, x) {
       }, function(Ne, pe) {
-        function x(T, N) {
+        function x(T, L) {
           return Ne.exports = x = Object.setPrototypeOf || function(Y, B) {
             return Y.__proto__ = B, Y;
-          }, x(T, N);
+          }, x(T, L);
         }
         Ne.exports = x;
       }, function(Ne, pe, x) {
-        var T = (function(N) {
+        var T = (function(L) {
           var Y = Object.prototype, B = Y.hasOwnProperty, g = typeof Symbol == "function" ? Symbol : {}, W = g.iterator || "@@iterator", R = g.asyncIterator || "@@asyncIterator", H = g.toStringTag || "@@toStringTag";
           function fe(O, ce, X, be) {
             var qe = ce && ce.prototype instanceof ge ? ce : ge, ut = Object.create(qe.prototype), _t = new Ge(be || []);
@@ -32679,7 +32680,7 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
               return { type: "throw", arg: be };
             }
           }
-          N.wrap = fe;
+          L.wrap = fe;
           var Q = {};
           function ge() {
           }
@@ -32770,26 +32771,26 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
           function Te() {
             return { value: void 0, done: !0 };
           }
-          return K.prototype = U.constructor = Z, Z.constructor = K, Z[H] = K.displayName = "GeneratorFunction", N.isGeneratorFunction = function(O) {
+          return K.prototype = U.constructor = Z, Z.constructor = K, Z[H] = K.displayName = "GeneratorFunction", L.isGeneratorFunction = function(O) {
             var ce = typeof O == "function" && O.constructor;
             return !!ce && (ce === K || (ce.displayName || ce.name) === "GeneratorFunction");
-          }, N.mark = function(O) {
+          }, L.mark = function(O) {
             return Object.setPrototypeOf ? Object.setPrototypeOf(O, Z) : (O.__proto__ = Z, H in O || (O[H] = "GeneratorFunction")), O.prototype = Object.create(U), O;
-          }, N.awrap = function(O) {
+          }, L.awrap = function(O) {
             return { __await: O };
           }, re(de.prototype), de.prototype[R] = function() {
             return this;
-          }, N.AsyncIterator = de, N.async = function(O, ce, X, be, qe) {
+          }, L.AsyncIterator = de, L.async = function(O, ce, X, be, qe) {
             qe === void 0 && (qe = Promise);
             var ut = new de(fe(O, ce, X, be), qe);
-            return N.isGeneratorFunction(ce) ? ut : ut.next().then((function(_t) {
+            return L.isGeneratorFunction(ce) ? ut : ut.next().then((function(_t) {
               return _t.done ? _t.value : ut.next();
             }));
           }, re(U), U[H] = "Generator", U[W] = function() {
             return this;
           }, U.toString = function() {
             return "[object Generator]";
-          }, N.keys = function(O) {
+          }, L.keys = function(O) {
             var ce = [];
             for (var X in O) ce.push(X);
             return ce.reverse(), function be() {
@@ -32799,7 +32800,7 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
               }
               return be.done = !0, be;
             };
-          }, N.values = me, Ge.prototype = { constructor: Ge, reset: function(O) {
+          }, L.values = me, Ge.prototype = { constructor: Ge, reset: function(O) {
             if (this.prev = 0, this.next = 0, this.sent = this._sent = void 0, this.done = !1, this.delegate = null, this.method = "next", this.arg = void 0, this.tryEntries.forEach(ae), !O) for (var ce in this) ce.charAt(0) === "t" && B.call(this, ce) && !isNaN(+ce.slice(1)) && (this[ce] = void 0);
           }, stop: function() {
             this.done = !0;
@@ -32862,7 +32863,7 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
             throw new Error("illegal catch attempt");
           }, delegateYield: function(O, ce, X) {
             return this.delegate = { iterator: me(O), resultName: ce, nextLoc: X }, this.method === "next" && (this.arg = void 0), Q;
-          } }, N;
+          } }, L;
         })(Ne.exports);
         try {
           regeneratorRuntime = T;
@@ -32870,10 +32871,10 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
           Function("r", "regeneratorRuntime = r")(T);
         }
       }, function(Ne, pe, x) {
-        var T = x(107), N = x(108), Y = [x(115)];
-        Ne.exports = T.createStore(N, Y);
+        var T = x(107), L = x(108), Y = [x(115)];
+        Ne.exports = T.createStore(L, Y);
       }, function(Ne, pe, x) {
-        var T = x(40), N = T.slice, Y = T.pluck, B = T.each, g = T.bind, W = T.create, R = T.isList, H = T.isFunction, fe = T.isObject;
+        var T = x(40), L = T.slice, Y = T.pluck, B = T.each, g = T.bind, W = T.create, R = T.isList, H = T.isFunction, fe = T.isObject;
         Ne.exports = { createStore: Q };
         var C = { version: "2.0.12", enabled: !1, get: function(ge, K) {
           var Z = this.storage.read(this._namespacePrefix + ge);
@@ -32914,7 +32915,7 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
           }, _assignPluginFnProp: function(U, re) {
             var de = this[re];
             this[re] = function() {
-              var he = N(arguments, 0), p = this;
+              var he = L(arguments, 0), p = this;
               function ae() {
                 if (de) return B(arguments, (function(me, Te) {
                   he[Te] = me;
@@ -32973,42 +32974,42 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
         Ne.exports = [x(109), x(110), x(111), x(112), x(113), x(114)];
       }, function(Ne, pe, x) {
         var T = x(40).Global;
-        function N() {
+        function L() {
           return T.localStorage;
         }
         function Y(B) {
-          return N().getItem(B);
+          return L().getItem(B);
         }
         Ne.exports = { name: "localStorage", read: Y, write: function(B, g) {
-          return N().setItem(B, g);
+          return L().setItem(B, g);
         }, each: function(B) {
-          for (var g = N().length - 1; g >= 0; g--) {
-            var W = N().key(g);
+          for (var g = L().length - 1; g >= 0; g--) {
+            var W = L().key(g);
             B(Y(W), W);
           }
         }, remove: function(B) {
-          return N().removeItem(B);
+          return L().removeItem(B);
         }, clearAll: function() {
-          return N().clear();
+          return L().clear();
         } };
       }, function(Ne, pe, x) {
         var T = x(40).Global;
         Ne.exports = { name: "oldFF-globalStorage", read: function(B) {
-          return N[B];
+          return L[B];
         }, write: function(B, g) {
-          N[B] = g;
+          L[B] = g;
         }, each: Y, remove: function(B) {
-          return N.removeItem(B);
+          return L.removeItem(B);
         }, clearAll: function() {
           Y((function(B, g) {
-            delete N[B];
+            delete L[B];
           }));
         } };
-        var N = T.globalStorage;
+        var L = T.globalStorage;
         function Y(B) {
-          for (var g = N.length - 1; g >= 0; g--) {
-            var W = N.key(g);
-            B(N[W], W);
+          for (var g = L.length - 1; g >= 0; g--) {
+            var W = L.key(g);
+            B(L[W], W);
           }
         }
       }, function(Ne, pe, x) {
@@ -33047,13 +33048,13 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
             R.save("storejs");
           }));
         } };
-        var N = T.document, Y = (function() {
-          if (!N || !N.documentElement || !N.documentElement.addBehavior) return null;
+        var L = T.document, Y = (function() {
+          if (!L || !L.documentElement || !L.documentElement.addBehavior) return null;
           var R, H, fe;
           try {
             (H = new ActiveXObject("htmlfile")).open(), H.write('<script>document.w=window<\/script><iframe src="/favicon.ico"></iframe>'), H.close(), R = H.w.frames[0].document, fe = R.createElement("div");
           } catch {
-            fe = N.createElement("div"), R = N.body;
+            fe = L.createElement("div"), R = L.body;
           }
           return function(C) {
             var Q = [].slice.call(arguments, 0);
@@ -33064,7 +33065,7 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
           return R.replace(/^\d/, "___$&").replace(g, "___");
         }
       }, function(Ne, pe, x) {
-        var T = x(40), N = T.Global, Y = T.trim;
+        var T = x(40), L = T.Global, Y = T.trim;
         Ne.exports = { name: "cookieStorage", read: function(H) {
           if (!H || !R(H)) return null;
           var fe = "(?:^|.*;\\s*)" + escape(H).replace(/[\-\.\+\*]/g, "\\$&") + "\\s*\\=\\s*((?:[^;](?!;))*[^;]?).*";
@@ -33076,7 +33077,7 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
             W(fe);
           }));
         } };
-        var B = N.document;
+        var B = L.document;
         function g(H) {
           for (var fe = B.cookie.split(/; ?/g), C = fe.length - 1; C >= 0; C--) if (Y(fe[C])) {
             var Q = fe[C].split("="), ge = unescape(Q[0]);
@@ -33091,31 +33092,31 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
         }
       }, function(Ne, pe, x) {
         var T = x(40).Global;
-        function N() {
+        function L() {
           return T.sessionStorage;
         }
         function Y(B) {
-          return N().getItem(B);
+          return L().getItem(B);
         }
         Ne.exports = { name: "sessionStorage", read: Y, write: function(B, g) {
-          return N().setItem(B, g);
+          return L().setItem(B, g);
         }, each: function(B) {
-          for (var g = N().length - 1; g >= 0; g--) {
-            var W = N().key(g);
+          for (var g = L().length - 1; g >= 0; g--) {
+            var W = L().key(g);
             B(Y(W), W);
           }
         }, remove: function(B) {
-          return N().removeItem(B);
+          return L().removeItem(B);
         }, clearAll: function() {
-          return N().clear();
+          return L().clear();
         } };
       }, function(Ne, pe) {
         Ne.exports = { name: "memoryStorage", read: function(T) {
           return x[T];
-        }, write: function(T, N) {
-          x[T] = N;
+        }, write: function(T, L) {
+          x[T] = L;
         }, each: function(T) {
-          for (var N in x) x.hasOwnProperty(N) && T(x[N], N);
+          for (var L in x) x.hasOwnProperty(L) && T(x[L], L);
         }, remove: function(T) {
           delete x[T];
         }, clearAll: function(T) {
@@ -33142,7 +33143,7 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
             })) + '"' : '"' + Ne + '"';
           }
           function str(Ne, pe) {
-            var x, T, N, Y, B, g = gap, W = pe[Ne];
+            var x, T, L, Y, B, g = gap, W = pe[Ne];
             switch (W && typeof W == "object" && typeof W.toJSON == "function" && (W = W.toJSON(Ne)), typeof rep == "function" && (W = rep.call(pe, Ne, W)), typeof W) {
               case "string":
                 return quote(W);
@@ -33155,17 +33156,17 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
                 if (!W) return "null";
                 if (gap += indent, B = [], Object.prototype.toString.apply(W) === "[object Array]") {
                   for (Y = W.length, x = 0; x < Y; x += 1) B[x] = str(x, W) || "null";
-                  return N = B.length === 0 ? "[]" : gap ? `[
+                  return L = B.length === 0 ? "[]" : gap ? `[
 ` + gap + B.join(`,
 ` + gap) + `
-` + g + "]" : "[" + B.join(",") + "]", gap = g, N;
+` + g + "]" : "[" + B.join(",") + "]", gap = g, L;
                 }
-                if (rep && typeof rep == "object") for (Y = rep.length, x = 0; x < Y; x += 1) typeof rep[x] == "string" && (N = str(T = rep[x], W)) && B.push(quote(T) + (gap ? ": " : ":") + N);
-                else for (T in W) Object.prototype.hasOwnProperty.call(W, T) && (N = str(T, W)) && B.push(quote(T) + (gap ? ": " : ":") + N);
-                return N = B.length === 0 ? "{}" : gap ? `{
+                if (rep && typeof rep == "object") for (Y = rep.length, x = 0; x < Y; x += 1) typeof rep[x] == "string" && (L = str(T = rep[x], W)) && B.push(quote(T) + (gap ? ": " : ":") + L);
+                else for (T in W) Object.prototype.hasOwnProperty.call(W, T) && (L = str(T, W)) && B.push(quote(T) + (gap ? ": " : ":") + L);
+                return L = B.length === 0 ? "{}" : gap ? `{
 ` + gap + B.join(`,
 ` + gap) + `
-` + g + "}" : "{" + B.join(",") + "}", gap = g, N;
+` + g + "}" : "{" + B.join(",") + "}", gap = g, L;
             }
           }
           typeof Date.prototype.toJSON != "function" && (Date.prototype.toJSON = function() {
@@ -33179,9 +33180,9 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
           }), typeof JSON.parse != "function" && (JSON.parse = function(text, reviver) {
             var j;
             function walk(Ne, pe) {
-              var x, T, N = Ne[pe];
-              if (N && typeof N == "object") for (x in N) Object.prototype.hasOwnProperty.call(N, x) && ((T = walk(N, x)) !== void 0 ? N[x] = T : delete N[x]);
-              return reviver.call(Ne, pe, N);
+              var x, T, L = Ne[pe];
+              if (L && typeof L == "object") for (x in L) Object.prototype.hasOwnProperty.call(L, x) && ((T = walk(L, x)) !== void 0 ? L[x] = T : delete L[x]);
+              return reviver.call(Ne, pe, L);
             }
             if (text = String(text), rx_dangerous.lastIndex = 0, rx_dangerous.test(text) && (text = text.replace(rx_dangerous, (function(Ne) {
               return "\\u" + ("0000" + Ne.charCodeAt(0).toString(16)).slice(-4);
@@ -33196,7 +33197,7 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
       }, function(Ne, pe) {
         Ne.exports = function(x, T) {
           (T == null || T > x.length) && (T = x.length);
-          for (var N = 0, Y = new Array(T); N < T; N++) Y[N] = x[N];
+          for (var L = 0, Y = new Array(T); L < T; L++) Y[L] = x[L];
           return Y;
         };
       }, function(Ne, pe) {
@@ -33213,14 +33214,14 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
           x.d(pe, "a", (function() {
             return ge;
           }));
-          var N = x(23), Y = x(124), B = x.n(Y);
+          var L = x(23), Y = x(124), B = x.n(Y);
           function g(K, Z) {
             for (var te = 0; te < Z.length; te++) {
               var b = Z[te];
               b.enumerable = b.enumerable || !1, b.configurable = !0, "value" in b && (b.writable = !0), Object.defineProperty(K, b.key, b);
             }
           }
-          var W = N.a.xsd, R = /\\u([a-fA-F0-9]{4})|\\U([a-fA-F0-9]{8})|\\([^])/g, H = { "\\": "\\", "'": "'", '"': '"', n: `
+          var W = L.a.xsd, R = /\\u([a-fA-F0-9]{4})|\\U([a-fA-F0-9]{8})|\\([^])/g, H = { "\\": "\\", "'": "'", '"': '"', n: `
 `, r: "\r", t: "	", f: "\f", b: "\b", _: "_", "~": "~", ".": ".", "-": "-", "!": "!", $: "$", "&": "&", "(": "(", ")": ")", "*": "*", "+": "+", ",": ",", ";": ";", "=": "=", "/": "/", "?": "?", "#": "#", "@": "@", "%": "%" }, fe = /[\x00-\x20<>\\"\{\}\|\^\`]/, C = { _iri: !0, _unescapedIri: !0, _simpleQuotedString: !0, _langcode: !0, _blank: !0, _newline: !0, _comment: !0, _whitespace: !0, _endOfFile: !0 }, Q = /$0^/, ge = (function() {
             function K(b) {
               if ((function(U, re) {
@@ -33400,12 +33401,12 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
         }).call(this, x(132).Buffer);
       }, function(Ne, pe) {
         let x;
-        Ne.exports = typeof queueMicrotask == "function" ? queueMicrotask : (T) => (x || (x = Promise.resolve())).then(T).catch((N) => setTimeout(() => {
-          throw N;
+        Ne.exports = typeof queueMicrotask == "function" ? queueMicrotask : (T) => (x || (x = Promise.resolve())).then(T).catch((L) => setTimeout(() => {
+          throw L;
         }, 0));
       }, function(Ne, pe, x) {
-        var T, N, Y;
-        N = [], (Y = typeof (T = function B() {
+        var T, L, Y;
+        L = [], (Y = typeof (T = function B() {
           var g = typeof self < "u" ? self : typeof window < "u" ? window : g !== void 0 ? g : {}, W = !g.document && !!g.postMessage, R = W && /blob:/i.test((g.location || {}).protocol), H = {}, fe = 0, C = { parse: function(Te, O) {
             var ce = (O = O || {}).dynamicTyping || !1;
             if (me(ce) && (O.dynamicTypingFunction = ce, ce = {}), O.dynamicTyping = ce, O.transform = !!me(O.transform) && O.transform, O.worker && C.WORKERS_SUPPORTED) {
@@ -33865,15 +33866,15 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
               ce && g.postMessage({ workerId: C.WORKER_ID, results: ce, finished: !0 });
             }
           }), (K.prototype = Object.create(ge.prototype)).constructor = K, (Z.prototype = Object.create(ge.prototype)).constructor = Z, (te.prototype = Object.create(te.prototype)).constructor = te, (b.prototype = Object.create(ge.prototype)).constructor = b, C;
-        }) == "function" ? T.apply(pe, N) : T) === void 0 || (Ne.exports = Y);
+        }) == "function" ? T.apply(pe, L) : T) === void 0 || (Ne.exports = Y);
       }, function(Ne, pe, x) {
-        var T = x(117), N = x(120), Y = x(94), B = x(119);
+        var T = x(117), L = x(120), Y = x(94), B = x(119);
         Ne.exports = function(g) {
-          return T(g) || N(g) || Y(g) || B();
+          return T(g) || L(g) || Y(g) || B();
         };
       }, function(Ne, pe, x) {
         (function(T) {
-          (function(N) {
+          (function(L) {
             function Y() {
             }
             function B() {
@@ -35428,15 +35429,15 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
             }
             function y(s, l) {
               if (typeof l != "function" && l !== null) throw new TypeError("Super expression must either be null or a function");
-              s.prototype = Object.create(l && l.prototype, { constructor: { value: s, writable: !0, configurable: !0 } }), l && L(s, l);
+              s.prototype = Object.create(l && l.prototype, { constructor: { value: s, writable: !0, configurable: !0 } }), l && N(s, l);
             }
             function _(s) {
               return (_ = Object.setPrototypeOf ? Object.getPrototypeOf : function(l) {
                 return l.__proto__ || Object.getPrototypeOf(l);
               })(s);
             }
-            function L(s, l) {
-              return (L = Object.setPrototypeOf || function(h, F) {
+            function N(s, l) {
+              return (N = Object.setPrototypeOf || function(h, F) {
                 return h.__proto__ = F, h;
               })(s, l);
             }
@@ -36072,28 +36073,28 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
                 return Promise.reject(se);
               }
             }, gi = { flatten: bi, unwind: Qi }, Oi = { Parser: Do, AsyncParser: la, Transform: ua, parse: ca, parseAsync: ki, transforms: gi };
-            N.AsyncParser = la, N.Parser = Do, N.Transform = ua, N.default = Oi, N.parse = ca, N.parseAsync = ki, N.transforms = gi, Object.defineProperty(N, "__esModule", { value: !0 });
+            L.AsyncParser = la, L.Parser = Do, L.Transform = ua, L.default = Oi, L.parse = ca, L.parseAsync = ki, L.transforms = gi, Object.defineProperty(L, "__esModule", { value: !0 });
           })(pe);
         }).call(this, x(72));
       }, function(Ne, pe, x) {
         Object.defineProperty(pe, "__esModule", { value: !0 });
-        var T = [], N = "M216 0h80c13.3 0 24 10.7 24 24v168h87.7c17.8 0 26.7 21.5 14.1 34.1L269.7 378.3c-7.5 7.5-19.8 7.5-27.3 0L90.1 226.1c-12.6-12.6-3.7-34.1 14.1-34.1H192V24c0-13.3 10.7-24 24-24zm296 376v112c0 13.3-10.7 24-24 24H24c-13.3 0-24-10.7-24-24V376c0-13.3 10.7-24 24-24h146.7l49 49c20.1 20.1 52.5 20.1 72.6 0l49-49H488c13.3 0 24 10.7 24 24zm-124 88c0-11-9-20-20-20s-20 9-20 20 9 20 20 20 20-9 20-20zm64 0c0-11-9-20-20-20s-20 9-20 20 9 20 20 20 20-9 20-20z";
-        pe.definition = { prefix: "fas", iconName: "download", icon: [512, 512, T, "f019", N] }, pe.faDownload = pe.definition, pe.prefix = "fas", pe.iconName = "download", pe.width = 512, pe.height = 512, pe.ligatures = T, pe.unicode = "f019", pe.svgPathData = N;
+        var T = [], L = "M216 0h80c13.3 0 24 10.7 24 24v168h87.7c17.8 0 26.7 21.5 14.1 34.1L269.7 378.3c-7.5 7.5-19.8 7.5-27.3 0L90.1 226.1c-12.6-12.6-3.7-34.1 14.1-34.1H192V24c0-13.3 10.7-24 24-24zm296 376v112c0 13.3-10.7 24-24 24H24c-13.3 0-24-10.7-24-24V376c0-13.3 10.7-24 24-24h146.7l49 49c20.1 20.1 52.5 20.1 72.6 0l49-49H488c13.3 0 24 10.7 24 24zm-124 88c0-11-9-20-20-20s-20 9-20 20 9 20 20 20 20-9 20-20zm64 0c0-11-9-20-20-20s-20 9-20 20 9 20 20 20 20-9 20-20z";
+        pe.definition = { prefix: "fas", iconName: "download", icon: [512, 512, T, "f019", L] }, pe.faDownload = pe.definition, pe.prefix = "fas", pe.iconName = "download", pe.width = 512, pe.height = 512, pe.ligatures = T, pe.unicode = "f019", pe.svgPathData = L;
       }, function(Ne, pe, x) {
         Object.defineProperty(pe, "__esModule", { value: !0 });
-        var T = [], N = "M504 256c0 136.997-111.043 248-248 248S8 392.997 8 256C8 119.083 119.043 8 256 8s248 111.083 248 248zM262.655 90c-54.497 0-89.255 22.957-116.549 63.758-3.536 5.286-2.353 12.415 2.715 16.258l34.699 26.31c5.205 3.947 12.621 3.008 16.665-2.122 17.864-22.658 30.113-35.797 57.303-35.797 20.429 0 45.698 13.148 45.698 32.958 0 14.976-12.363 22.667-32.534 33.976C247.128 238.528 216 254.941 216 296v4c0 6.627 5.373 12 12 12h56c6.627 0 12-5.373 12-12v-1.333c0-28.462 83.186-29.647 83.186-106.667 0-58.002-60.165-102-116.531-102zM256 338c-25.365 0-46 20.635-46 46 0 25.364 20.635 46 46 46s46-20.636 46-46c0-25.365-20.635-46-46-46z";
-        pe.definition = { prefix: "fas", iconName: "question-circle", icon: [512, 512, T, "f059", N] }, pe.faQuestionCircle = pe.definition, pe.prefix = "fas", pe.iconName = "question-circle", pe.width = 512, pe.height = 512, pe.ligatures = T, pe.unicode = "f059", pe.svgPathData = N;
+        var T = [], L = "M504 256c0 136.997-111.043 248-248 248S8 392.997 8 256C8 119.083 119.043 8 256 8s248 111.083 248 248zM262.655 90c-54.497 0-89.255 22.957-116.549 63.758-3.536 5.286-2.353 12.415 2.715 16.258l34.699 26.31c5.205 3.947 12.621 3.008 16.665-2.122 17.864-22.658 30.113-35.797 57.303-35.797 20.429 0 45.698 13.148 45.698 32.958 0 14.976-12.363 22.667-32.534 33.976C247.128 238.528 216 254.941 216 296v4c0 6.627 5.373 12 12 12h56c6.627 0 12-5.373 12-12v-1.333c0-28.462 83.186-29.647 83.186-106.667 0-58.002-60.165-102-116.531-102zM256 338c-25.365 0-46 20.635-46 46 0 25.364 20.635 46 46 46s46-20.636 46-46c0-25.365-20.635-46-46-46z";
+        pe.definition = { prefix: "fas", iconName: "question-circle", icon: [512, 512, T, "f059", L] }, pe.faQuestionCircle = pe.definition, pe.prefix = "fas", pe.iconName = "question-circle", pe.width = 512, pe.height = 512, pe.ligatures = T, pe.unicode = "f059", pe.svgPathData = L;
       }, function(Ne, pe, x) {
         Object.defineProperty(pe, "__esModule", { value: !0 });
-        var T = [], N = "M464 32H48C21.49 32 0 53.49 0 80v352c0 26.51 21.49 48 48 48h416c26.51 0 48-21.49 48-48V80c0-26.51-21.49-48-48-48zM224 416H64v-96h160v96zm0-160H64v-96h160v96zm224 160H288v-96h160v96zm0-160H288v-96h160v96z";
-        pe.definition = { prefix: "fas", iconName: "table", icon: [512, 512, T, "f0ce", N] }, pe.faTable = pe.definition, pe.prefix = "fas", pe.iconName = "table", pe.width = 512, pe.height = 512, pe.ligatures = T, pe.unicode = "f0ce", pe.svgPathData = N;
+        var T = [], L = "M464 32H48C21.49 32 0 53.49 0 80v352c0 26.51 21.49 48 48 48h416c26.51 0 48-21.49 48-48V80c0-26.51-21.49-48-48-48zM224 416H64v-96h160v96zm0-160H64v-96h160v96zm224 160H288v-96h160v96zm0-160H288v-96h160v96z";
+        pe.definition = { prefix: "fas", iconName: "table", icon: [512, 512, T, "f0ce", L] }, pe.faTable = pe.definition, pe.prefix = "fas", pe.iconName = "table", pe.width = 512, pe.height = 512, pe.ligatures = T, pe.unicode = "f0ce", pe.svgPathData = L;
       }, function(Ne, pe, x) {
         Object.defineProperty(pe, "__esModule", { value: !0 });
-        var T = [], N = "M12.83 352h262.34A12.82 12.82 0 0 0 288 339.17v-38.34A12.82 12.82 0 0 0 275.17 288H12.83A12.82 12.82 0 0 0 0 300.83v38.34A12.82 12.82 0 0 0 12.83 352zm0-256h262.34A12.82 12.82 0 0 0 288 83.17V44.83A12.82 12.82 0 0 0 275.17 32H12.83A12.82 12.82 0 0 0 0 44.83v38.34A12.82 12.82 0 0 0 12.83 96zM432 160H16a16 16 0 0 0-16 16v32a16 16 0 0 0 16 16h416a16 16 0 0 0 16-16v-32a16 16 0 0 0-16-16zm0 256H16a16 16 0 0 0-16 16v32a16 16 0 0 0 16 16h416a16 16 0 0 0 16-16v-32a16 16 0 0 0-16-16z";
-        pe.definition = { prefix: "fas", iconName: "align-left", icon: [448, 512, T, "f036", N] }, pe.faAlignLeft = pe.definition, pe.prefix = "fas", pe.iconName = "align-left", pe.width = 448, pe.height = 512, pe.ligatures = T, pe.unicode = "f036", pe.svgPathData = N;
+        var T = [], L = "M12.83 352h262.34A12.82 12.82 0 0 0 288 339.17v-38.34A12.82 12.82 0 0 0 275.17 288H12.83A12.82 12.82 0 0 0 0 300.83v38.34A12.82 12.82 0 0 0 12.83 352zm0-256h262.34A12.82 12.82 0 0 0 288 83.17V44.83A12.82 12.82 0 0 0 275.17 32H12.83A12.82 12.82 0 0 0 0 44.83v38.34A12.82 12.82 0 0 0 12.83 96zM432 160H16a16 16 0 0 0-16 16v32a16 16 0 0 0 16 16h416a16 16 0 0 0 16-16v-32a16 16 0 0 0-16-16zm0 256H16a16 16 0 0 0-16 16v32a16 16 0 0 0 16 16h416a16 16 0 0 0 16-16v-32a16 16 0 0 0-16-16z";
+        pe.definition = { prefix: "fas", iconName: "align-left", icon: [448, 512, T, "f036", L] }, pe.faAlignLeft = pe.definition, pe.prefix = "fas", pe.iconName = "align-left", pe.width = 448, pe.height = 512, pe.ligatures = T, pe.unicode = "f036", pe.svgPathData = L;
       }, function(Ne, pe, x) {
         (function(T) {
-          var N = x(133), Y = x(134), B = x(135);
+          var L = x(133), Y = x(134), B = x(135);
           function g() {
             return R.TYPED_ARRAY_SUPPORT ? 2147483647 : 1073741823;
           }
@@ -36281,7 +36282,7 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
             })(G, I.length - ne), I, ne, Le);
           }
           function Ge(I, G, ne) {
-            return G === 0 && ne === I.length ? N.fromByteArray(I) : N.fromByteArray(I.slice(G, ne));
+            return G === 0 && ne === I.length ? L.fromByteArray(I) : L.fromByteArray(I.slice(G, ne));
           }
           function me(I, G, ne) {
             ne = Math.min(I.length, ne);
@@ -36683,7 +36684,7 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
             return Re;
           }
           function Qe(I) {
-            return N.toByteArray((function(G) {
+            return L.toByteArray((function(G) {
               if ((G = (function(ne) {
                 return ne.trim ? ne.trim() : ne.replace(/^\s+|\s+$/g, "");
               })(G).replace(mt, "")).length < 2) return "";
@@ -36704,13 +36705,13 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
           var C, Q, ge = R(fe), K = ge[0], Z = ge[1], te = new Y((function(U, re, de) {
             return 3 * (re + de) / 4 - de;
           })(0, K, Z)), b = 0, w = Z > 0 ? K - 4 : K;
-          for (Q = 0; Q < w; Q += 4) C = N[fe.charCodeAt(Q)] << 18 | N[fe.charCodeAt(Q + 1)] << 12 | N[fe.charCodeAt(Q + 2)] << 6 | N[fe.charCodeAt(Q + 3)], te[b++] = C >> 16 & 255, te[b++] = C >> 8 & 255, te[b++] = 255 & C;
-          return Z === 2 && (C = N[fe.charCodeAt(Q)] << 2 | N[fe.charCodeAt(Q + 1)] >> 4, te[b++] = 255 & C), Z === 1 && (C = N[fe.charCodeAt(Q)] << 10 | N[fe.charCodeAt(Q + 1)] << 4 | N[fe.charCodeAt(Q + 2)] >> 2, te[b++] = C >> 8 & 255, te[b++] = 255 & C), te;
+          for (Q = 0; Q < w; Q += 4) C = L[fe.charCodeAt(Q)] << 18 | L[fe.charCodeAt(Q + 1)] << 12 | L[fe.charCodeAt(Q + 2)] << 6 | L[fe.charCodeAt(Q + 3)], te[b++] = C >> 16 & 255, te[b++] = C >> 8 & 255, te[b++] = 255 & C;
+          return Z === 2 && (C = L[fe.charCodeAt(Q)] << 2 | L[fe.charCodeAt(Q + 1)] >> 4, te[b++] = 255 & C), Z === 1 && (C = L[fe.charCodeAt(Q)] << 10 | L[fe.charCodeAt(Q + 1)] << 4 | L[fe.charCodeAt(Q + 2)] >> 2, te[b++] = C >> 8 & 255, te[b++] = 255 & C), te;
         }, pe.fromByteArray = function(fe) {
           for (var C, Q = fe.length, ge = Q % 3, K = [], Z = 0, te = Q - ge; Z < te; Z += 16383) K.push(H(fe, Z, Z + 16383 > te ? te : Z + 16383));
           return ge === 1 ? (C = fe[Q - 1], K.push(T[C >> 2] + T[C << 4 & 63] + "==")) : ge === 2 && (C = (fe[Q - 2] << 8) + fe[Q - 1], K.push(T[C >> 10] + T[C >> 4 & 63] + T[C << 2 & 63] + "=")), K.join("");
         };
-        for (var T = [], N = [], Y = typeof Uint8Array < "u" ? Uint8Array : Array, B = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/", g = 0, W = B.length; g < W; ++g) T[g] = B[g], N[B.charCodeAt(g)] = g;
+        for (var T = [], L = [], Y = typeof Uint8Array < "u" ? Uint8Array : Array, B = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/", g = 0, W = B.length; g < W; ++g) T[g] = B[g], L[B.charCodeAt(g)] = g;
         function R(fe) {
           var C = fe.length;
           if (C % 4 > 0) throw new Error("Invalid string. Length must be a multiple of 4");
@@ -36721,10 +36722,10 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
           for (var ge, K, Z = [], te = C; te < Q; te += 3) ge = (fe[te] << 16 & 16711680) + (fe[te + 1] << 8 & 65280) + (255 & fe[te + 2]), Z.push(T[(K = ge) >> 18 & 63] + T[K >> 12 & 63] + T[K >> 6 & 63] + T[63 & K]);
           return Z.join("");
         }
-        N[45] = 62, N[95] = 63;
+        L[45] = 62, L[95] = 63;
       }, function(Ne, pe) {
-        pe.read = function(x, T, N, Y, B) {
-          var g, W, R = 8 * B - Y - 1, H = (1 << R) - 1, fe = H >> 1, C = -7, Q = N ? B - 1 : 0, ge = N ? -1 : 1, K = x[T + Q];
+        pe.read = function(x, T, L, Y, B) {
+          var g, W, R = 8 * B - Y - 1, H = (1 << R) - 1, fe = H >> 1, C = -7, Q = L ? B - 1 : 0, ge = L ? -1 : 1, K = x[T + Q];
           for (Q += ge, g = K & (1 << -C) - 1, K >>= -C, C += R; C > 0; g = 256 * g + x[T + Q], Q += ge, C -= 8) ;
           for (W = g & (1 << -C) - 1, g >>= -C, C += Y; C > 0; W = 256 * W + x[T + Q], Q += ge, C -= 8) ;
           if (g === 0) g = 1 - fe;
@@ -36733,11 +36734,11 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
             W += Math.pow(2, Y), g -= fe;
           }
           return (K ? -1 : 1) * W * Math.pow(2, g - Y);
-        }, pe.write = function(x, T, N, Y, B, g) {
+        }, pe.write = function(x, T, L, Y, B, g) {
           var W, R, H, fe = 8 * g - B - 1, C = (1 << fe) - 1, Q = C >> 1, ge = B === 23 ? Math.pow(2, -24) - Math.pow(2, -77) : 0, K = Y ? 0 : g - 1, Z = Y ? 1 : -1, te = T < 0 || T === 0 && 1 / T < 0 ? 1 : 0;
-          for (T = Math.abs(T), isNaN(T) || T === 1 / 0 ? (R = isNaN(T) ? 1 : 0, W = C) : (W = Math.floor(Math.log(T) / Math.LN2), T * (H = Math.pow(2, -W)) < 1 && (W--, H *= 2), (T += W + Q >= 1 ? ge / H : ge * Math.pow(2, 1 - Q)) * H >= 2 && (W++, H /= 2), W + Q >= C ? (R = 0, W = C) : W + Q >= 1 ? (R = (T * H - 1) * Math.pow(2, B), W += Q) : (R = T * Math.pow(2, Q - 1) * Math.pow(2, B), W = 0)); B >= 8; x[N + K] = 255 & R, K += Z, R /= 256, B -= 8) ;
-          for (W = W << B | R, fe += B; fe > 0; x[N + K] = 255 & W, K += Z, W /= 256, fe -= 8) ;
-          x[N + K - Z] |= 128 * te;
+          for (T = Math.abs(T), isNaN(T) || T === 1 / 0 ? (R = isNaN(T) ? 1 : 0, W = C) : (W = Math.floor(Math.log(T) / Math.LN2), T * (H = Math.pow(2, -W)) < 1 && (W--, H *= 2), (T += W + Q >= 1 ? ge / H : ge * Math.pow(2, 1 - Q)) * H >= 2 && (W++, H /= 2), W + Q >= C ? (R = 0, W = C) : W + Q >= 1 ? (R = (T * H - 1) * Math.pow(2, B), W += Q) : (R = T * Math.pow(2, Q - 1) * Math.pow(2, B), W = 0)); B >= 8; x[L + K] = 255 & R, K += Z, R /= 256, B -= 8) ;
+          for (W = W << B | R, fe += B; fe > 0; x[L + K] = 255 & W, K += Z, W /= 256, fe -= 8) ;
+          x[L + K - Z] |= 128 * te;
         };
       }, function(Ne, pe) {
         var x = {}.toString;
@@ -36747,9 +36748,9 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
       }, function(Ne, pe) {
         Ne.exports = function(x, T) {
           if (typeof Symbol < "u" && Symbol.iterator in Object(x)) {
-            var N = [], Y = !0, B = !1, g = void 0;
+            var L = [], Y = !0, B = !1, g = void 0;
             try {
-              for (var W, R = x[Symbol.iterator](); !(Y = (W = R.next()).done) && (N.push(W.value), !T || N.length !== T); Y = !0) ;
+              for (var W, R = x[Symbol.iterator](); !(Y = (W = R.next()).done) && (L.push(W.value), !T || L.length !== T); Y = !0) ;
             } catch (H) {
               B = !0, g = H;
             } finally {
@@ -36759,14 +36760,14 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
                 if (B) throw g;
               }
             }
-            return N;
+            return L;
           }
         };
       }, function(Ne, pe, x) {
       }, function(Ne, pe, x) {
         var T = x(118);
-        Ne.exports = function(N) {
-          if (Array.isArray(N)) return T(N);
+        Ne.exports = function(L) {
+          if (Array.isArray(L)) return T(L);
         };
       }, function(Ne, pe) {
         Ne.exports = function() {
@@ -36776,84 +36777,84 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
       }, function(Ne, pe, x) {
       }, function(Ne, pe, x) {
       }, function(Ne, pe, x) {
-        var T, N;
+        var T, L;
         (function(Y) {
-          T = [x(95)], (N = function(B) {
+          T = [x(95)], (L = function(B) {
             return (function(g, W, R, H) {
               var fe, C, Q, ge, K = function(r) {
-                this.$ = function(L, k) {
-                  return this.api(!0).$(L, k);
-                }, this._ = function(L, k) {
-                  return this.api(!0).rows(L, k).data();
-                }, this.api = function(L) {
-                  return new C(L ? ve(this[fe.iApiIndex]) : this);
-                }, this.fnAddData = function(L, k) {
-                  var $ = this.api(!0), ue = Array.isArray(L) && (Array.isArray(L[0]) || g.isPlainObject(L[0])) ? $.rows.add(L) : $.row.add(L);
+                this.$ = function(N, k) {
+                  return this.api(!0).$(N, k);
+                }, this._ = function(N, k) {
+                  return this.api(!0).rows(N, k).data();
+                }, this.api = function(N) {
+                  return new C(N ? ve(this[fe.iApiIndex]) : this);
+                }, this.fnAddData = function(N, k) {
+                  var $ = this.api(!0), ue = Array.isArray(N) && (Array.isArray(N[0]) || g.isPlainObject(N[0])) ? $.rows.add(N) : $.row.add(N);
                   return (k === H || k) && $.draw(), ue.flatten().toArray();
-                }, this.fnAdjustColumnSizing = function(L) {
+                }, this.fnAdjustColumnSizing = function(N) {
                   var k = this.api(!0).columns.adjust(), $ = k.settings()[0], ue = $.oScroll;
-                  L === H || L ? k.draw(!1) : ue.sX === "" && ue.sY === "" || Sn($);
-                }, this.fnClearTable = function(L) {
+                  N === H || N ? k.draw(!1) : ue.sX === "" && ue.sY === "" || Sn($);
+                }, this.fnClearTable = function(N) {
                   var k = this.api(!0).clear();
-                  (L === H || L) && k.draw();
-                }, this.fnClose = function(L) {
-                  this.api(!0).row(L).child.hide();
-                }, this.fnDeleteRow = function(L, k, $) {
-                  var ue = this.api(!0), Fe = ue.rows(L), Ce = Fe.settings()[0], n = Ce.aoData[Fe[0][0]];
+                  (N === H || N) && k.draw();
+                }, this.fnClose = function(N) {
+                  this.api(!0).row(N).child.hide();
+                }, this.fnDeleteRow = function(N, k, $) {
+                  var ue = this.api(!0), Fe = ue.rows(N), Ce = Fe.settings()[0], n = Ce.aoData[Fe[0][0]];
                   return Fe.remove(), k && k.call(this, Ce, n), ($ === H || $) && ue.draw(), n;
-                }, this.fnDestroy = function(L) {
-                  this.api(!0).destroy(L);
-                }, this.fnDraw = function(L) {
-                  this.api(!0).draw(L);
-                }, this.fnFilter = function(L, k, $, ue, Fe, Ce) {
+                }, this.fnDestroy = function(N) {
+                  this.api(!0).destroy(N);
+                }, this.fnDraw = function(N) {
+                  this.api(!0).draw(N);
+                }, this.fnFilter = function(N, k, $, ue, Fe, Ce) {
                   var n = this.api(!0);
-                  k === null || k === H ? n.search(L, $, ue, Ce) : n.column(k).search(L, $, ue, Ce), n.draw();
-                }, this.fnGetData = function(L, k) {
+                  k === null || k === H ? n.search(N, $, ue, Ce) : n.column(k).search(N, $, ue, Ce), n.draw();
+                }, this.fnGetData = function(N, k) {
                   var $ = this.api(!0);
-                  if (L !== H) {
-                    var ue = L.nodeName ? L.nodeName.toLowerCase() : "";
-                    return k !== H || ue == "td" || ue == "th" ? $.cell(L, k).data() : $.row(L).data() || null;
+                  if (N !== H) {
+                    var ue = N.nodeName ? N.nodeName.toLowerCase() : "";
+                    return k !== H || ue == "td" || ue == "th" ? $.cell(N, k).data() : $.row(N).data() || null;
                   }
                   return $.data().toArray();
-                }, this.fnGetNodes = function(L) {
+                }, this.fnGetNodes = function(N) {
                   var k = this.api(!0);
-                  return L !== H ? k.row(L).node() : k.rows().nodes().flatten().toArray();
-                }, this.fnGetPosition = function(L) {
-                  var k = this.api(!0), $ = L.nodeName.toUpperCase();
-                  if ($ == "TR") return k.row(L).index();
+                  return N !== H ? k.row(N).node() : k.rows().nodes().flatten().toArray();
+                }, this.fnGetPosition = function(N) {
+                  var k = this.api(!0), $ = N.nodeName.toUpperCase();
+                  if ($ == "TR") return k.row(N).index();
                   if ($ == "TD" || $ == "TH") {
-                    var ue = k.cell(L).index();
+                    var ue = k.cell(N).index();
                     return [ue.row, ue.columnVisible, ue.column];
                   }
                   return null;
-                }, this.fnIsOpen = function(L) {
-                  return this.api(!0).row(L).child.isShown();
-                }, this.fnOpen = function(L, k, $) {
-                  return this.api(!0).row(L).child(k, $).show().child()[0];
-                }, this.fnPageChange = function(L, k) {
-                  var $ = this.api(!0).page(L);
+                }, this.fnIsOpen = function(N) {
+                  return this.api(!0).row(N).child.isShown();
+                }, this.fnOpen = function(N, k, $) {
+                  return this.api(!0).row(N).child(k, $).show().child()[0];
+                }, this.fnPageChange = function(N, k) {
+                  var $ = this.api(!0).page(N);
                   (k === H || k) && $.draw(!1);
-                }, this.fnSetColumnVis = function(L, k, $) {
-                  var ue = this.api(!0).column(L).visible(k);
+                }, this.fnSetColumnVis = function(N, k, $) {
+                  var ue = this.api(!0).column(N).visible(k);
                   ($ === H || $) && ue.columns.adjust().draw();
                 }, this.fnSettings = function() {
                   return ve(this[fe.iApiIndex]);
-                }, this.fnSort = function(L) {
-                  this.api(!0).order(L).draw();
-                }, this.fnSortListener = function(L, k, $) {
-                  this.api(!0).order.listener(L, k, $);
-                }, this.fnUpdate = function(L, k, $, ue, Fe) {
+                }, this.fnSort = function(N) {
+                  this.api(!0).order(N).draw();
+                }, this.fnSortListener = function(N, k, $) {
+                  this.api(!0).order.listener(N, k, $);
+                }, this.fnUpdate = function(N, k, $, ue, Fe) {
                   var Ce = this.api(!0);
-                  return $ === H || $ === null ? Ce.row(k).data(L) : Ce.cell(k, $).data(L), (Fe === H || Fe) && Ce.columns.adjust(), (ue === H || ue) && Ce.draw(), 0;
+                  return $ === H || $ === null ? Ce.row(k).data(N) : Ce.cell(k, $).data(N), (Fe === H || Fe) && Ce.columns.adjust(), (ue === H || ue) && Ce.draw(), 0;
                 }, this.fnVersionCheck = fe.fnVersionCheck;
                 var u = this, v = r === H, y = this.length;
                 for (var _ in v && (r = {}), this.oApi = this.internal = fe.internal, K.ext.internal) _ && (this[_] = lt(_));
                 return this.each((function() {
-                  var L, k = y > 1 ? D({}, r, !0) : r, $ = 0, ue = this.getAttribute("id"), Fe = !1, Ce = K.defaults, n = g(this);
+                  var N, k = y > 1 ? D({}, r, !0) : r, $ = 0, ue = this.getAttribute("id"), Fe = !1, Ce = K.defaults, n = g(this);
                   if (this.nodeName.toLowerCase() == "table") {
                     Je(Ce), mt(Ce.column), _t(Ce, Ce, !0), _t(Ce.column, Ce.column, !0), _t(Ce, g.extend(k, n.data()), !0);
                     var c = K.settings;
-                    for ($ = 0, L = c.length; $ < L; $++) {
+                    for ($ = 0, N = c.length; $ < N; $++) {
                       var m = c[$];
                       if (m.nTable == this || m.nTHead && m.nTHead.parentNode == this || m.nTFoot && m.nTFoot.parentNode == this) {
                         var E = k.bRetrieve !== H ? k.bRetrieve : Ce.bRetrieve, M = k.bDestroy !== H ? k.bDestroy : Ce.bDestroy;
@@ -36889,9 +36890,9 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
                       return ot.hasClass(hr);
                     }))) !== -1 && (g("tbody tr", this).removeClass(Ue.join(" ")), P.asDestroyStripes = Ue.slice());
                     var Tt, at = [], gt = this.getElementsByTagName("thead");
-                    if (gt.length !== 0 && (an(P.aoHeader, gt[0]), at = Cr(P)), k.aoColumns === null) for (Tt = [], $ = 0, L = at.length; $ < L; $++) Tt.push(null);
+                    if (gt.length !== 0 && (an(P.aoHeader, gt[0]), at = Cr(P)), k.aoColumns === null) for (Tt = [], $ = 0, N = at.length; $ < N; $++) Tt.push(null);
                     else Tt = k.aoColumns;
-                    for ($ = 0, L = Tt.length; $ < L; $++) Qe(P, at ? at[$] : null);
+                    for ($ = 0, N = Tt.length; $ < N; $++) Qe(P, at ? at[$] : null);
                     if (ze(P, k.aoColumnDefs, Tt, (function(hr, zr) {
                       Dt(P, hr, zr);
                     })), ot.length) {
@@ -36909,7 +36910,7 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
                     var ar = P.oFeatures, nr = function() {
                       if (k.aaSorting === H) {
                         var hr = P.aaSorting;
-                        for ($ = 0, L = hr.length; $ < L; $++) hr[$][1] = P.aoColumns[$].asSorting[0];
+                        for ($ = 0, N = hr.length; $ < N; $++) hr[$][1] = P.aoColumns[$].asSorting[0];
                       }
                       sr(P), ar.bSort && Be(P, "aoDrawCallback", (function() {
                         if (P.bSorted) {
@@ -36950,14 +36951,14 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
                   return de(y) || typeof y == "string";
                 })(r) && !!ae(X(r), u, v) || null;
               }, me = function(r, u, v) {
-                var y = [], _ = 0, L = r.length;
-                if (v !== H) for (; _ < L; _++) r[_] && r[_][u] && y.push(r[_][u][v]);
-                else for (; _ < L; _++) r[_] && y.push(r[_][u]);
+                var y = [], _ = 0, N = r.length;
+                if (v !== H) for (; _ < N; _++) r[_] && r[_][u] && y.push(r[_][u][v]);
+                else for (; _ < N; _++) r[_] && y.push(r[_][u]);
                 return y;
               }, Te = function(r, u, v, y) {
-                var _ = [], L = 0, k = u.length;
-                if (y !== H) for (; L < k; L++) r[u[L]][v] && _.push(r[u[L]][v][y]);
-                else for (; L < k; L++) _.push(r[u[L]][v]);
+                var _ = [], N = 0, k = u.length;
+                if (y !== H) for (; N < k; N++) r[u[N]][v] && _.push(r[u[N]][v][y]);
+                else for (; N < k; N++) _.push(r[u[N]][v]);
                 return _;
               }, O = function(r, u) {
                 var v, y = [];
@@ -36978,8 +36979,8 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
                   }
                   return !0;
                 })(r)) return r.slice();
-                var u, v, y, _ = [], L = r.length, k = 0;
-                e: for (v = 0; v < L; v++) {
+                var u, v, y, _ = [], N = r.length, k = 0;
+                e: for (v = 0; v < N; v++) {
                   for (u = r[v], y = 0; y < k; y++) if (_[y] === u) continue e;
                   _.push(u), k++;
                 }
@@ -36996,13 +36997,13 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
               });
               function ut(r) {
                 var u, v, y = {};
-                g.each(r, (function(_, L) {
+                g.each(r, (function(_, N) {
                   (u = _.match(/^([^A-Z]+?)([A-Z])/)) && "a aa ai ao as b fn i m o s ".indexOf(u[1] + " ") !== -1 && (v = _.replace(u[0], u[2].toLowerCase()), y[v] = _, u[1] === "o" && ut(r[_]));
                 })), r._hungarianMap = y;
               }
               function _t(r, u, v) {
                 var y;
-                r._hungarianMap || ut(r), g.each(u, (function(_, L) {
+                r._hungarianMap || ut(r), g.each(u, (function(_, N) {
                   (y = r._hungarianMap[_]) === H || !v && u[y] !== H || (y.charAt(0) === "o" ? (u[y] || (u[y] = {}), g.extend(!0, u[y], u[_]), _t(r[y], u[y], v)) : u[y] = u[_]);
                 }));
               }
@@ -37018,10 +37019,10 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
               K.util = { throttle: function(r, u) {
                 var v, y, _ = u !== H ? u : 200;
                 return function() {
-                  var L = this, k = +/* @__PURE__ */ new Date(), $ = arguments;
+                  var N = this, k = +/* @__PURE__ */ new Date(), $ = arguments;
                   v && k < v + _ ? (clearTimeout(y), y = setTimeout((function() {
-                    v = H, r.apply(L, $);
-                  }), _)) : (v = k, r.apply(L, $));
+                    v = H, r.apply(N, $);
+                  }), _)) : (v = k, r.apply(N, $));
                 };
               }, escapeRegex: function(r) {
                 return r.replace(U, "\\$1");
@@ -37048,25 +37049,25 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
                 }
                 g.extend(r.oBrowser, K.__browser), r.oScroll.iBarWidth = K.__browser.barWidth;
               }
-              function Ct(r, u, v, y, _, L) {
+              function Ct(r, u, v, y, _, N) {
                 var k, $ = y, ue = !1;
-                for (v !== H && (k = v, ue = !0); $ !== _; ) r.hasOwnProperty($) && (k = ue ? u(k, r[$], $, r) : r[$], ue = !0, $ += L);
+                for (v !== H && (k = v, ue = !0); $ !== _; ) r.hasOwnProperty($) && (k = ue ? u(k, r[$], $, r) : r[$], ue = !0, $ += N);
                 return k;
               }
               function Qe(r, u) {
                 var v = K.defaults.column, y = r.aoColumns.length, _ = g.extend({}, K.models.oColumn, v, { nTh: u || R.createElement("th"), sTitle: v.sTitle ? v.sTitle : u ? u.innerHTML : "", aDataSort: v.aDataSort ? v.aDataSort : [y], mData: v.mData ? v.mData : y, idx: y });
                 r.aoColumns.push(_);
-                var L = r.aoPreSearchCols;
-                L[y] = g.extend({}, K.models.oSearch, L[y]), Dt(r, y, g(u).data());
+                var N = r.aoPreSearchCols;
+                N[y] = g.extend({}, K.models.oSearch, N[y]), Dt(r, y, g(u).data());
               }
               function Dt(r, u, v) {
-                var y = r.aoColumns[u], _ = r.oClasses, L = g(y.nTh);
+                var y = r.aoColumns[u], _ = r.oClasses, N = g(y.nTh);
                 if (!y.sWidthOrig) {
-                  y.sWidthOrig = L.attr("width") || null;
-                  var k = (L.attr("style") || "").match(/width:\s*(\d+[pxem%]+)/);
+                  y.sWidthOrig = N.attr("width") || null;
+                  var k = (N.attr("style") || "").match(/width:\s*(\d+[pxem%]+)/);
                   k && (y.sWidthOrig = k[1]);
                 }
-                v !== H && v !== null && (mt(v), _t(K.defaults.column, v, !0), v.mDataProp === H || v.mData || (v.mData = v.mDataProp), v.sType && (y._sManualType = v.sType), v.className && !v.sClass && (v.sClass = v.className), v.sClass && L.addClass(v.sClass), g.extend(y, v), q(y, v, "sWidth", "sWidthOrig"), v.iDataSort !== H && (y.aDataSort = [v.iDataSort]), q(y, v, "aDataSort"));
+                v !== H && v !== null && (mt(v), _t(K.defaults.column, v, !0), v.mDataProp === H || v.mData || (v.mData = v.mDataProp), v.sType && (y._sManualType = v.sType), v.className && !v.sClass && (v.sClass = v.className), v.sClass && N.addClass(v.sClass), g.extend(y, v), q(y, v, "sWidth", "sWidthOrig"), v.iDataSort !== H && (y.aDataSort = [v.iDataSort]), q(y, v, "aDataSort"));
                 var $ = y.mData, ue = dr($), Fe = y.mRender ? dr(y.mRender) : null, Ce = function(m) {
                   return typeof m == "string" && m.indexOf("@") !== -1;
                 };
@@ -37075,7 +37076,7 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
                   return Fe && E ? Fe(P, E, m, M) : P;
                 }, y.fnSetData = function(m, E, M) {
                   return br($)(m, E, M);
-                }, typeof $ != "number" && (r._rowReadObject = !0), r.oFeatures.bSort || (y.bSortable = !1, L.addClass(_.sSortableNone));
+                }, typeof $ != "number" && (r._rowReadObject = !0), r.oFeatures.bSort || (y.bSortable = !1, N.addClass(_.sSortableNone));
                 var n = g.inArray("asc", y.asSorting) !== -1, c = g.inArray("desc", y.asSorting) !== -1;
                 y.bSortable && (n || c) ? n && !c ? (y.sSortingClass = _.sSortableAsc, y.sSortingClassJUI = _.sSortJUIAscAllowed) : !n && c ? (y.sSortingClass = _.sSortableDesc, y.sSortingClassJUI = _.sSortJUIDescAllowed) : (y.sSortingClass = _.sSortable, y.sSortingClassJUI = _.sSortJUI) : (y.sSortingClass = _.sSortableNone, y.sSortingClassJUI = "");
               }
@@ -37109,11 +37110,11 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
                 })), v;
               }
               function Re(r) {
-                var u, v, y, _, L, k, $, ue, Fe, Ce = r.aoColumns, n = r.aoData, c = K.ext.type.detect;
+                var u, v, y, _, N, k, $, ue, Fe, Ce = r.aoColumns, n = r.aoData, c = K.ext.type.detect;
                 for (u = 0, v = Ce.length; u < v; u++) if (Fe = [], !($ = Ce[u]).sType && $._sManualType) $.sType = $._sManualType;
                 else if (!$.sType) {
                   for (y = 0, _ = c.length; y < _; y++) {
-                    for (L = 0, k = n.length; L < k && (Fe[L] === H && (Fe[L] = It(r, L, u, "type")), (ue = c[y](Fe[L], r)) || y === c.length - 1) && ue !== "html"; L++) ;
+                    for (N = 0, k = n.length; N < k && (Fe[N] === H && (Fe[N] = It(r, N, u, "type")), (ue = c[y](Fe[N], r)) || y === c.length - 1) && ue !== "html"; N++) ;
                     if (ue) {
                       $.sType = ue;
                       break;
@@ -37123,7 +37124,7 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
                 }
               }
               function ze(r, u, v, y) {
-                var _, L, k, $, ue, Fe, Ce, n = r.aoColumns;
+                var _, N, k, $, ue, Fe, Ce, n = r.aoColumns;
                 if (u) for (_ = u.length - 1; _ >= 0; _--) {
                   var c = (Ce = u[_]).targets !== H ? Ce.targets : Ce.aTargets;
                   for (Array.isArray(c) || (c = [c]), k = 0, $ = c.length; k < $; k++) if (typeof c[k] == "number" && c[k] >= 0) {
@@ -37132,15 +37133,15 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
                   } else if (typeof c[k] == "number" && c[k] < 0) y(n.length + c[k], Ce);
                   else if (typeof c[k] == "string") for (ue = 0, Fe = n.length; ue < Fe; ue++) (c[k] == "_all" || g(n[ue].nTh).hasClass(c[k])) && y(ue, Ce);
                 }
-                if (v) for (_ = 0, L = v.length; _ < L; _++) y(_, v[_]);
+                if (v) for (_ = 0, N = v.length; _ < N; _++) y(_, v[_]);
               }
               function tt(r, u, v, y) {
-                var _ = r.aoData.length, L = g.extend(!0, {}, K.models.oRow, { src: v ? "dom" : "data", idx: _ });
-                L._aData = u, r.aoData.push(L);
+                var _ = r.aoData.length, N = g.extend(!0, {}, K.models.oRow, { src: v ? "dom" : "data", idx: _ });
+                N._aData = u, r.aoData.push(N);
                 for (var k = r.aoColumns, $ = 0, ue = k.length; $ < ue; $++) k[$].sType = null;
                 r.aiDisplayMaster.push(_);
                 var Fe = r.rowIdFn(u);
-                return Fe !== H && (r.aIds[Fe] = L), !v && r.oFeatures.bDeferRender || mn(r, _, v, y), _;
+                return Fe !== H && (r.aIds[Fe] = N), !v && r.oFeatures.bDeferRender || mn(r, _, v, y), _;
               }
               function We(r, u) {
                 var v;
@@ -37152,16 +37153,16 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
                 return g.inArray(v, r.aoData[u].anCells);
               }
               function It(r, u, v, y) {
-                var _ = r.iDraw, L = r.aoColumns[v], k = r.aoData[u]._aData, $ = L.sDefaultContent, ue = L.fnGetData(k, y, { settings: r, row: u, col: v });
-                if (ue === H) return r.iDrawError != _ && $ === null && (we(r, 0, "Requested unknown parameter " + (typeof L.mData == "function" ? "{function}" : "'" + L.mData + "'") + " for row " + u + ", column " + v, 4), r.iDrawError = _), $;
+                var _ = r.iDraw, N = r.aoColumns[v], k = r.aoData[u]._aData, $ = N.sDefaultContent, ue = N.fnGetData(k, y, { settings: r, row: u, col: v });
+                if (ue === H) return r.iDrawError != _ && $ === null && (we(r, 0, "Requested unknown parameter " + (typeof N.mData == "function" ? "{function}" : "'" + N.mData + "'") + " for row " + u + ", column " + v, 4), r.iDrawError = _), $;
                 if (ue !== k && ue !== null || $ === null || y === H) {
                   if (typeof ue == "function") return ue.call(k);
                 } else ue = $;
                 return ue === null && y == "display" ? "" : ue;
               }
               function er(r, u, v, y) {
-                var _ = r.aoColumns[v], L = r.aoData[u]._aData;
-                _.fnSetData(L, y, { settings: r, row: u, col: v });
+                var _ = r.aoColumns[v], N = r.aoData[u]._aData;
+                _.fnSetData(N, y, { settings: r, row: u, col: v });
               }
               var Ut = /\[.*?\]$/, Sr = /\(\)$/;
               function Dr(r) {
@@ -37174,23 +37175,23 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
                   var u = {};
                   return g.each(r, (function(y, _) {
                     _ && (u[y] = dr(_));
-                  })), function(y, _, L, k) {
+                  })), function(y, _, N, k) {
                     var $ = u[_] || u._;
-                    return $ !== H ? $(y, _, L, k) : y;
+                    return $ !== H ? $(y, _, N, k) : y;
                   };
                 }
                 if (r === null) return function(y) {
                   return y;
                 };
-                if (typeof r == "function") return function(y, _, L, k) {
-                  return r(y, _, L, k);
+                if (typeof r == "function") return function(y, _, N, k) {
+                  return r(y, _, N, k);
                 };
                 if (typeof r != "string" || r.indexOf(".") === -1 && r.indexOf("[") === -1 && r.indexOf("(") === -1) return function(y, _) {
                   return y[r];
                 };
-                var v = function(y, _, L) {
+                var v = function(y, _, N) {
                   var k, $, ue, Fe;
-                  if (L !== "") for (var Ce = Dr(L), n = 0, c = Ce.length; n < c; n++) {
+                  if (N !== "") for (var Ce = Dr(N), n = 0, c = Ce.length; n < c; n++) {
                     if (k = Ce[n].match(Ut), $ = Ce[n].match(Sr), k) {
                       if (Ce[n] = Ce[n].replace(Ut, ""), Ce[n] !== "" && (y = y[Ce[n]]), ue = [], Ce.splice(0, n + 1), Fe = Ce.join("."), Array.isArray(y)) for (var m = 0, E = y.length; m < E; m++) ue.push(v(y[m], _, Fe));
                       var M = k[0].substring(1, k[0].length - 1);
@@ -37220,10 +37221,10 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
                   v[r] = y;
                 };
                 var u = function(v, y, _) {
-                  for (var L, k, $, ue, Fe, Ce = Dr(_), n = Ce[Ce.length - 1], c = 0, m = Ce.length - 1; c < m; c++) {
+                  for (var N, k, $, ue, Fe, Ce = Dr(_), n = Ce[Ce.length - 1], c = 0, m = Ce.length - 1; c < m; c++) {
                     if (Ce[c] === "__proto__" || Ce[c] === "constructor") throw new Error("Cannot set prototype values");
                     if (k = Ce[c].match(Ut), $ = Ce[c].match(Sr), k) {
-                      if (Ce[c] = Ce[c].replace(Ut, ""), v[Ce[c]] = [], (L = Ce.slice()).splice(0, c + 1), Fe = L.join("."), Array.isArray(y)) for (var E = 0, M = y.length; E < M; E++) u(ue = {}, y[E], Fe), v[Ce[c]].push(ue);
+                      if (Ce[c] = Ce[c].replace(Ut, ""), v[Ce[c]] = [], (N = Ce.slice()).splice(0, c + 1), Fe = N.join("."), Array.isArray(y)) for (var E = 0, M = y.length; E < M; E++) u(ue = {}, y[E], Fe), v[Ce[c]].push(ue);
                       else v[Ce[c]] = y;
                       return;
                     }
@@ -37242,29 +37243,29 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
                 r.aoData.length = 0, r.aiDisplayMaster.length = 0, r.aiDisplay.length = 0, r.aIds = {};
               }
               function wr(r, u, v) {
-                for (var y = -1, _ = 0, L = r.length; _ < L; _++) r[_] == u ? y = _ : r[_] > u && r[_]--;
+                for (var y = -1, _ = 0, N = r.length; _ < N; _++) r[_] == u ? y = _ : r[_] > u && r[_]--;
                 y != -1 && v === H && r.splice(y, 1);
               }
               function pn(r, u, v, y) {
-                var _, L, k = r.aoData[u], $ = function(Ce, n) {
+                var _, N, k = r.aoData[u], $ = function(Ce, n) {
                   for (; Ce.childNodes.length; ) Ce.removeChild(Ce.firstChild);
                   Ce.innerHTML = It(r, u, n, "display");
                 };
                 if (v !== "dom" && (v && v !== "auto" || k.src !== "dom")) {
                   var ue = k.anCells;
                   if (ue) if (y !== H) $(ue[y], y);
-                  else for (_ = 0, L = ue.length; _ < L; _++) $(ue[_], _);
+                  else for (_ = 0, N = ue.length; _ < N; _++) $(ue[_], _);
                 } else k._aData = Kr(r, k, y, y === H ? H : k._aData).data;
                 k._aSortData = null, k._aFilterData = null;
                 var Fe = r.aoColumns;
                 if (y !== H) Fe[y].sType = null;
                 else {
-                  for (_ = 0, L = Fe.length; _ < L; _++) Fe[_].sType = null;
+                  for (_ = 0, N = Fe.length; _ < N; _++) Fe[_].sType = null;
                   ur(r, k);
                 }
               }
               function Kr(r, u, v, y) {
-                var _, L, k, $ = [], ue = u.firstChild, Fe = 0, Ce = r.aoColumns, n = r._rowReadObject;
+                var _, N, k, $ = [], ue = u.firstChild, Fe = 0, Ce = r.aoColumns, n = r._rowReadObject;
                 y = y !== H ? y : n ? {} : [];
                 var c = function(_e, ke) {
                   if (typeof _e == "string") {
@@ -37275,7 +37276,7 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
                     }
                   }
                 }, m = function(_e) {
-                  v !== H && v !== Fe || (L = Ce[Fe], k = _e.innerHTML.trim(), L && L._bAttrSrc ? (br(L.mData._)(y, k), c(L.mData.sort, _e), c(L.mData.type, _e), c(L.mData.filter, _e)) : n ? (L._setter || (L._setter = br(L.mData)), L._setter(y, k)) : y[Fe] = k), Fe++;
+                  v !== H && v !== Fe || (N = Ce[Fe], k = _e.innerHTML.trim(), N && N._bAttrSrc ? (br(N.mData._)(y, k), c(N.mData.sort, _e), c(N.mData.type, _e), c(N.mData.filter, _e)) : n ? (N._setter || (N._setter = br(N.mData)), N._setter(y, k)) : y[Fe] = k), Fe++;
                 };
                 if (ue) for (; ue; ) (_ = ue.nodeName.toUpperCase()) != "TD" && _ != "TH" || (m(ue), $.push(ue)), ue = ue.nextSibling;
                 else for (var E = 0, M = ($ = u.anCells).length; E < M; E++) m($[E]);
@@ -37287,9 +37288,9 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
                 return { data: y, cells: $ };
               }
               function mn(r, u, v, y) {
-                var _, L, k, $, ue, Fe, Ce = r.aoData[u], n = Ce._aData, c = [];
+                var _, N, k, $, ue, Fe, Ce = r.aoData[u], n = Ce._aData, c = [];
                 if (Ce.nTr === null) {
-                  for (_ = v || R.createElement("tr"), Ce.nTr = _, Ce.anCells = c, _._DT_RowIndex = u, ur(r, Ce), $ = 0, ue = r.aoColumns.length; $ < ue; $++) k = r.aoColumns[$], (L = (Fe = !v) ? R.createElement(k.sCellType) : y[$])._DT_CellIndex = { row: u, column: $ }, c.push(L), !Fe && (!k.mRender && k.mData === $ || g.isPlainObject(k.mData) && k.mData._ === $ + ".display") || (L.innerHTML = It(r, u, $, "display")), k.sClass && (L.className += " " + k.sClass), k.bVisible && !v ? _.appendChild(L) : !k.bVisible && v && L.parentNode.removeChild(L), k.fnCreatedCell && k.fnCreatedCell.call(r.oInstance, L, It(r, u, $), n, u, $);
+                  for (_ = v || R.createElement("tr"), Ce.nTr = _, Ce.anCells = c, _._DT_RowIndex = u, ur(r, Ce), $ = 0, ue = r.aoColumns.length; $ < ue; $++) k = r.aoColumns[$], (N = (Fe = !v) ? R.createElement(k.sCellType) : y[$])._DT_CellIndex = { row: u, column: $ }, c.push(N), !Fe && (!k.mRender && k.mData === $ || g.isPlainObject(k.mData) && k.mData._ === $ + ".display") || (N.innerHTML = It(r, u, $, "display")), k.sClass && (N.className += " " + k.sClass), k.bVisible && !v ? _.appendChild(N) : !k.bVisible && v && N.parentNode.removeChild(N), k.fnCreatedCell && k.fnCreatedCell.call(r.oInstance, N, It(r, u, $), n, u, $);
                   Ze(r, "aoRowCreatedCallback", null, [_, n, u, c]);
                 }
               }
@@ -37298,36 +37299,36 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
                 if (v) {
                   var _ = r.rowIdFn(y);
                   if (_ && (v.id = _), y.DT_RowClass) {
-                    var L = y.DT_RowClass.split(" ");
-                    u.__rowc = u.__rowc ? be(u.__rowc.concat(L)) : L, g(v).removeClass(u.__rowc.join(" ")).addClass(y.DT_RowClass);
+                    var N = y.DT_RowClass.split(" ");
+                    u.__rowc = u.__rowc ? be(u.__rowc.concat(N)) : N, g(v).removeClass(u.__rowc.join(" ")).addClass(y.DT_RowClass);
                   }
                   y.DT_RowAttr && g(v).attr(y.DT_RowAttr), y.DT_RowData && g(v).data(y.DT_RowData);
                 }
               }
               function or(r) {
-                var u, v, y, _, L, k = r.nTHead, $ = r.nTFoot, ue = g("th, td", k).length === 0, Fe = r.oClasses, Ce = r.aoColumns;
-                for (ue && (_ = g("<tr/>").appendTo(k)), u = 0, v = Ce.length; u < v; u++) L = Ce[u], y = g(L.nTh).addClass(L.sClass), ue && y.appendTo(_), r.oFeatures.bSort && (y.addClass(L.sSortingClass), L.bSortable !== !1 && (y.attr("tabindex", r.iTabIndex).attr("aria-controls", r.sTableId), mi(r, L.nTh, u))), L.sTitle != y[0].innerHTML && y.html(L.sTitle), ie(r, "header")(r, y, L, Fe);
+                var u, v, y, _, N, k = r.nTHead, $ = r.nTFoot, ue = g("th, td", k).length === 0, Fe = r.oClasses, Ce = r.aoColumns;
+                for (ue && (_ = g("<tr/>").appendTo(k)), u = 0, v = Ce.length; u < v; u++) N = Ce[u], y = g(N.nTh).addClass(N.sClass), ue && y.appendTo(_), r.oFeatures.bSort && (y.addClass(N.sSortingClass), N.bSortable !== !1 && (y.attr("tabindex", r.iTabIndex).attr("aria-controls", r.sTableId), mi(r, N.nTh, u))), N.sTitle != y[0].innerHTML && y.html(N.sTitle), ie(r, "header")(r, y, N, Fe);
                 if (ue && an(r.aoHeader, k), g(k).children("tr").attr("role", "row"), g(k).children("tr").children("th, td").addClass(Fe.sHeaderTH), g($).children("tr").children("th, td").addClass(Fe.sFooterTH), $ !== null) {
                   var n = r.aoFooter[0];
-                  for (u = 0, v = n.length; u < v; u++) (L = Ce[u]).nTf = n[u].cell, L.sClass && g(L.nTf).addClass(L.sClass);
+                  for (u = 0, v = n.length; u < v; u++) (N = Ce[u]).nTf = n[u].cell, N.sClass && g(N.nTf).addClass(N.sClass);
                 }
               }
               function fn(r, u, v) {
-                var y, _, L, k, $, ue, Fe, Ce, n, c = [], m = [], E = r.aoColumns.length;
+                var y, _, N, k, $, ue, Fe, Ce, n, c = [], m = [], E = r.aoColumns.length;
                 if (u) {
                   for (v === H && (v = !1), y = 0, _ = u.length; y < _; y++) {
-                    for (c[y] = u[y].slice(), c[y].nTr = u[y].nTr, L = E - 1; L >= 0; L--) r.aoColumns[L].bVisible || v || c[y].splice(L, 1);
+                    for (c[y] = u[y].slice(), c[y].nTr = u[y].nTr, N = E - 1; N >= 0; N--) r.aoColumns[N].bVisible || v || c[y].splice(N, 1);
                     m.push([]);
                   }
                   for (y = 0, _ = c.length; y < _; y++) {
                     if (Fe = c[y].nTr) for (; ue = Fe.firstChild; ) Fe.removeChild(ue);
-                    for (L = 0, k = c[y].length; L < k; L++) if (Ce = 1, n = 1, m[y][L] === H) {
-                      for (Fe.appendChild(c[y][L].cell), m[y][L] = 1; c[y + Ce] !== H && c[y][L].cell == c[y + Ce][L].cell; ) m[y + Ce][L] = 1, Ce++;
-                      for (; c[y][L + n] !== H && c[y][L].cell == c[y][L + n].cell; ) {
-                        for ($ = 0; $ < Ce; $++) m[y + $][L + n] = 1;
+                    for (N = 0, k = c[y].length; N < k; N++) if (Ce = 1, n = 1, m[y][N] === H) {
+                      for (Fe.appendChild(c[y][N].cell), m[y][N] = 1; c[y + Ce] !== H && c[y][N].cell == c[y + Ce][N].cell; ) m[y + Ce][N] = 1, Ce++;
+                      for (; c[y][N + n] !== H && c[y][N].cell == c[y][N + n].cell; ) {
+                        for ($ = 0; $ < Ce; $++) m[y + $][N + n] = 1;
                         n++;
                       }
-                      g(c[y][L].cell).attr("rowspan", Ce).attr("colspan", n);
+                      g(c[y][N].cell).attr("rowspan", Ce).attr("colspan", n);
                     }
                   }
                 }
@@ -37335,7 +37336,7 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
               function Ar(r) {
                 var u = Ze(r, "aoPreDrawCallback", "preDraw", [r]);
                 if (g.inArray(!1, u) === -1) {
-                  var v = [], y = 0, _ = r.asStripeClasses, L = _.length, k = (r.aoOpenRows.length, r.oLanguage), $ = r.iInitDisplayStart, ue = le(r) == "ssp", Fe = r.aiDisplay;
+                  var v = [], y = 0, _ = r.asStripeClasses, N = _.length, k = (r.aoOpenRows.length, r.oLanguage), $ = r.iInitDisplayStart, ue = le(r) == "ssp", Fe = r.aiDisplay;
                   r.bDrawing = !0, $ !== H && $ !== -1 && (r._iDisplayStart = ue ? $ : $ >= r.fnRecordsDisplay() ? 0 : $, r.iInitDisplayStart = -1);
                   var Ce = r._iDisplayStart, n = r.fnDisplayEnd();
                   if (r.bDeferLoading) r.bDeferLoading = !1, r.iDraw++, xr(r, !1);
@@ -37346,15 +37347,15 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
                     var M = Fe[E], P = r.aoData[M];
                     P.nTr === null && mn(r, M);
                     var ee = P.nTr;
-                    if (L !== 0) {
-                      var _e = _[y % L];
+                    if (N !== 0) {
+                      var _e = _[y % N];
                       P._sRowStripe != _e && (g(ee).removeClass(P._sRowStripe).addClass(_e), P._sRowStripe = _e);
                     }
                     Ze(r, "aoRowCallback", null, [ee, P._aData, y, E, M]), v.push(ee), y++;
                   }
                   else {
                     var ke = k.sZeroRecords;
-                    r.iDraw == 1 && le(r) == "ajax" ? ke = k.sLoadingRecords : k.sEmptyTable && r.fnRecordsTotal() === 0 && (ke = k.sEmptyTable), v[0] = g("<tr/>", { class: L ? _[0] : "" }).append(g("<td />", { valign: "top", colSpan: Le(r), class: r.oClasses.sRowEmpty }).html(ke))[0];
+                    r.iDraw == 1 && le(r) == "ajax" ? ke = k.sLoadingRecords : k.sEmptyTable && r.fnRecordsTotal() === 0 && (ke = k.sEmptyTable), v[0] = g("<tr/>", { class: N ? _[0] : "" }).append(g("<td />", { valign: "top", colSpan: Le(r), class: r.oClasses.sRowEmpty }).html(ke))[0];
                   }
                   Ze(r, "aoHeaderCallback", "header", [g(r.nTHead).children("tr")[0], $r(r), Ce, n, Fe]), Ze(r, "aoFooterCallback", "footer", [g(r.nTFoot).children("tr")[0], $r(r), Ce, n, Fe]);
                   var Ue = g(r.nTBody);
@@ -37366,8 +37367,8 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
                 y && Jr(r), _ ? _n(r, r.oPreviousSearch) : r.aiDisplay = r.aiDisplayMaster.slice(), u !== !0 && (r._iDisplayStart = 0), r._drawHold = u, Ar(r), r._drawHold = !1;
               }
               function hn(r) {
-                var u = r.oClasses, v = g(r.nTable), y = g("<div/>").insertBefore(v), _ = r.oFeatures, L = g("<div/>", { id: r.sTableId + "_wrapper", class: u.sWrapper + (r.nTFoot ? "" : " " + u.sNoFooter) });
-                r.nHolding = y[0], r.nTableWrapper = L[0], r.nTableReinsertBefore = r.nTable.nextSibling;
+                var u = r.oClasses, v = g(r.nTable), y = g("<div/>").insertBefore(v), _ = r.oFeatures, N = g("<div/>", { id: r.sTableId + "_wrapper", class: u.sWrapper + (r.nTFoot ? "" : " " + u.sNoFooter) });
+                r.nHolding = y[0], r.nTableWrapper = N[0], r.nTableReinsertBefore = r.nTable.nextSibling;
                 for (var k, $, ue, Fe, Ce, n, c = r.sDom.split(""), m = 0; m < c.length; m++) {
                   if (k = null, ($ = c[m]) == "<") {
                     if (ue = g("<div/>")[0], (Fe = c[m + 1]) == "'" || Fe == '"') {
@@ -37378,8 +37379,8 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
                       } else Ce.charAt(0) == "#" ? ue.id = Ce.substr(1, Ce.length - 1) : ue.className = Ce;
                       m += n;
                     }
-                    L.append(ue), L = g(ue);
-                  } else if ($ == ">") L = L.parent();
+                    N.append(ue), N = g(ue);
+                  } else if ($ == ">") N = N.parent();
                   else if ($ == "l" && _.bPaginate && _.bLengthChange) k = xn(r);
                   else if ($ == "f" && _.bFilter) k = li(r);
                   else if ($ == "r" && _.bProcessing) k = Rn(r);
@@ -37394,26 +37395,26 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
                   }
                   if (k) {
                     var _e = r.aanFeatures;
-                    _e[$] || (_e[$] = []), _e[$].push(k), L.append(k);
+                    _e[$] || (_e[$] = []), _e[$].push(k), N.append(k);
                   }
                 }
-                y.replaceWith(L), r.nHolding = null;
+                y.replaceWith(N), r.nHolding = null;
               }
               function an(r, u) {
-                var v, y, _, L, k, $, ue, Fe, Ce, n, c = g(u).children("tr"), m = function(E, M, P) {
+                var v, y, _, N, k, $, ue, Fe, Ce, n, c = g(u).children("tr"), m = function(E, M, P) {
                   for (var ee = E[M]; ee[P]; ) P++;
                   return P;
                 };
                 for (r.splice(0, r.length), _ = 0, $ = c.length; _ < $; _++) r.push([]);
                 for (_ = 0, $ = c.length; _ < $; _++) for (y = (v = c[_]).firstChild; y; ) {
-                  if (y.nodeName.toUpperCase() == "TD" || y.nodeName.toUpperCase() == "TH") for (Fe = (Fe = 1 * y.getAttribute("colspan")) && Fe !== 0 && Fe !== 1 ? Fe : 1, Ce = (Ce = 1 * y.getAttribute("rowspan")) && Ce !== 0 && Ce !== 1 ? Ce : 1, ue = m(r, _, 0), n = Fe === 1, k = 0; k < Fe; k++) for (L = 0; L < Ce; L++) r[_ + L][ue + k] = { cell: y, unique: n }, r[_ + L].nTr = v;
+                  if (y.nodeName.toUpperCase() == "TD" || y.nodeName.toUpperCase() == "TH") for (Fe = (Fe = 1 * y.getAttribute("colspan")) && Fe !== 0 && Fe !== 1 ? Fe : 1, Ce = (Ce = 1 * y.getAttribute("rowspan")) && Ce !== 0 && Ce !== 1 ? Ce : 1, ue = m(r, _, 0), n = Fe === 1, k = 0; k < Fe; k++) for (N = 0; N < Ce; N++) r[_ + N][ue + k] = { cell: y, unique: n }, r[_ + N].nTr = v;
                   y = y.nextSibling;
                 }
               }
               function Cr(r, u, v) {
                 var y = [];
                 v || (v = r.aoHeader, u && an(v = [], u));
-                for (var _ = 0, L = v.length; _ < L; _++) for (var k = 0, $ = v[_].length; k < $; k++) !v[_][k].unique || y[k] && r.bSortCellsTop || (y[k] = v[_][k].cell);
+                for (var _ = 0, N = v.length; _ < N; _++) for (var k = 0, $ = v[_].length; k < $; k++) !v[_][k].unique || y[k] && r.bSortCellsTop || (y[k] = v[_][k].cell);
                 return y;
               }
               function Qr(r, u, v) {
@@ -37427,12 +37428,12 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
                     } else y[c.name] = c.value;
                   })), u = y;
                 }
-                var L, k = r.ajax, $ = r.oInstance, ue = function(n) {
+                var N, k = r.ajax, $ = r.oInstance, ue = function(n) {
                   Ze(r, null, "xhr", [r, n, r.jqXHR]), v(n);
                 };
                 if (g.isPlainObject(k) && k.data) {
-                  var Fe = typeof (L = k.data) == "function" ? L(u, r) : L;
-                  u = typeof L == "function" && Fe ? Fe : g.extend(!0, u, Fe), delete k.data;
+                  var Fe = typeof (N = k.data) == "function" ? N(u, r) : N;
+                  u = typeof N == "function" && Fe ? Fe : g.extend(!0, u, Fe), delete k.data;
                 }
                 var Ce = { data: u, success: function(n) {
                   var c = n.error || n.sError;
@@ -37443,7 +37444,7 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
                 } };
                 r.oAjaxData = u, Ze(r, null, "preXhr", [r, u]), r.fnServerData ? r.fnServerData.call($, r.sAjaxSource, g.map(u, (function(n, c) {
                   return { name: c, value: n };
-                })), ue, r) : r.sAjaxSource || typeof k == "string" ? r.jqXHR = g.ajax(g.extend(Ce, { url: k || r.sAjaxSource })) : typeof k == "function" ? r.jqXHR = k.call($, u, ue, r) : (r.jqXHR = g.ajax(g.extend(Ce, k)), k.data = L);
+                })), ue, r) : r.sAjaxSource || typeof k == "string" ? r.jqXHR = g.ajax(g.extend(Ce, { url: k || r.sAjaxSource })) : typeof k == "function" ? r.jqXHR = k.call($, u, ue, r) : (r.jqXHR = g.ajax(g.extend(Ce, k)), k.data = N);
               }
               function Ur(r) {
                 return !r.bAjaxDataGet || (r.iDraw++, xr(r, !0), Qr(r, ii(r), (function(u) {
@@ -37451,12 +37452,12 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
                 })), !1);
               }
               function ii(r) {
-                var u, v, y, _, L = r.aoColumns, k = L.length, $ = r.oFeatures, ue = r.oPreviousSearch, Fe = r.aoPreSearchCols, Ce = [], n = qt(r), c = r._iDisplayStart, m = $.bPaginate !== !1 ? r._iDisplayLength : -1, E = function(ee, _e) {
+                var u, v, y, _, N = r.aoColumns, k = N.length, $ = r.oFeatures, ue = r.oPreviousSearch, Fe = r.aoPreSearchCols, Ce = [], n = qt(r), c = r._iDisplayStart, m = $.bPaginate !== !1 ? r._iDisplayLength : -1, E = function(ee, _e) {
                   Ce.push({ name: ee, value: _e });
                 };
-                E("sEcho", r.iDraw), E("iColumns", k), E("sColumns", me(L, "sName").join(",")), E("iDisplayStart", c), E("iDisplayLength", m);
+                E("sEcho", r.iDraw), E("iColumns", k), E("sColumns", me(N, "sName").join(",")), E("iDisplayStart", c), E("iDisplayLength", m);
                 var M = { draw: r.iDraw, columns: [], order: [], start: c, length: m, search: { value: ue.sSearch, regex: ue.bRegex } };
-                for (u = 0; u < k; u++) y = L[u], _ = Fe[u], v = typeof y.mData == "function" ? "function" : y.mData, M.columns.push({ data: v, name: y.sName, searchable: y.bSearchable, orderable: y.bSortable, search: { value: _.sSearch, regex: _.bRegex } }), E("mDataProp_" + u, v), $.bFilter && (E("sSearch_" + u, _.sSearch), E("bRegex_" + u, _.bRegex), E("bSearchable_" + u, y.bSearchable)), $.bSort && E("bSortable_" + u, y.bSortable);
+                for (u = 0; u < k; u++) y = N[u], _ = Fe[u], v = typeof y.mData == "function" ? "function" : y.mData, M.columns.push({ data: v, name: y.sName, searchable: y.bSearchable, orderable: y.bSortable, search: { value: _.sSearch, regex: _.bRegex } }), E("mDataProp_" + u, v), $.bFilter && (E("sSearch_" + u, _.sSearch), E("bRegex_" + u, _.bRegex), E("bSearchable_" + u, y.bSearchable)), $.bSort && E("bSortable_" + u, y.bSortable);
                 $.bFilter && (E("sSearch", ue.sSearch), E("bRegex", ue.bRegex)), $.bSort && (g.each(n, (function(ee, _e) {
                   M.order.push({ column: _e.col, dir: _e.dir }), E("iSortCol_" + ee, _e.col), E("sSortDir_" + ee, _e.dir);
                 })), E("iSortingCols", n.length));
@@ -37466,12 +37467,12 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
               function si(r, u) {
                 var v = function(Fe, Ce) {
                   return u[Fe] !== H ? u[Fe] : u[Ce];
-                }, y = sn(r, u), _ = v("sEcho", "draw"), L = v("iTotalRecords", "recordsTotal"), k = v("iTotalDisplayRecords", "recordsFiltered");
+                }, y = sn(r, u), _ = v("sEcho", "draw"), N = v("iTotalRecords", "recordsTotal"), k = v("iTotalDisplayRecords", "recordsFiltered");
                 if (_ !== H) {
                   if (1 * _ < r.iDraw) return;
                   r.iDraw = 1 * _;
                 }
-                on(r), r._iRecordsTotal = parseInt(L, 10), r._iRecordsDisplay = parseInt(k, 10);
+                on(r), r._iRecordsTotal = parseInt(N, 10), r._iRecordsDisplay = parseInt(k, 10);
                 for (var $ = 0, ue = y.length; $ < ue; $++) tt(r, y[$]);
                 r.aiDisplay = r.aiDisplayMaster.slice(), r.bAjaxDataGet = !1, Ar(r), r._bInitComplete || kr(r, u), r.bAjaxDataGet = !0, xr(r, !1);
               }
@@ -37480,10 +37481,10 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
                 return v === "data" ? u.aaData || u[v] : v !== "" ? dr(v)(u) : u;
               }
               function li(r) {
-                var u = r.oClasses, v = r.sTableId, y = r.oLanguage, _ = r.oPreviousSearch, L = r.aanFeatures, k = '<input type="search" class="' + u.sFilterInput + '"/>', $ = y.sSearch;
+                var u = r.oClasses, v = r.sTableId, y = r.oLanguage, _ = r.oPreviousSearch, N = r.aanFeatures, k = '<input type="search" class="' + u.sFilterInput + '"/>', $ = y.sSearch;
                 $ = $.match(/_INPUT_/) ? $.replace("_INPUT_", k) : $ + k;
-                var ue = g("<div/>", { id: L.f ? null : v + "_filter", class: u.sFilter }).append(g("<label/>").append($)), Fe = function() {
-                  L.f;
+                var ue = g("<div/>", { id: N.f ? null : v + "_filter", class: u.sFilter }).append(g("<label/>").append($)), Fe = function() {
+                  N.f;
                   var c = this.value ? this.value : "";
                   c != _.sSearch && (_n(r, { sSearch: c, bRegex: _.bRegex, bSmart: _.bSmart, bCaseInsensitive: _.bCaseInsensitive }), r._iDisplayStart = 0, Ar(r));
                 }, Ce = r.searchDelay !== null ? r.searchDelay : le(r) === "ssp" ? 400 : 0, n = g("input", ue).val(_.sSearch).attr("placeholder", y.sSearchPlaceholder).on("keyup.DT search.DT input.DT paste.DT cut.DT", Ce ? pt(Fe, Ce) : Fe).on("mouseup", (function(c) {
@@ -37501,32 +37502,32 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
                 })), ue[0];
               }
               function _n(r, u, v) {
-                var y = r.oPreviousSearch, _ = r.aoPreSearchCols, L = function(ue) {
+                var y = r.oPreviousSearch, _ = r.aoPreSearchCols, N = function(ue) {
                   y.sSearch = ue.sSearch, y.bRegex = ue.bRegex, y.bSmart = ue.bSmart, y.bCaseInsensitive = ue.bCaseInsensitive;
                 }, k = function(ue) {
                   return ue.bEscapeRegex !== H ? !ue.bEscapeRegex : ue.bRegex;
                 };
                 if (Re(r), le(r) != "ssp") {
-                  Dn(r, u.sSearch, v, k(u), u.bSmart, u.bCaseInsensitive), L(u);
+                  Dn(r, u.sSearch, v, k(u), u.bSmart, u.bCaseInsensitive), N(u);
                   for (var $ = 0; $ < _.length; $++) Tn(r, _[$].sSearch, $, k(_[$]), _[$].bSmart, _[$].bCaseInsensitive);
                   On(r);
-                } else L(u);
+                } else N(u);
                 r.bFiltered = !0, Ze(r, null, "search", [r]);
               }
               function On(r) {
-                for (var u, v, y = K.ext.search, _ = r.aiDisplay, L = 0, k = y.length; L < k; L++) {
-                  for (var $ = [], ue = 0, Fe = _.length; ue < Fe; ue++) v = _[ue], u = r.aoData[v], y[L](r, u._aFilterData, v, u._aData, ue) && $.push(v);
+                for (var u, v, y = K.ext.search, _ = r.aiDisplay, N = 0, k = y.length; N < k; N++) {
+                  for (var $ = [], ue = 0, Fe = _.length; ue < Fe; ue++) v = _[ue], u = r.aoData[v], y[N](r, u._aFilterData, v, u._aData, ue) && $.push(v);
                   _.length = 0, g.merge(_, $);
                 }
               }
-              function Tn(r, u, v, y, _, L) {
+              function Tn(r, u, v, y, _, N) {
                 if (u !== "") {
-                  for (var k, $ = [], ue = r.aiDisplay, Fe = bt(u, y, _, L), Ce = 0; Ce < ue.length; Ce++) k = r.aoData[ue[Ce]]._aFilterData[v], Fe.test(k) && $.push(ue[Ce]);
+                  for (var k, $ = [], ue = r.aiDisplay, Fe = bt(u, y, _, N), Ce = 0; Ce < ue.length; Ce++) k = r.aoData[ue[Ce]]._aFilterData[v], Fe.test(k) && $.push(ue[Ce]);
                   r.aiDisplay = $;
                 }
               }
-              function Dn(r, u, v, y, _, L) {
-                var k, $, ue, Fe = bt(u, y, _, L), Ce = r.oPreviousSearch.sSearch, n = r.aiDisplayMaster, c = [];
+              function Dn(r, u, v, y, _, N) {
+                var k, $, ue, Fe = bt(u, y, _, N), Ce = r.oPreviousSearch.sSearch, n = r.aiDisplayMaster, c = [];
                 if (K.ext.search.length !== 0 && (v = !0), $ = st(r), u.length <= 0) r.aiDisplay = n.slice();
                 else {
                   for (($ || v || y || Ce.length > u.length || u.indexOf(Ce) !== 0 || r.bSorted) && (r.aiDisplay = n.slice()), k = r.aiDisplay, ue = 0; ue < k.length; ue++) Fe.test(r.aoData[k[ue]]._sFilterRow) && c.push(k[ue]);
@@ -37535,12 +37536,12 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
               }
               function bt(r, u, v, y) {
                 if (r = u ? r : wt(r), v) {
-                  var _ = g.map(r.match(/"[^"]+"|[^ ]+/g) || [""], (function(L) {
-                    if (L.charAt(0) === '"') {
-                      var k = L.match(/^"(.*)"$/);
-                      L = k ? k[1] : L;
+                  var _ = g.map(r.match(/"[^"]+"|[^ ]+/g) || [""], (function(N) {
+                    if (N.charAt(0) === '"') {
+                      var k = N.match(/^"(.*)"$/);
+                      N = k ? k[1] : N;
                     }
-                    return L.replace('"', "");
+                    return N.replace('"', "");
                   }));
                   r = "^(?=.*?" + _.join(")(?=.*?") + ").*$";
                 }
@@ -37548,9 +37549,9 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
               }
               var wt = K.util.escapeRegex, ht = g("<div>")[0], $e = ht.textContent !== H;
               function st(r) {
-                var u, v, y, _, L, k, $, ue, Fe = r.aoColumns, Ce = K.ext.type.search, n = !1;
+                var u, v, y, _, N, k, $, ue, Fe = r.aoColumns, Ce = K.ext.type.search, n = !1;
                 for (v = 0, _ = r.aoData.length; v < _; v++) if (!(ue = r.aoData[v])._aFilterData) {
-                  for (k = [], y = 0, L = Fe.length; y < L; y++) (u = Fe[y]).bSearchable ? ($ = It(r, v, y, "filter"), Ce[u.sType] && ($ = Ce[u.sType]($)), $ === null && ($ = ""), typeof $ != "string" && $.toString && ($ = $.toString())) : $ = "", $.indexOf && $.indexOf("&") !== -1 && (ht.innerHTML = $, $ = $e ? ht.textContent : ht.innerText), $.replace && ($ = $.replace(/[\r\n\u2028]/g, "")), k.push($);
+                  for (k = [], y = 0, N = Fe.length; y < N; y++) (u = Fe[y]).bSearchable ? ($ = It(r, v, y, "filter"), Ce[u.sType] && ($ = Ce[u.sType]($)), $ === null && ($ = ""), typeof $ != "string" && $.toString && ($ = $.toString())) : $ = "", $.indexOf && $.indexOf("&") !== -1 && (ht.innerHTML = $, $ = $e ? ht.textContent : ht.innerText), $.replace && ($ = $.replace(/[\r\n\u2028]/g, "")), k.push($);
                   ue._aFilterData = k, ue._sFilterRow = k.join("  "), n = !0;
                 }
                 return n;
@@ -37568,20 +37569,20 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
               function Kt(r) {
                 var u = r.aanFeatures.i;
                 if (u.length !== 0) {
-                  var v = r.oLanguage, y = r._iDisplayStart + 1, _ = r.fnDisplayEnd(), L = r.fnRecordsTotal(), k = r.fnRecordsDisplay(), $ = k ? v.sInfo : v.sInfoEmpty;
-                  k !== L && ($ += " " + v.sInfoFiltered), $ = Zt(r, $ += v.sInfoPostFix);
+                  var v = r.oLanguage, y = r._iDisplayStart + 1, _ = r.fnDisplayEnd(), N = r.fnRecordsTotal(), k = r.fnRecordsDisplay(), $ = k ? v.sInfo : v.sInfoEmpty;
+                  k !== N && ($ += " " + v.sInfoFiltered), $ = Zt(r, $ += v.sInfoPostFix);
                   var ue = v.fnInfoCallback;
-                  ue !== null && ($ = ue.call(r.oInstance, r, y, _, L, k, $)), g(u).html($);
+                  ue !== null && ($ = ue.call(r.oInstance, r, y, _, N, k, $)), g(u).html($);
                 }
               }
               function Zt(r, u) {
-                var v = r.fnFormatNumber, y = r._iDisplayStart + 1, _ = r._iDisplayLength, L = r.fnRecordsDisplay(), k = _ === -1;
-                return u.replace(/_START_/g, v.call(r, y)).replace(/_END_/g, v.call(r, r.fnDisplayEnd())).replace(/_MAX_/g, v.call(r, r.fnRecordsTotal())).replace(/_TOTAL_/g, v.call(r, L)).replace(/_PAGE_/g, v.call(r, k ? 1 : Math.ceil(y / _))).replace(/_PAGES_/g, v.call(r, k ? 1 : Math.ceil(L / _)));
+                var v = r.fnFormatNumber, y = r._iDisplayStart + 1, _ = r._iDisplayLength, N = r.fnRecordsDisplay(), k = _ === -1;
+                return u.replace(/_START_/g, v.call(r, y)).replace(/_END_/g, v.call(r, r.fnDisplayEnd())).replace(/_MAX_/g, v.call(r, r.fnRecordsTotal())).replace(/_TOTAL_/g, v.call(r, N)).replace(/_PAGE_/g, v.call(r, k ? 1 : Math.ceil(y / _))).replace(/_PAGES_/g, v.call(r, k ? 1 : Math.ceil(N / _)));
               }
               function Er(r) {
-                var u, v, y, _ = r.iInitDisplayStart, L = r.aoColumns, k = r.oFeatures, $ = r.bDeferLoading;
+                var u, v, y, _ = r.iInitDisplayStart, N = r.aoColumns, k = r.oFeatures, $ = r.bDeferLoading;
                 if (r.bInitialised) {
-                  for (hn(r), or(r), fn(r, r.aoHeader), fn(r, r.aoFooter), xr(r, !0), k.bAutoWidth && vt(r), u = 0, v = L.length; u < v; u++) (y = L[u]).sWidth && (y.nTh.style.width = Pt(y.sWidth));
+                  for (hn(r), or(r), fn(r, r.aoHeader), fn(r, r.aoFooter), xr(r, !0), k.bAutoWidth && vt(r), u = 0, v = N.length; u < v; u++) (y = N[u]).sWidth && (y.nTh.style.width = Pt(y.sWidth));
                   Ze(r, null, "preInit", [r]), gr(r);
                   var ue = le(r);
                   (ue != "ssp" || $) && (ue == "ajax" ? Qr(r, [], (function(Fe) {
@@ -37601,7 +37602,7 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
                 r._iDisplayLength = v, Et(r), Ze(r, null, "length", [r, v]);
               }
               function xn(r) {
-                for (var u = r.oClasses, v = r.sTableId, y = r.aLengthMenu, _ = Array.isArray(y[0]), L = _ ? y[0] : y, k = _ ? y[1] : y, $ = g("<select/>", { name: v + "_length", "aria-controls": v, class: u.sLengthSelect }), ue = 0, Fe = L.length; ue < Fe; ue++) $[0][ue] = new Option(typeof k[ue] == "number" ? r.fnFormatNumber(k[ue]) : k[ue], L[ue]);
+                for (var u = r.oClasses, v = r.sTableId, y = r.aLengthMenu, _ = Array.isArray(y[0]), N = _ ? y[0] : y, k = _ ? y[1] : y, $ = g("<select/>", { name: v + "_length", "aria-controls": v, class: u.sLengthSelect }), ue = 0, Fe = N.length; ue < Fe; ue++) $[0][ue] = new Option(typeof k[ue] == "number" ? r.fnFormatNumber(k[ue]) : k[ue], N[ue]);
                 var Ce = g("<div><label/></div>").addClass(u.sLength);
                 return r.aanFeatures.l || (Ce[0].id = v + "_length"), Ce.children().append(r.oLanguage.sLengthMenu.replace("_MENU_", $[0].outerHTML)), g("select", Ce).val(r._iDisplayLength).on("change.DT", (function(n) {
                   Nr(r, g(this).val()), Ar(r);
@@ -37612,17 +37613,17 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
               function cn(r) {
                 var u = r.sPaginationType, v = K.ext.pager[u], y = typeof v == "function", _ = function($) {
                   Ar($);
-                }, L = g("<div/>").addClass(r.oClasses.sPaging + u)[0], k = r.aanFeatures;
-                return y || v.fnInit(r, L, _), k.p || (L.id = r.sTableId + "_paginate", r.aoDrawCallback.push({ fn: function($) {
+                }, N = g("<div/>").addClass(r.oClasses.sPaging + u)[0], k = r.aanFeatures;
+                return y || v.fnInit(r, N, _), k.p || (N.id = r.sTableId + "_paginate", r.aoDrawCallback.push({ fn: function($) {
                   if (y) {
                     var ue, Fe, Ce = $._iDisplayStart, n = $._iDisplayLength, c = $.fnRecordsDisplay(), m = n === -1, E = m ? 0 : Math.ceil(Ce / n), M = m ? 1 : Math.ceil(c / n), P = v(E, M);
                     for (ue = 0, Fe = k.p.length; ue < Fe; ue++) ie($, "pageButton")($, k.p[ue], ue, P, E, M);
                   } else v.fnUpdate($, _);
-                }, sName: "pagination" })), L;
+                }, sName: "pagination" })), N;
               }
               function Xr(r, u, v) {
-                var y = r._iDisplayStart, _ = r._iDisplayLength, L = r.fnRecordsDisplay();
-                L === 0 || _ === -1 ? y = 0 : typeof u == "number" ? (y = u * _) > L && (y = 0) : u == "first" ? y = 0 : u == "previous" ? (y = _ >= 0 ? y - _ : 0) < 0 && (y = 0) : u == "next" ? y + _ < L && (y += _) : u == "last" ? y = Math.floor((L - 1) / _) * _ : we(r, 0, "Unknown paging action: " + u, 5);
+                var y = r._iDisplayStart, _ = r._iDisplayLength, N = r.fnRecordsDisplay();
+                N === 0 || _ === -1 ? y = 0 : typeof u == "number" ? (y = u * _) > N && (y = 0) : u == "first" ? y = 0 : u == "previous" ? (y = _ >= 0 ? y - _ : 0) < 0 && (y = 0) : u == "next" ? y + _ < N && (y += _) : u == "last" ? y = Math.floor((N - 1) / _) * _ : we(r, 0, "Unknown paging action: " + u, 5);
                 var k = r._iDisplayStart !== y;
                 return r._iDisplayStart = y, k && (Ze(r, null, "page", [r]), v && Ar(r)), k;
               }
@@ -37637,12 +37638,12 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
                 u.attr("role", "grid");
                 var v = r.oScroll;
                 if (v.sX === "" && v.sY === "") return r.nTable;
-                var y = v.sX, _ = v.sY, L = r.oClasses, k = u.children("caption"), $ = k.length ? k[0]._captionSide : null, ue = g(u[0].cloneNode(!1)), Fe = g(u[0].cloneNode(!1)), Ce = u.children("tfoot"), n = "<div/>", c = function(_e) {
+                var y = v.sX, _ = v.sY, N = r.oClasses, k = u.children("caption"), $ = k.length ? k[0]._captionSide : null, ue = g(u[0].cloneNode(!1)), Fe = g(u[0].cloneNode(!1)), Ce = u.children("tfoot"), n = "<div/>", c = function(_e) {
                   return _e ? Pt(_e) : null;
                 };
                 Ce.length || (Ce = null);
-                var m = g(n, { class: L.sScrollWrapper }).append(g(n, { class: L.sScrollHead }).css({ overflow: "hidden", position: "relative", border: 0, width: y ? c(y) : "100%" }).append(g(n, { class: L.sScrollHeadInner }).css({ "box-sizing": "content-box", width: v.sXInner || "100%" }).append(ue.removeAttr("id").css("margin-left", 0).append($ === "top" ? k : null).append(u.children("thead"))))).append(g(n, { class: L.sScrollBody }).css({ position: "relative", overflow: "auto", width: c(y) }).append(u));
-                Ce && m.append(g(n, { class: L.sScrollFoot }).css({ overflow: "hidden", border: 0, width: y ? c(y) : "100%" }).append(g(n, { class: L.sScrollFootInner }).append(Fe.removeAttr("id").css("margin-left", 0).append($ === "bottom" ? k : null).append(u.children("tfoot")))));
+                var m = g(n, { class: N.sScrollWrapper }).append(g(n, { class: N.sScrollHead }).css({ overflow: "hidden", position: "relative", border: 0, width: y ? c(y) : "100%" }).append(g(n, { class: N.sScrollHeadInner }).css({ "box-sizing": "content-box", width: v.sXInner || "100%" }).append(ue.removeAttr("id").css("margin-left", 0).append($ === "top" ? k : null).append(u.children("thead"))))).append(g(n, { class: N.sScrollBody }).css({ position: "relative", overflow: "auto", width: c(y) }).append(u));
+                Ce && m.append(g(n, { class: N.sScrollFoot }).css({ overflow: "hidden", border: 0, width: y ? c(y) : "100%" }).append(g(n, { class: N.sScrollFootInner }).append(Fe.removeAttr("id").css("margin-left", 0).append($ === "bottom" ? k : null).append(u.children("tfoot")))));
                 var E = m.children(), M = E[0], P = E[1], ee = Ce ? E[2] : null;
                 return y && g(P).on("scroll.DT", (function(_e) {
                   var ke = this.scrollLeft;
@@ -37650,12 +37651,12 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
                 })), g(P).css("max-height", _), v.bCollapse || g(P).css("height", _), r.nScrollHead = M, r.nScrollBody = P, r.nScrollFoot = ee, r.aoDrawCallback.push({ fn: Sn, sName: "scrolling" }), m[0];
               }
               function Sn(r) {
-                var u, v, y, _, L, k, $, ue, Fe, Ce = r.oScroll, n = Ce.sX, c = Ce.sXInner, m = Ce.sY, E = Ce.iBarWidth, M = g(r.nScrollHead), P = M[0].style, ee = M.children("div"), _e = ee[0].style, ke = ee.children("table"), Ue = r.nScrollBody, ot = g(Ue), Tt = Ue.style, at = g(r.nScrollFoot).children("div"), gt = at.children("table"), rr = g(r.nTHead), ar = g(r.nTable), nr = ar[0], hr = nr.style, zr = r.nTFoot ? g(r.nTFoot) : null, Bn = r.oBrowser, Yr = Bn.bScrollOversize, fr = me(r.aoColumns, "nTh"), Jn = [], Wr = [], Zr = [], ui = [], Ai = function(dn) {
+                var u, v, y, _, N, k, $, ue, Fe, Ce = r.oScroll, n = Ce.sX, c = Ce.sXInner, m = Ce.sY, E = Ce.iBarWidth, M = g(r.nScrollHead), P = M[0].style, ee = M.children("div"), _e = ee[0].style, ke = ee.children("table"), Ue = r.nScrollBody, ot = g(Ue), Tt = Ue.style, at = g(r.nScrollFoot).children("div"), gt = at.children("table"), rr = g(r.nTHead), ar = g(r.nTable), nr = ar[0], hr = nr.style, zr = r.nTFoot ? g(r.nTFoot) : null, Bn = r.oBrowser, Yr = Bn.bScrollOversize, fr = me(r.aoColumns, "nTh"), Jn = [], Wr = [], Zr = [], ui = [], Ai = function(dn) {
                   var Nn = dn.style;
                   Nn.paddingTop = "0", Nn.paddingBottom = "0", Nn.borderTopWidth = "0", Nn.borderBottomWidth = "0", Nn.height = 0;
                 }, ti = Ue.scrollHeight > Ue.clientHeight;
                 if (r.scrollBarVis !== ti && r.scrollBarVis !== H) return r.scrollBarVis = ti, void I(r);
-                r.scrollBarVis = ti, ar.children("thead, tfoot").remove(), zr && (k = zr.clone().prependTo(ar), v = zr.find("tr"), _ = k.find("tr")), L = rr.clone().prependTo(ar), u = rr.find("tr"), y = L.find("tr"), L.find("th, td").removeAttr("tabindex"), n || (Tt.width = "100%", M[0].style.width = "100%"), g.each(Cr(r, L), (function(dn, Nn) {
+                r.scrollBarVis = ti, ar.children("thead, tfoot").remove(), zr && (k = zr.clone().prependTo(ar), v = zr.find("tr"), _ = k.find("tr")), N = rr.clone().prependTo(ar), u = rr.find("tr"), y = N.find("tr"), N.find("th, td").removeAttr("tabindex"), n || (Tt.width = "100%", M[0].style.width = "100%"), g.each(Cr(r, N), (function(dn, Nn) {
                   $ = G(r, dn), Nn.style.width = r.aoColumns[$].sWidth;
                 })), zr && oe((function(dn) {
                   dn.style.width = "";
@@ -37678,32 +37679,32 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
                 _e[Kn] = Li ? E + "px" : "0px", zr && (gt[0].style.width = Pt(ri), at[0].style.width = Pt(ri), at[0].style[Kn] = Li ? E + "px" : "0px"), ar.children("colgroup").insertBefore(ar.children("thead")), ot.trigger("scroll"), !r.bSorted && !r.bFiltered || r._drawHold || (Ue.scrollTop = 0);
               }
               function oe(r, u, v) {
-                for (var y, _, L = 0, k = 0, $ = u.length; k < $; ) {
-                  for (y = u[k].firstChild, _ = v ? v[k].firstChild : null; y; ) y.nodeType === 1 && (v ? r(y, _, L) : r(y, L), L++), y = y.nextSibling, _ = v ? _.nextSibling : null;
+                for (var y, _, N = 0, k = 0, $ = u.length; k < $; ) {
+                  for (y = u[k].firstChild, _ = v ? v[k].firstChild : null; y; ) y.nodeType === 1 && (v ? r(y, _, N) : r(y, N), N++), y = y.nextSibling, _ = v ? _.nextSibling : null;
                   k++;
                 }
               }
               var Oe = /<.*?>/g;
               function vt(r) {
-                var u, v, y, _ = r.nTable, L = r.aoColumns, k = r.oScroll, $ = k.sY, ue = k.sX, Fe = k.sXInner, Ce = L.length, n = je(r, "bVisible"), c = g("th", r.nTHead), m = _.getAttribute("width"), E = _.parentNode, M = !1, P = r.oBrowser, ee = P.bScrollOversize, _e = _.style.width;
-                for (_e && _e.indexOf("%") !== -1 && (m = _e), u = 0; u < n.length; u++) (v = L[n[u]]).sWidth !== null && (v.sWidth = Wt(v.sWidthOrig, E), M = !0);
+                var u, v, y, _ = r.nTable, N = r.aoColumns, k = r.oScroll, $ = k.sY, ue = k.sX, Fe = k.sXInner, Ce = N.length, n = je(r, "bVisible"), c = g("th", r.nTHead), m = _.getAttribute("width"), E = _.parentNode, M = !1, P = r.oBrowser, ee = P.bScrollOversize, _e = _.style.width;
+                for (_e && _e.indexOf("%") !== -1 && (m = _e), u = 0; u < n.length; u++) (v = N[n[u]]).sWidth !== null && (v.sWidth = Wt(v.sWidthOrig, E), M = !0);
                 if (ee || !M && !ue && !$ && Ce == Le(r) && Ce == c.length) for (u = 0; u < Ce; u++) {
                   var ke = G(r, u);
-                  ke !== null && (L[ke].sWidth = Pt(c.eq(u).width()));
+                  ke !== null && (N[ke].sWidth = Pt(c.eq(u).width()));
                 }
                 else {
                   var Ue = g(_).clone().css("visibility", "hidden").removeAttr("id");
                   Ue.find("tbody tr").remove();
                   var ot = g("<tr/>").appendTo(Ue.find("tbody"));
-                  for (Ue.find("thead, tfoot").remove(), Ue.append(g(r.nTHead).clone()).append(g(r.nTFoot).clone()), Ue.find("tfoot th, tfoot td").css("width", ""), c = Cr(r, Ue.find("thead")[0]), u = 0; u < n.length; u++) v = L[n[u]], c[u].style.width = v.sWidthOrig !== null && v.sWidthOrig !== "" ? Pt(v.sWidthOrig) : "", v.sWidthOrig && ue && g(c[u]).append(g("<div/>").css({ width: v.sWidthOrig, margin: 0, padding: 0, border: 0, height: 1 }));
-                  if (r.aoData.length) for (u = 0; u < n.length; u++) v = L[y = n[u]], g(lr(r, y)).clone(!1).append(v.sContentPadding).appendTo(ot);
+                  for (Ue.find("thead, tfoot").remove(), Ue.append(g(r.nTHead).clone()).append(g(r.nTFoot).clone()), Ue.find("tfoot th, tfoot td").css("width", ""), c = Cr(r, Ue.find("thead")[0]), u = 0; u < n.length; u++) v = N[n[u]], c[u].style.width = v.sWidthOrig !== null && v.sWidthOrig !== "" ? Pt(v.sWidthOrig) : "", v.sWidthOrig && ue && g(c[u]).append(g("<div/>").css({ width: v.sWidthOrig, margin: 0, padding: 0, border: 0, height: 1 }));
+                  if (r.aoData.length) for (u = 0; u < n.length; u++) v = N[y = n[u]], g(lr(r, y)).clone(!1).append(v.sContentPadding).appendTo(ot);
                   g("[name]", Ue).removeAttr("name");
                   var Tt = g("<div/>").css(ue || $ ? { position: "absolute", top: 0, left: 0, height: 1, right: 0, overflow: "hidden" } : {}).append(Ue).appendTo(E);
                   ue && Fe ? Ue.width(Fe) : ue ? (Ue.css("width", "auto"), Ue.removeAttr("width"), Ue.width() < E.clientWidth && m && Ue.width(E.clientWidth)) : $ ? Ue.width(E.clientWidth) : m && Ue.width(m);
                   var at = 0;
                   for (u = 0; u < n.length; u++) {
                     var gt = g(c[u]), rr = gt.outerWidth() - gt.width(), ar = P.bBounding ? Math.ceil(c[u].getBoundingClientRect().width) : gt.outerWidth();
-                    at += ar, L[n[u]].sWidth = Pt(ar - rr);
+                    at += ar, N[n[u]].sWidth = Pt(ar - rr);
                   }
                   _.style.width = Pt(at), Tt.remove();
                 }
@@ -37729,44 +37730,44 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
                 return y.nTr ? y.anCells[u] : g("<td/>").html(It(r, v, u, "display"))[0];
               }
               function ft(r, u) {
-                for (var v, y = -1, _ = -1, L = 0, k = r.aoData.length; L < k; L++) (v = (v = (v = It(r, L, u, "display") + "").replace(Oe, "")).replace(/&nbsp;/g, " ")).length > y && (y = v.length, _ = L);
+                for (var v, y = -1, _ = -1, N = 0, k = r.aoData.length; N < k; N++) (v = (v = (v = It(r, N, u, "display") + "").replace(Oe, "")).replace(/&nbsp;/g, " ")).length > y && (y = v.length, _ = N);
                 return _;
               }
               function Pt(r) {
                 return r === null ? "0px" : typeof r == "number" ? r < 0 ? "0px" : r + "px" : r.match(/\d$/) ? r + "px" : r;
               }
               function qt(r) {
-                var u, v, y, _, L, k, $, ue = [], Fe = r.aoColumns, Ce = r.aaSortingFixed, n = g.isPlainObject(Ce), c = [], m = function(E) {
+                var u, v, y, _, N, k, $, ue = [], Fe = r.aoColumns, Ce = r.aaSortingFixed, n = g.isPlainObject(Ce), c = [], m = function(E) {
                   E.length && !Array.isArray(E[0]) ? c.push(E) : g.merge(c, E);
                 };
-                for (Array.isArray(Ce) && m(Ce), n && Ce.pre && m(Ce.pre), m(r.aaSorting), n && Ce.post && m(Ce.post), u = 0; u < c.length; u++) for (v = 0, y = (_ = Fe[$ = c[u][0]].aDataSort).length; v < y; v++) k = Fe[L = _[v]].sType || "string", c[u]._idx === H && (c[u]._idx = g.inArray(c[u][1], Fe[L].asSorting)), ue.push({ src: $, col: L, dir: c[u][1], index: c[u]._idx, type: k, formatter: K.ext.type.order[k + "-pre"] });
+                for (Array.isArray(Ce) && m(Ce), n && Ce.pre && m(Ce.pre), m(r.aaSorting), n && Ce.post && m(Ce.post), u = 0; u < c.length; u++) for (v = 0, y = (_ = Fe[$ = c[u][0]].aDataSort).length; v < y; v++) k = Fe[N = _[v]].sType || "string", c[u]._idx === H && (c[u]._idx = g.inArray(c[u][1], Fe[N].asSorting)), ue.push({ src: $, col: N, dir: c[u][1], index: c[u]._idx, type: k, formatter: K.ext.type.order[k + "-pre"] });
                 return ue;
               }
               function Jr(r) {
-                var u, v, y, _, L, k = [], $ = K.ext.type.order, ue = r.aoData, Fe = (r.aoColumns, 0), Ce = r.aiDisplayMaster;
-                for (Re(r), u = 0, v = (L = qt(r)).length; u < v; u++) (_ = L[u]).formatter && Fe++, qr(r, _.col);
-                if (le(r) != "ssp" && L.length !== 0) {
+                var u, v, y, _, N, k = [], $ = K.ext.type.order, ue = r.aoData, Fe = (r.aoColumns, 0), Ce = r.aiDisplayMaster;
+                for (Re(r), u = 0, v = (N = qt(r)).length; u < v; u++) (_ = N[u]).formatter && Fe++, qr(r, _.col);
+                if (le(r) != "ssp" && N.length !== 0) {
                   for (u = 0, y = Ce.length; u < y; u++) k[Ce[u]] = u;
-                  Fe === L.length ? Ce.sort((function(n, c) {
-                    var m, E, M, P, ee, _e = L.length, ke = ue[n]._aSortData, Ue = ue[c]._aSortData;
-                    for (M = 0; M < _e; M++) if ((P = (m = ke[(ee = L[M]).col]) < (E = Ue[ee.col]) ? -1 : m > E ? 1 : 0) != 0) return ee.dir === "asc" ? P : -P;
+                  Fe === N.length ? Ce.sort((function(n, c) {
+                    var m, E, M, P, ee, _e = N.length, ke = ue[n]._aSortData, Ue = ue[c]._aSortData;
+                    for (M = 0; M < _e; M++) if ((P = (m = ke[(ee = N[M]).col]) < (E = Ue[ee.col]) ? -1 : m > E ? 1 : 0) != 0) return ee.dir === "asc" ? P : -P;
                     return (m = k[n]) < (E = k[c]) ? -1 : m > E ? 1 : 0;
                   })) : Ce.sort((function(n, c) {
-                    var m, E, M, P, ee, _e = L.length, ke = ue[n]._aSortData, Ue = ue[c]._aSortData;
-                    for (M = 0; M < _e; M++) if (m = ke[(ee = L[M]).col], E = Ue[ee.col], (P = ($[ee.type + "-" + ee.dir] || $["string-" + ee.dir])(m, E)) !== 0) return P;
+                    var m, E, M, P, ee, _e = N.length, ke = ue[n]._aSortData, Ue = ue[c]._aSortData;
+                    for (M = 0; M < _e; M++) if (m = ke[(ee = N[M]).col], E = Ue[ee.col], (P = ($[ee.type + "-" + ee.dir] || $["string-" + ee.dir])(m, E)) !== 0) return P;
                     return (m = k[n]) < (E = k[c]) ? -1 : m > E ? 1 : 0;
                   }));
                 }
                 r.bSorted = !0;
               }
               function Gr(r) {
-                for (var u, v, y = r.aoColumns, _ = qt(r), L = r.oLanguage.oAria, k = 0, $ = y.length; k < $; k++) {
+                for (var u, v, y = r.aoColumns, _ = qt(r), N = r.oLanguage.oAria, k = 0, $ = y.length; k < $; k++) {
                   var ue = y[k], Fe = ue.asSorting, Ce = ue.sTitle.replace(/<.*?>/g, ""), n = ue.nTh;
-                  n.removeAttribute("aria-sort"), ue.bSortable ? (_.length > 0 && _[0].col == k ? (n.setAttribute("aria-sort", _[0].dir == "asc" ? "ascending" : "descending"), v = Fe[_[0].index + 1] || Fe[0]) : v = Fe[0], u = Ce + (v === "asc" ? L.sSortAscending : L.sSortDescending)) : u = Ce, n.setAttribute("aria-label", u);
+                  n.removeAttribute("aria-sort"), ue.bSortable ? (_.length > 0 && _[0].col == k ? (n.setAttribute("aria-sort", _[0].dir == "asc" ? "ascending" : "descending"), v = Fe[_[0].index + 1] || Fe[0]) : v = Fe[0], u = Ce + (v === "asc" ? N.sSortAscending : N.sSortDescending)) : u = Ce, n.setAttribute("aria-label", u);
                 }
               }
               function ei(r, u, v, y) {
-                var _, L = r.aoColumns[u], k = r.aaSorting, $ = L.asSorting, ue = function(Ce, n) {
+                var _, N = r.aoColumns[u], k = r.aaSorting, $ = N.asSorting, ue = function(Ce, n) {
                   var c = Ce._idx;
                   return c === H && (c = g.inArray(Ce[1], $)), c + 1 < $.length ? c + 1 : n ? null : 0;
                 };
@@ -37778,24 +37779,24 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
               }
               function mi(r, u, v, y) {
                 var _ = r.aoColumns[v];
-                xe(u, {}, (function(L) {
+                xe(u, {}, (function(N) {
                   _.bSortable !== !1 && (r.oFeatures.bProcessing ? (xr(r, !0), setTimeout((function() {
-                    ei(r, v, L.shiftKey, y), le(r) !== "ssp" && xr(r, !1);
-                  }), 0)) : ei(r, v, L.shiftKey, y));
+                    ei(r, v, N.shiftKey, y), le(r) !== "ssp" && xr(r, !1);
+                  }), 0)) : ei(r, v, N.shiftKey, y));
                 }));
               }
               function sr(r) {
-                var u, v, y, _ = r.aLastSort, L = r.oClasses.sSortColumn, k = qt(r), $ = r.oFeatures;
+                var u, v, y, _ = r.aLastSort, N = r.oClasses.sSortColumn, k = qt(r), $ = r.oFeatures;
                 if ($.bSort && $.bSortClasses) {
-                  for (u = 0, v = _.length; u < v; u++) y = _[u].src, g(me(r.aoData, "anCells", y)).removeClass(L + (u < 2 ? u + 1 : 3));
-                  for (u = 0, v = k.length; u < v; u++) y = k[u].src, g(me(r.aoData, "anCells", y)).addClass(L + (u < 2 ? u + 1 : 3));
+                  for (u = 0, v = _.length; u < v; u++) y = _[u].src, g(me(r.aoData, "anCells", y)).removeClass(N + (u < 2 ? u + 1 : 3));
+                  for (u = 0, v = k.length; u < v; u++) y = k[u].src, g(me(r.aoData, "anCells", y)).addClass(N + (u < 2 ? u + 1 : 3));
                 }
                 r.aLastSort = k;
               }
               function qr(r, u) {
-                var v, y, _, L = r.aoColumns[u], k = K.ext.order[L.sSortDataType];
+                var v, y, _, N = r.aoColumns[u], k = K.ext.order[N.sSortDataType];
                 k && (v = k.call(r.oInstance, r, u, ne(r, u)));
-                for (var $ = K.ext.type.order[L.sType + "-pre"], ue = 0, Fe = r.aoData.length; ue < Fe; ue++) (y = r.aoData[ue])._aSortData || (y._aSortData = []), y._aSortData[u] && !k || (_ = k ? v[ue] : It(r, ue, u, "sort"), y._aSortData[u] = $ ? $(_) : _);
+                for (var $ = K.ext.type.order[N.sType + "-pre"], ue = 0, Fe = r.aoData.length; ue < Fe; ue++) (y = r.aoData[ue])._aSortData || (y._aSortData = []), y._aSortData[u] && !k || (_ = k ? v[ue] : It(r, ue, u, "sort"), y._aSortData[u] = $ ? $(_) : _);
               }
               function Yn(r) {
                 if (r.oFeatures.bStateSave && !r.bDestroying) {
@@ -37806,19 +37807,19 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
                 }
               }
               function Pe(r, u, v) {
-                var y, _, L = r.aoColumns, k = function(ue) {
+                var y, _, N = r.aoColumns, k = function(ue) {
                   if (ue && ue.time) {
                     var Fe = Ze(r, "aoStateLoadParams", "stateLoadParams", [r, ue]);
                     if (g.inArray(!1, Fe) === -1) {
                       var Ce = r.iStateDuration;
                       if (Ce > 0 && ue.time < +/* @__PURE__ */ new Date() - 1e3 * Ce) v();
-                      else if (ue.columns && L.length !== ue.columns.length) v();
+                      else if (ue.columns && N.length !== ue.columns.length) v();
                       else {
                         if (r.oLoadedState = g.extend(!0, {}, ue), ue.start !== H && (r._iDisplayStart = ue.start, r.iInitDisplayStart = ue.start), ue.length !== H && (r._iDisplayLength = ue.length), ue.order !== H && (r.aaSorting = [], g.each(ue.order, (function(c, m) {
-                          r.aaSorting.push(m[0] >= L.length ? [0, m[1]] : m);
+                          r.aaSorting.push(m[0] >= N.length ? [0, m[1]] : m);
                         }))), ue.search !== H && g.extend(r.oPreviousSearch, $t(ue.search)), ue.columns) for (y = 0, _ = ue.columns.length; y < _; y++) {
                           var n = ue.columns[y];
-                          n.visible !== H && (L[y].bVisible = n.visible), n.search !== H && g.extend(r.aoPreSearchCols[y], $t(n.search));
+                          n.visible !== H && (N[y].bVisible = n.visible), n.search !== H && g.extend(r.aoPreSearchCols[y], $t(n.search));
                         }
                         Ze(r, "aoStateLoaded", "stateLoaded", [r, ue]), v();
                       }
@@ -37837,17 +37838,17 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
               function we(r, u, v, y) {
                 if (v = "DataTables warning: " + (r ? "table id=" + r.sTableId + " - " : "") + v, y && (v += ". For more information about this error, please see http://datatables.net/tn/" + y), u) W.console && console.log && console.log(v);
                 else {
-                  var _ = K.ext, L = _.sErrMode || _.errMode;
-                  if (r && Ze(r, null, "error", [r, y, v]), L == "alert") alert(v);
+                  var _ = K.ext, N = _.sErrMode || _.errMode;
+                  if (r && Ze(r, null, "error", [r, y, v]), N == "alert") alert(v);
                   else {
-                    if (L == "throw") throw new Error(v);
-                    typeof L == "function" && L(r, y, v);
+                    if (N == "throw") throw new Error(v);
+                    typeof N == "function" && N(r, y, v);
                   }
                 }
               }
               function q(r, u, v, y) {
-                Array.isArray(v) ? g.each(v, (function(_, L) {
-                  Array.isArray(L) ? q(r, u, L[0], L[1]) : q(r, u, L);
+                Array.isArray(v) ? g.each(v, (function(_, N) {
+                  Array.isArray(N) ? q(r, u, N[0], N[1]) : q(r, u, N);
                 })) : (y === H && (y = v), u[v] !== H && (r[y] = u[v]));
               }
               function D(r, u, v) {
@@ -37872,8 +37873,8 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
                 if (u && (_ = g.map(r[u].slice().reverse(), (function(k, $) {
                   return k.fn.apply(r.oInstance, y);
                 }))), v !== null) {
-                  var L = g.Event(v + ".dt");
-                  g(r.nTable).trigger(L, y), _.push(L.result);
+                  var N = g.Event(v + ".dt");
+                  g(r.nTable).trigger(N, y), _.push(N.result);
                 }
                 return _;
               }
@@ -37902,7 +37903,7 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
                   })(k);
                   $ && v.push.apply(v, $);
                 };
-                if (Array.isArray(r)) for (var _ = 0, L = r.length; _ < L; _++) y(r[_]);
+                if (Array.isArray(r)) for (var _ = 0, N = r.length; _ < N; _++) y(r[_]);
                 else y(r);
                 this.context = be(v), u && g.merge(this, u), this.selector = { rows: null, cols: null, opts: null }, C.extend(this, this, Ie);
               }, K.Api = C, g.extend(C.prototype, { any: function() {
@@ -37927,12 +37928,12 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
                 for (var v = u || 0, y = this.length; v < y; v++) if (this[v] === r) return v;
                 return -1;
               }, iterator: function(r, u, v, y) {
-                var _, L, k, $, ue, Fe, Ce, n, c = [], m = this.context, E = this.selector;
-                for (typeof r == "string" && (y = v, v = u, u = r, r = !1), L = 0, k = m.length; L < k; L++) {
-                  var M = new C(m[L]);
-                  if (u === "table") (_ = v.call(M, m[L], L)) !== H && c.push(_);
-                  else if (u === "columns" || u === "rows") (_ = v.call(M, m[L], this[L], L)) !== H && c.push(_);
-                  else if (u === "column" || u === "column-rows" || u === "row" || u === "cell") for (Ce = this[L], u === "column-rows" && (Fe = Lr(m[L], E.opts)), $ = 0, ue = Ce.length; $ < ue; $++) n = Ce[$], (_ = u === "cell" ? v.call(M, m[L], n.row, n.column, L, $) : v.call(M, m[L], n, L, $, Fe)) !== H && c.push(_);
+                var _, N, k, $, ue, Fe, Ce, n, c = [], m = this.context, E = this.selector;
+                for (typeof r == "string" && (y = v, v = u, u = r, r = !1), N = 0, k = m.length; N < k; N++) {
+                  var M = new C(m[N]);
+                  if (u === "table") (_ = v.call(M, m[N], N)) !== H && c.push(_);
+                  else if (u === "columns" || u === "rows") (_ = v.call(M, m[N], this[N], N)) !== H && c.push(_);
+                  else if (u === "column" || u === "column-rows" || u === "row" || u === "cell") for (Ce = this[N], u === "column-rows" && (Fe = Lr(m[N], E.opts)), $ = 0, ue = Ce.length; $ < ue; $++) n = Ce[$], (_ = u === "cell" ? v.call(M, m[N], n.row, n.column, N, $) : v.call(M, m[N], n, N, $, Fe)) !== H && c.push(_);
                 }
                 if (c.length || y) {
                   var P = new C(m, r ? c.concat.apply([], c) : c), ee = P.selector;
@@ -37966,24 +37967,24 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
                 return new C(this.context, be(this));
               }, unshift: et.unshift }), C.extend = function(r, u, v) {
                 if (v.length && u && (u instanceof C || u.__dt_wrapper)) {
-                  var y, _, L, k = function($, ue, Fe) {
+                  var y, _, N, k = function($, ue, Fe) {
                     return function() {
                       var Ce = ue.apply($, arguments);
                       return C.extend(Ce, Ce, Fe.methodExt), Ce;
                     };
                   };
-                  for (y = 0, _ = v.length; y < _; y++) u[(L = v[y]).name] = L.type === "function" ? k(r, L.val, L) : L.type === "object" ? {} : L.val, u[L.name].__dt_wrapper = !0, C.extend(r, u[L.name], L.propExt);
+                  for (y = 0, _ = v.length; y < _; y++) u[(N = v[y]).name] = N.type === "function" ? k(r, N.val, N) : N.type === "object" ? {} : N.val, u[N.name].__dt_wrapper = !0, C.extend(r, u[N.name], N.propExt);
                 }
               }, C.register = Q = function(r, u) {
                 if (Array.isArray(r)) for (var v = 0, y = r.length; v < y; v++) C.register(r[v], u);
                 else {
-                  var _, L, k, $, ue = r.split("."), Fe = Ie, Ce = function(c, m) {
+                  var _, N, k, $, ue = r.split("."), Fe = Ie, Ce = function(c, m) {
                     for (var E = 0, M = c.length; E < M; E++) if (c[E].name === m) return c[E];
                     return null;
                   };
-                  for (_ = 0, L = ue.length; _ < L; _++) {
+                  for (_ = 0, N = ue.length; _ < N; _++) {
                     var n = Ce(Fe, k = ($ = ue[_].indexOf("()") !== -1) ? ue[_].replace("()", "") : ue[_]);
-                    n || (n = { name: k, val: {}, methodExt: [], propExt: [], type: "object" }, Fe.push(n)), _ === L - 1 ? (n.val = u, n.type = typeof u == "function" ? "function" : g.isPlainObject(u) ? "object" : "other") : Fe = $ ? n.methodExt : n.propExt;
+                    n || (n = { name: k, val: {}, methodExt: [], propExt: [], type: "object" }, Fe.push(n)), _ === N - 1 ? (n.val = u, n.type = typeof u == "function" ? "function" : g.isPlainObject(u) ? "object" : "other") : Fe = $ ? n.methodExt : n.propExt;
                   }
                 }
               }, C.registerPlural = ge = function(r, u, v) {
@@ -38040,8 +38041,8 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
                 }));
               })), Q("page.info()", (function(r) {
                 if (this.context.length === 0) return H;
-                var u = this.context[0], v = u._iDisplayStart, y = u.oFeatures.bPaginate ? u._iDisplayLength : -1, _ = u.fnRecordsDisplay(), L = y === -1;
-                return { page: L ? 0 : Math.floor(v / y), pages: L ? 1 : Math.ceil(_ / y), start: v, end: u.fnDisplayEnd(), length: y, recordsTotal: u.fnRecordsTotal(), recordsDisplay: _, serverSide: le(u) === "ssp" };
+                var u = this.context[0], v = u._iDisplayStart, y = u.oFeatures.bPaginate ? u._iDisplayLength : -1, _ = u.fnRecordsDisplay(), N = y === -1;
+                return { page: N ? 0 : Math.floor(v / y), pages: N ? 1 : Math.ceil(_ / y), start: v, end: u.fnDisplayEnd(), length: y, recordsTotal: u.fnRecordsTotal(), recordsDisplay: _, serverSide: le(u) === "ssp" };
               })), Q("page.len()", (function(r) {
                 return r === H ? this.context.length !== 0 ? this.context[0]._iDisplayLength : H : this.iterator("table", (function(u) {
                   Nr(u, r);
@@ -38058,9 +38059,9 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
                 else {
                   xr(r, !0);
                   var _ = r.jqXHR;
-                  _ && _.readyState !== 4 && _.abort(), Qr(r, [], (function(L) {
+                  _ && _.readyState !== 4 && _.abort(), Qr(r, [], (function(N) {
                     on(r);
-                    for (var k = sn(r, L), $ = 0, ue = k.length; $ < ue; $++) tt(r, k[$]);
+                    for (var k = sn(r, N), $ = 0, ue = k.length; $ < ue; $++) tt(r, k[$]);
                     gr(r, u), xr(r, !1);
                   }));
                 }
@@ -38086,8 +38087,8 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
                 }));
               }));
               var Yt = function(r, u, v, y, _) {
-                var L, k, $, ue, Fe, Ce, n = [], c = typeof u;
-                for (u && c !== "string" && c !== "function" && u.length !== H || (u = [u]), $ = 0, ue = u.length; $ < ue; $++) for (Fe = 0, Ce = (k = u[$] && u[$].split && !u[$].match(/[\[\(:]/) ? u[$].split(",") : [u[$]]).length; Fe < Ce; Fe++) (L = v(typeof k[Fe] == "string" ? k[Fe].trim() : k[Fe])) && L.length && (n = n.concat(L));
+                var N, k, $, ue, Fe, Ce, n = [], c = typeof u;
+                for (u && c !== "string" && c !== "function" && u.length !== H || (u = [u]), $ = 0, ue = u.length; $ < ue; $++) for (Fe = 0, Ce = (k = u[$] && u[$].split && !u[$].match(/[\[\(:]/) ? u[$].split(",") : [u[$]]).length; Fe < Ce; Fe++) (N = v(typeof k[Fe] == "string" ? k[Fe].trim() : k[Fe])) && N.length && (n = n.concat(N));
                 var m = fe.selector[r];
                 if (m.length) for ($ = 0, ue = m.length; $ < ue; $++) n = m[$](y, _, n);
                 return be(n);
@@ -38097,15 +38098,15 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
                 for (var u = 0, v = r.length; u < v; u++) if (r[u].length > 0) return r[0] = r[u], r[0].length = 1, r.length = 1, r.context = [r.context[u]], r;
                 return r.length = 0, r;
               }, Lr = function(r, u) {
-                var v, y = [], _ = r.aiDisplay, L = r.aiDisplayMaster, k = u.search, $ = u.order, ue = u.page;
-                if (le(r) == "ssp") return k === "removed" ? [] : O(0, L.length);
+                var v, y = [], _ = r.aiDisplay, N = r.aiDisplayMaster, k = u.search, $ = u.order, ue = u.page;
+                if (le(r) == "ssp") return k === "removed" ? [] : O(0, N.length);
                 if (ue == "current") for (Ce = r._iDisplayStart, n = r.fnDisplayEnd(); Ce < n; Ce++) y.push(_[Ce]);
                 else if ($ == "current" || $ == "applied") {
-                  if (k == "none") y = L.slice();
+                  if (k == "none") y = N.slice();
                   else if (k == "applied") y = _.slice();
                   else if (k == "removed") {
                     for (var Fe = {}, Ce = 0, n = _.length; Ce < n; Ce++) Fe[_[Ce]] = null;
-                    y = g.map(L, (function(c) {
+                    y = g.map(N, (function(c) {
                       return Fe.hasOwnProperty(c) ? null : c;
                     }));
                   }
@@ -38115,9 +38116,9 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
               Q("rows()", (function(r, u) {
                 r === H ? r = "" : g.isPlainObject(r) && (u = r, r = ""), u = tr(u);
                 var v = this.iterator("table", (function(y) {
-                  return (function(_, L, k) {
+                  return (function(_, N, k) {
                     var $;
-                    return Yt("row", L, (function(ue) {
+                    return Yt("row", N, (function(ue) {
                       var Fe = he(ue), Ce = _.aoData;
                       if (Fe !== null && !k) return [Fe];
                       if ($ || ($ = Lr(_, k)), Fe !== null && g.inArray(Fe, $) !== -1) return [Fe];
@@ -38167,16 +38168,16 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
                   return u;
                 }), 1);
               })), ge("rows().ids()", "row().id()", (function(r) {
-                for (var u = [], v = this.context, y = 0, _ = v.length; y < _; y++) for (var L = 0, k = this[y].length; L < k; L++) {
-                  var $ = v[y].rowIdFn(v[y].aoData[this[y][L]]._aData);
+                for (var u = [], v = this.context, y = 0, _ = v.length; y < _; y++) for (var N = 0, k = this[y].length; N < k; N++) {
+                  var $ = v[y].rowIdFn(v[y].aoData[this[y][N]]._aData);
                   u.push((r === !0 ? "#" : "") + $);
                 }
                 return new C(v, u);
               })), ge("rows().remove()", "row().remove()", (function() {
                 var r = this;
                 return this.iterator("row", (function(u, v, y) {
-                  var _, L, k, $, ue, Fe, Ce = u.aoData, n = Ce[v];
-                  for (Ce.splice(v, 1), _ = 0, L = Ce.length; _ < L; _++) if (Fe = (ue = Ce[_]).anCells, ue.nTr !== null && (ue.nTr._DT_RowIndex = _), Fe !== null) for (k = 0, $ = Fe.length; k < $; k++) Fe[k]._DT_CellIndex.row = _;
+                  var _, N, k, $, ue, Fe, Ce = u.aoData, n = Ce[v];
+                  for (Ce.splice(v, 1), _ = 0, N = Ce.length; _ < N; _++) if (Fe = (ue = Ce[_]).anCells, ue.nTr !== null && (ue.nTr._DT_RowIndex = _), Fe !== null) for (k = 0, $ = Fe.length; k < $; k++) Fe[k]._DT_CellIndex.row = _;
                   wr(u.aiDisplayMaster, v), wr(u.aiDisplay, v), wr(r[y], v, !1), u._iRecordsDisplay > 0 && u._iRecordsDisplay--, Et(u);
                   var c = u.rowIdFn(n._aData);
                   c !== H && delete u.aIds[c];
@@ -38185,8 +38186,8 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
                 })), this;
               })), Q("rows.add()", (function(r) {
                 var u = this.iterator("table", (function(y) {
-                  var _, L, k, $ = [];
-                  for (L = 0, k = r.length; L < k; L++) (_ = r[L]).nodeName && _.nodeName.toUpperCase() === "TR" ? $.push(We(y, _)[0]) : $.push(tt(y, _));
+                  var _, N, k, $ = [];
+                  for (N = 0, k = r.length; N < k; N++) (_ = r[N]).nodeName && _.nodeName.toUpperCase() === "TR" ? $.push(We(y, _)[0]) : $.push(tt(y, _));
                   return $;
                 }), 1), v = this.rows(-1);
                 return v.pop(), g.merge(v, u), v;
@@ -38222,19 +38223,19 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
               }, ln = function(r) {
                 var u = new C(r), v = r.aoData;
                 u.off("draw.dt.DT_details column-visibility.dt.DT_details destroy.dt.DT_details"), me(v, "_details").length > 0 && (u.on("draw.dt.DT_details", (function(y, _) {
-                  r === _ && u.rows({ page: "current" }).eq(0).each((function(L) {
-                    var k = v[L];
+                  r === _ && u.rows({ page: "current" }).eq(0).each((function(N) {
+                    var k = v[N];
                     k._detailsShow && k._details.insertAfter(k.nTr);
                   }));
-                })), u.on("column-visibility.dt.DT_details", (function(y, _, L, k) {
+                })), u.on("column-visibility.dt.DT_details", (function(y, _, N, k) {
                   if (r === _) for (var $, ue = Le(_), Fe = 0, Ce = v.length; Fe < Ce; Fe++) ($ = v[Fe])._details && $._details.children("td[colspan]").attr("colspan", ue);
                 })), u.on("destroy.dt.DT_details", (function(y, _) {
-                  if (r === _) for (var L = 0, k = v.length; L < k; L++) v[L]._details && Ir(u, L);
+                  if (r === _) for (var N = 0, k = v.length; N < k; N++) v[N]._details && Ir(u, N);
                 })));
               };
               Q("row().child()", (function(r, u) {
                 var v = this.context;
-                return r === H ? v.length && this.length ? v[0].aoData[this[0]]._details : H : (r === !0 ? this.child.show() : r === !1 ? Ir(this) : v.length && this.length && (function(y, _, L, k) {
+                return r === H ? v.length && this.length ? v[0].aoData[this[0]]._details : H : (r === !0 ? this.child.show() : r === !1 ? Ir(this) : v.length && this.length && (function(y, _, N, k) {
                   var $ = [], ue = function(Fe, Ce) {
                     if (Array.isArray(Fe) || Fe instanceof g) for (var n = 0, c = Fe.length; n < c; n++) ue(Fe[n], Ce);
                     else if (Fe.nodeName && Fe.nodeName.toLowerCase() === "tr") $.push(Fe);
@@ -38243,7 +38244,7 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
                       g("td", m).addClass(Ce).html(Fe)[0].colSpan = Le(y), $.push(m[0]);
                     }
                   };
-                  ue(L, k), _._details && _._details.detach(), _._details = g($), _._detailsShow && _._details.insertAfter(_.nTr);
+                  ue(N, k), _._details && _._details.detach(), _._details = g($), _._detailsShow && _._details.insertAfter(_.nTr);
                 })(v[0], v[0].aoData[this[0]], r, u), this);
               })), Q(["row().child.show()", "row().child().show()"], (function(r) {
                 return Vr(this, !0), this;
@@ -38256,15 +38257,15 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
                 return r.length && this.length && r[0].aoData[this[0]]._detailsShow || !1;
               }));
               var yn = /^([^:]+):(name|visIdx|visible)$/, ai = function(r, u, v, y, _) {
-                for (var L = [], k = 0, $ = _.length; k < $; k++) L.push(It(r, _[k], u));
-                return L;
+                for (var N = [], k = 0, $ = _.length; k < $; k++) N.push(It(r, _[k], u));
+                return N;
               };
               Q("columns()", (function(r, u) {
                 r === H ? r = "" : g.isPlainObject(r) && (u = r, r = ""), u = tr(u);
                 var v = this.iterator("table", (function(y) {
-                  return (function(_, L, k) {
+                  return (function(_, N, k) {
                     var $ = _.aoColumns, ue = me($, "sName"), Fe = me($, "nTh");
-                    return Yt("column", L, (function(Ce) {
+                    return Yt("column", N, (function(Ce) {
                       var n = he(Ce);
                       if (Ce === "") return O($.length);
                       if (n !== null) return [n >= 0 ? n : $.length + n];
@@ -38319,16 +38320,16 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
                   return r.aoColumns[u].mData;
                 }), 1);
               })), ge("columns().cache()", "column().cache()", (function(r) {
-                return this.iterator("column-rows", (function(u, v, y, _, L) {
-                  return Te(u.aoData, L, r === "search" ? "_aFilterData" : "_aSortData", v);
+                return this.iterator("column-rows", (function(u, v, y, _, N) {
+                  return Te(u.aoData, N, r === "search" ? "_aFilterData" : "_aSortData", v);
                 }), 1);
               })), ge("columns().nodes()", "column().nodes()", (function() {
                 return this.iterator("column-rows", (function(r, u, v, y, _) {
                   return Te(r.aoData, _, "anCells", u);
                 }), 1);
               })), ge("columns().visible()", "column().visible()", (function(r, u) {
-                var v = this, y = this.iterator("column", (function(_, L) {
-                  if (r === H) return _.aoColumns[L].bVisible;
+                var v = this, y = this.iterator("column", (function(_, N) {
+                  if (r === H) return _.aoColumns[N].bVisible;
                   (function(k, $, ue) {
                     var Fe, Ce, n, c, m = k.aoColumns, E = m[$], M = k.aoData;
                     if (ue === H) return E.bVisible;
@@ -38339,11 +38340,11 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
                       } else g(me(k.aoData, "anCells", $)).detach();
                       E.bVisible = ue;
                     }
-                  })(_, L, r);
+                  })(_, N, r);
                 }));
                 return r !== H && this.iterator("table", (function(_) {
-                  fn(_, _.aoHeader), fn(_, _.aoFooter), _.aiDisplay.length || g(_.nTBody).find("td[colspan]").attr("colspan", Le(_)), Yn(_), v.iterator("column", (function(L, k) {
-                    Ze(L, null, "column-visibility", [L, k, r, u]);
+                  fn(_, _.aoHeader), fn(_, _.aoFooter), _.aiDisplay.length || g(_.nTBody).find("td[colspan]").attr("colspan", Le(_)), Yn(_), v.iterator("column", (function(N, k) {
+                    Ze(N, null, "column-visibility", [N, k, r, u]);
                   })), (u === H || u) && v.columns.adjust();
                 })), y;
               })), ge("columns().indexes()", "column().index()", (function(r) {
@@ -38380,9 +38381,9 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
                     }), m, M);
                   })(c, r, tr(v));
                 }));
-                var y, _, L, k, $ = v ? { page: v.page, order: v.order, search: v.search } : {}, ue = this.columns(u, $), Fe = this.rows(r, $), Ce = this.iterator("table", (function(c, m) {
+                var y, _, N, k, $ = v ? { page: v.page, order: v.order, search: v.search } : {}, ue = this.columns(u, $), Fe = this.rows(r, $), Ce = this.iterator("table", (function(c, m) {
                   var E = [];
-                  for (y = 0, _ = Fe[m].length; y < _; y++) for (L = 0, k = ue[m].length; L < k; L++) E.push({ row: Fe[m][y], column: ue[m][L] });
+                  for (y = 0, _ = Fe[m].length; y < _; y++) for (N = 0, k = ue[m].length; N < k; N++) E.push({ row: Fe[m][y], column: ue[m][N] });
                   return E;
                 }), 1), n = v && v.selected ? this.cells(Ce, v) : Ce;
                 return g.extend(n.selector, { cols: u, rows: r, opts: v }), n;
@@ -38437,20 +38438,20 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
                 var u = this;
                 return this.iterator("table", (function(v, y) {
                   var _ = [];
-                  g.each(u[y], (function(L, k) {
+                  g.each(u[y], (function(N, k) {
                     _.push([k, r]);
                   })), v.aaSorting = _;
                 }));
               })), Q("search()", (function(r, u, v, y) {
                 var _ = this.context;
-                return r === H ? _.length !== 0 ? _[0].oPreviousSearch.sSearch : H : this.iterator("table", (function(L) {
-                  L.oFeatures.bFilter && _n(L, g.extend({}, L.oPreviousSearch, { sSearch: r + "", bRegex: u !== null && u, bSmart: v === null || v, bCaseInsensitive: y === null || y }), 1);
+                return r === H ? _.length !== 0 ? _[0].oPreviousSearch.sSearch : H : this.iterator("table", (function(N) {
+                  N.oFeatures.bFilter && _n(N, g.extend({}, N.oPreviousSearch, { sSearch: r + "", bRegex: u !== null && u, bSmart: v === null || v, bCaseInsensitive: y === null || y }), 1);
                 }));
               })), ge("columns().search()", "column().search()", (function(r, u, v, y) {
-                return this.iterator("column", (function(_, L) {
+                return this.iterator("column", (function(_, N) {
                   var k = _.aoPreSearchCols;
-                  if (r === H) return k[L].sSearch;
-                  _.oFeatures.bFilter && (g.extend(k[L], { sSearch: r + "", bRegex: u !== null && u, bSmart: v === null || v, bCaseInsensitive: y === null || y }), _n(_, _.oPreviousSearch, 1));
+                  if (r === H) return k[N].sSearch;
+                  _.oFeatures.bFilter && (g.extend(k[N], { sSearch: r + "", bRegex: u !== null && u, bSmart: v === null || v, bCaseInsensitive: y === null || y }), _n(_, _.oPreviousSearch, 1));
                 }));
               })), Q("state()", (function() {
                 return this.context.length ? this.context[0].oSavedState : null;
@@ -38465,13 +38466,13 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
                   Yn(r);
                 }));
               })), K.versionCheck = K.fnVersionCheck = function(r) {
-                for (var u, v, y = K.version.split("."), _ = r.split("."), L = 0, k = _.length; L < k; L++) if ((u = parseInt(y[L], 10) || 0) !== (v = parseInt(_[L], 10) || 0)) return u > v;
+                for (var u, v, y = K.version.split("."), _ = r.split("."), N = 0, k = _.length; N < k; N++) if ((u = parseInt(y[N], 10) || 0) !== (v = parseInt(_[N], 10) || 0)) return u > v;
                 return !0;
               }, K.isDataTable = K.fnIsDataTable = function(r) {
                 var u = g(r).get(0), v = !1;
                 return r instanceof K.Api || (g.each(K.settings, (function(y, _) {
-                  var L = _.nScrollHead ? g("table", _.nScrollHead)[0] : null, k = _.nScrollFoot ? g("table", _.nScrollFoot)[0] : null;
-                  _.nTable !== u && L !== u && k !== u || (v = !0);
+                  var N = _.nScrollHead ? g("table", _.nScrollHead)[0] : null, k = _.nScrollFoot ? g("table", _.nScrollFoot)[0] : null;
+                  _.nTable !== u && N !== u && k !== u || (v = !0);
                 })), v);
               }, K.tables = K.fnTables = function(r) {
                 var u = !1;
@@ -38507,12 +38508,12 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
                 })).flatten();
               })), Q("destroy()", (function(r) {
                 return r = r || !1, this.iterator("table", (function(u) {
-                  var v, y = u.nTableWrapper.parentNode, _ = u.oClasses, L = u.nTable, k = u.nTBody, $ = u.nTHead, ue = u.nTFoot, Fe = g(L), Ce = g(k), n = g(u.nTableWrapper), c = g.map(u.aoData, (function(M) {
+                  var v, y = u.nTableWrapper.parentNode, _ = u.oClasses, N = u.nTable, k = u.nTBody, $ = u.nTHead, ue = u.nTFoot, Fe = g(N), Ce = g(k), n = g(u.nTableWrapper), c = g.map(u.aoData, (function(M) {
                     return M.nTr;
                   }));
-                  u.bDestroying = !0, Ze(u, "aoDestroyCallback", "destroy", [u]), r || new C(u).columns().visible(!0), n.off(".DT").find(":not(tbody *)").off(".DT"), g(W).off(".DT-" + u.sInstance), L != $.parentNode && (Fe.children("thead").detach(), Fe.append($)), ue && L != ue.parentNode && (Fe.children("tfoot").detach(), Fe.append(ue)), u.aaSorting = [], u.aaSortingFixed = [], sr(u), g(c).removeClass(u.asStripeClasses.join(" ")), g("th, td", $).removeClass(_.sSortable + " " + _.sSortableAsc + " " + _.sSortableDesc + " " + _.sSortableNone), Ce.children().detach(), Ce.append(c);
+                  u.bDestroying = !0, Ze(u, "aoDestroyCallback", "destroy", [u]), r || new C(u).columns().visible(!0), n.off(".DT").find(":not(tbody *)").off(".DT"), g(W).off(".DT-" + u.sInstance), N != $.parentNode && (Fe.children("thead").detach(), Fe.append($)), ue && N != ue.parentNode && (Fe.children("tfoot").detach(), Fe.append(ue)), u.aaSorting = [], u.aaSortingFixed = [], sr(u), g(c).removeClass(u.asStripeClasses.join(" ")), g("th, td", $).removeClass(_.sSortable + " " + _.sSortableAsc + " " + _.sSortableDesc + " " + _.sSortableNone), Ce.children().detach(), Ce.append(c);
                   var m = r ? "remove" : "detach";
-                  Fe[m](), n[m](), !r && y && (y.insertBefore(L, u.nTableReinsertBefore), Fe.css("width", u.sDestroyWidth).removeClass(_.sTable), (v = u.asDestroyStripes.length) && Ce.children().each((function(M) {
+                  Fe[m](), n[m](), !r && y && (y.insertBefore(N, u.nTableReinsertBefore), Fe.css("width", u.sDestroyWidth).removeClass(_.sTable), (v = u.asDestroyStripes.length) && Ce.children().each((function(M) {
                     g(this).addClass(u.asDestroyStripes[M % v]);
                   })));
                   var E = g.inArray(u, K.settings);
@@ -38521,7 +38522,7 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
               })), g.each(["column", "row", "cell"], (function(r, u) {
                 Q(u + "s().every()", (function(v) {
                   var y = this.selector.opts, _ = this;
-                  return this.iterator(u, (function(L, k, $, ue, Fe) {
+                  return this.iterator(u, (function(N, k, $, ue, Fe) {
                     v.call(_[u](k, u === "cell" ? $ : y, u === "cell" ? y : H), k, $, ue, Fe);
                   }));
                 }));
@@ -38546,8 +38547,8 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
               }, fnRecordsDisplay: function() {
                 return le(this) == "ssp" ? 1 * this._iRecordsDisplay : this.aiDisplay.length;
               }, fnDisplayEnd: function() {
-                var r = this._iDisplayLength, u = this._iDisplayStart, v = u + r, y = this.aiDisplay.length, _ = this.oFeatures, L = _.bPaginate;
-                return _.bServerSide ? L === !1 || r === -1 ? u + y : Math.min(u + r, this._iRecordsDisplay) : !L || v > y || r === -1 ? y : v;
+                var r = this._iDisplayLength, u = this._iDisplayStart, v = u + r, y = this.aiDisplay.length, _ = this.oFeatures, N = _.bPaginate;
+                return _.bServerSide ? N === !1 || r === -1 ? u + y : Math.min(u + r, this._iRecordsDisplay) : !N || v > y || r === -1 ? y : v;
               }, oInstance: null, sInstance: null, iTabIndex: 0, nScrollHead: null, nScrollFoot: null, aLastSort: [], oPlugins: {}, rowIdFn: null, rowId: null }, K.ext = fe = { buttons: {}, classes: {}, builder: "-source-", errMode: "alert", feature: [], search: [], selector: { cell: [], column: [], row: [] }, internal: {}, legacy: { ajax: null }, pager: {}, renderer: { pageButton: {}, header: {} }, order: {}, type: { detect: [], search: {}, order: {} }, _unique: 0, fnVersionCheck: K.fnVersionCheck, iApiIndex: 0, oJUIClasses: {}, sVersion: K.version }, g.extend(fe, { afnFiltering: fe.search, aTypes: fe.type.detect, ofnSearch: fe.type.search, oSort: fe.type.order, afnSortData: fe.order, aoFeatures: fe.feature, oApi: fe.internal, oStdClasses: fe.classes, oPagination: fe.pager }), g.extend(K.ext.classes, { sTable: "dataTable", sNoFooter: "no-footer", sPageButton: "paginate_button", sPageButtonActive: "current", sPageButtonDisabled: "disabled", sStripeOdd: "odd", sStripeEven: "even", sRowEmpty: "dataTables_empty", sWrapper: "dataTables_wrapper", sFilter: "dataTables_filter", sInfo: "dataTables_info", sPaging: "dataTables_paginate paging_", sLength: "dataTables_length", sProcessing: "dataTables_processing", sSortAsc: "sorting_asc", sSortDesc: "sorting_desc", sSortable: "sorting", sSortableAsc: "sorting_desc_disabled", sSortableDesc: "sorting_asc_disabled", sSortableNone: "sorting_disabled", sSortColumn: "sorting_", sFilterInput: "", sLengthSelect: "", sScrollWrapper: "dataTables_scroll", sScrollHead: "dataTables_scrollHead", sScrollHeadInner: "dataTables_scrollHeadInner", sScrollBody: "dataTables_scrollBody", sScrollFoot: "dataTables_scrollFoot", sScrollFootInner: "dataTables_scrollFootInner", sHeaderTH: "", sFooterTH: "", sSortJUIAsc: "", sSortJUIDesc: "", sSortJUI: "", sSortJUIAscAllowed: "", sSortJUIDescAllowed: "", sSortJUIWrapper: "", sSortIcon: "", sJUIHeader: "", sJUIFooter: "" });
               var zn = K.ext.pager;
               function wn(r, u) {
@@ -38566,7 +38567,7 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
                 return ["first", "previous", wn(r, u), "next", "last"];
               }, first_last_numbers: function(r, u) {
                 return ["first", wn(r, u), "last"];
-              }, _numbers: wn, numbers_length: 7 }), g.extend(!0, K.ext.renderer, { pageButton: { _: function(r, u, v, y, _, L) {
+              }, _numbers: wn, numbers_length: 7 }), g.extend(!0, K.ext.renderer, { pageButton: { _: function(r, u, v, y, _, N) {
                 var k, $, ue, Fe = r.oClasses, Ce = r.oLanguage.oPaginate, n = r.oLanguage.oAria.paginate || {}, c = 0, m = function(E, M) {
                   var P, ee, _e, ke, Ue = Fe.sPageButtonDisabled, ot = function(at) {
                     Xr(r, at.data.action, !0);
@@ -38586,10 +38587,10 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
                         k = Ce.sPrevious, _ === 0 && (ke = -1, $ += " " + Ue);
                         break;
                       case "next":
-                        k = Ce.sNext, L !== 0 && _ !== L - 1 || (ke = -1, $ += " " + Ue);
+                        k = Ce.sNext, N !== 0 && _ !== N - 1 || (ke = -1, $ += " " + Ue);
                         break;
                       case "last":
-                        k = Ce.sLast, L !== 0 && _ !== L - 1 || (ke = -1, $ += " " + Ue);
+                        k = Ce.sLast, N !== 0 && _ !== N - 1 || (ke = -1, $ += " " + Ue);
                         break;
                       default:
                         k = r.fnFormatNumber(_e + 1), $ = _ === _e ? Fe.sPageButtonActive : "";
@@ -38653,15 +38654,15 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
               }, "string-desc": function(r, u) {
                 return r < u ? 1 : r > u ? -1 : 0;
               } }), Wn(""), g.extend(!0, K.ext.renderer, { header: { _: function(r, u, v, y) {
-                g(r.nTable).on("order.dt.DT", (function(_, L, k, $) {
-                  if (r === L) {
+                g(r.nTable).on("order.dt.DT", (function(_, N, k, $) {
+                  if (r === N) {
                     var ue = v.idx;
                     u.removeClass(y.sSortAsc + " " + y.sSortDesc).addClass($[ue] == "asc" ? y.sSortAsc : $[ue] == "desc" ? y.sSortDesc : v.sSortingClass);
                   }
                 }));
               }, jqueryui: function(r, u, v, y) {
-                g("<div/>").addClass(y.sSortJUIWrapper).append(u.contents()).append(g("<span/>").addClass(y.sSortIcon + " " + v.sSortingClassJUI)).appendTo(u), g(r.nTable).on("order.dt.DT", (function(_, L, k, $) {
-                  if (r === L) {
+                g("<div/>").addClass(y.sSortJUIWrapper).append(u.contents()).append(g("<span/>").addClass(y.sSortIcon + " " + v.sSortingClassJUI)).appendTo(u), g(r.nTable).on("order.dt.DT", (function(_, N, k, $) {
+                  if (r === N) {
                     var ue = v.idx;
                     u.removeClass(y.sSortAsc + " " + y.sSortDesc).addClass($[ue] == "asc" ? y.sSortAsc : $[ue] == "desc" ? y.sSortDesc : v.sSortingClass), u.find("span." + y.sSortIcon).removeClass(y.sSortJUIAsc + " " + y.sSortJUIDesc + " " + y.sSortJUI + " " + y.sSortJUIAscAllowed + " " + y.sSortJUIDescAllowed).addClass($[ue] == "asc" ? y.sSortJUIAsc : $[ue] == "desc" ? y.sSortJUIDesc : v.sSortingClassJUI);
                   }
@@ -38677,12 +38678,12 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
                 };
               }
               return K.render = { number: function(r, u, v, y, _) {
-                return { display: function(L) {
-                  if (typeof L != "number" && typeof L != "string") return L;
-                  var k = L < 0 ? "-" : "", $ = parseFloat(L);
-                  if (isNaN($)) return yt(L);
-                  $ = $.toFixed(v), L = Math.abs($);
-                  var ue = parseInt(L, 10), Fe = v ? u + (L - ue).toFixed(v).substring(2) : "";
+                return { display: function(N) {
+                  if (typeof N != "number" && typeof N != "string") return N;
+                  var k = N < 0 ? "-" : "", $ = parseFloat(N);
+                  if (isNaN($)) return yt(N);
+                  $ = $.toFixed(v), N = Math.abs($);
+                  var ue = parseInt(N, 10), Fe = v ? u + (N - ue).toFixed(v).substring(2) : "";
                   return k + (y || "") + ue.toString().replace(/\B(?=(\d{3})+(?!\d))/g, r) + Fe + (_ || "");
                 } };
               }, text: function() {
@@ -38696,19 +38697,19 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
                 g.fn.DataTable[r] = u;
               })), g.fn.dataTable;
             })(B, window, document);
-          }.apply(pe, T)) === void 0 || (Ne.exports = N);
+          }.apply(pe, T)) === void 0 || (Ne.exports = L);
         })();
       }, function(Ne, pe, x) {
         var T;
         T = function() {
-          return (function(N) {
+          return (function(L) {
             var Y = {};
             function B(g) {
               if (Y[g]) return Y[g].exports;
               var W = Y[g] = { i: g, l: !1, exports: {} };
-              return N[g].call(W.exports, W, W.exports, B), W.l = !0, W.exports;
+              return L[g].call(W.exports, W, W.exports, B), W.l = !0, W.exports;
             }
-            return B.m = N, B.c = Y, B.d = function(g, W, R) {
+            return B.m = L, B.c = Y, B.d = function(g, W, R) {
               B.o(g, W) || Object.defineProperty(g, W, { enumerable: !0, get: R });
             }, B.r = function(g) {
               typeof Symbol < "u" && Symbol.toStringTag && Object.defineProperty(g, Symbol.toStringTag, { value: "Module" }), Object.defineProperty(g, "__esModule", { value: !0 });
@@ -38729,12 +38730,12 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
             }, B.o = function(g, W) {
               return Object.prototype.hasOwnProperty.call(g, W);
             }, B.p = "/", B(B.s = 1);
-          })([function(N, Y, B) {
-            N.exports = function(g) {
+          })([function(L, Y, B) {
+            L.exports = function(g) {
               for (var W = 5381, R = g.length; R; ) W = 33 * W ^ g.charCodeAt(--R);
               return W >>> 0;
             };
-          }, function(N, Y, B) {
+          }, function(L, Y, B) {
             B.r(Y), B.d(Y, "default", (function() {
               return Q;
             }));
@@ -38929,9 +38930,9 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
       }, function(Ne, pe, x) {
       }, function(Ne, pe, x) {
         (function(T) {
-          var N = { autoSelfClosers: { area: !0, base: !0, br: !0, col: !0, command: !0, embed: !0, frame: !0, hr: !0, img: !0, input: !0, keygen: !0, link: !0, meta: !0, param: !0, source: !0, track: !0, wbr: !0, menuitem: !0 }, implicitlyClosed: { dd: !0, li: !0, optgroup: !0, option: !0, p: !0, rp: !0, rt: !0, tbody: !0, td: !0, tfoot: !0, th: !0, tr: !0 }, contextGrabbers: { dd: { dd: !0, dt: !0 }, dt: { dd: !0, dt: !0 }, li: { li: !0 }, option: { option: !0, optgroup: !0 }, optgroup: { optgroup: !0 }, p: { address: !0, article: !0, aside: !0, blockquote: !0, dir: !0, div: !0, dl: !0, fieldset: !0, footer: !0, form: !0, h1: !0, h2: !0, h3: !0, h4: !0, h5: !0, h6: !0, header: !0, hgroup: !0, hr: !0, menu: !0, nav: !0, ol: !0, p: !0, pre: !0, section: !0, table: !0, ul: !0 }, rp: { rp: !0, rt: !0 }, rt: { rp: !0, rt: !0 }, tbody: { tbody: !0, tfoot: !0 }, td: { td: !0, th: !0 }, tfoot: { tbody: !0 }, th: { td: !0, th: !0 }, thead: { tbody: !0, tfoot: !0 }, tr: { tr: !0 } }, doNotIndent: { pre: !0 }, allowUnquoted: !0, allowMissing: !0, caseFold: !0 }, Y = { autoSelfClosers: {}, implicitlyClosed: {}, contextGrabbers: {}, doNotIndent: {}, allowUnquoted: !1, allowMissing: !1, allowMissingTagName: !1, caseFold: !1 };
+          var L = { autoSelfClosers: { area: !0, base: !0, br: !0, col: !0, command: !0, embed: !0, frame: !0, hr: !0, img: !0, input: !0, keygen: !0, link: !0, meta: !0, param: !0, source: !0, track: !0, wbr: !0, menuitem: !0 }, implicitlyClosed: { dd: !0, li: !0, optgroup: !0, option: !0, p: !0, rp: !0, rt: !0, tbody: !0, td: !0, tfoot: !0, th: !0, tr: !0 }, contextGrabbers: { dd: { dd: !0, dt: !0 }, dt: { dd: !0, dt: !0 }, li: { li: !0 }, option: { option: !0, optgroup: !0 }, optgroup: { optgroup: !0 }, p: { address: !0, article: !0, aside: !0, blockquote: !0, dir: !0, div: !0, dl: !0, fieldset: !0, footer: !0, form: !0, h1: !0, h2: !0, h3: !0, h4: !0, h5: !0, h6: !0, header: !0, hgroup: !0, hr: !0, menu: !0, nav: !0, ol: !0, p: !0, pre: !0, section: !0, table: !0, ul: !0 }, rp: { rp: !0, rt: !0 }, rt: { rp: !0, rt: !0 }, tbody: { tbody: !0, tfoot: !0 }, td: { td: !0, th: !0 }, tfoot: { tbody: !0 }, th: { td: !0, th: !0 }, thead: { tbody: !0, tfoot: !0 }, tr: { tr: !0 } }, doNotIndent: { pre: !0 }, allowUnquoted: !0, allowMissing: !0, caseFold: !0 }, Y = { autoSelfClosers: {}, implicitlyClosed: {}, contextGrabbers: {}, doNotIndent: {}, allowUnquoted: !1, allowMissing: !1, allowMissingTagName: !1, caseFold: !1 };
           T.defineMode("xml", (function(B, g) {
-            var W, R, H = B.indentUnit, fe = {}, C = g.htmlMode ? N : Y;
+            var W, R, H = B.indentUnit, fe = {}, C = g.htmlMode ? L : Y;
             for (var Q in C) fe[Q] = C[Q];
             for (var Q in g) fe[Q] = g[Q];
             function ge(O, ce) {
@@ -39075,8 +39076,8 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
         })(x(7));
       }, function(Ne, pe, x) {
         (function(T) {
-          T.defineMode("javascript", (function(N, Y) {
-            var B, g, W = N.indentUnit, R = Y.statementIndent, H = Y.jsonld, fe = Y.json || H, C = Y.typescript, Q = Y.wordCharacters || /[\w$\xa1-\uffff]/, ge = (function() {
+          T.defineMode("javascript", (function(L, Y) {
+            var B, g, W = L.indentUnit, R = Y.statementIndent, H = Y.jsonld, fe = Y.json || H, C = Y.typescript, Q = Y.wordCharacters || /[\w$\xa1-\uffff]/, ge = (function() {
               function oe(Pt) {
                 return { type: Pt, style: "keyword" };
               }
@@ -39520,25 +39521,25 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
         })(x(7));
       }, function(Ne, pe, x) {
       }, , , , , , , , , , , , , , , , , , , , , , function(Ne, pe, x) {
-        var T = x(87), N = x(85), Y = Object(N.a)((function(B, g, W) {
+        var T = x(87), L = x(85), Y = Object(L.a)((function(B, g, W) {
           Object(T.a)(B, g, W);
         }));
         pe.a = Y;
       }, function(Ne, pe, x) {
-        var T = x(64), N = Object(T.a)({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }), Y = x(27), B = /[&<>"']/g, g = RegExp(B.source);
+        var T = x(64), L = Object(T.a)({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }), Y = x(27), B = /[&<>"']/g, g = RegExp(B.source);
         pe.a = function(W) {
-          return (W = Object(Y.a)(W)) && g.test(W) ? W.replace(B, N) : W;
+          return (W = Object(Y.a)(W)) && g.test(W) ? W.replace(B, L) : W;
         };
       }, , , , function(Ne, pe, x) {
-        var T = x(31), N = x(66), Y = x(52);
+        var T = x(31), L = x(66), Y = x(52);
         pe.a = function(B, g) {
           var W = {};
-          return g = Object(Y.a)(g, 3), Object(N.a)(B, (function(R, H, fe) {
+          return g = Object(Y.a)(g, 3), Object(L.a)(B, (function(R, H, fe) {
             Object(T.a)(W, H, g(R, H, fe));
           })), W;
         };
       }, , , , , , , , , , , function(Ne, pe, x) {
-        var T = x(18), N = function(dt, Ct) {
+        var T = x(18), L = function(dt, Ct) {
           for (var Qe = -1, Dt = dt == null ? 0 : dt.length; ++Qe < Dt && Ct(dt[Qe], Qe, dt) !== !1; ) ;
           return dt;
         }, Y = x(67);
@@ -39624,7 +39625,7 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
             Le.set(Ut, dt(er, Qe, Dt, Ut, Ct, ne));
           }));
           var Rt = fe.a, It = Re ? void 0 : Rt(Ct);
-          return N(It || Ct, (function(er, Ut) {
+          return L(It || Ct, (function(er, Ut) {
             It && (er = Ct[Ut = er]), Object(Y.a)(Le, Ut, dt(er, Qe, Dt, Ut, Ct, ne));
           })), Le;
         };
@@ -39646,10 +39647,10 @@ const Yasr = /* @__PURE__ */ getDefaultExportFromCjs(yasr_minExports), _sfc_main
     watch(pe.dataSource, () => {
       console.log("update"), B();
     }, { deep: !0 });
-    const N = ref(null), Y = ref(pe.dataSource), { update: B } = useTemporaryStore(pe.dataSource.type, Y, T);
+    const L = ref(null), Y = ref(pe.dataSource), { update: B } = useTemporaryStore(pe.dataSource.type, Y, T);
     let g;
     return onMounted(() => {
-      g = new Yasr(N.value, {
+      g = new Yasr(L.value, {
         // Optional: spezifische Plugins definieren (table, rawResponse etc.)
         plugins: {
           table: {},
@@ -39662,10 +39663,36 @@ const Yasr = /* @__PURE__ */ getDefaultExportFromCjs(yasr_minExports), _sfc_main
       id: "yasr",
       style: { width: "100%", height: "100%" },
       ref_key: "yasguiResult",
-      ref: N
+      ref: L
     }, null, 512));
   }
-}), symbol = Symbol.for("SparqlStore"), previewSymbol = Symbol.for("SparqlPreview"), settingsSymbol = Symbol.for("SparqlSettings");
+}), Settings$1 = { connection: "Verbindung" }, Sparql$1 = { query: "Abfrage" }, lang_de = {
+  Settings: Settings$1,
+  Sparql: Sparql$1
+}, Settings = { connection: "Connection" }, Sparql = { query: "Query" }, lang_en = {
+  Settings,
+  Sparql
+};
+var __getOwnPropDesc = Object.getOwnPropertyDescriptor, __decorateClass = (Ne, pe, x, T) => {
+  for (var L = T > 1 ? void 0 : T ? __getOwnPropDesc(pe, x) : pe, Y = Ne.length - 1, B; Y >= 0; Y--)
+    (B = Ne[Y]) && (L = B(L) || L);
+  return L;
+};
+const NAMESPACE = "datasourceSparql";
+let DatasourceSparqlTranslations = class {
+  namespace = NAMESPACE;
+  resources = {
+    de: lang_de,
+    en: lang_en
+  };
+};
+DatasourceSparqlTranslations = __decorateClass([
+  component({
+    service: ["Translations"],
+    properties: { "i18n.namespace": NAMESPACE }
+  })
+], DatasourceSparqlTranslations);
+const symbol = Symbol.for("SparqlStore"), previewSymbol = Symbol.for("SparqlPreview"), settingsSymbol = Symbol.for("SparqlSettings");
 function activate({ services: Ne }) {
   Ne.register("SparqlPreview", _sfc_main), Ne.register("SparqlSettings", _sfc_main$1), Ne.getRequired(DATASOURCE_REPOSITORY).registerDatasourceType("sparql", {
     icon: "share",
@@ -39680,6 +39707,7 @@ function deactivate({ services: Ne }) {
   Ne.getRequired(DATASOURCE_REPOSITORY).unregisterDatasourceType("sparql"), Ne.unregister("SparqlPreview"), Ne.unregister("SparqlSettings");
 }
 export {
+  DatasourceSparqlTranslations,
   activate,
   deactivate
 };

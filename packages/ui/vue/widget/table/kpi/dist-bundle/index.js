@@ -1,62 +1,62 @@
 (function(){var i="ui.vue.widget.table.kpi",d=document,s=d.querySelector('style[data-tsm-bundle="'+i+'"]');if(!s){s=d.createElement('style');s.setAttribute('data-tsm-bundle',i);d.head.appendChild(s);}s.textContent=".filters[data-v-f4b39436]{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:1rem;padding:1rem;flex-grow:0}.table_container[data-v-f4b39436]{display:flex;flex-direction:column;height:100%}.table_container .pagination[data-v-f4b39436]{flex-grow:0;padding:1rem;display:grid;grid-template-columns:1fr 1fr 1fr;justify-items:center;align-items:end}.table_container .pagination .page_input[data-v-f4b39436]{justify-self:start}.table_container .table[data-v-f4b39436]{flex-grow:1;flex-shrink:1}.loading[data-v-f4b39436]{display:flex;height:100%}\n";})();
-import { WidgetActionInterfaceImpl as j, EVENT_ACTIONS_REGISTRY as M, PayloadImpl as V, EVENT_REGISTRY_ID as X, EVENT_ACTIONS_REGISTRY_ID as Z } from "org.eclipse.daanse.board.app.lib.api.events";
-import { activate as $, deactivate as z, component as J, inject as L } from "@eclipse-daanse/tsm";
-import { defineComponent as q, toRefs as Q, inject as B, onUnmounted as ee, ref as te, watch as se, onMounted as ae, computed as _, provide as R, createElementBlock as re, openBlock as ie, withModifiers as ne, createVNode as oe, unref as le } from "vue";
-import { useVariableRepository as ue, useDatasourceRepository as de, VariableWrapper as g } from "org.eclipse.daanse.board.app.ui.vue.composables";
-import { useRoute as ce } from "vue-router";
-import { KpiTable as he } from "org.eclipse.daanse.board.app.ui.vue.common.kpi";
-import { WidgetAction as Te } from "org.eclipse.daanse.board.app.lib.events";
-import { BasicEFactory as ge, BasicEPackage as Ee, EPackageRegistry as b, BasicEClass as _e, BasicEReference as fe, BasicEAttribute as S, getEcorePackage as w, BasicEObject as Se } from "@emfts/core";
-import { WIDGET_SERVICE_ID as we } from "org.eclipse.daanse.board.app.lib.api.widget";
-const { identifiers: pe } = __tsm__.require("org.eclipse.daanse.board.app.lib.core"), Ce = "data:image/svg+xml,%3csvg%20width='120'%20height='120'%20viewBox='0%200%20120%20120'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cpath%20fill-rule='evenodd'%20clip-rule='evenodd'%20d='M105%207.5H15C10.8579%207.5%207.5%2010.8579%207.5%2015V105C7.5%20109.142%2010.8579%20112.5%2015%20112.5H105C109.142%20112.5%20112.5%20109.142%20112.5%20105V15C112.5%2010.8579%20109.142%207.5%20105%207.5ZM15%200C6.71573%200%200%206.71573%200%2015V105C0%20113.284%206.71573%20120%2015%20120H105C113.284%20120%20120%20113.284%20120%20105V15C120%206.71573%20113.284%200%20105%200H15Z'%20fill='%23606060'/%3e%3cpath%20d='M22.5%2025.5C22.5%2023.8431%2023.8431%2022.5%2025.5%2022.5H34.5C36.1569%2022.5%2037.5%2023.8431%2037.5%2025.5V34.5C37.5%2036.1569%2036.1569%2037.5%2034.5%2037.5H25.5C23.8431%2037.5%2022.5%2036.1569%2022.5%2034.5V25.5Z'%20fill='%23606060'/%3e%3cpath%20d='M22.5%2048C22.5%2046.3431%2023.8431%2045%2025.5%2045H34.5C36.1569%2045%2037.5%2046.3431%2037.5%2048V94.5C37.5%2096.1569%2036.1569%2097.5%2034.5%2097.5H25.5C23.8431%2097.5%2022.5%2096.1569%2022.5%2094.5V48Z'%20fill='%23606060'/%3e%3cpath%20d='M45%2025.5C45%2023.8431%2046.3431%2022.5%2048%2022.5H94.5C96.1569%2022.5%2097.5%2023.8431%2097.5%2025.5V34.5C97.5%2036.1569%2096.1569%2037.5%2094.5%2037.5H48C46.3431%2037.5%2045%2036.1569%2045%2034.5V25.5Z'%20fill='%23606060'/%3e%3cpath%20d='M45%2048C45%2046.3431%2046.3431%2045%2048%2045H94.5C96.1569%2045%2097.5%2046.3431%2097.5%2048V94.5C97.5%2096.1569%2096.1569%2097.5%2094.5%2097.5H48C46.3431%2097.5%2045%2096.1569%2045%2094.5V48Z'%20fill='%23606060'/%3e%3c/svg%3e";
-var Ie = Object.defineProperty, Ae = Object.getOwnPropertyDescriptor, Ne = (l, e, t, u) => {
-  for (var a = Ae(e, t), r = l.length - 1, i; r >= 0; r--)
-    (i = l[r]) && (a = i(e, t, a) || a);
-  return a && Ie(e, t, a), a;
+import { WidgetActionInterfaceImpl as X, EVENT_ACTIONS_REGISTRY as Z, PayloadImpl as b, EVENT_REGISTRY_ID as z, EVENT_ACTIONS_REGISTRY_ID as J } from "org.eclipse.daanse.board.app.lib.api.events";
+import { component as O, activate as q, deactivate as Q, inject as D } from "@eclipse-daanse/tsm";
+import { defineComponent as ee, toRefs as te, inject as L, onUnmounted as se, ref as ae, watch as re, onMounted as ie, computed as _, provide as B, createElementBlock as ne, openBlock as oe, withModifiers as le, createVNode as ue, unref as de } from "vue";
+import { useVariableRepository as ce, useDatasourceRepository as he, VariableWrapper as g } from "org.eclipse.daanse.board.app.ui.vue.composables";
+import { useRoute as pe } from "vue-router";
+import { KpiTable as Te } from "org.eclipse.daanse.board.app.ui.vue.common.kpi";
+import { WidgetAction as Ee } from "org.eclipse.daanse.board.app.lib.events";
+import { BasicEFactory as _e, BasicEPackage as fe, EPackageRegistry as k, BasicEClass as Se, BasicEReference as we, BasicEAttribute as S, getEcorePackage as w, BasicEObject as Ce } from "@emfts/core";
+import { WIDGET_SERVICE_ID as ye } from "org.eclipse.daanse.board.app.lib.api.widget";
+const { identifiers: ge } = __tsm__.require("org.eclipse.daanse.board.app.lib.core"), Ie = "data:image/svg+xml,%3csvg%20width='120'%20height='120'%20viewBox='0%200%20120%20120'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cpath%20fill-rule='evenodd'%20clip-rule='evenodd'%20d='M105%207.5H15C10.8579%207.5%207.5%2010.8579%207.5%2015V105C7.5%20109.142%2010.8579%20112.5%2015%20112.5H105C109.142%20112.5%20112.5%20109.142%20112.5%20105V15C112.5%2010.8579%20109.142%207.5%20105%207.5ZM15%200C6.71573%200%200%206.71573%200%2015V105C0%20113.284%206.71573%20120%2015%20120H105C113.284%20120%20120%20113.284%20120%20105V15C120%206.71573%20113.284%200%20105%200H15Z'%20fill='%23606060'/%3e%3cpath%20d='M22.5%2025.5C22.5%2023.8431%2023.8431%2022.5%2025.5%2022.5H34.5C36.1569%2022.5%2037.5%2023.8431%2037.5%2025.5V34.5C37.5%2036.1569%2036.1569%2037.5%2034.5%2037.5H25.5C23.8431%2037.5%2022.5%2036.1569%2022.5%2034.5V25.5Z'%20fill='%23606060'/%3e%3cpath%20d='M22.5%2048C22.5%2046.3431%2023.8431%2045%2025.5%2045H34.5C36.1569%2045%2037.5%2046.3431%2037.5%2048V94.5C37.5%2096.1569%2036.1569%2097.5%2034.5%2097.5H25.5C23.8431%2097.5%2022.5%2096.1569%2022.5%2094.5V48Z'%20fill='%23606060'/%3e%3cpath%20d='M45%2025.5C45%2023.8431%2046.3431%2022.5%2048%2022.5H94.5C96.1569%2022.5%2097.5%2023.8431%2097.5%2025.5V34.5C97.5%2036.1569%2096.1569%2037.5%2094.5%2037.5H48C46.3431%2037.5%2045%2036.1569%2045%2034.5V25.5Z'%20fill='%23606060'/%3e%3cpath%20d='M45%2048C45%2046.3431%2046.3431%2045%2048%2045H94.5C96.1569%2045%2097.5%2046.3431%2097.5%2048V94.5C97.5%2096.1569%2096.1569%2097.5%2094.5%2097.5H48C46.3431%2097.5%2045%2096.1569%2045%2094.5V48Z'%20fill='%23606060'/%3e%3c/svg%3e";
+var me = Object.defineProperty, ve = Object.getOwnPropertyDescriptor, Ae = (o, e, t, l) => {
+  for (var a = ve(e, t), r = o.length - 1, i; r >= 0; r--)
+    (i = o[r]) && (a = i(e, t, a) || a);
+  return a && me(e, t, a), a;
 };
-class A extends j {
+class I extends X {
   refresh() {
     throw new Error("refresh not implemented");
   }
 }
-Ne([
-  Te({ eventType: "kpiTable.refresh" })
-], A.prototype, "refresh");
-const ve = /* @__PURE__ */ q({
+Ae([
+  Ee({ eventType: "kpiTable.refresh" })
+], I.prototype, "refresh");
+const Ne = /* @__PURE__ */ ee({
   __name: "KpiTableWidget",
   props: {
     datasourceId: {},
     config: {},
     id: {}
   },
-  setup(l, { expose: e }) {
-    const { wrapParameters: t } = ue(), u = l, { datasourceId: a, config: r, id: i } = Q(u), y = B(pe.TINY_EMITTER), P = B(M), k = ce().params.pageid || "";
-    class O extends A {
+  setup(o, { expose: e }) {
+    const { wrapParameters: t } = ce(), l = o, { datasourceId: a, config: r, id: i } = te(l), A = L(ge.TINY_EMITTER), N = L(Z), H = pe().params.pageid || "";
+    class W extends I {
       refresh() {
-        m(a.value, a.value);
+        V(a.value, a.value);
       }
     }
-    const D = new O();
-    e(D), ee(() => {
-      i?.value && P.unregisterInstance(i.value);
+    const P = new W();
+    e(P), se(() => {
+      i?.value && N.unregisterInstance(i.value);
     });
-    const U = () => {
-      i?.value && y.emit("widget:KpiTableWidget:click", {
+    const G = () => {
+      i?.value && A.emit("widget:KpiTableWidget:click", {
         type: "widget:KpiTableWidget:click",
         widgetId: i.value,
         payload: { widgetId: i.value, timestamp: Date.now() }
       });
-    }, H = () => {
-      i?.value && y.emit("widget:KpiTableWidget:right_click", {
+    }, K = () => {
+      i?.value && A.emit("widget:KpiTableWidget:right_click", {
         type: "widget:KpiTableWidget:right_click",
         widgetId: i.value,
         payload: { widgetId: i.value, timestamp: Date.now() }
       });
-    }, I = te(null);
-    se(a, (n, c) => {
-      m(n, c);
-    }), ae(() => {
-      if (i?.value && P.registerInstance(i.value, D, "KpiTableWidget", k), !r.value) return;
+    }, y = ae(null);
+    re(a, (n, c) => {
+      V(n, c);
+    }), ie(() => {
+      if (i?.value && N.registerInstance(i.value, P, "KpiTableWidget", H), !r.value) return;
       const n = {
         headerBackground: "var(--color-raised)"
       };
@@ -73,25 +73,25 @@ const ve = /* @__PURE__ */ q({
       }
     });
     const {
-      showParentChild: Fe,
-      showFolders: be
+      showParentChild: Me,
+      showFolders: $e
     } = t({
       showParentChild: _(() => r.value.showParentChild ?? !1),
       showFolders: _(() => r.value.showFolders ?? !1)
-    }), W = _(() => {
+    }), x = _(() => {
       const n = r.value.statusVisualType;
       return Array.isArray(n) ? n[0] || "Badge" : n || "Badge";
-    }), G = _(() => {
+    }), j = _(() => {
       const n = r.value.trendVisualType;
       return Array.isArray(n) ? n[0] || "Badge" : n || "Badge";
     });
-    R("statusVisualType", W), R("trendVisualType", G);
-    const { update: m } = de(a, "DataTable", I), x = _(() => {
-      if (!I.value) return null;
-      let n = I.value;
-      return (r.value.showFolders ?? !1) || (n = Y(n)), (r.value.showParentChild ?? !1) || (n = K(n)), n;
+    B("statusVisualType", x), B("trendVisualType", j);
+    const { update: V } = he(a, "DataTable", y), Y = _(() => {
+      if (!y.value) return null;
+      let n = y.value;
+      return (r.value.showFolders ?? !1) || (n = M(n)), (r.value.showParentChild ?? !1) || (n = $(n)), n;
     });
-    function Y(n) {
+    function M(n) {
       const c = [];
       function T(p) {
         p.forEach((d) => {
@@ -100,7 +100,7 @@ const ve = /* @__PURE__ */ q({
       }
       return T(n), c;
     }
-    function K(n) {
+    function $(n) {
       const c = [];
       function T(d) {
         d.forEach((h) => {
@@ -126,31 +126,31 @@ const ve = /* @__PURE__ */ q({
       }
       return T(n), c;
     }
-    return (n, c) => (ie(), re("div", {
+    return (n, c) => (oe(), ne("div", {
       class: "w-full h-full",
-      onClick: U,
-      onContextmenu: ne(H, ["prevent"])
+      onClick: G,
+      onContextmenu: le(K, ["prevent"])
     }, [
-      oe(le(he), { tableData: x.value }, null, 8, ["tableData"])
+      ue(de(Te), { tableData: Y.value }, null, 8, ["tableData"])
     ], 32));
   }
-}), ye = (l, e) => {
-  const t = l.__vccOpts || l;
-  for (const [u, a] of e)
-    t[u] = a;
+}), Pe = (o, e) => {
+  const t = o.__vccOpts || o;
+  for (const [l, a] of e)
+    t[l] = a;
   return t;
-}, Pe = /* @__PURE__ */ ye(ve, [["__scopeId", "data-v-f4b39436"]]), De = [
-  { name: "KpiTable Clicked", type: "click", description: "Triggered when the kpi table widget is clicked", payloadType: V },
-  { name: "KpiTable Right Clicked", type: "right_click", description: "Triggered when the kpi table widget is right-clicked", payloadType: V }
+}, Ve = /* @__PURE__ */ Pe(Ne, [["__scopeId", "data-v-f4b39436"]]), be = [
+  { name: "KpiTable Clicked", type: "click", description: "Triggered when the kpi table widget is clicked", payloadType: b },
+  { name: "KpiTable Right Clicked", type: "right_click", description: "Triggered when the kpi table widget is right-clicked", payloadType: b }
 ];
-class N extends ge {
+class m extends _e {
   // Lazy singleton instance
   static _instance;
   static get eINSTANCE() {
-    return this._instance || (this._instance = new N()), this._instance;
+    return this._instance || (this._instance = new m()), this._instance;
   }
   constructor() {
-    super(), this.setEPackage(o.eINSTANCE);
+    super(), this.setEPackage(u.eINSTANCE);
   }
   /**
    * Create a new KpiTableSettings instance
@@ -170,20 +170,20 @@ class N extends ge {
     }
   }
 }
-function me(l) {
-  const e = b.INSTANCE.getEPackage(l);
+function De(o) {
+  const e = k.INSTANCE.getEPackage(o);
   if (!e)
-    throw new Error(`EPackage '${l}' is not registered. Access the eINSTANCE of that model's generated package (or register it via EPackageRegistry.INSTANCE.registerPackage) before initializing KpitablesettingsPackage.`);
+    throw new Error(`EPackage '${o}' is not registered. Access the eINSTANCE of that model's generated package (or register it via EPackageRegistry.INSTANCE.registerPackage) before initializing KpitablesettingsPackage.`);
   return e;
 }
-class o extends Ee {
+class u extends fe {
   static eNAME = "kpitablesettings";
   static eNS_URI = "http://org.eclipse.daanse.board.app.ui.vue.widget.table.kpi";
   static eNS_PREFIX = "kpitablesettings";
   // Singleton instance
   static _instance;
   static get eINSTANCE() {
-    return this._instance || (this._instance = new o(), this._instance.init()), this._instance;
+    return this._instance || (this._instance = new u(), this._instance.init()), this._instance;
   }
   /**
    * Literals for quick access to metaclasses and features
@@ -197,28 +197,28 @@ class o extends Ee {
     KPI_TABLE_SETTINGS__SHOW_PARENT_CHILD: null
   };
   constructor() {
-    super(), this.setName(o.eNAME), this.setNsURI(o.eNS_URI), this.setNsPrefix(o.eNS_PREFIX);
+    super(), this.setName(u.eNAME), this.setNsURI(u.eNS_URI), this.setNsPrefix(u.eNS_PREFIX);
   }
   /**
    * Initialize package contents
    */
   init() {
-    b.INSTANCE.set(o.eNS_URI, this), this.setEFactoryInstance(N.eINSTANCE);
-    const e = new _e();
-    e.setName("KpiTableSettings"), e.setAbstract(!1), e.setInterface(!1), this.getEClassifiers().push(e), e.setEPackage(this), o.Literals.KPI_TABLE_SETTINGS = e;
-    const t = new fe();
-    t.setContainment(!1), t.setName("headerBackground"), t.setLowerBound(0), t.setUpperBound(1), e.getEStructuralFeatures().push(t), o.Literals.KPI_TABLE_SETTINGS__HEADER_BACKGROUND = t;
-    const u = new S();
-    u.setName("trendVisualType"), u.setLowerBound(0), u.setUpperBound(1), e.getEStructuralFeatures().push(u), o.Literals.KPI_TABLE_SETTINGS__TREND_VISUAL_TYPE = u;
+    k.INSTANCE.set(u.eNS_URI, this), this.setEFactoryInstance(m.eINSTANCE);
+    const e = new Se();
+    e.setName("KpiTableSettings"), e.setAbstract(!1), e.setInterface(!1), this.getEClassifiers().push(e), e.setEPackage(this), u.Literals.KPI_TABLE_SETTINGS = e;
+    const t = new we();
+    t.setContainment(!1), t.setName("headerBackground"), t.setLowerBound(0), t.setUpperBound(1), e.getEStructuralFeatures().push(t), u.Literals.KPI_TABLE_SETTINGS__HEADER_BACKGROUND = t;
+    const l = new S();
+    l.setName("trendVisualType"), l.setLowerBound(0), l.setUpperBound(1), e.getEStructuralFeatures().push(l), u.Literals.KPI_TABLE_SETTINGS__TREND_VISUAL_TYPE = l;
     const a = new S();
-    a.setName("statusVisualType"), a.setLowerBound(0), a.setUpperBound(1), e.getEStructuralFeatures().push(a), o.Literals.KPI_TABLE_SETTINGS__STATUS_VISUAL_TYPE = a;
+    a.setName("statusVisualType"), a.setLowerBound(0), a.setUpperBound(1), e.getEStructuralFeatures().push(a), u.Literals.KPI_TABLE_SETTINGS__STATUS_VISUAL_TYPE = a;
     const r = new S();
-    r.setName("showFolders"), r.setLowerBound(0), r.setUpperBound(1), e.getEStructuralFeatures().push(r), o.Literals.KPI_TABLE_SETTINGS__SHOW_FOLDERS = r;
+    r.setName("showFolders"), r.setLowerBound(0), r.setUpperBound(1), e.getEStructuralFeatures().push(r), u.Literals.KPI_TABLE_SETTINGS__SHOW_FOLDERS = r;
     const i = new S();
-    i.setName("showParentChild"), i.setLowerBound(0), i.setUpperBound(1), e.getEStructuralFeatures().push(i), o.Literals.KPI_TABLE_SETTINGS__SHOW_PARENT_CHILD = i, o.Literals.KPI_TABLE_SETTINGS__HEADER_BACKGROUND.setEType(me("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), o.Literals.KPI_TABLE_SETTINGS__TREND_VISUAL_TYPE.setEType(w().getEClassifier("EString")), o.Literals.KPI_TABLE_SETTINGS__STATUS_VISUAL_TYPE.setEType(w().getEClassifier("EString")), o.Literals.KPI_TABLE_SETTINGS__SHOW_FOLDERS.setEType(w().getEClassifier("EBoolean")), o.Literals.KPI_TABLE_SETTINGS__SHOW_PARENT_CHILD.setEType(w().getEClassifier("EBoolean"));
+    i.setName("showParentChild"), i.setLowerBound(0), i.setUpperBound(1), e.getEStructuralFeatures().push(i), u.Literals.KPI_TABLE_SETTINGS__SHOW_PARENT_CHILD = i, u.Literals.KPI_TABLE_SETTINGS__HEADER_BACKGROUND.setEType(De("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), u.Literals.KPI_TABLE_SETTINGS__TREND_VISUAL_TYPE.setEType(w().getEClassifier("EString")), u.Literals.KPI_TABLE_SETTINGS__STATUS_VISUAL_TYPE.setEType(w().getEClassifier("EString")), u.Literals.KPI_TABLE_SETTINGS__SHOW_FOLDERS.setEType(w().getEClassifier("EBoolean")), u.Literals.KPI_TABLE_SETTINGS__SHOW_PARENT_CHILD.setEType(w().getEClassifier("EBoolean"));
   }
 }
-class s extends Se {
+class s extends Ce {
   // Feature ID Constants (eLiterals)
   static HEADER_BACKGROUND = 0;
   static TREND_VISUAL_TYPE = 1;
@@ -235,7 +235,7 @@ class s extends Se {
    * Returns the EClass of this object
    */
   eClass() {
-    return o.Literals.KPI_TABLE_SETTINGS;
+    return u.Literals.KPI_TABLE_SETTINGS;
   }
   // Getters and Setters
   get headerBackground() {
@@ -442,7 +442,7 @@ class s extends Se {
     };
   }
 }
-const Ve = `<?xml version="1.0" encoding="UTF-8"?>
+const Le = `<?xml version="1.0" encoding="UTF-8"?>
 <!--
 /*********************************************************************
 * Copyright (c) 2026 Contributors to the Eclipse Foundation.
@@ -471,49 +471,76 @@ them - so they are the values; optionLabel says what each one looks like.
 
   <components xsi:type="uimodel:FormView" name="KpiTableSettingsFormView">
 
-    <fields xsi:type="uimodel:GroupWidget" name="marksGroup" layout="VERTICAL" label="Kennzeichen">
+    <fields xsi:type="uimodel:GroupWidget" name="marksGroup" layout="VERTICAL" label="tableKpi:Form.marksGroup">
       <fields xsi:type="uimodel:SelectWidget" name="trendVisualType"
-          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.table.kpi#//KpiTableSettings/trendVisualType" label="Trend">
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.table.kpi#//KpiTableSettings/trendVisualType" label="tableKpi:Form.trendVisualType">
         <values>Emoji</values>
         <values>Arrow</values>
         <values>Chart</values>
         <values>Badge</values>
-        <optionLabel language="JS" body="({ Emoji: 'Emoji', Arrow: 'Pfeil', Chart: 'Kurve', Badge: 'Plakette' })[option] ?? option"/>
+        <optionLabel language="JS" body="({ Emoji: 'tableKpi:Options.trend.emoji', Arrow: 'tableKpi:Options.trend.arrow', Chart: 'tableKpi:Options.trend.chart', Badge: 'tableKpi:Options.trend.badge' })[option] ?? option"/>
       </fields>
       <fields xsi:type="uimodel:SelectWidget" name="statusVisualType"
-          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.table.kpi#//KpiTableSettings/statusVisualType" label="Status">
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.table.kpi#//KpiTableSettings/statusVisualType" label="tableKpi:Form.statusVisualType">
         <values>Emoji</values>
         <values>Lights</values>
         <values>Badge</values>
-        <optionLabel language="JS" body="({ Emoji: 'Emoji', Lights: 'Ampel', Badge: 'Plakette' })[option] ?? option"/>
+        <optionLabel language="JS" body="({ Emoji: 'tableKpi:Options.status.emoji', Lights: 'tableKpi:Options.status.lights', Badge: 'tableKpi:Options.status.badge' })[option] ?? option"/>
       </fields>
     </fields>
 
-    <fields xsi:type="uimodel:GroupWidget" name="shapeGroup" layout="VERTICAL" label="Aufbau">
+    <fields xsi:type="uimodel:GroupWidget" name="shapeGroup" layout="VERTICAL" label="tableKpi:Form.shapeGroup">
       <fields xsi:type="uimodel:CheckboxWidget" name="showFolders"
-          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.table.kpi#//KpiTableSettings/showFolders" label="Ordner zeigen"/>
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.table.kpi#//KpiTableSettings/showFolders" label="tableKpi:Form.showFolders"/>
       <fields xsi:type="uimodel:CheckboxWidget" name="showParentChild"
-          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.table.kpi#//KpiTableSettings/showParentChild" label="Über- und Untereinträge zeigen"/>
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.table.kpi#//KpiTableSettings/showParentChild" label="tableKpi:Form.showParentChild"/>
       <fields xsi:type="uimodel:InputWidget" name="headerBackground"
-          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.table.kpi#//KpiTableSettings/headerBackground" label="Kopfzeilenfarbe"/>
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.table.kpi#//KpiTableSettings/headerBackground" label="tableKpi:Form.headerBackground"/>
     </fields>
 
   </components>
 </uimodel:UIModel>
-`;
-var Le = Object.defineProperty, Be = Object.getOwnPropertyDescriptor, v = (l, e, t, u) => {
-  for (var a = u > 1 ? void 0 : u ? Be(e, t) : e, r = l.length - 1, i; r >= 0; r--)
-    (i = l[r]) && (a = (u ? i(e, t, a) : i(a)) || a);
-  return u && a && Le(e, t, a), a;
-}, F = (l, e) => (t, u) => e(t, u, l);
-o.eINSTANCE;
+`, Be = { name: "KPI-Tabelle" }, Fe = { marksGroup: "Kennzeichen", trendVisualType: "Trend", statusVisualType: "Status", shapeGroup: "Aufbau", showFolders: "Ordner zeigen", showParentChild: "Über- und Untereinträge zeigen", headerBackground: "Kopfzeilenfarbe" }, Re = { trend: { emoji: "Emoji", arrow: "Pfeil", chart: "Kurve", badge: "Plakette" }, status: { emoji: "Emoji", lights: "Ampel", badge: "Plakette" } }, Oe = {
+  Widget: Be,
+  Form: Fe,
+  Options: Re
+}, ke = { name: "KPI table" }, Ue = { marksGroup: "Indicators", trendVisualType: "Trend", statusVisualType: "Status", shapeGroup: "Structure", showFolders: "Show folders", showParentChild: "Show parent and child entries", headerBackground: "Header colour" }, He = { trend: { emoji: "Emoji", arrow: "Arrow", chart: "Curve", badge: "Badge" }, status: { emoji: "Emoji", lights: "Traffic light", badge: "Badge" } }, We = {
+  Widget: ke,
+  Form: Ue,
+  Options: He
+};
+var Ge = Object.getOwnPropertyDescriptor, Ke = (o, e, t, l) => {
+  for (var a = l > 1 ? void 0 : l ? Ge(e, t) : e, r = o.length - 1, i; r >= 0; r--)
+    (i = o[r]) && (a = i(a) || a);
+  return a;
+};
+const U = "tableKpi";
+let F = class {
+  namespace = U;
+  resources = {
+    de: Oe,
+    en: We
+  };
+};
+F = Ke([
+  O({
+    service: ["Translations"],
+    properties: { "i18n.namespace": U }
+  })
+], F);
+var xe = Object.defineProperty, je = Object.getOwnPropertyDescriptor, v = (o, e, t, l) => {
+  for (var a = l > 1 ? void 0 : l ? je(e, t) : e, r = o.length - 1, i; r >= 0; r--)
+    (i = o[r]) && (a = (l ? i(e, t, a) : i(a)) || a);
+  return l && a && xe(e, t, a), a;
+}, R = (o, e) => (t, l) => e(t, l, o);
+u.eINSTANCE;
 const E = "KpiTableWidget";
 let C = class {
-  constructor(l, e) {
-    this.events = l, this.actions = e;
+  constructor(o, e) {
+    this.events = o, this.actions = e;
   }
   type = E;
-  component = Pe;
+  component = Ve;
   /*
    * No hand-written form: the model covers all of it, so there is nothing
    * to keep beside it and no second place for the two to disagree.
@@ -523,39 +550,41 @@ let C = class {
    * exists - and the shell needs no dependency on this bundle.
    */
   settingsForm = {
-    xmi: Ve,
+    xmi: Le,
     uri: "/kpi-table-settings.ui.xmi",
-    ePackage: () => o.eINSTANCE,
+    ePackage: () => u.eINSTANCE,
     create: () => new s()
   };
   supportedDSTypes = ["csv", "rest"];
-  icon = Ce;
+  icon = Ie;
   name = "KpiTable";
+  nameKey = "tableKpi:Widget.name";
   register() {
-    this.events.registerWidget(E, De), this.actions.registerWidgetType(E, A, "widget");
+    this.events.registerWidget(E, be), this.actions.registerWidgetType(E, I, "widget");
   }
   unregister() {
     this.events.unregisterWidget(E), this.actions.unregisterWidgetType(E);
   }
 };
 v([
-  $()
+  q()
 ], C.prototype, "register", 1);
 v([
-  z()
+  Q()
 ], C.prototype, "unregister", 1);
 C = v([
-  J({
-    service: [we],
+  O({
+    service: [ye],
     properties: { "widget.type": E }
   }),
-  F(0, L(X)),
-  F(1, L(Z))
+  R(0, D(z)),
+  R(1, D(J))
 ], C);
 export {
   s as KpiTableSettingsImpl,
-  Pe as KpiTableWidget,
+  Ve as KpiTableWidget,
   C as KpiTableWidgetProvider,
-  o as KpitablesettingsPackage,
-  Ve as kpiTableSettingsFormXmi
+  u as KpitablesettingsPackage,
+  F as TableKpiTranslations,
+  Le as kpiTableSettingsFormXmi
 };

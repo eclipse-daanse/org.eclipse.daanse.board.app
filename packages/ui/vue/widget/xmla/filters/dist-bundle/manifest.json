@@ -53,9 +53,24 @@
       "versionRange": ">=0.0.1-0"
     }
   ],
+  "capabilities": [
+    {
+      "namespace": "tsm.i18n",
+      "attributes": {
+        "namespace": "xmlaFilters",
+        "languages": [
+          "de",
+          "en"
+        ]
+      }
+    }
+  ],
   "provides": [
     {
       "id": "daanse.widget"
+    },
+    {
+      "id": "Translations"
     }
   ]
 }

@@ -1,9 +1,10 @@
-import { VARIABLE_REPOSITORY as o } from "org.eclipse.daanse.board.app.lib.api.variable";
-import { CONSTANT_VARIABLE as c, ConstantVariableSymbol as E } from "org.eclipse.daanse.board.app.lib.variables";
-import { BasicEFactory as N, BasicEPackage as d, EPackageRegistry as p, BasicEClass as g, BasicEAttribute as m, getEcorePackage as I, BasicEObject as S } from "@emfts/core";
-class n extends N {
+import { VARIABLE_REPOSITORY as E } from "org.eclipse.daanse.board.app.lib.api.variable";
+import { CONSTANT_VARIABLE as p, ConstantVariableSymbol as d } from "org.eclipse.daanse.board.app.lib.variables";
+import { BasicEFactory as I, BasicEPackage as A, EPackageRegistry as S, BasicEClass as T, BasicEAttribute as f, getEcorePackage as _, BasicEObject as b } from "@emfts/core";
+import { component as w } from "@eclipse-daanse/tsm";
+class c extends I {
   static get eINSTANCE() {
-    return this._instance || (this._instance = new n()), this._instance;
+    return this._instance || (this._instance = new c()), this._instance;
   }
   constructor() {
     super(), this.setEPackage(s.eINSTANCE);
@@ -26,7 +27,7 @@ class n extends N {
     }
   }
 }
-class s extends d {
+class s extends A {
   static {
     this.eNAME = "constantVariable";
   }
@@ -52,14 +53,14 @@ class s extends d {
    * Initialize package contents
    */
   init() {
-    p.INSTANCE.set(s.eNS_URI, this), this.setEFactoryInstance(n.eINSTANCE);
-    const e = new g();
+    S.INSTANCE.set(s.eNS_URI, this), this.setEFactoryInstance(c.eINSTANCE);
+    const e = new T();
     e.setName("ConstantVariableSettings"), e.setAbstract(!1), e.setInterface(!1), this.getEClassifiers().push(e), e.setEPackage(this), s.Literals.CONSTANT_VARIABLE_SETTINGS = e;
-    const t = new m();
-    t.setName("value"), t.setLowerBound(0), t.setUpperBound(1), e.getEStructuralFeatures().push(t), s.Literals.CONSTANT_VARIABLE_SETTINGS__VALUE = t, s.Literals.CONSTANT_VARIABLE_SETTINGS__VALUE.setEType(I().getEClassifier("EString"));
+    const t = new f();
+    t.setName("value"), t.setLowerBound(0), t.setUpperBound(1), e.getEStructuralFeatures().push(t), s.Literals.CONSTANT_VARIABLE_SETTINGS__VALUE = t, s.Literals.CONSTANT_VARIABLE_SETTINGS__VALUE.setEType(_().getEClassifier("EString"));
   }
 }
-class i extends S {
+class i extends b {
   static {
     this.VALUE = 0;
   }
@@ -150,7 +151,7 @@ class i extends S {
     };
   }
 }
-const l = `<?xml version="1.0" encoding="UTF-8"?>
+const m = `<?xml version="1.0" encoding="UTF-8"?>
 <!--
 /*********************************************************************
 * Copyright (c) 2026 Contributors to the Eclipse Foundation.
@@ -179,51 +180,79 @@ variable, not to this type, and the dialog asks for them once.
   <components xsi:type="uimodel:FormView" name="ConstantVariableSettingsFormView">
     <fields xsi:type="uimodel:InputWidget" name="value"
         feature="http://org.eclipse.daanse.board.app.ui.vue.variable.constant#//ConstantVariableSettings/value"
-        label="Wert"/>
+        label="variableConstant:FormConstant.value"/>
   </components>
 </uimodel:UIModel>
-`;
+`, C = { value: "Wert" }, L = {
+  FormConstant: C
+}, V = { value: "Value" }, y = {
+  FormConstant: V
+};
+var F = Object.getOwnPropertyDescriptor, R = (a, e, t, r) => {
+  for (var n = r > 1 ? void 0 : r ? F(e, t) : e, o = a.length - 1, u; o >= 0; o--)
+    (u = a[o]) && (n = u(n) || n);
+  return n;
+};
+const g = "variableConstant";
+let l = class {
+  constructor() {
+    this.namespace = g, this.resources = {
+      de: L,
+      en: y
+    };
+  }
+};
+l = R([
+  w({
+    service: ["Translations"],
+    properties: { "i18n.namespace": g }
+  })
+], l);
 s.eINSTANCE;
-function u({ services: a }) {
-  a.getRequired(o).registerVariableType(c, {
-    Variable: E,
+function v({ services: a }) {
+  a.getRequired(E).registerVariableType(p, {
+    Variable: d,
     /*
      * The form is a model, not a template: the fields come from the
      * Ecore beside this, so there is one description of what this type
      * needs rather than a class and a form that can drift apart.
      */
     settingsForm: {
-      xmi: l,
+      xmi: m,
       uri: "/constant-variable-settings.ui.xmi",
       ePackage: () => s.eINSTANCE,
       create: () => new i()
     }
   });
 }
-function h({ services: a }) {
-  a.getRequired(o).unregisterVariableType(c);
+function N({ services: a }) {
+  a.getRequired(E).unregisterVariableType(p);
 }
-const A = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const U = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   ConstantVariableSettingsImpl: i,
   ConstantVariableSettingsPackage: s,
-  activate: u,
-  deactivate: h,
-  settingsFormXmi: l
-}, Symbol.toStringTag, { value: "Module" })), r = "org.eclipse.daanse.board.app.ui.vue.variable.constant", v = "0.0.1-next.1";
-async function _(a) {
+  get VariableConstantTranslations() {
+    return l;
+  },
+  activate: v,
+  deactivate: N,
+  settingsFormXmi: m
+}, Symbol.toStringTag, { value: "Module" })), h = "org.eclipse.daanse.board.app.ui.vue.variable.constant", D = "0.0.1-next.1";
+async function G(a) {
   const e = globalThis.__tsm__;
   if (!e)
-    throw new Error(`${r}: tsm runtime is not initialized`);
-  e.register(r, A, v, "ui.vue.variable.constant"), await u?.(a);
+    throw new Error(`${h}: tsm runtime is not initialized`);
+  e.register(h, U, D, "ui.vue.variable.constant"), await v?.(a);
 }
-async function L(a) {
-  await h?.(a);
+async function M(a) {
+  await N?.(a);
 }
 export {
   i as ConstantVariableSettingsImpl,
   s as ConstantVariableSettingsPackage,
-  _ as activate,
-  L as deactivate,
-  l as settingsFormXmi
+  l as VariableConstantTranslations,
+  G as activate,
+  M as deactivate,
+  m as settingsFormXmi
 };

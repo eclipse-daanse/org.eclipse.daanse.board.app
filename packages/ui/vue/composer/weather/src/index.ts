@@ -49,3 +49,6 @@ export function deactivate({ services }: ActivationContext) {
   services.unregister('WeatherComposerPreview')
   services.unregister('WeatherComposerSettings')
 }
+
+/* Its texts - collected by lib.i18next, see src/i18n. */
+export { ComposerWeatherTranslations } from './i18n'

@@ -42,6 +42,7 @@ export class MarkdownWidgetProvider implements WidgetProvider {
   readonly supportedDSTypes = []
   readonly icon = Icon
   readonly name = 'Markdown'
+  readonly nameKey = 'markdown:Widget.name'
 
   constructor(
     @inject(EVENT_REGISTRY_ID) private readonly events: EventRegistry,
@@ -63,3 +64,6 @@ export class MarkdownWidgetProvider implements WidgetProvider {
 
 export { MarkdownWidget, MarkdownWidgetSettings }
 export type { IMarkdownWidgetSettings }
+
+/* Its texts - collected by lib.i18next, see src/i18n. */
+export { MarkdownTranslations } from './i18n'

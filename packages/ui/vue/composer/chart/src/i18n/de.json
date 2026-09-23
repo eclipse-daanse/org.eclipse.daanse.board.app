@@ -1,0 +1,10 @@
+{
+  "Settings": {
+    "sources": "Quellen",
+    "composeBy": "Zusammensetzen nach"
+  },
+  "Chart": {
+    "series": "Reihen",
+    "labelColumn": "Spalte für die Beschriftung"
+  }
+}

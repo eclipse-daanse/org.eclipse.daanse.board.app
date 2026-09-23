@@ -28,7 +28,7 @@ Contributors:
     </td>
 
     <template v-if="isFolder">
-      <td :colspan="showSelection ? 4 : 4" class="folder-cell">{{ children.length }} items</td>
+      <td :colspan="showSelection ? 4 : 4" class="folder-cell">{{ t('Table.items', { count: children.length }) }}</td>
     </template>
     <template v-else>
       <KpiValueCell :value="props.item.value" />
@@ -51,6 +51,10 @@ import KpiValueCell from './KpiValueCell.vue'
 import KpiGoalCell from './KpiGoalCell.vue'
 import KpiStatusCell from './KpiStatusCell.vue'
 import KpiTrendCell from './KpiTrendCell.vue'
+import { useFormat, useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+
+const format = useFormat()
+const { t } = useTranslation('kpi')
 
 const props = defineProps<{
   item: any
@@ -79,7 +83,7 @@ const toggleExpand = () => {
 
 const formatValue = (value: any) => {
   if (value == null) return '-'
-  return typeof value === 'number' ? value.toLocaleString() : value.toString()
+  return typeof value === 'number' ? format.number(value) : value.toString()
 }
 
 const isSelected = computed(() => {

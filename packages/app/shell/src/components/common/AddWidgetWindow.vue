@@ -16,7 +16,7 @@ import {
   identifier as WORKSPACE,
   type Workspace,
 } from 'org.eclipse.daanse.board.app.lib.model.workspace'
-import { useEList } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+import { useEList, useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import { WidgetRepository, identifier } from 'org.eclipse.daanse.board.app.lib.api.widget'
 import { inject, ref, computed, watch } from 'vue'
 import Draggable from 'vuedraggable'
@@ -46,10 +46,10 @@ const onDragStart = (event: DragEvent) => {
 }
 
 const registeredWidgets = inject<WidgetRepository>(identifier)!
-console.log(registeredWidgets.getAllWidgets())
+const { t } = useTranslation('shell')
 const availableWidgets = Object.entries(registeredWidgets.getAllWidgets())
   //.filter(([_, widget]) => widget.icon)
-  .map(([name, widget]) => ({ type: name,name:widget.name ,icon: widget.icon }))
+  .map(([name, widget]) => ({ type: name, name: widget.name, nameKey: widget.nameKey, icon: widget.icon }))
 
 const computedWidgets = computed(() => {
   return availableWidgets
@@ -122,7 +122,7 @@ watch(selectedType, (newType) => {
           @dragstart="(event) => onDragStart(event)"
         >
           <span class="widgets_grid-icon"><img :src="element.icon" alt="" /></span>
-          <span class="widgets_grid-name">{{ element.name }}</span>
+          <span class="widgets_grid-name">{{ element.nameKey ? t(element.nameKey, { defaultValue: element.name }) : element.name }}</span>
         </div>
       </template>
     </draggable>

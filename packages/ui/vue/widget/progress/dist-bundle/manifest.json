@@ -75,9 +75,24 @@
       "versionRange": ">=0.0.1-0"
     }
   ],
+  "capabilities": [
+    {
+      "namespace": "tsm.i18n",
+      "attributes": {
+        "namespace": "progress",
+        "languages": [
+          "de",
+          "en"
+        ]
+      }
+    }
+  ],
   "provides": [
     {
       "id": "daanse.widget"
+    },
+    {
+      "id": "Translations"
     }
   ]
 }

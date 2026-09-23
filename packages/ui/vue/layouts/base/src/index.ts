@@ -26,6 +26,7 @@ export function activate({ services }: ActivationContext) {
   services.getRequired<LayoutRepositoryI>(LAYOUT_REPOSITORY).addLayout({
     id: LAYOUT_ID,
     name: 'BaseLayout',
+    nameKey: 'layoutsBase:Base.name',
     description: 'pixelbased Layout',
     component: View,
     editor: Edit,
@@ -37,3 +38,6 @@ export function deactivate({ services }: ActivationContext) {
     .getRequired<LayoutRepositoryI>(LAYOUT_REPOSITORY)
     .removeLayout(LAYOUT_ID)
 }
+
+/* Its texts - collected by lib.i18next, see src/i18n. */
+export { LayoutsBaseTranslations } from './i18n'

@@ -15,6 +15,7 @@ Contributors:
 import { DChip, DIcon } from "org.eclipse.daanse.board.app.ui.vue.controls";
 import draggable from 'vuedraggable';
 import { ref } from "vue";
+import { useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables';
 import { HierarchyTreeItem, MeasureTreeItem } from '../MetadataTree/TreeViewItems';
 import FilterModal from '../Modals/FiltersModal.vue';
 
@@ -220,7 +221,7 @@ const configureFilter = async (type: string, element: any) => {
   console.log('configureFilter', originalItem);
 };
 
-const t = (text) => text;
+const { t } = useTranslation('xmla');
 
 </script>
 <template>

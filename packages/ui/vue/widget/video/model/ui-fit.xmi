@@ -29,13 +29,13 @@ chosen between.
     <fields xsi:type="uimodel:SelectWidget"
         name="fit"
         feature="http://org.eclipse.daanse.board.app.ui.vue.widget.video#//ObjectFitSetting/fit"
-        label="Einpassen">
+        label="video:FormFit.fit">
       <values>cover</values>
       <values>contain</values>
       <values>fill</values>
       <values>scale-down</values>
       <values>none</values>
-      <optionLabel language="JS" body="({ cover: 'Ausfüllen, Ränder beschneiden', contain: 'Ganz zeigen, Ränder frei lassen', fill: 'Auf den Rahmen verzerren', 'scale-down': 'Nur verkleinern', none: 'Originalgröße' })[option] ?? option"/>
+      <optionLabel language="JS" body="({ cover: 'video:Options.fit.cover', contain: 'video:Options.fit.contain', fill: 'video:Options.fit.fill', 'scale-down': 'video:Options.fit.scaleDown', none: 'video:Options.fit.none' })[option] ?? option"/>
     </fields>
   </components>
 </uimodel:UIModel>

@@ -27,14 +27,14 @@ board, it is "from 1800 px".
 
   <components xsi:type="uimodel:FormView" name="GridColumnsFormView">
     <fields xsi:type="uimodel:NumberWidget" name="lg"
-        feature="http://org.eclipse.daanse.board.app.ui.vue.layouts.grid#//GridColumns/lg" label="ab 1800 px" min="1" max="48" step="1"/>
+        feature="http://org.eclipse.daanse.board.app.ui.vue.layouts.grid#//GridColumns/lg" label="layoutsGrid:FormColumns.lg" min="1" max="48" step="1"/>
     <fields xsi:type="uimodel:NumberWidget" name="md"
-        feature="http://org.eclipse.daanse.board.app.ui.vue.layouts.grid#//GridColumns/md" label="ab 1200 px" min="1" max="48" step="1"/>
+        feature="http://org.eclipse.daanse.board.app.ui.vue.layouts.grid#//GridColumns/md" label="layoutsGrid:FormColumns.md" min="1" max="48" step="1"/>
     <fields xsi:type="uimodel:NumberWidget" name="sm"
-        feature="http://org.eclipse.daanse.board.app.ui.vue.layouts.grid#//GridColumns/sm" label="ab 768 px" min="1" max="48" step="1"/>
+        feature="http://org.eclipse.daanse.board.app.ui.vue.layouts.grid#//GridColumns/sm" label="layoutsGrid:FormColumns.sm" min="1" max="48" step="1"/>
     <fields xsi:type="uimodel:NumberWidget" name="xs"
-        feature="http://org.eclipse.daanse.board.app.ui.vue.layouts.grid#//GridColumns/xs" label="ab 480 px" min="1" max="48" step="1"/>
+        feature="http://org.eclipse.daanse.board.app.ui.vue.layouts.grid#//GridColumns/xs" label="layoutsGrid:FormColumns.xs" min="1" max="48" step="1"/>
     <fields xsi:type="uimodel:NumberWidget" name="xxs"
-        feature="http://org.eclipse.daanse.board.app.ui.vue.layouts.grid#//GridColumns/xxs" label="darunter" min="1" max="48" step="1"/>
+        feature="http://org.eclipse.daanse.board.app.ui.vue.layouts.grid#//GridColumns/xxs" label="layoutsGrid:FormColumns.xxs" min="1" max="48" step="1"/>
   </components>
 </uimodel:UIModel>

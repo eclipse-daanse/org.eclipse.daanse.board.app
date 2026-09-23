@@ -1,0 +1,73 @@
+{
+  "Widget": {
+    "name": "Wetter",
+    "loading": "Wetterdaten werden geladen…",
+    "loadFailed": "Wetterdaten konnten nicht geladen werden",
+    "noData": "Keine Wetterdaten vorhanden",
+    "unknownLocation": "Unbekannter Ort",
+    "from": "Ab: {{time}}",
+    "until": "Bis: {{time}}",
+    "humidity": "Luftfeuchte:",
+    "pressure": "Luftdruck:",
+    "wind": "Wind:",
+    "precipitation": "Niederschlag:",
+    "visibility": "Sichtweite:",
+    "cloudCover": "Bewölkung:",
+    "forecast": "Wettervorhersage",
+    "forecastOf": "Vorhersage {{name}}",
+    "noForecast": "Keine Vorhersagedaten vorhanden",
+    "autoRefresh_one": "Wird jede Minute aktualisiert",
+    "autoRefresh_other": "Wird alle {{count}} Minuten aktualisiert",
+    "params": {
+      "temperature": "Temperatur",
+      "humidity": "Luftfeuchte",
+      "pressure": "Luftdruck",
+      "windSpeed": "Windgeschwindigkeit",
+      "windDirection": "Windrichtung",
+      "precipitation": "Niederschlag",
+      "visibility": "Sichtweite",
+      "cloudCover": "Bewölkung"
+    }
+  },
+  "Settings": {
+    "range": "Zeitraum",
+    "latest": "Neueste Daten",
+    "timeRange": "Zeitraum",
+    "manual": "Von Hand",
+    "lastHour": "Letzte Stunde",
+    "last6Hours": "Letzte 6 Stunden",
+    "last24Hours": "Letzte 24 Stunden",
+    "lastWeek": "Letzte Woche",
+    "start": "Beginn:",
+    "end": "Ende:",
+    "now": "Auf die aktuelle Zeit setzen",
+    "colors": "Farbe je Wert",
+    "colorsHint": "Farbe, in der jeder Wert in den Vorhersage-Diagrammen gezeichnet wird."
+  },
+  "Form": {
+    "refreshGroup": "Aktualisierung",
+    "refreshInterval": "Neu lesen",
+    "forecastGroup": "Vorhersage",
+    "showForecast": "Vorhersage zeigen",
+    "selectedForecastParameters": "Welche Werte",
+    "forecastPeriods": "Welche Zeiträume",
+    "gridColor": "Farbe der Gitterlinien"
+  },
+  "Options": {
+    "refresh": {
+      "m1": "Jede Minute",
+      "m5": "Alle 5 Minuten",
+      "m10": "Alle 10 Minuten",
+      "m30": "Alle 30 Minuten",
+      "h1": "Jede Stunde"
+    },
+    "period": {
+      "h12": "12 Stunden",
+      "h24": "24 Stunden",
+      "h36": "36 Stunden",
+      "h48": "48 Stunden",
+      "h60": "60 Stunden",
+      "h72": "72 Stunden"
+    }
+  }
+}

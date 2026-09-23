@@ -66,10 +66,16 @@ export {
 export type { ClassDoc, FeatureDoc } from './modelDocs'
 
 /*
- * Translation that re-renders when a language pack arrives or the language
+ * Translation that re-renders when a bundle's texts arrive or the language
  * changes - which is what lets a widget or its texts be deployed later.
  */
 export { useTranslation } from './useTranslation'
 export { useLanguage } from './useLanguage'
+/* Numbers and dates in the language on screen. */
+export { useFormat, numberFormat, dateFormat, relativeDays } from './useFormat'
+export type { Format } from './useFormat'
 export type { Translation } from './useTranslation'
 export type { Language, LanguageChoice } from './useLanguage'
+
+/* Its texts - collected by lib.i18next, see src/i18n. */
+export { CommonTranslations } from './i18n'

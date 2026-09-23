@@ -1,0 +1,24 @@
+{
+  "Sta": {
+    "sources": "OGC STA sources",
+    "things": "Things (required)",
+    "thingsPlaceholder": "Select one or more Things",
+    "noThings": "No things found",
+    "selected": "Selected datastreams",
+    "add": "Add datastream",
+    "loading": "Loading available datastreams…",
+    "none": "No datastreams available. Select an OGC STA data source and one or more Things first.",
+    "datastream": "Datastream",
+    "noDatastreams": "No datastreams found",
+    "label": "Label (optional)",
+    "labelPlaceholder": "Custom label for the chart",
+    "color": "Colour",
+    "columns": {
+      "datastream": "Datastream",
+      "value": "Value",
+      "unit": "Unit",
+      "timestamp": "Timestamp"
+    },
+    "previewHint": "Set up data sources and datastreams to see a preview"
+  }
+}

@@ -57,6 +57,7 @@ export class PivotTableWidgetProvider implements WidgetProvider {
   readonly supportedDSTypes = []
   readonly icon = Icon
   readonly name = 'PivotTable'
+  readonly nameKey = 'tablePivot:Widget.name'
 
   constructor(
     @inject(EVENT_REGISTRY_ID) private readonly events: EventRegistry,
@@ -78,3 +79,6 @@ export class PivotTableWidgetProvider implements WidgetProvider {
 
 export { PivotTableWidget, PivotTableWidgetSettings }
 export type { IPivotTable }
+
+/* Its texts - collected by lib.i18next, see src/i18n. */
+export { TablePivotTranslations } from './i18n'

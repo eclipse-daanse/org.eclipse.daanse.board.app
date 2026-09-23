@@ -47,3 +47,6 @@ export function deactivate({ services }: ActivationContext) {
   services.unregister('ChartPreview')
   services.unregister('ChartSettings')
 }
+
+/* Its texts - collected by lib.i18next, see src/i18n. */
+export { ComposerChartTranslations } from './i18n'

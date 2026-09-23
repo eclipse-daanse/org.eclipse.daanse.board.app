@@ -27,7 +27,7 @@ import {
   identifier as WORKSPACE,
   type Workspace,
 } from 'org.eclipse.daanse.board.app.lib.model.workspace'
-import { describeModel, useEList } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+import { describeModel, useEList, useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import { DIconPicker, DInput, DSelect } from 'org.eclipse.daanse.board.app.ui.vue.controls'
 import CreateWizard from './CreateWizard.vue'
 import ModelFields from './ModelFields.vue'
@@ -39,6 +39,7 @@ const props = defineProps<{
   forConnection?: string
 }>()
 const emit = defineEmits<{ created: [uid: string] }>()
+const { t } = useTranslation('shell')
 
 const datasources = inject<DatasourceRepository>(DATASOURCE_REPOSITORY)!
 const workspace = inject<Workspace>(WORKSPACE)!
@@ -63,11 +64,11 @@ const kindOf = (each: string) => datasources.getDatasourceIdentifiers(each)?.kin
  */
 const groups = computed(() => [
   {
-    label: 'Aus einer Verbindung lesen',
+    label: t('Datasource.groups.connected'),
     types: types.value.filter((each) => kindOf(each) !== 'composer'),
   },
   {
-    label: 'Aus vorhandenen Datenquellen zusammensetzen',
+    label: t('Datasource.groups.composed'),
     types: types.value.filter((each) => kindOf(each) === 'composer'),
   },
 ])
@@ -112,7 +113,13 @@ const connectionOptions = computed(() => {
   return connections.value.map((each: any) => ({
     label: each.name || each.uid,
     value: each.uid,
-    group: suits.size === 0 ? 'Verbindungen' : suits.has(each.type) ? 'Passend zum Typ' : 'Weitere',
+    suited: suits.has(each.type),
+    group:
+      suits.size === 0
+        ? t('Datasource.connections.all')
+        : suits.has(each.type)
+          ? t('Datasource.connections.suited')
+          : t('Datasource.connections.other'),
   }))
 })
 
@@ -120,7 +127,7 @@ const connectionOptions = computed(() => {
 const nothingSuits = computed(
   () =>
     connectionOptions.value.length > 0 &&
-    !connectionOptions.value.some((each) => each.group === 'Passend zum Typ') &&
+    !connectionOptions.value.some((each) => each.suited) &&
     (datasources.getDatasourceIdentifiers(type.value)?.connections ?? []).length > 0,
 )
 
@@ -185,8 +192,8 @@ function create() {
   <CreateWizard
     v-model="open"
     v-model:type="type"
-    title="Datenquelle anlegen"
-    lead="Was für Daten sollen gelesen werden? Die Beschreibungen stammen aus den Modellen der Typen."
+    :title="t('Tree.newSource')"
+    :lead="t('Datasource.createLead')"
     :groups="groups"
     :summary-of="summaryOf"
     :icon-of="iconOf"
@@ -196,32 +203,30 @@ function create() {
     <template #setup>
       <DInput
         v-model="name"
-        label="Name"
-        placeholder="Wofür diese Datenquelle steht"
-        hint="Unter diesem Namen wählst du die Datenquelle im Widget aus."
+        :label="t('Editor.name')"
+        :placeholder="t('Datasource.namePlaceholder')"
+        :hint="t('Datasource.nameHint')"
         stacked
         required
       />
 
       <template v-if="needsConnection">
         <p v-if="!connectionOptions.length" class="note note--warn">
-          Es gibt noch keine Verbindung. Lege zuerst eine an — ohne sie hat die Datenquelle
-          nichts, woraus sie lesen kann.
+          {{ t('Datasource.noConnection') }}
         </p>
         <template v-else>
           <p v-if="nothingSuits" class="note">
-            Keine der vorhandenen Verbindungen ist von diesem Typ vorgesehen. Du kannst
-            trotzdem eine wählen — die Angabe ist ein Hinweis, keine Regel.
+            {{ t('Datasource.nothingSuits') }}
           </p>
           <DSelect
             v-model="connection"
-            label="Verbindung"
+            :label="t('Datasource.connection')"
             :options="connectionOptions"
             value-key="value"
             label-key="label"
             group-key="group"
-            placeholder="Verbindung wählen"
-            hint="Der Endpunkt, aus dem diese Quelle liest."
+            :placeholder="t('Datasource.connectionPlaceholder')"
+            :hint="t('Datasource.connectionHint')"
             stacked
             required
           />
@@ -230,15 +235,15 @@ function create() {
 
       <DIconPicker
         v-model="icon"
-        label="Symbol"
+        :label="t('Editor.icon')"
         :fallback="iconOf(type)"
-        hint="Ohne eigenes Symbol steht hier das des Typs."
+        :hint="t('Editor.iconHint')"
       />
 
       <TagInput
         v-model="tags"
-        label="Schlagworte"
-        hint="Wofür diese Datenquelle da ist — danach lässt sich später suchen."
+        :label="t('Editor.tags')"
+        :hint="t('Datasource.tagsHint')"
         :known="knownTags"
       />
 

@@ -1,50 +1,51 @@
 (function(){var i="ui.vue.datasource.kpi",d=document,s=d.querySelector('style[data-tsm-bundle="'+i+'"]');if(!s){s=d.createElement('style');s.setAttribute('data-tsm-bundle',i);d.head.appendChild(s);}s.textContent=".add_kpi[data-v-869dc0ea]{display:flex;flex-direction:row;gap:10px;margin-bottom:10px;align-items:end}.added_kpis[data-v-869dc0ea]{display:flex;flex-direction:row;gap:10px;margin-bottom:10px;align-items:center}\n";})();
-import { DATASOURCE_REPOSITORY as v } from "org.eclipse.daanse.board.app.lib.api.datasource";
-import { defineComponent as y, shallowRef as K, ref as r, computed as s, watch as u, createElementBlock as S, createCommentVNode as k, openBlock as b, createElementVNode as P, createVNode as d, unref as f, inject as V, onMounted as D, Fragment as I } from "vue";
-import { useTemporaryStore as h } from "org.eclipse.daanse.board.app.ui.vue.composables";
-import { KpiTable as E } from "org.eclipse.daanse.board.app.ui.vue.common.kpi";
+import { DATASOURCE_REPOSITORY as S } from "org.eclipse.daanse.board.app.lib.api.datasource";
+import { defineComponent as b, shallowRef as D, ref as l, computed as u, watch as d, createElementBlock as y, createCommentVNode as k, openBlock as w, createElementVNode as C, createVNode as f, unref as r, inject as T, onMounted as E, Fragment as V } from "vue";
+import { useTemporaryStore as h, useTranslation as I } from "org.eclipse.daanse.board.app.ui.vue.composables";
+import { KpiTable as O } from "org.eclipse.daanse.board.app.ui.vue.common.kpi";
 import { DSelect as p } from "org.eclipse.daanse.board.app.ui.vue.controls";
 import { XmlaStore as g } from "org.eclipse.daanse.board.app.lib.datasource.xmla";
 import { identifier as R } from "org.eclipse.daanse.board.app.lib.api.connection";
-const T = {
+import { component as x } from "@eclipse-daanse/tsm";
+const U = {
   key: 0,
   style: { overflow: "hidden", height: "100%", width: "100%" },
   class: "flex flex-col gap-4"
-}, x = { class: "h-full" }, C = /* @__PURE__ */ y({
+}, _ = { class: "h-full" }, A = /* @__PURE__ */ b({
   __name: "Preview",
   props: {
     dataSource: {}
   },
   setup(e) {
-    const n = e, t = K(null), o = r(n.dataSource), { update: a } = h(n.dataSource.type, o, t);
-    s(() => o.value.config.kpis ? i.value.items.filter((l) => o.value.config.kpis.includes(l.name)) : []), u(() => n.dataSource.config, () => {
-      a();
+    const o = e, n = D(null), t = l(o.dataSource), { update: i } = h(o.dataSource.type, t, n);
+    u(() => t.value.config.kpis ? c.value.items.filter((s) => t.value.config.kpis.includes(s.name)) : []), d(() => o.dataSource.config, () => {
+      i();
     }, { deep: !0 });
-    const i = r(null), c = s({
-      get: () => o.value.config.kpis || [],
-      set: (l) => {
-        o.value.config.kpis = l, console.log("Updated selected KPIs:", l);
+    const c = l(null), a = u({
+      get: () => t.value.config.kpis || [],
+      set: (s) => {
+        t.value.config.kpis = s, console.log("Updated selected KPIs:", s);
       }
     });
-    return u(t, async () => {
-      i.value = await t.value.getOriginalData("DataTable");
-    }, { deep: !0 }), (l, m) => t.value ? (b(), S("div", T, [
-      P("div", x, [
-        d(f(E), {
-          tableData: i.value,
-          selectedItems: c.value,
-          "onUpdate:selectedItems": m[0] || (m[0] = (w) => c.value = w),
+    return d(n, async () => {
+      c.value = await n.value.getOriginalData("DataTable");
+    }, { deep: !0 }), (s, m) => n.value ? (w(), y("div", U, [
+      C("div", _, [
+        f(r(O), {
+          tableData: c.value,
+          selectedItems: a.value,
+          "onUpdate:selectedItems": m[0] || (m[0] = (P) => a.value = P),
           "show-selection": !0
         }, null, 8, ["tableData", "selectedItems"])
       ])
     ])) : k("", !0);
   }
-}), U = (e, n) => {
-  const t = e.__vccOpts || e;
-  for (const [o, a] of n)
-    t[o] = a;
-  return t;
-}, N = /* @__PURE__ */ U(C, [["__scopeId", "data-v-869dc0ea"]]), O = /* @__PURE__ */ y({
+}), N = (e, o) => {
+  const n = e.__vccOpts || e;
+  for (const [t, i] of o)
+    n[t] = i;
+  return n;
+}, B = /* @__PURE__ */ N(A, [["__scopeId", "data-v-869dc0ea"]]), M = /* @__PURE__ */ b({
   __name: "Settings",
   props: {
     config: {},
@@ -52,43 +53,68 @@ const T = {
     connections: {}
   },
   setup(e) {
-    const n = V(R), t = r([]), o = s(() => e.connections.filter((a) => a.type === "xmla"));
-    return u(async () => e.config.connection, async () => {
-      e.config.connection && (t.value = await g.fetchCubes(e.config.connection, n));
-    }), D(async () => {
-      e.config.connection && (t.value = await g.fetchCubes(e.config.connection, n));
-    }), (a, i) => (b(), S(I, null, [
-      d(f(p), {
+    const o = T(R), { t: n } = I("datasourceKpi"), t = l([]), i = u(() => e.connections.filter((c) => c.type === "xmla"));
+    return d(async () => e.config.connection, async () => {
+      e.config.connection && (t.value = await g.fetchCubes(e.config.connection, o));
+    }), E(async () => {
+      e.config.connection && (t.value = await g.fetchCubes(e.config.connection, o));
+    }), (c, a) => (w(), y(V, null, [
+      f(r(p), {
         modelValue: e.config.connection,
-        "onUpdate:modelValue": i[0] || (i[0] = (c) => e.config.connection = c),
-        label: "Verbindung",
-        options: o.value,
+        "onUpdate:modelValue": a[0] || (a[0] = (s) => e.config.connection = s),
+        label: r(n)("Settings.connection"),
+        options: i.value,
         "label-key": "name",
         "value-key": "uid"
-      }, null, 8, ["modelValue", "options"]),
-      d(f(p), {
+      }, null, 8, ["modelValue", "label", "options"]),
+      f(r(p), {
         modelValue: e.config.cube,
-        "onUpdate:modelValue": i[1] || (i[1] = (c) => e.config.cube = c),
-        label: "Würfel",
+        "onUpdate:modelValue": a[1] || (a[1] = (s) => e.config.cube = s),
+        label: r(n)("Settings.cube"),
         options: t.value,
         "label-key": "CUBE_NAME",
         "value-key": "CUBE_NAME"
-      }, null, 8, ["modelValue", "options"])
+      }, null, 8, ["modelValue", "label", "options"])
     ], 64));
   }
-}), A = Symbol.for("KpiStoreFactory"), B = Symbol.for("KpiPreview"), F = Symbol.for("KpiSettings");
-function $({ services: e }) {
-  e.register("KpiPreview", N), e.register("KpiSettings", O), e.getRequired(v).registerDatasourceType("KPI", {
+}), F = { connection: "Verbindung", cube: "Würfel" }, j = {
+  Settings: F
+}, q = { connection: "Connection", cube: "Cube" }, $ = {
+  Settings: q
+};
+var W = Object.getOwnPropertyDescriptor, X = (e, o, n, t) => {
+  for (var i = t > 1 ? void 0 : t ? W(o, n) : o, c = e.length - 1, a; c >= 0; c--)
+    (a = e[c]) && (i = a(i) || i);
+  return i;
+};
+const K = "datasourceKpi";
+let v = class {
+  namespace = K;
+  resources = {
+    de: j,
+    en: $
+  };
+};
+v = X([
+  x({
+    service: ["Translations"],
+    properties: { "i18n.namespace": K }
+  })
+], v);
+const Y = Symbol.for("KpiStoreFactory"), z = Symbol.for("KpiPreview"), G = Symbol.for("KpiSettings");
+function oe({ services: e }) {
+  e.register("KpiPreview", B), e.register("KpiSettings", M), e.getRequired(S).registerDatasourceType("KPI", {
     icon: "speed",
-    Store: A,
-    Preview: B,
-    Settings: F
+    Store: Y,
+    Preview: z,
+    Settings: G
   });
 }
-function z({ services: e }) {
-  e.getRequired(v).unregisterDatasourceType("KPI"), e.unregister("KpiPreview"), e.unregister("KpiSettings");
+function ie({ services: e }) {
+  e.getRequired(S).unregisterDatasourceType("KPI"), e.unregister("KpiPreview"), e.unregister("KpiSettings");
 }
 export {
-  $ as activate,
-  z as deactivate
+  v as DatasourceKpiTranslations,
+  oe as activate,
+  ie as deactivate
 };

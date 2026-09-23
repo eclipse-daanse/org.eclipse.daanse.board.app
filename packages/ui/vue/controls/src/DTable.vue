@@ -24,6 +24,7 @@ Contributors:
  * for a table and none of them asked for any of that.
  */
 import { computed } from 'vue'
+import { useText } from './useText'
 
 /**
  * The row that is picked, when the table is one you pick from.
@@ -38,13 +39,15 @@ const props = withDefaults(
     items: Array<Record<string, unknown>>
     /** The columns to show; without it, the keys of the first row. */
     columns?: Array<string | { key: string; label?: string }>
-    /** Shown in place of the table when there are no rows. */
+    /** Shown in place of the table when there are no rows; a word of its own when left out. */
     empty?: string
     /** Rows answer a click and the chosen one is marked. */
     selectable?: boolean
   }>(),
-  { empty: 'Keine Zeilen', selectable: false },
+  { selectable: false },
 )
+
+const t = useText()
 
 interface Column {
   key: string
@@ -94,7 +97,7 @@ function cell(row: Record<string, unknown>, key: string): string {
       </tbody>
     </table>
 
-    <p v-else class="table__empty">{{ empty }}</p>
+    <p v-else class="table__empty">{{ empty ?? t('Table.empty', 'No rows') }}</p>
   </div>
 </template>
 

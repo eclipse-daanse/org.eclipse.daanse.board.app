@@ -13,6 +13,10 @@
     {
       "id": "org.eclipse.daanse.board.app.ui.vue.controls",
       "versionRange": ">=0.0.1-0"
+    },
+    {
+      "id": "org.eclipse.daanse.board.app.ui.vue.composables",
+      "versionRange": ">=0.0.1-0"
     }
   ],
   "capabilities": [
@@ -22,10 +26,21 @@
         "library": "org.eclipse.daanse.board.app.ui.vue.common.monaco",
         "version": "0.0.1-next.1"
       }
+    },
+    {
+      "namespace": "tsm.i18n",
+      "attributes": {
+        "namespace": "monaco",
+        "languages": [
+          "de",
+          "en"
+        ]
+      }
     }
   ],
   "dependencies": [
     "platform.vue",
+    "ui.vue.composables",
     "ui.vue.controls"
   ]
 }

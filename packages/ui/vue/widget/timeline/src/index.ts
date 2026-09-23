@@ -59,6 +59,7 @@ export class TimelineWidgetProvider implements WidgetProvider {
   readonly supportedDSTypes = []
   readonly icon = icon
   readonly name = 'Timeline'
+  readonly nameKey = 'timeline:Widget.name'
 
   /*
    * The settings form, as a model. Carried on the registration like the
@@ -98,3 +99,6 @@ export class TimelineWidgetProvider implements WidgetProvider {
 
 export { TimelineWidget, TimelineWidgetSettings }
 export { TimelineSettingsImpl, TimelinesettingsPackage, timelineSettingsFormXmi }
+
+/* Its texts - collected by lib.i18next, see src/i18n. */
+export { TimelineTranslations } from './i18n'

@@ -13,9 +13,9 @@ Contributors:
 
 <script setup lang="ts">
 import { DCheckbox, DTabs } from 'org.eclipse.daanse.board.app.ui.vue.controls'
-import { useTemporaryStore } from 'org.eclipse.daanse.board.app.ui.vue.composables';
+import { useTemporaryStore, useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables';
 import { identifier, ConnectionRepository } from 'org.eclipse.daanse.board.app.lib.api.connection'
-import { inject, ref, watch, toRef, shallowRef, nextTick, onMounted } from 'vue';
+import { computed, inject, ref, watch, toRef, shallowRef, nextTick, onMounted } from 'vue';
 import { MetadataTree, QueryDesigner, PivotTable } from 'org.eclipse.daanse.board.app.ui.vue.common.xmla';
 import { MonacoEditor } from 'org.eclipse.daanse.board.app.ui.vue.common.monaco';
 
@@ -26,6 +26,7 @@ const data = ref(null as any);
 const connection = ref(null as any);
 const query = ref(props.dataSource.config.mdx || '');
 const emit = defineEmits(['updateConfig']);
+const { t } = useTranslation('datasourceXmla')
 
 const tempStore = shallowRef(null as any)
 const settingsRef = ref(props.dataSource);
@@ -34,10 +35,10 @@ const { update } = useTemporaryStore(props.dataSource.type, settingsRef, tempSto
 
 console.log(props.dataSource)
 
-const tabs = [
-  { id: 'visual', label: 'Abfrage bauen' },
-  { id: 'code', label: 'MDX schreiben' },
-];
+const tabs = computed(() => [
+  { id: 'visual', label: t('Xmla.build') },
+  { id: 'code', label: t('Xmla.write') },
+]);
 const currentTab = ref('visual');
 const api = ref(null as any);
 const catalog = ref(null as any);
@@ -161,14 +162,14 @@ const getSettingsHash = (obj: any) => {
 <template>
   <div class="flex w-full h-full rounded gap-4 overflow-hidden">
     <div class="flex flex-col w-full h-full overflow-hidden flex-grow data-designer">
-      <DTabs v-model="currentTab" :tabs="tabs" label="Abfrage bauen oder schreiben" />
+      <DTabs v-model="currentTab" :tabs="tabs" :label="t('Xmla.tabs')" />
 
       <div class="editor-pane">
         <template v-if="currentTab === 'code' && connection">
           <!-- <MonacoEditor v-model="query" height="100%" width="100%" language="mdx" :supported-languages="[ 'mdx' ]" :metadata="metadataStore" /> -->
           <MonacoEditor v-model="query" class="monaco-container" language="mdx" :supported-languages="['mdx']">
             <template #actions>
-              <DCheckbox v-model="props.dataSource.config.useMdx" class="mt-2" label="MDX-Abfrage verwenden" />
+              <DCheckbox v-model="props.dataSource.config.useMdx" class="mt-2" :label="t('Xmla.useMdx')" />
             </template>
           </MonacoEditor>
         </template>
@@ -180,7 +181,7 @@ const getSettingsHash = (obj: any) => {
       </div>
       <div class="h-full w-full flex flex-col data-preview">
         <h4>
-          Data Preview
+          {{ t('Xmla.preview') }}
         </h4>
         <div class="w-full h-full overflow-auto">
           <!-- @onExpand="onExpand"
@@ -194,7 +195,7 @@ const getSettingsHash = (obj: any) => {
     <div class="h-full metadata-container">
       <MetadataTree v-if="metadata" :metadata="metadata" :key="getSettingsHash(metadata)" />
       <div class="h-full w-full flex items-center justify-center" v-else>
-        Select connection to load metadata
+        {{ t('Xmla.pickConnection') }}
       </div>
     </div>
   </div>

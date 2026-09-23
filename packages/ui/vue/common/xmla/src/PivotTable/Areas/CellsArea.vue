@@ -15,6 +15,9 @@ Contributors:
 import type { TinyEmitter } from "tiny-emitter";
 import { computed, inject, ref, watch, type Ref } from "vue";
 import CellDropdown from "./CellDropdown.vue";
+import { useFormat } from "org.eclipse.daanse.board.app.ui.vue.composables";
+
+const format = useFormat();
 // import CellPropertiesModal from "@/components/Modals/CellPropertiesModal.vue";
 
 
@@ -317,7 +320,8 @@ const getCellValue = (cell: any) => {
 const toLocalString = (value: number | string) => {
   try {
     if (typeof value == "string") value = isNaN(Number(value)) ? value : Number(value)
-    return value.toLocaleString("de-DE");
+    /* In the language on screen, not always German. */
+    return typeof value === "number" ? format.number(value) : value;
   } catch (e) {
     return value
   }

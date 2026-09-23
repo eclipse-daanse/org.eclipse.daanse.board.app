@@ -9,6 +9,7 @@
     "lib.api.connection",
     "lib.connection.rest",
     "platform.vue",
+    "ui.vue.composables",
     "ui.vue.controls"
   ],
   "requiresService": [
@@ -35,7 +36,27 @@
     {
       "id": "org.eclipse.daanse.board.app.ui.vue.controls",
       "versionRange": ">=0.0.1-0"
+    },
+    {
+      "id": "org.eclipse.daanse.board.app.ui.vue.composables",
+      "versionRange": ">=0.0.1-0"
     }
   ],
-  "provides": []
+  "capabilities": [
+    {
+      "namespace": "tsm.i18n",
+      "attributes": {
+        "namespace": "connectionRest",
+        "languages": [
+          "de",
+          "en"
+        ]
+      }
+    }
+  ],
+  "provides": [
+    {
+      "id": "Translations"
+    }
+  ]
 }

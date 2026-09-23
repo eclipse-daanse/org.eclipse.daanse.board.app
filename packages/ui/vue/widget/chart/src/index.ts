@@ -53,6 +53,7 @@ export class ChartWidgetProvider implements WidgetProvider {
   readonly supportedDSTypes = []
   readonly icon = Icon
   readonly name = 'Chart'
+  readonly nameKey = 'chart:Widget.name'
 
   /*
    * The settings form, as a model. Carried on the registration like the
@@ -72,7 +73,7 @@ export class ChartWidgetProvider implements WidgetProvider {
      * from. Named so that what is modelled is not offered twice, in two
      * forms that could disagree.
      */
-    unmodelledSections: ['Reference Lines & Areas'],
+    unmodelledSections: ['referenceLines'],
   }
 
   constructor(
@@ -96,3 +97,6 @@ export class ChartWidgetProvider implements WidgetProvider {
 export { ChartWidget, ChartWidgetSettings }
 export { ChartSettingsImpl, ChartsettingsPackage, chartSettingsFormXmi, seriesSettingsFormXmi }
 export type { ChartSettings }
+
+/* Its texts - collected by lib.i18next, see src/i18n. */
+export { ChartTranslations } from './i18n'

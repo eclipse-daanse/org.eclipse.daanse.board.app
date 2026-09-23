@@ -26,13 +26,13 @@ only means something once it is known which shapes are being talked about.
 
   <components xsi:type="uimodel:FormView" name="SvgConfigItemFormView">
     <fields xsi:type="uimodel:InputWidget" name="className"
-        feature="http://org.eclipse.daanse.board.app.ui.vue.widget.svg.base#//SvgConfigItem/className" label="CSS-Klasse"
+        feature="http://org.eclipse.daanse.board.app.ui.vue.widget.svg.base#//SvgConfigItem/className" label="svgBase:FormRule.className"
         placeholder="primary"/>
     <fields xsi:type="uimodel:InputWidget" name="fill"
-        feature="http://org.eclipse.daanse.board.app.ui.vue.widget.svg.base#//SvgConfigItem/fill" label="Füllfarbe"/>
+        feature="http://org.eclipse.daanse.board.app.ui.vue.widget.svg.base#//SvgConfigItem/fill" label="svgBase:FormRule.fill"/>
     <fields xsi:type="uimodel:InputWidget" name="stroke"
-        feature="http://org.eclipse.daanse.board.app.ui.vue.widget.svg.base#//SvgConfigItem/stroke" label="Linienfarbe"/>
+        feature="http://org.eclipse.daanse.board.app.ui.vue.widget.svg.base#//SvgConfigItem/stroke" label="svgBase:FormRule.stroke"/>
     <fields xsi:type="uimodel:InputWidget" name="strokeWidth"
-        feature="http://org.eclipse.daanse.board.app.ui.vue.widget.svg.base#//SvgConfigItem/strokeWidth" label="Linienstärke"/>
+        feature="http://org.eclipse.daanse.board.app.ui.vue.widget.svg.base#//SvgConfigItem/strokeWidth" label="svgBase:FormRule.strokeWidth"/>
   </components>
 </uimodel:UIModel>

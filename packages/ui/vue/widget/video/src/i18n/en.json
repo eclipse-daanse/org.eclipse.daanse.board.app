@@ -1,0 +1,22 @@
+{
+  "Widget": {
+    "name": "Video",
+    "unsupported": "Your browser does not support embedded videos."
+  },
+  "FormFit": {
+    "fit": "Fit"
+  },
+  "Form": {
+    "videoUrl": "Address",
+    "videoFitSettings": "Display"
+  },
+  "Options": {
+    "fit": {
+      "cover": "Cover, crop the edges",
+      "contain": "Show whole, leave edges free",
+      "fill": "Stretch to the frame",
+      "scaleDown": "Only scale down",
+      "none": "Original size"
+    }
+  }
+}

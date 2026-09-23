@@ -1,0 +1,139 @@
+{
+  "Widget": {
+    "name": "Map"
+  },
+  "Settings": {
+    "serviceFailed": "Failed to load the service. The URL is not a valid WMS or WFS service.",
+    "addService": "Add service",
+    "serviceTypes": {
+      "wmsWfs": "WMS/WFS service",
+      "datasource": "Data source"
+    },
+    "serviceUrl": "Service URL",
+    "selectDatasource": "Select data source",
+    "chooseDatasource": "Choose a data source",
+    "enterDatasourceId": "Enter data source ID",
+    "datasourceId": "Data source ID",
+    "primaryDatasource": "Primary data source:",
+    "add": "Add",
+    "addDatasource": "Add data source",
+    "serviceError": "Service error",
+    "ok": "OK",
+    "sections": {
+      "layers": "Layers",
+      "services": "Services",
+      "map": "Map"
+    },
+    "noLayers": "No layers here",
+    "noServices": "No services here",
+    "hideLayer": "Hide layer",
+    "showLayer": "Show layer",
+    "failed": "(failed)",
+    "styles": "Styles",
+    "removeLayer": "Remove layer",
+    "removeDatasource": "Remove data source",
+    "baseMap": "Base map URL",
+    "baseMapHint": "Tile server URL template. Use {z}, {x}, {y} placeholders for zoom and coordinates.",
+    "fixed": "Map fixed",
+    "highlight": "Selection highlight colour",
+    "highlightHint": "Colour used to highlight selected Things on the map."
+  },
+  "Renderer": {
+    "trafficLight": {
+      "name": "Traffic light data point renderer",
+      "description": "Renders a data point as a traffic light"
+    },
+    "valueUnit": {
+      "name": "Value and unit data point renderer",
+      "description": "Renders a value and its unit"
+    },
+    "tabs": {
+      "settings": "Settings",
+      "conditions": "Conditions",
+      "points": "Points",
+      "areas": "Areas",
+      "autoUpdate": "Auto-update",
+      "placement": "Placement"
+    },
+    "addStyle": "Add style",
+    "addDatastreamStyle": "Add datastream style",
+    "deleteStyle": "Delete style",
+    "deleteDatastreamStyle": "Delete datastream style",
+    "addObservation": "Add observation",
+    "deleteObservation": "Delete observation",
+    "tag": {
+      "thing": "Th",
+      "datastream": "DS",
+      "observation": "Obs"
+    },
+    "observation": "Observation",
+    "settings": "Renderer settings",
+    "create": "Create",
+    "orSelect": "or select a style to edit",
+    "warning": "Warning:",
+    "usedBy_one": "The style “{{name}}” is used by {{count}} layer:",
+    "usedBy_other": "The style “{{name}}” is used by {{count}} layers:",
+    "unnamedLayer": "Unnamed layer",
+    "deleteHint": "If you delete this style, it will be removed from all these layers.",
+    "continue": "Do you want to continue?",
+    "selectObservation": "Select observation renderer",
+    "chooseObservation": "Choose which type of renderer to use for observations:",
+    "newStyle": "New style",
+    "newDatastreamStyle": "New datastream style"
+  },
+  "Style": {
+    "section": "Style settings",
+    "stroke": "Stroke",
+    "lineColor": "Line colour",
+    "lineSize": "Line size",
+    "lineOpacity": "Line opacity",
+    "fill": "Fill",
+    "fillOpacity": "Fill opacity",
+    "fillColor": "Fill colour",
+    "className": "Class name"
+  },
+  "ValueUnit": {
+    "unit": "Unit",
+    "prefix": "Prefix",
+    "suffix": "Suffix"
+  },
+  "Observations": {
+    "renderer": "Renderer",
+    "choose": "Select an option"
+  },
+  "Placement": {
+    "label": "Render within",
+    "thing": "Thing",
+    "observedArea": "Observed area"
+  },
+  "Point": {
+    "renderAs": "Render point as",
+    "as": {
+      "icon": "Icon",
+      "prop": "Property",
+      "image": "Image",
+      "none": "None"
+    },
+    "prop": "Datastream property",
+    "imageUrl": "Image URL",
+    "imageSize": "Image size",
+    "pinColor": "Pin colour",
+    "solid": "Solid",
+    "noImage": "No image"
+  },
+  "AutoUpdate": {
+    "title": "Auto-update configuration",
+    "refresh": "Observation refresh time: {{time}}",
+    "never": "Never",
+    "current": "Current setting:",
+    "last": "Last update:"
+  },
+  "Conditions": {
+    "property": "Property",
+    "is": "is",
+    "value": "Value",
+    "remove": "Remove condition",
+    "none": "Nothing to match on yet.",
+    "add": "Add"
+  }
+}

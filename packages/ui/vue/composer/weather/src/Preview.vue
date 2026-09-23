@@ -12,9 +12,11 @@ Contributors:
 -->
 <script setup lang="ts">
 import {  ref, shallowRef, watch } from 'vue'
-import { useTemporaryStore } from 'org.eclipse.daanse.board.app.ui.vue.composables';
+import { useFormat, useTemporaryStore, useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables';
 
 const props = defineProps<{ dataSource: any }>();
+const { t } = useTranslation('composerWeather')
+const format = useFormat()
 
 
 
@@ -54,8 +56,7 @@ function formatTimestamp(timestamp: string): string {
   if (!timestamp) return '';
 
   try {
-    const date = new Date(timestamp);
-    return date.toLocaleString();
+    return format.date(timestamp, { dateStyle: 'short', timeStyle: 'medium' });
   } catch {
     return timestamp;
   }
@@ -66,12 +67,12 @@ function formatTimestamp(timestamp: string): string {
 <template>
   <div class="weather-composer-preview">
     <div class="preview-header">
-      <h3>🌤️ Weather Data Composer</h3>
+      <h3>🌤️ {{ t('Weather.title') }}</h3>
     </div>
 
     <div v-if="!waetherData || waetherData.length === 0" class="preview-empty">
-      <p>No weather data available</p>
-      <small>Configure connected datasources to see weather data</small>
+      <p>{{ t('Weather.noData') }}</p>
+      <small>{{ t('Weather.noDataHint') }}</small>
     </div>
 
     <div v-else class="weather-stations">
@@ -89,7 +90,7 @@ function formatTimestamp(timestamp: string): string {
           <div v-if="station.temperature" class="measurement">
             <div class="measurement-icon">🌡️</div>
             <div class="measurement-info">
-              <span class="label">Temperature</span>
+              <span class="label">{{ t('Weather.param.temperature') }}</span>
               <span class="value">{{ station.temperature.value }}{{ station.temperature.unit }}</span>
             </div>
           </div>
@@ -97,7 +98,7 @@ function formatTimestamp(timestamp: string): string {
           <div v-if="station.humidity" class="measurement">
             <div class="measurement-icon">💧</div>
             <div class="measurement-info">
-              <span class="label">Humidity</span>
+              <span class="label">{{ t('Weather.param.humidity') }}</span>
               <span class="value">{{ station.humidity.value }}{{ station.humidity.unit }}</span>
             </div>
           </div>
@@ -105,7 +106,7 @@ function formatTimestamp(timestamp: string): string {
           <div v-if="station.pressure" class="measurement">
             <div class="measurement-icon">📊</div>
             <div class="measurement-info">
-              <span class="label">Pressure</span>
+              <span class="label">{{ t('Weather.param.pressure') }}</span>
               <span class="value">{{ station.pressure.value }}{{ station.pressure.unit }}</span>
             </div>
           </div>
@@ -113,7 +114,7 @@ function formatTimestamp(timestamp: string): string {
           <div v-if="station.windSpeed" class="measurement">
             <div class="measurement-icon">💨</div>
             <div class="measurement-info">
-              <span class="label">Wind Speed</span>
+              <span class="label">{{ t('Weather.param.windSpeed') }}</span>
               <span class="value">{{ station.windSpeed.value }}{{ station.windSpeed.unit }}</span>
             </div>
           </div>
@@ -121,7 +122,7 @@ function formatTimestamp(timestamp: string): string {
           <div v-if="station.windDirection" class="measurement">
             <div class="measurement-icon">🧭</div>
             <div class="measurement-info">
-              <span class="label">Wind Direction</span>
+              <span class="label">{{ t('Weather.param.windDirection') }}</span>
               <span class="value">{{ station.windDirection.value }}{{ station.windDirection.unit }}</span>
             </div>
           </div>
@@ -129,7 +130,7 @@ function formatTimestamp(timestamp: string): string {
           <div v-if="station.precipitation" class="measurement">
             <div class="measurement-icon">🌧️</div>
             <div class="measurement-info">
-              <span class="label">Precipitation</span>
+              <span class="label">{{ t('Weather.param.precipitation') }}</span>
               <span class="value">{{ station.precipitation.value }}{{ station.precipitation.unit }}</span>
             </div>
           </div>
@@ -137,7 +138,7 @@ function formatTimestamp(timestamp: string): string {
           <div v-if="station.visibility" class="measurement">
             <div class="measurement-icon">👁️</div>
             <div class="measurement-info">
-              <span class="label">Visibility</span>
+              <span class="label">{{ t('Weather.param.visibility') }}</span>
               <span class="value">{{ station.visibility.value }}{{ station.visibility.unit }}</span>
             </div>
           </div>
@@ -145,14 +146,14 @@ function formatTimestamp(timestamp: string): string {
           <div v-if="station.cloudCover" class="measurement">
             <div class="measurement-icon">☁️</div>
             <div class="measurement-info">
-              <span class="label">Cloud Cover</span>
+              <span class="label">{{ t('Weather.param.cloudCover') }}</span>
               <span class="value">{{ station.cloudCover.value }}{{ station.cloudCover.unit }}</span>
             </div>
           </div>
         </div>
 
         <div v-if="hasTimestamp(station)" class="timestamp">
-          <small>Last updated: {{ formatTimestamp(getLatestTimestamp(station)) }}</small>
+          <small>{{ t('Weather.lastUpdated', { time: formatTimestamp(getLatestTimestamp(station)) }) }}</small>
         </div>
       </div>
     </div>

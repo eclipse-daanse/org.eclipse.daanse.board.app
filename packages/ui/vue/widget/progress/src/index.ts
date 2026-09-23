@@ -52,6 +52,7 @@ const WIDGET_TYPE = 'ProgressWidget'
 export class ProgressWidgetProvider implements WidgetProvider {
   readonly type = WIDGET_TYPE
   readonly name = 'Progress'
+  readonly nameKey = 'progress:Widget.name'
 
   /*
    * The settings form, as a model. Carried on the registration like the
@@ -95,3 +96,6 @@ export class ProgressWidgetProvider implements WidgetProvider {
 
 export { ProgressWidget, ProgressWidgetSettings }
 export { ProgressSettingsImpl, ProgresswidgetsPackage, progressSettingsFormXmi }
+
+/* Its texts - collected by lib.i18next, see src/i18n. */
+export { ProgressTranslations } from './i18n'

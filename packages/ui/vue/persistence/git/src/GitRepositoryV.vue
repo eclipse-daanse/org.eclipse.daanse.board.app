@@ -20,12 +20,13 @@ import type {
 import { asyncComputed } from '@vueuse/core'
 import { DButton, DIcon, DInput, DModal, DSelect, DTable } from 'org.eclipse.daanse.board.app.ui.vue.controls'
 
-import { usePromisifiedModal } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+import { usePromisifiedModal, useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import { GitWritableRepository, AuthentificationError } from 'org.eclipse.daanse.board.app.lib.persistence.git'
 import SaveInputGit from './SaveInputGit.vue'
 
 //Props
 const props = defineProps<{ repo: GitWritableRepository, context: { context: string, state?: any } | undefined }>()
+const { t } = useTranslation('persistence')
 
 //Emits
 const emts = defineEmits<{ close: any }>()
@@ -37,10 +38,10 @@ const emts = defineEmits<{ close: any }>()
  * handler was `ev.stopImmediatePropagation()` - they have never done
  * anything.
  */
-const columns = ref([
-  { key: 'name', label: 'Datei' },
-  { key: 'date', label: 'Datum' },
-  { key: 'size', label: 'Größe' },
+const columns = computed(() => [
+  { key: 'name', label: t('Git.columns.name') },
+  { key: 'date', label: t('Git.columns.date') },
+  { key: 'size', label: t('Git.columns.size') },
 ])
 
 const savedData = ref<Entity[]>([])
@@ -99,11 +100,11 @@ const override = async (e: Entity) => {
   e.data = props.context!.state
   try {
     await (props.repo as WritableRepository).update(e)
-    notify({ message: 'Datei abgelegt' })
+    notify({ message: t('Git.stored') })
   } catch (ee) {
     let token = await run(null)
     if (!token) {
-      notify({ title: 'Ablegen fehlgeschlagen', message: String(ee) })
+      notify({ title: t('Git.storeFailed'), message: String(ee) })
     } else {
       await props.repo.auth({ auth: token })
       override(e)
@@ -120,20 +121,20 @@ const save = async (e: Entity) => {
   e.data = props.context!.state
   try {
     await (props.repo as WritableRepository).create(e)
-    notify({ message: 'Datei abgelegt' })
+    notify({ message: t('Git.stored') })
   } catch (ee) {
     if (ee instanceof AuthentificationError) {
       //alert('not auth')
       let token = await run(null)
       if (!token) {
-        notify({ title: 'Ablegen fehlgeschlagen', message: String(ee) })
+        notify({ title: t('Git.storeFailed'), message: String(ee) })
       } else {
         await props.repo.auth({ auth: token })
         await save(e)
       }
 
     } else {
-      notify({ title: 'Ablegen fehlgeschlagen', message: String(ee) })
+      notify({ title: t('Git.storeFailed'), message: String(ee) })
       console.log(e)
     }
 
@@ -175,7 +176,7 @@ const loadFile = async () => {
     if (entity && entity.data) {
       emts('close', entity?.data as any)
     }
-    notify({ message: 'Datei geladen' })
+    notify({ message: t('Git.loaded') })
   } catch (e) {
     console.log(e)
   }
@@ -187,15 +188,15 @@ const loadFile = async () => {
     <Teleport defer to="#loadSaveModalFooter">
       <!-- Picking a branch and picking a commit is picking from a list. It
            was a dropdown button with a menu hanging off it, twice. -->
-      <DSelect v-model="branch" label="Branch" :options="branch_options ?? []" size="sm" />
-      <DSelect v-model="commit" label="Stand" :options="commit_options ?? []" size="sm" clearable />
+      <DSelect v-model="branch" :label="t('Git.branch')" :options="branch_options ?? []" size="sm" />
+      <DSelect v-model="commit" :label="t('Git.commit')" :options="commit_options ?? []" size="sm" clearable />
     </Teleport>
 
     <SaveInputGit :repo="repo" @save="save" @override="override" />
 
     <Teleport defer to="#loadSaveModalFooter">
       <DButton intent="primary" :disabled="!selectedRow" @click="loadFile">
-        <DIcon name="task" size="sm" />Laden
+        <DIcon name="task" size="sm" />{{ t('Git.load') }}
       </DButton>
     </Teleport>
   </div>
@@ -210,24 +211,24 @@ const loadFile = async () => {
     :items="savedData"
     :columns="columns"
     selectable
-    :empty="isTableLoading ? 'Wird geladen…' : 'Keine Datei in diesem Stand'"
+    :empty="isTableLoading ? t('Git.loading') : t('Git.empty')"
   />
 
   <DModal v-model="isOpened" size="sm">
     <template #header>
-      <h2 class="token__title">Zugang zum Repository</h2>
+      <h2 class="token__title">{{ t('Git.access') }}</h2>
     </template>
 
     <DInput
       v-model="token"
-      label="Token"
+      :label="t('Git.token')"
       type="password"
-      hint="Wird nur für diese Sitzung behalten."
+      :hint="t('Git.tokenHint')"
     />
 
     <template #actions>
-      <DButton intent="quiet" @click="() => { token = undefined; close(null) }">Abbrechen</DButton>
-      <DButton intent="primary" @click="() => close(token)">Weiter</DButton>
+      <DButton intent="quiet" @click="() => { token = undefined; close(null) }">{{ t('common:Action.cancel') }}</DButton>
+      <DButton intent="primary" @click="() => close(token)">{{ t('Git.continue') }}</DButton>
     </template>
   </DModal>
 </template>

@@ -27,31 +27,31 @@ them - so they are the values; optionLabel says what each one looks like.
 
   <components xsi:type="uimodel:FormView" name="KpiTableSettingsFormView">
 
-    <fields xsi:type="uimodel:GroupWidget" name="marksGroup" layout="VERTICAL" label="Kennzeichen">
+    <fields xsi:type="uimodel:GroupWidget" name="marksGroup" layout="VERTICAL" label="tableKpi:Form.marksGroup">
       <fields xsi:type="uimodel:SelectWidget" name="trendVisualType"
-          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.table.kpi#//KpiTableSettings/trendVisualType" label="Trend">
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.table.kpi#//KpiTableSettings/trendVisualType" label="tableKpi:Form.trendVisualType">
         <values>Emoji</values>
         <values>Arrow</values>
         <values>Chart</values>
         <values>Badge</values>
-        <optionLabel language="JS" body="({ Emoji: 'Emoji', Arrow: 'Pfeil', Chart: 'Kurve', Badge: 'Plakette' })[option] ?? option"/>
+        <optionLabel language="JS" body="({ Emoji: 'tableKpi:Options.trend.emoji', Arrow: 'tableKpi:Options.trend.arrow', Chart: 'tableKpi:Options.trend.chart', Badge: 'tableKpi:Options.trend.badge' })[option] ?? option"/>
       </fields>
       <fields xsi:type="uimodel:SelectWidget" name="statusVisualType"
-          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.table.kpi#//KpiTableSettings/statusVisualType" label="Status">
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.table.kpi#//KpiTableSettings/statusVisualType" label="tableKpi:Form.statusVisualType">
         <values>Emoji</values>
         <values>Lights</values>
         <values>Badge</values>
-        <optionLabel language="JS" body="({ Emoji: 'Emoji', Lights: 'Ampel', Badge: 'Plakette' })[option] ?? option"/>
+        <optionLabel language="JS" body="({ Emoji: 'tableKpi:Options.status.emoji', Lights: 'tableKpi:Options.status.lights', Badge: 'tableKpi:Options.status.badge' })[option] ?? option"/>
       </fields>
     </fields>
 
-    <fields xsi:type="uimodel:GroupWidget" name="shapeGroup" layout="VERTICAL" label="Aufbau">
+    <fields xsi:type="uimodel:GroupWidget" name="shapeGroup" layout="VERTICAL" label="tableKpi:Form.shapeGroup">
       <fields xsi:type="uimodel:CheckboxWidget" name="showFolders"
-          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.table.kpi#//KpiTableSettings/showFolders" label="Ordner zeigen"/>
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.table.kpi#//KpiTableSettings/showFolders" label="tableKpi:Form.showFolders"/>
       <fields xsi:type="uimodel:CheckboxWidget" name="showParentChild"
-          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.table.kpi#//KpiTableSettings/showParentChild" label="Über- und Untereinträge zeigen"/>
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.table.kpi#//KpiTableSettings/showParentChild" label="tableKpi:Form.showParentChild"/>
       <fields xsi:type="uimodel:InputWidget" name="headerBackground"
-          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.table.kpi#//KpiTableSettings/headerBackground" label="Kopfzeilenfarbe"/>
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.table.kpi#//KpiTableSettings/headerBackground" label="tableKpi:Form.headerBackground"/>
     </fields>
 
   </components>

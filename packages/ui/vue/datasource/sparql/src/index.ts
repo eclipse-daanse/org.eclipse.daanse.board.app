@@ -50,3 +50,6 @@ export function deactivate({ services }: ActivationContext) {
   services.unregister('SparqlPreview')
   services.unregister('SparqlSettings')
 }
+
+/* Its texts - collected by lib.i18next, see src/i18n. */
+export { DatasourceSparqlTranslations } from './i18n'

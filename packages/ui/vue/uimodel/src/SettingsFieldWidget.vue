@@ -44,7 +44,9 @@ import {
   DInput,
   DSelect,
 } from 'org.eclipse.daanse.board.app.ui.vue.controls'
+import { useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import { kindOf, labelOf } from './buildForm'
+import { isTranslationKey } from './translateLabels'
 
 const props = defineProps<{
   eObject?: EObject
@@ -57,6 +59,7 @@ const props = defineProps<{
 
 /* Injected once, in setup - not inside the handlers that use it. */
 const variables = inject<VariableRepository>(VARIABLE_REPOSITORY)
+const { t } = useTranslation('uimodel')
 
 /** The wrapper itself - read and written through, never swapped out. */
 const wrapper = computed<any>(() => {
@@ -228,7 +231,7 @@ const editable = computed(() => !props.custom?.resolvedStyle?.readOnly && !isBou
  * nothing defined it, so it read as undefined and fell through to the
  * placeholder - which is the one thing a bound field is not showing.
  */
-const boundHint = computed(() => (isBound.value ? `Von „${boundName.value}“` : undefined))
+const boundHint = computed(() => (isBound.value ? t('Field.boundFrom', { name: boundName.value }) : undefined))
 
 const value = computed({
   get: () => (bindable.value ? wrapper.value?.value : plain.value) ?? '',
@@ -316,7 +319,8 @@ const options = computed<Array<{ value: string | number; text: string }>>(() => 
         // A label that will not evaluate leaves the value readable as itself
       }
     }
-    return { value, text }
+    /* A model names its options by key, so they follow the language. */
+    return { value, text: isTranslationKey(text) ? t(text) : text }
   })
 })
 
@@ -404,7 +408,7 @@ const noVariables = computed(() => bindingMode.value && variableNames.value.leng
         :label="label"
         :options="variableNames"
         :disabled="custom?.resolvedStyle?.readOnly"
-        placeholder="Keine Variable"
+        :placeholder="t('Field.noVariable')"
         clearable
       />
 
@@ -413,7 +417,7 @@ const noVariables = computed(() => bindingMode.value && variableNames.value.leng
         :model-value="''"
         :label="label"
         disabled
-        hint="Es sind noch keine Variablen angelegt."
+        :hint="t('Field.noVariables')"
       />
 
       <!-- Several values: every choice is shown, ticked or not. A list
@@ -500,7 +504,7 @@ const noVariables = computed(() => bindingMode.value && variableNames.value.leng
       v-if="bindable"
       type="button"
       :class="['bind', { on: isBound, armed: bindingMode && !isBound }]"
-      :title="isBound ? `Bindung an „${boundName}“ lösen` : 'An eine Variable binden'"
+      :title="isBound ? t('Field.unbind', { name: boundName }) : t('Field.bind')"
       :aria-pressed="isBound"
       @click="toggleBinding"
     >

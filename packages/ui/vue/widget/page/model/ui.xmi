@@ -29,8 +29,8 @@ offered anywhere; it is offered here.
 
   <components xsi:type="uimodel:FormView" name="PageWidgetSettingsFormView">
     <fields xsi:type="uimodel:CheckboxWidget" name="hideTitle"
-        feature="http://org.eclipse.daanse.board.app.ui.vue.widget.page#//PageWidgetSettings/hideTitle" label="Titel der Seite verbergen"/>
+        feature="http://org.eclipse.daanse.board.app.ui.vue.widget.page#//PageWidgetSettings/hideTitle" label="page:Form.hideTitle"/>
     <fields xsi:type="uimodel:InputWidget" name="backgroundColor"
-        feature="http://org.eclipse.daanse.board.app.ui.vue.widget.page#//PageWidgetSettings/backgroundColor" label="Hintergrundfarbe"/>
+        feature="http://org.eclipse.daanse.board.app.ui.vue.widget.page#//PageWidgetSettings/backgroundColor" label="page:Form.backgroundColor"/>
   </components>
 </uimodel:UIModel>

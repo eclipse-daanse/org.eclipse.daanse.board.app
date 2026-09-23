@@ -13,8 +13,7 @@ Contributors:
 
 <script lang="ts" setup>
 import { inject, ref } from 'vue'
-import type { i18n } from "org.eclipse.daanse.board.app.lib.i18next"
-import { useVariableRepository, VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+import { useTranslation, useVariableRepository, VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import { identifier, VariableRepository } from 'org.eclipse.daanse.board.app.lib.api.variable'
 import { TextSettings } from './gen/TextSettings'
 import { VariableInput, ComplexTextInput } from 'org.eclipse.daanse.board.app.ui.vue.variable.components'
@@ -31,13 +30,12 @@ const previews = ref({
 const widgetSettings = defineModel<TextSettings>({ required: true })
 const variableRepository = inject<VariableRepository>(identifier)!
 
-const i18n: i18n | undefined = inject('i18n');
-const t = (key: string) => (i18n) ? i18n.t(key) : key;
+const { t } = useTranslation('textPlain')
 
 </script>
 
 <template>
-  <section class="settings-section" data-section="Text und Formatierung">
+  <section class="settings-section" data-section-id="text" :data-section="t('Settings.section')">
     <div class="settings-container">
       <div class="settings-block">
         <ComplexTextInput v-model="widgetSettings.text!">
@@ -45,8 +43,8 @@ const t = (key: string) => (i18n) ? i18n.t(key) : key;
             <DInput
               :modelValue="value"
               @input="change"
-              :label="t('textBase:TextWidget.label')"
-              placeholder="Enter text with variables..."
+              :label="t('Settings.text')"
+              :placeholder="t('Settings.textPlaceholder')"
               class="w-full"
             />
           </template>
@@ -63,21 +61,21 @@ const t = (key: string) => (i18n) ? i18n.t(key) : key;
           <DButton class="toolbar-btn" size="sm" intent="quiet"
             :class="{ 'is-active': widgetSettings.fontWeight!.value === 'bold' }"
             @click="widgetSettings.fontWeight!.value = widgetSettings.fontWeight!.value === 'bold' ? 'normal' : 'bold'"
-            title="Bold"
+            :title="t('Settings.bold')"
           >
             <DIcon name="format_bold" size="sm" />
           </DButton>
           <DButton class="toolbar-btn" size="sm" intent="quiet"
             :class="{ 'is-active': widgetSettings.fontStyle!.value === 'italic' }"
             @click="widgetSettings.fontStyle!.value = widgetSettings.fontStyle!.value === 'italic' ? 'normal' : 'italic'"
-            title="Italic"
+            :title="t('Settings.italic')"
           >
             <DIcon name="format_italic" size="sm" />
           </DButton>
           <DButton class="toolbar-btn" size="sm" intent="quiet"
             :class="{ 'is-active': widgetSettings.textDecoration!.value === 'underline' }"
             @click="widgetSettings.textDecoration!.value = widgetSettings.textDecoration!.value === 'underline' ? 'None' : 'underline'"
-            title="Underline"
+            :title="t('Settings.underline')"
           >
             <DIcon name="format_underlined" size="sm" />
           </DButton>
@@ -87,21 +85,21 @@ const t = (key: string) => (i18n) ? i18n.t(key) : key;
           <DButton class="toolbar-btn" size="sm" intent="quiet"
             :class="{ 'is-active': widgetSettings.horizontalAlign!.value === 'Left' }"
             @click="widgetSettings.horizontalAlign!.value = 'Left'"
-            title="Left"
+            :title="t('Settings.left')"
           >
             <DIcon name="format_align_left" size="sm" />
           </DButton>
           <DButton class="toolbar-btn" size="sm" intent="quiet"
             :class="{ 'is-active': widgetSettings.horizontalAlign!.value === 'Center' }"
             @click="widgetSettings.horizontalAlign!.value = 'Center'"
-            title="Center"
+            :title="t('Settings.center')"
           >
             <DIcon name="format_align_center" size="sm" />
           </DButton>
           <DButton class="toolbar-btn" size="sm" intent="quiet"
             :class="{ 'is-active': widgetSettings.horizontalAlign!.value === 'Right' }"
             @click="widgetSettings.horizontalAlign!.value = 'Right'"
-            title="Right"
+            :title="t('Settings.right')"
           >
             <DIcon name="format_align_right" size="sm" />
           </DButton>
@@ -111,21 +109,21 @@ const t = (key: string) => (i18n) ? i18n.t(key) : key;
           <DButton class="toolbar-btn" size="sm" intent="quiet"
             :class="{ 'is-active': widgetSettings.verticalAlign!.value === 'Top' }"
             @click="widgetSettings.verticalAlign!.value = 'Top'"
-            title="Top"
+            :title="t('Settings.top')"
           >
             <DIcon name="vertical_align_top" size="sm" />
           </DButton>
           <DButton class="toolbar-btn" size="sm" intent="quiet"
             :class="{ 'is-active': widgetSettings.verticalAlign!.value === 'Center' }"
             @click="widgetSettings.verticalAlign!.value = 'Center'"
-            title="Center"
+            :title="t('Settings.center')"
           >
             <DIcon name="vertical_align_center" size="sm" />
           </DButton>
           <DButton class="toolbar-btn" size="sm" intent="quiet"
             :class="{ 'is-active': widgetSettings.verticalAlign!.value === 'Bottom' }"
             @click="widgetSettings.verticalAlign!.value = 'Bottom'"
-            title="Bottom"
+            :title="t('Settings.bottom')"
           >
             <DIcon name="vertical_align_bottom" size="sm" />
           </DButton>

@@ -21,7 +21,6 @@ Contributors:
  * not a value to type.
  */
 import { inject, ref, watch } from 'vue'
-import type { i18n } from 'org.eclipse.daanse.board.app.lib.i18next'
 import type { ProgressSettings } from './gen/ProgressSettings'
 import {
   DButton,
@@ -29,9 +28,9 @@ import {
   DIcon,
   DInput,
 } from 'org.eclipse.daanse.board.app.ui.vue.controls'
+import { useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 
-const i18n: i18n | undefined = inject('i18n')
-const t = (key: string) => (i18n ? i18n.t(key) : key)
+const { t } = useTranslation('progress')
 
 interface GradientPart {
   color: string;
@@ -108,15 +107,15 @@ const deleteField = (id: number) => {
     Nothing is shown until the gradient is switched on, which is done in
     the form: there is no such thing as a stop without one.
   -->
-  <section class="settings-section" data-section="Farbstopps">
+  <section class="settings-section" data-section-id="stops" :data-section="t('Settings.stops')">
     <div class="settings-container">
       <p v-if="!widgetSettings.isGradient" class="hint">
-        Der Farbverlauf ist ausgeschaltet. Er lässt sich unter „Darstellung“ einschalten.
+        {{ t('Settings.gradientOff') }}
       </p>
 
       <template v-else>
         <DButton class="add-btn" @click="addItem">
-          {{ t("progress:ProgressWidget.addButton") }}
+          {{ t('Settings.add') }}
         </DButton>
 
         <!--
@@ -130,7 +129,7 @@ const deleteField = (id: number) => {
             <DInput v-model="stop.location" type="number" suffix="%" class="stop__at" />
             <DButton
               intent="quiet"
-              :title="t('progress:ProgressWidget.removeButton')"
+              :title="t('Settings.remove')"
               @click="deleteField(index)"
             >
               <DIcon name="delete" size="sm" />

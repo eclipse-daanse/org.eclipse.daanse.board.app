@@ -40,3 +40,6 @@ export { loadUIModel } from './loadUIModel'
  */
 export { useLabelTranslator, retranslate } from './loadUIModel'
 export { hasLabelKeys } from './translateLabels'
+
+/* Its texts - collected by lib.i18next, see src/i18n. */
+export { UimodelTranslations } from './i18n'
