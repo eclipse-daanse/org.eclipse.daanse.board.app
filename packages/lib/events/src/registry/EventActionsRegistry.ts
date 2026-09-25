@@ -206,6 +206,19 @@ export class EventActionsRegistry {
   }
 
   /**
+   * Nimmt die Registrierung eines Widget-Typs zurück.
+   *
+   * Gegenstück zu registerWidgetType, damit ein Widget-Modul seine
+   * Registrierung in deactivate() wieder aufheben kann.
+   *
+   * @param widgetType - Widget type identifier
+   * @returns ob der Typ registriert war
+   */
+  unregisterWidgetType(widgetType: string): boolean {
+    return this.widgetTypes.delete(widgetType);
+  }
+
+  /**
    * Registriert Actions aus einem Ecore-Modell
    * @param name - Action type identifier (z.B. "MapWidget", "OGCSTAToChartComposer")
    * @param ecoreUri - URI zum Ecore-Model (z.B. "model/model.ecore")
@@ -517,4 +530,12 @@ export class EventActionsRegistry {
 }
 
 // Symbol für Dependency Injection
-export const EVENT_ACTIONS_REGISTRY = Symbol.for('EventActionsRegistry');
+/**
+ * Dienst-ID im Namensraum der ServiceRegistry.
+ *
+ * `EVENT_ACTIONS_REGISTRY` ist das dazu passende Symbol für den
+ * Inversify-Container; beide bezeichnen denselben Dienst.
+ */
+export const EVENT_ACTIONS_REGISTRY_ID = 'EventActionsRegistry';
+
+export const EVENT_ACTIONS_REGISTRY = Symbol.for(EVENT_ACTIONS_REGISTRY_ID);

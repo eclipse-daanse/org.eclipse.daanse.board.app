@@ -11,23 +11,22 @@
  *   Smart City Jena
  **********************************************************************/
 
-import { type WidgetRepository, identifier } from 'org.eclipse.daanse.board.app.lib.repository.widget'
+import { type WidgetRepository, WIDGET_REPOSITORY } from 'org.eclipse.daanse.board.app.lib.repository.widget'
 import Icon from './assets/text.svg'
 import MarkdownWidget from './MarkdownWidget.vue'
 import MarkdownWidgetSettings from './MarkdownWidgetSettings.vue'
-import { container } from 'org.eclipse.daanse.board.app.lib.core'
+import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
 
 interface IMarkdownWidgetSettings {
   value: string;
 }
 
-import { EventRegistry, EVENT_REGISTRY, EventActionsRegistry, EVENT_ACTIONS_REGISTRY } from 'org.eclipse.daanse.board.app.lib.events'
+import { EventRegistry, EVENT_REGISTRY_ID, EventActionsRegistry, EVENT_ACTIONS_REGISTRY_ID } from 'org.eclipse.daanse.board.app.lib.events'
 import { MarkdownWidgetEvents } from './events/MarkdownWidgetEvents'
 import { MarkdownWidgetInterface } from './api/MarkdownWidgetInterface'
 
-const register = () => {
-  console.log('registering Markdown widget', container)
-  container.get<WidgetRepository>(identifier).registerWidget('MarkdownWidget', {
+export function activate({ services }: ActivationContext) {
+  services.getRequired<WidgetRepository>(WIDGET_REPOSITORY).registerWidget('MarkdownWidget', {
     component: MarkdownWidget,
     settingsComponent: MarkdownWidgetSettings,
     supportedDSTypes: [],
@@ -35,14 +34,18 @@ const register = () => {
     name: 'Markdown'
   })
 
-  const eventRegistry = container.get<EventRegistry>(EVENT_REGISTRY)
+  const eventRegistry = services.getRequired<EventRegistry>(EVENT_REGISTRY_ID)
   eventRegistry.registerWidget('MarkdownWidget', MarkdownWidgetEvents)
 
-  const actionsRegistry = container.get<EventActionsRegistry>(EVENT_ACTIONS_REGISTRY)
+  const actionsRegistry = services.getRequired<EventActionsRegistry>(EVENT_ACTIONS_REGISTRY_ID)
   actionsRegistry.registerWidgetType('MarkdownWidget', MarkdownWidgetInterface, 'widget')
 }
 
-register();
+export function deactivate({ services }: ActivationContext) {
+  services.getRequired<WidgetRepository>(WIDGET_REPOSITORY).unregisterWidget('MarkdownWidget')
+  services.getRequired<EventRegistry>(EVENT_REGISTRY_ID).unregisterWidget('MarkdownWidget')
+  services.getRequired<EventActionsRegistry>(EVENT_ACTIONS_REGISTRY_ID).unregisterWidgetType('MarkdownWidget')
+}
 
 export { MarkdownWidget, MarkdownWidgetSettings }
 export type { IMarkdownWidgetSettings }

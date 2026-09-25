@@ -34,16 +34,37 @@ beides liefert innerhalb weniger Tage die Grundlage, um den Rest verbindlich zu 
 Diese drei Punkte kann ich nicht aus dem Code ableiten; sie sind Projektentscheidungen.
 Ich gebe jeweils eine Empfehlung.
 
-### E1 — Ersetzt die tsm-`ServiceRegistry` Inversify, oder liegt sie darüber?
+### E1 — Ersetzt die tsm-`ServiceRegistry` Inversify, oder liegt sie darüber?  ✔ entschieden
 
-71 Pakete greifen heute direkt auf den globalen Inversify-`Container` zu. Ein Austausch
-würde alle 71 gleichzeitig treffen.
+**Entschieden: tsm ersetzt Inversify.** `DefaultServiceRegistry` aus
+`@eclipse-daanse/tsm` ist die Registry; Inversify bleibt nur als absterbender
+Rückfallweg, bis das letzte Paket umgestellt ist.
 
-**Empfehlung: Adapter, kein Ersatz.** Der Inversify-Container bleibt die
-Auflösungsmaschine; eine dünne `ServiceRegistry`-Implementierung delegiert
-`register`/`bind`/`get` an ihn. Damit funktionieren alte und neue Pakete zur gleichen
-Zeit, und die Migration kann paketweise laufen. tsm gibt die Registry als Interface
-vor (`src/types.ts`), nicht als Implementierung — der Adapter ist also vorgesehen.
+*Die ursprüngliche Empfehlung lautete umgekehrt — ein Adapter mit
+tsm-Schnittstelle über Inversify — und wurde verworfen. Sie stützte sich darauf,
+dass „ein Austausch alle Pakete gleichzeitig treffen" würde. Das Argument ist
+zirkulär: Die Pakete werden bei der `activate`-Migration ohnehin alle angefasst,
+und dabei ist gleichgültig, was hinter `ctx.services` steht. Ein Adapter hätte
+die eigentliche Arbeit — die Umstellung der Decorators — nur verschoben und
+danach selbst zurückgebaut werden müssen.*
+
+Der Abgleich mit dem, was die Anwendung an Inversify tatsächlich nutzt, stützt
+den Wechsel:
+
+| Inversify | Verwendungen | tsm |
+|---|---:|---|
+| `toConstantValue` | 53 | `register(id, service)` |
+| `toSelf` + Scope | 31 | `bindClass(id, ctor, { scope })` |
+| `toFactory` | 29 | `register(id, fn)` — einfacher, da der Umweg über eine Factory-Bindung entfällt |
+| `toDynamicValue` | 8 | `bind(id, factory, { scope })` |
+| `@injectable` / `@inject` | 27 / 57 | eigene Decorators — mechanische Umstellung |
+| `multiInject` | 2 | `getAll(idPattern)` mit Wildcard |
+| `tagged` / `named` | 2 / 3 | kein Äquivalent — betrifft nur den ungenutzten, auskommentierten `RootService` |
+
+`DefaultServiceRegistry` ist getestet (`ServiceRegistry.test.ts`,
+`decorators.test.ts`, `integration.test.ts`) und deckt den benötigten
+Funktionsumfang ab. Was für die **Migration** dorthin fehlt, ist als
+[Feature Request](./tsm-feature-requests.md) an tsm gemeldet statt lokal umgangen.
 
 ### E2 — Wie weit soll tsm gehen: Lifecycle oder echtes Laufzeitladen?
 
@@ -151,13 +172,27 @@ Zugriff bevorzugen und sonst auf `eGet` zurückfallen. Reflektives Lesen eines
 Metamodells ist idiomatisches EMF, und der Code bleibt unverändert gültig,
 sobald die Runtime auch diese Elemente typisiert liefert.
 
-**Offene Punkte für einen Beitrag an `@emfts/core`:**
+**Offene Punkte für einen Beitrag an `@emfts/core`** — ausgearbeitet mit
+Minimalbeispielen in [`emfts-feature-requests.md`](./emfts-feature-requests.md):
 
 1. `EOperation`, `EParameter` und Detail-Einträge beim XMI-Laden typisiert
    materialisieren — die `Basic*`-Klassen existieren bereits, der Loader nutzt
    sie an dieser Stelle nur nicht.
 2. `registerPackage()` auch auf der Instanz-Registry anbieten; heute existiert
    sie nur auf der über `createPackageRegistry()` erzeugten Variante.
+3. **EMF-Generics** (`eGenericType`, `eTypeArguments`) werden vom XMI-Loader
+   nicht verstanden. Beim Start der Anwendung meldet die Konsole dutzendfach
+   `Unknown feature 'eGenericType' for type 'EReference'`. Betroffen sind acht
+   Widget-Modelle (chart, progress, svg/base, svg/repeat, table/pivot,
+   text/plain, video, wrapper), die damit `VariableWrapper<T>` typisieren.
+   Noch zu klären: ob dadurch Metadaten verlorengehen oder nur die Typparameter
+   ignoriert werden.
+
+**Damit zusammenhängend, aber eigenständig:** Die betroffenen `eGenericType`
+verweisen auf `org.eclipse.daanse.board.app.ui.vue.composables#//VariableWrapper`.
+Für `ui.vue.composables` existiert jedoch gar kein Ecore-Modell — die Referenz
+war also schon vor allen Umbauten unauflösbar. Seit A4 liegt `VariableWrapper`
+zudem in `lib.variables`. Beim Aufräumen ist beides zusammen zu korrigieren.
 
 **Nebenbefund (Lizenz, unabhängig von der Portierung):** `packages/lib/ecore`
 trägt in den Dateiköpfen **MPL-2.0 (MASA Group)**, nicht EPL-2.0 wie der Rest
@@ -252,10 +287,18 @@ allein gereicht hätte: `VariableWrapper` ist **Vue-frei** und hängt nur an
   `registerWrapperType(WrapperTypeI)` entgegen. Die App registriert den
   Vue-gebundenen Wrapper in `main.ts`.
 
-**Verifiziert:** Vollbuild 133/133; App startet im Dev-Server, rendert und meldet
-keinen JS-Fehler — `main.ts` läuft also bis zum abschließenden `app.mount()`
-durch. Das Bundle schrumpft um 383 kB, weil `lib` nicht mehr das Vue-Paket
-mitzieht.
+**Verifiziert:** Vollbuild 133/133. Das Bundle schrumpft um 383 kB, weil `lib`
+nicht mehr das Vue-Paket mitzieht.
+
+> **Korrektur (bei B3 aufgefallen).** Die ursprünglich hier angeführte
+> Laufzeitprüfung war wertlos: Der Dev-Server wurde auf Port 5199 gestartet, den
+> zu diesem Zeitpunkt bereits `EMFTs/uimodel-composer/editor` belegte. Geprüft
+> wurde also eine fremde Anwendung — erkennbar erst am Seitentitel
+> („UIModel & Style Editor" statt „Daanse Floor"). Die Aussage selbst ist
+> inzwischen belegt: Bei der B3-Verifikation lief die Board-App mit allen
+> A4-Änderungen auf einem freien Port, mountete und registrierte ihre 24
+> Widgets. Lehre für weitere Prüfungen: Port mit `--strictPort` erzwingen und
+> die Identität der Seite bestätigen, bevor aus ihr etwas geschlossen wird.
 
 **Nebenbefund mit Folgen für B2 — der globale Container ist nicht global.**
 Beim Versuch, die umgebaute Factory mit einem Unit-Test abzusichern, zeigte
@@ -326,8 +369,29 @@ export function deactivate(ctx: ModuleContext): void | Promise<void>
   Phase 2 der von tsm gestellte ist. `ServiceI` deckt die Semantik bereits ab und
   sollte darauf abgebildet, nicht ersetzt werden.
 
-**Akzeptanzkriterium:** eine Tabelle aller 71 Pakete mit Familie, Registrierungsmuster
-und geschätztem Migrationsaufwand; ein schriftlich fixierter `activate`-Vertrag.
+**Status: erledigt.** Ergebnis in [`tsm-modulvertrag.md`](./tsm-modulvertrag.md).
+
+Es sind **113 Pakete**, nicht 71 — die frühere Zahl erfasste nur
+`container.bind`/`isBound`, nicht die Pakete, die ausschließlich `container.get`
+aufrufen. Eingeteilt nach dem Ort des Zugriffs, weil daraus der Aufwand folgt:
+
+| Klasse | n | Bedeutung | Aufwand |
+|---|---:|---|---|
+| A — nur `bind` | 17 | idempotent, keine Auflösung beim Import | trivial |
+| B — `get` in einer Funktion | 62 | faktisch schon ein `activate`, nur selbst aufgerufen | klein |
+| C — `get` auf Modulebene | 34 | erzwingt die Ladereihenfolge, Ursache der Race Condition | mittel |
+
+**Der wichtigste Befund: 62 von 113 sind bereits gekapselt.** Für die Mehrheit ist
+die Migration eine Umbenennung, kein Umbau. Die 34 kritischen Fälle sind auf vier
+Familien konzentriert (`ui/vue/lang`, `ui/vue/datasource`, `ui/vue/composer`,
+`ui/vue/connection`) und als gleichförmige Blöcke abzuarbeiten.
+
+**Zweiter Befund, mit Folgen für B3:** Den Registries fehlt überwiegend die
+Gegenoperation. `NavigationRegistry`, `RouteRegistry` und i18next können
+zurücknehmen; `DatasourceRepository` und `ConnectionRepository` nur Instanzen,
+nicht die registrierten Typen; **`WidgetRepository` kann gar nichts zurücknehmen**.
+Vor dem Piloten ist deshalb ein `unregisterWidget` zu ergänzen — sonst wäre
+`deactivate` eine Attrappe und der Pilot ohne Aussagekraft.
 
 ### B2 — ServiceRegistry-Adapter über Inversify (Entscheidung E1)
 
@@ -358,9 +422,23 @@ Parallel entsteht in `app/default` ein schlanker Bootstrapper, der die Liste in
 definierter Reihenfolge aktiviert und **auf `await` besteht** — das beseitigt die
 Race Condition aus `main.ts:68`.
 
-**Akzeptanzkriterium:** kein `import '…widget…'` mehr in `main.ts`; die App startet
-mit identischem Widget-Angebot; ein Widget lässt sich zur Laufzeit deaktivieren und
-verschwindet aus der Palette.
+**Status: erledigt** (Commits `66c301f4`, `8e42e99d`). Alle drei
+Akzeptanzkriterien erfüllt: `main.ts` enthält keinen Widget-Import mehr, die App
+startet mit denselben 24 Widgets wie zuvor, und die Rücknahme ist wirksam.
+
+22 Pakete wurden skriptgestützt umgestellt, `page` manuell — dort war der
+Selbstaufruf eingerückt, weshalb das Skript es übersprungen statt geraten hat.
+`wrapper` und `layout/grid` blieben unberührt, da sie nichts registrieren.
+
+Was das Skript nicht erfassen konnte und im Build auffiel: eine Debug-Zeile mit
+`container.isBound` in `map`, 17 tote `console.log(…, container)`, ein
+mehrzeiliger Import in `routing`, sowie ein fehlender Re-Export von
+`EVENT_ACTIONS_REGISTRY_ID`. Letzterer blieb in den Tests unsichtbar, weil die
+seit B3 gegen die Quellen laufen — nur der Build nutzt `dist`. Beide Prüfwege
+haben also eigenen Wert.
+
+Nebenbei ergänzt: 20 Widget-Pakete deklarieren `lib.core` jetzt als
+Abhängigkeit; sie importierten es zuvor, ohne es zu deklarieren.
 
 ### B4 — Restliche Familien nachziehen
 
