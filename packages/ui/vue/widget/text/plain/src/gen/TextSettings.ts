@@ -27,7 +27,7 @@ import {VariableComplexStringWrapper} from 'org.eclipse.daanse.board.app.ui.vue.
 import {VariableWrapper} from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import {Documentation, Attribute, ModelClass, Reference, Enum} from 'org.eclipse.daanse.board.app.lib.annotations'
 
-@ModelClass({type:'http://www.example.org/textsettings#//TextSettings'})
+@ModelClass({type:'http://org.eclipse.daanse.board.app.ui.vue.widget.text.plain#//TextSettings'})
 export class TextSettings {
   @Reference('VariableComplexStringWrapper') text: VariableComplexStringWrapper<string> = new VariableComplexStringWrapper<string>();
   @Reference('VariableWrapper') fontSize: VariableWrapper<string> = new VariableWrapper<string>();

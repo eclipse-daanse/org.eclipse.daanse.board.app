@@ -25,7 +25,7 @@ Contributors: Smart City Jena
 */
 import {Documentation, Attribute, ModelClass, Reference, Enum} from 'org.eclipse.daanse.board.app.lib.annotations'
 
-@ModelClass({type:'http://example.com/imagesettings#//GallerySettings'})
+@ModelClass({type:'http://org.eclipse.daanse.board.app.ui.vue.widget.image#//GallerySettings'})
 export class GallerySettings {
 
   @Attribute() fit?: string;

@@ -27,7 +27,7 @@ import {WidgetActionInterface} from 'org.eclipse.daanse.board.app.lib.events'
 import {WidgetAction} from 'org.eclipse.daanse.board.app.lib.events'
 import {Documentation, Attribute, ModelClass, Reference, Enum} from 'org.eclipse.daanse.board.app.lib.annotations'
 
-@ModelClass({type:'http://www.example.org/PivotTable#//PivotTableInterface'})
+@ModelClass({type:'http://org.eclipse.daanse.board.app.ui.vue.widget.table.pivot#//PivotTableInterface'})
 export abstract class PivotTableInterface extends WidgetActionInterface {
 
   @WidgetAction({eventType: 'pivotTable.expandRow'})

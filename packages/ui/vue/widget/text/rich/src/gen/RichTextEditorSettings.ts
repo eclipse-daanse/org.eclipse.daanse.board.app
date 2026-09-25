@@ -26,7 +26,7 @@ Contributors: Smart City Jena
 import {Documentation, Attribute, ModelClass, Reference, Enum} from 'org.eclipse.daanse.board.app.lib.annotations'
 import { VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 
-@ModelClass({type:'http://www.example.org/richTextEditor#//RichTextEditorSettings'})
+@ModelClass({type:'http://org.eclipse.daanse.board.app.ui.vue.widget.text.rich#//RichTextEditorSettings'})
 export class RichTextEditorSettings {
 
   @Documentation("An identifier or type string indicating which rich text editor should be used (e.g., 'TinyMCE', 'Quill', 'ProseMirror' etc.).")

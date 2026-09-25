@@ -13,10 +13,10 @@
 <ecore:EPackage xmi:version="2.0"
                 xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                 xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="restconnection"
-                nsURI="http://example.com/restconnection" nsPrefix="restconn">
+                nsURI="http://org.eclipse.daanse.board.app.lib.connection.rest" nsPrefix="restconn">
 
     <eClassifiers xsi:type="ecore:EClass" name="IRestConnectionConfig">
-        <eSuperTypes href="http://example.com/baseconnection#//BaseConnectionConfig"/>
+        <eSuperTypes href="http://org.eclipse.daanse.board.app.lib.connection.base#//BaseConnectionConfig"/>
 
         <eStructuralFeatures xsi:type="ecore:EAttribute" name="url"
                              eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
@@ -29,6 +29,6 @@
 
     </eClassifiers>
 
-    <eSubpackages href="http://example.com/baseconnection#/"/>
+    <eSubpackages href="http://org.eclipse.daanse.board.app.lib.connection.base#/"/>
 
 </ecore:EPackage>

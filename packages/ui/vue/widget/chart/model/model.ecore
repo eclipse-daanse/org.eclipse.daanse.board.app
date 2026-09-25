@@ -15,7 +15,7 @@
                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                 xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
                 name="chartsettings"
-                nsURI="http://www.example.org/chartsettings"
+                nsURI="http://org.eclipse.daanse.board.app.ui.vue.widget.chart"
                 nsPrefix="chartsettings">
 
     <!-- Series Settings for per-dataset configuration -->

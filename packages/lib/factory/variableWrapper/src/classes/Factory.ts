@@ -8,19 +8,43 @@
   Contributors: Smart City Jena
 
 */
-import { injectable, inject, Container } from 'inversify'
-import { identifiers } from 'org.eclipse.daanse.board.app.lib.core'
-import { VariableWrapper, VARIABLEWRAPPER, VariableComplexStringWrapper, VARIABLECOMPLEXSTRINGWRAPPER } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+import { injectable, inject } from 'inversify'
+import { VariableWrapper, VARIABLEWRAPPER } from 'org.eclipse.daanse.board.app.lib.variables'
 import {identifier as IDVariableRepo,VariableRepository} from 'org.eclipse.daanse.board.app.lib.repository.variable'
 type SearchResult = {
   path: string;
   value: any;
 };
 
+/**
+ * Beschreibt einen zusaetzlichen Wrapper-Typ, den die Factory beim Laden
+ * eines Boards wiederherstellen kann.
+ *
+ * Ueber diese Registrierung bleiben Wrapper, die an ein UI-Framework
+ * gebunden sind, ausserhalb von lib - die Factory kennt nur den Vertrag.
+ */
+export interface WrapperTypeI {
+  /** Wert des 'type'-Feldes im serialisierten JSON */
+  readonly type: string;
+  /** Erzeugt die Laufzeitinstanz aus dem serialisierten Wert */
+  create(value: any): any;
+}
+
 @injectable()
 export class VariableWrapperFactory {
+  private readonly wrapperTypes = new Map<string, WrapperTypeI>()
+
   constructor(@inject(IDVariableRepo) private variables: VariableRepository) {
   }
+
+  /**
+   * Registriert einen zusaetzlichen Wrapper-Typ. Eine erneute Registrierung
+   * desselben Typs ersetzt die vorherige.
+   */
+  registerWrapperType(wrapperType: WrapperTypeI): void {
+    this.wrapperTypes.set(wrapperType.type, wrapperType)
+  }
+
   initilazeVariableWrappers(json:any) {
     const results = this.findPropertyWithValue(json,'type',VARIABLEWRAPPER)
     if (results) {
@@ -40,16 +64,17 @@ export class VariableWrapperFactory {
       }
     }
 
-    const complexResults = this.findPropertyWithValue(json, 'type', VARIABLECOMPLEXSTRINGWRAPPER)
-    if (complexResults) {
-      for (const result of complexResults) {
+    for (const wrapperType of this.wrapperTypes.values()) {
+      const typeResults = this.findPropertyWithValue(json, 'type', wrapperType.type)
+      if (!typeResults) continue
+
+      for (const result of typeResults) {
         const short = result.path.split('.');
         short.pop();
         const upperPath = short.join('.');
         const originalValue = this.getValueAtPath(json, short.join('.'))
         if (originalValue._value !== undefined && originalValue._value !== null) {
-          const var1 = new VariableComplexStringWrapper<string>(originalValue._value);
-          this.setValueAtPath(json, upperPath, var1)
+          this.setValueAtPath(json, upperPath, wrapperType.create(originalValue._value))
         }
       }
     }

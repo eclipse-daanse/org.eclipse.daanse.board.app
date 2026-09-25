@@ -9,7 +9,7 @@ Contributors: Smart City Jena
 */
 
 import { container } from 'org.eclipse.daanse.board.app.lib.core'
-import { VariableWrapperFactory } from './classes/Factory'
+import { VariableWrapperFactory, type WrapperTypeI } from './classes/Factory'
 
 const identifier = Symbol.for('VariableWrapperFactory')
 
@@ -22,5 +22,6 @@ if (!container.isBound(identifier)) {
 
 export {
   identifier,
-  type VariableWrapperFactory
+  type VariableWrapperFactory,
+  type WrapperTypeI
 }
