@@ -13,9 +13,9 @@
 
 import VideoWidget from './VideoWidget.vue'
 import VideoWidgetSettings from './VideoWidgetSettings.vue'
-import { type WidgetRepository, identifier } from 'org.eclipse.daanse.board.app.lib.repository.widget'
+import { type WidgetRepository, WIDGET_REPOSITORY } from 'org.eclipse.daanse.board.app.lib.repository.widget'
 import Icon from './assets/video.svg'
-import { container } from 'org.eclipse.daanse.board.app.lib.core'
+import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
 
 interface ObjectFitSetting {
   fit: string
@@ -26,13 +26,12 @@ interface IVideoSettings {
   videoUrl: string
 }
 
-import { EventRegistry, EVENT_REGISTRY, EventActionsRegistry, EVENT_ACTIONS_REGISTRY } from 'org.eclipse.daanse.board.app.lib.events'
+import { EventRegistry, EVENT_REGISTRY_ID, EventActionsRegistry, EVENT_ACTIONS_REGISTRY_ID } from 'org.eclipse.daanse.board.app.lib.events'
 import { VideoWidgetEvents } from './events/VideoWidgetEvents'
 import { VideoWidgetInterface } from './api/VideoWidgetInterface'
 
-const register = () => {
-  console.log('registering Video widget', container)
-  container.get<WidgetRepository>(identifier).registerWidget('VideoWidget', {
+export function activate({ services }: ActivationContext) {
+  services.getRequired<WidgetRepository>(WIDGET_REPOSITORY).registerWidget('VideoWidget', {
     component: VideoWidget,
     settingsComponent: VideoWidgetSettings,
     supportedDSTypes: [],
@@ -40,14 +39,18 @@ const register = () => {
     name: 'Video'
   })
 
-  const eventRegistry = container.get<EventRegistry>(EVENT_REGISTRY)
+  const eventRegistry = services.getRequired<EventRegistry>(EVENT_REGISTRY_ID)
   eventRegistry.registerWidget('VideoWidget', VideoWidgetEvents)
 
-  const actionsRegistry = container.get<EventActionsRegistry>(EVENT_ACTIONS_REGISTRY)
+  const actionsRegistry = services.getRequired<EventActionsRegistry>(EVENT_ACTIONS_REGISTRY_ID)
   actionsRegistry.registerWidgetType('VideoWidget', VideoWidgetInterface, 'widget')
 }
 
-register();
+export function deactivate({ services }: ActivationContext) {
+  services.getRequired<WidgetRepository>(WIDGET_REPOSITORY).unregisterWidget('VideoWidget')
+  services.getRequired<EventRegistry>(EVENT_REGISTRY_ID).unregisterWidget('VideoWidget')
+  services.getRequired<EventActionsRegistry>(EVENT_ACTIONS_REGISTRY_ID).unregisterWidgetType('VideoWidget')
+}
 
 export { VideoWidget, VideoWidgetSettings }
 export type { IVideoSettings }

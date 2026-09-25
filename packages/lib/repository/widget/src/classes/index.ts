@@ -27,6 +27,20 @@ export class WidgetRepository {
     this.availableWidgets[typename] = config
   }
 
+  /**
+   * Nimmt eine Registrierung zurück. Gibt zurück, ob der Typ registriert war.
+   *
+   * Gegenstück zu registerWidget, damit ein Widget-Modul seine Registrierung
+   * in deactivate() wieder aufheben kann.
+   */
+  unregisterWidget(typename: string): boolean {
+    if (!(typename in this.availableWidgets)) {
+      return false
+    }
+    delete this.availableWidgets[typename]
+    return true
+  }
+
   getWidget(typename: string): WidgetConfig {
     return this.availableWidgets[typename]
   }

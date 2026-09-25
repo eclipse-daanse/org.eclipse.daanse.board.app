@@ -11,19 +11,18 @@
  *   Smart City Jena
  **********************************************************************/
 
-import { type WidgetRepository, identifier } from 'org.eclipse.daanse.board.app.lib.repository.widget'
+import { type WidgetRepository, WIDGET_REPOSITORY } from 'org.eclipse.daanse.board.app.lib.repository.widget'
 import Icon from './assets/data_table.svg'
 import DataTableWidget from './DataTableWidget.vue'
 import DataTableWidgetSettings from './DataTableWidgetSettings.vue'
-import { container } from 'org.eclipse.daanse.board.app.lib.core'
+import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
 
-import { EventRegistry, EVENT_REGISTRY, EventActionsRegistry, EVENT_ACTIONS_REGISTRY } from 'org.eclipse.daanse.board.app.lib.events'
+import { EventRegistry, EVENT_REGISTRY_ID, EventActionsRegistry, EVENT_ACTIONS_REGISTRY_ID } from 'org.eclipse.daanse.board.app.lib.events'
 import { DataTableWidgetEvents } from './events/DataTableWidgetEvents'
 import { DataTableWidgetInterface } from './api/DataTableWidgetInterface'
 
-const register = () => {
-  console.log('registering DataTable widget', container)
-  container.get<WidgetRepository>(identifier).registerWidget('DataTableWidget', {
+export function activate({ services }: ActivationContext) {
+  services.getRequired<WidgetRepository>(WIDGET_REPOSITORY).registerWidget('DataTableWidget', {
     component: DataTableWidget,
     settingsComponent: DataTableWidgetSettings,
     supportedDSTypes: ['csv', 'rest'],
@@ -31,13 +30,17 @@ const register = () => {
     name: 'DataTable'
   })
 
-  const eventRegistry = container.get<EventRegistry>(EVENT_REGISTRY)
+  const eventRegistry = services.getRequired<EventRegistry>(EVENT_REGISTRY_ID)
   eventRegistry.registerWidget('DataTableWidget', DataTableWidgetEvents)
 
-  const actionsRegistry = container.get<EventActionsRegistry>(EVENT_ACTIONS_REGISTRY)
+  const actionsRegistry = services.getRequired<EventActionsRegistry>(EVENT_ACTIONS_REGISTRY_ID)
   actionsRegistry.registerWidgetType('DataTableWidget', DataTableWidgetInterface, 'widget')
 }
 
-register();
+export function deactivate({ services }: ActivationContext) {
+  services.getRequired<WidgetRepository>(WIDGET_REPOSITORY).unregisterWidget('DataTableWidget')
+  services.getRequired<EventRegistry>(EVENT_REGISTRY_ID).unregisterWidget('DataTableWidget')
+  services.getRequired<EventActionsRegistry>(EVENT_ACTIONS_REGISTRY_ID).unregisterWidgetType('DataTableWidget')
+}
 
 export { DataTableWidget, DataTableWidgetSettings }

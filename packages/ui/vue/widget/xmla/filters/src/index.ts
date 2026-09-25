@@ -11,20 +11,19 @@
  *   Smart City Jena
  **********************************************************************/
 
-import { type WidgetRepository, identifier } from 'org.eclipse.daanse.board.app.lib.repository.widget'
+import { type WidgetRepository, WIDGET_REPOSITORY } from 'org.eclipse.daanse.board.app.lib.repository.widget'
 import Icon from './assets/sample.svg'
 import FiltersWidget from './FiltersWidget.vue';
 import FiltersWidgetSettings from './FiltersWidgetSettings.vue';
-import { container } from 'org.eclipse.daanse.board.app.lib.core'
+import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
 
 
 
-import { EventRegistry, EVENT_REGISTRY } from 'org.eclipse.daanse.board.app.lib.events'
+import { EventRegistry, EVENT_REGISTRY_ID } from 'org.eclipse.daanse.board.app.lib.events'
 import { FiltersWidgetEvents } from './events/FiltersWidgetEvents'
 
-const register = () => {
-  console.log('registering sample', container)
-  container.get<WidgetRepository>(identifier).registerWidget('FiltersWidget', {
+export function activate({ services }: ActivationContext) {
+  services.getRequired<WidgetRepository>(WIDGET_REPOSITORY).registerWidget('FiltersWidget', {
     component: FiltersWidget,
     settingsComponent: FiltersWidgetSettings,
     supportedDSTypes: ['xmla'],
@@ -32,10 +31,13 @@ const register = () => {
     name: 'XMLA Filters',
   })
 
-  const eventRegistry = container.get<EventRegistry>(EVENT_REGISTRY)
+  const eventRegistry = services.getRequired<EventRegistry>(EVENT_REGISTRY_ID)
   eventRegistry.registerWidget('FiltersWidget', FiltersWidgetEvents)
 }
 
-register();
+export function deactivate({ services }: ActivationContext) {
+  services.getRequired<WidgetRepository>(WIDGET_REPOSITORY).unregisterWidget('FiltersWidget')
+  services.getRequired<EventRegistry>(EVENT_REGISTRY_ID).unregisterWidget('FiltersWidget')
+}
 
 export { FiltersWidget, FiltersWidgetSettings }

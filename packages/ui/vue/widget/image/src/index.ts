@@ -11,12 +11,12 @@
  *   Smart City Jena
  **********************************************************************/
 
-import { type WidgetRepository, identifier } from 'org.eclipse.daanse.board.app.lib.repository.widget'
+import { type WidgetRepository, WIDGET_REPOSITORY } from 'org.eclipse.daanse.board.app.lib.repository.widget'
 import Icon from './assets/image.svg'
 import ImageWidget from './ImageWidget.vue'
 import ImageWidgetSettings from './ImageWidgetSettings.vue'
-import { container } from 'org.eclipse.daanse.board.app.lib.core'
-import { EventRegistry, EVENT_REGISTRY } from 'org.eclipse.daanse.board.app.lib.events'
+import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
+import { EventRegistry, EVENT_REGISTRY_ID } from 'org.eclipse.daanse.board.app.lib.events'
 import { ImageWidgetEvents } from './events/ImageWidgetEvents'
 
 interface IImageSettings {
@@ -34,10 +34,10 @@ interface GallerySettings {
   diashowInterval: number
 }
 
-const register = () => {
+export function activate({ services }: ActivationContext) {
   console.log('registering image widget')
-  const widgetRepository = container.get<WidgetRepository>(identifier)
-  const eventRegistry = container.get<EventRegistry>(EVENT_REGISTRY)
+  const widgetRepository = services.getRequired<WidgetRepository>(WIDGET_REPOSITORY)
+  const eventRegistry = services.getRequired<EventRegistry>(EVENT_REGISTRY_ID)
 
   widgetRepository.registerWidget('ImageWidget', {
     component: ImageWidget,
@@ -51,7 +51,10 @@ const register = () => {
   eventRegistry.registerWidget('ImageWidget', ImageWidgetEvents)
 }
 
-register();
+export function deactivate({ services }: ActivationContext) {
+  services.getRequired<WidgetRepository>(WIDGET_REPOSITORY).unregisterWidget('ImageWidget')
+  services.getRequired<EventRegistry>(EVENT_REGISTRY_ID).unregisterWidget('ImageWidget')
+}
 
 export { ImageWidget, ImageWidgetSettings }
 export type { IImageSettings }

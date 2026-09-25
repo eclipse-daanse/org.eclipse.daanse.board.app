@@ -11,31 +11,39 @@
  *   Smart City Jena
  **********************************************************************/
 
-import { type WidgetRepository, identifier } from 'org.eclipse.daanse.board.app.lib.repository.widget'
+import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
+import {
+  type WidgetRepository,
+  WIDGET_REPOSITORY,
+} from 'org.eclipse.daanse.board.app.lib.repository.widget'
+import {
+  type EventRegistry,
+  EVENT_REGISTRY_ID,
+} from 'org.eclipse.daanse.board.app.lib.events'
+
 import Icon from './assets/sample.svg'
 import SampleWidget from './SampleWidget.vue'
 import SampleWidgetSettings from './SampleWidgetSettings.vue'
-import { container } from 'org.eclipse.daanse.board.app.lib.core'
-
-
-
-import { EventRegistry, EVENT_REGISTRY } from 'org.eclipse.daanse.board.app.lib.events'
 import { SampleWidgetEvents } from './events/SampleWidgetEvents'
 
-const register = () => {
-  console.log('registering sample', container)
-  container.get<WidgetRepository>(identifier).registerWidget('SampleWidget', {
+const WIDGET_TYPE = 'SampleWidget'
+
+export function activate({ services }: ActivationContext) {
+  services.getRequired<WidgetRepository>(WIDGET_REPOSITORY).registerWidget(WIDGET_TYPE, {
     component: SampleWidget,
     settingsComponent: SampleWidgetSettings,
     supportedDSTypes: ['csv'],
     icon: Icon,
-    name: 'Sample'
+    name: 'Sample',
   })
 
-  const eventRegistry = container.get<EventRegistry>(EVENT_REGISTRY)
-  eventRegistry.registerWidget('SampleWidget', SampleWidgetEvents)
+  services.getRequired<EventRegistry>(EVENT_REGISTRY_ID)
+    .registerWidget(WIDGET_TYPE, SampleWidgetEvents)
 }
 
-register();
+export function deactivate({ services }: ActivationContext) {
+  services.getRequired<WidgetRepository>(WIDGET_REPOSITORY).unregisterWidget(WIDGET_TYPE)
+  services.getRequired<EventRegistry>(EVENT_REGISTRY_ID).unregisterWidget(WIDGET_TYPE)
+}
 
 export { SampleWidget, SampleWidgetSettings }

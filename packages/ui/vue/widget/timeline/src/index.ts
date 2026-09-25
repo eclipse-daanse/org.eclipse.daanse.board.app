@@ -11,8 +11,8 @@
 import TimelineWidget from './TimelineWidget.vue'
 import TimelineWidgetSettings from './TimelineWidgetSettings.vue'
 import icon from './assets/timeline.svg'
-import { container } from 'org.eclipse.daanse.board.app.lib.core'
-import { type WidgetRepository, identifier } from 'org.eclipse.daanse.board.app.lib.repository.widget'
+import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
+import { type WidgetRepository, WIDGET_REPOSITORY } from 'org.eclipse.daanse.board.app.lib.repository.widget'
 
 export interface TimelineSettings {
   startTime?: string; // ISO 8601 DateTime
@@ -24,13 +24,12 @@ export interface TimelineSettings {
 }
 
 
-import { EventRegistry, EVENT_REGISTRY, EventActionsRegistry, EVENT_ACTIONS_REGISTRY } from 'org.eclipse.daanse.board.app.lib.events'
+import { EventRegistry, EVENT_REGISTRY_ID, EventActionsRegistry, EVENT_ACTIONS_REGISTRY_ID } from 'org.eclipse.daanse.board.app.lib.events'
 import { TimelineWidgetEvents } from './events/TimelineWidgetEvents'
 import { TimelineWidgetInterface } from './api/TimelineWidgetInterface'
 
-const register = () => {
-  console.log('registering Timeline widget', container)
-  container.get<WidgetRepository>(identifier).registerWidget('TimelineWidget', {
+export function activate({ services }: ActivationContext) {
+  services.getRequired<WidgetRepository>(WIDGET_REPOSITORY).registerWidget('TimelineWidget', {
     component: TimelineWidget,
     settingsComponent: TimelineWidgetSettings,
     supportedDSTypes: [],
@@ -38,13 +37,17 @@ const register = () => {
     name: 'Timeline'
   })
 
-  const eventRegistry = container.get<EventRegistry>(EVENT_REGISTRY)
+  const eventRegistry = services.getRequired<EventRegistry>(EVENT_REGISTRY_ID)
   eventRegistry.registerWidget('TimelineWidget', TimelineWidgetEvents)
 
-  const actionsRegistry = container.get<EventActionsRegistry>(EVENT_ACTIONS_REGISTRY)
+  const actionsRegistry = services.getRequired<EventActionsRegistry>(EVENT_ACTIONS_REGISTRY_ID)
   actionsRegistry.registerWidgetType('TimelineWidget', TimelineWidgetInterface, 'widget')
 }
 
-register();
+export function deactivate({ services }: ActivationContext) {
+  services.getRequired<WidgetRepository>(WIDGET_REPOSITORY).unregisterWidget('TimelineWidget')
+  services.getRequired<EventRegistry>(EVENT_REGISTRY_ID).unregisterWidget('TimelineWidget')
+  services.getRequired<EventActionsRegistry>(EVENT_ACTIONS_REGISTRY_ID).unregisterWidgetType('TimelineWidget')
+}
 
 export { TimelineWidget, TimelineWidgetSettings }

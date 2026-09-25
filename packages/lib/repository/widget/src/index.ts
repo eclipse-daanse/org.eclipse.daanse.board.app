@@ -14,9 +14,16 @@
 import { WidgetRepository, type WidgetConfig } from './classes'
 import { container } from 'org.eclipse.daanse.board.app.lib.core';
 
-const identifier = Symbol.for('WidgetRepository')
+/**
+ * Dienst-ID im Namensraum der ServiceRegistry.
+ *
+ * `identifier` ist das dazu passende Symbol für den Inversify-Container;
+ * beide bezeichnen denselben Dienst, weil `Symbol.for` global registriert.
+ */
+const WIDGET_REPOSITORY = 'WidgetRepository'
 
-console.log('Refistering WidgetRepository', container)
+const identifier = Symbol.for(WIDGET_REPOSITORY)
+
 if (!container.isBound(identifier)) {
   container
     .bind<WidgetRepository>(identifier)
@@ -25,4 +32,4 @@ if (!container.isBound(identifier)) {
 }
 
 
-export { WidgetRepository, type WidgetConfig, identifier }
+export { WidgetRepository, type WidgetConfig, identifier, WIDGET_REPOSITORY }
