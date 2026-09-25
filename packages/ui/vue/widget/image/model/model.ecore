@@ -14,7 +14,7 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
         name="imagesettings"
-        nsURI="http://example.com/imagesettings"
+        nsURI="http://org.eclipse.daanse.board.app.ui.vue.widget.image"
         nsPrefix="imagesettings">
 
     <eClassifiers xsi:type="ecore:EClass" name="ImageSettings">

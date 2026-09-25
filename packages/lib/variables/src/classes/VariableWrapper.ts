@@ -10,7 +10,7 @@
 */
 
 
-import { Variable } from 'org.eclipse.daanse.board.app.lib.variables'
+import { Variable } from './Variable'
 const TYPE = 'VARIABLEWRAPPER'
 
 class VariableWrapper<T> {

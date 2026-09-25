@@ -16,7 +16,10 @@ import { useTemporaryStore } from './useTemporaryStore'
 import { usePromisifiedModal } from './promisifiedModal'
 import { useVariableRepository } from './useVariableRepository'
 import { useGlobalLoading } from './useGlobalLoading'
-import { VariableWrapper,VARIABLEWRAPPER } from './VariableWrapper'
+// VariableWrapper ist Vue-frei und liegt deshalb in lib.variables. Der
+// Re-Export haelt die bestehenden Importpfade gueltig; neuer Code sollte
+// direkt aus org.eclipse.daanse.board.app.lib.variables importieren.
+import { VariableWrapper,VARIABLEWRAPPER } from 'org.eclipse.daanse.board.app.lib.variables'
 import { VariableComplexStringWrapper,VARIABLECOMPLEXSTRINGWRAPPER } from './VariableComplexStringWrapper'
 
 const WrapperTypes = {

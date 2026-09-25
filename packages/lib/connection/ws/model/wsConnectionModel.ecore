@@ -13,7 +13,7 @@
 <ecore:EPackage xmi:version="2.0"
                 xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                 xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="wsconnection"
-                nsURI="http://example.com/wsconnection" nsPrefix="wsconn">
+                nsURI="http://org.eclipse.daanse.board.app.lib.connection.websocket" nsPrefix="wsconn">
 
     <eClassifiers xsi:type="ecore:EClass" name="IWSConnectionConfiguration" interface="true" abstract="true">
         <eStructuralFeatures xsi:type="ecore:EAttribute" name="url" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">

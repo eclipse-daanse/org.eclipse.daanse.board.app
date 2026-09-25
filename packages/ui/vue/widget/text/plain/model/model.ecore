@@ -15,7 +15,7 @@
                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                 xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
                 name="textsettings"
-                nsURI="http://www.example.org/textsettings"
+                nsURI="http://org.eclipse.daanse.board.app.ui.vue.widget.text.plain"
                 nsPrefix="textsettings">
 
     <eClassifiers xsi:type="ecore:EClass" name="TextSettings">

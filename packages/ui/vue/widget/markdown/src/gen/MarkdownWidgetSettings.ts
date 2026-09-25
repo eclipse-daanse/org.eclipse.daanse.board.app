@@ -25,7 +25,7 @@ Contributors: Smart City Jena
 */
 import {Documentation, Attribute, ModelClass, Reference, Enum} from 'org.eclipse.daanse.board.app.lib.annotations'
 
-@ModelClass({type:'org.eclipse.daanse.board.app.ui.vue.widget.markdown#//MarkdownWidgetSettings'})
+@ModelClass({type:'http://org.eclipse.daanse.board.app.ui.vue.widget.markdown#//MarkdownWidgetSettings'})
 export class MarkdownWidgetSettings {
 
   @Documentation("The Markdown content to be displayed or edited in the widget.")
