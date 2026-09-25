@@ -23,10 +23,10 @@ Contributors: Smart City Jena
 * Default values are set. The '_type' parameter is generated for the
 * Serialization to a backend.
 */
-import {IBaseConnectionConfiguration} from 'example.com/baseconnection'
+import {IBaseConnectionConfiguration} from 'org.eclipse.daanse.board.app.lib.datasource.base'
 import {Documentation, Attribute, ModelClass, Reference, Enum} from 'org.eclipse.daanse.board.app.lib.annotations'
 
-@ModelClass({type:'http://example.com/wsstore#//IWSStoreConfiguration'})
+@ModelClass({type:'http://org.eclipse.daanse.board.app.lib.datasource.websocket#//IWSStoreConfiguration'})
 export class IWSStoreConfiguration extends IBaseConnectionConfiguration {
 
   @Documentation("A reference or ID to a WebSocket connection configuration.")

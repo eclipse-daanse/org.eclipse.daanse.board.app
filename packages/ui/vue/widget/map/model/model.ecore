@@ -680,7 +680,7 @@
         </eLiterals>
         <eLiterals name="lte" value="3" literal="lte">
             <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-                <details key="documentation" value="Less than or equals operator (<=)."/>
+                <details key="documentation" value="Less than or equals operator (&lt;=)."/>
             </eAnnotations>
         </eLiterals>
         <eLiterals name="gte" value="4" literal="gte">

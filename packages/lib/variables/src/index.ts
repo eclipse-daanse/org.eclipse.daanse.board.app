@@ -93,9 +93,12 @@ const init = (container: Container) => {
 }
 
 import { Variable, VariableScope, VariableAccessMode } from './classes/Variable'
+import { VariableWrapper, VARIABLEWRAPPER } from './classes/VariableWrapper'
 
 export {
   init,
+  VariableWrapper,
+  VARIABLEWRAPPER,
   ComputedVariable,
   ConstantVariable,
   QueryVariable,

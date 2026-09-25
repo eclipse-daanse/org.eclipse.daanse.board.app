@@ -27,7 +27,7 @@ import {ObjectFitSetting} from "./ObjectFitSetting"
 import {VariableWrapper} from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import {Documentation, Attribute, ModelClass, Reference, Enum} from 'org.eclipse.daanse.board.app.lib.annotations'
 
-@ModelClass({type:'http://www.example.org/videoSettings#//VideoSettings'})
+@ModelClass({type:'http://org.eclipse.daanse.board.app.ui.vue.widget.video#//VideoSettings'})
 export class VideoSettings {
   @Reference('ObjectFitSetting') videoFitSettings: ObjectFitSetting = new ObjectFitSetting();
   @Reference('VariableWrapper') videoUrl: VariableWrapper<string> = new VariableWrapper<string>();

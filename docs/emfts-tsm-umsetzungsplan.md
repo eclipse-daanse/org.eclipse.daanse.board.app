@@ -59,7 +59,7 @@ Zwei getrennte Ausbaustufen, die oft in einen Topf geworfen werden:
 Arbeit; Ziel 2 ist danach überwiegend Konfiguration. Wer beides mischt, debuggt
 Ladefehler und Reihenfolgefehler gleichzeitig.
 
-### E3 — `nsURI`-Schema
+### E3 — `nsURI`-Schema  ✔ entschieden
 
 Die 41 Modelle tragen heute Platzhalter wie `http://example.com/baseconnection`.
 Vorschlag als verbindliche Konvention:
@@ -70,9 +70,11 @@ https://eclipse.dev/daanse/board/<bereich>/<paket>/<major.minor>
 
 Beispiel: `https://eclipse.dev/daanse/board/connection/rest/1.0`
 
-Die Entscheidung muss **vor A3** fallen, weil ab dann Modelle über die Registry
-aufgelöst werden und der `nsURI` zur Identität wird. Eine spätere Änderung
-invalidiert gespeicherte Boards.
+**Entschieden wurde anders** — siehe A3: die im Projekt bereits vorhandene
+Konvention `http://<paketname>` wird durchgezogen, statt ein neues Schema
+einzuführen. Ausschlaggebend war, dass 13 Modelle ihr bereits folgen und ein
+Wechsel auch `lib/events` samt hartkodierter Konstante und
+paketübergreifender Referenz angefasst hätte.
 
 ---
 
@@ -171,35 +173,110 @@ geklärt.
 
 ### A2 — `lib/ecore` entfernen
 
-**Freigegeben** — A1 ist grün, `lib/events` hat keinen Bezug mehr auf `lib/ecore`.
+**Status: erledigt** (Commit `ebb2c8a9`). Entfernt wurden 210 getrackte Dateien mit
+33.247 Zeilen; ein Vite-Lib-Build weniger. Damit gibt es nur noch eine
+Ecore-Runtime im Projekt.
 
-- `packages/lib/ecore` löschen — 355 Dateien, ~26.000 LOC, ein Build weniger
-- Abhängigkeitseintrag in `packages/lib/events/package.json` austauschen
-- `packages/lib/ecore/vite.config.ts` und die Referenz in der Workspace-Liste bereinigen
+Mit dem Paket verschwand auch sein Ausschluss aus `.licenserc.yaml`. Der
+Lizenz-Nebenbefund aus A1 hat sich dabei bestätigt: das Paket war genau deshalb
+vom Header-Check ausgenommen, weil es MPL-2.0-Fremdcode war. Das Repo ist jetzt
+durchgängig EPL-2.0.
 
-**Akzeptanzkriterium:** Vollbuild grün, `grep -r "lib.ecore" packages` liefert keine
-Treffer mehr.
+`lerna.json` und die Workspace-Liste brauchten keine Pflege — beide verwenden
+`packages/**`.
 
-### A3 — `nsURI`-Migration der 41 Modelle
+**Verifiziert:** keine Referenz mehr in Code oder Konfiguration (verbleibende
+Treffer sind Dokumentation und ein historischer Testkommentar), `lib/events` mit
+9/9 Tests, `tsc --noEmit` und `vite build` grün, sowie
+`turbo run build --filter='...lib.events'` mit **132/132 Tasks erfolgreich** —
+einschließlich `app.default`, also der vollständigen Anwendung.
 
-Nach Entscheidung E3.
+**Beiläufige Beobachtung aus diesem Build**, die S5/S8 beziffert: das
+App-Bundle liegt bei **26,6 MB** (5,25 MB gzip) in einem einzigen Chunk. Das ist
+die konkrete Größenordnung, an der sich der Nutzen von B5 später messen lässt.
 
-- `.ecore`-Dateien auf das neue Schema umstellen
-- Neu generieren, damit die `@ModelClass({type: …})`-Annotationen mitziehen
-- Prüfen, welche der 193 generierten Dateien sich ändern — die Diffs sollten
-  ausschließlich URIs betreffen
+### A3 — `nsURI`-Migration
 
-**Akzeptanzkriterium:** kein `example.com` mehr unter `packages/**/model/*.ecore`,
-Vollbuild grün, App startet.
+**Status: erledigt** (Commits `b5b1b2aa`, `fb08cb14`).
+
+**Entscheidung E3 gefallen:** der nsURI beginnt mit `http://<paketname>`;
+mehrere Modelle eines Pakets unterscheiden sich durch ein Suffix. Das war
+bereits die faktische Konvention von 13 Modellen — darunter `lib/events` samt
+seiner paketübergreifenden Referenz —, die deshalb unverändert blieben. Das
+ursprünglich vorgeschlagene `eclipse.dev`-Schema hätte alle 40 Modelle plus
+Code angefasst, ohne inhaltlichen Gewinn.
+
+Migriert: **27 Modelle und 40 generierte Dateien** (19 × `example.com`,
+7 × `www.example.org`, 1 ganz ohne Schema).
+
+**Dabei aufgedeckt und behoben — eine doppelt vergebene Identität:**
+`http://example.com/baseconnection` gehörte gleichzeitig `lib/connection/base`
+und `lib/datasource/base`. In einer gemeinsamen PackageRegistry hätte eines
+das andere verdrängt. Die Zuordnung war über die referenzierten Klassen
+eindeutig: `IBaseConnectionConfiguration` → `datasource.base`, die übrigen drei
+→ `connection.base`.
+
+**Nebeneffekt, der die Konvention nachträglich rechtfertigt:** Der Generator
+leitet auch **Import-Pfade** aus dem nsURI ab. Die bisherigen
+`import … from 'example.com/baseconnection'` waren nicht auflösbar und fielen
+nur deshalb nie auf, weil es reine Typ-Importe sind. Sie zeigen jetzt auf die
+tatsächlichen Pakete, die ohnehin schon als Dependency eingetragen waren.
+
+**Zwei Vorschäden**, aufgedeckt weil die Verifikation die Modelle erstmals
+wirklich *lädt* statt sie zu durchsuchen (separat in `b5b1b2aa`): `widget/icon`
+fehlte ein `</eClassifiers>`, `widget/map` hatte ein unescaptes `<` in einem
+Dokumentationstext. Beide Modelle waren für jeden Parser unlesbar.
+
+**Neu: `test/ecore-models.spec.ts`** sichert die Konvention repo-weit ab —
+lädt jedes Modell mit dem echten Loader und prüft Eindeutigkeit der nsURIs,
+Schema und Abwesenheit von Platzhaltern.
+
+**Verifiziert:** 4/4 Modelltests, Vollbuild mit **133/133 Turbo-Tasks**
+einschließlich `app.default`.
 
 ### A4 — Layering-Verletzung auflösen (S10)
 
-`packages/lib/factory/variableWrapper` hängt an
-`org.eclipse.daanse.board.app.ui.vue.composables`. Die benötigte Funktionalität
-identifizieren und entweder nach `lib` ziehen oder das Paket nach `ui` verschieben.
+**Status: erledigt** (Commit `6a5ee935`). `packages/lib/**` enthält jetzt weder
+eine `ui`-Abhängigkeit noch `vue`.
 
-**Akzeptanzkriterium:** keine `lib → ui`-Kante mehr; `packages/lib/**` enthält kein
-`vue` als Abhängigkeit.
+Die Ursache war gemischt, weshalb keine der beiden im Plan angedachten Varianten
+allein gereicht hätte: `VariableWrapper` ist **Vue-frei** und hängt nur an
+`lib.variables`, `VariableComplexStringWrapper` importiert Vue **zur Laufzeit**.
+
+- `VariableWrapper` wanderte nach `lib/variables`. `ui.vue.composables`
+  re-exportiert ihn, damit die rund 38 bestehenden Importstellen — viele davon
+  generiert — unverändert gültig bleiben.
+- Die Factory kennt `VariableComplexStringWrapper` nicht mehr fest. Sie behandelt
+  `VariableWrapper` selbst, weil nur sie das `VariableRepository` für die
+  Referenzauflösung hat, und nimmt weitere Typen über
+  `registerWrapperType(WrapperTypeI)` entgegen. Die App registriert den
+  Vue-gebundenen Wrapper in `main.ts`.
+
+**Verifiziert:** Vollbuild 133/133; App startet im Dev-Server, rendert und meldet
+keinen JS-Fehler — `main.ts` läuft also bis zum abschließenden `app.mount()`
+durch. Das Bundle schrumpft um 383 kB, weil `lib` nicht mehr das Vue-Paket
+mitzieht.
+
+**Nebenbefund mit Folgen für B2 — der globale Container ist nicht global.**
+Beim Versuch, die umgebaute Factory mit einem Unit-Test abzusichern, zeigte
+sich: `lib.core` lieferte kein `exports`-Feld, weshalb Node die UMD-Variante
+lud. Nachgerüstet nach dem Muster von `ui.vue.composables`. Der Test scheiterte
+dennoch, und die Gegenprobe erklärt warum:
+
+```
+esm.container === cjs.container  →  false
+```
+
+ESM- und CJS-Build von `lib.core` erzeugen **zwei verschiedene
+Container-Instanzen**. In der App fällt das nicht auf, weil dort alles ESM ist —
+aber jeder Test-, SSR- oder Node-Kontext bekommt einen zweiten Container. Das
+verschärft S4 über das dort Beschriebene hinaus und ist ein zusätzliches
+Argument für B2: eine `ServiceRegistry` mit klar definiertem Besitzer statt
+eines Modul-Singletons, dessen Identität vom Modulformat abhängt.
+
+Ein Unit-Test der Factory wurde deshalb **nicht** hinterlassen — er wäre nur mit
+Kunstgriffen lauffähig gewesen. Er ist nach B3/B4 nachzuholen, wenn die Pakete
+nicht mehr beim Import auf den Container zugreifen.
 
 ### A5 — Entscheidungsvorlage für Stufe 1 (Generator)
 

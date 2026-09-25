@@ -13,7 +13,7 @@
 <ecore:EPackage xmi:version="2.0"
                 xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                 xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="videoSettings"
-                nsURI="http://www.example.org/videoSettings" nsPrefix="videoSettings">
+                nsURI="http://org.eclipse.daanse.board.app.ui.vue.widget.video" nsPrefix="videoSettings">
     <eClassifiers xsi:type="ecore:EClass" name="ObjectFitSetting">
         <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
             <details key="documentation" value="Defines how the content of a replaced element (like a video or image) should be fitted into its container's box."/>

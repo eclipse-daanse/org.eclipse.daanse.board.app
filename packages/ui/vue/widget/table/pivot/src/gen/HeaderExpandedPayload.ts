@@ -26,7 +26,7 @@ Contributors: Smart City Jena
 import {Payload} from 'org.eclipse.daanse.board.app.lib.events'
 import {Documentation, Attribute, ModelClass, Reference, Enum} from 'org.eclipse.daanse.board.app.lib.annotations'
 
-@ModelClass({type:'http://www.example.org/PivotTable#//HeaderExpandedPayload'})
+@ModelClass({type:'http://org.eclipse.daanse.board.app.ui.vue.widget.table.pivot#//HeaderExpandedPayload'})
 export class HeaderExpandedPayload extends Payload {
 
   @Documentation("Header Unique Name.")

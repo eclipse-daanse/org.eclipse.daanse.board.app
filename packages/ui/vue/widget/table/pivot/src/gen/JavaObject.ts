@@ -25,6 +25,6 @@ Contributors: Smart City Jena
 */
 import {Documentation, Attribute, ModelClass, Reference, Enum} from 'org.eclipse.daanse.board.app.lib.annotations'
 
-@ModelClass({type:'http://www.example.org/PivotTable#//JavaObject'})
+@ModelClass({type:'http://org.eclipse.daanse.board.app.ui.vue.widget.table.pivot#//JavaObject'})
 export abstract class JavaObject {
 }

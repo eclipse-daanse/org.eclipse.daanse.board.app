@@ -26,7 +26,7 @@ Contributors: Smart City Jena
 import {VariableWrapper} from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import {Documentation, Attribute, ModelClass, Reference, Enum} from 'org.eclipse.daanse.board.app.lib.annotations'
 
-@ModelClass({type:'http://www.example.org/chartsettings#//SeriesSettings'})
+@ModelClass({type:'http://org.eclipse.daanse.board.app.ui.vue.widget.chart#//SeriesSettings'})
 export class SeriesSettings {
   @Reference('VariableWrapper') seriesIndex: VariableWrapper<number> = new VariableWrapper<number>();
   @Reference('VariableWrapper') label: VariableWrapper<string> = new VariableWrapper<string>();

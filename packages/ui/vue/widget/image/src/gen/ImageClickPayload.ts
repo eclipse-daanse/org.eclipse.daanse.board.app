@@ -28,7 +28,7 @@
 import {Documentation, Attribute, ModelClass, Reference, Enum} from 'org.eclipse.daanse.board.app.lib.annotations'
 import {Payload} from 'org.eclipse.daanse.board.app.lib.events'
 
-@ModelClass({type:'http://example.com/imagesettings#//ImageClickPayload'})
+@ModelClass({type:'http://org.eclipse.daanse.board.app.ui.vue.widget.image#//ImageClickPayload'})
 export class ImageClickPayload extends Payload {
   @Documentation("URL or ID of the clicked image.")
   @Attribute() imageUrl: string = '';

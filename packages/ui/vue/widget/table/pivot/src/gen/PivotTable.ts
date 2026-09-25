@@ -29,7 +29,7 @@ import {ConditionalFormat} from "./ConditionalFormat"
 import {VariableWrapper} from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import {Documentation, Attribute, ModelClass, Reference, Enum} from 'org.eclipse.daanse.board.app.lib.annotations'
 
-@ModelClass({type:'http://www.example.org/PivotTable#//PivotTable'})
+@ModelClass({type:'http://org.eclipse.daanse.board.app.ui.vue.widget.table.pivot#//PivotTable'})
 export class PivotTable {
   @Reference('JavaObject') rows: Array<JavaObject> = [];
   @Reference('JavaObject') columns: Array<JavaObject> = [];
