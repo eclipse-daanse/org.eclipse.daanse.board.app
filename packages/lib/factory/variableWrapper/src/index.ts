@@ -8,20 +8,29 @@ SPDX-License-Identifier: EPL-2.0
 Contributors: Smart City Jena
 */
 
-import { container } from 'org.eclipse.daanse.board.app.lib.core'
+import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
 import { VariableWrapperFactory, type WrapperTypeI } from './classes/Factory'
 
-const identifier = Symbol.for('VariableWrapperFactory')
+/** Dienst-ID im Namensraum der ServiceRegistry; `identifier` ist das dazu passende Symbol. */
+const VARIABLE_WRAPPER_FACTORY = 'VariableWrapperFactory'
 
-if (!container.isBound(identifier)) {
-  container
-    .bind<VariableWrapperFactory>(identifier)
-    .to(VariableWrapperFactory)
-    .inSingletonScope()
+const identifier = Symbol.for(VARIABLE_WRAPPER_FACTORY)
+
+/**
+ * Singleton mit Konstruktor-Injektion: die Fabrik bekommt das
+ * VariableRepository ueber ihren Konstruktor, `construct` traegt es ein.
+ */
+export function activate({ services }: ActivationContext) {
+  services.register(VARIABLE_WRAPPER_FACTORY, services.construct(VariableWrapperFactory))
+}
+
+export function deactivate({ services }: ActivationContext) {
+  services.unregister(VARIABLE_WRAPPER_FACTORY)
 }
 
 export {
   identifier,
+  VARIABLE_WRAPPER_FACTORY,
   type VariableWrapperFactory,
   type WrapperTypeI
 }

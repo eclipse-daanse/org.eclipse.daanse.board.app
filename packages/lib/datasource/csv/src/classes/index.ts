@@ -12,7 +12,7 @@
  **********************************************************************/
 
 // import { extractDataByPath } from "@/utils/helpers";
-import { inject } from 'inversify'
+import { inject } from '@eclipse-daanse/tsm'
 import { BaseDatasource } from 'org.eclipse.daanse.board.app.lib.datasource.base'
 import {
   identifier,
@@ -49,7 +49,7 @@ export class CsvStore extends BaseDatasource {
   private skipRowsFromStart: number = 0
   private skipRowsFromEnd: number = 0
 
-  @inject(identifier)
+  @inject('ConnectionRepository')
   private connectionRepository!: ConnectionRepository
 
   init(configuration: ICsvStoreConfiguration) {

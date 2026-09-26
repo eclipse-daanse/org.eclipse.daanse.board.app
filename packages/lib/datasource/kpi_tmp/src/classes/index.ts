@@ -19,7 +19,7 @@ import {
   identifier,
   ConnectionRepository,
 } from 'org.eclipse.daanse.board.app.lib.repository.connection'
-import { inject } from 'inversify'
+import { inject } from '@eclipse-daanse/tsm'
 
 export interface IKpiStoreConfiguration extends IBaseConnectionConfiguration {
   connection: string
@@ -37,7 +37,7 @@ export class KpiStore extends BaseDatasource {
   private cube: string = ''
   // private computedUrl: ComputedVariable;
 
-  @inject(identifier)
+  @inject('ConnectionRepository')
   private connectionRepository!: ConnectionRepository
 
   init(configuration: IKpiStoreConfiguration) {

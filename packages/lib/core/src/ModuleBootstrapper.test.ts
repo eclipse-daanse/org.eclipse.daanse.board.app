@@ -39,7 +39,7 @@ describe('ModuleBootstrapper', () => {
     bootstrapper = new ModuleBootstrapper(services, stilleAusgabe())
   })
 
-  it('aktiviert Module in der angegebenen Reihenfolge', async () => {
+  it('behaelt die Listenreihenfolge, wo keine Abhaengigkeit besteht', async () => {
     const reihenfolge: string[] = []
     const modul = (id: string): ModuleEntry => ({
       id,
@@ -192,5 +192,128 @@ describe('ModuleBootstrapper', () => {
     await bootstrapper.deactivateAll()
 
     expect(reihenfolge).toEqual(['ok'])
+  })
+
+  describe('Reihenfolge aus Deklarationen', () => {
+    const protokollierend = (
+      id: string,
+      reihenfolge: string[],
+      rest: Partial<ModuleEntry> = {},
+    ): ModuleEntry => ({
+      id,
+      load: async () => ({ activate: () => { reihenfolge.push(id) } }),
+      ...rest,
+    })
+
+    it('aktiviert den Anbieter vor seinem Konsumenten, egal wie die Liste sortiert ist', async () => {
+      const reihenfolge: string[] = []
+
+      await bootstrapper.activateAll([
+        protokollierend('widget', reihenfolge, { requires: ['WidgetRepository'] }),
+        protokollierend('registry', reihenfolge, { provides: ['WidgetRepository'] }),
+      ])
+
+      expect(reihenfolge).toEqual(['registry', 'widget'])
+    })
+
+    it('ordnet ueber mehrere Stufen hinweg', async () => {
+      const reihenfolge: string[] = []
+
+      await bootstrapper.activateAll([
+        protokollierend('c', reihenfolge, { requires: ['B'] }),
+        protokollierend('b', reihenfolge, { provides: ['B'], requires: ['A'] }),
+        protokollierend('a', reihenfolge, { provides: ['A'] }),
+      ])
+
+      expect(reihenfolge).toEqual(['a', 'b', 'c'])
+    })
+
+    /*
+     * Der eigentliche Beweis: Wenn die Reihenfolge aus den Deklarationen
+     * folgt, darf die Reihenfolge der Liste beliebig sein. Geprueft ueber
+     * alle Permutationen, damit kein Zufall durchrutscht.
+     */
+    it('kommt bei jeder Permutation der Liste zum selben Ergebnis', async () => {
+      const permutationen = <T,>(xs: T[]): T[][] =>
+        xs.length <= 1
+          ? [xs]
+          : xs.flatMap((x, i) =>
+              permutationen([...xs.slice(0, i), ...xs.slice(i + 1)]).map((rest) => [x, ...rest]),
+            )
+
+      for (const reihe of permutationen(['registry', 'layout', 'widget'])) {
+        const reihenfolge: string[] = []
+        const bauplan: Record<string, Partial<ModuleEntry>> = {
+          registry: { provides: ['WidgetRepository'] },
+          layout: { provides: ['LayoutRepository'], requires: ['WidgetRepository'] },
+          widget: { requires: ['WidgetRepository', 'LayoutRepository'] },
+        }
+
+        const eigener = new ModuleBootstrapper(new BoardServiceRegistry(new Container()), stilleAusgabe())
+        await eigener.activateAll(reihe.map((id) => protokollierend(id, reihenfolge, bauplan[id])))
+
+        expect(reihenfolge, `Eingabe: ${reihe.join(', ')}`).toEqual(['registry', 'layout', 'widget'])
+      }
+    })
+
+    /*
+     * Waehrend der Umstellung stammen die meisten Dienste noch aus nicht
+     * migrierten Paketen. Die duerfen die Sortierung nicht blockieren -
+     * sie kommen ueber den Rueckfallweg der Registry.
+     */
+    it('ignoriert Dienste, die kein Modul der Liste bereitstellt', async () => {
+      const reihenfolge: string[] = []
+
+      const { activated } = await bootstrapper.activateAll([
+        protokollierend('a', reihenfolge, { requires: ['EventRegistry', 'I18next'] }),
+        protokollierend('b', reihenfolge, { requires: ['DatasourceRepository'] }),
+      ])
+
+      expect(activated).toEqual(['a', 'b'])
+      expect(reihenfolge).toEqual(['a', 'b'])
+    })
+
+    it('meldet einen Zyklus mit den beteiligten Modulen, statt willkuerlich zu sortieren', async () => {
+      const reihenfolge: string[] = []
+
+      await expect(
+        bootstrapper.activateAll([
+          protokollierend('a', reihenfolge, { provides: ['A'], requires: ['B'] }),
+          protokollierend('b', reihenfolge, { provides: ['B'], requires: ['A'] }),
+        ]),
+      ).rejects.toThrow(/Zyklische Modulabhaengigkeit|Zyklische Modulabhängigkeit/)
+
+      expect(reihenfolge).toEqual([])
+    })
+
+    it('stoert sich nicht an einem Modul, das seinen eigenen Dienst aufloest', async () => {
+      const reihenfolge: string[] = []
+
+      await bootstrapper.activateAll([
+        protokollierend('selbst', reihenfolge, { provides: ['X'], requires: ['X'] }),
+      ])
+
+      expect(reihenfolge).toEqual(['selbst'])
+    })
+
+    it('baut in umgekehrter Aktivierungsreihenfolge ab, nicht in Listenreihenfolge', async () => {
+      const reihenfolge: string[] = []
+      const modul = (id: string, rest: Partial<ModuleEntry>): ModuleEntry => ({
+        id,
+        load: async () => ({
+          activate: () => {},
+          deactivate: () => { reihenfolge.push(id) },
+        }),
+        ...rest,
+      })
+
+      await bootstrapper.activateAll([
+        modul('konsument', { requires: ['R'] }),
+        modul('anbieter', { provides: ['R'] }),
+      ])
+      await bootstrapper.deactivateAll()
+
+      expect(reihenfolge).toEqual(['konsument', 'anbieter'])
+    })
   })
 })

@@ -11,35 +11,41 @@
  *   Smart City Jena
  **********************************************************************/
 
-import { Factory } from 'inversify'
-import { container } from 'org.eclipse.daanse.board.app.lib.core'
+import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
 import {
   ValhallaStore,
   type IValhallaStoreConfiguration,
 } from './classes'
 
-const factorySymbol = Symbol.for('ValhallaStoreFactory')
+/** Dienst-ID im Namensraum der ServiceRegistry; `factorySymbol` ist das dazu passende Symbol. */
+const VALHALLA_STORE_FACTORY = 'ValhallaStoreFactory'
 
-if (!container.isBound(ValhallaStore)) {
-  container.bind(ValhallaStore).toSelf().inTransientScope()
+const factorySymbol = Symbol.for(VALHALLA_STORE_FACTORY)
+
+/**
+ * Erzeugt einen Store aus einer Konfiguration.
+ *
+ * Die Instanz kommt ueber `construct`, nicht ueber `new`: die Klasse loest
+ * ihre Dienste ueber `@inject` auf, und `construct` traegt sie ein. Jeder
+ * Aufruf liefert eine eigene Instanz - vorher ueber `inTransientScope`.
+ */
+export function activate({ services }: ActivationContext) {
+  services.register(VALHALLA_STORE_FACTORY, (config: any) => {
+    if (!ValhallaStore.validateConfiguration(config)) {
+      throw new Error(
+        'Invalid ValhallaStore configuration. Please provide a valid configuration.',
+      )
+    }
+
+    const store = services.construct(ValhallaStore)
+    store.init(config)
+
+    return store
+  })
 }
 
-if (!container.isBound(factorySymbol)) {
-  container
-    .bind<Factory<ValhallaStore>>(factorySymbol)
-    .toFactory(() => {
-      return (config: any) => {
-        if (!ValhallaStore.validateConfiguration(config)) {
-          throw new Error(
-            'Invalid ValhallaStore configuration. ' +
-              'Please provide a valid configuration.',
-          )
-        }
-        const store = container.get<ValhallaStore>(ValhallaStore)
-        store.init(config)
-        return store
-      }
-    })
+export function deactivate({ services }: ActivationContext) {
+  services.unregister(VALHALLA_STORE_FACTORY)
 }
 
 export {
@@ -57,4 +63,4 @@ export type {
   RouteManeuver,
   RouteSummary,
 } from './classes'
-export { factorySymbol }
+export { VALHALLA_STORE_FACTORY, factorySymbol }

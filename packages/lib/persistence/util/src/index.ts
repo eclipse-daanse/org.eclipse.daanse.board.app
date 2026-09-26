@@ -8,16 +8,26 @@
   Contributors: Smart City Jena
 */
 
-import {container} from 'org.eclipse.daanse.board.app.lib.core'
+import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
 import { type ValidityCheckI } from './api/ValidityCheckI'
 import ValidityCheck from './utils/ValidityCheck'
 
-const identifier = Symbol.for('ValidityCheck')
-if(!container.isBound(identifier)) {
-  container.bind<ValidityCheckI>(identifier).to(ValidityCheck).inSingletonScope()
+/** Dienst-ID im Namensraum der ServiceRegistry; `identifier` ist das dazu passende Symbol. */
+const VALIDITY_CHECK = 'ValidityCheck'
+
+const identifier = Symbol.for(VALIDITY_CHECK)
+
+/** Singleton ohne eigene Abhaengigkeiten - siehe lib.repository.connection. */
+export function activate({ services }: ActivationContext) {
+  services.register(VALIDITY_CHECK, new ValidityCheck())
+}
+
+export function deactivate({ services }: ActivationContext) {
+  services.unregister(VALIDITY_CHECK)
 }
 
 export {
   ValidityCheckI,
-  identifier
+  identifier,
+  VALIDITY_CHECK
 }

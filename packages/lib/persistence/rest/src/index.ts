@@ -8,21 +8,31 @@
   Contributors: Smart City Jena
 */
 
-import {container} from 'org.eclipse.daanse.board.app.lib.core'
+import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
 import { Repository, RepositoryRegistryI, identifier as persistenceIdentifieer } from 'org.eclipse.daanse.board.app.lib.repository.persistence'
 import RestRepositoryImpl from './RestRepository/RestRepository'
 
-const identifier = Symbol.for('RestRepository')
+/** Dienst-ID im Namensraum der ServiceRegistry; `identifier` ist das dazu passende Symbol. */
+const REST_REPOSITORY = 'RestRepository'
 
-if(!container.isBound(identifier)) {
-  container.bind<Repository>(identifier).to(RestRepositoryImpl)
-  const repoRegistry = container.get<RepositoryRegistryI>(persistenceIdentifieer)
-  if (!repoRegistry) {
-    console.log('RepositoryRegistry not found')
-  }else {
-    repoRegistry.registerRepoType(RestRepositoryImpl.type, identifier)
-    console.log('📦 RestRepository registered')
-  }
+const identifier = Symbol.for(REST_REPOSITORY)
 
+/**
+ * Meldet die Repository-Umsetzung an und traegt ihren Typ in die
+ * RepositoryRegistry ein.
+ *
+ * Die Klasse hat keine injizierten Felder, deshalb `new`. Vorher stand
+ * beides auf Modulebene, und ob die Registry schon da war, entschied die
+ * Importreihenfolge - fehlte sie, wurde der Typ still uebersprungen.
+ */
+export function activate({ services }: ActivationContext) {
+  services.register(REST_REPOSITORY, new RestRepositoryImpl())
+
+  const repoRegistry = services.getRequired<RepositoryRegistryI>('RepositoryRegistry')
+  repoRegistry.registerRepoType(RestRepositoryImpl.type, identifier)
+}
+
+export function deactivate({ services }: ActivationContext) {
+  services.unregister(REST_REPOSITORY)
 }
 

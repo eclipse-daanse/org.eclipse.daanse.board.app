@@ -8,10 +8,8 @@
   Contributors: Smart City Jena
 
 */
-import { injectable } from 'inversify'
 import { ValidityCheckI } from '../api/ValidityCheckI'
 
-@injectable()
 export default class ValidityCheck implements ValidityCheckI {
   checkContent(json: any): boolean {
     const keys = Object.keys(json)

@@ -8,7 +8,7 @@ SPDX-License-Identifier: EPL-2.0
 Contributors: Smart City Jena
 */
 
-import {container} from 'org.eclipse.daanse.board.app.lib.core';
+import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core';
 import type { RepositoryRegistryI,WritableRepository,Entity,Repository } from './api/persistance'
 import {BaseRepository} from './api/BaseRepository'
 import { RepositoryRegistry } from './RepositoryRegistry/RepositoryRegistryImpl'
@@ -17,11 +17,15 @@ import type {RepositoryObserver} from './api/RepositoryObserverI';
 const REPOSITORY_REGISTRY = 'RepositoryRegistry'
 
 const identifier = Symbol.for(REPOSITORY_REGISTRY)
-const identifierInternalContainer = Symbol.for('InternalContainer')
 
-if(!container.isBound(identifier)){
-  container.bind<RepositoryRegistryI>(identifier).to(RepositoryRegistry).inSingletonScope();
-  console.log("📦 ReposetoryRegistry initialized");
+/** Singleton ohne eigene Abhaengigkeiten - siehe lib.repository.connection. */
+export function activate({ services, log }: ActivationContext) {
+  services.register(REPOSITORY_REGISTRY, new RepositoryRegistry())
+  log.info('RepositoryRegistry bereit')
+}
+
+export function deactivate({ services }: ActivationContext) {
+  services.unregister(REPOSITORY_REGISTRY)
 }
 
 export {

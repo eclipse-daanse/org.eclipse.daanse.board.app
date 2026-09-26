@@ -11,37 +11,41 @@
  *   Smart City Jena
  **********************************************************************/
 
-import { Factory } from 'inversify'
-import { container } from 'org.eclipse.daanse.board.app.lib.core'
+import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
 import {
   GraphQLConnection,
   type IGraphQLConnectionConfiguration,
 } from './classes'
 
-const factorySymbol = Symbol.for('GraphQLConnectionFactory')
+/** Dienst-ID im Namensraum der ServiceRegistry; `factorySymbol` ist das dazu passende Symbol. */
+const GRAPHQL_CONNECTION_FACTORY = 'GraphQLConnectionFactory'
 
-if (!container.isBound(GraphQLConnection)) {
-  container
-    .bind<GraphQLConnection>(GraphQLConnection)
-    .toSelf()
-    .inTransientScope()
+const factorySymbol = Symbol.for(GRAPHQL_CONNECTION_FACTORY)
+
+/**
+ * Erzeugt eine Verbindung aus einer Konfiguration.
+ *
+ * Die Klasse hat keine Abhaengigkeiten, deshalb `new` statt eines
+ * Umwegs ueber den Container. Jeder Aufruf liefert eine eigene
+ * Instanz - vorher ueber `inTransientScope`.
+ */
+export function activate({ services }: ActivationContext) {
+  services.register(GRAPHQL_CONNECTION_FACTORY, (config: IGraphQLConnectionConfiguration) => {
+    if (!GraphQLConnection.validateConfiguration(config)) {
+      throw new Error(
+        'Invalid GraphQLConnection configuration. Please provide a valid configuration.',
+      )
+    }
+
+    const connection = new GraphQLConnection()
+    connection.init(config)
+
+    return connection
+  })
 }
 
-if (!container.isBound(factorySymbol)) {
-  container.bind<Factory<GraphQLConnection>>(factorySymbol).toFactory(() => {
-    return (config: IGraphQLConnectionConfiguration) => {
-      if (!GraphQLConnection.validateConfiguration(config)) {
-        throw new Error(
-          'Invalid GraphQLConnection configuration. Please provide a valid configuration.',
-        )
-      }
-
-      const connection = container.get<GraphQLConnection>(GraphQLConnection)
-      connection.init(config)
-
-      return connection
-    }
-  })
+export function deactivate({ services }: ActivationContext) {
+  services.unregister(GRAPHQL_CONNECTION_FACTORY)
 }
 
 export {

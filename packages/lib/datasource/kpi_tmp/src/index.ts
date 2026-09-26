@@ -11,30 +11,38 @@
  *   Smart City Jena
  **********************************************************************/
 
-import { Factory } from 'inversify'
 import { KpiStore, type IKpiStoreConfiguration } from './classes'
-import { container } from 'org.eclipse.daanse.board.app.lib.core'
+import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
 
-const factorySymbol = Symbol.for('KpiStoreFactory')
+/** Dienst-ID im Namensraum der ServiceRegistry; `factorySymbol` ist das dazu passende Symbol. */
+const KPI_STORE_FACTORY = 'KpiStoreFactory'
 
-if (!container.isBound(KpiStore)) {
-  container.bind<KpiStore>(KpiStore).toSelf().inTransientScope()
-}
+const factorySymbol = Symbol.for(KPI_STORE_FACTORY)
 
-if (!container.isBound(factorySymbol)) {
-  container.bind<Factory<KpiStore>>(factorySymbol).toFactory(() => {
-    return (config: IKpiStoreConfiguration) => {
-      if (!KpiStore.validateConfiguration(config)) {
-        throw new Error(
-          'Invalid KpiStore configuration. Please provide a valid configuration.',
-        )
-      }
-      const store = container.get<KpiStore>(KpiStore)
-      store.init(config)
-
-      return store
+/**
+ * Erzeugt einen Store aus einer Konfiguration.
+ *
+ * Die Instanz kommt ueber `construct`, nicht ueber `new`: die Klasse loest
+ * ihre Dienste ueber `@inject` auf, und `construct` traegt sie ein. Jeder
+ * Aufruf liefert eine eigene Instanz - vorher ueber `inTransientScope`.
+ */
+export function activate({ services }: ActivationContext) {
+  services.register(KPI_STORE_FACTORY, (config: IKpiStoreConfiguration) => {
+    if (!KpiStore.validateConfiguration(config)) {
+      throw new Error(
+        'Invalid KpiStore configuration. Please provide a valid configuration.',
+      )
     }
+
+    const store = services.construct(KpiStore)
+    store.init(config)
+
+    return store
   })
 }
 
-export { KpiStore, IKpiStoreConfiguration, factorySymbol }
+export function deactivate({ services }: ActivationContext) {
+  services.unregister(KPI_STORE_FACTORY)
+}
+
+export { KpiStore, IKpiStoreConfiguration, KPI_STORE_FACTORY, factorySymbol }

@@ -11,13 +11,9 @@
  *   Smart City Jena
  **********************************************************************/
 
-import { Factory } from 'inversify'
-import { container } from 'org.eclipse.daanse.board.app.lib.core'
+import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
 import { OGCSTAToChartComposer } from './classes'
-import {
-  EventActionsRegistry,
-  EVENT_ACTIONS_REGISTRY,
-} from 'org.eclipse.daanse.board.app.lib.events'
+import type { EventActionsRegistry } from 'org.eclipse.daanse.board.app.lib.events'
 import ecoreModelContent from '../model/OGCSTAToChartActions.ecore?raw'
 
 export * from './classes/index'
@@ -30,78 +26,53 @@ export const symbol = Symbol.for('OGCSTAToChartComposer')
 // Widget type identifier - used for action registration and instance registration
 export const WIDGET_TYPE = 'OGCSTAToChartComposer'
 
-if (!container.isBound(OGCSTAToChartComposer)) {
-  container.bind(OGCSTAToChartComposer).toSelf().inTransientScope()
-}
+/** Dienst-ID im Namensraum der ServiceRegistry; `symbol` ist das dazu passende Symbol. */
+export const OGCSTA_TO_CHART_COMPOSER = 'OGCSTAToChartComposer'
 
-if (!container.isBound(symbol)) {
-  container.bind<Factory<OGCSTAToChartComposer>>(symbol).toFactory(() => {
-    return config => {
-      if (!OGCSTAToChartComposer.validateConfiguration(config)) {
-        throw new Error(
-          'Invalid OGCSTAToChartComposer configuration. Please provide a valid configuration.',
-        )
-      }
+/**
+ * Meldet die Composer-Fabrik an und traegt die Aktionen aus dem Ecore-Modell
+ * ein.
+ *
+ * Beides haengt an der EventActionsRegistry. Vorher wurde die mit
+ * `container.isBound` abgefragt und bei Abwesenheit stillschweigend
+ * uebersprungen - die Aktionen fehlten dann in der EventManager-Oberflaeche,
+ * ohne dass etwas darauf hinwies. Jetzt steht die Registry in `requires`.
+ */
+export function activate({ services, log }: ActivationContext) {
+  const actionsRegistry = services.getRequired<EventActionsRegistry>('EventActionsRegistry')
 
-      const composer = container.get<OGCSTAToChartComposer>(
-        OGCSTAToChartComposer,
+  services.register(OGCSTA_TO_CHART_COMPOSER, (config: any) => {
+    if (!OGCSTAToChartComposer.validateConfiguration(config)) {
+      throw new Error(
+        'Invalid OGCSTAToChartComposer configuration. Please provide a valid configuration.',
       )
-      composer.init(config)
+    }
 
-      // Don't register temporary preview instances - they would override the real instance
-      if (config._isTemporaryPreview) {
-        const previewId = `preview-${config.uid || config.name}-${Date.now()}`
-        composer.setInstanceId(previewId)
-        console.log(
-          `Created temporary preview ${WIDGET_TYPE}: ${previewId} (not registered)`,
-        )
-        return composer
-      }
+    const composer = new OGCSTAToChartComposer()
+    composer.init(config)
 
-      // Register composer instance for action execution
-      try {
-        if (container.isBound(EVENT_ACTIONS_REGISTRY)) {
-          const actionsRegistry = container.get<EventActionsRegistry>(
-            EVENT_ACTIONS_REGISTRY,
-          )
-          const instanceId =
-            config.uid || config.name || `composer-${Date.now()}`
-          composer.setInstanceId(instanceId)
-
-          // Register instance with widget type so actions can be executed on it
-          actionsRegistry.registerInstance(instanceId, composer, WIDGET_TYPE)
-
-          console.log(`Registered ${WIDGET_TYPE} instance: ${instanceId}`)
-        }
-      } catch (error) {
-        console.warn('Could not register composer instance:', error)
-      }
-
+    // Vorschau-Instanzen bleiben unangemeldet, sonst verdraengen sie die echte
+    if (config._isTemporaryPreview) {
+      composer.setInstanceId(`preview-${config.uid || config.name}-${Date.now()}`)
       return composer
     }
+
+    const instanceId = config.uid || config.name || `composer-${Date.now()}`
+    composer.setInstanceId(instanceId)
+    actionsRegistry.registerInstance(instanceId, composer, WIDGET_TYPE)
+
+    return composer
   })
+
+  actionsRegistry.registerActionsFromEcoreString(
+    WIDGET_TYPE,
+    ecoreModelContent,
+    'system',
+    'OGCSTAToChartActions.ecore',
+  )
+  log.info(`Aktionen fuer ${WIDGET_TYPE} aus dem Ecore-Modell eingetragen`)
 }
 
-// Register composer actions from Ecore model so they appear in EventManager UI
-const registerComposerActions = () => {
-  try {
-    if (container.isBound(EVENT_ACTIONS_REGISTRY)) {
-      const actionsRegistry = container.get<EventActionsRegistry>(
-        EVENT_ACTIONS_REGISTRY,
-      )
-
-      // Register with 'system' context from Ecore model
-      actionsRegistry.registerActionsFromEcoreString(
-        WIDGET_TYPE,
-        ecoreModelContent,
-        'system',
-        'OGCSTAToChartActions.ecore',
-      )
-      console.log(`Registered ${WIDGET_TYPE} actions from Ecore model`)
-    }
-  } catch (error) {
-    console.warn('Could not register OGCSTAToChartComposer actions:', error)
-  }
+export function deactivate({ services }: ActivationContext) {
+  services.unregister(OGCSTA_TO_CHART_COMPOSER)
 }
-
-registerComposerActions()
