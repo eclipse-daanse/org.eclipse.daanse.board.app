@@ -20,7 +20,7 @@ import {
   identifier,
   ConnectionRepository,
 } from 'org.eclipse.daanse.board.app.lib.repository.connection'
-import { inject } from 'inversify'
+import { inject } from '@eclipse-daanse/tsm'
 
 export interface IWSStoreConfiguration extends IBaseConnectionConfiguration {
   connection: string
@@ -34,7 +34,7 @@ export class WSStore extends BaseDatasource {
   private accumulate: boolean = false
   private topic = ''
 
-  @inject(identifier)
+  @inject('ConnectionRepository')
   private connectionRepository!: ConnectionRepository
 
   init(configuration: IWSStoreConfiguration) {

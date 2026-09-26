@@ -9,9 +9,8 @@ Contributors: Smart City Jena
 
 */
 
-import { injectable, inject } from 'inversify';
+import { injectable, inject } from '@eclipse-daanse/tsm';
 import type { TinyEmitter } from 'tiny-emitter';
-import { identifiers } from 'org.eclipse.daanse.board.app.lib.core';
 import { EventManager, EVENT_MANAGER } from '../manager/EventManager';
 import { EventRegistry, EVENT_REGISTRY } from '../registry/EventRegistry';
 import { EventActionsRegistry, EVENT_ACTIONS_REGISTRY } from '../registry/EventActionsRegistry';
@@ -31,9 +30,9 @@ export class EventBusBridge {
   private registeredListeners = new Set<string>();
 
   constructor(
-    @inject(EVENT_MANAGER) private eventManager: EventManager,
-    @inject(EVENT_REGISTRY) private eventRegistry: EventRegistry,
-    @inject(EVENT_ACTIONS_REGISTRY) private actionsRegistry: EventActionsRegistry
+    @inject('EventManager') private eventManager: EventManager,
+    @inject('EventRegistry') private eventRegistry: EventRegistry,
+    @inject('EventActionsRegistry') private actionsRegistry: EventActionsRegistry
   ) {
     // EventBus wird später aus dem Container geholt, da er möglicherweise noch nicht gebunden ist
   }
@@ -41,14 +40,21 @@ export class EventBusBridge {
   /**
    * Richtet die Bridge ein (muss nach Container-Initialisierung aufgerufen werden)
    */
-  setup(container: any): void {
+  /**
+   * Verbindet die Bruecke mit dem Ereignisbus.
+   *
+   * Nimmt die ServiceRegistry statt des Inversify-Containers: gebraucht wird
+   * daraus nur der Emitter, und ueber die Registry ist er unter seiner
+   * String-ID erreichbar.
+   */
+  setup(services: { getRequired<T>(id: string): T }): void {
     if (this.isSetup) {
       log('Bridge already setup, skipping');
       return;
     }
 
     try {
-      this.eventBus = container.get(identifiers.TINY_EMITTER) as TinyEmitter;
+      this.eventBus = services.getRequired<TinyEmitter>('TINY_EMITTER');
 
       // Registriere Callback beim EventManager
       this.eventManager.onMappingsChanged(() => {
@@ -188,4 +194,7 @@ export class EventBusBridge {
   }
 }
 
-export const EVENT_BUS_BRIDGE = Symbol.for('EventBusBridge');
+/** Dienst-ID im Namensraum der ServiceRegistry; `EVENT_BUS_BRIDGE` ist das dazu passende Symbol. */
+export const EVENT_BUS_BRIDGE_ID = 'EventBusBridge';
+
+export const EVENT_BUS_BRIDGE = Symbol.for(EVENT_BUS_BRIDGE_ID);

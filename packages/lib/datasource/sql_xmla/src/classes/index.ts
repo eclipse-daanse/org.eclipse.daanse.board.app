@@ -18,7 +18,7 @@ import {
   identifier,
   ConnectionRepository,
 } from 'org.eclipse.daanse.board.app.lib.repository.connection'
-import { inject } from 'inversify'
+import { inject } from '@eclipse-daanse/tsm'
 
 export interface ISqlXmlaStoreConfiguration
   extends IBaseConnectionConfiguration {
@@ -31,7 +31,7 @@ export class SqlXmlaStore extends BaseDatasource {
   private connection: any
   private sql: string = ''
 
-  @inject(identifier)
+  @inject('ConnectionRepository')
   private connectionRepository!: ConnectionRepository
   // private computedUrl: ComputedVariable;
 

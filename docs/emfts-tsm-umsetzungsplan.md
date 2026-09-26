@@ -523,6 +523,115 @@ Umstellung Vereinheitlichung, nicht Fehlerbehebung.
 100 — dafür müssten die verbleibenden 34 Nebenwirkungsimporte weichen, also die
 50 offenen Pakete. Startreihenfolge und Fehlerbehandlung erfüllen das Kriterium.
 
+### B4 — Abschluss: 112 Pakete, ein Startvorgang
+
+Der zweite Durchgang hat die verbleibenden Familien nachgezogen. Der Stand:
+
+| | |
+|---|---:|
+| Pakete mit `activate` | **112** |
+| Nebenwirkungsimporte in `main.ts` | **0** |
+| Startphasen | **1** (vorher 3) |
+| Dienste, die noch von außen kommen | **2** (`App`, `TINY_EMITTER`) |
+
+**Der Decorator-Wechsel war kleiner als veranschlagt.** Im Plan standen 29
+Pakete, „Wechsel des DI-Mechanismus". Tatsächlich gab es im ganzen Projekt
+**26 `@inject`-Stellen**; die meisten Pakete trugen nur ein `@injectable()`,
+das allein für die Klassenbindung da war und mit ihr entfiel. Welche
+Konstante auf welchen Dienst zeigt, wurde über die Importe aufgelöst statt
+über den Namen geraten — `identifier` heißt in verschiedenen Paketen
+verschieden viel, und einmal habe ich falsch geraten (`Logger` statt
+`LoggerFactory`), was der Abgleich aufdeckte.
+
+**Drei Muster deckten fast alles ab:**
+
+| Fall | Rezept |
+|---|---|
+| Singleton ohne Abhängigkeit | `services.register(ID, new X())` — die Klassenbindung samt `@injectable` entfällt |
+| Singleton mit Abhängigkeit | `services.register(ID, services.construct(X))` |
+| Factory (`toFactory` + `inTransientScope`) | `services.register(ID, config => { … services.construct(X) … })` |
+
+`construct()` war der Schlüssel: dieselbe Auflösung wie `bindClass()`, aber
+ohne Registrierung. Damit geht die fertige Instanz über `register` in die
+Registry und wird in den Inversify-Container gespiegelt — bei `bindClass`
+wäre die Spiegelung ausgeblieben und die noch nicht umgestellten Konsumenten
+hätten nichts gefunden.
+
+**Was die Umstellung sichtbar gemacht hat.** Neun Pakete prüften ihre
+Voraussetzung mit `container.isBound(...)` und übersprangen sie bei
+Abwesenheit stillschweigend — der Event-Manager verschwand dann aus der
+Navigation, Composer-Aktionen fehlten in der Oberfläche, ein Repository-Typ
+war nicht angemeldet. Als `requires` deklariert bricht die Aktivierung
+stattdessen mit Grund ab.
+
+Ein Fehler ließ sich dabei aufklären, den ich dreimal als vorbestehend
+abgehakt hatte: `classConstructor.plugins[i] is not a function` stammt aus
+`@octokit/rest` und trat beim Wiederherstellen eines gespeicherten
+Git-Repositories auf. Er war nur als unbehandelte Zusage sichtbar, weil der
+Persistenz-Loader als `init()` ohne `await` neben dem Start herlief. Als
+Pflichtmodul brach er den Start ab — das war der Anlass, genauer hinzusehen.
+Der Octokit-Defekt selbst ist offen, aber lokalisiert
+(`CommitProvider` in `GitRepositoryImpl.init`).
+
+**Was offen bleibt:**
+
+- `lib.variables` behält die Inversify-Decorators. Seine Klassen werden nicht
+  vom Paket selbst erzeugt, sondern per Service Locator
+  (`container.get(ComputedStoreParameter)` in `UsesComputedVariable`). Die
+  Decorators zu wechseln, ohne die Erzeugung mitzunehmen, würde sie brechen —
+  das gehört zur Service-Locator-Auflösung, nicht hierher.
+- `lib.module1` ist ein Beispielpaket, dessen `init` niemand aufruft.
+- **96 Vue-Dateien** greifen über `container.get(...)` auf Dienste zu. Das ist
+  der eigentliche Rest von Inversify und der Gegenstand von §7 des
+  Modulvertrags.
+
+### B4a — Die Handsortierung in `modules.ts` auflösen
+
+`ModuleEntry` trägt jetzt `provides` und `requires` — benannt wie im späteren
+tsm-Manifest, damit die Angaben 1:1 dorthin wandern. Der Bootstrapper leitet
+daraus die Aktivierungsreihenfolge ab, stabil gegenüber der Listenreihenfolge:
+Module ohne Abhängigkeit zueinander behalten ihre Position, was die
+Widget-Palette unverändert lässt.
+
+**Der Befund, der die Arbeit klein machte:** Von den acht Diensten, die die 75
+Module auflösen, stammen sechs aus noch nicht umgestellten Paketen
+(`EventRegistry`, `EventActionsRegistry`, `DatasourceRepository`, `I18next`,
+`ConnectionRepository`, `VariableRepository`) und kommen über den Rückfallweg.
+Innerhalb der Liste bleiben genau **zwei** ordnende Abhängigkeiten:
+`WidgetRepository` mit 24 Konsumenten und `LayoutRepository` mit 2. Die
+sorgfältig gepflegte Gliederung — Registries, Layouts, Variablen, i18n,
+Composer, Verbindungen, Datenquellen, Widgets — bildete eine Komplexität ab,
+die es nicht gab. Sie war korrekt, aber überflüssig.
+
+Deshalb gilt für die Sortierung: Dienste ohne Anbieter in der Liste sind
+extern und beeinflussen die Reihenfolge nicht. Ein Auflöser, der sie als
+Fehler wertete, wäre mitten in einer Migration unbenutzbar.
+
+**Verifikation.** Drei Ebenen, weil die ersten beiden je eine Lücke lassen:
+
+1. *Sortierung:* Permutationstest über alle Anordnungen dreier Module.
+   Gegenprobe: ohne die Sortierung werden 5 der 6 neuen Tests rot.
+2. *Vollständigkeit der Deklarationen:* Die `requires` sind aus den
+   `activate`-Rümpfen abgeleitet — eine fehlende Kante fiele in Test 1 nicht
+   auf. Eine unabhängige zweite Ableitung (anderes Muster, alle Quelldateien
+   statt nur `index.ts`, Konstanten repoweit aufgelöst) findet keinen nicht
+   deklarierten Zugriff.
+3. *End-to-End:* Die laufende Anwendung mit **umgekehrter** Modulliste. Ohne
+   die Sortierung bricht der Start an `WidgetRepository` ab, mit ihr werden
+   75 von 75 Modulen aktiviert.
+
+Ebene 3 hätte ich beinahe verschenkt: Der Dev-Server lädt `lib.core` aus
+`dist`, nicht aus `src`. Der erste Durchlauf lief deshalb gegen den alten
+Bootstrapper — und wäre als Bestätigung durchgegangen, weil die alphabetische
+Liste zufällig schon in gültiger Reihenfolge steht. Erst der Umkehrlauf machte
+das sichtbar. Wie schon bei A4 gilt: eine Prüfung, die nur bestätigen kann,
+prüft nichts.
+
+**Was bleibt.** Die drei Phasen in `main.ts` bleiben bestehen. Sie hängen
+nicht an `modules`, sondern an Paketen, die beim Import Nebenwirkungen haben
+(`i18next`, `settings.manager` davor; `endpointfinder`, Persistenz danach).
+Sie verschwinden mit deren Umstellung, nicht mit dieser Änderung.
+
 ### B5 — Echtes Laufzeitladen (Ziel 2 aus E2)
 
 Erst wenn B4 vollständig ist.

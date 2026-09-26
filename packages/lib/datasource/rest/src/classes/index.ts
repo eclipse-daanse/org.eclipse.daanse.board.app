@@ -12,7 +12,7 @@
  **********************************************************************/
 
 // import { extractDataByPath } from "@/utils/helpers";
-import { inject, injectable } from 'inversify'
+import { inject, injectable } from '@eclipse-daanse/tsm'
 import {
   BaseDatasource,
   IBaseConnectionConfiguration,
@@ -38,7 +38,7 @@ export class RestStore extends BaseDatasource {
   private resourceUrl: ComputedStoreParameter | null = null
   private selectedJSONValue?: string
 
-  @inject(identifier)
+  @inject('ConnectionRepository')
   private connectionRepository!: ConnectionRepository
 
   init(configuration: IRestStoreConfiguration) {

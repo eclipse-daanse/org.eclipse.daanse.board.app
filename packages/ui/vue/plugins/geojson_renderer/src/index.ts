@@ -14,11 +14,15 @@
 import { useDataPointRegistry } from 'org.eclipse.daanse.board.app.ui.vue.widget.map'
 import GeoJsonDataRendererDescription from './GeoJsonDataRendererDescription'
 
-const register = () => {
-  console.log('Registering GeoJSON Data Renderer')
+/**
+ * Meldet den GeoJSON-Renderer bei der Datenpunkt-Registrierung an.
+ *
+ * Die Registrierung ist ein Vue-Composable ohne Dienst-ID, deshalb keine
+ * `requires`-Angabe - das Modul haengt ueber seinen Import an
+ * ui.vue.widget.map.
+ */
+export function activate() {
   useDataPointRegistry().registerDataPointRenderer(new GeoJsonDataRendererDescription())
 }
-
-register()
 
 export { GeoJsonDataRendererDescription }

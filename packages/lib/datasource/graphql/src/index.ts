@@ -11,30 +11,38 @@
  *   Smart City Jena
  **********************************************************************/
 
-import { Factory } from 'inversify'
 import { GraphQLStore, type IGraphQLStoreConfiguration } from './classes'
-import { container } from 'org.eclipse.daanse.board.app.lib.core'
+import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
 
-const factorySymbol = Symbol.for('GraphQLStoreFactory')
+/** Dienst-ID im Namensraum der ServiceRegistry; `factorySymbol` ist das dazu passende Symbol. */
+const GRAPHQL_STORE_FACTORY = 'GraphQLStoreFactory'
 
-if (!container.isBound(GraphQLStore)) {
-  container.bind<GraphQLStore>(GraphQLStore).toSelf().inTransientScope()
-}
+const factorySymbol = Symbol.for(GRAPHQL_STORE_FACTORY)
 
-if (!container.isBound(factorySymbol)) {
-  container.bind<Factory<GraphQLStore>>(factorySymbol).toFactory(() => {
-    return (config: IGraphQLStoreConfiguration) => {
-      if (!GraphQLStore.validateConfiguration(config)) {
-        throw new Error(
-          'Invalid GraphQLStore configuration. Please provide a valid configuration.',
-        )
-      }
-      const store = container.get<GraphQLStore>(GraphQLStore)
-      store.init(config)
-
-      return store
+/**
+ * Erzeugt einen Store aus einer Konfiguration.
+ *
+ * Die Instanz kommt ueber `construct`, nicht ueber `new`: die Klasse loest
+ * ihre Dienste ueber `@inject` auf, und `construct` traegt sie ein. Jeder
+ * Aufruf liefert eine eigene Instanz - vorher ueber `inTransientScope`.
+ */
+export function activate({ services }: ActivationContext) {
+  services.register(GRAPHQL_STORE_FACTORY, (config: IGraphQLStoreConfiguration) => {
+    if (!GraphQLStore.validateConfiguration(config)) {
+      throw new Error(
+        'Invalid GraphQLStore configuration. Please provide a valid configuration.',
+      )
     }
+
+    const store = services.construct(GraphQLStore)
+    store.init(config)
+
+    return store
   })
 }
 
-export { GraphQLStore, IGraphQLStoreConfiguration, factorySymbol }
+export function deactivate({ services }: ActivationContext) {
+  services.unregister(GRAPHQL_STORE_FACTORY)
+}
+
+export { GraphQLStore, IGraphQLStoreConfiguration, GRAPHQL_STORE_FACTORY, factorySymbol }
