@@ -11,31 +11,45 @@
  *   Smart City Jena
  **********************************************************************/
 
-import { Factory } from 'inversify'
 import { WSConnection, type IWSConnectionConfiguration } from './classes'
-import { container } from 'org.eclipse.daanse.board.app.lib.core'
+import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
 
-const factorySymbol = Symbol.for('WSConnectionFactory')
+/** Dienst-ID im Namensraum der ServiceRegistry; `factorySymbol` ist das dazu passende Symbol. */
+const WSCONNECTION_FACTORY = 'WSConnectionFactory'
 
-if (!container.isBound(WSConnection)) {
-  container.bind<WSConnection>(WSConnection).toSelf().inTransientScope()
+const factorySymbol = Symbol.for(WSCONNECTION_FACTORY)
+
+/**
+ * Erzeugt eine Instanz aus einer Konfiguration.
+ *
+ * Wird ueber die Dienst-ID aufgeloest und mit der Konfiguration aufgerufen.
+ * Jeder Aufruf liefert eine eigene Instanz - vorher ueber inTransientScope,
+ * jetzt schlicht ueber `new`.
+ */
+function createWSConnection(config: IWSConnectionConfiguration) {
+  if (!WSConnection.validateConfiguration(config)) {
+    throw new Error(
+      'Invalid WSConnection configuration. Please provide a valid configuration.',
+    )
+  }
+
+  const connection = new WSConnection()
+  connection.init(config)
+
+  return connection
 }
 
-if (!container.isBound(factorySymbol)) {
-  container.bind<Factory<WSConnection>>(factorySymbol).toFactory(() => {
-    return (config: IWSConnectionConfiguration) => {
-      if (!WSConnection.validateConfiguration(config)) {
-        throw new Error(
-          'Invalid WSConnection configuration. Please provide a valid configuration.',
-        )
-      }
-
-      const connection = container.get<WSConnection>(WSConnection)
-      connection.init(config)
-
-      return connection
-    }
-  })
+export function activate({ services }: ActivationContext) {
+  services.register(WSCONNECTION_FACTORY, createWSConnection)
 }
 
-export { WSConnection, IWSConnectionConfiguration, factorySymbol }
+export function deactivate({ services }: ActivationContext) {
+  services.unregister(WSCONNECTION_FACTORY)
+}
+
+export {
+  WSConnection,
+  IWSConnectionConfiguration,
+  factorySymbol,
+  WSCONNECTION_FACTORY,
+}

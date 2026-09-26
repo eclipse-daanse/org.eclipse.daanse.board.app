@@ -17,7 +17,7 @@
     "url": "git+https://github.com/eclipse-daanse/org.eclipse.daanse.board.app.git"
   },
   "scripts": {
-    "build": "vite build",
+    "build": "vue-tsc --noEmit && vite build",
     "test": "node ./__tests__/test.test.ts"
   },
   "bugs": {
@@ -32,10 +32,9 @@
   "devDependencies": {
     "inversify": "7.11.0",
     "typescript": "^5.8.2",
-
     "vite-plugin-dts": "4.5.4",
     "vite-plugin-libcss": "^1.1.1",
-    "@rollup/plugin-commonjs" : "^29.0.2"
+    "@rollup/plugin-commonjs": "^29.0.2"
   },
   "gitHead": "aecb37efd418b32c929d0657474b25cce42c17cd",
   "publishConfig": {

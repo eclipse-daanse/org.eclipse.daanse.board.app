@@ -1,7 +1,7 @@
 # Feature Requests an @emfts/core
 
 Ziel-Repository: <https://github.com/eclipse-fennec/emf.ts>
-Getestet gegen: `@emfts/core@0.1.1-next.16` (dist-tag `next`)
+Getestet gegen: `@emfts/core@0.1.1-next.16`; FR-1 und FR-2 sind mit `0.2.0-next.1` behoben
 Kontext: Ablösung der projekteigenen Ecore-Runtime durch `@emfts/core` in der
 Daanse Board App ([Umsetzungsplan](./emfts-tsm-umsetzungsplan.md), Strang A)
 
@@ -17,8 +17,8 @@ Auswirkung. Jeder ist mit einem lauffähigen Minimalbeispiel belegt.
 
 | | Issue |
 |---|---|
-| FR-1 | [#65 — eGenericType leaves the feature without any eType](https://github.com/eclipse-fennec/emf.ts/issues/65) |
-| FR-2 | [#66 — Nested model elements (EOperation, EParameter) load as DynamicEObject](https://github.com/eclipse-fennec/emf.ts/issues/66) |
+| FR-1 | [#65 — eGenericType leaves the feature without any eType](https://github.com/eclipse-fennec/emf.ts/issues/65) — **behoben und geschlossen** in 0.2.0-next.1 |
+| FR-2 | [#66 — Nested model elements (EOperation, EParameter) load as DynamicEObject](https://github.com/eclipse-fennec/emf.ts/issues/66) — **behoben in 0.2.0-next.1**, [bestätigt](https://github.com/eclipse-fennec/emf.ts/issues/66#issuecomment-5318280769) |
 | FR-3 | [#67 — registerPackage() missing on a ResourceSet's package registry](https://github.com/eclipse-fennec/emf.ts/issues/67) |
 | Anmerkungen | [#68 — Docs: mixed EList/array returns, and latest predates the masagroup compatibility layer](https://github.com/eclipse-fennec/emf.ts/issues/68) |
 

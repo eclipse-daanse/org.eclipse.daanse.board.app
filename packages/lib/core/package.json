@@ -21,19 +21,18 @@
     "url": "git+https://github.com/eclipse-daanse/org.eclipse.daanse.board.app.git"
   },
   "scripts": {
-    "build": "vite build",
+    "build": "tsc --noEmit && vite build",
     "test": "node ./__tests__/test.test.js"
   },
   "bugs": {
     "url": "https://github.com/eclipse-daanse/org.eclipse.daanse.board.app/issues"
   },
   "dependencies": {
-    "@eclipse-daanse/tsm": "0.0.1-next.2"
+    "@eclipse-daanse/tsm": "link:../../../../EMFTs/tsm"
   },
   "devDependencies": {
     "inversify": "7.11.0",
     "typescript": "^5.8.2",
-
     "vite-plugin-dts": "4.5.4"
   },
   "gitHead": "aecb37efd418b32c929d0657474b25cce42c17cd",

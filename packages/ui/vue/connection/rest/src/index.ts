@@ -11,22 +11,31 @@
  *   Smart City Jena
  **********************************************************************/
 import {
-  ConnectionRepository,
-  identifier,
+  type ConnectionRepository,
+  CONNECTION_REPOSITORY,
 } from 'org.eclipse.daanse.board.app.lib.repository.connection'
-import { container } from 'org.eclipse.daanse.board.app.lib.core'
+import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
 
 import { factorySymbol as RestConnectionIdentifier } from 'org.eclipse.daanse.board.app.lib.connection.rest'
 
 import Settings from './Settings.vue'
 
-const connectionRepository = container.get<ConnectionRepository>(identifier)
-
 const settingsSymbol = Symbol.for('RestConnectionSettings')
 
-container.bind(settingsSymbol).toConstantValue(Settings)
+export function activate({ services }: ActivationContext) {
+  services.register('RestConnectionSettings', Settings)
 
-connectionRepository.registerConnectionType('rest', {
-  Connection: RestConnectionIdentifier,
-  Settings: settingsSymbol,
-})
+  services
+    .getRequired<ConnectionRepository>(CONNECTION_REPOSITORY)
+    .registerConnectionType('rest', {
+      Connection: RestConnectionIdentifier,
+      Settings: settingsSymbol,
+    })
+}
+
+export function deactivate({ services }: ActivationContext) {
+  services
+    .getRequired<ConnectionRepository>(CONNECTION_REPOSITORY)
+    .unregisterConnectionType('rest')
+  services.unregister('RestConnectionSettings')
+}

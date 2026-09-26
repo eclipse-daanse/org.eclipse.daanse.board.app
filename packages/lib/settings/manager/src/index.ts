@@ -11,7 +11,10 @@ Contributors: Smart City Jena
 import  { container } from 'org.eclipse.daanse.board.app.lib.core';
 import { SettingsManager } from './classes/SettingsManager'
 import { type SettingsManagerI } from './interfaces/SettingsManagerI'
-const identifier = Symbol.for('SettingsManager')
+/** Dienst-ID im Namensraum der ServiceRegistry; `identifier` ist das dazu passende Symbol. */
+const SETTINGS_MANAGER = 'SettingsManager'
+
+const identifier = Symbol.for(SETTINGS_MANAGER)
 
 if (!container.isBound(identifier)) {
   container.bind<SettingsManagerI>(identifier).toConstantValue(new SettingsManager());
@@ -19,5 +22,4 @@ if (!container.isBound(identifier)) {
 }
 export {
   identifier,
-  type SettingsManagerI
-}
+  type SettingsManagerI, SETTINGS_MANAGER }

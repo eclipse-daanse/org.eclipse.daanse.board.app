@@ -11,34 +11,48 @@
  *   Smart City Jena
  **********************************************************************/
 
-import { Factory } from 'inversify'
 import {
   DataTableComposer,
-  type IDataTableComposerConfiguration
+  type IDataTableComposerConfiguration,
 } from './classes'
-import { container } from 'org.eclipse.daanse.board.app.lib.core';
+import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
 
-const symbol = Symbol.for('DataTableComposer')
+/** Dienst-ID im Namensraum der ServiceRegistry; `symbol` ist das dazu passende Symbol. */
+const DATA_TABLE_COMPOSER = 'DataTableComposer'
 
-if (!container.isBound(DataTableComposer)) {
-  container.bind(DataTableComposer).toSelf().inTransientScope()
+const symbol = Symbol.for(DATA_TABLE_COMPOSER)
+
+/**
+ * Erzeugt eine Instanz aus einer Konfiguration.
+ *
+ * Wird ueber die Dienst-ID aufgeloest und mit der Konfiguration aufgerufen.
+ * Jeder Aufruf liefert eine eigene Instanz - vorher ueber inTransientScope,
+ * jetzt schlicht ueber `new`.
+ */
+function createDataTableComposer(config: any) {
+  if (!DataTableComposer.validateConfiguration(config)) {
+    throw new Error(
+      'Invalid DataTableComposer configuration. Please provide a valid configuration.',
+    )
+  }
+
+  const composer = new DataTableComposer()
+  composer.init(config)
+
+  return composer
 }
 
-if (!container.isBound(symbol)) {
-  container.bind<Factory<DataTableComposer>>(symbol).toFactory(() => {
-    return config => {
-      if (!DataTableComposer.validateConfiguration(config)) {
-        throw new Error(
-          'Invalid DataTableComposer configuration. Please provide a valid configuration.',
-        )
-      }
-
-      const composer = container.get<DataTableComposer>(DataTableComposer)
-      composer.init(config)
-
-      return composer
-    }
-  });
+export function activate({ services }: ActivationContext) {
+  services.register(DATA_TABLE_COMPOSER, createDataTableComposer)
 }
 
-export { DataTableComposer, IDataTableComposerConfiguration, symbol }
+export function deactivate({ services }: ActivationContext) {
+  services.unregister(DATA_TABLE_COMPOSER)
+}
+
+export {
+  DataTableComposer,
+  IDataTableComposerConfiguration,
+  symbol,
+  DATA_TABLE_COMPOSER,
+}

@@ -11,34 +11,40 @@
  *   Smart City Jena
  **********************************************************************/
 
-import { Factory } from 'inversify'
-import {
-  KpiComposer,
-  type IKpiComposerConfiguration
-} from './classes'
-import { container } from 'org.eclipse.daanse.board.app.lib.core'
+import { KpiComposer, type IKpiComposerConfiguration } from './classes'
+import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
 
-const symbol = Symbol.for('KpiComposer')
+/** Dienst-ID im Namensraum der ServiceRegistry; `symbol` ist das dazu passende Symbol. */
+const KPI_COMPOSER = 'KpiComposer'
 
-if (!container.isBound(KpiComposer)) {
-  container.bind(KpiComposer).toSelf().inTransientScope()
+const symbol = Symbol.for(KPI_COMPOSER)
+
+/**
+ * Erzeugt eine Instanz aus einer Konfiguration.
+ *
+ * Wird ueber die Dienst-ID aufgeloest und mit der Konfiguration aufgerufen.
+ * Jeder Aufruf liefert eine eigene Instanz - vorher ueber inTransientScope,
+ * jetzt schlicht ueber `new`.
+ */
+function createKpiComposer(config: any) {
+  if (!KpiComposer.validateConfiguration(config)) {
+    throw new Error(
+      'Invalid KpiComposer configuration. Please provide a valid configuration.',
+    )
+  }
+
+  const composer = new KpiComposer()
+  composer.init(config)
+
+  return composer
 }
 
-if (!container.isBound(symbol)) {
-  container.bind<Factory<KpiComposer>>(symbol).toFactory(() => {
-    return config => {
-      if (!KpiComposer.validateConfiguration(config)) {
-        throw new Error(
-          'Invalid KpiComposer configuration. Please provide a valid configuration.',
-        )
-      }
-
-      const composer = container.get<KpiComposer>(KpiComposer)
-      composer.init(config)
-
-      return composer
-    }
-  })
+export function activate({ services }: ActivationContext) {
+  services.register(KPI_COMPOSER, createKpiComposer)
 }
 
-export { KpiComposer, IKpiComposerConfiguration, symbol }
+export function deactivate({ services }: ActivationContext) {
+  services.unregister(KPI_COMPOSER)
+}
+
+export { KpiComposer, IKpiComposerConfiguration, symbol, KPI_COMPOSER }
