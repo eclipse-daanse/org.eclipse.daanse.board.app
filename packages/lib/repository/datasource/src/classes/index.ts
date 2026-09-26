@@ -69,6 +69,23 @@ export class DatasourceRepository implements IDatasourceRepository {
   registerDatasourceType(name: string, identifiers: StoreIdentifiers): void {
     this.availableDatasources[name] = identifiers
   }
+
+  /**
+   * Nimmt die Registrierung eines Datenquellen-Typs zurück.
+   *
+   * Gegenstück zu registerDatasourceType, damit ein Modul seine
+   * Registrierung in deactivate() wieder aufheben kann. Betrifft nur den
+   * Typ; bereits angelegte Instanzen werden über removeDatasource entfernt.
+   *
+   * @returns ob der Typ registriert war
+   */
+  unregisterDatasourceType(name: string): boolean {
+    if (!(name in this.availableDatasources)) {
+      return false
+    }
+    delete this.availableDatasources[name]
+    return true
+  }
   getDataSourceTypes() {
     return Object.keys(this.availableDatasources)
   }

@@ -64,6 +64,23 @@ export class ConnectionRepository {
     this.availableConnections[name] = identifiers
   }
 
+  /**
+   * Nimmt die Registrierung eines Verbindungstyps zurück.
+   *
+   * Gegenstück zu registerConnectionType, damit ein Modul seine
+   * Registrierung in deactivate() wieder aufheben kann. Betrifft nur den
+   * Typ; bestehende Verbindungen werden über removeConnection entfernt.
+   *
+   * @returns ob der Typ registriert war
+   */
+  unregisterConnectionType(name: string): boolean {
+    if (!(name in this.availableConnections)) {
+      return false
+    }
+    delete this.availableConnections[name]
+    return true
+  }
+
   get registeredConnections(): string[] {
     return Object.keys(this.availableConnections)
   }

@@ -601,13 +601,9 @@
   resolved "https://registry.npmjs.org/@daybrush/utils/-/utils-1.13.0.tgz"
   integrity sha512-ALK12C6SQNNHw1enXK+UO8bdyQ+jaWNQ1Af7Z3FNxeAwjYhQT7do+TRE4RASAJ3ObaS2+TJ7TXR3oz2Gzbw0PQ==
 
-"@eclipse-daanse/tsm@0.0.1-next.2":
-  version "0.0.1-next.2"
-  resolved "https://registry.npmjs.org/@eclipse-daanse/tsm/-/tsm-0.0.1-next.2.tgz#bd340075e589b78a870bf08c2a88377cca4e122e"
-  integrity sha512-7dlRRiT0Qzsa5RIqo2rR2G9mDvx/dXLw2dV+U871v3rlnhBgYh4g1Z7++2x5z7da1Gtp8MHUAmv4gspglHCUvA==
-  dependencies:
-    reflect-metadata "^0.2.2"
-    semver "^7.7.3"
+"@eclipse-daanse/tsm@link:../EMFTs/tsm":
+  version "0.0.0"
+  uid ""
 
 "@egjs/agent@^2.2.1":
   version "2.4.4"
@@ -631,10 +627,10 @@
   resolved "https://registry.npmjs.org/@egjs/list-differ/-/list-differ-1.0.1.tgz"
   integrity sha512-OTFTDQcWS+1ZREOdCWuk5hCBgYO4OsD30lXcOCyVOAjXMhgL5rBRDnt/otb6Nz8CzU0L/igdcaQBDLWc4t9gvg==
 
-"@emfts/core@0.1.1-next.16":
-  version "0.1.1-next.16"
-  resolved "https://registry.npmjs.org/@emfts/core/-/core-0.1.1-next.16.tgz#d696c3be1d23cf0297bad66c2fa17109b104c520"
-  integrity sha512-HsP2h9buaxpE4ggoqnWywVCRwEKllKtDG1bpH3n5DFPhEsSpTCgxTz0D0iqwlsfIqNov2ha9Sf430CDr0FJh3g==
+"@emfts/core@0.2.0-next.1":
+  version "0.2.0-next.1"
+  resolved "https://registry.npmjs.org/@emfts/core/-/core-0.2.0-next.1.tgz#6dd64965cbfc636c4a57eb856cff61e13088acc5"
+  integrity sha512-Rm26aFAd/NZvQWifOFAQnysknlmJbwwiab4sPVRM4iOXItUvxbuJAEFd7j65ICzvNanD7ikUoNn6MWCSBZLx7A==
 
 "@emnapi/core@1.4.5":
   version "1.4.5"

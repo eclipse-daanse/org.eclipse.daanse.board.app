@@ -10,7 +10,10 @@ Contributors: Smart City Jena
 import i18next from "i18next";
 import type {i18n} from "i18next";
 import  { container } from 'org.eclipse.daanse.board.app.lib.core';
-const symbolForI18n = Symbol.for('I18next')
+/** Dienst-ID im Namensraum der ServiceRegistry; `symbolForI18n` ist das dazu passende Symbol. */
+const I18NEXT = 'I18next'
+
+const symbolForI18n = Symbol.for(I18NEXT)
 
 
 if (!container.isBound(symbolForI18n)) {
@@ -20,5 +23,4 @@ if (!container.isBound(symbolForI18n)) {
 }
 export {
   symbolForI18n,
-  i18n
-}
+  i18n, I18NEXT }

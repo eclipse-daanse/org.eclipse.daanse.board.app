@@ -10,10 +10,10 @@
  * Contributors:
  *   Smart City Jena
  **********************************************************************/
-import { container } from 'org.eclipse.daanse.board.app.lib.core'
+import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
 import {
-  DatasourceRepository,
-  identifier,
+  type DatasourceRepository,
+  DATASOURCE_REPOSITORY,
 } from 'org.eclipse.daanse.board.app.lib.repository.datasource'
 
 import { symbol as DatatableComposerIdentifier } from 'org.eclipse.daanse.board.app.lib.composer.datatable'
@@ -21,18 +21,26 @@ import { symbol as DatatableComposerIdentifier } from 'org.eclipse.daanse.board.
 import Preview from './Preview.vue'
 import Settings from './Settings.vue'
 
-
-const datasourceRepository = container.get<DatasourceRepository>(identifier)
-
 const previewSymbol = Symbol.for('DatatablePreview')
 const settingsSymbol = Symbol.for('DatatableSettings')
 
-container.bind(previewSymbol).toConstantValue(Preview)
-container.bind(settingsSymbol).toConstantValue(Settings)
+export function activate({ services }: ActivationContext) {
+  services.register('DatatablePreview', Preview)
+  services.register('DatatableSettings', Settings)
 
-datasourceRepository.registerDatasourceType('datatable', {
-  Store: DatatableComposerIdentifier,
-  Preview: previewSymbol,
-  Settings: settingsSymbol,
-})
+  services
+    .getRequired<DatasourceRepository>(DATASOURCE_REPOSITORY)
+    .registerDatasourceType('datatable', {
+      Store: DatatableComposerIdentifier,
+      Preview: previewSymbol,
+      Settings: settingsSymbol,
+    })
+}
 
+export function deactivate({ services }: ActivationContext) {
+  services
+    .getRequired<DatasourceRepository>(DATASOURCE_REPOSITORY)
+    .unregisterDatasourceType('datatable')
+  services.unregister('DatatablePreview')
+  services.unregister('DatatableSettings')
+}

@@ -10,23 +10,32 @@
  * Contributors:
  *   Smart City Jena
  **********************************************************************/
-import { container } from 'org.eclipse.daanse.board.app.lib.core'
+import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
 import {
-  ConnectionRepository,
-  identifier,
+  type ConnectionRepository,
+  CONNECTION_REPOSITORY,
 } from 'org.eclipse.daanse.board.app.lib.repository.connection'
 
 import { factorySymbol as MqttConnectionIdentifier } from 'org.eclipse.daanse.board.app.lib.connection.mqtt'
 
 import Settings from './Settings.vue'
 
-const connectionRepository = container.get<ConnectionRepository>(identifier)
-
 const settingsSymbol = Symbol.for('MqttConnectionSettings')
 
-container.bind(settingsSymbol).toConstantValue(Settings)
+export function activate({ services }: ActivationContext) {
+  services.register('MqttConnectionSettings', Settings)
 
-connectionRepository.registerConnectionType('mqtt', {
-  Connection: MqttConnectionIdentifier,
-  Settings: settingsSymbol,
-})
+  services
+    .getRequired<ConnectionRepository>(CONNECTION_REPOSITORY)
+    .registerConnectionType('mqtt', {
+      Connection: MqttConnectionIdentifier,
+      Settings: settingsSymbol,
+    })
+}
+
+export function deactivate({ services }: ActivationContext) {
+  services
+    .getRequired<ConnectionRepository>(CONNECTION_REPOSITORY)
+    .unregisterConnectionType('mqtt')
+  services.unregister('MqttConnectionSettings')
+}

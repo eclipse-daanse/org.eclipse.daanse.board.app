@@ -10,24 +10,35 @@ Contributors: Smart City Jena
 
 import { factorySymbol } from 'org.eclipse.daanse.board.app.lib.datasource.ogcsta'
 import {
-  DatasourceRepository,
-  identifier,
+  type DatasourceRepository,
+  DATASOURCE_REPOSITORY,
 } from 'org.eclipse.daanse.board.app.lib.repository.datasource'
-import { container } from 'org.eclipse.daanse.board.app.lib.core'
+import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
 import MapPreview from './MapPreview.vue'
 import OGCSTAStoreSettings from './OGCSTAStoreSettings.vue'
 
 const symbolForOgcStaPreview = Symbol.for('OgcStaPreview')
 const symbolForOgcStaSettings = Symbol.for('OgcStaSettings')
 
-const datasourceRepository = container.get<DatasourceRepository>(identifier)
-container.bind(symbolForOgcStaPreview).toConstantValue(MapPreview)
-container.bind(symbolForOgcStaSettings).toConstantValue(OGCSTAStoreSettings)
+export function activate({ services }: ActivationContext) {
+  services.register('OgcStaPreview', MapPreview)
+  services.register('OgcStaSettings', OGCSTAStoreSettings)
 
-datasourceRepository.registerDatasourceType('ogcsta', {
-  Store: factorySymbol,
-  Preview: symbolForOgcStaPreview,
-  Settings: symbolForOgcStaSettings,
-})
+  services
+    .getRequired<DatasourceRepository>(DATASOURCE_REPOSITORY)
+    .registerDatasourceType('ogcsta', {
+      Store: factorySymbol,
+      Preview: symbolForOgcStaPreview,
+      Settings: symbolForOgcStaSettings,
+    })
+}
+
+export function deactivate({ services }: ActivationContext) {
+  services
+    .getRequired<DatasourceRepository>(DATASOURCE_REPOSITORY)
+    .unregisterDatasourceType('ogcsta')
+  services.unregister('OgcStaPreview')
+  services.unregister('OgcStaSettings')
+}
 
 export { symbolForOgcStaPreview, symbolForOgcStaSettings }

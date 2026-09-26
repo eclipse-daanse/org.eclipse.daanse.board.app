@@ -12,6 +12,7 @@
  **********************************************************************/
 
 import { DefaultServiceRegistry } from '@eclipse-daanse/tsm'
+import type { ServiceProperties, ServiceRegistration } from '@eclipse-daanse/tsm'
 import type { Container } from 'inversify'
 
 /**
@@ -41,6 +42,65 @@ import type { Container } from 'inversify'
 export class BoardServiceRegistry extends DefaultServiceRegistry {
   constructor(private readonly legacyContainer: Container) {
     super()
+  }
+
+  /**
+   * Registriert den Dienst zusätzlich im Inversify-Container.
+   *
+   * Der Rückfallweg unten deckt nur eine Richtung ab: ein umgestelltes Paket
+   * findet Dienste der noch nicht umgestellten. Umgekehrt lesen noch nicht
+   * umgestellte Konsumenten weiterhin über `container.get(Symbol.for(...))` —
+   * etwa `DatasourceEditor.vue` für die Preview- und Settings-Komponenten.
+   * Ohne diese Spiegelung sähen sie nichts, sobald der Anbieter umgestellt ist.
+   *
+   * Wie der Rückfallweg ist auch die Spiegelung ein Übergangsbauteil: ist das
+   * letzte Paket umgestellt, liest niemand mehr aus dem Container, und beide
+   * entfallen gemeinsam.
+   */
+  override register<T>(
+    id: string,
+    service: T,
+    options: {
+      providedBy?: string
+      ranking?: number
+      properties?: ServiceProperties
+    } = {},
+  ): ServiceRegistration {
+    const registration = super.register(id, service, options)
+
+    const identifier = Symbol.for(id)
+    try {
+      if (this.legacyContainer.isBound(identifier)) {
+        this.legacyContainer.unbind(identifier)
+      }
+      this.legacyContainer.bind(identifier).toConstantValue(service)
+    } catch {
+      // Die Spiegelung ist eine Zugabe für den Übergang. Schlägt sie fehl,
+      // bleibt die Registrierung in dieser Registry trotzdem gültig.
+    }
+
+    return registration
+  }
+
+  /**
+   * Hebt die Registrierung auf — einschließlich der gespiegelten Bindung.
+   *
+   * Ohne das griffe direkt danach der Rückfallweg und lieferte den eben
+   * entfernten Dienst weiter aus, womit `deactivate` wirkungslos wäre.
+   */
+  override unregister(id: string): boolean {
+    const entfernt = super.unregister(id)
+
+    const identifier = Symbol.for(id)
+    try {
+      if (this.legacyContainer.isBound(identifier)) {
+        this.legacyContainer.unbind(identifier)
+      }
+    } catch {
+      // siehe register(): die Spiegelung ist eine Zugabe für den Übergang
+    }
+
+    return entfernt
   }
 
   override get<T>(id: string, _resolving?: Set<string>): T | undefined {

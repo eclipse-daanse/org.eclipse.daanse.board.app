@@ -10,10 +10,10 @@
  * Contributors:
  *   Smart City Jena
  **********************************************************************/
-import { container } from 'org.eclipse.daanse.board.app.lib.core'
+import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
 import {
-  DatasourceRepository,
-  identifier,
+  type DatasourceRepository,
+  DATASOURCE_REPOSITORY,
 } from 'org.eclipse.daanse.board.app.lib.repository.datasource'
 
 import { symbol as KpiComposerIdentifier } from 'org.eclipse.daanse.board.app.lib.composer.kpi'
@@ -21,17 +21,26 @@ import { symbol as KpiComposerIdentifier } from 'org.eclipse.daanse.board.app.li
 import Preview from './Preview.vue'
 import Settings from './Settings.vue'
 
-
-const datasourceRepository = container.get<DatasourceRepository>(identifier)
-
 const previewSymbol = Symbol.for('KpiComposerPreview')
 const settingsSymbol = Symbol.for('KpiComposerSettings')
 
-container.bind(previewSymbol).toConstantValue(Preview)
-container.bind(settingsSymbol).toConstantValue(Settings)
+export function activate({ services }: ActivationContext) {
+  services.register('KpiComposerPreview', Preview)
+  services.register('KpiComposerSettings', Settings)
 
-datasourceRepository.registerDatasourceType('KpiComposer', {
-  Store: KpiComposerIdentifier,
-  Preview: previewSymbol,
-  Settings: settingsSymbol,
-})
+  services
+    .getRequired<DatasourceRepository>(DATASOURCE_REPOSITORY)
+    .registerDatasourceType('KpiComposer', {
+      Store: KpiComposerIdentifier,
+      Preview: previewSymbol,
+      Settings: settingsSymbol,
+    })
+}
+
+export function deactivate({ services }: ActivationContext) {
+  services
+    .getRequired<DatasourceRepository>(DATASOURCE_REPOSITORY)
+    .unregisterDatasourceType('KpiComposer')
+  services.unregister('KpiComposerPreview')
+  services.unregister('KpiComposerSettings')
+}

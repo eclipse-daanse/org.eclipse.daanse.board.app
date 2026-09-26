@@ -11,31 +11,45 @@
  *   Smart City Jena
  **********************************************************************/
 
-import { Factory } from 'inversify'
-import { container } from 'org.eclipse.daanse.board.app.lib.core'
+import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
 import { RestConnection, type IRestConnectionConfig } from './classes'
 
-const factorySymbol = Symbol.for('RestConnectionFactory')
+/** Dienst-ID im Namensraum der ServiceRegistry; `factorySymbol` ist das dazu passende Symbol. */
+const REST_CONNECTION_FACTORY = 'RestConnectionFactory'
 
-if (!container.isBound(RestConnection)) {
-  container.bind(RestConnection).toSelf().inTransientScope()
+const factorySymbol = Symbol.for(REST_CONNECTION_FACTORY)
+
+/**
+ * Erzeugt eine Instanz aus einer Konfiguration.
+ *
+ * Wird ueber die Dienst-ID aufgeloest und mit der Konfiguration aufgerufen.
+ * Jeder Aufruf liefert eine eigene Instanz - vorher ueber inTransientScope,
+ * jetzt schlicht ueber `new`.
+ */
+function createRestConnection(config: any) {
+  if (!RestConnection.validateConfiguration(config)) {
+    throw new Error(
+      'Invalid RestConnection configuration. Please provide a valid configuration.',
+    )
+  }
+
+  const connection = new RestConnection()
+  connection.init(config)
+
+  return connection
 }
 
-if (!container.isBound(factorySymbol)) {
-  container.bind<Factory<RestConnection>>(factorySymbol).toFactory(() => {
-    return config => {
-      if (!RestConnection.validateConfiguration(config)) {
-        throw new Error(
-          'Invalid RestConnection configuration. Please provide a valid configuration.',
-        )
-      }
-
-      const connection = container.get<RestConnection>(RestConnection)
-      connection.init(config)
-
-      return connection
-    }
-  })
+export function activate({ services }: ActivationContext) {
+  services.register(REST_CONNECTION_FACTORY, createRestConnection)
 }
 
-export { RestConnection, IRestConnectionConfig, factorySymbol }
+export function deactivate({ services }: ActivationContext) {
+  services.unregister(REST_CONNECTION_FACTORY)
+}
+
+export {
+  RestConnection,
+  IRestConnectionConfig,
+  factorySymbol,
+  REST_CONNECTION_FACTORY,
+}

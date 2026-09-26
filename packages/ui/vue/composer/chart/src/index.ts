@@ -10,10 +10,10 @@
  * Contributors:
  *   Smart City Jena
  **********************************************************************/
-import { container } from 'org.eclipse.daanse.board.app.lib.core'
+import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
 import {
-  DatasourceRepository,
-  identifier,
+  type DatasourceRepository,
+  DATASOURCE_REPOSITORY,
 } from 'org.eclipse.daanse.board.app.lib.repository.datasource'
 
 import { symbol as ChartComposerIdentifier } from 'org.eclipse.daanse.board.app.lib.composer.chart'
@@ -21,18 +21,26 @@ import { symbol as ChartComposerIdentifier } from 'org.eclipse.daanse.board.app.
 import Preview from './Preview.vue'
 import Settings from './Settings.vue'
 
-
-const datasourceRepository = container.get<DatasourceRepository>(identifier)
-
 const previewSymbol = Symbol.for('ChartPreview')
 const settingsSymbol = Symbol.for('ChartSettings')
 
-container.bind(previewSymbol).toConstantValue(Preview)
-container.bind(settingsSymbol).toConstantValue(Settings)
+export function activate({ services }: ActivationContext) {
+  services.register('ChartPreview', Preview)
+  services.register('ChartSettings', Settings)
 
-datasourceRepository.registerDatasourceType('chart', {
-  Store: ChartComposerIdentifier,
-  Preview: previewSymbol,
-  Settings: settingsSymbol,
-})
+  services
+    .getRequired<DatasourceRepository>(DATASOURCE_REPOSITORY)
+    .registerDatasourceType('chart', {
+      Store: ChartComposerIdentifier,
+      Preview: previewSymbol,
+      Settings: settingsSymbol,
+    })
+}
 
+export function deactivate({ services }: ActivationContext) {
+  services
+    .getRequired<DatasourceRepository>(DATASOURCE_REPOSITORY)
+    .unregisterDatasourceType('chart')
+  services.unregister('ChartPreview')
+  services.unregister('ChartSettings')
+}
