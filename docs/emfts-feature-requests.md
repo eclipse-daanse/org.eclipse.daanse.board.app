@@ -184,3 +184,65 @@ Zugriffe was liefern, würde helfen.
 `@masagroup/ecore` — für uns der Grund, überhaupt umsteigen zu können — steckt
 nur in `next`. Wer `npm install @emfts/core` ausführt, bekommt sie nicht und
 schließt womöglich, sie existiere nicht.
+
+---
+
+## `@emfts/codegen` — aus der Generator-Bewertung (A5)
+
+Geprüft gegen den lokalen Stand `@emfts/codegen@0.0.1-next.1`, Modell
+`packages/lib/connection/base/model/model.ecore`. Ausführliche Herleitung in
+der [Entscheidungsvorlage](./emfts-generator-entscheidung.md).
+
+### FR-C1 — `decorator`- und `plain`-Modus brechen in der Operations-Schleife ab
+
+`init --mode decorator` erzeugt eine GenConfig, `generate` damit scheitert:
+
+```
+ >> 48| <% for (const genOp of operations) {
+    49|   const op = genOp.ecoreOperation;
+    50|   const opName = op.getName();
+
+op.getName is not a function
+```
+
+Reproduzierbar mit `plain` ebenso; `emf` läuft mit derselben Konfiguration
+durch. Das mitgelieferte `library.ecore` läuft im `emf`-Modus, sodass der
+Fehler nicht am Modell hängt — geprüft an einem Modell **ohne** Operationen,
+die Schleife läuft also über etwas, das dort gar nicht steht.
+
+**Warum uns das betrifft:** Der `decorator`-Modus entspricht dem Ausgabestil
+dieser Anwendung — 193 erzeugte Dateien mit `@ModelClass`/`@Attribute`. Der
+`emf`-Modus erzeugt für dasselbe Modell 818 Zeilen statt 114, mit getrennten
+Impl-, Factory- und Package-Dateien. Solange nur `emf` läuft, wäre ein
+Wechsel kein Generatorwechsel, sondern ein Umbau der Modellschicht.
+
+### FR-C2 — `href`-Verweise auf andere Pakete werden in `init` nicht aufgelöst
+
+Unsere Modelle bauen über Paketgrenzen hinweg aufeinander auf:
+
+```xml
+<eSuperTypes href="http://…lib.connection.base#//BaseConnectionConfig"/>
+<eSubpackages href="http://…lib.connection.base#/"/>
+```
+
+`init -m …/rest/model/model.ecore` bricht ab:
+
+```
+Error: subPkg.getNsURI is not a function
+```
+
+Der Proxy bleibt unaufgelöst, und `init` hat — anders als `generate` — keine
+Optionen `--dependency`/`--import-mapping`, um das abzufangen.
+
+**Vorschlag:** `--dependency` und `--import-mapping` auch für `init`; und
+unaufgelöste Proxies mit einer Meldung abweisen, die den fehlenden `nsURI`
+nennt, statt mit `getNsURI is not a function`.
+
+**Warum uns das betrifft:** Von 41 Modellen im Projekt nutzen die meisten
+dieses Muster. Es ist die Art, wie unsere Modelle aufeinander aufbauen, kein
+Randfall.
+
+### Keine Lücke (Korrektur zu unserer früheren Annahme)
+
+Wir hatten `--no_factories` als fehlend notiert. Im `emf`-Modus lässt sich
+das über `generateFactory="false"` in der GenConfig ausdrücken — erledigt.

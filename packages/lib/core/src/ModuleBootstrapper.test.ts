@@ -11,11 +11,12 @@
  *   Smart City Jena
  **********************************************************************/
 
+
 /*
- * Der Bootstrapper ersetzt die nebenwirkungsgetriebenen Importe in main.ts.
- * Zugesichert wird vor allem, was dort bisher nicht galt: eine feste
- * Reihenfolge, Warten auf asynchrone Aktivierung, und dass ein
- * fehlgeschlagenes Pflichtmodul den Start abbricht statt still weiterzulaufen.
+ * The bootstrapper replaces the side-effect driven imports in main.ts. What
+ * it guarantees is above all what did not hold there: a fixed order, waiting
+ * for asynchronous activation, and that a failing required module aborts the
+ * start instead of silently carrying on.
  */
 
 import { describe, it, expect, beforeEach } from 'vitest'
@@ -23,7 +24,7 @@ import { Container } from 'inversify'
 import { BoardServiceRegistry } from './BoardServiceRegistry'
 import { ModuleBootstrapper, type ModuleEntry } from './ModuleBootstrapper'
 
-const stilleAusgabe = () => ({
+const silentLogger = () => ({
   debug: () => {},
   info: () => {},
   warn: () => {},
@@ -36,284 +37,292 @@ describe('ModuleBootstrapper', () => {
 
   beforeEach(() => {
     services = new BoardServiceRegistry(new Container())
-    bootstrapper = new ModuleBootstrapper(services, stilleAusgabe())
+    bootstrapper = new ModuleBootstrapper(services, silentLogger())
   })
 
-  it('behaelt die Listenreihenfolge, wo keine Abhaengigkeit besteht', async () => {
-    const reihenfolge: string[] = []
-    const modul = (id: string): ModuleEntry => ({
+  it('keeps list order where no dependency exists', async () => {
+    const order: string[] = []
+    const makeModule = (id: string): ModuleEntry => ({
       id,
-      load: async () => ({ activate: () => { reihenfolge.push(id) } }),
+      load: async () => ({ activate: () => { order.push(id) } }),
     })
 
-    await bootstrapper.activateAll([modul('a'), modul('b'), modul('c')])
+    await bootstrapper.activateAll([makeModule('a'), makeModule('b'), makeModule('c')])
 
-    expect(reihenfolge).toEqual(['a', 'b', 'c'])
+    expect(order).toEqual(['a', 'b', 'c'])
   })
 
-  it('wartet auf asynchrone Aktivierung, bevor das naechste Modul startet', async () => {
-    const reihenfolge: string[] = []
-    const langsam: ModuleEntry = {
-      id: 'langsam',
+  it('awaits asynchronous activation before starting the next module', async () => {
+    const order: string[] = []
+    const slow: ModuleEntry = {
+      id: 'slow',
       load: async () => ({
         activate: async () => {
           await new Promise((r) => setTimeout(r, 20))
-          reihenfolge.push('langsam')
+          order.push('slow')
         },
       }),
     }
-    const schnell: ModuleEntry = {
-      id: 'schnell',
-      load: async () => ({ activate: () => { reihenfolge.push('schnell') } }),
+    const fast: ModuleEntry = {
+      id: 'fast',
+      load: async () => ({ activate: () => { order.push('fast') } }),
     }
 
-    await bootstrapper.activateAll([langsam, schnell])
+    await bootstrapper.activateAll([slow, fast])
 
-    // Genau die Zusicherung, die main.ts bisher fehlte
-    expect(reihenfolge).toEqual(['langsam', 'schnell'])
+    // Without awaiting, 'fast' would win the race
+    expect(order).toEqual(['slow', 'fast'])
   })
 
-  it('reicht den Dienstzugriff an das Modul durch', async () => {
-    services.register('Repository', { eintraege: [] as string[] })
+  it('hands the service access through to the module', async () => {
+    services.register('Repository', { entries: [] as string[] })
 
     await bootstrapper.activateAll([
       {
-        id: 'nutzer',
+        id: 'consumer',
         load: async () => ({
           activate: ({ services: s }) => {
-            s.getRequired<{ eintraege: string[] }>('Repository').eintraege.push('x')
+            s.getRequired<{ entries: string[] }>('Repository').entries.push('x')
           },
         }),
       },
     ])
 
-    expect(services.getRequired<{ eintraege: string[] }>('Repository').eintraege).toEqual(['x'])
+    expect(services.getRequired<{ entries: string[] }>('Repository').entries).toEqual(['x'])
   })
 
-  it('bricht ab, wenn ein Pflichtmodul fehlschlaegt', async () => {
-    const danach: string[] = []
+  it('aborts when a required module fails', async () => {
+    const later: string[] = []
 
     await expect(
       bootstrapper.activateAll([
-        { id: 'kaputt', load: async () => ({ activate: () => { throw new Error('Ursache') } }) },
-        { id: 'danach', load: async () => ({ activate: () => { danach.push('lief') } }) },
+        { id: 'broken', load: async () => ({ activate: () => { throw new Error('cause') } }) },
+        { id: 'later', load: async () => ({ activate: () => { later.push('ran') } }) },
       ]),
-    ).rejects.toThrow(/kaputt/)
+    ).rejects.toThrow(/broken/)
 
-    // Kein stilles Weiterlaufen mit halb initialisiertem Zustand
-    expect(danach).toEqual([])
+    // No silent continuation with half-initialized state
+    expect(later).toEqual([])
   })
 
-  it('nennt die urspruengliche Ursache als cause', async () => {
-    const ursache = new Error('Dienst fehlt')
+  it('carries the original error as cause', async () => {
+    const cause = new Error('service missing')
 
     await expect(
       bootstrapper.activateAll([
-        { id: 'kaputt', load: async () => ({ activate: () => { throw ursache } }) },
+        { id: 'broken', load: async () => ({ activate: () => { throw cause } }) },
       ]),
-    ).rejects.toMatchObject({ cause: ursache })
+    ).rejects.toMatchObject({ cause })
   })
 
-  it('ueberspringt ein optionales Modul und laeuft weiter', async () => {
-    const danach: string[] = []
+  it('skips an optional module and carries on', async () => {
+    const later: string[] = []
 
-    const ergebnis = await bootstrapper.activateAll([
+    const result = await bootstrapper.activateAll([
       {
-        id: 'optional-kaputt',
+        id: 'optional-broken',
         optional: true,
-        load: async () => ({ activate: () => { throw new Error('egal') } }),
+        load: async () => ({ activate: () => { throw new Error('whatever') } }),
       },
-      { id: 'danach', load: async () => ({ activate: () => { danach.push('lief') } }) },
+      { id: 'later', load: async () => ({ activate: () => { later.push('ran') } }) },
     ])
 
-    expect(danach).toEqual(['lief'])
-    expect(ergebnis.activated).toEqual(['danach'])
-    expect(ergebnis.failed.map((f) => f.id)).toEqual(['optional-kaputt'])
+    expect(later).toEqual(['ran'])
+    expect(result.activated).toEqual(['later'])
+    expect(result.failed.map((f) => f.id)).toEqual(['optional-broken'])
   })
 
-  it('weist ein Modul ohne activate zurueck', async () => {
+  it('rejects a module without an activate export', async () => {
     await expect(
-      bootstrapper.activateAll([{ id: 'leer', load: async () => ({}) }]),
-    ).rejects.toThrow(/leer/)
+      bootstrapper.activateAll([{ id: 'empty', load: async () => ({}) }]),
+    ).rejects.toMatchObject({
+      message: expect.stringMatching(/could not be activated/),
+      cause: expect.objectContaining({
+        message: expect.stringMatching(/does not export an activate function/),
+      }),
+    })
   })
 
-  it('deaktiviert in umgekehrter Reihenfolge', async () => {
-    const reihenfolge: string[] = []
-    const modul = (id: string): ModuleEntry => ({
+  it('deactivates in reverse order', async () => {
+    const order: string[] = []
+    const makeModule = (id: string): ModuleEntry => ({
       id,
       load: async () => ({
         activate: () => {},
-        deactivate: () => { reihenfolge.push(id) },
+        deactivate: () => { order.push(id) },
       }),
     })
 
-    await bootstrapper.activateAll([modul('a'), modul('b'), modul('c')])
+    await bootstrapper.activateAll([makeModule('a'), makeModule('b'), makeModule('c')])
     await bootstrapper.deactivateAll()
 
-    expect(reihenfolge).toEqual(['c', 'b', 'a'])
+    expect(order).toEqual(['c', 'b', 'a'])
   })
 
-  it('deaktiviert die uebrigen Module weiter, wenn eines dabei scheitert', async () => {
-    const reihenfolge: string[] = []
-
-    await bootstrapper.activateAll([
-      {
-        id: 'a',
-        load: async () => ({ activate: () => {}, deactivate: () => { reihenfolge.push('a') } }),
-      },
-      {
-        id: 'b',
-        load: async () => ({ activate: () => {}, deactivate: () => { throw new Error('nope') } }),
-      },
-    ])
-    const fehler = await bootstrapper.deactivateAll()
-
-    expect(reihenfolge).toEqual(['a'])
-    expect(fehler.map((f) => f.id)).toEqual(['b'])
-  })
-
-  it('deaktiviert nur, was auch aktiviert wurde', async () => {
-    const reihenfolge: string[] = []
+  it('keeps deactivating when one module fails to deactivate', async () => {
+    const order: string[] = []
 
     await bootstrapper.activateAll([
       {
         id: 'ok',
-        load: async () => ({ activate: () => {}, deactivate: () => { reihenfolge.push('ok') } }),
+        load: async () => ({ activate: () => {}, deactivate: () => { order.push('ok') } }),
       },
       {
-        id: 'optional-kaputt',
+        id: 'broken',
+        load: async () => ({
+          activate: () => {},
+          deactivate: () => { throw new Error('teardown failed') },
+        }),
+      },
+    ])
+    const failed = await bootstrapper.deactivateAll()
+
+    expect(order).toEqual(['ok'])
+    expect(failed.map((f) => f.id)).toEqual(['broken'])
+  })
+
+  it('does not deactivate modules that never activated', async () => {
+    const order: string[] = []
+
+    await bootstrapper.activateAll([
+      {
+        id: 'ok',
+        load: async () => ({ activate: () => {}, deactivate: () => { order.push('ok') } }),
+      },
+      {
+        id: 'optional-broken',
         optional: true,
         load: async () => ({
-          activate: () => { throw new Error('egal') },
-          deactivate: () => { reihenfolge.push('darf-nicht') },
+          activate: () => { throw new Error('whatever') },
+          deactivate: () => { order.push('must-not-run') },
         }),
       },
     ])
     await bootstrapper.deactivateAll()
 
-    expect(reihenfolge).toEqual(['ok'])
+    expect(order).toEqual(['ok'])
   })
 
-  describe('Reihenfolge aus Deklarationen', () => {
-    const protokollierend = (
+  describe('order from declarations', () => {
+    const tracking = (
       id: string,
-      reihenfolge: string[],
+      order: string[],
       rest: Partial<ModuleEntry> = {},
     ): ModuleEntry => ({
       id,
-      load: async () => ({ activate: () => { reihenfolge.push(id) } }),
+      load: async () => ({ activate: () => { order.push(id) } }),
       ...rest,
     })
 
-    it('aktiviert den Anbieter vor seinem Konsumenten, egal wie die Liste sortiert ist', async () => {
-      const reihenfolge: string[] = []
+    it('activates the provider before its consumer, however the list is sorted', async () => {
+      const order: string[] = []
 
       await bootstrapper.activateAll([
-        protokollierend('widget', reihenfolge, { requires: ['WidgetRepository'] }),
-        protokollierend('registry', reihenfolge, { provides: ['WidgetRepository'] }),
+        tracking('widget', order, { requires: ['WidgetRepository'] }),
+        tracking('registry', order, { provides: ['WidgetRepository'] }),
       ])
 
-      expect(reihenfolge).toEqual(['registry', 'widget'])
+      expect(order).toEqual(['registry', 'widget'])
     })
 
-    it('ordnet ueber mehrere Stufen hinweg', async () => {
-      const reihenfolge: string[] = []
+    it('orders across several levels', async () => {
+      const order: string[] = []
 
       await bootstrapper.activateAll([
-        protokollierend('c', reihenfolge, { requires: ['B'] }),
-        protokollierend('b', reihenfolge, { provides: ['B'], requires: ['A'] }),
-        protokollierend('a', reihenfolge, { provides: ['A'] }),
+        tracking('c', order, { requires: ['B'] }),
+        tracking('b', order, { provides: ['B'], requires: ['A'] }),
+        tracking('a', order, { provides: ['A'] }),
       ])
 
-      expect(reihenfolge).toEqual(['a', 'b', 'c'])
+      expect(order).toEqual(['a', 'b', 'c'])
     })
 
     /*
-     * Der eigentliche Beweis: Wenn die Reihenfolge aus den Deklarationen
-     * folgt, darf die Reihenfolge der Liste beliebig sein. Geprueft ueber
-     * alle Permutationen, damit kein Zufall durchrutscht.
+     * The actual proof: if the order follows from the declarations, the list
+     * may be in any order. Checked across all permutations so no coincidence
+     * slips through.
      */
-    it('kommt bei jeder Permutation der Liste zum selben Ergebnis', async () => {
-      const permutationen = <T,>(xs: T[]): T[][] =>
+    it('reaches the same result for every permutation of the list', async () => {
+      const permutations = <T,>(xs: T[]): T[][] =>
         xs.length <= 1
           ? [xs]
           : xs.flatMap((x, i) =>
-              permutationen([...xs.slice(0, i), ...xs.slice(i + 1)]).map((rest) => [x, ...rest]),
+              permutations([...xs.slice(0, i), ...xs.slice(i + 1)]).map((rest) => [x, ...rest]),
             )
 
-      for (const reihe of permutationen(['registry', 'layout', 'widget'])) {
-        const reihenfolge: string[] = []
-        const bauplan: Record<string, Partial<ModuleEntry>> = {
+      for (const arrangement of permutations(['registry', 'layout', 'widget'])) {
+        const order: string[] = []
+        const blueprint: Record<string, Partial<ModuleEntry>> = {
           registry: { provides: ['WidgetRepository'] },
           layout: { provides: ['LayoutRepository'], requires: ['WidgetRepository'] },
           widget: { requires: ['WidgetRepository', 'LayoutRepository'] },
         }
 
-        const eigener = new ModuleBootstrapper(new BoardServiceRegistry(new Container()), stilleAusgabe())
-        await eigener.activateAll(reihe.map((id) => protokollierend(id, reihenfolge, bauplan[id])))
+        const own = new ModuleBootstrapper(new BoardServiceRegistry(new Container()), silentLogger())
+        await own.activateAll(arrangement.map((id) => tracking(id, order, blueprint[id])))
 
-        expect(reihenfolge, `Eingabe: ${reihe.join(', ')}`).toEqual(['registry', 'layout', 'widget'])
+        expect(order, `input: ${arrangement.join(', ')}`).toEqual(['registry', 'layout', 'widget'])
       }
     })
 
     /*
-     * Waehrend der Umstellung stammen die meisten Dienste noch aus nicht
-     * migrierten Paketen. Die duerfen die Sortierung nicht blockieren -
-     * sie kommen ueber den Rueckfallweg der Registry.
+     * During the migration most services still come from not-yet-migrated
+     * packages. Those must not block the sorting - they arrive through the
+     * registry's fallback path.
      */
-    it('ignoriert Dienste, die kein Modul der Liste bereitstellt', async () => {
-      const reihenfolge: string[] = []
+    it('ignores services no module of the list provides', async () => {
+      const order: string[] = []
 
       const { activated } = await bootstrapper.activateAll([
-        protokollierend('a', reihenfolge, { requires: ['EventRegistry', 'I18next'] }),
-        protokollierend('b', reihenfolge, { requires: ['DatasourceRepository'] }),
+        tracking('a', order, { requires: ['EventRegistry', 'I18next'] }),
+        tracking('b', order, { requires: ['DatasourceRepository'] }),
       ])
 
       expect(activated).toEqual(['a', 'b'])
-      expect(reihenfolge).toEqual(['a', 'b'])
+      expect(order).toEqual(['a', 'b'])
     })
 
-    it('meldet einen Zyklus mit den beteiligten Modulen, statt willkuerlich zu sortieren', async () => {
-      const reihenfolge: string[] = []
+    it('reports a cycle naming the modules involved instead of sorting arbitrarily', async () => {
+      const order: string[] = []
 
       await expect(
         bootstrapper.activateAll([
-          protokollierend('a', reihenfolge, { provides: ['A'], requires: ['B'] }),
-          protokollierend('b', reihenfolge, { provides: ['B'], requires: ['A'] }),
+          tracking('a', order, { provides: ['A'], requires: ['B'] }),
+          tracking('b', order, { provides: ['B'], requires: ['A'] }),
         ]),
-      ).rejects.toThrow(/Zyklische Modulabhaengigkeit|Zyklische Modulabhängigkeit/)
+      ).rejects.toThrow(/Cyclic module dependency/)
 
-      expect(reihenfolge).toEqual([])
+      expect(order).toEqual([])
     })
 
-    it('stoert sich nicht an einem Modul, das seinen eigenen Dienst aufloest', async () => {
-      const reihenfolge: string[] = []
+    it('is not bothered by a module resolving its own service', async () => {
+      const order: string[] = []
 
       await bootstrapper.activateAll([
-        protokollierend('selbst', reihenfolge, { provides: ['X'], requires: ['X'] }),
+        tracking('self', order, { provides: ['X'], requires: ['X'] }),
       ])
 
-      expect(reihenfolge).toEqual(['selbst'])
+      expect(order).toEqual(['self'])
     })
 
-    it('baut in umgekehrter Aktivierungsreihenfolge ab, nicht in Listenreihenfolge', async () => {
-      const reihenfolge: string[] = []
-      const modul = (id: string, rest: Partial<ModuleEntry>): ModuleEntry => ({
+    it('tears down in reverse activation order, not list order', async () => {
+      const order: string[] = []
+      const makeModule = (id: string, rest: Partial<ModuleEntry>): ModuleEntry => ({
         id,
         load: async () => ({
           activate: () => {},
-          deactivate: () => { reihenfolge.push(id) },
+          deactivate: () => { order.push(id) },
         }),
         ...rest,
       })
 
       await bootstrapper.activateAll([
-        modul('konsument', { requires: ['R'] }),
-        modul('anbieter', { provides: ['R'] }),
+        makeModule('consumer', { requires: ['R'] }),
+        makeModule('provider', { provides: ['R'] }),
       ])
       await bootstrapper.deactivateAll()
 
-      expect(reihenfolge).toEqual(['konsument', 'anbieter'])
+      expect(order).toEqual(['consumer', 'provider'])
     })
   })
 })

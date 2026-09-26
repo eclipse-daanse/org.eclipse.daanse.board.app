@@ -20,6 +20,23 @@ export interface WidgetConfig {
   datasource?: string
 }
 
+/**
+ * Service ID under which widget bundles register their provider.
+ *
+ * The repository tracks registrations under this ID (the OSGi ServiceTracker
+ * pattern): a bundle that registers appears in the palette, one that goes
+ * away disappears - nobody calls registerWidget by hand for bundles.
+ */
+export const WIDGET_SERVICE_ID = 'daanse.widget'
+
+/**
+ * What a widget bundle offers as a service: its type key plus the
+ * configuration the palette and the wrapper consume.
+ */
+export interface WidgetProvider extends WidgetConfig {
+  readonly type: string
+}
+
 export class WidgetRepository {
   private availableWidgets: Record<string, WidgetConfig> = {}
 
