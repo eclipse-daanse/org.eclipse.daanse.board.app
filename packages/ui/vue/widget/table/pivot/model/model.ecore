@@ -12,7 +12,7 @@
 -->
 <xmi:XMI xmi:version="2.1" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:PivotTable="http://org.eclipse.daanse.board.app.ui.vue.widget.table.pivot">
   <ecore:EPackage name="PivotTable" nsURI="http://org.eclipse.daanse.board.app.ui.vue.widget.table.pivot" nsPrefix="PivotTable">
-    <eClassifiers xsi:type="ecore:EClass" name="PivotTable" eTypeParameters.0="PivotTable:IPivotTable">
+    <eClassifiers xsi:type="ecore:EClass" name="PivotTable">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="documentation">Represents a pivot table structure.  Contains rows, columns, cells, and table state information.</details>
       </eAnnotations>
@@ -31,7 +31,7 @@
           <details key="documentation">Cells of the pivot table. Can contain any type of data.</details>
         </eAnnotations>
       </eStructuralFeatures>
-      <eStructuralFeatures xsi:type="ecore:EAttribute" name="tableState" lowerBound="0" eType="ecore:EJavaObject">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="tableState" lowerBound="0" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject">
         <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
           <details key="documentation">The overall state of the pivot table. Can be any type of data.</details>
         </eAnnotations>
@@ -158,7 +158,7 @@
         <eAnnotations source="org.eclipse.daanse.board.app.lib.events/WidgetAction">
           <details key="eventType" value="pivotTable.expandRow"/>
         </eAnnotations>
-        <eParameters name="rowUniqueName" eType="ecore:EString">
+        <eParameters name="rowUniqueName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
           <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
             <details key="documentation">The unique identifier of the row to expand.</details>
           </eAnnotations>

@@ -1,4 +1,3 @@
-
 {
   "name": "org.eclipse.daanse.board.app.ui.vue.page_provider",
   "version": "0.0.1-next.1",
@@ -14,7 +13,7 @@
     "url": "git+https://github.com/eclipse-daanse/org.eclipse.daanse.board.app.git"
   },
   "scripts": {
-    "build": "vite build"
+    "build": "tsc --noEmit && vite build"
   },
   "bugs": {
     "url": "https://github.com/eclipse-daanse/org.eclipse.daanse.board.app/issues"

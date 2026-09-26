@@ -10,7 +10,7 @@
   "module": "./dist/weather.js",
   "types": "./dist/index.d.ts",
   "scripts": {
-    "build": "vite build",
+    "build": "tsc --noEmit && vite build",
     "preview": "vite preview"
   },
   "dependencies": {

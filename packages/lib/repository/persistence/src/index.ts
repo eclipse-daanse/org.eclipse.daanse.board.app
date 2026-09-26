@@ -13,7 +13,10 @@ import type { RepositoryRegistryI,WritableRepository,Entity,Repository } from '.
 import {BaseRepository} from './api/BaseRepository'
 import { RepositoryRegistry } from './RepositoryRegistry/RepositoryRegistryImpl'
 import type {RepositoryObserver} from './api/RepositoryObserverI';
-const identifier = Symbol.for('RepositoryRegistry')
+/** Dienst-ID im Namensraum der ServiceRegistry; `identifier` ist das dazu passende Symbol. */
+const REPOSITORY_REGISTRY = 'RepositoryRegistry'
+
+const identifier = Symbol.for(REPOSITORY_REGISTRY)
 const identifierInternalContainer = Symbol.for('InternalContainer')
 
 if(!container.isBound(identifier)){
@@ -28,6 +31,4 @@ export {
   WritableRepository,
   Entity,
   Repository,
-  RepositoryObserver
-
-}
+  RepositoryObserver, REPOSITORY_REGISTRY }

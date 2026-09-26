@@ -11,22 +11,31 @@
  *   Smart City Jena
  **********************************************************************/
 import {
-  ConnectionRepository,
-  identifier,
+  type ConnectionRepository,
+  CONNECTION_REPOSITORY,
 } from 'org.eclipse.daanse.board.app.lib.repository.connection'
-import { container } from 'org.eclipse.daanse.board.app.lib.core'
+import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
 
 import { factorySymbol as WSConnectionIdentifier } from 'org.eclipse.daanse.board.app.lib.connection.websocket'
 
 import Settings from './Settings.vue'
 
-const connectionRepository = container.get<ConnectionRepository>(identifier)
-
 const settingsSymbol = Symbol.for('WsConnectionSettings')
 
-container.bind(settingsSymbol).toConstantValue(Settings)
+export function activate({ services }: ActivationContext) {
+  services.register('WsConnectionSettings', Settings)
 
-connectionRepository.registerConnectionType('ws', {
-  Connection: WSConnectionIdentifier,
-  Settings: settingsSymbol,
-})
+  services
+    .getRequired<ConnectionRepository>(CONNECTION_REPOSITORY)
+    .registerConnectionType('ws', {
+      Connection: WSConnectionIdentifier,
+      Settings: settingsSymbol,
+    })
+}
+
+export function deactivate({ services }: ActivationContext) {
+  services
+    .getRequired<ConnectionRepository>(CONNECTION_REPOSITORY)
+    .unregisterConnectionType('ws')
+  services.unregister('WsConnectionSettings')
+}

@@ -11,31 +11,45 @@
  *   Smart City Jena
  **********************************************************************/
 
-import { Factory } from 'inversify'
 import { RssConnection, type IRssConnectionConfiguration } from './classes'
-import { container } from 'org.eclipse.daanse.board.app.lib.core'
+import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
 
-const factorySymbol = Symbol.for('RssConnectionFactory')
+/** Dienst-ID im Namensraum der ServiceRegistry; `factorySymbol` ist das dazu passende Symbol. */
+const RSS_CONNECTION_FACTORY = 'RssConnectionFactory'
 
-if (!container.isBound(RssConnection)) {
-  container.bind<RssConnection>(RssConnection).toSelf().inTransientScope()
+const factorySymbol = Symbol.for(RSS_CONNECTION_FACTORY)
+
+/**
+ * Erzeugt eine Instanz aus einer Konfiguration.
+ *
+ * Wird ueber die Dienst-ID aufgeloest und mit der Konfiguration aufgerufen.
+ * Jeder Aufruf liefert eine eigene Instanz - vorher ueber inTransientScope,
+ * jetzt schlicht ueber `new`.
+ */
+function createRssConnection(config: IRssConnectionConfiguration) {
+  if (!RssConnection.validateConfiguration(config)) {
+    throw new Error(
+      'Invalid RssConnection configuration. Please provide a valid configuration.',
+    )
+  }
+
+  const connection = new RssConnection()
+  connection.init(config)
+
+  return connection
 }
 
-if (!container.isBound(factorySymbol)) {
-  container.bind<Factory<RssConnection>>(factorySymbol).toFactory(() => {
-    return (config: IRssConnectionConfiguration) => {
-      if (!RssConnection.validateConfiguration(config)) {
-        throw new Error(
-          'Invalid RssConnection configuration. Please provide a valid configuration.',
-        )
-      }
-
-      const connection = container.get<RssConnection>(RssConnection)
-      connection.init(config)
-
-      return connection
-    }
-  })
+export function activate({ services }: ActivationContext) {
+  services.register(RSS_CONNECTION_FACTORY, createRssConnection)
 }
 
-export { RssConnection, IRssConnectionConfiguration, factorySymbol }
+export function deactivate({ services }: ActivationContext) {
+  services.unregister(RSS_CONNECTION_FACTORY)
+}
+
+export {
+  RssConnection,
+  IRssConnectionConfiguration,
+  factorySymbol,
+  RSS_CONNECTION_FACTORY,
+}

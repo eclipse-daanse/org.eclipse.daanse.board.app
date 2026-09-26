@@ -119,6 +119,31 @@ describe('BoardServiceRegistry', () => {
     })
   })
 
+  describe('Spiegelung in den Inversify-Container', () => {
+    it('macht einen registrierten Dienst ueber Symbol.for auffindbar', () => {
+      // Noch nicht umgestellte Konsumenten lesen so - z. B. DatasourceEditor.vue
+      const komponente = { name: 'CsvPreview' }
+      services.register('CsvPreview', komponente)
+
+      expect(container.get(Symbol.for('CsvPreview'))).toBe(komponente)
+    })
+
+    it('ersetzt eine bestehende Bindung desselben Symbols', () => {
+      container.bind(Symbol.for('Doppelt')).toConstantValue({ quelle: 'alt' })
+      services.register('Doppelt', { quelle: 'neu' })
+
+      expect(container.get(Symbol.for('Doppelt'))).toEqual({ quelle: 'neu' })
+    })
+
+    it('spiegelt nur register, nicht bind', () => {
+      // bind ist lazy; eine Spiegelung wuerde die Instanz vorzeitig erzeugen.
+      services.bind('Spaet', () => ({ a: 1 }))
+
+      expect(container.isBound(Symbol.for('Spaet'))).toBe(false)
+      expect(services.get('Spaet')).toEqual({ a: 1 })
+    })
+  })
+
   describe('Abschaltbarkeit des Rueckfallwegs', () => {
     it('verhaelt sich ohne Inversify-Bindungen wie die reine tsm-Registry', () => {
       // Wenn das letzte Paket umgestellt ist, findet der Rueckfallweg nichts
@@ -140,6 +165,26 @@ describe('BoardServiceRegistry', () => {
       services.unregister('Weg')
 
       expect(services.get('Weg')).toBeUndefined()
+    })
+
+    it('entfernt auch die gespiegelte Bindung', () => {
+      // Sonst liefert der Rueckfallweg den eben entfernten Dienst weiter aus,
+      // und deactivate waere wirkungslos.
+      services.register('Weg', { a: 1 })
+      expect(container.isBound(Symbol.for('Weg'))).toBe(true)
+
+      services.unregister('Weg')
+
+      expect(container.isBound(Symbol.for('Weg'))).toBe(false)
+      expect(services.has('Weg')).toBe(false)
+    })
+
+    it('laesst eine fremde Inversify-Bindung beim Aufraeumen unberuehrt', () => {
+      // Nur was diese Registry gespiegelt hat, darf sie auch entfernen -
+      // hier hat sie nie registriert, also gibt es nichts aufzuraeumen.
+      services.unregister('NieRegistriert')
+
+      expect(services.get('NieRegistriert')).toBeUndefined()
     })
   })
 })

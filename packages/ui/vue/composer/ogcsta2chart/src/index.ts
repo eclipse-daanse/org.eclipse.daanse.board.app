@@ -10,10 +10,10 @@
  * Contributors:
  *   Smart City Jena
  **********************************************************************/
-import { container } from 'org.eclipse.daanse.board.app.lib.core'
+import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
 import {
-  DatasourceRepository,
-  identifier,
+  type DatasourceRepository,
+  DATASOURCE_REPOSITORY,
 } from 'org.eclipse.daanse.board.app.lib.repository.datasource'
 
 import { symbol as OGCSTAToChartComposerIdentifier } from 'org.eclipse.daanse.board.app.lib.composer.ogcsta2chart'
@@ -21,17 +21,28 @@ import { symbol as OGCSTAToChartComposerIdentifier } from 'org.eclipse.daanse.bo
 import Preview from './Preview.vue'
 import Settings from './Settings.vue'
 
-const datasourceRepository = container.get<DatasourceRepository>(identifier)
-
 const previewSymbol = Symbol.for('OGCSTAToChartComposerPreview')
 const settingsSymbol = Symbol.for('OGCSTAToChartComposerSettings')
 
 // Create factory function for OGCSTAToChartComposer
-container.bind(previewSymbol).toConstantValue(Preview)
-container.bind(settingsSymbol).toConstantValue(Settings)
 
-datasourceRepository.registerDatasourceType('ogcsta2chart', {
-  Store: OGCSTAToChartComposerIdentifier,
-  Preview: previewSymbol,
-  Settings: settingsSymbol,
-})
+export function activate({ services }: ActivationContext) {
+  services.register('OGCSTAToChartComposerPreview', Preview)
+  services.register('OGCSTAToChartComposerSettings', Settings)
+
+  services
+    .getRequired<DatasourceRepository>(DATASOURCE_REPOSITORY)
+    .registerDatasourceType('ogcsta2chart', {
+      Store: OGCSTAToChartComposerIdentifier,
+      Preview: previewSymbol,
+      Settings: settingsSymbol,
+    })
+}
+
+export function deactivate({ services }: ActivationContext) {
+  services
+    .getRequired<DatasourceRepository>(DATASOURCE_REPOSITORY)
+    .unregisterDatasourceType('ogcsta2chart')
+  services.unregister('OGCSTAToChartComposerPreview')
+  services.unregister('OGCSTAToChartComposerSettings')
+}

@@ -3,7 +3,7 @@
     "sourceMap": true,
     "declarationMap": true,
     "inlineSources": true,
-    "target": "es2016",
+    "target": "es2022",
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "module": "commonjs",

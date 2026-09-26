@@ -42,6 +42,19 @@ export class VariableRepository implements SystemVariableActions, PageVariableAc
     this.availableVariablesTypes.set(type, identifiers)
   }
 
+  /**
+   * Nimmt die Registrierung eines Variablentyps zurück.
+   *
+   * Gegenstück zu registerVariableType, damit ein Modul seine Registrierung
+   * in deactivate() wieder aufheben kann. Betrifft nur den Typ; angelegte
+   * Variablen werden über removeVariable entfernt.
+   *
+   * @returns ob der Typ registriert war
+   */
+  unregisterVariableType(type: string): boolean {
+    return this.availableVariablesTypes.delete(type)
+  }
+
   getRegisteredVariableTypes(): string[] {
     return Array.from(this.availableVariablesTypes.keys())
   }

@@ -1,4 +1,3 @@
-
 {
   "name": "org.eclipse.daanse.board.app.lib.variables",
   "version": "0.0.1-next.1",
@@ -15,7 +14,7 @@
     "url": "git+https://github.com/eclipse-daanse/org.eclipse.daanse.board.app.git"
   },
   "scripts": {
-    "build": "vite build",
+    "build": "tsc --noEmit && vite build",
     "test": "node ./__tests__/test.test.ts"
   },
   "bugs": {
@@ -29,7 +28,6 @@
   "devDependencies": {
     "inversify": "7.11.0",
     "typescript": "^5.8.2",
-
     "vite-plugin-dts": "4.5.4"
   },
   "gitHead": "aecb37efd418b32c929d0657474b25cce42c17cd",

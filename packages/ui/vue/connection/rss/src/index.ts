@@ -11,22 +11,31 @@
  *   Smart City Jena
  **********************************************************************/
 import {
-  ConnectionRepository,
-  identifier,
+  type ConnectionRepository,
+  CONNECTION_REPOSITORY,
 } from 'org.eclipse.daanse.board.app.lib.repository.connection'
-import { container } from 'org.eclipse.daanse.board.app.lib.core'
+import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
 
 import { factorySymbol as RssConnectionIdentifier } from 'org.eclipse.daanse.board.app.lib.connection.rss'
 
 import Settings from './Settings.vue'
 
-const connectionRepository = container.get<ConnectionRepository>(identifier)
-
 const settingsSymbol = Symbol.for('RssConnectionSettings')
 
-container.bind(settingsSymbol).toConstantValue(Settings)
+export function activate({ services }: ActivationContext) {
+  services.register('RssConnectionSettings', Settings)
 
-connectionRepository.registerConnectionType('rss', {
-  Connection: RssConnectionIdentifier,
-  Settings: settingsSymbol,
-})
+  services
+    .getRequired<ConnectionRepository>(CONNECTION_REPOSITORY)
+    .registerConnectionType('rss', {
+      Connection: RssConnectionIdentifier,
+      Settings: settingsSymbol,
+    })
+}
+
+export function deactivate({ services }: ActivationContext) {
+  services
+    .getRequired<ConnectionRepository>(CONNECTION_REPOSITORY)
+    .unregisterConnectionType('rss')
+  services.unregister('RssConnectionSettings')
+}

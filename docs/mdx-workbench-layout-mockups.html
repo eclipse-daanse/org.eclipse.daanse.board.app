@@ -1,0 +1,1429 @@
+<title>Daanse × MDX Workbench — Layout-Mockups</title>
+<style>
+  :root {
+    --pg-bg: #f4f5f7;
+    --pg-surface: #ffffff;
+    --pg-border: #dcdee4;
+    --pg-fg: #22242a;
+    --pg-dim: #676b76;
+    --pg-accent: #3b64c4;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --pg-bg: #141519;
+      --pg-surface: #1d1e24;
+      --pg-border: #32343d;
+      --pg-fg: #dcdee4;
+      --pg-dim: #8f929c;
+      --pg-accent: #7ea6f0;
+    }
+  }
+  :root[data-theme="dark"] {
+    --pg-bg: #141519; --pg-surface: #1d1e24; --pg-border: #32343d;
+    --pg-fg: #dcdee4; --pg-dim: #8f929c; --pg-accent: #7ea6f0;
+  }
+  :root[data-theme="light"] {
+    --pg-bg: #f4f5f7; --pg-surface: #ffffff; --pg-border: #dcdee4;
+    --pg-fg: #22242a; --pg-dim: #676b76; --pg-accent: #3b64c4;
+  }
+
+  body {
+    background: var(--pg-bg);
+    color: var(--pg-fg);
+    font-family: "Segoe UI", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
+    line-height: 1.5;
+    margin: 0;
+    padding: 0 0 4rem;
+  }
+  .wrap { max-width: 1200px; margin: 0 auto; padding: 0 1.25rem; }
+
+  header.page {
+    padding: 2.5rem 0 1.5rem;
+    border-bottom: 1px solid var(--pg-border);
+    margin-bottom: 1.25rem;
+  }
+  .eyebrow {
+    font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--pg-accent); font-weight: 600; margin: 0 0 0.5rem;
+  }
+  h1 { font-size: 1.7rem; margin: 0 0 0.5rem; text-wrap: balance; font-weight: 650; }
+  .lede { color: var(--pg-dim); max-width: 62ch; margin: 0; font-size: 0.95rem; }
+
+  .controls {
+    display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center;
+    margin: 1.25rem 0 1rem;
+  }
+  .tabs { display: flex; flex-wrap: wrap; gap: 0.35rem; flex: 1; }
+  .tabs button {
+    font: inherit; font-size: 0.82rem; font-weight: 550;
+    padding: 0.42rem 0.85rem; border-radius: 6px;
+    border: 1px solid var(--pg-border); background: var(--pg-surface); color: var(--pg-dim);
+    cursor: pointer;
+  }
+  .tabs button:hover { color: var(--pg-fg); }
+  .tabs button.on { background: var(--pg-accent); border-color: var(--pg-accent); color: #fff; }
+  .tabs button:focus-visible, .mtheme:focus-visible { outline: 2px solid var(--pg-accent); outline-offset: 2px; }
+  .mtheme {
+    font: inherit; font-size: 0.78rem; padding: 0.42rem 0.75rem; border-radius: 6px;
+    border: 1px solid var(--pg-border); background: var(--pg-surface); color: var(--pg-dim); cursor: pointer;
+  }
+
+  .screen { display: none; }
+  .screen.on { display: block; }
+  .screen h2 { font-size: 1.05rem; margin: 0.25rem 0 0.2rem; font-weight: 640; }
+  .screen .sub { color: var(--pg-dim); font-size: 0.85rem; margin: 0 0 0.85rem; max-width: 75ch; }
+
+  .frame {
+    border: 1px solid var(--pg-border); border-radius: 10px; overflow: hidden;
+    background: var(--pg-surface);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+  }
+  .viewport { width: 100%; overflow: hidden; }
+  .stage { width: 1280px; transform-origin: 0 0; }
+
+  .legend { margin: 1rem 0 0; padding: 0; list-style: none; display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 0.5rem 1.5rem; }
+  .legend li { display: flex; gap: 0.6rem; font-size: 0.84rem; color: var(--pg-dim); align-items: baseline; }
+  .legend b { color: var(--pg-fg); font-weight: 600; }
+  .legend .dot { flex: none; transform: translateY(-1px); }
+  .dot {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 18px; height: 18px; border-radius: 50%;
+    background: #c9860a; color: #fff; font-size: 11px; font-weight: 700;
+    font-variant-numeric: tabular-nums;
+  }
+  .note { position: absolute; z-index: 30; box-shadow: 0 0 0 3px rgba(201,134,10,0.25); }
+
+  section.tokens { margin-top: 3rem; }
+  section.tokens h2 { font-size: 1.05rem; }
+  .tok-note { color: var(--pg-dim); font-size: 0.85rem; max-width: 75ch; }
+  .tbl-wrap { overflow-x: auto; border: 1px solid var(--pg-border); border-radius: 8px; }
+  table.tok { border-collapse: collapse; width: 100%; font-size: 0.82rem; }
+  table.tok th, table.tok td { text-align: left; padding: 0.5rem 0.85rem; border-bottom: 1px solid var(--pg-border); white-space: nowrap; }
+  table.tok th { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--pg-dim); }
+  table.tok tr:last-child td { border-bottom: 0; }
+  table.tok code { font-family: "JetBrains Mono", "Cascadia Code", Consolas, monospace; font-size: 0.78rem; }
+  .sw { display: inline-block; width: 12px; height: 12px; border-radius: 3px; border: 1px solid rgba(128,128,128,0.4); vertical-align: -1px; margin-right: 6px; }
+
+  /* ============ MOCKUP TOKENS ============ */
+  .mock {
+    --bg: #1e1f24;
+    --pane: #25262c;
+    --raised: #2c2d34;
+    --canvas: #191a1e;
+    --border: #383a43;
+    --fg: #d7d9df;
+    --dim: #898c97;
+    --accent: #6ea8fe;
+    --accent-soft: rgba(110,168,254,0.14);
+    --brand: #d9a422;
+    --ok: #58bb8a;
+    --warn: #d9a95a;
+    --err: #e06c75;
+    --sel: rgba(110,168,254,0.22);
+    --kw: #6ea8fe;
+    --measure: #d9a95a;
+    --member: #58bb8a;
+    --fn: #c586c0;
+    --shadow: rgba(0,0,0,0.4);
+    font-family: "Segoe UI", system-ui, sans-serif;
+    font-size: 13px;
+    color: var(--fg);
+    background: var(--bg);
+    position: relative;
+  }
+  .mock.light {
+    --bg: #eceef1;
+    --pane: #f7f8fa;
+    --raised: #ffffff;
+    --canvas: #e2e4e9;
+    --border: #d3d6dd;
+    --fg: #2c2e35;
+    --dim: #71747e;
+    --accent: #3567c9;
+    --accent-soft: rgba(53,103,201,0.10);
+    --brand: #a87d10;
+    --ok: #2c8a5e;
+    --warn: #a2721c;
+    --err: #c0392b;
+    --sel: rgba(53,103,201,0.16);
+    --kw: #3567c9;
+    --measure: #a2721c;
+    --member: #2c8a5e;
+    --fn: #8f4bb0;
+    --shadow: rgba(30,40,60,0.15);
+  }
+  .mock * { box-sizing: border-box; }
+  .mock .mono { font-family: "JetBrains Mono", "Cascadia Code", Consolas, monospace; font-size: 12.5px; }
+
+  /* App shell grid */
+  .shell { display: grid; grid-template-rows: 42px 1fr; height: 800px; }
+  .shell-body { display: grid; grid-template-columns: 52px 1fr; min-height: 0; }
+
+  /* Topbar */
+  .tb {
+    display: flex; align-items: center; gap: 10px; padding: 0 12px;
+    background: var(--pane); border-bottom: 1px solid var(--border);
+  }
+  .logo { display: flex; align-items: center; gap: 8px; font-weight: 650; letter-spacing: 0.01em; }
+  .logo .mark {
+    width: 20px; height: 20px; border-radius: 5px;
+    background: linear-gradient(135deg, var(--brand), #b3730a);
+    display: inline-flex; align-items: center; justify-content: center;
+    color: #fff; font-size: 11px; font-weight: 800;
+  }
+  .tb .crumb { color: var(--dim); font-size: 12.5px; }
+  .tb .crumb b { color: var(--fg); font-weight: 550; }
+  .tb .sp { flex: 1; }
+  .tbtn {
+    padding: 4px 10px; border-radius: 5px; border: 1px solid var(--border);
+    background: var(--raised); color: var(--fg); font-size: 12px; display: inline-flex; gap: 6px; align-items: center;
+  }
+  .tbtn.primary { background: var(--accent); border-color: var(--accent); color: #fff; font-weight: 600; }
+  .tbtn.ghost { background: transparent; border-color: transparent; color: var(--dim); }
+  .tsel {
+    padding: 4px 8px; border-radius: 5px; border: 1px solid var(--border);
+    background: var(--bg); color: var(--fg); font-size: 12px;
+  }
+  .tsel span { color: var(--dim); }
+  .avatar { width: 24px; height: 24px; border-radius: 50%; background: var(--raised); border: 1px solid var(--border);
+    display: inline-flex; align-items: center; justify-content: center; font-size: 10.5px; color: var(--dim); font-weight: 700; }
+
+  /* Activity rail */
+  .rail {
+    background: var(--pane); border-right: 1px solid var(--border);
+    display: flex; flex-direction: column; align-items: center; padding: 8px 0; gap: 4px;
+  }
+  .rail .ri {
+    width: 36px; height: 36px; border-radius: 8px; display: flex; align-items: center; justify-content: center;
+    color: var(--dim); position: relative; font-size: 16px;
+  }
+  .rail .ri.on { background: var(--accent-soft); color: var(--accent); }
+  .rail .ri.on::before {
+    content: ""; position: absolute; left: -8px; top: 8px; bottom: 8px; width: 3px;
+    border-radius: 2px; background: var(--accent);
+  }
+  .rail .ri svg { width: 18px; height: 18px; stroke: currentColor; fill: none; stroke-width: 1.7; }
+  .rail .sp { flex: 1; }
+
+  /* Panels & splitters */
+  .cols { display: grid; min-height: 0; height: 100%; }
+  .panel { background: var(--pane); display: flex; flex-direction: column; min-height: 0; min-width: 0; }
+  .panel + .panel { border-top: 1px solid var(--border); }
+  .ph {
+    height: 30px; flex: none; display: flex; align-items: center; gap: 8px; padding: 0 10px;
+    font-size: 11px; font-weight: 650; letter-spacing: 0.07em; text-transform: uppercase; color: var(--dim);
+    border-bottom: 1px solid var(--border);
+  }
+  .ph .sp { flex: 1; }
+  .ph .pha { color: var(--dim); font-size: 13px; font-weight: 400; letter-spacing: 0; text-transform: none; }
+  .pbody { flex: 1; overflow: hidden; padding: 6px 0; }
+  .split-x { background: var(--border); width: 4px; cursor: col-resize; position: relative; }
+  .split-y { background: var(--border); height: 4px; cursor: row-resize; }
+  .split-x::after, .split-y::after {
+    content: ""; position: absolute; inset: 0; margin: auto;
+    width: 2px; height: 26px; border-radius: 2px; background: var(--dim); opacity: 0.5;
+  }
+  .split-y { position: relative; }
+  .split-y::after { width: 26px; height: 2px; }
+
+  /* Tabs inside panes */
+  .ptabs { display: flex; align-items: center; height: 30px; flex: none; border-bottom: 1px solid var(--border); background: var(--pane); padding: 0 6px; gap: 2px; }
+  .ptab { padding: 4px 12px; font-size: 12px; color: var(--dim); border-radius: 5px 5px 0 0; position: relative; }
+  .ptab.on { color: var(--fg); font-weight: 550; }
+  .ptab.on::after { content: ""; position: absolute; left: 8px; right: 8px; bottom: -1px; height: 2px; background: var(--accent); border-radius: 2px; }
+  .ptabs .sp { flex: 1; }
+
+  /* Tree */
+  .tree { padding: 2px 6px; overflow: hidden; font-size: 12.5px; }
+  .trow { display: flex; align-items: center; gap: 5px; padding: 2.5px 4px; border-radius: 4px; white-space: nowrap; color: var(--fg); }
+  .trow .tw { color: var(--dim); width: 12px; flex: none; font-size: 10px; text-align: center; }
+  .trow .ic { flex: none; width: 14px; text-align: center; font-size: 11px; }
+  .trow.sel { background: var(--sel); }
+  .trow .cnt { color: var(--dim); font-size: 10.5px; }
+  .trow.dim2 { color: var(--dim); }
+  .ind1 { padding-left: 16px; } .ind2 { padding-left: 32px; } .ind3 { padding-left: 48px; } .ind4 { padding-left: 64px; }
+  .ic.dimension { color: var(--accent); } .ic.hier { color: var(--fn); } .ic.level { color: var(--member); }
+  .ic.measure { color: var(--measure); } .ic.folder { color: var(--warn); } .ic.set { color: var(--ok); } .ic.kpi { color: var(--err); }
+  .searchbox {
+    margin: 4px 8px 6px; padding: 4px 8px; border-radius: 5px; border: 1px solid var(--border);
+    background: var(--bg); color: var(--dim); font-size: 12px; display: flex; gap: 6px; align-items: center;
+  }
+
+  /* Editor */
+  .ed { background: var(--bg); flex: 1; display: grid; grid-template-columns: 40px 1fr; overflow: hidden; font-size: 12.5px; line-height: 1.65; }
+  .gutter { text-align: right; padding: 8px 8px 0 0; color: var(--dim); opacity: 0.6; font-variant-numeric: tabular-nums; }
+  .code { padding: 8px 12px 0 4px; white-space: pre; overflow: hidden; }
+  .code .kw { color: var(--kw); font-weight: 600; }
+  .code .ms { color: var(--measure); }
+  .code .mb { color: var(--member); }
+  .code .fn { color: var(--fn); }
+  .code .cm { color: var(--dim); font-style: italic; }
+  .code .squig { text-decoration: underline wavy var(--warn) 1px; text-underline-offset: 3px; }
+  .code .cursorline { background: var(--accent-soft); display: inline-block; width: 100%; }
+
+  /* Status bar */
+  .status {
+    height: 24px; flex: none; display: flex; align-items: center; gap: 14px; padding: 0 12px;
+    background: var(--pane); border-top: 1px solid var(--border); color: var(--dim); font-size: 11.5px;
+  }
+  .status .okdot { color: var(--ok); }
+  .status .sp { flex: 1; }
+
+  /* Results grid */
+  .rgrid { overflow: hidden; flex: 1; padding: 0; }
+  .rt { border-collapse: collapse; font-size: 12px; width: 100%; font-variant-numeric: tabular-nums; }
+  .rt th, .rt td { border: 1px solid var(--border); padding: 4px 10px; text-align: right; white-space: nowrap; }
+  .rt th { background: var(--raised); color: var(--dim); font-weight: 600; text-align: left; }
+  .rt td.h { background: var(--raised); color: var(--fg); text-align: left; font-weight: 500; }
+  .rt td { color: var(--fg); }
+  .rt td.neg { color: var(--err); }
+  .rt tr.selrow td { background: var(--sel); }
+
+  /* Widgets / dashboard */
+  .canvas { background: var(--canvas); position: relative; overflow: hidden; }
+  .canvas.gridbg {
+    background-image: radial-gradient(circle, var(--border) 1px, transparent 1px);
+    background-size: 24px 24px;
+  }
+  .widget {
+    position: absolute; background: var(--pane); border: 1px solid var(--border); border-radius: 8px;
+    box-shadow: 0 2px 10px var(--shadow); display: flex; flex-direction: column; overflow: hidden;
+  }
+  .wh { padding: 7px 12px; font-size: 12px; font-weight: 600; color: var(--fg); display: flex; align-items: center; gap: 6px; flex: none; }
+  .wh .sp { flex: 1; } .wh .m { color: var(--dim); font-weight: 400; }
+  .wb { flex: 1; padding: 4px 12px 10px; min-height: 0; }
+  .kpi-v { font-size: 26px; font-weight: 700; letter-spacing: -0.01em; font-variant-numeric: tabular-nums; }
+  .kpi-d { font-size: 11.5px; margin-top: 2px; }
+  .kpi-d.up { color: var(--ok); } .kpi-d.dn { color: var(--err); }
+  .widget.sel2 { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent), 0 2px 12px var(--shadow); }
+  .hdl { position: absolute; width: 8px; height: 8px; background: var(--accent); border-radius: 2px; z-index: 5; }
+
+  /* Chips / zones (builder) */
+  .zone { border: 1px dashed var(--border); border-radius: 7px; padding: 8px; margin: 8px 10px; }
+  .zl { font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--dim); font-weight: 650; margin-bottom: 6px; display: flex; gap: 6px; align-items: center; }
+  .zl .sp { flex: 1; }
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; }
+  .chip {
+    display: inline-flex; align-items: center; gap: 6px; padding: 3px 9px; border-radius: 5px;
+    background: var(--raised); border: 1px solid var(--border); font-size: 12px;
+  }
+  .chip .x { color: var(--dim); font-size: 10px; }
+  .chip.ms { border-left: 3px solid var(--measure); }
+  .chip.mb { border-left: 3px solid var(--member); }
+  .chip.plus { border-style: dashed; color: var(--dim); background: transparent; }
+  .zbtn { font-size: 11px; color: var(--dim); border: 1px solid var(--border); border-radius: 4px; padding: 1px 7px; background: var(--raised); }
+
+  /* Forms (inspector) */
+  .field { padding: 6px 12px; }
+  .field label { display: block; font-size: 11px; color: var(--dim); margin-bottom: 3px; font-weight: 600; }
+  .inp { width: 100%; padding: 5px 8px; border-radius: 5px; border: 1px solid var(--border); background: var(--bg); color: var(--fg); font-size: 12.5px; display: flex; justify-content: space-between; }
+  .inp span.car { color: var(--dim); }
+  .switch { display: flex; align-items: center; gap: 8px; font-size: 12.5px; padding: 6px 12px; color: var(--fg); }
+  .knob { width: 28px; height: 16px; border-radius: 9px; background: var(--accent); position: relative; flex: none; }
+  .knob::after { content: ""; position: absolute; right: 2px; top: 2px; width: 12px; height: 12px; background: #fff; border-radius: 50%; }
+  .knob.off { background: var(--border); } .knob.off::after { right: auto; left: 2px; }
+
+  .itbl { width: 100%; border-collapse: collapse; font-size: 12px; }
+  .itbl td { padding: 4px 12px; border-bottom: 1px solid var(--border); }
+  .itbl td:first-child { color: var(--dim); width: 40%; }
+  .badge { display: inline-block; padding: 1px 7px; border-radius: 4px; font-size: 10.5px; font-weight: 650; }
+  .badge.set { background: var(--accent-soft); color: var(--accent); }
+  .badge.num { background: rgba(217,169,90,0.15); color: var(--measure); }
+
+  .diag { display: flex; gap: 8px; padding: 4px 12px; font-size: 12px; align-items: baseline; }
+  .diag .sev { flex: none; font-weight: 700; }
+  .diag .sev.w { color: var(--warn); } .diag .sev.e { color: var(--err); }
+  .diag .pos { color: var(--dim); font-variant-numeric: tabular-nums; }
+
+  .palette-item { display: flex; align-items: center; gap: 9px; padding: 6px 12px; font-size: 12.5px; color: var(--fg); }
+  .palette-item .pic { width: 26px; height: 26px; border-radius: 6px; background: var(--raised); border: 1px solid var(--border);
+    display: inline-flex; align-items: center; justify-content: center; color: var(--accent); font-size: 13px; flex: none; }
+  .palette-item small { color: var(--dim); display: block; font-size: 11px; }
+  .palette-item.drag { border: 1px dashed var(--accent); border-radius: 6px; background: var(--accent-soft); }
+
+  svg.spark { width: 100%; height: 100%; display: block; }
+
+  /* Mode toggle (Ansicht/Bearbeiten) */
+  .seg { display: inline-flex; border: 1px solid var(--border); border-radius: 6px; overflow: hidden; }
+  .seg-i { padding: 4px 11px; font-size: 12px; color: var(--dim); background: var(--raised); }
+  .seg-i.on { background: var(--accent); color: #fff; font-weight: 600; }
+
+  /* Boards overview */
+  .onb { display: flex; align-items: stretch; margin: 16px 20px 4px; border: 1px solid var(--border); border-radius: 8px; background: var(--pane); overflow: hidden; }
+  .onb-s { flex: 1; display: flex; gap: 10px; padding: 10px 14px; align-items: center; font-size: 12.5px; color: var(--dim); }
+  .onb-s + .onb-s { border-left: 1px solid var(--border); }
+  .onb-n { width: 20px; height: 20px; border-radius: 50%; flex: none; display: inline-flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; background: var(--raised); border: 1px solid var(--border); color: var(--dim); }
+  .onb-s.done .onb-n { background: var(--ok); border-color: var(--ok); color: #fff; }
+  .onb-s.now { color: var(--fg); font-weight: 550; }
+  .onb-s.now .onb-n { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .onb-x { padding: 10px 12px; color: var(--dim); }
+  .bhead { display: flex; align-items: center; gap: 8px; padding: 18px 20px 4px; font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--dim); font-weight: 650; }
+  .bgrid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; padding: 10px 20px 20px; }
+  .bcard { background: var(--pane); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 2px 8px var(--shadow); }
+  .bthumb { height: 112px; background: var(--canvas); border-bottom: 1px solid var(--border); padding: 10px; display: grid; grid-template-columns: 1fr 1fr 1fr; grid-template-rows: 1fr 1.6fr; gap: 6px; }
+  .bt { border-radius: 4px; background: var(--raised); border: 1px solid var(--border); }
+  .bt.a { background: var(--accent-soft); border-color: var(--accent); }
+  .bt.b { background: rgba(217,164,34,0.15); border-color: var(--brand); }
+  .bmeta { padding: 10px 12px 12px; }
+  .bname { font-weight: 600; font-size: 13px; }
+  .binfo { color: var(--dim); font-size: 11.5px; margin-top: 3px; }
+  .btags { display: flex; gap: 6px; margin-top: 8px; }
+  .btag { font-size: 10.5px; padding: 1px 7px; border-radius: 4px; background: var(--raised); border: 1px solid var(--border); color: var(--dim); }
+  .bcard.new { border-style: dashed; background: transparent; box-shadow: none; color: var(--dim); display: flex; align-items: center; justify-content: center; text-align: center; padding: 16px; }
+  .bcard.new .plus { width: 34px; height: 34px; border-radius: 50%; border: 1px dashed var(--dim); display: flex; align-items: center; justify-content: center; font-size: 18px; margin: 0 auto 10px; }
+
+  /* Journey switcher (page chrome) */
+  .journey { display: flex; flex-wrap: wrap; gap: 0.45rem; align-items: center; flex: 1; }
+  .jgroup { display: flex; align-items: center; gap: 0.25rem; border: 1px solid var(--pg-border); border-radius: 8px; padding: 0.28rem 0.4rem; background: var(--pg-surface); }
+  .jlabel { font-size: 0.64rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--pg-dim); font-weight: 700; padding: 0 0.35rem; white-space: nowrap; }
+  .jbtn { font: inherit; font-size: 0.79rem; font-weight: 550; padding: 0.32rem 0.65rem; border-radius: 6px; border: 1px solid transparent; background: transparent; color: var(--pg-dim); cursor: pointer; white-space: nowrap; }
+  .jbtn:hover { color: var(--pg-fg); }
+  .jbtn.on { background: var(--pg-accent); color: #fff; }
+  .jbtn:focus-visible { outline: 2px solid var(--pg-accent); outline-offset: 2px; }
+  .jarrow { color: var(--pg-dim); font-size: 0.9rem; }
+
+  /* Clickable hotspots inside mockups */
+  .mock [data-goto], .mock .ri[data-goto-rail] { cursor: pointer; }
+  .mock [data-goto]:hover, .mock .ri[data-goto-rail]:hover { outline: 1.5px dashed var(--brand); outline-offset: 2px; }
+  .hint-click { color: var(--pg-dim); font-size: 0.78rem; margin: 0.5rem 0 0; }
+  .hint-click .k { display: inline-block; border: 1.5px dashed #c9860a; border-radius: 4px; padding: 0 5px; }
+
+  /* First-run state variants */
+  .stv.st-full { display: contents; }
+  .stv.st-empty { display: none; }
+  .mock.fresh .stv.st-empty { display: contents; }
+  .mock.fresh .stv.st-full { display: none; }
+  .empty { display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 90px 20px; color: var(--dim); }
+  .empty .eic { width: 56px; height: 56px; border-radius: 14px; border: 1px dashed var(--dim); display: flex; align-items: center; justify-content: center; font-size: 24px; margin-bottom: 14px; }
+  .empty h4 { margin: 0 0 6px; color: var(--fg); font-size: 15px; }
+  .empty p { margin: 0 0 16px; font-size: 12.5px; max-width: 46ch; line-height: 1.5; }
+  .empty .tbtn + .tbtn { margin-top: 8px; }
+
+  /* Workflow overview screen */
+  .flow { display: grid; grid-template-columns: 1fr auto 1fr auto 1fr auto 1fr; gap: 0.7rem; align-items: stretch; margin-top: 0.9rem; }
+  .fstep { border: 1px solid var(--pg-border); border-radius: 10px; background: var(--pg-surface); padding: 1rem 1.1rem; display: flex; flex-direction: column; }
+  .fstep h3 { margin: 0.45rem 0 0.35rem; font-size: 0.98rem; }
+  .fstep p { margin: 0; font-size: 0.82rem; color: var(--pg-dim); line-height: 1.5; flex: 1; }
+  .fnum { width: 24px; height: 24px; border-radius: 50%; background: var(--pg-accent); color: #fff; font-size: 0.78rem; font-weight: 700; display: flex; align-items: center; justify-content: center; }
+  .fscreens { display: flex; gap: 0.35rem; flex-wrap: wrap; margin-top: 0.7rem; }
+  .fscreens .jbtn { border: 1px solid var(--pg-border); font-size: 0.75rem; padding: 0.22rem 0.55rem; }
+  .fout { margin-top: 0.6rem; font-size: 0.76rem; color: var(--pg-accent); }
+  .farrow { align-self: center; font-size: 1.3rem; color: var(--pg-dim); }
+  .fnotes { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1.1rem; }
+  .fnote { border: 1px solid var(--pg-border); border-radius: 8px; padding: 0.75rem 0.9rem; font-size: 0.82rem; color: var(--pg-dim); background: var(--pg-surface); }
+  .fnote b { color: var(--pg-fg); }
+  @media (max-width: 950px) {
+    .flow { grid-template-columns: 1fr; }
+    .farrow { transform: rotate(90deg); justify-self: center; }
+    .fnotes { grid-template-columns: 1fr; }
+  }
+</style>
+
+<div class="wrap">
+  <header class="page">
+    <p class="eyebrow">Daanse Board App · Integrationsplan</p>
+    <h1>Layout-Mockups: MDX Workbench in Daanse</h1>
+    <p class="lede">Klickbarer Prototyp der Board App im neuen Workbench-Layout. Die Leiste unten folgt der App-Struktur: Boards (Home) · Übersicht → Details (Verbindungen &amp; Daten mit Daten-Editor und MDX Workbench · Pages &amp; Layouts) → Board (Bearbeiten ⇄ Ansicht); Aktionen in den Mockups und die Aktivitätsleiste springen zum Ziel-Screen. Begleitdokument: <code>docs/mdx-workbench-integration-plan.md</code>.</p>
+    <p class="hint-click">Bedienung: <span class="k">gestrichelt markierte</span> Elemente (beim Überfahren) sind klickbar und folgen dem Workflow. Schalter rechts: Dark/Light-Token-Mapping und Bestand/Erstnutzung (geführte Leerzustände).</p>
+  </header>
+
+  <div class="controls">
+    <div class="journey" role="tablist">
+      <div class="jgroup"><button class="jbtn on" data-s="sflow" role="tab" aria-selected="true">⟐ Flow</button></div>
+      <div class="jgroup"><span class="jlabel">1 Home</span><button class="jbtn" data-s="s0" role="tab" aria-selected="false">Boards</button></div>
+      <div class="jgroup"><span class="jlabel">2 Konfiguration</span><button class="jbtn" data-s="s6" role="tab" aria-selected="false">Übersicht</button></div>
+      <span class="jarrow">→</span>
+      <div class="jgroup"><span class="jlabel">Details</span><button class="jbtn" data-s="s5" role="tab" aria-selected="false">Verbindungen &amp; Daten</button><button class="jbtn" data-s="s3" role="tab" aria-selected="false">Daten-Editor</button><button class="jbtn" data-s="s4" role="tab" aria-selected="false">MDX Workbench</button><button class="jbtn" data-s="s7" role="tab" aria-selected="false">Pages &amp; Layouts</button></div>
+      <span class="jarrow">→</span>
+      <div class="jgroup"><span class="jlabel">Board</span><button class="jbtn" data-s="s2" role="tab" aria-selected="false">Bearbeiten</button><button class="jbtn" data-s="s1" role="tab" aria-selected="false">Ansicht</button></div>
+    </div>
+    <button class="mtheme" id="mtheme">Mockup-Theme: Dunkel ▸ Hell</button>
+    <button class="mtheme" id="mfresh">Zustand: Bestand ▸ Erstnutzung</button>
+  </div>
+
+  <!-- ============================ SCREEN FLOW: WORKFLOW MAP ============================ -->
+  <div class="screen on" id="sflow">
+    <h2>Der Flow auf einen Blick</h2>
+    <p class="sub">Drei Ebenen: <b>Boards</b> als Home, eine <b>Übersichtsseite</b> für alles Konfigurative, darunter die <b>Detailansichten</b> mit einem einheitlichen Muster (Liste links, Preview/Editor rechts). Jede Kachel öffnet die zugehörigen Screens.</p>
+    <div class="flow">
+      <div class="fstep" data-goto="s0">
+        <span class="fnum">1</span>
+        <h3>Boards</h3>
+        <p>Home ohne Seitenmenü — ein reiner Board-Launcher: bestehende Boards öffnen, neue anlegen, aus dem Git-Repository holen oder als Datei vom Dateisystem importieren (heutige SaveLoad-/Configuration-Seiten entfallen).</p>
+        <div class="fscreens"><button class="jbtn" data-s="s0">Boards-Liste</button></div>
+        <div class="fout">Board öffnen → Seiten, Bearbeiten &amp; Ansicht (Schritt 4)</div>
+      </div>
+      <span class="farrow">→</span>
+      <div class="fstep" data-goto="s6">
+        <span class="fnum">2</span>
+        <h3>Übersicht</h3>
+        <p>Der Konfigurations-Hub: Verbindungen &amp; Daten (inkl. MDX Workbench), Variablen, Events, Pages &amp; Layouts als Kacheln mit Zählern und Status — exakt die Menüeinträge unterhalb von „Übersicht“. Hub für den Überblick, Menü für den Direktsprung.</p>
+        <div class="fscreens"><button class="jbtn" data-s="s6">Übersichtsseite</button></div>
+        <div class="fout">Kachel → Detailansicht des Bereichs</div>
+      </div>
+      <span class="farrow">→</span>
+      <div class="fstep" data-goto="s5">
+        <span class="fnum">3</span>
+        <h3>Verbindungen &amp; Daten</h3>
+        <p>Master-Detail: links der Baum aus Verbindungen und ihren Datenquellen, rechts Preview oder Editor der gewählten Quelle. Variablen und Events behalten ihre Detail-/Anlageansichten wie im heutigen Daanse.</p>
+        <div class="fscreens"><button class="jbtn" data-s="s5">Verbindungen &amp; Daten</button><button class="jbtn" data-s="s3">Daten-Editor</button><button class="jbtn" data-s="s4">MDX Workbench</button></div>
+        <div class="fout">Gleichrangig: Master-Detail · Daten-Editor · MDX Workbench</div>
+      </div>
+      <span class="farrow">→</span>
+      <div class="fstep" data-goto="s7">
+        <span class="fnum">4</span>
+        <h3>Pages &amp; Layouts</h3>
+        <p>Übersicht der Seiten und Layouts (LayoutRepository: Grid, freie Anordnung). <b>Darunter hängen Board-Bearbeiten und Board-Ansicht:</b> Seite wählen → Widgets bearbeiten → Ergebnis ansehen.</p>
+        <div class="fscreens"><button class="jbtn" data-s="s7">Pages &amp; Layouts</button><button class="jbtn" data-s="s2">Bearbeiten</button><button class="jbtn" data-s="s1">Ansicht</button></div>
+        <div class="fout">Seite wählen → Widgets bearbeiten → Ansicht</div>
+      </div>
+    </div>
+    <div class="fnotes">
+      <div class="fnote"><b>Boards zuerst, Konfiguration gebündelt.</b> Boards sind das Home (<code>/</code> → <code>/boards</code>) — ein Launcher ohne Seitenmenü mit den Quellen Lokal, Git und Dateisystem. Alles Konfigurative sammelt die Übersichtsseite; jede Kategorie ist zusätzlich Menüeintrag, sodass beide Wege funktionieren. Geführt wird über Leerzustände (Schalter „Erstnutzung“ oben ausprobieren).</div>
+      <div class="fnote"><b>Ein Detailmuster überall.</b> Verbindungen &amp; Daten hat drei gleichrangige Ansichten: Master-Detail (Liste links, Preview rechts), Daten-Editor und <b>MDX Workbench</b> — Letztere hat wie der Daten-Editor <b>kein eigenes Menü-Icon</b>, sondern hängt unter Verbindungen &amp; Daten. Variablen und Events: wie im heutigen Daanse. Pages &amp; Layouts: Seitenübersicht, darunter Board-Bearbeiten und -Ansicht.</div>
+    </div>
+  </div>
+
+  <!-- ============================ SCREEN 0: BOARDS OVERVIEW ============================ -->
+  <div class="screen" id="s0">
+    <h2>Boards-Seite (Home)</h2>
+    <p class="sub">Reiner Board-Launcher <b>ohne Seitenmenü</b>: bestehende Boards öffnen, neue anlegen, <b>aus Git holen oder vom Dateisystem importieren</b> — gruppiert nach Quelle (Lokal · Git · Dateisystem). Die Konfiguration erreicht man über „⚙ Konfiguration“ in der Topbar; das Menü links erscheint erst in den Arbeitsbereichen.</p>
+    <div class="frame"><div class="viewport"><div class="stage">
+      <div class="mock shell">
+        <div class="tb">
+          <span class="logo"><span class="mark">D</span> Daanse Board</span>
+          <span class="crumb"><b>Boards</b></span>
+          <span class="note dot" style="position:static">1</span>
+          <span class="sp"></span>
+          <span class="tsel" style="min-width:220px;"><span>⌕</span> Boards durchsuchen…</span>
+          <span class="tsel"><span>Sortierung:</span> Zuletzt geändert ▾</span>
+          <span class="tbtn">⇣ Aus Git holen</span>
+          <span class="tbtn">⤒ Aus Datei</span>
+          <span class="tbtn primary" data-goto="s2">＋ Neues Board</span>
+          <span class="tbtn ghost" data-goto="s6">⚙ Konfiguration</span>
+          <span class="avatar">MH</span>
+        </div>
+        <div class="shell-body" style="grid-template-columns: 1fr;">
+          <div class="canvas">
+            <div class="stv st-full">
+            <div class="bhead" style="padding-top:18px;">Lokal · 3</div>
+            <div class="bgrid" style="padding-bottom:4px;">
+              <div class="bcard">
+                <div class="bthumb">
+                  <div class="bt a"></div><div class="bt"></div><div class="bt b"></div>
+                  <div class="bt" style="grid-column:1/3;"></div><div class="bt a"></div>
+                </div>
+                <div class="bmeta">
+                  <div class="bname">Vertriebs-Dashboard</div>
+                  <div class="binfo">6 Widgets · 2 Datenquellen · vor 2 Std geändert</div>
+                  <div class="btags"><span class="btag">xmla</span><span class="btag">Pivot</span><span class="btag">3 Seiten</span></div>
+                </div>
+              </div>
+              <div class="bcard">
+                <div class="bthumb">
+                  <div class="bt b" style="grid-row:1/3; grid-column:1/3;"></div>
+                  <div class="bt a"></div><div class="bt"></div>
+                </div>
+                <div class="bmeta">
+                  <div class="bname">Bewässerung Feld Nord</div>
+                  <div class="binfo">4 Widgets · 1 Datenquelle · gestern geändert</div>
+                  <div class="btags"><span class="btag">ogcsta</span><span class="btag">Karte</span></div>
+                </div>
+              </div>
+              <div class="bcard">
+                <div class="bthumb">
+                  <div class="bt"></div><div class="bt a"></div><div class="bt"></div>
+                  <div class="bt b" style="grid-column:2/4;"></div><div class="bt" style="grid-column:1/2; grid-row:2;"></div>
+                </div>
+                <div class="bmeta">
+                  <div class="bname">Wetterübersicht</div>
+                  <div class="binfo">3 Widgets · 1 Datenquelle · vor 3 Tagen geändert</div>
+                  <div class="btags"><span class="btag">rest</span><span class="btag">Chart</span></div>
+                </div>
+              </div>
+              <div class="bcard new" data-goto="s2">
+                <div>
+                  <div class="plus">＋</div>
+                  <div style="font-weight:600; color:var(--fg);">Neues Board</div>
+                  <div style="font-size:11.5px; margin-top:4px;">Leer starten oder aus Vorlage</div>
+                  <span class="note dot" style="position:static; margin-top:10px;">3</span>
+                </div>
+              </div>
+            </div>
+            <div class="bhead">Aus Git · daanse/boards.git <span style="text-transform:none; letter-spacing:0; font-weight:400;">· zuletzt synchronisiert vor 5 min</span> <span class="note dot" style="position:static; margin-left:6px;">2</span></div>
+            <div class="bgrid" style="padding-bottom:4px;">
+              <div class="bcard">
+                <div class="bthumb">
+                  <div class="bt"></div><div class="bt b"></div><div class="bt"></div>
+                  <div class="bt a" style="grid-column:1/3;"></div><div class="bt"></div>
+                </div>
+                <div class="bmeta">
+                  <div class="bname">Produktion Nord</div>
+                  <div class="binfo">5 Widgets · main · Stand: heute 08:12</div>
+                  <div class="btags"><span class="btag" style="color:var(--ok);">git · synchron</span></div>
+                </div>
+              </div>
+              <div class="bcard">
+                <div class="bthumb">
+                  <div class="bt a"></div><div class="bt"></div><div class="bt"></div>
+                  <div class="bt" style="grid-column:2/4;"></div><div class="bt b" style="grid-column:1/2; grid-row:2;"></div>
+                </div>
+                <div class="bmeta">
+                  <div class="bname">Energie-Monitor</div>
+                  <div class="binfo">7 Widgets · main · Stand: gestern</div>
+                  <div class="btags"><span class="btag" style="color:var(--warn);">git · Update verfügbar ↻</span></div>
+                </div>
+              </div>
+            </div>
+            <div class="bhead">Dateisystem <span class="note dot" style="position:static; margin-left:6px;">4</span></div>
+            <div style="margin:4px 20px 18px; border:1px dashed var(--border); border-radius:8px; padding:14px 16px; color:var(--dim); font-size:12.5px; display:flex; gap:12px; align-items:center;">
+              ⤒ Board-Datei (.json) hierher ziehen — oder <span class="tbtn" style="font-size:11.5px;">Datei wählen…</span>
+            </div>
+            </div>
+            <div class="stv st-empty">
+              <div class="empty" style="height:100%;">
+                <div class="eic">▦</div>
+                <h4>Noch keine Boards</h4>
+                <p>Lege ein neues Board an, hole bestehende aus einem Git-Repository oder importiere eine Board-Datei vom Dateisystem.</p>
+                <span class="tbtn primary" data-goto="s2">＋ Neues Board</span>
+                <span class="tbtn">⇣ Aus Git holen</span>
+                <span class="tbtn">⤒ Aus Datei importieren</span>
+                <span class="tbtn ghost" data-goto="s6">Konfiguration öffnen (Übersicht)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div></div></div>
+    <ol class="legend">
+      <li><span class="dot">1</span><span><b>Launcher ohne Seitenmenü:</b> Die Boards-Seite zeigt nur Boards — Suche, Sortierung, Vorschau-Kacheln. Die Konfiguration erreicht man über „⚙ Konfiguration“ (Übersichts-Hub); das Menü links erscheint erst in den Arbeitsbereichen. „View“/„Edit“ sind Modus-Umschalter im geöffneten Board.</span></li>
+      <li><span class="dot">2</span><span><b>Quelle Git:</b> Boards aus dem Repository (<code>lib/persistence/git</code>) mit Sync-Status je Board („synchron“, „Update verfügbar“) und „⇣ Aus Git holen“ — ersetzt die separaten SaveLoad-/Configuration-Menüpunkte.</span></li>
+      <li><span class="dot">3</span><span><b>„＋ Neues Board“</b> öffnet den Board-Editor (leer oder aus Vorlage).</span></li>
+      <li><span class="dot">4</span><span><b>Quelle Dateisystem:</b> Board-Datei (.json) per Drag &amp; Drop oder Dateidialog importieren (heutiges „Upload file“, <code>persistence/loader</code>).</span></li>
+    </ol>
+  </div>
+
+  <!-- ============================ SCREEN 1: VIEW DASHBOARD ============================ -->
+  <div class="screen" id="s1">
+    <h2>Dashboard-Ansicht (View-Modus)</h2>
+    <p class="sub">Ersetzt die heutige Hover-Sidebar + leere Header-Leiste. Die Aktivitätsleiste speist sich aus der <code>NAVIGATION_REGISTRY</code>, die Topbar aus dem neuen <code>Header.vue</code>.</p>
+    <div class="frame"><div class="viewport"><div class="stage">
+      <div class="mock shell">
+        <div class="tb">
+          <span class="logo"><span class="mark">D</span> Daanse Board</span>
+          <span class="crumb" data-goto="s0">Boards / <b>Vertriebs-Dashboard</b></span>
+          <span class="note dot" style="position:static">1</span>
+          <span class="sp"></span>
+          <span class="tsel"><span>Seite:</span> Übersicht ▾</span>
+          <span class="tbtn ghost">◔ Aktualisiert 12:04</span>
+          <span class="seg"><span class="seg-i on">Ansicht</span><span class="seg-i" data-goto="s2">Bearbeiten</span></span>
+          <span class="tbtn ghost">⛶</span>
+          <span class="avatar">MH</span>
+        </div>
+        <div class="shell-body">
+          <div class="rail">
+            <span class="ri" title="Boards"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></span>
+            <span class="ri" title="Übersicht"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="4" rx="1"/><rect x="3" y="11" width="18" height="4" rx="1"/><rect x="3" y="18" width="18" height="3" rx="1"/></svg></span>
+            <span class="ri" title="Verbindungen &amp; Daten"><svg viewBox="0 0 24 24"><ellipse cx="12" cy="5.5" rx="7" ry="2.5"/><path d="M5 5.5v13c0 1.4 3.1 2.5 7 2.5s7-1.1 7-2.5v-13"/><path d="M5 12c0 1.4 3.1 2.5 7 2.5s7-1.1 7-2.5"/></svg></span>
+            <span class="ri" title="Variablen" style="font-size:12px; font-style:italic;">{x}</span>
+            <span class="ri" title="Events"><svg viewBox="0 0 24 24"><path d="M13 2L4 14h6l-1 8 9-12h-6l1-8z"/></svg></span>
+            <span class="ri on" title="Pages &amp; Layouts"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 9v12"/></svg></span>
+            <span class="note dot" style="left:44px; top:170px;">2</span>
+            <span class="sp"></span>
+            <span class="ri" title="Einstellungen"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19 12a7 7 0 0 0-.1-1.2l2-1.6-2-3.4-2.4 1a7 7 0 0 0-2-1.2L14 3h-4l-.5 2.6a7 7 0 0 0-2 1.2l-2.4-1-2 3.4 2 1.6A7 7 0 0 0 5 12c0 .4 0 .8.1 1.2l-2 1.6 2 3.4 2.4-1a7 7 0 0 0 2 1.2L10 21h4l.5-2.6a7 7 0 0 0 2-1.2l2.4 1 2-3.4-2-1.6c.1-.4.1-.8.1-1.2z"/></svg></span>
+          </div>
+          <div class="canvas">
+            <!-- KPI row -->
+            <div class="widget" style="left:20px; top:20px; width:280px; height:110px;">
+              <div class="wh">Umsatz YTD <span class="sp"></span><span class="m">⋯</span></div>
+              <div class="wb"><div class="kpi-v">4,82 Mio €</div><div class="kpi-d up">▲ 6,4 % ggü. Vorjahr</div></div>
+            </div>
+            <div class="widget" style="left:316px; top:20px; width:280px; height:110px;">
+              <div class="wh">Marge <span class="sp"></span><span class="m">⋯</span></div>
+              <div class="wb"><div class="kpi-v">23,7 %</div><div class="kpi-d up">▲ 1,1 Pp</div></div>
+            </div>
+            <div class="widget" style="left:612px; top:20px; width:280px; height:110px;">
+              <div class="wh">Offene Aufträge <span class="sp"></span><span class="m">⋯</span></div>
+              <div class="wb"><div class="kpi-v">1 284</div><div class="kpi-d dn">▼ 3,2 % ggü. Vormonat</div></div>
+            </div>
+            <div class="widget" style="left:908px; top:20px; width:300px; height:110px;">
+              <div class="wh">pf-Wert Sensorik <span class="sp"></span><span class="m">⋯</span></div>
+              <div class="wb">
+                <svg class="spark" viewBox="0 0 260 52" preserveAspectRatio="none" aria-hidden="true">
+                  <path d="M0 40 L30 38 L60 30 L90 33 L120 22 L150 26 L180 14 L210 18 L240 8 L260 10" fill="none" stroke="var(--accent)" stroke-width="2"/>
+                  <path d="M0 40 L30 38 L60 30 L90 33 L120 22 L150 26 L180 14 L210 18 L240 8 L260 10 L260 52 L0 52 Z" fill="var(--accent-soft)" stroke="none"/>
+                  <circle cx="260" cy="10" r="3" fill="var(--accent)"/>
+                </svg>
+              </div>
+            </div>
+            <!-- Chart -->
+            <div class="widget" style="left:20px; top:146px; width:576px; height:330px;">
+              <div class="wh">Umsatz nach Region <span class="m">· Cube „Vertrieb“</span><span class="sp"></span><span class="m">⋯</span></div>
+              <div class="wb">
+                <svg class="spark" viewBox="0 0 540 268" preserveAspectRatio="none" aria-hidden="true">
+                  <g stroke="var(--border)" stroke-width="1">
+                    <line x1="0" y1="60" x2="540" y2="60"/><line x1="0" y1="120" x2="540" y2="120"/>
+                    <line x1="0" y1="180" x2="540" y2="180"/><line x1="0" y1="240" x2="540" y2="240"/>
+                  </g>
+                  <g fill="var(--accent)">
+                    <rect x="30" y="90" width="46" height="150" rx="3"/>
+                    <rect x="120" y="60" width="46" height="180" rx="3"/>
+                    <rect x="210" y="130" width="46" height="110" rx="3"/>
+                    <rect x="300" y="105" width="46" height="135" rx="3"/>
+                    <rect x="390" y="150" width="46" height="90" rx="3"/>
+                  </g>
+                  <g fill="var(--brand)" opacity="0.85">
+                    <rect x="78" y="130" width="24" height="110" rx="3"/>
+                    <rect x="168" y="110" width="24" height="130" rx="3"/>
+                    <rect x="258" y="170" width="24" height="70" rx="3"/>
+                    <rect x="348" y="150" width="24" height="90" rx="3"/>
+                    <rect x="438" y="190" width="24" height="50" rx="3"/>
+                  </g>
+                </svg>
+              </div>
+            </div>
+            <!-- Pivot -->
+            <div class="widget" style="left:612px; top:146px; width:596px; height:330px;">
+              <div class="wh">Pivot: Umsatz × Quartal<span class="sp"></span><span class="m">⋯</span></div>
+              <div class="wb" style="padding-top:6px; overflow:hidden;">
+                <table class="rt">
+                  <tr><th>Region</th><th>Q1</th><th>Q2</th><th>Q3</th><th>Q4</th><th>Σ</th></tr>
+                  <tr><td class="h">▾ Nord</td><td>412 380</td><td>398 122</td><td>441 209</td><td>487 651</td><td>1 739 362</td></tr>
+                  <tr><td class="h" style="padding-left:22px;">Hamburg</td><td>201 114</td><td>188 902</td><td>224 871</td><td>240 118</td><td>855 005</td></tr>
+                  <tr><td class="h" style="padding-left:22px;">Bremen</td><td>211 266</td><td>209 220</td><td>216 338</td><td>247 533</td><td>884 357</td></tr>
+                  <tr><td class="h">▸ Süd</td><td>388 401</td><td>402 118</td><td>378 442</td><td>431 007</td><td>1 599 968</td></tr>
+                  <tr><td class="h">▸ West</td><td>301 220</td><td>318 447</td><td>296 010</td><td>344 189</td><td>1 259 866</td></tr>
+                  <tr><td class="h">▸ Ost</td><td>52 118</td><td class="neg">−4 220</td><td>61 002</td><td>72 461</td><td>181 361</td></tr>
+                </table>
+              </div>
+            </div>
+            <div class="note dot" style="left:590px; top:140px;">3</div>
+          </div>
+        </div>
+      </div>
+    </div></div></div>
+    <ol class="legend">
+      <li><span class="dot">1</span><span><b>Topbar statt leerem Header:</b> Logo, Board-Kontext, Seiten-Selektor und der <b>Modus-Umschalter Ansicht/Bearbeiten</b> — <code>Header.vue</code> wird zur echten Werkzeugleiste (42 px, wie Workbench). „Edit dashboard“ als eigener Menüpunkt entfällt.</span></li>
+      <li><span class="dot">2</span><span><b>Aktivitätsleiste (52 px, fix)</b> ersetzt die aufklappende <code>va-sidebar</code>: Boards · Übersicht · Verbindungen &amp; Daten · Variablen · Events · Pages &amp; Layouts (aus <code>NAVIGATION_REGISTRY</code>). Im geöffneten Board ist konsistent <b>Pages &amp; Layouts</b> aktiv — dort sind Ansicht/Bearbeiten angesiedelt.</span></li>
+      <li><span class="dot">3</span><span><b>Widgets unverändert</b> (WidgetRepository/Layouts) — nur Rahmen, Dichte und Tokens werden auf das Workbench-Theme umgestellt.</span></li>
+    </ol>
+  </div>
+
+  <!-- ============================ SCREEN 2: EDIT DASHBOARD ============================ -->
+  <div class="screen" id="s2">
+    <h2>Dashboard-Editor (Edit-Modus)</h2>
+    <p class="sub">Widget-Palette und Widget-Einstellungen werden andockbare Panels mit Splittern (heute: Floating-FAB + Modal-Fenster). Gleiche Panel-Primitiven (<code>&lt;WbSplitPane&gt;</code>) wie in der Workbench.</p>
+    <div class="frame"><div class="viewport"><div class="stage">
+      <div class="mock shell">
+        <div class="tb">
+          <span class="logo"><span class="mark">D</span> Daanse Board</span>
+          <span class="crumb" data-goto="s0">Boards / <b>Vertriebs-Dashboard</b></span>
+          <span class="sp"></span>
+          <span class="tsel"><span>Layout:</span> Grid ▾</span>
+          <span class="tbtn ghost">↶</span><span class="tbtn ghost">↷</span>
+          <span class="seg"><span class="seg-i" data-goto="s1">Ansicht</span><span class="seg-i on">Bearbeiten</span></span>
+          <span class="tbtn primary">Speichern</span>
+        </div>
+        <div class="shell-body">
+          <div class="rail">
+            <span class="ri" title="Boards"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></span>
+            <span class="ri" title="Übersicht"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="4" rx="1"/><rect x="3" y="11" width="18" height="4" rx="1"/><rect x="3" y="18" width="18" height="3" rx="1"/></svg></span>
+            <span class="ri" title="Verbindungen &amp; Daten"><svg viewBox="0 0 24 24"><ellipse cx="12" cy="5.5" rx="7" ry="2.5"/><path d="M5 5.5v13c0 1.4 3.1 2.5 7 2.5s7-1.1 7-2.5v-13"/><path d="M5 12c0 1.4 3.1 2.5 7 2.5s7-1.1 7-2.5"/></svg></span>
+            <span class="ri" title="Variablen" style="font-size:12px; font-style:italic;">{x}</span>
+            <span class="ri" title="Events"><svg viewBox="0 0 24 24"><path d="M13 2L4 14h6l-1 8 9-12h-6l1-8z"/></svg></span>
+            <span class="ri on" title="Pages &amp; Layouts"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 9v12"/></svg></span>
+            <span class="sp"></span>
+            <span class="ri"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19 12a7 7 0 0 0-.1-1.2l2-1.6-2-3.4-2.4 1a7 7 0 0 0-2-1.2L14 3h-4l-.5 2.6a7 7 0 0 0-2 1.2l-2.4-1-2 3.4 2 1.6A7 7 0 0 0 5 12c0 .4 0 .8.1 1.2l-2 1.6 2 3.4 2.4-1a7 7 0 0 0 2 1.2L10 21h4l.5-2.6a7 7 0 0 0 2-1.2l2.4 1 2-3.4-2-1.6c.1-.4.1-.8.1-1.2z"/></svg></span>
+          </div>
+          <div class="cols" style="grid-template-columns: 240px 4px 1fr 4px 300px;">
+            <!-- Palette -->
+            <div class="panel">
+              <div class="ph">Widgets<span class="sp"></span><span class="pha">⌕</span></div>
+              <div class="pbody">
+                <div class="palette-item"><span class="pic">▦</span><span>Chart<small>ECharts · Linien, Balken, Torten</small></span></div>
+                <div class="palette-item drag"><span class="pic">▤</span><span>Pivot-Tabelle<small>XMLA · Drilldown, Writeback</small></span></div>
+                <div class="palette-item"><span class="pic">◔</span><span>KPI-Kachel<small>Wert + Trend</small></span></div>
+                <div class="palette-item"><span class="pic">✎</span><span>Rich Text<small>Markdown / WYSIWYG</small></span></div>
+                <div class="palette-item"><span class="pic">◈</span><span>Karte<small>OGC STA, GeoJSON</small></span></div>
+                <div class="palette-item"><span class="pic">▣</span><span>Bild &amp; Video</span></div>
+                <div class="palette-item"><span class="pic">≣</span><span>Datentabelle</span></div>
+                <div class="note dot" style="position:static; margin:10px 12px 0;">1</div>
+              </div>
+            </div>
+            <div class="split-x"></div>
+            <!-- Canvas -->
+            <div class="panel" style="background: transparent;">
+              <div class="canvas gridbg" style="height:100%;">
+                <div class="widget" style="left:16px; top:16px; width:300px; height:104px;">
+                  <div class="wh">Umsatz YTD</div>
+                  <div class="wb"><div class="kpi-v">4,82 Mio €</div><div class="kpi-d up">▲ 6,4 %</div></div>
+                </div>
+                <div class="widget sel2" style="left:16px; top:136px; width:420px; height:280px;">
+                  <div class="wh">Umsatz nach Region <span class="sp"></span><span class="m">▤ Pivot</span></div>
+                  <div class="wb" style="padding-top:2px; overflow:hidden;">
+                    <table class="rt">
+                      <tr><th>Region</th><th>Q1</th><th>Q2</th></tr>
+                      <tr><td class="h">Nord</td><td>412 380</td><td>398 122</td></tr>
+                      <tr><td class="h">Süd</td><td>388 401</td><td>402 118</td></tr>
+                      <tr><td class="h">West</td><td>301 220</td><td>318 447</td></tr>
+                    </table>
+                  </div>
+                  <span class="hdl" style="left:-4px; top:-4px;"></span><span class="hdl" style="right:-4px; top:-4px;"></span>
+                  <span class="hdl" style="left:-4px; bottom:-4px;"></span><span class="hdl" style="right:-4px; bottom:-4px;"></span>
+                </div>
+                <div class="note dot" style="left:446px; top:150px;">2</div>
+                <div class="widget" style="left:452px; top:136px; width:380px; height:280px; opacity:0.9;">
+                  <div class="wh">Trend</div>
+                  <div class="wb">
+                    <svg class="spark" viewBox="0 0 340 210" preserveAspectRatio="none" aria-hidden="true">
+                      <g stroke="var(--border)" stroke-width="1"><line x1="0" y1="52" x2="340" y2="52"/><line x1="0" y1="104" x2="340" y2="104"/><line x1="0" y1="156" x2="340" y2="156"/></g>
+                      <path d="M0 170 L40 160 L80 130 L120 138 L160 100 L200 108 L240 70 L280 82 L320 40 L340 46" fill="none" stroke="var(--brand)" stroke-width="2"/>
+                    </svg>
+                  </div>
+                </div>
+                <div class="widget" style="left:16px; top:432px; width:816px; height:120px; border-style:dashed; opacity:0.65; align-items:center; justify-content:center;">
+                  <div style="margin:auto; color:var(--dim); font-size:12px;">＋ Widget hierher ziehen</div>
+                </div>
+              </div>
+            </div>
+            <div class="split-x"></div>
+            <!-- Inspector -->
+            <div class="panel">
+              <div class="ph">Widget-Einstellungen<span class="sp"></span><span class="pha">✕</span></div>
+              <div class="pbody">
+                <div class="field"><label>Titel</label><div class="inp">Umsatz nach Region</div></div>
+                <div class="field"><label>Datenquelle</label><div class="inp" data-goto="s3">Vertrieb (xmla) <span class="car">▾</span></div></div>
+                <div class="field"><label>Darstellung</label><div class="inp">Pivot-Tabelle <span class="car">▾</span></div></div>
+                <div class="switch"><span class="knob"></span> Drilldown erlauben</div>
+                <div class="switch"><span class="knob off"></span> Zellen beschreibbar (Writeback)</div>
+                <div class="field"><label>Abfrage</label>
+                  <div class="inp mono" style="font-size:11.5px;">SELECT … FROM [Vertrieb] <span class="car">✎</span></div>
+                </div>
+                <div class="field" style="display:flex; gap:8px; align-items:center;">
+                  <span class="tbtn" data-goto="s4" style="font-size:11.5px;">In MDX Workbench öffnen ↗</span>
+                  <span class="note dot" style="position:static;">3</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div></div></div>
+    <ol class="legend">
+      <li><span class="dot">1</span><span><b>Widget-Palette als Panel</b> (statt FAB + Modal): Typen aus der <code>WidgetRepository</code>, per Drag auf den Raster-Canvas.</span></li>
+      <li><span class="dot">2</span><span><b>Selektion + Handles</b> wie bisher (<code>layouts/base</code>/<code>grid</code>); ausgewähltes Widget koppelt an den rechten Inspector.</span></li>
+      <li><span class="dot">3</span><span><b>Sprung in die Workbench:</b> die dem Widget zugrunde liegende MDX-Abfrage öffnet direkt in Screen 4 (gleiche Datasource-Konfiguration).</span></li>
+    </ol>
+  </div>
+
+  <!-- ============================ SCREEN 5: DATASOURCES OVERVIEW ============================ -->
+  <div class="screen" id="s5">
+    <h2>Verbindungen &amp; Daten — Liste links, Preview/Editor rechts</h2>
+    <p class="sub">Das Master-Detail-Muster der Detailansichten: links der Baum aus Verbindungen und ihren Datenquellen (mit Status und Verwendungsnachweis), rechts Vorschau oder Einstellungen der gewählten Quelle — mit Absprung in den Vollbild-Editor und die MDX Workbench. Ersetzt die heutige <code>DataSettings</code>-Seite.</p>
+    <div class="frame"><div class="viewport"><div class="stage">
+      <div class="mock shell">
+        <div class="tb">
+          <span class="logo"><span class="mark">D</span> Daanse Board</span>
+          <span class="crumb"><span data-goto="s6">Übersicht</span> / <b>Verbindungen &amp; Daten</b></span>
+          <span class="sp"></span>
+          <span class="tbtn ghost" data-goto="s1">↗ Zuletzt: Vertriebs-Dashboard</span>
+          <span class="tbtn ghost" data-goto="s4">⌕ Erst erkunden? MDX Workbench</span>
+          <span class="tbtn">＋ Verbindung</span>
+          <span class="tbtn primary" data-goto="s3">＋ Datenquelle</span>
+          <span class="note dot" style="position:static">4</span>
+          <span class="avatar">MH</span>
+        </div>
+        <div class="shell-body">
+          <div class="rail">
+            <span class="ri" title="Boards"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></span>
+            <span class="ri" title="Übersicht"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="4" rx="1"/><rect x="3" y="11" width="18" height="4" rx="1"/><rect x="3" y="18" width="18" height="3" rx="1"/></svg></span>
+            <span class="ri on" title="Verbindungen &amp; Daten"><svg viewBox="0 0 24 24"><ellipse cx="12" cy="5.5" rx="7" ry="2.5"/><path d="M5 5.5v13c0 1.4 3.1 2.5 7 2.5s7-1.1 7-2.5v-13"/><path d="M5 12c0 1.4 3.1 2.5 7 2.5s7-1.1 7-2.5"/></svg></span>
+            <span class="ri" title="Variablen" style="font-size:12px; font-style:italic;">{x}</span>
+            <span class="ri" title="Events"><svg viewBox="0 0 24 24"><path d="M13 2L4 14h6l-1 8 9-12h-6l1-8z"/></svg></span>
+            <span class="ri" title="Pages &amp; Layouts"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 9v12"/></svg></span>
+            <span class="sp"></span>
+            <span class="ri" title="Einstellungen"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19 12a7 7 0 0 0-.1-1.2l2-1.6-2-3.4-2.4 1a7 7 0 0 0-2-1.2L14 3h-4l-.5 2.6a7 7 0 0 0-2 1.2l-2.4-1-2 3.4 2 1.6A7 7 0 0 0 5 12c0 .4 0 .8.1 1.2l-2 1.6 2 3.4 2.4-1a7 7 0 0 0 2 1.2L10 21h4l.5-2.6a7 7 0 0 0 2-1.2l2.4 1 2-3.4-2-1.6c.1-.4.1-.8.1-1.2z"/></svg></span>
+          </div>
+          <div class="stv st-full">
+          <div class="cols" style="grid-template-columns: 300px 4px 1fr;">
+            <div class="panel">
+              <div class="ph">Verbindungen &amp; Daten<span class="sp"></span><span class="pha">＋ ▾</span></div>
+              <div class="searchbox">⌕ Suchen…</div>
+              <div class="tree">
+                <div class="trow"><span class="tw">▾</span><span class="ic" style="color:var(--ok);">●</span> ssas-demo <span class="cnt">xmla · 3 Kataloge</span></div>
+                <div class="trow ind1 sel"><span class="ic dimension">⛁</span> Vertrieb <span class="cnt">Cube „Vertrieb“ · 2 Boards</span></div>
+                <div class="trow ind1"><span class="ic dimension">⛁</span> Einkauf <span class="cnt">Cube „Einkauf“</span></div>
+                <div class="trow"><span class="tw">▾</span><span class="ic" style="color:var(--ok);">●</span> wetter-api <span class="cnt">rest</span></div>
+                <div class="trow ind1"><span class="ic dimension">⛁</span> Wetter 7 Tage <span class="cnt">/forecast · 1 Board</span></div>
+                <div class="trow"><span class="tw">▾</span><span class="ic" style="color:var(--err);">●</span> feld-mqtt <span class="cnt">mqtt · getrennt ↻</span></div>
+                <div class="trow ind1 dim2"><span class="ic dimension">⛁</span> Bodensensorik <span class="cnt">1 Board</span></div>
+                <div class="trow dim2" style="margin-top:8px;"><span class="tw">＋</span> Verbindung oder Datenquelle anlegen…</div>
+              </div>
+              <div class="note dot" style="left:274px; top:44px;">1</div>
+            </div>
+            <div class="split-x"></div>
+            <div class="panel" style="background:var(--bg);">
+              <div class="ptabs">
+                <span class="ptab on">Vorschau</span>
+                <span class="ptab">Einstellungen</span>
+                <span class="sp"></span>
+                <span class="pha" style="font-size:11.5px;" data-goto="s3">⛶ Editor im Vollbild</span>
+                <span class="pha" style="font-size:11.5px;" data-goto="s4">⌕ In Workbench erkunden</span>
+                <span class="note dot" style="position:static;">3</span>
+              </div>
+              <div style="padding:9px 14px; display:flex; gap:16px; align-items:center; color:var(--dim); font-size:12px; border-bottom:1px solid var(--border); background:var(--pane);">
+                <span style="color:var(--fg); font-weight:600;">Vertrieb</span>
+                <span>xmla · ssas-demo · Cube „Vertrieb“</span>
+                <span style="color:var(--ok);">● bereit</span>
+                <span>Verwendet in 2 Boards · 5 Widgets</span>
+                <span class="note dot" style="position:static;">2</span>
+              </div>
+              <div class="ed" style="flex:none; height:118px;">
+                <div class="gutter mono">1<br>2<br>3<br>4</div>
+                <div class="code mono"><span class="kw">SELECT</span>
+  { <span class="ms">[Measures].[Umsatz]</span>, <span class="ms">[Measures].[Marge]</span> } <span class="kw">ON COLUMNS</span>,
+  <span class="kw">NON EMPTY</span> <span class="mb">[Kunde].[Region].[Region].Members</span> <span class="kw">ON ROWS</span>
+<span class="kw">FROM</span> <span class="mb">[Vertrieb]</span></div>
+              </div>
+              <div class="ptabs"><span class="ptab on">Datenvorschau</span><span class="sp"></span><span class="pha" style="font-size:11.5px;">⬇ CSV</span></div>
+              <div class="rgrid">
+                <table class="rt">
+                  <tr><th></th><th>Umsatz</th><th>Marge</th></tr>
+                  <tr><td class="h">Nord</td><td>1 739 362</td><td>24,1 %</td></tr>
+                  <tr><td class="h">Süd</td><td>1 599 968</td><td>22,8 %</td></tr>
+                  <tr><td class="h">West</td><td>1 259 866</td><td>25,3 %</td></tr>
+                  <tr><td class="h">Ost</td><td>181 361</td><td class="neg">−1,7 %</td></tr>
+                </table>
+              </div>
+            </div>
+          </div>
+          </div>
+          <div class="stv st-empty">
+            <div class="empty" style="height:100%;">
+              <div class="eic">⛁</div>
+              <h4>Noch keine Verbindung</h4>
+              <p>Eine Verbindung ist der Zugang zu deinem Server (XMLA, REST, MQTT, …). Datenquellen bauen darauf auf und liefern die Daten für Board-Widgets.</p>
+              <span class="tbtn primary">＋ Verbindung anlegen</span>
+              <span class="tbtn ghost" data-goto="s4">Öffentlichen Demo-Server in der Workbench erkunden</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div></div></div>
+    <ol class="legend">
+      <li><span class="dot">1</span><span><b>Ein Baum für beides:</b> Verbindungen (mit Live-Status: verbunden/getrennt, Kataloge) und darunter ihre Datenquellen mit Verwendungshinweis; Anlage über „＋“ direkt im Baum.</span></li>
+      <li><span class="dot">2</span><span><b>Detail rechts:</b> Vorschau (Abfrage + Datenvorschau) oder Einstellungen der gewählten Quelle; Kopfzeile mit Status und <b>Verwendungsnachweis</b> („2 Boards · 5 Widgets“) vor dem Ändern/Löschen.</span></li>
+      <li><span class="dot">3</span><span><b>Vertiefung:</b> „⛶ Editor im Vollbild“ öffnet den Workbench-Editor (Screen „Daten-Editor“), „⌕ In Workbench erkunden“ die MDX Workbench mit dieser Verbindung.</span></li>
+      <li><span class="dot">4</span><span><b>Anlage-Wege:</b> „＋ Verbindung“/„＋ Datenquelle“ in der Topbar oder erkundend über die Workbench; der Leerzustand (Schalter „Erstnutzung“) führt Erstnutzer zur ersten Verbindung.</span></li>
+    </ol>
+  </div>
+
+  <!-- ============================ SCREEN 3: DATA CONFIG ============================ -->
+  <div class="screen" id="s3">
+    <h2>Datenkonfiguration — Workbench ersetzt den MDX Preview</h2>
+    <p class="sub">Der neue Inhalt des <code>Symbol.for('XmlaPreview')</code>-Slots: Metadaten-Baum (Workbench-Pane), Tabs Designer / MDX-Code / Builder, Datenvorschau unten. Vertrag unverändert: <code>dataSource</code>-Prop rein, <code>updateConfig</code> raus.</p>
+    <div class="frame"><div class="viewport"><div class="stage">
+      <div class="mock shell">
+        <div class="tb">
+          <span class="logo"><span class="mark">D</span> Daanse Board</span>
+          <span class="crumb" data-goto="s5">Datenquellen / <b>Vertrieb (xmla)</b></span>
+          <span class="sp"></span>
+          <span class="tsel"><span>Cube:</span> Vertrieb ▾</span>
+          <span class="tbtn primary">▶ Ausführen</span>
+          <span class="tbtn">Formatieren</span>
+          <span class="tbtn">Übernehmen</span>
+          <span class="tbtn" data-goto="s2">Als Widget in Board ↗</span>
+        </div>
+        <div class="shell-body">
+          <div class="rail">
+            <span class="ri" title="Boards"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></span>
+            <span class="ri" title="Übersicht"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="4" rx="1"/><rect x="3" y="11" width="18" height="4" rx="1"/><rect x="3" y="18" width="18" height="3" rx="1"/></svg></span>
+            <span class="ri on" title="Verbindungen &amp; Daten"><svg viewBox="0 0 24 24"><ellipse cx="12" cy="5.5" rx="7" ry="2.5"/><path d="M5 5.5v13c0 1.4 3.1 2.5 7 2.5s7-1.1 7-2.5v-13"/><path d="M5 12c0 1.4 3.1 2.5 7 2.5s7-1.1 7-2.5"/></svg></span>
+            <span class="ri" title="Variablen" style="font-size:12px; font-style:italic;">{x}</span>
+            <span class="ri" title="Events"><svg viewBox="0 0 24 24"><path d="M13 2L4 14h6l-1 8 9-12h-6l1-8z"/></svg></span>
+            <span class="ri" title="Pages &amp; Layouts"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 9v12"/></svg></span>
+            <span class="sp"></span>
+            <span class="ri"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19 12a7 7 0 0 0-.1-1.2l2-1.6-2-3.4-2.4 1a7 7 0 0 0-2-1.2L14 3h-4l-.5 2.6a7 7 0 0 0-2 1.2l-2.4-1-2 3.4 2 1.6A7 7 0 0 0 5 12c0 .4 0 .8.1 1.2l-2 1.6 2 3.4 2.4-1a7 7 0 0 0 2 1.2L10 21h4l.5-2.6a7 7 0 0 0 2-1.2l2.4 1 2-3.4-2-1.6c.1-.4.1-.8.1-1.2z"/></svg></span>
+          </div>
+          <div class="cols" style="grid-template-columns: 264px 4px 1fr;">
+            <!-- Left: sources + metadata -->
+            <div class="panel" style="display:grid; grid-template-rows: auto auto 4px 1fr;">
+              <div class="panel" style="border-top:0;">
+                <div class="ph">Verbindungen &amp; Daten<span class="sp"></span><span class="pha">＋ ▾</span></div>
+                <div class="tree" style="padding-bottom:6px;">
+                  <div class="trow"><span class="tw">▾</span><span class="ic" style="color:var(--ok);">●</span> ssas-demo <span class="cnt">xmla</span></div>
+                  <div class="trow ind1 sel"><span class="ic dimension">⛁</span> Vertrieb <span class="cnt">Cube „Vertrieb“</span></div>
+                  <div class="trow ind1"><span class="ic dimension">⛁</span> Einkauf</div>
+                  <div class="trow"><span class="tw">▸</span><span class="ic" style="color:var(--ok);">●</span> wetter-api <span class="cnt">rest</span></div>
+                  <div class="trow"><span class="tw">▸</span><span class="ic" style="color:var(--err);">●</span> feld-mqtt <span class="cnt">mqtt</span></div>
+                </div>
+              </div>
+              <div class="split-y" style="position:relative;"></div>
+              <div class="panel" style="border-top:0; min-height:0;">
+                <div class="ph">Cube „Vertrieb“ <span class="sp"></span><span class="pha">⌕</span></div>
+                <div class="searchbox">⌕ Metadaten durchsuchen…</div>
+                <div class="tree">
+                  <div class="trow"><span class="tw">▾</span><span class="ic folder">▦</span> Measures</div>
+                  <div class="trow ind1"><span class="tw"></span><span class="ic measure">∑</span> Umsatz</div>
+                  <div class="trow ind1 sel"><span class="tw"></span><span class="ic measure">∑</span> Kosten</div>
+                  <div class="trow ind1"><span class="tw"></span><span class="ic measure">∑</span> Absatzmenge</div>
+                  <div class="trow"><span class="tw">▾</span><span class="ic dimension">◇</span> Kunde</div>
+                  <div class="trow ind1"><span class="tw">▾</span><span class="ic hier">⌥</span> Region</div>
+                  <div class="trow ind2"><span class="tw"></span><span class="ic level">◦</span> (Alle)</div>
+                  <div class="trow ind2"><span class="tw"></span><span class="ic level">①</span> Region</div>
+                  <div class="trow ind2"><span class="tw"></span><span class="ic level">②</span> Stadt <span class="cnt">⧉</span></div>
+                  <div class="trow"><span class="tw">▸</span><span class="ic dimension">◇</span> Produkt</div>
+                  <div class="trow"><span class="tw">▾</span><span class="ic dimension">◇</span> Zeit</div>
+                  <div class="trow ind1"><span class="tw">▸</span><span class="ic hier">⌥</span> Jahr · Quartal · Monat</div>
+                  <div class="trow"><span class="tw">▸</span><span class="ic set">{}</span> Named Sets</div>
+                  <div class="trow"><span class="tw">▸</span><span class="ic kpi">◎</span> KPIs</div>
+                </div>
+                <div class="note dot" style="left:236px; top:120px;">1</div>
+              </div>
+            </div>
+            <div class="split-x"></div>
+            <!-- Right: editor + results -->
+            <div class="panel" style="display:grid; grid-template-rows: 30px 1fr 4px 232px 24px; background: var(--bg);">
+              <div class="ptabs">
+                <span class="ptab">Designer</span>
+                <span class="ptab on">MDX-Code</span>
+                <span class="ptab">Builder</span>
+                <span class="note dot" style="position:static; margin-left:8px;">2</span>
+                <span class="sp"></span>
+                <span class="pha" style="font-size:11.5px; color:var(--dim);">✨ Assist (Alt+M) · LCID 1031</span>
+              </div>
+              <div class="ed">
+                <div class="gutter mono">1<br>2<br>3<br>4<br>5<br>6<br>7<br>8</div>
+                <div class="code mono"><span class="kw">WITH MEMBER</span> <span class="ms">[Measures].[Marge]</span> <span class="kw">AS</span>
+  ( <span class="ms">[Measures].[Umsatz]</span> − <span class="ms">[Measures].[Kosten]</span> ) / <span class="ms">[Measures].[Umsatz]</span>
+<span class="kw">SELECT</span>
+  { <span class="ms">[Measures].[Umsatz]</span>, <span class="ms">[Measures].[Marge]</span> } <span class="kw">ON COLUMNS</span>,
+<span class="cursorline">  <span class="kw">NON EMPTY</span> <span class="fn squig">Fltr</span>( <span class="mb">[Kunde].[Region].[Region].Members</span>, <span class="ms">[Measures].[Umsatz]</span> &gt; 0 ) <span class="kw">ON ROWS</span></span>
+<span class="kw">FROM</span> <span class="mb">[Vertrieb]</span>
+<span class="kw">WHERE</span> ( <span class="mb">[Zeit].[Jahr].&amp;[2026]</span> )
+<span class="cm">-- Drag &amp; Drop aus dem Baum erzeugt strukturierte Edits (eine Undo-Einheit)</span></div>
+              </div>
+              <div class="split-y"></div>
+              <div class="panel" style="border-top:0;">
+                <div class="ptabs">
+                  <span class="ptab on">Datenvorschau</span>
+                  <span class="ptab">Diagnostik <span style="color:var(--warn);">●1</span></span>
+                  <span class="sp"></span>
+                  <span class="pha" style="font-size:11.5px;">⬇ CSV</span>
+                </div>
+                <div class="rgrid">
+                  <table class="rt">
+                    <tr><th></th><th>Umsatz</th><th>Marge</th></tr>
+                    <tr><td class="h">Nord</td><td>1 739 362</td><td>24,1 %</td></tr>
+                    <tr><td class="h">Süd</td><td>1 599 968</td><td>22,8 %</td></tr>
+                    <tr class="selrow"><td class="h">West</td><td>1 259 866</td><td>25,3 %</td></tr>
+                    <tr><td class="h">Ost</td><td>181 361</td><td class="neg">−1,7 %</td></tr>
+                  </table>
+                </div>
+                <div class="note dot" style="right:18px; bottom:64px;">3</div>
+              </div>
+              <div class="status">
+                <span><span class="okdot">●</span> Parse OK · AST v41</span>
+                <span style="color:var(--warn);">⚠ 1 Warnung: Unbekannte Funktion „Fltr“ — meinten Sie <u>Filter</u>?</span>
+                <span class="note dot" style="position:static;">4</span>
+                <span class="sp"></span>
+                <span>Verbindung: SSAS demo · Katalog AdventureWorks</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div></div></div>
+    <ol class="legend">
+      <li><span class="dot">1</span><span><b>Konsistenter Baum + Metadaten:</b> oben derselbe Verbindungen-&amp;-Daten-Baum wie in der Übersicht (identisch in allen drei Daten-Ansichten), darunter der Workbench-Metadatenbaum (<code>createMetadataTree</code> via <code>&lt;WbMetadataTree&gt;</code>): lazy Discover, Suche, Member-Loader; Drag-Quelle für strukturierte Edits.</span></li>
+      <li><span class="dot">2</span><span><b>Drei Sichten auf dieselbe Abfrage:</b> Designer (heutiger QueryDesigner-Workflow → <code>requestParams</code>), MDX-Code (CodeMirror 6 + Langium-LSP → <code>mdx</code>/<code>useMdx</code>), Builder (Achsen-Zonen über dem AST). Ersetzt die Monaco-Tabs des alten <code>Preview.vue</code>.</span></li>
+      <li><span class="dot">3</span><span><b>Datenvorschau</b> mit Drilldown und Writeback wie bisher (<code>XmlaStore.getData</code>), plus Diagnostik-Tab aus dem Language Server.</span></li>
+      <li><span class="dot">4</span><span><b>Statusleiste:</b> Parse-Status, Diagnosen mit Quick-Fix („Fltr → Filter“), Verbindungs-/Katalogkontext.</span></li>
+    </ol>
+  </div>
+
+  <!-- ============================ SCREEN 4: WORKBENCH ============================ -->
+  <div class="screen" id="s4">
+    <h2>MDX Workbench — Erkunden-Ansicht innerhalb von „Verbindungen &amp; Daten“</h2>
+    <p class="sub">Voller Funktionsumfang der Workbench, aber <b>kein eigener Menüeintrag</b> — wie der Daten-Editor eine Ansicht des Bereichs Verbindungen &amp; Daten (Route <code>/datasources/workbench</code>), erreichbar über „⌕ In Workbench erkunden“: Query-Tabs, AST/Builder rechts, Function Browser, Discover-Explorer.</p>
+    <div class="frame"><div class="viewport"><div class="stage">
+      <div class="mock shell">
+        <div class="tb">
+          <span class="logo"><span class="mark">D</span> Daanse Board</span>
+          <span class="crumb"><span data-goto="s6">Übersicht</span> / <span data-goto="s5">Verbindungen &amp; Daten</span> / <b>MDX Workbench</b></span>
+          <span class="sp"></span>
+          <span class="tbtn primary">▶ Run</span>
+          <span class="tbtn">Format</span>
+          <span class="tbtn">✨ Assist</span>
+          <span class="tbtn" data-goto="s5">Als Datenquelle speichern</span>
+          <span class="tsel"><span>Verbindung:</span> SSAS demo ▾</span>
+          <span class="tsel"><span>Cube:</span> Vertrieb ▾</span>
+          <span class="tsel">LCID 1031 ▾</span>
+          <span class="tbtn ghost">🔗</span>
+        </div>
+        <div class="shell-body">
+          <div class="rail">
+            <span class="ri" title="Boards"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></span>
+            <span class="ri" title="Übersicht"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="4" rx="1"/><rect x="3" y="11" width="18" height="4" rx="1"/><rect x="3" y="18" width="18" height="3" rx="1"/></svg></span>
+            <span class="ri on" title="Verbindungen &amp; Daten"><svg viewBox="0 0 24 24"><ellipse cx="12" cy="5.5" rx="7" ry="2.5"/><path d="M5 5.5v13c0 1.4 3.1 2.5 7 2.5s7-1.1 7-2.5v-13"/><path d="M5 12c0 1.4 3.1 2.5 7 2.5s7-1.1 7-2.5"/></svg></span>
+            <span class="ri" title="Variablen" style="font-size:12px; font-style:italic;">{x}</span>
+            <span class="ri" title="Events"><svg viewBox="0 0 24 24"><path d="M13 2L4 14h6l-1 8 9-12h-6l1-8z"/></svg></span>
+            <span class="ri" title="Pages &amp; Layouts"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 9v12"/></svg></span>
+            <span class="sp"></span>
+            <span class="ri"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19 12a7 7 0 0 0-.1-1.2l2-1.6-2-3.4-2.4 1a7 7 0 0 0-2-1.2L14 3h-4l-.5 2.6a7 7 0 0 0-2 1.2l-2.4-1-2 3.4 2 1.6A7 7 0 0 0 5 12c0 .4 0 .8.1 1.2l-2 1.6 2 3.4 2.4-1a7 7 0 0 0 2 1.2L10 21h4l.5-2.6a7 7 0 0 0 2-1.2l2.4 1 2-3.4-2-1.6c.1-.4.1-.8.1-1.2z"/></svg></span>
+          </div>
+          <div class="cols" style="grid-template-columns: 250px 4px 1fr 4px 280px;">
+            <!-- Left: explorer + functions -->
+            <div class="panel" style="display:grid; grid-template-rows: auto 1fr 4px 200px;">
+              <div class="panel" style="border-top:0;">
+                <div class="ph">Verbindungen &amp; Daten<span class="sp"></span><span class="pha" data-goto="s5">⌄ aufklappen</span></div>
+                <div class="tree" style="padding-bottom:4px;">
+                  <div class="trow"><span class="ic" style="color:var(--ok);">●</span> ssas-demo <span class="cnt">xmla</span> <span class="cnt">›</span> <span class="ic dimension">⛁</span> Vertrieb <span class="cnt">aktiv</span></div>
+                </div>
+              </div>
+              <div class="panel" style="border-top:0; min-height:0;">
+                <div class="ph">Explorer<span class="sp"></span><span class="pha">⌕</span></div>
+                <div class="tree">
+                  <div class="trow"><span class="tw">▾</span><span class="ic dimension">⌬</span> OLAP</div>
+                  <div class="trow ind1"><span class="tw">▾</span><span class="ic folder">🗀</span> AdventureWorks</div>
+                  <div class="trow ind2"><span class="tw">▾</span><span class="ic dimension">◈</span> Vertrieb <span class="cnt">✎</span></div>
+                  <div class="trow ind3"><span class="tw">▸</span><span class="ic folder">▦</span> Measures <span class="cnt">12</span></div>
+                  <div class="trow ind3"><span class="tw">▸</span><span class="ic dimension">◇</span> Kunde</div>
+                  <div class="trow ind3"><span class="tw">▸</span><span class="ic dimension">◇</span> Produkt</div>
+                  <div class="trow ind3"><span class="tw">▸</span><span class="ic dimension">◇</span> Zeit</div>
+                  <div class="trow ind3"><span class="tw">▸</span><span class="ic set">{}</span> Sets · <span class="ic kpi">◎</span> KPIs</div>
+                  <div class="trow ind2"><span class="tw">▸</span><span class="ic dimension">◈</span> Einkauf</div>
+                  <div class="trow"><span class="tw">▾</span><span class="ic hier">⌸</span> Relational</div>
+                  <div class="trow ind1"><span class="tw">▸</span><span class="ic folder">🗀</span> Tabellen &amp; Sichten <span class="cnt">34</span></div>
+                  <div class="trow"><span class="tw">▸</span><span class="ic level">⚙</span> Weitere Rowsets <span class="cnt">19</span></div>
+                </div>
+                <div class="note dot" style="left:222px; top:216px;">1</div>
+              </div>
+              <div class="split-y"></div>
+              <div class="panel" style="border-top:0;">
+                <div class="ph">Funktionen<span class="sp"></span><span class="pha">Gruppe: Library ▾</span></div>
+                <div class="tree">
+                  <div class="trow"><span class="tw">▾</span><span class="ic fn" style="color:var(--fn);">ƒ</span> Set-Funktionen</div>
+                  <div class="trow ind1 sel"><span class="tw"></span><span class="ic fn" style="color:var(--fn);">ƒ</span> Filter <span class="cnt">(Set, Bool) → Set</span></div>
+                  <div class="trow ind1"><span class="tw"></span><span class="ic fn" style="color:var(--fn);">ƒ</span> CrossJoin</div>
+                  <div class="trow ind1"><span class="tw"></span><span class="ic fn" style="color:var(--fn);">ƒ</span> Descendants</div>
+                  <div class="trow"><span class="tw">▸</span><span class="ic fn" style="color:var(--fn);">ƒ</span> Numerisch</div>
+                </div>
+              </div>
+            </div>
+            <div class="split-x"></div>
+            <!-- Center: tabs + editor + results -->
+            <div class="panel" style="display:grid; grid-template-rows: 30px 1fr 4px 250px; background: var(--bg);">
+              <div class="ptabs">
+                <span class="ptab on">Abfrage 1</span>
+                <span class="ptab">Abfrage 2</span>
+                <span class="ptab" style="color:var(--dim);">＋</span>
+                <span class="note dot" style="position:static; margin-left:6px;">2</span>
+                <span class="sp"></span>
+                <span class="pha" style="font-size:11.5px;">Beispiele ▾</span>
+              </div>
+              <div class="ed">
+                <div class="gutter mono">1<br>2<br>3<br>4<br>5<br>6<br>7</div>
+                <div class="code mono"><span class="kw">WITH MEMBER</span> <span class="ms">[Measures].[Marge]</span> <span class="kw">AS</span>
+  ( <span class="ms">[Measures].[Umsatz]</span> − <span class="ms">[Measures].[Kosten]</span> ) / <span class="ms">[Measures].[Umsatz]</span>
+<span class="kw">SELECT</span>
+  { <span class="ms">[Measures].[Umsatz]</span>, <span class="ms">[Measures].[Marge]</span> } <span class="kw">ON COLUMNS</span>,
+  <span class="kw">NON EMPTY</span> <span class="fn">Filter</span>( <span class="mb">[Kunde].[Region].[Region].Members</span>, <span class="ms">[Measures].[Umsatz]</span> &gt; 0 ) <span class="kw">ON ROWS</span>
+<span class="kw">FROM</span> <span class="mb">[Vertrieb]</span>
+<span class="kw">WHERE</span> ( <span class="mb">[Zeit].[Jahr].&amp;[2026]</span> )</div>
+              </div>
+              <div class="split-y"></div>
+              <div class="panel" style="border-top:0;">
+                <div class="ptabs">
+                  <span class="ptab on">Ergebnis</span>
+                  <span class="ptab">Diagramm</span>
+                  <span class="ptab">Diagnostik</span>
+                  <span class="ptab">Verlauf</span>
+                  <span class="sp"></span>
+                  <span class="pha" style="font-size:11.5px;">240 ms · 16 Zellen · ⬇ CSV</span>
+                </div>
+                <div class="rgrid">
+                  <table class="rt">
+                    <tr><th></th><th>Umsatz</th><th>Marge</th></tr>
+                    <tr><td class="h">Nord</td><td>1 739 362</td><td>24,1 %</td></tr>
+                    <tr><td class="h">Süd</td><td>1 599 968</td><td>22,8 %</td></tr>
+                    <tr><td class="h">West</td><td>1 259 866</td><td>25,3 %</td></tr>
+                    <tr><td class="h">Ost</td><td>181 361</td><td class="neg">−1,7 %</td></tr>
+                  </table>
+                </div>
+              </div>
+            </div>
+            <div class="split-x"></div>
+            <!-- Right: AST + inspector -->
+            <div class="panel" style="display:grid; grid-template-rows: 1fr 4px 240px;">
+              <div class="panel" style="border-top:0; min-height:0;">
+                <div class="ptabs" style="padding:0 6px;">
+                  <span class="ptab on">AST</span><span class="ptab">CST</span><span class="ptab">Builder</span>
+                  <span class="sp"></span><span class="pha" style="font-size:11px;">Tiefe 7 ▾</span>
+                </div>
+                <div class="tree">
+                  <div class="trow"><span class="tw">▾</span> SelectStatement</div>
+                  <div class="trow ind1"><span class="tw">▸</span> WithClause <span class="cnt">1</span></div>
+                  <div class="trow ind1"><span class="tw">▾</span> Axes <span class="cnt">2</span></div>
+                  <div class="trow ind2"><span class="tw">▸</span> Axis <span class="cnt">COLUMNS · Set</span></div>
+                  <div class="trow ind2 sel"><span class="tw">▾</span> Axis <span class="cnt">ROWS · NON EMPTY</span></div>
+                  <div class="trow ind3"><span class="tw">▾</span> FunctionCall <span class="cnt" style="color:var(--fn);">Filter → Set</span></div>
+                  <div class="trow ind4"><span class="tw"></span> MemberChain <span class="cnt" style="color:var(--member);">Level.Members</span></div>
+                  <div class="trow ind4"><span class="tw">▸</span> Comparison <span class="cnt">&gt;</span></div>
+                  <div class="trow ind1"><span class="tw"></span> FromCube <span class="cnt">[Vertrieb]</span></div>
+                  <div class="trow ind1"><span class="tw">▸</span> WhereSlicer <span class="cnt">Tuple</span></div>
+                </div>
+                <div class="note dot" style="left:252px; top:170px;">3</div>
+              </div>
+              <div class="split-y"></div>
+              <div class="panel" style="border-top:0;">
+                <div class="ph">Inspector</div>
+                <table class="itbl">
+                  <tr><td>Knoten</td><td>FunctionCall „Filter“</td></tr>
+                  <tr><td>Rückgabetyp</td><td><span class="badge set">Set</span></td></tr>
+                  <tr><td>Signatur</td><td class="mono" style="font-size:11px;">Filter(Set, Logical)</td></tr>
+                  <tr><td>Quelle</td><td class="mono" style="font-size:11px;">Z. 5, Sp. 13–19</td></tr>
+                  <tr><td>Herkunft</td><td>MDSCHEMA_FUNCTIONS</td></tr>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div></div></div>
+    <ol class="legend">
+      <li><span class="dot">1</span><span><b>Konsistenter Baum, minimiert:</b> ganz oben der Verbindungen-&amp;-Daten-Baum in eingeklappter Form (aktueller Kontext „ssas-demo › Vertrieb“, per Klick aufklappbar) — derselbe Baum wie in Verbindungen &amp; Daten und im Daten-Editor. Darunter der <b>Discover-Explorer</b>: OLAP- und Relational-Zweig, generisch aus <code>DISCOVER_SCHEMA_ROWSETS</code>, über den Adapter auf der bestehenden Daanse-XMLA-Verbindung.</span></li>
+      <li><span class="dot">2</span><span><b>Query-Tabs</b> gegen einen gemeinsamen Language-Server-Worker (ein Worker pro App, Service <code>mdx.language.client</code>).</span></li>
+      <li><span class="dot">3</span><span><b>AST/CST/Builder + Inspector:</b> Auswahl im Editor, Baum und Ergebnis bleiben synchron; Drops auf AST-Knoten erzeugen minimale Text-Patches.</span></li>
+    </ol>
+  </div>
+
+  <!-- ============================ SCREEN 6: OVERVIEW HUB ============================ -->
+  <div class="screen" id="s6">
+    <h2>Übersichtsseite — der Konfigurations-Hub</h2>
+    <p class="sub">Alles Konfigurative auf einer Seite: Verbindungen &amp; Daten (inkl. MDX Workbench), Variablen, Events, Pages &amp; Layouts — als Kacheln mit Zählern und Status. Die Kacheln entsprechen exakt den Menüeinträgen unterhalb von „Übersicht“ (Hub für Überblick und Einstieg, Menü für den Direktsprung).</p>
+    <div class="frame"><div class="viewport"><div class="stage">
+      <div class="mock shell">
+        <div class="tb">
+          <span class="logo"><span class="mark">D</span> Daanse Board</span>
+          <span class="crumb"><b>Übersicht</b></span>
+          <span class="note dot" style="position:static">1</span>
+          <span class="sp"></span>
+          <span class="tbtn ghost" data-goto="s4">⌕ MDX Workbench</span>
+          <span class="avatar">MH</span>
+        </div>
+        <div class="shell-body">
+          <div class="rail">
+            <span class="ri" title="Boards"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></span>
+            <span class="ri on" title="Übersicht"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="4" rx="1"/><rect x="3" y="11" width="18" height="4" rx="1"/><rect x="3" y="18" width="18" height="3" rx="1"/></svg></span>
+            <span class="ri" title="Verbindungen &amp; Daten"><svg viewBox="0 0 24 24"><ellipse cx="12" cy="5.5" rx="7" ry="2.5"/><path d="M5 5.5v13c0 1.4 3.1 2.5 7 2.5s7-1.1 7-2.5v-13"/><path d="M5 12c0 1.4 3.1 2.5 7 2.5s7-1.1 7-2.5"/></svg></span>
+            <span class="ri" title="Variablen" style="font-size:12px; font-style:italic;">{x}</span>
+            <span class="ri" title="Events"><svg viewBox="0 0 24 24"><path d="M13 2L4 14h6l-1 8 9-12h-6l1-8z"/></svg></span>
+            <span class="ri" title="Pages &amp; Layouts"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 9v12"/></svg></span>
+            <span class="note dot" style="left:44px; top:58px;">2</span>
+            <span class="sp"></span>
+            <span class="ri" title="Einstellungen"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19 12a7 7 0 0 0-.1-1.2l2-1.6-2-3.4-2.4 1a7 7 0 0 0-2-1.2L14 3h-4l-.5 2.6a7 7 0 0 0-2 1.2l-2.4-1-2 3.4 2 1.6A7 7 0 0 0 5 12c0 .4 0 .8.1 1.2l-2 1.6 2 3.4 2.4-1a7 7 0 0 0 2 1.2L10 21h4l.5-2.6a7 7 0 0 0 2-1.2l2.4 1 2-3.4-2-1.6c.1-.4.1-.8.1-1.2z"/></svg></span>
+          </div>
+          <div class="canvas">
+            <div class="bhead" style="padding-top:26px;">Konfiguration &amp; Inhalte</div>
+            <div class="bgrid" style="grid-template-columns: repeat(2, 1fr); max-width: 940px;">
+              <div class="bcard" data-goto="s5" style="padding:18px 20px;">
+                <div style="display:flex; align-items:center; gap:10px; font-weight:600; font-size:14px;"><span class="ic dimension" style="font-size:15px;">⛁</span> Verbindungen &amp; Daten</div>
+                <div class="binfo" style="margin-top:8px;">3 Verbindungen · 4 Datenquellen · <span style="color:var(--err);">1 Störung (feld-mqtt)</span></div>
+                <div class="btags"><span class="btag">xmla</span><span class="btag">rest</span><span class="btag">mqtt</span><span class="btag">Liste + Preview/Editor</span><span class="btag" data-goto="s4">inkl. MDX Workbench</span></div>
+              </div>
+              <div class="bcard" style="padding:18px 20px;">
+                <div style="display:flex; align-items:center; gap:10px; font-weight:600; font-size:14px;"><span style="font-style:italic; color:var(--accent);">{x}</span> Variablen</div>
+                <div class="binfo" style="margin-top:8px;">8 Variablen · 5 konstant · 2 berechnet · 1 Zeitbereich</div>
+                <div class="btags"><span class="btag">Detail &amp; Anlage wie heute</span><span class="btag">in Widgets: {{variable}}</span></div>
+              </div>
+              <div class="bcard" style="padding:18px 20px;">
+                <div style="display:flex; align-items:center; gap:10px; font-weight:600; font-size:14px;"><span style="color:var(--warn);">⚡</span> Events</div>
+                <div class="binfo" style="margin-top:8px;">12 Events · 4 Aktionen · 2 Ecore-Modelle</div>
+                <div class="btags"><span class="btag">Event Manager wie heute</span><span class="btag">Widget-Aktionen</span></div>
+              </div>
+              <div class="bcard" data-goto="s7" style="padding:18px 20px;">
+                <div style="display:flex; align-items:center; gap:10px; font-weight:600; font-size:14px;"><span style="color:var(--member);">▤</span> Pages &amp; Layouts</div>
+                <div class="binfo" style="margin-top:8px;">5 Seiten · 2 Layout-Typen (Grid, freie Anordnung)</div>
+                <div class="btags"><span class="btag">Seitenübersicht</span><span class="btag">→ Widget-Editor</span></div>
+              </div>
+            </div>
+            <div class="note dot" style="left:985px; top:108px;">3</div>
+          </div>
+        </div>
+      </div>
+    </div></div></div>
+    <ol class="legend">
+      <li><span class="dot">1</span><span><b>Ein Hub statt verstreuter Seiten:</b> bündelt die heutigen Bereiche Data configuration, Variablen, Event Manager und Seitenverwaltung an einem Ort — mit Zählern und Störungsanzeige als Einstieg.</span></li>
+      <li><span class="dot">2</span><span><b>Doppelt erreichbar:</b> jede Kategorie ist zugleich Menüeintrag in der Aktivitätsleiste — der Hub dient dem Überblick, das Menü dem Direktsprung.</span></li>
+      <li><span class="dot">3</span><span><b>Kachel → Detail:</b> „Verbindungen &amp; Daten“ (mit den Ansichten Master-Detail, Daten-Editor und MDX Workbench) und „Pages &amp; Layouts“ öffnen die neuen Detailansichten; Variablen und Events behalten ihre heutigen Ansichten.</span></li>
+    </ol>
+  </div>
+
+  <!-- ============================ SCREEN 7: PAGES & LAYOUTS ============================ -->
+  <div class="screen" id="s7">
+    <h2>Pages &amp; Layouts — Seitenübersicht mit Absprung in den Widget-Editor</h2>
+    <p class="sub">Links alle Seiten (aus der <code>PageRegistry</code>) mit Layout, Widget-Zahl und Board-Zuordnung; rechts die registrierten Layout-Typen (<code>LayoutRepository</code>). Von jeder Seite geht es direkt in den Widget-Editor.</p>
+    <div class="frame"><div class="viewport"><div class="stage">
+      <div class="mock shell">
+        <div class="tb">
+          <span class="logo"><span class="mark">D</span> Daanse Board</span>
+          <span class="crumb"><span data-goto="s6">Übersicht</span> / <b>Pages &amp; Layouts</b></span>
+          <span class="sp"></span>
+          <span class="tbtn">＋ Seite</span>
+          <span class="tbtn primary" data-goto="s2">✎ Widgets bearbeiten</span>
+          <span class="avatar">MH</span>
+        </div>
+        <div class="shell-body">
+          <div class="rail">
+            <span class="ri" title="Boards"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></span>
+            <span class="ri" title="Übersicht"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="4" rx="1"/><rect x="3" y="11" width="18" height="4" rx="1"/><rect x="3" y="18" width="18" height="3" rx="1"/></svg></span>
+            <span class="ri" title="Verbindungen &amp; Daten"><svg viewBox="0 0 24 24"><ellipse cx="12" cy="5.5" rx="7" ry="2.5"/><path d="M5 5.5v13c0 1.4 3.1 2.5 7 2.5s7-1.1 7-2.5v-13"/><path d="M5 12c0 1.4 3.1 2.5 7 2.5s7-1.1 7-2.5"/></svg></span>
+            <span class="ri" title="Variablen" style="font-size:12px; font-style:italic;">{x}</span>
+            <span class="ri" title="Events"><svg viewBox="0 0 24 24"><path d="M13 2L4 14h6l-1 8 9-12h-6l1-8z"/></svg></span>
+            <span class="ri on" title="Pages &amp; Layouts"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 9v12"/></svg></span>
+            <span class="sp"></span>
+            <span class="ri" title="Einstellungen"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19 12a7 7 0 0 0-.1-1.2l2-1.6-2-3.4-2.4 1a7 7 0 0 0-2-1.2L14 3h-4l-.5 2.6a7 7 0 0 0-2 1.2l-2.4-1-2 3.4 2 1.6A7 7 0 0 0 5 12c0 .4 0 .8.1 1.2l-2 1.6 2 3.4 2.4-1a7 7 0 0 0 2 1.2L10 21h4l.5-2.6a7 7 0 0 0 2-1.2l2.4 1 2-3.4-2-1.6c.1-.4.1-.8.1-1.2z"/></svg></span>
+          </div>
+          <div class="cols" style="grid-template-columns: 1fr 4px 380px;">
+            <div class="panel">
+              <div class="ph">Seiten · 5<span class="sp"></span><span class="pha">⌕ Filtern…</span></div>
+              <div class="rgrid" style="padding:0;">
+                <table class="rt">
+                  <tr><th>Seite</th><th style="text-align:left;">Board</th><th style="text-align:left;">Layout</th><th style="text-align:left;">Widgets</th><th style="text-align:left;">Aktionen</th></tr>
+                  <tr class="selrow">
+                    <td class="h">Übersicht</td><td style="text-align:left;">Vertriebs-Dashboard</td><td style="text-align:left;">Grid</td><td style="text-align:left;">6</td>
+                    <td style="text-align:left;"><span data-goto="s2">✎ Widgets bearbeiten</span> · <span data-goto="s1">👁 Ansehen</span></td>
+                  </tr>
+                  <tr>
+                    <td class="h">Details Nord</td><td style="text-align:left;">Vertriebs-Dashboard</td><td style="text-align:left;">Grid</td><td style="text-align:left;">4</td>
+                    <td style="text-align:left;"><span data-goto="s2">✎ Widgets bearbeiten</span></td>
+                  </tr>
+                  <tr>
+                    <td class="h">Kennzahlen Q3</td><td style="text-align:left;">Vertriebs-Dashboard</td><td style="text-align:left;">Frei (Canvas)</td><td style="text-align:left;">5</td>
+                    <td style="text-align:left;"><span data-goto="s2">✎ Widgets bearbeiten</span></td>
+                  </tr>
+                  <tr>
+                    <td class="h">Feldkarte</td><td style="text-align:left;">Bewässerung Feld Nord</td><td style="text-align:left;">Frei (Canvas)</td><td style="text-align:left;">3</td>
+                    <td style="text-align:left;"><span data-goto="s2">✎ Widgets bearbeiten</span></td>
+                  </tr>
+                  <tr>
+                    <td class="h">Wetter</td><td style="text-align:left;">Wetterübersicht</td><td style="text-align:left;">Grid</td><td style="text-align:left;">3</td>
+                    <td style="text-align:left;"><span data-goto="s2">✎ Widgets bearbeiten</span></td>
+                  </tr>
+                </table>
+              </div>
+              <div class="note dot" style="right:30px; top:74px;">1</div>
+            </div>
+            <div class="split-x"></div>
+            <div class="panel">
+              <div class="ph">Layout-Typen · 2<span class="sp"></span><span class="pha">aus LayoutRepository</span></div>
+              <div style="padding:12px; display:flex; flex-direction:column; gap:12px;">
+                <div class="bcard" style="box-shadow:none;">
+                  <div class="bthumb" style="height:84px;">
+                    <div class="bt a"></div><div class="bt"></div><div class="bt"></div>
+                    <div class="bt"></div><div class="bt b"></div><div class="bt"></div>
+                  </div>
+                  <div class="bmeta"><div class="bname">Grid-Layout</div><div class="binfo">Raster mit Snap; responsiv umbrechend</div></div>
+                </div>
+                <div class="bcard" style="box-shadow:none;">
+                  <div class="bthumb" style="height:84px; display:block; position:relative;">
+                    <div class="bt a" style="position:absolute; left:10px; top:10px; width:44%; height:36px;"></div>
+                    <div class="bt b" style="position:absolute; right:14px; top:22px; width:30%; height:44px;"></div>
+                    <div class="bt" style="position:absolute; left:24%; bottom:8px; width:38%; height:22px;"></div>
+                  </div>
+                  <div class="bmeta"><div class="bname">Freie Anordnung (Canvas)</div><div class="binfo">Pixelgenau mit Moveable + Minimap</div></div>
+                </div>
+                <div class="note dot" style="position:static; align-self:flex-end;">2</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div></div></div>
+    <ol class="legend">
+      <li><span class="dot">1</span><span><b>Seiten board-übergreifend:</b> jede Seite mit Board-Zuordnung, Layout-Typ und Widget-Zahl; „✎ Widgets bearbeiten“ öffnet den Board-Editor direkt auf dieser Seite.</span></li>
+      <li><span class="dot">2</span><span><b>Layout-Typen aus der <code>LayoutRepository</code>:</b> Grid und freie Anordnung (heutige <code>layouts/grid</code> und <code>layouts/base</code>); neue Layout-Pakete erscheinen hier automatisch.</span></li>
+    </ol>
+  </div>
+
+  <!-- ============================ TOKENS ============================ -->
+  <section class="tokens">
+    <h2>Design-Tokens (Vorschlag für Phase 4)</h2>
+    <p class="tok-note">Ein Token-Satz in <code>app/default/src/assets/main.css</code> (<code>@theme</code>), gemappt auf die <code>--mdxwb-*</code>-Variablen der Workbench-Panes — beide Welten teilen sich damit Light/Dark automatisch. Daanse-Orange bleibt als Marken-/Zweitakzent erhalten.</p>
+    <div class="tbl-wrap">
+      <table class="tok">
+        <tr><th>Token</th><th>Dunkel</th><th>Hell</th><th>Verwendung</th></tr>
+        <tr><td><code>--color-background</code> → <code>--mdxwb-bg</code></td><td><span class="sw" style="background:#1e1f24"></span><code>#1e1f24</code></td><td><span class="sw" style="background:#eceef1"></span><code>#eceef1</code></td><td>App-Grund, Editor</td></tr>
+        <tr><td><code>--color-surface</code> → <code>--mdxwb-pane</code></td><td><span class="sw" style="background:#25262c"></span><code>#25262c</code></td><td><span class="sw" style="background:#f7f8fa"></span><code>#f7f8fa</code></td><td>Panels, Topbar, Widgets</td></tr>
+        <tr><td><code>--color-primary</code> → <code>--mdxwb-accent</code></td><td><span class="sw" style="background:#6ea8fe"></span><code>#6ea8fe</code></td><td><span class="sw" style="background:#3567c9"></span><code>#3567c9</code></td><td>Interaktion, Selektion, aktive Tabs</td></tr>
+        <tr><td><code>--color-brand</code> (Daanse-Orange)</td><td><span class="sw" style="background:#d9a422"></span><code>#d9a422</code></td><td><span class="sw" style="background:#a87d10"></span><code>#a87d10</code></td><td>Logo, Marken-Akzente, Zweitserie in Charts</td></tr>
+        <tr><td><code>--color-border</code> → <code>--mdxwb-border</code></td><td><span class="sw" style="background:#383a43"></span><code>#383a43</code></td><td><span class="sw" style="background:#d3d6dd"></span><code>#d3d6dd</code></td><td>Panelgrenzen, Splitter, Tabellen</td></tr>
+        <tr><td><code>--color-semantic</code> ok / warn / error</td><td><code>#58bb8a · #d9a95a · #e06c75</code></td><td><code>#2c8a5e · #a2721c · #c0392b</code></td><td>Diagnosen, Status, Datenzustände</td></tr>
+      </table>
+    </div>
+  </section>
+</div>
+
+<script>
+  (function () {
+    var jbtns = document.querySelectorAll('.jbtn');
+
+    function rescale() {
+      document.querySelectorAll('.screen.on .viewport').forEach(function (vp) {
+        var stage = vp.querySelector('.stage');
+        var w = vp.clientWidth;
+        if (!w) return;
+        var scale = Math.min(1, w / 1280);
+        stage.style.transform = 'scale(' + scale + ')';
+        vp.style.height = (800 * scale) + 'px';
+      });
+    }
+
+    function go(id) {
+      jbtns.forEach(function (o) {
+        var on = o.dataset.s === id;
+        o.classList.toggle('on', on);
+        o.setAttribute('aria-selected', String(on));
+      });
+      document.querySelectorAll('.screen').forEach(function (s) { s.classList.toggle('on', s.id === id); });
+      rescale();
+    }
+
+    jbtns.forEach(function (b) {
+      b.addEventListener('click', function (e) { e.stopPropagation(); go(b.dataset.s); });
+    });
+
+    document.querySelectorAll('[data-goto]').forEach(function (el) {
+      el.setAttribute('title', 'Öffnet den verlinkten Screen');
+      el.addEventListener('click', function (e) { e.stopPropagation(); go(el.dataset.goto); });
+    });
+
+    var railTargets = ['s0', 's6', 's5', null, null, 's7'];
+    document.querySelectorAll('.mock .rail').forEach(function (rail) {
+      rail.querySelectorAll('.ri').forEach(function (el, i) {
+        if (i < railTargets.length && railTargets[i]) {
+          el.setAttribute('data-goto-rail', railTargets[i]);
+          el.addEventListener('click', function () { go(railTargets[i]); });
+        }
+      });
+    });
+
+    var light = false;
+    document.getElementById('mtheme').addEventListener('click', function () {
+      light = !light;
+      document.querySelectorAll('.mock').forEach(function (m) { m.classList.toggle('light', light); });
+      this.textContent = light ? 'Mockup-Theme: Hell ▸ Dunkel' : 'Mockup-Theme: Dunkel ▸ Hell';
+    });
+
+    var fresh = false;
+    document.getElementById('mfresh').addEventListener('click', function () {
+      fresh = !fresh;
+      document.querySelectorAll('.mock').forEach(function (m) { m.classList.toggle('fresh', fresh); });
+      this.textContent = fresh ? 'Zustand: Erstnutzung ▸ Bestand' : 'Zustand: Bestand ▸ Erstnutzung';
+    });
+
+    window.addEventListener('resize', rescale);
+    rescale();
+  })();
+</script>

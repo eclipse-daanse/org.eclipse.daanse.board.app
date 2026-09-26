@@ -11,25 +11,35 @@
  *   Smart City Jena
  **********************************************************************/
 import {
-  DatasourceRepository,
-  identifier,
+  type DatasourceRepository,
+  DATASOURCE_REPOSITORY,
 } from 'org.eclipse.daanse.board.app.lib.repository.datasource'
-import { container } from 'org.eclipse.daanse.board.app.lib.core'
+import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
 import { factorySymbol as CSVDatasourceIdentifier } from 'org.eclipse.daanse.board.app.lib.datasource.csv'
 
 import Preview from './Preview.vue'
 import Settings from './Settings.vue'
 
-const datasourceRepository = container.get<DatasourceRepository>(identifier)
-
 const previewSymbol = Symbol.for('CsvPreview')
 const settingsSymbol = Symbol.for('CsvSettings')
 
-container.bind(previewSymbol).toConstantValue(Preview)
-container.bind(settingsSymbol).toConstantValue(Settings)
+export function activate({ services }: ActivationContext) {
+  services.register('CsvPreview', Preview)
+  services.register('CsvSettings', Settings)
 
-datasourceRepository.registerDatasourceType('csv', {
-  Store: CSVDatasourceIdentifier,
-  Preview: previewSymbol,
-  Settings: settingsSymbol,
-})
+  services
+    .getRequired<DatasourceRepository>(DATASOURCE_REPOSITORY)
+    .registerDatasourceType('csv', {
+      Store: CSVDatasourceIdentifier,
+      Preview: previewSymbol,
+      Settings: settingsSymbol,
+    })
+}
+
+export function deactivate({ services }: ActivationContext) {
+  services
+    .getRequired<DatasourceRepository>(DATASOURCE_REPOSITORY)
+    .unregisterDatasourceType('csv')
+  services.unregister('CsvPreview')
+  services.unregister('CsvSettings')
+}

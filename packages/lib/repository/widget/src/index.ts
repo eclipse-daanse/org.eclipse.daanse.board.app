@@ -12,24 +12,19 @@
  **********************************************************************/
 
 import { WidgetRepository, type WidgetConfig } from './classes'
-import { container } from 'org.eclipse.daanse.board.app.lib.core';
+import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
 
-/**
- * Dienst-ID im Namensraum der ServiceRegistry.
- *
- * `identifier` ist das dazu passende Symbol für den Inversify-Container;
- * beide bezeichnen denselben Dienst, weil `Symbol.for` global registriert.
- */
+/** Dienst-ID im Namensraum der ServiceRegistry; `identifier` ist das dazu passende Symbol. */
 const WIDGET_REPOSITORY = 'WidgetRepository'
 
 const identifier = Symbol.for(WIDGET_REPOSITORY)
 
-if (!container.isBound(identifier)) {
-  container
-    .bind<WidgetRepository>(identifier)
-    .to(WidgetRepository)
-    .inSingletonScope()
+export function activate({ services }: ActivationContext) {
+  services.register<WidgetRepository>(WIDGET_REPOSITORY, new WidgetRepository())
 }
 
+export function deactivate({ services }: ActivationContext) {
+  services.unregister(WIDGET_REPOSITORY)
+}
 
 export { WidgetRepository, type WidgetConfig, identifier, WIDGET_REPOSITORY }

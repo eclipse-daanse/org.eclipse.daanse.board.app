@@ -10,23 +10,32 @@
  * Contributors:
  *   Smart City Jena
  **********************************************************************/
-import { container } from 'org.eclipse.daanse.board.app.lib.core'
+import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
 import {
-  ConnectionRepository,
-  identifier,
+  type ConnectionRepository,
+  CONNECTION_REPOSITORY,
 } from 'org.eclipse.daanse.board.app.lib.repository.connection'
 
 import { factorySymbol as XmlaConnectionIdentifier } from 'org.eclipse.daanse.board.app.lib.connection.xmla'
 
 import Settings from './Settings.vue'
 
-const connectionRepository = container.get<ConnectionRepository>(identifier)
-
 const settingsSymbol = Symbol.for('XmlaConnectionSettings')
 
-container.bind(settingsSymbol).toConstantValue(Settings)
+export function activate({ services }: ActivationContext) {
+  services.register('XmlaConnectionSettings', Settings)
 
-connectionRepository.registerConnectionType('xmla', {
-  Connection: XmlaConnectionIdentifier,
-  Settings: settingsSymbol,
-})
+  services
+    .getRequired<ConnectionRepository>(CONNECTION_REPOSITORY)
+    .registerConnectionType('xmla', {
+      Connection: XmlaConnectionIdentifier,
+      Settings: settingsSymbol,
+    })
+}
+
+export function deactivate({ services }: ActivationContext) {
+  services
+    .getRequired<ConnectionRepository>(CONNECTION_REPOSITORY)
+    .unregisterConnectionType('xmla')
+  services.unregister('XmlaConnectionSettings')
+}

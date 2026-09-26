@@ -12,25 +12,35 @@
  **********************************************************************/
 
 import {
-  DatasourceRepository,
-  identifier,
+  type DatasourceRepository,
+  DATASOURCE_REPOSITORY,
 } from 'org.eclipse.daanse.board.app.lib.repository.datasource'
-import { container } from 'org.eclipse.daanse.board.app.lib.core'
+import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
 import { factorySymbol as XmlaDatasourceIndentifier } from 'org.eclipse.daanse.board.app.lib.datasource.xmla'
 
 import Preview from './Preview.vue'
 import Settings from './Settings.vue'
 
-const datasourceRepository = container.get<DatasourceRepository>(identifier)
-
 const previewSymbol = Symbol.for('XmlaPreview')
 const settingsSymbol = Symbol.for('XmlaSettings')
 
-container.bind(previewSymbol).toConstantValue(Preview)
-container.bind(settingsSymbol).toConstantValue(Settings)
+export function activate({ services }: ActivationContext) {
+  services.register('XmlaPreview', Preview)
+  services.register('XmlaSettings', Settings)
 
-datasourceRepository.registerDatasourceType('xmla', {
-  Store: XmlaDatasourceIndentifier,
-  Preview: previewSymbol,
-  Settings: settingsSymbol,
-})
+  services
+    .getRequired<DatasourceRepository>(DATASOURCE_REPOSITORY)
+    .registerDatasourceType('xmla', {
+      Store: XmlaDatasourceIndentifier,
+      Preview: previewSymbol,
+      Settings: settingsSymbol,
+    })
+}
+
+export function deactivate({ services }: ActivationContext) {
+  services
+    .getRequired<DatasourceRepository>(DATASOURCE_REPOSITORY)
+    .unregisterDatasourceType('xmla')
+  services.unregister('XmlaPreview')
+  services.unregister('XmlaSettings')
+}

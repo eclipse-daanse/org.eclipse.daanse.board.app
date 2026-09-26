@@ -11,25 +11,35 @@
  *   Smart City Jena
  **********************************************************************/
 import {
-  DatasourceRepository,
-  identifier,
+  type DatasourceRepository,
+  DATASOURCE_REPOSITORY,
 } from 'org.eclipse.daanse.board.app.lib.repository.datasource'
-import { container } from 'org.eclipse.daanse.board.app.lib.core'
+import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
 import { factorySymbol as GraphqlDatasourceIdentifier } from 'org.eclipse.daanse.board.app.lib.datasource.graphql'
 
 import Preview from './Preview.vue'
 import Settings from './Settings.vue'
 
-const datasourceRepository = container.get<DatasourceRepository>(identifier)
-
 const previewSymbol = Symbol.for('GraphqlPreview')
 const settingsSymbol = Symbol.for('GraphqlSettings')
 
-container.bind(previewSymbol).toConstantValue(Preview)
-container.bind(settingsSymbol).toConstantValue(Settings)
+export function activate({ services }: ActivationContext) {
+  services.register('GraphqlPreview', Preview)
+  services.register('GraphqlSettings', Settings)
 
-datasourceRepository.registerDatasourceType('graphql', {
-  Store: GraphqlDatasourceIdentifier,
-  Preview: previewSymbol,
-  Settings: settingsSymbol,
-})
+  services
+    .getRequired<DatasourceRepository>(DATASOURCE_REPOSITORY)
+    .registerDatasourceType('graphql', {
+      Store: GraphqlDatasourceIdentifier,
+      Preview: previewSymbol,
+      Settings: settingsSymbol,
+    })
+}
+
+export function deactivate({ services }: ActivationContext) {
+  services
+    .getRequired<DatasourceRepository>(DATASOURCE_REPOSITORY)
+    .unregisterDatasourceType('graphql')
+  services.unregister('GraphqlPreview')
+  services.unregister('GraphqlSettings')
+}

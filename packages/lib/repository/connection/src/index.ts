@@ -20,7 +20,10 @@ import {
   type PubSubEvents,
 } from './classes'
 
-const identifier = Symbol.for('ConnectionRepository')
+/** Dienst-ID im Namensraum der ServiceRegistry; `identifier` ist das dazu passende Symbol. */
+const CONNECTION_REPOSITORY = 'ConnectionRepository'
+
+const identifier = Symbol.for(CONNECTION_REPOSITORY)
 
 if (!container.isBound(identifier)) {
   console.log('Binding ConnectionRepository to container', container)
@@ -31,7 +34,7 @@ if (!container.isBound(identifier)) {
     .inSingletonScope()
 }
 
-export { type ConnectionRepository, identifier }
+export { type ConnectionRepository, identifier, CONNECTION_REPOSITORY }
 export type {
   ConnectionIdentifiers,
   IConnection,
