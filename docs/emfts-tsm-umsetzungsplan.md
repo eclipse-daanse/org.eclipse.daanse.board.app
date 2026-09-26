@@ -346,15 +346,33 @@ Ein Unit-Test der Factory wurde deshalb **nicht** hinterlassen — er wäre nur 
 Kunstgriffen lauffähig gewesen. Er ist nach B3/B4 nachzuholen, wenn die Pakete
 nicht mehr beim Import auf den Container zugreifen.
 
-### A5 — Entscheidungsvorlage für Stufe 1 (Generator)
+### A5 — Entscheidungsvorlage für Stufe 1 (Generator)  ✔ durchgeführt
 
-Kein Umbau, sondern ein Bewertungsschritt: Ein Modell — Vorschlag
-`lib/connection/rest` — mit `@emfts/codegen` generieren und die Ausgabe gegen das
-Ergebnis von `tools/generator/main.js` diffen. Daraus entsteht die Liste der
-Funktionslücken, die `@emfts/codegen` noch fehlen (bekannt: `--no_factories`, das
-Annotations-Paket `lib.annotations`).
+Ergebnis in der [Entscheidungsvorlage](./emfts-generator-entscheidung.md).
 
-Ergebnis ist die Grundlage, um Stufe 1 verbindlich zu planen — nicht deren Beginn.
+**Empfehlung: noch nicht wechseln.** Der geplante Diff ließ sich nicht
+erstellen, und der Grund dafür ist die Antwort: Von den drei Modi in
+`@emfts/codegen` läuft nur `emf`. `decorator` — der Modus, der unserem
+Ausgabestil entspricht — bricht in der Operations-Schleife der Vorlage ab,
+`plain` ebenso. Zweitens scheitert `init` an `eSubpackages`/`eSuperTypes` per
+`href`, also an der Art, wie unsere 41 Modelle aufeinander aufbauen.
+
+Der Unterschied ist grundsätzlicher als erwartet: Für dasselbe Modell erzeugt
+`tools/generator/main.js` 3 Dateien mit 114 Zeilen (eine Decorator-Klasse je
+Klassifizierer), `@emfts/codegen` im `emf`-Modus 9 Dateien mit 818 Zeilen
+(Interface, Impl, Factory, Package, Index). Beides ist legitim, aber es sind
+verschiedene Erzeugnisse, nicht dasselbe in unterschiedlicher Güte.
+
+Nebenbefund, unabhängig von der Entscheidung: `tools/generator/main.js`
+erzeugt bei mehrzeiligen `documentation`-Annotationen **syntaktisch ungültiges
+TypeScript** — 4 der 193 Dateien sind betroffen. Sie fallen nicht auf, weil
+die Pakete mit `vite build` ohne Typcheck bauen. Behebung im Template, fällig
+unabhängig von der Generatorfrage.
+
+Zwei Feature Requests sind daraus abgeleitet (FR-C1, FR-C2 in
+[emfts-feature-requests.md](./emfts-feature-requests.md)). `--no_factories`
+hat sich als keine Lücke erwiesen — im `emf`-Modus deckt
+`generateFactory="false"` das ab.
 
 ---
 

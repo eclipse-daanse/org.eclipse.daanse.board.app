@@ -16,28 +16,28 @@ import type { ServiceProperties, ServiceRegistration } from '@eclipse-daanse/tsm
 import type { Container } from 'inversify'
 
 /**
- * Die ServiceRegistry der Anwendung: `DefaultServiceRegistry` von tsm mit
- * einem Rückfallweg auf den Inversify-Container.
+ * The application's ServiceRegistry: tsm's `DefaultServiceRegistry` with a
+ * fallback path onto the Inversify container.
  *
- * Hintergrund: Die Umstellung der Pakete auf `activate(ctx)` läuft
- * schrittweise. Bereits umgestellte Pakete registrieren über diese Registry,
- * noch nicht umgestellte binden weiterhin direkt in den Inversify-Container.
- * Damit ein umgestelltes Paket die Dienste der übrigen findet, wird eine
- * unbekannte ID einmal gegen Inversify aufgelöst.
+ * Background: the migration of packages to `activate(ctx)` runs step by
+ * step. Already migrated packages register through this registry, the rest
+ * still bind straight into the Inversify container. So that a migrated
+ * package finds the others' services, an unknown ID is resolved against
+ * Inversify once.
  *
- * Der Rückfallweg ist bewusst als absterbendes Bauteil angelegt: Wenn das
- * letzte Paket umgestellt ist, findet er nichts mehr und kann samt Inversify
- * ersatzlos entfallen. Er ist keine dauerhafte Schicht.
+ * The fallback path is deliberately built as a dying part: once the last
+ * package is migrated it finds nothing anymore and can be removed together
+ * with Inversify, without replacement. It is not a permanent layer.
  *
- * Brücke zwischen den Namensräumen: tsm adressiert Dienste über Strings, die
- * Anwendung bisher über `Symbol.for(...)`. Da `Symbol.for` global registriert
- * ist, entspricht die String-ID `'WidgetRepository'` genau dem bisherigen
+ * Bridge between the namespaces: tsm addresses services by strings, the
+ * application so far by `Symbol.for(...)`. Since `Symbol.for` is globally
+ * registered, the string ID `'WidgetRepository'` denotes exactly the former
  * `Symbol.for('WidgetRepository')`.
  *
- * Nicht erreichbar ist der Rückfallweg für Bindungen, die eine Klasse selbst
- * als Identifier verwenden (`container.bind(CsvStore).toSelf()`), weil dafür
- * kein Symbol existiert. Solche Bindungen sind paketintern - nach außen
- * gereicht wird jeweils ein Factory-Symbol.
+ * Out of the fallback's reach are bindings that use a class itself as the
+ * identifier (`container.bind(CsvStore).toSelf()`), because no symbol exists
+ * for those. Such bindings are package-internal - what is handed outward is
+ * always a factory symbol.
  */
 export class BoardServiceRegistry extends DefaultServiceRegistry {
   constructor(private readonly legacyContainer: Container) {
@@ -45,17 +45,18 @@ export class BoardServiceRegistry extends DefaultServiceRegistry {
   }
 
   /**
-   * Registriert den Dienst zusätzlich im Inversify-Container.
+   * Registers the service in the Inversify container as well.
    *
-   * Der Rückfallweg unten deckt nur eine Richtung ab: ein umgestelltes Paket
-   * findet Dienste der noch nicht umgestellten. Umgekehrt lesen noch nicht
-   * umgestellte Konsumenten weiterhin über `container.get(Symbol.for(...))` —
-   * etwa `DatasourceEditor.vue` für die Preview- und Settings-Komponenten.
-   * Ohne diese Spiegelung sähen sie nichts, sobald der Anbieter umgestellt ist.
+   * The fallback path below covers only one direction: a migrated package
+   * finds services of the not-yet-migrated ones. The other way around,
+   * unmigrated consumers still read via `container.get(Symbol.for(...))` -
+   * `DatasourceEditor.vue` does, for the preview and settings components.
+   * Without this mirroring they would see nothing once the provider is
+   * migrated.
    *
-   * Wie der Rückfallweg ist auch die Spiegelung ein Übergangsbauteil: ist das
-   * letzte Paket umgestellt, liest niemand mehr aus dem Container, und beide
-   * entfallen gemeinsam.
+   * Like the fallback path, the mirroring is a transitional part: once the
+   * last package is migrated nobody reads from the container anymore, and
+   * both go away together.
    */
   override register<T>(
     id: string,
@@ -75,21 +76,21 @@ export class BoardServiceRegistry extends DefaultServiceRegistry {
       }
       this.legacyContainer.bind(identifier).toConstantValue(service)
     } catch {
-      // Die Spiegelung ist eine Zugabe für den Übergang. Schlägt sie fehl,
-      // bleibt die Registrierung in dieser Registry trotzdem gültig.
+      // The mirroring is a bonus for the transition. If it fails, the
+      // registration in this registry stays valid regardless.
     }
 
     return registration
   }
 
   /**
-   * Hebt die Registrierung auf — einschließlich der gespiegelten Bindung.
+   * Withdraws the registration - including the mirrored binding.
    *
-   * Ohne das griffe direkt danach der Rückfallweg und lieferte den eben
-   * entfernten Dienst weiter aus, womit `deactivate` wirkungslos wäre.
+   * Without that, the fallback path would kick in right afterwards and keep
+   * handing out the service just removed, making `deactivate` ineffective.
    */
   override unregister(id: string): boolean {
-    const entfernt = super.unregister(id)
+    const removed = super.unregister(id)
 
     const identifier = Symbol.for(id)
     try {
@@ -97,10 +98,10 @@ export class BoardServiceRegistry extends DefaultServiceRegistry {
         this.legacyContainer.unbind(identifier)
       }
     } catch {
-      // siehe register(): die Spiegelung ist eine Zugabe für den Übergang
+      // see register(): the mirroring is a bonus for the transition
     }
 
-    return entfernt
+    return removed
   }
 
   override get<T>(id: string, _resolving?: Set<string>): T | undefined {
@@ -116,11 +117,11 @@ export class BoardServiceRegistry extends DefaultServiceRegistry {
   }
 
   /**
-   * Dienst-IDs beider Namensräume, ohne Doppelnennungen.
+   * Service IDs of both namespaces, without duplicates.
    *
-   * Inversify kennt keine Aufzählung seiner Bindungen; enthalten sind
-   * deshalb nur die IDs aus der tsm-Registry. Für den Übergang genügt das,
-   * weil die Aufzählung nur diagnostisch verwendet wird.
+   * Inversify cannot enumerate its bindings; only the IDs of the tsm
+   * registry are included. That is enough for the transition, because the
+   * enumeration is used diagnostically only.
    */
   override getServiceIds(): string[] {
     return super.getServiceIds()
@@ -134,9 +135,9 @@ export class BoardServiceRegistry extends DefaultServiceRegistry {
       }
       return this.legacyContainer.get<T>(identifier)
     } catch {
-      // Der Dienst ist gebunden, seine Auflösung schlägt aber fehl - etwa
-      // weil eine seiner eigenen Abhängigkeiten noch nicht registriert ist.
-      // Für den Aufrufer ist das dasselbe wie 'nicht vorhanden'.
+      // The service is bound but its resolution fails - for instance because
+      // one of its own dependencies is not registered yet. To the caller
+      // that is the same as 'not there'.
       return undefined
     }
   }

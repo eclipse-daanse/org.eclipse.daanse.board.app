@@ -30,6 +30,9 @@ import {
   ModuleBootstrapper,
 } from 'org.eclipse.daanse.board.app.lib.core'
 import { modules } from './modules'
+import { bundles } from './bundles'
+import { ModuleLoader } from '@eclipse-daanse/tsm'
+import { installDevtools } from '@eclipse-daanse/tsm/devtools'
 import { registerSystemActions } from './systemActions'
 import { registerTestActions } from './testActions'
 
@@ -257,11 +260,84 @@ const bootstrapper = new ModuleBootstrapper(services, {
 // Der gesamte Start: alle Pakete sind Module, ihre Reihenfolge folgt aus den
 // Deklarationen in modules.ts. Was hier bleibt, ist anwendungseigen — die
 // beiden Seiten Configuration und SaveLoad und ihre Navigationseintraege.
+/*
+ * The tsm ModuleLoader loads the real bundles from bundles.ts - packages with
+ * their own build and entry URL. It shares the registry with the bootstrapper:
+ * services of the static stock are ordinary services to bundles and vice
+ * versa. The migration moves modules from modules.ts over here; the
+ * bootstrapper dies by becoming empty.
+ */
+/*
+ * Modules that still live inside the host bundle but are run by the loader:
+ * the entryResolver hands over their namespace instead of fetching the entry
+ * URL. An entry disappears from this map once the module is built as a real
+ * bundle - from then on its URL is used.
+ */
+const preloadedContainers = new Map<string, () => Promise<unknown>>([
+  ['platform.vue', () => import('org.eclipse.daanse.board.app.platform.vue')],
+  ['platform.compat', () => import('org.eclipse.daanse.board.app.platform.compat')],
+])
+
+const resolvedContainers = new Map<string, unknown>()
+
+const loader = new ModuleLoader({
+  serviceRegistry: services,
+  hotReload: import.meta.env.DEV,
+  continueOnError: true,
+  entryResolver: (manifest) => resolvedContainers.get(manifest.id),
+})
+
+// The tsm console: tsm.lb(), tsm.services() and friends become available in
+// the browser devtools - insight into modules, services and their states.
+installDevtools({ loader })
+
+async function loadBundles() {
+  const manifests = [
+    (await import('org.eclipse.daanse.board.app.platform.vue/manifest.json')).default,
+    (await import('org.eclipse.daanse.board.app.platform.compat/manifest.json')).default,
+    ...bundles,
+  ]
+  for (const [id, load] of preloadedContainers) {
+    resolvedContainers.set(id, await load())
+  }
+  loader.register(manifests)
+  await loader.loadAll()
+}
+
+/*
+ * Dev reload bridge: the vite plugin in vite.config.ts watches the built
+ * bundles and sends this event after every rebuild. A save in a bundle
+ * (with `vite build --watch` running there) swaps the module live -
+ * a real restart with deactivate/activate, not a component patch.
+ */
+if (import.meta.hot) {
+  import.meta.hot.on('tsm:bundle-changed', ({ id }: { id: string }) => {
+    loader.reloadModule(id).catch((error) => {
+      console.error(`bundle reload failed for ${id}:`, error)
+    })
+  })
+}
+
 bootstrapper
   .activateAll(modules)
   .then(({ activated }) => {
     console.log(`✅ ${activated.length} Module aktiviert`)
     seitenEinrichten()
+    // After the static stock, so its services are registered by the time a
+    // bundle names them in requiresService.
+    //
+    // The host does not load any bundle itself - it registers manifests and
+    // resolves the preloaded containers. What loads when is decided by the
+    // resolver from the manifests' dependencies: a widget naming platform.vue
+    // pulls it ahead of itself in the order. The platform.vue manifest
+    // carries the tsm.library capabilities that the bundles'
+    // sharedDependencies are validated against.
+    return loadBundles()
+  })
+  .then(() => {
+    if (bundles.length > 0) {
+      console.log(`📦 ${bundles.length} bundle(s) loaded`)
+    }
   })
   .catch((err) => {
     // Die Ursache mit ausgeben - der Bootstrapper hängt sie als `cause` an,

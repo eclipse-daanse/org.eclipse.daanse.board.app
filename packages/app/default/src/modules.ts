@@ -545,11 +545,6 @@ export const modules: ModuleEntry[] = [
     requires: ['EventRegistry', 'WidgetRepository'],
   },
   {
-    id: 'ui.vue.widget.progress',
-    load: () => import('org.eclipse.daanse.board.app.ui.vue.widget.progress'),
-    requires: ['EventActionsRegistry', 'EventRegistry', 'WidgetRepository'],
-  },
-  {
     id: 'ui.vue.widget.video',
     load: () => import('org.eclipse.daanse.board.app.ui.vue.widget.video'),
     requires: ['EventActionsRegistry', 'EventRegistry', 'WidgetRepository'],

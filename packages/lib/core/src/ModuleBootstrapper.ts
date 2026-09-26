@@ -15,34 +15,33 @@ import type { ServiceRegistry, ModuleLogger } from '@eclipse-daanse/tsm'
 import type { ActivationContext, ActivatableModule } from './api/ActivationContext'
 
 /**
- * Ein Eintrag in der Modulliste der Anwendung.
+ * One entry in the application's module list.
  */
 export interface ModuleEntry {
-  /** Sprechender Name, erscheint in Protokoll und Fehlermeldungen */
+  /** Human-readable name, shows up in logs and error messages */
   readonly id: string
-  /** Lädt das Modul. Der Import selbst darf keine Wirkung haben. */
+  /** Loads the module. The import itself must not have side effects. */
   readonly load: () => Promise<Partial<ActivatableModule>>
   /**
-   * Dienst-IDs, die dieses Modul in `activate` registriert.
+   * Service IDs this module registers in `activate`.
    *
-   * Daraus leitet der Bootstrapper die Aktivierungsreihenfolge ab — die Liste
-   * muss deshalb nicht mehr von Hand sortiert werden. Entspricht `provides`
-   * im tsm-Manifest.
+   * The bootstrapper derives the activation order from these - the list no
+   * longer needs to be sorted by hand. Matches `provides` in the tsm
+   * manifest.
    */
   readonly provides?: readonly string[]
   /**
-   * Dienst-IDs, die dieses Modul in `activate` auflöst.
+   * Service IDs this module resolves in `activate`.
    *
-   * Dienste, die kein Modul der Liste bereitstellt, gelten als extern: sie
-   * kommen aus noch nicht umgestellten Paketen und werden über den
-   * Rückfallweg der Registry aufgelöst. Sie beeinflussen die Reihenfolge
-   * nicht. Entspricht `requiresService` im tsm-Manifest.
+   * Services no module of the list provides count as external: they come
+   * from not-yet-migrated packages through the registry's fallback path and
+   * do not influence the order. Matches `requiresService` in the tsm
+   * manifest.
    */
   readonly requires?: readonly string[]
   /**
-   * Ein optionales Modul darf fehlschlagen, ohne den Start abzubrechen.
-   * Voreinstellung ist `false`: ein Pflichtmodul, das nicht aktiviert werden
-   * kann, bricht den Start ab.
+   * An optional module may fail without aborting startup. Defaults to
+   * `false`: a required module that cannot be activated aborts the start.
    */
   readonly optional?: boolean
 }
@@ -58,24 +57,24 @@ export interface BootstrapResult {
 }
 
 /**
- * Aktiviert Module und wartet auf jedes einzelne.
+ * Activates modules and awaits each one.
  *
- * Die Reihenfolge wird aus den `provides`/`requires`-Angaben der Einträge
- * abgeleitet, nicht der Liste entnommen: Ein Modul läuft nach denen, deren
- * Dienste es auflöst. Wo keine Abhängigkeit besteht, bleibt die Reihenfolge
- * der Liste erhalten — die Widget-Palette behält also ihre Sortierung.
+ * The order is derived from the entries' `provides`/`requires` declarations,
+ * not taken from the list: a module runs after those whose services it
+ * resolves. Where no dependency exists, list order is preserved - the widget
+ * palette keeps its sorting.
  *
- * Dienste, die kein Eintrag bereitstellt, gelten als extern: sie stammen aus
- * noch nicht umgestellten Paketen und werden über den Rückfallweg der
- * Registry aufgelöst.
+ * Services no entry provides count as external: they come from
+ * not-yet-migrated packages and are resolved through the registry's fallback
+ * path.
  *
- * Auf asynchrone Aktivierung wird gewartet — bisher lief `loadPackages()`
- * ohne `await` neben dem synchron folgenden Code, was nur durch Timing
- * gutging.
+ * Asynchronous activation is awaited - previously `loadPackages()` ran
+ * without `await` next to synchronously following code, which only worked by
+ * timing.
  *
- * Fehler werden nicht verschluckt: ein Pflichtmodul, das nicht aktiviert
- * werden kann, bricht den Start mit der ursprünglichen Ursache ab. Nur als
- * `optional` gekennzeichnete Module werden protokolliert und übersprungen.
+ * Errors are not swallowed: a required module that cannot be activated aborts
+ * the start with the original cause attached. Only modules marked `optional`
+ * are logged and skipped.
  */
 export class ModuleBootstrapper {
   private readonly activated: Array<{ entry: ModuleEntry; module: ActivatableModule }> = []
@@ -89,12 +88,12 @@ export class ModuleBootstrapper {
     const activated: string[] = []
     const failed: ActivationFailure[] = []
 
-    for (const entry of this.reihenfolge(entries)) {
+    for (const entry of this.orderOf(entries)) {
       try {
         const module = (await entry.load()) as ActivatableModule
 
         if (typeof module.activate !== 'function') {
-          throw new Error(`Modul "${entry.id}" exportiert keine activate-Funktion`)
+          throw new Error(`Module "${entry.id}" does not export an activate function`)
         }
 
         await module.activate(this.contextFor(entry))
@@ -102,9 +101,9 @@ export class ModuleBootstrapper {
         activated.push(entry.id)
       } catch (error) {
         if (!entry.optional) {
-          throw new Error(`Modul "${entry.id}" konnte nicht aktiviert werden`, { cause: error })
+          throw new Error(`Module "${entry.id}" could not be activated`, { cause: error })
         }
-        this.log.warn(`optionales Modul "${entry.id}" übersprungen`, error)
+        this.log.warn(`optional module "${entry.id}" skipped`, error)
         failed.push({ id: entry.id, error })
       }
     }
@@ -113,11 +112,11 @@ export class ModuleBootstrapper {
   }
 
   /**
-   * Deaktiviert alle aktivierten Module in umgekehrter Reihenfolge, damit
-   * Abhängige vor ihren Abhängigkeiten abgebaut werden.
+   * Deactivates all activated modules in reverse order, so dependents are
+   * torn down before their dependencies.
    *
-   * Ein Fehler beim Deaktivieren bricht den Vorgang nicht ab — sonst bliebe
-   * der Rest der Module in einem halb abgebauten Zustand zurück.
+   * A failure while deactivating does not abort the run - otherwise the rest
+   * of the modules would be left in a half-dismantled state.
    */
   async deactivateAll(): Promise<ActivationFailure[]> {
     const failed: ActivationFailure[] = []
@@ -127,7 +126,7 @@ export class ModuleBootstrapper {
       try {
         await module.deactivate(this.contextFor(entry))
       } catch (error) {
-        this.log.error(`Modul "${entry.id}" konnte nicht deaktiviert werden`, error)
+        this.log.error(`Module "${entry.id}" could not be deactivated`, error)
         failed.push({ id: entry.id, error })
       }
     }
@@ -137,50 +136,50 @@ export class ModuleBootstrapper {
   }
 
   /**
-   * Bringt die Einträge in eine Reihenfolge, in der jedes Modul nach den
-   * Modulen steht, deren Dienste es auflöst.
+   * Brings the entries into an order in which every module runs after the
+   * modules whose services it resolves.
    *
-   * Stabil: Einträge ohne Abhängigkeit zueinander behalten ihre relative
-   * Reihenfolge aus der Liste. Ein Zyklus bricht mit den beteiligten Modulen
-   * ab, statt eine willkürliche Reihenfolge zu wählen.
+   * Stable: entries without a dependency between them keep their relative
+   * list order. A cycle aborts naming the modules involved instead of picking
+   * an arbitrary order.
    */
-  private reihenfolge(entries: readonly ModuleEntry[]): ModuleEntry[] {
-    const anbieter = new Map<string, ModuleEntry>()
+  private orderOf(entries: readonly ModuleEntry[]): ModuleEntry[] {
+    const providers = new Map<string, ModuleEntry>()
     for (const entry of entries) {
-      for (const dienst of entry.provides ?? []) {
-        anbieter.set(dienst, entry)
+      for (const service of entry.provides ?? []) {
+        providers.set(service, entry)
       }
     }
 
-    const geordnet: ModuleEntry[] = []
-    const fertig = new Set<ModuleEntry>()
-    const imGang = new Set<ModuleEntry>()
+    const ordered: ModuleEntry[] = []
+    const done = new Set<ModuleEntry>()
+    const inProgress = new Set<ModuleEntry>()
 
-    const einfuegen = (entry: ModuleEntry, pfad: readonly ModuleEntry[]): void => {
-      if (fertig.has(entry)) return
-      if (imGang.has(entry)) {
-        const zyklus = [...pfad.slice(pfad.indexOf(entry)), entry].map(e => e.id)
-        throw new Error(`Zyklische Modulabhängigkeit: ${zyklus.join(' -> ')}`)
+    const insert = (entry: ModuleEntry, path: readonly ModuleEntry[]): void => {
+      if (done.has(entry)) return
+      if (inProgress.has(entry)) {
+        const cycle = [...path.slice(path.indexOf(entry)), entry].map(e => e.id)
+        throw new Error(`Cyclic module dependency: ${cycle.join(' -> ')}`)
       }
 
-      imGang.add(entry)
-      for (const dienst of entry.requires ?? []) {
-        const lieferant = anbieter.get(dienst)
-        // Kein Lieferant in der Liste: externer Dienst, kein Einfluss auf die Reihenfolge
-        if (lieferant && lieferant !== entry) {
-          einfuegen(lieferant, [...pfad, entry])
+      inProgress.add(entry)
+      for (const service of entry.requires ?? []) {
+        const provider = providers.get(service)
+        // No provider in the list: external service, no influence on the order
+        if (provider && provider !== entry) {
+          insert(provider, [...path, entry])
         }
       }
-      imGang.delete(entry)
+      inProgress.delete(entry)
 
-      fertig.add(entry)
-      geordnet.push(entry)
+      done.add(entry)
+      ordered.push(entry)
     }
 
     for (const entry of entries) {
-      einfuegen(entry, [])
+      insert(entry, [])
     }
-    return geordnet
+    return ordered
   }
 
   private contextFor(entry: ModuleEntry): ActivationContext {
