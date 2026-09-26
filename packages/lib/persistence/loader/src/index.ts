@@ -7,44 +7,59 @@
   Contributors: Smart City Jena
  */
 
-import { container } from 'org.eclipse.daanse.board.app.lib.core'
-import { inject, optional, ServiceIdentifier } from 'inversify'
+import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
 import { identifier, SettingsManagerI } from 'org.eclipse.daanse.board.app.lib.settings.manager'
 import { identifier as RepoManagerId, Repository, RepositoryRegistryI } from 'org.eclipse.daanse.board.app.lib.repository.persistence'
 
 
-const settingsManager = container.get<SettingsManagerI>(identifier)
-const repoManager: RepositoryRegistryI = container.get<RepositoryRegistryI>(RepoManagerId)
-
-async function init() {
-  console.info('📦 RepoRepositoryLoader started')
+/**
+ * Stellt die gespeicherten Repository-Instanzen wieder her.
+ *
+ * Setzt voraus, dass die Repository-Typen bereits angemeldet sind - deshalb
+ * `requires` auf die drei Umsetzungen. Vorher lief das als `init()` am
+ * Dateiende, ohne `await` und ohne dass jemand die Reihenfolge zusicherte;
+ * die Anwendung lud dieses Paket darum in einer eigenen Nachlaufphase.
+ */
+export async function activate({ services, log }: ActivationContext) {
+  const settingsManager = services.get<SettingsManagerI>('SettingsManager')
   if (!settingsManager) {
-    console.info('SettingsManager not installed')
+    log.info('SettingsManager nicht vorhanden - nichts wiederherzustellen')
     return
   }
-  let persirepos = await settingsManager.getSettings(['persistanceRepositories'])
-  console.log(persirepos)
-  if (!persirepos) return
-  for (let [type, instances] of Object.entries(persirepos)) {
-    let baseclass = repoManager.availableRepoTypes.get(type)
+
+  const repoManager = services.getRequired<RepositoryRegistryI>('RepositoryRegistry')
+  const gespeicherte = await settingsManager.getSettings(['persistanceRepositories'])
+  if (!gespeicherte) return
+
+  for (const [type, instances] of Object.entries(gespeicherte)) {
+    const baseclass = repoManager.availableRepoTypes.get(type)
     if (!baseclass) {
-      console.log(`${type} not registered`)
+      log.warn(`Repository-Typ "${type}" ist nicht angemeldet`)
       continue
     }
 
-    const aclass = container.get<Repository>(baseclass as ServiceIdentifier)
-    if (aclass) {
-      for (let entitysetting of (instances as any[])) {
-        if (entitysetting.name && entitysetting.url) {
-          aclass.init(new URL(entitysetting.url), entitysetting.name, entitysetting) as Repository
-          repoManager.register(aclass)
-        }
+    const repository = services.get<Repository>(String(baseclass.description ?? baseclass))
+    if (!repository) {
+      log.warn(`keine Umsetzung fuer Repository-Typ "${type}"`)
+      continue
+    }
+
+    for (const entitysetting of instances as any[]) {
+      if (!entitysetting.name || !entitysetting.url) continue
+      /*
+       * Pro Instanz auffangen: ein Repository, das sich nicht herstellen
+       * laesst, darf die uebrigen nicht mitnehmen. Vorher lief diese Funktion
+       * ohne `await` neben dem Start her - ein Fehler landete als unbehandelte
+       * Zusage in der Konsole und blieb unbemerkt.
+       */
+      try {
+        repository.init(new URL(entitysetting.url), entitysetting.name, entitysetting)
+        repoManager.register(repository)
+      } catch (fehler) {
+        log.warn(`Repository "${entitysetting.name}" (${type}) nicht wiederhergestellt`, fehler)
       }
-    } else {
-      console.warn('found no RepositoryType for:', type)
     }
   }
 }
-init();
 
 

@@ -8,7 +8,7 @@ SPDX-License-Identifier: EPL-2.0
 Contributors: Smart City Jena
 */
 
-import  { container } from 'org.eclipse.daanse.board.app.lib.core';
+import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core';
 import { SettingsManager } from './classes/SettingsManager'
 import { type SettingsManagerI } from './interfaces/SettingsManagerI'
 /** Dienst-ID im Namensraum der ServiceRegistry; `identifier` ist das dazu passende Symbol. */
@@ -16,9 +16,12 @@ const SETTINGS_MANAGER = 'SettingsManager'
 
 const identifier = Symbol.for(SETTINGS_MANAGER)
 
-if (!container.isBound(identifier)) {
-  container.bind<SettingsManagerI>(identifier).toConstantValue(new SettingsManager());
-  console.log("📦 SettingsManager initialized");
+export function activate({ services }: ActivationContext) {
+  services.register(SETTINGS_MANAGER, new SettingsManager())
+}
+
+export function deactivate({ services }: ActivationContext) {
+  services.unregister(SETTINGS_MANAGER)
 }
 export {
   identifier,

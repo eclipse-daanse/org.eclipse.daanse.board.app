@@ -10,7 +10,7 @@ Contributors: Smart City Jena
 */
 
 import 'reflect-metadata';
-import { injectable, inject } from 'inversify';
+import { injectable, inject } from '@eclipse-daanse/tsm';
 import { EventActionsRegistry, EVENT_ACTIONS_REGISTRY, type EventActionContext } from '../registry/EventActionsRegistry';
 import { Condition } from './Condition';
 import { Comperator } from './Comperator';
@@ -66,7 +66,7 @@ export class EventManager {
   private onMappingsChangedCallback?: () => void;
 
   constructor(
-    @inject(EVENT_ACTIONS_REGISTRY) private actionsRegistry: EventActionsRegistry
+    @inject('EventActionsRegistry') private actionsRegistry: EventActionsRegistry
   ) {}
 
   /**
@@ -386,4 +386,7 @@ export class EventManager {
 }
 
 // Symbol für Dependency Injection
-export const EVENT_MANAGER = Symbol.for('EventManager');
+/** Dienst-ID im Namensraum der ServiceRegistry; `EVENT_MANAGER` ist das dazu passende Symbol. */
+export const EVENT_MANAGER_ID = 'EventManager';
+
+export const EVENT_MANAGER = Symbol.for(EVENT_MANAGER_ID);

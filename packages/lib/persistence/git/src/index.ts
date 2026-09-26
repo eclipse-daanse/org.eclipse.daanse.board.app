@@ -12,23 +12,33 @@
 import { Repository, RepositoryRegistryI, identifier as persistenceIdentifieer } from 'org.eclipse.daanse.board.app.lib.repository.persistence'
 
 import GitRepositoryImpl from './GitRepository/GitRepositoryImpl'
-import {container} from 'org.eclipse.daanse.board.app.lib.core'
+import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
 import type {GitWritableRepository} from './git_api/api/GitWritableRepsitory';
 import {AuthentificationError} from "./git_api/services/common/CastError";
-const identifier = Symbol.for('GitRepository')
+/** Dienst-ID im Namensraum der ServiceRegistry; `identifier` ist das dazu passende Symbol. */
+const GIT_REPOSITORY = 'GitRepository'
+
+const identifier = Symbol.for(GIT_REPOSITORY)
+
 const type = GitRepositoryImpl.type;
-if(!container.isBound(identifier)) {
-  container.bind<Repository>(identifier).to(GitRepositoryImpl)
-  const repoRegistry = container.get<RepositoryRegistryI>(persistenceIdentifieer)
-  if (!repoRegistry) {
-    console.log('RepositoryRegistry not found')
-  }
-  else {
-    repoRegistry.registerRepoType(GitRepositoryImpl.type, identifier)
-    console.log('📦 GitRepository registered')
-  }
 
+/**
+ * Meldet die Repository-Umsetzung an und traegt ihren Typ in die
+ * RepositoryRegistry ein.
+ *
+ * Die Klasse hat keine injizierten Felder, deshalb `new`. Vorher stand
+ * beides auf Modulebene, und ob die Registry schon da war, entschied die
+ * Importreihenfolge - fehlte sie, wurde der Typ still uebersprungen.
+ */
+export function activate({ services }: ActivationContext) {
+  services.register(GIT_REPOSITORY, new GitRepositoryImpl())
 
+  const repoRegistry = services.getRequired<RepositoryRegistryI>('RepositoryRegistry')
+  repoRegistry.registerRepoType(GitRepositoryImpl.type, identifier)
+}
+
+export function deactivate({ services }: ActivationContext) {
+  services.unregister(GIT_REPOSITORY)
 }
 export {
   identifier,

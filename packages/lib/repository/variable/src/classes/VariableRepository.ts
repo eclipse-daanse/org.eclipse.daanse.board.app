@@ -14,7 +14,7 @@
 import { identifiers } from 'org.eclipse.daanse.board.app.lib.core'
 import { type TinyEmitter } from 'tiny-emitter'
 import { container } from 'org.eclipse.daanse.board.app.lib.core'
-import { inject, injectable } from 'inversify'
+import { inject, injectable } from '@eclipse-daanse/tsm'
 import { SystemVariableActions } from '../gen/SystemVariableActions'
 import { PageVariableActions } from '../gen/PageVariableActions'
 
@@ -32,7 +32,12 @@ export class VariableRepository implements SystemVariableActions, PageVariableAc
   private availableVariablesByScope: Map<string, Map<string, any>> = new Map(); // scope -> name -> variable
   private availableVariablesTypes: Map<string, VariableDeffinition> = new Map();
 
-  @inject(identifiers.TINY_EMITTER)
+  /*
+   * tsm adressiert Dienste ueber Strings statt ueber Symbole; `TINY_EMITTER`
+   * ist derselbe Dienst wie `identifiers.TINY_EMITTER`, weil `Symbol.for`
+   * global registriert ist.
+   */
+  @inject('TINY_EMITTER')
   private tinyEmitter?: TinyEmitter;
 
   registerVariableType(type: string, identifiers: VariableDeffinition) {

@@ -11,30 +11,38 @@
  *   Smart City Jena
  **********************************************************************/
 
-import { Factory } from 'inversify'
 import { XmlaStore, type IXmlaStoreConfiguration } from './classes'
-import { container } from 'org.eclipse.daanse.board.app.lib.core'
+import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
 
-const factorySymbol = Symbol.for('XmlaStoreFactory')
+/** Dienst-ID im Namensraum der ServiceRegistry; `factorySymbol` ist das dazu passende Symbol. */
+const XMLA_STORE_FACTORY = 'XmlaStoreFactory'
 
-if (!container.isBound(XmlaStore)) {
-  container.bind<XmlaStore>(XmlaStore).toSelf().inTransientScope()
-}
+const factorySymbol = Symbol.for(XMLA_STORE_FACTORY)
 
-if (!container.isBound(factorySymbol)) {
-  container.bind<Factory<XmlaStore>>(factorySymbol).toFactory(() => {
-    return (config: IXmlaStoreConfiguration) => {
-      if (!XmlaStore.validateConfiguration(config)) {
-        throw new Error(
-          'Invalid XmlaStore configuration. Please provide a valid configuration.',
-        )
-      }
-      const store = container.get<XmlaStore>(XmlaStore)
-      store.init(config)
-
-      return store
+/**
+ * Erzeugt einen Store aus einer Konfiguration.
+ *
+ * Die Instanz kommt ueber `construct`, nicht ueber `new`: die Klasse loest
+ * ihre Dienste ueber `@inject` auf, und `construct` traegt sie ein. Jeder
+ * Aufruf liefert eine eigene Instanz - vorher ueber `inTransientScope`.
+ */
+export function activate({ services }: ActivationContext) {
+  services.register(XMLA_STORE_FACTORY, (config: IXmlaStoreConfiguration) => {
+    if (!XmlaStore.validateConfiguration(config)) {
+      throw new Error(
+        'Invalid XmlaStore configuration. Please provide a valid configuration.',
+      )
     }
+
+    const store = services.construct(XmlaStore)
+    store.init(config)
+
+    return store
   })
 }
 
-export { XmlaStore, IXmlaStoreConfiguration, factorySymbol }
+export function deactivate({ services }: ActivationContext) {
+  services.unregister(XMLA_STORE_FACTORY)
+}
+
+export { XmlaStore, IXmlaStoreConfiguration, XMLA_STORE_FACTORY, factorySymbol }

@@ -12,7 +12,6 @@
  **********************************************************************/
 import { container } from 'org.eclipse.daanse.board.app.lib.core'
 import { type IDataRetrieveable } from 'org.eclipse.daanse.board.app.lib.datasource.base'
-import { injectable } from 'inversify'
 
 
 
@@ -42,7 +41,6 @@ export interface StoreConstructor<T> {
 
 const datasources = new Map<string, IDataRetrieveable>()
 
-@injectable()
 export class DatasourceRepository implements IDatasourceRepository {
   private availableDatasources: Record<string, StoreIdentifiers> = {}
   private datasourcesByType: Record<string, string> = {}

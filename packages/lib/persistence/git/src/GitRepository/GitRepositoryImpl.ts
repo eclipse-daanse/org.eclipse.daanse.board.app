@@ -25,9 +25,7 @@ import type { FileI } from '../git_api/api/File'
 import type { FolderI } from '../git_api/api/Folder'
 import { FileProviderI } from '../git_api/api/FileProvider'
 import CommitProviderI from '../git_api/api/CommitProvider'
-import { injectable } from 'inversify'
 
-@injectable()
 export default class GitRepositoryImpl extends BaseRepository implements WritableRepository {
 
   public static readonly type = 'gitRepositories'

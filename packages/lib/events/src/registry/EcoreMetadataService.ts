@@ -414,4 +414,7 @@ export class EcoreMetadataService {
   }
 }
 
-export const ECORE_METADATA_SERVICE = Symbol.for('EcoreMetadataService');
+/** Dienst-ID im Namensraum der ServiceRegistry; `ECORE_METADATA_SERVICE` ist das dazu passende Symbol. */
+export const ECORE_METADATA_SERVICE_ID = 'EcoreMetadataService';
+
+export const ECORE_METADATA_SERVICE = Symbol.for(ECORE_METADATA_SERVICE_ID);

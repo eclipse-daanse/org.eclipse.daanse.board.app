@@ -8,7 +8,7 @@
   Contributors: Smart City Jena
 */
 
-import { container } from 'org.eclipse.daanse.board.app.lib.core'
+import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
 import { RouteRegistryImpl } from './RouteRegistryImpl'
 import { RouteRegistry } from './gen/RouteRegistry'
 
@@ -16,10 +16,18 @@ export { RouteDefinition } from './gen/RouteDefinition'
 export { RouteRegistry } from './gen/RouteRegistry'
 export { RouteRegistryImpl } from './RouteRegistryImpl'
 
-export const ROUTE_REGISTRY = Symbol.for('RouteRegistry')
+/** Dienst-ID im Namensraum der ServiceRegistry; `ROUTE_REGISTRY` ist das dazu passende Symbol. */
+export const ROUTE_REGISTRY_ID = 'RouteRegistry'
 
-if (!container.isBound(ROUTE_REGISTRY)) {
-  container.bind<RouteRegistry>(ROUTE_REGISTRY).to(RouteRegistryImpl).inSingletonScope()
+export const ROUTE_REGISTRY = Symbol.for(ROUTE_REGISTRY_ID)
+
+/** Singleton ohne eigene Abhaengigkeiten - siehe lib.repository.connection. */
+export function activate({ services }: ActivationContext) {
+  services.register(ROUTE_REGISTRY_ID, new RouteRegistryImpl())
+}
+
+export function deactivate({ services }: ActivationContext) {
+  services.unregister(ROUTE_REGISTRY_ID)
 }
 
 export const identifier = ROUTE_REGISTRY

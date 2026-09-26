@@ -11,7 +11,7 @@
  *   Smart City Jena
  **********************************************************************/
 
-import { container } from 'org.eclipse.daanse.board.app.lib.core'
+import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
 import {
   ConnectionRepository,
   type ConnectionIdentifiers,
@@ -25,13 +25,16 @@ const CONNECTION_REPOSITORY = 'ConnectionRepository'
 
 const identifier = Symbol.for(CONNECTION_REPOSITORY)
 
-if (!container.isBound(identifier)) {
-  console.log('Binding ConnectionRepository to container', container)
+/**
+ * Das Repository ist ein Singleton ohne eigene Abhaengigkeiten - eine Instanz
+ * genuegt, erzeugt beim Aktivieren statt beim ersten Zugriff.
+ */
+export function activate({ services }: ActivationContext) {
+  services.register(CONNECTION_REPOSITORY, new ConnectionRepository())
+}
 
-  container
-    .bind<ConnectionRepository>(identifier)
-    .to(ConnectionRepository)
-    .inSingletonScope()
+export function deactivate({ services }: ActivationContext) {
+  services.unregister(CONNECTION_REPOSITORY)
 }
 
 export { type ConnectionRepository, identifier, CONNECTION_REPOSITORY }

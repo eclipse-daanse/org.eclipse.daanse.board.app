@@ -9,7 +9,7 @@ Contributors: Smart City Jena
 */
 
 import debug from 'debug'
-import { injectable, type Container } from 'inversify'
+import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
 
 // Force debug to use console.log instead of console.debug
 debug.log = console.log.bind(console)
@@ -28,7 +28,6 @@ export interface ILogger {
   enabled: boolean
 }
 
-@injectable()
 export class LoggerFactory {
   /**
    * Create a namespaced logger
@@ -73,12 +72,27 @@ export class LoggerFactory {
 // Export singleton instance for direct use (non-injectable)
 export const loggerFactory = new LoggerFactory()
 
-// Export identifier for Inversify
-export const identifier = Symbol.for('LoggerFactory')
+/** Dienst-ID im Namensraum der ServiceRegistry; `identifier` ist das dazu passende Symbol. */
+export const LOGGER_FACTORY = 'LoggerFactory'
 
-// Initialize container bindings
-const init = (container: Container) => {
-  container.bind<LoggerFactory>(identifier).to(LoggerFactory).inSingletonScope()
+export const identifier = Symbol.for(LOGGER_FACTORY)
+
+/**
+ * Meldet die Logger-Fabrik als Dienst an.
+ *
+ * Vorher gab es dafuer ein exportiertes `init(container)`, das die Anwendung
+ * in ihrer eigenen Startdatei aufrufen musste - eine Bindung, die das Paket
+ * selbst nicht herstellen konnte. Registriert wird die bereits vorhandene
+ * Singleton-Instanz statt einer zweiten ueber die Klassenbindung, damit
+ * Direktnutzer (`loggerFactory`) und Injektionsnutzer (`@inject`) dieselbe
+ * Fabrik sehen - vorher waren es zwei.
+ */
+export function activate({ services }: ActivationContext) {
+  services.register(LOGGER_FACTORY, loggerFactory)
+}
+
+export function deactivate({ services }: ActivationContext) {
+  services.unregister(LOGGER_FACTORY)
 }
 
 // Make loggerFactory globally accessible for DevTools
@@ -88,6 +102,4 @@ if (typeof window !== 'undefined') {
   (window as any).__daanseDebug = debug
 }
 
-export {
-  init
-}
+

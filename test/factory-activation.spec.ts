@@ -26,8 +26,11 @@
  */
 
 import { describe, it, expect, beforeEach } from 'vitest'
-import { Container } from 'inversify'
-import { BoardServiceRegistry, ModuleBootstrapper } from 'org.eclipse.daanse.board.app.lib.core'
+import {
+  container,
+  BoardServiceRegistry,
+  ModuleBootstrapper,
+} from 'org.eclipse.daanse.board.app.lib.core'
 
 /** Minimal gueltige Konfiguration - validateConfiguration prueft genau diese vier Felder. */
 const GUELTIG = {
@@ -42,17 +45,37 @@ const stilleAusgabe = () => ({
 })
 
 describe('Composer-Factory', () => {
-  let container: Container
   let services: BoardServiceRegistry
   let bootstrapper: ModuleBootstrapper
 
   const chartModul = {
     id: 'lib.composer.chart',
     load: () => import('org.eclipse.daanse.board.app.lib.composer.chart'),
+    requires: ['DatasourceRepository'],
   }
 
+  /*
+   * Der ChartComposer schlägt Datenquellen im DatasourceRepository nach.
+   * Solange dessen Paket beim Import band, war es allein durch die
+   * Importkette da; seit es über `activate` registriert, muss es hier
+   * mitaktiviert werden. Genau diesen stillen Verlass löst die Umstellung auf.
+   */
+  const datasourceRepositoryModul = {
+    id: 'lib.repository.datasource',
+    load: () => import('org.eclipse.daanse.board.app.lib.repository.datasource'),
+    provides: ['DatasourceRepository'],
+  }
+
+  const module = [chartModul, datasourceRepositoryModul]
+
   beforeEach(() => {
-    container = new Container()
+    /*
+     * Der echte Container aus lib.core, nicht ein eigener. Die Composer und
+     * Stores lösen ihre Dienste über genau diesen auf; ein frischer bliebe
+     * für sie leer. Vorher fiel das nicht auf, weil das Repository-Paket beim
+     * Import global band — es war also immer der globale im Spiel, nur
+     * unsichtbar.
+     */
     services = new BoardServiceRegistry(container)
     bootstrapper = new ModuleBootstrapper(services, stilleAusgabe())
   })
@@ -60,21 +83,21 @@ describe('Composer-Factory', () => {
   it('registriert die Factory unter ihrer Dienst-ID', async () => {
     expect(services.has('ChartComposer')).toBe(false)
 
-    await bootstrapper.activateAll([chartModul])
+    await bootstrapper.activateAll(module)
 
     expect(typeof services.get('ChartComposer')).toBe('function')
   })
 
   it('ist ueber das Symbol im Container auffindbar', async () => {
     // Genau so löst das DatasourceRepository den 'Store'-Eintrag auf
-    await bootstrapper.activateAll([chartModul])
+    await bootstrapper.activateAll(module)
 
     const { symbol } = await import('org.eclipse.daanse.board.app.lib.composer.chart')
     expect(typeof container.get(symbol)).toBe('function')
   })
 
   it('laesst eine gueltige Konfiguration die Validierung passieren', async () => {
-    await bootstrapper.activateAll([chartModul])
+    await bootstrapper.activateAll(module)
     const { symbol } = await import('org.eclipse.daanse.board.app.lib.composer.chart')
     const factory = container.get(symbol) as (c: unknown) => unknown
 
@@ -85,7 +108,7 @@ describe('Composer-Factory', () => {
   })
 
   it('weist eine ungueltige Konfiguration zurueck', async () => {
-    await bootstrapper.activateAll([chartModul])
+    await bootstrapper.activateAll(module)
     const { symbol } = await import('org.eclipse.daanse.board.app.lib.composer.chart')
 
     const factory = container.get(symbol) as (c: unknown) => unknown
@@ -97,7 +120,7 @@ describe('Composer-Factory', () => {
   it('nimmt die Registrierung beim Deaktivieren zurueck', async () => {
     const { symbol } = await import('org.eclipse.daanse.board.app.lib.composer.chart')
 
-    await bootstrapper.activateAll([chartModul])
+    await bootstrapper.activateAll(module)
     await bootstrapper.deactivateAll()
 
     expect(services.has('ChartComposer')).toBe(false)

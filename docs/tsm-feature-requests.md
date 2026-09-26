@@ -208,11 +208,33 @@ keinen Wartezustand:
 'registered' | 'resolving' | 'loading' | 'activating' | 'active' | 'deactivating' | 'stopped' | 'error'
 ```
 
-**Die Folge:** Die Ladereihenfolge bleibt Aufgabe des Aufrufers. Genau das tun
-wir heute — `modules.ts` ist eine handsortierte Liste (Registries zuerst, dann
-Layouts, dann was Layouts nachschlägt), und der Bootstrap zerfällt in drei
-Phasen, weil ein Paket beim Laden eine Verbindung anlegt. Das ist
+**Die Folge:** Die Ladereihenfolge bleibt Aufgabe des Aufrufers. Genau das war
+bei uns der Fall — `modules.ts` war eine handsortierte Liste (Registries
+zuerst, dann Layouts, dann was Layouts nachschlägt), und der Bootstrap zerfällt
+in drei Phasen, weil ein Paket beim Laden eine Verbindung anlegt. Das ist
 Abhängigkeitsauflösung von Hand, obwohl die Manifeste die Information tragen.
+
+**Nachtrag: wir haben Schritt 1 lokal gebaut — und er trägt.** `ModuleEntry`
+hat jetzt `provides` und `requires` (bewusst so benannt wie im Manifest), und
+der Bootstrapper leitet daraus die Reihenfolge ab. Zwei Beobachtungen, die für
+den Entwurf interessant sein dürften:
+
+1. **Der Aufwand ist gering.** Eine topologische Sortierung über
+   `provides`/`requires`, stabil gegenüber der Eingabereihenfolge, sind rund
+   40 Zeilen. Die Zyklenerkennung fällt dabei ab.
+2. **Unbekannte Dienste dürfen nicht blockieren.** Von den acht Diensten, die
+   unsere 75 Module auflösen, stammen sechs aus noch nicht umgestellten
+   Paketen. Ein Auflöser, der jeden unbekannten Dienst als Fehler wertet, wäre
+   während einer Migration unbenutzbar. Wir behandeln sie als extern und
+   lassen sie die Reihenfolge nicht beeinflussen — für tsm entspräche das dem
+   Unterschied zwischen `unsatisfied` (wartet) und `error` (scheitert).
+
+Belegt ist das über einen Umkehrtest: mit der umgekehrten Modulliste bricht
+der Start ohne die Sortierung an `WidgetRepository` ab und läuft mit ihr
+vollständig durch. Damit ist unsere handsortierte Startliste weg — die
+Phasentrennung in `main.ts` bleibt allerdings, weil sie an Paketen hängt, die
+beim Import Nebenwirkungen haben. Der zweite Teil dieses FR (Benachrichtigung
+beim Wegfall) bleibt davon unberührt.
 
 Die Gegenrichtung fehlt ebenso: Verschwindet ein Dienst — und `deactivate`
 entfernt seit B3 wirklich etwas —, behalten Konsumenten ihre Referenz.
@@ -231,4 +253,5 @@ die Verbindung zwischen beiden.
 
 Uns ist bewusst, dass das tsm vom Modullader Richtung Komponentenlaufzeit
 verschiebt — das ist eine Designentscheidung und keine Kleinigkeit. Eingereicht,
-weil bereits Schritt 1 die handsortierten Startlisten überflüssig machen würde.
+weil bereits Schritt 1 die handsortierten Startlisten überflüssig macht — was
+der Nachtrag oben inzwischen praktisch zeigt.

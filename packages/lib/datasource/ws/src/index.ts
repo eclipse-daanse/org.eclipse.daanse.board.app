@@ -11,30 +11,38 @@
  *   Smart City Jena
  **********************************************************************/
 
-import { Factory } from 'inversify'
 import { WSStore, type IWSStoreConfiguration } from './classes'
-import { container } from 'org.eclipse.daanse.board.app.lib.core'
+import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
 
-const factorySymbol = Symbol.for('WSStoreFactory')
+/** Dienst-ID im Namensraum der ServiceRegistry; `factorySymbol` ist das dazu passende Symbol. */
+const WS_STORE_FACTORY = 'WSStoreFactory'
 
-if (!container.isBound(WSStore)) {
-  container.bind<WSStore>(WSStore).toSelf().inTransientScope()
-}
+const factorySymbol = Symbol.for(WS_STORE_FACTORY)
 
-if (!container.isBound(factorySymbol)) {
-  container.bind<Factory<WSStore>>(factorySymbol).toFactory(() => {
-    return (config: IWSStoreConfiguration) => {
-      if (!WSStore.validateConfiguration(config)) {
-        throw new Error(
-          'Invalid WSStore configuration. Please provide a valid configuration.',
-        )
-      }
-      const store = container.get<WSStore>(WSStore)
-      store.init(config)
-
-      return store
+/**
+ * Erzeugt einen Store aus einer Konfiguration.
+ *
+ * Die Instanz kommt ueber `construct`, nicht ueber `new`: die Klasse loest
+ * ihre Dienste ueber `@inject` auf, und `construct` traegt sie ein. Jeder
+ * Aufruf liefert eine eigene Instanz - vorher ueber `inTransientScope`.
+ */
+export function activate({ services }: ActivationContext) {
+  services.register(WS_STORE_FACTORY, (config: IWSStoreConfiguration) => {
+    if (!WSStore.validateConfiguration(config)) {
+      throw new Error(
+        'Invalid WSStore configuration. Please provide a valid configuration.',
+      )
     }
+
+    const store = services.construct(WSStore)
+    store.init(config)
+
+    return store
   })
 }
 
-export { WSStore, IWSStoreConfiguration, factorySymbol }
+export function deactivate({ services }: ActivationContext) {
+  services.unregister(WS_STORE_FACTORY)
+}
+
+export { WSStore, IWSStoreConfiguration, WS_STORE_FACTORY, factorySymbol }

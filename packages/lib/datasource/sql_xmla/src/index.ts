@@ -11,30 +11,38 @@
  *   Smart City Jena
  **********************************************************************/
 
-import { Factory } from 'inversify'
 import { SqlXmlaStore, type ISqlXmlaStoreConfiguration } from './classes'
-import { container } from 'org.eclipse.daanse.board.app.lib.core'
+import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
 
-const factorySymbol = Symbol.for('SqlXmlaStoreFactory')
+/** Dienst-ID im Namensraum der ServiceRegistry; `factorySymbol` ist das dazu passende Symbol. */
+const SQL_XMLA_STORE_FACTORY = 'SqlXmlaStoreFactory'
 
-if (!container.isBound(SqlXmlaStore)) {
-  container.bind<SqlXmlaStore>(SqlXmlaStore).toSelf().inTransientScope()
-}
+const factorySymbol = Symbol.for(SQL_XMLA_STORE_FACTORY)
 
-if (!container.isBound(factorySymbol)) {
-  container.bind<Factory<SqlXmlaStore>>(factorySymbol).toFactory(() => {
-    return config => {
-      if (!SqlXmlaStore.validateConfiguration(config)) {
-        throw new Error(
-          'Invalid SqlXmlaStore configuration. Please provide a valid configuration.',
-        )
-      }
-      const store = container.get<SqlXmlaStore>(SqlXmlaStore)
-      store.init(config)
-
-      return store
+/**
+ * Erzeugt einen Store aus einer Konfiguration.
+ *
+ * Die Instanz kommt ueber `construct`, nicht ueber `new`: die Klasse loest
+ * ihre Dienste ueber `@inject` auf, und `construct` traegt sie ein. Jeder
+ * Aufruf liefert eine eigene Instanz - vorher ueber `inTransientScope`.
+ */
+export function activate({ services }: ActivationContext) {
+  services.register(SQL_XMLA_STORE_FACTORY, (config: any) => {
+    if (!SqlXmlaStore.validateConfiguration(config)) {
+      throw new Error(
+        'Invalid SqlXmlaStore configuration. Please provide a valid configuration.',
+      )
     }
+
+    const store = services.construct(SqlXmlaStore)
+    store.init(config)
+
+    return store
   })
 }
 
-export { SqlXmlaStore, ISqlXmlaStoreConfiguration, factorySymbol }
+export function deactivate({ services }: ActivationContext) {
+  services.unregister(SQL_XMLA_STORE_FACTORY)
+}
+
+export { SqlXmlaStore, ISqlXmlaStoreConfiguration, SQL_XMLA_STORE_FACTORY, factorySymbol }

@@ -30,7 +30,6 @@ import {
   ModuleBootstrapper,
 } from 'org.eclipse.daanse.board.app.lib.core'
 import { modules } from './modules'
-import { init as initLogger } from 'org.eclipse.daanse.board.app.lib.logger'
 import { registerSystemActions } from './systemActions'
 import { registerTestActions } from './testActions'
 
@@ -54,7 +53,6 @@ app.use(createVuestic({
 }))
 
 init(container)
-initLogger(container)
 container.bind(identifiers.CONTAINER).toDynamicValue((ctx: any) => {
   return ctx
 })
@@ -65,6 +63,13 @@ app.provide('container', container);
 app.provide('codeEditorType', 'monaco');
 const symbolForApp = Symbol.for('App');
 container.bind('App').toConstantValue(app);
+/*
+ * Zusaetzlich in der Registry: die Container-Bindung oben verwendet den String
+ * 'App' als Identifier, waehrend der Rueckfallweg der Registry ueber
+ * Symbol.for(id) sucht - er faende sie also nicht. Module, die die App-Instanz
+ * brauchen, loesen sie ueber diese Registrierung auf.
+ */
+services.register('App', app);
 const pinia = createPinia();
 setActivePinia(pinia)
 app.use(pinia)
@@ -87,45 +92,22 @@ import { XmlaConnection } from 'org.eclipse.daanse.board.app.lib.connection.xmla
 import 'org.eclipse.daanse.board.app.lib.connection.graphql'
 import 'org.eclipse.daanse.board.app.lib.connection.websocket'
 import 'org.eclipse.daanse.board.app.lib.connection.mqtt'
-import 'org.eclipse.daanse.board.app.lib.datasource.rest'
-import 'org.eclipse.daanse.board.app.lib.datasource.csv'
-import 'org.eclipse.daanse.board.app.lib.datasource.rss'
-import 'org.eclipse.daanse.board.app.lib.datasource.graphql'
-import 'org.eclipse.daanse.board.app.lib.datasource.xmla'
-import 'org.eclipse.daanse.board.app.lib.datasource.sql_xmla'
-import 'org.eclipse.daanse.board.app.lib.datasource.websocket'
-import 'org.eclipse.daanse.board.app.lib.datasource.kpi_tmp'
-import 'org.eclipse.daanse.board.app.lib.datasource.ogcsta'
-import 'org.eclipse.daanse.board.app.lib.datasource.sparql'
-import 'org.eclipse.daanse.board.app.lib.datasource.valhalla'
 import 'org.eclipse.daanse.board.app.lib.composer.ogcsta2chart'
 
-import 'org.eclipse.daanse.board.app.lib.repository.navigation'
-import 'org.eclipse.daanse.board.app.lib.repository.route'
 
 import 'org.eclipse.daanse.board.app.ui.vue.plugins.geojson_renderer'
-import 'org.eclipse.daanse.board.app.ui.vue.eventmanager'
 
 import 'org.eclipse.daanse.board.app.lib.variables'
 import {
   // init as initVariableWrapperFactory,
-  identifier as variableFactoryWrapperIdentifier,
   type VariableWrapperFactory,
 } from 'org.eclipse.daanse.board.app.lib.factory.variableWrapper'
-import 'org.eclipse.daanse.board.app.lib.repository.variable'
 import {
   VariableComplexStringWrapper,
   VARIABLECOMPLEXSTRINGWRAPPER,
 } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 
-// VariableComplexStringWrapper haengt an Vue und bleibt deshalb in der
-// UI-Schicht; die Factory in lib kennt ihn nur ueber diese Registrierung.
-container
-  .get<VariableWrapperFactory>(variableFactoryWrapperIdentifier)
-  .registerWrapperType({
-    type: VARIABLECOMPLEXSTRINGWRAPPER,
-    create: (value: any) => new VariableComplexStringWrapper<string>(value),
-  })
+
 
 
 
@@ -134,12 +116,12 @@ import { identifier as LayoutRepositoryIdentifier, type LayoutRepositoryI }
   from 'org.eclipse.daanse.board.app.lib.repository.layout.page'
 
 import {
-  NAVIGATION_REGISTRY,
+  NAVIGATION_REGISTRY_ID,
   type NavigationRegistry,
   NavigationItem
 } from 'org.eclipse.daanse.board.app.lib.repository.navigation'
 import {
-  ROUTE_REGISTRY,
+  ROUTE_REGISTRY_ID,
   type RouteRegistry,
   RouteDefinition
 } from 'org.eclipse.daanse.board.app.lib.repository.route'
@@ -148,60 +130,75 @@ import {
 import Configuration from './pages/Configuration.vue'
 import SaveLoad from './pages/SaveLoad.vue'
 
-const routeRegistry = container.get<RouteRegistry>(ROUTE_REGISTRY)
-
-const configRoute = new RouteDefinition()
-configRoute.path = '/configuration'
-configRoute.name = 'config'
-configRoute.component = Configuration
-routeRegistry.registerRoute(configRoute)
-
-const saveRoute = new RouteDefinition()
-saveRoute.path = '/save'
-saveRoute.name = 'save'
-saveRoute.component = SaveLoad
-routeRegistry.registerRoute(saveRoute)
-
-// Import router AFTER all packages are loaded so routes can be registered
 import router from './router'
 
-// Add dynamically registered routes to router
-const routeRegistryForDynamic = container.get<RouteRegistry>(ROUTE_REGISTRY) as any
-const allRoutes = routeRegistryForDynamic.getAllRoutesArray
-  ? routeRegistryForDynamic.getAllRoutesArray()
-  : []
-allRoutes.forEach((route: any) => {
-  router.addRoute({
-    path: route.path,
-    name: route.name,
-    component: route.component,
-    ...(route.meta && { meta: route.meta })
-  })
-  console.log('Added dynamic route:', route.name, route.path)
-})
+/**
+ * Trägt die anwendungseigenen Seiten in Routen- und Navigationsregistrierung
+ * ein und übernimmt anschließend alles Registrierte in den Router.
+ *
+ * Läuft nach der Modulaktivierung, weil beide Registries seit ihrer
+ * Umstellung erst dort entstehen. Vorher stand dieser Block auf Modulebene
+ * und griff auf Dienste zu, die zu dem Zeitpunkt gebunden waren, weil der
+ * Import sie gebunden hatte — genau die Kopplung, die die Umstellung auflöst.
+ */
+function seitenEinrichten() {
+  // VariableComplexStringWrapper haengt an Vue und bleibt deshalb in der
+  // UI-Schicht; die Factory in lib kennt ihn nur ueber diese Registrierung.
+  services
+    .getRequired<VariableWrapperFactory>('VariableWrapperFactory')
+    .registerWrapperType({
+      type: VARIABLECOMPLEXSTRINGWRAPPER,
+      create: (value: any) => new VariableComplexStringWrapper<string>(value),
+    })
 
-const navRegistry = container.get<NavigationRegistry>(NAVIGATION_REGISTRY)
+  const routeRegistry = services.getRequired<RouteRegistry>(ROUTE_REGISTRY_ID)
 
-// Register navigation items
-const configNav = new NavigationItem()
-configNav.id = 'config'
-configNav.label = 'Environment variables'
-configNav.icon = 'settings'
-configNav.route = '/configuration'
-configNav.routeName = 'config'
-configNav.order = 10
-configNav.visible = true
-navRegistry.registerNavigationItem(configNav)
+  const configRoute = new RouteDefinition()
+  configRoute.path = '/configuration'
+  configRoute.name = 'config'
+  configRoute.component = Configuration
+  routeRegistry.registerRoute(configRoute)
 
-const saveNav = new NavigationItem()
-saveNav.id = 'save'
-saveNav.label = 'Store and Restore'
-saveNav.icon = 'cloud_sync'
-saveNav.route = '/save'
-saveNav.routeName = 'save'
-saveNav.order = 20
-saveNav.visible = true
-navRegistry.registerNavigationItem(saveNav)
+  const saveRoute = new RouteDefinition()
+  saveRoute.path = '/save'
+  saveRoute.name = 'save'
+  saveRoute.component = SaveLoad
+  routeRegistry.registerRoute(saveRoute)
+
+  const navRegistry = services.getRequired<NavigationRegistry>(NAVIGATION_REGISTRY_ID)
+
+  const configNav = new NavigationItem()
+  configNav.id = 'config'
+  configNav.label = 'Environment variables'
+  configNav.icon = 'settings'
+  configNav.route = '/configuration'
+  configNav.routeName = 'config'
+  configNav.order = 10
+  configNav.visible = true
+  navRegistry.registerNavigationItem(configNav)
+
+  const saveNav = new NavigationItem()
+  saveNav.id = 'save'
+  saveNav.label = 'Store and Restore'
+  saveNav.icon = 'cloud_sync'
+  saveNav.route = '/save'
+  saveNav.routeName = 'save'
+  saveNav.order = 20
+  saveNav.visible = true
+  navRegistry.registerNavigationItem(saveNav)
+
+  const dynamische = routeRegistry as unknown as {
+    getAllRoutesArray?: () => Array<Record<string, any>>
+  }
+  for (const route of dynamische.getAllRoutesArray?.() ?? []) {
+    router.addRoute({
+      path: route.path,
+      name: route.name,
+      component: route.component,
+      ...(route.meta && { meta: route.meta }),
+    })
+  }
+}
 
 
 
@@ -224,38 +221,6 @@ function onLoaded() {
 //   Settings: null as any,
 // })
 
-/**
- * Grunddienste, die umgestellte Module in `activate` bereits benötigen —
- * allen voran i18next, an das sich die Sprachmodule hängen.
- */
-async function loadGrunddienste() {
-  await import('org.eclipse.daanse.board.app.lib.i18next')
-  await import('org.eclipse.daanse.board.app.ui.vue.plugins.i18next')
-  await import('org.eclipse.daanse.board.app.lib.settings.manager')
-}
-
-/**
- * Pakete, die die registrierten Typen der Module bereits benutzen.
- *
- * Muss **nach** der Modulaktivierung laufen — zwei Beispiele aus diesem
- * Bündel: der Endpointfinder legt beim Laden eine REST-Verbindung an, und der
- * Persistenz-Loader stellt ein gespeichertes Board wieder her. Beides setzt
- * registrierte Verbindungs- und Datenquellentypen voraus. Vor der Umstellung
- * war das nur dadurch gegeben, dass jene Pakete weiter oben im Importblock
- * standen.
- */
-async function loadNachModulen() {
-  await import('org.eclipse.daanse.board.app.ui.vue.plugins.endpointfinder')
-
-  await import('org.eclipse.daanse.board.app.lib.repository.persistence')
-  await import('org.eclipse.daanse.board.app.lib.persistence.local')
-  await import('org.eclipse.daanse.board.app.lib.persistence.util')
-  await import('org.eclipse.daanse.board.app.lib.persistence.rest')
-  await import('org.eclipse.daanse.board.app.lib.persistence.git')
-  await import('org.eclipse.daanse.board.app.ui.vue.persistence.git')
-  await import('org.eclipse.daanse.board.app.lib.persistence.loader')
-  await import('org.eclipse.daanse.board.app.ui.vue.page_provider')
-}
 
 //initSettingsManager(container)
 
@@ -289,14 +254,14 @@ const bootstrapper = new ModuleBootstrapper(services, {
   error: (msg, ...args) => console.error(msg, ...args),
 })
 
-// Startreihenfolge, jetzt explizit statt als Nebenwirkung der Importzeilen:
-// Grunddienste, dann die Module, dann die Wiederherstellung gespeicherter
-// Boards — die setzt die registrierten Typen der Module bereits voraus.
-loadGrunddienste()
-  .then(() => bootstrapper.activateAll(modules))
+// Der gesamte Start: alle Pakete sind Module, ihre Reihenfolge folgt aus den
+// Deklarationen in modules.ts. Was hier bleibt, ist anwendungseigen — die
+// beiden Seiten Configuration und SaveLoad und ihre Navigationseintraege.
+bootstrapper
+  .activateAll(modules)
   .then(({ activated }) => {
     console.log(`✅ ${activated.length} Module aktiviert`)
-    return loadNachModulen()
+    seitenEinrichten()
   })
   .catch((err) => {
     // Die Ursache mit ausgeben - der Bootstrapper hängt sie als `cause` an,

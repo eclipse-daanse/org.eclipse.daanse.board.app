@@ -8,11 +8,9 @@
   Contributors: Smart City Jena
 */
 
-import { injectable } from 'inversify'
 import { RouteRegistry } from './gen/RouteRegistry'
 import { RouteDefinition } from './gen/RouteDefinition'
 
-@injectable()
 export class RouteRegistryImpl extends RouteRegistry {
   private routesMap: Map<string, RouteDefinition> = new Map()
 

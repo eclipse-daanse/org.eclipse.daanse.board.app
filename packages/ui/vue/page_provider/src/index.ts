@@ -8,22 +8,33 @@ SPDX-License-Identifier: EPL-2.0
 Contributors: Smart City Jena
 */
 
-import {container} from "org.eclipse.daanse.board.app.lib.core"
+import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
 import {identifier as pagecontext_service_id,type PageContextServiceI } from "org.eclipse.daanse.board.app.lib.pagecontext.pagecontext_service"
 import { VuePageProvider } from './classes/VuePageProvider'
 
-const identifier = Symbol.for('VuePageProvider');
+/** Dienst-ID im Namensraum der ServiceRegistry; `identifier` ist das dazu passende Symbol. */
+const VUE_PAGE_PROVIDER = 'VuePageProvider'
 
-const vuePageProvider = new VuePageProvider();
-container.bind(identifier).toConstantValue(vuePageProvider);
+const identifier = Symbol.for(VUE_PAGE_PROVIDER)
 
-if(!container.isBound(pagecontext_service_id)){
-  console.log("X📦X VuePageContext couldn't be initialized: No PageContextService");
-}else {
-  container.get<PageContextServiceI>(pagecontext_service_id).setProvider(vuePageProvider);
-  console.log("✅ VuePageProvider set as PageContextService provider");
+const vuePageProvider = new VuePageProvider()
+
+/**
+ * Meldet den Vue-Seitenanbieter an und haengt ihn in den PageContextService.
+ *
+ * Vorher wurde dessen Anwesenheit mit `container.isBound` geprueft und bei
+ * Abwesenheit nur eine Meldung ausgegeben - der Anbieter blieb dann
+ * unverbunden. Jetzt steht die Bedingung in `requires`.
+ */
+export function activate({ services }: ActivationContext) {
+  services.register(VUE_PAGE_PROVIDER, vuePageProvider)
+  services.getRequired<PageContextServiceI>('PageContext').setProvider(vuePageProvider)
 }
 
-export { VuePageProvider, identifier, vuePageProvider };
+export function deactivate({ services }: ActivationContext) {
+  services.unregister(VUE_PAGE_PROVIDER)
+}
+
+export { VuePageProvider, identifier, VUE_PAGE_PROVIDER, vuePageProvider };
 
 

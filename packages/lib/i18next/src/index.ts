@@ -9,17 +9,27 @@ Contributors: Smart City Jena
 */
 import i18next from "i18next";
 import type {i18n} from "i18next";
-import  { container } from 'org.eclipse.daanse.board.app.lib.core';
+import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core';
 /** Dienst-ID im Namensraum der ServiceRegistry; `symbolForI18n` ist das dazu passende Symbol. */
 const I18NEXT = 'I18next'
 
 const symbolForI18n = Symbol.for(I18NEXT)
 
 
-if (!container.isBound(symbolForI18n)) {
-  i18next.init({fallbackLng: 'en', resources: {}});
-  container.bind<i18n>(symbolForI18n).toConstantValue(i18next);
-  console.log('initilaized i18n')
+/**
+ * Richtet i18next ein und meldet es als Dienst an.
+ *
+ * Grunddienst: die elf Sprachmodule haengen ihre Ressourcenbuendel daran.
+ * Die Reihenfolge ergibt sich aus deren `requires`, nicht mehr daraus, in
+ * welcher Zeile dieser Import steht.
+ */
+export function activate({ services }: ActivationContext) {
+  i18next.init({ fallbackLng: 'en', resources: {} })
+  services.register(I18NEXT, i18next)
+}
+
+export function deactivate({ services }: ActivationContext) {
+  services.unregister(I18NEXT)
 }
 export {
   symbolForI18n,
