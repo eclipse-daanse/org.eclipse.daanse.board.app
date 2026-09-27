@@ -173,7 +173,36 @@ kappen (API-Pakete für Typen), eigener Build, Manifest, DS-Form, Eintrag aus
 `modules.ts` raus. Die Registries werden dabei nacheinander auf das
 Tracker-Muster umgebaut.
 
-### B5.4 — Bootstrapper löschen
+### B5.4 — Bootstrapper löschen  · Teil 1 ✔
+
+**`modules.ts` ist leer und gelöscht, der `ModuleBootstrapper` mitsamt seiner
+17 Tests entfernt.** Die 63 verbliebenen statischen Module tragen ihr
+Manifest jetzt am Paket und laufen per Container-Übergabe unter dem Loader —
+das platform.vue-Muster, auf den ganzen Bestand angewandt. Sie bleiben
+absichtlich im Host-Bundle: die meisten sind zugleich geteilte Bibliotheken
+in `platform.compat`, eine URL-Kopie würde Klassenidentität und Modulzustand
+spalten. URL-isierung folgt paketweise, sobald nichts im Host-Graphen mehr
+per Wert importiert.
+
+Reihenfolge ist niemandes Aufgabe mehr: kein `dependencies`-Feld, keine
+Sortierung — ein Modul mit fehlendem Pflichtdienst parkt als `unsatisfied`
+und aktiviert in der Kaskade, wenn der Anbieter registriert (tsm#18 im
+Groß-Einsatz).
+
+**Teil 2 ✔ — der Host ist ein Launcher.** `main.ts`: 335 → 155 Zeilen.
+Die anwendungseigenen Beiträge (Seiten, Navigation, Aktionen) sind das Modul
+`app.pages` mit eigenem Manifest und `deactivate`; der Launcher bootet nur
+noch den Rahmen. Ein tragender Seiteneffekt-Import bleibt markiert:
+`lib.variables` bindet beim Import (letzter Klasse-C-Rest, gehört zur
+Service-Locator-Baustelle).
+
+**Noch offen aus B5.4:** Inversify-Brücke (fällt mit dem
+Service-Locator-Rest: 30 Dateien `container.get`, `lib.variables`),
+URL-isierung der lib-Schicht von unten nach oben, Produktionsbuild des
+Bundle-Servings (heute Dev-Middleware).
+
+Ursprünglicher Text:
+
 
 Wenn `modules.ts` leer ist: `ModuleBootstrapper`, Sortierung und die
 `provides`/`requires`-Felder an `ModuleEntry` entfernen. Hot Reload und die

@@ -166,11 +166,11 @@ export default defineConfig({
           replacement: resolve(__dirname, '../../ui/vue/widget/map/src/index.ts')
         },
         {
-          find: 'org.eclipse.daanse.board.app.ui.vue.widget.wrapper',
+          find: /^org\.eclipse\.daanse\.board\.app\.ui\.vue\.widget\.wrapper$/,
           replacement: resolve(__dirname, '../../ui/vue/widget/wrapper/src/index.ts')
         },
         {
-          find: 'org.eclipse.daanse.board.app.ui.vue.layouts.grid',
+          find: /^org\.eclipse\.daanse\.board\.app\.ui\.vue\.layouts\.grid$/,
           replacement: resolve(__dirname, '../../ui/vue/layouts/grid/src/index.ts')
         },
       ] : [])

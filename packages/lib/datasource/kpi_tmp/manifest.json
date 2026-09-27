@@ -1,0 +1,18 @@
+{
+  "$schema": "https://tsm.dev/schema/manifest/v1.json",
+  "id": "lib.datasource.kpi_tmp",
+  "name": "lib.datasource.kpi_tmp",
+  "version": "0.0.1-next.1",
+  "entry": "./src/index.ts",
+  "exports": {},
+  "provides": [
+    {
+      "id": "KpiStoreFactory"
+    }
+  ],
+  "requiresService": [
+    {
+      "id": "ConnectionRepository"
+    }
+  ]
+}
