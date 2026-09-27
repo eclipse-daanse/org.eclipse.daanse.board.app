@@ -13,7 +13,7 @@ import { toRefs, computed } from 'vue'
 import { LGeoJson, LMarker, LIcon } from '@vue-leaflet/vue-leaflet'
 import type { FeatureCollection, Feature } from 'geojson'
 import L from 'leaflet'
-import MapMarker from 'org.eclipse.daanse.board.app.ui.vue.widget.map/src/components/MapMarker.vue'
+import { MapMarker } from 'org.eclipse.daanse.board.app.ui.vue.widget.map'
 
 export interface ICondition {
   prop: string

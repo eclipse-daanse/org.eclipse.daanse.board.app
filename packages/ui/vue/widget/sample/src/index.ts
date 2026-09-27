@@ -1,5 +1,5 @@
 /*********************************************************************
- * Copyright (c) 2025 Contributors to the Eclipse Foundation.
+ * Copyright (c) 2026 Contributors to the Eclipse Foundation.
  *
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
@@ -11,39 +11,48 @@
  *   Smart City Jena
  **********************************************************************/
 
-import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
-import {
-  type WidgetRepository,
-  WIDGET_REPOSITORY,
-} from 'org.eclipse.daanse.board.app.lib.repository.widget'
-import {
-  type EventRegistry,
-  EVENT_REGISTRY_ID,
-} from 'org.eclipse.daanse.board.app.lib.events'
-
+import { component, inject, activate, deactivate } from '@eclipse-daanse/tsm/decorators'
 import Icon from './assets/sample.svg'
 import SampleWidget from './SampleWidget.vue'
 import SampleWidgetSettings from './SampleWidgetSettings.vue'
 import { SampleWidgetEvents } from './events/SampleWidgetEvents'
+import type { EventRegistry } from 'org.eclipse.daanse.board.app.lib.events'
+import type { WidgetProvider } from 'org.eclipse.daanse.board.app.lib.repository.widget'
+
+/*
+ * Literal on purpose: the tsm plugin derives the manifest's provides at
+ * build time and cannot evaluate an imported constant. Must match
+ * WIDGET_SERVICE_ID in lib.repository.widget.
+ */
+const WIDGET_SERVICE = 'daanse.widget'
 
 const WIDGET_TYPE = 'SampleWidget'
 
-export function activate({ services }: ActivationContext) {
-  services.getRequired<WidgetRepository>(WIDGET_REPOSITORY).registerWidget(WIDGET_TYPE, {
-    component: SampleWidget,
-    settingsComponent: SampleWidgetSettings,
-    supportedDSTypes: ['csv'],
-    icon: Icon,
-    name: 'Sample',
-  })
+@component({
+  service: [WIDGET_SERVICE],
+  properties: { 'widget.type': WIDGET_TYPE },
+})
+export class SampleWidgetProvider implements WidgetProvider {
+  readonly type = WIDGET_TYPE
+  readonly component = SampleWidget
+  readonly settingsComponent = SampleWidgetSettings
+  readonly supportedDSTypes = ['csv']
+  readonly icon = Icon
+  readonly name = 'Sample'
 
-  services.getRequired<EventRegistry>(EVENT_REGISTRY_ID)
-    .registerWidget(WIDGET_TYPE, SampleWidgetEvents)
-}
+  constructor(
+    @inject('EventRegistry') private readonly events: EventRegistry,
+  ) {}
 
-export function deactivate({ services }: ActivationContext) {
-  services.getRequired<WidgetRepository>(WIDGET_REPOSITORY).unregisterWidget(WIDGET_TYPE)
-  services.getRequired<EventRegistry>(EVENT_REGISTRY_ID).unregisterWidget(WIDGET_TYPE)
+  @activate()
+  register(): void {
+    this.events.registerWidget(WIDGET_TYPE, SampleWidgetEvents)
+  }
+
+  @deactivate()
+  unregister(): void {
+    this.events.unregisterWidget(WIDGET_TYPE)
+  }
 }
 
 export { SampleWidget, SampleWidgetSettings }

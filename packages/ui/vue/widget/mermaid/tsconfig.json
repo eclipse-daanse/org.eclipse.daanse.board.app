@@ -3,10 +3,10 @@
     "sourceMap": true,
     "declarationMap": true,
     "inlineSources": true,
-    "target": "es2016",
+    "target": "es2022",
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
-    "module": "commonjs",
+    "module": "esnext",
     "declaration": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
@@ -15,6 +15,7 @@
     "resolveJsonModule": true,
     "types": [
       "vite/client"
-    ]
+    ],
+    "moduleResolution": "bundler"
   }
 }

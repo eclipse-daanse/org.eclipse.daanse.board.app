@@ -1,36 +1,49 @@
-/**
-Copyright (c) 2025 Contributors to the  Eclipse Foundation.
-This program and the accompanying materials are made
-available under the terms of the Eclipse Public License 2.0
-which is available at https://www.eclipse.org/legal/epl-2.0/
-SPDX-License-Identifier: EPL-2.0
+/*********************************************************************
+ * Copyright (c) 2026 Contributors to the Eclipse Foundation.
+ *
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ *
+ * SPDX-License-Identifier: EPL-2.0
+ *
+ * Contributors:
+ *   Smart City Jena
+ **********************************************************************/
 
-Contributors: Smart City Jena
-*/
-
-
-import { type WidgetRepository, WIDGET_REPOSITORY } from 'org.eclipse.daanse.board.app.lib.repository.widget'
+import { component } from '@eclipse-daanse/tsm/decorators'
 //@ts-ignore
 import Icon from './assets/progress.svg'
 import PageWidget from './PageWidget.vue'
 import PageWidgetSettings from './PageWidgetSettings.vue'
-import {type PageI} from './interface/PageI'
-import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
+import { type PageI } from './interface/PageI'
+import type { WidgetProvider } from 'org.eclipse.daanse.board.app.lib.repository.widget'
 
-export function activate({ services }: ActivationContext) {
-  services.getRequired<WidgetRepository>(WIDGET_REPOSITORY).registerWidget('PageWidget', {
-    component: PageWidget,
-    settingsComponent: PageWidgetSettings,
-    supportedDSTypes: [],
-    icon: Icon,
-    name:'Page'
-  })
+/*
+ * Literal on purpose: the tsm plugin derives the manifest's provides at
+ * build time and cannot evaluate an imported constant. Must match
+ * WIDGET_SERVICE_ID in lib.repository.widget.
+ */
+const WIDGET_SERVICE = 'daanse.widget'
+
+const WIDGET_TYPE = 'PageWidget'
+
+/**
+ * Delayed component - no lifecycle methods, nothing to do until the palette
+ * resolves it. The nested-board machinery it renders (wrapper, layout and
+ * page stores) comes through the shared workspace libraries.
+ */
+@component({
+  service: [WIDGET_SERVICE],
+  properties: { 'widget.type': WIDGET_TYPE },
+})
+export class PageWidgetProvider implements WidgetProvider {
+  readonly type = WIDGET_TYPE
+  readonly component = PageWidget
+  readonly settingsComponent = PageWidgetSettings
+  readonly supportedDSTypes = []
+  readonly icon = Icon
+  readonly name = 'Page'
 }
 
-export function deactivate({ services }: ActivationContext) {
-  services.getRequired<WidgetRepository>(WIDGET_REPOSITORY).unregisterWidget('PageWidget')
-}
-
-export {
-  type PageI
-}
+export { type PageI }

@@ -64,11 +64,23 @@ function workspaceSourceAliases(): Record<string, string> {
   return aliases
 }
 
+/**
+ * Third-party packages whose entry declarations break Node-style resolution.
+ *
+ * They ship only an ESM `module`/file but declare no `main`/`exports`, which
+ * the browser path (Vite picks `module`) tolerates and Vitest's SSR
+ * resolution does not. The aliases point at the files that actually exist.
+ */
+const brokenThirdPartyEntries = {
+  'monaco-editor': join(root, 'node_modules/monaco-editor/esm/vs/editor/editor.main.js'),
+  'vuedraggable-es': join(root, 'node_modules/vuedraggable-es/dist/index.es.js'),
+}
+
 export default mergeConfig(
   viteConfig,
   defineConfig({
     resolve: {
-      alias: workspaceSourceAliases(),
+      alias: { ...workspaceSourceAliases(), ...brokenThirdPartyEntries },
     },
     test: {
       environment: 'jsdom',

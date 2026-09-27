@@ -10,9 +10,9 @@ Contributors: Smart City Jena
 -->
 <script lang="ts" setup>
 import { ref, computed } from 'vue'
-import ConditionSettings from 'org.eclipse.daanse.board.app.ui.vue.widget.map/src/parts/conditionLogic/ConditionSettings.vue'
-import PointStyler from 'org.eclipse.daanse.board.app.ui.vue.widget.map/src/parts/styler/PointStyler.vue'
-import AreaStyler from 'org.eclipse.daanse.board.app.ui.vue.widget.map/src/parts/styler/AreaStyler.vue'
+import { ConditionSettings } from 'org.eclipse.daanse.board.app.ui.vue.widget.map'
+import { PointStyler } from 'org.eclipse.daanse.board.app.ui.vue.widget.map'
+import { AreaStyler } from 'org.eclipse.daanse.board.app.ui.vue.widget.map'
 
 const model = defineModel<any>({ required: true })
 const tabNo = ref(0)
