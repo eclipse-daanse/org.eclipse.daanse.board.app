@@ -16,8 +16,9 @@ import {
   DATASOURCE_REPOSITORY,
 } from 'org.eclipse.daanse.board.app.lib.repository.datasource'
 
-import { symbol as KpiComposerIdentifier } from 'org.eclipse.daanse.board.app.lib.composer.kpi'
-
+// Service id of lib.composer.kpi; Symbol.for is global, so this literal
+// denotes the same symbol the factory package exports.
+const KpiComposerIdentifier = Symbol.for('KpiComposer')
 import Preview from './Preview.vue'
 import Settings from './Settings.vue'
 

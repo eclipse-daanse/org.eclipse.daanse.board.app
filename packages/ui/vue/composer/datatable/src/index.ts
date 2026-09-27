@@ -16,8 +16,9 @@ import {
   DATASOURCE_REPOSITORY,
 } from 'org.eclipse.daanse.board.app.lib.repository.datasource'
 
-import { symbol as DatatableComposerIdentifier } from 'org.eclipse.daanse.board.app.lib.composer.datatable'
-
+// Service id of lib.composer.datatable; Symbol.for is global, so this literal
+// denotes the same symbol the factory package exports.
+const DatatableComposerIdentifier = Symbol.for('DataTableComposer')
 import Preview from './Preview.vue'
 import Settings from './Settings.vue'
 

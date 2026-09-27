@@ -16,8 +16,9 @@ import {
 } from 'org.eclipse.daanse.board.app.lib.repository.connection'
 import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
 
-import { factorySymbol as RestConnectionIdentifier } from 'org.eclipse.daanse.board.app.lib.connection.rest'
-
+// Service id of lib.connection.rest; Symbol.for is global, so this literal
+// denotes the same symbol the factory package exports.
+const RestConnectionIdentifier = Symbol.for('RestConnectionFactory')
 import Settings from './Settings.vue'
 
 const settingsSymbol = Symbol.for('RestConnectionSettings')

@@ -16,8 +16,9 @@ import {
 } from 'org.eclipse.daanse.board.app.lib.repository.connection'
 import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
 
-import { factorySymbol as RssConnectionIdentifier } from 'org.eclipse.daanse.board.app.lib.connection.rss'
-
+// Service id of lib.connection.rss; Symbol.for is global, so this literal
+// denotes the same symbol the factory package exports.
+const RssConnectionIdentifier = Symbol.for('RssConnectionFactory')
 import Settings from './Settings.vue'
 
 const settingsSymbol = Symbol.for('RssConnectionSettings')

@@ -15,8 +15,9 @@ import {
   DATASOURCE_REPOSITORY,
 } from 'org.eclipse.daanse.board.app.lib.repository.datasource'
 import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
-import { factorySymbol as RestDatasourceIdentifier } from 'org.eclipse.daanse.board.app.lib.datasource.rest'
-
+// Service id of lib.datasource.rest; Symbol.for is global, so this literal
+// denotes the same symbol the factory package exports.
+const RestDatasourceIdentifier = Symbol.for('RestStoreFactory')
 import Preview from './Preview.vue'
 import Settings from './Settings.vue'
 

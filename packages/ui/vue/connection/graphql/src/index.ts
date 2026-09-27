@@ -16,8 +16,9 @@ import {
 } from 'org.eclipse.daanse.board.app.lib.repository.connection'
 import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
 
-import { factorySymbol as GraphqlConnectionIdentifier } from 'org.eclipse.daanse.board.app.lib.connection.graphql'
-
+// Service id of lib.connection.graphql; Symbol.for is global, so this literal
+// denotes the same symbol the factory package exports.
+const GraphqlConnectionIdentifier = Symbol.for('GraphQLConnectionFactory')
 import Settings from './Settings.vue'
 
 const settingsSymbol = Symbol.for('GraphqlConnectionSettings')

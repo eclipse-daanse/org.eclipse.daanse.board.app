@@ -51,6 +51,12 @@ export async function activate({ log }: ActivationContext) {
     'org.eclipse.daanse.board.app.ui.vue.stores.layout': () => import('org.eclipse.daanse.board.app.ui.vue.stores.layout'),
     'org.eclipse.daanse.board.app.ui.vue.stores.widgets': () => import('org.eclipse.daanse.board.app.ui.vue.stores.widgets'),
     'org.eclipse.daanse.board.app.ui.vue.widget.wrapper': () => import('org.eclipse.daanse.board.app.ui.vue.widget.wrapper'),
+    'org.eclipse.daanse.board.app.lib.repository.connection': () => import('org.eclipse.daanse.board.app.lib.repository.connection'),
+    'org.eclipse.daanse.board.app.lib.datasource.xmla': () => import('org.eclipse.daanse.board.app.lib.datasource.xmla'),
+    'org.eclipse.daanse.board.app.lib.connection.xmla': () => import('org.eclipse.daanse.board.app.lib.connection.xmla'),
+    'org.eclipse.daanse.board.app.lib.composer.ogcsta2chart': () => import('org.eclipse.daanse.board.app.lib.composer.ogcsta2chart'),
+    'org.eclipse.daanse.board.app.ui.vue.stores.connection': () => import('org.eclipse.daanse.board.app.ui.vue.stores.connection'),
+    'org.eclipse.daanse.board.app.ui.vue.stores.datasouce': () => import('org.eclipse.daanse.board.app.ui.vue.stores.datasouce'),
   }
 
   for (const [id, load] of Object.entries(libraries)) {

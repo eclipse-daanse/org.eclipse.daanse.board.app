@@ -15,6 +15,30 @@ import type { ModuleManifest } from '@eclipse-daanse/tsm'
 import progressWidget from 'org.eclipse.daanse.board.app.ui.vue.widget.progress/manifest.json'
 import wmap from 'org.eclipse.daanse.board.app.ui.vue.widget.map/manifest.json'
 import geojsonRenderer from 'org.eclipse.daanse.board.app.ui.vue.plugins.geojson_renderer/manifest.json'
+import endpointfinder from 'org.eclipse.daanse.board.app.ui.vue.plugins.endpointfinder/manifest.json'
+import tcomposerchart from 'org.eclipse.daanse.board.app.ui.vue.composer.chart/manifest.json'
+import tcomposerdatatable from 'org.eclipse.daanse.board.app.ui.vue.composer.datatable/manifest.json'
+import tcomposerkpi from 'org.eclipse.daanse.board.app.ui.vue.composer.kpi/manifest.json'
+import tcomposerogc from 'org.eclipse.daanse.board.app.ui.vue.composer.ogc/manifest.json'
+import tcomposerogcsta2chart from 'org.eclipse.daanse.board.app.ui.vue.composer.ogcsta2chart/manifest.json'
+import tcomposerweather from 'org.eclipse.daanse.board.app.ui.vue.composer.weather/manifest.json'
+import tconnectiongraphql from 'org.eclipse.daanse.board.app.ui.vue.connection.graphql/manifest.json'
+import tconnectionmqtt from 'org.eclipse.daanse.board.app.ui.vue.connection.mqtt/manifest.json'
+import tconnectionrest from 'org.eclipse.daanse.board.app.ui.vue.connection.rest/manifest.json'
+import tconnectionrss from 'org.eclipse.daanse.board.app.ui.vue.connection.rss/manifest.json'
+import tconnectionws from 'org.eclipse.daanse.board.app.ui.vue.connection.ws/manifest.json'
+import tconnectionxmla from 'org.eclipse.daanse.board.app.ui.vue.connection.xmla/manifest.json'
+import tdatasourcecsv from 'org.eclipse.daanse.board.app.ui.vue.datasource.csv/manifest.json'
+import tdatasourcegraphql from 'org.eclipse.daanse.board.app.ui.vue.datasource.graphql/manifest.json'
+import tdatasourcekpi from 'org.eclipse.daanse.board.app.ui.vue.datasource.kpi/manifest.json'
+import tdatasourceogcsta from 'org.eclipse.daanse.board.app.ui.vue.datasource.ogcsta/manifest.json'
+import tdatasourcerest from 'org.eclipse.daanse.board.app.ui.vue.datasource.rest/manifest.json'
+import tdatasourcerss from 'org.eclipse.daanse.board.app.ui.vue.datasource.rss/manifest.json'
+import tdatasourcesparql from 'org.eclipse.daanse.board.app.ui.vue.datasource.sparql/manifest.json'
+import tdatasourcesqlxmla from 'org.eclipse.daanse.board.app.ui.vue.datasource.sql_xmla/manifest.json'
+import tdatasourcevalhalla from 'org.eclipse.daanse.board.app.ui.vue.datasource.valhalla/manifest.json'
+import tdatasourcews from 'org.eclipse.daanse.board.app.ui.vue.datasource.ws/manifest.json'
+import tdatasourcexmla from 'org.eclipse.daanse.board.app.ui.vue.datasource.xmla/manifest.json'
 import wchart from 'org.eclipse.daanse.board.app.ui.vue.widget.chart/manifest.json'
 import wcode from 'org.eclipse.daanse.board.app.ui.vue.widget.code/manifest.json'
 import wicon from 'org.eclipse.daanse.board.app.ui.vue.widget.icon/manifest.json'
@@ -59,6 +83,30 @@ export const bundles: ModuleManifest[] = [
   progressWidget as ModuleManifest,
   wmap as ModuleManifest,
   geojsonRenderer as ModuleManifest,
+  endpointfinder as ModuleManifest,
+  tcomposerchart as ModuleManifest,
+  tcomposerdatatable as ModuleManifest,
+  tcomposerkpi as ModuleManifest,
+  tcomposerogc as ModuleManifest,
+  tcomposerogcsta2chart as ModuleManifest,
+  tcomposerweather as ModuleManifest,
+  tconnectiongraphql as ModuleManifest,
+  tconnectionmqtt as ModuleManifest,
+  tconnectionrest as ModuleManifest,
+  tconnectionrss as ModuleManifest,
+  tconnectionws as ModuleManifest,
+  tconnectionxmla as ModuleManifest,
+  tdatasourcecsv as ModuleManifest,
+  tdatasourcegraphql as ModuleManifest,
+  tdatasourcekpi as ModuleManifest,
+  tdatasourceogcsta as ModuleManifest,
+  tdatasourcerest as ModuleManifest,
+  tdatasourcerss as ModuleManifest,
+  tdatasourcesparql as ModuleManifest,
+  tdatasourcesqlxmla as ModuleManifest,
+  tdatasourcevalhalla as ModuleManifest,
+  tdatasourcews as ModuleManifest,
+  tdatasourcexmla as ModuleManifest,
   wchart as ModuleManifest,
   wcode as ModuleManifest,
   wicon as ModuleManifest,

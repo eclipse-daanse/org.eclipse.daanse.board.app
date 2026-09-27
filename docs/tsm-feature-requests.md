@@ -303,3 +303,28 @@ einem Bundler-Monolithen auf tsm-Bundles umsteigt, braucht genau diese Phase:
 Loader-Semantik (Manifeste, DS-Komponenten, Lebenszyklus) für Module, die
 noch im Hauptbundle stecken. Auch Tests profitieren: ein Modul lässt sich dem
 Loader direkt übergeben, ohne URL-Mock oder jsdom-Global.
+
+---
+
+## FR-8 — Vite-Plugin: nackte Seiteneffekt-Importe geteilter Module überleben die Umschreibung
+
+**Eingereicht als [#20](https://github.com/eclipse-daanse/org.eclipse.daanse.tsm/issues/20).**
+
+`transformTsmImports()` schreibt benannte, Namespace- und Default-Importe von
+`sharedModules` auf `__tsm__.require()` um — die nackte Form
+`import 'modul'` nicht. Da das Plugin geteilte Module zugleich externalisiert,
+landet die überlebende Anweisung als `import "modul"` im Entry-Chunk, wo der
+Browser den nackten Spezifizierer nicht auflösen kann: das ganze Bundle lädt
+nicht. Die Anweisung muss dafür nicht einmal im Quelltext stehen — Rollup
+synthetisiert Seiteneffekt-Importe für Externals beim Chunking selbst (bei
+uns über eine Re-Export-Fassade nach Code-Splitting aufgetreten,
+`geojson_renderer` → `widget.map`).
+
+Vorgeschlagen: die nackte Form in der Transformation behandeln (umschreiben
+oder streichen) plus ein `renderChunk`-Durchlauf für die von Rollup
+synthetisierten Fälle. PR angeboten.
+
+**Umgehung bei uns:** ein klar markierter `generateBundle`-Schritt in den
+Bundle-Configs entfernt `import "<shared-id>"`-Zeilen — geteilte
+Bibliotheken sind hier per Definition seiteneffektfrei. Fällt mit der
+Behebung ersatzlos weg.

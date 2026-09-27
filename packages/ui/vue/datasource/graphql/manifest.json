@@ -1,0 +1,38 @@
+{
+  "$schema": "https://tsm.dev/schema/manifest/v1.json",
+  "id": "ui.vue.datasource.graphql",
+  "name": "graphql datasource UI",
+  "version": "0.0.1-next.1",
+  "entry": "/bundles/ui.vue.datasource.graphql/index.js",
+  "exports": {},
+  "dependencies": [
+    "platform.vue",
+    "platform.compat"
+  ],
+  "requiresService": [
+    {
+      "id": "DatasourceRepository"
+    },
+    {
+      "id": "GraphQLStoreFactory"
+    }
+  ],
+  "sharedDependencies": [
+    {
+      "id": "vue",
+      "versionRange": "^3.5.0"
+    },
+    {
+      "id": "org.eclipse.daanse.board.app.lib.core",
+      "versionRange": ">=0.0.1-0"
+    },
+    {
+      "id": "org.eclipse.daanse.board.app.lib.repository.datasource",
+      "versionRange": ">=0.0.1-0"
+    },
+    {
+      "id": "org.eclipse.daanse.board.app.ui.vue.composables",
+      "versionRange": ">=0.0.1-0"
+    }
+  ]
+}

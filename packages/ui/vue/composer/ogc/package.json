@@ -29,7 +29,8 @@
     "lodash": "^4.17.16",
     "vue-json-pretty": "^2.4.0",
     "vite-plugin-libcss": "^1.1.1",
-    "org.eclipse.daanse.board.app.ui.vue.composables": "^0.0.1-next.1"
+    "org.eclipse.daanse.board.app.ui.vue.composables": "^0.0.1-next.1",
+    "@eclipse-daanse/tsm": "link:../../../../../EMFTs/tsm"
   },
   "devDependencies": {
     "inversify": "7.11.0",

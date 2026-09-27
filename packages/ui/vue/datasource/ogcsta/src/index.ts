@@ -8,7 +8,9 @@ SPDX-License-Identifier: EPL-2.0
 Contributors: Smart City Jena
 */
 
-import { factorySymbol } from 'org.eclipse.daanse.board.app.lib.datasource.ogcsta'
+// Service id of lib.datasource.ogcsta; Symbol.for is global, so this literal
+// denotes the same symbol the factory package exports.
+const factorySymbol = Symbol.for('OgcStaStoreFactory')
 import {
   type DatasourceRepository,
   DATASOURCE_REPOSITORY,

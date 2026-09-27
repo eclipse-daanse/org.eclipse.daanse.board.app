@@ -90,6 +90,12 @@ const sharedModules = ['vue', 'vue-router', ...manifest.sharedDependencies
   .filter((id) => id.startsWith('org.eclipse.daanse'))]
 
 export default defineConfig({
+  // Bundles run in the browser; embedded third-party code still probing
+  // process.env must see a value instead of throwing.
+  define: {
+    'process.env.NODE_ENV': JSON.stringify('production'),
+    'process.env': '{}',
+  },
   plugins: [
     vue(),
     inlineCss(),

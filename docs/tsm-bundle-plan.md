@@ -144,7 +144,27 @@ Erfolgskriterium: Das Widget erscheint in der Palette, funktioniert im Board,
 Palette inklusive), und der Eintrag ist aus `modules.ts` gelöscht. **Der
 Pilot beweist oder widerlegt das Zielbild, bevor 111 weitere folgen.**
 
-### B5.3 — Familienweise nachziehen
+### B5.3 — Familienweise nachziehen  · Widgets ✔
+
+**Die Widget-Familie ist vollständig umgezogen: 24 von 24.** 21 per
+Generator (derselbe stolperte über dieselben Fallen wie die B4-Skripte plus
+zwei neue — kommabehaftete Arrays, verschachtelte Interface-Klammern; jede
+vom Einzel-Build gefangen), `sample`/`page` von Hand, `map`+`geojson_renderer`
+als Paar zum Schluss.
+
+Das Paar erbrachte den Nachweis für **Bundle-zu-Bundle-API-Sharing**: `map`
+veröffentlicht seine öffentliche API in `@activate` als geteilte Bibliothek
+(Capability im Manifest), `geojson_renderer` — jetzt eine reine
+Lebenszyklus-Komponente — registriert seinen Renderer in `map`s
+DataPointRegistry. Erkenntnis dabei: **der src-Baum eines Bundles ist keine
+Schnittstelle** — die vier tief importierten .vue-Teile wurden in `map`s
+öffentliche API gehoben. Zweite Erkenntnis: nackte Seiteneffekt-Importe
+geteilter Module überleben die Plugin-Umschreibung (FR-8/#20, Workaround in
+den Bundle-Configs markiert).
+
+Stand: 87 statische Module, 25 Bundles + 2 Plattform-Module.
+
+**Es folgen:**
 
 Reihenfolge nach Homogenität und Kopplungsarmut: übrige 23 Widgets, dann
 Typ-Registrierungen (Datasource/Connection/Composer-UI, 23), i18n (11),
