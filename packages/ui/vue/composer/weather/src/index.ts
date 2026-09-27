@@ -16,8 +16,9 @@ import {
   DATASOURCE_REPOSITORY,
 } from 'org.eclipse.daanse.board.app.lib.repository.datasource'
 
-import { symbol as WeatherComposerIdentifier } from 'org.eclipse.daanse.board.app.lib.composer.weather'
-
+// Service id of lib.composer.weather; Symbol.for is global, so this literal
+// denotes the same symbol the factory package exports.
+const WeatherComposerIdentifier = Symbol.for('WeatherComposer')
 import Preview from './Preview.vue'
 import Settings from './Settings.vue'
 

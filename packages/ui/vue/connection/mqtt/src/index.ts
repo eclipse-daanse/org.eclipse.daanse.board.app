@@ -16,8 +16,9 @@ import {
   CONNECTION_REPOSITORY,
 } from 'org.eclipse.daanse.board.app.lib.repository.connection'
 
-import { factorySymbol as MqttConnectionIdentifier } from 'org.eclipse.daanse.board.app.lib.connection.mqtt'
-
+// Service id of lib.connection.mqtt; Symbol.for is global, so this literal
+// denotes the same symbol the factory package exports.
+const MqttConnectionIdentifier = Symbol.for('MQTTConnectionFactory')
 import Settings from './Settings.vue'
 
 const settingsSymbol = Symbol.for('MqttConnectionSettings')

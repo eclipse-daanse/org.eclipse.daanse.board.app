@@ -16,13 +16,13 @@ import { LMap, LTileLayer, LGeoJson, LCircleMarker, LPopup } from '@vue-leaflet/
 import type { PointExpression } from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 import { useTemporaryStore } from 'org.eclipse.daanse.board.app.ui.vue.composables'
-import {
-  SET_WAYPOINTS,
-  SET_COSTING,
-  OPTIMIZE_ROUTE,
-  type Waypoint,
-  type CostingModel,
-} from 'org.eclipse.daanse.board.app.lib.datasource.valhalla'
+import type { Waypoint, CostingModel } from 'org.eclipse.daanse.board.app.lib.datasource.valhalla'
+
+// Plain string constants of lib.datasource.valhalla, inlined to keep the
+// factory package out of this bundle's value imports.
+const SET_WAYPOINTS = 'SET_WAYPOINTS'
+const SET_COSTING = 'SET_COSTING'
+const OPTIMIZE_ROUTE = 'OPTIMIZE_ROUTE'
 
 const props = defineProps<{ dataSource: any }>()
 
