@@ -32,7 +32,8 @@ import {
   getActivateMethod,
   getDeactivateMethod,
 } from '@eclipse-daanse/tsm/decorators'
-import { BoardServiceRegistry, ModuleBootstrapper } from 'org.eclipse.daanse.board.app.lib.core'
+import { ModuleLoader, type ModuleManifest } from '@eclipse-daanse/tsm'
+import { BoardServiceRegistry } from 'org.eclipse.daanse.board.app.lib.core'
 import { WIDGET_SERVICE_ID, WidgetRepository } from 'org.eclipse.daanse.board.app.lib.repository.widget'
 
 const silentLogger = () => ({
@@ -76,15 +77,18 @@ describe('widget bundles as declared components', () => {
     services.register('EventRegistry', events)
     services.register('EventActionsRegistry', actions)
 
-    // The repository module installs the tracker
-    const bootstrapper = new ModuleBootstrapper(services, silentLogger())
-    await bootstrapper.activateAll([
-      {
-        id: 'lib.repository.widget',
-        load: () => import('org.eclipse.daanse.board.app.lib.repository.widget'),
-        provides: ['WidgetRepository'],
-      },
-    ])
+    // The repository module installs the tracker; run by the real loader,
+    // its container handed over - the same path main.ts uses.
+    const loader = new ModuleLoader({ serviceRegistry: services, logger: silentLogger() })
+    const manifest: ModuleManifest = {
+      id: 'lib.repository.widget', name: 'widget repository', version: '0.0.0',
+      entry: './src/index.ts', exports: {},
+      provides: [{ id: 'WidgetRepository' }],
+    }
+    await loader.loadModule(manifest, {
+      container: await import('org.eclipse.daanse.board.app.lib.repository.widget'),
+      awaitCascade: true,
+    })
   })
 
   it('sample declares a component providing daanse.widget with its type', async () => {
