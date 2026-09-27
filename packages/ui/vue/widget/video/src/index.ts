@@ -1,5 +1,5 @@
 /*********************************************************************
- * Copyright (c) 2025 Contributors to the Eclipse Foundation.
+ * Copyright (c) 2026 Contributors to the Eclipse Foundation.
  *
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
@@ -11,45 +11,64 @@
  *   Smart City Jena
  **********************************************************************/
 
+import { component, inject, activate, deactivate } from '@eclipse-daanse/tsm/decorators'
 import VideoWidget from './VideoWidget.vue'
 import VideoWidgetSettings from './VideoWidgetSettings.vue'
-import { type WidgetRepository, WIDGET_REPOSITORY } from 'org.eclipse.daanse.board.app.lib.repository.widget'
 import Icon from './assets/video.svg'
-import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
+import { VideoWidgetEvents } from './events/VideoWidgetEvents'
+import { VideoWidgetInterface } from './api/VideoWidgetInterface'
+import type { EventRegistry, EventActionsRegistry } from 'org.eclipse.daanse.board.app.lib.events'
+import type { WidgetProvider } from 'org.eclipse.daanse.board.app.lib.repository.widget'
 
 interface ObjectFitSetting {
   fit: string
 }
-
 interface IVideoSettings {
   videoSettings: ObjectFitSetting
   videoUrl: string
 }
 
-import { EventRegistry, EVENT_REGISTRY_ID, EventActionsRegistry, EVENT_ACTIONS_REGISTRY_ID } from 'org.eclipse.daanse.board.app.lib.events'
-import { VideoWidgetEvents } from './events/VideoWidgetEvents'
-import { VideoWidgetInterface } from './api/VideoWidgetInterface'
+/*
+ * Literal on purpose: the tsm plugin derives the manifest's provides at
+ * build time and cannot evaluate an imported constant. Must match
+ * WIDGET_SERVICE_ID in lib.repository.widget.
+ */
+const WIDGET_SERVICE = 'daanse.widget'
 
-export function activate({ services }: ActivationContext) {
-  services.getRequired<WidgetRepository>(WIDGET_REPOSITORY).registerWidget('VideoWidget', {
-    component: VideoWidget,
-    settingsComponent: VideoWidgetSettings,
-    supportedDSTypes: [],
-    icon: Icon,
-    name: 'Video'
-  })
+const WIDGET_TYPE = 'VideoWidget'
 
-  const eventRegistry = services.getRequired<EventRegistry>(EVENT_REGISTRY_ID)
-  eventRegistry.registerWidget('VideoWidget', VideoWidgetEvents)
+/**
+ * Declared component: the loader registers it under WIDGET_SERVICE, the
+ * WidgetRepository tracks it into the palette, unloading withdraws it.
+ */
+@component({
+  service: [WIDGET_SERVICE],
+  properties: { 'widget.type': WIDGET_TYPE },
+})
+export class VideoWidgetProvider implements WidgetProvider {
+  readonly type = WIDGET_TYPE
+  readonly component = VideoWidget
+  readonly settingsComponent = VideoWidgetSettings
+  readonly supportedDSTypes = []
+  readonly icon = Icon
+  readonly name = 'Video'
 
-  const actionsRegistry = services.getRequired<EventActionsRegistry>(EVENT_ACTIONS_REGISTRY_ID)
-  actionsRegistry.registerWidgetType('VideoWidget', VideoWidgetInterface, 'widget')
-}
+  constructor(
+    @inject('EventRegistry') private readonly events: EventRegistry,
+    @inject('EventActionsRegistry') private readonly actions: EventActionsRegistry,
+  ) {}
 
-export function deactivate({ services }: ActivationContext) {
-  services.getRequired<WidgetRepository>(WIDGET_REPOSITORY).unregisterWidget('VideoWidget')
-  services.getRequired<EventRegistry>(EVENT_REGISTRY_ID).unregisterWidget('VideoWidget')
-  services.getRequired<EventActionsRegistry>(EVENT_ACTIONS_REGISTRY_ID).unregisterWidgetType('VideoWidget')
+  @activate()
+  register(): void {
+    this.events.registerWidget(WIDGET_TYPE, VideoWidgetEvents)
+    this.actions.registerWidgetType(WIDGET_TYPE, VideoWidgetInterface, 'widget')
+  }
+
+  @deactivate()
+  unregister(): void {
+    this.events.unregisterWidget(WIDGET_TYPE)
+    this.actions.unregisterWidgetType(WIDGET_TYPE)
+  }
 }
 
 export { VideoWidget, VideoWidgetSettings }

@@ -1,5 +1,5 @@
 /*********************************************************************
- * Copyright (c) 2025 Contributors to the Eclipse Foundation.
+ * Copyright (c) 2026 Contributors to the Eclipse Foundation.
  *
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
@@ -11,15 +11,15 @@
  *   Smart City Jena
  **********************************************************************/
 
-import { type WidgetRepository, WIDGET_REPOSITORY } from 'org.eclipse.daanse.board.app.lib.repository.widget'
+import { component, inject, activate, deactivate } from '@eclipse-daanse/tsm/decorators'
 import Icon from './assets/pivot_table.svg'
 import PivotTableWidget from './PivotTableWidget.vue'
 import PivotTableWidgetSettings from './PivotTableWidgetSettings.vue'
-import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
-import { EventRegistry, EVENT_REGISTRY_ID, EventActionsRegistry, EVENT_ACTIONS_REGISTRY_ID } from 'org.eclipse.daanse.board.app.lib.events'
 import { PivotTableEvents } from './events/PivotTableEvents'
 import { PivotTableInterface } from './gen/PivotTableInterface'
 import ecoreModelContent from '../model/model.ecore?raw'
+import type { EventRegistry, EventActionsRegistry } from 'org.eclipse.daanse.board.app.lib.events'
+import type { WidgetProvider } from 'org.eclipse.daanse.board.app.lib.repository.widget'
 
 interface IPivotTable {
   rows: any[][]
@@ -28,34 +28,47 @@ interface IPivotTable {
   tableState: any
 }
 
-export function activate({ services }: ActivationContext) {
-  services.getRequired<WidgetRepository>(WIDGET_REPOSITORY).registerWidget('PivotTableWidget', {
-    component: PivotTableWidget,
-    settingsComponent: PivotTableWidgetSettings,
-    supportedDSTypes: [],
-    icon: Icon,
-    name: 'PivotTable'
-  })
+/*
+ * Literal on purpose: the tsm plugin derives the manifest's provides at
+ * build time and cannot evaluate an imported constant. Must match
+ * WIDGET_SERVICE_ID in lib.repository.widget.
+ */
+const WIDGET_SERVICE = 'daanse.widget'
 
+const WIDGET_TYPE = 'PivotTableWidget'
 
-  const eventRegistry = services.getRequired<EventRegistry>(EVENT_REGISTRY_ID)
-  const actionsRegistry = services.getRequired<EventActionsRegistry>(EVENT_ACTIONS_REGISTRY_ID)
+/**
+ * Declared component: the loader registers it under WIDGET_SERVICE, the
+ * WidgetRepository tracks it into the palette, unloading withdraws it.
+ */
+@component({
+  service: [WIDGET_SERVICE],
+  properties: { 'widget.type': WIDGET_TYPE },
+})
+export class PivotTableWidgetProvider implements WidgetProvider {
+  readonly type = WIDGET_TYPE
+  readonly component = PivotTableWidget
+  readonly settingsComponent = PivotTableWidgetSettings
+  readonly supportedDSTypes = []
+  readonly icon = Icon
+  readonly name = 'PivotTable'
 
-  eventRegistry.registerWidget('PivotTableWidget', PivotTableEvents)
+  constructor(
+    @inject('EventRegistry') private readonly events: EventRegistry,
+    @inject('EventActionsRegistry') private readonly actions: EventActionsRegistry,
+  ) {}
 
-  // Register widget actions from Ecore model (async, non-blocking)
-  actionsRegistry.registerActionsFromEcoreString('PivotTableWidget', ecoreModelContent, 'widget', 'model.ecore')
-    .catch((error) => {
-      console.error('Failed to register PivotTableWidget from Ecore, falling back to decorator-based registration:', error)
-      // Fallback to decorator-based registration
-      actionsRegistry.registerWidgetType('PivotTableWidget', PivotTableInterface, 'widget')
-    })
-}
+  @activate()
+  register(): void {
+    this.events.registerWidget(WIDGET_TYPE, PivotTableEvents)
+    this.actions.registerWidgetType(WIDGET_TYPE, PivotTableInterface, 'widget')
+  }
 
-export function deactivate({ services }: ActivationContext) {
-  services.getRequired<WidgetRepository>(WIDGET_REPOSITORY).unregisterWidget('PivotTableWidget')
-  services.getRequired<EventRegistry>(EVENT_REGISTRY_ID).unregisterWidget('PivotTableWidget')
-  services.getRequired<EventActionsRegistry>(EVENT_ACTIONS_REGISTRY_ID).unregisterWidgetType('PivotTableWidget')
+  @deactivate()
+  unregister(): void {
+    this.events.unregisterWidget(WIDGET_TYPE)
+    this.actions.unregisterWidgetType(WIDGET_TYPE)
+  }
 }
 
 export { PivotTableWidget, PivotTableWidgetSettings }

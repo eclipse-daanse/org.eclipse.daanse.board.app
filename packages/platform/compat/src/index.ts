@@ -42,6 +42,15 @@ export async function activate({ log }: ActivationContext) {
     'org.eclipse.daanse.board.app.lib.repository.widget': () => import('org.eclipse.daanse.board.app.lib.repository.widget'),
     'org.eclipse.daanse.board.app.ui.vue.composables': () => import('org.eclipse.daanse.board.app.ui.vue.composables'),
     'org.eclipse.daanse.board.app.ui.vue.variable.components': () => import('org.eclipse.daanse.board.app.ui.vue.variable.components'),
+    'org.eclipse.daanse.board.app.lib.variables': () => import('org.eclipse.daanse.board.app.lib.variables'),
+    'org.eclipse.daanse.board.app.lib.logger': () => import('org.eclipse.daanse.board.app.lib.logger'),
+    'org.eclipse.daanse.board.app.lib.repository.datasource': () => import('org.eclipse.daanse.board.app.lib.repository.datasource'),
+    'org.eclipse.daanse.board.app.lib.repository.variable': () => import('org.eclipse.daanse.board.app.lib.repository.variable'),
+    'org.eclipse.daanse.board.app.lib.repository.page': () => import('org.eclipse.daanse.board.app.lib.repository.page'),
+    'org.eclipse.daanse.board.app.lib.repository.layout.page': () => import('org.eclipse.daanse.board.app.lib.repository.layout.page'),
+    'org.eclipse.daanse.board.app.ui.vue.stores.layout': () => import('org.eclipse.daanse.board.app.ui.vue.stores.layout'),
+    'org.eclipse.daanse.board.app.ui.vue.stores.widgets': () => import('org.eclipse.daanse.board.app.ui.vue.stores.widgets'),
+    'org.eclipse.daanse.board.app.ui.vue.widget.wrapper': () => import('org.eclipse.daanse.board.app.ui.vue.widget.wrapper'),
   }
 
   for (const [id, load] of Object.entries(libraries)) {

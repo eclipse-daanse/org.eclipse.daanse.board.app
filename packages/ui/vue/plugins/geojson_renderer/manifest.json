@@ -1,0 +1,23 @@
+{
+  "$schema": "https://tsm.dev/schema/manifest/v1.json",
+  "id": "ui.vue.plugins.geojson_renderer",
+  "name": "GeoJSON Renderer",
+  "version": "0.0.1-next.1",
+  "entry": "/bundles/ui.vue.plugins.geojson_renderer/index.js",
+  "exports": {},
+  "dependencies": [
+    "platform.vue",
+    "ui.vue.widget.map"
+  ],
+  "requiresService": [],
+  "sharedDependencies": [
+    {
+      "id": "vue",
+      "versionRange": "^3.5.0"
+    },
+    {
+      "id": "org.eclipse.daanse.board.app.ui.vue.widget.map",
+      "versionRange": ">=0.0.1-0"
+    }
+  ]
+}

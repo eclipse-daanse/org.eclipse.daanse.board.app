@@ -1,5 +1,5 @@
 /*********************************************************************
- * Copyright (c) 2025 Contributors to the Eclipse Foundation.
+ * Copyright (c) 2026 Contributors to the Eclipse Foundation.
  *
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
@@ -11,18 +11,25 @@
  *   Smart City Jena
  **********************************************************************/
 
+import { component, activate } from '@eclipse-daanse/tsm/decorators'
 import { useDataPointRegistry } from 'org.eclipse.daanse.board.app.ui.vue.widget.map'
 import GeoJsonDataRendererDescription from './GeoJsonDataRendererDescription'
 
 /**
- * Meldet den GeoJSON-Renderer bei der Datenpunkt-Registrierung an.
+ * Lifecycle-only component: it offers no service, it just has something to
+ * do when its bundle starts - register the GeoJSON renderer with the map's
+ * DataPointRegistry. The registry is module state of the map bundle; the
+ * shared-library rewrite makes this import reach that copy.
  *
- * Die Registrierung ist ein Vue-Composable ohne Dienst-ID, deshalb keine
- * `requires`-Angabe - das Modul haengt ueber seinen Import an
- * ui.vue.widget.map.
+ * Immediate by virtue of its @activate method: it runs whether or not
+ * anyone ever resolves it.
  */
-export function activate() {
-  useDataPointRegistry().registerDataPointRenderer(new GeoJsonDataRendererDescription())
+@component({})
+export class GeoJsonRendererComponent {
+  @activate()
+  register(): void {
+    useDataPointRegistry().registerDataPointRenderer(new GeoJsonDataRendererDescription())
+  }
 }
 
 export { GeoJsonDataRendererDescription }
