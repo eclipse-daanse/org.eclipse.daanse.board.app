@@ -26,11 +26,8 @@
  */
 
 import { describe, it, expect, beforeEach } from 'vitest'
-import {
-  container,
-  BoardServiceRegistry,
-  ModuleBootstrapper,
-} from 'org.eclipse.daanse.board.app.lib.core'
+import { ModuleLoader, type ModuleManifest } from '@eclipse-daanse/tsm'
+import { container, BoardServiceRegistry } from 'org.eclipse.daanse.board.app.lib.core'
 
 /** Minimal gueltige Konfiguration - validateConfiguration prueft genau diese vier Felder. */
 const GUELTIG = {
@@ -46,7 +43,7 @@ const stilleAusgabe = () => ({
 
 describe('Composer-Factory', () => {
   let services: BoardServiceRegistry
-  let bootstrapper: ModuleBootstrapper
+  let loader: ModuleLoader
 
   const chartModul = {
     id: 'lib.composer.chart',
@@ -77,27 +74,42 @@ describe('Composer-Factory', () => {
      * unsichtbar.
      */
     services = new BoardServiceRegistry(container)
-    bootstrapper = new ModuleBootstrapper(services, stilleAusgabe())
+    loader = new ModuleLoader({ serviceRegistry: services, logger: stilleAusgabe() })
   })
+
+  const activateAll = async () => {
+    const eintraege: Array<[ModuleManifest, string]> = [
+      [{ id: 'lib.repository.datasource', name: 'ds repo', version: '0.0.0',
+         entry: './src/index.ts', exports: {}, provides: [{ id: 'DatasourceRepository' }] },
+       'org.eclipse.daanse.board.app.lib.repository.datasource'],
+      [{ id: 'lib.composer.chart', name: 'chart composer', version: '0.0.0',
+         entry: './src/index.ts', exports: {},
+         requiresService: [{ id: 'DatasourceRepository' }] },
+       'org.eclipse.daanse.board.app.lib.composer.chart'],
+    ]
+    for (const [manifest, pkg] of eintraege) {
+      await loader.loadModule(manifest, { container: await import(/* @vite-ignore */ pkg), awaitCascade: true })
+    }
+  }
 
   it('registriert die Factory unter ihrer Dienst-ID', async () => {
     expect(services.has('ChartComposer')).toBe(false)
 
-    await bootstrapper.activateAll(module)
+    await activateAll()
 
     expect(typeof services.get('ChartComposer')).toBe('function')
   })
 
   it('ist ueber das Symbol im Container auffindbar', async () => {
     // Genau so löst das DatasourceRepository den 'Store'-Eintrag auf
-    await bootstrapper.activateAll(module)
+    await activateAll()
 
     const { symbol } = await import('org.eclipse.daanse.board.app.lib.composer.chart')
     expect(typeof container.get(symbol)).toBe('function')
   })
 
   it('laesst eine gueltige Konfiguration die Validierung passieren', async () => {
-    await bootstrapper.activateAll(module)
+    await activateAll()
     const { symbol } = await import('org.eclipse.daanse.board.app.lib.composer.chart')
     const factory = container.get(symbol) as (c: unknown) => unknown
 
@@ -108,7 +120,7 @@ describe('Composer-Factory', () => {
   })
 
   it('weist eine ungueltige Konfiguration zurueck', async () => {
-    await bootstrapper.activateAll(module)
+    await activateAll()
     const { symbol } = await import('org.eclipse.daanse.board.app.lib.composer.chart')
 
     const factory = container.get(symbol) as (c: unknown) => unknown
@@ -117,17 +129,17 @@ describe('Composer-Factory', () => {
     expect(() => factory({})).toThrow(/Invalid ChartComposer configuration/)
   })
 
-  it('nimmt die Registrierung beim Deaktivieren zurueck', async () => {
+  it('withdraws the registration on unload', async () => {
     const { symbol } = await import('org.eclipse.daanse.board.app.lib.composer.chart')
 
-    await bootstrapper.activateAll(module)
-    await bootstrapper.deactivateAll()
+    await activateAll()
+    await loader.unloadModule('lib.composer.chart')
 
     expect(services.has('ChartComposer')).toBe(false)
     expect(container.isBound(symbol)).toBe(false)
   })
 
-  it('hat beim Import keine Wirkung', async () => {
+  it('has no effect on import alone', async () => {
     await import('org.eclipse.daanse.board.app.lib.composer.chart')
 
     expect(services.has('ChartComposer')).toBe(false)
