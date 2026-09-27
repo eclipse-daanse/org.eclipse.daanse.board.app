@@ -15,8 +15,9 @@ import {
   DATASOURCE_REPOSITORY,
 } from 'org.eclipse.daanse.board.app.lib.repository.datasource'
 import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
-import { factorySymbol as KpiTmpDatasourceIdentifier } from 'org.eclipse.daanse.board.app.lib.datasource.kpi_tmp'
-
+// Service id of lib.datasource.kpi_tmp; Symbol.for is global, so this literal
+// denotes the same symbol the factory package exports.
+const KpiTmpDatasourceIdentifier = Symbol.for('KpiStoreFactory')
 import Preview from './Preview.vue'
 import Settings from './Settings.vue'
 

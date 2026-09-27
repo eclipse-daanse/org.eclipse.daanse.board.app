@@ -16,7 +16,7 @@ import { App, Component } from 'vue'
 import type { ConnectionRepository } from 'org.eclipse.daanse.board.app.lib.repository.connection'
 import { identifier } from 'org.eclipse.daanse.board.app.lib.repository.connection'
 import { useSparQLEndPointManager } from './sparql/SparqlEndpointRegistry'
-import { RestConnection } from 'org.eclipse.daanse.board.app.lib.connection.rest'
+import type { RestConnection } from 'org.eclipse.daanse.board.app.lib.connection.rest'
 import { useConnectionsStore } from 'org.eclipse.daanse.board.app.ui.vue.stores.connection'
 import { DataSourceDTO } from 'org.eclipse.daanse.board.app.ui.vue.stores.datasouce'
 

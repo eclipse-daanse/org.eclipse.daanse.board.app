@@ -32,12 +32,12 @@
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "graphiql": "^5.2.2",
-    "org.eclipse.daanse.board.app.ui.vue.composables": "^0.0.1-next.1"
+    "org.eclipse.daanse.board.app.ui.vue.composables": "^0.0.1-next.1",
+    "@eclipse-daanse/tsm": "link:../../../../../EMFTs/tsm"
   },
   "devDependencies": {
     "inversify": "7.11.0",
     "typescript": "^5.8.2",
-
     "vite-plugin-dts": "4.5.4",
     "@types/lodash": "^4.17.16"
   },

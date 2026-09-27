@@ -16,8 +16,9 @@ import {
   DATASOURCE_REPOSITORY,
 } from 'org.eclipse.daanse.board.app.lib.repository.datasource'
 import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
-import { factorySymbol as RssDatasourceIdentifier } from 'org.eclipse.daanse.board.app.lib.datasource.rss'
-
+// Service id of lib.datasource.rss; Symbol.for is global, so this literal
+// denotes the same symbol the factory package exports.
+const RssDatasourceIdentifier = Symbol.for('RssStoreFactory')
 import Preview from './Preview.vue'
 import Settings from './Settings.vue'
 

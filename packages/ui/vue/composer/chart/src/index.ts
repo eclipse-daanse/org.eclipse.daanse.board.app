@@ -16,8 +16,9 @@ import {
   DATASOURCE_REPOSITORY,
 } from 'org.eclipse.daanse.board.app.lib.repository.datasource'
 
-import { symbol as ChartComposerIdentifier } from 'org.eclipse.daanse.board.app.lib.composer.chart'
-
+// Service id of lib.composer.chart; Symbol.for is global, so this literal
+// denotes the same symbol the factory package exports.
+const ChartComposerIdentifier = Symbol.for('ChartComposer')
 import Preview from './Preview.vue'
 import Settings from './Settings.vue'
 
