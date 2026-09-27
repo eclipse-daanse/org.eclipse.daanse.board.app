@@ -17,7 +17,7 @@
 // import type { IWidget } from "@/types/Widgets";
 // import { WidgetRepository } from "@/plugins/data/WidgetRepository";
 // import SERVICE_IDENTIFIER from "@/config/identifiers/services";
-import { computed, ref } from 'vue'
+import { computed, ref, onUnmounted } from 'vue'
 import { container } from 'org.eclipse.daanse.board.app.lib.core';
 import {
   WidgetRepository,
@@ -32,14 +32,25 @@ const { widget } = defineProps<{ widget: any; editEnabled: boolean }>();
 const emit = defineEmits(['openSettings', 'removeWidget'])
 
 const registeredWidgets = container.get<WidgetRepository>(WidgetIdentifier)
-console.log('registeredWidgets', container);
+
+/*
+ * The repository is deliberately framework-free, so its record is not
+ * reactive. This counter bridges the gap: every registration change bumps
+ * it, and the computeds below list it as a dependency. Without this, a
+ * widget whose bundle stops would keep rendering stale code instead of
+ * showing the placeholder - and never come back on restart.
+ */
+const registryVersion = ref(0)
+const unsubscribe = registeredWidgets.onChange?.(() => { registryVersion.value++ })
+onUnmounted(() => unsubscribe?.())
 
 const isWidgetRegistered = computed(() => {
+  void registryVersion.value
   return registeredWidgets.getWidget(widget.type)
 })
 
 const availableWidgets = computed(() => {
-  console.log(registeredWidgets.getAllWidgets())
+  void registryVersion.value
   return registeredWidgets.getAllWidgets()
 })
 

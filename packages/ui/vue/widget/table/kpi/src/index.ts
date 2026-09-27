@@ -1,5 +1,5 @@
 /*********************************************************************
- * Copyright (c) 2025 Contributors to the Eclipse Foundation.
+ * Copyright (c) 2026 Contributors to the Eclipse Foundation.
  *
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
@@ -11,36 +11,52 @@
  *   Smart City Jena
  **********************************************************************/
 
-import { type WidgetRepository, WIDGET_REPOSITORY } from 'org.eclipse.daanse.board.app.lib.repository.widget'
+import { component, inject, activate, deactivate } from '@eclipse-daanse/tsm/decorators'
 import Icon from './assets/data_table.svg'
 import KpiTableWidget from './KpiTableWidget.vue'
 import KpiTableWidgetSettings from './KpiTableWidgetSettings.vue'
-import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
-
-import { EventRegistry, EVENT_REGISTRY_ID, EventActionsRegistry, EVENT_ACTIONS_REGISTRY_ID } from 'org.eclipse.daanse.board.app.lib.events'
 import { KpiTableWidgetEvents } from './events/KpiTableWidgetEvents'
 import { KpiTableWidgetInterface } from './api/KpiTableWidgetInterface'
+import type { EventRegistry, EventActionsRegistry } from 'org.eclipse.daanse.board.app.lib.events'
+import type { WidgetProvider } from 'org.eclipse.daanse.board.app.lib.repository.widget'
 
-export function activate({ services }: ActivationContext) {
-  services.getRequired<WidgetRepository>(WIDGET_REPOSITORY).registerWidget('KpiTableWidget', {
-    component: KpiTableWidget,
-    settingsComponent: KpiTableWidgetSettings,
-    supportedDSTypes: ['csv', 'rest'],
-    icon: Icon,
-    name: 'KpiTable'
-  })
+/*
+ * Literal on purpose: the tsm plugin derives the manifest's provides at
+ * build time and cannot evaluate an imported constant. Must match
+ * WIDGET_SERVICE_ID in lib.repository.widget.
+ */
+const WIDGET_SERVICE = 'daanse.widget'
 
-  const eventRegistry = services.getRequired<EventRegistry>(EVENT_REGISTRY_ID)
-  eventRegistry.registerWidget('KpiTableWidget', KpiTableWidgetEvents)
+const WIDGET_TYPE = 'KpiTableWidget'
 
-  const actionsRegistry = services.getRequired<EventActionsRegistry>(EVENT_ACTIONS_REGISTRY_ID)
-  actionsRegistry.registerWidgetType('KpiTableWidget', KpiTableWidgetInterface, 'widget')
-}
+@component({
+  service: [WIDGET_SERVICE],
+  properties: { 'widget.type': WIDGET_TYPE },
+})
+export class KpiTableWidgetProvider implements WidgetProvider {
+  readonly type = WIDGET_TYPE
+  readonly component = KpiTableWidget
+  readonly settingsComponent = KpiTableWidgetSettings
+  readonly supportedDSTypes = ['csv', 'rest']
+  readonly icon = Icon
+  readonly name = 'KpiTable'
 
-export function deactivate({ services }: ActivationContext) {
-  services.getRequired<WidgetRepository>(WIDGET_REPOSITORY).unregisterWidget('KpiTableWidget')
-  services.getRequired<EventRegistry>(EVENT_REGISTRY_ID).unregisterWidget('KpiTableWidget')
-  services.getRequired<EventActionsRegistry>(EVENT_ACTIONS_REGISTRY_ID).unregisterWidgetType('KpiTableWidget')
+  constructor(
+    @inject('EventRegistry') private readonly events: EventRegistry,
+    @inject('EventActionsRegistry') private readonly actions: EventActionsRegistry,
+  ) {}
+
+  @activate()
+  register(): void {
+    this.events.registerWidget(WIDGET_TYPE, KpiTableWidgetEvents)
+    this.actions.registerWidgetType(WIDGET_TYPE, KpiTableWidgetInterface, 'widget')
+  }
+
+  @deactivate()
+  unregister(): void {
+    this.events.unregisterWidget(WIDGET_TYPE)
+    this.actions.unregisterWidgetType(WIDGET_TYPE)
+  }
 }
 
 export { KpiTableWidget, KpiTableWidgetSettings }

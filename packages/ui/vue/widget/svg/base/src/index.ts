@@ -1,5 +1,5 @@
 /*********************************************************************
- * Copyright (c) 2025 Contributors to the Eclipse Foundation.
+ * Copyright (c) 2026 Contributors to the Eclipse Foundation.
  *
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
@@ -11,51 +11,69 @@
  *   Smart City Jena
  **********************************************************************/
 
+import { component, inject, activate, deactivate } from '@eclipse-daanse/tsm/decorators'
 import SvgWidget from './SvgWidget.vue'
 import SvgWidgetSettings from './SvgWidgetSettings.vue'
-import { type WidgetRepository, WIDGET_REPOSITORY } from 'org.eclipse.daanse.board.app.lib.repository.widget'
 import Icon from './assets/svg_icon.svg'
-import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
+import { SVGWidgetEvents } from './events/SVGWidgetEvents'
+import { SvgWidgetInterface } from './api/SvgWidgetInterface'
+import type { EventRegistry, EventActionsRegistry } from 'org.eclipse.daanse.board.app.lib.events'
+import type { WidgetProvider } from 'org.eclipse.daanse.board.app.lib.repository.widget'
 
 interface ISvgSettings {
   src: string
   classesConfig: Config
 }
-
 interface Config {
   [className: string]: ConfigItem
 }
-
 interface ConfigItem {
   fill: string
   stroke: string
   strokeWidth: string
 }
 
-import { EventRegistry, EVENT_REGISTRY_ID, EventActionsRegistry, EVENT_ACTIONS_REGISTRY_ID } from 'org.eclipse.daanse.board.app.lib.events'
-import { SVGWidgetEvents } from './events/SVGWidgetEvents'
-import { SvgWidgetInterface } from './api/SvgWidgetInterface'
+/*
+ * Literal on purpose: the tsm plugin derives the manifest's provides at
+ * build time and cannot evaluate an imported constant. Must match
+ * WIDGET_SERVICE_ID in lib.repository.widget.
+ */
+const WIDGET_SERVICE = 'daanse.widget'
 
-export function activate({ services }: ActivationContext) {
-  services.getRequired<WidgetRepository>(WIDGET_REPOSITORY).registerWidget('SVGWidget', {
-    component: SvgWidget,
-    settingsComponent: SvgWidgetSettings,
-    supportedDSTypes: [],
-    icon: Icon,
-    name: 'SVG'
-  })
+const WIDGET_TYPE = 'SVGWidget'
 
-  const eventRegistry = services.getRequired<EventRegistry>(EVENT_REGISTRY_ID)
-  eventRegistry.registerWidget('SVGWidget', SVGWidgetEvents)
+/**
+ * Declared component: the loader registers it under WIDGET_SERVICE, the
+ * WidgetRepository tracks it into the palette, unloading withdraws it.
+ */
+@component({
+  service: [WIDGET_SERVICE],
+  properties: { 'widget.type': WIDGET_TYPE },
+})
+export class SVGWidgetProvider implements WidgetProvider {
+  readonly type = WIDGET_TYPE
+  readonly component = SvgWidget
+  readonly settingsComponent = SvgWidgetSettings
+  readonly supportedDSTypes = []
+  readonly icon = Icon
+  readonly name = 'SVG'
 
-  const actionsRegistry = services.getRequired<EventActionsRegistry>(EVENT_ACTIONS_REGISTRY_ID)
-  actionsRegistry.registerWidgetType('SVGWidget', SvgWidgetInterface, 'widget')
-}
+  constructor(
+    @inject('EventRegistry') private readonly events: EventRegistry,
+    @inject('EventActionsRegistry') private readonly actions: EventActionsRegistry,
+  ) {}
 
-export function deactivate({ services }: ActivationContext) {
-  services.getRequired<WidgetRepository>(WIDGET_REPOSITORY).unregisterWidget('SVGWidget')
-  services.getRequired<EventRegistry>(EVENT_REGISTRY_ID).unregisterWidget('SVGWidget')
-  services.getRequired<EventActionsRegistry>(EVENT_ACTIONS_REGISTRY_ID).unregisterWidgetType('SVGWidget')
+  @activate()
+  register(): void {
+    this.events.registerWidget(WIDGET_TYPE, SVGWidgetEvents)
+    this.actions.registerWidgetType(WIDGET_TYPE, SvgWidgetInterface, 'widget')
+  }
+
+  @deactivate()
+  unregister(): void {
+    this.events.unregisterWidget(WIDGET_TYPE)
+    this.actions.unregisterWidgetType(WIDGET_TYPE)
+  }
 }
 
 export { SvgWidget, SvgWidgetSettings }

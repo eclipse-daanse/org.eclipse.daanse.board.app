@@ -3,10 +3,10 @@
     "sourceMap": true,
     "declarationMap": true,
     "inlineSources": true,
-    "target": "ESNext",
+    "target": "es2022",
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
-    "module": "ESNext",
+    "module": "esnext",
     "moduleResolution": "bundler",
     "declaration": true,
     "outDir": "./dist/types",
@@ -16,5 +16,8 @@
     "skipLibCheck": true,
     "jsx": "preserve"
   },
-  "include": ["src/**/*.ts", "src/**/*.vue"]
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.vue"
+  ]
 }
