@@ -8102,9 +8102,9 @@ inversify@7.11.0:
     "@inversifyjs/core" "9.2.0"
 
 ip-address@^10.0.1, ip-address@^10.2.0:
-  version "10.2.0"
-  resolved "https://registry.yarnpkg.com/ip-address/-/ip-address-10.2.0.tgz#805fc178b20c518bd4c8548b24fe30892d7f3206"
-  integrity sha512-/+S6j4E9AHvW9SWMSEY9Xfy66O5PWvVEJ08O0y5JGyEKQpojb0K0GKpz/v5HJ/G0vi3D2sjGK78119oXZeE0qA==
+  version "10.5.1"
+  resolved "https://registry.yarnpkg.com/ip-address/-/ip-address-10.5.1.tgz#6a4793078537de6c82e61d6eadb2914813d23b00"
+  integrity sha512-EXujUp9jyOI/chPgtqk6uy7fDq8AeCB/WlfEuPg9LN0fN9lzKAKfuDYi60SMhHwgUiEhZvVYsbGZN+RUU1INiA==
 
 is-arrayish@^0.2.1:
   version "0.2.1"
