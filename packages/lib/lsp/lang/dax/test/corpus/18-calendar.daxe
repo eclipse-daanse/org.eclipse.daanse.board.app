@@ -1,0 +1,6 @@
+// Source: https://learn.microsoft.com/en-us/dax/calendar-function-dax (example 1)
+// Construct: DATE calls as arguments.
+// Expect: parse
+// Reference: accepts
+// Normalized: as published, less the `Name =` that makes it a measure definition.
+CALENDAR (DATE (2015, 1, 1), DATE (2021, 12, 31))

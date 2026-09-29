@@ -1,0 +1,12 @@
+// Source: https://learn.microsoft.com/en-us/dax/isnumber-function-dax (example 1)
+// Construct: A number with an exponent: 3.1E-1.
+// Expect: parse
+// Reference: rejects - Encountered an error at (or somewhere around) input:9:24
+// Divergence: number with exponent
+// Normalized: as published.
+EVALUATE
+{
+    IF ( ISNUMBER ( 0 ), "Is number", "Is Not number" ), // RETURNS: Is number
+    IF ( ISNUMBER ( 3.1E-1 ), "Is number", "Is Not number" ), // RETURNS: Is number
+    IF ( ISNUMBER ( "42" ), "Is number", "Is Not number" ) // RETURNS: Is Not number
+}

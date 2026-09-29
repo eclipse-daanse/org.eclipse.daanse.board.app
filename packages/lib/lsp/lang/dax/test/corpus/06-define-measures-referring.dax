@@ -1,0 +1,27 @@
+// Source: https://learn.microsoft.com/en-us/dax/dax-queries
+// Construct: DEFINE MEASUREs that refer to each other; a bare table name as an argument.
+// Expect: parse
+// Reference: accepts
+// Normalized: as published.
+DEFINE
+	MEASURE 'Pick a sales measure'[Orders] = DISTINCTCOUNT('Sales Order'[Sales Order])
+	MEASURE 'Pick a sales measure'[Customers] = CALCULATE(
+			COUNTROWS(Customer),
+			FILTER(
+				'Sales',
+				[Orders] > 0
+			)
+		)
+	MEASURE 'Pick a sales measure'[Orders per Customer] = DIVIDE(
+			[Orders],
+			[Customers],
+			0
+		)
+
+EVALUATE
+	SUMMARIZECOLUMNS(
+		'Date'[Fiscal Year],
+		"Orders", [Orders],
+		"Customers", [Customers],
+		"Orders per Customer", [Orders per Customer]
+	)

@@ -1,0 +1,6 @@
+// Source: https://learn.microsoft.com/en-us/dax/mid-function-dax (example 1)
+// Construct: One `)` too many.
+// Expect: reject
+// Reference: rejects - Encountered an error at (or somewhere around) input:5:17
+// Normalized: as published, less the `Name =` that makes it a measure definition.
+MID("abcde",2,3))

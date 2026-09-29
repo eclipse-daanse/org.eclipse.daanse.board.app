@@ -1,0 +1,10 @@
+// Source: https://learn.microsoft.com/en-us/dax/dax-syntax-reference
+// Construct: dt"..." datetime literals and &&.
+// Expect: parse
+// Reference: accepts
+// Normalized: as published.
+EVALUATE
+FILTER (
+        FactInternetSales,
+        [OrderDate] > dt"2015-1-9T02:30:00" && [OrderDate] < dt"2015-12-31T11:59:59"
+)

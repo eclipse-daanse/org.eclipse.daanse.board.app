@@ -1,0 +1,14 @@
+// Source: https://learn.microsoft.com/en-us/dax/find-function-dax (example 1)
+// Construct: IN with a table constructor.
+// Expect: parse
+// Reference: accepts
+// Normalized: as published.
+EVALUATE
+CALCULATETABLE (
+    ADDCOLUMNS (
+        TOPN ( 10, SUMMARIZE ( 'Reseller', [Reseller], [Business Type] ) ),
+        "Position of Bike", FIND ( "Bike", 'Reseller'[Reseller], 1, BLANK () )
+    ),
+    'Reseller'[Business Type]
+        IN { "Specialty Bike Shop", "Value Added Reseller", "Warehouse" }
+)

@@ -1,0 +1,6 @@
+// Source: https://learn.microsoft.com/en-us/dax/dax-operator-reference
+// Construct: * before +.
+// Expect: parse
+// Reference: accepts
+// Normalized: as published, less the leading `=`.
+5+2*3

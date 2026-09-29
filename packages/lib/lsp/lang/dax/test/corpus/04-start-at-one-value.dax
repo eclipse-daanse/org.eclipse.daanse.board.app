@@ -1,0 +1,10 @@
+// Source: https://learn.microsoft.com/en-us/dax/dax-queries
+// Construct: START AT with one value for one ORDER BY column.
+// Expect: parse
+// Reference: accepts
+// Normalized: as published.
+EVALUATE
+	'Sales Order'
+	ORDER BY 'Sales Order'[Sales Order] ASC
+	// Start at this order, orders before this order will not be displayed
+	START AT "SO43661"

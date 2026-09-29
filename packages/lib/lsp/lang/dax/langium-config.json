@@ -1,0 +1,18 @@
+{
+    "projectName": "Dax",
+    "languages": [
+        {
+            "id": "dax-query",
+            "grammar": "src/language/dax-query.langium",
+            "fileExtensions": [".dax"],
+            "caseInsensitive": true
+        },
+        {
+            "id": "dax-formula",
+            "grammar": "src/language/dax-formula.langium",
+            "fileExtensions": [".daxe"],
+            "caseInsensitive": true
+        }
+    ],
+    "out": "src/language/generated"
+}

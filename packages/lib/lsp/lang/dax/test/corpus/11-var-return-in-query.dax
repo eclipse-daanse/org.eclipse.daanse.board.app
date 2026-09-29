@@ -1,0 +1,18 @@
+// Source: https://learn.microsoft.com/en-us/dax/datediff-function-dax (example 1)
+// Construct: VAR ... RETURN inside a query.
+// Expect: parse
+// Reference: accepts
+// Normalized: as published.
+EVALUATE
+VAR StartDate =
+    DATE ( 2019, 07, 01 )
+VAR EndDate =
+    DATE ( 2021, 12, 31 )
+RETURN
+    {
+        ( "Year", DATEDIFF ( StartDate, EndDate, YEAR ) ),
+        ( "Quarter", DATEDIFF ( StartDate, EndDate, QUARTER ) ),
+        ( "Month", DATEDIFF ( StartDate, EndDate, MONTH ) ),
+        ( "Week", DATEDIFF ( StartDate, EndDate, WEEK ) ),
+        ( "Day", DATEDIFF ( StartDate, EndDate, DAY ) )
+    }

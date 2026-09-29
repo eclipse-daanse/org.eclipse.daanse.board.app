@@ -1,0 +1,7 @@
+// A measure expression with variables: growth over the previous year.
+VAR Current =
+    SUM ( 'Sales'[Amount] )
+VAR Previous =
+    CALCULATE ( SUM ( 'Sales'[Amount] ), SAMEPERIODLASTYEAR ( 'Date'[Date] ) )
+RETURN
+    IF ( Previous = 0, BLANK (), ( Current - Previous ) / Previous )
