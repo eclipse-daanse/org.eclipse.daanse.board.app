@@ -1,0 +1,11 @@
+// Source: https://learn.microsoft.com/en-us/dax/containsrow-function-dax
+// Construct: A row of values IN a table of rows.
+// Expect: parse
+// Reference: rejects - Encountered an error at (or somewhere around) input:9:23
+// Divergence: row IN
+// Normalized: written from the documented syntax `( <scalarExpr1>, <scalarExpr2>, … ) IN <tableExpr>`.
+EVALUATE
+FILTER (
+    ALL ( 'Product'[Color], 'Product'[Size] ),
+    ( 'Product'[Color], 'Product'[Size] ) IN { ( "Red", "L" ), ( "Blue", "M" ) }
+)

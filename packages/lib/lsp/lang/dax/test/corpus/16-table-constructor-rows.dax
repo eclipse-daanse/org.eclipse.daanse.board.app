@@ -1,0 +1,6 @@
+// Source: https://learn.microsoft.com/en-us/dax/bitand-function-dax (example 1)
+// Construct: A table constructor as the whole query.
+// Expect: parse
+// Reference: accepts
+// Normalized: as published.
+EVALUATE { BITAND(13, 11) }

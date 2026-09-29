@@ -1,0 +1,7 @@
+// Source: https://learn.microsoft.com/en-us/dax/evaluate-statement-dax
+// Construct: EVALUATE of a quoted table name.
+// Expect: parse
+// Reference: accepts
+// Normalized: as published.
+EVALUATE
+    'Internet Sales'
