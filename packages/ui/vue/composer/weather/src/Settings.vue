@@ -11,7 +11,7 @@ Contributors:
     Smart City Jena
 -->
 <script setup lang="ts">
-import { ref, computed, watch } from 'vue'
+import { inject, ref, computed, watch } from 'vue'
 import { container } from 'org.eclipse.daanse.board.app.lib.core'
 import { identifier, DatasourceRepository } from 'org.eclipse.daanse.board.app.lib.repository.datasource'
 
@@ -42,7 +42,7 @@ async function loadAvailableThings() {
 
   isLoadingThings.value = true
   try {
-    const datasourceRepository = container.get(identifier) as DatasourceRepository
+    const datasourceRepository = inject<DatasourceRepository>(identifier)!
     const allThings: Array<{ iotId: string; name: string }> = []
 
     for (const datasourceId of config.connectedDatasources) {

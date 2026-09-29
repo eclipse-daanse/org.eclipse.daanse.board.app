@@ -580,9 +580,12 @@ const resetToDefaults = () => {
 };
 
 // Initialize settings
+const injectedVariableRepository = inject<VariableRepository>(variableIdentifier)
+
 onMounted(() => {
   try {
-    variableRepository.value = container.get<VariableRepository>(variableIdentifier);
+    variableRepository.value = injectedVariableRepository ?? null;
+    if (!variableRepository.value) throw new Error('VariableRepository not provided');
   } catch (error) {
     console.warn('VariableRepository not found in container:', error);
   }

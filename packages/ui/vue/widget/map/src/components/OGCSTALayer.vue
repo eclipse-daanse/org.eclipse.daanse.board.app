@@ -9,7 +9,7 @@ Contributors: Smart City Jena
 
 -->
 <script lang="ts" setup>
-import { ref, computed, onErrorCaptured, toRaw, type Ref } from 'vue'
+import { inject, ref, computed, onErrorCaptured, toRaw, type Ref } from 'vue'
 import { LGeoJson, LMarker, LIcon, LTooltip } from '@vue-leaflet/vue-leaflet'
 import { type BoxedDatastream } from 'org.eclipse.daanse.board.app.lib.datasource.ogcsta'
 import L from 'leaflet'
@@ -63,7 +63,7 @@ onErrorCaptured((err) => {
   }
 })
 
-const eventBus = container.get<TinyEmitter>(identifiers.TINY_EMITTER)
+const eventBus = inject<TinyEmitter>(identifiers.TINY_EMITTER)!
 
 // Pre-compute all matched things and datastreams in a flat list
 // This eliminates O(renderers × locations × things × datastreams × ds_renderers) template evaluations

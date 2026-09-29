@@ -29,8 +29,9 @@ const weatherComposerConfig: IWeatherComposerConfiguration = {
 
 // Usage in a widget or application
 //@ts-ignore
-async function useWeatherComposer() {
-  const weatherComposer = new WeatherComposer()
+async function useWeatherComposer(datasourceRepository: never) {
+  // In real code the repository comes from the registry (see this package's activate)
+  const weatherComposer = new WeatherComposer(datasourceRepository)
   weatherComposer.init(weatherComposerConfig)
 
   // Get weather data for all Things

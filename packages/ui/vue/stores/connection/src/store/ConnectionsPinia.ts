@@ -12,7 +12,6 @@
  **********************************************************************/
 import { ref } from 'vue'
 import { defineStore } from 'pinia'
-import { container } from 'org.eclipse.daanse.board.app.lib.core'
 import {
   ConnectionRepository,
   identifier,
@@ -29,6 +28,20 @@ export interface ConnectionDTO {
   }
 }
 
+let repository: ConnectionRepository | undefined
+
+/** Called by this package's activate - dependency injection at the module boundary. */
+export function provideRepository(instance: ConnectionRepository): void {
+  repository = instance
+}
+
+function requireRepository(): ConnectionRepository {
+  if (!repository) {
+    throw new Error('ConnectionRepository not provided - is the ui.vue.stores.connection module active?')
+  }
+  return repository
+}
+
 export const useConnectionsStore = defineStore('connections', () => {
 
   const connections = ref([
@@ -41,7 +54,12 @@ export const useConnectionsStore = defineStore('connections', () => {
       },
     },
   ] as ConnectionDTO[])
-  const connectionRepository = container.get<ConnectionRepository>(identifier)
+  /*
+   * Injected at module activation (see ../index.ts). The store is a global
+   * singleton and may be first used outside component setup, so Vue's
+   * inject() is not available here.
+   */
+  const connectionRepository = requireRepository()
 
   const createConnection = (type: any, config: any = {}) => {
     const uid = Math.random().toString(36).substring(7)

@@ -30,7 +30,7 @@ const opened = ref({
 
 const widgetSettings = defineModel<TextSettings>({ required: true })
 console.log(widgetSettings)
-const variableRepository = container.get<VariableRepository>(identifier)
+const variableRepository = inject<VariableRepository>(identifier)!
 
 const i18n: i18n | undefined = inject('i18n');
 const t = (key: string) => (i18n) ? i18n.t(key) : key;

@@ -18,12 +18,35 @@ import { type VariableRepository, identifier }
 import { identifiers } from 'org.eclipse.daanse.board.app.lib.core';
 import { TinyEmitter } from 'tiny-emitter';
 import { type Variable, VariableEvents } from 'org.eclipse.daanse.board.app.lib.variables'
-import { container } from 'org.eclipse.daanse.board.app.lib.core';
+
+interface VariablesStoreDependencies {
+  repository: VariableRepository
+  eventBus: TinyEmitter
+}
+
+let dependencies: VariablesStoreDependencies | undefined
+
+/** Called by app.pages' activate - dependency injection at the module boundary. */
+export function provideVariablesStoreDependencies(d: VariablesStoreDependencies): void {
+  dependencies = d
+}
+
+function requireDependencies(): VariablesStoreDependencies {
+  if (!dependencies) {
+    throw new Error('variables store dependencies not provided - is app.pages active?')
+  }
+  return dependencies
+}
 
 export const useVariablesStore = defineStore('variables', () =>{
     const variables = ref([] as any[]);
-    const variableRepositoryInst = container.get<VariableRepository>(identifier)
-    const eventBus = container.get<TinyEmitter>(identifiers.TINY_EMITTER);
+    /*
+     * Injected at app.pages activation. The store is a global singleton and
+     * may be first used outside component setup, so Vue's inject() is not
+     * available here.
+     */
+    const variableRepositoryInst = requireDependencies().repository
+    const eventBus = requireDependencies().eventBus
 
     eventBus.on(VariableEvents.VariableUpdated, () => {
         updateVariables();

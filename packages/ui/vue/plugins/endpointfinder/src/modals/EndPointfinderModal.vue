@@ -52,7 +52,7 @@ const { connections, createConnection } = useConnectionsStore()
 const { dataSources, createDataSource,updateDataSource } = useDataSourcesStore()
 
 
-const registeredWidgets = container.get<WidgetRepository>(widgetRepoIdentifier)
+const registeredWidgets = inject<WidgetRepository>(widgetRepoIdentifier)!
 
 const widgetOptions = ref<any[]>([]) // z.B. aus einer Factory basierend auf store.type
 const selectedWidgets = ref<any[]>([])
@@ -135,8 +135,8 @@ const search = async () => {
 }
 
 
-const connectionManager = container.get<ConnectionRepository>(identifier)
-const storeManager = container.get<DatasourceRepository>(DataSourceIdentifier)
+const connectionManager = inject<ConnectionRepository>(identifier)!
+const storeManager = inject<DatasourceRepository>(DataSourceIdentifier)!
 const types = storeManager.getDataSourceTypes()
 let ds = ref<ConnectionDTO | undefined>()
 const ds_type = ref('rest')
@@ -249,12 +249,12 @@ const createStoreFromFormat = (format: string, aconnection: string, aresourceUri
 
 const getComponent = computed(() => {
   const identifiers = storeManager.getDatasourceIdentifiers(store.value.type)
-  return container.get(identifiers.Settings)
+  return storeManager.resolveIdentifier(identifiers.Settings)
 })
 const getComponentConnection = computed(() => {
   if (!ds.value) return null
   const identifiers = connectionManager.getConnectionIdentifiers((ds.value as any).type)
-  return container.get(identifiers.Settings)
+  return connectionManager.resolveIdentifier(identifiers.Settings)
 })
 const finish = () => {
 

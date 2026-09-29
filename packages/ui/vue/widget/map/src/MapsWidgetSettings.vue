@@ -219,7 +219,7 @@ const services = computedAsync(async () => {
   for (const id of allDatasourceIds) {
     if (!id) continue
 
-    const datasourceRepository = container.get<DatasourceRepository>(identifier)
+    const datasourceRepository = inject<DatasourceRepository>(identifier)!
 
     try {
       const OGCStore = datasourceRepository.getDatasource(id)

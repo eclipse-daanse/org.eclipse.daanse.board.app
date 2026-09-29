@@ -38,7 +38,7 @@ describe('lib.datasource.rest', () => {
   let services: BoardServiceRegistry
   let repositoryAttrappe: { getConnection: (id: string) => unknown }
 
-  beforeEach(() => {
+  beforeEach(async () => {
     /*
      * Der echte Container aus lib.core, nicht ein eigener: der
      * Service-Locator in ComputedStoreParameter greift auf genau diesen zu,
@@ -56,6 +56,10 @@ describe('lib.datasource.rest', () => {
      */
     services.register('VariableRepository', { getVariable: () => undefined })
     services.register('TINY_EMITTER', { on() {}, off() {}, emit() {} })
+    // Since the locator cleanup, ComputedStoreParameter instances come from
+    // lib.variables' activate - the test boots it like the runtime does.
+    const variables = await import('org.eclipse.daanse.board.app.lib.variables')
+    variables.activate({ services, log: { debug() {}, info() {}, warn() {}, error() {} } })
     activate({ services, log: { debug() {}, info() {}, warn() {}, error() {} } })
   })
 

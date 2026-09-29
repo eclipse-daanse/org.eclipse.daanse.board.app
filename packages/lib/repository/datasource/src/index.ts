@@ -28,7 +28,7 @@ const identifier = Symbol.for(DATASOURCE_REPOSITORY)
 
 /** Singleton ohne eigene Abhaengigkeiten - siehe lib.repository.connection. */
 export function activate({ services }: ActivationContext) {
-  services.register(DATASOURCE_REPOSITORY, new DatasourceRepository())
+  services.register(DATASOURCE_REPOSITORY, new DatasourceRepository(services))
 }
 
 export function deactivate({ services }: ActivationContext) {

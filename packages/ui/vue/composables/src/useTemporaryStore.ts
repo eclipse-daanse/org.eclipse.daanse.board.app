@@ -14,18 +14,17 @@ import {
   DatasourceRepository,
   identifier as repositoryIdentifier,
 } from 'org.eclipse.daanse.board.app.lib.repository.datasource'
-import { onMounted, watch, onBeforeUnmount, Ref } from 'vue'
-import { container } from 'org.eclipse.daanse.board.app.lib.core'
+import { onMounted, watch, onBeforeUnmount, inject, Ref } from 'vue'
 
 export function useTemporaryStore(
   type: string,
   settings: Ref<any>,
   tempStore: Ref<any>,
 ) {
-  console.log('Container for useTemporaryStore', container)
-  const datasourceRepository =
-    container.get<DatasourceRepository>(repositoryIdentifier)
-  console.log('Using datasource repository', datasourceRepository)
+  const datasourceRepository = inject<DatasourceRepository>(repositoryIdentifier)
+  if (!datasourceRepository) {
+    throw new Error('DatasourceRepository not provided')
+  }
   const identifiers = datasourceRepository.getDatasourceIdentifiers(type)
   console.log('Identifiers for datasource type', type, identifiers)
 
@@ -36,7 +35,7 @@ export function useTemporaryStore(
       'with settings',
       settings.value,
     )
-    const factory = container.get(identifiers.Store) as any
+    const factory = datasourceRepository.resolveIdentifier(identifiers.Store) as any
     // Mark as temporary preview - factories should not register these in EventActionsRegistry
     tempStore.value = factory({ ...settings.value.config, _isTemporaryPreview: true })
   })
@@ -46,7 +45,7 @@ export function useTemporaryStore(
 
     tempStore.value = null
 
-    const factory = container.get(identifiers.Store) as any
+    const factory = datasourceRepository.resolveIdentifier(identifiers.Store) as any
 
     // Mark as temporary preview - factories should not register these in EventActionsRegistry
     const newStore = factory({ ...settings.value.config, _isTemporaryPreview: true })

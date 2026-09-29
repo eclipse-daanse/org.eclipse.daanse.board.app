@@ -12,7 +12,7 @@ Contributors:
 -->
 
 <script lang="ts" setup>
-import { ref, computed, onMounted, onUnmounted, watch } from 'vue'
+import { inject, ref, computed, onMounted, onUnmounted, watch } from 'vue'
 import { LGeoJson, LCircleMarker } from '@vue-leaflet/vue-leaflet'
 import { container } from 'org.eclipse.daanse.board.app.lib.core'
 import {
@@ -73,7 +73,7 @@ async function loadData() {
 
   try {
     const dsRepo =
-      container.get<DatasourceRepository>(identifier)
+      inject<DatasourceRepository>(identifier)!
     const ds = dsRepo.getDatasource(
       props.datasourceId,
     ) as IDataRetrieveable

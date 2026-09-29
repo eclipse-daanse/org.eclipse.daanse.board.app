@@ -12,7 +12,7 @@ Contributors:
 -->
 
 <script setup lang="ts">
-import { onMounted, ref, computed, watch } from 'vue';
+import { inject, onMounted, ref, computed, watch } from 'vue';
 import { container } from 'org.eclipse.daanse.board.app.lib.core'
 import { identifier, VariableRepository } from 'org.eclipse.daanse.board.app.lib.repository.variable'
 import { VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables'
@@ -38,7 +38,7 @@ watch(() => model.value?.isSet, (isSet) => {
 }, { immediate: true });
 
 onMounted(() => {
-  const variableRepository = container.get<VariableRepository>(identifier)
+  const variableRepository = inject<VariableRepository>(identifier)!
   options.value = variableRepository.getAllVariables().map(([name, value]) => {
     const variable = variableRepository.getVariable(name);
 
@@ -50,7 +50,7 @@ onMounted(() => {
 })
 
 const getVariableValue = (name: string) => {
-  const variableRepository = container.get<VariableRepository>(identifier)
+  const variableRepository = inject<VariableRepository>(identifier)!
   const variable = variableRepository.getVariable(name);
   return variable ? variable.value : null;
 }
@@ -65,7 +65,7 @@ const onChange = (e: any) => {
 const setVariable = (v: VariableOption) => {
   if (!model.value) return;
   const name = v.label;
-  const variableRepository = container.get<VariableRepository>(identifier)
+  const variableRepository = inject<VariableRepository>(identifier)!
   const variable = variableRepository.getVariable(name);
 
   model.value.setTo(variable);
@@ -76,7 +76,7 @@ const selectModel = computed(() => {
   let variable = null as null | VariableWrapper<any>;
 
   if (name) {
-    const variableRepository = container.get<VariableRepository>(identifier)
+    const variableRepository = inject<VariableRepository>(identifier)!
     variable = variableRepository.getVariable(name);
   }
 

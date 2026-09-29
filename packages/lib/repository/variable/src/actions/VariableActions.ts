@@ -12,7 +12,6 @@
  **********************************************************************/
 
 import { EventActionsRegistry, EVENT_ACTIONS_REGISTRY } from 'org.eclipse.daanse.board.app.lib.events';
-import { container } from 'org.eclipse.daanse.board.app.lib.core';
 import { loggerFactory } from 'org.eclipse.daanse.board.app.lib.logger';
 import { VariableRepository } from '../classes/VariableRepository';
 import VariableActionsModelContent from '../../model/VariableActions.ecore?raw';
@@ -24,9 +23,14 @@ const log = loggerFactory.createLogger('daanse:variable:actions');
 /**
  * Registers all variable-related actions (system and page level)
  */
-export function registerVariableActions() {
-  const actionsRegistry = container.get<EventActionsRegistry>(EVENT_ACTIONS_REGISTRY);
-  const variableRepository = container.get<VariableRepository>(VariableRepositoryIdentifier);
+/**
+ * Dependencies arrive as parameters from the module's activate - the one
+ * place that legitimately holds the registry.
+ */
+export function registerVariableActions(
+  actionsRegistry: EventActionsRegistry,
+  variableRepository: VariableRepository,
+) {
 
   // Register Variable Actions metadata from Ecore model with correct context
   actionsRegistry.registerActionsFromEcoreString(
