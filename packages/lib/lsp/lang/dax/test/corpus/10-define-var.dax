@@ -1,0 +1,14 @@
+// Source: https://learn.microsoft.com/en-us/dax/ispmt-function-dax (example 1)
+// Construct: DEFINE VAR used by a later EVALUATE.
+// Expect: parse
+// Reference: accepts
+// Normalized: as published.
+DEFINE
+VAR NumPaymentPeriods = 4
+VAR PaymentPeriods = GENERATESERIES(0, NumPaymentPeriods-1)
+EVALUATE
+ADDCOLUMNS (
+  PaymentPeriods,
+  "Interest Payment",
+  ISPMT(0.1, [Value], NumPaymentPeriods, 4000)
+)

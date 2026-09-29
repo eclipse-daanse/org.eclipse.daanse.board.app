@@ -1,0 +1,6 @@
+// Source: https://learn.microsoft.com/en-us/dax/stdevx-p-function-dax (example 1)
+// Construct: An en dash (U+2013) where a minus is meant.
+// Expect: reject
+// Reference: rejects - Encountered an error at (or somewhere around) input:5:7
+// Normalized: as published, less the `Name =` that makes it a measure definition.
+STDEVX.P(RELATEDTABLE(InternetSales_USD), InternetSales_USD[UnitPrice_USD] – (InternetSales_USD[DiscountAmount_USD]/InternetSales_USD[OrderQuantity]))
