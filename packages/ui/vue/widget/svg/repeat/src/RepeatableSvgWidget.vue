@@ -20,7 +20,7 @@ import { VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables
 // import { useDatasourceRepository } from "../composables/datasourceRepository";
 
 const props = defineProps<{ datasourceId: string, id?: string }>();
-import { toRefs } from 'vue';
+import { inject, toRefs } from 'vue';
 const { id: widgetId } = toRefs(props);
 const config = defineModel<RepeatableSVGSettings>('configv', { required: true });
 
@@ -29,8 +29,8 @@ import type { TinyEmitter } from 'tiny-emitter';
 import { EventActionsRegistry, EVENT_ACTIONS_REGISTRY } from 'org.eclipse.daanse.board.app.lib.events';
 import { RepeatableSvgWidgetInterface } from './api/RepeatableSvgWidgetInterface';
 
-const eventBus = coreContainer.get<TinyEmitter>(identifiers.TINY_EMITTER);
-const actionsRegistry = coreContainer.get<EventActionsRegistry>(EVENT_ACTIONS_REGISTRY);
+const eventBus = inject<TinyEmitter>(identifiers.TINY_EMITTER)!;
+const actionsRegistry = inject<EventActionsRegistry>(EVENT_ACTIONS_REGISTRY)!;
 
 const route = useRoute();
 const pageId = (route.params.pageid as string) || '';

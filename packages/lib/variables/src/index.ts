@@ -11,9 +11,8 @@
  *   Smart City Jena
  **********************************************************************/
 
-import { Container } from 'inversify'
 import { ComputedVariable, symbol as ComputedVariableSymbol,COMPUTED_VARIABLE } from './classes/ComputedVariable'
-import { ConstantVariable, init as initConstant, symbol as ConstantVariableSymbol,CONSTANT_VARIABLE } from './classes/ConstantVariable'
+import { ConstantVariable, symbol as ConstantVariableSymbol,CONSTANT_VARIABLE } from './classes/ConstantVariable'
 import { QueryVariable, symbol as QueryVariableSymbol } from './classes/QueryVariable'
 import { RequestVariable, symbol as RequestVariableSymbol } from './classes/RequestVariable'
 import { TimeVariable, symbol as TimeVariableSymbol } from './classes/TimeVariable'
@@ -88,15 +87,11 @@ type INewVariableConfig =
   | IPageVariableConfig
   | IVariableConfig
 
-const init = (container: Container) => {
-  // No additional initialization needed
-}
 
 import { Variable, VariableScope, VariableAccessMode } from './classes/Variable'
 import { VariableWrapper, VARIABLEWRAPPER } from './classes/VariableWrapper'
 
 export {
-  init,
   VariableWrapper,
   VARIABLEWRAPPER,
   ComputedVariable,
@@ -130,4 +125,46 @@ export {
   COMPUTED_VARIABLE,
   CONSTANT_VARIABLE,
   DATETIME_PICKER_VARIABLE
+}
+
+import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
+import type { TinyEmitter } from 'tiny-emitter'
+import type { PageContextServiceI } from 'org.eclipse.daanse.board.app.lib.pagecontext.pagecontext_service'
+import type { VariableRepository } from 'org.eclipse.daanse.board.app.lib.repository.variable'
+import type { VariableDependencies } from './classes/Variable'
+import { createConstantVariableFactory } from './classes/ConstantVariable'
+import { createComputedVariableFactory } from './classes/ComputedVariable'
+import { createQueryVariableFactory } from './classes/QueryVariable'
+import { createRequestVariableFactory } from './classes/RequestVariable'
+import { createTimeVariableFactory } from './classes/TimeVariable'
+import { createDateTimePickerVariableFactory } from './classes/DateTimePickerVariable'
+import { provideComputedStoreParameterFactory } from './utils/UsesComputedVariable'
+
+/**
+ * Registers the per-type variable factories under their type ids. The
+ * VariableRepository resolves them through the symbols the variable type
+ * packages hand in - Symbol.for(id), so the symbol's description is the id.
+ *
+ * This replaced import-time container.bind blocks in every class file: the
+ * last load-bearing side-effect import of the application.
+ */
+export function activate({ services }: ActivationContext) {
+  const deps: VariableDependencies = {
+    eventBus: services.get<TinyEmitter>('TINY_EMITTER'),
+    pageContextService: services.get<PageContextServiceI>('PageContext'),
+  }
+
+  services.register(CONSTANT_VARIABLE, createConstantVariableFactory(deps))
+  services.register(COMPUTED_VARIABLE, createComputedVariableFactory(deps))
+  services.register('QueryVariable', createQueryVariableFactory(deps))
+  services.register('RequestVariable', createRequestVariableFactory(deps))
+  services.register('TimeVariable', createTimeVariableFactory(deps))
+  services.register(DATETIME_PICKER_VARIABLE, createDateTimePickerVariableFactory(deps))
+
+  provideComputedStoreParameterFactory(() => {
+    const parameter = new ComputedStoreParameter()
+    parameter.eventBus = deps.eventBus
+    parameter.storage = services.get<VariableRepository>('VariableRepository')
+    return parameter
+  })
 }

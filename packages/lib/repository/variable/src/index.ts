@@ -14,6 +14,8 @@
 import { VariableRepository, type VariableConfig } from './classes/VariableRepository'
 import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
 import { registerVariableActions } from './actions/VariableActions'
+import type { TinyEmitter } from 'tiny-emitter'
+import type { EventActionsRegistry } from 'org.eclipse.daanse.board.app.lib.events'
 
 /** Dienst-ID im Namensraum der ServiceRegistry; `identifier` ist das dazu passende Symbol. */
 const VARIABLE_REPOSITORY = 'VariableRepository'
@@ -26,8 +28,15 @@ const identifier = Symbol.for(VARIABLE_REPOSITORY)
  * Registriert wird die fertige Instanz, damit auch der Rueckfallweg sie sieht.
  */
 export function activate({ services }: ActivationContext) {
-  services.register(VARIABLE_REPOSITORY, services.construct(VariableRepository))
-  registerVariableActions()
+  const repository = new VariableRepository(
+    services,
+    services.get<TinyEmitter>('TINY_EMITTER'),
+  )
+  services.register(VARIABLE_REPOSITORY, repository)
+  registerVariableActions(
+    services.getRequired<EventActionsRegistry>('EventActionsRegistry'),
+    repository,
+  )
 }
 
 export function deactivate({ services }: ActivationContext) {

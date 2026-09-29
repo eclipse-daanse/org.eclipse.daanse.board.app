@@ -13,7 +13,6 @@
 
 import { BaseDatasource, IBaseConnectionConfiguration } from 'org.eclipse.daanse.board.app.lib.datasource.base'
 import { identifier, DatasourceRepository, IDatasourceRepository } from 'org.eclipse.daanse.board.app.lib.repository.datasource';
-import { container } from 'org.eclipse.daanse.board.app.lib.core';
 
 export interface IDataTableComposerConfiguration extends IBaseConnectionConfiguration {
   connectedDatasources: string[];
@@ -24,6 +23,16 @@ export interface IDataTableComposerConfiguration extends IBaseConnectionConfigur
 }
 
 export class DataTableComposer extends BaseDatasource {
+  /**
+   * Dependencies arrive through the constructor - the factory in this
+   * package's activate passes them from the registry. No global lookups.
+   */
+  constructor(
+    private readonly datasourceRepository: DatasourceRepository,
+  ) {
+    super()
+  }
+
   destroy(): void {
     console.log("Destroying DataTableComposer");
   }
@@ -44,9 +53,7 @@ export class DataTableComposer extends BaseDatasource {
       this.notify();
     };
 
-    const datasourceRepository = container.get(
-      identifier,
-    ) as DatasourceRepository;
+    const datasourceRepository = this.datasourceRepository
 
     this.connectedDatasources
       .filter((datasourceId) => datasourceId)
@@ -61,9 +68,7 @@ export class DataTableComposer extends BaseDatasource {
   async getData(type: string): Promise<any> {
     if (!this.composeBy) return null;
 
-    const datasourceRepository = container.get(
-      identifier,
-    ) as DatasourceRepository;
+    const datasourceRepository = this.datasourceRepository
     const data = await Promise.all(
       this.connectedDatasources
         .filter((datasourceId) => datasourceId)

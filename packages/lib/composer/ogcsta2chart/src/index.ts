@@ -48,7 +48,10 @@ export function activate({ services, log }: ActivationContext) {
       )
     }
 
-    const composer = new OGCSTAToChartComposer()
+    const composer = new OGCSTAToChartComposer(
+      services.getRequired('DatasourceRepository'),
+      actionsRegistry,
+    )
     composer.init(config)
 
     // Vorschau-Instanzen bleiben unangemeldet, sonst verdraengen sie die echte

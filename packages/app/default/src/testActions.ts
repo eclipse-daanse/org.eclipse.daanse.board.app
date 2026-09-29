@@ -10,7 +10,6 @@
  * Contributors:
  *   Smart City Jena
  **********************************************************************/
-import { container, identifiers } from 'org.eclipse.daanse.board.app.lib.core';
 import {
   EventActionsRegistry,
   EVENT_ACTIONS_REGISTRY
@@ -27,8 +26,8 @@ class TestActions {
   }
 }
 
-export async function registerTestActions() {
-  const actionsRegistry = container.get<EventActionsRegistry>(EVENT_ACTIONS_REGISTRY);
+export async function registerTestActions(actionsRegistry: EventActionsRegistry) {
+  
 
   actionsRegistry.registerWidgetType('test', TestActions, 'system');
 

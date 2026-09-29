@@ -12,7 +12,7 @@ Contributors:
 -->
 
 <script lang="ts" setup>
-import { nextTick, onMounted, onUnmounted, ref, watch, toRefs } from 'vue';
+import { inject, nextTick, onMounted, onUnmounted, ref, watch, toRefs } from 'vue';
 import { useRoute } from 'vue-router';
 import { container as coreContainer, identifiers } from 'org.eclipse.daanse.board.app.lib.core';
 import type { TinyEmitter } from 'tiny-emitter';
@@ -28,8 +28,8 @@ const config = defineModel<MarkdownWidgetSettings>('configv', { required: true})
 const props = defineProps<{ id?: string }>();
 const { id: widgetId } = toRefs(props);
 
-const eventBus = coreContainer.get<TinyEmitter>(identifiers.TINY_EMITTER);
-const actionsRegistry = coreContainer.get<EventActionsRegistry>(EVENT_ACTIONS_REGISTRY);
+const eventBus = inject<TinyEmitter>(identifiers.TINY_EMITTER)!;
+const actionsRegistry = inject<EventActionsRegistry>(EVENT_ACTIONS_REGISTRY)!;
 
 const route = useRoute();
 const pageId = (route.params.pageid as string) || '';

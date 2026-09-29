@@ -12,7 +12,7 @@ Contributors:
 -->
 
 <script lang="ts" setup>
-import { onMounted, ref, watch, type Ref, computed, toRefs, onBeforeUnmount, nextTick } from 'vue'
+import { inject, onMounted, ref, watch, type Ref, computed, toRefs, onBeforeUnmount, nextTick } from 'vue'
 // @ts-ignore
 import * as THREE from 'three'
 // @ts-ignore
@@ -37,7 +37,7 @@ const { config, id: widgetId } = toRefs(props)
 
 import { container as coreContainer, identifiers } from 'org.eclipse.daanse.board.app.lib.core';
 import type { TinyEmitter } from 'tiny-emitter';
-const eventBus = coreContainer.get<TinyEmitter>(identifiers.TINY_EMITTER);
+const eventBus = inject<TinyEmitter>(identifiers.TINY_EMITTER)!;
 
 const emitClick = () => {
     if (!widgetId?.value) return;

@@ -12,7 +12,7 @@ Contributors:
 -->
 <script setup lang="ts">
 import { useDatasourceRepository } from 'org.eclipse.daanse.board.app.ui.vue.composables'
-import { toRefs, watch, ref, onMounted, onUnmounted } from 'vue'
+import { inject, toRefs, watch, ref, onMounted, onUnmounted } from 'vue'
 import { useRoute } from 'vue-router'
 
 const props = defineProps<{ datasourceId: string, id?: string }>();
@@ -23,8 +23,8 @@ import type { TinyEmitter } from 'tiny-emitter';
 import { EventActionsRegistry, EVENT_ACTIONS_REGISTRY } from 'org.eclipse.daanse.board.app.lib.events';
 import { RssWidgetInterface } from './api/RssWidgetInterface';
 
-const eventBus = coreContainer.get<TinyEmitter>(identifiers.TINY_EMITTER);
-const actionsRegistry = coreContainer.get<EventActionsRegistry>(EVENT_ACTIONS_REGISTRY);
+const eventBus = inject<TinyEmitter>(identifiers.TINY_EMITTER)!;
+const actionsRegistry = inject<EventActionsRegistry>(EVENT_ACTIONS_REGISTRY)!;
 
 const route = useRoute();
 const pageId = (route.params.pageid as string) || '';

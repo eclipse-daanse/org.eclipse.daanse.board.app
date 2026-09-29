@@ -25,7 +25,6 @@ import {
 } from 'org.eclipse.daanse.board.app.lib.repository.connection'
 import { type XmlaConnection } from 'org.eclipse.daanse.board.app.lib.connection.xmla'
 import { inject } from '@eclipse-daanse/tsm'
-import { container } from 'org.eclipse.daanse.board.app.lib.core'
 
 export interface IXmlaStoreConfiguration extends IBaseConnectionConfiguration {
   connection: string
@@ -159,10 +158,13 @@ export class XmlaStore extends BaseDatasource {
     }
   }
 
-  static async fetchCubes(connection: string): Promise<MDSchemaCube[]> {
-    const connectionRepository = container.get(identifier) as ConnectionRepository
+  /** The repository arrives as a parameter - callers inject it Vue-side. */
+  static async fetchCubes(
+    connection: string,
+    connectionRepository: ConnectionRepository,
+  ): Promise<MDSchemaCube[]> {
     if (!connectionRepository) {
-      throw new Error('ConnectionRepository is not instanciated')
+      throw new Error('ConnectionRepository is required')
     }
 
     const conn = connectionRepository.getConnection(connection) as XmlaConnection

@@ -9,5 +9,10 @@
     {
       "id": "OgcFeatureComposer"
     }
+  ],
+  "requiresService": [
+    {
+      "id": "DatasourceRepository"
+    }
   ]
 }

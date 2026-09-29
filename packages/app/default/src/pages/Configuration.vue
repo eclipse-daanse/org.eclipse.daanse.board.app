@@ -181,7 +181,7 @@ Contributors:
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref, computed } from 'vue'
+import { inject, onMounted, ref, computed } from 'vue'
 import { type VariableRepository, identifier }
   from 'org.eclipse.daanse.board.app.lib.repository.variable'
 import { container } from 'org.eclipse.daanse.board.app.lib.core'
@@ -224,8 +224,8 @@ const options = ref([] as any[])
 const variableProxy = ref(null as unknown as any)
 
 onMounted(() => {
-  const variableRepository = container.get<VariableRepository>(identifier)
-  const pageRepository = container.get<PageRegistryI>(PageRepoIdentifier)
+  const variableRepository = inject<VariableRepository>(identifier)!
+  const pageRepository = inject<PageRegistryI>(PageRepoIdentifier)!
 
   const variableTypes = variableRepository.getRegisteredVariableTypes()
   options.value = variableTypes
@@ -246,7 +246,7 @@ const saveVariable = () => {
   })
 
   // Update the actual variable in the repository with new values
-  const variableRepository = container.get<VariableRepository>(identifier)
+  const variableRepository = inject<VariableRepository>(identifier)!
   const variable = variableRepository.getVariableById(currentlySelectedVariable.value)
   if (variable) {
     // Update the variable with new properties from proxy
@@ -273,7 +273,7 @@ const saveVariable = () => {
 
 const editVariable = (id: any) => {
   currentlySelectedVariable.value = id
-  const variableRepository = container.get<VariableRepository>(identifier)
+  const variableRepository = inject<VariableRepository>(identifier)!
   const variable = variableRepository.getVariableById(id)
   if (variable) {
     currentlySelectedType.value = variable.type
@@ -296,7 +296,7 @@ const editVariable = (id: any) => {
 }
 
 const currentEditor = computed(() => {
-  const variableRepository = container.get<VariableRepository>(identifier)
+  const variableRepository = inject<VariableRepository>(identifier)!
   const type = currentlySelectedType.value
   if (!type) {
     return null
@@ -306,7 +306,7 @@ const currentEditor = computed(() => {
 })
 
 const getVariableValue = (id: any) => {
-  const variableRepository = container.get<VariableRepository>(identifier)
+  const variableRepository = inject<VariableRepository>(identifier)!
   const variable = variableRepository.getVariableById(id)
   if (variable) {
     return variable.value

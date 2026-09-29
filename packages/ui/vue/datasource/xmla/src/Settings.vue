@@ -15,6 +15,10 @@ Contributors:
 import { debounce } from 'lodash';
 import { computed, onMounted, ref, watch } from 'vue';
 import { XmlaStore } from 'org.eclipse.daanse.board.app.lib.datasource.xmla';
+import { inject } from 'vue'
+import { type ConnectionRepository, identifier as connectionIdentifier } from 'org.eclipse.daanse.board.app.lib.repository.connection'
+
+const connectionRepository = inject<ConnectionRepository>(connectionIdentifier)!
 
 const { config, connections } = defineProps<{
     config: any;
@@ -44,13 +48,13 @@ watch(() => innerInterval.value, (nv) => {
 
 watch(async () => config.connection, async () => {
   if (config.connection) {
-    cubes.value = await XmlaStore.fetchCubes(config.connection);
+    cubes.value = await XmlaStore.fetchCubes(config.connection, connectionRepository);
   }
 });
 
 onMounted(async () => {
   if (config.connection) {
-    cubes.value = await XmlaStore.fetchCubes(config.connection);
+    cubes.value = await XmlaStore.fetchCubes(config.connection, connectionRepository);
   }
 });
 </script>

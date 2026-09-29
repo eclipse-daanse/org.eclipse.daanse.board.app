@@ -31,12 +31,6 @@ import {
   identifiers,
   services,
 } from 'org.eclipse.daanse.board.app.lib.core'
-/*
- * KNOWN DEBT (service-locator work): lib.variables binds its classes at
- * import time - the last load-bearing side-effect import. It goes away when
- * those bindings move into an activate of their own.
- */
-import 'org.eclipse.daanse.board.app.lib.variables'
 import App from './App.vue'
 import router from './router'
 import { preloadedModules } from './preloaded'
@@ -66,9 +60,37 @@ app.use(pinia)
 app.use(router)
 
 /*
- * Legacy container bridge: Vue components that still resolve services via
- * container.get() reach it through these provides. Dies together with the
- * Inversify fallback once the service-locator rest is gone.
+ * Vue DI bridge: every service is provided into the Vue app under its
+ * string id AND under Symbol.for(id) - which is exactly the `identifier`
+ * constant the packages already export. A component declares its dependency
+ * with plain Vue means:
+ *
+ *   const repo = inject<WidgetRepository>(identifier)
+ *
+ * No container object, no registry object, no lookup API in components -
+ * the dependency is named at the consumption site and Vue delivers it.
+ * Services registered later (bundle loads, reloads) become visible to
+ * components created after that point; components track liveness through
+ * the repositories' own change notifications where they need it.
+ */
+function bridgeServicesIntoVue() {
+  const provide = (id: string) => {
+    const service = services.get(id)
+    app.provide(id, service)
+    app.provide(Symbol.for(id), service)
+  }
+  for (const id of services.getServiceIds()) provide(id)
+  services.addListener({
+    onServiceEvent(event) {
+      provide(event.serviceId)
+    },
+  })
+}
+
+/*
+ * Legacy container bridge: the few remaining non-Vue call sites and the
+ * composition root itself. Dies together with the Inversify fallback once
+ * the last container.get is gone.
  */
 container.bind(identifiers.CONTAINER).toDynamicValue((ctx: unknown) => ctx)
 container.bind('App').toConstantValue(app)
@@ -133,6 +155,11 @@ async function start() {
   for (const [manifest, load] of preloaded) {
     resolvedContainers.set(manifest.id, await load())
   }
+
+  // Before loadAll: modules may mount components during their activate
+  // (the endpoint finder does), and those components inject services - the
+  // bridge's listener has to be feeding the provides while loading runs.
+  bridgeServicesIntoVue()
 
   loader.register([...preloaded.map(([manifest]) => manifest), ...bundles])
   await loader.loadAll()

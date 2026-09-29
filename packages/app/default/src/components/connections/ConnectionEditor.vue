@@ -11,7 +11,7 @@ Contributors:
     Smart City Jena
 -->
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue'
+import { inject, computed, onMounted, ref } from 'vue'
 import { container } from 'org.eclipse.daanse.board.app.lib.core'
 import {
   ConnectionRepository,
@@ -30,7 +30,7 @@ const emit = defineEmits(['close'])
 
 const connectionProxy = ref({} as any)
 
-const connectionRepository = container.get<ConnectionRepository>(identifier)
+const connectionRepository = inject<ConnectionRepository>(identifier)!
 const { connections, updateConnection } = useConnectionsStore()
 
 const availableConnections = computed(() => {
@@ -49,7 +49,7 @@ const settingsComponent = computed(() => {
     return null
   }
 
-  return container.get(identifiers.Settings)
+  return connectionRepository.resolveIdentifier(identifiers.Settings)
 })
 
 const saveConnection = () => {

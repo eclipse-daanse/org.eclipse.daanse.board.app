@@ -11,12 +11,16 @@ Contributors:
     Smart City Jena
 -->
 <script setup lang="ts">
+import { inject } from 'vue'
 import { OgcFeatureComposer } from "org.eclipse.daanse.board.app.lib.composer.ogc";
 import {
   DatasourceRepository, identifier as DatasourceRepositoryIdentifier
 } from "org.eclipse.daanse.board.app.lib.repository.datasource";
 import { watch, ref, computed, onMounted } from "vue";
 import { container } from 'org.eclipse.daanse.board.app.lib.core'
+
+// Injected once at setup; the static helpers receive it as an argument
+const dsRepository = inject<DatasourceRepository>(DatasourceRepositoryIdentifier)!
 
 const { config, dataSources, connections } = defineProps<{
   config: any;
@@ -36,12 +40,12 @@ const geometryTypes = ['Point'];
 watch(() => config.connectedDatasources, async (newValue) => {
   headers.value = await OgcFeatureComposer.getHeaders(
     newValue,
-    container.get(DatasourceRepositoryIdentifier) as DatasourceRepository
+    dsRepository
   );
 
   properties.value = await OgcFeatureComposer.getProperties(
     newValue,
-    container.get(DatasourceRepositoryIdentifier) as DatasourceRepository
+    dsRepository
   );
 });
 

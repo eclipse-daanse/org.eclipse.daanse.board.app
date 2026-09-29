@@ -13,9 +13,8 @@
 
 import { Variable } from './Variable'
 import { type IVariableConfig } from '..'
-import { Container, Factory } from 'inversify'
 import { Serializable } from '../interface/JSONSerializableI'
-import { container } from 'org.eclipse.daanse.board.app.lib.core'
+import type { VariableDependencies } from './Variable'
 
 const TYPE = 'DateTimePickerVariable'
 const symbol = Symbol.for(TYPE)
@@ -25,9 +24,7 @@ export interface IDateTimePickerVariableConfig extends IVariableConfig {
   datetime: string
 }
 
-const init = (container: Container) => {
-  container.bind(symbol).toConstantValue(DateTimePickerVariable);
-}
+
 
 class DateTimePickerVariable extends Variable implements Serializable {
   public type = TYPE
@@ -69,18 +66,22 @@ class DateTimePickerVariable extends Variable implements Serializable {
   }
 }
 
-if (!container.isBound(DateTimePickerVariable)) {
-  container.bind(DateTimePickerVariable).toSelf().inTransientScope();
+
+
+
+/**
+ * Builds the per-type factory the VariableRepository resolves and calls.
+ * Dependencies are closed over once, at activation - the instances receive
+ * them as plain properties, no container involved.
+ */
+export function createDateTimePickerVariableFactory(deps: VariableDependencies) {
+  return (name: string, config: IDateTimePickerVariableConfig): DateTimePickerVariable => {
+    const variable = new DateTimePickerVariable()
+    variable.eventBus = deps.eventBus
+    variable.pageContextService = deps.pageContextService
+    variable.init(name, config)
+    return variable
+  }
 }
 
-if (!container.isBound(symbol)) {
-  container.bind<Factory<DateTimePickerVariable>>(symbol).toFactory(() => {
-    return (name: string, config: IDateTimePickerVariableConfig) => {
-      const variable = container.get<DateTimePickerVariable>(DateTimePickerVariable);
-      variable.init(name, config);
-      return variable;
-    };
-  })
-};
-
-export { DateTimePickerVariable, symbol, init, TYPE as DATETIME_PICKER_VARIABLE }
+export { DateTimePickerVariable, symbol, TYPE as DATETIME_PICKER_VARIABLE }

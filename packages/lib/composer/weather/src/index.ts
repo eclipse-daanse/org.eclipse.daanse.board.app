@@ -12,6 +12,7 @@
  **********************************************************************/
 
 import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
+import type { DatasourceRepository } from 'org.eclipse.daanse.board.app.lib.repository.datasource'
 import { WeatherComposer } from './classes'
 
 export * from './classes/index'
@@ -30,21 +31,28 @@ export const symbol = Symbol.for(WEATHER_COMPOSER)
  * Jeder Aufruf liefert eine eigene Instanz - vorher ueber inTransientScope,
  * jetzt schlicht ueber `new`.
  */
-function createWeatherComposer(config: any) {
+/**
+ * Factory factory: the repository is closed over once, at activation - the
+ * config-taking function the registry hands out carries its dependency
+ * instead of looking anything up.
+ */
+function createWeatherComposer(repository: DatasourceRepository) {
+  return (config: any) => {
   if (!WeatherComposer.validateConfiguration(config)) {
     throw new Error(
       'Invalid WeatherComposer configuration. Please provide a valid configuration.',
     )
   }
 
-  const composer = new WeatherComposer()
+  const composer = new WeatherComposer(repository)
   composer.init(config)
 
   return composer
+  }
 }
 
 export function activate({ services }: ActivationContext) {
-  services.register(WEATHER_COMPOSER, createWeatherComposer)
+  services.register(WEATHER_COMPOSER, createWeatherComposer(services.getRequired('DatasourceRepository')))
 }
 
 export function deactivate({ services }: ActivationContext) {

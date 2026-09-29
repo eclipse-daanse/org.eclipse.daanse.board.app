@@ -13,14 +13,10 @@
 
 import { Variable } from './Variable'
 import { type IQueryVariableConfig } from '..'
-import { injectFromBase, Factory } from 'inversify'
-import { container } from 'org.eclipse.daanse.board.app.lib.core'
+import type { VariableDependencies } from './Variable'
 
 const symbol = Symbol.for('QueryVariable')
 
-@injectFromBase({
-  extendProperties: true,
-})
 class QueryVariable extends Variable {
   private innerQueryParam: string = ''
   public type = 'query'
@@ -48,18 +44,20 @@ class QueryVariable extends Variable {
   }
 }
 
-if (!container.isBound(QueryVariable)) {
-  container.bind<QueryVariable>(QueryVariable).toSelf().inTransientScope()
-}
 
-if (!container.isBound(symbol)) {
-  container.bind<Factory<QueryVariable>>(symbol).toFactory(() => {
-    return (name: string, config: IQueryVariableConfig) => {
-      const variable = container.get<QueryVariable>(QueryVariable)
-      variable.init(name, config as IQueryVariableConfig)
-      return variable
-    }
-  })
+/**
+ * Builds the per-type factory the VariableRepository resolves and calls.
+ * Dependencies are closed over once, at activation - the instances receive
+ * them as plain properties, no container involved.
+ */
+export function createQueryVariableFactory(deps: VariableDependencies) {
+  return (name: string, config: IQueryVariableConfig): QueryVariable => {
+    const variable = new QueryVariable()
+    variable.eventBus = deps.eventBus
+    variable.pageContextService = deps.pageContextService
+    variable.init(name, config)
+    return variable
+  }
 }
 
 export { QueryVariable, symbol }

@@ -84,7 +84,7 @@ const availableVariables = ref<{ name: string; value: any }[]>([])
 
 onMounted(() => {
     try {
-        const repo = container.get<VariableRepository>(varIdentifier)
+        const repo = inject<VariableRepository>(varIdentifier)!
         availableVariables.value = repo.getAllVariables().map(([name]) => {
             const v = repo.getVariable(name)
             return { name: v.name, value: v.value }
@@ -96,7 +96,7 @@ onMounted(() => {
 
 const setSizeVariable = (varName: string) => {
     try {
-        const repo = container.get<VariableRepository>(varIdentifier)
+        const repo = inject<VariableRepository>(varIdentifier)!
         const variable = repo.getVariable(varName)
         if (variable && widgetSettings.value.fontSize) {
             widgetSettings.value.fontSize.setTo(variable)
@@ -114,7 +114,7 @@ const clearSizeVariable = () => {
 
 const setColorVariable = (varName: string) => {
     try {
-        const repo = container.get<VariableRepository>(varIdentifier)
+        const repo = inject<VariableRepository>(varIdentifier)!
         const variable = repo.getVariable(varName)
         if (variable && widgetSettings.value.fontColor) {
             widgetSettings.value.fontColor.setTo(variable)

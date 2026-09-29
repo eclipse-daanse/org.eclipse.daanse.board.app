@@ -32,7 +32,7 @@ const widgetSettings = defineModel<PageI>({ required: true });
 const currentRoute = useRoute()
 
 // Lade alle verfügbaren Seiten
-const pageRegistry = container.get<PageRegistryI>(identifier)
+const pageRegistry = inject<PageRegistryI>(identifier)!
 const currentPageId = computed(() => currentRoute.params.pageid as string)
 
 // Verfügbare Seiten ohne die aktuelle Seite

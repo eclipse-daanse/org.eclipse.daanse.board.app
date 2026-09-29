@@ -11,7 +11,7 @@ Contributors:
     Smart City Jena
 -->
 <script setup lang="ts">
-import { ref, computed, watch, onMounted } from 'vue'
+import { inject, ref, computed, watch, onMounted } from 'vue'
 import { OGCSTAToChartComposer } from 'org.eclipse.daanse.board.app.lib.composer.ogcsta2chart'
 import {
   DatasourceRepository, identifier as DatasourceRepositoryIdentifier
@@ -80,7 +80,7 @@ const loadThings = async () => {
 
   isLoadingThings.value = true
   try {
-    const datasourceRepository = container.get(DatasourceRepositoryIdentifier) as DatasourceRepository
+    const datasourceRepository = inject<DatasourceRepository>(DatasourceRepositoryIdentifier)!
     const allThings: any[] = []
 
     for (const datasourceId of validDatasources) {
@@ -137,7 +137,7 @@ const loadDatastreams = async () => {
 
   isLoadingDatastreams.value = true
   try {
-    const datasourceRepository = container.get(DatasourceRepositoryIdentifier) as DatasourceRepository
+    const datasourceRepository = inject<DatasourceRepository>(DatasourceRepositoryIdentifier)!
     const datastreams = await OGCSTAToChartComposer.getAvailableDatastreams(
       config.connectedDatasources,
       config.thingIds,

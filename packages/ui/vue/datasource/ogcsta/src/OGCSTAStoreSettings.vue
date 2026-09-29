@@ -9,7 +9,7 @@ Contributors: Smart City Jena
 
 -->
 <script setup lang="ts">
-import { computed, reactive, watch, ref } from 'vue';
+import { inject, computed, reactive, watch, ref } from 'vue';
 import { VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables';
 import { container } from 'org.eclipse.daanse.board.app.lib.core';
 import {
@@ -33,11 +33,11 @@ const mqttConnectionsFiltered = computed(() => {
 });
 
 // Variable Support - get synchronously so wrappers are initialized before VariableInput renders
-let variableRepository: VariableRepository | null = null;
-try {
-  variableRepository = container.get<VariableRepository>(variableIdentifier);
-} catch (error) {
-  console.warn('VariableRepository not found in container:', error);
+// Optional dependency: absent repository degrades features, not the widget
+const variableRepository: VariableRepository | null =
+  inject<VariableRepository>(variableIdentifier) ?? null;
+if (!variableRepository) {
+  console.warn('VariableRepository not provided');
 }
 
 // Initialize history config if not present

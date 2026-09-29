@@ -17,7 +17,6 @@ import {
   DatasourceRepository,
   identifier
 } from 'org.eclipse.daanse.board.app.lib.repository.datasource'
-import { container } from 'org.eclipse.daanse.board.app.lib.core'
 
 export interface IKpiComposerConfiguration extends IBaseConnectionConfiguration {
   connectedDatasources?: string[]
@@ -25,6 +24,16 @@ export interface IKpiComposerConfiguration extends IBaseConnectionConfiguration 
 
 @injectable()
 export class KpiComposer extends BaseDatasource {
+  /**
+   * Dependencies arrive through the constructor - the factory in this
+   * package's activate passes them from the registry. No global lookups.
+   */
+  constructor(
+    private readonly datasourceRepository: DatasourceRepository,
+  ) {
+    super()
+  }
+
   private configuration!: IKpiComposerConfiguration
   private connectedDatasources: string[] = []
   public static availableTypes = ["KPI"];
@@ -37,7 +46,7 @@ export class KpiComposer extends BaseDatasource {
   async getData(type: string): Promise<any> {
     if (this.connectedDatasources.length === 0) return []
 
-    const datasourceRepository = container.get(identifier) as DatasourceRepository
+    const datasourceRepository = this.datasourceRepository
 
     const dataPromises = this.connectedDatasources
       .filter((datasourceId) => datasourceId)

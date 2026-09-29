@@ -11,12 +11,16 @@ Contributors:
     Smart City Jena
 -->
 <script setup lang="ts">
+import { inject } from 'vue'
 import { ChartComposer } from "org.eclipse.daanse.board.app.lib.composer.chart";
 import {
   DatasourceRepository, identifier as DatasourceRepositoryIdentifier
 } from "org.eclipse.daanse.board.app.lib.repository.datasource";
 import { watch, ref, computed, onMounted } from "vue";
 import { container } from 'org.eclipse.daanse.board.app.lib.core'
+
+// Injected once at setup; the static helpers receive it as an argument
+const dsRepository = inject<DatasourceRepository>(DatasourceRepositoryIdentifier)!
 
 
 const { config, dataSources } = defineProps<{
@@ -34,7 +38,7 @@ const composeByOptions = ref([] as string[]);
 onMounted(async () => {
   composeByOptions.value = await ChartComposer.getHeaders(
     config.connectedDatasources || [],
-    container.get(DatasourceRepositoryIdentifier) as DatasourceRepository,
+    dsRepository,
   );
 });
 
@@ -42,7 +46,7 @@ watch(() => config.connectedDatasources, async (newValue) => {
   composeByOptions.value =
     await ChartComposer.getHeaders(
       newValue || [],
-      container.get(DatasourceRepositoryIdentifier) as DatasourceRepository,
+      dsRepository,
     );
 });
 </script>

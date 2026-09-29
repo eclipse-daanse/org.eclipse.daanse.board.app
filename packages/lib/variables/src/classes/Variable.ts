@@ -27,16 +27,20 @@ enum VariableAccessMode {
   ExternalWritable = 'external-writable'
 }
 // Removed import to break circular dependency
-import { identifiers } from 'org.eclipse.daanse.board.app.lib.core'
 import { type TinyEmitter } from 'tiny-emitter'
 import { Serializable } from '../interface/JSONSerializableI'
-import { inject } from 'inversify'
 import { AccessError } from './AccessError'
 import { v4 as uuid } from 'uuid'
 
 
 const TYPE = 'Variable'
 const symbol = Symbol.for(TYPE)
+
+/** What every variable instance receives from the factory. */
+export interface VariableDependencies {
+  eventBus?: TinyEmitter
+  pageContextService?: PageContextServiceI
+}
 
 abstract class Variable implements Serializable{
   private subscribers: any[] = []
@@ -55,10 +59,13 @@ abstract class Variable implements Serializable{
   public accessMode: VariableAccessMode = VariableAccessMode.ExternalWritable
   public pageId?: string
 
-  @inject(identifiers.TINY_EMITTER)
+  /*
+   * Set by the factory right after construction (see this package's
+   * activate) - plain properties, no container involved. Optional: a
+   * variable works without an event bus or page context, with fewer
+   * features.
+   */
   public eventBus?: TinyEmitter;
-
-  @inject(PAGE_CONTEXT_SERVICE)
   public pageContextService?: PageContextServiceI;
 
   // Removed injection to break circular dependency

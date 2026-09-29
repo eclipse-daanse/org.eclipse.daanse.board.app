@@ -14,7 +14,7 @@ Contributors:
 <script setup lang="ts">
 import { VariableComplexStringWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import { Mentionable } from 'vue-mention';
-import { onMounted, ref, nextTick, useSlots } from 'vue';
+import { inject, onMounted, ref, nextTick, useSlots } from 'vue';
 import { container } from 'org.eclipse.daanse.board.app.lib.core'
 import { identifier, VariableRepository } from 'org.eclipse.daanse.board.app.lib.repository.variable'
 
@@ -30,7 +30,7 @@ const inputRef = ref();
 // const slots = useSlots();
 
 onMounted(() => {
-  const variableRepository = container.get<VariableRepository>(identifier)
+  const variableRepository = inject<VariableRepository>(identifier)!
   variableItems.value = variableRepository.getAllVariables().map(([name]) => {
     const variable = variableRepository.getVariable(name);
 

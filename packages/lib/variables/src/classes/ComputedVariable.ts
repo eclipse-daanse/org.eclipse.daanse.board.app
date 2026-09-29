@@ -14,15 +14,11 @@
 import { Variable } from './Variable'
 import { type IComputedVariableConfig } from '..'
 import {  Serializable } from '../interface/JSONSerializableI'
-import { container } from 'org.eclipse.daanse.board.app.lib.core'
-import { Factory, injectFromBase } from 'inversify'
+import type { VariableDependencies } from './Variable'
 
 const TYPE = 'ComputedVariable'
 const symbol = Symbol.for(TYPE)
 
-@injectFromBase({
-  extendProperties: true,
-})
 class ComputedVariable extends Variable implements Serializable{
   private innerExpression: string = ''
   public type = TYPE
@@ -118,18 +114,20 @@ class ComputedVariable extends Variable implements Serializable{
   }
 }
 
-if (!container.isBound(ComputedVariable)) {
-  container.bind<ComputedVariable>(ComputedVariable).toSelf().inTransientScope()
-}
 
-if (!container.isBound(symbol)) {
-  container.bind<Factory<ComputedVariable>>(symbol).toFactory(() => {
-    return (name: string, config: IComputedVariableConfig) => {
-      const variable = container.get<ComputedVariable>(ComputedVariable)
-      variable.init(name, config as IComputedVariableConfig)
-      return variable
-    }
-  })
+/**
+ * Builds the per-type factory the VariableRepository resolves and calls.
+ * Dependencies are closed over once, at activation - the instances receive
+ * them as plain properties, no container involved.
+ */
+export function createComputedVariableFactory(deps: VariableDependencies) {
+  return (name: string, config: IComputedVariableConfig): ComputedVariable => {
+    const variable = new ComputedVariable()
+    variable.eventBus = deps.eventBus
+    variable.pageContextService = deps.pageContextService
+    variable.init(name, config)
+    return variable
+  }
 }
 
 export { ComputedVariable, symbol, TYPE as COMPUTED_VARIABLE }

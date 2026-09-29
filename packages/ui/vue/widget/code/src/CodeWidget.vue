@@ -13,7 +13,7 @@ Contributors:
 
 <script lang="ts" setup>
 import { codeToHtml } from 'shiki'
-import { ref, watch, toRefs, onMounted, onUnmounted, nextTick } from 'vue';
+import { inject, ref, watch, toRefs, onMounted, onUnmounted, nextTick } from 'vue';
 import { useRoute } from 'vue-router';
 import { ICodeSettings } from '.';
 import { container, identifiers } from 'org.eclipse.daanse.board.app.lib.core';
@@ -26,8 +26,8 @@ const { id: widgetId } = toRefs(props);
 
 const htmlString = ref<string>('');
 
-const eventBus = container.get<TinyEmitter>(identifiers.TINY_EMITTER);
-const actionsRegistry = container.get<EventActionsRegistry>(EVENT_ACTIONS_REGISTRY);
+const eventBus = inject<TinyEmitter>(identifiers.TINY_EMITTER)!;
+const actionsRegistry = inject<EventActionsRegistry>(EVENT_ACTIONS_REGISTRY)!;
 
 const route = useRoute();
 const pageId = (route.params.pageid as string) || '';

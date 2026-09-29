@@ -13,16 +13,12 @@
 
 import { Variable } from './Variable'
 import { type IRequestVaribleConfig } from '..'
-import { Factory, injectFromBase } from 'inversify'
-import { container } from 'org.eclipse.daanse.board.app.lib.core'
+import type { VariableDependencies } from './Variable'
 
 
 const symbol = Symbol.for('RequestVariable')
 
 
-@injectFromBase({
-  extendProperties: true,
-})
 class RequestVariable extends Variable {
   private innerRequest: string = ''
   public type = 'request'
@@ -58,18 +54,20 @@ class RequestVariable extends Variable {
   set value(value) {}
 }
 
-if (!container.isBound(RequestVariable)) {
-  container.bind<RequestVariable>(RequestVariable).toSelf().inTransientScope()
-}
 
-if (!container.isBound(symbol)) {
-  container.bind<Factory<RequestVariable>>(symbol).toFactory(() => {
-    return (name: string, config: IRequestVaribleConfig) => {
-      const variable = container.get<RequestVariable>(RequestVariable)
-      variable.init(name, config as IRequestVaribleConfig)
-      return variable
-    }
-  })
+/**
+ * Builds the per-type factory the VariableRepository resolves and calls.
+ * Dependencies are closed over once, at activation - the instances receive
+ * them as plain properties, no container involved.
+ */
+export function createRequestVariableFactory(deps: VariableDependencies) {
+  return (name: string, config: IRequestVaribleConfig): RequestVariable => {
+    const variable = new RequestVariable()
+    variable.eventBus = deps.eventBus
+    variable.pageContextService = deps.pageContextService
+    variable.init(name, config)
+    return variable
+  }
 }
 
 export { RequestVariable, symbol }

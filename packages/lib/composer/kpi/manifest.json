@@ -9,5 +9,10 @@
     {
       "id": "KpiComposer"
     }
+  ],
+  "requiresService": [
+    {
+      "id": "DatasourceRepository"
+    }
   ]
 }

@@ -11,12 +11,16 @@ Contributors:
     Smart City Jena
 -->
 <script setup lang="ts">
+import { inject } from 'vue'
 import { DataTableComposer } from "org.eclipse.daanse.board.app.lib.composer.datatable";
 import {
   DatasourceRepository, identifier as DatasourceRepositoryIdentifier
 } from "org.eclipse.daanse.board.app.lib.repository.datasource";
 import { watch, ref, computed } from "vue";
 import { container } from 'org.eclipse.daanse.board.app.lib.core'
+
+// Injected once at setup; the static helpers receive it as an argument
+const dsRepository = inject<DatasourceRepository>(DatasourceRepositoryIdentifier)!
 
 const { config, dataSources } = defineProps<{
   config: any;
@@ -33,7 +37,7 @@ watch(() => config.connectedDatasources, async (newValue) => {
   console.log('newValue', newValue);
   composeByOptions.value = await DataTableComposer.getHeaders(
     newValue,
-    container.get(DatasourceRepositoryIdentifier) as DatasourceRepository
+    dsRepository
   );
 });
 </script>

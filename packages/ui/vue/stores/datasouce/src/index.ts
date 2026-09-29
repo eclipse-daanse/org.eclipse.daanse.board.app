@@ -16,3 +16,11 @@ export {
   useDataSourcesStore,
   type DataSourceDTO
 }
+
+import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
+import { provideRepository } from './store/DatasourcePinia'
+import type { DatasourceRepository } from 'org.eclipse.daanse.board.app.lib.repository.datasource'
+
+export function activate({ services }: ActivationContext) {
+  provideRepository(services.getRequired<DatasourceRepository>('DatasourceRepository'))
+}
