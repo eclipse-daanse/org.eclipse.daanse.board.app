@@ -1,0 +1,9 @@
+// Paging: ORDER BY with START AT, and a second EVALUATE in the same query.
+EVALUATE
+    'Customer'
+ORDER BY
+    'Customer'[Country] DESC
+START AT "Germany"
+
+EVALUATE
+    TOPN ( 10, 'Product', 'Product'[List Price], DESC )

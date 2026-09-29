@@ -1,0 +1,40 @@
+// Source: https://learn.microsoft.com/en-us/dax/keepfilters-function-dax (example 1)
+// Construct: || between comparisons.
+// Expect: parse
+// Reference: accepts
+// Normalized: as published.
+EVALUATE ROW(
+  "$$ in WA"
+    , CALCULATE('Internet Sales'[Internet Total Sales]
+                , 'Geography'[State Province Code]="WA"
+      )
+, "$$ in WA and OR"
+    , CALCULATE('Internet Sales'[Internet Total Sales]
+               , 'Geography'[State Province Code]="WA" 
+                 || 'Geography'[State Province Code]="OR"
+      )
+, "$$ in WA and BC"
+    , CALCULATE('Internet Sales'[Internet Total Sales]
+               , 'Geography'[State Province Code]="WA" 
+                 || 'Geography'[State Province Code]="BC"
+      )
+, "$$ in WA and OR ??"
+    , CALCULATE(
+          CALCULATE('Internet Sales'[Internet Total Sales]
+                    ,'Geography'[State Province Code]="WA" 
+                      || 'Geography'[State Province Code]="OR"
+          )
+          , 'Geography'[State Province Code]="WA" 
+            || 'Geography'[State Province Code]="BC"
+      )
+, "$$ in WA !!"
+    , CALCULATE(
+          CALCULATE('Internet Sales'[Internet Total Sales]
+                   , KEEPFILTERS('Geography'[State Province Code]="WA" 
+                              || 'Geography'[State Province Code]="OR"
+                     )
+          )
+          , 'Geography'[State Province Code]="WA" 
+            || 'Geography'[State Province Code]="BC"
+      )
+)

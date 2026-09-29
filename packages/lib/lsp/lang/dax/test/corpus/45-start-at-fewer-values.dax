@@ -1,0 +1,12 @@
+// Source: https://learn.microsoft.com/en-us/dax/startat-statement-dax
+// Construct: Fewer START AT values than ORDER BY columns.
+// Expect: parse
+// Reference: rejects - START AT must supply exactly one value per ORDER BY column (2 expected, 1 given)
+// Divergence: START AT value list
+// Normalized: written from the documented rule: "There can be as many arguments in the START AT statement as there are in the ORDER BY statement, but not more."
+EVALUATE
+    'Customer'
+ORDER BY
+    'Customer'[Country] ASC,
+    'Customer'[City] ASC
+START AT "Germany"

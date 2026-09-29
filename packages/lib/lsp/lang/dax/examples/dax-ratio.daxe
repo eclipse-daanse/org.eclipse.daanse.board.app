@@ -1,0 +1,5 @@
+// A measure expression: the share of the current product in all sales.
+DIVIDE (
+    SUM ( 'Sales'[Amount] ),
+    CALCULATE ( SUM ( 'Sales'[Amount] ), ALL ( 'Product' ) )
+)

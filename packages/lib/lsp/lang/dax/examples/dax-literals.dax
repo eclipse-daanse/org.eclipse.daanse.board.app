@@ -1,0 +1,13 @@
+// Literals: numbers, strings, booleans, a date and a table constructor.
+EVALUATE
+    ROW (
+        "Number", 3.14,
+        "Text", "He said ""hello""",
+        "Flag", TRUE (),
+        "Date", dt"2024-12-31",
+        "Joined", "a" & "b",
+        "Power", 2 ^ 10
+    )
+
+EVALUATE
+    { 1, 2, 3 }

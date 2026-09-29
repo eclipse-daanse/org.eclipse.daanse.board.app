@@ -1,0 +1,12 @@
+// Source: https://learn.microsoft.com/en-us/dax/var-dax
+// Construct: VAR ... RETURN, with unquoted tables.
+// Expect: parse
+// Reference: rejects - Encountered an error at (or somewhere around) input:7:16
+// Divergence: unquoted table before a column
+// Normalized: as published, less the `Name =` that makes it a measure definition.
+VAR Sales =
+    SUM ( Sales[Sales Amount] )
+VAR SalesLastYear =
+    CALCULATE ( SUM ( Sales[Sales Amount] ), SAMEPERIODLASTYEAR ( 'Date'[Date] ) )
+RETURN
+    IF ( Sales && SalesLastYear, DIVIDE ( Sales - SalesLastYear, SalesLastYear ) )

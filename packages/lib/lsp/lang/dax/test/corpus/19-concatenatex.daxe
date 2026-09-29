@@ -1,0 +1,6 @@
+// Source: https://learn.microsoft.com/en-us/dax/concatenatex-function-dax (example 1)
+// Construct: An iterator with a string separator.
+// Expect: parse
+// Reference: accepts
+// Normalized: as published, less the `Name =` that makes it a measure definition.
+CONCATENATEX(Employees, [FirstName] & " " & [LastName], ",")

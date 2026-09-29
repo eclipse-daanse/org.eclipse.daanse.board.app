@@ -1,0 +1,9 @@
+// Source: https://learn.microsoft.com/en-us/dax/containsrow-function-dax (example 3)
+// Construct: NOT as an operator: `NOT [Color] IN {...}`.
+// Expect: parse
+// Reference: rejects - Encountered an error at (or somewhere around) input:7:23
+// Divergence: NOT operator; unquoted table
+// Normalized: as published.
+EVALUATE
+FILTER ( ALL ( Product[Color] ), NOT [Color] IN { "Red", "Yellow", "Blue" } )
+ORDER BY [Color]

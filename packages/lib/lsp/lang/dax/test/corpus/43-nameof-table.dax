@@ -1,0 +1,8 @@
+// Source: https://learn.microsoft.com/en-us/dax/nameof-function-dax (example 3)
+// Construct: TABLE as a NAMEOF component value.
+// Expect: parse
+// Reference: rejects - Encountered an error at (or somewhere around) input:7:35
+// Divergence: TABLE, COLUMN, MEASURE as values
+// Normalized: as published.
+EVALUATE
+{ NAMEOF ( 'Sales'[Sales Amount], TABLE ) }

@@ -1,0 +1,7 @@
+// Source: https://learn.microsoft.com/en-us/dax/floor-function-dax (example 1)
+// Construct: A number with no integer part: `.1`.
+// Expect: parse
+// Reference: rejects - Encountered an error at (or somewhere around) input:6:20
+// Divergence: number with a leading dot; unquoted table
+// Normalized: as published, less the `Name =` that makes it a measure definition.
+FLOOR(InternetSales[Total Product Cost],.1)

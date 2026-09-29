@@ -1,0 +1,7 @@
+// Source: https://learn.microsoft.com/en-us/dax/dax-operator-reference
+// Construct: `-2^2`, which the page says is -4: power binds tighter than sign.
+// Expect: parse
+// Reference: rejects - Encountered an error at (or somewhere around) input:6:1
+// Divergence: unary sign
+// Normalized: as published, less the leading `=`.
+-2^2

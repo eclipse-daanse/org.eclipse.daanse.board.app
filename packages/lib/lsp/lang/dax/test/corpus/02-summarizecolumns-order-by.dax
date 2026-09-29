@@ -1,0 +1,29 @@
+// Source: https://learn.microsoft.com/en-us/dax/dax-queries
+// Construct: SUMMARIZECOLUMNS with a FILTER argument, // comments, ORDER BY ... ASC.
+// Expect: parse
+// Reference: accepts
+// Normalized: as published.
+EVALUATE
+	SUMMARIZECOLUMNS(
+		// Group by columns
+		'Date'[Month Name],
+		'Date'[Month of Year],
+		'Product'[Category],
+
+		// Optional filters
+		FILTER(
+			VALUES('Product'[Category]),
+			[Category] = "Clothing"
+		),
+
+		// Measures or explicit DAX formulas to aggregate and analyze the data by row
+		"Orders", [Orders],
+		"Avg Profit per Order", DIVIDE(
+			[Total Sales Profit],
+			[Orders]
+		)
+	)
+
+	// DAX queries do not use sort order defined in Power BI, 
+	// sort by columns must be included in the DAX query to be used in order by
+	ORDER BY 'Date'[Month of Year] ASC

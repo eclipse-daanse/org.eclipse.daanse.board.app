@@ -1,0 +1,3 @@
+// The smallest query: every row of one table.
+EVALUATE
+    'Product'
