@@ -14,7 +14,7 @@ Contributors:
 <script setup lang="ts">
 import { useDataSourcesStore } from 'org.eclipse.daanse.board.app.ui.vue.stores.datasouce'
 import { WidgetRepository, identifier } from 'org.eclipse.daanse.board.app.lib.repository.widget'
-import { ref, computed, watch } from 'vue'
+import { inject, ref, computed, watch } from 'vue'
 import Draggable from 'vuedraggable'
 import { container } from 'org.eclipse.daanse.board.app.lib.core'
 import { VaScrollContainer } from 'vuestic-ui'
@@ -43,7 +43,7 @@ const onDragStart = (event: DragEvent) => {
   }, 0)
 }
 
-const registeredWidgets = container.get<WidgetRepository>(identifier)
+const registeredWidgets = inject<WidgetRepository>(identifier)!
 console.log(registeredWidgets.getAllWidgets())
 const availableWidgets = Object.entries(registeredWidgets.getAllWidgets())
   //.filter(([_, widget]) => widget.icon)

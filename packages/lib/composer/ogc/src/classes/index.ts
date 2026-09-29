@@ -12,7 +12,6 @@
  **********************************************************************/
 
 import { BaseDatasource, IBaseConnectionConfiguration } from 'org.eclipse.daanse.board.app.lib.datasource.base'
-import { container } from 'org.eclipse.daanse.board.app.lib.core';
 import { identifier, DatasourceRepository, IDatasourceRepository } from 'org.eclipse.daanse.board.app.lib.repository.datasource';
 
 export interface IOgcFeatureComposerConfiguration extends IBaseConnectionConfiguration {
@@ -30,6 +29,16 @@ export interface IOgcFeatureComposerConfiguration extends IBaseConnectionConfigu
 }
 
 export class OgcFeatureComposer extends BaseDatasource {
+  /**
+   * Dependencies arrive through the constructor - the factory in this
+   * package's activate passes them from the registry. No global lookups.
+   */
+  constructor(
+    private readonly datasourceRepository: DatasourceRepository,
+  ) {
+    super()
+  }
+
   private connectedDatasources: string[] = [];
   private xField: string = '';
   private yField: string = '';
@@ -65,7 +74,7 @@ export class OgcFeatureComposer extends BaseDatasource {
   }
 
   async createFeatureCollection(): Promise<any> {
-    const repo = container.get<DatasourceRepository>(identifier);
+    const repo = this.datasourceRepository
     const datasourcesData = await Promise.all(
       this.connectedDatasources
         .filter(id => id)

@@ -14,3 +14,11 @@ export {
   useConnectionsStore,
   type ConnectionDTO
 }
+
+import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
+import { provideRepository } from './store/ConnectionsPinia'
+import type { ConnectionRepository } from 'org.eclipse.daanse.board.app.lib.repository.connection'
+
+export function activate({ services }: ActivationContext) {
+  provideRepository(services.getRequired<ConnectionRepository>('ConnectionRepository'))
+}

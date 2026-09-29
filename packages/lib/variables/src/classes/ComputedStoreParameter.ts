@@ -15,19 +15,16 @@ import { type Variable } from './Variable'
 import { type TinyEmitter } from 'tiny-emitter'
 import { VariableRepository, identifier } from 'org.eclipse.daanse.board.app.lib.repository.variable'
 import { VariableEvents } from '..'
-import { container, identifiers } from 'org.eclipse.daanse.board.app.lib.core'
-import { inject, Factory } from 'inversify'
 
 export class ComputedStoreParameter {
   private innerExpression: string = ''
   private currentSubscriptions: Map<string, () => void> = new Map()
   private refreshCb: () => void = () => {}
 
-  @inject(identifiers.TINY_EMITTER)
-  private eventBus?: TinyEmitter
-
-  @inject(identifier)
-  private storage?: VariableRepository
+  /* Set by the provided factory (see UsesComputedVariable) - plain
+   * properties, no container involved. */
+  public eventBus?: TinyEmitter
+  public storage?: VariableRepository
 
   init(expression: string, refreshCb: () => void) {
     this.innerExpression = expression
@@ -126,6 +123,3 @@ export class ComputedStoreParameter {
   }
 }
 
-if (!container.isBound(ComputedStoreParameter)) {
-  container.bind<ComputedStoreParameter>(ComputedStoreParameter).toSelf().inTransientScope();
-}

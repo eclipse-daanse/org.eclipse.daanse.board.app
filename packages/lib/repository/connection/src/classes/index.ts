@@ -14,7 +14,6 @@ import {
   type IRequestParams,
   type BaseConnectionConfig,
 } from 'org.eclipse.daanse.board.app.lib.connection.base'
-import { container } from 'org.eclipse.daanse.board.app.lib.core'
 
 export interface IConnection {
   fetch(config: IRequestParams, options?: any): Promise<any>
@@ -37,7 +36,27 @@ export interface ConnectionIdentifiers {
 
 const connections = new Map<string, IConnection | PubSubConnection>()
 
+/**
+ * The slice of the service registry a repository needs: resolving the
+ * identifiers its type entries carry. Injected through the constructor -
+ * the repository names its dependency instead of reaching for a global.
+ */
+export interface IdentifierResolver {
+  getRequired<T>(id: string): T
+}
+
 export class ConnectionRepository {
+  constructor(private readonly resolver: IdentifierResolver) {}
+
+  /**
+   * Resolves one of the identifiers a registered type entry carries
+   * (Connection factory, Settings component). All of them are created with
+   * Symbol.for, so the symbol's description IS the service id.
+   */
+  resolveIdentifier<T>(identifier: symbol): T {
+    return this.resolver.getRequired<T>(identifier.description as string)
+  }
+
   private availableConnections: Record<string, ConnectionIdentifiers> = {}
   private connectionsByType: Record<string, string> = {}
 
@@ -114,7 +133,7 @@ export class ConnectionRepository {
     const identifiers = this.availableConnections[type]
 
     if (identifiers) {
-      const connectionFactory = container.get(identifiers.Connection) as any
+      const connectionFactory = this.resolveIdentifier<(c: BaseConnectionConfig) => IConnection | PubSubConnection>(identifiers.Connection)
       const connection = connectionFactory(connectionConfig)
       connections.set(connectionId, connection)
       this.connectionsByType[connectionId] = type

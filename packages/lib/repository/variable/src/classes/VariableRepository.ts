@@ -11,10 +11,7 @@
  *   Smart City Jena
  **********************************************************************/
 
-import { identifiers } from 'org.eclipse.daanse.board.app.lib.core'
 import { type TinyEmitter } from 'tiny-emitter'
-import { container } from 'org.eclipse.daanse.board.app.lib.core'
-import { inject, injectable } from '@eclipse-daanse/tsm'
 import { SystemVariableActions } from '../gen/SystemVariableActions'
 import { PageVariableActions } from '../gen/PageVariableActions'
 
@@ -26,19 +23,23 @@ export interface VariableDeffinition {
   Variable: symbol,
   Settings: any
 }
-@injectable()
 export class VariableRepository implements SystemVariableActions, PageVariableActions {
   private availableVariables: Map<string, any> = new Map();
   private availableVariablesByScope: Map<string, Map<string, any>> = new Map(); // scope -> name -> variable
   private availableVariablesTypes: Map<string, VariableDeffinition> = new Map();
 
-  /*
-   * tsm adressiert Dienste ueber Strings statt ueber Symbole; `TINY_EMITTER`
-   * ist derselbe Dienst wie `identifiers.TINY_EMITTER`, weil `Symbol.for`
-   * global registriert ist.
+  constructor(
+    private readonly resolver: { getRequired<T>(id: string): T },
+    private readonly tinyEmitter?: TinyEmitter,
+  ) {}
+
+  /**
+   * Resolves one of the identifiers a registered variable type carries.
+   * All of them are created with Symbol.for, so the description IS the id.
    */
-  @inject('TINY_EMITTER')
-  private tinyEmitter?: TinyEmitter;
+  resolveIdentifier<T>(identifier: symbol): T {
+    return this.resolver.getRequired<T>(identifier.description as string)
+  }
 
   registerVariableType(type: string, identifiers: VariableDeffinition) {
     if (this.availableVariablesTypes.has(type)) {
@@ -71,7 +72,7 @@ export class VariableRepository implements SystemVariableActions, PageVariableAc
   registerVariable(name: string, type: string, config: VariableConfig) {
     const identifiers = this.availableVariablesTypes.get(type)
     if (identifiers) {
-      const variableFactory = container.get(identifiers.Variable) as any
+      const variableFactory = this.resolveIdentifier<(name: string, config: VariableConfig) => unknown>(identifiers.Variable) as any
       const variable = variableFactory(name, config)
 
       // Add to scope-aware storage (primary system)

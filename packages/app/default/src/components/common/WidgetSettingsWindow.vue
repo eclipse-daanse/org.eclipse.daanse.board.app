@@ -24,7 +24,7 @@ const widget = defineModel<IWidget>()
 const storeSection = ref(false)
 const { dataSources } = useDataSourcesStore()
 
-const registeredWidgets = container.get<WidgetRepository>(identifier)
+const registeredWidgets = inject<WidgetRepository>(identifier)!
 const availableWidgetsSettings = registeredWidgets.getAllWidgets()
 
 const i18n: i18n | undefined = inject('i18n')

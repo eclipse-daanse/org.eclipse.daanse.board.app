@@ -12,7 +12,7 @@ Contributors:
 -->
 
 <script lang="ts" setup>
-import {
+import { inject,
   ref,
   toRefs,
   computed,
@@ -51,9 +51,9 @@ const props = defineProps<{
 const { datasourceId, config, id: widgetId } = toRefs(props)
 
 const eventBus =
-  coreContainer.get<TinyEmitter>(identifiers.TINY_EMITTER)
+  inject<TinyEmitter>(identifiers.TINY_EMITTER)!
 const actionsRegistry =
-  coreContainer.get<EventActionsRegistry>(EVENT_ACTIONS_REGISTRY)
+  inject<EventActionsRegistry>(EVENT_ACTIONS_REGISTRY)!
 
 const route = useRoute()
 const pageId = (route.params.pageid as string) || ''
@@ -241,7 +241,7 @@ async function doCalculateRoute() {
     } = await import(
       'org.eclipse.daanse.board.app.lib.repository.datasource'
     )
-    const dsRepo = coreContainer.get<any>(identifier)
+    const dsRepo = inject<any>(identifier)!
     const ds = dsRepo.getDatasource(datasourceId.value)
     if (ds && typeof ds.callEvent === 'function') {
       await ds.callEvent(SET_WAYPOINTS, {

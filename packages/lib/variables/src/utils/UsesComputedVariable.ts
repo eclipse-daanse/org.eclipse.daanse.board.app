@@ -11,8 +11,21 @@
  *   Smart City Jena
  **********************************************************************/
 
-import { container } from 'org.eclipse.daanse.board.app.lib.core'
 import { ComputedStoreParameter } from '../classes/ComputedStoreParameter'
+
+let parameterFactory: (() => ComputedStoreParameter) | undefined
+
+/** Called by lib.variables' activate - dependency injection at the module boundary. */
+export function provideComputedStoreParameterFactory(factory: () => ComputedStoreParameter): void {
+  parameterFactory = factory
+}
+
+function requireParameterFactory(): () => ComputedStoreParameter {
+  if (!parameterFactory) {
+    throw new Error('ComputedStoreParameter factory not provided - is lib.variables active?')
+  }
+  return parameterFactory
+}
 
 export class UsesComputedVariable {
   protected updateCb: () => void = () => {}
@@ -24,10 +37,8 @@ export class UsesComputedVariable {
   }
 
   initVariable(expression: string): ComputedStoreParameter {
-    const computedStoreParameter = container.get<ComputedStoreParameter>(
-      ComputedStoreParameter,
-    )
-    computedStoreParameter.init(expression,() => { this.updateCb() })
+    const computedStoreParameter = requireParameterFactory()()
+    computedStoreParameter.init(expression, () => { this.updateCb() })
     return computedStoreParameter
   }
 }

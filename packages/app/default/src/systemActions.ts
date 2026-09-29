@@ -17,7 +17,6 @@ import {
   EVENT_ACTIONS_REGISTRY,
   SystemActionsEcoreContent
 } from 'org.eclipse.daanse.board.app.lib.events';
-import { container, identifiers } from 'org.eclipse.daanse.board.app.lib.core';
 import { loggerFactory } from 'org.eclipse.daanse.board.app.lib.logger';
 import type { TinyEmitter } from 'tiny-emitter';
 
@@ -29,8 +28,8 @@ const log = loggerFactory.createLogger('daanse:system:actions');
 class SystemActionsImpl {
   private eventBus: TinyEmitter;
 
-  constructor(private router: Router) {
-    this.eventBus = container.get<TinyEmitter>(identifiers.TINY_EMITTER);
+  constructor(private router: Router, eventBus: TinyEmitter) {
+    this.eventBus = eventBus;
   }
 
   async changePage(pageId?: string): Promise<void> {
@@ -75,8 +74,8 @@ class SystemActionsImpl {
  * Registriert System-Actions (nur router-bezogene Actions)
  * Variable-Actions sind im variable package registriert
  */
-export async function registerSystemActions(router: Router) {
-  const actionsRegistry = container.get<EventActionsRegistry>(EVENT_ACTIONS_REGISTRY);
+export async function registerSystemActions(router: Router, actionsRegistry: EventActionsRegistry, eventBus: TinyEmitter) {
+  
 
   // Registriere SystemActions Metadata aus Ecore Model
   await actionsRegistry.registerActionsFromEcoreString(
@@ -87,7 +86,7 @@ export async function registerSystemActions(router: Router) {
   );
 
   // Registriere Instanz mit Router-Zugriff
-  const systemActions = new SystemActionsImpl(router);
+  const systemActions = new SystemActionsImpl(router, eventBus);
   actionsRegistry.registerInstance('SystemActions', systemActions, 'SystemActions');
 
   log('✅ System actions registered');

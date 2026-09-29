@@ -11,6 +11,7 @@ Contributors:
     Smart City Jena
 -->
 <script lang="ts" setup>
+import { inject } from 'vue'
 import { computed, onMounted, toRefs } from "vue";
 import { useVariableRepository, VariableWrapper } from "org.eclipse.daanse.board.app.ui.vue.composables"
 import { IconSettings } from './gen/IconSettings'
@@ -27,7 +28,7 @@ const config = defineModel<IconSettings>('configv', { required: true });
 const defaultConfig = new IconSettings();
 
 // Get EventBus
-const eventBus = container.get<TinyEmitter>(identifiers.TINY_EMITTER);
+const eventBus = inject<TinyEmitter>(identifiers.TINY_EMITTER)!;
 
 onMounted(() => {
     if (config.value) {
