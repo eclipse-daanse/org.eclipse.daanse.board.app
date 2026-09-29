@@ -1,0 +1,13 @@
+// Source: https://learn.microsoft.com/en-us/dax/columnstatistics-function-dax (example 1)
+// Construct: `==`, strict equality.
+// Expect: parse
+// Reference: rejects - Encountered an error at (or somewhere around) input:8:36
+// Divergence: == operator; unquoted table
+// Normalized: as published.
+DEFINE
+    TABLE FilteredProduct =
+        FILTER ( Product, [Color] == "Blue" )
+    COLUMN Customer[Location] = [State-Province] & " " & [Country-Region]
+
+EVALUATE
+COLUMNSTATISTICS ()

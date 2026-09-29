@@ -1,0 +1,12 @@
+// Source: https://learn.microsoft.com/en-us/dax/startat-statement-dax
+// Construct: START AT with a comma-separated value per ORDER BY column.
+// Expect: parse
+// Reference: rejects - START AT must supply exactly one value per ORDER BY column (2 expected, 1 given)
+// Divergence: START AT value list
+// Normalized: written from the documented syntax `[START AT {<value>|<parameter>} [, …]]`; names from the page's examples.
+EVALUATE
+    'Customer'
+ORDER BY
+    'Customer'[Country] ASC,
+    'Customer'[City] ASC
+START AT "Germany", "Berlin"

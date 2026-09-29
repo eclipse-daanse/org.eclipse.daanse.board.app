@@ -1,0 +1,10 @@
+// Source: https://learn.microsoft.com/en-us/dax/dax-syntax-reference
+// Construct: `&&[OrderDate]` with no space; parenthesised arithmetic on DATE and TIME.
+// Expect: parse
+// Reference: accepts
+// Normalized: as published.
+EVALUATE
+FILTER (
+        FactInternetSales,
+        [OrderDate] > (DATE(2015,1,9) + TIME(2,30,0)) &&[OrderDate] < (DATE(2015,12,31) + TIME(11,59,59))
+)

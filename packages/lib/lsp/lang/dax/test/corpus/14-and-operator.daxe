@@ -1,0 +1,7 @@
+// Source: https://learn.microsoft.com/en-us/dax/related-function-dax (example 1)
+// Construct: && in a formula.
+// Expect: parse
+// Reference: accepts
+// Normalized: as published, less the `Name =` that makes it a measure definition.
+FILTER('InternetSales_USD'
+, 'InternetSales_USD'[SalesTerritoryKey]<>1 && 'InternetSales_USD'[SalesTerritoryKey]<>2 && 'InternetSales_USD'[SalesTerritoryKey]<>3 && 'InternetSales_USD'[SalesTerritoryKey]<>4 && 'InternetSales_USD'[SalesTerritoryKey]<>5)
