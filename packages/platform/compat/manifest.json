@@ -167,6 +167,34 @@
         "library": "org.eclipse.daanse.board.app.ui.vue.stores.datasouce",
         "version": "0.0.1-next.1"
       }
+    },
+    {
+      "namespace": "tsm.library",
+      "attributes": {
+        "library": "org.eclipse.daanse.board.app.lib.repository.navigation",
+        "version": "0.0.1-next.1"
+      }
+    },
+    {
+      "namespace": "tsm.library",
+      "attributes": {
+        "library": "org.eclipse.daanse.board.app.lib.repository.route",
+        "version": "0.0.1-next.1"
+      }
+    },
+    {
+      "namespace": "tsm.library",
+      "attributes": {
+        "library": "org.eclipse.daanse.board.app.lib.repository.persistence",
+        "version": "0.0.1-next.1"
+      }
+    },
+    {
+      "namespace": "tsm.library",
+      "attributes": {
+        "library": "org.eclipse.daanse.board.app.lib.factory.variableWrapper",
+        "version": "0.0.1-next.1"
+      }
     }
   ]
 }

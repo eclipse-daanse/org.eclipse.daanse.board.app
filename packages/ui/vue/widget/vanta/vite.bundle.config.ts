@@ -41,27 +41,62 @@ import manifest from './manifest.json'
  */
 
 /**
- * WORKAROUND (tsm FR pending): the tsm plugin rewrites named, namespace and
- * default imports of shared modules to __tsm__.require(), but leaves bare
- * side-effect imports (`import "module"`) untouched; Rollup then emits them
- * into the entry chunk, where the browser cannot resolve the bare specifier.
- * Shared libraries are side-effect-free by definition here, so stripping is
- * sound. Remove once the plugin handles the bare form itself.
+ * WORKAROUND (tsm#20): rewrites every import form of a shared module that
+ * survives into the chunks - source-level transform cannot see what Rollup
+ * synthesizes or what third-party code inside node_modules carries, and the
+ * tsm plugin misses the combined `import Default, { named }` form entirely.
+ * This is the renderChunk half proposed in the issue; it moves upstream as
+ * a PR and this helper disappears.
  */
-function stripBareSharedImports() {
+function rewriteSharedImportsInChunks() {
   const ids = ['vue', 'vue-router', ...manifest.sharedDependencies.map((d) => d.id)]
+  const esc = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+  const bindings = (inner: string) =>
+    inner
+      .split(',')
+      .map((p) => p.trim())
+      .filter(Boolean)
+      .map((p) => {
+        const m = p.match(/^([\w$]+)\s+as\s+([\w$]+)$/)
+        return m ? `${m[1]}: ${m[2]}` : p
+      })
+      .join(', ')
+
   return {
-    name: 'strip-bare-shared-imports',
+    name: 'rewrite-shared-imports-in-chunks',
     apply: 'build' as const,
     enforce: 'post' as const,
     generateBundle(_o: unknown, bundle: Record<string, { type: string; code?: string }>) {
       for (const chunk of Object.values(bundle)) {
         if (chunk.type !== 'chunk' || !chunk.code) continue
+        let code = chunk.code
         for (const id of ids) {
-          const escaped = id.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
-          chunk.code = chunk.code.replace(
-            new RegExp('^import\\s*["\']' + escaped + '["\'];?\\s*$', 'gm'), '')
+          const q = `["']${esc(id)}["']`
+          // import Default, { named } from 'id'
+          code = code.replace(
+            new RegExp(`import\\s+([\\w$]+)\\s*,\\s*\\{([\\s\\S]*?)\\}\\s*from\\s*${q};?`, 'g'),
+            (_, def, inner) =>
+              `const __tsm_m = __tsm__.require('${id}'); const ${def} = (__tsm_m && __tsm_m.default) ?? __tsm_m; const { ${bindings(inner)} } = __tsm_m;`,
+          )
+          // import { named } from 'id'
+          code = code.replace(
+            new RegExp(`import\\s*\\{([\\s\\S]*?)\\}\\s*from\\s*${q};?`, 'g'),
+            (_, inner) => `const { ${bindings(inner)} } = __tsm__.require('${id}');`,
+          )
+          // import * as ns from 'id'
+          code = code.replace(
+            new RegExp(`import\\s+\\*\\s+as\\s+([\\w$]+)\\s*from\\s*${q};?`, 'g'),
+            (_, ns) => `const ${ns} = __tsm__.require('${id}');`,
+          )
+          // import Default from 'id'
+          code = code.replace(
+            new RegExp(`import\\s+([\\w$]+)\\s+from\\s*${q};?`, 'g'),
+            (_, def) => `const ${def} = (() => { const m = __tsm__.require('${id}'); return (m && m.default) ?? m })();`,
+          )
+          // bare side-effect import
+          code = code.replace(new RegExp(`import\\s*${q};?\\s*`, 'g'), '')
         }
+        chunk.code = code
       }
     },
   } as import('vite').Plugin
@@ -99,7 +134,7 @@ export default defineConfig({
   plugins: [
     vue(),
     inlineCss(),
-    stripBareSharedImports(),
+    rewriteSharedImportsInChunks(),
     tsmPlugin({
       manifest: resolve(__dirname, 'manifest.json'),
       components: 'derive',
