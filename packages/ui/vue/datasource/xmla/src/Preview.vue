@@ -18,7 +18,6 @@ import { inject, ref, watch, toRef, shallowRef, nextTick, onMounted, provide, co
 import { debounce } from 'lodash';
 import { MetadataTree, QueryDesigner, PivotTable } from 'org.eclipse.daanse.board.app.ui.vue.common.xmla';
 import { MonacoEditor } from 'org.eclipse.daanse.board.app.ui.vue.common.monaco';
-import { container } from 'org.eclipse.daanse.board.app.lib.core';
 
 const props = defineProps<{ dataSource: any }>();
 console.log(MetadataTree)

@@ -33,7 +33,6 @@ import { Superscript } from "@tiptap/extension-superscript";
 import { TextAlign } from "@tiptap/extension-text-align";
 import type {i18n} from "org.eclipse.daanse.board.app.lib.i18next"
 import { RichTextEditorSettings } from './gen/RichTextEditorSettings'
-import { container } from 'org.eclipse.daanse.board.app.lib.core'
 import { identifier as varIdentifier, type VariableRepository } from 'org.eclipse.daanse.board.app.lib.repository.variable'
 import { VariableInput } from 'org.eclipse.daanse.board.app.ui.vue.variable.components'
 import { VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables'

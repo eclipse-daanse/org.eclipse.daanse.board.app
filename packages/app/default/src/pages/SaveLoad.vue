@@ -33,7 +33,6 @@ import {
   VaSidebarItemTitle
 } from 'vuestic-ui'
 import { computedAsync } from '@vueuse/core'
-import type { Container } from 'inversify'
 import Default from '@/components/saveLoad/Default.vue'
 import { type ConnectionRepository, identifier as ConnectionRepoId }
   from 'org.eclipse.daanse.board.app.lib.repository.connection'
@@ -70,21 +69,20 @@ if (window && (window as any)['__env'] && (window as any)['__env'].settings
   releaseEndPointUrl.value = (window as any)['__env'].settings.releaseEndPointUrl
 }
 
-const container = inject<Container>('container')
 const repoManager: RepositoryRegistryI | undefined =
-  container?.get<RepositoryRegistryI>(RepoManagerId)
+  inject<RepositoryRegistryI>(RepoManagerId)
 const connectionRepository:ConnectionRepository|undefined =
-  container?.get<ConnectionRepository>(ConnectionRepoId)
+  inject<ConnectionRepository>(ConnectionRepoId)
 const dsRepository:DatasourceRepository|undefined =
-  container?.get<DatasourceRepository>(DsRepoId)
+  inject<DatasourceRepository>(DsRepoId)
 const variableRepository:VariableRepository|undefined =
-  container?.get<VariableRepository>(VariableRepositoryId)
+  inject<VariableRepository>(VariableRepositoryId)
 const variableWrapperFactroy:VariableWrapperFactory|undefined =
-  container?.get<VariableWrapperFactory>(VariableWrapperFactroyId)
-const pageRepo:PageRegistryI|undefined = container?.get<PageRegistryI>(PageRegistryIDentifier)
+  inject<VariableWrapperFactory>(VariableWrapperFactroyId)
+const pageRepo:PageRegistryI|undefined = inject<PageRegistryI>(PageRegistryIDentifier)
 const layoutRepo:LayoutRepositoryI|undefined
-  = container?.get<LayoutRepositoryI>(LayoutRepositoryIdentifier)
-const eventManager:EventManager|undefined = container?.get<EventManager>(EVENT_MANAGER)
+  = inject<LayoutRepositoryI>(LayoutRepositoryIdentifier)
+const eventManager:EventManager|undefined = inject<EventManager>(EVENT_MANAGER)
 repoManager.addObserver({
   update: async (event, repo) => {
     console.log('repos updated')

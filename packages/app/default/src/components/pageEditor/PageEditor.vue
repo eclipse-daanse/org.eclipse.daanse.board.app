@@ -30,16 +30,14 @@ import {
   type LayoutRepositoryI,
   identifier as LayoutRepositoryIdentifier
 } from 'org.eclipse.daanse.board.app.lib.repository.layout.page'
-import type { Container } from 'inversify'
 import { useRoute, useRouter } from 'vue-router'
 import { v4 } from 'uuid'
 
 const router = useRouter();
 const route = useRoute();
-const container = inject<Container>('container')
-const pageRepo:PageRegistryI|undefined = container?.get<PageRegistryI>(PageIdentifier);
+const pageRepo:PageRegistryI|undefined = inject<PageRegistryI>(PageIdentifier);
 const layoutRepo:LayoutRepositoryI|undefined
-  = container?.get<LayoutRepositoryI>(LayoutRepositoryIdentifier);
+  = inject<LayoutRepositoryI>(LayoutRepositoryIdentifier);
 const updated = ref(0);
 const createNew = ref(false);
 const name = ref('newPage');

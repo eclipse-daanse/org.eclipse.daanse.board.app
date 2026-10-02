@@ -18,14 +18,8 @@ import 'vuestic-ui/styles/typography.css'
 import App from './App.vue'
 import 'leaflet/dist/leaflet.css'
 
-import { init } from 'org.eclipse.daanse.board.app.lib.module1'
-import { container, identifiers } from 'org.eclipse.daanse.board.app.lib.core'
+import { services } from 'org.eclipse.daanse.board.app.lib.core'
 
-// Initialize container
-init(container)
-container.bind(identifiers.CONTAINER).toDynamicValue((ctx: any) => {
-  return ctx
-})
 
 // Import required modules for Maps Widget
 import 'org.eclipse.daanse.board.app.lib.datasource.ogcsta'
@@ -38,8 +32,7 @@ const app = createApp(App)
 app.use(createVuestic())
 
 // Setup global properties
-app.config.globalProperties.$container = container
-app.provide('container', container)
+services.register('App', app)
 
 // Setup pinia
 const pinia = createPinia()

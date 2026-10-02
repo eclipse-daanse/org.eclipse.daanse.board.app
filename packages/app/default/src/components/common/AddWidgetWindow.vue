@@ -16,7 +16,6 @@ import { useDataSourcesStore } from 'org.eclipse.daanse.board.app.ui.vue.stores.
 import { WidgetRepository, identifier } from 'org.eclipse.daanse.board.app.lib.repository.widget'
 import { inject, ref, computed, watch } from 'vue'
 import Draggable from 'vuedraggable'
-import { container } from 'org.eclipse.daanse.board.app.lib.core'
 import { VaScrollContainer } from 'vuestic-ui'
 // import SERVICE_IDENTIFIER from "@/config/identifiers/services";
 

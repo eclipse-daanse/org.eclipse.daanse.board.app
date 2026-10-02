@@ -16,7 +16,7 @@ Contributors: Smart City Jena
  * to dynamically load widget actions from an .ecore file.
  */
 
-import { container } from 'org.eclipse.daanse.board.app.lib.core';
+import { services } from 'org.eclipse.daanse.board.app.lib.core';
 import {
   EventActionsRegistry,
   EVENT_ACTIONS_REGISTRY,
@@ -25,9 +25,9 @@ import {
 } from '../index';
 
 export async function loadWidgetActionsFromEcore() {
-  // Get the services from the container
-  const actionsRegistry = container.get<EventActionsRegistry>(EVENT_ACTIONS_REGISTRY);
-  const ecoreService = container.get<EcoreMetadataService>(ECORE_METADATA_SERVICE);
+  // Resolve the services from the registry
+  const actionsRegistry = services.getRequired<EventActionsRegistry>('EventActionsRegistry');
+  const ecoreService = services.getRequired<EcoreMetadataService>('EcoreMetadataService');
 
   // Example 1: Load from URI (fetch)
   try {

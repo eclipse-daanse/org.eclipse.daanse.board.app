@@ -24,7 +24,7 @@ import { inject, toRefs } from 'vue';
 const { id: widgetId } = toRefs(props);
 const config = defineModel<RepeatableSVGSettings>('configv', { required: true });
 
-import { container as coreContainer, identifiers } from 'org.eclipse.daanse.board.app.lib.core';
+import { identifiers } from 'org.eclipse.daanse.board.app.lib.core'
 import type { TinyEmitter } from 'tiny-emitter';
 import { EventActionsRegistry, EVENT_ACTIONS_REGISTRY } from 'org.eclipse.daanse.board.app.lib.events';
 import { RepeatableSvgWidgetInterface } from './api/RepeatableSvgWidgetInterface';

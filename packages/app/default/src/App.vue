@@ -15,7 +15,6 @@ Contributors:
 import Header from './components/common/Header.vue'
 import { VaSpacer } from 'vuestic-ui'
 import { inject, ref, onMounted } from 'vue'
-import { container } from 'org.eclipse.daanse.board.app.lib.core'
 import {
   NAVIGATION_REGISTRY,
   type NavigationRegistry,

@@ -64,7 +64,7 @@ function stripBareSharedImports() {
         }
       }
     },
-  }
+  } as import('vite').Plugin
 }
 
 function inlineCss() {
@@ -82,7 +82,7 @@ function inlineCss() {
       entry.code = inject + entry.code
       for (const f of cssFiles) delete bundle[f.fileName]
     },
-  }
+  } as import('vite').Plugin
 }
 
 const sharedModules = ['vue', 'vue-router', ...manifest.sharedDependencies
@@ -104,7 +104,9 @@ export default defineConfig({
       manifest: resolve(__dirname, 'manifest.json'),
       components: 'derive',
       sharedModules,
-    }),
+      // Cast: tsm links its own vite copy, whose Plugin type is nominally
+      // incompatible with the workspace's - same shape, different identity.
+    }) as unknown as import('vite').PluginOption,
   ],
   build: {
     target: 'es2022',

@@ -22,7 +22,7 @@ import { useDatasourceRepository, useVariableRepository } from 'org.eclipse.daan
 import { inject, computed, onMounted, onUnmounted, ref, toRefs, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import { ChartSettings } from './gen/ChartSettings';
-import { container, identifiers } from 'org.eclipse.daanse.board.app.lib.core';
+import { identifiers } from 'org.eclipse.daanse.board.app.lib.core'
 import type { TinyEmitter } from 'tiny-emitter';
 import { EventActionsRegistry, EVENT_ACTIONS_REGISTRY } from 'org.eclipse.daanse.board.app.lib.events';
 import { ChartWidgetInterface } from './api/ChartWidgetInterface';

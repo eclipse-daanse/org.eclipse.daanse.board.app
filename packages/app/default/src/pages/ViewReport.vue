@@ -14,7 +14,6 @@ Contributors:
 <script setup lang="ts">
 import { useRoute, useRouter } from 'vue-router'
 import { inject, computed } from 'vue'
-import type { Container } from 'inversify'
 import { v4 as uuidv4 } from 'uuid'
 import LayoutRenderer from '@/components/pageEditor/LayoutRenderer.vue'
 import {
@@ -30,9 +29,8 @@ import {
 const props = defineProps(['params']);
 const route = useRoute();
 const router = useRouter();
-const container = inject<Container>('container')
-const pageRepo = container?.get<PageRegistryI>(PageIdentifier)
-const layoutRepo = container?.get<LayoutRepositoryI>(LayoutRepositoryIdentifier)
+const pageRepo = inject<PageRegistryI>(PageIdentifier)
+const layoutRepo = inject<LayoutRepositoryI>(LayoutRepositoryIdentifier)
 
 const pageID = computed(() => {
   return (props.params?.pageid ?? route.params.pageid ?? '') as string

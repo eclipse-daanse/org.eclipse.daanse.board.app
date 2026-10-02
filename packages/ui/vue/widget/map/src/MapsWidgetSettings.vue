@@ -21,10 +21,8 @@ import WFS from './WFS'
 import RendererModal from './parts/RendererModal.vue'
 import { computedAsync } from '@vueuse/core'
 import { DatasourceRepository, identifier } from 'org.eclipse.daanse.board.app.lib.repository.datasource'
-import type { Container } from 'inversify'
 import { logServices, logDatasource } from './utils/logger'
 
-const container = inject('container') as Container
 const instance = getCurrentInstance()
 
 // Accept optional dataSources prop for compatibility with WidgetSettingsWindow

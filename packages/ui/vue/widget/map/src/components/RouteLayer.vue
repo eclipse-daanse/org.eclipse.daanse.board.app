@@ -14,7 +14,6 @@ Contributors:
 <script lang="ts" setup>
 import { inject, ref, computed, onMounted, onUnmounted, watch } from 'vue'
 import { LGeoJson, LCircleMarker } from '@vue-leaflet/vue-leaflet'
-import { container } from 'org.eclipse.daanse.board.app.lib.core'
 import {
   DatasourceRepository,
   identifier,

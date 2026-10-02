@@ -17,7 +17,6 @@ import {
   DatasourceRepository, identifier as DatasourceRepositoryIdentifier
 } from "org.eclipse.daanse.board.app.lib.repository.datasource";
 import { watch, ref, computed, onMounted } from "vue";
-import { container } from 'org.eclipse.daanse.board.app.lib.core'
 
 // Injected once at setup; the static helpers receive it as an argument
 const dsRepository = inject<DatasourceRepository>(DatasourceRepositoryIdentifier)!

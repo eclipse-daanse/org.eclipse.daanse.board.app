@@ -81,7 +81,7 @@ Contributors:
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch, nextTick, onMounted, onBeforeUnmount } from 'vue'
+import { inject, ref, computed, watch, nextTick, onMounted, onBeforeUnmount } from 'vue'
 import { GridLayout, type LayoutItem } from 'grid-layout-plus'
 import { type IWidget, useWidgetsStore } from 'org.eclipse.daanse.board.app.ui.vue.stores.widgets'
 import { useLayoutStore } from 'org.eclipse.daanse.board.app.ui.vue.stores.layout'
@@ -93,7 +93,6 @@ import throttle from 'lodash/throttle'
 import { useClipboardStore } from 'org.eclipse.daanse.board.app.ui.vue.layouts.base'
 import { BREAKPOINTS, resolveGridSettings } from '../GridSettings'
 import { identifier as PageIdentifier, type PageRegistryI } from 'org.eclipse.daanse.board.app.lib.repository.page'
-import { container as diContainer } from 'org.eclipse.daanse.board.app.lib.core'
 
 /** Grid Settings — direkt aus dem Page Repository lesen */
 const layoutSettingsRef = ref<Record<string, any> | undefined>(undefined)
@@ -324,9 +323,7 @@ const onResize = throttle(() => {
 }, 120)
 /** Page Repo Subscription für layoutSettings */
 let pageSubId: string | null = null
-const pageRepo = diContainer.isBound(PageIdentifier)
-  ? diContainer.get<PageRegistryI>(PageIdentifier)
-  : null
+const pageRepo = inject<PageRegistryI>(PageIdentifier) ?? null
 
 function syncLayoutSettings() {
   if (pageRepo && pageID.value) {

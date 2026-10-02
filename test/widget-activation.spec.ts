@@ -26,14 +26,13 @@
  */
 
 import { describe, it, expect, beforeEach } from 'vitest'
-import { Container } from 'inversify'
+import { DefaultServiceRegistry } from '@eclipse-daanse/tsm'
 import {
   getComponentMetadata,
   getActivateMethod,
   getDeactivateMethod,
 } from '@eclipse-daanse/tsm/decorators'
-import { ModuleLoader, type ModuleManifest } from '@eclipse-daanse/tsm'
-import { BoardServiceRegistry } from 'org.eclipse.daanse.board.app.lib.core'
+import { DefaultServiceRegistry, ModuleLoader, type ModuleManifest } from '@eclipse-daanse/tsm'
 import { WIDGET_SERVICE_ID, WidgetRepository } from 'org.eclipse.daanse.board.app.lib.repository.widget'
 
 const silentLogger = () => ({
@@ -66,12 +65,12 @@ window.matchMedia ??= ((query: string) => ({
 })) as typeof window.matchMedia
 
 describe('widget bundles as declared components', () => {
-  let services: BoardServiceRegistry
+  let services: DefaultServiceRegistry
   let events: EventRegistryDouble
   let actions: ActionsRegistryDouble
 
   beforeEach(async () => {
-    services = new BoardServiceRegistry(new Container())
+    services = new DefaultServiceRegistry()
     events = new EventRegistryDouble()
     actions = new ActionsRegistryDouble()
     services.register('EventRegistry', events)

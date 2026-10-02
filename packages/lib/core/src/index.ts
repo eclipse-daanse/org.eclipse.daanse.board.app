@@ -1,46 +1,39 @@
-/**
-Copyright (c) 2023 Contributors to the  Eclipse Foundation.
-This program and the accompanying materials are made
-available under the terms of the Eclipse Public License 2.0
-which is available at https://www.eclipse.org/legal/epl-2.0/
-SPDX-License-Identifier: EPL-2.0
+/*********************************************************************
+ * Copyright (c) 2026 Contributors to the Eclipse Foundation.
+ *
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ *
+ * SPDX-License-Identifier: EPL-2.0
+ *
+ * Contributors:
+ *   Smart City Jena
+ **********************************************************************/
 
-Contributors: Smart City Jena
-*/
-
-import { Container } from 'inversify'
-
-const identifiers = {
-  TINY_EMITTER: Symbol.for('TINY_EMITTER'),
-  CONTAINER: Symbol.for('CONTAINER'),
-}
-import { TinyEmitter } from 'tiny-emitter'
-
-
-const container = new Container()
-
-const tinyEmitter = new TinyEmitter()
-if (!container.isBound(identifiers.TINY_EMITTER)) {
-  container.bind<TinyEmitter>(identifiers.TINY_EMITTER).toConstantValue(tinyEmitter)
-}
-
-import { BoardServiceRegistry } from './BoardServiceRegistry'
+import { DefaultServiceRegistry } from '@eclipse-daanse/tsm'
 import type { ActivationContext, ActivatableModule } from './api/ActivationContext'
 
 /**
- * Die ServiceRegistry der Anwendung.
- *
- * Umgestellte Pakete registrieren hier über ihren `activate`-Kontext. Bis
- * alle Pakete umgestellt sind, löst die Registry unbekannte IDs zusätzlich
- * gegen den Inversify-Container auf.
+ * Well-known symbols, kept for Vue-side injection: the host's DI bridge
+ * provides every service under Symbol.for(id), and these constants are those
+ * symbols under a stable name.
  */
-const services = new BoardServiceRegistry(container)
+const identifiers = {
+  TINY_EMITTER: Symbol.for('TINY_EMITTER'),
+}
+
+/**
+ * The application's ServiceRegistry - tsm's DefaultServiceRegistry, nothing
+ * else. The Inversify container and the transitional bridge that mirrored
+ * registrations into it are gone: the migration they carried is complete,
+ * and they died the way they were designed to - by becoming unused.
+ */
+const services = new DefaultServiceRegistry()
 
 export {
-  container,
   identifiers,
   services,
-  BoardServiceRegistry,
   type ActivationContext,
   type ActivatableModule,
 }

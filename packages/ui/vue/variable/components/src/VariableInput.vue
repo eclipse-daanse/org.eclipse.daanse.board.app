@@ -13,7 +13,6 @@ Contributors:
 
 <script setup lang="ts">
 import { inject, onMounted, ref, computed, watch } from 'vue';
-import { container } from 'org.eclipse.daanse.board.app.lib.core'
 import { identifier, VariableRepository } from 'org.eclipse.daanse.board.app.lib.repository.variable'
 import { VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 

@@ -15,7 +15,6 @@ Contributors:
 import { inject, ref } from 'vue'
 import type { i18n } from "org.eclipse.daanse.board.app.lib.i18next"
 import { useVariableRepository, VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables'
-import { container } from 'org.eclipse.daanse.board.app.lib.core'
 import { identifier, VariableRepository } from 'org.eclipse.daanse.board.app.lib.repository.variable'
 import { TextSettings } from './gen/TextSettings'
 import { VariableInput, ComplexTextInput } from 'org.eclipse.daanse.board.app.ui.vue.variable.components'

@@ -16,12 +16,14 @@ import { inject, toRefs, watch, onMounted, computed, shallowRef } from "vue";
 import { useVariableRepository, useDatasourceRepository } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import { PivotTable as PivotTableComponent } from 'org.eclipse.daanse.board.app.ui.vue.common.xmla';
 import { PivotTable } from "./gen/PivotTable";
-import { identifiers } from 'org.eclipse.daanse.board.app.lib.core';
-import type { TinyEmitter } from 'tiny-emitter';
+import { EventActionsRegistry, EVENT_ACTIONS_REGISTRY } from 'org.eclipse.daanse.board.app.lib.events'
+import { useRoute } from 'vue-router'
 
 const props = defineProps<{ datasourceId: string, id?: string }>();
 const { datasourceId, id: widgetId } = toRefs(props);
 
+import { identifiers } from 'org.eclipse.daanse.board.app.lib.core';
+import type { TinyEmitter } from 'tiny-emitter';
 const eventBus = inject<TinyEmitter>(identifiers.TINY_EMITTER)!;
 
 // Publishes widget:PivotTableWidget:<name> on the board's event bus

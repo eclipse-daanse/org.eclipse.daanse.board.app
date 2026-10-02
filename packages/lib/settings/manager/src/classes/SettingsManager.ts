@@ -9,10 +9,8 @@
 
 */
 import get from "lodash/get";
-import { injectable } from 'inversify'
 import { SettingsManagerI } from '../interfaces/SettingsManagerI'
 
-@injectable()
 export class SettingsManager implements SettingsManagerI{
 
   private ext_loaded = false;

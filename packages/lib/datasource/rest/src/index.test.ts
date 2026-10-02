@@ -23,7 +23,7 @@
  */
 
 import { describe, it, expect, beforeEach, afterEach } from 'vitest'
-import { container, BoardServiceRegistry } from 'org.eclipse.daanse.board.app.lib.core'
+import { DefaultServiceRegistry } from '@eclipse-daanse/tsm'
 import { activate, deactivate, REST_STORE_FACTORY } from './index'
 
 const konfiguration = {
@@ -35,7 +35,7 @@ const konfiguration = {
 }
 
 describe('lib.datasource.rest', () => {
-  let services: BoardServiceRegistry
+  let services: DefaultServiceRegistry
   let repositoryAttrappe: { getConnection: (id: string) => unknown }
 
   beforeEach(async () => {
@@ -44,7 +44,7 @@ describe('lib.datasource.rest', () => {
      * Service-Locator in ComputedStoreParameter greift auf genau diesen zu,
      * ein frischer bliebe für ihn leer. Aufgeräumt wird in afterEach.
      */
-    services = new BoardServiceRegistry(container)
+    services = new DefaultServiceRegistry()
     repositoryAttrappe = { getConnection: () => ({ getData: async () => ({}) }) }
     services.register('ConnectionRepository', repositoryAttrappe)
     /*
