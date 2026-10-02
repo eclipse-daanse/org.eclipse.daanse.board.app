@@ -35,32 +35,13 @@ export async function activate({ log }: ActivationContext) {
 
   const libraries: Record<string, () => Promise<unknown>> = {
     'org.eclipse.daanse.board.app.lib.core': () => import('org.eclipse.daanse.board.app.lib.core'),
-    'org.eclipse.daanse.board.app.lib.events': () => import('org.eclipse.daanse.board.app.lib.events'),
     'org.eclipse.daanse.board.app.lib.annotations': () => import('org.eclipse.daanse.board.app.lib.annotations'),
     'org.eclipse.daanse.board.app.lib.utils.helpers': () => import('org.eclipse.daanse.board.app.lib.utils.helpers'),
-    'org.eclipse.daanse.board.app.lib.i18next': () => import('org.eclipse.daanse.board.app.lib.i18next'),
-    'org.eclipse.daanse.board.app.lib.repository.widget': () => import('org.eclipse.daanse.board.app.lib.repository.widget'),
     'org.eclipse.daanse.board.app.ui.vue.composables': () => import('org.eclipse.daanse.board.app.ui.vue.composables'),
     'org.eclipse.daanse.board.app.ui.vue.variable.components': () => import('org.eclipse.daanse.board.app.ui.vue.variable.components'),
-    'org.eclipse.daanse.board.app.lib.variables': () => import('org.eclipse.daanse.board.app.lib.variables'),
-    'org.eclipse.daanse.board.app.lib.logger': () => import('org.eclipse.daanse.board.app.lib.logger'),
-    'org.eclipse.daanse.board.app.lib.repository.datasource': () => import('org.eclipse.daanse.board.app.lib.repository.datasource'),
-    'org.eclipse.daanse.board.app.lib.repository.variable': () => import('org.eclipse.daanse.board.app.lib.repository.variable'),
-    'org.eclipse.daanse.board.app.lib.repository.page': () => import('org.eclipse.daanse.board.app.lib.repository.page'),
-    'org.eclipse.daanse.board.app.lib.repository.layout.page': () => import('org.eclipse.daanse.board.app.lib.repository.layout.page'),
     'org.eclipse.daanse.board.app.ui.vue.stores.layout': () => import('org.eclipse.daanse.board.app.ui.vue.stores.layout'),
     'org.eclipse.daanse.board.app.ui.vue.stores.widgets': () => import('org.eclipse.daanse.board.app.ui.vue.stores.widgets'),
     'org.eclipse.daanse.board.app.ui.vue.widget.wrapper': () => import('org.eclipse.daanse.board.app.ui.vue.widget.wrapper'),
-    'org.eclipse.daanse.board.app.lib.repository.connection': () => import('org.eclipse.daanse.board.app.lib.repository.connection'),
-    'org.eclipse.daanse.board.app.lib.datasource.xmla': () => import('org.eclipse.daanse.board.app.lib.datasource.xmla'),
-    'org.eclipse.daanse.board.app.lib.connection.xmla': () => import('org.eclipse.daanse.board.app.lib.connection.xmla'),
-    'org.eclipse.daanse.board.app.lib.composer.ogcsta2chart': () => import('org.eclipse.daanse.board.app.lib.composer.ogcsta2chart'),
-    'org.eclipse.daanse.board.app.ui.vue.stores.connection': () => import('org.eclipse.daanse.board.app.ui.vue.stores.connection'),
-    'org.eclipse.daanse.board.app.ui.vue.stores.datasouce': () => import('org.eclipse.daanse.board.app.ui.vue.stores.datasouce'),
-    'org.eclipse.daanse.board.app.lib.repository.navigation': () => import('org.eclipse.daanse.board.app.lib.repository.navigation'),
-    'org.eclipse.daanse.board.app.lib.repository.route': () => import('org.eclipse.daanse.board.app.lib.repository.route'),
-    'org.eclipse.daanse.board.app.lib.repository.persistence': () => import('org.eclipse.daanse.board.app.lib.repository.persistence'),
-    'org.eclipse.daanse.board.app.lib.factory.variableWrapper': () => import('org.eclipse.daanse.board.app.lib.factory.variableWrapper'),
   }
 
   for (const [id, load] of Object.entries(libraries)) {

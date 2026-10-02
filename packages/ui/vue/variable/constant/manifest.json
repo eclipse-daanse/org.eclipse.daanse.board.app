@@ -3,11 +3,34 @@
   "id": "ui.vue.variable.constant",
   "name": "ui.vue.variable.constant",
   "version": "0.0.1-next.1",
-  "entry": "./src/index.ts",
+  "entry": "/bundles/ui.vue.variable.constant/index.js",
   "exports": {},
   "requiresService": [
     {
       "id": "VariableRepository"
     }
+  ],
+  "sharedDependencies": [
+    {
+      "id": "org.eclipse.daanse.board.app.lib.repository.variable",
+      "versionRange": ">=0.0.1-0"
+    },
+    {
+      "id": "org.eclipse.daanse.board.app.lib.variables",
+      "versionRange": ">=0.0.1-0"
+    }
+  ],
+  "capabilities": [
+    {
+      "namespace": "tsm.library",
+      "attributes": {
+        "library": "org.eclipse.daanse.board.app.ui.vue.variable.constant",
+        "version": "0.0.1-next.1"
+      }
+    }
+  ],
+  "dependencies": [
+    "lib.repository.variable",
+    "lib.variables"
   ]
 }

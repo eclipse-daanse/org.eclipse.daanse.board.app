@@ -3,7 +3,7 @@
   "id": "lib.datasource.kpi_tmp",
   "name": "lib.datasource.kpi_tmp",
   "version": "0.0.1-next.1",
-  "entry": "./src/index.ts",
+  "entry": "/bundles/lib.datasource.kpi_tmp/index.js",
   "exports": {},
   "provides": [
     {
@@ -14,5 +14,28 @@
     {
       "id": "ConnectionRepository"
     }
+  ],
+  "sharedDependencies": [
+    {
+      "id": "org.eclipse.daanse.board.app.lib.datasource.base",
+      "versionRange": ">=0.0.1-0"
+    },
+    {
+      "id": "org.eclipse.daanse.board.app.lib.repository.connection",
+      "versionRange": ">=0.0.1-0"
+    }
+  ],
+  "capabilities": [
+    {
+      "namespace": "tsm.library",
+      "attributes": {
+        "library": "org.eclipse.daanse.board.app.lib.datasource.kpi_tmp",
+        "version": "0.0.1-next.1"
+      }
+    }
+  ],
+  "dependencies": [
+    "lib.datasource.base",
+    "lib.repository.connection"
   ]
 }
