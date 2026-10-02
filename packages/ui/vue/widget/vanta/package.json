@@ -32,7 +32,7 @@
     "three": "0.134.0",
     "uuid": "^14.0.0",
     "vanta": "0.5.24",
-    "@eclipse-daanse/tsm": "link:../../../../../EMFTs/tsm"
+    "@eclipse-daanse/tsm": "0.1.0-next.1"
   },
   "devDependencies": {
     "@types/node": "^25.0.8",
