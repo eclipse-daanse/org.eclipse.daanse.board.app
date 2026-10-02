@@ -11,14 +11,20 @@
  *   Smart City Jena
  **********************************************************************/
 
-import { describe, it, expect, afterEach } from 'vitest'
+import { describe, it, expect, afterEach, beforeEach } from 'vitest'
 import { version as vueVersion } from 'vue'
-import { isTsmRuntimeAvailable, tsmRuntime } from '@eclipse-daanse/tsm'
+import { initTsmRuntime, isTsmRuntimeAvailable, tsmRuntime } from '@eclipse-daanse/tsm'
 import { activate, VERSIONS } from './index'
 
 const silent = { debug() {}, info() {}, warn() {}, error() {} }
 
 describe('platform.vue', () => {
+  beforeEach(() => {
+    // The launcher initializes the runtime before any module activates;
+    // the bundle reads it from the global instead of importing tsm.
+    initTsmRuntime()
+  })
+
   afterEach(() => {
     // The runtime is a global singleton; clean up so later tests do not
     // depend on this registration.
@@ -39,8 +45,8 @@ describe('platform.vue', () => {
     expect(VERSIONS.pinia).toBe(pinia.version)
   })
 
-  it('provides vue and vue-router under their names', () => {
-    activate({ services: undefined as never, log: silent })
+  it('provides vue and vue-router under their names', async () => {
+    await activate({ services: undefined as never, log: silent })
 
     expect(isTsmRuntimeAvailable()).toBe(true)
     const vue = globalThis.window.__tsm__.require('vue') as typeof import('vue')
@@ -49,12 +55,12 @@ describe('platform.vue', () => {
   })
 
   /*
-   * The transition constraint from the module comment: the provided instance
-   * must be THE SAME one the host imports - two copies would be two
-   * reactivity systems.
+   * In the browser the identity guarantee is the import map (one URL, one
+   * instance); in this test environment both paths resolve through node,
+   * which proves the artefact re-exports the real package.
    */
-  it('hands out the same Vue instance the host imports', async () => {
-    activate({ services: undefined as never, log: silent })
+  it('hands out the same Vue instance a bare import receives', async () => {
+    await activate({ services: undefined as never, log: silent })
 
     const shared = globalThis.window.__tsm__.require('vue') as typeof import('vue')
     const direct = await import('vue')

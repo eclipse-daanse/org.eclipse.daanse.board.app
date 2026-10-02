@@ -605,6 +605,13 @@
   version "0.0.0"
   uid ""
 
+"@eclipse-daanse/tsm@link:EMFTs/tsm":
+  version "0.0.0"
+  uid ""
+
+"@eclipse-daanse/tsm@link:packages/EMFTs/tsm":
+  version "0.0.0"
+
 "@egjs/agent@^2.2.1":
   version "2.4.4"
   resolved "https://registry.npmjs.org/@egjs/agent/-/agent-2.4.4.tgz"

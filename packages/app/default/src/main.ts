@@ -23,18 +23,16 @@
  */
 
 import 'reflect-metadata'
-import { ModuleLoader, type ModuleManifest } from '@eclipse-daanse/tsm'
+import { initTsmRuntime, ModuleLoader, type ModuleManifest } from '@eclipse-daanse/tsm'
 import { installDevtools } from '@eclipse-daanse/tsm/devtools'
+import * as libCore from 'org.eclipse.daanse.board.app.lib.core'
 import { services } from 'org.eclipse.daanse.board.app.lib.core'
 import { bundles } from './bundles'
-
-const resolvedContainers = new Map<string, unknown>()
 
 const loader = new ModuleLoader({
   serviceRegistry: services,
   hotReload: import.meta.env.DEV,
   continueOnError: true,
-  entryResolver: (manifest) => resolvedContainers.get(manifest.id),
 })
 
 // The tsm console: tsm.lb(), tsm.services() and friends in the devtools
@@ -70,6 +68,19 @@ async function start() {
   services.register('ModuleLoader', loader)
 
   /*
+   * The system library: lib.core is the bridge to this very registry, so it
+   * can only ever come from the launcher - a bundle-built copy would carry
+   * its own registry instance. The OSGi analogue is the system bundle
+   * exporting the framework packages.
+   */
+  initTsmRuntime().register(
+    'org.eclipse.daanse.board.app.lib.core',
+    libCore,
+    '0.0.1-next.1',
+    'system',
+  )
+
+  /*
    * Boot screen first, explicitly, before anything else is even registered:
    * a progress display that loads after the modules it should show would
    * miss its own point. Plain DOM, dependency-free by design.
@@ -81,27 +92,11 @@ async function start() {
   )
 
   /*
-   * The last two statically bundled modules: the shared vue stack and the
-   * shrinking compat library bridge. Everything else arrives per URL.
+   * Nothing else is statically bundled: platform.vue is a URL bundle in
+   * bundles.ts like everything else, and the vue stack itself arrives
+   * through the import map in index.html pointing at its artefacts.
    */
-  const platform: Array<[ModuleManifest, () => Promise<unknown>]> = [
-    [
-      (await import('org.eclipse.daanse.board.app.platform.vue/manifest.json'))
-        .default as ModuleManifest,
-      () => import('org.eclipse.daanse.board.app.platform.vue'),
-    ],
-    [
-      (await import('org.eclipse.daanse.board.app.platform.compat/manifest.json'))
-        .default as ModuleManifest,
-      () => import('org.eclipse.daanse.board.app.platform.compat'),
-    ],
-  ]
-
-  for (const [manifest, load] of platform) {
-    resolvedContainers.set(manifest.id, await load())
-  }
-
-  loader.register([...platform.map(([manifest]) => manifest), ...bundles])
+  loader.register(bundles)
   await loader.loadAll()
 
   const all = loader.getManifests()

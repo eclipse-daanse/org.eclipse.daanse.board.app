@@ -11,8 +11,10 @@
     "lib.repository.page",
     "lib.repository.widget",
     "lib.variables",
-    "platform.compat",
-    "platform.vue"
+    "platform.vue",
+    "ui.vue.stores.layout",
+    "ui.vue.stores.widgets",
+    "ui.vue.widget.wrapper"
   ],
   "requiresService": [],
   "sharedDependencies": [
