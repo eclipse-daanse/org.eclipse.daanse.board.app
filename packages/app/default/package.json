@@ -147,7 +147,7 @@
     "vue3-moveable": "^0.28.0",
     "vuedraggable": "^4.1.0",
     "vuestic-ui": "^1.10.3",
-    "@eclipse-daanse/tsm": "link:../../../../EMFTs/tsm"
+    "@eclipse-daanse/tsm": "0.1.0-next.1"
   },
   "devDependencies": {
     "@playwright/test": "^1.51.0",
