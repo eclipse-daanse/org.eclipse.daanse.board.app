@@ -15,7 +15,7 @@ import { type BoxedDatastream } from 'org.eclipse.daanse.board.app.lib.datasourc
 import L from 'leaflet'
 import { ERefType } from '../api/Renderer'
 import MapMarker from './MapMarker.vue'
-import { container, identifiers } from 'org.eclipse.daanse.board.app.lib.core'
+import { identifiers } from 'org.eclipse.daanse.board.app.lib.core'
 import type { TinyEmitter } from 'tiny-emitter'
 import { ThingClickPayload } from '../gen/ThingClickPayload'
 import { DatastreamClickPayload } from '../gen/DatastreamClickPayload'

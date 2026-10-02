@@ -225,7 +225,6 @@ Contributors:
 import { ref, computed, watch, onMounted, inject } from 'vue';
 import type { i18n } from "org.eclipse.daanse.board.app.lib.i18next";
 import { VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables';
-import { container } from 'org.eclipse.daanse.board.app.lib.core';
 import {
   identifier as variableIdentifier,
   type VariableRepository

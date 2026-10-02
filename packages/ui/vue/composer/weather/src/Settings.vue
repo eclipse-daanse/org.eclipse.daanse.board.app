@@ -12,7 +12,6 @@ Contributors:
 -->
 <script setup lang="ts">
 import { inject, ref, computed, watch } from 'vue'
-import { container } from 'org.eclipse.daanse.board.app.lib.core'
 import { identifier, DatasourceRepository } from 'org.eclipse.daanse.board.app.lib.repository.datasource'
 
 const { config, dataSources } = defineProps<{

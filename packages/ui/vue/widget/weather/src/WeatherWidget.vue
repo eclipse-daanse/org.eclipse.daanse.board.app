@@ -27,7 +27,7 @@ import { toRefs } from 'vue';
 const { id: widgetId } = toRefs(props);
 const settings = defineModel<WeatherWidgetSettings>('configv', { required: false, default: () => ({}) })
 
-import { container as coreContainer, identifiers } from 'org.eclipse.daanse.board.app.lib.core';
+import { identifiers } from 'org.eclipse.daanse.board.app.lib.core'
 import type { TinyEmitter } from 'tiny-emitter';
 import { EventActionsRegistry, EVENT_ACTIONS_REGISTRY } from 'org.eclipse.daanse.board.app.lib.events';
 import { WeatherWidgetInterface } from './api/WeatherWidgetInterface';

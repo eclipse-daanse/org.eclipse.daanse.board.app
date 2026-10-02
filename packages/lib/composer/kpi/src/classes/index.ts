@@ -11,7 +11,6 @@
  *   Smart City Jena
  **********************************************************************/
 
-import { inject, injectable } from 'inversify'
 import { BaseDatasource, type IBaseConnectionConfiguration } from 'org.eclipse.daanse.board.app.lib.datasource.base'
 import {
   DatasourceRepository,
@@ -22,7 +21,6 @@ export interface IKpiComposerConfiguration extends IBaseConnectionConfiguration 
   connectedDatasources?: string[]
 }
 
-@injectable()
 export class KpiComposer extends BaseDatasource {
   /**
    * Dependencies arrive through the constructor - the factory in this

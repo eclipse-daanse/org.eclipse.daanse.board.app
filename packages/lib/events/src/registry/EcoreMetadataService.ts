@@ -9,7 +9,6 @@ Contributors: Smart City Jena
 
 */
 
-import { injectable } from 'inversify';
 import {
   ResourceSet,
   Resource,
@@ -75,7 +74,6 @@ export interface EcorePayloadMetadata {
 /**
  * Service for extracting action metadata from Ecore models
  */
-@injectable()
 export class EcoreMetadataService {
   private modelCache: Map<string, EPackage> = new Map();
   private resourceSet: ResourceSet;

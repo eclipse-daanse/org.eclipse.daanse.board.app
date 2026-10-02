@@ -24,17 +24,15 @@ import {
   identifier as LayoutRepositoryIdentifier,
   type LayoutI
 } from 'org.eclipse.daanse.board.app.lib.repository.layout.page'
-import type { Container } from 'inversify'
 
 const i18n: i18n | undefined = inject('i18n');
 const t = (key: string) => (i18n) ? i18n.t(key) : key;
 
 const pageid = defineModel<string>({ required: true })
 const collepsed = ref(true);
-const container = inject<Container>('container')
-const pageRepo:PageRegistryI|undefined = container?.get<PageRegistryI>(PageIdentifier);
+const pageRepo:PageRegistryI|undefined = inject<PageRegistryI>(PageIdentifier);
 const layoutRepo:LayoutRepositoryI|undefined
-  = container?.get<LayoutRepositoryI>(LayoutRepositoryIdentifier);
+  = inject<LayoutRepositoryI>(LayoutRepositoryIdentifier);
 const pageSettings = ref<PageI | null>(null)
 const emit = defineEmits(['close'])
 

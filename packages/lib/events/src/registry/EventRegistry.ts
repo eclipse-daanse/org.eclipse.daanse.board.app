@@ -10,7 +10,6 @@ Contributors: Smart City Jena
 */
 
 import 'reflect-metadata';
-import { injectable } from 'inversify';
 
 /**
  * Metadaten-Eintrag
@@ -50,7 +49,6 @@ export interface WidgetEventDefinition {
 /**
  * Zentrale Registry für alle Event-Schemas mit Introspection
  */
-@injectable()
 export class EventRegistry {
   private events: Map<string, WidgetEventDefinition> = new Map();
   private widgetTypeMap: Map<string, string> = new Map(); // Maps eventType -> widgetType

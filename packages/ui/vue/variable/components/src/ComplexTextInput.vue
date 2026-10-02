@@ -15,7 +15,6 @@ Contributors:
 import { VariableComplexStringWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import { Mentionable } from 'vue-mention';
 import { inject, onMounted, ref, nextTick, useSlots } from 'vue';
-import { container } from 'org.eclipse.daanse.board.app.lib.core'
 import { identifier, VariableRepository } from 'org.eclipse.daanse.board.app.lib.repository.variable'
 
 interface VariableOption {

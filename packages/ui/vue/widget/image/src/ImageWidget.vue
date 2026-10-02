@@ -14,7 +14,7 @@ Contributors:
 <script lang="ts" setup>
 import { inject, onMounted, ref, watch, type Ref, computed, toRefs } from 'vue'
 import { ImageSettings } from './gen/ImageSettings'
-import { container, identifiers } from 'org.eclipse.daanse.board.app.lib.core'
+import { identifiers } from 'org.eclipse.daanse.board.app.lib.core'
 import type { TinyEmitter } from 'tiny-emitter'
 
 const props = defineProps<{ datasourceId: string, id?: string }>()
