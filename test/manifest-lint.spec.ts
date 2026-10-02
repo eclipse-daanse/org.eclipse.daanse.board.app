@@ -32,8 +32,11 @@ const platform = [platformVue as ModuleManifest, platformCompat as ModuleManifes
 const preloaded = preloadedModules.map(([manifest]) => manifest)
 const all: ModuleManifest[] = [...platform, ...preloaded, ...bundles]
 
-/** Services the host itself registers before loadAll (composition root). */
-const HOST_PROVIDED = new Set(['App'])
+/**
+ * Services the host itself registers before loadAll. Empty since the shell
+ * step: even the Vue app instance is provided by a bundle (app.shell).
+ */
+const HOST_PROVIDED = new Set<string>()
 
 describe('manifest lint', () => {
   it('module ids are unique', () => {

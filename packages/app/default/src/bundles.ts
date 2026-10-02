@@ -12,6 +12,7 @@
  **********************************************************************/
 
 import type { ModuleManifest } from '@eclipse-daanse/tsm'
+import appShell from 'org.eclipse.daanse.board.app.shell/manifest.json'
 import progressWidget from 'org.eclipse.daanse.board.app.ui.vue.widget.progress/manifest.json'
 import wmap from 'org.eclipse.daanse.board.app.ui.vue.widget.map/manifest.json'
 import geojsonRenderer from 'org.eclipse.daanse.board.app.ui.vue.plugins.geojson_renderer/manifest.json'
@@ -80,6 +81,8 @@ import wxmlafilters from 'org.eclipse.daanse.board.app.ui.vue.widget.xmla.filter
  * of failing.
  */
 export const bundles: ModuleManifest[] = [
+  // The user interface itself - a bundle like every other
+  appShell as ModuleManifest,
   progressWidget as ModuleManifest,
   wmap as ModuleManifest,
   geojsonRenderer as ModuleManifest,

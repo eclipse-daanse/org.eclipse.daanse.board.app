@@ -13,6 +13,7 @@
 
 import * as Vue from 'vue'
 import * as VueRouter from 'vue-router'
+import * as Pinia from 'pinia'
 import { initTsmRuntime } from '@eclipse-daanse/tsm'
 import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
 
@@ -41,6 +42,7 @@ import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
 const VERSIONS = {
   vue: '3.5.24',
   'vue-router': '5.0.6',
+  pinia: '3.0.4',
 } as const
 
 export function activate({ log }: ActivationContext) {
@@ -48,8 +50,9 @@ export function activate({ log }: ActivationContext) {
 
   runtime.register('vue', Vue, VERSIONS.vue, 'platform.vue')
   runtime.register('vue-router', VueRouter, VERSIONS['vue-router'], 'platform.vue')
+  runtime.register('pinia', Pinia, VERSIONS.pinia, 'platform.vue')
 
-  log.info(`shared libraries ready: vue@${VERSIONS.vue}, vue-router@${VERSIONS['vue-router']}`)
+  log.info(`shared libraries ready: vue@${VERSIONS.vue}, vue-router@${VERSIONS['vue-router']}, pinia@${VERSIONS.pinia}`)
 }
 
 /**
