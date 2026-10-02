@@ -3,11 +3,38 @@
   "id": "ui.vue.stores.datasouce",
   "name": "ui.vue.stores.datasouce",
   "version": "0.0.1-next.1",
-  "entry": "./src/index.ts",
+  "entry": "/bundles/ui.vue.stores.datasouce/index.js",
   "exports": {},
   "requiresService": [
     {
       "id": "DatasourceRepository"
     }
+  ],
+  "sharedDependencies": [
+    {
+      "id": "vue",
+      "versionRange": "^3.5.0"
+    },
+    {
+      "id": "pinia",
+      "versionRange": "^3.0.0"
+    },
+    {
+      "id": "org.eclipse.daanse.board.app.lib.repository.datasource",
+      "versionRange": ">=0.0.1-0"
+    }
+  ],
+  "capabilities": [
+    {
+      "namespace": "tsm.library",
+      "attributes": {
+        "library": "org.eclipse.daanse.board.app.ui.vue.stores.datasouce",
+        "version": "0.0.1-next.1"
+      }
+    }
+  ],
+  "dependencies": [
+    "lib.repository.datasource",
+    "platform.vue"
   ]
 }

@@ -3,7 +3,7 @@
   "id": "lib.variables",
   "name": "lib.variables",
   "version": "0.0.1-next.1",
-  "entry": "./src/index.ts",
+  "entry": "/bundles/lib.variables/index.js",
   "exports": {},
   "provides": [
     {
@@ -29,5 +29,28 @@
     {
       "id": "TINY_EMITTER"
     }
+  ],
+  "sharedDependencies": [
+    {
+      "id": "org.eclipse.daanse.board.app.lib.pagecontext.pagecontext_service",
+      "versionRange": ">=0.0.1-0"
+    },
+    {
+      "id": "org.eclipse.daanse.board.app.lib.repository.variable",
+      "versionRange": ">=0.0.1-0"
+    }
+  ],
+  "capabilities": [
+    {
+      "namespace": "tsm.library",
+      "attributes": {
+        "library": "org.eclipse.daanse.board.app.lib.variables",
+        "version": "0.0.1-next.1"
+      }
+    }
+  ],
+  "dependencies": [
+    "lib.pagecontext.pagecontext_service",
+    "lib.repository.variable"
   ]
 }

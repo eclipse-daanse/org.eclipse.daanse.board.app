@@ -6,8 +6,10 @@
   "entry": "/bundles/ui.vue.composer.ogcsta2chart/index.js",
   "exports": {},
   "dependencies": [
-    "platform.vue",
-    "platform.compat"
+    "lib.composer.ogcsta2chart",
+    "lib.repository.datasource",
+    "platform.compat",
+    "platform.vue"
   ],
   "requiresService": [
     {

@@ -6,8 +6,11 @@
   "entry": "/bundles/ui.vue.widget.chart/index.js",
   "exports": {},
   "dependencies": [
-    "platform.vue",
-    "platform.compat"
+    "lib.events",
+    "lib.i18next",
+    "lib.repository.widget",
+    "platform.compat",
+    "platform.vue"
   ],
   "requiresService": [
     {

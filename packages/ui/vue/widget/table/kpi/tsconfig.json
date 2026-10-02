@@ -1,4 +1,5 @@
 {
+  "exclude": ["node_modules", "dist", "dist-bundle", "vite.bundle.config.ts"],
   "compilerOptions": {
     "sourceMap": true,
     "declarationMap": true,

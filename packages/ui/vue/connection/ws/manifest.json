@@ -6,8 +6,9 @@
   "entry": "/bundles/ui.vue.connection.ws/index.js",
   "exports": {},
   "dependencies": [
-    "platform.vue",
-    "platform.compat"
+    "lib.repository.connection",
+    "platform.compat",
+    "platform.vue"
   ],
   "requiresService": [
     {

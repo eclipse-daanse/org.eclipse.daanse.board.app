@@ -3,11 +3,20 @@
   "id": "lib.repository.widget",
   "name": "lib.repository.widget",
   "version": "0.0.1-next.1",
-  "entry": "./src/index.ts",
+  "entry": "/bundles/lib.repository.widget/index.js",
   "exports": {},
   "provides": [
     {
       "id": "WidgetRepository"
+    }
+  ],
+  "capabilities": [
+    {
+      "namespace": "tsm.library",
+      "attributes": {
+        "library": "org.eclipse.daanse.board.app.lib.repository.widget",
+        "version": "0.0.1-next.1"
+      }
     }
   ]
 }

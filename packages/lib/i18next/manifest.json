@@ -3,11 +3,20 @@
   "id": "lib.i18next",
   "name": "lib.i18next",
   "version": "0.0.1-next.1",
-  "entry": "./src/index.ts",
+  "entry": "/bundles/lib.i18next/index.js",
   "exports": {},
   "provides": [
     {
       "id": "I18next"
+    }
+  ],
+  "capabilities": [
+    {
+      "namespace": "tsm.library",
+      "attributes": {
+        "library": "org.eclipse.daanse.board.app.lib.i18next",
+        "version": "0.0.1-next.1"
+      }
     }
   ]
 }
