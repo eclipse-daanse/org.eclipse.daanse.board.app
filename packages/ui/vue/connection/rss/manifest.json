@@ -7,7 +7,6 @@
   "exports": {},
   "dependencies": [
     "lib.repository.connection",
-    "platform.compat",
     "platform.vue"
   ],
   "requiresService": [

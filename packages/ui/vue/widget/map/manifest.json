@@ -6,12 +6,13 @@
   "entry": "/bundles/ui.vue.widget.map/index.js",
   "exports": {},
   "dependencies": [
+    "lib.annotations",
     "lib.events",
     "lib.logger",
     "lib.repository.datasource",
     "lib.repository.widget",
-    "platform.compat",
     "platform.vue",
+    "ui.vue.composables",
     "ui.vue.widget.icon"
   ],
   "requiresService": [

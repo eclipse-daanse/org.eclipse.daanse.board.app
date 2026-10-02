@@ -8,8 +8,9 @@
   "dependencies": [
     "lib.repository.datasource",
     "lib.repository.variable",
-    "platform.compat",
-    "platform.vue"
+    "platform.vue",
+    "ui.vue.composables",
+    "ui.vue.variable.components"
   ],
   "requiresService": [
     {

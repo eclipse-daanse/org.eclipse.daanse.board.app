@@ -48,6 +48,22 @@
     <div class="spinner"></div>
   </div>
     <div id="app" class="w-full h-full"></div>
+    <!--
+      The shared-library import map: bare 'vue' (and friends) in every
+      bundle resolves to the single ESM artefact served by platform.vue.
+      One URL means one instance - the browser's module cache is the
+      identity guarantee. Must precede the first module script.
+    -->
+    <script type="importmap">
+      {
+        "imports": {
+          "vue": "/bundles/platform.vue/vue.js",
+          "vue-router": "/bundles/platform.vue/vue-router.js",
+          "pinia": "/bundles/platform.vue/pinia.js",
+          "vuedraggable": "/bundles/platform.vue/vuedraggable.js"
+        }
+      }
+    </script>
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>
