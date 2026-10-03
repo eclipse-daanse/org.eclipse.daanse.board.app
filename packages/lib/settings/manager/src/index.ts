@@ -11,10 +11,9 @@ Contributors: Smart City Jena
 import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core';
 import { SettingsManager } from './classes/SettingsManager'
 import { type SettingsManagerI } from './interfaces/SettingsManagerI'
-/** Dienst-ID im Namensraum der ServiceRegistry; `identifier` ist das dazu passende Symbol. */
-const SETTINGS_MANAGER = 'SettingsManager'
+import { SETTINGS_MANAGER, identifier } from 'org.eclipse.daanse.board.app.lib.api.settings'
+export { SETTINGS_MANAGER, identifier } from 'org.eclipse.daanse.board.app.lib.api.settings'
 
-const identifier = Symbol.for(SETTINGS_MANAGER)
 
 export function activate({ services }: ActivationContext) {
   services.register(SETTINGS_MANAGER, new SettingsManager())
@@ -24,5 +23,5 @@ export function deactivate({ services }: ActivationContext) {
   services.unregister(SETTINGS_MANAGER)
 }
 export {
-  identifier,
-  type SettingsManagerI, SETTINGS_MANAGER }
+  type SettingsManagerI,
+}

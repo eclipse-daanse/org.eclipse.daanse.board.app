@@ -11,10 +11,13 @@ Contributors: Smart City Jena
 
 import { injectable, inject } from '@eclipse-daanse/tsm';
 import type { TinyEmitter } from 'tiny-emitter';
-import { EventManager, EVENT_MANAGER } from '../manager/EventManager';
-import { EventRegistry, EVENT_REGISTRY } from '../registry/EventRegistry';
-import { EventActionsRegistry, EVENT_ACTIONS_REGISTRY } from '../registry/EventActionsRegistry';
+import { EventManager } from '../manager/EventManager';
+import { EventRegistry } from '../registry/EventRegistry';
+import { EventActionsRegistry } from '../registry/EventActionsRegistry';
 import { loggerFactory } from 'org.eclipse.daanse.board.app.lib.logger';
+import { TINY_EMITTER } from 'org.eclipse.daanse.board.app.lib.core'
+import { EVENT_BUS_BRIDGE_ID } from 'org.eclipse.daanse.board.app.lib.api.events'
+export { EVENT_BUS_BRIDGE_ID } from 'org.eclipse.daanse.board.app.lib.api.events'
 
 const log = loggerFactory.createLogger('daanse:events:bridge');
 
@@ -31,7 +34,9 @@ export class EventBusBridge {
 
   constructor(
     @inject('EventManager') private eventManager: EventManager,
-    @inject('EventRegistry') private eventRegistry: EventRegistry,
+    /* Injected so the registry exists before the bridge wires itself up. */
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    @inject('EventRegistry') _eventRegistry: EventRegistry,
     @inject('EventActionsRegistry') private actionsRegistry: EventActionsRegistry
   ) {
     // EventBus wird später aus dem Container geholt, da er möglicherweise noch nicht gebunden ist
@@ -54,7 +59,7 @@ export class EventBusBridge {
     }
 
     try {
-      this.eventBus = services.getRequired<TinyEmitter>('TINY_EMITTER');
+      this.eventBus = services.getRequired(TINY_EMITTER);
 
       // Registriere Callback beim EventManager
       this.eventManager.onMappingsChanged(() => {
@@ -195,6 +200,5 @@ export class EventBusBridge {
 }
 
 /** Dienst-ID im Namensraum der ServiceRegistry; `EVENT_BUS_BRIDGE` ist das dazu passende Symbol. */
-export const EVENT_BUS_BRIDGE_ID = 'EventBusBridge';
 
 export const EVENT_BUS_BRIDGE = Symbol.for(EVENT_BUS_BRIDGE_ID);

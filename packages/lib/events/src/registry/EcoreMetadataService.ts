@@ -18,10 +18,13 @@ import {
   EClass,
   EClassifier,
   EAnnotation,
-  EList,
   isEClass
 } from '@emfts/core';
-import eventModelContent from '../../model/EventModel.ecore?raw';
+// The model belongs to the api package now and travels as part of its
+// exported contract, not as a file this bundle reaches in and copies
+import { EVENT_MODEL_ECORE as eventModelContent } from 'org.eclipse.daanse.board.app.lib.api.events';
+import { ECORE_METADATA_SERVICE_ID } from 'org.eclipse.daanse.board.app.lib.api.events'
+export { ECORE_METADATA_SERVICE_ID } from 'org.eclipse.daanse.board.app.lib.api.events'
 
 const EVENTS_NS_URI = 'http://org.eclipse.daanse.board.app.lib.events';
 
@@ -32,20 +35,6 @@ const EVENTS_NS_URI = 'http://org.eclipse.daanse.board.app.lib.events';
  * natives Array (getEOperations, getESuperTypes) - siehe
  * eclipse-fennec/emf.ts#68.
  */
-function toArray<T>(value: EList<T> | T[] | null | undefined): T[] {
-  if (value == null) {
-    return [];
-  }
-  if (Array.isArray(value)) {
-    return value;
-  }
-
-  const result: T[] = [];
-  for (let i = 0; i < value.size(); i++) {
-    result.push(value.get(i));
-  }
-  return result;
-}
 
 export interface EcoreParameterMetadata {
   name: string;
@@ -215,7 +204,7 @@ export class EcoreMetadataService {
       if (isEClass(classifier)) {
         const eClass = classifier as EClass;
 
-        // Check if this class extends WidgetActionInterface
+        // Check if this class extends WidgetActionInterfaceImpl
         const isWidgetActionInterface = this.extendsWidgetActionInterface(eClass);
         if (!isWidgetActionInterface) {
           continue;
@@ -351,7 +340,7 @@ export class EcoreMetadataService {
   }
 
   /**
-   * Check if an EClass extends WidgetActionInterface
+   * Check if an EClass extends WidgetActionInterfaceImpl
    */
   private extendsWidgetActionInterface(eClass: EClass): boolean {
     // Check all super types
@@ -413,6 +402,5 @@ export class EcoreMetadataService {
 }
 
 /** Dienst-ID im Namensraum der ServiceRegistry; `ECORE_METADATA_SERVICE` ist das dazu passende Symbol. */
-export const ECORE_METADATA_SERVICE_ID = 'EcoreMetadataService';
 
 export const ECORE_METADATA_SERVICE = Symbol.for(ECORE_METADATA_SERVICE_ID);

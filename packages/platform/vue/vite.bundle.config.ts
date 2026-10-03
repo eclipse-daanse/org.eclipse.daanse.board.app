@@ -21,7 +21,7 @@
 import { resolve } from 'node:path'
 import { defineConfig } from 'vite'
 
-const libraries = ['vue', 'vue-router', 'pinia', 'vuedraggable']
+const libraries = ['vue', 'vue-router', 'vuedraggable', '@emfts/core']
 
 export default defineConfig({
   define: {
@@ -35,7 +35,9 @@ export default defineConfig({
   },
   build: {
     target: 'es2022',
-    minify: false,
+    // Production artefacts are minified; the dev watcher overrides this
+    // with `minify: false` for fast incremental rebuilds.
+    minify: 'esbuild',
     outDir: resolve(__dirname, 'dist-bundle'),
     emptyOutDir: true,
     lib: {
@@ -43,8 +45,8 @@ export default defineConfig({
         index: resolve(__dirname, 'src/index.ts'),
         vue: resolve(__dirname, 'src/artifacts/vue.ts'),
         'vue-router': resolve(__dirname, 'src/artifacts/vue-router.ts'),
-        pinia: resolve(__dirname, 'src/artifacts/pinia.ts'),
         vuedraggable: resolve(__dirname, 'src/artifacts/vuedraggable.ts'),
+        'emfts-core': resolve(__dirname, 'src/artifacts/emfts-core.ts'),
       },
       formats: ['es'],
       fileName: (_format, entryName) => `${entryName}.js`,
@@ -55,7 +57,9 @@ export default defineConfig({
         // The artefact for a library bundles that library itself; every
         // other reference stays bare for the import map.
         const artifact = importer?.match(/artifacts[\\/]([\w-]+)\.ts$/)?.[1]
-        return artifact !== source
+        // '@emfts/core' cannot be a file name; its artefact is emfts-core.ts
+        const scoped = artifact === 'emfts-core' ? '@emfts/core' : artifact
+        return scoped !== source
       },
     },
   },

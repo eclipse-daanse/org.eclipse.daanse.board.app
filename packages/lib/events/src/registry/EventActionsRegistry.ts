@@ -11,7 +11,9 @@ Contributors: Smart City Jena
 
 import 'reflect-metadata';
 import { getWidgetActions, type WidgetActionMetadata } from '../decorators/WidgetAction';
-import { EcoreMetadataService, ECORE_METADATA_SERVICE, type EcoreActionMetadata } from './EcoreMetadataService';
+import { EcoreMetadataService } from './EcoreMetadataService';
+import { EVENT_ACTIONS_REGISTRY_ID } from 'org.eclipse.daanse.board.app.lib.api.events'
+export { EVENT_ACTIONS_REGISTRY_ID } from 'org.eclipse.daanse.board.app.lib.api.events'
 
 /**
  * Kontext für Event-Aktionen
@@ -371,8 +373,11 @@ export class EventActionsRegistry {
   }
 
   /**
-   * Setzt eine Funktion die pageId von widgetId ableiten kann
-   * Diese Funktion wird von der Vue-App gesetzt um Zugriff auf die Pinia Stores zu haben
+   * Setzt eine Funktion die pageId von widgetId ableiten kann.
+   *
+   * Ein Haken für den Fall, dass eine Instanz nicht von Hand registriert
+   * wurde. Gesetzt wird er zurzeit von niemandem: er stammt aus der Zeit,
+   * als die Vue-App darüber an ihre Stores kam.
    */
   setPageIdLookup(fn: (widgetId: string) => string | undefined): void {
     this.pageIdLookupFn = fn;
@@ -534,6 +539,5 @@ export class EventActionsRegistry {
  * `EVENT_ACTIONS_REGISTRY` ist das dazu passende Symbol für den
  * Inversify-Container; beide bezeichnen denselben Dienst.
  */
-export const EVENT_ACTIONS_REGISTRY_ID = 'EventActionsRegistry';
 
 export const EVENT_ACTIONS_REGISTRY = Symbol.for(EVENT_ACTIONS_REGISTRY_ID);

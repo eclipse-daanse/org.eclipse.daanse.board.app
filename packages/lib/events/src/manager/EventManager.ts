@@ -11,10 +11,12 @@ Contributors: Smart City Jena
 
 import 'reflect-metadata';
 import { injectable, inject } from '@eclipse-daanse/tsm';
-import { EventActionsRegistry, EVENT_ACTIONS_REGISTRY, type EventActionContext } from '../registry/EventActionsRegistry';
+import { EventActionsRegistry, type EventActionContext } from '../registry/EventActionsRegistry';
 import { Condition } from './Condition';
 import { Comperator } from './Comperator';
 import { loggerFactory } from 'org.eclipse.daanse.board.app.lib.logger';
+import { EVENT_MANAGER_ID } from 'org.eclipse.daanse.board.app.lib.api.events'
+export { EVENT_MANAGER_ID } from 'org.eclipse.daanse.board.app.lib.api.events'
 
 const log = loggerFactory.createLogger('daanse:events:manager');
 
@@ -387,6 +389,5 @@ export class EventManager {
 
 // Symbol für Dependency Injection
 /** Dienst-ID im Namensraum der ServiceRegistry; `EVENT_MANAGER` ist das dazu passende Symbol. */
-export const EVENT_MANAGER_ID = 'EventManager';
 
 export const EVENT_MANAGER = Symbol.for(EVENT_MANAGER_ID);

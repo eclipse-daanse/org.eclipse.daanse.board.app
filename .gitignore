@@ -39,3 +39,7 @@ package-lock.json
 .turbo/**/*
 .claude
 */**/.claude
+
+# Where a bundle is built before it is moved into dist-bundle/; only ever
+# present while a build runs, or after one was interrupted.
+dist-bundle.building/

@@ -7,6 +7,10 @@
   Contributors: Smart City Jena
   */
 
-export interface PageContextProviderI {
-  getCurrentPageId(): string | undefined;
-}
+/*
+ * The contract lives in lib.api.pagecontext - re-exported here so old
+ * import paths keep compiling during the transition.
+ */
+export type { PageContextProviderI } from 'org.eclipse.daanse.board.app.lib.api.pagecontext'
+import type { PageContextProviderI } from 'org.eclipse.daanse.board.app.lib.api.pagecontext'
+

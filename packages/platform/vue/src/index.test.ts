@@ -41,8 +41,6 @@ describe('platform.vue', () => {
    */
   it('declares exactly the versions that are actually bundled', async () => {
     expect(VERSIONS.vue).toBe(vueVersion)
-    const pinia = await import('pinia/package.json')
-    expect(VERSIONS.pinia).toBe(pinia.version)
   })
 
   it('provides vue and vue-router under their names', async () => {
