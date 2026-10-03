@@ -24,11 +24,11 @@
   ],
   "sharedDependencies": [
     {
-      "id": "org.eclipse.daanse.board.app.lib.repository.persistence",
+      "id": "org.eclipse.daanse.board.app.lib.api.persistence",
       "versionRange": ">=0.0.1-0"
     },
     {
-      "id": "org.eclipse.daanse.board.app.lib.settings.manager",
+      "id": "org.eclipse.daanse.board.app.lib.api.settings",
       "versionRange": ">=0.0.1-0"
     }
   ],
@@ -42,7 +42,7 @@
     }
   ],
   "dependencies": [
-    "lib.repository.persistence",
-    "lib.settings.manager"
+    "lib.api.persistence",
+    "lib.api.settings"
   ]
 }

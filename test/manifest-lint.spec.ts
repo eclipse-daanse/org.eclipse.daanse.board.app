@@ -21,6 +21,8 @@
  * shared dependency nothing offers fails only at load time in the browser.
  */
 
+import { globSync, readFileSync, existsSync } from 'node:fs'
+import { dirname, join } from 'node:path'
 import { describe, it, expect } from 'vitest'
 import type { ModuleManifest } from '@eclipse-daanse/tsm'
 import { bundles } from '../packages/app/default/src/bundles'
@@ -125,4 +127,49 @@ describe('manifest lint', () => {
     }
     expect(wrong).toEqual([])
   })
+
+  /*
+   * Every workspace package a bundle imports at runtime must be declared in
+   * sharedDependencies. An undeclared import is not an error the build
+   * reports - it is a silently bundled copy, and a copy is a second class
+   * identity, a second module state, a second reactivity system.
+   */
+  it('every cross-package runtime import is a declared shared dependency', () => {
+    const WS = 'org.eclipse.daanse.board.app.'
+    const packages = new Map<string, string>()
+    for (const pkgJson of globSync('packages/**/package.json')) {
+      if (pkgJson.includes('node_modules') || pkgJson.includes('/dist')) continue
+      try {
+        const meta = JSON.parse(readFileSync(pkgJson, 'utf-8'))
+        if (meta.name?.startsWith(WS)) packages.set(meta.name, dirname(pkgJson))
+      } catch {
+        // not a workspace package
+      }
+    }
+
+    const undeclared: string[] = []
+    for (const [name, dir] of packages) {
+      const manifestPath = join(dir, 'manifest.json')
+      if (!existsSync(join(dir, 'vite.bundle.config.ts')) || !existsSync(manifestPath)) continue
+      const manifest = JSON.parse(readFileSync(manifestPath, 'utf-8'))
+      if (!manifest.entry?.startsWith('/bundles/')) continue
+      const declared = new Set(
+        (manifest.sharedDependencies ?? []).map((d: { id: string }) => d.id),
+      )
+      for (const file of globSync(join(dir, 'src/**/*.{ts,tsx,vue}'))) {
+        const text = readFileSync(file, 'utf-8')
+          .replace(/\/\*[\s\S]*?\*\//g, '')
+          .replace(/^\s*\/\/[^\n]*$/gm, '')
+          .replace(/^\s*(?:import|export)\s+type\s[^\n]*$/gm, '')
+        for (const m of text.matchAll(/from\s+['"](org\.eclipse\.daanse\.board\.app\.[A-Za-z0-9._]+)/g)) {
+          const target = m[1].split('/')[0]
+          if (target !== name && !declared.has(target)) {
+            undeclared.push(`${manifest.id} imports ${target} without declaring it`)
+          }
+        }
+      }
+    }
+    expect([...new Set(undeclared)]).toEqual([])
+  })
 })
+

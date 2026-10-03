@@ -49,7 +49,9 @@ export default class CommitProvider implements CommitProviderI {
     commits.data.map((commit: any) => {
       commits_ret.push(
         new Commit(
-          commit.author?.name ?? 'unknown',
+          // listCommits: the git author name lives under commit.commit.author;
+          // the top-level author is the GitHub user object, which has a login
+          commit.commit?.author?.name ?? commit.author?.login ?? 'unknown',
           commit.commit.message,
           commit.commit?.author?.date ?? '',
           commit.sha,

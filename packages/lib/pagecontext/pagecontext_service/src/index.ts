@@ -15,11 +15,10 @@ import type { ActivationContext } from "org.eclipse.daanse.board.app.lib.core"
 import {type PageContextServiceI } from './api/PageContextServiceI'
 import {type PageContextProviderI } from './api/PageContextProviderI'
 import { PageContextService } from './classes/PageContextService'
+import { PAGE_CONTEXT, identifier } from 'org.eclipse.daanse.board.app.lib.api.pagecontext'
+export { PAGE_CONTEXT, identifier } from 'org.eclipse.daanse.board.app.lib.api.pagecontext'
 
-/** Dienst-ID im Namensraum der ServiceRegistry; `identifier` ist das dazu passende Symbol. */
-const PAGE_CONTEXT = 'PageContext'
 
-const identifier = Symbol.for(PAGE_CONTEXT)
 
 /** Singleton ohne eigene Abhaengigkeiten - siehe lib.repository.connection. */
 export function activate({ services }: ActivationContext) {
@@ -30,5 +29,8 @@ export function deactivate({ services }: ActivationContext) {
   services.unregister(PAGE_CONTEXT)
 }
 
-export {identifier, PAGE_CONTEXT, type PageContextServiceI, type PageContextProviderI}
+export {
+  type PageContextServiceI,
+  type PageContextProviderI,
+}
 

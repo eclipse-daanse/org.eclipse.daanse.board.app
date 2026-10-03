@@ -9,10 +9,17 @@ Contributors: Smart City Jena
 
 */
 
-import { Payload } from './gen/Payload';
-import { WidgetActionInterface } from './gen/WidgetActionInterface';
-import { SystemActionInterface } from './gen/SystemActionInterface';
-import { PageActionInterface } from './gen/PageActionInterface';
+/*
+ * The contract comes from the api package now - it owns EventModel.ecore.
+ * Re-exported here so the many places that import these from the
+ * implementation keep working while they are moved over one at a time.
+ */
+import type {
+  Payload,
+  WidgetActionInterface,
+  SystemActionInterface,
+  PageActionInterface,
+} from 'org.eclipse.daanse.board.app.lib.api.events';
 import { Condition } from './manager/Condition';
 import { Comperator } from './manager/Comperator';
 import { EventRegistry, EVENT_REGISTRY, EVENT_REGISTRY_ID, type MetadataEntry, type PayloadMetadata, type PayloadPropertyInfo, type WidgetEventDefinition } from './registry/EventRegistry';
@@ -23,12 +30,10 @@ import { EventBusBridge, EVENT_BUS_BRIDGE, EVENT_BUS_BRIDGE_ID } from './bridge/
 import { WidgetAction, ActionParameter, getWidgetActions, type WidgetActionMetadata, type ActionParameterMetadata } from './decorators/WidgetAction';
 import { EcoreMetadataService, ECORE_METADATA_SERVICE, ECORE_METADATA_SERVICE_ID, type EcoreActionMetadata, type EcoreParameterMetadata } from './registry/EcoreMetadataService';
 import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core';
-import { loggerFactory } from 'org.eclipse.daanse.board.app.lib.logger';
 
 // Export Ecore model content for external use
 import SystemActionsEcoreContent from '../model/SystemActions.ecore?raw';
 
-const log = loggerFactory.createLogger('daanse:events:registry');
 
 const identifier = EVENT_REGISTRY;
 const actionsIdentifier = EVENT_ACTIONS_REGISTRY;
@@ -80,11 +85,19 @@ export function deactivate({ services }: ActivationContext) {
   }
 }
 
-export {
+/*
+ * In emf mode these four are interfaces, so they carry no runtime value -
+ * re-exporting them as values makes the bundle ask the api module for names
+ * it does not have.
+ */
+export type {
   Payload,
   WidgetActionInterface,
   SystemActionInterface,
   PageActionInterface,
+};
+
+export {
   Condition,
   Comperator,
   EventRegistry,

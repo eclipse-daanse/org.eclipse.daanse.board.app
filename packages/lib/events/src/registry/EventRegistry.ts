@@ -10,6 +10,8 @@ Contributors: Smart City Jena
 */
 
 import 'reflect-metadata';
+import { EVENT_REGISTRY_ID } from 'org.eclipse.daanse.board.app.lib.api.events'
+export { EVENT_REGISTRY_ID } from 'org.eclipse.daanse.board.app.lib.api.events'
 
 /**
  * Metadaten-Eintrag
@@ -179,7 +181,7 @@ export class EventRegistry {
    * Extract payload properties with type information (legacy method for backward compatibility)
    * @deprecated Use extractPayloadPropertiesForEvent instead
    */
-  public extractPayloadProperties(target: any): PayloadPropertyInfo[] {
+  public extractPayloadProperties(_target: any): PayloadPropertyInfo[] {
     // This is now a fallback method that won't be used
     console.warn('extractPayloadProperties() called - this method is deprecated, use extractPayloadPropertiesForEvent() instead');
     return [];
@@ -216,7 +218,6 @@ export class EventRegistry {
  * `EVENT_REGISTRY` ist das dazu passende Symbol für den Inversify-Container;
  * beide bezeichnen denselben Dienst, weil `Symbol.for` global registriert.
  */
-export const EVENT_REGISTRY_ID = 'EventRegistry';
 
 // Symbol für Dependency Injection
 export const EVENT_REGISTRY = Symbol.for(EVENT_REGISTRY_ID);

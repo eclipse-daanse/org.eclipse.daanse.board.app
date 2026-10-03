@@ -10,6 +10,15 @@ Contributors: Smart City Jena
 
 import debug from 'debug'
 import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
+import { LOGGER_FACTORY, identifier } from 'org.eclipse.daanse.board.app.lib.api.logger'
+
+/*
+ * The contract lives in lib.api.logger - re-exported here so old
+ * import paths keep compiling during the transition.
+ */
+export type { ILogger } from 'org.eclipse.daanse.board.app.lib.api.logger'
+import type { ILogger } from 'org.eclipse.daanse.board.app.lib.api.logger'
+export { LOGGER_FACTORY, identifier } from 'org.eclipse.daanse.board.app.lib.api.logger'
 
 // Force debug to use console.log instead of console.debug
 debug.log = console.log.bind(console)
@@ -20,12 +29,6 @@ if (typeof localStorage !== 'undefined') {
   if (debugConfig) {
     debug.enable(debugConfig)
   }
-}
-
-export interface ILogger {
-  (message?: any, ...args: any[]): void
-  extend(namespace: string): ILogger
-  enabled: boolean
 }
 
 export class LoggerFactory {
@@ -72,11 +75,6 @@ export class LoggerFactory {
 // Export singleton instance for direct use (non-injectable)
 export const loggerFactory = new LoggerFactory()
 
-/** Dienst-ID im Namensraum der ServiceRegistry; `identifier` ist das dazu passende Symbol. */
-export const LOGGER_FACTORY = 'LoggerFactory'
-
-export const identifier = Symbol.for(LOGGER_FACTORY)
-
 /**
  * Meldet die Logger-Fabrik als Dienst an.
  *
@@ -101,5 +99,4 @@ if (typeof window !== 'undefined') {
   // Also expose debug instance for inspection
   (window as any).__daanseDebug = debug
 }
-
 

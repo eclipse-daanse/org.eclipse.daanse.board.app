@@ -195,6 +195,11 @@ der [Entscheidungsvorlage](./emfts-generator-entscheidung.md).
 
 ### FR-C1 — `decorator`- und `plain`-Modus brechen in der Operations-Schleife ab
 
+Eingereicht: <https://github.com/eclipse-fennec/emf.ts.codegen/issues/24> —
+**behoben, verifiziert am 2026-08-24** gegen lokalen Stand `45dea57`
+(0.0.2-next.1): `decorator` und `plain` generieren für `lib.connection.rest`
+fehlerfrei; Output strukturell äquivalent zu unserem Generator.
+
 `init --mode decorator` erzeugt eine GenConfig, `generate` damit scheitert:
 
 ```
@@ -217,6 +222,10 @@ Impl-, Factory- und Package-Dateien. Solange nur `emf` läuft, wäre ein
 Wechsel kein Generatorwechsel, sondern ein Umbau der Modellschicht.
 
 ### FR-C2 — `href`-Verweise auf andere Pakete werden in `init` nicht aufgelöst
+
+Eingereicht: <https://github.com/eclipse-fennec/emf.ts.codegen/issues/25> —
+**behoben, verifiziert am 2026-08-24**: ohne `-d` jetzt eine klare Meldung,
+mit `-d`/`--import-mapping` läuft `init` durch (exakt der Vorschlag).
 
 Unsere Modelle bauen über Paketgrenzen hinweg aufeinander auf:
 
@@ -241,6 +250,99 @@ nennt, statt mit `getNsURI is not a function`.
 **Warum uns das betrifft:** Von 41 Modellen im Projekt nutzen die meisten
 dieses Muster. Es ist die Art, wie unsere Modelle aufeinander aufbauen, kein
 Randfall.
+
+### FR-C3 — decorator-Modus: Annotationen aus geteiltem Paket importieren
+
+Eingereicht: <https://github.com/eclipse-fennec/emf.ts.codegen/issues/26> —
+**umgesetzt, verifiziert am 2026-08-24** gegen lokalen Stand `49f0abc`:
+`-a/--annotations` auf `init` und `generate` importiert aus
+`lib.annotations` (kein ModelAnnotations.ts mehr, Import byte-gleich zu
+unserem Generator), und das Fallback nutzt `Symbol.for('emfts.*')`.
+Damit ist der letzte Adoptions-Blocker weg; offen bleibt nur die
+`@Documentation`-Emission (Notiz auf #24).
+
+Bei der Verifikation von C1 gefunden: der decorator-Modus generiert pro
+Modell ein eigenes `ModelAnnotations.ts` mit `Symbol('…')`-Keys — 41 Modelle
+hießen 41 Dekorator-Kopien, deren Metadaten kein zentraler Leser
+paketübergreifend sieht. Nötig ist eine Option wie unser `-a`
+(Annotations-Import aus `lib.annotations`); solange die fehlt, bleibt
+`tools/generator` unser Generator. Außerdem gemeldet: `@Documentation` wird
+nicht emittiert, und beim GenConfig-Laden erscheint eine vermutlich
+harmlose Forward-Ref-Warnung.
+
+### FR-C4 — decorator-Modus: Enum-Literale werden ignoriert
+
+Eingereicht: <https://github.com/eclipse-fennec/emf.ts.codegen/issues/28>
+
+Probelauf 2026-08-24 (Stand `f750ebc`, drei Modelle im Diff gegen
+`tools/generator`): Enums werden numerisch statt mit den
+`EEnumLiteral`-Literalen emittiert (`eq = 0` statt `eq = '=='`) —
+laufzeitbrechend, weil persistierte Konfigurationen die Literale tragen.
+
+### FR-C5 — decorator-Modus: Wertsemantik der Features
+
+Eingereicht: <https://github.com/eclipse-fennec/emf.ts.codegen/issues/29>
+
+Aus demselben Probelauf, vier zusammengehörige Lücken: eTypeArguments
+(Generics) fallen weg, Referenz-Defaults kommen als rohe Literale statt
+Instanziierung (`= 12` an einem `VariableWrapper`), Attribut-Defaults und
+Pflichtigkeit gehen verloren (`comparator?:` statt `= Comparator.eq`),
+mehrwertige Features starten uninitalisiert statt `= []`.
+
+### FR-C8/C9/C10 — Nachzügler aus dem zweiten Volllauf (2026-08-24, Stand `19e70c9`)
+
+C6 (#30, extends) und C7 (#31, Custom-Dekoratoren) sind **verifiziert
+behoben** — null verlorene Supertypen, null verlorene `@WidgetAction`.
+Der zweite Volllauf fand drei Nachzügler:
+
+- <https://github.com/eclipse-fennec/emf.ts.codegen/issues/31> (Rest):
+  Operationsparameter verlieren ihr `?` — auch bei explizitem
+  `lowerBound="0"` (15 Stellen).
+- <https://github.com/eclipse-fennec/emf.ts.codegen/issues/32>:
+  Annotation-Imports pauschal statt nur genutzte (Treiber prunt bis
+  dahin, als Workaround markiert); dazu kosmetisch Doppel-Importe aus
+  demselben Paket.
+- <https://github.com/eclipse-fennec/emf.ts.codegen/issues/33> — **der
+  letzte echte Blocker**: einwertige Klassenreferenzen ohne
+  `defaultValueLiteral` werden optional-uninitialisiert statt
+  instanziiert (31 Referenzen in 7 Paketen; unsere Settings-UIs binden
+  v-model direkt auf die Wrapper-Instanzen).
+
+Board-seitig in diesem Zug erledigt: `Documentation`-Dekorator in
+lib.annotations akzeptiert jetzt auch Klassen (der codegen emittiert
+Klassen-Doku), und vier Konsumstellen (chart/image) vertragen die
+ehrlicheren gen-Typen.
+
+### FR-C6/C7 — Vollmigration blockiert: extends aus Dependency-Modellen und Custom-Dekoratoren
+
+Eingereicht: <https://github.com/eclipse-fennec/emf.ts.codegen/issues/30>
+und <https://github.com/eclipse-fennec/emf.ts.codegen/issues/31>
+
+Der Volllauf über alle 41 Modelle (Treiber ist umgestellt, GenConfigs
+liegen bei den Modellen) deckte zwei Lücken auf, die der Drei-Modell-
+Probelauf nicht traf: 17 Klassen verlieren ihr `extends` auf Supertypen
+aus Dependency-/Geschwister-Modellen (`IconClickPayload extends
+Payload`), und die `@WidgetAction`-Custom-Dekoratoren aus
+eAnnotations (`source="<paket>/<Dekorator>"`) samt Options-Objekt aus
+den details werden nicht emittiert (5 Dateien, trägt die
+Action-Metadaten des Event-Systems). Dazu 26 verlorene optionale
+Operationsparameter. Die gen-Ausgaben sind bis dahin auf dem Stand von
+`tools/generator` zurückgehalten; `npm run generate_models` fährt schon
+den neuen Treiber.
+
+**Probelauf bestanden (2026-08-24, Stand `b709b5d`):** Der Volldiff über
+`connection.rest`, `text.plain` und `events/MappingModel` ist **leer** —
+null echte Abweichungen gegen `tools/generator`, modulo der bewusst
+akzeptierten Verbesserungen (`unknown` statt `any`, `T[]` statt
+`Array<T>`, Klassen-/Feature-Doku, `.js`-Import-Endungen). C4 (#28) und
+C5 (#29, inkl. Dekorator-Name- und Import-Mapping-Nachzügler) sind
+verifiziert. Der Vollumstieg der 41 Modelle kann starten.
+
+**Frühere Zwischenfazite:** @Documentation (C1/#27), Cross-Package (C2/#25) und
+geteilte Annotationen (C3/#26) sind verifiziert; Struktur, Imports und
+Doku sind adoptionsreif — Klassen-Doku emittiert der codegen sogar
+zusätzlich, und `.js`-Endungen auf relativen Imports sind ESM-korrekter
+als unser Output. Der Umstieg wartet auf C4/C5.
 
 ### Keine Lücke (Korrektur zu unserer früheren Annahme)
 

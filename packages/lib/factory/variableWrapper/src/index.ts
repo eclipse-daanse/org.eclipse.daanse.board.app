@@ -9,16 +9,17 @@ Contributors: Smart City Jena
 */
 
 import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
+import { serviceId } from 'org.eclipse.daanse.board.app.lib.core'
 import { VariableWrapperFactory, type WrapperTypeI } from './classes/Factory'
 
-/** Dienst-ID im Namensraum der ServiceRegistry; `identifier` ist das dazu passende Symbol. */
-const VARIABLE_WRAPPER_FACTORY = 'VariableWrapperFactory'
+/** Typed service id - the name and the contract declared once, here. */
+const VARIABLE_WRAPPER_FACTORY = serviceId<VariableWrapperFactory>('VariableWrapperFactory')
 
 const identifier = Symbol.for(VARIABLE_WRAPPER_FACTORY)
 
 /**
- * Singleton mit Konstruktor-Injektion: die Fabrik bekommt das
- * VariableRepository ueber ihren Konstruktor, `construct` traegt es ein.
+ * Singleton with constructor injection: the factory receives the
+ * VariableRepository through its constructor; `construct` wires it in.
  */
 export function activate({ services }: ActivationContext) {
   services.register(VARIABLE_WRAPPER_FACTORY, services.construct(VariableWrapperFactory))

@@ -129,14 +129,26 @@ export default defineConfig({
   ],
   build: {
     target: 'es2022',
-    rollupOptions: { external: importMapLibraries },
-    minify: false,
+    rollupOptions: {
+      external: (source: string, importer: string | undefined) => {
+        if (source !== '@eclipse-daanse/tsm') return false
+        // The artefact bundles the framework API itself; everything else
+        // references it bare, for the import map.
+        return !importer?.includes('artifacts/tsm.ts') && !importer?.endsWith('artifacts/tsm.ts')
+      },
+    },
+    // Production artefacts are minified; the dev watcher overrides this
+    // with `minify: false` for fast incremental rebuilds.
+    minify: 'esbuild',
     outDir: resolve(__dirname, 'dist-bundle'),
     emptyOutDir: true,
     lib: {
-      entry: resolve(__dirname, 'src/bundle.ts'),
+      entry: {
+        index: resolve(__dirname, 'src/index.ts'),
+        tsm: resolve(__dirname, 'src/artifacts/tsm.ts'),
+      },
       formats: ['es'],
-      fileName: () => 'index.js',
+      fileName: (_format, entryName) => `${entryName}.js`,
     },
   },
 })

@@ -10,7 +10,10 @@
 
 import { PageContextProviderI } from './PageContextProviderI'
 
-export interface PageContextServiceI {
-  getCurrentPageId(): string | undefined;
-  setProvider(provider: PageContextProviderI): void;
-}
+/*
+ * The contract lives in lib.api.pagecontext - re-exported here so old
+ * import paths keep compiling during the transition.
+ */
+export type { PageContextServiceI } from 'org.eclipse.daanse.board.app.lib.api.pagecontext'
+import type { PageContextServiceI } from 'org.eclipse.daanse.board.app.lib.api.pagecontext'
+
