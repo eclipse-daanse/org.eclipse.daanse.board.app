@@ -1,0 +1,21 @@
+{
+  "name": "org.eclipse.daanse.board.app.lib.api.variable",
+  "version": "0.0.1-next.1",
+  "type": "module",
+  "license": "EPL-2.0",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "import": "./src/index.ts"
+    },
+    "./manifest.json": "./manifest.json"
+  },
+  "scripts": {
+    "build": "tsc --noEmit"
+  },
+  "dependencies": {
+    "org.eclipse.daanse.board.app.lib.core": "^0.0.1-next.1"
+  }
+}
