@@ -11,7 +11,8 @@
  *   Smart City Jena
  **********************************************************************/
 
-import { DefaultServiceRegistry } from '@eclipse-daanse/tsm'
+import { DefaultServiceRegistry, serviceId, type ModuleLoader } from '@eclipse-daanse/tsm'
+import type { TinyEmitter } from 'tiny-emitter'
 import type { ActivationContext, ActivatableModule } from './api/ActivationContext'
 
 /**
@@ -22,6 +23,26 @@ import type { ActivationContext, ActivatableModule } from './api/ActivationConte
 const identifiers = {
   TINY_EMITTER: Symbol.for('TINY_EMITTER'),
 }
+
+/*
+ * Typed service ids for what the framework side of the application offers.
+ * A ServiceId<T> is the id string carrying its contract as a phantom type:
+ * the name and the type are declared once, here, and a consumer that writes
+ * `services.getRequired(TINY_EMITTER)` gets the right type or a compile
+ * error - the tsm answer to OSGi naming a service by its interface.
+ *
+ * Ids for services owned by other packages live next to their contracts in
+ * those packages; these are only the ones the launcher itself registers.
+ */
+
+/** The application-wide event bus, registered by platform.system. */
+const TINY_EMITTER = serviceId<TinyEmitter>('TINY_EMITTER')
+
+/** The framework publishing itself, registered by the launcher. */
+const MODULE_LOADER = serviceId<ModuleLoader>('ModuleLoader')
+
+/** The mounted Vue application, registered by the shell. */
+const APP = serviceId<import('vue').App>('App')
 
 /**
  * The application's ServiceRegistry - tsm's DefaultServiceRegistry, nothing
@@ -34,6 +55,11 @@ const services = new DefaultServiceRegistry()
 export {
   identifiers,
   services,
+  serviceId,
+  TINY_EMITTER,
+  MODULE_LOADER,
+  APP,
   type ActivationContext,
   type ActivatableModule,
 }
+export type { ServiceId, ServiceOf } from '@eclipse-daanse/tsm'
