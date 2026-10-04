@@ -11,6 +11,7 @@ Contributors:
     Smart City Jena
 -->
 <script setup lang="ts">
+import { DTable } from 'org.eclipse.daanse.board.app.ui.vue.controls'
 import { useTemporaryStore } from 'org.eclipse.daanse.board.app.ui.vue.composables';
 import { Bar } from 'vue-chartjs'
 import {
@@ -44,7 +45,7 @@ watch(tempStore, async () => {
 <template>
   <div v-if="tempStore && data" class="flex flex-col h-full w-full gap-4">
     <div class="h50 overflow-hidden">
-      <VaDataTable :items="data.items" :stickyHeader="true" style="height: 100%;" />
+      <DTable :items="data.items" />
     </div>
     <div class="h50">
       <Bar id="my-chart-id" v-if="chartData && chartOptions"

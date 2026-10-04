@@ -1,5 +1,4 @@
 {
-  "exclude": ["node_modules", "dist", "dist-bundle", "vite.bundle.config.ts"],
   "compilerOptions": {
     "sourceMap": true,
     "declarationMap": true,
@@ -13,6 +12,15 @@
     "forceConsistentCasingInFileNames": true,
     "strict": true,
     "skipLibCheck": true,
-    "resolveJsonModule": true
-  }
+    "resolveJsonModule": true,
+    "types": [
+      "vite/client"
+    ]
+  },
+  "exclude": [
+    "node_modules",
+    "vite.bundle.config.ts",
+    "dist",
+    "dist-bundle"
+  ]
 }

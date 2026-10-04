@@ -11,6 +11,7 @@ Contributors:
     Smart City Jena
 -->
 <script setup lang="ts">
+import { DInput, DSelect } from 'org.eclipse.daanse.board.app.ui.vue.controls'
 import { computed } from 'vue';
 
 const { config, connections } = defineProps<{
@@ -44,28 +45,28 @@ if (!config.language) config.language = 'de-DE';
 </script>
 
 <template>
-    <VaSelect
+    <DSelect
         v-model="config.connection"
-        label="Valhalla Connection"
+        label="Valhalla-Verbindung"
         :options="connectionsFiltered"
-        text-by="name"
-        value-by="uid"
+        label-key="name"
+        value-key="uid"
     />
-    <VaSelect
+    <DSelect
         v-model="config.costing"
-        label="Default Costing"
+        label="Standard-Fortbewegung"
         :options="costingOptions"
-        text-by="text"
-        value-by="value"
+        label-key="text"
+        value-key="value"
     />
-    <VaSelect
+    <DSelect
         v-model="config.units"
-        label="Units"
+        label="Einheiten"
         :options="unitOptions"
-        text-by="text"
-        value-by="value"
+        label-key="text"
+        value-key="value"
     />
-    <VaInput
+    <DInput
         v-model="config.language"
         label="Language (e.g. de-DE)"
     />

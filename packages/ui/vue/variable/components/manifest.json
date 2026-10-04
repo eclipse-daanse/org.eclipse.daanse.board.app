@@ -11,11 +11,15 @@
       "versionRange": "^3.5.0"
     },
     {
-      "id": "org.eclipse.daanse.board.app.lib.repository.variable",
+      "id": "org.eclipse.daanse.board.app.lib.api.variable",
       "versionRange": ">=0.0.1-0"
     },
     {
       "id": "org.eclipse.daanse.board.app.ui.vue.composables",
+      "versionRange": ">=0.0.1-0"
+    },
+    {
+      "id": "org.eclipse.daanse.board.app.ui.vue.controls",
       "versionRange": ">=0.0.1-0"
     }
   ],
@@ -29,8 +33,9 @@
     }
   ],
   "dependencies": [
-    "lib.repository.variable",
+    "lib.api.variable",
     "platform.vue",
-    "ui.vue.composables"
+    "ui.vue.composables",
+    "ui.vue.controls"
   ]
 }

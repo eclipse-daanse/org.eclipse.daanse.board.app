@@ -6,9 +6,13 @@
   "entry": "/bundles/ui.vue.composer.kpi/index.js",
   "exports": {},
   "dependencies": [
+    "lib.api.datasource",
+    "lib.composer.kpi",
     "lib.repository.datasource",
     "platform.vue",
-    "ui.vue.composables"
+    "ui.vue.common.kpi",
+    "ui.vue.composables",
+    "ui.vue.controls"
   ],
   "requiresService": [
     {
@@ -24,7 +28,11 @@
       "versionRange": "^3.5.0"
     },
     {
-      "id": "org.eclipse.daanse.board.app.lib.core",
+      "id": "org.eclipse.daanse.board.app.lib.api.datasource",
+      "versionRange": ">=0.0.1-0"
+    },
+    {
+      "id": "org.eclipse.daanse.board.app.lib.composer.kpi",
       "versionRange": ">=0.0.1-0"
     },
     {
@@ -32,7 +40,15 @@
       "versionRange": ">=0.0.1-0"
     },
     {
+      "id": "org.eclipse.daanse.board.app.ui.vue.common.kpi",
+      "versionRange": ">=0.0.1-0"
+    },
+    {
       "id": "org.eclipse.daanse.board.app.ui.vue.composables",
+      "versionRange": ">=0.0.1-0"
+    },
+    {
+      "id": "org.eclipse.daanse.board.app.ui.vue.controls",
       "versionRange": ">=0.0.1-0"
     }
   ]

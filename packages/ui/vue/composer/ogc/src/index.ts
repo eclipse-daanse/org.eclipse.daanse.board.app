@@ -17,7 +17,7 @@ import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
 import {
   type DatasourceRepository,
   DATASOURCE_REPOSITORY,
-} from 'org.eclipse.daanse.board.app.lib.repository.datasource'
+} from 'org.eclipse.daanse.board.app.lib.api.datasource'
 // Service id of lib.composer.ogc; Symbol.for is global, so this literal
 // denotes the same symbol the factory package exports.
 const OgcComposerIdentifier = Symbol.for('OgcFeatureComposer')
@@ -31,6 +31,8 @@ export function activate({ services }: ActivationContext) {
   services
     .getRequired<DatasourceRepository>(DATASOURCE_REPOSITORY)
     .registerDatasourceType('OGC Composer', {
+      icon: 'sensors',
+      kind: 'composer',
       Store: OgcComposerIdentifier,
       Preview: previewSymbol,
       Settings: settingsSymbol,

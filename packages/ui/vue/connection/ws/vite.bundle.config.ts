@@ -124,8 +124,12 @@ const allShared = (manifest.sharedDependencies ?? []).map((d) => d.id)
 // Workspace libraries resolve through __tsm__.require; browser-standard
 // libraries (vue and friends) stay bare imports, resolved by the import map
 // in the host page - platform.vue serves the artefacts they point at.
-const sharedModules = allShared.filter((id) => id.startsWith('org.eclipse.daanse'))
-const importMapLibraries = allShared.filter((id) => !id.startsWith('org.eclipse.daanse'))
+// Only the host library stays on __tsm__.require: lib.core carries the
+// service registry singleton and can never arrive by URL. Every other
+// library is a bare import, resolved by the import map.
+const sharedModules = allShared.filter((id) => id === 'org.eclipse.daanse.board.app.lib.core')
+// The framework API rides the import map too - the system bundle serves it.
+const importMapLibraries = [...allShared.filter((id) => id !== 'org.eclipse.daanse.board.app.lib.core'), '@eclipse-daanse/tsm']
 
 export default defineConfig({
   // Bundles run in the browser; embedded third-party code still probing
@@ -140,6 +144,12 @@ export default defineConfig({
     rewriteSharedImportsInChunks(),
     tsmPlugin({
       manifest: resolve(__dirname, 'manifest.json'),
+      /*
+       * The model file is a contract, not code: it is read for the field
+       * descriptions the generator drops, and carrying a copy of a text
+       * file across the boundary costs nothing at runtime.
+       */
+      boundary: { allow: ['../../../../lib/connection/ws/model'] },
       components: 'derive',
       sharedModules,
       // Cast: tsm links its own vite copy, whose Plugin type is nominally
@@ -149,7 +159,9 @@ export default defineConfig({
   build: {
     target: 'es2022',
     rollupOptions: { external: importMapLibraries },
-    minify: false,
+    // Production artefacts are minified; the dev watcher overrides this
+    // with `minify: false` for fast incremental rebuilds.
+    minify: 'esbuild',
     outDir: resolve(__dirname, 'dist-bundle'),
     emptyOutDir: true,
     lib: {

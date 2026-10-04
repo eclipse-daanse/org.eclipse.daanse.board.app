@@ -10,15 +10,22 @@
  * Contributors:
  *   Smart City Jena
  **********************************************************************/
+import { REST_CONNECTION_FACTORY } from 'org.eclipse.daanse.board.app.lib.connection.rest'
+/*
+ * The model file itself, not the package around it: a value import from
+ * the library would pull its runtime - and lib.core with it - into this
+ * bundle, which has to share that, not carry a copy.
+ */
+import MODEL_ECORE from 'org.eclipse.daanse.board.app.lib.connection.rest/model/model.ecore?raw'
 import {
   type ConnectionRepository,
   CONNECTION_REPOSITORY,
-} from 'org.eclipse.daanse.board.app.lib.repository.connection'
+} from 'org.eclipse.daanse.board.app.lib.api.connection'
 import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
 
 // Service id of lib.connection.rest; Symbol.for is global, so this literal
 // denotes the same symbol the factory package exports.
-const RestConnectionIdentifier = Symbol.for('RestConnectionFactory')
+const RestConnectionIdentifier = Symbol.for(REST_CONNECTION_FACTORY)
 import Settings from './Settings.vue'
 
 const settingsSymbol = Symbol.for('RestConnectionSettings')
@@ -29,6 +36,8 @@ export function activate({ services }: ActivationContext) {
   services
     .getRequired<ConnectionRepository>(CONNECTION_REPOSITORY)
     .registerConnectionType('rest', {
+      icon: 'api',
+      Model: MODEL_ECORE,
       Connection: RestConnectionIdentifier,
       Settings: settingsSymbol,
     })

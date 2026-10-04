@@ -14,7 +14,7 @@ import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
 import {
   type DatasourceRepository,
   DATASOURCE_REPOSITORY,
-} from 'org.eclipse.daanse.board.app.lib.repository.datasource'
+} from 'org.eclipse.daanse.board.app.lib.api.datasource'
 
 import { symbol as OGCSTAToChartComposerIdentifier } from 'org.eclipse.daanse.board.app.lib.composer.ogcsta2chart'
 
@@ -33,6 +33,8 @@ export function activate({ services }: ActivationContext) {
   services
     .getRequired<DatasourceRepository>(DATASOURCE_REPOSITORY)
     .registerDatasourceType('ogcsta2chart', {
+      icon: 'insights',
+      kind: 'composer',
       Store: OGCSTAToChartComposerIdentifier,
       Preview: previewSymbol,
       Settings: settingsSymbol,

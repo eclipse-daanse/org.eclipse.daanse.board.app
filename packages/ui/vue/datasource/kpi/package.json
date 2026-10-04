@@ -32,7 +32,8 @@
     "lodash": "^4.17.16",
     "vue-json-pretty": "^2.4.0",
     "vite-plugin-libcss": "^1.1.1",
-    "@eclipse-daanse/tsm": "0.1.0-next.1"
+    "@eclipse-daanse/tsm": "0.1.0-next.1",
+    "org.eclipse.daanse.board.app.ui.vue.controls": "^0.0.1-next.1"
   },
   "devDependencies": {
     "typescript": "^5.8.2",

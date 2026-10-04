@@ -11,10 +11,16 @@
  *   Smart City Jena
  **********************************************************************/
 
+/*
+ * The model file itself, not the package around it: a value import from
+ * the library would pull its runtime - and lib.core with it - into this
+ * bundle, which has to share that, not carry a copy.
+ */
+import MODEL_ECORE from 'org.eclipse.daanse.board.app.lib.datasource.sql_xmla/model/SqlXmlaDataSourceModel.ecore?raw'
 import {
   type DatasourceRepository,
   DATASOURCE_REPOSITORY,
-} from 'org.eclipse.daanse.board.app.lib.repository.datasource'
+} from 'org.eclipse.daanse.board.app.lib.api.datasource'
 import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
 // Service id of lib.datasource.sql_xmla; Symbol.for is global, so this literal
 // denotes the same symbol the factory package exports.
@@ -32,6 +38,9 @@ export function activate({ services }: ActivationContext) {
   services
     .getRequired<DatasourceRepository>(DATASOURCE_REPOSITORY)
     .registerDatasourceType('sql_xmla', {
+      icon: 'storage',
+      connections: ['xmla'],
+      Model: MODEL_ECORE,
       Store: SqlXmlaDatasourceIdentifier,
       Preview: previewSymbol,
       Settings: settingsSymbol,

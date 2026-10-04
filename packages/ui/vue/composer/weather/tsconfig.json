@@ -1,5 +1,4 @@
 {
-  "exclude": ["node_modules", "dist", "dist-bundle", "vite.bundle.config.ts"],
   "compilerOptions": {
     "target": "es2022",
     "useDefineForClassFields": true,

@@ -14,7 +14,7 @@ import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
 import {
   type DatasourceRepository,
   DATASOURCE_REPOSITORY,
-} from 'org.eclipse.daanse.board.app.lib.repository.datasource'
+} from 'org.eclipse.daanse.board.app.lib.api.datasource'
 
 // Service id of lib.composer.chart; Symbol.for is global, so this literal
 // denotes the same symbol the factory package exports.
@@ -32,6 +32,8 @@ export function activate({ services }: ActivationContext) {
   services
     .getRequired<DatasourceRepository>(DATASOURCE_REPOSITORY)
     .registerDatasourceType('chart', {
+      icon: 'bar_chart',
+      kind: 'composer',
       Store: ChartComposerIdentifier,
       Preview: previewSymbol,
       Settings: settingsSymbol,

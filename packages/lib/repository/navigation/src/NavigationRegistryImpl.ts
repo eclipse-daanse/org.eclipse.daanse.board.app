@@ -8,8 +8,8 @@
   Contributors: Smart City Jena
 */
 
-import { NavigationRegistry } from './gen/NavigationRegistry'
-import { NavigationItem } from './gen/NavigationItem'
+import { NavigationRegistry } from 'org.eclipse.daanse.board.app.lib.api.navigation'
+import { NavigationItem } from 'org.eclipse.daanse.board.app.lib.api.navigation'
 
 export class NavigationRegistryImpl extends NavigationRegistry {
   private itemsMap: Map<string, NavigationItem> = new Map()
