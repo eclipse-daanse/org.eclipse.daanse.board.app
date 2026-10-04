@@ -13,7 +13,7 @@
 import {
   DatasourceRepository,
   identifier as repositoryIdentifier,
-} from 'org.eclipse.daanse.board.app.lib.repository.datasource'
+} from 'org.eclipse.daanse.board.app.lib.api.datasource'
 import { onMounted, watch, onBeforeUnmount, inject, Ref } from 'vue'
 
 export function useTemporaryStore(
