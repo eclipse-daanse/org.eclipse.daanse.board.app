@@ -9,6 +9,7 @@ Contributors: Smart City Jena
 
 */
 <script setup lang="ts">
+import { DButton, DCheckbox, DDivider, DIcon } from 'org.eclipse.daanse.board.app.ui.vue.controls'
 import { onMounted, shallowRef, getCurrentInstance, watch, ref, computed, nextTick } from 'vue'
 import { Chart, registerables } from 'chart.js';
 import { LMap, LTileLayer, LMarker, LPopup, LIcon, LCircleMarker } from '@vue-leaflet/vue-leaflet';
@@ -426,25 +427,25 @@ watch([chartData, chartCanvas], async () => {
     <div v-if="tempStore && data" style="overflow: hidden; height: 100%;width:100%;display: flex; flex-direction: column;">
       <!-- View Mode Selector -->
       <div style="padding: 0.5rem; border-bottom: 1px solid #e5e7eb; display: flex; gap: 0.5rem; align-items: center;">
-        <va-button
-          :preset="viewMode === 'tree' ? 'primary' : 'secondary'"
-          size="small"
+        <DButton
+          :intent="viewMode === 'tree' ? 'primary' : 'default'"
+          size="sm"
           @click="viewMode = 'tree'"
         >
           Tree View
-        </va-button>
-        <va-button
-          :preset="viewMode === 'json' ? 'primary' : 'secondary'"
-          size="small"
+        </DButton>
+        <DButton
+          :intent="viewMode === 'json' ? 'primary' : 'default'"
+          size="sm"
           @click="viewMode = 'json'"
         >
           JSON View
-        </va-button>
-        <va-divider vertical />
-        <va-checkbox
+        </DButton>
+        <DDivider vertical />
+        <DCheckbox
           v-model="showMap"
-          label="Show Map"
-          size="small"
+          label="Karte zeigen"
+          size="sm"
         />
         <div style="margin-left: auto; display: flex; gap: 1rem; font-size: 0.85rem; color: #6b7280;">
           <span><strong>{{ hierarchicalData.length }}</strong> Things</span>
@@ -468,10 +469,10 @@ watch([chartData, chartCanvas], async () => {
             :class="{ 'thing-selected': selectedThing?.id === (thing.iotId || thing['@iot.id']) }"
           >
             <div class="tree-node thing-node" @click="toggleThing(thing.iotId || thing['@iot.id'], thing)">
-              <va-icon :name="expandedThings.has(thing.iotId || thing['@iot.id']) ? 'expand_more' : 'chevron_right'" size="small" />
-              <va-icon name="sensors" size="small" color="primary" />
+              <DIcon :name="expandedThings.has(thing.iotId || thing['@iot.id']) ? 'expand_more' : 'chevron_right'" size="sm" />
+              <DIcon name="sensors" size="sm" tone="color-accent" />
               <span class="node-label">{{ thing.name || thing.iotId || thing['@iot.id'] }}</span>
-              <va-icon v-if="thing.Locations?.[0]?.location || thing.location" name="location_on" size="small" color="warning" title="Has location" />
+              <DIcon v-if="thing.Locations?.[0]?.location || thing.location" name="location_on" size="sm" tone="color-warn" title="Has location" />
               <span class="node-count">({{ thing.datastreams?.length || 0 }} DS)</span>
             </div>
 
@@ -498,16 +499,16 @@ watch([chartData, chartCanvas], async () => {
                   :class="{ 'selected': selectedDatastream && (selectedDatastream.iotId || selectedDatastream['@iot.id']) === (ds.iotId || ds['@iot.id']) }"
                   @click="selectDatastream(ds, $event)"
                 >
-                  <va-icon
+                  <DIcon
                     :name="expandedDatastreams.has(ds.iotId || ds['@iot.id']) ? 'expand_more' : 'chevron_right'"
-                    size="small"
+                    size="sm"
                     @click="toggleDatastream(ds.iotId || ds['@iot.id'], ds, $event)"
                   />
-                  <va-icon name="timeline" size="small" color="success" />
+                  <DIcon name="timeline" size="sm" tone="color-ok" />
                   <span class="node-label">{{ ds.name || ds.iotId || ds['@iot.id'] }}</span>
                   <span v-if="ds.unitOfMeasurement?.symbol" class="unit-badge">{{ ds.unitOfMeasurement.symbol }}</span>
                   <span class="node-count">({{ ds.observations?.length || 0 }} obs)</span>
-                  <va-icon
+                  <DIcon
                     v-if="ds.observations && ds.observations.length > 0"
                     name="show_chart"
                     size="small"
@@ -531,7 +532,7 @@ watch([chartData, chartCanvas], async () => {
                     No observations loaded
                   </div>
                   <div v-for="(obs, idx) in (ds.observations || []).slice(0, 10)" :key="obs['@iot.id'] || idx" class="observation-item">
-                    <va-icon name="circle" size="12px" color="info" />
+                    <DIcon name="circle" size="12px" tone="color-accent" />
                     <span class="observation-time">{{ new Date(obs.phenomenonTime).toLocaleString('de-DE') }}</span>
                     <span class="observation-result">{{ obs.result }} {{ ds.unitOfMeasurement?.symbol || '' }}</span>
                   </div>
@@ -587,7 +588,7 @@ watch([chartData, chartCanvas], async () => {
 
           <!-- No locations hint -->
           <div v-else-if="showMap && thingLocations.length === 0" class="no-locations">
-            <va-icon name="location_off" size="large" color="secondary" />
+            <DIcon name="location_off" size="lg" tone="color-dim" />
             <p>No location data available</p>
           </div>
 
@@ -598,12 +599,12 @@ watch([chartData, chartCanvas], async () => {
                 <h3>{{ selectedDatastream.name || 'Datastream' }}</h3>
                 <p v-if="selectedDatastream.description">{{ selectedDatastream.description }}</p>
               </div>
-              <va-button
-                icon="close"
-                preset="plain"
-                size="small"
-                @click="selectedDatastream = null"
-              />
+              <DButton
+                intent="quiet"
+                size="sm"
+                @click="selectedDatastream = null">
+  <DIcon name="close" size="sm" />
+</DButton>
             </div>
             <div class="chart-container">
               <canvas v-if="chartData" ref="chartCanvas"></canvas>

@@ -9,6 +9,7 @@ Contributors: Smart City Jena
 
 -->
 <script lang="ts" setup>
+import { DSelect } from 'org.eclipse.daanse.board.app.ui.vue.controls'
 
 
 import { type Ref, onMounted, ref, watch, computed } from "vue";
@@ -82,14 +83,22 @@ onMounted(() => {
 
 <template>
   <div>
-      <VaSelect v-model="config.connection" label="Connection1" :options="connectionsFiltered" text-by="name"
-                value-by="uid" ></VaSelect>
-    <div style="height: 5px"></div>
-    <label aria-hidden="true" class="va-input-label va-input-wrapper__label va-input-wrapper__label--outer .mt-0.5" id="input-label-va-27" style="color: var(--va-primary);">Query <!----></label>
-      <div ref="yasgui" id="yasgui"> </div>
+    <DSelect v-model="config.connection" label="Verbindung" :options="connectionsFiltered" />
+    <!-- A label copied out of the framework's own markup once, down to the
+         id of the field it belonged to. It is a label. -->
+    <label class="query__label" for="yasgui">Abfrage</label>
+    <div id="yasgui" ref="yasgui"></div>
   </div>
 </template>
 <style lang="scss">
+.query__label {
+  display: block;
+  margin: 10px 0 3px;
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  color: var(--color-dim);
+}
+
 .store-item {
   .flex {
     ul {

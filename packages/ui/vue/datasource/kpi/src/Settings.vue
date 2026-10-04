@@ -11,8 +11,12 @@ Contributors:
     Smart City Jena
 -->
 <script setup lang="ts">
-import { computed, watch, onMounted, ref } from 'vue';
+import { DSelect } from 'org.eclipse.daanse.board.app.ui.vue.controls'
+import { inject, computed, watch, onMounted, ref } from 'vue'
 import { XmlaStore } from 'org.eclipse.daanse.board.app.lib.datasource.xmla';
+import { type ConnectionRepository, identifier as connectionIdentifier } from 'org.eclipse.daanse.board.app.lib.api.connection'
+
+const connectionRepository = inject<ConnectionRepository>(connectionIdentifier)!
 
 const { config, connections } = defineProps<{
   config: any;
@@ -27,20 +31,20 @@ const connectionsFiltered = computed(() => {
 
 watch(async () => config.connection, async () => {
   if (config.connection) {
-    cubes.value = await XmlaStore.fetchCubes(config.connection);
+    cubes.value = await XmlaStore.fetchCubes(config.connection, connectionRepository);
   }
 });
 
 onMounted(async () => {
   if (config.connection) {
-    cubes.value = await XmlaStore.fetchCubes(config.connection);
+    cubes.value = await XmlaStore.fetchCubes(config.connection, connectionRepository);
   }
 });
 </script>
 
 <template>
   <!-- eslint-disable-next-line vue/no-mutating-props -->
-  <VaSelect v-model="config.connection" label="Connection" :options="connectionsFiltered" text-by="name"
-    value-by="uid" />
-    <VaSelect v-model="config.cube" label="Cube" :options="cubes" text-by="CUBE_NAME" value-by="CUBE_NAME" />
+  <DSelect v-model="config.connection" label="Verbindung" :options="connectionsFiltered" label-key="name"
+    value-key="uid" />
+    <DSelect v-model="config.cube" label="Würfel" :options="cubes" label-key="CUBE_NAME" value-key="CUBE_NAME" />
 </template>

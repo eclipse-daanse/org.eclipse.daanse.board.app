@@ -6,9 +6,11 @@
   "entry": "/bundles/ui.vue.datasource.sql_xmla/index.js",
   "exports": {},
   "dependencies": [
-    "lib.repository.datasource",
+    "lib.api.datasource",
     "platform.vue",
-    "ui.vue.composables"
+    "ui.vue.common.monaco",
+    "ui.vue.composables",
+    "ui.vue.controls"
   ],
   "requiresService": [
     {
@@ -24,15 +26,19 @@
       "versionRange": "^3.5.0"
     },
     {
-      "id": "org.eclipse.daanse.board.app.lib.core",
+      "id": "org.eclipse.daanse.board.app.lib.api.datasource",
       "versionRange": ">=0.0.1-0"
     },
     {
-      "id": "org.eclipse.daanse.board.app.lib.repository.datasource",
+      "id": "org.eclipse.daanse.board.app.ui.vue.common.monaco",
       "versionRange": ">=0.0.1-0"
     },
     {
       "id": "org.eclipse.daanse.board.app.ui.vue.composables",
+      "versionRange": ">=0.0.1-0"
+    },
+    {
+      "id": "org.eclipse.daanse.board.app.ui.vue.controls",
       "versionRange": ">=0.0.1-0"
     }
   ]

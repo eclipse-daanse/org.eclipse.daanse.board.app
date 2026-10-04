@@ -20,11 +20,10 @@ import {
   type StoreConstructor,
   type IDatasourceRepository,
 } from './classes'
+import { DATASOURCE_REPOSITORY, identifier } from 'org.eclipse.daanse.board.app.lib.api.datasource'
+export { DATASOURCE_REPOSITORY, identifier } from 'org.eclipse.daanse.board.app.lib.api.datasource'
 
-/** Dienst-ID im Namensraum der ServiceRegistry; `identifier` ist das dazu passende Symbol. */
-const DATASOURCE_REPOSITORY = 'DatasourceRepository'
 
-const identifier = Symbol.for(DATASOURCE_REPOSITORY)
 
 /** Singleton ohne eigene Abhaengigkeiten - siehe lib.repository.connection. */
 export function activate({ services }: ActivationContext) {
@@ -35,7 +34,9 @@ export function deactivate({ services }: ActivationContext) {
   services.unregister(DATASOURCE_REPOSITORY)
 }
 
-export { DatasourceRepository, identifier, DATASOURCE_REPOSITORY }
+export {
+  DatasourceRepository,
+}
 export type {
   StoreIdentifiers,
   IDataRetrieveable,

@@ -13,7 +13,7 @@
 import {
   type DatasourceRepository,
   DATASOURCE_REPOSITORY,
-} from 'org.eclipse.daanse.board.app.lib.repository.datasource'
+} from 'org.eclipse.daanse.board.app.lib.api.datasource'
 import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
 // Service id of lib.datasource.kpi_tmp; Symbol.for is global, so this literal
 // denotes the same symbol the factory package exports.
@@ -31,6 +31,7 @@ export function activate({ services }: ActivationContext) {
   services
     .getRequired<DatasourceRepository>(DATASOURCE_REPOSITORY)
     .registerDatasourceType('KPI', {
+      icon: 'speed',
       Store: KpiTmpDatasourceIdentifier,
       Preview: previewSymbol,
       Settings: settingsSymbol,

@@ -11,6 +11,7 @@ Contributors:
     Smart City Jena
 -->
 <script setup lang="ts">
+import { DSelect } from 'org.eclipse.daanse.board.app.ui.vue.controls'
 import { KpiComposer } from "org.eclipse.daanse.board.app.lib.composer.kpi";
 import {
   DatasourceRepository, identifier as DatasourceRepositoryIdentifier
@@ -29,6 +30,6 @@ const datasourcesFiltered = computed(() => {
 </script>
 <template>
   <!-- eslint-disable-next-line vue/no-mutating-props -->
-  <VaSelect v-model="config.connectedDatasources" label="KPI Sources" :options="datasourcesFiltered" multiple text-by="name"
-    value-by="uid" />
+  <DSelect v-model="config.connectedDatasources" label="KPI Sources" :options="datasourcesFiltered" multiple label-key="name"
+    value-key="uid" />
 </template>

@@ -11,6 +11,7 @@ Contributors:
     Smart City Jena
 -->
 <script setup lang="ts">
+import { DInput, DSelect, DSwitch } from 'org.eclipse.daanse.board.app.ui.vue.controls'
 import { computed } from 'vue';
 
 const { config, connections } = defineProps<{
@@ -27,8 +28,8 @@ const connectionsFiltered = computed(() => {
 
 <template>
   <!-- eslint-disable-next-line vue/no-mutating-props -->
-  <VaSelect v-model="config.connection" label="Connection" :options="connectionsFiltered" text-by="name"
-    value-by="uid" />
-  <VaSwitch v-model="config.accumulate" label="Accumulate messages in array" />
-  <VaInput v-model="config.topic" label="Topic"/>
+  <DSelect v-model="config.connection" label="Verbindung" :options="connectionsFiltered" label-key="name"
+    value-key="uid" />
+  <DSwitch v-model="config.accumulate" label="Nachrichten sammeln" />
+  <DInput v-model="config.topic" label="Thema"/>
 </template>

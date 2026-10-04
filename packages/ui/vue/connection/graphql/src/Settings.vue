@@ -11,13 +11,14 @@ Contributors:
     Smart City Jena
 -->
 <script setup lang="ts">
+import { DInput } from 'org.eclipse.daanse.board.app.ui.vue.controls'
+
 const { config } = defineProps<{
-  config: any;
-}>();
+  config: any
+}>()
 </script>
 
 <template>
-
   <!-- eslint-disable-next-line vue/no-mutating-props -->
-  <VaInput v-model="config.url" label="URL" />
+  <DInput v-model="config.url" label="URL" />
 </template>

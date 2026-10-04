@@ -41,17 +41,6 @@ watch(tempStore, async () => {
 
 <template>
   <div class="grid grid-cols-2 grid-rows-4 gap-4 overflow-hidden w-full h-full" v-if="tempStore">
-    <!-- Commented out filters section
-    <div class="flex col-span-2 row-span-1 border border-gray-200 rounded-lg p-4">
-      <div class="flex-1">
-        <VaInput v-model="props.dataSource.config.selectedJSONValue" label="Selected Field"/>
-      </div>
-      <div class="flex-1">
-        <VaSelect class="ml-2" v-model="selectedFilter" label="Filters" :options="['filter1', 'filter2', 'filter3']" />
-        <VaButton class="ml-2 mt-4">Add filter</VaButton>
-      </div>
-    </div>
-    -->
     <div class="row-span-4 col-span-1 overflow-auto border border-gray-200 rounded-lg p-4">
       <VueJsonPretty :data="originalData" v-model:selectedValue="props.dataSource.config.selectedJSONValue"
         showSelectController highlightSelectedNode collapsedOnClickBrackets selectableType="single" editable />

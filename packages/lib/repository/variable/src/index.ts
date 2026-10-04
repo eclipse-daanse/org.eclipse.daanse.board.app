@@ -11,30 +11,28 @@
  *   Smart City Jena
  **********************************************************************/
 
+import { EVENT_ACTIONS_REGISTRY_ID } from 'org.eclipse.daanse.board.app.lib.events'
 import { VariableRepository, type VariableConfig } from './classes/VariableRepository'
 import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
 import { registerVariableActions } from './actions/VariableActions'
-import type { TinyEmitter } from 'tiny-emitter'
 import type { EventActionsRegistry } from 'org.eclipse.daanse.board.app.lib.events'
+import { VARIABLE_REPOSITORY, identifier } from 'org.eclipse.daanse.board.app.lib.api.variable'
+export { VARIABLE_REPOSITORY, identifier } from 'org.eclipse.daanse.board.app.lib.api.variable'
 
-/** Dienst-ID im Namensraum der ServiceRegistry; `identifier` ist das dazu passende Symbol. */
-const VARIABLE_REPOSITORY = 'VariableRepository'
 
-const identifier = Symbol.for(VARIABLE_REPOSITORY)
 
 /**
- * Singleton mit einer Abhaengigkeit (`TINY_EMITTER`), deshalb `construct`
- * statt `new`: das loest die mit `@inject` ausgezeichneten Felder auf.
- * Registriert wird die fertige Instanz, damit auch der Rueckfallweg sie sieht.
+ * The repository takes the service registry and nothing else.
+ *
+ * It used to take the event bus as well, to announce that the list had
+ * changed. The list is the model's now and announces itself; the bus still
+ * carries value changes, which a variable emits without being asked.
  */
 export function activate({ services }: ActivationContext) {
-  const repository = new VariableRepository(
-    services,
-    services.get<TinyEmitter>('TINY_EMITTER'),
-  )
+  const repository = new VariableRepository(services)
   services.register(VARIABLE_REPOSITORY, repository)
   registerVariableActions(
-    services.getRequired<EventActionsRegistry>('EventActionsRegistry'),
+    services.getRequired(EVENT_ACTIONS_REGISTRY_ID),
     repository,
   )
 }
@@ -43,4 +41,7 @@ export function deactivate({ services }: ActivationContext) {
   services.unregister(VARIABLE_REPOSITORY)
 }
 
-export { VariableRepository, type VariableConfig, identifier, VARIABLE_REPOSITORY }
+export {
+  VariableRepository,
+  type VariableConfig,
+}

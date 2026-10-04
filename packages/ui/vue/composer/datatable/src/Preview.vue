@@ -11,6 +11,7 @@ Contributors:
     Smart City Jena
 -->
 <script setup lang="ts">
+import { DTable } from 'org.eclipse.daanse.board.app.ui.vue.controls'
 import { useTemporaryStore } from 'org.eclipse.daanse.board.app.ui.vue.composables';
 import { ref, watch, toRef, shallowRef } from 'vue';
 
@@ -34,6 +35,6 @@ watch(tempStore, async () => {
 
 <template>
   <div v-if="tempStore && data" style="overflow: hidden; height: 100%; width: 100%;">
-    <VaDataTable :items="data.items" :stickyHeader="true" style="height: 100%;" />
+    <DTable :items="data.items" />
   </div>
 </template>

@@ -11,16 +11,15 @@
 import 'reflect-metadata'
 import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
 import { NavigationRegistryImpl } from './NavigationRegistryImpl'
-import { NavigationRegistry } from './gen/NavigationRegistry'
+import { NavigationRegistry } from 'org.eclipse.daanse.board.app.lib.api.navigation'
+import { NAVIGATION_REGISTRY_ID, NAVIGATION_REGISTRY } from 'org.eclipse.daanse.board.app.lib.api.navigation'
+export { NAVIGATION_REGISTRY_ID, NAVIGATION_REGISTRY } from 'org.eclipse.daanse.board.app.lib.api.navigation'
 
-export { NavigationItem } from './gen/NavigationItem'
-export { NavigationRegistry } from './gen/NavigationRegistry'
+export { NavigationItem } from 'org.eclipse.daanse.board.app.lib.api.navigation'
+export { NavigationRegistry } from 'org.eclipse.daanse.board.app.lib.api.navigation'
 export { NavigationRegistryImpl } from './NavigationRegistryImpl'
 
-/** Dienst-ID im Namensraum der ServiceRegistry; `NAVIGATION_REGISTRY` ist das dazu passende Symbol. */
-export const NAVIGATION_REGISTRY_ID = 'NavigationRegistry'
 
-export const NAVIGATION_REGISTRY = Symbol.for(NAVIGATION_REGISTRY_ID)
 
 /** Singleton ohne eigene Abhaengigkeiten - siehe lib.repository.connection. */
 export function activate({ services }: ActivationContext) {
