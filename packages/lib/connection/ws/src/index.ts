@@ -13,9 +13,10 @@
 
 import { WSConnection, type IWSConnectionConfiguration } from './classes'
 import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
+import { serviceId } from 'org.eclipse.daanse.board.app.lib.core'
 
-/** Dienst-ID im Namensraum der ServiceRegistry; `factorySymbol` ist das dazu passende Symbol. */
-const WSCONNECTION_FACTORY = 'WSConnectionFactory'
+/** Typed service id - the name and the contract declared once, here. */
+const WSCONNECTION_FACTORY = serviceId<typeof createWSConnection>('WSConnectionFactory')
 
 const factorySymbol = Symbol.for(WSCONNECTION_FACTORY)
 

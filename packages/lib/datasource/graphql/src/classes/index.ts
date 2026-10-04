@@ -17,34 +17,31 @@ import { injectable, inject } from '@eclipse-daanse/tsm'
 import {
   BaseDatasource,
   IBaseConnectionConfiguration,
+  type ConfigurationOf,
 } from 'org.eclipse.daanse.board.app.lib.datasource.base'
 import { identifiers } from 'org.eclipse.daanse.board.app.lib.core'
-import {
+import { CONNECTION_REPOSITORY,
   identifier,
-  ConnectionRepository,
-} from 'org.eclipse.daanse.board.app.lib.repository.connection'
+  ConnectionRepository,} from 'org.eclipse.daanse.board.app.lib.api.connection'
 // import type { ComputedString } from "@/plugins/variables/ComputedString";
 
-export interface IGraphQLStoreConfiguration
-  extends IBaseConnectionConfiguration {
-  connection: string
-  query: string
-  variables?: any
-}
+/* The configuration is the model's; see ../gen. */
+export type { IGraphQLStoreConfiguration } from '../gen/IGraphQLStoreConfiguration'
+import type { IGraphQLStoreConfiguration } from '../gen/IGraphQLStoreConfiguration'
 
 @injectable()
 export class GraphQLStore extends BaseDatasource {
   private connection: any
   private query: string = ''
 
-  @inject('ConnectionRepository')
+  @inject(CONNECTION_REPOSITORY)
   private connectionRepository!: ConnectionRepository
 
-  init(configuration: IGraphQLStoreConfiguration) {
+  init(configuration: ConfigurationOf<IGraphQLStoreConfiguration>) {
     super.init(configuration)
 
     this.connection = configuration.connection
-    this.query = configuration.query
+    this.query = configuration.query ?? ''
     this.pollingInterval = configuration.pollingInterval ?? 5000
     if (this.pollingEnabled) {
       this.startPolling(this.pollingInterval)

@@ -15,18 +15,21 @@ import { getMdxRequest } from '../utils/MdxRequestConstructor'
 import { parseMdxRequest, parseRequestToTable } from '../utils/MdxRequestHelper'
 import { DrilldownHandler, DrilldownPayload } from './DrilldownHandler'
 import { MetadataStore } from './MetadataStorage'
-import {
-  BaseDatasource,
-  IBaseConnectionConfiguration,
-} from 'org.eclipse.daanse.board.app.lib.datasource.base'
-import {
+import { BaseDatasource, IBaseConnectionConfiguration, type ConfigurationOf } from 'org.eclipse.daanse.board.app.lib.datasource.base'
+import { CONNECTION_REPOSITORY,
   identifier,
-  ConnectionRepository,
-} from 'org.eclipse.daanse.board.app.lib.repository.connection'
+  ConnectionRepository,} from 'org.eclipse.daanse.board.app.lib.api.connection'
 import { type XmlaConnection } from 'org.eclipse.daanse.board.app.lib.connection.xmla'
 import { inject } from '@eclipse-daanse/tsm'
 
-export interface IXmlaStoreConfiguration extends IBaseConnectionConfiguration {
+/*
+ * Still hand-written: requestParams is a nested object this store reads
+ * and writes directly, and the model's XMLARequestParams is an EObject
+ * with EList axes. Taking the generated type here means rewiring the
+ * store's internals - a separate step. The Ecore beside this now says
+ * what the four axes are, so the two no longer disagree.
+ */
+export interface IXmlaStoreConfiguration extends ConfigurationOf<IBaseConnectionConfiguration> {
   connection: string
   requestParams: XMLARequestParams
   useMdx: boolean
@@ -75,14 +78,14 @@ export class XmlaStore extends BaseDatasource {
   private metadataPromiseResolve: ((value: MetadataStore) => void) | undefined
   private metadataPromise: Promise<MetadataStore> = null as unknown as Promise<MetadataStore>;
 
-  @inject('ConnectionRepository')
+  @inject(CONNECTION_REPOSITORY)
   private connectionRepository!: ConnectionRepository
 
   constructor() {
     super()
   }
 
-  init(configuration: IXmlaStoreConfiguration) {
+  init(configuration: ConfigurationOf<IXmlaStoreConfiguration>) {
     super.init(configuration)
 
     console.log('state of store during creation', JSON.stringify(this.requestParams));

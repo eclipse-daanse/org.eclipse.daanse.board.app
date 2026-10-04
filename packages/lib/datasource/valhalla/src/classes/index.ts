@@ -12,15 +12,11 @@
  **********************************************************************/
 
 import { inject, injectable } from '@eclipse-daanse/tsm'
-import {
-  BaseDatasource,
-  IBaseConnectionConfiguration,
-} from 'org.eclipse.daanse.board.app.lib.datasource.base'
-import {
+import { BaseDatasource, IBaseConnectionConfiguration, type ConfigurationOf } from 'org.eclipse.daanse.board.app.lib.datasource.base'
+import { CONNECTION_REPOSITORY,
   identifier,
   type IConnection,
-  ConnectionRepository,
-} from 'org.eclipse.daanse.board.app.lib.repository.connection'
+  ConnectionRepository,} from 'org.eclipse.daanse.board.app.lib.api.connection'
 
 export const SET_WAYPOINTS = 'SET_WAYPOINTS'
 export const SET_COSTING = 'SET_COSTING'
@@ -72,7 +68,7 @@ export interface ValhallaRouteResult {
 }
 
 export interface IValhallaStoreConfiguration
-  extends IBaseConnectionConfiguration {
+  extends ConfigurationOf<IBaseConnectionConfiguration> {
   connection: string
   costing: CostingModel
   units?: 'kilometers' | 'miles'
@@ -173,7 +169,7 @@ export class ValhallaStore extends BaseDatasource {
   private waypoints: Waypoint[] = []
   private lastResult: ValhallaRouteResult | null = null
 
-  @inject('ConnectionRepository')
+  @inject(CONNECTION_REPOSITORY)
   private connectionRepository!: ConnectionRepository
 
   init(configuration: IValhallaStoreConfiguration) {

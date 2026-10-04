@@ -12,7 +12,15 @@ export interface IDataRetrieveable {
   getData(type: string, options?: any): Promise<any>
   getOriginalData(): any
   callEvent: (event: string, params: any, shouldUpdate?: boolean) => Promise<void> | void
-  subscribe: (subscriber: () => any) => void
+  /**
+   * Registers a subscriber and hands back the way to remove it again.
+   *
+   * The base implementation has always returned that function; the
+   * declaration said void, so callers that kept it - a component that has
+   * to unsubscribe when it goes away - did not type-check, and one that
+   * believed the declaration would leak a subscriber per mount.
+   */
+  subscribe: (subscriber: () => any) => () => void
   unsubscribe: (subscriber: () => any) => void
   destroy: () => void
   startPolling: (interval: number) => void

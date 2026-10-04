@@ -13,6 +13,10 @@
     {
       "id": "org.eclipse.daanse.board.app.lib.variables",
       "versionRange": ">=0.0.1-0"
+    },
+    {
+      "id": "@emfts/core",
+      "versionRange": "^0.1.1-next.18"
     }
   ],
   "capabilities": [

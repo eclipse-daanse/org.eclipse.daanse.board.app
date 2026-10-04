@@ -11,22 +11,19 @@
  *   Smart City Jena
  **********************************************************************/
 
-import {
-  BaseDatasource,
-  IBaseConnectionConfiguration
-} from 'org.eclipse.daanse.board.app.lib.datasource.base'
+import { BaseDatasource, IBaseConnectionConfiguration, type ConfigurationOf } from 'org.eclipse.daanse.board.app.lib.datasource.base'
 import {
   identifier,
   DatasourceRepository
-} from 'org.eclipse.daanse.board.app.lib.repository.datasource'
+} from 'org.eclipse.daanse.board.app.lib.api.datasource'
 import { DatastreamSelection, OGCSTAToChartData } from '../interfaces/OGCSTAToChartData'
 import {
   EventActionsRegistry,
   EVENT_ACTIONS_REGISTRY
-} from 'org.eclipse.daanse.board.app.lib.events'
+} from 'org.eclipse.daanse.board.app.lib.api.events'
 import { OGCSTAToChartComposerActions } from '../gen/OGCSTAToChartComposerActions'
 
-export interface IOGCSTAToChartComposerConfiguration extends IBaseConnectionConfiguration {
+export interface IOGCSTAToChartComposerConfiguration extends ConfigurationOf<IBaseConnectionConfiguration> {
   connectedDatasources: string[]
   thingIds: (string | number)[]
   datastreams: DatastreamSelection[]

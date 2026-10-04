@@ -14,18 +14,18 @@
 import {
   BaseDatasource,
   IBaseConnectionConfiguration,
+  type ConfigurationOf,
 } from 'org.eclipse.daanse.board.app.lib.datasource.base'
 import { type TwoWayConnection } from 'org.eclipse.daanse.board.app.lib.connection.twowayconnection'
-import {
+import { CONNECTION_REPOSITORY,
   identifier,
   ConnectionRepository,
-} from 'org.eclipse.daanse.board.app.lib.repository.connection'
+  type PubSubEvents,} from 'org.eclipse.daanse.board.app.lib.api.connection'
 import { inject } from '@eclipse-daanse/tsm'
 
-export interface IWSStoreConfiguration extends IBaseConnectionConfiguration {
-  connection: string
-  topic?: string
-}
+/* The configuration is the model's; see ../gen. */
+export type { IWSStoreConfiguration } from '../gen/IWSStoreConfiguration'
+import type { IWSStoreConfiguration } from '../gen/IWSStoreConfiguration'
 
 export class WSStore extends BaseDatasource {
   private connection: any
@@ -33,12 +33,22 @@ export class WSStore extends BaseDatasource {
   private lastMessage: any = null
   private accumulate: boolean = false
   private topic = ''
+  /* Held so a second init can take it off again - see below. */
+  private listener: ((event: PubSubEvents, data?: any, topic?: string) => void) | undefined
 
-  @inject('ConnectionRepository')
+  @inject(CONNECTION_REPOSITORY)
   private connectionRepository!: ConnectionRepository
 
-  init(configuration: IWSStoreConfiguration) {
+  init(configuration: ConfigurationOf<IWSStoreConfiguration>) {
     super.init(configuration)
+
+    /*
+     * Configured again rather than replaced: a changed setting reaches the
+     * store that is already running, so what it is attached to has to come
+     * off first. Without this a save would leave the old listener in place
+     * and every message would arrive twice, then three times.
+     */
+    this.detach()
 
     this.connection = configuration.connection
     this.accumulate = configuration.accumulate ?? false
@@ -52,7 +62,7 @@ export class WSStore extends BaseDatasource {
       ;(connection as any).connectStore(this, configuration.topic)
     }
 
-    connection.subscribe((event, data, topic) => {
+    this.listener = (event, data, topic) => {
       switch (event) {
         case 'connect':
           this.onConnect()
@@ -67,7 +77,26 @@ export class WSStore extends BaseDatasource {
           this.onError(data)
           break
       }
-    })
+    }
+    connection.subscribe(this.listener)
+  }
+
+  /** Takes this store off the connection it is currently attached to. */
+  private detach(): void {
+    if (!this.connection) return
+    const connection = this.connectionRepository.getConnection(
+      this.connection,
+    ) as TwoWayConnection
+    if (!connection) return
+
+    if (this.listener) {
+      connection.unsubscribe(this.listener as unknown as () => any)
+      this.listener = undefined
+    }
+    if (this.topic && connection.hasTopics()) {
+      ;(connection as any).disconnectStore(this)
+      this.topic = ''
+    }
   }
 
   private onError(error: any) {
@@ -144,15 +173,7 @@ export class WSStore extends BaseDatasource {
   }
 
   destroy(): void {
-    console.log('Destroying WSStore')
-
-    const connection = this.connectionRepository.getConnection(
-      this.connection,
-    ) as TwoWayConnection
-
-    if (connection && connection.hasTopics()) {
-      ;(connection as any).disconnectStore(this)
-    }
+    this.detach()
   }
 
   getData(type: string): any {

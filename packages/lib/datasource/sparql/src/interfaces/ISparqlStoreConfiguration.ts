@@ -11,10 +11,9 @@
 
 import { IBaseConnectionConfiguration } from 'org.eclipse.daanse.board.app.lib.datasource.base'
 
-export interface ISparqlStoreConfiguration extends IBaseConnectionConfiguration{
-  query:string,
-  connection: string
-}
+/* The configuration is the model's; see ../gen. */
+export type { ISparqlStoreConfiguration } from '../gen/ISparqlStoreConfiguration'
+import type { ISparqlStoreConfiguration } from '../gen/ISparqlStoreConfiguration'
 export type SparqlResponse = {
   head: { vars: string[] };
   results: { bindings: Record<string, SparqlBinding>[] };

@@ -12,10 +12,11 @@
  **********************************************************************/
 
 import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
+import { serviceId } from 'org.eclipse.daanse.board.app.lib.core'
 import { RestConnection, type IRestConnectionConfig } from './classes'
 
-/** Dienst-ID im Namensraum der ServiceRegistry; `factorySymbol` ist das dazu passende Symbol. */
-const REST_CONNECTION_FACTORY = 'RestConnectionFactory'
+/** Typed service id - the name and the contract declared once, here. */
+const REST_CONNECTION_FACTORY = serviceId<typeof createRestConnection>('RestConnectionFactory')
 
 const factorySymbol = Symbol.for(REST_CONNECTION_FACTORY)
 

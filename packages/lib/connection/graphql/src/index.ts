@@ -12,13 +12,14 @@
  **********************************************************************/
 
 import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
+import { serviceId } from 'org.eclipse.daanse.board.app.lib.core'
 import {
   GraphQLConnection,
   type IGraphQLConnectionConfiguration,
 } from './classes'
 
-/** Dienst-ID im Namensraum der ServiceRegistry; `factorySymbol` ist das dazu passende Symbol. */
-const GRAPHQL_CONNECTION_FACTORY = 'GraphQLConnectionFactory'
+/** Typed service id - the name and the contract declared once, here. */
+const GRAPHQL_CONNECTION_FACTORY = serviceId<(config: IGraphQLConnectionConfiguration) => Error>('GraphQLConnectionFactory')
 
 const factorySymbol = Symbol.for(GRAPHQL_CONNECTION_FACTORY)
 
