@@ -14,10 +14,10 @@
 import {
   identifier,
   type VariableRepository,
-} from 'org.eclipse.daanse.board.app.lib.repository.variable'
+} from 'org.eclipse.daanse.board.app.lib.api.variable'
 import { ref, computed, inject, type ComputedRef } from 'vue'
 import { Variable } from 'org.eclipse.daanse.board.app.lib.variables'
-import { type PageContextServiceI, identifier as PAGE_CONTEXT_SERVICE } from 'org.eclipse.daanse.board.app.lib.pagecontext.pagecontext_service'
+import { type PageContextServiceI, identifier as PAGE_CONTEXT_SERVICE } from 'org.eclipse.daanse.board.app.lib.api.pagecontext'
 
 export function useVariableRepository() {
   let variableRepositoryFound = false
