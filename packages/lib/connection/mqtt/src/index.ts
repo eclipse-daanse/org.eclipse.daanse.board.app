@@ -13,9 +13,10 @@
 
 import { MQTTConnection, type IMQTTConnectionConfiguration } from './classes'
 import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
+import { serviceId } from 'org.eclipse.daanse.board.app.lib.core'
 
-/** Dienst-ID im Namensraum der ServiceRegistry; `factorySymbol` ist das dazu passende Symbol. */
-const MQTT_CONNECTION_FACTORY = 'MQTTConnectionFactory'
+/** Typed service id - the name and the contract declared once, here. */
+const MQTT_CONNECTION_FACTORY = serviceId<(config: IMQTTConnectionConfiguration) => MQTTConnection>('MQTTConnectionFactory')
 
 const factorySymbol = Symbol.for(MQTT_CONNECTION_FACTORY)
 

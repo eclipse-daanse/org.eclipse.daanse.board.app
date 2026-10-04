@@ -11,17 +11,13 @@
  *   Smart City Jena
  **********************************************************************/
 
-import {
-  BaseDatasource,
-  IBaseConnectionConfiguration,
-} from 'org.eclipse.daanse.board.app.lib.datasource.base'
-import {
+import { BaseDatasource, IBaseConnectionConfiguration, type ConfigurationOf } from 'org.eclipse.daanse.board.app.lib.datasource.base'
+import { CONNECTION_REPOSITORY,
   identifier,
-  ConnectionRepository,
-} from 'org.eclipse.daanse.board.app.lib.repository.connection'
+  ConnectionRepository,} from 'org.eclipse.daanse.board.app.lib.api.connection'
 import { inject } from '@eclipse-daanse/tsm'
 
-export interface IKpiStoreConfiguration extends IBaseConnectionConfiguration {
+export interface IKpiStoreConfiguration extends ConfigurationOf<IBaseConnectionConfiguration> {
   connection: string
   cube: string
   kpis: any[]
@@ -37,7 +33,7 @@ export class KpiStore extends BaseDatasource {
   private cube: string = ''
   // private computedUrl: ComputedVariable;
 
-  @inject('ConnectionRepository')
+  @inject(CONNECTION_REPOSITORY)
   private connectionRepository!: ConnectionRepository
 
   init(configuration: IKpiStoreConfiguration) {

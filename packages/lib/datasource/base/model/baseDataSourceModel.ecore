@@ -36,6 +36,12 @@
             </eAnnotations>
         </eStructuralFeatures>
 
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="pollingEnabled" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean" lowerBound="0">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="Whether this source re-reads on its own. Every datasource knows the flag - the base class reads it in init - so it belongs here rather than being repeated in each model."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+
     </eClassifiers>
 
 </ecore:EPackage>

@@ -41,7 +41,17 @@
                 <details key="documentation" value="A list of possible separator characters used in the CSV file (e.g., ',', ';', '\t')."/>
             </eAnnotations>
         </eStructuralFeatures>
-    </eClassifiers>
+            <eStructuralFeatures xsi:type="ecore:EAttribute" name="skipRowsFromStart" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt" lowerBound="0">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="How many lines at the top are not data - a title, a legend, a second header row."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="skipRowsFromEnd" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt" lowerBound="0">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="How many lines at the bottom are not data - a total row, a footnote."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+</eClassifiers>
 
     <eSubpackages href="http://org.eclipse.daanse.board.app.lib.datasource.base#/"/>
 

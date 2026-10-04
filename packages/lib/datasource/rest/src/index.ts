@@ -12,10 +12,21 @@
  **********************************************************************/
 
 import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
+import { serviceId } from 'org.eclipse.daanse.board.app.lib.core'
 import { RestStore, type IRestStoreConfiguration } from './classes'
+import { ReststorePackage } from './gen/ReststorePackage'
+import { ReststoreFactory } from './gen/ReststoreFactory'
+import { IRestStoreConfigurationImpl } from './gen/IRestStoreConfigurationImpl'
 
-/** Dienst-ID im Namensraum der ServiceRegistry; `factorySymbol` ist das dazu passende Symbol. */
-const REST_STORE_FACTORY = 'RestStoreFactory'
+/*
+ * Building the EPackage on load: until it exists the class literals are
+ * null, an instance cannot say what it is, and nothing can render a form
+ * from the model.
+ */
+void ReststorePackage.eINSTANCE
+
+/** Typed service id - the name and the contract declared once, here. */
+const REST_STORE_FACTORY = serviceId<(config: any) => RestStore>('RestStoreFactory')
 
 const factorySymbol = Symbol.for(REST_STORE_FACTORY)
 
@@ -52,3 +63,4 @@ export function deactivate({ services }: ActivationContext) {
 // }
 
 export { type RestStore, IRestStoreConfiguration, REST_STORE_FACTORY, factorySymbol }
+export { ReststorePackage, ReststoreFactory, IRestStoreConfigurationImpl }

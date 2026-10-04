@@ -13,9 +13,19 @@
 
 import { CsvStore, type ICsvStoreConfiguration } from './classes'
 import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
+import { serviceId } from 'org.eclipse.daanse.board.app.lib.core'
+import { CsvstorePackage } from './gen/CsvstorePackage'
+import { CsvstoreFactory } from './gen/CsvstoreFactory'
+import { ICsvStoreConfigurationImpl } from './gen/ICsvStoreConfigurationImpl'
+/*
+ * Building the EPackage on load: until it exists the class literals are
+ * null, an instance cannot say what it is, and nothing can render a form
+ * from the model.
+ */
+void CsvstorePackage.eINSTANCE
 
-/** Dienst-ID im Namensraum der ServiceRegistry; `factorySymbol` ist das dazu passende Symbol. */
-const CSV_STORE_FACTORY = 'CsvStoreFactory'
+/** Typed service id - the name and the contract declared once, here. */
+const CSV_STORE_FACTORY = serviceId<(config: any) => CsvStore>('CsvStoreFactory')
 
 const factorySymbol = Symbol.for(CSV_STORE_FACTORY)
 
@@ -46,3 +56,4 @@ export function deactivate({ services }: ActivationContext) {
 }
 
 export { type CsvStore, ICsvStoreConfiguration, CSV_STORE_FACTORY, factorySymbol }
+export { CsvstorePackage, CsvstoreFactory, ICsvStoreConfigurationImpl }

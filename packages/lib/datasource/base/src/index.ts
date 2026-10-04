@@ -14,16 +14,46 @@
 import { UsesComputedVariable } from 'org.eclipse.daanse.board.app.lib.variables'
 import { type IDataRetrieveable } from './api/IDataRetrieveable'
 export {type IDataRetrieveable} from './api/IDataRetrieveable'
-// import type ConnectionRepository from "./ConnectionRepository";
-// import UsesComputedVariable from "./connections/UsesComputedVariable";
-// import type DatasourceRepository from "./DatasourceRepository";
 
-export interface IBaseConnectionConfiguration {
-  [key: string]: any
-  name: string
-  type: string
-  uid: string
-}
+/*
+ * What a datasource is configured with comes from the model now.
+ *
+ * There used to be a hand-written interface of the same name here, with an
+ * index signature that let any key through. Every datasource mirrored it
+ * with a second hand-written interface listing the keys it actually reads -
+ * while the Ecore beside it said the same thing again, generated into
+ * src/gen and imported by nobody. Three declarations of one fact.
+ *
+ * The model is the one that survives: it is what the generated Impl, the
+ * EPackage and anything rendering a form from it all read.
+ */
+export type { IBaseConnectionConfiguration } from './gen/IBaseConnectionConfiguration'
+export { IBaseConnectionConfigurationImpl } from './gen/IBaseConnectionConfigurationImpl'
+export { BaseconnectionPackage } from './gen/BaseconnectionPackage'
+export { BaseconnectionFactory } from './gen/BaseconnectionFactory'
+
+import type { EObject } from '@emfts/core'
+import type { IBaseConnectionConfiguration } from './gen/IBaseConnectionConfiguration'
+import { BaseconnectionPackage } from './gen/BaseconnectionPackage'
+
+/**
+ * A modelled configuration as plain data: its features, without the EObject
+ * machinery around them.
+ *
+ * Both shapes are real. A configuration read back from a stored board is an
+ * object with the model's keys and nothing else; one built through a factory
+ * is an EObject that also notifies, knows its EClass and can be rendered from
+ * the model. Everything that only reads values takes the first, and an
+ * EObject satisfies it too - it has those keys as well.
+ */
+export type ConfigurationOf<T> = Omit<T, keyof EObject>
+
+/*
+ * Building the EPackage on load: until it exists the class literals are
+ * null, an instance cannot say what it is, and nothing downstream can
+ * resolve a feature by name.
+ */
+void BaseconnectionPackage.eINSTANCE
 
 // export default abstract class BaseDatasource extends UsesComputedVariable implements IDataRetrieveable {
 export abstract class BaseDatasource extends UsesComputedVariable implements IDataRetrieveable{
@@ -38,10 +68,15 @@ export abstract class BaseDatasource extends UsesComputedVariable implements IDa
   public type: string = ''
   public uid: string = ''
 
-  init(configuration: IBaseConnectionConfiguration) {
-    this.type = configuration.type
-    this.name = configuration.name
-    this.uid = configuration.uid
+  init(configuration: ConfigurationOf<IBaseConnectionConfiguration>) {
+    /*
+     * Optional in the model, because a configuration is also read back from
+     * a stored board where a key may be missing. The class keeps the plain
+     * strings it has always exposed.
+     */
+    this.type = configuration.type ?? ''
+    this.name = configuration.name ?? ''
+    this.uid = configuration.uid ?? ''
 
     this.setUpdateCb(() => {
       console.log('Test notify')

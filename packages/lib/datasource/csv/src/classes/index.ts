@@ -13,27 +13,18 @@
 
 // import { extractDataByPath } from "@/utils/helpers";
 import { inject } from '@eclipse-daanse/tsm'
-import { BaseDatasource } from 'org.eclipse.daanse.board.app.lib.datasource.base'
-import {
+import { type ConfigurationOf, BaseDatasource } from 'org.eclipse.daanse.board.app.lib.datasource.base'
+import { CONNECTION_REPOSITORY,
   identifier,
   type IConnection,
-  ConnectionRepository,
-} from 'org.eclipse.daanse.board.app.lib.repository.connection'
+  ConnectionRepository,} from 'org.eclipse.daanse.board.app.lib.api.connection'
 import { ComputedStoreParameter } from 'org.eclipse.daanse.board.app.lib.variables'
 import helpers from 'org.eclipse.daanse.board.app.lib.utils.helpers'
 import { ParseOptions } from 'org.eclipse.daanse.board.app.lib.utils.helpers'
 
-export interface ICsvStoreConfiguration {
-  resourceUrl: string
-  connection: string
-  pollingInterval?: number
-  type: string
-  name: string
-  uid: string
-  separators: string[]
-  skipRowsFromStart?: number
-  skipRowsFromEnd?: number
-}
+/* The configuration is the model's; see ../gen. */
+export type { ICsvStoreConfiguration } from '../gen/ICsvStoreConfiguration'
+import type { ICsvStoreConfiguration } from '../gen/ICsvStoreConfiguration'
 
 export interface ICsvParseResult {
   header: string[]
@@ -49,20 +40,31 @@ export class CsvStore extends BaseDatasource {
   private skipRowsFromStart: number = 0
   private skipRowsFromEnd: number = 0
 
-  @inject('ConnectionRepository')
+  @inject(CONNECTION_REPOSITORY)
   private connectionRepository!: ConnectionRepository
 
-  init(configuration: ICsvStoreConfiguration) {
+  init(configuration: ConfigurationOf<ICsvStoreConfiguration>) {
     super.init(configuration)
 
     this.connection = configuration.connection
     this.parseOptions = {
-      separators: configuration.separators,
+      /*
+       * Left out entirely when the configuration names none: the parser
+       * falls back to a comma through a default parameter, and a default
+       * parameter only fires on undefined. An empty list would be taken as
+       * "split on nothing" and put every line in one column.
+       *
+       * A many-valued feature is an EList on the model and a plain array in
+       * a stored board; both are iterable.
+       */
+      separators: configuration.separators
+        ? Array.from(configuration.separators)
+        : undefined,
     }
     this.skipRowsFromStart = configuration.skipRowsFromStart ?? 0
     this.skipRowsFromEnd = configuration.skipRowsFromEnd ?? 0
 
-    this.resourceUrl = super.initVariable(configuration.resourceUrl)
+    this.resourceUrl = super.initVariable(configuration.resourceUrl ?? '')
     this.pollingInterval = configuration.pollingInterval ?? 5000
     if (this.pollingEnabled) {
       this.startPolling(this.pollingInterval)
