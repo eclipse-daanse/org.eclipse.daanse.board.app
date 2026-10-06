@@ -12,14 +12,13 @@ import {
   type LayoutI,
   type LayoutRepositoryI,
   LAYOUT_REPOSITORY,
-} from 'org.eclipse.daanse.board.app.lib.repository.layout.page'
+} from 'org.eclipse.daanse.board.app.lib.api.layout.page'
 import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
 import View from './components/View.vue'
 import Edit from './components/Edit.vue'
 
 // Export clipboard store for use in other layouts
 export { useClipboardStore } from './composables/useClipboardStore'
-export { useUndoRedoStore } from './composables/useUndoRedoStore'
 
 const LAYOUT_ID = 'org.eclipse.daanse.board.app.ui.vue.layouts.base'
 

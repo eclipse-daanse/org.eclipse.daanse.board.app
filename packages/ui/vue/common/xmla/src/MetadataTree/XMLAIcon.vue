@@ -12,9 +12,9 @@ Contributors:
 -->
 
 <script setup lang="ts">
+import { DIcon } from "org.eclipse.daanse.board.app.ui.vue.controls";
 import { computed } from "vue";
 import { default as icons } from "./svg";
-console.log(icons);
 
 const props = defineProps({
   icon: {
@@ -49,9 +49,13 @@ const containerWidth = computed(() => typeof props.width === "number" ? props.wi
   <div class="icon-container" v-if="icon">
     <component :is="icon"></component>
   </div>
-  <va-icon v-else :name="props.icon" color="#000" :size="height" style="margin-right: 4px;" />
+  <DIcon v-else :name="props.icon" class="icon-fallback" />
 </template>
 <style>
+.icon-fallback {
+  margin-right: 4px;
+}
+
 .icon-container {
   height: v-bind(containerHeight);
   width: v-bind(containerWidth);

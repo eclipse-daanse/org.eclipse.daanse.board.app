@@ -12,6 +12,7 @@ Contributors:
 -->
 
 <script setup lang="ts">
+import { DIcon } from "org.eclipse.daanse.board.app.ui.vue.controls";
 import { computed } from "vue";
 import { usePivotActions, usePivotBus } from "../context";
 import { type AxisLayout, sizeAt } from "../logic/axis";
@@ -81,10 +82,10 @@ const onContextMenu = (event: MouseEvent, member: PivotMember) => {
             <div class="columnMemberOffset" v-for="n in view.indent" :key="n"></div>
             <div class="columnMemberContent">
               <div v-if="view.toggle === 'expand'" class="expandIcon">
-                <va-icon name="chevron_right" size="small" @click="actions.expand(view.member, 'columns')" />
+                <DIcon name="chevron_right" size="sm" @click="actions.expand(view.member, 'columns')" />
               </div>
               <div v-else-if="view.toggle === 'collapse'" class="expandIcon">
-                <va-icon name="expand_more" size="small" @click="actions.collapse(view.member, 'columns')" />
+                <DIcon name="expand_more" size="sm" @click="actions.collapse(view.member, 'columns')" />
               </div>
               <div class="columnMemberHeader">{{ view.caption }}</div>
             </div>

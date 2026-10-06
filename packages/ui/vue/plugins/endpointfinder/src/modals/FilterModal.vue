@@ -11,11 +11,11 @@ Contributors:
     Smart City Jena
 -->
 <script lang="ts" setup>
+import { DChip, DDivider, DModal, DSwitch } from 'org.eclipse.daanse.board.app.ui.vue.controls'
 
 import { LMap, LTileLayer } from '@vue-leaflet/vue-leaflet'
 import { reactive, ref, watch } from 'vue'
 import { type Filter, type Format, Formats, type MapSection } from '../queryBuilder/FilterAPI'
-import { useFormat } from '../composeables/FormatComposeable'
 
 const toogle = ref<boolean>(false)
 const run = () => {
@@ -24,7 +24,6 @@ const run = () => {
 defineExpose({
   run
 })
-const getColor = useFormat().getColorForFormat
 
 const model = defineModel<Filter[]>({
   default: reactive([
@@ -32,11 +31,11 @@ const model = defineModel<Filter[]>({
 })
 
 const formats = ref([
-  { name: 'OGC', key: Formats.WMS, color: getColor(Formats.WMS), active: true },
-  { name: 'SensorThings', key: Formats.OGCSTA, color: getColor(Formats.OGCSTA), active: true },
-  { name: 'XMLA', key: Formats.XMLA, color: getColor(Formats.XMLA), active: true },
-  { name: 'CSV', key: Formats.CSV, color: getColor(Formats.CSV), active: true },
-  { name: 'JSON', key: Formats.JSON, color: getColor(Formats.JSON), active: true }
+  { name: 'OGC', key: Formats.WMS, active: true },
+  { name: 'SensorThings', key: Formats.OGCSTA, active: true },
+  { name: 'XMLA', key: Formats.XMLA, active: true },
+  { name: 'CSV', key: Formats.CSV, active: true },
+  { name: 'JSON', key: Formats.JSON, active: true }
 ])
 
 const formatFilter = ref<boolean>(false)
@@ -149,93 +148,70 @@ const toogleFormat = (format: any) => {
 </script>
 
 <template>
-  <va-modal :modelValue="toogle" class="filterbox" hide-default-actions no-padding @open="init">
+  <DModal v-model="toogle" title="Filter" size="md" @open="init">
+    <div class="filters">
+      <div class="line">
+        <span class="line__label">Format</span>
+        <DSwitch v-model="formatFilter" label="Nur ausgewählte Formate" />
+      </div>
 
+      <!-- A chip per format, dimmed when it is not in the filter. It used
+           to carry a colour of its own; the name is what identifies it. -->
+      <div class="list_of_formats">
+        <DChip
+          v-for="format in formats"
+          :key="format.key"
+          :tone="format.active ? 'accent' : 'neutral'"
+          class="pointer"
+          @click="toogleFormat(format)"
+        >
+          {{ format.name }}
+        </DChip>
+      </div>
 
-    <template #header class="header">
-      <h3 class="title">Filter</h3>
-    </template>
-    <template #default="{ ok }">
+      <DDivider />
 
-      <va-button
-        class="mr-1 mb-1 close"
-        preset="secondary"
-        style="position: absolute;right: 0;top:0"
-        @click="()=>{toogle=false}"
-      >
-        x
-      </va-button>
-      <va-card-content>
-        <div class="spacer" style="height:25px"></div>
-        <div class="line">
-          <div class="va-collapse__header__text left">Format</div>
-          <div class="right">
-            <VaSwitch
-              v-model="formatFilter"
-              false-inner-label="all"
-              true-inner-label="Selection"
-            />
-          </div>
-        </div>
+      <div class="line">
+        <span class="line__label">Region</span>
+        <DSwitch v-model="mapSettings.map_filter_on" label="Nur im Kartenausschnitt" />
+      </div>
 
-        <va-divider></va-divider>
-
-        <div class="content">
-          <div class="list_of_formats">
-            <template v-for="format in formats" :key="format.key">
-              <VaChip :color="(format.active)?format.color:'#ccc'" :disabled="!format.active" class="pointer" size="small"
-                      @click="toogleFormat(format)">
-                {{ format.name }}
-              </VaChip>
-            </template>
-          </div>
-        </div>
-
-
-        <div class="line">
-          <div class="va-collapse__header__text left">Region</div>
-          <div class="right">
-            <VaSwitch v-model="mapSettings.map_filter_on"
-                      false-inner-label="anywhere"
-                      true-inner-label="within map section"
-            />
-          </div>
-        </div>
-        <va-divider></va-divider>
-        <div class="content">
-
-
-          <div class="map">
-            <l-map
-              id="map"
-              ref="map"
-              :center="mapSettings.center as any"
-              :max-zoom="21"
-              :useGlobalLeaflet="true"
-              :zoom="mapSettings.zoom as number"
-              style="height: 100%"
-              @move="()=>{move();mapSettings.map_filter_on = true}"
-            >
-              <l-tile-layer :attribution="mapSettings.attribution" :options="{maxNativeZoom:19,
-                                                maxZoom:25}" :url="mapSettings.baseMapUrl">
-              </l-tile-layer>
-            </l-map>
-          </div>
-        </div>
-      </va-card-content>
-    </template>
-  </va-modal>
+      <div class="map">
+        <l-map
+          id="map"
+          ref="map"
+          :center="mapSettings.center as any"
+          :max-zoom="21"
+          :useGlobalLeaflet="true"
+          :zoom="mapSettings.zoom as number"
+          style="height: 100%"
+          @move="() => { move(); mapSettings.map_filter_on = true }"
+        >
+          <l-tile-layer
+            :attribution="mapSettings.attribution"
+            :options="{ maxNativeZoom: 19, maxZoom: 25 }"
+            :url="mapSettings.baseMapUrl"
+          />
+        </l-map>
+      </div>
+    </div>
+  </DModal>
 </template>
 
 <style lang="scss" scoped>
+.filters {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
 
 .list_of_formats {
   display: flex;
   flex-direction: row;
   gap: 5px;
+  flex-wrap: wrap;
   justify-content: flex-start;
 }
-
 
 .map {
   width: 100%;
@@ -243,42 +219,23 @@ const toogleFormat = (format: any) => {
   position: relative;
 }
 
-.content {
-  margin-top: 25px;
-  margin-bottom: 35px;
-  padding-left: 10px;
-}
-
 .line {
-  overflow: hidden;
-  width: 100%;
   display: flex;
   flex-direction: row;
-  flex-wrap: nowrap;
-  align-content: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
   justify-content: space-between;
-  align-items: flex-end;
-
-  div {
-    display: block;
-    width: auto;
-  }
 }
 
-.title {
-  font-size: 24px;
-  padding: 23px 10px 0px 15px;
+.line__label {
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  font-weight: 600;
+  color: var(--color-fg);
 }
 
 .pointer {
   cursor: pointer;
-}
-</style>
-<style lang="scss">
-.filterbox {
-  .va-modal__header {
-    background: #f1f1f1;
-    padding-bottom: 15px;
-  }
 }
 </style>

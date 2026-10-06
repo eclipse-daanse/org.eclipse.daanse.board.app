@@ -12,6 +12,8 @@ Contributors:
 -->
 
 <script lang="ts" setup>
+import { DCheckbox, DIcon, DInput, DSelect } from "org.eclipse.daanse.board.app.ui.vue.controls";
+import TreeView from "../TreeView.vue";
 import { useFilterTreeDataSource } from "../Composables/filterTreeDataSource";
 import { useSearchResultTreeData } from "../Composables/searchResultTreeData";
 import { debounce } from "lodash";
@@ -57,7 +59,6 @@ const treeData = ref({
   expanded: ref<string[]>([]),
 });
 
-console.log('tree in <FilterTreeView>', tree);
 
 const onSearch = debounce((val: string) => {
   if (val && val.length > 0) {
@@ -157,113 +158,105 @@ onMounted(() => {
 <template>
   <div class="flex" style="flex-direction: column; width: 100%">
     <div class="flex">
-      <va-input
+      <DInput
         v-model="searchValue"
         class="mr-3"
-        clearable
-        placeholder="Search value"
+        placeholder="Suchen"
         style="width: 100%"
       />
-      <va-select
+      <DSelect
         v-model="searchBy"
-        label="Search by"
+        label="Suchen in"
         :options="levels"
-        value-by="LEVEL_UNIQUE_NAME"
-        text-by="LEVEL_CAPTION"
-        prevent-overflow
+        value-key="LEVEL_UNIQUE_NAME"
+        label-key="LEVEL_CAPTION"
       />
     </div>
     <div class="mt-3 mb-2">
-      <va-checkbox
-        v-model="multipleChoise"
-        label="Select Multiple Items"
-        left-label
-      />
+      <DCheckbox v-model="multipleChoise" label="Mehrere wählen" />
     </div>
     <div class="mb-3" style="overflow: auto; height: 100%">
       <template v-if="multipleChoise">
-        <template v-if="emptySelection">
-          <va-checkbox
-            class="mt-3 ml-2 selectAll"
-            v-model="treeData.selectAll"
-            label="Select all"
-          />
-        </template>
-        <template v-else>
-          <va-checkbox
-            class="mt-3 ml-2 selectAll"
-            :model-value="true"
-            label="Select all"
-            checked-icon="remove"
-            @click.prevent.stop="treeData.setSelectAll"
-          />
-        </template>
+        <DCheckbox
+          v-if="emptySelection"
+          v-model="treeData.selectAll"
+          class="mt-3 ml-2 selectAll"
+          label="Alle wählen"
+        />
+        <DCheckbox
+          v-else
+          class="mt-3 ml-2 selectAll"
+          :model-value="true"
+          indeterminate
+          label="Alle wählen"
+          @click.prevent.stop="treeData.setSelectAll"
+        />
       </template>
-      <va-tree-view
+
+      <TreeView
+        :key="treeData.key"
         class="filter-tree-view"
         :nodes="treeData.nodes"
-        @update:expanded="treeData.onExpanded"
         :expanded="treeData.expanded"
-        :key="treeData.key"
+        text-by="Caption"
+        @update:expanded="treeData.onExpanded"
       >
         <template #content="node">
           <div v-if="node.isLoading" class="flex align-center">
-            <va-progress-circle indeterminate size="small" />
+            <span class="spinner" aria-label="Wird geladen" />
           </div>
           <div
             v-else
-            class="flex"
-            style="align-items: center"
-            :style="
-              !multipleChoise && node.id === singleSelection.id
-                ? `border-bottom: 1px solid var(--va-primary);`
-                : 'border-bottom: 1px solid transparent'
-            "
+            :class="['member', { 'member--on': !multipleChoise && node.id === singleSelection.id }]"
             @click.stop.prevent="selectFilter(node)"
           >
-            <template v-if="multipleChoise && !node.partiallySelected">
-              <va-checkbox
-                class="mr-2"
-                :model-value="node.selected"
-                @click.stop.prevent="treeData.changeSelection(node)"
-              />
-            </template>
-            <template v-else-if="multipleChoise && node.partiallySelected">
-              <va-checkbox
-                class="mr-2"
-                :model-value="true"
-                checked-icon="remove"
-                @click.stop.prevent="treeData.changeSelection(node)"
-              />
-            </template>
+            <DCheckbox
+              v-if="multipleChoise"
+              class="mr-2"
+              :model-value="node.partiallySelected ? true : node.selected"
+              :indeterminate="!!node.partiallySelected"
+              @click.stop.prevent="treeData.changeSelection(node)"
+            />
             <div style="width: 100%">{{ node.Caption }}</div>
-            <va-icon
+            <DIcon
               v-if="!multipleChoise && node.id === singleSelection.id"
               class="ml-2"
               name="check"
-              color="primary"
-              size="small"
+              size="sm"
+              tone="color-accent"
             />
           </div>
         </template>
-      </va-tree-view>
+      </TreeView>
     </div>
   </div>
 </template>
 <style lang="scss">
 .filter-tree-view {
-  .va-tree-node-root {
-    padding-top: 0;
-    padding-bottom: 0;
+  .member {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    border-bottom: 1px solid transparent;
   }
 
-  .va-tree-node-content__body > div {
-    padding-top: 8px;
-    padding-bottom: 8px;
+  /* The one that is picked, when only one may be. */
+  .member--on {
+    border-bottom-color: var(--color-accent);
+  }
+
+  .spinner {
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    border: 2px solid var(--color-divider);
+    border-top-color: var(--color-accent);
+    border-radius: 50%;
+    animation: xmla-spin 700ms linear infinite;
   }
 }
 
-.selectAll label {
-  font-weight: 600;
+@keyframes xmla-spin {
+  to { transform: rotate(360deg); }
 }
 </style>

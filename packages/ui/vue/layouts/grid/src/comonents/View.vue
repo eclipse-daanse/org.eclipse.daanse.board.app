@@ -11,10 +11,7 @@ Contributors:
     Smart City Jena
 -->
 <template>
-  <VaScrollContainer
-    class="max-h-screen ml-15"
-    vertical
-  >
+  <div class="scroll max-h-screen ml-15">
     <div ref="wrapper" class="view_grid_layout">
       <GridLayout ref="gridLayout" :key="gridSettingsKey" v-model:layout="layout" :row-height="ROW_HEIGHT" :responsive="true" :vertical-compact="false" :breakpoints="BREAKPOINTS" :cols="COLS as any" :is-draggable="false" :is-resizable="false">
         <template #item="{ item }">
@@ -27,21 +24,21 @@ Contributors:
         </template>
       </GridLayout>
     </div>
-  </VaScrollContainer>
+  </div>
 </template>
 
 <script setup lang="ts">
 import { inject, ref, computed, onMounted, nextTick } from 'vue'
 import { GridLayout } from 'grid-layout-plus'
 
-import { useWidgetsStore } from 'org.eclipse.daanse.board.app.ui.vue.stores.widgets'
-import { useLayoutStore } from 'org.eclipse.daanse.board.app.ui.vue.stores.layout'
+import { useBoard } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import { WidgetWrapper } from 'org.eclipse.daanse.board.app.ui.vue.widget.wrapper'
 import { useRoute } from 'vue-router'
 import { identifiers } from 'org.eclipse.daanse.board.app.lib.core'
 import type { TinyEmitter } from 'tiny-emitter'
 import { BREAKPOINTS, resolveGridSettings } from '../GridSettings'
-import { identifier as PageIdentifier, type PageRegistryI } from 'org.eclipse.daanse.board.app.lib.repository.page'
+import { plainSettings } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+import { identifier as PageIdentifier, type PageRegistryI } from 'org.eclipse.daanse.board.app.lib.api.page'
 
 const props = defineProps<{
   pageId?: string,
@@ -60,13 +57,15 @@ const route = useRoute();
 // Get page ID - use prop first, then route param
 const pageId = props.pageId ?? route.params.pageid as string ?? ''
 
-// Initialize reactive refs first
-const widgets = ref<any[]>([])
-const storedLayout = ref<any[]>([])
-
-// Store references (will be set in onMounted)
-let widgetStore: any = null
-let layoutStore: any = null
+/*
+ * Straight from the model. There used to be two refs filled from two
+ * stores in onMounted, with a retry after 100ms when Pinia was not ready
+ * yet - the stores were created on first call, and whether they existed
+ * depended on when this ran.
+ */
+const board = useBoard(pageId)
+const widgets = board.widgets
+const storedLayout = board.layout
 
 
 // Get EventBus for page loaded event
@@ -79,7 +78,13 @@ const pageRepo = inject<PageRegistryI>(PageIdentifier) ?? null
 function syncLayoutSettings() {
   if (pageRepo && pageId) {
     const page = pageRepo.getPage(pageId)
-    layoutSettingsRef.value = page?.layoutSettings ? { ...page.layoutSettings } : undefined
+    /* Copied by the model's names: the settings are a modelled instance
+       once the form has been open, and spreading one gives the private
+       fields its getters sit in - the grid then silently fell back to
+       every default while the form showed what had been set. */
+    layoutSettingsRef.value = page?.layoutSettings
+      ? { ...plainSettings(page.layoutSettings) }
+      : undefined
   }
 }
 
@@ -95,47 +100,14 @@ onMounted(async () => {
     })
   }
 
-  // Wait a tick to ensure Pinia is fully initialized
+  /* One tick, so the widgets this mounts exist before it says so. The
+     second one was waiting for Pinia to finish starting. */
   await nextTick()
-
-  const initStores = () => {
-    try {
-      widgetStore = useWidgetsStore(pageId)
-      layoutStore = useLayoutStore(pageId)
-
-      // Set initial data
-      widgets.value = widgetStore.widgets
-      storedLayout.value = layoutStore.layout
-
-      console.log('Grid View stores initialized successfully, widgets:', widgets.value.length)
-      return true
-    } catch (error) {
-      console.error('Error initializing Grid View stores:', error)
-      return false
-    }
-  }
-
-  // Try to initialize immediately
-  if (!initStores()) {
-    // If it fails, try again after a short delay
-    setTimeout(() => {
-      if (!initStores()) {
-        console.error('Failed to initialize Grid View stores after retry')
-      } else {
-        // Emit page loaded event after successful retry
-        emitPageLoaded()
-      }
-    }, 100)
-  } else {
-    // Wait another tick to ensure widgets are mounted and registered
-    await nextTick()
-    emitPageLoaded()
-  }
+  emitPageLoaded()
 })
 
 // Emit page loaded event
 const emitPageLoaded = () => {
-  console.log('📄 Emitting system:pageLoaded for page:', pageId)
   eventBus.emit('system:pageLoaded', { pageId })
 }
 
@@ -188,12 +160,17 @@ let layout = computed(() => (storedLayout.value || []).map(toGrid))
 </script>
 
 <style scoped>
+/* The board scrolls inside the page; main.css paints the bar */
+.scroll {
+  overflow-y: auto;
+}
+
 
 .view_grid_layout{
   padding-left:60px;
 }
 .vgl-layout {
-  --vgl-placeholder-bg: #aaa;
+  --vgl-placeholder-bg: var(--color-outline);
   min-height:100vh;
 }
 /* Grid background disabled in view mode */
@@ -211,7 +188,7 @@ let layout = computed(() => (storedLayout.value || []).map(toGrid))
 }
 
 :deep(.vgl-item--static) {
-  background-color: #cce;
+  background-color: color-mix(in srgb, var(--color-accent) 18%, transparent);
 }
 
 .text {

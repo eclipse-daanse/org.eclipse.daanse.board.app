@@ -12,6 +12,7 @@ Contributors:
 -->
 
 <script setup lang="ts">
+import { DSelect } from 'org.eclipse.daanse.board.app.ui.vue.controls'
 interface IMonacoEditorProps {
     modelValue?: string;
     language?: 'sql' | 'msdax' | 'mdx';
@@ -169,14 +170,15 @@ watch(() => props.modelValue, (newValue) => {
     <div class="editor-page">
         <div class="header-container">
             <div class="toolbar" v-if="props.showToolbar">
-                <va-select v-model="selectedLanguage" label="Language:" :options="supportedLanguages" />
-                <!-- <va-select class="ml-3" v-model="selectedTheme" label="Theme:" :options="supportedThemes" /> -->
+                <DSelect v-model="selectedLanguage" label="Sprache" :options="supportedLanguages" size="sm" />
             </div>
             <slot name="actions">
                 <!-- Additional action buttons can be inserted here -->
             </slot>
         </div>
-        <div ref="editorContainer" class="monaco-editor mt-2"></div>
+        <!-- Not called monaco-editor: that is Monaco's own class, and its
+             stylesheet would style this as if it were the editor. -->
+        <div ref="editorContainer" class="editor-surface mt-2"></div>
     </div>
 </template>
 
@@ -187,15 +189,49 @@ watch(() => props.modelValue, (newValue) => {
     align-items: center;
 }
 
+/*
+ * The caller gives this a height - 500px, h-full, whatever fits where it
+ * sits - and the editor takes what is left of it under the toolbar.
+ *
+ * It used to be a column with a header in it and height:100% on the editor
+ * below, which together are taller than the box they are in; with overflow
+ * visible the editor then hung out of its container and, in the widget
+ * settings, over the dialog's own footer. min-height:0 is what lets a flex
+ * item shrink at all - without it the editor keeps its content height and
+ * pushes the column open from the inside.
+ */
 .editor-page {
     display: flex;
     flex-direction: column;
-    /* height: 100%; */
+    min-height: 0;
+    overflow: hidden;
 }
 
-.monaco-editor {
-    height: 100%;
-    border: 1px solid #ccc;
+/*
+ * The box Monaco is mounted into, and deliberately not called
+ * monaco-editor: that is Monaco's own class, and its stylesheet sets
+ * position:absolute on it. Named that, this stopped being a flex item
+ * altogether - which is why it used to need height:100% to have any size
+ * at all, and why it then hung out of the dialog it was in.
+ *
+ * flex-basis 0, not auto: auto asks the content how tall it wants to be,
+ * and Monaco answers with the size of the box it was given - this one.
+ * A basis of 0 hands it whatever the column has left over from the
+ * toolbar, and Monaco lays out to that.
+ */
+.editor-surface {
+    flex: 1 1 0;
+    min-height: 0;
+    /*
+     * Monaco positions its own parts absolutely - the gutter, the overflow
+     * guard, the overlay widgets - and they resolve against the nearest
+     * positioned ancestor. Without one here they escaped to the dialog and
+     * drew a full-height band across it. Monaco's own class used to supply
+     * this by accident, being position:absolute itself.
+     */
+    position: relative;
+    overflow: hidden;
+    border: 1px solid var(--color-divider);
 }
 
 .visual-editor-container {

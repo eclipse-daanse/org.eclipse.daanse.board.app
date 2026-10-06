@@ -11,14 +11,10 @@
 
 import 'reflect-metadata'
 import { createApp } from 'vue'
-import { createPinia, setActivePinia } from 'pinia'
-import { createVuestic } from 'vuestic-ui'
-import 'vuestic-ui/styles/essential.css'
-import 'vuestic-ui/styles/typography.css'
 import App from './App.vue'
 import 'leaflet/dist/leaflet.css'
 
-import { services } from 'org.eclipse.daanse.board.app.lib.core'
+import { APP, services } from 'org.eclipse.daanse.board.app.lib.core'
 
 
 // Import required modules for Maps Widget
@@ -28,15 +24,7 @@ import 'org.eclipse.daanse.board.app.ui.vue.widget.icon'
 
 const app = createApp(App)
 
-// Setup Vuestic UI
-app.use(createVuestic())
-
 // Setup global properties
-services.register('App', app)
-
-// Setup pinia
-const pinia = createPinia()
-setActivePinia(pinia)
-app.use(pinia)
+services.register(APP, app)
 
 app.mount('#app')

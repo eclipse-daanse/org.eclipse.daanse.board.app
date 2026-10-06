@@ -43,6 +43,11 @@ const BUNDLE_TYPES: Record<string, string> = {
   '.css': 'text/css',
 }
 
+/* How long to let a bundle's output settle before telling the client about
+   it: two checks of the same size, up to a minute for a slow build. */
+const SETTLE_STEP = 150
+const SETTLE_TRIES = 400
+
 /**
  * Serves the built bundles under /bundles/<id>/ as plain files and reloads
  * them in the running app when their build output changes.
@@ -57,9 +62,55 @@ const BUNDLE_TYPES: Record<string, string> = {
  * Save in the bundle -> `vite build --watch` rebuilds -> this fires -> the
  * widget swaps live, lifecycle included.
  */
+/**
+ * The workspace half of the import map, generated from the manifests: every
+ * bundle offering a `tsm.library` capability for a workspace package is a
+ * library bundle, and its entry URL IS the package. Consumers write plain
+ * bare imports; who serves them is wiring, not code.
+ *
+ * The vue stack and the tsm API keep their hand-written entries in
+ * index.html - their capabilities name artefact files, not the entry.
+ * lib.core never appears here: it carries the host's service registry
+ * singleton and travels through __tsm__.require by design.
+ */
+function workspaceImportMapEntries(): Record<string, string> {
+  const entries: Record<string, string> = {}
+  for (const configPath of globSync(resolve(__dirname, '../../**/vite.bundle.config.ts'))) {
+    if (configPath.includes('node_modules')) continue
+    const manifestPath = join(configPath, '..', 'manifest.json')
+    if (!existsSync(manifestPath)) continue
+    const manifest = JSON.parse(readFileSync(manifestPath, 'utf-8'))
+    if (!manifest.entry?.startsWith('/bundles/')) continue
+    for (const capability of manifest.capabilities ?? []) {
+      const library = capability?.attributes?.library
+      if (capability?.namespace === 'tsm.library' && typeof library === 'string'
+          && library.startsWith('org.eclipse.daanse.board.app.')) {
+        entries[library] = manifest.entry
+      }
+    }
+  }
+  return entries
+}
+
 function tsmBundles(): Plugin {
   return {
     name: 'serve-tsm-bundles',
+
+    /*
+     * Both dev and build: merge the generated workspace entries into the
+     * static import map in index.html. In dev this runs per request, so a
+     * freshly added library bundle appears on reload.
+     */
+    transformIndexHtml(html) {
+      return html.replace(
+        /(<script type="importmap">\s*)([\s\S]*?)(\s*<\/script>)/,
+        (_match, open, json, close) => {
+          const map = JSON.parse(json)
+          map.imports = { ...workspaceImportMapEntries(), ...map.imports }
+          return open + JSON.stringify(map, null, 2) + close
+        },
+      )
+    },
 
     /*
      * Production: the bundles are finished artefacts - copy them into the
@@ -102,13 +153,38 @@ function tsmBundles(): Plugin {
 
       for (const [id, dir] of Object.entries(bundleDirs)) {
         if (!existsSync(dir)) continue
+        const entry = join(dir, 'index.js')
         let timer: ReturnType<typeof setTimeout> | undefined
+        let seen = -1
+
+        /*
+         * A build empties the directory before it writes into it, and the
+         * first thing the watch reports is the emptying. Announcing then
+         * sends the client after a file that is not there yet - a 404 that
+         * leaves the module unloaded. So wait for the entry to exist and to
+         * stop growing; a build that never finishes announces nothing, and
+         * the next one that does will.
+         */
+        const announce = (attempt: number) => {
+          const size = existsSync(entry) ? statSync(entry).size : -1
+          if (size > 0 && size === seen) {
+            seen = -1
+            server.ws.send({ type: 'custom', event: 'tsm:bundle-changed', data: { id } })
+            return
+          }
+          seen = size
+          if (attempt >= SETTLE_TRIES) {
+            seen = -1
+            return
+          }
+          timer = setTimeout(() => announce(attempt + 1), SETTLE_STEP)
+        }
+
         watch(dir, () => {
           // Debounced: one build touches several files
           clearTimeout(timer)
-          timer = setTimeout(() => {
-            server.ws.send({ type: 'custom', event: 'tsm:bundle-changed', data: { id } })
-          }, 150)
+          seen = -1
+          timer = setTimeout(() => announce(0), SETTLE_STEP)
         })
       }
     },
@@ -160,7 +236,7 @@ export default defineConfig({
         },
       ] : [])
     ],
-    dedupe: ['vue', 'pinia', 'debug']
+    dedupe: ['vue', 'debug']
 
   },
   server: {

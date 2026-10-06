@@ -11,14 +11,13 @@ Contributors:
     Smart City Jena
 -->
 <script lang="ts" setup>
+import { DCard, DChip } from 'org.eclipse.daanse.board.app.ui.vue.controls'
 
 import type { QueryResult } from '../../queryBuilder/QueryBuilderAPI'
 import Ellipsis from '../utils/Ellipsis/Ellipsis.vue'
-import { useFormat } from '../../composeables/FormatComposeable'
 import { Formats } from '../../queryBuilder/FilterAPI'
 
 const prop = withDefaults(defineProps<{ result: QueryResult }>(), {})
-const color = useFormat().getColorForFormat('<' + prop.result.format.value + '>')
 const getName = (name: string) => {
   const result = Object.entries(Formats).filter((val, index) => val[1] == '<' + name + '>')
   if (result && result[0]) return result[0][0]
@@ -27,66 +26,63 @@ const getName = (name: string) => {
 </script>
 
 <template>
-  <VaCard class="card">
-    <VaCardTitle>
-      <VaChip :color="color" class="pointer" size="small">
-        {{ getName(prop.result.format.value) }}
-      </VaChip>
-      {{ prop.result.title.value }}
-    </VaCardTitle>
-    <VaCardContent>
-      <Ellipsis :lines="3">
-        {{ prop.result.description.value }}
-      </Ellipsis>
-      <br>
-      <div class="aflex small light">
-        <div class="right">
-          {{ prop.result.creator_name ? prop.result.creator_name.value : '' }}
-        </div>
-        <div class="left">
-          {{ prop.result.date ? prop.result.date.value : '' }}
-        </div>
-      </div>
+  <DCard class="card">
+    <template #header>
+      <h3 class="card__heading">
+        <DChip>{{ getName(prop.result.format.value) }}</DChip>
+        {{ prop.result.title.value }}
+      </h3>
+    </template>
 
-    </VaCardContent>
-  </VaCard>
+    <Ellipsis :lines="3">
+      {{ prop.result.description.value }}
+    </Ellipsis>
+
+    <div class="aflex small light">
+      <div class="right">
+        {{ prop.result.creator_name ? prop.result.creator_name.value : '' }}
+      </div>
+      <div class="left">
+        {{ prop.result.date ? prop.result.date.value : '' }}
+      </div>
+    </div>
+  </DCard>
 </template>
 
 <style lang="scss" scoped>
-
-.pointer {
+.card {
+  border: 0;
+  border-bottom: 1px solid var(--color-divider);
+  border-radius: 0;
+  background: none;
   cursor: pointer;
-  align-self: start;
-  margin-right: 5px;
+
+  &:hover {
+    background-color: color-mix(in srgb, var(--color-pane) 60%, transparent);
+  }
 }
 
-.card {
-  box-shadow: none;
-  border-bottom: 1px solid #e1e1e1;
-  border-radius: 0;
-  cursor: pointer;
+.card__heading {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  font-weight: 600;
+}
 
-  &:hover, &.active {
-    background: #f5f8ff !important;
-  }
+.aflex {
+  display: flex;
+  margin-top: 12px;
+  flex-direction: row;
+  justify-content: space-between;
+  flex-wrap: nowrap;
+}
 
-  .va-card-title {
-    font-size: 1.25rem;
-  }
-
-  .aflex {
-    display: flex;
-    margin-top: 15px;
-    flex-direction: row;
-    justify-content: space-between;
-    align-content: center;
-    /* align-items: flex-start; */
-    flex-wrap: nowrap;
-  }
-
-  .light {
-    color: #6c6a6add;
-  }
-
+.light,
+.small {
+  font-size: var(--text-sm);
+  color: var(--color-dim);
 }
 </style>

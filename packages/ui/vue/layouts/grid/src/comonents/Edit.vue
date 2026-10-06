@@ -12,7 +12,7 @@ Contributors:
 -->
 
 <template>
-  <VaScrollContainer class="max-h-screen ml-15" vertical>
+  <div class="scroll max-h-screen ml-15">
     <div ref="wrapper" @dragenter="onDragEnter" @drop.prevent="onDrop" @drag="onDragMove" class="alayout" @click="closeAllContextMenus"
       :style="{ '--grid-row-height': ROW_HEIGHT + 'px', '--grid-cols': currentColCount }"
     >
@@ -48,7 +48,10 @@ Contributors:
             class="widget-context-menu"
             :style="{ left: widgetContextMenu.x + 'px', top: widgetContextMenu.y + 'px' }"
           >
-            <va-button @click="copyWidgetFromMenu" size="small"> Copy </va-button>
+            <DButton intent="quiet" size="sm" class="menu__item" @click="copyWidgetFromMenu">
+              <DIcon name="content_copy" size="sm" />
+              Kopieren
+            </DButton>
           </div>
 
       <!-- Overlay für externes Draggen von Widgets -->
@@ -74,17 +77,20 @@ Contributors:
         class="canvas-context-menu"
         :style="{ left: canvasContextMenu.x + 'px', top: canvasContextMenu.y + 'px' }"
       >
-        <va-button @click="pasteWidgetFromMenu" size="small"> Paste </va-button>
+        <DButton intent="quiet" size="sm" class="menu__item" @click="pasteWidgetFromMenu">
+          <DIcon name="content_paste" size="sm" />
+          Einfügen
+        </DButton>
       </div>
     </div>
-  </VaScrollContainer>
+  </div>
 </template>
 
 <script setup lang="ts">
 import { inject, ref, computed, watch, nextTick, onMounted, onBeforeUnmount } from 'vue'
 import { GridLayout, type LayoutItem } from 'grid-layout-plus'
-import { type IWidget, useWidgetsStore } from 'org.eclipse.daanse.board.app.ui.vue.stores.widgets'
-import { useLayoutStore } from 'org.eclipse.daanse.board.app.ui.vue.stores.layout'
+import { useBoard } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+import type { StoredWidget } from 'org.eclipse.daanse.board.app.lib.api.page'
 import { WidgetWrapper, defaultConfig } from 'org.eclipse.daanse.board.app.ui.vue.widget.wrapper'
 import { useRoute } from 'vue-router'
 import Draggable from 'vuedraggable'
@@ -92,7 +98,9 @@ import { cloneDeep, isEqual } from 'lodash'
 import throttle from 'lodash/throttle'
 import { useClipboardStore } from 'org.eclipse.daanse.board.app.ui.vue.layouts.base'
 import { BREAKPOINTS, resolveGridSettings } from '../GridSettings'
-import { identifier as PageIdentifier, type PageRegistryI } from 'org.eclipse.daanse.board.app.lib.repository.page'
+import { plainSettings } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+import { identifier as PageIdentifier, type PageRegistryI } from 'org.eclipse.daanse.board.app.lib.api.page'
+import { DButton, DIcon } from 'org.eclipse.daanse.board.app.ui.vue.controls'
 
 /** Grid Settings — direkt aus dem Page Repository lesen */
 const layoutSettingsRef = ref<Record<string, any> | undefined>(undefined)
@@ -106,10 +114,10 @@ const currentColCount = computed(() => getCurrentCols(windowWidth.value))
 /** Routing/Stores */
 const route = useRoute()
 const pageID = computed(() => (route.params.pageid as string) || '')
-const widgetStore = computed(() => useWidgetsStore(pageID.value))
-const layoutStore = computed(() => useLayoutStore(pageID.value))
-const widgets = computed(() => widgetStore.value.widgets)
-const storedLayout = computed(() => layoutStore.value.layout)
+/* One board: the widgets and where they sit, from the model. */
+const board = useBoard(pageID)
+const widgets = board.widgets
+const storedLayout = board.layout
 const clipboardStore = useClipboardStore()
 
 /** Copy/Paste */
@@ -187,7 +195,23 @@ const copyWidget = (widgetId: string) => {
   const widget = widgets.value.find((w: any) => w.uid === widgetId)
   const layoutItem = storedLayout.value.find((l: any) => l.id === widgetId)
   if (widget && layoutItem) {
-    clipboardStore.copy(widget, layoutItem)
+    /* A snapshot, feature by feature: a modelled object keeps its values
+       in private fields, so spreading one copies _uid, not uid. */
+    clipboardStore.copy(
+      {
+        type: widget.type as string,
+        config: cloneDeep(widget.config ?? {}) as StoredWidget['config'],
+        wrapperConfig: cloneDeep(widget.wrapperConfig ?? {}) as Record<string, any>,
+      },
+      {
+        x: layoutItem.x,
+        y: layoutItem.y,
+        z: layoutItem.z,
+        width: layoutItem.width,
+        height: layoutItem.height,
+        group: layoutItem.group,
+      },
+    )
   }
 }
 
@@ -218,8 +242,14 @@ const pasteWidget = () => {
     static: false
   }
 
-  // Add to stores
-  widgetStore.value.updateWidgets([...widgets.value, newWidget])
+  board.addWidget(newWidget, {
+    id: newWidget.uid,
+    x: gridX * colW,
+    y: gridY * rowH,
+    z: 0,
+    width: clipboard.layout.width ?? 200,
+    height: clipboard.layout.height ?? 100,
+  })
   layoutModel.value = [...layoutModel.value, newLayout]
   persistLayout(layoutModel.value)
 }
@@ -328,7 +358,13 @@ const pageRepo = inject<PageRegistryI>(PageIdentifier) ?? null
 function syncLayoutSettings() {
   if (pageRepo && pageID.value) {
     const page = pageRepo.getPage(pageID.value)
-    layoutSettingsRef.value = page?.layoutSettings ? { ...page.layoutSettings } : undefined
+    /* Copied by the model's names: the settings are a modelled instance
+       once the form has been open, and spreading one gives the private
+       fields its getters sit in - the grid then silently fell back to
+       every default while the form showed what had been set. */
+    layoutSettingsRef.value = page?.layoutSettings
+      ? { ...plainSettings(page.layoutSettings) }
+      : undefined
   }
 }
 
@@ -374,7 +410,7 @@ function persistLayout(newLayout?: LayoutItem[]) {
 
   // Nur schreiben, wenn wirklich anders
   if (!isEqual(roundedCurr, roundedNext)) {
-    layoutStore.value.updateLayout(nextPixels)
+    board.setBoard(toStoredWidgets(), nextPixels)
   }
 }
 
@@ -469,14 +505,33 @@ function onDrop() { onOverlayEnd() }
 
 /** Widgets hinzufügen/entfernen */
 function addWidget(uid: string, type: string, datasourceId: string) {
-  const config = { datasourceId, settings: {} }
-  const newWidget: IWidget = { uid, type, config, wrapperConfig: cloneDeep(defaultConfig) }
-  widgetStore.value.updateWidgets([...widgets.value, newWidget])
+  const widget: StoredWidget = {
+    uid,
+    type,
+    config: { datasourceId, settings: {} },
+    wrapperConfig: cloneDeep(defaultConfig),
+  }
+  board.addWidget(widget, { id: uid, x: 0, y: 0, z: 0, width: 300, height: 150 })
 }
 function removeWidget(uid: string) {
-  widgetStore.value.updateWidgets(widgets.value.filter((w: any) => w.uid !== uid))
+  board.removeWidget(uid)
   layoutModel.value = layoutModel.value.filter((it: any) => it.i !== uid)
   persistLayout(layoutModel.value)
+}
+
+/**
+ * The widgets as plain data, for the one call that replaces the board.
+ *
+ * Writing the layout means writing both halves, because they arrive and
+ * leave together; the widgets go back unchanged.
+ */
+function toStoredWidgets(): StoredWidget[] {
+  return widgets.value.map((widget) => ({
+    uid: widget.uid,
+    type: widget.type as string,
+    config: widget.config as StoredWidget['config'],
+    wrapperConfig: widget.wrapperConfig as Record<string, any>,
+  }))
 }
 
 /** UI */
@@ -493,7 +548,7 @@ const openWidgetSettings = (id: string) => {
   padding-left:60px;
 }
 .vgl-layout {
-  --vgl-placeholder-bg: #aaa;
+  --vgl-placeholder-bg: var(--color-outline);
   min-height: 100vh;
 
 }
@@ -504,18 +559,18 @@ const openWidgetSettings = (id: string) => {
   margin: 5px;
   content: '';
   background-image:
-    linear-gradient(to right, #e9e9e9 1px, transparent 1px),
-    linear-gradient(to bottom, #e9e9e9 1px, transparent 1px);
+    linear-gradient(to right, var(--color-divider) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--color-divider) 1px, transparent 1px);
   background-repeat: repeat;
   background-size: calc(calc(100% - 5px) / var(--grid-cols, 12)) calc(var(--grid-row-height, 30px) + 10px);
 }
 
 :deep(.vgl-item--placeholder) {
-  outline: 2px dashed #888;
+  outline: 2px dashed var(--color-outline);
   background-color: rgba(136,136,136,0.15);
 }
 :deep(.vgl-item--resizing) { opacity: 90%; }
-:deep(.vgl-item--static) { background-color: #cce; }
+:deep(.vgl-item--static) { background-color: color-mix(in srgb, var(--color-accent) 18%, transparent); }
 
 .text {
   position: absolute; inset: 0; width: 100%; height: 100%;
@@ -547,11 +602,27 @@ const openWidgetSettings = (id: string) => {
 .widget-context-menu,
 .canvas-context-menu {
   position: fixed;
-  background: white;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+  background: var(--color-pane);
+  border: 1px solid var(--color-divider);
+  border-radius: var(--radius-sm);
   padding: 4px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  box-shadow: var(--shadow-e2);
   z-index: 100000;
+}
+
+/* A row in a menu: the icon, then the word, both left */
+.menu__item {
+  justify-content: flex-start;
+  gap: 7px;
+  white-space: nowrap;
+}
+
+/*
+ * The board scrolls inside the page; main.css paints the bar from the
+ * theme, which is what the third-party container this replaced could not
+ * be told.
+ */
+.scroll {
+  overflow-y: auto;
 }
 </style>

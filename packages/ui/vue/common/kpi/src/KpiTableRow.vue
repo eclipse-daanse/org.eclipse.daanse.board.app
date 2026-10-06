@@ -96,7 +96,7 @@ const handleSelectionChange = () => {
 
 <style scoped>
 .folder-row {
-  background-color: #f8f9fa;
+  background-color: var(--color-raised);
   font-weight: 500;
 }
 
@@ -105,11 +105,11 @@ const handleSelectionChange = () => {
 }
 
 .expandable:hover {
-  background-color: #f8f9fa;
+  background-color: var(--color-raised);
 }
 
 .expanded {
-  background-color: #e3f2fd;
+  background-color: color-mix(in srgb, var(--color-accent) 16%, transparent);
 }
 
 .expand-icon {
@@ -119,7 +119,7 @@ const handleSelectionChange = () => {
 }
 
 .folder-cell {
-  color: #6c757d;
+  color: var(--color-dim);
   text-align: right;
   font-style: italic;
 }
@@ -127,7 +127,7 @@ const handleSelectionChange = () => {
 .child-count {
   margin-left: 8px;
   font-size: 0.875em;
-  color: #6c757d;
+  color: var(--color-dim);
 }
 
 .selection-cell {
@@ -137,6 +137,6 @@ const handleSelectionChange = () => {
 }
 
 .selected {
-  background-color: #e3f2fd;
+  background-color: color-mix(in srgb, var(--color-accent) 16%, transparent);
 }
 </style>
