@@ -11,28 +11,54 @@
  *   Smart City Jena
  **********************************************************************/
 
-export interface ILayoutItem {
-  id: string
-  width: number
-  height: number
-  x: number
-  y: number
-  z: number
-}
+/**
+ * Where a widget sits.
+ *
+ * The model's, now that the layout is part of the workspace. The name
+ * stays: it is what every layout in this repo imports.
+ */
+export type ILayoutItem = LayoutItem
 
 import { ref } from 'vue'
 import type { OnDrag, OnResize } from 'vue3-moveable'
-import { useLayoutStore } from 'org.eclipse.daanse.board.app.ui.vue.stores.layout'
-import { useWidgetsStore } from 'org.eclipse.daanse.board.app.ui.vue.stores.widgets'
+import { useBoard, useHistory } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+import type { LayoutItem, StoredWidget } from 'org.eclipse.daanse.board.app.lib.api.page'
 import { useClipboardStore } from './useClipboardStore'
-import { useUndoRedoStore, type IEditorSnapshot } from './useUndoRedoStore'
 import { cloneDeep } from 'lodash'
 
-export function useMoveableLayout(pageId: string = '') {
-  const layoutStore = useLayoutStore(pageId)
-  const widgetStore = useWidgetsStore(pageId)
+/**
+ * @param gridSize how far apart the grid is, or 0 to place freely. Read on
+ *   every drag rather than passed once, so the switch takes effect at once.
+ */
+export function useMoveableLayout(pageId: string = '', gridSize: () => number = () => 0) {
+  /*
+   * One board, both halves. The widgets and their placement used to be two
+   * stores, and adding a widget wrote to each in turn - a widget could be
+   * on the board and nowhere on it.
+   */
+  const board = useBoard(pageId)
+
+  /*
+   * Lands the value on the grid.
+   *
+   * The rounding is done here rather than left to Moveable's own snapping:
+   * that only catches within a few pixels of a line, so on a 24px grid a
+   * widget came to rest wherever it was dropped four times out of five, and
+   * the setting felt like it did nothing. Asked to line up with the grid, a
+   * widget lines up with it.
+   */
+  const toGrid = (value: number) => {
+    const grid = gridSize()
+    return grid > 0 ? Math.round(value / grid) * grid : value
+  }
   const clipboardStore = useClipboardStore()
-  const undoRedoStore = useUndoRedoStore(pageId)
+
+  /*
+   * The history listens to the board rather than copying it. It is made
+   * here because this is where the board is, and handed out below so the
+   * editor can offer the two buttons and the shortcuts.
+   */
+  const history = useHistory(() => board.page.value)
 
   const ghostPlaceholder = ref({
     x: 0,
@@ -42,41 +68,13 @@ export function useMoveableLayout(pageId: string = '') {
     visible: false,
   })
 
-  const getCurrentSnapshot = (): IEditorSnapshot => ({
-    widgets: cloneDeep(widgetStore.widgets),
-    layout: cloneDeep(layoutStore.layout),
-  })
-
-  const saveSnapshot = () => {
-    undoRedoStore.pushSnapshot(getCurrentSnapshot())
-  }
-
-  const restoreSnapshot = (snapshot: IEditorSnapshot) => {
-    layoutStore.layout.splice(0, layoutStore.layout.length, ...snapshot.layout)
-    widgetStore.widgets.splice(0, widgetStore.widgets.length, ...snapshot.widgets)
-  }
-
-  const undo = () => {
-    const snapshot = undoRedoStore.undo(getCurrentSnapshot())
-    if (snapshot) {
-      restoreSnapshot(snapshot)
-    }
-  }
-
-  const redo = () => {
-    const snapshot = undoRedoStore.redo(getCurrentSnapshot())
-    if (snapshot) {
-      restoreSnapshot(snapshot)
-    }
-  }
-
   const processDropCoordinates = (event: DragEvent, container: HTMLElement) => {
     const { clientX, clientY } = event
     const { left, top } = container.getBoundingClientRect()
-    const dropX = clientX - left
-    const dropY = clientY - top
 
-    return { dropX, dropY }
+    // A widget put down lines up the same way one dragged does - otherwise
+    // the first thing on a board is the one thing off the grid
+    return { dropX: toGrid(clientX - left), dropY: toGrid(clientY - top) }
   }
 
   const processDragOverCoordinates = (event: DragEvent, container: HTMLElement) => {
@@ -85,8 +83,9 @@ export function useMoveableLayout(pageId: string = '') {
     const ghostX = clientX - left
     const ghostY = clientY - top
 
-    ghostPlaceholder.value.x = ghostX - ghostPlaceholder.value.width / 2
-    ghostPlaceholder.value.y = ghostY - ghostPlaceholder.value.height / 2
+    // The outline shows where it will land, so it lands where the outline is
+    ghostPlaceholder.value.x = toGrid(ghostX - ghostPlaceholder.value.width / 2)
+    ghostPlaceholder.value.y = toGrid(ghostY - ghostPlaceholder.value.height / 2)
     ghostPlaceholder.value.visible = true
   }
 
@@ -95,7 +94,7 @@ export function useMoveableLayout(pageId: string = '') {
   }
 
   const getInitialStyle = (id: string) => {
-    const item = layoutStore?.layout?.find((item: ILayoutItem) => item.id === id)
+    const item = board.layout.value.find((item: ILayoutItem) => item.id === id)
     if (!item) return {}
 
     return {
@@ -107,7 +106,7 @@ export function useMoveableLayout(pageId: string = '') {
   }
 
   const getMovableControlStyles = (id: string) => {
-    const item = layoutStore.layout.find((item: ILayoutItem) => item.id === id)
+    const item = board.layout.value.find((item: ILayoutItem) => item.id === id)
     if (!item) return {}
 
     return {
@@ -115,103 +114,107 @@ export function useMoveableLayout(pageId: string = '') {
     }
   }
 
-  const dragStart = () => {
-    saveSnapshot()
-  }
-
   const drag = (id: string, e: OnDrag) => {
-    const item = layoutStore.layout.find((item: ILayoutItem) => item.id === id)
+    const item = board.layout.value.find((item: ILayoutItem) => item.id === id)
     if (!item) return
 
-    item.x = e.translate[0]
-    item.y = e.translate[1]
+    item.x = toGrid(e.translate[0])
+    item.y = toGrid(e.translate[1])
 
-    e.target.style.transform = e.transform
-  }
-
-  const resizeStart = () => {
-    saveSnapshot()
+    // The element follows the value that was stored, not the raw drag
+    e.target.style.transform = `translate(${item.x}px, ${item.y}px)`
   }
 
   const resize = (id: string, e: OnResize) => {
-    const item = layoutStore.layout.find((item: ILayoutItem) => item.id === id)
+    const item = board.layout.value.find((item: ILayoutItem) => item.id === id)
     if (!item) return
 
-    item.width = e.width
-    item.height = e.height
-    item.x = e.drag.translate[0]
-    item.y = e.drag.translate[1]
+    // Size lands on the grid too: an edge between two dots is as crooked
+    // as a corner between them
+    item.width = toGrid(e.width)
+    item.height = toGrid(e.height)
+    item.x = toGrid(e.drag.translate[0])
+    item.y = toGrid(e.drag.translate[1])
 
-    e.target.style.width = `${e.width}px`
-    e.target.style.height = `${e.height}px`
-    e.target.style.transform = e.drag.transform
+    e.target.style.width = `${item.width}px`
+    e.target.style.height = `${item.height}px`
+    e.target.style.transform = `translate(${item.x}px, ${item.y}px)`
   }
 
   const moveUp = (id: string) => {
-    saveSnapshot()
-    const item = layoutStore.layout.find((item: ILayoutItem) => item.id === id)
+    const item = board.layout.value.find((item: ILayoutItem) => item.id === id)
     if (!item) return
 
-    item.z += 1
+    history.record('Nach vorn', () => {
+      item.z += 1
+    })
   }
 
   const moveToTop = (id: string) => {
-    saveSnapshot()
-    const zIndexMax = Math.max(...layoutStore.layout.map((item: ILayoutItem) => item.z))
-    const item = layoutStore.layout.find((item: ILayoutItem) => item.id === id)
+    const zIndexMax = Math.max(...board.layout.value.map((item: ILayoutItem) => item.z))
+    const item = board.layout.value.find((item: ILayoutItem) => item.id === id)
     if (!item) return
 
-    item.z = zIndexMax + 1
+    history.record('Ganz nach vorn', () => {
+      item.z = zIndexMax + 1
+    })
   }
 
   const moveDown = (id: string) => {
-    saveSnapshot()
-    const item = layoutStore.layout.find((item: ILayoutItem) => item.id === id)
+    const item = board.layout.value.find((item: ILayoutItem) => item.id === id)
     if (!item) return
 
-    item.z -= 1
+    history.record('Nach hinten', () => {
+      item.z -= 1
+    })
   }
 
   const moveToBottom = (id: string) => {
-    saveSnapshot()
-    const zIndexMin = Math.min(...layoutStore.layout.map((item: ILayoutItem) => item.z))
-    const item = layoutStore.layout.find((item: ILayoutItem) => item.id === id)
+    const zIndexMin = Math.min(...board.layout.value.map((item: ILayoutItem) => item.z))
+    const item = board.layout.value.find((item: ILayoutItem) => item.id === id)
     if (!item) return
 
-    item.z = zIndexMin - 1
+    history.record('Ganz nach hinten', () => {
+      item.z = zIndexMin - 1
+    })
   }
 
   const addWidget = (type: any, config: any = {}, wrapperConfig: any = {}, layoutConfig: Partial<ILayoutItem> = {}) => {
-    saveSnapshot()
-    const uid = widgetStore.createWidget(type, config, wrapperConfig)
-
-    const defaultLayout: ILayoutItem = {
-      id: uid,
-      width: layoutConfig.width || 300,
-      height: layoutConfig.height || 150,
-      x: layoutConfig.x || 0,
-      y: layoutConfig.y || 0,
-      z: layoutConfig.z || Math.max(...layoutStore.layout.map((item:any) => item.z), 0) + 1,
+    const widget: StoredWidget = {
+      uid: '',
+      type,
+      config: { datasourceId: config?.datasourceId, settings: { ...(config?.settings ?? {}) } },
+      wrapperConfig,
     }
-
-    layoutStore.layout.push(defaultLayout)
-    return uid
+    return history.record('Widget hinzugefügt', () => board.addWidget(widget, layoutConfig))
   }
 
+  /* The placement goes with it - that is one call now, not two. */
   const removeWidget = (id: string) => {
-    saveSnapshot()
-    widgetStore.removeWidget(id)
-    const layoutIndex = layoutStore.layout.findIndex((item:any) => item.id === id)
-    if (layoutIndex > -1) {
-      layoutStore.layout.splice(layoutIndex, 1)
-    }
+    history.record('Widget gelöscht', () => board.removeWidget(id))
   }
 
   const copyWidget = (widgetId: string) => {
-    const widget = widgetStore.widgets.find((w: any) => w.uid === widgetId)
-    const layoutItem = layoutStore.layout.find((l: ILayoutItem) => l.id === widgetId)
+    const widget = board.widgets.value.find((w: { uid?: string }) => w.uid === widgetId)
+    const layoutItem = board.layout.value.find((l: ILayoutItem) => l.id === widgetId)
     if (widget && layoutItem) {
-      clipboardStore.copy(widget, layoutItem)
+      /* A snapshot, feature by feature: a modelled object keeps its values
+         in private fields, so spreading one copies _uid, not uid. */
+      clipboardStore.copy(
+        {
+          type: widget.type as string,
+          config: cloneDeep(widget.config ?? {}) as StoredWidget['config'],
+          wrapperConfig: cloneDeep(widget.wrapperConfig ?? {}) as Record<string, any>,
+        },
+        {
+          x: layoutItem.x,
+          y: layoutItem.y,
+          z: layoutItem.z,
+          width: layoutItem.width,
+          height: layoutItem.height,
+          group: layoutItem.group,
+        },
+      )
     }
   }
 
@@ -219,45 +222,37 @@ export function useMoveableLayout(pageId: string = '') {
     const clipboard = clipboardStore.paste()
     if (!clipboard) return null
 
-    saveSnapshot()
     const newUid = 'li_' + Math.random().toString(36).substring(7)
-    const maxZ = Math.max(...layoutStore.layout.map((item: ILayoutItem) => item.z), 0)
+    const maxZ = Math.max(...board.layout.value.map((item: ILayoutItem) => item.z), 0)
 
-    // Clone widget with new UID
-    const newWidget = cloneDeep(clipboard.widget) as any
-    newWidget.uid = newUid
-    if (newWidget.config?.settings) {
-      newWidget.config.settings.name = 'widget_' + newUid
-    }
+    const copied = cloneDeep(clipboard.widget)
+    const settings = { ...(copied.config?.settings ?? {}), name: 'widget_' + newUid }
 
-    // Clone layout with new position
-    const newLayout: ILayoutItem = {
-      ...clipboard.layout,
-      id: newUid,
-      x: x,
-      y: y,
-      z: maxZ + 1
-    }
-
-    widgetStore.widgets.push(newWidget)
-    layoutStore.layout.push(newLayout)
+    history.record('Widget eingefügt', () =>
+      board.addWidget(
+        {
+          uid: newUid,
+          type: copied.type,
+          config: { datasourceId: copied.config?.datasourceId, settings },
+          wrapperConfig: copied.wrapperConfig,
+        },
+        { ...clipboard.layout, id: newUid, x, y, z: maxZ + 1 },
+      ),
+    )
     return newUid
   }
 
   return {
-    layoutStore,
-    widgetStore,
+    board,
     clipboardStore,
-    undoRedoStore,
+    history,
     ghostPlaceholder,
     processDropCoordinates,
     processDragOverCoordinates,
     hidePlaceholder,
     getInitialStyle,
     getMovableControlStyles,
-    dragStart,
     drag,
-    resizeStart,
     resize,
     moveUp,
     moveDown,
@@ -267,7 +262,5 @@ export function useMoveableLayout(pageId: string = '') {
     removeWidget,
     copyWidget,
     pasteWidget,
-    undo,
-    redo,
   }
 }

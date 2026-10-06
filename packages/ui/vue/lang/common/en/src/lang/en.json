@@ -3,13 +3,11 @@
     "loading": "Loading",
     "connect": "Connect to the cube"
   },
-
   "DashboardNavigation": {
     "designer": "Designer",
     "dashboard": "Dashboard",
     "multilevelDashboard": "Multilevel Dashboard"
   },
-
   "MultilevelDashboardNavigation": {
     "edit": "Edit Mode",
     "save": "Save",
@@ -19,34 +17,27 @@
     "addWidgetButton": "Add",
     "dataSourceList": "Store list"
   },
-
   "AppSidebarSettings": {
     "labelAppSettings": "App Settings",
     "backgroundColor": "Background Color",
     "selectedLanguage": "Selected Language",
     "switchButton": "Switch"
-
   },
-
   "SidebarControlSettings": {
     "controlSettings": "Control settings"
   },
-
   "SidebarWidgetSettings": {
     "widgetSettings": "Widget settings"
   },
-
   "SidebarSettings": {
     "closeButton": "Close",
     "doneButton": "Done"
   },
-
   "SidebarStoreSettings": {
     "storesTitle": "Stores",
     "addNewStore": "Add new",
     "addNewXMLAStore": "Add new XMLA"
   },
-
   "SidebarStoreList": {
     "caption": "Caption",
     "dataEndpoint": "Data endpoint",
@@ -85,11 +76,9 @@
       "preview": "Preview"
     }
   },
-
   "SidebarDatasourceList": {
     "title": "Store List"
   },
-
   "StoreConfigurationModal": {
     "datasourceSelection": "Store selection",
     "addNew": "Add new",
@@ -100,7 +89,6 @@
     "datasourceURLLabel": "Store URL",
     "datasourceTypeLabel": "Store type"
   },
-
   "StoreSelectionModal": {
     "storeSelection": "Store selection",
     "createNewStore": "Create new store",
@@ -108,14 +96,12 @@
     "selectButton": "Select",
     "selectExisting": "Or select existing one"
   },
-
   "LayoutMovingButtons": {
     "moveUp": "Move up",
     "moveDown": "Move down",
     "moveToTop": "Move to top",
     "moveToBottom": "Move to bottom"
   },
-
   "Options": {
     "cover": "Cover",
     "contain": "Contain",
@@ -123,7 +109,6 @@
     "fill": "Fill",
     "none": "None"
   },
-
   "Widgets": {
     "selectStore": "Select store",
     "storeSettingsTitle": "Store settings",
@@ -136,22 +121,20 @@
     "IconWidget": "Icon Widget",
     "RichTextWidget": "Rich Text Widget",
     "TableWidget": "Table Widget",
-    "PivotTableWidget" : "Pivot Table Widget",
+    "PivotTableWidget": "Pivot Table Widget",
     "BarChartWidget": "Bar Chart Widget",
     "SwitchControl": "Switch Control",
-    "SelectControl" : "Select Control",
-    "DateControl" : "Date Control",
-    "TimeControl" : "Time Control",
-    "ColorControl" : "Color Control",
-    "ButtonControl" : "Button Control",
-    "InputControl" : "Input Control"
+    "SelectControl": "Select Control",
+    "DateControl": "Date Control",
+    "TimeControl": "Time Control",
+    "ColorControl": "Color Control",
+    "ButtonControl": "Button Control",
+    "InputControl": "Input Control"
   },
-
   "Controls": {
     "eventsList": "Events list",
     "addButton": "Add event"
   },
-
   "ImageWidget": {
     "title": "Image widget settings",
     "imageUrl": "Image src",
@@ -159,20 +142,17 @@
     "imageFit": "Fit",
     "imageDiashowInterval": "Diashow interval"
   },
-
   "TextWidget": {
     "title": "Text widget settings",
     "label": "Title",
     "fontSize": "Font Size",
     "fontColor": "Font Color"
   },
-
   "SvgWidget": {
     "title": "SVG widget settings",
     "svgSrc": "SVG src",
     "addButton": "Add items"
   },
-
   "RepeatableSvgWidget": {
     "title": "Repeatable SVG widget settings",
     "svgSrc": "Svg src",
@@ -183,7 +163,6 @@
     "defaultItemFill": "Default item fill",
     "defaultItemStroke": "Default item stroke"
   },
-
   "ProgressWidget": {
     "title": "Progress widget settings",
     "progress": "Progress",
@@ -194,13 +173,11 @@
     "addButton": "Add color",
     "rotation": "Rotation"
   },
-
   "VideoWidget": {
     "title": "Video widget settings",
     "videoUrl": "Video url",
     "videoFit": "Fit"
   },
-
   "IconWidget": {
     "title": "Icon widget settings",
     "iconSearch": "Search icon",
@@ -211,7 +188,6 @@
     "opticSize": "Optic size",
     "grade": "Grade"
   },
-
   "RichTextWidget": {
     "title": "Rich text widget settings",
     "bold": "Bold",
@@ -231,17 +207,12 @@
     "undo": "undo",
     "redo": "redo"
   },
-
-  "TableWidget": {
-
-  },
-
+  "TableWidget": {},
   "PivotTableWidget": {
     "selectCatalog": "Select catalog",
     "selectCube": "Select cube",
     "mdx": "MDX"
   },
-
   "WidgetWrapper": {
     "title": "Title",
     "label": "Title",
@@ -264,86 +235,69 @@
     "transparence": "Transparence",
     "transparency": "Transparency"
   },
-
   "SwitchControl": {
     "label": "Label text"
   },
-
   "SelectControl": {
     "label": "Label text",
     "optionsList": "Options list",
     "addOptionButton": "Add option",
     "option": "Option"
   },
-
   "DateControl": {
     "label": "Label text"
   },
-
   "TimeControl": {
     "label": "Label text"
   },
-
   "ColorControl": {
     "label": "Label text"
   },
-
   "ButtonControl": {
     "label": "Label text"
   },
-
   "InputControl": {
     "label": "Label text"
   },
-
   "DataSource": {
     "dataSource": "Stores",
     "withoutDataSource": "No store available"
   },
-
   "Modals": {
     "okButton": "Ok!",
     "cancelButton": "Cancel",
     "confirmButton": "Confirm",
     "saveButton": "Save button"
   },
-
   "CatalogSelectionModal": {
     "selectCatalogAndCube": "Select catalog and cube:"
   },
-
   "CellPropertiesModal": {
     "cellProperties": "Cell properties",
     "property": "Property",
     "value": "Value"
   },
-
   "DrillThroughModal": {
     "dataReturned": "Data returned for cell:"
   },
-
   "FilterModal": {
     "enableFilters": "Enable any filters:",
     "currentlySelection": "Currently selected:",
     "resetSelection": "Reset selection"
   },
-
   "MemberPropertiesModal": {
     "memberProperties": "Member properties",
     "property": "Property",
     "value": "Value"
   },
-
   "PivotTableSettingsModal": {
     "pivotTableSettings": "Pivot table settings",
     "pivotTableData": "Pivot Table data",
     "cellStyles": "Cell styles"
   },
-
   "ServerSelectionModal": {
     "serverUrl": "Enter server url:"
   },
-
   "PivotTable": {
     "openCellPropertiesButton": "Open Cell Properties",
     "drillthroughButton": "Drillthrough",
@@ -353,7 +307,6 @@
     "hideButton": "Hide Hierarchy Properties",
     "showButton": "Show Hierarchy Properties"
   },
-
   "QueryDesigner": {
     "updateButton": "Update",
     "filters": "Filters",
@@ -361,23 +314,9 @@
     "rows": "Rows",
     "data": "Data"
   },
-
   "Routes": {
     "addWidgetButton": "Add widget",
     "loading": "Loading...",
     "addRestDatasourceButton": "Add REST store"
-  },
-  "vuestic": {
-    "toggleDropdown": "toggle",
-    "select": "select",
-    "openColorPicker": "color",
-    "noOptions": "No options",
-    "selectRowByIndex": "select",
-    "uploadFile": "upload File",
-    "ok": "ok",
-    "cancel": "cancel",
-    "decreaseCounter": "Decrease",
-    "increaseCounter": "Increase",
-    "counterValue": "Value"
   }
 }

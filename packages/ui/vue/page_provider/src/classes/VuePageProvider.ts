@@ -9,7 +9,7 @@ Contributors: Smart City Jena
 */
 
 import { useRoute, useRouter } from 'vue-router'
-import { type PageContextProviderI } from 'org.eclipse.daanse.board.app.lib.pagecontext.pagecontext_service'
+import { type PageContextProviderI } from 'org.eclipse.daanse.board.app.lib.api.pagecontext'
 
 export class VuePageProvider implements PageContextProviderI {
   private currentPageId: string | undefined = undefined;
