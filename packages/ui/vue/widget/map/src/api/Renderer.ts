@@ -12,16 +12,16 @@
 
 import { IMapProps } from './MapPreview'
 
-//ToDo remove this and link to IconWidget
-export interface IIconSettings {
-  currentIcon: string;
-  iconColor: string;
-  iconSize: number;
-  isIconFilled: boolean;
-  strokeWeight: number;
-  opticSize: number;
-  grade: number;
-}
+/*
+ * The icon settings, from this widget's own model.
+ *
+ * There was a hand-written copy of these seven fields here, with a note to
+ * link the real thing instead. The model has them, and the modelled type
+ * carries the EObject members the icon component now expects - so the copy
+ * is gone and this is the name it had.
+ */
+import type { IconSettings as IIconSettings } from '../gen/IconSettings'
+export type { IIconSettings }
 
 export interface IPointPin {
   color: string;

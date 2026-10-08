@@ -10,39 +10,23 @@ Contributors: Smart City Jena
 -->
 <script lang="ts" setup>
 
-import { ref, type Ref, type UnwrapRef } from 'vue'
+import type { Ref } from 'vue'
 import type { IUnitPoint } from './ValueUnitDataLabelRenderer.vue'
+import { DInput } from 'org.eclipse.daanse.board.app.ui.vue.controls'
 
 
 const settings: Ref<IUnitPoint> = defineModel<IUnitPoint>({ required: true })
 
-
-const opened: Ref<UnwrapRef<{ textSection: boolean }>> = ref({
-  textSection: true
-})
-
-
 </script>
 
 <template>
-  <va-collapse
-    v-model="opened.textSection"
-    header="Style settings">
+  <section class="settings-section" data-section="Style settings">
     <div class="settings-container">
-      <va-input
-        v-model="settings.unit"
-        label="unit"
-      />
-      <va-input
-        v-model="settings.prefix"
-        label="Prefix"
-      />
-      <va-input
-        v-model="settings.suffix"
-        label="suffix"
-      />
+      <DInput v-model="settings.unit" label="unit" />
+      <DInput v-model="settings.prefix" label="Prefix" />
+      <DInput v-model="settings.suffix" label="suffix" />
     </div>
-  </va-collapse>
+  </section>
 
 </template>
 <style scoped>

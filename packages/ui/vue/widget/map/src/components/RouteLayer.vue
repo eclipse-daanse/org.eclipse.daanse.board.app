@@ -17,8 +17,8 @@ import { LGeoJson, LCircleMarker } from '@vue-leaflet/vue-leaflet'
 import {
   DatasourceRepository,
   identifier,
-} from 'org.eclipse.daanse.board.app.lib.repository.datasource'
-import type { IDataRetrieveable } from 'org.eclipse.daanse.board.app.lib.repository.datasource'
+} from 'org.eclipse.daanse.board.app.lib.api.datasource'
+import type { IDataRetrieveable } from 'org.eclipse.daanse.board.app.lib.api.datasource'
 
 const props = defineProps<{
   datasourceId: string

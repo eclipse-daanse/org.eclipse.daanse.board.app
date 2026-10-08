@@ -9,8 +9,9 @@
 
 -->
 <script lang="ts" setup>
-import { Comperator, ERefType, type ICondition, type IDSRenderer } from './../../api/Renderer'
-import { type ModelRef, reactive, ref } from 'vue'
+import { Comperator, type ICondition } from './../../api/Renderer'
+import { computed, type ModelRef, reactive, ref, useId } from 'vue'
+import { DButton, DIcon, DSelect } from 'org.eclipse.daanse.board.app.ui.vue.controls'
 
 export interface ThingProp {
   text: string,
@@ -22,12 +23,10 @@ const model: ModelRef<ICondition[]> = defineModel<ICondition[]>({
   default:
     () => reactive([])
 })
-const newCreateProp = ref()
-const newCreateValue = ref()
-const newCreateComperator = ref({
-  text: '==',
-  selector: Comperator.equals
-})
+const newCreateProp = ref('')
+const newCreateValue = ref('')
+const newCreateComperator = ref<Comperator>(Comperator.equals)
+
 const thingsPropOptions: ModelRef<ThingProp[]> = defineModel<ThingProp[]>('thingProps', {
   default: () => reactive([{
       text: 'id',
@@ -82,213 +81,239 @@ const ComperatorOptions = [{
   }
 ]
 
+/*
+ * The property is picked from what the layer offers or typed in full: a
+ * feature nobody has read yet is still a property, and the list is only
+ * what has been seen so far. A datalist is the browser's own answer to
+ * that - a text field with suggestions attached, so both ways of naming
+ * one are the same control.
+ */
+const propListId = useId()
+const valueListId = useId()
 
-const filtercolumns = [
-  { key: 'prop', sortable: true },
-  { key: 'comperator', sortable: true },
-  { key: 'value', sortable: true },
-  { key: 'actions', width: 80 }
-]
-const addNewOption = (val: any) => {
-  const option = {
-    text: val,
-    selector: val
-  }
-  thingsPropOptions.value.push(option)
-  return option
+/** The suggestions the chosen property brings, if any were read with it. */
+const suggestionsFor = (selector: string): any[] =>
+  thingsPropOptions.value.find((option) => option.selector === selector)?.suggestions ?? []
+
+const newValueSuggestions = computed(() => suggestionsFor(newCreateProp.value))
+
+const labelFor = (selector: string): string =>
+  ComperatorOptions.find((option) => option.selector === selector)?.text ?? String(selector)
+
+/**
+ * The cell being edited, as "<row>:<column>".
+ *
+ * A condition reads as a sentence until it is clicked, and turns into the
+ * control for that one part while it is being changed. One at a time, so
+ * the rest of the table stays readable.
+ */
+const editing = ref<string | undefined>(undefined)
+const isEditing = (index: number, column: string) => editing.value === `${index}:${column}`
+const edit = (index: number, column: string) => { editing.value = `${index}:${column}` }
+const done = () => { editing.value = undefined }
+
+/** A name that is not in the list yet becomes one, so it is offered next time. */
+const rememberProp = (selector: string) => {
+  if (!selector) return
+  if (thingsPropOptions.value.some((option) => option.selector === selector)) return
+  thingsPropOptions.value.push({ text: selector, selector })
 }
+
 const addContition = () => {
+  rememberProp(newCreateProp.value)
   model.value.push({
-    comperator: newCreateComperator.value.selector,
+    comperator: newCreateComperator.value,
     value: newCreateValue.value,
-    prop: newCreateProp.value.selector
+    prop: newCreateProp.value
   } as ICondition)
-  newCreateComperator.value = {
-    text: '==',
-    selector: Comperator.equals
-  }
+  newCreateComperator.value = Comperator.equals
   newCreateValue.value = ''
   newCreateProp.value = ''
+}
 
+const setProp = (condition: ICondition, selector: string) => {
+  rememberProp(selector)
+  condition.prop = selector
+  done()
 }
 </script>
 
 <template>
-  <VaDataTable
-    :columns="filtercolumns"
-    :items="model"
-    class="table-crud ds prop"
-    striped
-    id="proptableConditions"
-  >
-    <template #headerAppend>
-      <tr class="table-crud__slot">
-        <th class="p-1">
-          <VaSelect
-
-            width="230px"
+  <table class="conditions">
+    <thead>
+      <tr>
+        <th class="conditions__head">Property</th>
+        <th class="conditions__head">Is</th>
+        <th class="conditions__head">Value</th>
+        <th class="conditions__head conditions__head--end"></th>
+      </tr>
+      <tr class="conditions__new">
+        <td>
+          <input
             v-model="newCreateProp"
-            :options="thingsPropOptions"
-            :track-by="(option:any) => option.selector"
-            allow-create
-            placeholder="Select an option"
-            @create-new="(val:any)=>{
-
-                                newCreateProp = addNewOption(val);
-                            }"
-          />
-        </th>
-        <th class="p-1">
-          <VaSelect
-            width="230px"
+            :list="propListId"
+            class="cell__input"
+            placeholder="Property"
+          >
+          <datalist :id="propListId">
+            <option v-for="option in thingsPropOptions" :key="option.selector" :value="option.selector">
+              {{ option.text }}
+            </option>
+          </datalist>
+        </td>
+        <td>
+          <DSelect
             v-model="newCreateComperator"
             :options="ComperatorOptions"
-            :track-by="(option:any) => option.selector"
+            label-key="text"
+            value-key="selector"
+            stacked
           />
-        </th>
-        <th class="p-1">
-          <template v-if="thingsPropOptions.find(s=>s.selector == newCreateProp?.selector)?.suggestions">
-            <VaSelect
-              width="230px"
-              v-model="newCreateValue"
-              :options="thingsPropOptions.find(s=>s.selector == newCreateProp?.selector)?.suggestions"
-              :track-by="(option:any) => option.selector"
-              allow-create
-              placeholder="Select an option"
-              @create-new="(val:any)=>{
-                                newCreateValue = val;
-                            }"
-            />
-          </template>
-          <VaInput v-else v-model="newCreateValue"
-                    width="230px"
-                    placeholder="Enter value"
-          />
-        </th>
-        <th class="p-1">
-          <VaButton
-            :disabled="!newCreateProp  || !newCreateValue"
-            block
-            style="min-width: 40px; float: right;"
+        </td>
+        <td>
+          <input
+            v-model="newCreateValue"
+            :list="valueListId"
+            class="cell__input"
+            placeholder="Value"
+          >
+          <datalist :id="valueListId">
+            <option v-for="(suggestion, at) in newValueSuggestions" :key="at" :value="suggestion" />
+          </datalist>
+        </td>
+        <td class="conditions__end">
+          <DButton
+            intent="primary"
+            :disabled="!newCreateProp || !newCreateValue"
             @click="addContition"
           >
             Add
-          </VaButton>
-        </th>
+          </DButton>
+        </td>
       </tr>
-    </template>
+    </thead>
 
-
-    <template #cell(actions)="{ rowIndex }">
-      <VaButton
-        class="ml-3"
-        icon="delete"
-        preset="plain"
-        style="min-width: 40px; float: right;"
-        @click="()=>{
-                        model.splice(rowIndex,1)
-                    }"
-      />
-    </template>
-    <template #cell(prop)="{ value, row }">
-      <div class="table-inline__cell">
-        <VaValue v-slot="doShowInput">
-          <VaSelect
-            v-if="doShowInput.value"
-            :model-value="value"
-            :options="thingsPropOptions"
-            :track-by="(option:any) => option.selector"
-            allow-create
-            placeholder="Select an option"
-            @create-new="(val:any)=>{
-                            const option = addNewOption(val);
-                                  row.rowData['prop'] = option.selector;
-                                  doShowInput.value = false
-                            }"
-            @update:modelValue="(event:any) => {
-                                  row.rowData['prop'] = event.selector
-                                  doShowInput.value = false
-                                }"
-          />
-          <span
-            v-else
-            :class="doShowInput.value ? 'table-inline__item--hidden' : ''"
-            class="table-inline__item"
-            @click="doShowInput.value = true"
+    <tbody>
+      <tr v-for="(condition, index) in model" :key="index">
+        <td>
+          <input
+            v-if="isEditing(index, 'prop')"
+            :value="condition.prop"
+            :list="propListId"
+            class="cell__input"
+            @blur="setProp(condition, ($event.target as HTMLInputElement).value)"
+            @keyup.enter="setProp(condition, ($event.target as HTMLInputElement).value)"
           >
-                            {{ value }}
-                      </span>
-        </VaValue>
-      </div>
-    </template>
-    <template #cell(comperator)="{ value, row }">
-      <div class="table-inline__cell">
-        <VaValue v-slot="doShowInput">
-          <VaSelect
-            v-if="doShowInput.value"
-            :model-value="{text:ComperatorOptions.filter(e=>e.selector==value)[0].text,selector:value}"
+          <span v-else class="cell__text" @click="edit(index, 'prop')">{{ condition.prop }}</span>
+        </td>
+        <td>
+          <DSelect
+            v-if="isEditing(index, 'comperator')"
+            :model-value="condition.comperator"
             :options="ComperatorOptions"
-            :track-by="(option:any) => option.selector"
-            @update:modelValue="(event:any) => {
-                                  row.rowData['comperator'] = event.selector
-                                  doShowInput.value = false
-                                }"
+            label-key="text"
+            value-key="selector"
+            stacked
+            @update:model-value="(next: any) => { condition.comperator = next; done() }"
           />
-          <span
-            v-else
-            :class="doShowInput.value ? 'table-inline__item--hidden' : ''"
-            class="table-inline__item"
-            @click="doShowInput.value = true"
+          <span v-else class="cell__text" @click="edit(index, 'comperator')">
+            {{ labelFor(condition.comperator) }}
+          </span>
+        </td>
+        <td>
+          <input
+            v-if="isEditing(index, 'value')"
+            :value="condition.value"
+            :list="valueListId"
+            class="cell__input"
+            @blur="condition.value = ($event.target as HTMLInputElement).value; done()"
+            @keyup.enter="condition.value = ($event.target as HTMLInputElement).value; done()"
           >
-                            {{ ComperatorOptions.filter(e => e.selector == value)[0].text }}
-                      </span>
-        </VaValue>
-      </div>
-    </template>
-    <template #cell(value)="{ value, row }">
-      <div class="table-inline__cell">
-        <VaValue v-slot="doShowInput">
-
-          <VaInput
-            v-if="doShowInput.value"
-            :model-value="value"
-            @blur="doShowInput.value = false"
-            @change="(event:any) => {
-                                  row.rowData['value'] = event.target.value
-                                  doShowInput.value = false
-                                }"
-          />
-          <span
-            v-else
-            :class="doShowInput.value ? 'table-inline__item--hidden' : ''"
-            class="table-inline__item"
-            @click="doShowInput.value = true"
-          >
-                            {{ value }}
-                      </span>
-        </VaValue>
-      </div>
-    </template>
-  </VaDataTable>
+          <span v-else class="cell__text" @click="edit(index, 'value')">{{ condition.value }}</span>
+        </td>
+        <td class="conditions__end">
+          <DButton intent="quiet" title="Remove condition" @click="model.splice(index, 1)">
+            <DIcon name="delete" size="sm" />
+          </DButton>
+        </td>
+      </tr>
+      <tr v-if="model.length === 0">
+        <td class="conditions__empty" colspan="4">Nothing to match on yet.</td>
+      </tr>
+    </tbody>
+  </table>
 </template>
 
-<style>
-.row {
-  align-items: flex-start;
-  display: flex;
-  flex: 1 1 auto;
-  flex-wrap: wrap;
-  min-width: 0;
-  flex-direction: row;
-}
-.table-inline__cell{
-  padding: 0;
-}
-#proptableConditions{
-  .va-data-table__table-td{
-    padding: 0;
-    margin: 7px 0px 7px 0;
-  }
+<style scoped>
+.conditions {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  color: var(--color-fg);
 }
 
+.conditions td,
+.conditions th {
+  padding: 3px 6px;
+  text-align: left;
+  vertical-align: middle;
+}
+
+.conditions__head {
+  font-size: var(--text-xs);
+  font-weight: 600;
+  color: var(--color-dim);
+  border-bottom: 1px solid var(--color-divider);
+}
+
+.conditions__head--end,
+.conditions__end {
+  width: 1%;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.conditions__new td {
+  border-bottom: 1px solid var(--color-divider);
+  padding-bottom: 7px;
+}
+
+.conditions tbody tr:hover {
+  background: var(--color-raised);
+}
+
+.conditions__empty {
+  padding: 10px 6px;
+  color: var(--color-dim);
+}
+
+/* Reads as a word until it is pointed at, then says it can be changed */
+.cell__text {
+  display: inline-block;
+  min-width: 40px;
+  padding: 2px 4px;
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm, 3px);
+  cursor: text;
+}
+
+.cell__text:hover {
+  border-color: var(--color-divider);
+}
+
+.cell__input {
+  width: 100%;
+  padding: 2px 4px;
+  border: 1px solid var(--color-outline);
+  border-radius: var(--radius-sm, 3px);
+  background: var(--color-pane);
+  color: var(--color-fg);
+  font: inherit;
+}
+
+.cell__input:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: -1px;
+}
 </style>

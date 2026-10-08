@@ -25,13 +25,13 @@ import type { GeoJsonObject, GeoJsonProperties, Geometry, Polygon } from 'geojso
 import type { Datastream } from 'org.eclipse.daanse.board.app.lib.datasource.ogcsta'
 import { Task, useTaskManager } from './composables/tasktimer'
 import { FILTER, FILTERRESET, UPDATE_MQTT_SUBSCRIPTIONS, MQTT_UNSUBSCRIBE_ALL } from 'org.eclipse.daanse.board.app.lib.datasource.ogcsta'
-import { useDatasourceRepository } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+import { useDatasourceRepository, plainSettings } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import booleanContains from '@turf/boolean-contains'
 import { feature } from '@turf/helpers'
 import pointOnFeature from '@turf/point-on-feature'
 import { useDataPointRegistry } from './composables/datapointRegistry'
 import { IconWidget } from 'org.eclipse.daanse.board.app.ui.vue.widget.icon'
-import { IDataRetrieveable, DatasourceRepository, identifier } from 'org.eclipse.daanse.board.app.lib.repository.datasource'
+import { IDataRetrieveable, DatasourceRepository, identifier } from 'org.eclipse.daanse.board.app.lib.api.datasource'
 import { IconSettings } from './gen/IconSettings'
 import { identifiers } from 'org.eclipse.daanse.board.app.lib.core'
 import type { TinyEmitter } from 'tiny-emitter'
@@ -43,9 +43,53 @@ import RouteLayer from './components/RouteLayer.vue'
 import { useOGCService } from './composables/Service'
 import { logMap, logDatasource, logObservations, logServices, logTasks } from './utils/logger'
 import type { MapWidgetInterface } from './gen/MapWidgetInterface'
-import { MapSettings } from './gen/MapSettings'
-import { EventActionsRegistry, EVENT_ACTIONS_REGISTRY } from 'org.eclipse.daanse.board.app.lib.events'
-import { MapClickPayload } from './gen/MapClickPayload'
+// The class to extend: the interface now carries the EObject members too
+import { MapWidgetInterfaceImpl } from './gen/MapWidgetInterfaceImpl'
+import type { MapSettings } from './gen/MapSettings'
+import { MapSettingsImpl } from './gen/MapSettingsImpl'
+
+/**
+ * What this widget expects of the client object a service carries.
+ *
+ * The model types `Service.service` as unknown on purpose: it is whichever
+ * WMS or WFS client the service was built with, and the model has no
+ * business knowing their shapes. This says what is actually reached for, so
+ * the calls are checked against something rather than against nothing - and
+ * so the next reader can see what a service has to provide.
+ *
+ * Everything is optional because the object arrives from storage as plain
+ * JSON, without its methods, and is rebuilt from its URL - which is exactly
+ * what the checks below are for.
+ */
+interface MapServiceClient {
+  getLayers?: (...args: unknown[]) => unknown
+  getFeatureTypes?: (...args: unknown[]) => unknown
+  getOperationUrl?: (...args: unknown[]) => string
+  fetch?: (...args: unknown[]) => unknown
+  geoJson?: unknown
+  url?: string
+  serviceUrl?: string
+  _capabilitiesUrl?: string
+}
+
+/**
+ * A modelled list as a plain array, for the template and for leaflet.
+ *
+ * Anything typed in the model comes back as an EList, and neither v-for nor
+ * leaflet's PointExpression knows what to do with one.
+ */
+const asArray = (list: unknown): any[] => {
+  const any = list as any
+  if (typeof any?.toArray === 'function') return any.toArray()
+  return Array.isArray(any) ? any : []
+}
+
+/** The client of a service, as the shape this file works with. */
+const clientOf = (service: unknown): MapServiceClient | undefined =>
+  (service ?? undefined) as MapServiceClient | undefined
+import { EventActionsRegistry, EVENT_ACTIONS_REGISTRY } from 'org.eclipse.daanse.board.app.lib.api.events'
+import type { MapClickPayload } from './gen/MapClickPayload'
+import { MapClickPayloadImpl } from './gen/MapClickPayloadImpl'
 import { useRoute } from 'vue-router'
 
 const props = defineProps<{ datasourceId: string; id: string }>()
@@ -56,8 +100,41 @@ const route = useRoute()
 const pageId = (route.params.pageid as string) || ''
 const config = defineModel<MapSettings>('configv', { required: true});
 const map = ref(null)
-const currentZoom = ref(config.value?.zoom ?? 14)
-const defaultConfig = new MapSettings()
+const defaultConfig = new MapSettingsImpl()
+
+/*
+ * Where the map starts when nothing says otherwise.
+ *
+ * The model carries this as defaultValueLiteral on a many-valued feature,
+ * which the generator cannot express: an EList is created empty by its
+ * getter and takes no initialiser. So it is applied here, where an empty
+ * centre would otherwise leave leaflet without one.
+ */
+const DEFAULT_CENTER = [50.93115286, 11.60392726]
+
+/**
+ * Puts a whole list into the configuration, by the name the model gives it.
+ *
+ * The model types these as ELists, but what the widget holds is a plain
+ * object: toJSON is how the generated defaults get in, and it hands a
+ * many-valued feature back as an array. So the values replace the list.
+ * A board stored while one of them was still an EList carries one, and
+ * that is filled rather than replaced - a containment list belongs to its
+ * object.
+ */
+function setList(name: 'center' | 'layers', values: unknown[]) {
+  const held = (config.value as any)[name] as { clear?: () => void; add?: (value: unknown) => void }
+  if (typeof held?.clear === 'function' && typeof held?.add === 'function') {
+    held.clear()
+    for (const value of values) held.add!(value)
+    return
+  }
+  ;(config.value as any)[name] = values
+}
+
+function ensureCentre() {
+  if (asArray(config.value.center).length === 0) setList('center', DEFAULT_CENTER)
+}
 
 // Get EventActionsRegistry
 const actionsRegistry = inject<EventActionsRegistry>(EVENT_ACTIONS_REGISTRY)!
@@ -66,7 +143,7 @@ const eventBus = inject<TinyEmitter>(identifiers.TINY_EMITTER)!
 function handleMapClick(e: any) {
   if (!widgetId?.value) return
   const { lat, lng } = e.latlng
-  const payload = new MapClickPayload()
+  const payload = new MapClickPayloadImpl()
   payload.lat = lat
   payload.lon = lng
   eventBus.emit('widget:MapWidget:click_on_map', {
@@ -328,14 +405,20 @@ const getLayerData = (layer: any) => {
 
 onMounted(async () => {
   if (config.value) {
-    Object.assign(config.value, { ...defaultConfig, ...config.value })
+    /* Read by the model's names: spreading a generated instance gives
+         * the private fields the getters sit in, not the features. */
+        Object.assign(config.value, {
+            ...plainSettings(defaultConfig),
+            ...plainSettings(config.value),
+        })
+    ensureCentre()
 
     // Reconstruct services from URLs after deserialization
     if (config.value.services) {
       for (const service of config.value.services) {
         // Check if service needs reconstruction by checking for methods
         if (service.type === 'WMS') {
-          const hasGetLayersMethod = typeof service.service?.getLayers === 'function'
+          const hasGetLayersMethod = typeof clientOf(service.service)?.getLayers === 'function'
           if (!hasGetLayersMethod && service.url) {
             logServices('Reconstructing WMS service from URL: %s', service.url)
             try {
@@ -348,7 +431,7 @@ onMounted(async () => {
             }
           }
         } else if (service.type === 'WFS') {
-          const hasGetFeatureTypesMethod = typeof service.service?.getFeatureTypes === 'function'
+          const hasGetFeatureTypesMethod = typeof clientOf(service.service)?.getFeatureTypes === 'function'
           if (!hasGetFeatureTypesMethod && service.url) {
             logServices('Reconstructing WFS service from URL: %s', service.url)
             try {
@@ -362,17 +445,17 @@ onMounted(async () => {
           }
         }
       }
-      // Trigger reactivity by reassigning the array
-      config.value.services = [...config.value.services]
+      // The list notifies on its own now - reassigning it was a way to
+      // make a plain array reactive, and an EList cannot be replaced anyway
     }
 
     // Reconstruct service instances for WMS/WFS layers after deserialization
     if (config.value.layers) {
       const newLayers = []
       for (const layer of config.value.layers) {
-        if (layer.type === 'WMSLayer' && layer.service && !layer.service.getOperationUrl) {
+        if (layer.type === 'WMSLayer' && layer.service && !clientOf(layer.service)?.getOperationUrl) {
           // Service was deserialized as plain object, reconstruct WmsEndpoint
-          const serviceUrl = layer.service._capabilitiesUrl || layer.service.url || layer.service.serviceUrl
+          const serviceUrl = clientOf(layer.service)?._capabilitiesUrl || clientOf(layer.service)?.url || clientOf(layer.service)?.serviceUrl
           if (serviceUrl) {
             try {
               const newService = await createServiceWMS(serviceUrl)
@@ -387,9 +470,9 @@ onMounted(async () => {
           }
         } else if (layer.type === 'WFSLayer' && layer.wfs_service) {
           // WFS service needs reconstruction - check if it has fetch method
-          if (typeof layer.wfs_service.fetch !== 'function') {
+          if (typeof clientOf(layer.wfs_service)?.fetch !== 'function') {
             // Deserialized WFS service - reconstruct from URL
-            const wfsUrl = layer.wfs_service.url
+            const wfsUrl = clientOf(layer.wfs_service)?.url
             if (wfsUrl) {
               try {
                 // Import WFS class dynamically
@@ -414,7 +497,7 @@ onMounted(async () => {
           newLayers.push(layer)
         }
       }
-      config.value.layers = newLayers
+      setList('layers', newLayers)
     }
     servicesReady.value = true
   }
@@ -735,7 +818,7 @@ const mapmove = debounce(() => {
   const leaflet = (map.value as any)?.leafletObject
   if (leaflet) {
     const center = leaflet.getCenter()
-    config.value.center = [center.lat, center.lng]
+    setList('center', [center.lat, center.lng])
     config.value.zoom = leaflet.getZoom()
   }
   loadObservationsInView()
@@ -1000,7 +1083,7 @@ const getPointformArea = (PointOrFeature: any) => {
 }
 
 
-let api = new class implements MapWidgetInterface{
+let api = new class extends MapWidgetInterfaceImpl implements MapWidgetInterface {
   zoomToThing = (thingId: string, zoom: number = 16, duration: number = 1000) => {
     if (!map.value || !(map.value as any).leafletObject) {
       console.warn('Map instance not available. Cannot zoom to thing.')
@@ -1272,7 +1355,7 @@ onUnmounted(() => {
 
   <div id="mapholder" class="holder" style="height: 100%">
     <l-map v-if="config.baseMapUrl" id="map" ref="map"
-            :center="config.center as PointExpression"
+            :center="asArray(config.center) as PointExpression"
             :max-zoom="21"
             :use-global-leaflet="false"
             :zoom="config.zoom"
@@ -1293,7 +1376,7 @@ onUnmounted(() => {
       <l-tile-layer :attribution="config.attribution" :options="{maxNativeZoom:19,
         maxZoom:25}" :url="config.baseMapUrl"></l-tile-layer>
       <template v-for="(wmsLayer, index) in [...config.layers].reverse()" :key="`${wmsLayer.name}-${getOriginalLayerIndex(wmsLayer)}`">
-        <LWmsTileLayer v-if="wmsLayer.type == 'WMSLayer' && wmsLayer.service && typeof wmsLayer.service.getOperationUrl === 'function'"
+        <LWmsTileLayer v-if="wmsLayer.type == 'WMSLayer' && wmsLayer.service && typeof clientOf(wmsLayer.service)?.getOperationUrl === 'function'"
                         :attribution="wmsLayer.attribution"
                         :layers="wmsLayer.name!"
                         :name="wmsLayer.name"
@@ -1308,8 +1391,8 @@ onUnmounted(() => {
         </LWmsTileLayer>
         <WFSLayer
           v-if="wmsLayer.type == 'WFSLayer'"
-          :geo-json="wmsLayer.wfs_service?.geoJson"
-          :style-ids="wmsLayer.styleIds"
+          :geo-json="clientOf(wmsLayer.wfs_service)?.geoJson"
+          :style-ids="asArray(wmsLayer.styleIds)"
           :layer-options="getLayerOptions(wmsLayer)"
           :filter-feature-collection="filterFeatureCollection"
           :get-style-by-id="getStyleById"
@@ -1318,7 +1401,7 @@ onUnmounted(() => {
         <GeoJsonLayer
           v-if="wmsLayer.type == 'GEOJSON'"
           :layer-data="getLayerData(wmsLayer)"
-          :style-ids="wmsLayer.styleIds"
+          :style-ids="asArray(wmsLayer.styleIds)"
           :layer-options="getLayerOptions(wmsLayer)"
           :marker-pane="getMarkerPane(wmsLayer)"
           :filter-feature-collection="filterFeatureCollection"
@@ -1329,7 +1412,7 @@ onUnmounted(() => {
         <RestGeoJsonLayer
           v-if="wmsLayer.type == 'REST-GEOJSON'"
           :layer-data="getLayerData(wmsLayer)"
-          :style-ids="wmsLayer.styleIds"
+          :style-ids="asArray(wmsLayer.styleIds)"
           :layer-options="getLayerOptions(wmsLayer)"
           :marker-pane="getMarkerPane(wmsLayer)"
           :filter-feature-collection="filterFeatureCollection"
@@ -1344,7 +1427,7 @@ onUnmounted(() => {
         <OGCSTALayer
           v-if="wmsLayer.type == 'OGCSTA'"
           :locations="getLayerLocations(wmsLayer)"
-          :renderers="config.OGCSstyles ?? []"
+          :renderers="asArray(config.OGCSstyles)"
           :layer-options="getLayerOptions(wmsLayer)"
           :marker-pane="getMarkerPane(wmsLayer)"
           :area-pane="getAreaPane(wmsLayer)"

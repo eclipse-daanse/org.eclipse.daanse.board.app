@@ -34,6 +34,9 @@ export function useComparator() {
           if (!prop) {
             return false
           }
+          // A condition without a comparator matches nothing rather than
+          // being passed on as undefined
+          if (!condition.comperator) return false
           return compateCondition(condition.comperator, prop, condition.value)
         }
       }
@@ -61,6 +64,9 @@ export function useComparator() {
             return condition.comperator === Comperator.neq
           }
 
+          // A condition without a comparator matches nothing rather than
+          // being passed on as undefined
+          if (!condition.comperator) return false
           return compateCondition(condition.comperator, prop, condition.value)
         }
       }
@@ -89,7 +95,8 @@ export function useComparator() {
           if (!prop) {
             continue
           }
-          if (compateCondition(condition.comperator, prop, condition.value)) {
+          // Same as above: no comparator, no match
+          if (condition.comperator && compateCondition(condition.comperator, prop, condition.value)) {
             listofFeatures.push(feature)
             break
           }
