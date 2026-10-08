@@ -15,14 +15,13 @@ Contributors: Smart City Jena
     <div class="refresh-setting">
       <label>Observation Refresh Time: {{ getRefreshTimeLabel(renderer.ObservationrefreshTime || 0) }}</label>
 
-      <va-slider
+      <DSlider
         :model-value="renderer.ObservationrefreshTime || 0"
         @update:model-value="updateRefreshTime"
         :min="0"
         :max="30"
         :step="1"
-        :show-ticks="true"
-        color="primary"
+        suffix="s"
         class="refresh-slider"
       />
 
@@ -51,6 +50,7 @@ Contributors: Smart City Jena
 <script lang="ts" setup>
 import { computed, ref } from 'vue';
 import type { IRenderer } from '../../api/Renderer';
+import { DSlider } from 'org.eclipse.daanse.board.app.ui.vue.controls';
 
 const renderer = defineModel<IRenderer>({ required: true });
 
@@ -93,7 +93,7 @@ const formatLastUpdate = (timestamp: number): string => {
 
 .auto-update-settings h3 {
   margin: 0;
-  color: var(--va-text-primary);
+  color: var(--color-fg);
   font-size: 1.1rem;
   font-weight: 600;
 }
@@ -106,7 +106,7 @@ const formatLastUpdate = (timestamp: number): string => {
 
 .refresh-setting label {
   font-weight: 500;
-  color: var(--va-text-primary);
+  color: var(--color-fg);
   font-size: 0.9rem;
 }
 
@@ -118,13 +118,13 @@ const formatLastUpdate = (timestamp: number): string => {
   display: flex;
   justify-content: space-between;
   font-size: 0.8rem;
-  color: var(--va-text-secondary);
+  color: var(--color-dim);
   margin-top: 0.5rem;
 }
 
 .refresh-info {
-  background: var(--va-background-secondary);
-  border: 1px solid var(--va-background-border);
+  background: var(--color-raised);
+  border: 1px solid var(--color-divider);
   border-radius: 6px;
   padding: 1rem;
   display: flex;
@@ -140,13 +140,13 @@ const formatLastUpdate = (timestamp: number): string => {
 
 .info-item .label {
   font-weight: 500;
-  color: var(--va-text-secondary);
+  color: var(--color-dim);
   font-size: 0.9rem;
 }
 
 .info-item .value {
   font-weight: 600;
-  color: var(--va-text-primary);
+  color: var(--color-fg);
   font-size: 0.9rem;
 }
 </style>

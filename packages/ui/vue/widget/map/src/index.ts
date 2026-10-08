@@ -11,7 +11,8 @@
  *   Smart City Jena
  **********************************************************************/
 
-import { component, inject, activate, deactivate } from '@eclipse-daanse/tsm/decorators'
+import { EVENT_ACTIONS_REGISTRY_ID, EVENT_REGISTRY_ID } from 'org.eclipse.daanse.board.app.lib.api.events'
+import { component, inject, activate, deactivate } from '@eclipse-daanse/tsm'
 import { initTsmRuntime } from '@eclipse-daanse/tsm'
 import Icon from './assets/map.svg'
 import MapsWidget from './MapsWidget.vue'
@@ -24,22 +25,26 @@ import MapMarker from './components/MapMarker.vue'
 import ConditionSettings from './parts/conditionLogic/ConditionSettings.vue'
 import PointStyler from './parts/styler/PointStyler.vue'
 import AreaStyler from './parts/styler/AreaStyler.vue'
-import { MapWidgetInterface } from './gen/MapWidgetInterface'
+import { MapWidgetInterfaceImpl } from './gen/MapWidgetInterfaceImpl'
+import { MapSettingsPackage } from './gen/MapSettingsPackage'
 import ecoreModelContent from '../model/model.ecore?raw'
-import type { EventRegistry, EventActionsRegistry } from 'org.eclipse.daanse.board.app.lib.events'
-import type { WidgetProvider } from 'org.eclipse.daanse.board.app.lib.repository.widget'
+import type { EventRegistry, EventActionsRegistry } from 'org.eclipse.daanse.board.app.lib.api.events'
+import { WIDGET_SERVICE_ID, type WidgetProvider } from 'org.eclipse.daanse.board.app.lib.api.widget'
 
 /*
- * Literal on purpose: the tsm plugin derives the manifest's provides at
- * build time and cannot evaluate an imported constant. Must match
- * WIDGET_SERVICE_ID in lib.repository.widget.
+ * Touching eINSTANCE is what builds the EPackage: until then the class
+ * literals are null, an instance cannot say what it is, and the first
+ * getter that asks for a feature - the map's centre, on every mount -
+ * fails with "Cannot read properties of null". EMF expects the package to
+ * register itself when its code is loaded, and for a bundle that moment
+ * is here.
  */
-const WIDGET_SERVICE = 'daanse.widget'
+void MapSettingsPackage.eINSTANCE
 
 const WIDGET_TYPE = 'MapWidget'
 
 @component({
-  service: [WIDGET_SERVICE],
+  service: [WIDGET_SERVICE_ID],
   properties: { 'widget.type': WIDGET_TYPE },
 })
 export class MapWidgetProvider implements WidgetProvider {
@@ -51,8 +56,8 @@ export class MapWidgetProvider implements WidgetProvider {
   readonly name = 'Map'
 
   constructor(
-    @inject('EventRegistry') private readonly events: EventRegistry,
-    @inject('EventActionsRegistry') private readonly actions: EventActionsRegistry,
+    @inject(EVENT_REGISTRY_ID) private readonly events: EventRegistry,
+    @inject(EVENT_ACTIONS_REGISTRY_ID) private readonly actions: EventActionsRegistry,
   ) {}
 
   @activate()
@@ -66,7 +71,7 @@ export class MapWidgetProvider implements WidgetProvider {
     this.actions
       .registerActionsFromEcoreString(WIDGET_TYPE, ecoreModelContent, 'widget', 'model.ecore')
       .catch(() => {
-        this.actions.registerWidgetType(WIDGET_TYPE, MapWidgetInterface, 'widget')
+        this.actions.registerWidgetType(WIDGET_TYPE, MapWidgetInterfaceImpl, 'widget')
       })
 
     /*

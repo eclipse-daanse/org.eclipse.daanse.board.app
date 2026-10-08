@@ -15,6 +15,7 @@ import { useDataPointRegistry } from '../../composables/datapointRegistry'
 import { LIcon, LMarker } from '@vue-leaflet/vue-leaflet'
 import MapPreviewPoint from './../../parts/MapPreviewPoint.vue'
 import {IconWidget}  from 'org.eclipse.daanse.board.app.ui.vue.widget.icon'
+import { DSelect } from 'org.eclipse.daanse.board.app.ui.vue.controls'
 
 const model: ModelRef<IDSRenderer> = defineModel<IDSRenderer>({ required: true })
 
@@ -44,14 +45,14 @@ const value = computed({
 <template>
 
   <div class="max-w-xs">
-    <VaSelect
+    <DSelect
       v-if="rendererOptions"
       v-model="value"
       :options="rendererOptions"
       label="renderer"
       placeholder="Select an option"
-      text-by="name"
-      value-by="id"
+      label-key="name"
+      value-key="id"
     />
 
 

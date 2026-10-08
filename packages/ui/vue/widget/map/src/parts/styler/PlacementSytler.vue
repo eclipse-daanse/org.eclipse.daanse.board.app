@@ -11,6 +11,7 @@ Contributors: Smart City Jena
 
 import { ERefType, IDSRenderer, type PlacementI } from './../../api/Renderer'
 import { type ModelRef, reactive } from 'vue'
+import { DRadioGroup } from 'org.eclipse.daanse.board.app.ui.vue.controls'
 
 const model: ModelRef<PlacementI> = defineModel<PlacementI>({
   default: () => {
@@ -23,15 +24,12 @@ const model: ModelRef<PlacementI> = defineModel<PlacementI>({
 
 <template>
   <div>
-  <label id="input-label-240" aria-hidden="true"
-          class="va-input-label va-input-wrapper__label va-input-wrapper__label--outer"
-          style="color: var(--va-primary);">render within </label>
-  <VaOptionList
-    v-model="model.placement"
-    :options="[ERefType.Thing,ERefType.OberservedArea]"
-    label="render within"
-    type="radio"
-  />
+    <DRadioGroup
+      v-model="model.placement"
+      :options="[ERefType.Thing, ERefType.OberservedArea]"
+      label="render within"
+      stacked
+    />
   </div>
   <div></div>
 </template>
