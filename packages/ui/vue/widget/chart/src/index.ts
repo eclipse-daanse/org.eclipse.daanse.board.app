@@ -11,31 +11,39 @@
  *   Smart City Jena
  **********************************************************************/
 
-import { component, inject, activate, deactivate } from '@eclipse-daanse/tsm/decorators'
+import { EVENT_ACTIONS_REGISTRY_ID, EVENT_REGISTRY_ID } from 'org.eclipse.daanse.board.app.lib.api.events'
+import { component, inject, activate, deactivate } from '@eclipse-daanse/tsm'
 import Icon from './assets/chart.svg'
 import ChartWidget from './ChartWidget.vue'
 import ChartWidgetSettings from './ChartWidgetSettings.vue'
-import { ChartSettings } from './gen/ChartSettings'
-import { ChartWidgetEvents } from './events/ChartWidgetEvents'
-import { ChartWidgetInterface } from './api/ChartWidgetInterface'
-import type { EventRegistry, EventActionsRegistry } from 'org.eclipse.daanse.board.app.lib.events'
-import type { WidgetProvider } from 'org.eclipse.daanse.board.app.lib.repository.widget'
+import type { ChartSettings } from './gen/ChartSettings'
+import { ChartSettingsImpl } from './gen/ChartSettingsImpl'
+import { ChartsettingsPackage } from './gen/ChartsettingsPackage'
+/* The form for these settings, written as a model beside the Ecore. */
+import chartSettingsFormXmi from '../model/ui.xmi?raw'
+/* The form for one entry of the series list - same values as above, so a
+ * series states its type from the same list the chart does. */
+import seriesSettingsFormXmi from '../model/ui-series.xmi?raw'
 
 /*
- * Literal on purpose: the tsm plugin derives the manifest's provides at
- * build time and cannot evaluate an imported constant. Must match
- * WIDGET_SERVICE_ID in lib.repository.widget.
+ * Building the EPackage on load: until it exists the class literals are
+ * null, an instance cannot say what it is, and nothing can render it from
+ * the model.
  */
-const WIDGET_SERVICE = 'daanse.widget'
+void ChartsettingsPackage.eINSTANCE
+import { ChartWidgetEvents } from './events/ChartWidgetEvents'
+import { ChartWidgetInterface } from './api/ChartWidgetInterface'
+import type { EventRegistry, EventActionsRegistry } from 'org.eclipse.daanse.board.app.lib.api.events'
+import { WIDGET_SERVICE_ID, type WidgetProvider } from 'org.eclipse.daanse.board.app.lib.api.widget'
 
 const WIDGET_TYPE = 'ChartWidget'
 
 /**
- * Declared component: the loader registers it under WIDGET_SERVICE, the
+ * Declared component: the loader registers it under WIDGET_SERVICE_ID, the
  * WidgetRepository tracks it into the palette, unloading withdraws it.
  */
 @component({
-  service: [WIDGET_SERVICE],
+  service: [WIDGET_SERVICE_ID],
   properties: { 'widget.type': WIDGET_TYPE },
 })
 export class ChartWidgetProvider implements WidgetProvider {
@@ -46,9 +54,30 @@ export class ChartWidgetProvider implements WidgetProvider {
   readonly icon = Icon
   readonly name = 'Chart'
 
+  /*
+   * The settings form, as a model. Carried on the registration like the
+   * icon, so whoever shows the settings does not have to know this widget
+   * exists - and the shell needs no dependency on this bundle.
+   */
+  readonly settingsForm = {
+    xmi: chartSettingsFormXmi,
+    uri: '/chart-settings.ui.xmi',
+    ePackage: () => ChartsettingsPackage.eINSTANCE,
+    create: () => new ChartSettingsImpl(),
+    /* Forms for classes that appear inside this one's lists. */
+    entryForms: [{ xmi: seriesSettingsFormXmi, uri: '/chart-series.ui.xmi' }],
+    /*
+     * What the model does not describe: the reference lines and areas, four
+     * lists the Ecore does not type - there is no class to build a form
+     * from. Named so that what is modelled is not offered twice, in two
+     * forms that could disagree.
+     */
+    unmodelledSections: ['Reference Lines & Areas'],
+  }
+
   constructor(
-    @inject('EventRegistry') private readonly events: EventRegistry,
-    @inject('EventActionsRegistry') private readonly actions: EventActionsRegistry,
+    @inject(EVENT_REGISTRY_ID) private readonly events: EventRegistry,
+    @inject(EVENT_ACTIONS_REGISTRY_ID) private readonly actions: EventActionsRegistry,
   ) {}
 
   @activate()
@@ -64,4 +93,6 @@ export class ChartWidgetProvider implements WidgetProvider {
   }
 }
 
-export { ChartWidget, ChartWidgetSettings, ChartSettings }
+export { ChartWidget, ChartWidgetSettings }
+export { ChartSettingsImpl, ChartsettingsPackage, chartSettingsFormXmi, seriesSettingsFormXmi }
+export type { ChartSettings }
