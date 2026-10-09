@@ -11,11 +11,9 @@ Contributors:
     Smart City Jena
 -->
 <script lang="ts" setup>
-import type { IIconSettings } from './index'
-import { computed, inject, onMounted, ref, type Ref, watch, markRaw } from 'vue'
+import type { IconSettings } from './gen/IconSettings'
+import { computed, inject, onMounted, ref, type Ref } from 'vue'
 import MaterialIcons from './assets/output.json'
-import { VariableInput } from 'org.eclipse.daanse.board.app.ui.vue.variable.components'
-import { VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 
 // interface MaterialIcon {
 //     name: string;
@@ -28,16 +26,23 @@ import { VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables
 //     sizes_px?: number[];
 // }
 
-import type {i18n} from "org.eclipse.daanse.board.app.lib.i18next"
+import { useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+import {
+  DCheckbox,
+  DColorInput,
+  DInput,
+  DSlider,
+} from 'org.eclipse.daanse.board.app.ui.vue.controls'
+import { VariableInput } from 'org.eclipse.daanse.board.app.ui.vue.variable.components'
 
-const i18n:i18n|undefined = inject('i18n');
-const t = (key:string)=>(i18n)?i18n.t(key):key;
+/*
+ * Reactive on purpose. A language pack is a bundle of its own and can be
+ * deployed after this component has rendered - reading through a plain
+ * i18n.t left those texts unseen until a reload.
+ */
+const { t } = useTranslation('icon')
 
-const opened = ref({
-  widgetSection: false,
-  storeSection: false,
-})
-const widgetSettings = defineModel<IIconSettings>({ required: true })
+const widgetSettings = defineModel<IconSettings>({ required: true })
 
 const isDarkTheme: Ref<boolean> = ref(
   JSON.parse(localStorage.getItem('isDarkTheme') || 'false'),
@@ -60,30 +65,30 @@ onMounted(() => {
   iconsList.value = MaterialIcons
 })
 
-watch(() => widgetSettings.value, (newVal) => {
-    if (newVal) {
-        if (!(newVal.iconColor instanceof VariableWrapper)) {
-            newVal.iconColor = markRaw(new VariableWrapper<string>((newVal.iconColor as string) || '#000000'));
-        }
-    }
-}, { immediate: true, deep: true });
-
-const fontColor = computed(() => {
-  return isDarkTheme.value ? '#ffffff' : ''
-})
-
 const iconStyle = computed(() => {
   return `font-variation-settings: "FILL" 0, "wght" 200, "GRAD" 100, "opsz" 48;`
 })
 </script>
 
 <template>
-  <va-collapse v-model="opened.widgetSection" icon="settings" :header="t('IconWidget.title')">
+  <!--
+    Two sections, because they are two different things: picking the icon
+    is searching a list and clicking one - there is no value to type -
+    while everything below it is a plain setting.
+
+    The second section looks redundant beside the model, and inside this
+    widget's own settings it is: the overlay hides it, because
+    unmodelledSections names only the picker. It is here for the map
+    widget, which renders this component whole to style its points and has
+    no model form beside it.
+  -->
+  <section class="settings-section" data-section="Symbol wählen">
     <div class="settings-container">
-      <va-input
+      <DInput
         v-model="searchQuery"
+        type="search"
         placeholder="Search icon..."
-        :label="t('icon:IconWidget.iconSearch')"
+        :label="t('IconWidget.iconSearch')"
       />
       <div class="icons-container" :style="iconStyle">
         <span
@@ -96,60 +101,54 @@ const iconStyle = computed(() => {
           {{ icon }}
         </span>
       </div>
-      <va-checkbox
+    </div>
+  </section>
+
+  <section class="settings-section" :data-section="t('IconWidget.title')">
+    <div class="settings-container">
+      <DCheckbox
         v-model="widgetSettings.isIconFilled"
-        :label="t('icon:IconWidget.iconFilled')"
+        :label="t('IconWidget.iconFilled')"
       />
-      <VariableInput v-model="(widgetSettings.iconColor as unknown as VariableWrapper<string>)" :label="t('icon:IconWidget.iconColor')">
+      <VariableInput v-model="widgetSettings.iconColor!" :label="t('IconWidget.iconColor')">
         <template #default="{ value, change }">
-          <va-color-input
+          <DColorInput
             :model-value="value"
-            @input="change"
-            :label="t('icon:IconWidget.iconColor')"
+            @update:model-value="change"
+            :label="t('IconWidget.iconColor')"
           />
         </template>
       </VariableInput>
-      <va-slider
-        class="slider"
+      <DSlider
         v-model="widgetSettings.iconSize"
-        :label-color="fontColor"
-        track-label-visible
         :min="10"
         :max="1000"
         :step="10"
-        :label="t('icon:IconWidget.iconSize')"
+        suffix="px"
+        :label="t('IconWidget.iconSize')"
       />
-      <va-slider
-        class="slider"
+      <DSlider
         v-model="widgetSettings.strokeWeight"
-        :label-color="fontColor"
-        track-label-visible
         :min="100"
         :max="700"
         :step="100"
-        :label="t('icon:IconWidget.strokeWeight')"
+        :label="t('IconWidget.strokeWeight')"
       />
-      <va-slider
-        class="slider"
+      <DSlider
         v-model="widgetSettings.opticSize"
-        :label-color="fontColor"
-        track-label-visible
         :min="20"
         :max="48"
-        :label="t('icon:IconWidget.opticSize')"
+        :label="t('IconWidget.opticSize')"
       />
-      <va-slider
-        class="slider"
+      <DSlider
         v-model="widgetSettings.grade"
-        :label-color="fontColor"
-        track-label-visible
         :min="-25"
         :max="200"
         :step="15"
-        :label="t('icon:IconWidget.grade')"
+        :label="t('IconWidget.grade')"
       />
     </div>
-  </va-collapse>
+  </section>
 </template>
 <style lang="css" scoped>
 .settings-container {

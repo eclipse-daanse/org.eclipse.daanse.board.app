@@ -147,6 +147,10 @@ const initVanta = () => {
             if (config.value.alignment) {
                 options.alignment = config.value.alignment
             }
+            /* The form has offered this all along and nothing passed it on */
+            if (config.value.cohesion) {
+                options.cohesion = config.value.cohesion
+            }
             if (config.value.color1) {
                 options.color1 = config.value.color1
             }

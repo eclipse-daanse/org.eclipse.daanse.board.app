@@ -11,41 +11,59 @@
  *   Smart City Jena
  **********************************************************************/
 
-import { component, inject, activate, deactivate } from '@eclipse-daanse/tsm/decorators'
+import { EVENT_REGISTRY_ID } from 'org.eclipse.daanse.board.app.lib.api.events'
+import { component, inject, activate, deactivate } from '@eclipse-daanse/tsm'
 import Icon from './assets/image.svg'
 import VantaWidget from './VantaWidget.vue'
-import VantaWidgetSettings from './VantaWidgetSettings.vue'
 import { VantaWidgetEvents } from './events/VantaWidgetEvents'
-import type { EventRegistry } from 'org.eclipse.daanse.board.app.lib.events'
-import type { WidgetProvider } from 'org.eclipse.daanse.board.app.lib.repository.widget'
+import { VantaSettingsImpl } from './gen/VantaSettingsImpl'
+import { VantasettingsPackage } from './gen/VantasettingsPackage'
+/* The form for these settings, written as a model beside the Ecore. */
+import vantaSettingsFormXmi from '../model/ui.xmi?raw'
 
 /*
- * Literal on purpose: the tsm plugin derives the manifest's provides at
- * build time and cannot evaluate an imported constant. Must match
- * WIDGET_SERVICE_ID in lib.repository.widget.
+ * Building the EPackage on load: until it exists the class literals are
+ * null, an instance cannot say what it is, and nothing can render it from
+ * the model.
  */
-const WIDGET_SERVICE = 'daanse.widget'
+void VantasettingsPackage.eINSTANCE
+import type { EventRegistry } from 'org.eclipse.daanse.board.app.lib.api.events'
+import { WIDGET_SERVICE_ID, type WidgetProvider } from 'org.eclipse.daanse.board.app.lib.api.widget'
+import type { Component } from 'vue'
 
 const WIDGET_TYPE = 'VantaWidget'
 
 /**
- * Declared component: the loader registers it under WIDGET_SERVICE, the
+ * Declared component: the loader registers it under WIDGET_SERVICE_ID, the
  * WidgetRepository tracks it into the palette, unloading withdraws it.
  */
 @component({
-  service: [WIDGET_SERVICE],
+  service: [WIDGET_SERVICE_ID],
   properties: { 'widget.type': WIDGET_TYPE },
 })
 export class VantaWidgetProvider implements WidgetProvider {
   readonly type = WIDGET_TYPE
-  readonly component = VantaWidget
-  readonly settingsComponent = VantaWidgetSettings
+  readonly component: Component = VantaWidget
+  /*
+   * No hand-written form: the model covers all of it, so there is nothing
+   * to keep beside it and no second place for the two to disagree.
+   *
+   * The settings form, as a model. Carried on the registration like the
+   * icon, so whoever shows the settings does not have to know this widget
+   * exists - and the shell needs no dependency on this bundle.
+   */
+  readonly settingsForm = {
+    xmi: vantaSettingsFormXmi,
+    uri: '/vanta-settings.ui.xmi',
+    ePackage: () => VantasettingsPackage.eINSTANCE,
+    create: () => new VantaSettingsImpl(),
+  }
   readonly supportedDSTypes = []
   readonly icon = Icon
   readonly name = 'Vanta'
 
   constructor(
-    @inject('EventRegistry') private readonly events: EventRegistry,
+    @inject(EVENT_REGISTRY_ID) private readonly events: EventRegistry,
   ) {}
 
   @activate()
@@ -59,4 +77,5 @@ export class VantaWidgetProvider implements WidgetProvider {
   }
 }
 
-export { VantaWidget, VantaWidgetSettings }
+export { VantaWidget }
+export { VantaSettingsImpl, VantasettingsPackage, vantaSettingsFormXmi }

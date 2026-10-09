@@ -10,10 +10,10 @@
  * Contributors:
  *   Smart City Jena
  **********************************************************************/
-import type { WidgetEventDefinition } from 'org.eclipse.daanse.board.app.lib.events';
-import { Payload } from 'org.eclipse.daanse.board.app.lib.events';
+import type { WidgetEventDefinition } from 'org.eclipse.daanse.board.app.lib.events'
+import { PayloadImpl } from 'org.eclipse.daanse.board.app.lib.api.events'
 
 export const ProgressWidgetEvents: WidgetEventDefinition[] = [
-  { name: 'Progress Clicked', type: 'click', description: 'Triggered when the progress widget is clicked', payloadType: Payload },
-  { name: 'Progress Right Clicked', type: 'right_click', description: 'Triggered when the progress widget is right-clicked', payloadType: Payload }
+  { name: 'Progress Clicked', type: 'click', description: 'Triggered when the progress widget is clicked', payloadType: PayloadImpl },
+  { name: 'Progress Right Clicked', type: 'right_click', description: 'Triggered when the progress widget is right-clicked', payloadType: PayloadImpl }
 ];

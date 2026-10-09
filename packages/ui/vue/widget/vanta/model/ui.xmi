@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/*********************************************************************
+* Copyright (c) 2026 Contributors to the Eclipse Foundation.
+*
+* This program and the accompanying materials are made
+* available under the terms of the Eclipse Public License 2.0
+* which is available at https://www.eclipse.org/legal/epl-2.0/
+*
+* SPDX-License-Identifier: EPL-2.0
+**********************************************************************/
+
+The form for the animated background.
+
+The effect comes first, because it decides what the rest of the form even
+is: the four share only their background colour, so each one's fields appear
+and disappear with the choice above rather than sitting there greyed out
+or, worse, being set on an effect that ignores them.
+
+Colour and spacing belong to two effects each. They are written twice, under
+different names pointing at the same feature, so that each effect's fields
+read as one block - the alternative is a shared group between the two that
+belongs to neither.
+
+Every field may be left empty, and empty is not zero: the widget passes a
+value to the effect only when it is set, so an empty field means "whatever
+the effect does by default". That is why nothing here is required.
+-->
+<uimodel:UIModel
+    xmlns:xmi="http://www.omg.org/XMI"
+    xmi:version="2.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:uimodel="http://uimodel/1.0"
+    name="VantaSettingsForm">
+
+  <targetClasses href="http://org.eclipse.daanse.board.app.ui.vue.widget.vanta#//VantaSettings"/>
+
+  <components xsi:type="uimodel:FormView" name="VantaSettingsFormView">
+
+    <fields xsi:type="uimodel:GroupWidget" name="effectGroup" layout="VERTICAL" label="Effekt">
+      <fields xsi:type="uimodel:SelectWidget"
+          name="type"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.vanta#//VantaSettings/type"
+          label="Art">
+        <values>CLOUDS</values>
+        <values>BIRDS</values>
+        <values>NET</values>
+        <values>TRUNK</values>
+        <optionLabel language="JS" body="({ CLOUDS: 'Wolken', BIRDS: 'Vögel', NET: 'Netz', TRUNK: 'Geäst' })[option] ?? option"/>
+      </fields>
+      <fields xsi:type="uimodel:InputWidget"
+          name="backgroundColor"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.vanta#//VantaSettings/backgroundColor"
+          label="Hintergrundfarbe"/>
+    </fields>
+
+    <fields xsi:type="uimodel:GroupWidget" name="cloudsGroup" layout="VERTICAL" label="Wolken">
+      <visibilityCondition language="JS" body="self.type === 'CLOUDS'"/>
+      <fields xsi:type="uimodel:InputWidget"
+          name="skyColor"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.vanta#//VantaSettings/skyColor"
+          label="Himmelsfarbe"/>
+      <fields xsi:type="uimodel:InputWidget"
+          name="cloudColor"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.vanta#//VantaSettings/cloudColor"
+          label="Wolkenfarbe"/>
+      <fields xsi:type="uimodel:InputWidget"
+          name="cloudShadowColor"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.vanta#//VantaSettings/cloudShadowColor"
+          label="Wolkenschatten"/>
+      <fields xsi:type="uimodel:InputWidget"
+          name="sunColor"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.vanta#//VantaSettings/sunColor"
+          label="Sonnenfarbe"/>
+      <fields xsi:type="uimodel:InputWidget"
+          name="sunGlareColor"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.vanta#//VantaSettings/sunGlareColor"
+          label="Sonnenblendung"/>
+      <fields xsi:type="uimodel:InputWidget"
+          name="sunlightColor"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.vanta#//VantaSettings/sunlightColor"
+          label="Sonnenlicht"/>
+      <fields xsi:type="uimodel:NumberWidget"
+          name="speed"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.vanta#//VantaSettings/speed"
+          label="Geschwindigkeit" min="0" step="0.1"/>
+    </fields>
+
+    <fields xsi:type="uimodel:GroupWidget" name="birdsGroup" layout="VERTICAL" label="Vögel">
+      <visibilityCondition language="JS" body="self.type === 'BIRDS'"/>
+      <fields xsi:type="uimodel:InputWidget"
+          name="color1"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.vanta#//VantaSettings/color1"
+          label="Farbe 1"/>
+      <fields xsi:type="uimodel:InputWidget"
+          name="color2"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.vanta#//VantaSettings/color2"
+          label="Farbe 2"/>
+      <fields xsi:type="uimodel:NumberWidget"
+          name="quantity"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.vanta#//VantaSettings/quantity"
+          label="Anzahl" min="1" step="1"/>
+      <fields xsi:type="uimodel:NumberWidget"
+          name="birdSize"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.vanta#//VantaSettings/birdSize"
+          label="Größe" min="0" step="0.1"/>
+      <fields xsi:type="uimodel:NumberWidget"
+          name="wingSpan"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.vanta#//VantaSettings/wingSpan"
+          label="Flügelspanne" min="0" step="1"/>
+      <fields xsi:type="uimodel:NumberWidget"
+          name="speedLimit"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.vanta#//VantaSettings/speedLimit"
+          label="Höchstgeschwindigkeit" min="0" step="0.1"/>
+      <fields xsi:type="uimodel:NumberWidget"
+          name="separation"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.vanta#//VantaSettings/separation"
+          label="Abstand" min="0" step="1"/>
+      <fields xsi:type="uimodel:NumberWidget"
+          name="alignment"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.vanta#//VantaSettings/alignment"
+          label="Ausrichtung" min="0" step="1"/>
+      <fields xsi:type="uimodel:NumberWidget"
+          name="cohesion"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.vanta#//VantaSettings/cohesion"
+          label="Zusammenhalt" min="0" step="1"/>
+    </fields>
+
+    <fields xsi:type="uimodel:GroupWidget" name="netGroup" layout="VERTICAL" label="Netz">
+      <visibilityCondition language="JS" body="self.type === 'NET'"/>
+      <fields xsi:type="uimodel:InputWidget"
+          name="netColor"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.vanta#//VantaSettings/color"
+          label="Farbe"/>
+      <fields xsi:type="uimodel:NumberWidget"
+          name="points"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.vanta#//VantaSettings/points"
+          label="Punkte" min="1" step="1"/>
+      <fields xsi:type="uimodel:NumberWidget"
+          name="maxDistance"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.vanta#//VantaSettings/maxDistance"
+          label="Größter Abstand" min="0" step="1"/>
+      <fields xsi:type="uimodel:NumberWidget"
+          name="netSpacing"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.vanta#//VantaSettings/spacing"
+          label="Abstand" min="0" step="0.1"/>
+    </fields>
+
+    <fields xsi:type="uimodel:GroupWidget" name="trunkGroup" layout="VERTICAL" label="Geäst">
+      <visibilityCondition language="JS" body="self.type === 'TRUNK'"/>
+      <fields xsi:type="uimodel:InputWidget"
+          name="trunkColor"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.vanta#//VantaSettings/color"
+          label="Farbe"/>
+      <fields xsi:type="uimodel:NumberWidget"
+          name="chaos"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.vanta#//VantaSettings/chaos"
+          label="Unordnung" min="0" step="0.1"/>
+      <fields xsi:type="uimodel:NumberWidget"
+          name="trunkSpacing"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.vanta#//VantaSettings/spacing"
+          label="Abstand" min="0" step="0.1"/>
+    </fields>
+
+  </components>
+</uimodel:UIModel>

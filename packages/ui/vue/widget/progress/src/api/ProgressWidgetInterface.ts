@@ -11,10 +11,10 @@
  *   Smart City Jena
  **********************************************************************/
 
-import { WidgetActionInterface } from 'org.eclipse.daanse.board.app.lib.events'
+import { WidgetActionInterfaceImpl } from 'org.eclipse.daanse.board.app.lib.api.events'
 import { WidgetAction } from 'org.eclipse.daanse.board.app.lib.events'
 
-export abstract class ProgressWidgetInterface extends WidgetActionInterface {
+export abstract class ProgressWidgetInterface extends WidgetActionInterfaceImpl {
 
   @WidgetAction({ eventType: 'progress.setValue' })
   setValue(value: number): void { throw new Error("setValue not implemented"); }
