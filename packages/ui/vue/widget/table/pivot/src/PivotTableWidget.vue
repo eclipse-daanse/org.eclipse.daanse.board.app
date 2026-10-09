@@ -12,11 +12,14 @@ Contributors:
 -->
 
 <script lang="ts" setup>
-import { inject, toRefs, watch, onMounted, computed, shallowRef } from "vue";
-import { useVariableRepository, useDatasourceRepository } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+import { inject } from 'vue'
+import { toRefs, ref, watch, onMounted, computed, markRaw, shallowRef } from "vue";
+import { useVariableRepository, useDatasourceRepository, VariableWrapper, plainSettings } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import { PivotTable as PivotTableComponent } from 'org.eclipse.daanse.board.app.ui.vue.common.xmla';
-import { PivotTable } from "./gen/PivotTable";
-import { EventActionsRegistry, EVENT_ACTIONS_REGISTRY } from 'org.eclipse.daanse.board.app.lib.events'
+import type { PivotTable } from "./gen/PivotTable";
+// The class to instantiate: in emf mode the plain name is the interface
+import { PivotTableImpl } from "./gen/PivotTableImpl";
+import { EventActionsRegistry, EVENT_ACTIONS_REGISTRY } from 'org.eclipse.daanse.board.app.lib.api.events'
 import { useRoute } from 'vue-router'
 
 const props = defineProps<{ datasourceId: string, id?: string }>();
@@ -40,11 +43,16 @@ const emitWidgetEvent = (name: string, details: Record<string, unknown> = {}) =>
 const config = defineModel<PivotTable>('configv', { required: true });
 const { wrapParameters } = useVariableRepository();
 
-const defaultConfig = new PivotTable()
+const defaultConfig = new PivotTableImpl()
 
 onMounted(() => {
     if (config.value) {
-        Object.assign(config.value, { ...defaultConfig, ...config.value });
+        /* Read by the model's names: spreading a generated instance gives
+         * the private fields the getters sit in, not the features. */
+        Object.assign(config.value, {
+            ...plainSettings(defaultConfig),
+            ...plainSettings(config.value),
+        });
     }
 });
 

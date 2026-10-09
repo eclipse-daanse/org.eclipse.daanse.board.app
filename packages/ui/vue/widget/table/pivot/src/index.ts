@@ -11,15 +11,17 @@
  *   Smart City Jena
  **********************************************************************/
 
-import { component, inject, activate, deactivate } from '@eclipse-daanse/tsm/decorators'
+import { EVENT_ACTIONS_REGISTRY_ID, EVENT_REGISTRY_ID } from 'org.eclipse.daanse.board.app.lib.api.events'
+import { component, inject, activate, deactivate } from '@eclipse-daanse/tsm'
 import Icon from './assets/pivot_table.svg'
 import PivotTableWidget from './PivotTableWidget.vue'
 import PivotTableWidgetSettings from './PivotTableWidgetSettings.vue'
 import { PivotTableEvents } from './events/PivotTableEvents'
-import { PivotTableInterface } from './gen/PivotTableInterface'
+import { PivotTableInterfaceImpl } from './gen/PivotTableInterfaceImpl'
+import { PivotTablePackage } from './gen/PivotTablePackage'
 import ecoreModelContent from '../model/model.ecore?raw'
-import type { EventRegistry, EventActionsRegistry } from 'org.eclipse.daanse.board.app.lib.events'
-import type { WidgetProvider } from 'org.eclipse.daanse.board.app.lib.repository.widget'
+import type { EventRegistry, EventActionsRegistry } from 'org.eclipse.daanse.board.app.lib.api.events'
+import { WIDGET_SERVICE_ID, type WidgetProvider } from 'org.eclipse.daanse.board.app.lib.api.widget'
 
 interface IPivotTable {
   rows: any[][]
@@ -29,20 +31,23 @@ interface IPivotTable {
 }
 
 /*
- * Literal on purpose: the tsm plugin derives the manifest's provides at
- * build time and cannot evaluate an imported constant. Must match
- * WIDGET_SERVICE_ID in lib.repository.widget.
+ * Touching eINSTANCE is what builds the EPackage: until then the class
+ * literals are null, and a generated instance cannot say what it is -
+ * eClass() returns null, so the action interface registered below fails
+ * the moment anything asks it for a feature. EMF expects the package to
+ * register itself when its code is loaded, and for a bundle that moment
+ * is here.
  */
-const WIDGET_SERVICE = 'daanse.widget'
+void PivotTablePackage.eINSTANCE
 
 const WIDGET_TYPE = 'PivotTableWidget'
 
 /**
- * Declared component: the loader registers it under WIDGET_SERVICE, the
+ * Declared component: the loader registers it under WIDGET_SERVICE_ID, the
  * WidgetRepository tracks it into the palette, unloading withdraws it.
  */
 @component({
-  service: [WIDGET_SERVICE],
+  service: [WIDGET_SERVICE_ID],
   properties: { 'widget.type': WIDGET_TYPE },
 })
 export class PivotTableWidgetProvider implements WidgetProvider {
@@ -54,14 +59,14 @@ export class PivotTableWidgetProvider implements WidgetProvider {
   readonly name = 'PivotTable'
 
   constructor(
-    @inject('EventRegistry') private readonly events: EventRegistry,
-    @inject('EventActionsRegistry') private readonly actions: EventActionsRegistry,
+    @inject(EVENT_REGISTRY_ID) private readonly events: EventRegistry,
+    @inject(EVENT_ACTIONS_REGISTRY_ID) private readonly actions: EventActionsRegistry,
   ) {}
 
   @activate()
   register(): void {
     this.events.registerWidget(WIDGET_TYPE, PivotTableEvents)
-    this.actions.registerWidgetType(WIDGET_TYPE, PivotTableInterface, 'widget')
+    this.actions.registerWidgetType(WIDGET_TYPE, PivotTableInterfaceImpl, 'widget')
   }
 
   @deactivate()

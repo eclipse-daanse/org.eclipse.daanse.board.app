@@ -24,7 +24,7 @@ const { datasourceId, config, id: widgetId } = toRefs(props);
 
 import { identifiers } from 'org.eclipse.daanse.board.app.lib.core'
 import type { TinyEmitter } from 'tiny-emitter';
-import { EventActionsRegistry, EVENT_ACTIONS_REGISTRY } from 'org.eclipse.daanse.board.app.lib.events';
+import { EventActionsRegistry, EVENT_ACTIONS_REGISTRY } from 'org.eclipse.daanse.board.app.lib.api.events';
 import { KpiTableWidgetInterface } from './api/KpiTableWidgetInterface';
 
 const eventBus = inject<TinyEmitter>(identifiers.TINY_EMITTER)!;
@@ -70,7 +70,7 @@ onMounted(() => {
     if (widgetId?.value) actionsRegistry.registerInstance(widgetId.value, api, 'KpiTableWidget', pageId);
     if (!config.value) return;
     const upgradeFields: Record<string, string> = {
-        headerBackground: '#f0f0f0'
+        headerBackground: 'var(--color-raised)'
     };
 
     for (const [key, defaultVal] of Object.entries(upgradeFields)) {

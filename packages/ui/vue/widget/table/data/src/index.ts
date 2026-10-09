@@ -11,39 +11,57 @@
  *   Smart City Jena
  **********************************************************************/
 
-import { component, inject, activate, deactivate } from '@eclipse-daanse/tsm/decorators'
+import { EVENT_ACTIONS_REGISTRY_ID, EVENT_REGISTRY_ID } from 'org.eclipse.daanse.board.app.lib.api.events'
+import { component, inject, activate, deactivate } from '@eclipse-daanse/tsm'
 import Icon from './assets/data_table.svg'
 import DataTableWidget from './DataTableWidget.vue'
-import DataTableWidgetSettings from './DataTableWidgetSettings.vue'
 import { DataTableWidgetEvents } from './events/DataTableWidgetEvents'
 import { DataTableWidgetInterface } from './api/DataTableWidgetInterface'
-import type { EventRegistry, EventActionsRegistry } from 'org.eclipse.daanse.board.app.lib.events'
-import type { WidgetProvider } from 'org.eclipse.daanse.board.app.lib.repository.widget'
+import { DataTableSettingsImpl } from './gen/DataTableSettingsImpl'
+import { DatatablesettingsPackage } from './gen/DatatablesettingsPackage'
+/* The form for these settings, written as a model beside the Ecore. */
+import dataTableSettingsFormXmi from '../model/ui.xmi?raw'
 
 /*
- * Literal on purpose: the tsm plugin derives the manifest's provides at
- * build time and cannot evaluate an imported constant. Must match
- * WIDGET_SERVICE_ID in lib.repository.widget.
+ * Building the EPackage on load: until it exists the class literals are
+ * null, an instance cannot say what it is, and nothing can render it from
+ * the model.
  */
-const WIDGET_SERVICE = 'daanse.widget'
+void DatatablesettingsPackage.eINSTANCE
+import type { EventRegistry, EventActionsRegistry } from 'org.eclipse.daanse.board.app.lib.api.events'
+import { WIDGET_SERVICE_ID, type WidgetProvider } from 'org.eclipse.daanse.board.app.lib.api.widget'
+import type { Component } from 'vue'
 
 const WIDGET_TYPE = 'DataTableWidget'
 
 @component({
-  service: [WIDGET_SERVICE],
+  service: [WIDGET_SERVICE_ID],
   properties: { 'widget.type': WIDGET_TYPE },
 })
 export class DataTableWidgetProvider implements WidgetProvider {
   readonly type = WIDGET_TYPE
-  readonly component = DataTableWidget
-  readonly settingsComponent = DataTableWidgetSettings
+  readonly component: Component = DataTableWidget
+  /*
+   * No hand-written form: the model covers all of it, so there is nothing
+   * to keep beside it and no second place for the two to disagree.
+   *
+   * The settings form, as a model. Carried on the registration like the
+   * icon, so whoever shows the settings does not have to know this widget
+   * exists - and the shell needs no dependency on this bundle.
+   */
+  readonly settingsForm = {
+    xmi: dataTableSettingsFormXmi,
+    uri: '/data-table-settings.ui.xmi',
+    ePackage: () => DatatablesettingsPackage.eINSTANCE,
+    create: () => new DataTableSettingsImpl(),
+  }
   readonly supportedDSTypes = ['csv', 'rest']
   readonly icon = Icon
   readonly name = 'DataTable'
 
   constructor(
-    @inject('EventRegistry') private readonly events: EventRegistry,
-    @inject('EventActionsRegistry') private readonly actions: EventActionsRegistry,
+    @inject(EVENT_REGISTRY_ID) private readonly events: EventRegistry,
+    @inject(EVENT_ACTIONS_REGISTRY_ID) private readonly actions: EventActionsRegistry,
   ) {}
 
   @activate()
@@ -59,4 +77,5 @@ export class DataTableWidgetProvider implements WidgetProvider {
   }
 }
 
-export { DataTableWidget, DataTableWidgetSettings }
+export { DataTableWidget }
+export { DataTableSettingsImpl, DatatablesettingsPackage, dataTableSettingsFormXmi }

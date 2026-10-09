@@ -21,10 +21,13 @@ import annotationPlugin from 'chartjs-plugin-annotation';
 import { useDatasourceRepository, useVariableRepository } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import { inject, computed, onMounted, onUnmounted, ref, toRefs, watch } from 'vue';
 import { useRoute } from 'vue-router';
-import { ChartSettings } from './gen/ChartSettings';
+import { ChartSettingsImpl } from './gen/ChartSettingsImpl';
+// The interface, for the model this component is bound to; the Impl above
+// only supplies the defaults
+import type { ChartSettings } from './gen/ChartSettings';
 import { identifiers } from 'org.eclipse.daanse.board.app.lib.core'
 import type { TinyEmitter } from 'tiny-emitter';
-import { EventActionsRegistry, EVENT_ACTIONS_REGISTRY } from 'org.eclipse.daanse.board.app.lib.events';
+import { EventActionsRegistry, EVENT_ACTIONS_REGISTRY } from 'org.eclipse.daanse.board.app.lib.api.events';
 import { ChartWidgetInterface } from './api/ChartWidgetInterface';
 
 const { wrapParameters } = useVariableRepository()
@@ -34,7 +37,7 @@ ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale,
 const props = defineProps<{ datasourceId: string, id?: string }>();
 const { datasourceId, id: widgetId } = toRefs(props);
 const config = defineModel<ChartSettings>('configv', { required: true });
-const defaultConfig = new ChartSettings();
+const defaultConfig = new ChartSettingsImpl();
 const data = ref(null as any);
 
 const eventBus = inject<TinyEmitter>(identifiers.TINY_EMITTER)!;
@@ -125,7 +128,7 @@ const { update } = useDatasourceRepository(datasourceId, "ChartData", data);
 
 const chartComponent = computed(() => {
   // Check if we have mixed chart types (different types per series)
-  const hasMixedTypes = config.value?.seriesSettings?.some(
+  const hasMixedTypes = seriesList().some(
     (s: any) => s.chartType?.value && s.chartType.value !== config.value?.chartType?.value
   )
 
@@ -153,26 +156,64 @@ watch(() => config.value, (newVal) => {
   chartKey.value++
 }, { deep: true })
 
+/**
+ * The first value that was actually set.
+ *
+ * An empty field is not a setting - clearing a colour has to fall through
+ * to what lies behind it rather than painting with an empty string, which
+ * is what `??` alone would do.
+ */
+function firstSet(...candidates: any[]): any {
+  return candidates.find((v) => v !== undefined && v !== null && v !== '')
+}
+
+/**
+ * One entry of a reference line or box list.
+ *
+ * These four lists are untyped in the Ecore, so the generator gives them an
+ * EList of unknown - which has get(i) and does not answer to [i] at all.
+ * Reading them through here works either way, and is the one place to change
+ * once the lists have a class of their own.
+ */
+function annotationAt(list: unknown, index: number): any {
+  const any = list as any
+  if (typeof any?.get === 'function') return any.get(index)
+  return any?.[index]
+}
+
+/** The series settings as a plain array, whether they arrive as one or as an EList. */
+function seriesList(): any[] {
+  const list: any = config.value?.seriesSettings
+  if (!list) return []
+  if (typeof list.toArray === 'function') return list.toArray()
+  return Array.isArray(list) ? list : []
+}
+
+/*
+ * Every one of these reads the value inside the wrapper, never the wrapper
+ * itself: a wrapper is an object and therefore always truthy, so a flag
+ * read without .value is permanently on - and the chart drew nothing.
+ */
 const resolvedConfig = wrapParameters({
   chartType: computed(() => (config.value?.chartType as any)?.value ?? 'bar'),
   borderColor: computed(() => (config.value?.borderColor as any)?.value ?? 'rgba(75, 192, 192, 1)'),
   backgroundColor: computed(() => (config.value?.backgroundColor as any)?.value ?? 'rgba(75, 192, 192, 0.2)'),
   borderWidth: computed(() => (config.value?.borderWidth as any)?.value ?? 2),
   borderDash: computed(() => (config.value?.borderDash as any)?.value ?? []),
-  fill: computed(() => config.value?.fill ?? false),
-  showPoints: computed(() => config.value?.showPoints ?? true),
+  fill: computed(() => (config.value?.fill as any)?.value ?? false),
+  showPoints: computed(() => (config.value?.showPoints as any)?.value ?? true),
   pointColor: computed(() => (config.value?.pointColor as any)?.value ?? 'rgba(75, 192, 192, 1)'),
   pointSize: computed(() => (config.value?.pointSize as any)?.value ?? 3),
   barOrientation: computed(() => (config.value as any)?.barOrientation?.value ?? 'vertical'),
   stacked: computed(() => (config.value as any)?.stacked?.value ?? false),
-  showHorizontalGrid: computed(() => config.value?.showHorizontalGrid ?? true),
+  showHorizontalGrid: computed(() => (config.value?.showHorizontalGrid as any)?.value ?? true),
   horizontalGridColor: computed(() => (config.value?.horizontalGridColor as any)?.value ?? 'rgba(0, 0, 0, 0.1)'),
   horizontalGridWidth: computed(() => (config.value?.horizontalGridWidth as any)?.value ?? 1),
-  showVerticalGrid: computed(() => config.value?.showVerticalGrid ?? true),
+  showVerticalGrid: computed(() => (config.value?.showVerticalGrid as any)?.value ?? true),
   verticalGridColor: computed(() => (config.value?.verticalGridColor as any)?.value ?? 'rgba(0, 0, 0, 0.1)'),
   verticalGridWidth: computed(() => (config.value?.verticalGridWidth as any)?.value ?? 1),
   dateDisplayFormat: computed(() => (config.value?.dateDisplayFormat as any)?.value ?? 'dd.MM.yyyy HH:mm'),
-  annotationsEditMode: computed(() => config.value?.annotationsEditMode ?? false)
+  annotationsEditMode: computed(() => (config.value?.annotationsEditMode as any)?.value ?? false)
 })
 
 console.log(resolvedConfig.backgroundColor.value);
@@ -183,28 +224,71 @@ const chartData = computed(() => {
 
   const dataCopy = JSON.parse(JSON.stringify(data.value))
 
-  // Check if we have any series-specific settings
-  const hasSeriesSettings = config.value?.seriesSettings && config.value.seriesSettings.length > 0
+  /*
+   * The series list is an EList since the model types it against
+   * SeriesSettings - it has size() and toArray(), not length and find().
+   * Read as an array once, so the merge below stays plain.
+   */
+  const series = seriesList()
+  const hasSeriesSettings = series.length > 0
 
   if (dataCopy.datasets && Array.isArray(dataCopy.datasets)) {
     dataCopy.datasets = dataCopy.datasets.map((dataset: any, index: number) => {
       // Check if there's a series-specific setting for this dataset
-      const seriesSettings = config.value?.seriesSettings?.find(
-        (s: any) => (s.seriesIndex as any)?.value === index
-      )
+      /*
+       * Compared as numbers: a settings value may arrive as a string,
+       * whether it was typed, stored that way, or came from a variable -
+       * and "0" === 0 is false, which loses the series without a word.
+       */
+      const seriesSettings: any = series.find((s: any) => {
+        const at = (s.seriesIndex as any)?.value
+        return at !== undefined && at !== null && at !== '' && Number(at) === index
+      })
 
       // Determine chart type (series-specific or global fallback)
-      const chartType = (seriesSettings?.chartType as any)?.value ?? resolvedConfig.chartType ?? 'bar'
+      /*
+       * resolvedConfig holds computed refs, so it has to be read through
+       * .value - handing the ref itself to Chart.js sets the type to
+       * "[object Object]", which it rejects as an unknown controller. Only
+       * visible once a series exists, since type is set for series only.
+       */
+      const chartType =
+        (seriesSettings?.chartType as any)?.value ?? resolvedConfig.chartType?.value ?? 'bar'
 
       // Determine axis assignment (series-specific or default)
       const xAxisId = (seriesSettings?.xAxisId as any)?.value
       const yAxisId = (seriesSettings?.yAxisId as any)?.value
 
-      // Determine colors: series-specific > dataset (from composer) > global config
-      const borderColor = seriesSettings?.borderColor?.value ?? dataset.borderColor ?? config.value?.borderColor?.value
-      const backgroundColor = seriesSettings?.backgroundColor?.value ?? dataset.backgroundColor ?? config.value?.backgroundColor?.value
-      const borderWidth = seriesSettings?.borderWidth?.value ?? dataset.borderWidth ?? config.value?.borderWidth?.value
-      const borderDash = seriesSettings?.borderDash?.value ?? dataset.borderDash ?? config.value?.borderDash?.value
+      /*
+       * What was set here wins, and the data source is what is left when
+       * nothing was: series first, then the chart's own setting, then the
+       * colour the datasource composer proposed.
+       *
+       * The composer always supplies a colour - a configured one or one it
+       * generates - so with the dataset in front, a colour set in the form
+       * never took effect. Setting something and seeing nothing happen is
+       * worse than losing a proposal nobody asked for.
+       */
+      const borderColor = firstSet(
+        seriesSettings?.borderColor?.value,
+        config.value?.borderColor?.value,
+        dataset.borderColor,
+      )
+      const backgroundColor = firstSet(
+        seriesSettings?.backgroundColor?.value,
+        config.value?.backgroundColor?.value,
+        dataset.backgroundColor,
+      )
+      const borderWidth = firstSet(
+        seriesSettings?.borderWidth?.value,
+        config.value?.borderWidth?.value,
+        dataset.borderWidth,
+      )
+      const borderDash = firstSet(
+        seriesSettings?.borderDash?.value,
+        config.value?.borderDash?.value,
+        dataset.borderDash,
+      )
 
       // Apply settings based on chart type
       let result: any = {
@@ -233,7 +317,11 @@ const chartData = computed(() => {
         // Determine line-specific settings (series-specific or global fallback)
         const showPoints = seriesSettings?.showPoints?.value ?? config.value?.showPoints?.value ?? true
         const fillEnabled = seriesSettings?.fill?.value ?? config.value?.fill?.value ?? false
-        const pointColor = seriesSettings?.pointColor?.value ?? dataset.pointBackgroundColor ?? config.value?.pointColor?.value
+        const pointColor = firstSet(
+          seriesSettings?.pointColor?.value,
+          config.value?.pointColor?.value,
+          dataset.pointBackgroundColor,
+        )
         const pointSize = seriesSettings?.pointSize?.value ?? config.value?.pointSize?.value ?? 3
 
         result = {
@@ -325,7 +413,7 @@ const chartOptions = computed(() => {
       },
       drag({ element }: any) {
         if (editMode && config.value.horizontalLines) {
-          config.value.horizontalLines[index].value = element.y
+          annotationAt(config.value.horizontalLines, index).value = element.y
         }
       }
     }
@@ -355,7 +443,7 @@ const chartOptions = computed(() => {
       },
       drag({ element }: any) {
         if (editMode && config.value.verticalLines) {
-          config.value.verticalLines[index].value = element.x
+          annotationAt(config.value.verticalLines, index).value = element.x
         }
       }
     }
@@ -387,8 +475,8 @@ const chartOptions = computed(() => {
       drag({ element }: any) {
         if (editMode && config.value.horizontalBoxes) {
           const height = box.yMax - box.yMin
-          config.value.horizontalBoxes[index].yMin = element.y - height / 2
-          config.value.horizontalBoxes[index].yMax = element.y + height / 2
+          annotationAt(config.value.horizontalBoxes, index).yMin = element.y - height / 2
+          annotationAt(config.value.horizontalBoxes, index).yMax = element.y + height / 2
         }
       }
     }
@@ -420,8 +508,8 @@ const chartOptions = computed(() => {
       drag({ element }: any) {
         if (editMode && config.value.verticalBoxes) {
           const width = (box.xMax as number) - (box.xMin as number)
-          config.value.verticalBoxes[index].xMin = element.x - width / 2
-          config.value.verticalBoxes[index].xMax = element.x + width / 2
+          annotationAt(config.value.verticalBoxes, index).xMin = element.x - width / 2
+          annotationAt(config.value.verticalBoxes, index).xMax = element.x + width / 2
         }
       }
     }

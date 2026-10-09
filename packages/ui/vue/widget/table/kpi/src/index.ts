@@ -11,39 +11,57 @@
  *   Smart City Jena
  **********************************************************************/
 
-import { component, inject, activate, deactivate } from '@eclipse-daanse/tsm/decorators'
+import { EVENT_ACTIONS_REGISTRY_ID, EVENT_REGISTRY_ID } from 'org.eclipse.daanse.board.app.lib.api.events'
+import { component, inject, activate, deactivate } from '@eclipse-daanse/tsm'
 import Icon from './assets/data_table.svg'
 import KpiTableWidget from './KpiTableWidget.vue'
-import KpiTableWidgetSettings from './KpiTableWidgetSettings.vue'
 import { KpiTableWidgetEvents } from './events/KpiTableWidgetEvents'
 import { KpiTableWidgetInterface } from './api/KpiTableWidgetInterface'
-import type { EventRegistry, EventActionsRegistry } from 'org.eclipse.daanse.board.app.lib.events'
-import type { WidgetProvider } from 'org.eclipse.daanse.board.app.lib.repository.widget'
+import { KpiTableSettingsImpl } from './gen/KpiTableSettingsImpl'
+import { KpitablesettingsPackage } from './gen/KpitablesettingsPackage'
+/* The form for these settings, written as a model beside the Ecore. */
+import kpiTableSettingsFormXmi from '../model/ui.xmi?raw'
 
 /*
- * Literal on purpose: the tsm plugin derives the manifest's provides at
- * build time and cannot evaluate an imported constant. Must match
- * WIDGET_SERVICE_ID in lib.repository.widget.
+ * Building the EPackage on load: until it exists the class literals are
+ * null, an instance cannot say what it is, and nothing can render it from
+ * the model.
  */
-const WIDGET_SERVICE = 'daanse.widget'
+void KpitablesettingsPackage.eINSTANCE
+import type { EventRegistry, EventActionsRegistry } from 'org.eclipse.daanse.board.app.lib.api.events'
+import { WIDGET_SERVICE_ID, type WidgetProvider } from 'org.eclipse.daanse.board.app.lib.api.widget'
+import type { Component } from 'vue'
 
 const WIDGET_TYPE = 'KpiTableWidget'
 
 @component({
-  service: [WIDGET_SERVICE],
+  service: [WIDGET_SERVICE_ID],
   properties: { 'widget.type': WIDGET_TYPE },
 })
 export class KpiTableWidgetProvider implements WidgetProvider {
   readonly type = WIDGET_TYPE
-  readonly component = KpiTableWidget
-  readonly settingsComponent = KpiTableWidgetSettings
+  readonly component: Component = KpiTableWidget
+  /*
+   * No hand-written form: the model covers all of it, so there is nothing
+   * to keep beside it and no second place for the two to disagree.
+   *
+   * The settings form, as a model. Carried on the registration like the
+   * icon, so whoever shows the settings does not have to know this widget
+   * exists - and the shell needs no dependency on this bundle.
+   */
+  readonly settingsForm = {
+    xmi: kpiTableSettingsFormXmi,
+    uri: '/kpi-table-settings.ui.xmi',
+    ePackage: () => KpitablesettingsPackage.eINSTANCE,
+    create: () => new KpiTableSettingsImpl(),
+  }
   readonly supportedDSTypes = ['csv', 'rest']
   readonly icon = Icon
   readonly name = 'KpiTable'
 
   constructor(
-    @inject('EventRegistry') private readonly events: EventRegistry,
-    @inject('EventActionsRegistry') private readonly actions: EventActionsRegistry,
+    @inject(EVENT_REGISTRY_ID) private readonly events: EventRegistry,
+    @inject(EVENT_ACTIONS_REGISTRY_ID) private readonly actions: EventActionsRegistry,
   ) {}
 
   @activate()
@@ -59,4 +77,5 @@ export class KpiTableWidgetProvider implements WidgetProvider {
   }
 }
 
-export { KpiTableWidget, KpiTableWidgetSettings }
+export { KpiTableWidget }
+export { KpiTableSettingsImpl, KpitablesettingsPackage, kpiTableSettingsFormXmi }
