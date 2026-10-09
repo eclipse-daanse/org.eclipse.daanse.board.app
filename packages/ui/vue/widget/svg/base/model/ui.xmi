@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/*********************************************************************
+* Copyright (c) 2026 Contributors to the Eclipse Foundation.
+*
+* This program and the accompanying materials are made
+* available under the terms of the Eclipse Public License 2.0
+* which is available at https://www.eclipse.org/legal/epl-2.0/
+*
+* SPDX-License-Identifier: EPL-2.0
+**********************************************************************/
+
+The form for the SVG widget.
+
+The drawing first, then the rules that colour it. Each rule names a CSS
+class in the file and says what to paint the shapes carrying it - which is
+how one drawing serves as a diagram: the shapes are drawn once, the colours
+come from here or from a variable.
+-->
+<uimodel:UIModel
+    xmlns:xmi="http://www.omg.org/XMI"
+    xmi:version="2.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:uimodel="http://uimodel/1.0"
+    name="SvgSettingsForm">
+
+  <targetClasses href="http://org.eclipse.daanse.board.app.ui.vue.widget.svg.base#//SvgSettings"/>
+
+  <components xsi:type="uimodel:FormView" name="SvgSettingsFormView">
+    <fields xsi:type="uimodel:InputWidget" name="src"
+        feature="http://org.eclipse.daanse.board.app.ui.vue.widget.svg.base#//SvgSettings/src" label="Adresse der Grafik"
+        placeholder="https://… oder ein Pfad"/>
+    <fields xsi:type="uimodel:InputWidget" name="classesConfig"
+        feature="http://org.eclipse.daanse.board.app.ui.vue.widget.svg.base#//SvgSettings/classesConfig" label="Klassenregeln"/>
+  </components>
+</uimodel:UIModel>

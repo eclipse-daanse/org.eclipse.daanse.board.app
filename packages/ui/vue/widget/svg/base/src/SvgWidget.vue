@@ -12,7 +12,8 @@ Contributors:
 -->
 
 <script lang="ts" setup>
-import { SvgSettings } from "./gen/SvgSettings";
+import type { SvgSettings } from "./gen/SvgSettings";
+import { SvgSettingsImpl } from "./gen/SvgSettingsImpl";
 import {
     computed,
     getCurrentInstance,
@@ -22,7 +23,7 @@ import {
     watch,
 } from "vue";
 import { useRoute } from 'vue-router';
-import { VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+import { VariableWrapper, plainSettings } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 // import { useDatasourceRepository } from "../composables/datasourceRepository";
 
 const props = defineProps<{ datasourceId: string, id?: string }>();
@@ -32,7 +33,7 @@ const config = defineModel<SvgSettings>('configv', { required: true });
 
 import { identifiers } from 'org.eclipse.daanse.board.app.lib.core'
 import type { TinyEmitter } from 'tiny-emitter';
-import { EventActionsRegistry, EVENT_ACTIONS_REGISTRY } from 'org.eclipse.daanse.board.app.lib.events';
+import { EventActionsRegistry, EVENT_ACTIONS_REGISTRY } from 'org.eclipse.daanse.board.app.lib.api.events';
 import { SvgWidgetInterface } from './api/SvgWidgetInterface';
 
 const eventBus = inject<TinyEmitter>(identifiers.TINY_EMITTER)!;
@@ -90,7 +91,7 @@ const svgSource = ref("");
 const inst = getCurrentInstance();
 const scope = (inst?.type as any).__scopeId;
 
-const defaultConfig = new SvgSettings();
+const defaultConfig = new SvgSettingsImpl();
 
 const loadSvg = async (srcWrapper: any) => {
     const src = srcWrapper?.value || srcWrapper;
@@ -129,7 +130,12 @@ const ensureWrapper = (obj: any, key: string, defaultVal: any) => {
 onMounted(async () => {
     if (widgetId?.value) actionsRegistry.registerInstance(widgetId.value, api, 'SVGWidget', pageId);
     if (config.value) {
-        Object.assign(config.value, { ...defaultConfig, ...config.value });
+        /* Read by the model's names: spreading a generated instance gives
+         * the private fields the getters sit in, not the features. */
+        Object.assign(config.value, {
+            ...plainSettings(defaultConfig),
+            ...plainSettings(config.value),
+        });
         console.log('SVG config:', config.value);
         console.log('SVG config.value.src:', config.value.src);
         console.log('SVG config.value (as any).settings:', (config.value as any).settings);

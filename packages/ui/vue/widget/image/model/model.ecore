@@ -39,12 +39,18 @@
     </eClassifiers>
 
     <eClassifiers xsi:type="ecore:EClass" name="GallerySettings">
-        <eStructuralFeatures xsi:type="ecore:EAttribute"
-                             name="fit"
-                             eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-        <eStructuralFeatures xsi:type="ecore:EAttribute"
-                             name="diashowInterval"
-                             eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+        <!-- Wrappers, like every other setting in the application: the value
+             is either given in the form or taken from a variable. -->
+        <eStructuralFeatures xsi:type="ecore:EReference" name="fit" containment="false" defaultValueLiteral="contain">
+            <eGenericType eClassifier="org.eclipse.daanse.board.app.ui.vue.composables#//VariableWrapper">
+                <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+            </eGenericType>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="diashowInterval" containment="false" defaultValueLiteral="0">
+            <eGenericType eClassifier="org.eclipse.daanse.board.app.ui.vue.composables#//VariableWrapper">
+                <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+            </eGenericType>
+        </eStructuralFeatures>
     </eClassifiers>
 
     <!-- Event System: ImageClickPayload -->

@@ -13,9 +13,13 @@ Contributors:
 
 <script lang="ts" setup>
 import { inject, onMounted, ref, watch, type Ref, computed, toRefs } from 'vue'
-import { ImageSettings } from './gen/ImageSettings'
+import { plainSettings } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+import type { ImageSettings } from './gen/ImageSettings'
+// The class to instantiate: in emf mode the plain name is the interface
+import { ImageSettingsImpl } from './gen/ImageSettingsImpl'
 import { identifiers } from 'org.eclipse.daanse.board.app.lib.core'
 import type { TinyEmitter } from 'tiny-emitter'
+import { DButton, DIcon } from 'org.eclipse.daanse.board.app.ui.vue.controls'
 
 const props = defineProps<{ datasourceId: string, id?: string }>()
 const { id: widgetId } = toRefs(props)
@@ -41,13 +45,26 @@ const handleRightClick = (url: string) => {
   });
 };
 
-const defaultConfig = new ImageSettings();
+const defaultConfig = new ImageSettingsImpl();
 
 onMounted(() => {
   if (config.value) {
-    Object.assign(config.value, { ...defaultConfig, ...config.value })
+    /* Read by the model's names: spreading a generated instance gives
+         * the private fields the getters sit in, not the features. */
+        Object.assign(config.value, {
+            ...plainSettings(defaultConfig),
+            ...plainSettings(config.value),
+        })
   }
 })
+
+/*
+ * Both are wrappers now, so they are read through .value - the setting is
+ * either given in the form or taken from a variable, and the widget sees
+ * only the resulting value either way.
+ */
+const fit = computed(() => config.value.imagesSettings?.fit?.value)
+const intervalSeconds = computed(() => config.value.imagesSettings?.diashowInterval?.value)
 
 // Map CSS object-fit values to Tailwind classes
 const getObjectFit = computed(() => {
@@ -60,8 +77,7 @@ const getObjectFit = computed(() => {
   }
   return (
     fitMap[
-      (config.value.imagesSettings?.fit?.toLowerCase() as keyof typeof fitMap) ||
-        'none'
+      (fit.value?.toLowerCase() as keyof typeof fitMap) || 'none'
     ] || ''
   )
 })
@@ -85,14 +101,14 @@ const initInterval = () => {
   if (interval) {
     clearInterval(interval)
   }
-  if ((config.value.imagesSettings.diashowInterval ?? 0) > 0) {
+  if ((intervalSeconds.value ?? 0) > 0) {
     interval = setInterval(() => {
       if (currentImage.value === config.value.images.length - 1) {
         currentImage.value = 0
         return
       }
       toNext()
-    }, (config.value.imagesSettings.diashowInterval ?? 1) * 1000)
+    }, (intervalSeconds.value ?? 1) * 1000)
   }
 }
 
@@ -100,7 +116,7 @@ onMounted(() => {
   initInterval()
 })
 
-watch(() => config.value.imagesSettings?.diashowInterval, initInterval)
+watch(() => intervalSeconds.value, initInterval)
 
 const parsedUrl = (url: string): string => {
   return url
@@ -139,14 +155,15 @@ watch(lastImageIndex, () => {
   <template v-else>
     <div class="slideshow-container">
       <div class="slideshow-nav slideshow-nav--prev">
-        <va-button
-          @click="toPrev()"
-          icon="chevron_left"
-          preset="plain"
-          text-color="#ffffff"
+        <DButton
+          intent="quiet"
+          class="slideshow-nav__button"
+          title="Previous image"
           :disabled="currentImage === 0"
+          @click="toPrev()"
         >
-        </va-button>
+          <DIcon name="chevron_left" />
+        </DButton>
       </div>
       <div
         class="slideshow-track"
@@ -169,14 +186,15 @@ watch(lastImageIndex, () => {
       </div>
 
       <div class="slideshow-nav slideshow-nav--next">
-        <va-button
-          @click="toNext()"
-          icon="chevron_right"
-          text-color="#ffffff"
+        <DButton
+          intent="quiet"
+          class="slideshow-nav__button"
+          title="Next image"
           :disabled="currentImage === config.images?.length - 1"
-          preset="plain"
+          @click="toNext()"
         >
-        </va-button>
+          <DIcon name="chevron_right" />
+        </DButton>
       </div>
     </div>
   </template>
@@ -226,5 +244,22 @@ watch(lastImageIndex, () => {
 
 .slideshow-nav--next {
   right: 40px;
+}
+
+/*
+ * White on the dark disc the arrow sits on, whatever the theme does - the
+ * disc is over the picture, not over the page.
+ */
+.slideshow-nav__button {
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  padding: 0;
+  color: #ffffff;
+}
+
+.slideshow-nav__button:hover:not(:disabled) {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.15);
 }
 </style>

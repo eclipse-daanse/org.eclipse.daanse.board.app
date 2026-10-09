@@ -25,7 +25,7 @@ const { datasourceId, config, id: widgetId } = toRefs(props);
 
 import { identifiers } from 'org.eclipse.daanse.board.app.lib.core'
 import type { TinyEmitter } from 'tiny-emitter';
-import { EventActionsRegistry, EVENT_ACTIONS_REGISTRY } from 'org.eclipse.daanse.board.app.lib.events';
+import { EventActionsRegistry, EVENT_ACTIONS_REGISTRY } from 'org.eclipse.daanse.board.app.lib.api.events';
 import { RichTextWidgetInterface } from './api/RichTextWidgetInterface';
 
 const eventBus = inject<TinyEmitter>(identifiers.TINY_EMITTER)!;
@@ -80,7 +80,7 @@ const { calculateValue, wrapParameters } = useVariableRepository()
 
 const resolvedStyle = wrapParameters({
     fontSize: computed(() => (config.value?.fontSize as any)?.value ?? '16'),
-    fontColor: computed(() => (config.value?.fontColor as any)?.value ?? '#000000'),
+    fontColor: computed(() => (config.value?.fontColor as any)?.value ?? 'var(--color-fg)'),
 })
 
 const data = ref(null as any);
