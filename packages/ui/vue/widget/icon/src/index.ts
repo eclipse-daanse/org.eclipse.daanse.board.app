@@ -11,41 +11,40 @@
  *   Smart City Jena
  **********************************************************************/
 
-import { component, inject, activate, deactivate } from '@eclipse-daanse/tsm/decorators'
+import { EVENT_REGISTRY_ID, EventsPackage } from 'org.eclipse.daanse.board.app.lib.api.events'
+import { component, inject, activate, deactivate } from '@eclipse-daanse/tsm'
 import { initTsmRuntime } from '@eclipse-daanse/tsm'
 import Icon from './assets/icon.svg'
 import IconWidget from './IconWidget.vue'
 import IconWidgetSettings from './IconWidgetSettings.vue'
 import { IconWidgetEvents } from './events/IconWidgetEvents'
-import { VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables'
-import type { EventRegistry } from 'org.eclipse.daanse.board.app.lib.events'
-import type { WidgetProvider } from 'org.eclipse.daanse.board.app.lib.repository.widget'
-
-interface IIconSettings {
-  currentIcon: string;
-  iconColor: string | VariableWrapper<string>;
-  iconSize: number;
-  isIconFilled: boolean;
-  strokeWeight: number;
-  opticSize: number;
-  grade: number;
-}
+import type { EventRegistry } from 'org.eclipse.daanse.board.app.lib.api.events'
+import { WIDGET_SERVICE_ID, type WidgetProvider } from 'org.eclipse.daanse.board.app.lib.api.widget'
+import type { IconSettings } from './gen/IconSettings'
+import { IconSettingsImpl } from './gen/IconSettingsImpl'
+import { IconSettingsPackage } from './gen/IconSettingsPackage'
+/* The form for these settings, written as a model beside the Ecore. */
+import iconSettingsFormXmi from '../model/ui.xmi?raw'
 
 /*
- * Literal on purpose: the tsm plugin derives the manifest's provides at
- * build time and cannot evaluate an imported constant. Must match
- * WIDGET_SERVICE_ID in lib.repository.widget.
+ * Building the EPackage on load: until it exists the class literals are
+ * null, an instance cannot say what it is, and nothing can render it from
+ * the model.
+ *
+ * The events package first: the click payloads inherit from Payload, and a
+ * package cannot resolve a supertype that is not in the registry yet.
  */
-const WIDGET_SERVICE = 'daanse.widget'
+void EventsPackage.eINSTANCE
+void IconSettingsPackage.eINSTANCE
 
 const WIDGET_TYPE = 'IconWidget'
 
 /**
- * Declared component: the loader registers it under WIDGET_SERVICE, the
+ * Declared component: the loader registers it under WIDGET_SERVICE_ID, the
  * WidgetRepository tracks it into the palette, unloading withdraws it.
  */
 @component({
-  service: [WIDGET_SERVICE],
+  service: [WIDGET_SERVICE_ID],
   properties: { 'widget.type': WIDGET_TYPE },
 })
 export class IconWidgetProvider implements WidgetProvider {
@@ -56,8 +55,26 @@ export class IconWidgetProvider implements WidgetProvider {
   readonly icon = Icon
   readonly name = 'Icon'
 
+  /*
+   * The settings form, as a model. Carried on the registration like the
+   * icon, so whoever shows the settings does not have to know this widget
+   * exists - and the shell needs no dependency on this bundle.
+   */
+  readonly settingsForm = {
+    xmi: iconSettingsFormXmi,
+    uri: '/icon-settings.ui.xmi',
+    ePackage: () => IconSettingsPackage.eINSTANCE,
+    create: () => new IconSettingsImpl(),
+    /*
+     * Picking the symbol is not a field - it is searching a list and
+     * clicking one - so it stays with the hand-written component. Named so
+     * that what is modelled is not offered twice.
+     */
+    unmodelledSections: ['Symbol wählen'],
+  }
+
   constructor(
-    @inject('EventRegistry') private readonly events: EventRegistry,
+    @inject(EVENT_REGISTRY_ID) private readonly events: EventRegistry,
   ) {}
 
   @activate()
@@ -86,4 +103,5 @@ export class IconWidgetProvider implements WidgetProvider {
 }
 
 export { IconWidget, IconWidgetSettings }
-export type { IIconSettings }
+export { IconSettingsImpl, IconSettingsPackage, iconSettingsFormXmi }
+export type { IconSettings }

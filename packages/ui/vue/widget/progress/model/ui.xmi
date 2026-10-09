@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/*********************************************************************
+* Copyright (c) 2026 Contributors to the Eclipse Foundation.
+*
+* This program and the accompanying materials are made
+* available under the terms of the Eclipse Public License 2.0
+* which is available at https://www.eclipse.org/legal/epl-2.0/
+*
+* SPDX-License-Identifier: EPL-2.0
+**********************************************************************/
+
+The form for the progress widget.
+
+The order is the order of the decisions: what the bar is showing, then what
+it looks like, then where the number sits on it. The gradient is a switch
+here and a table of stops in the section beside this - the stops are built
+up row by row, which is not a field.
+
+Rotation only means something once there is a gradient to rotate, and the
+gradient's colour is worked out from the stops rather than typed, so it is
+not offered here at all.
+
+The alignment values are the model's own literals, which is what a board
+stores; optionLabel gives them the words.
+-->
+<uimodel:UIModel
+    xmlns:xmi="http://www.omg.org/XMI"
+    xmi:version="2.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:uimodel="http://uimodel/1.0"
+    name="ProgressSettingsForm">
+
+  <targetClasses href="http://org.eclipse.daanse.board.app.ui.vue.widget.progress#//ProgressSettings"/>
+
+  <components xsi:type="uimodel:FormView" name="ProgressSettingsFormView">
+
+    <fields xsi:type="uimodel:GroupWidget" name="valueGroup" layout="VERTICAL" label="Wert">
+      <fields xsi:type="uimodel:NumberWidget" name="progress"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.progress#//ProgressSettings/progress" label="Fortschritt"/>
+      <fields xsi:type="uimodel:NumberWidget" name="min"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.progress#//ProgressSettings/min" label="Kleinster Wert"/>
+      <fields xsi:type="uimodel:NumberWidget" name="max"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.progress#//ProgressSettings/max" label="Größter Wert"/>
+    </fields>
+
+    <fields xsi:type="uimodel:GroupWidget" name="barGroup" layout="VERTICAL" label="Balken">
+      <fields xsi:type="uimodel:CheckboxWidget" name="isVertical"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.progress#//ProgressSettings/isVertical" label="Senkrecht"/>
+      <fields xsi:type="uimodel:InputWidget" name="fillColor"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.progress#//ProgressSettings/fillColor" label="Balkenfarbe"/>
+      <fields xsi:type="uimodel:InputWidget" name="backgroundColor"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.progress#//ProgressSettings/backgroundColor" label="Hintergrundfarbe"/>
+      <fields xsi:type="uimodel:InputWidget" name="barThickness"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.progress#//ProgressSettings/barThickness" label="Dicke"
+          placeholder="20px"/>
+      <fields xsi:type="uimodel:InputWidget" name="borderRadius"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.progress#//ProgressSettings/borderRadius" label="Eckenradius"
+          placeholder="0px"/>
+    </fields>
+
+    <fields xsi:type="uimodel:GroupWidget" name="gradientGroup" layout="VERTICAL" label="Farbverlauf">
+      <fields xsi:type="uimodel:CheckboxWidget" name="isGradient"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.progress#//ProgressSettings/isGradient" label="Farbverlauf statt einer Farbe"/>
+      <fields xsi:type="uimodel:NumberWidget" name="rotation"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.progress#//ProgressSettings/rotation" label="Richtung (Grad)" min="0" max="360" step="15">
+        <visibilityCondition language="JS" body="self.isGradient === true || self.isGradient === 'true'"/>
+      </fields>
+    </fields>
+
+    <fields xsi:type="uimodel:GroupWidget" name="labelGroup" layout="VERTICAL" label="Beschriftung">
+      <fields xsi:type="uimodel:InputWidget" name="textColor"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.progress#//ProgressSettings/textColor" label="Schriftfarbe"/>
+      <fields xsi:type="uimodel:SelectWidget" name="valueAlign"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.progress#//ProgressSettings/valueAlign" label="Waagerecht">
+        <values>left</values>
+        <values>center</values>
+        <values>right</values>
+        <optionLabel language="JS" body="({ left: 'Links', center: 'Mittig', right: 'Rechts' })[option] ?? option"/>
+      </fields>
+      <fields xsi:type="uimodel:SelectWidget" name="valueJustify"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.progress#//ProgressSettings/valueJustify" label="Senkrecht">
+        <values>top</values>
+        <values>center</values>
+        <values>bottom</values>
+        <optionLabel language="JS" body="({ top: 'Oben', center: 'Mittig', bottom: 'Unten' })[option] ?? option"/>
+      </fields>
+    </fields>
+
+  </components>
+</uimodel:UIModel>

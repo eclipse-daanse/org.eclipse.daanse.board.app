@@ -20,12 +20,28 @@ import { inject, computed, ref, onUnmounted } from 'vue'
 import {
   WidgetRepository,
   identifier as WidgetIdentifier,
-} from 'org.eclipse.daanse.board.app.lib.repository.widget'
+} from 'org.eclipse.daanse.board.app.lib.api.widget'
 
 import { VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+import {
+  DButton,
+  DIcon,
+  DModal,
+} from 'org.eclipse.daanse.board.app.ui.vue.controls'
 
 
-const { widget } = defineProps<{ widget: any; editEnabled: boolean }>();
+const { widget, extraActions } = defineProps<{
+  widget: any
+  editEnabled: boolean
+  /**
+   * Actions from whoever places the widget.
+   *
+   * Stacking order and copying belong to the layout - it is the only thing
+   * that knows there are other widgets. The wrapper knows how to show an
+   * action, not which ones exist, so the two are kept apart.
+   */
+  extraActions?: Array<{ id: string; icon: string; label: string; danger?: boolean; run: () => void }>
+}>();
 
 const emit = defineEmits(['openSettings', 'removeWidget'])
 
@@ -68,27 +84,69 @@ const confirmDelete = (): void => {
   widgetToDelete.value = null
 }
 
+/*
+ * Escape and a click on the scrim close the dialog as well as the button
+ * does, so the widget waiting to be deleted is dropped here rather than in
+ * the button's handler - otherwise a dismissed dialog leaves it pending and
+ * the next confirmation deletes something nobody asked about.
+ */
+const cancelDelete = (): void => {
+  showDeleteConfirm.value = false
+  widgetToDelete.value = null
+}
+
 const openSettings = (id: string): void => {
   emit('openSettings', id)
 }
 
+/*
+ * What can be done with a widget while the board is being edited.
+ *
+ * A list rather than a pair of buttons: it states in one place what the
+ * board offers on a widget, and anything added here appears in the overlay
+ * without further layout work.
+ */
+const actions = computed(() => [
+  {
+    id: 'settings',
+    icon: 'settings',
+    label: 'Einstellungen',
+    run: () => openSettings(widget.uid),
+  },
+  ...(extraActions ?? []),
+  {
+    id: 'delete',
+    icon: 'delete',
+    label: 'Löschen',
+    danger: true,
+    run: () => deleteWidget(widget.uid),
+  },
+])
+
+/*
+ * Widget chrome as specified in docs/mdx-workbench-layout-mockups.html:
+ * pane surface, a real 1px edge in the divider colour, 8px radius and the
+ * --shadow-e2 elevation (0 2px 8px, 14% ink) instead of the old 5/5/12 drop
+ * shadow. These are the defaults for newly placed widgets - widgets already
+ * on a board keep the wrapperConfig stored with them.
+ */
 const defaultConfig = {
   title: "",
-  backgroundColor: "#fff",
+  backgroundColor: "#f6f7f9",
   backgroundColorTransparence: 255,
-  titleColor: "#7c7c7c",
+  titleColor: "#575d68",
   padding: 0,
-  titleFontSize: 15,
-  borderSize: 0,
-  borderColor: "#ccc",
-  borderRadius: 15,
+  titleFontSize: 12,
+  borderSize: 1,
+  borderColor: "#ccd1d9",
+  borderRadius: 8,
   blur: 0,
   fullscreen: false,
-  shadowColor: "#333",
-  shadowBlur: 12,
-  shadowX: 5,
-  shadowY: 5,
-  shadowTransparence: 25,
+  shadowColor: "#191e2d",
+  shadowBlur: 8,
+  shadowX: 0,
+  shadowY: 2,
+  shadowTransparence: 36,
   transparency: 255
 }
 
@@ -154,10 +212,15 @@ const getBackground = computed(() => {
     bgAlpha = Math.round(bgAlpha * (transparencyVal / 255))
   }
 
-  let color = (widget.wrapperConfig.backgroundColor?.value || '#FFFFFF').replace(
-    '#',
-    '',
-  )
+  /*
+   * No colour of its own means "follow the theme" - white was a sensible
+   * default while the app only had a light surface, but it burns a hole in
+   * a dark board. Widgets that carry a stored colour keep it.
+   */
+  const stored = widget.wrapperConfig.backgroundColor?.value
+  if (!stored) return 'var(--color-pane)'
+
+  let color = stored.replace('#', '')
   if (color.length == 3) {
     color = color[0] + color[0] + color[1] + color[1] + color[2] + color[2]
   }
@@ -168,7 +231,7 @@ const getBackground = computed(() => {
 })
 
 const borderColor = computed(() => {
-  return widget.wrapperConfig.borderColor?.value || '#000000'
+  return widget.wrapperConfig.borderColor?.value || 'var(--color-divider)'
 })
 
 const borderSize = computed(() => {
@@ -191,7 +254,7 @@ const titleFontSize = computed(() => {
 })
 
 const titleColor = computed(() => {
-  return widget.wrapperConfig.titleColor?.value || '#000000'
+  return widget.wrapperConfig.titleColor?.value || 'var(--color-divider)'
 })
 
 // Unused? But kept for consistency
@@ -221,7 +284,6 @@ const getBlur = computed(() => {
     b : ''
 })
 const getpadding = computed(() => {
-  console.log(widget.wrapperConfig.padding)
   const int = parseInt(widget.wrapperConfig.padding?.value);
   return isNaN(int) ? 0 : int;
 })
@@ -250,45 +312,54 @@ const getpadding = computed(() => {
         class="w-full h-full box-border cursor-pointer overflow-hidden sub"
         :style="{ position: 'relative', opacity: transparency }"
       >
-        <VaScrollContainer color="#cbcbcb" vertical horizontal>
+        <div class="scroll">
           <component :is="availableWidgets[widget.type].component" :config="widget.config"
             v-model:configv="widget.config" :datasourceId="widget.config.datasourceId" :id="widget.uid || widget.id"
             class="widget_component" />
-        </VaScrollContainer>
+        </div>
       </div>
-      <div class="hover absolute top-[25px] right-0 flex justify-end bg-white z-3000 hightz" v-if="editEnabled">
-        <VaButton class="control-button" @click="openSettings(widget.uid)" icon="settings" size="small">
-        </VaButton>
-        <VaButton class="control-button" @click="deleteWidget(widget.uid)" icon="close" color="danger" size="small">
-        </VaButton>
+      <!--
+        While editing, hovering a widget dims it and offers what can be done
+        with it. Dimmed rather than covered: you have to see which widget you
+        are about to change, and a widget that disappears under its own menu
+        is the wrong one half the time.
+      -->
+      <div class="actions" v-if="editEnabled" aria-hidden="false">
+        <div class="actions__row">
+          <button
+            v-for="action in actions"
+            :key="action.id"
+            type="button"
+            :class="['action', { 'action--danger': action.danger }]"
+            :title="action.label"
+            @click.stop="action.run()"
+          >
+            <DIcon :name="action.icon" size="lg" />
+            <span class="action__label">{{ action.label }}</span>
+          </button>
+        </div>
       </div>
     </template>
     <div v-else>
       <p>Widget type {{ widget.type }} is not registered.</p>
     </div>
 
-    <VaModal
-      v-model="showDeleteConfirm"
-      size="small"
-      hide-default-actions
-      overlay-opacity="0.3"
-    >
-      <div style="text-align: center; padding: 1rem;">
-        <VaIcon name="warning" color="danger" size="2rem" />
-        <h5 style="margin: 0.5rem 0;">Widget löschen</h5>
-        <p>Möchtest du dieses Widget wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden.</p>
-      </div>
-      <template #footer>
-        <div style="display: flex; justify-content: flex-end; gap: 0.5rem;">
-          <VaButton preset="secondary" @click="showDeleteConfirm = false; widgetToDelete = null;">
-            Abbrechen
-          </VaButton>
-          <VaButton color="danger" icon="delete" @click="confirmDelete()">
-            Löschen
-          </VaButton>
-        </div>
+    <DModal v-model="showDeleteConfirm" size="sm" @cancel="cancelDelete">
+      <template #header>
+        <DIcon name="warning" size="lg" tone="color-err" />
+        <h2 class="confirm__title">Widget löschen</h2>
       </template>
-    </VaModal>
+
+      <p class="confirm__text">
+        Möchtest du dieses Widget wirklich löschen? Diese Aktion kann nicht rückgängig gemacht
+        werden.
+      </p>
+
+      <template #actions>
+        <DButton intent="quiet" @click="cancelDelete">Abbrechen</DButton>
+        <DButton intent="danger" @click="confirmDelete">Löschen</DButton>
+      </template>
+    </DModal>
   </div>
 </template>
 <style scoped>
@@ -316,15 +387,131 @@ const getpadding = computed(() => {
   padding: v-bind(getpadding + "px");
 }
 
-.wrapper-container:hover .hover {
-  display: block;
+/*
+ * The widget scrolls inside its frame rather than pushing it open.
+ *
+ * Nothing here paints the bar: the app styles every scrollbar from the
+ * theme tokens in main.css, which is what the third-party container this
+ * replaced was being asked - and refusing - to do.
+ */
+.scroll {
+  width: 100%;
+  height: 100%;
+  overflow: auto;
 }
 
-.wrapper-container .hover {
-  display: none;
+.confirm__title {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  font-weight: 600;
+  color: var(--color-fg);
 }
 
-.hightz {
+.confirm__text {
+  margin: 0;
+  color: var(--color-dim);
+  line-height: 1.5;
+}
+
+/*
+ * The overlay covers the widget but does not take the pointer: only the
+ * buttons do. Everything between them stays draggable, so a widget can
+ * still be moved and resized while its actions are showing.
+ */
+.actions {
+  position: absolute;
+  inset: 0;
   z-index: 3000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: inherit;
+  background: color-mix(in srgb, var(--color-bg, #121820) 70%, transparent);
+  opacity: 0;
+  transition: opacity 120ms ease;
+  pointer-events: none;
+}
+
+.wrapper-container:hover .actions,
+.actions:focus-within {
+  opacity: 1;
+}
+
+/* A little above the middle: an optical centre sits higher than a measured one */
+.actions__row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 2px;
+  max-width: 100%;
+  padding: 0 4px;
+  margin-bottom: 6%;
+}
+
+.action {
+  pointer-events: auto;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border: 1px solid transparent;
+  border-radius: var(--radius-md, 4px);
+  background: transparent;
+  color: var(--color-dim, #8b98a8);
+  font: inherit;
+  cursor: pointer;
+  transition: color 100ms ease, background-color 100ms ease, border-color 100ms ease;
+}
+
+.action:hover,
+.action:focus-visible {
+  color: var(--color-fg, #e6edf5);
+  background: color-mix(in srgb, var(--color-pane, #1a222c) 88%, transparent);
+  border-color: var(--color-divider, #2b3644);
+}
+
+.action:focus-visible {
+  outline: 2px solid var(--color-accent, #4fa3d1);
+  outline-offset: 1px;
+}
+
+.action--danger:hover,
+.action--danger:focus-visible {
+  color: var(--color-err, #d1584f);
+  border-color: color-mix(in srgb, var(--color-err, #d1584f) 40%, transparent);
+}
+
+/*
+ * The word for the icon, under the one being pointed at.
+ *
+ * Out of the flow rather than beneath every icon: seven labels side by side
+ * need more width than a widget has, and wrapped onto two rows they filled
+ * two thirds of a small one. An icon needs its word at the moment you are
+ * about to press it, not before.
+ */
+.action__label {
+  position: absolute;
+  top: calc(100% + 2px);
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 2px 6px;
+  border-radius: var(--radius-sm, 3px);
+  background: var(--color-raised, #232d3a);
+  color: var(--color-fg, #e6edf5);
+  font-size: 11px;
+  line-height: 1.4;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 90ms ease;
+}
+
+.action:hover .action__label,
+.action:focus-visible .action__label {
+  opacity: 1;
 }
 </style>
