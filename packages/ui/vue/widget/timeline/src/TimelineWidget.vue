@@ -117,7 +117,7 @@ import { VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables
 import {
     identifier as variableIdentifier,
     type VariableRepository
-} from 'org.eclipse.daanse.board.app.lib.repository.variable';
+} from 'org.eclipse.daanse.board.app.lib.api.variable';
 
 
 const i18n: i18n | undefined = inject('i18n');
@@ -163,7 +163,7 @@ const config = defineModel<TimelineSettings>('configv', { required: true });
 
 import { identifiers } from 'org.eclipse.daanse.board.app.lib.core';
 import type { TinyEmitter } from 'tiny-emitter';
-import { EventActionsRegistry, EVENT_ACTIONS_REGISTRY } from 'org.eclipse.daanse.board.app.lib.events';
+import { EventActionsRegistry, EVENT_ACTIONS_REGISTRY } from 'org.eclipse.daanse.board.app.lib.api.events';
 import { TimelineWidgetInterface } from './api/TimelineWidgetInterface';
 
 const eventBus = inject<TinyEmitter>(identifiers.TINY_EMITTER)!;
@@ -182,7 +182,11 @@ class TimelineWidgetApi extends TimelineWidgetInterface {
         const newStart = new Date(start.getTime() + shrink);
         const newEnd = new Date(end.getTime() - shrink);
         if (newEnd.getTime() - newStart.getTime() > 60000) {
-            config.value = { ...config.value, rangeStart: newStart.toISOString(), rangeEnd: newEnd.toISOString() };
+            /* Written in place: replacing the object with a spread of it
+             * would hand back the private fields of a generated instance
+             * and drop everything else the settings hold. */
+            config.value.rangeStart = newStart.toISOString();
+            config.value.rangeEnd = newEnd.toISOString();
         }
     }
     zoomOut(): void {
@@ -199,10 +203,12 @@ class TimelineWidgetApi extends TimelineWidgetInterface {
             end.getTime() + expand,
             new Date(config.value.timelineMax || Date.now() + 86400000 * 7).getTime()
         ));
-        config.value = { ...config.value, rangeStart: newStart.toISOString(), rangeEnd: newEnd.toISOString() };
+        config.value.rangeStart = newStart.toISOString();
+        config.value.rangeEnd = newEnd.toISOString();
     }
     setDateRange(start: string, end: string): void {
-        config.value = { ...config.value, rangeStart: start, rangeEnd: end };
+        config.value.rangeStart = start;
+        config.value.rangeEnd = end;
     }
     jumpToNow(): void {
         const now = new Date();
@@ -210,7 +216,8 @@ class TimelineWidgetApi extends TimelineWidgetInterface {
             new Date(config.value.rangeStart || now).getTime();
         const newEnd = now;
         const newStart = new Date(now.getTime() - duration);
-        config.value = { ...config.value, rangeStart: newStart.toISOString(), rangeEnd: newEnd.toISOString() };
+        config.value.rangeStart = newStart.toISOString();
+        config.value.rangeEnd = newEnd.toISOString();
     }
 }
 const api = new TimelineWidgetApi();
@@ -583,12 +590,9 @@ const updateConfig = (newStart?: Date, newEnd?: Date, immediate = false) => {
   }
 
   const updateFn = () => {
-    config.value = {
-      ...config.value,
-      rangeStart: actualStart.toISOString(),
-      rangeEnd: actualEnd.toISOString(),
-      playbackSpeed: playbackSpeed.value
-    };
+    config.value.rangeStart = actualStart.toISOString();
+    config.value.rangeEnd = actualEnd.toISOString();
+    config.value.playbackSpeed = playbackSpeed.value;
 
     // Update variables if they are configured
     if (config.value.rangeStartVariable && variableRepository.value) {
@@ -1034,8 +1038,8 @@ onUnmounted(() => {
 .timeline-container {
   overflow: hidden;
   position: relative;
-  background: var(--va-background-primary);
-  border: 1px solid var(--va-background-border);
+  background: var(--color-bg);
+  border: 1px solid var(--color-divider);
   border-radius: 8px;
   padding: 1rem;
   min-height: 80px;
@@ -1080,7 +1084,7 @@ onUnmounted(() => {
   top: 50%;
   width: 24px;
   height: 24px;
-  background: var(--va-primary);
+  background: var(--color-accent);
   border: 3px solid white;
   border-radius: 50%;
   cursor: grab;
@@ -1091,7 +1095,7 @@ onUnmounted(() => {
 }
 
 .timeline-knob:hover {
-  background: var(--va-primary-dark);
+  background: var(--color-accent);
   transform: translate(-50%, -50%) scale(1.1);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
@@ -1113,7 +1117,7 @@ onUnmounted(() => {
 
 .fixed-knob:hover {
   transform: translate(-50%, -50%) !important;
-  background: var(--va-background-border) !important;
+  background: var(--color-divider) !important;
 }
 
 .end-knob {
@@ -1125,8 +1129,8 @@ onUnmounted(() => {
 .time-axis {
   position: relative;
   height: 30px;
-  background: var(--va-background-secondary);
-  border-top: 1px solid var(--va-background-border);
+  background: var(--color-pane);
+  border-top: 1px solid var(--color-divider);
   border-radius: 0 0 8px 8px;
   margin: 0 -1rem -1rem -1rem;
   padding: 0 1rem;
@@ -1148,13 +1152,13 @@ onUnmounted(() => {
 .tick-mark {
   width: 1px;
   height: 8px;
-  background: var(--va-text-secondary);
+  background: var(--color-dim);
   margin-top: 2px;
 }
 
 .tick-label {
   font-size: 0.7rem;
-  color: var(--va-text-secondary);
+  color: var(--color-dim);
   margin-top: 4px;
   white-space: nowrap;
   user-select: none;
@@ -1167,8 +1171,8 @@ onUnmounted(() => {
   align-items: center;
   gap: 1rem;
   font-size: 0.9rem;
-  background: var(--va-background-primary);
-  border: 1px solid var(--va-background-border);
+  background: var(--color-bg);
+  border: 1px solid var(--color-divider);
   border-radius: 6px;
   padding: 0.75rem;
 }
@@ -1184,13 +1188,13 @@ onUnmounted(() => {
 .time-label {
   font-size: 0.8rem;
   font-weight: 500;
-  color: var(--va-text-secondary);
+  color: var(--color-dim);
 }
 
 .time-value {
   font-size: 0.9rem;
   font-weight: 600;
-  color: var(--va-text-primary);
+  color: var(--color-fg);
   word-wrap: break-word;
 }
 
@@ -1211,7 +1215,7 @@ onUnmounted(() => {
   height: 56px;
   border: none;
   border-radius: 50%;
-  background: var(--play-button-bg, var(--va-primary));
+  background: var(--play-button-bg, var(--color-accent));
   color: white;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -1219,14 +1223,14 @@ onUnmounted(() => {
 }
 
 .play-button:hover:not(:disabled) {
-  background: var(--va-primary-dark);
+  background: var(--color-accent);
   transform: scale(1.05);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
 .play-button:disabled {
-  background: var(--va-background-border);
-  color: var(--va-text-secondary);
+  background: var(--color-divider);
+  color: var(--color-dim);
   cursor: not-allowed;
   transform: none;
 }
@@ -1255,16 +1259,16 @@ onUnmounted(() => {
 
 .speed-control label {
   font-weight: 500;
-  color: var(--va-text-primary);
+  color: var(--color-fg);
   min-width: fit-content;
 }
 
 .speed-control select {
   padding: 0.5rem;
-  border: 1px solid var(--va-background-border);
+  border: 1px solid var(--color-divider);
   border-radius: 4px;
-  background: var(--va-background-primary);
-  color: var(--va-text-primary);
+  background: var(--color-bg);
+  color: var(--color-fg);
   font-size: 0.9rem;
   cursor: pointer;
 }

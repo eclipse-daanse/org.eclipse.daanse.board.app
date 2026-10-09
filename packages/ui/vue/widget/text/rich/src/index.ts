@@ -11,31 +11,37 @@
  *   Smart City Jena
  **********************************************************************/
 
-import { component, inject, activate, deactivate } from '@eclipse-daanse/tsm/decorators'
+import { EVENT_ACTIONS_REGISTRY_ID, EVENT_REGISTRY_ID } from 'org.eclipse.daanse.board.app.lib.api.events'
+import { component, inject, activate, deactivate } from '@eclipse-daanse/tsm'
 import Icon from './assets/rich_text.svg'
 import RichTextWidget from './RichTextWidget.vue'
 import RichTextWidgetSettings from './RichTextWidgetSettings.vue'
-import {RichTextEditorSettings} from './gen/RichTextEditorSettings'
+import type { RichTextEditorSettings } from './gen/RichTextEditorSettings'
+import { RichTextEditorSettingsImpl } from './gen/RichTextEditorSettingsImpl'
+import { RichTextEditorPackage } from './gen/RichTextEditorPackage'
+import richTextSettingsFormXmi from '../model/ui.xmi?raw'
 import { RichTextWidgetEvents } from './events/RichTextWidgetEvents'
 import { RichTextWidgetInterface } from './api/RichTextWidgetInterface'
-import type { EventRegistry, EventActionsRegistry } from 'org.eclipse.daanse.board.app.lib.events'
-import type { WidgetProvider } from 'org.eclipse.daanse.board.app.lib.repository.widget'
+import type { EventRegistry, EventActionsRegistry } from 'org.eclipse.daanse.board.app.lib.api.events'
+import { WIDGET_SERVICE_ID, type WidgetProvider } from 'org.eclipse.daanse.board.app.lib.api.widget'
 
 /*
- * Literal on purpose: the tsm plugin derives the manifest's provides at
- * build time and cannot evaluate an imported constant. Must match
- * WIDGET_SERVICE_ID in lib.repository.widget.
+ * Touching eINSTANCE is what builds the EPackage: until then the class
+ * literals are null and an instance cannot say what it is - eClass()
+ * returns null and anything reading the model sees nothing. EMF expects
+ * the package to register itself when its code is loaded, and for a bundle
+ * that moment is here.
  */
-const WIDGET_SERVICE = 'daanse.widget'
+void RichTextEditorPackage.eINSTANCE
 
 const WIDGET_TYPE = 'RichTextWidget'
 
 /**
- * Declared component: the loader registers it under WIDGET_SERVICE, the
+ * Declared component: the loader registers it under WIDGET_SERVICE_ID, the
  * WidgetRepository tracks it into the palette, unloading withdraws it.
  */
 @component({
-  service: [WIDGET_SERVICE],
+  service: [WIDGET_SERVICE_ID],
   properties: { 'widget.type': WIDGET_TYPE },
 })
 export class RichTextWidgetProvider implements WidgetProvider {
@@ -46,9 +52,27 @@ export class RichTextWidgetProvider implements WidgetProvider {
   readonly icon = Icon
   readonly name = 'RichText'
 
+  /**
+   * The form for this widget's settings, as a model rather than a
+   * template - read by whoever shows the settings, so the shell needs no
+   * dependency on this bundle.
+   */
+  readonly settingsForm = {
+    xmi: richTextSettingsFormXmi,
+    uri: '/rich-text-settings.ui.xmi',
+    ePackage: () => RichTextEditorPackage.eINSTANCE,
+    create: () => new RichTextEditorSettingsImpl(),
+    /*
+     * Writing the text is not a field: a rich text editor is a surface you
+     * type into and a row of things you press. Named so that what is
+     * modelled is not offered twice.
+     */
+    unmodelledSections: ['Text und Formatierung'],
+  }
+
   constructor(
-    @inject('EventRegistry') private readonly events: EventRegistry,
-    @inject('EventActionsRegistry') private readonly actions: EventActionsRegistry,
+    @inject(EVENT_REGISTRY_ID) private readonly events: EventRegistry,
+    @inject(EVENT_ACTIONS_REGISTRY_ID) private readonly actions: EventActionsRegistry,
   ) {}
 
   @activate()
@@ -64,4 +88,6 @@ export class RichTextWidgetProvider implements WidgetProvider {
   }
 }
 
-export { RichTextWidget, RichTextWidgetSettings,RichTextEditorSettings }
+export { RichTextWidget, RichTextWidgetSettings }
+export { RichTextEditorSettingsImpl, RichTextEditorPackage, richTextSettingsFormXmi }
+export type { RichTextEditorSettings }

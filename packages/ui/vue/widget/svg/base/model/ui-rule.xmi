@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/*********************************************************************
+* Copyright (c) 2026 Contributors to the Eclipse Foundation.
+*
+* This program and the accompanying materials are made
+* available under the terms of the Eclipse Public License 2.0
+* which is available at https://www.eclipse.org/legal/epl-2.0/
+*
+* SPDX-License-Identifier: EPL-2.0
+**********************************************************************/
+
+What one rule paints.
+
+The class name comes first because it is what the rule is about: the rest
+only means something once it is known which shapes are being talked about.
+-->
+<uimodel:UIModel
+    xmlns:xmi="http://www.omg.org/XMI"
+    xmi:version="2.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:uimodel="http://uimodel/1.0"
+    name="SvgConfigItemForm">
+
+  <targetClasses href="http://org.eclipse.daanse.board.app.ui.vue.widget.svg.base#//SvgConfigItem"/>
+
+  <components xsi:type="uimodel:FormView" name="SvgConfigItemFormView">
+    <fields xsi:type="uimodel:InputWidget" name="className"
+        feature="http://org.eclipse.daanse.board.app.ui.vue.widget.svg.base#//SvgConfigItem/className" label="CSS-Klasse"
+        placeholder="primary"/>
+    <fields xsi:type="uimodel:InputWidget" name="fill"
+        feature="http://org.eclipse.daanse.board.app.ui.vue.widget.svg.base#//SvgConfigItem/fill" label="Füllfarbe"/>
+    <fields xsi:type="uimodel:InputWidget" name="stroke"
+        feature="http://org.eclipse.daanse.board.app.ui.vue.widget.svg.base#//SvgConfigItem/stroke" label="Linienfarbe"/>
+    <fields xsi:type="uimodel:InputWidget" name="strokeWidth"
+        feature="http://org.eclipse.daanse.board.app.ui.vue.widget.svg.base#//SvgConfigItem/strokeWidth" label="Linienstärke"/>
+  </components>
+</uimodel:UIModel>

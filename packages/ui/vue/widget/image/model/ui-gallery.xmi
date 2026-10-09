@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/*********************************************************************
+* Copyright (c) 2026 Contributors to the Eclipse Foundation.
+*
+* This program and the accompanying materials are made
+* available under the terms of the Eclipse Public License 2.0
+* which is available at https://www.eclipse.org/legal/epl-2.0/
+*
+* SPDX-License-Identifier: EPL-2.0
+**********************************************************************/
+
+How the pictures are shown.
+
+The fit is a choice from the five CSS object-fit values, not free text: a
+mistyped one is ignored by the browser and the picture then sits at its own
+size with no hint why.
+-->
+<uimodel:UIModel
+    xmlns:xmi="http://www.omg.org/XMI"
+    xmi:version="2.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:uimodel="http://uimodel/1.0"
+    name="GallerySettingsForm">
+
+  <targetClasses href="http://org.eclipse.daanse.board.app.ui.vue.widget.image#//GallerySettings"/>
+
+  <components xsi:type="uimodel:FormView" name="GallerySettingsFormView">
+    <fields xsi:type="uimodel:SelectWidget"
+        name="fit"
+        feature="http://org.eclipse.daanse.board.app.ui.vue.widget.image#//GallerySettings/fit"
+        label="Einpassen">
+      <values>none</values>
+      <values>contain</values>
+      <values>cover</values>
+      <values>fill</values>
+      <values>scale-down</values>
+    </fields>
+    <fields xsi:type="uimodel:NumberWidget"
+        name="diashowInterval"
+        feature="http://org.eclipse.daanse.board.app.ui.vue.widget.image#//GallerySettings/diashowInterval"
+        label="Wechsel alle (Sekunden)" min="0" step="1"/>
+  </components>
+</uimodel:UIModel>

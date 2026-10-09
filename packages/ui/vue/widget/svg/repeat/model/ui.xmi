@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/*********************************************************************
+* Copyright (c) 2026 Contributors to the Eclipse Foundation.
+*
+* This program and the accompanying materials are made
+* available under the terms of the Eclipse Public License 2.0
+* which is available at https://www.eclipse.org/legal/epl-2.0/
+*
+* SPDX-License-Identifier: EPL-2.0
+**********************************************************************/
+
+The form for the repeatable SVG widget.
+
+The widget draws one small picture over and over and colours the first few
+differently - five of ten batteries filled, three of five stars. So: the
+picture, how many of it, how far along, and then the two looks that
+difference is made of. The two looks are alike on purpose - it is the same
+two properties either side of the line, and seeing them in the same order
+is what makes the pair readable.
+-->
+<uimodel:UIModel
+    xmlns:xmi="http://www.omg.org/XMI"
+    xmi:version="2.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:uimodel="http://uimodel/1.0"
+    name="RepeatableSVGSettingsForm">
+
+  <targetClasses href="http://org.eclipse.daanse.board.app.ui.vue.widget.svg.repeat#//RepeatableSVGSettings"/>
+
+  <components xsi:type="uimodel:FormView" name="RepeatableSVGSettingsFormView">
+
+    <fields xsi:type="uimodel:GroupWidget" name="sourceGroup" layout="VERTICAL" label="Grafik">
+      <fields xsi:type="uimodel:InputWidget" name="src"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.svg.repeat#//RepeatableSVGSettings/src" label="Adresse der Grafik"
+          placeholder="https://… oder ein Pfad"/>
+      <fields xsi:type="uimodel:NumberWidget" name="repetitions"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.svg.repeat#//RepeatableSVGSettings/repetitions" label="Wie oft" min="1" step="1"/>
+      <fields xsi:type="uimodel:NumberWidget" name="progress"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.svg.repeat#//RepeatableSVGSettings/progress" label="Davon hervorgehoben" min="0" step="1"/>
+    </fields>
+
+    <fields xsi:type="uimodel:GroupWidget" name="activeGroup" layout="VERTICAL" label="Hervorgehoben">
+      <fields xsi:type="uimodel:InputWidget" name="activeItemStyles"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.svg.repeat#//RepeatableSVGSettings/activeItemStyles" label=""/>
+    </fields>
+
+    <fields xsi:type="uimodel:GroupWidget" name="defaultGroup" layout="VERTICAL" label="Übrige">
+      <fields xsi:type="uimodel:InputWidget" name="defaultItemStyles"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.svg.repeat#//RepeatableSVGSettings/defaultItemStyles" label=""/>
+    </fields>
+
+  </components>
+</uimodel:UIModel>

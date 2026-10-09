@@ -12,20 +12,25 @@ Contributors:
 -->
 
 <template>
-  <va-collapse
-    v-model="opened.timelineSection"
-    icon="timeline"
-    :header="t('Timeline Settings')"
-  >
+  <!--
+    What is left of the hand-written form: which stretch of time the
+    timeline covers.
+
+    It is given either as two moments or as an offset from now, typed or
+    taken from a variable, and each end is edited as a date and a time
+    apart - none of which is a field. Playing the timeline and drawing it
+    are rendered from model/ui.xmi beside this.
+  -->
+  <section class="settings-section" data-section="Zeitraum">
     <div class="settings-container">
       <!-- Time Range Mode -->
       <div class="setting-group">
-        <va-select
+        <DSelect
           v-model="timeRangeMode"
           :label="t('Time Range Mode')"
           :options="timeRangeModeOptions"
-          text-by="label"
-          value-by="value"
+          label-key="label"
+          value-key="value"
           @update:modelValue="onTimeRangeModeChange"
         />
       </div>
@@ -35,7 +40,7 @@ Contributors:
         <label>{{ t('Relative Time Range') }}</label>
         <div class="relative-time-config">
           <div class="relative-time-row">
-            <va-input
+            <DInput
               v-model.number="settings.relativeTime.offset"
               :label="t('Offset')"
               type="number"
@@ -44,12 +49,12 @@ Contributors:
               class="offset-input"
               @update:modelValue="onRelativeTimeChange"
             />
-            <va-select
+            <DSelect
               v-model="settings.relativeTime.unit"
               :options="timeUnitOptions"
               :label="t('Unit')"
-              text-by="text"
-              value-by="value"
+              label-key="text"
+              value-key="value"
               class="unit-select"
               @update:modelValue="onRelativeTimeChange"
             />
@@ -66,13 +71,15 @@ Contributors:
         <div class="setting-group">
           <label>{{ t('Timeline Start') }}</label>
           <div class="datetime-group">
-            <va-date-input
-              v-model="timelineMinDate"
+            <DDateInput
+              v-model="timelineMinDateText"
+              mode="date"
               :label="t('Date')"
               @update:modelValue="onTimelineMinDateChange"
             />
-            <va-time-input
-              v-model="timelineMinTime"
+            <DDateInput
+              v-model="timelineMinTimeText"
+              mode="time"
               :label="t('Time')"
               @update:modelValue="onTimelineMinTimeChange"
             />
@@ -82,19 +89,21 @@ Contributors:
         <!-- Timeline End (latest time) -->
         <div class="setting-group">
           <label>{{ t('Timeline End') }}</label>
-          <va-checkbox
+          <DCheckbox
             v-model="useCurrentTimeAsMax"
             :label="t('Use current time')"
             @update:modelValue="onTimelineEndTypeChange"
           />
           <div v-if="!useCurrentTimeAsMax" class="datetime-group">
-            <va-date-input
-              v-model="timelineMaxDate"
+            <DDateInput
+              v-model="timelineMaxDateText"
+              mode="date"
               :label="t('Date')"
               @update:modelValue="onTimelineMaxDateChange"
             />
-            <va-time-input
-              v-model="timelineMaxTime"
+            <DDateInput
+              v-model="timelineMaxTimeText"
+              mode="time"
               :label="t('Time')"
               @update:modelValue="onTimelineMaxTimeChange"
             />
@@ -107,128 +116,59 @@ Contributors:
       <div class="setting-group">
         <label>{{ t('Variable Binding') }}</label>
         <div class="variable-config">
-          <va-checkbox
+          <DCheckbox
             v-model="useStartVariable"
             :label="t('Start time from variable')"
             @update:modelValue="onStartVariableToggle"
           />
-          <va-select
+          <DSelect
             v-if="useStartVariable"
             v-model="settings.rangeStartVariable"
             :options="availableVariables"
             :label="t('Start variable')"
-            text-by="name"
-            value-by="name"
+            label-key="name"
+            value-key="name"
             @update:modelValue="onVariableChange"
           />
         </div>
         <div class="variable-config">
-          <va-checkbox
+          <DCheckbox
             v-model="useEndVariable"
             :label="t('End time from variable')"
             @update:modelValue="onEndVariableToggle"
           />
-          <va-select
+          <DSelect
             v-if="useEndVariable"
             v-model="settings.rangeEndVariable"
             :options="availableVariables"
             :label="t('End variable')"
-            text-by="name"
-            value-by="name"
+            label-key="name"
+            value-key="name"
             @update:modelValue="onVariableChange"
           />
         </div>
       </div>
 
     </div>
-  </va-collapse>
+  </section>
 
-  <!-- Playback Settings -->
-  <va-collapse
-    v-model="opened.playbackSection"
-    icon="play_circle"
-    :header="t('Playback')"
-  >
-    <div class="settings-container">
-      <div class="setting-group">
-        <va-select
-          v-model="settings.stepSize"
-          :label="t('Step Size')"
-          :options="stepSizeOptions"
-          value-by="value"
-          @update:modelValue="onSettingsChange"
-        />
-      </div>
-
-      <div class="setting-group">
-        <va-select
-          v-model="settings.playbackSpeed"
-          :label="t('Playback Speed')"
-          :options="speedOptions"
-          @update:modelValue="onSettingsChange"
-        />
-      </div>
-
-      <div class="setting-group">
-        <va-checkbox
-          v-model="settings.autoPlay"
-          :label="t('Auto-play on load')"
-          @update:modelValue="onSettingsChange"
-        />
-      </div>
-
-      <div class="setting-group">
-        <va-checkbox
-          v-model="settings.fixStartKnob"
-          :label="t('Fix start knob at beginning')"
-          @update:modelValue="onSettingsChange"
-        />
-      </div>
-
-      <div class="setting-group">
-        <va-checkbox
-          v-model="settings.showControls"
-          :label="t('Show playback controls')"
-          @update:modelValue="onSettingsChange"
-        />
-      </div>
-    </div>
-  </va-collapse>
-
-  <!-- Styling Settings -->
-  <va-collapse
-    v-model="opened.stylingSection"
-    icon="palette"
-    :header="t('Styling')"
-  >
-    <div class="settings-container">
-      <div class="setting-group">
-        <va-color-input
-          v-model="settings.rangeStripColor"
-          :label="t('Range Strip Color')"
-          @update:modelValue="onSettingsChange"
-        />
-      </div>
-
-      <div class="setting-group">
-        <va-checkbox
-          v-model="settings.showTimeInfo"
-          :label="t('Show time information panel')"
-          @update:modelValue="onSettingsChange"
-        />
-      </div>
-    </div>
-  </va-collapse>
 </template>
 
 <script lang="ts" setup>
-import { ref, computed, watch, onMounted, inject } from 'vue';
+import { ref, computed, watch, onMounted, inject, type Ref } from 'vue';
 import type { i18n } from "org.eclipse.daanse.board.app.lib.i18next";
-import { VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables';
+import { VariableWrapper, plainSettings } from 'org.eclipse.daanse.board.app.ui.vue.composables';
 import {
   identifier as variableIdentifier,
   type VariableRepository
-} from 'org.eclipse.daanse.board.app.lib.repository.variable';
+} from 'org.eclipse.daanse.board.app.lib.api.variable';
+import {
+  DCheckbox,
+  DDateInput,
+  DInput,
+  DSelect,
+} from 'org.eclipse.daanse.board.app.ui.vue.controls'
+import { TimelinesettingsFactory } from './gen/TimelinesettingsFactory';
 
 const i18n: i18n | undefined = inject('i18n');
 const t = (key: string) => (i18n) ? i18n.t(key) : key;
@@ -263,11 +203,6 @@ interface TimelineSettings {
 
 const widgetSettings = defineModel<TimelineSettings>({ required: true });
 
-const opened = ref({
-  timelineSection: false,
-  playbackSection: false,
-  stylingSection: false
-});
 
 // Time range mode: 'relative' or 'absolute'
 const timeRangeMode = ref<'relative' | 'absolute'>('absolute');
@@ -311,6 +246,49 @@ const timelineMinTime = ref<Date>();
 const timelineMaxDate = ref<Date>();
 const timelineMaxTime = ref<Date>();
 
+/*
+ * The fields speak the browser's own formats - "2026-09-09" and "14:30" -
+ * while everything below this works in Date. One writable computed per
+ * field translates, so a date picked here and a date read from the
+ * settings are still the same kind of value.
+ */
+const pad = (n: number) => String(n).padStart(2, '0');
+
+const dateText = (moment: Ref<Date | undefined>) =>
+  computed({
+    get: () => {
+      const d = moment.value;
+      return d ? `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}` : '';
+    },
+    set: (text: string) => {
+      if (!text) return void (moment.value = undefined);
+      const [year, month, day] = text.split('-').map(Number);
+      const next = moment.value ? new Date(moment.value) : new Date();
+      next.setFullYear(year, month - 1, day);
+      moment.value = next;
+    },
+  });
+
+const timeText = (moment: Ref<Date | undefined>) =>
+  computed({
+    get: () => {
+      const d = moment.value;
+      return d ? `${pad(d.getHours())}:${pad(d.getMinutes())}` : '';
+    },
+    set: (text: string) => {
+      if (!text) return void (moment.value = undefined);
+      const [hours, minutes] = text.split(':').map(Number);
+      const next = moment.value ? new Date(moment.value) : new Date();
+      next.setHours(hours, minutes, 0, 0);
+      moment.value = next;
+    },
+  });
+
+const timelineMinDateText = dateText(timelineMinDate);
+const timelineMinTimeText = timeText(timelineMinTime);
+const timelineMaxDateText = dateText(timelineMaxDate);
+const timelineMaxTimeText = timeText(timelineMaxTime);
+
 // Variable Support
 const variableRepository = ref<VariableRepository | null>(null);
 const useStartVariable = ref(false);
@@ -326,22 +304,6 @@ const availableVariables = computed(() => {
     .filter((v: any) => v.value && typeof v.value === 'string')
     .map((v: any) => ({ name: v.name, value: v.value }));
 });
-
-const stepSizeOptions = computed(() => [
-  { text: '1 Minute', value: 'minute' },
-  { text: '1 Hour', value: 'hour' },
-  { text: '1 Day', value: 'day' },
-  { text: '1 Week', value: 'week' },
-  { text: '1 Month', value: 'month' }
-]);
-
-const speedOptions = computed(() => [
-  { text: '0.25x', value: 0.25 },
-  { text: '0.5x', value: 0.5 },
-  { text: '1x', value: 1 },
-  { text: '2x', value: 2 },
-  { text: '4x', value: 4 }
-]);
 
 const timeUnitOptions = [
   { text: 'Hours', value: 'hours' },
@@ -533,8 +495,102 @@ const onSettingsChange = () => {
     showControls: settings.value.showControls
   };
 
-  Object.assign(widgetSettings.value, updatedSettings);
+  writeBack(updatedSettings);
 };
+
+/**
+ * The draft always has relative-time settings, even when the widget's
+ * configuration does not.
+ *
+ * The configuration is read through toJSON, which reports every feature
+ * including the ones never set - so a widget that has never been switched
+ * to a relative range hands back `relativeTime: undefined`, and copying
+ * that into the draft takes away the object the form writes into. The
+ * three fields are what the form offers; the model learns about them the
+ * moment someone switches the mode.
+ */
+function ensureDraftRelativeTime(): RelativeTimeConfig {
+  if (!settings.value.relativeTime) {
+    settings.value.relativeTime = { enabled: false, offset: 24, unit: 'hours' }
+  }
+  return settings.value.relativeTime
+}
+
+/**
+ * The features this form owns, by the names the model gives them.
+ *
+ * Listed rather than derived: the draft above is a plain object and can
+ * pick up keys from a board saved before this widget was modelled, and
+ * those must not be written back as if the model knew about them.
+ */
+const FEATURES = [
+  'timelineMin',
+  'timelineMax',
+  'rangeStart',
+  'rangeEnd',
+  'rangeStartVariable',
+  'rangeEndVariable',
+  'startTime',
+  'endTime',
+  'currentTime',
+  'stepSize',
+  'playbackSpeed',
+  'autoPlay',
+  'fixStartKnob',
+  'showControls',
+  'rangeStripColor',
+  'showTimeInfo',
+] as const
+
+/**
+ * The draft, written into the widget's configuration.
+ *
+ * Not Object.assign: the draft is a plain object while the configuration
+ * is a generated instance, and assigning the whole bag put a plain object
+ * where the model declares a contained one. Everything that walks the
+ * model afterwards - the form rendered beside this, the overlay's undo -
+ * then met something that could not say what it was, and asked it for
+ * eAllContents.
+ *
+ * So each feature is written by name, and the nested one is written into
+ * the object that is already there.
+ */
+function writeBack(draft: TimelineSettings) {
+  const target = widgetSettings.value as unknown as Record<string, unknown>
+
+  for (const name of FEATURES) {
+    const value = draft[name]
+    if (value !== undefined) target[name] = value
+  }
+
+  const relative = draft.relativeTime
+  if (!relative) return
+
+  const held = relativeTimeIn(target)
+  held.enabled = relative.enabled
+  held.offset = relative.offset
+  held.unit = relative.unit
+}
+
+/**
+ * The contained relative-time settings, built if the configuration has
+ * none yet - through the factory when the configuration is a modelled
+ * instance, as a plain object when it is a board saved before that.
+ */
+function relativeTimeIn(target: Record<string, unknown>): RelativeTimeConfig {
+  const held = target.relativeTime as RelativeTimeConfig | undefined
+  if (held) return held
+
+  const modelled = typeof (target as { eClass?: unknown }).eClass === 'function'
+  const created = (
+    modelled
+      ? TimelinesettingsFactory.eINSTANCE.createRelativeTimeConfig()
+      : { enabled: false, offset: 24, unit: 'hours' }
+  ) as unknown as RelativeTimeConfig
+
+  target.relativeTime = created
+  return created
+}
 
 const onTimelineEndTypeChange = () => {
   if (useCurrentTimeAsMax.value) {
@@ -590,22 +646,16 @@ onMounted(() => {
   }
 
   if (widgetSettings.value && widgetSettings.value.timelineMin) {
-    Object.assign(settings.value, widgetSettings.value);
+    /* By the model's names: the settings object may be a generated
+       instance, whose own properties are the private fields */
+    Object.assign(settings.value, plainSettings(widgetSettings.value));
     useCurrentTimeAsMax.value = !widgetSettings.value.timelineMax;
 
     useStartVariable.value = !!widgetSettings.value.rangeStartVariable;
     useEndVariable.value = !!widgetSettings.value.rangeEndVariable;
 
-    if (!settings.value.relativeTime) {
-      settings.value.relativeTime = {
-        enabled: false,
-        offset: 24,
-        unit: 'hours'
-      };
-    }
-
     // Set time range mode based on relativeTime.enabled
-    timeRangeMode.value = settings.value.relativeTime.enabled ? 'relative' : 'absolute';
+    timeRangeMode.value = ensureDraftRelativeTime().enabled ? 'relative' : 'absolute';
 
     if (settings.value.timelineMin) {
       const minDate = new Date(settings.value.timelineMin);
@@ -627,7 +677,8 @@ onMounted(() => {
 // Watch for external changes
 watch(() => widgetSettings.value, (newSettings) => {
   if (newSettings) {
-    Object.assign(settings.value, newSettings);
+    Object.assign(settings.value, plainSettings(newSettings));
+    ensureDraftRelativeTime();
     useCurrentTimeAsMax.value = !newSettings.timelineMax;
     if (newSettings.relativeTime) {
       timeRangeMode.value = newSettings.relativeTime.enabled ? 'relative' : 'absolute';
@@ -654,7 +705,7 @@ watch(() => widgetSettings.value, (newSettings) => {
 
 .setting-group > label {
   font-weight: 600;
-  color: var(--va-text-primary);
+  color: var(--color-fg);
   font-size: 0.9rem;
 }
 
@@ -675,7 +726,7 @@ watch(() => widgetSettings.value, (newSettings) => {
   flex-direction: column;
   gap: 0.75rem;
   padding: 0.75rem;
-  background: var(--va-background-element);
+  background: var(--color-raised);
   border-radius: 4px;
   min-width: 0;
   overflow: hidden;
@@ -701,9 +752,9 @@ watch(() => widgetSettings.value, (newSettings) => {
 
 .relative-time-preview {
   font-size: 0.85rem;
-  color: var(--va-primary);
+  color: var(--color-accent);
   padding: 0.5rem;
-  background: var(--va-background-secondary);
+  background: var(--color-pane);
   border-radius: 4px;
   text-align: center;
   word-break: break-word;
