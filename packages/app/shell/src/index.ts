@@ -19,25 +19,19 @@
  * user interface down and `load` brings it back, exactly like any widget.
  */
 
+import { APP, TINY_EMITTER } from 'org.eclipse.daanse.board.app.lib.core'
+import { VARIABLE_WRAPPER_FACTORY } from 'org.eclipse.daanse.board.app.lib.factory.variableWrapper'
+import { EVENT_ACTIONS_REGISTRY_ID } from 'org.eclipse.daanse.board.app.lib.api.events'
+import { VARIABLE_REPOSITORY } from 'org.eclipse.daanse.board.app.lib.api.variable'
 import { createApp, type App as VueApp } from 'vue'
-import { createPinia, setActivePinia } from 'pinia'
-import { createVuestic } from 'vuestic-ui'
-import 'vuestic-ui/styles/essential.css'
-import 'vuestic-ui/styles/typography.css'
 import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
-import {
-  NAVIGATION_REGISTRY_ID,
-  type NavigationRegistry,
-  NavigationItem,
-} from 'org.eclipse.daanse.board.app.lib.repository.navigation'
-import {
-  ROUTE_REGISTRY_ID,
-  type RouteRegistry,
-  RouteDefinition,
-} from 'org.eclipse.daanse.board.app.lib.repository.route'
+import { NAVIGATION_REGISTRY_ID, type NavigationRegistry } from 'org.eclipse.daanse.board.app.lib.api.navigation'
+import { NavigationItem } from 'org.eclipse.daanse.board.app.lib.api.navigation'
+import { ROUTE_REGISTRY_ID, type RouteRegistry } from 'org.eclipse.daanse.board.app.lib.api.route'
+import { RouteDefinition } from 'org.eclipse.daanse.board.app.lib.api.route'
 import type { VariableWrapperFactory } from 'org.eclipse.daanse.board.app.lib.factory.variableWrapper'
-import type { VariableRepository } from 'org.eclipse.daanse.board.app.lib.repository.variable'
-import type { EventActionsRegistry } from 'org.eclipse.daanse.board.app.lib.events'
+import type { VariableRepository } from 'org.eclipse.daanse.board.app.lib.api.variable'
+import type { EventActionsRegistry } from 'org.eclipse.daanse.board.app.lib.api.events'
 import type { TinyEmitter } from 'tiny-emitter'
 import {
   VariableComplexStringWrapper,
@@ -46,35 +40,33 @@ import {
 import App from './App.vue'
 import router from './router'
 import Configuration from './pages/Configuration.vue'
-import SaveLoad from './pages/SaveLoad.vue'
+import Appearance from './pages/Appearance.vue'
+import { initTheme } from './theme/useTheme'
+import { initBoardBackdrop } from './composables/useBoardBackdrop'
+import { initGridSnap } from './composables/useGridSnap'
 import { registerSystemActions } from './systemActions'
 import { registerTestActions } from './testActions'
-import { provideVariablesStoreDependencies } from './stores/VariablesPinia'
+import {
+  CONNECTION_REPOSITORY,
+  type ConnectionRepository,
+} from 'org.eclipse.daanse.board.app.lib.api.connection'
+import {
+  DATASOURCE_REPOSITORY,
+  type DatasourceRepository,
+} from 'org.eclipse.daanse.board.app.lib.api.datasource'
 
 let app: VueApp | undefined
 
 export async function activate({ services, log }: ActivationContext) {
+  /*
+   * Before the first view: main.css already carries a full set of values, so
+   * this only replaces them where the person chose something else.
+   */
+  initTheme()
+  initBoardBackdrop()
+  initGridSnap()
+
   app = createApp(App)
-
-  app.use(createVuestic({
-    config: {
-      colors: {
-        presets: {
-          light: {
-            primary: '#606060',
-            lightPrim: '#cbcbcb',
-            orange: '#c29803',
-            active: 'rgba(147,147,147,0.25)',
-            textPrimary: '#3a3a3a',
-          },
-        },
-      },
-    },
-  }))
-
-  const pinia = createPinia()
-  setActivePinia(pinia)
-  app.use(pinia)
   app.use(router)
   app.provide('codeEditorType', 'monaco')
 
@@ -97,18 +89,46 @@ export async function activate({ services, log }: ActivationContext) {
   registry.addListener?.({ onServiceEvent: (event) => provide(event.serviceId) })
 
   // The one service the shell owns: the app instance it just created.
-  services.register('App', app)
+  services.register(APP, app)
 
-  // Store dependencies, closed over at the module boundary
-  provideVariablesStoreDependencies({
-    repository: services.getRequired<VariableRepository>('VariableRepository'),
-    eventBus: services.getRequired<TinyEmitter>('TINY_EMITTER'),
-  })
+  /*
+   * What an empty workspace starts with.
+   *
+   * It used to be a hard-coded entry in the connections store, which is
+   * both the wrong layer for it and the reason it was never registered with
+   * anything. Deciding what an application opens with is the application's
+   * business, so it is here - and only when nothing has been loaded, so a
+   * stored board is never overwritten.
+   */
+  const connectionRepository = services.getRequired<ConnectionRepository>(CONNECTION_REPOSITORY)
+  const datasourceRepository = services.getRequired<DatasourceRepository>(DATASOURCE_REPOSITORY)
+  if (connectionRepository.getConnections().length === 0) {
+    /*
+     * Created without a type, then filled in, then saved once. Creating
+     * with the type would build the live object straight away - under the
+     * generated uid, and from a configuration that is not finished yet.
+     * A source would be rejected outright for naming no connection.
+     */
+    const connection = connectionRepository.createConnection('')
+    connection.uid = 'test'
+    connection.name = 'Test Connection 01'
+    connection.type = 'rest'
+    connection.config = { url: 'https://jsonplaceholder.typicode.com/' }
+    connectionRepository.saveConnection(connection)
+
+    const source = datasourceRepository.createDatasource('')
+    source.uid = 'test_ds'
+    source.name = 'Test DataSource 01'
+    source.type = 'rest'
+    source.connection = connection
+    source.config = { resourceUrl: 'posts' }
+    datasourceRepository.saveDatasource(source)
+  }
 
   // VariableComplexStringWrapper depends on Vue and therefore lives in the
   // UI layer; the factory in lib only knows it through this registration.
   services
-    .getRequired<VariableWrapperFactory>('VariableWrapperFactory')
+    .getRequired(VARIABLE_WRAPPER_FACTORY)
     .registerWrapperType({
       type: VARIABLECOMPLEXSTRINGWRAPPER,
       create: (value: unknown) => new VariableComplexStringWrapper<string>(value as string),
@@ -123,11 +143,11 @@ export async function activate({ services, log }: ActivationContext) {
   configRoute.component = Configuration
   routeRegistry.registerRoute(configRoute)
 
-  const saveRoute = new RouteDefinition()
-  saveRoute.path = '/save'
-  saveRoute.name = 'save'
-  saveRoute.component = SaveLoad
-  routeRegistry.registerRoute(saveRoute)
+  const appearanceRoute = new RouteDefinition()
+  appearanceRoute.path = '/appearance'
+  appearanceRoute.name = 'appearance'
+  appearanceRoute.component = Appearance
+  routeRegistry.registerRoute(appearanceRoute)
 
   const navRegistry = services.getRequired<NavigationRegistry>(NAVIGATION_REGISTRY_ID)
 
@@ -141,15 +161,12 @@ export async function activate({ services, log }: ActivationContext) {
   configNav.visible = true
   navRegistry.registerNavigationItem(configNav)
 
-  const saveNav = new NavigationItem()
-  saveNav.id = 'save'
-  saveNav.label = 'Store and Restore'
-  saveNav.icon = 'cloud_sync'
-  saveNav.route = '/save'
-  saveNav.routeName = 'save'
-  saveNav.order = 20
-  saveNav.visible = true
-  navRegistry.registerNavigationItem(saveNav)
+  /*
+   * Storing and restoring is deliberately not an area of its own: it is
+   * reached where it is needed - from the launcher to open a stored
+   * workspace, and from the topbar of an open board to store it. The
+   * route stays registered above; only the rail entry is gone.
+   */
 
   // Routes other modules contributed before the shell came up
   const dynamic = routeRegistry as unknown as {
@@ -164,19 +181,31 @@ export async function activate({ services, log }: ActivationContext) {
     } as Parameters<typeof router.addRoute>[0])
   }
 
+  /*
+   * A page opened straight at /configuration or /appearance rendered
+   * nothing: those routes did not exist when the router first resolved the
+   * url. Point it at the address bar now that they do - and read the url
+   * from the browser, because this runs before the first navigation, when
+   * the router still reports its start location rather than where we are.
+   */
+  const opened = window.location.pathname + window.location.search + window.location.hash
+  if (router.resolve(opened).matched.length && router.currentRoute.value.fullPath !== opened) {
+    router.replace(opened)
+  }
+
   // One failing action set must not take the other down
   try {
     await registerSystemActions(
       router,
-      services.getRequired<EventActionsRegistry>('EventActionsRegistry'),
-      services.getRequired<TinyEmitter>('TINY_EMITTER'),
+      services.getRequired(EVENT_ACTIONS_REGISTRY_ID),
+      services.getRequired(TINY_EMITTER),
     )
     log.info('system actions registered')
   } catch (error) {
     log.error('system actions failed', error)
   }
   try {
-    await registerTestActions(services.getRequired<EventActionsRegistry>('EventActionsRegistry'))
+    await registerTestActions(services.getRequired(EVENT_ACTIONS_REGISTRY_ID))
     log.info('test actions registered')
   } catch (error) {
     log.error('test actions failed', error)

@@ -12,23 +12,22 @@ Contributors:
 -->
 
 <script setup lang="ts">
-import { useRoute, useRouter } from 'vue-router'
-import { inject, computed } from 'vue'
-import { v4 as uuidv4 } from 'uuid'
+import { useRoute } from 'vue-router'
+import { inject, computed, watch } from 'vue'
+import { useBoardUsage } from '@/composables/useBoardUsage'
 import LayoutRenderer from '@/components/pageEditor/LayoutRenderer.vue'
+import BoardsHome from '@/components/boards/BoardsHome.vue'
 import {
   type PageRegistryI,
-  type PageI,
   identifier as PageIdentifier
-} from 'org.eclipse.daanse.board.app.lib.repository.page'
+} from 'org.eclipse.daanse.board.app.lib.api.page'
 import {
   type LayoutRepositoryI,
   identifier as LayoutRepositoryIdentifier
-} from 'org.eclipse.daanse.board.app.lib.repository.layout.page'
+} from 'org.eclipse.daanse.board.app.lib.api.layout.page'
 
 const props = defineProps(['params']);
 const route = useRoute();
-const router = useRouter();
 const pageRepo = inject<PageRegistryI>(PageIdentifier)
 const layoutRepo = inject<LayoutRepositoryI>(LayoutRepositoryIdentifier)
 
@@ -36,39 +35,14 @@ const pageID = computed(() => {
   return (props.params?.pageid ?? route.params.pageid ?? '') as string
 })
 
-const availablePages = computed(() => {
-  if (!pageRepo) return []
-  return pageRepo.getAllPageIds().map(id => ({
-    id,
-    page: pageRepo.getPage(id)
-  }))
-})
+/*
+ * Counted here rather than in the launcher: a board is just as often opened
+ * from a breadcrumb, a link or a reload, and all of those pass through this
+ * page.
+ */
+const { recordOpened } = useBoardUsage()
+watch(pageID, (id) => recordOpened(id), { immediate: true })
 
-const navigateToPage = (pageId: string) => {
-  router.push(`/page/${pageId}`)
-}
-
-const createNewPage = () => {
-  if (!pageRepo || !layoutRepo) return
-
-  const newPageId = uuidv4()
-  const baseLayout = layoutRepo.getLayout('org.eclipse.daanse.board.app.ui.vue.layouts.base')
-
-  pageRepo.registerPage({
-    id: newPageId,
-    name: 'New Page',
-    description: '',
-    icon: '',
-    visibleInNavigation: true,
-    layout: baseLayout
-  } as PageI)
-
-  router.push(`/page/${newPageId}/edit`)
-}
-
-const navigateToLoad = () => {
-  router.push('/save')
-}
 </script>
 
 <template>
@@ -80,138 +54,15 @@ const navigateToLoad = () => {
       :viewMode="true"
     />
 
-    <!-- Welcome placeholder when no page is selected -->
-    <div v-else class="welcome-placeholder">
-      <div class="welcome-content">
-        <div class="logo-container">
-          <div class="logo-bg"></div>
-          <img :src="'/LogoDaanse.svg'" alt="Daanse Logo" class="welcome-logo" />
-        </div>
-        <h1>Welcome to Daanse Dashboard</h1>
-        <p>Select a page to view or get started with the options below.</p>
-
-        <div class="welcome-actions">
-          <va-button
-            preset="primary"
-            icon="add"
-            @click="createNewPage"
-          >
-            Create New Page
-          </va-button>
-
-          <va-button
-            preset="secondary"
-            icon="folder_open"
-            @click="navigateToLoad"
-          >
-            Load Dashboard
-          </va-button>
-        </div>
-
-        <div v-if="availablePages.length > 0" class="available-pages">
-          <h3>Available Pages</h3>
-          <div class="page-list">
-            <va-button
-              v-for="item in availablePages"
-              :key="item.id"
-              preset="plain"
-              icon="description"
-              @click="navigateToPage(item.id)"
-            >
-              {{ item.page?.name || item.id }}
-            </va-button>
-          </div>
-        </div>
-      </div>
-    </div>
+    <!-- No board selected: the launcher, not a welcome screen -->
+    <BoardsHome v-else :page-repo="pageRepo" :layout-repo="layoutRepo" />
   </div>
 </template>
 <style scoped>
-.welcome-placeholder {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(135deg, #f5f7fa 0%, #e4e8ec 100%);
-}
-
-.welcome-content {
-  text-align: center;
-  padding: 2rem;
-  max-width: 500px;
-}
-
-.logo-container {
-  position: relative;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-bottom: 8rem;
-}
-
-.welcome-content {
-  padding-bottom: 10%;
-}
-
-.logo-bg {
-  position: absolute;
-  width: 200px;
-  height: 200px;
-  background-image: linear-gradient(-45deg, #E19840 50%, #ffffff 50%);
-  filter: blur(68px);
-  border-radius: 50%;
-  z-index: 0;
-  margin-top: -23px;
-}
-
-.welcome-logo {
-  max-width: 150px;
-  height: auto;
-  position: relative;
-  z-index: 1;
-}
-
-.welcome-content h1 {
-  font-size: 2rem;
-  color: #333;
-  margin-bottom: 0.5rem;
-}
-
-.welcome-content p {
-  color: #666;
-  margin-bottom: 2rem;
-}
-
-.welcome-actions {
-  display: flex;
-  gap: 1rem;
-  justify-content: center;
-  margin-bottom: 2rem;
-}
-
-.available-pages {
-  margin-top: 2rem;
-  padding-top: 1.5rem;
-  border-top: 1px solid #ddd;
-}
-
-.available-pages h3 {
-  font-size: 1rem;
-  color: #555;
-  margin-bottom: 1rem;
-}
-
-.page-list {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  align-items: center;
-}
 
 .dottet{
-  background: #fafafa;
-  background-image: radial-gradient(#b8b8b8 1px, transparent 0);
+  background: var(--color-canvas);
+  background-image: radial-gradient(var(--color-divider) 1px, transparent 0);
   background-size: 40px 40px;
   background-position: -19px -19px;
 }
@@ -219,7 +70,7 @@ const navigateToLoad = () => {
   position: absolute;
   background-color: rgba(0, 0, 0, 0.1);
   border-radius: 5px;
-  border: 2px dashed #ccc;
+  border: 2px dashed var(--color-outline);
   z-index: 100000;
   pointer-events: none;
 }
@@ -232,17 +83,19 @@ const navigateToLoad = () => {
   width: 100%;
   height: 100%;
   position: relative;
+  /* Board surface from the mockups (view mode): canvas token, no dot grid */
+  background: var(--color-canvas, #dee1e7);
 }
 
 .report-container__title {
   width: 100%;
   padding: 16px;
-  border-bottom: 1px dashed #e0e0e0;
+  border-bottom: 1px dashed var(--color-divider, #ccd1d9);
 }
 
 .report-container .widgets-adding-controls {
   display: flex;
-  border: 1px solid #e0e0e0;
+  border: 1px solid var(--color-divider, #ccd1d9);
   border-radius: 8px;
   margin: 16px;
 }
