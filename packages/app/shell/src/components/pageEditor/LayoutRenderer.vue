@@ -11,18 +11,20 @@ Contributors:
     Smart City Jena
 -->
 <script setup lang="ts">
-import { inject, ref, computed, watchEffect, onMounted, onUnmounted, shallowRef, nextTick }
+import { DIcon } from 'org.eclipse.daanse.board.app.ui.vue.controls'
+import { inject, ref, computed, watch, watchEffect, onMounted, shallowRef, nextTick }
   from 'vue'
 import {
   type LayoutRepositoryI,
   identifier as LayoutRepositoryIdentifier,
   type LayoutI
-} from 'org.eclipse.daanse.board.app.lib.repository.layout.page'
+} from 'org.eclipse.daanse.board.app.lib.api.layout.page'
+import { useEObject, useFeature } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import {
   type PageRegistryI,
   identifier as PageIdentifier,
   type PageI
-} from 'org.eclipse.daanse.board.app.lib.repository.page'
+} from 'org.eclipse.daanse.board.app.lib.api.page'
 
 const props = defineProps<{
   pageId: string,
@@ -63,10 +65,10 @@ const loadLayout = async () => {
 
   if (props.pageId && pageRepo) {
     const page = pageRepo.getPage(props.pageId)
-    currentPage.value = page ? { ...page } : null
+    currentPage.value = page ?? null
 
-    if (page?.layout && layoutRepo) {
-      const layout = layoutRepo.getLayout(page.layout.id)
+    if (page?.layoutId && layoutRepo) {
+      const layout = layoutRepo.getLayout(page.layoutId as string)
       currentLayout.value = layout || null
 
       if (props.viewMode) {
@@ -89,24 +91,29 @@ const loadLayout = async () => {
   isLoading.value = false
 }
 
-const subscriptionId = ref<string | null>(null)
+/*
+ * The page watches itself now. A modelled object announces its own changes,
+ * so this is a watcher on it rather than a subscription to three event
+ * names the registry used to publish.
+ */
+const page = () => (props.pageId ? pageRepo?.getPage(props.pageId) : undefined)
+const held = useEObject(page)
+watch(held, () => { currentPage.value = held.value ?? null })
 
-const onPageUpdate = (eventType: string) => {
-  if (eventType === 'PAGE_UPDATE') {
-    if (props.pageId && pageRepo) {
-      const page = pageRepo.getPage(props.pageId)
-      currentPage.value = page ? { ...page } : null
-
-      const layoutChanged =
-        page?.layout?.id !== currentLayout.value?.id
-
-      if (layoutChanged || !currentLayout.value) {
-        refreshTrigger.value++
-        loadLayout()
-      }
-    }
-  }
-}
+/*
+ * The layout engine is reloaded when the layout changes, and only then.
+ *
+ * Watching the page itself means watching everything under it - the widgets
+ * are contained in it now, so a widget added or a pixel dragged is a change
+ * to the page, and this watcher would run on every frame of a drag only to
+ * decide it has nothing to do. The feature is what matters, so the feature
+ * is what is watched.
+ */
+const layoutId = useFeature(page, 'layoutId')
+watch(layoutId, () => {
+  refreshTrigger.value++
+  loadLayout()
+})
 
 /*watchEffect(() => {
   // Trigger reactivity
@@ -115,23 +122,14 @@ const onPageUpdate = (eventType: string) => {
 })*/
 
 onMounted(async () => {
-  // Wait a tick to ensure all dependencies are ready
+  /*
+   * One tick, for the components this mounts. The hundred milliseconds
+   * that used to follow were waiting for Pinia to finish starting, and
+   * there is no Pinia to wait for - every board paid them on open.
+   */
   await nextTick()
-
-  // Small delay to ensure Pinia is fully initialized for dynamic components
-  await new Promise(resolve => setTimeout(resolve, 100))
-
   await loadLayout()
 
-  if (pageRepo && 'subscribe' in pageRepo) {
-    subscriptionId.value = (pageRepo as any).subscribe(onPageUpdate)
-  }
-})
-
-onUnmounted(() => {
-  if (pageRepo && 'unsubscribe' in pageRepo && subscriptionId.value) {
-    (pageRepo as any).unsubscribe(subscriptionId.value)
-  }
 })
 </script>
 
@@ -147,8 +145,8 @@ onUnmounted(() => {
   }">
     <!-- Loading state -->
     <div v-if="isLoading" class="loading-state">
-      <va-progress-circle indeterminate />
-      <p>Loading layout...</p>
+      <span class="spinner" aria-hidden="true" />
+      <p>Layout wird geladen…</p>
     </div>
 
     <!-- View mode - only render if all components are ready -->
@@ -175,23 +173,23 @@ onUnmounted(() => {
 
     <!-- Error/fallback state with more detailed info -->
     <div v-else class="no-layout-message">
-      <va-alert color="warning" icon="warning">
-        <div v-if="isLoading">
-          Loading layout components...
-        </div>
-        <div v-else-if="!currentPage">
-          Page "{{ props.pageId }}" not found
-        </div>
-        <div v-else-if="!currentLayout">
-          No layout configured for page "{{ currentPage.name || props.pageId }}"
-        </div>
-        <div v-else>
-          {{ props.viewMode ?
-          'No layout component found for the current page layout'
-          : 'No layout editor found for the current page layout' }}
-          <br><small>Layout ID: {{ currentLayout.id }}</small>
-        </div>
-      </va-alert>
+      <!-- Not an alert component: a page without a layout is a state to
+           explain, and what it needs is the sentence. -->
+      <p class="no-layout-message__text">
+        <DIcon name="warning" size="lg" tone="color-warn" />
+        <span v-if="!currentPage">
+          Die Seite „{{ props.pageId }}" gibt es nicht.
+        </span>
+        <span v-else-if="!currentLayout">
+          Für „{{ currentPage.name || props.pageId }}" ist kein Layout eingestellt.
+        </span>
+        <span v-else>
+          {{ props.viewMode
+            ? 'Zu diesem Layout gibt es keine Darstellung.'
+            : 'Zu diesem Layout gibt es keinen Editor.' }}
+          <br /><small>Layout: {{ currentLayout.id }}</small>
+        </span>
+      </p>
     </div>
   </div>
 </template>
@@ -207,6 +205,15 @@ onUnmounted(() => {
     height: 100%;
   }
 
+  .spinner {
+    width: 22px;
+    height: 22px;
+    border: 2px solid var(--color-divider);
+    border-top-color: var(--color-accent);
+    border-radius: 50%;
+    animation: layout-spin 700ms linear infinite;
+  }
+
   .no-layout-message,
   .loading-state {
     display: flex;
@@ -216,5 +223,23 @@ onUnmounted(() => {
     padding: 2rem;
     gap: 1rem;
   }
+
+  .no-layout-message__text {
+    display: flex;
+    align-items: flex-start;
+    gap: 9px;
+    margin: 0;
+    font-family: var(--font-sans);
+    font-size: var(--text-base);
+    line-height: 1.55;
+    color: var(--color-dim);
+  }
+}
+</style>
+
+<style>
+/* A turning ring needs a keyframe, and a keyframe cannot be scoped. */
+@keyframes layout-spin {
+  to { transform: rotate(360deg); }
 }
 </style>
