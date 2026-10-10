@@ -15,35 +15,91 @@ import { inject, computed, onMounted, ref } from 'vue'
 import {
   DatasourceRepository,
   identifier,
-} from 'org.eclipse.daanse.board.app.lib.repository.datasource'
-import { useDataSourcesStore } from 'org.eclipse.daanse.board.app.ui.vue.stores.datasouce'
-import { useConnectionsStore } from 'org.eclipse.daanse.board.app.ui.vue.stores.connection'
+} from 'org.eclipse.daanse.board.app.lib.api.datasource'
+import {
+  identifier as WORKSPACE,
+  type Workspace,
+} from 'org.eclipse.daanse.board.app.lib.model.workspace'
+import { useEList } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import { cloneDeep } from 'lodash'
+import { DButton, DIconPicker, DInput, DSelect } from 'org.eclipse.daanse.board.app.ui.vue.controls'
+import TagInput from './TagInput.vue'
 
-const props = defineProps({
-  itemId: {
-    type: String,
-    required: true,
-  },
-})
+const props = withDefaults(
+  defineProps<{
+    itemId: string
+    /**
+     * Which half of a source is shown.
+     *
+     * The two used to sit side by side in one strip. The page around this
+     * makes them tabs, because reading the data and changing the settings
+     * are two different visits.
+     */
+    view?: 'settings' | 'preview'
+  }>(),
+  { view: 'settings' },
+)
 
 const datasourceProxy = ref({} as any)
 
 const datasourceRepository = inject<DatasourceRepository>(identifier)!
-const { dataSources, updateDataSource } = useDataSourcesStore()
-const { connections } = useConnectionsStore()
+const workspace = inject<Workspace>(WORKSPACE)!
+const connections = useEList(workspace, (w) => w.connections)
+/* A composer's settings pick the sources it reads from. */
+const dataSources = useEList(workspace, (w) => w.datasources)
+
+const typeIcon = computed(
+  () =>
+    datasourceRepository.getDatasourceIdentifiers(datasourceProxy.value.type)?.icon ?? 'database',
+)
+
+/* Every tag already in use, so the same thing is not filed twice. */
+const knownTags = computed(() => {
+  const all = new Set<string>()
+  for (const source of dataSources.value as any[]) {
+    for (const tag of source.tags ?? []) all.add(tag)
+  }
+  return [...all].sort()
+})
 
 const availableDatasources = computed(() => {
   return datasourceRepository.registeredDatasources
 })
 
+/*
+ * Edited on a copy and committed on Save, the way it always was - what
+ * changed is only where the copy comes from and where it goes back to.
+ */
 onMounted(() => {
-  const dataSource = dataSources.find((ds: any) => ds.uid === props.itemId)
-  datasourceProxy.value = cloneDeep(dataSource)
+  const dataSource = datasourceRepository.getDatasourceModel(props.itemId)
+  datasourceProxy.value = dataSource
+    ? {
+        uid: dataSource.uid,
+        name: dataSource.name,
+        type: dataSource.type,
+        icon: dataSource.icon ?? '',
+        tags: [...(dataSource.tags ?? [])],
+        config: cloneDeep(dataSource.config ?? {}),
+      }
+    : { tags: [] }
 })
 
 const saveDataSource = () => {
-  updateDataSource(datasourceProxy.value.uid, datasourceProxy.value)
+  const dataSource = datasourceRepository.getDatasourceModel(props.itemId)
+  if (dataSource) {
+    dataSource.name = datasourceProxy.value.name
+    dataSource.type = datasourceProxy.value.type
+    dataSource.icon = datasourceProxy.value.icon?.trim() || undefined
+    /* Replaced wholesale: the EList is the model's, the array was a copy. */
+    dataSource.tags.clear()
+    for (const tag of datasourceProxy.value.tags ?? []) dataSource.tags.add(tag)
+    dataSource.config = datasourceProxy.value.config
+    /* The settings name the connection by id; the model holds the reference. */
+    dataSource.connection = connections.value.find(
+      (connection) => connection.uid === datasourceProxy.value.config?.connection,
+    )
+    datasourceRepository.saveDatasource(dataSource)
+  }
   emit('close')
 }
 
@@ -59,7 +115,6 @@ const previewComponent = computed(() => {
 
 const settingsComponent = computed(() => {
   const identifiers = datasourceRepository.getDatasourceIdentifiers(datasourceProxy.value.type)
-  console.log(identifiers);
 
   if (!identifiers) {
     return null
@@ -69,51 +124,83 @@ const settingsComponent = computed(() => {
 })
 
 const updateConfig = (config: any) => {
-  console.log('updateConfig called')
-  console.log(config)
   datasourceProxy.value.config = config
 }
 
 const emit = defineEmits(['close'])
 </script>
 <template>
-  <div class="w-full h-full flex gap-4">
-    <div class="min-w-[350px]">
-      <div class="flex flex-col border border-gray-300 rounded-lg overflow-hidden w-full h-full">
-        <div class="flex gap-4 w-full border-b border-gray-300 px-4 py-2 items-center">
-          <h4 class="flex-grow text-sm font-semibold leading-[1.5rem]">Store settings</h4>
-        </div>
-        <div class="flex-grow flex flex-col h-full">
-          <div class="flex-grow p-4 flex flex-col gap-2">
-            <template v-if="datasourceProxy">
-              <VaInput v-model="datasourceProxy.uid" label="UID" readonly />
-              <VaInput v-model="datasourceProxy.name" label="Name" />
-              <VaSelect
-                v-model="datasourceProxy.type"
-                label="Type"
-                :options="availableDatasources"
-              />
-              <component
-                :is="settingsComponent"
-                :config="datasourceProxy.config"
-                :connections="connections"
-                :dataSources="dataSources"
-              />
-            </template>
-          </div>
-          <div class="self-end flex gap-4 p-4">
-            <va-button @click="saveDataSource">Save</va-button>
-            <va-button @click="$emit('close')" preset="plain">Close</va-button>
-          </div>
-        </div>
+  <div class="editor">
+    <template v-if="view === 'settings'">
+      <div class="editor__fields">
+        <DInput v-model="datasourceProxy.uid" label="UID" readonly />
+        <DInput v-model="datasourceProxy.name" label="Name" />
+        <DSelect v-model="datasourceProxy.type" label="Typ" :options="availableDatasources" />
+        <DIconPicker
+          v-model="datasourceProxy.icon"
+          label="Symbol"
+          :fallback="typeIcon"
+          hint="Ohne eigenes Symbol steht hier das des Typs."
+        />
+        <TagInput
+          v-model="datasourceProxy.tags"
+          label="Schlagworte"
+          hint="Wofür diese Datenquelle da ist — danach lässt sich suchen."
+          :known="knownTags"
+        />
+        <component
+          :is="settingsComponent"
+          :config="datasourceProxy.config"
+          :connections="connections"
+          :dataSources="dataSources"
+        />
       </div>
-    </div>
-    <div class="flex-grow overflow-hidden w-full">
-      <div class="bg-white rounded-lg p-4 border border-gray-300
-        h-full w-full flex items-center justify-center overflow-hidden">
-        <component :is="previewComponent" :data-source="datasourceProxy" :key="datasourceProxy.uid"
-          @updateConfig="updateConfig" />
+      <div class="editor__actions">
+        <DButton intent="quiet" @click="$emit('close')">Schließen</DButton>
+        <DButton intent="primary" @click="saveDataSource">Speichern</DButton>
       </div>
+    </template>
+
+    <div v-else class="editor__preview">
+      <component
+        :is="previewComponent"
+        :data-source="datasourceProxy"
+        :key="datasourceProxy.uid"
+        @updateConfig="updateConfig"
+      />
     </div>
   </div>
 </template>
+
+<style scoped>
+.editor {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  height: 100%;
+  min-height: 0;
+}
+
+
+
+
+.editor__fields {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  max-width: 620px;
+}
+
+.editor__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 7px;
+}
+
+.editor__preview {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  overflow: auto;
+}
+</style>

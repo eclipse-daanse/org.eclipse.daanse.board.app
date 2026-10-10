@@ -15,8 +15,9 @@ import { inject, computed, onMounted, ref } from 'vue'
 import {
   ConnectionRepository,
   identifier,
-} from 'org.eclipse.daanse.board.app.lib.repository.connection'
-import { useConnectionsStore } from 'org.eclipse.daanse.board.app.ui.vue.stores.connection'
+} from 'org.eclipse.daanse.board.app.lib.api.connection'
+import { DButton, DIconPicker, DInput, DSelect } from 'org.eclipse.daanse.board.app.ui.vue.controls'
+import TagInput from '../datasources/TagInput.vue'
 
 const props = defineProps({
   itemId: {
@@ -30,15 +31,40 @@ const emit = defineEmits(['close'])
 const connectionProxy = ref({} as any)
 
 const connectionRepository = inject<ConnectionRepository>(identifier)!
-const { connections, updateConnection } = useConnectionsStore()
 
 const availableConnections = computed(() => {
   return connectionRepository.registeredConnections
 })
 
+/*
+ * Edited on a copy and committed on Save, the way it always was - what
+ * changed is only where the copy comes from and where it goes back to.
+ */
 onMounted(() => {
-  const connection = connections.find((c) => c.uid === props.itemId)
-  connectionProxy.value = JSON.parse(JSON.stringify(connection))
+  const connection = connectionRepository.getConnectionModel(props.itemId)
+  connectionProxy.value = connection
+    ? {
+        uid: connection.uid,
+        name: connection.name,
+        type: connection.type,
+        icon: connection.icon ?? '',
+        tags: [...(connection.tags ?? [])],
+        config: JSON.parse(JSON.stringify(connection.config ?? {})),
+      }
+    : { tags: [] }
+})
+
+const typeIcon = computed(
+  () => connectionRepository.getConnectionIdentifiers(connectionProxy.value.type)?.icon ?? 'link',
+)
+
+/* Every tag already in use, so the same thing is not filed twice. */
+const knownTags = computed(() => {
+  const all = new Set<string>()
+  for (const connection of connectionRepository.getConnections() as any[]) {
+    for (const tag of connection.tags ?? []) all.add(tag)
+  }
+  return [...all].sort()
 })
 
 const settingsComponent = computed(() => {
@@ -52,36 +78,68 @@ const settingsComponent = computed(() => {
 })
 
 const saveConnection = () => {
-  updateConnection(connectionProxy.value.uid, connectionProxy.value)
+  const connection = connectionRepository.getConnectionModel(props.itemId)
+  if (connection) {
+    connection.name = connectionProxy.value.name
+    connection.type = connectionProxy.value.type
+    connection.icon = connectionProxy.value.icon?.trim() || undefined
+    /* Replaced wholesale: the EList is the model's, the array was a copy. */
+    connection.tags.clear()
+    for (const tag of connectionProxy.value.tags ?? []) connection.tags.add(tag)
+    connection.config = connectionProxy.value.config
+    connectionRepository.saveConnection(connection)
+  }
   emit('close')
 }
 </script>
 <template>
-  <div class="w-full h-full flex gap-4">
-    <div class="min-w-[350px]">
-      <div class="flex flex-col border border-gray-300 rounded-lg overflow-hidden w-full h-full">
-        <div class="flex gap-4 w-full border-b border-gray-300 px-4 py-2 items-center">
-          <h4 class="flex-grow text-sm font-semibold leading-[1.5rem]">Connection settings</h4>
-        </div>
-        <div class="flex-grow flex flex-col h-full">
-          <div class="flex-grow p-4 flex flex-col gap-2">
-            <template v-if="connectionProxy">
-              <VaInput v-model="connectionProxy.uid" label="UID" readonly />
-              <VaInput v-model="connectionProxy.name" label="Name" />
-              <VaSelect
-                v-model="connectionProxy.type"
-                label="Type"
-                :options="availableConnections"
-              />
-              <component :is="settingsComponent" :config="connectionProxy.config" />
-            </template>
-          </div>
-          <div class="self-end flex gap-4 p-4">
-            <va-button @click="saveConnection">Save</va-button>
-            <va-button @click="$emit('close')" preset="plain">Close</va-button>
-          </div>
-        </div>
-      </div>
+  <!-- The frame, the heading and the tabs belong to the page around this -->
+  <div class="editor">
+    <div class="editor__fields">
+      <DInput v-model="connectionProxy.uid" label="UID" readonly />
+      <DInput v-model="connectionProxy.name" label="Name" />
+      <DSelect v-model="connectionProxy.type" label="Typ" :options="availableConnections" />
+      <DIconPicker
+        v-model="connectionProxy.icon"
+        label="Symbol"
+        :fallback="typeIcon"
+        hint="Ohne eigenes Symbol steht hier das des Typs."
+      />
+      <TagInput
+        v-model="connectionProxy.tags"
+        label="Schlagworte"
+        hint="Wofür diese Verbindung da ist — danach lässt sich suchen."
+        :known="knownTags"
+      />
+      <component :is="settingsComponent" :config="connectionProxy.config" />
+    </div>
+    <div class="editor__actions">
+      <DButton intent="quiet" @click="$emit('close')">Schließen</DButton>
+      <DButton intent="primary" @click="saveConnection">Speichern</DButton>
     </div>
   </div>
 </template>
+
+<style scoped>
+.editor {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.editor__fields {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  max-width: 620px;
+}
+
+
+
+
+.editor__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 7px;
+}
+</style>
