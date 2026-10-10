@@ -28,7 +28,6 @@ export default defineConfig({
         globals: {
           vue: 'Vue',
           'vue-router': 'VueRouter',
-          pinia: 'Pinia',
           'org.eclipse.daanse.board.app.lib.core':'org.eclipse.daanse.board.app.lib.core',
         }
       }

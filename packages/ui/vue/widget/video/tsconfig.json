@@ -1,5 +1,4 @@
 {
-  "exclude": ["node_modules", "dist", "dist-bundle", "vite.bundle.config.ts"],
   "compilerOptions": {
     "sourceMap": true,
     "declarationMap": true,
@@ -17,5 +16,11 @@
       "vite/client"
     ],
     "moduleResolution": "bundler"
-  }
+  },
+  "exclude": [
+    "node_modules",
+    "vite.bundle.config.ts",
+    "dist",
+    "dist-bundle"
+  ]
 }

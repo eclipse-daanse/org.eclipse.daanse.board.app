@@ -16,7 +16,7 @@ import { inject, nextTick, onMounted, onUnmounted, ref, watch, toRefs } from 'vu
 import { useRoute } from 'vue-router';
 import { identifiers } from 'org.eclipse.daanse.board.app.lib.core'
 import type { TinyEmitter } from 'tiny-emitter';
-import { EventActionsRegistry, EVENT_ACTIONS_REGISTRY } from 'org.eclipse.daanse.board.app.lib.events';
+import { EventActionsRegistry, EVENT_ACTIONS_REGISTRY } from 'org.eclipse.daanse.board.app.lib.api.events';
 import { MarkdownWidgetInterface } from './api/MarkdownWidgetInterface';
 import "easymde/dist/easymde.min.css";
 import "github-markdown-css/github-markdown.css";

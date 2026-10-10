@@ -11,10 +11,10 @@
  *   Smart City Jena
  **********************************************************************/
 
-import { WidgetActionInterface } from 'org.eclipse.daanse.board.app.lib.events'
+import { WidgetActionInterfaceImpl } from 'org.eclipse.daanse.board.app.lib.api.events'
 import { WidgetAction } from 'org.eclipse.daanse.board.app.lib.events'
 
-export abstract class MarkdownWidgetInterface extends WidgetActionInterface {
+export abstract class MarkdownWidgetInterface extends WidgetActionInterfaceImpl {
 
   @WidgetAction({ eventType: 'markdown.scrollToTop' })
   scrollToTop(): void { throw new Error("scrollToTop not implemented"); }

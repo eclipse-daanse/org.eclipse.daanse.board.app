@@ -16,12 +16,12 @@ import { inject, computed, nextTick, onMounted, onUnmounted, ref, watch, toRefs 
 import { useRoute } from 'vue-router'
 import { identifiers } from 'org.eclipse.daanse.board.app.lib.core'
 import type { TinyEmitter } from 'tiny-emitter';
-import { EventActionsRegistry, EVENT_ACTIONS_REGISTRY } from 'org.eclipse.daanse.board.app.lib.events';
+import { EventActionsRegistry, EVENT_ACTIONS_REGISTRY } from 'org.eclipse.daanse.board.app.lib.api.events';
 import { MermaidWidgetInterface } from './api/MermaidWidgetInterface';
 import mermaid from 'mermaid';
-import { IMermaidWidgetSettings } from '.';
-import {  VariableWrapper,VariableComplexStringWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables'
-import { MermaidWidgetSettings } from './gen/MermaidWidgetSettings'
+import {  VariableWrapper,VariableComplexStringWrapper, plainSettings } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+import type { MermaidWidgetSettings } from './gen/MermaidWidgetSettings'
+import { MermaidWidgetSettingsImpl } from './gen/MermaidWidgetSettingsImpl'
 
 
 const config = defineModel<MermaidWidgetSettings>('configv', { required: true});
@@ -78,11 +78,16 @@ const emitRightClick = () => {
 
 const container = ref<HTMLDivElement | null>(null);
 const timestamp = ref(Date.now());
-const defaultConfig = new MermaidWidgetSettings();
+const defaultConfig = new MermaidWidgetSettingsImpl();
 
 onMounted(() => {
   if (config.value) {
-    Object.assign(config.value, { ...defaultConfig, ...config.value })
+    /* Read by the model's names: spreading a generated instance gives
+         * the private fields the getters sit in, not the features. */
+        Object.assign(config.value, {
+            ...plainSettings(defaultConfig),
+            ...plainSettings(config.value),
+        })
   }
 })
 
