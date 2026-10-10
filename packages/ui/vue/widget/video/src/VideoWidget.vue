@@ -15,7 +15,9 @@ Contributors:
 
 import { computed, onMounted, onUnmounted, ref } from "vue";
 import { useRoute } from "vue-router";
-import { VideoSettings } from './gen/VideoSettings'
+import type { VideoSettings } from './gen/VideoSettings'
+import { VideoSettingsImpl } from './gen/VideoSettingsImpl'
+import { ObjectFitSettingImpl } from './gen/ObjectFitSettingImpl'
 import { VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 // import { useDatasourceRepository } from "../composables/datasourceRepository";
 
@@ -26,7 +28,7 @@ const config = defineModel<VideoSettings>('configv', { required: true });
 
 import { identifiers } from 'org.eclipse.daanse.board.app.lib.core'
 import type { TinyEmitter } from 'tiny-emitter';
-import { EventActionsRegistry, EVENT_ACTIONS_REGISTRY } from 'org.eclipse.daanse.board.app.lib.events';
+import { EventActionsRegistry, EVENT_ACTIONS_REGISTRY } from 'org.eclipse.daanse.board.app.lib.api.events';
 import { VideoWidgetInterface } from './api/VideoWidgetInterface';
 
 const eventBus = inject<TinyEmitter>(identifiers.TINY_EMITTER)!;
@@ -140,7 +142,7 @@ onMounted(() => {
     }
 
     if (!config.value) {
-        config.value = new VideoSettings();
+        config.value = new VideoSettingsImpl();
     }
 
     // Handle Video URL Wrapper
@@ -158,7 +160,11 @@ onMounted(() => {
     }
 
     if (config.value && !config.value.videoFitSettings) {
-        config.value.videoFitSettings = defaultConfig.videoFitSettings;
+        /* A real instance, not the literal: it is a contained object and
+         * the form renders it from its class. */
+        const fitting = new ObjectFitSettingImpl();
+        fitting.fit = defaultConfig.videoFitSettings.fit;
+        config.value.videoFitSettings = fitting;
     }
 });
 

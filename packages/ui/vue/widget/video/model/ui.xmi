@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/*********************************************************************
+* Copyright (c) 2026 Contributors to the Eclipse Foundation.
+*
+* This program and the accompanying materials are made
+* available under the terms of the Eclipse Public License 2.0
+* which is available at https://www.eclipse.org/legal/epl-2.0/
+*
+* SPDX-License-Identifier: EPL-2.0
+**********************************************************************/
+
+The form for the video widget.
+
+The address first - without one there is nothing to fit - then how the
+picture sits in the frame. The address is a wrapper, so a board can play
+whatever a variable points at rather than one fixed file.
+-->
+<uimodel:UIModel
+    xmlns:xmi="http://www.omg.org/XMI"
+    xmi:version="2.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:uimodel="http://uimodel/1.0"
+    name="VideoSettingsForm">
+
+  <targetClasses href="http://org.eclipse.daanse.board.app.ui.vue.widget.video#//VideoSettings"/>
+
+  <components xsi:type="uimodel:FormView" name="VideoSettingsFormView">
+    <fields xsi:type="uimodel:InputWidget"
+        name="videoUrl"
+        feature="http://org.eclipse.daanse.board.app.ui.vue.widget.video#//VideoSettings/videoUrl"
+        label="Adresse"
+        placeholder="https://…"/>
+    <fields xsi:type="uimodel:InputWidget"
+        name="videoFitSettings"
+        feature="http://org.eclipse.daanse.board.app.ui.vue.widget.video#//VideoSettings/videoFitSettings"
+        label="Darstellung"/>
+  </components>
+</uimodel:UIModel>

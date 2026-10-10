@@ -35,10 +35,6 @@ watch(timeMode, (newMode) => {
   }
 })
 
-const isValid = computed(() => {
-  return (localSettings.value.thingId || '').trim() !== ''
-})
-
 const setCurrentTime = () => {
   const now = new Date()
   settings.value.endTime = now.toISOString().slice(0, 16)
@@ -65,15 +61,6 @@ const availableForecastParameters = [
   { key: 'precipitation', label: 'Precipitation' },
   { key: 'visibility', label: 'Visibility' },
   { key: 'cloudCover', label: 'Cloud Cover' }
-]
-
-const availableForecastPeriods = [
-  { key: 'forecast12h', label: '12 hours' },
-  { key: 'forecast24h', label: '24 hours' },
-  { key: 'forecast36h', label: '36 hours' },
-  { key: 'forecast48h', label: '48 hours' },
-  { key: 'forecast60h', label: '60 hours' },
-  { key: 'forecast72h', label: '72 hours' }
 ]
 
 // Initialize forecast settings if not set
@@ -107,12 +94,20 @@ onMounted(() => {
 
 <template>
   <div class="weather-settings">
-    <div class="settings-section">
-      <h4>Data Source Configuration</h4>
-    </div>
+    <!--
+      What is left of the hand-written form: which stretch of time is read,
+      and what colour each parameter is drawn in.
 
+      The first is three modes with quick ranges beside them and a button
+      that sets both ends to now - a way of arriving at two moments, not a
+      field. The second is one colour per parameter, keyed by the parameter,
+      which is a map rather than a set of fields.
+
+      How often it reads and what the forecast shows are rendered from
+      model/ui.xmi beside this.
+    -->
     <div class="settings-section">
-      <h4>Time Range Configuration</h4>
+      <h4>Zeitraum</h4>
 
       <div class="time-mode-selector">
         <label>
@@ -203,88 +198,8 @@ onMounted(() => {
       </div>
     </div>
 
-    <div class="settings-section">
-      <h4>Refresh Settings</h4>
-
-      <div class="form-group">
-        <label for="refreshInterval">Refresh Interval (seconds):</label>
-        <select
-          id="refreshInterval"
-          v-model="settings.refreshInterval"
-          class="form-control"
-        >
-          <option :value="60000">1 minute</option>
-          <option :value="300000">5 minutes</option>
-          <option :value="600000">10 minutes</option>
-          <option :value="1800000">30 minutes</option>
-          <option :value="3600000">1 hour</option>
-        </select>
-      </div>
-    </div>
-
-    <div class="settings-section">
-      <h4>Forecast Settings</h4>
-
-      <div class="form-group">
-        <label>
-          <input
-            type="checkbox"
-            v-model="settings.showForecast"
-          />
-          Show Forecast Data
-        </label>
-        <small class="form-text">
-          Enable forecast tabs to display weather predictions for different time periods
-        </small>
-      </div>
-
-      <div v-if="settings.showForecast" class="forecast-configuration">
-        <div class="form-group">
-          <label>Forecast Parameters:</label>
-          <div class="checkbox-grid">
-            <label
-              v-for="param in availableForecastParameters"
-              :key="param.key"
-              class="checkbox-item"
-            >
-              <input
-                type="checkbox"
-                :value="param.key"
-                v-model="settings.selectedForecastParameters"
-              />
-              {{ param.label }}
-            </label>
-          </div>
-          <small class="form-text">
-            Select which weather parameters to show in forecast tabs
-          </small>
-        </div>
-
-        <div class="form-group">
-          <label>Forecast Periods:</label>
-          <div class="checkbox-grid">
-            <label
-              v-for="period in availableForecastPeriods"
-              :key="period.key"
-              class="checkbox-item"
-            >
-              <input
-                type="checkbox"
-                :value="period.key"
-                v-model="settings.forecastPeriods"
-              />
-              {{ period.label }}
-            </label>
-          </div>
-          <small class="form-text">
-            Select which forecast time periods to include in charts
-          </small>
-        </div>
-      </div>
-    </div>
-
     <div class="settings-section" v-if="settings.showForecast">
-      <h4>Chart Colors</h4>
+      <h4>Farbe je Wert</h4>
 
       <div class="color-settings">
         <div
@@ -302,21 +217,10 @@ onMounted(() => {
           <span class="color-preview" :style="{ backgroundColor: settings.chartColors?.[param.key] }"></span>
         </div>
 
-        <!-- Grid Color Setting -->
-        <div class="color-setting-item">
-          <label for="grid-color">Grid Color:</label>
-          <input
-            id="grid-color"
-            type="color"
-            v-model="settings.gridColor"
-            class="color-picker"
-          />
-          <span class="color-preview" :style="{ backgroundColor: settings.gridColor }"></span>
-        </div>
       </div>
 
       <small class="form-text">
-        Choose colors for each weather parameter in forecast charts and grid lines
+        Farbe, in der jeder Wert in den Vorhersage-Diagrammen gezeichnet wird.
       </small>
     </div>
 

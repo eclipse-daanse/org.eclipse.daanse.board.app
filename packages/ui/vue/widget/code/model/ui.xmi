@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/*********************************************************************
+* Copyright (c) 2026 Contributors to the Eclipse Foundation.
+*
+* This program and the accompanying materials are made
+* available under the terms of the Eclipse Public License 2.0
+* which is available at https://www.eclipse.org/legal/epl-2.0/
+*
+* SPDX-License-Identifier: EPL-2.0
+**********************************************************************/
+
+The form for the code widget: how the source is shown.
+
+Writing it is the other half, and it stays hand-written - the editor is
+chosen at runtime and a form cannot offer three of them.
+
+The language comes before the theme because it changes what the code means
+to the widget, while the theme only changes what it looks like.
+-->
+<uimodel:UIModel
+    xmlns:xmi="http://www.omg.org/XMI"
+    xmi:version="2.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:uimodel="http://uimodel/1.0"
+    name="CodeSettingsForm">
+
+  <targetClasses href="http://org.eclipse.daanse.board.app.ui.vue.widget.code#//CodeSettings"/>
+
+  <components xsi:type="uimodel:FormView" name="CodeSettingsFormView">
+    <fields xsi:type="uimodel:SelectWidget" name="language"
+        feature="http://org.eclipse.daanse.board.app.ui.vue.widget.code#//CodeSettings/language" label="Sprache">
+      <values>typescript</values>
+      <values>vue</values>
+      <values>php</values>
+      <optionLabel language="JS" body="({ typescript: 'TypeScript', vue: 'Vue', php: 'PHP' })[option] ?? option"/>
+    </fields>
+    <fields xsi:type="uimodel:SelectWidget" name="theme"
+        feature="http://org.eclipse.daanse.board.app.ui.vue.widget.code#//CodeSettings/theme" label="Farbschema">
+      <values>github-light</values>
+      <values>vitesse-dark</values>
+      <values>catppuccin-mocha</values>
+      <values>min-dark</values>
+      <optionLabel language="JS" body="({ 'github-light': 'GitHub, hell', 'vitesse-dark': 'Vitesse, dunkel', 'catppuccin-mocha': 'Catppuccin Mocha', 'min-dark': 'Min, dunkel' })[option] ?? option"/>
+    </fields>
+  </components>
+</uimodel:UIModel>

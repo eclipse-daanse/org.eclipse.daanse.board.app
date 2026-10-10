@@ -11,37 +11,34 @@
  *   Smart City Jena
  **********************************************************************/
 
-import { component, inject, activate, deactivate } from '@eclipse-daanse/tsm/decorators'
+import { EVENT_REGISTRY_ID } from 'org.eclipse.daanse.board.app.lib.api.events'
+import { component, inject, activate, deactivate } from '@eclipse-daanse/tsm'
 import Icon from './assets/sample.svg'
 import SampleWidget from './SampleWidget.vue'
-import SampleWidgetSettings from './SampleWidgetSettings.vue'
 import { SampleWidgetEvents } from './events/SampleWidgetEvents'
-import type { EventRegistry } from 'org.eclipse.daanse.board.app.lib.events'
-import type { WidgetProvider } from 'org.eclipse.daanse.board.app.lib.repository.widget'
-
-/*
- * Literal on purpose: the tsm plugin derives the manifest's provides at
- * build time and cannot evaluate an imported constant. Must match
- * WIDGET_SERVICE_ID in lib.repository.widget.
- */
-const WIDGET_SERVICE = 'daanse.widget'
+import type { EventRegistry } from 'org.eclipse.daanse.board.app.lib.api.events'
+import { WIDGET_SERVICE_ID, type WidgetProvider } from 'org.eclipse.daanse.board.app.lib.api.widget'
 
 const WIDGET_TYPE = 'SampleWidget'
 
 @component({
-  service: [WIDGET_SERVICE],
+  service: [WIDGET_SERVICE_ID],
   properties: { 'widget.type': WIDGET_TYPE },
 })
 export class SampleWidgetProvider implements WidgetProvider {
   readonly type = WIDGET_TYPE
   readonly component = SampleWidget
-  readonly settingsComponent = SampleWidgetSettings
+  /*
+   * No settings at all: this widget takes its content from a datasource and
+   * has nothing of its own to configure. The empty form it used to declare
+   * put an empty section in the dialog and suggested otherwise.
+   */
   readonly supportedDSTypes = ['csv']
   readonly icon = Icon
   readonly name = 'Sample'
 
   constructor(
-    @inject('EventRegistry') private readonly events: EventRegistry,
+    @inject(EVENT_REGISTRY_ID) private readonly events: EventRegistry,
   ) {}
 
   @activate()
@@ -55,4 +52,4 @@ export class SampleWidgetProvider implements WidgetProvider {
   }
 }
 
-export { SampleWidget, SampleWidgetSettings }
+export { SampleWidget }

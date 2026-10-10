@@ -11,43 +11,40 @@
  *   Smart City Jena
  **********************************************************************/
 
-import { component, inject, activate, deactivate } from '@eclipse-daanse/tsm/decorators'
+import { EVENT_ACTIONS_REGISTRY_ID, EVENT_REGISTRY_ID } from 'org.eclipse.daanse.board.app.lib.api.events'
+import { component, inject, activate, deactivate } from '@eclipse-daanse/tsm'
 import Icon from './assets/sample.svg'
 import RssWidget from './RssWidget.vue'
-import RssWidgetSettings from './RssWidgetSettings.vue'
 import { RssWidgetEvents } from './events/RssWidgetEvents'
 import { RssWidgetInterface } from './api/RssWidgetInterface'
-import type { EventRegistry, EventActionsRegistry } from 'org.eclipse.daanse.board.app.lib.events'
-import type { WidgetProvider } from 'org.eclipse.daanse.board.app.lib.repository.widget'
-
-/*
- * Literal on purpose: the tsm plugin derives the manifest's provides at
- * build time and cannot evaluate an imported constant. Must match
- * WIDGET_SERVICE_ID in lib.repository.widget.
- */
-const WIDGET_SERVICE = 'daanse.widget'
+import type { EventRegistry, EventActionsRegistry } from 'org.eclipse.daanse.board.app.lib.api.events'
+import { WIDGET_SERVICE_ID, type WidgetProvider } from 'org.eclipse.daanse.board.app.lib.api.widget'
 
 const WIDGET_TYPE = 'RssWidget'
 
 /**
- * Declared component: the loader registers it under WIDGET_SERVICE, the
+ * Declared component: the loader registers it under WIDGET_SERVICE_ID, the
  * WidgetRepository tracks it into the palette, unloading withdraws it.
  */
 @component({
-  service: [WIDGET_SERVICE],
+  service: [WIDGET_SERVICE_ID],
   properties: { 'widget.type': WIDGET_TYPE },
 })
 export class RssWidgetProvider implements WidgetProvider {
   readonly type = WIDGET_TYPE
   readonly component = RssWidget
-  readonly settingsComponent = RssWidgetSettings
+  /*
+   * No settings at all: this widget takes its content from a datasource and
+   * has nothing of its own to configure. The empty form it used to declare
+   * put an empty section in the dialog and suggested otherwise.
+   */
   readonly supportedDSTypes = []
   readonly icon = Icon
   readonly name = 'RSS'
 
   constructor(
-    @inject('EventRegistry') private readonly events: EventRegistry,
-    @inject('EventActionsRegistry') private readonly actions: EventActionsRegistry,
+    @inject(EVENT_REGISTRY_ID) private readonly events: EventRegistry,
+    @inject(EVENT_ACTIONS_REGISTRY_ID) private readonly actions: EventActionsRegistry,
   ) {}
 
   @activate()
@@ -63,4 +60,4 @@ export class RssWidgetProvider implements WidgetProvider {
   }
 }
 
-export { RssWidget, RssWidgetSettings }
+export { RssWidget }

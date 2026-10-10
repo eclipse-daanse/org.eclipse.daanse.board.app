@@ -13,19 +13,17 @@ Contributors:
 
 <script setup lang="ts">
 import { computed, ref, watch, onMounted, onErrorCaptured, inject, shallowRef } from 'vue'
-import { useWidgetsStore, type IWidget } from 'org.eclipse.daanse.board.app.ui.vue.stores.widgets'
-import { useLayoutStore } from 'org.eclipse.daanse.board.app.ui.vue.stores.layout'
 import { WidgetWrapper } from 'org.eclipse.daanse.board.app.ui.vue.widget.wrapper'
 import {
   type LayoutRepositoryI,
   identifier as LayoutRepositoryIdentifier,
   type LayoutI
-} from 'org.eclipse.daanse.board.app.lib.repository.layout.page'
+} from 'org.eclipse.daanse.board.app.lib.api.layout.page'
 import {
   type PageRegistryI,
   identifier as PageIdentifier,
   type PageI as RepositoryPageI
-} from 'org.eclipse.daanse.board.app.lib.repository.page'
+} from 'org.eclipse.daanse.board.app.lib.api.page'
 
 const props = defineProps<{
   pageId: string
@@ -57,8 +55,8 @@ const loadLayout = () => {
     ViewComponent.value = null
     currentLayout.value = null
 
-    if (page?.layout && layoutRepo) {
-      const layout = layoutRepo.getLayout(page.layout.id)
+    if (page?.layoutId && layoutRepo) {
+      const layout = layoutRepo.getLayout(page.layoutId as string)
       currentLayout.value = layout || null
 
       // Für ViewMode verwende die View-Komponente des Layouts

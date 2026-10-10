@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/*********************************************************************
+* Copyright (c) 2026 Contributors to the Eclipse Foundation.
+*
+* This program and the accompanying materials are made
+* available under the terms of the Eclipse Public License 2.0
+* which is available at https://www.eclipse.org/legal/epl-2.0/
+*
+* SPDX-License-Identifier: EPL-2.0
+**********************************************************************/
+
+The page widget's settings: which page it shows, and how it frames it.
+
+The path is declared here because it is a setting, but it is not in the form
+- picking a page means choosing from the pages that exist right now, which
+is not something a written list of values can say. That one control stays
+hand-written beside the form.
+
+The variables a nested page carries are not declared at all: nothing sets
+them here, and what a settings object holds beyond its class is carried
+across unchanged.
+-->
+<ecore:EPackage xmi:version="2.0"
+                xmlns:xmi="http://www.omg.org/XMI"
+                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
+                name="pagesettings"
+                nsURI="http://org.eclipse.daanse.board.app.ui.vue.widget.page"
+                nsPrefix="pagesettings">
+
+    <eClassifiers xsi:type="ecore:EClass" name="PageWidgetSettings">
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="path"
+                             eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="hideTitle"
+                             eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+                             defaultValueLiteral="false"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="backgroundColor"
+                             eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+</ecore:EPackage>

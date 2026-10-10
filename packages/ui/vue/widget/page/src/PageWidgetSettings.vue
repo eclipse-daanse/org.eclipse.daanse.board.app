@@ -17,15 +17,15 @@ import { inject, onMounted, ref, computed } from 'vue'
 import type {i18n} from "org.eclipse.daanse.board.app.lib.i18next"
 import { PageI } from './interface/PageI'
 import { useRoute } from 'vue-router'
-import { type PageRegistryI, identifier } from 'org.eclipse.daanse.board.app.lib.repository.page'
+import { type PageRegistryI, identifier } from 'org.eclipse.daanse.board.app.lib.api.page'
+import {
+  DInput,
+  DSelect,
+} from 'org.eclipse.daanse.board.app.ui.vue.controls'
 
 const i18n:i18n|undefined = inject('i18n');
 const t = (key:string)=>(i18n)?i18n.t(key):key;
 
-const opened = ref({
-  widgetSection: false,
-  storeSection: false,
-});
 
 const widgetSettings = defineModel<PageI>({ required: true });
 const currentRoute = useRoute()
@@ -59,51 +59,38 @@ const isValidSelection = computed(() => {
 </script>
 
 <template>
-<va-collapse
-        v-model="opened.widgetSection"
-        :header="t('page:pageWidget.title')"
-        icon="settings"
-    >
-        <div class="settings-container">
-            <!-- Dropdown für Seitenauswahl -->
-            <va-select
-                v-model="widgetSettings.path"
-                :label="t('page:pageWidget.selectPage')"
-                :options="availablePages"
-                value-by="value"
-                text-by="text"
-                :placeholder="t('page:pageWidget.selectPagePlaceholder')"
-                :color="isValidSelection ? 'primary' : 'danger'"
-            />
-            <!-- Warnung bei Selbstreferenz -->
-            <va-alert
-                v-if="!isValidSelection"
-                color="warning"
-                :border="false"
-                icon="warning"
-            >
-              {{ t('page:pageWidget.selfReferenceWarning') }}
-            </va-alert>
+  <!--
+    What is left of the hand-written form: choosing the page.
 
-            <!-- Hintergrundfarbe -->
-            <va-color-input
-                v-model="widgetSettings.backgroundColor"
-                :label="t('page:pageWidget.backgroundColor')"
-            />
-            <!-- Manueller Pfad-Input als Fallback -->
-            <va-collapse
-                v-model="opened.storeSection"
-                :header="t('page:pageWidget.manualPath')"
-                icon="edit"
-            >
-                <va-input
-                    v-model="widgetSettings.path"
-                    :label="t('page:pageWidget.path')"
-                    :color="isValidSelection ? 'primary' : 'danger'"
-                />
-            </va-collapse>
-        </div>
-    </va-collapse>
+    The choices are the pages that exist right now, so there is no list a
+    model could state; and the widget refuses the page it is sitting on,
+    which is a rule about the choice rather than a property of it. The
+    framing - the title switch and the background - is rendered from
+    model/ui.xmi beside this.
+  -->
+  <section class="settings-section" data-section="Seite wählen">
+    <div class="settings-container">
+      <DSelect
+        v-model="widgetSettings.path"
+        :label="t('page:pageWidget.selectPage')"
+        :options="availablePages"
+        value-key="value"
+        label-key="text"
+        :placeholder="t('page:pageWidget.selectPagePlaceholder')"
+        :error="isValidSelection ? undefined : t('page:pageWidget.selfReferenceWarning')"
+      />
+
+      <!-- A page that is not in the list yet - one being built, or one from
+           a board that has not loaded - can still be reached by its path.
+           It used to sit behind a disclosure inside the section; the way
+           out of a list that does not have your page in it is worth
+           seeing before you need it. -->
+      <div class="manual-path">
+        <p class="manual-path__note">{{ t('page:pageWidget.manualPath') }}</p>
+        <DInput v-model="widgetSettings.path" :label="t('page:pageWidget.path')" />
+      </div>
+    </div>
+  </section>
 </template>
 
 <style scoped>
@@ -112,6 +99,18 @@ const isValidSelection = computed(() => {
   flex-direction: column;
   align-items: stretch;
   gap: 1rem;
+}
+
+.manual-path {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.manual-path__note {
+  margin: 0;
+  font-size: 12px;
+  color: var(--color-dim, #6b7280);
 }
 .add-btn {
   width: 150px;

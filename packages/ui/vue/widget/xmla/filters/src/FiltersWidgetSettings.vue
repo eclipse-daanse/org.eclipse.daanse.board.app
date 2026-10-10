@@ -13,7 +13,7 @@ Contributors:
 -->
 
 <script lang="ts" setup>
-import { ref } from 'vue';
+import { DCheckbox } from 'org.eclipse.daanse.board.app.ui.vue.controls';
 
 const widgetSettings = defineModel() as any;
 
@@ -22,17 +22,16 @@ widgetSettings.settings = widgetSettings.settings ?? {};
 widgetSettings.settings.showRows = widgetSettings.settings?.showRows ?? true;
 widgetSettings.settings.showColumns = widgetSettings.settings?.showRows ?? true;
 widgetSettings.settings.showFilters = widgetSettings.settings?.showRows ?? true;
-const opened = ref(false)
 </script>
 
 <template>
-  <va-collapse v-model="opened" header="Vanta widget settings" icon="settings">
+  <section class="settings-section" data-section="Vanta widget settings">
     <div class="settings-container">
-      <VaCheckbox v-model="widgetSettings.settings.showRows" label="Show rows" style="margin: 0.5rem 0;"/>
-      <VaCheckbox v-model="widgetSettings.settings.showColumns" label="Show columns" style="margin: 0.5rem 0;"/>
-      <VaCheckbox v-model="widgetSettings.settings.showFilters" label="Show filters" style="margin: 0.5rem 0;"/>
+      <DCheckbox v-model="widgetSettings.settings.showRows" label="Show rows" />
+      <DCheckbox v-model="widgetSettings.settings.showColumns" label="Show columns" />
+      <DCheckbox v-model="widgetSettings.settings.showFilters" label="Show filters" />
     </div>
-  </va-collapse>
+  </section>
 </template>
 <style scoped>
   .settings-container {

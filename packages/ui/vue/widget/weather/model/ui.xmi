@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/*********************************************************************
+* Copyright (c) 2026 Contributors to the Eclipse Foundation.
+*
+* This program and the accompanying materials are made
+* available under the terms of the Eclipse Public License 2.0
+* which is available at https://www.eclipse.org/legal/epl-2.0/
+*
+* SPDX-License-Identifier: EPL-2.0
+**********************************************************************/
+
+The form for the weather widget.
+
+How often it reads, and what the forecast shows. Which stretch of time it
+reads and what colour each parameter is drawn in stay with the hand-written
+component: the first is three modes with quick ranges and a "now" button,
+the second is one colour per parameter keyed by the parameter.
+
+The parameters and the periods are sets, so every choice is shown ticked or
+not rather than hidden behind a dropdown - which of the eight are charted is
+read by scanning them.
+
+The interval is stored in milliseconds, which is what the widget hands to
+setInterval; the labels say it in the units someone thinks in.
+-->
+<uimodel:UIModel
+    xmlns:xmi="http://www.omg.org/XMI"
+    xmi:version="2.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:uimodel="http://uimodel/1.0"
+    name="WeatherSettingsForm">
+
+  <targetClasses href="http://org.eclipse.daanse.board.app.ui.vue.widget.weather#//WeatherSettings"/>
+
+  <components xsi:type="uimodel:FormView" name="WeatherSettingsFormView">
+
+    <fields xsi:type="uimodel:GroupWidget" name="refreshGroup" layout="VERTICAL" label="Aktualisierung">
+      <fields xsi:type="uimodel:SelectWidget" name="refreshInterval"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.weather#//WeatherSettings/refreshInterval" label="Neu lesen">
+        <values>60000</values>
+        <values>300000</values>
+        <values>600000</values>
+        <values>1800000</values>
+        <values>3600000</values>
+        <optionLabel language="JS" body="({ '60000': 'Jede Minute', '300000': 'Alle 5 Minuten', '600000': 'Alle 10 Minuten', '1800000': 'Alle 30 Minuten', '3600000': 'Jede Stunde' })[option] ?? option"/>
+      </fields>
+    </fields>
+
+    <fields xsi:type="uimodel:GroupWidget" name="forecastGroup" layout="VERTICAL" label="Vorhersage">
+      <fields xsi:type="uimodel:CheckboxWidget" name="showForecast"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.weather#//WeatherSettings/showForecast" label="Vorhersage zeigen"/>
+      <fields xsi:type="uimodel:SelectWidget" name="selectedForecastParameters"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.weather#//WeatherSettings/selectedForecastParameters"
+          label="Welche Werte" multiSelect="true">
+        <values>temperature</values>
+        <values>humidity</values>
+        <values>pressure</values>
+        <values>windSpeed</values>
+        <values>windDirection</values>
+        <values>precipitation</values>
+        <values>visibility</values>
+        <values>cloudCover</values>
+        <optionLabel language="JS" body="({ temperature: 'Temperatur', humidity: 'Luftfeuchte', pressure: 'Luftdruck', windSpeed: 'Windgeschwindigkeit', windDirection: 'Windrichtung', precipitation: 'Niederschlag', visibility: 'Sichtweite', cloudCover: 'Bewölkung' })[option] ?? option"/>
+        <visibilityCondition language="JS" body="self.showForecast === true || self.showForecast === 'true'"/>
+      </fields>
+      <fields xsi:type="uimodel:SelectWidget" name="forecastPeriods"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.weather#//WeatherSettings/forecastPeriods"
+          label="Welche Zeiträume" multiSelect="true">
+        <values>forecast12h</values>
+        <values>forecast24h</values>
+        <values>forecast36h</values>
+        <values>forecast48h</values>
+        <values>forecast60h</values>
+        <values>forecast72h</values>
+        <optionLabel language="JS" body="option.replace('forecast', '').replace('h', ' Stunden')"/>
+        <visibilityCondition language="JS" body="self.showForecast === true || self.showForecast === 'true'"/>
+      </fields>
+      <fields xsi:type="uimodel:InputWidget" name="gridColor"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.weather#//WeatherSettings/gridColor" label="Farbe der Gitterlinien">
+        <visibilityCondition language="JS" body="self.showForecast === true || self.showForecast === 'true'"/>
+      </fields>
+    </fields>
+
+  </components>
+</uimodel:UIModel>

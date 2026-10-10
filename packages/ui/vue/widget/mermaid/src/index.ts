@@ -11,49 +11,58 @@
  *   Smart City Jena
  **********************************************************************/
 
-import { component, inject, activate, deactivate } from '@eclipse-daanse/tsm/decorators'
+import { EVENT_ACTIONS_REGISTRY_ID, EVENT_REGISTRY_ID } from 'org.eclipse.daanse.board.app.lib.api.events'
+import { component, inject, activate, deactivate } from '@eclipse-daanse/tsm'
 import Icon from './assets/text.svg'
 import MermaidWidget from './MermaidWidget.vue'
-import MermaidWidgetSettings from './MermaidWidgetSettings.vue'
-import { VariableComplexStringWrapper, VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import { MermaidWidgetEvents } from './events/MermaidWidgetEvents'
 import { MermaidWidgetInterface } from './api/MermaidWidgetInterface'
-import type { EventRegistry, EventActionsRegistry } from 'org.eclipse.daanse.board.app.lib.events'
-import type { WidgetProvider } from 'org.eclipse.daanse.board.app.lib.repository.widget'
-
-interface IMermaidWidgetSettings {
-  theme: VariableWrapper<string>
-  value: VariableComplexStringWrapper
-}
+import { MermaidWidgetSettingsImpl } from './gen/MermaidWidgetSettingsImpl'
+import { MermaidwidgetsPackage } from './gen/MermaidwidgetsPackage'
+/* The form for these settings, written as a model beside the Ecore. */
+import mermaidSettingsFormXmi from '../model/ui.xmi?raw'
 
 /*
- * Literal on purpose: the tsm plugin derives the manifest's provides at
- * build time and cannot evaluate an imported constant. Must match
- * WIDGET_SERVICE_ID in lib.repository.widget.
+ * Building the EPackage on load: until it exists the class literals are
+ * null, an instance cannot say what it is, and nothing can render it from
+ * the model.
  */
-const WIDGET_SERVICE = 'daanse.widget'
+void MermaidwidgetsPackage.eINSTANCE
+import type { EventRegistry, EventActionsRegistry } from 'org.eclipse.daanse.board.app.lib.api.events'
+import { WIDGET_SERVICE_ID, type WidgetProvider } from 'org.eclipse.daanse.board.app.lib.api.widget'
 
 const WIDGET_TYPE = 'MermaidWidget'
 
 /**
- * Declared component: the loader registers it under WIDGET_SERVICE, the
+ * Declared component: the loader registers it under WIDGET_SERVICE_ID, the
  * WidgetRepository tracks it into the palette, unloading withdraws it.
  */
 @component({
-  service: [WIDGET_SERVICE],
+  service: [WIDGET_SERVICE_ID],
   properties: { 'widget.type': WIDGET_TYPE },
 })
 export class MermaidWidgetProvider implements WidgetProvider {
   readonly type = WIDGET_TYPE
   readonly component = MermaidWidget
-  readonly settingsComponent = MermaidWidgetSettings
   readonly supportedDSTypes = []
   readonly icon = Icon
   readonly name = 'Mermaid'
 
+  /*
+   * The settings form, as a model. Carried on the registration like the
+   * icon, so whoever shows the settings does not have to know this widget
+   * exists - and the shell needs no dependency on this bundle.
+   */
+  readonly settingsForm = {
+    xmi: mermaidSettingsFormXmi,
+    uri: '/mermaid-settings.ui.xmi',
+    ePackage: () => MermaidwidgetsPackage.eINSTANCE,
+    create: () => new MermaidWidgetSettingsImpl(),
+  }
+
   constructor(
-    @inject('EventRegistry') private readonly events: EventRegistry,
-    @inject('EventActionsRegistry') private readonly actions: EventActionsRegistry,
+    @inject(EVENT_REGISTRY_ID) private readonly events: EventRegistry,
+    @inject(EVENT_ACTIONS_REGISTRY_ID) private readonly actions: EventActionsRegistry,
   ) {}
 
   @activate()
@@ -69,5 +78,5 @@ export class MermaidWidgetProvider implements WidgetProvider {
   }
 }
 
-export { MermaidWidget, MermaidWidgetSettings }
-export type { IMermaidWidgetSettings }
+export { MermaidWidget }
+export { MermaidWidgetSettingsImpl, MermaidwidgetsPackage, mermaidSettingsFormXmi }
