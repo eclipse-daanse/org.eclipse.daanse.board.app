@@ -28,6 +28,7 @@
 import { resolve } from 'node:path'
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
+import tailwindcss from '@tailwindcss/vite'
 import { tsmPlugin } from '@eclipse-daanse/tsm/vite'
 import manifest from './manifest.json'
 
@@ -126,8 +127,12 @@ const allShared = manifest.sharedDependencies.map((dependency) => dependency.id)
 // Workspace libraries resolve through __tsm__.require; browser-standard
 // libraries (vue and friends) stay bare imports, resolved by the import map
 // in the host page - platform.vue serves the artefacts they point at.
-const sharedModules = allShared.filter((id) => id.startsWith('org.eclipse.daanse'))
-const importMapLibraries = allShared.filter((id) => !id.startsWith('org.eclipse.daanse'))
+// Only the host library stays on __tsm__.require: lib.core carries the
+// service registry singleton and can never arrive by URL. Every other
+// library is a bare import, resolved by the import map.
+const sharedModules = allShared.filter((id) => id === 'org.eclipse.daanse.board.app.lib.core')
+// The framework API rides the import map too - the system bundle serves it.
+const importMapLibraries = [...allShared.filter((id) => id !== 'org.eclipse.daanse.board.app.lib.core'), '@eclipse-daanse/tsm']
 
 export default defineConfig({
   resolve: {
@@ -142,6 +147,10 @@ export default defineConfig({
   },
   plugins: [
     vue(),
+    // The shell owns the application-wide stylesheet; main.css pulls
+    // tailwind in and @source widens the scan across the workspace, since
+    // widget bundles use the same utility classes.
+    tailwindcss(),
     inlineCss(),
     rewriteSharedImportsInChunks(),
     tsmPlugin({
@@ -155,7 +164,9 @@ export default defineConfig({
   build: {
     target: 'es2022',
     rollupOptions: { external: importMapLibraries },
-    minify: false,
+    // Production artefacts are minified; the dev watcher overrides this
+    // with `minify: false` for fast incremental rebuilds.
+    minify: 'esbuild',
     outDir: resolve(__dirname, 'dist-bundle'),
     emptyOutDir: true,
     lib: {
