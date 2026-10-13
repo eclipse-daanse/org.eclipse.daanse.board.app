@@ -61,7 +61,7 @@ export async function getMdxRequest(
 
     if (!pivotTableSettings.showEmpty) selectSection += ' NON EMPTY'
 
-    const rowsProperties = getRowsProperies(rows, properties)
+    const rowsProperties = getRowsProperies(rows, shownProperties(properties, pivotTableSettings?.showRowsProperties))
     const rowsRequest = await getRowsRequest(
       rows,
       rowsDrilldownMembers,
@@ -76,7 +76,7 @@ export async function getMdxRequest(
 
     if (!pivotTableSettings.showEmpty) selectSection += ' NON EMPTY'
 
-    const colsProperties = getColumnsProperies(columns, properties)
+    const colsProperties = getColumnsProperies(columns, shownProperties(properties, pivotTableSettings?.showColumnsProperties))
     const colsRequest = await getColumnsRequest(
       columns,
       columnsDrilldownMembers,
@@ -279,8 +279,6 @@ async function getRowsRequest(
           )`
       }
     }
-  } else if (rows.length === 1) {
-    rowsSelect = `{ ${rows[0].originalItem.HIERARCHY_UNIQUE_NAME}.Members }`
   } else {
     rowsSelect = ''
   }
@@ -343,6 +341,16 @@ async function getSingleRowRequest(
     select: `Hierarchize(AddCalculatedMembers({${rootLevel?.LEVEL_UNIQUE_NAME}.members}))`,
     with: '',
   }
+}
+
+/**
+ * The member properties to ask for: none where the pivot table was told not
+ * to show them. Where nobody said - a DataTable - they are asked for: the
+ * table hands them on as rowProperties, and the OGC composer finds its
+ * geometry there.
+ */
+function shownProperties<T>(properties: T[], shown: boolean | undefined): T[] {
+  return shown === false ? [] : properties
 }
 
 function getRowsProperies(rows: any, properties: any[]) {
@@ -423,7 +431,7 @@ async function getSingleHierarchyRequest(
       else rowsWith = `WITH ${filtersRequest.with}`
     }
 
-    const rowsProperties = getRowsProperies(rows, properties)
+    const rowsProperties = getRowsProperies(rows, shownProperties(properties, pivotTableSettings?.showRowsProperties))
 
     return `
       ${rowsWith}
@@ -449,7 +457,7 @@ async function getSingleHierarchyRequest(
       else colsWith = `WITH ${filtersRequest.with}`
     }
 
-    const colsProperties = getColumnsProperies(columns, properties)
+    const colsProperties = getColumnsProperies(columns, shownProperties(properties, pivotTableSettings?.showColumnsProperties))
 
     return `
       ${colsWith}
@@ -545,12 +553,10 @@ async function getAxisFilterRequest(e: any, levels: any[]) {
       l.LEVEL_NUMBER === '0',
   )
 
+  // Everything selected, nothing taken out: no filter at all.
   if (filter.selectAll && !filter.deselectedItems?.length) {
-    const uid = 'id' + v4()
-    const filterSetName = `[FILTER_${uid}]`
-
     return {
-      with: `SET ${filterSetName} AS 'VisualTotals(Distinct(Hierarchize(AddCalculatedMembers({${rootLevel?.LEVEL_UNIQUE_NAME}.members}))))' `,
+      with: '',
       select: `Hierarchize(AddCalculatedMembers({${rootLevel?.LEVEL_UNIQUE_NAME}.members}))`,
     }
   }
