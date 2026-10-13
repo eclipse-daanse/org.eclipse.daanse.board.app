@@ -254,8 +254,27 @@ const parseMdxRequest = (mdxResponce: any, params: QueryParams) => {
   }
 }
 
-const parseCells = (cells: any[], columns: any[], rows: any[]) => {
-  if (!cells.length) return []
+/**
+ * Cells by their ordinal. A server may leave empty cells out - SSAS does -
+ * so a cell's place is its CellOrdinal, never its index in the list.
+ */
+interface CellNode {
+  Value?: unknown
+  __attrs?: { CellOrdinal?: string }
+}
+
+const cellsByOrdinal = <T extends CellNode>(cells: T[]): Map<number, T> => {
+  const byOrdinal = new Map<number, T>()
+  cells.forEach((cell, index) => byOrdinal.set(Number(cell?.__attrs?.CellOrdinal ?? index), cell))
+  return byOrdinal
+}
+
+const parseCells = (sparse: CellNode[], columns: unknown[], rows: unknown[]) => {
+  if (!sparse.length) return []
+  const byOrdinal = cellsByOrdinal(sparse)
+  const size = Math.max(columns.length, 1) * Math.max(rows.length, 1)
+  // A cell left out is there all the same, empty, so the ones after it keep their place.
+  const cells: CellNode[] = Array.from({ length: size }, (_, ordinal) => byOrdinal.get(ordinal) ?? { __attrs: { CellOrdinal: String(ordinal) } })
   if (!rows.length) {
     return [cells]
   } else if (!columns.length) {
@@ -269,6 +288,36 @@ const parseCells = (cells: any[], columns: any[], rows: any[]) => {
     columnsArray.push(cp.splice(0, count))
   }
   return columnsArray
+}
+
+/** A member's place in its hierarchy, from its unique name: [Time].[1997].[Q1] is 1997 › Q1. */
+const memberPath = (uniqueName: string): string => {
+  const parts = (uniqueName.match(/\[(?:[^\]]|\]\])*\]/g) ?? [uniqueName]).map(p => p.replace(/^\[|\]$/g, '').replace(/\]\]/g, ']'))
+  return parts.length > 1 ? parts.slice(1).join(' › ') : parts[0]
+}
+
+/**
+ * The captions a table is keyed by - its headers, its item fields and its
+ * rowProperties. A caption that turns up twice (Q1 of 1997 and of 1998) is
+ * told apart by its members' paths; otherwise one would overwrite the other
+ * and its values would be lost.
+ */
+const tableCaptions = (tuples: { Member: unknown }[]): string[] => {
+  const plain = tuples.map(t => optionalArrayToArray(t.Member).map(m => m.Caption).join(' - '))
+  const seen = new Map<string, number>()
+  for (const caption of plain) seen.set(caption, (seen.get(caption) ?? 0) + 1)
+  const distinct = plain.map((caption, i) =>
+    (seen.get(caption) ?? 0) > 1
+      ? optionalArrayToArray(tuples[i].Member).map(m => memberPath(m.UName ?? m.Caption)).join(' - ')
+      : caption,
+  )
+  // Two tuples of the very same members: numbered, rather than lost.
+  const used = new Map<string, number>()
+  return distinct.map(caption => {
+    const n = (used.get(caption) ?? 0) + 1
+    used.set(caption, n)
+    return n > 1 ? `${caption} (${n})` : caption
+  })
 }
 
 const parseRequestToTable = (mdxResponce: any, mainAxis = 0) => {
@@ -302,9 +351,9 @@ const parseRequestToTable = (mdxResponce: any, mainAxis = 0) => {
   //   )
   // }
 
-  const cellsArray = optionalArrayToArray(
+  const cells = cellsByOrdinal(optionalArrayToArray(
     mdxResponce.Body.ExecuteResponse.return.root.CellData?.Cell,
-  )
+  ))
 
   const table = {
     rows: [],
@@ -318,16 +367,15 @@ const parseRequestToTable = (mdxResponce: any, mainAxis = 0) => {
   }
 
   if (mainAxis === 0) {
-    axis1.forEach((item, index) => {
-      table.headers.push(getCaption(item.Member))
-    })
+    table.headers.push(...tableCaptions(axis1))
 
+    const rowCaptions = tableCaptions(axis0)
     axis0.forEach((item, i) => {
-      const caption = getCaption(item.Member)
+      const caption = rowCaptions[i]
       table.rows[i] = [caption]
       table.rowProperties[caption] = item.Member;
       axis1.forEach((subItem, j) => {
-        table.rows[i].push(cellsArray[j * axis0.length + i]?.Value)
+        table.rows[i].push(cells.get(j * axis0.length + i)?.Value)
       })
     })
   } else if (mainAxis === 1) {
@@ -340,7 +388,7 @@ const parseRequestToTable = (mdxResponce: any, mainAxis = 0) => {
       table.items[i] = [caption]
       table.rowProperties[caption] = item.Member;
       axis0.forEach((subItem, j) => {
-        table.items[i].push(cellsArray[i * axis0.length + j]?.Value)
+        table.items[i].push(cells.get(i * axis0.length + j)?.Value)
       })
     })
   }

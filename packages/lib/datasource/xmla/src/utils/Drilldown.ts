@@ -33,7 +33,7 @@ export async function getRowsDrilldownRequestString(
     const rowsLevels = metadataLevels.filter(e => {
       return (
         e.HIERARCHY_UNIQUE_NAME === rowsMemberLevel?.HIERARCHY_UNIQUE_NAME &&
-        e.LEVEL_NUMBER <= rowsMemberLevel.LEVEL_NUMBER
+        Number(e.LEVEL_NUMBER) <= Number(rowsMemberLevel.LEVEL_NUMBER)
       )
     })
 
@@ -207,7 +207,7 @@ export async function getColsDrilldownRequestString(
     const colsLevels = metadataLevels.filter(e => {
       return (
         e.HIERARCHY_UNIQUE_NAME === colsMemberLevel?.HIERARCHY_UNIQUE_NAME &&
-        e.LEVEL_NUMBER <= colsMemberLevel.LEVEL_NUMBER
+        Number(e.LEVEL_NUMBER) <= Number(colsMemberLevel.LEVEL_NUMBER)
       )
     })
 
