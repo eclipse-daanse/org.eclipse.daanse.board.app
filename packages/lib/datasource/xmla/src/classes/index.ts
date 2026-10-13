@@ -75,8 +75,8 @@ export class XmlaStore extends BaseDatasource {
   private initPromiseResolve: (() => void) | undefined
   private initPromise: Promise<void> = null as unknown as Promise<void>;
 
-  private metadataPromiseResolve: ((value: MetadataStore) => void) | undefined
-  private metadataPromise: Promise<MetadataStore> = null as unknown as Promise<MetadataStore>;
+  /* Loaded once per configuration - every query and every widget needs it. */
+  private metadataPromise: Promise<MetadataStore> | null = null
 
   @inject(CONNECTION_REPOSITORY)
   private connectionRepository!: ConnectionRepository
@@ -88,15 +88,11 @@ export class XmlaStore extends BaseDatasource {
   init(configuration: ConfigurationOf<IXmlaStoreConfiguration>) {
     super.init(configuration)
 
-    console.log('state of store during creation', JSON.stringify(this.requestParams));
-
     this.initPromise = new Promise(resolve => {
       this.initPromiseResolve = resolve
     })
 
-    this.metadataPromise = new Promise(resolve => {
-      this.metadataPromiseResolve = resolve
-    })
+    this.metadataPromise = null
 
     this.connection = configuration.connection
     this.cube = configuration.cube
@@ -136,29 +132,29 @@ export class XmlaStore extends BaseDatasource {
     this.initPromiseResolve?.()
   }
 
-  private metadataLoading = false;
-  async loadMetadata() {
-    if (this.metadataLoading) {
-      return this.metadataPromise;
+  loadMetadata(): Promise<MetadataStore> {
+    if (!this.metadataPromise) {
+      const loading = this.fetchMetadata()
+      this.metadataPromise = loading
+      // A failed load is not kept; the next call tries again.
+      loading.catch(() => {
+        if (this.metadataPromise === loading) this.metadataPromise = null
+      })
     }
-    if (this.metadata && this.metadata.getLevels()?.length > 0) {
-      return this.metadata;
-    }
-    this.metadataLoading = true;
-    try {
-      const connection = this.connectionRepository.getConnection(
-        this.connection,
-      ) as XmlaConnection
+    return this.metadataPromise
+  }
 
-      this.metadata = new MetadataStore()
-      const api = await connection.getApi();
-      this.metadata.init(api);
-      await this.metadata.loadMetadata(connection.catalogName, this.cube)
-      this.metadataPromiseResolve?.(this.metadata);
-      return this.metadata;
-    } finally {
-      this.metadataLoading = false;
-    }
+  private async fetchMetadata(): Promise<MetadataStore> {
+    const connection = this.connectionRepository.getConnection(
+      this.connection,
+    ) as XmlaConnection
+
+    const metadata = new MetadataStore()
+    metadata.init(await connection.getApi())
+    await metadata.loadMetadata(connection.catalogName, this.cube)
+    this.metadata = metadata
+
+    return metadata
   }
 
   /** The repository arrives as a parameter - callers inject it Vue-side. */
@@ -199,13 +195,20 @@ export class XmlaStore extends BaseDatasource {
     }
   }
 
-  async getOriginalData() {
-    throw new Error('Not Implemented')
-  }
+  /*
+   * Polling only has to notify: every subscriber refetches through getData.
+   * Running the query here as well would send it twice per tick.
+   */
+  async getOriginalData() {}
 
   async getData(type: string, requestConfig: any = {}): Promise<any> {
     let request
     let response = null
+
+    // Before the query, not after: an unknown type is not worth a round trip.
+    if (type !== 'PivotTable' && type !== 'DataTable') {
+      throw new Error('Invalid data type')
+    }
 
     if (!this.connectionRepository) {
       throw new Error('ConnectionRepository is not provided to Store Classes')
@@ -216,22 +219,22 @@ export class XmlaStore extends BaseDatasource {
 
     if (this.useMdx) {
       request = this.mdx
+      // The pivot parser reads the properties even for hand-written MDX.
+      if (type === 'PivotTable') await this.loadMetadata()
     } else {
       request = await this.getMdxRequest(requestConfig)
     }
 
-    console.log('MDX Request in store:', request)
-    console.log('Metadata in store:', this.metadata.getProperties())
-    console.log('Metadata in store:', this.metadata.getLevels())
     const mdxResponse = await connection.fetch({
       data: {
         mdx: request,
       },
+      // A caller that no longer needs the answer can give up on it.
+      signal: requestConfig.signal,
     })
 
     if (type === 'PivotTable') {
       response = this.parseToPivotTable(mdxResponse, requestConfig)
-      console.log('Parsed responce in datasource', response);
       if (!response) return null
 
       response.tableState = {
@@ -252,10 +255,10 @@ export class XmlaStore extends BaseDatasource {
   }
 
   async getMdxRequest(requestConfig: any = {}) {
-    await this.loadMetadata()
+    const metadata = await this.loadMetadata()
     this.executeCleanup();
-    const properties = this.metadata.getProperties()
-    const levels = this.metadata.getLevels()
+    const properties = metadata.getProperties()
+    const levels = metadata.getLevels()
 
     const mdxRequest = await getMdxRequest(
       this.cube,
@@ -277,8 +280,7 @@ export class XmlaStore extends BaseDatasource {
 
   async getMetadata() {
     await this.initPromise
-    await this.loadMetadata()
-    return this.metadata
+    return this.loadMetadata()
   }
 
   public getCubeName(): string {
@@ -303,7 +305,6 @@ export class XmlaStore extends BaseDatasource {
   }
 
   changeFilters(e: FilterChangePayload) {
-    console.log('event in the datasource', e);
 
     const originalItem = this.requestParams[e.area].find(
       (item) => item.id === e.id
@@ -464,7 +465,6 @@ export class XmlaStore extends BaseDatasource {
 
   parseToPivotTable(mdxResponse: any, requestConfig: any = {}): any {
     const properties = this.metadata.getProperties()
-    console.log(requestConfig);
 
     return parseMdxRequest(mdxResponse, {
       rows: this.requestParams.rows,

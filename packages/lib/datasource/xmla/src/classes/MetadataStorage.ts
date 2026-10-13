@@ -11,7 +11,7 @@
  *   Smart City Jena
  **********************************************************************/
 
-import type { XMLAApi } from 'org.eclipse.daanse.board.app.ui.vue.connection.xmla'
+import type { XMLAApi } from 'org.eclipse.daanse.board.app.lib.connection.xmla'
 
 interface MetadataStorage {
   hierarchies: MDSchemaHierarchy[]
@@ -81,13 +81,13 @@ export class MetadataStore {
       sets,
       properties,
     ] = await Promise.all([
-      await this.api.getDimensions(catalogName, cubeName),
-      await this.api.getHierarchies(catalogName, cubeName),
-      await this.api.getLevels(catalogName, cubeName),
-      await this.api.getMeasureGroups(catalogName, cubeName),
-      await this.api.getMeasures(catalogName, cubeName),
-      await this.api.getSets(catalogName, cubeName),
-      await this.api.getProperties(catalogName, cubeName),
+      this.api.getDimensions(catalogName, cubeName),
+      this.api.getHierarchies(catalogName, cubeName),
+      this.api.getLevels(catalogName, cubeName),
+      this.api.getMeasureGroups(catalogName, cubeName),
+      this.api.getMeasures(catalogName, cubeName),
+      this.api.getSets(catalogName, cubeName),
+      this.api.getProperties(catalogName, cubeName),
     ])
 
     this.storage.dimensions = dimensions

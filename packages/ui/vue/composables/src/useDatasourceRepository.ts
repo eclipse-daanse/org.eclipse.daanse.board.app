@@ -59,23 +59,39 @@ export function useDatasourceRepository(
 
   const { startLoading, stopLoading } = useGlobalLoading()
 
+  /*
+   * The request whose answer this widget is waiting for. A newer one
+   * replaces it, and an answer nobody waits for any more is dropped rather
+   * than shown over the newer one - whether or not the datasource could
+   * stop it on the way.
+   */
+  let pending: AbortController | null = null
+
+  const nextRequest = (): AbortSignal => {
+    pending?.abort()
+    pending = new AbortController()
+    return pending.signal
+  }
+
   const getData = async () => {
     if (!dataSourceId.value) {
+      pending?.abort()
       data.value = null
       return
     }
-    console.log('getData', dataSourceId.value)
-    console.log('type', type)
+    const signal = nextRequest()
     startLoading()
     try {
       const dataSource = datasourceRepository.getDatasource(dataSourceId.value);
-      const dataRaw = await dataSource.getData(type, requestConfig?.value || {});
+      const dataRaw = await dataSource.getData(type, { ...(requestConfig?.value || {}), signal });
+      if (signal.aborted) return
       if (type === "PivotTable") {
         data.value = JSON.parse(JSON.stringify(dataRaw));
       } else {
         data.value = structuredClone(dataRaw);
       }
     } catch (e) {
+      if (signal.aborted) return
       data.value = null
       console.warn(e)
     } finally {
@@ -94,7 +110,9 @@ export function useDatasourceRepository(
         // When shouldUpdate=false, wait for data to be ready, then update our own data
         if (!shouldUpdate && result instanceof Promise) {
           await result
-          const dataRaw = await dataSource.getData(type)
+          const signal = nextRequest()
+          const dataRaw = await dataSource.getData(type, { signal })
+          if (signal.aborted) return
           data.value = structuredClone(dataRaw)
         }
       } catch (e) {
@@ -121,17 +139,19 @@ export function useDatasourceRepository(
 
   const getDataWithOptions = async (options?: any) => {
     if (!dataSourceId.value) {
+      pending?.abort()
       data.value = null
       return
     }
-    console.log('getDataWithOptions', dataSourceId.value, options)
-    console.log('type', type)
+    const signal = nextRequest()
     startLoading()
     try {
       const dataSource = datasourceRepository.getDatasource(dataSourceId.value);
-      const dataRaw = await dataSource.getData(type, options);
+      const dataRaw = await dataSource.getData(type, { ...(options || {}), signal });
+      if (signal.aborted) return
       data.value = structuredClone(dataRaw);
     } catch (e) {
+      if (signal.aborted) return
       data.value = null
       console.warn(e)
     } finally {
@@ -159,8 +179,8 @@ export function useDatasourceRepository(
     }
     try {
       const dataSource = datasourceRepository.getDatasource(newVal)
-      // TODO: fix duplicate subscription
-      dataSource.subscribe(()=>getData())
+      // The function itself, so the unsubscribe above finds it next time.
+      dataSource.subscribe(getData)
       subscriptions.forEach(fn => {
         dataSource.subscribe(fn);
       })
@@ -195,6 +215,7 @@ export function useDatasourceRepository(
   })
 
   onUnmounted(() => {
+    pending?.abort()
     try {
       const dataSource = datasourceRepository.getDatasource(dataSourceId.value)
       dataSource.unsubscribe(getData)

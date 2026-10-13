@@ -23,7 +23,12 @@
   "dependencies": {
     "org.eclipse.daanse.board.app.lib.connection.base": "^0.0.1-next.1",
     "org.eclipse.daanse.board.app.lib.annotations": "0.0.1-next.1",
-    "org.eclipse.daanse.board.app.lib.core": "^0.0.1-next.1"
+    "org.eclipse.daanse.board.app.lib.core": "^0.0.1-next.1",
+    "@eclipse-daanse/emf-xml": "0.0.1-next.1",
+    "@eclipse-daanse/xmla-client": "0.0.1-next.1",
+    "@eclipse-daanse/xmla-dynamic": "0.0.1-next.1",
+    "@eclipse-daanse/xmla-model": "0.0.1-next.1",
+    "@eclipse-daanse/xmla-workbench-adapter": "0.0.1-next.1"
   },
   "devDependencies": {
     "typescript": "^5.8.2",

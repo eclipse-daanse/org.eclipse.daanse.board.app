@@ -7,6 +7,7 @@
       "basic": "Basic"
     },
     "user": "User",
-    "password": "Password"
+    "password": "Password",
+    "timeout": "Timeout in seconds (0 = none)"
   }
 }
