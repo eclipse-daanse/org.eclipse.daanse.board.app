@@ -14,7 +14,7 @@ import {
   getRowsDrilldownRequestString,
   getColsDrilldownRequestString,
 } from './Drilldown'
-import { v4 } from 'uuid'
+import { filterKey, stableId } from './helpers'
 import { filterMembers } from './filterMembers'
 
 export async function getMdxRequest(
@@ -520,7 +520,7 @@ function getFiltersRequest(filters: any[]) {
     if (!filter?.enabled) return
 
     if (filter.multipleChoise) {
-      const uid = 'id' + v4()
+      const uid = stableId('where', filter.originalItem.DIMENSION_UNIQUE_NAME, filterKey(filter))
       const filterSetName = `${filter.originalItem.DIMENSION_UNIQUE_NAME}.[FILTER_${uid}]`
 
       const selectedItems = filter.selectedItems
@@ -563,7 +563,7 @@ async function getAxisFilterRequest(e: any, levels: any[]) {
 
   if (!rootLevel) return null
 
-  const uid = 'id' + v4()
+  const uid = stableId('axis', e.originalItem.HIERARCHY_UNIQUE_NAME, filterKey(filter))
   const filterSetName = `[FILTER_${uid}]`
   const members = filterMembers(filter, e.originalItem.HIERARCHY_UNIQUE_NAME)
 

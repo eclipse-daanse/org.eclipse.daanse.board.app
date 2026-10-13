@@ -12,8 +12,8 @@ Contributors:
 -->
 
 <script setup lang="ts">
-import { computed, watch, onMounted, ref } from 'vue';
-import { XmlaConnection } from 'org.eclipse.daanse.board.app.lib.connection.xmla';
+import { computed, watch, onMounted, onUnmounted, ref } from 'vue';
+import { DEFAULT_TIMEOUT_SECONDS, XmlaConnection } from 'org.eclipse.daanse.board.app.lib.connection.xmla';
 import { DInput, DSelect } from 'org.eclipse.daanse.board.app.ui.vue.controls';
 import { useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 
@@ -37,30 +37,39 @@ onMounted(async () => {
   }
 });
 
+let latestRequest = 0;
+
 const fetchCatalogs = async () => {
-  catalogs.value = await XmlaConnection.getCatalogs(config.url, {
-    type: config.security,
-    user: config.user,
-    password: config.password
-  });
+  const request = ++latestRequest;
+  try {
+    const result = await XmlaConnection.getCatalogs(config.url, {
+      type: config.security,
+      user: config.user,
+      password: config.password
+    });
+    // An answer to an older URL or login must not replace a newer one.
+    if (request === latestRequest) catalogs.value = result;
+  } catch (error) {
+    if (request === latestRequest) catalogs.value = [];
+    console.warn('Could not list the catalogs', error);
+  }
 };
 
+/*
+ * One request once typing pauses, not one per keystroke in the URL, the
+ * user or the password.
+ */
+let debounce: ReturnType<typeof setTimeout> | undefined;
+watch(
+  () => [config.url, config.security, config.user, config.password],
+  () => {
+    clearTimeout(debounce);
+    if (!config.url) return;
+    debounce = setTimeout(fetchCatalogs, 400);
+  },
+);
 
-watch(async () => config.url, async () => {
-  await fetchCatalogs();
-});
-
-watch(async () => config.security, async () => {
-  await fetchCatalogs();
-});
-
-watch(async () => config.user, async () => {
-  await fetchCatalogs();
-});
-
-watch(async () => config.password, async () => {
-  await fetchCatalogs();
-});
+onUnmounted(() => clearTimeout(debounce));
 </script>
 
 <template>
@@ -84,5 +93,12 @@ watch(async () => config.password, async () => {
     v-model="config.password"
     :label="t('Xmla.password')"
     type="password"
+  />
+
+  <!-- eslint-disable-next-line vue/no-mutating-props -->
+  <DInput v-model="config.timeout"
+    :label="t('Xmla.timeout')"
+    type="number"
+    :placeholder="String(DEFAULT_TIMEOUT_SECONDS)"
   />
 </template>

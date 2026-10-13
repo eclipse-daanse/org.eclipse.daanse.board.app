@@ -40,7 +40,7 @@ export class SqlXmlaStore extends BaseDatasource {
     this.sql = configuration.sql ?? ''
   }
 
-  async getData(type: string): Promise<any> {
+  async getData(type: string, requestConfig: { signal?: AbortSignal } = {}): Promise<any> {
     let response = null
     if (!this.connectionRepository) {
       throw new Error('ConnectionRepository is not provided to Store Classes')
@@ -53,6 +53,7 @@ export class SqlXmlaStore extends BaseDatasource {
         data: {
           mdx: this.sql,
         },
+        signal: requestConfig.signal,
       })
       //   const req = await connection.fetch({ url: this.resourceUrl.value });
       //   const data = await req.json();
@@ -64,6 +65,8 @@ export class SqlXmlaStore extends BaseDatasource {
       // console.log(rowset);
       // console.log(mdxResponse);
       if (!rowset) return null
+      // A single row arrives as the row itself, not as a list of one.
+      if (!Array.isArray(rowset)) rowset = [rowset]
 
       let response = null as any
 

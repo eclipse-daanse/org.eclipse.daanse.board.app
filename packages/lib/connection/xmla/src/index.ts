@@ -12,7 +12,8 @@
  **********************************************************************/
 
 import { XmlaConnection, type IXmlaConnectionConfiguration } from './classes'
-import { XMLAApi } from './classes/xml'
+import { DEFAULT_TIMEOUT_SECONDS, XMLAApi } from './classes/xml'
+import { XmlaTimeoutError } from './client/transport'
 import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
 import { serviceId } from 'org.eclipse.daanse.board.app.lib.core'
 
@@ -55,4 +56,6 @@ export {
   factorySymbol,
   type XMLAApi,
   XMLA_CONNECTION_FACTORY,
+  DEFAULT_TIMEOUT_SECONDS,
+  XmlaTimeoutError,
 }
