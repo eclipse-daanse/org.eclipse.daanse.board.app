@@ -27,7 +27,7 @@ class TestActions {
 }
 
 export async function registerTestActions(actionsRegistry: EventActionsRegistry) {
-  
+
 
   actionsRegistry.registerWidgetType('test', TestActions, 'system');
 

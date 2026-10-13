@@ -88,7 +88,7 @@ function editPage(id: string) {
 }
 
 /* The registry makes the board if there is none yet, which is what the
-   first page of a fresh workspace does. */
+  first page of a fresh workspace does. */
 function createPage() {
   if (!pageRepo) return
   const id = uuidv4()
@@ -191,7 +191,7 @@ function createPage() {
 
 <style scoped>
 /* The frame every full-surface area has: a panel on the canvas, a header
-   with a rule under it, and the content scrolling below. */
+  with a rule under it, and the content scrolling below. */
 .pages {
   display: flex;
   width: 100%;

@@ -49,8 +49,8 @@ import {
 } from 'org.eclipse.daanse.board.app.ui.vue.controls'
 
 /* Injected here, in setup, which is the only place inject() works. The
-   page used to call it inside editVariable and saveVariable, where it
-   returns undefined - which is why editing threw instead of opening. */
+  page used to call it inside editVariable and saveVariable, where it
+  returns undefined - which is why editing threw instead of opening. */
 const repository = inject<VariableRepository>(VARIABLE_REPOSITORY)!
 const workspace = inject<Workspace>(WORKSPACE)!
 const eventBus = inject<TinyEmitter>(Symbol.for(TINY_EMITTER))
@@ -303,7 +303,7 @@ function confirmDelete(): void {
         />
 
         <!-- The name is every variable's, so it is asked here rather than
-             three times over in three type forms. -->
+          three times over in three type forms. -->
         <DInput v-model="draftName" label="Name" />
 
         <!-- And what the chosen type needs, said by the type itself. -->

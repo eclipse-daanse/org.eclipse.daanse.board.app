@@ -170,7 +170,7 @@ const { visible: paletteVisible, hide: hidePalette } = useWidgetPalette()
   /* The frame the palette floats in, and is kept inside of */
   position: relative;
   /* Said out loud: the board goes to the edge, and a class named "editor"
-     is common enough that something else may try to pad it */
+    is common enough that something else may try to pad it */
   padding: 0;
   border: 0;
   display: flex;

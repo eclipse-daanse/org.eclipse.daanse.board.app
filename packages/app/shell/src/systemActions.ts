@@ -72,7 +72,7 @@ class SystemActionsImpl {
  * Variable-Actions sind im variable package registriert
  */
 export async function registerSystemActions(router: Router, actionsRegistry: EventActionsRegistry, eventBus: TinyEmitter) {
-  
+
 
   // Registriere SystemActions Metadata aus Ecore Model
   await actionsRegistry.registerActionsFromEcoreString(

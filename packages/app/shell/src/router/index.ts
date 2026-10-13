@@ -39,7 +39,7 @@ const router = createRouter({
      */
     {
       /* The pages of the open board - an area of the workspace, not a view
-         of the launcher: a page only means anything once a board is open. */
+        of the launcher: a page only means anything once a board is open. */
       path: '/pages',
       name: 'pages',
       component: BoardPages,
