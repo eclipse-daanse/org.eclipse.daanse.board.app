@@ -665,6 +665,11 @@
     "@emfts/core" "^0.1.1-next.2"
     vue "^3.4.0"
 
+"@emfts/core@^0.1.1-next.18":
+  version "0.1.1-next.18"
+  resolved "https://registry.yarnpkg.com/@emfts/core/-/core-0.1.1-next.18.tgz#63224ebf97c4d7a565398b890c40c486ca10ad50"
+  integrity sha512-fJalqar3AO1vp1P0LWOhR7X1DcZY9P+nPSlwEJqVYu/e2HF0sZO9toO+HBZ5aGQyBhFeG7q5CyTCHmYJWfrmCA==
+
 "@emnapi/core@1.4.5":
   version "1.4.5"
   resolved "https://registry.npmjs.org/@emnapi/core/-/core-1.4.5.tgz#bfbb0cbbbb9f96ec4e2c4fd917b7bbe5495ceccb"
@@ -11701,9 +11706,9 @@ sortablejs@^1.10.2:
   integrity sha512-aNfiuwMEpfBM/CN6LY0ibyhxPfPbyFeBTYJKCvzkJ2GkUpazIt3H+QIPAMHwqQ7tMKaHz1Qj+rJJCqljnf4p3A==
 
 "source-map-js@>=0.6.2 <2.0.0", source-map-js@^1.2.1:
-  version "1.2.1"
-  resolved "https://registry.npmjs.org/source-map-js/-/source-map-js-1.2.1.tgz"
-  integrity sha512-UXWMKhLOwVKb728IUtQPXxfYU+usdybtUrK/8uGE8CQMvrhOpwvzDBwj0QhSL7MQc7vIsISBG8VQ8+IDQxpfQA==
+  version "1.2.2"
+  resolved "https://registry.yarnpkg.com/source-map-js/-/source-map-js-1.2.2.tgz#79fb88d97535a21cb27162cb05d211b67acea4ab"
+  integrity sha512-KGj/8Y43x35aZVDtt+J4mK1hoLGHULMYfSkODJNQjNDC3oW1PqPoxMwo0pLUsWM/UEGzON/NxeHywEfNXNP3Vw==
 
 source-map-support@~0.5.20:
   version "0.5.21"
