@@ -106,3 +106,54 @@ describe('useDatasourceRepository giving up on a request', () => {
     expect(source.calls[0].options.signal.aborted).toBe(true)
   })
 })
+
+describe('useDatasourceRepository saying it waits', () => {
+  it('is loading until the answer is there, and through a replaced request', async () => {
+    const source = datasource()
+    const { api } = widget(source)
+    await flushPromises()
+    expect(api().loading.value).toBe(true)
+
+    api().update()
+    await flushPromises()
+    source.calls[0].answer({ answer: 'older' })
+    await flushPromises()
+    // The replaced one is done; the newer one is still on its way.
+    expect(api().loading.value).toBe(true)
+
+    source.calls[1].answer({ answer: 'newer' })
+    await flushPromises()
+    expect(api().loading.value).toBe(false)
+  })
+})
+
+describe('useDatasourceRepository telling why there is no data', () => {
+  it('keeps the reason a request failed, and forgets it once one succeeds', async () => {
+    let fail = true
+    const source = {
+      async getData() {
+        if (fail) throw new Error('Session with id "s-1" does not exist')
+        return [{ a: 1 }]
+      },
+      subscribe() {},
+      unsubscribe() {},
+    }
+    const data = ref<unknown>(null)
+    let api!: ReturnType<typeof useDatasourceRepository>
+    const Widget = defineComponent({
+      setup() {
+        api = useDatasourceRepository(ref('ds'), 'DataTable', data)
+        return () => h('div')
+      },
+    })
+    mount(Widget, { global: { provide: { [identifier as symbol]: { getDatasource: () => source } } } })
+    await flushPromises()
+    expect(api.error.value).toBe('Session with id "s-1" does not exist')
+    expect(data.value).toBeNull()
+
+    fail = false
+    await api.getDataWithOptions()
+    expect(api.error.value).toBeNull()
+    expect(data.value).toEqual([{ a: 1 }])
+  })
+})

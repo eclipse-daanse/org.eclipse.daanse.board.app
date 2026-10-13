@@ -126,9 +126,11 @@ watch(selected, (at) => {
             :item-id="selected.itemId"
             @close="selected = undefined"
           />
+          <!-- One editor for both tabs: the query built in the preview is
+               part of the draft that Save in the settings commits. -->
           <DatasourceEditor
             v-else
-            :key="`${selected.itemId}-${tab}`"
+            :key="selected.itemId"
             :item-id="selected.itemId"
             :view="tab === 'preview' ? 'preview' : 'settings'"
             @close="selected = undefined"

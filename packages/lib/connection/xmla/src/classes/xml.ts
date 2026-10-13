@@ -39,8 +39,8 @@ export interface XMLAApiOptions {
 export interface RequestOptions {
   /** Gives up on the request; the promise rejects with the signal's reason. */
   signal?: AbortSignal
-  /** More entries for the PropertyList - the write-back calls send their own. */
-  properties?: Restrictions
+  /** Further Execute properties - a writeback statement needs a few. */
+  properties?: Record<string, unknown>
 }
 
 interface ExecuteInFlight {
@@ -59,6 +59,19 @@ type Restrictions = Record<string, string | number | boolean | undefined>
  */
 const registry = new DynamicModelRegistry('org.eclipse.daanse.board.app')
 const rowClasses = new Map<string, EClass>()
+
+/*
+ * Restrictions or properties as they go on the wire: without the empty
+ * ones, which are not sent, and in one order. Two callers asking the same
+ * thing in other words - CUBE_NAME before CATALOG_NAME, or an empty
+ * restriction beside the others - send the same Discover, and share it.
+ */
+function sentAs(values: Restrictions): [string, string][] {
+  return Object.entries(values)
+    .filter(([, value]) => value !== undefined && value !== null && value !== '')
+    .map(([name, value]): [string, string] => [name, String(value)])
+    .sort(([a], [b]) => (a < b ? -1 : a > b ? 1 : 0))
+}
 
 /** A fault saying the session the request named is gone. */
 export function isLostSession(error: unknown): boolean {
@@ -193,7 +206,7 @@ class XMLAApi {
     restrictions: Restrictions = {},
     properties: Restrictions = {},
   ): Promise<any[]> {
-    const key = JSON.stringify([requestType, restrictions, properties])
+    const key = JSON.stringify([requestType, sentAs(restrictions), sentAs(properties)])
     let rows = this.discoverCache.get(key)
     if (!rows) {
       rows = this.sendDiscover(requestType, restrictions, properties)
@@ -410,7 +423,7 @@ class XMLAApi {
   ): Promise<any> {
     const xml = await this.execute(
       mdx,
-      { Format: format, Catalog: catalog || this.catalog, ...options.properties },
+      { ...stringValues(options.properties), Format: format, Catalog: catalog || this.catalog },
       options.signal,
     )
     return toLegacyEnvelope(xml)
@@ -433,6 +446,11 @@ class XMLAApi {
  */
 function cubeRef(name: string): string {
   return name.startsWith('[') ? name : `[${name.replace(/]/g, ']]')}]`
+}
+
+/** Execute properties as the property list carries them: text. */
+function stringValues(properties: Record<string, unknown> = {}): Restrictions {
+  return Object.fromEntries(Object.entries(properties).map(([key, value]) => [key, value == null ? undefined : String(value)]))
 }
 
 /** Enough to tell two schemas of one request type apart. */
