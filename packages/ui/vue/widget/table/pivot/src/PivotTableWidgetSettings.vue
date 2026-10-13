@@ -33,6 +33,29 @@ const widgetSettings = defineModel<PivotTable>({ required: true });
 const { t } = useTranslation('tablePivot');
 
 
+/* Pages and chapters: only shown when the query puts something on axis 2. */
+// i18n-keys: tablePivot:Navigation.modes.*
+// i18n-keys: tablePivot:Navigation.depth.*
+// i18n-keys: tablePivot:Navigation.layout.*
+// i18n-keys: tablePivot:Navigation.diff.*
+// i18n-keys: tablePivot:Navigation.scale.*
+const option = (value: string, key: string) => ({ value, text: t(key) })
+const modeOptions = computed(() =>
+  ['standard', 'cascade', 'map', 'matrix', 'tree-tabs', 'compare'].map(v => option(v, `Navigation.modes.${v}`)),
+)
+const cascadeDepthOptions = computed(() =>
+  ['axes', 'hierarchy'].map(v => option(v, `Navigation.depth.${v}`)),
+)
+const compareLayoutOptions = computed(() =>
+  ['side-by-side', 'side-by-side-diff', 'diff-only'].map(v => option(v, `Navigation.layout.${v}`)),
+)
+const diffTypeOptions = computed(() =>
+  ['absolute', 'percent', 'both'].map(v => option(v, `Navigation.diff.${v}`)),
+)
+const normalizationOptions = computed(() =>
+  ['global', 'row', 'column'].map(v => option(v, `Navigation.scale.${v}`)),
+)
+
 const textAlignOptions = computed(() => [
   { value: 'left', text: t('Settings.align.left') },
   { value: 'center', text: t('Settings.align.center') },
@@ -145,6 +168,21 @@ const needsResultColors = (type?: string) => {
       <DCheckbox v-model="widgetSettings.showRowsProperties" :label="t('Settings.showRowsProperties')" />
       <DCheckbox v-model="widgetSettings.showColumnsProperties" :label="t('Settings.showColumnsProperties')" />
       <DCheckbox v-model="widgetSettings.showSingleMeasureHeader" :label="t('Settings.showSingleMeasureHeader')" />
+    </div>
+  </section>
+  <section class="settings-section" data-section-id="navigation" :data-section="t('Settings.sections.navigation')">
+    <div class="settings-container">
+      <DSelect :label="t('Settings.navigation.mode')" v-model="widgetSettings.mode" :options="modeOptions" value-key="value" />
+      <DSelect :label="t('Settings.navigation.cascadeDepth')" v-model="widgetSettings.cascadeDepth" :options="cascadeDepthOptions" value-key="value" />
+      <DInput v-model="widgetSettings.measure" :label="t('Settings.navigation.measure')" />
+      <DSelect :label="t('Settings.navigation.scale')" v-model="widgetSettings.scaleNormalization" :options="normalizationOptions" value-key="value" />
+      <DCheckbox v-model="widgetSettings.divergingScale" :label="t('Settings.navigation.diverging')" />
+      <DSelect :label="t('Settings.navigation.compareLayout')" v-model="widgetSettings.compareLayout" :options="compareLayoutOptions" value-key="value" />
+      <DSelect :label="t('Settings.navigation.diffType')" v-model="widgetSettings.diffType" :options="diffTypeOptions" value-key="value" />
+      <DInput v-model.number="widgetSettings.significanceThreshold" type="number" :label="t('Settings.navigation.threshold')" />
+      <DCheckbox v-model="widgetSettings.hideUnchanged" :label="t('Settings.navigation.hideUnchanged')" />
+      <DInput v-model.number="widgetSettings.matrixLimit" type="number" :label="t('Settings.navigation.matrixLimit')" />
+      <DCheckbox v-model="widgetSettings.timeline" :label="t('Settings.navigation.timeline')" />
     </div>
   </section>
   <section class="settings-section" data-section-id="colors" :data-section="t('Settings.sections.colors')">

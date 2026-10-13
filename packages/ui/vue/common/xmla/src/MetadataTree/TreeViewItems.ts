@@ -127,6 +127,10 @@ export interface DimensionTreeItem extends TreeItem {
   type: TreeItemTypesEnum.Dimension
   isMeasureDimension: boolean
   children: TreeItem[]
+  /** The dimension's unique name, to load its hierarchies by. */
+  dimension?: string
+  /** Its hierarchies are loaded when it is opened. */
+  lazy?: boolean
 }
 
 export interface HierarchyTreeItem extends TreeItem {
@@ -252,6 +256,10 @@ export interface DimensionTreeItem extends TreeItem {
   type: TreeItemTypesEnum.Dimension
   isMeasureDimension: boolean
   children: TreeItem[]
+  /** The dimension's unique name, to load its hierarchies by. */
+  dimension?: string
+  /** Its hierarchies are loaded when it is opened. */
+  lazy?: boolean
 }
 
 export interface HierarchyTreeItem extends TreeItem {
@@ -326,6 +334,7 @@ export function getDimensionDesc(
     children: [],
     id: `Dimension(${dimension.DIMENSION_UNIQUE_NAME})`,
     caption: dimension.DIMENSION_CAPTION,
+    dimension: dimension.DIMENSION_UNIQUE_NAME,
   }
 }
 

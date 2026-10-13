@@ -142,6 +142,19 @@ describe('XMLAApi on the EMF client', () => {
     expect(transport.count('Discover')).toBe(2)
   })
 
+  it('shares a discover asked in other words: restrictions in another order, or an empty one beside them', async () => {
+    const { api: xmla, transport } = api()
+
+    await Promise.all([
+      xmla.discover('MDSCHEMA_DIMENSIONS', { CATALOG_NAME: 'FoodMart', CUBE_NAME: 'Sales' }),
+      xmla.discover('MDSCHEMA_DIMENSIONS', { CUBE_NAME: 'Sales', CATALOG_NAME: 'FoodMart' }),
+      xmla.discover('MDSCHEMA_DIMENSIONS', { CATALOG_NAME: 'FoodMart', CUBE_NAME: 'Sales', DIMENSION_UNIQUE_NAME: '' }),
+      xmla.discover('MDSCHEMA_DIMENSIONS', { CATALOG_NAME: 'FoodMart', CUBE_NAME: 'Sales', DIMENSION_UNIQUE_NAME: undefined }),
+    ])
+
+    expect(transport.count('Discover')).toBe(1)
+  })
+
   it('hands every caller its own list', async () => {
     const { api: xmla } = api()
     const first = await xmla.getLevels('FoodMart', 'Sales')

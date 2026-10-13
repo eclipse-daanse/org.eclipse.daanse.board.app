@@ -15,9 +15,10 @@ Contributors:
 import { DCheckbox, DTabs } from 'org.eclipse.daanse.board.app.ui.vue.controls'
 import { useTemporaryStore, useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables';
 import { identifier, ConnectionRepository } from 'org.eclipse.daanse.board.app.lib.api.connection'
-import { computed, inject, ref, watch, toRef, shallowRef, nextTick, onMounted } from 'vue';
+import { computed, inject, provide, ref, watch, toRef, shallowRef, nextTick, onMounted } from 'vue';
 import { debounce } from 'lodash';
-import { MetadataTree, QueryDesigner, PivotTable } from 'org.eclipse.daanse.board.app.ui.vue.common.xmla';
+import { MetadataTree, QueryDesigner, PivotTable, SlicePicker } from 'org.eclipse.daanse.board.app.ui.vue.common.xmla';
+import { axisOptions, pivotSlice, positionsOf, sliceByKeys, sliceKeys, type SliceRef } from 'org.eclipse.daanse.board.app.lib.datasource.xmla';
 import { MonacoEditor } from 'org.eclipse.daanse.board.app.ui.vue.common.monaco';
 
 const props = defineProps<{ dataSource: any }>();
@@ -33,6 +34,8 @@ const tempStore = shallowRef(null as any)
 const settingsRef = ref(props.dataSource);
 const metadata = ref(null as any);
 const { update } = useTemporaryStore(props.dataSource.type, settingsRef, tempStore);
+// The table's drillthrough asks the datasource itself.
+provide('datasource', computed(() => tempStore.value));
 
 console.log(props.dataSource)
 
@@ -49,6 +52,8 @@ const queryConfig = ref({
   rows: props.dataSource.config.requestParams?.rows || [],
   columns: props.dataSource.config.requestParams?.columns || [],
   measures: props.dataSource.config.requestParams?.measures || [],
+  pages: props.dataSource.config.requestParams?.pages || [],
+  chapters: props.dataSource.config.requestParams?.chapters || [],
 });
 
 const drilldownState = ref(props.dataSource.config.drilldownState || {});
@@ -60,6 +65,7 @@ watch(() => props.dataSource.config.connection, async () => {
   console.log('connection updated', props.dataSource)
 
   const newStore = await update();
+  if (!newStore) return;
   metadata.value = await newStore.getMetadata();
 
   console.log(newStore);
@@ -69,6 +75,7 @@ watch(() => props.dataSource.config.cube, async () => {
   console.log('connection updated', props.dataSource)
 
   const newStore = await update();
+  if (!newStore) return;
   metadata.value = await newStore.getMetadata();
 
   console.log(newStore);
@@ -92,17 +99,22 @@ onMounted(async () => {
   // metadata.value = await tempStore.value.getMetadata();
 });
 
+// inject() answers only during setup, not later in a watcher.
+const connectionRepo = inject<ConnectionRepository>(identifier)!;
+
 // This works only once when component is mounted
 watch(tempStore, async () => {
   if (!tempStore.value) return;
   const connectionId = tempStore.value.connection;
-  const connectionRepo = inject<ConnectionRepository>(identifier)!;
   connection.value = await connectionRepo.getConnection(connectionId);
   api.value = await connection.value.getApi();
   catalog.value = await connection.value.catalogName;
 
-  metadata.value = await tempStore.value.getMetadata();
+  // The table asks only for its own hierarchies; it does not wait for the cube explorer.
+  const store = tempStore.value;
   debouncedUpdateData();
+  const loaded = await store.getMetadata();
+  if (tempStore.value === store) metadata.value = loaded;
 }, { deep: true });
 
 watch(() => queryConfig, async () => {
@@ -147,25 +159,84 @@ const onCollapse = async (e: any) => {
   debouncedUpdateData();
 }
 
-const getSettingsHash = (obj: any) => {
-  const str = JSON.stringify(obj);
-  if (!str) return 0;
+/* The context menu's drill down and up, kept with the source as expanding is. */
+const onDrill = (event: 'drilldown' | 'drillup') => async (e: any) => {
+  drilldownState.value = tempStore.value[event](e);
 
-  let hash = 0;
-    for (let i = 0, len = str.length; i < len; i++) {
-        let chr = str.charCodeAt(i);
-        hash = (hash << 5) - hash + chr;
-        hash |= 0; // Convert to 32bit integer
-    }
-    return hash;
+  emit('updateConfig', {
+    ...props.dataSource.config,
+    drilldownState: drilldownState.value,
+  });
+
+  debouncedUpdateData();
 }
+const onDrilldown = onDrill('drilldown');
+const onDrillup = onDrill('drillup');
+
+/* ---- writeback: an edited cell, and the transaction it runs in */
+
+const cellEditLoading = ref(false);
+
+const whileEditing = async (work: () => Promise<unknown>, reload: boolean) => {
+  if (!tempStore.value) return;
+  cellEditLoading.value = true;
+  try {
+    await work();
+    if (reload) await updateData();
+  } finally {
+    cellEditLoading.value = false;
+  }
+}
+
+const onCellEdit = (e: any) => whileEditing(() => tempStore.value.callEvent('cellUpdate', { query: e.query }), true)
+const onEditModeChanged = (isEditing: boolean) => {
+  if (isEditing) whileEditing(() => tempStore.value.callEvent('beginTransaction'), false)
+}
+const onCommitTransaction = () => whileEditing(() => tempStore.value.callEvent('commitTransaction'), true)
+const onRollbackTransaction = () => whileEditing(() => tempStore.value.callEvent('rollbackTransaction'), true)
+
+/*
+ * Pages and chapters: the preview shows one slice, picked from two
+ * dropdowns. The pick is held by unique name, so it outlasts a changed
+ * query that still has the same members.
+ */
+const cellset = computed(() => (data.value?.cellset?.axes?.length > 2 ? data.value.cellset : null));
+const picked = ref<{ axis2?: string; axis3?: string }>({});
+const slice = computed<SliceRef | null>(() => {
+  const c = cellset.value;
+  if (!c) return null;
+  return sliceByKeys(c, picked.value) ?? sliceByKeys(c, { axis2: picked.value.axis2 }) ?? sliceByKeys(c, {});
+});
+const pageOptions = computed(() => (cellset.value ? axisOptions(positionsOf(cellset.value, 2)) : []));
+const chapterOptions = computed(() =>
+  cellset.value?.axes.length > 3 ? axisOptions(positionsOf(cellset.value, 3)) : undefined,
+);
+const pick = (axis: 'axis2' | 'axis3', index: number) => {
+  if (!cellset.value || !slice.value) return;
+  const keys = sliceKeys(cellset.value, { ...slice.value, [axis]: index });
+  picked.value = { axis2: keys.axis2 ?? undefined, axis3: keys.axis3 ?? undefined };
+};
+const tableData = computed(() => {
+  if (!data.value || !cellset.value || !slice.value) return data.value;
+  return { ...pivotSlice(cellset.value, slice.value, data.value.sliceParams), tableState: data.value.tableState };
+});
+
+/*
+ * The tree starts over for other metadata. Counted rather than hashed from
+ * its JSON: the metadata holds the client's models, which point back at
+ * themselves.
+ */
+const metadataVersion = ref(0);
+watch(metadata, () => {
+  metadataVersion.value += 1;
+});
 
 // const selectedFilter = ref("");
 </script>
 
 <template>
-  <div class="flex w-full h-full rounded gap-4 overflow-hidden">
-    <div class="flex flex-col w-full h-full overflow-hidden flex-grow data-designer">
+  <div class="xmla-preview">
+    <div class="data-designer">
       <DTabs v-model="currentTab" :tabs="tabs" :label="t('Xmla.tabs')" />
 
       <div class="editor-pane">
@@ -178,60 +249,140 @@ const getSettingsHash = (obj: any) => {
           </MonacoEditor>
         </template>
         <template v-if="currentTab === 'visual'">
-          <div class="w-full h-full">
-            <QueryDesigner v-model="queryConfig" :api="api" :catalog="catalog"/>
-          </div>
+          <QueryDesigner v-model="queryConfig" :api="api" :catalog="catalog"/>
         </template>
       </div>
-      <div class="h-full w-full flex flex-col data-preview">
-        <h4>
+      <div class="data-preview">
+        <h4 class="data-preview__title">
           {{ t('Xmla.preview') }}
         </h4>
-        <div class="w-full h-full overflow-auto">
-          <!-- @onExpand="onExpand"
-          @onCollapse="onCollapse" -->
-          <PivotTable v-if="data" v-model="data" @onExpand="onExpand" @onCollapse="onCollapse"
-            :rowsExpandedMembers="data.tableState.rowsExpandedMembers"
-            :columnsExpandedMembers="data.tableState.columnsExpandedMembers" />
+        <SlicePicker
+          v-if="slice"
+          class="data-preview__slice"
+          :pages="pageOptions"
+          :chapters="chapterOptions"
+          :page="slice.axis2"
+          :chapter="slice.axis3"
+          @update:page="pick('axis2', $event)"
+          @update:chapter="pick('axis3', $event)"
+        />
+        <div class="data-preview__table" :class="{ 'is-busy': cellEditLoading }" :aria-busy="cellEditLoading">
+          <PivotTable v-if="tableData" :modelValue="tableData" @onExpand="onExpand" @onCollapse="onCollapse" @onDrilldown="onDrilldown" @onDrillup="onDrillup"
+            @onCellEdit="onCellEdit"
+            @onEditModeChanged="onEditModeChanged"
+            @onCommitTransaction="onCommitTransaction"
+            @onRollbackTransaction="onRollbackTransaction"
+            :cubeName="tempStore?.getCubeName ? tempStore.getCubeName() : ''"
+            :rowsExpandedMembers="tableData.tableState?.rowsExpandedMembers"
+            :columnsExpandedMembers="tableData.tableState?.columnsExpandedMembers" />
         </div>
       </div>
     </div>
-    <div class="h-full metadata-container">
-      <MetadataTree v-if="metadata" :metadata="metadata" :key="getSettingsHash(metadata)" />
-      <div class="h-full w-full flex items-center justify-center" v-else>
+    <div class="metadata-container">
+      <MetadataTree v-if="metadata" :metadata="metadata" :key="metadataVersion" />
+      <div class="metadata-container__empty" v-else>
         {{ t('Xmla.pickConnection') }}
       </div>
     </div>
   </div>
 </template>
 <style>
-.editor-pane {
-  height: 100%;
+/*
+ * Two panes on the theme's surfaces: the query and its preview on the left,
+ * the cube on the right. The query takes what it needs up to half the
+ * height, the preview the rest, so neither covers the other.
+ */
+.xmla-preview {
+  display: flex;
+  gap: 12px;
   width: 100%;
+  height: 100%;
   min-height: 0;
+  overflow: hidden;
 }
 
+.data-designer,
 .metadata-container {
-  flex-grow: 0;
-  flex-shrink: 0;
-  min-width: 300px;
-  background-color: #fff;
-  padding: 8px;
-  border-radius: 8px;
+  background-color: var(--color-pane);
+  border: 1px solid var(--color-divider);
+  border-radius: var(--radius-sm);
+  color: var(--color-fg);
 }
 
 .data-designer {
-  background-color: #fff;
-  padding: 8px;
-  border-radius: 8px;
+  display: grid;
+  /* One column as wide as the pane - not as the widest table in it. */
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: auto minmax(0, max-content) minmax(160px, 1fr);
+  flex: 1 1 auto;
+  min-width: 0;
+  min-height: 0;
+  padding: 8px 12px 12px;
 }
 
-.data-preview {
-  border-top: 1px dashed #ccc;
+.editor-pane {
+  min-width: 0;
+  min-height: 0;
+  max-height: 55vh;
+  overflow: auto;
   padding-top: 8px;
 }
 
 .monaco-container {
-  height: 500px;
+  height: 320px;
+}
+
+.data-preview {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px dashed var(--color-divider);
+}
+
+.data-preview__title {
+  margin: 0 0 6px;
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--color-dim);
+}
+
+.data-preview__slice {
+  margin-bottom: 6px;
+}
+
+/* A big table scrolls here, in both directions, instead of widening the page. */
+.data-preview__table {
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  overflow: auto;
+}
+
+/* While a written value goes to the server and the table reloads. */
+.data-preview__table.is-busy {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.metadata-container {
+  flex: 0 0 300px;
+  min-height: 0;
+  overflow: auto;
+  padding: 8px;
+}
+
+.metadata-container__empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  padding: 1rem;
+  text-align: center;
+  font-size: var(--text-sm);
+  color: var(--color-dim);
 }
 </style>
