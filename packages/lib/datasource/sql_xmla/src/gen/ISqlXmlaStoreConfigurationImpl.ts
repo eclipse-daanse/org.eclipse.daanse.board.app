@@ -29,9 +29,9 @@ import { SqlxmlastorePackage } from './SqlxmlastorePackage.js';
  */
 export class ISqlXmlaStoreConfigurationImpl extends IBaseConnectionConfigurationImpl implements ISqlXmlaStoreConfiguration {
   // Feature ID Constants (eLiterals)
-  static readonly CONNECTION: number = 3;
-  static readonly SQL: number = 4;
-  static readonly POLLING_INTERVAL: number = 5;
+  static readonly CONNECTION: number = 4;
+  static readonly SQL: number = 5;
+  static readonly POLLING_INTERVAL: number = 6;
 
   // Private fields
   private _connection?: string;

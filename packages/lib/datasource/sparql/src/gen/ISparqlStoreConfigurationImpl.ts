@@ -29,8 +29,8 @@ import { SparqlstorePackage } from './SparqlstorePackage.js';
  */
 export class ISparqlStoreConfigurationImpl extends IBaseConnectionConfigurationImpl implements ISparqlStoreConfiguration {
   // Feature ID Constants (eLiterals)
-  static readonly QUERY: number = 3;
-  static readonly CONNECTION: number = 4;
+  static readonly QUERY: number = 4;
+  static readonly CONNECTION: number = 5;
 
   // Private fields
   private _query?: string;

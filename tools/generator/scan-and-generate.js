@@ -47,6 +47,8 @@ import os from 'node:os'
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..', '..')
 // The package exports no ./cli subpath; the bin path is the stable entry.
 const CODEGEN = join(ROOT, 'node_modules', '@emfts', 'codegen', 'dist', 'cli', 'index.js')
+// generate goes through a wrapper: the CLI's leaves every class out (see there).
+const GENERATE = join(ROOT, 'tools', 'generator', 'codegen-generate.mjs')
 const ANNOTATIONS = 'org.eclipse.daanse.board.app.lib.annotations'
 const filters = process.argv.slice(2)
 
@@ -397,10 +399,10 @@ for (const [pkgDir, pkgModels] of byPackage) {
         execFileSync('node', [CODEGEN, ...args], { stdio: 'pipe' })
         prependXmiLicenseHeader(genconfig)
       }
-      const args = ['generate', '-m', file, '-c', genconfig, '-o', tmp]
+      const args = ['-m', file, '-c', genconfig, '-o', tmp]
       if (deps.length) args.push('-d', ...deps)
       if (mappings.length) args.push('--import-mapping', ...mappings)
-      execFileSync('node', [CODEGEN, ...args], { stdio: 'pipe' })
+      execFileSync('node', [GENERATE, ...args], { stdio: 'pipe' })
 
       // Flatten: codegen nests under the base package; our layout is flat.
       const flatten = (dir) => {
