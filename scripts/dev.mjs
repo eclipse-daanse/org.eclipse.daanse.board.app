@@ -31,12 +31,12 @@ import { describe, holder } from './bundle-lock.mjs'
 const args = process.argv.slice(2)
 const portAt = args.indexOf('--port')
 /* The port decides the origin, and the origin decides which localStorage the
-   app sees - a fallback port would silently open an empty workspace. */
+  app sees - a fallback port would silently open an empty workspace. */
 const port = portAt >= 0 ? args[portAt + 1] : undefined
 const filters = args.filter((a, i) => i !== portAt && i !== portAt + 1)
 
 /* Checked here rather than left to the catch-up build, so the reason is the
-   first thing on screen instead of a build error. */
+  first thing on screen instead of a build error. */
 const held = holder()
 if (held) {
   console.error(

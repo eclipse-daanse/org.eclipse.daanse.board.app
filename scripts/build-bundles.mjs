@@ -43,7 +43,7 @@ const filters = args.filter((a) => !a.startsWith('--'))
 
 const ROOT = resolve(import.meta.dirname, '..')
 /* The binary directly: npx costs about half a second per call, and there
-   are a hundred and forty of them. */
+  are a hundred and forty of them. */
 const VITE = join(ROOT, 'node_modules', '.bin', 'vite')
 
 /* --list only reads mtimes; everything else writes to dist-bundle/ */
@@ -63,7 +63,7 @@ const jobs = Math.max(1, Number(process.env.BUNDLE_JOBS) || availableParallelism
 const all = bundleDirs(filters)
 
 /* A staging directory that outlived its build is rubbish, and `git add -A`
-   would otherwise commit it. */
+  would otherwise commit it. */
 if (!list) {
   for (const dir of all) {
     rmSync(join(dir, 'dist-bundle.building'), { recursive: true, force: true })
@@ -106,8 +106,8 @@ async function worker() {
       rmSync(staging, { recursive: true, force: true })
       await run(`"${VITE}" build --config vite.bundle.config.ts --outDir ${STAGING}`, { cwd: dir })
       /* The gap between these two is a few milliseconds of work already
-         done, against seconds of building - and nothing reads the directory
-         while a build of it is running. */
+        done, against seconds of building - and nothing reads the directory
+        while a build of it is running. */
       rmSync(output, { recursive: true, force: true })
       renameSync(staging, output)
       ok += 1

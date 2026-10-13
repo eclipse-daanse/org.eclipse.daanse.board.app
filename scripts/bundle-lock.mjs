@@ -31,7 +31,7 @@ const ROOT = resolve(import.meta.dirname, '..')
 const LOCK = join(ROOT, 'node_modules', '.cache', 'daanse-bundles.lock')
 
 /* A build started by the process that already holds the lock is the same
-   writer, not a second one. */
+  writer, not a second one. */
 const INHERITED = 'DAANSE_BUNDLE_LOCK'
 
 function alive(pid) {
