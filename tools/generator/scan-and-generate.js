@@ -312,6 +312,30 @@ function promoteInstantiatedTypeImports(file) {
   if (out !== source) writeFileSync(file, out)
 }
 
+// The generator emits no license header; Eclipse requires one on every source
+// file, so it is prepended here rather than carried in 300 generated files by
+// hand. See .licenserc.yaml for the text the check looks for.
+const LICENSE_HEADER = `/*********************************************************************
+ * Copyright (c) ${new Date().getFullYear()} Contributors to the Eclipse Foundation.
+ *
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ *
+ * SPDX-License-Identifier: EPL-2.0
+ *
+ * Contributors:
+ *   Smart City Jena
+ **********************************************************************/
+
+`
+
+function prependLicenseHeader(file) {
+  const source = readFileSync(file, 'utf-8')
+  if (source.includes('SPDX-License-Identifier: EPL-2.0')) return
+  writeFileSync(file, LICENSE_HEADER + source)
+}
+
 // ----------------------------------------------------------------- generate
 let ok = 0
 const failed = []
@@ -367,6 +391,7 @@ for (const [pkgDir, pkgModels] of byPackage) {
             collapseSubpathImports(join(genDir, entry))
             pruneUnusedNamedImports(join(genDir, entry))
             addToJson(join(genDir, entry))
+            prependLicenseHeader(join(genDir, entry))
           }
         }
       }
