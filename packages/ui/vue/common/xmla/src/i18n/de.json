@@ -18,7 +18,8 @@
   },
   "Tree": {
     "collapse": "Zuklappen",
-    "expand": "Aufklappen"
+    "expand": "Aufklappen",
+    "loading": "Wird geladen"
   },
   "PivotTable": {
     "openCellPropertiesButton": "Zelleigenschaften öffnen",
@@ -26,12 +27,32 @@
     "drillDownButton": "Drilldown",
     "drillUpButton": "Drillup",
     "openButton": "Elementeigenschaften öffnen",
-    "showButton": "Hierarchie-Eigenschaften zeigen"
+    "showButton": "Hierarchie-Eigenschaften zeigen",
+    "drillthroughTitle": "Drillthrough-Details",
+    "drillthroughLoading": "Die Zeilen hinter der Zelle werden geladen…",
+    "drillthroughFailed": "Die Zeilen hinter der Zelle konnten nicht geladen werden.",
+    "drillthroughEmpty": "Keine Zeilen hinter dieser Zelle.",
+    "close": "Schließen",
+    "editMode": "Werte bearbeiten",
+    "leaveEditMode": "Bearbeiten beenden",
+    "commit": "Änderungen speichern",
+    "rollback": "Änderungen verwerfen"
   },
   "QueryDesigner": {
     "filters": "Filter",
     "columns": "Spalten",
     "rows": "Zeilen",
-    "data": "Daten"
+    "data": "Daten",
+    "pages": "Seiten",
+    "chapters": "Kapitel",
+    "pagesNeedRowsAndColumns": "Seiten brauchen etwas auf Zeilen und Spalten.",
+    "chaptersNeedPages": "Kapitel brauchen etwas auf Seiten.",
+    "valuesOnlyOnRowsOrColumns": "Werte gehören nur auf Zeilen oder Spalten.",
+    "hierarchyOnOneAxisOnly": "Eine Hierarchie kann nur auf einer Achse liegen."
+  },
+  "SlicePicker": {
+    "label": "Ausschnitt",
+    "page": "Seite",
+    "chapter": "Kapitel"
   }
 }

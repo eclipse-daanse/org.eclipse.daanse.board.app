@@ -29,5 +29,7 @@ export interface XMLARequestParams extends EObject {
   columns: EList<unknown>;
   measures: EList<unknown>;
   filters: EList<unknown>;
+  pages: EList<unknown>;
+  chapters: EList<unknown>;
 
 }

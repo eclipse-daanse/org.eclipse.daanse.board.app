@@ -15,8 +15,10 @@ import MetadataTree from './MetadataTree/MetadataTree.vue'
 import QueryDesigner from './QueryDesigner/QueryDesigner.vue'
 import PivotTable from './PivotTable/PivotTable.vue'
 import FiltersModal from './Modals/FiltersModal.vue'
+import SlicePicker from './SlicePicker/SlicePicker.vue'
 
-export { MetadataTree, QueryDesigner, PivotTable, FiltersModal }
+export { MetadataTree, QueryDesigner, PivotTable, FiltersModal, SlicePicker }
+export type { SlicePickerOption } from './SlicePicker/SlicePicker.vue'
 
 /* Its texts - collected by lib.i18next, see src/i18n. */
 export { XmlaTranslations } from './i18n'

@@ -23,11 +23,11 @@ const props = defineProps({
   },
   primaryColor: {
     type: String,
-    default: "#000",
+    default: "",
   },
   secondaryColor: {
     type: String,
-    default: "#000",
+    default: "",
   },
   height: {
     type: [String, Number],
@@ -40,8 +40,9 @@ const props = defineProps({
 });
 
 const icon = computed(() => icons[props.icon as keyof typeof icons]);
-const primaryColor = computed(() => props.primaryColor);
-const secondaryColor = computed(() => props.secondaryColor);
+// Unset, an icon takes the text's colour and the theme's accent, light or dark.
+const primaryColor = computed(() => props.primaryColor || 'currentColor');
+const secondaryColor = computed(() => props.secondaryColor || 'var(--color-accent)');
 const containerHeight = computed(() => typeof props.height === "number" ? props.height + "px" : props.height);
 const containerWidth = computed(() => typeof props.width === "number" ? props.width + "px" : props.width);
 </script>

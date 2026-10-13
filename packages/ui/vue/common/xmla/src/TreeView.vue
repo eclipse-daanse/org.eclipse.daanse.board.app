@@ -22,6 +22,9 @@ Contributors:
  * Which branches are open can be held by the caller (the filter tree
  * swaps the whole tree when a search runs and carries the open set with
  * it) or left here.
+ *
+ * A node marked lazy has children not yet loaded: it is drawn as a branch,
+ * and the first time it opens loadChildren is asked to fill it in.
  */
 import { computed, ref } from 'vue'
 import { DIcon } from 'org.eclipse.daanse.board.app.ui.vue.controls'
@@ -31,6 +34,10 @@ const { t } = useTranslation('xmla');
 interface Node {
   id?: string | number
   children?: Node[]
+  /** Children to be loaded when the node first opens. */
+  lazy?: boolean
+  /** Set while they are on their way. */
+  loading?: boolean
   [key: string]: unknown
 }
 
@@ -45,6 +52,8 @@ const props = withDefaults(
     textBy?: string
     /** How deep this level sits, for the indent. */
     depth?: number
+    /** Fills in a lazy node's children. */
+    loadChildren?: (node: Node) => Promise<void>
   }>(),
   { textBy: 'label', depth: 0 },
 )
@@ -65,10 +74,27 @@ function isOpen(node: Node): boolean {
 
 function toggle(node: Node): void {
   const id = idOf(node)
-  const next = isOpen(node) ? open.value.filter((o) => o !== id) : [...open.value, id]
+  const opening = !isOpen(node)
+  const next = opening ? [...open.value, id] : open.value.filter((o) => o !== id)
   if (props.expanded) emit('update:expanded', next)
   else ownExpanded.value = next
+  if (opening && node.lazy && !node.loading && props.loadChildren) void load(node)
 }
+
+async function load(node: Node): Promise<void> {
+  node.loading = true
+  try {
+    await props.loadChildren!(node)
+    node.lazy = false
+  } catch (error) {
+    // Left lazy: closing and opening it again tries once more.
+    console.warn('Could not load the branch', error)
+  } finally {
+    node.loading = false
+  }
+}
+
+const isBranch = (node: Node) => !!node.children?.length || !!node.lazy
 
 /** Whether this node or anything under it answers the filter. */
 function matches(node: Node): boolean {
@@ -92,8 +118,9 @@ function showsOpen(node: Node): boolean {
   <ul class="tree">
     <li v-for="node in shown" :key="idOf(node)" class="node">
       <div class="node__row" :style="{ paddingLeft: `${depth * 14 + 2}px` }">
+        <span v-if="node.loading" class="node__loading" role="status" :aria-label="t('Tree.loading')" />
         <button
-          v-if="node.children?.length"
+          v-else-if="isBranch(node)"
           type="button"
           class="node__twist"
           :aria-expanded="showsOpen(node)"
@@ -116,6 +143,7 @@ function showsOpen(node: Node): boolean {
         :filter="filter"
         :text-by="textBy"
         :depth="depth + 1"
+        :load-children="loadChildren"
         @update:expanded="(open) => emit('update:expanded', open)"
       >
         <template #content="child">
@@ -159,6 +187,22 @@ function showsOpen(node: Node): boolean {
 .node__twist:focus-visible {
   outline: 2px solid var(--color-accent);
   outline-offset: -2px;
+}
+
+/* In the twist's place while a branch loads. */
+.node__loading {
+  width: 12px;
+  height: 12px;
+  margin: 0 3px;
+  flex: none;
+  border: 2px solid var(--color-divider);
+  border-top-color: var(--color-accent);
+  border-radius: 50%;
+  animation: node-spin 700ms linear infinite;
+}
+
+@keyframes node-spin {
+  to { transform: rotate(360deg); }
 }
 
 /* Keeps a leaf's content on the same edge as a branch's. */

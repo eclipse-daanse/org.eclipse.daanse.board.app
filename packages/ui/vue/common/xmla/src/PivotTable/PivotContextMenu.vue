@@ -28,7 +28,6 @@ const emit = defineEmits<{
   (e: "action", action: MenuAction, target: MenuTarget): void;
 }>();
 
-// const { t } = useI18n();
 const { t } = useTranslation("xmla");
 
 const items = computed((): { action: MenuAction; label: string }[] => {
@@ -113,14 +112,11 @@ const run = (action: MenuAction) => {
 
 <template>
   <Teleport to="body">
-    <div v-if="target" ref="menu" class="pivotContextMenu"
+    <div v-if="target" ref="menu" class="pivotContextMenu" role="menu"
       :style="{ left: `${position.left}px`, top: `${position.top}px` }" @contextmenu.prevent>
-      <va-button-group class="dropdown_button-group">
-        <va-button v-for="item in items" :key="item.action" preset="plain" class="dropdown_button" text-color="#000"
-          :hover-opacity="0.5" @click="run(item.action)">
-          {{ item.label }}
-        </va-button>
-      </va-button-group>
+      <button v-for="item in items" :key="item.action" type="button" role="menuitem" @click="run(item.action)">
+        {{ item.label }}
+      </button>
     </div>
   </Teleport>
 </template>
@@ -128,38 +124,37 @@ const run = (action: MenuAction) => {
 <style scoped>
 .pivotContextMenu {
   position: fixed;
-  z-index: 10000;
-  min-width: 150px;
-  background: #fff;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  z-index: 40000;
+  min-width: 180px;
+  padding: 3px;
+  background-color: var(--color-pane);
+  border: 1px solid var(--color-divider);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-e3, 0 8px 24px rgba(0, 0, 0, 0.5));
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
 }
 
-.dropdown_button-group {
-  display: flex;
-  flex-direction: column;
-  padding: 0;
-  margin: 0;
+.pivotContextMenu button {
+  display: block;
   width: 100%;
-}
-
-.dropdown_button {
+  padding: 5px 9px;
+  border: 0;
+  border-radius: var(--radius-xs);
+  background: none;
   text-align: left;
-  justify-content: flex-start;
-  border: 1px solid silver !important;
-  border-bottom: 0 !important;
-  border-radius: 0 !important;
-  padding: 0.25rem !important;
+  font-family: inherit;
+  font-size: inherit;
+  color: var(--color-fg);
+  cursor: pointer;
 }
 
-.dropdown_button:deep(.va-button__content) {
-  color: #000;
+.pivotContextMenu button:hover {
+  background-color: var(--color-raised);
 }
 
-.dropdown_button:hover:deep(.va-button__content) {
-  color: #555;
-}
-
-.dropdown_button:last-child {
-  border-bottom: 1px solid silver !important;
+.pivotContextMenu button:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: -2px;
 }
 </style>
