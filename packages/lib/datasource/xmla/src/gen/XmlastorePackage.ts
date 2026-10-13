@@ -63,6 +63,8 @@ export class XmlastorePackage extends BasicEPackage {
     X_M_L_A_REQUEST_PARAMS__COLUMNS: null as unknown as EAttribute | EReference,
     X_M_L_A_REQUEST_PARAMS__MEASURES: null as unknown as EAttribute | EReference,
     X_M_L_A_REQUEST_PARAMS__FILTERS: null as unknown as EAttribute | EReference,
+    X_M_L_A_REQUEST_PARAMS__PAGES: null as unknown as EAttribute | EReference,
+    X_M_L_A_REQUEST_PARAMS__CHAPTERS: null as unknown as EAttribute | EReference,
     I_XMLA_STORE_CONFIGURATION: null as unknown as EClass,
     I_XMLA_STORE_CONFIGURATION__CONNECTION: null as unknown as EAttribute | EReference,
     I_XMLA_STORE_CONFIGURATION__REQUEST_PARAMS: null as unknown as EAttribute | EReference,
@@ -132,6 +134,22 @@ export class XmlastorePackage extends BasicEPackage {
     xMLARequestParams_filters.setUpperBound(-1);
     xMLARequestParamsClass.getEStructuralFeatures().push(xMLARequestParams_filters);
     XmlastorePackage.Literals.X_M_L_A_REQUEST_PARAMS__FILTERS = xMLARequestParams_filters;
+
+    // Create pages feature
+    const xMLARequestParams_pages = new BasicEAttribute();
+    xMLARequestParams_pages.setName('pages');
+    xMLARequestParams_pages.setLowerBound(0);
+    xMLARequestParams_pages.setUpperBound(-1);
+    xMLARequestParamsClass.getEStructuralFeatures().push(xMLARequestParams_pages);
+    XmlastorePackage.Literals.X_M_L_A_REQUEST_PARAMS__PAGES = xMLARequestParams_pages;
+
+    // Create chapters feature
+    const xMLARequestParams_chapters = new BasicEAttribute();
+    xMLARequestParams_chapters.setName('chapters');
+    xMLARequestParams_chapters.setLowerBound(0);
+    xMLARequestParams_chapters.setUpperBound(-1);
+    xMLARequestParamsClass.getEStructuralFeatures().push(xMLARequestParams_chapters);
+    XmlastorePackage.Literals.X_M_L_A_REQUEST_PARAMS__CHAPTERS = xMLARequestParams_chapters;
 
     // Create IXmlaStoreConfiguration class
     const iXmlaStoreConfigurationClass = new BasicEClass();
@@ -222,6 +240,8 @@ export class XmlastorePackage extends BasicEPackage {
     (XmlastorePackage.Literals.X_M_L_A_REQUEST_PARAMS__COLUMNS as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EJavaObject')!);
     (XmlastorePackage.Literals.X_M_L_A_REQUEST_PARAMS__MEASURES as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EJavaObject')!);
     (XmlastorePackage.Literals.X_M_L_A_REQUEST_PARAMS__FILTERS as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EJavaObject')!);
+    (XmlastorePackage.Literals.X_M_L_A_REQUEST_PARAMS__PAGES as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EJavaObject')!);
+    (XmlastorePackage.Literals.X_M_L_A_REQUEST_PARAMS__CHAPTERS as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EJavaObject')!);
     (XmlastorePackage.Literals.I_XMLA_STORE_CONFIGURATION__CONNECTION as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
     (XmlastorePackage.Literals.I_XMLA_STORE_CONFIGURATION__REQUEST_PARAMS as BasicEReference).setEType(XmlastorePackage.Literals.X_M_L_A_REQUEST_PARAMS);
     (XmlastorePackage.Literals.I_XMLA_STORE_CONFIGURATION__USE_VISUAL_EDITOR as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EBoolean')!);

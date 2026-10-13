@@ -73,6 +73,7 @@ const initEditor = async () => {
                 // wordWrapColumn: 80,
                 // theme: props.theme,
                 automaticLayout: true,
+                theme: appTheme(),
                 dropIntoEditor: {
                     enabled: true,
                 },
@@ -132,6 +133,15 @@ watch(() => props.metadata, async (newMetadata) => {
     }
 }, { deep: true });
 
+/*
+ * Monaco keeps its own theme; it follows the application's, which sits on
+ * <html data-theme>, light or dark (the default).
+ */
+const appTheme = () => document.documentElement.getAttribute('data-theme') === 'light' ? 'vs' : 'vs-dark';
+const themeObserver = new MutationObserver(() => monaco.editor.setTheme(appTheme()));
+themeObserver.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+onBeforeUnmount(() => themeObserver.disconnect());
+
 const disposeEditor = () => {
     if (editorInstance) {
         editorInstance.dispose();
@@ -172,7 +182,7 @@ watch(() => props.modelValue, (newValue) => {
 <template>
     <div class="editor-page">
         <div class="header-container">
-            <div class="toolbar" v-if="props.showToolbar">
+            <div class="code-editor__toolbar" v-if="props.showToolbar">
                 <DSelect v-model="selectedLanguage" :label="t('Editor.language')" :options="supportedLanguages" size="sm" />
             </div>
             <slot name="actions">
@@ -245,7 +255,8 @@ watch(() => props.modelValue, (newValue) => {
     height: 100%;
 }
 
-.toolbar {
+/* Not .toolbar or .editor-toolbar: other bundles style those globally. */
+.code-editor__toolbar {
     margin-bottom: 10px;
 }
 </style>

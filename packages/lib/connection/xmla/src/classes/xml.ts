@@ -38,8 +38,8 @@ export interface XMLAApiOptions {
 export interface RequestOptions {
   /** Gives up on the request; the promise rejects with the signal's reason. */
   signal?: AbortSignal
-  /** More entries for the PropertyList - the write-back calls send their own. */
-  properties?: Restrictions
+  /** Further Execute properties - a writeback statement needs a few. */
+  properties?: Record<string, unknown>
 }
 
 interface ExecuteInFlight {
@@ -357,7 +357,7 @@ class XMLAApi {
   ): Promise<any> {
     const xml = await this.execute(
       mdx,
-      { Format: format, Catalog: catalog || this.catalog, ...options.properties },
+      { ...stringValues(options.properties), Format: format, Catalog: catalog || this.catalog },
       options.signal,
     )
     return toLegacyEnvelope(xml)
@@ -380,6 +380,11 @@ class XMLAApi {
  */
 function cubeRef(name: string): string {
   return name.startsWith('[') ? name : `[${name.replace(/]/g, ']]')}]`
+}
+
+/** Execute properties as the property list carries them: text. */
+function stringValues(properties: Record<string, unknown> = {}): Restrictions {
+  return Object.fromEntries(Object.entries(properties).map(([key, value]) => [key, value == null ? undefined : String(value)]))
 }
 
 /** Enough to tell two schemas of one request type apart. */

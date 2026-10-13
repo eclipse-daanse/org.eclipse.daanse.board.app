@@ -161,6 +161,8 @@ export class DrilldownHandler {
   }
 
   expandOnRows(member: any) {
+    // Once is enough: a second click while the first answer is on its way drilled it twice.
+    if (this.rowsExpandedMembers.some((e: any) => e.UName === member.UName)) return
     const currentMemberHierarchyItems: any[] = this.rowsExpandedMembers.filter(
       (e: any) => {
         return e.HIERARCHY_UNIQUE_NAME === member.HIERARCHY_UNIQUE_NAME
@@ -193,10 +195,13 @@ export class DrilldownHandler {
       e => e.UName === member.UName,
     )
 
-    this.rowsExpandedMembers.splice(itemIndex, 1)
+    // Not there: nothing to close - splice(-1) would have closed the last one open.
+    if (itemIndex >= 0) this.rowsExpandedMembers.splice(itemIndex, 1)
   }
 
   expandOnColumns(member: any) {
+    // Once is enough: a second click while the first answer is on its way drilled it twice.
+    if (this.columnsExpandedMembers.some((e: any) => e.UName === member.UName)) return
     const currentMemberHierarchyItems: any[] =
       this.columnsExpandedMembers.filter((e: any) => {
         return e.HIERARCHY_UNIQUE_NAME === member.HIERARCHY_UNIQUE_NAME
@@ -228,7 +233,8 @@ export class DrilldownHandler {
       e => e.UName === member.UName,
     )
 
-    this.columnsExpandedMembers.splice(itemIndex, 1)
+    // Not there: nothing to close - splice(-1) would have closed the last one open.
+    if (itemIndex >= 0) this.columnsExpandedMembers.splice(itemIndex, 1)
   }
 
   flushExpands(columns: any[], rows: any[]) {

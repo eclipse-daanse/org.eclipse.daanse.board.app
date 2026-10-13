@@ -15,6 +15,8 @@ Contributors:
 import { computed, nextTick, onBeforeUnmount, provide, ref, shallowRef, toRaw, type PropType } from "vue";
 import { TinyEmitter } from "tiny-emitter";
 import { useElementSize } from "@vueuse/core";
+import { DButton, DIcon } from "org.eclipse.daanse.board.app.ui.vue.controls";
+import { useTranslation } from "org.eclipse.daanse.board.app.ui.vue.composables";
 import RowsArea from "./Areas/RowsArea.vue";
 import ColumnsArea from "./Areas/ColumnsArea.vue";
 import CellsArea from "./Areas/CellsArea.vue";
@@ -30,7 +32,7 @@ import {
     typedBus,
 } from "./context";
 import { buildAxis, entryKey, sizeAt, visibleRange } from "./logic/axis";
-import { cellIds } from "./logic/cell";
+import { cellIds, isCellEditable } from "./logic/cell";
 import { compileConditionalFormats } from "./logic/conditionalFormat";
 import { analyzeAxis, levelStyleMap } from "./logic/hierarchy";
 import type {
@@ -331,6 +333,10 @@ onBeforeUnmount(() => {
 });
 
 // Write-back
+const { t } = useTranslation("xmla");
+// Offered only where the server says a cell can be written to
+const hasEditableCells = computed(() =>
+    (raw.value.cells ?? []).some((row: any) => (Array.isArray(row) ? row : [row]).some((cell: any) => isCellEditable(cell))));
 const isEditMode = ref(false);
 const toggleEditMode = () => {
     isEditMode.value = !isEditMode.value;
@@ -373,12 +379,22 @@ const cssVars = computed(() => ({
 <template>
     <template v-if="data">
         <div class="pivotTable_container" :style="cssVars" @contextmenu.stop.prevent="">
-            <div class="bar">
+            <div v-if="hasEditableCells || isEditMode" class="bar">
                 <template v-if="isEditMode">
-                    <va-button size="small" color="success" class="mr-2" @click="commitTransaction" icon="check"></va-button>
-                    <va-button size="small" color="warning" class="mr-2" @click="rollbackTransaction" icon="undo"></va-button>
+                    <DButton size="sm" intent="primary" :aria-label="t('PivotTable.commit')" :title="t('PivotTable.commit')"
+                        @click="commitTransaction">
+                        <DIcon name="check" size="sm" decorative />
+                    </DButton>
+                    <DButton size="sm" :aria-label="t('PivotTable.rollback')" :title="t('PivotTable.rollback')"
+                        @click="rollbackTransaction">
+                        <DIcon name="undo" size="sm" decorative />
+                    </DButton>
                 </template>
-                <va-button size="small" :class="['edit-mode-btn', { active: isEditMode }]" @click="toggleEditMode" :color="isEditMode ? 'danger' : ''" :icon="isEditMode ? 'close' : 'edit'"></va-button>
+                <DButton class="edit-mode-btn" size="sm" :intent="isEditMode ? 'danger' : 'default'" :aria-pressed="isEditMode"
+                    :title="isEditMode ? t('PivotTable.leaveEditMode') : t('PivotTable.editMode')" @click="toggleEditMode">
+                    <DIcon :name="isEditMode ? 'close' : 'edit'" size="sm" decorative />
+                    {{ isEditMode ? t('PivotTable.leaveEditMode') : t('PivotTable.editMode') }}
+                </DButton>
             </div>
             <div ref="scroller" class="pivotTable_scroller" @scroll.passive="onScroll">
                 <div class="pivotTable_head" :style="{ height: `${colHeaderHeight}px` }">
@@ -427,40 +443,7 @@ const cssVars = computed(() => ({
         flex-wrap: nowrap;
         align-content: center;
         gap: 8px;
-        padding-bottom: 16px;
-    }
-
-    .edit-mode-btn {
-        background: linear-gradient(135deg, hsl(230, 80%, 60%) 0%, hsl(280, 80%, 50%) 100%);
-        color: #ffffff;
-        border: none;
-        padding: 5px 12px;
-        font-size: 12px;
-        font-weight: 600;
-        border-radius: 4px;
-        cursor: pointer;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.08), 0 1px 3px rgba(0, 0, 0, 0.05);
-        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-        line-height: 1;
-        outline: none;
-    }
-
-    .edit-mode-btn:hover {
-        background: linear-gradient(135deg, hsl(230, 85%, 65%) 0%, hsl(280, 85%, 55%) 100%);
-        transform: translateY(-1px);
-        box-shadow: 0 7px 14px rgba(0, 0, 0, 0.12), 0 3px 6px rgba(0, 0, 0, 0.08);
-    }
-
-    .edit-mode-btn:active {
-        transform: translateY(1px);
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.06);
-    }
-
-    .edit-mode-btn.active {
-        background: linear-gradient(135deg, hsl(340, 80%, 60%) 0%, hsl(10, 80%, 60%) 100%);
+        padding-bottom: 8px;
     }
 }
 

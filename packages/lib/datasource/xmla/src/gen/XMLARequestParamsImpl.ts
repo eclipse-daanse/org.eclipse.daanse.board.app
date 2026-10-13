@@ -34,12 +34,16 @@ export class XMLARequestParamsImpl extends BasicEObject implements XMLARequestPa
   static readonly COLUMNS: number = 1;
   static readonly MEASURES: number = 2;
   static readonly FILTERS: number = 3;
+  static readonly PAGES: number = 4;
+  static readonly CHAPTERS: number = 5;
 
   // Private fields
   private _rows!: EList<unknown>;
   private _columns!: EList<unknown>;
   private _measures!: EList<unknown>;
   private _filters!: EList<unknown>;
+  private _pages!: EList<unknown>;
+  private _chapters!: EList<unknown>;
 
   /**
    * Returns the EClass of this object
@@ -77,6 +81,20 @@ export class XMLARequestParamsImpl extends BasicEObject implements XMLARequestPa
     return this._filters;
   }
 
+  get pages(): EList<unknown> {
+    if (!this._pages) {
+      this._pages = createBasicEList<any>(this, this.eClass().getEStructuralFeature('pages')!);
+    }
+    return this._pages;
+  }
+
+  get chapters(): EList<unknown> {
+    if (!this._chapters) {
+      this._chapters = createBasicEList<any>(this, this.eClass().getEStructuralFeature('chapters')!);
+    }
+    return this._chapters;
+  }
+
   // Reflective API
 
   /**
@@ -93,6 +111,10 @@ export class XMLARequestParamsImpl extends BasicEObject implements XMLARequestPa
         return this.measures;
       case XMLARequestParamsImpl.FILTERS:
         return this.filters;
+      case XMLARequestParamsImpl.PAGES:
+        return this.pages;
+      case XMLARequestParamsImpl.CHAPTERS:
+        return this.chapters;
       default:
         return super.eGet(feature);
     }
@@ -124,6 +146,16 @@ export class XMLARequestParamsImpl extends BasicEObject implements XMLARequestPa
         this.filters.addAll(newValue as any[]);
         super.eSet(feature, newValue);
         break;
+      case XMLARequestParamsImpl.PAGES:
+        this.pages.clear();
+        this.pages.addAll(newValue as any[]);
+        super.eSet(feature, newValue);
+        break;
+      case XMLARequestParamsImpl.CHAPTERS:
+        this.chapters.clear();
+        this.chapters.addAll(newValue as any[]);
+        super.eSet(feature, newValue);
+        break;
       default:
         super.eSet(feature, newValue);
     }
@@ -143,6 +175,10 @@ export class XMLARequestParamsImpl extends BasicEObject implements XMLARequestPa
         return this._measures !== undefined && !this._measures.isEmpty();
       case XMLARequestParamsImpl.FILTERS:
         return this._filters !== undefined && !this._filters.isEmpty();
+      case XMLARequestParamsImpl.PAGES:
+        return this._pages !== undefined && !this._pages.isEmpty();
+      case XMLARequestParamsImpl.CHAPTERS:
+        return this._chapters !== undefined && !this._chapters.isEmpty();
       default:
         return super.eIsSet(feature);
     }
@@ -166,6 +202,12 @@ export class XMLARequestParamsImpl extends BasicEObject implements XMLARequestPa
       case XMLARequestParamsImpl.FILTERS:
         if (this._filters) this._filters.clear();
         return;
+      case XMLARequestParamsImpl.PAGES:
+        if (this._pages) this._pages.clear();
+        return;
+      case XMLARequestParamsImpl.CHAPTERS:
+        if (this._chapters) this._chapters.clear();
+        return;
       default:
         super.eUnset(feature);
     }
@@ -185,6 +227,8 @@ export class XMLARequestParamsImpl extends BasicEObject implements XMLARequestPa
       columns: this.columns?.toArray?.() ?? this.columns,
       measures: this.measures?.toArray?.() ?? this.measures,
       filters: this.filters?.toArray?.() ?? this.filters,
+      pages: this.pages?.toArray?.() ?? this.pages,
+      chapters: this.chapters?.toArray?.() ?? this.chapters,
     };
   }
 }

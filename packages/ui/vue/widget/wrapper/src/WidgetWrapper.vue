@@ -130,16 +130,21 @@ const actions = computed(() => [
  * --shadow-e2 elevation (0 2px 8px, 14% ink) instead of the old 5/5/12 drop
  * shadow. These are the defaults for newly placed widgets - widgets already
  * on a board keep the wrapperConfig stored with them.
+ *
+ * The colours are empty: no colour of its own follows the theme (see
+ * getBackground and the others). A light hex here was what a widget got
+ * whenever a setting was missing - on a board loaded from storage, which
+ * drops the empty ones - and it lit up white on a dark board.
  */
 const defaultConfig = {
   title: "",
-  backgroundColor: "#f6f7f9",
+  backgroundColor: "",
   backgroundColorTransparence: 255,
-  titleColor: "#575d68",
+  titleColor: "",
   padding: 0,
   titleFontSize: 12,
   borderSize: 1,
-  borderColor: "#ccd1d9",
+  borderColor: "",
   borderRadius: 8,
   blur: 0,
   fullscreen: false,

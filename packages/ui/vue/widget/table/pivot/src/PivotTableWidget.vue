@@ -13,8 +13,12 @@ Contributors:
 
 <script lang="ts" setup>
 import { inject } from 'vue'
-import { toRefs, ref, watch, onMounted, computed, markRaw, shallowRef } from "vue";
-import { useVariableRepository, useDatasourceRepository, VariableWrapper, plainSettings } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+import { toRefs, ref, shallowRef, watch, onMounted, onUnmounted, computed } from "vue";
+import { pivotSlice, sliceByKeys, sliceKeys, type Cellset } from 'org.eclipse.daanse.board.app.lib.datasource.xmla'
+import PivotNavigator from './navigation/PivotNavigator.vue'
+import { createNavigationStore, type NavigationSettings } from './navigation/store'
+import { isFor, PIVOT_EVENTS, type SelectionChangedEvent, type SliceChangedEvent } from './navigation/events'
+import { useVariableRepository, useDatasourceRepository, useTranslation, VariableWrapper, plainSettings } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import { PivotTable as PivotTableComponent } from 'org.eclipse.daanse.board.app.ui.vue.common.xmla';
 import type { PivotTable } from "./gen/PivotTable";
 // The class to instantiate: in emf mode the plain name is the interface
@@ -40,6 +44,19 @@ const emitWidgetEvent = (name: string, details: Record<string, unknown> = {}) =>
     });
 };
 
+const emitClick = () => emitWidgetEvent('click');
+const emitRightClick = () => emitWidgetEvent('right_click');
+const emitRowClick = (uName: string) => emitWidgetEvent('row_clicked', { uniqueName: uName });
+const emitRowRightClick = (uName: string) => emitWidgetEvent('row_right_clicked', { uniqueName: uName });
+const emitColumnClick = (uName: string) => emitWidgetEvent('column_clicked', { uniqueName: uName });
+const emitColumnRightClick = (uName: string) => emitWidgetEvent('column_right_clicked', { uniqueName: uName });
+const emitCellClick = (ids: { rowId: string, colId: string }) => emitWidgetEvent('cell_clicked', ids);
+const emitCellRightClick = (ids: { rowId: string, colId: string }) => emitWidgetEvent('cell_right_clicked', ids);
+const emitRowExpanded = (uName: string) => emitWidgetEvent('row_expanded', { uniqueName: uName });
+const emitRowCollapsed = (uName: string) => emitWidgetEvent('row_collapsed', { uniqueName: uName });
+const emitColumnExpanded = (uName: string) => emitWidgetEvent('column_expanded', { uniqueName: uName });
+const emitColumnCollapsed = (uName: string) => emitWidgetEvent('column_collapsed', { uniqueName: uName });
+
 const config = defineModel<PivotTable>('configv', { required: true });
 const { wrapParameters } = useVariableRepository();
 
@@ -54,165 +71,314 @@ onMounted(() => {
             ...plainSettings(config.value),
         });
     }
+
+    // actionsRegistry.registerInstance(widgetId.value, api, 'MapWidget', pageId);
 });
 
-type StyleKey = 'headerBackgroundColor' | 'headerTextColor' | 'cellBackgroundColor' | 'cellTextColor' | 'borderColor'
-    | 'defaultColumnWidth' | 'defaultRowHeight' | 'fontSize' | 'headerFontWeight';
+/*
+ * A setting as the table takes it. Stored ones and the model's defaults are
+ * both variable wrappers, typed as strings; unset, the default's wrapper
+ * holds nothing, and handed over as it is it becomes "[object Object]px".
+ * Nothing at all lets the table use its own default; sizes go as numbers.
+ */
+const SIZES = new Set(['defaultColumnWidth', 'defaultRowHeight', 'fontSize'])
+const unwrap = (value: unknown) =>
+  value !== null && typeof value === 'object' && 'value' in value ? (value as { value: unknown }).value : value
+const setting = (key: string) => {
+  for (const source of [config.value as any, defaultConfig as any]) {
+    let value = unwrap(source?.[key])
+    if (SIZES.has(key) && typeof value === 'string' && value.trim() !== '') value = Number(value)
+    if (value === undefined || value === null || value === '' || typeof value === 'object') continue
+    if (typeof value === 'number' && Number.isNaN(value)) continue
+    return value
+  }
+  return undefined
+}
 
-const configValue = (key: StyleKey) =>
-    computed(() => (config.value?.[key] as any)?.value ?? defaultConfig[key].value);
-
-// Colours of saved configs are either a VariableWrapper or a plain string
-const plain = (value: any) => value?.value ?? value;
-
-// wrapParameters resolves {variables} in strings. The level styles and
-// conditional formats go through it as one JSON string, so variables work
-// inside their colours as well
 const wrappedConfig = wrapParameters({
-    headerBackgroundColor: configValue('headerBackgroundColor'),
-    headerTextColor: configValue('headerTextColor'),
-    cellBackgroundColor: configValue('cellBackgroundColor'),
-    cellTextColor: configValue('cellTextColor'),
-    borderColor: configValue('borderColor'),
-    defaultColumnWidth: configValue('defaultColumnWidth'),
-    defaultRowHeight: configValue('defaultRowHeight'),
-    fontSize: configValue('fontSize'),
-    headerFontWeight: configValue('headerFontWeight'),
-    jsonArrays: computed(() => JSON.stringify({
-        rowLevelStyles: config.value?.rowLevelStyles?.map((s: any) => ({
-            ...s,
-            backgroundColor: plain(s.backgroundColor),
-            textColor: plain(s.textColor),
-        })),
-        columnLevelStyles: config.value?.columnLevelStyles?.map((s: any) => ({
-            ...s,
-            backgroundColor: plain(s.backgroundColor),
-            textColor: plain(s.textColor),
-        })),
-        conditionalFormats: config.value?.conditionalFormats?.map((s: any) => ({
-            ...s,
-            id: s.id ?? '',
-            priority: s.priority ?? 0,
-            backgroundColor: plain(s.backgroundColor),
-            textColor: plain(s.textColor),
-            minColor: plain(s.minColor),
-            maxColor: plain(s.maxColor),
-        })),
-    })),
+    headerBackgroundColor: computed(() => setting('headerBackgroundColor')),
+    headerTextColor: computed(() => setting('headerTextColor')),
+    cellBackgroundColor: computed(() => setting('cellBackgroundColor')),
+    cellTextColor: computed(() => setting('cellTextColor')),
+    borderColor: computed(() => setting('borderColor')),
+    defaultColumnWidth: computed(() => setting('defaultColumnWidth')),
+    defaultRowHeight: computed(() => setting('defaultRowHeight')),
+    fontSize: computed(() => setting('fontSize')),
+    headerFontWeight: computed(() => setting('headerFontWeight')),
+    jsonArrays: computed(() => {
+        const payload = {
+            rowLevelStyles: config.value?.rowLevelStyles?.map((s:any) => ({
+                ...s,
+                backgroundColor: (s.backgroundColor as any)?.value ?? s.backgroundColor,
+                textColor: (s.textColor as any)?.value ?? s.textColor,
+            })),
+            columnLevelStyles: config.value?.columnLevelStyles?.map((s:any) => ({
+                ...s,
+                backgroundColor: (s.backgroundColor as any)?.value ?? s.backgroundColor,
+                textColor: (s.textColor as any)?.value ?? s.textColor,
+            })),
+            conditionalFormats: config.value?.conditionalFormats?.map((s:any) => ({
+                ...s,
+                id: s.id ?? '',
+                priority: s.priority ?? 0,
+                backgroundColor: (s.backgroundColor as any)?.value ?? s.backgroundColor,
+                textColor: (s.textColor as any)?.value ?? s.textColor,
+                minColor: (s.minColor as any)?.value ?? s.minColor,
+                maxColor: (s.maxColor as any)?.value ?? s.maxColor,
+            })),
+        };
+        return JSON.stringify(payload);
+    })
 });
 
-const nestedStyles = computed(() => {
-    let parsed: any = {};
+const parsedNestedPivots = computed(() => {
     try {
-        parsed = JSON.parse(wrappedConfig.jsonArrays.value || "{}");
+        const str = wrappedConfig.jsonArrays.value;
+        const parsed = JSON.parse(str || "{}");
+        return {
+            rowLevelStyles: parsed.rowLevelStyles || defaultConfig.rowLevelStyles,
+            columnLevelStyles: parsed.columnLevelStyles || defaultConfig.columnLevelStyles,
+            conditionalFormats: parsed.conditionalFormats || defaultConfig.conditionalFormats,
+        };
     } catch (e) {
-        // fall back to the defaults below
+        return {
+          rowLevelStyles: defaultConfig.rowLevelStyles,
+          columnLevelStyles: defaultConfig.columnLevelStyles,
+          conditionalFormats: defaultConfig.conditionalFormats,
+        };
     }
-    return {
-        rowLevelStyles: parsed.rowLevelStyles || defaultConfig.rowLevelStyles,
-        columnLevelStyles: parsed.columnLevelStyles || defaultConfig.columnLevelStyles,
-        conditionalFormats: parsed.conditionalFormats || defaultConfig.conditionalFormats,
-    };
 });
 
-// wrapParameters hands back strings; sizes and weights are numbers for the table
-const numeric = (key: StyleKey) => {
-    const value = Number(wrappedConfig[key].value);
-    return Number.isFinite(value) ? value : Number(defaultConfig[key].value);
-};
+/*
+ * What the variables made of a setting. They resolve as text, so an unset
+ * one arrives as "undefined"; that, like nothing, leaves the table its own
+ * default.
+ */
+const resolved = (key: string) => {
+  const value = wrappedConfig[key].value
+  const text = value === undefined || value === null ? '' : String(value)
+  if (text === '' || text === 'undefined' || text === 'null' || text === '[object Object]') return undefined
+  if (!SIZES.has(key)) return value
+  const size = Number(text)
+  return Number.isFinite(size) ? size : undefined
+}
 
 const stylingProps = computed(() => ({
-    headerBackgroundColor: wrappedConfig.headerBackgroundColor.value,
-    headerTextColor: wrappedConfig.headerTextColor.value,
-    cellBackgroundColor: wrappedConfig.cellBackgroundColor.value,
-    cellTextColor: wrappedConfig.cellTextColor.value,
-    borderColor: wrappedConfig.borderColor.value,
-    defaultColumnWidth: numeric('defaultColumnWidth'),
-    defaultRowHeight: numeric('defaultRowHeight'),
-    fontSize: numeric('fontSize'),
-    headerFontWeight: numeric('headerFontWeight'),
-    cellTextAlign: (config.value?.cellTextAlign || defaultConfig.cellTextAlign) as "left" | "center" | "right",
-    ...nestedStyles.value,
+  headerBackgroundColor: resolved('headerBackgroundColor'),
+  headerTextColor: resolved('headerTextColor'),
+  cellBackgroundColor: resolved('cellBackgroundColor'),
+  cellTextColor: resolved('cellTextColor'),
+  borderColor: resolved('borderColor'),
+  defaultColumnWidth: resolved('defaultColumnWidth'),
+  defaultRowHeight: resolved('defaultRowHeight'),
+  fontSize: resolved('fontSize'),
+  headerFontWeight: resolved('headerFontWeight'),
+  cellTextAlign: (config.value?.cellTextAlign || defaultConfig.cellTextAlign) as "left" | "center" | "right" | undefined,
+  rowLevelStyles: parsedNestedPivots.value.rowLevelStyles,
+  columnLevelStyles: parsedNestedPivots.value.columnLevelStyles,
+  conditionalFormats: parsedNestedPivots.value.conditionalFormats as any[],
 }));
 
 const dataProps = computed(() => ({
-    showRowsProperties: config.value?.showRowsProperties || defaultConfig.showRowsProperties,
-    showColumnsProperties: config.value?.showColumnsProperties || defaultConfig.showColumnsProperties,
-    showSingleMeasureHeader: config.value?.showSingleMeasureHeader ?? defaultConfig.showSingleMeasureHeader,
+  showRowsProperties: config.value?.showRowsProperties || defaultConfig.showRowsProperties,
+  showColumnsProperties: config.value?.showColumnsProperties || defaultConfig.showColumnsProperties,
+  showSingleMeasureHeader: config.value?.showSingleMeasureHeader ?? defaultConfig.showSingleMeasureHeader,
 }))
 
 // Replaced as a whole on every load, never mutated: no deep reactivity over
 // what can be hundreds of thousands of cells
 const data = shallowRef(null as any);
-const { callEvent, update, getDatasourceInstance } = useDatasourceRepository(datasourceId, "PivotTable", data, [], dataProps);
+const { t } = useTranslation('tablePivot')
+const { callEvent, update, loading, getDatasourceInstance } = useDatasourceRepository(datasourceId, "PivotTable", data, [], dataProps);
+
+/* ---- writeback */
 
 const cubeName = computed(() => {
-    const ds = getDatasourceInstance();
-    return ds?.getCubeName ? ds.getCubeName() : '';
+  const ds = getDatasourceInstance();
+  return ds?.getCubeName ? ds.getCubeName() : '';
 });
 
 const onCellEdit = (e: any) => {
-    callEvent('cellUpdate', { query: e.query });
-    emitWidgetEvent('cell_edited', { cell: e.cell, value: e.value, query: e.query });
+  callEvent('cellUpdate', { query: e.query });
+  if (!widgetId?.value) return;
+  eventBus.emit('widget:PivotTableWidget:cell_edited', {
+    type: 'widget:PivotTableWidget:cell_edited',
+    widgetId: widgetId.value,
+    payload: { widgetId: widgetId.value, timestamp: Date.now(), cell: e.cell, value: e.value, query: e.query },
+  });
 };
 
 const onEditModeChanged = async (isEditing: boolean) => {
-    if (isEditing) {
-        await callEvent('beginTransaction', undefined);
-    }
+  if (isEditing) await callEvent('beginTransaction', undefined);
 };
 
-const onCommitTransaction = async () => {
-    await callEvent('commitTransaction', undefined);
-};
-
-const onRollbackTransaction = async () => {
-    await callEvent('rollbackTransaction', undefined);
-};
+const onCommitTransaction = () => callEvent('commitTransaction', undefined);
+const onRollbackTransaction = () => callEvent('rollbackTransaction', undefined);
 
 watch(datasourceId, (newVal, oldVal) => {
-    update(newVal, oldVal);
+  update(newVal, oldVal);
 })
 
 watch(() => dataProps.value, () => {
-    update();
+  update();
 });
 
-const memberName = (e: any) => e.value?.UName || e.value?.UNAME;
+/* ---- pages and chapters */
+
+const cellset = computed<Cellset | null>(() => data.value?.cellset ?? null)
+/*
+ * The board hands the settings over as a plain object, so a mode switched in
+ * the header would be written and never shown. The navigator works on a
+ * reactive copy of its own settings, and every change goes back into the
+ * board's object, which is what gets saved.
+ */
+const NAVIGATION_KEYS: (keyof NavigationSettings)[] = [
+  'mode', 'cascadeDepth', 'measure', 'compareLayout', 'diffType', 'scaleNormalization',
+  'divergingScale', 'significanceThreshold', 'hideUnchanged', 'matrixLimit', 'timeline',
+]
+const navigationOf = (source: any): NavigationSettings =>
+  Object.fromEntries(NAVIGATION_KEYS.map(key => [key, source?.[key]]))
+const navigationSettings = ref<NavigationSettings>(navigationOf(config.value))
+watch(config, value => {
+  navigationSettings.value = navigationOf(value)
+})
+watch(navigationSettings, value => {
+  if (config.value) Object.assign(config.value, value)
+}, { deep: true })
+
+const navigation = createNavigationStore(cellset, navigationSettings)
+
+/** The table shown: the current slice where there are slices, else the data as it came. */
+const tableData = computed(() => {
+  if (!data.value) return null
+  if (!cellset.value || !navigation.hasNavigation.value) return data.value
+  return {
+    ...pivotSlice(cellset.value, navigation.state.slice, data.value.sliceParams),
+    tableState: data.value.tableState,
+  }
+})
+
+const sliceEvent = (): SliceChangedEvent | null => {
+  if (!cellset.value) return null
+  return { source: widgetId?.value, ...sliceKeys(cellset.value, navigation.state.slice) }
+}
+watch(
+  () => [navigation.state.slice.axis2, navigation.state.slice.axis3],
+  () => {
+    const event = sliceEvent()
+    if (event && navigation.state.touched) eventBus.emit(PIVOT_EVENTS.sliceChanged, event)
+  },
+)
+watch(
+  () => navigation.state.selection,
+  selection => {
+    if (!cellset.value) return
+    const event: SelectionChangedEvent = {
+      source: widgetId?.value,
+      slices: selection.map(slice => sliceKeys(cellset.value!, slice)),
+    }
+    eventBus.emit(PIVOT_EVENTS.selectionChanged, event)
+  },
+)
+const onHover = (axis: 2 | 3, key: string | null) => {
+  eventBus.emit(PIVOT_EVENTS.memberHover, { source: widgetId?.value, axis, uniqueName: key })
+}
+
+/* What other widgets say: follow it where the members are on our axes. */
+const followSlice = (event: SliceChangedEvent) => {
+  if (!isFor(event, widgetId?.value) || !cellset.value) return
+  const slice = sliceByKeys(cellset.value, {
+    axis2: event.axis2 ?? undefined,
+    axis3: event.axis3 ?? undefined,
+  })
+  if (slice) navigation.select(slice)
+}
+const followSelection = (event: SelectionChangedEvent) => {
+  if (!isFor(event, widgetId?.value) || !cellset.value) return
+  navigation.clearSelection()
+  for (const keys of event.slices ?? []) {
+    const slice = sliceByKeys(cellset.value, { axis2: keys.axis2 ?? undefined, axis3: keys.axis3 ?? undefined })
+    if (slice) navigation.toggleSelection(slice)
+  }
+}
+onMounted(() => {
+  eventBus.on(PIVOT_EVENTS.sliceChanged, followSlice)
+  eventBus.on(PIVOT_EVENTS.selectionChanged, followSelection)
+})
+onUnmounted(() => {
+  eventBus.off(PIVOT_EVENTS.sliceChanged, followSlice)
+  eventBus.off(PIVOT_EVENTS.selectionChanged, followSelection)
+})
 
 const onExpand = (e: any) => {
-    callEvent('expand', e, true);
-    if (e.area === 'rows') emitWidgetEvent('row_expanded', { uniqueName: memberName(e) });
-    else if (e.area === 'columns') emitWidgetEvent('column_expanded', { uniqueName: memberName(e) });
+  callEvent('expand', e, true);
+  if (e.area === 'rows') {
+      emitRowExpanded(e.value?.UName || e.value?.UNAME);
+  } else if (e.area === 'columns') {
+      emitColumnExpanded(e.value?.UName || e.value?.UNAME);
+  }
 };
 
 const onCollapse = (e: any) => {
-    callEvent('collapse', e, true);
-    if (e.area === 'rows') emitWidgetEvent('row_collapsed', { uniqueName: memberName(e) });
-    else if (e.area === 'columns') emitWidgetEvent('column_collapsed', { uniqueName: memberName(e) });
+  callEvent('collapse', e, true);
+  if (e.area === 'rows') {
+      emitRowCollapsed(e.value?.UName || e.value?.UNAME);
+  } else if (e.area === 'columns') {
+      emitColumnCollapsed(e.value?.UName || e.value?.UNAME);
+  }
 };
+
+const tableBindings = computed(() => ({
+  modelValue: tableData.value,
+  rowsExpandedMembers: tableData.value?.tableState?.rowsExpandedMembers,
+  columnsExpandedMembers: tableData.value?.tableState?.columnsExpandedMembers,
+  propertiesRows: tableData.value?.propertiesRows,
+  propertiesCols: tableData.value?.propertiesCols,
+  cubeName: cubeName.value,
+  ...stylingProps.value,
+}))
+/* The table in the Table mode's popover: smaller type, lower rows, narrower columns. */
+const COMPACT = { fontSize: 11, defaultRowHeight: 22, defaultColumnWidth: 96 }
+const compactTableBindings = computed(() => ({ ...tableBindings.value, ...COMPACT }))
+
+const tableListeners = {
+  onExpand,
+  onCollapse,
+  row_clicked: emitRowClick,
+  row_right_clicked: emitRowRightClick,
+  column_clicked: emitColumnClick,
+  column_right_clicked: emitColumnRightClick,
+  cell_clicked: emitCellClick,
+  cell_right_clicked: emitCellRightClick,
+  onCellEdit,
+  onEditModeChanged,
+  onCommitTransaction,
+  onRollbackTransaction,
+}
 </script>
 
 <template>
-  <div class="text-container" @click="emitWidgetEvent('click')" @contextmenu.prevent="emitWidgetEvent('right_click')">
+  <div class="text-container" @click="emitClick" @contextmenu.prevent="emitRightClick">
     <div class="component">
-      <PivotTableComponent v-if="data" :model-value="data" @onExpand="onExpand" @onCollapse="onCollapse"
-        @row_clicked="(uName: string) => emitWidgetEvent('row_clicked', { uniqueName: uName })"
-        @row_right_clicked="(uName: string) => emitWidgetEvent('row_right_clicked', { uniqueName: uName })"
-        @column_clicked="(uName: string) => emitWidgetEvent('column_clicked', { uniqueName: uName })"
-        @column_right_clicked="(uName: string) => emitWidgetEvent('column_right_clicked', { uniqueName: uName })"
-        @cell_clicked="(ids: { rowId: string, colId: string }) => emitWidgetEvent('cell_clicked', ids)"
-        @cell_right_clicked="(ids: { rowId: string, colId: string }) => emitWidgetEvent('cell_right_clicked', ids)"
-        @onCellEdit="onCellEdit"
-        @onEditModeChanged="onEditModeChanged"
-        @onCommitTransaction="onCommitTransaction"
-        @onRollbackTransaction="onRollbackTransaction"
-        :cubeName="cubeName"
-        :rowsExpandedMembers="data.tableState?.rowsExpandedMembers"
-        :columnsExpandedMembers="data.tableState?.columnsExpandedMembers"
-        :propertiesRows="data.propertiesRows"
-        :propertiesCols="data.propertiesCols"
-        v-bind="stylingProps" />
+      <PivotNavigator
+        v-if="data && cellset && navigation.hasNavigation.value"
+        v-model:settings="navigationSettings"
+        :cellset="cellset"
+        :store="navigation"
+        :metadata="data.axisMetadata"
+        @hover="onHover"
+      >
+        <template #table="{ compact }">
+          <PivotTableComponent v-if="tableData" v-bind="compact ? compactTableBindings : tableBindings" v-on="tableListeners" />
+        </template>
+      </PivotNavigator>
+      <PivotTableComponent v-else-if="tableData" v-bind="tableBindings" v-on="tableListeners" />
+      <!-- The first answer can take a while: an OLAP server works out its
+           metadata before the query. Said, rather than an empty frame. -->
+      <div v-else-if="loading" class="pivot-loading" role="status">
+        <span class="pivot-loading__spinner" aria-hidden="true" />
+        {{ t('Widget.loading') }}
+      </div>
     </div>
   </div>
 </template>
@@ -227,8 +393,35 @@ const onCollapse = (e: any) => {
   align-items: stretch;
 }
 
+.pivot-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 100%;
+  min-height: 80px;
+  font-size: var(--text-sm);
+  color: var(--color-dim);
+}
+
+.pivot-loading__spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid var(--color-divider);
+  border-top-color: var(--color-accent);
+  border-radius: 50%;
+  animation: pivot-spin 700ms linear infinite;
+}
+
+@keyframes pivot-spin {
+  to { transform: rotate(360deg); }
+}
+
 .component {
   overflow: hidden;
   padding: 16px;
+  /* The navigator needs a height to share between its parts. */
+  flex: 1;
+  min-height: 0;
 }
 </style>

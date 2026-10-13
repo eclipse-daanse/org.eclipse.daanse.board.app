@@ -15,7 +15,7 @@ Contributors:
 import { DInput } from "org.eclipse.daanse.board.app.ui.vue.controls";
 import TreeView from "../TreeView.vue";
 import { ref, onMounted } from 'vue';
-import { getTreeViewNodes } from './XMLAMetadataTree';
+import { dimensionChildren, getTreeViewNodes } from './XMLAMetadataTree';
 import { TreeItemTypesEnum } from './TreeViewItems';
 import XMLAIconVue from './XMLAIcon.vue';
 import { useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables';
@@ -27,8 +27,29 @@ const { metadata } = defineProps(['metadata'])
 const treeViewData = ref(null as any);
 const treeContainer = ref(null as any);
 
+/* The dimensions' own rows come after the tree is drawn: their captions replace the names. */
+function refreshCaptions(nodes: any[]) {
+  for (const node of nodes ?? []) {
+    if (node.type === TreeItemTypesEnum.Dimension && node.dimension) {
+      const row = metadata.storage.dimensions.find((d: any) => d.DIMENSION_UNIQUE_NAME === node.dimension);
+      if (row?.DIMENSION_CAPTION) node.caption = row.DIMENSION_CAPTION;
+    }
+    refreshCaptions(node.children);
+  }
+}
+
+/* A dimension's hierarchies, asked for when it opens. */
+async function loadChildren(node: any) {
+  if (node.type !== TreeItemTypesEnum.Dimension || !node.dimension) return;
+  await metadata.loadHierarchies(node.dimension);
+  const row = metadata.storage.dimensions.find((d: any) => d.DIMENSION_UNIQUE_NAME === node.dimension)
+    ?? { DIMENSION_UNIQUE_NAME: node.dimension };
+  node.children = dimensionChildren(row, metadata.storage);
+}
+
 onMounted(() => {
   treeViewData.value = getTreeViewNodes(metadata.storage);
+  metadata.dimensionsReady?.().then(() => refreshCaptions(treeViewData.value));
   // console.log(treeContainer);
   treeContainer.value.addEventListener('dragstart', (event: any) => {
     console.log(event._xmla_context)
@@ -75,18 +96,18 @@ const getTreeViewItemIcon = (treeViewItem) => {
   } else if (treeViewItem.type === TreeItemTypesEnum.MeasureGroup) {
     // if (this.expandedNodes.some((e) => e === treeViewItem.id)) {
     //   iconDesc.name = "MeasureFolderOpened";
-    //   iconDesc.secondaryColor = "#154EC1";
+    //   iconDesc.secondaryColor = "var(--color-accent)";
     // } else {
     iconDesc.name = "MeasureFolder";
-    iconDesc.secondaryColor = "#154EC1";
+    iconDesc.secondaryColor = "var(--color-accent)";
     // }
   } else if (treeViewItem.type === TreeItemTypesEnum.Hierarchy) {
     if (treeViewItem.originalItem.PARENT_CHILD) {
       iconDesc.name = "HierarchyParentChild";
-      iconDesc.secondaryColor = "#154EC1";
+      iconDesc.secondaryColor = "var(--color-accent)";
     }
     iconDesc.name = "HierarchyNormal";
-    iconDesc.secondaryColor = "#154EC1";
+    iconDesc.secondaryColor = "var(--color-accent)";
   } else if (treeViewItem.type === TreeItemTypesEnum.Level) {
     if (treeViewItem.originalItem.LEVEL_NUMBER === "0") {
       iconDesc.name = "LevelZero";
@@ -135,7 +156,8 @@ const populateDragEvent = (e: any, element: any) => {
         <div class="tree-header mb-2">
           <DInput v-model="filter" :placeholder="t('Metadata.filter')" class="filter-input" />
         </div>
-        <TreeView :nodes="treeViewData" class="tree-view overflow-auto" :filter="filter" text-by="caption">
+        <TreeView :nodes="treeViewData" class="tree-view overflow-auto" :filter="filter" text-by="caption"
+          :load-children="loadChildren">
           <!-- @update:expanded="triggerExpanded" -->
           <template #content="node">
             <draggable v-if="node.type === TreeItemTypesEnum.Hierarchy" :modelValue="[node]"

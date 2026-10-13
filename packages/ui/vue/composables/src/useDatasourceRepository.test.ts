@@ -106,3 +106,23 @@ describe('useDatasourceRepository giving up on a request', () => {
     expect(source.calls[0].options.signal.aborted).toBe(true)
   })
 })
+
+describe('useDatasourceRepository saying it waits', () => {
+  it('is loading until the answer is there, and through a replaced request', async () => {
+    const source = datasource()
+    const { api } = widget(source)
+    await flushPromises()
+    expect(api().loading.value).toBe(true)
+
+    api().update()
+    await flushPromises()
+    source.calls[0].answer({ answer: 'older' })
+    await flushPromises()
+    // The replaced one is done; the newer one is still on its way.
+    expect(api().loading.value).toBe(true)
+
+    source.calls[1].answer({ answer: 'newer' })
+    await flushPromises()
+    expect(api().loading.value).toBe(false)
+  })
+})

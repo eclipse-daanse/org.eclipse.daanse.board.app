@@ -17,7 +17,6 @@ export function getTreeViewNodes(storage: MetadataStorage) {
   const dimensions = getDimensions(storage);
   const measuresGroup = dimensions.find(d => d.isMeasureDimension);
 
-  console.log('Measures Group', measuresGroup)
   const tree = [
     getSets(storage),
     measuresGroup,
@@ -54,15 +53,21 @@ export function getDimensions(storage: MetadataStorage) {
       dimensionDesc.expanded = true
       dimensionDesc.children = [...measureGroups]
     } else {
-      const sets = getSetsForDimensions(dimension, storage)
-      const hierarchies = getChildHierarchies(dimension, storage)
-
-      const childElements = reorderTree([...sets, ...hierarchies])
-      dimensionDesc.children = [...childElements]
+      // Its hierarchies come when it is opened: see dimensionChildren.
+      dimensionDesc.children = getSetsForDimensions(dimension, storage)
+      dimensionDesc.lazy = true
     }
 
     return dimensionDesc
   })
+}
+
+/** An opened dimension's branch: its sets and the hierarchies just loaded. */
+export function dimensionChildren(
+  dimension: Parameters<typeof getSetsForDimensions>[0],
+  storage: Parameters<typeof getSetsForDimensions>[1],
+) {
+  return reorderTree([...getSetsForDimensions(dimension, storage), ...getChildHierarchies(dimension, storage)])
 }
 
 export function getMeasureGroups(storage: MetadataStorage) {
@@ -220,7 +225,6 @@ function getChildHierarchies(
 
 export function reorderTree(tree: any[]) {
   return tree.sort((a, b) => {
-    console.log('Reorder tree items', a, b);
     if (a.isMeasureDimension) return -2;
     else if (a.type === 8) return -1;
     else return 1;

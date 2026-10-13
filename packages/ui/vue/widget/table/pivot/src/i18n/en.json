@@ -7,7 +7,8 @@
       "text": "Text",
       "rowLevels": "Row level styles",
       "columnLevels": "Column level styles",
-      "conditional": "Conditional formatting"
+      "conditional": "Conditional formatting",
+      "navigation": "Pages and chapters"
     },
     "showRowsProperties": "Show row properties",
     "showColumnsProperties": "Show column properties",
@@ -64,9 +65,97 @@
     "columnLevelsHint": "Styles of your own for the hierarchy levels in the column headers.",
     "rulesHint": "Rules by which cells are formatted based on their values.",
     "noLevels": "No level styles yet. “Add level” creates the first one.",
-    "noRules": "No formatting rules yet. “Add rule” creates the first one."
+    "noRules": "No formatting rules yet. “Add rule” creates the first one.",
+    "navigation": {
+      "mode": "View",
+      "cascadeDepth": "Cascade",
+      "measure": "Colour by measure (unique name, empty = first)",
+      "scale": "Colour scale",
+      "diverging": "Colour scale around zero for negative values",
+      "compareLayout": "Compare",
+      "diffType": "Difference",
+      "threshold": "Threshold for differences",
+      "hideUnchanged": "Hide unchanged rows and columns",
+      "matrixLimit": "From this many members: search instead of all",
+      "timeline": "Tree + tabs: time as a timeline"
+    }
   },
   "Widget": {
-    "name": "Pivot table"
+    "name": "Pivot table",
+    "loading": "Loading…"
+  },
+  "Navigation": {
+    "modes": {
+      "standard": "Standard",
+      "cascade": "Cascade",
+      "map": "Map",
+      "matrix": "Table",
+      "tree-tabs": "Tree + tabs",
+      "compare": "Compare"
+    },
+    "depth": {
+      "axes": "By axes",
+      "hierarchy": "By hierarchy"
+    },
+    "layout": {
+      "side-by-side": "Side by side",
+      "side-by-side-diff": "Side by side + difference",
+      "diff-only": "Difference only"
+    },
+    "diff": {
+      "absolute": "Absolute (B − A)",
+      "percent": "Percent ((B − A) / |A|)",
+      "both": "Both"
+    },
+    "scale": {
+      "global": "Overall",
+      "row": "Per row",
+      "column": "Per column"
+    },
+    "view": "View",
+    "colourBy": "Colour by",
+    "overview": "Overview",
+    "chapters": "Chapters",
+    "pages": "Pages",
+    "path": "Path",
+    "steps": "Steps",
+    "search": "Search ({{count}})",
+    "searchGrid": "Search ({{pages}} × {{chapters}})",
+    "searchIn": "Search {{label}}",
+    "searchMembers": "Search members",
+    "tileTitle": "{{label}}: {{value}} — Shift/Ctrl-click: add to comparison",
+    "hasChildren": "has child members",
+    "selectedForComparison": "selected for comparison",
+    "collapse": "Collapse",
+    "expand": "Expand",
+    "layoutLabel": "Layout",
+    "difference": "Difference",
+    "threshold": "Threshold",
+    "hideUnchanged": "Hide unchanged",
+    "baseline": "Baseline",
+    "against": "against",
+    "previous": "Previous",
+    "next": "Next",
+    "selectionSets": "Selection sets",
+    "pickComparison": "Pick comparison",
+    "pickTwo": "Pick two slices to compare them.",
+    "sliceOverview": "Slice overview",
+    "colourScale": "Colour scale",
+    "aroundZero": "Around zero",
+    "slices": "Slices",
+    "selectedCount": "{{count}} selected",
+    "compareSelected": "Compare",
+    "clear": "Clear",
+    "timeline": "Timeline",
+    "back": "Back",
+    "play": "Play",
+    "pause": "Pause",
+    "forward": "Forward",
+    "allPages": "All pages",
+    "sumOfVisible": " (Σ of the visible cells)",
+    "notAvailable": "n/a",
+    "close": "Close",
+    "asTabs": "Tabs",
+    "asTimeline": "Timeline"
   }
 }

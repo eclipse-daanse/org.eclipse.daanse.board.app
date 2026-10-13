@@ -18,7 +18,8 @@
   },
   "Tree": {
     "collapse": "Collapse",
-    "expand": "Expand"
+    "expand": "Expand",
+    "loading": "Loading"
   },
   "PivotTable": {
     "openCellPropertiesButton": "Open cell properties",
@@ -26,12 +27,32 @@
     "drillDownButton": "Drilldown",
     "drillUpButton": "Drillup",
     "openButton": "Open member properties",
-    "showButton": "Show hierarchy properties"
+    "showButton": "Show hierarchy properties",
+    "drillthroughTitle": "Drillthrough details",
+    "drillthroughLoading": "Loading the rows behind the cell…",
+    "drillthroughFailed": "The rows behind the cell could not be loaded.",
+    "drillthroughEmpty": "No rows behind this cell.",
+    "close": "Close",
+    "editMode": "Edit values",
+    "leaveEditMode": "Stop editing",
+    "commit": "Save the changes",
+    "rollback": "Discard the changes"
   },
   "QueryDesigner": {
     "filters": "Filters",
     "columns": "Columns",
     "rows": "Rows",
-    "data": "Data"
+    "data": "Data",
+    "pages": "Pages",
+    "chapters": "Chapters",
+    "pagesNeedRowsAndColumns": "Pages need something on rows and columns.",
+    "chaptersNeedPages": "Chapters need something on pages.",
+    "valuesOnlyOnRowsOrColumns": "Values go on rows or columns only.",
+    "hierarchyOnOneAxisOnly": "A hierarchy can be on one axis only."
+  },
+  "SlicePicker": {
+    "label": "Slice",
+    "page": "Page",
+    "chapter": "Chapter"
   }
 }
