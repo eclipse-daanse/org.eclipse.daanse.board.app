@@ -641,7 +641,7 @@
     ejs "^3.1.10"
     sax "^1.4.4"
 
-"@emfts/core@^0.1.1-next.16", "@emfts/core@^0.1.1-next.18", "@emfts/core@^0.1.1-next.2":
+"@emfts/core@^0.1.1-next.18":
   version "0.1.1-next.18"
   resolved "https://registry.npmjs.org/@emfts/core/-/core-0.1.1-next.18.tgz#63224ebf97c4d7a565398b890c40c486ca10ad50"
   integrity sha512-fJalqar3AO1vp1P0LWOhR7X1DcZY9P+nPSlwEJqVYu/e2HF0sZO9toO+HBZ5aGQyBhFeG7q5CyTCHmYJWfrmCA==
@@ -650,20 +650,6 @@
   version "0.2.0-next.2"
   resolved "https://registry.npmjs.org/@emfts/core/-/core-0.2.0-next.2.tgz#79f531b574d0eefafd71f596974ca0aa1b6f9768"
   integrity sha512-CEUOaZljZBEhFlPESIqjIAN8whnffsQxA7XQwvxVRz9AUVpfoQWaWAZfJ6WmqSkgqxn7DfSDICwbA3TNv0Q2pw==
-
-"@emfts/uimodel-composer@file:../EMFTs/uimodel-composer/packages/uimodel-composer":
-  version "0.0.2-next.1"
-  dependencies:
-    "@emfts/core" "^0.1.1-next.16"
-    "@emfts/vue-registry" "^0.0.1-next.1"
-
-"@emfts/vue-registry@^0.0.1-next.1":
-  version "0.0.1-next.1"
-  resolved "https://registry.npmjs.org/@emfts/vue-registry/-/vue-registry-0.0.1-next.1.tgz#b139a91fc1381426cd1910f7928f971ce8ecbdbe"
-  integrity sha512-EKbE3PalGRgbOgrlvb/muOLhtXyzZDYD46HBO6Sp46igcqPJxIcdpL4w3elBfDLO64x8MPbcxor9uNptE3Aa4Q==
-  dependencies:
-    "@emfts/core" "^0.1.1-next.2"
-    vue "^3.4.0"
 
 "@emnapi/core@1.4.5":
   version "1.4.5"
@@ -4971,6 +4957,11 @@
     de-indent "^1.0.2"
     he "^1.2.0"
 
+"@vue/devtools-api@^6.6.3":
+  version "6.6.4"
+  resolved "https://registry.yarnpkg.com/@vue/devtools-api/-/devtools-api-6.6.4.tgz#cbe97fe0162b365edc1dba80e173f90492535343"
+  integrity sha512-sGhTPMuXqZ1rVOk32RylztWkfXTRhuS7vgAKv0zjqk8gbsHkJ7xfFf+jbySxt7tWObEJwyKaHMikV/WGDiQm8g==
+
 "@vue/devtools-api@^7.7.7":
   version "7.7.10"
   resolved "https://registry.npmjs.org/@vue/devtools-api/-/devtools-api-7.7.10.tgz#bfa52dee8918edeea1bfe04cce9f809eeed19862"
@@ -8183,9 +8174,9 @@ inversify@7.11.0:
     "@inversifyjs/core" "9.2.0"
 
 ip-address@^10.0.1, ip-address@^10.2.0:
-  version "10.2.0"
-  resolved "https://registry.yarnpkg.com/ip-address/-/ip-address-10.2.0.tgz#805fc178b20c518bd4c8548b24fe30892d7f3206"
-  integrity sha512-/+S6j4E9AHvW9SWMSEY9Xfy66O5PWvVEJ08O0y5JGyEKQpojb0K0GKpz/v5HJ/G0vi3D2sjGK78119oXZeE0qA==
+  version "10.7.1"
+  resolved "https://registry.yarnpkg.com/ip-address/-/ip-address-10.7.1.tgz#df8031c20df6b7f1dcc9f68c4f4fa5ee71c45d39"
+  integrity sha512-4OUAqU9Z1i3vCnS05hzGiFnEMDpQ+62pAD/MVQOp83fYyNC8GleCqaS0QikQBmcWCrKFiUs/B8ztRRiYOAXuCA==
 
 is-arrayish@^0.2.1:
   version "0.2.1"
@@ -10509,7 +10500,15 @@ pify@^3.0.0:
   resolved "https://registry.npmjs.org/pify/-/pify-3.0.0.tgz"
   integrity sha512-C3FsVNH1udSEX48gGX1xfvwTWfsYWj5U+8/uK15BGzIGrKoUpghX8hWZwa/OFnakBiiVNmBvemTJR5mcy7iPcg==
 
-pinia@^3.0.1:
+pinia@^2.1.0:
+  version "2.3.1"
+  resolved "https://registry.yarnpkg.com/pinia/-/pinia-2.3.1.tgz#54c476675b72f5abcfafa24a7582531ea8c23d94"
+  integrity sha512-khUlZSwt9xXCaTbbxFYBKDc/bWAGWJjOgvxETwkTN7KRm66EeT1ZdZj6i2ceh9sP2Pzqsbc704r2yngBrxBVug==
+  dependencies:
+    "@vue/devtools-api" "^6.6.3"
+    vue-demi "^0.14.10"
+
+pinia@^3.0.1, pinia@^3.0.2:
   version "3.0.4"
   resolved "https://registry.npmjs.org/pinia/-/pinia-3.0.4.tgz#75dde12784a61e34c1fa6abcd13c1a1061c360c0"
   integrity sha512-l7pqLUFTI/+ESXn6k3nu30ZIzW5E2WZF/LaHJEpoq6ElcLD+wduZoB2kBN19du6K/4FDpPMazY2wJr+IndBtQw==
@@ -12742,7 +12741,7 @@ vue-component-type-helpers@^2.0.0:
   resolved "https://registry.npmjs.org/vue-component-type-helpers/-/vue-component-type-helpers-2.2.12.tgz"
   integrity sha512-YbGqHZ5/eW4SnkPNR44mKVc6ZKQoRs/Rux1sxC6rdwXb4qpbOSYfDr9DsTHolOTGmIKgM9j141mZbBeg05R1pw==
 
-vue-demi@>=0.13.0:
+vue-demi@>=0.13.0, vue-demi@^0.14.10:
   version "0.14.10"
   resolved "https://registry.npmjs.org/vue-demi/-/vue-demi-0.14.10.tgz#afc78de3d6f9e11bf78c55e8510ee12814522f04"
   integrity sha512-nMZBOwuzabUO0nLgIcc6rycZEebF6eeUfaiQx9+WSk8e29IbLvPU9feI6tqW4kTo3hvoYAJkMh8n8D0fuISphg==
