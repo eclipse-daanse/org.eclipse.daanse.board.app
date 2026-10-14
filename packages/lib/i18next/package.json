@@ -29,6 +29,7 @@
     "access": "public"
   },
   "dependencies": {
-    "i18next": "^25.0.1"
+    "i18next": "^25.0.1",
+    "org.eclipse.daanse.board.app.lib.core": "^0.0.1-next.1"
   }
 }

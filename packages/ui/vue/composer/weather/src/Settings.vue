@@ -96,12 +96,15 @@ const weatherParameters = [
   { key: 'cloudCover', label: 'Cloud Cover', placeholder: 'cloudcover, wolken, bedeckung' }
 ]
 
-const updateCustomMapping = (parameter: string, keywords: string) => {
+// DInput carries string | number | null, so the raw value is normalised here
+// before it is split; an empty or absent value clears the mapping as before.
+const updateCustomMapping = (parameter: string, keywords: string | number | null) => {
   if (!config.customMapping) {
     config.customMapping = {}
   }
-  if (keywords.trim()) {
-    config.customMapping[parameter] = keywords.split(',').map((k: string) => k.trim())
+  const text = String(keywords ?? '')
+  if (text.trim()) {
+    config.customMapping[parameter] = text.split(',').map((k: string) => k.trim())
   } else {
     delete config.customMapping[parameter]
   }

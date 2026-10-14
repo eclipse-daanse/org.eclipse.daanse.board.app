@@ -1,3 +1,16 @@
+/*********************************************************************
+ * Copyright (c) 2026 Contributors to the Eclipse Foundation.
+ *
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ *
+ * SPDX-License-Identifier: EPL-2.0
+ *
+ * Contributors:
+ *   Smart City Jena
+ **********************************************************************/
+
 /**
  * Watches every bundle package's sources and rebuilds exactly the bundles a
  * change belongs to. The dev server's reload bridge (vite.config.ts) sees
@@ -58,7 +71,7 @@ if (bundles.length === 0) {
 }
 
 /* dir -> { name, bundles }: the workspace packages baked into a bundle, and
-   which bundles carry the copy. */
+  which bundles carry the copy. */
 const inlined = inlinedInto(bundles)
 /* Every package worth watching, longest path first so a nested one wins. */
 const watched = [...new Set([...bundles, ...inlined.keys()])].sort((a, b) => b.length - a.length)
@@ -115,8 +128,8 @@ function startBundleWatcher(dir, { oneShot = false } = {}) {
         logLevel: 'silent',
         build: {
           /* Rollup watches every file in the graph and, left alone, the
-             directory it writes into as well - which makes each build the
-             trigger for the next one. */
+            directory it writes into as well - which makes each build the
+            trigger for the next one. */
           watch: { exclude: ['**/dist-bundle/**', '**/node_modules/**'] },
           minify: false,
           emptyOutDir: false,
@@ -143,7 +156,7 @@ function startBundleWatcher(dir, { oneShot = false } = {}) {
 }
 
 /* Library changes arrive one file at a time; a save across several is still
-   one rebuild. */
+  one rebuild. */
 const pendingLibs = new Set()
 let libTimer
 
@@ -175,17 +188,17 @@ function flushLibs() {
     )
 
     /* Bundles with a live watcher pick this up themselves: the library's
-       dist/ files are modules in their graph, and rollup watches those. They
-       are also the ones a parallel build must not touch - two processes
-       writing the same dist-bundle/ leave it empty. */
+      dist/ files are modules in their graph, and rollup watches those. They
+      are also the ones a parallel build must not touch - two processes
+      writing the same dist-bundle/ leave it empty. */
     const affected = [...new Set(libs.flatMap((d) => inlined.get(d).bundles))].filter(
       (d) => !active.has(d),
     )
     if (affected.length === 0) return
 
     /* Out of process and in parallel: lib.core reaches twenty-nine bundles,
-       and one after another in here would take minutes. build-bundles.mjs
-       skips whatever is already current, so naming them all is safe. */
+      and one after another in here would take minutes. build-bundles.mjs
+      skips whatever is already current, so naming them all is safe. */
     console.log(`[${now()}] ${affected.length} bundle(s) inline it, rebuilding`)
     const spread = Date.now()
     try {

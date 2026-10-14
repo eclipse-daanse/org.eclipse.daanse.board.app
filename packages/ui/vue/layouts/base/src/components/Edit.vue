@@ -467,7 +467,7 @@ const selectionIsGroup = computed(() => {
 function groupSelection() {
   const items = pickedItems()
   if (items.length < 2) return
-  const id = `g_${Math.random().toString(36).slice(2, 9)}`
+  const id = `g_${crypto.randomUUID()}`
   for (const item of items) item.group = id
 }
 
@@ -1101,7 +1101,7 @@ const change = (e: any) => {
 /* ------------------------------------------------------ several at once */
 
 /* A picked widget says so, since the group's handles surround them all
-   rather than marking each one */
+  rather than marking each one */
 .dashboard-item-container.is-selected::after {
   content: '';
   position: absolute;

@@ -277,7 +277,7 @@ table {
   border: 3px solid transparent;
   border-radius: 6px;
   /* The border is drawn in the track's colour, which leaves the thumb
-     narrower than the bar and floating in it */
+    narrower than the bar and floating in it */
   background-clip: padding-box;
 }
 

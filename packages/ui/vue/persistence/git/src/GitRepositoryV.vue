@@ -186,7 +186,7 @@ const loadFile = async () => {
   <div class="flex-nowrap">
     <Teleport defer to="#loadSaveModalFooter">
       <!-- Picking a branch and picking a commit is picking from a list. It
-           was a dropdown button with a menu hanging off it, twice. -->
+        was a dropdown button with a menu hanging off it, twice. -->
       <DSelect v-model="branch" label="Branch" :options="branch_options ?? []" size="sm" />
       <DSelect v-model="commit" label="Stand" :options="commit_options ?? []" size="sm" clearable />
     </Teleport>

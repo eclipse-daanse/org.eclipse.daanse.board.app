@@ -1,3 +1,16 @@
+/*********************************************************************
+ * Copyright (c) 2026 Contributors to the Eclipse Foundation.
+ *
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ *
+ * SPDX-License-Identifier: EPL-2.0
+ *
+ * Contributors:
+ *   Smart City Jena
+ **********************************************************************/
+
 /**
  * What a tsm bundle is made of, and when it has gone stale.
  *
@@ -122,7 +135,7 @@ export function isStale(dir) {
   if (!built) return true
 
   /* dist/ is turbo's output for this same package, not an input, and
-     .turbo holds its log. */
+    .turbo holds its log. */
   let newest = newestUnder(dir, ['dist-bundle', 'dist-bundle.building', 'dist', 'node_modules', '.turbo'])
 
   for (const dep of inlinedDeps(dir)) {

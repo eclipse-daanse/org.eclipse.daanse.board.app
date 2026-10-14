@@ -1,3 +1,16 @@
+/*********************************************************************
+ * Copyright (c) 2026 Contributors to the Eclipse Foundation.
+ *
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ *
+ * SPDX-License-Identifier: EPL-2.0
+ *
+ * Contributors:
+ *   Smart City Jena
+ **********************************************************************/
+
 /**
  * One writer at a time for the dist-bundle/ directories.
  *
@@ -18,7 +31,7 @@ const ROOT = resolve(import.meta.dirname, '..')
 const LOCK = join(ROOT, 'node_modules', '.cache', 'daanse-bundles.lock')
 
 /* A build started by the process that already holds the lock is the same
-   writer, not a second one. */
+  writer, not a second one. */
 const INHERITED = 'DAANSE_BUNDLE_LOCK'
 
 function alive(pid) {

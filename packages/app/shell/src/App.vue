@@ -169,7 +169,7 @@ const go = (target: string) => router.push(target)
 }
 
 /* 36px hit target, 8px radius, and the 3px accent bar the mockups put on
-   the active entry. */
+  the active entry. */
 .ri {
   position: relative;
   width: 36px;

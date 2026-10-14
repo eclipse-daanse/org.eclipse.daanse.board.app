@@ -31,6 +31,11 @@
     "debug": "^4.4.3",
     "org.eclipse.daanse.board.app.lib.annotations": "0.0.1-next.1",
     "org.eclipse.daanse.board.app.lib.datasource.base": "^0.0.1-next.1",
-    "org.eclipse.daanse.board.app.lib.repository.connection": "^0.0.1-next.1"
+    "org.eclipse.daanse.board.app.lib.repository.connection": "^0.0.1-next.1",
+    "org.eclipse.daanse.board.app.lib.core": "^0.0.1-next.1",
+    "org.eclipse.daanse.board.app.lib.api.connection": "^0.0.1-next.1",
+    "org.eclipse.daanse.board.app.lib.api.logger": "^0.0.1-next.1",
+    "org.eclipse.daanse.board.app.lib.api.variable": "^0.0.1-next.1",
+    "org.eclipse.daanse.board.app.lib.connection.base": "^0.0.1-next.1"
   }
 }

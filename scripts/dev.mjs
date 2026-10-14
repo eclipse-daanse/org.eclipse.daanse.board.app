@@ -1,3 +1,16 @@
+/*********************************************************************
+ * Copyright (c) 2026 Contributors to the Eclipse Foundation.
+ *
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ *
+ * SPDX-License-Identifier: EPL-2.0
+ *
+ * Contributors:
+ *   Smart City Jena
+ **********************************************************************/
+
 /**
  * One-command dev environment: brings the bundles up to date, then starts the
  * vite dev server (launcher) and the bundle watcher together; killing this
@@ -18,12 +31,12 @@ import { describe, holder } from './bundle-lock.mjs'
 const args = process.argv.slice(2)
 const portAt = args.indexOf('--port')
 /* The port decides the origin, and the origin decides which localStorage the
-   app sees - a fallback port would silently open an empty workspace. */
+  app sees - a fallback port would silently open an empty workspace. */
 const port = portAt >= 0 ? args[portAt + 1] : undefined
 const filters = args.filter((a, i) => i !== portAt && i !== portAt + 1)
 
 /* Checked here rather than left to the catch-up build, so the reason is the
-   first thing on screen instead of a build error. */
+  first thing on screen instead of a build error. */
 const held = holder()
 if (held) {
   console.error(

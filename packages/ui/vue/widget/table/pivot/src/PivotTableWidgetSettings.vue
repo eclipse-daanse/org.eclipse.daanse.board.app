@@ -99,7 +99,7 @@ const conditionTypeOptions = [
   { value: 'bottomN', text: 'Bottom N Werte' },
 ]
 
-const generateId = () => Math.random().toString(36).substring(2, 9)
+const generateId = () => crypto.randomUUID()
 
 const addConditionalFormat = () => {
   if (!widgetSettings.value.conditionalFormats) {

@@ -312,6 +312,55 @@ function promoteInstantiatedTypeImports(file) {
   if (out !== source) writeFileSync(file, out)
 }
 
+// The generator emits no license header; Eclipse requires one on every source
+// file, so it is prepended here rather than carried in 300 generated files by
+// hand. See .licenserc.yaml for the text the check looks for.
+const LICENSE_HEADER = `/*********************************************************************
+ * Copyright (c) ${new Date().getFullYear()} Contributors to the Eclipse Foundation.
+ *
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ *
+ * SPDX-License-Identifier: EPL-2.0
+ *
+ * Contributors:
+ *   Smart City Jena
+ **********************************************************************/
+
+`
+
+const XMI_LICENSE_HEADER = `<!--
+/*********************************************************************
+* Copyright (c) ${new Date().getFullYear()} Contributors to the Eclipse Foundation.
+*
+* This program and the accompanying materials are made
+* available under the terms of the Eclipse Public License 2.0
+* which is available at https://www.eclipse.org/legal/epl-2.0/
+*
+* SPDX-License-Identifier: EPL-2.0
+**********************************************************************/
+-->
+`
+
+// The genconfig is written by the codegen and then committed, so it needs the
+// header too - in XML comment form, as the .ecore models carry it.
+function prependXmiLicenseHeader(file) {
+  const source = readFileSync(file, 'utf-8')
+  if (source.includes('SPDX-License-Identifier: EPL-2.0')) return
+  const declaration = '<?xml version="1.0" encoding="UTF-8"?>\n'
+  const out = source.startsWith(declaration)
+    ? declaration + XMI_LICENSE_HEADER + source.slice(declaration.length)
+    : XMI_LICENSE_HEADER + source
+  writeFileSync(file, out)
+}
+
+function prependLicenseHeader(file) {
+  const source = readFileSync(file, 'utf-8')
+  if (source.includes('SPDX-License-Identifier: EPL-2.0')) return
+  writeFileSync(file, LICENSE_HEADER + source)
+}
+
 // ----------------------------------------------------------------- generate
 let ok = 0
 const failed = []
@@ -346,6 +395,7 @@ for (const [pkgDir, pkgModels] of byPackage) {
         if (deps.length) args.push('-d', ...deps)
         if (mappings.length) args.push('--import-mapping', ...mappings)
         execFileSync('node', [CODEGEN, ...args], { stdio: 'pipe' })
+        prependXmiLicenseHeader(genconfig)
       }
       const args = ['generate', '-m', file, '-c', genconfig, '-o', tmp]
       if (deps.length) args.push('-d', ...deps)
@@ -367,6 +417,7 @@ for (const [pkgDir, pkgModels] of byPackage) {
             collapseSubpathImports(join(genDir, entry))
             pruneUnusedNamedImports(join(genDir, entry))
             addToJson(join(genDir, entry))
+            prependLicenseHeader(join(genDir, entry))
           }
         }
       }
