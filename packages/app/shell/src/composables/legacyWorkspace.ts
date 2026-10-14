@@ -115,7 +115,7 @@ export function readLegacyWorkspace(data: LegacyWorkspace): Workspace | undefine
   const variables: Array<{ entry: Record<string, unknown>; variable: VariableImpl }> = []
   for (const entry of data.variables ?? []) {
     const variable = new VariableImpl()
-    variable.uid = (entry['id'] ?? entry['uid'] ?? Math.random().toString(36).substring(7)) as string
+    variable.uid = (entry['id'] ?? entry['uid'] ?? crypto.randomUUID()) as string
     variable.name = entry['name'] as string
     variable.type = entry['type'] as string
     variable.scope = (entry['scope'] as string) ?? 'global'

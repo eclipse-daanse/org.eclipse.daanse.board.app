@@ -196,7 +196,7 @@ const copyWidget = (widgetId: string) => {
   const layoutItem = storedLayout.value.find((l: any) => l.id === widgetId)
   if (widget && layoutItem) {
     /* A snapshot, feature by feature: a modelled object keeps its values
-       in private fields, so spreading one copies _uid, not uid. */
+      in private fields, so spreading one copies _uid, not uid. */
     clipboardStore.copy(
       {
         type: widget.type as string,
@@ -219,7 +219,7 @@ const pasteWidget = () => {
   const clipboard = clipboardStore.paste()
   if (!clipboard) return
 
-  const newUid = 'li_' + Math.random().toString(36).substring(7)
+  const newUid = 'li_' + crypto.randomUUID()
 
   // Clone widget with new UID
   const newWidget = cloneDeep(clipboard.widget) as any
@@ -359,9 +359,9 @@ function syncLayoutSettings() {
   if (pageRepo && pageID.value) {
     const page = pageRepo.getPage(pageID.value)
     /* Copied by the model's names: the settings are a modelled instance
-       once the form has been open, and spreading one gives the private
-       fields its getters sit in - the grid then silently fell back to
-       every default while the form showed what had been set. */
+      once the form has been open, and spreading one gives the private
+      fields its getters sit in - the grid then silently fell back to
+      every default while the form showed what had been set. */
     layoutSettingsRef.value = page?.layoutSettings
       ? { ...plainSettings(page.layoutSettings) }
       : undefined
@@ -487,7 +487,7 @@ function onExternalDragAdd(e: any) {
   drag.value = false
 
   // finales Item an zuletzt berechneter Grid-Position
-  const finalId = `widget_${Math.random().toString(36).slice(2, 9)}`
+  const finalId = `widget_${crypto.randomUUID()}`
   const { x, y } = lastPos.value
   layoutModel.value = [...layoutModel.value, { i: finalId, x, y, w: 2, h: 2, static: false }]
 

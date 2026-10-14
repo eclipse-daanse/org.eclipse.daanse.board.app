@@ -120,7 +120,7 @@ export class DatasourceRepository implements IDatasourceRepository {
 
   createDatasource(type: string, config: Record<string, unknown> = {}): Datasource {
     const datasource = new DatasourceImpl()
-    datasource.uid = Math.random().toString(36).substring(7)
+    datasource.uid = crypto.randomUUID()
     datasource.name = 'DataSource ' + datasource.uid
     datasource.type = type
     datasource.config = config

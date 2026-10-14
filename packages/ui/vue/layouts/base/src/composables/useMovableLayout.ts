@@ -199,7 +199,7 @@ export function useMoveableLayout(pageId: string = '', gridSize: () => number = 
     const layoutItem = board.layout.value.find((l: ILayoutItem) => l.id === widgetId)
     if (widget && layoutItem) {
       /* A snapshot, feature by feature: a modelled object keeps its values
-         in private fields, so spreading one copies _uid, not uid. */
+        in private fields, so spreading one copies _uid, not uid. */
       clipboardStore.copy(
         {
           type: widget.type as string,
@@ -222,7 +222,7 @@ export function useMoveableLayout(pageId: string = '', gridSize: () => number = 
     const clipboard = clipboardStore.paste()
     if (!clipboard) return null
 
-    const newUid = 'li_' + Math.random().toString(36).substring(7)
+    const newUid = 'li_' + crypto.randomUUID()
     const maxZ = Math.max(...board.layout.value.map((item: ILayoutItem) => item.z), 0)
 
     const copied = cloneDeep(clipboard.widget)

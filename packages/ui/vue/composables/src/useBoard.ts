@@ -73,7 +73,7 @@ export function useBoard(pageId: MaybeRefOrGetter<string>): Board {
     layout,
 
     addWidget(widget, placement) {
-      const uid = widget.uid || 'li_' + Math.random().toString(36).substring(7)
+      const uid = widget.uid || 'li_' + crypto.randomUUID()
       pages.addWidget(id(), { ...widget, uid }, placement)
       return uid
     },

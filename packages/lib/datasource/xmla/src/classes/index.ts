@@ -315,11 +315,9 @@ export class XmlaStore extends BaseDatasource {
   }
 
   private generateUUID(): string {
-    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
-      const r = (Math.random() * 16) | 0;
-      const v = c === 'x' ? r : (r & 0x3) | 0x8;
-      return v.toString(16).toUpperCase();
-    });
+    // Upper case: the Analysis Services properties this feeds are written
+    // that way everywhere else, and the server echoes them back verbatim.
+    return crypto.randomUUID().toUpperCase();
   }
 
   async cellUpdate(params: { query: string }) {
