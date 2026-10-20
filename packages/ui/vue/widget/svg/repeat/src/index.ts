@@ -21,6 +21,8 @@ import { RepeatableSVGSettingsImpl } from './gen/RepeatableSVGSettingsImpl'
 import { RepeatableSvgWidgetsPackage } from './gen/RepeatableSvgWidgetsPackage'
 /* The form for these settings, written as a model beside the Ecore. */
 import repeatSettingsFormXmi from '../model/ui.xmi?raw'
+/* The Ecore itself, for the sentences the generator drops. */
+import settingsEcore from '../model/model.ecore?raw'
 /* The form for the look one copy of the picture is painted with. */
 import repeatStylesFormXmi from '../model/ui-styles.xmi?raw'
 
@@ -72,6 +74,7 @@ export class RepeatableSVGWidgetProvider implements WidgetProvider {
    */
   readonly settingsForm = {
     xmi: repeatSettingsFormXmi,
+    ecore: settingsEcore,
     uri: '/svg-repeat-settings.ui.xmi',
     ePackage: () => RepeatableSvgWidgetsPackage.eINSTANCE,
     create: () => new RepeatableSVGSettingsImpl(),

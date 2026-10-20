@@ -21,6 +21,8 @@ import { ChartSettingsImpl } from './gen/ChartSettingsImpl'
 import { ChartsettingsPackage } from './gen/ChartsettingsPackage'
 /* The form for these settings, written as a model beside the Ecore. */
 import chartSettingsFormXmi from '../model/ui.xmi?raw'
+/* The Ecore itself, for the sentences the generator drops. */
+import settingsEcore from '../model/model.ecore?raw'
 /* The form for one entry of the series list - same values as above, so a
  * series states its type from the same list the chart does. */
 import seriesSettingsFormXmi from '../model/ui-series.xmi?raw'
@@ -61,6 +63,7 @@ export class ChartWidgetProvider implements WidgetProvider {
    */
   readonly settingsForm = {
     xmi: chartSettingsFormXmi,
+    ecore: settingsEcore,
     uri: '/chart-settings.ui.xmi',
     ePackage: () => ChartsettingsPackage.eINSTANCE,
     create: () => new ChartSettingsImpl(),

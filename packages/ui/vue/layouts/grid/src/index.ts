@@ -20,6 +20,8 @@ import { GridSettingsImpl } from './gen/GridSettingsImpl'
 import { GridsettingsPackage } from './gen/GridsettingsPackage'
 /* The form for these settings, written as a model beside the Ecore. */
 import gridSettingsFormXmi from '../model/ui.xmi?raw'
+/* The Ecore itself, for the sentences the generator drops. */
+import settingsEcore from '../model/model.ecore?raw'
 /* The form for the columns it contains. */
 import gridColumnsFormXmi from '../model/ui-columns.xmi?raw'
 
@@ -46,6 +48,7 @@ export function activate({ services }: ActivationContext) {
      */
     settingsForm: {
       xmi: gridSettingsFormXmi,
+      ecore: settingsEcore,
       uri: '/grid-settings.ui.xmi',
       ePackage: () => GridsettingsPackage.eINSTANCE,
       create: () => new GridSettingsImpl(),

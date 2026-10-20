@@ -22,6 +22,8 @@ import { TextSettingsImpl } from './gen/TextSettingsImpl'
 import { TextsettingsPackage } from './gen/TextsettingsPackage'
 /* The form for these settings, written as a model beside the Ecore. */
 import textSettingsFormXmi from '../model/ui.xmi?raw'
+/* The Ecore itself, for the sentences the generator drops. */
+import textSettingsEcore from '../model/model.ecore?raw'
 
 /*
  * Building the EPackage on load: until it exists the class literals are
@@ -57,6 +59,7 @@ export class TextWidgetProvider implements WidgetProvider {
    */
   readonly settingsForm = {
     xmi: textSettingsFormXmi,
+    ecore: textSettingsEcore,
     uri: '/text-settings.ui.xmi',
     ePackage: () => TextsettingsPackage.eINSTANCE,
     create: () => new TextSettingsImpl(),

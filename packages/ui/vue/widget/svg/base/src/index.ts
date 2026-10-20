@@ -21,6 +21,8 @@ import { SvgSettingsImpl } from './gen/SvgSettingsImpl'
 import { SvgwidgetsPackage } from './gen/SvgwidgetsPackage'
 /* The form for these settings, written as a model beside the Ecore. */
 import svgSettingsFormXmi from '../model/ui.xmi?raw'
+/* The Ecore itself, for the sentences the generator drops. */
+import settingsEcore from '../model/model.ecore?raw'
 /* The forms for the classes inside it: one rule, and what it paints. */
 import svgEntryFormXmi from '../model/ui-entry.xmi?raw'
 import svgRuleFormXmi from '../model/ui-rule.xmi?raw'
@@ -77,6 +79,7 @@ export class SVGWidgetProvider implements WidgetProvider {
    */
   readonly settingsForm = {
     xmi: svgSettingsFormXmi,
+    ecore: settingsEcore,
     uri: '/svg-settings.ui.xmi',
     ePackage: () => SvgwidgetsPackage.eINSTANCE,
     create: () => new SvgSettingsImpl(),

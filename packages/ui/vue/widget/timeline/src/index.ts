@@ -22,6 +22,8 @@ import { TimelineSettingsImpl } from './gen/TimelineSettingsImpl'
 import { TimelinesettingsPackage } from './gen/TimelinesettingsPackage'
 /* The form for these settings, written as a model beside the Ecore. */
 import timelineSettingsFormXmi from '../model/ui.xmi?raw'
+/* The Ecore itself, for the sentences the generator drops. */
+import settingsEcore from '../model/model.ecore?raw'
 
 /*
  * Building the EPackage on load: until it exists the class literals are
@@ -67,6 +69,7 @@ export class TimelineWidgetProvider implements WidgetProvider {
    */
   readonly settingsForm = {
     xmi: timelineSettingsFormXmi,
+    ecore: settingsEcore,
     uri: '/timeline-settings.ui.xmi',
     ePackage: () => TimelinesettingsPackage.eINSTANCE,
     create: () => new TimelineSettingsImpl(),

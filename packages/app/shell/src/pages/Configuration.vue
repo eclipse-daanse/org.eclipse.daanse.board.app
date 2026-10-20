@@ -315,6 +315,7 @@ function confirmDelete(): void {
           :ui-model-xmi="typeForm.xmi"
           :domain-package="typeForm.ePackage()"
           :ui-model-uri="typeForm.uri"
+          :ecore="typeForm.ecore"
         />
         <component :is="typeEditor" v-else-if="typeEditor" v-model="draft" />
       </div>

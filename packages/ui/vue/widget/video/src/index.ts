@@ -21,6 +21,8 @@ import { VideoSettingsImpl } from './gen/VideoSettingsImpl'
 import { VideoSettingsPackage } from './gen/VideoSettingsPackage'
 /* The form for these settings, written as a model beside the Ecore. */
 import videoSettingsFormXmi from '../model/ui.xmi?raw'
+/* The Ecore itself, for the sentences the generator drops. */
+import settingsEcore from '../model/model.ecore?raw'
 /* The form for the nested fitting options. */
 import videoFitFormXmi from '../model/ui-fit.xmi?raw'
 
@@ -65,6 +67,7 @@ export class VideoWidgetProvider implements WidgetProvider {
    */
   readonly settingsForm = {
     xmi: videoSettingsFormXmi,
+    ecore: settingsEcore,
     uri: '/video-settings.ui.xmi',
     ePackage: () => VideoSettingsPackage.eINSTANCE,
     create: () => new VideoSettingsImpl(),

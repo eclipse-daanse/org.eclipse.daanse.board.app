@@ -31,6 +31,7 @@ import {
   WrapperSettingsImpl,
   WrapperSettingsPackage,
   wrapperSettingsFormXmi,
+  wrapperSettingsEcore,
 } from 'org.eclipse.daanse.board.app.ui.vue.widget.wrapper'
 import { DButton, DSelect } from 'org.eclipse.daanse.board.app.ui.vue.controls'
 import { SettingsForm } from 'org.eclipse.daanse.board.app.ui.vue.uimodel'
@@ -68,6 +69,8 @@ const tab = ref<TabId>('look')
  */
 interface SettingsForm {
   xmi: string
+  /** The Ecore behind the form - its sentences explain the fields. */
+  ecore?: string
   uri?: string
   ePackage: () => any
   create: () => any
@@ -536,9 +539,9 @@ onBeforeUnmount(() => {
             </template>
 
             <!-- Wrapped rather than v-show'd directly: these settings
-                 components have several root elements, and v-show has
-                 nothing to put display:none on in that case. Kept mounted
-                 so switching tabs does not reset their open sections. -->
+              components have several root elements, and v-show has
+              nothing to put display:none on in that case. Kept mounted
+              so switching tabs does not reset their open sections. -->
             <div v-show="tab === 'look'" ref="lookHost">
               <SettingsForm
                 v-if="modelledLook"
@@ -548,6 +551,7 @@ onBeforeUnmount(() => {
                 :domain-package="modelledLook.ePackage()"
                 :ui-model-uri="modelledLook.uri"
                 :entry-forms="modelledLook.entryForms"
+                :ecore="modelledLook.ecore"
               />
               <component
                 v-else
@@ -561,10 +565,10 @@ onBeforeUnmount(() => {
             <!-- What the model does not describe yet -->
             <div v-show="tab === 'rest'" ref="restHost">
               <!-- The tab holds whatever the widget's model does not cover,
-                   and that is a different thing per widget: the chart's
-                   series, the icon's symbol picker, the code widget's
-                   editor. Naming one of them here told every other widget
-                   something untrue about itself. -->
+                and that is a different thing per widget: the chart's
+                series, the icon's symbol picker, the code widget's
+                editor. Naming one of them here told every other widget
+                something untrue about itself. -->
               <p class="rest__note">
                 Einstellungen, die dieses Widget selbst mitbringt und die sich nicht als Feld
                 beschreiben lassen.
@@ -579,9 +583,9 @@ onBeforeUnmount(() => {
             </div>
 
             <!-- The form is a model: model/ui.xmi beside the Ecore, read
-                 against the package it points at. Fields are grouped the
-                 way someone setting up a widget thinks about them, which
-                 is what a form derived from the class cannot know. -->
+              against the package it points at. Fields are grouped the
+              way someone setting up a widget thinks about them, which
+              is what a form derived from the class cannot know. -->
             <div v-show="tab === 'frame'">
               <SettingsForm
                 v-model="widget.wrapperConfig"
@@ -589,6 +593,7 @@ onBeforeUnmount(() => {
                 :ui-model-xmi="wrapperSettingsFormXmi"
                 :domain-package="WrapperSettingsPackage.eINSTANCE"
                 ui-model-uri="/wrapper-settings.ui.xmi"
+                :ecore="wrapperSettingsEcore"
               />
             </div>
 
@@ -759,7 +764,7 @@ onBeforeUnmount(() => {
 }
 
 /* The chart brings six sections of its own, so the row wraps rather than
-   scrolling sideways - a tab you have to hunt for is not a tab. */
+  scrolling sideways - a tab you have to hunt for is not a tab. */
 .tabs {
   display: flex;
   flex-wrap: wrap;
