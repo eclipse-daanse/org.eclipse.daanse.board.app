@@ -46,7 +46,8 @@ const t = (key: string) => (i18n) ? i18n.t(key) : key;
               :modelValue="value"
               @input="change"
               :label="t('textBase:TextWidget.label')"
-              placeholder="Enter text with variables..."
+              :placeholder="t('textBase:TextWidget.textPlaceholder')"
+              :hint="t('textBase:TextWidget.textHint')"
               class="w-full"
             />
           </template>

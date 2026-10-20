@@ -20,7 +20,7 @@
         </eAnnotations>
         <eStructuralFeatures xsi:type="ecore:EAttribute" name="editor" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
             <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-                <details key="documentation" value="The rich text itself, as HTML, with {variable} placeholders left in it for the widget to substitute. The name says editor because that is what a board already stored it under."/>
+                <details key="documentation" value="The rich text itself, as HTML. A $value placeholder is replaced with the data of the assigned datasource: $value on its own inserts the whole object, $value.name one of its fields. A {variable} placeholder is replaced with a board variable, which is a different thing. The name says editor because that is what a board already stored it under."/>
             </eAnnotations>
         </eStructuralFeatures>
 
