@@ -37,7 +37,10 @@ playwright-report/
 package-lock.json
 .turbo
 .turbo/**/*
-.claude
+# Personal Claude Code settings stay out; the review agents are shared, since
+# the rules they enforce are the project's and not one developer's.
+.claude/*
+!.claude/agents/
 */**/.claude
 
 # Build output: the bundle a package produces, and the directory it is
