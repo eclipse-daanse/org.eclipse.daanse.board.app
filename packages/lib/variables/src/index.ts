@@ -89,11 +89,14 @@ type INewVariableConfig =
 
 
 import { Variable, VariableScope, VariableAccessMode } from './classes/Variable'
-import { VariableWrapper, VARIABLEWRAPPER } from './classes/VariableWrapper'
+import { VariableWrapper, VARIABLEWRAPPER, observeWrappers, type WrapperObserver } from './classes/VariableWrapper'
+
+export type { WrapperObserver }
 
 export {
   VariableWrapper,
   VARIABLEWRAPPER,
+  observeWrappers,
   ComputedVariable,
   ConstantVariable,
   QueryVariable,

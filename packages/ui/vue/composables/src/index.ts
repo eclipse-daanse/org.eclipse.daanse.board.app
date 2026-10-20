@@ -25,6 +25,16 @@ import { useBoard } from './useBoard'
 // Re-Export haelt die bestehenden Importpfade gueltig; neuer Code sollte
 // direkt aus org.eclipse.daanse.board.app.lib.variables importieren.
 import { VariableWrapper,VARIABLEWRAPPER } from 'org.eclipse.daanse.board.app.lib.variables'
+import { trackWrappers } from './wrapperReactivity'
+export { trackWrappers, untrackWrappers } from './wrapperReactivity'
+
+/*
+ * A wrapper's value has to be visible to Vue, and lib.variables cannot see
+ * Vue from where it sits. Started on load: a widget reads a setting the
+ * moment it renders, which is well before anything would get round to
+ * calling this.
+ */
+trackWrappers()
 import { VariableComplexStringWrapper,VARIABLECOMPLEXSTRINGWRAPPER } from './VariableComplexStringWrapper'
 import { EPackageRegistry } from '@emfts/core'
 import { ComposablesPackage } from './gen/ComposablesPackage'
