@@ -1,0 +1,21 @@
+/* Top 10 best reseller-selling products by name, sliced by product line.
+   Exercises calculated members with properties, named sets, key qualifiers
+   and a slicer axis. Source: SELECT Statement (MDX), Microsoft Learn. */
+with member [Measures].[PCT Discount] AS [Measures].[Discount Amount]/[Measures].[Reseller Sales Amount], FORMAT_STRING = 'Percent'
+set Top10SellingProducts as topcount([Product].[Model Name].children, 10, [Measures].[Reseller Sales Amount])
+set Preferred10Products as
+{[Product].[Model Name].&[Mountain-200],
+[Product].[Model Name].&[Road-250],
+[Product].[Model Name].&[Mountain-100],
+[Product].[Model Name].&[Road-650],
+[Product].[Model Name].&[Touring-1000],
+[Product].[Model Name].&[Road-550-W],
+[Product].[Model Name].&[Road-350-W],
+[Product].[Model Name].&[HL Mountain Frame],
+[Product].[Model Name].&[Road-150],
+[Product].[Model Name].&[Touring-3000]
+}
+select {[Measures].[Reseller Sales Amount], [Measures].[Discount Amount], [Measures].[PCT Discount]} on 0,
+Top10SellingProducts on 1
+from [Adventure Works]
+where [Product].[Product Line].[Mountain]
