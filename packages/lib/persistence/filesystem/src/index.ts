@@ -21,6 +21,12 @@ import {
   rememberedKeys,
 } from './classes/handleStore'
 
+/*
+ * The type's identifier, for the registry that maps a repository type to its
+ * view. No service is registered under it: unlike the other places there is
+ * no single instance - one exists per folder the user picks, which is why
+ * the manifest promises nothing here either.
+ */
 export const FILESYSTEM_REPOSITORY = serviceId<FileSystemRepositoryImpl>('FileSystemRepository')
 
 const identifier = Symbol.for(FILESYSTEM_REPOSITORY)
@@ -84,24 +90,33 @@ export async function activate({ services, log }: ActivationContext) {
     return
   }
 
-  for (const key of await rememberedKeys()) {
-    const handle = await recallDirectory(key)
-    if (!handle) continue
-    if (!(await ensurePermission(handle, false))) {
-      log.info(`folder "${handle.name}" needs its permission granted again`)
-      continue
+  /*
+   * The folders are a convenience, not the module. A browser with storage
+   * switched off makes opening IndexedDB throw, and letting that out would
+   * take the whole module down over something nobody has used yet.
+   */
+  try {
+    for (const key of await rememberedKeys()) {
+      const handle = await recallDirectory(key)
+      if (!handle) continue
+      if (!(await ensurePermission(handle, false))) {
+        log.info(`folder "${handle.name}" needs its permission granted again`)
+        continue
+      }
+      try {
+        const repository = services.construct(FileSystemRepositoryImpl)
+        repository.init(new URL(key), handle.name, { handle })
+        registry.register(repository)
+      } catch (error) {
+        log.warn(`folder "${handle.name}" not restored`, error)
+      }
     }
-    try {
-      const repository = services.construct(FileSystemRepositoryImpl)
-      repository.init(new URL(key), handle.name, { handle })
-      registry.register(repository)
-    } catch (error) {
-      log.warn(`folder "${handle.name}" not restored`, error)
-    }
+  } catch (error) {
+    log.warn('the remembered folders could not be read', error)
   }
 }
 
-export function deactivate({ services }: ActivationContext) {
+export function deactivate(_context: ActivationContext) {
+  /* Nothing to unregister - no service was registered. */
   context = undefined
-  services.unregister(FILESYSTEM_REPOSITORY)
 }

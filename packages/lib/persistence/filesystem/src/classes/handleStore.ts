@@ -69,22 +69,29 @@ export function rememberedKeys(): Promise<string[]> {
 }
 
 /**
- * Asks for permission if it is not already granted.
+ * Whether the folder may be used, asking only where asking is allowed.
  *
- * `requestPermission` only resolves to 'granted' while a user gesture is in
- * flight; called outside one it resolves to 'prompt' and nothing is asked.
- * The caller decides what to do with a refusal - restoring a place on start
- * settles for read access, writing asks for more when the user saves.
+ * `requestPermission` throws a SecurityError when no user gesture is in
+ * flight - it does not quietly answer 'prompt'. So asking is something the
+ * caller has to permit: a click may, start-up may not, and start-up asking
+ * anyway is what made the module fail to load.
  */
 export async function ensurePermission(
   handle: FileSystemDirectoryHandle,
   writable: boolean,
+  mayAsk = false,
 ): Promise<boolean> {
   const options = { mode: writable ? 'readwrite' : 'read' }
   const held = await (handle as any).queryPermission?.(options)
   if (held === 'granted') return true
-  const asked = await (handle as any).requestPermission?.(options)
-  return asked === 'granted'
+  if (!mayAsk) return false
+  try {
+    return (await (handle as any).requestPermission?.(options)) === 'granted'
+  } catch {
+    /* Outside a gesture this throws; a refusal and an impossible question
+       are the same answer here. */
+    return false
+  }
 }
 
 /** Whether this browser can pick a directory at all. */
