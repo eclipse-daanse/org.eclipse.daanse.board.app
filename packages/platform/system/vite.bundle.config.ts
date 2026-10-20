@@ -32,6 +32,18 @@ const allShared = (manifest.sharedDependencies ?? []).map((d) => d.id)
 const sharedModules = allShared.filter((id) => id.startsWith('org.eclipse.daanse'))
 const importMapLibraries = allShared.filter((id) => !id.startsWith('org.eclipse.daanse'))
 
+/*
+ * The browser-standard libraries this bundle carries into the import map,
+ * by the artefact that bundles each one. EMF belongs here rather than with
+ * the Vue platform: it is infrastructure, and while it was served from
+ * there, every package that wanted an EObject had to depend on Vue's bundle
+ * or get a second EPackageRegistry of its own - see #1068.
+ */
+const artifactLibraries: Record<string, string> = {
+  'artifacts/tsm.ts': '@eclipse-daanse/tsm',
+  'artifacts/emfts-core.ts': '@emfts/core',
+}
+
 /**
  * WORKAROUND (tsm#20): rewrites every import form of a shared module that
  * survives into the chunks. This is the renderChunk half proposed in the
@@ -131,10 +143,11 @@ export default defineConfig({
     target: 'es2022',
     rollupOptions: {
       external: (source: string, importer: string | undefined) => {
-        if (source !== '@eclipse-daanse/tsm') return false
-        // The artefact bundles the framework API itself; everything else
-        // references it bare, for the import map.
-        return !importer?.includes('artifacts/tsm.ts') && !importer?.endsWith('artifacts/tsm.ts')
+        const own = Object.entries(artifactLibraries).find(([file]) => importer?.includes(file))
+        if (!Object.values(artifactLibraries).includes(source)) return false
+        // The artefact for a library bundles that library itself; every
+        // other reference stays bare, for the import map.
+        return own?.[1] !== source
       },
     },
     // Production artefacts are minified; the dev watcher overrides this
@@ -146,6 +159,8 @@ export default defineConfig({
       entry: {
         index: resolve(__dirname, 'src/index.ts'),
         tsm: resolve(__dirname, 'src/artifacts/tsm.ts'),
+        // '@emfts/core' cannot be a file name; its artefact is emfts-core.ts
+        'emfts-core': resolve(__dirname, 'src/artifacts/emfts-core.ts'),
       },
       formats: ['es'],
       fileName: (_format, entryName) => `${entryName}.js`,

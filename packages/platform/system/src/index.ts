@@ -29,9 +29,42 @@ import { TINY_EMITTER } from 'org.eclipse.daanse.board.app.lib.core'
  * cannot own an instance only the host can construct.
  */
 
-export function activate({ services, log }: ActivationContext) {
+interface SharedLibraryRuntime {
+  register(moduleId: string, exports: unknown, version: string, providedBy?: string): void
+}
+
+/** Must match the actually bundled version; checked in index.test.ts. */
+export const EMFTS_CORE_VERSION = '0.1.1-next.18'
+
+export async function activate({ services, log }: ActivationContext) {
   services.register(TINY_EMITTER, new TinyEmitter())
-  log.info('system services ready: TINY_EMITTER')
+
+  // The runtime the launcher initialized - the same global legacy
+  // `__tsm__.require` callers use.
+  const runtime = (globalThis as { __tsm__?: SharedLibraryRuntime }).__tsm__
+  if (!runtime) {
+    throw new Error('platform.system: tsm runtime is not initialized')
+  }
+
+  /*
+   * EMF has to exist exactly once. EPackageRegistry.INSTANCE is created at
+   * import time, every generated package registers itself into it once, and
+   * eObject.eClass() === Package.Literals.X has to hold. Two copies would
+   * mean two registries and two EClass objects for the same model, and
+   * every such comparison would quietly fail.
+   *
+   * It is registered here rather than with the Vue platform because it is
+   * infrastructure. While it was served from there, a package that wanted
+   * an EObject had to depend on Vue's bundle or carry a second copy - which
+   * is what kept the variable wrappers outside the model (#1068).
+   *
+   * The relative import resolves to the same URL the import map names, so
+   * the registered instance is identical to what bare imports receive.
+   */
+  const emftsCore = await import('./artifacts/emfts-core')
+  runtime.register('@emfts/core', emftsCore, EMFTS_CORE_VERSION, 'platform.system')
+
+  log.info(`system services ready: TINY_EMITTER, @emfts/core@${EMFTS_CORE_VERSION}`)
 }
 
 /**
