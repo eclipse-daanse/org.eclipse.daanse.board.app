@@ -165,10 +165,11 @@ export default class FileSystemRepositoryImpl extends BaseRepository implements 
     return true
   }
 
+  /** Asks for write access. Only meaningful from a click - it may prompt. */
   auth(): Promise<unknown> {
     const directory = this.directory
     if (!directory) return Promise.reject('no folder chosen')
-    return ensurePermission(directory, true)
+    return ensurePermission(directory, true, true)
   }
 
   /* ------------------------------------------------------------- inside */
@@ -176,7 +177,7 @@ export default class FileSystemRepositoryImpl extends BaseRepository implements 
   private async writable(): Promise<FileSystemDirectoryHandle> {
     const directory = this.directory
     if (!directory) throw new Error('no folder chosen for ' + this.name)
-    if (!(await ensurePermission(directory, true))) {
+    if (!(await ensurePermission(directory, true, true))) {
       throw new Error('no permission to write in ' + this.name)
     }
     return directory
