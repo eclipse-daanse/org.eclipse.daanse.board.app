@@ -97,6 +97,7 @@ import b81 from 'org.eclipse.daanse.board.app.lib.factory.variableWrapper/manife
 import b82 from 'org.eclipse.daanse.board.app.lib.i18next/manifest.json'
 import b83 from 'org.eclipse.daanse.board.app.lib.logger/manifest.json'
 import b84 from 'org.eclipse.daanse.board.app.lib.pagecontext.pagecontext_service/manifest.json'
+import bFs from 'org.eclipse.daanse.board.app.lib.persistence.filesystem/manifest.json'
 import b85 from 'org.eclipse.daanse.board.app.lib.persistence.git/manifest.json'
 import b86 from 'org.eclipse.daanse.board.app.lib.persistence.loader/manifest.json'
 import b87 from 'org.eclipse.daanse.board.app.lib.persistence.local/manifest.json'
@@ -251,6 +252,7 @@ export const bundles: ModuleManifest[] = [
   b84 as ModuleManifest,
   b85 as ModuleManifest,
   b86 as ModuleManifest,
+  bFs as ModuleManifest,
   b87 as ModuleManifest,
   b88 as ModuleManifest,
   b89 as ModuleManifest,

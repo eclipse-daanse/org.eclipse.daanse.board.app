@@ -38,6 +38,10 @@ import {
   type Entity,
   identifier as RepoManagerId,
 } from 'org.eclipse.daanse.board.app.lib.api.persistence'
+import {
+  chooseDirectory,
+  filesystemAvailable,
+} from 'org.eclipse.daanse.board.app.lib.persistence.filesystem'
 
 const emit = defineEmits<{ restored: [ids: string[]] }>()
 
@@ -117,6 +121,29 @@ async function loadPlaces() {
   if (first && expanded.value.size === 0) {
     selectedPlace.value = first
     await expand(first)
+  }
+}
+
+/*
+ * A folder on the machine, as a place of its own.
+ *
+ * The picker has to be opened from the click itself - the browser hands out
+ * a directory handle only while a gesture is in flight - so this cannot be
+ * folded into loadPlaces or done on mount.
+ */
+const canUseFolders = filesystemAvailable()
+
+async function connectFolder() {
+  failure.value = ''
+  try {
+    const place = await chooseDirectory()
+    /* Closing the picker is not a failure; nothing was chosen, nothing said. */
+    if (!place) return
+    await loadPlaces()
+    selectedPlace.value = places.value.find((p) => String(p.uri) === String(place.uri)) ?? place
+    await expand(selectedPlace.value)
+  } catch (error) {
+    failure.value = `Der Ordner liess sich nicht verbinden: ${(error as Error).message}`
   }
 }
 
@@ -204,7 +231,7 @@ function entrySummary(entry: Entity): string {
   const list = boardsIn(entry)
   if (list.length === 0) return 'leer'
   /* Pages, not boards: a stored state holds one board, and what is counted
-     here is what is inside it. */
+    here is what is inside it. */
   return `${list.length} ${list.length === 1 ? 'Seite' : 'Seiten'}`
 }
 
@@ -355,6 +382,19 @@ watch(() => repoManager, loadPlaces)
         </template>
 
         <p v-if="!places.length" class="row row--hint">Keine Speicherorte eingerichtet.</p>
+
+        <button
+          v-if="canUseFolders"
+          type="button"
+          class="row row--add"
+          @click="connectFolder"
+        >
+          <span class="row__twist">＋</span>
+          <span class="row__name">Ordner verbinden…</span>
+        </button>
+        <p v-else class="row row--hint">
+          Dieser Browser kann keinen Ordner öffnen. Stände lassen sich herunterladen und wieder hochladen.
+        </p>
       </div>
     </aside>
 
