@@ -1,0 +1,77 @@
+{
+  "$schema": "https://tsm.dev/schema/manifest/v1.json",
+  "id": "ui.vue.common.lsp",
+  "name": "ui.vue.common.lsp",
+  "version": "0.0.1-next.1",
+  "entry": "/bundles/ui.vue.common.lsp/index.js",
+  "exports": {},
+  "dependencies": [
+    "lib.api.lsp",
+    "lib.lsp.core",
+    "platform.vue",
+    "platform.codemirror"
+  ],
+  "capabilities": [
+    {
+      "namespace": "tsm.library",
+      "attributes": {
+        "library": "org.eclipse.daanse.board.app.ui.vue.common.lsp",
+        "version": "0.0.1-next.1"
+      }
+    }
+  ],
+  "sharedDependencies": [
+    {
+      "id": "vue",
+      "versionRange": "^3.5.0"
+    },
+    {
+      "id": "org.eclipse.daanse.board.app.lib.core",
+      "versionRange": ">=0.0.1-0"
+    },
+    {
+      "id": "org.eclipse.daanse.board.app.lib.api.lsp",
+      "versionRange": ">=0.0.1-0"
+    },
+    {
+      "id": "org.eclipse.daanse.board.app.lib.lsp.core",
+      "versionRange": ">=0.0.1-0"
+    },
+    {
+      "id": "@codemirror/state",
+      "versionRange": "^6.7.2"
+    },
+    {
+      "id": "@codemirror/view",
+      "versionRange": "^6.43.10"
+    },
+    {
+      "id": "@codemirror/language",
+      "versionRange": "^6.12.4"
+    },
+    {
+      "id": "@codemirror/commands",
+      "versionRange": "^6.9.0"
+    },
+    {
+      "id": "@codemirror/search",
+      "versionRange": "^6.5.11"
+    },
+    {
+      "id": "@codemirror/lint",
+      "versionRange": "^6.9.7"
+    },
+    {
+      "id": "@codemirror/autocomplete",
+      "versionRange": "^6.20.3"
+    },
+    {
+      "id": "@codemirror/lsp-client",
+      "versionRange": "^6.2.5"
+    },
+    {
+      "id": "@lezer/highlight",
+      "versionRange": "^1.2.3"
+    }
+  ]
+}

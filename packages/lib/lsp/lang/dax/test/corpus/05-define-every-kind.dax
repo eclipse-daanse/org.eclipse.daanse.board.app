@@ -1,0 +1,18 @@
+// Source: https://learn.microsoft.com/en-us/dax/dax-queries
+// Construct: DEFINE VAR, TABLE (quoted name), COLUMN and MEASURE; two EVALUATEs, one a table constructor.
+// Expect: parse
+// Reference: rejects - Encountered an error at (or somewhere around) input:9:11
+// Divergence: quoted DEFINE TABLE name
+// Normalized: as published.
+DEFINE
+	VAR _firstyear = MIN('Date'[Fiscal Year])
+	VAR _lastyear = MAX('Date'[Fiscal Year])
+	TABLE 'Unbought products' = FILTER('Product', [Orders] + 0 = 0)
+	COLUMN 'Unbought products'[Year Range] = _firstyear & " - " & _lastyear
+	MEASURE 'Unbought products'[Unbought products] = COUNTROWS('Unbought products')
+	
+EVALUATE
+	'Unbought products'
+	
+EVALUATE
+	{[Unbought products]}
