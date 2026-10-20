@@ -21,9 +21,9 @@ import { plainSettings } from './plainSettings'
 import { useEObject, useEList, useFeature } from './useEmf'
 /* What is on one board - its widgets and where they sit. */
 import { useBoard } from './useBoard'
-// VariableWrapper ist Vue-frei und liegt deshalb in lib.variables. Der
-// Re-Export haelt die bestehenden Importpfade gueltig; neuer Code sollte
-// direkt aus org.eclipse.daanse.board.app.lib.variables importieren.
+// VariableWrapper is Vue-free and therefore lives in lib.variables. The
+// re-export keeps the existing import paths working; new code should import
+// it from org.eclipse.daanse.board.app.lib.variables directly.
 import { VariableWrapper,VARIABLEWRAPPER } from 'org.eclipse.daanse.board.app.lib.variables'
 import { trackWrappers } from './wrapperReactivity'
 export { trackWrappers, untrackWrappers } from './wrapperReactivity'
