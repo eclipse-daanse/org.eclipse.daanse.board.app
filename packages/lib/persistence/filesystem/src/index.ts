@@ -54,7 +54,12 @@ export async function chooseDirectory(): Promise<FileSystemRepositoryImpl | unde
     throw error
   }
   const repository = services.construct(FileSystemRepositoryImpl)
-  repository.init(new URL(`file:///${encodeURIComponent(handle.name)}`), handle.name)
+  /*
+   * folder:, not file:. A file: URL keeps no host, so every folder would
+   * carry the same empty one and a place could not tell its own boards from
+   * another's. An unknown scheme keeps the name as written.
+   */
+  repository.init(new URL(`folder://${encodeURIComponent(handle.name)}/`), handle.name)
   await repository.adopt(handle)
 
   const registry = services.getRequired(REPOSITORY_REGISTRY)
