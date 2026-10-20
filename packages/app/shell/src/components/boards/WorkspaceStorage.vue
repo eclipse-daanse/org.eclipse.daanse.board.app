@@ -184,6 +184,77 @@ function entriesOf(place: Repository): Entity[] {
   return [...filtered].sort((a, b) => label(a).localeCompare(label(b)))
 }
 
+/*
+ * The folders a place's boards sit in.
+ *
+ * A board carries the path it was found under as its name - a folder place
+ * walks its subfolders - so the structure is read back out of the names
+ * rather than kept twice. Rendered as one flat list of rows with a depth
+ * each, which keeps the markup and the keyboard order simple.
+ *
+ * While a filter is typed the tree is dropped and full paths are shown:
+ * what is wanted then is the hit, not where it sits.
+ */
+const openFolders = ref<Set<string>>(new Set())
+
+type Row =
+  | { kind: 'folder'; id: string; name: string; depth: number; count: number }
+  | { kind: 'entry'; id: string; name: string; depth: number; entry: Entity }
+
+function toggleFolder(id: string) {
+  const open = new Set(openFolders.value)
+  open.has(id) ? open.delete(id) : open.add(id)
+  openFolders.value = open
+}
+
+function rowsOf(place: Repository): Row[] {
+  const entries = entriesOf(place)
+  if (query.value.trim()) {
+    return entries.map((entry) => ({
+      kind: 'entry' as const,
+      id: String(entry.uri),
+      name: label(entry),
+      depth: 0,
+      entry,
+    }))
+  }
+
+  const rows: Row[] = []
+  const placeKey = key(place)
+
+  const build = (prefix: string, depth: number) => {
+    const names = new Set<string>()
+    for (const entry of entries) {
+      const path = label(entry)
+      if (!path.startsWith(prefix)) continue
+      const rest = path.slice(prefix.length)
+      const slash = rest.indexOf('/')
+      if (slash >= 0) names.add(rest.slice(0, slash))
+    }
+    for (const name of [...names].sort((a, b) => a.localeCompare(b))) {
+      const folder = `${prefix}${name}/`
+      const id = `${placeKey}|${folder}`
+      rows.push({
+        kind: 'folder',
+        id,
+        name,
+        depth,
+        count: entries.filter((e) => label(e).startsWith(folder)).length,
+      })
+      if (openFolders.value.has(id)) build(folder, depth + 1)
+    }
+    for (const entry of entries) {
+      const path = label(entry)
+      if (!path.startsWith(prefix)) continue
+      const rest = path.slice(prefix.length)
+      if (rest.includes('/')) continue
+      rows.push({ kind: 'entry', id: String(entry.uri), name: rest, depth, entry })
+    }
+  }
+  build('', 0)
+  return rows
+}
+
 function selectEntry(place: Repository, entry: Entity) {
   selectedPlace.value = place
   selectedEntry.value = entry
@@ -352,18 +423,35 @@ watch(() => repoManager, loadPlaces)
           </button>
 
           <template v-if="expanded.has(key(place))">
-            <button
-              v-for="entry in entriesOf(place)"
-              :key="String(entry.uri)"
-              type="button"
-              role="treeitem"
-              :class="['row', 'row--entry', { on: selectedEntry === entry }]"
-              @click="selectEntry(place, entry)"
-            >
-              <span class="row__dot" :class="{ open: isOpen(entry) }" aria-hidden="true" />
-              <span class="row__name">{{ label(entry) }}</span>
-              <span class="row__meta">{{ entrySummary(entry) }}</span>
-            </button>
+            <template v-for="row in rowsOf(place)" :key="row.id">
+              <!-- A folder the place walked into; its depth is its indent -->
+              <button
+                v-if="row.kind === 'folder'"
+                type="button"
+                role="treeitem"
+                :aria-expanded="openFolders.has(row.id)"
+                class="row row--folder"
+                :style="{ paddingLeft: `${16 + row.depth * 14}px` }"
+                @click="toggleFolder(row.id)"
+              >
+                <span class="row__twist">{{ openFolders.has(row.id) ? '▾' : '▸' }}</span>
+                <span class="row__name">{{ row.name }}</span>
+                <span class="row__meta">{{ row.count }}</span>
+              </button>
+
+              <button
+                v-else
+                type="button"
+                role="treeitem"
+                :class="['row', 'row--entry', { on: selectedEntry === row.entry }]"
+                :style="{ paddingLeft: `${16 + row.depth * 14}px` }"
+                @click="selectEntry(place, row.entry)"
+              >
+                <span class="row__dot" :class="{ open: isOpen(row.entry) }" aria-hidden="true" />
+                <span class="row__name">{{ row.name }}</span>
+                <span class="row__meta">{{ entrySummary(row.entry) }}</span>
+              </button>
+            </template>
 
             <p v-if="entriesOf(place).length === 0" class="row row--hint">
               {{ query ? 'Nichts gefunden' : 'Noch kein Stand' }}
@@ -567,6 +655,12 @@ watch(() => repoManager, loadPlaces)
   color: var(--color-dim);
   font-size: var(--text-sm);
   cursor: default;
+}
+
+/* A folder inside a place - lighter than the place, firmer than a board. */
+.row--folder {
+  color: var(--text-1, inherit);
+  font-weight: 500;
 }
 
 .row--add {
