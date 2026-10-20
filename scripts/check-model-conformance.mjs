@@ -38,6 +38,7 @@
  */
 import { globSync, existsSync, readFileSync } from 'node:fs'
 import { basename, dirname, join, resolve } from 'node:path'
+import { declarationsIn } from './source-declarations.mjs'
 
 const ROOT = resolve(import.meta.dirname, '..')
 const args = process.argv.slice(2)
@@ -80,16 +81,9 @@ for (const file of globSync('packages/**/src/**/*.ts', { cwd: ROOT }).filter(
 )) {
   if (file.includes('/src/gen/')) continue
   const source = readFileSync(join(ROOT, file), 'utf8')
-  for (const m of source.matchAll(
-    /^\s*(?:export\s+)?(?:abstract\s+)?(class|interface)\s+(\w+)/gm,
-  )) {
-    const [, kind, name] = m
-    /* What it extends decides whether it is a replacement or a subclass. */
-    const extended = source.match(
-      new RegExp(`${kind}\\s+${name}\\b[^{]*?extends\\s+(\\w+)`),
-    )?.[1]
-    if (!declarations.has(name)) declarations.set(name, [])
-    declarations.get(name).push({ file, kind, extends: extended })
+  for (const found of declarationsIn(source)) {
+    if (!declarations.has(found.name)) declarations.set(found.name, [])
+    declarations.get(found.name).push({ file, ...found })
   }
 }
 
