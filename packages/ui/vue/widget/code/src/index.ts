@@ -21,6 +21,8 @@ import { CodeSettingsImpl } from './gen/CodeSettingsImpl'
 import { CodesettingsPackage } from './gen/CodesettingsPackage'
 /* The form for these settings, written as a model beside the Ecore. */
 import codeSettingsFormXmi from '../model/ui.xmi?raw'
+/* The Ecore itself, for the sentences the generator drops. */
+import settingsEcore from '../model/model.ecore?raw'
 
 /*
  * Building the EPackage on load: until it exists the class literals are
@@ -58,6 +60,7 @@ export class CodeWidgetProvider implements WidgetProvider {
    */
   readonly settingsForm = {
     xmi: codeSettingsFormXmi,
+    ecore: settingsEcore,
     uri: '/code-settings.ui.xmi',
     ePackage: () => CodesettingsPackage.eINSTANCE,
     create: () => new CodeSettingsImpl(),

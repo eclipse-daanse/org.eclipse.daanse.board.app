@@ -168,7 +168,7 @@ watch(
 
     <div class="body">
       <!-- Said out loud rather than rendering nothing: a panel that opens
-           empty looks like a fault in the button that opened it -->
+        empty looks like a fault in the button that opened it -->
       <p v-if="!pageSettings" class="missing">
         Diese Seite ist nicht mehr da. Wähle oben eine andere.
       </p>
@@ -197,6 +197,7 @@ watch(
           :domain-package="chosenLayout!.settingsForm!.ePackage() as any"
           :ui-model-uri="chosenLayout!.settingsForm!.uri"
           :entry-forms="chosenLayout!.settingsForm!.entryForms"
+          :ecore="chosenLayout!.settingsForm!.ecore"
         />
         <component
           v-else-if="chosenLayout?.settings"
@@ -208,7 +209,7 @@ watch(
       <section class="group">
         <h3 class="group__label">Hintergrund</h3>
         <!-- Stacked: swatch and hex field together are wider than a label
-             plus a control fits in a panel this narrow -->
+          plus a control fits in a panel this narrow -->
         <DColorInput v-model="pageSettings.backgroundColor" label="Farbe" stacked />
         <DInput
           v-model="pageSettings.backgroundImage"

@@ -60,6 +60,7 @@ export class RoutingWidgetProvider implements WidgetProvider {
    */
   readonly settingsForm = {
     xmi: routingSettingsFormXmi,
+    ecore: ecoreModelContent,
     uri: '/routing-settings.ui.xmi',
     ePackage: () => RoutingSettingsPackage.eINSTANCE,
     create: () => new RoutingWidgetSettingsImpl(),

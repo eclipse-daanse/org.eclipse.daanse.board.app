@@ -21,6 +21,8 @@ import { WeatherSettingsImpl } from './gen/WeatherSettingsImpl'
 import { WeathersettingsPackage } from './gen/WeathersettingsPackage'
 /* The form for these settings, written as a model beside the Ecore. */
 import weatherSettingsFormXmi from '../model/ui.xmi?raw'
+/* The Ecore itself, for the sentences the generator drops. */
+import settingsEcore from '../model/model.ecore?raw'
 
 /*
  * Building the EPackage on load: until it exists the class literals are
@@ -59,6 +61,7 @@ export class WeatherWidgetProvider implements WidgetProvider {
    */
   readonly settingsForm = {
     xmi: weatherSettingsFormXmi,
+    ecore: settingsEcore,
     uri: '/weather-settings.ui.xmi',
     ePackage: () => WeathersettingsPackage.eINSTANCE,
     create: () => new WeatherSettingsImpl(),

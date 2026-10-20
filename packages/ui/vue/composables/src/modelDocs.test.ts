@@ -11,6 +11,13 @@
  *   Smart City Jena
  **********************************************************************/
 
+/*
+ * jsdom, because modelDocs reads the model with DOMParser - which the node
+ * environment does not have. Without this the parse throws, every call
+ * returns undefined, and the suite fails on the first assertion.
+ */
+// @vitest-environment jsdom
+
 import { beforeEach, describe, expect, it } from 'vitest'
 import { readFileSync } from 'node:fs'
 import { resolve } from 'node:path'

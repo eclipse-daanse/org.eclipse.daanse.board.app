@@ -21,6 +21,8 @@ import { MermaidWidgetSettingsImpl } from './gen/MermaidWidgetSettingsImpl'
 import { MermaidwidgetsPackage } from './gen/MermaidwidgetsPackage'
 /* The form for these settings, written as a model beside the Ecore. */
 import mermaidSettingsFormXmi from '../model/ui.xmi?raw'
+/* The Ecore itself, for the sentences the generator drops. */
+import settingsEcore from '../model/model.ecore?raw'
 
 /*
  * Building the EPackage on load: until it exists the class literals are
@@ -55,6 +57,7 @@ export class MermaidWidgetProvider implements WidgetProvider {
    */
   readonly settingsForm = {
     xmi: mermaidSettingsFormXmi,
+    ecore: settingsEcore,
     uri: '/mermaid-settings.ui.xmi',
     ePackage: () => MermaidwidgetsPackage.eINSTANCE,
     create: () => new MermaidWidgetSettingsImpl(),

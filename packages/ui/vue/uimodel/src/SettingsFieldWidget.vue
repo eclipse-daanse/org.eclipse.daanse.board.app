@@ -44,6 +44,7 @@ import {
   DInput,
   DSelect,
 } from 'org.eclipse.daanse.board.app.ui.vue.controls'
+import { describeClass } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import { kindOf, labelOf } from './buildForm'
 
 const props = defineProps<{
@@ -229,6 +230,27 @@ const editable = computed(() => !props.custom?.resolvedStyle?.readOnly && !isBou
  * placeholder - which is the one thing a bound field is not showing.
  */
 const boundHint = computed(() => (isBound.value ? `Von „${boundName.value}“` : undefined))
+
+/*
+ * What the model says this field is for.
+ *
+ * The sentence lives in the .ecore as a GenModel documentation annotation.
+ * The code generator drops it, so modelDocs reads it back from the model
+ * file - which the package hands over when it registers its form. Until a
+ * package does that, there is nothing to find and the field stays bare.
+ */
+const modelHint = computed(() => {
+  const feature = props.feature
+  const owner = feature?.getEContainingClass?.()
+  const nsURI = owner?.getEPackage?.()?.getNsURI?.()
+  const className = owner?.getName?.()
+  const name = feature?.getName?.()
+  if (!nsURI || !className || !name) return undefined
+  return describeClass(nsURI, className)?.features.find((f) => f.name === name)?.documentation
+})
+
+/* Where it is bound, that is the more urgent thing to say. */
+const fieldHint = computed(() => boundHint.value ?? modelHint.value)
 
 const value = computed({
   get: () => (bindable.value ? wrapper.value?.value : plain.value) ?? '',
@@ -417,8 +439,8 @@ const noVariables = computed(() => bindingMode.value && variableNames.value.leng
       />
 
       <!-- Several values: every choice is shown, ticked or not. A list
-           this size is read by scanning it, and a dropdown that has to be
-           opened to see what is in it hides exactly that. -->
+        this size is read by scanning it, and a dropdown that has to be
+        opened to see what is in it hides exactly that. -->
       <fieldset v-else-if="kind === 'set'" class="set">
         <legend class="set__label">{{ label }}</legend>
         <DCheckbox
@@ -436,6 +458,7 @@ const noVariables = computed(() => bindingMode.value && variableNames.value.leng
         v-model="flag"
         :label="label"
         :disabled="!editable"
+        :hint="fieldHint"
       />
 
       <DSelect
@@ -446,6 +469,7 @@ const noVariables = computed(() => bindingMode.value && variableNames.value.leng
         value-key="value"
         label-key="text"
         :disabled="!editable"
+        :hint="fieldHint"
         clearable
       />
 
@@ -454,7 +478,7 @@ const noVariables = computed(() => bindingMode.value && variableNames.value.leng
         v-model="value"
         :label="label"
         :disabled="!editable"
-        :hint="boundHint ?? custom?.resolvedStyle?.placeholder"
+        :hint="fieldHint ?? custom?.resolvedStyle?.placeholder"
       />
 
       <DInput
@@ -463,6 +487,7 @@ const noVariables = computed(() => bindingMode.value && variableNames.value.leng
         :label="label"
         :rows="rows"
         :placeholder="custom?.resolvedStyle?.placeholder"
+        :hint="fieldHint"
         :disabled="!editable"
       />
 
@@ -474,6 +499,7 @@ const noVariables = computed(() => bindingMode.value && variableNames.value.leng
         :min="numberBounds.min"
         :max="numberBounds.max"
         :step="numberBounds.step"
+        :hint="fieldHint"
         :disabled="!editable"
       />
 
@@ -482,6 +508,7 @@ const noVariables = computed(() => bindingMode.value && variableNames.value.leng
         v-model="moment"
         :label="label"
         type="datetime-local"
+        :hint="fieldHint"
         :disabled="!editable"
       />
 
@@ -490,12 +517,13 @@ const noVariables = computed(() => bindingMode.value && variableNames.value.leng
         v-model="value"
         :label="label"
         :placeholder="custom?.resolvedStyle?.placeholder"
+        :hint="fieldHint"
         :disabled="!editable"
       />
     </div>
 
     <!-- The switch between a value of its own and one from outside;
-         a plain attribute has no wrapper to bind, so it is left out -->
+      a plain attribute has no wrapper to bind, so it is left out -->
     <button
       v-if="bindable"
       type="button"

@@ -35,6 +35,15 @@ import type { Component } from 'vue'
 export interface SettingsFormI {
     /** The form itself, as XMI. */
     xmi: string;
+    /**
+     * The Ecore the form is written for, as text.
+     *
+     * Only the sentences in it are wanted: the code generator drops the
+     * GenModel documentation, so a field can say what it is for only if the
+     * model file itself is handed over. Without it the form still renders,
+     * just without the explanations.
+     */
+    ecore?: string;
     /** Names the loaded resource, and is its cache key. */
     uri?: string;
     /** The package the form's feature references point at. */

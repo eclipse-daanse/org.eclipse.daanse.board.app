@@ -21,6 +21,8 @@ import { PageWidgetSettingsImpl } from './gen/PageWidgetSettingsImpl'
 import { PagesettingsPackage } from './gen/PagesettingsPackage'
 /* The form for these settings, written as a model beside the Ecore. */
 import pageSettingsFormXmi from '../model/ui.xmi?raw'
+/* The Ecore itself, for the sentences the generator drops. */
+import settingsEcore from '../model/model.ecore?raw'
 
 /*
  * Building the EPackage on load: until it exists the class literals are
@@ -56,6 +58,7 @@ export class PageWidgetProvider implements WidgetProvider {
    */
   readonly settingsForm = {
     xmi: pageSettingsFormXmi,
+    ecore: settingsEcore,
     uri: '/page-settings.ui.xmi',
     ePackage: () => PagesettingsPackage.eINSTANCE,
     create: () => new PageWidgetSettingsImpl(),

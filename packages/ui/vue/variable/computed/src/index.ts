@@ -22,6 +22,8 @@ import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
 import { ComputedVariableSettingsImpl } from './gen/ComputedVariableSettingsImpl'
 import { ComputedVariableSettingsPackage } from './gen/ComputedVariableSettingsPackage'
 import settingsFormXmi from '../model/ui.xmi?raw'
+/* The Ecore itself, for the sentences the generator drops. */
+import settingsEcore from '../model/model.ecore?raw'
 
 /*
  * Touching eINSTANCE is what builds the EPackage: until then the class
@@ -43,6 +45,7 @@ export function activate({ services }: ActivationContext) {
        */
       settingsForm: {
         xmi: settingsFormXmi,
+        ecore: settingsEcore,
         uri: '/computed-variable-settings.ui.xmi',
         ePackage: () => ComputedVariableSettingsPackage.eINSTANCE,
         create: () => new ComputedVariableSettingsImpl(),

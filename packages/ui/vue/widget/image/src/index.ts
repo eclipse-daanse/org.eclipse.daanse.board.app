@@ -20,6 +20,8 @@ import { ImageSettingsImpl } from './gen/ImageSettingsImpl'
 import { ImagesettingsPackage } from './gen/ImagesettingsPackage'
 /* The form for these settings, written as a model beside the Ecore. */
 import imageSettingsFormXmi from '../model/ui.xmi?raw'
+/* The Ecore itself, for the sentences the generator drops. */
+import settingsEcore from '../model/model.ecore?raw'
 /* The form for one picture of the gallery list. */
 import imageItemFormXmi from '../model/ui-item.xmi?raw'
 /* The form for the nested display options. */
@@ -75,6 +77,7 @@ export class ImageWidgetProvider implements WidgetProvider {
    */
   readonly settingsForm = {
     xmi: imageSettingsFormXmi,
+    ecore: settingsEcore,
     uri: '/image-settings.ui.xmi',
     ePackage: () => ImagesettingsPackage.eINSTANCE,
     create: () => new ImageSettingsImpl(),

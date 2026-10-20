@@ -25,6 +25,8 @@ import { IconSettingsImpl } from './gen/IconSettingsImpl'
 import { IconSettingsPackage } from './gen/IconSettingsPackage'
 /* The form for these settings, written as a model beside the Ecore. */
 import iconSettingsFormXmi from '../model/ui.xmi?raw'
+/* The Ecore itself, for the sentences the generator drops. */
+import settingsEcore from '../model/model.ecore?raw'
 
 /*
  * Building the EPackage on load: until it exists the class literals are
@@ -62,6 +64,7 @@ export class IconWidgetProvider implements WidgetProvider {
    */
   readonly settingsForm = {
     xmi: iconSettingsFormXmi,
+    ecore: settingsEcore,
     uri: '/icon-settings.ui.xmi',
     ePackage: () => IconSettingsPackage.eINSTANCE,
     create: () => new IconSettingsImpl(),

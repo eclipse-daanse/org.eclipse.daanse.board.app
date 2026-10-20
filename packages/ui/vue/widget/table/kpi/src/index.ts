@@ -21,6 +21,8 @@ import { KpiTableSettingsImpl } from './gen/KpiTableSettingsImpl'
 import { KpitablesettingsPackage } from './gen/KpitablesettingsPackage'
 /* The form for these settings, written as a model beside the Ecore. */
 import kpiTableSettingsFormXmi from '../model/ui.xmi?raw'
+/* The Ecore itself, for the sentences the generator drops. */
+import settingsEcore from '../model/model.ecore?raw'
 
 /*
  * Building the EPackage on load: until it exists the class literals are
@@ -51,6 +53,7 @@ export class KpiTableWidgetProvider implements WidgetProvider {
    */
   readonly settingsForm = {
     xmi: kpiTableSettingsFormXmi,
+    ecore: settingsEcore,
     uri: '/kpi-table-settings.ui.xmi',
     ePackage: () => KpitablesettingsPackage.eINSTANCE,
     create: () => new KpiTableSettingsImpl(),

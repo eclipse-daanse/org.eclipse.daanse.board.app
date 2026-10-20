@@ -22,6 +22,8 @@ import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
 import { ConstantVariableSettingsImpl } from './gen/ConstantVariableSettingsImpl'
 import { ConstantVariableSettingsPackage } from './gen/ConstantVariableSettingsPackage'
 import settingsFormXmi from '../model/ui.xmi?raw'
+/* The Ecore itself, for the sentences the generator drops. */
+import settingsEcore from '../model/model.ecore?raw'
 
 /*
  * Touching eINSTANCE is what builds the EPackage: until then the class
@@ -43,6 +45,7 @@ export function activate({ services }: ActivationContext) {
        */
       settingsForm: {
         xmi: settingsFormXmi,
+        ecore: settingsEcore,
         uri: '/constant-variable-settings.ui.xmi',
         ePackage: () => ConstantVariableSettingsPackage.eINSTANCE,
         create: () => new ConstantVariableSettingsImpl(),

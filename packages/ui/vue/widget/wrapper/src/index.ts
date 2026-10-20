@@ -34,7 +34,9 @@ export { WidgetWrapper, defaultConfig }
 /* The form for these settings, written as a model rather than as a
  * template - grouped by what someone setting up a widget thinks about. */
 import wrapperSettingsFormXmi from '../model/ui.xmi?raw'
-export { wrapperSettingsFormXmi }
+/* The Ecore itself, for the sentences the generator drops. */
+import wrapperSettingsEcore from '../model/model.ecore?raw'
+export { wrapperSettingsFormXmi, wrapperSettingsEcore }
 export { WrapperSettingsImpl } from './gen/WrapperSettingsImpl'
 export { WrapperSettingsPackage }
 export type { WrapperSettings } from './gen/WrapperSettings'
