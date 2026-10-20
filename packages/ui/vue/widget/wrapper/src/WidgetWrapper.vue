@@ -22,7 +22,8 @@ import {
   identifier as WidgetIdentifier,
 } from 'org.eclipse.daanse.board.app.lib.api.widget'
 
-import { VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+import { useEObject, VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+import type { EObject } from '@emfts/core'
 import {
   DButton,
   DIcon,
@@ -44,7 +45,7 @@ const { widget, extraActions } = defineProps<{
 }>();
 
 /**
- * Which datasource a widget reads from.
+ * Which datasource this widget reads from.
  *
  * The model holds it as a reference on the widget. It used to be an id in
  * the widget's own configuration, and that is still where a board written
@@ -55,10 +56,20 @@ const { widget, extraActions } = defineProps<{
  * are modelled now, so the configuration is itself an EObject and is
  * written out by its features alone. Anything put beside them is dropped
  * on save, which is exactly how the assignment used to get lost.
+ *
+ * Watched rather than read off the prop. Changing a feature leaves the
+ * widget the same instance, so the prop does not change and this component
+ * is never asked to render again - which is why the settings preview went
+ * on showing what the widget looked like when the dialog opened, while the
+ * one on the board, re-rendered by its own list, followed along.
  */
-function datasourceIdOf(held: any): string | undefined {
-  return held?.datasource?.uid ?? held?.config?.datasourceId
-}
+const watchedWidget = useEObject(() => widget as EObject | undefined)
+
+const datasourceId = computed(
+  () =>
+    (watchedWidget.value as any)?.datasource?.uid ??
+    (watchedWidget.value as any)?.config?.datasourceId,
+)
 
 const emit = defineEmits(['openSettings', 'removeWidget'])
 
@@ -331,7 +342,7 @@ const getpadding = computed(() => {
       >
         <div class="scroll">
           <component :is="availableWidgets[widget.type].component" :config="widget.config"
-            v-model:configv="widget.config" :datasourceId="datasourceIdOf(widget)" :id="widget.uid || widget.id"
+            v-model:configv="widget.config" :datasourceId="datasourceId" :id="widget.uid || widget.id"
             class="widget_component" />
         </div>
       </div>
