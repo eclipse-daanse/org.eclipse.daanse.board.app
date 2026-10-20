@@ -18,6 +18,7 @@
     "dev": "NODE_ENV=development turbo run dev",
     "dev:app": "NODE_ENV=development npm run dev --workspace=packages/app/default",
     "generate_models": "cd tools/generator && node scan-and-generate.js",
+    "check_models": "node scripts/check-model-conformance.mjs",
     "bundles": "node scripts/build-bundles.mjs",
     "bundles:watch": "node scripts/watch-bundles.mjs",
     "start": "node scripts/dev.mjs"
