@@ -19,7 +19,6 @@
   },
   "scripts": {
     "build": "[ \"$SKIP_TYPE_CHECK\" = \"true\" ] && vite build || (vue-tsc --noEmit && vite build)",
-    "test": "vitest",
     "test:ui": "vitest --ui",
     "test:run": "vitest run",
     "test:coverage": "vitest run --coverage"

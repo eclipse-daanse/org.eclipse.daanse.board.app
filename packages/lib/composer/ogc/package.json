@@ -14,8 +14,7 @@
     "url": "git+https://github.com/eclipse-daanse/org.eclipse.daanse.board.app.git"
   },
   "scripts": {
-    "build": "tsc --noEmit && vite build",
-    "test": "node ./__tests__/test.test.ts"
+    "build": "tsc --noEmit && vite build"
   },
   "bugs": {
     "url": "https://github.com/eclipse-daanse/org.eclipse.daanse.board.app/issues"

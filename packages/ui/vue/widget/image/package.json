@@ -17,8 +17,7 @@
     "url": "git+https://github.com/eclipse-daanse/org.eclipse.daanse.board.app.git"
   },
   "scripts": {
-    "build": "vue-tsc --noEmit && vite build",
-    "test": "echo \"Error: no test specified\" && exit 0"
+    "build": "vue-tsc --noEmit && vite build"
   },
   "bugs": {
     "url": "https://github.com/ssemenkoff/org.eclipse.daanse.board.app/issues"

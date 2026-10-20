@@ -25,7 +25,6 @@
  */
 
 import { describe, it, expect, beforeEach } from 'vitest'
-import { DefaultServiceRegistry } from '@eclipse-daanse/tsm'
 import { DefaultServiceRegistry, ModuleLoader, type ModuleManifest } from '@eclipse-daanse/tsm'
 
 /** Minimal gueltige Konfiguration - validateConfiguration prueft genau diese vier Felder. */
