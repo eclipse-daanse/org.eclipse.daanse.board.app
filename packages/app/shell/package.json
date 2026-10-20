@@ -42,6 +42,7 @@
     "org.eclipse.daanse.board.app.lib.logger": "^0.0.1-next.1",
     "org.eclipse.daanse.board.app.lib.variables": "^0.0.1-next.1",
     "org.eclipse.daanse.board.app.ui.vue.composables": "^0.0.1-next.1",
-    "org.eclipse.daanse.board.app.ui.vue.widget.wrapper": "^0.0.1-next.1"
+    "org.eclipse.daanse.board.app.ui.vue.widget.wrapper": "^0.0.1-next.1",
+    "org.eclipse.daanse.board.app.lib.persistence.filesystem": "^0.0.1-next.1"
   }
 }

@@ -10,8 +10,15 @@
 */
 
 export class BaseRepository{
-    protected name?:string;
-    protected uri?:URL;
+    /*
+     * Public, because the Repository contract the subclasses declare says
+     * readonly name and readonly uri. They were protected, which contradicts
+     * it - no subclass ever satisfied the interface. It went unnoticed
+     * because these packages build with vite alone and nothing type-checks
+     * them.
+     */
+    name?:string;
+    uri?:URL;
     static readonly type:string;
     init(url:URL,name:string){
         this.uri = url;
