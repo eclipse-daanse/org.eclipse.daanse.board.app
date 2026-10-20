@@ -3,6 +3,8 @@
     "title": "Text widget settings",
     "label": "Title",
     "fontSize": "Font Size",
-    "fontColor": "Font Color"
+    "fontColor": "Font Color",
+    "textHint": "$value inserts the assigned datasource - $value on its own the whole object, $value.name a field. {variable} inserts a board variable.",
+    "textPlaceholder": "Revenue: $value.total"
   }
 }
