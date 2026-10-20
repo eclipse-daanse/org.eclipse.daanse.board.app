@@ -1,0 +1,6 @@
+-- Source: https://thedailydba.wordpress.com/2014/01/20/finding-and-killing-ssas-sessions/
+-- Construct: Column list with inconsistent spacing after commas; numeric literal on the right.
+-- Expect: parse
+-- Normalized: identifiers and string values substituted; casing, spacing,
+--             line breaks and quoting preserved exactly as published.
+SELECT CHANNEL_SPID,CHANNEL_USER_NAME, CHANNEL_START_TIME, CHANNEL_ELAPSED_TIME_MS,CHANNEL_CPU_TIME_MS, CHANNEL_ID FROM $SYSTEM.DISCOVER_CHANNELS WHERE CHANNEL_STATUS = 1

@@ -1,0 +1,29 @@
+{
+  "name": "org.eclipse.daanse.board.app.platform.codemirror",
+  "version": "0.0.1-next.1",
+  "description": "Provides the CodeMirror stack as shared libraries for tsm bundles",
+  "license": "EPL-2.0",
+  "type": "module",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "import": "./src/index.ts"
+    },
+    "./manifest.json": "./manifest.json"
+  },
+  "dependencies": {
+    "@eclipse-daanse/tsm": "0.1.0-next.1",
+    "org.eclipse.daanse.board.app.lib.core": "^0.0.1-next.1",
+    "@codemirror/state": "^6.7.2",
+    "@codemirror/view": "^6.43.10",
+    "@codemirror/language": "^6.12.4",
+    "@codemirror/commands": "^6.9.0",
+    "@codemirror/search": "^6.5.11",
+    "@codemirror/lint": "^6.9.7",
+    "@codemirror/autocomplete": "^6.20.3",
+    "@codemirror/lsp-client": "^6.2.5",
+    "@lezer/highlight": "^1.2.3"
+  }
+}

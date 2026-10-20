@@ -1,0 +1,5 @@
+-- WHERE supplies a restriction to the rowset.
+-- Source: Dynamic Management Views (DMVs) in Analysis Services, Microsoft Learn.
+SELECT *
+FROM $System.DISCOVER_CALC_DEPENDENCY
+WHERE OBJECT_TYPE = 'ACTIVE_RELATIONSHIP'
