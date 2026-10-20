@@ -316,6 +316,22 @@ function accept() {
   emit('close')
 }
 
+/*
+ * Which datasource this widget reads from.
+ *
+ * The model holds it as a reference on the widget, and that is what is set
+ * here. Reading falls back to the id in the configuration, which is where a
+ * board written before the reference existed carries it.
+ */
+const chosenDatasource = computed<string>({
+  get: () => widget.value?.datasource?.uid ?? (widget.value?.config?.datasourceId as string) ?? '',
+  set: (uid) => {
+    const held = widget.value
+    if (!held) return
+    held.datasource = dataSources.value.find((source) => source.uid === uid) as never
+  },
+})
+
 /* ------------------------------------------------------------- preview */
 
 const fill = ref(false)
@@ -526,7 +542,7 @@ onBeforeUnmount(() => {
           <div class="fields" v-if="widget">
             <template v-if="tab === 'data'">
               <DSelect
-                v-model="widget.config!.datasourceId"
+                v-model="chosenDatasource"
                 label="Datenquelle"
                 class="pick"
                 :options="dataSources"

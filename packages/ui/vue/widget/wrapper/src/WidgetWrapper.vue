@@ -43,6 +43,23 @@ const { widget, extraActions } = defineProps<{
   extraActions?: Array<{ id: string; icon: string; label: string; danger?: boolean; run: () => void }>
 }>();
 
+/**
+ * Which datasource a widget reads from.
+ *
+ * The model holds it as a reference on the widget. It used to be an id in
+ * the widget's own configuration, and that is still where a board written
+ * before the reference existed carries it - so the reference is asked
+ * first and the configuration answers for the old ones.
+ *
+ * The id cannot be kept in the configuration any more: a widget's settings
+ * are modelled now, so the configuration is itself an EObject and is
+ * written out by its features alone. Anything put beside them is dropped
+ * on save, which is exactly how the assignment used to get lost.
+ */
+function datasourceIdOf(held: any): string | undefined {
+  return held?.datasource?.uid ?? held?.config?.datasourceId
+}
+
 const emit = defineEmits(['openSettings', 'removeWidget'])
 
 const registeredWidgets = inject<WidgetRepository>(WidgetIdentifier)!
@@ -314,7 +331,7 @@ const getpadding = computed(() => {
       >
         <div class="scroll">
           <component :is="availableWidgets[widget.type].component" :config="widget.config"
-            v-model:configv="widget.config" :datasourceId="widget.config.datasourceId" :id="widget.uid || widget.id"
+            v-model:configv="widget.config" :datasourceId="datasourceIdOf(widget)" :id="widget.uid || widget.id"
             class="widget_component" />
         </div>
       </div>
