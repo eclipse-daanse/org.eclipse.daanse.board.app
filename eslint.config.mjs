@@ -36,6 +36,18 @@ export default [
   ...vueTsEslintConfig(),
 
   {
+    // `v-html` compiles to innerHTML. Feed items, REST payloads, fetched SVG
+    // and board definitions loaded from a foreign repository all reach these
+    // bindings, so every one of them has to go through the sanitizers in
+    // org.eclipse.daanse.board.app.ui.vue.composables first.
+    name: 'app/no-unsanitised-v-html',
+    files: ['**/*.vue'],
+    rules: {
+      'vue/no-v-html': 'error',
+    },
+  },
+
+  {
     ...pluginVitest.configs.recommended,
     files: ['src/**/__tests__/*'],
   },

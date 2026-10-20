@@ -73,3 +73,9 @@ export { useTranslation } from './useTranslation'
 export { useLanguage } from './useLanguage'
 export type { Translation } from './useTranslation'
 export type { Language, LanguageChoice } from './useLanguage'
+
+/*
+ * Anything bound with v-html goes through one of these first. They are
+ * exported here so a widget needs no DOMPurify dependency of its own.
+ */
+export { sanitizeHtml, sanitizeSvg, sanitizeStyleBlock } from './sanitize'
