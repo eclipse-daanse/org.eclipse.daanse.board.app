@@ -34,6 +34,9 @@ import { ensurePermission, forgetDirectory, rememberDirectory } from './handleSt
 export default class FileSystemRepositoryImpl extends BaseRepository implements WritableRepository {
   public static readonly type = 'fileSystemRepositories'
 
+  /** How far down the folder is followed. Deep enough for any board tree. */
+  private static readonly MAX_DEPTH = 8
+
   /*
    * The base keeps these optional because they are only set by init, which
    * runs after construction. The contract wants them present, and by the
@@ -77,54 +80,88 @@ export default class FileSystemRepositoryImpl extends BaseRepository implements 
     if (!directory || !(await ensurePermission(directory, false))) return []
 
     const found: Entity[] = []
-    for await (const [fileName, handle] of (directory as any).entries()) {
-      if (handle.kind !== 'file' || !fileName.endsWith('.json')) continue
-      const entity = await this.read(fileName, handle as FileSystemFileHandle)
+    await this.walk(directory, '', found, 0)
+    return found
+  }
+
+  /**
+   * Every .json below the folder, subfolders included.
+   *
+   * A board keeps the path it was found under as its name, so two files
+   * called the same thing in different folders stay apart.
+   *
+   * Hidden folders and node_modules are left alone: a folder of boards may
+   * well sit inside a checkout, and walking .git is a long way to no
+   * boards. The depth is capped because a folder tree is not guaranteed to
+   * be one - a handle may be reachable from inside itself.
+   */
+  private async walk(
+    directory: FileSystemDirectoryHandle,
+    prefix: string,
+    found: Entity[],
+    depth: number,
+  ): Promise<void> {
+    if (depth > FileSystemRepositoryImpl.MAX_DEPTH) return
+
+    for await (const [entryName, handle] of (directory as any).entries()) {
+      const path = prefix ? `${prefix}/${entryName}` : entryName
+      if (handle.kind === 'directory') {
+        if (entryName.startsWith('.') || entryName === 'node_modules') continue
+        await this.walk(handle as FileSystemDirectoryHandle, path, found, depth + 1)
+        continue
+      }
+      if (!entryName.endsWith('.json')) continue
+      const entity = await this.read(path, handle as FileSystemFileHandle)
       if (entity) found.push(entity)
     }
-    return found
   }
 
   async getEntityByUri(uri: URL): Promise<Entity | null> {
     if (!this.belongsHere(uri)) return null
-    const fileName = this.fileNameOf(uri)
+    const path = this.fileNameOf(uri)
     const directory = this.directory
     if (!directory || !(await ensurePermission(directory, false))) return null
     try {
-      const handle = await directory.getFileHandle(fileName)
-      return await this.read(fileName, handle)
+      const { folder, fileName } = await this.folderOf(path, { create: false })
+      return await this.read(path, await folder.getFileHandle(fileName))
     } catch {
       return null
     }
   }
 
   async create(e: Entity): Promise<unknown> {
-    const fileName = this.fileNameOf(e.uri)
-    const directory = await this.writable()
-    try {
-      await directory.getFileHandle(fileName)
+    const path = this.fileNameOf(e.uri)
+    await this.writable()
+    if (await this.exists(path)) {
       return Promise.reject('Entity allready exists! use update!')
-    } catch {
-      // not there yet, which is what create wants
     }
-    return this.write(fileName, e.data)
+    return this.write(path, e.data)
   }
 
   async update(e: Entity): Promise<unknown> {
-    const fileName = this.fileNameOf(e.uri)
-    const directory = await this.writable()
-    try {
-      await directory.getFileHandle(fileName)
-    } catch {
+    const path = this.fileNameOf(e.uri)
+    await this.writable()
+    if (!(await this.exists(path))) {
       return Promise.reject('Entity not exists! use create!')
     }
-    return this.write(fileName, e.data)
+    return this.write(path, e.data)
+  }
+
+  private async exists(path: string): Promise<boolean> {
+    try {
+      const { folder, fileName } = await this.folderOf(path, { create: false })
+      await folder.getFileHandle(fileName)
+      return true
+    } catch {
+      return false
+    }
   }
 
   async delete(e: Entity): Promise<unknown> {
-    const fileName = this.fileNameOf(e.uri)
-    const directory = await this.writable()
-    await directory.removeEntry(fileName)
+    const path = this.fileNameOf(e.uri)
+    await this.writable()
+    const { folder, fileName } = await this.folderOf(path, { create: false })
+    await folder.removeEntry(fileName)
     return true
   }
 
@@ -145,9 +182,30 @@ export default class FileSystemRepositoryImpl extends BaseRepository implements 
     return directory
   }
 
-  private async write(fileName: string, data: unknown): Promise<unknown> {
-    const directory = await this.writable()
-    const handle = await directory.getFileHandle(fileName, { create: true })
+  /**
+   * The folder a path sits in, walking the parts of it.
+   *
+   * getFileHandle takes one name, never a path, so each part has to be
+   * stepped through. With create the folders are made on the way; without
+   * it, a missing one throws, which is what the callers read as "not here".
+   */
+  private async folderOf(
+    path: string,
+    options: { create: boolean },
+  ): Promise<{ folder: FileSystemDirectoryHandle; fileName: string }> {
+    const parts = path.split('/').filter(Boolean)
+    const fileName = parts.pop()!
+    let folder = options.create ? await this.writable() : this.directory!
+    for (const part of parts) {
+      folder = await folder.getDirectoryHandle(part, { create: options.create })
+    }
+    return { folder, fileName }
+  }
+
+  private async write(path: string, data: unknown): Promise<unknown> {
+    await this.writable()
+    const { folder, fileName } = await this.folderOf(path, { create: true })
+    const handle = await folder.getFileHandle(fileName, { create: true })
     const stream = await handle.createWritable()
     await stream.write(typeof data === 'string' ? data : JSON.stringify(data, null, 2))
     await stream.close()
