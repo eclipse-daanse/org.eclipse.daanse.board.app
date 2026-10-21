@@ -44,8 +44,19 @@ export function registerWrapperRenderer(): boolean {
     | undefined
 
   if (!target) {
-    // The package registers itself when its bundle loads; until then there
-    // is nothing to register against and the caller tries again later
+    /*
+     * Said out loud, because the symptom is not. Without this registration
+     * the composer draws every setting with its fallback widget - a
+     * textarea holding "[object Object]" - and nothing throws, warns or
+     * looks broken until someone opens a settings dialog and tries to type
+     * in it. The comment that used to sit here claimed the caller would try
+     * again later; no caller ever did (#1091).
+     */
+    console.error(
+      'uimodel: VariableWrapper is missing from ' +
+        VariablesPackage.eINSTANCE.getNsURI() +
+        ' - every widget setting will be drawn with the fallback widget.',
+    )
     return false
   }
 
