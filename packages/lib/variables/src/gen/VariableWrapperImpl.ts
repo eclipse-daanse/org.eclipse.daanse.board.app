@@ -21,7 +21,7 @@
 import { BasicEObject } from '@emfts/core';
 import type { EClass, EStructuralFeature, EObject } from '@emfts/core';
 import type { VariableWrapper } from './VariableWrapper.js';
-import { ComposablesPackage } from './ComposablesPackage.js';
+import { VariablesPackage } from './VariablesPackage.js';
 
 /**
  * Implementation of VariableWrapper
@@ -44,7 +44,7 @@ export class VariableWrapperImpl extends BasicEObject implements VariableWrapper
    * Returns the EClass of this object
    */
   override eClass(): EClass {
-    return ComposablesPackage.Literals.VARIABLE_WRAPPER;
+    return VariablesPackage.Literals.VARIABLE_WRAPPER;
   }
 
   // Getters and Setters

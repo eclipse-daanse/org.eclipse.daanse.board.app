@@ -139,7 +139,7 @@ export class VideoSettingsPackage extends BasicEPackage {
     // ============================================
     (VideoSettingsPackage.Literals.OBJECT_FIT_SETTING__FIT as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
     (VideoSettingsPackage.Literals.VIDEO_SETTINGS__VIDEO_FIT_SETTINGS as BasicEReference).setEType(VideoSettingsPackage.Literals.OBJECT_FIT_SETTING);
-    (VideoSettingsPackage.Literals.VIDEO_SETTINGS__VIDEO_URL as BasicEReference).setEType(requireEPackage('org.eclipse.daanse.board.app.ui.vue.composables').getEClassifier('VariableWrapper')!);
+    (VideoSettingsPackage.Literals.VIDEO_SETTINGS__VIDEO_URL as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
 
     // ============================================
     // Register XML name mappings from ExtendedMetaData annotations

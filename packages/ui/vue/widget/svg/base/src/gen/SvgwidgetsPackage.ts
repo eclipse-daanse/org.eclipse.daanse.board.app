@@ -196,13 +196,13 @@ export class SvgwidgetsPackage extends BasicEPackage {
     // An EAttribute without eType leaves the XMI reader no EDataType to
     // convert against - every value would arrive as a raw string (#37)
     // ============================================
-    (SvgwidgetsPackage.Literals.SVG_SETTINGS__SRC as BasicEReference).setEType(requireEPackage('org.eclipse.daanse.board.app.ui.vue.composables').getEClassifier('VariableWrapper')!);
+    (SvgwidgetsPackage.Literals.SVG_SETTINGS__SRC as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
     (SvgwidgetsPackage.Literals.SVG_SETTINGS__CLASSES_CONFIG as BasicEReference).setEType(SvgwidgetsPackage.Literals.SVG_CLASS_CONFIG_MAP_ENTRY);
     (SvgwidgetsPackage.Literals.SVG_CLASS_CONFIG_MAP_ENTRY__KEY as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
     (SvgwidgetsPackage.Literals.SVG_CLASS_CONFIG_MAP_ENTRY__VALUE as BasicEReference).setEType(SvgwidgetsPackage.Literals.SVG_CONFIG_ITEM);
-    (SvgwidgetsPackage.Literals.SVG_CONFIG_ITEM__FILL as BasicEReference).setEType(requireEPackage('org.eclipse.daanse.board.app.ui.vue.composables').getEClassifier('VariableWrapper')!);
-    (SvgwidgetsPackage.Literals.SVG_CONFIG_ITEM__STROKE as BasicEReference).setEType(requireEPackage('org.eclipse.daanse.board.app.ui.vue.composables').getEClassifier('VariableWrapper')!);
-    (SvgwidgetsPackage.Literals.SVG_CONFIG_ITEM__STROKE_WIDTH as BasicEReference).setEType(requireEPackage('org.eclipse.daanse.board.app.ui.vue.composables').getEClassifier('VariableWrapper')!);
+    (SvgwidgetsPackage.Literals.SVG_CONFIG_ITEM__FILL as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
+    (SvgwidgetsPackage.Literals.SVG_CONFIG_ITEM__STROKE as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
+    (SvgwidgetsPackage.Literals.SVG_CONFIG_ITEM__STROKE_WIDTH as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
     (SvgwidgetsPackage.Literals.SVG_CONFIG_ITEM__CLASS_NAME as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
 
     // ============================================

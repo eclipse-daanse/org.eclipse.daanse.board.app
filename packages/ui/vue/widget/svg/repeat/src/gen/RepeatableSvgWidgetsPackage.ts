@@ -187,13 +187,13 @@ export class RepeatableSvgWidgetsPackage extends BasicEPackage {
     // An EAttribute without eType leaves the XMI reader no EDataType to
     // convert against - every value would arrive as a raw string (#37)
     // ============================================
-    (RepeatableSvgWidgetsPackage.Literals.REPEATABLE_S_V_G_SETTINGS__SRC as BasicEReference).setEType(requireEPackage('org.eclipse.daanse.board.app.ui.vue.composables').getEClassifier('VariableWrapper')!);
+    (RepeatableSvgWidgetsPackage.Literals.REPEATABLE_S_V_G_SETTINGS__SRC as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
     (RepeatableSvgWidgetsPackage.Literals.REPEATABLE_S_V_G_SETTINGS__ACTIVE_ITEM_STYLES as BasicEReference).setEType(RepeatableSvgWidgetsPackage.Literals.S_V_G_ITEM_STYLES);
     (RepeatableSvgWidgetsPackage.Literals.REPEATABLE_S_V_G_SETTINGS__DEFAULT_ITEM_STYLES as BasicEReference).setEType(RepeatableSvgWidgetsPackage.Literals.S_V_G_ITEM_STYLES);
-    (RepeatableSvgWidgetsPackage.Literals.REPEATABLE_S_V_G_SETTINGS__REPETITIONS as BasicEReference).setEType(requireEPackage('org.eclipse.daanse.board.app.ui.vue.composables').getEClassifier('VariableWrapper')!);
-    (RepeatableSvgWidgetsPackage.Literals.REPEATABLE_S_V_G_SETTINGS__PROGRESS as BasicEReference).setEType(requireEPackage('org.eclipse.daanse.board.app.ui.vue.composables').getEClassifier('VariableWrapper')!);
-    (RepeatableSvgWidgetsPackage.Literals.S_V_G_ITEM_STYLES__FILL as BasicEReference).setEType(requireEPackage('org.eclipse.daanse.board.app.ui.vue.composables').getEClassifier('VariableWrapper')!);
-    (RepeatableSvgWidgetsPackage.Literals.S_V_G_ITEM_STYLES__STROKE as BasicEReference).setEType(requireEPackage('org.eclipse.daanse.board.app.ui.vue.composables').getEClassifier('VariableWrapper')!);
+    (RepeatableSvgWidgetsPackage.Literals.REPEATABLE_S_V_G_SETTINGS__REPETITIONS as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
+    (RepeatableSvgWidgetsPackage.Literals.REPEATABLE_S_V_G_SETTINGS__PROGRESS as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
+    (RepeatableSvgWidgetsPackage.Literals.S_V_G_ITEM_STYLES__FILL as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
+    (RepeatableSvgWidgetsPackage.Literals.S_V_G_ITEM_STYLES__STROKE as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
     (RepeatableSvgWidgetsPackage.Literals.S_V_G_ITEM_STYLES__CLASS_NAME as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
 
     // ============================================

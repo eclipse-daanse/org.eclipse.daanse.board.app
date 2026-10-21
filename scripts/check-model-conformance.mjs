@@ -51,7 +51,7 @@ const filters = args.filter(a => !a.startsWith('--'))
  * has gone is reported as stale, so the list cannot rot quietly.
  */
 const KNOWN = new Map([
-  ['VariableWrapper in packages/ui/vue/composables', 1068],
+  ['VariableWrapper in packages/lib/variables', 1068],
   ['VariableComplexStringWrapper in packages/ui/vue/composables', 1068],
   ['ImageGalleryItem in packages/ui/vue/widget/image', 1073],
   ['GallerySettings in packages/ui/vue/widget/image', 1073],

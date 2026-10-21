@@ -268,23 +268,23 @@ export class WrapperSettingsPackage extends BasicEPackage {
     // An EAttribute without eType leaves the XMI reader no EDataType to
     // convert against - every value would arrive as a raw string (#37)
     // ============================================
-    (WrapperSettingsPackage.Literals.WRAPPER_SETTINGS__TITLE as BasicEReference).setEType(requireEPackage('org.eclipse.daanse.board.app.ui.vue.composables').getEClassifier('VariableWrapper')!);
-    (WrapperSettingsPackage.Literals.WRAPPER_SETTINGS__BACKGROUND_COLOR as BasicEReference).setEType(requireEPackage('org.eclipse.daanse.board.app.ui.vue.composables').getEClassifier('VariableWrapper')!);
-    (WrapperSettingsPackage.Literals.WRAPPER_SETTINGS__BACKGROUND_COLOR_TRANSPARENCE as BasicEReference).setEType(requireEPackage('org.eclipse.daanse.board.app.ui.vue.composables').getEClassifier('VariableWrapper')!);
-    (WrapperSettingsPackage.Literals.WRAPPER_SETTINGS__TITLE_COLOR as BasicEReference).setEType(requireEPackage('org.eclipse.daanse.board.app.ui.vue.composables').getEClassifier('VariableWrapper')!);
-    (WrapperSettingsPackage.Literals.WRAPPER_SETTINGS__PADDING as BasicEReference).setEType(requireEPackage('org.eclipse.daanse.board.app.ui.vue.composables').getEClassifier('VariableWrapper')!);
-    (WrapperSettingsPackage.Literals.WRAPPER_SETTINGS__TITLE_FONT_SIZE as BasicEReference).setEType(requireEPackage('org.eclipse.daanse.board.app.ui.vue.composables').getEClassifier('VariableWrapper')!);
-    (WrapperSettingsPackage.Literals.WRAPPER_SETTINGS__BORDER_SIZE as BasicEReference).setEType(requireEPackage('org.eclipse.daanse.board.app.ui.vue.composables').getEClassifier('VariableWrapper')!);
-    (WrapperSettingsPackage.Literals.WRAPPER_SETTINGS__BORDER_COLOR as BasicEReference).setEType(requireEPackage('org.eclipse.daanse.board.app.ui.vue.composables').getEClassifier('VariableWrapper')!);
-    (WrapperSettingsPackage.Literals.WRAPPER_SETTINGS__BORDER_RADIUS as BasicEReference).setEType(requireEPackage('org.eclipse.daanse.board.app.ui.vue.composables').getEClassifier('VariableWrapper')!);
-    (WrapperSettingsPackage.Literals.WRAPPER_SETTINGS__BLUR as BasicEReference).setEType(requireEPackage('org.eclipse.daanse.board.app.ui.vue.composables').getEClassifier('VariableWrapper')!);
-    (WrapperSettingsPackage.Literals.WRAPPER_SETTINGS__FULLSCREEN as BasicEReference).setEType(requireEPackage('org.eclipse.daanse.board.app.ui.vue.composables').getEClassifier('VariableWrapper')!);
-    (WrapperSettingsPackage.Literals.WRAPPER_SETTINGS__SHADOW_COLOR as BasicEReference).setEType(requireEPackage('org.eclipse.daanse.board.app.ui.vue.composables').getEClassifier('VariableWrapper')!);
-    (WrapperSettingsPackage.Literals.WRAPPER_SETTINGS__SHADOW_BLUR as BasicEReference).setEType(requireEPackage('org.eclipse.daanse.board.app.ui.vue.composables').getEClassifier('VariableWrapper')!);
-    (WrapperSettingsPackage.Literals.WRAPPER_SETTINGS__SHADOW_X as BasicEReference).setEType(requireEPackage('org.eclipse.daanse.board.app.ui.vue.composables').getEClassifier('VariableWrapper')!);
-    (WrapperSettingsPackage.Literals.WRAPPER_SETTINGS__SHADOW_Y as BasicEReference).setEType(requireEPackage('org.eclipse.daanse.board.app.ui.vue.composables').getEClassifier('VariableWrapper')!);
-    (WrapperSettingsPackage.Literals.WRAPPER_SETTINGS__SHADOW_TRANSPARENCE as BasicEReference).setEType(requireEPackage('org.eclipse.daanse.board.app.ui.vue.composables').getEClassifier('VariableWrapper')!);
-    (WrapperSettingsPackage.Literals.WRAPPER_SETTINGS__TRANSPARENCY as BasicEReference).setEType(requireEPackage('org.eclipse.daanse.board.app.ui.vue.composables').getEClassifier('VariableWrapper')!);
+    (WrapperSettingsPackage.Literals.WRAPPER_SETTINGS__TITLE as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
+    (WrapperSettingsPackage.Literals.WRAPPER_SETTINGS__BACKGROUND_COLOR as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
+    (WrapperSettingsPackage.Literals.WRAPPER_SETTINGS__BACKGROUND_COLOR_TRANSPARENCE as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
+    (WrapperSettingsPackage.Literals.WRAPPER_SETTINGS__TITLE_COLOR as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
+    (WrapperSettingsPackage.Literals.WRAPPER_SETTINGS__PADDING as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
+    (WrapperSettingsPackage.Literals.WRAPPER_SETTINGS__TITLE_FONT_SIZE as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
+    (WrapperSettingsPackage.Literals.WRAPPER_SETTINGS__BORDER_SIZE as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
+    (WrapperSettingsPackage.Literals.WRAPPER_SETTINGS__BORDER_COLOR as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
+    (WrapperSettingsPackage.Literals.WRAPPER_SETTINGS__BORDER_RADIUS as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
+    (WrapperSettingsPackage.Literals.WRAPPER_SETTINGS__BLUR as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
+    (WrapperSettingsPackage.Literals.WRAPPER_SETTINGS__FULLSCREEN as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
+    (WrapperSettingsPackage.Literals.WRAPPER_SETTINGS__SHADOW_COLOR as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
+    (WrapperSettingsPackage.Literals.WRAPPER_SETTINGS__SHADOW_BLUR as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
+    (WrapperSettingsPackage.Literals.WRAPPER_SETTINGS__SHADOW_X as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
+    (WrapperSettingsPackage.Literals.WRAPPER_SETTINGS__SHADOW_Y as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
+    (WrapperSettingsPackage.Literals.WRAPPER_SETTINGS__SHADOW_TRANSPARENCE as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
+    (WrapperSettingsPackage.Literals.WRAPPER_SETTINGS__TRANSPARENCY as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
 
     // ============================================
     // Register XML name mappings from ExtendedMetaData annotations

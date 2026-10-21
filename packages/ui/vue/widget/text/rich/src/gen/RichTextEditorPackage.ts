@@ -128,8 +128,8 @@ export class RichTextEditorPackage extends BasicEPackage {
     // convert against - every value would arrive as a raw string (#37)
     // ============================================
     (RichTextEditorPackage.Literals.RICH_TEXT_EDITOR_SETTINGS__EDITOR as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
-    (RichTextEditorPackage.Literals.RICH_TEXT_EDITOR_SETTINGS__FONT_SIZE as BasicEReference).setEType(requireEPackage('org.eclipse.daanse.board.app.ui.vue.composables').getEClassifier('VariableWrapper')!);
-    (RichTextEditorPackage.Literals.RICH_TEXT_EDITOR_SETTINGS__FONT_COLOR as BasicEReference).setEType(requireEPackage('org.eclipse.daanse.board.app.ui.vue.composables').getEClassifier('VariableWrapper')!);
+    (RichTextEditorPackage.Literals.RICH_TEXT_EDITOR_SETTINGS__FONT_SIZE as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
+    (RichTextEditorPackage.Literals.RICH_TEXT_EDITOR_SETTINGS__FONT_COLOR as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
 
     // ============================================
     // Register XML name mappings from ExtendedMetaData annotations

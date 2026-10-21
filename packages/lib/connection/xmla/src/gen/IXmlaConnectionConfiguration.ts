@@ -21,6 +21,7 @@
 import { BaseConnectionConfig } from 'org.eclipse.daanse.board.app.lib.connection.base';
 import { Documentation, Attribute, ModelClass } from 'org.eclipse.daanse.board.app.lib.annotations';
 
+@Documentation("A connection to an XMLA endpoint, the protocol OLAP servers answer on. Data sources built on it run MDX queries against a catalogue and cube.")
 @ModelClass({ type: 'http://org.eclipse.daanse.board.app.lib.connection.xmla#//IXmlaConnectionConfiguration' })
 export class IXmlaConnectionConfiguration extends BaseConnectionConfig {
   @Documentation("The URL endpoint for the XMLA service.")

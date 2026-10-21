@@ -21,6 +21,7 @@
 import { BaseConnectionConfig } from 'org.eclipse.daanse.board.app.lib.connection.base';
 import { Documentation, Attribute, ModelClass } from 'org.eclipse.daanse.board.app.lib.annotations';
 
+@Documentation("A connection to an MQTT broker. It stays open and pushes messages as they are published, so data sources on it update without polling.")
 @ModelClass({ type: 'http://org.eclipse.daanse.board.app.lib.connection.mqtt#//IMQTTConnectionConfiguration' })
 export class IMQTTConnectionConfiguration extends BaseConnectionConfig {
   @Documentation("The URL for the MQTT broker, e.g., 'mqtt://localhost:1883'.\n                                            This attribute overrides the 'url' from BaseConnectionConfig\n                                            to emphasize its specific role in MQTT connections.")

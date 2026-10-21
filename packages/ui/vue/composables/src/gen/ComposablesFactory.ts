@@ -21,8 +21,6 @@
 import { BasicEFactory } from '@emfts/core';
 import type { EClass, EObject } from '@emfts/core';
 import { ComposablesPackage } from './ComposablesPackage.js';
-import { VariableWrapper } from './VariableWrapper.js';
-import { VariableWrapperImpl } from './VariableWrapperImpl.js';
 import { VariableComplexStringWrapper } from './VariableComplexStringWrapper.js';
 import { VariableComplexStringWrapperImpl } from './VariableComplexStringWrapperImpl.js';
 
@@ -47,13 +45,6 @@ export class ComposablesFactory extends BasicEFactory {
   }
 
   /**
-   * Create a new VariableWrapper instance
-   */
-  createVariableWrapper(): VariableWrapper<unknown> {
-    return new VariableWrapperImpl();
-  }
-
-  /**
    * Create a new VariableComplexStringWrapper instance
    */
   createVariableComplexStringWrapper(): VariableComplexStringWrapper<unknown> {
@@ -65,8 +56,6 @@ export class ComposablesFactory extends BasicEFactory {
    */
   override create(eClass: EClass): EObject {
     switch (eClass.getName()) {
-      case 'VariableWrapper':
-        return this.createVariableWrapper();
       case 'VariableComplexStringWrapper':
         return this.createVariableComplexStringWrapper();
       default:

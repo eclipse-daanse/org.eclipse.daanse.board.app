@@ -20,7 +20,7 @@
 
 import { BasicEObject } from '@emfts/core';
 import type { EClass, EStructuralFeature } from '@emfts/core';
-import { VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables';
+import { VariableWrapper } from 'org.eclipse.daanse.board.app.lib.variables';
 import type { LevelStyle } from './LevelStyle.js';
 import { PivotTablePackage } from './PivotTablePackage.js';
 

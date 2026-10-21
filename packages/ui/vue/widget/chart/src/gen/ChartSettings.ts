@@ -20,7 +20,7 @@
 
 import type { EObject, EList } from '@emfts/core';
 import type { SeriesSettings } from './SeriesSettings.js';
-import type { VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables';
+import type { VariableWrapper } from 'org.eclipse.daanse.board.app.lib.variables';
 
 /**
  * ChartSettings

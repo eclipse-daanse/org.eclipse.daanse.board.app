@@ -21,6 +21,7 @@
 import { BaseConnectionConfig } from 'org.eclipse.daanse.board.app.lib.connection.base';
 import { Documentation, Attribute, ModelClass } from 'org.eclipse.daanse.board.app.lib.annotations';
 
+@Documentation("A connection to an RSS or Atom feed. Data sources built on it read the feed's entries.")
 @ModelClass({ type: 'http://org.eclipse.daanse.board.app.lib.connection.rss#//IRssConnectionConfiguration' })
 export class IRssConnectionConfiguration extends BaseConnectionConfig {
   @Documentation("The URL of the RSS feed to connect to.\n                                            This attribute overrides the 'url' from BaseConnectionConfig\n                                            to specify its role in RSS feed connections.")

@@ -96,12 +96,7 @@ describe('Ecore-Modelle', () => {
     expect(placeholders).toEqual([])
   })
 
-  /*
-   * Expected to fail: one model of 54 carries a package name where a URI
-   * belongs - #1075. Marked rather than skipped, so the day it is fixed
-   * this line fails and has to be removed.
-   */
-  it.fails('jeder nsURI beginnt mit http://', () => {
+  it('jeder nsURI beginnt mit http://', () => {
     expect(loaded.filter(({ nsURI }) => !nsURI.startsWith('http://'))).toEqual([])
   })
 })

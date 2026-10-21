@@ -144,7 +144,7 @@ export class KpitablesettingsPackage extends BasicEPackage {
     // An EAttribute without eType leaves the XMI reader no EDataType to
     // convert against - every value would arrive as a raw string (#37)
     // ============================================
-    (KpitablesettingsPackage.Literals.KPI_TABLE_SETTINGS__HEADER_BACKGROUND as BasicEReference).setEType(requireEPackage('org.eclipse.daanse.board.app.ui.vue.composables').getEClassifier('VariableWrapper')!);
+    (KpitablesettingsPackage.Literals.KPI_TABLE_SETTINGS__HEADER_BACKGROUND as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
     (KpitablesettingsPackage.Literals.KPI_TABLE_SETTINGS__TREND_VISUAL_TYPE as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
     (KpitablesettingsPackage.Literals.KPI_TABLE_SETTINGS__STATUS_VISUAL_TYPE as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
     (KpitablesettingsPackage.Literals.KPI_TABLE_SETTINGS__SHOW_FOLDERS as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EBoolean')!);

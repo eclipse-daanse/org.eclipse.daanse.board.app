@@ -202,7 +202,7 @@ export class IconSettingsPackage extends BasicEPackage {
     // An EAttribute without eType leaves the XMI reader no EDataType to
     // convert against - every value would arrive as a raw string (#37)
     // ============================================
-    (IconSettingsPackage.Literals.ICON_SETTINGS__ICON_COLOR as BasicEReference).setEType(requireEPackage('org.eclipse.daanse.board.app.ui.vue.composables').getEClassifier('VariableWrapper')!);
+    (IconSettingsPackage.Literals.ICON_SETTINGS__ICON_COLOR as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
     (IconSettingsPackage.Literals.ICON_SETTINGS__ICON_SIZE as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EInt')!);
     (IconSettingsPackage.Literals.ICON_SETTINGS__IS_ICON_FILLED as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EBoolean')!);
     (IconSettingsPackage.Literals.ICON_SETTINGS__STROKE_WEIGHT as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EInt')!);
