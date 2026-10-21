@@ -12,6 +12,7 @@
  **********************************************************************/
 
 import { v4 } from 'uuid'
+import { filterMembers } from './filterMembers'
 
 export async function getRowsDrilldownRequestString(
   hierarchy: any,
@@ -32,7 +33,7 @@ export async function getRowsDrilldownRequestString(
     const rowsLevels = metadataLevels.filter(e => {
       return (
         e.HIERARCHY_UNIQUE_NAME === rowsMemberLevel?.HIERARCHY_UNIQUE_NAME &&
-        e.LEVEL_NUMBER <= rowsMemberLevel.LEVEL_NUMBER
+        Number(e.LEVEL_NUMBER) <= Number(rowsMemberLevel.LEVEL_NUMBER)
       )
     })
 
@@ -131,34 +132,12 @@ export async function getRowsDrilldownRequestString(
       }
     } else {
       const filter = hierarchy.filters
-      let withSection = ''
       let selectSection = ''
 
-      const selectedFilters = [] as any[]
-      if (filter?.multipleChoise) {
-        selectedFilters.push(...filter.selectedItems)
-      } else {
-        selectedFilters.push(filter.selectedItem)
-      }
-
-      const filtersLevels = [] as any[][]
-      selectedFilters.forEach(e => {
-        const levelNum = e.LNum
-        if (filtersLevels[levelNum]) {
-          filtersLevels[levelNum].push(e)
-        } else {
-          filtersLevels[levelNum] = [e]
-        }
-      })
-
-      const rowsLevels = metadataLevels.filter(e => {
-        return (
-          e.HIERARCHY_UNIQUE_NAME ===
-          hierarchy.originalItem.HIERARCHY_UNIQUE_NAME
-        )
-      })
-
-      const rootLevel = rowsLevels.find(e => e.LEVEL_NUMBER === '0')
+      const hierarchyLevels = metadataLevels.filter(
+        e => e.HIERARCHY_UNIQUE_NAME === hierarchy.originalItem.HIERARCHY_UNIQUE_NAME,
+      )
+      const rootLevel = hierarchyLevels.find(e => e.LEVEL_NUMBER === '0')
 
       if (!rootLevel)
         return {
@@ -168,27 +147,6 @@ export async function getRowsDrilldownRequestString(
 
       const uid = 'id' + v4()
       const filterSetName = `[FILTER_${uid}]`
-
-      const set = selectedFilters
-        .map(e => `Ascendants(${e.UName}), Descendants(${e.UName})`)
-        .join(',')
-
-      const deseclectedFiltersLevels = [] as any[][]
-      if (filter.deselectedItems) {
-        filter.deselectedItems.forEach((e: any) => {
-          const levelNum = e.LNum
-          if (deseclectedFiltersLevels[levelNum]) {
-            deseclectedFiltersLevels[levelNum].push(e)
-          } else {
-            deseclectedFiltersLevels[levelNum] = [e]
-          }
-        })
-      }
-
-      const filtersDepth = Math.max(
-        filtersLevels.length,
-        deseclectedFiltersLevels.length,
-      )
 
       const levels = [] as any[][]
       expandedMembers.forEach(element => {
@@ -219,61 +177,11 @@ export async function getRowsDrilldownRequestString(
         selectSection = `Intersect(AddCalculatedMembers({${rootLevel.LEVEL_UNIQUE_NAME}.members}), ${filterSetName}))`
       }
 
-      // if (filter.selectAll) {
-      //     const appSettings = useAppSettingsStore();
-      //     const members = await appSettings.api?.getLevelMembers(
-      //         rootLevel,
-      //         100,
-      //         0,
-      //     );
-
-      //     const req =
-      //         members
-      //             ?.map(
-      //                 (e) =>
-      //                     `Ascendants(${e.Member.UName}), Descendants(${e.Member.UName})`,
-      //             )
-      //             .join(",") || "";
-
-      //     withSection = `{${req}}`;
-      // }
-
-      for (let i = 0; i < filtersDepth; i++) {
-        if (filtersLevels[i]) {
-          const aggregatedFiltersForLevel = filtersLevels[i]
-            .map(e => `Ascendants(${e.UName}), Descendants(${e.UName})`)
-            .join(',')
-
-          if (withSection.length) {
-            withSection = `Union({${aggregatedFiltersForLevel}}, {${withSection}})`
-          } else {
-            // 0 iter
-            withSection = `{${aggregatedFiltersForLevel}}`
-          }
-        }
-        if (deseclectedFiltersLevels[i]) {
-          const aggregatedFiltersForLevel = deseclectedFiltersLevels[i]
-            .map(e => `Descendants(${e.UName})`)
-            .join(',')
-
-          if (withSection.length) {
-            withSection = `Except({${withSection}}, {${aggregatedFiltersForLevel}})`
-          } else {
-            withSection = `{${aggregatedFiltersForLevel}}`
-          }
-        }
-      }
-
       selectSection = `Hierarchize(${selectSection})`
-
-      if (filter.selectAll) {
-        withSection = `SET ${filterSetName} AS 'VisualTotals(Distinct(Hierarchize(${withSection})))' `
-      } else {
-        withSection = `SET ${filterSetName} AS 'VisualTotals(Distinct(Hierarchize(Intersect({${set}}, ${withSection}))))' `
-      }
+      const members = filterMembers(filter, hierarchy.originalItem.HIERARCHY_UNIQUE_NAME)
 
       return {
-        with: withSection,
+        with: `SET ${filterSetName} AS 'VisualTotals(Distinct(Hierarchize(${members})))' `,
         select: selectSection,
       }
     }
@@ -299,7 +207,7 @@ export async function getColsDrilldownRequestString(
     const colsLevels = metadataLevels.filter(e => {
       return (
         e.HIERARCHY_UNIQUE_NAME === colsMemberLevel?.HIERARCHY_UNIQUE_NAME &&
-        e.LEVEL_NUMBER <= colsMemberLevel.LEVEL_NUMBER
+        Number(e.LEVEL_NUMBER) <= Number(colsMemberLevel.LEVEL_NUMBER)
       )
     })
 
@@ -398,34 +306,12 @@ export async function getColsDrilldownRequestString(
       }
     } else {
       const filter = hierarchy.filters
-      let withSection = ''
       let selectSection = ''
 
-      const selectedFilters = [] as any[]
-      if (filter?.multipleChoise) {
-        selectedFilters.push(...filter.selectedItems)
-      } else {
-        selectedFilters.push(filter.selectedItem)
-      }
-
-      const filtersLevels = [] as any[][]
-      selectedFilters.forEach(e => {
-        const levelNum = e.LNum
-        if (filtersLevels[levelNum]) {
-          filtersLevels[levelNum].push(e)
-        } else {
-          filtersLevels[levelNum] = [e]
-        }
-      })
-
-      const rowsLevels = metadataLevels.filter(e => {
-        return (
-          e.HIERARCHY_UNIQUE_NAME ===
-          hierarchy.originalItem.HIERARCHY_UNIQUE_NAME
-        )
-      })
-
-      const rootLevel = rowsLevels.find(e => e.LEVEL_NUMBER === '0')
+      const hierarchyLevels = metadataLevels.filter(
+        e => e.HIERARCHY_UNIQUE_NAME === hierarchy.originalItem.HIERARCHY_UNIQUE_NAME,
+      )
+      const rootLevel = hierarchyLevels.find(e => e.LEVEL_NUMBER === '0')
 
       if (!rootLevel)
         return {
@@ -435,28 +321,6 @@ export async function getColsDrilldownRequestString(
 
       const uid = 'id' + v4()
       const filterSetName = `[FILTER_${uid}]`
-
-      const set = selectedFilters
-        .map(e => `Ascendants(${e.UName}), Descendants(${e.UName})`)
-        .join(',')
-
-      const deseclectedFiltersLevels = [] as any[][]
-
-      if (filter.deselectedItems) {
-        filter.deselectedItems.forEach((e: any) => {
-          const levelNum = e.LNum
-          if (deseclectedFiltersLevels[levelNum]) {
-            deseclectedFiltersLevels[levelNum].push(e)
-          } else {
-            deseclectedFiltersLevels[levelNum] = [e]
-          }
-        })
-      }
-
-      const filtersDepth = Math.max(
-        filtersLevels.length,
-        deseclectedFiltersLevels.length,
-      )
 
       const levels = [] as any[][]
       expandedMembers.forEach(element => {
@@ -487,72 +351,11 @@ export async function getColsDrilldownRequestString(
         selectSection = `Intersect(AddCalculatedMembers({${rootLevel.LEVEL_UNIQUE_NAME}.members}), ${filterSetName}))`
       }
 
-      // if (filter.selectAll) {
-      //     const appSettings = useAppSettingsStore();
-      //     const members = await appSettings.api?.getLevelMembers(
-      //         rootLevel,
-      //         100,
-      //         0,
-      //     );
-
-      //     const req =
-      //         members
-      //             ?.map(
-      //                 (e) =>
-      //                     `Ascendants(${e.Member.UName}), Descendants(${e.Member.UName})`,
-      //             )
-      //             .join(",") || "";
-
-      //     withSection = `{${req}}`;
-      // }
-
-      for (let i = 0; i < filtersDepth; i++) {
-        if (filtersLevels[i]) {
-          const aggregatedFiltersForLevel = filtersLevels[i]
-            .map(e => `Ascendants(${e.UName}), Descendants(${e.UName})`)
-            .join(',')
-
-          if (withSection.length) {
-            withSection = `Union({${aggregatedFiltersForLevel}}, {${withSection}})`
-          } else {
-            // 0 iter
-            withSection = `{${aggregatedFiltersForLevel}}`
-          }
-        }
-        if (deseclectedFiltersLevels[i]) {
-          const aggregatedFiltersForLevel = deseclectedFiltersLevels[i]
-            .map(e => `Descendants(${e.UName})`)
-            .join(',')
-
-          if (withSection.length) {
-            withSection = `Except({${withSection}}, {${aggregatedFiltersForLevel}})`
-          } else {
-            withSection = `{${aggregatedFiltersForLevel}}`
-          }
-        }
-      }
-
       selectSection = `Hierarchize(${selectSection})`
-
-      if (filter.selectAll) {
-        withSection = `SET ${filterSetName} AS 'VisualTotals(Distinct(Hierarchize(${withSection})))' `
-      } else {
-        withSection = `SET ${filterSetName} AS 'VisualTotals(Distinct(Hierarchize(Intersect({${set}}, ${withSection}))))' `
-      }
-
-      // withSection = `SET ${filterSetName} AS 'VisualTotals(Distinct(Hierarchize(
-      //   Intersect(
-      //     {Ascendants([Time].[1997]), Descendants([Time].[1997])},
-      //     {
-      //       Except({
-      //         Except({Ascendants([Time].[1997]), Descendants([Time].[1997])}, {Descendants([Time].[1997].[Q2])})
-      //       }, {Descendants([Time].[1997].[Q1].[January]), Descendants([Time].[1997].[Q1].[March])})
-      //     }
-      //   )
-      // )))'`;
+      const members = filterMembers(filter, hierarchy.originalItem.HIERARCHY_UNIQUE_NAME)
 
       return {
-        with: withSection,
+        with: `SET ${filterSetName} AS 'VisualTotals(Distinct(Hierarchize(${members})))' `,
         select: selectSection,
       }
     }

@@ -15,6 +15,7 @@ import {
   getColsDrilldownRequestString,
 } from './Drilldown'
 import { v4 } from 'uuid'
+import { filterMembers } from './filterMembers'
 
 export async function getMdxRequest(
   cubename: string,
@@ -60,7 +61,7 @@ export async function getMdxRequest(
 
     if (!pivotTableSettings.showEmpty) selectSection += ' NON EMPTY'
 
-    const rowsProperties = getRowsProperies(rows, properties)
+    const rowsProperties = getRowsProperies(rows, shownProperties(properties, pivotTableSettings?.showRowsProperties))
     const rowsRequest = await getRowsRequest(
       rows,
       rowsDrilldownMembers,
@@ -75,7 +76,7 @@ export async function getMdxRequest(
 
     if (!pivotTableSettings.showEmpty) selectSection += ' NON EMPTY'
 
-    const colsProperties = getColumnsProperies(columns, properties)
+    const colsProperties = getColumnsProperies(columns, shownProperties(properties, pivotTableSettings?.showColumnsProperties))
     const colsRequest = await getColumnsRequest(
       columns,
       columnsDrilldownMembers,
@@ -278,8 +279,6 @@ async function getRowsRequest(
           )`
       }
     }
-  } else if (rows.length === 1) {
-    rowsSelect = `{ ${rows[0].originalItem.HIERARCHY_UNIQUE_NAME}.Members }`
   } else {
     rowsSelect = ''
   }
@@ -342,6 +341,16 @@ async function getSingleRowRequest(
     select: `Hierarchize(AddCalculatedMembers({${rootLevel?.LEVEL_UNIQUE_NAME}.members}))`,
     with: '',
   }
+}
+
+/**
+ * The member properties to ask for: none where the pivot table was told not
+ * to show them. Where nobody said - a DataTable - they are asked for: the
+ * table hands them on as rowProperties, and the OGC composer finds its
+ * geometry there.
+ */
+function shownProperties<T>(properties: T[], shown: boolean | undefined): T[] {
+  return shown === false ? [] : properties
 }
 
 function getRowsProperies(rows: any, properties: any[]) {
@@ -422,7 +431,7 @@ async function getSingleHierarchyRequest(
       else rowsWith = `WITH ${filtersRequest.with}`
     }
 
-    const rowsProperties = getRowsProperies(rows, properties)
+    const rowsProperties = getRowsProperies(rows, shownProperties(properties, pivotTableSettings?.showRowsProperties))
 
     return `
       ${rowsWith}
@@ -448,7 +457,7 @@ async function getSingleHierarchyRequest(
       else colsWith = `WITH ${filtersRequest.with}`
     }
 
-    const colsProperties = getColumnsProperies(columns, properties)
+    const colsProperties = getColumnsProperies(columns, shownProperties(properties, pivotTableSettings?.showColumnsProperties))
 
     return `
       ${colsWith}
@@ -535,128 +544,31 @@ function getFiltersRequest(filters: any[]) {
 }
 
 async function getAxisFilterRequest(e: any, levels: any[]) {
-  // const appSettings = useAppSettingsStore();
-  // const api = appSettings.getApi();
   const filter = e.filters
-  let withSection = ''
-  let selectSection = ''
-
   if (!filter?.enabled) return null
-  const selectedFilters = [] as any[]
-  if (filter.multipleChoise) {
-    selectedFilters.push(...filter.selectedItems)
-  } else {
-    selectedFilters.push(filter.selectedItem)
-  }
 
-  const filtersLevels = [] as any[][]
-  selectedFilters.forEach(e => {
-    const levelNum = e.LNum
-    if (filtersLevels[levelNum]) {
-      filtersLevels[levelNum].push(e)
-    } else {
-      filtersLevels[levelNum] = [e]
-    }
-  })
-
-  const deseclectedFiltersLevels = [] as any[][]
-  if (filter.deselectedItems) {
-    filter.deselectedItems.forEach((e: any) => {
-      const levelNum = e.LNum
-      if (deseclectedFiltersLevels[levelNum]) {
-        deseclectedFiltersLevels[levelNum].push(e)
-      } else {
-        deseclectedFiltersLevels[levelNum] = [e]
-      }
-    })
-  }
-
-  const filtersDepth = Math.max(
-    filtersLevels.length,
-    deseclectedFiltersLevels.length,
+  const rootLevel = levels.find(
+    l =>
+      l.HIERARCHY_UNIQUE_NAME === e.originalItem.HIERARCHY_UNIQUE_NAME &&
+      l.LEVEL_NUMBER === '0',
   )
 
-  if (filter.selectAll && !deseclectedFiltersLevels.length) {
-    const uid = 'id' + v4()
-    const filterSetName = `[FILTER_${uid}]`
-
-    const rootLevel = levels.find(
-      l =>
-        l.HIERARCHY_UNIQUE_NAME === e.originalItem.HIERARCHY_UNIQUE_NAME &&
-        l.LEVEL_NUMBER === '0',
-    )
-
-    withSection = `SET ${filterSetName} AS 'VisualTotals(Distinct(Hierarchize(AddCalculatedMembers({${rootLevel?.LEVEL_UNIQUE_NAME}.members}))))' `
-    selectSection = `Hierarchize(AddCalculatedMembers({${rootLevel?.LEVEL_UNIQUE_NAME}.members}))`
-  } else {
-    const rowsLevels = levels.filter(l => {
-      return l.HIERARCHY_UNIQUE_NAME === e.originalItem.HIERARCHY_UNIQUE_NAME
-    })
-
-    const rootLevel = rowsLevels.find(e => e.LEVEL_NUMBER === '0')
-    // if (filter.selectAll) {
-    //   const appSettings = useAppSettingsStore()
-    //   const members = await appSettings.api?.getLevelMembers(
-    //     rootLevel as MDSchemaLevel,
-    //     100,
-    //     0,
-    //   )
-
-    //   const req =
-    //     members
-    //       ?.map(
-    //         e =>
-    //           `Ascendants(${e.Member.UName}), Descendants(${e.Member.UName})`,
-    //       )
-    //       .join(',') || ''
-
-    //   withSection = `{${req}}`
-    // }
-
-    if (!rootLevel) return null
-
-    const uid = 'id' + v4()
-    const filterSetName = `[FILTER_${uid}]`
-
-    const set = selectedFilters
-      .map(e => `Ascendants(${e.UName}), Descendants(${e.UName})`)
-      .join(',')
-
-    for (let i = 0; i < filtersDepth; i++) {
-      if (filtersLevels[i]) {
-        const aggregatedFiltersForLevel = filtersLevels[i]
-          .map(e => `Ascendants(${e.UName}), Descendants(${e.UName})`)
-          .join(',')
-
-        if (withSection.length) {
-          withSection = `Union({${aggregatedFiltersForLevel}}, {${withSection}})`
-        } else {
-          withSection = `{${aggregatedFiltersForLevel}}`
-        }
-      }
-      if (deseclectedFiltersLevels[i]) {
-        const aggregatedFiltersForLevel = deseclectedFiltersLevels[i]
-          .map(e => `Descendants(${e.UName})`)
-          .join(',')
-
-        if (withSection.length) {
-          withSection = `Except({${withSection}}, {${aggregatedFiltersForLevel}})`
-        } else {
-          withSection = `{${aggregatedFiltersForLevel}}`
-        }
-      }
+  // Everything selected, nothing taken out: no filter at all.
+  if (filter.selectAll && !filter.deselectedItems?.length) {
+    return {
+      with: '',
+      select: `Hierarchize(AddCalculatedMembers({${rootLevel?.LEVEL_UNIQUE_NAME}.members}))`,
     }
-
-    if (filter.selectAll) {
-      withSection = `SET ${filterSetName} AS 'VisualTotals(Distinct(Hierarchize(${withSection})))' `
-    } else {
-      withSection = `SET ${filterSetName} AS 'VisualTotals(Distinct(Hierarchize(Intersect({${set}}, ${withSection}))))' `
-    }
-    selectSection = `Hierarchize(Intersect(AddCalculatedMembers({${rootLevel.LEVEL_UNIQUE_NAME}.members}), ${filterSetName}))`
   }
 
+  if (!rootLevel) return null
+
+  const uid = 'id' + v4()
+  const filterSetName = `[FILTER_${uid}]`
+  const members = filterMembers(filter, e.originalItem.HIERARCHY_UNIQUE_NAME)
+
   return {
-    with: withSection,
-    select: selectSection,
+    with: `SET ${filterSetName} AS 'VisualTotals(Distinct(Hierarchize(${members})))' `,
+    select: `Hierarchize(Intersect(AddCalculatedMembers({${rootLevel.LEVEL_UNIQUE_NAME}.members}), ${filterSetName}))`,
   }
 }
