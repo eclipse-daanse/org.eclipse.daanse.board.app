@@ -80,10 +80,10 @@ const isValidSelection = computed(() => {
       />
 
       <!-- A page that is not in the list yet - one being built, or one from
-           a board that has not loaded - can still be reached by its path.
-           It used to sit behind a disclosure inside the section; the way
-           out of a list that does not have your page in it is worth
-           seeing before you need it. -->
+          a board that has not loaded - can still be reached by its path.
+          It used to sit behind a disclosure inside the section; the way
+          out of a list that does not have your page in it is worth
+          seeing before you need it. -->
       <div class="manual-path">
         <p class="manual-path__note">{{ t('Settings.manualPath') }}</p>
         <DInput v-model="widgetSettings.path" :label="t('Settings.path')" />

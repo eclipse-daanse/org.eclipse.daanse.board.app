@@ -88,7 +88,7 @@ onMounted(() => {
   <div>
     <DSelect v-model="config.connection" :label="t('Settings.connection')" :options="connectionsFiltered" />
     <!-- A label copied out of the framework's own markup once, down to the
-         id of the field it belonged to. It is a label. -->
+        id of the field it belonged to. It is a label. -->
     <label class="query__label" for="yasgui">{{ t('Sparql.query') }}</label>
     <div id="yasgui" ref="yasgui"></div>
   </div>

@@ -225,7 +225,7 @@ const resultTimeEndDT = createDateTimeComputed(() => timeWrappers.resultTimeEnd)
 
         <!-- History Configuration -->
         <!-- A disclosure, which the browser already has. Its open state is
-             the setting it guards, so opening it turns history on. -->
+            the setting it guards, so opening it turns history on. -->
         <details class="history" :open="config.history.enabled">
           <summary class="history__head" @click.prevent="config.history.enabled = !config.history.enabled">
             <DIcon name="history" size="sm" tone="color-dim" />{{ t('Ogcsta.history') }}

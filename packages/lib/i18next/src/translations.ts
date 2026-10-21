@@ -68,7 +68,7 @@ export class TranslationTracker {
     const gone = this.held.filter((translations) => !current.includes(translations))
     for (const translations of gone) removeTranslations(translations)
     /* A namespace is one package's, but should two offer it, removing one
-       must not take the other's texts with it. */
+      must not take the other's texts with it. */
     const emptied = new Set(gone.map((translations) => translations.namespace))
     for (const translations of current) {
       if (!this.held.includes(translations) || emptied.has(translations.namespace)) addTranslations(translations)

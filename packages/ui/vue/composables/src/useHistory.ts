@@ -322,7 +322,7 @@ export function useHistory(root: MaybeRefOrGetter<EObject | undefined>): History
     end,
 
     /* Free functions, not methods: a caller that pulls `record` out of the
-       object still gets a working one. */
+      object still gets a working one. */
     record(label, change) {
       begin(label)
       try {

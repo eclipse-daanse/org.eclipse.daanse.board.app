@@ -295,8 +295,8 @@ defineExpose({
     </template>
 
     <!-- Four steps, taken in order, so they are numbered and the one being
-         taken is marked. The framework's stepper did the same and brought
-         a controls bar that had to be hidden. -->
+        taken is marked. The framework's stepper did the same and brought
+        a controls bar that had to be hidden. -->
     <ol class="steps" :aria-label="t('Finder.steps.label')">
       <li
         v-for="(entry, index) in steps"

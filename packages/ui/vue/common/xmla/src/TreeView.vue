@@ -82,7 +82,7 @@ function matches(node: Node): boolean {
 const shown = computed(() => props.nodes.filter(matches))
 
 /* A search says which branches to open by itself: a match three levels
-   down is no use behind three closed rows. */
+  down is no use behind three closed rows. */
 function showsOpen(node: Node): boolean {
   return isOpen(node) || (!!props.filter?.trim() && (node.children ?? []).some(matches))
 }

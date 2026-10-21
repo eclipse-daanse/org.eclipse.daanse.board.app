@@ -160,7 +160,7 @@ function openRestored(ids: string[]) {
 
 <template>
   <div class="boards">
-   <div class="boards__panel">
+  <div class="boards__panel">
     <header class="boards__bar">
       <div class="boards__views" role="tablist" :aria-label="t('Boards.views')">
         <button
@@ -243,7 +243,7 @@ function openRestored(ids: string[]) {
 
     <WorkspaceStorage v-else @restored="openRestored" />
     </div>
-   </div>
+  </div>
   </div>
 </template>
 
@@ -253,7 +253,7 @@ function openRestored(ids: string[]) {
   flex-direction: column;
   gap: 12px;
   /* The same frame the grid view has, so switching tabs does not move the
-     content it shows. */
+    content it shows. */
   padding: 16px;
   max-width: 640px;
 }
@@ -336,7 +336,7 @@ function openRestored(ids: string[]) {
 
 .boards {
   /* The page container is a column flexbox; without this the launcher
-     shrinks to its content width instead of filling the surface. */
+    shrinks to its content width instead of filling the surface. */
   display: flex;
   width: 100%;
   flex: 1 1 auto;
@@ -372,7 +372,7 @@ function openRestored(ids: string[]) {
 }
 
 /* The panel's top edge: the switch on the left, the tools for the current
-   view on the right. */
+  view on the right. */
 .boards__bar {
   display: flex;
   align-items: center;

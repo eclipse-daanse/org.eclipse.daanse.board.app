@@ -97,8 +97,8 @@ const blocks = computed(() => {
   margin: 2px 0 0 2px;
   border-radius: 2px;
   /* On the dark ground a lit edge reads as a block where a filled area only
-     reads as a stain - so the outline carries the family and the fill stays
-     barely there. The arrangement is what has to come across, not the hue. */
+    reads as a stain - so the outline carries the family and the fill stays
+    barely there. The arrangement is what has to come across, not the hue. */
   border: 1px solid color-mix(in srgb, currentColor 70%, transparent);
   background-color: color-mix(in srgb, currentColor 14%, transparent);
 }

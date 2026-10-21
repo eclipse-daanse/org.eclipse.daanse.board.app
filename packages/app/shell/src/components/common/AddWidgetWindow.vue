@@ -132,7 +132,7 @@ watch(selectedType, (newType) => {
 
 <style scoped>
 /* A list, not a tile grid - that is what the mockups' palette is, and it
-   survives a 240px column. */
+  survives a 240px column. */
 .widgets_grid {
   display: flex;
   flex-direction: column;
@@ -181,7 +181,7 @@ watch(selectedType, (newType) => {
 }
 
 /* Docked into the palette panel of the editor (mockup screen 4) - the panel
-   owns position, width and header now. */
+  owns position, width and header now. */
 .add_widget_window {
   position: relative;
   width: 100%;

@@ -32,7 +32,7 @@ one that was always there.
 
     <fields xsi:type="uimodel:GroupWidget" name="picturesGroup" layout="VERTICAL" label="image:Form.picturesGroup">
       <!-- A list: each entry is a form of its own, built from
-           ImageGalleryItem. -->
+          ImageGalleryItem. -->
       <fields xsi:type="uimodel:InputWidget"
           name="images"
           feature="http://org.eclipse.daanse.board.app.ui.vue.widget.image#//ImageSettings/images"

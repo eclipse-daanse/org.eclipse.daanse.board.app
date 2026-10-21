@@ -175,7 +175,7 @@ onMounted(async () => {
     <!-- Error/fallback state with more detailed info -->
     <div v-else class="no-layout-message">
       <!-- Not an alert component: a page without a layout is a state to
-           explain, and what it needs is the sentence. -->
+          explain, and what it needs is the sentence. -->
       <p class="no-layout-message__text">
         <DIcon name="warning" size="lg" tone="color-warn" />
         <span v-if="!currentPage">

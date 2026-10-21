@@ -159,7 +159,7 @@ const toogleFormat = (format: any) => {
       </div>
 
       <!-- A chip per format, dimmed when it is not in the filter. It used
-           to carry a colour of its own; the name is what identifies it. -->
+          to carry a colour of its own; the name is what identifies it. -->
       <div class="list_of_formats">
         <DChip
           v-for="format in formats"

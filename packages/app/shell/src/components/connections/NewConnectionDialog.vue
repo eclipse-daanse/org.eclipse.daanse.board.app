@@ -61,7 +61,7 @@ const doc = computed(() =>
 )
 
 /* Every tag already in use, so the same thing is not filed twice under two
-   spellings. */
+  spellings. */
 const knownTags = computed(() => {
   const all = new Set<string>()
   for (const connection of held.value as any[]) {
@@ -71,7 +71,7 @@ const knownTags = computed(() => {
 })
 
 /* A new type is a new set of fields; what was typed for the old one does
-   not belong to it. */
+  not belong to it. */
 watch(type, () => {
   config.value = {}
 })
@@ -103,11 +103,11 @@ function create() {
   const connection = connections.createConnection(type.value, { ...config.value })
   connection.name = name.value.trim()
   /* Empty means "the one the type carries" - storing that here would freeze
-     a default that should follow the type. */
+    a default that should follow the type. */
   if (icon.value.trim()) connection.icon = icon.value.trim()
   for (const tag of tags.value) connection.tags.add(tag)
   /* Same as for a data source: a configuration that is not complete yet
-     leaves a connection that is modelled but not live. */
+    leaves a connection that is modelled but not live. */
   try {
     connections.saveConnection(connection)
   } catch (error) {

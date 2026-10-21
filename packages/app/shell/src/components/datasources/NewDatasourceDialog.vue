@@ -168,7 +168,7 @@ function create() {
   const datasource = datasources.createDatasource(type.value, settings)
   datasource.name = name.value.trim()
   /* Empty means "the one the type carries" - storing that here would freeze
-     a default that should follow the type. */
+    a default that should follow the type. */
   if (icon.value.trim()) datasource.icon = icon.value.trim()
   for (const tag of tags.value) datasource.tags.add(tag)
   /* The settings name the connection by id; the model holds the reference. */

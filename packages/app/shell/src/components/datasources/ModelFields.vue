@@ -58,7 +58,7 @@ function isEmpty(feature: FeatureDoc): boolean {
 
 function label(feature: FeatureDoc): string {
   /* resourceUrl -> Resource url: the model's name, made readable, with no
-     dictionary in between to go stale. */
+    dictionary in between to go stale. */
   const spaced = feature.name.replace(/([a-z0-9])([A-Z])/g, '$1 $2').replace(/_/g, ' ')
   return spaced.charAt(0).toUpperCase() + spaced.slice(1)
 }

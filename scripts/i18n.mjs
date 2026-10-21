@@ -269,8 +269,10 @@ function usedKeys(known) {
           const m = QUALIFIED.exec(label)
           if (m && known.has(m[1])) note(label)
         }
-        /* An option's label is an expression inside an attribute, with the
-           keys in single quotes. */
+        /*
+         * An option's label is an expression inside an attribute, with
+         * the keys in single quotes.
+         */
         for (const [, literal] of model.matchAll(/'([^'\n]*)'/g)) {
           const m = QUALIFIED.exec(literal)
           if (m && known.has(m[1])) note(literal)

@@ -436,7 +436,7 @@ defineExpose({ placement: place, keepInView })
 }
 
 /* Fastened to a side: square against the edge it holds, and no border
-   shared with it */
+  shared with it */
 .fw--docked {
   border-radius: 0;
 }

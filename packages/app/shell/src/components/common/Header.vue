@@ -759,7 +759,7 @@ const openAppearance = () => router.push('/appearance')
 }
 
 /* The open page is marked, not hidden: a list that drops its own entry
-   makes you count to work out where you are */
+  makes you count to work out where you are */
 .pages__item.on {
   color: var(--color-accent);
 }

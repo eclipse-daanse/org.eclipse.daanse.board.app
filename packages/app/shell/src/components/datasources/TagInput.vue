@@ -82,7 +82,7 @@ function onKey(event: KeyboardEvent) {
         </DChip>
       </div>
       <!-- The design system's own input, so this field's left edge and
-           frame are the ones every other field has. -->
+          frame are the ones every other field has. -->
       <DInput
         v-model="draft"
         :placeholder="t('Tags.placeholder')"

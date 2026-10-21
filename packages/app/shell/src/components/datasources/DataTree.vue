@@ -93,7 +93,7 @@ const { t } = useTranslation('shell')
 const emit = defineEmits<{
   findEndpoints: []
   /* Which half of the selection to show - the menu asks for one by name,
-     where a plain click leaves the page to its own default. */
+    where a plain click leaves the page to its own default. */
   view: [view: 'settings' | 'preview']
 }>()
 
@@ -101,7 +101,7 @@ const search = ref('')
 const collapsed = ref<Set<string>>(new Set())
 
 /* Not a connection uid - a heading that groups what reads from sources
-   rather than from an endpoint. */
+  rather than from an endpoint. */
 const COMPOSED = '\u0000composed'
 
 /** Whether a type composes other sources instead of reading an endpoint. */
@@ -128,7 +128,7 @@ function iconFor(held: any, kind: 'connection' | 'source'): string {
 }
 
 /* Two tags fit beside a name without pushing it out; the rest are counted.
-   The name is what you read a row by. */
+  The name is what you read a row by. */
 const TAGS_SHOWN = 2
 
 /** EList or plain array, depending on where the object came from. */
@@ -161,14 +161,14 @@ const groups = computed(() => {
 
   const known: Group[] = connections.value.map((connection) => ({
     /* A connection just created has no type yet, and the row says so by
-       showing none - the model has every feature optional for that reason. */
+      showing none - the model has every feature optional for that reason. */
     uid: connection.uid ?? '',
     name: connection.name ?? '',
     type: connection.type ?? '',
     orphan: false,
     sources: sourcesOf(connection.uid),
     /* A connection stays visible while its own name matches, even with no
-       source under it - otherwise searching would hide where to add one. */
+      source under it - otherwise searching would hide where to add one. */
     itself: matches(connection.name, connection.type, connection.uid, ...tagsOf(connection)),
     icon: iconFor(connection, 'connection'),
     tags: tagsOf(connection),
@@ -190,8 +190,8 @@ const groups = computed(() => {
     .filter((source: any) => matches(source.name, source.type, source.uid, ...tagsOf(source)))
 
   /* A composer reads from other sources, so having no connection is its
-     normal state - not the same thing as a source that lost one. Listing
-     both under "Ohne Verbindung" made every composer look broken. */
+    normal state - not the same thing as a source that lost one. Listing
+    both under "Ohne Verbindung" made every composer look broken. */
   const composed: Row[] = unattached.filter((source: any) => isComposer(source.type)).map(row)
   const loose: Row[] = unattached.filter((source: any) => !isComposer(source.type)).map(row)
 
@@ -314,7 +314,7 @@ function onMenuChoice(id: string) {
   if (target.what === 'connection') {
     if (id === 'edit') select('Connection', target.uid)
     /* The dialog picks the connection itself; selecting it first is what
-       makes it the obvious one to choose. */
+      makes it the obvious one to choose. */
     if (id === 'add-source') {
       select('Connection', target.uid)
       creatingFor.value = target.uid
@@ -453,7 +453,7 @@ const removingUsage = computed(() => {
                 "
               >
                 <!-- Empty, but the same width as a connection's chevron: the
-                     row below has to start where the row above starts. -->
+                    row below has to start where the row above starts. -->
                 <span class="row__twist row__twist--none" aria-hidden="true" />
                 <button type="button" class="row__body" @click="select('DataSource', source.uid)">
                   <DIcon :name="source.icon" size="sm" class="row__icon" />
@@ -573,7 +573,7 @@ const removingUsage = computed(() => {
 
 .tree__sources {
   /* One step, the width of the chevron column: a source's icon lands under
-     its connection's name, which is what makes the nesting readable. */
+    its connection's name, which is what makes the nesting readable. */
   padding-left: 22px;
 }
 
@@ -582,7 +582,7 @@ const removingUsage = computed(() => {
   align-items: center;
   gap: 2px;
   /* The hover and selection band still runs the full width; only what is
-     inside it starts at the gutter. */
+    inside it starts at the gutter. */
   padding-left: 10px;
   padding-right: 4px;
 }
@@ -628,7 +628,7 @@ const removingUsage = computed(() => {
   color: var(--color-fg);
   cursor: pointer;
   /* A row with tags is two lines rather than a name squeezed out of its
-     own row: the name is what you read it by. */
+    own row: the name is what you read it by. */
   flex-wrap: wrap;
 }
 
@@ -661,7 +661,7 @@ const removingUsage = computed(() => {
 }
 
 /* A tag is a word, not a chip: a row holding several of them turns into a
-   bar of pills otherwise, and the name stops being the thing you read. */
+  bar of pills otherwise, and the name stops being the thing you read. */
 .row__tag {
   flex: none;
   max-width: 84px;
@@ -710,7 +710,7 @@ const removingUsage = computed(() => {
  */
 .tree__none {
   /* 36px inside a list that is already indented 22: the text lands on the
-     icon edge of the sources it stands in for. */
+    icon edge of the sources it stands in for. */
   padding: 6px 10px 6px 36px;
   font-family: var(--font-sans);
   font-size: var(--text-xs);

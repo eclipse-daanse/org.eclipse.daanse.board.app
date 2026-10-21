@@ -115,7 +115,7 @@ const onChange = (given: unknown) => {
     </div>
 
     <!-- The switch, and whether it is thrown: bound is the accent, typed
-         in is the quiet colour every other secondary mark uses. -->
+        in is the quiet colour every other secondary mark uses. -->
     <button
       type="button"
       class="toggle"

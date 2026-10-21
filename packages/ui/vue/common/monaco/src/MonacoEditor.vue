@@ -180,7 +180,7 @@ watch(() => props.modelValue, (newValue) => {
             </slot>
         </div>
         <!-- Not called monaco-editor: that is Monaco's own class, and its
-             stylesheet would style this as if it were the editor. -->
+            stylesheet would style this as if it were the editor. -->
         <div ref="editorContainer" class="editor-surface mt-2"></div>
     </div>
 </template>

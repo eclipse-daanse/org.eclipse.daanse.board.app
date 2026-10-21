@@ -642,7 +642,7 @@ onMounted(() => {
 
   if (widgetSettings.value && widgetSettings.value.timelineMin) {
     /* By the model's names: the settings object may be a generated
-       instance, whose own properties are the private fields */
+      instance, whose own properties are the private fields */
     Object.assign(settings.value, plainSettings(widgetSettings.value));
     useCurrentTimeAsMax.value = !widgetSettings.value.timelineMax;
 

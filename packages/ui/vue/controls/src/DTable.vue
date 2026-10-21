@@ -151,7 +151,7 @@ tbody tr:hover {
 }
 
 /* Marked by a rule down its side rather than a fill: a fill of the accent
-   would fight the hover, and both have to be readable at once. */
+  would fight the hover, and both have to be readable at once. */
 .row--on td:first-child {
   box-shadow: inset 2px 0 0 var(--color-accent);
 }

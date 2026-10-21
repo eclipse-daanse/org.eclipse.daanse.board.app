@@ -65,7 +65,7 @@ from, so they still come from the hand-written component beside this.
 
     <fields xsi:type="uimodel:GroupWidget" name="seriesGroup" layout="VERTICAL" label="chart:Form.seriesGroup">
       <!-- A list: each entry is a form of its own, built from SeriesSettings.
-           What a series does not set falls back to the values below. -->
+          What a series does not set falls back to the values below. -->
       <fields xsi:type="uimodel:InputWidget"
           name="seriesSettings"
           feature="http://org.eclipse.daanse.board.app.ui.vue.widget.chart#//ChartSettings/seriesSettings"
@@ -97,8 +97,8 @@ from, so they still come from the hand-written component beside this.
           feature="http://org.eclipse.daanse.board.app.ui.vue.widget.chart#//ChartSettings/fill"
           label="chart:Form.fill"/>
       <!-- Always shown: this is what a bar, a pie or a doughnut is painted
-           with, so hiding it behind "fill" made the colour unreachable for
-           every chart type that is not a line. -->
+          with, so hiding it behind "fill" made the colour unreachable for
+          every chart type that is not a line. -->
       <fields xsi:type="uimodel:InputWidget"
           name="backgroundColor"
           feature="http://org.eclipse.daanse.board.app.ui.vue.widget.chart#//ChartSettings/backgroundColor"
