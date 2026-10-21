@@ -24,14 +24,19 @@ stays invisible for months (#1068). Findings already filed sit in the script's
 `useEObject`, `useEList` and `useFeature` (`packages/ui/vue/composables/src/useEmf.ts`)
 attach an `EContentAdapter`. That adapter reacts **only** to containment
 references and descends **only** through `eContents()`. A change inside an
-object held by a non-containment reference is not seen, however correctly it
-calls `eNotify`.
+object held by a non-containment reference is not seen by it, however correctly
+that object calls `eNotify` — listen to such an object directly instead, which
+is what `wrapperReactivity.ts` does for settings wrappers.
 
-So reactivity is not something to arrange per widget. If a change does not
-arrive, the question is where the object sits in the containment tree, not
-which `ref` is missing. Where a second mechanism is genuinely unavoidable, it
-is written down at the place it lives and carries an issue number —
-`packages/ui/vue/composables/src/wrapperReactivity.ts` is the one such case.
+Two things follow, and both have cost us weeks.
+
+A feature *replaced* is a change like any other, but reading it straight off
+the object is not something Vue re-runs. Read through the watched ref —
+`watched.value?.config`, not `widget.config` — or the component keeps the
+instance it mounted with (#1093).
+
+`useEObject`'s watch flushes before render, not synchronously. Inside a
+component that is invisible; in a test, await a tick.
 
 Do not wrap an EObject in `reactive()` and do not `cloneDeep` one: both copy
 `_eAdapters` and `_eContainer` and break identity silently.
@@ -62,9 +67,12 @@ No `link:` or `file:` dependencies on local paths. They resolve on the machine
 that wrote them and fail `yarn install` in CI.
 
 A package's `manifest.json` lists what it expects the import map to provide.
-`@emfts/core` is served by the Vue platform bundle alone; a package that
-imports it without declaring it gets a second copy, and with it a second
-`EPackageRegistry.INSTANCE` whose contents nobody else can see.
+`@emfts/core` is served by `platform.system`, the base platform bundle; a
+package that imports it without declaring it gets a second copy, and with it a
+second `EPackageRegistry.INSTANCE` whose contents nobody else can see. It used
+to be served by the Vue platform bundle, which forced every package wanting an
+EObject to depend on Vue's — that is what kept the variable wrappers outside
+the model for months (#1068).
 
 ## Language
 

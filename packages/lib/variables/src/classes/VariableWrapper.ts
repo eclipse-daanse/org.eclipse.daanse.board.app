@@ -71,14 +71,23 @@ class VariableWrapper<T> extends VariableWrapperImpl {
     this.isSet = true
   }
 
-  override get value(): T {
+  /*
+   * Typed loosely on purpose. The class carries a <T>, but emfts-codegen
+   * does not carry a type parameter into what it generates - both the
+   * generated interface and its implementation fix `value` to EObject, so
+   * an override typed T is not assignable to the base and the package does
+   * not compile. Widening here keeps every call site reading the value it
+   * actually holds; narrowing it again is a generator question, filed as
+   * emf.ts.codegen generics.
+   */
+  override get value(): any {
     observer?.read(this)
-    return super.value as unknown as T
+    return super.value
   }
 
   // TODO: Memory leak - the subscription in setTo is an anonymous closure
   // and cannot be handed back to unsubscribe.
-  override set value(isn: T) {
+  override set value(isn: any) {
     this.reference = undefined
     this.isSet = false
     /*
@@ -87,7 +96,7 @@ class VariableWrapper<T> extends VariableWrapperImpl {
      * got an answer that was no longer true.
      */
     this.variable = undefined as unknown as string
-    super.value = isn as unknown as EObject
+    super.value = isn
   }
 }
 export { VariableWrapper, TYPE as VARIABLEWRAPPER }
