@@ -20,22 +20,28 @@
  * would mean knowing every class in advance, and doing it again for each
  * new one.
  */
-import { EPackageRegistry, type EClass, type EStructuralFeature } from '@emfts/core'
+import { type EClass, type EStructuralFeature } from '@emfts/core'
 import { componentRegistry } from '@emfts/vue-registry'
+import { VariablesPackage } from 'org.eclipse.daanse.board.app.lib.variables'
 import SettingsListWidget from './SettingsListWidget.vue'
 import SettingsObjectWidget from './SettingsObjectWidget.vue'
 import SettingsFieldWidget from './SettingsFieldWidget.vue'
-
-const COMPOSABLES_NS = 'org.eclipse.daanse.board.app.ui.vue.composables'
 
 let done = false
 
 export function registerWrapperRenderer(): boolean {
   if (done) return true
 
-  const target = EPackageRegistry.INSTANCE.getEPackage(COMPOSABLES_NS)?.getEClassifier(
-    'VariableWrapper',
-  ) as EClass | undefined
+  /*
+   * Asked of the package itself rather than looked up by nsURI. The nsURI
+   * used to be written out here as a string, and when VariableWrapper moved
+   * to lib.variables the string still compiled, still found nothing, and
+   * every settings field quietly fell back to a textarea holding
+   * "[object Object]". A renamed package is now a build error.
+   */
+  const target = VariablesPackage.eINSTANCE.getEClassifier('VariableWrapper') as
+    | EClass
+    | undefined
 
   if (!target) {
     // The package registers itself when its bundle loads; until then there
