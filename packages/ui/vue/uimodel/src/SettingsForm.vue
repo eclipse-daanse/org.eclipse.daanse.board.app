@@ -30,7 +30,7 @@ import { computed, markRaw, onMounted, provide, shallowRef, watch } from 'vue'
 import type { EObject, EPackage } from '@emfts/core'
 import { UIModelComposer, bumpExpressionTick } from '@emfts/uimodel-composer'
 import type { UIModel } from '@emfts/uimodel-composer'
-import { useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+import { registerModelDocs, useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import { componentRegistry, COMPONENT_REGISTRY_KEY } from '@emfts/vue-registry'
 import { UimodelPackage } from '@emfts/uimodel-composer'
 import { asModel } from './adopt'
@@ -102,9 +102,21 @@ const props = defineProps<{
    * derived from its class.
    */
   entryForms?: Array<{ xmi: string; uri?: string }>
+  /**
+   * The Ecore this form is written for, as text. Registering it is what
+   * lets each field show the sentence its model carries.
+   */
+  ecore?: string
   /** Shown when the object has no features to edit. */
   emptyText?: string
 }>()
+
+/*
+ * Taking the model in is idempotent and keyed by nsURI, so handing over the
+ * same file on every render costs nothing after the first - which is why it
+ * can sit here rather than in a lifecycle hook.
+ */
+watch(() => props.ecore, (ecore) => { if (ecore) registerModelDocs(ecore) }, { immediate: true })
 
 /*
  * Adopting replaces the object the caller holds, so it happens once and the
@@ -192,8 +204,8 @@ const hasFields = computed(() => (model.value?.eClass?.().getEStructuralFeatures
 }
 
 /* The composer draws the group's own label (emf.ts.ui#10); the spacing
-   and the rule are ours, so a group reads as a block rather than as a
-   heading with fields loosely under it. */
+  and the rule are ours, so a group reads as a block rather than as a
+  heading with fields loosely under it. */
 .settings-form :deep(.uim-c-GroupWidget) {
   padding-top: 10px;
   margin-top: 12px;

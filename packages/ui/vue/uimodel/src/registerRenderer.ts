@@ -20,26 +20,43 @@
  * would mean knowing every class in advance, and doing it again for each
  * new one.
  */
-import { EPackageRegistry, type EClass, type EStructuralFeature } from '@emfts/core'
+import { type EClass, type EStructuralFeature } from '@emfts/core'
 import { componentRegistry } from '@emfts/vue-registry'
+import { VariablesPackage } from 'org.eclipse.daanse.board.app.lib.variables'
 import SettingsListWidget from './SettingsListWidget.vue'
 import SettingsObjectWidget from './SettingsObjectWidget.vue'
 import SettingsFieldWidget from './SettingsFieldWidget.vue'
-
-const COMPOSABLES_NS = 'org.eclipse.daanse.board.app.ui.vue.composables'
 
 let done = false
 
 export function registerWrapperRenderer(): boolean {
   if (done) return true
 
-  const target = EPackageRegistry.INSTANCE.getEPackage(COMPOSABLES_NS)?.getEClassifier(
-    'VariableWrapper',
-  ) as EClass | undefined
+  /*
+   * Asked of the package itself rather than looked up by nsURI. The nsURI
+   * used to be written out here as a string, and when VariableWrapper moved
+   * to lib.variables the string still compiled, still found nothing, and
+   * every settings field quietly fell back to a textarea holding
+   * "[object Object]". A renamed package is now a build error.
+   */
+  const target = VariablesPackage.eINSTANCE.getEClassifier('VariableWrapper') as
+    | EClass
+    | undefined
 
   if (!target) {
-    // The package registers itself when its bundle loads; until then there
-    // is nothing to register against and the caller tries again later
+    /*
+     * Said out loud, because the symptom is not. Without this registration
+     * the composer draws every setting with its fallback widget - a
+     * textarea holding "[object Object]" - and nothing throws, warns or
+     * looks broken until someone opens a settings dialog and tries to type
+     * in it. The comment that used to sit here claimed the caller would try
+     * again later; no caller ever did (#1091).
+     */
+    console.error(
+      'uimodel: VariableWrapper is missing from ' +
+        VariablesPackage.eINSTANCE.getNsURI() +
+        ' - every widget setting will be drawn with the fallback widget.',
+    )
     return false
   }
 

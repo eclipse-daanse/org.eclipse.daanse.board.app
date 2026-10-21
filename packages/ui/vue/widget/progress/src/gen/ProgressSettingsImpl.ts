@@ -20,7 +20,7 @@
 
 import { BasicEObject } from '@emfts/core';
 import type { EClass, EStructuralFeature } from '@emfts/core';
-import { VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables';
+import { VariableWrapper } from 'org.eclipse.daanse.board.app.lib.variables';
 import { HorizontalAlign } from './HorizontalAlign.js';
 import { VerticalAlign } from './VerticalAlign.js';
 import type { ProgressSettings } from './ProgressSettings.js';

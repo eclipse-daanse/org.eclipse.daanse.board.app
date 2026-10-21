@@ -28,7 +28,7 @@ import { ComposablesFactory } from './ComposablesFactory.js';
  */
 export class ComposablesPackage extends BasicEPackage {
   static readonly eNAME = 'composables';
-  static readonly eNS_URI = 'org.eclipse.daanse.board.app.ui.vue.composables';
+  static readonly eNS_URI = 'http://org.eclipse.daanse.board.app.ui.vue.composables';
   static readonly eNS_PREFIX = 'composables';
 
   // Singleton instance
@@ -46,11 +46,6 @@ export class ComposablesPackage extends BasicEPackage {
    * Literals for quick access to metaclasses and features
    */
   static readonly Literals = {
-    VARIABLE_WRAPPER: null as unknown as EClass,
-    VARIABLE_WRAPPER__VALUE: null as unknown as EAttribute | EReference,
-    VARIABLE_WRAPPER__VARIABLE: null as unknown as EAttribute | EReference,
-    VARIABLE_WRAPPER__IS_SET: null as unknown as EAttribute | EReference,
-    VARIABLE_WRAPPER__TYPE: null as unknown as EAttribute | EReference,
     VARIABLE_COMPLEX_STRING_WRAPPER: null as unknown as EClass,
     VARIABLE_COMPLEX_STRING_WRAPPER__VALUE: null as unknown as EAttribute | EReference,
     VARIABLE_COMPLEX_STRING_WRAPPER__TYPE: null as unknown as EAttribute | EReference,
@@ -73,47 +68,6 @@ export class ComposablesPackage extends BasicEPackage {
     EPackageRegistry.INSTANCE.set(ComposablesPackage.eNS_URI, this);
     // Wire the generated factory so loaded/created instances are typed Impls.
     this.setEFactoryInstance(ComposablesFactory.eINSTANCE);
-
-    // Create VariableWrapper class
-    const variableWrapperClass = new BasicEClass();
-    variableWrapperClass.setName('VariableWrapper');
-    variableWrapperClass.setAbstract(false);
-    variableWrapperClass.setInterface(false);
-    this.getEClassifiers().push(variableWrapperClass);
-    variableWrapperClass.setEPackage(this);
-    ComposablesPackage.Literals.VARIABLE_WRAPPER = variableWrapperClass;
-
-    // Create value feature
-    const variableWrapper_value = new BasicEAttribute();
-    variableWrapper_value.setName('value');
-    variableWrapper_value.setLowerBound(0);
-    variableWrapper_value.setUpperBound(1);
-    variableWrapperClass.getEStructuralFeatures().push(variableWrapper_value);
-    ComposablesPackage.Literals.VARIABLE_WRAPPER__VALUE = variableWrapper_value;
-
-    // Create variable feature
-    const variableWrapper_variable = new BasicEAttribute();
-    variableWrapper_variable.setName('variable');
-    variableWrapper_variable.setLowerBound(0);
-    variableWrapper_variable.setUpperBound(1);
-    variableWrapperClass.getEStructuralFeatures().push(variableWrapper_variable);
-    ComposablesPackage.Literals.VARIABLE_WRAPPER__VARIABLE = variableWrapper_variable;
-
-    // Create isSet feature
-    const variableWrapper_isSet = new BasicEAttribute();
-    variableWrapper_isSet.setName('isSet');
-    variableWrapper_isSet.setLowerBound(0);
-    variableWrapper_isSet.setUpperBound(1);
-    variableWrapperClass.getEStructuralFeatures().push(variableWrapper_isSet);
-    ComposablesPackage.Literals.VARIABLE_WRAPPER__IS_SET = variableWrapper_isSet;
-
-    // Create type feature
-    const variableWrapper_type = new BasicEAttribute();
-    variableWrapper_type.setName('type');
-    variableWrapper_type.setLowerBound(0);
-    variableWrapper_type.setUpperBound(1);
-    variableWrapperClass.getEStructuralFeatures().push(variableWrapper_type);
-    ComposablesPackage.Literals.VARIABLE_WRAPPER__TYPE = variableWrapper_type;
 
     // Create VariableComplexStringWrapper class
     const variableComplexStringWrapperClass = new BasicEClass();
@@ -150,10 +104,6 @@ export class ComposablesPackage extends BasicEPackage {
     // An EAttribute without eType leaves the XMI reader no EDataType to
     // convert against - every value would arrive as a raw string (#37)
     // ============================================
-    (ComposablesPackage.Literals.VARIABLE_WRAPPER__VALUE as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EObject')!);
-    (ComposablesPackage.Literals.VARIABLE_WRAPPER__VARIABLE as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
-    (ComposablesPackage.Literals.VARIABLE_WRAPPER__IS_SET as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EBoolean')!);
-    (ComposablesPackage.Literals.VARIABLE_WRAPPER__TYPE as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
     (ComposablesPackage.Literals.VARIABLE_COMPLEX_STRING_WRAPPER__VALUE as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EObject')!);
     (ComposablesPackage.Literals.VARIABLE_COMPLEX_STRING_WRAPPER__TYPE as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
 

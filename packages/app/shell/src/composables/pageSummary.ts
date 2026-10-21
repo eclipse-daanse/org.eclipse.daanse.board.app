@@ -35,6 +35,8 @@ export interface PageSummary {
 interface WidgetLike {
   uid?: string
   type?: string
+  /** The model's reference; a board from before it carries the id below. */
+  datasource?: { uid?: string }
   config?: { datasourceId?: string }
 }
 
@@ -59,7 +61,9 @@ export function summarizePage(
   }
 
   const sources = new Set(
-    list.map((w) => w?.config?.datasourceId).filter((d): d is string => Boolean(d)),
+    list
+      .map((w) => w?.datasource?.uid ?? w?.config?.datasourceId)
+      .filter((d): d is string => Boolean(d)),
   )
   const kinds = [...new Set(list.map((w) => shortKind(w?.type ?? '')).filter(Boolean))]
 

@@ -20,7 +20,7 @@
 
 import { BasicEObject } from '@emfts/core';
 import type { EClass, EStructuralFeature } from '@emfts/core';
-import type { VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables';
+import type { VariableWrapper } from 'org.eclipse.daanse.board.app.lib.variables';
 import type { SvgConfigItem } from './SvgConfigItem.js';
 import { SvgwidgetsPackage } from './SvgwidgetsPackage.js';
 

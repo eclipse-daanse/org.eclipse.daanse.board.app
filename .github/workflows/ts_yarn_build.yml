@@ -47,6 +47,11 @@ jobs:
         env:
           NODE_OPTIONS: --max_old_space_size=65536
 
+      # The job has been called "Build & Test" since it was written and ran
+      # no tests. It runs them now.
+      - name: Test
+        run: yarn run test
+
       - name: Build browser
         working-directory: ./packages/app/default
         run: yarn run build:prod

@@ -22,7 +22,8 @@ import {
   identifier as WidgetIdentifier,
 } from 'org.eclipse.daanse.board.app.lib.api.widget'
 
-import { VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+import { useEObject, VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+import type { EObject } from '@emfts/core'
 import {
   DButton,
   DIcon,
@@ -42,6 +43,49 @@ const { widget, extraActions } = defineProps<{
    */
   extraActions?: Array<{ id: string; icon: string; label: string; danger?: boolean; run: () => void }>
 }>();
+
+/**
+ * Which datasource this widget reads from.
+ *
+ * The model holds it as a reference on the widget. It used to be an id in
+ * the widget's own configuration, and that is still where a board written
+ * before the reference existed carries it - so the reference is asked
+ * first and the configuration answers for the old ones.
+ *
+ * The id cannot be kept in the configuration any more: a widget's settings
+ * are modelled now, so the configuration is itself an EObject and is
+ * written out by its features alone. Anything put beside them is dropped
+ * on save, which is exactly how the assignment used to get lost.
+ *
+ * Watched rather than read off the prop. Changing a feature leaves the
+ * widget the same instance, so the prop does not change and this component
+ * is never asked to render again - which is why the settings preview went
+ * on showing what the widget looked like when the dialog opened, while the
+ * one on the board, re-rendered by its own list, followed along.
+ */
+const watchedWidget = useEObject(() => widget as EObject | undefined)
+
+const datasourceId = computed(
+  () =>
+    (watchedWidget.value as any)?.datasource?.uid ??
+    (watchedWidget.value as any)?.config?.datasourceId,
+)
+
+/*
+ * The settings object, read through the watched widget rather than off the
+ * prop. Opening the settings adopts a stored board into modelled instances
+ * and writes them back, so widget.config is replaced - and a plain property
+ * read in the template is not something Vue re-runs. The preview went on
+ * handing its widget the instance it had mounted with, while the one on the
+ * board, re-rendered by its own list, got the new one (#1093).
+ */
+const config = computed({
+  get: () => (watchedWidget.value as any)?.config,
+  set: (next) => {
+    const held = watchedWidget.value as any
+    if (held) held.config = next
+  },
+})
 
 const emit = defineEmits(['openSettings', 'removeWidget'])
 
@@ -313,8 +357,8 @@ const getpadding = computed(() => {
         :style="{ position: 'relative', opacity: transparency }"
       >
         <div class="scroll">
-          <component :is="availableWidgets[widget.type].component" :config="widget.config"
-            v-model:configv="widget.config" :datasourceId="widget.config.datasourceId" :id="widget.uid || widget.id"
+          <component :is="availableWidgets[widget.type].component" :config="config"
+            v-model:configv="config" :datasourceId="datasourceId" :id="widget.uid || widget.id"
             class="widget_component" />
         </div>
       </div>

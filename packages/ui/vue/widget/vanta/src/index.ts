@@ -20,6 +20,8 @@ import { VantaSettingsImpl } from './gen/VantaSettingsImpl'
 import { VantasettingsPackage } from './gen/VantasettingsPackage'
 /* The form for these settings, written as a model beside the Ecore. */
 import vantaSettingsFormXmi from '../model/ui.xmi?raw'
+/* The Ecore itself, for the sentences the generator drops. */
+import settingsEcore from '../model/model.ecore?raw'
 
 /*
  * Building the EPackage on load: until it exists the class literals are
@@ -54,6 +56,7 @@ export class VantaWidgetProvider implements WidgetProvider {
    */
   readonly settingsForm = {
     xmi: vantaSettingsFormXmi,
+    ecore: settingsEcore,
     uri: '/vanta-settings.ui.xmi',
     ePackage: () => VantasettingsPackage.eINSTANCE,
     create: () => new VantaSettingsImpl(),

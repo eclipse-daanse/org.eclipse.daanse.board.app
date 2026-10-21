@@ -21,6 +21,7 @@
 import { BaseConnectionConfig } from 'org.eclipse.daanse.board.app.lib.connection.base';
 import { Documentation, Attribute, ModelClass } from 'org.eclipse.daanse.board.app.lib.annotations';
 
+@Documentation("A connection to a GraphQL endpoint. Data sources built on it send queries to the single URL a GraphQL server exposes.")
 @ModelClass({ type: 'http://org.eclipse.daanse.board.app.lib.connection.graphql#//IGraphQLConnectionConfiguration' })
 export class IGraphQLConnectionConfiguration extends BaseConnectionConfig {
   @Documentation("The specific URL endpoint for the GraphQL API.\n                                            This attribute overrides the 'url' from BaseConnectionConfig\n                                            to emphasize its specific role in GraphQL connections.")

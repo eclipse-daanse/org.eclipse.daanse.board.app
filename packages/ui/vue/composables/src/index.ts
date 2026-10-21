@@ -21,10 +21,20 @@ import { plainSettings } from './plainSettings'
 import { useEObject, useEList, useFeature } from './useEmf'
 /* What is on one board - its widgets and where they sit. */
 import { useBoard } from './useBoard'
-// VariableWrapper ist Vue-frei und liegt deshalb in lib.variables. Der
-// Re-Export haelt die bestehenden Importpfade gueltig; neuer Code sollte
-// direkt aus org.eclipse.daanse.board.app.lib.variables importieren.
+// VariableWrapper is Vue-free and therefore lives in lib.variables. The
+// re-export keeps the existing import paths working; new code should import
+// it from org.eclipse.daanse.board.app.lib.variables directly.
 import { VariableWrapper,VARIABLEWRAPPER } from 'org.eclipse.daanse.board.app.lib.variables'
+import { trackWrappers } from './wrapperReactivity'
+export { trackWrappers, untrackWrappers } from './wrapperReactivity'
+
+/*
+ * A wrapper's value has to be visible to Vue, and lib.variables cannot see
+ * Vue from where it sits. Started on load: a widget reads a setting the
+ * moment it renders, which is well before anything would get round to
+ * calling this.
+ */
+trackWrappers()
 import { VariableComplexStringWrapper,VARIABLECOMPLEXSTRINGWRAPPER } from './VariableComplexStringWrapper'
 import { EPackageRegistry } from '@emfts/core'
 import { ComposablesPackage } from './gen/ComposablesPackage'

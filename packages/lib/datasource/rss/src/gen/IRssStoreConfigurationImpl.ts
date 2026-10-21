@@ -29,8 +29,8 @@ import { RssstorePackage } from './RssstorePackage.js';
  */
 export class IRssStoreConfigurationImpl extends IBaseConnectionConfigurationImpl implements IRssStoreConfiguration {
   // Feature ID Constants (eLiterals)
-  static readonly RESOURCE_URL: number = 3;
-  static readonly CONNECTION: number = 4;
+  static readonly RESOURCE_URL: number = 4;
+  static readonly CONNECTION: number = 5;
 
   // Private fields
   private _resourceUrl?: string;

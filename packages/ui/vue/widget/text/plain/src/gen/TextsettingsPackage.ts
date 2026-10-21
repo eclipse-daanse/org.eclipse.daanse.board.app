@@ -178,14 +178,14 @@ export class TextsettingsPackage extends BasicEPackage {
     // An EAttribute without eType leaves the XMI reader no EDataType to
     // convert against - every value would arrive as a raw string (#37)
     // ============================================
-    (TextsettingsPackage.Literals.TEXT_SETTINGS__TEXT as BasicEReference).setEType(requireEPackage('org.eclipse.daanse.board.app.ui.vue.composables').getEClassifier('VariableComplexStringWrapper')!);
-    (TextsettingsPackage.Literals.TEXT_SETTINGS__FONT_SIZE as BasicEReference).setEType(requireEPackage('org.eclipse.daanse.board.app.ui.vue.composables').getEClassifier('VariableWrapper')!);
-    (TextsettingsPackage.Literals.TEXT_SETTINGS__FONT_COLOR as BasicEReference).setEType(requireEPackage('org.eclipse.daanse.board.app.ui.vue.composables').getEClassifier('VariableWrapper')!);
-    (TextsettingsPackage.Literals.TEXT_SETTINGS__FONT_WEIGHT as BasicEReference).setEType(requireEPackage('org.eclipse.daanse.board.app.ui.vue.composables').getEClassifier('VariableWrapper')!);
-    (TextsettingsPackage.Literals.TEXT_SETTINGS__FONT_STYLE as BasicEReference).setEType(requireEPackage('org.eclipse.daanse.board.app.ui.vue.composables').getEClassifier('VariableWrapper')!);
-    (TextsettingsPackage.Literals.TEXT_SETTINGS__TEXT_DECORATION as BasicEReference).setEType(requireEPackage('org.eclipse.daanse.board.app.ui.vue.composables').getEClassifier('VariableWrapper')!);
-    (TextsettingsPackage.Literals.TEXT_SETTINGS__HORIZONTAL_ALIGN as BasicEReference).setEType(requireEPackage('org.eclipse.daanse.board.app.ui.vue.composables').getEClassifier('VariableWrapper')!);
-    (TextsettingsPackage.Literals.TEXT_SETTINGS__VERTICAL_ALIGN as BasicEReference).setEType(requireEPackage('org.eclipse.daanse.board.app.ui.vue.composables').getEClassifier('VariableWrapper')!);
+    (TextsettingsPackage.Literals.TEXT_SETTINGS__TEXT as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.ui.vue.composables').getEClassifier('VariableComplexStringWrapper')!);
+    (TextsettingsPackage.Literals.TEXT_SETTINGS__FONT_SIZE as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
+    (TextsettingsPackage.Literals.TEXT_SETTINGS__FONT_COLOR as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
+    (TextsettingsPackage.Literals.TEXT_SETTINGS__FONT_WEIGHT as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
+    (TextsettingsPackage.Literals.TEXT_SETTINGS__FONT_STYLE as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
+    (TextsettingsPackage.Literals.TEXT_SETTINGS__TEXT_DECORATION as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
+    (TextsettingsPackage.Literals.TEXT_SETTINGS__HORIZONTAL_ALIGN as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
+    (TextsettingsPackage.Literals.TEXT_SETTINGS__VERTICAL_ALIGN as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
 
     // ============================================
     // Register XML name mappings from ExtendedMetaData annotations

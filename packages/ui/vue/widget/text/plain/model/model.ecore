@@ -21,49 +21,52 @@
     <eClassifiers xsi:type="ecore:EClass" name="TextSettings">
 
         <eStructuralFeatures xsi:type="ecore:EReference" name="text" containment="false" defaultValueLiteral="">
-            <eGenericType eClassifier="org.eclipse.daanse.board.app.ui.vue.composables#//VariableComplexStringWrapper">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="The text the widget shows. A $value placeholder is replaced with the data of the assigned datasource: $value on its own inserts the whole object, $value.name one of its fields, $value.items.0.title an entry of a list. A {variable} placeholder is replaced with a board variable, which is a different thing."/>
+            </eAnnotations>
+            <eGenericType eClassifier="http://org.eclipse.daanse.board.app.ui.vue.composables#//VariableComplexStringWrapper">
                 <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
             </eGenericType>
         </eStructuralFeatures>
 
         <eStructuralFeatures xsi:type="ecore:EReference" name="fontSize" containment="false" defaultValueLiteral="12">
-            <eGenericType eClassifier="org.eclipse.daanse.board.app.ui.vue.composables#//VariableWrapper">
+            <eGenericType eClassifier="http://org.eclipse.daanse.board.app.lib.variables#//VariableWrapper">
                 <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
             </eGenericType>
         </eStructuralFeatures>
 
         <eStructuralFeatures xsi:type="ecore:EReference" name="fontColor" containment="false" defaultValueLiteral="#000">
-            <eGenericType eClassifier="org.eclipse.daanse.board.app.ui.vue.composables#//VariableWrapper">
+            <eGenericType eClassifier="http://org.eclipse.daanse.board.app.lib.variables#//VariableWrapper">
                 <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
             </eGenericType>
         </eStructuralFeatures>
 
         <eStructuralFeatures xsi:type="ecore:EReference" name="fontWeight" containment="false" defaultValueLiteral="normal">
-            <eGenericType eClassifier="org.eclipse.daanse.board.app.ui.vue.composables#//VariableWrapper">
+            <eGenericType eClassifier="http://org.eclipse.daanse.board.app.lib.variables#//VariableWrapper">
                 <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
             </eGenericType>
         </eStructuralFeatures>
 
         <eStructuralFeatures xsi:type="ecore:EReference" name="fontStyle" containment="false" defaultValueLiteral="normal">
-            <eGenericType eClassifier="org.eclipse.daanse.board.app.ui.vue.composables#//VariableWrapper">
+            <eGenericType eClassifier="http://org.eclipse.daanse.board.app.lib.variables#//VariableWrapper">
                 <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
             </eGenericType>
         </eStructuralFeatures>
 
         <eStructuralFeatures xsi:type="ecore:EReference" name="textDecoration" containment="false" defaultValueLiteral="none">
-            <eGenericType eClassifier="org.eclipse.daanse.board.app.ui.vue.composables#//VariableWrapper">
+            <eGenericType eClassifier="http://org.eclipse.daanse.board.app.lib.variables#//VariableWrapper">
                 <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
             </eGenericType>
         </eStructuralFeatures>
 
         <eStructuralFeatures xsi:type="ecore:EReference" name="horizontalAlign" containment="false" defaultValueLiteral="Left">
-            <eGenericType eClassifier="org.eclipse.daanse.board.app.ui.vue.composables#//VariableWrapper">
+            <eGenericType eClassifier="http://org.eclipse.daanse.board.app.lib.variables#//VariableWrapper">
                 <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
             </eGenericType>
         </eStructuralFeatures>
 
         <eStructuralFeatures xsi:type="ecore:EReference" name="verticalAlign" containment="false" defaultValueLiteral="Top">
-            <eGenericType eClassifier="org.eclipse.daanse.board.app.ui.vue.composables#//VariableWrapper">
+            <eGenericType eClassifier="http://org.eclipse.daanse.board.app.lib.variables#//VariableWrapper">
                 <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
             </eGenericType>
         </eStructuralFeatures>

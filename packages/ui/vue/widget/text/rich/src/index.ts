@@ -20,6 +20,8 @@ import type { RichTextEditorSettings } from './gen/RichTextEditorSettings'
 import { RichTextEditorSettingsImpl } from './gen/RichTextEditorSettingsImpl'
 import { RichTextEditorPackage } from './gen/RichTextEditorPackage'
 import richTextSettingsFormXmi from '../model/ui.xmi?raw'
+/* The Ecore itself, for the sentences the generator drops. */
+import settingsEcore from '../model/model.ecore?raw'
 import { RichTextWidgetEvents } from './events/RichTextWidgetEvents'
 import { RichTextWidgetInterface } from './api/RichTextWidgetInterface'
 import type { EventRegistry, EventActionsRegistry } from 'org.eclipse.daanse.board.app.lib.api.events'
@@ -59,6 +61,7 @@ export class RichTextWidgetProvider implements WidgetProvider {
    */
   readonly settingsForm = {
     xmi: richTextSettingsFormXmi,
+    ecore: settingsEcore,
     uri: '/rich-text-settings.ui.xmi',
     ePackage: () => RichTextEditorPackage.eINSTANCE,
     create: () => new RichTextEditorSettingsImpl(),

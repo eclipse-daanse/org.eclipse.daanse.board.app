@@ -22,7 +22,7 @@ import { BasicEObject } from '@emfts/core';
 import { createContainmentEList, createBasicEList } from '@emfts/core';
 import type { EClass, EStructuralFeature, EList, EReference } from '@emfts/core';
 import type { SeriesSettings } from './SeriesSettings.js';
-import { VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables';
+import { VariableWrapper } from 'org.eclipse.daanse.board.app.lib.variables';
 import type { ChartSettings } from './ChartSettings.js';
 import { ChartsettingsPackage } from './ChartsettingsPackage.js';
 

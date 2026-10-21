@@ -21,6 +21,7 @@
 import { BaseConnectionConfig } from 'org.eclipse.daanse.board.app.lib.connection.base';
 import { Documentation, Attribute, ModelClass } from 'org.eclipse.daanse.board.app.lib.annotations';
 
+@Documentation("A connection to an HTTP endpoint. Data sources built on it request a path below this base URL and read the response.")
 @ModelClass({ type: 'http://org.eclipse.daanse.board.app.lib.connection.rest#//IRestConnectionConfig' })
 export class IRestConnectionConfig extends BaseConnectionConfig {
   @Documentation("The base URL endpoint for the REST API.\n                                            This attribute overrides the 'url' from BaseConnectionConfig\n                                            to specify its role in REST connections.")

@@ -11,7 +11,7 @@
  *   Smart City Jena
  **********************************************************************/
 
-import { ref, computed, Ref } from 'vue'
+import { shallowRef, type Ref } from 'vue'
 import { useVariableRepository } from './useVariableRepository'
 
 const TYPE = 'VARIABLECOMPLEXSTRINGWRAPPER'
@@ -24,9 +24,32 @@ class VariableComplexStringWrapper<T = string> {
 
   constructor(initValue = '') {
     this._value = initValue;
+    /*
+     * What a read subscribes to and a write notifies.
+     *
+     * _value is a plain field on a plain class: reading it inside a
+     * computed tracks nothing, so typing in the settings changed the
+     * stored text and nothing re-rendered. The widget only caught up when
+     * it was mounted again, which is what reopening the settings does.
+     *
+     * Defined rather than declared, and not enumerable: a wrapper is
+     * written out as its own fields, and a ref among them would land in
+     * the stored board.
+     */
+    Object.defineProperty(this, '_tick', {
+      value: shallowRef(0),
+      enumerable: false,
+      writable: false,
+    });
+  }
+
+  /** @internal The dependency behind value - see the constructor. */
+  private get tick(): Ref<number> {
+    return (this as unknown as { _tick: Ref<number> })._tick;
   }
 
   get original() {
+    void this.tick.value;
     return this._value || '';
   }
 
@@ -50,6 +73,7 @@ class VariableComplexStringWrapper<T = string> {
    * handing it back would show the previous value as if it were current.
    */
   get value() {
+    void this.tick.value;
     const substituted = this.substitute(this._value || '', this.updateFn.bind(this));
     if (substituted === null) return this._value ?? '';
     this._computedValue = substituted;
@@ -67,7 +91,9 @@ class VariableComplexStringWrapper<T = string> {
   }
 
   set value(newValue: string) {
+    if (newValue === this._value) return;
     this._value = newValue;
+    this.tick.value++;
   }
 }
 

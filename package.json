@@ -9,7 +9,8 @@
     "build_force": "NODE_OPTIONS=\"--max-old-space-size=65536\" turbo run build --concurrency=20 --force",
     "build_local": "NODE_OPTIONS=\"--max-old-space-size=4096\" turbo run build --concurrency=2",
     "build_clean": "NODE_OPTIONS=\"--max-old-space-size=4096\" turbo run build --concurrency=2 --force",
-    "test": "turbo run test",
+    "test": "vitest run",
+    "test:integration": "vitest run --config vitest.integration.config.ts",
     "lint": "turbo run lint",
     "test:e2e": "playwright test",
     "type-check": "vue-tsc --build --force",
@@ -51,7 +52,7 @@
     "vite": "6.4.2",
     "vitest": "^4.0.16",
     "vue-tsc": "^3.2.2",
-    "@emfts/codegen": "0.0.2-next.4"
+    "@emfts/codegen": "0.0.2-next.8"
   },
   "workspaces": [
     "packages/**"

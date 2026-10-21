@@ -29,7 +29,7 @@ import { OgcstaPackage } from './OgcstaPackage.js';
  */
 export class IOGCSTAConfigurationImpl extends IBaseConnectionConfigurationImpl implements IOGCSTAConfiguration {
   // Feature ID Constants (eLiterals)
-  static readonly CONNECTION: number = 3;
+  static readonly CONNECTION: number = 4;
 
   // Private fields
   private _connection?: string;

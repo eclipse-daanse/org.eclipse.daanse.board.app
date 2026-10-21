@@ -631,12 +631,12 @@
   resolved "https://registry.npmjs.org/@egjs/list-differ/-/list-differ-1.0.1.tgz"
   integrity sha512-OTFTDQcWS+1ZREOdCWuk5hCBgYO4OsD30lXcOCyVOAjXMhgL5rBRDnt/otb6Nz8CzU0L/igdcaQBDLWc4t9gvg==
 
-"@emfts/codegen@0.0.2-next.4":
-  version "0.0.2-next.4"
-  resolved "https://registry.npmjs.org/@emfts/codegen/-/codegen-0.0.2-next.4.tgz#c96fa7fce1ceafd1ee0a5d67dafcff9f46fdca68"
-  integrity sha512-b146TuKZmZyzt0ThyPyI8WAp4i7YeRFvIrWLBLh98F4irZbEOiUXc8YA9lxWmgwJMsaqcZe4cE/fzmrY+7PXkg==
+"@emfts/codegen@0.0.2-next.8":
+  version "0.0.2-next.8"
+  resolved "https://registry.npmjs.org/@emfts/codegen/-/codegen-0.0.2-next.8.tgz#e8b6c3b59542ca780eca157a559d7e9299b5fa7a"
+  integrity sha512-CTsyGT7hlna6Q8cyqZU8R7NP4YModfYLEV1JKw3LzrZobOBwtOYgM/zgSCWvZUpg1x00NGquKwku2AkldOT14A==
   dependencies:
-    "@emfts/core" "^0.2.0-next.1"
+    "@emfts/core" "^0.3.0-next.4"
     commander "^12.0.0"
     ejs "^3.1.10"
     sax "^1.4.4"
@@ -646,10 +646,10 @@
   resolved "https://registry.npmjs.org/@emfts/core/-/core-0.1.1-next.18.tgz#63224ebf97c4d7a565398b890c40c486ca10ad50"
   integrity sha512-fJalqar3AO1vp1P0LWOhR7X1DcZY9P+nPSlwEJqVYu/e2HF0sZO9toO+HBZ5aGQyBhFeG7q5CyTCHmYJWfrmCA==
 
-"@emfts/core@^0.2.0-next.1":
-  version "0.2.0-next.2"
-  resolved "https://registry.npmjs.org/@emfts/core/-/core-0.2.0-next.2.tgz#79f531b574d0eefafd71f596974ca0aa1b6f9768"
-  integrity sha512-CEUOaZljZBEhFlPESIqjIAN8whnffsQxA7XQwvxVRz9AUVpfoQWaWAZfJ6WmqSkgqxn7DfSDICwbA3TNv0Q2pw==
+"@emfts/core@^0.3.0-next.4":
+  version "0.3.0-next.4"
+  resolved "https://registry.npmjs.org/@emfts/core/-/core-0.3.0-next.4.tgz#49122ef59220130054ffa85fa1ca54267d82f98d"
+  integrity sha512-2nV/ya92uDfGSmlofExx2mMA9+OxebY/+Mtw5FUNE3y53wzk/SwTNYGRPT4p2rYuTNmGOC/2N7luHgtWqx1FQw==
 
 "@emfts/uimodel-composer@0.0.2-next.1":
   version "0.0.2-next.1"

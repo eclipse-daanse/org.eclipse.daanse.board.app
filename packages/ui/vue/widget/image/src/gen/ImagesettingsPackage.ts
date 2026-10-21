@@ -220,8 +220,8 @@ export class ImagesettingsPackage extends BasicEPackage {
     (ImagesettingsPackage.Literals.IMAGE_SETTINGS__IMAGES as BasicEReference).setEType(ImagesettingsPackage.Literals.IMAGE_GALLERY_ITEM);
     (ImagesettingsPackage.Literals.IMAGE_GALLERY_ITEM__ID as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
     (ImagesettingsPackage.Literals.IMAGE_GALLERY_ITEM__URL as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
-    (ImagesettingsPackage.Literals.GALLERY_SETTINGS__FIT as BasicEReference).setEType(requireEPackage('org.eclipse.daanse.board.app.ui.vue.composables').getEClassifier('VariableWrapper')!);
-    (ImagesettingsPackage.Literals.GALLERY_SETTINGS__DIASHOW_INTERVAL as BasicEReference).setEType(requireEPackage('org.eclipse.daanse.board.app.ui.vue.composables').getEClassifier('VariableWrapper')!);
+    (ImagesettingsPackage.Literals.GALLERY_SETTINGS__FIT as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
+    (ImagesettingsPackage.Literals.GALLERY_SETTINGS__DIASHOW_INTERVAL as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
     (ImagesettingsPackage.Literals.IMAGE_CLICK_PAYLOAD__IMAGE_URL as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
     (ImagesettingsPackage.Literals.IMAGE_RIGHT_CLICK_PAYLOAD__IMAGE_URL as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
 

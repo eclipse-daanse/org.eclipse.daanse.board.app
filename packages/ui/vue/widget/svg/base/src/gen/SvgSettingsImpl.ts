@@ -21,7 +21,7 @@
 import { BasicEObject } from '@emfts/core';
 import { createContainmentEList } from '@emfts/core';
 import type { EClass, EStructuralFeature, EList, EReference } from '@emfts/core';
-import type { VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables';
+import type { VariableWrapper } from 'org.eclipse.daanse.board.app.lib.variables';
 import type { SvgClassConfigMapEntry } from './SvgClassConfigMapEntry.js';
 import type { SvgSettings } from './SvgSettings.js';
 import { SvgwidgetsPackage } from './SvgwidgetsPackage.js';

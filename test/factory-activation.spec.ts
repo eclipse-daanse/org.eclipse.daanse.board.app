@@ -25,7 +25,6 @@
  */
 
 import { describe, it, expect, beforeEach } from 'vitest'
-import { DefaultServiceRegistry } from '@eclipse-daanse/tsm'
 import { DefaultServiceRegistry, ModuleLoader, type ModuleManifest } from '@eclipse-daanse/tsm'
 
 /** Minimal gueltige Konfiguration - validateConfiguration prueft genau diese vier Felder. */
@@ -77,16 +76,31 @@ describe('Composer-Factory', () => {
   })
 
   const activateAll = async () => {
-    const eintraege: Array<[ModuleManifest, string]> = [
-      [{ id: 'lib.repository.datasource', name: 'ds repo', version: '0.0.0',
-         entry: './src/index.ts', exports: {}, provides: [{ id: 'DatasourceRepository' }] },
-       'org.eclipse.daanse.board.app.lib.repository.datasource'],
-      [{ id: 'lib.composer.chart', name: 'chart composer', version: '0.0.0',
-         entry: './src/index.ts', exports: {},
-         requiresService: [{ id: 'DatasourceRepository' }] },
-       'org.eclipse.daanse.board.app.lib.composer.chart'],
+    const entries: Array<[ModuleManifest, string]> = [
+      [
+        {
+          id: 'lib.repository.datasource',
+          name: 'ds repo',
+          version: '0.0.0',
+          entry: './src/index.ts',
+          exports: {},
+          provides: [{ id: 'DatasourceRepository' }],
+        },
+        'org.eclipse.daanse.board.app.lib.repository.datasource',
+      ],
+      [
+        {
+          id: 'lib.composer.chart',
+          name: 'chart composer',
+          version: '0.0.0',
+          entry: './src/index.ts',
+          exports: {},
+          requiresService: [{ id: 'DatasourceRepository' }],
+        },
+        'org.eclipse.daanse.board.app.lib.composer.chart',
+      ],
     ]
-    for (const [manifest, pkg] of eintraege) {
+    for (const [manifest, pkg] of entries) {
       await loader.loadModule(manifest, { container: await import(/* @vite-ignore */ pkg), awaitCascade: true })
     }
   }

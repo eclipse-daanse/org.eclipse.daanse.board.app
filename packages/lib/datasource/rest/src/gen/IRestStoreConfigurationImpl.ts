@@ -29,10 +29,10 @@ import { ReststorePackage } from './ReststorePackage.js';
  */
 export class IRestStoreConfigurationImpl extends IBaseConnectionConfigurationImpl implements IRestStoreConfiguration {
   // Feature ID Constants (eLiterals)
-  static readonly RESOURCE_URL: number = 3;
-  static readonly CONNECTION: number = 4;
-  static readonly SELECTED_J_S_O_N_VALUE: number = 5;
-  static readonly POLLING_INTERVAL: number = 6;
+  static readonly RESOURCE_URL: number = 4;
+  static readonly CONNECTION: number = 5;
+  static readonly SELECTED_J_S_O_N_VALUE: number = 6;
+  static readonly POLLING_INTERVAL: number = 7;
 
   // Private fields
   private _resourceUrl?: string;

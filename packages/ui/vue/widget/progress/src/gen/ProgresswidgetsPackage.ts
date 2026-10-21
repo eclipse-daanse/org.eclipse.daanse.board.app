@@ -234,18 +234,18 @@ export class ProgresswidgetsPackage extends BasicEPackage {
     // An EAttribute without eType leaves the XMI reader no EDataType to
     // convert against - every value would arrive as a raw string (#37)
     // ============================================
-    (ProgresswidgetsPackage.Literals.PROGRESS_SETTINGS__PROGRESS as BasicEReference).setEType(requireEPackage('org.eclipse.daanse.board.app.ui.vue.composables').getEClassifier('VariableWrapper')!);
-    (ProgresswidgetsPackage.Literals.PROGRESS_SETTINGS__FILL_COLOR as BasicEReference).setEType(requireEPackage('org.eclipse.daanse.board.app.ui.vue.composables').getEClassifier('VariableWrapper')!);
-    (ProgresswidgetsPackage.Literals.PROGRESS_SETTINGS__GRADIENT_COLOR as BasicEReference).setEType(requireEPackage('org.eclipse.daanse.board.app.ui.vue.composables').getEClassifier('VariableWrapper')!);
-    (ProgresswidgetsPackage.Literals.PROGRESS_SETTINGS__BACKGROUND_COLOR as BasicEReference).setEType(requireEPackage('org.eclipse.daanse.board.app.ui.vue.composables').getEClassifier('VariableWrapper')!);
+    (ProgresswidgetsPackage.Literals.PROGRESS_SETTINGS__PROGRESS as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
+    (ProgresswidgetsPackage.Literals.PROGRESS_SETTINGS__FILL_COLOR as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
+    (ProgresswidgetsPackage.Literals.PROGRESS_SETTINGS__GRADIENT_COLOR as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
+    (ProgresswidgetsPackage.Literals.PROGRESS_SETTINGS__BACKGROUND_COLOR as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
     (ProgresswidgetsPackage.Literals.PROGRESS_SETTINGS__IS_GRADIENT as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EBoolean')!);
     (ProgresswidgetsPackage.Literals.PROGRESS_SETTINGS__IS_VERTICAL as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EBoolean')!);
-    (ProgresswidgetsPackage.Literals.PROGRESS_SETTINGS__ROTATION as BasicEReference).setEType(requireEPackage('org.eclipse.daanse.board.app.ui.vue.composables').getEClassifier('VariableWrapper')!);
-    (ProgresswidgetsPackage.Literals.PROGRESS_SETTINGS__MIN as BasicEReference).setEType(requireEPackage('org.eclipse.daanse.board.app.ui.vue.composables').getEClassifier('VariableWrapper')!);
-    (ProgresswidgetsPackage.Literals.PROGRESS_SETTINGS__MAX as BasicEReference).setEType(requireEPackage('org.eclipse.daanse.board.app.ui.vue.composables').getEClassifier('VariableWrapper')!);
-    (ProgresswidgetsPackage.Literals.PROGRESS_SETTINGS__TEXT_COLOR as BasicEReference).setEType(requireEPackage('org.eclipse.daanse.board.app.ui.vue.composables').getEClassifier('VariableWrapper')!);
-    (ProgresswidgetsPackage.Literals.PROGRESS_SETTINGS__BAR_THICKNESS as BasicEReference).setEType(requireEPackage('org.eclipse.daanse.board.app.ui.vue.composables').getEClassifier('VariableWrapper')!);
-    (ProgresswidgetsPackage.Literals.PROGRESS_SETTINGS__BORDER_RADIUS as BasicEReference).setEType(requireEPackage('org.eclipse.daanse.board.app.ui.vue.composables').getEClassifier('VariableWrapper')!);
+    (ProgresswidgetsPackage.Literals.PROGRESS_SETTINGS__ROTATION as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
+    (ProgresswidgetsPackage.Literals.PROGRESS_SETTINGS__MIN as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
+    (ProgresswidgetsPackage.Literals.PROGRESS_SETTINGS__MAX as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
+    (ProgresswidgetsPackage.Literals.PROGRESS_SETTINGS__TEXT_COLOR as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
+    (ProgresswidgetsPackage.Literals.PROGRESS_SETTINGS__BAR_THICKNESS as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
+    (ProgresswidgetsPackage.Literals.PROGRESS_SETTINGS__BORDER_RADIUS as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
 
     // ============================================
     // Register XML name mappings from ExtendedMetaData annotations

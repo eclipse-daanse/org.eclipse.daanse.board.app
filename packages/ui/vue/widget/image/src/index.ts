@@ -20,6 +20,8 @@ import { ImageSettingsImpl } from './gen/ImageSettingsImpl'
 import { ImagesettingsPackage } from './gen/ImagesettingsPackage'
 /* The form for these settings, written as a model beside the Ecore. */
 import imageSettingsFormXmi from '../model/ui.xmi?raw'
+/* The Ecore itself, for the sentences the generator drops. */
+import settingsEcore from '../model/model.ecore?raw'
 /* The form for one picture of the gallery list. */
 import imageItemFormXmi from '../model/ui-item.xmi?raw'
 /* The form for the nested display options. */
@@ -37,19 +39,6 @@ void EventsPackage.eINSTANCE
 void ImagesettingsPackage.eINSTANCE
 import type { EventRegistry } from 'org.eclipse.daanse.board.app.lib.api.events'
 import { WIDGET_SERVICE_ID, type WidgetProvider } from 'org.eclipse.daanse.board.app.lib.api.widget'
-
-interface IImageSettings {
-  imagesSettings: GallerySettings
-  images: ImageGalleryItem[]
-}
-interface ImageGalleryItem {
-  id: string
-  url: string
-}
-interface GallerySettings {
-  fit: string
-  diashowInterval: number
-}
 
 const WIDGET_TYPE = 'ImageWidget'
 
@@ -75,6 +64,7 @@ export class ImageWidgetProvider implements WidgetProvider {
    */
   readonly settingsForm = {
     xmi: imageSettingsFormXmi,
+    ecore: settingsEcore,
     uri: '/image-settings.ui.xmi',
     ePackage: () => ImagesettingsPackage.eINSTANCE,
     create: () => new ImageSettingsImpl(),
@@ -103,4 +93,3 @@ export class ImageWidgetProvider implements WidgetProvider {
 
 export { ImageWidget }
 export { ImageSettingsImpl, ImagesettingsPackage, imageSettingsFormXmi, imageItemFormXmi, galleryFormXmi }
-export type { IImageSettings }

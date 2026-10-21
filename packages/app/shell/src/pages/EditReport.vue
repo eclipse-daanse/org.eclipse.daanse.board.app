@@ -22,7 +22,7 @@ Contributors:
 <script setup lang="ts">
 import { ref, computed, inject } from 'vue'
 
-import { useBoard } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+import { useBoard, useEObject } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import type { Widget as IWidget } from 'org.eclipse.daanse.board.app.lib.api.page'
 import AddWidgetWindow from '@/components/common/AddWidgetWindow.vue'
 import WidgetSettingsOverlay from '@/components/common/WidgetSettingsOverlay.vue'
@@ -64,7 +64,16 @@ const openWidgetSettings = (id: string) => {
   widgetSettingsOpenedId.value = id
 }
 
-const currentlyEditingWidget = computed(() => {
+/*
+ * The widget the dialog is editing - watched, not merely found.
+ *
+ * A computed that looks an object up hands back the same instance every
+ * time, and Vue compares by identity: changing a feature on it re-runs
+ * nothing downstream, so the preview kept rendering what the widget looked
+ * like when the dialog opened. useEObject watches the object itself and
+ * re-triggers when it notifies.
+ */
+const currentlyEditingWidget = useEObject(() => {
   const widgetFromStore = widgets.value.find((widget) => widget.uid === widgetSettingsOpenedId.value)
   if (widgetFromStore) return widgetFromStore
   return innerWidgets.value.find((widget) => widget.uid === widgetSettingsOpenedId.value)

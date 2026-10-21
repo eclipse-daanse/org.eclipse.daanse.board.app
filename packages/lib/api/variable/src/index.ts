@@ -88,6 +88,12 @@ export interface VariableDeffinition {
     */
     settingsForm?: {
         xmi: string;
+        /**
+         * The Ecore the form is written for, as text. Only the sentences in
+         * it are wanted: the generator drops the GenModel documentation, so
+         * a field can explain itself only if the model file comes along.
+         */
+        ecore?: string;
         uri?: string;
         ePackage: () => any;
         create: () => any;

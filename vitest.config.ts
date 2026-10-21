@@ -97,7 +97,23 @@ export default mergeConfig(
     },
     test: {
       environment: 'jsdom',
-      exclude: [...configDefaults.exclude, 'e2e/**'],
+      exclude: [
+        ...configDefaults.exclude,
+        /*
+         * Playwright specs, which have to be anchored at any depth: 'e2e/**'
+         * is read against the root and matched none of the five suites that
+         * actually sit in packages/**\/e2e/. Vitest collected them and they
+         * failed on test.describe() being called outside a Playwright run.
+         */
+        '**/e2e/**',
+        /*
+         * The git providers are tested against live GitHub and Gitea, with a
+         * token out of a config file that is not in the tree. They belong to
+         * a run that has credentials, not to the one that guards a pull
+         * request - see "test:integration".
+         */
+        '**/git_api/test/**',
+      ],
       root,
     },
   }),

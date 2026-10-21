@@ -25,6 +25,8 @@ import { ProgressSettingsImpl } from './gen/ProgressSettingsImpl'
 import { ProgresswidgetsPackage } from './gen/ProgresswidgetsPackage'
 /* The form for these settings, written as a model beside the Ecore. */
 import progressSettingsFormXmi from '../model/ui.xmi?raw'
+/* The Ecore itself, for the sentences the generator drops. */
+import settingsEcore from '../model/model.ecore?raw'
 
 /*
  * Building the EPackage on load: until it exists the class literals are
@@ -60,6 +62,7 @@ export class ProgressWidgetProvider implements WidgetProvider {
    */
   readonly settingsForm = {
     xmi: progressSettingsFormXmi,
+    ecore: settingsEcore,
     uri: '/progress-settings.ui.xmi',
     ePackage: () => ProgresswidgetsPackage.eINSTANCE,
     create: () => new ProgressSettingsImpl(),

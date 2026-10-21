@@ -10,7 +10,7 @@
 * SPDX-License-Identifier: EPL-2.0
 **********************************************************************/
 -->
-<genconfig:GenConfig xmlns:xmi="http://www.omg.org/XMI" xmi:version="2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:genconfig="http://www.emfts.org/genconfig/1.0" ecorePackage="org.eclipse.daanse.board.app.ui.vue.composables#/">
+<genconfig:GenConfig xmlns:xmi="http://www.omg.org/XMI" xmi:version="2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:genconfig="http://www.emfts.org/genconfig/1.0" ecorePackage="http://org.eclipse.daanse.board.app.ui.vue.composables#/">
   <generation mode="emf" outputDir="./generated" fileExtension=".ts" annotationsPackage="org.eclipse.daanse.board.app.lib.annotations"/>
   <package prefix="Composables" basePackage="org.example" generateFactory="true" generatePackage="true" generateIndex="true"/>
   <classDefaults generateInterface="true" generateImpl="true" rootExtendsClass="BasicEObject" rootExtendsInterface="EObject"/>

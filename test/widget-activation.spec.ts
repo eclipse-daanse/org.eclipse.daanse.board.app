@@ -26,7 +26,6 @@
  */
 
 import { describe, it, expect, beforeEach } from 'vitest'
-import { DefaultServiceRegistry } from '@eclipse-daanse/tsm'
 import {
   getComponentMetadata,
   getActivateMethod,
@@ -68,6 +67,7 @@ describe('widget bundles as declared components', () => {
   let services: DefaultServiceRegistry
   let events: EventRegistryDouble
   let actions: ActionsRegistryDouble
+  let loader: ModuleLoader
 
   beforeEach(async () => {
     services = new DefaultServiceRegistry()
@@ -78,7 +78,7 @@ describe('widget bundles as declared components', () => {
 
     // The repository module installs the tracker; run by the real loader,
     // its container handed over - the same path main.ts uses.
-    const loader = new ModuleLoader({ serviceRegistry: services, logger: silentLogger() })
+    loader = new ModuleLoader({ serviceRegistry: services, logger: silentLogger() })
     const manifest: ModuleManifest = {
       id: 'lib.repository.widget', name: 'widget repository', version: '0.0.0',
       entry: './src/index.ts', exports: {},
@@ -111,18 +111,36 @@ describe('widget bundles as declared components', () => {
     expect(events.registered.has('SampleWidget')).toBe(false)
   })
 
-  it('the tracker carries a registration into the palette and out again', async () => {
-    const { SampleWidgetProvider } = await import('org.eclipse.daanse.board.app.ui.vue.widget.sample')
+  /*
+   * Loaded as a bundle, not registered by hand.
+   *
+   * TrackedWidgetRepository collects providers with @injectAll, and that
+   * follows what the loader registers from a component's own declaration -
+   * not what a caller puts into the service registry directly. This test
+   * used to do the latter and was marked as expected to fail for it; the
+   * tracker was never the problem, the test was (#1076).
+   */
+  it('a widget bundle appears in the palette and leaves it again', async () => {
     const repository = services.getRequired<WidgetRepository>('WidgetRepository')
+    expect(repository.getWidget('SampleWidget')).toBeUndefined()
 
-    const provider = services.construct(SampleWidgetProvider)
-    const registration = services.register(WIDGET_SERVICE_ID, provider, {
-      properties: { 'widget.type': provider.type },
-    })
+    await loader.loadModule(
+      {
+        id: 'ui.vue.widget.sample', name: 'sample widget', version: '0.0.0',
+        entry: './src/index.ts', exports: {},
+        requiresService: [{ id: 'EventRegistry' }, { id: 'EventActionsRegistry' }],
+      } as ModuleManifest,
+      {
+        container: await import('org.eclipse.daanse.board.app.ui.vue.widget.sample'),
+        awaitCascade: true,
+      },
+    )
+
     expect(repository.getWidget('SampleWidget')).toBeDefined()
     expect(repository.getWidget('SampleWidget').name).toBe('Sample')
 
-    registration.unregister()
+    await loader.unloadModule('ui.vue.widget.sample')
+
     expect(repository.getWidget('SampleWidget')).toBeUndefined()
   })
 

@@ -19,7 +19,7 @@
  */
 
 import type { EObject } from '@emfts/core';
-import type { VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables';
+import type { VariableWrapper } from 'org.eclipse.daanse.board.app.lib.variables';
 
 /**
  * KpiTableSettings

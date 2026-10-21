@@ -89,11 +89,32 @@ type INewVariableConfig =
 
 
 import { Variable, VariableScope, VariableAccessMode } from './classes/Variable'
-import { VariableWrapper, VARIABLEWRAPPER } from './classes/VariableWrapper'
+import { VariableWrapper, VARIABLEWRAPPER, observeWrappers, type WrapperObserver } from './classes/VariableWrapper'
+import { EPackageRegistry } from '@emfts/core'
+import { VariablesPackage } from './gen/VariablesPackage'
+
+/*
+ * Building the EPackage on load and putting it in the registry, so a
+ * reference to VariableWrapper from a settings model resolves to a type
+ * instead of to nothing. Fourteen widget models state their fields that way.
+ *
+ * The registration is ours to do: generated packages resolve foreign types
+ * through EPackageRegistry.INSTANCE but do not enter themselves into it,
+ * so whoever owns the package has to. Reported as emf.ts.codegen#36.
+ *
+ * This package can reach EMF at all only because @emfts/core moved out of
+ * the Vue platform bundle - lib may not depend on ui, and while EMF was
+ * served from there, this was the wall the wrapper could not cross (#1068).
+ */
+EPackageRegistry.INSTANCE.registerPackage(VariablesPackage.eINSTANCE)
+
+export type { WrapperObserver }
+export { VariablesPackage }
 
 export {
   VariableWrapper,
   VARIABLEWRAPPER,
+  observeWrappers,
   ComputedVariable,
   ConstantVariable,
   QueryVariable,

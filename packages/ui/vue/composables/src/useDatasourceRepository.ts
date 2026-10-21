@@ -103,22 +103,6 @@ export function useDatasourceRepository(
     }
   }
 
-  // watch(
-  //   () => dataSourceId.value,
-  //   (newVal, oldVal) => {
-  //     getData()
-  //     try {
-  //       const oldDataSource = datasourceRepository.getDatasource(oldVal)
-  //       oldDataSource.unsubscribe(getData)
-
-  //       const dataSource = datasourceRepository.getDatasource(newVal)
-  //       dataSource.subscribe(getData)
-  //     } catch (e) {
-  //       console.warn(e)
-  //     }
-  //   },
-  // )
-
   const getDataWithOptions = async (options?: any) => {
     if (!dataSourceId.value) {
       data.value = null
@@ -139,34 +123,58 @@ export function useDatasourceRepository(
     }
   }
 
-  const update = (newVal?: string, oldVal?: string) => {
+  /*
+   * Which datasource this composable is listening to.
+   *
+   * Kept because unsubscribing needs the id it subscribed under - the one
+   * in dataSourceId has already moved on by then - and because subscribing
+   * twice to the same one is what left handlers behind.
+   */
+  let listeningTo: string | undefined
+
+  const listen = (id?: string) => {
+    if (id === listeningTo) return
+    if (listeningTo) {
+      try {
+        const previous = datasourceRepository.getDatasource(listeningTo)
+        previous.unsubscribe(getData)
+        subscriptions.forEach((fn) => previous.unsubscribe(fn))
+      } catch (e) {
+        console.warn(e)
+      }
+    }
+    listeningTo = undefined
+    if (!id) return
+    try {
+      const next = datasourceRepository.getDatasource(id)
+      /*
+       * getData itself, not a wrapper around it. A fresh arrow function is
+       * a different handler every time, so unsubscribe could never find it
+       * again and every reassignment left one more behind.
+       */
+      next.subscribe(getData)
+      subscriptions.forEach((fn) => next.subscribe(fn))
+      listeningTo = id
+    } catch (e) {
+      console.warn(e)
+    }
+  }
+
+  /**
+   * Reads the data and listens for what comes after.
+   *
+   * The old shape bailed out before subscribing whenever there was no
+   * previous id - which is every first assignment, the usual case. The data
+   * arrived once and nothing after it ever did, and only remounting the
+   * widget made it look alive again.
+   */
+  const update = (newVal?: string, _oldVal?: string) => {
     try {
       getData()
-    } catch (e){
-      console.warn(e)
-    }
-
-    if (!newVal || !oldVal || newVal === oldVal) return;
-
-    try {
-      const oldDataSource = datasourceRepository.getDatasource(oldVal)
-      oldDataSource.unsubscribe(getData)
-      subscriptions.forEach(fn => {
-        oldDataSource.unsubscribe(fn);
-      });
     } catch (e) {
       console.warn(e)
     }
-    try {
-      const dataSource = datasourceRepository.getDatasource(newVal)
-      // TODO: fix duplicate subscription
-      dataSource.subscribe(()=>getData())
-      subscriptions.forEach(fn => {
-        dataSource.subscribe(fn);
-      })
-    } catch (e) {
-      console.warn(e)
-    }
+    listen(newVal ?? dataSourceId.value)
   }
 
   const getDatasourceInstance = () => {
@@ -182,28 +190,11 @@ export function useDatasourceRepository(
 
   onMounted(() => {
     getData()
-
-    try {
-      const dataSource = datasourceRepository.getDatasource(dataSourceId.value)
-      dataSource.subscribe(getData)
-      subscriptions.forEach(fn => {
-        dataSource.subscribe(fn);
-      })
-    } catch (e) {
-      console.warn(e)
-    }
+    listen(dataSourceId.value)
   })
 
   onUnmounted(() => {
-    try {
-      const dataSource = datasourceRepository.getDatasource(dataSourceId.value)
-      dataSource.unsubscribe(getData)
-      subscriptions.forEach(fn => {
-        dataSource.unsubscribe(fn);
-      })
-    } catch (e) {
-      console.warn(e)
-    }
+    listen(undefined)
   })
 
   return {

@@ -108,7 +108,7 @@ export class DatatablesettingsPackage extends BasicEPackage {
     // An EAttribute without eType leaves the XMI reader no EDataType to
     // convert against - every value would arrive as a raw string (#37)
     // ============================================
-    (DatatablesettingsPackage.Literals.DATA_TABLE_SETTINGS__HEADER_BACKGROUND as BasicEReference).setEType(requireEPackage('org.eclipse.daanse.board.app.ui.vue.composables').getEClassifier('VariableWrapper')!);
+    (DatatablesettingsPackage.Literals.DATA_TABLE_SETTINGS__HEADER_BACKGROUND as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
 
     // ============================================
     // Register XML name mappings from ExtendedMetaData annotations

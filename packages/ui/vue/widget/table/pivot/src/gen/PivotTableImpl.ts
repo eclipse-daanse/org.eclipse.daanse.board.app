@@ -24,7 +24,7 @@ import type { EClass, EStructuralFeature, EList, EReference } from '@emfts/core'
 import type { JavaObject } from './JavaObject.js';
 import type { LevelStyle } from './LevelStyle.js';
 import type { ConditionalFormat } from './ConditionalFormat.js';
-import { VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables';
+import { VariableWrapper } from 'org.eclipse.daanse.board.app.lib.variables';
 import type { PivotTable } from './PivotTable.js';
 import { PivotTablePackage } from './PivotTablePackage.js';
 
