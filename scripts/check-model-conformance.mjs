@@ -51,7 +51,6 @@ const filters = args.filter(a => !a.startsWith('--'))
  * has gone is reported as stale, so the list cannot rot quietly.
  */
 const KNOWN = new Map([
-  ['VariableWrapper in packages/lib/variables', 1068],
   ['VariableComplexStringWrapper in packages/ui/vue/composables', 1068],
   ['ImageGalleryItem in packages/ui/vue/widget/image', 1073],
   ['GallerySettings in packages/ui/vue/widget/image', 1073],
@@ -137,7 +136,16 @@ for (const implFile of generated) {
   /* bypass: the package hands out this name, but not its own generated class */
   const { exported, origin } = indexExports(packageDir)
   const from = origin.get(name)
-  if (exported.has(name) && from && !from.includes('/gen/')) {
+  /*
+   * A hand-written class that extends the generated one is the sanctioned
+   * way to add what a model cannot state - a live reference, a side effect
+   * on write. Re-exporting that under the model's name is correct, and
+   * only a name that resolves to something standing apart is a bypass.
+   */
+  const buildsOnGenerated = (declarations.get(name) ?? []).some(
+    found => found.kind === 'class' && found.extends === `${name}Impl`,
+  )
+  if (exported.has(name) && from && !from.includes('/gen/') && !buildsOnGenerated) {
     report('bypass', `src/index.ts exports ${name} from '${from}'`)
   }
 

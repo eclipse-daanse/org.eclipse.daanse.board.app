@@ -14,17 +14,45 @@
 /**
  * Makes a settings wrapper's value visible to Vue.
  *
- * A VariableWrapper keeps its value in a plain field, and a widget reads it
- * inside a computed - `config.fontSize.value`. A plain field tracks
- * nothing, so changing colour, size or alignment changed what was stored
- * and nothing re-rendered: the widget caught up only when it was mounted
- * again, which is what reopening the settings does.
+ * A widget reads a setting inside a computed - `config.fontSize.value` -
+ * and Vue only re-renders what it watched being read. The wrapper is an
+ * EObject, so it announces every change as an EMF notification; what EMF
+ * does not do, and cannot, is say that something was read. Those are the
+ * two halves joined here:
  *
- * lib.variables is deliberately free of Vue, so it only says when a value
- * is read or written. The translating happens here.
+ *   read      lib.variables says a value was read -> depend on this wrapper
+ *   notified  the wrapper's own adapter fires     -> look at it again
+ *
+ * An adapter is attached the first time a wrapper is read, which is also
+ * the first moment anyone could care. Containment does not come into it:
+ * EContentAdapter follows containment, but this listens to each wrapper
+ * directly, and BasicEObject delivers to its own adapters.
  */
 import { shallowRef, type ShallowRef } from 'vue'
 import { observeWrappers } from 'org.eclipse.daanse.board.app.lib.variables'
+import { AdapterImpl, type Adapter, type Notification } from '@emfts/core'
+
+/** The half of a notifier this needs - see the rule in useEmf.ts. */
+interface Adaptable {
+  eAdapterAdd(adapter: Adapter): void
+}
+
+/** Bumps a counter whenever its wrapper reports a real change. */
+class TickOnChange extends AdapterImpl {
+  constructor(private readonly tick: ShallowRef<number>) {
+    super()
+  }
+
+  notifyChanged(notification: Notification): void {
+    /*
+     * Touch notifications are not changes; everything else means the value,
+     * the bound variable or the binding itself moved, and all three are
+     * worth re-reading.
+     */
+    if (notification.isTouch?.()) return
+    this.tick.value++
+  }
+}
 
 /*
  * One counter per wrapper, held weakly: a board that is closed takes its
@@ -37,6 +65,12 @@ function tickOf(wrapper: object): ShallowRef<number> {
   if (!tick) {
     tick = shallowRef(0)
     ticks.set(wrapper, tick)
+
+    /*
+     * A plain object that is not an EObject still gets a counter, so a
+     * caller that holds one is not a crash - it simply never ticks.
+     */
+    ;(wrapper as Partial<Adaptable>).eAdapterAdd?.(new TickOnChange(tick))
   }
   return tick
 }
@@ -46,9 +80,6 @@ export function trackWrappers(): void {
   observeWrappers({
     read: (wrapper) => {
       void tickOf(wrapper).value
-    },
-    written: (wrapper) => {
-      tickOf(wrapper).value++
     },
   })
 }

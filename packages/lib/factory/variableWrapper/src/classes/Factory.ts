@@ -16,6 +16,28 @@ type SearchResult = {
   value: any;
 };
 
+/*
+ * A wrapper has been stored two ways, and boards written either way still
+ * have to open.
+ *
+ * Before it was an EObject, JSON.stringify wrote out its plain fields, so
+ * the value arrived under the private name `_value` and the bound variable
+ * as a whole nested object under `reference`. As an EObject it is written
+ * by toJSON, which names the value `value` and keeps only the variable's
+ * name - in `variable`, which is what the model says that field is for and
+ * which the old shape carried alongside `reference` anyway.
+ */
+
+/** The stored value, under whichever name the state was written with. */
+function storedValue(held: any): any {
+  return held?._value !== undefined ? held._value : held?.value
+}
+
+/** The bound variable's name, however the state recorded it. */
+function boundVariableName(held: any): string | undefined {
+  return held?.variable ?? held?.reference?.name ?? undefined
+}
+
 /**
  * Beschreibt einen zusaetzlichen Wrapper-Typ, den die Factory beim Laden
  * eines Boards wiederherstellen kann.
@@ -53,10 +75,12 @@ export class VariableWrapperFactory {
         short.pop();
         const upperPath = short.join('.');
         const originalValue = this.getValueAtPath(json,short.join('.'))
-        if(originalValue._value !== undefined && originalValue._value !== null){
-          const var1 = new VariableWrapper(originalValue._value);
-          if(originalValue.reference && originalValue.reference.name){
-            const ref = this.variables.getVariable(originalValue.reference.name)
+        const held = storedValue(originalValue)
+        if(held !== undefined && held !== null){
+          const var1 = new VariableWrapper(held);
+          const name = boundVariableName(originalValue)
+          if(name){
+            const ref = this.variables.getVariable(name)
             var1.setTo(ref);
           }
           this.setValueAtPath(json,upperPath,var1)
@@ -73,8 +97,9 @@ export class VariableWrapperFactory {
         short.pop();
         const upperPath = short.join('.');
         const originalValue = this.getValueAtPath(json, short.join('.'))
-        if (originalValue._value !== undefined && originalValue._value !== null) {
-          this.setValueAtPath(json, upperPath, wrapperType.create(originalValue._value))
+        const held = storedValue(originalValue)
+        if (held !== undefined && held !== null) {
+          this.setValueAtPath(json, upperPath, wrapperType.create(held))
         }
       }
     }

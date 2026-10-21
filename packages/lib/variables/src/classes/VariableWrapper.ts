@@ -8,29 +8,25 @@
   Contributors: Smart City Jena
 
 */
-
-
 import { Variable } from './Variable'
+import { VariableWrapperImpl } from '../gen/VariableWrapperImpl'
+import type { EObject } from '@emfts/core'
+
 const TYPE = 'VARIABLEWRAPPER'
 
 /**
- * Someone who wants to know when a wrapper is read or written.
+ * Someone who wants to know when a wrapper is read.
  *
- * A wrapper keeps its value in a plain field, and a widget reads it inside
- * a computed - `config.fontSize.value`. A plain field tracks nothing, so
- * changing a setting changed what was stored and nothing re-rendered; the
- * widget caught up only when it was mounted again.
- *
- * The fix belongs where the value changes, but this package is deliberately
- * free of Vue. So it says what happens and leaves the translating to
- * whoever is listening - ui.vue.composables installs an observer that
- * turns a read into a dependency and a write into a notification.
+ * A widget reads a setting inside a computed - `config.fontSize.value` - and
+ * Vue only re-renders what it saw being read. EMF announces changes, but it
+ * has nothing to say about reads, and this package is deliberately free of
+ * Vue. So it says when a value is read and leaves the translating to
+ * whoever is listening; ui.vue.composables turns that into a dependency and
+ * listens to the EMF notification for the other half.
  */
 export interface WrapperObserver {
   /** A value was read - whoever is rendering now depends on it. */
   read(wrapper: object): void
-  /** A value changed - whoever read it should look again. */
-  written(wrapper: object): void
 }
 
 let observer: WrapperObserver | undefined
@@ -40,48 +36,58 @@ export function observeWrappers(next: WrapperObserver | undefined): void {
   observer = next
 }
 
-class VariableWrapper<T> {
-  public readonly type:string = TYPE;
-  private _value: T|undefined =undefined;
-  public isSet: boolean = false;
-  public reference: Variable|undefined;
-  public variable = null as string|null;
+/**
+ * A setting's value, either given directly or taken from a variable.
+ *
+ * The generated class underneath is the model: it holds value, variable,
+ * isSet and type, and notifies on every one of them. What is added here is
+ * the part a model cannot state - the live Variable this follows, and that
+ * writing a value by hand releases that binding.
+ *
+ * `reference` is deliberately not a modelled feature. It points at a running
+ * object with subscriptions attached; what belongs in a stored board is its
+ * name, which `variable` already carries.
+ */
+class VariableWrapper<T> extends VariableWrapperImpl {
+  /** The variable this follows, while it follows one. Never serialised. */
+  public reference: Variable | undefined
 
-  constructor(init_value: T|undefined = undefined) {
-    this._value= init_value;
+  constructor(init_value: T | undefined = undefined) {
+    super()
+    if (init_value !== undefined) {
+      super.value = init_value as unknown as EObject
+    }
   }
 
-  setTo(e:Variable) {
-    this.reference = e;
-    e.subscribe(()=>{
-        if(this.reference) {
-          this._value = (this.reference).value;
-          observer?.written(this);
-    }});
-    this._value = this.reference.value as T;
-    this.variable = this.reference.name;
-    this.isSet = true;
-    observer?.written(this);
+  setTo(e: Variable) {
+    this.reference = e
+    e.subscribe(() => {
+      if (this.reference) {
+        super.value = this.reference.value as EObject
+      }
+    })
+    super.value = this.reference.value as EObject
+    this.variable = this.reference.name
+    this.isSet = true
   }
 
-  get value(){
-    observer?.read(this);
-    return this._value as T;
+  override get value(): T {
+    observer?.read(this)
+    return super.value as unknown as T
   }
 
-  // TODO: Memory leak
-  set value(isn:T){
-    //this.reference?.unsubscribe(this.boundOnChange)
-    this.reference = undefined;
-    this.isSet = false;
+  // TODO: Memory leak - the subscription in setTo is an anonymous closure
+  // and cannot be handed back to unsubscribe.
+  override set value(isn: T) {
+    this.reference = undefined
+    this.isSet = false
     /*
      * The name goes with the binding. Keeping it described a binding that
      * no longer exists, and anything asking "which variable is this on?"
      * got an answer that was no longer true.
      */
-    this.variable = null;
-    this._value = isn;
-    observer?.written(this);
+    this.variable = undefined as unknown as string
+    super.value = isn as unknown as EObject
   }
 }
-export {VariableWrapper, TYPE as VARIABLEWRAPPER}
+export { VariableWrapper, TYPE as VARIABLEWRAPPER }
