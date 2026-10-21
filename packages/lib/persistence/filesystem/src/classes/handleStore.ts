@@ -88,8 +88,10 @@ export async function ensurePermission(
   try {
     return (await (handle as any).requestPermission?.(options)) === 'granted'
   } catch {
-    /* Outside a gesture this throws; a refusal and an impossible question
-       are the same answer here. */
+    /*
+     * Outside a gesture this throws; a refusal and an impossible question
+     * are the same answer here.
+     */
     return false
   }
 }
