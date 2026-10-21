@@ -71,6 +71,22 @@ const datasourceId = computed(
     (watchedWidget.value as any)?.config?.datasourceId,
 )
 
+/*
+ * The settings object, read through the watched widget rather than off the
+ * prop. Opening the settings adopts a stored board into modelled instances
+ * and writes them back, so widget.config is replaced - and a plain property
+ * read in the template is not something Vue re-runs. The preview went on
+ * handing its widget the instance it had mounted with, while the one on the
+ * board, re-rendered by its own list, got the new one (#1093).
+ */
+const config = computed({
+  get: () => (watchedWidget.value as any)?.config,
+  set: (next) => {
+    const held = watchedWidget.value as any
+    if (held) held.config = next
+  },
+})
+
 const emit = defineEmits(['openSettings', 'removeWidget'])
 
 const registeredWidgets = inject<WidgetRepository>(WidgetIdentifier)!
@@ -341,8 +357,8 @@ const getpadding = computed(() => {
         :style="{ position: 'relative', opacity: transparency }"
       >
         <div class="scroll">
-          <component :is="availableWidgets[widget.type].component" :config="widget.config"
-            v-model:configv="widget.config" :datasourceId="datasourceId" :id="widget.uid || widget.id"
+          <component :is="availableWidgets[widget.type].component" :config="config"
+            v-model:configv="config" :datasourceId="datasourceId" :id="widget.uid || widget.id"
             class="widget_component" />
         </div>
       </div>
