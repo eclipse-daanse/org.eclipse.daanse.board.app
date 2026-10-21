@@ -52,7 +52,7 @@
     "vite": "6.4.2",
     "vitest": "^4.0.16",
     "vue-tsc": "^3.2.2",
-    "@emfts/codegen": "0.0.2-next.4"
+    "@emfts/codegen": "0.0.2-next.8"
   },
   "workspaces": [
     "packages/**"
