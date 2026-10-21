@@ -40,19 +40,6 @@ void ImagesettingsPackage.eINSTANCE
 import type { EventRegistry } from 'org.eclipse.daanse.board.app.lib.api.events'
 import { WIDGET_SERVICE_ID, type WidgetProvider } from 'org.eclipse.daanse.board.app.lib.api.widget'
 
-interface IImageSettings {
-  imagesSettings: GallerySettings
-  images: ImageGalleryItem[]
-}
-interface ImageGalleryItem {
-  id: string
-  url: string
-}
-interface GallerySettings {
-  fit: string
-  diashowInterval: number
-}
-
 const WIDGET_TYPE = 'ImageWidget'
 
 /**
@@ -106,4 +93,3 @@ export class ImageWidgetProvider implements WidgetProvider {
 
 export { ImageWidget }
 export { ImageSettingsImpl, ImagesettingsPackage, imageSettingsFormXmi, imageItemFormXmi, galleryFormXmi }
-export type { IImageSettings }

@@ -35,13 +35,6 @@ void VideoSettingsPackage.eINSTANCE
 import type { EventRegistry, EventActionsRegistry } from 'org.eclipse.daanse.board.app.lib.api.events'
 import { WIDGET_SERVICE_ID, type WidgetProvider } from 'org.eclipse.daanse.board.app.lib.api.widget'
 
-interface ObjectFitSetting {
-  fit: string
-}
-interface IVideoSettings {
-  videoSettings: ObjectFitSetting
-  videoUrl: string
-}
 
 const WIDGET_TYPE = 'VideoWidget'
 
@@ -95,4 +88,3 @@ export class VideoWidgetProvider implements WidgetProvider {
 
 export { VideoWidget }
 export { VideoSettingsImpl, VideoSettingsPackage, videoSettingsFormXmi, videoFitFormXmi }
-export type { IVideoSettings }
