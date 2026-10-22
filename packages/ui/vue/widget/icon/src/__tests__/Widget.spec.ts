@@ -13,6 +13,8 @@
 
 // @vitest-environment jsdom
 import { describe, it, expect, vi } from 'vitest';
+import { EventsPackage } from 'org.eclipse.daanse.board.app.lib.api.events';
+import { IconSettingsPackage } from '../gen/IconSettingsPackage';
 import { mount } from '@vue/test-utils';
 import IconWidget from '../IconWidget.vue';
 import IconWidgetSettings from '../IconWidgetSettings.vue';
@@ -248,6 +250,15 @@ vi.mock('org.eclipse.daanse.board.app.ui.vue.composables', async (importOriginal
     }
   };
 });
+
+/*
+ * Touched so the class literals exist: a generated package builds its
+ * EClasses on first access, and without this eClass() is null and a
+ * feature lookup on a settings object throws. src/index.ts does the
+ * same when the bundle activates.
+ */
+void EventsPackage.eINSTANCE;
+void IconSettingsPackage.eINSTANCE;
 
 describe('Rendering tests for org.eclipse.daanse.board.app.ui.vue.widget.icon', () => {
   it('renders IconWidget component', () => {

@@ -13,6 +13,7 @@
 
 // @vitest-environment jsdom
 import { describe, it, expect, vi } from 'vitest';
+import { RepeatableSvgWidgetsPackage } from '../gen/RepeatableSvgWidgetsPackage';
 import { mount } from '@vue/test-utils';
 import RepeatableSvgWidget from '../RepeatableSvgWidget.vue';
 
@@ -247,6 +248,14 @@ vi.mock('org.eclipse.daanse.board.app.ui.vue.composables', async (importOriginal
     }
   };
 });
+
+/*
+ * Touched so the class literals exist: a generated package builds its
+ * EClasses on first access, and without this eClass() is null and a
+ * feature lookup on a settings object throws. src/index.ts does the
+ * same when the bundle activates.
+ */
+void RepeatableSvgWidgetsPackage.eINSTANCE;
 
 describe('Rendering tests for org.eclipse.daanse.board.app.ui.vue.widget.svg.repeat', () => {
   it('renders RepeatableSvgWidget component', () => {

@@ -13,6 +13,8 @@
 
 // @vitest-environment jsdom
 import { describe, it, expect, vi } from 'vitest';
+import { identifier as PAGE_REGISTRY } from 'org.eclipse.daanse.board.app.lib.api.page';
+import { PagesettingsPackage } from '../gen/PagesettingsPackage';
 import { mount } from '@vue/test-utils';
 import PageLayoutRenderer from '../PageLayoutRenderer.vue';
 import PageWidget from '../PageWidget.vue';
@@ -250,6 +252,23 @@ vi.mock('org.eclipse.daanse.board.app.ui.vue.composables', async (importOriginal
   };
 });
 
+/*
+ * Touched so the class literals exist: a generated package builds its
+ * EClasses on first access, and without this eClass() is null and a
+ * feature lookup on a settings object throws. src/index.ts does the
+ * same when the bundle activates.
+ */
+void PagesettingsPackage.eINSTANCE;
+
+/* The services this dialog injects, as doubles. */
+const extraProvides: Record<symbol | string, unknown> = {
+  [PAGE_REGISTRY as unknown as symbol]: {
+    getAllPageIds: () => [],
+    getPage: () => undefined,
+    onChange: () => () => {},
+  },
+};
+
 describe('Rendering tests for org.eclipse.daanse.board.app.ui.vue.widget.page', () => {
   it('renders PageLayoutRenderer component', () => {
     const wrapper = mount(PageLayoutRenderer, {
@@ -435,6 +454,7 @@ describe('Rendering tests for org.eclipse.daanse.board.app.ui.vue.widget.page', 
         editEnabled: false
       } as any,
       global: {
+        provide: extraProvides,
         stubs: {
           VaCard: { template: '<div><slot /></div>' },
           VaButton: { template: '<button><slot /></button>' },
@@ -631,6 +651,7 @@ describe('Rendering tests for org.eclipse.daanse.board.app.ui.vue.widget.page', 
         editEnabled: false
       } as any,
       global: {
+        provide: extraProvides,
         stubs: {
           VaCard: { template: '<div><slot /></div>' },
           VaButton: { template: '<button><slot /></button>' },
@@ -827,6 +848,7 @@ describe('Rendering tests for org.eclipse.daanse.board.app.ui.vue.widget.page', 
         editEnabled: false
       } as any,
       global: {
+        provide: extraProvides,
         stubs: {
           VaCard: { template: '<div><slot /></div>' },
           VaButton: { template: '<button><slot /></button>' },

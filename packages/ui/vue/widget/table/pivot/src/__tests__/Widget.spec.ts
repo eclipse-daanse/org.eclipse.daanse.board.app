@@ -13,6 +13,8 @@
 
 // @vitest-environment jsdom
 import { describe, it, expect, vi } from 'vitest';
+import { EventsPackage } from 'org.eclipse.daanse.board.app.lib.api.events';
+import { PivotTablePackage } from '../gen/PivotTablePackage';
 import { mount } from '@vue/test-utils';
 import PivotTableWidget from '../PivotTableWidget.vue';
 import PivotTableWidgetSettings from '../PivotTableWidgetSettings.vue';
@@ -248,6 +250,15 @@ vi.mock('org.eclipse.daanse.board.app.ui.vue.composables', async (importOriginal
     }
   };
 });
+
+/*
+ * Touched so the class literals exist: a generated package builds its
+ * EClasses on first access, and without this eClass() is null and a
+ * feature lookup on a settings object throws. src/index.ts does the
+ * same when the bundle activates.
+ */
+void EventsPackage.eINSTANCE;
+void PivotTablePackage.eINSTANCE;
 
 describe('Rendering tests for org.eclipse.daanse.board.app.ui.vue.widget.table.pivot', () => {
   it('renders PivotTableWidget component', () => {

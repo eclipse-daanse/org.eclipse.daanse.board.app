@@ -13,6 +13,7 @@
 
 // @vitest-environment jsdom
 import { describe, it, expect, vi } from 'vitest';
+import { WeathersettingsPackage } from '../gen/WeathersettingsPackage';
 import { EVENT_ACTIONS_REGISTRY } from 'org.eclipse.daanse.board.app.lib.api.events';
 import { identifiers } from 'org.eclipse.daanse.board.app.lib.core';
 import { mount } from '@vue/test-utils';
@@ -272,6 +273,14 @@ const widgetProvides = {
     on() {}, off() {}, once() {}, emit() {},
   },
 };
+
+/*
+ * Touched so the class literals exist: a generated package builds its
+ * EClasses on first access, and without this eClass() is null and a
+ * feature lookup on a settings object throws. src/index.ts does the
+ * same when the bundle activates.
+ */
+void WeathersettingsPackage.eINSTANCE;
 
 describe('Rendering tests for org.eclipse.daanse.board.app.ui.vue.widget.weather', () => {
   it('renders WeatherWidget component', () => {

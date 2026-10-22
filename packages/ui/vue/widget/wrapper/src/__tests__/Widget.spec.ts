@@ -13,6 +13,8 @@
 
 // @vitest-environment jsdom
 import { describe, it, expect, vi } from 'vitest';
+import { identifier as WIDGET_REPOSITORY } from 'org.eclipse.daanse.board.app.lib.repository.widget';
+import { WrapperSettingsPackage } from '../gen/WrapperSettingsPackage';
 import { mount } from '@vue/test-utils';
 import WidgetWrapper from '../WidgetWrapper.vue';
 
@@ -248,6 +250,23 @@ vi.mock('org.eclipse.daanse.board.app.ui.vue.composables', async (importOriginal
   };
 });
 
+/*
+ * Touched so the class literals exist: a generated package builds its
+ * EClasses on first access, and without this eClass() is null and a
+ * feature lookup on a settings object throws. src/index.ts does the
+ * same when the bundle activates.
+ */
+void WrapperSettingsPackage.eINSTANCE;
+
+/* The widget palette, as a double - the wrapper asks it what to render. */
+const extraProvides: Record<symbol | string, unknown> = {
+  [WIDGET_REPOSITORY as unknown as symbol]: {
+    getWidget: () => undefined,
+    getWidgets: () => ({}),
+    onChange: () => () => {},
+  },
+};
+
 describe('Rendering tests for org.eclipse.daanse.board.app.ui.vue.widget.wrapper', () => {
   it('renders WidgetWrapper component', () => {
     const wrapper = mount(WidgetWrapper, {
@@ -433,6 +452,7 @@ describe('Rendering tests for org.eclipse.daanse.board.app.ui.vue.widget.wrapper
         editEnabled: false
       } as any,
       global: {
+        provide: extraProvides,
         stubs: {
           VaCard: { template: '<div><slot /></div>' },
           VaButton: { template: '<button><slot /></button>' },
