@@ -95,6 +95,14 @@ export default mergeConfig(
     resolve: {
       alias: exactAliases({ ...workspaceSourceAliases(), ...brokenThirdPartyEntries }),
     },
+    /*
+     * monaco-editor ships a sourcemap comment pointing at a .map file it
+     * does not ship. Vite tries to read it, fails, and the error surfaces
+     * as an unhandled one that marks the whole test file failed - with
+     * every test in it passing. Nothing here needs those maps.
+     */
+    css: { devSourcemap: false },
+    server: { sourcemapIgnoreList: (path) => path.includes('monaco-editor') },
     test: {
       environment: 'jsdom',
       exclude: [

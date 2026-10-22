@@ -28,16 +28,20 @@ vi.mock('org.eclipse.daanse.board.app.lib.connection.xmla', () => {
   };
 });
 
-const customStubs = {
-  VaInput: {
-    template: '<div><input class="va-input-stub" :data-label="label" :value="modelValue" @input="$emit(\'update:modelValue\', $event.target.value)" /></div>',
-    props: ['modelValue', 'label']
-  },
-  VaSelect: {
-    template: '<div><select class="va-select-stub" :data-label="label" :value="modelValue" @change="$emit(\'update:modelValue\', $event.target.value)"><option v-for="opt in options" :key="typeof opt === \'string\' ? opt : opt[valueBy]">{{ typeof opt === \'string\' ? opt : opt[textBy] }}</option></select></div>',
-    props: ['modelValue', 'label', 'options', 'textBy', 'valueBy']
-  }
-};
+/*
+ * Mounted with its real controls. Written when the dialog used Vuestic;
+ * DInput and DSelect render a plain input and select, so the stubs left
+ * the assertions with nothing to find.
+ *
+ * Fields are located by their label. No translator is provided here, so a
+ * label written as a key renders as that key - which is what the dialog
+ * shows in this setting, and what the assertions therefore look for.
+ */
+function fieldNamed(wrapper: ReturnType<typeof mount>, label: string) {
+  const tag = wrapper.findAll('label').find((l) => l.text().includes(label));
+  return tag ? wrapper.find(`#${tag.attributes('for')}`) : undefined;
+}
+;
 
 describe('XMLA Connection Settings.vue', () => {
   beforeEach(() => {
@@ -47,32 +51,29 @@ describe('XMLA Connection Settings.vue', () => {
   it('renders standard fields URL, Catalog and Security', () => {
     const config = { url: '', catalogName: '', security: 'None' };
     const wrapper = mount(Settings, {
-      props: { config },
-      global: { stubs: customStubs }
+      props: { config }
     });
 
-    expect(wrapper.find('input[data-label="URL"]').exists()).toBe(true);
-    expect(wrapper.find('select[data-label="Catalog"]').exists()).toBe(true);
-    expect(wrapper.find('select[data-label="Security"]').exists()).toBe(true);
-    expect(wrapper.find('input[data-label="User"]').exists()).toBe(false);
+    expect((fieldNamed(wrapper, 'URL') ?? { exists: () => false }).exists()).toBe(true);
+    expect((fieldNamed(wrapper, 'Xmla.catalog') ?? { exists: () => false }).exists()).toBe(true);
+    expect((fieldNamed(wrapper, 'Xmla.security') ?? { exists: () => false }).exists()).toBe(true);
+    expect((fieldNamed(wrapper, 'Xmla.user') ?? { exists: () => false }).exists()).toBe(false);
   });
 
   it('renders user and password fields when security is Basic', () => {
     const config = { url: '', catalogName: '', security: 'Basic', user: '', password: '' };
     const wrapper = mount(Settings, {
-      props: { config },
-      global: { stubs: customStubs }
+      props: { config }
     });
 
-    expect(wrapper.find('input[data-label="User"]').exists()).toBe(true);
-    expect(wrapper.find('input[data-label="Password"]').exists()).toBe(true);
+    expect((fieldNamed(wrapper, 'Xmla.user') ?? { exists: () => false }).exists()).toBe(true);
+    expect((fieldNamed(wrapper, 'Xmla.password') ?? { exists: () => false }).exists()).toBe(true);
   });
 
   it('calls fetchCatalogs on mount if URL is set', async () => {
     const config = { url: 'https://daans.emondrian.com/xmla', catalogName: '', security: 'None' };
     mount(Settings, {
-      props: { config },
-      global: { stubs: customStubs }
+      props: { config }
     });
 
     expect(XmlaConnection.getCatalogs).toHaveBeenCalledWith('https://daans.emondrian.com/xmla', {
