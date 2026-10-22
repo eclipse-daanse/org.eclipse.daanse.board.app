@@ -356,6 +356,12 @@ das über `generateFactory="false"` in der GenConfig ausdrücken — erledigt.
 Ziel-Repository: <https://github.com/eclipse-fennec/emf.ts.ui>
 Getestet gegen: `@emfts/uimodel-composer@0.0.2-next.1`
 
+**Eingereicht am 22.10.2026**, auf Englisch:
+
+| | Issue |
+|---|---|
+| FR-U1 | [#13 — UIModel has no notion of a translatable label](https://github.com/eclipse-fennec/emf.ts.ui/issues/13) |
+
 ### FR-U1 — `label` ist eine fertige Zeichenkette, kein übersetzbarer Text
 
 **Schwere:** mittel — die Anwendung funktioniert, aber jeder Verbraucher muss
