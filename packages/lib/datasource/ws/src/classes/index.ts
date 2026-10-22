@@ -21,12 +21,13 @@ import { CONNECTION_REPOSITORY,
   identifier,
   ConnectionRepository,
   type PubSubEvents,} from 'org.eclipse.daanse.board.app.lib.api.connection'
-import { inject } from '@eclipse-daanse/tsm'
+import { injectable, inject } from '@eclipse-daanse/tsm'
 
 /* The configuration is the model's; see ../gen. */
 export type { IWSStoreConfiguration } from '../gen/IWSStoreConfiguration'
 import type { IWSStoreConfiguration } from '../gen/IWSStoreConfiguration'
 
+@injectable()
 export class WSStore extends BaseDatasource {
   private connection: any
   private accumulatedData: any[] = []

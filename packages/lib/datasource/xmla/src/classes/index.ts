@@ -20,7 +20,7 @@ import { CONNECTION_REPOSITORY,
   identifier,
   ConnectionRepository,} from 'org.eclipse.daanse.board.app.lib.api.connection'
 import { type XmlaConnection } from 'org.eclipse.daanse.board.app.lib.connection.xmla'
-import { inject } from '@eclipse-daanse/tsm'
+import { injectable, inject } from '@eclipse-daanse/tsm'
 
 /*
  * Still hand-written: requestParams is a nested object this store reads
@@ -58,6 +58,7 @@ export interface FilterChangePayload {
   id: string
 }
 
+@injectable()
 export class XmlaStore extends BaseDatasource {
   private connection: any
   private requestParams: XMLARequestParams = {

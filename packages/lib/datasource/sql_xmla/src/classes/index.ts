@@ -18,12 +18,13 @@ import {
 import { CONNECTION_REPOSITORY,
   identifier,
   ConnectionRepository,} from 'org.eclipse.daanse.board.app.lib.api.connection'
-import { inject } from '@eclipse-daanse/tsm'
+import { injectable, inject } from '@eclipse-daanse/tsm'
 
 /* The configuration is the model's; see ../gen. */
 export type { ISqlXmlaStoreConfiguration } from '../gen/ISqlXmlaStoreConfiguration'
 import type { ISqlXmlaStoreConfiguration } from '../gen/ISqlXmlaStoreConfiguration'
 
+@injectable()
 export class SqlXmlaStore extends BaseDatasource {
   private connection: any
   private sql: string = ''

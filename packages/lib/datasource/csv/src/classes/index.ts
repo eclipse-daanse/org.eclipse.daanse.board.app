@@ -12,7 +12,7 @@
  **********************************************************************/
 
 // import { extractDataByPath } from "@/utils/helpers";
-import { inject } from '@eclipse-daanse/tsm'
+import { injectable, inject } from '@eclipse-daanse/tsm'
 import { type ConfigurationOf, BaseDatasource } from 'org.eclipse.daanse.board.app.lib.datasource.base'
 import { CONNECTION_REPOSITORY,
   identifier,
@@ -33,6 +33,7 @@ export interface ICsvParseResult {
   mappedRows: any[]
 }
 
+@injectable()
 export class CsvStore extends BaseDatasource {
   private connection: any
   private resourceUrl: ComputedStoreParameter | null = null

@@ -15,7 +15,7 @@ import { BaseDatasource, IBaseConnectionConfiguration, type ConfigurationOf } fr
 import { CONNECTION_REPOSITORY,
   identifier,
   ConnectionRepository,} from 'org.eclipse.daanse.board.app.lib.api.connection'
-import { inject } from '@eclipse-daanse/tsm'
+import { injectable, inject } from '@eclipse-daanse/tsm'
 
 export interface IKpiStoreConfiguration extends ConfigurationOf<IBaseConnectionConfiguration> {
   connection: string
@@ -27,6 +27,7 @@ export interface IKpiStoreConfiguration extends ConfigurationOf<IBaseConnectionC
   uid: string
 }
 
+@injectable()
 export class KpiStore extends BaseDatasource {
   private connection: any
   private kpis: any[] = []

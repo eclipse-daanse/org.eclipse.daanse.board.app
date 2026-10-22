@@ -33,6 +33,7 @@ export interface IRssParseResult {
   mappedRows: any[]
 }
 
+@injectable()
 export class RssStore extends BaseDatasource {
   private connection: any
 
