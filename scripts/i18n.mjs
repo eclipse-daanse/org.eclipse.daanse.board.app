@@ -252,6 +252,23 @@ const XMI_LABEL = /\blabel="([^"]*)"/g
 const DEFAULT_NS = /useTranslation\(\s*['"]([A-Za-z0-9]+)['"]\s*\)/
 /* t('Key'), t("Key"), also $t / tt / i18n.t - anything named t right before the paren */
 const CALL = /(?<![\w$])t\(\s*(['"])([^'"\n]+)\1/g
+/*
+ * Stripped until nothing changes, not in one pass. A single replace leaves
+ * the opener of an overlapping comment behind - `<!--<!-- -->` keeps a
+ * `<!--` - and the next pattern then reads markup that is not there. No
+ * security weight here, nothing is rendered; it is counted keys that would
+ * be wrong.
+ */
+function withoutComments(text, pattern) {
+  let previous
+  let stripped = text
+  do {
+    previous = stripped
+    stripped = stripped.replace(pattern, '')
+  } while (stripped !== previous)
+  return stripped
+}
+
 const DECLARED = /i18n-keys:\s*([a-z][A-Za-z0-9]*:[\w.]*\*?)/g
 
 /* Every key a package uses, with the file it is used in. */
@@ -264,7 +281,7 @@ function usedKeys(known) {
       const note = (key) => uses.push([key, pkg, relative(ROOT, file)])
       const text = readFileSync(file, 'utf8')
       if (file.endsWith('.xmi')) {
-        const model = text.replace(/<!--[\s\S]*?-->/g, '')
+        const model = withoutComments(text, /<!--[\s\S]*?-->/g)
         for (const [, label] of model.matchAll(XMI_LABEL)) {
           const m = QUALIFIED.exec(label)
           if (m && known.has(m[1])) note(label)
@@ -281,7 +298,9 @@ function usedKeys(known) {
       }
       for (const [, declared] of text.matchAll(DECLARED)) prefixes.push([declared.replace(/\*$/, ''), pkg])
       /* A key in a comment is an example, not a use. */
-      const code = text.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '').replace(/<!--[\s\S]*?-->/g, '')
+      let code = withoutComments(text, /\/\*[\s\S]*?\*\//g)
+      code = code.replace(/^\s*\/\/.*$/gm, '')
+      code = withoutComments(code, /<!--[\s\S]*?-->/g)
       const namespace = DEFAULT_NS.exec(code)?.[1] ?? (/\buseText\(\)/.test(code) ? 'controls' : undefined)
       for (const [, , key] of code.matchAll(CALL)) {
         if (QUALIFIED.test(key)) note(key)
