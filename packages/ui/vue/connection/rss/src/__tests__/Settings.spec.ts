@@ -16,12 +16,11 @@ import { describe, it, expect } from 'vitest'
 import { mount } from '@vue/test-utils'
 import Settings from '../Settings.vue'
 
-const customStubs = {
-  VaInput: {
-    template: '<div><input class="va-input-stub" :data-label="label" :value="modelValue" @input="$emit(\'update:modelValue\', $event.target.value)" /></div>',
-    props: ['modelValue', 'label']
-  }
-}
+/*
+ * Mounted with its real controls. The dialog was written against Vuestic
+ * when this test was, and stubbing VaInput left nothing for the assertions
+ * to find once it moved to the project's own DInput.
+ */
 
 describe('RSS Connection Settings.vue', () => {
   it('renders standard URL input field', () => {
@@ -29,13 +28,10 @@ describe('RSS Connection Settings.vue', () => {
     const wrapper = mount(Settings, {
       props: {
         config
-      },
-      global: {
-        stubs: customStubs
       }
     })
 
-    expect(wrapper.find('input[data-label="URL"]').exists()).toBe(true)
+    expect(wrapper.find('input').exists()).toBe(true)
   })
 
   it('updates the config object when URL input is modified', async () => {
@@ -43,13 +39,10 @@ describe('RSS Connection Settings.vue', () => {
     const wrapper = mount(Settings, {
       props: {
         config
-      },
-      global: {
-        stubs: customStubs
       }
     })
 
-    const urlInput = wrapper.find('input[data-label="URL"]')
+    const urlInput = wrapper.find('input')
     await urlInput.setValue('https://news.ycombinator.com/rss')
     expect(config.url).toBe('https://news.ycombinator.com/rss')
   })

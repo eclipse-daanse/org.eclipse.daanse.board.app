@@ -23,15 +23,15 @@ const mockFetch = vi.fn().mockResolvedValue({
 
 vi.stubGlobal('fetch', mockFetch)
 
-const customStubs = {
-  VaInput: {
-    template: '<div><input class="va-input-stub" :data-label="label" :value="modelValue" @input="$emit(\'update:modelValue\', $event.target.value)" /></div>',
-    props: ['modelValue', 'label']
-  },
-  VaCheckbox: {
-    template: '<div><input type="checkbox" class="va-checkbox-stub" :data-label="label" :checked="modelValue" @change="$emit(\'update:modelValue\', $event.target.checked)" /></div>',
-    props: ['modelValue', 'label']
-  }
+/*
+ * Mounted with its real controls, and found by what they render rather
+ * than by a data-label the stubs used to add. DInput puts the label in a
+ * <label for>, so a field is located by its words.
+ */
+function fieldNamed(wrapper: ReturnType<typeof mount>, label: string) {
+  const tag = wrapper.findAll('label').find((l) => l.text().includes(label))
+  if (!tag) return undefined
+  return wrapper.find(`#${tag.attributes('for')}`)
 }
 
 describe('REST Connection Settings.vue', () => {
@@ -44,16 +44,13 @@ describe('REST Connection Settings.vue', () => {
     const wrapper = mount(Settings, {
       props: {
         config
-      },
-      global: {
-        stubs: customStubs
       }
     })
 
-    expect(wrapper.find('input[data-label="URL"]').exists()).toBe(true)
-    expect(wrapper.find('input[type="checkbox"][data-label="Enable Response Caching"]').exists()).toBe(true)
+    expect(fieldNamed(wrapper, 'URL')?.exists()).toBe(true)
+    expect(wrapper.find('input[type="checkbox"]').exists()).toBe(true)
     // TTL input should be hidden when cache is disabled
-    expect(wrapper.find('input[data-label="Cache TTL (ms)"]').exists()).toBe(false)
+    expect(wrapper.findAll('input[type="number"]').length).toBe(0)
   })
 
   it('renders Cache TTL input when cacheEnabled is true', () => {
@@ -61,13 +58,10 @@ describe('REST Connection Settings.vue', () => {
     const wrapper = mount(Settings, {
       props: {
         config
-      },
-      global: {
-        stubs: customStubs
       }
     })
 
-    expect(wrapper.find('input[data-label="Cache TTL (ms)"]').exists()).toBe(true)
+    expect(wrapper.findAll('input[type="number"]').length).toBe(1)
   })
 
   it('checks URL on mount if config has URL', async () => {
@@ -75,9 +69,6 @@ describe('REST Connection Settings.vue', () => {
     mount(Settings, {
       props: {
         config
-      },
-      global: {
-        stubs: customStubs
       }
     })
 
@@ -89,14 +80,11 @@ describe('REST Connection Settings.vue', () => {
     const wrapper = mount(Settings, {
       props: {
         config
-      },
-      global: {
-        stubs: customStubs
       }
     })
 
     // Modify URL
-    const urlInput = wrapper.find('input[data-label="URL"]')
+    const urlInput = fieldNamed(wrapper, 'URL')!
     await urlInput.setValue('https://api.newplace.com')
     // wait for 700ms debounce in updateUrl
     await new Promise(resolve => setTimeout(resolve, 800))
@@ -104,7 +92,7 @@ describe('REST Connection Settings.vue', () => {
     expect(mockFetch).toHaveBeenCalledWith('https://api.newplace.com', { method: 'HEAD' })
 
     // Enable caching
-    const cacheSwitch = wrapper.find('input[type="checkbox"][data-label="Enable Response Caching"]')
+    const cacheSwitch = wrapper.find('input[type="checkbox"]')
     await (cacheSwitch as any).setChecked(true)
     expect(config.cacheEnabled).toBe(true)
 
@@ -112,7 +100,7 @@ describe('REST Connection Settings.vue', () => {
     await wrapper.vm.$nextTick()
 
     // Modify TTL
-    const ttlInput = wrapper.find('input[data-label="Cache TTL (ms)"]')
+    const ttlInput = wrapper.find('input[type="number"]')
     await ttlInput.setValue('15000')
     expect(config.cacheTTL).toBe(15000)
   })

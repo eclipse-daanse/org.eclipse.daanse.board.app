@@ -16,41 +16,27 @@ import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { mount } from '@vue/test-utils'
 import Settings from '../Settings.vue'
 
-const customStubs = {
-  VaInput: {
-    template: '<div><input class="va-input-stub" :data-label="label" :value="modelValue" @input="$emit(\'update:modelValue\', $event.target.value)" /></div>',
-    props: ['modelValue', 'label']
-  }
-}
+/*
+ * Mounted with its real controls. The dialog was written against Vuestic
+ * when this test was, and stubbing VaInput left nothing for the assertions
+ * to find once it moved to the project's own DInput - which renders a
+ * plain input, so there is nothing to stand in for.
+ */
 
 describe('GraphQL Connection Settings.vue', () => {
   it('renders standard URL input field', () => {
     const config = { url: '' }
-    const wrapper = mount(Settings, {
-      props: {
-        config
-      },
-      global: {
-        stubs: customStubs
-      }
-    })
+    const wrapper = mount(Settings, { props: { config } })
 
-    expect(wrapper.find('input[data-label="URL"]').exists()).toBe(true)
+    expect(wrapper.find('input').exists()).toBe(true)
   })
 
   it('updates the config object when URL input is modified', async () => {
     const config = { url: '' }
-    const wrapper = mount(Settings, {
-      props: {
-        config
-      },
-      global: {
-        stubs: customStubs
-      }
-    })
+    const wrapper = mount(Settings, { props: { config } })
 
-    const urlInput = wrapper.find('input[data-label="URL"]')
-    await urlInput.setValue('https://api.spacex.land/graphql')
+    await wrapper.find('input').setValue('https://api.spacex.land/graphql')
+
     expect(config.url).toBe('https://api.spacex.land/graphql')
   })
 })

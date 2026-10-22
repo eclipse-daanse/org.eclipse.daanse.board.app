@@ -13,6 +13,8 @@
 
 // @vitest-environment jsdom
 import { describe, it, expect, vi } from 'vitest';
+import { EVENT_ACTIONS_REGISTRY } from 'org.eclipse.daanse.board.app.lib.api.events';
+import { identifiers } from 'org.eclipse.daanse.board.app.lib.core';
 import { mount } from '@vue/test-utils';
 import WeatherWidget from '../WeatherWidget.vue';
 import WeatherWidgetSettings from '../WeatherWidgetSettings.vue';
@@ -251,6 +253,26 @@ vi.mock('org.eclipse.daanse.board.app.ui.vue.composables', async (importOriginal
   };
 });
 
+
+/*
+ * What a widget injects when it is mounted for real. The components assert
+ * these are present - inject(...)! - so a mount without them throws before
+ * anything can be asserted.
+ */
+const widgetProvides = {
+  [EVENT_ACTIONS_REGISTRY as symbol]: {
+    registerInstance() {},
+    unregisterInstance() {},
+    registerAction() {},
+    unregisterAction() {},
+    getAction: () => undefined,
+    getAllActions: () => [],
+  },
+  [identifiers.TINY_EMITTER as unknown as symbol]: {
+    on() {}, off() {}, once() {}, emit() {},
+  },
+};
+
 describe('Rendering tests for org.eclipse.daanse.board.app.ui.vue.widget.weather', () => {
   it('renders WeatherWidget component', () => {
     const wrapper = mount(WeatherWidget, {
@@ -436,6 +458,7 @@ describe('Rendering tests for org.eclipse.daanse.board.app.ui.vue.widget.weather
         editEnabled: false
       } as any,
       global: {
+        provide: widgetProvides,
         stubs: {
           VaCard: { template: '<div><slot /></div>' },
           VaButton: { template: '<button><slot /></button>' },
@@ -632,6 +655,7 @@ describe('Rendering tests for org.eclipse.daanse.board.app.ui.vue.widget.weather
         editEnabled: false
       } as any,
       global: {
+        provide: widgetProvides,
         stubs: {
           VaCard: { template: '<div><slot /></div>' },
           VaButton: { template: '<button><slot /></button>' },
@@ -828,6 +852,7 @@ describe('Rendering tests for org.eclipse.daanse.board.app.ui.vue.widget.weather
         editEnabled: false
       } as any,
       global: {
+        provide: widgetProvides,
         stubs: {
           VaCard: { template: '<div><slot /></div>' },
           VaButton: { template: '<button><slot /></button>' },
@@ -1024,6 +1049,7 @@ describe('Rendering tests for org.eclipse.daanse.board.app.ui.vue.widget.weather
         editEnabled: false
       } as any,
       global: {
+        provide: widgetProvides,
         stubs: {
           VaCard: { template: '<div><slot /></div>' },
           VaButton: { template: '<button><slot /></button>' },
