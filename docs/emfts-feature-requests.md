@@ -16,7 +16,7 @@ Auswirkung. Jeder ist mit einem lauffähigen Minimalbeispiel belegt.
 **Eingereicht am 11.08.2026** als Issues (Account `vwfox`, auf Englisch):
 
 | | Issue |
-|---|---|
+| --- | --- |
 | FR-1 | [#65 — eGenericType leaves the feature without any eType](https://github.com/eclipse-fennec/emf.ts/issues/65) — **behoben und geschlossen** in 0.2.0-next.1 |
 | FR-2 | [#66 — Nested model elements (EOperation, EParameter) load as DynamicEObject](https://github.com/eclipse-fennec/emf.ts/issues/66) — **behoben in 0.2.0-next.1**, [bestätigt](https://github.com/eclipse-fennec/emf.ts/issues/66#issuecomment-5318280769) |
 | FR-3 | [#67 — registerPackage() missing on a ResourceSet's package registry](https://github.com/eclipse-fennec/emf.ts/issues/67) |
@@ -70,7 +70,7 @@ for (const f of holder.getEStructuralFeatures()) {
 
 **Ist:**
 
-```
+```text
 Ladefehler: 3
   [Line 8, Col 103] Feature 'eTypeArguments' has no parent object
   Unknown feature 'eGenericType' for type 'EReference'
@@ -202,7 +202,7 @@ fehlerfrei; Output strukturell äquivalent zu unserem Generator.
 
 `init --mode decorator` erzeugt eine GenConfig, `generate` damit scheitert:
 
-```
+```text
  >> 48| <% for (const genOp of operations) {
     49|   const op = genOp.ecoreOperation;
     50|   const opName = op.getName();
@@ -236,7 +236,7 @@ Unsere Modelle bauen über Paketgrenzen hinweg aufeinander auf:
 
 `init -m …/rest/model/model.ecore` bricht ab:
 
-```
+```text
 Error: subPkg.getNsURI is not a function
 ```
 
@@ -359,7 +359,7 @@ Getestet gegen: `@emfts/uimodel-composer@0.0.2-next.1`
 **Eingereicht am 22.10.2026**, auf Englisch:
 
 | | Issue |
-|---|---|
+| --- | --- |
 | FR-U1 | [#13 — UIModel has no notion of a translatable label](https://github.com/eclipse-fennec/emf.ts.ui/issues/13) |
 
 ### FR-U1 — `label` ist eine fertige Zeichenkette, kein übersetzbarer Text

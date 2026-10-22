@@ -1,0 +1,17 @@
+# Markdown rules for super-linter, which reads this path by default.
+#
+# Adding a file here replaces super-linter's own defaults, so what it had
+# switched off has to be switched off again here. Only two rules are
+# relaxed, and both only as far as they have to be.
+
+# A document that describes several things in the same shape repeats its
+# sub-headings on purpose: every feature request has a "Reproduktion" and a
+# "Vorschlag". siblings_only still catches a heading duplicated under the
+# same parent, which is the mistake the rule is for.
+MD024:
+  siblings_only: true
+
+# Line length. Off in super-linter's defaults, and the prose here is
+# wrapped for reading rather than to a column - a table row or a long URL
+# would otherwise have to be broken where it cannot be.
+MD013: false
