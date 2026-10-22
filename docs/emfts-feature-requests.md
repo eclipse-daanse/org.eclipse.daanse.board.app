@@ -32,7 +32,7 @@ Ein `EStructuralFeature`, dessen Typ über `eGenericType` statt über das
 Attribut `eType` angegeben ist, kommt nach dem Laden **ohne jeden Typ** an.
 Nicht nur die Typargumente fehlen, sondern `getEType()` liefert `null`.
 
-### Reproduktion
+### Reproduktion (FR-1)
 
 ```typescript
 import { EResourceSetImpl, URI, type EPackage, type EClass } from '@emfts/core'
@@ -81,7 +81,7 @@ plain -> EString
 **Soll:** `label -> Box`. Die Typargumente dürfen aus unserer Sicht gern
 zunächst ignoriert werden — entscheidend ist, dass der Basistyp erhalten bleibt.
 
-### Auswirkung bei uns
+### Auswirkung bei uns (FR-1)
 
 Acht Widget-Modelle typisieren ihre Konfigurationsfelder als
 `VariableWrapper<EString>`, also über `eGenericType`. Alle diese Felder erscheinen
@@ -91,7 +91,7 @@ Beim Start der Anwendung erzeugt das zusätzlich dutzende Konsolenfehler.
 Der Fehler ist deshalb unangenehm, weil er nicht zum Abbruch führt: Das Modell
 lädt, die Klasse existiert, nur der Typ ist weg.
 
-### Vorschlag
+### Vorschlag (FR-1)
 
 Im XMI-Handler `eGenericType` als Kindelement von `EStructuralFeature`,
 `EOperation`, `EParameter` und `EClass` (`eSuperTypes`) verstehen und mindestens
@@ -113,7 +113,7 @@ typisierte Objekte materialisiert (`BasicEPackage`, `BasicEClass`,
 Einträge einer Annotation-Detail-Map dagegen als `DynamicEObject`, das nur
 `eClass()` und `eGet()` anbietet.
 
-### Reproduktion
+### Reproduktion (FR-2)
 
 ```typescript
 const op = eClass.getEOperations()[0]
@@ -130,7 +130,7 @@ op.getEAnnotation('meine/quelle')
 implementiert es auch — nur erzeugt der Loader an dieser Stelle keine
 `BasicEOperation`.
 
-### Auswirkung bei uns
+### Auswirkung bei uns (FR-2)
 
 Code, der gegen die Interfaces geschrieben ist, bricht zur Laufzeit. Wir lesen
 diese Elemente deshalb reflektiv über `eGet()` und halten uns eine kleine
@@ -138,7 +138,7 @@ Hilfsschicht, die den typisierten Zugriff bevorzugt und sonst zurückfällt. Das
 ist tragbar — reflektives Lesen eines Metamodells ist idiomatisches EMF —, aber
 es überrascht, weil dieselbe Datei `EClass` typisiert liefert.
 
-### Vorschlag
+### Vorschlag (FR-2)
 
 Im XMI-Loader die vorhandenen `Basic*`-Implementierungen auch für die
 verschachtelten Elemente verwenden. Sollte das aus Aufwandsgründen nicht
