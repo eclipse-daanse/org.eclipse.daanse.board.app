@@ -120,7 +120,7 @@ describe('REST Datasource Settings.vue', () => {
 
     // Enable Polling
     const pollingSwitch = wrapper.find('input[type="checkbox"][data-label="Enable Long Polling"]')
-    await (pollingSwitch as any).setChecked(true)
+    await (pollingSwitch as any).trigger('click')
     expect(config.pollingEnabled).toBe(true)
 
     // Wait for DOM update

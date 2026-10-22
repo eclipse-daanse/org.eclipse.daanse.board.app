@@ -55,8 +55,8 @@ describe('GraphQL Datasource Settings.vue', () => {
     })
 
     expect(wrapper.find('select').exists()).toBe(true)
-    expect(wrapper.find('input[type="checkbox"].va-switch-stub').exists()).toBe(true)
-    expect(wrapper.find('input[type="text"].va-input-stub').exists()).toBe(false)
+    expect(wrapper.find('[role="switch"]').exists()).toBe(true)
+    expect(wrapper.find('input[type="text"]').exists()).toBe(false)
   })
 
   it('shows polling interval input when polling is enabled', async () => {
@@ -69,7 +69,7 @@ describe('GraphQL Datasource Settings.vue', () => {
       }
     })
 
-    expect(wrapper.find('input[type="text"].va-input-stub').exists()).toBe(true)
+    expect(wrapper.find('input[type="text"]').exists()).toBe(true)
   })
 
   it('updates connection selection in the config', async () => {
@@ -97,7 +97,7 @@ describe('GraphQL Datasource Settings.vue', () => {
       }
     })
 
-    const intervalInput = wrapper.find('input[type="text"].va-input-stub')
+    const intervalInput = wrapper.find('input[type="text"]')
     await intervalInput.setValue('8000')
 
     // Wait for the 700ms debounce

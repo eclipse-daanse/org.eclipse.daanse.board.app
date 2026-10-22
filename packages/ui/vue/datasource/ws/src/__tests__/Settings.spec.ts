@@ -55,8 +55,8 @@ describe('WS Datasource Settings.vue', () => {
     })
 
     expect(wrapper.find('select').exists()).toBe(true)
-    expect(wrapper.find('input[type="checkbox"].va-switch-stub').exists()).toBe(true)
-    expect(wrapper.find('input[type="text"].va-input-stub').exists()).toBe(true)
+    expect(wrapper.find('[role="switch"]').exists()).toBe(true)
+    expect(wrapper.find('input[type="text"]').exists()).toBe(true)
   })
 
   it('filters only WS and MQTT connections', () => {
@@ -92,13 +92,12 @@ describe('WS Datasource Settings.vue', () => {
     expect(config.connection).toBe('conn-ws')
 
     // Toggle accumulate switch
-    const toggle = wrapper.find('input[type="checkbox"].va-switch-stub')
-    ;(toggle.element as HTMLInputElement).checked = true
-    await toggle.trigger('change')
+    const toggle = wrapper.find('[role="switch"]')
+    await toggle.trigger('click')
     expect(config.accumulate).toBe(true)
 
     // Update topic input
-    const input = wrapper.find('input[type="text"].va-input-stub')
+    const input = wrapper.find('input[type="text"]')
     await input.setValue('live/sensors/temp')
     expect(config.topic).toBe('live/sensors/temp')
   })

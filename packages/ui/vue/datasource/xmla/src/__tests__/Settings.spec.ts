@@ -91,8 +91,8 @@ describe('XMLA Datasource Settings.vue', () => {
     expect(wrapper.find('input').exists()).toBe(false);
 
     // Toggle switch
-    const toggle = wrapper.find('input[type="checkbox"]');
-    await (toggle as any).setChecked(true);
+    const toggle = wrapper.find('[role="switch"]');
+    await (toggle as any).trigger('click');
     expect(config.pollingEnabled).toBe(true);
 
     await wrapper.vm.$nextTick();
