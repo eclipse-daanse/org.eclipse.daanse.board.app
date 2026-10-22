@@ -16,20 +16,25 @@ import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { mount } from '@vue/test-utils'
 import Settings from '../Settings.vue'
 
-const customStubs = {
-  VaSelect: {
-    template: '<div><select class="va-select-stub" :value="modelValue" @change="$emit(\'update:modelValue\', $event.target.value)"><option v-for="opt in options" :value="opt.value || opt.uid">{{ opt.label || opt.name }}</option></select></div>',
-    props: ['modelValue', 'options']
-  },
-  VaInput: {
-    template: '<div><input class="va-input-stub" :value="modelValue" @input="$emit(\'update:modelValue\', $event.target.value)" /></div>',
-    props: ['modelValue']
-  },
-  VaSwitch: {
-    template: '<input type="checkbox" class="va-switch-stub" :checked="modelValue" @change="$emit(\'update:modelValue\', $event.target.checked)" />',
-    props: ['modelValue']
-  },
-  VaIcon: true
+/*
+ * Mounted with its real controls. These tests were written when the dialogs
+ * used Vuestic; the project's own DSelect and DInput render a plain select
+ * and input, so there is nothing left to stand in for - and a stub left the
+ * assertions with nothing to find.
+ */
+function fieldNamed(wrapper: ReturnType<typeof mount>, label: string) {
+  const tag = wrapper.findAll('label').find((l) => l.text().includes(label))
+  return tag ? wrapper.find(`#${tag.attributes('for')}`) : undefined
+}
+
+/*
+ * DSelect gives its options the entry's index as value and maps back
+ * internally, so a test picks an option by the words it shows.
+ */
+async function chooseOption(wrapper: ReturnType<typeof mount>, text: string, at = 0) {
+  const select = wrapper.findAll('select')[at]
+  const option = select.findAll('option').find((o) => o.text().includes(text))
+  await select.setValue(option!.element.value)
 }
 
 describe('CSV Datasource Settings.vue', () => {
@@ -55,14 +60,11 @@ describe('CSV Datasource Settings.vue', () => {
         config,
         dataSources: [],
         connections
-      },
-      global: {
-        stubs: customStubs
       }
     })
 
-    expect(wrapper.find('select.va-select-stub').exists()).toBe(true)
-    expect(wrapper.findAll('input.va-input-stub').length).toBeGreaterThanOrEqual(1)
+    expect(wrapper.find('select').exists()).toBe(true)
+    expect(wrapper.findAll('input').length).toBeGreaterThanOrEqual(1)
   })
 
   it('updates connection selection in config', async () => {
@@ -72,14 +74,11 @@ describe('CSV Datasource Settings.vue', () => {
         config,
         dataSources: [],
         connections
-      },
-      global: {
-        stubs: customStubs
       }
     })
 
-    const selects = wrapper.findAll('select.va-select-stub')
-    await selects[0].setValue('conn-rest-2')
+    const selects = wrapper.findAll('select')
+    await chooseOption(wrapper, 'REST Conn 2', 0)
     expect(config.connection).toBe('conn-rest-2')
   })
 
@@ -90,13 +89,10 @@ describe('CSV Datasource Settings.vue', () => {
         config,
         dataSources: [],
         connections
-      },
-      global: {
-        stubs: customStubs
       }
     })
 
-    const inputs = wrapper.findAll('input.va-input-stub')
+    const inputs = wrapper.findAll('input')
     // First input is resourceUrl
     await inputs[0].setValue('users.csv')
     expect(config.resourceUrl).toBe('') // should not update immediately due to debounce

@@ -27,30 +27,25 @@ if (!container.isBound(variableIdentifier)) {
   container.bind(variableIdentifier).toConstantValue(mockVariableRepository)
 }
 
-const customStubs = {
-  VaSelect: {
-    template: '<div><select class="va-select-stub" :value="modelValue" @change="$emit(\'update:modelValue\', $event.target.value)"><option v-for="opt in options" :value="opt.uid">{{ opt.name }}</option></select></div>',
-    props: ['modelValue', 'options']
-  },
-  VaSwitch: {
-    template: '<input type="checkbox" class="va-switch-stub" :checked="modelValue" @change="$emit(\'update:modelValue\', $event.target.checked)" />',
-    props: ['modelValue']
-  },
-  VaInput: {
-    template: '<input type="text" class="va-input-stub" :value="modelValue" @input="$emit(\'update:modelValue\', $event.target.value)" />',
-    props: ['modelValue']
-  },
-  VariableInput: {
-    template: '<div class="variable-input-stub">VariableInput</div>'
-  },
-  VaIcon: true,
-  VaCollapse: { template: '<div><slot /></div>' },
-  VaCheckbox: true,
-  VaDivider: true,
-  VaButton: true,
-  VaDateInput: true,
-  VaTimeInput: true,
-  VaScrollContainer: { template: '<div><slot /></div>' }
+/*
+ * Mounted with its real controls. These tests were written when the dialogs
+ * used Vuestic; the project's own DSelect and DInput render a plain select
+ * and input, so there is nothing left to stand in for - and a stub left the
+ * assertions with nothing to find.
+ */
+function fieldNamed(wrapper: ReturnType<typeof mount>, label: string) {
+  const tag = wrapper.findAll('label').find((l) => l.text().includes(label))
+  return tag ? wrapper.find(`#${tag.attributes('for')}`) : undefined
+}
+
+/*
+ * DSelect gives its options the entry's index as value and maps back
+ * internally, so a test picks an option by the words it shows.
+ */
+async function chooseOption(wrapper: ReturnType<typeof mount>, text: string, at = 0) {
+  const select = wrapper.findAll('select')[at]
+  const option = select.findAll('option').find((o) => o.text().includes(text))
+  await select.setValue(option!.element.value)
 }
 
 describe('OGCSTAStoreSettings.vue', () => {
@@ -76,13 +71,10 @@ describe('OGCSTAStoreSettings.vue', () => {
         config,
         dataSources: [],
         connections
-      },
-      global: {
-        stubs: customStubs
       }
     })
 
-    const selects = wrapper.findAllComponents(customStubs.VaSelect)
+    const selects = wrapper.findAll('select')
     expect(selects.length).toBeGreaterThanOrEqual(1)
   })
 
@@ -103,15 +95,12 @@ describe('OGCSTAStoreSettings.vue', () => {
         config,
         dataSources: [],
         connections
-      },
-      global: {
-        stubs: customStubs
       }
     })
 
-    const selects = wrapper.findAllComponents(customStubs.VaSelect)
+    const selects = wrapper.findAll('select')
     // Connection is the first select
-    await selects[0].find('select').setValue('conn-rest-1')
+    await chooseOption(wrapper, 'REST connection', 0)
     expect(config.connection).toBe('conn-rest-1')
   })
 })

@@ -24,19 +24,25 @@ const mockFetch = vi.fn().mockResolvedValue({
 
 vi.stubGlobal('fetch', mockFetch)
 
-const customStubs = {
-  VaSelect: {
-    template: '<div><select class="va-select-stub" :data-label="label" :value="modelValue" @change="$emit(\'update:modelValue\', $event.target.value)"><option value="conn1">conn1</option><option v-for="opt in options" :value="opt.uid || opt">{{ opt.name || opt }}</option></select></div>',
-    props: ['modelValue', 'label', 'options']
-  },
-  VaSwitch: {
-    template: '<div><input type="checkbox" class="va-switch-stub" :data-label="label" :checked="modelValue" @change="$emit(\'update:modelValue\', $event.target.checked)" /></div>',
-    props: ['modelValue', 'label']
-  },
-  VaInput: {
-    template: '<div><input class="va-input-stub" :data-label="label" :value="modelValue" @input="$emit(\'update:modelValue\', $event.target.value)" /></div>',
-    props: ['modelValue', 'label']
-  }
+/*
+ * Mounted with its real controls. These tests were written when the dialogs
+ * used Vuestic; the project's own DSelect and DInput render a plain select
+ * and input, so there is nothing left to stand in for - and a stub left the
+ * assertions with nothing to find.
+ */
+function fieldNamed(wrapper: ReturnType<typeof mount>, label: string) {
+  const tag = wrapper.findAll('label').find((l) => l.text().includes(label))
+  return tag ? wrapper.find(`#${tag.attributes('for')}`) : undefined
+}
+
+/*
+ * DSelect gives its options the entry's index as value and maps back
+ * internally, so a test picks an option by the words it shows.
+ */
+async function chooseOption(wrapper: ReturnType<typeof mount>, text: string, at = 0) {
+  const select = wrapper.findAll('select')[at]
+  const option = select.findAll('option').find((o) => o.text().includes(text))
+  await select.setValue(option!.element.value)
 }
 
 describe('REST Datasource Settings.vue', () => {
@@ -51,17 +57,14 @@ describe('REST Datasource Settings.vue', () => {
         config,
         connections: [],
         dataSources: []
-      },
-      global: {
-        stubs: customStubs
       }
     })
 
     expect(wrapper.find('select[data-label="Connection"]').exists()).toBe(true)
-    expect(wrapper.find('input[data-label="Resource Url"]').exists()).toBe(true)
-    expect(wrapper.find('input[data-label="Selected value"]').exists()).toBe(true)
+    expect(wrapper.find('input').exists()).toBe(true)
+    expect(wrapper.find('input').exists()).toBe(true)
     expect(wrapper.find('input[type="checkbox"][data-label="Enable Long Polling"]').exists()).toBe(true)
-    expect(wrapper.find('input[data-label="Polling Interval (ms)"]').exists()).toBe(false)
+    expect(wrapper.find('input').exists()).toBe(false)
   })
 
   it('filters connections list to type rest', () => {
@@ -75,9 +78,6 @@ describe('REST Datasource Settings.vue', () => {
         config,
         connections,
         dataSources: []
-      },
-      global: {
-        stubs: customStubs
       }
     })
 
@@ -97,9 +97,6 @@ describe('REST Datasource Settings.vue', () => {
         config,
         connections,
         dataSources: []
-      },
-      global: {
-        stubs: customStubs
       }
     })
 
@@ -109,7 +106,7 @@ describe('REST Datasource Settings.vue', () => {
     expect(config.connection).toBe('conn1')
 
     // Modify Resource Url (debounced)
-    const resourceUrlInput = wrapper.find('input[data-label="Resource Url"]')
+    const resourceUrlInput = wrapper.find('input')
     await resourceUrlInput.setValue('users')
     // wait for 700ms debounce in updateResourceUrl
     await new Promise(resolve => setTimeout(resolve, 800))
@@ -117,7 +114,7 @@ describe('REST Datasource Settings.vue', () => {
     expect(mockFetch).toHaveBeenCalledWith('https://api.test.com/users', { method: 'HEAD' })
 
     // Modify Selected Value
-    const selectValInput = wrapper.find('input[data-label="Selected value"]')
+    const selectValInput = wrapper.find('input')
     await selectValInput.setValue('data.items')
     expect(config.selectedJSONValue).toBe('data.items')
 
@@ -130,7 +127,7 @@ describe('REST Datasource Settings.vue', () => {
     await wrapper.vm.$nextTick()
 
     // Modify Polling Interval (debounced)
-    const intervalInput = wrapper.find('input[data-label="Polling Interval (ms)"]')
+    const intervalInput = wrapper.find('input')
     await intervalInput.setValue('7500')
     // wait for 700ms debounce in intervalDebounce
     await new Promise(resolve => setTimeout(resolve, 800))

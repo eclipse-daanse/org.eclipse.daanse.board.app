@@ -16,19 +16,25 @@ import { describe, it, expect, vi } from 'vitest'
 import { mount } from '@vue/test-utils'
 import Settings from '../Settings.vue'
 
-const customStubs = {
-  VaSelect: {
-    template: '<div><select class="va-select-stub" :value="modelValue" @change="$emit(\'update:modelValue\', $event.target.value)"><option v-for="opt in options" :value="opt.uid">{{ opt.name }}</option></select></div>',
-    props: ['modelValue', 'options']
-  },
-  VaSwitch: {
-    template: '<input type="checkbox" class="va-switch-stub" :checked="modelValue" @change="$emit(\'update:modelValue\', $event.target.checked)" />',
-    props: ['modelValue']
-  },
-  VaInput: {
-    template: '<input type="text" class="va-input-stub" :value="modelValue" @input="$emit(\'update:modelValue\', $event.target.value)" />',
-    props: ['modelValue']
-  }
+/*
+ * Mounted with its real controls. These tests were written when the dialogs
+ * used Vuestic; the project's own DSelect and DInput render a plain select
+ * and input, so there is nothing left to stand in for - and a stub left the
+ * assertions with nothing to find.
+ */
+function fieldNamed(wrapper: ReturnType<typeof mount>, label: string) {
+  const tag = wrapper.findAll('label').find((l) => l.text().includes(label))
+  return tag ? wrapper.find(`#${tag.attributes('for')}`) : undefined
+}
+
+/*
+ * DSelect gives its options the entry's index as value and maps back
+ * internally, so a test picks an option by the words it shows.
+ */
+async function chooseOption(wrapper: ReturnType<typeof mount>, text: string, at = 0) {
+  const select = wrapper.findAll('select')[at]
+  const option = select.findAll('option').find((o) => o.text().includes(text))
+  await select.setValue(option!.element.value)
 }
 
 describe('GraphQL Datasource Settings.vue', () => {
@@ -45,13 +51,10 @@ describe('GraphQL Datasource Settings.vue', () => {
         config,
         dataSources: [],
         connections
-      },
-      global: {
-        stubs: customStubs
       }
     })
 
-    expect(wrapper.find('select.va-select-stub').exists()).toBe(true)
+    expect(wrapper.find('select').exists()).toBe(true)
     expect(wrapper.find('input[type="checkbox"].va-switch-stub').exists()).toBe(true)
     expect(wrapper.find('input[type="text"].va-input-stub').exists()).toBe(false)
   })
@@ -63,9 +66,6 @@ describe('GraphQL Datasource Settings.vue', () => {
         config,
         dataSources: [],
         connections
-      },
-      global: {
-        stubs: customStubs
       }
     })
 
@@ -79,14 +79,11 @@ describe('GraphQL Datasource Settings.vue', () => {
         config,
         dataSources: [],
         connections
-      },
-      global: {
-        stubs: customStubs
       }
     })
 
-    const select = wrapper.find('select.va-select-stub')
-    await select.setValue('conn2')
+    const select = wrapper.find('select')
+    await chooseOption(wrapper, 'GraphQL Connection 2')
     expect(config.connection).toBe('conn2')
   })
 
@@ -97,9 +94,6 @@ describe('GraphQL Datasource Settings.vue', () => {
         config,
         dataSources: [],
         connections
-      },
-      global: {
-        stubs: customStubs
       }
     })
 

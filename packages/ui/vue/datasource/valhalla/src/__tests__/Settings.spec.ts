@@ -16,15 +16,25 @@ import { describe, it, expect } from 'vitest'
 import { mount } from '@vue/test-utils'
 import Settings from '../Settings.vue'
 
-const customStubs = {
-  VaSelect: {
-    template: '<div><select class="va-select-stub" :value="modelValue" @change="$emit(\'update:modelValue\', $event.target.value)"><option v-for="opt in options" :value="opt.value || opt.uid">{{ opt.text || opt.name }}</option></select></div>',
-    props: ['modelValue', 'options']
-  },
-  VaInput: {
-    template: '<input type="text" class="va-input-stub" :value="modelValue" @input="$emit(\'update:modelValue\', $event.target.value)" />',
-    props: ['modelValue']
-  }
+/*
+ * Mounted with its real controls. These tests were written when the dialogs
+ * used Vuestic; the project's own DSelect and DInput render a plain select
+ * and input, so there is nothing left to stand in for - and a stub left the
+ * assertions with nothing to find.
+ */
+function fieldNamed(wrapper: ReturnType<typeof mount>, label: string) {
+  const tag = wrapper.findAll('label').find((l) => l.text().includes(label))
+  return tag ? wrapper.find(`#${tag.attributes('for')}`) : undefined
+}
+
+/*
+ * DSelect gives its options the entry's index as value and maps back
+ * internally, so a test picks an option by the words it shows.
+ */
+async function chooseOption(wrapper: ReturnType<typeof mount>, text: string, at = 0) {
+  const select = wrapper.findAll('select')[at]
+  const option = select.findAll('option').find((o) => o.text().includes(text))
+  await select.setValue(option!.element.value)
 }
 
 describe('Valhalla Datasource Settings.vue', () => {
@@ -40,9 +50,6 @@ describe('Valhalla Datasource Settings.vue', () => {
         config,
         dataSources: [],
         connections
-      },
-      global: {
-        stubs: customStubs
       }
     })
 
@@ -64,17 +71,14 @@ describe('Valhalla Datasource Settings.vue', () => {
         config,
         dataSources: [],
         connections
-      },
-      global: {
-        stubs: customStubs
       }
     })
 
-    const selects = wrapper.findAll('select.va-select-stub')
-    const langInput = wrapper.find('input.va-input-stub')
+    const selects = wrapper.findAll('select')
+    const langInput = wrapper.find('input')
 
     // Set connection (first select)
-    await selects[0].setValue('conn-rest-valhalla')
+    await chooseOption(wrapper, 'Valhalla Routing Rest', 0)
     expect(config.connection).toBe('conn-rest-valhalla')
 
     // Set costing (second select)

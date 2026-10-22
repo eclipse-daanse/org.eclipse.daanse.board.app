@@ -34,11 +34,25 @@ vi.mock('org.eclipse.daanse.board.app.lib.datasource.xmla', () => {
 
 import Settings from '../Settings.vue'
 
-const customStubs = {
-  VaSelect: {
-    template: '<div><select class="va-select-stub" :value="modelValue" @change="$emit(\'update:modelValue\', $event.target.value)"><option v-for="opt in options" :value="opt.uid || opt.CUBE_NAME">{{ opt.name || opt.CUBE_NAME }}</option></select></div>',
-    props: ['modelValue', 'options']
-  }
+/*
+ * Mounted with its real controls. These tests were written when the dialogs
+ * used Vuestic; the project's own DSelect and DInput render a plain select
+ * and input, so there is nothing left to stand in for - and a stub left the
+ * assertions with nothing to find.
+ */
+function fieldNamed(wrapper: ReturnType<typeof mount>, label: string) {
+  const tag = wrapper.findAll('label').find((l) => l.text().includes(label))
+  return tag ? wrapper.find(`#${tag.attributes('for')}`) : undefined
+}
+
+/*
+ * DSelect gives its options the entry's index as value and maps back
+ * internally, so a test picks an option by the words it shows.
+ */
+async function chooseOption(wrapper: ReturnType<typeof mount>, text: string, at = 0) {
+  const select = wrapper.findAll('select')[at]
+  const option = select.findAll('option').find((o) => o.text().includes(text))
+  await select.setValue(option!.element.value)
 }
 
 describe('KPI Datasource Settings.vue', () => {
@@ -59,9 +73,6 @@ describe('KPI Datasource Settings.vue', () => {
         config,
         dataSources: [],
         connections
-      },
-      global: {
-        stubs: customStubs
       }
     })
 
@@ -69,7 +80,7 @@ describe('KPI Datasource Settings.vue', () => {
     await new Promise(resolve => setTimeout(resolve, 0))
 
     expect(mockFetchCubes).toHaveBeenCalledWith('conn-xmla-1')
-    expect(wrapper.findAll('select.va-select-stub').length).toBe(2)
+    expect(wrapper.findAll('select').length).toBe(2)
   })
 
   it('updates cube value in the config when selected', async () => {
@@ -79,15 +90,12 @@ describe('KPI Datasource Settings.vue', () => {
         config,
         dataSources: [],
         connections
-      },
-      global: {
-        stubs: customStubs
       }
     })
 
     await new Promise(resolve => setTimeout(resolve, 0))
 
-    const selects = wrapper.findAll('select.va-select-stub')
+    const selects = wrapper.findAll('select')
     // Selects[1] is the Cube select
     await selects[1].setValue('Sales')
     expect(config.cube).toBe('Sales')

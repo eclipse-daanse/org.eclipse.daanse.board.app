@@ -16,19 +16,25 @@ import { describe, it, expect } from 'vitest'
 import { mount } from '@vue/test-utils'
 import Settings from '../Settings.vue'
 
-const customStubs = {
-  VaSelect: {
-    template: '<div><select class="va-select-stub" :value="modelValue" @change="$emit(\'update:modelValue\', $event.target.value)"><option v-for="opt in options" :value="opt.uid">{{ opt.name }}</option></select></div>',
-    props: ['modelValue', 'options']
-  },
-  VaSwitch: {
-    template: '<input type="checkbox" class="va-switch-stub" :checked="modelValue" @change="$emit(\'update:modelValue\', $event.target.checked)" />',
-    props: ['modelValue']
-  },
-  VaInput: {
-    template: '<input type="text" class="va-input-stub" :value="modelValue" @input="$emit(\'update:modelValue\', $event.target.value)" />',
-    props: ['modelValue']
-  }
+/*
+ * Mounted with its real controls. These tests were written when the dialogs
+ * used Vuestic; the project's own DSelect and DInput render a plain select
+ * and input, so there is nothing left to stand in for - and a stub left the
+ * assertions with nothing to find.
+ */
+function fieldNamed(wrapper: ReturnType<typeof mount>, label: string) {
+  const tag = wrapper.findAll('label').find((l) => l.text().includes(label))
+  return tag ? wrapper.find(`#${tag.attributes('for')}`) : undefined
+}
+
+/*
+ * DSelect gives its options the entry's index as value and maps back
+ * internally, so a test picks an option by the words it shows.
+ */
+async function chooseOption(wrapper: ReturnType<typeof mount>, text: string, at = 0) {
+  const select = wrapper.findAll('select')[at]
+  const option = select.findAll('option').find((o) => o.text().includes(text))
+  await select.setValue(option!.element.value)
 }
 
 describe('WS Datasource Settings.vue', () => {
@@ -45,13 +51,10 @@ describe('WS Datasource Settings.vue', () => {
         config,
         dataSources: [],
         connections
-      },
-      global: {
-        stubs: customStubs
       }
     })
 
-    expect(wrapper.find('select.va-select-stub').exists()).toBe(true)
+    expect(wrapper.find('select').exists()).toBe(true)
     expect(wrapper.find('input[type="checkbox"].va-switch-stub').exists()).toBe(true)
     expect(wrapper.find('input[type="text"].va-input-stub').exists()).toBe(true)
   })
@@ -63,13 +66,10 @@ describe('WS Datasource Settings.vue', () => {
         config,
         dataSources: [],
         connections
-      },
-      global: {
-        stubs: customStubs
       }
     })
 
-    const select = wrapper.find('select.va-select-stub')
+    const select = wrapper.find('select')
     const options = select.findAll('option')
     expect(options.length).toBe(2)
     expect(options[0].text()).toBe('WebSocket Connection')
@@ -83,15 +83,12 @@ describe('WS Datasource Settings.vue', () => {
         config,
         dataSources: [],
         connections
-      },
-      global: {
-        stubs: customStubs
       }
     })
 
     // Update connection
-    const select = wrapper.find('select.va-select-stub')
-    await select.setValue('conn-ws')
+    const select = wrapper.find('select')
+    await chooseOption(wrapper, 'WebSocket Connection')
     expect(config.connection).toBe('conn-ws')
 
     // Toggle accumulate switch

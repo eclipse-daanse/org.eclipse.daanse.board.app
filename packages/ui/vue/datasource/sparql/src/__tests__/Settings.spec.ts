@@ -42,11 +42,25 @@ vi.mock('@triply/yasgui', () => {
 
 import Settings from '../Settings.vue'
 
-const customStubs = {
-  VaSelect: {
-    template: '<div><select class="va-select-stub" :value="modelValue" @change="$emit(\'update:modelValue\', $event.target.value)"><option v-for="opt in options" :value="opt.uid">{{ opt.name }}</option></select></div>',
-    props: ['modelValue', 'options']
-  }
+/*
+ * Mounted with its real controls. These tests were written when the dialogs
+ * used Vuestic; the project's own DSelect and DInput render a plain select
+ * and input, so there is nothing left to stand in for - and a stub left the
+ * assertions with nothing to find.
+ */
+function fieldNamed(wrapper: ReturnType<typeof mount>, label: string) {
+  const tag = wrapper.findAll('label').find((l) => l.text().includes(label))
+  return tag ? wrapper.find(`#${tag.attributes('for')}`) : undefined
+}
+
+/*
+ * DSelect gives its options the entry's index as value and maps back
+ * internally, so a test picks an option by the words it shows.
+ */
+async function chooseOption(wrapper: ReturnType<typeof mount>, text: string, at = 0) {
+  const select = wrapper.findAll('select')[at]
+  const option = select.findAll('option').find((o) => o.text().includes(text))
+  await select.setValue(option!.element.value)
 }
 
 describe('SPARQL Datasource Settings.vue', () => {
@@ -74,13 +88,10 @@ describe('SPARQL Datasource Settings.vue', () => {
         config,
         dataSources: [],
         connections
-      },
-      global: {
-        stubs: customStubs
       }
     })
 
-    expect(wrapper.find('select.va-select-stub').exists()).toBe(true)
+    expect(wrapper.find('select').exists()).toBe(true)
     expect(mockAddTab).toHaveBeenCalled()
     expect(mockSetQuery).toHaveBeenCalledWith('SELECT ?s ?p ?o WHERE {}')
   })
@@ -99,14 +110,11 @@ describe('SPARQL Datasource Settings.vue', () => {
         config,
         dataSources: [],
         connections
-      },
-      global: {
-        stubs: customStubs
       }
     })
 
-    const select = wrapper.find('select.va-select-stub')
-    await select.setValue('conn-rest-2')
+    const select = wrapper.find('select')
+    await chooseOption(wrapper, 'SPARQL Endpoint 2')
     expect(config.connection).toBe('conn-rest-2')
   })
 })

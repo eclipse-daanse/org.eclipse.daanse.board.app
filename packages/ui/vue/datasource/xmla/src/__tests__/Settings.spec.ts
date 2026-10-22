@@ -28,20 +28,27 @@ vi.mock('org.eclipse.daanse.board.app.lib.datasource.xmla', () => {
   };
 });
 
-const customStubs = {
-  VaSelect: {
-    template: '<div><select class="va-select-stub" :data-label="label" :value="modelValue" @change="$emit(\'update:modelValue\', $event.target.value)"><option v-for="opt in options" :key="typeof opt === \'string\' ? opt : opt[valueBy]">{{ typeof opt === \'string\' ? opt : opt[textBy] }}</option></select></div>',
-    props: ['modelValue', 'label', 'options', 'textBy', 'valueBy']
-  },
-  VaSwitch: {
-    template: '<div><input type="checkbox" class="va-switch-stub" :data-label="label" :checked="modelValue" @change="$emit(\'update:modelValue\', $event.target.checked)" /></div>',
-    props: ['modelValue', 'label']
-  },
-  VaInput: {
-    template: '<div><input class="va-input-stub" :data-label="label" :value="modelValue" @input="$emit(\'update:modelValue\', $event.target.value)" /></div>',
-    props: ['modelValue', 'label']
-  }
-};
+/*
+ * Mounted with its real controls. These tests were written when the dialogs
+ * used Vuestic; the project's own DSelect and DInput render a plain select
+ * and input, so there is nothing left to stand in for - and a stub left the
+ * assertions with nothing to find.
+ */
+function fieldNamed(wrapper: ReturnType<typeof mount>, label: string) {
+  const tag = wrapper.findAll('label').find((l) => l.text().includes(label))
+  return tag ? wrapper.find(`#${tag.attributes('for')}`) : undefined
+}
+;
+
+/*
+ * DSelect gives its options the entry's index as value and maps back
+ * internally, so a test picks an option by the words it shows.
+ */
+async function chooseOption(wrapper: ReturnType<typeof mount>, text: string, at = 0) {
+  const select = wrapper.findAll('select')[at]
+  const option = select.findAll('option').find((o) => o.text().includes(text))
+  await select.setValue(option!.element.value)
+}
 
 describe('XMLA Datasource Settings.vue', () => {
   beforeEach(() => {
@@ -56,11 +63,10 @@ describe('XMLA Datasource Settings.vue', () => {
   it('renders and filters connections of type xmla', () => {
     const config = { connection: '', cube: '', pollingEnabled: false };
     const wrapper = mount(Settings, {
-      props: { config, connections, dataSources: [] },
-      global: { stubs: customStubs }
+      props: { config, connections, dataSources: [] }
     });
 
-    const select = wrapper.findComponent(customStubs.VaSelect);
+    const select = wrapper.find('select');
     expect(select.exists()).toBe(true);
     expect(select.props('options')).toEqual([
       { uid: 'xmla-conn-1', name: 'XMLA Conn 1', type: 'xmla' }
@@ -70,8 +76,7 @@ describe('XMLA Datasource Settings.vue', () => {
   it('fetches cubes on mount if connection is preset', async () => {
     const config = { connection: 'xmla-conn-1', cube: '', pollingEnabled: false };
     mount(Settings, {
-      props: { config, connections, dataSources: [] },
-      global: { stubs: customStubs }
+      props: { config, connections, dataSources: [] }
     });
 
     expect(XmlaStore.fetchCubes).toHaveBeenCalledWith('xmla-conn-1');
@@ -80,11 +85,10 @@ describe('XMLA Datasource Settings.vue', () => {
   it('toggles polling interval visibility and updates pollingInterval config', async () => {
     const config = { connection: 'xmla-conn-1', cube: '', pollingEnabled: false, pollingInterval: 5000 };
     const wrapper = mount(Settings, {
-      props: { config, connections, dataSources: [] },
-      global: { stubs: customStubs }
+      props: { config, connections, dataSources: [] }
     });
 
-    expect(wrapper.find('input[data-label="Polling Interval (ms)"]').exists()).toBe(false);
+    expect(wrapper.find('input').exists()).toBe(false);
 
     // Toggle switch
     const toggle = wrapper.find('input[type="checkbox"]');
@@ -92,9 +96,9 @@ describe('XMLA Datasource Settings.vue', () => {
     expect(config.pollingEnabled).toBe(true);
 
     await wrapper.vm.$nextTick();
-    expect(wrapper.find('input[data-label="Polling Interval (ms)"]').exists()).toBe(true);
+    expect(wrapper.find('input').exists()).toBe(true);
 
-    const intervalInput = wrapper.find('input[data-label="Polling Interval (ms)"]');
+    const intervalInput = wrapper.find('input');
     await intervalInput.setValue('7500');
 
     // Wait for lodash debounce (700ms)
