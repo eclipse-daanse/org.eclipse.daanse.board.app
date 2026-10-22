@@ -21,15 +21,11 @@ import Settings from '../Settings.vue'
  * used Vuestic; the project's own DSelect and DInput render a plain select
  * and input, so there is nothing left to stand in for - and a stub left the
  * assertions with nothing to find.
- */
-function fieldNamed(wrapper: ReturnType<typeof mount>, label: string) {
-  const tag = wrapper.findAll('label').find((l) => l.text().includes(label))
-  return tag ? wrapper.find(`#${tag.attributes('for')}`) : undefined
-}
-
-/*
+ *
  * DSelect gives its options the entry's index as value and maps back
- * internally, so a test picks an option by the words it shows.
+ * internally, so a test picks an option by the words it shows. Without a
+ * translator the options show their raw keys, which is what is searched for
+ * here.
  */
 async function chooseOption(wrapper: ReturnType<typeof mount>, text: string, at = 0) {
   const select = wrapper.findAll('select')[at]
@@ -74,23 +70,20 @@ describe('Valhalla Datasource Settings.vue', () => {
       }
     })
 
-    const selects = wrapper.findAll('select')
-    const langInput = wrapper.find('input')
-
     // Set connection (first select)
     await chooseOption(wrapper, 'Valhalla Routing Rest', 0)
     expect(config.connection).toBe('conn-rest-valhalla')
 
     // Set costing (second select)
-    await selects[1].setValue('bicycle')
+    await chooseOption(wrapper, 'costing.bicycle', 1)
     expect(config.costing).toBe('bicycle')
 
     // Set units (third select)
-    await selects[2].setValue('miles')
+    await chooseOption(wrapper, 'units.miles', 2)
     expect(config.units).toBe('miles')
 
     // Change language
-    await langInput.setValue('en-US')
+    await wrapper.find('input').setValue('en-US')
     expect(config.language).toBe('en-US')
   })
 })

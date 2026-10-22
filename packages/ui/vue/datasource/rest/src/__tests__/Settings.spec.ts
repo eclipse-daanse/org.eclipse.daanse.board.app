@@ -29,6 +29,9 @@ vi.stubGlobal('fetch', mockFetch)
  * used Vuestic; the project's own DSelect and DInput render a plain select
  * and input, so there is nothing left to stand in for - and a stub left the
  * assertions with nothing to find.
+ *
+ * Without a translator the labels show their raw keys, which is what the
+ * fields are found by here.
  */
 function fieldNamed(wrapper: ReturnType<typeof mount>, label: string) {
   const tag = wrapper.findAll('label').find((l) => l.text().includes(label))
@@ -60,11 +63,12 @@ describe('REST Datasource Settings.vue', () => {
       }
     })
 
-    expect(wrapper.find('select[data-label="Connection"]').exists()).toBe(true)
-    expect(wrapper.find('input').exists()).toBe(true)
-    expect(wrapper.find('input').exists()).toBe(true)
-    expect(wrapper.find('input[type="checkbox"][data-label="Enable Long Polling"]').exists()).toBe(true)
-    expect(wrapper.find('input').exists()).toBe(false)
+    expect(wrapper.find('select').exists()).toBe(true)
+    expect(fieldNamed(wrapper, 'Settings.path')?.exists()).toBe(true)
+    expect(fieldNamed(wrapper, 'Rest.selectedValue')?.exists()).toBe(true)
+    expect(wrapper.find('[role="switch"]').exists()).toBe(true)
+    // The interval is only asked for once polling is on
+    expect(fieldNamed(wrapper, 'Settings.intervalMs')).toBeUndefined()
   })
 
   it('filters connections list to type rest', () => {
@@ -101,34 +105,29 @@ describe('REST Datasource Settings.vue', () => {
     })
 
     // Modify Connection
-    const connSelect = wrapper.find('select[data-label="Connection"]')
-    await connSelect.setValue('conn1')
+    await chooseOption(wrapper, 'Conn 1')
     expect(config.connection).toBe('conn1')
 
     // Modify Resource Url (debounced)
-    const resourceUrlInput = wrapper.find('input')
-    await resourceUrlInput.setValue('users')
+    await fieldNamed(wrapper, 'Settings.path')!.setValue('users')
     // wait for 700ms debounce in updateResourceUrl
     await new Promise(resolve => setTimeout(resolve, 800))
     expect(config.resourceUrl).toBe('users')
     expect(mockFetch).toHaveBeenCalledWith('https://api.test.com/users', { method: 'HEAD' })
 
     // Modify Selected Value
-    const selectValInput = wrapper.find('input')
-    await selectValInput.setValue('data.items')
+    await fieldNamed(wrapper, 'Rest.selectedValue')!.setValue('data.items')
     expect(config.selectedJSONValue).toBe('data.items')
 
     // Enable Polling
-    const pollingSwitch = wrapper.find('input[type="checkbox"][data-label="Enable Long Polling"]')
-    await (pollingSwitch as any).trigger('click')
+    await wrapper.find('[role="switch"]').trigger('click')
     expect(config.pollingEnabled).toBe(true)
 
     // Wait for DOM update
     await wrapper.vm.$nextTick()
 
     // Modify Polling Interval (debounced)
-    const intervalInput = wrapper.find('input')
-    await intervalInput.setValue('7500')
+    await fieldNamed(wrapper, 'Settings.intervalMs')!.setValue('7500')
     // wait for 700ms debounce in intervalDebounce
     await new Promise(resolve => setTimeout(resolve, 800))
     expect(config.pollingInterval).toBe(7500)

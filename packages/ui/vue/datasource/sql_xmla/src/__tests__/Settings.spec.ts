@@ -18,16 +18,10 @@ import Settings from '../Settings.vue'
 
 /*
  * Mounted with its real controls. These tests were written when the dialogs
- * used Vuestic; the project's own DSelect and DInput render a plain select
- * and input, so there is nothing left to stand in for - and a stub left the
- * assertions with nothing to find.
- */
-function fieldNamed(wrapper: ReturnType<typeof mount>, label: string) {
-  const tag = wrapper.findAll('label').find((l) => l.text().includes(label))
-  return tag ? wrapper.find(`#${tag.attributes('for')}`) : undefined
-}
-
-/*
+ * used Vuestic; the project's own DSelect renders a plain select, so there
+ * is nothing left to stand in for - and a stub left the assertions with
+ * nothing to find.
+ *
  * DSelect gives its options the entry's index as value and maps back
  * internally, so a test picks an option by the words it shows.
  */
@@ -61,10 +55,8 @@ describe('SQL_XMLA Datasource Settings.vue', () => {
       }
     })
 
-    const select = wrapper.find('select')
-    const options = select.props('options')
-    expect(options.length).toBe(2)
-    expect(options.find((o: any) => o.uid === 'conn-other')).toBeUndefined()
+    const options = wrapper.find('select').findAll('option').map((o) => o.text())
+    expect(options).toEqual(['XMLA Conn 1', 'XMLA Conn 2'])
   })
 
   it('updates connection property in config', async () => {
@@ -84,7 +76,6 @@ describe('SQL_XMLA Datasource Settings.vue', () => {
       }
     })
 
-    const select = wrapper.find('select')
     await chooseOption(wrapper, 'XMLA Conn 2')
     expect(config.connection).toBe('conn-xmla-2')
   })

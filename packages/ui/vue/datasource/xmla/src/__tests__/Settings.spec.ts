@@ -16,6 +16,7 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { mount } from '@vue/test-utils';
 import Settings from '../Settings.vue';
 import { XmlaStore } from 'org.eclipse.daanse.board.app.lib.datasource.xmla';
+import { identifier as connectionIdentifier } from 'org.eclipse.daanse.board.app.lib.api.connection';
 
 vi.mock('org.eclipse.daanse.board.app.lib.datasource.xmla', () => {
   return {
@@ -33,21 +34,17 @@ vi.mock('org.eclipse.daanse.board.app.lib.datasource.xmla', () => {
  * used Vuestic; the project's own DSelect and DInput render a plain select
  * and input, so there is nothing left to stand in for - and a stub left the
  * assertions with nothing to find.
+ *
+ * The dialog asks the connection repository for the connection it fetches
+ * cubes through, so the mount provides one.
  */
-function fieldNamed(wrapper: ReturnType<typeof mount>, label: string) {
-  const tag = wrapper.findAll('label').find((l) => l.text().includes(label))
-  return tag ? wrapper.find(`#${tag.attributes('for')}`) : undefined
-}
-;
+const connectionRepository = {} as any
 
-/*
- * DSelect gives its options the entry's index as value and maps back
- * internally, so a test picks an option by the words it shows.
- */
-async function chooseOption(wrapper: ReturnType<typeof mount>, text: string, at = 0) {
-  const select = wrapper.findAll('select')[at]
-  const option = select.findAll('option').find((o) => o.text().includes(text))
-  await select.setValue(option!.element.value)
+function mountSettings(config: any, connections: any[]) {
+  return mount(Settings, {
+    props: { config, connections, dataSources: [] },
+    global: { provide: { [connectionIdentifier]: connectionRepository } }
+  })
 }
 
 describe('XMLA Datasource Settings.vue', () => {
@@ -62,31 +59,23 @@ describe('XMLA Datasource Settings.vue', () => {
 
   it('renders and filters connections of type xmla', () => {
     const config = { connection: '', cube: '', pollingEnabled: false };
-    const wrapper = mount(Settings, {
-      props: { config, connections, dataSources: [] }
-    });
+    const wrapper = mountSettings(config, connections);
 
     const select = wrapper.find('select');
     expect(select.exists()).toBe(true);
-    expect(select.props('options')).toEqual([
-      { uid: 'xmla-conn-1', name: 'XMLA Conn 1', type: 'xmla' }
-    ]);
+    expect(select.findAll('option').map((o) => o.text())).toEqual(['XMLA Conn 1']);
   });
 
   it('fetches cubes on mount if connection is preset', async () => {
     const config = { connection: 'xmla-conn-1', cube: '', pollingEnabled: false };
-    mount(Settings, {
-      props: { config, connections, dataSources: [] }
-    });
+    mountSettings(config, connections);
 
-    expect(XmlaStore.fetchCubes).toHaveBeenCalledWith('xmla-conn-1');
+    expect(XmlaStore.fetchCubes).toHaveBeenCalledWith('xmla-conn-1', connectionRepository);
   });
 
   it('toggles polling interval visibility and updates pollingInterval config', async () => {
     const config = { connection: 'xmla-conn-1', cube: '', pollingEnabled: false, pollingInterval: 5000 };
-    const wrapper = mount(Settings, {
-      props: { config, connections, dataSources: [] }
-    });
+    const wrapper = mountSettings(config, connections);
 
     expect(wrapper.find('input').exists()).toBe(false);
 

@@ -14,31 +14,25 @@
 // @vitest-environment jsdom
 import { describe, it, expect } from 'vitest'
 import { mount } from '@vue/test-utils'
-import { container } from 'org.eclipse.daanse.board.app.lib.core'
-import { identifier as variableIdentifier } from 'org.eclipse.daanse.board.app.lib.repository.variable'
+import { identifier as variableIdentifier } from 'org.eclipse.daanse.board.app.lib.api.variable'
 import OGCSTAStoreSettings from '../OGCSTAStoreSettings.vue'
 
-// Setup mock variable repository in container
-const mockVariableRepository = {
-  getVariable: () => null
-}
-
-if (!container.isBound(variableIdentifier)) {
-  container.bind(variableIdentifier).toConstantValue(mockVariableRepository)
-}
+/*
+ * The dialog takes its variable repository from the component tree, not from
+ * a container, so the mount provides one. Without it the wrappers stay
+ * unbound and the dialog warns.
+ */
+const variableRepository = {
+  getVariable: () => null,
+  getAllVariables: () => []
+} as any
 
 /*
  * Mounted with its real controls. These tests were written when the dialogs
- * used Vuestic; the project's own DSelect and DInput render a plain select
- * and input, so there is nothing left to stand in for - and a stub left the
- * assertions with nothing to find.
- */
-function fieldNamed(wrapper: ReturnType<typeof mount>, label: string) {
-  const tag = wrapper.findAll('label').find((l) => l.text().includes(label))
-  return tag ? wrapper.find(`#${tag.attributes('for')}`) : undefined
-}
-
-/*
+ * used Vuestic; the project's own DSelect renders a plain select, so there
+ * is nothing left to stand in for - and a stub left the assertions with
+ * nothing to find.
+ *
  * DSelect gives its options the entry's index as value and maps back
  * internally, so a test picks an option by the words it shows.
  */
@@ -71,7 +65,8 @@ describe('OGCSTAStoreSettings.vue', () => {
         config,
         dataSources: [],
         connections
-      }
+      },
+      global: { provide: { [variableIdentifier]: variableRepository } }
     })
 
     const selects = wrapper.findAll('select')
@@ -95,7 +90,8 @@ describe('OGCSTAStoreSettings.vue', () => {
         config,
         dataSources: [],
         connections
-      }
+      },
+      global: { provide: { [variableIdentifier]: variableRepository } }
     })
 
     const selects = wrapper.findAll('select')

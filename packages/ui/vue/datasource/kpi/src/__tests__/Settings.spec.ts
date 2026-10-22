@@ -33,19 +33,17 @@ vi.mock('org.eclipse.daanse.board.app.lib.datasource.xmla', () => {
 })
 
 import Settings from '../Settings.vue'
+import { identifier as connectionIdentifier } from 'org.eclipse.daanse.board.app.lib.api.connection'
+
+/* The dialog fetches cubes through the repository it is given. */
+const connectionRepository = {} as any
 
 /*
  * Mounted with its real controls. These tests were written when the dialogs
- * used Vuestic; the project's own DSelect and DInput render a plain select
- * and input, so there is nothing left to stand in for - and a stub left the
- * assertions with nothing to find.
- */
-function fieldNamed(wrapper: ReturnType<typeof mount>, label: string) {
-  const tag = wrapper.findAll('label').find((l) => l.text().includes(label))
-  return tag ? wrapper.find(`#${tag.attributes('for')}`) : undefined
-}
-
-/*
+ * used Vuestic; the project's own DSelect renders a plain select, so there
+ * is nothing left to stand in for - and a stub left the assertions with
+ * nothing to find.
+ *
  * DSelect gives its options the entry's index as value and maps back
  * internally, so a test picks an option by the words it shows.
  */
@@ -73,13 +71,14 @@ describe('KPI Datasource Settings.vue', () => {
         config,
         dataSources: [],
         connections
-      }
+      },
+      global: { provide: { [connectionIdentifier]: connectionRepository } }
     })
 
     // Allow watch/onMounted ticks to run
     await new Promise(resolve => setTimeout(resolve, 0))
 
-    expect(mockFetchCubes).toHaveBeenCalledWith('conn-xmla-1')
+    expect(mockFetchCubes).toHaveBeenCalledWith('conn-xmla-1', connectionRepository)
     expect(wrapper.findAll('select').length).toBe(2)
   })
 
@@ -90,14 +89,14 @@ describe('KPI Datasource Settings.vue', () => {
         config,
         dataSources: [],
         connections
-      }
+      },
+      global: { provide: { [connectionIdentifier]: connectionRepository } }
     })
 
     await new Promise(resolve => setTimeout(resolve, 0))
 
-    const selects = wrapper.findAll('select')
-    // Selects[1] is the Cube select
-    await selects[1].setValue('Sales')
+    // The second select is the cube
+    await chooseOption(wrapper, 'Sales', 1)
     expect(config.cube).toBe('Sales')
   })
 })
