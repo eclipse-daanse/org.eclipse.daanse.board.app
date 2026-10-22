@@ -348,3 +348,59 @@ als unser Output. Der Umstieg wartet auf C4/C5.
 
 Wir hatten `--no_factories` als fehlend notiert. Im `emf`-Modus lässt sich
 das über `generateFactory="false"` in der GenConfig ausdrücken — erledigt.
+
+---
+
+## `@emfts/uimodel-composer` — Sprache fehlt im Modell
+
+Ziel-Repository: <https://github.com/eclipse-fennec/emf.ts.ui>
+Getestet gegen: `@emfts/uimodel-composer@0.0.2-next.1`
+
+### FR-U1 — `label` ist eine fertige Zeichenkette, kein übersetzbarer Text
+
+**Schwere:** mittel — die Anwendung funktioniert, aber jeder Verbraucher muss
+dasselbe umgehen, und die Umgehung ist zerbrechlich.
+
+`WidgetComponent.label` und `WidgetStyle.label` sind `string`. Der Komponist
+rendert sie, wie sie dastehen. Eine Anwendung, die ihre Oberfläche übersetzt,
+hat damit keinen Ort, an dem sie das tun könnte: Es gibt keinen Haken beim
+Rendern und keine Struktur, die sagt "dieses Label ist ein Schlüssel".
+
+**Was wir deshalb tun** (`packages/ui/vue/uimodel/src/translateLabels.ts`):
+
+1. beim Laden jeden Knoten, dessen Label wie ein Schlüssel aussieht, in einer
+   `WeakMap` merken — `noteLabelKeys`
+2. das `label` im Modell **überschreiben** mit dem übersetzten Text
+3. bei Sprachwechsel oder wenn ein Textpaket nachkommt, alle zwischengespeicherten
+   Modelle erneut überschreiben — `retranslate`
+
+Das Modell verliert dabei die Information, die es trug. Die `WeakMap` ist nur
+der Ersatz dafür. Wer das Modell nach dem Laden liest, sieht Text, wo ein
+Schlüssel stand, und kann die beiden nicht mehr unterscheiden.
+
+Eine Folge davon, die uns nicht gefällt: Fehlt eine Übersetzung, setzen wir das
+letzte Segment des Schlüssels ein (`fontSize` statt `textPlain:Form.fontSize`),
+weil der ganze Schlüssel in der Oberfläche unlesbar ist. Damit ist ein
+fehlender Schlüssel aber **nicht mehr zu sehen** — er sieht aus wie ein
+absichtlicher Feldname.
+
+**Was wir uns wünschen**, in abnehmender Eingriffstiefe:
+
+- ein eigener Typ für übersetzbaren Text im UI-Modell, etwa
+  `label: LocalizedString` mit `key` und optionalem Literal — dann bleibt die
+  Herkunft erhalten und der Komponist kann entscheiden
+- oder ein Übersetzer, den der Komponist beim Rendern befragt:
+  `UIModelComposer({ translate: (key) => string })`, angewandt auf Labels, die
+  als Schlüssel markiert sind
+- oder, als Kleinstlösung, ein zweites Feld `labelKey` neben `label`, das der
+  Komponist bevorzugt, wenn ein Übersetzer gesetzt ist
+
+Jede dieser Formen nimmt dem Verbraucher das Überschreiben ab, und keine
+erzwingt eine bestimmte i18n-Bibliothek.
+
+### Nebenpunkt — `documentation` ist Prosa, kein Schlüssel
+
+Dasselbe eine Ebene tiefer: Wir binden die `documentation`-Annotation aus dem
+`.ecore` als Hinweistext an ein Feld an. Labels sind Schlüssel, Dokumentation
+ist Text — die Hinweise bleiben deshalb einsprachig. Soweit das UI-Modell eine
+Antwort auf Sprache bekommt, sollte sie für beide gelten.
