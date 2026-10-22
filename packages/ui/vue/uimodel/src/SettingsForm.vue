@@ -28,34 +28,38 @@ Contributors:
  */
 import { computed, markRaw, onMounted, provide, shallowRef, watch } from 'vue'
 import type { EObject, EPackage } from '@emfts/core'
-import { UIModelComposer, bumpExpressionTick } from '@emfts/uimodel-composer'
-import type { UIModel } from '@emfts/uimodel-composer'
+import { UIModelComposer, TRANSLATOR_KEY } from '@emfts/uimodel-composer'
+import type { UIModel, Translator } from '@emfts/uimodel-composer'
 import { registerModelDocs, useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import { componentRegistry, COMPONENT_REGISTRY_KEY } from '@emfts/vue-registry'
 import { UimodelPackage } from '@emfts/uimodel-composer'
 import { asModel } from './adopt'
 import { registerListRenderer, registerWrapperRenderer } from './registerRenderer'
 import { formFor } from './buildForm'
-import { loadUIModel, retranslate, useLabelTranslator } from './loadUIModel'
+import { loadUIModel } from './loadUIModel'
 import SettingsFieldWidget from './SettingsFieldWidget.vue'
 
 /*
- * Labels written as translation keys become words here.
+ * Labels written as translation keys become words in the composer.
  *
- * The models are loaded once and live on; the language can change at any
- * time, so the translator is handed to the loader and every loaded model
- * is written again on each change. Reading `revision` is what makes that
- * happen - it counts the same events a text would re-render on.
+ * It asks this translator while it renders, so the model keeps its keys -
+ * we used to overwrite them and remember the originals beside the model,
+ * which lost the one thing the model was saying. Since 0.0.2-next.2 the
+ * composer takes a translator instead (emf.ts.ui#13).
+ *
+ * A key i18next does not know comes back as the key itself; handing back
+ * undefined there is what lets the composer fall back, and what stops a
+ * missing translation from looking like a deliberate field name.
  */
 const { t: translate, revision } = useTranslation()
-useLabelTranslator(translate)
-watch(revision, () => {
-  retranslate()
-  // EObject attributes are not reactive sources, so rewriting a label does
-  // not invalidate the composer's computed on its own. This is the signal
-  // the library documents for changes its own content adapter cannot see.
-  bumpExpressionTick()
+const translator = computed<Translator>(() => {
+  void revision.value
+  return (key) => {
+    const text = translate(key)
+    return text === key ? undefined : text
+  }
 })
+provide(TRANSLATOR_KEY, translator)
 
 /*
  * Both metamodels have to exist before anything reads them: the settings

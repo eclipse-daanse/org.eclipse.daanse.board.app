@@ -46,7 +46,6 @@ import {
 } from 'org.eclipse.daanse.board.app.ui.vue.controls'
 import { describeClass, useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import { kindOf, labelOf } from './buildForm'
-import { isTranslationKey } from './translateLabels'
 
 const props = defineProps<{
   eObject?: EObject
@@ -60,6 +59,13 @@ const props = defineProps<{
 /* Injected once, in setup - not inside the handlers that use it. */
 const variables = inject<VariableRepository>(VARIABLE_REPOSITORY)
 const { t } = useTranslation('uimodel')
+/*
+ * This file renders its own labels, so it does its own asking. The
+ * composer's translator is for what the composer draws; what is drawn
+ * here goes through the same t the rest of the application uses, which
+ * hands a key back unchanged when it knows no word for it.
+ */
+const localized = (text: string | undefined) => (text ? t(text) : text)
 
 /** The wrapper itself - read and written through, never swapped out. */
 const wrapper = computed<any>(() => {
@@ -340,8 +346,12 @@ const options = computed<Array<{ value: string | number; text: string }>>(() => 
         // A label that will not evaluate leaves the value readable as itself
       }
     }
-    /* A model names its options by key, so they follow the language. */
-    return { value, text: isTranslationKey(text) ? t(text) : text }
+    /*
+     * A model names its options by key. Handed to the composer's own
+     * translate, which asks the translator this form provides and falls
+     * back to the text when it is a word rather than a key.
+     */
+    return { value, text: localized(text) ?? text }
   })
 })
 
@@ -412,9 +422,21 @@ const moment = computed<string>({
   },
 })
 
-const label = computed(
-  () => props.custom?.resolvedStyle?.label ?? (props.feature ? labelOf(props.feature) : ''),
-)
+/*
+ * The model writes labels as keys; this file renders them rather than the
+ * composer, so it does the asking. Before 0.0.2-next.2 the keys were
+ * overwritten in the model on load and this read words by accident.
+ */
+const label = computed(() => {
+  const written = props.custom?.resolvedStyle?.label ?? (props.feature ? labelOf(props.feature) : '')
+  return localized(written) ?? written
+})
+
+/** Same for the placeholder, which a style may also write as a key. */
+const placeholder = computed(() => {
+  const written = props.custom?.resolvedStyle?.placeholder
+  return localized(written) ?? written
+})
 
 const noVariables = computed(() => bindingMode.value && variableNames.value.length === 0)
 </script>
@@ -481,7 +503,7 @@ const noVariables = computed(() => bindingMode.value && variableNames.value.leng
         v-model="value"
         :label="label"
         :disabled="!editable"
-        :hint="fieldHint ?? custom?.resolvedStyle?.placeholder"
+        :hint="fieldHint ?? placeholder"
       />
 
       <DInput
@@ -489,7 +511,7 @@ const noVariables = computed(() => bindingMode.value && variableNames.value.leng
         v-model="value"
         :label="label"
         :rows="rows"
-        :placeholder="custom?.resolvedStyle?.placeholder"
+        :placeholder="placeholder"
         :hint="fieldHint"
         :disabled="!editable"
       />
@@ -519,7 +541,7 @@ const noVariables = computed(() => bindingMode.value && variableNames.value.leng
         v-else
         v-model="value"
         :label="label"
-        :placeholder="custom?.resolvedStyle?.placeholder"
+        :placeholder="placeholder"
         :hint="fieldHint"
         :disabled="!editable"
       />
