@@ -12,8 +12,7 @@
  * ********************************************************************/
 
 import { describe, test, expect } from 'vitest';
-import { container } from 'org.eclipse.daanse.board.app.lib.core';
-import { DatasourceRepository, identifier as repositorySymbol } from '../src/index';
+import { wireRepositories } from '../../../../../test/support/wiring';
 
 const testSymbol = Symbol.for('TestClass');
 
@@ -24,17 +23,16 @@ class TestClass {
   }
 }
 
-// Bind a mock datasource factory function for testSymbol
-if (!container.isBound(testSymbol)) {
-  container.bind<any>(testSymbol).toConstantValue((config: any) => {
-    return new TestClass();
-  });
-}
+/*
+ * The repository resolves a type entry's identifier through the registry it
+ * was given, and a symbol's description is the service id - so the stand-in
+ * factory is registered under exactly that name.
+ */
+const { services, datasourceRepository } = wireRepositories();
+services.register(testSymbol.description!, () => new TestClass());
 
 describe('DatasourceRepository Tests', () => {
   test('registers datasource types and datasources correctly', () => {
-    const datasourceRepository = container.get<DatasourceRepository>(repositorySymbol);
-
     datasourceRepository.registerDatasourceType('test', {
       Store: testSymbol,
       Preview: null as any,

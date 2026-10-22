@@ -15,6 +15,9 @@
 import { describe, it, expect, vi } from 'vitest';
 import { SvgwidgetsPackage } from '../gen/SvgwidgetsPackage';
 import { mount } from '@vue/test-utils';
+import { EVENT_ACTIONS_REGISTRY } from 'org.eclipse.daanse.board.app.lib.api.events';
+import { identifiers } from 'org.eclipse.daanse.board.app.lib.core';
+import { VARIABLE_REPOSITORY } from 'org.eclipse.daanse.board.app.lib.api.variable';
 import SvgWidget from '../SvgWidget.vue';
 
 if (typeof global.ResizeObserver === 'undefined') {
@@ -257,6 +260,26 @@ vi.mock('org.eclipse.daanse.board.app.ui.vue.composables', async (importOriginal
  */
 void SvgwidgetsPackage.eINSTANCE;
 
+/*
+ * What this widget injects when it is mounted for real. The components
+ * assert these are present - inject(...)! - so a mount without them throws
+ * before anything can be asserted.
+ */
+const widgetProvides: Record<symbol | string, unknown> = {
+  [EVENT_ACTIONS_REGISTRY as symbol]: {
+    registerInstance() {}, unregisterInstance() {},
+    registerAction() {}, unregisterAction() {},
+    getAction: () => undefined, getAllActions: () => [],
+  },
+  [identifiers.TINY_EMITTER as unknown as symbol]: {
+    on() {}, off() {}, once() {}, emit() {},
+  },
+  [VARIABLE_REPOSITORY as unknown as symbol]: {
+    getAllVariables: () => [], getVariable: () => undefined,
+    registerVariable() {}, unregisterVariable() {},
+  },
+};
+
 describe('Rendering tests for org.eclipse.daanse.board.app.ui.vue.widget.svg.base', () => {
   it('renders SvgWidget component', () => {
     const wrapper = mount(SvgWidget, {
@@ -442,6 +465,7 @@ describe('Rendering tests for org.eclipse.daanse.board.app.ui.vue.widget.svg.bas
         editEnabled: false
       } as any,
       global: {
+        provide: widgetProvides,
         stubs: {
           VaCard: { template: '<div><slot /></div>' },
           VaButton: { template: '<button><slot /></button>' },

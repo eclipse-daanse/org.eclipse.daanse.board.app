@@ -13,13 +13,11 @@
 
 import assert from 'assert';
 import { describe, test, vi } from 'vitest';
-import { container } from 'org.eclipse.daanse.board.app.lib.core';
-import { identifier as connRepoId } from 'org.eclipse.daanse.board.app.lib.repository.connection';
-import { identifier as dsRepoId } from 'org.eclipse.daanse.board.app.lib.repository.datasource';
+import { wireRepositories } from '../../../../../test/support/wiring';
+import * as kpiStore from '../src/index';
 import { factorySymbol as kpiStoreFactorySymbol, KpiStore } from '../src/index';
 
-const connectionRepository = container.get<any>(connRepoId);
-const datasourceRepository = container.get<any>(dsRepoId);
+const { services, connectionRepository, datasourceRepository } = wireRepositories(kpiStore);
 
 datasourceRepository.registerDatasourceType('kpi', {
   Store: kpiStoreFactorySymbol,

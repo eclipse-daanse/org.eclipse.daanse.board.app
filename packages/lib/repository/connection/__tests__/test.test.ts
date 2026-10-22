@@ -12,8 +12,7 @@
  * ********************************************************************/
 
 import { describe, test, expect } from 'vitest';
-import { container } from 'org.eclipse.daanse.board.app.lib.core';
-import { ConnectionRepository, identifier as repositorySymbol } from '../src/index';
+import { wireRepositories } from '../../../../../test/support/wiring';
 
 const testSymbol = Symbol.for('TestClass');
 
@@ -24,17 +23,16 @@ class TestClass {
   }
 }
 
-// Bind a mock connection factory function for testSymbol
-if (!container.isBound(testSymbol)) {
-  container.bind<any>(testSymbol).toConstantValue((config: any) => {
-    return new TestClass();
-  });
-}
+/*
+ * The repository resolves a type entry's identifier through the registry it
+ * was given, and a symbol's description is the service id - so the stand-in
+ * factory is registered under exactly that name.
+ */
+const { services, connectionRepository } = wireRepositories();
+services.register(testSymbol.description!, () => new TestClass());
 
 describe('ConnectionRepository Tests', () => {
   test('registers connection types and connections correctly', () => {
-    const connectionRepository = container.get<ConnectionRepository>(repositorySymbol);
-
     connectionRepository.registerConnectionType('test', {
       Connection: testSymbol,
       Settings: null as any,

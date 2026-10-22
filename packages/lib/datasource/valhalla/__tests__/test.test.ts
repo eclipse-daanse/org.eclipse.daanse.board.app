@@ -13,14 +13,13 @@
 
 import assert from 'assert';
 import { describe, test } from 'vitest';
-import { container } from 'org.eclipse.daanse.board.app.lib.core';
-import { identifier as connRepoId } from 'org.eclipse.daanse.board.app.lib.repository.connection';
-import { identifier as dsRepoId } from 'org.eclipse.daanse.board.app.lib.repository.datasource';
+import { wireRepositories } from '../../../../../test/support/wiring';
+import * as restConnection from 'org.eclipse.daanse.board.app.lib.connection.rest';
 import { factorySymbol as restConnFactorySymbol } from 'org.eclipse.daanse.board.app.lib.connection.rest';
+import * as valhallaStore from '../src/index';
 import { ValhallaStore, factorySymbol as valhallaFactorySymbol, SET_WAYPOINTS } from '../src/index';
 
-const connectionRepository = container.get<any>(connRepoId);
-const datasourceRepository = container.get<any>(dsRepoId);
+const { connectionRepository, datasourceRepository } = wireRepositories(restConnection, valhallaStore);
 
 connectionRepository.registerConnectionType('rest', {
   Connection: restConnFactorySymbol,
@@ -52,8 +51,12 @@ describe('Valhalla datasource/store integration tests', () => {
       name: 'Valhalla Route Store'
     });
 
-    const store = datasourceRepository.getDatasource('valhalla-ds');
-    assert.ok(store instanceof ValhallaStore, 'Store should be successfully registered');
+    /*
+     * The class itself is exported as a type only, so the test asks what
+     * the store answers to rather than which constructor made it.
+     */
+    const store = datasourceRepository.getDatasource('valhalla-ds') as ValhallaStore;
+    assert.ok(store, 'Store should be successfully registered');
 
     // 2. Mock REST Response for Routing
     const connection = connectionRepository.getConnection('valhalla-conn');

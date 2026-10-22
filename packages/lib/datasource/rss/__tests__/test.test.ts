@@ -13,14 +13,13 @@
 
 import assert from 'assert';
 import { describe, test, vi } from 'vitest';
-import { container } from 'org.eclipse.daanse.board.app.lib.core';
-import { identifier as connRepoId } from 'org.eclipse.daanse.board.app.lib.repository.connection';
-import { identifier as dsRepoId } from 'org.eclipse.daanse.board.app.lib.repository.datasource';
+import { wireRepositories } from '../../../../../test/support/wiring';
+import * as rssConnection from 'org.eclipse.daanse.board.app.lib.connection.rss';
 import { factorySymbol as rssConnFactorySymbol } from 'org.eclipse.daanse.board.app.lib.connection.rss';
+import * as rssStore from '../src/index';
 import { factorySymbol as rssStoreFactorySymbol, RssStore } from '../src/index';
 
-const connectionRepository = container.get<any>(connRepoId);
-const datasourceRepository = container.get<any>(dsRepoId);
+const { connectionRepository, datasourceRepository } = wireRepositories(rssConnection, rssStore);
 
 connectionRepository.registerConnectionType('rss', {
   Connection: rssConnFactorySymbol,

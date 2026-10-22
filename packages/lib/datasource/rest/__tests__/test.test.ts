@@ -12,11 +12,13 @@
  * ********************************************************************/
 
 import { describe, test, expect, vi, beforeEach } from 'vitest';
-import { container } from 'org.eclipse.daanse.board.app.lib.core';
-import { ConnectionRepository, identifier as connectionRepoSymbol } from 'org.eclipse.daanse.board.app.lib.repository.connection';
-import { DatasourceRepository, identifier as datasourceRepoSymbol } from 'org.eclipse.daanse.board.app.lib.repository.datasource';
+import { wireRepositories } from '../../../../../test/support/wiring';
+import * as restConnection from 'org.eclipse.daanse.board.app.lib.connection.rest';
 import { factorySymbol as restConnectionFactorySymbol } from 'org.eclipse.daanse.board.app.lib.connection.rest';
+import * as restStoreModule from '../src/index';
 import { factorySymbol as restStoreFactorySymbol, RestStore } from '../src/index';
+
+const { services, connectionRepository, datasourceRepository } = wireRepositories(restConnection, restStoreModule);
 
 const mockFetch = vi.fn().mockResolvedValue({
   json: () => Promise.resolve([
@@ -32,12 +34,9 @@ describe('REST Datasource Integration Tests', () => {
   });
 
   test('registers connection, datasource, and retrieves data correctly', async () => {
-    const connectionRepository = container.get<ConnectionRepository>(connectionRepoSymbol);
-    const datasourceRepository = container.get<DatasourceRepository>(datasourceRepoSymbol);
-
-    // Get factories from container to ensure they are registered/initialized
-    const connFactory = container.get<any>(restConnectionFactorySymbol);
-    const storeFactory = container.get<any>(restStoreFactorySymbol);
+    // The factories the repositories will resolve through
+    const connFactory = services.get(restConnectionFactorySymbol.description!);
+    const storeFactory = services.get(restStoreFactorySymbol.description!);
 
     expect(connFactory).toBeDefined();
     expect(storeFactory).toBeDefined();

@@ -13,15 +13,13 @@
 
 import assert from 'assert';
 import { describe, test, vi } from 'vitest';
-import { container } from 'org.eclipse.daanse.board.app.lib.core';
-import { identifier as connRepoId } from 'org.eclipse.daanse.board.app.lib.repository.connection';
-import { identifier as dsRepoId } from 'org.eclipse.daanse.board.app.lib.repository.datasource';
+import { wireRepositories } from '../../../../../test/support/wiring';
+import * as wsConnection from 'org.eclipse.daanse.board.app.lib.connection.websocket';
 import { factorySymbol as wsConnFactorySymbol } from 'org.eclipse.daanse.board.app.lib.connection.websocket';
+import * as wsStore from '../src/index';
 import { factorySymbol as wsStoreFactorySymbol, WSStore } from '../src/index';
 
-// Retrieve repositories
-const connectionRepository = container.get<any>(connRepoId);
-const datasourceRepository = container.get<any>(dsRepoId);
+const { connectionRepository, datasourceRepository } = wireRepositories(wsConnection, wsStore);
 
 connectionRepository.registerConnectionType('ws', {
   Connection: wsConnFactorySymbol,

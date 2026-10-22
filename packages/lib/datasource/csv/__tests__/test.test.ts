@@ -9,18 +9,17 @@
  *
  * Contributors:
  *   Smart City Jena
- **********************************************************************/
+ * ********************************************************************/
 
 import assert from 'assert';
 import { describe, test } from 'vitest';
-import { container } from 'org.eclipse.daanse.board.app.lib.core';
-import { identifier as connRepoId } from 'org.eclipse.daanse.board.app.lib.repository.connection';
-import { identifier as dsRepoId } from 'org.eclipse.daanse.board.app.lib.repository.datasource';
+import { wireRepositories } from '../../../../../test/support/wiring';
+import * as restConnection from 'org.eclipse.daanse.board.app.lib.connection.rest';
 import { factorySymbol as restConnFactorySymbol } from 'org.eclipse.daanse.board.app.lib.connection.rest';
+import * as csvStore from '../src/index';
 import { factorySymbol as csvStoreFactorySymbol } from '../src/index';
 
-const connectionRepository = container.get<any>(connRepoId);
-const datasourceRepository = container.get<any>(dsRepoId);
+const { connectionRepository, datasourceRepository } = wireRepositories(restConnection, csvStore);
 
 connectionRepository.registerConnectionType('rest', {
   Connection: restConnFactorySymbol,
@@ -52,12 +51,12 @@ describe('CSV datasource/store integration tests', () => {
       name: 'csv-store-test'
     });
 
-    const store = datasourceRepository.getDatasource('csv-store-test');
+    const store = datasourceRepository.getDatasource('csv-store-test') as any;
     assert.ok(store, 'CSV Store should be successfully registered');
 
     // Mock fetch on the connection
     const mockCsvContent = 'id,name,role\n1,Alice,Admin\n2,Bob,User';
-    const connection = connectionRepository.getConnection('csv-conn-test');
+    const connection = connectionRepository.getConnection('csv-conn-test') as any;
     connection.fetch = async () => {
       return {
         ok: true,
@@ -83,7 +82,7 @@ describe('CSV datasource/store integration tests', () => {
       name: 'csv-store-skip-test'
     });
 
-    const skipStore = datasourceRepository.getDatasource('csv-store-skip-test');
+    const skipStore = datasourceRepository.getDatasource('csv-store-skip-test') as any;
     const dtSkip = await skipStore.getData('DataTable');
     assert.deepStrictEqual(dtSkip.headers, ['1', 'Alice', 'Admin']);
     assert.strictEqual(dtSkip.items.length, 1);

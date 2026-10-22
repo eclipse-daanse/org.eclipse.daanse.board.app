@@ -12,15 +12,14 @@
  * ********************************************************************/
 
 import { describe, test, expect } from 'vitest';
-import { container } from 'org.eclipse.daanse.board.app.lib.core';
-import { ConnectionRepository, identifier as connectionRepoSymbol } from 'org.eclipse.daanse.board.app.lib.repository.connection';
-import { DatasourceRepository, identifier as datasourceRepoSymbol } from 'org.eclipse.daanse.board.app.lib.repository.datasource';
-import { RestConnection, factorySymbol as restConnectionFactorySymbol } from 'org.eclipse.daanse.board.app.lib.connection.rest';
-import { factorySymbol as ogcStoreFactorySymbol, OgcStaStore } from '../src/index';
-import { init as initLogger } from 'org.eclipse.daanse.board.app.lib.logger';
+import { wireRepositories } from '../../../../../test/support/wiring';
+import * as restConnection from 'org.eclipse.daanse.board.app.lib.connection.rest';
+import { factorySymbol as restConnectionFactorySymbol } from 'org.eclipse.daanse.board.app.lib.connection.rest';
+import * as ogcStaStore from '../src/index';
+import { factorySymbol as ogcStoreFactorySymbol } from '../src/index';
+import type { OgcStaStore } from '../src/classes/OgcSta';
 
-// Initialize global logger
-initLogger(container);
+const { connectionRepository, datasourceRepository } = wireRepositories(restConnection, ogcStaStore);
 
 // Silence unhandled promise rejections from caching fetch wrappers
 process.on('unhandledRejection', (reason) => {
@@ -29,23 +28,6 @@ process.on('unhandledRejection', (reason) => {
 
 describe.skipIf(!process.env.RUN_LIVE_TESTS)('OGCSTA Datasource Live API Integration Tests', () => {
   test('initializes and connects to live FROST SensorThings API server', async () => {
-    const connectionRepository = container.get<ConnectionRepository>(connectionRepoSymbol);
-    const datasourceRepository = container.get<DatasourceRepository>(datasourceRepoSymbol);
-
-    // Fallback binding in case of Vitest module resolution/duplication issues
-    if (!container.isBound(RestConnection)) {
-      container.bind<RestConnection>(RestConnection).toSelf().inTransientScope();
-    }
-    if (!container.isBound(restConnectionFactorySymbol)) {
-      container.bind<any>(restConnectionFactorySymbol).toFactory(() => {
-        return (config: any) => {
-          const connection = container.get<RestConnection>(RestConnection);
-          connection.init(config);
-          return connection;
-        };
-      });
-    }
-
     // Register type info in repository
     connectionRepository.registerConnectionType('rest-live', {
       Connection: restConnectionFactorySymbol,

@@ -13,14 +13,13 @@
 
 import assert from 'assert';
 import { describe, test } from 'vitest';
-import { container } from 'org.eclipse.daanse.board.app.lib.core';
-import { identifier as connRepoId } from 'org.eclipse.daanse.board.app.lib.repository.connection';
-import { identifier as dsRepoId } from 'org.eclipse.daanse.board.app.lib.repository.datasource';
+import { wireRepositories } from '../../../../../test/support/wiring';
+import * as restConnection from 'org.eclipse.daanse.board.app.lib.connection.rest';
 import { factorySymbol as restConnFactorySymbol } from 'org.eclipse.daanse.board.app.lib.connection.rest';
+import * as sparqlStore from '../src/index';
 import { symbol as sparqlStoreSymbol, SparqlStore } from '../src/index';
 
-const connectionRepository = container.get<any>(connRepoId);
-const datasourceRepository = container.get<any>(dsRepoId);
+const { connectionRepository, datasourceRepository } = wireRepositories(restConnection, sparqlStore);
 
 connectionRepository.registerConnectionType('rest', {
   Connection: restConnFactorySymbol,

@@ -13,13 +13,11 @@
 
 import assert from 'assert';
 import { describe, test } from 'vitest';
-import { container } from 'org.eclipse.daanse.board.app.lib.core';
-import { identifier as connRepoId } from 'org.eclipse.daanse.board.app.lib.repository.connection';
-import { identifier as dsRepoId } from 'org.eclipse.daanse.board.app.lib.repository.datasource';
+import { wireRepositories } from '../../../../../test/support/wiring';
+import * as sqlXmlaStore from '../src/index';
 import { SqlXmlaStore, factorySymbol as sqlXmlaFactorySymbol } from '../src/index';
 
-const connectionRepository = container.get<any>(connRepoId);
-const datasourceRepository = container.get<any>(dsRepoId);
+const { services, connectionRepository, datasourceRepository } = wireRepositories(sqlXmlaStore);
 
 // Stub XMLA connection type
 connectionRepository.registerConnectionType('xmla', {
@@ -56,10 +54,12 @@ describe('SQL_XMLA datasource/store integration tests', () => {
       }
     };
 
-    const xmlaConnFactory = () => mockXmlaConnection;
-    if (!container.isBound(Symbol.for('XmlaConnectionFactory'))) {
-      container.bind(Symbol.for('XmlaConnectionFactory')).toConstantValue(xmlaConnFactory);
-    }
+    /*
+     * The store reaches its connection through the repository, which
+     * resolves the identifier its type entry carries - so a stand-in for
+     * the real XMLA connection is registered under that very id.
+     */
+    services.register('XmlaConnectionFactory', () => mockXmlaConnection);
 
     connectionRepository.registerConnection('xmla-conn-1', 'xmla', {
       url: 'https://daans.emondrian.com/xmla',

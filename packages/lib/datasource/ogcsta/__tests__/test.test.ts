@@ -13,24 +13,18 @@
 
 import assert from 'assert';
 import { describe, test, vi } from 'vitest';
-import { container } from 'org.eclipse.daanse.board.app.lib.core';
-import { identifier as connRepoId } from 'org.eclipse.daanse.board.app.lib.repository.connection';
-import { init as initLogger } from 'org.eclipse.daanse.board.app.lib.logger';
-import { factorySymbol as ogcStoreFactorySymbol, OgcStaStore } from '../src/index';
+import { wireRepositories } from '../../../../../test/support/wiring';
+import * as ogcStaStore from '../src/index';
+import { factorySymbol as ogcStoreFactorySymbol } from '../src/index';
+/* The class is not part of the package's public surface, so a test of its
+ * own package reaches for it where it lives. */
+import { OgcStaStore } from '../src/classes/OgcSta';
 
-// Initialize global logger
-initLogger(container);
+const { services, connectionRepository, datasourceRepository } = wireRepositories(ogcStaStore);
 
-// Setup mock connection repository in container if needed
-const connectionRepository = {
-  getConnection: vi.fn().mockReturnValue({
-    url: 'http://localhost:8080/v1.1'
-  })
-};
-
-if (!container.isBound(connRepoId)) {
-  container.bind(connRepoId).toConstantValue(connectionRepository);
-}
+/* The store asks the repository for its connection; this is what it gets. */
+const connection = { url: 'http://localhost:8080/v1.1' };
+vi.spyOn(connectionRepository, 'getConnection').mockReturnValue(connection as any);
 
 describe('OGCSTA Datasource Unit Tests', () => {
   test('validateConfiguration requires a connection', () => {
@@ -42,8 +36,13 @@ describe('OGCSTA Datasource Unit Tests', () => {
   });
 
   test('initializes and configures OgcStaStore properties', () => {
-    const store = container.get<OgcStaStore>(OgcStaStore);
-    store.init({
+    datasourceRepository.registerDatasourceType('ogcsta', {
+      Store: ogcStoreFactorySymbol,
+      Preview: null as any,
+      Settings: null as any,
+    });
+
+    datasourceRepository.registerDatasource('ogc-store-1', 'ogcsta', {
       connection: 'conn-1',
       uid: 'ogc-store-1',
       type: 'ogcsta',
@@ -52,8 +51,9 @@ describe('OGCSTA Datasource Unit Tests', () => {
       things: [],
       locations: [],
       history: { enabled: false, limit: 10 }
-    });
+    } as any);
 
+    const store = datasourceRepository.getDatasource('ogc-store-1') as OgcStaStore;
     assert.ok(store instanceof OgcStaStore, 'Store should be successfully initialized');
   });
 });

@@ -12,19 +12,19 @@
  * ********************************************************************/
 
 import { describe, test, expect, vi } from 'vitest';
-import { container } from 'org.eclipse.daanse.board.app.lib.core';
-import { init as initLogger } from 'org.eclipse.daanse.board.app.lib.logger';
-import { factorySymbol as mqttFactorySymbol, MQTTConnection } from '../src/index';
+import { wireRepositories } from '../../../../../test/support/wiring';
+import * as mqttConnection from '../src/index';
+import { factorySymbol, MQTTConnection } from '../src/index';
 
-// Initialize the logger bindings on the shared container
-initLogger(container);
+const { services } = wireRepositories(mqttConnection);
+const factoryOf = () => services.getRequired<any>(factorySymbol.description!);
 
 // Unmock mqtt library for real network connections
 vi.unmock('mqtt');
 
 describe.skipIf(!process.env.RUN_LIVE_TESTS)('MQTTConnection Live API Integration Tests', () => {
   test('connects to public MQTT broker and subscribes to topic', async () => {
-    const factory = container.get<any>(mqttFactorySymbol);
+    const factory = factoryOf();
     const conn = factory({
       url: 'mqtt://broker.hivemq.com',
       topic: 'daanse/live-test-topic',
@@ -58,7 +58,7 @@ describe.skipIf(!process.env.RUN_LIVE_TESTS)('MQTTConnection Live API Integratio
   });
 
   test('performs ping-pong message roundtrip to verify reactivity', async () => {
-    const factory = container.get<any>(mqttFactorySymbol);
+    const factory = factoryOf();
     const uniqueTopic = `daanse/live-reactivity-test-${Math.random().toString(36).substring(7)}`;
     const conn = factory({
       url: 'mqtt://broker.hivemq.com',

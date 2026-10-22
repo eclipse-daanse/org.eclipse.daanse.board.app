@@ -11,9 +11,18 @@
  *   Smart City Jena
  * ********************************************************************/
 
-import { describe, test, expect } from 'vitest';
+import { describe, test, expect, vi } from 'vitest';
 import { DefaultServiceRegistry } from '@eclipse-daanse/tsm';
 import { activate, XmlaConnection, factorySymbol } from '../src/index';
+
+/*
+ * A connection opens its XMLA session the moment it is initialised, and
+ * what this test asks about is the factory, not the session. Left alone
+ * that call reaches for a server, and its rejection outlives the test as
+ * an unhandled one. A request that never settles is the session never
+ * starting, which is exactly what is wanted here.
+ */
+vi.stubGlobal('fetch', vi.fn(() => new Promise(() => {})));
 
 
 /*

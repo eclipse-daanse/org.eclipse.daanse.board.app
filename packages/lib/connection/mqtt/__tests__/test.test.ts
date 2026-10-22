@@ -13,13 +13,10 @@
 
 import assert from 'assert';
 import { describe, test, vi, beforeEach, expect } from 'vitest';
-import { DefaultServiceRegistry } from '@eclipse-daanse/tsm';
-import { init as initLogger } from 'org.eclipse.daanse.board.app.lib.logger';
 import mqtt from 'mqtt';
-import { activate, factorySymbol as mqttFactorySymbol, MQTTConnection } from '../src/index';
-
-// Initialize the logger bindings on the shared container
-initLogger(container);
+import { wireRepositories } from '../../../../../test/support/wiring';
+import * as mqttConnection from '../src/index';
+import { factorySymbol, MQTTConnection } from '../src/index';
 
 // Mock the mqtt library
 const mockClient = {
@@ -46,14 +43,12 @@ vi.mock('mqtt', () => {
 /*
  * The package registers its factory when it is activated; the Inversify
  * container these tests were written against is gone. The id is a string,
- * and factorySymbol is Symbol.for(it).
+ * and factorySymbol is Symbol.for(it). The connection takes a logger
+ * through the registry, so it is wired with the rest.
  */
 function factoryOf() {
-  const services = new DefaultServiceRegistry();
-  activate({ services } as never);
-  return services.getRequired<(config: never) => never>(
-    Symbol.keyFor(factorySymbol) ?? String(factorySymbol.description),
-  );
+  const { services } = wireRepositories(mqttConnection);
+  return services.getRequired<(config: never) => never>(factorySymbol.description!);
 }
 
 describe('MQTT Connection Integration/Unit Tests', () => {
@@ -61,9 +56,9 @@ describe('MQTT Connection Integration/Unit Tests', () => {
     vi.clearAllMocks();
   });
 
-  test('factory is bound and registers correctly in container', () => {
-    const factory = container.get<any>(mqttFactorySymbol);
-    assert.ok(factory, 'MQTTConnectionFactory should be bound in the container');
+  test('factory is registered on activation and builds a connection', () => {
+    const factory = factoryOf() as any;
+    assert.ok(factory, 'MQTTConnectionFactory should be registered on activation');
 
     const config = { url: 'mqtt://localhost:1883', uid: 'mqtt-test', type: 'mqtt', name: 'MQTT Connection' };
     const connection = factory(config);
@@ -79,7 +74,7 @@ describe('MQTT Connection Integration/Unit Tests', () => {
   });
 
   test('initializes and subscribes to topic', async () => {
-    const factory = container.get<any>(mqttFactorySymbol);
+    const factory = factoryOf() as any;
     const config = { url: 'mqtt://test-broker.com', topic: 'test/topic', uid: 'mqtt-test-2', type: 'mqtt', name: 'MQTT 2' };
 
     factory(config);

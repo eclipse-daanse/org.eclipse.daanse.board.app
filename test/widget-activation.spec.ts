@@ -155,9 +155,13 @@ describe('widget bundles as declared components', () => {
     'table.kpi', 'table.pivot', 'text.plain', 'text.rich', 'timeline',
     'vanta', 'video', 'weather', 'xmla.filters', 'progress',
   ]
-  // 30s: the code widget drags monaco through the SSR transform on a cold
-  // cache - import cost, not a defect.
-  it.each(bundleIds)('%s exports a daanse.widget component', { timeout: 30_000 }, async (suffix) => {
+  /*
+   * 90s: the code widget drags monaco through the SSR transform on a cold
+   * cache - import cost, not a defect. It takes some eight seconds on its
+   * own and several times that while the rest of the suite competes for
+   * the same cores, which is what a full run does.
+   */
+  it.each(bundleIds)('%s exports a daanse.widget component', { timeout: 90_000 }, async (suffix) => {
     const ns = await import(/* @vite-ignore */ `org.eclipse.daanse.board.app.ui.vue.widget.${suffix}`)
 
     const providers = Object.values(ns).filter(
