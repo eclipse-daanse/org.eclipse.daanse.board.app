@@ -13,6 +13,10 @@
 
 // @vitest-environment jsdom
 import { describe, it, expect, vi } from 'vitest';
+import { VariableComplexStringWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables';
+import { EVENT_ACTIONS_REGISTRY } from 'org.eclipse.daanse.board.app.lib.api.events';
+import { identifiers } from 'org.eclipse.daanse.board.app.lib.core';
+import { identifier as VARIABLE_REPOSITORY } from 'org.eclipse.daanse.board.app.lib.api.variable';
 import { mount } from '@vue/test-utils';
 import TextWidget from '../TextWidget.vue';
 import TextWidgetSettings from '../TextWidgetSettings.vue';
@@ -249,6 +253,27 @@ vi.mock('org.eclipse.daanse.board.app.ui.vue.composables', async (importOriginal
   };
 });
 
+
+/*
+ * What this widget injects when it is mounted for real. The components
+ * assert these are present - inject(...)! - so a mount without them throws
+ * before anything can be asserted.
+ */
+const widgetProvides: Record<symbol | string, unknown> = {
+  [EVENT_ACTIONS_REGISTRY as symbol]: {
+    registerInstance() {}, unregisterInstance() {},
+    registerAction() {}, unregisterAction() {},
+    getAction: () => undefined, getAllActions: () => [],
+  },
+  [identifiers.TINY_EMITTER as unknown as symbol]: {
+    on() {}, off() {}, once() {}, emit() {},
+  },
+  [VARIABLE_REPOSITORY as unknown as symbol]: {
+    getAllVariables: () => [], getVariable: () => undefined,
+    registerVariable() {}, unregisterVariable() {},
+  },
+};
+
 describe('Rendering tests for org.eclipse.daanse.board.app.ui.vue.widget.text.plain', () => {
   it('renders TextWidget component', () => {
     const wrapper = mount(TextWidget, {
@@ -293,9 +318,9 @@ describe('Rendering tests for org.eclipse.daanse.board.app.ui.vue.widget.text.pl
           textDecoration: { value: 'none' },
           horizontalAlign: { value: 'left' },
           verticalAlign: { value: 'top' },
-          text: 'mocked-text',
-          fontSize: '14px',
-          fontColor: '#000000',
+          text: new VariableComplexStringWrapper('mocked-text'),
+          fontSize: { value: 14 },
+          fontColor: { value: '#000000' },
           activeItemStyles: {
             fill: { value: '#ff0000' },
             stroke: { value: '#000000' }
@@ -334,9 +359,9 @@ describe('Rendering tests for org.eclipse.daanse.board.app.ui.vue.widget.text.pl
           textDecoration: { value: 'none' },
           horizontalAlign: { value: 'left' },
           verticalAlign: { value: 'top' },
-          text: 'mocked-text',
-          fontSize: '14px',
-          fontColor: '#000000',
+          text: new VariableComplexStringWrapper('mocked-text'),
+          fontSize: { value: 14 },
+          fontColor: { value: '#000000' },
           activeItemStyles: {
             fill: { value: '#ff0000' },
             stroke: { value: '#000000' }
@@ -376,9 +401,9 @@ describe('Rendering tests for org.eclipse.daanse.board.app.ui.vue.widget.text.pl
           textDecoration: { value: 'none' },
           horizontalAlign: { value: 'left' },
           verticalAlign: { value: 'top' },
-          text: 'mocked-text',
-          fontSize: '14px',
-          fontColor: '#000000',
+          text: new VariableComplexStringWrapper('mocked-text'),
+          fontSize: { value: 14 },
+          fontColor: { value: '#000000' },
           activeItemStyles: {
             fill: { value: '#ff0000' },
             stroke: { value: '#000000' }
@@ -407,9 +432,9 @@ describe('Rendering tests for org.eclipse.daanse.board.app.ui.vue.widget.text.pl
           textDecoration: { value: 'none' },
           horizontalAlign: { value: 'left' },
           verticalAlign: { value: 'top' },
-          text: 'mocked-text',
-          fontSize: '14px',
-          fontColor: '#000000',
+          text: new VariableComplexStringWrapper('mocked-text'),
+          fontSize: { value: 14 },
+          fontColor: { value: '#000000' },
           activeItemStyles: {
             fill: { value: '#ff0000' },
             stroke: { value: '#000000' }
@@ -434,6 +459,7 @@ describe('Rendering tests for org.eclipse.daanse.board.app.ui.vue.widget.text.pl
         editEnabled: false
       } as any,
       global: {
+        provide: widgetProvides,
         stubs: {
           VaCard: { template: '<div><slot /></div>' },
           VaButton: { template: '<button><slot /></button>' },
@@ -489,9 +515,9 @@ describe('Rendering tests for org.eclipse.daanse.board.app.ui.vue.widget.text.pl
           textDecoration: { value: 'none' },
           horizontalAlign: { value: 'left' },
           verticalAlign: { value: 'top' },
-          text: 'mocked-text',
-          fontSize: '14px',
-          fontColor: '#000000',
+          text: new VariableComplexStringWrapper('mocked-text'),
+          fontSize: { value: 14 },
+          fontColor: { value: '#000000' },
           activeItemStyles: {
             fill: { value: '#ff0000' },
             stroke: { value: '#000000' }
@@ -530,9 +556,9 @@ describe('Rendering tests for org.eclipse.daanse.board.app.ui.vue.widget.text.pl
           textDecoration: { value: 'none' },
           horizontalAlign: { value: 'left' },
           verticalAlign: { value: 'top' },
-          text: 'mocked-text',
-          fontSize: '14px',
-          fontColor: '#000000',
+          text: new VariableComplexStringWrapper('mocked-text'),
+          fontSize: { value: 14 },
+          fontColor: { value: '#000000' },
           activeItemStyles: {
             fill: { value: '#ff0000' },
             stroke: { value: '#000000' }
@@ -572,9 +598,9 @@ describe('Rendering tests for org.eclipse.daanse.board.app.ui.vue.widget.text.pl
           textDecoration: { value: 'none' },
           horizontalAlign: { value: 'left' },
           verticalAlign: { value: 'top' },
-          text: 'mocked-text',
-          fontSize: '14px',
-          fontColor: '#000000',
+          text: new VariableComplexStringWrapper('mocked-text'),
+          fontSize: { value: 14 },
+          fontColor: { value: '#000000' },
           activeItemStyles: {
             fill: { value: '#ff0000' },
             stroke: { value: '#000000' }
@@ -603,9 +629,9 @@ describe('Rendering tests for org.eclipse.daanse.board.app.ui.vue.widget.text.pl
           textDecoration: { value: 'none' },
           horizontalAlign: { value: 'left' },
           verticalAlign: { value: 'top' },
-          text: 'mocked-text',
-          fontSize: '14px',
-          fontColor: '#000000',
+          text: new VariableComplexStringWrapper('mocked-text'),
+          fontSize: { value: 14 },
+          fontColor: { value: '#000000' },
           activeItemStyles: {
             fill: { value: '#ff0000' },
             stroke: { value: '#000000' }
@@ -630,6 +656,7 @@ describe('Rendering tests for org.eclipse.daanse.board.app.ui.vue.widget.text.pl
         editEnabled: false
       } as any,
       global: {
+        provide: widgetProvides,
         stubs: {
           VaCard: { template: '<div><slot /></div>' },
           VaButton: { template: '<button><slot /></button>' },

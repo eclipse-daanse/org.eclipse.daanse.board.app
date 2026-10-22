@@ -40,6 +40,13 @@ class VariableComplexStringWrapper<T = string> {
       value: shallowRef(0),
       enumerable: false,
       writable: false,
+      /*
+       * Configurable, or a Vue proxy over this object throws on reading it:
+       * a proxy may not report a different value for a property that is
+       * both non-writable and non-configurable, and the ref is exactly
+       * that. Nothing reconfigures it; this only lets the proxy work.
+       */
+      configurable: true,
     });
   }
 
