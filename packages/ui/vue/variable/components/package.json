@@ -30,7 +30,7 @@
     "vite-plugin-libcss": "^1.1.1",
     "vue-json-pretty": "^2.4.0",
     "vue-mention": "^2.0.0-alpha.3",
-    "floating-vue": "5.2.2",
+    "floating-vue": "5.4.0",
     "org.eclipse.daanse.board.app.ui.vue.controls": "^0.0.1-next.1",
     "org.eclipse.daanse.board.app.lib.api.variable": "^0.0.1-next.1",
     "org.eclipse.daanse.board.app.ui.vue.composables": "^0.0.1-next.1"
