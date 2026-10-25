@@ -58,6 +58,25 @@ function hidePreloader() {
 if (document.readyState === 'complete') hidePreloader()
 else window.addEventListener('load', hidePreloader)
 
+/*
+ * Which frame the page shows. The board shell and the MDX workbench both
+ * create the Vue application, provide it as 'App' and mount it on #app, so
+ * exactly one of them is registered; every other bundle is shared. The
+ * workbench answers /workbench - a single segment, since the production
+ * build loads its assets relative to the page.
+ */
+const FRAMES = ['app.shell', 'app.workbench']
+
+function frameOf(pathname: string): string {
+  const workbench = pathname === '/workbench' || pathname.startsWith('/workbench/')
+  return workbench ? 'app.workbench' : 'app.shell'
+}
+
+function framed(manifests: ModuleManifest[]): ModuleManifest[] {
+  const frame = frameOf(window.location.pathname)
+  return manifests.filter((manifest) => !FRAMES.includes(manifest.id) || manifest.id === frame)
+}
+
 async function start() {
   /*
    * The framework publishes itself: the boot screen (and any diagnostic
@@ -96,7 +115,7 @@ async function start() {
    * bundles.ts like everything else, and the vue stack itself arrives
    * through the import map in index.html pointing at its artefacts.
    */
-  loader.register(bundles)
+  loader.register(framed(bundles))
   await loader.loadAll()
 
   const all = loader.getManifests()

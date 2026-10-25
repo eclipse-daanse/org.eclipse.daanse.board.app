@@ -60,7 +60,13 @@ describe('manifest lint', () => {
         providers.set(p.id, [...(providers.get(p.id) ?? []), m.id])
       }
     }
-    const dupes = [...providers].filter(([, ms]) => ms.length > 1)
+    /*
+     * The frames are alternatives: the launcher registers exactly one of them
+     * (packages/app/default/src/main.ts), so both declaring the App they
+     * create is not two providers at runtime.
+     */
+    const FRAMES = new Set(['app.shell', 'app.workbench'])
+    const dupes = [...providers].filter(([, ms]) => ms.length > 1 && !ms.every((m) => FRAMES.has(m)))
     expect(dupes, dupes.map(([id, ms]) => `${id} <- ${ms.join(', ')}`).join('; ')).toEqual([])
   })
 
