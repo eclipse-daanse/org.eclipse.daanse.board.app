@@ -53,5 +53,11 @@
         ]
       }
     }
+  ],
+  "provides": [
+    {
+      "id": "XmlaConnectionSettings",
+      "description": "The XMLA connection settings form, for hosts that edit a connection outside the board's dialogs"
+    }
   ]
 }
