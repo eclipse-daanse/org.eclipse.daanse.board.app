@@ -13,67 +13,82 @@ Contributors:
 
 <script setup lang="ts">
 import { computed } from 'vue'
+import { useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import AstTreeNode from './AstTreeNode.vue'
-import { useAstTree, type AstTreeMode } from '../composables/useAstTree.js'
+import { useAstTree, type AstTreeDepth, type AstTreeMode } from '../composables/useAstTree.js'
 
-defineProps<{
-  ready: boolean
-}>()
+withDefaults(
+  defineProps<{
+    ready: boolean
+    /** Which views to offer; the outline only where the language has one. */
+    modes?: AstTreeMode[]
+    /** Whether the panel draws its own title row. */
+    titled?: boolean
+  }>(),
+  { modes: () => ['ast', 'outline'], titled: true },
+)
+
+const { t } = useTranslation('lsp')
 
 const {
   mode,
   outlineAvailable,
   rows,
   setMode,
+  depth,
+  setDepth,
   loading,
   stale,
   parserErrors,
   errorMessage,
 } = useAstTree()
 
-const ALL_MODES: Array<{
-  id: AstTreeMode
-  label: string
-  description: string
-}> = [
-  { id: 'ast', label: 'AST', description: 'The parse tree, node by node' },
-  {
-    id: 'outline',
-    label: 'Outline',
-    description: 'Statements and declarations',
-  },
-]
+// i18n-keys: lsp:Tree.ast*
+// i18n-keys: lsp:Tree.cst*
+// i18n-keys: lsp:Tree.outline*
+const ALL_MODES: AstTreeMode[] = ['ast', 'cst', 'outline']
+const DEPTHS: AstTreeDepth[] = ['all', 1, 2, 3, 5, 7, 10]
 
-const modes = computed(() =>
-  outlineAvailable.value
-    ? ALL_MODES
-    : ALL_MODES.filter(option => option.id === 'ast'),
-)
+const offered = (wanted: AstTreeMode[]) =>
+  ALL_MODES.filter(option => wanted.includes(option) && (option !== 'outline' || outlineAvailable.value))
+
+const depthValue = computed({
+  get: () => String(depth.value),
+  set: (value: string) => setDepth(value === 'all' ? 'all' : Number(value)),
+})
 </script>
 
 <template>
-  <aside class="panel" aria-label="Syntax tree">
+  <aside class="panel" :aria-label="t('Tree.title')">
     <header class="panel-header">
-      <h2>Syntax tree</h2>
+      <h2 v-if="titled">{{ t('Tree.title') }}</h2>
       <div
-        v-if="modes.length > 1"
+        v-if="offered(modes).length > 1"
         class="modes"
         role="group"
-        aria-label="Tree mode"
+        :aria-label="t('Tree.modes')"
       >
         <button
-          v-for="option in modes"
-          :key="option.id"
+          v-for="option in offered(modes)"
+          :key="option"
           type="button"
           class="mode"
-          :class="{ 'mode--active': option.id === mode }"
-          :aria-pressed="option.id === mode"
-          :title="option.description"
-          @click="setMode(option.id)"
+          :class="{ 'mode--active': option === mode }"
+          :aria-pressed="option === mode"
+          :title="t(`Tree.${option}Hint`)"
+          @click="setMode(option)"
         >
-          {{ option.label }}
+          {{ t(`Tree.${option}`) }}
         </button>
       </div>
+      <label v-if="mode !== 'outline'" class="depth">
+        <span>{{ t('Tree.depth') }}</span>
+        <select v-model="depthValue" :title="t('Tree.depthHint')">
+          <option v-for="option in DEPTHS" :key="option" :value="String(option)">
+            {{ option === 'all' ? t('Tree.depthAll') : option }}
+          </option>
+        </select>
+      </label>
     </header>
 
     <p
@@ -81,18 +96,15 @@ const modes = computed(() =>
       class="status"
       :class="{ 'status--errors': parserErrors > 0 }"
     >
-      <template v-if="stale">Rebuilding…</template>
-      <template v-else
-        >{{ parserErrors }} parse
-        {{ parserErrors === 1 ? 'error' : 'errors' }} — partial tree</template
-      >
+      <template v-if="stale">{{ t('Tree.rebuilding') }}</template>
+      <template v-else>{{ t('Tree.partial', { count: parserErrors }) }}</template>
     </p>
 
     <div class="panel-body">
       <p v-if="errorMessage" class="empty empty--error">{{ errorMessage }}</p>
-      <p v-else-if="!ready" class="empty">Waiting for the language server…</p>
+      <p v-else-if="!ready" class="empty">{{ t('Tree.waiting') }}</p>
       <p v-else-if="rows.length === 0" class="empty">
-        {{ loading ? 'Parsing…' : 'Nothing parsed yet.' }}
+        {{ loading ? t('Tree.parsing') : t('Tree.nothing') }}
       </p>
       <AstTreeNode
         v-for="node in rows"
@@ -109,7 +121,7 @@ const modes = computed(() =>
   display: flex;
   flex-direction: column;
   min-height: 0;
-  width: 22rem;
+  width: var(--ast-panel-width, 22rem);
   flex-shrink: 0;
   background: var(--surface);
   border-left: 1px solid var(--border);
@@ -169,6 +181,24 @@ h2 {
 .mode:focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 1px;
+}
+
+.depth {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  margin-left: auto;
+  font-size: 0.68rem;
+  color: var(--text-muted);
+}
+
+.depth select {
+  font: inherit;
+  padding: 0 0.2rem;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: var(--surface-raised);
+  color: var(--text);
 }
 
 .status {

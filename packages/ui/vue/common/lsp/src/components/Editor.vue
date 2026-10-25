@@ -16,7 +16,10 @@ import { onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import type { Extension } from '@codemirror/state'
 import type { EditorView } from '@codemirror/view'
 import type { LanguageDescriptor } from 'org.eclipse.daanse.board.app.lib.lsp.core'
+import { useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import { createEditor, type EditorHandle } from '../editor/editor-service.js'
+
+const { t } = useTranslation('lsp')
 
 const props = defineProps<{
   language: LanguageDescriptor
@@ -82,6 +85,72 @@ onBeforeUnmount(() => {
   handle = undefined
 })
 
+/*
+ * What a host does to the text from outside: a toolbar replaces it, a tree
+ * inserts a name where the caret is, a result row points at a range. Each
+ * is one transaction, so one undo step.
+ */
+function getText(): string {
+  return handle?.view.state.doc.toString() ?? props.text
+}
+
+function setText(text: string): void {
+  const view = handle?.view
+  if (!view) return
+  /*
+   * A new text starts at its beginning: the caret's old offset means
+   * nothing in it, and a view left scrolled to the right hides where the
+   * lines start.
+   */
+  view.dispatch({
+    changes: { from: 0, to: view.state.doc.length, insert: text },
+    selection: { anchor: 0 },
+    scrollIntoView: true,
+  })
+  view.scrollDOM.scrollLeft = 0
+}
+
+/** Replaces the selection; the caret lands at `caret` within the text, its end by default. */
+function insertAtCursor(text: string, caret: number = text.length): void {
+  const view = handle?.view
+  if (!view) return
+  const { from, to } = view.state.selection.main
+  view.dispatch({
+    changes: { from, to, insert: text },
+    selection: { anchor: from + Math.max(0, Math.min(caret, text.length)) },
+    scrollIntoView: true,
+  })
+  view.focus()
+}
+
+/** Edits given as document offsets, applied together. */
+function applyEdits(edits: Array<{ from: number; to: number; insert: string }>): void {
+  const view = handle?.view
+  if (!view || edits.length === 0) return
+  view.dispatch({ changes: edits, scrollIntoView: true })
+}
+
+function select(from: number, to: number = from, focus = false): void {
+  const view = handle?.view
+  if (!view) return
+  const length = view.state.doc.length
+  view.dispatch({
+    selection: { anchor: Math.min(from, length), head: Math.min(to, length) },
+    scrollIntoView: true,
+  })
+  if (focus) view.focus()
+}
+
+defineExpose({
+  getText,
+  setText,
+  insertAtCursor,
+  applyEdits,
+  select,
+  focus: () => handle?.view.focus(),
+  view: () => handle?.view,
+})
+
 // --- Drag-drop from the metadata tree -------------------------------------
 // Tree rows put their XMLA unique name on the drag's `text/plain` payload; it
 // is already a valid, bracket-quoted MDX reference, so it can be spliced in
@@ -98,6 +167,9 @@ function onDragOver(event: DragEvent) {
 }
 
 function onDrop(event: DragEvent) {
+  // A drop onto the text is CodeMirror's: it inserts and prevents the default.
+  // Inserting here as well wrote every dropped name twice.
+  if (event.defaultPrevented) return
   const text = event.dataTransfer?.getData('text/plain')
   const view = handle?.view
   if (!text || !view) return
@@ -119,13 +191,13 @@ function onDrop(event: DragEvent) {
     <div ref="container" class="editor-host"></div>
     <div v-if="status === 'starting'" class="editor-overlay">
       <span class="spinner" aria-hidden="true"></span>
-      Starting the MDX language server…
+      {{ t('Editor.starting', { language: language.label }) }}
     </div>
     <div
       v-else-if="status === 'failed'"
       class="editor-overlay editor-overlay--error"
     >
-      <strong>The editor failed to start.</strong>
+      <strong>{{ t('Editor.failed') }}</strong>
       <code>{{ errorMessage }}</code>
     </div>
   </div>
