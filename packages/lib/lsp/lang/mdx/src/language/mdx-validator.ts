@@ -39,6 +39,7 @@ import {
 } from './mdx-functions.js'
 import { argumentSlotCount } from './mdx-call-slots.js'
 import { identifierBody, splitMemberPath } from './mdx-member-path.js'
+import { UNKNOWN_FUNCTION } from './mdx-code-actions.js'
 
 const MAX_AXIS = 127
 
@@ -160,6 +161,7 @@ export function registerValidationChecks(services: {
   const validator = new MdxValidator()
   const checks: ValidationChecks<MdxAstType> = {
     SelectStatement: [
+      validator.checkAxisTargets,
       validator.checkAxisOrdinals,
       validator.checkSlicerIsNotASet,
     ],
@@ -182,6 +184,24 @@ export function registerValidationChecks(services: {
 }
 
 export class MdxValidator {
+  /* Every axis of a cube query says where it goes; a DMV's columns do not. */
+  checkAxisTargets = (
+    select: SelectStatement,
+    accept: ValidationAcceptor,
+  ): void => {
+    const dmv = select.from?.$type === 'SystemRowsetReference'
+    for (const axis of select.axes) {
+      if (dmv && axis.target) {
+        accept('error', 'A $SYSTEM query lists columns; ON <axis> does not belong here.', {
+          node: axis,
+          property: 'target',
+        })
+      } else if (!dmv && !axis.target) {
+        accept('error', "Expecting 'ON' and the axis this set goes on.", { node: axis })
+      }
+    }
+  }
+
   checkAxisOrdinals = (
     select: SelectStatement,
     accept: ValidationAcceptor,
@@ -396,6 +416,8 @@ export class MdxValidator {
       accept('warning', `Unknown MDX function '${call.name}'.`, {
         node: call,
         property: 'name',
+        code: UNKNOWN_FUNCTION,
+        data: { name: call.name },
       })
       return
     }

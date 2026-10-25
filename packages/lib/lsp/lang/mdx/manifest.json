@@ -44,6 +44,18 @@
     {
       "id": "org.eclipse.daanse.board.app.lib.lsp.server",
       "versionRange": ">=0.0.1-0"
+    },
+    {
+      "id": "@codemirror/autocomplete",
+      "versionRange": "^6.20.3"
+    },
+    {
+      "id": "@codemirror/state",
+      "versionRange": "^6.7.1"
+    },
+    {
+      "id": "@codemirror/view",
+      "versionRange": "^6.43.8"
     }
   ]
 }

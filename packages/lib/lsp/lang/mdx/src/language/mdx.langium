@@ -57,11 +57,14 @@ SelectStatement:
     ('WHERE' slicer=Expression)?
     (cellProperties=CellPropertyList)?;
 
+// `ON <axis>` is optional here and required by validation for a cube: a DMV
+// (SELECT CUBE_NAME, CATALOG_NAME FROM $SYSTEM.MDSCHEMA_CUBES) lists
+// columns, and telling the two apart needs the FROM that comes after.
 AxisClause:
     (nonEmpty?='NON' 'EMPTY')?
     set=Expression
     (dimensionProperties=DimensionPropertyList)?
-    'ON' target=AxisTarget;
+    ('ON' target=AxisTarget)?;
 
 AxisTarget:
       {infer NamedAxis} name=('COLUMNS' | 'ROWS' | 'PAGES' | 'SECTIONS' | 'CHAPTERS')
@@ -76,7 +79,8 @@ CellPropertyList:
 
 SubcubeClause:
       {infer CubeReference} cube=MemberPath
-    | {infer SubSelect} (nonVisual?='NON' 'VISUAL')? '(' select=SelectStatement ')';
+    | {infer SubSelect} (nonVisual?='NON' 'VISUAL')? '(' select=SelectStatement ')'
+    | {infer SystemRowsetReference} '$SYSTEM' '.' rowset=Identifier;
 
 // ---------------------------------------------------------------------------
 // Statements built around a SELECT

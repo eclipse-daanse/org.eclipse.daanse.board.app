@@ -78,3 +78,18 @@ export {
 } from './mdx-stream-language.js'
 export { parseMdxCompletionContext } from './mdx-reference-parser.js'
 export type { MdxCompletionContext, WordRange } from './mdx-reference-parser.js'
+
+/* The visual builder's view of a SELECT and its text edits - see mdx-select-model.ts. */
+export * from './mdx-select-model.js'
+
+/* Cube metadata in the editor: completion, hover, colour - see mdx-metadata-editing.ts. */
+export {
+  mdxMetadata,
+  mdxMetadataCompletion,
+  mdxMetadataHighlight,
+  mdxMetadataHover,
+  type MdxFunctionItem,
+  type MdxMetadataItem,
+  type MdxMetadataKind,
+  type MdxMetadataSource,
+} from './mdx-metadata-editing.js'

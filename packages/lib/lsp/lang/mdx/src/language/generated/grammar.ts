@@ -357,20 +357,26 @@ export const MdxGrammar = (): Grammar =>
             "cardinality": "?"
           },
           {
-            "$type": "Keyword",
-            "value": "ON"
-          },
-          {
-            "$type": "Assignment",
-            "feature": "target",
-            "operator": "=",
-            "terminal": {
-              "$type": "RuleCall",
-              "rule": {
-                "$ref": "#/rules@4"
+            "$type": "Group",
+            "elements": [
+              {
+                "$type": "Keyword",
+                "value": "ON"
               },
-              "arguments": []
-            }
+              {
+                "$type": "Assignment",
+                "feature": "target",
+                "operator": "=",
+                "terminal": {
+                  "$type": "RuleCall",
+                  "rule": {
+                    "$ref": "#/rules@4"
+                  },
+                  "arguments": []
+                }
+              }
+            ],
+            "cardinality": "?"
           }
         ]
       },
@@ -680,6 +686,38 @@ export const MdxGrammar = (): Grammar =>
               {
                 "$type": "Keyword",
                 "value": ")"
+              }
+            ]
+          },
+          {
+            "$type": "Group",
+            "elements": [
+              {
+                "$type": "Action",
+                "inferredType": {
+                  "$type": "InferredType",
+                  "name": "SystemRowsetReference"
+                }
+              },
+              {
+                "$type": "Keyword",
+                "value": "$SYSTEM"
+              },
+              {
+                "$type": "Keyword",
+                "value": "."
+              },
+              {
+                "$type": "Assignment",
+                "feature": "rowset",
+                "operator": "=",
+                "terminal": {
+                  "$type": "RuleCall",
+                  "rule": {
+                    "$ref": "#/rules@45"
+                  },
+                  "arguments": []
+                }
               }
             ]
           }
