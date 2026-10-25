@@ -21,6 +21,7 @@ export const MdxTerminals = {
 export type MdxTerminalNames = keyof typeof MdxTerminals
 
 export type MdxKeywordNames =
+  | '$SYSTEM'
   | '&'
   | '('
   | ')'
@@ -207,7 +208,7 @@ export interface AxisClause extends langium.AstNode {
   dimensionProperties?: DimensionPropertyList
   nonEmpty: boolean
   set: Expression
-  target: AxisTarget
+  target?: AxisTarget
 }
 
 export const AxisClause = {
@@ -1720,7 +1721,7 @@ export function isStringLiteral(item: unknown): item is StringLiteral {
   return reflection.isInstance(item, StringLiteral.$type)
 }
 
-export type SubcubeClause = CubeReference | SubSelect
+export type SubcubeClause = CubeReference | SubSelect | SystemRowsetReference
 
 export const SubcubeClause = {
   $type: 'SubcubeClause',
@@ -1745,6 +1746,23 @@ export const SubSelect = {
 
 export function isSubSelect(item: unknown): item is SubSelect {
   return reflection.isInstance(item, SubSelect.$type)
+}
+
+export interface SystemRowsetReference extends langium.AstNode {
+  readonly $container: SelectStatement
+  readonly $type: 'SystemRowsetReference'
+  rowset: Identifier
+}
+
+export const SystemRowsetReference = {
+  $type: 'SystemRowsetReference',
+  rowset: 'rowset',
+} as const
+
+export function isSystemRowsetReference(
+  item: unknown,
+): item is SystemRowsetReference {
+  return reflection.isInstance(item, SystemRowsetReference.$type)
 }
 
 export interface ThisReference extends langium.AstNode {
@@ -2068,6 +2086,7 @@ export type MdxAstType = {
   StringLiteral: StringLiteral
   SubSelect: SubSelect
   SubcubeClause: SubcubeClause
+  SystemRowsetReference: SystemRowsetReference
   ThisReference: ThisReference
   TupleExpression: TupleExpression
   UnaryExpression: UnaryExpression
@@ -2123,6 +2142,7 @@ export class MdxAstReflection extends langium.AbstractAstReflection {
         },
         target: {
           name: AxisClause.target,
+          optional: true,
         },
       },
       superTypes: [],
@@ -2689,6 +2709,15 @@ export class MdxAstReflection extends langium.AbstractAstReflection {
       name: SubcubeClause.$type,
       properties: {},
       superTypes: [],
+    },
+    SystemRowsetReference: {
+      name: SystemRowsetReference.$type,
+      properties: {
+        rowset: {
+          name: SystemRowsetReference.rowset,
+        },
+      },
+      superTypes: [SubcubeClause.$type],
     },
     ThisReference: {
       name: ThisReference.$type,

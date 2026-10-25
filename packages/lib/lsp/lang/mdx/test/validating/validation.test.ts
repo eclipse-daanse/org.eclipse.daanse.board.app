@@ -28,6 +28,34 @@ async function validate(text: string) {
   return document
 }
 
+describe('DMV queries over $SYSTEM', () => {
+  test('list columns without ON and need no cube', async () => {
+    const document = await validate(
+      "SELECT CUBE_NAME, CATALOG_NAME FROM $SYSTEM.MDSCHEMA_CUBES WHERE CUBE_NAME = 'Sales'",
+    )
+    expect(diagnosticsOfSeverity(document, ERROR)).toEqual([])
+  })
+
+  test('take a star, in any casing', async () => {
+    const document = await validate('select * from $system.DISCOVER_SESSIONS')
+    expect(diagnosticsOfSeverity(document, ERROR)).toEqual([])
+  })
+
+  test('refuse an axis target', async () => {
+    const document = await validate('SELECT CUBE_NAME ON COLUMNS FROM $SYSTEM.MDSCHEMA_CUBES')
+    expect(diagnosticsOfSeverity(document, ERROR)).toContainEqual(
+      expect.stringContaining('ON <axis> does not belong here'),
+    )
+  })
+
+  test('a cube query still needs ON for every axis', async () => {
+    const document = await validate('SELECT {[A].[B]} FROM [Cube]')
+    expect(diagnosticsOfSeverity(document, ERROR)).toContainEqual(
+      expect.stringContaining("Expecting 'ON'"),
+    )
+  })
+})
+
 describe('axis ordinals', () => {
   test('an ordinal above 127 is rejected', async () => {
     const document = await validate(

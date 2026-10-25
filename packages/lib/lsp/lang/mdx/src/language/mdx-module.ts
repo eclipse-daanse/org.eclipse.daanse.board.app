@@ -33,7 +33,14 @@ import {
   MdxGeneratedModule,
   MdxGeneratedSharedModule,
 } from './generated/module.js'
+import { MdxCodeActionProvider } from './mdx-code-actions.js'
 import { MdxCompletionProvider } from './mdx-completion-provider.js'
+import { MdxFormatter } from './mdx-formatter.js'
+import {
+  createMdxParser,
+  MdxLexerErrorMessageProvider,
+  MdxParserErrorMessageProvider,
+} from './mdx-parser-messages.js'
 import { MdxScopeProvider } from './mdx-scope.js'
 import {
   MdxDocumentSymbolProvider,
@@ -62,6 +69,11 @@ export const MdxModule: Module<
   MdxServices,
   PartialLangiumServices & MdxAddedServices
 > = {
+  parser: {
+    LangiumParser: services => createMdxParser(services),
+    ParserErrorMessageProvider: () => new MdxParserErrorMessageProvider(),
+    LexerErrorMessageProvider: () => new MdxLexerErrorMessageProvider(),
+  },
   references: {
     ScopeProvider: services => new MdxScopeProvider(services),
   },
@@ -71,6 +83,8 @@ export const MdxModule: Module<
   lsp: {
     DocumentSymbolProvider: services => new MdxDocumentSymbolProvider(services),
     CompletionProvider: services => new MdxCompletionProvider(services),
+    Formatter: () => new MdxFormatter(),
+    CodeActionProvider: () => new MdxCodeActionProvider(),
   },
 }
 

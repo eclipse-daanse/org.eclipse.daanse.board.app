@@ -125,9 +125,19 @@ function inlineCss() {
  * a worker nobody emitted.
  */
 function buildWorker() {
+  /*
+   * Beside index.js means wherever this build writes, not dist-bundle by
+   * name: scripts/build-bundles.mjs builds into dist-bundle.building and
+   * swaps it in, and a worker written to dist-bundle meanwhile went with
+   * the old directory.
+   */
+  let outDir = resolve(__dirname, 'dist-bundle')
   return {
     name: 'build-language-server-worker',
     apply: 'build' as const,
+    configResolved(config: { build: { outDir: string }; root: string }) {
+      outDir = resolve(config.root, config.build.outDir)
+    },
     closeBundle: async () => {
       const { build } = await import('vite')
       const config = await import('./vite.worker.config')
@@ -136,7 +146,7 @@ function buildWorker() {
         configFile: false,
         build: {
           ...((config.default as { build?: Record<string, unknown> }).build ?? {}),
-          outDir: resolve(__dirname, 'dist-bundle'),
+          outDir,
           emptyOutDir: false,
         },
       })
