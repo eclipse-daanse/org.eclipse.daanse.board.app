@@ -12,21 +12,37 @@ Contributors:
 -->
 
 <script setup lang="ts">
+import { useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import type { DiagnosticEntry } from '../composables/useDiagnostics.js'
 
 defineProps<{
   diagnostics: DiagnosticEntry[]
   ready: boolean
+  /** The entry whose details are open, if the host shows any. */
+  selected?: DiagnosticEntry | null
 }>()
+
+/* A click on a row: the host reveals the range, and may offer fixes in the slot. */
+const emit = defineEmits<{ (event: 'select', diagnostic: DiagnosticEntry): void }>()
+
+const { t } = useTranslation('lsp')
 </script>
 
 <template>
-  <p v-if="!ready" class="placeholder">Waiting for the language server…</p>
+  <p v-if="!ready" class="placeholder">{{ t('Tree.waiting') }}</p>
   <p v-else-if="diagnostics.length === 0" class="placeholder">
-    No problems detected.
+    {{ t('Diagnostics.none') }}
   </p>
   <ul v-else class="list">
-    <li v-for="(diagnostic, index) in diagnostics" :key="index" class="row">
+    <li
+      v-for="(diagnostic, index) in diagnostics"
+      :key="index"
+      class="row"
+      :class="{ 'row--selected': selected === diagnostic }"
+      tabindex="0"
+      @click="emit('select', diagnostic)"
+      @keydown.enter="emit('select', diagnostic)"
+    >
       <span
         class="dot"
         :class="`dot--${diagnostic.severity}`"
@@ -36,6 +52,9 @@ defineProps<{
         >{{ diagnostic.line }}:{{ diagnostic.column }}</span
       >
       <span class="message">{{ diagnostic.message }}</span>
+      <div v-if="selected === diagnostic && $slots.details" class="details" @click.stop>
+        <slot name="details" :diagnostic="diagnostic" />
+      </div>
     </li>
   </ul>
 </template>
@@ -67,8 +86,17 @@ defineProps<{
   line-height: 1.45;
 }
 
-.row:hover {
+.row:hover,
+.row--selected {
   background: var(--surface-raised);
+}
+
+.row {
+  cursor: pointer;
+}
+
+.details {
+  grid-column: 2 / -1;
 }
 
 .dot {

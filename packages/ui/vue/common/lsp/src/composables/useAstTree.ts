@@ -14,7 +14,10 @@
 /**
  * The AST panel's model.
  *
- * Two sources, one shape. **AST mode** renders the parse tree the session
+ * Three sources, one shape. **CST mode** renders the concrete syntax tree of
+ * the same parse - every token under the rule that consumed it, comments
+ * included - with chains of single-child rules folded into one row.
+ * **AST mode** renders the parse tree the session
  * already holds: every node, the property slot it occupies in its parent, and
  * its source range — for any language. **Outline mode** asks for standard
  * document symbols, which a language server may narrow to the statements and
@@ -49,6 +52,7 @@ import type { DocumentSymbol, Range } from 'vscode-languageserver-types'
 import {
   getLanguageClient,
   type AstTreeNode,
+  type CstTreeNode,
 } from 'org.eclipse.daanse.board.app.lib.lsp.core'
 import {
   rangeContains,
@@ -57,14 +61,23 @@ import {
   type EditorSession,
 } from '../state/editor-session.js'
 
-export type AstTreeMode = 'ast' | 'outline'
+export type AstTreeMode = 'ast' | 'cst' | 'outline'
+
+/** How many levels open by themselves; 'all' opens the whole tree. */
+export type AstTreeDepth = number | 'all'
 
 export interface AstTreeRow {
   id: string
   label: string
   detail?: string
-  kind: AstTreeNode['kind'] | 'symbol'
+  kind: AstTreeNode['kind'] | 'symbol' | 'composite' | 'leaf' | 'hidden'
   range?: Range
+  /** Rules folded into this row, outermost first - CST mode only. */
+  chain?: string[]
+  /** The wire node the row was made from. */
+  source?: AstTreeNode | CstTreeNode
+  /** The AST row a CST row stands for. */
+  astId?: string
   children: AstTreeRow[]
 }
 
@@ -91,7 +104,47 @@ function toRow(node: AstTreeNode): AstTreeRow {
     detail: node.kind === 'node' ? undefined : (node.value ?? node.label),
     kind: node.kind,
     range: node.range,
+    source: node,
     children: node.children.map(toRow),
+  }
+}
+
+/*
+ * A rule calling a rule calling a rule is one row: the grammar is layered
+ * by precedence, so `5` sits under a dozen expression levels, none of which
+ * says anything. The row keeps the outermost name, the folded ones in
+ * `chain`, and the innermost id - the one whose children it shows.
+ */
+function cstToRow(node: CstTreeNode): AstTreeRow {
+  if (node.kind === 'leaf') {
+    return {
+      id: node.id,
+      label: node.name,
+      detail: JSON.stringify(node.text ?? ''),
+      kind: node.hidden ? 'hidden' : 'leaf',
+      range: node.range,
+      source: node,
+      children: [],
+    }
+  }
+  const chain = [node.name]
+  let inner = node
+  let astId = node.astId
+  while (inner.children.length === 1 && inner.children[0]!.kind === 'composite') {
+    inner = inner.children[0]!
+    chain.push(inner.name)
+    astId ??= inner.astId
+  }
+  return {
+    id: inner.id,
+    label: chain.length > 1 ? `${node.name} ⟩${chain.length - 1}` : node.name,
+    detail: `[${node.offset}..${node.offset + node.length})`,
+    kind: 'composite',
+    range: node.range,
+    chain: chain.length > 1 ? chain : undefined,
+    source: inner,
+    astId,
+    children: inner.children.map(cstToRow),
   }
 }
 
@@ -151,6 +204,10 @@ export interface AstTreeModel {
   outlineAvailable: ComputedRef<boolean>
   rows: Ref<AstTreeRow[]>
   activeId: Ref<string | null>
+  /** The row the caret or a click selected. */
+  activeRow: ComputedRef<AstTreeRow | null>
+  depth: Ref<AstTreeDepth>
+  setDepth(next: AstTreeDepth): void
   loading: Ref<boolean>
   outlineLoading: Ref<boolean>
   stale: Ref<boolean>
@@ -165,8 +222,13 @@ export const AST_TREE_MODEL: InjectionKey<AstTreeModel> = Symbol(
   'olap-editor ast tree',
 )
 
-export function createAstTreeModel(session: EditorSession): AstTreeModel {
-  const mode = ref<AstTreeMode>('ast')
+export function createAstTreeModel(
+  session: EditorSession,
+  options: { mode?: AstTreeMode; depth?: AstTreeDepth } = {},
+): AstTreeModel {
+  const mode = ref<AstTreeMode>(options.mode ?? 'ast')
+  const depth = ref<AstTreeDepth>(options.depth ?? INITIAL_DEPTH)
+  const byId = new Map<string, AstTreeRow>()
   const rows = ref<AstTreeRow[]>([])
   const expanded = reactive(new Set<string>())
   const activeId = ref<string | null>(null)
@@ -179,25 +241,56 @@ export function createAstTreeModel(session: EditorSession): AstTreeModel {
 
   let lastSeed = ''
   let outlineToken = 0
+  /* Every row id the tree has had: a row new after an edit opens as the depth says. */
+  const known = new Set<string>()
+  /*
+   * A row clicked in the tree stays the marked one while the caret is
+   * inside it: the click selects its text, the caret lands at the end of
+   * that, and the innermost row there is not what was clicked.
+   */
+  let clicked: string | null = null
 
-  function seedExpansion(seeds: AstTreeRow[], depth = 0) {
-    if (depth >= INITIAL_DEPTH) return
+  function seedExpansion(seeds: AstTreeRow[], level = 0, onlyNew = false) {
+    if (depth.value !== 'all' && level >= depth.value) return
     for (const row of seeds) {
       if (row.children.length === 0) continue
-      expanded.add(row.id)
-      seedExpansion(row.children, depth + 1)
+      if (!onlyNew || !known.has(row.id)) expanded.add(row.id)
+      seedExpansion(row.children, level + 1, onlyNew)
+    }
+  }
+
+  function remember(list: AstTreeRow[]) {
+    for (const row of list) {
+      known.add(row.id)
+      remember(row.children)
+    }
+  }
+
+  function index(list: AstTreeRow[]) {
+    for (const row of list) {
+      byId.set(row.id, row)
+      index(row.children)
     }
   }
 
   function applyRows(next: AstTreeRow[]) {
+    byId.clear()
+    index(next)
     rows.value = next
     const seed = `${session.uri.value} ${mode.value}`
-    if (seed !== lastSeed) {
+    // An empty first answer is no tree yet: the expansion waits for one.
+    if (seed !== lastSeed && next.length > 0) {
       lastSeed = seed
       expanded.clear()
+      known.clear()
       activeId.value = null
+      clicked = null
       seedExpansion(next)
+    } else if (next.length > 0) {
+      // Rows the user opened or closed stay so; only rows new to the tree follow the depth.
+      seedExpansion(next, 0, true)
     }
+    remember(next)
   }
 
   async function rebuild() {
@@ -207,6 +300,15 @@ export function createAstTreeModel(session: EditorSession): AstTreeModel {
     }
     if (mode.value === 'ast') {
       applyRows(session.ast.value?.root ? [toRow(session.ast.value.root)] : [])
+      return
+    }
+    if (mode.value === 'cst') {
+      if (!session.cstWanted.value) {
+        // The first time the tab opens: from now on every parse brings it.
+        session.cstWanted.value = true
+        void session.refreshAst()
+      }
+      applyRows(session.cst.value?.root ? [cstToRow(session.cst.value.root)] : [])
       return
     }
     const token = ++outlineToken
@@ -231,7 +333,7 @@ export function createAstTreeModel(session: EditorSession): AstTreeModel {
   )
 
   // One clock: the session's debounced parse drives both modes.
-  watch([session.ast, mode, session.uri], () => void rebuild(), {
+  watch([session.ast, session.cst, mode, session.uri], () => void rebuild(), {
     immediate: true,
   })
 
@@ -241,6 +343,11 @@ export function createAstTreeModel(session: EditorSession): AstTreeModel {
     const path = pathToPosition(rows.value, position)
     if (path.length === 0) return
     for (const row of path.slice(0, -1)) expanded.add(row.id)
+    if (clicked && path.some(row => row.id === clicked)) {
+      activeId.value = clicked
+      return
+    }
+    clicked = null
     activeId.value = path[path.length - 1].id
   })
 
@@ -249,6 +356,21 @@ export function createAstTreeModel(session: EditorSession): AstTreeModel {
     outlineAvailable,
     rows,
     activeId,
+    activeRow: computed(() => {
+      // Read rows so the lookup follows a rebuild.
+      void rows.value
+      return activeId.value ? (byId.get(activeId.value) ?? null) : null
+    }),
+    depth,
+    setDepth: (next: AstTreeDepth) => {
+      depth.value = next
+      expanded.clear()
+      seedExpansion(rows.value)
+      // The way to the marked row stays open whatever the depth.
+      if (activeId.value && session.cursorPosition.value) {
+        for (const row of pathToPosition(rows.value, session.cursorPosition.value).slice(0, -1)) expanded.add(row.id)
+      }
+    },
     loading: session.astLoading,
     outlineLoading,
     stale: session.astStale,
@@ -261,6 +383,7 @@ export function createAstTreeModel(session: EditorSession): AstTreeModel {
     isExpanded: (row: AstTreeRow) => expanded.has(row.id),
     selectRow: (row: AstTreeRow) => {
       activeId.value = row.id
+      clicked = row.id
       if (row.range) session.revealRange(row.range)
       if (row.children.length === 0) return
       if (expanded.has(row.id)) expanded.delete(row.id)
@@ -269,8 +392,11 @@ export function createAstTreeModel(session: EditorSession): AstTreeModel {
   }
 }
 
-export function provideAstTree(session?: EditorSession): AstTreeModel {
-  const model = createAstTreeModel(session ?? useEditorSession())
+export function provideAstTree(
+  session?: EditorSession,
+  options?: { mode?: AstTreeMode; depth?: AstTreeDepth },
+): AstTreeModel {
+  const model = createAstTreeModel(session ?? useEditorSession(), options)
   provide(AST_TREE_MODEL, model)
   return model
 }

@@ -34,12 +34,17 @@ export {
   provideAstTree,
   useAstTree,
   AST_TREE_MODEL,
+  type AstTreeDepth,
   type AstTreeMode,
   type AstTreeModel,
   type AstTreeRow,
 } from './composables/useAstTree.js'
 
 export {
+  diagnosticsOf,
   useDiagnostics,
   type DiagnosticEntry,
 } from './composables/useDiagnostics.js'
+
+/* Its texts - collected by lib.i18next, see src/i18n. */
+export { LspTranslations } from './i18n'
