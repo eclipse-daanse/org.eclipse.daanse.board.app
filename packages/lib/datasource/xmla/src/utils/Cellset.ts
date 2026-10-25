@@ -616,3 +616,99 @@ export function sliceKeys(cellset: Cellset, slice: SliceRef): { axis2: string | 
     axis3: positionsOf(cellset, 3)[slice.axis3]?.key ?? null,
   }
 }
+
+/** Where each axis of an ordinal sits: the inverse of cellOrdinal. */
+function coordinatesOf(sizes: number[], ordinal: number): number[] {
+  const coords: number[] = []
+  for (const size of sizes) {
+    coords.push(size > 0 ? ordinal % size : 0)
+    ordinal = size > 0 ? Math.floor(ordinal / size) : 0
+  }
+  return coords
+}
+
+/**
+ * The same cells seen with the axes in another order: `order[i]` names the
+ * axis that becomes axis i. Turning a page axis into columns is the order
+ * [2, 1, 0], say. Nothing is asked again - every cell is moved to the
+ * ordinal its coordinates have under the new order.
+ */
+export function permuteAxes(cellset: Cellset, order: number[]): Cellset {
+  const count = cellset.axes.length
+  if (order.length !== count || new Set(order).size !== count || order.some(i => i < 0 || i >= count)) {
+    throw new Error(`permuteAxes: ${JSON.stringify(order)} is no order of ${count} axes`)
+  }
+  if (order.every((from, to) => from === to)) return cellset
+
+  const sizes = cellset.axes.map(axis => axis.positions.length)
+  const axes = order.map((from, to) => ({ ...cellset.axes[from], ordinal: to }))
+  const turned: Cellset = { ...cellset, axes, cells: {} }
+  for (const [ordinal, cell] of Object.entries(cellset.cells)) {
+    const coords = coordinatesOf(sizes, Number(ordinal))
+    const next = cellOrdinal(turned, order.map(from => coords[from]))
+    turned.cells[next] = { ...cell, __attrs: { ...cell.__attrs, CellOrdinal: String(next) } }
+  }
+  const info = (from: number) => {
+    const entry = cellset.axesInfo[from]
+    return entry ? { ...entry, __attrs: { ...entry.__attrs, name: `Axis${order.indexOf(from)}` } } : entry
+  }
+  turned.axesInfo = order.map(info)
+  return turned
+}
+
+/** Every combination of positions of the axes from `first` on - one per page/chapter/... */
+export function combinationsOf(cellset: Cellset, first = 2): number[][] {
+  let combos: number[][] = [[]]
+  for (let axis = first; axis < cellset.axes.length; axis++) {
+    const size = cellset.axes[axis].positions.length
+    combos = combos.flatMap(combo => Array.from({ length: size }, (_, at) => [...combo, at]))
+  }
+  return combos
+}
+
+function csvField(value: unknown): string {
+  const text = value === null || value === undefined ? '' : String(value)
+  return /[",\n\r;]/.test(text) ? `"${text.replace(/"/g, '""')}"` : text
+}
+
+/** Lines of comma-separated fields, as spreadsheets read them. */
+export function toCsv(rows: unknown[][]): string {
+  return rows.map(row => row.map(csvField).join(',')).join('\r\n')
+}
+
+/**
+ * A cellset as CSV. Up to two axes it is the table on screen - row captions
+ * down the side, column captions across, raw values in the cells. With more
+ * axes it is one line per cell, a column per axis, since a matrix cannot
+ * hold a third dimension.
+ */
+/** An axis as its hierarchies: `Product × Time`; by its number where it has no tuple. */
+function axisHeading(axis: CellsetAxis, index: number): string {
+  const members = axis.positions[0]?.members ?? []
+  const names = members.map(member => member.hierarchy.replace(/^\[|\]$/g, '').replace(/\]\.\[/g, '.')).filter(Boolean)
+  return names.length ? names.join(' × ') : `Axis${index}`
+}
+
+export function cellsetToCsv(cellset: Cellset): string {
+  const columns = positionsOf(cellset, 0)
+  if (cellset.axes.length <= 2) {
+    const rows = cellset.axes.length > 1 ? positionsOf(cellset, 1) : []
+    const header = ['', ...columns.map(column => column.label)]
+    const body = (rows.length ? rows : [null]).map(row => [
+      row?.label ?? '',
+      ...columns.map(column => getCell(cellset, [column.index, row?.index ?? 0])?.value ?? ''),
+    ])
+    return toCsv([header, ...body])
+  }
+  // Each axis is called by what it holds, so a reordered answer still reads right.
+  const header = [...cellset.axes.map(axisHeading), 'Value', 'Formatted']
+  const lines: unknown[][] = [header]
+  const sizes = cellset.axes.map(axis => axis.positions.length)
+  const total = sizes.reduce((a, b) => a * b, 1)
+  for (let ordinal = 0; ordinal < total; ordinal++) {
+    const coords = coordinatesOf(sizes, ordinal)
+    const cell = getCell(cellset, coords)
+    lines.push([...coords.map((at, axis) => cellset.axes[axis].positions[at]?.label ?? ''), cell?.value ?? '', cell?.formatted ?? ''])
+  }
+  return toCsv(lines)
+}
