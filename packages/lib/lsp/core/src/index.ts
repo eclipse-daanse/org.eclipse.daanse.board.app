@@ -25,10 +25,12 @@ export type {
   AstRequestParams,
   AstTreeNode,
   AstTreeResult,
+  CstTreeNode,
+  CstTreeResult,
   LanguageDescriptor,
   LanguageExample,
 } from 'org.eclipse.daanse.board.app.lib.api.lsp'
-export { AST_REQUEST } from 'org.eclipse.daanse.board.app.lib.api.lsp'
+export { AST_REQUEST, CST_REQUEST } from 'org.eclipse.daanse.board.app.lib.api.lsp'
 export { defineLanguage } from './language-descriptor.js'
 export {
   getLanguageClient,

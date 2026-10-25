@@ -35,24 +35,33 @@ import {
   BrowserMessageWriter,
   createConnection,
 } from 'vscode-languageserver/browser'
-import { registerAstRequest } from './ast-tree.js'
+import type { Connection } from 'vscode-languageserver'
+import { registerAstRequest, registerCstRequest } from './ast-tree.js'
 import type { AstTreeStrategy } from './ast-tree.js'
 
-export interface LanguageServerDefinition {
+export interface LanguageServerDefinition<Services = unknown> {
   createServices(context: DefaultSharedModuleContext): {
     shared: LangiumSharedServices
+    /** The language's own services, handed to `register`. */
+    language?: Services
   }
   astStrategy?: AstTreeStrategy
+  /**
+   * The language's own protocol on top of LSP - requests and notifications
+   * beyond the standard ones. Called before the connection listens, which
+   * is the only time a handler can be added without racing the first message.
+   */
+  register?(connection: Connection, shared: LangiumSharedServices, language: Services | undefined): void
 }
 
-export function startWorkerLanguageServer(
+export function startWorkerLanguageServer<Services>(
   port: DedicatedWorkerGlobalScope | MessagePort,
-  definition: LanguageServerDefinition,
+  definition: LanguageServerDefinition<Services>,
 ): void {
   const messageReader = new BrowserMessageReader(port)
   const messageWriter = new BrowserMessageWriter(port)
   const connection = createConnection(messageReader, messageWriter)
-  const { shared } = definition.createServices({
+  const { shared, language } = definition.createServices({
     connection,
     ...EmptyFileSystem,
   })
@@ -60,6 +69,8 @@ export function startWorkerLanguageServer(
   // Before `startLanguageServer`, which calls `connection.listen()`.
   // Registering a request handler after that races the first message.
   registerAstRequest(connection, shared, definition.astStrategy)
+  registerCstRequest(connection, shared, definition.astStrategy)
+  definition.register?.(connection, shared, language)
 
   startLanguageServer(shared)
 }
