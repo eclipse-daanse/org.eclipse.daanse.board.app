@@ -184,7 +184,8 @@ export class ChartComposer extends BaseDatasource {
     chartData.datasets = this.usedSets.map((set) => {
       return {
         label: set,
-        data: data.items.map((e: any) => --e[set]),
+        // The value as a number - read, not changed: the items are the table's own.
+        data: data.items.map((e: any) => Number(e[set])),
         backgroundColor: 'red',
       }
     });
