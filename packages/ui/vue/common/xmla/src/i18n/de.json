@@ -54,5 +54,49 @@
     "label": "Ausschnitt",
     "page": "Seite",
     "chapter": "Kapitel"
+  },
+  "Explorer": {
+    "olap": "OLAP",
+    "relational": "Relational",
+    "rowsets": "XMLA Discover",
+    "catalogRowsets": "Rowsets des Katalogs",
+    "unavailable": "nicht angeboten",
+    "view": "Sicht",
+    "more": "… {{count}} weitere - alle Zeilen stehen im Raster",
+    "noRows": "keine Zeilen",
+    "failed": "Der Server-Explorer ist fehlgeschlagen: {{error}}",
+    "filter": "Filtern…",
+    "useCube": "Diesen Cube verwenden",
+    "measures": "Kennzahlen",
+    "restrictions": "Einschränkungen: {{names}}",
+    "noRestrictions": "Nimmt keine Einschränkungen",
+    "branchFailed": "Nicht lesbar: {{error}}"
+  },
+  "Functions": {
+    "filter": "Funktionen filtern…",
+    "groupBy": "Gruppieren nach",
+    "byKind": "Schreibweise",
+    "byInterface": "Schnittstelle",
+    "byLibrary": "Bibliothek",
+    "byOrigin": "Herkunft",
+    "none": "Der Server nennt keine Funktionen.",
+    "ungrouped": "(keine)",
+    "kindDot": "Nach einem Punkt - .Members, .Children",
+    "kindCall": "Aufruf - Filter(…), Sum(…)",
+    "overloads_one": "{{count}} Variante",
+    "overloads_other": "{{count}} Varianten",
+    "parameter": "Parameter",
+    "description": "Beschreibung",
+    "optional": "Optional",
+    "repeatable": "Wiederholbar",
+    "skippable": "Auslassbar"
+  },
+  "Rowset": {
+    "count_one": "{{count}} Zeile",
+    "count_other": "{{count}} Zeilen",
+    "limited": "die ersten {{limit}} gezeigt, alle exportiert",
+    "nested_one": "{{count}} Eintrag",
+    "nested_other": "{{count}} Einträge",
+    "empty": "Keine Zeilen."
   }
 }

@@ -24,6 +24,84 @@ import draggable from 'vuedraggable'
 
 const { metadata } = defineProps(['metadata'])
 
+/*
+ * A host that does more than feed a query designer - the MDX workbench -
+ * hears which object was clicked and which one was asked to go into the
+ * text. Every row with a unique name drags as that name, so it drops into
+ * an editor as valid MDX.
+ */
+const emit = defineEmits<{
+  (event: 'inspect', node: any): void
+  (event: 'insert', uniqueName: string, node: any): void
+}>()
+
+function uniqueNameOf(node: any): string | null {
+  const item = node?.originalItem ?? node?.__MDSchemaMember ?? {}
+  switch (node?.type) {
+    case TreeItemTypesEnum.Dimension:
+      return item.DIMENSION_UNIQUE_NAME ?? node.dimension ?? null
+    case TreeItemTypesEnum.Hierarchy:
+      return item.HIERARCHY_UNIQUE_NAME ?? null
+    case TreeItemTypesEnum.Level:
+      return item.LEVEL_UNIQUE_NAME ?? null
+    case TreeItemTypesEnum.Measure:
+      return item.MEASURE_UNIQUE_NAME ?? null
+    case TreeItemTypesEnum.Set:
+      return item.SET_NAME ? `[${String(item.SET_NAME).replace(/^\[|\]$/g, '')}]` : null
+    case TreeItemTypesEnum.Member:
+      return item.MEMBER_UNIQUE_NAME ?? item.UName ?? null
+    default:
+      return null
+  }
+}
+
+function dragName(event: DragEvent, node: any) {
+  const name = uniqueNameOf(node)
+  if (!name || !event.dataTransfer) return
+  event.dataTransfer.setData('text/plain', name)
+  event.dataTransfer.effectAllowed = 'copy'
+}
+
+function insert(node: any) {
+  const name = uniqueNameOf(node)
+  if (name) emit('insert', name, node)
+}
+
+/* A dimension node carries its name only; the inspector wants its row. */
+function inspect(node: any) {
+  if (node?.type === TreeItemTypesEnum.Dimension && !node.originalItem && node.dimension) {
+    const row = metadata.storage.dimensions.find((d: any) => d.DIMENSION_UNIQUE_NAME === node.dimension)
+    emit('inspect', row ? { ...node, originalItem: row } : node)
+    return
+  }
+  emit('inspect', node)
+}
+
+/*
+ * One click inspects, two insert. Counted here rather than left to dblclick:
+ * the rows wrapped for the query designer's drag (vuedraggable) never get a
+ * dblclick from a real mouse. The first click waits for a second one, so a
+ * double click does not open the inspector on its way.
+ */
+const DOUBLE_CLICK_MS = 300
+let lastClick: { node: any; at: number; timer: ReturnType<typeof setTimeout> } | null = null
+
+function clicked(node: any) {
+  const now = Date.now()
+  if (lastClick && lastClick.node === node && now - lastClick.at < DOUBLE_CLICK_MS) {
+    clearTimeout(lastClick.timer)
+    lastClick = null
+    insert(node)
+    return
+  }
+  if (lastClick) clearTimeout(lastClick.timer)
+  const timer = setTimeout(() => {
+    lastClick = null
+    inspect(node)
+  }, DOUBLE_CLICK_MS)
+  lastClick = { node, at: now, timer }
+}
+
 const treeViewData = ref(null as any);
 const treeContainer = ref(null as any);
 
@@ -52,7 +130,6 @@ onMounted(() => {
   metadata.dimensionsReady?.().then(() => refreshCaptions(treeViewData.value));
   // console.log(treeContainer);
   treeContainer.value.addEventListener('dragstart', (event: any) => {
-    console.log(event._xmla_context)
     if (!event._xmla_context) {
       return;
     }
@@ -160,6 +237,7 @@ const populateDragEvent = (e: any, element: any) => {
           :load-children="loadChildren">
           <!-- @update:expanded="triggerExpanded" -->
           <template #content="node">
+            <div class="metadata-row" @click="clicked(node)">
             <draggable v-if="node.type === TreeItemTypesEnum.Hierarchy" :modelValue="[node]"
               :group="{ name: 'hierarchies', pull: 'clone', put: false }" item-key="id">
               <template #item="{ element }">
@@ -184,12 +262,14 @@ const populateDragEvent = (e: any, element: any) => {
                 </div>
               </template>
             </draggable>
-            <div v-else class="flex align-center cursor-pointer">
+            <div v-else class="flex align-center cursor-pointer" :draggable="!!uniqueNameOf(node)"
+              @dragstart="dragName($event, node)">
               <XMLAIconVue :icon="getTreeViewItemIcon(node).name"
                 :primary-color="getTreeViewItemIcon(node).primaryColor"
                 :secondary-color="getTreeViewItemIcon(node).secondaryColor" :height="24" :width="24" class="mr-1">
               </XMLAIconVue>
               {{ node.caption }}
+            </div>
             </div>
           </template>
         </TreeView>

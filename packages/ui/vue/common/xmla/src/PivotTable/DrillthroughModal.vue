@@ -15,6 +15,7 @@ Contributors:
 import { ref, computed, inject } from "vue";
 import { DModal, DTable, DButton } from "org.eclipse.daanse.board.app.ui.vue.controls";
 import { useTranslation } from "org.eclipse.daanse.board.app.ui.vue.composables";
+import { columnLabel, tabularRows } from "org.eclipse.daanse.board.app.lib.datasource.xmla";
 
 const { t } = useTranslation("xmla");
 
@@ -34,8 +35,7 @@ const tableColumns = computed(() => {
     if (drillthroughItems.value.length === 0) return [];
     return Object.keys(drillthroughItems.value[0]).map(key => ({
         key,
-        // Column names come XML-encoded: a space is _x0020_
-        label: key.replace(/_x([0-9a-fA-F]{4})_/g, (_, code) => String.fromCharCode(parseInt(code, 16))).replace(/_/g, ' '),
+        label: columnLabel(key),
     }));
 });
 
@@ -85,19 +85,7 @@ const open = async (cell: any, pivotData: any) => {
 
         const rawResponse = await api.getDrillthroughMDX(generatedMdx.value);
 
-        const root = rawResponse?.Body?.ExecuteResponse?.return?.root;
-        const rowData = root?.row || rawResponse?.Body?.ExecuteResponse?.return?.[0]?.root?.row;
-        const rows = rowData ? (Array.isArray(rowData) ? rowData : [rowData]) : [];
-
-        drillthroughItems.value = rows.map((r: any) => {
-            const item: Record<string, any> = {};
-            for (const k of Object.keys(r)) {
-                if (k === '__attrs') continue;
-                const v = r[k];
-                item[k] = v && typeof v === 'object' ? (v.Value ?? v.text ?? JSON.stringify(v)) : v;
-            }
-            return item;
-        });
+        drillthroughItems.value = tabularRows(rawResponse);
     } catch (err: any) {
         console.error("Drillthrough fetch error:", err);
         failed.value = true;
