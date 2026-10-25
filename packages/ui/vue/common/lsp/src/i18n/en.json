@@ -1,0 +1,28 @@
+{
+  "Tree": {
+    "title": "Syntax tree",
+    "modes": "Tree mode",
+    "ast": "AST",
+    "astHint": "The abstract syntax tree, node by node",
+    "cst": "CST",
+    "cstHint": "The concrete syntax tree: every token under the rule that read it",
+    "outline": "Outline",
+    "outlineHint": "Statements and declarations",
+    "depth": "Depth",
+    "depthHint": "How many levels open by themselves",
+    "depthAll": "all",
+    "rebuilding": "Rebuilding…",
+    "partial_one": "{{count}} parse error - partial tree",
+    "partial_other": "{{count}} parse errors - partial tree",
+    "waiting": "Waiting for the language server…",
+    "parsing": "Parsing…",
+    "nothing": "Nothing parsed yet."
+  },
+  "Editor": {
+    "starting": "Starting the {{language}} language server…",
+    "failed": "The editor failed to start."
+  },
+  "Diagnostics": {
+    "none": "No problems."
+  }
+}

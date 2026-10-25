@@ -1,0 +1,28 @@
+{
+  "Tree": {
+    "title": "Syntaxbaum",
+    "modes": "Baumansicht",
+    "ast": "AST",
+    "astHint": "Der abstrakte Syntaxbaum, Knoten für Knoten",
+    "cst": "CST",
+    "cstHint": "Der konkrete Syntaxbaum: jedes Token unter der Regel, die es gelesen hat",
+    "outline": "Gliederung",
+    "outlineHint": "Anweisungen und Deklarationen",
+    "depth": "Tiefe",
+    "depthHint": "Wie viele Ebenen sich von selbst öffnen",
+    "depthAll": "alle",
+    "rebuilding": "Wird neu aufgebaut…",
+    "partial_one": "{{count}} Parserfehler - unvollständiger Baum",
+    "partial_other": "{{count}} Parserfehler - unvollständiger Baum",
+    "waiting": "Warte auf den Sprachserver…",
+    "parsing": "Wird geparst…",
+    "nothing": "Noch nichts geparst."
+  },
+  "Editor": {
+    "starting": "Der Sprachserver für {{language}} startet…",
+    "failed": "Der Editor konnte nicht starten."
+  },
+  "Diagnostics": {
+    "none": "Keine Probleme."
+  }
+}
