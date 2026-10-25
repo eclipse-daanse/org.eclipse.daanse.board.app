@@ -50,6 +50,8 @@ const props = withDefaults(
     filter?: string
     /** Which field carries a node's text. */
     textBy?: string
+    /** A node's text where no one field holds it - one translated as drawn, say. Before textBy. */
+    textOf?: (node: Node) => string
     /** How deep this level sits, for the indent. */
     depth?: number
     /** Fills in a lazy node's children. */
@@ -100,7 +102,7 @@ const isBranch = (node: Node) => !!node.children?.length || !!node.lazy
 function matches(node: Node): boolean {
   const needle = (props.filter ?? '').trim().toLowerCase()
   if (!needle) return true
-  const text = String(node[props.textBy] ?? '').toLowerCase()
+  const text = String(props.textOf ? props.textOf(node) : (node[props.textBy] ?? '')).toLowerCase()
   if (text.includes(needle)) return true
   return (node.children ?? []).some(matches)
 }
@@ -127,7 +129,7 @@ function showsOpen(node: Node): boolean {
           :aria-label="showsOpen(node) ? t('Tree.collapse') : t('Tree.expand')"
           @click.stop="toggle(node)"
         >
-          <DIcon :name="showsOpen(node) ? 'expand_more' : 'chevron_right'" size="sm" tone="color-dim" />
+          <DIcon :name="showsOpen(node) ? 'expand_more' : 'chevron_right'" size="sm" />
         </button>
         <span v-else class="node__leaf" />
 
@@ -142,6 +144,7 @@ function showsOpen(node: Node): boolean {
         :expanded="expanded"
         :filter="filter"
         :text-by="textBy"
+        :text-of="textOf"
         :depth="depth + 1"
         :load-children="loadChildren"
         @update:expanded="(open) => emit('update:expanded', open)"
@@ -175,13 +178,23 @@ function showsOpen(node: Node): boolean {
   background-color: color-mix(in srgb, var(--color-pane) 70%, transparent);
 }
 
+/* A target the size of a row, not of the glyph: the dim chevron alone was hard to hit. */
 .node__twist {
   display: flex;
   align-items: center;
+  justify-content: center;
+  flex: none;
+  width: 22px;
+  height: 22px;
   padding: 0;
   border: 0;
+  border-radius: var(--radius-xs, 3px);
   background: none;
   cursor: pointer;
+}
+
+.node__twist:hover {
+  background: var(--color-hover, rgba(127, 127, 127, 0.15));
 }
 
 .node__twist:focus-visible {
@@ -207,7 +220,7 @@ function showsOpen(node: Node): boolean {
 
 /* Keeps a leaf's content on the same edge as a branch's. */
 .node__leaf {
-  width: 18px;
+  width: 22px;
   flex: none;
 }
 

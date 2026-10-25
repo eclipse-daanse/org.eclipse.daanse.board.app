@@ -54,5 +54,49 @@
     "label": "Slice",
     "page": "Page",
     "chapter": "Chapter"
+  },
+  "Explorer": {
+    "olap": "OLAP",
+    "relational": "Relational",
+    "rowsets": "XMLA Discover",
+    "catalogRowsets": "Rowsets of the catalog",
+    "unavailable": "not offered",
+    "view": "view",
+    "more": "… {{count}} more - all rows are in the grid",
+    "noRows": "no rows",
+    "failed": "The server explorer failed: {{error}}",
+    "filter": "Filter…",
+    "useCube": "Use this cube",
+    "measures": "Measures",
+    "restrictions": "Restrictions: {{names}}",
+    "noRestrictions": "Takes no restrictions",
+    "branchFailed": "Could not be read: {{error}}"
+  },
+  "Functions": {
+    "filter": "Filter functions…",
+    "groupBy": "Group by",
+    "byKind": "How it is written",
+    "byInterface": "Interface",
+    "byLibrary": "Library",
+    "byOrigin": "Origin",
+    "none": "The server lists no functions.",
+    "ungrouped": "(none)",
+    "kindDot": "After a dot - .Members, .Children",
+    "kindCall": "Called - Filter(…), Sum(…)",
+    "overloads_one": "{{count}} overload",
+    "overloads_other": "{{count}} overloads",
+    "parameter": "Parameter",
+    "description": "Description",
+    "optional": "Optional",
+    "repeatable": "Repeatable",
+    "skippable": "Skippable"
+  },
+  "Rowset": {
+    "count_one": "{{count}} row",
+    "count_other": "{{count}} rows",
+    "limited": "the first {{limit}} shown, all exported",
+    "nested_one": "{{count}} entry",
+    "nested_other": "{{count}} entries",
+    "empty": "No rows."
   }
 }
