@@ -16,8 +16,27 @@ import QueryDesigner from './QueryDesigner/QueryDesigner.vue'
 import PivotTable from './PivotTable/PivotTable.vue'
 import FiltersModal from './Modals/FiltersModal.vue'
 import SlicePicker from './SlicePicker/SlicePicker.vue'
+import RowsetGrid from './RowsetGrid/RowsetGrid.vue'
+import DiscoverExplorer from './DiscoverExplorer/DiscoverExplorer.vue'
+import FunctionBrowser from './Functions/FunctionBrowser.vue'
+import FunctionInfo from './Functions/FunctionInfo.vue'
 
-export { MetadataTree, QueryDesigner, PivotTable, FiltersModal, SlicePicker }
+export { MetadataTree, QueryDesigner, PivotTable, FiltersModal, SlicePicker, RowsetGrid, DiscoverExplorer, FunctionBrowser, FunctionInfo }
+export {
+  entryGroupLabel,
+  groupFunctions,
+  insertionOf,
+  isDotFunction,
+  parametersOf,
+  representativeOf,
+  returnTypeOf,
+  signatureOf,
+  textOf,
+  type FunctionEntry,
+  type FunctionParameter,
+  type FunctionRow,
+} from './Functions/functions'
+export { dataTypeName, restrictionNames, rowLabel, scopesOf, type ExplorerNode, type ExplorerText } from './DiscoverExplorer/explorer'
 export type { SlicePickerOption } from './SlicePicker/SlicePicker.vue'
 
 /* Its texts - collected by lib.i18next, see src/i18n. */
