@@ -16,6 +16,7 @@ import { EmptyFileSystem } from 'langium'
 import { parseHelper } from 'langium/test'
 import {
   buildAstTree,
+  buildCstTree,
   renderScalar,
   type AstTreeNode,
 } from 'org.eclipse.daanse.board.app.lib.lsp.server'
@@ -52,6 +53,17 @@ describe('the result envelope', () => {
     const result = await tree('SELECT FROM')
     expect(result.parserErrors).toBeGreaterThan(0)
     expect(result.root).toBeDefined()
+  })
+
+  test('counts the lexer errors the Problems list shows as well', async () => {
+    // `[Gender].[` - an unclosed bracket (the lexer) and a name missing
+    // after the dot (the parser): two problems, two in the header.
+    const document = await parse('SELECT {[Gender].[')
+    const { lexerErrors, parserErrors } = document.parseResult
+    expect(lexerErrors.length).toBeGreaterThan(0)
+    const expected = lexerErrors.length + parserErrors.length
+    expect(buildAstTree(document, MDX_AST_STRATEGY).parserErrors).toBe(expected)
+    expect(buildCstTree(document).parserErrors).toBe(expected)
   })
 })
 
