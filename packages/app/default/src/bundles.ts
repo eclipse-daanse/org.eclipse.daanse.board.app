@@ -14,6 +14,7 @@
 import type { ModuleManifest } from '@eclipse-daanse/tsm'
 import b0 from 'org.eclipse.daanse.board.app.platform.vue/manifest.json'
 import b1 from 'org.eclipse.daanse.board.app.shell/manifest.json'
+import workbench from 'org.eclipse.daanse.board.app.workbench/manifest.json'
 import b2 from 'org.eclipse.daanse.board.app.ui.vue.widget.progress/manifest.json'
 import b3 from 'org.eclipse.daanse.board.app.ui.vue.widget.map/manifest.json'
 import b4 from 'org.eclipse.daanse.board.app.ui.vue.plugins.geojson_renderer/manifest.json'
@@ -163,6 +164,7 @@ import lspMdx from 'org.eclipse.daanse.board.app.lib.lsp.lang.mdx/manifest.json'
 export const bundles: ModuleManifest[] = [
   b0 as ModuleManifest,
   b1 as ModuleManifest,
+  workbench as ModuleManifest,
   b2 as ModuleManifest,
   b3 as ModuleManifest,
   b4 as ModuleManifest,

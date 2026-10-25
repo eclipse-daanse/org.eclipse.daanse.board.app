@@ -1,0 +1,39 @@
+/*********************************************************************
+ * Copyright (c) 2026 Contributors to the Eclipse Foundation.
+ *
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ *
+ * SPDX-License-Identifier: EPL-2.0
+ *
+ * Contributors:
+ *   Smart City Jena
+ **********************************************************************/
+/*
+ * One palette for both frames: the shell's tokens, tailwind and the theme
+ * the person chose there. On top, the names the LSP editor components paint
+ * with, pointed at the same tokens - they were written against a palette of
+ * their own.
+ */
+@import 'org.eclipse.daanse.board.app.shell/main.css';
+
+:root {
+  --surface: var(--color-pane);
+  --surface-raised: var(--color-raised);
+  --bg: var(--color-bg);
+  --border: var(--color-divider);
+  --text: var(--color-fg);
+  --text-muted: var(--color-dim);
+  --accent: var(--color-accent);
+  --warning: var(--color-warn);
+  --danger: var(--color-err);
+  --mono: var(--font-mono);
+}
+
+html,
+body,
+#app {
+  height: 100%;
+  margin: 0;
+}
