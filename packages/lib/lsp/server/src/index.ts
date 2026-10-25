@@ -13,8 +13,11 @@
 
 export {
   AST_REQUEST,
+  CST_REQUEST,
   buildAstTree,
+  buildCstTree,
   registerAstRequest,
+  registerCstRequest,
   renderScalar,
 } from './ast-tree.js'
 export type {
@@ -23,4 +26,6 @@ export type {
   AstTreeNode,
   AstTreeResult,
   AstTreeStrategy,
+  CstTreeNode,
+  CstTreeResult,
 } from './ast-tree.js'
