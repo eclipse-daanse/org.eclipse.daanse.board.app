@@ -21,7 +21,10 @@ export function startMdxLanguageServer(
   port: DedicatedWorkerGlobalScope | MessagePort,
 ): void {
   startWorkerLanguageServer(port, {
-    createServices: createMdxServices,
+    createServices: context => {
+      const { shared, Mdx } = createMdxServices(context)
+      return { shared, language: Mdx }
+    },
     astStrategy: MDX_AST_STRATEGY,
   })
 }

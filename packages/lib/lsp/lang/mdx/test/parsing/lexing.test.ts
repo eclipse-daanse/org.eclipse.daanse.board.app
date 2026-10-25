@@ -109,7 +109,7 @@ describe('case insensitivity', () => {
     )
     for (const select of [upper, lower, mixed]) {
       expect(select.axes).toHaveLength(1)
-      expect(select.axes[0].target.$type).toBe('NamedAxis')
+      expect(select.axes[0].target?.$type).toBe('NamedAxis')
       expect(select.slicer).toBeDefined()
     }
   })
@@ -126,13 +126,13 @@ describe('case insensitivity', () => {
 describe('axis targets', () => {
   test('named, ordinal and AXIS() forms', async () => {
     const named = await parseSelect('SELECT {[A].[B]} ON COLUMNS FROM [Cube]')
-    expect(named.axes[0].target.$type).toBe('NamedAxis')
+    expect(named.axes[0].target?.$type).toBe('NamedAxis')
 
     const ordinal = await parseSelect('SELECT {[A].[B]} ON 0 FROM [Cube]')
-    expect(ordinal.axes[0].target.$type).toBe('OrdinalAxis')
+    expect(ordinal.axes[0].target?.$type).toBe('OrdinalAxis')
 
     const axisFn = await parseSelect('SELECT {[A].[B]} ON AXIS(0) FROM [Cube]')
-    expect(axisFn.axes[0].target.$type).toBe('AxisFunction')
+    expect(axisFn.axes[0].target?.$type).toBe('AxisFunction')
   })
 })
 
