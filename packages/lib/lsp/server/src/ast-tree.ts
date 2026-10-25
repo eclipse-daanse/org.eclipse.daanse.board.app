@@ -13,9 +13,12 @@
 
 import {
   DocumentState,
+  GrammarAST,
   GrammarUtils,
   URI,
   isAstNode,
+  isCompositeCstNode,
+  isLeafCstNode,
   isReference,
   type AstNode,
   type CstNode,
@@ -25,17 +28,22 @@ import type { LangiumSharedServices } from 'langium/lsp'
 import type { CancellationToken, Connection } from 'vscode-languageserver'
 import {
   AST_REQUEST,
+  CST_REQUEST,
   type AstRequestParams,
   type AstTreeNode,
   type AstTreeResult,
+  type CstTreeNode,
+  type CstTreeResult,
 } from 'org.eclipse.daanse.board.app.lib.api.lsp'
 
 export type {
   AstRequestParams,
   AstTreeNode,
   AstTreeResult,
+  CstTreeNode,
+  CstTreeResult,
 } from 'org.eclipse.daanse.board.app.lib.api.lsp'
-export { AST_REQUEST } from 'org.eclipse.daanse.board.app.lib.api.lsp'
+export { AST_REQUEST, CST_REQUEST } from 'org.eclipse.daanse.board.app.lib.api.lsp'
 
 export interface AstTreeContext {
   serializeNode(
@@ -72,7 +80,10 @@ export function renderScalar(value: unknown): string {
   return typeof value === 'string' ? JSON.stringify(value) : String(value)
 }
 
-function createSerializer(strategy: AstTreeStrategy): AstTreeContext {
+function createSerializer(
+  strategy: AstTreeStrategy,
+  ids?: Map<AstNode, string>,
+): AstTreeContext {
   const scalar = strategy.renderScalar ?? renderScalar
   const label = strategy.labelNode ?? ((node: AstNode) => node.$type)
 
@@ -165,6 +176,7 @@ function createSerializer(strategy: AstTreeStrategy): AstTreeContext {
     property?: string,
     index?: number,
   ): AstTreeNode {
+    ids?.set(node, id)
     return {
       id,
       kind: 'node',
@@ -180,6 +192,17 @@ function createSerializer(strategy: AstTreeStrategy): AstTreeContext {
   return context
 }
 
+/*
+ * What made the tree partial: the parser's errors and the lexer's, which
+ * the Problems list shows as well - a `[` never closed is a lexer error and
+ * leaves the tree as partial as a missing keyword. The wire field keeps its
+ * name; it counts both.
+ */
+function syntaxErrors(document: LangiumDocument): number {
+  const { lexerErrors, parserErrors } = document.parseResult
+  return lexerErrors.length + parserErrors.length
+}
+
 export function buildAstTree(
   document: LangiumDocument,
   strategy: AstTreeStrategy = {},
@@ -189,8 +212,92 @@ export function buildAstTree(
   return {
     uri: document.uri.toString(),
     root: root ? serializeNode(root, 'root') : undefined,
-    parserErrors: document.parseResult.parserErrors.length,
+    parserErrors: syntaxErrors(document),
   }
+}
+
+/** A composite node's rule: the AST type where it is a node's own, the rule it calls otherwise. */
+function ruleName(node: CstNode): string {
+  if (node.astNode.$cstNode === node) return node.astNode.$type
+  const source = node.grammarSource
+  if (source && GrammarAST.isRuleCall(source)) return source.rule.$refText
+  if (source && GrammarAST.isKeyword(source)) return source.value
+  return source?.$type ?? 'node'
+}
+
+/**
+ * The concrete syntax tree, with each composite that is an AST node's own
+ * carrying that node's id in the langium/ast tree - so a selection in one
+ * view finds its row in the other. Built from the same serializer, which is
+ * what makes the ids agree.
+ */
+export function buildCstTree(
+  document: LangiumDocument,
+  strategy: AstTreeStrategy = {},
+): CstTreeResult {
+  const root = document.parseResult.value as AstNode | undefined
+  const ids = new Map<AstNode, string>()
+  if (root) createSerializer(strategy, ids).serializeNode(root, 'root')
+
+  function serialize(node: CstNode, id: string): CstTreeNode {
+    const base = {
+      id,
+      range: node.range,
+      offset: node.offset,
+      length: node.length,
+    }
+    if (isLeafCstNode(node)) {
+      return {
+        ...base,
+        kind: 'leaf',
+        name: node.tokenType.name,
+        text: node.text,
+        ...(node.hidden ? { hidden: true } : {}),
+        children: [],
+      }
+    }
+    const astId = node.astNode.$cstNode === node ? ids.get(node.astNode) : undefined
+    return {
+      ...base,
+      kind: 'composite',
+      name: ruleName(node),
+      ...(astId ? { astId } : {}),
+      children: isCompositeCstNode(node)
+        ? node.content.map((child, index) => serialize(child, `${id}.${index}`))
+        : [],
+    }
+  }
+
+  const cst = root?.$cstNode
+  return {
+    uri: document.uri.toString(),
+    root: cst ? serialize(cst, 'cst') : undefined,
+    parserErrors: syntaxErrors(document),
+  }
+}
+
+export function registerCstRequest(
+  connection: Connection,
+  shared: LangiumSharedServices,
+  strategy: AstTreeStrategy = {},
+): void {
+  connection.onRequest(
+    CST_REQUEST,
+    async (
+      params: AstRequestParams,
+      cancelToken: CancellationToken,
+    ): Promise<CstTreeResult> => {
+      const uri = URI.parse(params.textDocument.uri)
+      const document =
+        await shared.workspace.LangiumDocuments.getOrCreateDocument(uri)
+      await shared.workspace.DocumentBuilder.waitUntil(
+        DocumentState.Parsed,
+        uri,
+        cancelToken,
+      )
+      return buildCstTree(document, strategy)
+    },
+  )
 }
 
 export function registerAstRequest(

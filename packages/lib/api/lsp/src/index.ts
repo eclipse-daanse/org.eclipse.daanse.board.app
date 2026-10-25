@@ -50,6 +50,37 @@ export interface AstRequestParams {
   textDocument: { uri: string }
 }
 
+/*
+ * The langium/cst wire contract: the concrete syntax tree, every token the
+ * parser consumed - comments and whitespace-adjacent hidden tokens included -
+ * under the rules that produced them.
+ */
+
+export interface CstTreeNode {
+  id: string
+  kind: 'composite' | 'leaf'
+  /** The rule a composite node came from, or a leaf's token type. */
+  name: string
+  /** A leaf's text as it stands in the document. */
+  text?: string
+  /** A token the parser skipped: a comment, for instance. */
+  hidden?: boolean
+  range: Range
+  offset: number
+  length: number
+  /** The AST row this node is the source of, by its id in the langium/ast tree. */
+  astId?: string
+  children: CstTreeNode[]
+}
+
+export interface CstTreeResult {
+  uri: string
+  root?: CstTreeNode
+  parserErrors: number
+}
+
+export const CST_REQUEST = 'langium/cst'
+
 /* What a language is, to everything that is not that language. */
 
 export interface LanguageExample {
