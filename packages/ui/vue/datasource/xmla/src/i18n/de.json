@@ -12,5 +12,21 @@
     "useMdx": "MDX-Abfrage verwenden",
     "preview": "Datenvorschau",
     "pickConnection": "Wähle eine Verbindung, um die Metadaten zu laden"
+  },
+  "Fields": {
+    "cube": "Würfel",
+    "pollingEnabled": "Regelmäßig neu laden",
+    "pollingInterval": "Abstand (ms)",
+    "useVisualEditor": "Abfrage visuell bauen",
+    "mdx": "MDX-Abfrage",
+    "useMdx": "Geschriebenes MDX senden"
+  },
+  "Hints": {
+    "cube": "Der Würfel, aus dem die Abfrage liest – im Katalog, den die Verbindung nennt.",
+    "pollingEnabled": "Ob diese Quelle von selbst neu liest.",
+    "pollingInterval": "Wie oft sie neu liest, in Millisekunden.",
+    "useVisualEditor": "Ob die Abfrage im Designer zusammengestellt statt als MDX geschrieben wird.",
+    "mdx": "Die Abfrage in MDX, wenn du sie selbst schreibst.",
+    "useMdx": "Ob das geschriebene MDX statt der im Designer gebauten Abfrage gesendet wird."
   }
 }

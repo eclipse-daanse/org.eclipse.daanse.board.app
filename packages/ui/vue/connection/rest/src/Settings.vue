@@ -53,10 +53,18 @@ const updateUrl = debounce((newUrl: string) => {
   validateAndCheckUrl(newUrl)
 }, 700)
 
+/*
+ * What the connection can fetch from. A `data:` address is one: fetch reads
+ * it like any other, and it is how a board carries a small dataset inline.
+ * The check and the probe agree on this - the probe used to run on mount
+ * without the check, so the same address was called invalid and reachable
+ * at once.
+ */
+const FETCHABLE = new Set(['http:', 'https:', 'data:'])
+
 function isValidUrl(value: string): boolean {
   try {
-    const parsed = new URL(value)
-    return parsed.protocol === 'http:' || parsed.protocol === 'https:'
+    return FETCHABLE.has(new URL(value).protocol)
   } catch {
     return false
   }
@@ -101,9 +109,7 @@ watch(cacheTTL, (newValue) => {
 onMounted(async () => {
   if (config.url) {
     url.value = config.url
-    const resp = await ifUrlExist(config.url)
-    available.value = resp.available
-    statusCode.value = resp.statusCode
+    await validateAndCheckUrl(config.url)
   }
   cacheEnabled.value = config.cacheEnabled ?? false
   cacheTTL.value = config.cacheTTL ?? 30000

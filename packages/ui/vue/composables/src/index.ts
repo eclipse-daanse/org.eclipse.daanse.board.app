@@ -69,7 +69,9 @@ export {
   describeClass,
   describeConfiguration,
   describeModel,
+  formFields,
   hasModelDocs,
+  missingFields,
   registerModelDocs,
   resetModelDocs,
 } from './modelDocs'

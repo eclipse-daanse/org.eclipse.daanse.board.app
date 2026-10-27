@@ -8,5 +8,15 @@
     },
     "user": "User",
     "password": "Password"
+  },
+  "Fields": {
+    "url": "Address",
+    "cubeName": "Cube",
+    "catalogName": "Catalogue"
+  },
+  "Hints": {
+    "url": "The address the XMLA service answers on.",
+    "cubeName": "The OLAP cube to connect to.",
+    "catalogName": "The catalogue that holds the cube."
   }
 }

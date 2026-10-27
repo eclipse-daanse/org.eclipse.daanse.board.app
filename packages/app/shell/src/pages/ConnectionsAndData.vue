@@ -128,7 +128,7 @@ watch(selected, (at) => {
           />
           <DatasourceEditor
             v-else
-            :key="`${selected.itemId}-${tab}`"
+            :key="selected.itemId"
             :item-id="selected.itemId"
             :view="tab === 'preview' ? 'preview' : 'settings'"
             @close="selected = undefined"

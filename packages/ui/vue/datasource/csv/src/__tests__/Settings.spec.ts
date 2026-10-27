@@ -100,4 +100,24 @@ describe('CSV Datasource Settings.vue', () => {
     vi.advanceTimersByTime(750)
     expect(config.resourceUrl).toBe('users.csv')
   })
+
+  it('names the separators in the language in use, and marks the path required', () => {
+    const english: Record<string, string> = {
+      'datasourceCsv:Csv.separators.comma': 'Comma (,)',
+      'datasourceCsv:Csv.separators.semicolon': 'Semicolon (;)',
+      'datasourceCsv:Settings.path': 'Path',
+    }
+    const i18n = { language: 'en', t: (key: string) => english[key] ?? key }
+    const config = { connection: '', resourceUrl: '', separators: [','], skipRowsFromStart: 0, skipRowsFromEnd: 0, pollingEnabled: false }
+    const wrapper = mount(Settings, {
+      props: { config, dataSources: [], connections },
+      global: { provide: { i18n } },
+    })
+
+    const separators = wrapper.findAll('select')[1].findAll('option').map((o) => o.text())
+    expect(separators).toEqual(expect.arrayContaining(['Comma (,)', 'Semicolon (;)']))
+    expect(wrapper.text()).not.toContain('Komma')
+
+    expect(fieldNamed(wrapper, 'Path')!.attributes('required')).toBeDefined()
+  })
 })

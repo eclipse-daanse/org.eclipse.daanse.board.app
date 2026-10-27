@@ -60,6 +60,11 @@ export interface ConnectionIdentifiers {
      * still registers, it just has nothing to say about its fields.
      */
     Model?: string;
+    /**
+     * The language-pack namespace that names this type's fields - see the
+     * same field on a data source type's identifiers.
+     */
+    namespace?: string;
 }
 
 export interface ConnectionRepository {

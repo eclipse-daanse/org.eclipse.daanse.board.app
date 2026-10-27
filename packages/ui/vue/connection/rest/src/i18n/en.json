@@ -1,6 +1,6 @@
 {
   "Rest": {
-    "invalidUrl": "Not a valid http or https address",
+    "invalidUrl": "Not a valid http, https or data address",
     "minTtl": "At least {{ms}} ms",
     "unchecked": "Not checked yet",
     "reachable": "Reachable ({{status}})",
@@ -9,5 +9,11 @@
     "cache": "Cache responses",
     "ttl": "Lifetime",
     "ttlHint": "How long a response is reused before asking again."
+  },
+  "Fields": {
+    "url": "Address"
+  },
+  "Hints": {
+    "url": "The base address of the API; a data source requests a path below it."
   }
 }

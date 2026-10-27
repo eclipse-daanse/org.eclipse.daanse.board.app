@@ -21,7 +21,14 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 import { readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
-import { describeClass, describeConfiguration, registerModelDocs, resetModelDocs } from './modelDocs'
+import {
+  describeClass,
+  describeConfiguration,
+  formFields,
+  missingFields,
+  registerModelDocs,
+  resetModelDocs,
+} from './modelDocs'
 
 /* The real model files: what this reads has to survive them changing. */
 const ROOT = resolve(__dirname, '../../../../..')
@@ -103,5 +110,32 @@ describe('modelDocs', () => {
 
   it('says nothing about a model it was never given', () => {
     expect(describeConfiguration('http://nobody.registered.this')).toBeUndefined()
+  })
+
+  it('asks a form only for what a control can hold', () => {
+    registerModelDocs(model(DATASOURCE_BASE))
+    const nsURI = registerModelDocs(model('packages/lib/datasource/xmla/model/XmlaDataSourceModel.ecore'))!
+    const names = formFields(describeConfiguration(nsURI), ['connection']).map((f) => f.name)
+
+    expect(names).toContain('cube')
+    expect(names).toContain('pollingEnabled')
+    /* contained, opaque, identity, asked for by the dialog */
+    expect(names).not.toContain('requestParams')
+    expect(names).not.toContain('drilldownState')
+    expect(names).not.toContain('uid')
+    expect(names).not.toContain('connection')
+  })
+
+  it('requires the cube of an xmla source and the path of a csv one', () => {
+    const xmla = describeConfiguration(
+      registerModelDocs(model('packages/lib/datasource/xmla/model/XmlaDataSourceModel.ecore'))!,
+    )
+    expect(missingFields(xmla, {}, ['connection'])).toEqual(['cube'])
+    expect(missingFields(xmla, { cube: 'Sales' }, ['connection'])).toEqual([])
+
+    const csv = describeConfiguration(
+      registerModelDocs(model('packages/lib/datasource/csv/model/CsvDataSourceModel.ecore'))!,
+    )
+    expect(missingFields(csv, {}, ['connection'])).toEqual(['resourceUrl'])
   })
 })

@@ -4,11 +4,33 @@
     "polling": "Regelmäßig neu laden",
     "interval": "Abstand",
     "path": "Pfad",
-    "pathHint": "Relativ zur Adresse der Verbindung."
+    "pathHint": "Relativ zur Adresse der Verbindung.",
+    "unreachable": "Nicht erreichbar"
   },
   "Csv": {
     "separator": "Trennzeichen",
     "skipTop": "Zeilen oben überspringen",
-    "skipBottom": "Zeilen unten überspringen"
+    "skipBottom": "Zeilen unten überspringen",
+    "separators": {
+      "comma": "Komma (,)",
+      "semicolon": "Semikolon (;)",
+      "tab": "Tabulator",
+      "pipe": "Senkrechter Strich (|)",
+      "colon": "Doppelpunkt (:)"
+    }
+  },
+  "Fields": {
+    "resourceUrl": "Pfad",
+    "pollingEnabled": "Regelmäßig neu laden",
+    "pollingInterval": "Abstand (ms)",
+    "skipRowsFromStart": "Zeilen oben überspringen",
+    "skipRowsFromEnd": "Zeilen unten überspringen"
+  },
+  "Hints": {
+    "resourceUrl": "Die Datei, die gelesen wird, relativ zur Adresse der Verbindung.",
+    "pollingEnabled": "Ob diese Quelle von selbst neu liest.",
+    "pollingInterval": "Wie oft sie neu liest, in Millisekunden.",
+    "skipRowsFromStart": "Wie viele Zeilen oben keine Daten sind – ein Titel, eine Legende, eine zweite Kopfzeile.",
+    "skipRowsFromEnd": "Wie viele Zeilen unten keine Daten sind – eine Summenzeile, eine Fußnote."
   }
 }

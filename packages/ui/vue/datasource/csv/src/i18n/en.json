@@ -4,11 +4,33 @@
     "polling": "Reload regularly",
     "interval": "Interval",
     "path": "Path",
-    "pathHint": "Relative to the connection's address."
+    "pathHint": "Relative to the connection's address.",
+    "unreachable": "Not reachable"
   },
   "Csv": {
     "separator": "Separator",
     "skipTop": "Skip rows at the top",
-    "skipBottom": "Skip rows at the bottom"
+    "skipBottom": "Skip rows at the bottom",
+    "separators": {
+      "comma": "Comma (,)",
+      "semicolon": "Semicolon (;)",
+      "tab": "Tab",
+      "pipe": "Vertical bar (|)",
+      "colon": "Colon (:)"
+    }
+  },
+  "Fields": {
+    "resourceUrl": "Path",
+    "pollingEnabled": "Reload regularly",
+    "pollingInterval": "Interval (ms)",
+    "skipRowsFromStart": "Skip rows at the top",
+    "skipRowsFromEnd": "Skip rows at the bottom"
+  },
+  "Hints": {
+    "resourceUrl": "The file to read, relative to the connection's address.",
+    "pollingEnabled": "Whether this source re-reads on its own.",
+    "pollingInterval": "How often it re-reads, in milliseconds.",
+    "skipRowsFromStart": "How many lines at the top are not data - a title, a legend, a second header row.",
+    "skipRowsFromEnd": "How many lines at the bottom are not data - a total row, a footnote."
   }
 }

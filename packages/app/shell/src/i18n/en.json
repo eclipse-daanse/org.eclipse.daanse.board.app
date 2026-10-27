@@ -156,7 +156,9 @@
     "type": "Type",
     "icon": "Icon",
     "iconHint": "Without an icon of its own, the type's icon is shown here.",
-    "tags": "Tags"
+    "tags": "Tags",
+    "unsaved": "Changed here and not saved yet — the widgets still read the saved version.",
+    "discard": "Discard"
   },
   "Connection": {
     "tagsHint": "What this connection is for — you can search by it.",
@@ -225,7 +227,8 @@
   },
   "ModelFields": {
     "noModel": "This type brings no model — you fill in the fields in the editor after creating it.",
-    "nothing": "This type needs nothing but a name."
+    "nothing": "This type needs nothing but a name.",
+    "pick": "Choose…"
   },
   "Tags": {
     "placeholder": "Type a word, Enter"

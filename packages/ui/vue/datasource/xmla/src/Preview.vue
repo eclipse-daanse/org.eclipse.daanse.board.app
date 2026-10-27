@@ -80,9 +80,23 @@ const updateData = async () => {
   data.value = req;
   console.log('data', data.value);
   if (props.dataSource.config.useVisualEditor) {
-    query.value = await tempStore.value.getMdxRequest();
+    generatedMdx = await tempStore.value.getMdxRequest();
+    query.value = generatedMdx;
   }
 }
+
+/*
+ * The MDX the designer built, last time it was asked. Writing it into the
+ * editor is not a change somebody made, and reporting it as one marked the
+ * source unsaved for merely being looked at.
+ */
+let generatedMdx = '';
+
+/* Every caller below used this; it went missing in d289f108, and with it
+  the preview stopped answering. */
+const debouncedUpdateData = debounce(async () => {
+  await updateData();
+}, 100);
 
 onMounted(async () => {
   // if (!tempStore.value) return;
@@ -113,6 +127,7 @@ watch(() => queryConfig, async () => {
 }, { deep: true });
 
 watch(() => query, async () => {
+  if (query.value === generatedMdx) return;
   emit('updateConfig', {
     ...props.dataSource.config,
     mdx: query.value,

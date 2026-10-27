@@ -27,10 +27,15 @@ import {
   identifier as WORKSPACE,
   type Workspace,
 } from 'org.eclipse.daanse.board.app.lib.model.workspace'
-import { describeModel, useEList, useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+import {
+  describeModel,
+  missingFields,
+  useEList,
+  useTranslation,
+} from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import { DIconPicker, DInput, DSelect } from 'org.eclipse.daanse.board.app.ui.vue.controls'
 import CreateWizard from './CreateWizard.vue'
-import ModelFields from './ModelFields.vue'
+import ModelFields, { type Choice } from './ModelFields.vue'
 import TagInput from './TagInput.vue'
 
 const open = defineModel<boolean>({ required: true })
@@ -145,15 +150,48 @@ watch(open, (isOpen) => {
   config.value = {}
 })
 
+/**
+ * The values the type can offer for its fields, once it knows enough.
+ *
+ * Asked again whenever the connection changes, because that is what the
+ * answers come from - an xmla source's cubes are the cubes of the catalogue
+ * its connection names. An answer that arrives after the person moved on
+ * to another type or connection is dropped. A failed one leaves the field
+ * a text box rather than the form stuck.
+ */
+const choices = ref<Record<string, Choice[] | undefined>>({})
+let asked = 0
+
+watch(
+  [type, connection],
+  async () => {
+    const ask = ++asked
+    choices.value = {}
+    const sources = datasources.getDatasourceIdentifiers(type.value)?.choices
+    if (!sources) return
+    const settings = { ...config.value, connection: connection.value }
+    for (const [feature, source] of Object.entries(sources)) {
+      try {
+        const offered = await source(settings)
+        if (ask !== asked) return
+        choices.value = { ...choices.value, [feature]: offered }
+        /* A cube of the previous connection is not one of this one's. */
+        const held = config.value[feature]
+        if (offered.length && held && !offered.some((each) => each.value === held)) {
+          delete config.value[feature]
+        }
+      } catch (error) {
+        console.warn(`No choices for ${type.value}.${feature}:`, error)
+      }
+    }
+  },
+)
+
+const namespace = computed(() => datasources.getDatasourceIdentifiers(type.value)?.namespace)
+
 /* `connection` is answered by its own select, not by ModelFields. */
 const missing = computed(() => {
-  const required = (doc.value?.features ?? [])
-    .filter((f) => !f.optional && !['name', 'type', 'uid', 'connection'].includes(f.name))
-    .filter((f) => {
-      const value = config.value[f.name]
-      return value === undefined || value === null || value === ''
-    })
-    .map((f) => f.name)
+  const required = missingFields(doc.value, config.value, ['connection'])
   if (needsConnection.value && !connection.value) required.push('connection')
   return required
 })
@@ -247,7 +285,13 @@ function create() {
         :known="knownTags"
       />
 
-      <ModelFields :doc="doc" :config="config" :omit="['connection']" />
+      <ModelFields
+        :doc="doc"
+        :config="config"
+        :omit="['connection']"
+        :namespace="namespace"
+        :choices="choices"
+      />
     </template>
   </CreateWizard>
 </template>

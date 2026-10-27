@@ -231,6 +231,48 @@ export function describeModel(ecore: string | undefined): ClassDoc | undefined {
   return nsURI ? describeConfiguration(nsURI) : undefined
 }
 
+/** Held by the dialog around a form, never by the model's own fields. */
+const IDENTITY = new Set(['name', 'type', 'uid'])
+
+/* The types a form has a control for. */
+const ASKABLE = new Set(['string', 'number', 'boolean'])
+
+/**
+ * The fields a form asks for, in the model's order.
+ *
+ * Only single values of a type a control can hold: a contained object
+ * (xmla's `requestParams`) or an opaque one (`drilldownState`) is written
+ * by an editor, not typed into a text box - and asking for a required
+ * reference as text held the form back on a field nobody could answer.
+ * Identity fields are left out, and so is whatever the caller asks for
+ * itself.
+ */
+export function formFields(doc: ClassDoc | undefined, omit: readonly string[] = []): FeatureDoc[] {
+  return (doc?.features ?? []).filter(
+    (f) => !IDENTITY.has(f.name) && !omit.includes(f.name) && !f.many && ASKABLE.has(f.type),
+  )
+}
+
+/**
+ * The fields of a form the model requires and nobody has filled in yet.
+ *
+ * The same selection as formFields, so a form is never held back by a
+ * field it does not show.
+ */
+export function missingFields(
+  doc: ClassDoc | undefined,
+  config: Record<string, unknown>,
+  omit: readonly string[] = [],
+): string[] {
+  return formFields(doc, omit)
+    .filter((f) => !f.optional)
+    .filter((f) => {
+      const value = config[f.name]
+      return value === undefined || value === null || value === ''
+    })
+    .map((f) => f.name)
+}
+
 /** Drops every registered model - for tests, which must not leak into each other. */
 export function resetModelDocs(): void {
   models.clear()

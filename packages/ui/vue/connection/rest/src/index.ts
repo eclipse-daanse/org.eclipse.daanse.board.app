@@ -27,6 +27,10 @@ import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
 // denotes the same symbol the factory package exports.
 const RestConnectionIdentifier = Symbol.for(REST_CONNECTION_FACTORY)
 import Settings from './Settings.vue'
+import { NAMESPACE } from './i18n'
+
+/* Looked up by the create form by field name.
+   i18n-keys: connectionRest:Fields.*, i18n-keys: connectionRest:Hints.* */
 
 const settingsSymbol = Symbol.for('RestConnectionSettings')
 
@@ -37,6 +41,7 @@ export function activate({ services }: ActivationContext) {
     .getRequired<ConnectionRepository>(CONNECTION_REPOSITORY)
     .registerConnectionType('rest', {
       icon: 'api',
+      namespace: NAMESPACE,
       Model: MODEL_ECORE,
       Connection: RestConnectionIdentifier,
       Settings: settingsSymbol,

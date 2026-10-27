@@ -75,6 +75,27 @@ describe('REST Connection Settings.vue', () => {
     expect(mockFetch).toHaveBeenCalledWith('https://api.example.com', { method: 'HEAD' })
   })
 
+  it('takes a data: address as valid, and says so the same way the probe does', async () => {
+    const config = { url: 'data:text/csv,a;b%0A1;2', cacheEnabled: false }
+    const wrapper = mount(Settings, { props: { config } })
+    await new Promise((resolve) => setTimeout(resolve, 0))
+    await wrapper.vm.$nextTick()
+
+    expect(wrapper.text()).not.toContain('Rest.invalidUrl')
+    expect(wrapper.text()).toContain('Rest.reachable')
+  })
+
+  it('does not probe an address it calls invalid', async () => {
+    const config = { url: 'ftp://files.example.com', cacheEnabled: false }
+    const wrapper = mount(Settings, { props: { config } })
+    await new Promise((resolve) => setTimeout(resolve, 0))
+    await wrapper.vm.$nextTick()
+
+    expect(mockFetch).not.toHaveBeenCalled()
+    expect(wrapper.text()).toContain('Rest.invalidUrl')
+    expect(wrapper.text()).not.toContain('Rest.reachable')
+  })
+
   it('updates config when inputs are modified', async () => {
     const config = { url: '', cacheEnabled: false, cacheTTL: 30000 }
     const wrapper = mount(Settings, {

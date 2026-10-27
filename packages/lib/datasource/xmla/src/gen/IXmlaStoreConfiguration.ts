@@ -32,7 +32,7 @@ export interface IXmlaStoreConfiguration extends IBaseConnectionConfiguration {
   mdx?: string;
   drilldownState?: unknown;
   pollingInterval?: number;
-  cube?: string;
+  cube: string;
   useMdx?: boolean;
 
 }

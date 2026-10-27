@@ -70,7 +70,7 @@ const availableDatasources = computed(() => {
  * Edited on a copy and committed on Save, the way it always was - what
  * changed is only where the copy comes from and where it goes back to.
  */
-onMounted(() => {
+const load = () => {
   const dataSource = datasourceRepository.getDatasourceModel(props.itemId)
   datasourceProxy.value = dataSource
     ? {
@@ -82,9 +82,34 @@ onMounted(() => {
         config: cloneDeep(dataSource.config ?? {}),
       }
     : { tags: [] }
-})
+  saved.value = JSON.stringify(datasourceProxy.value.config ?? {})
+}
 
-const saveDataSource = () => {
+/*
+ * What the configuration was when it was last loaded or saved, as text.
+ *
+ * A preview edits the copy - the query a person builds there is a change
+ * to the source - and it used to vanish with the tab: nothing said it had
+ * not been kept, and the only way to keep it was the Save of another tab.
+ * Comparing against this is what lets the preview say so and offer Save.
+ * Saving there is deliberate, not automatic: every step of building a
+ * query would otherwise rebuild the live store and every widget on it.
+ */
+const saved = ref('{}')
+const unsaved = computed(() => JSON.stringify(datasourceProxy.value.config ?? {}) !== saved.value)
+
+onMounted(load)
+
+/* The preview holds the query it shows in state of its own, so going back
+  to the saved version builds it afresh. */
+const discarded = ref(0)
+const discard = () => {
+  load()
+  discarded.value += 1
+}
+
+/** Applies the copy to the source and keeps editing. */
+const commit = () => {
   const dataSource = datasourceRepository.getDatasourceModel(props.itemId)
   if (dataSource) {
     dataSource.name = datasourceProxy.value.name
@@ -99,7 +124,12 @@ const saveDataSource = () => {
       (connection) => connection.uid === datasourceProxy.value.config?.connection,
     )
     datasourceRepository.saveDatasource(dataSource)
+    saved.value = JSON.stringify(datasourceProxy.value.config ?? {})
   }
+}
+
+const saveDataSource = () => {
+  commit()
   emit('close')
 }
 
@@ -162,14 +192,21 @@ const { t } = useTranslation('shell')
       </div>
     </template>
 
-    <div v-else class="editor__preview">
-      <component
-        :is="previewComponent"
-        :data-source="datasourceProxy"
-        :key="datasourceProxy.uid"
-        @updateConfig="updateConfig"
-      />
-    </div>
+    <template v-else>
+      <div v-if="unsaved" class="editor__unsaved" role="status">
+        <span class="editor__unsaved-text">{{ t('Editor.unsaved') }}</span>
+        <DButton intent="quiet" size="sm" @click="discard">{{ t('Editor.discard') }}</DButton>
+        <DButton intent="primary" size="sm" @click="commit">{{ t('common:Action.save') }}</DButton>
+      </div>
+      <div class="editor__preview">
+        <component
+          :is="previewComponent"
+          :data-source="datasourceProxy"
+          :key="`${datasourceProxy.uid}-${discarded}`"
+          @updateConfig="updateConfig"
+        />
+      </div>
+    </template>
   </div>
 </template>
 
@@ -196,6 +233,23 @@ const { t } = useTranslation('shell')
   display: flex;
   justify-content: flex-end;
   gap: 7px;
+}
+
+.editor__unsaved {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  flex: none;
+  padding: 8px 12px;
+  font-size: var(--text-sm);
+  color: var(--color-fg);
+  background-color: var(--color-sunken);
+  border-left: 2px solid var(--color-warn, var(--color-accent));
+  border-radius: var(--radius-sm);
+}
+
+.editor__unsaved-text {
+  flex: 1;
 }
 
 .editor__preview {
