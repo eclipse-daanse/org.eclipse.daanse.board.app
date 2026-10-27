@@ -12,5 +12,21 @@
     "useMdx": "Use MDX query",
     "preview": "Data preview",
     "pickConnection": "Select a connection to load the metadata"
+  },
+  "Fields": {
+    "cube": "Cube",
+    "pollingEnabled": "Reload regularly",
+    "pollingInterval": "Interval (ms)",
+    "useVisualEditor": "Build the query visually",
+    "mdx": "MDX query",
+    "useMdx": "Send the written MDX"
+  },
+  "Hints": {
+    "cube": "The cube the query reads from, inside the catalogue the connection names.",
+    "pollingEnabled": "Whether this source re-reads on its own.",
+    "pollingInterval": "How often it re-reads, in milliseconds.",
+    "useVisualEditor": "Whether the query is put together in the designer rather than written as MDX.",
+    "mdx": "The query in MDX, if you write it yourself.",
+    "useMdx": "Whether the written MDX is sent instead of the query built in the designer."
   }
 }

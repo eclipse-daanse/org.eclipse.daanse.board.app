@@ -14,19 +14,24 @@ Contributors:
 /**
  * The fields of a configuration, as its model declares them.
  *
- * Every sentence here is the model's own: the GenModel `documentation`
- * annotation on the feature, shown under the control it belongs to. They
- * are written in English because the models are - the code they describe is
- * English too, and a translation kept beside them would be one more thing
- * that drifts.
+ * What a field is called and what it is for comes from the type's language
+ * pack first - `<namespace>:Fields.<feature>` and `<namespace>:Hints.<feature>`.
+ * The model's own words, its feature name made readable and its GenModel
+ * `documentation`, are the fallback: a type nobody has translated still
+ * explains itself, in the English the models are written in.
  *
  * Fields the dialog asks for itself are left out: name, type and uid are
  * the connection's identity, not part of its configuration.
  */
 import { computed } from 'vue'
 import type { ClassDoc, FeatureDoc } from 'org.eclipse.daanse.board.app.ui.vue.composables'
-import { DField, DInput, DSwitch } from 'org.eclipse.daanse.board.app.ui.vue.controls'
-import { useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+import { DField, DInput, DSelect, DSwitch } from 'org.eclipse.daanse.board.app.ui.vue.controls'
+import { formFields, useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+
+export interface Choice {
+  label: string
+  value: string
+}
 
 const props = withDefaults(
   defineProps<{
@@ -35,35 +40,45 @@ const props = withDefaults(
     config: Record<string, unknown>
     /** Fields the dialog asks for in its own words, so they are not asked twice. */
     omit?: string[]
+    /** The type's language-pack namespace, for its field labels. */
+    namespace?: string
+    /**
+     * Values a field is picked from, by feature name. A field with choices
+     * is a select; one whose choices are empty or not known yet stays a
+     * text field, so it can always be answered.
+     */
+    choices?: Record<string, Choice[] | undefined>
   }>(),
-  { omit: () => [] },
+  { omit: () => [], choices: () => ({}) },
 )
 
 const { t } = useTranslation('shell')
 
-/** Held by the dialog around this, never by the model's own fields. */
-const IDENTITY = new Set(['name', 'type', 'uid'])
+const fields = computed<FeatureDoc[]>(() => formFields(props.doc, props.omit))
 
-/* Lists and nested objects are left to the type's own editor: a single text
-  field can hold neither, and asking for one only made people guess a
-  format - xmla's request parameters were typed as "{}". */
-const fields = computed<FeatureDoc[]>(() =>
-  (props.doc?.features ?? []).filter(
-    (f) => !IDENTITY.has(f.name) && !props.omit.includes(f.name) && !f.many && !f.reference,
-  ),
-)
-
-/* A field the model marks as required and nobody has filled in yet. */
-function isEmpty(feature: FeatureDoc): boolean {
-  const held = props.config[feature.name]
-  return held === undefined || held === null || held === ''
+/** A text of the type's pack, or nothing when the pack does not hold it. */
+function fromPack(key: string): string | undefined {
+  if (!props.namespace) return undefined
+  const full = `${props.namespace}:${key}`
+  const text = t(full, { defaultValue: '' })
+  return text && text !== full ? text : undefined
 }
 
 function label(feature: FeatureDoc): string {
-  /* resourceUrl -> Resource url: the model's name, made readable, with no
-    dictionary in between to go stale. */
+  const named = fromPack(`Fields.${feature.name}`)
+  if (named) return named
+  /* resourceUrl -> Resource Url: the model's name, made readable. */
   const spaced = feature.name.replace(/([a-z0-9])([A-Z])/g, '$1 $2').replace(/_/g, ' ')
   return spaced.charAt(0).toUpperCase() + spaced.slice(1)
+}
+
+function hint(feature: FeatureDoc): string | undefined {
+  return fromPack(`Hints.${feature.name}`) ?? feature.documentation
+}
+
+function choicesOf(feature: FeatureDoc): Choice[] | undefined {
+  const offered = props.choices[feature.name]
+  return offered?.length ? offered : undefined
 }
 
 function asNumber(feature: FeatureDoc, value: string | number) {
@@ -86,7 +101,7 @@ function asNumber(feature: FeatureDoc, value: string | number) {
       <DField
         v-if="feature.type === 'boolean'"
         :label="label(feature)"
-        :hint="feature.documentation"
+        :hint="hint(feature)"
         stacked
       >
         <DSwitch
@@ -94,11 +109,24 @@ function asNumber(feature: FeatureDoc, value: string | number) {
           @update:model-value="config[feature.name] = $event"
         />
       </DField>
+      <DSelect
+        v-else-if="choicesOf(feature)"
+        :model-value="config[feature.name]"
+        :options="choicesOf(feature)!"
+        value-key="value"
+        label-key="label"
+        :label="label(feature)"
+        :hint="hint(feature)"
+        :required="!feature.optional"
+        :placeholder="t('ModelFields.pick')"
+        stacked
+        @update:model-value="config[feature.name] = $event"
+      />
       <DInput
         v-else-if="feature.type === 'number'"
         :model-value="(config[feature.name] as number | undefined) ?? ''"
         :label="label(feature)"
-        :hint="feature.documentation"
+        :hint="hint(feature)"
         :required="!feature.optional"
         type="number"
         stacked
@@ -108,7 +136,7 @@ function asNumber(feature: FeatureDoc, value: string | number) {
         v-else
         :model-value="(config[feature.name] as string | undefined) ?? ''"
         :label="label(feature)"
-        :hint="feature.documentation"
+        :hint="hint(feature)"
         :required="!feature.optional"
         :type="/url|uri|endpoint/i.test(feature.name) ? 'url' : 'text'"
         stacked

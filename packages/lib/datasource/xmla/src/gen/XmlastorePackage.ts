@@ -212,7 +212,7 @@ export class XmlastorePackage extends BasicEPackage {
     // Create cube feature
     const iXmlaStoreConfiguration_cube = new BasicEAttribute();
     iXmlaStoreConfiguration_cube.setName('cube');
-    iXmlaStoreConfiguration_cube.setLowerBound(0);
+    iXmlaStoreConfiguration_cube.setLowerBound(1);
     iXmlaStoreConfiguration_cube.setUpperBound(1);
     iXmlaStoreConfigurationClass.getEStructuralFeatures().push(iXmlaStoreConfiguration_cube);
     XmlastorePackage.Literals.I_XMLA_STORE_CONFIGURATION__CUBE = iXmlaStoreConfiguration_cube;

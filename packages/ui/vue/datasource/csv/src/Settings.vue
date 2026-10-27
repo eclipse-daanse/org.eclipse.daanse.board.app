@@ -43,16 +43,17 @@ const available = ref(false);
 const urlError = computed(() => {
   if (!tempResourceUrl.value || available.value) return undefined
   if (response.code) return `${response.code} ${response.statusText}`.trim()
-  return 'Nicht erreichbar'
+  return t('Settings.unreachable')
 })
 
-const separatorOptions = [
-  { label: 'Komma (,)', value: ',' },
-  { label: 'Semikolon (;)', value: ';' },
-  { label: 'Tabulator', value: '\t' },
-  { label: 'Senkrechter Strich (|)', value: '|' },
-  { label: 'Doppelpunkt (:)', value: ':' },
-]
+/* Named in the language pack; computed so a language switch reaches them. */
+const separatorOptions = computed(() => [
+  { label: t('Csv.separators.comma'), value: ',' },
+  { label: t('Csv.separators.semicolon'), value: ';' },
+  { label: t('Csv.separators.tab'), value: '\t' },
+  { label: t('Csv.separators.pipe'), value: '|' },
+  { label: t('Csv.separators.colon'), value: ':' },
+])
 const response = reactive<{
     code: number | null;
     statusText: string;
@@ -137,6 +138,7 @@ onMounted(async () => {
       :label="t('Settings.path')"
       :error="urlError"
       :hint="t('Settings.pathHint')"
+      required
     />
 
     <DSelect

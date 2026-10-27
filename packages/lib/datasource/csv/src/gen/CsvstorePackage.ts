@@ -97,7 +97,7 @@ export class CsvstorePackage extends BasicEPackage {
     // Create resourceUrl feature
     const iCsvStoreConfiguration_resourceUrl = new BasicEAttribute();
     iCsvStoreConfiguration_resourceUrl.setName('resourceUrl');
-    iCsvStoreConfiguration_resourceUrl.setLowerBound(0);
+    iCsvStoreConfiguration_resourceUrl.setLowerBound(1);
     iCsvStoreConfiguration_resourceUrl.setUpperBound(1);
     iCsvStoreConfigurationClass.getEStructuralFeatures().push(iCsvStoreConfiguration_resourceUrl);
     CsvstorePackage.Literals.I_CSV_STORE_CONFIGURATION__RESOURCE_URL = iCsvStoreConfiguration_resourceUrl;

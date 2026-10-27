@@ -26,7 +26,7 @@ import type { IBaseConnectionConfiguration } from 'org.eclipse.daanse.board.app.
  * @generated
  */
 export interface ICsvStoreConfiguration extends IBaseConnectionConfiguration {
-  resourceUrl?: string;
+  resourceUrl: string;
   connection?: string;
   pollingInterval?: number;
   separators: EList<string>;

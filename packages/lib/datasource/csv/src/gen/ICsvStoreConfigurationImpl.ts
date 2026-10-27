@@ -38,7 +38,7 @@ export class ICsvStoreConfigurationImpl extends IBaseConnectionConfigurationImpl
   static readonly SKIP_ROWS_FROM_END: number = 9;
 
   // Private fields
-  private _resourceUrl?: string;
+  private _resourceUrl: string = "";
   private _connection?: string;
   private _pollingInterval?: number;
   private _separators!: EList<string>;
@@ -248,7 +248,7 @@ export class ICsvStoreConfigurationImpl extends IBaseConnectionConfigurationImpl
     const featureID = this.eClass().getFeatureID(feature);
     switch (featureID) {
       case ICsvStoreConfigurationImpl.RESOURCE_URL:
-        return this._resourceUrl !== undefined;
+        return this._resourceUrl !== "";
       case ICsvStoreConfigurationImpl.CONNECTION:
         return this._connection !== undefined;
       case ICsvStoreConfigurationImpl.POLLING_INTERVAL:
@@ -271,7 +271,7 @@ export class ICsvStoreConfigurationImpl extends IBaseConnectionConfigurationImpl
     const featureID = this.eClass().getFeatureID(feature);
     switch (featureID) {
       case ICsvStoreConfigurationImpl.RESOURCE_URL:
-        this._resourceUrl = undefined;
+        this._resourceUrl = "";
         return;
       case ICsvStoreConfigurationImpl.CONNECTION:
         this._connection = undefined;

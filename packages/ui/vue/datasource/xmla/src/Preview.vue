@@ -79,9 +79,17 @@ const updateData = async () => {
   if (update !== latestUpdate) return;
   data.value = req;
   if (props.dataSource.config.useVisualEditor) {
-    query.value = await store.getMdxRequest();
+    generatedMdx = await store.getMdxRequest();
+    query.value = generatedMdx;
   }
 }
+
+/*
+ * The MDX the designer built, last time it was asked. Writing it into the
+ * editor is not a change somebody made, and reporting it as one marked the
+ * source unsaved for merely being looked at.
+ */
+let generatedMdx = '';
 
 // Edits, expands and collapses come in bursts; the preview asks once.
 const debouncedUpdateData = debounce(updateData, 100);
@@ -122,6 +130,7 @@ watch(() => queryConfig, async () => {
 }, { deep: true });
 
 watch(() => query, async () => {
+  if (query.value === generatedMdx) return;
   emit('updateConfig', {
     ...props.dataSource.config,
     mdx: query.value,

@@ -13,5 +13,15 @@
     "user": "Benutzer",
     "password": "Passwort",
     "timeout": "Zeitlimit in Sekunden (0 = unbegrenzt)"
+  },
+  "Fields": {
+    "url": "Adresse",
+    "cubeName": "Würfel",
+    "catalogName": "Katalog"
+  },
+  "Hints": {
+    "url": "Die Adresse, unter der der XMLA-Dienst antwortet.",
+    "cubeName": "Der OLAP-Würfel, mit dem verbunden wird.",
+    "catalogName": "Der Katalog, der den Würfel enthält."
   }
 }
