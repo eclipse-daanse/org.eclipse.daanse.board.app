@@ -32,6 +32,12 @@ import {
   type NavigationItem,
 } from 'org.eclipse.daanse.board.app.lib.api.navigation'
 import { useGlobalLoading, useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+import {
+  type PageRegistryI,
+  identifier as PageIdentifier,
+} from 'org.eclipse.daanse.board.app.lib.api.page'
+import { boardTarget } from './composables/boardTarget'
+import { useBoardUsage } from './composables/useBoardUsage'
 
 const navigationItems = ref<NavigationItem[]>([])
 const { isLoading } = useGlobalLoading()
@@ -41,6 +47,8 @@ useTheme()
 
 const route = useRoute()
 const router = useRouter()
+const pageRepo = inject<PageRegistryI>(PageIdentifier)
+const { usageOf } = useBoardUsage()
 
 onMounted(() => {
   const navRegistry = inject<NavigationRegistry>(NAVIGATION_REGISTRY)! as any
@@ -49,10 +57,20 @@ onMounted(() => {
     : []
 })
 
-/** Board entry: the rail points at the board, the topbar picks the mode. */
-const boardTarget = computed(() =>
-  route.params.pageid ? `/page/${route.params.pageid}` : '/page/abc',
-)
+/**
+ * Board entry: the rail points at the board, the topbar picks the mode.
+ * Resolved on click rather than as a computed: the pages live in the
+ * workspace model, which a computed would not see change.
+ */
+const openBoard = () =>
+  go(
+    boardTarget({
+      currentPageId: route.params.pageid as string | undefined,
+      pageIds: pageRepo?.getAllPageIds() ?? [],
+      defaultPageId: pageRepo?.defaultPageId,
+      lastOpened: (id) => usageOf(id)?.lastOpened,
+    }),
+  )
 /*
  * The launcher has no side menu: on the boards overview there is no open
  * board for the rail to point into, and the areas it lists are properties
@@ -82,7 +100,7 @@ const go = (target: string) => router.push(target)
           :class="['ri', { on: boardActive }]"
           :aria-current="boardActive ? 'page' : undefined"
           :title="t('Rail.board')"
-          @click="go(boardTarget)"
+          @click="openBoard"
         >
           <DIcon name="dashboard" />
           <span class="sr-only">{{ t('Rail.board') }}</span>
