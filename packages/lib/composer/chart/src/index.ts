@@ -36,10 +36,9 @@ const symbol = Symbol.for(CHART_COMPOSER)
  */
 function createChartComposer(repository: DatasourceRepository) {
   return (config: IChartComposerConfiguration): ChartComposer => {
-  if (!ChartComposer.validateConfiguration(config)) {
-    throw new Error(
-      'Invalid ChartComposer configuration. Please provide a valid configuration.',
-    )
+  const missing = ChartComposer.missingConfiguration(config)
+  if (missing.length) {
+    throw new Error(`Invalid ChartComposer configuration: ${missing.join(', ')} not set.`)
   }
 
   const composer = new ChartComposer(repository)

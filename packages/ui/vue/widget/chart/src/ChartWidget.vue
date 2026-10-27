@@ -181,6 +181,21 @@ function annotationAt(list: unknown, index: number): any {
   return any?.[index]
 }
 
+/**
+ * A dash pattern as Chart.js takes it: an array of lengths.
+ *
+ * The form stores its choice as text - "5,5", or "durchgezogen" for a solid
+ * line, which boards saved so far hold and which therefore stays the stored
+ * value. Anything that is not a list of lengths is a solid line; handing a
+ * string on to the canvas does not draw a dash at all.
+ */
+function dashPattern(given: unknown): number[] | undefined {
+  if (given === undefined || given === null) return undefined
+  if (Array.isArray(given)) return given.map(Number).filter((n) => Number.isFinite(n))
+  const lengths = String(given).replace(/[\[\]\s]/g, '').split(',').filter(Boolean).map(Number)
+  return lengths.length > 0 && lengths.every((n) => Number.isFinite(n)) ? lengths : []
+}
+
 /** The series settings as a plain array, whether they arrive as one or as an EList. */
 function seriesList(): any[] {
   const list: any = config.value?.seriesSettings
@@ -284,11 +299,11 @@ const chartData = computed(() => {
         config.value?.borderWidth?.value,
         dataset.borderWidth,
       )
-      const borderDash = firstSet(
+      const borderDash = dashPattern(firstSet(
         seriesSettings?.borderDash?.value,
         config.value?.borderDash?.value,
         dataset.borderDash,
-      )
+      ))
 
       // Apply settings based on chart type
       let result: any = {
@@ -317,10 +332,19 @@ const chartData = computed(() => {
         // Determine line-specific settings (series-specific or global fallback)
         const showPoints = seriesSettings?.showPoints?.value ?? config.value?.showPoints?.value ?? true
         const fillEnabled = seriesSettings?.fill?.value ?? config.value?.fill?.value ?? false
+        /*
+         * A point follows the line it sits on unless it was given a colour
+         * of its own. The legend draws a line series as its point, so a
+         * point left on the colour behind the line kept the legend on the
+         * old colour while the line itself turned red.
+         */
         const pointColor = firstSet(
           seriesSettings?.pointColor?.value,
+          seriesSettings?.borderColor?.value,
           config.value?.pointColor?.value,
+          config.value?.borderColor?.value,
           dataset.pointBackgroundColor,
+          borderColor,
         )
         const pointSize = seriesSettings?.pointSize?.value ?? config.value?.pointSize?.value ?? 3
 

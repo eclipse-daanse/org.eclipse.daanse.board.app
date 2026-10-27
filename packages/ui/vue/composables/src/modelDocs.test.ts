@@ -94,6 +94,15 @@ describe('modelDocs', () => {
     expect(doc.features.find((f) => f.name === 'pollingInterval')?.type).toBe('number')
   })
 
+  it('reads the default a field stands for while nothing is set', () => {
+    const nsURI = registerModelDocs(model('packages/ui/vue/widget/chart/model/model.ecore'))!
+    const chart = describeClass(nsURI, 'ChartSettings')!
+    expect(chart.features.find((f) => f.name === 'chartType')?.defaultValue).toBe('bar')
+    /* A series without a type takes the chart's - it has no default of its own */
+    const series = describeClass(nsURI, 'SeriesSettings')!
+    expect(series.features.find((f) => f.name === 'chartType')?.defaultValue).toBeUndefined()
+  })
+
   it('picks the configuration class when a model holds more than one', () => {
     const xmla = model('packages/lib/datasource/xmla/model/XmlaDataSourceModel.ecore')
     const nsURI = registerModelDocs(xmla)!

@@ -49,7 +49,7 @@ export class SeriesSettingsImpl extends BasicEObject implements SeriesSettings {
   // Private fields
   private _seriesIndex: VariableWrapper<number> = new VariableWrapper<number>();
   private _label?: VariableWrapper<string>;
-  private _chartType: VariableWrapper<string> = new VariableWrapper<string>();
+  private _chartType?: VariableWrapper<string>;
   private _xAxisId: VariableWrapper<string> = new VariableWrapper<string>();
   private _yAxisId: VariableWrapper<string> = new VariableWrapper<string>();
   private _yAxisTitle: VariableWrapper<string> = new VariableWrapper<string>();
@@ -556,7 +556,7 @@ export class SeriesSettingsImpl extends BasicEObject implements SeriesSettings {
       case SeriesSettingsImpl.LABEL:
         return this._label !== undefined;
       case SeriesSettingsImpl.CHART_TYPE:
-        return this._chartType !== new VariableWrapper<string>();
+        return this._chartType !== undefined;
       case SeriesSettingsImpl.X_AXIS_ID:
         return this._xAxisId !== new VariableWrapper<string>();
       case SeriesSettingsImpl.Y_AXIS_ID:
@@ -599,7 +599,7 @@ export class SeriesSettingsImpl extends BasicEObject implements SeriesSettings {
         this._label = undefined;
         return;
       case SeriesSettingsImpl.CHART_TYPE:
-        this._chartType = new VariableWrapper<string>();
+        this._chartType = undefined;
         return;
       case SeriesSettingsImpl.X_AXIS_ID:
         this._xAxisId = new VariableWrapper<string>();

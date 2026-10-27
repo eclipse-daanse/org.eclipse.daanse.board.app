@@ -30,6 +30,7 @@
     "label": "Label",
     "seriesIndex": "Series number",
     "chartType": "Type",
+    "chartTypeHint": "the chart's type",
     "seriesAxes": "Axes",
     "xAxisId": "X axis",
     "yAxisId": "Y axis",
@@ -43,7 +44,11 @@
     "seriesPoints": "Points",
     "showPoints": "Show points",
     "pointColor": "Colour",
-    "pointSize": "Size"
+    "pointSize": "Size",
+    "labelHint": "as it is named in the chart",
+    "borderColorHint": "visible from width 1",
+    "backgroundColorHint": "bars, pie, filled area",
+    "valueFormula": "Formula"
   },
   "Form": {
     "typeGroup": "Chart type",
@@ -52,6 +57,7 @@
     "stacked": "Stacked",
     "seriesGroup": "Series",
     "seriesSettings": "Series",
+    "seriesSettingsHint": "Without an entry of its own, every series is drawn with the settings below. An entry sets what is different about one series.",
     "lineGroup": "Line",
     "borderColor": "Line and border colour",
     "borderWidth": "Line width",
@@ -72,6 +78,17 @@
     "axisGroup": "Axes",
     "xAxisTitle": "X title",
     "yAxisTitle": "Y title",
-    "dateDisplayFormat": "Date format"
+    "dateDisplayFormat": "Date format",
+    "borderColorHint": "visible from width 1",
+    "backgroundColorHint": "bars, pie, filled area"
+  },
+  "Options": {
+    "borderDash": {
+      "solid": "Solid",
+      "dashed": "Dashed",
+      "longDashes": "Long dashes",
+      "dotted": "Dotted",
+      "dashDot": "Dash-dot"
+    }
   }
 }

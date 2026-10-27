@@ -193,8 +193,26 @@ export class ChartComposer extends BaseDatasource {
     return chartData;
   }
 
+  /**
+   * The settings a composer cannot be built without, in the order its form
+   * asks for them. Named once, so that the check below and the form that
+   * marks these fields required cannot come to disagree.
+   */
+  static readonly requiredConfiguration = [
+    'connectedDatasources',
+    'composeBy',
+    'usedSets',
+    'labelColumn',
+  ] as const satisfies ReadonlyArray<keyof IChartComposerConfiguration>;
+
+  /** The required settings this configuration leaves unset - none when it is complete. */
+  static missingConfiguration(
+    config: Partial<IChartComposerConfiguration> | undefined,
+  ): Array<(typeof ChartComposer.requiredConfiguration)[number]> {
+    return ChartComposer.requiredConfiguration.filter((key) => !config?.[key]);
+  }
+
   static validateConfiguration(config: IChartComposerConfiguration): boolean {
-    if (!config.connectedDatasources || !config.labelColumn || !config.usedSets || !config.composeBy) return false;
-    return true;
+    return ChartComposer.missingConfiguration(config).length === 0;
   }
 }

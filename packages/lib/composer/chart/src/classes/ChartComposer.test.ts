@@ -42,4 +42,22 @@ describe('ChartComposer', () => {
     expect(chart.datasets[0].data).toEqual([24597, 191940])
     expect(table.items[0]['Unit Sales']).toBe('24597')
   })
+
+  it('names what a configuration lacks, compose-by among it', () => {
+    const complete = {
+      connectedDatasources: ['source'],
+      composeBy: 'Caption',
+      labelColumn: 'Caption',
+      usedSets: ['Unit Sales'],
+    } as any
+
+    expect(ChartComposer.missingConfiguration(complete)).toEqual([])
+    expect(ChartComposer.validateConfiguration(complete)).toBe(true)
+
+    const withoutComposeBy = { ...complete, composeBy: '' }
+    expect(ChartComposer.missingConfiguration(withoutComposeBy)).toEqual(['composeBy'])
+    expect(ChartComposer.validateConfiguration(withoutComposeBy)).toBe(false)
+
+    expect(ChartComposer.missingConfiguration({} as any)).toEqual([...ChartComposer.requiredConfiguration])
+  })
 })

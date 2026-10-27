@@ -26,12 +26,13 @@ Contributors:
  * empty. The alternative is a form that shows nothing until someone presses
  * something, for a part of the settings that always exists.
  */
-import { computed, watch } from 'vue'
+import { computed, inject, unref, watch } from 'vue'
 import type { EClass, EObject, EStructuralFeature } from '@emfts/core'
-import { UIModelComposer } from '@emfts/uimodel-composer'
+import { UIModelComposer, TRANSLATOR_KEY } from '@emfts/uimodel-composer'
 import { ensureWrappers } from './adopt'
 import { formFor, labelOf } from './buildForm'
 import { formForClass } from './loadUIModel'
+import { useLabel } from './useLabel'
 import { useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 
 const props = defineProps<{
@@ -44,10 +45,16 @@ const props = defineProps<{
 }>()
 
 const { t } = useTranslation('uimodel')
+const localized = useLabel()
 
-const label = computed(
-  () => props.custom?.resolvedStyle?.label ?? (props.feature ? labelOf(props.feature) : ''),
+/* Translated by the composer already; only a key is asked - see useLabel. */
+const label = computed(() =>
+  localized(props.custom?.resolvedStyle?.label ?? (props.feature ? labelOf(props.feature) : '')),
 )
+
+/* Handed on, or the inner composer provides none - see SettingsListWidget. */
+const inherited = inject(TRANSLATOR_KEY, undefined)
+const translate = computed(() => unref(inherited))
 
 /** The class the reference is typed against; without it nothing can be built. */
 const valueClass = computed<EClass | undefined>(() => {
@@ -115,7 +122,7 @@ const form = computed(() => {
     </p>
 
     <div v-else class="object__body">
-      <UIModelComposer v-if="form && value" :ui-model="form" :model="value" />
+      <UIModelComposer v-if="form && value" :ui-model="form" :model="value" :translate="translate" />
     </div>
   </section>
 </template>

@@ -38,7 +38,7 @@ that does not state its own.
           name="label"
           feature="http://org.eclipse.daanse.board.app.ui.vue.widget.chart#//SeriesSettings/label"
           label="chart:FormSeries.label"
-          placeholder="Wie im Diagramm benannt"/>
+          placeholder="chart:FormSeries.labelHint"/>
       <fields xsi:type="uimodel:NumberWidget"
           name="seriesIndex"
           feature="http://org.eclipse.daanse.board.app.ui.vue.widget.chart#//SeriesSettings/seriesIndex"
@@ -46,7 +46,8 @@ that does not state its own.
       <fields xsi:type="uimodel:SelectWidget"
           name="chartType"
           feature="http://org.eclipse.daanse.board.app.ui.vue.widget.chart#//SeriesSettings/chartType"
-          label="chart:FormSeries.chartType">
+          label="chart:FormSeries.chartType"
+          placeholder="chart:FormSeries.chartTypeHint">
         <values>line</values>
         <values>bar</values>
         <values>pie</values>
@@ -80,7 +81,7 @@ that does not state its own.
           name="borderColor"
           feature="http://org.eclipse.daanse.board.app.ui.vue.widget.chart#//SeriesSettings/borderColor"
           label="chart:FormSeries.borderColor"
-          placeholder="sichtbar ab Stärke 1"/>
+          placeholder="chart:FormSeries.borderColorHint"/>
       <fields xsi:type="uimodel:NumberWidget"
           name="borderWidth"
           feature="http://org.eclipse.daanse.board.app.ui.vue.widget.chart#//SeriesSettings/borderWidth"
@@ -94,6 +95,7 @@ that does not state its own.
         <values>10,5</values>
         <values>2,2</values>
         <values>15,5,5,5</values>
+        <optionLabel language="JS" body="({ durchgezogen: 'chart:Options.borderDash.solid', '5,5': 'chart:Options.borderDash.dashed', '10,5': 'chart:Options.borderDash.longDashes', '2,2': 'chart:Options.borderDash.dotted', '15,5,5,5': 'chart:Options.borderDash.dashDot' })[option] ?? option"/>
       </fields>
       <fields xsi:type="uimodel:CheckboxWidget"
           name="fill"
@@ -104,7 +106,7 @@ that does not state its own.
           name="backgroundColor"
           feature="http://org.eclipse.daanse.board.app.ui.vue.widget.chart#//SeriesSettings/backgroundColor"
           label="chart:FormSeries.backgroundColor"
-          placeholder="Balken, Torte, gefüllte Fläche"/>
+          placeholder="chart:FormSeries.backgroundColorHint"/>
     </fields>
 
     <fields xsi:type="uimodel:GroupWidget" name="seriesPoints" layout="VERTICAL" label="chart:FormSeries.seriesPoints">
@@ -127,7 +129,7 @@ that does not state its own.
       <fields xsi:type="uimodel:TextWidget"
           name="valueFormula"
           feature="http://org.eclipse.daanse.board.app.ui.vue.widget.chart#//SeriesSettings/valueFormula"
-          label="Formel"
+          label="chart:FormSeries.valueFormula"
           placeholder="(value - 32) * 5 / 9"/>
     </fields>
 

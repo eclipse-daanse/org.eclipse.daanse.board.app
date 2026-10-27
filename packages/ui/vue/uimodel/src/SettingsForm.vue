@@ -59,6 +59,13 @@ const translator = computed<Translator>(() => {
     return text === key ? undefined : text
   }
 })
+/*
+ * Handed to the composer as its prop, not only provided: the composer
+ * provides its `translate` prop under TRANSLATOR_KEY itself, and without
+ * the prop that is undefined - over this one. Every label it draws, the
+ * group headings first, then came out as its key. Still provided here for
+ * what sits beside the composer rather than under it.
+ */
 provide(TRANSLATOR_KEY, translator)
 
 /*
@@ -193,6 +200,7 @@ const hasFields = computed(() => (model.value?.eClass?.().getEStructuralFeatures
       v-if="uiModel && model && hasFields"
       :ui-model="uiModel"
       :model="model"
+      :translate="translator"
     />
     <p v-else class="settings-form__empty">
       {{ emptyText ?? translate('uimodel:Form.empty') }}

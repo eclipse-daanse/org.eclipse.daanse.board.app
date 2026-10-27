@@ -30,6 +30,7 @@
     "label": "Beschriftung",
     "seriesIndex": "Reihennummer",
     "chartType": "Typ",
+    "chartTypeHint": "wie das Diagramm",
     "seriesAxes": "Achsen",
     "xAxisId": "X-Achse",
     "yAxisId": "Y-Achse",
@@ -43,7 +44,11 @@
     "seriesPoints": "Punkte",
     "showPoints": "Punkte zeigen",
     "pointColor": "Farbe",
-    "pointSize": "Größe"
+    "pointSize": "Größe",
+    "labelHint": "Wie im Diagramm benannt",
+    "borderColorHint": "sichtbar ab Stärke 1",
+    "backgroundColorHint": "Balken, Torte, gefüllte Fläche",
+    "valueFormula": "Formel"
   },
   "Form": {
     "typeGroup": "Diagrammtyp",
@@ -51,7 +56,8 @@
     "barOrientation": "Balkenausrichtung",
     "stacked": "Gestapelt",
     "seriesGroup": "Datenreihen",
-    "seriesSettings": "Datenreihen",
+    "seriesSettings": "Datenreihe",
+    "seriesSettingsHint": "Ohne eigenen Eintrag wird jede Reihe mit den Einstellungen unten gezeichnet. Ein Eintrag legt für eine Reihe fest, was bei ihr anders ist.",
     "lineGroup": "Linie",
     "borderColor": "Linien- und Randfarbe",
     "borderWidth": "Linienstärke",
@@ -72,6 +78,17 @@
     "axisGroup": "Achsen",
     "xAxisTitle": "Titel X",
     "yAxisTitle": "Titel Y",
-    "dateDisplayFormat": "Datumsformat"
+    "dateDisplayFormat": "Datumsformat",
+    "borderColorHint": "sichtbar ab Stärke 1",
+    "backgroundColorHint": "Balken, Torte, gefüllte Fläche"
+  },
+  "Options": {
+    "borderDash": {
+      "solid": "Durchgezogen",
+      "dashed": "Gestrichelt",
+      "longDashes": "Lang gestrichelt",
+      "dotted": "Gepunktet",
+      "dashDot": "Strich-Punkt"
+    }
   }
 }
