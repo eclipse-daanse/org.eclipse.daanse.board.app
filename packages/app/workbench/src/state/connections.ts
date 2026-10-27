@@ -17,6 +17,7 @@
  * client and session handling every board uses.
  */
 
+import { randomUUID } from 'org.eclipse.daanse.board.app.lib.core'
 import { readStored, writeStored } from './storage'
 
 export interface SavedConnection {
@@ -124,5 +125,5 @@ export function connectionConfig(connection: SavedConnection) {
 }
 
 export function newConnectionId(): string {
-  return `xmla.${crypto.randomUUID()}`
+  return `xmla.${randomUUID()}`
 }
