@@ -14,14 +14,12 @@ Contributors:
 <script setup lang="ts">
 import { DCheckbox, DTabs } from 'org.eclipse.daanse.board.app.ui.vue.controls'
 import { useTemporaryStore, useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables';
-import { identifier, ConnectionRepository } from 'org.eclipse.daanse.board.app.lib.api.connection'
-import { computed, inject, ref, watch, toRef, shallowRef, nextTick, onMounted } from 'vue';
+import { computed, ref, watch, shallowRef, onMounted, onBeforeUnmount } from 'vue';
 import { debounce } from 'lodash';
 import { MetadataTree, QueryDesigner, PivotTable } from 'org.eclipse.daanse.board.app.ui.vue.common.xmla';
 import { MonacoEditor } from 'org.eclipse.daanse.board.app.ui.vue.common.monaco';
 
 const props = defineProps<{ dataSource: any }>();
-console.log(MetadataTree)
 
 const data = ref(null as any);
 const connection = ref(null as any);
@@ -33,8 +31,6 @@ const tempStore = shallowRef(null as any)
 const settingsRef = ref(props.dataSource);
 const metadata = ref(null as any);
 const { update } = useTemporaryStore(props.dataSource.type, settingsRef, tempStore);
-
-console.log(props.dataSource)
 
 const tabs = computed(() => [
   { id: 'visual', label: t('Xmla.build') },
@@ -53,54 +49,49 @@ const queryConfig = ref({
 
 const drilldownState = ref(props.dataSource.config.drilldownState || {});
 
-
-console.log(props.dataSource);
-
 watch(() => props.dataSource.config.connection, async () => {
-  console.log('connection updated', props.dataSource)
-
   const newStore = await update();
   metadata.value = await newStore.getMetadata();
-
-  console.log(newStore);
 });
 
 watch(() => props.dataSource.config.cube, async () => {
-  console.log('connection updated', props.dataSource)
-
   const newStore = await update();
   metadata.value = await newStore.getMetadata();
-
-  console.log(newStore);
 });
 
 const updateData = async () => {
-  console.log('updateData called');
-  const req = await tempStore.value.getData('PivotTable');
-  data.value = req;
-  console.log('data', data.value);
+  const store = tempStore.value;
+  // The store is replaced while the connection or cube changes; there is
+  // nothing to ask until the new one has arrived.
+  if (!store) return;
+  data.value = await store.getData('PivotTable');
   if (props.dataSource.config.useVisualEditor) {
-    query.value = await tempStore.value.getMdxRequest();
+    query.value = await store.getMdxRequest();
   }
 }
+
+// Edits, expands and collapses come in bursts; the preview asks once.
+const debouncedUpdateData = debounce(updateData, 100);
+
+onBeforeUnmount(() => debouncedUpdateData.cancel());
 
 onMounted(async () => {
   // if (!tempStore.value) return;
   // metadata.value = await tempStore.value.getMetadata();
 });
 
-// This works only once when component is mounted
-watch(tempStore, async () => {
-  if (!tempStore.value) return;
-  const connectionId = tempStore.value.connection;
-  const connectionRepo = inject<ConnectionRepository>(identifier)!;
-  connection.value = await connectionRepo.getConnection(connectionId);
+// Runs each time the temporary store is created or replaced.
+watch(tempStore, async (store) => {
+  if (!store) return;
+  // The store resolves its connection through the repository it was built
+  // with; inject() is not available in a watcher callback.
+  connection.value = store.getConnection();
   api.value = await connection.value.getApi();
-  catalog.value = await connection.value.catalogName;
+  catalog.value = connection.value.catalogName;
 
-  metadata.value = await tempStore.value.getMetadata();
+  metadata.value = await store.getMetadata();
   debouncedUpdateData();
-}, { deep: true });
+});
 
 watch(() => queryConfig, async () => {
   emit('updateConfig', {
@@ -118,7 +109,6 @@ watch(() => query, async () => {
     mdx: query.value,
   });
 
-  console.log('query changed', query.value);
   debouncedUpdateData();
 }, { deep: true });
 
