@@ -145,10 +145,12 @@ watch(open, (isOpen) => {
   config.value = {}
 })
 
-/* `connection` is answered by its own select, not by ModelFields. */
+/* `connection` is answered by its own select, not by ModelFields; a nested
+  object is not asked here at all (see ModelFields), so it cannot hold the
+  form back. */
 const missing = computed(() => {
   const required = (doc.value?.features ?? [])
-    .filter((f) => !f.optional && !['name', 'type', 'uid', 'connection'].includes(f.name))
+    .filter((f) => !f.optional && !f.reference && !['name', 'type', 'uid', 'connection'].includes(f.name))
     .filter((f) => {
       const value = config.value[f.name]
       return value === undefined || value === null || value === ''

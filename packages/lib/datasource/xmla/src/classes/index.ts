@@ -33,7 +33,7 @@ import { injectable, inject } from '@eclipse-daanse/tsm'
  */
 export interface IXmlaStoreConfiguration extends ConfigurationOf<IBaseConnectionConfiguration> {
   connection: string
-  requestParams: XMLARequestParams
+  requestParams?: XMLARequestParams
   useMdx: boolean
   mdx: string
   cube: string
@@ -49,6 +49,34 @@ interface XMLARequestParams {
   /** Axis 2 and 3: which slice of the result the table shows. */
   pages?: NavigationItem[]
   chapters?: NavigationItem[]
+}
+
+const AXIS_LISTS = ['rows', 'columns', 'measures', 'filters', 'pages', 'chapters'] as const
+
+/**
+ * The request a store starts from, out of whatever the configuration holds.
+ *
+ * A source is created with a connection and a cube; what it asks for is
+ * built afterwards in its editor. So the value may be missing, may be the
+ * text "{}" a create form once demanded, or may lack an axis - each of
+ * them means an empty query, not a broken store. An object that is there is
+ * completed in place, because the store and the stored configuration share
+ * it.
+ */
+export function requestParamsFrom(raw: unknown): XMLARequestParams {
+  let held: unknown = raw
+  if (typeof held === 'string') {
+    try {
+      held = held.trim() ? JSON.parse(held) : undefined
+    } catch {
+      held = undefined
+    }
+  }
+  const params = (held && typeof held === 'object' ? held : {}) as Record<string, unknown>
+  for (const axis of AXIS_LISTS) {
+    if (!Array.isArray(params[axis])) params[axis] = []
+  }
+  return params as unknown as XMLARequestParams
 }
 
 export interface SecurityOptions {
@@ -73,28 +101,11 @@ function navigatedHierarchies(mdxResponse: unknown): string[] {
   return cellset && cellset.axes.length > 2 ? navigatedHierarchiesOf(cellset) : []
 }
 
-const AXIS_LISTS = ['rows', 'columns', 'measures', 'filters', 'pages', 'chapters'] as const
-
 /*
  * Request params as stored can lack axes - older boards have no pages or
  * chapters - and the generic create form hands over whatever was typed,
  * "{}" as text included. Every list the query is built from is there.
  */
-function withAllAxes(params: unknown): XMLARequestParams {
-  let value = params
-  if (typeof value === 'string') {
-    try {
-      value = JSON.parse(value)
-    } catch {
-      value = {}
-    }
-  }
-  const source = (value && typeof value === 'object' ? value : {}) as Record<string, unknown>
-  const lists = Object.fromEntries(
-    AXIS_LISTS.map(axis => [axis, Array.isArray(source[axis]) ? source[axis] : []]),
-  )
-  return { ...source, ...lists } as unknown as XMLARequestParams
-}
 
 /* eMondrian's fault for a cell property it does not know: a null CellProperty. */
 const refusesUpdateable = (error: unknown) =>
@@ -166,9 +177,9 @@ export class XmlaStore extends BaseDatasource {
     if (configuration.mdx) {
       this.mdx = configuration.mdx
     }
-    if (configuration.requestParams) {
-      this.requestParams = withAllAxes(configuration.requestParams)
-    }
+    this.requestParams = requestParamsFrom(configuration.requestParams)
+    /* What is saved next is the request this store works with, not the text. */
+    ;(configuration as { requestParams?: XMLARequestParams }).requestParams = this.requestParams
 
     this.pollingInterval = configuration.pollingInterval ?? 5000
     if (this.pollingEnabled) {
@@ -240,7 +251,7 @@ export class XmlaStore extends BaseDatasource {
   }
 
   public async setRequestParams(requestParams: XMLARequestParams) {
-    this.requestParams = withAllAxes(requestParams);
+    this.requestParams = requestParamsFrom(requestParams);
     this.executeCleanup();
     this.mdx = await this.getMdxRequest();
   }

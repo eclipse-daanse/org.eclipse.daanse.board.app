@@ -172,7 +172,7 @@ export class XmlastorePackage extends BasicEPackage {
     const iXmlaStoreConfiguration_requestParams = new BasicEReference();
     iXmlaStoreConfiguration_requestParams.setContainment(true);
     iXmlaStoreConfiguration_requestParams.setName('requestParams');
-    iXmlaStoreConfiguration_requestParams.setLowerBound(1);
+    iXmlaStoreConfiguration_requestParams.setLowerBound(0);
     iXmlaStoreConfiguration_requestParams.setUpperBound(1);
     iXmlaStoreConfigurationClass.getEStructuralFeatures().push(iXmlaStoreConfiguration_requestParams);
     XmlastorePackage.Literals.I_XMLA_STORE_CONFIGURATION__REQUEST_PARAMS = iXmlaStoreConfiguration_requestParams;

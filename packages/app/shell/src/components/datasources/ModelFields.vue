@@ -44,9 +44,12 @@ const { t } = useTranslation('shell')
 /** Held by the dialog around this, never by the model's own fields. */
 const IDENTITY = new Set(['name', 'type', 'uid'])
 
+/* Lists and nested objects are left to the type's own editor: a single text
+  field can hold neither, and asking for one only made people guess a
+  format - xmla's request parameters were typed as "{}". */
 const fields = computed<FeatureDoc[]>(() =>
   (props.doc?.features ?? []).filter(
-    (f) => !IDENTITY.has(f.name) && !props.omit.includes(f.name) && !f.many,
+    (f) => !IDENTITY.has(f.name) && !props.omit.includes(f.name) && !f.many && !f.reference,
   ),
 )
 
