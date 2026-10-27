@@ -27,7 +27,13 @@ import {
   identifier as WORKSPACE,
   type Workspace,
 } from 'org.eclipse.daanse.board.app.lib.model.workspace'
-import { describeModel, useEList, useRegistrations, useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+import {
+  describeModel,
+  missingFields,
+  useEList,
+  useRegistrations,
+  useTranslation,
+} from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import { DIconPicker, DInput } from 'org.eclipse.daanse.board.app.ui.vue.controls'
 import CreateWizard from '../datasources/CreateWizard.vue'
 import ModelFields from '../datasources/ModelFields.vue'
@@ -104,14 +110,9 @@ watch(open, (isOpen) => {
 })
 
 /** Every field the model marks as required has to hold something. */
-const missing = computed(() =>
-  (doc.value?.features ?? [])
-    .filter((f) => !f.optional && !['name', 'type', 'uid'].includes(f.name))
-    .filter((f) => {
-      const value = config.value[f.name]
-      return value === undefined || value === null || value === ''
-    }),
-)
+const missing = computed(() => missingFields(doc.value, config.value))
+
+const namespace = computed(() => connections.getConnectionIdentifiers(type.value)?.namespace)
 
 const ready = computed(() => !!type.value && !!name.value.trim() && !missing.value.length)
 
@@ -172,7 +173,7 @@ function create() {
       />
 
       <component :is="createForm" v-if="createForm" :config="config" />
-      <ModelFields v-else :doc="doc" :config="config" />
+      <ModelFields v-else :doc="doc" :config="config" :namespace="namespace" />
     </template>
   </CreateWizard>
 </template>

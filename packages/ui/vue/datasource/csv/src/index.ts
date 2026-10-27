@@ -26,6 +26,10 @@ import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
 const CSVDatasourceIdentifier = Symbol.for('CsvStoreFactory')
 import Preview from './Preview.vue'
 import Settings from './Settings.vue'
+import { NAMESPACE } from './i18n'
+
+/* Looked up by the create form by field name.
+   i18n-keys: datasourceCsv:Fields.*, i18n-keys: datasourceCsv:Hints.* */
 
 const previewSymbol = Symbol.for('CsvPreview')
 const settingsSymbol = Symbol.for('CsvSettings')
@@ -38,6 +42,7 @@ export function activate({ services }: ActivationContext) {
     .getRequired<DatasourceRepository>(DATASOURCE_REPOSITORY)
     .registerDatasourceType('csv', {
       icon: 'grid_on',
+      namespace: NAMESPACE,
       connections: ['rest'],
       Model: MODEL_ECORE,
       Store: CSVDatasourceIdentifier,

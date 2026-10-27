@@ -71,7 +71,7 @@ const availableDatasources = useRegistrations(
  * Edited on a copy and committed on Save, the way it always was - what
  * changed is only where the copy comes from and where it goes back to.
  */
-onMounted(() => {
+const load = () => {
   const dataSource = datasourceRepository.getDatasourceModel(props.itemId)
   datasourceProxy.value = dataSource
     ? {
@@ -83,7 +83,8 @@ onMounted(() => {
         config: cloneDeep(dataSource.config ?? {}),
       }
     : { tags: [] }
-})
+  saved.value = JSON.stringify(datasourceProxy.value.config ?? {})
+}
 
 /*
  * Set when the settings were stored but the live source could not be built
@@ -93,7 +94,34 @@ onMounted(() => {
  */
 const notLive = ref(false)
 
-const saveDataSource = () => {
+/*
+ * What the configuration was when it was last loaded or saved, as text.
+ *
+ * A preview edits the copy - the query a person builds there is a change
+ * to the source - and it used to vanish with the tab: nothing said it had
+ * not been kept, and the only way to keep it was the Save of another tab.
+ * Comparing against this is what lets the preview say so and offer Save.
+ * Saving there is deliberate, not automatic: every step of building a
+ * query would otherwise rebuild the live store and every widget on it.
+ */
+const saved = ref('{}')
+const unsaved = computed(() => JSON.stringify(datasourceProxy.value.config ?? {}) !== saved.value)
+
+onMounted(load)
+
+/* The preview holds the query it shows in state of its own, so going back
+  to the saved version builds it afresh. */
+const discarded = ref(0)
+const discard = () => {
+  load()
+  discarded.value += 1
+}
+
+/**
+ * Applies the copy to the source and keeps editing. Answers whether the live
+ * source could be built from it, which is what decides the editor closes.
+ */
+const commit = () => {
   notLive.value = false
   const dataSource = datasourceRepository.getDatasourceModel(props.itemId)
   if (dataSource) {
@@ -113,10 +141,17 @@ const saveDataSource = () => {
     } catch (error) {
       console.warn(`${dataSource.uid} is not live yet:`, error)
       notLive.value = true
-      return
     }
+    /* saveDatasource writes the configuration to the model before it builds
+      the store from it, so what the editor holds is what is stored - also
+      when the store could not be built, which is what notLive says. */
+    saved.value = JSON.stringify(datasourceProxy.value.config ?? {})
   }
-  emit('close')
+  return !notLive.value
+}
+
+const saveDataSource = () => {
+  if (commit()) emit('close')
 }
 
 const previewComponent = computed(() => {
@@ -179,14 +214,21 @@ const { t } = useTranslation('shell')
       </div>
     </template>
 
-    <div v-else class="editor__preview">
-      <component
-        :is="previewComponent"
-        :data-source="datasourceProxy"
-        :key="datasourceProxy.uid"
-        @updateConfig="updateConfig"
-      />
-    </div>
+    <template v-else>
+      <div v-if="unsaved" class="editor__unsaved" role="status">
+        <span class="editor__unsaved-text">{{ t('Editor.unsaved') }}</span>
+        <DButton intent="quiet" size="sm" @click="discard">{{ t('Editor.discard') }}</DButton>
+        <DButton intent="primary" size="sm" @click="commit">{{ t('common:Action.save') }}</DButton>
+      </div>
+      <div class="editor__preview">
+        <component
+          :is="previewComponent"
+          :data-source="datasourceProxy"
+          :key="`${datasourceProxy.uid}-${discarded}`"
+          @updateConfig="updateConfig"
+        />
+      </div>
+    </template>
   </div>
 </template>
 
@@ -223,6 +265,23 @@ const { t } = useTranslation('shell')
   display: flex;
   justify-content: flex-end;
   gap: 7px;
+}
+
+.editor__unsaved {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  flex: none;
+  padding: 8px 12px;
+  font-size: var(--text-sm);
+  color: var(--color-fg);
+  background-color: var(--color-sunken);
+  border-left: 2px solid var(--color-warn, var(--color-accent));
+  border-radius: var(--radius-sm);
+}
+
+.editor__unsaved-text {
+  flex: 1;
 }
 
 .editor__preview {

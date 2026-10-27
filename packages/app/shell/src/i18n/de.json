@@ -157,7 +157,9 @@
     "icon": "Symbol",
     "iconHint": "Ohne eigenes Symbol steht hier das des Typs.",
     "tags": "Schlagworte",
-    "notLive": "Gespeichert, aber diese Quelle kann noch nicht laufen: ihre Einstellungen sind unvollständig. Die markierten Felder oben zeigen, was fehlt."
+    "notLive": "Gespeichert, aber diese Quelle kann noch nicht laufen: ihre Einstellungen sind unvollständig. Die markierten Felder oben zeigen, was fehlt.",
+    "unsaved": "Hier geändert und noch nicht gespeichert — die Widgets lesen noch die gespeicherte Fassung.",
+    "discard": "Verwerfen"
   },
   "Connection": {
     "tagsHint": "Wofür diese Verbindung da ist — danach lässt sich suchen.",
@@ -226,7 +228,8 @@
   },
   "ModelFields": {
     "noModel": "Dieser Typ bringt kein Modell mit — die Felder füllst du nach dem Anlegen im Editor aus.",
-    "nothing": "Dieser Typ braucht außer dem Namen nichts weiter."
+    "nothing": "Dieser Typ braucht außer dem Namen nichts weiter.",
+    "pick": "Auswählen…"
   },
   "Tags": {
     "placeholder": "Wort eingeben, Enter"

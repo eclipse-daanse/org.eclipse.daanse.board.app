@@ -67,7 +67,7 @@ onMounted(async () => {
     <!-- eslint-disable-next-line vue/no-mutating-props -->
     <DSelect v-model="config.connection" :label="t('Settings.connection')" :options="connectionsFiltered" label-key="name"
         value-key="uid" />
-    <DSelect v-model="config.cube" :label="t('Settings.cube')" :options="cubes" label-key="CUBE_NAME" value-key="CUBE_NAME" />
+    <DSelect v-model="config.cube" :label="t('Settings.cube')" :options="cubes" label-key="CUBE_NAME" value-key="CUBE_NAME" required />
     <DSwitch v-model="config.pollingEnabled" :label="t('Settings.polling')" />
     <DInput v-if="config.pollingEnabled" v-model="innerInterval" :label="t('Settings.intervalMs')" />
     <!-- eslint-disable-next-line vue/no-mutating-props -->

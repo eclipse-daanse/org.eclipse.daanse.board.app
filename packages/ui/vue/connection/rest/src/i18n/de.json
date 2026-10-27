@@ -1,6 +1,6 @@
 {
   "Rest": {
-    "invalidUrl": "Keine gültige http- oder https-Adresse",
+    "invalidUrl": "Keine gültige http-, https- oder data-Adresse",
     "minTtl": "Mindestens {{ms}} ms",
     "unchecked": "Noch nicht geprüft",
     "reachable": "Erreichbar ({{status}})",
@@ -9,5 +9,11 @@
     "cache": "Antworten zwischenspeichern",
     "ttl": "Haltbarkeit",
     "ttlHint": "Wie lange eine Antwort wiederverwendet wird, bevor neu gefragt wird."
+  },
+  "Fields": {
+    "url": "Adresse"
+  },
+  "Hints": {
+    "url": "Die Basisadresse der API; eine Datenquelle fragt einen Pfad darunter ab."
   }
 }

@@ -25,6 +25,10 @@ import { factorySymbol as XmlaConnectionIdentifier } from 'org.eclipse.daanse.bo
 import MODEL_ECORE from 'org.eclipse.daanse.board.app.lib.connection.xmla/model/xmlaConnectionModel.ecore?raw'
 
 import Settings from './Settings.vue'
+import { NAMESPACE } from './i18n'
+
+/* Looked up by the create form by field name.
+   i18n-keys: connectionXmla:Fields.*, i18n-keys: connectionXmla:Hints.* */
 
 const settingsSymbol = Symbol.for('XmlaConnectionSettings')
 
@@ -35,6 +39,7 @@ export function activate({ services }: ActivationContext) {
     .getRequired<ConnectionRepository>(CONNECTION_REPOSITORY)
     .registerConnectionType('xmla', {
       icon: 'dataset',
+      namespace: NAMESPACE,
       Model: MODEL_ECORE,
       Connection: XmlaConnectionIdentifier,
       Settings: settingsSymbol,

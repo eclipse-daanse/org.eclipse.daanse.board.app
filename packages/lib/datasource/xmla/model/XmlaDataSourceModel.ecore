@@ -87,7 +87,7 @@
                 <details key="documentation" value="The optional interval in milliseconds to poll the XMLA source for updates."/>
             </eAnnotations>
         </eStructuralFeatures>
-            <eStructuralFeatures xsi:type="ecore:EAttribute" name="cube" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="cube" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" lowerBound="1">
             <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
                 <details key="documentation" value="The cube the query reads from, inside the catalog the connection names."/>
             </eAnnotations>

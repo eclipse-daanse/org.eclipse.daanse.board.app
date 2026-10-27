@@ -77,6 +77,31 @@ export interface StoreIdentifiers {
      * still registers, it just has nothing to say about its fields.
      */
     Model?: string;
+    /**
+     * The language-pack namespace that names this type's fields.
+     *
+     * A form looks up `<namespace>:Fields.<feature>` for a field's label and
+     * `<namespace>:Hints.<feature>` for the sentence under it, and falls back
+     * to the model's own name and documentation - which are English, and
+     * stay English in a German UI unless a pack says otherwise.
+     */
+    namespace?: string;
+    /**
+     * Where the answers to a field come from, when the endpoint knows them.
+     *
+     * Keyed by feature name. Given the settings filled in so far - the
+     * connection's uid among them - it answers the values to pick from, so
+     * a form can offer the cubes a connection has instead of a text box
+     * that has to be typed exactly right. A form that gets nothing back
+     * still asks for the field as text.
+     */
+    choices?: Record<string, (settings: Record<string, unknown>) => Promise<FieldChoice[]>>;
+}
+
+/** One answer a field can take, as a form offers it. */
+export interface FieldChoice {
+    label: string;
+    value: string;
 }
 
 export interface StoreConstructor<T> {
