@@ -11,6 +11,7 @@
  *   Smart City Jena
  **********************************************************************/
 
+import { randomUUID } from 'org.eclipse.daanse.board.app.lib.core'
 import { getMdxRequest } from '../utils/MdxRequestConstructor'
 import { parseMdxRequest, parseRequestToTable } from '../utils/MdxRequestHelper'
 import { DrilldownHandler, DrilldownPayload } from './DrilldownHandler'
@@ -318,7 +319,7 @@ export class XmlaStore extends BaseDatasource {
   private generateUUID(): string {
     // Upper case: the Analysis Services properties this feeds are written
     // that way everywhere else, and the server echoes them back verbatim.
-    return crypto.randomUUID().toUpperCase();
+    return randomUUID().toUpperCase();
   }
 
   async cellUpdate(params: { query: string }) {

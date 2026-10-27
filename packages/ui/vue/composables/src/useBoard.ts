@@ -26,6 +26,7 @@
  * its placement have to arrive and leave together.
  */
 
+import { randomUUID } from 'org.eclipse.daanse.board.app.lib.core'
 import { computed, inject, toValue, type ComputedRef, type MaybeRefOrGetter } from 'vue'
 import {
   identifier as PAGE_REPOSITORY,
@@ -73,7 +74,7 @@ export function useBoard(pageId: MaybeRefOrGetter<string>): Board {
     layout,
 
     addWidget(widget, placement) {
-      const uid = widget.uid || 'li_' + crypto.randomUUID()
+      const uid = widget.uid || 'li_' + randomUUID()
       pages.addWidget(id(), { ...widget, uid }, placement)
       return uid
     },

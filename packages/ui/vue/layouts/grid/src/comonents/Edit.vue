@@ -87,6 +87,7 @@ Contributors:
 </template>
 
 <script setup lang="ts">
+import { randomUUID } from 'org.eclipse.daanse.board.app.lib.core'
 import { inject, ref, computed, watch, nextTick, onMounted, onBeforeUnmount } from 'vue'
 import { GridLayout, type LayoutItem } from 'grid-layout-plus'
 import { useBoard, useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
@@ -221,7 +222,7 @@ const pasteWidget = () => {
   const clipboard = clipboardStore.paste()
   if (!clipboard) return
 
-  const newUid = 'li_' + crypto.randomUUID()
+  const newUid = 'li_' + randomUUID()
 
   // Clone widget with new UID
   const newWidget = cloneDeep(clipboard.widget) as any
@@ -489,7 +490,7 @@ function onExternalDragAdd(e: any) {
   drag.value = false
 
   // finales Item an zuletzt berechneter Grid-Position
-  const finalId = `widget_${crypto.randomUUID()}`
+  const finalId = `widget_${randomUUID()}`
   const { x, y } = lastPos.value
   layoutModel.value = [...layoutModel.value, { i: finalId, x, y, w: 2, h: 2, static: false }]
 

@@ -11,6 +11,7 @@
  *   Smart City Jena
  **********************************************************************/
 
+import { randomUUID } from 'org.eclipse.daanse.board.app.lib.core'
 import { BaseDatasource, IBaseConnectionConfiguration, type ConfigurationOf } from 'org.eclipse.daanse.board.app.lib.datasource.base'
 import { CONNECTION_REPOSITORY,
   identifier,
@@ -74,7 +75,7 @@ export class KpiStore extends BaseDatasource {
   }
 
   private generateGuid() {
-    return crypto.randomUUID()
+    return randomUUID()
   }
 
   public async getKpis(): Promise<any[]> {

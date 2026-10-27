@@ -11,6 +11,7 @@ Contributors:
     Smart City Jena
 -->
 <script setup lang="ts">
+import { randomUUID } from 'org.eclipse.daanse.board.app.lib.core'
 import { ref, computed, inject, onMounted, onUnmounted, nextTick, watch } from 'vue'
 import Moveable from 'vue3-moveable'
 import Draggable from 'vuedraggable'
@@ -469,7 +470,7 @@ const selectionIsGroup = computed(() => {
 function groupSelection() {
   const items = pickedItems()
   if (items.length < 2) return
-  const id = `g_${crypto.randomUUID()}`
+  const id = `g_${randomUUID()}`
   for (const item of items) item.group = id
 }
 

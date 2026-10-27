@@ -10,6 +10,7 @@
  * Contributors:
  *   Smart City Jena
  **********************************************************************/
+import { randomUUID } from 'org.eclipse.daanse.board.app.lib.core'
 import {
   type IRequestParams,
   type BaseConnectionConfig,
@@ -94,7 +95,7 @@ export class ConnectionRepository {
 
   createConnection(type: string, config: Record<string, unknown> = {}): Connection {
     const connection = new ConnectionImpl()
-    connection.uid = crypto.randomUUID()
+    connection.uid = randomUUID()
     connection.name = 'Connection ' + connection.uid
     connection.type = type
     connection.config = config

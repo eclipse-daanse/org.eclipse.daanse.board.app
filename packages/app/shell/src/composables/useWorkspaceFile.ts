@@ -29,6 +29,7 @@
  * that own them. That is the second half of loading.
  */
 
+import { randomUUID } from 'org.eclipse.daanse.board.app.lib.core'
 import { inject, ref } from 'vue'
 import { JSONResource, OPTION_INDENT, URI } from '@emfts/core'
 import {
@@ -99,7 +100,7 @@ export function liftPagesIntoBoard(data: unknown): unknown {
 
   const board: Record<string, unknown> = {
     eClass: BOARD_ECLASS,
-    id: crypto.randomUUID(),
+    id: randomUUID(),
     /* Nothing in the old shape named the board; the pages were the boards. */
     name: 'Board',
     pages: moved.pages,

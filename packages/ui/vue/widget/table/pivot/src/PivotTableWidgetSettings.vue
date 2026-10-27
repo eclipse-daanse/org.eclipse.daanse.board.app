@@ -11,6 +11,7 @@ Contributors:
     Smart City Jena
 -->
 <script setup lang="ts">
+import { randomUUID } from 'org.eclipse.daanse.board.app.lib.core'
 import { computed, ref, onMounted, watch, markRaw } from 'vue'
 import { VariableInput } from 'org.eclipse.daanse.board.app.ui.vue.variable.components'
 import { VariableWrapper, useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
@@ -101,7 +102,7 @@ const conditionTypeOptions = computed(() => [
   { value: 'bottomN', text: 'Bottom N Werte' },
 ].map((option) => ({ ...option, text: t(`Settings.condition.${option.value}`) })))
 
-const generateId = () => crypto.randomUUID()
+const generateId = () => randomUUID()
 
 const addConditionalFormat = () => {
   if (!widgetSettings.value.conditionalFormats) {

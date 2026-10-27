@@ -11,6 +11,7 @@
  *   Smart City Jena
  **********************************************************************/
 
+import { randomUUID } from 'org.eclipse.daanse.board.app.lib.core'
 import type {
   PageRegistryI,
   StoredPage,
@@ -77,7 +78,7 @@ export class PageRegistryImpl implements PageRegistryI {
     let held = this.workspace.board
     if (!held) {
       held = new BoardImpl()
-      held.id = crypto.randomUUID()
+      held.id = randomUUID()
       held.name = 'Board'
       this.workspace.board = held
     }

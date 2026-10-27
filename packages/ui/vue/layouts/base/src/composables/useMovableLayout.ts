@@ -19,6 +19,7 @@
  */
 export type ILayoutItem = LayoutItem
 
+import { randomUUID } from 'org.eclipse.daanse.board.app.lib.core'
 import { ref } from 'vue'
 import type { OnDrag, OnResize } from 'vue3-moveable'
 import { useBoard, useHistory } from 'org.eclipse.daanse.board.app.ui.vue.composables'
@@ -222,7 +223,7 @@ export function useMoveableLayout(pageId: string = '', gridSize: () => number = 
     const clipboard = clipboardStore.paste()
     if (!clipboard) return null
 
-    const newUid = 'li_' + crypto.randomUUID()
+    const newUid = 'li_' + randomUUID()
     const maxZ = Math.max(...board.layout.value.map((item: ILayoutItem) => item.z), 0)
 
     const copied = cloneDeep(clipboard.widget)
