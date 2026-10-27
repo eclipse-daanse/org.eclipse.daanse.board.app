@@ -14,15 +14,13 @@ Contributors:
 <script setup lang="ts">
 import { DCheckbox, DTabs } from 'org.eclipse.daanse.board.app.ui.vue.controls'
 import { useTemporaryStore, useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables';
-import { identifier, ConnectionRepository } from 'org.eclipse.daanse.board.app.lib.api.connection'
-import { computed, inject, provide, ref, watch, toRef, shallowRef, nextTick, onMounted } from 'vue';
+import { computed, provide, ref, watch, toRef, shallowRef, nextTick, onMounted, onBeforeUnmount } from 'vue';
 import { debounce } from 'lodash';
 import { MetadataTree, QueryDesigner, PivotTable, SlicePicker } from 'org.eclipse.daanse.board.app.ui.vue.common.xmla';
 import { axisOptions, pivotSlice, positionsOf, sliceByKeys, sliceKeys, type SliceRef } from 'org.eclipse.daanse.board.app.lib.datasource.xmla';
 import { MonacoEditor } from 'org.eclipse.daanse.board.app.ui.vue.common.monaco';
 
 const props = defineProps<{ dataSource: any }>();
-console.log(MetadataTree)
 
 const data = ref(null as any);
 const connection = ref(null as any);
@@ -36,8 +34,6 @@ const metadata = ref(null as any);
 const { update } = useTemporaryStore(props.dataSource.type, settingsRef, tempStore);
 // The table's drillthrough asks the datasource itself.
 provide('datasource', computed(() => tempStore.value));
-
-console.log(props.dataSource)
 
 const tabs = computed(() => [
   { id: 'visual', label: t('Xmla.build') },
@@ -58,57 +54,55 @@ const queryConfig = ref({
 
 const drilldownState = ref(props.dataSource.config.drilldownState || {});
 
-
-console.log(props.dataSource);
-
 watch(() => props.dataSource.config.connection, async () => {
-  console.log('connection updated', props.dataSource)
-
   const newStore = await update();
   if (!newStore) return;
   metadata.value = await newStore.getMetadata();
-
-  console.log(newStore);
 });
 
 watch(() => props.dataSource.config.cube, async () => {
-  console.log('connection updated', props.dataSource)
-
   const newStore = await update();
   if (!newStore) return;
   metadata.value = await newStore.getMetadata();
-
-  console.log(newStore);
 });
 
 let latestUpdate = 0;
 
 const updateData = async () => {
+  const store = tempStore.value;
+  // The store is replaced while the connection or cube changes; there is
+  // nothing to ask until the new one has arrived.
+  if (!store) return;
   // Answers can arrive out of order; only the latest request's counts.
   const update = ++latestUpdate;
-  const req = await tempStore.value.getData('PivotTable');
+  const req = await store.getData('PivotTable');
   if (update !== latestUpdate) return;
   data.value = req;
   if (props.dataSource.config.useVisualEditor) {
-    query.value = await tempStore.value.getMdxRequest();
+    query.value = await store.getMdxRequest();
   }
 }
+
+// Edits, expands and collapses come in bursts; the preview asks once.
+const debouncedUpdateData = debounce(updateData, 100);
+
+onBeforeUnmount(() => debouncedUpdateData.cancel());
 
 onMounted(async () => {
   // if (!tempStore.value) return;
   // metadata.value = await tempStore.value.getMetadata();
 });
 
-// inject() answers only during setup, not later in a watcher.
-const connectionRepo = inject<ConnectionRepository>(identifier)!;
-
-// This works only once when component is mounted
+// Runs each time the temporary store is created or replaced.
 watch(tempStore, async () => {
   if (!tempStore.value) return;
-  const connectionId = tempStore.value.connection;
-  connection.value = await connectionRepo.getConnection(connectionId);
+  /*
+   * Asked of the store, which resolves it through the repository it was
+   * built with. inject() would answer only during setup, not here.
+   */
+  connection.value = tempStore.value.getConnection();
   api.value = await connection.value.getApi();
-  catalog.value = await connection.value.catalogName;
+  catalog.value = connection.value.catalogName;
 
   // The table asks only for its own hierarchies; it does not wait for the cube explorer.
   const store = tempStore.value;
@@ -133,7 +127,6 @@ watch(() => query, async () => {
     mdx: query.value,
   });
 
-  console.log('query changed', query.value);
   debouncedUpdateData();
 }, { deep: true });
 
