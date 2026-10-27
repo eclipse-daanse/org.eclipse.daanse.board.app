@@ -27,7 +27,7 @@ import {
   identifier as WORKSPACE,
   type Workspace,
 } from 'org.eclipse.daanse.board.app.lib.model.workspace'
-import { describeModel, useEList, useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+import { describeModel, useEList, useRegistrations, useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import { DIconPicker, DInput } from 'org.eclipse.daanse.board.app.ui.vue.controls'
 import CreateWizard from '../datasources/CreateWizard.vue'
 import ModelFields from '../datasources/ModelFields.vue'
@@ -47,9 +47,10 @@ const icon = ref('')
 const tags = ref<string[]>([])
 const config = ref<Record<string, unknown>>({})
 
-const groups = computed(() => [
-  { label: t('Connection.types'), types: connections.registeredConnections },
-])
+/* A type whose bundle activates after the dialog mounted is offered too. */
+const types = useRegistrations(connections, () => connections.registeredConnections)
+
+const groups = computed(() => [{ label: t('Connection.types'), types: types.value }])
 
 const summaryOf = (each: string) =>
   describeModel(connections.getConnectionIdentifiers(each)?.Model)?.documentation

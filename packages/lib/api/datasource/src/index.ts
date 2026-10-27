@@ -102,6 +102,12 @@ export interface DatasourceRepository {
   unregisterDatasourceType(name: string): boolean;
   getDataSourceTypes(): string[];
   get registeredDatasources(): string[];
+  /**
+   * Subscribes to type registrations and their withdrawal; returns the
+   * unsubscribe function. A type's bundle may activate after whoever lists
+   * the types has already looked.
+   */
+  onChange(listener: () => void): () => void;
   getDatasourceIdentifiers(type: string): StoreIdentifiers;
   registerDatasource(datasourceId: string, type: string, config: any): void;
   getDatasourceType(datasourceId: string): string;
