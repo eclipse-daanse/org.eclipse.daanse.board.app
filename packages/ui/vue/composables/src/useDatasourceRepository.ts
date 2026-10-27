@@ -222,6 +222,8 @@ export function useDatasourceRepository(
   }
 
   const getDatasourceInstance = () => {
+    // A widget without a datasource yet has nothing to ask for.
+    if (!dataSourceId.value) return null
     try {
       const dataSource = datasourceRepository.getDatasource(dataSourceId.value)
       return dataSource
