@@ -29,9 +29,11 @@ const factorySymbol = Symbol.for(XMLA_CONNECTION_FACTORY)
  * jetzt schlicht ueber `new`.
  */
 function createXmlaConnection(config: IXmlaConnectionConfiguration) {
-  if (!XmlaConnection.validateConfiguration(config)) {
+  const problems = XmlaConnection.configurationProblems(config)
+  if (problems.length) {
+    const which = config?.name || config?.uid
     throw new Error(
-      'Invalid XmlaConnection configuration. Please provide a valid configuration.',
+      `XMLA connection${which ? ` "${which}"` : ''} cannot open: ${problems.join(' and ')}.`,
     )
   }
 

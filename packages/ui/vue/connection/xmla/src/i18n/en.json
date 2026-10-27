@@ -1,6 +1,10 @@
 {
   "Xmla": {
     "catalog": "Catalogue",
+    "catalogHint": "Pick one of the server's catalogues or type a name.",
+    "catalogRequired": "Without a catalogue the connection cannot open.",
+    "cube": "Cube",
+    "unreachable": "Could not reach the server: {{reason}}",
     "security": {
       "label": "Authentication",
       "none": "None",

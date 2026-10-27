@@ -51,4 +51,17 @@ describe('XmlaConnection Tests', () => {
     expect(connB).toBeInstanceOf(XmlaConnection);
     expect(connA).not.toBe(connB);
   });
+
+  /*
+   * A catalogue the server could not be asked for is left empty. What the
+   * factory says then has to name that field, not "invalid configuration".
+   */
+  test('says which field keeps a configuration from opening', () => {
+    const factory = factoryOf();
+
+    expect(() => factory({ url: 'http://localhost:8080', catalogName: '', name: 'Sales' } as never))
+      .toThrow('XMLA connection "Sales" cannot open: it names no catalogue to query.');
+    expect(() => factory({ url: '', catalogName: '' } as never))
+      .toThrow('it has no URL of an XMLA server and it names no catalogue to query');
+  });
 });

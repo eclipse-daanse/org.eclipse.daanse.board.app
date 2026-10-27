@@ -43,6 +43,14 @@ export interface ConnectionIdentifiers {
     Connection: symbol;
     Settings: symbol;
     /**
+     * The component a new connection of this type is filled in with, when
+     * the type knows more than its model can say - XMLA asks the server for
+     * its catalogues. It takes `config` like Settings, and is often the
+     * same component. Optional: without it the create dialog builds its
+     * form from the model.
+     */
+    Create?: symbol;
+    /**
      * The symbol this type wears in lists - a Material Symbols name.
      *
      * What a connection or source carries itself wins; this is what stands

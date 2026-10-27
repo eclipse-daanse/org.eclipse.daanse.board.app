@@ -102,34 +102,58 @@ export class XmlaConnection extends BaseConnection {
   }
 
   static validateConfiguration(configuration: IXmlaConnectionConfiguration) {
-    if (!configuration.url) {
-      return false
-    }
-
-    if (!configuration.catalogName) {
-      return false
-    }
-
-    return true
+    return XmlaConnection.configurationProblems(configuration).length === 0
   }
 
+  /**
+   * What keeps this configuration from opening a connection, one phrase
+   * each - empty when nothing does.
+   *
+   * Said rather than answered with false: a catalogue left empty because
+   * the server could not be asked for its list otherwise surfaced as
+   * "Invalid XmlaConnection configuration", which names neither the field
+   * nor the cause.
+   */
+  static configurationProblems(configuration: Partial<IXmlaConnectionConfiguration>): string[] {
+    const problems: string[] = []
+    if (!configuration?.url) {
+      problems.push('it has no URL of an XMLA server')
+    }
+    if (!configuration?.catalogName) {
+      problems.push('it names no catalogue to query')
+    }
+    return problems
+  }
+
+  /** The catalogues the server at this URL offers. */
   static async getCatalogs(url: string, security: SecurityOptions): Promise<DBSchemaCatalog[]> {
+    const api = await XmlaConnection.openApi(url, security)
+    const { catalogs } = await api.getCatalogs()
+    return catalogs ?? []
+  }
+
+  /** The cubes one of the server's catalogues holds. */
+  static async getCubes(
+    url: string,
+    security: SecurityOptions,
+    catalogName: string,
+  ): Promise<MDSchemaCube[]> {
+    const api = await XmlaConnection.openApi(url, security)
+    const { cubes } = await api.getCubes(catalogName)
+    return cubes ?? []
+  }
+
+  private static async openApi(url: string, security: SecurityOptions): Promise<XMLAApi> {
     const client = await createClientAsync('xmla.wsdl')
 
     if (security.type === 'Basic' && security.user) {
-      const securityClass = new BasicAuthSecurity(security.user, security.password)
-      console.log('Security class:', securityClass)
-
-      client.setSecurity(securityClass)
+      client.setSecurity(new BasicAuthSecurity(security.user, security.password))
     }
 
     client.setEndpoint(url)
-    console.log("Client", client)
     const api = new XMLAApi(client, url)
     await api.startSession()
-
-    const { catalogs } = await api.getCatalogs()
-    return catalogs
+    return api
   }
 
   async getApi(): Promise<XMLAApi> {
