@@ -18,6 +18,9 @@ import { CONNECTION_REPOSITORY, identifier } from 'org.eclipse.daanse.board.app.
 import { useSparQLEndPointManager } from './sparql/SparqlEndpointRegistry'
 import type { RestConnection } from 'org.eclipse.daanse.board.app.lib.connection.rest'
 
+/** The id the finder's own SPARQL endpoint is registered under. */
+export const SPARQL_CONNECTION_ID = 'ui.vue.plugins.endpointfinder.sparql'
+
 /**
  * Haengt den Endpointfinder in die Anwendung und legt die Standardverbindung
  * zur SPARQL-Quelle an.
@@ -39,11 +42,21 @@ export function activate({ services, log }: ActivationContext) {
 
   services.getRequired<App<any>>('App').use(endpointFinderPlugin)
 
+  /*
+   * Live only, not a connection in the workspace. The finder's own endpoint
+   * is not part of anybody's board: put into the workspace it showed up as
+   * a second "Connection <uuid>" beside the seeded one, was stored with
+   * every board, and - created after the shell had started tracking -
+   * marked a workspace nobody had touched as unsaved.
+   */
   const connectionRepository = services.getRequired(CONNECTION_REPOSITORY)
-  const created = connectionRepository.createConnection('rest', {
+  connectionRepository.registerConnection(SPARQL_CONNECTION_ID, 'rest', {
+    uid: SPARQL_CONNECTION_ID,
+    name: 'SparqlDataEurope',
+    type: 'rest',
     url: 'https://www.govdata.de/sparql',
   })
-  const verbindung = connectionRepository.getConnection(created.uid as string)
+  const verbindung = connectionRepository.getConnection(SPARQL_CONNECTION_ID)
 
   useSparQLEndPointManager().registerEndpoint(verbindung as RestConnection, 'SparqlDataEurope')
   useSparQLEndPointManager().setActive('SparqlDataEurope')

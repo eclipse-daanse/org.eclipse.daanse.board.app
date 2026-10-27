@@ -30,7 +30,6 @@ import {
   type LayoutRepositoryI,
   identifier as LayoutRepositoryIdentifier,
 } from 'org.eclipse.daanse.board.app.lib.api.layout.page'
-import { usePages } from '@/composables/usePages'
 import {
   DButton,
   DColorInput,
@@ -157,11 +156,17 @@ onMounted(load)
 watch(pageid, load)
 
 
+/*
+ * Written back on an edit, not on opening. Load replaces the copy, an edit
+ * changes it in place - and only the edit is something the person did.
+ * Writing the fresh copy back would fill in the defaults it reads with
+ * (layout, visibility) and mark a page nobody touched as changed.
+ */
 watch(
   pageSettings,
-  () => {
-    if (!pageSettings.value) return
-    pageRepo?.updatePage(pageSettings.value)
+  (now, before) => {
+    if (!now || now !== before) return
+    pageRepo?.updatePage(now)
   },
   { deep: true },
 )

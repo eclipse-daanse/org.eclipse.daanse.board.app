@@ -55,6 +55,7 @@ import {
 } from 'org.eclipse.daanse.board.app.lib.factory.variableWrapper'
 import { EVENT_MANAGER, type EventManager } from 'org.eclipse.daanse.board.app.lib.api.events'
 import { decodeStored, isResource, readLegacyWorkspace } from './legacyWorkspace'
+import { useUnsavedChanges } from './unsavedChanges'
 
 /** Where the workspace currently in the app came from, or nothing if it was never stored. */
 export interface WorkspaceOrigin {
@@ -169,8 +170,19 @@ export function useWorkspaceFile() {
     }
   }
 
-  /** The current workspace as a storable string. */
+  /**
+   * The current workspace as a storable string.
+   *
+   * Serializing moves the workspace into a resource and out again, which is
+   * not a change to it - so it is not counted as one. Whether the string
+   * actually got stored is the caller's to report, by markSaved.
+   */
   function save(): string {
+    const changes = useUnsavedChanges()
+    return changes ? changes.untracked(serialize) : serialize()
+  }
+
+  function serialize(): string {
     collect()
 
     const resource = new JSONResource(URI.createURI(WORKSPACE_URI))
@@ -196,6 +208,13 @@ export function useWorkspaceFile() {
     const loaded = parseWorkspace(content)
     if (!loaded) return []
 
+    const opened = apply(loaded)
+    /* What was just loaded is what is stored. */
+    useUnsavedChanges()?.markSaved()
+    return opened
+  }
+
+  function apply(loaded: Workspace): string[] {
     /*
      * Moved rather than copied. Adding an object to a containment list
      * takes it out of the one it was in, so the loaded tree is emptied into
