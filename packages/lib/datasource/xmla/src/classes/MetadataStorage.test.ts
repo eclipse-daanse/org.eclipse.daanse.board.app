@@ -11,7 +11,7 @@
  *   Smart City Jena
  **********************************************************************/
 
-import { beforeEach, describe, expect, it } from 'vitest'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { MetadataStore } from './MetadataStorage'
 import { clearMemoryCache } from './metadataCache'
 
@@ -24,6 +24,11 @@ const levels: Record<string, object[]> = {
     { HIERARCHY_UNIQUE_NAME: '[Airline]', DIMENSION_UNIQUE_NAME: '[Airline]', LEVEL_NUMBER: '1' },
   ],
   '[Time]': [{ HIERARCHY_UNIQUE_NAME: '[Time]', DIMENSION_UNIQUE_NAME: '[Time]', LEVEL_NUMBER: '0' }],
+  // Listed out of order, as a server may.
+  '[Time.Year]': [
+    { HIERARCHY_UNIQUE_NAME: '[Time.Year]', DIMENSION_UNIQUE_NAME: '[Time]', LEVEL_NUMBER: '1' },
+    { HIERARCHY_UNIQUE_NAME: '[Time.Year]', DIMENSION_UNIQUE_NAME: '[Time]', LEVEL_NUMBER: '0' },
+  ],
 }
 const dimensions = ['[Airline]', '[Time]']
 
@@ -194,5 +199,50 @@ describe('MetadataStore kept between page loads', () => {
     await storeOn(changed).loadQueryMetadata('OnTime', 'OnTime', ['[Airline]'])
 
     expect(types(changed)).toContain('MDSCHEMA_LEVELS')
+  })
+})
+
+describe('MetadataStore below a hierarchy', () => {
+  it('gives an opened hierarchy its levels in level order, asking for that hierarchy only', async () => {
+    const source = api()
+    const store = storeOn(source)
+    await store.loadMetadata('OnTime', 'OnTime')
+
+    const loaded = await store.loadHierarchyLevels('[Time.Year]')
+
+    expect(loaded.map(l => l.LEVEL_NUMBER)).toEqual(['0', '1'])
+    expect(source.asked.filter(a => a.type === 'MDSCHEMA_LEVELS').map(a => a.restrictions.HIERARCHY_UNIQUE_NAME))
+      .toEqual(['[Time.Year]'])
+  })
+
+  it('fetches a level\'s members one page at a time, in the cube\'s catalog', async () => {
+    const level = {
+      CATALOG_NAME: 'OnTime',
+      CUBE_NAME: 'OnTime',
+      DIMENSION_UNIQUE_NAME: '[Airline]',
+      HIERARCHY_UNIQUE_NAME: '[Airline]',
+      LEVEL_NAME: 'Carrier',
+      LEVEL_UNIQUE_NAME: '[Airline].[Carrier]',
+      LEVEL_CAPTION: 'Carrier',
+      LEVEL_NUMBER: '1',
+    } as unknown as MDSchemaLevel
+    const tuple = (code: string) => ({ Member: { UName: `[Airline].[${code}]`, Caption: code, LNum: '1' } })
+    const source = { ...api(), getLevelMembers: vi.fn(async () => [tuple('AA'), tuple('DL'), tuple('UA')]) }
+    const store = storeOn(source)
+    await store.loadMetadata('OnTime', 'OnTime')
+
+    const page = await store.loadLevelMembers(level, 4, 2)
+
+    expect(source.getLevelMembers).toHaveBeenCalledWith(level, 2, 4, 'OnTime')
+    expect(page.hasMore).toBe(true)
+    expect(page.members.map(m => m.MEMBER_CAPTION)).toEqual(['AA', 'DL'])
+    expect(page.members[0]).toMatchObject({
+      MEMBER_UNIQUE_NAME: '[Airline].[AA]',
+      LEVEL_UNIQUE_NAME: '[Airline].[Carrier]',
+      HIERARCHY_UNIQUE_NAME: '[Airline]',
+    })
+
+    source.getLevelMembers.mockResolvedValueOnce([tuple('AA')])
+    expect((await store.loadLevelMembers(level, 6, 2)).hasMore).toBe(false)
   })
 })

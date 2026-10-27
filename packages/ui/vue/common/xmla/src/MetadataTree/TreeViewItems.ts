@@ -137,6 +137,8 @@ export interface HierarchyTreeItem extends TreeItem {
   type: TreeItemTypesEnum.Hierarchy
   children: TreeItem[]
   originalItem: MDSchemaHierarchy
+  /** Its levels are loaded when it is opened. */
+  lazy?: boolean
   filters: {
     enabled: boolean
   }
@@ -152,6 +154,14 @@ export interface LevelTreeItem extends TreeItem {
   type: TreeItemTypesEnum.Level
   children: TreeItem[]
   originalItem: MDSchemaLevel
+  /** Its first page of members is loaded when it is opened. */
+  lazy?: boolean
+  /** How many of the level's members are in the tree so far. */
+  loadedMembers?: number
+  /** Whether the server has more of them than are in the tree. */
+  hasMore?: boolean
+  /** A page of members is on its way. */
+  fetching?: boolean
 }
 
 export interface SetsFolderTreeItem extends TreeItem {
@@ -266,6 +276,8 @@ export interface HierarchyTreeItem extends TreeItem {
   type: TreeItemTypesEnum.Hierarchy
   children: TreeItem[]
   originalItem: MDSchemaHierarchy
+  /** Its levels are loaded when it is opened. */
+  lazy?: boolean
   filters: {
     enabled: boolean
   }
@@ -281,6 +293,14 @@ export interface LevelTreeItem extends TreeItem {
   type: TreeItemTypesEnum.Level
   children: TreeItem[]
   originalItem: MDSchemaLevel
+  /** Its first page of members is loaded when it is opened. */
+  lazy?: boolean
+  /** How many of the level's members are in the tree so far. */
+  loadedMembers?: number
+  /** Whether the server has more of them than are in the tree. */
+  hasMore?: boolean
+  /** A page of members is on its way. */
+  fetching?: boolean
 }
 
 export interface SetsFolderTreeItem extends TreeItem {

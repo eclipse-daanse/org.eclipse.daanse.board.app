@@ -8,7 +8,8 @@
   },
   "Metadata": {
     "title": "Cube explorer",
-    "filter": "Filter…"
+    "filter": "Filter…",
+    "loadMore": "Load more…"
   },
   "FilterModal": {
     "title": "Set filter",

@@ -52,7 +52,10 @@ type Restrictions = Record<string, string>
  *   (loadMetadata), which cost nothing; the dimensions' captions follow
  *   (dimensionsReady), and a dimension's hierarchies are asked for when it
  *   is opened (loadHierarchies) - the airports of OnTime, three seconds
- *   each, only for whoever opens them. Levels it does not show.
+ *   each, only for whoever opens them. A hierarchy's levels come the same
+ *   way when it is opened (loadHierarchyLevels), and a level's members a
+ *   page at a time when that is opened (loadLevelMembers), never kept: a
+ *   level can hold millions of them.
  *
  * Whatever came is kept between page loads (metadataCache), under the
  * cube's LAST_SCHEMA_UPDATE.
@@ -145,6 +148,44 @@ export class MetadataStore {
       ]
       return rows
     })
+  }
+
+  /** A hierarchy's levels, in level order, for the explorer opening it. */
+  public async loadHierarchyLevels(hierarchy: string): Promise<MDSchemaLevel[]> {
+    const levels = await this.loadLevels(hierarchy)
+    return [...levels].sort((a, b) => Number(a.LEVEL_NUMBER) - Number(b.LEVEL_NUMBER))
+  }
+
+  /**
+   * One page of a level's members: amount of them from start, and whether
+   * more remain - the client answers one tuple beyond the page to tell.
+   */
+  public async loadLevelMembers(
+    level: MDSchemaLevel,
+    start: number,
+    amount: number,
+  ): Promise<{ members: MDSchemaMember[]; hasMore: boolean }> {
+    if (!this.api) throw new Error('API is not initialized')
+    const tuples = await this.api.getLevelMembers(level, amount, start, this.catalog || level.CATALOG_NAME)
+    const members = tuples
+      .map((tuple: any) => (Array.isArray(tuple?.Member) ? tuple.Member[0] : tuple?.Member))
+      .filter(Boolean)
+      .map((member: any) => ({
+        CATALOG_NAME: level.CATALOG_NAME,
+        CUBE_NAME: level.CUBE_NAME,
+        DIMENSION_UNIQUE_NAME: level.DIMENSION_UNIQUE_NAME,
+        HIERARCHY_UNIQUE_NAME: level.HIERARCHY_UNIQUE_NAME,
+        LEVEL_UNIQUE_NAME: member.LName ?? level.LEVEL_UNIQUE_NAME,
+        LEVEL_NAME: level.LEVEL_NAME,
+        LEVEL_CAPTION: level.LEVEL_CAPTION,
+        LEVEL_NUMBER: member.LNum ?? level.LEVEL_NUMBER,
+        MEMBER_NAME: member.Caption,
+        MEMBER_UNIQUE_NAME: member.UName,
+        MEMBER_CAPTION: member.Caption,
+        HAS_CHILDREN: false,
+        PARENT_UNIQUE_NAME: '',
+      })) as MDSchemaMember[]
+    return { members: members.slice(0, amount), hasMore: members.length > amount }
   }
 
   public async getMetadataStorage() {

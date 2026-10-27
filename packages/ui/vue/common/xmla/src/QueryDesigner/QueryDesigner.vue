@@ -16,8 +16,9 @@ import { DChip, DIcon } from "org.eclipse.daanse.board.app.ui.vue.controls";
 import draggable from 'vuedraggable';
 import { computed, nextTick, ref } from "vue";
 import { useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables';
-import { HierarchyTreeItem, MeasureTreeItem } from '../MetadataTree/TreeViewItems';
+import { HierarchyTreeItem, MeasureTreeItem, TreeItemTypesEnum } from '../MetadataTree/TreeViewItems';
 import FilterModal from '../Modals/FiltersModal.vue';
+import { carriesTreeItem, readTreeItem } from './treeItemTransfer';
 
 interface QueryConfig {
   filters: HierarchyTreeItem[];
@@ -112,9 +113,43 @@ const addedOperationCache = {
   cancelRemoving: false,
 };
 
+/*
+ * A drop from the cube explorer that vuedraggable did not take: a drag over
+ * before SortableJS saw it start (see treeItemTransfer). Checked after the
+ * drop has gone all the way through - SortableJS handles it on the document,
+ * after this area has heard it - and only then taken as vuedraggable would
+ * have handed it over.
+ */
+let takenDrops = 0;
+
+const allowDrop = (event: DragEvent) => {
+  if (carriesTreeItem(event.dataTransfer)) event.preventDefault();
+};
+
+const dropFromTree = (area: Area | "measures", event: DragEvent) => {
+  const item = readTreeItem(event.dataTransfer);
+  if (!item) return;
+  const isMeasure = item.type === TreeItemTypesEnum.Measure;
+  if (isMeasure !== (area === "measures")) return;
+  const before = takenDrops;
+  setTimeout(() => {
+    if (takenDrops !== before) return;
+    const element = { ...item, children: [], filters: { enabled: false } } as any;
+    if (area === "measures") {
+      queryConfig.value.measures.push(element);
+      changeMeasures({ added: { element, newIndex: queryConfig.value.measures.length - 1 } });
+      return;
+    }
+    const list = (queryConfig.value[area] ??= []);
+    list.push(element);
+    changeItems(area, { added: { element, newIndex: list.length - 1 } });
+  });
+};
+
 const changeItems = (area: Area, e: any) => {
   const { added, moved, removed } = e;
   if (added) {
+    takenDrops += 1;
     refusal.value = "";
     // Values into the filters: refused like anywhere else off rows and columns, and put back.
     if (area === "filters" && added.element.type === "Values") {
@@ -213,6 +248,7 @@ const changeMeasures = (e: any) => {
   const { added } = e;
 
   if (added) {
+    takenDrops += 1;
     const element: MeasureTreeItem = added.element;
 
     const duplicates = queryConfig.value.measures.filter(
@@ -310,7 +346,7 @@ const { t } = useTranslation('xmla');
     <div class="areas">
       <div class="queryDesignerArea">
         <div class="area-title">{{ t('QueryDesigner.filters') }}</div>
-        <div class="queryDesingnerArea_container">
+        <div class="queryDesingnerArea_container" @dragover="allowDrop" @drop="dropFromTree('filters', $event)">
           <draggable class="dragArea list-group" :list="queryConfig.filters" group="hierarchies"
             @change="changeItems('filters', $event)" item-key="id">
             <template #item="{ element }">
@@ -334,7 +370,7 @@ const { t } = useTranslation('xmla');
       </div>
       <div class="queryDesignerArea">
         <div class="area-title">{{ t('QueryDesigner.columns') }}</div>
-        <div class="queryDesingnerArea_container">
+        <div class="queryDesingnerArea_container" @dragover="allowDrop" @drop="dropFromTree('columns', $event)">
           <draggable class="dragArea list-group" :list="queryConfig.columns" group="hierarchies"
             @change="changeItems('columns', $event)" item-key="id">
             <template #item="{ element }">
@@ -359,7 +395,7 @@ const { t } = useTranslation('xmla');
       </div>
       <div class="queryDesignerArea">
         <div class="area-title">{{ t('QueryDesigner.rows') }}</div>
-        <div class="queryDesingnerArea_container">
+        <div class="queryDesingnerArea_container" @dragover="allowDrop" @drop="dropFromTree('rows', $event)">
           <draggable class="dragArea list-group" :list="queryConfig.rows" group="hierarchies"
             @change="changeItems('rows', $event)" item-key="id">
             <template #item="{ element }">
@@ -384,7 +420,7 @@ const { t } = useTranslation('xmla');
       </div>
       <div class="queryDesignerArea">
         <div class="area-title">{{ t('QueryDesigner.pages') }}</div>
-        <div class="queryDesingnerArea_container">
+        <div class="queryDesingnerArea_container" @dragover="allowDrop" @drop="dropFromTree('pages', $event)">
           <draggable class="dragArea list-group" :list="queryConfig.pages" group="hierarchies"
             @change="changeItems('pages', $event)" item-key="id">
             <template #item="{ element }">
@@ -408,7 +444,7 @@ const { t } = useTranslation('xmla');
       </div>
       <div class="queryDesignerArea">
         <div class="area-title">{{ t('QueryDesigner.chapters') }}</div>
-        <div class="queryDesingnerArea_container">
+        <div class="queryDesingnerArea_container" @dragover="allowDrop" @drop="dropFromTree('chapters', $event)">
           <draggable class="dragArea list-group" :list="queryConfig.chapters" group="hierarchies"
             @change="changeItems('chapters', $event)" item-key="id">
             <template #item="{ element }">
@@ -432,7 +468,7 @@ const { t } = useTranslation('xmla');
       </div>
       <div class="queryDesignerArea">
         <div class="area-title">{{ t('QueryDesigner.data') }}</div>
-        <div class="queryDesingnerArea_container">
+        <div class="queryDesingnerArea_container" @dragover="allowDrop" @drop="dropFromTree('measures', $event)">
           <draggable class="dragArea list-group" :list="queryConfig.measures" group="measures"
             @change="changeMeasures($event)" item-key="id">
             <template #item="{ element }">
