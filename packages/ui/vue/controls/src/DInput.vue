@@ -41,6 +41,14 @@ const props = withDefaults(
     min?: number
     max?: number
     step?: number
+    /**
+     * Values to offer while typing, without restricting the field to them.
+     *
+     * A native datalist: the platform filters and shows them, and what is
+     * typed stays what is stored - for a list fetched from a server that
+     * may not have answered, or may not hold the value someone means.
+     */
+    suggestions?: string[]
   }>(),
   { type: 'text', size: 'md', disabled: false, readonly: false, required: false, stacked: false },
 )
@@ -83,8 +91,12 @@ const isNumeric = computed(() => props.type === 'number')
           :min="min"
           :max="max"
           :step="step"
+          :list="suggestions ? `${id}-suggestions` : undefined"
           :aria-invalid="!!error || undefined"
         />
+        <datalist v-if="suggestions && !rows" :id="`${id}-suggestions`">
+          <option v-for="each in suggestions" :key="each" :value="each" />
+        </datalist>
         <span v-if="suffix" class="suffix">{{ suffix }}</span>
       </div>
 

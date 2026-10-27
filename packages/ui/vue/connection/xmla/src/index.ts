@@ -38,6 +38,8 @@ export function activate({ services }: ActivationContext) {
       Model: MODEL_ECORE,
       Connection: XmlaConnectionIdentifier,
       Settings: settingsSymbol,
+      /* The same form: it already offers the server's catalogues and cubes. */
+      Create: settingsSymbol,
     })
 }
 

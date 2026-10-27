@@ -121,21 +121,44 @@ export class XmlaConnection extends BaseConnection {
   }
 
   static validateConfiguration(configuration: IXmlaConnectionConfiguration) {
-    if (!configuration.url) {
-      return false
-    }
+    return XmlaConnection.configurationProblems(configuration).length === 0
+  }
 
-    if (!configuration.catalogName) {
-      return false
+  /**
+   * What keeps this configuration from opening a connection, one phrase
+   * each - empty when nothing does.
+   *
+   * Said rather than answered with false: a catalogue left empty because
+   * the server could not be asked for its list otherwise surfaced as
+   * "Invalid XmlaConnection configuration", which names neither the field
+   * nor the cause.
+   */
+  static configurationProblems(configuration: Partial<IXmlaConnectionConfiguration>): string[] {
+    const problems: string[] = []
+    if (!configuration?.url) {
+      problems.push('it has no URL of an XMLA server')
     }
-
-    return true
+    if (!configuration?.catalogName) {
+      problems.push('it names no catalogue to query')
+    }
+    return problems
   }
 
   /** Lists the catalogs of a server not yet configured; no session needed. */
   static async getCatalogs(url: string, security: SecurityOptions): Promise<DBSchemaCatalog[]> {
     const api = new XMLAApi({ url, credentials: credentialsOf(security) })
     const { catalogs } = await api.getCatalogs()
-    return catalogs
+    return catalogs ?? []
+  }
+
+  /** The cubes one of the server's catalogues holds; no session needed either. */
+  static async getCubes(
+    url: string,
+    security: SecurityOptions,
+    catalogName: string,
+  ): Promise<MDSchemaCube[]> {
+    const api = new XMLAApi({ url, credentials: credentialsOf(security) })
+    const { cubes } = await api.getCubes(catalogName)
+    return cubes ?? []
   }
 }
