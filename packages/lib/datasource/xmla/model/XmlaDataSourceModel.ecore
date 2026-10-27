@@ -52,9 +52,9 @@
                 <details key="documentation" value="A reference or ID to an XMLA connection configuration."/>
             </eAnnotations>
         </eStructuralFeatures>
-        <eStructuralFeatures xsi:type="ecore:EReference" name="requestParams" eType="#//XMLARequestParams" lowerBound="1" containment="true">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="requestParams" eType="#//XMLARequestParams" lowerBound="0" containment="true">
             <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-                <details key="documentation" value="The parameters for the XMLA request to be executed."/>
+                <details key="documentation" value="The parameters for the XMLA request to be executed. Built in the source's editor; a source without them starts from an empty query."/>
             </eAnnotations>
         </eStructuralFeatures>
         <eStructuralFeatures xsi:type="ecore:EAttribute" name="useVisualEditor" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">

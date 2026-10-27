@@ -101,6 +101,16 @@ describe('modelDocs', () => {
     expect(describeClass(nsURI, 'XMLARequestParams')).toBeDefined()
   })
 
+  it('tells a nested object from a value', () => {
+    const xmla = model('packages/lib/datasource/xmla/model/XmlaDataSourceModel.ecore')
+    const doc = describeConfiguration(registerModelDocs(xmla)!)!
+    const requestParams = doc.features.find((f) => f.name === 'requestParams')
+    expect(requestParams?.reference).toBe(true)
+    /* A source is created with a connection and a cube; the request comes later. */
+    expect(requestParams?.optional).toBe(true)
+    expect(doc.features.find((f) => f.name === 'cube')?.reference).toBe(false)
+  })
+
   it('says nothing about a model it was never given', () => {
     expect(describeConfiguration('http://nobody.registered.this')).toBeUndefined()
   })

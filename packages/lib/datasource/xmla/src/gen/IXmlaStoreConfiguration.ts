@@ -27,7 +27,7 @@ import type { XMLARequestParams } from './XMLARequestParams.js';
  */
 export interface IXmlaStoreConfiguration extends IBaseConnectionConfiguration {
   connection?: string;
-  requestParams: XMLARequestParams;
+  requestParams?: XMLARequestParams;
   useVisualEditor?: boolean;
   mdx?: string;
   drilldownState?: unknown;

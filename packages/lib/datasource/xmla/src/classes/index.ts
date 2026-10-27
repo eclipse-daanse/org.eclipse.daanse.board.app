@@ -31,7 +31,7 @@ import { injectable, inject } from '@eclipse-daanse/tsm'
  */
 export interface IXmlaStoreConfiguration extends ConfigurationOf<IBaseConnectionConfiguration> {
   connection: string
-  requestParams: XMLARequestParams
+  requestParams?: XMLARequestParams
   useMdx: boolean
   mdx: string
   cube: string
@@ -44,6 +44,34 @@ interface XMLARequestParams {
   columns: any[]
   measures: any[]
   filters: any[]
+}
+
+const AXES = ['rows', 'columns', 'measures', 'filters'] as const
+
+/**
+ * The request a store starts from, out of whatever the configuration holds.
+ *
+ * A source is created with a connection and a cube; what it asks for is
+ * built afterwards in its editor. So the value may be missing, may be the
+ * text "{}" a create form once demanded, or may lack an axis - each of
+ * them means an empty query, not a broken store. An object that is there is
+ * completed in place, because the store and the stored configuration share
+ * it.
+ */
+export function requestParamsFrom(raw: unknown): XMLARequestParams {
+  let held: unknown = raw
+  if (typeof held === 'string') {
+    try {
+      held = held.trim() ? JSON.parse(held) : undefined
+    } catch {
+      held = undefined
+    }
+  }
+  const params = (held && typeof held === 'object' ? held : {}) as Record<string, unknown>
+  for (const axis of AXES) {
+    if (!Array.isArray(params[axis])) params[axis] = []
+  }
+  return params as unknown as XMLARequestParams
 }
 
 export interface SecurityOptions {
@@ -125,9 +153,9 @@ export class XmlaStore extends BaseDatasource {
     if (configuration.mdx) {
       this.mdx = configuration.mdx
     }
-    if (configuration.requestParams) {
-      this.requestParams = configuration.requestParams
-    }
+    this.requestParams = requestParamsFrom(configuration.requestParams)
+    /* What is saved next is the request this store works with, not the text. */
+    ;(configuration as { requestParams?: XMLARequestParams }).requestParams = this.requestParams
 
     this.pollingInterval = configuration.pollingInterval ?? 5000
     if (this.pollingEnabled) {

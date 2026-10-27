@@ -38,6 +38,12 @@ export interface FeatureDoc {
   optional: boolean
   /** Whether it holds a list rather than a single value. */
   many: boolean
+  /**
+   * Whether it holds another modelled object (an EReference) rather than a
+   * value. Such a thing is built by the type's own editor; a text field has
+   * no way to say what it is.
+   */
+  reference: boolean
   /** The class it was declared on - a supertype, for inherited fields. */
   declaredBy: string
 }
@@ -152,6 +158,7 @@ function featuresOf(element: Element, owner: string): FeatureDoc[] {
          model says so. */
       optional: (feature.getAttribute('lowerBound') ?? '0') === '0',
       many: upper === '-1' || Number(upper ?? '1') > 1,
+      reference: feature.getAttribute('xsi:type') === 'ecore:EReference',
       declaredBy: owner,
     })
   }
