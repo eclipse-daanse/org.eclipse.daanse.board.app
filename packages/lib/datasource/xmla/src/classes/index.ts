@@ -11,6 +11,7 @@
  *   Smart City Jena
  **********************************************************************/
 
+import { randomUUID } from 'org.eclipse.daanse.board.app.lib.core'
 import { getMdxRequest, queryAxes, type NavigationItem } from '../utils/MdxRequestConstructor'
 import { parseMdxRequest, parseRequestToTable } from '../utils/MdxRequestHelper'
 import { parseCellset, slicesOf, type Cellset } from '../utils/Cellset'
@@ -419,7 +420,7 @@ export class XmlaStore extends BaseDatasource {
   private generateUUID(): string {
     // Upper case: the Analysis Services properties this feeds are written
     // that way everywhere else, and the server echoes them back verbatim.
-    return crypto.randomUUID().toUpperCase();
+    return randomUUID().toUpperCase();
   }
 
   /** A statement that changes the cube rather than asks it: writeback and its transaction. */

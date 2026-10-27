@@ -26,6 +26,7 @@
  * keys because the key was the name being changed.
  */
 
+import { randomUUID } from 'org.eclipse.daanse.board.app.lib.core'
 import { SystemVariableActions } from '../gen/SystemVariableActions'
 import { PageVariableActions } from '../gen/PageVariableActions'
 import {
@@ -171,7 +172,7 @@ export class VariableRepository implements SystemVariableActions, PageVariableAc
   // ---------------------------------------------------------- the variables
 
   registerVariable(name: string, type: string, config: VariableConfig) {
-    const uid = (config.uid ?? config.id ?? crypto.randomUUID()) as string
+    const uid = (config.uid ?? config.id ?? randomUUID()) as string
 
     const held = this.getVariableModel(uid) ?? new VariableImpl()
     held.uid = uid
