@@ -30,7 +30,6 @@ const queryConfig = defineModel<QueryConfig>({ required: true });
 const filterModal = ref<any>(null);
 
 const { api, catalog } = defineProps<{ api: any, catalog: any }>();
-console.log('QueryDesigner catalog:', catalog);
 
 const addedOperationCache = {
   area: "filters" as "rows" | "columns" | "filters",
@@ -207,7 +206,6 @@ const configureFilter = async (type: "filters" | "columns" | "rows", element: an
     (e: any) => e.id === element.id
   );
 
-  console.log(filterModal.value);
   const { filters } = await filterModal.value.run({
     element,
     filters: element.filters,
@@ -218,7 +216,6 @@ const configureFilter = async (type: "filters" | "columns" | "rows", element: an
   if (originalItem) {
     originalItem.filters = filters;
   }
-  console.log('configureFilter', originalItem);
 };
 
 const { t } = useTranslation('xmla');

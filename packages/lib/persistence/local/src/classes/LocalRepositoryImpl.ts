@@ -34,28 +34,43 @@ export default class LocalRepositoryImpl extends BaseRepository implements Writa
   }
 
   async findAll(): Promise<Entity[]> {
-    let ret: Entity[] = []
-    Object.keys(localStorage).forEach((e, key) => {
-      try {
-        let content = JSON.parse(localStorage.getItem(e) ?? '')
-        if(Array.isArray(content)){ //false format serialized be flatted ?
-          content = parse(localStorage.getItem(e) ?? '')
-        }
-        if (this.ValidityCheck.checkContent(content)) {
-          let copyBaseUri = new URL(this.uri ?? '')
-          copyBaseUri.pathname = e + '.json'
-          ret.push({
-            name: e,
-            uri: copyBaseUri,
-            data: content
-          } as Entity)
-        }
+    const ret: Entity[] = []
+    for (const key of Object.keys(localStorage)) {
+      const content = this.readWorkspace(key)
+      if (content === undefined) continue
+      const copyBaseUri = new URL(this.uri ?? '')
+      copyBaseUri.pathname = key + '.json'
+      ret.push({
+        name: key,
+        uri: copyBaseUri,
+        data: content
+      } as Entity)
+    }
+    return ret
+  }
 
-      } catch (e) {
-        console.log(e)
+  /**
+   * The workspace stored under `key`, or undefined when the key holds
+   * something else.
+   *
+   * localStorage is shared with the rest of the origin - the theme and the
+   * language sit there as plain strings like `auto` and `en`. Workspaces are
+   * stored under bare keys, so there is no prefix to filter by; a value that
+   * is not JSON, or JSON that is not a workspace, is simply not ours.
+   */
+  private readWorkspace(key: string): unknown {
+    const raw = localStorage.getItem(key)
+    if (raw === null) return undefined
+    let content: unknown
+    try {
+      content = JSON.parse(raw)
+      if (Array.isArray(content)) { // serialized by flatted
+        content = parse(raw)
       }
-    })
-    return Promise.resolve(ret)
+    } catch {
+      return undefined
+    }
+    return this.ValidityCheck?.checkContent(content) ? content : undefined
   }
 
   test() {
@@ -65,20 +80,14 @@ export default class LocalRepositoryImpl extends BaseRepository implements Writa
   findByFragment(_pathname: string): Promise<Entity[]> {
     let pathname = (_pathname.charAt(0) == '/') ? _pathname.slice(1) : _pathname
     let ret: Entity[] = []
-    if (Object.keys(localStorage).includes(pathname)) {
-      let content = JSON.parse(localStorage.getItem(pathname) ?? '')
-      if(Array.isArray(content)){ //false format serialized be flatted ?
-        content = parse(localStorage.getItem(pathname) ?? '')
-      }
-      if (this.ValidityCheck.checkContent(content)) {
-        let copyBaseUri = new URL(this.uri ?? '')
-        copyBaseUri.pathname = pathname + '.json'
-        ret.push({
-          name: pathname,
-          uri: copyBaseUri,
-          data: localStorage.getItem(pathname)
-        } as Entity)
-      }
+    if (this.readWorkspace(pathname) !== undefined) {
+      const copyBaseUri = new URL(this.uri ?? '')
+      copyBaseUri.pathname = pathname + '.json'
+      ret.push({
+        name: pathname,
+        uri: copyBaseUri,
+        data: localStorage.getItem(pathname)
+      } as Entity)
     }
     return Promise.resolve(ret)
   }
