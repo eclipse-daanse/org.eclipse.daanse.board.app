@@ -8,7 +8,15 @@ SPDX-License-Identifier: EPL-2.0
 Contributors: Smart City Jena
 */
 
-import { cpSync, createReadStream, existsSync, globSync, readFileSync, statSync, watch } from 'node:fs'
+import {
+  cpSync,
+  createReadStream,
+  existsSync,
+  globSync,
+  readFileSync,
+  statSync,
+  watch,
+} from 'node:fs'
 import { extname, join, normalize } from 'node:path'
 import { defineConfig, searchForWorkspaceRoot, type Plugin } from 'vite'
 import vue from '@vitejs/plugin-vue'
@@ -43,8 +51,10 @@ const BUNDLE_TYPES: Record<string, string> = {
   '.css': 'text/css',
 }
 
-/* How long to let a bundle's output settle before telling the client about
-   it: two checks of the same size, up to a minute for a slow build. */
+/*
+ * How long to let a bundle's output settle before telling the client about
+ * it: two checks of the same size, up to a minute for a slow build.
+ */
 const SETTLE_STEP = 150
 const SETTLE_TRIES = 400
 
@@ -146,7 +156,8 @@ function tsmBundles(): Plugin {
         const file = join(dir, rest.join('/') || 'index.js')
         if (!existsSync(file) || !statSync(file).isFile()) return next()
 
-        response.setHeader('Content-Type', BUNDLE_TYPES[extname(file)] ?? 'application/octet-stream')
+        const type = BUNDLE_TYPES[extname(file)] ?? 'application/octet-stream'
+        response.setHeader('Content-Type', type)
         response.setHeader('Cache-Control', 'no-store')
         createReadStream(file).pipe(response)
       })
