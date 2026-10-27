@@ -156,7 +156,8 @@
     "type": "Type",
     "icon": "Icon",
     "iconHint": "Without an icon of its own, the type's icon is shown here.",
-    "tags": "Tags"
+    "tags": "Tags",
+    "notLive": "Saved, but this source cannot run yet: its settings are incomplete. The marked fields above say what is missing."
   },
   "Connection": {
     "tagsHint": "What this connection is for — you can search by it.",

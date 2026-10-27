@@ -38,6 +38,14 @@ const datasourcesFiltered = computed(() => {
 
 const composeByOptions = ref([] as string[]);
 
+/*
+ * What the composer cannot be built without, asked of the composer itself -
+ * the same list its factory checks before it builds one. A field left out
+ * of it is marked here, rather than the save failing with nothing shown.
+ */
+const missing = computed(() => new Set<string>(ChartComposer.missingConfiguration(config)));
+const errorFor = (field: string) => (missing.value.has(field) ? t('Settings.required') : undefined);
+
 onMounted(async () => {
   composeByOptions.value = await ChartComposer.getHeaders(
     config.connectedDatasources || [],
@@ -56,15 +64,18 @@ watch(() => config.connectedDatasources, async (newValue) => {
 <template>
   <!-- eslint-disable-next-line vue/no-mutating-props -->
   <DSelect v-model="config.connectedDatasources" :label="t('Settings.sources')" :options="datasourcesFiltered" multiple label-key="name"
-    value-key="uid" />
+    value-key="uid" required :error="errorFor('connectedDatasources')" />
 
   <!-- eslint-disable-next-line vue/no-mutating-props -->
-  <DSelect v-model="config.composeBy" :label="t('Settings.composeBy')" :options="composeByOptions" />
+  <DSelect v-model="config.composeBy" :label="t('Settings.composeBy')" :options="composeByOptions"
+    required :error="errorFor('composeBy')" />
 
 
   <!-- eslint-disable-next-line vue/no-mutating-props -->
-  <DSelect v-model="config.usedSets" :label="t('Chart.series')" :options="composeByOptions" multiple />
+  <DSelect v-model="config.usedSets" :label="t('Chart.series')" :options="composeByOptions" multiple
+    required :error="errorFor('usedSets')" />
 
   <!-- eslint-disable-next-line vue/no-mutating-props -->
-  <DSelect v-model="config.labelColumn" :label="t('Chart.labelColumn')" :options="composeByOptions" />
+  <DSelect v-model="config.labelColumn" :label="t('Chart.labelColumn')" :options="composeByOptions"
+    required :error="errorFor('labelColumn')" />
 </template>

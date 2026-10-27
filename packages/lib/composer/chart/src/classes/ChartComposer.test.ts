@@ -67,4 +67,22 @@ describe('ChartComposer', () => {
     expect(colours[0]).toBe(seriesColor(0))
     expect(seriesColor(10)).toBe(seriesColor(0))
   })
+
+  it('names what a configuration lacks, compose-by among it', () => {
+    const complete = {
+      connectedDatasources: ['source'],
+      composeBy: 'Caption',
+      labelColumn: 'Caption',
+      usedSets: ['Unit Sales'],
+    } as any
+
+    expect(ChartComposer.missingConfiguration(complete)).toEqual([])
+    expect(ChartComposer.validateConfiguration(complete)).toBe(true)
+
+    const withoutComposeBy = { ...complete, composeBy: '' }
+    expect(ChartComposer.missingConfiguration(withoutComposeBy)).toEqual(['composeBy'])
+    expect(ChartComposer.validateConfiguration(withoutComposeBy)).toBe(false)
+
+    expect(ChartComposer.missingConfiguration({} as any)).toEqual([...ChartComposer.requiredConfiguration])
+  })
 })

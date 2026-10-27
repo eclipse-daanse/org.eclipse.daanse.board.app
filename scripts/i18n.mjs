@@ -248,7 +248,8 @@ function* files(dir, top = dir) {
 
 const LITERAL = /(['"`])((?:(?!\1)[^\\\n]|\\.)*)\1/g
 const QUALIFIED = /^([a-z][A-Za-z0-9]*):([A-Za-z][\w]*(?:\.[\w]+)*)$/
-const XMI_LABEL = /\blabel="([^"]*)"/g
+/* A placeholder is drawn through the same t as the label, and may be a key too. */
+const XMI_LABEL = /\b(?:label|placeholder)="([^"]*)"/g
 const DEFAULT_NS = /useTranslation\(\s*['"]([A-Za-z0-9]+)['"]\s*\)/
 /* t('Key'), t("Key"), also $t / tt / i18n.t - anything named t right before the paren */
 const CALL = /(?<![\w$])t\(\s*(['"])([^'"\n]+)\1/g

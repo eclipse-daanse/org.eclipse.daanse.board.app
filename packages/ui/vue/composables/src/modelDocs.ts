@@ -46,6 +46,15 @@ export interface FeatureDoc {
   reference: boolean
   /** The class it was declared on - a supertype, for inherited fields. */
   declaredBy: string
+  /**
+   * The value the model says it has when nothing is set, as written.
+   *
+   * Read from the file for the same reason as the documentation: the
+   * generated package does not carry it, and a wrapper-typed feature is
+   * not initialised with it either - so this is the only place a form can
+   * learn what an empty field actually stands for.
+   */
+  defaultValue?: string
 }
 
 /** A configuration class, as the model describes it. */
@@ -164,6 +173,7 @@ function featuresOf(element: Element, owner: string): FeatureDoc[] {
       many: upper === '-1' || Number(upper ?? '1') > 1,
       reference: feature.getAttribute('xsi:type') === 'ecore:EReference',
       declaredBy: owner,
+      defaultValue: feature.getAttribute('defaultValueLiteral') ?? undefined,
     })
   }
   return features

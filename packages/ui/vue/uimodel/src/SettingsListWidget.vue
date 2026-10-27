@@ -25,14 +25,15 @@ Contributors:
  * real instance of the right class - with its defaults, and able to say
  * what it is, which is what lets the same renderer draw its fields.
  */
-import { computed, ref } from 'vue'
+import { computed, inject, ref, unref, watch } from 'vue'
 import type { EClass, EObject, EStructuralFeature } from '@emfts/core'
-import { UIModelComposer } from '@emfts/uimodel-composer'
+import { UIModelComposer, TRANSLATOR_KEY } from '@emfts/uimodel-composer'
 import { DButton } from 'org.eclipse.daanse.board.app.ui.vue.controls'
-import { useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+import { useEList, useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import { ensureWrappers } from './adopt'
 import { formFor, labelOf } from './buildForm'
 import { formForClass } from './loadUIModel'
+import { useLabel } from './useLabel'
 
 const props = defineProps<{
   eObject?: EObject
@@ -44,10 +45,32 @@ const props = defineProps<{
 }>()
 
 const { t } = useTranslation('uimodel')
+const localized = useLabel()
 
-const label = computed(
-  () => props.custom?.resolvedStyle?.label ?? (props.feature ? labelOf(props.feature) : ''),
+/*
+ * The composer hands the label over translated; a key that still arrives
+ * is asked once more - see useLabel for why only keys are.
+ */
+const label = computed(() =>
+  localized(props.custom?.resolvedStyle?.label ?? (props.feature ? labelOf(props.feature) : '')),
 )
+
+/*
+ * What an empty list means, where the form says so. A chart with no series
+ * entries still draws its series - with the chart's own settings - and a
+ * bare "nothing created yet" under a heading called Series read as if it
+ * had none.
+ */
+const emptyText = computed(() => localized(props.custom?.resolvedStyle?.placeholder) || t('List.empty'))
+
+/*
+ * Handed on to the composer that draws each entry. The composer provides
+ * its `translate` prop to everything under it - when the prop is missing it
+ * provides nothing, over the translator the form above already provided,
+ * and every group label inside an entry came out as its key.
+ */
+const inherited = inject(TRANSLATOR_KEY, undefined)
+const translate = computed(() => unref(inherited))
 
 const readOnly = computed(() => props.custom?.resolvedStyle?.readOnly === true)
 
@@ -65,12 +88,38 @@ function rawList(): any {
   return (props.eObject as unknown as Record<string, unknown>)[name]
 }
 
-const entries = computed<EObject[]>(() => {
-  const list = rawList()
-  if (!list) return []
-  if (typeof list.toArray === 'function') return list.toArray()
-  return Array.isArray(list) ? (list as EObject[]) : []
-})
+/*
+ * Read through useEList, which listens to the owner's containment tree: an
+ * add or a remove on the EList is a notification, and that is what makes
+ * this re-render. Reading the list directly saw it once - a series added
+ * by the button below went into the model and never onto the screen.
+ *
+ * A plain array is not a notifier and is read as it stands.
+ */
+const entries = useEList<EObject, EObject>(
+  () => props.eObject,
+  () => {
+    const list = rawList()
+    if (typeof list?.toArray === 'function') return list
+    return { toArray: () => (Array.isArray(list) ? [...(list as EObject[])] : []) }
+  },
+)
+
+/*
+ * An entry that did not come through Add - restored with the board, or put
+ * there by code - may lack a wrapper where its class declares no default,
+ * and a field without one is not drawn at all. Given one when it appears,
+ * as Add does for its own.
+ */
+watch(
+  entries,
+  (list) => {
+    for (const entry of list) {
+      if (typeof entry?.eClass === 'function') ensureWrappers(entry)
+    }
+  },
+  { immediate: true },
+)
 
 /** The class the list is typed against; without it nothing can be built. */
 const entryClass = computed<EClass | undefined>(() => {
@@ -115,8 +164,12 @@ const open = ref(0)
  */
 const NAMING = ['label', 'name', 'title', 'key', 'className', 'id']
 
+/*
+ * Failing that, the list's own label and the position - "Series 2". The
+ * class name it used before is a word for the code, not for the reader.
+ */
 function titleOf(entry: EObject, index: number): string {
-  return nameIn(entry) ?? `${entryClass.value?.getName?.() ?? t('List.entry')} ${index + 1}`
+  return nameIn(entry) ?? t('List.entryTitle', { name: label.value || t('List.entry'), n: index + 1 })
 }
 
 /**
@@ -204,7 +257,9 @@ function move(index: number, by: number) {
   <section class="list">
     <header class="list__head">
       <span class="list__label">{{ label }}</span>
-      <span class="list__count">{{ entries.length }}</span>
+      <!-- Not at zero: next to "Series" a 0 read as "this chart has no
+        series", while it draws every one with the chart's settings -->
+      <span v-if="entries.length" class="list__count">{{ entries.length }}</span>
       <span class="list__spacer" />
       <DButton v-if="entryClass && !readOnly" size="sm" @click="add">{{ t('List.add') }}</DButton>
     </header>
@@ -213,7 +268,7 @@ function move(index: number, by: number) {
       {{ t('List.untyped') }}
     </p>
 
-    <p v-else-if="!entries.length" class="list__empty">{{ t('List.empty') }}</p>
+    <p v-else-if="!entries.length" class="list__empty">{{ emptyText }}</p>
 
     <div v-for="(entry, index) in entries" :key="index" class="entry">
       <button
@@ -240,7 +295,7 @@ function move(index: number, by: number) {
       </span>
 
       <div v-if="open === index" class="entry__body">
-        <UIModelComposer v-if="entryForm" :ui-model="entryForm" :model="entry" />
+        <UIModelComposer v-if="entryForm" :ui-model="entryForm" :model="entry" :translate="translate" />
       </div>
     </div>
   </section>
