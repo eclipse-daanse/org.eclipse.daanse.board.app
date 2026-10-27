@@ -732,10 +732,13 @@ const change = (e: any) => {
             />
           </div>
         </div>
-        <!-- One widget keeps its own handles; from two the group takes over -->
+        <!-- One widget keeps its own handles; from two the group takes over.
+          The target is a selector string, not a new array per render: the
+          handles watch it, and a render before they mounted (a widget writing
+          its settings while it sets up) set it on nothing and threw. -->
         <Moveable
           v-if="!selectionActive"
-          v-bind:target="[`.${widget.uid}`]"
+          v-bind:target="`.${widget.uid}`"
           v-bind:draggable="true"
           v-bind:resizable="true"
           v-bind:useResizeObserver="true"
