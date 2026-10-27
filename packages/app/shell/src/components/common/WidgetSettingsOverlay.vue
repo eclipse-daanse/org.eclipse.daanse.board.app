@@ -39,7 +39,7 @@ import {
   identifier as WORKSPACE,
   type Workspace,
 } from 'org.eclipse.daanse.board.app.lib.model.workspace'
-import { useEList, useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+import { useEList, useRegistrations, useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import { type Widget as IWidget } from 'org.eclipse.daanse.board.app.lib.api.page'
 import { WidgetRepository, identifier } from 'org.eclipse.daanse.board.app.lib.api.widget'
 
@@ -53,13 +53,13 @@ const props = defineProps<{
 
 const dataSources = useEList(inject<Workspace>(WORKSPACE)!, (w) => w.datasources)
 const registeredWidgets = inject<WidgetRepository>(identifier)!
-const availableWidgetsSettings = registeredWidgets.getAllWidgets()
+const availableWidgets = useRegistrations(registeredWidgets, () => registeredWidgets.getAllWidgets())
 const { t, revision } = useTranslation('shell')
 
 /* What the palette calls this widget, in the language on screen. */
 const widgetName = computed(() => {
   const type = widget.value?.type
-  const registered = type ? availableWidgetsSettings[type] : undefined
+  const registered = type ? availableWidgets.value[type] : undefined
   if (!registered) return type ?? t('WidgetSettings.widget')
   return registered.nameKey ? t(registered.nameKey, { defaultValue: registered.name }) : registered.name
 })
@@ -88,7 +88,7 @@ interface SettingsForm {
 
 const modelledLook = computed<SettingsForm | undefined>(() => {
   const type = widget.value?.type
-  return type ? (availableWidgetsSettings[type] as { settingsForm?: SettingsForm })?.settingsForm : undefined
+  return type ? (availableWidgets.value[type] as { settingsForm?: SettingsForm })?.settingsForm : undefined
 })
 
 /*
@@ -99,7 +99,7 @@ const modelledLook = computed<SettingsForm | undefined>(() => {
  * unreachable. The tab disappears by itself once nothing is left in it.
  */
 const hasHandWritten = computed(
-  () => !!(widget.value?.type && availableWidgetsSettings[widget.value.type]?.settingsComponent),
+  () => !!(widget.value?.type && availableWidgets.value[widget.value.type]?.settingsComponent),
 )
 const showRestTab = computed(() => !!modelledLook.value && hasHandWritten.value)
 
@@ -584,7 +584,7 @@ onBeforeUnmount(() => {
               />
               <component
                 v-else
-                :is="availableWidgetsSettings[widget.type ?? '']?.settingsComponent"
+                :is="availableWidgets[widget.type ?? '']?.settingsComponent"
                 v-model="widget.config"
                 :key="widget.uid"
                 :dataSources="dataSources"
@@ -603,7 +603,7 @@ onBeforeUnmount(() => {
               </p>
               <component
                 v-if="showRestTab"
-                :is="availableWidgetsSettings[widget.type ?? '']?.settingsComponent"
+                :is="availableWidgets[widget.type ?? '']?.settingsComponent"
                 v-model="widget.config"
                 :key="widget.uid + '-rest'"
                 :dataSources="dataSources"

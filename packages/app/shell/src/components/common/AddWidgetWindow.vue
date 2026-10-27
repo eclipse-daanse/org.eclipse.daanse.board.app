@@ -16,7 +16,7 @@ import {
   identifier as WORKSPACE,
   type Workspace,
 } from 'org.eclipse.daanse.board.app.lib.model.workspace'
-import { useEList, useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+import { useEList, useRegistrations, useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import { WidgetRepository, identifier } from 'org.eclipse.daanse.board.app.lib.api.widget'
 import { inject, ref, computed, watch } from 'vue'
 import Draggable from 'vuedraggable'
@@ -47,12 +47,19 @@ const onDragStart = (event: DragEvent) => {
 
 const registeredWidgets = inject<WidgetRepository>(identifier)!
 const { t } = useTranslation('shell')
-const availableWidgets = Object.entries(registeredWidgets.getAllWidgets())
-  //.filter(([_, widget]) => widget.icon)
-  .map(([name, widget]) => ({ type: name, name: widget.name, nameKey: widget.nameKey, icon: widget.icon }))
+/*
+ * Read again on every registration: a widget bundle can activate after the
+ * palette has mounted, and the pivot table used to be missing until the
+ * route changed.
+ */
+const availableWidgets = useRegistrations(registeredWidgets, () =>
+  Object.entries(registeredWidgets.getAllWidgets())
+    //.filter(([_, widget]) => widget.icon)
+    .map(([name, widget]) => ({ type: name, name: widget.name, nameKey: widget.nameKey, icon: widget.icon })),
+)
 
 const computedWidgets = computed(() => {
-  return availableWidgets
+  return availableWidgets.value
   // if (!selectedType.value || selectedType.value === "None") {
   //     return availableWidgets
   //         .filter((widget) => {

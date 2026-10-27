@@ -20,7 +20,7 @@ import {
   identifier as WORKSPACE,
   type Workspace,
 } from 'org.eclipse.daanse.board.app.lib.model.workspace'
-import { useEList, useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+import { useEList, useRegistrations, useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import { cloneDeep } from 'lodash'
 import { DButton, DIconPicker, DInput, DSelect } from 'org.eclipse.daanse.board.app.ui.vue.controls'
 import TagInput from './TagInput.vue'
@@ -62,9 +62,10 @@ const knownTags = computed(() => {
   return [...all].sort()
 })
 
-const availableDatasources = computed(() => {
-  return datasourceRepository.registeredDatasources
-})
+const availableDatasources = useRegistrations(
+  datasourceRepository,
+  () => datasourceRepository.registeredDatasources,
+)
 
 /*
  * Edited on a copy and committed on Save, the way it always was - what

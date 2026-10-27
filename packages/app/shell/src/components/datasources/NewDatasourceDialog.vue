@@ -27,7 +27,7 @@ import {
   identifier as WORKSPACE,
   type Workspace,
 } from 'org.eclipse.daanse.board.app.lib.model.workspace'
-import { describeModel, useEList, useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+import { describeModel, useEList, useRegistrations, useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import { DIconPicker, DInput, DSelect } from 'org.eclipse.daanse.board.app.ui.vue.controls'
 import CreateWizard from './CreateWizard.vue'
 import ModelFields from './ModelFields.vue'
@@ -53,7 +53,8 @@ const tags = ref<string[]>([])
 const connection = ref<string | undefined>(undefined)
 const config = ref<Record<string, unknown>>({})
 
-const types = computed(() => datasources.registeredDatasources)
+/* A type whose bundle activates after the dialog mounted is offered too. */
+const types = useRegistrations(datasources, () => datasources.registeredDatasources)
 const kindOf = (each: string) => datasources.getDatasourceIdentifiers(each)?.kind
 
 /*

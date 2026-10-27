@@ -62,6 +62,7 @@ export interface IdentifierResolver {
 }
 
 export class DatasourceRepository implements IDatasourceRepository {
+  private readonly changeListeners = new Set<() => void>()
   private availableDatasources: Record<string, StoreIdentifiers> = {}
   private datasourcesByType: Record<string, string> = {}
 
@@ -236,6 +237,30 @@ export class DatasourceRepository implements IDatasourceRepository {
 
   registerDatasourceType(name: string, identifiers: StoreIdentifiers): void {
     this.availableDatasources[name] = identifiers
+    this.notifyChange()
+  }
+
+  /**
+   * Called after a type registers or is withdrawn.
+   *
+   * Framework-free, like the widget repository's: bundles activate in no
+   * particular order, so a type can arrive after a dialog has listed the
+   * types. The Vue side turns the callback into reactivity. Returns the
+   * unsubscribe function.
+   */
+  onChange(listener: () => void): () => void {
+    this.changeListeners.add(listener)
+    return () => this.changeListeners.delete(listener)
+  }
+
+  private notifyChange(): void {
+    for (const listener of this.changeListeners) {
+      try {
+        listener()
+      } catch {
+        // One broken subscriber must not keep the others from hearing it
+      }
+    }
   }
 
   /**
@@ -252,6 +277,7 @@ export class DatasourceRepository implements IDatasourceRepository {
       return false
     }
     delete this.availableDatasources[name]
+    this.notifyChange()
     return true
   }
   getDataSourceTypes() {

@@ -19,6 +19,8 @@ import { useGlobalLoading } from './useGlobalLoading'
 import { plainSettings } from './plainSettings'
 /* Modelled objects, as something Vue re-renders on. */
 import { useEObject, useEList, useFeature } from './useEmf'
+/* What a registry offers - types and widgets whose bundles arrive late. */
+export { useRegistrations, type ObservableRegistry } from './useRegistrations'
 /* What is on one board - its widgets and where they sit. */
 import { useBoard } from './useBoard'
 // VariableWrapper is Vue-free and therefore lives in lib.variables. The
