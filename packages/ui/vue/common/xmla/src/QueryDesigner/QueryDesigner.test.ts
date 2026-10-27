@@ -17,6 +17,8 @@ import { reactive } from 'vue'
 import { flushPromises, mount } from '@vue/test-utils'
 import QueryDesigner from './QueryDesigner.vue'
 import english from '../i18n/en.json'
+import { TREE_ITEM_TYPE } from './treeItemTransfer'
+import { TreeItemTypesEnum } from '../MetadataTree/TreeViewItems'
 
 /* The texts the designer shows, without i18next. */
 const i18n = {
@@ -99,5 +101,65 @@ describe('the query designer', () => {
 
     expect(errors).toEqual([])
     expect(designer.wrapper.text()).toContain('Age')
+  })
+})
+
+/*
+ * A drop the browser hands out before SortableJS has seen the drag start:
+ * the area hears `drop`, vuedraggable says nothing.
+ */
+function dropOn(designer: ReturnType<typeof mountDesigner>, index: number, item: any) {
+  const data = JSON.stringify(item)
+  const event = new Event('drop', { bubbles: true, cancelable: true })
+  Object.defineProperty(event, 'dataTransfer', {
+    value: { types: [TREE_ITEM_TYPE, 'text/plain'], getData: (type: string) => (type === TREE_ITEM_TYPE ? data : '') },
+  })
+  designer.wrapper.findAll('.queryDesingnerArea_container')[index]!.element.dispatchEvent(event)
+}
+
+const settle = () => new Promise(resolve => setTimeout(resolve)).then(flushPromises)
+
+const STORE_TYPE = { id: 'h-store-type', type: TreeItemTypesEnum.Hierarchy, caption: 'Store Type', originalItem: { HIERARCHY_UNIQUE_NAME: '[Store Type]' } }
+const UNIT_SALES = { id: 'm-unit-sales', type: TreeItemTypesEnum.Measure, caption: 'Unit Sales', originalItem: { MEASURE_UNIQUE_NAME: '[Measures].[Unit Sales]' } }
+
+describe('a drop from the cube explorer SortableJS did not take', () => {
+  it('puts the hierarchy where it was dropped', async () => {
+    const designer = mountDesigner()
+    dropOn(designer, 2, STORE_TYPE)
+    await settle()
+
+    expect(designer.config.rows.map((item: any) => item.id)).toEqual(['[Gender]', 'h-store-type'])
+    expect(designer.config.rows[1].filters).toEqual({ enabled: false })
+  })
+
+  it('puts a measure into the data, and Values onto the columns', async () => {
+    const designer = mountDesigner()
+    designer.config.columns = []
+    dropOn(designer, 5, UNIT_SALES)
+    await settle()
+
+    expect(designer.config.measures.map((item: any) => item.id)).toEqual(['m-unit-sales'])
+    expect(designer.config.columns.map((item: any) => item.id)).toEqual(['Values'])
+  })
+
+  it('leaves a measure dropped on the rows, and a hierarchy dropped on the data, where they came from', async () => {
+    const designer = mountDesigner()
+    dropOn(designer, 2, UNIT_SALES)
+    dropOn(designer, 5, STORE_TYPE)
+    await settle()
+
+    expect(designer.config.rows.map((item: any) => item.id)).toEqual(['[Gender]'])
+    expect(designer.config.measures).toEqual([])
+  })
+
+  it('takes nothing twice when vuedraggable did take the drop', async () => {
+    const designer = mountDesigner()
+    dropOn(designer, 2, STORE_TYPE)
+    // SortableJS handles the same drop on the document, after the area.
+    designer.config.rows.push(STORE_TYPE)
+    designer.areas[2]!.vm.$emit('change', { added: { element: STORE_TYPE, newIndex: 1 } })
+    await settle()
+
+    expect(designer.config.rows.map((item: any) => item.id)).toEqual(['[Gender]', 'h-store-type'])
   })
 })

@@ -15,9 +15,10 @@ Contributors:
 import { DInput } from "org.eclipse.daanse.board.app.ui.vue.controls";
 import TreeView from "../TreeView.vue";
 import { ref, onMounted } from 'vue';
-import { dimensionChildren, getTreeViewNodes } from './XMLAMetadataTree';
+import { dimensionChildren, findTreeItem, getTreeViewNodes, hierarchyChildren, loadLevelMembers } from './XMLAMetadataTree';
 import { TreeItemTypesEnum } from './TreeViewItems';
 import XMLAIconVue from './XMLAIcon.vue';
+import { writeTreeItem } from '../QueryDesigner/treeItemTransfer';
 import { useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables';
 const { t } = useTranslation('xmla');
 import draggable from 'vuedraggable'
@@ -116,13 +117,33 @@ function refreshCaptions(nodes: any[]) {
   }
 }
 
-/* A dimension's hierarchies, asked for when it opens. */
+/*
+ * A branch filled in when it opens: a dimension with its hierarchies, a
+ * hierarchy with its levels, a level with the first page of its members.
+ */
 async function loadChildren(node: any) {
-  if (node.type !== TreeItemTypesEnum.Dimension || !node.dimension) return;
-  await metadata.loadHierarchies(node.dimension);
-  const row = metadata.storage.dimensions.find((d: any) => d.DIMENSION_UNIQUE_NAME === node.dimension)
-    ?? { DIMENSION_UNIQUE_NAME: node.dimension };
-  node.children = dimensionChildren(row, metadata.storage);
+  if (node.type === TreeItemTypesEnum.Dimension && node.dimension) {
+    await metadata.loadHierarchies(node.dimension);
+    const row = metadata.storage.dimensions.find((d: any) => d.DIMENSION_UNIQUE_NAME === node.dimension)
+      ?? { DIMENSION_UNIQUE_NAME: node.dimension };
+    node.children = dimensionChildren(row, metadata.storage);
+  } else if (node.type === TreeItemTypesEnum.Hierarchy && metadata.loadHierarchyLevels) {
+    const levels = await metadata.loadHierarchyLevels(node.originalItem.HIERARCHY_UNIQUE_NAME);
+    node.children = hierarchyChildren(levels);
+  } else if (node.type === TreeItemTypesEnum.Level && metadata.loadLevelMembers) {
+    await loadLevelMembers(node, (level, start, amount) => metadata.loadLevelMembers(level, start, amount));
+  }
+}
+
+/* The row behind a level's members while it has more: the next page. */
+async function loadMore(row: any) {
+  const level = findTreeItem(treeViewData.value, row.parentId) as any;
+  if (!level || !metadata.loadLevelMembers) return;
+  try {
+    await loadLevelMembers(level, (lvl, start, amount) => metadata.loadLevelMembers(lvl, start, amount));
+  } catch (error) {
+    console.warn('Could not load more members', error);
+  }
 }
 
 onMounted(() => {
@@ -139,7 +160,16 @@ onMounted(() => {
     } else if (event._xmla_context.type === TreeItemTypesEnum.Measure) {
       event.dataTransfer.setData('text/plain', event._xmla_context.originalItem.MEASURE_UNIQUE_NAME);
     }
-    // event.dataTransfer.setData('text/plain', 'test');
+    // For the query designer, should the drag be over before SortableJS has seen it start.
+    writeTreeItem(event.dataTransfer, event._xmla_context);
+  });
+  /*
+   * SortableJS marks the row it drags with its drag class and takes it off a
+   * tick later; a drag over before that leaves it on. Taken off here, so the
+   * row looks like the others again.
+   */
+  treeContainer.value.addEventListener('dragend', (event: any) => {
+    event.target?.classList?.remove('sortable-drag');
   });
 });
 
@@ -237,7 +267,11 @@ const populateDragEvent = (e: any, element: any) => {
           :load-children="loadChildren">
           <!-- @update:expanded="triggerExpanded" -->
           <template #content="node">
-            <div class="metadata-row" @click="clicked(node)">
+            <button v-if="node.type === TreeItemTypesEnum.LoadMore" type="button" class="load-more"
+              @click.stop="loadMore(node)">
+              {{ t('Metadata.loadMore') }}
+            </button>
+            <div v-else class="metadata-row" @click="clicked(node)">
             <draggable v-if="node.type === TreeItemTypesEnum.Hierarchy" :modelValue="[node]"
               :group="{ name: 'hierarchies', pull: 'clone', put: false }" item-key="id">
               <template #item="{ element }">
@@ -333,6 +367,15 @@ const populateDragEvent = (e: any, element: any) => {
   border-top-color: var(--color-accent);
   border-radius: 50%;
   animation: xmla-spin 700ms linear infinite;
+}
+
+.load-more {
+  padding: 0 4px;
+  border: 0;
+  background: none;
+  color: var(--color-accent);
+  font: inherit;
+  cursor: pointer;
 }
 </style>
 

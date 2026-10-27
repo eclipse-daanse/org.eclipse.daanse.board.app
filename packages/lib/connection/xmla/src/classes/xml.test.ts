@@ -213,6 +213,19 @@ describe('XMLAApi on the EMF client', () => {
     expect(second).toMatch(/<Catalog>Other<\/Catalog>/)
   })
 
+  it('asks for a page of a level\'s members and one beyond it, in the catalog named', async () => {
+    const { api: xmla, transport } = api()
+    const level = { LEVEL_UNIQUE_NAME: '[Gender].[Gender]', CUBE_NAME: 'Sales Ragged' } as MDSchemaLevel
+
+    const tuples = await xmla.getLevelMembers(level, 100, 200, 'Other')
+
+    const body = transport.requests[0]!.body
+    expect(body).toContain('Subset([Gender].[Gender].AllMembers, 200, 101)')
+    expect(body).toContain('from [Sales Ragged]')
+    expect(body).toMatch(/<Catalog>Other<\/Catalog>/)
+    expect(tuples.map(t => t.Member.Caption)).toEqual(['Unit Sales'])
+  })
+
   it('carries the session it opened on every later request', async () => {
     const { api: xmla, transport } = api()
     await xmla.startSession()
