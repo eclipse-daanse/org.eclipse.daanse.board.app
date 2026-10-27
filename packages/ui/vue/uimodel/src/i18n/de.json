@@ -11,6 +11,7 @@
   },
   "List": {
     "entry": "Eintrag",
+    "entryTitle": "{{name}} {{n}}",
     "add": "Hinzufügen",
     "untyped": "Diese Liste ist im Modell ohne Typ angegeben - es steht dort nur, dass es mehrere sind, nicht wovon. Solange das so ist, lässt sich hier nichts zeigen.",
     "empty": "Noch nichts angelegt.",

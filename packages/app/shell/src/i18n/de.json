@@ -156,7 +156,8 @@
     "type": "Typ",
     "icon": "Symbol",
     "iconHint": "Ohne eigenes Symbol steht hier das des Typs.",
-    "tags": "Schlagworte"
+    "tags": "Schlagworte",
+    "notLive": "Gespeichert, aber diese Quelle kann noch nicht laufen: ihre Einstellungen sind unvollständig. Die markierten Felder oben zeigen, was fehlt."
   },
   "Connection": {
     "tagsHint": "Wofür diese Verbindung da ist — danach lässt sich suchen.",

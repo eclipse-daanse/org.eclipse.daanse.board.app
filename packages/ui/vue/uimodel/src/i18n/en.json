@@ -11,6 +11,7 @@
   },
   "List": {
     "entry": "Entry",
+    "entryTitle": "{{name}} {{n}}",
     "add": "Add",
     "untyped": "This list has no type in the model - it only says there are several, not of what. As long as that is so, nothing can be shown here.",
     "empty": "Nothing created yet.",

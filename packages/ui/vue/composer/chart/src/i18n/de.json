@@ -1,7 +1,8 @@
 {
   "Settings": {
     "sources": "Quellen",
-    "composeBy": "Zusammensetzen nach"
+    "composeBy": "Zusammensetzen nach",
+    "required": "Erforderlich - ohne diese Angabe lässt sich das Diagramm nicht zusammensetzen."
   },
   "Chart": {
     "series": "Reihen",

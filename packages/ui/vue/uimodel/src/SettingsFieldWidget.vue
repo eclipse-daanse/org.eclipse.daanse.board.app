@@ -46,6 +46,7 @@ import {
 } from 'org.eclipse.daanse.board.app.ui.vue.controls'
 import { describeClass, useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import { kindOf, labelOf } from './buildForm'
+import { useLabel } from './useLabel'
 
 const props = defineProps<{
   eObject?: EObject
@@ -60,12 +61,11 @@ const props = defineProps<{
 const variables = inject<VariableRepository>(VARIABLE_REPOSITORY)
 const { t } = useTranslation('uimodel')
 /*
- * This file renders its own labels, so it does its own asking. The
- * composer's translator is for what the composer draws; what is drawn
- * here goes through the same t the rest of the application uses, which
- * hands a key back unchanged when it knows no word for it.
+ * This file renders its own labels, so it does its own asking - of keys
+ * only. The composer has put most labels into words already, and a word
+ * sent through t('uimodel') came back with that namespace in front of it.
  */
-const localized = (text: string | undefined) => (text ? t(text) : text)
+const localized = useLabel()
 
 /** The wrapper itself - read and written through, never swapped out. */
 const wrapper = computed<any>(() => {
@@ -247,15 +247,17 @@ const boundHint = computed(() => (isBound.value ? t('Field.boundFrom', { name: b
  * file - which the package hands over when it registers its form. Until a
  * package does that, there is nothing to find and the field stays bare.
  */
-const modelHint = computed(() => {
+const featureDoc = computed(() => {
   const feature = props.feature
   const owner = feature?.getEContainingClass?.()
   const nsURI = owner?.getEPackage?.()?.getNsURI?.()
   const className = owner?.getName?.()
   const name = feature?.getName?.()
   if (!nsURI || !className || !name) return undefined
-  return describeClass(nsURI, className)?.features.find((f) => f.name === name)?.documentation
+  return describeClass(nsURI, className)?.features.find((f) => f.name === name)
 })
+
+const modelHint = computed(() => featureDoc.value?.documentation)
 
 /* Where it is bound, that is the more urgent thing to say. */
 const fieldHint = computed(() => boundHint.value ?? modelHint.value)
@@ -346,13 +348,30 @@ const options = computed<Array<{ value: string | number; text: string }>>(() => 
         // A label that will not evaluate leaves the value readable as itself
       }
     }
-    /*
-     * A model names its options by key. Handed to the composer's own
-     * translate, which asks the translator this form provides and falls
-     * back to the text when it is a word rather than a key.
-     */
-    return { value, text: localized(text) ?? text }
+    /* A model may name its options by key; a stored value stays itself */
+    return { value, text: localized(text) }
   })
+})
+
+/*
+ * The choice as the widget draws it.
+ *
+ * An unset field is not "nothing": the widget falls back to the default
+ * the model declares, and draws a bar chart while the select said "—".
+ * So an empty choice shows that default - one of the listed options only,
+ * since anything else is a fallback the form cannot name. Nothing is
+ * written until someone picks: the stored settings stay as they were, and
+ * a later change of default still reaches a field nobody set.
+ */
+const choice = computed<any>({
+  get: () => {
+    const held = value.value
+    if (held !== '' && held !== null && held !== undefined) return held
+    const fallback = featureDoc.value?.defaultValue
+    if (fallback === undefined || fallback === '') return held
+    return options.value.find((option) => String(option.value) === fallback)?.value ?? held
+  },
+  set: (next) => { value.value = next },
 })
 
 /* How tall a text area is, when the form asks for one. */
@@ -423,20 +442,15 @@ const moment = computed<string>({
 })
 
 /*
- * The model writes labels as keys; this file renders them rather than the
- * composer, so it does the asking. Before 0.0.2-next.2 the keys were
- * overwritten in the model on load and this read words by accident.
+ * The composer hands the label over translated; a key that still arrives
+ * here is one it was given no translator for, and is asked once more.
  */
-const label = computed(() => {
-  const written = props.custom?.resolvedStyle?.label ?? (props.feature ? labelOf(props.feature) : '')
-  return localized(written) ?? written
-})
+const label = computed(() =>
+  localized(props.custom?.resolvedStyle?.label ?? (props.feature ? labelOf(props.feature) : '')),
+)
 
 /** Same for the placeholder, which a style may also write as a key. */
-const placeholder = computed(() => {
-  const written = props.custom?.resolvedStyle?.placeholder
-  return localized(written) ?? written
-})
+const placeholder = computed(() => localized(props.custom?.resolvedStyle?.placeholder))
 
 const noVariables = computed(() => bindingMode.value && variableNames.value.length === 0)
 </script>
@@ -488,8 +502,9 @@ const noVariables = computed(() => bindingMode.value && variableNames.value.leng
 
       <DSelect
         v-else-if="kind === 'choice'"
-        v-model="value"
+        v-model="choice"
         :label="label"
+        :placeholder="placeholder"
         :options="options"
         value-key="value"
         label-key="text"

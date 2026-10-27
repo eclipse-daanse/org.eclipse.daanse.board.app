@@ -85,7 +85,16 @@ onMounted(() => {
     : { tags: [] }
 })
 
+/*
+ * Set when the settings were stored but the live source could not be built
+ * from them - a composer told too little to compose, say. The editor stays
+ * open and says so, next to the fields its settings mark as missing; it
+ * used to close on an uncaught error and show nothing at all.
+ */
+const notLive = ref(false)
+
 const saveDataSource = () => {
+  notLive.value = false
   const dataSource = datasourceRepository.getDatasourceModel(props.itemId)
   if (dataSource) {
     dataSource.name = datasourceProxy.value.name
@@ -99,7 +108,13 @@ const saveDataSource = () => {
     dataSource.connection = connections.value.find(
       (connection) => connection.uid === datasourceProxy.value.config?.connection,
     )
-    datasourceRepository.saveDatasource(dataSource)
+    try {
+      datasourceRepository.saveDatasource(dataSource)
+    } catch (error) {
+      console.warn(`${dataSource.uid} is not live yet:`, error)
+      notLive.value = true
+      return
+    }
   }
   emit('close')
 }
@@ -157,6 +172,7 @@ const { t } = useTranslation('shell')
           :dataSources="dataSources"
         />
       </div>
+      <p v-if="notLive" class="editor__error" role="alert">{{ t('Editor.notLive') }}</p>
       <div class="editor__actions">
         <DButton intent="quiet" @click="$emit('close')">{{ t('common:Action.close') }}</DButton>
         <DButton intent="primary" @click="saveDataSource">{{ t('common:Action.save') }}</DButton>
@@ -191,6 +207,16 @@ const { t } = useTranslation('shell')
   flex-direction: column;
   gap: 4px;
   max-width: 620px;
+}
+
+.editor__error {
+  margin: 0;
+  padding: 10px 12px;
+  font-size: var(--text-sm);
+  line-height: 1.45;
+  color: var(--color-err);
+  border: 1px solid var(--color-err);
+  border-radius: var(--radius-xs);
 }
 
 .editor__actions {

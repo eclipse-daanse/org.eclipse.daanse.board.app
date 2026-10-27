@@ -65,11 +65,13 @@ from, so they still come from the hand-written component beside this.
 
     <fields xsi:type="uimodel:GroupWidget" name="seriesGroup" layout="VERTICAL" label="chart:Form.seriesGroup">
       <!-- A list: each entry is a form of its own, built from SeriesSettings.
-          What a series does not set falls back to the values below. -->
+          What a series does not set falls back to the values below. The
+          placeholder is what the list says while it is empty. -->
       <fields xsi:type="uimodel:InputWidget"
           name="seriesSettings"
           feature="http://org.eclipse.daanse.board.app.ui.vue.widget.chart#//ChartSettings/seriesSettings"
-          label="chart:Form.seriesSettings"/>
+          label="chart:Form.seriesSettings"
+          placeholder="chart:Form.seriesSettingsHint"/>
     </fields>
 
     <fields xsi:type="uimodel:GroupWidget" name="lineGroup" layout="VERTICAL" label="chart:Form.lineGroup">
@@ -77,7 +79,7 @@ from, so they still come from the hand-written component beside this.
           name="borderColor"
           feature="http://org.eclipse.daanse.board.app.ui.vue.widget.chart#//ChartSettings/borderColor"
           label="chart:Form.borderColor"
-          placeholder="sichtbar ab Stärke 1"/>
+          placeholder="chart:Form.borderColorHint"/>
       <fields xsi:type="uimodel:NumberWidget"
           name="borderWidth"
           feature="http://org.eclipse.daanse.board.app.ui.vue.widget.chart#//ChartSettings/borderWidth"
@@ -91,6 +93,7 @@ from, so they still come from the hand-written component beside this.
         <values>10,5</values>
         <values>2,2</values>
         <values>15,5,5,5</values>
+        <optionLabel language="JS" body="({ durchgezogen: 'chart:Options.borderDash.solid', '5,5': 'chart:Options.borderDash.dashed', '10,5': 'chart:Options.borderDash.longDashes', '2,2': 'chart:Options.borderDash.dotted', '15,5,5,5': 'chart:Options.borderDash.dashDot' })[option] ?? option"/>
       </fields>
       <fields xsi:type="uimodel:CheckboxWidget"
           name="fill"
@@ -103,7 +106,7 @@ from, so they still come from the hand-written component beside this.
           name="backgroundColor"
           feature="http://org.eclipse.daanse.board.app.ui.vue.widget.chart#//ChartSettings/backgroundColor"
           label="chart:Form.backgroundColor"
-          placeholder="Balken, Torte, gefüllte Fläche"/>
+          placeholder="chart:Form.backgroundColorHint"/>
     </fields>
 
     <fields xsi:type="uimodel:GroupWidget" name="pointGroup" layout="VERTICAL" label="chart:Form.pointGroup">
