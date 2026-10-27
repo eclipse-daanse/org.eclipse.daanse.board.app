@@ -8,7 +8,8 @@
   },
   "Metadata": {
     "title": "Würfel-Explorer",
-    "filter": "Filtern…"
+    "filter": "Filtern…",
+    "loadMore": "Weitere laden…"
   },
   "FilterModal": {
     "title": "Filter setzen",

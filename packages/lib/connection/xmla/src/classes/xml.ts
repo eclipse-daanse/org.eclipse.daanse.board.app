@@ -380,14 +380,19 @@ class XMLAApi {
     return members[0]
   }
 
-  public async getLevelMembers(level: MDSchemaLevel, amount: number, start: number): Promise<any[]> {
+  /**
+   * One page of a level's members: up to amount + 1 tuples from start, the
+   * extra one telling the caller that there is more to fetch. In the named
+   * catalog, or the client's own.
+   */
+  public async getLevelMembers(level: MDSchemaLevel, amount: number, start: number, catalog?: string): Promise<any[]> {
     const mdx = `
       select Subset(${level.LEVEL_UNIQUE_NAME}.AllMembers, ${start}, ${amount + 1})
       DIMENSION PROPERTIES MEMBER_TYPE on 0,
       {} on 1
       from ${cubeRef(level.CUBE_NAME)}
     `
-    return this.firstAxisTuples(await this.getMDX(mdx))
+    return this.firstAxisTuples(await this.getMDX(mdx, catalog))
   }
 
   public async getChildMembers(member: MDSchemaMember, amount: number, start: number): Promise<any[]> {
