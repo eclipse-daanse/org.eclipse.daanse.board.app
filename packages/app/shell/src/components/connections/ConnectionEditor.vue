@@ -18,7 +18,7 @@ import {
 } from 'org.eclipse.daanse.board.app.lib.api.connection'
 import { DButton, DIconPicker, DInput, DSelect } from 'org.eclipse.daanse.board.app.ui.vue.controls'
 import TagInput from '../datasources/TagInput.vue'
-import { useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+import { useRegistrations, useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 
 const props = defineProps({
   itemId: {
@@ -34,9 +34,10 @@ const connectionProxy = ref({} as any)
 
 const connectionRepository = inject<ConnectionRepository>(identifier)!
 
-const availableConnections = computed(() => {
-  return connectionRepository.registeredConnections
-})
+const availableConnections = useRegistrations(
+  connectionRepository,
+  () => connectionRepository.registeredConnections,
+)
 
 /*
  * Edited on a copy and committed on Save, the way it always was - what

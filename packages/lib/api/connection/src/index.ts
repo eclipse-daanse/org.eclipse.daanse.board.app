@@ -91,6 +91,12 @@ export interface ConnectionRepository {
   */
   unregisterConnectionType(name: string): boolean;
   get registeredConnections(): string[];
+  /**
+   * Subscribes to type registrations and their withdrawal; returns the
+   * unsubscribe function. A type's bundle may activate after whoever lists
+   * the types has already looked.
+   */
+  onChange(listener: () => void): () => void;
   getConnectionIdentifiers(type: string): ConnectionIdentifiers;
   getRegisteredTypes(): string[];
   getConnectionType(connectionId: string): string;

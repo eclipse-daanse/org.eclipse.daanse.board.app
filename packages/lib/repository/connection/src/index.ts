@@ -37,7 +37,7 @@ export function deactivate({ services }: ActivationContext) {
 }
 
 export {
-  type ConnectionRepository,
+  ConnectionRepository,
 }
 export type {
   ConnectionIdentifiers,

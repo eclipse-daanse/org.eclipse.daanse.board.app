@@ -65,6 +65,7 @@ export class ConnectionRepository {
     return this.resolver.getRequired<T>(identifier.description as string)
   }
 
+  private readonly changeListeners = new Set<() => void>()
   private availableConnections: Record<string, ConnectionIdentifiers> = {}
   private connectionsByType: Record<string, string> = {}
 
@@ -182,6 +183,30 @@ export class ConnectionRepository {
     identifiers: ConnectionIdentifiers,
   ): void {
     this.availableConnections[name] = identifiers
+    this.notifyChange()
+  }
+
+  /**
+   * Called after a type registers or is withdrawn.
+   *
+   * Framework-free, like the widget repository's: bundles activate in no
+   * particular order, so a type can arrive after a dialog has listed the
+   * types. The Vue side turns the callback into reactivity. Returns the
+   * unsubscribe function.
+   */
+  onChange(listener: () => void): () => void {
+    this.changeListeners.add(listener)
+    return () => this.changeListeners.delete(listener)
+  }
+
+  private notifyChange(): void {
+    for (const listener of this.changeListeners) {
+      try {
+        listener()
+      } catch {
+        // One broken subscriber must not keep the others from hearing it
+      }
+    }
   }
 
   /**
@@ -198,6 +223,7 @@ export class ConnectionRepository {
       return false
     }
     delete this.availableConnections[name]
+    this.notifyChange()
     return true
   }
 
