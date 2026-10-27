@@ -1,6 +1,10 @@
 {
   "Xmla": {
     "catalog": "Katalog",
+    "catalogHint": "Einen der Kataloge des Servers wählen oder einen Namen eingeben.",
+    "catalogRequired": "Ohne Katalog lässt sich die Verbindung nicht öffnen.",
+    "cube": "Würfel",
+    "unreachable": "Server nicht erreichbar: {{reason}}",
     "security": {
       "label": "Anmeldung",
       "none": "Keine",

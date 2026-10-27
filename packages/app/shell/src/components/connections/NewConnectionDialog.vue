@@ -18,7 +18,7 @@ Contributors:
  * and what each is for - see CreateWizard for the two steps, and modelDocs
  * for where the descriptions come from.
  */
-import { computed, inject, ref, watch } from 'vue'
+import { computed, inject, ref, watch, type Component } from 'vue'
 import {
   type ConnectionRepository,
   identifier as CONNECTION_REPOSITORY,
@@ -59,6 +59,22 @@ const iconOf = (each: string) => connections.getConnectionIdentifiers(each)?.ico
 const doc = computed(() =>
   type.value ? describeModel(connections.getConnectionIdentifiers(type.value)?.Model) : undefined,
 )
+
+/*
+ * A type that knows more than its model can say brings its own form - XMLA
+ * offers the server's catalogues. Everyone else is asked what the model
+ * declares.
+ */
+const createForm = computed(() => {
+  const identifier = type.value ? connections.getConnectionIdentifiers(type.value)?.Create : undefined
+  if (!identifier) return undefined
+  try {
+    return connections.resolveIdentifier<Component>(identifier)
+  } catch (error) {
+    console.warn(`create form of "${type.value}" not available:`, error)
+    return undefined
+  }
+})
 
 /* Every tag already in use, so the same thing is not filed twice under two
   spellings. */
@@ -154,7 +170,8 @@ function create() {
         :known="knownTags"
       />
 
-      <ModelFields :doc="doc" :config="config" />
+      <component :is="createForm" v-if="createForm" :config="config" />
+      <ModelFields v-else :doc="doc" :config="config" />
     </template>
   </CreateWizard>
 </template>

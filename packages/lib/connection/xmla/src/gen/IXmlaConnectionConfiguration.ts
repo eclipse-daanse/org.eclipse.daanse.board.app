@@ -26,14 +26,14 @@ import { Documentation, Attribute, ModelClass } from 'org.eclipse.daanse.board.a
 export class IXmlaConnectionConfiguration extends BaseConnectionConfig {
   @Documentation("The URL endpoint for the XMLA service.")
   @Attribute()
-  url?: string;
+  url: string = "";
 
   @Documentation("The name of the OLAP cube to connect to.")
   @Attribute()
   cubeName?: string;
 
-  @Documentation("The name of the catalog containing the cube.")
+  @Documentation("The name of the catalog containing the cube. Every request the connection sends names it, so a connection without one cannot be opened.")
   @Attribute()
-  catalogName?: string;
+  catalogName: string = "";
 
 }
