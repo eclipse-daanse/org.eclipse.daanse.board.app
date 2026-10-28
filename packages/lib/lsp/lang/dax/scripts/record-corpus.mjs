@@ -46,7 +46,7 @@ import {
   writeFileSync,
 } from 'node:fs'
 import { tmpdir } from 'node:os'
-import { dirname, join } from 'node:path'
+import { dirname, join, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { DAANSE_COMMIT, DAANSE_REPOSITORY } from './daanse-pin.mjs'
 
@@ -78,7 +78,13 @@ function run(command, args, options = {}) {
 
 /** A checkout of the reference at the pinned commit. */
 function checkout() {
-  if (process.env.DAX_REFERENCE_DIR) return process.env.DAX_REFERENCE_DIR
+  /*
+   * Resolved rather than taken as given: the variable is a developer's
+   * convenience, and a relative or dotted path would otherwise reach the
+   * jar lookup and the docker mount as written.
+   */
+  if (process.env.DAX_REFERENCE_DIR)
+    return resolve(process.env.DAX_REFERENCE_DIR)
   const dir = join(tmpdir(), 'daanse-dax-reference')
   if (!existsSync(join(dir, '.git'))) {
     mkdirSync(dir, { recursive: true })

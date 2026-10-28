@@ -120,9 +120,21 @@ function statMtime(file) {
   return statSync(file).mtimeMs
 }
 
+/*
+ * One pass leaves a tag behind when the page nests one inside another -
+ * `<<b>i>` becomes `<i>` - so strip until there is nothing left to strip.
+ */
+const stripTags = text => {
+  let previous
+  do {
+    previous = text
+    text = text.replace(/<[^>]+>/g, '')
+  } while (text !== previous)
+  return text
+}
+
 const decode = text =>
-  text
-    .replace(/<[^>]+>/g, '')
+  stripTags(text)
     .replace(/&lt;/g, '<')
     .replace(/&gt;/g, '>')
     .replace(/&quot;/g, '"')
