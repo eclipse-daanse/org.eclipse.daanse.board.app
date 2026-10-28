@@ -202,9 +202,9 @@ function extract() {
 
     const keywords = json(`
       SELECT coalesce(json_agg(json_build_object(
-               'word', word, 'category', catcode, 'bareLabel', barelabel
-             ) ORDER BY word), '[]'::json)
-        FROM pg_get_keywords()`)
+        'word', word, 'category', catcode, 'bareLabel', barelabel
+      ) ORDER BY word), '[]'::json)
+      FROM pg_get_keywords()`)
     if (keywords.length < 400) {
       throw new Error(
         `pg_get_keywords() returned only ${keywords.length} rows; refusing to write.`,
@@ -218,24 +218,24 @@ function extract() {
     const functions = json(`
       SELECT coalesce(json_agg(f ORDER BY f->>'name'), '[]'::json) FROM (
         SELECT json_build_object(
-                 'name', p.proname,
-                 'kind', p.prokind,
-                 'overloads', json_agg(json_build_object(
-                     'args', p.pronargs,
-                     'defaults', p.pronargdefaults,
-                     'variadic', p.provariadic <> 0
-                   ) ORDER BY p.pronargs)
-               ) AS f
-          FROM pg_proc p
-          JOIN pg_namespace n ON n.oid = p.pronamespace
-         WHERE n.nspname = 'pg_catalog'
-           AND p.prokind IN ('f', 'a', 'w')
-           AND p.prorettype::regtype::text NOT IN (${internal})
-           AND NOT EXISTS (
-                 SELECT 1 FROM unnest(p.proargtypes) a
-                  WHERE a::regtype::text IN (${internal})
-               )
-         GROUP BY p.proname, p.prokind
+          'name', p.proname,
+          'kind', p.prokind,
+          'overloads', json_agg(json_build_object(
+            'args', p.pronargs,
+            'defaults', p.pronargdefaults,
+            'variadic', p.provariadic <> 0
+          ) ORDER BY p.pronargs)
+        ) AS f
+        FROM pg_proc p
+        JOIN pg_namespace n ON n.oid = p.pronamespace
+        WHERE n.nspname = 'pg_catalog'
+          AND p.prokind IN ('f', 'a', 'w')
+          AND p.prorettype::regtype::text NOT IN (${internal})
+          AND NOT EXISTS (
+            SELECT 1 FROM unnest(p.proargtypes) a
+            WHERE a::regtype::text IN (${internal})
+          )
+        GROUP BY p.proname, p.prokind
       ) s`)
     if (functions.length < 1000) {
       throw new Error(
