@@ -192,6 +192,17 @@ function createSerializer(
   return context
 }
 
+/*
+ * What made the tree partial: the parser's errors and the lexer's, which
+ * the Problems list shows as well - a `[` never closed is a lexer error and
+ * leaves the tree as partial as a missing keyword. The wire field keeps its
+ * name; it counts both.
+ */
+function syntaxErrors(document: LangiumDocument): number {
+  const { lexerErrors, parserErrors } = document.parseResult
+  return lexerErrors.length + parserErrors.length
+}
+
 export function buildAstTree(
   document: LangiumDocument,
   strategy: AstTreeStrategy = {},
@@ -201,7 +212,7 @@ export function buildAstTree(
   return {
     uri: document.uri.toString(),
     root: root ? serializeNode(root, 'root') : undefined,
-    parserErrors: document.parseResult.parserErrors.length,
+    parserErrors: syntaxErrors(document),
   }
 }
 
@@ -261,7 +272,7 @@ export function buildCstTree(
   return {
     uri: document.uri.toString(),
     root: cst ? serialize(cst, 'cst') : undefined,
-    parserErrors: document.parseResult.parserErrors.length,
+    parserErrors: syntaxErrors(document),
   }
 }
 
