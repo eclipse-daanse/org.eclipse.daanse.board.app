@@ -401,8 +401,8 @@ const tableListeners = {
         </template>
       </PivotNavigator>
       <PivotTableComponent v-else-if="tableData" v-bind="tableBindings" v-on="tableListeners" />
-      <!-- The first answer can take a while: an OLAP server works out its
-           metadata before the query. Said, rather than an empty frame. -->
+      <!-- The first answer can take a while: an OLAP server works out
+        its metadata before the query. Said, rather than an empty frame. -->
       <div v-else-if="loading" class="pivot-loading" role="status">
         <span class="pivot-loading__spinner" aria-hidden="true" />
         {{ t('Widget.loading') }}

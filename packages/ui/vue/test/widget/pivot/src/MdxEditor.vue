@@ -25,8 +25,8 @@ const emit = defineEmits<{ run: [] }>()
 
 const KEYWORDS = new Set(
   `select from where on with member set as non empty dimension properties cell
-   columns rows pages chapters sections axis and or not is null case when then else end
-   self before after self_and_before self_and_after before_and_after leaves`
+  columns rows pages chapters sections axis and or not is null case when then else end
+  self before after self_and_before self_and_after before_and_after leaves`
     .split(/\s+/)
     .filter(Boolean),
 )
