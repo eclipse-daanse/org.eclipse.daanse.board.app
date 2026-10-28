@@ -16,7 +16,7 @@ npx vitest run test/dmv  # parsing, diagnostics, examples and corpus
 
 ## Files
 
-```
+```text
 dmv.langium              the grammar
 langium-config.json      its own config, so it generates independently of MDX
 dmv-value-converter.ts   strips [brackets], 'quotes' and the @ from parameters
@@ -97,7 +97,7 @@ All of these are implemented:
 
 ## Shape of the AST
 
-```
+```text
 DmvModel
 └── query: SelectStatement
       ├── distinct: boolean
