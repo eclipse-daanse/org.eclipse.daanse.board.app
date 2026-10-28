@@ -20,6 +20,26 @@ export interface DiagnosticEntry {
   readonly message: string
   readonly line: number
   readonly column: number
+  /** Document offsets of the range the diagnostic covers. */
+  readonly from: number
+  readonly to: number
+}
+
+/** The diagnostics an editor state holds, in document order. */
+export function diagnosticsOf(state: EditorView['state']): DiagnosticEntry[] {
+  const collected: DiagnosticEntry[] = []
+  forEachDiagnostic(state, (diagnostic: Diagnostic, from: number, to: number) => {
+    const line = state.doc.lineAt(from)
+    collected.push({
+      severity: diagnostic.severity,
+      message: diagnostic.message,
+      line: line.number,
+      column: from - line.from + 1,
+      from,
+      to,
+    })
+  })
+  return collected.sort((a, b) => a.line - b.line || a.column - b.column)
 }
 
 export function useDiagnostics() {
@@ -36,18 +56,7 @@ export function useDiagnostics() {
       return
     }
 
-    const collected: DiagnosticEntry[] = []
-    forEachDiagnostic(target.state, (diagnostic: Diagnostic, from: number) => {
-      const line = target.state.doc.lineAt(from)
-      collected.push({
-        severity: diagnostic.severity,
-        message: diagnostic.message,
-        line: line.number,
-        column: from - line.from + 1,
-      })
-    })
-    collected.sort((a, b) => a.line - b.line || a.column - b.column)
-    diagnostics.value = collected
+    diagnostics.value = diagnosticsOf(target.state)
   }
 
   function clear(): void {

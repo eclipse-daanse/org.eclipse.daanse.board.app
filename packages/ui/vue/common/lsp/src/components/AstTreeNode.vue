@@ -12,7 +12,7 @@ Contributors:
 -->
 
 <script setup lang="ts">
-import { computed, ref, watch } from 'vue'
+import { computed, nextTick, ref, watch } from 'vue'
 // Explicit self-import — required for a component to recurse into itself
 // under <script setup>.
 import AstTreeNode from './AstTreeNode.vue'
@@ -33,9 +33,15 @@ const rowIndent = computed(() => `${props.depth * 14 + 6}px`)
 // The caret can select a row far outside the viewport, so a row that becomes
 // active scrolls itself into view. `nearest` keeps the tree still when the row
 // is already visible.
-watch(active, isActive => {
-  if (isActive) row.value?.scrollIntoView({ block: 'nearest' })
-})
+// Immediate too: a branch opened to reach the caret mounts its row already
+// active, and that row is the one that most needs scrolling to.
+watch(
+  active,
+  isActive => {
+    if (isActive) void nextTick(() => row.value?.scrollIntoView({ block: 'nearest' }))
+  },
+  { immediate: true },
+)
 </script>
 
 <template>

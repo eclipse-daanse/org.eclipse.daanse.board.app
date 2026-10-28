@@ -8,8 +8,9 @@
   "dependencies": [
     "lib.api.lsp",
     "lib.lsp.core",
+    "platform.codemirror",
     "platform.vue",
-    "platform.codemirror"
+    "ui.vue.composables"
   ],
   "capabilities": [
     {
@@ -17,6 +18,16 @@
       "attributes": {
         "library": "org.eclipse.daanse.board.app.ui.vue.common.lsp",
         "version": "0.0.1-next.1"
+      }
+    },
+    {
+      "namespace": "tsm.i18n",
+      "attributes": {
+        "namespace": "lsp",
+        "languages": [
+          "de",
+          "en"
+        ]
       }
     }
   ],
@@ -72,6 +83,10 @@
     {
       "id": "@lezer/highlight",
       "versionRange": "^1.2.3"
+    },
+    {
+      "id": "org.eclipse.daanse.board.app.ui.vue.composables",
+      "versionRange": ">=0.0.1-0"
     }
   ]
 }

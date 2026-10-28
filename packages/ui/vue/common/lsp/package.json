@@ -17,6 +17,7 @@
     "typecheck": "vue-tsc --noEmit -p tsconfig.json"
   },
   "dependencies": {
+    "@eclipse-daanse/tsm": "0.1.0-next.1",
     "@codemirror/autocomplete": "~6.20.3",
     "@codemirror/commands": "~6.9.0",
     "@codemirror/language": "~6.12.4",
@@ -28,7 +29,8 @@
     "@lezer/highlight": "~1.2.3",
     "org.eclipse.daanse.board.app.lib.lsp.core": "0.0.1-next.1",
     "vscode-languageserver-types": "~3.17.5",
-    "org.eclipse.daanse.board.app.lib.api.lsp": "^0.0.1-next.1"
+    "org.eclipse.daanse.board.app.lib.api.lsp": "^0.0.1-next.1",
+    "org.eclipse.daanse.board.app.ui.vue.composables": "^0.0.1-next.1"
   },
   "peerDependencies": {
     "vue": "^3.5.13"
