@@ -22,6 +22,7 @@ indent_size = unset
 # casing, spacing, line breaks and quoting preserved exactly as they
 # appeared.
 [*.{dmv,dax,daxe}]
+indent_style = unset
 indent_size = unset
 trim_trailing_whitespace = unset
 
