@@ -2,13 +2,37 @@
 
 ## Introduction to the Multidimensional Expressions Paradigm
 
-The Multidimensional Expressions (MDX) language is a standardized syntactic framework for executing analytical queries against multidimensional databases, OLAP cubes, and modern semantic models. Originally designed by Microsoft, this language has evolved into a de facto industry standard, gaining support in platforms such as SQL Server Analysis Services (SSAS), Azure Analysis Services, Fabric/Power BI Premium, as well as in third-party solutions, including Oracle Essbase and InterSystems IRIS.
+The Multidimensional Expressions (MDX) language is a standardized syntactic
+framework for executing analytical queries against multidimensional databases,
+OLAP cubes, and modern semantic models. Originally designed by Microsoft, this
+language has evolved into a de facto industry standard, gaining support in
+platforms such as SQL Server Analysis Services (SSAS), Azure Analysis Services,
+Fabric/Power BI Premium, as well as in third-party solutions, including Oracle
+Essbase and InterSystems IRIS.
 
-Unlike the relational SQL language, which is oriented toward manipulating flat, two-dimensional tables, MDX operates on hypercubes—high-dimensional mathematical structures. Each dimension in such a cube consists of hierarchies, levels, and discrete members, the intersection of which forms multidimensional cells containing quantitative metrics or measures. Understanding the MDX paradigm requires a radical shift in mindset from traditional relational algebra to spatial navigation, where a query is formulated as the extraction of a specific subspace (a multidimensional slice) from the overall data array.
+Unlike the relational SQL language, which is oriented toward manipulating flat,
+two-dimensional tables, MDX operates on hypercubes—high-dimensional mathematical
+structures. Each dimension in such a cube consists of hierarchies, levels, and
+discrete members, the intersection of which forms multidimensional cells
+containing quantitative metrics or measures. Understanding the MDX paradigm
+requires a radical shift in mindset from traditional relational algebra to
+spatial navigation, where a query is formulated as the extraction of a specific
+subspace (a multidimensional slice) from the overall data array.
 
-The language's architecture is closely tied to the underlying data types of the Component Object Model (COM). At a fundamental level, MDX exclusively supports the OLE VARIANT data type. Processes for casting, converting, and manipulating types within expressions fully comply with VARIANT and VARIANTARG specifications, ensuring versatility when integrating with various client interfaces, from Microsoft Excel to specialized analytical platforms.
+The language's architecture is closely tied to the underlying data types of the
+Component Object Model (COM). At a fundamental level, MDX exclusively supports
+the OLE VARIANT data type. Processes for casting, converting, and manipulating
+types within expressions fully comply with VARIANT and VARIANTARG
+specifications, ensuring versatility when integrating with various client
+interfaces, from Microsoft Excel to specialized analytical platforms.
 
-MDX syntax has specific lexical rules. In most implementations, including SSAS, the language is case-insensitive. However, some engines, such as InterSystems MDX, maintain case sensitivity exclusively for member keys while ignoring the case for keywords and functions. Developers must also account for an extensive list of reserved words—such as ABSOLUTE, CALCULATE, FREEZE, SCOPE, VISUALTOTALS, and many others—which are strictly prohibited from being used as identifiers for cubes, dimensions, or custom functions to avoid syntactic collisions.
+MDX syntax has specific lexical rules. In most implementations, including SSAS,
+the language is case-insensitive. However, some engines, such as InterSystems
+MDX, maintain case sensitivity exclusively for member keys while ignoring the
+case for keywords and functions. Developers must also account for an extensive
+list of reserved words—such as ABSOLUTE, CALCULATE, FREEZE, SCOPE, VISUALTOTALS,
+and many others—which are strictly prohibited from being used as identifiers for
+cubes, dimensions, or custom functions to avoid syntactic collisions.
 
 ## Basic Structure and Topology of an MDX Query
 
@@ -24,7 +48,13 @@ While SQL separates column projection and row filtering, MDX allows multidimensi
 * Axis 1 is traditionally named ROWS.
 * Subsequent axes can be named PAGES, CHAPTERS, SECTIONS, though they are more commonly referred to by their ordinal numbers (from 0 to 127).
 
-From the analytical engine's perspective, every axis behaves identically. In SQL, there are fundamental differences in the behavior of rows and columns, whereas in MDX, any axis is merely a vector for placing a set of members. The formation of the display grid depends entirely on how the client application interprets these axes. The basic syntax for axis specification requires enclosing a set of members in curly braces `{}`, which is one of the main visual distinctions between MDX and SQL.
+From the analytical engine's perspective, every axis behaves identically. In
+SQL, there are fundamental differences in the behavior of rows and columns,
+whereas in MDX, any axis is merely a vector for placing a set of members. The
+formation of the display grid depends entirely on how the client application
+interprets these axes. The basic syntax for axis specification requires
+enclosing a set of members in curly braces `{}`, which is one of the main visual
+distinctions between MDX and SQL.
 
 ### Contextualizing the Query: The FROM Clause
 
@@ -42,13 +72,27 @@ This mechanism ensures that cell values in the resulting set are calculated as t
 
 The formal grammar of MDX is built upon the strict typing of multidimensional objects. Understanding these primitives is critical for constructing correct expressions and scripts.
 
-* **Members:** A member represents a discrete unit of data within a dimension. Members are identified by a hierarchical path that guarantees uniqueness across the entire cube. The standard reference syntax is: `[Dimension_Name].[Hierarchy_Name].[Level_Name].[Member_Name]`. Measures in the Analysis Services architecture are treated as regular members of a special system dimension called `[Measures]`.
+* **Members:** A member represents a discrete unit of data within a dimension.
+  Members are identified by a hierarchical path that guarantees uniqueness
+  across the entire cube. The standard reference syntax is:
+  `[Dimension_Name].[Hierarchy_Name].[Level_Name].[Member_Name]`. Measures in
+  the Analysis Services architecture are treated as regular members of a special
+  system dimension called `[Measures]`.
 * **Tuples:** A tuple is an ordered vector of members from different dimensions that defines a single point (or intersection) in the multidimensional space. Syntactically, tuples are enclosed in parentheses `()`. If a tuple consists of only one member, the parentheses can be omitted.
 * **Sets:** A set is an ordered collection of tuples of the same dimensionality (containing members from the exact same set of dimensions). Sets are defined by enclosing a list of tuples in curly braces `{}`.
 
 ### The Autoexists Mechanism
 
-High performance in analytical queries is largely achieved through the hidden Autoexists mechanism. When members from different hierarchies or attributes of the same dimension are combined in a single query (or within a single tuple), the analytical engine automatically excludes combinations from the result set that do not physically exist in the actual data. For example, when querying sales by the "City" attribute (Paris) and the "Country" attribute (Germany), the Autoexists mechanism proactively removes this intersection from the computational space, as the city of Paris does not exist in the country of Germany. This exponentially reduces the volume of computations, turning potentially massive Cartesian products into sparse and compact structures.
+High performance in analytical queries is largely achieved through the hidden
+Autoexists mechanism. When members from different hierarchies or attributes of
+the same dimension are combined in a single query (or within a single tuple),
+the analytical engine automatically excludes combinations from the result set
+that do not physically exist in the actual data. For example, when querying
+sales by the "City" attribute (Paris) and the "Country" attribute (Germany), the
+Autoexists mechanism proactively removes this intersection from the
+computational space, as the city of Paris does not exist in the country of
+Germany. This exponentially reduces the volume of computations, turning
+potentially massive Cartesian products into sparse and compact structures.
 
 ## MDX Language Operators and Precedence Logic
 
@@ -56,7 +100,15 @@ MDX provides a comprehensive set of operators that allow manipulating data, chan
 
 ### Arithmetic, String, and Bitwise Operators
 
-Arithmetic operators are used to construct calculated measures and dynamic aggregations. Their precedence order is classic: operations in parentheses are performed first, followed by multiplication (`*`) and division (`/`), and then addition (`+`) and subtraction (`-`). When precedence is equal, evaluation proceeds from left to right. Exponentiation is provided by the `^` operator. The MDX specification lacks a built-in function for extracting square roots; for this purpose, architects are instructed to raise the value to the power of 0.5 using the `^` operator. The unary `-` operator inverts the sign of a numeric expression.
+Arithmetic operators are used to construct calculated measures and dynamic
+aggregations. Their precedence order is classic: operations in parentheses are
+performed first, followed by multiplication (`*`) and division (`/`), and then
+addition (`+`) and subtraction (`-`). When precedence is equal, evaluation
+proceeds from left to right. Exponentiation is provided by the `^` operator. The
+MDX specification lacks a built-in function for extracting square roots; for
+this purpose, architects are instructed to raise the value to the power of 0.5
+using the `^` operator. The unary `-` operator inverts the sign of a numeric
+expression.
 
 String operations support concatenation using the `+` operator, which allows concatenating not only strings but also the string representations of tuples.
 
@@ -98,15 +150,37 @@ Setting the value to 1 or 2 is critical for financial planning systems where dyn
 
 For session-level (rather than query-level) restriction of the visible cube, the Data Definition Language (DDL) statement CREATE SUBCUBE is used. It establishes a rigid context for all subsequent MDX queries within an open client session until the context is destroyed by the DROP SUBCUBE command.
 
-The formation of a subcube follows complex rules of transitive closure. If the (All) member is included in the subcube definition, the engine automatically projects all child members of that hierarchy into the subcube. If a specific member is included (e.g., the city "Seattle"), the system is obliged to preserve structural integrity, so all its ancestors (state "Washington", country "USA") and all its direct descendants are implicitly included in the subcube. If members are excluded by default, the cube's coordinates shift to the (All) member, and for non-aggregatable attributes—to the first available member within the subcube.
+The formation of a subcube follows complex rules of transitive closure. If the
+(All) member is included in the subcube definition, the engine automatically
+projects all child members of that hierarchy into the subcube. If a specific
+member is included (e.g., the city "Seattle"), the system is obliged to preserve
+structural integrity, so all its ancestors (state "Washington", country "USA")
+and all its direct descendants are implicitly included in the subcube. If
+members are excluded by default, the cube's coordinates shift to the (All)
+member, and for non-aggregatable attributes—to the first available member within
+the subcube.
 
-A key feature is that aggregated values within a subcube always become "visually totaled". If a subcube is artificially restricted to the states of Washington (WA) and Oregon (OR), the aggregate at the "USA" country level within this subcube will represent the sum of WA and OR only, ignoring other states that exist in the physical cube. However, explicit references to cells outside the subcube (e.g., calling the `ParallelPeriod` function to access a previous year excluded from the subcube) will execute successfully, as the evaluation of such functions occurs in the context of the full original cube.
+A key feature is that aggregated values within a subcube always become "visually
+totaled". If a subcube is artificially restricted to the states of Washington
+(WA) and Oregon (OR), the aggregate at the "USA" country level within this
+subcube will represent the sum of WA and OR only, ignoring other states that
+exist in the physical cube. However, explicit references to cells outside the
+subcube (e.g., calling the `ParallelPeriod` function to access a previous year
+excluded from the subcube) will execute successfully, as the evaluation of such
+functions occurs in the context of the full original cube.
 
 ### Context Optimization: The EXISTING Operator
 
 In normal operation mode, the MDX engine evaluates specified sets within the context of the full cube. The EXISTING operator forcefully compels the system to re-evaluate the set exclusively within the current, narrowed query context (defined by the axes and the WHERE slicer).
 
-The semantic value of the EXISTING operator is revealed when interacting with the `Filter` function. Attempting to filter a customer dimension (containing millions of records) within a calculated measure would force the server to scan the entire customer base. Injecting the EXISTING operator before the customer set ensures that the `Filter` iteration only traverses customers corresponding to the report's current coordinates (e.g., only customers from Canada, if Canada is selected in the report rows). This reduces the algorithmic complexity, saving the server's CPU and RAM resources.
+The semantic value of the EXISTING operator is revealed when interacting with
+the `Filter` function. Attempting to filter a customer dimension (containing
+millions of records) within a calculated measure would force the server to scan
+the entire customer base. Injecting the EXISTING operator before the customer
+set ensures that the `Filter` iteration only traverses customers corresponding
+to the report's current coordinates (e.g., only customers from Canada, if Canada
+is selected in the report rows). This reduces the algorithmic complexity, saving
+the server's CPU and RAM resources.
 
 ## MDX Language Function Library
 
@@ -119,7 +193,12 @@ Time-series analytics and drill-down operations rely on navigation functions.
 * **Children and Descendants:** The `.Children` function returns strictly the set of direct descendants of a specified node, whereas `Descendants` allows extracting descendants at any given depth, including `SELF`, `BEFORE`, and `AFTER` flags to fine-tune the returned subtree.
 * **Ancestor and ClosingPeriod:** The first returns an ancestor at a specified level; the second finds the last sibling among a node's descendants (indispensable for calculating end-of-period balances).
 * **Order:** A function that orders the members of a set based on a numeric or string criterion. It supports hierarchical sorting (`ASC`, `DESC`), which sorts members within their parent nodes, and flat sorting (`BASC`, `BDESC` — Break Hierarchy), which completely destroys hierarchical links and builds an across-the-board ranking.
-* **VisualTotals:** Generates a new set in which the totals of parent members are dynamically recalculated, summing only those descendants explicitly present in the passed set. An optional string argument `Pattern` allows renaming the visual total using the `*` symbol as a placeholder for the original name (e.g., `"* (Visual Total)"`). This prevents the display of distorted grand totals when rows are programmatically hidden in a report.
+* **VisualTotals:** Generates a new set in which the totals of parent members
+  are dynamically recalculated, summing only those descendants explicitly
+  present in the passed set. An optional string argument `Pattern` allows
+  renaming the visual total using the `*` symbol as a placeholder for the
+  original name (e.g., `"* (Visual Total)"`). This prevents the display of
+  distorted grand totals when rows are programmatically hidden in a report.
 
 ### Aggregation, Statistics, and Linear Regression Functions
 
@@ -146,7 +225,16 @@ The `RollupChildren` function deserves special attention. It takes a member and 
 
 Although MDX rigidly binds a query's context to a single cube in the FROM clause, the `LookupCube(Cube_Name, Expression)` function allows extracting data from an adjacent cube hosted within the same Analysis Services database.
 
-The function supports both String expression syntax and Numeric expression syntax. The architectural drawback of `LookupCube` is that the current query's context (coordinates) is not automatically translated into the external cube. The analyst must manually construct a string expression, passing the full Unique Names of the current slice's members into it. This function completely destroys the benefits of the Storage Engine Cache, forcing the server to process the query at the Formula Engine level row by row. Due to immense performance degradation, Microsoft's official guidelines recommend avoiding `LookupCube` and instead restructuring the data model itself to physically place the required measures in a single cube.
+The function supports both String expression syntax and Numeric expression
+syntax. The architectural drawback of `LookupCube` is that the current query's
+context (coordinates) is not automatically translated into the external cube.
+The analyst must manually construct a string expression, passing the full Unique
+Names of the current slice's members into it. This function completely destroys
+the benefits of the Storage Engine Cache, forcing the server to process the
+query at the Formula Engine level row by row. Due to immense performance
+degradation, Microsoft's official guidelines recommend avoiding `LookupCube` and
+instead restructuring the data model itself to physically place the required
+measures in a single cube.
 
 ### Evaluating Key Performance Indicators (KPIs)
 
@@ -165,7 +253,12 @@ The MDX language provides direct access to the metadata layer describing both th
 
 For bulk extraction of properties directly on the query axes, the `DIMENSION PROPERTIES` construct is used, which immediately follows the set specification.
 
-An alternative method is using the `.Properties()` function. The syntax `.Properties(Property_Name [, TYPED])` retrieves the property value of a specific member. Using the optional `TYPED` flag is critical for analytics: by default, the function returns all values as formatted text. The `TYPED` flag forces the engine to retain the strongly-typed original data type, enabling further mathematical calculations on it.
+An alternative method is using the `.Properties()` function. The syntax
+`.Properties(Property_Name [, TYPED])` retrieves the property value of a
+specific member. Using the optional `TYPED` flag is critical for analytics: by
+default, the function returns all values as formatted text. The `TYPED` flag
+forces the engine to retain the strongly-typed original data type, enabling
+further mathematical calculations on it.
 
 The MDX specification defines a broad spectrum of Intrinsic Member Properties:
 
@@ -202,7 +295,12 @@ After this operator executes, every parent cell in the cube is populated with th
 
 ### Scope Management: SCOPE, THIS, and FREEZE
 
-Scripting possesses a unique mechanism for restricting the application area of formulas. The `SCOPE(Subcube_Expression)` operator focuses the execution of subsequent MDX commands exclusively on a defined subcube, ending with an `END SCOPE` block. An important detail is that the `SCOPE` operator works with metadata and can expose "holes" in hierarchies (invisible system placeholders created to balance ragged trees) regardless of MDX Compatibility settings.
+Scripting possesses a unique mechanism for restricting the application area of
+formulas. The `SCOPE(Subcube_Expression)` operator focuses the execution of
+subsequent MDX commands exclusively on a defined subcube, ending with an `END
+SCOPE` block. An important detail is that the `SCOPE` operator works with
+metadata and can expose "holes" in hierarchies (invisible system placeholders
+created to balance ragged trees) regardless of MDX Compatibility settings.
 
 Acting in tandem with SCOPE is the `THIS` function, which returns a reference to the currently active subcube. In allocation scripts (top-down budget distribution), `THIS` is always placed on the left side of the assignment expression.
 
@@ -224,11 +322,27 @@ Multidimensionality breeds mathematical collisions when a cell's coordinates are
 
 ### Calculation Pass Depth (Pass Order)
 
-Cube calculation is not linear; it is stratified into Calculation Passes. The absolute physical data slice (facts and Writeback data) forms the zero pass (Pass 0). In an MDX script, each subsequent assignment operation applied to existing measures generates a new computational layer. MDX functionality allows the developer to navigate these layers using the `CalculationCurrentPass()` function (returning the current pass number) and `CalculationPassValue()`, which extracts a cell's state at a historical calculation stage, enabling the implementation of complex recursive algorithms and goal-seeking logic.
+Cube calculation is not linear; it is stratified into Calculation Passes. The
+absolute physical data slice (facts and Writeback data) forms the zero pass
+(Pass 0). In an MDX script, each subsequent assignment operation applied to
+existing measures generates a new computational layer. MDX functionality allows
+the developer to navigate these layers using the `CalculationCurrentPass()`
+function (returning the current pass number) and `CalculationPassValue()`, which
+extracts a cell's state at a historical calculation stage, enabling the
+implementation of complex recursive algorithms and goal-seeking logic.
 
 ### Calculation Order (Solve Order)
 
-The primary arbitration mechanism for conflicting members at the intersection of axes is the Solve Order. A common collision scenario arises when designing financial reports, where a calculated profitability measure (the ratio of profit to revenue, a division) is placed on the ROWS axis, and a "Yearly Total" member (temporal aggregation, an addition) is placed on the COLUMNS axis. If the system first divides the metrics by month and then adds the resulting percentages, the final yearly profitability value would be mathematically absurd. The correct approach dictates that the engine must first aggregate the base metrics (profit and revenue) for the year, and only then apply the division formula to the accumulated sums.
+The primary arbitration mechanism for conflicting members at the intersection of
+axes is the Solve Order. A common collision scenario arises when designing
+financial reports, where a calculated profitability measure (the ratio of profit
+to revenue, a division) is placed on the ROWS axis, and a "Yearly Total" member
+(temporal aggregation, an addition) is placed on the COLUMNS axis. If the system
+first divides the metrics by month and then adds the resulting percentages, the
+final yearly profitability value would be mathematically absurd. The correct
+approach dictates that the engine must first aggregate the base metrics (profit
+and revenue) for the year, and only then apply the division formula to the
+accumulated sums.
 
 The Solve Order mechanics function as follows:
 
@@ -240,4 +354,10 @@ The Solve Order mechanics function as follows:
 
 The absolute exception to the Solve Order rules is the `Aggregate()` function. By default, calculated members based on the Aggregate function are assigned a systematically downgraded priority. Regardless of what `SOLVE_ORDER` value the developer has set, the aggregation function will always execute before any intersecting measure, protecting base totals from distortion.
 
-Nevertheless, in hyper-complex analytical scenarios, a need arises to bypass even this fundamental rule, forcing session-level calculations or formulas from subqueries to be evaluated prior to server-side calculations. In such cases, the architect injects the `SCOPE_ISOLATION` calculation property. This instruction disables the system subordination of `Aggregate` and forces the member to isolate its calculation scope, guaranteeing the predictability of the algorithm's execution regardless of the depth of axis intersection.
+Nevertheless, in hyper-complex analytical scenarios, a need arises to bypass
+even this fundamental rule, forcing session-level calculations or formulas from
+subqueries to be evaluated prior to server-side calculations. In such cases, the
+architect injects the `SCOPE_ISOLATION` calculation property. This instruction
+disables the system subordination of `Aggregate` and forces the member to
+isolate its calculation scope, guaranteeing the predictability of the
+algorithm's execution regardless of the depth of axis intersection.

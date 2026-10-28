@@ -51,5 +51,9 @@ header:
     - 'packages/lib/datasource/ogcsta/src/client/**'
     - 'packages/lib/persistence/git/src/git_api/generated/**'
     - 'packages/lib/lsp/lang/*/src/language/generated/**'
+    # Query and script examples quoted from the languages' own
+    # documentation, each naming its source in a comment of its own.
+    - '**/*.mdxq'
+    - '**/*.mdxs'
 
   comment: always
