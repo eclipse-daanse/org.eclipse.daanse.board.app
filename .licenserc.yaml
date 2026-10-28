@@ -51,12 +51,11 @@ header:
     - 'packages/lib/datasource/ogcsta/src/client/**'
     - 'packages/lib/persistence/git/src/git_api/generated/**'
     - 'packages/lib/lsp/lang/*/src/language/generated/**'
-    # Query and script examples quoted from the languages' own
-    # documentation, each naming its source in a comment of its own.
-    - '**/*.mdxq'
-    - '**/*.mdxs'
-    - '**/*.dmv'
-    - '**/*.dax'
-    - '**/*.daxe'
+    - 'packages/lib/lsp/lang/*/src/language/generated-*/**'
+    # A language package's corpus and examples: queries written in the
+    # language itself, most of them quoted from its own documentation and
+    # naming the source in a comment. A header belongs to neither.
+    - 'packages/lib/lsp/lang/*/test/corpus/**'
+    - 'packages/lib/lsp/lang/*/examples/**'
 
   comment: always

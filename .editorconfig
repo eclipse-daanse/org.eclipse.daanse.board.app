@@ -18,10 +18,10 @@ indent_size = 2
 [{LICENSE,*.md,*.g4,*.langium,*.langium.alt,*.mdxq,*.mdxs}]
 indent_size = unset
 
-# The DMV and DAX corpora and examples quote published queries, with
-# casing, spacing, line breaks and quoting preserved exactly as they
+# The language packages' corpora and examples quote published queries,
+# with casing, spacing, line breaks and quoting preserved exactly as they
 # appeared.
-[*.{dmv,dax,daxe}]
+[*.{dmv,dax,daxe,sql}]
 indent_style = unset
 indent_size = unset
 trim_trailing_whitespace = unset

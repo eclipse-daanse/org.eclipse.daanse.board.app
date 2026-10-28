@@ -161,6 +161,7 @@ import lsp4 from 'org.eclipse.daanse.board.app.ui.vue.common.lsp/manifest.json'
 import lspMdx from 'org.eclipse.daanse.board.app.lib.lsp.lang.mdx/manifest.json'
 import lspDmv from 'org.eclipse.daanse.board.app.lib.lsp.lang.dmv/manifest.json'
 import lspDax from 'org.eclipse.daanse.board.app.lib.lsp.lang.dax/manifest.json'
+import lspSql from 'org.eclipse.daanse.board.app.lib.lsp.lang.sql/manifest.json'
 
 export const bundles: ModuleManifest[] = [
   b0 as ModuleManifest,
@@ -306,4 +307,5 @@ export const bundles: ModuleManifest[] = [
   lspMdx as ModuleManifest,
   lspDmv as ModuleManifest,
   lspDax as ModuleManifest,
+  lspSql as ModuleManifest,
 ]

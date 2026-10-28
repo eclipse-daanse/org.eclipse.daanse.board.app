@@ -1,0 +1,5 @@
+# The raw catalogue extract: half a megabyte of server output that every
+# generated file here is derived from. Not committed, so a fresh checkout runs
+# the full `npm run refresh-postgres-data` once (it needs Docker) before the
+# `--split` phase can be used on its own.
+src/language/generated-postgres/catalog.json
