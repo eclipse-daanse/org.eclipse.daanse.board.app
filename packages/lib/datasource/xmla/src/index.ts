@@ -58,3 +58,5 @@ export function deactivate({ services }: ActivationContext) {
 
 export { XmlaStore, IXmlaStoreConfiguration, XMLA_STORE_FACTORY, factorySymbol }
 export { XmlastorePackage, XmlastoreFactory, IXmlaStoreConfigurationImpl, XMLARequestParamsImpl }
+export * from './utils/Cellset'
+export * from './utils/Tabular'
