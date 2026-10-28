@@ -22,7 +22,7 @@
  * needing a schema: this package has no connection and no catalogue, so
  * `SELECT nosuchcolumn FROM t` is correctly silent.
  */
-import { describe, expect, test } from 'vitest'
+import { beforeAll, describe, expect, test } from 'vitest'
 import { EmptyFileSystem } from 'langium'
 import { parseHelper } from 'langium/test'
 import { createSqlServices } from '../src/language/sql-module.js'
@@ -30,6 +30,16 @@ import type { SqlModel } from '../src/language/generated/ast.js'
 
 const services = createSqlServices(EmptyFileSystem)
 const parse = parseHelper<SqlModel>(services.Sql)
+
+/*
+ * Langium builds the parser on the first parse, and a grammar carrying every
+ * PostgreSQL keyword takes seconds over it - enough to exhaust a single
+ * test's budget when this package runs alongside the rest of the workspace.
+ * Paid once here, so each case below is timed for what it measures.
+ */
+beforeAll(async () => {
+  await parse('SELECT 1')
+}, 60_000)
 
 async function diagnose(text: string): Promise<string[]> {
   const document = await parse(text, { validation: true })
