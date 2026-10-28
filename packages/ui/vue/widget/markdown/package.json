@@ -23,7 +23,7 @@
     "url": "https://github.com/eclipse-daanse/org.eclipse.daanse.board.app/issues"
   },
   "dependencies": {
-    "easymde": "2.20.0",
+    "easymde": "2.21.0",
     "github-markdown-css": "^5.8.1",
     "org.eclipse.daanse.board.app.lib.core": "0.0.1-next.1",
     "org.eclipse.daanse.board.app.lib.events": "0.0.1-next.1",
