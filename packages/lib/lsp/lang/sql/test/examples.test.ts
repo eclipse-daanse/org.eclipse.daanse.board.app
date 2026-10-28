@@ -13,7 +13,7 @@
 
 import { readFileSync, readdirSync } from 'node:fs'
 import { join } from 'node:path'
-import { describe, expect, test } from 'vitest'
+import { beforeAll, describe, expect, test } from 'vitest'
 import { EmptyFileSystem } from 'langium'
 import { parseHelper } from 'langium/test'
 import { createSqlServices } from '../src/language/sql-module.js'
@@ -21,6 +21,16 @@ import type { SqlModel } from '../src/language/generated/ast.js'
 
 const services = createSqlServices(EmptyFileSystem)
 const parse = parseHelper<SqlModel>(services.Sql)
+
+/*
+ * Langium builds the parser on the first parse, and a grammar carrying every
+ * PostgreSQL keyword takes seconds over it - enough to exhaust a single
+ * test's budget when this package runs alongside the rest of the workspace.
+ * Paid once here, so each case below is timed for what it measures.
+ */
+beforeAll(async () => {
+  await parse('SELECT 1')
+}, 60_000)
 
 const EXAMPLES_DIR = join(__dirname, '..', 'examples')
 const files = readdirSync(EXAMPLES_DIR).filter(file => file.endsWith('.sql'))
