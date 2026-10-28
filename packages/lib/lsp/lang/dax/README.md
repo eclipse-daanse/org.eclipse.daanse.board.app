@@ -29,7 +29,7 @@ whiteboard, like the MDX and DMV bundles; `app/default` lists its manifest.
 
 ## Files
 
-```
+```text
 src/language/
   dax-core.langium          expressions, definitions, terminals; no entry rule
   dax-query.langium         DEFINE ... EVALUATE ... ORDER BY ... START AT
@@ -137,6 +137,7 @@ syntax errors. There is no type checking: whether `Sales` is a table or a
 column is a fact about the model.
 
 **Completion** covers:
+
 - every function in the reference, with its arity, syntax, summary and
   link, flagged `Daanse` when the engine can execute it;
 - the `VAR`s, tables, measures and `@parameters` in scope;
@@ -183,6 +184,7 @@ the pinned commit: `BLANK`, `FALSE`, `ROW`, `SUMMARIZECOLUMNS`, `TRUE`.
 | `Normalized` | what was changed from the published text |
 
 The recording runs the reference inside Docker. It:
+
 1. clones the reference at the pin;
 2. builds `parser.ccc` with Maven 3.9 and JDK 25;
 3. runs `scripts/reference/Verdict.java` over every entry.
