@@ -18,6 +18,12 @@ indent_size = 2
 [{LICENSE,*.md,*.g4,*.langium,*.langium.alt,*.mdxq,*.mdxs}]
 indent_size = unset
 
+# The DMV corpus and examples quote published queries, with casing,
+# spacing, line breaks and quoting preserved exactly as they appeared.
+[*.dmv]
+indent_size = unset
+trim_trailing_whitespace = unset
+
 [license.templates]
 indent_size = unset
 trim_trailing_whitespace = unset

@@ -55,5 +55,6 @@ header:
     # documentation, each naming its source in a comment of its own.
     - '**/*.mdxq'
     - '**/*.mdxs'
+    - '**/*.dmv'
 
   comment: always

@@ -1,14 +1,14 @@
-You are an expert Language Engineer specializing in the Langium framework. 
+You are an expert Language Engineer specializing in the Langium framework.
 Your task is to write a complete, valid `.langium` grammar file for the DMV (Dynamic Management Views) query language based strictly on the specification below.
 
 ### 1. Lexical Rules & Tokens
 *   **Case Insensitivity:** All keywords must be case-insensitive. Use regex terminals like `/(?i)SELECT/`.
 *   **Keywords:** `SELECT`, `FROM`, `WHERE`, `ORDER`, `BY`, `DISTINCT`, `TOP`, `ASC`, `DESC`, `AND`, `OR`, `NOT`, `SYSTEMRESTRICTSCHEMA`.
-*   **Identifiers:** 
+*   **Identifiers:**
     *   Standard identifiers (letters, numbers, underscores, starts with a letter).
     *   Escaped identifiers: Enclosed in square brackets `[...]` (e.g., `[$Dim Product]`). Ensure the brackets are stripped in the AST via value converters or grammar rules.
     *   System Identifiers: Must support the `$System` prefix (handle the `$` sign).
-*   **Literals:** 
+*   **Literals:**
     *   String literals (strictly single quotes `'...'`).
     *   Numeric literals (integers and floats).
 *   **Operators:** `=`, `<>`, `>`, `<`, `>=`, `<=`.
@@ -16,16 +16,16 @@ Your task is to write a complete, valid `.langium` grammar file for the DMV (Dyn
 
 ### 2. Syntactic Rules
 *   **Root Rule:** `DmvModel` containing a single `query` of type `SelectStatement`.
-*   **SelectStatement:** 
-    `SELECT` (`DISTINCT`)? (`TOP` topLimit=INT)? 
-    selections+=SelectItem (',' selections+=SelectItem)* 
-    `FROM` source=FromClause 
-    (`WHERE` whereFilter=Expression)? 
+*   **SelectStatement:**
+    `SELECT` (`DISTINCT`)? (`TOP` topLimit=INT)?
+    selections+=SelectItem (',' selections+=SelectItem)*
+    `FROM` source=FromClause
+    (`WHERE` whereFilter=Expression)?
     (`ORDER` `BY` orderings+=SortItem (',' orderings+=SortItem)*)?
 *   **SelectItem:** Can be a wildcard `*`, a `ColumnReference`, or a `FunctionCall`.
 *   **FromClause:** Must support two branches:
     1.  `TableReference`: A path of dot-separated identifiers (e.g., `$System.discover_sessions` or `[DB].[Cube].[$Dim]`).
-    2.  `SystemRestrictSchemaCall`: 
+    2.  `SystemRestrictSchemaCall`:
         `SYSTEMRESTRICTSCHEMA` '(' table=TableReference ',' parameters+=ParameterAssignment (',' parameters+=ParameterAssignment)* ')'
 *   **ParameterAssignment:** `paramName=ID '=' value=Literal`
 *   **SortItem:** `column=ColumnReference (direction=('ASC' | 'DESC'))?`
