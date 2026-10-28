@@ -72,8 +72,48 @@ export function rowsToCsv(rows: Record<string, unknown>[], columns = columnsOf(r
   return toCsv([columns.map(columnLabel), ...rows.map(row => columns.map(column => cell(row[column])))])
 }
 
+/*
+ * Comments out, so a statement is read by what it says rather than by what
+ * is written around it. Scanned rather than matched: a pattern for block
+ * comments has to allow anything between the delimiters, and on a statement
+ * that opens one and never closes it that costs a pass per opening - text a
+ * user can type into the editor. An opening with no closing is not a
+ * comment and stays, as it did under the pattern.
+ */
+function withoutComments(mdx: string): string {
+  let out = ''
+  let at = 0
+  /*
+   * Once a `/*` has no `*\/` after it, no later one has either, and asking
+   * again for each of them is the pass per opening this is here to avoid.
+   */
+  let blockMayClose = true
+  while (at < mdx.length) {
+    const opening = mdx.slice(at, at + 2)
+    if (opening === '/*' && blockMayClose) {
+      const closing = mdx.indexOf('*/', at + 2)
+      if (closing === -1) {
+        blockMayClose = false
+        out += mdx[at]
+        at += 1
+        continue
+      }
+      out += ' '
+      at = closing + 2
+    } else if (opening === '--' || opening === '//') {
+      const end = mdx.indexOf('\n', at)
+      out += ' '
+      at = end === -1 ? mdx.length : end
+    } else {
+      out += mdx[at]
+      at += 1
+    }
+  }
+  return out
+}
+
 /** Statements the server answers with rows rather than a cellset. */
 export function isTabularStatement(mdx: string): boolean {
-  const text = mdx.replace(/\/\*[\s\S]*?\*\/|--[^\n]*|\/\/[^\n]*/g, ' ').trim()
+  const text = withoutComments(mdx).trim()
   return /^DRILLTHROUGH\b/i.test(text) || /\bFROM\s+\$SYSTEM\b/i.test(text)
 }

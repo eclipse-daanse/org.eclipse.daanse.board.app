@@ -120,4 +120,28 @@ describe('tabular answers', () => {
     expect(isTabularStatement('-- schema\nSELECT * FROM $SYSTEM.MDSCHEMA_CUBES')).toBe(true)
     expect(isTabularStatement('SELECT {} ON 0 FROM [Sales]')).toBe(false)
   })
+
+  it('reads a statement around its comments, closed or not', () => {
+    expect(isTabularStatement('/* which */ DRILLTHROUGH SELECT FROM [Sales]')).toBe(true)
+    expect(isTabularStatement('SELECT /* a */ * /* b */ FROM $SYSTEM.MDSCHEMA_CUBES')).toBe(true)
+    expect(isTabularStatement('/* DRILLTHROUGH */ SELECT {} ON 0 FROM [Sales]')).toBe(false)
+    // An opening with no closing is not a comment, so what follows is read
+    expect(isTabularStatement('/* DRILLTHROUGH SELECT FROM [Sales]')).toBe(false)
+    expect(isTabularStatement('DRILLTHROUGH /* SELECT FROM [Sales]')).toBe(true)
+  })
+
+  it('reads a statement that opens comments it never closes, without pausing', () => {
+    /*
+     * The shape a pattern for block comments runs slowly on: every opening
+     * sends it looking for a closing that is not there, so the work grows
+     * with the square of the openings. 120k of them, which a user can paste
+     * into the editor. Reading it takes about 5ms; the pattern this replaced
+     * took 1.5s on the same input, so half a second tells the two apart with
+     * room on either side.
+     */
+    const pathological = `/*${'a/*'.repeat(40_000)}`
+    const started = performance.now()
+    expect(isTabularStatement(pathological)).toBe(false)
+    expect(performance.now() - started).toBeLessThan(500)
+  })
 })
