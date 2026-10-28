@@ -748,6 +748,14 @@
   resolved "https://registry.npmjs.org/@daybrush/utils/-/utils-1.13.0.tgz"
   integrity sha512-ALK12C6SQNNHw1enXK+UO8bdyQ+jaWNQ1Af7Z3FNxeAwjYhQT7do+TRE4RASAJ3ObaS2+TJ7TXR3oz2Gzbw0PQ==
 
+"@eclipse-daanse/emf-xml@0.0.1-next.1":
+  version "0.0.1-next.1"
+  resolved "https://registry.yarnpkg.com/@eclipse-daanse/emf-xml/-/emf-xml-0.0.1-next.1.tgz#c1f8cfb6d58d058d4e429ff6d2ddac361f4d0cff"
+  integrity sha512-LdI3e6MZY8R91b8oJU21Y3b2GhPhvCZ8xqGB/VpRWM9c6dvw5p0a0YUlrPPCanMkogU4Pnej/OsW1Mbv8A+Iiw==
+  dependencies:
+    "@emfts/core" "0.3.0-next.1"
+    sax "^1.4.1"
+
 "@eclipse-daanse/tsm@0.1.0-next.1":
   version "0.1.0-next.1"
   resolved "https://registry.npmjs.org/@eclipse-daanse/tsm/-/tsm-0.1.0-next.1.tgz#612aea31352651a54db18bb8336ccc22f96c8941"
@@ -755,6 +763,54 @@
   dependencies:
     reflect-metadata "^0.2.2"
     semver "^7.7.3"
+
+"@eclipse-daanse/xmla-client@0.0.1-next.1":
+  version "0.0.1-next.1"
+  resolved "https://registry.yarnpkg.com/@eclipse-daanse/xmla-client/-/xmla-client-0.0.1-next.1.tgz#5c779833c6b016e4da09e96bf8a23fe7f714a98c"
+  integrity sha512-ABEqxuDf5uofvngpQvhmTx+UlaEF878fgWqo4xF91FgcGR56nnQhM77q0/DV+wZn8+skA2/Ld2eEnvQSiLDDaQ==
+  dependencies:
+    "@eclipse-daanse/emf-xml" "0.0.1-next.1"
+    "@eclipse-daanse/xmla-io" "0.0.1-next.1"
+    "@eclipse-daanse/xmla-model" "0.0.1-next.1"
+    "@emfts/core" "0.3.0-next.1"
+
+"@eclipse-daanse/xmla-dynamic@0.0.1-next.1":
+  version "0.0.1-next.1"
+  resolved "https://registry.yarnpkg.com/@eclipse-daanse/xmla-dynamic/-/xmla-dynamic-0.0.1-next.1.tgz#321ecab95b224cd25b4f7d496bc048894aa445e9"
+  integrity sha512-QEtSRdvApyQ/z1Fc/6RcAUFAx0icLvF3ERck2YP4gQrXOj7SVzQq0w9iIz2kkbN9xxwLmIHKfPRiMEC4gce50g==
+  dependencies:
+    "@eclipse-daanse/emf-xml" "0.0.1-next.1"
+    "@eclipse-daanse/xmla-io" "0.0.1-next.1"
+    "@eclipse-daanse/xmla-model" "0.0.1-next.1"
+    "@emfts/core" "0.3.0-next.1"
+
+"@eclipse-daanse/xmla-io@0.0.1-next.1":
+  version "0.0.1-next.1"
+  resolved "https://registry.yarnpkg.com/@eclipse-daanse/xmla-io/-/xmla-io-0.0.1-next.1.tgz#5c8301d713e9a2b83fb321ee46243f5f19ae44a1"
+  integrity sha512-3Eff/UIEQBBmusBQGe9wlxbkqg+jzdId3e7PhCrZ200teaiXlIHVuSZMjF0QNVO0hUd9G6cqwZNrZtqopPYTVg==
+  dependencies:
+    "@eclipse-daanse/emf-xml" "0.0.1-next.1"
+    "@eclipse-daanse/xmla-model" "0.0.1-next.1"
+    "@emfts/core" "0.3.0-next.1"
+
+"@eclipse-daanse/xmla-model@0.0.1-next.1":
+  version "0.0.1-next.1"
+  resolved "https://registry.yarnpkg.com/@eclipse-daanse/xmla-model/-/xmla-model-0.0.1-next.1.tgz#ded802bdac638e42b71a9c57bcceb6aa41aab996"
+  integrity sha512-u9jk3/KDvLtxdNnsya6OksCC9Sd+jymhWGRMgpGrPiXiwMfAo6V+I4LwranM21RE+rK4kXKZiGnnmEPqT8WS3w==
+  dependencies:
+    "@eclipse-daanse/emf-xml" "0.0.1-next.1"
+    "@emfts/core" "0.3.0-next.1"
+
+"@eclipse-daanse/xmla-workbench-adapter@0.0.1-next.1":
+  version "0.0.1-next.1"
+  resolved "https://registry.yarnpkg.com/@eclipse-daanse/xmla-workbench-adapter/-/xmla-workbench-adapter-0.0.1-next.1.tgz#aeae807aca7f0e7a0d63b96f3109397ac853a701"
+  integrity sha512-1NWHtMoRYZ5XYGd1XDmUShI2PPSqwi8NeRWUbto0Qj3Dmpe8rRo78jiwJWCzMJG7+/JiBjNCcdvch4qFSZtg5A==
+  dependencies:
+    "@eclipse-daanse/emf-xml" "0.0.1-next.1"
+    "@eclipse-daanse/xmla-client" "0.0.1-next.1"
+    "@eclipse-daanse/xmla-dynamic" "0.0.1-next.1"
+    "@eclipse-daanse/xmla-model" "0.0.1-next.1"
+    "@emfts/core" "0.3.0-next.1"
 
 "@egjs/agent@^2.2.1":
   version "2.4.4"
@@ -787,6 +843,11 @@
     commander "^12.0.0"
     ejs "^3.1.10"
     sax "^1.4.4"
+
+"@emfts/core@0.3.0-next.1":
+  version "0.3.0-next.1"
+  resolved "https://registry.yarnpkg.com/@emfts/core/-/core-0.3.0-next.1.tgz#c81c93abef272b9d9c5daad2b6995095d565584e"
+  integrity sha512-SKLBuuo3P58kd2CuvMygEAVUBcoIUf1j/JAmFpcwMufpvbpBHvGXNgQOYAwqfb9j31pQ68G07ijX1Epdgmw7tw==
 
 "@emfts/core@^0.1.1-next.18", "@emfts/core@^0.1.1-next.2":
   version "0.1.1-next.18"

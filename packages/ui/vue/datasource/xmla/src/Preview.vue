@@ -74,11 +74,14 @@ watch(() => props.dataSource.config.cube, async () => {
   console.log(newStore);
 });
 
+let latestUpdate = 0;
+
 const updateData = async () => {
-  console.log('updateData called');
+  // Answers can arrive out of order; only the latest request's counts.
+  const update = ++latestUpdate;
   const req = await tempStore.value.getData('PivotTable');
+  if (update !== latestUpdate) return;
   data.value = req;
-  console.log('data', data.value);
   if (props.dataSource.config.useVisualEditor) {
     query.value = await tempStore.value.getMdxRequest();
   }

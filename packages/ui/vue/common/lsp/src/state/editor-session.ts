@@ -24,10 +24,12 @@ import type { Position, Range } from 'vscode-languageserver-types'
 import type {
   AstRequestParams,
   AstTreeResult,
+  CstTreeResult,
   LanguageDescriptor,
 } from 'org.eclipse.daanse.board.app.lib.lsp.core'
 import {
   AST_REQUEST,
+  CST_REQUEST,
   getLanguageClient,
 } from 'org.eclipse.daanse.board.app.lib.lsp.core'
 
@@ -40,10 +42,16 @@ export interface EditorSession {
   cursorPosition: Ref<Position | null>
 
   ast: Ref<AstTreeResult | null>
+  /** The concrete syntax tree of the same parse, once something asked for it. */
+  cst: Ref<CstTreeResult | null>
+  /** Whether the CST is fetched with every parse; off until a view needs it. */
+  cstWanted: Ref<boolean>
   astLoading: Ref<boolean>
   astStale: Ref<boolean>
   astError: Ref<string | null>
 
+  /** The view, once the editor has one. */
+  view: Readonly<Ref<EditorView | undefined>>
   setView(view: EditorView | undefined): void
   revealRange(range: Range): void
   refreshAst(): Promise<void>
@@ -66,6 +74,8 @@ export function createEditorSession(options: {
   const cursorPosition = ref<Position | null>(null)
 
   const ast = ref<AstTreeResult | null>(null)
+  const cst = shallowRef<CstTreeResult | null>(null)
+  const cstWanted = ref(false)
   const astLoading = ref(false)
   const astStale = ref(false)
   const astError = ref<string | null>(null)
@@ -84,15 +94,23 @@ export function createEditorSession(options: {
     }
     astLoading.value = true
     try {
-      const result = await client.request<AstRequestParams, AstTreeResult>(
-        AST_REQUEST,
-        {
-          textDocument: { uri: toFileUri(uri.value) },
-        },
-      )
+      /*
+       * The client sends edits on its own clock, half a second behind the
+       * typing; a tree asked for before that would describe the previous
+       * text. Flushing first makes the server parse what is on screen.
+       */
+      client.sync()
+      const params: AstRequestParams = { textDocument: { uri: toFileUri(uri.value) } }
+      const [result, concrete] = await Promise.all([
+        client.request<AstRequestParams, AstTreeResult>(AST_REQUEST, params),
+        cstWanted.value
+          ? client.request<AstRequestParams, CstTreeResult>(CST_REQUEST, params)
+          : Promise.resolve(null),
+      ])
       // A slower earlier request must not overwrite a newer parse.
       if (current !== token) return
       ast.value = result
+      if (concrete) cst.value = concrete
       astError.value = null
       astStale.value = false
     } catch (error) {
@@ -115,9 +133,12 @@ export function createEditorSession(options: {
     text,
     cursorPosition,
     ast,
+    cst,
+    cstWanted,
     astLoading,
     astStale,
     astError,
+    view,
     setView(next) {
       view.value = next
       if (!next) {
@@ -163,6 +184,7 @@ export function createEditorSession(options: {
       token++
       view.value = undefined
       ast.value = null
+      cst.value = null
     },
   }
 }
