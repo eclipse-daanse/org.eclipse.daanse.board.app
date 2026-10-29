@@ -86,8 +86,10 @@ function documentationOf(element: Element): string | undefined {
     for (const detail of Array.from(annotation.children)) {
       if (detail.getAttribute('key') !== 'documentation') continue
       const value = detail.getAttribute('value')
-      /* The models wrap long sentences across lines and indent them to
-         line up with the XML; that indentation is not part of the text. */
+      /*
+       * The models wrap long sentences across lines and indent them to line
+       * up with the XML; that indentation is not part of the text.
+       */
       if (value) return value.split(/\s+/).filter(Boolean).join(' ')
     }
   }
@@ -154,8 +156,10 @@ function featuresOf(element: Element, owner: string): FeatureDoc[] {
       name,
       documentation: documentationOf(feature),
       type: typeOf(feature),
-      /* Ecore's default lowerBound is 0; a field is required only when the
-         model says so. */
+      /*
+       * Ecore's default lowerBound is 0; a field is required only when the
+       * model says so.
+       */
       optional: (feature.getAttribute('lowerBound') ?? '0') === '0',
       many: upper === '-1' || Number(upper ?? '1') > 1,
       reference: feature.getAttribute('xsi:type') === 'ecore:EReference',
@@ -199,8 +203,10 @@ export function describeClass(nsURI: string, className: string): ClassDoc | unde
 
   const own = featuresOf(element, className)
   const byName = new Map<string, FeatureDoc>()
-  /* A class may redeclare an inherited field to document its own role -
-     rest's `url` does exactly that. The nearer declaration wins. */
+  /*
+   * A class may redeclare an inherited field to document its own role -
+   * rest's `url` does exactly that. The nearer declaration wins.
+   */
   for (const feature of [...inherited, ...own]) byName.set(feature.name, feature)
 
   return {
