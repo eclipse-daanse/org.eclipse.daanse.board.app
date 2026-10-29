@@ -4,5 +4,31 @@
   },
   "Sparql": {
     "query": "Query"
+  },
+  "View": {
+    "query": "Query",
+    "catalogue": "Catalogue",
+    "label": "What to look at"
+  },
+  "Catalogue": {
+    "search": "Search the catalogue",
+    "searchPlaceholder": "Part of a title - empty lists everything",
+    "ask": "Search",
+    "asking": "Searching…",
+    "kind": "Kind",
+    "formats": "Formats",
+    "all": "All",
+    "datasets": "Datasets",
+    "services": "Services",
+    "dataset": "Dataset",
+    "service": "Service",
+    "untitled": "Untitled",
+    "nothing": "Nothing in this catalogue matches.",
+    "failed": "The endpoint could not answer: {{reason}}",
+    "noConnection": "This source has no connection yet - pick one in its settings.",
+    "pages": "Pages",
+    "previous": "Previous",
+    "next": "Next",
+    "showing": "{{from}}-{{to}}"
   }
 }

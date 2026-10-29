@@ -4,5 +4,31 @@
   },
   "Sparql": {
     "query": "Abfrage"
+  },
+  "View": {
+    "query": "Abfrage",
+    "catalogue": "Katalog",
+    "label": "Was angezeigt wird"
+  },
+  "Catalogue": {
+    "search": "Katalog durchsuchen",
+    "searchPlaceholder": "Teil eines Titels – leer zeigt alles",
+    "ask": "Suchen",
+    "asking": "Suche läuft…",
+    "kind": "Art",
+    "formats": "Formate",
+    "all": "Alle",
+    "datasets": "Datensätze",
+    "services": "Dienste",
+    "dataset": "Datensatz",
+    "service": "Dienst",
+    "untitled": "Ohne Titel",
+    "nothing": "In diesem Katalog passt nichts.",
+    "failed": "Der Dienst konnte nicht antworten: {{reason}}",
+    "noConnection": "Diese Quelle hat noch keine Verbindung – wähle eine in den Einstellungen.",
+    "pages": "Seiten",
+    "previous": "Zurück",
+    "next": "Weiter",
+    "showing": "{{from}}–{{to}}"
   }
 }
