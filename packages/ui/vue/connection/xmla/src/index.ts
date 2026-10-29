@@ -28,7 +28,7 @@ import Settings from './Settings.vue'
 import { NAMESPACE } from './i18n'
 
 /* Looked up by the create form by field name.
-   i18n-keys: connectionXmla:Fields.*, i18n-keys: connectionXmla:Hints.* */
+  i18n-keys: connectionXmla:Fields.*, i18n-keys: connectionXmla:Hints.* */
 
 const settingsSymbol = Symbol.for('XmlaConnectionSettings')
 
