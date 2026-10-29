@@ -79,6 +79,17 @@ export class PivotTablePackage extends BasicEPackage {
     PIVOT_TABLE__ROW_LEVEL_STYLES: null as unknown as EAttribute | EReference,
     PIVOT_TABLE__COLUMN_LEVEL_STYLES: null as unknown as EAttribute | EReference,
     PIVOT_TABLE__CONDITIONAL_FORMATS: null as unknown as EAttribute | EReference,
+    PIVOT_TABLE__MODE: null as unknown as EAttribute | EReference,
+    PIVOT_TABLE__CASCADE_DEPTH: null as unknown as EAttribute | EReference,
+    PIVOT_TABLE__MEASURE: null as unknown as EAttribute | EReference,
+    PIVOT_TABLE__COMPARE_LAYOUT: null as unknown as EAttribute | EReference,
+    PIVOT_TABLE__DIFF_TYPE: null as unknown as EAttribute | EReference,
+    PIVOT_TABLE__SCALE_NORMALIZATION: null as unknown as EAttribute | EReference,
+    PIVOT_TABLE__DIVERGING_SCALE: null as unknown as EAttribute | EReference,
+    PIVOT_TABLE__SIGNIFICANCE_THRESHOLD: null as unknown as EAttribute | EReference,
+    PIVOT_TABLE__HIDE_UNCHANGED: null as unknown as EAttribute | EReference,
+    PIVOT_TABLE__MATRIX_LIMIT: null as unknown as EAttribute | EReference,
+    PIVOT_TABLE__TIMELINE: null as unknown as EAttribute | EReference,
     LEVEL_STYLE: null as unknown as EClass,
     LEVEL_STYLE__LEVEL: null as unknown as EAttribute | EReference,
     LEVEL_STYLE__BACKGROUND_COLOR: null as unknown as EAttribute | EReference,
@@ -305,6 +316,94 @@ export class PivotTablePackage extends BasicEPackage {
     pivotTableClass.getEStructuralFeatures().push(pivotTable_conditionalFormats);
     PivotTablePackage.Literals.PIVOT_TABLE__CONDITIONAL_FORMATS = pivotTable_conditionalFormats;
 
+    // Create mode feature
+    const pivotTable_mode = new BasicEAttribute();
+    pivotTable_mode.setName('mode');
+    pivotTable_mode.setLowerBound(0);
+    pivotTable_mode.setUpperBound(1);
+    pivotTableClass.getEStructuralFeatures().push(pivotTable_mode);
+    PivotTablePackage.Literals.PIVOT_TABLE__MODE = pivotTable_mode;
+
+    // Create cascadeDepth feature
+    const pivotTable_cascadeDepth = new BasicEAttribute();
+    pivotTable_cascadeDepth.setName('cascadeDepth');
+    pivotTable_cascadeDepth.setLowerBound(0);
+    pivotTable_cascadeDepth.setUpperBound(1);
+    pivotTableClass.getEStructuralFeatures().push(pivotTable_cascadeDepth);
+    PivotTablePackage.Literals.PIVOT_TABLE__CASCADE_DEPTH = pivotTable_cascadeDepth;
+
+    // Create measure feature
+    const pivotTable_measure = new BasicEAttribute();
+    pivotTable_measure.setName('measure');
+    pivotTable_measure.setLowerBound(0);
+    pivotTable_measure.setUpperBound(1);
+    pivotTableClass.getEStructuralFeatures().push(pivotTable_measure);
+    PivotTablePackage.Literals.PIVOT_TABLE__MEASURE = pivotTable_measure;
+
+    // Create compareLayout feature
+    const pivotTable_compareLayout = new BasicEAttribute();
+    pivotTable_compareLayout.setName('compareLayout');
+    pivotTable_compareLayout.setLowerBound(0);
+    pivotTable_compareLayout.setUpperBound(1);
+    pivotTableClass.getEStructuralFeatures().push(pivotTable_compareLayout);
+    PivotTablePackage.Literals.PIVOT_TABLE__COMPARE_LAYOUT = pivotTable_compareLayout;
+
+    // Create diffType feature
+    const pivotTable_diffType = new BasicEAttribute();
+    pivotTable_diffType.setName('diffType');
+    pivotTable_diffType.setLowerBound(0);
+    pivotTable_diffType.setUpperBound(1);
+    pivotTableClass.getEStructuralFeatures().push(pivotTable_diffType);
+    PivotTablePackage.Literals.PIVOT_TABLE__DIFF_TYPE = pivotTable_diffType;
+
+    // Create scaleNormalization feature
+    const pivotTable_scaleNormalization = new BasicEAttribute();
+    pivotTable_scaleNormalization.setName('scaleNormalization');
+    pivotTable_scaleNormalization.setLowerBound(0);
+    pivotTable_scaleNormalization.setUpperBound(1);
+    pivotTableClass.getEStructuralFeatures().push(pivotTable_scaleNormalization);
+    PivotTablePackage.Literals.PIVOT_TABLE__SCALE_NORMALIZATION = pivotTable_scaleNormalization;
+
+    // Create divergingScale feature
+    const pivotTable_divergingScale = new BasicEAttribute();
+    pivotTable_divergingScale.setName('divergingScale');
+    pivotTable_divergingScale.setLowerBound(0);
+    pivotTable_divergingScale.setUpperBound(1);
+    pivotTableClass.getEStructuralFeatures().push(pivotTable_divergingScale);
+    PivotTablePackage.Literals.PIVOT_TABLE__DIVERGING_SCALE = pivotTable_divergingScale;
+
+    // Create significanceThreshold feature
+    const pivotTable_significanceThreshold = new BasicEAttribute();
+    pivotTable_significanceThreshold.setName('significanceThreshold');
+    pivotTable_significanceThreshold.setLowerBound(0);
+    pivotTable_significanceThreshold.setUpperBound(1);
+    pivotTableClass.getEStructuralFeatures().push(pivotTable_significanceThreshold);
+    PivotTablePackage.Literals.PIVOT_TABLE__SIGNIFICANCE_THRESHOLD = pivotTable_significanceThreshold;
+
+    // Create hideUnchanged feature
+    const pivotTable_hideUnchanged = new BasicEAttribute();
+    pivotTable_hideUnchanged.setName('hideUnchanged');
+    pivotTable_hideUnchanged.setLowerBound(0);
+    pivotTable_hideUnchanged.setUpperBound(1);
+    pivotTableClass.getEStructuralFeatures().push(pivotTable_hideUnchanged);
+    PivotTablePackage.Literals.PIVOT_TABLE__HIDE_UNCHANGED = pivotTable_hideUnchanged;
+
+    // Create matrixLimit feature
+    const pivotTable_matrixLimit = new BasicEAttribute();
+    pivotTable_matrixLimit.setName('matrixLimit');
+    pivotTable_matrixLimit.setLowerBound(0);
+    pivotTable_matrixLimit.setUpperBound(1);
+    pivotTableClass.getEStructuralFeatures().push(pivotTable_matrixLimit);
+    PivotTablePackage.Literals.PIVOT_TABLE__MATRIX_LIMIT = pivotTable_matrixLimit;
+
+    // Create timeline feature
+    const pivotTable_timeline = new BasicEAttribute();
+    pivotTable_timeline.setName('timeline');
+    pivotTable_timeline.setLowerBound(0);
+    pivotTable_timeline.setUpperBound(1);
+    pivotTableClass.getEStructuralFeatures().push(pivotTable_timeline);
+    PivotTablePackage.Literals.PIVOT_TABLE__TIMELINE = pivotTable_timeline;
+
     // Create LevelStyle class
     const levelStyleClass = new BasicEClass();
     levelStyleClass.setName('LevelStyle');
@@ -526,6 +625,17 @@ export class PivotTablePackage extends BasicEPackage {
     (PivotTablePackage.Literals.PIVOT_TABLE__ROW_LEVEL_STYLES as BasicEReference).setEType(PivotTablePackage.Literals.LEVEL_STYLE);
     (PivotTablePackage.Literals.PIVOT_TABLE__COLUMN_LEVEL_STYLES as BasicEReference).setEType(PivotTablePackage.Literals.LEVEL_STYLE);
     (PivotTablePackage.Literals.PIVOT_TABLE__CONDITIONAL_FORMATS as BasicEReference).setEType(PivotTablePackage.Literals.CONDITIONAL_FORMAT);
+    (PivotTablePackage.Literals.PIVOT_TABLE__MODE as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (PivotTablePackage.Literals.PIVOT_TABLE__CASCADE_DEPTH as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (PivotTablePackage.Literals.PIVOT_TABLE__MEASURE as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (PivotTablePackage.Literals.PIVOT_TABLE__COMPARE_LAYOUT as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (PivotTablePackage.Literals.PIVOT_TABLE__DIFF_TYPE as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (PivotTablePackage.Literals.PIVOT_TABLE__SCALE_NORMALIZATION as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (PivotTablePackage.Literals.PIVOT_TABLE__DIVERGING_SCALE as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EBoolean')!);
+    (PivotTablePackage.Literals.PIVOT_TABLE__SIGNIFICANCE_THRESHOLD as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EDouble')!);
+    (PivotTablePackage.Literals.PIVOT_TABLE__HIDE_UNCHANGED as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EBoolean')!);
+    (PivotTablePackage.Literals.PIVOT_TABLE__MATRIX_LIMIT as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EInt')!);
+    (PivotTablePackage.Literals.PIVOT_TABLE__TIMELINE as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EBoolean')!);
     (PivotTablePackage.Literals.LEVEL_STYLE__LEVEL as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EDouble')!);
     (PivotTablePackage.Literals.LEVEL_STYLE__BACKGROUND_COLOR as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
     (PivotTablePackage.Literals.LEVEL_STYLE__TEXT_COLOR as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);

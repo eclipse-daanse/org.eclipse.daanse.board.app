@@ -479,7 +479,7 @@ function onOverlayEnd() {
 function onExternalDragAdd(e: any) {
   const added = e?.item?._underlying_vm_ || e?.added?.element || e?.item
   const type = added?.type ?? 'UnknownWidget'
-  const datasourceId = added?.datasourceId ?? 'default'
+  const datasourceId: string | undefined = added?.datasourceId
 
   if (isDraggingPlaceholder.value && gridLayout.value) {
     gridLayout.value.dragEvent('dragend', dropId, lastPos.value.x, lastPos.value.y, 2, 2)
@@ -506,7 +506,8 @@ function onDragEnter() { drag.value = true }
 function onDrop() { onOverlayEnd() }
 
 /** Widgets hinzufügen/entfernen */
-function addWidget(uid: string, type: string, datasourceId: string) {
+/* Without a datasource until its settings name one - never a placeholder id no repository holds. */
+function addWidget(uid: string, type: string, datasourceId?: string) {
   const widget: StoredWidget = {
     uid,
     type,

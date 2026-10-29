@@ -1,0 +1,6 @@
+-- Source: https://www.kasperonbi.com/determine-columns-you-dont-need-using-dmvs-in-power-bi/
+-- Construct: Lower-case order by ... desc on one line.
+-- Expect: parse
+-- Normalized: identifiers and string values substituted; casing, spacing,
+--             line breaks and quoting preserved exactly as published.
+select * from $SYSTEM.DISCOVER_STORAGE_UNITS order by rows_count desc

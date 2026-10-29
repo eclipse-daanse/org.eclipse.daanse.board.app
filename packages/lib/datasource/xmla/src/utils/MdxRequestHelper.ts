@@ -62,7 +62,6 @@ const parseMdxRequest = (mdxResponce: any, params: QueryParams) => {
 
   // const properties = (await metadataStorage.getMetadataStorage()).properties;
   const properties = params.properties;
-  console.log('properties in helper', properties);
 
   let tupples = optionalArrayToArray(
       mdxResponce.Body.ExecuteResponse.return?.root.Axes?.Axis,
@@ -123,14 +122,12 @@ const parseMdxRequest = (mdxResponce: any, params: QueryParams) => {
   const columnProperties = [] as any[]
   const rowsProperties = [] as any[]
 
-  console.log('Params in helper', params)
 
   columns[0]?.forEach((col: any) => {
     // const colPropsShown = pivotTableStore.state.membersWithProps.includes(
     //   col.HIERARCHY_UNIQUE_NAME,
     // );
     if (!params.showColumnsProperties) return;
-    console.log(col);
 
     const colProps: any[] = properties.filter(
       (prop) => prop.HIERARCHY_UNIQUE_NAME === col.HIERARCHY_UNIQUE_NAME,

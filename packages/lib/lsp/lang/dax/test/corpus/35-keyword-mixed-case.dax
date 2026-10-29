@@ -1,0 +1,15 @@
+// Source: https://learn.microsoft.com/en-us/dax/bitlshift-function-dax (example 3)
+// Construct: `Define`, `Evaluate` - keywords are case-insensitive.
+// Expect: parse
+// Reference: rejects - Encountered an error at (or somewhere around) input:6:1
+// Divergence: case-insensitive keywords; unquoted table
+// Normalized: as published.
+Define 
+    Measure Sales[LeftShift] = BITLSHIFT(SELECTEDVALUE(Sales[Amount]), 3)
+
+EVALUATE 
+SUMMARIZECOLUMNS(
+    Sales[Amount],
+    "LEFTSHIFT", 
+    [LeftShift]
+)

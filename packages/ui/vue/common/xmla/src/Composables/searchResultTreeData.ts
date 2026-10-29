@@ -94,13 +94,13 @@ export async function useSearchResultTreeData(element: {
       let mdx = `
           WITH Set FilteredMembers As 'Head (Filter(AddCalculatedMembers(${element.item.HIERARCHY_UNIQUE_NAME}.Members), InStr(1, ${element.item.HIERARCHY_UNIQUE_NAME}.currentmember.member_caption, "${searchValue.value}")>0),10001)'
           Select
-          Hierarchize(Generate(FilteredMembers, Ascendants(${element.item.HIERARCHY_UNIQUE_NAME}.currentmember))) DIMENSION PROPERTIES PARENT_UNIQUE_NAME, MEMBER_TYPE ON 0, {} ON 1 FROM ${element.item.CUBE_NAME}
+          Hierarchize(Generate(FilteredMembers, Ascendants(${element.item.HIERARCHY_UNIQUE_NAME}.currentmember))) DIMENSION PROPERTIES PARENT_UNIQUE_NAME, MEMBER_TYPE ON 0, {} ON 1 FROM [${element.item.CUBE_NAME}]
         `;
       if (searchBy.value !== "All Members") {
         mdx = `
             WITH Set FilteredMembers As 'Head (Filter(AddCalculatedMembers(${searchBy.value}.Members), InStr(1, ${element.item.HIERARCHY_UNIQUE_NAME}.currentmember.member_caption, "${searchValue.value}")>0),10001)'
             Select
-            Hierarchize(Generate(FilteredMembers, Ascendants(${element.item.HIERARCHY_UNIQUE_NAME}.currentmember))) DIMENSION PROPERTIES PARENT_UNIQUE_NAME, MEMBER_TYPE ON 0, {} ON 1 FROM ${element.item.CUBE_NAME}
+            Hierarchize(Generate(FilteredMembers, Ascendants(${element.item.HIERARCHY_UNIQUE_NAME}.currentmember))) DIMENSION PROPERTIES PARENT_UNIQUE_NAME, MEMBER_TYPE ON 0, {} ON 1 FROM [${element.item.CUBE_NAME}]
           `;
       }
       const childMembersResponce = await api.getMDX(mdx);
@@ -130,7 +130,7 @@ export async function useSearchResultTreeData(element: {
 
         try {
           const mdx = `
-            SELECT {AddCalculatedMembers({${treeNode.UName}.Children})} DIMENSION PROPERTIES MEMBER_TYPE ON 0, {} ON 1 FROM ${element.item.CUBE_NAME} CELL PROPERTIES CELL_ORDINAL
+            SELECT {AddCalculatedMembers({${treeNode.UName}.Children})} DIMENSION PROPERTIES MEMBER_TYPE ON 0, {} ON 1 FROM [${element.item.CUBE_NAME}] CELL PROPERTIES CELL_ORDINAL
           `;
           const childrenResponce = await api.getMDX(mdx);
           const children = optionalArrayToArray(

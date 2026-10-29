@@ -1,0 +1,6 @@
+-- Source: https://www.kasperonbi.com/determine-columns-you-dont-need-using-dmvs-in-power-bi/
+-- Construct: A $ inside a string literal, and no whitespace around the = operator.
+-- Expect: parse
+-- Normalized: identifiers and string values substituted; casing, spacing,
+--             line breaks and quoting preserved exactly as published.
+select * from $SYSTEM.DBSCHEMA_FIELDS where table_name='$Dimcalendar'

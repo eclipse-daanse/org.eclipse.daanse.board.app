@@ -1,0 +1,6 @@
+-- Source: https://www.inkeysolutions.com/power-bi-how-to-identify-referenced-measures-and-columns-in-model-i/
+-- Construct: AND/OR mixed without parentheses — exercises the precedence cascade.
+-- Expect: parse
+-- Normalized: identifiers and string values substituted; casing, spacing,
+--             line breaks and quoting preserved exactly as published.
+SELECT [TABLE], OBJECT, OBJECT_TYPE, REFERENCED_TABLE, REFERENCED_OBJECT, REFERENCED_OBJECT_TYPE FROM $SYSTEM.DISCOVER_ITEM_DEPENDENCY WHERE OBJECT_TYPE = 'CALC_FIELD' AND REFERENCED_OBJECT_TYPE = 'FIELD' OR OBJECT_TYPE = 'UNIT' AND REFERENCED_OBJECT_TYPE = 'UNIT' ORDER BY [TABLE] ASC

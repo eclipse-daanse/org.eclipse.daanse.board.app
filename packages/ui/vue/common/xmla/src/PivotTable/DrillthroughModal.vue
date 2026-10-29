@@ -13,6 +13,11 @@ Contributors:
 
 <script lang="ts" setup>
 import { ref, computed, inject } from "vue";
+import { DModal, DTable, DButton } from "org.eclipse.daanse.board.app.ui.vue.controls";
+import { useTranslation } from "org.eclipse.daanse.board.app.ui.vue.composables";
+import { columnLabel, tabularRows } from "org.eclipse.daanse.board.app.lib.datasource.xmla";
+
+const { t } = useTranslation("xmla");
 
 const props = defineProps<{
     cubeName: string;
@@ -24,14 +29,13 @@ const isOpened = ref(false);
 const generatedMdx = ref("");
 const drillthroughItems = ref<any[]>([]);
 const isDrillthroughLoading = ref(false);
-const copied = ref(false);
+const failed = ref(false);
 
 const tableColumns = computed(() => {
     if (drillthroughItems.value.length === 0) return [];
     return Object.keys(drillthroughItems.value[0]).map(key => ({
         key,
-        label: key.replace(/_/g, ' ').toUpperCase(),
-        sortable: true
+        label: columnLabel(key),
     }));
 });
 
@@ -48,17 +52,19 @@ const open = async (cell: any, pivotData: any) => {
 
     const uNames = [...rowTuple, ...colTuple].map((m: any) => m.UName).filter(Boolean);
 
-    const clickedMeasure = uNames.find(u => u.startsWith('[Measures].')) || '[Measures].[Sales Amount]';
+    // Without a measure on the axes - one in the WHERE clause, say - the cube's default measure answers.
+    const clickedMeasure = uNames.find(u => u.startsWith('[Measures].'));
     const slicerMembers = uNames.filter(u => !u.startsWith('[Measures].'));
 
-    const cube = props.cubeName || 'AccountingWb';
-    const selectClause = `{ ${clickedMeasure} }`;
+    const cube = props.cubeName.startsWith('[') ? props.cubeName : `[${props.cubeName}]`;
+    const selectClause = clickedMeasure ? `{ ${clickedMeasure} } ON 0 ` : '';
     const whereClause = slicerMembers.length > 0 ? ` WHERE ( ${slicerMembers.join(', ')} )` : '';
 
-    generatedMdx.value = `DRILLTHROUGH MAXROWS 100 SELECT ${selectClause} ON 0 FROM [${cube}]${whereClause}`;
+    generatedMdx.value = `DRILLTHROUGH MAXROWS 100 SELECT ${selectClause}FROM ${cube}${whereClause}`;
 
     isOpened.value = true;
     isDrillthroughLoading.value = true;
+    failed.value = false;
     drillthroughItems.value = [];
 
     try {
@@ -79,21 +85,10 @@ const open = async (cell: any, pivotData: any) => {
 
         const rawResponse = await api.getDrillthroughMDX(generatedMdx.value);
 
-        const root = rawResponse?.Body?.ExecuteResponse?.return?.root;
-        const rowData = root?.row || rawResponse?.Body?.ExecuteResponse?.return?.[0]?.root?.row;
-        const rows = rowData ? (Array.isArray(rowData) ? rowData : [rowData]) : [];
-
-        drillthroughItems.value = rows.map((r: any) => {
-            const item: Record<string, any> = {};
-            for (const k of Object.keys(r)) {
-                if (k === '__attrs') continue;
-                const v = r[k];
-                item[k] = v && typeof v === 'object' ? (v.Value ?? v.text ?? JSON.stringify(v)) : v;
-            }
-            return item;
-        });
+        drillthroughItems.value = tabularRows(rawResponse);
     } catch (err: any) {
         console.error("Drillthrough fetch error:", err);
+        failed.value = true;
     } finally {
         isDrillthroughLoading.value = false;
     }
@@ -103,31 +98,27 @@ defineExpose({ open });
 </script>
 
 <template>
-  <va-modal
-    v-model="isOpened"
-    hide-default-actions
-    max-width="850px"
-    title="Drillthrough Details"
-  >
-    <div class="flex flex-col gap-4 w-full h-full">
-      <div class="flex flex-col border border-solid border-gray-200 rounded overflow-hidden max-h-96 w-full h-full relative">
-        <va-data-table
-          :items="drillthroughItems"
-          :columns="tableColumns"
-          striped
-          hoverable
-          :loading="isDrillthroughLoading"
-          no-data-html="<div class='p-6 text-center text-gray-400'>No drillthrough results found.</div>"
-        />
-      </div>
-
-      <div class="flex justify-end gap-2">
-        <va-button
-          @click="isOpened = false"
-        >
-          Close
-        </va-button>
-      </div>
+  <DModal v-model="isOpened" :title="t('PivotTable.drillthroughTitle')" size="lg">
+    <div class="drillthrough">
+      <p v-if="isDrillthroughLoading" class="drillthrough__state" role="status">{{ t('PivotTable.drillthroughLoading') }}</p>
+      <p v-else-if="failed" class="drillthrough__state">{{ t('PivotTable.drillthroughFailed') }}</p>
+      <DTable v-else :items="drillthroughItems" :columns="tableColumns" :empty="t('PivotTable.drillthroughEmpty')" />
     </div>
-  </va-modal>
+    <template #actions>
+      <DButton @click="isOpened = false">{{ t('PivotTable.close') }}</DButton>
+    </template>
+  </DModal>
 </template>
+
+<style scoped>
+.drillthrough {
+  max-height: 60vh;
+  overflow: auto;
+}
+
+.drillthrough__state {
+  padding: 1.5rem;
+  text-align: center;
+  color: var(--color-dim);
+}
+</style>

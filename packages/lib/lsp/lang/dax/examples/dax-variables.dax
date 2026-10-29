@@ -1,0 +1,13 @@
+// Query variables, and VAR ... RETURN inside a measure.
+DEFINE
+    VAR MinAmount = 100
+    MEASURE 'Sales'[Large Sales] =
+        VAR Large =
+            FILTER ( 'Sales', 'Sales'[Amount] >= MinAmount )
+        VAR Total =
+            SUMX ( Large, 'Sales'[Amount] )
+        RETURN
+            IF ( ISBLANK ( Total ), 0, Total )
+
+EVALUATE
+    ROW ( "Large Sales", [Large Sales] )

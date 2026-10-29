@@ -189,7 +189,7 @@ const onKeyDown = (event: KeyboardEvent, { i, j }: VisibleCell) => {
 .cell-input {
   width: 100%;
   height: calc(100% - 2px);
-  border: 1px solid silver;
+  border: 1px solid var(--color-divider);
   border-radius: 4px;
   padding: 0 6px;
   font-size: inherit;
@@ -205,8 +205,8 @@ const onKeyDown = (event: KeyboardEvent, { i, j }: VisibleCell) => {
 
 .cell-input:focus {
   outline: none;
-  border-color: hsl(207, 90%, 54%);
-  box-shadow: 0 0 0 3px hsla(207, 90%, 54%, 0.25), inset 0 1px 3px rgba(0, 0, 0, 0.08);
-  background-color: #ffffff;
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-accent) 25%, transparent);
+  background-color: var(--color-bg);
 }
 </style>

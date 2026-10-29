@@ -1,0 +1,10 @@
+-- Source: https://datamartin.ca/2022/09/30/what-are-the-dmvs-and-how-you-can-use-them/
+-- Construct: Blank lines between clauses; ORDER BY on a bare column that reads as a SQL keyword.
+-- Expect: parse
+-- Normalized: identifiers and string values substituted; casing, spacing,
+--             line breaks and quoting preserved exactly as published.
+SELECT * FROM $System.DISCOVER_ITEM_DEPENDENCY
+
+WHERE OBJECT_TYPE = 'UNIT'
+
+ORDER BY TABLE ASC

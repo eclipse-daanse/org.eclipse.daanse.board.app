@@ -1,0 +1,8 @@
+// Source: https://learn.microsoft.com/en-us/dax/log-function-dax (example 1)
+// Construct: Three alternative formulas in one block - the page lists them, it does not write one expression.
+// Expect: reject
+// Reference: rejects - Encountered an error at (or somewhere around) input:7:1
+// Normalized: as published, less the `Name =` that makes it a measure definition.
+LOG(100,10)
+= LOG(100)
+= LOG10(100)

@@ -1,0 +1,16 @@
+// Source: https://learn.microsoft.com/en-us/dax/allcrossfiltered-function-dax (example 1)
+// Construct: Unquoted table names throughout a query.
+// Expect: parse
+// Reference: rejects - Encountered an error at (or somewhere around) input:7:9
+// Divergence: unquoted table before a column
+// Normalized: as published.
+DEFINE
+MEASURE FactInternetSales[TotalQuantity1] =
+    CALCULATE(SUM(FactInternetSales[OrderQuantity]), ALLCROSSFILTERED(FactInternetSales))
+MEASURE FactInternetSales[TotalQuantity2] =
+    CALCULATE(SUM(FactInternetSales[OrderQuantity]), ALL(FactInternetSales))
+EVALUATE
+    SUMMARIZECOLUMNS(DimSalesReason[SalesReasonName], 
+        "TotalQuantity1", [TotalQuantity1],
+        "TotalQuantity2", [TotalQuantity2])
+    ORDER BY DimSalesReason[SalesReasonName]

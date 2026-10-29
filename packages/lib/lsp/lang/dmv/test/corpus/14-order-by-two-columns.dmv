@@ -1,0 +1,8 @@
+-- Source: https://asstoredprocedures.github.io/functions/DMV/
+-- Construct: Multi-column ORDER BY, lower-case desc, no WHERE.
+-- Expect: parse
+-- Normalized: identifiers and string values substituted; casing, spacing,
+--             line breaks and quoting preserved exactly as published.
+SELECT *
+FROM $SYSTEM.DISCOVER_SEGMENT_GROUPING_STAT
+ORDER BY GROUPING_NAME, ATTRIBUTE_COUNT_MAX desc
