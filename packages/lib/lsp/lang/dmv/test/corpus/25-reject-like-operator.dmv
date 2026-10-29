@@ -1,0 +1,11 @@
+-- Source: https://asstoredprocedures.github.io/functions/DMV/
+-- Construct: LIKE — Microsoft documents it as unsupported and the reference parser has no
+--            such token. A published query uses it anyway.
+-- Expect: reject
+-- Normalized: identifiers and string values substituted; casing, spacing,
+--             line breaks and quoting preserved exactly as published.
+SELECT GROUPING_ORDINAL
+ , [GROUPING_NAME]
+  FROM $SYSTEM.MDSCHEMA_GROUPINGS
+ WHERE MODEL_NAME LIKE '%Orders'
+ORDER BY GROUPING_NAME

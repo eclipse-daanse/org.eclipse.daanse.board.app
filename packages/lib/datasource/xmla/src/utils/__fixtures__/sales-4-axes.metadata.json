@@ -1,0 +1,124 @@
+{
+  "mdx": "SELECT {[Measures].[Unit Sales],[Measures].[Store Sales]} DIMENSION PROPERTIES PARENT_UNIQUE_NAME,HIERARCHY_UNIQUE_NAME ON 0,\n {[Product].[All Products], [Product].[Product Family].Members} DIMENSION PROPERTIES PARENT_UNIQUE_NAME,HIERARCHY_UNIQUE_NAME ON 1,\n Hierarchize(Descendants({[Time].[Year].members}, 1, SELF_AND_BEFORE)) DIMENSION PROPERTIES PARENT_UNIQUE_NAME,HIERARCHY_UNIQUE_NAME ON 2,\n Hierarchize(Descendants({[Store].[Store Country].members}, 1, SELF_AND_BEFORE)) DIMENSION PROPERTIES PARENT_UNIQUE_NAME,HIERARCHY_UNIQUE_NAME ON 3\nFROM [Sales] CELL PROPERTIES VALUE, FORMAT_STRING, FORMATTED_VALUE, BACK_COLOR, FORE_COLOR",
+  "levels": [
+    {
+      "HIERARCHY_UNIQUE_NAME": "[Product]",
+      "LEVEL_UNIQUE_NAME": "[Product].[(All)]",
+      "LEVEL_NUMBER": "0",
+      "LEVEL_TYPE": "1",
+      "DIMENSION_UNIQUE_NAME": "[Product]"
+    },
+    {
+      "HIERARCHY_UNIQUE_NAME": "[Product]",
+      "LEVEL_UNIQUE_NAME": "[Product].[Product Family]",
+      "LEVEL_NUMBER": "1",
+      "LEVEL_TYPE": "0",
+      "DIMENSION_UNIQUE_NAME": "[Product]"
+    },
+    {
+      "HIERARCHY_UNIQUE_NAME": "[Product]",
+      "LEVEL_UNIQUE_NAME": "[Product].[Product Department]",
+      "LEVEL_NUMBER": "2",
+      "LEVEL_TYPE": "0",
+      "DIMENSION_UNIQUE_NAME": "[Product]"
+    },
+    {
+      "HIERARCHY_UNIQUE_NAME": "[Product]",
+      "LEVEL_UNIQUE_NAME": "[Product].[Product Category]",
+      "LEVEL_NUMBER": "3",
+      "LEVEL_TYPE": "0",
+      "DIMENSION_UNIQUE_NAME": "[Product]"
+    },
+    {
+      "HIERARCHY_UNIQUE_NAME": "[Product]",
+      "LEVEL_UNIQUE_NAME": "[Product].[Product Subcategory]",
+      "LEVEL_NUMBER": "4",
+      "LEVEL_TYPE": "0",
+      "DIMENSION_UNIQUE_NAME": "[Product]"
+    },
+    {
+      "HIERARCHY_UNIQUE_NAME": "[Product]",
+      "LEVEL_UNIQUE_NAME": "[Product].[Brand Name]",
+      "LEVEL_NUMBER": "5",
+      "LEVEL_TYPE": "0",
+      "DIMENSION_UNIQUE_NAME": "[Product]"
+    },
+    {
+      "HIERARCHY_UNIQUE_NAME": "[Product]",
+      "LEVEL_UNIQUE_NAME": "[Product].[Product Name]",
+      "LEVEL_NUMBER": "6",
+      "LEVEL_TYPE": "0",
+      "DIMENSION_UNIQUE_NAME": "[Product]"
+    },
+    {
+      "HIERARCHY_UNIQUE_NAME": "[Store]",
+      "LEVEL_UNIQUE_NAME": "[Store].[(All)]",
+      "LEVEL_NUMBER": "0",
+      "LEVEL_TYPE": "1",
+      "DIMENSION_UNIQUE_NAME": "[Store]"
+    },
+    {
+      "HIERARCHY_UNIQUE_NAME": "[Store]",
+      "LEVEL_UNIQUE_NAME": "[Store].[Store Country]",
+      "LEVEL_NUMBER": "1",
+      "LEVEL_TYPE": "0",
+      "DIMENSION_UNIQUE_NAME": "[Store]"
+    },
+    {
+      "HIERARCHY_UNIQUE_NAME": "[Store]",
+      "LEVEL_UNIQUE_NAME": "[Store].[Store State]",
+      "LEVEL_NUMBER": "2",
+      "LEVEL_TYPE": "0",
+      "DIMENSION_UNIQUE_NAME": "[Store]"
+    },
+    {
+      "HIERARCHY_UNIQUE_NAME": "[Store]",
+      "LEVEL_UNIQUE_NAME": "[Store].[Store City]",
+      "LEVEL_NUMBER": "3",
+      "LEVEL_TYPE": "0",
+      "DIMENSION_UNIQUE_NAME": "[Store]"
+    },
+    {
+      "HIERARCHY_UNIQUE_NAME": "[Store]",
+      "LEVEL_UNIQUE_NAME": "[Store].[Store Name]",
+      "LEVEL_NUMBER": "4",
+      "LEVEL_TYPE": "0",
+      "DIMENSION_UNIQUE_NAME": "[Store]"
+    },
+    {
+      "HIERARCHY_UNIQUE_NAME": "[Time]",
+      "LEVEL_UNIQUE_NAME": "[Time].[Year]",
+      "LEVEL_NUMBER": "0",
+      "LEVEL_TYPE": "20",
+      "DIMENSION_UNIQUE_NAME": "[Time]"
+    },
+    {
+      "HIERARCHY_UNIQUE_NAME": "[Time]",
+      "LEVEL_UNIQUE_NAME": "[Time].[Quarter]",
+      "LEVEL_NUMBER": "1",
+      "LEVEL_TYPE": "68",
+      "DIMENSION_UNIQUE_NAME": "[Time]"
+    },
+    {
+      "HIERARCHY_UNIQUE_NAME": "[Time]",
+      "LEVEL_UNIQUE_NAME": "[Time].[Month]",
+      "LEVEL_NUMBER": "2",
+      "LEVEL_TYPE": "132",
+      "DIMENSION_UNIQUE_NAME": "[Time]"
+    }
+  ],
+  "dimensions": [
+    {
+      "DIMENSION_UNIQUE_NAME": "[Product]",
+      "DIMENSION_TYPE": "3"
+    },
+    {
+      "DIMENSION_UNIQUE_NAME": "[Store]",
+      "DIMENSION_TYPE": "3"
+    },
+    {
+      "DIMENSION_UNIQUE_NAME": "[Time]",
+      "DIMENSION_TYPE": "1"
+    }
+  ]
+}

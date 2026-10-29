@@ -1,0 +1,8 @@
+// A query parameter with the default DEFINE gives it.
+DEFINE
+    @Year = 2024
+    TABLE SalesOfYear =
+        FILTER ( 'Sales', YEAR ( 'Sales'[Order Date] ) = @Year )
+
+EVALUATE
+    SalesOfYear

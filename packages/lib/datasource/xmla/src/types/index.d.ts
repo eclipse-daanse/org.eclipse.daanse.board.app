@@ -19,6 +19,8 @@ declare interface DBSchemaCatalog {
 declare interface MDSchemaCube {
   CUBE_NAME: string
   CUBE_CAPTION: string
+  /** Changes with the schema; what cached metadata is kept under. */
+  LAST_SCHEMA_UPDATE?: string
 }
 
 declare interface MDSchemaDimension {

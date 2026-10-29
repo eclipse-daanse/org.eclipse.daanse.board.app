@@ -14,6 +14,7 @@
 import type { ModuleManifest } from '@eclipse-daanse/tsm'
 import b0 from 'org.eclipse.daanse.board.app.platform.vue/manifest.json'
 import b1 from 'org.eclipse.daanse.board.app.shell/manifest.json'
+import workbench from 'org.eclipse.daanse.board.app.workbench/manifest.json'
 import b2 from 'org.eclipse.daanse.board.app.ui.vue.widget.progress/manifest.json'
 import b3 from 'org.eclipse.daanse.board.app.ui.vue.widget.map/manifest.json'
 import b4 from 'org.eclipse.daanse.board.app.ui.vue.plugins.geojson_renderer/manifest.json'
@@ -152,9 +153,21 @@ import b143 from 'org.eclipse.daanse.board.app.lib.api.events/manifest.json'
  * The dev server serves each package's dist-bundle/ under /bundles/<id>/;
  * the production build copies them into dist/bundles/.
  */
+import lspP from 'org.eclipse.daanse.board.app.platform.codemirror/manifest.json'
+import lsp0 from 'org.eclipse.daanse.board.app.lib.api.lsp/manifest.json'
+import lsp1 from 'org.eclipse.daanse.board.app.lib.lsp.core/manifest.json'
+import lsp2 from 'org.eclipse.daanse.board.app.lib.lsp.server/manifest.json'
+import lsp3 from 'org.eclipse.daanse.board.app.lib.repository.lsp/manifest.json'
+import lsp4 from 'org.eclipse.daanse.board.app.ui.vue.common.lsp/manifest.json'
+import lspMdx from 'org.eclipse.daanse.board.app.lib.lsp.lang.mdx/manifest.json'
+import lspDmv from 'org.eclipse.daanse.board.app.lib.lsp.lang.dmv/manifest.json'
+import lspDax from 'org.eclipse.daanse.board.app.lib.lsp.lang.dax/manifest.json'
+import lspSql from 'org.eclipse.daanse.board.app.lib.lsp.lang.sql/manifest.json'
+
 export const bundles: ModuleManifest[] = [
   b0 as ModuleManifest,
   b1 as ModuleManifest,
+  workbench as ModuleManifest,
   b2 as ModuleManifest,
   b3 as ModuleManifest,
   b4 as ModuleManifest,
@@ -287,4 +300,14 @@ export const bundles: ModuleManifest[] = [
   b141 as ModuleManifest,
   b142 as ModuleManifest,
   b143 as ModuleManifest,
+  lspP as ModuleManifest,
+  lsp0 as ModuleManifest,
+  lsp1 as ModuleManifest,
+  lsp2 as ModuleManifest,
+  lsp3 as ModuleManifest,
+  lsp4 as ModuleManifest,
+  lspMdx as ModuleManifest,
+  lspDmv as ModuleManifest,
+  lspDax as ModuleManifest,
+  lspSql as ModuleManifest,
 ]

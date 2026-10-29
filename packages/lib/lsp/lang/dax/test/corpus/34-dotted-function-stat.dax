@@ -1,0 +1,7 @@
+// Source: https://learn.microsoft.com/en-us/dax/chisq-dist-function-dax (example 1)
+// Construct: A dotted function name: CHISQ.DIST.
+// Expect: parse
+// Reference: rejects - Encountered an error at (or somewhere around) input:6:17
+// Divergence: dotted function names
+// Normalized: as published.
+EVALUATE { CHISQ.DIST(2, 2, TRUE) }

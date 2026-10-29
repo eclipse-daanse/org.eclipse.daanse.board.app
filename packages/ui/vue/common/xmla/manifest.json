@@ -21,6 +21,10 @@
     {
       "id": "org.eclipse.daanse.board.app.ui.vue.controls",
       "versionRange": ">=0.0.1-0"
+    },
+    {
+      "id": "org.eclipse.daanse.board.app.lib.datasource.xmla",
+      "versionRange": ">=0.0.1-0"
     }
   ],
   "capabilities": [
@@ -43,6 +47,7 @@
     }
   ],
   "dependencies": [
+    "lib.datasource.xmla",
     "platform.vue",
     "ui.vue.composables",
     "ui.vue.controls"

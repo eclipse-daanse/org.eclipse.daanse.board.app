@@ -1,0 +1,7 @@
+// Source: https://learn.microsoft.com/en-us/dax/nameof-function-dax
+// Construct: `]]` inside a column name.
+// Expect: parse
+// Reference: rejects - Encountered an error at (or somewhere around) input:6:23
+// Divergence: ]] in column names
+// Normalized: written from the escaping rule: "A literal closing bracket (]) in a column or measure name is escaped as ]]."
+SUM ( 'Sales'[Amount ]]USD] )

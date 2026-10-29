@@ -11,8 +11,10 @@
  *   Smart City Jena
  **********************************************************************/
 
-import { getMdxRequest } from '../utils/MdxRequestConstructor'
+import { getMdxRequest, queryAxes, type NavigationItem } from '../utils/MdxRequestConstructor'
 import { parseMdxRequest, parseRequestToTable } from '../utils/MdxRequestHelper'
+import { parseCellset, slicesOf, type Cellset } from '../utils/Cellset'
+import { pivotSlice, type PivotSliceParams } from '../utils/PivotSlice'
 import { DrilldownHandler, DrilldownPayload } from './DrilldownHandler'
 import { MetadataStore } from './MetadataStorage'
 import { BaseDatasource, IBaseConnectionConfiguration, type ConfigurationOf } from 'org.eclipse.daanse.board.app.lib.datasource.base'
@@ -44,6 +46,9 @@ interface XMLARequestParams {
   columns: any[]
   measures: any[]
   filters: any[]
+  /** Axis 2 and 3: which slice of the result the table shows. */
+  pages?: NavigationItem[]
+  chapters?: NavigationItem[]
 }
 
 export interface SecurityOptions {
@@ -53,11 +58,49 @@ export interface SecurityOptions {
 }
 
 export interface FilterChangePayload {
-  area: 'rows' | 'columns' | 'filters'
+  area: 'rows' | 'columns' | 'filters' | 'pages' | 'chapters'
   filters: any
   id: string
 }
 
+/** The hierarchies on the pages and chapters of an answer. */
+function navigatedHierarchiesOf(cellset: Cellset): string[] {
+  return [...new Set(cellset.axes.slice(2).flatMap(a => a.positions.flatMap(p => p.members.map(m => m.hierarchy))))]
+}
+
+function navigatedHierarchies(mdxResponse: unknown): string[] {
+  const cellset = parseCellset(mdxResponse)
+  return cellset && cellset.axes.length > 2 ? navigatedHierarchiesOf(cellset) : []
+}
+
+const AXIS_LISTS = ['rows', 'columns', 'measures', 'filters', 'pages', 'chapters'] as const
+
+/*
+ * Request params as stored can lack axes - older boards have no pages or
+ * chapters - and the generic create form hands over whatever was typed,
+ * "{}" as text included. Every list the query is built from is there.
+ */
+function withAllAxes(params: unknown): XMLARequestParams {
+  let value = params
+  if (typeof value === 'string') {
+    try {
+      value = JSON.parse(value)
+    } catch {
+      value = {}
+    }
+  }
+  const source = (value && typeof value === 'object' ? value : {}) as Record<string, unknown>
+  const lists = Object.fromEntries(
+    AXIS_LISTS.map(axis => [axis, Array.isArray(source[axis]) ? source[axis] : []]),
+  )
+  return { ...source, ...lists } as unknown as XMLARequestParams
+}
+
+/* eMondrian's fault for a cell property it does not know: a null CellProperty. */
+const refusesUpdateable = (error: unknown) =>
+  /cellProperty|UPDATEABLE/i.test(error instanceof Error ? error.message : String(error))
+
+// Built through services.construct, which takes only declared classes.
 @injectable()
 export class XmlaStore extends BaseDatasource {
   private connection: any
@@ -66,6 +109,8 @@ export class XmlaStore extends BaseDatasource {
     columns: [],
     measures: [],
     filters: [],
+    pages: [],
+    chapters: [],
   }
   private useMdx: boolean = false
   private mdx: string = ''
@@ -76,8 +121,8 @@ export class XmlaStore extends BaseDatasource {
   private initPromiseResolve: (() => void) | undefined
   private initPromise: Promise<void> = null as unknown as Promise<void>;
 
-  private metadataPromiseResolve: ((value: MetadataStore) => void) | undefined
-  private metadataPromise: Promise<MetadataStore> = null as unknown as Promise<MetadataStore>;
+  /* Loaded once per configuration - every query and every widget needs it. */
+  private metadataPromise: Promise<MetadataStore> | null = null
 
   @inject(CONNECTION_REPOSITORY)
   private connectionRepository!: ConnectionRepository
@@ -89,15 +134,11 @@ export class XmlaStore extends BaseDatasource {
   init(configuration: ConfigurationOf<IXmlaStoreConfiguration>) {
     super.init(configuration)
 
-    console.log('state of store during creation', JSON.stringify(this.requestParams));
-
     this.initPromise = new Promise(resolve => {
       this.initPromiseResolve = resolve
     })
 
-    this.metadataPromise = new Promise(resolve => {
-      this.metadataPromiseResolve = resolve
-    })
+    this.metadataPromise = null
 
     this.connection = configuration.connection
     this.cube = configuration.cube
@@ -126,7 +167,7 @@ export class XmlaStore extends BaseDatasource {
       this.mdx = configuration.mdx
     }
     if (configuration.requestParams) {
-      this.requestParams = configuration.requestParams
+      this.requestParams = withAllAxes(configuration.requestParams)
     }
 
     this.pollingInterval = configuration.pollingInterval ?? 5000
@@ -137,29 +178,46 @@ export class XmlaStore extends BaseDatasource {
     this.initPromiseResolve?.()
   }
 
-  private metadataLoading = false;
-  async loadMetadata() {
-    if (this.metadataLoading) {
-      return this.metadataPromise;
+  /** One metadata store per configuration, built on the connection's API. */
+  private metadataStore(): Promise<MetadataStore> {
+    if (!this.metadataPromise) {
+      const loading = (async () => {
+        const connection = this.connectionRepository.getConnection(this.connection) as XmlaConnection
+        const metadata = new MetadataStore()
+        metadata.init(await connection.getApi())
+        this.metadata = metadata
+        return metadata
+      })()
+      this.metadataPromise = loading
+      // A failed start is not kept; the next call tries again.
+      loading.catch(() => {
+        if (this.metadataPromise === loading) this.metadataPromise = null
+      })
     }
-    if (this.metadata && this.metadata.getLevels()?.length > 0) {
-      return this.metadata;
-    }
-    this.metadataLoading = true;
-    try {
-      const connection = this.connectionRepository.getConnection(
-        this.connection,
-      ) as XmlaConnection
+    return this.metadataPromise
+  }
 
-      this.metadata = new MetadataStore()
-      const api = await connection.getApi();
-      this.metadata.init(api);
-      await this.metadata.loadMetadata(connection.catalogName, this.cube)
-      this.metadataPromiseResolve?.(this.metadata);
-      return this.metadata;
-    } finally {
-      this.metadataLoading = false;
-    }
+  private catalogName(): string {
+    const connection = this.connectionRepository.getConnection(this.connection) as XmlaConnection
+    return connection.catalogName
+  }
+
+  /** The hierarchies the query is built from, on every axis and in the filters. */
+  private queryHierarchies(): string[] {
+    const params = this.requestParams
+    const items = [params.rows, params.columns, params.pages, params.chapters, params.filters]
+      .flatMap(list => (list ?? []) as any[])
+      .filter(item => item?.type !== 'Values')
+      .map(item => item?.originalItem?.HIERARCHY_UNIQUE_NAME)
+      .filter((name): name is string => typeof name === 'string' && name !== '')
+    return [...new Set(items)]
+  }
+
+  /** Metadata a query needs - its own hierarchies' levels - not the whole cube's. */
+  private async queryMetadata(hierarchies: string[]): Promise<MetadataStore> {
+    const metadata = await this.metadataStore()
+    await metadata.loadQueryMetadata(this.catalogName(), this.cube, hierarchies)
+    return metadata
   }
 
   /** The repository arrives as a parameter - callers inject it Vue-side. */
@@ -182,31 +240,33 @@ export class XmlaStore extends BaseDatasource {
   }
 
   public async setRequestParams(requestParams: XMLARequestParams) {
-    this.requestParams = requestParams;
+    this.requestParams = withAllAxes(requestParams);
     this.executeCleanup();
     this.mdx = await this.getMdxRequest();
   }
 
+  /** Drilldowns and expansions of hierarchies no longer on their axis are dropped. */
   private executeCleanup() {
     if (this.drilldownHandler) {
-      this.drilldownHandler.flushExpands(
-        this.requestParams.columns,
-        this.requestParams.rows,
-      )
-      this.drilldownHandler.flushDrilldowns(
-        this.requestParams.columns,
-        this.requestParams.rows,
-      )
+      this.drilldownHandler.flushExpands(this.requestParams.columns, this.requestParams.rows)
+      this.drilldownHandler.flushDrilldowns(this.requestParams.columns, this.requestParams.rows)
     }
   }
 
-  async getOriginalData() {
-    throw new Error('Not Implemented')
-  }
+  /*
+   * Polling only has to notify: every subscriber refetches through getData.
+   * Running the query here as well would send it twice per tick.
+   */
+  async getOriginalData() {}
 
   async getData(type: string, requestConfig: any = {}): Promise<any> {
     let request
     let response = null
+
+    // Before the query, not after: an unknown type is not worth a round trip.
+    if (type !== 'PivotTable' && type !== 'DataTable') {
+      throw new Error('Invalid data type')
+    }
 
     if (!this.connectionRepository) {
       throw new Error('ConnectionRepository is not provided to Store Classes')
@@ -217,22 +277,34 @@ export class XmlaStore extends BaseDatasource {
 
     if (this.useMdx) {
       request = this.mdx
+      // The pivot parser reads the properties even for hand-written MDX.
+      if (type === 'PivotTable') await this.queryMetadata([])
     } else {
       request = await this.getMdxRequest(requestConfig)
     }
 
-    console.log('MDX Request in store:', request)
-    console.log('Metadata in store:', this.metadata.getProperties())
-    console.log('Metadata in store:', this.metadata.getLevels())
-    const mdxResponse = await connection.fetch({
-      data: {
-        mdx: request,
-      },
-    })
+    const send = (mdx: string) =>
+      connection.fetch({
+        data: { mdx },
+        // A caller that no longer needs the answer can give up on it.
+        signal: requestConfig.signal,
+      })
+
+    let mdxResponse
+    try {
+      mdxResponse = await send(request)
+    } catch (error) {
+      // A server without writeback refuses UPDATEABLE; asked once, it is left out from then on.
+      if (this.useMdx || !this.askUpdateable || !refusesUpdateable(error)) throw error
+      this.askUpdateable = false
+      request = await this.getMdxRequest(requestConfig)
+      mdxResponse = await send(request)
+    }
 
     if (type === 'PivotTable') {
+      // Pages and chapters of hand-written MDX are known only from the answer.
+      await this.queryMetadata(navigatedHierarchies(mdxResponse))
       response = this.parseToPivotTable(mdxResponse, requestConfig)
-      console.log('Parsed responce in datasource', response);
       if (!response) return null
 
       response.tableState = {
@@ -252,11 +324,14 @@ export class XmlaStore extends BaseDatasource {
     return response
   }
 
+  /** Whether the server takes UPDATEABLE among the cell properties; eMondrian does not. */
+  private askUpdateable = true
+
   async getMdxRequest(requestConfig: any = {}) {
-    await this.loadMetadata()
+    const metadata = await this.queryMetadata(this.queryHierarchies())
     this.executeCleanup();
-    const properties = this.metadata.getProperties()
-    const levels = this.metadata.getLevels()
+    const properties = metadata.getProperties()
+    const levels = metadata.getLevels()
 
     const mdxRequest = await getMdxRequest(
       this.cube,
@@ -267,19 +342,23 @@ export class XmlaStore extends BaseDatasource {
       this.requestParams.rows,
       this.requestParams.columns,
       this.requestParams.measures,
-      requestConfig,
+      { ...requestConfig, updateable: this.askUpdateable },
       properties,
       this.requestParams.filters,
       levels,
+      this.requestParams.pages ?? [],
+      this.requestParams.chapters ?? [],
     )
 
     return mdxRequest
   }
 
+  /** Everything the cube explorer shows. */
   async getMetadata() {
     await this.initPromise
-    await this.loadMetadata()
-    return this.metadata
+    const metadata = await this.metadataStore()
+    await metadata.loadMetadata(this.catalogName(), this.cube)
+    return metadata
   }
 
   public getCubeName(): string {
@@ -298,15 +377,26 @@ export class XmlaStore extends BaseDatasource {
     return this.drilldownHandler?.getDrilldownState()
   }
 
+  drilldown(e: DrilldownPayload): any {
+    this.drilldownHandler?.handleDrilldown(e)
+
+    return this.drilldownHandler?.getDrilldownState()
+  }
+
+  drillup(e: DrilldownPayload): any {
+    this.drilldownHandler?.handleDrillup(e, this.metadata?.getLevels?.() ?? [])
+
+    return this.drilldownHandler?.getDrilldownState()
+  }
+
   getConnection() {
     const connectionRepository = (this as any).connectionRepository
     return connectionRepository.getConnection(this.connection)
   }
 
   changeFilters(e: FilterChangePayload) {
-    console.log('event in the datasource', e);
 
-    const originalItem = this.requestParams[e.area].find(
+    const originalItem = this.requestParams[e.area]?.find(
       (item) => item.id === e.id
     );
 
@@ -321,8 +411,8 @@ export class XmlaStore extends BaseDatasource {
     return crypto.randomUUID().toUpperCase();
   }
 
-  async cellUpdate(params: { query: string }) {
-    console.log('Executing cellUpdate MDX:', params.query);
+  /** A statement that changes the cube rather than asks it: writeback and its transaction. */
+  private async executeStatement(mdx: string) {
     const connection = this.getConnection()
     try {
       await connection.fetch({
@@ -339,98 +429,28 @@ export class XmlaStore extends BaseDatasource {
           LocaleIdentifier: 1049,
           DbpropMsmdMDXCompatibility: 1,
         },
-        data: {
-          mdx: params.query,
-        },
+        data: { mdx },
       })
     } catch (e) {
-      console.error('Error executing cellUpdate MDX:', e)
-      throw e;
+      console.error(`Error executing ${mdx}:`, e)
+      throw e
     }
   }
 
-  async beginTransaction() {
-    console.log('Beginning transaction');
-    const connection = this.getConnection()
-    try {
-      await connection.fetch({
-        format: 'Native',
-        properties: {
-          Timeout: 0,
-          VisualMode: 1,
-          DbpropMsmdFlattened2: false,
-          SafetyOptions: 2,
-          Dialect: 'MDX',
-          MdxMissingMemberMode: 'Error',
-          DbpropMsmdActivityID: this.generateUUID(),
-          DbpropMsmdRequestID: this.generateUUID(),
-          LocaleIdentifier: 1049,
-          DbpropMsmdMDXCompatibility: 1,
-        },
-        data: {
-          mdx: 'BEGIN TRANSACTION',
-        },
-      })
-    } catch (e) {
-      console.error('Error executing BEGIN TRANSACTION:', e)
-      throw e;
-    }
+  cellUpdate(params: { query: string }) {
+    return this.executeStatement(params.query)
   }
 
-  async commitTransaction() {
-    console.log('Committing transaction');
-    const connection = this.getConnection()
-    try {
-      await connection.fetch({
-        format: 'Native',
-        properties: {
-          Timeout: 0,
-          VisualMode: 1,
-          DbpropMsmdFlattened2: false,
-          SafetyOptions: 2,
-          Dialect: 'MDX',
-          MdxMissingMemberMode: 'Error',
-          DbpropMsmdActivityID: this.generateUUID(),
-          DbpropMsmdRequestID: this.generateUUID(),
-          LocaleIdentifier: 1049,
-          DbpropMsmdMDXCompatibility: 1,
-        },
-        data: {
-          mdx: 'COMMIT TRANSACTION',
-        },
-      })
-    } catch (e) {
-      console.error('Error executing COMMIT TRANSACTION:', e)
-      throw e;
-    }
+  beginTransaction() {
+    return this.executeStatement('BEGIN TRANSACTION')
   }
 
-  async rollbackTransaction() {
-    console.log('Rolling back transaction');
-    const connection = this.getConnection()
-    try {
-      await connection.fetch({
-        format: 'Native',
-        properties: {
-          Timeout: 0,
-          VisualMode: 1,
-          DbpropMsmdFlattened2: false,
-          SafetyOptions: 2,
-          Dialect: 'MDX',
-          MdxMissingMemberMode: 'Error',
-          DbpropMsmdActivityID: this.generateUUID(),
-          DbpropMsmdRequestID: this.generateUUID(),
-          LocaleIdentifier: 1049,
-          DbpropMsmdMDXCompatibility: 1,
-        },
-        data: {
-          mdx: 'ROLLBACK TRANSACTION',
-        },
-      })
-    } catch (e) {
-      console.error('Error executing ROLLBACK TRANSACTION:', e)
-      throw e;
-    }
+  commitTransaction() {
+    return this.executeStatement('COMMIT TRANSACTION')
+  }
+
+  rollbackTransaction() {
+    return this.executeStatement('ROLLBACK TRANSACTION')
   }
 
   async callEvent(event: string, params: any) {
@@ -440,6 +460,13 @@ export class XmlaStore extends BaseDatasource {
         break
       case 'collapse':
         this.collapse(params)
+        break
+      // The table's context menu: these had nowhere to go, so the menu did nothing.
+      case 'drilldown':
+        this.drilldown(params)
+        break
+      case 'drillup':
+        this.drillup(params)
         break
       case 'filterChange':
         this.changeFilters(params)
@@ -465,16 +492,48 @@ export class XmlaStore extends BaseDatasource {
 
   parseToPivotTable(mdxResponse: any, requestConfig: any = {}): any {
     const properties = this.metadata.getProperties()
-    console.log(requestConfig);
-
-    return parseMdxRequest(mdxResponse, {
-      rows: this.requestParams.rows,
-      columns: this.requestParams.columns,
+    // Read against the axes the request was sent with, not the stored ones.
+    const { rows, columns } = queryAxes(
+      this.requestParams.rows,
+      this.requestParams.columns,
+      this.requestParams.measures,
+      requestConfig,
+      this.requestParams.pages ?? [],
+    )
+    const params: PivotSliceParams = {
+      rows,
+      columns,
       measures: this.requestParams.measures,
       properties,
       showRowsProperties: requestConfig.showRowsProperties,
       showColumnsProperties: requestConfig.showColumnsProperties
-    })
+    }
+
+    const cellset = parseCellset(mdxResponse)
+    if (!cellset || cellset.axes.length <= 2) {
+      return parseMdxRequest(mdxResponse, params)
+    }
+
+    /*
+     * Pages and chapters: the whole cellset goes along, so the widget can
+     * show any slice without asking again. The table for the first slice
+     * is ready-made, for a widget that knows nothing of slices.
+     */
+    const navigated = new Set(navigatedHierarchiesOf(cellset))
+    const levels = (this.metadata.getLevels() ?? []).filter(l => navigated.has(l.HIERARCHY_UNIQUE_NAME))
+    const dimensionNames = new Set(levels.map(l => l.DIMENSION_UNIQUE_NAME))
+    const dimensions = (this.metadata.getDimensions() ?? []).filter(d => dimensionNames.has(d.DIMENSION_UNIQUE_NAME))
+
+    const first = slicesOf(cellset)[0]
+    const table = first
+      ? pivotSlice(cellset, first, params)
+      : { columns: [], rows: [], cells: [], propertiesRows: [], propertiesCols: [] }
+    return {
+      ...table,
+      cellset,
+      sliceParams: params,
+      axisMetadata: { levels, dimensions },
+    }
   }
 
   parseToDataTable(mdxResponce: any): any {

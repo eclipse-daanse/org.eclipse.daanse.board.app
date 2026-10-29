@@ -8,6 +8,10 @@
   "provides": [
     {
       "id": "XmlaConnectionFactory"
+    },
+    {
+      "id": "XmlaTraffic",
+      "description": "Every XMLA request of the page as it goes out and is answered"
     }
   ],
   "sharedDependencies": [

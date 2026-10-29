@@ -1,0 +1,39 @@
+{
+  "$schema": "https://tsm.dev/schema/manifest/v1.json",
+  "id": "lib.lsp.core",
+  "name": "lib.lsp.core",
+  "version": "0.0.1-next.1",
+  "entry": "/bundles/lib.lsp.core/index.js",
+  "exports": {},
+  "dependencies": [
+    "lib.api.lsp",
+    "platform.codemirror"
+  ],
+  "capabilities": [
+    {
+      "namespace": "tsm.library",
+      "attributes": {
+        "library": "org.eclipse.daanse.board.app.lib.lsp.core",
+        "version": "0.0.1-next.1"
+      }
+    }
+  ],
+  "sharedDependencies": [
+    {
+      "id": "org.eclipse.daanse.board.app.lib.core",
+      "versionRange": ">=0.0.1-0"
+    },
+    {
+      "id": "org.eclipse.daanse.board.app.lib.api.lsp",
+      "versionRange": ">=0.0.1-0"
+    },
+    {
+      "id": "@codemirror/lsp-client",
+      "versionRange": "^6.2.5"
+    },
+    {
+      "id": "@codemirror/language",
+      "versionRange": "^6.12.4"
+    }
+  ]
+}

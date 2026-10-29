@@ -1,0 +1,10 @@
+// Source: https://learn.microsoft.com/en-us/dax/datesinperiod-function-dax (example 1)
+// Construct: `-1` as an argument.
+// Expect: parse
+// Reference: rejects - Encountered an error at (or somewhere around) input:7:16
+// Divergence: unary sign; unquoted table
+// Normalized: as published, less the `Name =` that makes it a measure definition.
+CALCULATE (
+    SUM ( Sales[Sales Amount] ),
+    DATESINPERIOD ( 'Date'[Date], MAX ( 'Date'[Date] ), -1, YEAR )
+)

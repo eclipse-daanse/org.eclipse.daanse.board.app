@@ -15,8 +15,8 @@ import {
   identifier,
   DatasourceRepository,
 } from 'org.eclipse.daanse.board.app.lib.api.datasource'
-import { onMounted, onUnmounted, inject, type Ref, reactive, ComputedRef, provide, computed } from 'vue'
-import { watch, ref } from 'vue'
+import { onMounted, onUnmounted, inject, provide, type Ref, reactive, ComputedRef } from 'vue'
+import { watch, ref, computed } from 'vue'
 import { useGlobalLoading } from './useGlobalLoading'
 
 export interface IVueDatasourceRepository {
@@ -29,6 +29,10 @@ export interface IVueDatasourceRepository {
   update: (oldVal?: string, newVal?: string) => void
   getDataWithOptions: (options?: any) => Promise<void>
   getDatasourceInstance: () => any
+  /** True while a request of this widget is on its way. */
+  loading: Readonly<Ref<boolean>>
+  /** Why the last request failed - the server's words - or null once one succeeds. */
+  error: Readonly<Ref<string | null>>
 }
 
 export function useDatasourceRepository(
@@ -45,6 +49,7 @@ export function useDatasourceRepository(
     throw new Error('DatasourceRepository not provided')
   }
 
+  /* The datasource itself, for what the widget's parts need beyond its data - drillthrough asks it. */
   const datasourceInstance = computed(() => {
     if (dataSourceId.value) {
       try {
@@ -58,28 +63,59 @@ export function useDatasourceRepository(
   provide('datasource', datasourceInstance)
 
   const { startLoading, stopLoading } = useGlobalLoading()
+  /* Requests of this widget still on their way; the widget can say it is waiting. */
+  const inFlight = ref(0)
+  const loading = computed(() => inFlight.value > 0)
+  /*
+   * A failed request left the data empty and the widget blank, with the
+   * reason only in the console. Kept here so the widget can say it.
+   */
+  const error = ref<string | null>(null)
+  const failed = (e: unknown) => {
+    error.value = e instanceof Error ? e.message : String(e)
+  }
+
+  /*
+   * The request whose answer this widget is waiting for. A newer one
+   * replaces it, and an answer nobody waits for any more is dropped rather
+   * than shown over the newer one - whether or not the datasource could
+   * stop it on the way.
+   */
+  let pending: AbortController | null = null
+
+  const nextRequest = (): AbortSignal => {
+    pending?.abort()
+    pending = new AbortController()
+    return pending.signal
+  }
 
   const getData = async () => {
     if (!dataSourceId.value) {
+      pending?.abort()
       data.value = null
       return
     }
-    console.log('getData', dataSourceId.value)
-    console.log('type', type)
+    const signal = nextRequest()
     startLoading()
+    inFlight.value += 1
     try {
       const dataSource = datasourceRepository.getDatasource(dataSourceId.value);
-      const dataRaw = await dataSource.getData(type, requestConfig?.value || {});
+      const dataRaw = await dataSource.getData(type, { ...(requestConfig?.value || {}), signal });
+      if (signal.aborted) return
       if (type === "PivotTable") {
         data.value = JSON.parse(JSON.stringify(dataRaw));
       } else {
         data.value = structuredClone(dataRaw);
       }
+      error.value = null
     } catch (e) {
+      if (signal.aborted) return
       data.value = null
+      failed(e)
       console.warn(e)
     } finally {
       stopLoading()
+      inFlight.value -= 1
     }
   }
 
@@ -94,7 +130,9 @@ export function useDatasourceRepository(
         // When shouldUpdate=false, wait for data to be ready, then update our own data
         if (!shouldUpdate && result instanceof Promise) {
           await result
-          const dataRaw = await dataSource.getData(type)
+          const signal = nextRequest()
+          const dataRaw = await dataSource.getData(type, { signal })
+          if (signal.aborted) return
           data.value = structuredClone(dataRaw)
         }
       } catch (e) {
@@ -105,21 +143,27 @@ export function useDatasourceRepository(
 
   const getDataWithOptions = async (options?: any) => {
     if (!dataSourceId.value) {
+      pending?.abort()
       data.value = null
       return
     }
-    console.log('getDataWithOptions', dataSourceId.value, options)
-    console.log('type', type)
+    const signal = nextRequest()
     startLoading()
+    inFlight.value += 1
     try {
       const dataSource = datasourceRepository.getDatasource(dataSourceId.value);
-      const dataRaw = await dataSource.getData(type, options);
+      const dataRaw = await dataSource.getData(type, { ...(options || {}), signal });
+      if (signal.aborted) return
       data.value = structuredClone(dataRaw);
+      error.value = null
     } catch (e) {
+      if (signal.aborted) return
       data.value = null
+      failed(e)
       console.warn(e)
     } finally {
       stopLoading()
+      inFlight.value -= 1
     }
   }
 
@@ -196,6 +240,7 @@ export function useDatasourceRepository(
   })
 
   onUnmounted(() => {
+    pending?.abort()
     listen(undefined)
   })
 
@@ -205,5 +250,7 @@ export function useDatasourceRepository(
     update,
     getDataWithOptions,
     getDatasourceInstance,
+    loading,
+    error,
   }
 }

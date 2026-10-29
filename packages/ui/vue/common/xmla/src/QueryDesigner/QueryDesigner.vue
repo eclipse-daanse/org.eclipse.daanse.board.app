@@ -14,38 +14,146 @@ Contributors:
 <script setup lang="ts">
 import { DChip, DIcon } from "org.eclipse.daanse.board.app.ui.vue.controls";
 import draggable from 'vuedraggable';
-import { ref } from "vue";
+import { computed, nextTick, ref } from "vue";
 import { useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables';
-import { HierarchyTreeItem, MeasureTreeItem } from '../MetadataTree/TreeViewItems';
+import { HierarchyTreeItem, MeasureTreeItem, TreeItemTypesEnum } from '../MetadataTree/TreeViewItems';
 import FilterModal from '../Modals/FiltersModal.vue';
+import { carriesTreeItem, readTreeItem } from './treeItemTransfer';
 
 interface QueryConfig {
   filters: HierarchyTreeItem[];
   columns: HierarchyTreeItem[];
   rows: HierarchyTreeItem[];
   measures: MeasureTreeItem[];
+  /** Axis 2 and 3: which slice of the result the table shows. */
+  pages?: HierarchyTreeItem[];
+  chapters?: HierarchyTreeItem[];
 }
+
+type Area = "rows" | "columns" | "filters" | "pages" | "chapters";
+const AXES = ["columns", "rows", "pages", "chapters"] as const;
 
 const queryConfig = defineModel<QueryConfig>({ required: true });
 const filterModal = ref<any>(null);
 
+/* Boards saved before pages and chapters existed have neither. */
+queryConfig.value.pages ??= [];
+queryConfig.value.chapters ??= [];
+
+/** Why the last drop was turned away; cleared by the next one. */
+const refusal = ref("");
+
+/*
+ * Where the item being moved came from. A move between areas removes it
+ * from its old area on the way (the lists are vuedraggable's own), so a
+ * refused move has to put it back there - else it is simply gone.
+ */
+let lastRemoved: { area: Area; element: HierarchyTreeItem; index: number } | null = null;
+
+/*
+ * MDX numbers its axes without gaps, and the store leaves out what is out
+ * of order rather than send it. Said here, so nobody wonders where it went.
+ */
+const axisGaps = computed(() => {
+  const config = queryConfig.value;
+  const notes = [] as string[];
+  if (config.pages?.length && (!config.rows.length || !config.columns.length)) {
+    notes.push(t('QueryDesigner.pagesNeedRowsAndColumns'));
+  }
+  if (config.chapters?.length && !config.pages?.length) {
+    notes.push(t('QueryDesigner.chaptersNeedPages'));
+  }
+  return notes;
+});
+
+/**
+ * Checked once the drop is complete: a move from one area to another
+ * removes the item from its old area only after adding it to the new one.
+ */
+const refuseIfInvalid = (area: Area, element: HierarchyTreeItem) => {
+  nextTick(() => {
+    const config = queryConfig.value as unknown as Record<string, HierarchyTreeItem[] | undefined>;
+    let reason = "";
+    // The measures pseudo-hierarchy: typed as a tree item, but not one of the enum's kinds.
+    const isValues = String(element.type) === "Values";
+    if (isValues && area !== "rows" && area !== "columns") {
+      reason = t('QueryDesigner.valuesOnlyOnRowsOrColumns');
+    } else if ((AXES as readonly string[]).includes(area) && !isValues) {
+      const hierarchy = element.originalItem.HIERARCHY_UNIQUE_NAME;
+      const onAxes = AXES.flatMap(axis => (config[axis] ?? []) as HierarchyTreeItem[])
+        .filter(item => item.originalItem?.HIERARCHY_UNIQUE_NAME === hierarchy);
+      // Mondrian: "Hierarchy ... appears in more than one independent axis."
+      if (onAxes.length > 1) reason = t('QueryDesigner.hierarchyOnOneAxisOnly');
+    }
+    if (!reason) return;
+    const content = config[area] ?? [];
+    // The item just dropped, not an earlier one of the same hierarchy.
+    let index = content.indexOf(element);
+    if (index < 0) index = content.findLastIndex(item => item.id === element.id);
+    if (index >= 0) config[area] = content.filter((_, i) => i !== index);
+    const origin = lastRemoved;
+    lastRemoved = null;
+    if (origin && origin.area !== area && origin.element.id === element.id) {
+      const back = config[origin.area] ?? [];
+      if (!back.some(item => item.id === element.id)) {
+        config[origin.area] = [...back.slice(0, origin.index), origin.element, ...back.slice(origin.index)];
+      }
+    }
+    refusal.value = reason;
+  });
+};
+
 const { api, catalog } = defineProps<{ api: any, catalog: any }>();
 
 const addedOperationCache = {
-  area: "filters" as "rows" | "columns" | "filters",
+  area: "filters" as Area,
   e: null,
   hasCache: false,
   cancelRemoving: false,
 };
 
-const changeItems = (area: "rows" | "columns" | "filters", e: any) => {
+/*
+ * A drop from the cube explorer that vuedraggable did not take: a drag over
+ * before SortableJS saw it start (see treeItemTransfer). Checked after the
+ * drop has gone all the way through - SortableJS handles it on the document,
+ * after this area has heard it - and only then taken as vuedraggable would
+ * have handed it over.
+ */
+let takenDrops = 0;
+
+const allowDrop = (event: DragEvent) => {
+  if (carriesTreeItem(event.dataTransfer)) event.preventDefault();
+};
+
+const dropFromTree = (area: Area | "measures", event: DragEvent) => {
+  const item = readTreeItem(event.dataTransfer);
+  if (!item) return;
+  const isMeasure = item.type === TreeItemTypesEnum.Measure;
+  if (isMeasure !== (area === "measures")) return;
+  const before = takenDrops;
+  setTimeout(() => {
+    if (takenDrops !== before) return;
+    const element = { ...item, children: [], filters: { enabled: false } } as any;
+    if (area === "measures") {
+      queryConfig.value.measures.push(element);
+      changeMeasures({ added: { element, newIndex: queryConfig.value.measures.length - 1 } });
+      return;
+    }
+    const list = (queryConfig.value[area] ??= []);
+    list.push(element);
+    changeItems(area, { added: { element, newIndex: list.length - 1 } });
+  });
+};
+
+const changeItems = (area: Area, e: any) => {
   const { added, moved, removed } = e;
   if (added) {
-    if (area === "filters") {
-      if (added.element.type === "Values") {
-        addedOperationCache.cancelRemoving = true;
-        return;
-      }
+    takenDrops += 1;
+    refusal.value = "";
+    // Values into the filters: refused like anywhere else off rows and columns, and put back.
+    if (area === "filters" && added.element.type === "Values") {
+      refuseIfInvalid(area, added.element);
+      return;
     }
 
     const element: HierarchyTreeItem = added.element;
@@ -54,7 +162,7 @@ const changeItems = (area: "rows" | "columns" | "filters", e: any) => {
     //   (e) => e === element.originalItem.HIERARCHY_UNIQUE_NAME
     // );
     const duplicate = false;
-    const areaContent = queryConfig.value[area];
+    const areaContent = queryConfig.value[area] ?? [];
 
     if (duplicate) {
       addedOperationCache.e = e;
@@ -82,9 +190,11 @@ const changeItems = (area: "rows" | "columns" | "filters", e: any) => {
       newElement,
       ...(arrayAfter as HierarchyTreeItem[]),
     ];
+    refuseIfInvalid(area, newElement);
   }
   // Event only occurs when moving item from one area to another
   if (removed) {
+    lastRemoved = { area, element: removed.element, index: removed.oldIndex };
     // if (addedOperationCache.cancelRemoving) {
     //   addedOperationCache.cancelRemoving = false;
     //   return;
@@ -105,7 +215,7 @@ const changeItems = (area: "rows" | "columns" | "filters", e: any) => {
   }
   if (moved) {
     const { element, newIndex, oldIndex } = moved;
-    const areaContent = queryConfig.value[area];
+    const areaContent = queryConfig.value[area] ?? [];
 
     if (newIndex < oldIndex) {
       const arrayBefore = areaContent.slice(0, newIndex);
@@ -137,6 +247,7 @@ const changeMeasures = (e: any) => {
   const { added } = e;
 
   if (added) {
+    takenDrops += 1;
     const element: MeasureTreeItem = added.element;
 
     const duplicates = queryConfig.value.measures.filter(
@@ -163,7 +274,7 @@ const changeMeasures = (e: any) => {
         originalItem: {
           HIERARCHY_UNIQUE_NAME: "Values",
         } as any,
-        filters: null as any,
+        filters: { enabled: false },
       });
     }
   } else {
@@ -177,12 +288,12 @@ const changeMeasures = (e: any) => {
 };
 
 const remove = (
-  area: "rows" | "columns" | "filters" | "measures",
+  area: Area | "measures",
   item: any,
   event: any
 ) => {
   if (!event) {
-    const areaContent = queryConfig.value[area];
+    const areaContent = queryConfig.value[area] ?? [];
     const index = areaContent.findIndex((e) => e.id === item.id);
 
     if (area === "measures") {
@@ -223,10 +334,16 @@ const { t } = useTranslation('xmla');
 </script>
 <template>
   <div class="queryDesigner">
+    <p v-for="note in [refusal, ...axisGaps].filter(Boolean)" :key="note" class="axis-note" role="status">
+      {{ note }}
+    </p>
+    <!-- vuedraggable puts a dragged item into the list, and so on screen,
+      before @change replaces it with one that has filters: an item from the
+      tree, or Values, is drawn at least once without them. -->
     <div class="areas">
       <div class="queryDesignerArea">
         <div class="area-title">{{ t('QueryDesigner.filters') }}</div>
-        <div class="queryDesingnerArea_container">
+        <div class="queryDesingnerArea_container" @dragover="allowDrop" @drop="dropFromTree('filters', $event)">
           <draggable class="dragArea list-group" :list="queryConfig.filters" group="hierarchies"
             @change="changeItems('filters', $event)" item-key="id">
             <template #item="{ element }">
@@ -239,7 +356,7 @@ const { t } = useTranslation('xmla');
                     class="filter-icon ml-2"
                     name="filter_list"
                     size="sm"
-                    :tone="element.filters.enabled ? 'color-ok' : 'color-dim'"
+                    :tone="element.filters?.enabled ? 'color-ok' : 'color-dim'"
                     @click="configureFilter('filters', element)"
                   />
                 </div>
@@ -250,7 +367,7 @@ const { t } = useTranslation('xmla');
       </div>
       <div class="queryDesignerArea">
         <div class="area-title">{{ t('QueryDesigner.columns') }}</div>
-        <div class="queryDesingnerArea_container">
+        <div class="queryDesingnerArea_container" @dragover="allowDrop" @drop="dropFromTree('columns', $event)">
           <draggable class="dragArea list-group" :list="queryConfig.columns" group="hierarchies"
             @change="changeItems('columns', $event)" item-key="id">
             <template #item="{ element }">
@@ -264,7 +381,7 @@ const { t } = useTranslation('xmla');
                     class="filter-icon ml-2"
                     name="filter_list"
                     size="sm"
-                    :tone="element.filters.enabled ? 'color-ok' : 'color-dim'"
+                    :tone="element.filters?.enabled ? 'color-ok' : 'color-dim'"
                     @click="configureFilter('columns', element)"
                   />
                 </div>
@@ -275,7 +392,7 @@ const { t } = useTranslation('xmla');
       </div>
       <div class="queryDesignerArea">
         <div class="area-title">{{ t('QueryDesigner.rows') }}</div>
-        <div class="queryDesingnerArea_container">
+        <div class="queryDesingnerArea_container" @dragover="allowDrop" @drop="dropFromTree('rows', $event)">
           <draggable class="dragArea list-group" :list="queryConfig.rows" group="hierarchies"
             @change="changeItems('rows', $event)" item-key="id">
             <template #item="{ element }">
@@ -289,7 +406,7 @@ const { t } = useTranslation('xmla');
                     class="filter-icon ml-2"
                     name="filter_list"
                     size="sm"
-                    :tone="element.filters.enabled ? 'color-ok' : 'color-dim'"
+                    :tone="element.filters?.enabled ? 'color-ok' : 'color-dim'"
                     @click="configureFilter('rows', element)"
                   />
                 </div>
@@ -299,8 +416,56 @@ const { t } = useTranslation('xmla');
         </div>
       </div>
       <div class="queryDesignerArea">
+        <div class="area-title">{{ t('QueryDesigner.pages') }}</div>
+        <div class="queryDesingnerArea_container" @dragover="allowDrop" @drop="dropFromTree('pages', $event)">
+          <draggable class="dragArea list-group" :list="queryConfig.pages" group="hierarchies"
+            @change="changeItems('pages', $event)" item-key="id">
+            <template #item="{ element }">
+              <DChip removable @remove="remove('pages', element, false)">
+                <div class="flex items-center chip_caption">
+                  <span class="chip_caption_text">
+                    {{ element.caption }}
+                  </span>
+                  <DIcon
+                    class="filter-icon ml-2"
+                    name="filter_list"
+                    size="sm"
+                    :tone="element.filters?.enabled ? 'color-ok' : 'color-dim'"
+                    @click="configureFilter('pages', element)"
+                  />
+                </div>
+              </DChip>
+            </template>
+          </draggable>
+        </div>
+      </div>
+      <div class="queryDesignerArea">
+        <div class="area-title">{{ t('QueryDesigner.chapters') }}</div>
+        <div class="queryDesingnerArea_container" @dragover="allowDrop" @drop="dropFromTree('chapters', $event)">
+          <draggable class="dragArea list-group" :list="queryConfig.chapters" group="hierarchies"
+            @change="changeItems('chapters', $event)" item-key="id">
+            <template #item="{ element }">
+              <DChip removable @remove="remove('chapters', element, false)">
+                <div class="flex items-center chip_caption">
+                  <span class="chip_caption_text">
+                    {{ element.caption }}
+                  </span>
+                  <DIcon
+                    class="filter-icon ml-2"
+                    name="filter_list"
+                    size="sm"
+                    :tone="element.filters?.enabled ? 'color-ok' : 'color-dim'"
+                    @click="configureFilter('chapters', element)"
+                  />
+                </div>
+              </DChip>
+            </template>
+          </draggable>
+        </div>
+      </div>
+      <div class="queryDesignerArea">
         <div class="area-title">{{ t('QueryDesigner.data') }}</div>
-        <div class="queryDesingnerArea_container">
+        <div class="queryDesingnerArea_container" @dragover="allowDrop" @drop="dropFromTree('measures', $event)">
           <draggable class="dragArea list-group" :list="queryConfig.measures" group="measures"
             @change="changeMeasures($event)" item-key="id">
             <template #item="{ element }">
@@ -323,11 +488,14 @@ const { t } = useTranslation('xmla');
 .queryDesigner {
   display: flex;
   flex-direction: column;
-  height: 100%;
   width: 100%;
-  overflow: hidden;
 
-  padding: 1rem;
+  .axis-note {
+    margin: 0 0 0.5rem;
+    font-family: var(--font-sans);
+    font-size: var(--text-sm);
+    color: var(--color-warn, var(--color-dim));
+  }
 
   .update_container {
     display: flex;
@@ -335,17 +503,16 @@ const { t } = useTranslation('xmla');
     justify-content: space-between;
   }
 
+  /* Two columns: filters and columns, rows and pages, chapters and data. */
   .areas {
-    height: 100%;
-    overflow: hidden;
-    display: flex;
-    flex-direction: row;
-    gap: 16px;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 4px 12px;
 
     .queryDesignerArea {
       display: flex;
       flex-direction: column;
-      height: 100%;
+      min-width: 0;
 
       /* Was .va-title, a class the framework defined globally. */
       .area-title {
@@ -356,20 +523,22 @@ const { t } = useTranslation('xmla');
       }
 
       .queryDesingnerArea_container {
-        height: 100%;
         width: 100%;
+        min-height: 40px;
 
-        border: 1px solid var(--color-divider);
-        margin: 0.25rem 0 1rem;
+        background-color: var(--color-bg);
+        border: 1px dashed var(--color-outline);
+        border-radius: var(--radius-sm);
+        margin: 0.25rem 0 0.5rem;
 
         .list-group {
-          height: 100%;
+          min-height: 38px;
           width: 100%;
-          padding: 0.5rem;
+          padding: 0.375rem;
           display: flex;
-          flex-direction: column;
+          flex-wrap: wrap;
           gap: 0.25rem;
-          align-items: baseline;
+          align-items: center;
 
           /* What a chip being dragged leaves behind, in the shape of one. */
           div.sortable-ghost {
@@ -407,16 +576,4 @@ const { t } = useTranslation('xmla');
   }
 }
 
-.split.vertical .queryDesigner {
-  .areas {
-    flex-direction: row;
-    flex-wrap: wrap;
-
-    .queryDesignerArea {
-      width: 50%;
-      height: 50%;
-      padding: 5px;
-    }
-  }
-}
 </style>

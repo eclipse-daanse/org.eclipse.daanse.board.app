@@ -1,1 +1,6 @@
+# Vite
+dist/
+*.local
+
+# Measurements from earlier runs, not part of the harness
 perf-results/

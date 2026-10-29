@@ -1,0 +1,11 @@
+-- Source: https://asstoredprocedures.github.io/functions/DMV/
+-- Construct: Leading-comma column list mixing bare and [bracketed] names, indented FROM/WHERE.
+-- Expect: parse
+-- Normalized: identifiers and string values substituted; casing, spacing,
+--             line breaks and quoting preserved exactly as published.
+SELECT GROUPING_ORDINAL
+ , [GROUPING_NAME]
+ , GROUPING_CARDINALITY
+ , DEFAULT_LEVELSET
+  FROM $SYSTEM.MDSCHEMA_GROUPINGS
+ORDER BY GROUPING_NAME, GROUPING_ORDINAL

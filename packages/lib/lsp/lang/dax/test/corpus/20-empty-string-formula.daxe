@@ -1,0 +1,13 @@
+// Source: https://learn.microsoft.com/en-us/dax/and-function-dax (example 2)
+// Construct: An empty string as a result; comparisons across lines.
+// Expect: parse
+// Reference: accepts
+// Normalized: as published, less the `Name =` that makes it a measure definition.
+IF( AND(  SUM( 'InternetSales_USD'[SalesAmount_USD])
+           >SUM('ResellerSales_USD'[SalesAmount_USD])
+          , CALCULATE(SUM('InternetSales_USD'[SalesAmount_USD]), PREVIOUSYEAR('DateTime'[DateKey] )) 
+           >CALCULATE(SUM('ResellerSales_USD'[SalesAmount_USD]), PREVIOUSYEAR('DateTime'[DateKey] ))
+          )
+     , "Internet Hit"
+     , ""
+     )

@@ -1,0 +1,16 @@
+// Source: https://learn.microsoft.com/en-us/dax/dax-queries
+// Construct: TOPN with ASC as an argument; ORDER BY two columns.
+// Expect: parse
+// Reference: accepts
+// Normalized: as published.
+EVALUATE
+	TOPN(
+		100,
+		'Sales Order',
+		// The way the data is sorted before the top 100 rows are selected
+		'Sales Order'[SalesOrderLineKey], ASC
+	)
+	// The way the data is sorted for the results
+	ORDER BY
+		'Sales Order'[Sales Order] ASC,
+		'Sales Order'[Sales Order Line] ASC

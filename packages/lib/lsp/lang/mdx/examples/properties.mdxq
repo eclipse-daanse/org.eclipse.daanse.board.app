@@ -1,0 +1,13 @@
+// DIMENSION PROPERTIES on an axis, CELL PROPERTIES after the slicer, and the
+// .Properties(name, TYPED) accessor described in MDX-specs.md.
+SELECT
+    NON EMPTY {[Measures].[Internet Sales Amount]}
+        DIMENSION PROPERTIES MEMBER_CAPTION, MEMBER_UNIQUE_NAME ON COLUMNS,
+    NON EMPTY [Customer].[Customer Geography].[City].MEMBERS
+        DIMENSION PROPERTIES [Customer].[Customer Geography].[City].[Country],
+                             LEVEL_NUMBER,
+                             CHILDREN_CARDINALITY,
+                             IS_DATAMEMBER ON ROWS
+FROM [Adventure Works]
+WHERE ([Date].[Calendar].[Calendar Year].&[2003], [Measures].[Internet Sales Amount])
+CELL PROPERTIES VALUE, FORMATTED_VALUE, BACK_COLOR, FORE_COLOR, FONT_FLAGS, ACTION_TYPE

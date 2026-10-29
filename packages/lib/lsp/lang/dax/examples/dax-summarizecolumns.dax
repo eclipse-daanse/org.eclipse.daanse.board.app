@@ -1,0 +1,13 @@
+// A measure defined for this query only, grouped by year and colour.
+DEFINE
+    MEASURE 'Sales'[Total Sales] = SUM ( 'Sales'[Amount] )
+
+EVALUATE
+    SUMMARIZECOLUMNS (
+        'Date'[Year],
+        'Product'[Color],
+        "Total Sales", [Total Sales]
+    )
+ORDER BY
+    'Date'[Year] ASC,
+    'Product'[Color]
