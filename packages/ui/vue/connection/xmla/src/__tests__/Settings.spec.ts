@@ -19,6 +19,7 @@ import { XmlaConnection } from 'org.eclipse.daanse.board.app.lib.connection.xmla
 
 vi.mock('org.eclipse.daanse.board.app.lib.connection.xmla', () => {
   return {
+    DEFAULT_TIMEOUT_SECONDS: 60,
     XmlaConnection: {
       getCatalogs: vi.fn().mockResolvedValue([
         { CATALOG_NAME: 'Accounting' },

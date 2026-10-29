@@ -14,6 +14,7 @@
 // @vitest-environment jsdom
 import { describe, it, expect, vi } from 'vitest';
 import { EventsPackage } from 'org.eclipse.daanse.board.app.lib.api.events';
+import { identifiers } from 'org.eclipse.daanse.board.app.lib.core';
 import { PivotTablePackage } from '../gen/PivotTablePackage';
 import { mount } from '@vue/test-utils';
 import PivotTableWidget from '../PivotTableWidget.vue';
@@ -260,6 +261,16 @@ vi.mock('org.eclipse.daanse.board.app.ui.vue.composables', async (importOriginal
 void EventsPackage.eINSTANCE;
 void PivotTablePackage.eINSTANCE;
 
+/*
+ * The widget follows slices and selections published by its siblings, so
+ * it subscribes to the event bus on mount and needs one to subscribe to.
+ */
+const widgetProvides = {
+  [identifiers.TINY_EMITTER as unknown as symbol]: {
+    on() {}, off() {}, once() {}, emit() {},
+  },
+};
+
 describe('Rendering tests for org.eclipse.daanse.board.app.ui.vue.widget.table.pivot', () => {
   it('renders PivotTableWidget component', () => {
     const wrapper = mount(PivotTableWidget, {
@@ -445,6 +456,7 @@ describe('Rendering tests for org.eclipse.daanse.board.app.ui.vue.widget.table.p
         editEnabled: false
       } as any,
       global: {
+        provide: widgetProvides,
         stubs: {
           VaCard: { template: '<div><slot /></div>' },
           VaButton: { template: '<button><slot /></button>' },

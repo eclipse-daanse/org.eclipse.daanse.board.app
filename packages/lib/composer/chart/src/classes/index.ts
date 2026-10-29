@@ -24,6 +24,16 @@ export interface IChartComposerConfiguration extends ConfigurationOf<IBaseConnec
   uid: string;
 }
 
+/*
+ * One colour per series, so a legend can tell them apart. A colour set on
+ * the chart widget or its series still wins over these.
+ */
+const SERIES_COLORS = ['#4e79a7', '#f28e2b', '#e15759', '#76b7b2', '#59a14f', '#edc948', '#b07aa1', '#ff9da7', '#9c755f', '#bab0ac']
+
+export function seriesColor(index: number): string {
+  return SERIES_COLORS[index % SERIES_COLORS.length]!
+}
+
 export class ChartComposer extends BaseDatasource {
   /**
    * Dependencies arrive through the constructor - the factory in this
@@ -181,12 +191,13 @@ export class ChartComposer extends BaseDatasource {
   private parseToChartData(data: any): any {
     const chartData = {} as any;
     chartData.labels = data.items.map((e: any) => e[this.labelColumn]);
-    chartData.datasets = this.usedSets.map((set) => {
+    chartData.datasets = this.usedSets.map((set, index) => {
       return {
         label: set,
         // The value as a number - read, not changed: the items are the table's own.
         data: data.items.map((e: any) => Number(e[set])),
-        backgroundColor: 'red',
+        backgroundColor: seriesColor(index),
+        borderColor: seriesColor(index),
       }
     });
 

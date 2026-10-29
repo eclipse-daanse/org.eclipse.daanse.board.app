@@ -31,6 +31,7 @@ import {
   useWorkspaceOrigin,
 } from '@/composables/useWorkspaceFile'
 import { summarizePage, type PageSummary } from '@/composables/pageSummary'
+import { useUnsavedChanges } from '@/composables/unsavedChanges'
 import { type Workspace } from 'org.eclipse.daanse.board.app.lib.model.workspace'
 import {
   type Repository,
@@ -338,6 +339,7 @@ async function overwrite(entry: Entity) {
   failure.value = ''
   try {
     await (place as WritableRepository).update({ ...entry, data: save() } as Entity)
+    useUnsavedChanges()?.markSaved()
     remember(entry, label(entry))
     await readEntries(place)
     selectedEntry.value = entriesOf(place).find((e) => String(e.uri) === String(entry.uri))
@@ -362,6 +364,7 @@ async function createEntry() {
   try {
     const entry = { name, uri: uriFor(place, name), data: save() } as unknown as Entity
     await (place as WritableRepository).create(entry)
+    useUnsavedChanges()?.markSaved()
     remember(entry, name)
     await expand(place)
     creating.value = false

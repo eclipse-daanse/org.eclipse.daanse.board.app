@@ -8,7 +8,8 @@
   },
   "Metadata": {
     "title": "Würfel-Explorer",
-    "filter": "Filtern…"
+    "filter": "Filtern…",
+    "loadMore": "Weitere laden…"
   },
   "FilterModal": {
     "title": "Filter setzen",
@@ -18,7 +19,8 @@
   },
   "Tree": {
     "collapse": "Zuklappen",
-    "expand": "Aufklappen"
+    "expand": "Aufklappen",
+    "loading": "Wird geladen"
   },
   "PivotTable": {
     "openCellPropertiesButton": "Zelleigenschaften öffnen",
@@ -26,12 +28,76 @@
     "drillDownButton": "Drilldown",
     "drillUpButton": "Drillup",
     "openButton": "Elementeigenschaften öffnen",
-    "showButton": "Hierarchie-Eigenschaften zeigen"
+    "showButton": "Hierarchie-Eigenschaften zeigen",
+    "drillthroughTitle": "Drillthrough-Details",
+    "drillthroughLoading": "Die Zeilen hinter der Zelle werden geladen…",
+    "drillthroughFailed": "Die Zeilen hinter der Zelle konnten nicht geladen werden.",
+    "drillthroughEmpty": "Keine Zeilen hinter dieser Zelle.",
+    "close": "Schließen",
+    "editMode": "Werte bearbeiten",
+    "leaveEditMode": "Bearbeiten beenden",
+    "commit": "Änderungen speichern",
+    "rollback": "Änderungen verwerfen"
   },
   "QueryDesigner": {
     "filters": "Filter",
     "columns": "Spalten",
     "rows": "Zeilen",
-    "data": "Daten"
+    "data": "Daten",
+    "pages": "Seiten",
+    "chapters": "Kapitel",
+    "pagesNeedRowsAndColumns": "Seiten brauchen etwas auf Zeilen und Spalten.",
+    "chaptersNeedPages": "Kapitel brauchen etwas auf Seiten.",
+    "valuesOnlyOnRowsOrColumns": "Werte gehören nur auf Zeilen oder Spalten.",
+    "hierarchyOnOneAxisOnly": "Eine Hierarchie kann nur auf einer Achse liegen."
+  },
+  "SlicePicker": {
+    "label": "Ausschnitt",
+    "page": "Seite",
+    "chapter": "Kapitel"
+  },
+  "Explorer": {
+    "olap": "OLAP",
+    "relational": "Relational",
+    "rowsets": "XMLA Discover",
+    "catalogRowsets": "Rowsets des Katalogs",
+    "unavailable": "nicht angeboten",
+    "view": "Sicht",
+    "more": "… {{count}} weitere - alle Zeilen stehen im Raster",
+    "noRows": "keine Zeilen",
+    "failed": "Der Server-Explorer ist fehlgeschlagen: {{error}}",
+    "filter": "Filtern…",
+    "useCube": "Diesen Cube verwenden",
+    "measures": "Kennzahlen",
+    "restrictions": "Einschränkungen: {{names}}",
+    "noRestrictions": "Nimmt keine Einschränkungen",
+    "branchFailed": "Nicht lesbar: {{error}}"
+  },
+  "Functions": {
+    "filter": "Funktionen filtern…",
+    "groupBy": "Gruppieren nach",
+    "byKind": "Schreibweise",
+    "byInterface": "Schnittstelle",
+    "byLibrary": "Bibliothek",
+    "byOrigin": "Herkunft",
+    "none": "Der Server nennt keine Funktionen.",
+    "ungrouped": "(keine)",
+    "kindDot": "Nach einem Punkt - .Members, .Children",
+    "kindCall": "Aufruf - Filter(…), Sum(…)",
+    "overloads_one": "{{count}} Variante",
+    "overloads_other": "{{count}} Varianten",
+    "parameter": "Parameter",
+    "description": "Beschreibung",
+    "optional": "Optional",
+    "repeatable": "Wiederholbar",
+    "skippable": "Auslassbar"
+  },
+  "Rowset": {
+    "count_one": "{{count}} Zeile",
+    "count_other": "{{count}} Zeilen",
+    "limited": "die ersten {{limit}} gezeigt, alle exportiert",
+    "nested_one": "{{count}} Eintrag",
+    "nested_other": "{{count}} Einträge",
+    "empty": "Keine Zeilen."
   }
 }

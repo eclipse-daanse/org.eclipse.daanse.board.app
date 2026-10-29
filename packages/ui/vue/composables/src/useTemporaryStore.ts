@@ -35,20 +35,33 @@ export function useTemporaryStore(
       'with settings',
       settings.value,
     )
-    const factory = datasourceRepository.resolveIdentifier(identifiers.Store) as any
-    // Mark as temporary preview - factories should not register these in EventActionsRegistry
-    tempStore.value = factory({ ...settings.value.config, _isTemporaryPreview: true })
+    tempStore.value = build()
   })
+
+  /*
+   * A preview opens as soon as a source is created, before its settings are
+   * complete - an XMLA source without its cube. A factory that refuses such
+   * a configuration leaves the preview without a store, not broken; the next
+   * update, once the setting is there, builds it.
+   */
+  const build = () => {
+    const factory = datasourceRepository.resolveIdentifier(identifiers.Store) as any
+    try {
+      // Mark as temporary preview - factories should not register these in EventActionsRegistry
+      return factory({ ...settings.value.config, _isTemporaryPreview: true })
+    } catch (error) {
+      console.info('No preview store yet:', error instanceof Error ? error.message : error)
+      return null
+    }
+  }
 
   const update = async () => {
     tempStore.value?.destroy()
 
     tempStore.value = null
 
-    const factory = datasourceRepository.resolveIdentifier(identifiers.Store) as any
-
-    // Mark as temporary preview - factories should not register these in EventActionsRegistry
-    const newStore = factory({ ...settings.value.config, _isTemporaryPreview: true })
+    const newStore = build()
+    if (!newStore) return null
     if (newStore.initPromise) {
         await newStore.initPromise
         tempStore.value = newStore

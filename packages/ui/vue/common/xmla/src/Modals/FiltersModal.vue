@@ -41,12 +41,13 @@ const reset = () => {
 };
 
 const opened = ({ element }: { element: any }) => {
+  /* A hierarchy dragged in from the tree may carry no filters yet. */
+  const initialFilters = element.filters ?? { enabled: false };
   rootHierarchy.value = {
     item: element.originalItem,
-    filters: element.filters,
+    filters: initialFilters,
   };
 
-  const initialFilters = element.filters;
   multipleChoise.value = initialFilters.multipleChoise;
 
   if (initialFilters.multipleChoise) {

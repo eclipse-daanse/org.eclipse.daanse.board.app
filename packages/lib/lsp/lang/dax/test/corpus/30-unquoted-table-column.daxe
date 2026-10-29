@@ -1,0 +1,7 @@
+// Source: https://learn.microsoft.com/en-us/dax/sumx-function-dax (example 1)
+// Construct: A column qualified by an unquoted table: `InternetSales[SalesTerritoryID]`.
+// Expect: parse
+// Reference: rejects - Encountered an error at (or somewhere around) input:6:41
+// Divergence: unquoted table before a column
+// Normalized: as published, less the `Name =` that makes it a measure definition.
+SUMX(FILTER(InternetSales, InternetSales[SalesTerritoryID]=5),[Freight])

@@ -152,7 +152,7 @@ function selectFilter(e: any) {
 }
 
 onMounted(() => {
-  if (props.rootHierarchy.filters.enabled && !props.rootHierarchy.filters.multipleChoise && props.rootHierarchy.filters.selectedItem?.id) {
+  if (props.rootHierarchy.filters?.enabled && !props.rootHierarchy.filters.multipleChoise && props.rootHierarchy.filters.selectedItem?.id) {
     singleSelection.value = props.rootHierarchy.filters.selectedItem;
   }
 })

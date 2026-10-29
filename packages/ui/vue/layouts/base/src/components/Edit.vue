@@ -561,8 +561,13 @@ function distribute(axis: 'x' | 'y') {
   }
 }
 
-const addWidget = (type: string, datasourceId: string, dropX: number, dropY: number) => {
-  const config = { datasourceId, settings: {} }
+/*
+ * A widget dropped from the palette has no datasource yet - it gets one in
+ * its settings. It was given the placeholder id 'test', which no repository
+ * holds, and every read of it logged "Store with id test not found".
+ */
+const addWidget = (type: string, dropX: number, dropY: number) => {
+  const config = { settings: {} }
   const wrapperConfig = cloneDeep(defaultConfig)
 
   const width = ghostPlaceholder.value.width
@@ -653,12 +658,10 @@ const onDragLeave = (event: DragEvent) => {
 }
 
 const change = (e: any) => {
-  console.log(e)
-  const datasource = 'test'
   const widgetType = e.added?.element?.type || 'default'
   const dropX = widgetConfig.value?.dropX ?? ghostPlaceholder.value.x + ghostPlaceholder.value.width / 2
   const dropY = widgetConfig.value?.dropY ?? ghostPlaceholder.value.y + ghostPlaceholder.value.height / 2
-  addWidget(widgetType, datasource, dropX, dropY)
+  addWidget(widgetType, dropX, dropY)
 }
 
 </script>
