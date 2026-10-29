@@ -36,6 +36,7 @@ import {
   identifier as WORKSPACE,
   type Workspace,
   EventMappingImpl,
+  BoardImpl,
 } from 'org.eclipse.daanse.board.app.lib.model.workspace'
 import {
   type ConnectionRepository,
@@ -79,6 +80,20 @@ export function useWorkspaceOrigin() {
 const WORKSPACE_URI = 'workspace.json'
 
 const BOARD_ECLASS = 'http://org.eclipse.daanse.board.app.lib.model.workspace#//Board'
+
+/**
+ * The board a state without one is opened as.
+ *
+ * Named after what was opened, so the header has something true to show;
+ * it holds no pages, which is a board one explores its connections from
+ * rather than a half-finished one.
+ */
+function boardFor(name?: string) {
+  const board = new BoardImpl()
+  board.id = randomUUID()
+  if (name) board.name = name
+  return board
+}
 
 /**
  * A state written before a board held the pages.
@@ -204,17 +219,32 @@ export function useWorkspaceFile() {
    * @returns the ids of the boards it opened, so the caller can decide
    *   where to navigate - that is a view's business, not this one's.
    */
-  function load(content: unknown): string[] {
+  /**
+   * Applies a stored state.
+   *
+   * `name` is what the state was called where it was stored - a board
+   * that arrives without one is named after it, so the header has
+   * something true to show instead of a generic label.
+   */
+  function load(content: unknown, name?: string): string[] {
     const loaded = parseWorkspace(content)
     if (!loaded) return []
 
-    const opened = apply(loaded)
+    const opened = apply(loaded, name)
     /* What was just loaded is what is stored. */
     useUnsavedChanges()?.markSaved()
     return opened
   }
 
-  function apply(loaded: Workspace): string[] {
+  /**
+   * Moves a loaded state into the live workspace.
+   *
+   * `openedAs` is what the state was called where it was stored, used to
+   * name a board that arrives without one. Not called `name`: that is a
+   * property of window, so a stray reference to it compiles and silently
+   * reads the frame's name instead of failing.
+   */
+  function apply(loaded: Workspace, openedAs?: string): string[] {
     /*
      * Moved rather than copied. Adding an object to a containment list
      * takes it out of the one it was in, so the loaded tree is emptied into
@@ -231,8 +261,15 @@ export function useWorkspaceFile() {
      * The board comes over whole. A state written before boards existed has
      * its pages directly on the workspace; parseWorkspace puts those into a
      * board, so there is one shape to move here.
+     *
+     * A state that holds no board at all still opens one. Such a state is
+     * not nothing - it carries the connections, sources and variables that
+     * were saved with it - and it is what a person explores those from. It
+     * used to arrive with workspace.board left empty, which every screen
+     * read as "no board open", so the connections that had just loaded
+     * were nowhere to be seen.
      */
-    workspace.board = loaded.board
+    workspace.board = loaded.board ?? boardFor(openedAs)
 
     workspace.variables.clear()
     for (const variable of loaded.variables.toArray()) workspace.variables.push(variable)

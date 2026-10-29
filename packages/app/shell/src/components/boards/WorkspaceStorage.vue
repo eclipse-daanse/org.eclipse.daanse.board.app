@@ -294,19 +294,38 @@ function summarize(held: Workspace | undefined): PageSummary[] {
 
 const boards = computed(() => boardsIn(selectedEntry.value))
 
+/*
+ * What the state holds besides its pages.
+ *
+ * A stored state can carry connections, sources and variables and no
+ * pages at all - that is what a person explores those connections from.
+ * Counted off the pages alone, such a state looked empty, which is the
+ * one thing it is not.
+ */
+const held = computed(() => parseWorkspace(selectedEntry.value?.data))
+
 const totals = computed(() => ({
   boards: boards.value.length,
   widgets: boards.value.reduce((sum, b) => sum + b.widgetCount, 0),
   sources: boards.value.reduce((sum, b) => sum + b.sourceCount, 0),
+  connections: held.value?.connections.toArray().length ?? 0,
+  datasources: held.value?.datasources.toArray().length ?? 0,
+  variables: held.value?.variables.toArray().length ?? 0,
 }))
 
 /** Short summary for a tree row, so the tree says what is inside each state. */
 function entrySummary(entry: Entity): string {
   const list = boardsIn(entry)
-  if (list.length === 0) return t('Storage.entry.empty')
-  /* Pages, not boards: a stored state holds one board, and what is counted
-    here is what is inside it. */
-  return t('Storage.pages', { count: list.length })
+  if (list.length > 0) {
+    /* Pages, not boards: a stored state holds one board, and what is
+      counted here is what is inside it. */
+    return t('Storage.pages', { count: list.length })
+  }
+  /* No pages is not nothing: say what it does hold, where it holds any. */
+  const inside = parseWorkspace(entry.data)
+  const connections = inside?.connections.toArray().length ?? 0
+  if (connections > 0) return t('Storage.entry.connections', { count: connections })
+  return t('Storage.entry.empty')
 }
 
 /** What the current workspace would be stored as, shown before storing it. */
@@ -325,7 +344,7 @@ async function open(entry: Entity) {
   failure.value = ''
   try {
     const stored = await selectedPlace.value?.getEntityByUri(entry.uri as unknown as URL)
-    const ids = load(stored?.data ?? entry.data)
+    const ids = load(stored?.data ?? entry.data, label(entry))
     remember(entry, label(entry))
     emit('restored', ids)
   } catch (error) {
@@ -567,8 +586,17 @@ watch(() => repoManager, loadPlaces)
             </div>
           </article>
         </div>
+        <!-- No pages, but what is here is worth naming: this is the state
+          one explores its connections from. -->
         <p v-else class="detail__hint">
           {{ t('Storage.noBoard') }}
+          <span v-if="totals.connections || totals.datasources || totals.variables">
+            {{ t('Storage.holds', {
+              connections: totals.connections,
+              datasources: totals.datasources,
+              variables: totals.variables,
+            }) }}
+          </span>
         </p>
       </template>
 
