@@ -1,0 +1,6 @@
+-- Source: https://data-goblins.com/power-bi/dmvs
+-- Construct: Wildcard select with a single numeric comparison.
+-- Expect: parse
+-- Normalized: identifiers and string values substituted; casing, spacing,
+--             line breaks and quoting preserved exactly as published.
+SELECT * FROM $SYSTEM.DISCOVER_STORAGE_UNITS WHERE RIVIOLATION_COUNT > 0

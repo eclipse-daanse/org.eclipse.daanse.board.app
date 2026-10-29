@@ -127,12 +127,18 @@ export interface DimensionTreeItem extends TreeItem {
   type: TreeItemTypesEnum.Dimension
   isMeasureDimension: boolean
   children: TreeItem[]
+  /** The dimension's unique name, to load its hierarchies by. */
+  dimension?: string
+  /** Its hierarchies are loaded when it is opened. */
+  lazy?: boolean
 }
 
 export interface HierarchyTreeItem extends TreeItem {
   type: TreeItemTypesEnum.Hierarchy
   children: TreeItem[]
   originalItem: MDSchemaHierarchy
+  /** Its levels are loaded when it is opened. */
+  lazy?: boolean
   filters: {
     enabled: boolean
   }
@@ -148,6 +154,14 @@ export interface LevelTreeItem extends TreeItem {
   type: TreeItemTypesEnum.Level
   children: TreeItem[]
   originalItem: MDSchemaLevel
+  /** Its first page of members is loaded when it is opened. */
+  lazy?: boolean
+  /** How many of the level's members are in the tree so far. */
+  loadedMembers?: number
+  /** Whether the server has more of them than are in the tree. */
+  hasMore?: boolean
+  /** A page of members is on its way. */
+  fetching?: boolean
 }
 
 export interface SetsFolderTreeItem extends TreeItem {
@@ -252,12 +266,18 @@ export interface DimensionTreeItem extends TreeItem {
   type: TreeItemTypesEnum.Dimension
   isMeasureDimension: boolean
   children: TreeItem[]
+  /** The dimension's unique name, to load its hierarchies by. */
+  dimension?: string
+  /** Its hierarchies are loaded when it is opened. */
+  lazy?: boolean
 }
 
 export interface HierarchyTreeItem extends TreeItem {
   type: TreeItemTypesEnum.Hierarchy
   children: TreeItem[]
   originalItem: MDSchemaHierarchy
+  /** Its levels are loaded when it is opened. */
+  lazy?: boolean
   filters: {
     enabled: boolean
   }
@@ -273,6 +293,14 @@ export interface LevelTreeItem extends TreeItem {
   type: TreeItemTypesEnum.Level
   children: TreeItem[]
   originalItem: MDSchemaLevel
+  /** Its first page of members is loaded when it is opened. */
+  lazy?: boolean
+  /** How many of the level's members are in the tree so far. */
+  loadedMembers?: number
+  /** Whether the server has more of them than are in the tree. */
+  hasMore?: boolean
+  /** A page of members is on its way. */
+  fetching?: boolean
 }
 
 export interface SetsFolderTreeItem extends TreeItem {
@@ -326,6 +354,7 @@ export function getDimensionDesc(
     children: [],
     id: `Dimension(${dimension.DIMENSION_UNIQUE_NAME})`,
     caption: dimension.DIMENSION_CAPTION,
+    dimension: dimension.DIMENSION_UNIQUE_NAME,
   }
 }
 

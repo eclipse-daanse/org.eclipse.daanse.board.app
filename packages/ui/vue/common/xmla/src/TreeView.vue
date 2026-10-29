@@ -22,6 +22,9 @@ Contributors:
  * Which branches are open can be held by the caller (the filter tree
  * swaps the whole tree when a search runs and carries the open set with
  * it) or left here.
+ *
+ * A node marked lazy has children not yet loaded: it is drawn as a branch,
+ * and the first time it opens loadChildren is asked to fill it in.
  */
 import { computed, ref } from 'vue'
 import { DIcon } from 'org.eclipse.daanse.board.app.ui.vue.controls'
@@ -31,6 +34,10 @@ const { t } = useTranslation('xmla');
 interface Node {
   id?: string | number
   children?: Node[]
+  /** Children to be loaded when the node first opens. */
+  lazy?: boolean
+  /** Set while they are on their way. */
+  loading?: boolean
   [key: string]: unknown
 }
 
@@ -43,8 +50,12 @@ const props = withDefaults(
     filter?: string
     /** Which field carries a node's text. */
     textBy?: string
+    /** A node's text where no one field holds it - one translated as drawn, say. Before textBy. */
+    textOf?: (node: Node) => string
     /** How deep this level sits, for the indent. */
     depth?: number
+    /** Fills in a lazy node's children. */
+    loadChildren?: (node: Node) => Promise<void>
   }>(),
   { textBy: 'label', depth: 0 },
 )
@@ -65,16 +76,33 @@ function isOpen(node: Node): boolean {
 
 function toggle(node: Node): void {
   const id = idOf(node)
-  const next = isOpen(node) ? open.value.filter((o) => o !== id) : [...open.value, id]
+  const opening = !isOpen(node)
+  const next = opening ? [...open.value, id] : open.value.filter((o) => o !== id)
   if (props.expanded) emit('update:expanded', next)
   else ownExpanded.value = next
+  if (opening && node.lazy && !node.loading && props.loadChildren) void load(node)
 }
+
+async function load(node: Node): Promise<void> {
+  node.loading = true
+  try {
+    await props.loadChildren!(node)
+    node.lazy = false
+  } catch (error) {
+    // Left lazy: closing and opening it again tries once more.
+    console.warn('Could not load the branch', error)
+  } finally {
+    node.loading = false
+  }
+}
+
+const isBranch = (node: Node) => !!node.children?.length || !!node.lazy
 
 /** Whether this node or anything under it answers the filter. */
 function matches(node: Node): boolean {
   const needle = (props.filter ?? '').trim().toLowerCase()
   if (!needle) return true
-  const text = String(node[props.textBy] ?? '').toLowerCase()
+  const text = String(props.textOf ? props.textOf(node) : (node[props.textBy] ?? '')).toLowerCase()
   if (text.includes(needle)) return true
   return (node.children ?? []).some(matches)
 }
@@ -92,15 +120,16 @@ function showsOpen(node: Node): boolean {
   <ul class="tree">
     <li v-for="node in shown" :key="idOf(node)" class="node">
       <div class="node__row" :style="{ paddingLeft: `${depth * 14 + 2}px` }">
+        <span v-if="node.loading" class="node__loading" role="status" :aria-label="t('Tree.loading')" />
         <button
-          v-if="node.children?.length"
+          v-else-if="isBranch(node)"
           type="button"
           class="node__twist"
           :aria-expanded="showsOpen(node)"
           :aria-label="showsOpen(node) ? t('Tree.collapse') : t('Tree.expand')"
           @click.stop="toggle(node)"
         >
-          <DIcon :name="showsOpen(node) ? 'expand_more' : 'chevron_right'" size="sm" tone="color-dim" />
+          <DIcon :name="showsOpen(node) ? 'expand_more' : 'chevron_right'" size="sm" />
         </button>
         <span v-else class="node__leaf" />
 
@@ -115,7 +144,9 @@ function showsOpen(node: Node): boolean {
         :expanded="expanded"
         :filter="filter"
         :text-by="textBy"
+        :text-of="textOf"
         :depth="depth + 1"
+        :load-children="loadChildren"
         @update:expanded="(open) => emit('update:expanded', open)"
       >
         <template #content="child">
@@ -147,13 +178,23 @@ function showsOpen(node: Node): boolean {
   background-color: color-mix(in srgb, var(--color-pane) 70%, transparent);
 }
 
+/* A target the size of a row, not of the glyph: the dim chevron alone was hard to hit. */
 .node__twist {
   display: flex;
   align-items: center;
+  justify-content: center;
+  flex: none;
+  width: 22px;
+  height: 22px;
   padding: 0;
   border: 0;
+  border-radius: var(--radius-xs, 3px);
   background: none;
   cursor: pointer;
+}
+
+.node__twist:hover {
+  background: var(--color-hover, rgba(127, 127, 127, 0.15));
 }
 
 .node__twist:focus-visible {
@@ -161,9 +202,25 @@ function showsOpen(node: Node): boolean {
   outline-offset: -2px;
 }
 
+/* In the twist's place while a branch loads. */
+.node__loading {
+  width: 12px;
+  height: 12px;
+  margin: 0 3px;
+  flex: none;
+  border: 2px solid var(--color-divider);
+  border-top-color: var(--color-accent);
+  border-radius: 50%;
+  animation: node-spin 700ms linear infinite;
+}
+
+@keyframes node-spin {
+  to { transform: rotate(360deg); }
+}
+
 /* Keeps a leaf's content on the same edge as a branch's. */
 .node__leaf {
-  width: 18px;
+  width: 22px;
   flex: none;
 }
 

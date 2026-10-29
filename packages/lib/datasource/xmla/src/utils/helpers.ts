@@ -76,3 +76,29 @@ export function findMaxInArrayByField(
     )
   }
 }
+
+/**
+ * The name of a set or member a generated query defines, the same every
+ * time the same query is built. A random name made each build a new
+ * statement, which no request coalescing and no server cache can match.
+ */
+export function stableId(...parts: unknown[]): string {
+  const text = JSON.stringify(parts)
+  let hash = 0x811c9dc5
+  for (let i = 0; i < text.length; i++) {
+    hash ^= text.charCodeAt(i)
+    hash = Math.imul(hash, 0x01000193)
+  }
+  return 'id' + (hash >>> 0).toString(16)
+}
+
+/** What a filter selects, by member - the part of it a query depends on. */
+export function filterKey(filter: any) {
+  return {
+    multiple: !!filter?.multipleChoise,
+    all: !!filter?.selectAll,
+    selected: (filter?.selectedItems ?? []).map((e: any) => e?.UName),
+    deselected: (filter?.deselectedItems ?? []).map((e: any) => e?.UName),
+    single: filter?.selectedItem?.UName,
+  }
+}

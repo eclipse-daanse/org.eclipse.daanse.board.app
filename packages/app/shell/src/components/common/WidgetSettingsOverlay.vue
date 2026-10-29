@@ -39,7 +39,7 @@ import {
   identifier as WORKSPACE,
   type Workspace,
 } from 'org.eclipse.daanse.board.app.lib.model.workspace'
-import { useEList, useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+import { plainSettings, useEList, useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import { type Widget as IWidget } from 'org.eclipse.daanse.board.app.lib.api.page'
 import { WidgetRepository, identifier } from 'org.eclipse.daanse.board.app.lib.api.widget'
 
@@ -271,7 +271,12 @@ function takeSnapshot() {
   for (const which of ['wrapperConfig', 'config'] as const) {
     const bag = bagOf(which)
     if (!bag) continue
-    for (const [key, field] of Object.entries(bag)) {
+    /*
+     * By feature: a modelled bag keeps its values in private fields, and
+     * writing one of those back would put the value in place without the
+     * notification that tells the widget - the board kept a discarded view.
+     */
+    for (const [key, field] of Object.entries(plainSettings(bag))) {
       const list = asArray(field)
       const hasValue = Boolean(field) && typeof field === 'object' && 'value' in (field as object)
       snapshot[which][key] = {

@@ -11,7 +11,8 @@
       "types": "./src/index.ts",
       "import": "./src/index.ts"
     },
-    "./manifest.json": "./manifest.json"
+    "./manifest.json": "./manifest.json",
+    "./main.css": "./src/assets/main.css"
   },
   "scripts": {
     "build": "vite build --config vite.bundle.config.ts"

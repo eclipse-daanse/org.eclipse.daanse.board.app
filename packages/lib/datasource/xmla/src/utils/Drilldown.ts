@@ -11,7 +11,7 @@
  *   Smart City Jena
  **********************************************************************/
 
-import { v4 } from 'uuid'
+import { filterKey, stableId } from './helpers'
 import { filterMembers } from './filterMembers'
 
 export async function getRowsDrilldownRequestString(
@@ -23,7 +23,7 @@ export async function getRowsDrilldownRequestString(
   const metadataLevels = levels
 
   if (rowsDrilldownMember) {
-    const uid = 'id' + v4()
+    const uid = stableId('rows', rowsDrilldownMember.UName)
     const setSection = `SET [Row_Dim_${uid}] AS 'VisualTotals(Distinct(Hierarchize({Ascendants(${rowsDrilldownMember.UName}), Descendants(${rowsDrilldownMember.UName})})))'`
 
     const rowsMemberLevel = metadataLevels.find(
@@ -145,7 +145,7 @@ export async function getRowsDrilldownRequestString(
           with: '',
         }
 
-      const uid = 'id' + v4()
+      const uid = stableId('rows-filter', hierarchy.originalItem.HIERARCHY_UNIQUE_NAME, filterKey(filter))
       const filterSetName = `[FILTER_${uid}]`
 
       const levels = [] as any[][]
@@ -197,7 +197,7 @@ export async function getColsDrilldownRequestString(
   const metadataLevels = levels
 
   if (columnsDrilldownMember) {
-    const uid = 'id' + v4()
+    const uid = stableId('columns', columnsDrilldownMember.UName)
     const setSection = `SET [Col_Dim_${uid}] AS 'VisualTotals(Distinct(Hierarchize({Ascendants(${columnsDrilldownMember.UName}), Descendants(${columnsDrilldownMember.UName})})))'`
 
     const colsMemberLevel = metadataLevels.find(
@@ -319,7 +319,7 @@ export async function getColsDrilldownRequestString(
           with: '',
         }
 
-      const uid = 'id' + v4()
+      const uid = stableId('columns-filter', hierarchy.originalItem.HIERARCHY_UNIQUE_NAME, filterKey(filter))
       const filterSetName = `[FILTER_${uid}]`
 
       const levels = [] as any[][]

@@ -1,0 +1,3 @@
+-- The simplest DMV query: every row of a schema rowset.
+-- Source: Dynamic Management Views (DMVs) in Analysis Services, Microsoft Learn.
+SELECT * FROM $System.DISCOVER_SESSIONS

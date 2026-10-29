@@ -49,5 +49,16 @@ export interface PivotTable extends EObject {
   rowLevelStyles: EList<LevelStyle>;
   columnLevelStyles: EList<LevelStyle>;
   conditionalFormats: EList<ConditionalFormat>;
+  mode?: string;
+  cascadeDepth?: string;
+  measure?: string;
+  compareLayout?: string;
+  diffType?: string;
+  scaleNormalization?: string;
+  divergingScale?: boolean;
+  significanceThreshold?: number;
+  hideUnchanged?: boolean;
+  matrixLimit?: number;
+  timeline?: boolean;
 
 }

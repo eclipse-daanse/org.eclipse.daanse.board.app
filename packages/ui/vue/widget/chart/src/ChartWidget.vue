@@ -216,7 +216,6 @@ const resolvedConfig = wrapParameters({
   annotationsEditMode: computed(() => (config.value?.annotationsEditMode as any)?.value ?? false)
 })
 
-console.log(resolvedConfig.backgroundColor.value);
 
 // Apply settings to data (override dataset colors and apply per-series settings)
 const chartData = computed(() => {
@@ -699,7 +698,6 @@ const chartOptions = computed(() => {
     }
   }
 
-  console.log('Chart options:', options)
   return options
 })
 </script>

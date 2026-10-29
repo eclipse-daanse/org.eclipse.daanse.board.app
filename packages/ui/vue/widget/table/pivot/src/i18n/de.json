@@ -7,7 +7,8 @@
       "text": "Text",
       "rowLevels": "Stile je Zeilenebene",
       "columnLevels": "Stile je Spaltenebene",
-      "conditional": "Bedingte Formatierung"
+      "conditional": "Bedingte Formatierung",
+      "navigation": "Seiten und Kapitel"
     },
     "showRowsProperties": "Zeileneigenschaften zeigen",
     "showColumnsProperties": "Spalteneigenschaften zeigen",
@@ -64,9 +65,98 @@
     "columnLevelsHint": "Eigene Stile für die Hierarchieebenen in den Spaltenköpfen.",
     "rulesHint": "Regeln, nach denen Zellen anhand ihrer Werte formatiert werden.",
     "noLevels": "Noch keine Stile je Ebene. „Ebene hinzufügen“ legt den ersten an.",
-    "noRules": "Noch keine Formatierungsregeln. „Regel hinzufügen“ legt die erste an."
+    "noRules": "Noch keine Formatierungsregeln. „Regel hinzufügen“ legt die erste an.",
+    "navigation": {
+      "mode": "Ansicht",
+      "cascadeDepth": "Kaskade",
+      "measure": "Farbe nach Kennzahl (Unique Name, leer = erste)",
+      "scale": "Farbskala",
+      "diverging": "Farbskala um Null bei negativen Werten",
+      "compareLayout": "Vergleich",
+      "diffType": "Differenz",
+      "threshold": "Schwelle für Abweichungen",
+      "hideUnchanged": "Unveränderte Zeilen und Spalten ausblenden",
+      "matrixLimit": "Ab so vielen Mitgliedern: Suche statt alle",
+      "timeline": "Baum + Reiter: Zeit als Zeitachse"
+    }
   },
   "Widget": {
-    "name": "Pivot-Tabelle"
+    "name": "Pivot-Tabelle",
+    "loading": "Wird geladen…",
+    "failed": "Die Abfrage ist fehlgeschlagen: {{error}}"
+  },
+  "Navigation": {
+    "modes": {
+      "standard": "Standard",
+      "cascade": "Kaskade",
+      "map": "Karte",
+      "matrix": "Tabelle",
+      "tree-tabs": "Baum + Reiter",
+      "compare": "Vergleich"
+    },
+    "depth": {
+      "axes": "Nach Achsen",
+      "hierarchy": "Nach Hierarchie"
+    },
+    "layout": {
+      "side-by-side": "Nebeneinander",
+      "side-by-side-diff": "Nebeneinander + Differenz",
+      "diff-only": "Nur Differenz"
+    },
+    "diff": {
+      "absolute": "Absolut (B − A)",
+      "percent": "Prozent ((B − A) / |A|)",
+      "both": "Beides"
+    },
+    "scale": {
+      "global": "Gesamt",
+      "row": "Je Zeile",
+      "column": "Je Spalte"
+    },
+    "view": "Ansicht",
+    "colourBy": "Farbe nach",
+    "overview": "Übersicht",
+    "chapters": "Kapitel",
+    "pages": "Seiten",
+    "path": "Pfad",
+    "steps": "Schritte",
+    "search": "Suchen ({{count}})",
+    "searchGrid": "Suchen ({{pages}} × {{chapters}})",
+    "searchIn": "{{label}} durchsuchen",
+    "searchMembers": "Mitglieder durchsuchen",
+    "tileTitle": "{{label}}: {{value}} — Shift/Strg-Klick: zum Vergleich",
+    "hasChildren": "hat Untermitglieder",
+    "selectedForComparison": "zum Vergleich ausgewählt",
+    "collapse": "Zuklappen",
+    "expand": "Aufklappen",
+    "layoutLabel": "Darstellung",
+    "difference": "Differenz",
+    "threshold": "Schwelle",
+    "hideUnchanged": "Unveränderte ausblenden",
+    "baseline": "Basis",
+    "against": "gegen",
+    "previous": "Vorheriger",
+    "next": "Nächster",
+    "selectionSets": "Auswahl setzt",
+    "pickComparison": "Vergleich wählen",
+    "pickTwo": "Zwei Ausschnitte wählen, um sie zu vergleichen.",
+    "sliceOverview": "Übersicht der Ausschnitte",
+    "colourScale": "Farbskala",
+    "aroundZero": "Um Null",
+    "slices": "Ausschnitte",
+    "selectedCount": "{{count}} ausgewählt",
+    "compareSelected": "Vergleichen",
+    "clear": "Leeren",
+    "timeline": "Zeitachse",
+    "back": "Zurück",
+    "play": "Abspielen",
+    "pause": "Anhalten",
+    "forward": "Weiter",
+    "allPages": "Alle Seiten",
+    "sumOfVisible": " (Σ der sichtbaren Zellen)",
+    "notAvailable": "k. A.",
+    "close": "Schließen",
+    "asTabs": "Reiter",
+    "asTimeline": "Zeitachse"
   }
 }

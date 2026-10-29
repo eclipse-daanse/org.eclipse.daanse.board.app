@@ -1,13 +1,10 @@
 {
   "compilerOptions": {
-    "sourceMap": true,
-    "declarationMap": true,
-    "inlineSources": true,
-    "target": "es2016",
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
-    "module": "commonjs",
-    "declaration": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "strict": true,
