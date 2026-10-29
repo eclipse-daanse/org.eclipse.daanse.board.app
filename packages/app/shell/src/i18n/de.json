@@ -9,7 +9,6 @@
     "brand": "Daanse Board",
     "crumb": {
       "label": "Pfad",
-      "boards": "Boards",
       "board": "Board",
       "edit": "Bearbeiten",
       "pages": "Seiten",
@@ -17,7 +16,8 @@
       "config": "Konfiguration",
       "storage": "Speicher",
       "test": "Test",
-      "events": "Ereignisse"
+      "events": "Ereignisse",
+      "noBoard": "Kein Board offen"
     },
     "page": {
       "fallbackName": "Seite",
@@ -106,7 +106,9 @@
       "widgets_one": "{{count}} Widget",
       "widgets_other": "{{count}} Widgets",
       "action": "Öffnen",
-      "note": "Ein Arbeitsstand hält genau ein Board. Ein anderes bekommst du, indem du im Speicher einen anderen Stand öffnest; die Seiten dieses Boards liegen im Bereich „Seiten“."
+      "note": "Ein Arbeitsstand hält genau ein Board. Ein anderes bekommst du, indem du im Speicher einen anderen Stand öffnest; die Seiten dieses Boards liegen im Bereich „Seiten“.",
+      "connections": "{{count}} Verbindungen",
+      "datasources": "{{count}} Quellen"
     }
   },
   "Storage": {
