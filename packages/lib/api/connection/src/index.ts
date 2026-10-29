@@ -43,6 +43,19 @@ export interface ConnectionIdentifiers {
     Connection: symbol;
     Settings: symbol;
     /**
+     * What there is to look at on a connection of this type, if anything.
+     *
+     * Most connections have nothing: they are an address and a credential,
+     * and the data belongs to the sources built on them. A catalogue is the
+     * exception - a SPARQL endpoint holds the datasets one came to browse,
+     * and reading them is a visit of its own, not a setting to change.
+     *
+     * A type that registers one is given a tab beside its settings, the way
+     * a data source already is. Optional, and left out by every type that
+     * has nothing to show.
+     */
+    Preview?: symbol;
+    /**
      * The component a new connection of this type is filled in with, when
      * the type knows more than its model can say - XMLA asks the server for
      * its catalogues. It takes `config` like Settings, and is often the

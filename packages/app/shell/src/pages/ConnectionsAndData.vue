@@ -31,6 +31,10 @@ import {
   identifier as WORKSPACE,
   type Workspace,
 } from 'org.eclipse.daanse.board.app.lib.model.workspace'
+import {
+  identifier as CONNECTION_REPOSITORY,
+  type ConnectionRepository,
+} from 'org.eclipse.daanse.board.app.lib.api.connection'
 import { useEList, useEObject, useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import DataTree, { type Selection } from '@/components/datasources/DataTree.vue'
 import DatasourceEditor from '@/components/datasources/DatasourceEditor.vue'
@@ -38,6 +42,7 @@ import ConnectionEditor from '@/components/connections/ConnectionEditor.vue'
 import { useDatasourceUsage } from '@/composables/useDatasourceUsage'
 
 const workspace = inject<Workspace>(WORKSPACE)!
+const connectionRepository = inject<ConnectionRepository>(CONNECTION_REPOSITORY)!
 const connections = useEList(workspace, (w) => w.connections)
 const dataSources = useEList(workspace, (w) => w.datasources)
 
@@ -80,11 +85,23 @@ const usage = computed(() => {
 })
 
 /*
- * A connection has no data of its own to look at, so it opens on its
- * settings; a source opens on its data, which is what you came to see.
+ * Whether there is anything to look at, which is not the same question as
+ * connection or source.
+ *
+ * Every source has its data. Most connections have nothing - an address and
+ * a credential - but a catalogue does: a SPARQL endpoint holds the datasets
+ * one came to browse. So the type is asked, rather than assumed.
  */
+const showsPreview = computed(() => {
+  const at = selected.value
+  if (!at) return false
+  if (at.type === 'DataSource') return true
+  const type = (held.value as any)?.type
+  return !!(type && connectionRepository.getConnectionIdentifiers(type)?.Preview)
+})
+
 const tabs = computed(() =>
-  selected.value?.type === 'DataSource'
+  showsPreview.value
     ? [
         { id: 'preview', label: t('Data.preview') },
         { id: 'settings', label: t('WidgetSettings.settings') },
@@ -92,8 +109,9 @@ const tabs = computed(() =>
     : [{ id: 'settings', label: t('WidgetSettings.settings') }],
 )
 
-watch(selected, (at) => {
-  tab.value = at?.type === 'DataSource' ? 'preview' : 'settings'
+/* What you came to see, where there is something; the settings otherwise. */
+watch([selected, showsPreview], () => {
+  tab.value = showsPreview.value ? 'preview' : 'settings'
 })
 </script>
 
@@ -124,6 +142,7 @@ watch(selected, (at) => {
             v-if="selected.type === 'Connection'"
             :key="selected.itemId"
             :item-id="selected.itemId"
+            :view="tab === 'preview' ? 'preview' : 'settings'"
             @close="selected = undefined"
           />
           <!-- One editor for both tabs: the query built in the preview

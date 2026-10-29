@@ -20,12 +20,19 @@ import { DButton, DIconPicker, DInput, DSelect } from 'org.eclipse.daanse.board.
 import TagInput from '../datasources/TagInput.vue'
 import { useRegistrations, useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 
-const props = defineProps({
-  itemId: {
-    type: String,
-    required: true,
-  },
-})
+const props = withDefaults(
+  defineProps<{
+    itemId: string
+    /**
+     * Which half of a connection is shown.
+     *
+     * Only a type that registers a Preview has two; for everyone else the
+     * page offers one tab and this stays at its default.
+     */
+    view?: 'settings' | 'preview'
+  }>(),
+  { view: 'settings' },
+)
 
 const emit = defineEmits(['close'])
 const { t } = useTranslation('shell')
@@ -80,6 +87,17 @@ const settingsComponent = computed(() => {
   return connectionRepository.resolveIdentifier(identifiers.Settings)
 })
 
+/* Absent for every type that has nothing to look at, which is most of them. */
+const previewComponent = computed(() => {
+  const identifiers = connectionRepository.getConnectionIdentifiers(connectionProxy.value.type)
+
+  if (!identifiers?.Preview) {
+    return null
+  }
+
+  return connectionRepository.resolveIdentifier(identifiers.Preview)
+})
+
 const saveConnection = () => {
   const connection = connectionRepository.getConnectionModel(props.itemId)
   if (connection) {
@@ -97,29 +115,40 @@ const saveConnection = () => {
 </script>
 <template>
   <!-- The frame, the heading and the tabs belong to the page around this -->
-  <div class="editor">
-    <div class="editor__fields">
-      <DInput v-model="connectionProxy.uid" label="UID" readonly />
-      <DInput v-model="connectionProxy.name" :label="t('Editor.name')" />
-      <DSelect v-model="connectionProxy.type" :label="t('Editor.type')" :options="availableConnections" />
-      <DIconPicker
-        v-model="connectionProxy.icon"
-        :label="t('Editor.icon')"
-        :fallback="typeIcon"
-        :hint="t('Editor.iconHint')"
-      />
-      <TagInput
-        v-model="connectionProxy.tags"
-        :label="t('Editor.tags')"
-        :hint="t('Connection.tagsHint')"
-        :known="knownTags"
-      />
-      <component :is="settingsComponent" :config="connectionProxy.config" />
-    </div>
-    <div class="editor__actions">
-      <DButton intent="quiet" @click="$emit('close')">{{ t('common:Action.close') }}</DButton>
-      <DButton intent="primary" @click="saveConnection">{{ t('common:Action.save') }}</DButton>
-    </div>
+  <div class="editor" :class="{ 'editor--preview': view === 'preview' }">
+    <template v-if="view === 'settings'">
+      <div class="editor__fields">
+        <DInput v-model="connectionProxy.uid" label="UID" readonly />
+        <DInput v-model="connectionProxy.name" :label="t('Editor.name')" />
+        <DSelect v-model="connectionProxy.type" :label="t('Editor.type')" :options="availableConnections" />
+        <DIconPicker
+          v-model="connectionProxy.icon"
+          :label="t('Editor.icon')"
+          :fallback="typeIcon"
+          :hint="t('Editor.iconHint')"
+        />
+        <TagInput
+          v-model="connectionProxy.tags"
+          :label="t('Editor.tags')"
+          :hint="t('Connection.tagsHint')"
+          :known="knownTags"
+        />
+        <component :is="settingsComponent" :config="connectionProxy.config" />
+      </div>
+      <div class="editor__actions">
+        <DButton intent="quiet" @click="$emit('close')">{{ t('common:Action.close') }}</DButton>
+        <DButton intent="primary" @click="saveConnection">{{ t('common:Action.save') }}</DButton>
+      </div>
+    </template>
+
+    <!-- The saved connection, not the draft: what is on offer here is read
+      through the connection the rest of the app holds, and a half-typed
+      address would only fail to answer. -->
+    <template v-else>
+      <div class="editor__preview">
+        <component :is="previewComponent" :item-id="itemId" />
+      </div>
+    </template>
   </div>
 </template>
 
@@ -128,6 +157,19 @@ const saveConnection = () => {
   display: flex;
   flex-direction: column;
   gap: 12px;
+}
+
+/* Only the preview fills the pane; the settings keep the height they had. */
+.editor--preview {
+  height: 100%;
+  min-height: 0;
+}
+
+.editor__preview {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  overflow: auto;
 }
 
 .editor__fields {
