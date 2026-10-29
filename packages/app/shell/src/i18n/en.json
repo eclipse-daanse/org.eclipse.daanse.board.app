@@ -9,7 +9,6 @@
     "brand": "Daanse Board",
     "crumb": {
       "label": "Path",
-      "boards": "Boards",
       "board": "Board",
       "edit": "Edit",
       "pages": "Pages",
@@ -17,7 +16,8 @@
       "config": "Configuration",
       "storage": "Storage",
       "test": "Test",
-      "events": "Events"
+      "events": "Events",
+      "noBoard": "No board open"
     },
     "page": {
       "fallbackName": "Page",
@@ -106,7 +106,9 @@
       "widgets_one": "{{count}} widget",
       "widgets_other": "{{count}} widgets",
       "action": "Open",
-      "note": "A workspace holds exactly one board. To get another one, open a different workspace from storage; the pages of this board are in the “Pages” area."
+      "note": "A workspace holds exactly one board. To get another one, open a different workspace from storage; the pages of this board are in the “Pages” area.",
+      "connections": "{{count}} connections",
+      "datasources": "{{count}} sources"
     }
   },
   "Storage": {

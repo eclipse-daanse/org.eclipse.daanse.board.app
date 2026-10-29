@@ -24,6 +24,10 @@ Contributors:
 import { DIcon } from 'org.eclipse.daanse.board.app.ui.vue.controls'
 import Header from './components/common/Header.vue'
 import { inject, ref, onMounted, computed } from 'vue'
+import {
+  identifier as WORKSPACE,
+  type Workspace,
+} from 'org.eclipse.daanse.board.app.lib.model.workspace'
 import { useTheme } from './theme/useTheme'
 import { useRoute, useRouter } from 'vue-router'
 import {
@@ -31,7 +35,7 @@ import {
   type NavigationRegistry,
   type NavigationItem,
 } from 'org.eclipse.daanse.board.app.lib.api.navigation'
-import { useGlobalLoading, useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+import { useGlobalLoading, useTranslation, useEObject } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import {
   type PageRegistryI,
   identifier as PageIdentifier,
@@ -47,6 +51,7 @@ useTheme()
 
 const route = useRoute()
 const router = useRouter()
+const workspace = inject<Workspace>(WORKSPACE)!
 const pageRepo = inject<PageRegistryI>(PageIdentifier)
 const { usageOf } = useBoardUsage()
 
@@ -72,11 +77,22 @@ const openBoard = () =>
     }),
   )
 /*
- * The launcher has no side menu: on the boards overview there is no open
- * board for the rail to point into, and the areas it lists are properties
- * of a board. The rail returns as soon as one is open.
+ * Without an open board there is no side menu.
+ *
+ * The areas the rail lists - the board, its data, its settings - are all
+ * properties of a board, so none of them means anything before one is
+ * open. It used to be the route that decided this, which made the rail
+ * disappear on the launcher and appear on every other address whether or
+ * not there was a board behind it.
+ *
+ * A board with no pages is still open: one explores its connections from
+ * it. So this asks whether a board is there, never whether it has pages.
  */
-const isLauncher = computed(() => String(route.name) === 'home' && !route.params.pageid)
+const modelledBoard = useEObject(() => workspace.board)
+const noBoard = computed(() => {
+  void modelledBoard.value
+  return !workspace.board
+})
 
 const boardActive = computed(() =>
   ['home', 'page', 'edit', 'pageEdit'].includes(String(route.name)),
@@ -93,8 +109,8 @@ const go = (target: string) => router.push(target)
 
     <Header />
 
-    <div :class="['shell-body', { 'shell-body--norail': isLauncher }]">
-      <nav v-if="!isLauncher" class="rail" :aria-label="t('Rail.areas')">
+    <div :class="['shell-body', { 'shell-body--norail': noBoard }]">
+      <nav v-if="!noBoard" class="rail" :aria-label="t('Rail.areas')">
         <button
           type="button"
           :class="['ri', { on: boardActive }]"

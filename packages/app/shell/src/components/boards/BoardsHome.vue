@@ -95,12 +95,34 @@ const pages = computed<PageSummary[]>(() => {
 })
 
 
-/** What the board itself is worth saying: its pages, added up. */
+/*
+ * The connections, sources and variables the board holds.
+ *
+ * Held, not used: `sources` below counts the kinds of source the widgets
+ * on a page read through, which is a different number and says nothing
+ * about a board that has no pages yet.
+ */
+const connections = useEList(workspace, (w) => w.connections)
+const datasources = useEList(workspace, (w) => w.datasources)
+const variables = useEList(workspace, (w) => w.variables)
+
+/**
+ * What the board is worth saying - what lies on it, and what it reads.
+ *
+ * A board can hold pages, and with them widgets, but it does not have to:
+ * one holding only connections is what a person explores those
+ * connections from. Counting pages alone reported such a board as three
+ * zeroes, so what it holds is counted too.
+ */
 const boardTotals = computed(() => ({
   pages: pages.value.length,
   widgets: pages.value.reduce((sum, page) => sum + page.widgetCount, 0),
   sources: new Set(pages.value.flatMap((page) => page.kinds)).size,
+  connections: connections.value.length,
+  datasources: datasources.value.length,
+  variables: variables.value.length,
 }))
+
 
 /** Where opening the board lands: its default page, else the first one. */
 const entryPageId = computed(
@@ -186,8 +208,12 @@ function openRestored(ids: string[]) {
     </header>
 
     <div class="boards__body">
-    <!-- Nothing open and nothing built: say what a board is -->
-    <div v-if="view === 'recent' && pages.length === 0" class="boards__empty">
+    <!--
+      No board open: the only thing to do here is open one, so that is all
+      there is. What a board holds - pages, connections, sources - is a
+      property of an open board, and none of it applies yet.
+    -->
+    <div v-if="view === 'recent' && !board" class="boards__empty">
       <BoardFloorplan
         class="boards__empty-plan"
         :items="[
@@ -226,9 +252,13 @@ function openRestored(ids: string[]) {
         <div class="single__text">
           <h3 class="single__name">{{ board?.name || t('Boards.open.fallbackName') }}</h3>
           <p v-if="board?.description" class="single__desc">{{ board.description }}</p>
+          <!-- What lies on it, then what it reads through: a board with no
+            pages is still worth describing by its connections. -->
           <p class="single__meta">
             {{ t('Boards.open.pages', { count: boardTotals.pages }) }}
             · {{ t('Boards.open.widgets', { count: boardTotals.widgets }) }}
+            · {{ t('Boards.open.connections', { count: boardTotals.connections }) }}
+            · {{ t('Boards.open.datasources', { count: boardTotals.datasources }) }}
           </p>
         </div>
         <div class="single__actions">
