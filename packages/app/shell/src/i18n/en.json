@@ -452,5 +452,13 @@
   },
   "Nav": {
     "variables": "Variables"
+  },
+  "Board": {
+    "noPages": {
+      "title": "No pages yet",
+      "text": "This board is where its connections are explored from. Lay out a page over them whenever you want one."
+    },
+    "toData": "Connections & data",
+    "toPages": "Pages"
   }
 }

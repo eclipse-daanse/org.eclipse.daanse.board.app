@@ -95,6 +95,7 @@ const crumb = computed<Crumb[]>(() => {
   void modelledPages.value
   return boardCrumb({
     route: route.name,
+    boardId: workspace.board?.id as string | undefined,
     boardName: workspace.board?.name as string | undefined,
     pageName: currentPageName.value,
     t,

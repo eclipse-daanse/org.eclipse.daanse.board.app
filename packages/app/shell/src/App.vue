@@ -81,17 +81,17 @@ const openBoard = () =>
  *
  * The areas the rail lists - the board, its data, its settings - are all
  * properties of a board, so none of them means anything before one is
- * open. It used to be the route that decided this, which made the rail
- * disappear on the launcher and appear on every other address whether or
- * not there was a board behind it.
+ * open. The launcher is the one screen where none is, and it is the one
+ * route that says so.
  *
- * A board with no pages is still open: one explores its connections from
- * it. So this asks whether a board is there, never whether it has pages.
+ * A board with no pages is open all the same: one explores its
+ * connections from it. So what decides this is whether a board is open,
+ * never whether it has pages.
  */
 const modelledBoard = useEObject(() => workspace.board)
 const noBoard = computed(() => {
   void modelledBoard.value
-  return !workspace.board
+  return String(route.name) === 'home' || !workspace.board
 })
 
 const boardActive = computed(() =>

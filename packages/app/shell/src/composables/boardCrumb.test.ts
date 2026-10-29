@@ -24,7 +24,7 @@ const labels = (crumb: ReturnType<typeof boardCrumb>) => crumb.map((part) => par
 describe('the path through a board', () => {
   it('roots every screen in the open board, by name', () => {
     for (const route of ['data', 'save', 'config', 'pages', 'events', 'appearance']) {
-      const crumb = boardCrumb({ route, boardName: 'Sparky', t })
+      const crumb = boardCrumb({ route, boardId: 'b1', boardName: 'Sparky', t })
       expect(crumb[0].label).toBe('Sparky')
       expect(crumb).toHaveLength(2)
     }
@@ -37,10 +37,21 @@ describe('the path through a board', () => {
     }
   })
 
-  it('leads back to the board from everywhere but the board itself', () => {
-    expect(boardCrumb({ route: 'data', boardName: 'Sparky', t })[0].to).toBe('/')
-    /* The last crumb is where you are; a link to here is not a step. */
-    expect(boardCrumb({ route: 'home', boardName: 'Sparky', t })[0].to).toBeUndefined()
+  it("leads back to the board's own address from everywhere else", () => {
+    const from = boardCrumb({ route: 'data', boardId: 'b1', boardName: 'Sparky', t })
+    expect(from[0].to).toBe('/board/b1')
+  })
+
+  it('names no board on the launcher, because none is open there', () => {
+    const crumb = boardCrumb({ route: 'home', boardId: 'b1', boardName: 'Sparky', t })
+    expect(crumb[0].label).toBe(en.Header.crumb.noBoard)
+  })
+
+  it('is a label on the board itself, not a link to where you are', () => {
+    const crumb = boardCrumb({ route: 'board', boardId: 'b1', boardName: 'Sparky', t })
+    expect(crumb).toHaveLength(1)
+    expect(crumb[0].label).toBe('Sparky')
+    expect(crumb[0].to).toBeUndefined()
   })
 
   it('roots a board that has no pages exactly like one that has', () => {

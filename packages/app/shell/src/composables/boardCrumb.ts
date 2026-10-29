@@ -25,6 +25,8 @@ export interface Crumb {
 export interface CrumbContext {
   /** The route's name, as the router knows it. */
   route?: string | symbol | null
+  /** The open board's id, which its own screen is addressed by. */
+  boardId?: string
   /** The open board's name, or nothing when none is open. */
   boardName?: string
   /** The open page's name, where a page is open. */
@@ -46,15 +48,19 @@ export interface CrumbContext {
  * from it. So what roots this is whether a board is open, never whether
  * it has pages.
  */
-export function boardCrumb({ route, boardName, pageName, t }: CrumbContext): Crumb[] {
+export function boardCrumb({ route, boardId, boardName, pageName, t }: CrumbContext): Crumb[] {
   const named = boardName?.trim()
+  /* Back to the board's own screen, which is an address of its own now. */
   const root: Crumb = named
-    ? { label: named, to: '/' }
+    ? { label: named, to: boardId ? `/board/${boardId}` : '/' }
     : { label: t('shell:Header.crumb.noBoard') }
 
   switch (route) {
-    /* The board itself: a label, because this is where the link would go. */
+    /* Nothing open: the launcher names no board. */
     case 'home':
+      return [{ label: t('shell:Header.crumb.noBoard') }]
+    /* The board itself: a label, because this is where the link would go. */
+    case 'board':
       return [{ label: root.label }]
     case 'page':
       return [root, { label: pageName || t('shell:Header.page.fallbackName') }]
