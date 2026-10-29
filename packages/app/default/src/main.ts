@@ -123,7 +123,8 @@ async function start() {
   const parked = loader.getUnsatisfiedModules()
   console.log(`✅ ${active}/${all.length} modules active (${bundles.length} URL bundles)`)
   if (parked.length > 0) {
-    console.warn('⏸ unsatisfied:', parked.map((p) => `${p.moduleId} <- ${p.waitingFor.join(',')}`).join('; '))
+    const waiting = parked.map((p) => `${p.moduleId} <- ${p.waitingFor.join(',')}`)
+    console.warn('⏸ unsatisfied:', waiting.join('; '))
   }
 }
 
