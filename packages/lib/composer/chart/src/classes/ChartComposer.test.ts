@@ -12,7 +12,7 @@
  **********************************************************************/
 
 import { describe, expect, it } from 'vitest'
-import { ChartComposer } from './index'
+import { ChartComposer, seriesColor } from './index'
 
 describe('ChartComposer', () => {
   it('charts the values as they are, without touching the table', async () => {
@@ -41,5 +41,30 @@ describe('ChartComposer', () => {
     expect(chart.labels).toEqual(['Drink', 'Food'])
     expect(chart.datasets[0].data).toEqual([24597, 191940])
     expect(table.items[0]['Unit Sales']).toBe('24597')
+  })
+
+  it('gives every series a colour of its own', async () => {
+    const table = {
+      headers: ['Caption', 'Unit Sales', 'Store Sales', 'Store Cost'],
+      items: [{ Caption: 'Drink', 'Unit Sales': '1', 'Store Sales': '2', 'Store Cost': '3' }],
+      rows: [],
+    }
+    const source = { getData: async () => table, subscribe() {} }
+    const composer = new ChartComposer({ getDatasource: () => source } as any)
+    composer.init({
+      uid: 'chart',
+      name: 'chart',
+      type: 'chart',
+      connectedDatasources: ['source'],
+      composeBy: 'Caption',
+      labelColumn: 'Caption',
+      usedSets: ['Unit Sales', 'Store Sales', 'Store Cost'],
+    } as any)
+
+    const chart = await composer.getData('ChartData')
+    const colours = chart.datasets.map((dataset: any) => dataset.backgroundColor)
+    expect(new Set(colours).size).toBe(3)
+    expect(colours[0]).toBe(seriesColor(0))
+    expect(seriesColor(10)).toBe(seriesColor(0))
   })
 })

@@ -3,22 +3,52 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Pivot Table Widget Dockyard</title>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+    <title>Pivot – pages and chapters</title>
     <style>
-      /* the board app gets these from unscoped styles of other packages */
-      .flex {
-        display: flex;
-        flex-direction: row;
+      /* The application's tokens (packages/app/shell/src/assets/main.css), dark and light. */
+      :root {
+        --font-sans: system-ui, -apple-system, 'Segoe UI', sans-serif;
+        --font-mono: ui-monospace, SFMono-Regular, Menlo, monospace;
+        --color-bg: #121820;
+        --color-pane: #1a222c;
+        --color-raised: #232d39;
+        --color-canvas: #0e141b;
+        --color-divider: #2a3541;
+        --color-outline: #3c4959;
+        --color-fg: #dfe8ef;
+        --color-dim: #8b9bab;
+        --color-accent: #4fa3d1;
+        --color-ok: #5fb98a;
+        --color-warn: #d8a13c;
+        --color-err: #e2766a;
+        --text-xs: 11px;
+        --text-sm: 12px;
+        --text-base: 13px;
+        --radius-xs: 2px;
+        --radius-sm: 3px;
       }
-      * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
+      :root[data-theme='light'] {
+        --color-bg: #eef1f4;
+        --color-pane: #f7f9fb;
+        --color-raised: #ffffff;
+        --color-canvas: #e2e7ec;
+        --color-divider: #d3dae1;
+        --color-outline: #b3bec9;
+        --color-fg: #16202a;
+        --color-dim: #55646f;
+        --color-accent: #1f6690;
+        --color-ok: #1f6f4a;
+        --color-warn: #8a5a0c;
+        --color-err: #b02a1c;
       }
+      * { box-sizing: border-box; }
       body {
-        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-        overflow: hidden;
+        margin: 0;
+        background: var(--color-canvas);
+        color: var(--color-fg);
+        font-family: var(--font-sans);
+        font-size: var(--text-base);
       }
     </style>
   </head>

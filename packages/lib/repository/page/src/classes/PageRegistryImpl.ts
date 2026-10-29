@@ -11,6 +11,7 @@
  *   Smart City Jena
  **********************************************************************/
 
+import { v4 as uuidv4 } from 'uuid'
 import type {
   PageRegistryI,
   StoredPage,
@@ -77,7 +78,8 @@ export class PageRegistryImpl implements PageRegistryI {
     let held = this.workspace.board
     if (!held) {
       held = new BoardImpl()
-      held.id = crypto.randomUUID()
+      // Not crypto.randomUUID: only secure contexts have it, a LAN address is not one.
+      held.id = uuidv4()
       held.name = 'Board'
       this.workspace.board = held
     }

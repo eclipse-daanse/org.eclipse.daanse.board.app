@@ -46,6 +46,9 @@ import { initBoardBackdrop } from './composables/useBoardBackdrop'
 import { initGridSnap } from './composables/useGridSnap'
 import { registerSystemActions } from './systemActions'
 import { registerTestActions } from './testActions'
+import { seedEmptyWorkspace } from './seedWorkspace'
+import { guardBeforeUnload, startTracking, stopTracking } from './composables/unsavedChanges'
+import { WORKSPACE, type Workspace } from 'org.eclipse.daanse.board.app.lib.model.workspace'
 import {
   CONNECTION_REPOSITORY,
   type ConnectionRepository,
@@ -56,6 +59,7 @@ import {
 } from 'org.eclipse.daanse.board.app.lib.api.datasource'
 
 let app: VueApp | undefined
+let removeUnloadGuard: (() => void) | undefined
 
 export async function activate({ services, log }: ActivationContext) {
   /*
@@ -91,39 +95,11 @@ export async function activate({ services, log }: ActivationContext) {
   // The one service the shell owns: the app instance it just created.
   services.register(APP, app)
 
-  /*
-   * What an empty workspace starts with.
-   *
-   * It used to be a hard-coded entry in the connections store, which is
-   * both the wrong layer for it and the reason it was never registered with
-   * anything. Deciding what an application opens with is the application's
-   * business, so it is here - and only when nothing has been loaded, so a
-   * stored board is never overwritten.
-   */
-  const connectionRepository = services.getRequired<ConnectionRepository>(CONNECTION_REPOSITORY)
-  const datasourceRepository = services.getRequired<DatasourceRepository>(DATASOURCE_REPOSITORY)
-  if (connectionRepository.getConnections().length === 0) {
-    /*
-     * Created without a type, then filled in, then saved once. Creating
-     * with the type would build the live object straight away - under the
-     * generated uid, and from a configuration that is not finished yet.
-     * A source would be rejected outright for naming no connection.
-     */
-    const connection = connectionRepository.createConnection('')
-    connection.uid = 'test'
-    connection.name = 'Test Connection 01'
-    connection.type = 'rest'
-    connection.config = { url: 'https://jsonplaceholder.typicode.com/' }
-    connectionRepository.saveConnection(connection)
-
-    const source = datasourceRepository.createDatasource('')
-    source.uid = 'test_ds'
-    source.name = 'Test DataSource 01'
-    source.type = 'rest'
-    source.connection = connection
-    source.config = { resourceUrl: 'posts' }
-    datasourceRepository.saveDatasource(source)
-  }
+  /* What an empty workspace starts with - see seedWorkspace. */
+  seedEmptyWorkspace(
+    services.getRequired<ConnectionRepository>(CONNECTION_REPOSITORY),
+    services.getRequired<DatasourceRepository>(DATASOURCE_REPOSITORY),
+  )
 
   // VariableComplexStringWrapper depends on Vue and therefore lives in the
   // UI layer; the factory in lib only knows it through this registration.
@@ -211,6 +187,20 @@ export async function activate({ services, log }: ActivationContext) {
     log.error('test actions failed', error)
   }
 
+  /*
+   * From here on a change to the workspace is one the person made: what
+   * it holds now is the empty workspace and its seeded defaults, which
+   * there is no point in storing. Reloading or closing the tab with
+   * changes that were not stored asks first.
+   *
+   * Which means nothing activated after the shell - everything that waits
+   * for the App service does - may put content of its own into the
+   * workspace. What a plugin needs for itself is not the person's work
+   * and does not belong in what they store.
+   */
+  const changes = startTracking(services.getRequired<Workspace>(WORKSPACE))
+  removeUnloadGuard = guardBeforeUnload(changes)
+
   app.mount('#app')
   log.info('shell mounted')
 }
@@ -228,6 +218,10 @@ export function deactivate({ services }: ActivationContext) {
   // loader; unmounting is ours.
   app?.unmount()
   app = undefined
+
+  removeUnloadGuard?.()
+  removeUnloadGuard = undefined
+  stopTracking()
 }
 
 /* Its texts - collected by lib.i18next, see src/i18n. */

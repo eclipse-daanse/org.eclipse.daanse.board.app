@@ -1,0 +1,10 @@
+// Source: https://learn.microsoft.com/en-us/dax/orderby-statement-dax
+// Construct: A sort direction other than ASC or DESC.
+// Expect: reject
+// Reference: accepts
+// Divergence: ORDER BY direction
+// Normalized: written from the documented syntax `[ORDER BY {<expression> [{ASC | DESC}]}[, …]]`.
+EVALUATE
+    'Customer'
+ORDER BY
+    'Customer'[Country] DOWN

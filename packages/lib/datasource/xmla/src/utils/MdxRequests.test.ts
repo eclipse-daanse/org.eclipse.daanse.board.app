@@ -92,6 +92,8 @@ describe('drilldown members', () => {
       // Read from the field or from what loading returns - versions of the store differ.
       metadata: { getProperties: () => [], getLevels: () => levels },
       loadMetadata: async () => ({ getProperties: () => [], getLevels: () => levels }),
+      // The store that loads only the query's own hierarchies asks through this.
+      queryMetadata: async () => ({ getProperties: () => [], getLevels: () => levels }),
     })
     const mdx = await store.getMdxRequest({})
     expect(mdx).toContain('Descendants([Gender].[F])')
@@ -178,5 +180,49 @@ describe('the pivot table', () => {
       params,
     )!
     expect(parsed.cells.map((row: { Value?: string }[]) => row.map(c => c.Value))).toEqual([[undefined, '7'], ['9', undefined]])
+  })
+})
+
+describe('a lone measure with its header hidden', () => {
+  const female = { u: '[Gender].[F]', c: 'F' }
+  const male = { u: '[Gender].[M]', c: 'M' }
+  // The board's pivot widget hides a single measure's header; the preview says nothing.
+  const settings = { showSingleMeasureHeader: false }
+
+  async function storeWith(rows: any[], columns: any[]) {
+    const { XmlaStore } = await import('../classes/index')
+    const store = Object.create(XmlaStore.prototype)
+    const metadata = { getProperties: () => [], getLevels: () => levels, getDimensions: () => [] }
+    Object.assign(store, {
+      cube: 'Sales',
+      askUpdateable: false,
+      requestParams: { rows, columns, measures: [unitSales], filters: [], pages: [], chapters: [] },
+      drilldownHandler: {
+        rowsDrilldownMembers: [], columnsDrilldownMembers: [], rowsExpandedMembers: [], columnsExpandedMembers: [],
+        flushExpands: () => {}, flushDrilldowns: () => {},
+      },
+      metadata,
+      queryMetadata: async () => metadata,
+    })
+    return store
+  }
+
+  it('keeps Gender on the rows, where the designer put it', async () => {
+    const store = await storeWith([hierarchy('[Gender]')], [values])
+    const mdx = await store.getMdxRequest(settings)
+    // Values left the columns, so the request has one axis.
+    expect(mdx).toMatch(/ON 0/)
+    expect(mdx).not.toMatch(/ON 1/)
+
+    // Was: read against Values still on the columns, and Gender came back across them.
+    const table = store.parseToPivotTable(answer([[female, male]], { 0: '10', 1: '20' }), settings)
+    expect(table.rows.map((tuple: any[]) => tuple[0].UName)).toEqual(['[Gender].[F]', '[Gender].[M]'])
+    expect(table.columns.flat().map((member: any) => member.UName)).not.toContain('[Gender].[F]')
+  })
+
+  it('keeps Gender on the columns, where the designer put it there', async () => {
+    const store = await storeWith([values], [hierarchy('[Gender]')])
+    const table = store.parseToPivotTable(answer([[female, male]], { 0: '10', 1: '20' }), settings)
+    expect(table.columns.map((tuple: any[]) => tuple[0].UName)).toEqual(['[Gender].[F]', '[Gender].[M]'])
   })
 })

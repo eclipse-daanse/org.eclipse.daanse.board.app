@@ -54,6 +54,17 @@ export class PivotTableImpl extends BasicEObject implements PivotTable {
   static readonly ROW_LEVEL_STYLES: number = 17;
   static readonly COLUMN_LEVEL_STYLES: number = 18;
   static readonly CONDITIONAL_FORMATS: number = 19;
+  static readonly MODE: number = 20;
+  static readonly CASCADE_DEPTH: number = 21;
+  static readonly MEASURE: number = 22;
+  static readonly COMPARE_LAYOUT: number = 23;
+  static readonly DIFF_TYPE: number = 24;
+  static readonly SCALE_NORMALIZATION: number = 25;
+  static readonly DIVERGING_SCALE: number = 26;
+  static readonly SIGNIFICANCE_THRESHOLD: number = 27;
+  static readonly HIDE_UNCHANGED: number = 28;
+  static readonly MATRIX_LIMIT: number = 29;
+  static readonly TIMELINE: number = 30;
 
   // Private fields
   private _rows!: EList<JavaObject>;
@@ -76,6 +87,17 @@ export class PivotTableImpl extends BasicEObject implements PivotTable {
   private _rowLevelStyles!: EList<LevelStyle>;
   private _columnLevelStyles!: EList<LevelStyle>;
   private _conditionalFormats!: EList<ConditionalFormat>;
+  private _mode: string = "standard";
+  private _cascadeDepth: string = "axes";
+  private _measure: string = "";
+  private _compareLayout: string = "side-by-side";
+  private _diffType: string = "absolute";
+  private _scaleNormalization: string = "global";
+  private _divergingScale: boolean = true;
+  private _significanceThreshold: number = 5;
+  private _hideUnchanged: boolean = false;
+  private _matrixLimit: number = 200;
+  private _timeline: boolean = true;
 
   /**
    * Returns the EClass of this object
@@ -463,6 +485,270 @@ export class PivotTableImpl extends BasicEObject implements PivotTable {
     return this._conditionalFormats;
   }
 
+  get mode(): string {
+    return this._mode!;
+  }
+
+  set mode(value: string) {
+    const oldValue = this._mode;
+    this._mode = value;
+    if (this.eDeliver()) {
+      this.eNotify({
+        getNotifier: () => this,
+        getEventType: () => 1, // SET
+        getFeature: () => this.eClass().getEStructuralFeature(PivotTableImpl.MODE),
+        getOldValue: () => oldValue,
+        getNewValue: () => value,
+        getPosition: () => -1,
+        wasSet: () => true,
+        isTouch: () => false,
+        isReset: () => false,
+        getFeatureID: () => PivotTableImpl.MODE,
+        merge: () => false
+      });
+    }
+  }
+
+  get cascadeDepth(): string {
+    return this._cascadeDepth!;
+  }
+
+  set cascadeDepth(value: string) {
+    const oldValue = this._cascadeDepth;
+    this._cascadeDepth = value;
+    if (this.eDeliver()) {
+      this.eNotify({
+        getNotifier: () => this,
+        getEventType: () => 1, // SET
+        getFeature: () => this.eClass().getEStructuralFeature(PivotTableImpl.CASCADE_DEPTH),
+        getOldValue: () => oldValue,
+        getNewValue: () => value,
+        getPosition: () => -1,
+        wasSet: () => true,
+        isTouch: () => false,
+        isReset: () => false,
+        getFeatureID: () => PivotTableImpl.CASCADE_DEPTH,
+        merge: () => false
+      });
+    }
+  }
+
+  get measure(): string {
+    return this._measure!;
+  }
+
+  set measure(value: string) {
+    const oldValue = this._measure;
+    this._measure = value;
+    if (this.eDeliver()) {
+      this.eNotify({
+        getNotifier: () => this,
+        getEventType: () => 1, // SET
+        getFeature: () => this.eClass().getEStructuralFeature(PivotTableImpl.MEASURE),
+        getOldValue: () => oldValue,
+        getNewValue: () => value,
+        getPosition: () => -1,
+        wasSet: () => true,
+        isTouch: () => false,
+        isReset: () => false,
+        getFeatureID: () => PivotTableImpl.MEASURE,
+        merge: () => false
+      });
+    }
+  }
+
+  get compareLayout(): string {
+    return this._compareLayout!;
+  }
+
+  set compareLayout(value: string) {
+    const oldValue = this._compareLayout;
+    this._compareLayout = value;
+    if (this.eDeliver()) {
+      this.eNotify({
+        getNotifier: () => this,
+        getEventType: () => 1, // SET
+        getFeature: () => this.eClass().getEStructuralFeature(PivotTableImpl.COMPARE_LAYOUT),
+        getOldValue: () => oldValue,
+        getNewValue: () => value,
+        getPosition: () => -1,
+        wasSet: () => true,
+        isTouch: () => false,
+        isReset: () => false,
+        getFeatureID: () => PivotTableImpl.COMPARE_LAYOUT,
+        merge: () => false
+      });
+    }
+  }
+
+  get diffType(): string {
+    return this._diffType!;
+  }
+
+  set diffType(value: string) {
+    const oldValue = this._diffType;
+    this._diffType = value;
+    if (this.eDeliver()) {
+      this.eNotify({
+        getNotifier: () => this,
+        getEventType: () => 1, // SET
+        getFeature: () => this.eClass().getEStructuralFeature(PivotTableImpl.DIFF_TYPE),
+        getOldValue: () => oldValue,
+        getNewValue: () => value,
+        getPosition: () => -1,
+        wasSet: () => true,
+        isTouch: () => false,
+        isReset: () => false,
+        getFeatureID: () => PivotTableImpl.DIFF_TYPE,
+        merge: () => false
+      });
+    }
+  }
+
+  get scaleNormalization(): string {
+    return this._scaleNormalization!;
+  }
+
+  set scaleNormalization(value: string) {
+    const oldValue = this._scaleNormalization;
+    this._scaleNormalization = value;
+    if (this.eDeliver()) {
+      this.eNotify({
+        getNotifier: () => this,
+        getEventType: () => 1, // SET
+        getFeature: () => this.eClass().getEStructuralFeature(PivotTableImpl.SCALE_NORMALIZATION),
+        getOldValue: () => oldValue,
+        getNewValue: () => value,
+        getPosition: () => -1,
+        wasSet: () => true,
+        isTouch: () => false,
+        isReset: () => false,
+        getFeatureID: () => PivotTableImpl.SCALE_NORMALIZATION,
+        merge: () => false
+      });
+    }
+  }
+
+  get divergingScale(): boolean {
+    return this._divergingScale!;
+  }
+
+  set divergingScale(value: boolean) {
+    const oldValue = this._divergingScale;
+    this._divergingScale = value;
+    if (this.eDeliver()) {
+      this.eNotify({
+        getNotifier: () => this,
+        getEventType: () => 1, // SET
+        getFeature: () => this.eClass().getEStructuralFeature(PivotTableImpl.DIVERGING_SCALE),
+        getOldValue: () => oldValue,
+        getNewValue: () => value,
+        getPosition: () => -1,
+        wasSet: () => true,
+        isTouch: () => false,
+        isReset: () => false,
+        getFeatureID: () => PivotTableImpl.DIVERGING_SCALE,
+        merge: () => false
+      });
+    }
+  }
+
+  get significanceThreshold(): number {
+    return this._significanceThreshold!;
+  }
+
+  set significanceThreshold(value: number) {
+    const oldValue = this._significanceThreshold;
+    this._significanceThreshold = value;
+    if (this.eDeliver()) {
+      this.eNotify({
+        getNotifier: () => this,
+        getEventType: () => 1, // SET
+        getFeature: () => this.eClass().getEStructuralFeature(PivotTableImpl.SIGNIFICANCE_THRESHOLD),
+        getOldValue: () => oldValue,
+        getNewValue: () => value,
+        getPosition: () => -1,
+        wasSet: () => true,
+        isTouch: () => false,
+        isReset: () => false,
+        getFeatureID: () => PivotTableImpl.SIGNIFICANCE_THRESHOLD,
+        merge: () => false
+      });
+    }
+  }
+
+  get hideUnchanged(): boolean {
+    return this._hideUnchanged!;
+  }
+
+  set hideUnchanged(value: boolean) {
+    const oldValue = this._hideUnchanged;
+    this._hideUnchanged = value;
+    if (this.eDeliver()) {
+      this.eNotify({
+        getNotifier: () => this,
+        getEventType: () => 1, // SET
+        getFeature: () => this.eClass().getEStructuralFeature(PivotTableImpl.HIDE_UNCHANGED),
+        getOldValue: () => oldValue,
+        getNewValue: () => value,
+        getPosition: () => -1,
+        wasSet: () => true,
+        isTouch: () => false,
+        isReset: () => false,
+        getFeatureID: () => PivotTableImpl.HIDE_UNCHANGED,
+        merge: () => false
+      });
+    }
+  }
+
+  get matrixLimit(): number {
+    return this._matrixLimit!;
+  }
+
+  set matrixLimit(value: number) {
+    const oldValue = this._matrixLimit;
+    this._matrixLimit = value;
+    if (this.eDeliver()) {
+      this.eNotify({
+        getNotifier: () => this,
+        getEventType: () => 1, // SET
+        getFeature: () => this.eClass().getEStructuralFeature(PivotTableImpl.MATRIX_LIMIT),
+        getOldValue: () => oldValue,
+        getNewValue: () => value,
+        getPosition: () => -1,
+        wasSet: () => true,
+        isTouch: () => false,
+        isReset: () => false,
+        getFeatureID: () => PivotTableImpl.MATRIX_LIMIT,
+        merge: () => false
+      });
+    }
+  }
+
+  get timeline(): boolean {
+    return this._timeline!;
+  }
+
+  set timeline(value: boolean) {
+    const oldValue = this._timeline;
+    this._timeline = value;
+    if (this.eDeliver()) {
+      this.eNotify({
+        getNotifier: () => this,
+        getEventType: () => 1, // SET
+        getFeature: () => this.eClass().getEStructuralFeature(PivotTableImpl.TIMELINE),
+        getOldValue: () => oldValue,
+        getNewValue: () => value,
+        getPosition: () => -1,
+        wasSet: () => true,
+        isTouch: () => false,
+        isReset: () => false,
+        getFeatureID: () => PivotTableImpl.TIMELINE,
+        merge: () => false
+      });
+    }
+  }
+
   // Reflective API
 
   /**
@@ -511,6 +797,28 @@ export class PivotTableImpl extends BasicEObject implements PivotTable {
         return this.columnLevelStyles;
       case PivotTableImpl.CONDITIONAL_FORMATS:
         return this.conditionalFormats;
+      case PivotTableImpl.MODE:
+        return this.mode;
+      case PivotTableImpl.CASCADE_DEPTH:
+        return this.cascadeDepth;
+      case PivotTableImpl.MEASURE:
+        return this.measure;
+      case PivotTableImpl.COMPARE_LAYOUT:
+        return this.compareLayout;
+      case PivotTableImpl.DIFF_TYPE:
+        return this.diffType;
+      case PivotTableImpl.SCALE_NORMALIZATION:
+        return this.scaleNormalization;
+      case PivotTableImpl.DIVERGING_SCALE:
+        return this.divergingScale;
+      case PivotTableImpl.SIGNIFICANCE_THRESHOLD:
+        return this.significanceThreshold;
+      case PivotTableImpl.HIDE_UNCHANGED:
+        return this.hideUnchanged;
+      case PivotTableImpl.MATRIX_LIMIT:
+        return this.matrixLimit;
+      case PivotTableImpl.TIMELINE:
+        return this.timeline;
       default:
         return super.eGet(feature);
     }
@@ -608,6 +916,50 @@ export class PivotTableImpl extends BasicEObject implements PivotTable {
         this.conditionalFormats.addAll(newValue as any[]);
         super.eSet(feature, newValue);
         break;
+      case PivotTableImpl.MODE:
+        this.mode = newValue as string;
+        super.eSet(feature, newValue);
+        break;
+      case PivotTableImpl.CASCADE_DEPTH:
+        this.cascadeDepth = newValue as string;
+        super.eSet(feature, newValue);
+        break;
+      case PivotTableImpl.MEASURE:
+        this.measure = newValue as string;
+        super.eSet(feature, newValue);
+        break;
+      case PivotTableImpl.COMPARE_LAYOUT:
+        this.compareLayout = newValue as string;
+        super.eSet(feature, newValue);
+        break;
+      case PivotTableImpl.DIFF_TYPE:
+        this.diffType = newValue as string;
+        super.eSet(feature, newValue);
+        break;
+      case PivotTableImpl.SCALE_NORMALIZATION:
+        this.scaleNormalization = newValue as string;
+        super.eSet(feature, newValue);
+        break;
+      case PivotTableImpl.DIVERGING_SCALE:
+        this.divergingScale = newValue as boolean;
+        super.eSet(feature, newValue);
+        break;
+      case PivotTableImpl.SIGNIFICANCE_THRESHOLD:
+        this.significanceThreshold = newValue as number;
+        super.eSet(feature, newValue);
+        break;
+      case PivotTableImpl.HIDE_UNCHANGED:
+        this.hideUnchanged = newValue as boolean;
+        super.eSet(feature, newValue);
+        break;
+      case PivotTableImpl.MATRIX_LIMIT:
+        this.matrixLimit = newValue as number;
+        super.eSet(feature, newValue);
+        break;
+      case PivotTableImpl.TIMELINE:
+        this.timeline = newValue as boolean;
+        super.eSet(feature, newValue);
+        break;
       default:
         super.eSet(feature, newValue);
     }
@@ -659,6 +1011,28 @@ export class PivotTableImpl extends BasicEObject implements PivotTable {
         return this._columnLevelStyles !== undefined && !this._columnLevelStyles.isEmpty();
       case PivotTableImpl.CONDITIONAL_FORMATS:
         return this._conditionalFormats !== undefined && !this._conditionalFormats.isEmpty();
+      case PivotTableImpl.MODE:
+        return this._mode !== "standard";
+      case PivotTableImpl.CASCADE_DEPTH:
+        return this._cascadeDepth !== "axes";
+      case PivotTableImpl.MEASURE:
+        return this._measure !== "";
+      case PivotTableImpl.COMPARE_LAYOUT:
+        return this._compareLayout !== "side-by-side";
+      case PivotTableImpl.DIFF_TYPE:
+        return this._diffType !== "absolute";
+      case PivotTableImpl.SCALE_NORMALIZATION:
+        return this._scaleNormalization !== "global";
+      case PivotTableImpl.DIVERGING_SCALE:
+        return this._divergingScale !== true;
+      case PivotTableImpl.SIGNIFICANCE_THRESHOLD:
+        return this._significanceThreshold !== 5;
+      case PivotTableImpl.HIDE_UNCHANGED:
+        return this._hideUnchanged !== false;
+      case PivotTableImpl.MATRIX_LIMIT:
+        return this._matrixLimit !== 200;
+      case PivotTableImpl.TIMELINE:
+        return this._timeline !== true;
       default:
         return super.eIsSet(feature);
     }
@@ -730,6 +1104,39 @@ export class PivotTableImpl extends BasicEObject implements PivotTable {
       case PivotTableImpl.CONDITIONAL_FORMATS:
         if (this._conditionalFormats) this._conditionalFormats.clear();
         return;
+      case PivotTableImpl.MODE:
+        this._mode = "standard";
+        return;
+      case PivotTableImpl.CASCADE_DEPTH:
+        this._cascadeDepth = "axes";
+        return;
+      case PivotTableImpl.MEASURE:
+        this._measure = "";
+        return;
+      case PivotTableImpl.COMPARE_LAYOUT:
+        this._compareLayout = "side-by-side";
+        return;
+      case PivotTableImpl.DIFF_TYPE:
+        this._diffType = "absolute";
+        return;
+      case PivotTableImpl.SCALE_NORMALIZATION:
+        this._scaleNormalization = "global";
+        return;
+      case PivotTableImpl.DIVERGING_SCALE:
+        this._divergingScale = true;
+        return;
+      case PivotTableImpl.SIGNIFICANCE_THRESHOLD:
+        this._significanceThreshold = 5;
+        return;
+      case PivotTableImpl.HIDE_UNCHANGED:
+        this._hideUnchanged = false;
+        return;
+      case PivotTableImpl.MATRIX_LIMIT:
+        this._matrixLimit = 200;
+        return;
+      case PivotTableImpl.TIMELINE:
+        this._timeline = true;
+        return;
       default:
         super.eUnset(feature);
     }
@@ -765,6 +1172,17 @@ export class PivotTableImpl extends BasicEObject implements PivotTable {
       rowLevelStyles: this.rowLevelStyles?.toArray?.() ?? this.rowLevelStyles,
       columnLevelStyles: this.columnLevelStyles?.toArray?.() ?? this.columnLevelStyles,
       conditionalFormats: this.conditionalFormats?.toArray?.() ?? this.conditionalFormats,
+      mode: this.mode,
+      cascadeDepth: this.cascadeDepth,
+      measure: this.measure,
+      compareLayout: this.compareLayout,
+      diffType: this.diffType,
+      scaleNormalization: this.scaleNormalization,
+      divergingScale: this.divergingScale,
+      significanceThreshold: this.significanceThreshold,
+      hideUnchanged: this.hideUnchanged,
+      matrixLimit: this.matrixLimit,
+      timeline: this.timeline,
     };
   }
 }

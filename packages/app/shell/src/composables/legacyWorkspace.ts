@@ -23,6 +23,7 @@
  * this file is only ever needed once per stored board.
  */
 
+import { v4 as uuidv4 } from 'uuid'
 import { parse } from 'flatted'
 import {
   ConnectionImpl,
@@ -137,7 +138,7 @@ export function readLegacyWorkspace(data: LegacyWorkspace): Workspace | undefine
    * it had no board, and a workspace holds one.
    */
   const board = new BoardImpl()
-  board.id = crypto.randomUUID()
+  board.id = uuidv4()
   board.name = 'Board'
   workspace.board = board
 

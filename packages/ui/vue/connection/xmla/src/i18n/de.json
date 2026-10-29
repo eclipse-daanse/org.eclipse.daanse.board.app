@@ -7,6 +7,7 @@
       "basic": "Basic"
     },
     "user": "Benutzer",
-    "password": "Passwort"
+    "password": "Passwort",
+    "timeout": "Zeitlimit in Sekunden (0 = unbegrenzt)"
   }
 }

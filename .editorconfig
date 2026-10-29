@@ -15,8 +15,16 @@ trim_trailing_whitespace = true
 [*.{xml,xmi,json,yml,yaml}]
 indent_size = 2
 
-[{LICENSE,*.md,*.g4}]
+[{LICENSE,*.md,*.g4,*.langium,*.langium.alt,*.mdxq,*.mdxs}]
 indent_size = unset
+
+# The language packages' corpora and examples quote published queries,
+# with casing, spacing, line breaks and quoting preserved exactly as they
+# appeared.
+[*.{dmv,dax,daxe,sql}]
+indent_style = unset
+indent_size = unset
+trim_trailing_whitespace = unset
 
 [license.templates]
 indent_size = unset

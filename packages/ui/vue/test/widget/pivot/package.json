@@ -1,43 +1,31 @@
 {
   "name": "org.eclipse.daanse.board.app.ui.vue.test.widget.pivot",
   "version": "0.0.1-next.1",
-  "description": "Dockyard mode for Pivot Table Widget E2E and performance testing",
+  "description": "Harness for the pivot table's page and chapter modes, on a recorded FoodMart cellset",
   "author": "Smart City Jena",
-  "homepage": "",
   "license": "EPL-2.0",
   "private": true,
   "type": "module",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/eclipse-daanse/org.eclipse.daanse.board.app.git"
-  },
   "scripts": {
-    "dev": "vite",
-    "preview": "vite preview",
-    "test:e2e": "playwright test",
-    "test:e2e:headed": "playwright test --headed",
-    "test:perf": "PIVOT_PERF=1 playwright test perf"
-  },
-  "bugs": {
-    "url": "https://github.com/eclipse-daanse/org.eclipse.daanse.board.app/issues"
+    "dev": "vite"
   },
   "dependencies": {
     "vue": "^3.5.13",
-    "pinia": "^3.0.1",
-    "vuestic-ui": "^1.10.3",
+    "@codemirror/commands": "^6.9.0",
+    "@codemirror/language": "^6.12.4",
+    "@codemirror/state": "^6.7.2",
+    "@codemirror/view": "^6.43.10",
+    "@lezer/highlight": "^1.2.3",
     "reflect-metadata": "~0.2.2",
-    "inversify": "7.11.0",
-    "org.eclipse.daanse.board.app.ui.vue.widget.table.pivot": "^0.0.1-next.1",
+    "org.eclipse.daanse.board.app.lib.connection.xmla": "^0.0.1-next.1",
+    "org.eclipse.daanse.board.app.lib.datasource.xmla": "^0.0.1-next.1",
     "org.eclipse.daanse.board.app.ui.vue.common.xmla": "^0.0.1-next.1",
-    "org.eclipse.daanse.board.app.ui.vue.composables": "^0.0.1-next.1",
-    "org.eclipse.daanse.board.app.lib.core": "^0.0.1-next.1",
-    "org.eclipse.daanse.board.app.lib.repository.datasource": "^0.0.1-next.1",
-    "org.eclipse.daanse.board.app.lib.repository.variable": "^0.0.1-next.1",
-    "org.eclipse.daanse.board.app.lib.annotations": "^0.0.1-next.1"
+    "org.eclipse.daanse.board.app.ui.vue.widget.table.pivot": "^0.0.1-next.1"
   },
   "devDependencies": {
-    "@playwright/test": "^1.56.1",
+    "@tailwindcss/vite": "^4.1.4",
     "@vitejs/plugin-vue": "^5.2.3",
+    "tailwindcss": "^4.1.5",
     "typescript": "^5.8.2",
     "vite": "^6.4.1"
   }

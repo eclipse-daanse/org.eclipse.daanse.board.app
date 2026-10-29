@@ -1,0 +1,6 @@
+-- Source: https://thedailydba.wordpress.com/2014/01/20/finding-and-killing-ssas-sessions/
+-- Construct: ORDER BY with no ASC/DESC.
+-- Expect: parse
+-- Normalized: identifiers and string values substituted; casing, spacing,
+--             line breaks and quoting preserved exactly as published.
+select * from $system.discover_requests order by request_start_time

@@ -12,7 +12,8 @@
  **********************************************************************/
 
 import { XmlaConnection, type IXmlaConnectionConfiguration } from './classes'
-import { XMLAApi } from './classes/xml'
+import { DEFAULT_TIMEOUT_SECONDS, XMLAApi } from './classes/xml'
+import { XmlaTimeoutError, XmlaTraffic, xmlaTraffic, faultOf, type XmlaExchange, type XmlaTrafficListener } from './client/transport'
 import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
 import { serviceId } from 'org.eclipse.daanse.board.app.lib.core'
 
@@ -20,6 +21,9 @@ import { serviceId } from 'org.eclipse.daanse.board.app.lib.core'
 const XMLA_CONNECTION_FACTORY = serviceId<typeof createXmlaConnection>('XmlaConnectionFactory')
 
 const factorySymbol = Symbol.for(XMLA_CONNECTION_FACTORY)
+
+/** Every XMLA request of the page as it goes out and comes back - for a request log. */
+const XMLA_TRAFFIC = serviceId<XmlaTraffic>('XmlaTraffic')
 
 /**
  * Erzeugt eine Instanz aus einer Konfiguration.
@@ -43,10 +47,12 @@ function createXmlaConnection(config: IXmlaConnectionConfiguration) {
 
 export function activate({ services }: ActivationContext) {
   services.register(XMLA_CONNECTION_FACTORY, createXmlaConnection)
+  services.register(XMLA_TRAFFIC, xmlaTraffic)
 }
 
 export function deactivate({ services }: ActivationContext) {
   services.unregister(XMLA_CONNECTION_FACTORY)
+  services.unregister(XMLA_TRAFFIC)
 }
 
 export {
@@ -55,4 +61,11 @@ export {
   factorySymbol,
   type XMLAApi,
   XMLA_CONNECTION_FACTORY,
+  DEFAULT_TIMEOUT_SECONDS,
+  XmlaTimeoutError,
+  XmlaTraffic,
+  XMLA_TRAFFIC,
+  faultOf,
+  type XmlaExchange,
+  type XmlaTrafficListener,
 }
