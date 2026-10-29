@@ -35,7 +35,7 @@ import {
   type NavigationRegistry,
   type NavigationItem,
 } from 'org.eclipse.daanse.board.app.lib.api.navigation'
-import { useGlobalLoading, useTranslation, useEObject } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+import { useGlobalLoading, useTranslation, useEList } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import {
   type PageRegistryI,
   identifier as PageIdentifier,
@@ -88,9 +88,11 @@ const openBoard = () =>
  * connections from it. So what decides this is whether a board is open,
  * never whether it has pages.
  */
-const modelledBoard = useEObject(() => workspace.board)
+/* Watched on the workspace: a board appearing replaces the reference, and
+  an adapter on the board that was there at setup would miss it. */
+const modelledPages = useEList(workspace, (w) => w.board?.pages)
 const noBoard = computed(() => {
-  void modelledBoard.value
+  void modelledPages.value
   return String(route.name) === 'home' || !workspace.board
 })
 

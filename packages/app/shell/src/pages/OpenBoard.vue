@@ -30,10 +30,10 @@ import {
   type Workspace,
 } from 'org.eclipse.daanse.board.app.lib.model.workspace'
 import {
-  identifier as PageIdentifier,
   type PageRegistryI,
-} from 'org.eclipse.daanse.board.app.lib.repository.page'
-import { useEObject, useEList, useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+  identifier as PageIdentifier,
+} from 'org.eclipse.daanse.board.app.lib.api.page'
+import { useEList, useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import { DButton } from 'org.eclipse.daanse.board.app.ui.vue.controls'
 import BoardFloorplan from '@/components/boards/BoardFloorplan.vue'
 import { useLastOpenedState } from '@/composables/useLastOpenedState'
@@ -47,13 +47,20 @@ const workspace = inject<Workspace>(WORKSPACE)!
 const pageRepo = inject<PageRegistryI>(PageIdentifier)
 const { load } = useWorkspaceFile()
 
-const held = useEObject(() => workspace.board)
+/*
+ * Watched on the workspace, not on the board.
+ *
+ * A board arrives here by being loaded, which replaces workspace.board -
+ * and an adapter attached to the board that was there at setup is
+ * attached to nothing when there was none. The list is watched on the
+ * workspace with a deep adapter, so a board appearing is a change it
+ * reports; reading it is what makes everything below re-run.
+ */
+const pages = useEList(workspace, (w) => w.board?.pages)
 const board = computed(() => {
-  void held.value
+  void pages.value
   return workspace.board
 })
-
-const pages = useEList(workspace, (w) => w.board?.pages)
 const connections = useEList(workspace, (w) => w.connections)
 const datasources = useEList(workspace, (w) => w.datasources)
 
