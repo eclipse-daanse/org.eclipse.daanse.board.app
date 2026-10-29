@@ -134,9 +134,18 @@ function openPage(id: string) {
 }
 
 
+/*
+ * Opening the board lands on a page, where there is one.
+ *
+ * A board that holds only connections has none, and the button used to
+ * do nothing at all - silently, because the id it needed was undefined.
+ * It goes to the data instead: that is what such a board is for, and it
+ * is where the next step is taken from.
+ */
 function openBoard() {
   const id = entryPageId.value
   if (id) openPage(id as string)
+  else router.push('/datasources')
 }
 
 /**
