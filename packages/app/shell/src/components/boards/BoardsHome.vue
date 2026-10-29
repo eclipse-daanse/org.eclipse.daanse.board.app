@@ -142,10 +142,10 @@ function openPage(id: string) {
  * It goes to the data instead: that is what such a board is for, and it
  * is where the next step is taken from.
  */
+/* The board's own screen; what it holds decides what is shown there. */
 function openBoard() {
-  const id = entryPageId.value
-  if (id) openPage(id as string)
-  else router.push('/datasources')
+  const id = board.value?.id as string | undefined
+  if (id) router.push(`/board/${id}`)
 }
 
 /**
@@ -182,10 +182,17 @@ function openStorage() {
  * you came here to open something, and after opening it the app still
  * showed the list of things to open.
  */
-function openRestored(ids: string[]) {
-  const id = props.pageRepo?.getDefaultPage()?.id ?? ids[0]
-  if (id) router.push(`/page/${id}`)
-  else view.value = 'recent'
+/*
+ * Loading a state opens the board it holds - at its own address.
+ *
+ * It used to drop back to the "often used" list when the state had no
+ * pages, which is the screen one picks a board from and therefore the
+ * one place opening a board must not end. There is a route for an open
+ * board now, so there is somewhere to go whether or not it has pages.
+ */
+function openRestored() {
+  const id = workspace.board?.id as string | undefined
+  router.push(id ? `/board/${id}` : '/')
 }
 </script>
 
