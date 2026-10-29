@@ -119,7 +119,8 @@
     "storeCurrent": "Aktuellen Stand ablegen…",
     "noPlaces": "Keine Speicherorte eingerichtet.",
     "entry": {
-      "empty": "leer"
+      "empty": "leer",
+      "connections": "{{count}} Verbindungen, keine Seiten"
     },
     "pages_one": "{{count}} Seite",
     "pages_other": "{{count}} Seiten",
@@ -151,7 +152,8 @@
     "reading": "Wird gelesen…",
     "pick": "Wähle links einen Stand, um zu sehen, was darin liegt.",
     "connectFolder": "Ordner verbinden…",
-    "noFolderSupport": "Dieser Browser kann keinen Ordner öffnen. Stände lassen sich herunterladen und wieder hochladen."
+    "noFolderSupport": "Dieser Browser kann keinen Ordner öffnen. Stände lassen sich herunterladen und wieder hochladen.",
+    "holds": "Er hält {{connections}} Verbindungen, {{datasources}} Quellen und {{variables}} Variablen."
   },
   "Editor": {
     "name": "Name",

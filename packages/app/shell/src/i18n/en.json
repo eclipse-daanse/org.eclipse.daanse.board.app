@@ -119,7 +119,8 @@
     "storeCurrent": "Store current workspace…",
     "noPlaces": "No storage locations set up.",
     "entry": {
-      "empty": "empty"
+      "empty": "empty",
+      "connections": "{{count}} connections, no pages"
     },
     "pages_one": "{{count}} page",
     "pages_other": "{{count}} pages",
@@ -151,7 +152,8 @@
     "reading": "Reading…",
     "pick": "Pick a workspace on the left to see what it holds.",
     "connectFolder": "Connect folder…",
-    "noFolderSupport": "This browser cannot open a folder. States can be downloaded and uploaded again."
+    "noFolderSupport": "This browser cannot open a folder. States can be downloaded and uploaded again.",
+    "holds": "It holds {{connections}} connections, {{datasources}} sources and {{variables}} variables."
   },
   "Editor": {
     "name": "Name",
