@@ -23,7 +23,7 @@
  * this file is only ever needed once per stored board.
  */
 
-import { v4 as uuidv4 } from 'uuid'
+import { randomUUID } from 'org.eclipse.daanse.board.app.lib.core'
 import { parse } from 'flatted'
 import {
   ConnectionImpl,
@@ -116,7 +116,7 @@ export function readLegacyWorkspace(data: LegacyWorkspace): Workspace | undefine
   const variables: Array<{ entry: Record<string, unknown>; variable: VariableImpl }> = []
   for (const entry of data.variables ?? []) {
     const variable = new VariableImpl()
-    variable.uid = (entry['id'] ?? entry['uid'] ?? crypto.randomUUID()) as string
+    variable.uid = (entry['id'] ?? entry['uid'] ?? randomUUID()) as string
     variable.name = entry['name'] as string
     variable.type = entry['type'] as string
     variable.scope = (entry['scope'] as string) ?? 'global'
@@ -138,7 +138,7 @@ export function readLegacyWorkspace(data: LegacyWorkspace): Workspace | undefine
    * it had no board, and a workspace holds one.
    */
   const board = new BoardImpl()
-  board.id = uuidv4()
+  board.id = randomUUID()
   board.name = 'Board'
   workspace.board = board
 

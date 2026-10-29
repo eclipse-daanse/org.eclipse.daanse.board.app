@@ -10,6 +10,7 @@
  * Contributors:
  *   Smart City Jena
  **********************************************************************/
+import { randomUUID } from 'org.eclipse.daanse.board.app.lib.core'
 import { type IDataRetrieveable } from 'org.eclipse.daanse.board.app.lib.datasource.base'
 export type { IDataRetrieveable }
 
@@ -121,7 +122,7 @@ export class DatasourceRepository implements IDatasourceRepository {
 
   createDatasource(type: string, config: Record<string, unknown> = {}): Datasource {
     const datasource = new DatasourceImpl()
-    datasource.uid = crypto.randomUUID()
+    datasource.uid = randomUUID()
     datasource.name = 'DataSource ' + datasource.uid
     datasource.type = type
     datasource.config = config
