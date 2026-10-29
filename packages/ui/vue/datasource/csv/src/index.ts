@@ -29,7 +29,7 @@ import Settings from './Settings.vue'
 import { NAMESPACE } from './i18n'
 
 /* Looked up by the create form by field name.
-   i18n-keys: datasourceCsv:Fields.*, i18n-keys: datasourceCsv:Hints.* */
+  i18n-keys: datasourceCsv:Fields.*, i18n-keys: datasourceCsv:Hints.* */
 
 const previewSymbol = Symbol.for('CsvPreview')
 const settingsSymbol = Symbol.for('CsvSettings')

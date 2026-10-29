@@ -48,7 +48,9 @@ function translator(texts: Record<string, string>) {
 }
 
 function labels(wrapper: ReturnType<typeof mount>) {
-  return wrapper.findAll('label').map((each) => each.text().replace(/\s*\*\s*$/, '').trim())
+  /* replace() with one occurrence leaves a second asterisk on, as 214eb09b
+    found next door; the scanner reads it as js/incomplete-sanitization. */
+  return wrapper.findAll('label').map((each) => each.text().replaceAll('*', '').trim())
 }
 
 describe('ModelFields', () => {

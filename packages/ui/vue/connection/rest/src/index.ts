@@ -30,7 +30,7 @@ import Settings from './Settings.vue'
 import { NAMESPACE } from './i18n'
 
 /* Looked up by the create form by field name.
-   i18n-keys: connectionRest:Fields.*, i18n-keys: connectionRest:Hints.* */
+  i18n-keys: connectionRest:Fields.*, i18n-keys: connectionRest:Hints.* */
 
 const settingsSymbol = Symbol.for('RestConnectionSettings')
 
