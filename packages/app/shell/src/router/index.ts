@@ -15,6 +15,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import ViewReport from '@/pages/ViewReport.vue'
 import ConnectionsAndData from '@/pages/ConnectionsAndData.vue'
 import BoardPages from '@/pages/BoardPages.vue'
+import OpenBoard from '@/pages/OpenBoard.vue'
 import EditReport from '@/pages/EditReport.vue'
 
 const router = createRouter({
@@ -22,9 +23,25 @@ const router = createRouter({
   routes: [
     // Static core routes (routes will be added dynamically via router.addRoute in main.ts)
     {
+      /*
+       * Nothing open: the launcher, where a board is created or opened.
+       * With one open this redirects to it - see the guard in main.ts -
+       * so that "the launcher" and "the board" are never the same screen.
+       */
       path: '/',
       name: 'home',
       component: ViewReport,
+    },
+    {
+      /*
+       * The open board. The id is in the path so that coming back to the
+       * address says which board is meant, rather than "whatever happens
+       * to be loaded"; a board with no pages is open all the same, and
+       * this is where its data and settings are reached from.
+       */
+      path: '/board/:boardid',
+      name: 'board',
+      component: OpenBoard,
     },
     {
       path: '/edit',

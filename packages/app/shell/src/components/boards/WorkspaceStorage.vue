@@ -32,7 +32,11 @@ import {
 } from '@/composables/useWorkspaceFile'
 import { summarizePage, type PageSummary } from '@/composables/pageSummary'
 import { useUnsavedChanges } from '@/composables/unsavedChanges'
-import { type Workspace } from 'org.eclipse.daanse.board.app.lib.model.workspace'
+import { useLastOpenedState } from '@/composables/useLastOpenedState'
+import {
+  identifier as WORKSPACE,
+  type Workspace,
+} from 'org.eclipse.daanse.board.app.lib.model.workspace'
 import {
   type Repository,
   type WritableRepository,
@@ -46,6 +50,9 @@ import {
 } from 'org.eclipse.daanse.board.app.lib.persistence.filesystem'
 
 const emit = defineEmits<{ restored: [ids: string[]] }>()
+
+const { remember: rememberOpened } = useLastOpenedState()
+const workspace = inject<Workspace>(WORKSPACE)!
 
 const repoManager = inject<RepositoryRegistryI>(RepoManagerId)
 const { save, load } = useWorkspaceFile()
@@ -344,8 +351,12 @@ async function open(entry: Entity) {
   failure.value = ''
   try {
     const stored = await selectedPlace.value?.getEntityByUri(entry.uri as unknown as URL)
-    const ids = load(stored?.data ?? entry.data, label(entry))
+    const data = stored?.data ?? entry.data
+    const ids = load(data, label(entry))
     remember(entry, label(entry))
+    /* So a reload finds this board again; see useLastOpenedState. */
+    const boardId = workspace.board?.id as string | undefined
+    if (boardId) rememberOpened({ boardId, name: label(entry), data })
     emit('restored', ids)
   } catch (error) {
     failure.value = t('Storage.failure.load', { reason: reason(error) })

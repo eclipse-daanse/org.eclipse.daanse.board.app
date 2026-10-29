@@ -121,7 +121,7 @@ describe('the board overview', () => {
     expect(labels).toContain(en.Boards.empty.openStored)
   })
 
-  it('opens a board with no pages on its data, instead of doing nothing', async () => {
+  it("opens the board at its own address, pages or not", async () => {
     const { wrapper } = setUp({ connections: 2 })
     await flushPromises()
 
@@ -130,17 +130,17 @@ describe('the board overview', () => {
     await open!.trigger('click')
 
     /* It used to need a page id it did not have, and fall through silently. */
-    expect(push).toHaveBeenCalledWith('/datasources')
+    expect(push).toHaveBeenCalledWith('/board/b1')
   })
 
-  it('opens a board that has pages on a page', async () => {
+  it('opens a board that has pages at the same address', async () => {
     const { wrapper } = setUp({ pages: ['p1'] })
     await flushPromises()
 
     const open = wrapper.findAll('button').find((b) => b.text() === en.Boards.open.action)
     await open!.trigger('click')
 
-    expect(push).toHaveBeenCalledWith('/page/p1')
+    expect(push).toHaveBeenCalledWith('/board/b1')
   })
 
   it('treats a board with connections and no pages as open all the same', async () => {
