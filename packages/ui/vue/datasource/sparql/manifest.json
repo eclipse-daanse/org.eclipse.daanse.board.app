@@ -6,6 +6,7 @@
   "entry": "/bundles/ui.vue.datasource.sparql/index.js",
   "exports": {},
   "dependencies": [
+    "lib.api.connection",
     "lib.api.datasource",
     "platform.vue",
     "ui.vue.composables",
@@ -17,6 +18,9 @@
     },
     {
       "id": "SparqlStore"
+    },
+    {
+      "id": "ConnectionRepository"
     }
   ],
   "sharedDependencies": [
@@ -34,6 +38,10 @@
     },
     {
       "id": "org.eclipse.daanse.board.app.ui.vue.controls",
+      "versionRange": ">=0.0.1-0"
+    },
+    {
+      "id": "org.eclipse.daanse.board.app.lib.api.connection",
       "versionRange": ">=0.0.1-0"
     }
   ],
