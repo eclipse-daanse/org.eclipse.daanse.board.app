@@ -84,7 +84,8 @@ function button(text: string): HTMLButtonElement {
 }
 
 function labels(): string[] {
-  return [...document.querySelectorAll('label')].map((l) => l.textContent?.replace('*', '').trim() ?? '')
+  // Every asterisk, not the first: a label marks what is required with one.
+  return [...document.querySelectorAll('label')].map((l) => l.textContent?.replaceAll('*', '').trim() ?? '')
 }
 
 async function type(label: string, value: string) {
