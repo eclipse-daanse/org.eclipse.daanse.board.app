@@ -119,6 +119,7 @@ const totals = computed(() => [
 const held = computed(() => [
   {
     key: 'connections',
+    kind: 'Connection' as const,
     items: connections.value.map((each: any) => ({
       uid: each.uid as string,
       name: (each.name as string) || (each.uid as string),
@@ -127,6 +128,7 @@ const held = computed(() => [
   },
   {
     key: 'datasources',
+    kind: 'DataSource' as const,
     items: datasources.value.map((each: any) => ({
       uid: each.uid as string,
       name: (each.name as string) || (each.uid as string),
@@ -134,6 +136,32 @@ const held = computed(() => [
     })),
   },
 ])
+
+/* A name one can follow. The data screen takes the selection from the
+  address, so pointing at one connection is a link like any other. */
+function show(kind: 'Connection' | 'DataSource', uid: string) {
+  router.push({ path: '/datasources', query: { select: uid, kind } })
+}
+
+/**
+ * Where a figure leads: the area it counts.
+ *
+ * Asked of the router rather than assumed - variables are contributed by
+ * a module, so that area exists only where the module is loaded, and a
+ * figure with nowhere to go stays a figure rather than a dead button.
+ */
+const figureTargets: Record<string, string> = {
+  pages: '/pages',
+  connections: '/datasources',
+  datasources: '/datasources',
+  variables: '/variables',
+}
+
+function targetFor(key: string): string | undefined {
+  const path = figureTargets[key]
+  if (!path) return undefined
+  return router.resolve(path).matched.length ? path : undefined
+}
 
 function openPage(id: string) {
   router.push(`/page/${id}`)
@@ -168,9 +196,20 @@ const entryPageId = computed(
 
     <!-- Figures speak mono, as everything countable in this interface does. -->
     <ul class="figures">
-      <li v-for="total in totals" :key="total.key" class="figure">
-        <span class="figure__value">{{ total.value }}</span>
-        <span class="figure__label">{{ t(`Board.figure.${total.key}`) }}</span>
+      <li v-for="total in totals" :key="total.key">
+        <button
+          v-if="targetFor(total.key)"
+          type="button"
+          class="figure figure--link"
+          @click="router.push(targetFor(total.key)!)"
+        >
+          <span class="figure__value">{{ total.value }}</span>
+          <span class="figure__label">{{ t(`Board.figure.${total.key}`) }}</span>
+        </button>
+        <div v-else class="figure">
+          <span class="figure__value">{{ total.value }}</span>
+          <span class="figure__label">{{ t(`Board.figure.${total.key}`) }}</span>
+        </div>
       </li>
     </ul>
 
@@ -204,9 +243,11 @@ const entryPageId = computed(
       </h2>
       <p v-if="!group.items.length" class="holds__none">{{ t('Board.holds.none') }}</p>
       <ul v-else class="holds__list">
-        <li v-for="item in group.items" :key="item.uid" class="holds__item">
-          <span class="holds__name">{{ item.name }}</span>
-          <span class="holds__type">{{ item.type }}</span>
+        <li v-for="item in group.items" :key="item.uid">
+          <button type="button" class="holds__item" @click="show(group.kind, item.uid)">
+            <span class="holds__name">{{ item.name }}</span>
+            <span class="holds__type">{{ item.type }}</span>
+          </button>
         </li>
       </ul>
     </section>
@@ -286,10 +327,25 @@ const entryPageId = computed(
   display: flex;
   flex-direction: column;
   gap: 2px;
+  width: 100%;
   padding: 12px 14px;
+  text-align: left;
   background-color: var(--color-pane);
   border: 1px solid var(--color-divider);
   border-radius: var(--radius-sm);
+}
+
+.figure--link {
+  cursor: pointer;
+}
+
+.figure--link:hover {
+  border-color: var(--color-outline);
+}
+
+.figure--link:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 1px;
 }
 
 .figure__value {
@@ -376,11 +432,24 @@ const entryPageId = computed(
   align-items: baseline;
   justify-content: space-between;
   gap: 12px;
+  width: 100%;
   padding: 7px 12px;
-  background-color: var(--color-pane);
+  text-align: left;
+  background: var(--color-pane);
+  border: 0;
+  cursor: pointer;
 }
 
-.holds__item + .holds__item {
+.holds__item:hover {
+  background-color: var(--color-raised);
+}
+
+.holds__item:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: -2px;
+}
+
+.holds__list > li + li .holds__item {
   border-top: 1px solid var(--color-divider);
 }
 

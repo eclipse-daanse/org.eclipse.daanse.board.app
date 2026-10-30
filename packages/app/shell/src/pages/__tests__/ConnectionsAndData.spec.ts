@@ -13,7 +13,7 @@
 
 // @vitest-environment jsdom
 
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 import { flushPromises, mount } from '@vue/test-utils'
 import { identifier as CONNECTION_REPOSITORY } from 'org.eclipse.daanse.board.app.lib.api.connection'
 import {
@@ -22,6 +22,14 @@ import {
   ConnectionImpl,
 } from 'org.eclipse.daanse.board.app.lib.model.workspace'
 import ConnectionsAndData from '../ConnectionsAndData.vue'
+
+/* The selection is addressable now, so this page reads and writes the
+  query. Neither is under test here; what matters is that both exist. */
+const replace = vi.fn()
+vi.mock('vue-router', () => ({
+  useRoute: () => ({ query: {} }),
+  useRouter: () => ({ replace, push: vi.fn() }),
+}))
 
 /*
  * Which tabs a selection is given. The editors below are stubbed: what is

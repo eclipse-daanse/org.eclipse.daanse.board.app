@@ -26,6 +26,7 @@ Contributors:
  * from it before either is touched.
  */
 import { computed, inject, ref, watch } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 import { DTabs } from 'org.eclipse.daanse.board.app.ui.vue.controls'
 import {
   identifier as WORKSPACE,
@@ -51,6 +52,36 @@ const { t } = useTranslation('shell')
 
 const selected = ref<Selection | undefined>(undefined)
 const tab = ref('preview')
+
+/*
+ * What the address asks to be shown.
+ *
+ * The selection used to live only in this component, so nothing could
+ * point at one connection or one source - the board screen names them,
+ * and a name one cannot follow is a label. `?select=<uid>&kind=...`
+ * names it; the tree still sets the selection as it did, and sending
+ * the choice back into the address keeps a reload on the same thing.
+ */
+const route = useRoute()
+const router = useRouter()
+
+function fromAddress() {
+  const uid = route.query.select as string | undefined
+  if (!uid) return
+  const kind = route.query.kind === 'DataSource' ? 'DataSource' : 'Connection'
+  if (selected.value?.itemId === uid && selected.value?.type === kind) return
+  selected.value = { type: kind, itemId: uid }
+}
+
+watch(() => [route.query.select, route.query.kind], fromAddress, { immediate: true })
+
+watch(selected, (at) => {
+  const asked = route.query.select as string | undefined
+  if (at?.itemId === asked) return
+  router.replace({
+    query: at ? { ...route.query, select: at.itemId, kind: at.type } : { ...route.query, select: undefined, kind: undefined },
+  })
+})
 
 const endpointfinder = inject('endpointfinder', null)
 const findEndpoints = () => (endpointfinder as any)?.()
