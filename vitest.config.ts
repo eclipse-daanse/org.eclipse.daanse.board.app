@@ -89,11 +89,26 @@ function exactAliases(entries: Record<string, string>) {
   }))
 }
 
+/*
+ * app.shell's own '@', which its vite and ts configs both define and the
+ * workspace aliases above do not cover - it is a path alias, not a package
+ * name. A prefix rather than an exact match, because that is how it is
+ * written: '@/components/...'. Nothing else in the tree resolves '@/' at
+ * run time; persistence/git has it only inside .d.ts files.
+ */
+const shellPathAlias = {
+  find: /^@\//,
+  replacement: join(root, 'packages/app/shell/src/'),
+}
+
 export default mergeConfig(
   viteConfig,
   defineConfig({
     resolve: {
-      alias: exactAliases({ ...workspaceSourceAliases(), ...brokenThirdPartyEntries }),
+      alias: [
+        ...exactAliases({ ...workspaceSourceAliases(), ...brokenThirdPartyEntries }),
+        shellPathAlias,
+      ],
     },
     /*
      * monaco-editor ships a sourcemap comment pointing at a .map file it

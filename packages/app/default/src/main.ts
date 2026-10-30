@@ -45,6 +45,13 @@ installDevtools({ loader })
  */
 if (import.meta.hot) {
   import.meta.hot.on('tsm:bundle-changed', ({ id }: { id: string }) => {
+    /*
+     * Only what is actually loaded. The watcher reports every rebuilt
+     * bundle, and most of them are not loaded on most pages - app.workbench
+     * lives at /workbench and is absent everywhere else - so reloading
+     * them failed, loudly, for doing nothing wrong.
+     */
+    if (!loader.isLoaded(id)) return
     loader.reloadModule(id).catch((error) => {
       console.error(`bundle reload failed for ${id}:`, error)
     })

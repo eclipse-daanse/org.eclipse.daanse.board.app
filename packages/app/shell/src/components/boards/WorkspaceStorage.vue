@@ -32,7 +32,11 @@ import {
 } from '@/composables/useWorkspaceFile'
 import { summarizePage, type PageSummary } from '@/composables/pageSummary'
 import { useUnsavedChanges } from '@/composables/unsavedChanges'
-import { type Workspace } from 'org.eclipse.daanse.board.app.lib.model.workspace'
+import { useLastOpenedState } from '@/composables/useLastOpenedState'
+import {
+  identifier as WORKSPACE,
+  type Workspace,
+} from 'org.eclipse.daanse.board.app.lib.model.workspace'
 import {
   type Repository,
   type WritableRepository,
@@ -46,6 +50,9 @@ import {
 } from 'org.eclipse.daanse.board.app.lib.persistence.filesystem'
 
 const emit = defineEmits<{ restored: [ids: string[]] }>()
+
+const { remember: rememberOpened } = useLastOpenedState()
+const workspace = inject<Workspace>(WORKSPACE)!
 
 const repoManager = inject<RepositoryRegistryI>(RepoManagerId)
 const { save, load } = useWorkspaceFile()
@@ -294,19 +301,38 @@ function summarize(held: Workspace | undefined): PageSummary[] {
 
 const boards = computed(() => boardsIn(selectedEntry.value))
 
+/*
+ * What the state holds besides its pages.
+ *
+ * A stored state can carry connections, sources and variables and no
+ * pages at all - that is what a person explores those connections from.
+ * Counted off the pages alone, such a state looked empty, which is the
+ * one thing it is not.
+ */
+const held = computed(() => parseWorkspace(selectedEntry.value?.data))
+
 const totals = computed(() => ({
   boards: boards.value.length,
   widgets: boards.value.reduce((sum, b) => sum + b.widgetCount, 0),
   sources: boards.value.reduce((sum, b) => sum + b.sourceCount, 0),
+  connections: held.value?.connections.toArray().length ?? 0,
+  datasources: held.value?.datasources.toArray().length ?? 0,
+  variables: held.value?.variables.toArray().length ?? 0,
 }))
 
 /** Short summary for a tree row, so the tree says what is inside each state. */
 function entrySummary(entry: Entity): string {
   const list = boardsIn(entry)
-  if (list.length === 0) return t('Storage.entry.empty')
-  /* Pages, not boards: a stored state holds one board, and what is counted
-    here is what is inside it. */
-  return t('Storage.pages', { count: list.length })
+  if (list.length > 0) {
+    /* Pages, not boards: a stored state holds one board, and what is
+      counted here is what is inside it. */
+    return t('Storage.pages', { count: list.length })
+  }
+  /* No pages is not nothing: say what it does hold, where it holds any. */
+  const inside = parseWorkspace(entry.data)
+  const connections = inside?.connections.toArray().length ?? 0
+  if (connections > 0) return t('Storage.entry.connections', { count: connections })
+  return t('Storage.entry.empty')
 }
 
 /** What the current workspace would be stored as, shown before storing it. */
@@ -325,8 +351,12 @@ async function open(entry: Entity) {
   failure.value = ''
   try {
     const stored = await selectedPlace.value?.getEntityByUri(entry.uri as unknown as URL)
-    const ids = load(stored?.data ?? entry.data)
+    const data = stored?.data ?? entry.data
+    const ids = load(data, label(entry))
     remember(entry, label(entry))
+    /* So a reload finds this board again; see useLastOpenedState. */
+    const boardId = workspace.board?.id as string | undefined
+    if (boardId) rememberOpened({ boardId, name: label(entry), data })
     emit('restored', ids)
   } catch (error) {
     failure.value = t('Storage.failure.load', { reason: reason(error) })
@@ -567,13 +597,35 @@ watch(() => repoManager, loadPlaces)
             </div>
           </article>
         </div>
+        <!-- No pages, but what is here is worth naming: this is the state
+          one explores its connections from. -->
         <p v-else class="detail__hint">
           {{ t('Storage.noBoard') }}
+          <span v-if="totals.connections || totals.datasources || totals.variables">
+            {{ t('Storage.holds', {
+              connections: totals.connections,
+              datasources: totals.datasources,
+              variables: totals.variables,
+            }) }}
+          </span>
         </p>
       </template>
 
       <p v-else-if="busy" class="detail__hint">{{ t('Storage.reading') }}</p>
-      <p v-else class="detail__hint">{{ t('Storage.pick') }}</p>
+      <!--
+        Nothing picked: the pane used to hold one grey line in the middle
+        of three quarters of empty. It says what a state is and what can
+        be done here instead, which is what one needs before picking.
+      -->
+      <div v-else class="detail__nothing">
+        <h2 class="nothing__title">{{ t('Storage.nothing.title') }}</h2>
+        <p class="nothing__text">{{ t('Storage.nothing.text') }}</p>
+        <ul class="nothing__points">
+          <li>{{ t('Storage.nothing.open') }}</li>
+          <li>{{ t('Storage.nothing.store') }}</li>
+          <li>{{ t('Storage.nothing.carry') }}</li>
+        </ul>
+      </div>
     </section>
   </div>
 </template>
@@ -752,6 +804,45 @@ watch(() => repoManager, loadPlaces)
   color: var(--color-accent);
   background-color: color-mix(in srgb, var(--color-accent) 14%, transparent);
   border-radius: var(--radius-xs);
+}
+
+.detail__nothing {
+  max-width: 420px;
+  margin: auto;
+  padding: 24px;
+  text-align: left;
+}
+
+.nothing__title {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: var(--text-lg);
+  font-weight: 600;
+  color: var(--color-fg);
+}
+
+.nothing__text {
+  margin: 6px 0 12px;
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  color: var(--color-dim);
+}
+
+.nothing__points {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.nothing__points li {
+  padding-left: 14px;
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  color: var(--color-dim);
+  border-left: 2px solid var(--color-divider);
 }
 
 .detail__hint {

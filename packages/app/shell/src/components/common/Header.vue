@@ -40,6 +40,7 @@ import {
 import { useCurrentHistory, useEList, useLanguage, useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import { usePages } from '@/composables/usePages'
 import { useWidgetPalette } from '@/composables/useWidgetPalette'
+import { boardCrumb, type Crumb } from '@/composables/boardCrumb'
 import { useBoardBackdrop } from '@/composables/useBoardBackdrop'
 import { useGridSnap } from '@/composables/useGridSnap'
 
@@ -60,16 +61,6 @@ const history = useCurrentHistory()
 const isEditing = computed(
   () => route.name === 'edit' || route.name === 'pageEdit' || String(route.path).endsWith('/edit'),
 )
-
-/**
- * Where you are, as a path of places. Everything but the last one is a
- * step you can go back to - a crumb that cannot be clicked is a label,
- * and labels do not belong in a path.
- */
-interface Crumb {
-  label: string
-  to?: string
-}
 
 const workspace = inject<Workspace>(WORKSPACE)!
 
@@ -94,45 +85,21 @@ function pickLanguage(tag: string) {
  */
 const modelledPages = useEList(workspace, (w) => w.board?.pages)
 
+/*
+ * The path, rooted in the open board. Built by boardCrumb, which is a
+ * plain function of the route and what is open - and therefore testable
+ * without a header around it.
+ */
 const crumb = computed<Crumb[]>(() => {
   /* Reading the pages is what makes this re-run when the board is renamed. */
   void modelledPages.value
-  const boards: Crumb = { label: t('Header.crumb.boards'), to: '/' }
-  /*
-   * The board's own name, not the open page's id. They were the same thing
-   * once - a page was a board - and the crumb said "Board 76134a0b", which
-   * was the page you happened to be on.
-   */
-  const board: Crumb = {
-    label: (workspace.board?.name as string) || t('Header.crumb.board'),
-    to: pageId.value ? `/page/${pageId.value}` : undefined,
-  }
-  switch (route.name) {
-    case 'home':
-      return [{ label: t('Header.crumb.boards') }]
-    case 'page':
-      return [boards, { label: board.label }]
-    case 'edit':
-    case 'pageEdit':
-      return [boards, board, { label: t('Header.crumb.edit') }]
-    case 'pages':
-      /* The board, then its pages - the same path as opening one. */
-      return [boards, board, { label: t('Header.crumb.pages') }]
-    case 'data':
-      return [boards, { label: t('Header.crumb.data') }]
-    case 'config':
-      return [boards, { label: t('Header.crumb.config') }]
-    case 'save':
-      return [boards, { label: t('Header.crumb.storage') }]
-    case 'test':
-      return [boards, { label: t('Header.crumb.test') }]
-    case 'appearance':
-      return [boards, { label: t('Header.appearance') }]
-    case 'events':
-      return [boards, { label: t('Header.crumb.events') }]
-    default:
-      return [boards, { label: route.name ? String(route.name) : t('Header.crumb.board') }]
-  }
+  return boardCrumb({
+    route: route.name,
+    boardId: workspace.board?.id as string | undefined,
+    boardName: workspace.board?.name as string | undefined,
+    pageName: currentPageName.value,
+    t,
+  })
 })
 
 const showModes = computed(() => Boolean(pageId.value))

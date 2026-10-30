@@ -12,7 +12,13 @@
  **********************************************************************/
 
 import { describe, expect, it } from 'vitest'
-import { liftPagesIntoBoard } from './useWorkspaceFile'
+import { defineComponent } from 'vue'
+import { mount } from '@vue/test-utils'
+import {
+  identifier as WORKSPACE_ID,
+  WorkspaceImpl,
+} from 'org.eclipse.daanse.board.app.lib.model.workspace'
+import { liftPagesIntoBoard, useWorkspaceFile } from './useWorkspaceFile'
 
 /**
  * States written before a board held the pages.
@@ -90,5 +96,78 @@ describe('liftPagesIntoBoard', () => {
   it('passes anything that is not an object straight through', () => {
     expect(liftPagesIntoBoard(undefined)).toBeUndefined()
     expect(liftPagesIntoBoard('nonsense')).toBe('nonsense')
+  })
+})
+
+/*
+ * Opening a state that holds no board.
+ *
+ * liftPagesIntoBoard above is the migration and rightly invents nothing;
+ * this is what opening does, where the difference shows: a state carrying
+ * connections and no pages is a board one explores them from, and it used
+ * to arrive with workspace.board empty - which every screen read as "no
+ * board open", with the connections nowhere to be seen.
+ */
+describe('opening a state with no board in it', () => {
+  function open(content: unknown, name?: string) {
+    const workspace = new WorkspaceImpl()
+    let ids: string[] = []
+    const host = defineComponent({
+      setup() {
+        const { load } = useWorkspaceFile()
+        ids = load(content, name)
+        return () => null
+      },
+    })
+    mount(host, { global: { provide: { [WORKSPACE_ID]: workspace } } })
+    return { workspace, ids }
+  }
+
+  const withConnections = {
+    eClass: 'http://org.eclipse.daanse.board.app.lib.model.workspace#//Workspace',
+    connections: [
+      {
+        eClass: 'http://org.eclipse.daanse.board.app.lib.model.workspace#//Connection',
+        uid: 'c1',
+        name: 'govdata',
+        type: 'rest',
+      },
+    ],
+  }
+
+  it('opens a board, so the state that was loaded is an open board', () => {
+    const { workspace } = open(withConnections)
+
+    expect(workspace.board).toBeTruthy()
+    expect(workspace.board?.pages.toArray()).toHaveLength(0)
+  })
+
+  it('keeps the connections that came with it', () => {
+    const { workspace } = open(withConnections)
+
+    expect(workspace.connections.toArray()).toHaveLength(1)
+  })
+
+  it('names the board after the state it came from', () => {
+    const { workspace } = open(withConnections, 'Sparky')
+
+    expect(workspace.board?.name).toBe('Sparky')
+  })
+
+  it('leaves a state that brought its own board alone', () => {
+    const { workspace } = open(
+      {
+        eClass: 'http://org.eclipse.daanse.board.app.lib.model.workspace#//Workspace',
+        board: {
+          eClass: 'http://org.eclipse.daanse.board.app.lib.model.workspace#//Board',
+          id: 'b1',
+          name: 'Stored name',
+          pages: [],
+        },
+      },
+      'Sparky',
+    )
+
+    expect(workspace.board?.name).toBe('Stored name')
   })
 })
