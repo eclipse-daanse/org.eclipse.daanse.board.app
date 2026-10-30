@@ -94,11 +94,46 @@ function settle() {
 
 watch(() => route.params.boardid, settle, { immediate: true })
 
-const totals = computed(() => ({
-  pages: pages.value.length,
-  connections: connections.value.length,
-  datasources: datasources.value.length,
-}))
+const variables = useEList(workspace, (w) => w.variables)
+
+/*
+ * What the board holds, as figures.
+ *
+ * Counted off what the workspace holds rather than off what lies on a
+ * page: a board whose purpose is its connections has none of the latter
+ * and plenty of the former.
+ */
+/* Named through a key, so the collector is told they are in use.
+  i18n-keys: shell:Board.figure.pages,
+  i18n-keys: shell:Board.figure.connections,
+  i18n-keys: shell:Board.figure.datasources,
+  i18n-keys: shell:Board.figure.variables */
+const totals = computed(() => [
+  { key: 'pages', value: pages.value.length },
+  { key: 'connections', value: connections.value.length },
+  { key: 'datasources', value: datasources.value.length },
+  { key: 'variables', value: variables.value.length },
+])
+
+/** Named, not only counted - a list of two is worth reading. */
+const held = computed(() => [
+  {
+    key: 'connections',
+    items: connections.value.map((each: any) => ({
+      uid: each.uid as string,
+      name: (each.name as string) || (each.uid as string),
+      type: each.type as string,
+    })),
+  },
+  {
+    key: 'datasources',
+    items: datasources.value.map((each: any) => ({
+      uid: each.uid as string,
+      name: (each.name as string) || (each.uid as string),
+      type: each.type as string,
+    })),
+  },
+])
 
 function openPage(id: string) {
   router.push(`/page/${id}`)
@@ -112,20 +147,36 @@ const entryPageId = computed(
 
 <template>
   <div v-if="board" class="board">
-    <header class="board__head">
-      <h1 class="board__name">{{ board.name || t('Boards.open.fallbackName') }}</h1>
-      <p v-if="board.description" class="board__desc">{{ board.description }}</p>
-      <p class="board__meta">
-        {{ t('Boards.open.pages', { count: totals.pages }) }}
-        · {{ t('Boards.open.connections', { count: totals.connections }) }}
-        · {{ t('Boards.open.datasources', { count: totals.datasources }) }}
-      </p>
+    <!--
+      The board, then what it holds, then the way on. A board whose
+      purpose is its connections has no pages to show, so what it holds
+      is the substance of this screen rather than a footnote under it.
+    -->
+    <header class="head">
+      <div class="head__what">
+        <h1 class="head__name">{{ board.name || t('Boards.open.fallbackName') }}</h1>
+        <p v-if="board.description" class="head__desc">{{ board.description }}</p>
+      </div>
+      <div class="head__actions">
+        <DButton v-if="entryPageId" intent="primary" size="sm" @click="openPage(entryPageId)">
+          {{ t('Boards.open.action') }}
+        </DButton>
+        <DButton size="sm" @click="router.push('/datasources')">{{ t('Board.toData') }}</DButton>
+        <DButton size="sm" @click="router.push('/pages')">{{ t('Board.toPages') }}</DButton>
+      </div>
     </header>
 
-    <!-- Its pages, where it has any: what one came to look at. -->
-    <section v-if="pages.length" class="board__pages">
-      <h2 class="board__heading">{{ t('Header.crumb.pages') }}</h2>
-      <ul class="pages">
+    <!-- Figures speak mono, as everything countable in this interface does. -->
+    <ul class="figures">
+      <li v-for="total in totals" :key="total.key" class="figure">
+        <span class="figure__value">{{ total.value }}</span>
+        <span class="figure__label">{{ t(`Board.figure.${total.key}`) }}</span>
+      </li>
+    </ul>
+
+    <section v-if="pages.length" class="pages">
+      <h2 class="section__heading">{{ t('Header.crumb.pages') }}</h2>
+      <ul class="pages__list">
         <li v-for="page in pages" :key="page.id as string">
           <button type="button" class="page" @click="openPage(page.id as string)">
             <BoardFloorplan
@@ -144,26 +195,23 @@ const entryPageId = computed(
       </ul>
     </section>
 
-    <!--
-      No pages is a board one explores its connections from, not a broken
-      one. What it holds is named, and both ways on are offered.
-    -->
-    <section v-else class="board__nopages">
-      <h2 class="board__heading">{{ t('Board.noPages.title') }}</h2>
-      <p class="board__text">{{ t('Board.noPages.text') }}</p>
+    <!-- What it reads through, named. Counting them says a board exists;
+      naming them says what it is for. -->
+    <section v-for="group in held" :key="group.key" class="holds">
+      <h2 class="section__heading">
+        {{ t(`Board.figure.${group.key}`) }}
+        <span class="section__count">{{ group.items.length }}</span>
+      </h2>
+      <p v-if="!group.items.length" class="holds__none">{{ t('Board.holds.none') }}</p>
+      <ul v-else class="holds__list">
+        <li v-for="item in group.items" :key="item.uid" class="holds__item">
+          <span class="holds__name">{{ item.name }}</span>
+          <span class="holds__type">{{ item.type }}</span>
+        </li>
+      </ul>
     </section>
 
-    <div class="board__actions">
-      <DButton v-if="entryPageId" intent="primary" size="sm" @click="openPage(entryPageId)">
-        {{ t('Boards.open.action') }}
-      </DButton>
-      <DButton size="sm" @click="router.push('/datasources')">
-        {{ t('Board.toData') }}
-      </DButton>
-      <DButton size="sm" @click="router.push('/pages')">
-        {{ t('Board.toPages') }}
-      </DButton>
-    </div>
+    <p v-if="!pages.length" class="board__note">{{ t('Board.noPages.text') }}</p>
   </div>
 </template>
 
@@ -171,40 +219,116 @@ const entryPageId = computed(
 .board {
   display: flex;
   flex-direction: column;
-  gap: 16px;
-  padding: 24px;
+  gap: 20px;
   height: 100%;
   min-height: 0;
+  padding: 20px 24px;
   overflow: auto;
 }
 
-.board__name {
+/* A column to read down, not a sheet pulled to the window's width. */
+.board > * {
+  width: 100%;
+  max-width: 880px;
+}
+
+/* ------------------------------------------------------------- the head */
+
+.head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--color-divider);
+}
+
+.head__name {
   margin: 0;
   font-family: var(--font-sans);
-  font-size: var(--text-xl, 1.4rem);
+  font-size: var(--text-xl);
+  font-weight: 600;
+  line-height: 1.2;
   color: var(--color-fg);
 }
 
-.board__desc,
-.board__meta,
-.board__text {
+.head__desc {
   margin: 4px 0 0;
   font-family: var(--font-sans);
+  font-size: var(--text-base);
+  color: var(--color-dim);
+}
+
+.head__actions {
+  display: flex;
+  flex: none;
+  gap: 6px;
+}
+
+/* ---------------------------------------------------------- the figures */
+
+/* Tiles sized by their content: a single digit in a quarter of the window
+  reads as a mistake, not as a figure. */
+.figures {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.figures > li {
+  min-width: 112px;
+}
+
+.figure {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 12px 14px;
+  background-color: var(--color-pane);
+  border: 1px solid var(--color-divider);
+  border-radius: var(--radius-sm);
+}
+
+.figure__value {
+  font-family: var(--font-mono);
+  font-size: var(--text-xl);
+  line-height: 1.1;
+  color: var(--color-fg);
+}
+
+.figure__label {
+  font-family: var(--font-sans);
+  font-size: var(--text-xs);
+  letter-spacing: 0.02em;
+  color: var(--color-dim);
+}
+
+/* ------------------------------------------------- pages and what it reads */
+
+.section__heading {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin: 0 0 8px;
+  font-family: var(--font-sans);
+  font-size: var(--text-lg);
+  font-weight: 600;
+  color: var(--color-fg);
+}
+
+.section__count {
+  font-family: var(--font-mono);
   font-size: var(--text-sm);
   color: var(--color-dim);
 }
 
-.board__heading {
-  margin: 0 0 8px;
-  font-family: var(--font-sans);
-  font-size: var(--text-base);
-  color: var(--color-fg);
-}
-
-.pages {
+.pages__list {
   display: flex;
   flex-wrap: wrap;
-  gap: 12px;
+  gap: 10px;
   margin: 0;
   padding: 0;
   list-style: none;
@@ -214,7 +338,7 @@ const entryPageId = computed(
   display: flex;
   flex-direction: column;
   gap: 6px;
-  padding: 10px;
+  padding: 8px;
   background-color: var(--color-pane);
   border: 1px solid var(--color-divider);
   border-radius: var(--radius-sm);
@@ -226,8 +350,8 @@ const entryPageId = computed(
 }
 
 .page__plan {
-  width: 140px;
-  height: 90px;
+  width: 150px;
+  height: 96px;
 }
 
 .page__name {
@@ -236,8 +360,47 @@ const entryPageId = computed(
   color: var(--color-fg);
 }
 
-.board__actions {
+.holds__list {
   display: flex;
-  gap: 8px;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border: 1px solid var(--color-divider);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+
+.holds__item {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 7px 12px;
+  background-color: var(--color-pane);
+}
+
+.holds__item + .holds__item {
+  border-top: 1px solid var(--color-divider);
+}
+
+.holds__name {
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  color: var(--color-fg);
+}
+
+.holds__type {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--color-dim);
+}
+
+.holds__none,
+.board__note {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  color: var(--color-dim);
 }
 </style>
