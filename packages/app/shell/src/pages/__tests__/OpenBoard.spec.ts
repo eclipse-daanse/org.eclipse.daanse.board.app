@@ -28,9 +28,18 @@ const replace = vi.fn()
 const push = vi.fn()
 let params: Record<string, string> = {}
 
+/* resolve() answers for the areas this shell always has; /variables is
+  contributed by a module and absent here, which is the case the screen
+  has to handle. */
+const KNOWN = ['/pages', '/datasources']
+
 vi.mock('vue-router', () => ({
   useRoute: () => ({ params }),
-  useRouter: () => ({ push, replace }),
+  useRouter: () => ({
+    push,
+    replace,
+    resolve: (path: string) => ({ matched: KNOWN.includes(path) ? [{}] : [] }),
+  }),
 }))
 
 const translator = {
@@ -129,6 +138,38 @@ describe('the open board', () => {
 
     expect(replace).not.toHaveBeenCalled()
     expect(workspace.connections.toArray()).toHaveLength(1)
+  })
+
+  it('follows a named connection to it, rather than only naming it', async () => {
+    const { wrapper } = setUp({ connections: 2 })
+    await flushPromises()
+
+    await wrapper.findAll('.holds__item')[0].trigger('click')
+
+    expect(push).toHaveBeenCalledWith({
+      path: '/datasources',
+      query: { select: 'c0', kind: 'Connection' },
+    })
+  })
+
+  it('leads a figure to the area it counts', async () => {
+    const { wrapper } = setUp({ connections: 1 })
+    await flushPromises()
+
+    const pages = wrapper.findAll('.figure--link').find((each) => each.text().includes('Pages'))
+    await pages!.trigger('click')
+
+    expect(push).toHaveBeenCalledWith('/pages')
+  })
+
+  it('leaves a figure whose area this shell does not have as a figure', async () => {
+    const { wrapper } = setUp({ connections: 1 })
+    await flushPromises()
+
+    /* Variables come with a module; without it there is nowhere to go. */
+    const asLink = wrapper.findAll('.figure--link').map((each) => each.text())
+    expect(asLink.some((each) => each.includes(en.Board.figure.variables))).toBe(false)
+    expect(wrapper.text()).toContain(en.Board.figure.variables)
   })
 
   it('sends a link to a board this browser never opened to the launcher', async () => {
