@@ -104,8 +104,18 @@ describe('the open board', () => {
     const { wrapper } = setUp()
     await flushPromises()
 
-    expect(wrapper.text()).toContain(en.Board.noPages.title)
-    expect(wrapper.text()).toContain('1 connections')
+    /* The figures, which is what such a board has instead of pages. */
+    const figures = wrapper.findAll('.figure').map((each) => each.text())
+    expect(figures.some((each) => each.includes(en.Board.figure.connections))).toBe(true)
+    expect(wrapper.text()).toContain(en.Board.noPages.text)
+  })
+
+  it('names what it holds rather than only counting it', async () => {
+    const { wrapper } = setUp({ connections: 2 })
+    await flushPromises()
+
+    const named = wrapper.findAll('.holds__name').map((each) => each.text())
+    expect(named).toHaveLength(2)
   })
 
   it('finds the board again after a reload, from what this browser kept', async () => {

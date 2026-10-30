@@ -150,10 +150,16 @@
     "download": "Herunterladen",
     "noBoard": "In diesem Stand liegt kein Board - er enthält nur Verbindungen, Quellen oder Variablen.",
     "reading": "Wird gelesen…",
-    "pick": "Wähle links einen Stand, um zu sehen, was darin liegt.",
     "connectFolder": "Ordner verbinden…",
     "noFolderSupport": "Dieser Browser kann keinen Ordner öffnen. Stände lassen sich herunterladen und wieder hochladen.",
-    "holds": "Er hält {{connections}} Verbindungen, {{datasources}} Quellen und {{variables}} Variablen."
+    "holds": "Er hält {{connections}} Verbindungen, {{datasources}} Quellen und {{variables}} Variablen.",
+    "nothing": {
+      "title": "Gespeicherte Stände",
+      "text": "Ein Stand ist ein ganzes Board, wie es war: seine Seiten, und die Verbindungen, Quellen und Variablen dahinter.",
+      "open": "Wähle links einen aus, um zu sehen, was darin liegt, und öffne ihn dann.",
+      "store": "Lege das offene Board in einem Ort ab, um später daran weiterzuarbeiten.",
+      "carry": "Lade einen Stand herunter, um ihn in einen anderen Browser mitzunehmen."
+    }
   },
   "Editor": {
     "name": "Name",
@@ -455,10 +461,18 @@
   },
   "Board": {
     "noPages": {
-      "title": "Noch keine Seiten",
       "text": "Von diesem Board aus werden seine Verbindungen erkundet. Lege eine Seite darüber an, sobald du eine brauchst."
     },
     "toData": "Verbindungen & Daten",
-    "toPages": "Seiten"
+    "toPages": "Seiten",
+    "figure": {
+      "pages": "Seiten",
+      "connections": "Verbindungen",
+      "datasources": "Datenquellen",
+      "variables": "Variablen"
+    },
+    "holds": {
+      "none": "Noch keine."
+    }
   }
 }

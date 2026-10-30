@@ -150,10 +150,16 @@
     "download": "Download",
     "noBoard": "This workspace holds no board - only connections, sources or variables.",
     "reading": "Reading…",
-    "pick": "Pick a workspace on the left to see what it holds.",
     "connectFolder": "Connect folder…",
     "noFolderSupport": "This browser cannot open a folder. States can be downloaded and uploaded again.",
-    "holds": "It holds {{connections}} connections, {{datasources}} sources and {{variables}} variables."
+    "holds": "It holds {{connections}} connections, {{datasources}} sources and {{variables}} variables.",
+    "nothing": {
+      "title": "Stored states",
+      "text": "A state is a whole board as it was: its pages, and the connections, sources and variables behind them.",
+      "open": "Pick one on the left to see what is inside it, then open it.",
+      "store": "Put the board you have open into a place, to come back to it.",
+      "carry": "Download a state to carry it to another browser, and upload it there."
+    }
   },
   "Editor": {
     "name": "Name",
@@ -455,10 +461,18 @@
   },
   "Board": {
     "noPages": {
-      "title": "No pages yet",
       "text": "This board is where its connections are explored from. Lay out a page over them whenever you want one."
     },
     "toData": "Connections & data",
-    "toPages": "Pages"
+    "toPages": "Pages",
+    "figure": {
+      "pages": "Pages",
+      "connections": "Connections",
+      "datasources": "Data sources",
+      "variables": "Variables"
+    },
+    "holds": {
+      "none": "None yet."
+    }
   }
 }
