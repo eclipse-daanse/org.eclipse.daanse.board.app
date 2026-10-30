@@ -612,7 +612,20 @@ watch(() => repoManager, loadPlaces)
       </template>
 
       <p v-else-if="busy" class="detail__hint">{{ t('Storage.reading') }}</p>
-      <p v-else class="detail__hint">{{ t('Storage.pick') }}</p>
+      <!--
+        Nothing picked: the pane used to hold one grey line in the middle
+        of three quarters of empty. It says what a state is and what can
+        be done here instead, which is what one needs before picking.
+      -->
+      <div v-else class="detail__nothing">
+        <h2 class="nothing__title">{{ t('Storage.nothing.title') }}</h2>
+        <p class="nothing__text">{{ t('Storage.nothing.text') }}</p>
+        <ul class="nothing__points">
+          <li>{{ t('Storage.nothing.open') }}</li>
+          <li>{{ t('Storage.nothing.store') }}</li>
+          <li>{{ t('Storage.nothing.carry') }}</li>
+        </ul>
+      </div>
     </section>
   </div>
 </template>
@@ -791,6 +804,45 @@ watch(() => repoManager, loadPlaces)
   color: var(--color-accent);
   background-color: color-mix(in srgb, var(--color-accent) 14%, transparent);
   border-radius: var(--radius-xs);
+}
+
+.detail__nothing {
+  max-width: 420px;
+  margin: auto;
+  padding: 24px;
+  text-align: left;
+}
+
+.nothing__title {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: var(--text-lg);
+  font-weight: 600;
+  color: var(--color-fg);
+}
+
+.nothing__text {
+  margin: 6px 0 12px;
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  color: var(--color-dim);
+}
+
+.nothing__points {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.nothing__points li {
+  padding-left: 14px;
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  color: var(--color-dim);
+  border-left: 2px solid var(--color-divider);
 }
 
 .detail__hint {
