@@ -57,8 +57,20 @@ watch(props.dataSource, () => {
  * against the same endpoint. What this is waiting for is a new store.
  */
 watch(tempStore, async () => {
-  data.value = await tempStore.value.getData('object');
-  originalData.value = await tempStore.value.getOriginalData();
+  /*
+   * Both at once, not one after the other.
+   *
+   * They read the same address, and the connection answers a request
+   * that is already on its way with the one in flight - which it can
+   * only do while both are. Awaited in turn, the second set off after
+   * the first had come back, and the endpoint was asked twice.
+   */
+  const [narrowed, original] = await Promise.all([
+    tempStore.value.getData('object'),
+    tempStore.value.getOriginalData(),
+  ]);
+  data.value = narrowed;
+  originalData.value = original;
 });
 
 /*
