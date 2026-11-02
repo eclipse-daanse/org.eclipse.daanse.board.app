@@ -28,7 +28,7 @@ Contributors:
 import Header from './components/common/Header.vue'
 import Rail from './components/common/Rail.vue'
 import WorkspaceStorage from './components/boards/WorkspaceStorage.vue'
-import { DModal } from 'org.eclipse.daanse.board.app.ui.vue.controls'
+import { DButton, DModal } from 'org.eclipse.daanse.board.app.ui.vue.controls'
 import { inject, computed } from 'vue'
 import {
   identifier as WORKSPACE,
@@ -103,10 +103,16 @@ const noBoard = computed(() => {
       </main>
     </div>
 
+    <!-- A named way out as well as the cross: this dialog is a place one
+      works in for a while, not a question with two answers, and the way
+      back to the board should not be a 22px grey glyph in a corner. -->
     <DModal v-model="storageOpen" size="lg" :title="t('Header.storageLabel')">
       <div class="storage-dialog">
         <WorkspaceStorage @restored="openRestored" />
       </div>
+      <template #actions>
+        <DButton size="sm" @click="hideStorage">{{ t('Storage.back') }}</DButton>
+      </template>
     </DModal>
   </div>
 </template>
