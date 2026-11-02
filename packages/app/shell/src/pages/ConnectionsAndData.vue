@@ -36,7 +36,13 @@ import {
   identifier as CONNECTION_REPOSITORY,
   type ConnectionRepository,
 } from 'org.eclipse.daanse.board.app.lib.api.connection'
-import { useEList, useEObject, useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+import {
+  describeModel,
+  formFields,
+  useEList,
+  useEObject,
+  useTranslation,
+} from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import DataTree, { type Selection } from '@/components/datasources/DataTree.vue'
 import DatasourceEditor from '@/components/datasources/DatasourceEditor.vue'
 import ConnectionEditor from '@/components/connections/ConnectionEditor.vue'
@@ -70,19 +76,47 @@ const { show: showNewDatasource } = useNewDatasource()
  * this replaces minted connection and source itself, from a format
  * string, past both their models (#1163).
  */
+/**
+ * Where a hit's address is cut between the connection and the source.
+ *
+ * A type with a `resourceUrl` reads a path below the connection's
+ * address - its own model says exactly that, "relative to the address of
+ * the connection" - so the connection takes the directory and the source
+ * the file. A type without one, like ogcsta, reads the address itself,
+ * and cutting it would leave the source pointing at nothing.
+ *
+ * The model is asked rather than the type's name, so a type added later
+ * is cut the same way without this knowing about it.
+ */
+function cut(type: string, url: string) {
+  const identifiers = datasourceRepository.getDatasourceIdentifiers(type)
+  const takesPath = formFields(describeModel(identifiers?.Model)).some(
+    (field) => field.name === 'resourceUrl',
+  )
+  if (!takesPath) return { base: url, path: '' }
+
+  const at = url.lastIndexOf('/')
+  if (at < 0 || at === url.length - 1) return { base: url, path: '' }
+  return { base: url.slice(0, at + 1), path: url.slice(at + 1) }
+}
+
 function createFromHit(hit: { type: string; url: string; name: string }) {
   const identifiers = datasourceRepository.getDatasourceIdentifiers(hit.type)
   const kind = identifiers?.connections?.[0]
   if (!kind) return
 
+  const { base, path } = cut(hit.type, hit.url)
+
   const existing = connections.value.find(
-    (each: any) => each.type === kind && (each.config as any)?.url === hit.url,
+    (each: any) => each.type === kind && (each.config as any)?.url === base,
   )
 
   let uid = existing?.uid as string | undefined
   if (!uid) {
-    const made = connectionRepository.createConnection(kind, { url: hit.url })
-    made.name = hit.name
+    const made = connectionRepository.createConnection(kind, { url: base })
+    /* The address, where it is a place several hits share; the hit's own
+      title where the address is the hit. */
+    made.name = path ? hostOf(base) : hit.name
     try {
       connectionRepository.saveConnection(made)
     } catch (error) {
@@ -93,7 +127,21 @@ function createFromHit(hit: { type: string; url: string; name: string }) {
     uid = made.uid as string
   }
 
-  showNewDatasource({ connection: uid, type: hit.type, name: hit.name })
+  showNewDatasource({
+    connection: uid,
+    type: hit.type,
+    name: hit.name,
+    config: path ? { resourceUrl: path } : undefined,
+  })
+}
+
+/** What to call a connection that stands for a place, not for one hit. */
+function hostOf(url: string): string {
+  try {
+    return new URL(url).host
+  } catch {
+    return url
+  }
 }
 const { usageOf, usageLabel } = useDatasourceUsage()
 const { t } = useTranslation('shell')
@@ -219,6 +267,27 @@ const tabs = computed(() => {
 watch([selected, sourceType, showsPreview], () => {
   tab.value = tabs.value[0]?.id ?? SETTINGS_TAB
 })
+
+/*
+ * And never a tab that is not there.
+ *
+ * `tab` starts on the preview, which most connections do not have - and
+ * a selection made before this component watches anything, from the
+ * address, never passed through the watcher above. The detail then
+ * showed a tab strip with nothing chosen and a pane with nothing in it.
+ *
+ * This asks the question the other way round: whatever is shown has to
+ * be one of the tabs that exist.
+ */
+watch(
+  tabs,
+  (list) => {
+    if (!list.some((each) => each.id === tab.value)) {
+      tab.value = list[0]?.id ?? SETTINGS_TAB
+    }
+  },
+  { immediate: true },
+)
 
 /* Opening something else over a draft that is not saved asks first. */
 const editor = ref<Draft | null>(null)

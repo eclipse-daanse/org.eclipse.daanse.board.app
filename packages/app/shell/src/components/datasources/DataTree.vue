@@ -255,6 +255,7 @@ const {
   forConnection: creatingFor,
   forType: creatingType,
   forName: creatingName,
+  forConfig: creatingConfig,
   show: showNewDatasource,
 } = useNewDatasource()
 /* Set when the dialog was opened from a connection's own menu. */
@@ -505,6 +506,7 @@ const removingUsage = computed(() => {
     :for-connection="creatingFor"
     :for-type="creatingType"
     :for-name="creatingName"
+    :for-config="creatingConfig"
     @created="onDataSourceCreated"
   />
 

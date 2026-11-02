@@ -18,7 +18,7 @@ Contributors:
  * through in between: a source without one has nowhere to fetch from, and
  * the model says so by declaring a `connection` field.
  */
-import { computed, inject, ref, watch } from 'vue'
+import { computed, inject, nextTick, ref, watch } from 'vue'
 import {
   type DatasourceRepository,
   identifier as DATASOURCE_REPOSITORY,
@@ -51,6 +51,8 @@ const props = defineProps<{
   forType?: string
   /** A name worth offering - a catalogue hit carries its own title. */
   forName?: string
+  /** Fields the caller can already answer; see useNewDatasource. */
+  forConfig?: Record<string, unknown>
 }>()
 const emit = defineEmits<{ created: [uid: string] }>()
 const { t } = useTranslation('shell')
@@ -146,18 +148,30 @@ const nothingSuits = computed(
     (datasources.getDatasourceIdentifiers(type.value)?.connections ?? []).length > 0,
 )
 
+/*
+ * Changing the type throws its fields away, because they were another
+ * type's. The type being put in as the dialog opens is not a change of
+ * mind, though, and the caller may have answered some of them already -
+ * so that one assignment is marked as such.
+ */
+let seeding = false
+
 watch(type, () => {
-  config.value = {}
+  if (!seeding) config.value = {}
 })
 
 watch(open, (isOpen) => {
   if (!isOpen) return
+  seeding = true
   type.value = props.forType ?? ''
   name.value = props.forName ?? ''
   icon.value = ''
   tags.value = []
   connection.value = props.forConnection
-  config.value = {}
+  config.value = { ...(props.forConfig ?? {}) }
+  nextTick(() => {
+    seeding = false
+  })
 })
 
 /**
