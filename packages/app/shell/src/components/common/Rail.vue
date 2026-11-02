@@ -240,9 +240,18 @@ function byKeyboard(event: FocusEvent): boolean {
   z-index: 20;
   display: flex;
   flex-direction: column;
-  /* Half a step, so the first row sits the same distance from the top as
-    the rows sit from each other. */
-  padding: 4px 0;
+  /*
+   * The column reaches up into the actions row; its entries do not.
+   *
+   * Filling that notch is what the reach is for - without it the row
+   * begins at the content and leaves a hole beside the save. The rows
+   * themselves start where the content starts, or the first one sits at
+   * half the height of a bar it has nothing to do with.
+   *
+   * Four pixels on top of that is half a step, so the first row sits the
+   * same distance from the top as the rows sit from each other.
+   */
+  padding: calc(var(--spacing-pagebar, 34px) + 1px + 4px) 0 4px;
   overflow-x: hidden;
   overflow-y: auto;
   background: var(--color-pane);
