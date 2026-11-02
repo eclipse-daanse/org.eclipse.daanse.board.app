@@ -162,7 +162,8 @@
       "open": "Wähle links einen aus, um zu sehen, was darin liegt, und öffne ihn dann.",
       "store": "Lege das offene Board in einem Ort ab, um später daran weiterzuarbeiten.",
       "carry": "Lade einen Stand herunter, um ihn in einen anderen Browser mitzunehmen."
-    }
+    },
+    "back": "Zurück zum Board"
   },
   "Editor": {
     "name": "Name",
