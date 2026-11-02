@@ -25,7 +25,7 @@ Contributors:
 
 <script setup lang="ts">
 import { useTemporaryStore } from 'org.eclipse.daanse.board.app.ui.vue.composables';
-import { onBeforeUnmount, onMounted, ref, shallowRef, watch } from 'vue';
+import { onBeforeUnmount, ref, shallowRef, watch, type Ref } from 'vue';
 import VueJsonPretty from 'vue-json-pretty';
 import 'vue-json-pretty/lib/styles.css';
 
@@ -85,20 +85,56 @@ const rightPane = ref<HTMLElement | undefined>();
 const leftHeight = ref(360);
 const rightHeight = ref(360);
 
-let watcher: ResizeObserver | undefined;
+/** What is left of a pane once its own padding is taken off. */
+function roomIn(pane: HTMLElement): number {
+  const box = getComputedStyle(pane);
+  const padding = parseFloat(box.paddingTop || '0') + parseFloat(box.paddingBottom || '0');
+  return Math.max(120, pane.clientHeight - padding);
+}
 
-onMounted(() => {
-  const measure = () => {
-    if (leftPane.value) leftHeight.value = Math.max(120, leftPane.value.clientHeight - 16);
-    if (rightPane.value) rightHeight.value = Math.max(120, rightPane.value.clientHeight - 16);
-  };
-  measure();
-  watcher = new ResizeObserver(measure);
-  if (leftPane.value) watcher.observe(leftPane.value);
-  if (rightPane.value) watcher.observe(rightPane.value);
-});
+/*
+ * Measured when the pane appears, not when this component mounts.
+ *
+ * Both panes stand behind a v-if on the store, and the store is built in
+ * a mounted hook - so at mount time neither element exists. Measuring
+ * there read nothing and observed nothing, and both trees kept the
+ * height they had started with: 360 pixels of a window several times
+ * that, which is why a JSON answer was drawn in the top third of its
+ * pane and the rest stayed empty.
+ */
+const stops: Array<() => void> = [];
 
-onBeforeUnmount(() => watcher?.disconnect());
+function followHeight(pane: Ref<HTMLElement | undefined>, height: Ref<number>) {
+  let watched: HTMLElement | undefined;
+  const observer =
+    typeof ResizeObserver === 'undefined'
+      ? undefined
+      : new ResizeObserver(() => {
+          if (watched) height.value = roomIn(watched);
+        });
+
+  const stop = watch(
+    pane,
+    (element) => {
+      if (watched) observer?.unobserve(watched);
+      watched = element;
+      if (!element) return;
+      height.value = roomIn(element);
+      observer?.observe(element);
+    },
+    { immediate: true, flush: 'post' },
+  );
+
+  stops.push(() => {
+    stop();
+    observer?.disconnect();
+  });
+}
+
+followHeight(leftPane, leftHeight);
+followHeight(rightPane, rightHeight);
+
+onBeforeUnmount(() => stops.forEach((stop) => stop()));
 </script>
 
 <template>
