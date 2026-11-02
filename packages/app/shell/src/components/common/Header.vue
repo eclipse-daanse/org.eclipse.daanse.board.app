@@ -45,8 +45,14 @@ import { boardCrumb, type Crumb } from '@/composables/boardCrumb'
 import { useBoardBackdrop } from '@/composables/useBoardBackdrop'
 import { useGridSnap } from '@/composables/useGridSnap'
 import { useStorageDialog } from '@/composables/useStorageDialog'
+import { useStoreBoard } from '@/composables/useStoreBoard'
+import { useWorkspaceOrigin } from '@/composables/useWorkspaceFile'
 
 const { show: showStorage } = useStorageDialog()
+
+/* Keeping the board - the same press as on its own screen. */
+const { store, storing, stored } = useStoreBoard()
+const kept = useWorkspaceOrigin()
 
 const route = useRoute()
 const router = useRouter()
@@ -452,6 +458,25 @@ const openAppearance = () => router.push('/appearance')
 
     <span class="spacer"></span>
 
+    <!--
+      Keeping the board, from the page one is building on - the same
+      press as on the board's own screen. An icon, because this is the
+      row of things one does to a board and they are all icons; the word
+      is in its title and in what it says when it has written.
+    -->
+    <button
+      v-if="showModes"
+      type="button"
+      class="icon-action"
+      :class="{ 'icon-action--said': stored }"
+      :disabled="storing"
+      :title="kept ? t('Board.keepIn', { name: kept.name }) : t('Board.keepSomewhere')"
+      :aria-label="t('common:Action.save')"
+      @click="store"
+    >
+      <DIcon :name="stored ? 'check' : 'save'" size="sm" />
+    </button>
+
     <button
       v-if="showModes"
       type="button"
@@ -823,6 +848,12 @@ const openAppearance = () => router.push('/appearance')
   border: 0;
   border-radius: var(--radius-xs);
   cursor: pointer;
+}
+
+/* What it says when it has written: the tick that replaces the glyph,
+  held for a moment by useStoreBoard. */
+.icon-action--said {
+  color: var(--color-ok);
 }
 
 .icon-action:hover {

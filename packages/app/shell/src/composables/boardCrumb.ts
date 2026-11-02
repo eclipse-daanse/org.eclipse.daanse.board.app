@@ -69,9 +69,15 @@ export function boardCrumb({ route, boardId, boardName, pageName, t }: CrumbCont
       return [{ label: root.label }]
     case 'page':
       return [root, { label: pageName || t('shell:Header.page.fallbackName') }]
+    /*
+     * Editing names the page, like viewing it does. "Bearbeiten" said
+     * which mode one is in, which the switch beside it already says -
+     * and left the one thing the path is for, which page this is,
+     * nowhere on the screen.
+     */
     case 'edit':
     case 'pageEdit':
-      return [root, { label: t('shell:Header.crumb.edit') }]
+      return [root, { label: pageName || t('shell:Header.page.fallbackName') }]
     case 'pages':
       return [root, { label: t('shell:Header.crumb.pages') }]
     case 'data':
