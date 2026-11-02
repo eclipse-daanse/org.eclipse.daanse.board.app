@@ -36,6 +36,7 @@ import {
   identifier as WORKSPACE,
   type Workspace,
   EventMappingImpl,
+  BoardImpl,
 } from 'org.eclipse.daanse.board.app.lib.model.workspace'
 import {
   type ConnectionRepository,
@@ -54,6 +55,13 @@ import {
   type VariableWrapperFactory,
 } from 'org.eclipse.daanse.board.app.lib.factory.variableWrapper'
 import { EVENT_MANAGER, type EventManager } from 'org.eclipse.daanse.board.app.lib.api.events'
+import {
+  type Entity,
+  type Repository,
+  type RepositoryRegistryI,
+  type WritableRepository,
+  identifier as RepoManagerId,
+} from 'org.eclipse.daanse.board.app.lib.api.persistence'
 import { decodeStored, isResource, readLegacyWorkspace } from './legacyWorkspace'
 import { useUnsavedChanges } from './unsavedChanges'
 
@@ -75,10 +83,37 @@ export function useWorkspaceOrigin() {
   return origin
 }
 
+/**
+ * Where a state of this name lives in a place.
+ *
+ * The place's own address with a file name on it - which is what makes
+ * two states of the same name in the same place the same state, and why
+ * storing over one is an update rather than a second entry.
+ */
+export function entryUriFor(place: { uri: unknown }, name: string): URL {
+  const uri = new URL(String(place.uri))
+  uri.pathname = `/${name}.json`
+  return uri
+}
+
 /** The name the resource carries, and what its `$ref`s resolve against. */
 const WORKSPACE_URI = 'workspace.json'
 
 const BOARD_ECLASS = 'http://org.eclipse.daanse.board.app.lib.model.workspace#//Board'
+
+/**
+ * The board a state without one is opened as.
+ *
+ * Named after what was opened, so the header has something true to show;
+ * it holds no pages, which is a board one explores its connections from
+ * rather than a half-finished one.
+ */
+function boardFor(name?: string) {
+  const board = new BoardImpl()
+  board.id = randomUUID()
+  if (name) board.name = name
+  return board
+}
 
 /**
  * A state written before a board held the pages.
@@ -151,6 +186,7 @@ export function useWorkspaceFile() {
   const variables = inject<VariableRepository>(VariableRepositoryId)
   const variableWrappers = inject<VariableWrapperFactory>(VariableWrapperFactoryId)
   const events = inject<EventManager>(EVENT_MANAGER)
+  const repoManager = inject<RepositoryRegistryI>(RepoManagerId)
 
   /**
    * Brings the one list whose live side is the truth up to date.
@@ -204,17 +240,32 @@ export function useWorkspaceFile() {
    * @returns the ids of the boards it opened, so the caller can decide
    *   where to navigate - that is a view's business, not this one's.
    */
-  function load(content: unknown): string[] {
+  /**
+   * Applies a stored state.
+   *
+   * `name` is what the state was called where it was stored - a board
+   * that arrives without one is named after it, so the header has
+   * something true to show instead of a generic label.
+   */
+  function load(content: unknown, name?: string): string[] {
     const loaded = parseWorkspace(content)
     if (!loaded) return []
 
-    const opened = apply(loaded)
+    const opened = apply(loaded, name)
     /* What was just loaded is what is stored. */
     useUnsavedChanges()?.markSaved()
     return opened
   }
 
-  function apply(loaded: Workspace): string[] {
+  /**
+   * Moves a loaded state into the live workspace.
+   *
+   * `openedAs` is what the state was called where it was stored, used to
+   * name a board that arrives without one. Not called `name`: that is a
+   * property of window, so a stray reference to it compiles and silently
+   * reads the frame's name instead of failing.
+   */
+  function apply(loaded: Workspace, openedAs?: string): string[] {
     /*
      * Moved rather than copied. Adding an object to a containment list
      * takes it out of the one it was in, so the loaded tree is emptied into
@@ -231,8 +282,15 @@ export function useWorkspaceFile() {
      * The board comes over whole. A state written before boards existed has
      * its pages directly on the workspace; parseWorkspace puts those into a
      * board, so there is one shape to move here.
+     *
+     * A state that holds no board at all still opens one. Such a state is
+     * not nothing - it carries the connections, sources and variables that
+     * were saved with it - and it is what a person explores those from. It
+     * used to arrive with workspace.board left empty, which every screen
+     * read as "no board open", so the connections that had just loaded
+     * were nowhere to be seen.
      */
-    workspace.board = loaded.board
+    workspace.board = loaded.board ?? boardFor(openedAs)
 
     workspace.variables.clear()
     for (const variable of loaded.variables.toArray()) workspace.variables.push(variable)
@@ -264,5 +322,72 @@ export function useWorkspaceFile() {
     return opened
   }
 
-  return { save, load }
+  /**
+   * Writes the workspace back over the state it came from.
+   *
+   * The origin is where that is - kept with the workspace rather than
+   * with the storage view, which is what lets this be called from the
+   * board's own screen. A workspace that was never stored has none, and
+   * there is nothing here to write over: naming a new state is the
+   * storage view's business, and this says so by returning false rather
+   * than guessing a place.
+   */
+  async function saveInPlace(): Promise<boolean> {
+    const where = origin.value
+    if (!where || !repoManager) return false
+
+    const places: Repository[] = (await repoManager.getAvailableReposetories()) ?? []
+    const place = places.find((each) => String(each.uri) === where.placeUri)
+    if (!place) return false
+
+    /*
+     * A URL, not the string it was kept as: a repository reads
+     * `uri.protocol` and `uri.hostname` off it to decide whether the
+     * entry is one of its own, and on a string both are undefined - so
+     * it answers that it has never heard of it.
+     */
+    const entry = await place.getEntityByUri(new URL(where.entryUri))
+    if (!entry) return false
+
+    await (place as WritableRepository).update({ ...entry, data: save() } as Entity)
+    useUnsavedChanges()?.markSaved()
+    return true
+  }
+
+  /**
+   * Writes the workspace into a place under a name, as a new state.
+   *
+   * What the board came from afterwards - so the next save is a write
+   * rather than a question. Used where a state is first put somewhere:
+   * the storage view, and making a board, which asks for both up front
+   * precisely so that the first save has somewhere to go.
+   */
+  async function storeAs(place: Repository, name: string): Promise<boolean> {
+    if (typeof (place as WritableRepository).create !== 'function') return false
+
+    const entry = {
+      name,
+      uri: entryUriFor(place, name),
+      data: save(),
+    } as unknown as Entity
+    await (place as WritableRepository).create(entry)
+
+    origin.value = {
+      placeUri: String(place.uri),
+      entryUri: String(entry.uri),
+      name,
+    }
+    useUnsavedChanges()?.markSaved()
+    return true
+  }
+
+  /** The places a state can be written to, in the order they are offered. */
+  async function writablePlaces(): Promise<Repository[]> {
+    const places: Repository[] = (await repoManager?.getAvailableReposetories()) ?? []
+    return places.filter(
+      (place) => typeof (place as WritableRepository).create === 'function',
+    )
+  }
+
+  return { save, load, saveInPlace, storeAs, writablePlaces }
 }

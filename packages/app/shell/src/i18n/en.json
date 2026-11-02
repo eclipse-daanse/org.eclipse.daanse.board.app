@@ -1,23 +1,25 @@
 {
   "Rail": {
     "areas": "Areas",
-    "board": "Board",
+    "overview": "Overview",
+    "overviewDesc": "Everything this board holds — and the way to it.",
+    "data": "Connections & data",
+    "dataDesc": "Where the figures come from, and what reads on them.",
     "pages": "Pages",
-    "data": "Connections & data"
+    "pagesDesc": "The pages of this board: add, open, order."
   },
   "Header": {
     "brand": "Daanse Board",
     "crumb": {
       "label": "Path",
-      "boards": "Boards",
       "board": "Board",
-      "edit": "Edit",
       "pages": "Pages",
       "data": "Connections & data",
       "config": "Configuration",
       "storage": "Storage",
       "test": "Test",
-      "events": "Events"
+      "events": "Events",
+      "noBoard": "No board open"
     },
     "page": {
       "fallbackName": "Page",
@@ -39,7 +41,7 @@
     "palette": "Widgets",
     "paletteLabel": "Show or hide the widget palette",
     "pageSettings": "Page settings",
-    "storage": "Save",
+    "storage": "Storage",
     "storageLabel": "Save or load the workspace",
     "mode": "Mode",
     "view": "View",
@@ -106,7 +108,19 @@
       "widgets_one": "{{count}} widget",
       "widgets_other": "{{count}} widgets",
       "action": "Open",
-      "note": "A workspace holds exactly one board. To get another one, open a different workspace from storage; the pages of this board are in the “Pages” area."
+      "note": "A workspace holds exactly one board. To get another one, open a different workspace from storage; the pages of this board are in the “Pages” area.",
+      "connections": "{{count}} connections",
+      "datasources": "{{count}} sources"
+    },
+    "new": {
+      "title": "New board",
+      "name": "Name",
+      "suggestion": "My board",
+      "place": "Keep it in",
+      "placeNote": "Where this board is kept. Save writes there from then on.",
+      "noPlace": "This browser offers no place that can be written to. The board is made all the same, but kept nowhere yet — saving it will ask where.",
+      "connectFolder": "Connect a folder on this machine …",
+      "folderFailed": "The folder could not be connected: {{reason}}"
     }
   },
   "Storage": {
@@ -117,7 +131,8 @@
     "storeCurrent": "Store current workspace…",
     "noPlaces": "No storage locations set up.",
     "entry": {
-      "empty": "empty"
+      "empty": "empty",
+      "connections": "{{count}} connections, no pages"
     },
     "pages_one": "{{count}} page",
     "pages_other": "{{count}} pages",
@@ -147,9 +162,17 @@
     "download": "Download",
     "noBoard": "This workspace holds no board - only connections, sources or variables.",
     "reading": "Reading…",
-    "pick": "Pick a workspace on the left to see what it holds.",
     "connectFolder": "Connect folder…",
-    "noFolderSupport": "This browser cannot open a folder. States can be downloaded and uploaded again."
+    "noFolderSupport": "This browser cannot open a folder. States can be downloaded and uploaded again.",
+    "holds": "It holds {{connections}} connections, {{datasources}} sources and {{variables}} variables.",
+    "nothing": {
+      "title": "Stored states",
+      "text": "A state is a whole board as it was: its pages, and the connections, sources and variables behind them.",
+      "open": "Pick one on the left to see what is inside it, then open it.",
+      "store": "Put the board you have open into a place, to come back to it.",
+      "carry": "Download a state to carry it to another browser, and upload it there."
+    },
+    "back": "Back to the board"
   },
   "Editor": {
     "name": "Name",
@@ -447,6 +470,25 @@
     "view": "View of the selection"
   },
   "Nav": {
-    "variables": "Variables"
+    "variables": "Variables",
+    "variablesDesc": "Named values that pages and widgets share."
+  },
+  "Board": {
+    "noPages": {
+      "text": "This board is where its connections are explored from. Lay out a page over them whenever you want one."
+    },
+    "figure": {
+      "pages": "Pages",
+      "connections": "Connections",
+      "datasources": "Data sources",
+      "variables": "Variables",
+      "events": "Events"
+    },
+    "holds": {
+      "none": "None yet."
+    },
+    "rename": "Change the name",
+    "keepIn": "Save into \"{{name}}\"",
+    "keepSomewhere": "Not stored anywhere yet — pick a place"
   }
 }

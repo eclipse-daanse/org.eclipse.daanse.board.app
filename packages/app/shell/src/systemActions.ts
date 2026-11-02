@@ -17,6 +17,9 @@ import { SystemActionsEcoreContent } from 'org.eclipse.daanse.board.app.lib.even
 import { loggerFactory } from 'org.eclipse.daanse.board.app.lib.logger';
 import type { TinyEmitter } from 'tiny-emitter';
 
+import { pagePath } from 'org.eclipse.daanse.board.app.lib.api.page';
+import { useLastOpenedState } from './composables/useLastOpenedState';
+
 const log = loggerFactory.createLogger('daanse:system:actions');
 
 /**
@@ -27,6 +30,19 @@ class SystemActionsImpl {
 
   constructor(private router: Router, eventBus: TinyEmitter) {
     this.eventBus = eventBus;
+  }
+
+  /**
+   * The board the page to be opened is in.
+   *
+   * A page's address sits inside its board, and the board one is on is
+   * the one in the address one is already at. Falling back to what this
+   * browser last opened covers an action fired from a screen that is not
+   * under a board - the launcher, or storage.
+   */
+  private boardId(): string | undefined {
+    const inRoute = this.router.currentRoute.value.params.boardid;
+    return (inRoute as string | undefined) || useLastOpenedState().recall()?.boardId;
   }
 
   async changePage(pageId?: string): Promise<void> {
@@ -55,7 +71,13 @@ class SystemActionsImpl {
       }, 5000);
     });
 
-    await this.router.push(`/page/${pageId}`);
+    /*
+     * In view, deliberately. Picking a page by hand means working on it,
+     * but this is a rule firing while a board is being used - a button
+     * pressed on a dashboard must not drop whoever pressed it into the
+     * editor.
+     */
+    await this.router.push(pagePath(this.boardId(), pageId));
     await pageLoadedPromise;
 
     log('📄 Page change complete, widgets should be registered');

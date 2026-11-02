@@ -113,6 +113,7 @@ url('https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600&family=Jet
   /* --- fixed shell metrics ------------------------------------------- */
   --spacing-topbar: 42px;
   --spacing-rail: 52px;
+  --spacing-pagebar: 34px;      /* the actions row under the topbar */
   --spacing-panelHeader: 30px;
   --spacing-splitter: 4px;
   --spacing-statusbar: 24px;

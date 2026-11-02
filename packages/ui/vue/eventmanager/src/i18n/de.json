@@ -1,6 +1,7 @@
 {
   "Nav": {
-    "label": "Ereignisse"
+    "label": "Ereignisse",
+    "description": "Wenn etwas geschieht, tue dies."
   },
   "Title": "Ereignisse",
   "Lead": "Eine Regel verbindet, was auf einem Board geschieht, mit dem, was daraufhin geschehen soll.",

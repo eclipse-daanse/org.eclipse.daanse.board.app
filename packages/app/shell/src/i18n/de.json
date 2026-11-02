@@ -1,23 +1,25 @@
 {
   "Rail": {
     "areas": "Bereiche",
-    "board": "Board",
+    "overview": "Übersicht",
+    "overviewDesc": "Alles, was dieses Board hält — und der Weg dorthin.",
+    "data": "Verbindungen & Daten",
+    "dataDesc": "Woher die Zahlen kommen, und was darauf liest.",
     "pages": "Seiten",
-    "data": "Verbindungen & Daten"
+    "pagesDesc": "Die Seiten dieses Boards: anlegen, öffnen, ordnen."
   },
   "Header": {
     "brand": "Daanse Board",
     "crumb": {
       "label": "Pfad",
-      "boards": "Boards",
       "board": "Board",
-      "edit": "Bearbeiten",
       "pages": "Seiten",
       "data": "Verbindungen & Daten",
       "config": "Konfiguration",
       "storage": "Speicher",
       "test": "Test",
-      "events": "Ereignisse"
+      "events": "Ereignisse",
+      "noBoard": "Kein Board offen"
     },
     "page": {
       "fallbackName": "Seite",
@@ -39,7 +41,7 @@
     "palette": "Widgets",
     "paletteLabel": "Widget-Palette zeigen oder verbergen",
     "pageSettings": "Seite einrichten",
-    "storage": "Speichern",
+    "storage": "Speicher",
     "storageLabel": "Arbeitsstand speichern oder laden",
     "mode": "Modus",
     "view": "Ansicht",
@@ -106,7 +108,19 @@
       "widgets_one": "{{count}} Widget",
       "widgets_other": "{{count}} Widgets",
       "action": "Öffnen",
-      "note": "Ein Arbeitsstand hält genau ein Board. Ein anderes bekommst du, indem du im Speicher einen anderen Stand öffnest; die Seiten dieses Boards liegen im Bereich „Seiten“."
+      "note": "Ein Arbeitsstand hält genau ein Board. Ein anderes bekommst du, indem du im Speicher einen anderen Stand öffnest; die Seiten dieses Boards liegen im Bereich „Seiten“.",
+      "connections": "{{count}} Verbindungen",
+      "datasources": "{{count}} Quellen"
+    },
+    "new": {
+      "title": "Neues Board",
+      "name": "Name",
+      "suggestion": "Mein Board",
+      "place": "Ablegen in",
+      "placeNote": "Hier wird der Stand abgelegt. Speichern schreibt dann immer dorthin.",
+      "noPlace": "Dieser Browser bietet keinen beschreibbaren Ort an. Das Board wird angelegt, aber noch nirgends abgelegt — beim Speichern wirst du gefragt, wohin.",
+      "connectFolder": "Ordner auf diesem Rechner verbinden …",
+      "folderFailed": "Der Ordner ließ sich nicht verbinden: {{reason}}"
     }
   },
   "Storage": {
@@ -117,7 +131,8 @@
     "storeCurrent": "Aktuellen Stand ablegen…",
     "noPlaces": "Keine Speicherorte eingerichtet.",
     "entry": {
-      "empty": "leer"
+      "empty": "leer",
+      "connections": "{{count}} Verbindungen, keine Seiten"
     },
     "pages_one": "{{count}} Seite",
     "pages_other": "{{count}} Seiten",
@@ -147,9 +162,17 @@
     "download": "Herunterladen",
     "noBoard": "In diesem Stand liegt kein Board - er enthält nur Verbindungen, Quellen oder Variablen.",
     "reading": "Wird gelesen…",
-    "pick": "Wähle links einen Stand, um zu sehen, was darin liegt.",
     "connectFolder": "Ordner verbinden…",
-    "noFolderSupport": "Dieser Browser kann keinen Ordner öffnen. Stände lassen sich herunterladen und wieder hochladen."
+    "noFolderSupport": "Dieser Browser kann keinen Ordner öffnen. Stände lassen sich herunterladen und wieder hochladen.",
+    "holds": "Er hält {{connections}} Verbindungen, {{datasources}} Quellen und {{variables}} Variablen.",
+    "nothing": {
+      "title": "Gespeicherte Stände",
+      "text": "Ein Stand ist ein ganzes Board, wie es war: seine Seiten, und die Verbindungen, Quellen und Variablen dahinter.",
+      "open": "Wähle links einen aus, um zu sehen, was darin liegt, und öffne ihn dann.",
+      "store": "Lege das offene Board in einem Ort ab, um später daran weiterzuarbeiten.",
+      "carry": "Lade einen Stand herunter, um ihn in einen anderen Browser mitzunehmen."
+    },
+    "back": "Zurück zum Board"
   },
   "Editor": {
     "name": "Name",
@@ -447,6 +470,25 @@
     "view": "Ansicht der Auswahl"
   },
   "Nav": {
-    "variables": "Variablen"
+    "variables": "Variablen",
+    "variablesDesc": "Benannte Werte, die Seiten und Widgets teilen."
+  },
+  "Board": {
+    "noPages": {
+      "text": "Von diesem Board aus werden seine Verbindungen erkundet. Lege eine Seite darüber an, sobald du eine brauchst."
+    },
+    "figure": {
+      "pages": "Seiten",
+      "connections": "Verbindungen",
+      "datasources": "Datenquellen",
+      "variables": "Variablen",
+      "events": "Ereignisse"
+    },
+    "holds": {
+      "none": "Noch keine."
+    },
+    "rename": "Namen ändern",
+    "keepIn": "In „{{name}}“ speichern",
+    "keepSomewhere": "Noch nirgends gespeichert — Speicherort wählen"
   }
 }

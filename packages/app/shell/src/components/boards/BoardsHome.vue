@@ -27,6 +27,9 @@ import { v4 as uuidv4 } from 'uuid'
 import { DButton, DIcon } from 'org.eclipse.daanse.board.app.ui.vue.controls'
 import BoardFloorplan from './BoardFloorplan.vue'
 import WorkspaceStorage from './WorkspaceStorage.vue'
+import NewBoardDialog from './NewBoardDialog.vue'
+import { useWorkspaceFile, useWorkspaceOrigin } from '@/composables/useWorkspaceFile'
+import { useLastOpenedState } from '@/composables/useLastOpenedState'
 import { summarizePage, type PageSummary } from '@/composables/pageSummary'
 import { useBoardUsage } from '@/composables/useBoardUsage'
 import {
@@ -34,8 +37,14 @@ import {
   type Workspace,
 } from 'org.eclipse.daanse.board.app.lib.model.workspace'
 import { useEList, useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
-import type { PageRegistryI, PageI } from 'org.eclipse.daanse.board.app.lib.api.page'
+import {
+  boardPath,
+  pagePath,
+  type PageRegistryI,
+  type PageI,
+} from 'org.eclipse.daanse.board.app.lib.api.page'
 import type { LayoutRepositoryI } from 'org.eclipse.daanse.board.app.lib.api.layout.page'
+import type { Repository } from 'org.eclipse.daanse.board.app.lib.api.persistence'
 
 const props = defineProps<{
   pageRepo?: PageRegistryI
@@ -50,6 +59,9 @@ const { t } = useTranslation('shell')
 const { byUsage } = useBoardUsage()
 
 const workspace = inject<Workspace>(WORKSPACE)!
+const { save, storeAs } = useWorkspaceFile()
+const origin = useWorkspaceOrigin()
+const { remember: rememberOpened } = useLastOpenedState()
 
 /*
  * Reading the pages is what makes everything here re-run: the list is
@@ -95,35 +107,65 @@ const pages = computed<PageSummary[]>(() => {
 })
 
 
-/** What the board itself is worth saying: its pages, added up. */
+/*
+ * The connections, sources and variables the board holds.
+ *
+ * Held, not used: `sources` below counts the kinds of source the widgets
+ * on a page read through, which is a different number and says nothing
+ * about a board that has no pages yet.
+ */
+const connections = useEList(workspace, (w) => w.connections)
+const datasources = useEList(workspace, (w) => w.datasources)
+const variables = useEList(workspace, (w) => w.variables)
+
+/**
+ * What the board is worth saying - what lies on it, and what it reads.
+ *
+ * A board can hold pages, and with them widgets, but it does not have to:
+ * one holding only connections is what a person explores those
+ * connections from. Counting pages alone reported such a board as three
+ * zeroes, so what it holds is counted too.
+ */
 const boardTotals = computed(() => ({
   pages: pages.value.length,
   widgets: pages.value.reduce((sum, page) => sum + page.widgetCount, 0),
   sources: new Set(pages.value.flatMap((page) => page.kinds)).size,
+  connections: connections.value.length,
+  datasources: datasources.value.length,
+  variables: variables.value.length,
 }))
 
-/** Where opening the board lands: its default page, else the first one. */
-const entryPageId = computed(
-  () => props.pageRepo?.getDefaultPage()?.id ?? pages.value[0]?.id,
-)
 
-function openPage(id: string) {
-  router.push(`/page/${id}`)
-}
-
-
+/*
+ * Opening the board lands on a page, where there is one.
+ *
+ * A board that holds only connections has none, and the button used to
+ * do nothing at all - silently, because the id it needed was undefined.
+ * It goes to the data instead: that is what such a board is for, and it
+ * is where the next step is taken from.
+ */
+/* The board's own screen; what it holds decides what is shown there. */
 function openBoard() {
-  const id = entryPageId.value
-  if (id) openPage(id as string)
+  const id = board.value?.id as string | undefined
+  if (id) router.push(boardPath(id))
 }
+
+/** Asked before anything is made: what it is called, and where it lives. */
+const naming = ref(false)
 
 /**
- * A page, in the board that holds them.
+ * A board, with its first page in it.
  *
  * The registry makes the board if there is none yet - which is what
- * creating the first page of a fresh workspace does.
+ * creating the first page of a fresh workspace does - so the board comes
+ * into being here, and this is where it is given its name.
+ *
+ * It is written to its place at once. That write is what gives it an
+ * origin, and the origin is what makes every later save a write rather
+ * than a dialog asking where (#1174). A build with no writable place
+ * offers none, and the board is made unstored.
  */
-function createPage() {
+async function createBoard(name: string, place?: Repository) {
   const repo = props.pageRepo
   if (!repo || !props.layoutRepo) return
 
@@ -137,7 +179,25 @@ function createPage() {
     /* The id; the layout itself is resolved from the repository on render. */
     layoutId: 'org.eclipse.daanse.board.app.ui.vue.layouts.base',
   })
-  router.push(`/page/${id}/edit`)
+  if (workspace.board) workspace.board.name = name
+
+  if (place) {
+    try {
+      await storeAs(place, name)
+    } catch (error) {
+      /* The board exists either way; it is simply not kept yet, and
+        saving it will say where it wants to go. */
+      console.warn('the new board could not be stored yet', error)
+    }
+  }
+
+  /* So a reload finds it again, the same as opening a stored state does
+    - a board one just made is the one board one is least willing to
+    lose. See useLastOpenedState. */
+  const boardId = workspace.board?.id as string | undefined
+  if (boardId) rememberOpened({ boardId, name, data: save(), origin: origin.value })
+
+  router.push(pagePath(workspace.board?.id as string | undefined, id, true))
 }
 
 function openStorage() {
@@ -151,10 +211,17 @@ function openStorage() {
  * you came here to open something, and after opening it the app still
  * showed the list of things to open.
  */
-function openRestored(ids: string[]) {
-  const id = props.pageRepo?.getDefaultPage()?.id ?? ids[0]
-  if (id) router.push(`/page/${id}`)
-  else view.value = 'recent'
+/*
+ * Loading a state opens the board it holds - at its own address.
+ *
+ * It used to drop back to the "often used" list when the state had no
+ * pages, which is the screen one picks a board from and therefore the
+ * one place opening a board must not end. There is a route for an open
+ * board now, so there is somewhere to go whether or not it has pages.
+ */
+function openRestored() {
+  const id = workspace.board?.id as string | undefined
+  router.push(boardPath(id))
 }
 </script>
 
@@ -186,8 +253,12 @@ function openRestored(ids: string[]) {
     </header>
 
     <div class="boards__body">
-    <!-- Nothing open and nothing built: say what a board is -->
-    <div v-if="view === 'recent' && pages.length === 0" class="boards__empty">
+    <!--
+      No board open: the only thing to do here is open one, so that is all
+      there is. What a board holds - pages, connections, sources - is a
+      property of an open board, and none of it applies yet.
+    -->
+    <div v-if="view === 'recent' && !board" class="boards__empty">
       <BoardFloorplan
         class="boards__empty-plan"
         :items="[
@@ -203,7 +274,7 @@ function openRestored(ids: string[]) {
         {{ t('Boards.empty.text') }}
       </p>
       <div class="boards__empty-actions">
-        <DButton intent="primary" size="sm" @click="createPage">{{ t('Boards.empty.create') }}</DButton>
+        <DButton intent="primary" size="sm" @click="naming = true">{{ t('Boards.empty.create') }}</DButton>
         <DButton size="sm" @click="openStorage">{{ t('Boards.empty.openStored') }}</DButton>
       </div>
     </div>
@@ -226,9 +297,13 @@ function openRestored(ids: string[]) {
         <div class="single__text">
           <h3 class="single__name">{{ board?.name || t('Boards.open.fallbackName') }}</h3>
           <p v-if="board?.description" class="single__desc">{{ board.description }}</p>
+          <!-- What lies on it, then what it reads through: a board with no
+            pages is still worth describing by its connections. -->
           <p class="single__meta">
             {{ t('Boards.open.pages', { count: boardTotals.pages }) }}
             · {{ t('Boards.open.widgets', { count: boardTotals.widgets }) }}
+            · {{ t('Boards.open.connections', { count: boardTotals.connections }) }}
+            · {{ t('Boards.open.datasources', { count: boardTotals.datasources }) }}
           </p>
         </div>
         <div class="single__actions">
@@ -244,6 +319,8 @@ function openRestored(ids: string[]) {
     <WorkspaceStorage v-else @restored="openRestored" />
     </div>
   </div>
+
+  <NewBoardDialog v-model:open="naming" @create="createBoard" />
   </div>
 </template>
 
