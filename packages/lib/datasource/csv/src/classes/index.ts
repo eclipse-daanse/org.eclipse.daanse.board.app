@@ -33,6 +33,19 @@ export interface ICsvParseResult {
   mappedRows: any[]
 }
 
+/**
+ * What this store asks for.
+ *
+ * It asked for nothing, so an endpoint serving several representations
+ * of one address answered with whichever it prefers - which is JSON
+ * often enough that a CSV source pointed at a perfectly good address
+ * came back with something it could not parse, and said nothing about
+ * why.
+ */
+const ASKS_FOR_CSV: RequestInit = {
+  headers: { Accept: 'text/csv, text/plain;q=0.9, */*;q=0.1' },
+}
+
 @injectable()
 export class CsvStore extends BaseDatasource {
   private connection: any
@@ -76,7 +89,7 @@ export class CsvStore extends BaseDatasource {
     const connection = this.connectionRepository.getConnection(
       this.connection,
     ) as IConnection
-    const req = await connection.fetch({ url: this.resourceUrl?.value || '' })
+    const req = await connection.fetch({ url: this.resourceUrl?.value || '' }, ASKS_FOR_CSV)
     if (!req.ok) return []
     const text = await req.text()
 
@@ -88,7 +101,7 @@ export class CsvStore extends BaseDatasource {
     const connection = this.connectionRepository.getConnection(
       this.connection,
     ) as IConnection
-    const req = await connection.fetch({ url: this.resourceUrl?.value || '' })
+    const req = await connection.fetch({ url: this.resourceUrl?.value || '' }, ASKS_FOR_CSV)
     if (!req.ok) return null
     let text = await req.text()
 

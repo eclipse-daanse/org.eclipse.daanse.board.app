@@ -32,5 +32,10 @@
     "pollingInterval": "Wie oft sie neu liest, in Millisekunden.",
     "skipRowsFromStart": "Wie viele Zeilen oben keine Daten sind – ein Titel, eine Legende, eine zweite Kopfzeile.",
     "skipRowsFromEnd": "Wie viele Zeilen unten keine Daten sind – eine Summenzeile, eine Fußnote."
+  },
+  "Preview": {
+    "failed": "Von dieser Adresse kam nichts zurück. Stimmen Verbindung und Pfad?",
+    "empty": "Es kam etwas zurück, aber keine Zeilen. Vielleicht ist es kein CSV — sieh in den Verbindungen nach, was der Endpunkt liefert.",
+    "loading": "Wird gelesen …"
   }
 }
