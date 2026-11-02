@@ -23,7 +23,7 @@ Contributors:
  * its connections from - which is why nothing on this screen asks
  * whether there are pages before deciding that a board is open.
  */
-import { computed, inject, watch } from 'vue'
+import { computed, inject, nextTick, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import {
   identifier as WORKSPACE,
@@ -37,7 +37,8 @@ import { useEList, useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.co
 import { DButton } from 'org.eclipse.daanse.board.app.ui.vue.controls'
 import BoardFloorplan from '@/components/boards/BoardFloorplan.vue'
 import { useLastOpenedState } from '@/composables/useLastOpenedState'
-import { useWorkspaceFile } from '@/composables/useWorkspaceFile'
+import { useWorkspaceFile, useWorkspaceOrigin } from '@/composables/useWorkspaceFile'
+import { useStorageDialog } from '@/composables/useStorageDialog'
 import { boardTarget, BOARD_OVERVIEW } from '@/composables/boardTarget'
 import { useBoardUsage } from '@/composables/useBoardUsage'
 
@@ -47,8 +48,10 @@ const { t } = useTranslation('shell')
 
 const workspace = inject<Workspace>(WORKSPACE)!
 const pageRepo = inject<PageRegistryI>(PageIdentifier)
-const { load } = useWorkspaceFile()
+const { load, saveInPlace } = useWorkspaceFile()
 const { usageOf } = useBoardUsage()
+const origin = useWorkspaceOrigin()
+const { show: showStorage } = useStorageDialog()
 
 /*
  * Watched on the workspace, not on the board.
@@ -194,6 +197,75 @@ const entryPath = computed(() => {
   })
   return target === BOARD_OVERVIEW ? undefined : target
 })
+
+/* ------------------------------------------------------------ the name */
+
+/**
+ * The heading is the name, and editing it is editing the board.
+ *
+ * A board made in the app is called nothing at all and shows a label
+ * standing in for a name; this is the one screen that is about the
+ * board itself, so it is where the name is given.
+ */
+const renaming = ref(false)
+const draft = ref('')
+const nameField = ref<HTMLInputElement | undefined>()
+
+function startRenaming() {
+  draft.value = (board.value?.name as string) ?? ''
+  renaming.value = true
+  nextTick(() => {
+    nameField.value?.focus()
+    nameField.value?.select()
+  })
+}
+
+/* An empty name is no name: the board keeps the one it had. */
+function commitName() {
+  if (!renaming.value) return
+  renaming.value = false
+  const named = draft.value.trim()
+  if (!board.value || !named || named === board.value.name) return
+  board.value.name = named
+}
+
+function cancelRenaming() {
+  renaming.value = false
+}
+
+/* --------------------------------------------------------- keeping it */
+
+const storing = ref(false)
+const stored = ref(false)
+const storeFailed = ref('')
+
+/**
+ * Keeping the board.
+ *
+ * Where it came from, if it came from anywhere. A board that was never
+ * stored has no entry to write over and no name to write it under, so
+ * storage opens over the board and asks for both - over it, so closing
+ * it leaves the board where it was.
+ */
+async function store() {
+  if (storing.value) return
+  storing.value = true
+  stored.value = false
+  storeFailed.value = ''
+  try {
+    if (await saveInPlace()) {
+      stored.value = true
+      /* Long enough to be read, short enough not to linger. */
+      setTimeout(() => (stored.value = false), 2500)
+      return
+    }
+    showStorage()
+  } catch (error: any) {
+    storeFailed.value = String(error?.message ?? error)
+  } finally {
+    storing.value = false
+  }
+}
 </script>
 
 <template>
@@ -205,15 +277,42 @@ const entryPath = computed(() => {
     -->
     <header class="head">
       <div class="head__what">
-        <h1 class="head__name">{{ board.name || t('Boards.open.fallbackName') }}</h1>
+        <input
+          v-if="renaming"
+          ref="nameField"
+          v-model="draft"
+          class="head__name head__name--editing"
+          type="text"
+          :aria-label="t('Board.rename')"
+          @keydown.enter="commitName"
+          @keydown.esc="cancelRenaming"
+          @blur="commitName"
+        />
+        <button
+          v-else
+          type="button"
+          class="head__name head__name--button"
+          :title="t('Board.rename')"
+          @click="startRenaming"
+        >
+          {{ board.name || t('Boards.open.fallbackName') }}
+        </button>
         <p v-if="board.description" class="head__desc">{{ board.description }}</p>
       </div>
       <div class="head__actions">
+        <span v-if="storeFailed" class="head__failed" role="alert">{{ storeFailed }}</span>
+        <span v-else-if="stored" class="head__kept" role="status">{{ t('Board.kept') }}</span>
+        <DButton
+          size="sm"
+          :disabled="storing"
+          :title="origin ? t('Board.keepIn', { name: origin.name }) : t('Board.keepSomewhere')"
+          @click="store"
+        >
+          {{ t('common:Action.save') }}
+        </DButton>
         <DButton v-if="entryPath" intent="primary" size="sm" @click="router.push(entryPath)">
           {{ t('Boards.open.action') }}
         </DButton>
-        <DButton size="sm" @click="router.push('/datasources')">{{ t('Board.toData') }}</DButton>
-        <DButton size="sm" @click="router.push('/pages')">{{ t('Board.toPages') }}</DButton>
       </div>
     </header>
 
@@ -307,6 +406,13 @@ const entryPath = computed(() => {
   border-bottom: 1px solid var(--color-divider);
 }
 
+/* The name takes the room; the actions keep theirs. */
+.head__what {
+  min-width: 0;
+  flex: 1 1 auto;
+  max-width: 40ch;
+}
+
 .head__name {
   margin: 0;
   font-family: var(--font-sans);
@@ -314,6 +420,55 @@ const entryPath = computed(() => {
   font-weight: 600;
   line-height: 1.2;
   color: var(--color-fg);
+}
+
+/*
+ * The name reads as a heading and is one; that it can be edited shows
+ * on approach rather than as a control sitting beside it the whole time.
+ */
+.head__name--button {
+  display: block;
+  padding: 2px 6px;
+  margin-left: -6px;
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm, 3px);
+  background: transparent;
+  text-align: left;
+  cursor: text;
+}
+.head__name--button:hover {
+  border-color: var(--color-divider);
+}
+.head__name--button:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 1px;
+}
+
+/* The same box, so committing the name does not make the heading jump. */
+.head__name--editing {
+  display: block;
+  width: 100%;
+  min-width: 14ch;
+  padding: 2px 6px;
+  margin-left: -6px;
+  border: 1px solid var(--color-accent);
+  border-radius: var(--radius-sm, 3px);
+  background: var(--color-bg);
+}
+.head__name--editing:focus {
+  outline: none;
+}
+
+.head__kept,
+.head__failed {
+  align-self: center;
+  font-size: var(--text-sm);
+}
+.head__kept {
+  color: var(--color-ok);
+}
+.head__failed {
+  color: var(--color-err);
 }
 
 .head__desc {
@@ -326,6 +481,7 @@ const entryPath = computed(() => {
 .head__actions {
   display: flex;
   flex: none;
+  align-items: flex-start;
   gap: 6px;
 }
 

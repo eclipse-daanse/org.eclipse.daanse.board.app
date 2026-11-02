@@ -27,21 +27,44 @@ Contributors:
 <script setup lang="ts">
 import Header from './components/common/Header.vue'
 import Rail from './components/common/Rail.vue'
+import WorkspaceStorage from './components/boards/WorkspaceStorage.vue'
+import { DModal } from 'org.eclipse.daanse.board.app.ui.vue.controls'
 import { inject, computed } from 'vue'
 import {
   identifier as WORKSPACE,
   type Workspace,
 } from 'org.eclipse.daanse.board.app.lib.model.workspace'
 import { useTheme } from './theme/useTheme'
-import { useRoute } from 'vue-router'
-import { useGlobalLoading, useEList } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+import { useRoute, useRouter } from 'vue-router'
+import {
+  useGlobalLoading,
+  useEList,
+  useTranslation,
+} from 'org.eclipse.daanse.board.app.ui.vue.composables'
+import { useStorageDialog } from './composables/useStorageDialog'
 
 const { isLoading } = useGlobalLoading()
+const { t } = useTranslation('shell')
 /* The theme writes the tokens; everything paints from those. */
 useTheme()
 
 const route = useRoute()
+const router = useRouter()
 const workspace = inject<Workspace>(WORKSPACE)!
+
+/*
+ * Storage is a dialog over whatever is on screen, so leaving it leaves
+ * one where one was. It is mounted here rather than on a screen because
+ * every screen reaches the same one.
+ */
+const { open: storageOpen, hide: hideStorage } = useStorageDialog()
+
+/** A state opened from the dialog is a board opened: go to it, and close. */
+function openRestored() {
+  hideStorage()
+  const id = workspace.board?.id as string | undefined
+  router.push(id ? `/board/${id}` : '/')
+}
 
 /*
  * Without an open board there is no side menu.
@@ -79,6 +102,12 @@ const noBoard = computed(() => {
         <router-view :key="$route.fullPath" />
       </main>
     </div>
+
+    <DModal v-model="storageOpen" size="lg" :title="t('Header.storageLabel')">
+      <div class="storage-dialog">
+        <WorkspaceStorage @restored="openRestored" />
+      </div>
+    </DModal>
   </div>
 </template>
 
@@ -102,6 +131,19 @@ const noBoard = computed(() => {
 /* The launcher has no rail, so the content takes the whole width */
 .shell-body--norail {
   grid-template-columns: minmax(0, 1fr);
+}
+
+/* Storage is a two-pane view; in a dialog it needs a height of its own,
+  or it collapses to the height of whichever pane is shorter. */
+.storage-dialog {
+  display: flex;
+  flex-direction: column;
+  height: min(620px, 70vh);
+  min-height: 0;
+}
+.storage-dialog > :deep(*) {
+  min-height: 0;
+  flex: 1 1 auto;
 }
 
 .content {

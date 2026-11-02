@@ -43,6 +43,9 @@ import { useWidgetPalette } from '@/composables/useWidgetPalette'
 import { boardCrumb, type Crumb } from '@/composables/boardCrumb'
 import { useBoardBackdrop } from '@/composables/useBoardBackdrop'
 import { useGridSnap } from '@/composables/useGridSnap'
+import { useStorageDialog } from '@/composables/useStorageDialog'
+
+const { show: showStorage } = useStorageDialog()
 
 const route = useRoute()
 const router = useRouter()
@@ -253,7 +256,17 @@ const openEdit = () => {
  * entry is picked; saving in place without asking comes later, once the
  * workspace origin is carried across reloads.
  */
-const openStorage = () => router.push({ path: '/', query: { view: 'storage' } })
+/*
+ * Storage opens over the board rather than instead of it.
+ *
+ * Pressing here again closes it, though nothing here does that: the
+ * dialog's scrim lies over this button, and a click on the scrim is what
+ * dismisses it. Which is why this only ever opens.
+ *
+ * It used to go to the launcher with ?view=storage, which closed the
+ * board one had come to keep and offered no way back to it.
+ */
+const openStorage = () => showStorage()
 
 /* Appearance is global, so it hangs off the identity end of the bar rather
  * than the rail, which belongs to whatever board is open. */

@@ -55,6 +55,13 @@ import {
   type VariableWrapperFactory,
 } from 'org.eclipse.daanse.board.app.lib.factory.variableWrapper'
 import { EVENT_MANAGER, type EventManager } from 'org.eclipse.daanse.board.app.lib.api.events'
+import {
+  type Entity,
+  type Repository,
+  type RepositoryRegistryI,
+  type WritableRepository,
+  identifier as RepoManagerId,
+} from 'org.eclipse.daanse.board.app.lib.api.persistence'
 import { decodeStored, isResource, readLegacyWorkspace } from './legacyWorkspace'
 import { useUnsavedChanges } from './unsavedChanges'
 
@@ -166,6 +173,7 @@ export function useWorkspaceFile() {
   const variables = inject<VariableRepository>(VariableRepositoryId)
   const variableWrappers = inject<VariableWrapperFactory>(VariableWrapperFactoryId)
   const events = inject<EventManager>(EVENT_MANAGER)
+  const repoManager = inject<RepositoryRegistryI>(RepoManagerId)
 
   /**
    * Brings the one list whose live side is the truth up to date.
@@ -301,5 +309,31 @@ export function useWorkspaceFile() {
     return opened
   }
 
-  return { save, load }
+  /**
+   * Writes the workspace back over the state it came from.
+   *
+   * The origin is where that is - kept with the workspace rather than
+   * with the storage view, which is what lets this be called from the
+   * board's own screen. A workspace that was never stored has none, and
+   * there is nothing here to write over: naming a new state is the
+   * storage view's business, and this says so by returning false rather
+   * than guessing a place.
+   */
+  async function saveInPlace(): Promise<boolean> {
+    const where = origin.value
+    if (!where || !repoManager) return false
+
+    const places: Repository[] = (await repoManager.getAvailableReposetories()) ?? []
+    const place = places.find((each) => String(each.uri) === where.placeUri)
+    if (!place) return false
+
+    const entry = await place.getEntityByUri(where.entryUri as unknown as URL)
+    if (!entry) return false
+
+    await (place as WritableRepository).update({ ...entry, data: save() } as Entity)
+    useUnsavedChanges()?.markSaved()
+    return true
+  }
+
+  return { save, load, saveInPlace }
 }
