@@ -1,6 +1,7 @@
 {
   "Nav": {
-    "label": "Events"
+    "label": "Events",
+    "description": "When something happens, do this."
   },
   "Title": "Events",
   "Lead": "A rule connects what happens on a board with what should happen in response.",

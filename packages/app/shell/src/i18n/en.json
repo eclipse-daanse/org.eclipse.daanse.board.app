@@ -1,9 +1,12 @@
 {
   "Rail": {
     "areas": "Areas",
-    "board": "Board",
+    "overview": "Overview",
+    "overviewDesc": "Everything this board holds — and the way to it.",
+    "data": "Connections & data",
+    "dataDesc": "Where the figures come from, and what reads on them.",
     "pages": "Pages",
-    "data": "Connections & data"
+    "pagesDesc": "The pages of this board: add, open, order."
   },
   "Header": {
     "brand": "Daanse Board",
@@ -462,7 +465,8 @@
     }
   },
   "Nav": {
-    "variables": "Variables"
+    "variables": "Variables",
+    "variablesDesc": "Named values that pages and widgets share."
   },
   "Board": {
     "noPages": {
