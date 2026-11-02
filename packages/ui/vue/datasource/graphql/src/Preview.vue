@@ -45,13 +45,27 @@ watch(props.dataSource, () => {
   update();
 }, { deep: true });
 
+/*
+ * Watched for being rebuilt, not for being used.
+ *
+ * `deep` made this fire again whenever the store changed anything inside
+ * itself while answering - so every read was two reads, 60ms apart,
+ * against the same endpoint. What this is waiting for is a new store.
+ */
 watch(tempStore, async () => {
   console.log('tempStore changed', tempStore.value);
   data.value = await tempStore.value.getData('object');
-}, { deep: true });
+});
 
 
 let isMounted = false;
+/*
+ * Watched for being rebuilt, not for being used.
+ *
+ * `deep` made this fire again whenever the store changed anything inside
+ * itself while answering - so every read was two reads, 60ms apart,
+ * against the same endpoint. What this is waiting for is a new store.
+ */
 watch(tempStore, async () => {
     if (isMounted) {
         return;
@@ -63,7 +77,7 @@ watch(tempStore, async () => {
 
     mountGraphiQL();
     isMounted = true;
-}, { deep: true });
+});
 
 onMounted(() => {
     isMounted = false;

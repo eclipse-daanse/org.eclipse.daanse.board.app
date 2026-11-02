@@ -91,6 +91,13 @@ function transformToSchema(rawData: any) {
   return schema;
 }
 
+/*
+ * Watched for being rebuilt, not for being used.
+ *
+ * `deep` made this fire again whenever the store changed anything inside
+ * itself while answering - so every read was two reads, 60ms apart,
+ * against the same endpoint. What this is waiting for is a new store.
+ */
 watch(tempStore, async () => {
   const { tables } = await tempStore.value.getTables();
   const catalogs = await tempStore.value.getCatalogs();
@@ -142,7 +149,7 @@ watch(tempStore, async () => {
 
   metadata.value = transformToSchema(treeData.value);
   messages.value.push({ type: 'success', text: t('Sql.schemaRead', { time: format.date(new Date(), { timeStyle: 'medium' }) }) });
-}, { deep: true });
+});
 
 
 watch(() => query, async () => {

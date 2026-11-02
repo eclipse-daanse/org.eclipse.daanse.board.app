@@ -118,6 +118,9 @@ onMounted(async () => {
  * and the metadata the cube explorer shows, both reactive, and something in
  * them is written with every answer. So every answer asked for the next one,
  * and the preview queried the server without pause.
+ *
+ * Watched for being rebuilt, not for being used: with `deep`, every read
+ * was two reads, 60ms apart, against the same endpoint.
  */
 watch(tempStore, async () => {
   if (!tempStore.value) return;

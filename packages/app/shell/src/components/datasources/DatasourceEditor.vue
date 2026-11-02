@@ -243,7 +243,16 @@ defineExpose({ unsaved, commit })
         <DButton intent="quiet" size="sm" @click="discard">{{ t('Editor.discard') }}</DButton>
         <DButton intent="primary" size="sm" @click="commit">{{ t('common:Action.save') }}</DButton>
       </div>
-      <div class="editor__preview">
+      <!--
+        Not before the source is in hand.
+        The proxy starts empty and is filled once the repository answers,
+        and the key is built from its uid - so this mounted once on
+        "undefined", built a store from nothing, read its endpoint, and
+        was thrown away a few milliseconds later when the key changed.
+        Every preview asked twice; measured on a csv source, two GETs
+        20ms apart for one opening.
+      -->
+      <div v-if="datasourceProxy.uid" class="editor__preview">
         <component
           :is="previewComponent"
           :data-source="datasourceProxy"

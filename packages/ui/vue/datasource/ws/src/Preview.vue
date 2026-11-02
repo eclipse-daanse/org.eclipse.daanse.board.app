@@ -27,6 +27,13 @@ const { update } = useTemporaryStore(props.dataSource.type, settingsRef, tempSto
 
 const data = ref(null as unknown as any);
 
+/*
+ * Watched for being rebuilt, not for being used.
+ *
+ * `deep` made this fire again whenever the store changed anything inside
+ * itself while answering - so every read was two reads, 60ms apart,
+ * against the same endpoint. What this is waiting for is a new store.
+ */
 watch(tempStore, async () => {
   console.log('tempStore changed', tempStore.value);
   data.value = await tempStore.value.getData('object');
@@ -35,7 +42,7 @@ watch(tempStore, async () => {
       const req = await tempStore.value.getData('object');
       data.value = req;
     })
-}, { deep: true });
+});
 </script>
 <template>
   <div v-if="tempStore && data" style="overflow: hidden; height: 100%;">

@@ -14,7 +14,7 @@ import {
   DatasourceRepository,
   identifier as repositoryIdentifier,
 } from 'org.eclipse.daanse.board.app.lib.api.datasource'
-import { onMounted, watch, onBeforeUnmount, inject, Ref } from 'vue'
+import { onMounted, onBeforeUnmount, inject, Ref } from 'vue'
 
 export function useTemporaryStore(
   type: string,
@@ -28,14 +28,10 @@ export function useTemporaryStore(
   const identifiers = datasourceRepository.getDatasourceIdentifiers(type)
   console.log('Identifiers for datasource type', type, identifiers)
 
-  onMounted(async () => {
-    console.log(
-      'Creating temporary store for type',
-      type,
-      'with settings',
-      settings.value,
-    )
-    tempStore.value = build()
+  /* Through update, so the first build is remembered like any other and
+    the settings watch that follows does not build a second one. */
+  onMounted(() => {
+    void update()
   })
 
   /*
@@ -55,7 +51,26 @@ export function useTemporaryStore(
     }
   }
 
+  /**
+   * The configuration the store standing there was built from.
+   *
+   * Every preview watches the settings and asks for a rebuild when they
+   * change, and the editor touches them once as it mounts - so the store
+   * was built, thrown away and built again, and every preview read its
+   * endpoint twice within a few dozen milliseconds. Measured against a
+   * csv source: two GETs, 20ms apart, for one opening.
+   *
+   * Compared as text because the configuration is a plain object of
+   * values, and because what matters is whether a rebuilt store would
+   * differ, not whether the object is the same one.
+   */
+  let built: string | undefined
+
   const update = async () => {
+    const wanted = JSON.stringify(settings.value.config ?? {})
+    if (tempStore.value && wanted === built) return tempStore.value
+    built = wanted
+
     tempStore.value?.destroy()
 
     tempStore.value = null
@@ -71,12 +86,6 @@ export function useTemporaryStore(
       return newStore
     }
   }
-
-  watch(
-    () => settings,
-    async () => {},
-    { deep: true },
-  )
 
   onBeforeUnmount(() => {
     console.log('Destroying temporary store')
