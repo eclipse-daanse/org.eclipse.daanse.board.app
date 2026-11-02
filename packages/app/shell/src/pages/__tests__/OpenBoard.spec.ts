@@ -33,7 +33,7 @@ let params: Record<string, string> = {}
   contributed by a module and absent here, which is the case the screen
   has to handle; /configuration is the variables screen, which is not
   and must therefore be reachable. */
-const KNOWN = ['/pages', '/datasources', '/configuration']
+const KNOWN = ['/board/b1/pages', '/datasources', '/configuration']
 
 vi.mock('vue-router', () => ({
   useRoute: () => ({ params }),
@@ -162,7 +162,7 @@ describe('the open board', () => {
     const pages = wrapper.findAll('.figure--link').find((each) => each.text().includes('Pages'))
     await pages!.trigger('click')
 
-    expect(push).toHaveBeenCalledWith('/pages')
+    expect(push).toHaveBeenCalledWith('/board/b1/pages')
   })
 
   it('leaves a figure whose area this shell does not have as a figure', async () => {

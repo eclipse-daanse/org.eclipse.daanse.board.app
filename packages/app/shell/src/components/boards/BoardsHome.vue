@@ -37,7 +37,12 @@ import {
   type Workspace,
 } from 'org.eclipse.daanse.board.app.lib.model.workspace'
 import { useEList, useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
-import type { PageRegistryI, PageI } from 'org.eclipse.daanse.board.app.lib.api.page'
+import {
+  boardPath,
+  pagePath,
+  type PageRegistryI,
+  type PageI,
+} from 'org.eclipse.daanse.board.app.lib.api.page'
 import type { LayoutRepositoryI } from 'org.eclipse.daanse.board.app.lib.api.layout.page'
 import type { Repository } from 'org.eclipse.daanse.board.app.lib.api.persistence'
 
@@ -137,7 +142,7 @@ const entryPageId = computed(
 )
 
 function openPage(id: string) {
-  router.push(`/page/${id}`)
+  router.push(pagePath(board.value?.id as string | undefined, id))
 }
 
 
@@ -152,7 +157,7 @@ function openPage(id: string) {
 /* The board's own screen; what it holds decides what is shown there. */
 function openBoard() {
   const id = board.value?.id as string | undefined
-  if (id) router.push(`/board/${id}`)
+  if (id) router.push(boardPath(id))
 }
 
 /** Asked before anything is made: what it is called, and where it lives. */
@@ -202,7 +207,7 @@ async function createBoard(name: string, place?: Repository) {
   const boardId = workspace.board?.id as string | undefined
   if (boardId) rememberOpened({ boardId, name, data: save(), origin: origin.value })
 
-  router.push(`/page/${id}/edit`)
+  router.push(pagePath(workspace.board?.id as string | undefined, id, true))
 }
 
 function openStorage() {
@@ -226,7 +231,7 @@ function openStorage() {
  */
 function openRestored() {
   const id = workspace.board?.id as string | undefined
-  router.push(id ? `/board/${id}` : '/')
+  router.push(boardPath(id))
 }
 </script>
 
