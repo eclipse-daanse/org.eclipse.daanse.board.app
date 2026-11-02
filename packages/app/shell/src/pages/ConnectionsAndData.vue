@@ -93,7 +93,7 @@ function createFromHit(hit: { type: string; url: string; name: string }) {
     uid = made.uid as string
   }
 
-  showNewDatasource({ connection: uid, type: hit.type })
+  showNewDatasource({ connection: uid, type: hit.type, name: hit.name })
 }
 const { usageOf, usageLabel } = useDatasourceUsage()
 const { t } = useTranslation('shell')

@@ -254,6 +254,7 @@ const {
   open: creatingDataSource,
   forConnection: creatingFor,
   forType: creatingType,
+  forName: creatingName,
   show: showNewDatasource,
 } = useNewDatasource()
 /* Set when the dialog was opened from a connection's own menu. */
@@ -503,6 +504,7 @@ const removingUsage = computed(() => {
     v-model="creatingDataSource"
     :for-connection="creatingFor"
     :for-type="creatingType"
+    :for-name="creatingName"
     @created="onDataSourceCreated"
   />
 
