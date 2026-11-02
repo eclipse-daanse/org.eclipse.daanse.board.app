@@ -11,7 +11,7 @@
  *   Smart City Jena
  **********************************************************************/
 
-import { describe, expect, it } from 'vitest'
+import { afterEach, describe, expect, it } from 'vitest'
 import { defineComponent } from 'vue'
 import { mount } from '@vue/test-utils'
 import {
@@ -24,6 +24,7 @@ import {
   useWorkspaceFile,
   useWorkspaceOrigin,
 } from './useWorkspaceFile'
+import { useRestoreLastOpened } from './useRestoreLastOpened'
 
 /**
  * States written before a board held the pages.
@@ -254,5 +255,98 @@ describe('saveInPlace', () => {
 
     expect(await kept).toBe(false)
     expect(updated).toHaveLength(0)
+  })
+})
+
+/**
+ * Coming up with what was open.
+ *
+ * A reload used to be restored on the board screen and nowhere else, so
+ * the launcher offered "no board yet" for a board lying complete in
+ * storage (#1175).
+ */
+describe('restoreLastOpened', () => {
+  const STORED = {
+    eClass: 'http://org.eclipse.daanse.board.app.lib.model.workspace#//Workspace',
+    board: {
+      eClass: 'http://org.eclipse.daanse.board.app.lib.model.workspace#//Board',
+      id: 'b1',
+      name: 'Caradog',
+      pages: [],
+    },
+  }
+
+  function setUp({ wanted = undefined as string | undefined, held = STORED as unknown } = {}) {
+    useWorkspaceOrigin().value = undefined
+    if (held) {
+      localStorage.setItem(
+        'daanse.board.lastOpened',
+        JSON.stringify({
+          boardId: 'b1',
+          name: 'Caradog',
+          data: held,
+          origin: { placeUri: 'file:///x', entryUri: 'file:///x/c.json', name: 'Caradog' },
+        }),
+      )
+    }
+
+    const workspace = new WorkspaceImpl()
+    let restored = false
+    const host = defineComponent({
+      setup() {
+        const { restoreLastOpened } = useRestoreLastOpened()
+        restored = restoreLastOpened(wanted)
+        return () => null
+      },
+    })
+    mount(host, { global: { provide: { [WORKSPACE_ID]: workspace } } })
+    return { workspace, restored }
+  }
+
+  afterEach(() => localStorage.clear())
+
+  it('puts the board back, and where it was written to with it', () => {
+    const { workspace, restored } = setUp()
+
+    expect(restored).toBe(true)
+    expect(workspace.board?.name).toBe('Caradog')
+    expect(useWorkspaceOrigin().value?.name).toBe('Caradog')
+  })
+
+  it('restores the board an address names', () => {
+    const { restored, workspace } = setUp({ wanted: 'b1' })
+
+    expect(restored).toBe(true)
+    expect(workspace.board?.id).toBe('b1')
+  })
+
+  /* Following a link to someone else's board must not quietly open one's own. */
+  it('leaves the remembered state alone when the address names another board', () => {
+    const { restored, workspace } = setUp({ wanted: 'b9' })
+
+    expect(restored).toBe(false)
+    expect(workspace.board).toBeFalsy()
+    expect(useWorkspaceOrigin().value).toBeUndefined()
+  })
+
+  it('says nothing was restored when this browser remembers nothing', () => {
+    localStorage.clear()
+    const { restored } = setUp({ held: null })
+
+    expect(restored).toBe(false)
+  })
+
+  /*
+   * A state holding no board at all is not a failure: it is opened as
+   * one, named after what it came from, the same as opening it from
+   * storage would. What matters here is that nothing throws on the way
+   * up - this runs in App.vue's setup, where an exception is a blank
+   * screen rather than a message.
+   */
+  it('opens a state that holds no board as one, rather than throwing', () => {
+    const { restored, workspace } = setUp({ held: { nonsense: true } })
+
+    expect(restored).toBe(true)
+    expect(workspace.board).toBeTruthy()
   })
 })
