@@ -478,7 +478,8 @@
       "pages": "Pages",
       "connections": "Connections",
       "datasources": "Data sources",
-      "variables": "Variables"
+      "variables": "Variables",
+      "events": "Events"
     },
     "holds": {
       "none": "None yet."

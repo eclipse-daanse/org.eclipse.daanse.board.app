@@ -28,10 +28,11 @@ const replace = vi.fn()
 const push = vi.fn()
 let params: Record<string, string> = {}
 
-/* resolve() answers for the areas this shell always has; /variables is
+/* resolve() answers for the areas this shell always has. /events is
   contributed by a module and absent here, which is the case the screen
-  has to handle. */
-const KNOWN = ['/pages', '/datasources']
+  has to handle; /configuration is the variables screen, which is not
+  and must therefore be reachable. */
+const KNOWN = ['/pages', '/datasources', '/configuration']
 
 vi.mock('vue-router', () => ({
   useRoute: () => ({ params }),
@@ -166,10 +167,28 @@ describe('the open board', () => {
     const { wrapper } = setUp({ connections: 1 })
     await flushPromises()
 
-    /* Variables come with a module; without it there is nowhere to go. */
+    /* Events come with a module; without it there is nowhere to go. */
     const asLink = wrapper.findAll('.figure--link').map((each) => each.text())
-    expect(asLink.some((each) => each.includes(en.Board.figure.variables))).toBe(false)
-    expect(wrapper.text()).toContain(en.Board.figure.variables)
+    expect(asLink.some((each) => each.includes(en.Board.figure.events))).toBe(false)
+    expect(wrapper.text()).toContain(en.Board.figure.events)
+  })
+
+  /*
+   * The variables tile pointed at /variables, which is registered
+   * nowhere - so the guard above hid a misspelt path and the tile was
+   * never a button. The screen is /configuration.
+   */
+  it('reaches the variables screen at the address it actually has', async () => {
+    const { wrapper } = setUp({ connections: 1 })
+    await flushPromises()
+
+    const variables = wrapper
+      .findAll('.figure--link')
+      .find((each) => each.text().includes(en.Board.figure.variables))
+    expect(variables).toBeDefined()
+
+    await variables!.trigger('click')
+    expect(push).toHaveBeenCalledWith('/configuration')
   })
 
   it('sends a link to a board this browser never opened to the launcher', async () => {
