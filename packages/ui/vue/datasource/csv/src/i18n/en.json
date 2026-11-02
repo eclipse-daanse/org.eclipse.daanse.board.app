@@ -32,5 +32,10 @@
     "pollingInterval": "How often it re-reads, in milliseconds.",
     "skipRowsFromStart": "How many lines at the top are not data - a title, a legend, a second header row.",
     "skipRowsFromEnd": "How many lines at the bottom are not data - a total row, a footnote."
+  },
+  "Preview": {
+    "failed": "Nothing came back from this address. Are the connection and the path right?",
+    "empty": "Something came back, but no rows. It may not be CSV — look in the connection at what the endpoint serves.",
+    "loading": "Reading …"
   }
 }
