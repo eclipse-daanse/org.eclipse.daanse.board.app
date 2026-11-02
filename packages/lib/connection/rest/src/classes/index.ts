@@ -22,10 +22,36 @@ export interface IRestConnectionConfig extends BaseConnectionConfig {
   cacheTTL?: number // Time-to-live in milliseconds (default: 30000)
 }
 
-interface CacheEntry {
-  response: Response
-  body: any
+/*
+ * An answer that has been read, and can therefore be handed out again.
+ *
+ * A `Response` cannot: its body is readable once, and `clone()` only works
+ * before anyone has started reading. Both of the things this class does
+ * with an answer - give it to a second caller waiting on the same request,
+ * and keep it for the next one - mean handing out the same bytes more than
+ * once, so the bytes are what is kept, not the object around them.
+ */
+interface ReadAnswer {
+  bytes: ArrayBuffer
+  status: number
+  statusText: string
+  headers: Headers
+}
+
+interface CacheEntry extends ReadAnswer {
   timestamp: number
+}
+
+/* A body is not allowed with these, and passing one makes the constructor throw. */
+const WITHOUT_BODY = new Set([204, 205, 304])
+
+/** A fresh Response over the same bytes, as often as it is asked for. */
+function responseFrom(answer: ReadAnswer): Response {
+  return new Response(WITHOUT_BODY.has(answer.status) ? null : answer.bytes, {
+    status: answer.status,
+    statusText: answer.statusText,
+    headers: answer.headers,
+  })
 }
 
 export class RestConnection extends BaseConnection {
@@ -33,7 +59,7 @@ export class RestConnection extends BaseConnection {
   private cacheEnabled = false
   private cacheTTL = 30000 // 30 seconds default
   private cache: Map<string, CacheEntry> = new Map()
-  private pendingRequests: Map<string, Promise<Response>> = new Map()
+  private pendingRequests: Map<string, Promise<ReadAnswer>> = new Map()
 
   constructor() {
     super()
@@ -72,25 +98,26 @@ export class RestConnection extends BaseConnection {
 
   fetch(config: any, options?: RequestInit): Promise<Response> {
     const fullUrl = this.url + config.url
-    const cacheKey = this.getCacheKey(fullUrl, options)
     const method = options?.method || 'GET'
 
-    // Only cache GET requests
-    const shouldCache = this.cacheEnabled && method === 'GET'
+    /*
+     * Only a GET is read ahead of being handed over. Two POSTs of the same
+     * shape are two different things being asked, so there is nothing to
+     * share and nothing to keep - and reading the whole answer into memory
+     * for a caller who may be streaming it would be a cost for nothing.
+     */
+    if (method !== 'GET') {
+      return fetch(fullUrl, options)
+    }
+
+    const cacheKey = this.getCacheKey(fullUrl, options)
+    const shouldCache = this.cacheEnabled
 
     if (shouldCache) {
-      // Check cache first
-      const cachedEntry = this.cache.get(cacheKey)
-      if (cachedEntry && this.isValidCacheEntry(cachedEntry)) {
-        // Return cloned response from cache
-        const clonedResponse = new Response(JSON.stringify(cachedEntry.body), {
-          status: cachedEntry.response.status,
-          statusText: cachedEntry.response.statusText,
-          headers: cachedEntry.response.headers,
-        })
-        return Promise.resolve(clonedResponse)
+      const cached = this.cache.get(cacheKey)
+      if (cached && this.isValidCacheEntry(cached)) {
+        return Promise.resolve(responseFrom(cached))
       }
-
     }
 
     /*
@@ -98,35 +125,37 @@ export class RestConnection extends BaseConnection {
      * flight - whether or not the cache is on.
      *
      * Sharing an answer with a request that has not come back yet says
-     * nothing about how long an answer stays good, which is what the
-     * cache is for and why it can be off. It used to sit inside that
-     * switch, so with the cache off - which is the default - a preview
-     * asking for the data and for the original asked the endpoint twice
-     * for the same bytes, at the same moment.
+     * nothing about how long an answer stays good, which is what the cache
+     * is for and why it can be off. It used to sit inside that switch, so
+     * with the cache off - which is the default - a preview asking for the
+     * data and for the original asked the endpoint twice for the same
+     * bytes, at the same moment.
      */
-    const pendingRequest = this.pendingRequests.get(cacheKey)
-    if (pendingRequest) {
-      return pendingRequest.then((response) => response.clone())
+    const pending = this.pendingRequests.get(cacheKey)
+    if (pending) {
+      return pending.then(responseFrom)
     }
 
-    // Make the actual request
-    const requestPromise = fetch(fullUrl, options)
-      .then(async response => {
-        if (shouldCache && response.ok) {
-          // Clone response before reading body (response can only be read once)
-          const clonedResponse = response.clone()
-          try {
-            const body = await clonedResponse.json()
-            this.cache.set(cacheKey, {
-              response: response.clone(),
-              body,
-              timestamp: Date.now(),
-            })
-          } catch {
-            // Response is not JSON, don't cache
-          }
+    const reading = fetch(fullUrl, options)
+      .then(async (response) => {
+        const answer: ReadAnswer = {
+          bytes: await response.arrayBuffer(),
+          status: response.status,
+          statusText: response.statusText,
+          headers: response.headers,
         }
-        return response
+
+        /*
+         * Whatever came back, not whatever parsed as JSON. The answer used
+         * to be kept only if `response.json()` succeeded, which left CSV -
+         * and XML, and plain text - fetched again every single time while
+         * the setting said the connection was caching.
+         */
+        if (shouldCache && response.ok) {
+          this.cache.set(cacheKey, { ...answer, timestamp: Date.now() })
+        }
+
+        return answer
       })
       .finally(() => {
         this.pendingRequests.delete(cacheKey)
@@ -136,13 +165,9 @@ export class RestConnection extends BaseConnection {
         }
       })
 
-    /* Only a GET is worth sharing: two POSTs of the same shape are two
-      different things being asked. */
-    if (method === 'GET') {
-      this.pendingRequests.set(cacheKey, requestPromise)
-    }
+    this.pendingRequests.set(cacheKey, reading)
 
-    return requestPromise
+    return reading.then(responseFrom)
   }
 
   setConfig(): void {
