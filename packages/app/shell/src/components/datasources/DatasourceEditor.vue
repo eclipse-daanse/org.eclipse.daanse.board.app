@@ -29,13 +29,16 @@ const props = withDefaults(
   defineProps<{
     itemId: string
     /**
-     * Which half of a source is shown.
+     * Which view the type's tabs are on.
      *
-     * The two used to sit side by side in one strip. The page around this
-     * makes them tabs, because reading the data and changing the settings
-     * are two different visits.
+     * The settings and the data used to sit side by side in one strip.
+     * The page around this makes them tabs, because reading the data and
+     * changing the settings are two different visits.
+     *
+     * 'settings' is the one the shell adds; anything else is a view the
+     * type declared, or 'preview' for a type that declared none (#1178).
      */
-    view?: 'settings' | 'preview'
+    view?: string
   }>(),
   { view: 'settings' },
 )
@@ -160,6 +163,13 @@ const saveDataSource = () => {
   if (commit()) emit('close')
 }
 
+/**
+ * The component for the view that is open.
+ *
+ * A type's own view where it declared one of that id, and its preview
+ * otherwise - which is every type that has not said it has more than
+ * one thing to show.
+ */
 const previewComponent = computed(() => {
   const identifiers = datasourceRepository.getDatasourceIdentifiers(datasourceProxy.value.type)
 
@@ -167,7 +177,8 @@ const previewComponent = computed(() => {
     return null
   }
 
-  return datasourceRepository.resolveIdentifier(identifiers.Preview)
+  const declared = identifiers.Views?.find((each) => each.id === props.view)
+  return datasourceRepository.resolveIdentifier(declared?.component ?? identifiers.Preview)
 })
 
 const settingsComponent = computed(() => {

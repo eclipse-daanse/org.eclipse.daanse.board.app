@@ -38,10 +38,38 @@ export interface DataSourcePlugin<T> {
     Name: string;
 }
 
+/**
+ * One of the views a type brings, beside its settings.
+ *
+ * A type used to get exactly one - the preview - and a type with more
+ * than one thing to show had to fold them into it and draw tabs of its
+ * own inside, which is two rows of tabs above each other (#1178).
+ */
+export interface StoreView {
+    /** What the tab is addressed by, and what the editor keeps in `view`. */
+    id: string;
+    /** A translation key, namespaced as the type's own texts are. */
+    label: string;
+    component: symbol;
+}
+
 export interface StoreIdentifiers {
     Store: symbol;
+    /**
+     * The one view a type has when it declares no others.
+     *
+     * Ignored where `Views` is given: a type that says what its views are
+     * says all of them.
+     */
     Preview: symbol;
     Settings: symbol;
+    /**
+     * The views this type brings, in the order they are shown.
+     *
+     * The settings tab is appended by whoever renders these, because
+     * every type has settings and none has to say so.
+     */
+    Views?: StoreView[];
     /**
      * The symbol this type wears in lists - a Material Symbols name.
      *
