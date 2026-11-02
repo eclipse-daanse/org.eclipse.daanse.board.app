@@ -85,7 +85,8 @@ const visiblePages = computed(() => {
 })
 
 function openPage(id: string) {
-  router.push(pagePath(boardId.value, id))
+  /* Picking a page means working on it; the view is one press away. */
+  router.push(pagePath(boardId.value, id, true))
 }
 
 function editPage(id: string) {

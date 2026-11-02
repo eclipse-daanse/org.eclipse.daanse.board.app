@@ -136,16 +136,6 @@ const boardTotals = computed(() => ({
 }))
 
 
-/** Where opening the board lands: its default page, else the first one. */
-const entryPageId = computed(
-  () => props.pageRepo?.getDefaultPage()?.id ?? pages.value[0]?.id,
-)
-
-function openPage(id: string) {
-  router.push(pagePath(board.value?.id as string | undefined, id))
-}
-
-
 /*
  * Opening the board lands on a page, where there is one.
  *
