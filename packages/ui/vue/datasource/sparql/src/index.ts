@@ -23,12 +23,15 @@ import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
 // denotes the same symbol the factory package exports.
 const symbol = Symbol.for('SparqlStore')
 import Settings from './Settings.vue'
-import Preview from './Preview.vue'
-const previewSymbol = Symbol.for('SparqlPreview')
+import Catalogue from './Catalogue.vue'
+import Query from './Query.vue'
+const catalogueSymbol = Symbol.for('SparqlCatalogue')
+const querySymbol = Symbol.for('SparqlQuery')
 const settingsSymbol = Symbol.for('SparqlSettings')
 
 export function activate({ services }: ActivationContext) {
-  services.register('SparqlPreview', Preview)
+  services.register('SparqlCatalogue', Catalogue)
+  services.register('SparqlQuery', Query)
   services.register('SparqlSettings', Settings)
 
   services
@@ -38,7 +41,16 @@ export function activate({ services }: ActivationContext) {
       connections: ['rest'],
       Model: MODEL_ECORE,
       Store: symbol,
-      Preview: previewSymbol,
+      /*
+       * Three things, not two halves of one: finding an endpoint, asking
+       * it, and the settings the shell appends. The preview stays named
+       * because the contract asks for one; it is the first view here.
+       */
+      Preview: catalogueSymbol,
+      Views: [
+        { id: 'endpoints', label: 'datasourceSparql:View.endpoints', component: catalogueSymbol },
+        { id: 'query', label: 'datasourceSparql:View.query', component: querySymbol },
+      ],
       Settings: settingsSymbol,
     })
 }
@@ -47,7 +59,8 @@ export function deactivate({ services }: ActivationContext) {
   services
     .getRequired<DatasourceRepository>(DATASOURCE_REPOSITORY)
     .unregisterDatasourceType('sparql')
-  services.unregister('SparqlPreview')
+  services.unregister('SparqlCatalogue')
+  services.unregister('SparqlQuery')
   services.unregister('SparqlSettings')
 }
 

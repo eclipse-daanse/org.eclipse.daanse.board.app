@@ -2,13 +2,9 @@
   "Settings": {
     "connection": "Connection"
   },
-  "Sparql": {
-    "query": "Query"
-  },
   "View": {
-    "query": "Query",
-    "catalogue": "Catalogue",
-    "label": "What to look at"
+    "endpoints": "Endpoint finder",
+    "query": "SPARQL"
   },
   "Catalogue": {
     "search": "Search the catalogue",
@@ -30,5 +26,8 @@
     "previous": "Previous",
     "next": "Next",
     "showing": "{{from}}-{{to}}"
+  },
+  "Query": {
+    "tab": "Query"
   }
 }

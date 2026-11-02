@@ -1,0 +1,180 @@
+/*********************************************************************
+ * Copyright (c) 2026 Contributors to the Eclipse Foundation.
+ *
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ *
+ * SPDX-License-Identifier: EPL-2.0
+ *
+ * Contributors:
+ *   Smart City Jena
+ **********************************************************************/
+
+/*
+ * Yasgui in this application's colours.
+ *
+ * Its own stylesheet is light and says so in absolute values, so in the
+ * dark theme the editor and the result table stayed white - the one part
+ * of the screen that had not heard which theme was on, as the scrollbars
+ * once were (#1178).
+ *
+ * Written against the tokens rather than as a dark override: both themes
+ * then follow by construction, and a third would too, instead of a
+ * second sheet that has to be kept in step with the first.
+ *
+ * Loaded after yasgui.min.css by whoever imports it, which is what lets
+ * these win without !important on every line. The handful that do carry
+ * it are the places Yasgui sets a colour inline-equivalent, on an id or
+ * on three classes at once.
+ */
+
+.yasgui,
+.yasgui .yasqe,
+.yasgui .yasr {
+  background-color: var(--color-bg);
+  color: var(--color-fg);
+}
+
+/* ---------------------------------------------------------- the editor */
+
+.yasgui .yasqe .CodeMirror {
+  background-color: var(--color-bg);
+  color: var(--color-fg);
+  font-family: var(--font-mono);
+  font-size: var(--text-base, 13px);
+}
+
+.yasgui .yasqe .CodeMirror-gutters {
+  background-color: var(--color-pane);
+  border-right: 1px solid var(--color-divider);
+}
+
+.yasgui .yasqe .CodeMirror-linenumber {
+  color: var(--color-dim);
+}
+
+.yasgui .yasqe .CodeMirror-cursor {
+  border-left-color: var(--color-fg);
+}
+
+.yasgui .yasqe .CodeMirror-selected,
+.yasgui .yasqe .CodeMirror-line::selection,
+.yasgui .yasqe .CodeMirror-line > span::selection {
+  background-color: color-mix(in srgb, var(--color-accent) 28%, transparent);
+}
+
+.yasgui .yasqe .CodeMirror-activeline-background {
+  background-color: color-mix(in srgb, var(--color-accent) 8%, transparent);
+}
+
+/*
+ * SPARQL, in the colours MDX already speaks in this house: keywords in
+ * the accent, strings and numbers in the measure amber, names in green.
+ */
+.yasgui .yasqe .cm-keyword { color: var(--color-kw); }
+.yasgui .yasqe .cm-string,
+.yasgui .yasqe .cm-string-2 { color: var(--color-measure); }
+.yasgui .yasqe .cm-number { color: var(--color-measure); }
+.yasgui .yasqe .cm-variable,
+.yasgui .yasqe .cm-variable-2,
+.yasgui .yasqe .cm-variable-3 { color: var(--color-member); }
+.yasgui .yasqe .cm-atom { color: var(--color-fn); }
+.yasgui .yasqe .cm-comment { color: var(--color-dim); font-style: italic; }
+.yasgui .yasqe .cm-punctuation,
+.yasgui .yasqe .cm-operator { color: var(--color-dim); }
+
+/* What it offers while typing. */
+.yasgui .CodeMirror-hints {
+  background-color: var(--color-raised);
+  border: 1px solid var(--color-outline);
+  color: var(--color-fg);
+  font-family: var(--font-mono);
+}
+
+.yasgui .CodeMirror-hint-active {
+  background-color: var(--color-accent);
+  color: var(--color-onAccent);
+}
+
+/* --------------------------------------------------------- the answer */
+
+.yasgui .yasr .yasr_results,
+.yasgui .yasr table.dataTable {
+  background-color: var(--color-bg);
+  color: var(--color-fg);
+}
+
+.yasgui .yasr table.dataTable thead th {
+  background-color: var(--color-raised);
+  color: var(--color-fg);
+  border-bottom: 1px solid var(--color-divider);
+}
+
+.yasgui .yasr table.dataTable tbody td {
+  border-top: 1px solid var(--color-divider);
+}
+
+.yasgui .yasr table.dataTable tbody tr {
+  background-color: transparent;
+}
+
+.yasgui .yasr table.dataTable tbody tr:hover {
+  background-color: color-mix(in srgb, var(--color-accent) 8%, transparent);
+}
+
+/* A URI in a cell, and the little button beside it that follows it. */
+.yasgui .yasr a,
+.yasgui .yasr .yasr_external_ref_btn {
+  color: var(--color-accent);
+}
+
+.yasgui .yasr pre {
+  background-color: var(--color-canvas);
+  color: var(--color-fg);
+  font-family: var(--font-mono);
+}
+
+/* ------------------------------------------- the strips of small buttons */
+
+.yasgui .yasqe_buttons,
+.yasgui .yasr_btnGroup {
+  color: var(--color-dim);
+}
+
+.yasgui .yasr_btn,
+.yasgui .yasqe_btn {
+  background-color: var(--color-raised);
+  border: 1px solid var(--color-outline);
+  color: var(--color-fg);
+}
+
+.yasgui .yasr_btn:hover,
+.yasgui .yasqe_btn:hover {
+  background-color: color-mix(in srgb, var(--color-accent) 14%, var(--color-raised));
+}
+
+.yasgui .yasr_btn.selected {
+  background-color: var(--color-accent);
+  border-color: var(--color-accent);
+  color: var(--color-onAccent);
+}
+
+/* Yasgui draws these as a filled circle in its own blue. */
+.yasgui .yasqe_queryButton svg {
+  fill: var(--color-accent) !important;
+}
+
+.yasgui .yasgui_textfield {
+  background-color: var(--color-bg);
+  border: 1px solid var(--color-outline);
+  color: var(--color-fg);
+}
+
+/* The tab strip, which carries one tab here and still draws its ground. */
+.yasgui .tabsList,
+.yasgui .tabMenu {
+  background-color: var(--color-pane);
+  border-bottom: 1px solid var(--color-divider);
+  color: var(--color-fg);
+}

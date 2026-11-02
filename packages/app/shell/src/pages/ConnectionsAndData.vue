@@ -42,12 +42,17 @@ import DatasourceEditor from '@/components/datasources/DatasourceEditor.vue'
 import ConnectionEditor from '@/components/connections/ConnectionEditor.vue'
 import { useDatasourceUsage } from '@/composables/useDatasourceUsage'
 import { leavingADraft, type Draft } from '@/composables/leavingADraft'
+import {
+  identifier as DATASOURCE_REPOSITORY,
+  type DatasourceRepository,
+} from 'org.eclipse.daanse.board.app.lib.api.datasource'
 
 const workspace = inject<Workspace>(WORKSPACE)!
 const connectionRepository = inject<ConnectionRepository>(CONNECTION_REPOSITORY)!
 const connections = useEList(workspace, (w) => w.connections)
 const dataSources = useEList(workspace, (w) => w.datasources)
 
+const datasourceRepository = inject<DatasourceRepository>(DATASOURCE_REPOSITORY)!
 const { usageOf, usageLabel } = useDatasourceUsage()
 const { t } = useTranslation('shell')
 
@@ -117,8 +122,8 @@ const usage = computed(() => {
 })
 
 /*
- * Whether there is anything to look at, which is not the same question as
- * connection or source.
+ * Whether a connection has anything to look at, which is not the same
+ * question as connection or source.
  *
  * Every source has its data. Most connections have nothing - an address and
  * a credential - but a catalogue does: a SPARQL endpoint holds the datasets
@@ -126,24 +131,51 @@ const usage = computed(() => {
  */
 const showsPreview = computed(() => {
   const at = selected.value
-  if (!at) return false
-  if (at.type === 'DataSource') return true
+  if (!at || at.type === 'DataSource') return false
   const type = (held.value as any)?.type
   return !!(type && connectionRepository.getConnectionIdentifiers(type)?.Preview)
 })
 
-const tabs = computed(() =>
-  showsPreview.value
-    ? [
-        { id: 'preview', label: t('Data.preview') },
-        { id: 'settings', label: t('WidgetSettings.settings') },
-      ]
-    : [{ id: 'settings', label: t('WidgetSettings.settings') }],
-)
+/** The type of the selected source, where one is selected. */
+const sourceType = computed(() => {
+  if (selected.value?.type !== 'DataSource') return undefined
+  return (held.value as any)?.type as string | undefined
+})
+
+/**
+ * The tabs the selection brings.
+ *
+ * A source type says what views it has; one that says nothing has a
+ * preview, which is what every type had before any could say otherwise
+ * (#1178). A connection has one where its type offers one, and settings
+ * alone otherwise.
+ *
+ * The settings tab is added here rather than declared, because
+ * everything selectable has settings and none has to say so.
+ */
+const SETTINGS_TAB = 'settings'
+
+const tabs = computed(() => {
+  const settings = { id: SETTINGS_TAB, label: t('WidgetSettings.settings') }
+
+  if (selected.value?.type === 'DataSource') {
+    const declared = sourceType.value
+      ? datasourceRepository.getDatasourceIdentifiers(sourceType.value)?.Views
+      : undefined
+    const views = declared?.length
+      ? declared.map((view) => ({ id: view.id, label: t(view.label) }))
+      : [{ id: 'preview', label: t('Data.preview') }]
+    return [...views, settings]
+  }
+
+  return showsPreview.value
+    ? [{ id: 'preview', label: t('Data.preview') }, settings]
+    : [settings]
+})
 
 /* What you came to see, where there is something; the settings otherwise. */
-watch([selected, showsPreview], () => {
-  tab.value = showsPreview.value ? 'preview' : 'settings'
+watch([selected, sourceType, showsPreview], () => {
+  tab.value = tabs.value[0]?.id ?? SETTINGS_TAB
 })
 
 /* Opening something else over a draft that is not saved asks first. */
@@ -201,7 +233,7 @@ onBeforeRouteLeave(() => mayLeave())
             ref="editor"
             :key="selected.itemId"
             :item-id="selected.itemId"
-            :view="tab === 'preview' ? 'preview' : 'settings'"
+            :view="tab"
             @close="selected = undefined"
           />
         </div>

@@ -15,31 +15,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { mount } from '@vue/test-utils'
 
-const { mockSetQuery, mockGetQuery, mockAddTab, mockOn } = vi.hoisted(() => {
-  return {
-    mockSetQuery: vi.fn(),
-    mockGetQuery: vi.fn().mockReturnValue('SELECT * WHERE {}'),
-    mockAddTab: vi.fn().mockImplementation(() => {
-      return {
-        setQuery: mockSetQuery,
-        getQuery: mockGetQuery,
-        on: mockOn
-      }
-    }),
-    mockOn: vi.fn()
-  }
-})
-
-vi.mock('@triply/yasgui', () => {
-  const MockYasgui = function(this: any) {
-    this.addTab = mockAddTab;
-  };
-  return {
-    default: MockYasgui,
-    __esModule: true
-  }
-})
-
 import Settings from '../Settings.vue'
 
 /*
@@ -74,7 +49,12 @@ describe('SPARQL Datasource Settings.vue', () => {
     vi.clearAllMocks()
   })
 
-  it('renders dropdown and initializes Yasgui editor', () => {
+  /*
+   * The query is not a setting. It used to be a whole Yasgui in this
+   * form with its results switched off; it has a view of its own now,
+   * with what it answers under it (#1178).
+   */
+  it('asks for the connection, and for nothing that has an editor', () => {
     const config = {
       connection: '',
       query: 'SELECT ?s ?p ?o WHERE {}',
@@ -92,8 +72,10 @@ describe('SPARQL Datasource Settings.vue', () => {
     })
 
     expect(wrapper.find('select').exists()).toBe(true)
-    expect(mockAddTab).toHaveBeenCalled()
-    expect(mockSetQuery).toHaveBeenCalledWith('SELECT ?s ?p ?o WHERE {}')
+    expect(wrapper.find('.yasgui').exists()).toBe(false)
+    expect(wrapper.find('#yasgui').exists()).toBe(false)
+    /* And it leaves the query it was handed alone. */
+    expect(config.query).toBe('SELECT ?s ?p ?o WHERE {}')
   })
 
   it('updates connection in the config when selected', async () => {
@@ -113,7 +95,6 @@ describe('SPARQL Datasource Settings.vue', () => {
       }
     })
 
-    const select = wrapper.find('select')
     await chooseOption(wrapper, 'SPARQL Endpoint 2')
     expect(config.connection).toBe('conn-rest-2')
   })
