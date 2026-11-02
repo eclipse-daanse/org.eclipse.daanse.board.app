@@ -32,6 +32,8 @@ import {
 import {
   type PageRegistryI,
   identifier as PageIdentifier,
+  pagePath,
+  pagesPath,
 } from 'org.eclipse.daanse.board.app.lib.api.page'
 import { useEList, useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import { DButton } from 'org.eclipse.daanse.board.app.ui.vue.controls'
@@ -67,6 +69,9 @@ const board = computed(() => {
   void pages.value
   return workspace.board
 })
+/** A page's address is inside its board; see lib.api.page. */
+const boardId = computed(() => board.value?.id as string | undefined)
+
 const connections = useEList(workspace, (w) => w.connections)
 const datasources = useEList(workspace, (w) => w.datasources)
 
@@ -158,22 +163,24 @@ function show(kind: 'Connection' | 'DataSource', uid: string) {
  * `/variables`, a path registered nowhere - the screen is
  * `/configuration` - so the tile silently stayed a figure forever.
  */
-const figureTargets: Record<string, string> = {
-  pages: '/pages',
+/* Computed, not a constant: the board settles after this screen is set
+  up, and the pages of a board are addressed inside it. */
+const figureTargets = computed<Record<string, string>>(() => ({
+  pages: pagesPath(boardId.value),
   connections: '/datasources',
   datasources: '/datasources',
   variables: '/configuration',
   events: '/events',
-}
+}))
 
 function targetFor(key: string): string | undefined {
-  const path = figureTargets[key]
+  const path = figureTargets.value[key]
   if (!path) return undefined
   return router.resolve(path).matched.length ? path : undefined
 }
 
 function openPage(id: string) {
-  router.push(`/page/${id}`)
+  router.push(pagePath(boardId.value, id))
 }
 
 /**
@@ -186,6 +193,7 @@ function openPage(id: string) {
  */
 const entryPath = computed(() => {
   const target = boardTarget({
+    boardId: boardId.value,
     pageIds: pages.value.map((page: any) => page.id as string),
     defaultPageId: pageRepo?.defaultPageId,
     lastOpened: (id) => usageOf(id)?.lastOpened,

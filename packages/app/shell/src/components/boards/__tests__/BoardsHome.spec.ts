@@ -27,6 +27,7 @@ import {
   type Repository,
 } from 'org.eclipse.daanse.board.app.lib.api.persistence'
 import BoardsHome from '../BoardsHome.vue'
+import NewBoardDialog from '../NewBoardDialog.vue'
 import { useWorkspaceOrigin } from '../../../composables/useWorkspaceFile'
 import en from '../../../i18n/en.json'
 
@@ -221,7 +222,8 @@ describe('making a board', () => {
     await flushPromises()
 
     useWorkspaceOrigin().value = undefined
-    await wrapper.vm.createBoard('Caradog', {
+    /* Through the dialog, which is how a person reaches it. */
+    wrapper.findComponent(NewBoardDialog).vm.$emit('create', 'Caradog', {
       uri: 'file:///states',
       name: 'Browser',
       create: async (entry: Record<string, unknown>) => {
@@ -245,7 +247,7 @@ describe('making a board', () => {
     await flushPromises()
 
     useWorkspaceOrigin().value = undefined
-    await wrapper.vm.createBoard('Caradog', undefined)
+    wrapper.findComponent(NewBoardDialog).vm.$emit('create', 'Caradog', undefined)
     await flushPromises()
 
     expect(registered).toHaveLength(1)

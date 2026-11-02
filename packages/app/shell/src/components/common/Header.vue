@@ -27,6 +27,7 @@ import {
   type PageRegistryI,
   identifier as PageIdentifier,
   type PageI,
+  pagePath,
 } from 'org.eclipse.daanse.board.app.lib.api.page'
 import {
   type LayoutRepositoryI,
@@ -88,6 +89,12 @@ function pickLanguage(tag: string) {
  */
 const modelledPages = useEList(workspace, (w) => w.board?.pages)
 
+/** A page's address is inside its board; see lib.api.page. */
+const boardId = computed(() => {
+  void modelledPages.value
+  return workspace.board?.id as string | undefined
+})
+
 /*
  * The path, rooted in the open board. Built by boardCrumb, which is a
  * plain function of the route and what is open - and therefore testable
@@ -98,7 +105,7 @@ const crumb = computed<Crumb[]>(() => {
   void modelledPages.value
   return boardCrumb({
     route: route.name,
-    boardId: workspace.board?.id as string | undefined,
+    boardId: boardId.value,
     boardName: workspace.board?.name as string | undefined,
     pageName: currentPageName.value,
     t,
@@ -177,7 +184,7 @@ const pagesOpen = ref(false)
 function choosePage(id: string) {
   pagesOpen.value = false
   if (id === pageId.value) return
-  router.push(isEditing.value ? `/page/${id}/edit` : `/page/${id}`)
+  router.push(pagePath(boardId.value, id, isEditing.value))
 }
 
 /* Clicking anywhere else closes it, as a menu should */
@@ -222,7 +229,7 @@ function addPage() {
     layoutId: 'org.eclipse.daanse.board.app.ui.vue.layouts.base',
   })
   pagesOpen.value = false
-  router.push(`/page/${id}/edit`)
+  router.push(pagePath(boardId.value, id, true))
 }
 
 /* The last page is not removable: a board with no page has nothing to show */
@@ -238,16 +245,16 @@ function removePage(id: string) {
   // Standing on the page that just went: move to whichever is left
   if (id === pageId.value) {
     const next = pages.value.find((p) => p.id !== id)
-    if (next) router.push(isEditing.value ? `/page/${next.id}/edit` : `/page/${next.id}`)
+    if (next) router.push(pagePath(boardId.value, next.id as string, isEditing.value))
   }
 }
 
 
 const openView = () => {
-  if (pageId.value) router.push(`/page/${pageId.value}`)
+  if (pageId.value) router.push(pagePath(boardId.value, pageId.value))
 }
 const openEdit = () => {
-  if (pageId.value) router.push(`/page/${pageId.value}/edit`)
+  if (pageId.value) router.push(pagePath(boardId.value, pageId.value, true))
 }
 
 /*
