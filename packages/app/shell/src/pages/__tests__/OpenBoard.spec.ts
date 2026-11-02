@@ -22,6 +22,7 @@ import {
   ConnectionImpl,
 } from 'org.eclipse.daanse.board.app.lib.model.workspace'
 import OpenBoard from '../OpenBoard.vue'
+import { useStorageDialog } from '../../composables/useStorageDialog'
 import en from '../../i18n/en.json'
 
 const replace = vi.fn()
@@ -96,6 +97,7 @@ function setUp({ open = 'b1', asked = 'b1', connections = 1 } = {}) {
 beforeEach(() => {
   replace.mockClear()
   push.mockClear()
+  useStorageDialog().hide()
   localStorage.clear()
 })
 
@@ -189,6 +191,77 @@ describe('the open board', () => {
 
     await variables!.trigger('click')
     expect(push).toHaveBeenCalledWith('/configuration')
+  })
+
+  /* ------------------------------------------------------- the name */
+
+  it('names the board, and lets the name be changed where it is shown', async () => {
+    const { wrapper, workspace } = setUp()
+    await flushPromises()
+
+    await wrapper.find('.head__name--button').trigger('click')
+    const field = wrapper.find('input.head__name--editing')
+    expect((field.element as HTMLInputElement).value).toBe('Sparky')
+
+    await field.setValue('Caradog')
+    await field.trigger('keydown.enter')
+
+    expect(workspace.board!.name).toBe('Caradog')
+    expect(wrapper.find('.head__name--button').text()).toBe('Caradog')
+  })
+
+  it('keeps the name it had when the change is abandoned', async () => {
+    const { wrapper, workspace } = setUp()
+    await flushPromises()
+
+    await wrapper.find('.head__name--button').trigger('click')
+    await wrapper.find('input.head__name--editing').setValue('Nonsense')
+    await wrapper.find('input.head__name--editing').trigger('keydown.esc')
+
+    expect(workspace.board!.name).toBe('Sparky')
+  })
+
+  /* An empty name is not a name - the board would lose the one it had. */
+  it('refuses an empty name', async () => {
+    const { wrapper, workspace } = setUp()
+    await flushPromises()
+
+    await wrapper.find('.head__name--button').trigger('click')
+    await wrapper.find('input.head__name--editing').setValue('   ')
+    await wrapper.find('input.head__name--editing').trigger('keydown.enter')
+
+    expect(workspace.board!.name).toBe('Sparky')
+  })
+
+  /* ---------------------------------------------------- keeping it */
+
+  it('offers saving instead of repeating the navigation', async () => {
+    const { wrapper } = setUp()
+    await flushPromises()
+
+    const actions = wrapper.findAll('.head__actions button').map((each) => each.text())
+    expect(actions).toContain('common:Action.save')
+    expect(actions).not.toContain(en.Board.figure.connections)
+    expect(actions).not.toContain(en.Board.figure.pages)
+  })
+
+  /*
+   * A board that was never stored has no entry to write over, so storage
+   * is asked for one - over the board, never instead of it: going to the
+   * launcher closed the very board one had come to keep.
+   */
+  it('opens storage over a board that was never stored, and stays on it', async () => {
+    const { wrapper } = setUp()
+    await flushPromises()
+
+    const save = wrapper
+      .findAll('.head__actions button')
+      .find((each) => each.text() === 'common:Action.save')
+    await save!.trigger('click')
+    await flushPromises()
+
+    expect(useStorageDialog().open.value).toBe(true)
+    expect(push).not.toHaveBeenCalled()
   })
 
   it('sends a link to a board this browser never opened to the launcher', async () => {

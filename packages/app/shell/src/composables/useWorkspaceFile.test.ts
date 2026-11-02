@@ -18,7 +18,12 @@ import {
   identifier as WORKSPACE_ID,
   WorkspaceImpl,
 } from 'org.eclipse.daanse.board.app.lib.model.workspace'
-import { liftPagesIntoBoard, useWorkspaceFile } from './useWorkspaceFile'
+import { identifier as RepoManagerId } from 'org.eclipse.daanse.board.app.lib.api.persistence'
+import {
+  liftPagesIntoBoard,
+  useWorkspaceFile,
+  useWorkspaceOrigin,
+} from './useWorkspaceFile'
 
 /**
  * States written before a board held the pages.
@@ -169,5 +174,75 @@ describe('opening a state with no board in it', () => {
     )
 
     expect(workspace.board?.name).toBe('Stored name')
+  })
+})
+
+
+/**
+ * Saving in place.
+ *
+ * The origin was written for this - "there for saving in place from
+ * anywhere", says the comment on it - and nothing used it outside the
+ * storage view until the board's own screen did.
+ */
+describe('saveInPlace', () => {
+  const PLACE = 'file:///states'
+  const ENTRY = 'file:///states/sparky.json'
+
+  function setUp({ place = PLACE, entry = ENTRY, known = true } = {}) {
+    const updated: Array<Record<string, unknown>> = []
+    const repository = {
+      uri: PLACE,
+      getEntityByUri: async (uri: unknown) =>
+        known && String(uri) === ENTRY ? { uri: ENTRY, name: 'Sparky', data: '{}' } : undefined,
+      update: async (held: Record<string, unknown>) => {
+        updated.push(held)
+      },
+    }
+
+    const workspace = new WorkspaceImpl()
+    useWorkspaceOrigin().value = { placeUri: place, entryUri: entry, name: 'Sparky' }
+
+    let kept: Promise<boolean> | undefined
+    const host = defineComponent({
+      setup() {
+        const { saveInPlace } = useWorkspaceFile()
+        kept = saveInPlace()
+        return () => null
+      },
+    })
+    mount(host, {
+      global: {
+        provide: {
+          [WORKSPACE_ID]: workspace,
+          [RepoManagerId]: { getAvailableReposetories: async () => [repository] },
+        },
+      },
+    })
+    return { kept: kept!, updated }
+  }
+
+  it('writes the workspace over the state it came from', async () => {
+    const { kept, updated } = setUp()
+
+    expect(await kept).toBe(true)
+    expect(updated).toHaveLength(1)
+    /* The serialized workspace, not the string the entry held before. */
+    expect(String(updated[0].data)).toContain('Workspace')
+    expect(updated[0].uri).toBe(ENTRY)
+  })
+
+  it('writes nothing when the place it names is gone', async () => {
+    const { kept, updated } = setUp({ place: 'file:///elsewhere' })
+
+    expect(await kept).toBe(false)
+    expect(updated).toHaveLength(0)
+  })
+
+  it('writes nothing when the state it names is gone', async () => {
+    const { kept, updated } = setUp({ known: false })
+
+    expect(await kept).toBe(false)
+    expect(updated).toHaveLength(0)
   })
 })

@@ -472,8 +472,6 @@
     "noPages": {
       "text": "This board is where its connections are explored from. Lay out a page over them whenever you want one."
     },
-    "toData": "Connections & data",
-    "toPages": "Pages",
     "figure": {
       "pages": "Pages",
       "connections": "Connections",
@@ -483,6 +481,10 @@
     },
     "holds": {
       "none": "None yet."
-    }
+    },
+    "rename": "Change the name",
+    "kept": "Saved",
+    "keepIn": "Save into \"{{name}}\"",
+    "keepSomewhere": "Not stored anywhere yet — pick a place"
   }
 }
