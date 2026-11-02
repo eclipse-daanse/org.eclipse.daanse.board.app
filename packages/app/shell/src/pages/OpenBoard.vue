@@ -36,7 +36,7 @@ import {
 import { useEList, useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import { DButton } from 'org.eclipse.daanse.board.app.ui.vue.controls'
 import BoardFloorplan from '@/components/boards/BoardFloorplan.vue'
-import { useLastOpenedState } from '@/composables/useLastOpenedState'
+import { useRestoreLastOpened } from '@/composables/useRestoreLastOpened'
 import { useWorkspaceFile, useWorkspaceOrigin } from '@/composables/useWorkspaceFile'
 import { useStorageDialog } from '@/composables/useStorageDialog'
 import { boardTarget, BOARD_OVERVIEW } from '@/composables/boardTarget'
@@ -79,25 +79,17 @@ const datasources = useEList(workspace, (w) => w.datasources)
  * machine does not - nothing in the id says where the state is stored -
  * and lands on the launcher, which is where one opens something.
  */
-const { recall } = useLastOpenedState()
+const { restoreLastOpened } = useRestoreLastOpened()
 
 function settle() {
   const asked = route.params.boardid as string | undefined
   const open = board.value?.id as string | undefined
   if (open && (!asked || asked === open)) return
 
-  const last = recall()
-  if (asked && last?.boardId === asked) {
-    try {
-      load(last.data, last.name)
-      /* And where it came from, which otherwise lives only in memory:
-        without it every save after a reload asks where again. */
-      origin.value = last.origin
-      return
-    } catch {
-      /* Stored by an older shape, or no longer readable. */
-    }
-  }
+  /* The shell restores on the way up, so this is reached when the
+    address names a board other than the one that came back - and then
+    only a remembered state of that very id will do. */
+  if (asked && restoreLastOpened(asked)) return
   router.replace('/')
 }
 

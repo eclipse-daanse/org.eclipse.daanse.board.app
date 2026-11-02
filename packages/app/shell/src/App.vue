@@ -42,6 +42,7 @@ import {
   useTranslation,
 } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import { useStorageDialog } from './composables/useStorageDialog'
+import { useRestoreLastOpened } from './composables/useRestoreLastOpened'
 
 const { isLoading } = useGlobalLoading()
 const { t } = useTranslation('shell')
@@ -51,6 +52,23 @@ useTheme()
 const route = useRoute()
 const router = useRouter()
 const workspace = inject<Workspace>(WORKSPACE)!
+
+/**
+ * Coming up with something already open.
+ *
+ * The workspace lives in memory, so every reload starts with nothing;
+ * what this browser last opened is kept beside it. Restoring that used
+ * to be the board screen's doing, which is why a reload was restored at
+ * /board/:id and nowhere else - the launcher offered "no board yet" for
+ * a board sitting complete in storage, and a page blamed itself for not
+ * existing (#1175).
+ *
+ * It happens here, in setup, before any screen renders: the shell is
+ * where "what is open" belongs, and `load` reaches its repositories
+ * through inject, which a router guard is not in a position to do.
+ */
+const { restoreLastOpened } = useRestoreLastOpened()
+if (!workspace.board) restoreLastOpened()
 
 /*
  * Storage is a dialog over whatever is on screen, so leaving it leaves

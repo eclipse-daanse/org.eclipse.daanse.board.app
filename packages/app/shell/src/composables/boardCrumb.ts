@@ -56,9 +56,14 @@ export function boardCrumb({ route, boardId, boardName, pageName, t }: CrumbCont
     : { label: t('shell:Header.crumb.noBoard') }
 
   switch (route) {
-    /* Nothing open: the launcher names no board. */
+    /*
+     * The launcher is where one picks a board, which does not mean none
+     * is open: a reload comes up with the last one (#1175), and walking
+     * back here from an open board never closed it. It says which, and
+     * leads to it - the launcher itself offers the same board on a card.
+     */
     case 'home':
-      return [{ label: t('shell:Header.crumb.noBoard') }]
+      return [root]
     /* The board itself: a label, because this is where the link would go. */
     case 'board':
       return [{ label: root.label }]
