@@ -27,6 +27,9 @@ import { v4 as uuidv4 } from 'uuid'
 import { DButton, DIcon } from 'org.eclipse.daanse.board.app.ui.vue.controls'
 import BoardFloorplan from './BoardFloorplan.vue'
 import WorkspaceStorage from './WorkspaceStorage.vue'
+import NewBoardDialog from './NewBoardDialog.vue'
+import { useWorkspaceFile, useWorkspaceOrigin } from '@/composables/useWorkspaceFile'
+import { useLastOpenedState } from '@/composables/useLastOpenedState'
 import { summarizePage, type PageSummary } from '@/composables/pageSummary'
 import { useBoardUsage } from '@/composables/useBoardUsage'
 import {
@@ -36,6 +39,7 @@ import {
 import { useEList, useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import type { PageRegistryI, PageI } from 'org.eclipse.daanse.board.app.lib.api.page'
 import type { LayoutRepositoryI } from 'org.eclipse.daanse.board.app.lib.api.layout.page'
+import type { Repository } from 'org.eclipse.daanse.board.app.lib.api.persistence'
 
 const props = defineProps<{
   pageRepo?: PageRegistryI
@@ -50,6 +54,9 @@ const { t } = useTranslation('shell')
 const { byUsage } = useBoardUsage()
 
 const workspace = inject<Workspace>(WORKSPACE)!
+const { save, storeAs } = useWorkspaceFile()
+const origin = useWorkspaceOrigin()
+const { remember: rememberOpened } = useLastOpenedState()
 
 /*
  * Reading the pages is what makes everything here re-run: the list is
@@ -148,13 +155,22 @@ function openBoard() {
   if (id) router.push(`/board/${id}`)
 }
 
+/** Asked before anything is made: what it is called, and where it lives. */
+const naming = ref(false)
+
 /**
- * A page, in the board that holds them.
+ * A board, with its first page in it.
  *
  * The registry makes the board if there is none yet - which is what
- * creating the first page of a fresh workspace does.
+ * creating the first page of a fresh workspace does - so the board comes
+ * into being here, and this is where it is given its name.
+ *
+ * It is written to its place at once. That write is what gives it an
+ * origin, and the origin is what makes every later save a write rather
+ * than a dialog asking where (#1174). A build with no writable place
+ * offers none, and the board is made unstored.
  */
-function createPage() {
+async function createBoard(name: string, place?: Repository) {
   const repo = props.pageRepo
   if (!repo || !props.layoutRepo) return
 
@@ -168,6 +184,24 @@ function createPage() {
     /* The id; the layout itself is resolved from the repository on render. */
     layoutId: 'org.eclipse.daanse.board.app.ui.vue.layouts.base',
   })
+  if (workspace.board) workspace.board.name = name
+
+  if (place) {
+    try {
+      await storeAs(place, name)
+    } catch (error) {
+      /* The board exists either way; it is simply not kept yet, and
+        saving it will say where it wants to go. */
+      console.warn('the new board could not be stored yet', error)
+    }
+  }
+
+  /* So a reload finds it again, the same as opening a stored state does
+    - a board one just made is the one board one is least willing to
+    lose. See useLastOpenedState. */
+  const boardId = workspace.board?.id as string | undefined
+  if (boardId) rememberOpened({ boardId, name, data: save(), origin: origin.value })
+
   router.push(`/page/${id}/edit`)
 }
 
@@ -245,7 +279,7 @@ function openRestored() {
         {{ t('Boards.empty.text') }}
       </p>
       <div class="boards__empty-actions">
-        <DButton intent="primary" size="sm" @click="createPage">{{ t('Boards.empty.create') }}</DButton>
+        <DButton intent="primary" size="sm" @click="naming = true">{{ t('Boards.empty.create') }}</DButton>
         <DButton size="sm" @click="openStorage">{{ t('Boards.empty.openStored') }}</DButton>
       </div>
     </div>
@@ -290,6 +324,8 @@ function openRestored() {
     <WorkspaceStorage v-else @restored="openRestored" />
     </div>
   </div>
+
+  <NewBoardDialog v-model:open="naming" @create="createBoard" />
   </div>
 </template>
 
