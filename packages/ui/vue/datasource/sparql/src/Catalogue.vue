@@ -162,16 +162,24 @@ const labelFor = (entry: CatalogueEntry) => readsWith(entry) ?? shortFormat(entr
 <template>
   <div class="catalogue">
     <form class="catalogue__ask" @submit.prevent="first">
-      <DInput
-        v-model="search"
-        :label="t('Catalogue.search')"
-        :placeholder="t('Catalogue.searchPlaceholder')"
-        type="search"
-        stacked
-      />
-      <DButton intent="primary" type="submit" :disabled="asking">
-        {{ asking ? t('Catalogue.asking') : t('Catalogue.ask') }}
-      </DButton>
+      <!--
+        The words stand over the row rather than over the field: a label
+        on one of two controls makes that control taller than the other,
+        and no alignment of the boxes can put the field and the button on
+        one line afterwards.
+      -->
+      <h2 class="catalogue__asking">{{ t('Catalogue.search') }}</h2>
+      <div class="catalogue__row">
+        <DInput
+          v-model="search"
+          :aria-label="t('Catalogue.search')"
+          :placeholder="t('Catalogue.searchPlaceholder')"
+          type="search"
+        />
+        <DButton intent="primary" type="submit" :disabled="asking">
+          {{ asking ? t('Catalogue.asking') : t('Catalogue.ask') }}
+        </DButton>
+      </div>
     </form>
 
     <div class="catalogue__filters">
@@ -255,12 +263,37 @@ const labelFor = (entry: CatalogueEntry) => readsWith(entry) ?? shortFormat(entr
 
 .catalogue__ask {
   display: flex;
-  align-items: flex-end;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.catalogue__asking {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--color-dim);
+}
+
+/* Two controls of one height, centred on each other. */
+.catalogue__row {
+  display: flex;
+  align-items: center;
   gap: 8px;
 }
 
-.catalogue__ask > :first-child {
+.catalogue__row > :first-child {
   flex: 1 1 auto;
+}
+
+/*
+ * The field keeps a line under itself for a hint it has none of, as a
+ * margin - which is outside its box and inside the row's. The row then
+ * stands 33px while both controls are 26, and centring puts the button
+ * three pixels below the field it belongs beside.
+ */
+.catalogue__row > :deep(.field) {
+  margin-bottom: 0;
 }
 
 .catalogue__filters {
