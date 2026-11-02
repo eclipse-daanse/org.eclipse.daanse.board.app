@@ -309,13 +309,20 @@ const openAppearance = () => router.push('/appearance')
       lies in, the path - and on the right what holds for the whole
       application: its language, its appearance, who is signed in.
     -->
-    <div class="topbar__row topbar__row--where">
-  <span class="brand">
+    <div
+      :class="['topbar__row', 'topbar__row--where', { 'topbar__row--aside': boardOpen }]"
+    >
+      <!--
+        The mark, only where there is no rail to hold it. With a board
+        open it heads the column on the left, and this bar begins beside
+        that column.
+      -->
+      <span v-if="!boardOpen" class="brand">
         <span class="brand-mark" aria-hidden="true">D</span>
         <span class="brand-name">{{ t('Header.brand') }}</span>
       </span>
 
-<!--
+      <!--
         The storage, reached from the identity end of the bar: it holds
         every board, not the one open, which is why it is up here beside
         the mark rather than down among the things one does to a page.
@@ -629,6 +636,12 @@ const openAppearance = () => router.push('/appearance')
 .topbar__row--where {
   height: var(--spacing-topbar, 42px);
   flex: none;
+}
+
+/* Beside the rail, which carries the mark and begins at the top of the
+  window - so both bars start where the content does. */
+.topbar__row--aside {
+  padding-left: calc(var(--spacing-rail, 52px) + 12px);
 }
 
 /*
