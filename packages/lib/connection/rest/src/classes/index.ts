@@ -91,11 +91,22 @@ export class RestConnection extends BaseConnection {
         return Promise.resolve(clonedResponse)
       }
 
-      // Request deduplication: check if same request is already in flight
-      const pendingRequest = this.pendingRequests.get(cacheKey)
-      if (pendingRequest) {
-        return pendingRequest.then(response => response.clone())
-      }
+    }
+
+    /*
+     * The same request, already on its way, is answered by the one in
+     * flight - whether or not the cache is on.
+     *
+     * Sharing an answer with a request that has not come back yet says
+     * nothing about how long an answer stays good, which is what the
+     * cache is for and why it can be off. It used to sit inside that
+     * switch, so with the cache off - which is the default - a preview
+     * asking for the data and for the original asked the endpoint twice
+     * for the same bytes, at the same moment.
+     */
+    const pendingRequest = this.pendingRequests.get(cacheKey)
+    if (pendingRequest) {
+      return pendingRequest.then((response) => response.clone())
     }
 
     // Make the actual request
@@ -125,7 +136,9 @@ export class RestConnection extends BaseConnection {
         }
       })
 
-    if (shouldCache) {
+    /* Only a GET is worth sharing: two POSTs of the same shape are two
+      different things being asked. */
+    if (method === 'GET') {
       this.pendingRequests.set(cacheKey, requestPromise)
     }
 

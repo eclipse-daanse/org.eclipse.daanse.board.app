@@ -59,11 +59,13 @@ export class RestStore extends BaseDatasource {
       throw new Error('ConnectionRepository is not provided to Store Classes')
     }
     try {
-      const connection = this.connectionRepository.getConnection(
-        this.connection,
-      ) as IConnection
-      const req = await connection.fetch({ url: this.resourceUrl?.value || '' })
-      const data = await req.json()
+      /*
+       * Through the one reader, not a second request for the same
+       * address. Both of these fetched and parsed the whole answer on
+       * their own, and the preview calls both - so opening a rest
+       * source asked its endpoint twice for the same bytes.
+       */
+      const data = await this.getOriginalData()
 
       response = data
 
