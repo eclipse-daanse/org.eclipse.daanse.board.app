@@ -84,11 +84,13 @@ watch(() => innerInterval.value, (nv) => {
     intervalDebounce(nv);
 });
 
+/* Once per opening - onMounted below checks the same address, and the two
+  of them sent two HEAD requests before the preview had asked for anything. */
 watch([tempResourceUrl, connection], ([newTempUrl, newConnection]) => {
     if (newTempUrl && newConnection) {
         updateResourceUrl(newTempUrl);
     }
-}, { immediate: true });
+});
 
 onMounted(async () => {
     if (fullUrl.value) {

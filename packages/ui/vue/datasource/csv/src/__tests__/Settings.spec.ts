@@ -120,4 +120,28 @@ describe('CSV Datasource Settings.vue', () => {
 
     expect(fieldNamed(wrapper, 'Path')!.attributes('required')).toBeDefined()
   })
+
+  /*
+   * The watch on the address was declared immediate and onMounted checked
+   * the same address again, so opening the editor of a configured source
+   * sent two HEAD requests to it before the preview had asked for
+   * anything - and an endpoint that builds its answer in order to serve
+   * it does that work for a HEAD too.
+   */
+  it('asks the endpoint once when it opens', async () => {
+    const config = {
+      connection: 'conn-rest-1',
+      resourceUrl: 'auslastung.csv',
+      separators: [';'],
+      skipRowsFromStart: 0,
+      skipRowsFromEnd: 0,
+      pollingEnabled: false,
+    }
+    mount(Settings, { props: { config, dataSources: [], connections } })
+
+    await vi.advanceTimersByTimeAsync(2000)
+
+    expect((global.fetch as any).mock.calls).toHaveLength(1)
+    expect((global.fetch as any).mock.calls[0][1]).toEqual({ method: 'HEAD' })
+  })
 })
