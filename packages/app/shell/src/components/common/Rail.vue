@@ -206,13 +206,18 @@ function byKeyboard(event: FocusEvent): boolean {
  * content rather than against it.
  */
 /*
- * A stacking context of its own, high enough that what lies on a board
- * stays under the open panel - a widget carries its own z from the
- * layout, and a drag ghost in the report sits at 100000.
+ * A stacking context of its own, above everything that lies inside a
+ * board: a widget carries its own z from the layout, a drag ghost in the
+ * report sits at 100000, and the widget palette is a floating window at
+ * 20000 - which the open panel disappeared behind, being a navigation
+ * covered by the thing it navigates.
+ *
+ * Below the overlays that are meant to cover everything: a dialog's
+ * scrim at 40000, the widget settings, the tree menu.
  */
 .rail {
   position: relative;
-  z-index: 300;
+  z-index: 30000;
   width: var(--spacing-rail, 52px);
   background: var(--color-pane);
   border-right: 1px solid var(--color-divider);

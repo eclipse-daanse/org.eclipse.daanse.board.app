@@ -40,7 +40,7 @@ import { DButton } from 'org.eclipse.daanse.board.app.ui.vue.controls'
 import BoardFloorplan from '@/components/boards/BoardFloorplan.vue'
 import { useRestoreLastOpened } from '@/composables/useRestoreLastOpened'
 import { useWorkspaceFile, useWorkspaceOrigin } from '@/composables/useWorkspaceFile'
-import { useStorageDialog } from '@/composables/useStorageDialog'
+import { useStoreBoard } from '@/composables/useStoreBoard'
 import { boardTarget, BOARD_OVERVIEW } from '@/composables/boardTarget'
 import { useBoardUsage } from '@/composables/useBoardUsage'
 
@@ -50,10 +50,9 @@ const { t } = useTranslation('shell')
 
 const workspace = inject<Workspace>(WORKSPACE)!
 const pageRepo = inject<PageRegistryI>(PageIdentifier)
-const { load, saveInPlace } = useWorkspaceFile()
+const { load } = useWorkspaceFile()
 const { usageOf } = useBoardUsage()
 const origin = useWorkspaceOrigin()
-const { show: showStorage } = useStorageDialog()
 
 /*
  * Watched on the workspace, not on the board.
@@ -244,37 +243,8 @@ function cancelRenaming() {
 
 /* --------------------------------------------------------- keeping it */
 
-const storing = ref(false)
-const stored = ref(false)
-const storeFailed = ref('')
-
-/**
- * Keeping the board.
- *
- * Where it came from, if it came from anywhere. A board that was never
- * stored has no entry to write over and no name to write it under, so
- * storage opens over the board and asks for both - over it, so closing
- * it leaves the board where it was.
- */
-async function store() {
-  if (storing.value) return
-  storing.value = true
-  stored.value = false
-  storeFailed.value = ''
-  try {
-    if (await saveInPlace()) {
-      stored.value = true
-      /* Long enough to be read, short enough not to linger. */
-      setTimeout(() => (stored.value = false), 2500)
-      return
-    }
-    showStorage()
-  } catch (error: any) {
-    storeFailed.value = String(error?.message ?? error)
-  } finally {
-    storing.value = false
-  }
-}
+/* The same press as in the topbar; see useStoreBoard. */
+const { store, storing, stored, failed: storeFailed } = useStoreBoard()
 </script>
 
 <template>
