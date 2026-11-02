@@ -34,6 +34,7 @@ import {
   identifier as PageIdentifier,
   type PageRegistryI,
   type PageI,
+  pagePath,
 } from 'org.eclipse.daanse.board.app.lib.api.page'
 
 const router = useRouter()
@@ -51,6 +52,9 @@ const board = computed(() => {
   void modelledPages.value
   return workspace.board
 })
+
+/** A page's address is inside its board; see lib.api.page. */
+const boardId = computed(() => board.value?.id as string | undefined)
 
 const pages = computed<PageSummary[]>(() => {
   void modelledPages.value
@@ -81,11 +85,11 @@ const visiblePages = computed(() => {
 })
 
 function openPage(id: string) {
-  router.push(`/page/${id}`)
+  router.push(pagePath(boardId.value, id))
 }
 
 function editPage(id: string) {
-  router.push(`/page/${id}/edit`)
+  router.push(pagePath(boardId.value, id, true))
 }
 
 /* The registry makes the board if there is none yet, which is what the
@@ -101,7 +105,7 @@ function createPage() {
     visibleInNavigation: true,
     layoutId: 'org.eclipse.daanse.board.app.ui.vue.layouts.base',
   })
-  router.push(`/page/${id}/edit`)
+  router.push(pagePath(boardId.value, id, true))
 }
 </script>
 

@@ -22,7 +22,11 @@
  * Every candidate is checked against the pages that exist: an id from the
  * route or from usage may name a page that was deleted since.
  */
+import { LAUNCHER, pagePath } from 'org.eclipse.daanse.board.app.lib.api.page'
+
 export interface BoardTargetInput {
+  /** The board the pages belong to - a page's address is inside it. */
+  boardId?: string
   /** The page id in the current route, if any. */
   currentPageId?: string | null
   /** The pages the workspace holds, in order. */
@@ -32,17 +36,19 @@ export interface BoardTargetInput {
   lastOpened?: (id: string) => number | undefined
 }
 
-export const BOARD_OVERVIEW = '/'
+export const BOARD_OVERVIEW = LAUNCHER
 
 export function boardTarget({
+  boardId,
   currentPageId,
   pageIds,
   defaultPageId,
   lastOpened,
 }: BoardTargetInput): string {
   const exists = (id?: string | null): id is string => !!id && pageIds.includes(id)
+  const to = (id: string) => pagePath(boardId, id)
 
-  if (exists(currentPageId)) return `/page/${currentPageId}`
+  if (exists(currentPageId)) return to(currentPageId)
 
   if (lastOpened) {
     let recent: string | undefined
@@ -54,10 +60,10 @@ export function boardTarget({
         recentAt = at
       }
     }
-    if (recent) return `/page/${recent}`
+    if (recent) return to(recent)
   }
 
-  if (exists(defaultPageId)) return `/page/${defaultPageId}`
-  if (pageIds.length > 0) return `/page/${pageIds[0]}`
+  if (exists(defaultPageId)) return to(defaultPageId)
+  if (pageIds.length > 0) return to(pageIds[0])
   return BOARD_OVERVIEW
 }
