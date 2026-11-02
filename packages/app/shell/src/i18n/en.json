@@ -119,7 +119,9 @@
       "suggestion": "My board",
       "place": "Keep it in",
       "placeNote": "Where this board is kept. Save writes there from then on.",
-      "noPlace": "This browser offers no place that can be written to. The board is made all the same, but kept nowhere yet — saving it will ask where."
+      "noPlace": "This browser offers no place that can be written to. The board is made all the same, but kept nowhere yet — saving it will ask where.",
+      "connectFolder": "Connect a folder on this machine …",
+      "folderFailed": "The folder could not be connected: {{reason}}"
     }
   },
   "Storage": {
