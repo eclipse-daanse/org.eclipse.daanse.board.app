@@ -162,7 +162,8 @@
       "open": "Pick one on the left to see what is inside it, then open it.",
       "store": "Put the board you have open into a place, to come back to it.",
       "carry": "Download a state to carry it to another browser, and upload it there."
-    }
+    },
+    "back": "Back to the board"
   },
   "Editor": {
     "name": "Name",
