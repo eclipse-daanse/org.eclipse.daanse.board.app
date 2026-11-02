@@ -42,8 +42,19 @@ describe('the path through a board', () => {
     expect(from[0].to).toBe('/board/b1')
   })
 
-  it('names no board on the launcher, because none is open there', () => {
+  /*
+   * Being on the launcher does not mean nothing is open: a reload comes
+   * up with the board this browser had, and walking back here from one
+   * never closed it. The card on that screen names the same board.
+   */
+  it('names the open board on the launcher, and leads to it', () => {
     const crumb = boardCrumb({ route: 'home', boardId: 'b1', boardName: 'Sparky', t })
+    expect(crumb[0].label).toBe('Sparky')
+    expect(crumb[0].to).toBe('/board/b1')
+  })
+
+  it('says so on the launcher when nothing is open', () => {
+    const crumb = boardCrumb({ route: 'home', t })
     expect(crumb[0].label).toBe(en.Header.crumb.noBoard)
   })
 
