@@ -38,6 +38,8 @@ import { DButton } from 'org.eclipse.daanse.board.app.ui.vue.controls'
 import BoardFloorplan from '@/components/boards/BoardFloorplan.vue'
 import { useLastOpenedState } from '@/composables/useLastOpenedState'
 import { useWorkspaceFile } from '@/composables/useWorkspaceFile'
+import { boardTarget, BOARD_OVERVIEW } from '@/composables/boardTarget'
+import { useBoardUsage } from '@/composables/useBoardUsage'
 
 const route = useRoute()
 const router = useRouter()
@@ -46,6 +48,7 @@ const { t } = useTranslation('shell')
 const workspace = inject<Workspace>(WORKSPACE)!
 const pageRepo = inject<PageRegistryI>(PageIdentifier)
 const { load } = useWorkspaceFile()
+const { usageOf } = useBoardUsage()
 
 /*
  * Watched on the workspace, not on the board.
@@ -95,6 +98,7 @@ function settle() {
 watch(() => route.params.boardid, settle, { immediate: true })
 
 const variables = useEList(workspace, (w) => w.variables)
+const eventMappings = useEList(workspace, (w) => w.eventMappings)
 
 /*
  * What the board holds, as figures.
@@ -107,12 +111,14 @@ const variables = useEList(workspace, (w) => w.variables)
   i18n-keys: shell:Board.figure.pages,
   i18n-keys: shell:Board.figure.connections,
   i18n-keys: shell:Board.figure.datasources,
-  i18n-keys: shell:Board.figure.variables */
+  i18n-keys: shell:Board.figure.variables,
+  i18n-keys: shell:Board.figure.events */
 const totals = computed(() => [
   { key: 'pages', value: pages.value.length },
   { key: 'connections', value: connections.value.length },
   { key: 'datasources', value: datasources.value.length },
   { key: 'variables', value: variables.value.length },
+  { key: 'events', value: eventMappings.value.length },
 ])
 
 /** Named, not only counted - a list of two is worth reading. */
@@ -146,15 +152,20 @@ function show(kind: 'Connection' | 'DataSource', uid: string) {
 /**
  * Where a figure leads: the area it counts.
  *
- * Asked of the router rather than assumed - variables are contributed by
- * a module, so that area exists only where the module is loaded, and a
+ * Asked of the router rather than assumed - events are contributed by a
+ * module, so that area exists only where the module is loaded, and a
  * figure with nowhere to go stays a figure rather than a dead button.
+ *
+ * The guard is also what hid a plain mistake: variables pointed at
+ * `/variables`, a path registered nowhere - the screen is
+ * `/configuration` - so the tile silently stayed a figure forever.
  */
 const figureTargets: Record<string, string> = {
   pages: '/pages',
   connections: '/datasources',
   datasources: '/datasources',
-  variables: '/variables',
+  variables: '/configuration',
+  events: '/events',
 }
 
 function targetFor(key: string): string | undefined {
@@ -167,10 +178,22 @@ function openPage(id: string) {
   router.push(`/page/${id}`)
 }
 
-/** The page the board opens on: the one it names, else the first. */
-const entryPageId = computed(
-  () => (pageRepo?.getDefaultPage()?.id as string | undefined) ?? (pages.value[0]?.id as string | undefined),
-)
+/**
+ * Where "open" goes.
+ *
+ * The page one was last on, else the one the board names, else its
+ * first - the same rule the rail's board entry used to apply, which is
+ * now the only place that needs it. A board with no pages has nowhere to
+ * open, and the button is not offered at all.
+ */
+const entryPath = computed(() => {
+  const target = boardTarget({
+    pageIds: pages.value.map((page: any) => page.id as string),
+    defaultPageId: pageRepo?.defaultPageId,
+    lastOpened: (id) => usageOf(id)?.lastOpened,
+  })
+  return target === BOARD_OVERVIEW ? undefined : target
+})
 </script>
 
 <template>
@@ -186,7 +209,7 @@ const entryPageId = computed(
         <p v-if="board.description" class="head__desc">{{ board.description }}</p>
       </div>
       <div class="head__actions">
-        <DButton v-if="entryPageId" intent="primary" size="sm" @click="openPage(entryPageId)">
+        <DButton v-if="entryPath" intent="primary" size="sm" @click="router.push(entryPath)">
           {{ t('Boards.open.action') }}
         </DButton>
         <DButton size="sm" @click="router.push('/datasources')">{{ t('Board.toData') }}</DButton>
