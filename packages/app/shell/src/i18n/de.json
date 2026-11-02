@@ -42,7 +42,7 @@
     "palette": "Widgets",
     "paletteLabel": "Widget-Palette zeigen oder verbergen",
     "pageSettings": "Seite einrichten",
-    "storage": "Speichern",
+    "storage": "Speicher",
     "storageLabel": "Arbeitsstand speichern oder laden",
     "mode": "Modus",
     "view": "Ansicht",
@@ -112,6 +112,14 @@
       "note": "Ein Arbeitsstand hält genau ein Board. Ein anderes bekommst du, indem du im Speicher einen anderen Stand öffnest; die Seiten dieses Boards liegen im Bereich „Seiten“.",
       "connections": "{{count}} Verbindungen",
       "datasources": "{{count}} Quellen"
+    },
+    "new": {
+      "title": "Neues Board",
+      "name": "Name",
+      "suggestion": "Mein Board",
+      "place": "Ablegen in",
+      "placeNote": "Hier wird der Stand abgelegt. Speichern schreibt dann immer dorthin.",
+      "noPlace": "Dieser Browser bietet keinen beschreibbaren Ort an. Das Board wird angelegt, aber noch nirgends abgelegt — beim Speichern wirst du gefragt, wohin."
     }
   },
   "Storage": {

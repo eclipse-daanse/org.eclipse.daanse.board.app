@@ -11,6 +11,8 @@
  *   Smart City Jena
  **********************************************************************/
 
+import type { WorkspaceOrigin } from './useWorkspaceFile'
+
 const KEY = 'daanse.board.lastOpened'
 
 /** Enough to find a stored state again, and nothing more. */
@@ -21,6 +23,14 @@ export interface LastOpened {
   name?: string
   /** The content itself, so a reload needs nobody's permission to read it. */
   data: unknown
+  /**
+   * The place and entry it was written to, if it has one.
+   *
+   * The origin otherwise lives only in memory, so a reload turned every
+   * later save back into a question about where - for a board that had
+   * been answering it since the day it was made.
+   */
+  origin?: WorkspaceOrigin
 }
 
 /**

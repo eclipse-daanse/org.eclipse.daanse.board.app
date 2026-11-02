@@ -42,7 +42,7 @@
     "palette": "Widgets",
     "paletteLabel": "Show or hide the widget palette",
     "pageSettings": "Page settings",
-    "storage": "Save",
+    "storage": "Storage",
     "storageLabel": "Save or load the workspace",
     "mode": "Mode",
     "view": "View",
@@ -112,6 +112,14 @@
       "note": "A workspace holds exactly one board. To get another one, open a different workspace from storage; the pages of this board are in the “Pages” area.",
       "connections": "{{count}} connections",
       "datasources": "{{count}} sources"
+    },
+    "new": {
+      "title": "New board",
+      "name": "Name",
+      "suggestion": "My board",
+      "place": "Keep it in",
+      "placeNote": "Where this board is kept. Save writes there from then on.",
+      "noPlace": "This browser offers no place that can be written to. The board is made all the same, but kept nowhere yet — saving it will ask where."
     }
   },
   "Storage": {
