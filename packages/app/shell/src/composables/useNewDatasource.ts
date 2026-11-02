@@ -40,13 +40,31 @@ const forType = ref<string | undefined>(undefined)
 /** The name it opens with, where the caller has one worth offering. */
 const forName = ref<string | undefined>(undefined)
 
+/**
+ * Fields the caller can already answer.
+ *
+ * A catalogue hit carries an address, and for a type that reads a path
+ * below its connection that path is the hit's own last segment - known
+ * here, and a blank the person would otherwise fill in by hand from
+ * something they can see on the screen behind the dialog.
+ */
+const forConfig = ref<Record<string, unknown> | undefined>(undefined)
+
 export function useNewDatasource() {
-  function show(on: { connection?: string; type?: string; name?: string } = {}) {
+  function show(
+    on: {
+      connection?: string
+      type?: string
+      name?: string
+      config?: Record<string, unknown>
+    } = {},
+  ) {
     forConnection.value = on.connection
     forType.value = on.type
     forName.value = on.name
+    forConfig.value = on.config
     open.value = true
   }
 
-  return { open, forConnection, forType, forName, show }
+  return { open, forConnection, forType, forName, forConfig, show }
 }
