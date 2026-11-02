@@ -31,6 +31,10 @@ export class NavigationItem {
   @Attribute()
   label?: string;
 
+  @Documentation("One sentence saying what the area is for, shown beside the label where there is room for it. A translation key like the label.")
+  @Attribute()
+  description?: string;
+
   @Documentation("Icon name (e.g., 'event', 'settings', 'preview')")
   @Attribute()
   icon?: string;
