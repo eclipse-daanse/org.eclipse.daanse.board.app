@@ -113,11 +113,21 @@ watch(() => innerInterval.value, (nv) => {
     intervalDebounce(nv);
 });
 
+/*
+ * Once per opening, not twice.
+ *
+ * This watch was declared immediate and onMounted below checked the same
+ * address again, so opening the editor of a configured source sent two
+ * HEAD requests to it before the preview had asked for anything. An
+ * endpoint that builds its answer in order to serve it does that work for
+ * a HEAD as well, and throws the body away - two of them is two downloads
+ * nobody sees.
+ */
 watch([tempResourceUrl, connection], ([newTempUrl, newConnection]) => {
     if (newTempUrl && newConnection) {
         updateResourceUrl(newTempUrl);
     }
-}, { immediate: true });
+});
 
 onMounted(async () => {
     if (fullUrl.value) {

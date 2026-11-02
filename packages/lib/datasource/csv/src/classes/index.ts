@@ -85,56 +85,85 @@ export class CsvStore extends BaseDatasource {
     }
   }
 
-  async getOriginalData(): Promise<any> {
+  /*
+   * One read and one parse, shared by whatever asks for it while it runs.
+   *
+   * getData and getOriginalData each fetched the text and each ran the
+   * whole parse over it, and a preview calls both. The connection answers
+   * the second fetch from the one in flight, so there was one request -
+   * and two full parses. Measured on 0.92 MB and 20,000 rows: 402 ms for
+   * one opening, of which 179 ms was a single read and parse.
+   *
+   * Held only while it is in flight. What stays good for how long is the
+   * connection's business, and a poll that comes round again wants a new
+   * answer, not this one.
+   */
+  private reading?: { key: string; answer: Promise<ICsvParseResult | undefined> }
+
+  private read(skipStart: number, skipEnd: number): Promise<ICsvParseResult | undefined> {
+    /* Keyed by what was asked for: skipping rows makes a different answer
+      out of the same text, so those two are not one another's. */
+    const key = `${this.resourceUrl?.value ?? ''}|${skipStart}|${skipEnd}`
+    if (this.reading?.key === key) return this.reading.answer
+
+    const answer = this.readAndParse(skipStart, skipEnd)
+    this.reading = { key, answer }
+    void answer
+      .catch(() => undefined)
+      .then(() => {
+        if (this.reading?.answer === answer) this.reading = undefined
+      })
+    return answer
+  }
+
+  private async readAndParse(
+    skipStart: number,
+    skipEnd: number,
+  ): Promise<ICsvParseResult | undefined> {
     const connection = this.connectionRepository.getConnection(
       this.connection,
     ) as IConnection
     const req = await connection.fetch({ url: this.resourceUrl?.value || '' }, ASKS_FOR_CSV)
-    if (!req.ok) return []
-    const text = await req.text()
+    if (!req.ok) return undefined
 
-    const data = helpers.csv.parse(text, this.parseOptions || {})
+    let text = await req.text()
+
+    // Apply row skipping BEFORE parsing
+    if (skipStart > 0 || skipEnd > 0) {
+      const lines = text.split('\n')
+      const endIndex = skipEnd > 0 ? lines.length - skipEnd : lines.length
+      text = lines.slice(skipStart, endIndex).join('\n')
+    }
+
+    return helpers.csv.parse(text, this.parseOptions || {})
+  }
+
+  async getOriginalData(): Promise<any> {
+    const data = await this.read(0, 0)
+    if (!data) return []
     return data
   }
 
   async getData(type: string): Promise<any> {
-    const connection = this.connectionRepository.getConnection(
-      this.connection,
-    ) as IConnection
-    const req = await connection.fetch({ url: this.resourceUrl?.value || '' }, ASKS_FOR_CSV)
-    if (!req.ok) return null
-    let text = await req.text()
+    const parsed = await this.read(this.skipRowsFromStart, this.skipRowsFromEnd)
+    if (!parsed) return null
 
-    // Apply row skipping BEFORE parsing
-    if (this.skipRowsFromStart > 0 || this.skipRowsFromEnd > 0) {
-      const lines = text.split('\n')
-      const startIndex = this.skipRowsFromStart
-      const endIndex = this.skipRowsFromEnd > 0
-        ? lines.length - this.skipRowsFromEnd
-        : lines.length
+    /* Built rather than written into: with no rows skipped this is the
+      same parse getOriginalData was given, and trimming it in place would
+      trim what the other reader is holding. */
+    const trim = (value: any) => (typeof value === 'string' ? value.trim() : value)
 
-      text = lines.slice(startIndex, endIndex).join('\n')
+    const data: ICsvParseResult = {
+      header: parsed.header.map(trim),
+      rows: parsed.rows.map((row: any) => row.map(trim)),
+      mappedRows: parsed.mappedRows.map((row: any) => {
+        const trimmedRow: any = {}
+        for (const [key, value] of Object.entries(row)) {
+          trimmedRow[trim(key)] = trim(value)
+        }
+        return trimmedRow
+      }),
     }
-
-    const data: ICsvParseResult = helpers.csv.parse(
-      text,
-      this.parseOptions || {},
-    )
-
-    data.header = data.header.map(header => typeof header === 'string' ? header.trim() : header)
-
-    data.rows = data.rows.map(row =>
-      row.map((value: any) => typeof value === 'string' ? value.trim() : value)
-    )
-
-    data.mappedRows = data.mappedRows.map((row) => {
-      const trimmedRow: any = {}
-      for (const [key, value] of Object.entries(row)) {
-        const trimmedKey = typeof key === 'string' ? key.trim() : key
-        trimmedRow[trimmedKey] = typeof value === 'string' ? value.trim() : value
-      }
-      return trimmedRow
-    })
 
     if (type === 'DataTable') {
       return {

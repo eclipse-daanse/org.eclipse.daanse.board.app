@@ -132,4 +132,25 @@ describe('REST Datasource Settings.vue', () => {
     await new Promise(resolve => setTimeout(resolve, 800))
     expect(config.pollingInterval).toBe(7500)
   })
+
+  /* The watch on the address was immediate and onMounted checked the same
+    address again, so opening a configured source sent two HEAD requests
+    to it before the preview had asked for anything. */
+  it('asks the endpoint once when it opens', async () => {
+    const connections = [
+      { name: 'Conn 1', uid: 'conn1', type: 'rest', config: { url: 'https://api.test.com/' } },
+    ]
+    const config = {
+      connection: 'conn1',
+      resourceUrl: 'posts',
+      selectedJSONValue: '',
+      pollingEnabled: false,
+    }
+    mount(Settings, { props: { config, dataSources: [], connections } })
+
+    await new Promise((done) => setTimeout(done, 900))
+
+    expect(mockFetch.mock.calls).toHaveLength(1)
+    expect(mockFetch.mock.calls[0][1]).toEqual({ method: 'HEAD' })
+  })
 })
