@@ -27,9 +27,15 @@ Contributors:
   rather than inside it - so opening the panel does not move a single
   icon, and the one a person is reaching for stays where it was.
 
-  Opening is hover or keyboard focus. The pages of a board are not listed
-  here: they are reached through the pages area, which is the screen that
-  can show more of a page than its name.
+  Opening is hover or keyboard focus, and picking an area closes it again
+  - having navigated, one is looking at what one chose, not at the menu
+  one chose it from. Keyboard focus keeps it open all the same: there the
+  menu is where one still is, and collapsing it would hide the row one is
+  standing on.
+
+  The pages of a board are not listed here: they are reached through the
+  pages area, which is the screen that can show more of a page than its
+  name.
 -->
 
 <script setup lang="ts">
@@ -119,12 +125,59 @@ const areas = computed(() => [
   })),
 ])
 
-const go = (target: string) => router.push(target)
+/* ------------------------------------------------------- open or not */
+
+const hovered = ref(false)
+const focused = ref(false)
+/* Set by picking an area, cleared by leaving the rail: the pointer is
+  still on the panel at that moment, so :hover alone would hold it open. */
+const dismissed = ref(false)
+
+const expanded = computed(() => (hovered.value && !dismissed.value) || focused.value)
+
+function enter() {
+  hovered.value = true
+}
+
+function leave() {
+  hovered.value = false
+  dismissed.value = false
+}
+
+function go(target: string) {
+  dismissed.value = true
+  router.push(target)
+}
+
+/**
+ * Whether the focus arrived by keyboard.
+ *
+ * A click on a button focuses it, so plain focus would mean every pick
+ * holds the panel open - the very thing dismissing it is for.
+ * :focus-visible is the browser's own answer to "did they tab here",
+ * which is the question being asked. Where it is not understood - jsdom
+ * does not - the keyboard is assumed, because holding the menu open is
+ * the harmless way to be wrong about it.
+ */
+function byKeyboard(event: FocusEvent): boolean {
+  const target = event.target as HTMLElement | null
+  try {
+    return target?.matches(':focus-visible') ?? false
+  } catch {
+    return true
+  }
+}
 </script>
 
 <template>
   <nav class="rail" :aria-label="t('Rail.areas')">
-    <div class="rail__panel">
+    <div
+      :class="['rail__panel', { 'rail__panel--open': expanded }]"
+      @mouseenter="enter"
+      @mouseleave="leave"
+      @focusin="focused = byKeyboard($event)"
+      @focusout="focused = false"
+    >
       <ul class="rail__areas">
         <li v-for="area in areas" :key="area.id" class="rail__area">
           <button
@@ -181,8 +234,7 @@ const go = (target: string) => router.push(target)
   transition: width 140ms cubic-bezier(0.2, 0.6, 0.2, 1);
 }
 
-.rail__panel:hover,
-.rail__panel:focus-within {
+.rail__panel--open {
   width: 268px;
   box-shadow: var(--shadow-e3);
 }
@@ -277,8 +329,7 @@ const go = (target: string) => router.push(target)
   pointer-events: none;
   transition: opacity 110ms linear;
 }
-.rail__panel:hover .ri__text,
-.rail__panel:focus-within .ri__text {
+.rail__panel--open .ri__text {
   opacity: 1;
   pointer-events: auto;
 }
