@@ -241,17 +241,16 @@ function byKeyboard(event: FocusEvent): boolean {
   display: flex;
   flex-direction: column;
   /*
-   * The column reaches up into the actions row; its entries do not.
+   * Flush with the bar above: the column reaches up into the actions
+   * row and its entries come with it. Indenting them to the height of
+   * the content instead leaves the top of the column empty and drops
+   * every entry by one bar - which is the column reading as hung from
+   * the wrong line.
    *
-   * Filling that notch is what the reach is for - without it the row
-   * begins at the content and leaves a hole beside the save. The rows
-   * themselves start where the content starts, or the first one sits at
-   * half the height of a bar it has nothing to do with.
-   *
-   * Four pixels on top of that is half a step, so the first row sits the
-   * same distance from the top as the rows sit from each other.
+   * Four pixels is half a step, so the first row sits the same distance
+   * from the top as the rows sit from each other.
    */
-  padding: calc(var(--spacing-pagebar, 34px) + 1px + 4px) 0 4px;
+  padding: 4px 0;
   overflow-x: hidden;
   overflow-y: auto;
   background: var(--color-pane);
