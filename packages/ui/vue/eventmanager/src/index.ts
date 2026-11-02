@@ -39,6 +39,7 @@ export function activate({ services }: ActivationContext) {
   const eventManagerNav = new NavigationItem()
   eventManagerNav.id = NAV_ID
   eventManagerNav.label = 'eventmanager:Nav.label'
+  eventManagerNav.description = 'eventmanager:Nav.description'
   eventManagerNav.icon = 'event'
   eventManagerNav.route = '/events'
   eventManagerNav.routeName = ROUTE_NAME

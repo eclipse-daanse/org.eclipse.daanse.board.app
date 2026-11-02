@@ -1,9 +1,12 @@
 {
   "Rail": {
     "areas": "Bereiche",
-    "board": "Board",
+    "overview": "Übersicht",
+    "overviewDesc": "Alles, was dieses Board hält — und der Weg dorthin.",
+    "data": "Verbindungen & Daten",
+    "dataDesc": "Woher die Zahlen kommen, und was darauf liest.",
     "pages": "Seiten",
-    "data": "Verbindungen & Daten"
+    "pagesDesc": "Die Seiten dieses Boards: anlegen, öffnen, ordnen."
   },
   "Header": {
     "brand": "Daanse Board",
@@ -457,7 +460,8 @@
     "view": "Ansicht der Auswahl"
   },
   "Nav": {
-    "variables": "Variablen"
+    "variables": "Variablen",
+    "variablesDesc": "Benannte Werte, die Seiten und Widgets teilen."
   },
   "Board": {
     "noPages": {
