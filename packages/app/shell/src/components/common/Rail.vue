@@ -52,6 +52,7 @@ import {
   type NavigationRegistry,
 } from 'org.eclipse.daanse.board.app.lib.api.navigation'
 import { useEList, useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+import { boardPath, pagesPath } from 'org.eclipse.daanse.board.app.lib.api.page'
 
 const { t } = useTranslation('shell')
 const route = useRoute()
@@ -95,7 +96,7 @@ const areas = computed(() => [
     description: t('Rail.overviewDesc'),
     /* Without a board there is no rail at all, so the fallback is never
       reached in practice - it exists so the entry is never a dead href. */
-    route: boardId.value ? `/board/${boardId.value}` : '/',
+    route: boardPath(boardId.value),
     current: String(route.name) === 'board',
   },
   {
@@ -111,7 +112,7 @@ const areas = computed(() => [
     icon: 'layers',
     label: t('Rail.pages'),
     description: t('Rail.pagesDesc'),
-    route: '/pages',
+    route: pagesPath(boardId.value),
     current: inPages.value,
   },
   ...navigationItems.value.map((item) => ({

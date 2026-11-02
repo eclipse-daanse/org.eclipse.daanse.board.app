@@ -18,10 +18,12 @@ import { PageI } from './interface/PageI'
 import { RouterView, useRouter, useRoute } from 'vue-router'
 import PageLayoutRenderer from './PageLayoutRenderer.vue'
 import { useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+import { pageIdIn } from 'org.eclipse.daanse.board.app.lib.api.page'
 
 const config = defineModel<PageI>('configv', { required: true});
 const defaultConfig: PageI = {
-  path: '/page/abc',
+  /* A placeholder, replaced the moment a page is picked in the settings. */
+  path: '',
   hideTitle: false,
 };
 
@@ -37,12 +39,19 @@ const maxRecursionDepth = 3
 // Provide für nachfolgende PageWidgets
 provide('pageWidgetDepth', currentDepth)
 
-// Sammle alle PageWidget-Pfade in der Aufrufkette
-// WICHTIG: Verwende die aktuelle Seite, nicht den konfigurierten Ziel-Pfad
-const parentPaths = inject('pageWidgetPaths', []) as string[]
-const currentPagePath = `/page/${currentRoute.params.pageid}`
-const currentPaths = [...parentPaths, currentPagePath]
-provide('pageWidgetPaths', currentPaths)
+/*
+ * The chain of pages this one is being shown inside.
+ *
+ * Page ids, not paths: a page is addressed inside its board now
+ * (/board/:boardid/pages/:pageid), and a board stored before that holds
+ * widgets configured with the old /page/:pageid. Comparing the two
+ * strings would find no cycle where there plainly is one, and the id is
+ * what the question was ever about.
+ */
+const parentPageIds = inject('pageWidgetPageIds', []) as string[]
+const currentPageId = String(currentRoute.params.pageid ?? '')
+const chain = [...parentPageIds, currentPageId]
+provide('pageWidgetPageIds', chain)
 
 const isRecursive = computed(() => {
   const targetPath = config.value.path
@@ -54,18 +63,16 @@ const isRecursive = computed(() => {
     return true
   }
 
-  // 2. Ziel-Pfad bereits in der Aufrufkette vorhanden (Zirkulare Referenz)
-  // Prüfe ob das Ziel bereits von einer übergeordneten Seite aufgerufen wird
-  if (parentPaths.includes(targetPath)) {
-    console.warn(`PageWidget: Circular reference detected`, { targetPath, parentPaths })
+  // 2. The target is already somewhere in the chain above - a cycle
+  const wanted = pageIdIn(targetPath)
+  if (wanted && parentPageIds.includes(wanted)) {
+    console.warn('PageWidget: Circular reference detected', { wanted, parentPageIds })
     return true
   }
 
-  // 3. Zielseite ist die aktuelle Seite
-  const targetPageId = targetPath.split('/').pop()
-  const currentPageId = currentRoute.params.pageid as string
-  if (targetPageId === currentPageId) {
-    console.warn(`PageWidget: Self-reference detected`, { targetPageId, currentPageId })
+  // 3. The target is the page this widget is on
+  if (wanted && wanted === currentPageId) {
+    console.warn('PageWidget: Self-reference detected', { wanted, currentPageId })
     return true
   }
 
@@ -84,10 +91,8 @@ if (!config.value.path) {
   }
 }
 
-// Extrahiere Page-ID aus dem Pfad
-const targetPageId = computed(() => {
-  return config.value.path?.split('/').pop() || 'abc'
-})
+// The page this widget shows, whichever shape its path was written in
+const targetPageId = computed(() => pageIdIn(config.value.path) || 'abc')
 
 // Event Handlers für LayoutRenderer
 const handleOpenSettings = (widgetId: string) => {
@@ -104,16 +109,16 @@ const handleRemoveWidget = (widgetId: string) => {
 
 <template>
   <div class="container" v-if="config.path">
-    <!-- Rekursions-Warnung -->
+    <!-- The cycle this widget would have opened -->
     <div v-if="isRecursive" class="recursion-warning">
       ⚠️ {{ t('Widget.recursion', { path: config.path }) }}
       <div class="recursion-details">
         {{ t('Widget.depth', { depth: currentDepth, max: maxRecursionDepth }) }}<br>
-        {{ t('Widget.chain', { chain: [...currentPaths, config.path].join(' → ') }) }}
+        {{ t('Widget.chain', { chain: [...chain, targetPageId].join(' → ') }) }}
       </div>
     </div>
 
-    <!-- Normale Darstellung mit LayoutRenderer -->
+    <!-- Otherwise the page itself -->
     <div v-else style="width: 100%; height: 100%">
       <div
         class="page-widget-content"

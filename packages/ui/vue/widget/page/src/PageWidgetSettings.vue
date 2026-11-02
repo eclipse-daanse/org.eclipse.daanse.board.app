@@ -16,7 +16,7 @@ Contributors:
 import { inject, onMounted, ref, computed } from 'vue'
 import { PageI } from './interface/PageI'
 import { useRoute } from 'vue-router'
-import { type PageRegistryI, identifier } from 'org.eclipse.daanse.board.app.lib.api.page'
+import { type PageRegistryI, identifier, pageIdIn, pagePath } from 'org.eclipse.daanse.board.app.lib.api.page'
 import {
   DInput,
   DSelect,
@@ -41,7 +41,7 @@ const availablePages = computed(() => {
     .map(pageId => {
       const page = pageRegistry.getPage(pageId)
       return {
-        value: `/page/${pageId}`,
+        value: pagePath(currentRoute.params.boardid as string | undefined, pageId),
         text: page?.name || pageId,
         id: pageId
       }
@@ -51,7 +51,7 @@ const availablePages = computed(() => {
 // Hilfsfunktion um die aktuelle Auswahl zu validieren
 const isValidSelection = computed(() => {
   if (!widgetSettings.value.path) return true
-  const selectedPageId = widgetSettings.value.path.split('/').pop()
+  const selectedPageId = pageIdIn(widgetSettings.value.path)
   return selectedPageId !== currentPageId.value
 })
 

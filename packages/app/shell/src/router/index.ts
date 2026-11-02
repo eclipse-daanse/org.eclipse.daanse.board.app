@@ -17,6 +17,19 @@ import ConnectionsAndData from '@/pages/ConnectionsAndData.vue'
 import BoardPages from '@/pages/BoardPages.vue'
 import OpenBoard from '@/pages/OpenBoard.vue'
 import EditReport from '@/pages/EditReport.vue'
+import { useLastOpenedState } from '@/composables/useLastOpenedState'
+import { pagePath, pagesPath } from 'org.eclipse.daanse.board.app.lib.api.page'
+
+/**
+ * The board an address that does not name one must mean.
+ *
+ * Only what this browser last opened can answer it - which is the same
+ * source the restore on start-up reads, so an old address resolves to
+ * exactly the board that would have been loaded anyway. Where it answers
+ * nothing there is no board for the page to be in, and the launcher is
+ * where one is opened.
+ */
+const rememberedBoard = () => useLastOpenedState().recall()?.boardId
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -55,11 +68,22 @@ const router = createRouter({
      * still lands here for links that are already out there.
      */
     {
-      /* The pages of the open board - an area of the workspace, not a view
-        of the launcher: a page only means anything once a board is open. */
-      path: '/pages',
+      /* The pages of the open board. Under it, because that is where
+        they are: a page only means anything inside the board that
+        holds it. */
+      path: '/board/:boardid/pages',
       name: 'pages',
       component: BoardPages,
+    },
+    {
+      path: '/board/:boardid/pages/:pageid',
+      name: 'page',
+      component: ViewReport,
+    },
+    {
+      path: '/board/:boardid/pages/:pageid/edit',
+      name: 'pageEdit',
+      component: EditReport,
     },
     {
       path: '/datasources',
@@ -70,15 +94,24 @@ const router = createRouter({
       path: '/:id/data',
       redirect: { name: 'data' },
     },
+    /*
+     * What these addresses used to be.
+     *
+     * Not only bookmarks: ui.vue.widget.page writes /page/:pageid into
+     * the board itself as its `path` setting, so every stored board with
+     * a page widget on it carries one.
+     */
     {
-      path:'/page/:pageid/edit',
-      name:'pageEdit',
-      component:EditReport,
+      path: '/pages',
+      redirect: () => pagesPath(rememberedBoard()),
     },
     {
-      path:'/page/:pageid',
-      name:'page',
-      component:ViewReport,
+      path: '/page/:pageid/edit',
+      redirect: (to) => pagePath(rememberedBoard(), String(to.params.pageid), true),
+    },
+    {
+      path: '/page/:pageid',
+      redirect: (to) => pagePath(rememberedBoard(), String(to.params.pageid)),
     }
   ],
 })

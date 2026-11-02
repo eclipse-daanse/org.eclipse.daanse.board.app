@@ -139,3 +139,7 @@ export interface StoredLayoutItem {
 
 export const PAGE_REPOSITORY = serviceId<PageRegistryI>('PageRepository')
 export const identifier = Symbol.for(PAGE_REPOSITORY)
+
+/* How a page is addressed - part of the contract, because a page widget
+  keeps one of these as a setting. */
+export { LAUNCHER, boardPath, pagesPath, pagePath, pageIdIn } from './paths'
