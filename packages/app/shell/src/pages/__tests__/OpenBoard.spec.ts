@@ -235,33 +235,17 @@ describe('the open board', () => {
 
   /* ---------------------------------------------------- keeping it */
 
-  it('offers saving instead of repeating the navigation', async () => {
-    const { wrapper } = setUp()
-    await flushPromises()
-
-    const actions = wrapper.findAll('.head__actions button').map((each) => each.text())
-    expect(actions).toContain('common:Action.save')
-    expect(actions).not.toContain(en.Board.figure.connections)
-    expect(actions).not.toContain(en.Board.figure.pages)
-  })
-
   /*
-   * A board that was never stored has no entry to write over, so storage
-   * is asked for one - over the board, never instead of it: going to the
-   * launcher closed the very board one had come to keep.
+   * Keeping the board and the way into its pages moved to the topbar,
+   * where they are on every one of the board's screens. This one holds
+   * the board's name and what it holds, and nothing one presses twice.
    */
-  it('opens storage over a board that was never stored, and stays on it', async () => {
+  it('leaves acting on the board to the topbar', async () => {
     const { wrapper } = setUp()
     await flushPromises()
 
-    const save = wrapper
-      .findAll('.head__actions button')
-      .find((each) => each.text() === 'common:Action.save')
-    await save!.trigger('click')
-    await flushPromises()
-
-    expect(useStorageDialog().open.value).toBe(true)
-    expect(push).not.toHaveBeenCalled()
+    expect(wrapper.find('.head__actions').exists()).toBe(false)
+    expect(wrapper.find('.head__name--button').text()).toBe('Sparky')
   })
 
   it('sends a link to a board this browser never opened to the launcher', async () => {
