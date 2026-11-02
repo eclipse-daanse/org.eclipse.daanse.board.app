@@ -130,6 +130,7 @@ export async function activate({ services, log }: ActivationContext) {
   const configNav = new NavigationItem()
   configNav.id = 'config'
   configNav.label = 'shell:Nav.variables'
+  configNav.description = 'shell:Nav.variablesDesc'
   configNav.icon = 'settings'
   configNav.route = '/configuration'
   configNav.routeName = 'config'
