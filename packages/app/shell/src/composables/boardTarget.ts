@@ -46,7 +46,9 @@ export function boardTarget({
   lastOpened,
 }: BoardTargetInput): string {
   const exists = (id?: string | null): id is string => !!id && pageIds.includes(id)
-  const to = (id: string) => pagePath(boardId, id)
+  /* Opening a page means working on it - the mode lives in the topbar,
+    and a board is built far more often than it is watched. */
+  const to = (id: string) => pagePath(boardId, id, true)
 
   if (exists(currentPageId)) return to(currentPageId)
 

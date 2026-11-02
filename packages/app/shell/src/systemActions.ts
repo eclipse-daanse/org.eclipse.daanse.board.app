@@ -71,6 +71,12 @@ class SystemActionsImpl {
       }, 5000);
     });
 
+    /*
+     * In view, deliberately. Picking a page by hand means working on it,
+     * but this is a rule firing while a board is being used - a button
+     * pressed on a dashboard must not drop whoever pressed it into the
+     * editor.
+     */
     await this.router.push(pagePath(this.boardId(), pageId));
     await pageLoadedPromise;
 
