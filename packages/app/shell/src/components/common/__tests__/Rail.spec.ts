@@ -69,7 +69,7 @@ const MODULE_AREAS = [
   },
 ]
 
-function setUp({ pages = ['Wasser', 'Strom'], areas = MODULE_AREAS } = {}) {
+function setUp({ pages = ['Wasser', 'Strom'], areas = MODULE_AREAS, attachTo = undefined as any } = {}) {
   const workspace = new WorkspaceImpl()
   const board = new BoardImpl()
   board.id = 'b1'
@@ -91,6 +91,7 @@ function setUp({ pages = ['Wasser', 'Strom'], areas = MODULE_AREAS } = {}) {
       },
       stubs: { DIcon: true },
     },
+    ...(attachTo ? { attachTo } : {}),
   })
   return { wrapper, workspace }
 }
@@ -123,6 +124,45 @@ describe('the rail', () => {
     await wrapper.findAll('.ri')[0].trigger('click')
 
     expect(push).toHaveBeenCalledWith('/board/b1')
+  })
+
+  /* ----------------------------------------------- open or not */
+
+  it('opens on the pointer and closes again once an area is picked', async () => {
+    const { wrapper } = setUp()
+    await flushPromises()
+
+    const panel = wrapper.find('.rail__panel')
+    expect(panel.classes()).not.toContain('rail__panel--open')
+
+    await panel.trigger('mouseenter')
+    expect(panel.classes()).toContain('rail__panel--open')
+
+    /* The pointer is still on the panel here, which is why :hover alone
+      would have held it open over the screen one just asked for. */
+    await wrapper.findAll('.ri')[1].trigger('click')
+    expect(panel.classes()).not.toContain('rail__panel--open')
+
+    await panel.trigger('mouseleave')
+    await panel.trigger('mouseenter')
+    expect(panel.classes()).toContain('rail__panel--open')
+  })
+
+  /* On the keyboard the menu is where one still is: collapsing it would
+    hide the row the focus is standing on. Telling the two apart is what
+    :focus-visible is for - a click focuses a button too. */
+  it('stays open while the keyboard is in it', async () => {
+    const { wrapper } = setUp({ attachTo: document.body })
+    await flushPromises()
+
+    const panel = wrapper.find('.rail__panel')
+    const area = wrapper.findAll('.ri')[1]
+    ;(area.element as HTMLElement).focus()
+    await area.trigger('focusin')
+    expect(panel.classes()).toContain('rail__panel--open')
+
+    await area.trigger('click')
+    expect(panel.classes()).toContain('rail__panel--open')
   })
 
   it('says what each area is for', async () => {
