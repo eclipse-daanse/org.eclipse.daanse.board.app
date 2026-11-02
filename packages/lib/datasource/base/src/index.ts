@@ -78,8 +78,9 @@ export abstract class BaseDatasource extends UsesComputedVariable implements IDa
     this.name = configuration.name ?? ''
     this.uid = configuration.uid ?? ''
 
+    /* Every notification passed through a console.log called "Test
+      notify" - on a hot path, and once per change. */
     this.setUpdateCb(() => {
-      console.log('Test notify')
       this.notify()
     })
 
@@ -114,8 +115,13 @@ export abstract class BaseDatasource extends UsesComputedVariable implements IDa
     this.pollingIntervalId = window.setInterval(async () => {
       if (!this.pollingActive) return
       try {
-        const resp = await this.getOriginalData()
-        console.log(resp)
+        /*
+        * Not logged. This ran every tick - five seconds by default -
+        * and handed the console the whole answer, which it then keeps.
+        * On a few megabytes of JSON that is what made a board get
+        * slower the longer it stood open.
+        */
+        await this.getOriginalData()
         this.notify()
       } catch (error) {
         console.warn('Polling error', error)

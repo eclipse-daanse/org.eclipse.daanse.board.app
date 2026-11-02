@@ -43,9 +43,16 @@ const selectedKpis = computed({
   }
 })
 
+/*
+ * Watched for being rebuilt, not for being used.
+ *
+ * `deep` made this fire again whenever the store changed anything inside
+ * itself while answering - so every read was two reads, 60ms apart,
+ * against the same endpoint. What this is waiting for is a new store.
+ */
 watch(tempStore, async () => {
   data.value = await tempStore.value.getOriginalData('DataTable');
-}, { deep: true });
+});
 
 </script>
 <template>

@@ -136,7 +136,6 @@ export class CsvStore extends BaseDatasource {
       return trimmedRow
     })
 
-    console.log(data)
     if (type === 'DataTable') {
       return {
         headers: data.header,

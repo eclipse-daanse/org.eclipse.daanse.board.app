@@ -40,6 +40,13 @@ const tempStore = shallowRef(null as any)
 const settingsRef = ref(props.dataSource);
 const { update } = useTemporaryStore(props.dataSource.type, settingsRef, tempStore);
 
+/*
+ * Watched for being rebuilt, not for being used.
+ *
+ * `deep` made this fire again whenever the store changed anything inside
+ * itself while answering - so every read was two reads, 60ms apart,
+ * against the same endpoint. What this is waiting for is a new store.
+ */
 watch(tempStore, async () => {
   console.log('tempStore changed', tempStore.value);
   data.value = await tempStore.value.getData('OGCSTAData');
@@ -53,7 +60,7 @@ watch(tempStore, async () => {
       console.log('Updated data after subscribe callback:', data.value);
     });
   }
-}, { deep: true });
+});
 
 const nonCircular = computed(()=>{
     const cache:any = [];

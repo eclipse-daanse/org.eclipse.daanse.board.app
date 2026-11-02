@@ -77,6 +77,13 @@ function waypointLabel(index: number): string {
   return t('Valhalla.stop', { n: index })
 }
 
+/*
+ * Watched for being rebuilt, not for being used.
+ *
+ * `deep` made this fire again whenever the store changed anything inside
+ * itself while answering - so every read was two reads, 60ms apart,
+ * against the same endpoint. What this is waiting for is a new store.
+ */
 watch(tempStore, async () => {
   if (tempStore.value) {
     data.value = await tempStore.value.getData('object')
@@ -84,7 +91,7 @@ watch(tempStore, async () => {
       data.value = await tempStore.value.getData('object')
     })
   }
-}, { deep: true })
+})
 
 watch(props.dataSource, () => update(), { deep: true })
 
