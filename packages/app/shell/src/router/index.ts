@@ -18,7 +18,7 @@ import BoardPages from '@/pages/BoardPages.vue'
 import OpenBoard from '@/pages/OpenBoard.vue'
 import EditReport from '@/pages/EditReport.vue'
 import { useLastOpenedState } from '@/composables/useLastOpenedState'
-import { pagePath, pagesPath } from 'org.eclipse.daanse.board.app.lib.api.page'
+import { dataPath, pagePath, pagesPath } from 'org.eclipse.daanse.board.app.lib.api.page'
 
 /**
  * The board an address that does not name one must mean.
@@ -62,10 +62,9 @@ const router = createRouter({
       component: EditReport,
     },
     /*
-     * The screen the mockups call "Verbindungen & Daten". The old path
-     * carried a board id it never read - the page is about the workspace,
-     * not about one board - so /datasources is the name, and the old one
-     * still lands here for links that are already out there.
+     * The screen the mockups call "Verbindungen & Daten", under the board
+     * it belongs to. It was flat while every page was nested, which left
+     * the one area of a board whose address did not say which board.
      */
     {
       /* The pages of the open board. Under it, because that is where
@@ -86,13 +85,18 @@ const router = createRouter({
       component: EditReport,
     },
     {
-      path: '/datasources',
+      path: '/board/:boardid/data',
       name: 'data',
       component: ConnectionsAndData,
     },
     {
+      path: '/datasources',
+      redirect: () => dataPath(rememberedBoard()),
+    },
+    {
+      /* Older still: a board id this screen never read. */
       path: '/:id/data',
-      redirect: { name: 'data' },
+      redirect: () => dataPath(rememberedBoard()),
     },
     /*
      * What these addresses used to be.

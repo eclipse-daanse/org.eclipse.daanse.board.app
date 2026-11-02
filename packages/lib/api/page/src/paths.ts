@@ -41,6 +41,17 @@ export function boardPath(boardId?: string): string {
   return boardId ? `/board/${boardId}` : LAUNCHER
 }
 
+/**
+ * The connections and the sources that read on them.
+ *
+ * A board's, like its pages: a connection belongs to the workspace one
+ * board is open in, and the address said so nowhere while every page
+ * said it (#1176).
+ */
+export function dataPath(boardId?: string): string {
+  return boardId ? `/board/${boardId}/data` : LAUNCHER
+}
+
 export function pagesPath(boardId?: string): string {
   return boardId ? `/board/${boardId}/pages` : LAUNCHER
 }

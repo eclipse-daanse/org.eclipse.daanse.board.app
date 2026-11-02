@@ -52,7 +52,7 @@ import {
   type NavigationRegistry,
 } from 'org.eclipse.daanse.board.app.lib.api.navigation'
 import { useEList, useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
-import { boardPath, pagesPath } from 'org.eclipse.daanse.board.app.lib.api.page'
+import { boardPath, dataPath, pagesPath } from 'org.eclipse.daanse.board.app.lib.api.page'
 
 const { t } = useTranslation('shell')
 const route = useRoute()
@@ -104,7 +104,7 @@ const areas = computed(() => [
     icon: 'dataset',
     label: t('Rail.data'),
     description: t('Rail.dataDesc'),
-    route: '/datasources',
+    route: dataPath(boardId.value),
     current: String(route.name) === 'data',
   },
   {

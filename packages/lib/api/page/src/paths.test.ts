@@ -12,11 +12,12 @@
  **********************************************************************/
 
 import { describe, expect, it } from 'vitest'
-import { LAUNCHER, boardPath, pagesPath, pagePath, pageIdIn } from './paths'
+import { LAUNCHER, boardPath, dataPath, pagesPath, pagePath, pageIdIn } from './paths'
 
 describe('the addresses of a board', () => {
   it('puts a page inside the board that holds it', () => {
     expect(boardPath('b1')).toBe('/board/b1')
+    expect(dataPath('b1')).toBe('/board/b1/data')
     expect(pagesPath('b1')).toBe('/board/b1/pages')
     expect(pagePath('b1', 'p1')).toBe('/board/b1/pages/p1')
     expect(pagePath('b1', 'p1', true)).toBe('/board/b1/pages/p1/edit')
@@ -30,6 +31,7 @@ describe('the addresses of a board', () => {
    */
   it('answers the launcher where there is no board', () => {
     expect(boardPath(undefined)).toBe(LAUNCHER)
+    expect(dataPath(undefined)).toBe(LAUNCHER)
     expect(pagesPath(undefined)).toBe(LAUNCHER)
     expect(pagePath(undefined, 'p1')).toBe(LAUNCHER)
   })
