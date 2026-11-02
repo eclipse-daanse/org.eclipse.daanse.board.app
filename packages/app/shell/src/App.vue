@@ -144,12 +144,19 @@ const noBoard = computed(() => {
   min-height: 0;
   background: var(--color-bg);
 }
+/*
+ * Not clipped here.
+ *
+ * The rail reaches up into the actions row of the topbar, and an
+ * overflow on this box cut exactly that off - it looked like a stacking
+ * order and was a pair of scissors. What has to be clipped is the
+ * content beside it, and that clips itself.
+ */
 .shell-body {
   flex: 1 1 auto;
   display: grid;
   grid-template-columns: var(--spacing-rail, 52px) minmax(0, 1fr);
   min-height: 0;
-  overflow: hidden;
 }
 
 /* The launcher has no rail, so the content takes the whole width */

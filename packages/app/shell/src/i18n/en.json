@@ -488,7 +488,6 @@
       "none": "None yet."
     },
     "rename": "Change the name",
-    "kept": "Saved",
     "keepIn": "Save into \"{{name}}\"",
     "keepSomewhere": "Not stored anywhere yet — pick a place"
   }

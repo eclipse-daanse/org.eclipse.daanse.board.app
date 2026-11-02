@@ -36,13 +36,9 @@ import {
   pagesPath,
 } from 'org.eclipse.daanse.board.app.lib.api.page'
 import { useEList, useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
-import { DButton } from 'org.eclipse.daanse.board.app.ui.vue.controls'
 import BoardFloorplan from '@/components/boards/BoardFloorplan.vue'
 import { useRestoreLastOpened } from '@/composables/useRestoreLastOpened'
-import { useWorkspaceFile, useWorkspaceOrigin } from '@/composables/useWorkspaceFile'
-import { useStoreBoard } from '@/composables/useStoreBoard'
-import { boardTarget, BOARD_OVERVIEW } from '@/composables/boardTarget'
-import { useBoardUsage } from '@/composables/useBoardUsage'
+import { useWorkspaceFile } from '@/composables/useWorkspaceFile'
 
 const route = useRoute()
 const router = useRouter()
@@ -51,8 +47,6 @@ const { t } = useTranslation('shell')
 const workspace = inject<Workspace>(WORKSPACE)!
 const pageRepo = inject<PageRegistryI>(PageIdentifier)
 const { load } = useWorkspaceFile()
-const { usageOf } = useBoardUsage()
-const origin = useWorkspaceOrigin()
 
 /*
  * Watched on the workspace, not on the board.
@@ -188,24 +182,6 @@ function openPage(id: string) {
   router.push(pagePath(boardId.value, id, true))
 }
 
-/**
- * Where "open" goes.
- *
- * The page one was last on, else the one the board names, else its
- * first - the same rule the rail's board entry used to apply, which is
- * now the only place that needs it. A board with no pages has nowhere to
- * open, and the button is not offered at all.
- */
-const entryPath = computed(() => {
-  const target = boardTarget({
-    boardId: boardId.value,
-    pageIds: pages.value.map((page: any) => page.id as string),
-    defaultPageId: pageRepo?.defaultPageId,
-    lastOpened: (id) => usageOf(id)?.lastOpened,
-  })
-  return target === BOARD_OVERVIEW ? undefined : target
-})
-
 /* ------------------------------------------------------------ the name */
 
 /**
@@ -240,11 +216,6 @@ function commitName() {
 function cancelRenaming() {
   renaming.value = false
 }
-
-/* --------------------------------------------------------- keeping it */
-
-/* The same press as in the topbar; see useStoreBoard. */
-const { store, storing, stored, failed: storeFailed } = useStoreBoard()
 </script>
 
 <template>
@@ -278,21 +249,11 @@ const { store, storing, stored, failed: storeFailed } = useStoreBoard()
         </button>
         <p v-if="board.description" class="head__desc">{{ board.description }}</p>
       </div>
-      <div class="head__actions">
-        <span v-if="storeFailed" class="head__failed" role="alert">{{ storeFailed }}</span>
-        <span v-else-if="stored" class="head__kept" role="status">{{ t('Board.kept') }}</span>
-        <DButton
-          size="sm"
-          :disabled="storing"
-          :title="origin ? t('Board.keepIn', { name: origin.name }) : t('Board.keepSomewhere')"
-          @click="store"
-        >
-          {{ t('common:Action.save') }}
-        </DButton>
-        <DButton v-if="entryPath" intent="primary" size="sm" @click="router.push(entryPath)">
-          {{ t('Boards.open.action') }}
-        </DButton>
-      </div>
+      <!--
+        Keeping the board and the way into its pages are in the topbar
+        now, on every one of the board's screens rather than on this one
+        alone. Repeating them here would be the same press twice.
+      -->
     </header>
 
     <!-- Figures speak mono, as everything countable in this interface does. -->
@@ -438,17 +399,6 @@ const { store, storing, stored, failed: storeFailed } = useStoreBoard()
   outline: none;
 }
 
-.head__kept,
-.head__failed {
-  align-self: center;
-  font-size: var(--text-sm);
-}
-.head__kept {
-  color: var(--color-ok);
-}
-.head__failed {
-  color: var(--color-err);
-}
 
 .head__desc {
   margin: 4px 0 0;
@@ -457,12 +407,6 @@ const { store, storing, stored, failed: storeFailed } = useStoreBoard()
   color: var(--color-dim);
 }
 
-.head__actions {
-  display: flex;
-  flex: none;
-  align-items: flex-start;
-  gap: 6px;
-}
 
 /* ---------------------------------------------------------- the figures */
 

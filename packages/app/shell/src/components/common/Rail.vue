@@ -223,9 +223,19 @@ function byKeyboard(event: FocusEvent): boolean {
   border-right: 1px solid var(--color-divider);
 }
 
+/*
+ * Reaching up into the actions row.
+ *
+ * That row begins where the content does, which leaves the rail's own
+ * column empty beside it - and the rail, starting under it, read as
+ * hanging below its own heading. It starts where the row does, so the
+ * column is one column from the top of the board down.
+ */
 .rail__panel {
   position: absolute;
-  inset: 0 auto 0 0;
+  /* The row's height and the topbar's own bottom rule, so the column
+    begins flush with the bar above rather than a hair below it. */
+  inset: calc(-1 * var(--spacing-pagebar, 34px) - 1px) auto 0 0;
   width: var(--spacing-rail, 52px);
   z-index: 20;
   display: flex;
