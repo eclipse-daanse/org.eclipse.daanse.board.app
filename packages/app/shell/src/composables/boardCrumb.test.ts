@@ -58,6 +58,27 @@ describe('the path through a board', () => {
     expect(crumb[0].label).toBe(en.Header.crumb.noBoard)
   })
 
+  /*
+   * The mode is what the switch beside the crumb says. Writing
+   * "Bearbeiten" here said it twice and left out the one thing a path is
+   * for: which page this is.
+   */
+  it('names the page while editing it, not the mode', () => {
+    const crumb = boardCrumb({
+      route: 'pageEdit',
+      boardId: 'b1',
+      boardName: 'Sparky',
+      pageName: 'Wasser',
+      t,
+    })
+    expect(labels(crumb)).toEqual(['Sparky', 'Wasser'])
+  })
+
+  it('falls back to a page name where the page has none', () => {
+    const crumb = boardCrumb({ route: 'pageEdit', boardName: 'Sparky', t })
+    expect(crumb[1].label).toBe(en.Header.page.fallbackName)
+  })
+
   it('is a label on the board itself, not a link to where you are', () => {
     const crumb = boardCrumb({ route: 'board', boardId: 'b1', boardName: 'Sparky', t })
     expect(crumb).toHaveLength(1)
