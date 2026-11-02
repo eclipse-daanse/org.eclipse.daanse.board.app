@@ -241,16 +241,10 @@ function byKeyboard(event: FocusEvent): boolean {
   display: flex;
   flex-direction: column;
   /*
-   * Flush with the bar above: the column reaches up into the actions
-   * row and its entries come with it. Indenting them to the height of
-   * the content instead leaves the top of the column empty and drops
-   * every entry by one bar - which is the column reading as hung from
-   * the wrong line.
-   *
-   * Four pixels is half a step, so the first row sits the same distance
-   * from the top as the rows sit from each other.
+   * No padding: the column reaches up into the actions row and the
+   * first entry begins at its top edge. Half a step of air there read
+   * as the whole column hanging a little below the bar above it.
    */
-  padding: 4px 0;
   overflow-x: hidden;
   overflow-y: auto;
   background: var(--color-pane);
