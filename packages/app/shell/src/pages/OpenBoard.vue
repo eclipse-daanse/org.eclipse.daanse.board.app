@@ -179,8 +179,14 @@ function targetFor(key: string): string | undefined {
   return router.resolve(path).matched.length ? path : undefined
 }
 
+/*
+ * Picking a page means working on it.
+ *
+ * A board is built far more often than it is watched, and the view is
+ * one press away in the topbar - where the mode has always lived.
+ */
 function openPage(id: string) {
-  router.push(pagePath(boardId.value, id))
+  router.push(pagePath(boardId.value, id, true))
 }
 
 /**
