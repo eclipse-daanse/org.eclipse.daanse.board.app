@@ -248,6 +248,9 @@ function byKeyboard(event: FocusEvent): boolean {
   overflow-x: hidden;
   overflow-y: auto;
   background: var(--color-pane);
+  /* The same rule the actions row draws beside it, so the line runs
+    across unbroken and the two read as one edge. */
+  border-top: 1px solid var(--color-divider);
   border-right: 1px solid var(--color-divider);
   transition: width 140ms cubic-bezier(0.2, 0.6, 0.2, 1);
 }
@@ -257,10 +260,16 @@ function byKeyboard(event: FocusEvent): boolean {
   box-shadow: var(--shadow-e3);
 }
 
+/*
+ * The air is in here, not on the panel around it.
+ *
+ * On the panel it pushed the first entry off the top edge; on the list
+ * it only ends the column, so a long one has somewhere to stop.
+ */
 .rail__areas {
   list-style: none;
   margin: 0;
-  padding: 0;
+  padding: 0 0 8px;
 }
 
 /*
@@ -333,10 +342,16 @@ function byKeyboard(event: FocusEvent): boolean {
  * of the flow is what holds the row at its height whether they are
  * legible or not.
  */
+/*
+ * The air the panel gave up is here, where it is read: the words keep
+ * the same 16px from the right edge that the icon keeps from the left,
+ * so a two-line sentence has a margin to break against rather than the
+ * border.
+ */
 .ri__text {
   position: absolute;
   left: 46px;
-  right: 10px;
+  right: 16px;
   top: 50%;
   transform: translateY(-50%);
   display: flex;
