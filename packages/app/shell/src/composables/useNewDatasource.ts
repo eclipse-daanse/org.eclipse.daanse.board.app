@@ -37,12 +37,16 @@ const forConnection = ref<string | undefined>(undefined)
  */
 const forType = ref<string | undefined>(undefined)
 
+/** The name it opens with, where the caller has one worth offering. */
+const forName = ref<string | undefined>(undefined)
+
 export function useNewDatasource() {
-  function show(on: { connection?: string; type?: string } = {}) {
+  function show(on: { connection?: string; type?: string; name?: string } = {}) {
     forConnection.value = on.connection
     forType.value = on.type
+    forName.value = on.name
     open.value = true
   }
 
-  return { open, forConnection, forType, show }
+  return { open, forConnection, forType, forName, show }
 }

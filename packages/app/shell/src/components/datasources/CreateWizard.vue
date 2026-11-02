@@ -53,10 +53,23 @@ const { t } = useTranslation('shell')
 
 const step = ref<1 | 2>(1)
 
-/* Reopening starts at the beginning; the caller clears its own fields. */
-watch(open, (isOpen) => {
-  if (isOpen) step.value = 1
-})
+/*
+ * Reopening starts at the beginning; the caller clears its own fields.
+ *
+ * Unless the caller already knows the type - a catalogue hit says what
+ * it is read with (#1163) - in which case the first step is a grid of
+ * tiles with the answer already ticked on one of them, and the thing to
+ * do is the second step.
+ */
+watch(
+  open,
+  (isOpen) => {
+    if (isOpen) step.value = type.value ? 2 : 1
+  },
+  /* After the caller's own watcher on the same opening, which is where
+    the type it knows is put in. */
+  { flush: 'post' },
+)
 
 const shown = computed(() => props.groups.filter((group) => group.types.length))
 

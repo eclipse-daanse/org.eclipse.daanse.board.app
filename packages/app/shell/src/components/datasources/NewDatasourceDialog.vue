@@ -49,6 +49,8 @@ const props = defineProps<{
    * answer is on the screen (#1163).
    */
   forType?: string
+  /** A name worth offering - a catalogue hit carries its own title. */
+  forName?: string
 }>()
 const emit = defineEmits<{ created: [uid: string] }>()
 const { t } = useTranslation('shell')
@@ -151,7 +153,7 @@ watch(type, () => {
 watch(open, (isOpen) => {
   if (!isOpen) return
   type.value = props.forType ?? ''
-  name.value = ''
+  name.value = props.forName ?? ''
   icon.value = ''
   tags.value = []
   connection.value = props.forConnection
