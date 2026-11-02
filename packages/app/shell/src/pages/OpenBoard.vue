@@ -32,6 +32,7 @@ import {
 import {
   type PageRegistryI,
   identifier as PageIdentifier,
+  dataPath,
   pagePath,
   pagesPath,
 } from 'org.eclipse.daanse.board.app.lib.api.page'
@@ -142,7 +143,7 @@ const held = computed(() => [
 /* A name one can follow. The data screen takes the selection from the
   address, so pointing at one connection is a link like any other. */
 function show(kind: 'Connection' | 'DataSource', uid: string) {
-  router.push({ path: '/datasources', query: { select: uid, kind } })
+  router.push({ path: dataPath(boardId.value), query: { select: uid, kind } })
 }
 
 /**
@@ -160,8 +161,8 @@ function show(kind: 'Connection' | 'DataSource', uid: string) {
   up, and the pages of a board are addressed inside it. */
 const figureTargets = computed<Record<string, string>>(() => ({
   pages: pagesPath(boardId.value),
-  connections: '/datasources',
-  datasources: '/datasources',
+  connections: dataPath(boardId.value),
+  datasources: dataPath(boardId.value),
   variables: '/configuration',
   events: '/events',
 }))

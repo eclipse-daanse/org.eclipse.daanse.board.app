@@ -33,7 +33,7 @@ let params: Record<string, string> = {}
   contributed by a module and absent here, which is the case the screen
   has to handle; /configuration is the variables screen, which is not
   and must therefore be reachable. */
-const KNOWN = ['/board/b1/pages', '/datasources', '/configuration']
+const KNOWN = ['/board/b1/pages', '/board/b1/data', '/configuration']
 
 vi.mock('vue-router', () => ({
   useRoute: () => ({ params }),
@@ -150,7 +150,7 @@ describe('the open board', () => {
     await wrapper.findAll('.holds__item')[0].trigger('click')
 
     expect(push).toHaveBeenCalledWith({
-      path: '/datasources',
+      path: '/board/b1/data',
       query: { select: 'c0', kind: 'Connection' },
     })
   })
