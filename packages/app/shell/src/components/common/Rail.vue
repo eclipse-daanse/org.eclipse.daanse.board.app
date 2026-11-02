@@ -179,6 +179,16 @@ function byKeyboard(event: FocusEvent): boolean {
       @focusin="focused = byKeyboard($event)"
       @focusout="focused = false"
     >
+      <!--
+        The mark. It stood in the topbar beside the path; down here it
+        heads the column it belongs to, and the bar beside it starts
+        where the content starts.
+      -->
+      <div class="rail__brand">
+        <span class="rail__mark" aria-hidden="true">D</span>
+        <span class="rail__name">{{ t('Header.brand') }}</span>
+      </div>
+
       <ul class="rail__areas">
         <li v-for="area in areas" :key="area.id" class="rail__area">
           <button
@@ -233,9 +243,13 @@ function byKeyboard(event: FocusEvent): boolean {
  */
 .rail__panel {
   position: absolute;
-  /* The row's height and the topbar's own bottom rule, so the column
-    begins flush with the bar above rather than a hair below it. */
-  inset: calc(-1 * var(--spacing-pagebar, 34px) - 1px) auto 0 0;
+  /*
+   * Up to the top of the window: both bars of the topbar and its own
+   * bottom rule. The mark sits in here now, so the left of the screen
+   * is one column from the first pixel down, and the bars beside it
+   * begin where the content does.
+   */
+  inset: calc(-1 * (var(--spacing-topbar, 42px) + var(--spacing-pagebar, 34px) + 1px)) auto 0 0;
   width: var(--spacing-rail, 52px);
   z-index: 20;
   display: flex;
@@ -248,9 +262,6 @@ function byKeyboard(event: FocusEvent): boolean {
   overflow-x: hidden;
   overflow-y: auto;
   background: var(--color-pane);
-  /* The same rule the actions row draws beside it, so the line runs
-    across unbroken and the two read as one edge. */
-  border-top: 1px solid var(--color-divider);
   border-right: 1px solid var(--color-divider);
   transition: width 140ms cubic-bezier(0.2, 0.6, 0.2, 1);
 }
@@ -266,6 +277,51 @@ function byKeyboard(event: FocusEvent): boolean {
  * On the panel it pushed the first entry off the top edge; on the list
  * it only ends the column, so a long one has somewhere to stop.
  */
+/* As tall as the bar it replaces, so everything below lines up with
+  what is beside it. */
+.rail__brand {
+  position: relative;
+  display: flex;
+  align-items: center;
+  flex: none;
+  height: var(--spacing-topbar, 42px);
+  padding: 0 16px;
+  font-family: var(--font-sans);
+  font-size: var(--text-base, 13px);
+  font-weight: 600;
+  color: var(--color-fg);
+}
+
+.rail__mark {
+  flex: none;
+  width: 20px;
+  height: 20px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-sm, 3px);
+  background: var(--color-brandFill);
+  color: var(--color-onBrand);
+  font-size: var(--text-xs, 11px);
+  font-weight: 700;
+}
+
+/* Out of the flow, like every other word in here, so the narrow column
+  stays a column of marks. */
+.rail__name {
+  position: absolute;
+  left: 46px;
+  right: 16px;
+  white-space: nowrap;
+  overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 110ms linear;
+}
+.rail__panel--open .rail__name {
+  opacity: 1;
+}
+
 .rail__areas {
   list-style: none;
   margin: 0;
