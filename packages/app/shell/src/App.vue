@@ -43,6 +43,7 @@ import {
 } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import { useStorageDialog } from './composables/useStorageDialog'
 import { useRestoreLastOpened } from './composables/useRestoreLastOpened'
+import { useKeepLastOpened } from './composables/useKeepLastOpened'
 
 const { isLoading } = useGlobalLoading()
 const { t } = useTranslation('shell')
@@ -69,6 +70,14 @@ const workspace = inject<Workspace>(WORKSPACE)!
  */
 const { restoreLastOpened } = useRestoreLastOpened()
 if (!workspace.board) restoreLastOpened()
+
+/*
+ * And kept in step from here on. It used to be written when a board was
+ * made or opened and never again, so a reload replayed the board as it
+ * had been at that moment - without the connections, sources and pages
+ * made since.
+ */
+useKeepLastOpened()
 
 /*
  * Storage is a dialog over whatever is on screen, so leaving it leaves
