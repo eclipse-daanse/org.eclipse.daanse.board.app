@@ -25,7 +25,9 @@
     "pages": "Seiten",
     "previous": "Zurück",
     "next": "Weiter",
-    "showing": "{{from}}–{{to}}"
+    "showing": "{{from}}–{{to}}",
+    "take": "Als Datenquelle übernehmen",
+    "cannotRead": "Für {{format}} gibt es hier noch keine Datenquelle."
   },
   "Query": {
     "tab": "Abfrage"

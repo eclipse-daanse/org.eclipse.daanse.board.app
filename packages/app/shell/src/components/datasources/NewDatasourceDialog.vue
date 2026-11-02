@@ -43,6 +43,12 @@ const open = defineModel<boolean>({ required: true })
 const props = defineProps<{
   /** Opened from a connection's menu: that one is the obvious choice. */
   forConnection?: string
+  /**
+   * Opened for something whose type is already known - a catalogue hit
+   * says what it is read with, so asking is asking a question whose
+   * answer is on the screen (#1163).
+   */
+  forType?: string
 }>()
 const emit = defineEmits<{ created: [uid: string] }>()
 const { t } = useTranslation('shell')
@@ -144,7 +150,7 @@ watch(type, () => {
 
 watch(open, (isOpen) => {
   if (!isOpen) return
-  type.value = ''
+  type.value = props.forType ?? ''
   name.value = ''
   icon.value = ''
   tags.value = []

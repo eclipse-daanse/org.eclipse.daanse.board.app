@@ -46,6 +46,7 @@ import { DButton, DIcon, DInput, DModal } from 'org.eclipse.daanse.board.app.ui.
 import { useDatasourceUsage } from '@/composables/useDatasourceUsage'
 import NewConnectionDialog from '../connections/NewConnectionDialog.vue'
 import NewDatasourceDialog from './NewDatasourceDialog.vue'
+import { useNewDatasource } from '@/composables/useNewDatasource'
 import TreeMenu, { type MenuItem } from './TreeMenu.vue'
 
 /** A source as the tree shows it. */
@@ -247,9 +248,16 @@ function select(type: Selection['type'], itemId: string) {
  * type's model is what says which fields exist and what they are for.
  */
 const creatingConnection = ref(false)
-const creatingDataSource = ref(false)
+/* Shared, because a catalogue hit opens the same dialog from the other
+  side of the screen; see useNewDatasource. */
+const {
+  open: creatingDataSource,
+  forConnection: creatingFor,
+  forType: creatingType,
+  show: showNewDatasource,
+} = useNewDatasource()
 /* Set when the dialog was opened from a connection's own menu. */
-const creatingFor = ref<string | undefined>(undefined)
+
 
 /* A new thing is selected straight away: it is what you came to fill in. */
 function onConnectionCreated(uid: string) {
@@ -310,15 +318,14 @@ function onMenuChoice(id: string) {
   const target = menuFor.value
   closeMenu()
   if (id === 'new-connection') return void (creatingConnection.value = true)
-  if (id === 'new-source') return void (creatingDataSource.value = true)
+  if (id === 'new-source') return void showNewDatasource()
   if (target.what === 'connection') {
     if (id === 'edit') select('Connection', target.uid)
     /* The dialog picks the connection itself; selecting it first is what
       makes it the obvious one to choose. */
     if (id === 'add-source') {
       select('Connection', target.uid)
-      creatingFor.value = target.uid
-      creatingDataSource.value = true
+      showNewDatasource({ connection: target.uid as string })
     }
     if (id === 'remove') confirmRemove('Connection', target.uid)
     return
@@ -372,7 +379,7 @@ const removingUsage = computed(() => {
       <DButton intent="quiet" size="sm" :title="t('Tree.newConnection')" @click="creatingConnection = true">
         <DIcon name="add_link" size="sm" />
       </DButton>
-      <DButton intent="quiet" size="sm" :title="t('Tree.newSource')" @click="creatingFor = undefined; creatingDataSource = true">
+      <DButton intent="quiet" size="sm" :title="t('Tree.newSource')" @click="showNewDatasource()">
         <DIcon name="add" size="sm" />
       </DButton>
       <DButton intent="quiet" size="sm" :title="t('Tree.findEndpoints')" @click="emit('findEndpoints')">
@@ -495,6 +502,7 @@ const removingUsage = computed(() => {
   <NewDatasourceDialog
     v-model="creatingDataSource"
     :for-connection="creatingFor"
+    :for-type="creatingType"
     @created="onDataSourceCreated"
   />
 
