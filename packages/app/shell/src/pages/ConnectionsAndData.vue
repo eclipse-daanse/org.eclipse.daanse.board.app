@@ -42,6 +42,7 @@ import DatasourceEditor from '@/components/datasources/DatasourceEditor.vue'
 import ConnectionEditor from '@/components/connections/ConnectionEditor.vue'
 import { useDatasourceUsage } from '@/composables/useDatasourceUsage'
 import { leavingADraft, type Draft } from '@/composables/leavingADraft'
+import { useNewDatasource } from '@/composables/useNewDatasource'
 import {
   identifier as DATASOURCE_REPOSITORY,
   type DatasourceRepository,
@@ -53,6 +54,47 @@ const connections = useEList(workspace, (w) => w.connections)
 const dataSources = useEList(workspace, (w) => w.datasources)
 
 const datasourceRepository = inject<DatasourceRepository>(DATASOURCE_REPOSITORY)!
+const { show: showNewDatasource } = useNewDatasource()
+
+/**
+ * A catalogue hit, made into a data source.
+ *
+ * The hit carries an address and the type that reads it; what it has no
+ * way to carry is a connection, because a connection is a thing of this
+ * workspace and not of the catalogue. One on the same address is reused,
+ * and otherwise one is made of whatever kind that source type reads
+ * through - which the type itself declares.
+ *
+ * Then the ordinary dialog, with both filled in. It asks for whatever
+ * the type's model requires, which is the point: the endpoint finder
+ * this replaces minted connection and source itself, from a format
+ * string, past both their models (#1163).
+ */
+function createFromHit(hit: { type: string; url: string; name: string }) {
+  const identifiers = datasourceRepository.getDatasourceIdentifiers(hit.type)
+  const kind = identifiers?.connections?.[0]
+  if (!kind) return
+
+  const existing = connections.value.find(
+    (each: any) => each.type === kind && (each.config as any)?.url === hit.url,
+  )
+
+  let uid = existing?.uid as string | undefined
+  if (!uid) {
+    const made = connectionRepository.createConnection(kind, { url: hit.url })
+    made.name = hit.name
+    try {
+      connectionRepository.saveConnection(made)
+    } catch (error) {
+      /* Modelled but not live - the same as a connection made by hand
+        whose configuration is not complete yet. */
+      console.warn(`${made.uid} is not live yet:`, error)
+    }
+    uid = made.uid as string
+  }
+
+  showNewDatasource({ connection: uid, type: hit.type })
+}
 const { usageOf, usageLabel } = useDatasourceUsage()
 const { t } = useTranslation('shell')
 
@@ -234,6 +276,7 @@ onBeforeRouteLeave(() => mayLeave())
             :key="selected.itemId"
             :item-id="selected.itemId"
             :view="tab"
+            @create-datasource="createFromHit"
             @close="selected = undefined"
           />
         </div>

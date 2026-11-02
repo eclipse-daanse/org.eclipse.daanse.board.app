@@ -25,7 +25,9 @@
     "pages": "Pages",
     "previous": "Previous",
     "next": "Next",
-    "showing": "{{from}}-{{to}}"
+    "showing": "{{from}}-{{to}}",
+    "take": "Use as a data source",
+    "cannotRead": "There is no data source for {{format}} here yet."
   },
   "Query": {
     "tab": "Query"

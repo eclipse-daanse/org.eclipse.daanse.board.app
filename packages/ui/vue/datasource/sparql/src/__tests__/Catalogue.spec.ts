@@ -158,3 +158,47 @@ describe('the catalogue view', () => {
     expect(wrapper.find('.result__format').text()).toBe('csv')
   })
 })
+
+/*
+ * What a hit is worth: it can be read. Making the source is not this
+ * package's to do - it needs a connection, and the dialog that asks for
+ * whatever the type's model requires is the shell's - so a hit is
+ * reported upward rather than acted on (#1163).
+ */
+describe('taking a hit', () => {
+  it('offers a hit in a format we read, with the type that reads it', async () => {
+    const { wrapper } = setUp(answering([row(1, 'dataset', FILE_TYPE.CSV)]))
+    await search(wrapper)
+    await flushPromises()
+
+    const take = wrapper.findAll('.result__act button')
+    expect(take).toHaveLength(1)
+
+    await take[0].trigger('click')
+    expect(wrapper.emitted('createDatasource')).toEqual([
+      [{ type: 'csv', url: 'https://example.org/1', name: 'entry 1' }],
+    ])
+  })
+
+  /* A catalogue serves plenty we have no source for. Those are still
+    worth seeing, and say why there is nothing to press. */
+  it('presses nothing for a format we have no source for', async () => {
+    const { wrapper } = setUp(answering([row(1, 'dataset', FILE_TYPE.WMS)]))
+    await search(wrapper)
+    await flushPromises()
+
+    expect(wrapper.findAll('.result__act button')).toHaveLength(0)
+    expect(wrapper.find('.result__cannot').text()).toContain('WMS_SRVC')
+  })
+
+  it('reads a service by what it says it speaks', async () => {
+    const { wrapper } = setUp(
+      answering([row(1, 'service', 'http://www.opengis.net/doc/is/sensorthings/1.1')]),
+    )
+    await search(wrapper)
+    await flushPromises()
+
+    await wrapper.find('.result__act button').trigger('click')
+    expect(wrapper.emitted('createDatasource')?.[0][0]).toMatchObject({ type: 'ogcsta' })
+  })
+})

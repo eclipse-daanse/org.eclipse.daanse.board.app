@@ -195,7 +195,10 @@ const updateConfig = (config: any) => {
   datasourceProxy.value.config = config
 }
 
-const emit = defineEmits(['close'])
+/* `createDatasource` is a view's: a catalogue hit asking for a source
+  to be made of it. The editor knows nothing about what that takes, so
+  it carries it up to the page that holds the dialog (#1163). */
+const emit = defineEmits(['close', 'createDatasource'])
 const { t } = useTranslation('shell')
 
 /* The page asks before it opens something else over a draft that is not saved. */
@@ -246,6 +249,7 @@ defineExpose({ unsaved, commit })
           :data-source="datasourceProxy"
           :key="`${datasourceProxy.uid}-${discarded}`"
           @updateConfig="updateConfig"
+          @create-datasource="$emit('createDatasource', $event)"
         />
       </div>
     </template>

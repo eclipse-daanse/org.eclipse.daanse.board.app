@@ -31,6 +31,7 @@ import { catalogueQuery, pageFrom } from './catalogue/query'
 import {
   FILE_TYPE,
   CONFORMS_TO,
+  bareUri,
   readsWith,
   shortFormat,
   type CatalogueEntry,
@@ -38,6 +39,29 @@ import {
 } from './catalogue/types'
 
 const props = defineProps<{ dataSource: any }>()
+
+/**
+ * A hit, offered rather than acted on.
+ *
+ * What a hit is worth is that it can be read: an address and a format,
+ * and the format says with which of our source types. Making the source
+ * is not this package's to do - it needs a connection, and the dialog
+ * that asks for whatever the type's model requires lives in the shell -
+ * so the hit is reported upward and the shell opens that dialog (#1163).
+ *
+ * The endpoint finder it replaces built the connection and the source
+ * itself, from the format string, past both their models.
+ */
+const emit = defineEmits<{
+  createDatasource: [hit: { type: string; url: string; name: string }]
+}>()
+
+function take(entry: CatalogueEntry) {
+  const type = readsWith(entry)
+  const url = bareUri(entry.accessUrl)
+  if (!type || !url) return
+  emit('createDatasource', { type, url, name: entry.title || url })
+}
 
 const { t } = useTranslation('datasourceSparql')
 
@@ -234,6 +258,19 @@ const labelFor = (entry: CatalogueEntry) => readsWith(entry) ?? shortFormat(entr
             <span class="result__url">{{ entry.accessUrl }}</span>
             <span v-if="entry.publisher"> · {{ entry.publisher }}</span>
           </p>
+          <!--
+            What can be done with it, which is read it. A hit in a format
+            we have no source for is still worth seeing - a catalogue
+            serves plenty - and says why there is nothing to press.
+          -->
+          <p class="result__act">
+            <DButton v-if="readsWith(entry)" size="sm" @click="take(entry)">
+              {{ t('Catalogue.take') }}
+            </DButton>
+            <span v-else class="result__cannot">
+              {{ t('Catalogue.cannotRead', { format: shortFormat(entry.format) ?? '—' }) }}
+            </span>
+          </p>
         </li>
       </ul>
 
@@ -294,6 +331,18 @@ const labelFor = (entry: CatalogueEntry) => readsWith(entry) ?? shortFormat(entr
  */
 .catalogue__row > :deep(.field) {
   margin-bottom: 0;
+}
+
+.result__act {
+  margin: 6px 0 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.result__cannot {
+  font-size: var(--text-xs);
+  color: var(--color-dim);
 }
 
 .catalogue__filters {
