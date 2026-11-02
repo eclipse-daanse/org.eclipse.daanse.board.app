@@ -55,7 +55,7 @@ const { remember: rememberOpened } = useLastOpenedState()
 const workspace = inject<Workspace>(WORKSPACE)!
 
 const repoManager = inject<RepositoryRegistryI>(RepoManagerId)
-const { save, load } = useWorkspaceFile()
+const { save, load, storeAs } = useWorkspaceFile()
 const { t } = useTranslation('shell')
 
 const places = ref<Repository[]>([])
@@ -95,12 +95,6 @@ function key(place: Repository): string {
  * The repository keeps one file per entry and insists on the .json suffix, so
  * the name has to go into the path rather than be appended to the uri.
  */
-function uriFor(place: Repository, name: string): URL {
-  const uri = new URL(String(place.uri))
-  uri.pathname = `/${name}.json`
-  return uri
-}
-
 /** The type is a static on the implementation class, so it is read off the prototype. */
 function typeOf(place: Repository | undefined): string {
   const ctor = place ? (Object.getPrototypeOf(place)?.constructor as { type?: string }) : undefined
@@ -356,7 +350,7 @@ async function open(entry: Entity) {
     remember(entry, label(entry))
     /* So a reload finds this board again; see useLastOpenedState. */
     const boardId = workspace.board?.id as string | undefined
-    if (boardId) rememberOpened({ boardId, name: label(entry), data })
+    if (boardId) rememberOpened({ boardId, name: label(entry), data, origin: origin.value })
     emit('restored', ids)
   } catch (error) {
     failure.value = t('Storage.failure.load', { reason: reason(error) })
@@ -392,10 +386,11 @@ async function createEntry() {
   if (!place || !name) return
   failure.value = ''
   try {
-    const entry = { name, uri: uriFor(place, name), data: save() } as unknown as Entity
-    await (place as WritableRepository).create(entry)
-    useUnsavedChanges()?.markSaved()
-    remember(entry, name)
+    /* The same write the launcher makes when a board is created, so
+      there is one way a state is first put somewhere, not two. It sets
+      the origin itself; what is kept here is which place is selected. */
+    await storeAs(place, name)
+    selectedPlace.value = place
     await expand(place)
     creating.value = false
     selectedEntry.value = entriesOf(place).find((e) => label(e) === name)
