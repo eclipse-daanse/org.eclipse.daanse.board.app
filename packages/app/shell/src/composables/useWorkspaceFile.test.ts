@@ -191,10 +191,19 @@ describe('saveInPlace', () => {
 
   function setUp({ place = PLACE, entry = ENTRY, known = true } = {}) {
     const updated: Array<Record<string, unknown>> = []
+    const asked: unknown[] = []
     const repository = {
       uri: PLACE,
-      getEntityByUri: async (uri: unknown) =>
-        known && String(uri) === ENTRY ? { uri: ENTRY, name: 'Sparky', data: '{}' } : undefined,
+      /*
+       * A repository reads uri.protocol and uri.hostname to decide
+       * whether an entry is one of its own, so it is handed a URL. A
+       * string stringifies the same and is answered "never heard of it".
+       */
+      getEntityByUri: async (uri: unknown) => {
+        asked.push(uri)
+        if (!(uri instanceof URL)) return undefined
+        return known && String(uri) === ENTRY ? { uri: new URL(ENTRY), name: 'Sparky', data: '{}' } : undefined
+      },
       update: async (held: Record<string, unknown>) => {
         updated.push(held)
       },
@@ -219,17 +228,18 @@ describe('saveInPlace', () => {
         },
       },
     })
-    return { kept: kept!, updated }
+    return { kept: kept!, updated, asked }
   }
 
   it('writes the workspace over the state it came from', async () => {
-    const { kept, updated } = setUp()
+    const { kept, updated, asked } = setUp()
 
     expect(await kept).toBe(true)
+    expect(asked[0]).toBeInstanceOf(URL)
     expect(updated).toHaveLength(1)
     /* The serialized workspace, not the string the entry held before. */
     expect(String(updated[0].data)).toContain('Workspace')
-    expect(updated[0].uri).toBe(ENTRY)
+    expect(String(updated[0].uri)).toBe(ENTRY)
   })
 
   it('writes nothing when the place it names is gone', async () => {

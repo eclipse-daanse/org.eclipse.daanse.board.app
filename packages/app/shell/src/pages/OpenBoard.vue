@@ -90,6 +90,9 @@ function settle() {
   if (asked && last?.boardId === asked) {
     try {
       load(last.data, last.name)
+      /* And where it came from, which otherwise lives only in memory:
+        without it every save after a reload asks where again. */
+      origin.value = last.origin
       return
     } catch {
       /* Stored by an older shape, or no longer readable. */

@@ -83,6 +83,19 @@ export function useWorkspaceOrigin() {
   return origin
 }
 
+/**
+ * Where a state of this name lives in a place.
+ *
+ * The place's own address with a file name on it - which is what makes
+ * two states of the same name in the same place the same state, and why
+ * storing over one is an update rather than a second entry.
+ */
+export function entryUriFor(place: { uri: unknown }, name: string): URL {
+  const uri = new URL(String(place.uri))
+  uri.pathname = `/${name}.json`
+  return uri
+}
+
 /** The name the resource carries, and what its `$ref`s resolve against. */
 const WORKSPACE_URI = 'workspace.json'
 
@@ -327,7 +340,13 @@ export function useWorkspaceFile() {
     const place = places.find((each) => String(each.uri) === where.placeUri)
     if (!place) return false
 
-    const entry = await place.getEntityByUri(where.entryUri as unknown as URL)
+    /*
+     * A URL, not the string it was kept as: a repository reads
+     * `uri.protocol` and `uri.hostname` off it to decide whether the
+     * entry is one of its own, and on a string both are undefined - so
+     * it answers that it has never heard of it.
+     */
+    const entry = await place.getEntityByUri(new URL(where.entryUri))
     if (!entry) return false
 
     await (place as WritableRepository).update({ ...entry, data: save() } as Entity)
@@ -335,5 +354,40 @@ export function useWorkspaceFile() {
     return true
   }
 
-  return { save, load, saveInPlace }
+  /**
+   * Writes the workspace into a place under a name, as a new state.
+   *
+   * What the board came from afterwards - so the next save is a write
+   * rather than a question. Used where a state is first put somewhere:
+   * the storage view, and making a board, which asks for both up front
+   * precisely so that the first save has somewhere to go.
+   */
+  async function storeAs(place: Repository, name: string): Promise<boolean> {
+    if (typeof (place as WritableRepository).create !== 'function') return false
+
+    const entry = {
+      name,
+      uri: entryUriFor(place, name),
+      data: save(),
+    } as unknown as Entity
+    await (place as WritableRepository).create(entry)
+
+    origin.value = {
+      placeUri: String(place.uri),
+      entryUri: String(entry.uri),
+      name,
+    }
+    useUnsavedChanges()?.markSaved()
+    return true
+  }
+
+  /** The places a state can be written to, in the order they are offered. */
+  async function writablePlaces(): Promise<Repository[]> {
+    const places: Repository[] = (await repoManager?.getAvailableReposetories()) ?? []
+    return places.filter(
+      (place) => typeof (place as WritableRepository).create === 'function',
+    )
+  }
+
+  return { save, load, saveInPlace, storeAs, writablePlaces }
 }
