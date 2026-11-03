@@ -10,7 +10,7 @@
 */
 
 import { describe, it, expect, beforeEach, vi } from 'vitest'
-import { useOGCService } from '../Service'
+import { useOGCService } from '../ogcService'
 
 describe('OGC Service Reconstruction', () => {
   let ogcService: ReturnType<typeof useOGCService>
