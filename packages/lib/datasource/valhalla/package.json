@@ -27,6 +27,7 @@
   },
   "devDependencies": {
     "typescript": "^5.8.2",
+    "vite": "^6.4.1",
     "vite-plugin-dts": "4.5.4"
   },
   "gitHead": "c5d831f34534a4bff713917fedce8c09892d5a24",

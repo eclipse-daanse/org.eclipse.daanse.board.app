@@ -19,5 +19,8 @@
     "@codemirror/language": "~6.12.4",
     "org.eclipse.daanse.board.app.lib.core": "^0.0.1-next.1",
     "vscode-languageserver-types": "~3.17.5"
+  },
+  "devDependencies": {
+    "typescript": "^5.8.2"
   }
 }
