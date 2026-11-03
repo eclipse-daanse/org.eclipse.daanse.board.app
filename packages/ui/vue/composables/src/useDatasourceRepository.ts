@@ -18,6 +18,8 @@ import {
 import { onMounted, onUnmounted, inject, provide, type Ref, reactive, ComputedRef } from 'vue'
 import { watch, ref, computed } from 'vue'
 import { useGlobalLoading } from './useGlobalLoading'
+import { applySelection } from 'org.eclipse.daanse.board.app.lib.utils.helpers'
+import { injectDataSelection } from './dataSelection'
 
 export interface IVueDatasourceRepository {
   data: any
@@ -83,6 +85,40 @@ export function useDatasourceRepository(
    */
   let pending: AbortController | null = null
 
+  /*
+   * The part of the answer this widget takes (#1216).
+   *
+   * Provided by the wrapper around the widget; outside of one there is
+   * none and the whole answer is handed over, as it always was. The answer
+   * as it came is kept, so a changed selection is applied to it again
+   * rather than asked of the source a second time.
+   */
+  const selection = injectDataSelection()
+  let received: unknown = undefined
+
+  const deliver = (answer: unknown) => {
+    received = answer
+    const part = applySelection(answer, selection?.value, type)
+    /*
+     * A part shares its elements with the answer it came from. Copied, so
+     * a widget that writes into its data cannot change what the next
+     * selection is taken from.
+     */
+    data.value = part === answer || part === null || typeof part !== 'object' ? part : structuredClone(part)
+  }
+
+  const forget = () => {
+    received = undefined
+    data.value = null
+  }
+
+  if (selection) {
+    watch(selection, (next, previous) => {
+      if (JSON.stringify(next) === JSON.stringify(previous)) return
+      if (received !== undefined) deliver(received)
+    })
+  }
+
   const nextRequest = (): AbortSignal => {
     pending?.abort()
     pending = new AbortController()
@@ -92,7 +128,7 @@ export function useDatasourceRepository(
   const getData = async () => {
     if (!dataSourceId.value) {
       pending?.abort()
-      data.value = null
+      forget()
       return
     }
     const signal = nextRequest()
@@ -103,14 +139,14 @@ export function useDatasourceRepository(
       const dataRaw = await dataSource.getData(type, { ...(requestConfig?.value || {}), signal });
       if (signal.aborted) return
       if (type === "PivotTable") {
-        data.value = JSON.parse(JSON.stringify(dataRaw));
+        deliver(JSON.parse(JSON.stringify(dataRaw)));
       } else {
-        data.value = structuredClone(dataRaw);
+        deliver(structuredClone(dataRaw));
       }
       error.value = null
     } catch (e) {
       if (signal.aborted) return
-      data.value = null
+      forget()
       failed(e)
       console.warn(e)
     } finally {
@@ -133,7 +169,7 @@ export function useDatasourceRepository(
           const signal = nextRequest()
           const dataRaw = await dataSource.getData(type, { signal })
           if (signal.aborted) return
-          data.value = structuredClone(dataRaw)
+          deliver(structuredClone(dataRaw))
         }
       } catch (e) {
         console.warn(e)
@@ -144,7 +180,7 @@ export function useDatasourceRepository(
   const getDataWithOptions = async (options?: any) => {
     if (!dataSourceId.value) {
       pending?.abort()
-      data.value = null
+      forget()
       return
     }
     const signal = nextRequest()
@@ -154,11 +190,11 @@ export function useDatasourceRepository(
       const dataSource = datasourceRepository.getDatasource(dataSourceId.value);
       const dataRaw = await dataSource.getData(type, { ...(options || {}), signal });
       if (signal.aborted) return
-      data.value = structuredClone(dataRaw);
+      deliver(structuredClone(dataRaw));
       error.value = null
     } catch (e) {
       if (signal.aborted) return
-      data.value = null
+      forget()
       failed(e)
       console.warn(e)
     } finally {
