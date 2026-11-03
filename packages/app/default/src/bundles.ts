@@ -134,6 +134,7 @@ import b126 from 'org.eclipse.daanse.board.app.ui.vue.widget.wrapper/manifest.js
 import b127 from 'org.eclipse.daanse.board.app.ui.vue.common.kpi/manifest.json'
 import b128 from 'org.eclipse.daanse.board.app.ui.vue.common.monaco/manifest.json'
 import b129 from 'org.eclipse.daanse.board.app.ui.vue.common.xmla/manifest.json'
+import commonMap from 'org.eclipse.daanse.board.app.ui.vue.common.map/manifest.json'
 import b130 from 'org.eclipse.daanse.board.app.lib.api.widget/manifest.json'
 import b131 from 'org.eclipse.daanse.board.app.lib.api.connection/manifest.json'
 import b132 from 'org.eclipse.daanse.board.app.lib.api.datasource/manifest.json'
@@ -288,6 +289,7 @@ export const bundles: ModuleManifest[] = [
   b127 as ModuleManifest,
   b128 as ModuleManifest,
   b129 as ModuleManifest,
+  commonMap as ModuleManifest,
   b130 as ModuleManifest,
   b131 as ModuleManifest,
   b132 as ModuleManifest,

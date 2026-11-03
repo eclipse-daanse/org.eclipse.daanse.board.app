@@ -7,5 +7,9 @@
   },
   "Rest": {
     "selectedValue": "Selected value"
+  },
+  "View": {
+    "tree": "Tree",
+    "map": "Map"
   }
 }

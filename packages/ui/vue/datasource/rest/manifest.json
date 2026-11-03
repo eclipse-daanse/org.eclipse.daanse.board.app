@@ -9,7 +9,8 @@
     "lib.api.datasource",
     "platform.vue",
     "ui.vue.composables",
-    "ui.vue.controls"
+    "ui.vue.controls",
+    "ui.vue.common.map"
   ],
   "requiresService": [
     {
@@ -34,6 +35,10 @@
     },
     {
       "id": "org.eclipse.daanse.board.app.ui.vue.controls",
+      "versionRange": ">=0.0.1-0"
+    },
+    {
+      "id": "org.eclipse.daanse.board.app.ui.vue.common.map",
       "versionRange": ">=0.0.1-0"
     }
   ],

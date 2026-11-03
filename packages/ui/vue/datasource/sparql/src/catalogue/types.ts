@@ -65,6 +65,10 @@ const READS: Record<string, string> = {
   [FILE_TYPE.CSV]: 'csv',
   [FILE_TYPE.JSON]: 'rest',
   [FILE_TYPE.REST]: 'rest',
+  /* A GeoJSON distribution is a document at an address, which is what the
+    rest source fetches; what makes it geography is the map view that type
+    now offers, not a type of its own (#1187). */
+  [FILE_TYPE.GEOJSON]: 'rest',
   [CONFORMS_TO.SENSORTHINGS]: 'ogcsta',
 }
 
@@ -76,9 +80,9 @@ export function bareUri(value: string | undefined): string | undefined {
 /**
  * The data source type that can read an entry, where there is one.
  *
- * Nothing for a format we have no source for - WMS, WFS and GeoJSON are
- * listed above because a catalogue serves them and a person may want to
- * see them, not because we can open them yet.
+ * Nothing for a format we have no source for - WMS and WFS are listed
+ * above because a catalogue serves them and a person may want to see
+ * them, not because we can open them yet.
  */
 export function readsWith(entry: CatalogueEntry): string | undefined {
   const named = bareUri(entry.format)

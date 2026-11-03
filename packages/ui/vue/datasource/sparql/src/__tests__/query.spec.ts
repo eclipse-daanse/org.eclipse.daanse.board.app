@@ -106,6 +106,18 @@ describe('reading the answer', () => {
     expect(of(FILE_TYPE.WMS)).toBeUndefined()
     expect(of(undefined)).toBeUndefined()
   })
+
+  /*
+   * GeoJSON used to be among the formats with no source: the catalogue
+   * offered the hit and nothing could open it. It is a document at an
+   * address, so the rest source fetches it, and that type now carries a
+   * map view to look at it with (#1187).
+   */
+  it('opens a GeoJSON distribution', () => {
+    expect(
+      readsWith({ kind: 'dataset', title: '', accessUrl: '', format: FILE_TYPE.GEOJSON }),
+    ).toBe('rest')
+  })
 })
 
 describe('paging through a catalogue', () => {
