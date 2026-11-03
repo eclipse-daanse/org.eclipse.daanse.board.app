@@ -18,7 +18,7 @@
  * @generated
  */
 
-import { BasicEPackage, BasicEClass, BasicEReference, EPackageRegistry } from '@emfts/core';
+import { BasicEPackage, BasicEClass, BasicEAttribute, BasicEReference, EPackageRegistry, getEcorePackage } from '@emfts/core';
 import type { EClass, EAttribute, EReference } from '@emfts/core';
 import { DatatablesettingsFactory } from './DatatablesettingsFactory.js';
 
@@ -60,6 +60,10 @@ export class DatatablesettingsPackage extends BasicEPackage {
   static readonly Literals = {
     DATA_TABLE_SETTINGS: null as unknown as EClass,
     DATA_TABLE_SETTINGS__HEADER_BACKGROUND: null as unknown as EAttribute | EReference,
+    DATA_TABLE_SETTINGS__SHOW_HEADER: null as unknown as EAttribute | EReference,
+    DATA_TABLE_SETTINGS__SORTABLE: null as unknown as EAttribute | EReference,
+    DATA_TABLE_SETTINGS__PAGE_SIZE: null as unknown as EAttribute | EReference,
+    DATA_TABLE_SETTINGS__HIDDEN_COLUMNS: null as unknown as EAttribute | EReference,
   };
 
   private constructor() {
@@ -98,6 +102,38 @@ export class DatatablesettingsPackage extends BasicEPackage {
     dataTableSettingsClass.getEStructuralFeatures().push(dataTableSettings_headerBackground);
     DatatablesettingsPackage.Literals.DATA_TABLE_SETTINGS__HEADER_BACKGROUND = dataTableSettings_headerBackground;
 
+    // Create showHeader feature
+    const dataTableSettings_showHeader = new BasicEAttribute();
+    dataTableSettings_showHeader.setName('showHeader');
+    dataTableSettings_showHeader.setLowerBound(0);
+    dataTableSettings_showHeader.setUpperBound(1);
+    dataTableSettingsClass.getEStructuralFeatures().push(dataTableSettings_showHeader);
+    DatatablesettingsPackage.Literals.DATA_TABLE_SETTINGS__SHOW_HEADER = dataTableSettings_showHeader;
+
+    // Create sortable feature
+    const dataTableSettings_sortable = new BasicEAttribute();
+    dataTableSettings_sortable.setName('sortable');
+    dataTableSettings_sortable.setLowerBound(0);
+    dataTableSettings_sortable.setUpperBound(1);
+    dataTableSettingsClass.getEStructuralFeatures().push(dataTableSettings_sortable);
+    DatatablesettingsPackage.Literals.DATA_TABLE_SETTINGS__SORTABLE = dataTableSettings_sortable;
+
+    // Create pageSize feature
+    const dataTableSettings_pageSize = new BasicEAttribute();
+    dataTableSettings_pageSize.setName('pageSize');
+    dataTableSettings_pageSize.setLowerBound(0);
+    dataTableSettings_pageSize.setUpperBound(1);
+    dataTableSettingsClass.getEStructuralFeatures().push(dataTableSettings_pageSize);
+    DatatablesettingsPackage.Literals.DATA_TABLE_SETTINGS__PAGE_SIZE = dataTableSettings_pageSize;
+
+    // Create hiddenColumns feature
+    const dataTableSettings_hiddenColumns = new BasicEAttribute();
+    dataTableSettings_hiddenColumns.setName('hiddenColumns');
+    dataTableSettings_hiddenColumns.setLowerBound(0);
+    dataTableSettings_hiddenColumns.setUpperBound(-1);
+    dataTableSettingsClass.getEStructuralFeatures().push(dataTableSettings_hiddenColumns);
+    DatatablesettingsPackage.Literals.DATA_TABLE_SETTINGS__HIDDEN_COLUMNS = dataTableSettings_hiddenColumns;
+
 
     // ============================================
     // Set ESuperTypes (must be done after all classes are created)
@@ -109,6 +145,10 @@ export class DatatablesettingsPackage extends BasicEPackage {
     // convert against - every value would arrive as a raw string (#37)
     // ============================================
     (DatatablesettingsPackage.Literals.DATA_TABLE_SETTINGS__HEADER_BACKGROUND as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
+    (DatatablesettingsPackage.Literals.DATA_TABLE_SETTINGS__SHOW_HEADER as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EBoolean')!);
+    (DatatablesettingsPackage.Literals.DATA_TABLE_SETTINGS__SORTABLE as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EBoolean')!);
+    (DatatablesettingsPackage.Literals.DATA_TABLE_SETTINGS__PAGE_SIZE as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EInt')!);
+    (DatatablesettingsPackage.Literals.DATA_TABLE_SETTINGS__HIDDEN_COLUMNS as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
 
     // ============================================
     // Register XML name mappings from ExtendedMetaData annotations

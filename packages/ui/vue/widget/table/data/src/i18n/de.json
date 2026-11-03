@@ -3,6 +3,24 @@
     "name": "Datentabelle"
   },
   "Form": {
-    "headerBackground": "Kopfzeilenfarbe"
+    "headerBackground": "Kopfzeilenfarbe",
+    "rowsGroup": "Zeilen",
+    "headerGroup": "Kopfzeile",
+    "pageSize": "Zeilen je Seite (0 = alle)",
+    "sortable": "Spalten sortierbar",
+    "showHeader": "Kopfzeile zeigen"
+  },
+  "Settings": {
+    "columns": "Spalten",
+    "columnsHint": "Abgewählte Spalten werden nicht gezeigt.",
+    "noSource": "Noch keine Datenquelle gewählt.",
+    "noColumns": "Die Quelle hat noch nichts geliefert, woraus sich Spalten ablesen ließen."
+  },
+  "Pager": {
+    "label": "Seiten",
+    "showing": "{{from}}–{{to}} von {{total}}",
+    "page": "Seite {{page}} von {{pages}}",
+    "previous": "Vorige Seite",
+    "next": "Nächste Seite"
   }
 }

@@ -19,7 +19,8 @@
  */
 
 import { BasicEObject } from '@emfts/core';
-import type { EClass, EStructuralFeature } from '@emfts/core';
+import { createBasicEList } from '@emfts/core';
+import type { EClass, EStructuralFeature, EList } from '@emfts/core';
 import { VariableWrapper } from 'org.eclipse.daanse.board.app.lib.variables';
 import type { DataTableSettings } from './DataTableSettings.js';
 import { DatatablesettingsPackage } from './DatatablesettingsPackage.js';
@@ -31,9 +32,17 @@ import { DatatablesettingsPackage } from './DatatablesettingsPackage.js';
 export class DataTableSettingsImpl extends BasicEObject implements DataTableSettings {
   // Feature ID Constants (eLiterals)
   static readonly HEADER_BACKGROUND: number = 0;
+  static readonly SHOW_HEADER: number = 1;
+  static readonly SORTABLE: number = 2;
+  static readonly PAGE_SIZE: number = 3;
+  static readonly HIDDEN_COLUMNS: number = 4;
 
   // Private fields
   private _headerBackground: VariableWrapper<string> = new VariableWrapper<string>();
+  private _showHeader: boolean = true;
+  private _sortable: boolean = false;
+  private _pageSize: number = 0;
+  private _hiddenColumns!: EList<string>;
 
   /**
    * Returns the EClass of this object
@@ -67,6 +76,85 @@ export class DataTableSettingsImpl extends BasicEObject implements DataTableSett
     }
   }
 
+  get showHeader(): boolean {
+    return this._showHeader!;
+  }
+
+  set showHeader(value: boolean) {
+    const oldValue = this._showHeader;
+    this._showHeader = value;
+    if (this.eDeliver()) {
+      this.eNotify({
+        getNotifier: () => this,
+        getEventType: () => 1, // SET
+        getFeature: () => this.eClass().getEStructuralFeature(DataTableSettingsImpl.SHOW_HEADER),
+        getOldValue: () => oldValue,
+        getNewValue: () => value,
+        getPosition: () => -1,
+        wasSet: () => true,
+        isTouch: () => false,
+        isReset: () => false,
+        getFeatureID: () => DataTableSettingsImpl.SHOW_HEADER,
+        merge: () => false
+      });
+    }
+  }
+
+  get sortable(): boolean {
+    return this._sortable!;
+  }
+
+  set sortable(value: boolean) {
+    const oldValue = this._sortable;
+    this._sortable = value;
+    if (this.eDeliver()) {
+      this.eNotify({
+        getNotifier: () => this,
+        getEventType: () => 1, // SET
+        getFeature: () => this.eClass().getEStructuralFeature(DataTableSettingsImpl.SORTABLE),
+        getOldValue: () => oldValue,
+        getNewValue: () => value,
+        getPosition: () => -1,
+        wasSet: () => true,
+        isTouch: () => false,
+        isReset: () => false,
+        getFeatureID: () => DataTableSettingsImpl.SORTABLE,
+        merge: () => false
+      });
+    }
+  }
+
+  get pageSize(): number {
+    return this._pageSize!;
+  }
+
+  set pageSize(value: number) {
+    const oldValue = this._pageSize;
+    this._pageSize = value;
+    if (this.eDeliver()) {
+      this.eNotify({
+        getNotifier: () => this,
+        getEventType: () => 1, // SET
+        getFeature: () => this.eClass().getEStructuralFeature(DataTableSettingsImpl.PAGE_SIZE),
+        getOldValue: () => oldValue,
+        getNewValue: () => value,
+        getPosition: () => -1,
+        wasSet: () => true,
+        isTouch: () => false,
+        isReset: () => false,
+        getFeatureID: () => DataTableSettingsImpl.PAGE_SIZE,
+        merge: () => false
+      });
+    }
+  }
+
+  get hiddenColumns(): EList<string> {
+    if (!this._hiddenColumns) {
+      this._hiddenColumns = createBasicEList<any>(this, this.eClass().getEStructuralFeature('hiddenColumns')!);
+    }
+    return this._hiddenColumns;
+  }
+
   // Reflective API
 
   /**
@@ -77,6 +165,14 @@ export class DataTableSettingsImpl extends BasicEObject implements DataTableSett
     switch (featureID) {
       case DataTableSettingsImpl.HEADER_BACKGROUND:
         return this.headerBackground;
+      case DataTableSettingsImpl.SHOW_HEADER:
+        return this.showHeader;
+      case DataTableSettingsImpl.SORTABLE:
+        return this.sortable;
+      case DataTableSettingsImpl.PAGE_SIZE:
+        return this.pageSize;
+      case DataTableSettingsImpl.HIDDEN_COLUMNS:
+        return this.hiddenColumns;
       default:
         return super.eGet(feature);
     }
@@ -92,6 +188,23 @@ export class DataTableSettingsImpl extends BasicEObject implements DataTableSett
         this.headerBackground = newValue as VariableWrapper<string>;
         super.eSet(feature, newValue);
         break;
+      case DataTableSettingsImpl.SHOW_HEADER:
+        this.showHeader = newValue as boolean;
+        super.eSet(feature, newValue);
+        break;
+      case DataTableSettingsImpl.SORTABLE:
+        this.sortable = newValue as boolean;
+        super.eSet(feature, newValue);
+        break;
+      case DataTableSettingsImpl.PAGE_SIZE:
+        this.pageSize = newValue as number;
+        super.eSet(feature, newValue);
+        break;
+      case DataTableSettingsImpl.HIDDEN_COLUMNS:
+        this.hiddenColumns.clear();
+        this.hiddenColumns.addAll(newValue as any[]);
+        super.eSet(feature, newValue);
+        break;
       default:
         super.eSet(feature, newValue);
     }
@@ -105,6 +218,14 @@ export class DataTableSettingsImpl extends BasicEObject implements DataTableSett
     switch (featureID) {
       case DataTableSettingsImpl.HEADER_BACKGROUND:
         return this._headerBackground !== new VariableWrapper<string>();
+      case DataTableSettingsImpl.SHOW_HEADER:
+        return this._showHeader !== true;
+      case DataTableSettingsImpl.SORTABLE:
+        return this._sortable !== false;
+      case DataTableSettingsImpl.PAGE_SIZE:
+        return this._pageSize !== 0;
+      case DataTableSettingsImpl.HIDDEN_COLUMNS:
+        return this._hiddenColumns !== undefined && !this._hiddenColumns.isEmpty();
       default:
         return super.eIsSet(feature);
     }
@@ -118,6 +239,18 @@ export class DataTableSettingsImpl extends BasicEObject implements DataTableSett
     switch (featureID) {
       case DataTableSettingsImpl.HEADER_BACKGROUND:
         this._headerBackground = new VariableWrapper<string>();
+        return;
+      case DataTableSettingsImpl.SHOW_HEADER:
+        this._showHeader = true;
+        return;
+      case DataTableSettingsImpl.SORTABLE:
+        this._sortable = false;
+        return;
+      case DataTableSettingsImpl.PAGE_SIZE:
+        this._pageSize = 0;
+        return;
+      case DataTableSettingsImpl.HIDDEN_COLUMNS:
+        if (this._hiddenColumns) this._hiddenColumns.clear();
         return;
       default:
         super.eUnset(feature);
@@ -135,6 +268,10 @@ export class DataTableSettingsImpl extends BasicEObject implements DataTableSett
   toJSON(): Record<string, unknown> {
     return {
       headerBackground: this.headerBackground,
+      showHeader: this.showHeader,
+      sortable: this.sortable,
+      pageSize: this.pageSize,
+      hiddenColumns: this.hiddenColumns?.toArray?.() ?? this.hiddenColumns,
     };
   }
 }
