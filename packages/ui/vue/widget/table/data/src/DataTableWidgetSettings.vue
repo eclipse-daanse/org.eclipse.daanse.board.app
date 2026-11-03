@@ -36,7 +36,7 @@ import { DCheckbox } from 'org.eclipse.daanse.board.app.ui.vue.controls'
  * is which source the widget reads from, and the shape says that without
  * a dependency on the model package.
  */
-interface SourceHolder {
+export interface SourceHolder {
   datasource?: { uid?: string }
   config?: { datasourceId?: string }
 }
