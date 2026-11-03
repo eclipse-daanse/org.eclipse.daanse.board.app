@@ -34,7 +34,7 @@
   "devDependencies": {
     "langium-cli": "~4.3.0",
     "typescript": "~5.9.2",
-    "vite": "^6.4.1",
+    "vite": "6.4.2",
     "vite-plugin-dts": "4.5.4",
     "vitest": "5.0.5"
   },

@@ -2,13 +2,14 @@
   "exclude": ["node_modules", "dist", "dist-bundle", "vite.bundle.config.ts"],
   "compilerOptions": {
     /* Declares the ?raw imports the settings form is read through. */
-    "types": ["vite/client"],
+    "types": ["vite/client", "node"],
     "sourceMap": true,
     "declarationMap": true,
     "inlineSources": true,
     "target": "es2016",
     /* Set the JavaScript language version for emitted JavaScript and include compatible library declarations. */
     "module": "esnext",
+    "moduleResolution": "bundler",
     /* Specify what module code is generated. */
     "declaration": true,
     /* Generate .d.ts files from TypeScript and JavaScript files in your project. */
