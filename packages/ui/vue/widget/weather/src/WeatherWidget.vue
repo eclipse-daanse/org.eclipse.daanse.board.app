@@ -13,7 +13,8 @@ Contributors:
 <script setup lang="ts">
 import { inject, computed, ref, watch, onMounted, onUnmounted } from 'vue'
 import { useRoute } from 'vue-router'
-import { useDatasourceRepository, useFormat, useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+import { useDatasourceRepository, useEObject, useFormat, useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+import type { EObject } from '@emfts/core'
 import type { WeatherWidgetSettings } from './types/WeatherWidgetSettings'
 import { useWeatherData } from './composables/useWeatherData'
 import ForecastChart from './components/ForecastChart.vue'
@@ -28,7 +29,19 @@ const format = useFormat()
 
 import { toRefs } from 'vue';
 const { id: widgetId } = toRefs(props);
-const settings = defineModel<WeatherWidgetSettings>('configv', { required: false, default: () => ({}) })
+const config = defineModel<WeatherWidgetSettings>('configv', { required: false, default: () => ({}) })
+
+/*
+ * The settings, watched rather than read off the model prop.
+ *
+ * Widget.config is an attribute, not a containment, so the adapter the
+ * wrapper holds on the widget never hears a write inside this object - and
+ * the wrapper hands this component the same instance on every change, which
+ * is not a prop change Vue acts on. A setting changed in the open dialog
+ * reached the weather only once the dialog was reopened (#1203). The reads go
+ * through `settings`; the writes still go to `config`.
+ */
+const settings = useEObject(() => config.value as unknown as EObject | undefined) as unknown as { value: WeatherWidgetSettings | undefined }
 
 import { identifiers } from 'org.eclipse.daanse.board.app.lib.core'
 import type { TinyEmitter } from 'tiny-emitter';
@@ -77,10 +90,10 @@ const {
   currentWeather,
   locationInfo,
   formatTimeRange
-} = useWeatherData(settings.value, props.datasourceId)
+} = useWeatherData(config.value, props.datasourceId)
 
 const hasTimeFilter = computed(() => {
-  return settings.value.useTimeRange && (settings.value.startTime || settings.value.endTime)
+  return settings.value?.useTimeRange && (settings.value?.startTime || settings.value?.endTime)
 })
 
 const refreshData = async (newVal?: string, oldVal?: string) => {
@@ -111,7 +124,7 @@ const setupRefreshTimer = () => {
     clearInterval(refreshTimer.value)
   }
 
-  const interval = settings.value.refreshInterval || 300000 // 5 minutes default
+  const interval = settings.value?.refreshInterval || 300000 // 5 minutes default
   console.log('Weather widget refresh interval (ms):', interval, 'seconds:', interval/1000)
   refreshTimer.value = setInterval(() => {
     console.log('Weather widget auto-refresh triggered')
@@ -123,16 +136,16 @@ watch(() => props.datasourceId, (newVal, oldVal) => {
   refreshData(newVal, oldVal)
 })
 
-watch(() => settings.value.refreshInterval, setupRefreshTimer)
+watch(() => settings.value?.refreshInterval, setupRefreshTimer)
 
-watch(() => [settings.value.startTime, settings.value.endTime], () => {
+watch(() => [settings.value?.startTime, settings.value?.endTime], () => {
   if (hasTimeFilter.value) {
     //refreshData()
   }
 })
 
 // Watch for changes in thingId
-watch(() => settings.value.thingId, () => {
+watch(() => settings.value?.thingId, () => {
   refreshData()
 })
 
@@ -325,10 +338,10 @@ const hasForecastData = computed(() => {
 
 // Get enabled forecast parameters from settings
 const enabledForecastParameters = computed(() => {
-  if (!settings.value.selectedForecastParameters) {
+  if (!settings.value?.selectedForecastParameters) {
     return hasForecastData.value ? ['temperature', 'humidity', 'pressure', 'windSpeed'] : []
   }
-  return settings.value.selectedForecastParameters
+  return settings.value?.selectedForecastParameters
 })
 
 // Process current weather from the fetched data
@@ -341,9 +354,9 @@ const processedWeather = computed(() => {
     let weatherStation = weatherDataRef.value[0]
 
     // If thingId is specified, find the matching station
-    if (settings.value.thingId) {
+    if (settings.value?.thingId) {
       const specificStation = weatherDataRef.value.find((station: any) =>
-        station.thingId == settings.value.thingId || String(station.thingId) == String(settings.value.thingId)
+        station.thingId == settings.value?.thingId || String(station.thingId) == String(settings.value?.thingId)
       )
       if (specificStation) {
         weatherStation = specificStation
@@ -359,9 +372,9 @@ const processedWeather = computed(() => {
   let datastreams = weatherDataRef.value.datastreams
 
   // If thingId is specified, filter datastreams to only those from that Thing
-  if (settings.value.thingId) {
+  if (settings.value?.thingId) {
     datastreams = datastreams.filter((ds: any) => {
-      const thingMatch = ds.thing && ds.thing['@iot.id'] == settings.value.thingId
+      const thingMatch = ds.thing && ds.thing['@iot.id'] == settings.value?.thingId
       return thingMatch
     })
   }
@@ -450,7 +463,7 @@ const getChartColor = (parameter: string): string => {
     cloudCover: '#95a5a6'
   }
 
-  return settings.value.chartColors?.[parameter] || defaultColors[parameter] || '#3498db'
+  return settings.value?.chartColors?.[parameter] || defaultColors[parameter] || '#3498db'
 }
 
 // Get font color from CSS variable (set by wrapper) or fallback to default
@@ -464,8 +477,8 @@ const processedLocationInfo = computed(() => {
   let thing = weatherDataRef.value.things[0]
 
   // If thingId is specified, find the specific Thing
-  if (settings.value.thingId) {
-    const specificThing = weatherDataRef.value.things.find((t: any) => t['@iot.id'] == settings.value.thingId)
+  if (settings.value?.thingId) {
+    const specificThing = weatherDataRef.value.things.find((t: any) => t['@iot.id'] == settings.value?.thingId)
     if (specificThing) {
       thing = specificThing
     }
@@ -555,7 +568,7 @@ const processedLocationInfo = computed(() => {
       </div>
 
       <!-- Forecast Charts -->
-      <div v-if="settings.showForecast && hasForecastData" class="forecast-section">
+      <div v-if="settings?.showForecast && hasForecastData" class="forecast-section">
         <h3 class="forecast-title">{{ t('Widget.forecast') }}</h3>
         <div class="forecast-charts">
           <ForecastChart
@@ -565,13 +578,13 @@ const processedLocationInfo = computed(() => {
             :parameter="parameter"
             :color="getChartColor(parameter)"
             :fontColor="getFontColor"
-            :gridColor="settings.gridColor || '#e0e0e0'"
+            :gridColor="settings?.gridColor || '#e0e0e0'"
           />
         </div>
       </div>
 
-      <div v-if="settings.refreshInterval" class="refresh-info">
-        <small>{{ t('Widget.autoRefresh', { count: Math.round(settings.refreshInterval / 60000) }) }}</small>
+      <div v-if="settings?.refreshInterval" class="refresh-info">
+        <small>{{ t('Widget.autoRefresh', { count: Math.round((settings?.refreshInterval ?? 0) / 60000) }) }}</small>
       </div>
     </div>
 
