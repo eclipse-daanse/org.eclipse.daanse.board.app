@@ -91,6 +91,7 @@ import { EventActionsRegistry, EVENT_ACTIONS_REGISTRY } from 'org.eclipse.daanse
 import type { MapClickPayload } from './gen/MapClickPayload'
 import { MapClickPayloadImpl } from './gen/MapClickPayloadImpl'
 import { useRoute } from 'vue-router'
+import { dataTypeFor } from './dataTypes'
 
 const props = defineProps<{ datasourceId: string; id: string }>()
 const { datasourceId, id: widgetId } = toRefs(props)
@@ -263,14 +264,8 @@ const datasourceType = computed(() => {
   }
 })
 
-// Dynamic data type mapping
-const dataTypeMapping: Record<string, string> = {
-  'rest': 'object',
-  'ogcsta': 'OGCSTAData',
-  'OGC Composer': 'OGCSTAData'
-}
-
-const dataType = computed(() => dataTypeMapping[datasourceType.value] || 'OGCSTAData')
+/* Which shape to ask for, by the kind of source - see ./dataTypes. */
+const dataType = computed(() => dataTypeFor(datasourceType.value))
 
 const { update, callEvent } = useDatasourceRepository(datasourceId, dataType.value as any, data)
 
@@ -292,7 +287,7 @@ const loadDatasourceData = async (dsId: string) => {
     const dsType = dsRepository.getDatasourceType(dsId)
 
     // Determine the data type for this datasource
-    const requestType = dataTypeMapping[dsType] || 'OGCSTAData'
+    const requestType = dataTypeFor(dsType)
 
     // Get the raw data from the datasource
     if (datasource && typeof datasource.getData === 'function') {
