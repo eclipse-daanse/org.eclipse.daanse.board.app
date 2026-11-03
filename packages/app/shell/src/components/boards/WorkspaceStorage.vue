@@ -51,6 +51,16 @@ import {
 
 const emit = defineEmits<{ restored: [ids: string[]] }>()
 
+/*
+ * Where to open, when the caller knows (#1200).
+ *
+ * A board that has a place it came from is shown standing there, with
+ * its name filled in, rather than on whatever place happens to be first.
+ * Both are optional: opened from the topbar there is nothing to go on,
+ * and then the tree behaves as it always did.
+ */
+const props = defineProps<{ onPlace?: string; withName?: string }>()
+
 const { remember: rememberOpened } = useLastOpenedState()
 const workspace = inject<Workspace>(WORKSPACE)!
 
@@ -121,11 +131,18 @@ const placeView = computed(() => viewFor(selectedPlace.value))
 
 async function loadPlaces() {
   places.value = (await repoManager?.getAvailableReposetories()) ?? []
-  const first = places.value[0]
-  if (first && expanded.value.size === 0) {
-    selectedPlace.value = first
-    await expand(first)
-  }
+  if (expanded.value.size !== 0) return
+
+  /* The place the caller named, where it is there to be found. */
+  const asked = props.onPlace
+    ? places.value.find((each) => String(each.uri) === props.onPlace)
+    : undefined
+  const open = asked ?? places.value[0]
+  if (!open) return
+
+  selectedPlace.value = open
+  if (props.withName) newName.value = props.withName
+  await expand(open)
 }
 
 /*

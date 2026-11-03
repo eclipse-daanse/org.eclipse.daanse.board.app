@@ -84,7 +84,7 @@ useKeepLastOpened()
  * one where one was. It is mounted here rather than on a screen because
  * every screen reaches the same one.
  */
-const { open: storageOpen, hide: hideStorage } = useStorageDialog()
+const { open: storageOpen, openOn: storageOn, hide: hideStorage } = useStorageDialog()
 
 /** A state opened from the dialog is a board opened: go to it, and close. */
 function openRestored() {
@@ -135,7 +135,7 @@ const noBoard = computed(() => {
       back to the board should not be a 22px grey glyph in a corner. -->
     <DModal v-model="storageOpen" size="lg" :title="t('Header.storageLabel')">
       <div class="storage-dialog">
-        <WorkspaceStorage @restored="openRestored" />
+        <WorkspaceStorage :on-place="storageOn?.placeUri" :with-name="storageOn?.name" @restored="openRestored" />
       </div>
       <template #actions>
         <DButton size="sm" @click="hideStorage">{{ t('Storage.back') }}</DButton>
