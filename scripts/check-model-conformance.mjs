@@ -54,7 +54,6 @@ const KNOWN = new Map([
   ['VariableComplexStringWrapper in packages/ui/vue/composables', 1068],
   ['IXmlaStoreConfiguration in packages/lib/datasource/xmla', 1073],
   ['XMLARequestParams in packages/lib/datasource/xmla', 1073],
-  ['Service in packages/ui/vue/widget/map', 1073],
   ['TimelineSettings in packages/ui/vue/widget/timeline', 1073],
 ])
 
