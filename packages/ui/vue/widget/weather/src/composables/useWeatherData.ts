@@ -11,11 +11,20 @@ Contributors:
     Smart City Jena
 */
 
-import { ref, computed, watch } from 'vue'
+import { ref, computed, toValue, type MaybeRefOrGetter } from 'vue'
 import type { WeatherWidgetSettings } from '../types/WeatherWidgetSettings'
 import { useFormat, useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 
-export function useWeatherData(settings: WeatherWidgetSettings, datasourceId: string) {
+/**
+ * The weather an answer holds, filtered by the settings' time range.
+ *
+ * The settings arrive as a ref or a getter, not as the instance: read once
+ * at setup, the range was fixed for the life of the widget, and a start
+ * time changed in the open dialog never reached the filter (#1206). The
+ * widget hands over the ref useEObject gives it, which is re-triggered by
+ * the adapter on the settings instance, so the computeds here re-run.
+ */
+export function useWeatherData(source: MaybeRefOrGetter<WeatherWidgetSettings | undefined>, datasourceId: string) {
   const { t } = useTranslation('weather')
   const format = useFormat()
   const weatherData = ref<any>(null)
@@ -26,9 +35,10 @@ export function useWeatherData(settings: WeatherWidgetSettings, datasourceId: st
     if (!weatherData.value?.datastreams) return []
 
     let datastreams = weatherData.value.datastreams
+    const settings = toValue(source)
 
     // Filter by time range if specified
-    if (settings.useTimeRange && (settings.startTime || settings.endTime)) {
+    if (settings?.useTimeRange && (settings.startTime || settings.endTime)) {
       datastreams = datastreams.filter((ds: any) => {
         if (!ds.observations || ds.observations.length === 0) return false
 
@@ -156,7 +166,8 @@ export function useWeatherData(settings: WeatherWidgetSettings, datasourceId: st
   }
 
   const formatTimeRange = () => {
-    if (!settings.useTimeRange) return ''
+    const settings = toValue(source)
+    if (!settings?.useTimeRange) return ''
 
     const moment = { dateStyle: 'short', timeStyle: 'short' } as const
     const start = settings.startTime ? format.date(settings.startTime, moment) : ''
