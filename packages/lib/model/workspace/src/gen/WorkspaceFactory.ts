@@ -29,6 +29,10 @@ import { Page } from './Page.js';
 import { PageImpl } from './PageImpl.js';
 import { Widget } from './Widget.js';
 import { WidgetImpl } from './WidgetImpl.js';
+import { DataSelection } from './DataSelection.js';
+import { DataSelectionImpl } from './DataSelectionImpl.js';
+import { DataFilter } from './DataFilter.js';
+import { DataFilterImpl } from './DataFilterImpl.js';
 import { Variable } from './Variable.js';
 import { VariableImpl } from './VariableImpl.js';
 import { EventMapping } from './EventMapping.js';
@@ -89,6 +93,20 @@ export class WorkspaceFactory extends BasicEFactory {
   }
 
   /**
+   * Create a new DataSelection instance
+   */
+  createDataSelection(): DataSelection {
+    return new DataSelectionImpl();
+  }
+
+  /**
+   * Create a new DataFilter instance
+   */
+  createDataFilter(): DataFilter {
+    return new DataFilterImpl();
+  }
+
+  /**
    * Create a new Variable instance
    */
   createVariable(): Variable {
@@ -136,6 +154,10 @@ export class WorkspaceFactory extends BasicEFactory {
         return this.createPage();
       case 'Widget':
         return this.createWidget();
+      case 'DataSelection':
+        return this.createDataSelection();
+      case 'DataFilter':
+        return this.createDataFilter();
       case 'Variable':
         return this.createVariable();
       case 'EventMapping':

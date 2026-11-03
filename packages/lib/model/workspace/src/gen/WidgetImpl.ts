@@ -21,6 +21,7 @@
 import { BasicEObject } from '@emfts/core';
 import type { EClass, EStructuralFeature } from '@emfts/core';
 import type { Datasource } from './Datasource.js';
+import type { DataSelection } from './DataSelection.js';
 import type { Widget } from './Widget.js';
 import { WorkspacePackage } from './WorkspacePackage.js';
 
@@ -35,6 +36,7 @@ export class WidgetImpl extends BasicEObject implements Widget {
   static readonly DATASOURCE: number = 2;
   static readonly CONFIG: number = 3;
   static readonly WRAPPER_CONFIG: number = 4;
+  static readonly SELECTION: number = 5;
 
   // Private fields
   private _uid: string = "";
@@ -42,6 +44,7 @@ export class WidgetImpl extends BasicEObject implements Widget {
   private _datasource?: Datasource;
   private _config?: unknown;
   private _wrapperConfig?: unknown;
+  private _selection?: DataSelection;
 
   /**
    * Returns the EClass of this object
@@ -171,6 +174,30 @@ export class WidgetImpl extends BasicEObject implements Widget {
     }
   }
 
+  get selection(): DataSelection {
+    return this._selection!;
+  }
+
+  set selection(value: DataSelection) {
+    const oldValue = this._selection;
+    this._selection = value;
+    if (this.eDeliver()) {
+      this.eNotify({
+        getNotifier: () => this,
+        getEventType: () => 1, // SET
+        getFeature: () => this.eClass().getEStructuralFeature(WidgetImpl.SELECTION),
+        getOldValue: () => oldValue,
+        getNewValue: () => value,
+        getPosition: () => -1,
+        wasSet: () => true,
+        isTouch: () => false,
+        isReset: () => false,
+        getFeatureID: () => WidgetImpl.SELECTION,
+        merge: () => false
+      });
+    }
+  }
+
   // Reflective API
 
   /**
@@ -189,6 +216,8 @@ export class WidgetImpl extends BasicEObject implements Widget {
         return this.config;
       case WidgetImpl.WRAPPER_CONFIG:
         return this.wrapperConfig;
+      case WidgetImpl.SELECTION:
+        return this.selection;
       default:
         return super.eGet(feature);
     }
@@ -220,6 +249,10 @@ export class WidgetImpl extends BasicEObject implements Widget {
         this.wrapperConfig = newValue as unknown;
         super.eSet(feature, newValue);
         break;
+      case WidgetImpl.SELECTION:
+        this.selection = newValue as DataSelection;
+        super.eSet(feature, newValue);
+        break;
       default:
         super.eSet(feature, newValue);
     }
@@ -241,6 +274,8 @@ export class WidgetImpl extends BasicEObject implements Widget {
         return this._config !== undefined;
       case WidgetImpl.WRAPPER_CONFIG:
         return this._wrapperConfig !== undefined;
+      case WidgetImpl.SELECTION:
+        return this._selection !== undefined;
       default:
         return super.eIsSet(feature);
     }
@@ -267,6 +302,9 @@ export class WidgetImpl extends BasicEObject implements Widget {
       case WidgetImpl.WRAPPER_CONFIG:
         this._wrapperConfig = undefined;
         return;
+      case WidgetImpl.SELECTION:
+        this._selection = undefined;
+        return;
       default:
         super.eUnset(feature);
     }
@@ -287,6 +325,7 @@ export class WidgetImpl extends BasicEObject implements Widget {
       datasource: this.datasource,
       config: this.config,
       wrapperConfig: this.wrapperConfig,
+      selection: this.selection,
     };
   }
 }
