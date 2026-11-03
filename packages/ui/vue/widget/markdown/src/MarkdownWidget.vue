@@ -23,8 +23,21 @@ import "github-markdown-css/github-markdown.css";
 // @ts-ignore
 import EasyMDE from 'easymde';
 import { MarkdownWidgetSettings } from './gen/MarkdownWidgetSettings'
+import { useEObject } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 
 const config = defineModel<MarkdownWidgetSettings>('configv', { required: true});
+
+/*
+ * The settings, watched rather than read off the model prop.
+ *
+ * Widget.config is an attribute, not a containment, so the adapter the
+ * wrapper holds on the widget never hears a write inside this object - and
+ * the wrapper hands this component the same instance on every change, which
+ * is not a prop change Vue acts on. A setting changed in the open dialog
+ * reached the text only once the dialog was reopened (#1203). The reads go
+ * through `settings`; the writes still go to `config`.
+ */
+const settings = useEObject<MarkdownWidgetSettings>(() => config.value)
 const props = defineProps<{ id?: string }>();
 const { id: widgetId } = toRefs(props);
 
@@ -40,13 +53,13 @@ class MarkdownWidgetApi extends MarkdownWidgetInterface {
     refresh(): void {
         // Re-render the markdown by bumping easyMDE value
         if (easyMDE) {
-            const current = config.value?.value || '';
+            const current = settings.value?.value || '';
             easyMDE.value('');
             easyMDE.value(current);
         }
     }
     copyContent(): void {
-        const text = config.value?.value || '';
+        const text = settings.value?.value || '';
         navigator.clipboard?.writeText(text).catch(() => {});
     }
     scrollToTop(): void {
@@ -113,13 +126,13 @@ onMounted(() => {
         previewClass: 'markdown-body',
     })
 
-    easyMDE.value(config.value?.value || '');
+    easyMDE.value(settings.value?.value || '');
 
     // @ts-ignore
     easyMDE.togglePreview();
 })
 
-watch(() => config.value?.value, (newValue, oldValue) => {
+watch(() => settings.value?.value, (newValue, oldValue) => {
     if (newValue !== oldValue) {
         emitTextChange(newValue || '');
     }
@@ -132,7 +145,7 @@ watch(() => config.value?.value, (newValue, oldValue) => {
 <template>
     <div class="markdown-wrapper" @click="emitClick" @contextmenu.prevent="emitRightClick" ref="wrapperRef">
         <textarea ref="container">
-            {{ config.value }}
+            {{ settings?.value }}
         </textarea>
     </div>
 </template>
