@@ -81,7 +81,52 @@
     },
     "hint": "Changes apply only with “Done”",
     "discard": "Discard",
-    "done": "Done"
+    "done": "Done",
+    "selection": {
+      "title": "Data selection",
+      "noSource": "Choose a data source to see its data.",
+      "notSelectable": "This widget reads a kind of data nothing can be selected from. It receives the whole answer.",
+      "loading": "Loading data …",
+      "failed": "The data source did not answer: {{reason}}",
+      "empty": "The data source returned no data.",
+      "answerHead": "What the data source answers",
+      "pathHint": "Click an entry so the widget receives only that part.",
+      "answer": "Answer",
+      "wholeAnswer": "whole answer",
+      "path": "Path",
+      "listOf": "list of {{count}} entries",
+      "objectOf": "object with {{count}} fields",
+      "expand": "Expand",
+      "collapse": "Collapse",
+      "more": "Show {{count}} more",
+      "elementsHead": "Entries ({{count}})",
+      "pickLabel": "Which entries",
+      "pick": {
+        "ALL": "All",
+        "FIRST": "The first",
+        "LAST": "The last",
+        "INDEX": "Entry number …"
+      },
+      "index": "Number (from 0)",
+      "field": "Field",
+      "operatorLabel": "Condition",
+      "operator": {
+        "EQUALS": "equals",
+        "NOT_EQUALS": "is not",
+        "CONTAINS": "contains",
+        "GREATER_THAN": "greater than",
+        "LESS_THAN": "less than",
+        "EXISTS": "exists"
+      },
+      "value": "Value",
+      "addFilter": "Add filter",
+      "removeFilter": "Remove filter",
+      "fieldsHead": "Fields",
+      "fieldsHint": "With none chosen, the widget receives every field.",
+      "resultHead": "What the widget receives",
+      "resultCount": "{{count}} entries",
+      "clear": "Remove selection"
+    }
   },
   "Floorplan": {
     "empty": "no widgets"

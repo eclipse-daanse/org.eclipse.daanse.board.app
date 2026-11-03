@@ -35,6 +35,7 @@ import {
 } from 'org.eclipse.daanse.board.app.ui.vue.widget.wrapper'
 import { DButton, DSelect } from 'org.eclipse.daanse.board.app.ui.vue.controls'
 import { SettingsForm } from 'org.eclipse.daanse.board.app.ui.vue.uimodel'
+import DataSelectionEditor from './DataSelectionEditor.vue'
 import {
   identifier as WORKSPACE,
   type Workspace,
@@ -650,6 +651,12 @@ onBeforeUnmount(() => {
               <p class="note">
                 {{ t('WidgetSettings.datasourceNote') }}
               </p>
+              <!-- What the source answers, and the part of it this widget
+                takes - a setting of the widget, saved with it (#1216). -->
+              <DataSelectionEditor
+                :widget="widget as never"
+                :reads="availableWidgets[widget.type ?? '']?.reads as never"
+              />
             </template>
 
             <!-- Wrapped rather than v-show'd directly: these settings
