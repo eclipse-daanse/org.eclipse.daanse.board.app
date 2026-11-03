@@ -75,7 +75,17 @@ function cell(row: Record<string, unknown>, key: string): string {
 </script>
 
 <template>
-  <div class="table">
+  <!--
+    Not class="table".
+
+    The shell imports Tailwind, which owns that name as a utility meaning
+    `display: table`. A scoped style cannot defend against it: it never
+    sets `display`, so the utility sets it unopposed - and a table box
+    ignores `overflow` and treats `height` as a minimum. The scroll area
+    grew to the full height of 20,000 rows, the pane above clipped it,
+    and nothing scrolled (#1181).
+  -->
+  <div class="datatable">
     <table v-if="items?.length && columns.length">
       <thead>
         <tr>
@@ -97,12 +107,12 @@ function cell(row: Record<string, unknown>, key: string): string {
       </tbody>
     </table>
 
-    <p v-else class="table__empty">{{ empty ?? t('Table.empty', 'No rows') }}</p>
+    <p v-else class="datatable__empty">{{ empty ?? t('Table.empty', 'No rows') }}</p>
   </div>
 </template>
 
 <style scoped>
-.table {
+.datatable {
   width: 100%;
   height: 100%;
   overflow: auto;
@@ -160,7 +170,7 @@ tbody tr:hover {
   background-color: color-mix(in srgb, var(--color-accent) 12%, transparent);
 }
 
-.table__empty {
+.datatable__empty {
   margin: 0;
   padding: 14px 10px;
   color: var(--color-dim);

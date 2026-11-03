@@ -207,7 +207,7 @@ const loadFile = async () => {
 
   <DTable
     v-model:selected="selectedRow"
-    class="table"
+    class="saved-states"
     :items="savedData"
     :columns="columns"
     selectable
@@ -234,7 +234,9 @@ const loadFile = async () => {
 </template>
 
 <style scoped lang="scss">
-.table {
+/* Not "table": Tailwind owns that name as a utility, and it lands on
+  DTable's own root - see #1181. */
+.saved-states {
   min-height: 100px;
 }
 
