@@ -20,6 +20,8 @@ import {
   getValueByPath
 } from './classes/helpers'
 import csv, { ParseOptions } from './classes/csv'
+import { applySelection, selectsEverything } from './classes/selection'
+import type { SelectionSpec, FilterSpec } from './classes/selection'
 
 export default {
   extractDataByPath,
@@ -30,9 +32,15 @@ export default {
   widget: {
     extractValuesAndFullObject,
     getValueByPath,
+    applySelection,
+    selectsEverything,
   }
 }
 
+export { applySelection, selectsEverything }
+
 export type {
-  ParseOptions
+  ParseOptions,
+  SelectionSpec,
+  FilterSpec,
 }
