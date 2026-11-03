@@ -23,14 +23,27 @@ Contributors:
  * The view is offered whether or not the answer holds geometry; where it
  * does not, the map says so, which is itself worth knowing.
  */
-import { onBeforeUnmount, ref, shallowRef, watch } from 'vue'
-import { useTemporaryStore } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+import { computed, onBeforeUnmount, ref, shallowRef, watch } from 'vue'
+import { useTemporaryStore, useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import { GeoFeatureMap } from 'org.eclipse.daanse.board.app.ui.vue.common.map'
+import { isEmptyAnswer } from './answerState'
 
 const props = defineProps<{ dataSource: any }>()
 
+const { t } = useTranslation('datasourceRest')
+
 /* Shallow: the answer is read and thrown away, never written into. */
 const data = shallowRef(null as any)
+
+/*
+ * The same four states the tree beside it tells apart (#1194).
+ *
+ * A map with no features on it says nothing about why: whether the
+ * endpoint refused, answered emptily, or has not answered yet. The map
+ * is for geography; these three are for the person waiting on it.
+ */
+const asked = ref(false)
+const failed = ref(false)
 const loading = ref(true)
 
 const tempStore = shallowRef(null as any)
@@ -49,28 +62,66 @@ watch(
   new answer, a store changing something inside itself is not. */
 let subscription: (() => void) | undefined
 
+/** One read, with whatever came of it written down. */
+const read = async (store: any) => {
+  try {
+    const answer = await store.getData('object')
+    data.value = answer
+    failed.value = answer === null || answer === undefined
+  } catch (error) {
+    /* A refused read is a thing to be told, not only to be logged - and a
+      rejection inside a subscription has nobody to hand it to at all. */
+    console.warn('the endpoint could not be read:', error)
+    data.value = null
+    failed.value = true
+  } finally {
+    asked.value = true
+  }
+}
+
 watch(tempStore, async (store) => {
   subscription?.()
   subscription = undefined
-  if (!store) return
+
+  asked.value = false
+  failed.value = false
+  data.value = null
+  if (!store) {
+    loading.value = false
+    return
+  }
 
   loading.value = true
   try {
-    data.value = await store.getData('object')
+    await read(store)
   } finally {
     loading.value = false
   }
 
   if (typeof store.subscribe === 'function') {
-    subscription = store.subscribe(async () => {
-      data.value = await store.getData('object')
-    })
+    /* Polling brings a new answer; the same reading, so a later refusal
+      is shown rather than thrown into the void. */
+    subscription = store.subscribe(() => void read(store))
   }
 })
+
+const empty = computed(() => asked.value && !failed.value && isEmptyAnswer(data.value))
 
 onBeforeUnmount(() => subscription?.())
 </script>
 
 <template>
-  <GeoFeatureMap :data="data" :loading="loading" />
+  <p v-if="failed" class="map-view__note" role="alert">{{ t('Preview.failed') }}</p>
+  <p v-else-if="empty" class="map-view__note" role="status">{{ t('Preview.empty') }}</p>
+  <GeoFeatureMap v-else :data="data" :loading="loading" />
 </template>
+
+<style scoped>
+.map-view__note {
+  margin: 0;
+  padding: 12px;
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  color: var(--color-dim);
+}
+</style>
