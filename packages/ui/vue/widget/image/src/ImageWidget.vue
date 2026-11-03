@@ -13,10 +13,9 @@ Contributors:
 
 <script lang="ts" setup>
 import { inject, onMounted, ref, watch, type Ref, computed, toRefs } from 'vue'
-import { plainSettings, useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+import { useEObject, useTranslation, VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import type { ImageSettings } from './gen/ImageSettings'
-// The class to instantiate: in emf mode the plain name is the interface
-import { ImageSettingsImpl } from './gen/ImageSettingsImpl'
+import { GallerySettingsImpl } from './gen/GallerySettingsImpl'
 import { identifiers } from 'org.eclipse.daanse.board.app.lib.core'
 import type { TinyEmitter } from 'tiny-emitter'
 import { DButton, DIcon } from 'org.eclipse.daanse.board.app.ui.vue.controls'
@@ -25,6 +24,18 @@ const props = defineProps<{ datasourceId: string, id?: string }>()
 const { t } = useTranslation('image')
 const { id: widgetId } = toRefs(props)
 const config = defineModel<ImageSettings>('configv', { required: true })
+
+/*
+ * The settings, watched rather than read off the model prop.
+ *
+ * Widget.config is an attribute, not a containment, so the adapter the
+ * wrapper holds on the widget never hears a write inside this object - and
+ * the wrapper hands this component the same instance on every change, which
+ * is not a prop change Vue acts on. A setting changed in the open dialog
+ * reached the gallery only once the dialog was reopened (#1203). The reads go
+ * through `settings`; the writes still go to `config`.
+ */
+const settings = useEObject<ImageSettings>(() => config.value)
 
 const eventBus = inject<TinyEmitter>(identifiers.TINY_EMITTER)!
 
@@ -46,16 +57,23 @@ const handleRightClick = (url: string) => {
   });
 };
 
-const defaultConfig = new ImageSettingsImpl();
-
+/*
+ * Only what is unset, and never the list.
+ *
+ * This used to merge toJSON() of a fresh instance over the settings with
+ * Object.assign. That writes `images` - and a generated instance has only
+ * a getter for a list, so the assignment threw the moment the settings
+ * were a generated instance (#1204). The one thing a fresh instance can
+ * be missing is the contained gallery object; the model names its
+ * defaults (fit "contain", no slideshow), and they are set here because
+ * the generator emits no literal for a wrapper reference.
+ */
 onMounted(() => {
-  if (config.value) {
-    /* Read by the model's names: spreading a generated instance gives
-         * the private fields the getters sit in, not the features. */
-        Object.assign(config.value, {
-            ...plainSettings(defaultConfig),
-            ...plainSettings(config.value),
-        })
+  if (config.value && !config.value.imagesSettings) {
+    const gallery = new GallerySettingsImpl()
+    gallery.fit = new VariableWrapper('contain')
+    gallery.diashowInterval = new VariableWrapper(0)
+    config.value.imagesSettings = gallery
   }
 })
 
@@ -64,8 +82,8 @@ onMounted(() => {
  * either given in the form or taken from a variable, and the widget sees
  * only the resulting value either way.
  */
-const fit = computed(() => config.value.imagesSettings?.fit?.value)
-const intervalSeconds = computed(() => config.value.imagesSettings?.diashowInterval?.value)
+const fit = computed(() => settings.value?.imagesSettings?.fit?.value)
+const intervalSeconds = computed(() => settings.value?.imagesSettings?.diashowInterval?.value)
 
 // Map CSS object-fit values to Tailwind classes
 const getObjectFit = computed(() => {
@@ -87,7 +105,7 @@ let interval = null as any
 const currentImage: Ref<number> = ref(0)
 
 const toNext = () => {
-  if (currentImage.value < config.value.images.length - 1) {
+  if (currentImage.value < (settings.value?.images?.length ?? 0) - 1) {
     currentImage.value++
   }
 }
@@ -104,7 +122,7 @@ const initInterval = () => {
   }
   if ((intervalSeconds.value ?? 0) > 0) {
     interval = setInterval(() => {
-      if (currentImage.value === config.value.images.length - 1) {
+      if (currentImage.value === (settings.value?.images?.length ?? 0) - 1) {
         currentImage.value = 0
         return
       }
@@ -124,7 +142,7 @@ const parsedUrl = (url: string): string => {
 }
 
 watch(
-  () => config.value.images?.length,
+  () => settings.value?.images?.length,
   (newLength, oldLength) => {
     if (oldLength > newLength) {
       if (currentImage.value >= newLength) {
@@ -135,7 +153,8 @@ watch(
 )
 
 const lastImageIndex = computed(() => {
-  return config.value.images?.length > 0 ? config.value.images.length - 1 : 0
+  const count = settings.value?.images?.length ?? 0
+  return count > 0 ? count - 1 : 0
 })
 
 watch(lastImageIndex, () => {
@@ -144,13 +163,13 @@ watch(lastImageIndex, () => {
 </script>
 
 <template>
-  <template v-if="config.images?.length <= 1">
+  <template v-if="(settings?.images?.length ?? 0) <= 1">
     <img
       class="w-full h-full cursor-pointer"
       :class="getObjectFit"
-      :src="parsedUrl(config.images[0]?.url??'')"
-      @click="handleClick(config.images[0]?.url??'')"
-      @contextmenu.prevent="handleRightClick(config.images[0]?.url??'')"
+      :src="parsedUrl(settings?.images?.[0]?.url??'')"
+      @click="handleClick(settings?.images?.[0]?.url??'')"
+      @contextmenu.prevent="handleRightClick(settings?.images?.[0]?.url??'')"
     />
   </template>
   <template v-else>
@@ -171,7 +190,7 @@ watch(lastImageIndex, () => {
         :style="{ transform: `translateX(-${100 * currentImage}%)` }"
       >
         <div
-          v-for="(image, i) in config.images"
+          v-for="(image, i) in settings?.images"
           :key="image.id"
           class="slideshow-slide"
           :style="{ transform: `translateX(${100 * i}%)` }"
@@ -191,7 +210,7 @@ watch(lastImageIndex, () => {
           intent="quiet"
           class="slideshow-nav__button"
           :title="t('Widget.next')"
-          :disabled="currentImage === config.images?.length - 1"
+          :disabled="currentImage === (settings?.images?.length ?? 0) - 1"
           @click="toNext()"
         >
           <DIcon name="chevron_right" />
