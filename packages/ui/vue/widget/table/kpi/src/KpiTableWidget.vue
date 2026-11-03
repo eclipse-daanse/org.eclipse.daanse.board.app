@@ -11,7 +11,7 @@ Contributors:
     Smart City Jena
 -->
 <script lang="ts" setup>
-import { useDatasourceRepository, VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+import { useDatasourceRepository, useEObject, VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import { inject, toRefs, ref, watch, computed, provide, onMounted, onUnmounted } from 'vue';
 import { useRoute } from 'vue-router';
 import { useVariableRepository } from "org.eclipse.daanse.board.app.ui.vue.composables"
@@ -22,10 +22,23 @@ const { wrapParameters } = useVariableRepository();
 const props = defineProps<{ datasourceId: string, config: any, id?: string }>();
 const { datasourceId, config, id: widgetId } = toRefs(props);
 
+/*
+ * The settings, watched rather than read off the prop.
+ *
+ * Widget.config is an attribute, not a containment, so the adapter the
+ * wrapper holds on the widget never hears a write inside this object - and
+ * the wrapper hands this component the same instance on every change, which
+ * is not a prop change Vue acts on. A setting changed in the open dialog
+ * reached the table only once the dialog was reopened (#1203). The reads go
+ * through `settings`; the writes still go to `config`.
+ */
+const settings = useEObject<KpiTableSettings>(() => config.value)
+
 import { identifiers } from 'org.eclipse.daanse.board.app.lib.core'
 import type { TinyEmitter } from 'tiny-emitter';
 import { EventActionsRegistry, EVENT_ACTIONS_REGISTRY } from 'org.eclipse.daanse.board.app.lib.api.events';
 import { KpiTableWidgetInterface } from './api/KpiTableWidgetInterface';
+import type { KpiTableSettings } from './gen/KpiTableSettings';
 
 const eventBus = inject<TinyEmitter>(identifiers.TINY_EMITTER)!;
 const actionsRegistry = inject<EventActionsRegistry>(EVENT_ACTIONS_REGISTRY)!;
@@ -98,16 +111,16 @@ const {
     showParentChild,
     showFolders
 } = wrapParameters({
-    showParentChild: computed(() => config.value.showParentChild ?? false),
-    showFolders: computed(() => config.value.showFolders ?? false),
+    showParentChild: computed(() => settings.value?.showParentChild ?? false),
+    showFolders: computed(() => settings.value?.showFolders ?? false),
 });
 
 const statusVisualType = computed(() => {
-    const val = config.value.statusVisualType;
+    const val = settings.value?.statusVisualType;
     return Array.isArray(val) ? val[0] || 'Badge' : (val || 'Badge');
 });
 const trendVisualType = computed(() => {
-    const val = config.value.trendVisualType;
+    const val = settings.value?.trendVisualType;
     return Array.isArray(val) ? val[0] || 'Badge' : (val || 'Badge');
 });
 
@@ -120,11 +133,11 @@ const parsedTableData = computed(() => {
 
     let result = data.value;
 
-    if (!(config.value.showFolders ?? false)) {
+    if (!(settings.value?.showFolders ?? false)) {
         result = flattenFolders(result);
     }
 
-    if (!(config.value.showParentChild ?? false)) {
+    if (!(settings.value?.showParentChild ?? false)) {
         result = flattenParentChild(result);
     }
 
