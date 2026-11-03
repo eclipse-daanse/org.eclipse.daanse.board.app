@@ -21,6 +21,15 @@
  * graph warm, so every further save of that bundle rebuilds incrementally in
  * a fraction of a second. Untouched bundles cost nothing.
  *
+ * These builds are development builds, which is what the app being served
+ * needs and what #1196 was about. It takes two independent levers: NODE_ENV,
+ * which dev.mjs sets and which decides what the vue plugin compiles into a
+ * component, and the mode below, which decides what each bundle's define
+ * says - and with it whether the libraries inside keep their warnings.
+ * Everything this script shells out to stays production: build-bundles.mjs
+ * stages released artefacts, and a library's dist/ is inlined into bundles
+ * that production ships.
+ *
  * A change to a workspace package that bundles bake in is a change in every
  * one of them. Those carry a copy of the package's built output, so the
  * library is rebuilt first - through turbo, which also brings its own
@@ -99,6 +108,7 @@ async function buildOnce(dir) {
     await build({
       configFile: resolve(dir, 'vite.bundle.config.ts'),
       root: resolve(dir),
+      mode: 'development',
       logLevel: 'silent',
       build: { minify: false, emptyOutDir: false },
     })
@@ -125,6 +135,7 @@ function startBundleWatcher(dir, { oneShot = false } = {}) {
       const watcher = await build({
         configFile: resolve(dir, 'vite.bundle.config.ts'),
         root: resolve(dir),
+        mode: 'development',
         logLevel: 'silent',
         build: {
           /* Rollup watches every file in the graph and, left alone, the
@@ -176,7 +187,9 @@ function flushLibs() {
     try {
       await run(`"${TURBO}" run build ${names.map((n) => `--filter=${n}`).join(' ')}`, {
         cwd: ROOT,
-        env: inheritEnv({ ...process.env, SKIP_TYPE_CHECK: 'true' }),
+        /* A library's dist/ is baked into the bundles that inline it, and
+          those are shipped. It stays a production build. */
+        env: inheritEnv({ ...process.env, SKIP_TYPE_CHECK: 'true', NODE_ENV: 'production' }),
       })
     } catch (error) {
       const tail = `${error.stdout ?? ''}\n${error.stderr ?? ''}`.trim().split('\n').slice(-8)
@@ -204,7 +217,9 @@ function flushLibs() {
     try {
       await run(`node scripts/build-bundles.mjs ${affected.join(' ')}`, {
         cwd: ROOT,
-        env: inheritEnv(),
+        /* Same builder as a release, and it stages what it produces - so it
+          builds the same way here as it does there. */
+        env: inheritEnv({ ...process.env, NODE_ENV: 'production' }),
       })
       console.log(`[${now()}] inlining bundles rebuilt in ${((Date.now() - spread) / 1000).toFixed(1)}s`)
     } catch (error) {
