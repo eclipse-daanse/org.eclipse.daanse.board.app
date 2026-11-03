@@ -74,6 +74,48 @@ export async function chooseDirectory(): Promise<FileSystemRepositoryImpl | unde
 }
 
 /**
+ * Brings one remembered folder back, asking for it.
+ *
+ * `activate` skips a folder whose permission has lapsed, because asking
+ * needs a user gesture and start-up is not one. The board that came from
+ * that folder is still there after a reload, with its origin - and a
+ * click on Save is a gesture. This is the step that joins the two again
+ * (#1200).
+ *
+ * Asks for write, not read: the click that brings us here wants to save,
+ * and asking twice for one action is one prompt too many.
+ *
+ * Has to be called straight out of the click. The browser ends the
+ * transient activation after a few seconds, so the IndexedDB read and
+ * the registry lookup in front of the request are all there is room for.
+ *
+ * Answers the place, or undefined where there is nothing remembered
+ * under that uri, where the browser has no file system access, or where
+ * the person declined.
+ */
+export async function reconnect(placeUri: string): Promise<FileSystemRepositoryImpl | undefined> {
+  const services = context
+  if (!services) throw new Error('lib.persistence.filesystem is not active')
+  if (!filesystemAvailable()) return undefined
+
+  const handle = await recallDirectory(placeUri)
+  if (!handle) return undefined
+  if (!(await ensurePermission(handle, true, true))) return undefined
+
+  const registry = services.getRequired(REPOSITORY_REGISTRY)
+  /* Already back, by another route - hand back what is registered. */
+  const known = ((await registry.getAvailableReposetories?.()) ?? []).find(
+    (each: { uri?: unknown }) => String(each.uri) === placeUri,
+  )
+  if (known) return known as FileSystemRepositoryImpl
+
+  const repository = services.construct(FileSystemRepositoryImpl)
+  repository.init(new URL(placeUri), handle.name, { handle })
+  registry.register(repository)
+  return repository
+}
+
+/**
  * Brings back the folders that were picked before.
  *
  * Only those whose permission is still granted: asking again needs a user
