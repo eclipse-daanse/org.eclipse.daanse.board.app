@@ -15,6 +15,7 @@ import { DefaultServiceRegistry, serviceId, type ModuleLoader } from '@eclipse-d
 import type { TinyEmitter } from 'tiny-emitter'
 import type { ActivationContext, ActivatableModule } from './api/ActivationContext'
 import { randomUUID } from './randomUUID'
+import { READS_NOTHING, fits } from './api/DataShape'
 
 /**
  * Well-known symbols, kept for Vue-side injection: the host's DI bridge
@@ -61,7 +62,10 @@ export {
   MODULE_LOADER,
   APP,
   randomUUID,
+  READS_NOTHING,
+  fits,
   type ActivationContext,
   type ActivatableModule,
 }
+export type { DataShape, Reads } from './api/DataShape'
 export type { ServiceId, ServiceOf } from '@eclipse-daanse/tsm'

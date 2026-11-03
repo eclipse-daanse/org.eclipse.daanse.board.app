@@ -19,7 +19,7 @@
  * touching the twenty-four bundles that provide widgets.
  */
 
-import { serviceId } from 'org.eclipse.daanse.board.app.lib.core'
+import { serviceId, type Reads } from 'org.eclipse.daanse.board.app.lib.core'
 
 
 /**
@@ -63,7 +63,17 @@ export interface WidgetConfig {
   component: any
   settingsComponent?: any
   settingsForm?: SettingsFormI
-  supportedDSTypes: string[]
+  /**
+   * The data this widget reads, as the shapes a source would have to
+   * answer - or READS_NOTHING where it shows none.
+   *
+   * It used to be `supportedDSTypes`, a list of source types that held
+   * three different kinds of value and that nothing read. A widget does
+   * not care which kind of source it is given; it cares whether what
+   * comes back is the shape it asked `useDatasourceRepository` for, and
+   * that is what a source can be matched against without naming it (#1183).
+   */
+  reads: Reads
   icon: string
   /** What the palette calls it when there is no text for nameKey. */
   name: string
@@ -72,7 +82,6 @@ export interface WidgetConfig {
    * a widget without a language pack still shows up under its name.
    */
   nameKey?: string
-  datasource?: string
 }
 
 /**

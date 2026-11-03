@@ -38,6 +38,7 @@ export function activate({ services }: ActivationContext) {
   services
     .getRequired<DatasourceRepository>(DATASOURCE_REPOSITORY)
     .registerDatasourceType('sql_xmla', {
+      answers: ['DataTable', 'object', 'string'],
       icon: 'storage',
       connections: ['xmla'],
       Model: MODEL_ECORE,

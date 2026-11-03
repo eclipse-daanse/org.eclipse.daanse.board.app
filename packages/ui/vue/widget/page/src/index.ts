@@ -31,6 +31,7 @@ import settingsEcore from '../model/model.ecore?raw'
  */
 void PagesettingsPackage.eINSTANCE
 import { WIDGET_SERVICE_ID, type WidgetProvider } from 'org.eclipse.daanse.board.app.lib.api.widget'
+import { READS_NOTHING } from 'org.eclipse.daanse.board.app.lib.core'
 
 const WIDGET_TYPE = 'PageWidget'
 
@@ -47,7 +48,7 @@ export class PageWidgetProvider implements WidgetProvider {
   readonly type = WIDGET_TYPE
   readonly component = PageWidget
   readonly settingsComponent = PageWidgetSettings
-  readonly supportedDSTypes = []
+  readonly reads = READS_NOTHING
   readonly icon = Icon
   readonly name = 'Page'
   readonly nameKey = 'page:Widget.name'

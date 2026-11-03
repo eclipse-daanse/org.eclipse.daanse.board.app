@@ -64,6 +64,7 @@ export function activate({ services }: ActivationContext) {
   services
     .getRequired<DatasourceRepository>(DATASOURCE_REPOSITORY)
     .registerDatasourceType('xmla', {
+      answers: ['DataTable', 'PivotTable'],
       icon: 'dataset',
       connections: ['xmla'],
       namespace: NAMESPACE,

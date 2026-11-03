@@ -20,6 +20,7 @@ import { MarkdownWidgetEvents } from './events/MarkdownWidgetEvents'
 import { MarkdownWidgetInterface } from './api/MarkdownWidgetInterface'
 import type { EventRegistry, EventActionsRegistry } from 'org.eclipse.daanse.board.app.lib.api.events'
 import { WIDGET_SERVICE_ID, type WidgetProvider } from 'org.eclipse.daanse.board.app.lib.api.widget'
+import { READS_NOTHING } from 'org.eclipse.daanse.board.app.lib.core'
 
 interface IMarkdownWidgetSettings {
   value: string;
@@ -39,7 +40,7 @@ export class MarkdownWidgetProvider implements WidgetProvider {
   readonly type = WIDGET_TYPE
   readonly component = MarkdownWidget
   readonly settingsComponent = MarkdownWidgetSettings
-  readonly supportedDSTypes = []
+  readonly reads = READS_NOTHING
   readonly icon = Icon
   readonly name = 'Markdown'
   readonly nameKey = 'markdown:Widget.name'

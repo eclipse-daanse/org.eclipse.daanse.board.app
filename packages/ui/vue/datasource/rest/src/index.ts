@@ -37,6 +37,7 @@ export function activate({ services }: ActivationContext) {
   services
     .getRequired<DatasourceRepository>(DATASOURCE_REPOSITORY)
     .registerDatasourceType('rest', {
+      answers: ['DataTable', 'object', 'string'],
       icon: 'api',
       connections: ['rest'],
       Model: MODEL_ECORE,

@@ -63,7 +63,7 @@ export class RepeatableSVGWidgetProvider implements WidgetProvider {
    * of it, how far along, and the two looks - every one of them a field, so
    * there is nothing left to write by hand.
    */
-  readonly supportedDSTypes = []
+  readonly reads = ['object']
   readonly icon = Icon
   readonly name = 'RepeatableSVG'
   readonly nameKey = 'svgRepeat:Widget.name'

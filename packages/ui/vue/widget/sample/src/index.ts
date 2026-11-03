@@ -33,7 +33,7 @@ export class SampleWidgetProvider implements WidgetProvider {
    * has nothing of its own to configure. The empty form it used to declare
    * put an empty section in the dialog and suggested otherwise.
    */
-  readonly supportedDSTypes = ['csv']
+  readonly reads = ['string']
   readonly icon = Icon
   readonly name = 'Sample'
   readonly nameKey = 'sample:Widget.name'

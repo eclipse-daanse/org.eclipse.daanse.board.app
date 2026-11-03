@@ -58,7 +58,7 @@ export class DataTableWidgetProvider implements WidgetProvider {
     ePackage: () => DatatablesettingsPackage.eINSTANCE,
     create: () => new DataTableSettingsImpl(),
   }
-  readonly supportedDSTypes = ['csv', 'rest']
+  readonly reads = ['DataTable']
   readonly icon = Icon
   readonly name = 'DataTable'
   readonly nameKey = 'tableData:Widget.name'

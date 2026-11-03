@@ -48,7 +48,7 @@ export class TextWidgetProvider implements WidgetProvider {
   readonly type = WIDGET_TYPE
   readonly component = TextWidget
   readonly settingsComponent = TextWidgetSettings
-  readonly supportedDSTypes = []
+  readonly reads = ['object']
   readonly icon = Icon
   readonly name = 'Text'
   readonly nameKey = 'textPlain:Widget.name'

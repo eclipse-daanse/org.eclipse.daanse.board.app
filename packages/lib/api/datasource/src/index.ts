@@ -18,7 +18,7 @@
  * and consumers both depend on this package; neither depends on the other.
  */
 
-import { serviceId } from 'org.eclipse.daanse.board.app.lib.core'
+import { serviceId, type DataShape } from 'org.eclipse.daanse.board.app.lib.core'
 import type { IDataRetrieveable } from 'org.eclipse.daanse.board.app.lib.datasource.base'
 import type { Datasource } from 'org.eclipse.daanse.board.app.lib.model.workspace'
 
@@ -55,6 +55,19 @@ export interface StoreView {
 
 export interface StoreIdentifiers {
     Store: symbol;
+    /**
+     * The shapes this type's stores answer in `getData(type)`.
+     *
+     * The other half of what a widget declares it reads: whether a widget
+     * fits a source is whether the two overlap, and until this was written
+     * down the question could only be answered by a hand-kept table of
+     * source types that nothing read and that disagreed with both ends
+     * (#1183).
+     *
+     * Optional, so a type that has not said yet is not mistaken for one
+     * that answers nothing - it is simply not offered.
+     */
+    answers?: DataShape[];
     /**
      * The one view a type has when it declares no others.
      *

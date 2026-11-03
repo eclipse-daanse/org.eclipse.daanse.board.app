@@ -32,6 +32,7 @@ export function activate({ services }: ActivationContext) {
   services
     .getRequired<DatasourceRepository>(DATASOURCE_REPOSITORY)
     .registerDatasourceType('KpiComposer', {
+      answers: ['Folder', 'KPI'],
       icon: 'speed',
       kind: 'composer',
       Store: KpiComposerIdentifier,

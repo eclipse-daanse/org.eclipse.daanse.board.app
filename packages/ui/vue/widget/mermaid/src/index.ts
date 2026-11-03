@@ -32,6 +32,7 @@ import settingsEcore from '../model/model.ecore?raw'
 void MermaidwidgetsPackage.eINSTANCE
 import type { EventRegistry, EventActionsRegistry } from 'org.eclipse.daanse.board.app.lib.api.events'
 import { WIDGET_SERVICE_ID, type WidgetProvider } from 'org.eclipse.daanse.board.app.lib.api.widget'
+import { READS_NOTHING } from 'org.eclipse.daanse.board.app.lib.core'
 
 const WIDGET_TYPE = 'MermaidWidget'
 
@@ -46,7 +47,7 @@ const WIDGET_TYPE = 'MermaidWidget'
 export class MermaidWidgetProvider implements WidgetProvider {
   readonly type = WIDGET_TYPE
   readonly component = MermaidWidget
-  readonly supportedDSTypes = []
+  readonly reads = READS_NOTHING
   readonly icon = Icon
   readonly name = 'Mermaid'
   readonly nameKey = 'mermaid:Widget.name'

@@ -38,7 +38,7 @@ export class RssWidgetProvider implements WidgetProvider {
    * has nothing of its own to configure. The empty form it used to declare
    * put an empty section in the dialog and suggested otherwise.
    */
-  readonly supportedDSTypes = []
+  readonly reads = ['object']
   readonly icon = Icon
   readonly name = 'RSS'
   readonly nameKey = 'rss:Widget.name'
