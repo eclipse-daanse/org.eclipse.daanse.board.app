@@ -44,11 +44,13 @@ import {
   useTranslation,
 } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import DataTree, { type Selection } from '@/components/datasources/DataTree.vue'
+import NewWidgetDialog from '@/components/datasources/NewWidgetDialog.vue'
 import DatasourceEditor from '@/components/datasources/DatasourceEditor.vue'
 import ConnectionEditor from '@/components/connections/ConnectionEditor.vue'
 import { useDatasourceUsage } from '@/composables/useDatasourceUsage'
 import { leavingADraft, type Draft } from '@/composables/leavingADraft'
 import { useNewDatasource } from '@/composables/useNewDatasource'
+import { useNewWidget } from '@/composables/useNewWidget'
 import {
   identifier as DATASOURCE_REPOSITORY,
   type DatasourceRepository,
@@ -61,6 +63,7 @@ const dataSources = useEList(workspace, (w) => w.datasources)
 
 const datasourceRepository = inject<DatasourceRepository>(DATASOURCE_REPOSITORY)!
 const { show: showNewDatasource } = useNewDatasource()
+const { show: showNewWidget } = useNewWidget()
 
 /**
  * A catalogue hit, made into a data source.
@@ -325,6 +328,19 @@ onBeforeRouteLeave(() => mayLeave())
             <span v-if="subtitle" class="detail__sub">{{ subtitle }}</span>
           </div>
           <span v-if="usage" class="detail__usage">{{ t('Data.usedIn', { usage }) }}</span>
+          <!--
+            Beside what already reads this source, because it is the same
+            question one step on: what shows it.
+          -->
+          <DButton
+            v-if="selected.type === 'DataSource'"
+            intent="quiet"
+            size="sm"
+            class="detail__make"
+            @click="showNewWidget(selected.itemId)"
+          >
+            {{ t('Data.addWidget') }}
+          </DButton>
         </header>
 
         <DTabs v-model="tab" :tabs="tabs" :label="t('Data.view')" />
@@ -364,6 +380,7 @@ onBeforeRouteLeave(() => mayLeave())
         <DButton intent="primary" @click="answerLeaving('save')">{{ t('common:Action.save') }}</DButton>
       </template>
     </DModal>
+    <NewWidgetDialog />
   </div>
 </template>
 
@@ -449,6 +466,16 @@ onBeforeRouteLeave(() => mayLeave())
   flex: none;
   font-size: var(--text-xs);
   color: var(--color-dim);
+}
+
+/* And after it, because it is what comes next: something that shows it. */
+.detail__make {
+  flex: none;
+  margin-left: auto;
+}
+
+.detail__usage + .detail__make {
+  margin-left: 0;
 }
 
 .detail__body {
