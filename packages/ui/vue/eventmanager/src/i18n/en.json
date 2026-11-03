@@ -27,6 +27,7 @@
     "otherEvents": "Other",
     "allInstances": "all instances",
     "context": "Context",
+    "targetContext": "Target context",
     "widgetPlaceholder": "Identifier, empty for any",
     "event": "Event",
     "property": "Property",

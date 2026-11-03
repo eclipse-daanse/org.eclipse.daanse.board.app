@@ -856,7 +856,7 @@ onMounted(() => {
                   <div class="part__body--row">
                     <DSelect
                       v-model="action.targetContext"
-                      :label="t('Rule.context')"
+                      :label="t('Rule.targetContext')"
                       stacked
                       :options="contextOptions"
                       label-key="text"
