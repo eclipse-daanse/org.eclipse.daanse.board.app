@@ -30,14 +30,27 @@ import { ref } from 'vue'
  */
 const open = ref(false)
 
+/**
+ * Where the dialog opens, when the caller knows.
+ *
+ * A board that has a place it came from should not be asked where it
+ * belongs - it should be shown standing there, with its name filled in
+ * (#1200). Left undefined, the dialog opens on the first place, as it
+ * always did.
+ */
+const openOn = ref<{ placeUri?: string; name?: string } | undefined>(undefined)
+
 export function useStorageDialog() {
   return {
     open,
-    show: () => {
+    openOn,
+    show: (on?: { placeUri?: string; name?: string }) => {
+      openOn.value = on
       open.value = true
     },
     hide: () => {
       open.value = false
+      openOn.value = undefined
     },
   }
 }
