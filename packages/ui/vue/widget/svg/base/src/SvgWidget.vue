@@ -13,7 +13,6 @@ Contributors:
 
 <script lang="ts" setup>
 import type { SvgSettings } from "./gen/SvgSettings";
-import { SvgSettingsImpl } from "./gen/SvgSettingsImpl";
 import {
     computed,
     getCurrentInstance,
@@ -23,7 +22,7 @@ import {
     watch,
 } from "vue";
 import { useRoute } from 'vue-router';
-import { VariableWrapper, plainSettings, sanitizeSvg, sanitizeStyleBlock, useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+import { VariableWrapper, sanitizeSvg, sanitizeStyleBlock, useEObject, useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 // import { useDatasourceRepository } from "../composables/datasourceRepository";
 
 const props = defineProps<{ datasourceId: string, id?: string }>();
@@ -31,6 +30,18 @@ const { t } = useTranslation('svgBase');
 import { inject, toRefs } from 'vue';
 const { id: widgetId } = toRefs(props);
 const config = defineModel<SvgSettings>('configv', { required: true });
+
+/*
+ * The settings, watched rather than read off the model prop.
+ *
+ * Widget.config is an attribute, not a containment, so the adapter the
+ * wrapper holds on the widget never hears a write inside this object - and
+ * the wrapper hands this component the same instance on every change, which
+ * is not a prop change Vue acts on. A setting changed in the open dialog
+ * reached the drawing only once the dialog was reopened (#1203). The reads go
+ * through `settings`; the writes still go to `config`.
+ */
+const settings = useEObject<SvgSettings>(() => config.value)
 
 import { identifiers } from 'org.eclipse.daanse.board.app.lib.core'
 import type { TinyEmitter } from 'tiny-emitter';
@@ -92,8 +103,6 @@ const svgSource = ref("");
 const inst = getCurrentInstance();
 const scope = (inst?.type as any).__scopeId;
 
-const defaultConfig = new SvgSettingsImpl();
-
 const loadSvg = async (srcWrapper: any) => {
     const src = srcWrapper?.value || srcWrapper;
     if (src && typeof src === 'string') {
@@ -130,13 +139,15 @@ const ensureWrapper = (obj: any, key: string, defaultVal: any) => {
 
 onMounted(async () => {
     if (widgetId?.value) actionsRegistry.registerInstance(widgetId.value, api, 'SVGWidget', pageId);
+    /*
+     * Nothing is merged in any more. This used to spread toJSON() of a
+     * fresh instance over the settings with Object.assign, which writes
+     * `classesConfig` - and a generated instance has only a getter for a
+     * list, so the assignment threw the moment the settings were a
+     * generated instance (#1204). A fresh instance has no defaults of its
+     * own; the source wrapper is made sure of below, as before.
+     */
     if (config.value) {
-        /* Read by the model's names: spreading a generated instance gives
-         * the private fields the getters sit in, not the features. */
-        Object.assign(config.value, {
-            ...plainSettings(defaultConfig),
-            ...plainSettings(config.value),
-        });
         console.log('SVG config:', config.value);
         console.log('SVG config.value.src:', config.value.src);
         console.log('SVG config.value (as any).settings:', (config.value as any).settings);
@@ -173,7 +184,7 @@ onUnmounted(() => {
 
 // Watch for src changes
 watch(
-    () => (config.value?.src as any)?.value,
+    () => (settings.value?.src as any)?.value,
     (newSrc) => {
         console.log('SVG src changed to:', newSrc);
         loadSvg(newSrc);
@@ -183,9 +194,10 @@ watch(
 const styles = computed(() => {
     let string: string = "";
 
-    if (config.value?.classesConfig && config.value.classesConfig.length > 0) {
+    const classes = settings.value?.classesConfig
+    if (classes && classes.length > 0) {
         string += "<style>";
-        config.value.classesConfig.forEach(classConfig => {
+        classes.forEach(classConfig => {
             if (classConfig.value?.className) {
                 const fill = (classConfig.value.fill as any)?.value || '';
                 const stroke = (classConfig.value.stroke as any)?.value || '';
@@ -234,7 +246,7 @@ const svgSourceParced = computed(() => {
     <div v-html="styles"></div>
     <!-- eslint-disable-next-line vue/no-v-html -- SVG fetched from an asset host. -->
     <div v-bind="$attrs" class="svg" v-html="svgSourceParced" @click="emitClick" @contextmenu.prevent="emitRightClick" ref="svgContainerRef"></div>
-    <div v-if="!svgSourceParced && !((config?.src as any)?.value)" class="fallback" @click="emitClick" @contextmenu.prevent="emitRightClick">
+    <div v-if="!svgSourceParced && !((settings?.src as any)?.value)" class="fallback" @click="emitClick" @contextmenu.prevent="emitRightClick">
         {{ t('Widget.empty') }}
     </div>
 </template>
