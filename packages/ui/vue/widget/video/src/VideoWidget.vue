@@ -18,7 +18,7 @@ import { useRoute } from "vue-router";
 import type { VideoSettings } from './gen/VideoSettings'
 import { VideoSettingsImpl } from './gen/VideoSettingsImpl'
 import { ObjectFitSettingImpl } from './gen/ObjectFitSettingImpl'
-import { VariableWrapper, useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+import { VariableWrapper, useEObject, useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 // import { useDatasourceRepository } from "../composables/datasourceRepository";
 
 const props = defineProps<{ datasourceId: string; id?: string }>();
@@ -26,6 +26,18 @@ const { t } = useTranslation('video');
 import { inject, toRefs } from 'vue';
 const { id: widgetId } = toRefs(props);
 const config = defineModel<VideoSettings>('configv', { required: true });
+
+/*
+ * The settings, watched rather than read off the model prop.
+ *
+ * Widget.config is an attribute, not a containment, so the adapter the
+ * wrapper holds on the widget never hears a write inside this object - and
+ * the wrapper hands this component the same instance on every change, which
+ * is not a prop change Vue acts on. The object-fit chosen in the open
+ * dialog never reached the video (#1205, #1203). The reads go through
+ * `settings`; the writes on mount still go to `config`.
+ */
+const settings = useEObject<VideoSettings>(() => config.value)
 
 import { identifiers } from 'org.eclipse.daanse.board.app.lib.core'
 import type { TinyEmitter } from 'tiny-emitter';
@@ -175,20 +187,21 @@ onUnmounted(() => {
     }
 });
 
+/* Bound to the element below; it was computed and bound to nothing (#1205). */
 const videoFit = computed(() => {
-    return config.value.videoFitSettings?.fit;
+    return settings.value?.videoFitSettings?.fit || 'cover';
 });
 
 const videoUrlParced = computed(() => {
     // Access .value and cast to any because TS thinks it is string
-    let processedString = (config.value.videoUrl as any)?.value;
+    let processedString = (settings.value?.videoUrl as any)?.value;
     return processedString;
 });
 </script>
 
 <template>
     <div class="container" @click="emitClick" @contextmenu.prevent="emitRightClick">
-        <video controls :src="videoUrlParced" ref="videoElement"
+        <video controls :src="videoUrlParced" ref="videoElement" :style="{ objectFit: videoFit }"
             @play="emitVideoEvent('play', $event)"
             @pause="emitVideoEvent('pause', $event)"
             @timeupdate="emitVideoEvent('timeupdate', $event)"
@@ -212,6 +225,5 @@ const videoUrlParced = computed(() => {
     width: 100%;
     height: 100%;
     border-radius: 3px;
-    object-fit: v-bind(videoFit);
 }
 </style>
