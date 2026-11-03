@@ -14,6 +14,7 @@ import { computed, getCurrentInstance, inject, onMounted, ref, watch } from 'vue
 import Draggable from 'vuedraggable-es'
 import { useOGCService } from './composables/ogcService'
 import type { IMapSettings, LayerI } from './Settings'
+import { clientOf, describedService } from './serviceClient'
 import { WfsEndpoint, WmsEndpoint, type WmsLayerSummary } from '@camptocamp/ogc-client'
 import { v4 } from 'uuid'
 import type { WfsFeatureTypeBrief } from '@camptocamp/ogc-client/src/wfs/model'
@@ -67,6 +68,7 @@ const dragOptions = computed(() => {
 })
 
 const url = ref('')
+
 const addService = async () => {
   console.log('addService called with URL:', url.value)
   serviceLoading.value = true
@@ -80,12 +82,9 @@ const addService = async () => {
     const service = await OGCService.createServiceWMS(url.value)
     console.log('WMS result:', service)
     if (service) {
-      widgetSettings.value.services.push({
-        service: service,
-        url: url.value,
-        type: 'WMS',
-        id: v4()
-      })
+      widgetSettings.value.services.push(
+        describedService(service, url.value, 'WMS'),
+      )
       hasService = true
     }
   } catch (e) {
@@ -99,12 +98,9 @@ const addService = async () => {
     const service2 = await OGCService.createServiceWFS(url.value)
     console.log('WFS result:', service2)
     if (service2) {
-      widgetSettings.value.services.push({
-        service: service2,
-        url: url.value,
-        type: 'WFS',
-        id: v4()
-      })
+      widgetSettings.value.services.push(
+        describedService(service2, url.value, 'WFS'),
+      )
       hasService = true
     }
   } catch (e) {
@@ -176,18 +172,21 @@ const services = computedAsync(async () => {
     if (service.type == 'WFS') {
       logServices('Processing WFS service')
 
-      if (service.service && typeof service.service.getFeatureTypes === 'function') {
+      /* Read through clientOf: the model types the field as unknown,
+        because what it holds is rebuilt from the URL rather than stored. */
+      const wfs = clientOf(service.service)
+      if (typeof wfs?.getFeatureTypes === 'function') {
         ret.push({
           service: service.service,
           type: 'WFS',
           level: 0,
-          childs: service.service.getFeatureTypes().map(
+          childs: (wfs.getFeatureTypes() as WfsFeatureTypeBrief[]).map(
           (featureType: WfsFeatureTypeBrief) => {
             return {
               'id': v4(),
               'opacity': 1,
               'service': service.id,
-              'wfs_service': new WFS(service.service.getFeatureUrl(featureType.name, { outputCrs: 'EPSG:4326', asJson: true, maxFeatures: 100 })),
+              'wfs_service': new WFS(wfs.getFeatureUrl!(featureType.name, { outputCrs: 'EPSG:4326', asJson: true, maxFeatures: 100 })),
               'geoJson': {},
               'type': 'WFSLayer',
               'name': featureType.name,
@@ -201,13 +200,10 @@ const services = computedAsync(async () => {
       }
     } else {
       logServices('Processing WMS service')
-      console.log('[MapsWidgetSettings] WMS service object:', service)
-      console.log('[MapsWidgetSettings] service.service:', service.service)
-      console.log('[MapsWidgetSettings] service.service._info:', service.service?._info)
-      console.log('[MapsWidgetSettings] getLayers type:', typeof service.service?.getLayers)
 
-      if (service.service && typeof service.service.getLayers === 'function') {
-        const layers = service.service.getLayers()
+      const wms = clientOf(service.service)
+      if (typeof wms?.getLayers === 'function') {
+        const layers = wms.getLayers()
         console.log('[MapsWidgetSettings] WMS layers:', layers)
         ret.push({
           service: service.service,
