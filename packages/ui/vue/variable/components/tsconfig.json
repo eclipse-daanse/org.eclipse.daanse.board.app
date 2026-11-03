@@ -7,6 +7,12 @@
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "module": "esnext",
+    "moduleResolution": "bundler",
+    /* vue-mention declares its types in "types", but its "exports" field
+      names only the JavaScript. Bundler resolution reads "exports" and
+      finds no declarations; node10 read "types" and did. Pointed at
+      directly rather than declared as any, so the real types are used. */
+    "paths": { "vue-mention": ["../../../../../node_modules/vue-mention/dist/index.d.ts"] },
     "declaration": true,
     "outDir": "./dist/types",
     "resolveJsonModule": true,
@@ -14,9 +20,7 @@
     "forceConsistentCasingInFileNames": true,
     "strict": true,
     "skipLibCheck": true,
-    "types": [
-      "vite/client"
-    ]
+    "types": ["vite/client", "node"]
   },
   "exclude": [
     "node_modules",
