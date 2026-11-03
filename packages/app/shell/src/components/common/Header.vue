@@ -51,7 +51,7 @@ import { useWorkspaceOrigin } from '@/composables/useWorkspaceFile'
 const { show: showStorage } = useStorageDialog()
 
 /* Keeping the board - the same press as on its own screen. */
-const { store, storing, stored } = useStoreBoard()
+const { store, storing, stored, failed } = useStoreBoard()
 const kept = useWorkspaceOrigin()
 
 const route = useRoute()
@@ -280,9 +280,11 @@ const openEdit = () => {
 
 /*
  * Storing belongs to the board you are looking at, not to a separate area
- * in the rail. It opens the launcher on its storage view, where the target
- * entry is picked; saving in place without asking comes later, once the
- * workspace origin is carried across reloads.
+ * in the rail. A board that has been stored is written back where it came
+ * from, without asking - the origin is carried across reloads now, and a
+ * folder whose permission has lapsed is asked for again on the click
+ * (#1200). Storage opens only where there is nothing to write over, or
+ * where the place or the state has gone.
  */
 /*
  * Storage opens over the board rather than instead of it.
@@ -431,6 +433,11 @@ const openAppearance = () => router.push('/appearance')
       >
         <DIcon :name="stored ? 'check' : 'save'" size="sm" />
       </button>
+
+      <!-- Keeping the board failed. Said here because this is where the
+        person pressed, and where a board made with a place that refused
+        arrives believing it is stored. -->
+      <p v-if="failed" class="topbar__failed" role="alert" :title="failed">{{ failed }}</p>
 
   <!--
         The page of the board, and its settings. Right after the breadcrumb
@@ -1050,4 +1057,17 @@ const openAppearance = () => router.push('/appearance')
 .lang__item.on {
   color: var(--color-accent);
 }
+
+/* One line, cut off rather than pushing the topbar apart; the full text
+  is in the title. */
+.topbar__failed {
+  margin: 0;
+  max-width: 28ch;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: var(--text-xs);
+  color: var(--color-err);
+}
+
 </style>
