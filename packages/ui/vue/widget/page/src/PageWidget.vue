@@ -17,10 +17,23 @@ import { computed, toRefs, onMounted, ref, watch, inject, provide } from "vue";
 import { PageI } from './interface/PageI'
 import { RouterView, useRouter, useRoute } from 'vue-router'
 import PageLayoutRenderer from './PageLayoutRenderer.vue'
-import { useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+import { useEObject, useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+import type { EObject } from '@emfts/core'
 import { pageIdIn } from 'org.eclipse.daanse.board.app.lib.api.page'
 
 const config = defineModel<PageI>('configv', { required: true});
+
+/*
+ * The settings, watched rather than read off the model prop.
+ *
+ * Widget.config is an attribute, not a containment, so the adapter the
+ * wrapper holds on the widget never hears a write inside this object - and
+ * the wrapper hands this component the same instance on every change, which
+ * is not a prop change Vue acts on. A setting changed in the open dialog
+ * reached the page only once the dialog was reopened (#1203). The reads go
+ * through `settings`; the writes still go to `config`.
+ */
+const settings = useEObject(() => config.value as unknown as EObject | undefined) as unknown as { value: PageI | undefined }
 const defaultConfig: PageI = {
   /* A placeholder, replaced the moment a page is picked in the settings. */
   path: '',
@@ -54,7 +67,7 @@ const chain = [...parentPageIds, currentPageId]
 provide('pageWidgetPageIds', chain)
 
 const isRecursive = computed(() => {
-  const targetPath = config.value.path
+  const targetPath = settings.value?.path
   if (!targetPath) return false
 
   // 1. Maximale Tiefe erreicht
@@ -92,7 +105,7 @@ if (!config.value.path) {
 }
 
 // The page this widget shows, whichever shape its path was written in
-const targetPageId = computed(() => pageIdIn(config.value.path) || 'abc')
+const targetPageId = computed(() => pageIdIn(settings.value?.path ?? '') || 'abc')
 
 // Event Handlers für LayoutRenderer
 const handleOpenSettings = (widgetId: string) => {
@@ -108,10 +121,10 @@ const handleRemoveWidget = (widgetId: string) => {
 </script>
 
 <template>
-  <div class="container" v-if="config.path">
+  <div class="container" v-if="settings?.path">
     <!-- The cycle this widget would have opened -->
     <div v-if="isRecursive" class="recursion-warning">
-      ⚠️ {{ t('Widget.recursion', { path: config.path }) }}
+      ⚠️ {{ t('Widget.recursion', { path: settings?.path }) }}
       <div class="recursion-details">
         {{ t('Widget.depth', { depth: currentDepth, max: maxRecursionDepth }) }}<br>
         {{ t('Widget.chain', { chain: [...chain, targetPageId].join(' → ') }) }}
@@ -123,14 +136,14 @@ const handleRemoveWidget = (widgetId: string) => {
       <div
         class="page-widget-content"
         :style="{
-          backgroundColor: config.backgroundColor || undefined
+          backgroundColor: settings?.backgroundColor || undefined
         }"
         :class="{
 
         }"
       >
         <!-- Titel (optional anzeigen) -->
-        <div v-if="!config.hideTitle" class="page-info">
+        <div v-if="!settings?.hideTitle" class="page-info">
           📄 {{ t('Widget.target', { page: targetPageId }) }}
         </div>
 
