@@ -1,6 +1,7 @@
 {
   "exclude": ["node_modules", "dist", "dist-bundle", "vite.bundle.config.ts"],
   "compilerOptions": {
+    "types": ["vite/client"],
     "sourceMap": true,
     "declarationMap": true,
     "inlineSources": true,
@@ -12,7 +13,7 @@
     "emitDecoratorMetadata": true
     /* Emit design-type metadata for decorated declarations in source files. */,
     /* Modules */
-    "module": "commonjs"
+    "module": "esnext"
     /* Specify what module code is generated. */,
     /* Emit */
     "declaration": true
