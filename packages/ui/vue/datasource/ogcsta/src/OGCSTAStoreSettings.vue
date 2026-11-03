@@ -386,6 +386,8 @@ const resultTimeEndDT = createDateTimeComputed(() => timeWrappers.resultTimeEnd)
               { text: t('Ogcsta.order.resultAsc'), value: 'resultTime asc' }
             ]"
             :label="t('Ogcsta.orderBy')"
+            label-key="text"
+            value-key="value"
             clearable
           />
 
