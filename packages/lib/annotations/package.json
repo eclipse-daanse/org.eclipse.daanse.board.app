@@ -22,6 +22,7 @@
     "reflect-metadata": "^0.2.2"
   },
   "devDependencies": {
+    "@eclipse-daanse/tsm": "0.1.0-next.1",
     "typescript": "^5.8.2",
     "vite": "^6.4.1",
     "vite-plugin-dts": "4.5.4"

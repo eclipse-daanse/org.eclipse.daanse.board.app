@@ -43,6 +43,8 @@
     "org.eclipse.daanse.board.app.ui.vue.uimodel": "^0.0.1-next.1"
   },
   "devDependencies": {
+    "@tailwindcss/vite": "^4.1.4",
+    "@vitejs/plugin-vue": "^5.2.3",
     "vite": "^6.4.1"
   }
 }
