@@ -26,11 +26,21 @@ let notify: (() => void) | undefined
 /* Set where the endpoint is to refuse rather than answer. */
 let refuses = false
 
+/*
+ * The whole answer, where a test wants it to differ from the narrowed
+ * one - which is the case the two views used to disagree about.
+ */
+let wholeAnswer: unknown = undefined
+
 const store = {
   getData: vi.fn(async (shape: string) => {
     asked.push(shape)
     if (refuses) throw new Error('404')
     return answer
+  }),
+  getOriginalData: vi.fn(async () => {
+    if (refuses) throw new Error('404')
+    return wholeAnswer === undefined ? answer : wholeAnswer
   }),
   subscribe: (listener: () => void) => {
     notify = listener
@@ -82,6 +92,7 @@ describe('MapView', () => {
   beforeEach(() => {
     asked.length = 0
     answer = null
+    wholeAnswer = undefined
     refuses = false
     unsubscribed = false
     notify = undefined
@@ -96,6 +107,7 @@ describe('MapView', () => {
     answer = { type: 'FeatureCollection', features: [] }
     await open()
 
+    /* What it draws is asked for exactly once, and as 'object'. */
     expect(asked).toEqual(['object'])
   })
 
@@ -198,5 +210,102 @@ describe('MapView', () => {
 
       expect(wrapper.find('[role="alert"]').text()).toBe('Preview.failed')
     })
+  })
+
+  /*
+   * The two views of one source, agreeing about it (#1194).
+   *
+   * The map draws the narrowed answer and the tree shows the whole one,
+   * so they used to measure "is there anything" on different things: a
+   * selected path matching nothing made the map say "empty" while the
+   * tree drew a full answer beside it.
+   */
+  it('calls it empty by the whole answer, not by what the path selected', async () => {
+    wholeAnswer = { type: 'FeatureCollection', features: [{ type: 'Feature', geometry: null, properties: null }] }
+    answer = {}
+    const wrapper = await open()
+
+    /* Something came back; the path just did not match it. */
+    expect(wrapper.find('[role="status"]').exists()).toBe(false)
+    expect(shown(wrapper).exists()).toBe(true)
+    expect(shown(wrapper).props('data')).toEqual({})
+  })
+
+  it('calls it empty where the whole answer is empty', async () => {
+    wholeAnswer = {}
+    answer = {}
+    const wrapper = await open()
+
+    expect(wrapper.find('[role="status"]').text()).toBe('Preview.empty')
+  })
+
+  /* A source that refused once and then answers is drawn again, not
+    left showing the refusal. */
+  it('recovers when a later answer comes back', async () => {
+    refuses = true
+    const wrapper = await open()
+    expect(wrapper.find('[role="alert"]').exists()).toBe(true)
+
+    refuses = false
+    answer = { type: 'FeatureCollection', features: [{ type: 'Feature', geometry: null, properties: null }] }
+    wholeAnswer = answer
+    notify?.()
+    await flushPromises()
+
+    expect(wrapper.find('[role="alert"]').exists()).toBe(false)
+    expect(shown(wrapper).exists()).toBe(true)
+  })
+
+  it('says so when a later answer is empty', async () => {
+    answer = { type: 'FeatureCollection', features: [{ type: 'Feature', geometry: null, properties: null }] }
+    wholeAnswer = answer
+    const wrapper = await open()
+    expect(shown(wrapper).exists()).toBe(true)
+
+    answer = {}
+    wholeAnswer = {}
+    notify?.()
+    await flushPromises()
+
+    expect(wrapper.find('[role="status"]').text()).toBe('Preview.empty')
+  })
+
+  /*
+   * A store replaced while a read is in flight (#1194).
+   *
+   * The old read is still running and finishes later. Without a sequence
+   * number it writes its answer - and its failed, and its asked - over
+   * the store that replaced it, so the view shows what the source it no
+   * longer has said.
+   */
+  it('ignores a read that comes back after its store was replaced', async () => {
+    const letGo: Array<(value: unknown) => void> = []
+    const slow = {
+      getData: vi.fn(() => new Promise((resolve) => letGo.push(resolve))),
+      getOriginalData: vi.fn(() => new Promise((resolve) => letGo.push(resolve))),
+    }
+    const quick = {
+      getData: vi.fn(async () => ({ type: 'FeatureCollection', features: [{ type: 'Feature', geometry: null, properties: null }] })),
+      getOriginalData: vi.fn(async () => ({ type: 'FeatureCollection', features: [{ type: 'Feature', geometry: null, properties: null }] })),
+    }
+
+    const wrapper = mount(MapView, { props: { dataSource: SOURCE } })
+    await flushPromises()
+    const held = built.value as { value: unknown }
+
+    held.value = slow
+    await flushPromises()
+
+    /* The second source answers while the first is still thinking. */
+    held.value = quick
+    await flushPromises()
+    expect(shown(wrapper).exists()).toBe(true)
+
+    /* And now the first one answers, with nothing. */
+    letGo.forEach((resolve) => resolve(null))
+    await flushPromises()
+
+    expect(wrapper.find('[role="alert"]').exists()).toBe(false)
+    expect(shown(wrapper).exists()).toBe(true)
   })
 })
