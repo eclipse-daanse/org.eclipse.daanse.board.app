@@ -162,6 +162,85 @@ pages, and on each page its widgets and where they sit.
                 <details key="documentation" value="The frame around it - border, title, padding. Modelled as WrapperSettings in ui/vue/widget/wrapper."/>
             </eAnnotations>
         </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="selection" eType="#//DataSelection" lowerBound="0" containment="true">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="Which part of its source&apos;s answer the widget takes. Without one it takes the whole answer. Contained, so a change inside it is a change of the widget, and it is saved with it."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+    </eClassifiers>
+
+    <eClassifiers xsi:type="ecore:EClass" name="DataSelection">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+            <details key="documentation" value="The part of a source&apos;s answer one widget takes: where it sits, which elements of an array stay, and which fields of each."/>
+        </eAnnotations>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="path" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="Where the part sits, in the syntax of a $value placeholder: readings.0.items. Empty is the whole answer."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="filters" upperBound="-1" eType="#//DataFilter" containment="true">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="Which elements of an array stay. Every filter has to hold; none keeps them all."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="pick" eType="#//SelectionPick">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="Which of the elements that stay the widget takes: all of them, the first, the last, or the one at index."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="index" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="The element taken when pick is index, counted from 0."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="fields" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" upperBound="-1">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="Which fields of each element stay. None listed keeps them all."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+    </eClassifiers>
+
+    <eClassifiers xsi:type="ecore:EClass" name="DataFilter">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+            <details key="documentation" value="One condition an element of an array has to meet to stay."/>
+        </eAnnotations>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="field" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="Where the compared value sits inside the element, as a path. Empty compares the element itself."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="operator" eType="#//FilterOperator">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="How the value is compared."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="What it is compared with, as text. Compared as a number where both sides read as one."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+    </eClassifiers>
+
+    <eClassifiers xsi:type="ecore:EEnum" name="SelectionPick">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+            <details key="documentation" value="Which of the elements that stay are taken."/>
+        </eAnnotations>
+        <eLiterals name="ALL" literal="all"/>
+        <eLiterals name="FIRST" literal="first" value="1"/>
+        <eLiterals name="LAST" literal="last" value="2"/>
+        <eLiterals name="INDEX" literal="index" value="3"/>
+    </eClassifiers>
+
+    <eClassifiers xsi:type="ecore:EEnum" name="FilterOperator">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+            <details key="documentation" value="How a filter compares the value in an element with its own."/>
+        </eAnnotations>
+        <eLiterals name="EQUALS" literal="equals"/>
+        <eLiterals name="NOT_EQUALS" literal="notEquals" value="1"/>
+        <eLiterals name="CONTAINS" literal="contains" value="2"/>
+        <eLiterals name="GREATER_THAN" literal="greaterThan" value="3"/>
+        <eLiterals name="LESS_THAN" literal="lessThan" value="4"/>
+        <eLiterals name="EXISTS" literal="exists" value="5"/>
     </eClassifiers>
 
     <eClassifiers xsi:type="ecore:EClass" name="Variable">
