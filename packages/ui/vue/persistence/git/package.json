@@ -19,9 +19,11 @@
     "url": "https://github.com/eclipse-daanse/org.eclipse.daanse.board.app/issues"
   },
   "devDependencies": {
+    "@vitejs/plugin-vue": "^5.2.3",
     "typescript": "^5.8.2",
     "vite": "^6.4.1",
-    "vite-plugin-dts": "4.5.4"
+    "vite-plugin-dts": "4.5.4",
+    "vite-plugin-libcss": "^1.1.1"
   },
   "publishConfig": {
     "access": "public"

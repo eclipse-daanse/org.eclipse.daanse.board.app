@@ -21,7 +21,6 @@
 
 import { resolve } from 'node:path'
 import { defineConfig } from 'vite'
-import vue from '@vitejs/plugin-vue'
 import { tsmPlugin } from '@eclipse-daanse/tsm/vite'
 import manifest from './manifest.json'
 
@@ -176,7 +175,6 @@ export default defineConfig({
     'process.env': '{}',
   },
   plugins: [
-    vue(),
     inlineCss(),
     buildWorker(),
     rewriteSharedImportsInChunks(),
