@@ -20,7 +20,7 @@
  * them it is about - and that the questions whose answers are already on
  * the screen are not asked again.
  */
-import { describe, expect, it, vi } from 'vitest'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { flushPromises, mount } from '@vue/test-utils'
 import {
   EVENT_MANAGER,
@@ -78,6 +78,11 @@ function rulesShown(wrapper: ReturnType<typeof mount>): string[] {
 }
 
 describe('the events screen, scoped to a widget', () => {
+  beforeEach(() => {
+    registerMapping.mockClear()
+    document.body.innerHTML = ''
+  })
+
   it('shows the rules of that widget and no others', async () => {
     const wrapper = openOn({ context: 'widget', contextId: 'w1', widgetType: 'DataTableWidget' })
     await flushPromises()
@@ -102,6 +107,54 @@ describe('the events screen, scoped to a widget', () => {
     await flushPromises()
 
     expect(wrapper.vm.newMapping).toMatchObject({ context: 'widget', contextId: 'w1' })
+  })
+
+  /*
+   * What the rule carries when it is written, which is the whole point of
+   * not asking: the context is filled in from the scope and reaches the
+   * manager, rather than being left for someone to type.
+   */
+  it('writes the scope into the rule it saves', async () => {
+    const wrapper = openOn({ context: 'widget', contextId: 'w1', widgetType: 'DataTableWidget' })
+    await flushPromises()
+
+    wrapper.vm.newMapping.eventType = 'DataTableWidget:col_click'
+    wrapper.vm.newMapping.actions = [{ actionName: 'setGlobalVariable' }]
+    wrapper.vm.addMapping()
+
+    expect(registerMapping).toHaveBeenCalledTimes(1)
+    expect(registerMapping.mock.calls[0][0]).toMatchObject({
+      context: 'widget',
+      contextId: 'w1',
+      eventType: 'DataTableWidget:col_click',
+    })
+  })
+
+  /*
+   * The question is not asked, not merely answered in advance.
+   *
+   * Looked for in the 'when' half only: an action further down asks for a
+   * target context under the same label, and that one stays - a rule on
+   * this widget may well act on another.
+   */
+  async function whenLabels(scope?: Record<string, unknown>) {
+    const wrapper = openOn(scope)
+    await flushPromises()
+    wrapper.vm.showAddDialog = true
+    await flushPromises()
+
+    const when = document.querySelectorAll('.part')[0]
+    const labels = [...(when?.querySelectorAll('label') ?? [])].map((each) => each.textContent?.trim())
+    wrapper.unmount()
+    document.body.innerHTML = ''
+    return labels
+  }
+
+  it('does not ask for a context where the scope is the answer', async () => {
+    expect(await whenLabels({ context: 'widget', contextId: 'w1', widgetType: 'DataTableWidget' }))
+      .not.toContain('Rule.context')
+
+    expect(await whenLabels()).toContain('Rule.context')
   })
 
   it('offers only the events that widget raises', async () => {

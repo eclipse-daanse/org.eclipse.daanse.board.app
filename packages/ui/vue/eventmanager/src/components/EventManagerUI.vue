@@ -158,6 +158,15 @@ const selectAction = (index: number) => {
 const loadMappings = () => {
   const all = eventManager.getAllMappings()
   const only = props.scope
+  /*
+   * Exactly this widget, by its uid.
+   *
+   * A rule written without a contextId applies to every widget of its
+   * kind, and such a rule does not appear here - the scoped view shows
+   * what was written about this one instance. Whether the kind-wide rules
+   * belong here too is a question for the screen's owner, not something
+   * to decide in a filter (#1188).
+   */
   mappings.value = only
     ? all.filter((m) => m.context === only.context && m.contextId === only.contextId)
     : all
