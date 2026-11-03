@@ -11,5 +11,10 @@
   "View": {
     "tree": "Tree",
     "map": "Map"
+  },
+  "Preview": {
+    "loading": "Reading …",
+    "failed": "Nothing came back from this address. Are the connection and the path right?",
+    "empty": "Something came back, and it was empty. Look in the connection at what the endpoint serves."
   }
 }

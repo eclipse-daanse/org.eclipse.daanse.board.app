@@ -24,12 +24,15 @@ Contributors:
 -->
 
 <script setup lang="ts">
-import { useTemporaryStore } from 'org.eclipse.daanse.board.app.ui.vue.composables';
-import { onBeforeUnmount, ref, shallowRef, watch, type Ref } from 'vue';
+import { useTemporaryStore, useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables';
+import { computed, onBeforeUnmount, ref, shallowRef, watch, type Ref } from 'vue';
+import { isEmptyAnswer } from './answerState';
 import VueJsonPretty from 'vue-json-pretty';
 import 'vue-json-pretty/lib/styles.css';
 
 const props = defineProps<{ dataSource: any }>();
+
+const { t } = useTranslation('datasourceRest');
 
 /*
  * Shallow, both of them.
@@ -56,22 +59,58 @@ watch(props.dataSource, () => {
  * itself while answering - so every read was two reads, 60ms apart,
  * against the same endpoint. What this is waiting for is a new store.
  */
-watch(tempStore, async () => {
-  /*
-   * Both at once, not one after the other.
-   *
-   * They read the same address, and the connection answers a request
-   * that is already on its way with the one in flight - which it can
-   * only do while both are. Awaited in turn, the second set off after
-   * the first had come back, and the endpoint was asked twice.
-   */
-  const [narrowed, original] = await Promise.all([
-    tempStore.value.getData('object'),
-    tempStore.value.getOriginalData(),
-  ]);
-  data.value = narrowed;
-  originalData.value = original;
+/*
+ * Why there is nothing, where there is nothing (#1194).
+ *
+ * An answer that did not come back, one that came back empty, and one
+ * that has not come back yet all drew the same blank pane - and a
+ * rejected read drew it silently, with the reason in the console where
+ * nobody looking at the screen will find it. The same four states the
+ * CSV preview tells apart.
+ */
+const asked = ref(false);
+const failed = ref(false);
+const loading = ref(false);
+
+watch(tempStore, async (store) => {
+  asked.value = false;
+  failed.value = false;
+  data.value = null;
+  originalData.value = null;
+  if (!store) return;
+
+  loading.value = true;
+  try {
+    /*
+     * Both at once, not one after the other.
+     *
+     * They read the same address, and the connection answers a request
+     * that is already on its way with the one in flight - which it can
+     * only do while both are. Awaited in turn, the second set off after
+     * the first had come back, and the endpoint was asked twice.
+     */
+    const [narrowed, original] = await Promise.all([
+      store.getData('object'),
+      store.getOriginalData(),
+    ]);
+    data.value = narrowed;
+    originalData.value = original;
+    failed.value = original === null || original === undefined;
+  } catch (error) {
+    /* A refused read is a thing to be told, not only to be logged. */
+    console.warn('the endpoint could not be read:', error);
+    failed.value = true;
+  } finally {
+    loading.value = false;
+    asked.value = true;
+  }
 });
+
+const empty = computed(
+  () => asked.value && !failed.value && isEmptyAnswer(originalData.value),
+);
+
+const showsTrees = computed(() => !loading.value && !failed.value && !empty.value);
 
 /*
  * How tall a tree may draw itself.
@@ -138,7 +177,14 @@ onBeforeUnmount(() => stops.forEach((stop) => stop()));
 </script>
 
 <template>
-  <div class="grid grid-cols-2 grid-rows-4 gap-4 overflow-hidden w-full h-full" v-if="tempStore">
+  <p v-if="loading" class="preview__note" role="status">{{ t('Preview.loading') }}</p>
+  <p v-else-if="failed" class="preview__note" role="alert">{{ t('Preview.failed') }}</p>
+  <p v-else-if="empty" class="preview__note" role="status">{{ t('Preview.empty') }}</p>
+
+  <div
+    v-else-if="tempStore && showsTrees"
+    class="grid grid-cols-2 grid-rows-4 gap-4 overflow-hidden w-full h-full"
+  >
     <!--
       Opened two levels deep, and drawn a screenful at a time. A tree
       that renders every node of every record hands the browser tens of
@@ -156,3 +202,13 @@ onBeforeUnmount(() => stops.forEach((stop) => stop()));
     </div>
   </div>
 </template>
+
+<style scoped>
+.preview__note {
+  margin: 0;
+  padding: 12px;
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  color: var(--color-dim);
+}
+</style>
