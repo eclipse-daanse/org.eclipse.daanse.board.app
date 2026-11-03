@@ -93,6 +93,7 @@ import { MapClickPayloadImpl } from './gen/MapClickPayloadImpl'
 import { useRoute } from 'vue-router'
 import { dataTypeFor } from './dataTypes'
 import { presetFor } from './defaults'
+import { followZoom } from './zoom'
 import { v4 as uuid } from 'uuid'
 
 const props = defineProps<{ datasourceId: string; id: string }>()
@@ -740,6 +741,19 @@ watch(() => config.value?.styles, (newStyles) => {
 // During interaction, suppress all data processing to keep the UI smooth
 let isMapInteracting = false
 
+/*
+ * How far the map is zoomed in, which decides which icons are drawn and
+ * how large - see ./zoom.
+ *
+ * It was written to and read from without ever being declared: the
+ * zoomend handler threw a ReferenceError, and the layer below was handed
+ * undefined, for which it substitutes 99. That is above every threshold,
+ * so every icon was visible at every zoom and none of them scaled, and
+ * iconMinZoom, iconScaleWithZoom and iconFullSizeZoom did nothing at all
+ * (#1190).
+ */
+const currentZoom = ref<number | undefined>(undefined)
+
 const maploaded = () => {
   mounted = true
   logMap('map ready')
@@ -757,10 +771,13 @@ const maploaded = () => {
     leaflet.on('moveend', () => {
       isMapInteracting = false
     })
-    leaflet.on('zoomend', () => {
-      currentZoom.value = leaflet.getZoom()
-    })
   }
+
+  /* Outside the guard above: a map that cannot be reached still reports
+    the zoom its settings ask for, which is the one it is about to be at. */
+  followZoom(leaflet, config.value?.zoom, (zoom) => {
+    currentZoom.value = zoom
+  })
 }
 
 const createLayerPanes = () => {
