@@ -14,6 +14,7 @@
 // @vitest-environment jsdom
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { flushPromises, mount } from '@vue/test-utils'
+import { nextTick } from 'vue'
 import { EVENT_ACTIONS_REGISTRY } from 'org.eclipse.daanse.board.app.lib.api.events'
 import { identifiers } from 'org.eclipse.daanse.board.app.lib.core'
 import { VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables'
@@ -245,6 +246,100 @@ describe('GaugeWidget', () => {
     it('is left out where it is not wanted', async () => {
       const wrapper = await show(settingsWith({ showValue: false }))
       expect(wrapper.find('.gauge__number').exists()).toBe(false)
+    })
+  })
+
+  /*
+   * Widget.config is an attribute, not a containment: the adapter on the
+   * widget never hears a write inside the settings object, and the widget
+   * is handed the same instance on every change. A setting changed in the
+   * open dialog has to reach the gauge all the same (#1203).
+   */
+  describe('a setting changed in the open dialog', () => {
+    it('reaches the arc: a new shape redraws it', async () => {
+      const settings = settingsWith({ shape: 'half' })
+      const wrapper = await show(settings)
+      const half = arcLength(wrapper)
+
+      settings.shape = 'full'
+      await nextTick()
+
+      expect(arcLength(wrapper)).toBeCloseTo(half * 2, 5)
+    })
+
+    it('reaches the track: the bands appear when they are switched on', async () => {
+      const settings = settingsWith({ showBands: false })
+      settings.thresholds.add(thresholdAt(50, '#f59e0b'))
+      const wrapper = await show(settings)
+      /* The track and the value. */
+      expect(wrapper.findAll('path')).toHaveLength(2)
+
+      settings.showBands = true
+      await nextTick()
+
+      /* One band below the threshold, one above, plus the value. */
+      expect(wrapper.findAll('path')).toHaveLength(3)
+    })
+
+    /* A wrapper put in place of another is a set on the settings object. */
+    it('reaches the arc: a new lower bound moves the value along it', async () => {
+      const settings = settingsWith()
+      const wrapper = await show(settings)
+      expect(drawnShare(wrapper)).toBeCloseTo(0.42, 5)
+
+      settings.min = new VariableWrapper('40')
+      await nextTick()
+
+      /* 42 of 40..100 is 2 of 60. */
+      expect(drawnShare(wrapper)).toBeCloseTo(2 / 60, 5)
+    })
+
+    it('reaches the arc: a new upper bound does the same', async () => {
+      const settings = settingsWith()
+      const wrapper = await show(settings)
+
+      settings.max = new VariableWrapper('84')
+      await nextTick()
+
+      expect(drawnShare(wrapper)).toBeCloseTo(0.5, 5)
+    })
+
+    /* The thresholds are contained, so an adapter on the settings sees
+      one added and one changed from the inside. */
+    it('reaches the colour: a threshold added below the value takes over', async () => {
+      const settings = settingsWith()
+      const wrapper = await show(settings)
+      expect(wrapper.find('.gauge__value').attributes('stroke')).toBe('#2563eb')
+
+      settings.thresholds.add(thresholdAt(30, '#f59e0b'))
+      await nextTick()
+
+      expect(wrapper.find('.gauge__value').attributes('stroke')).toBe('#f59e0b')
+    })
+
+    it('reaches the colour: a threshold moved above the value lets go', async () => {
+      const settings = settingsWith()
+      const threshold = thresholdAt(30, '#f59e0b')
+      settings.thresholds.add(threshold)
+      const wrapper = await show(settings)
+      expect(wrapper.find('.gauge__value').attributes('stroke')).toBe('#f59e0b')
+
+      threshold.at = new VariableWrapper('60')
+      await nextTick()
+
+      expect(wrapper.find('.gauge__value').attributes('stroke')).toBe('#2563eb')
+    })
+
+    it('reaches the number: the places follow the setting', async () => {
+      answered = { percent: 42.123 }
+      const settings = settingsWith({ decimals: 0 })
+      const wrapper = await show(settings)
+      expect(wrapper.find('.gauge__number').text()).toBe('42')
+
+      settings.decimals = 2
+      await nextTick()
+
+      expect(wrapper.find('.gauge__number').text()).toBe('42.12')
     })
   })
 })
