@@ -45,7 +45,7 @@ vi.mock('org.eclipse.daanse.board.app.lib.persistence.filesystem', () => ({
   reconnect: (uri: string) => reconnect(uri),
 }))
 
-const { useStoreBoard } = await import('./useStoreBoard')
+const { useStoreBoard, reportStoreFailure } = await import('./useStoreBoard')
 
 const FOLDER = {
   placeUri: 'folder://boards/',
@@ -149,5 +149,30 @@ describe('a click on Save', () => {
     await Promise.all([store(), store()])
 
     expect(saveInPlace).toHaveBeenCalledTimes(1)
+  })
+
+  /*
+   * Making a board stores it straight away, and that write can fail -
+   * for a folder that refuses, say. The person is then taken to a board
+   * they believe is stored, and only the console knew otherwise (#1200).
+   */
+  it('shows a failure reported from elsewhere', async () => {
+    const { failed } = useStoreBoard()
+    expect(failed.value).toBe('')
+
+    reportStoreFailure('the folder refused')
+
+    expect(failed.value).toBe('the folder refused')
+  })
+
+  /* The state is shared, so the next save clears what the last one said. */
+  it('clears it on the next save', async () => {
+    reportStoreFailure('the folder refused')
+    outcome = ['saved']
+
+    const { store, failed } = useStoreBoard()
+    await store()
+
+    expect(failed.value).toBe('')
   })
 })

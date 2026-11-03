@@ -120,7 +120,8 @@
       "placeNote": "Hier wird der Stand abgelegt. Speichern schreibt dann immer dorthin.",
       "noPlace": "Dieser Browser bietet keinen beschreibbaren Ort an. Das Board wird angelegt, aber noch nirgends abgelegt — beim Speichern wirst du gefragt, wohin.",
       "connectFolder": "Ordner auf diesem Rechner verbinden …",
-      "folderFailed": "Der Ordner ließ sich nicht verbinden: {{reason}}"
+      "folderFailed": "Der Ordner ließ sich nicht verbinden: {{reason}}",
+      "notStored": "Das Board wurde angelegt, aber nicht gespeichert: {{reason}}. Mit „Speichern“ wird nach einem Ort gefragt."
     }
   },
   "Storage": {
