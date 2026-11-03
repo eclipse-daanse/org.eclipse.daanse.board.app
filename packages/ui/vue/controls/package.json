@@ -23,7 +23,9 @@
   },
   "devDependencies": {
     "typescript": "^5.8.2",
-    "vite-plugin-dts": "4.5.4"
+    "vite": "^6.4.1",
+    "vite-plugin-dts": "4.5.4",
+    "vue-tsc": "^3.2.2"
   },
   "publishConfig": {
     "access": "public"

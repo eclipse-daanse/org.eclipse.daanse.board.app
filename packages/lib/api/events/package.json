@@ -24,5 +24,8 @@
     "dist",
     "model",
     "src"
-  ]
+  ],
+  "devDependencies": {
+    "typescript": "^5.8.2"
+  }
 }
