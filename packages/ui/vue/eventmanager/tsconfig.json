@@ -21,9 +21,7 @@
     "noFallthroughCasesInSwitch": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
-    "types": [
-      "vite/client"
-    ]
+    "types": ["vite/client", "node"]
   },
   "include": [
     "src/**/*.ts",
