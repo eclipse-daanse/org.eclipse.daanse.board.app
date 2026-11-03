@@ -85,47 +85,56 @@ interface Entry {
 /*
  * Says so when an option cannot be read.
  *
- * The fields are named by valueKey and labelKey, which default to uid and
- * name. An option object carrying neither is handed back whole as the
- * value and written into the list as String(option) - so the list reads
- * "[object Object]" four times over and the model is set to an option
- * object rather than to the value inside it. A board saved from such a
- * select keeps the object (#1191).
+ * The value field is named by valueKey, which defaults to uid. An option
+ * object without it is handed back whole as the value - so the model is
+ * set to the option object rather than to the value inside it, and a
+ * board saved from such a select keeps an object where a string belongs
+ * (#1191).
  *
- * In development only, once per select, naming the component that owns
- * it - the default keys fit most callers here, which is exactly why the
- * ones they do not fit are easy to miss.
+ * The label matters less: without labelKey it falls back to the value,
+ * which at worst reads "[object Object]" and is visible at a glance. A
+ * wrong value is not.
+ *
+ * Behind the gate rather than inside it: a watch that only ever warns in
+ * development has no business running in production, where it would walk
+ * every option of every select on every change for nothing.
  */
-let warned = false
+if (import.meta.env.DEV) {
+  /*
+   * Taken here, in setup. getCurrentInstance() answers only while a
+   * component is being set up - asked later, from inside the watch, it
+   * returns null and the warning names nobody.
+   */
+  const owner = getCurrentInstance()?.parent?.type as
+    | { __name?: string; name?: string; __file?: string }
+    | undefined
+  const ownerName = owner?.__name ?? owner?.name ?? owner?.__file ?? 'an unknown component'
 
-function nameOfCaller(): string {
-  const parent = getCurrentInstance()?.parent?.type as { __name?: string; name?: string; __file?: string } | undefined
-  return parent?.__name ?? parent?.name ?? parent?.__file ?? 'an unknown component'
+  let warned = false
+
+  watch(
+    () => props.options,
+    (options) => {
+      if (warned) return
+      const unreadable = (options ?? []).find(
+        (option) =>
+          option !== null &&
+          typeof option === 'object' &&
+          !(props.valueKey in (option as Record<string, unknown>)),
+      )
+      if (!unreadable) return
+
+      warned = true
+      const held = Object.keys(unreadable as Record<string, unknown>).join(', ')
+      console.warn(
+        `DSelect in ${ownerName}: an option has no "${props.valueKey}" (it has: ${held}). ` +
+          `The model will be set to the option object itself rather than to a value inside it. ` +
+          `Pass value-key to say which field holds the value.`,
+      )
+    },
+    { immediate: true, deep: true },
+  )
 }
-
-watch(
-  () => props.options,
-  (options) => {
-    if (!import.meta.env.DEV || warned) return
-    const unreadable = (options ?? []).find(
-      (option) =>
-        option !== null &&
-        typeof option === 'object' &&
-        !(props.valueKey in (option as Record<string, unknown>)) &&
-        !(props.labelKey in (option as Record<string, unknown>)),
-    )
-    if (!unreadable) return
-
-    warned = true
-    const held = Object.keys(unreadable as Record<string, unknown>).join(', ')
-    console.warn(
-      `DSelect in ${nameOfCaller()}: an option has neither "${props.valueKey}" nor "${props.labelKey}" ` +
-        `(it has: ${held}). The list will read "[object Object]" and the model will be set to the option ` +
-        `object itself. Pass value-key and label-key to say which fields to use.`,
-    )
-  },
-  { immediate: true, deep: true },
-)
 
 const entries = computed<Entry[]>(() =>
   (props.options ?? []).map((option) => {
