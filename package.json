@@ -61,6 +61,7 @@
     "packages/**"
   ],
   "resolutions": {
+    "@types/leaflet": "^1.9.22",
     "ws": "^8.21.0",
     "qs": "^6.15.2",
     "markdown-it": "^14.2.0",

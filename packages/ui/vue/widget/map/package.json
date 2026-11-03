@@ -27,6 +27,7 @@
     "url": "https://github.com/eclipse-daanse/org.eclipse.daanse.board.app/issues"
   },
   "devDependencies": {
+    "@types/leaflet": "^1.9.22",
     "@types/debug": "^4.1.12",
     "@vitejs/plugin-vue": "^5.2.3",
     "@vitest/coverage-v8": "4.0.18",
