@@ -154,3 +154,69 @@ describe('when there is nothing to show', () => {
     expect(preview.findAll('.tree')).toHaveLength(2)
   })
 })
+
+/*
+ * The state between asking and being answered (#1194), and the one the
+ * two views used to disagree about.
+ */
+describe('while the source has not answered', () => {
+  it('says it is reading', async () => {
+    /* Both halves are awaited together, so both have to be let go. */
+    const waiting: Array<(value: unknown) => void> = []
+    const held = () => new Promise((resolve) => waiting.push(resolve))
+    const answerNow = (value: unknown) => waiting.forEach((resolve) => resolve(value))
+    const slow = {
+      getData: vi.fn(held),
+      getOriginalData: vi.fn(held),
+      destroy: vi.fn(),
+    }
+    const preview = mount(Preview, {
+      props: { dataSource: { type: 'rest', config: { selectedJSONValue: '' } } },
+      global: {
+        provide: {
+          [datasourceRepository]: {
+            getDatasourceIdentifiers: () => ({ Store: Symbol.for('store'), Preview: null, Settings: null }),
+            resolveIdentifier: () => () => slow,
+          },
+        },
+      },
+    })
+    await flushPromises()
+
+    expect(preview.find('[role="status"]').text()).toBe('Preview.loading')
+    expect(preview.findAll('.tree')).toHaveLength(0)
+
+    answerNow(answer)
+    await flushPromises()
+    expect(preview.find('[role="status"]').exists()).toBe(false)
+  })
+
+  /*
+   * The map decides "is there anything" on the whole answer too, so a
+   * path that selects nothing does not make one of them say empty while
+   * the other draws a full answer.
+   */
+  it('draws the trees where the path selected nothing but the answer holds something', async () => {
+    const preview = mount(Preview, {
+      props: { dataSource: { type: 'rest', config: { selectedJSONValue: 'nope' } } },
+      global: {
+        provide: {
+          [datasourceRepository]: {
+            getDatasourceIdentifiers: () => ({ Store: Symbol.for('store'), Preview: null, Settings: null }),
+            resolveIdentifier: () => () => ({
+              getData: vi.fn(async () => null),
+              getOriginalData: vi.fn(async () => answer),
+              destroy: vi.fn(),
+            }),
+          },
+        },
+      },
+    })
+    await flushPromises()
+
+    expect(preview.find('[role="status"]').exists()).toBe(false)
+    expect(preview.find('[role="alert"]').exists()).toBe(false)
+    expect(preview.findAll('.tree').length).toBeGreaterThan(0)
+  })
+})
+
