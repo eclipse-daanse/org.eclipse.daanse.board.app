@@ -113,3 +113,42 @@ describe('boundsOf', () => {
     expect(boundsOf(featuresIn(feature({ type: 'Point', coordinates: ['x', 'y'] })))).toBeUndefined()
   })
 })
+
+/*
+ * What an endpoint answers is not always what it claims. A geometry of an
+ * unknown type reaches L.geoJSON, which throws "Invalid GeoJSON object"
+ * and takes the view down with it - one malformed entry among a thousand
+ * good ones was enough.
+ */
+describe('a malformed answer', () => {
+  test('leaves out a feature whose geometry is of no known type', () => {
+    const collection = {
+      type: 'FeatureCollection',
+      features: [
+        { type: 'Feature', geometry: { type: 'Point', coordinates: [7, 51] }, properties: null },
+        { type: 'Feature', geometry: { type: 'Foo', coordinates: [1, 2] }, properties: null },
+        { type: 'Feature', geometry: {}, properties: null },
+      ],
+    }
+
+    const found = featuresIn(collection)
+    expect(found).toHaveLength(1)
+    expect(found[0].geometry?.type).toBe('Point')
+  })
+
+  test('keeps a feature that has no geometry yet, which the specification allows', () => {
+    const collection = {
+      type: 'FeatureCollection',
+      features: [{ type: 'Feature', geometry: null, properties: { name: 'later' } }],
+    }
+
+    const found = featuresIn(collection)
+    expect(found).toHaveLength(1)
+    expect(found[0].geometry).toBeNull()
+  })
+
+  test('leaves out a lone feature with an unusable geometry', () => {
+    expect(featuresIn({ type: 'Feature', geometry: { type: 'Foo' }, properties: null })).toEqual([])
+  })
+})
+

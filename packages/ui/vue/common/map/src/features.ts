@@ -49,10 +49,21 @@ function isGeometry(value: unknown): boolean {
   return typeof type === 'string' && GEOMETRY_TYPES.has(type)
 }
 
+/*
+ * A feature, and one Leaflet will accept.
+ *
+ * Saying "it calls itself a Feature" is not enough: what comes back from
+ * an endpoint is not always what it claims, and a geometry of an unknown
+ * type reaches L.geoJSON, which throws "Invalid GeoJSON object" and takes
+ * the whole view down - one malformed entry among a thousand good ones is
+ * enough. A geometry of null is a different matter: the specification
+ * allows it for a feature that has none yet, and Leaflet skips it.
+ */
 function isFeature(value: unknown): boolean {
   if (!value || typeof value !== 'object') return false
   const each = value as { type?: unknown; geometry?: unknown }
-  return each.type === 'Feature' && 'geometry' in each
+  if (each.type !== 'Feature' || !('geometry' in each)) return false
+  return each.geometry === null || isGeometry(each.geometry)
 }
 
 /** A geometry on its own, wrapped so everything downstream sees features. */

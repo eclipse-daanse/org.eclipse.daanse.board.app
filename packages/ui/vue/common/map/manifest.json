@@ -11,10 +11,6 @@
       "versionRange": "^3.5.0"
     },
     {
-      "id": "org.eclipse.daanse.board.app.ui.vue.controls",
-      "versionRange": ">=0.0.1-0"
-    },
-    {
       "id": "org.eclipse.daanse.board.app.ui.vue.composables",
       "versionRange": ">=0.0.1-0"
     }
@@ -40,8 +36,7 @@
   ],
   "dependencies": [
     "platform.vue",
-    "ui.vue.composables",
-    "ui.vue.controls"
+    "ui.vue.composables"
   ],
   "description": "A map that draws whatever geographic features it is given"
 }
