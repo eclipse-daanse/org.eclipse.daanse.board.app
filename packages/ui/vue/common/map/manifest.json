@@ -1,0 +1,47 @@
+{
+  "$schema": "https://tsm.dev/schema/manifest/v1.json",
+  "id": "ui.vue.common.map",
+  "name": "ui.vue.common.map",
+  "version": "0.0.1-next.1",
+  "exports": {},
+  "entry": "/bundles/ui.vue.common.map/index.js",
+  "sharedDependencies": [
+    {
+      "id": "vue",
+      "versionRange": "^3.5.0"
+    },
+    {
+      "id": "org.eclipse.daanse.board.app.ui.vue.controls",
+      "versionRange": ">=0.0.1-0"
+    },
+    {
+      "id": "org.eclipse.daanse.board.app.ui.vue.composables",
+      "versionRange": ">=0.0.1-0"
+    }
+  ],
+  "capabilities": [
+    {
+      "namespace": "tsm.library",
+      "attributes": {
+        "library": "org.eclipse.daanse.board.app.ui.vue.common.map",
+        "version": "0.0.1-next.1"
+      }
+    },
+    {
+      "namespace": "tsm.i18n",
+      "attributes": {
+        "namespace": "commonMap",
+        "languages": [
+          "de",
+          "en"
+        ]
+      }
+    }
+  ],
+  "dependencies": [
+    "platform.vue",
+    "ui.vue.composables",
+    "ui.vue.controls"
+  ],
+  "description": "A map that draws whatever geographic features it is given"
+}

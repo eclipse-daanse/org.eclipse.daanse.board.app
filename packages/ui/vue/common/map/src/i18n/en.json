@@ -1,0 +1,8 @@
+{
+  "Map": {
+    "features": "{{count}} features",
+    "features_one": "One feature",
+    "loading": "Loading …",
+    "none": "No geometry found in this answer."
+  }
+}
