@@ -14,6 +14,12 @@ import { LGeoJson, LMarker, LIcon, LTooltip } from '@vue-leaflet/vue-leaflet'
 import { type BoxedDatastream } from 'org.eclipse.daanse.board.app.lib.datasource.ogcsta'
 import L from 'leaflet'
 import { ERefType } from '../api/Renderer'
+import {
+  effectiveZoom as zoomOf,
+  iconScale as scaleOf,
+  isIconVisible as iconVisible,
+  isLabelVisible as labelVisible,
+} from '../iconZoom'
 import MapMarker from './MapMarker.vue'
 import { identifiers } from 'org.eclipse.daanse.board.app.lib.core'
 import type { TinyEmitter } from 'tiny-emitter'
@@ -344,40 +350,13 @@ const highlightColor = computed(() => props.selectionHighlightColor || '#ff0000'
 // Whether any renderer actually uses zoom-dependent features. If none do,
 // effectiveZoom stays constant so zooming/panning never re-renders the
 // (potentially hundreds of) markers — Leaflet moves them via CSS on its own.
-const usesZoomSettings = (s: any): boolean =>
-  s != null && (s.iconMinZoom != null || s.iconScaleWithZoom || s.labelMinZoom != null ||
-    s.labelScaleWithZoom || s.clusterEnabled)
+/* The sums themselves live in ../iconZoom, where they can be checked
+  without mounting a layer. */
+const effectiveZoom = computed(() => zoomOf(props.renderers ?? [], props.currentZoom))
 
-const zoomFeaturesActive = computed(() =>
-  props.renderers.some((r: any) =>
-    usesZoomSettings(r.renderer) || (r.ds_renderer ?? []).some((d: any) => usesZoomSettings(d.renderer))
-  )
-)
-
-const effectiveZoom = computed(() => zoomFeaturesActive.value ? (props.currentZoom ?? 99) : 99)
-
-// Zoom-based visibility and scaling for icons
-const isIconVisible = (renderer: any): boolean => {
-  const settings = renderer.renderer
-  if (settings?.iconMinZoom == null) return true
-  return effectiveZoom.value >= settings.iconMinZoom
-}
-
-const getIconScale = (renderer: any): number => {
-  const settings = renderer.renderer
-  if (!settings?.iconScaleWithZoom) return 1
-  const fullSizeZoom = settings.iconFullSizeZoom ?? 18
-  const zoom = props.currentZoom ?? fullSizeZoom
-  if (zoom >= fullSizeZoom) return 1
-  return Math.max(0.2, zoom / fullSizeZoom)
-}
-
-// Zoom-based visibility and scaling for labels
-const isLabelVisible = (renderer: any): boolean => {
-  const settings = renderer.renderer
-  if (settings?.labelMinZoom == null) return true
-  return effectiveZoom.value >= settings.labelMinZoom
-}
+const isIconVisible = (renderer: any): boolean => iconVisible(renderer, effectiveZoom.value)
+const getIconScale = (renderer: any): number => scaleOf(renderer, props.currentZoom)
+const isLabelVisible = (renderer: any): boolean => labelVisible(renderer, effectiveZoom.value)
 
 const getLabelScale = (renderer: any): number => {
   const settings = renderer.renderer
