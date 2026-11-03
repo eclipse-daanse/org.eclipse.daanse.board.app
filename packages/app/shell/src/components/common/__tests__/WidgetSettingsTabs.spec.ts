@@ -53,6 +53,21 @@ const Told = defineComponent({
     h('p', { class: 'told' }, `${props.widgetType}/${props.widgetId}`),
 })
 
+/*
+ * A hand-written settings component, which is what a widget registers
+ * when the model does not cover its settings. It records what it was
+ * handed.
+ */
+let handed: Record<string, unknown> | undefined
+
+const settingsComponent = defineComponent({
+  props: { modelValue: Object, widget: Object, dataSources: Array },
+  setup: (props) => {
+    handed = props as unknown as Record<string, unknown>
+    return () => h('p', { class: 'own-settings' }, 'settings')
+  },
+})
+
 function setUp(tabs: WidgetSettingsTab[], onType = 'datatable') {
   const workspace = new WorkspaceImpl()
 
@@ -87,8 +102,8 @@ function setUp(tabs: WidgetSettingsTab[], onType = 'datatable') {
       provide: {
         [WORKSPACE as symbol]: workspace,
         [WIDGET_REPOSITORY as symbol]: {
-          getWidget: () => ({ name: 'DataTable' }),
-          getAllWidgets: () => ({ [onType]: { name: 'DataTable' } }),
+          getWidget: () => ({ name: 'DataTable', settingsComponent }),
+          getAllWidgets: () => ({ [onType]: { name: 'DataTable', settingsComponent } }),
           onChange: () => () => {},
         },
         [settingsTabsIdentifier]: registry,
@@ -223,5 +238,26 @@ describe('a contributed settings tab', () => {
 
     expect(tabNames().length).toBeGreaterThan(0)
     expect(shown('.told')).toBeNull()
+  })
+
+  /*
+   * #1202: the source is a reference on the widget, not an id in its
+   * config, so a settings component that shows it needs the widget - and
+   * the overlay handed it the config alone.
+   */
+  it('hands the widget to its own settings component', async () => {
+    handed = undefined
+    const { widget } = setUp([])
+    await flushPromises()
+
+    const own = document.querySelector('.own-settings')
+    expect(own).not.toBeNull()
+
+    /* The widget itself, by its uid: what arrives is the model object
+      behind the overlay's own ref, not the one this test built. */
+    expect(handed?.widget).toBeDefined()
+    expect((handed?.widget as { uid?: string })?.uid).toBe(widget.uid)
+    /* And still the config, which is what it was handed before. */
+    expect(handed?.modelValue).toBeDefined()
   })
 })
