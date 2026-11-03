@@ -12,6 +12,7 @@
  **********************************************************************/
 
 import { useDatasourceRepository } from './useDatasourceRepository'
+export { DATA_SELECTION, selectionSnapshot, provideDataSelection, injectDataSelection } from './dataSelection'
 import { useTemporaryStore } from './useTemporaryStore'
 import { usePromisifiedModal } from './promisifiedModal'
 import { useVariableRepository } from './useVariableRepository'
