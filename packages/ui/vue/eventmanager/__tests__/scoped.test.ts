@@ -184,3 +184,51 @@ describe('the tab in a widget’s settings', () => {
     expect(rulesShown(wrapper)).toEqual(['DataTableWidget:col_click'])
   })
 })
+
+/*
+ * Two fields, two names (#1193).
+ *
+ * The dialog asks for a context twice: the one the rule belongs to, and
+ * the one its action acts on. Both wore the label "Rule.context", one
+ * above the other, which reads as the same question asked twice.
+ */
+describe('the rule dialog', () => {
+  beforeEach(() => {
+    document.body.innerHTML = ''
+  })
+
+  async function labelsIn(part: number, scope?: Record<string, unknown>) {
+    const wrapper = openOn(scope)
+    await flushPromises()
+    wrapper.vm.showAddDialog = true
+    await flushPromises()
+
+    const section = document.querySelectorAll('.part')[part]
+    const labels = [...(section?.querySelectorAll('label') ?? [])].map((each) =>
+      each.textContent?.trim(),
+    )
+    wrapper.unmount()
+    document.body.innerHTML = ''
+    return labels
+  }
+
+  it('calls the rule’s context and the action’s target by different names', async () => {
+    const when = await labelsIn(0)
+    const then = await labelsIn(2)
+
+    expect(when).toContain('Rule.context')
+    expect(then).toContain('Rule.targetContext')
+    expect(then).not.toContain('Rule.context')
+  })
+
+  /*
+   * Scoped, the rule's own context is not asked for - but the action's
+   * target still is: a rule on this widget may well act on another.
+   */
+  it('keeps asking what the action acts on, even when scoped', async () => {
+    const scope = { context: 'widget', contextId: 'w1', widgetType: 'DataTableWidget' }
+
+    expect(await labelsIn(0, scope)).not.toContain('Rule.context')
+    expect(await labelsIn(2, scope)).toContain('Rule.targetContext')
+  })
+})
