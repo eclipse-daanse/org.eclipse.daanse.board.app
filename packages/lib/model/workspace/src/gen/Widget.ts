@@ -20,6 +20,7 @@
 
 import type { EObject } from '@emfts/core';
 import type { Datasource } from './Datasource.js';
+import type { DataSelection } from './DataSelection.js';
 
 /**
  * Widget
@@ -31,5 +32,6 @@ export interface Widget extends EObject {
   datasource?: Datasource;
   config?: unknown;
   wrapperConfig?: unknown;
+  selection?: DataSelection;
 
 }
