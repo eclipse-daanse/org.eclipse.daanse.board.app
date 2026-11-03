@@ -89,17 +89,23 @@ const tab = ref<TabId>('look')
  */
 const settingsTabs = inject<WidgetSettingsTabRegistry | undefined>(settingsTabsIdentifier, undefined)
 
+/*
+ * Read through the registration ref, and read the tabs themselves.
+ *
+ * useRegistrations hands back a computed over `read()`; a read that
+ * answers the widget's type answers the same string whatever happens to
+ * the registry, so nothing downstream ever recomputed and a bundle
+ * starting while the overlay was open stayed invisible. Reading the tabs
+ * gives a new array each time, which is what tells the rest to look
+ * again.
+ */
 const contributed = settingsTabs
-  ? useRegistrations(settingsTabs, () => widget.value?.type ?? '')
+  ? useRegistrations(settingsTabs, () =>
+      widget.value?.type ? settingsTabs.getTabs(widget.value.type) : [],
+    )
   : undefined
 
-const extraTabs = computed(() => {
-  const type = widget.value?.type
-  if (!settingsTabs || !type) return []
-  /* Read through the registration ref so a bundle starting later is seen. */
-  void contributed?.value
-  return settingsTabs.getTabs(type)
-})
+const extraTabs = computed(() => contributed?.value ?? [])
 
 /* A tab whose bundle went away must not leave the pane showing nothing. */
 watch(extraTabs, (tabs) => {
