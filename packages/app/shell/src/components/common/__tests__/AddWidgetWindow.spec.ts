@@ -13,7 +13,7 @@
 
 // @vitest-environment jsdom
 
-import { describe, expect, it, vi } from 'vitest'
+import { describe, expect, it, vi, beforeEach } from 'vitest'
 import { flushPromises, mount } from '@vue/test-utils'
 import { identifier as DATASOURCE_REPOSITORY } from 'org.eclipse.daanse.board.app.lib.api.datasource'
 import { identifier as WIDGET_REPOSITORY } from 'org.eclipse.daanse.board.app.lib.api.widget'
@@ -22,6 +22,7 @@ import {
   identifier as WORKSPACE,
   WorkspaceImpl,
 } from 'org.eclipse.daanse.board.app.lib.model.workspace'
+import { identifiers } from 'org.eclipse.daanse.board.app.lib.core'
 import AddWidgetWindow from '../AddWidgetWindow.vue'
 
 /* vuedraggable wants a real drag environment; the list it is given is
@@ -50,6 +51,17 @@ const ANSWERS: Record<string, string[]> = {
   rest: ['DataTable', 'object', 'string'],
 }
 
+/** What the palette announced, in the order it announced it. */
+let placed: Array<Record<string, unknown>> = []
+
+const bus = {
+  emit: (_event: string, payload: Record<string, unknown>) => {
+    placed.push(payload)
+  },
+  on: () => {},
+  off: () => {},
+}
+
 function setUp(widgets: Record<string, unknown> = WIDGETS) {
   const workspace = new WorkspaceImpl()
   for (const [uid, name, type] of [
@@ -74,6 +86,7 @@ function setUp(widgets: Record<string, unknown> = WIDGETS) {
         [DATASOURCE_REPOSITORY as symbol]: {
           getDatasourceIdentifiers: (type: string) => ({ answers: ANSWERS[type] }),
         },
+        [identifiers.TINY_EMITTER]: bus,
       },
     },
   })
@@ -142,6 +155,56 @@ describe('AddWidgetWindow', () => {
     const withSource = (wrapper.vm as any).computedWidgets as Array<Record<string, unknown>>
     expect(withSource.length).toBeGreaterThan(0)
     expect(withSource.every((each) => each.datasourceId === 'ds2')).toBe(true)
+  })
+
+  /*
+   * #1165: dragging was the only way onto a board, which leaves out
+   * everyone working by keyboard - they cannot reach the row at all - and
+   * is awkward on a touch screen and in a narrow window.
+   */
+  describe('without a pointer', () => {
+    beforeEach(() => {
+      placed = []
+    })
+
+    it('is a button, so it can be reached and fired by keyboard', async () => {
+      const wrapper = setUp()
+      await flushPromises()
+
+      const rows = wrapper.findAll('.widgets_grid-item')
+      expect(rows.length).toBeGreaterThan(0)
+      for (const row of rows) {
+        expect(row.element.tagName).toBe('BUTTON')
+        expect(row.attributes('type')).toBe('button')
+      }
+    })
+
+    it('still says it can be dragged, by a grip and in words', async () => {
+      const wrapper = setUp()
+      await flushPromises()
+
+      expect(wrapper.find('.widgets_grid-grip').exists()).toBe(true)
+      expect(wrapper.find('.add_widget_window__hint').exists()).toBe(true)
+    })
+
+    it('announces the widget when a row is clicked', async () => {
+      const wrapper = setUp()
+      await flushPromises()
+
+      await wrapper.findAll('.widgets_grid-item')[1].trigger('click')
+
+      expect(placed).toEqual([{ type: 'gauge', datasourceId: undefined }])
+    })
+
+    /* The same thing a drop carries, so the two ways arrive alike. */
+    it('sends the picked source along with it', async () => {
+      const wrapper = setUp()
+      await pick(wrapper, 'Posts')
+
+      await wrapper.findAll('.widgets_grid-item')[0].trigger('click')
+
+      expect(placed).toEqual([{ type: 'datatable', datasourceId: 'ds2' }])
+    })
   })
 
   /* Registered afresh rather than taken away mid-flight: the palette

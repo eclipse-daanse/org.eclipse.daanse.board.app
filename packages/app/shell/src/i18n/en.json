@@ -508,6 +508,7 @@
   "Palette": {
     "forSource": "For data source",
     "anySource": "None — show every widget",
-    "noneFit": "No widget can show what this source answers."
+    "noneFit": "No widget can show what this source answers.",
+    "hint": "Drag onto the board – or click, and it is placed below what is there."
   }
 }

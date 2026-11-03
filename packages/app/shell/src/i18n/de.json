@@ -508,6 +508,7 @@
   "Palette": {
     "forSource": "Für Datenquelle",
     "anySource": "Keine — alle Widgets",
-    "noneFit": "Kein Widget kann zeigen, was diese Quelle liefert."
+    "noneFit": "Kein Widget kann zeigen, was diese Quelle liefert.",
+    "hint": "Auf das Board ziehen – oder anklicken, dann wird es unten angelegt."
   }
 }
