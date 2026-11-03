@@ -23,7 +23,7 @@ Contributors:
  * Options may be plain values or objects; valueKey and labelKey say which
  * field is which, so callers can pass the arrays they already have.
  */
-import { computed, useId } from 'vue'
+import { computed, getCurrentInstance, useId, watch } from 'vue'
 
 const model = defineModel<unknown>()
 
@@ -81,6 +81,51 @@ interface Entry {
   /** The heading it belongs under, when the caller named one. */
   group?: string
 }
+
+/*
+ * Says so when an option cannot be read.
+ *
+ * The fields are named by valueKey and labelKey, which default to uid and
+ * name. An option object carrying neither is handed back whole as the
+ * value and written into the list as String(option) - so the list reads
+ * "[object Object]" four times over and the model is set to an option
+ * object rather than to the value inside it. A board saved from such a
+ * select keeps the object (#1191).
+ *
+ * In development only, once per select, naming the component that owns
+ * it - the default keys fit most callers here, which is exactly why the
+ * ones they do not fit are easy to miss.
+ */
+let warned = false
+
+function nameOfCaller(): string {
+  const parent = getCurrentInstance()?.parent?.type as { __name?: string; name?: string; __file?: string } | undefined
+  return parent?.__name ?? parent?.name ?? parent?.__file ?? 'an unknown component'
+}
+
+watch(
+  () => props.options,
+  (options) => {
+    if (!import.meta.env.DEV || warned) return
+    const unreadable = (options ?? []).find(
+      (option) =>
+        option !== null &&
+        typeof option === 'object' &&
+        !(props.valueKey in (option as Record<string, unknown>)) &&
+        !(props.labelKey in (option as Record<string, unknown>)),
+    )
+    if (!unreadable) return
+
+    warned = true
+    const held = Object.keys(unreadable as Record<string, unknown>).join(', ')
+    console.warn(
+      `DSelect in ${nameOfCaller()}: an option has neither "${props.valueKey}" nor "${props.labelKey}" ` +
+        `(it has: ${held}). The list will read "[object Object]" and the model will be set to the option ` +
+        `object itself. Pass value-key and label-key to say which fields to use.`,
+    )
+  },
+  { immediate: true, deep: true },
+)
 
 const entries = computed<Entry[]>(() =>
   (props.options ?? []).map((option) => {
