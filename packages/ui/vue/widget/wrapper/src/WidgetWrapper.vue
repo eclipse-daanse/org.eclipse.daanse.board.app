@@ -22,7 +22,7 @@ import {
   identifier as WidgetIdentifier,
 } from 'org.eclipse.daanse.board.app.lib.api.widget'
 
-import { useEObject, VariableWrapper, useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+import { useEObject, VariableWrapper, useTranslation, provideDataSelection, selectionSnapshot } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import type { EObject } from '@emfts/core'
 import {
   DButton,
@@ -70,6 +70,14 @@ const datasourceId = computed(
     (watchedWidget.value as any)?.datasource?.uid ??
     (watchedWidget.value as any)?.config?.datasourceId,
 )
+
+/*
+ * Which part of the answer the widget takes (#1216), for the composable
+ * that hands it its data. Read through the watched widget: the selection
+ * is contained in it, so a change inside the selection is a change of the
+ * widget, and a fresh snapshot is taken on each.
+ */
+provideDataSelection(computed(() => selectionSnapshot((watchedWidget.value as any)?.selection)))
 
 /*
  * The settings object, read through the watched widget rather than off the
