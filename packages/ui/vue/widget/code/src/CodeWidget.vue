@@ -20,9 +20,22 @@ import { identifiers } from 'org.eclipse.daanse.board.app.lib.core'
 import type { TinyEmitter } from 'tiny-emitter';
 import { EventActionsRegistry, EVENT_ACTIONS_REGISTRY } from 'org.eclipse.daanse.board.app.lib.api.events';
 import { CodeWidgetInterface } from './api/CodeWidgetInterface';
+import { useEObject } from 'org.eclipse.daanse.board.app.ui.vue.composables';
 
 const props = defineProps<{ config: CodeSettings, id?: string }>();
 const { id: widgetId } = toRefs(props);
+
+/*
+ * The settings, watched rather than read off the model prop.
+ *
+ * Widget.config is an attribute, not a containment, so the adapter the
+ * wrapper holds on the widget never hears a write inside this object - and
+ * the wrapper hands this component the same instance on every change, which
+ * is not a prop change Vue acts on. A setting changed in the open dialog
+ * reached the code only once the dialog was reopened (#1203). The reads go
+ * through `settings`; the writes still go to `config`.
+ */
+const settings = useEObject<CodeSettings>(() => props.config)
 
 const htmlString = ref<string>('');
 
@@ -90,24 +103,24 @@ const emitTextChange = (newText: string) => {
 };
 
 const renderCode = async () => {
-    htmlString.value = await codeToHtml(props.config.code || '', {
-        theme: props.config.theme || 'github-light',
-        lang: props.config.language || 'typescript',
+    htmlString.value = await codeToHtml(settings.value?.code || '', {
+        theme: settings.value?.theme || 'github-light',
+        lang: settings.value?.language || 'typescript',
     });
 };
 
-watch(() => props.config.code, async (newVal, oldVal) => {
+watch(() => settings.value?.code, async (newVal, oldVal) => {
     if (newVal !== oldVal) {
         emitTextChange(newVal || '');
     }
     await renderCode();
 }, { immediate: true });
 
-watch(() => props.config.theme, async () => {
+watch(() => settings.value?.theme, async () => {
     await renderCode();
 }, { immediate: true });
 
-watch(() => props.config.language, async () => {
+watch(() => settings.value?.language, async () => {
     await renderCode();
 }, { immediate: true });
 </script>
