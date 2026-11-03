@@ -42,7 +42,8 @@ const datasourceId = ref('')
 const config = ref({
   datasourceId: '',
   datasourceIds: [],
-  baseMapUrl: 'https://a.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png',
+  /* OpenStreetMap's own tiles: CARTO's answer "API KEY REQUIRED" (#1197). */
+  baseMapUrl: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
   zoom: 13,
   center: [50.9275, 11.5892], // Jena, Germany
   attribution: undefined,
