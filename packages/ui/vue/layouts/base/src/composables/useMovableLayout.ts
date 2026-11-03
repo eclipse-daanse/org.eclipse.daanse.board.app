@@ -27,6 +27,8 @@ import type { Board } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import type { LayoutItem, StoredWidget } from 'org.eclipse.daanse.board.app.lib.api.page'
 import { useClipboardStore } from './useClipboardStore'
 import { cloneDeep } from 'lodash'
+import { EcoreUtil, type EList, type EObject } from '@emfts/core'
+import type { DataSelection } from 'org.eclipse.daanse.board.app.lib.model.workspace'
 
 /**
  * @param gridSize how far apart the grid is, or 0 to place freely. Read on
@@ -196,6 +198,15 @@ export function useMoveableLayout(pageId: string = '', gridSize: () => number = 
     history.record('layoutsBase:History.removed', () => board.removeWidget(id))
   }
 
+  /*
+   * A selection is an EObject contained in its widget (#1216). Copied
+   * through the model rather than by cloneDeep, which would carry its
+   * adapters and its container along - and a copy per paste, so two pasted
+   * widgets do not share one selection.
+   */
+  const copiedSelection = (selection: DataSelection | undefined): DataSelection | undefined =>
+    selection ? (copyContained(selection as unknown as EObject) as unknown as DataSelection) : undefined
+
   const copyWidget = (widgetId: string) => {
     const widget = board.widgets.value.find((w: { uid?: string }) => w.uid === widgetId)
     const layoutItem = board.layout.value.find((l: ILayoutItem) => l.id === widgetId)
@@ -216,6 +227,7 @@ export function useMoveableLayout(pageId: string = '', gridSize: () => number = 
           height: layoutItem.height,
           group: layoutItem.group,
         },
+        copiedSelection((widget as { selection?: DataSelection }).selection),
       )
     }
   }
@@ -230,8 +242,8 @@ export function useMoveableLayout(pageId: string = '', gridSize: () => number = 
     const copied = cloneDeep(clipboard.widget)
     const settings = { ...(copied.config?.settings ?? {}), name: 'widget_' + newUid }
 
-    history.record('layoutsBase:History.pasted', () =>
-      board.addWidget(
+    history.record('layoutsBase:History.pasted', () => {
+      const added = board.addWidget(
         {
           uid: newUid,
           type: copied.type,
@@ -239,8 +251,15 @@ export function useMoveableLayout(pageId: string = '', gridSize: () => number = 
           wrapperConfig: copied.wrapperConfig,
         },
         { ...clipboard.layout, id: newUid, x, y, z: maxZ + 1 },
-      ),
-    )
+      )
+      /* In the same step, so undoing the paste takes the selection with it. */
+      const pasted = board.widgets.value.find((w: { uid?: string }) => w.uid === newUid) as
+        | { selection?: DataSelection }
+        | undefined
+      const selection = copiedSelection(clipboard.selection)
+      if (pasted && selection) pasted.selection = selection
+      return added
+    })
     return newUid
   }
 
@@ -265,4 +284,27 @@ export function useMoveableLayout(pageId: string = '', gridSize: () => number = 
     copyWidget,
     pasteWidget,
   }
+}
+
+/**
+ * An object and everything it contains, copied.
+ *
+ * EcoreUtil.copy in @emfts/core copies the attributes only and leaves the
+ * contained objects behind - a selection came back without its filters.
+ * EMF's own copy is deep; until this one is, the containment is copied
+ * here, through the model's own features.
+ */
+function copyContained(original: EObject): EObject {
+  const copy = EcoreUtil.copy(original)
+  for (const reference of original.eClass().getEAllReferences()) {
+    if (!reference.isContainment() || reference.isDerived() || reference.isTransient()) continue
+    const value = original.eGet(reference)
+    if (reference.getUpperBound() !== 1) {
+      const target = copy.eGet(reference) as EList<EObject>
+      for (const child of ((value as EList<EObject> | undefined)?.toArray() ?? [])) target.push(copyContained(child))
+    } else if (value) {
+      copy.eSet(reference, copyContained(value as EObject))
+    }
+  }
+  return copy
 }
