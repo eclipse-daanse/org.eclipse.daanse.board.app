@@ -16,7 +16,8 @@
     "vue-router": "^5.0.1"
   },
   "devDependencies": {
-    "typescript": "^5.8.2"
+    "typescript": "^5.8.2",
+    "vite": "^6.4.1"
   },
   "publishConfig": {
     "access": "public"
