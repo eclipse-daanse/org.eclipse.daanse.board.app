@@ -36,7 +36,16 @@ export interface ZoomSettings {
   clusterEnabled?: boolean
 }
 
-export interface Renderer {
+/*
+ * Named for what it holds, not for what holds it.
+ *
+ * Calling this Renderer put a second declaration of that name in the
+ * package, beside the generated one in src/gen - the very shadowing the
+ * model conformance check exists to catch. The two are not the same
+ * thing either: the generated Renderer is a renderer, this is the part
+ * of one that the zoom consults.
+ */
+export interface ZoomRules {
   renderer?: ZoomSettings | null
   ds_renderer?: Array<{ renderer?: ZoomSettings | null }> | null
 }
@@ -60,7 +69,7 @@ export function usesZoomSettings(settings: ZoomSettings | null | undefined): boo
  * never re-render what may be hundreds of markers - Leaflet moves those
  * itself, in CSS.
  */
-export function zoomFeaturesActive(renderers: readonly Renderer[]): boolean {
+export function zoomFeaturesActive(renderers: readonly ZoomRules[]): boolean {
   return renderers.some(
     (each) =>
       usesZoomSettings(each.renderer) ||
@@ -73,21 +82,21 @@ export const ALWAYS = 99
 
 /** The zoom to compare thresholds against. */
 export function effectiveZoom(
-  renderers: readonly Renderer[],
+  renderers: readonly ZoomRules[],
   currentZoom: number | undefined,
 ): number {
   return zoomFeaturesActive(renderers) ? (currentZoom ?? ALWAYS) : ALWAYS
 }
 
 /** Whether this renderer's icon is drawn at that zoom. */
-export function isIconVisible(renderer: Renderer, zoom: number): boolean {
+export function isIconVisible(renderer: ZoomRules, zoom: number): boolean {
   const settings = renderer.renderer
   if (settings?.iconMinZoom == null) return true
   return zoom >= settings.iconMinZoom
 }
 
 /** Whether this renderer's label is drawn at that zoom. */
-export function isLabelVisible(renderer: Renderer, zoom: number): boolean {
+export function isLabelVisible(renderer: ZoomRules, zoom: number): boolean {
   const settings = renderer.renderer
   if (settings?.labelMinZoom == null) return true
   return zoom >= settings.labelMinZoom
@@ -100,7 +109,7 @@ export function isLabelVisible(renderer: Renderer, zoom: number): boolean {
  * renderer that asks to scale has said so, and the floor keeps an icon
  * from vanishing at the far end.
  */
-export function iconScale(renderer: Renderer, currentZoom: number | undefined): number {
+export function iconScale(renderer: ZoomRules, currentZoom: number | undefined): number {
   const settings = renderer.renderer
   if (!settings?.iconScaleWithZoom) return 1
 

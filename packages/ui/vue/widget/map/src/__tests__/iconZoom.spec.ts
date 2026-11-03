@@ -20,14 +20,14 @@ import {
   isLabelVisible,
   usesZoomSettings,
   zoomFeaturesActive,
-  type Renderer,
+  type ZoomRules,
 } from '../iconZoom'
 
 /** A renderer that hides its icon below zoom 12. */
-const HIDES_BELOW_12: Renderer = { renderer: { iconMinZoom: 12 } }
+const HIDES_BELOW_12: ZoomRules = { renderer: { iconMinZoom: 12 } }
 
 /** One that asks for nothing of the zoom. */
-const PLAIN: Renderer = { renderer: { iconMinZoom: null } }
+const PLAIN: ZoomRules = { renderer: { iconMinZoom: null } }
 
 describe('what the zoom decides about an icon', () => {
   /*
@@ -63,7 +63,7 @@ describe('what the zoom decides about an icon', () => {
   })
 
   it('decides a label the same way, by its own threshold', () => {
-    const renderer: Renderer = { renderer: { labelMinZoom: 15 } }
+    const renderer: ZoomRules = { renderer: { labelMinZoom: 15 } }
 
     expect(isLabelVisible(renderer, effectiveZoom([renderer], 10))).toBe(false)
     expect(isLabelVisible(renderer, effectiveZoom([renderer], 16))).toBe(true)
@@ -71,7 +71,7 @@ describe('what the zoom decides about an icon', () => {
 })
 
 describe('how large an icon is drawn', () => {
-  const SCALES: Renderer = { renderer: { iconScaleWithZoom: true, iconFullSizeZoom: 18 } }
+  const SCALES: ZoomRules = { renderer: { iconScaleWithZoom: true, iconFullSizeZoom: 18 } }
 
   it('grows towards full size as the map zooms in', () => {
     expect(iconScale(SCALES, 9)).toBeCloseTo(0.5, 3)
@@ -111,7 +111,7 @@ describe('whether the zoom is consulted at all', () => {
   })
 
   it('looks inside the datastream renderers too', () => {
-    const outerPlain: Renderer = { renderer: null, ds_renderer: [{ renderer: { iconMinZoom: 12 } }] }
+    const outerPlain: ZoomRules = { renderer: null, ds_renderer: [{ renderer: { iconMinZoom: 12 } }] }
 
     expect(zoomFeaturesActive([outerPlain])).toBe(true)
   })
