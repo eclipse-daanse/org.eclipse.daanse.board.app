@@ -18,13 +18,25 @@ import {
 } from 'org.eclipse.daanse.board.app.lib.model.workspace'
 import { useEList, useRegistrations, useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import { WidgetRepository, identifier } from 'org.eclipse.daanse.board.app.lib.api.widget'
-import { inject, ref, computed, watch } from 'vue'
+import {
+  identifier as DATASOURCE_REPOSITORY,
+  type DatasourceRepository,
+} from 'org.eclipse.daanse.board.app.lib.api.datasource'
+import { fits } from 'org.eclipse.daanse.board.app.lib.core'
+import { DSelect } from 'org.eclipse.daanse.board.app.ui.vue.controls'
+import { inject, ref, computed } from 'vue'
 import Draggable from 'vuedraggable'
-// import SERVICE_IDENTIFIER from "@/config/identifiers/services";
 
-const selectedDatasource = ref('')
-const selectedType = ref('')
 const dataSources = useEList(inject<Workspace>(WORKSPACE)!, (w) => w.datasources)
+const datasourceRepository = inject<DatasourceRepository>(DATASOURCE_REPOSITORY)!
+
+/**
+ * The source a widget dragged from here will read, where one is picked.
+ *
+ * Empty means "no source yet", which is how every widget arrived before
+ * this and still the right answer for the ones that show no data.
+ */
+const forSource = ref('')
 
 const onDragStart = (event: DragEvent) => {
   const dragElement = document.createElement('div')
@@ -43,47 +55,74 @@ const { t } = useTranslation('shell')
  * route changed.
  */
 const availableWidgets = useRegistrations(registeredWidgets, () =>
-  Object.entries(registeredWidgets.getAllWidgets())
-    //.filter(([_, widget]) => widget.icon)
-    .map(([name, widget]) => ({ type: name, name: widget.name, nameKey: widget.nameKey, icon: widget.icon })),
+  Object.entries(registeredWidgets.getAllWidgets()).map(([name, widget]) => ({
+    type: name,
+    name: widget.name,
+    nameKey: widget.nameKey,
+    icon: widget.icon,
+    reads: widget.reads,
+  })),
 )
 
 /*
- * Every registered widget, unfiltered.
+ * The sources to choose from, and the entry that chooses none.
  *
- * What stood here was a commented-out filter matching widget.supportedDSTypes
- * against a hand-written table of source types - both of which are gone
- * (#1183): a widget now says which data shapes it reads, a source type says
- * which it answers, and `fits` puts the two together. Wiring that into this
- * palette is #1184.
+ * Shaped as uid and name because that is what DSelect reads by default -
+ * given anything else it has no field to take the text from and writes
+ * the object out instead.
  */
-const computedWidgets = computed(() => availableWidgets.value)
+const sourceOptions = computed(() => [
+  { uid: '', name: t('Palette.anySource') },
+  ...dataSources.value.map((source: any) => ({
+    uid: source.uid as string,
+    name: (source.name as string) || (source.uid as string),
+  })),
+])
 
-const filteredTypes = computed(() => {
-  return [
-    'None',
-    ...dataSources.value.map((ds) => ds.type).filter((el, id, arr) => id === arr.indexOf(el)),
-  ]
+/** What the picked source's type answers; nothing while none is picked. */
+const answers = computed(() => {
+  const picked: any = dataSources.value.find((source: any) => source.uid === forSource.value)
+  return picked ? datasourceRepository.getDatasourceIdentifiers(picked.type)?.answers : undefined
 })
 
-const filteredIds = computed(() => {
-  return dataSources.value.filter((ds) => ds.type === selectedType.value).map((ds) => ({ uid: ds.uid }))
-})
-
-watch(selectedType, (newType) => {
-  if (!newType || newType === 'None') {
-    selectedDatasource.value = ''
-  } else {
-    const availableIds = filteredIds.value.map((ds) => ds.uid)
-    if (!availableIds.includes(selectedDatasource.value)) {
-      selectedDatasource.value = ''
-    }
-  }
+/*
+ * The widgets that can show the picked source - and all of them while
+ * none is picked.
+ *
+ * A filter stood here commented out, matching widget.supportedDSTypes
+ * against a hand-written table of source types. Both are gone: a widget
+ * declares the data shapes it reads, a source type the ones it answers,
+ * and `fits` puts the two together (#1183).
+ *
+ * The source rides along on the entry, because that is what the board
+ * reads off what was dropped on it - the grid editor has taken a
+ * datasourceId from a dropped item since before anything put one there.
+ */
+const computedWidgets = computed(() => {
+  const source = forSource.value || undefined
+  const offered = source
+    ? availableWidgets.value.filter((widget) => fits(widget.reads, answers.value))
+    : availableWidgets.value
+  return offered.map((widget) => ({ ...widget, datasourceId: source }))
 })
 </script>
 
 <template>
   <div class="add_widget_window">
+    <!-- Asked above the list, because it decides what the list contains. -->
+    <DSelect
+      v-if="dataSources.length"
+      v-model="forSource"
+      class="add_widget_window__source"
+      :label="t('Palette.forSource')"
+      :options="sourceOptions"
+      stacked
+    />
+
+    <p v-if="forSource && !computedWidgets.length" class="add_widget_window__none">
+      {{ t('Palette.noneFit') }}
+    </p>
+
     <div class="add_widget_window__scroll">
     <draggable
       class="widgets_grid"
@@ -107,6 +146,17 @@ watch(selectedType, (newType) => {
 </template>
 
 <style scoped>
+.add_widget_window__source {
+  padding: 0 10px 8px;
+}
+
+.add_widget_window__none {
+  margin: 0;
+  padding: 4px 10px 12px;
+  font-size: var(--text-sm);
+  color: var(--color-dim);
+}
+
 /* A list, not a tile grid - that is what the mockups' palette is, and it
   survives a 240px column. */
 .widgets_grid {

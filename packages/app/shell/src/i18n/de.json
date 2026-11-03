@@ -504,5 +504,10 @@
     "unknown": "Diese Quellenart sagt noch nicht, was sie liefert — darum ist hier nichts zu wählen.",
     "page": "Auf welche Seite",
     "noPages": "Dieses Board hat noch keine Seite, auf die ein Widget könnte."
+  },
+  "Palette": {
+    "forSource": "Für Datenquelle",
+    "anySource": "Keine — alle Widgets",
+    "noneFit": "Kein Widget kann zeigen, was diese Quelle liefert."
   }
 }
