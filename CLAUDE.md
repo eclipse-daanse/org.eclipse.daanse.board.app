@@ -43,7 +43,10 @@ the adapter on the widget hears nothing written inside the settings object,
 and the wrapper hands the widget the same instance on every change — which
 Vue does not count as a prop change. The wrapper cannot fix that from the
 outside; the widget that reads a plain setting watches the instance itself,
-`useEObject(() => config.value)`, and reads through it (#1203).
+`useEObject(() => config.value)`, and reads through it (#1203). That adapter
+sees a replaced wrapper (an `eSet` on the instance) and anything contained;
+a value written *into* a wrapper reaches the widget through
+`wrapperReactivity.ts`, as before. Wrapper references are not containment.
 
 Do not wrap an EObject in `reactive()` and do not `cloneDeep` one: both copy
 `_eAdapters` and `_eContainer` and break identity silently.
