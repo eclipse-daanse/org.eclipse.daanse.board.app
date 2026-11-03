@@ -471,7 +471,17 @@ const boundFields = computed(() => {
 })
 
 const frameCount = computed(() => Object.keys(widget.value?.wrapperConfig ?? {}).length)
-const dataCount = computed(() => (widget.value?.config?.datasourceId ? 1 : 0))
+/*
+ * The reference first, the id second - the order WidgetWrapper reads
+ * them in. A widget whose source is the model reference showed 0 beside
+ * the Data tab while its data was on the screen (#1202).
+ */
+const dataCount = computed(() =>
+  (widget.value as { datasource?: { uid?: string } })?.datasource?.uid ??
+  widget.value?.config?.datasourceId
+    ? 1
+    : 0,
+)
 
 function onKey(event: KeyboardEvent) {
   if (event.key === 'Escape') discard()
@@ -657,11 +667,16 @@ onBeforeUnmount(() => {
                 :entry-forms="modelledLook.entryForms"
                 :ecore="modelledLook.ecore"
               />
+              <!-- The widget itself, beside its config: the source is a
+                reference on the widget now, not an id in the config, and
+                a settings component that shows it has to be handed the
+                thing that holds it (#1202). -->
               <component
                 v-else
                 :is="availableWidgets[widget.type ?? '']?.settingsComponent"
                 v-model="widget.config"
                 :key="widget.uid"
+                :widget="widget"
                 :dataSources="dataSources"
               />
             </div>
@@ -681,6 +696,7 @@ onBeforeUnmount(() => {
                 :is="availableWidgets[widget.type ?? '']?.settingsComponent"
                 v-model="widget.config"
                 :key="widget.uid + '-rest'"
+                :widget="widget"
                 :dataSources="dataSources"
               />
             </div>
