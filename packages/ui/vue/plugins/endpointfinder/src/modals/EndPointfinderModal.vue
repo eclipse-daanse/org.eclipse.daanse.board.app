@@ -16,7 +16,6 @@ import { DButton, DCheckbox, DChip, DIcon, DInput, DModal } from 'org.eclipse.da
 import { computed, inject, reactive, ref, watch } from 'vue'
 import QueryBuilder from '../queryBuilder/QueryBuilder'
 import { useSparQLEndPointManager } from '../sparql/SparqlEndpointRegistry'
-import { Formats } from '../queryBuilder/FilterAPI'
 import { type ConnectionRepository, identifier } from 'org.eclipse.daanse.board.app.lib.api.connection'
 import { DatasourceRepository, IDataRetrieveable, type Datasource, identifier as DataSourceIdentifier } from 'org.eclipse.daanse.board.app.lib.api.datasource'
 import SearchResultCard from '../components/Searchcard/SearchResultCard.vue'
@@ -31,6 +30,7 @@ import { WidgetRepository, identifier as widgetRepoIdentifier } from 'org.eclips
 import { useBoard, useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import { useRoute } from 'vue-router'
 import { fits } from 'org.eclipse.daanse.board.app.lib.core'
+import { readWith } from '../formats'
 
 const route = useRoute();
 const { t } = useTranslation('pluginsEndpointfinder')
@@ -158,7 +158,11 @@ watch(step, (val) => {
       if (!ds.value) throw new Error('connection not found')
       const id = ds.value?.uid
       if (!id) throw new Error('id not found')
-      store.value = reactive(createStoreFromFormat(selectedItemsEmitted.value?.format?.value, id, uri!.pathname))
+      /* Only where the format is one we read: reactive() takes an object,
+        and a format we have no source for answers nothing. */
+      const made = createStoreFromFormat(selectedItemsEmitted.value?.format?.value, id, uri!.pathname)
+      if (!made) throw new Error('no source type reads this format')
+      store.value = reactive(made)
     } catch (e) {
       console.log(e)
     }
@@ -186,50 +190,25 @@ watch(step, (val) => {
   }
 
 })
+/*
+ * Both halves out of one table - see ../formats. They were two switch
+ * statements over the same formats, and GEOJSON was missing from both.
+ */
 const createConnectionFromFormat = (format: string, url: string) => {
-  let con: Connection | undefined = undefined
-
-  const availableTypes = connectionManager.getRegisteredTypes()
-  switch ('<' + format + '>') {
-    case Formats.CSV:
-    case Formats.JSON:
-    case Formats.REST:
-    case Formats.OGCSTA:
-      if (availableTypes.includes('rest')) {
-        con = connectionRepository.createConnection('rest', { url: url })
-      }
-      break
-    case Formats.XMLA:
-      if (availableTypes.includes('xmla')) {
-        con = connectionRepository.createConnection('xmla', { url: url })
-      }
-      break
-
-  }
-  return con
+  const reads = readWith(format)
+  if (!reads) return undefined
+  if (!connectionManager.getRegisteredTypes().includes(reads.connection)) return undefined
+  return connectionRepository.createConnection(reads.connection, { url })
 }
+
 const createStoreFromFormat = (format: string, aconnection: string, aresourceUri: string) => {
-  let store = undefined
-  switch ('<' + format + '>') {
-    case Formats.CSV:
-
-      return storeManager.createDatasource('csv', { connection: aconnection, resourceUrl: aresourceUri,separators:',' })
-
-    case Formats.JSON:
-      return storeManager.createDatasource('rest', { connection: aconnection, resourceUrl: aresourceUri })
-
-
-    case Formats.REST:
-      return storeManager.createDatasource('rest', { connection: aconnection, resourceUrl: aresourceUri })
-
-    case Formats.OGCSTA:
-      return storeManager.createDatasource('ogcsta', { connection: aconnection, resourceUrl: aresourceUri })
-
-    case Formats.XMLA:
-      return storeManager.createDatasource('xmla', { connection: aconnection, resourceUrl: aresourceUri })
-
-  }
-  return null
+  const reads = readWith(format)
+  if (!reads) return null
+  return storeManager.createDatasource(reads.source, {
+    connection: aconnection,
+    resourceUrl: aresourceUri,
+    ...(reads.config ?? {}),
+  })
 }
 
 
