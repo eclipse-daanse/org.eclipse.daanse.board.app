@@ -45,11 +45,15 @@ const libraries = [
   '@lezer/highlight',
 ]
 
-export default defineConfig({
+export default defineConfig(({ mode }) => ({
   define: {
     // vue's esm-bundler build reads these at compile time; devtools stay on
     // so the browser extension keeps working against the shared instance.
-    'process.env.NODE_ENV': JSON.stringify('production'),
+    // NODE_ENV follows the build mode, so a development build keeps vue's
+    // own warnings and a release build compiles them out (#1196).
+    'process.env.NODE_ENV': JSON.stringify(
+      mode === 'development' ? 'development' : 'production',
+    ),
     'process.env': '{}',
     __VUE_OPTIONS_API__: 'true',
     __VUE_PROD_DEVTOOLS__: 'true',
@@ -88,4 +92,4 @@ export default defineConfig({
       },
     },
   },
-})
+}))

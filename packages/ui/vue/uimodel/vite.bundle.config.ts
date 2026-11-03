@@ -112,11 +112,15 @@ function inlineCss() {
   } as import('vite').Plugin
 }
 
-export default defineConfig({
+export default defineConfig(({ mode }) => ({
   // Bundles run in the browser; embedded third-party code still probing
-  // process.env must see a value instead of throwing.
+  // process.env must see a value instead of throwing. The value follows the
+  // build mode: a development build keeps the warnings of the libraries
+  // inside, a release build compiles them out (#1196).
   define: {
-    'process.env.NODE_ENV': JSON.stringify('production'),
+    'process.env.NODE_ENV': JSON.stringify(
+      mode === 'development' ? 'development' : 'production',
+    ),
     'process.env': '{}',
   },
   plugins: [
@@ -145,4 +149,4 @@ export default defineConfig({
       fileName: () => 'index.js',
     },
   },
-})
+}))
