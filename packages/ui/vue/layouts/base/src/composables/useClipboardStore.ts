@@ -12,6 +12,7 @@
  **********************************************************************/
 import { ref } from 'vue'
 import type { StoredWidget, StoredLayoutItem } from 'org.eclipse.daanse.board.app.lib.api.page'
+import type { DataSelection } from 'org.eclipse.daanse.board.app.lib.model.workspace'
 
 /**
  * What was copied, as plain data.
@@ -22,6 +23,12 @@ import type { StoredWidget, StoredLayoutItem } from 'org.eclipse.daanse.board.ap
 export interface IClipboardItem {
   widget: Omit<StoredWidget, 'uid'>
   layout: Omit<StoredLayoutItem, 'id'>
+  /**
+   * The part of its source's answer the widget takes (#1216) - a copy of
+   * its own, made when it was copied, so a later edit of the original
+   * does not reach what is pasted.
+   */
+  selection?: DataSelection
 }
 
 /*
@@ -50,8 +57,8 @@ export function useClipboardStore() {
     get hasClipboard() {
       return clipboardItem.value !== null
     },
-    copy(widget: Omit<StoredWidget, 'uid'>, layout: Omit<StoredLayoutItem, 'id'>) {
-      clipboardItem.value = { widget, layout }
+    copy(widget: Omit<StoredWidget, 'uid'>, layout: Omit<StoredLayoutItem, 'id'>, selection?: DataSelection) {
+      clipboardItem.value = { widget, layout, selection }
     },
     paste() {
       return clipboardItem.value
