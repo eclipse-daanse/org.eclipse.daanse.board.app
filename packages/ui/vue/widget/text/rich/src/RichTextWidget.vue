@@ -16,12 +16,24 @@ Contributors:
 import { inject } from 'vue'
 import { computed, toRefs, onMounted, onUnmounted, ref, watch } from "vue";
 import { useRoute } from 'vue-router';
-import { useDatasourceRepository, useVariableRepository, sanitizeHtml } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+import { useDatasourceRepository, useEObject, useVariableRepository, sanitizeHtml } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import helpers from 'org.eclipse.daanse.board.app.lib.utils.helpers'
 import { RichTextEditorSettings } from './gen/RichTextEditorSettings'
 
 const props = defineProps<{ datasourceId: string, config: RichTextEditorSettings, id?: string }>();
 const { datasourceId, config, id: widgetId } = toRefs(props);
+
+/*
+ * The settings, watched rather than read off the prop.
+ *
+ * Widget.config is an attribute, not a containment, so the adapter the
+ * wrapper holds on the widget never hears a write inside this object - and
+ * the wrapper hands this component the same instance on every change, which
+ * is not a prop change Vue acts on. A setting changed in the open dialog
+ * reached the text only once the dialog was reopened (#1203). The reads go
+ * through `settings`; the writes still go to `config`.
+ */
+const settings = useEObject<RichTextEditorSettings>(() => config.value)
 
 import { identifiers } from 'org.eclipse.daanse.board.app.lib.core'
 import type { TinyEmitter } from 'tiny-emitter';
@@ -79,8 +91,8 @@ const emitTextChange = (newText: string) => {
 const { calculateValue, wrapParameters } = useVariableRepository()
 
 const resolvedStyle = wrapParameters({
-    fontSize: computed(() => (config.value?.fontSize as any)?.value ?? '16'),
-    fontColor: computed(() => (config.value?.fontColor as any)?.value ?? 'var(--color-fg)'),
+    fontSize: computed(() => (settings.value?.fontSize as any)?.value ?? '16'),
+    fontColor: computed(() => (settings.value?.fontColor as any)?.value ?? 'var(--color-fg)'),
 })
 
 const data = ref(null as any);
@@ -91,12 +103,13 @@ watch(datasourceId, (newVal, oldVal) => {
 })
 
 const parsedEditorText = computed(() => {
-    if (!config.value.editor) {
+    const editor = settings.value?.editor
+    if (!editor) {
         return "";
     }
 
     // First resolve variables like {variableName}
-    let html = calculateValue(config.value.editor)
+    let html = calculateValue(editor)
 
     // Then resolve datasource paths
     const { parts } = helpers.widget.extractValuesAndFullObject(html);
