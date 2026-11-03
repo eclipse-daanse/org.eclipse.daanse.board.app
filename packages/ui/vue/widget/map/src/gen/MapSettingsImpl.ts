@@ -56,7 +56,7 @@ export class MapSettingsImpl extends BasicEObject implements MapSettings {
   private _baseMapUrl: string = "https://tile.openstreetmap.org/{z}/{x}/{y}.png";
   private _zoom: number = 14;
   private _center!: EList<number>;
-  private _attribution?: string;
+  private _attribution: string = "&copy; <a href='https://www.openstreetmap.org/copyright' target='_blank'>OpenStreetMap</a> contributors";
   private _layers!: EList<Layer>;
   private _styles!: EList<DSRenderer>;
   private _OGCSstyles!: EList<Renderer>;
@@ -470,7 +470,7 @@ export class MapSettingsImpl extends BasicEObject implements MapSettings {
       case MapSettingsImpl.CENTER:
         return this._center !== undefined && !this._center.isEmpty();
       case MapSettingsImpl.ATTRIBUTION:
-        return this._attribution !== undefined;
+        return this._attribution !== "&copy; <a href='https://www.openstreetmap.org/copyright' target='_blank'>OpenStreetMap</a> contributors";
       case MapSettingsImpl.LAYERS:
         return this._layers !== undefined && !this._layers.isEmpty();
       case MapSettingsImpl.STYLES:
@@ -516,7 +516,7 @@ export class MapSettingsImpl extends BasicEObject implements MapSettings {
         if (this._center) this._center.clear();
         return;
       case MapSettingsImpl.ATTRIBUTION:
-        this._attribution = undefined;
+        this._attribution = "&copy; <a href='https://www.openstreetmap.org/copyright' target='_blank'>OpenStreetMap</a> contributors";
         return;
       case MapSettingsImpl.LAYERS:
         if (this._layers) this._layers.clear();
