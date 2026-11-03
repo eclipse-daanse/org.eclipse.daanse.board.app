@@ -51,7 +51,8 @@ export class MapWidgetProvider implements WidgetProvider {
   readonly type = WIDGET_TYPE
   readonly component = MapsWidget
   readonly settingsComponent = MapsWidgetSettings
-  readonly reads = ['object', 'OGCSTAData']
+  /* The shapes it asks a source for, by kind - see ./dataTypes. */
+  readonly reads = ['object', 'OGCSTAData', 'geojson']
   readonly icon = Icon
   readonly name = 'Map'
   readonly nameKey = 'map:Widget.name'
