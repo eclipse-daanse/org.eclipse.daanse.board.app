@@ -1,0 +1,8 @@
+{
+  "Map": {
+    "features": "{{count}} Objekte",
+    "features_one": "Ein Objekt",
+    "loading": "Wird geladen …",
+    "none": "Keine Geometrie in dieser Antwort gefunden."
+  }
+}
