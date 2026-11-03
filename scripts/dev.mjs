@@ -61,8 +61,14 @@ const children = [
       env: { ...process.env, NODE_ENV: 'development' },
     },
   ),
+  /* The watcher builds for development, and that takes both levers: this
+    one decides what the vue plugin compiles into a component - the file name
+    and the component name the devtools show - and the mode the watcher
+    passes decides what each bundle's own define says. Neither implies the
+    other, and one without the other is half a development build. */
   spawn('node', ['scripts/watch-bundles.mjs', ...filters], {
     stdio: 'inherit',
+    env: { ...process.env, NODE_ENV: 'development' },
   }),
 ]
 
