@@ -3,6 +3,24 @@
     "name": "Data table"
   },
   "Form": {
-    "headerBackground": "Header colour"
+    "headerBackground": "Header colour",
+    "rowsGroup": "Rows",
+    "headerGroup": "Header",
+    "pageSize": "Rows per page (0 = all)",
+    "sortable": "Columns can be sorted",
+    "showHeader": "Show the header"
+  },
+  "Settings": {
+    "columns": "Columns",
+    "columnsHint": "Columns left unticked are not shown.",
+    "noSource": "No data source chosen yet.",
+    "noColumns": "The source has not answered anything to read columns from yet."
+  },
+  "Pager": {
+    "label": "Pages",
+    "showing": "{{from}}-{{to}} of {{total}}",
+    "page": "Page {{page}} of {{pages}}",
+    "previous": "Previous page",
+    "next": "Next page"
   }
 }

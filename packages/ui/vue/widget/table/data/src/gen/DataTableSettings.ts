@@ -18,7 +18,7 @@
  * @generated
  */
 
-import type { EObject } from '@emfts/core';
+import type { EObject, EList } from '@emfts/core';
 import type { VariableWrapper } from 'org.eclipse.daanse.board.app.lib.variables';
 
 /**
@@ -27,5 +27,9 @@ import type { VariableWrapper } from 'org.eclipse.daanse.board.app.lib.variables
  */
 export interface DataTableSettings extends EObject {
   headerBackground?: VariableWrapper<string>;
+  showHeader?: boolean;
+  sortable?: boolean;
+  pageSize?: number;
+  hiddenColumns: EList<string>;
 
 }

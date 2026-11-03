@@ -11,12 +11,13 @@ Contributors:
     Smart City Jena
 -->
 <script lang="ts" setup>
-import { useDatasourceRepository, VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+import { useDatasourceRepository, useTranslation, VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import { inject, toRefs, ref, watch, computed, onMounted, onUnmounted } from 'vue';
 import { useRoute } from 'vue-router';
 import { useVariableRepository } from "org.eclipse.daanse.board.app.ui.vue.composables"
 
 const { wrapParameters } = useVariableRepository();
+const { t } = useTranslation('tableData');
 
 const props = defineProps<{ datasourceId: string, config: any, id?: string }>();
 const { datasourceId, config, id: widgetId } = toRefs(props);
@@ -156,41 +157,181 @@ const { update } = useDatasourceRepository(datasourceId, 'DataTable', data)
  * having to count table cells afterwards.
  */
 const rows = computed<Record<string, unknown>[]>(() => data.value?.items ?? [])
-const columns = computed<string[]>(() => Object.keys(rows.value[0] ?? {}))
+
+/*
+ * Named by what is left out, not by what is kept.
+ *
+ * An answer that grows a column later shows it, rather than quietly
+ * dropping it because nobody went back to tick it. A stored board holds
+ * the list as a plain array and a live settings object as an EList;
+ * both are iterable.
+ */
+const hidden = computed<Set<string>>(() => {
+    const held = config.value?.hiddenColumns
+    if (!held) return new Set()
+    return new Set(Array.from(held as Iterable<string>))
+})
+
+const allColumns = computed<string[]>(() => Object.keys(rows.value[0] ?? {}))
+const columns = computed<string[]>(() => allColumns.value.filter((column) => !hidden.value.has(column)))
+
+const showHeader = computed<boolean>(() => config.value?.showHeader !== false)
+const sortable = computed<boolean>(() => config.value?.sortable === true)
+const pageSize = computed<number>(() => Math.max(0, Math.floor(Number(config.value?.pageSize) || 0)))
+
+/** Which column the rows are ordered by, and which way. Nothing, until asked. */
+const sortedBy = ref<{ column: string; descending: boolean } | undefined>(undefined)
+
+/*
+ * A header click sorts and still announces itself.
+ *
+ * The event was there first and a board may be built on it, so sorting is
+ * added beside it rather than in its place - and only where the setting
+ * says so, which is why it is off by default.
+ */
+const onHeaderClick = (column: string) => {
+    emitColumnClick(column)
+    if (!sortable.value) return
+    const held = sortedBy.value
+    sortedBy.value =
+        held?.column === column && !held.descending
+            ? { column, descending: true }
+            : held?.column === column
+              ? undefined
+              : { column, descending: false }
+}
+
+/*
+ * Numbers by size, everything else as text.
+ *
+ * A column of counts sorted as text puts 100 before 99, which is the one
+ * thing someone sorting a column of counts is trying to find out.
+ */
+const compare = (left: unknown, right: unknown): number => {
+    if (left === right) return 0
+    if (left === undefined || left === null) return -1
+    if (right === undefined || right === null) return 1
+
+    const asNumbers = [Number(left), Number(right)]
+    if (asNumbers.every((value) => !Number.isNaN(value)) && String(left).trim() !== '' && String(right).trim() !== '') {
+        return asNumbers[0] - asNumbers[1]
+    }
+    return String(left).localeCompare(String(right), undefined, { numeric: true })
+}
+
+const ordered = computed<Record<string, unknown>[]>(() => {
+    const by = sortedBy.value
+    if (!sortable.value || !by) return rows.value
+    /* Copied before sorting: the array is the store's answer, and the
+      other readers of it did not ask for a new order. */
+    const sorted = [...rows.value].sort((a, b) => compare(a[by.column], b[by.column]))
+    return by.descending ? sorted.reverse() : sorted
+})
+
+const page = ref(0)
+
+const pageCount = computed(() =>
+    pageSize.value > 0 ? Math.max(1, Math.ceil(ordered.value.length / pageSize.value)) : 1,
+)
+
+/* A page that is no longer there - a smaller answer, a larger page size -
+  lands on the last one rather than on nothing. */
+watch([pageCount, pageSize], () => {
+    if (page.value > pageCount.value - 1) page.value = pageCount.value - 1
+})
+
+/* A new answer is read from the top. */
+watch(rows, () => {
+    page.value = 0
+})
+
+const shownRows = computed<Record<string, unknown>[]>(() => {
+    if (pageSize.value <= 0) return ordered.value
+    const from = page.value * pageSize.value
+    return ordered.value.slice(from, from + pageSize.value)
+})
+
+/** The row's place in the whole answer, which is what an event means by it. */
+const rowIdOf = (indexOnPage: number) => String(page.value * pageSize.value + indexOnPage)
+
+const firstShown = computed(() => (ordered.value.length ? page.value * pageSize.value + 1 : 0))
+const lastShown = computed(() => Math.min((page.value + 1) * pageSize.value, ordered.value.length))
 </script>
 <template>
-    <div class="w-full h-full" @click="emitClick" @contextmenu.prevent="emitRightClick">
-        <table class="table" :style="{ '--header-background': headerBackground }">
-            <thead>
-                <tr>
-                    <th
-                        v-for="column in columns"
-                        :key="column"
-                        @click="emitColumnClick(column)"
-                        @contextmenu.prevent="emitColumnRightClick(column)"
+    <div class="table_container" @click="emitClick" @contextmenu.prevent="emitRightClick">
+        <!-- The rows scroll, the pager below them does not. -->
+        <div class="table_scroll">
+            <table class="table" :style="{ '--header-background': headerBackground }">
+                <thead v-if="showHeader">
+                    <tr>
+                        <th
+                            v-for="column in columns"
+                            :key="column"
+                            :class="{ sortable, sorted: sortedBy?.column === column }"
+                            :aria-sort="
+                                sortedBy?.column === column
+                                    ? sortedBy.descending
+                                        ? 'descending'
+                                        : 'ascending'
+                                    : sortable
+                                      ? 'none'
+                                      : undefined
+                            "
+                            @click="onHeaderClick(column)"
+                            @contextmenu.prevent="emitColumnRightClick(column)"
+                        >
+                            {{ column }}
+                            <span v-if="sortable" class="mark" aria-hidden="true">{{
+                                sortedBy?.column === column ? (sortedBy.descending ? '▾' : '▴') : '·'
+                            }}</span>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr
+                        v-for="(row, rowIndex) in shownRows"
+                        :key="rowIdOf(rowIndex)"
+                        @click="emitRowClick(rowIdOf(rowIndex))"
+                        @contextmenu.prevent="emitRowRightClick(rowIdOf(rowIndex))"
                     >
-                        {{ column }}
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr
-                    v-for="(row, rowIndex) in rows"
-                    :key="rowIndex"
-                    @click="emitRowClick(String(rowIndex))"
-                    @contextmenu.prevent="emitRowRightClick(String(rowIndex))"
+                        <td
+                            v-for="column in columns"
+                            :key="column"
+                            @click="emitCellClick(rowIdOf(rowIndex), column)"
+                            @contextmenu.prevent="emitCellRightClick(rowIdOf(rowIndex), column)"
+                        >
+                            {{ row[column] }}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Only where a page size says there are pages at all. -->
+        <nav v-if="pageSize > 0" class="pagination" :aria-label="t('Pager.label')">
+            <span class="page_input">{{
+                t('Pager.showing', { from: firstShown, to: lastShown, total: ordered.length })
+            }}</span>
+            <span>{{ t('Pager.page', { page: page + 1, pages: pageCount }) }}</span>
+            <span class="page_steps">
+                <button
+                    type="button"
+                    :disabled="page <= 0"
+                    :aria-label="t('Pager.previous')"
+                    @click.stop="page = Math.max(0, page - 1)"
                 >
-                    <td
-                        v-for="column in columns"
-                        :key="column"
-                        @click="emitCellClick(String(rowIndex), column)"
-                        @contextmenu.prevent="emitCellRightClick(String(rowIndex), column)"
-                    >
-                        {{ row[column] }}
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+                    ‹
+                </button>
+                <button
+                    type="button"
+                    :disabled="page >= pageCount - 1"
+                    :aria-label="t('Pager.next')"
+                    @click.stop="page = Math.min(pageCount - 1, page + 1)"
+                >
+                    ›
+                </button>
+            </span>
+        </nav>
     </div>
 </template>
 
@@ -222,9 +363,17 @@ const columns = computed<string[]>(() => Object.keys(rows.value[0] ?? {}))
     justify-self: start;
 }
 
-.table_container .table {
-    flex-grow: 1;
-    flex-shrink: 1;
+/*
+ * The rows scroll, not the widget.
+ *
+ * A table taller than the widget used to push the pager off the bottom,
+ * where it could neither be seen nor pressed. Named rather than put on
+ * the table itself: `overflow` does not apply to a table box.
+ */
+.table_scroll {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow: auto;
 }
 
 .table {
@@ -256,6 +405,47 @@ const columns = computed<string[]>(() => Object.keys(rows.value[0] ?? {}))
 
 .table tbody tr:hover {
     background: var(--color-raised);
+}
+
+/* A column that cannot be sorted does not offer to be. */
+.table th {
+    cursor: default;
+}
+
+.table th.sortable {
+    cursor: pointer;
+}
+
+.table th .mark {
+    margin-left: 4px;
+    opacity: 0.35;
+}
+
+.table th.sorted .mark {
+    opacity: 1;
+    color: var(--color-accent);
+}
+
+.table_container .pagination .page_steps {
+    justify-self: end;
+    display: flex;
+    gap: 4px;
+}
+
+.table_container .pagination button {
+    min-width: 28px;
+    padding: 2px 8px;
+    font-size: var(--text-sm);
+    color: var(--color-fg);
+    background: var(--color-raised);
+    border: 1px solid var(--color-divider);
+    border-radius: var(--radius-xs, 4px);
+    cursor: pointer;
+}
+
+.table_container .pagination button:disabled {
+    opacity: 0.4;
+    cursor: default;
 }
 
 .loading {
