@@ -8,6 +8,9 @@
   "provides": [
     {
       "id": "WidgetRepository"
+    },
+    {
+      "id": "WidgetSettingsTabRegistry"
     }
   ],
   "capabilities": [
