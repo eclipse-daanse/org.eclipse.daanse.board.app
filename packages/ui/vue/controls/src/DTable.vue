@@ -20,10 +20,16 @@ Contributors:
  * is what every place that shows one already wanted; a caller that knows
  * better says so.
  *
- * Deliberately without sorting, paging or selection. Five previews asked
- * for a table and none of them asked for any of that.
+ * Deliberately without sorting or paging. Five previews asked for a table
+ * and none of them asked for either.
+ *
+ * What it does do, once there are enough rows to need it, is draw only the
+ * ones in view. A table that hands the browser every row of every record
+ * costs what the answer is large, however little of it anyone looks at:
+ * 20,000 rows of 8 columns took 2.3 seconds to reach the screen and left
+ * 180,000 nodes in the document (#1182).
  */
-import { computed } from 'vue'
+import { computed, onBeforeUnmount, ref, watch } from 'vue'
 import { useText } from './useText'
 
 /**
@@ -72,6 +78,89 @@ function cell(row: Record<string, unknown>, key: string): string {
   if (value === undefined || value === null) return ''
   return typeof value === 'object' ? JSON.stringify(value) : String(value)
 }
+
+/*
+ * Below this many rows the whole table is drawn.
+ *
+ * Windowing costs a measurement, a fixed layout and two spacer rows, and
+ * under a screenful or two of data it buys nothing back.
+ */
+const VIRTUAL_FROM = 150
+
+/** Rows kept above and below the view, so a fast scroll finds them drawn. */
+const OVERSCAN = 10
+
+/** Until a row has been measured. Replaced by the first real one. */
+const ROW_HEIGHT_GUESS = 29
+
+const area = ref<HTMLElement | undefined>()
+const scrolled = ref(0)
+const viewport = ref(0)
+const rowHeight = ref(ROW_HEIGHT_GUESS)
+
+/*
+ * Only where there is a height to window against.
+ *
+ * Without layout - in jsdom, or before the element is in the document -
+ * the view is zero rows tall, and a window computed from that would be
+ * empty. Drawing everything is then both correct and what the caller
+ * would have got anyway.
+ */
+const windowed = computed(() => props.items?.length >= VIRTUAL_FROM && viewport.value > 0)
+
+const first = computed(() =>
+  windowed.value ? Math.max(0, Math.floor(scrolled.value / rowHeight.value) - OVERSCAN) : 0,
+)
+
+const shown = computed(() => {
+  if (!windowed.value) return props.items ?? []
+  const fits = Math.ceil(viewport.value / rowHeight.value) + OVERSCAN * 2
+  return props.items.slice(first.value, first.value + fits)
+})
+
+/** The rows that are not drawn, as height - so the scrollbar tells the truth. */
+const above = computed(() => first.value * rowHeight.value)
+const below = computed(() =>
+  Math.max(0, (props.items.length - first.value - shown.value.length) * rowHeight.value),
+)
+
+function onScroll(event: Event) {
+  scrolled.value = (event.target as HTMLElement).scrollTop
+}
+
+/*
+ * Measured rather than assumed: the row height follows the font and the
+ * theme's spacing, and a window built on a wrong number drifts away from
+ * the scrollbar as it goes.
+ */
+function measure() {
+  const element = area.value
+  if (!element) return
+  viewport.value = element.clientHeight
+  const row = element.querySelector('tbody tr:not([data-pad])') as HTMLElement | null
+  if (row && row.offsetHeight > 0) rowHeight.value = row.offsetHeight
+}
+
+let watching: HTMLElement | undefined
+const observer =
+  typeof ResizeObserver === 'undefined' ? undefined : new ResizeObserver(() => measure())
+
+watch(
+  area,
+  (element) => {
+    if (watching) observer?.unobserve(watching)
+    watching = element
+    if (!element) return
+    measure()
+    observer?.observe(element)
+  },
+  { immediate: true, flush: 'post' },
+)
+
+/* A new answer is a new set of heights, and possibly a shorter table. */
+watch(() => props.items, () => measure(), { flush: 'post' })
+
+onBeforeUnmount(() => observer?.disconnect())
 </script>
 
 <template>
@@ -85,17 +174,31 @@ function cell(row: Record<string, unknown>, key: string): string {
     grew to the full height of 20,000 rows, the pane above clipped it,
     and nothing scrolled (#1181).
   -->
-  <div class="datatable">
-    <table v-if="items?.length && columns.length">
+  <div ref="area" class="datatable" @scroll.passive="onScroll">
+    <!--
+      A fixed layout while windowing, because the columns are then measured
+      from the rows in view - and those change as it scrolls. Left to work
+      the widths out per screenful, the table shifted under the reader.
+    -->
+    <table
+      v-if="items?.length && columns.length"
+      :class="{ 'datatable__fixed': windowed }"
+      :aria-rowcount="windowed ? items.length + 1 : undefined"
+    >
       <thead>
         <tr>
           <th v-for="column in columns" :key="column.key">{{ column.label }}</th>
         </tr>
       </thead>
       <tbody>
+        <!-- The rows above the view, as height rather than as rows. -->
+        <tr v-if="above" data-pad aria-hidden="true" :style="{ height: `${above}px` }">
+          <td :colspan="columns.length"></td>
+        </tr>
         <tr
-          v-for="(row, index) in items"
-          :key="index"
+          v-for="(row, index) in shown"
+          :key="first + index"
+          :aria-rowindex="windowed ? first + index + 2 : undefined"
           :class="{ 'row--pick': selectable, 'row--on': selectable && row === selected }"
           :aria-selected="selectable ? row === selected : undefined"
           @click="selectable && (selected = row)"
@@ -103,6 +206,9 @@ function cell(row: Record<string, unknown>, key: string): string {
           <td v-for="column in columns" :key="column.key" :title="cell(row, column.key)">
             {{ cell(row, column.key) }}
           </td>
+        </tr>
+        <tr v-if="below" data-pad aria-hidden="true" :style="{ height: `${below}px` }">
+          <td :colspan="columns.length"></td>
         </tr>
       </tbody>
     </table>
@@ -124,6 +230,20 @@ function cell(row: Record<string, unknown>, key: string): string {
 table {
   width: 100%;
   border-collapse: collapse;
+}
+
+.datatable__fixed {
+  table-layout: fixed;
+}
+
+/* Height and nothing else: a spacer is the rows that are not there. */
+tbody tr[data-pad] td {
+  padding: 0;
+  border: 0;
+}
+
+tbody tr[data-pad]:hover {
+  background-color: transparent;
 }
 
 /*
