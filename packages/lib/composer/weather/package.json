@@ -20,8 +20,9 @@
     "org.eclipse.daanse.board.app.lib.api.datasource": "^0.0.1-next.1"
   },
   "devDependencies": {
+    "org.eclipse.daanse.board.app.lib.utils.helpers": "^0.0.1-next.1",
     "typescript": "^5.8.2",
-    "vite-plugin-dts": "4.5.4",
-    "org.eclipse.daanse.board.app.lib.utils.helpers": "^0.0.1-next.1"
+    "vite": "^6.4.1",
+    "vite-plugin-dts": "4.5.4"
   }
 }
