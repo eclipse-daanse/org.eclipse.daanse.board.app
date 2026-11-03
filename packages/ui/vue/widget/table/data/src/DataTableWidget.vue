@@ -11,7 +11,7 @@ Contributors:
     Smart City Jena
 -->
 <script lang="ts" setup>
-import { useDatasourceRepository, useTranslation, VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+import { useDatasourceRepository, useEObject, useTranslation, VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import { inject, toRefs, ref, watch, computed, onMounted, onUnmounted } from 'vue';
 import { useRoute } from 'vue-router';
 import { useVariableRepository } from "org.eclipse.daanse.board.app.ui.vue.composables"
@@ -22,10 +22,25 @@ const { t } = useTranslation('tableData');
 const props = defineProps<{ datasourceId: string, config: any, id?: string }>();
 const { datasourceId, config, id: widgetId } = toRefs(props);
 
+
+/*
+ * The settings, watched rather than read off the prop.
+ *
+ * Widget.config is an attribute, not a containment, so the adapter the
+ * wrapper holds on the widget never hears a write inside this object - and
+ * the wrapper hands this component the same instance on every change, which
+ * is not a prop change Vue acts on. A setting ticked in the open dialog
+ * reached the table only once the dialog was reopened (#1203). Watching the
+ * instance itself is what makes a write inside it a change here; the reads
+ * below go through `settings`, the writes on mount still go to `config`.
+ */
+const settings = useEObject<DataTableSettings>(() => config.value)
+
 import { identifiers } from 'org.eclipse.daanse.board.app.lib.core'
 import type { TinyEmitter } from 'tiny-emitter';
 import { EventActionsRegistry, EVENT_ACTIONS_REGISTRY } from 'org.eclipse.daanse.board.app.lib.api.events';
 import { DataTableWidgetInterface } from './api/DataTableWidgetInterface';
+import type { DataTableSettings } from './gen/DataTableSettings';
 
 const eventBus = inject<TinyEmitter>(identifiers.TINY_EMITTER)!;
 const actionsRegistry = inject<EventActionsRegistry>(EVENT_ACTIONS_REGISTRY)!;
@@ -143,7 +158,7 @@ onMounted(() => {
 const {
     headerBackground,
 } = wrapParameters({
-    headerBackground: computed(() => (config.value.headerBackground as any)?.value || 'var(--color-raised)'),
+    headerBackground: computed(() => (settings.value?.headerBackground as any)?.value || 'var(--color-raised)'),
 });
 
 const { update } = useDatasourceRepository(datasourceId, 'DataTable', data)
@@ -167,7 +182,7 @@ const rows = computed<Record<string, unknown>[]>(() => data.value?.items ?? [])
  * both are iterable.
  */
 const hidden = computed<Set<string>>(() => {
-    const held = config.value?.hiddenColumns
+    const held = settings.value?.hiddenColumns
     if (!held) return new Set()
     return new Set(Array.from(held as Iterable<string>))
 })
@@ -175,9 +190,9 @@ const hidden = computed<Set<string>>(() => {
 const allColumns = computed<string[]>(() => Object.keys(rows.value[0] ?? {}))
 const columns = computed<string[]>(() => allColumns.value.filter((column) => !hidden.value.has(column)))
 
-const showHeader = computed<boolean>(() => config.value?.showHeader !== false)
-const sortable = computed<boolean>(() => config.value?.sortable === true)
-const pageSize = computed<number>(() => Math.max(0, Math.floor(Number(config.value?.pageSize) || 0)))
+const showHeader = computed<boolean>(() => settings.value?.showHeader !== false)
+const sortable = computed<boolean>(() => settings.value?.sortable === true)
+const pageSize = computed<number>(() => Math.max(0, Math.floor(Number(settings.value?.pageSize) || 0)))
 
 /** Which column the rows are ordered by, and which way. Nothing, until asked. */
 const sortedBy = ref<{ column: string; descending: boolean } | undefined>(undefined)

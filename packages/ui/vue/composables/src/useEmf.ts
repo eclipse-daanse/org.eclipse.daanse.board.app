@@ -126,6 +126,18 @@ function useChangeCount(target: () => EObject | undefined) {
  * it instead:
  *
  *     const held = useEObject(() => connections.value.find(byId))
+ *
+ * This is also how a widget watches its own settings. Widget.config is an
+ * attribute, not a containment, so the adapter on the widget never hears a
+ * write inside the settings object - and the wrapper hands the widget the
+ * same instance on every change, which is not a prop change Vue acts on.
+ * Nothing the wrapper does can reach a computed inside the widget, so the
+ * widget that reads the settings is the one that watches them:
+ *
+ *     const settings = useEObject<TableSettings>(() => config.value)
+ *
+ * and reads `settings.value?.pageSize` rather than `config.value.pageSize`
+ * (#1203). The writes on mount still go to `config`.
  */
 export function useEObject<T extends EObject>(
   source: MaybeRefOrGetter<T | undefined>,
