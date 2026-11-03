@@ -4,7 +4,7 @@
     "declarationMap": true,
     "inlineSources": true,
     "target": "es2016",
-    "module": "commonjs",
+    "module": "esnext",
     "declaration": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
@@ -12,7 +12,10 @@
     "skipLibCheck": true,
     "resolveJsonModule": true,
     "experimentalDecorators": true,
-    "emitDecoratorMetadata": true
+    "emitDecoratorMetadata": true,
+    "types": [
+      "vite/client"
+    ]
   },
   "exclude": [
     "node_modules",

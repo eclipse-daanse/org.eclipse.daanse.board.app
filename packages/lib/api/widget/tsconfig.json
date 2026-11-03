@@ -14,7 +14,10 @@
     "forceConsistentCasingInFileNames": true,
     "noEmit": true,
     "experimentalDecorators": true,
-    "emitDecoratorMetadata": true
+    "emitDecoratorMetadata": true,
+    "types": [
+      "vite/client"
+    ]
   },
   "include": [
     "src"

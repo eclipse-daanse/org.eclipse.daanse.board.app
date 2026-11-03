@@ -20,7 +20,10 @@
     "noFallthroughCasesInSwitch": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
-    "jsx": "preserve"
+    "jsx": "preserve",
+    "types": [
+      "vite/client"
+    ]
   },
   "include": [
     "src"
