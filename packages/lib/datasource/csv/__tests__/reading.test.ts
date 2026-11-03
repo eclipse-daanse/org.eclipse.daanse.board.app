@@ -141,6 +141,47 @@ describe('a source that skips rows', () => {
   })
 })
 
+/*
+ * What a CSV answers when asked for an object (#1189).
+ *
+ * It used to answer null and warn, which left every widget that reads an
+ * object - the gauge, the progress bar, both text widgets, both svg
+ * widgets, video and rss - unable to show a CSV at all.
+ */
+describe('a source asked for an object', () => {
+  test('answers the table, the same one DataTable gets', async () => {
+    const source = sourceOn()
+
+    const [asObject, asTable] = await Promise.all([
+      source.getData('object'),
+      source.getData('DataTable'),
+    ])
+
+    expect(asObject).toEqual(asTable)
+    expect(asObject.headers).toEqual(['id', 'name', 'value'])
+  })
+
+  /* So that $value.items.0.name reaches a cell. */
+  test('holds its rows as records a path can reach into', async () => {
+    const source = sourceOn()
+
+    const answer = await source.getData('object')
+
+    expect(answer.items[0].name).toBe('Freizeitbad')
+    expect(answer.items[1].value).toBe('8.1')
+  })
+
+  test('still says so when asked for something it does not answer', async () => {
+    const source = sourceOn()
+    const warned = vi.spyOn(console, 'warn').mockImplementation(() => {})
+
+    expect(await source.getData('PivotTable')).toBeNull()
+    expect(warned).toHaveBeenCalled()
+
+    warned.mockRestore()
+  })
+})
+
 describe('a source whose endpoint refuses', () => {
   beforeEach(() => {
     vi.stubGlobal('fetch', vi.fn(async () => new Response('no', { status: 404 })))

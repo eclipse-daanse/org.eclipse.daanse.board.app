@@ -165,19 +165,30 @@ export class CsvStore extends BaseDatasource {
       }),
     }
 
-    if (type === 'DataTable') {
+    /*
+     * A CSV is a table, so that is its object too.
+     *
+     * Asked for one, this used to fall through to the warning and answer
+     * null - which left the widgets that read an object unable to show a
+     * CSV at all, and since #1183 not even offered for one. Every other
+     * source that answers a table answers an object as well.
+     *
+     * The same structure for both: a widget writing $value.items.0.besucher
+     * reads a cell the way $value.percent reads a field of a JSON answer.
+     */
+    if (type === 'DataTable' || type === 'object') {
       return {
         headers: data.header,
         items: data.mappedRows,
         rows: data.rows,
       }
     }
-    if (type == 'string') {
+    if (type === 'string') {
       return JSON.stringify(data)
-    } else {
-      console.warn('Invalid data type')
-      return null
     }
+
+    console.warn(`CsvStore was asked for "${type}", which it does not answer`)
+    return null
   }
 
   callEvent(event: string, params: any) {
