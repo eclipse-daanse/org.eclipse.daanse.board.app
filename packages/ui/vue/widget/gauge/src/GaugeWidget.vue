@@ -311,6 +311,53 @@ const textColor = computed(() => held('textColor') || 'currentColor')
  */
 const textY = computed(() => ((settings.value as any)?.shape === 'half' ? 44 : 50))
 
+/* ----------------------------------------------------------- the box */
+
+/*
+ * The box is what the drawing fills, not the square it was laid out in.
+ *
+ * A half gauge draws nothing below the middle and a three-quarter one
+ * nothing in the wedge at the bottom. Against a viewBox of the whole
+ * square, `meet` scales that empty part along with the arc - so a half
+ * gauge filled half its tile and sat in the middle of it. Measuring the
+ * arc instead lets the same drawing be scaled up to the tile it is given.
+ *
+ * The readings belong to the drawing: the number sits inside the arc, the
+ * caption below it, and a box cropped to the arc alone would cut the
+ * caption off a half gauge.
+ */
+const round = (value: number) => Math.round(value * 100) / 100
+
+const viewBox = computed(() => {
+  const { from, sweep } = shape.value
+  const reach = thickness.value / 2
+
+  /*
+   * The ends of the arc, and whichever of the four extremes of the circle
+   * it passes on the way - those, and only those, can be its bounds.
+   */
+  const angles = [from, from + sweep]
+  for (let angle = Math.ceil(from / 90) * 90; angle < from + sweep; angle += 90) {
+    angles.push(angle)
+  }
+  const points = angles.map((angle) => at(angle))
+
+  let left = Math.min(...points.map((p) => p.x)) - reach
+  let right = Math.max(...points.map((p) => p.x)) + reach
+  let top = Math.min(...points.map((p) => p.y)) - reach
+  let bottom = Math.max(...points.map((p) => p.y)) + reach
+
+  /* Half the font size either way, which is what a central baseline
+    spans - see the font sizes in the stylesheet below. */
+  if ((settings.value as any)?.showValue !== false) {
+    top = Math.min(top, textY.value - 10)
+    bottom = Math.max(bottom, textY.value + 10)
+  }
+  if (caption.value) bottom = Math.max(bottom, textY.value + 16 + 4)
+
+  return `${round(left)} ${round(top)} ${round(right - left)} ${round(bottom - top)}`
+})
+
 function emitClick() {
   if (!widgetId?.value) return
   eventBus.emit('widget:GaugeWidget:click', {
@@ -334,7 +381,7 @@ function emitRightClick() {
   <div class="gauge" @click="emitClick" @contextmenu.prevent="emitRightClick">
     <svg
       class="gauge__face"
-      viewBox="0 0 100 100"
+      :viewBox="viewBox"
       preserveAspectRatio="xMidYMid meet"
       role="img"
       :aria-label="caption || undefined"
