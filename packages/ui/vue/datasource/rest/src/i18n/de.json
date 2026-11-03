@@ -11,5 +11,10 @@
   "View": {
     "tree": "Baum",
     "map": "Karte"
+  },
+  "Preview": {
+    "loading": "Wird gelesen …",
+    "failed": "Von dieser Adresse kam nichts zurück. Stimmen Verbindung und Pfad?",
+    "empty": "Es kam etwas zurück, aber es war leer. Sieh in den Verbindungen nach, was der Endpunkt liefert."
   }
 }

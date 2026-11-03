@@ -23,9 +23,13 @@ let answer: unknown = null
 let unsubscribed = false
 let notify: (() => void) | undefined
 
+/* Set where the endpoint is to refuse rather than answer. */
+let refuses = false
+
 const store = {
   getData: vi.fn(async (shape: string) => {
     asked.push(shape)
+    if (refuses) throw new Error('404')
     return answer
   }),
   subscribe: (listener: () => void) => {
@@ -78,6 +82,7 @@ describe('MapView', () => {
   beforeEach(() => {
     asked.length = 0
     answer = null
+    refuses = false
     unsubscribed = false
     notify = undefined
     vi.clearAllMocks()
@@ -136,5 +141,62 @@ describe('MapView', () => {
 
     wrapper.unmount()
     expect(unsubscribed).toBe(true)
+  })
+
+  /*
+   * A map with nothing on it says nothing about why (#1194). The three
+   * reasons are different things to be told, and two of them are not the
+   * map's to say.
+   */
+  describe('when there is nothing to draw', () => {
+    it('says the endpoint gave nothing, rather than drawing an empty map', async () => {
+      answer = null
+      const wrapper = await open()
+
+      expect(wrapper.find('[role="alert"]').text()).toBe('Preview.failed')
+      expect(shown(wrapper).exists()).toBe(false)
+    })
+
+    it('says the same where the read was refused outright', async () => {
+      refuses = true
+      const wrapper = await open()
+
+      expect(wrapper.find('[role="alert"]').text()).toBe('Preview.failed')
+      expect(shown(wrapper).exists()).toBe(false)
+    })
+
+    it('says an answer came back empty, which is not the same thing', async () => {
+      answer = {}
+      const wrapper = await open()
+
+      expect(wrapper.find('[role="status"]').text()).toBe('Preview.empty')
+      expect(shown(wrapper).exists()).toBe(false)
+    })
+
+    /* An answer with features in it is the map's business again. */
+    it('leaves a real answer to the map', async () => {
+      answer = {
+        type: 'FeatureCollection',
+        features: [{ type: 'Feature', geometry: { type: 'Point', coordinates: [7, 51] }, properties: null }],
+      }
+      const wrapper = await open()
+
+      expect(wrapper.find('[role="alert"]').exists()).toBe(false)
+      expect(shown(wrapper).exists()).toBe(true)
+    })
+
+    /* A refusal arriving through the subscription had nobody to hand it
+      to, and went to the console alone. */
+    it('shows a later refusal, not only the first answer', async () => {
+      answer = { type: 'FeatureCollection', features: [{ type: 'Feature', geometry: null, properties: null }] }
+      const wrapper = await open()
+      expect(shown(wrapper).exists()).toBe(true)
+
+      refuses = true
+      notify?.()
+      await flushPromises()
+
+      expect(wrapper.find('[role="alert"]').text()).toBe('Preview.failed')
+    })
   })
 })
