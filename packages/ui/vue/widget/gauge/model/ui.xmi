@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/*********************************************************************
+* Copyright (c) 2026 Contributors to the Eclipse Foundation.
+*
+* This program and the accompanying materials are made
+* available under the terms of the Eclipse Public License 2.0
+* which is available at https://www.eclipse.org/legal/epl-2.0/
+*
+* SPDX-License-Identifier: EPL-2.0
+**********************************************************************/
+
+The form for the gauge.
+
+In the order the decisions are made: what it measures, how much of a
+circle it draws, what colour that is, and last what is written in the
+middle. The thresholds are a list with a form of their own - a row is an
+entry, not a field.
+
+The decimals are only asked for once there is a number to write them on;
+the bands only once there is a threshold to show.
+-->
+<uimodel:UIModel
+    xmlns:xmi="http://www.omg.org/XMI"
+    xmi:version="2.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:uimodel="http://uimodel/1.0"
+    name="GaugeSettingsForm">
+
+  <targetClasses href="http://org.eclipse.daanse.board.app.ui.vue.widget.gauge#//GaugeSettings"/>
+
+  <components xsi:type="uimodel:FormView" name="GaugeSettingsFormView">
+
+    <fields xsi:type="uimodel:GroupWidget" name="valueGroup" layout="VERTICAL" label="gauge:Form.valueGroup">
+      <fields xsi:type="uimodel:InputWidget" name="value"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.gauge#//GaugeSettings/value"
+          label="gauge:Form.value" placeholder="$value.percent"/>
+      <fields xsi:type="uimodel:NumberWidget" name="min"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.gauge#//GaugeSettings/min" label="gauge:Form.min"/>
+      <fields xsi:type="uimodel:NumberWidget" name="max"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.gauge#//GaugeSettings/max" label="gauge:Form.max"/>
+    </fields>
+
+    <fields xsi:type="uimodel:GroupWidget" name="arcGroup" layout="VERTICAL" label="gauge:Form.arcGroup">
+      <fields xsi:type="uimodel:SelectWidget" name="shape"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.gauge#//GaugeSettings/shape" label="gauge:Form.shape">
+        <values>full</values>
+        <values>threeQuarter</values>
+        <values>half</values>
+        <optionLabel language="JS" body="({ full: 'gauge:Options.shape.full', threeQuarter: 'gauge:Options.shape.threeQuarter', half: 'gauge:Options.shape.half' })[option] ?? option"/>
+      </fields>
+      <fields xsi:type="uimodel:NumberWidget" name="thickness"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.gauge#//GaugeSettings/thickness"
+          label="gauge:Form.thickness" min="2" max="40" step="1"/>
+      <fields xsi:type="uimodel:InputWidget" name="color"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.gauge#//GaugeSettings/color" label="gauge:Form.color"/>
+      <fields xsi:type="uimodel:InputWidget" name="trackColor"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.gauge#//GaugeSettings/trackColor" label="gauge:Form.trackColor"/>
+    </fields>
+
+    <fields xsi:type="uimodel:GroupWidget" name="thresholdGroup" layout="VERTICAL" label="gauge:Form.thresholdGroup">
+      <fields xsi:type="uimodel:InputWidget" name="thresholds"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.gauge#//GaugeSettings/thresholds"
+          label="gauge:Form.thresholds"/>
+      <fields xsi:type="uimodel:CheckboxWidget" name="showBands"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.gauge#//GaugeSettings/showBands" label="gauge:Form.showBands">
+        <visibilityCondition language="JS" body="(self.thresholds?.size?.() ?? self.thresholds?.length ?? 0) > 0"/>
+      </fields>
+    </fields>
+
+    <fields xsi:type="uimodel:GroupWidget" name="textGroup" layout="VERTICAL" label="gauge:Form.textGroup">
+      <fields xsi:type="uimodel:CheckboxWidget" name="showValue"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.gauge#//GaugeSettings/showValue" label="gauge:Form.showValue"/>
+      <fields xsi:type="uimodel:NumberWidget" name="decimals"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.gauge#//GaugeSettings/decimals"
+          label="gauge:Form.decimals" min="0" max="6" step="1">
+        <visibilityCondition language="JS" body="self.showValue !== false"/>
+      </fields>
+      <fields xsi:type="uimodel:InputWidget" name="unit"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.gauge#//GaugeSettings/unit"
+          label="gauge:Form.unit" placeholder="%">
+        <visibilityCondition language="JS" body="self.showValue !== false"/>
+      </fields>
+      <fields xsi:type="uimodel:InputWidget" name="label"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.gauge#//GaugeSettings/label" label="gauge:Form.label"/>
+      <fields xsi:type="uimodel:InputWidget" name="textColor"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.gauge#//GaugeSettings/textColor" label="gauge:Form.textColor"/>
+    </fields>
+
+  </components>
+</uimodel:UIModel>

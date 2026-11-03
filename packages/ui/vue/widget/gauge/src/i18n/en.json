@@ -1,0 +1,37 @@
+{
+  "Widget": {
+    "name": "Gauge"
+  },
+  "Form": {
+    "valueGroup": "What it shows",
+    "value": "Value",
+    "min": "Lower bound",
+    "max": "Upper bound",
+    "arcGroup": "Arc",
+    "shape": "Shape",
+    "thickness": "Thickness",
+    "color": "Colour",
+    "trackColor": "Track colour",
+    "thresholdGroup": "Thresholds",
+    "thresholds": "Thresholds",
+    "showBands": "Show the ranges on the track",
+    "textGroup": "Caption",
+    "showValue": "Show the number in the middle",
+    "decimals": "Decimal places",
+    "unit": "Unit",
+    "label": "Caption",
+    "textColor": "Text colour"
+  },
+  "FormThreshold": {
+    "at": "From value",
+    "color": "Colour",
+    "label": "Name"
+  },
+  "Options": {
+    "shape": {
+      "full": "Full circle",
+      "threeQuarter": "Three-quarter circle",
+      "half": "Half circle"
+    }
+  }
+}

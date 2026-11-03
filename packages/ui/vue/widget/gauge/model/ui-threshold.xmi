@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/*********************************************************************
+* Copyright (c) 2026 Contributors to the Eclipse Foundation.
+*
+* This program and the accompanying materials are made
+* available under the terms of the Eclipse Public License 2.0
+* which is available at https://www.eclipse.org/legal/epl-2.0/
+*
+* SPDX-License-Identifier: EPL-2.0
+**********************************************************************/
+
+One threshold: from which value, in which colour.
+
+The label is for whoever edits the gauge - "warning", "critical" - and is
+not drawn, so it comes last.
+-->
+<uimodel:UIModel
+    xmlns:xmi="http://www.omg.org/XMI"
+    xmi:version="2.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:uimodel="http://uimodel/1.0"
+    name="GaugeThresholdForm">
+
+  <targetClasses href="http://org.eclipse.daanse.board.app.ui.vue.widget.gauge#//GaugeThreshold"/>
+
+  <components xsi:type="uimodel:FormView" name="GaugeThresholdFormView">
+    <fields xsi:type="uimodel:NumberWidget"
+        name="at"
+        feature="http://org.eclipse.daanse.board.app.ui.vue.widget.gauge#//GaugeThreshold/at"
+        label="gauge:FormThreshold.at"/>
+    <fields xsi:type="uimodel:InputWidget"
+        name="color"
+        feature="http://org.eclipse.daanse.board.app.ui.vue.widget.gauge#//GaugeThreshold/color"
+        label="gauge:FormThreshold.color"/>
+    <fields xsi:type="uimodel:InputWidget"
+        name="label"
+        feature="http://org.eclipse.daanse.board.app.ui.vue.widget.gauge#//GaugeThreshold/label"
+        label="gauge:FormThreshold.label"/>
+  </components>
+</uimodel:UIModel>
