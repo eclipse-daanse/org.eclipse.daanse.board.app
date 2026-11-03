@@ -46,7 +46,28 @@ export default defineConfig({
   plugins: [
     // @ts-ignore
     dts({
-      insertTypesEntry: true
+      insertTypesEntry: true,
+      /*
+       * Saying out loud what the declaration build found.
+       *
+       * The plugin writes every declaration it can and reports success for
+       * the rest. A file it cannot declare is simply left out, and the
+       * entry declaration that would have re-exported it ends up holding
+       * nothing but "export {}". The package then builds, publishes and
+       * installs, and the first thing anyone hears about it is TS7016 in
+       * a package that imports from here - which names this package but
+       * not the file that failed (#1199).
+       *
+       * So a diagnostic ends the build where it happened.
+       */
+      afterDiagnostic: (diagnostics) => {
+        if (diagnostics.length) {
+          throw new Error(
+            `Declaration build produced ${diagnostics.length} diagnostic(s); ` +
+              'the declarations for the files they name were not written.'
+          )
+        }
+      }
     }),
     //@ts-ignore
     vue(),
