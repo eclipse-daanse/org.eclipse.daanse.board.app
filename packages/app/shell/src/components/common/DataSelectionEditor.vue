@@ -205,6 +205,9 @@ function choosePath(path: string) {
   current.index = 0
 }
 
+/* The option labels are built from the enum values - declared for scripts/i18n.mjs:
+ * i18n-keys: shell:WidgetSettings.selection.pick.*
+ * i18n-keys: shell:WidgetSettings.selection.operator.* */
 const pickOptions = computed(() =>
   (['ALL', 'FIRST', 'LAST', 'INDEX'] as const).map((uid) => ({ uid, name: t(`WidgetSettings.selection.pick.${uid}`) })),
 )
