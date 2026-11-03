@@ -194,8 +194,10 @@ describe('NewWidgetDialog', () => {
     expect(pageId).toBe('p1')
     expect(widget.type).toBe('datatable')
     expect(widget.config.datasourceId).toBe('ds1')
-    /* Below what is already there rather than on top of it. */
+    /* Below what is already there rather than on top of it, and clear of
+      the palette, which docks top left and would hide it entirely. */
     expect(placement.y).toBe(150)
+    expect(placement.x).toBeGreaterThanOrEqual(240)
   })
 
   it('goes to the page it put the widget on', async () => {
@@ -211,11 +213,13 @@ describe('NewWidgetDialog', () => {
     expect(push).toHaveBeenCalledWith('/board/b1/pages/p1/edit')
   })
 
-  it('asks which page only where there is more than one', async () => {
+  /* Where a widget goes is part of making one, so it is always asked -
+    including on a board that has a single page today. */
+  it('asks which page, however many there are', async () => {
     setUp(['DataTable'], [{ id: 'p1', name: 'Erste' }])
     open()
     await flushPromises()
-    expect(document.querySelector('select')).toBeNull()
+    expect(document.querySelector('select')).not.toBeNull()
 
     close()
     await flushPromises()
@@ -228,7 +232,29 @@ describe('NewWidgetDialog', () => {
     ])
     open()
     await flushPromises()
-    expect(document.querySelector('select')).not.toBeNull()
+    const options = [...document.querySelectorAll('select option')].map((o) => o.textContent?.trim())
+    expect(options).toEqual(['Erste', 'Zweite'])
+  })
+
+  it('puts the widget on the page that was picked', async () => {
+    setUp(CSV, [
+      { id: 'p1', name: 'Erste' },
+      { id: 'p2', name: 'Zweite' },
+    ])
+    open()
+    await flushPromises()
+
+    tiles()[0].click()
+    const select = document.querySelector('select') as HTMLSelectElement
+    select.value = [...select.options].find((o) => o.textContent?.includes('Zweite'))!.value
+    select.dispatchEvent(new Event('change'))
+    await flushPromises()
+
+    button('Wizard.create').click()
+    await flushPromises()
+
+    expect(addWidget.mock.calls[0][0]).toBe('p2')
+    expect(push).toHaveBeenCalledWith('/board/b1/pages/p2/edit')
   })
 
   it('has nothing to offer when the board has no page', async () => {
