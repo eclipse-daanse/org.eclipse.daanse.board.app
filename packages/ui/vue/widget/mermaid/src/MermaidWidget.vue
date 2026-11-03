@@ -19,12 +19,24 @@ import type { TinyEmitter } from 'tiny-emitter';
 import { EventActionsRegistry, EVENT_ACTIONS_REGISTRY } from 'org.eclipse.daanse.board.app.lib.api.events';
 import { MermaidWidgetInterface } from './api/MermaidWidgetInterface';
 import mermaid from 'mermaid';
-import {  VariableWrapper,VariableComplexStringWrapper, plainSettings } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+import { plainSettings, useEObject } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import type { MermaidWidgetSettings } from './gen/MermaidWidgetSettings'
 import { MermaidWidgetSettingsImpl } from './gen/MermaidWidgetSettingsImpl'
 
 
 const config = defineModel<MermaidWidgetSettings>('configv', { required: true});
+
+/*
+ * The settings, watched rather than read off the model prop.
+ *
+ * Widget.config is an attribute, not a containment, so the adapter the
+ * wrapper holds on the widget never hears a write inside this object - and
+ * the wrapper hands this component the same instance on every change, which
+ * is not a prop change Vue acts on. A setting changed in the open dialog
+ * reached the diagram only once the dialog was reopened (#1203). The reads go
+ * through `settings`; the writes still go to `config`.
+ */
+const settings = useEObject<MermaidWidgetSettings>(() => config.value)
 const props = defineProps<{ id?: string }>();
 const { id: widgetId } = toRefs(props);
 
@@ -93,7 +105,7 @@ onMounted(() => {
 
 
 
-watch(() => config.value.theme, async (newTheme: any) => {
+watch(() => settings.value?.theme, async (newTheme: any) => {
     mermaid.initialize({
         theme: newTheme,
     });
@@ -109,7 +121,7 @@ watch(() => config.value.theme, async (newTheme: any) => {
     }
 }, { immediate: true });
 
-watch(() => config.value.value, async (val) => {
+watch(() => settings.value?.value, async (val) => {
     timestamp.value = Date.now();
     await nextTick();
     try {
@@ -124,7 +136,7 @@ watch(() => config.value.value, async (val) => {
 
 <template>
     <div ref="container" :key="timestamp" @click="emitClick" @contextmenu.prevent="emitRightClick" class="w-full h-full">
-        {{ config.value }}
+        {{ settings?.value }}
     </div>
 </template>
 
