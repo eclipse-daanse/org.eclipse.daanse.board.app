@@ -81,7 +81,52 @@
     },
     "hint": "Änderungen greifen erst mit „Fertig“",
     "discard": "Verwerfen",
-    "done": "Fertig"
+    "done": "Fertig",
+    "selection": {
+      "title": "Datenauswahl",
+      "noSource": "Wähle eine Datenquelle, um ihre Daten zu sehen.",
+      "notSelectable": "Dieses Widget liest eine Datenform, aus der sich nichts auswählen lässt. Es erhält die ganze Antwort.",
+      "loading": "Daten werden geladen …",
+      "failed": "Die Datenquelle hat nicht geantwortet: {{reason}}",
+      "empty": "Die Datenquelle hat keine Daten geliefert.",
+      "answerHead": "Antwort der Datenquelle",
+      "pathHint": "Klicke auf einen Eintrag, damit das Widget nur diesen Teil erhält.",
+      "answer": "Antwort",
+      "wholeAnswer": "ganze Antwort",
+      "path": "Pfad",
+      "listOf": "Liste mit {{count}} Einträgen",
+      "objectOf": "Objekt mit {{count}} Feldern",
+      "expand": "Aufklappen",
+      "collapse": "Zuklappen",
+      "more": "{{count}} weitere anzeigen",
+      "elementsHead": "Einträge ({{count}})",
+      "pickLabel": "Welche Einträge",
+      "pick": {
+        "ALL": "Alle",
+        "FIRST": "Den ersten",
+        "LAST": "Den letzten",
+        "INDEX": "Eintrag Nummer …"
+      },
+      "index": "Nummer (ab 0)",
+      "field": "Feld",
+      "operatorLabel": "Bedingung",
+      "operator": {
+        "EQUALS": "ist gleich",
+        "NOT_EQUALS": "ist nicht",
+        "CONTAINS": "enthält",
+        "GREATER_THAN": "größer als",
+        "LESS_THAN": "kleiner als",
+        "EXISTS": "ist vorhanden"
+      },
+      "value": "Wert",
+      "addFilter": "Filter hinzufügen",
+      "removeFilter": "Filter entfernen",
+      "fieldsHead": "Felder",
+      "fieldsHint": "Ohne Auswahl erhält das Widget alle Felder.",
+      "resultHead": "Das erhält das Widget",
+      "resultCount": "{{count}} Einträge",
+      "clear": "Auswahl entfernen"
+    }
   },
   "Floorplan": {
     "empty": "keine Widgets"
