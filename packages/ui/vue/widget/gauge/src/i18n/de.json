@@ -1,0 +1,37 @@
+{
+  "Widget": {
+    "name": "Rundanzeige"
+  },
+  "Form": {
+    "valueGroup": "Was gezeigt wird",
+    "value": "Wert",
+    "min": "Untere Grenze",
+    "max": "Obere Grenze",
+    "arcGroup": "Bogen",
+    "shape": "Form",
+    "thickness": "Dicke",
+    "color": "Farbe",
+    "trackColor": "Farbe der Spur",
+    "thresholdGroup": "Schwellwerte",
+    "thresholds": "Schwellwerte",
+    "showBands": "Bereiche in der Spur zeigen",
+    "textGroup": "Beschriftung",
+    "showValue": "Zahl in der Mitte zeigen",
+    "decimals": "Nachkommastellen",
+    "unit": "Einheit",
+    "label": "Bildunterschrift",
+    "textColor": "Textfarbe"
+  },
+  "FormThreshold": {
+    "at": "Ab Wert",
+    "color": "Farbe",
+    "label": "Bezeichnung"
+  },
+  "Options": {
+    "shape": {
+      "full": "Vollkreis",
+      "threeQuarter": "Dreiviertelkreis",
+      "half": "Halbkreis"
+    }
+  }
+}
