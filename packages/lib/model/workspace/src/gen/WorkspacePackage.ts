@@ -80,6 +80,17 @@ export class WorkspacePackage extends BasicEPackage {
     WIDGET__DATASOURCE: null as unknown as EAttribute | EReference,
     WIDGET__CONFIG: null as unknown as EAttribute | EReference,
     WIDGET__WRAPPER_CONFIG: null as unknown as EAttribute | EReference,
+    WIDGET__SELECTION: null as unknown as EAttribute | EReference,
+    DATA_SELECTION: null as unknown as EClass,
+    DATA_SELECTION__PATH: null as unknown as EAttribute | EReference,
+    DATA_SELECTION__FILTERS: null as unknown as EAttribute | EReference,
+    DATA_SELECTION__PICK: null as unknown as EAttribute | EReference,
+    DATA_SELECTION__INDEX: null as unknown as EAttribute | EReference,
+    DATA_SELECTION__FIELDS: null as unknown as EAttribute | EReference,
+    DATA_FILTER: null as unknown as EClass,
+    DATA_FILTER__FIELD: null as unknown as EAttribute | EReference,
+    DATA_FILTER__OPERATOR: null as unknown as EAttribute | EReference,
+    DATA_FILTER__VALUE: null as unknown as EAttribute | EReference,
     VARIABLE: null as unknown as EClass,
     VARIABLE__UID: null as unknown as EAttribute | EReference,
     VARIABLE__NAME: null as unknown as EAttribute | EReference,
@@ -420,6 +431,98 @@ export class WorkspacePackage extends BasicEPackage {
     widgetClass.getEStructuralFeatures().push(widget_wrapperConfig);
     WorkspacePackage.Literals.WIDGET__WRAPPER_CONFIG = widget_wrapperConfig;
 
+    // Create selection feature
+    const widget_selection = new BasicEReference();
+    widget_selection.setContainment(true);
+    widget_selection.setName('selection');
+    widget_selection.setLowerBound(0);
+    widget_selection.setUpperBound(1);
+    widgetClass.getEStructuralFeatures().push(widget_selection);
+    WorkspacePackage.Literals.WIDGET__SELECTION = widget_selection;
+
+    // Create DataSelection class
+    const dataSelectionClass = new BasicEClass();
+    dataSelectionClass.setName('DataSelection');
+    dataSelectionClass.setAbstract(false);
+    dataSelectionClass.setInterface(false);
+    this.getEClassifiers().push(dataSelectionClass);
+    dataSelectionClass.setEPackage(this);
+    WorkspacePackage.Literals.DATA_SELECTION = dataSelectionClass;
+
+    // Create path feature
+    const dataSelection_path = new BasicEAttribute();
+    dataSelection_path.setName('path');
+    dataSelection_path.setLowerBound(0);
+    dataSelection_path.setUpperBound(1);
+    dataSelectionClass.getEStructuralFeatures().push(dataSelection_path);
+    WorkspacePackage.Literals.DATA_SELECTION__PATH = dataSelection_path;
+
+    // Create filters feature
+    const dataSelection_filters = new BasicEReference();
+    dataSelection_filters.setContainment(true);
+    dataSelection_filters.setName('filters');
+    dataSelection_filters.setLowerBound(0);
+    dataSelection_filters.setUpperBound(-1);
+    dataSelectionClass.getEStructuralFeatures().push(dataSelection_filters);
+    WorkspacePackage.Literals.DATA_SELECTION__FILTERS = dataSelection_filters;
+
+    // Create pick feature
+    const dataSelection_pick = new BasicEAttribute();
+    dataSelection_pick.setName('pick');
+    dataSelection_pick.setLowerBound(0);
+    dataSelection_pick.setUpperBound(1);
+    dataSelectionClass.getEStructuralFeatures().push(dataSelection_pick);
+    WorkspacePackage.Literals.DATA_SELECTION__PICK = dataSelection_pick;
+
+    // Create index feature
+    const dataSelection_index = new BasicEAttribute();
+    dataSelection_index.setName('index');
+    dataSelection_index.setLowerBound(0);
+    dataSelection_index.setUpperBound(1);
+    dataSelectionClass.getEStructuralFeatures().push(dataSelection_index);
+    WorkspacePackage.Literals.DATA_SELECTION__INDEX = dataSelection_index;
+
+    // Create fields feature
+    const dataSelection_fields = new BasicEAttribute();
+    dataSelection_fields.setName('fields');
+    dataSelection_fields.setLowerBound(0);
+    dataSelection_fields.setUpperBound(-1);
+    dataSelectionClass.getEStructuralFeatures().push(dataSelection_fields);
+    WorkspacePackage.Literals.DATA_SELECTION__FIELDS = dataSelection_fields;
+
+    // Create DataFilter class
+    const dataFilterClass = new BasicEClass();
+    dataFilterClass.setName('DataFilter');
+    dataFilterClass.setAbstract(false);
+    dataFilterClass.setInterface(false);
+    this.getEClassifiers().push(dataFilterClass);
+    dataFilterClass.setEPackage(this);
+    WorkspacePackage.Literals.DATA_FILTER = dataFilterClass;
+
+    // Create field feature
+    const dataFilter_field = new BasicEAttribute();
+    dataFilter_field.setName('field');
+    dataFilter_field.setLowerBound(0);
+    dataFilter_field.setUpperBound(1);
+    dataFilterClass.getEStructuralFeatures().push(dataFilter_field);
+    WorkspacePackage.Literals.DATA_FILTER__FIELD = dataFilter_field;
+
+    // Create operator feature
+    const dataFilter_operator = new BasicEAttribute();
+    dataFilter_operator.setName('operator');
+    dataFilter_operator.setLowerBound(0);
+    dataFilter_operator.setUpperBound(1);
+    dataFilterClass.getEStructuralFeatures().push(dataFilter_operator);
+    WorkspacePackage.Literals.DATA_FILTER__OPERATOR = dataFilter_operator;
+
+    // Create value feature
+    const dataFilter_value = new BasicEAttribute();
+    dataFilter_value.setName('value');
+    dataFilter_value.setLowerBound(0);
+    dataFilter_value.setUpperBound(1);
+    dataFilterClass.getEStructuralFeatures().push(dataFilter_value);
+    WorkspacePackage.Literals.DATA_FILTER__VALUE = dataFilter_value;
+
     // Create Variable class
     const variableClass = new BasicEClass();
     variableClass.setName('Variable');
@@ -739,6 +842,13 @@ export class WorkspacePackage extends BasicEPackage {
     (WorkspacePackage.Literals.WIDGET__DATASOURCE as BasicEReference).setEType(WorkspacePackage.Literals.DATASOURCE);
     (WorkspacePackage.Literals.WIDGET__CONFIG as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EJavaObject')!);
     (WorkspacePackage.Literals.WIDGET__WRAPPER_CONFIG as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EJavaObject')!);
+    (WorkspacePackage.Literals.WIDGET__SELECTION as BasicEReference).setEType(WorkspacePackage.Literals.DATA_SELECTION);
+    (WorkspacePackage.Literals.DATA_SELECTION__PATH as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (WorkspacePackage.Literals.DATA_SELECTION__FILTERS as BasicEReference).setEType(WorkspacePackage.Literals.DATA_FILTER);
+    (WorkspacePackage.Literals.DATA_SELECTION__INDEX as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EInt')!);
+    (WorkspacePackage.Literals.DATA_SELECTION__FIELDS as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (WorkspacePackage.Literals.DATA_FILTER__FIELD as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (WorkspacePackage.Literals.DATA_FILTER__VALUE as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
     (WorkspacePackage.Literals.VARIABLE__UID as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
     (WorkspacePackage.Literals.VARIABLE__NAME as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
     (WorkspacePackage.Literals.VARIABLE__TYPE as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
