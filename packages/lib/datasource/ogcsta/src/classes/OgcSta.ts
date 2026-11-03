@@ -618,7 +618,18 @@ export class OgcStaStore extends BaseDatasource implements OgcStaStoreI {
         params.$filter = filter;
       }
 
-      if (historyConfig.orderBy) {
+      /*
+       * Only a string, because a board may hold something else.
+       *
+       * The settings offered this as a select whose options carried
+       * neither of the fields it reads values by, so what was stored was
+       * the option object rather than the order inside it (#1191). Such a
+       * board still exists; passing the object on would send
+       * "[object Object]" as $orderby and the endpoint would reject the
+       * whole request. Ignored instead - the server's own default order
+       * applies, which is what a board with no order set gets.
+       */
+      if (typeof historyConfig.orderBy === 'string' && historyConfig.orderBy) {
         params.$orderby = historyConfig.orderBy;
       }
 

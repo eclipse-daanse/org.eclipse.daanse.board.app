@@ -70,6 +70,27 @@ describe('DSelect', () => {
       expect(optionTexts(wrapper)).toEqual(['Newest first'])
     })
 
+    /*
+     * What the model is set to, which is what a board keeps. Checking the
+     * labels alone would pass just as well with the option object sitting
+     * in the model - which is the whole of #1191.
+     */
+    it('sets the model to the value inside the option, not to the option', async () => {
+      const wrapper = mount(DSelect, {
+        props: {
+          options: [{ text: 'Newest first', value: 'phenomenonTime desc' }],
+          labelKey: 'text',
+          valueKey: 'value',
+          modelValue: undefined,
+        },
+      })
+
+      const option = wrapper.findAll('option').find((each) => each.text() === 'Newest first')!
+      await wrapper.find('select').setValue(option.element.value)
+
+      expect(wrapper.emitted('update:modelValue')?.at(-1)).toEqual(['phenomenonTime desc'])
+    })
+
     it('shows plain values as themselves', () => {
       const wrapper = mount(DSelect, { props: { options: ['sql', 'mdx'] } })
 
@@ -96,9 +117,9 @@ describe('DSelect', () => {
       expect(warn).toHaveBeenCalledOnce()
       const said = warn.mock.calls[0][0] as string
       expect(said).toContain('OGCSTAStoreSettings')
+      /* The field it looked for ... */
       expect(said).toContain('uid')
-      expect(said).toContain('name')
-      /* And what the option does have, so the fix is obvious. */
+      /* ... and what the option has instead, so the fix is obvious. */
       expect(said).toContain('text, value')
     })
 
@@ -124,10 +145,21 @@ describe('DSelect', () => {
       expect(warn).not.toHaveBeenCalled()
     })
 
-    /* One key is enough to be meant: a label falls back to the value. */
-    it('stays quiet where only one of the two fields is there', () => {
-      inside('Settings', { options: [{ uid: 'a' }] })
+    /*
+     * A label that falls back to the value is visible at a glance; a value
+     * that is the whole option is not. So the value field is the one worth
+     * warning about - this test said the opposite until the review of
+     * #1191 caught it, and wrote the defect down as wanted.
+     */
+    it('says so when the value field is missing, label or no label', () => {
       inside('Settings', { options: [{ name: 'Auslastung' }] })
+
+      expect(warn).toHaveBeenCalledOnce()
+      expect(warn.mock.calls[0][0] as string).toContain('uid')
+    })
+
+    it('stays quiet when the value field is there but the label is not', () => {
+      inside('Settings', { options: [{ uid: 'a' }] })
 
       expect(warn).not.toHaveBeenCalled()
     })
