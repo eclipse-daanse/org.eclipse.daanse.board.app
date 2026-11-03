@@ -6,13 +6,16 @@
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "target": "es2016",
-    "module": "commonjs",
+    "module": "esnext",
     "declaration": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "strict": true,
     "skipLibCheck": true,
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "types": [
+      "vite/client"
+    ]
   },
   "exclude": [
     "node_modules",

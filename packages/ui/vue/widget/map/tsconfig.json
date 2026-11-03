@@ -1,6 +1,7 @@
 {
   "exclude": ["node_modules", "dist", "dist-bundle", "vite.bundle.config.ts"],
   "compilerOptions": {
+    "types": ["vite/client"],
     "sourceMap": true,
     "declarationMap": true,
     "inlineSources": true,
