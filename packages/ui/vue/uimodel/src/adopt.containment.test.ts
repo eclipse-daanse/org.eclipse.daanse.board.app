@@ -99,37 +99,59 @@ describe('adopting a stored settings object', () => {
   })
 
   /*
-   * Expected to fail: adopt() writes each stored value through the setter
-   * and never descends, so what arrives is the plain object that was in
-   * the file. Anything that then asks it for its class, notifies through
-   * it, or walks it as a model is talking to something that only looks
-   * the part - and only ever on a board that has been saved and reopened.
-   *
-   * #1098 (map services) and #1097 (timeline settings) both depend on
-   * this: building those through a factory is pointless while the way
-   * back flattens them again. - #1195
+   * What a plain object cannot do: say what it is. Anything that asks a
+   * contained object for its class, notifies through it, or walks it as
+   * a model needs this - and until #1195 it held only until the board
+   * was saved and reopened.
    */
-  it.fails('rebuilds a single contained object as a modelled one', () => {
+  it('rebuilds a single contained object as a modelled one', () => {
     expect(isModelled(restored().only)).toBe(true)
   })
 
   /*
-   * Expected to fail, and worse than the above: a contained list does not
-   * arrive at all.
-   *
-   * A many-valued feature has no setter - EMF gives it a getter that
-   * builds the list on demand - so the assignment adopt() makes has
-   * nothing to write to, and the catch around it takes the failure for a
-   * read-only feature. The fresh instance keeps its empty list, and the
-   * objects that were stored are gone: a map saved with three services
-   * reopens with none, and nothing anywhere says so. - #1195
+   * The one that lost data rather than shape. A many-valued feature has
+   * no setter - EMF gives it a getter that builds the list on demand -
+   * so the assignment had nothing to write to, and the catch around it
+   * took that for a read-only feature. A map saved with three services
+   * reopened with none, and nothing anywhere said so (#1195).
    */
-  it.fails('keeps the objects in a contained list, and rebuilds them', () => {
+  it('keeps the objects in a contained list, and rebuilds them', () => {
     const children = restored().children
 
     expect(children).toHaveLength(2)
     for (const child of children) {
       expect(isModelled(child)).toBe(true)
     }
+  })
+
+  /* Adopted in turn, so depth costs nothing. */
+  it('rebuilds what a contained object contains', () => {
+    const outer = factory.createFixtureSettings()
+    const inner = factory.createFixtureChild()
+    inner.label = 'inner'
+    outer.only = inner
+
+    const back = adopt(
+      factory.createFixtureSettings() as EObject,
+      JSON.parse(JSON.stringify(outer)),
+    ) as unknown as FixtureSettings
+
+    expect(isModelled(back.only)).toBe(true)
+    expect(back.only?.label).toBe('inner')
+  })
+
+  /*
+   * A board written by a later version may name a class this one does not
+   * have. Keeping the plain value leaves the widget something to read;
+   * dropping it would lose the setting outright.
+   */
+  it('keeps a stored value whose class it cannot reach', () => {
+    const settings = adopt(factory.createFixtureSettings() as EObject, {
+      title: 'A board',
+      somethingNewer: { kind: 'from a later version' },
+    }) as unknown as FixtureSettings & { somethingNewer?: { kind: string } }
+
+    expect(settings.title).toBe('A board')
+    expect(settings.somethingNewer?.kind).toBe('from a later version')
   })
 })
