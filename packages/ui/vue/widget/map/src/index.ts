@@ -51,7 +51,7 @@ export class MapWidgetProvider implements WidgetProvider {
   readonly type = WIDGET_TYPE
   readonly component = MapsWidget
   readonly settingsComponent = MapsWidgetSettings
-  readonly supportedDSTypes = ['ogcsta', 'OGC Composer', 'rest', 'valhalla']
+  readonly reads = ['object', 'OGCSTAData']
   readonly icon = Icon
   readonly name = 'Map'
   readonly nameKey = 'map:Widget.name'

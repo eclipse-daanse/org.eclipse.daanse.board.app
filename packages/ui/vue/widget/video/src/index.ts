@@ -49,7 +49,7 @@ const WIDGET_TYPE = 'VideoWidget'
 export class VideoWidgetProvider implements WidgetProvider {
   readonly type = WIDGET_TYPE
   readonly component = VideoWidget
-  readonly supportedDSTypes = []
+  readonly reads = ['object']
   readonly icon = Icon
   readonly name = 'Video'
   readonly nameKey = 'video:Widget.name'

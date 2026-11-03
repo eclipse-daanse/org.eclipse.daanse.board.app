@@ -26,16 +26,6 @@ const selectedDatasource = ref('')
 const selectedType = ref('')
 const dataSources = useEList(inject<Workspace>(WORKSPACE)!, (w) => w.datasources)
 
-const dataSourceTypeToDataTypes = {
-  CSV: ['DataTable'],
-  GraphQL: ['DataTable'],
-  REST: ['String', 'Object', 'DataTable'],
-  XMLA: ['DataTable', 'PivotTable'],
-  WS: ['String', 'Object', 'DataTable'],
-  Chart: ['ChartData'],
-  'SQL over XMLA': ['DataTable'],
-}
-
 const onDragStart = (event: DragEvent) => {
   const dragElement = document.createElement('div')
   document.body.appendChild(dragElement)
@@ -58,37 +48,16 @@ const availableWidgets = useRegistrations(registeredWidgets, () =>
     .map(([name, widget]) => ({ type: name, name: widget.name, nameKey: widget.nameKey, icon: widget.icon })),
 )
 
-const computedWidgets = computed(() => {
-  return availableWidgets.value
-  // if (!selectedType.value || selectedType.value === "None") {
-  //     return availableWidgets
-  //         .filter((widget) => {
-  //             const supportedTypes =
-  //                 registeredWidgets.getAllWidgets()[widget.type]?.supportedDSTypes || [];
-  //             return supportedTypes.includes("None");
-  //         })
-  //         .map((widget) => ({
-  //             ...widget,
-  //             ds: selectedDatasource.value,
-  //         }));
-  // }
-
-  // const allowedDataTypes =
-  //     dataSourceTypeToDataTypes[selectedType.value as keyof typeof dataSourceTypeToDataTypes] ||
-  //     [];
-
-  // const baseWidgets = Object.entries(registeredWidgets.getAllWidgets())
-  //     .filter(([_, widget]) => {
-  //         const supportedTypes = widget.supportedDSTypes || [];
-  //         return supportedTypes.some((type) => allowedDataTypes.includes(type));
-  //     })
-  //     .map(([name, widget]) => ({ type: name, icon: widget.icon }));
-
-  // return baseWidgets.map((widget) => ({
-  //     ...widget,
-  //     ds: selectedDatasource.value,
-  // }));
-})
+/*
+ * Every registered widget, unfiltered.
+ *
+ * What stood here was a commented-out filter matching widget.supportedDSTypes
+ * against a hand-written table of source types - both of which are gone
+ * (#1183): a widget now says which data shapes it reads, a source type says
+ * which it answers, and `fits` puts the two together. Wiring that into this
+ * palette is #1184.
+ */
+const computedWidgets = computed(() => availableWidgets.value)
 
 const filteredTypes = computed(() => {
   return [

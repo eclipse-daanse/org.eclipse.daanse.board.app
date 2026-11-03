@@ -68,7 +68,7 @@ export class SVGWidgetProvider implements WidgetProvider {
    * is a field or a list of them, so there is nothing left to write by
    * hand and no second place for the two to disagree.
    */
-  readonly supportedDSTypes = []
+  readonly reads = ['object']
   readonly icon = Icon
   readonly name = 'SVG'
   readonly nameKey = 'svgBase:Widget.name'

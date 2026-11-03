@@ -54,7 +54,7 @@ export class PivotTableWidgetProvider implements WidgetProvider {
   readonly type = WIDGET_TYPE
   readonly component = PivotTableWidget
   readonly settingsComponent = PivotTableWidgetSettings
-  readonly supportedDSTypes = []
+  readonly reads = ['PivotTable']
   readonly icon = Icon
   readonly name = 'PivotTable'
   readonly nameKey = 'tablePivot:Widget.name'

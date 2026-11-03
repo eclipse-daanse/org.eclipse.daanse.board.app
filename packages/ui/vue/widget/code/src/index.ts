@@ -34,6 +34,7 @@ import { CodeWidgetEvents } from './events/CodeWidgetEvents'
 import { CodeWidgetInterface } from './api/CodeWidgetInterface'
 import type { EventRegistry, EventActionsRegistry } from 'org.eclipse.daanse.board.app.lib.api.events'
 import { WIDGET_SERVICE_ID, type WidgetProvider } from 'org.eclipse.daanse.board.app.lib.api.widget'
+import { READS_NOTHING } from 'org.eclipse.daanse.board.app.lib.core'
 
 const WIDGET_TYPE = 'CodeWidget'
 
@@ -49,7 +50,7 @@ export class CodeWidgetProvider implements WidgetProvider {
   readonly type = WIDGET_TYPE
   readonly component = CodeWidget
   readonly settingsComponent = CodeWidgetSettings
-  readonly supportedDSTypes = []
+  readonly reads = READS_NOTHING
   readonly icon = Icon
   readonly name = 'Code'
   readonly nameKey = 'code:Widget.name'

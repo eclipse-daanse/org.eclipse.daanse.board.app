@@ -52,7 +52,7 @@ export class ChartWidgetProvider implements WidgetProvider {
   readonly type = WIDGET_TYPE
   readonly component = ChartWidget
   readonly settingsComponent = ChartWidgetSettings
-  readonly supportedDSTypes = []
+  readonly reads = ['ChartData']
   readonly icon = Icon
   readonly name = 'Chart'
   readonly nameKey = 'chart:Widget.name'

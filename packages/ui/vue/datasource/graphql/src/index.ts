@@ -37,6 +37,7 @@ export function activate({ services }: ActivationContext) {
   services
     .getRequired<DatasourceRepository>(DATASOURCE_REPOSITORY)
     .registerDatasourceType('graphql', {
+      answers: ['object'],
       icon: 'hub',
       connections: ['graphql'],
       Model: MODEL_ECORE,

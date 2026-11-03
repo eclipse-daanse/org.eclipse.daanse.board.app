@@ -50,7 +50,7 @@ export class RichTextWidgetProvider implements WidgetProvider {
   readonly type = WIDGET_TYPE
   readonly component = RichTextWidget
   readonly settingsComponent = RichTextWidgetSettings
-  readonly supportedDSTypes = []
+  readonly reads = ['object']
   readonly icon = Icon
   readonly name = 'RichText'
   readonly nameKey = 'textRich:Widget.name'

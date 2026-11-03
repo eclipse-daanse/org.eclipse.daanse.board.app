@@ -49,7 +49,7 @@ const WIDGET_TYPE = 'RoutingWidget'
 export class RoutingWidgetProvider implements WidgetProvider {
   readonly type = WIDGET_TYPE
   readonly component = RoutingWidget
-  readonly supportedDSTypes = ['valhalla']
+  readonly reads = ['object']
   readonly icon = Icon
   readonly name = 'Routing'
   readonly nameKey = 'routing:Widget.name'

@@ -34,7 +34,7 @@ export class FiltersWidgetProvider implements WidgetProvider {
   readonly type = WIDGET_TYPE
   readonly component = FiltersWidget
   readonly settingsComponent = FiltersWidgetSettings
-  readonly supportedDSTypes = ['xmla']
+  readonly reads = ['string']
   readonly icon = Icon
   readonly name = 'XMLA Filters'
   readonly nameKey = 'xmlaFilters:Widget.name'

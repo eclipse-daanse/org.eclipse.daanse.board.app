@@ -30,6 +30,7 @@ import FilterModal from './FilterModal.vue'
 import { WidgetRepository, identifier as widgetRepoIdentifier } from 'org.eclipse.daanse.board.app.lib.api.widget'
 import { useBoard, useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import { useRoute } from 'vue-router'
+import { fits } from 'org.eclipse.daanse.board.app.lib.core'
 
 const route = useRoute();
 const { t } = useTranslation('pluginsEndpointfinder')
@@ -170,8 +171,12 @@ watch(step, (val) => {
     // Beispiel: hole mögliche Widgets für store.type
 
     console.log(registeredWidgets.getAllWidgets())
+    /* What this source answers, against what each widget reads - rather
+      than the source's type against a list of type names, which named
+      three different kinds of thing and matched almost nothing (#1183). */
+    const answers = storeManager.getDatasourceIdentifiers(store.value?.type)?.answers
     const availableWidgets = Object.entries(registeredWidgets.getAllWidgets())
-      .filter(([_, widget])=>(widget.supportedDSTypes as string[]).includes(store.value?.type))
+      .filter(([_, widget]) => fits(widget.reads, answers))
       .filter(([_, widget]) => widget.icon)
       .map(([name, widget]) => ({ type: name, icon: widget.icon }))
       console.log(availableWidgets)

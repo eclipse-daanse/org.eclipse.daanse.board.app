@@ -75,7 +75,7 @@ export class ProgressWidgetProvider implements WidgetProvider {
     unmodelledSections: ['Farbstopps'],
   }
   readonly icon = Icon
-  readonly supportedDSTypes: string[] = []
+  readonly reads = ['object']
   readonly component = ProgressWidget
   readonly settingsComponent = ProgressWidgetSettings
 

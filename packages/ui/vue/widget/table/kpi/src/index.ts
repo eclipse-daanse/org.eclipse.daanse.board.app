@@ -58,7 +58,7 @@ export class KpiTableWidgetProvider implements WidgetProvider {
     ePackage: () => KpitablesettingsPackage.eINSTANCE,
     create: () => new KpiTableSettingsImpl(),
   }
-  readonly supportedDSTypes = ['csv', 'rest']
+  readonly reads = ['DataTable']
   readonly icon = Icon
   readonly name = 'KpiTable'
   readonly nameKey = 'tableKpi:Widget.name'

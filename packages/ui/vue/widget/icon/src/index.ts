@@ -27,6 +27,7 @@ import { IconSettingsPackage } from './gen/IconSettingsPackage'
 import iconSettingsFormXmi from '../model/ui.xmi?raw'
 /* The Ecore itself, for the sentences the generator drops. */
 import settingsEcore from '../model/model.ecore?raw'
+import { READS_NOTHING } from 'org.eclipse.daanse.board.app.lib.core'
 
 /*
  * Building the EPackage on load: until it exists the class literals are
@@ -53,7 +54,7 @@ export class IconWidgetProvider implements WidgetProvider {
   readonly type = WIDGET_TYPE
   readonly component = IconWidget
   readonly settingsComponent = IconWidgetSettings
-  readonly supportedDSTypes = []
+  readonly reads = READS_NOTHING
   readonly icon = Icon
   readonly name = 'Icon'
   readonly nameKey = 'icon:Widget.name'

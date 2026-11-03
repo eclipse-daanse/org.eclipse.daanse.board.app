@@ -45,7 +45,7 @@ export class WeatherWidgetProvider implements WidgetProvider {
   readonly type = WIDGET_TYPE
   readonly component = WeatherWidget
   readonly settingsComponent = WeatherWidgetSettings
-  readonly supportedDSTypes = ['OGCSTAData']
+  readonly reads = ['WeatherData']
   readonly icon = Icon
   readonly name = 'Weather'
   readonly nameKey = 'weather:Widget.name'

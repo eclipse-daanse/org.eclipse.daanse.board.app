@@ -31,6 +31,7 @@ export function activate({ services }: ActivationContext) {
   services
     .getRequired<DatasourceRepository>(DATASOURCE_REPOSITORY)
     .registerDatasourceType('valhalla', {
+      answers: ['geojson', 'object', 'string'],
       icon: 'route',
       connections: ['rest'],
       Store: ValhallaDatasourceIdentifier,
