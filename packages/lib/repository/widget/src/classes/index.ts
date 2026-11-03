@@ -19,18 +19,27 @@ import { component, injectAll } from '@eclipse-daanse/tsm'
 import {
   WIDGET_REPOSITORY,
   WIDGET_SERVICE_ID,
+  WIDGET_SETTINGS_TAB_SERVICE_ID,
+  WIDGET_SETTINGS_TABS,
   type WidgetConfig,
   type WidgetProvider,
   type WidgetRepository,
+  type WidgetSettingsTab,
+  type WidgetSettingsTabRegistry,
 } from 'org.eclipse.daanse.board.app.lib.api.widget'
 
 export {
   WIDGET_SERVICE_ID,
   WIDGET_REPOSITORY,
+  WIDGET_SETTINGS_TAB_SERVICE_ID,
+  WIDGET_SETTINGS_TABS,
   identifier,
+  settingsTabsIdentifier,
   type WidgetConfig,
   type WidgetProvider,
   type WidgetRepository,
+  type WidgetSettingsTab,
+  type WidgetSettingsTabRegistry,
 } from 'org.eclipse.daanse.board.app.lib.api.widget'
 
 /**
@@ -109,6 +118,61 @@ export class TrackedWidgetRepository implements WidgetRepository {
    * rendering stale code, and flips back when the bundle starts again.
    * Returns the unsubscribe function.
    */
+  onChange(listener: () => void): () => void {
+    this.changeListeners.add(listener)
+    return () => this.changeListeners.delete(listener)
+  }
+
+  private notifyChange(): void {
+    for (const listener of this.changeListeners) {
+      try {
+        listener()
+      } catch {
+        // One broken subscriber must not keep the others from hearing it
+      }
+    }
+  }
+}
+
+/**
+ * The settings tabs other bundles contribute, tracked the same way the
+ * widgets themselves are.
+ *
+ * Sorted on the way out rather than on the way in: references arrive in
+ * the registry's ranking order, which says which provider wins a contest,
+ * not where a tab belongs on screen. That is what `order` is for.
+ */
+@component({
+  service: [WIDGET_SETTINGS_TABS],
+})
+export class TrackedWidgetSettingsTabs implements WidgetSettingsTabRegistry {
+  private tracked: WidgetSettingsTab[] = []
+  private readonly changeListeners = new Set<() => void>()
+
+  @injectAll(WIDGET_SETTINGS_TAB_SERVICE_ID)
+  set tabs(tabs: WidgetSettingsTab[]) {
+    this.tracked = tabs
+    this.notifyChange()
+  }
+
+  get tabs(): WidgetSettingsTab[] {
+    return this.tracked
+  }
+
+  getTabs(widgetType: string): WidgetSettingsTab[] {
+    return this.tracked
+      .filter((tab) => {
+        /* A tab that does not say is a tab for every widget. One that
+          says and throws is a broken tab, not a broken overlay. */
+        try {
+          return tab.appliesTo ? tab.appliesTo(widgetType) : true
+        } catch {
+          return false
+        }
+      })
+      .sort((a, b) => (a.order ?? 0) - (b.order ?? 0))
+  }
+
   onChange(listener: () => void): () => void {
     this.changeListeners.add(listener)
     return () => this.changeListeners.delete(listener)

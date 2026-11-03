@@ -23,10 +23,16 @@
 
 export {
   TrackedWidgetRepository,
+  TrackedWidgetSettingsTabs,
   WIDGET_SERVICE_ID,
   WIDGET_REPOSITORY,
+  WIDGET_SETTINGS_TAB_SERVICE_ID,
+  WIDGET_SETTINGS_TABS,
   identifier,
+  settingsTabsIdentifier,
   type WidgetConfig,
   type WidgetProvider,
   type WidgetRepository,
+  type WidgetSettingsTab,
+  type WidgetSettingsTabRegistry,
 } from './classes'
