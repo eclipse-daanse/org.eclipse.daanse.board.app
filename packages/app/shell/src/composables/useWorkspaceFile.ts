@@ -179,6 +179,17 @@ export function parseWorkspace(content: unknown): Workspace | undefined {
   }
 }
 
+/**
+ * What came of writing the workspace back where it came from.
+ *
+ * Three different failures used to be one `false`, and the caller could
+ * only answer all of them the same way: open the storage dialog and ask
+ * for a place, for a board that has one (#1200). A place that is merely
+ * not connected can be asked for again; a board that was never stored
+ * cannot.
+ */
+export type SaveOutcome = 'saved' | 'no-origin' | 'place-unreachable' | 'entry-gone'
+
 export function useWorkspaceFile() {
   const workspace = inject<Workspace>(WORKSPACE)!
   const connections = inject<ConnectionRepository>(ConnectionRepoId)
@@ -332,13 +343,32 @@ export function useWorkspaceFile() {
    * storage view's business, and this says so by returning false rather
    * than guessing a place.
    */
-  async function saveInPlace(): Promise<boolean> {
+  async function saveInPlace(): Promise<SaveOutcome> {
     const where = origin.value
-    if (!where || !repoManager) return false
+    if (!where || !repoManager) return 'no-origin'
 
     const places: Repository[] = (await repoManager.getAvailableReposetories()) ?? []
     const place = places.find((each) => String(each.uri) === where.placeUri)
-    if (!place) return false
+    if (!place) return 'place-unreachable'
+
+    /*
+     * Asked before the entry is read, not after the write fails.
+     *
+     * A folder place answers from a handle whose permission may have
+     * lapsed since it was registered. Asking is a prompt, and a prompt
+     * needs the click that brought us here - so it happens here, at the
+     * front, rather than three awaits deeper where the activation may
+     * already have run out.
+     */
+    if (typeof (place as { auth?: unknown }).auth === 'function') {
+      try {
+        if ((await (place as { auth(): Promise<unknown> }).auth()) === false) {
+          return 'place-unreachable'
+        }
+      } catch {
+        return 'place-unreachable'
+      }
+    }
 
     /*
      * A URL, not the string it was kept as: a repository reads
@@ -347,11 +377,11 @@ export function useWorkspaceFile() {
      * it answers that it has never heard of it.
      */
     const entry = await place.getEntityByUri(new URL(where.entryUri))
-    if (!entry) return false
+    if (!entry) return 'entry-gone'
 
     await (place as WritableRepository).update({ ...entry, data: save() } as Entity)
     useUnsavedChanges()?.markSaved()
-    return true
+    return 'saved'
   }
 
   /**
