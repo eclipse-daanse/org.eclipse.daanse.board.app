@@ -144,6 +144,7 @@ const parsedUrl = (url: string): string => {
 watch(
   () => settings.value?.images?.length,
   (newLength, oldLength) => {
+    if (newLength === undefined || oldLength === undefined) return
     if (oldLength > newLength) {
       if (currentImage.value >= newLength) {
         currentImage.value = newLength - 1

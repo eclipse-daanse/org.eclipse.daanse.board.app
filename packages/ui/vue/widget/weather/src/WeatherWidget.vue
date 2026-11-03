@@ -14,7 +14,7 @@ Contributors:
 import { inject, computed, ref, watch, onMounted, onUnmounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { useDatasourceRepository, useEObject, useFormat, useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
-import type { EObject } from '@emfts/core'
+import type { WeatherSettings } from './gen/WeatherSettings'
 import type { WeatherWidgetSettings } from './types/WeatherWidgetSettings'
 import { useWeatherData } from './composables/useWeatherData'
 import ForecastChart from './components/ForecastChart.vue'
@@ -29,7 +29,7 @@ const format = useFormat()
 
 import { toRefs } from 'vue';
 const { id: widgetId } = toRefs(props);
-const config = defineModel<WeatherWidgetSettings>('configv', { required: false, default: () => ({}) })
+const config = defineModel<WeatherSettings>('configv', { required: false })
 
 /*
  * The settings, watched rather than read off the model prop.
@@ -41,7 +41,7 @@ const config = defineModel<WeatherWidgetSettings>('configv', { required: false, 
  * reached the weather only once the dialog was reopened (#1203). The reads go
  * through `settings`; the writes still go to `config`.
  */
-const settings = useEObject(() => config.value as unknown as EObject | undefined) as unknown as { value: WeatherWidgetSettings | undefined }
+const settings = useEObject<WeatherSettings>(() => config.value)
 
 import { identifiers } from 'org.eclipse.daanse.board.app.lib.core'
 import type { TinyEmitter } from 'tiny-emitter';
@@ -363,7 +363,9 @@ const getChartColor = (parameter: string): string => {
     cloudCover: '#95a5a6'
   }
 
-  return settings.value?.chartColors?.[parameter] || defaultColors[parameter] || '#3498db'
+  /* The colours are not in the model yet; the dialog writes them as a plain property. */
+  const colors = (settings.value as Pick<WeatherWidgetSettings, 'chartColors'> | undefined)?.chartColors
+  return colors?.[parameter] || defaultColors[parameter] || '#3498db'
 }
 
 // Get font color from CSS variable (set by wrapper) or fallback to default

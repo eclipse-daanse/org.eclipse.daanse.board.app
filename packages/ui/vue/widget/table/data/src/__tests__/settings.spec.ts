@@ -58,8 +58,9 @@ const Box = {
 }
 
 function show(widget: WidgetImpl | undefined, settings = new DataTableSettingsImpl()) {
+  /* The prop is a shape without the model package; Widget.config is unknown there. */
   return mount(DataTableWidgetSettings, {
-    props: { modelValue: settings, widget },
+    props: { modelValue: settings, widget: widget as never },
     global: { stubs: { DCheckbox: Box } },
   })
 }

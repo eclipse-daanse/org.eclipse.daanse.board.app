@@ -13,7 +13,7 @@ Contributors:
 
 <script lang="ts" setup>
 
-import { computed, onMounted, onUnmounted, ref } from "vue";
+import { computed, onMounted, onUnmounted, ref, type CSSProperties } from "vue";
 import { useRoute } from "vue-router";
 import type { VideoSettings } from './gen/VideoSettings'
 import { VideoSettingsImpl } from './gen/VideoSettingsImpl'
@@ -188,8 +188,8 @@ onUnmounted(() => {
 });
 
 /* Bound to the element below; it was computed and bound to nothing (#1205). */
-const videoFit = computed(() => {
-    return settings.value?.videoFitSettings?.fit || 'cover';
+const videoFit = computed<CSSProperties['objectFit']>(() => {
+    return (settings.value?.videoFitSettings?.fit || 'cover') as CSSProperties['objectFit'];
 });
 
 const videoUrlParced = computed(() => {
