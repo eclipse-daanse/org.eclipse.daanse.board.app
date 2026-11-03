@@ -46,6 +46,9 @@ const asked = ref(false)
 const failed = ref(false)
 const loading = ref(true)
 
+/* The whole answer, which is what "is there anything" is decided on. */
+const answered = shallowRef(null as any)
+
 const tempStore = shallowRef(null as any)
 const settingsRef = ref(props.dataSource)
 const { update } = useTemporaryStore(props.dataSource.type, settingsRef, tempStore)
@@ -62,20 +65,58 @@ watch(
   new answer, a store changing something inside itself is not. */
 let subscription: (() => void) | undefined
 
-/** One read, with whatever came of it written down. */
+/*
+ * Which read is the current one.
+ *
+ * A store replaced while a read is in flight leaves the old read still
+ * running, and it finishes later - writing its answer over the store
+ * that replaced it. A subscription makes that ordinary rather than rare:
+ * a poll and a rebuild overlap whenever the interval is short. Counted
+ * rather than cancelled, because a promise cannot be withdrawn.
+ */
+let reading = 0
+
+/**
+ * One read, with whatever came of it written down.
+ *
+ * Both halves are asked for: the map draws the narrowed answer, exactly
+ * as the map widget does - and whether there is anything at all is
+ * decided on the whole one, which is what the tree beside it decides on
+ * too (#1194). A selected path matching nothing is a path to fix, not an
+ * endpoint that answered emptily, and the two views now say the same
+ * thing about the same answer.
+ *
+ * It costs no second request: the connection answers a read already in
+ * flight with the one in flight.
+ */
 const read = async (store: any) => {
+  const mine = ++reading
   try {
-    const answer = await store.getData('object')
-    data.value = answer
-    failed.value = answer === null || answer === undefined
+    const [narrowed, whole] = await Promise.all([
+      store.getData('object'),
+      typeof store.getOriginalData === 'function'
+        ? store.getOriginalData()
+        : store.getData('object'),
+    ])
+    if (mine !== reading) return
+    data.value = narrowed
+    failed.value = whole === null || whole === undefined
+    answered.value = whole
   } catch (error) {
-    /* A refused read is a thing to be told, not only to be logged - and a
-      rejection inside a subscription has nobody to hand it to at all. */
+    if (mine !== reading) return
+    /*
+     * A read that throws rather than answering null. The stores answer
+     * null for an endpoint that refused - this is for the ones that
+     * cannot even ask, a missing connection repository among them, and
+     * for a rejection inside a subscription, which otherwise has nobody
+     * to hand it to at all.
+     */
     console.warn('the endpoint could not be read:', error)
     data.value = null
+    answered.value = null
     failed.value = true
   } finally {
-    asked.value = true
+    if (mine === reading) asked.value = true
   }
 }
 
@@ -86,6 +127,7 @@ watch(tempStore, async (store) => {
   asked.value = false
   failed.value = false
   data.value = null
+  answered.value = null
   if (!store) {
     loading.value = false
     return
@@ -105,7 +147,7 @@ watch(tempStore, async (store) => {
   }
 })
 
-const empty = computed(() => asked.value && !failed.value && isEmptyAnswer(data.value))
+const empty = computed(() => asked.value && !failed.value && isEmptyAnswer(answered.value))
 
 onBeforeUnmount(() => subscription?.())
 </script>

@@ -58,21 +58,29 @@ watch(props.dataSource, () => {
  * `deep` made this fire again whenever the store changed anything inside
  * itself while answering - so every read was two reads, 60ms apart,
  * against the same endpoint. What this is waiting for is a new store.
- */
-/*
- * Why there is nothing, where there is nothing (#1194).
  *
- * An answer that did not come back, one that came back empty, and one
- * that has not come back yet all drew the same blank pane - and a
- * rejected read drew it silently, with the reason in the console where
- * nobody looking at the screen will find it. The same four states the
+ * And why there is nothing, where there is nothing (#1194): an answer
+ * that did not come back, one that came back empty, and one that has not
+ * come back yet all drew the same blank pane. The same four states the
  * CSV preview tells apart.
  */
 const asked = ref(false);
 const failed = ref(false);
 const loading = ref(false);
 
+/*
+ * Which read is the current one.
+ *
+ * A store replaced while a read is in flight leaves the old read still
+ * running, and it finishes later - writing its answer, and its failed
+ * and asked, over the store that replaced it. Counted rather than
+ * cancelled, because a promise cannot be withdrawn: a read that comes
+ * back to find itself outdated says nothing.
+ */
+let reading = 0;
+
 watch(tempStore, async (store) => {
+  const mine = ++reading;
   asked.value = false;
   failed.value = false;
   data.value = null;
@@ -93,24 +101,36 @@ watch(tempStore, async (store) => {
       store.getData('object'),
       store.getOriginalData(),
     ]);
+    if (mine !== reading) return;
     data.value = narrowed;
     originalData.value = original;
     failed.value = original === null || original === undefined;
   } catch (error) {
-    /* A refused read is a thing to be told, not only to be logged. */
+    if (mine !== reading) return;
+    /*
+     * A read that throws rather than answering null. The stores answer
+     * null for an endpoint that refused - this is for the ones that
+     * cannot even ask, a missing connection repository among them.
+     */
     console.warn('the endpoint could not be read:', error);
     failed.value = true;
   } finally {
-    loading.value = false;
-    asked.value = true;
+    if (mine === reading) {
+      loading.value = false;
+      asked.value = true;
+    }
   }
 });
 
+/*
+ * Measured on the whole answer, which is what the other view measures
+ * too (#1194). A selected path that matches nothing is a path to fix,
+ * not an empty endpoint - and this pane shows the whole answer beside
+ * the narrowed one, so it has something to draw either way.
+ */
 const empty = computed(
   () => asked.value && !failed.value && isEmptyAnswer(originalData.value),
 );
-
-const showsTrees = computed(() => !loading.value && !failed.value && !empty.value);
 
 /*
  * How tall a tree may draw itself.
@@ -182,7 +202,7 @@ onBeforeUnmount(() => stops.forEach((stop) => stop()));
   <p v-else-if="empty" class="preview__note" role="status">{{ t('Preview.empty') }}</p>
 
   <div
-    v-else-if="tempStore && showsTrees"
+    v-else-if="tempStore"
     class="grid grid-cols-2 grid-rows-4 gap-4 overflow-hidden w-full h-full"
   >
     <!--
