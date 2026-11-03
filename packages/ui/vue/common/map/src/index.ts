@@ -22,6 +22,7 @@ import GeoFeatureMap from './GeoFeatureMap.vue'
 
 export { GeoFeatureMap }
 export { featuresIn, boundsOf, countByType, type Bounds, type Feature } from './features'
+export { FREE_BASE_MAP_URL, FREE_BASE_MAP_ATTRIBUTION } from './baseMap'
 
 /* Its texts - collected by lib.i18next, see src/i18n. */
 export { CommonMapTranslations } from './i18n'

@@ -97,7 +97,9 @@ const showMap = ref(true);
 // Map configuration
 const mapCenter = ref<[number, number]>([50.93115286, 11.60392726]);
 const mapZoom = ref(10);
-const baseMapUrl = 'https://a.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png';
+/* OpenStreetMap's own tiles: CARTO's answer "API KEY REQUIRED" (#1197). */
+const baseMapUrl = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
+const attribution = '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a> contributors';
 
 // Helper to extract coordinates from various location formats
 const extractCoordinates = (thing: any): [number, number] | null => {
@@ -566,6 +568,7 @@ watch([chartData, chartCanvas], async () => {
             >
               <l-tile-layer
                 :url="baseMapUrl"
+                :attribution="attribution"
                 :options="{ maxNativeZoom: 19, maxZoom: 21 }"
               />
               <!-- Highlight circle for selected thing -->

@@ -46,7 +46,8 @@ const formatFilter = ref<boolean>(false)
 const map = ref(null)
 
 const mapSettings = reactive({
-  baseMapUrl: 'https://a.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png',
+  /* OpenStreetMap's own tiles: CARTO's answer "API KEY REQUIRED" (#1197). */
+  baseMapUrl: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
   zoom: 14,
   attribution: '&copy; <a href="https://www.stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
   center: [50.93115286, 11.60392726],
