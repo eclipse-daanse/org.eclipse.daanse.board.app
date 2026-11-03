@@ -25,14 +25,58 @@ Contributors:
  * header - renders from model/ui.xmi beside this.
  */
 import { computed, ref, watch } from 'vue'
-import { useDatasourceRepository, useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+import type { EObject } from '@emfts/core'
+import { useDatasourceRepository, useEObject, useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import { DCheckbox } from 'org.eclipse.daanse.board.app.ui.vue.controls'
+
+/**
+ * The widget these settings belong to, as far as this section needs it.
+ *
+ * Named by shape rather than by the workspace model: all the section asks
+ * is which source the widget reads from, and the shape says that without
+ * a dependency on the model package.
+ */
+interface SourceHolder {
+  datasource?: { uid?: string }
+  config?: { datasourceId?: string }
+}
+
+const props = defineProps<{
+  /**
+   * The widget itself. Which source it reads from is a reference on the
+   * widget, not a value in its settings - see `datasourceId` below.
+   */
+  widget?: SourceHolder
+  /** Every source there is, offered by whoever shows the settings; not needed here. */
+  dataSources?: unknown
+}>()
 
 const widgetSettings = defineModel<any>({ required: true })
 
 const { t } = useTranslation('tableData')
 
-const datasourceId = computed<string>(() => widgetSettings.value?.datasourceId ?? '')
+/*
+ * Watched, not read off the prop: choosing a source in the "Data" tab sets
+ * the reference on the widget while this section is open, and the widget
+ * stays the same instance. The adapter sees the set; a plain read of the
+ * prop would not.
+ */
+const watchedWidget = useEObject(() => props.widget as EObject | undefined)
+
+/*
+ * Which source the widget reads from - the same way the wrapper finds it.
+ *
+ * The model holds it as a reference on the widget; the picker in the
+ * overlay sets only that. A board written before the reference existed
+ * carries the id in the configuration instead, so that is asked second.
+ * The settings object this section edits has no feature for it at all:
+ * reading the id off it saw nothing for a widget whose source is the
+ * reference, and the column list stayed empty (#1202).
+ */
+const datasourceId = computed<string>(() => {
+  const widget = watchedWidget.value as SourceHolder | undefined
+  return widget?.datasource?.uid ?? widget?.config?.datasourceId ?? widgetSettings.value?.datasourceId ?? ''
+})
 
 const data = ref<any>(null)
 useDatasourceRepository(datasourceId, 'DataTable', data)
