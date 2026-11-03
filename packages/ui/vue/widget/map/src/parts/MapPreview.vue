@@ -17,9 +17,10 @@ import { IMapProps } from '../api/MapPreview'
 import { FeatureCollection } from 'geojson'
 
 
-const baseMapUrl = 'https://a.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png'
+/* OpenStreetMap's own tiles: CARTO's answer "API KEY REQUIRED" (#1197). */
+const baseMapUrl = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png'
 const zoom = 5
-const attribution = '&copy; <a href="https://www.stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+const attribution = '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a> contributors'
 const center = [50.93115286, 11.60392726]
 const geojosonExample = geoJsonExample
 

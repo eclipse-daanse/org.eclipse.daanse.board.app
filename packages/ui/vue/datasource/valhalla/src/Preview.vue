@@ -361,7 +361,8 @@ const maneuvers = computed(() => {
         @click="onMapClick"
       >
         <l-tile-layer
-          url="https://a.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png"
+          url="https://tile.openstreetmap.org/{z}/{x}/{y}.png"
+          attribution="&copy; <a href=&quot;https://www.openstreetmap.org/copyright&quot; target=&quot;_blank&quot;>OpenStreetMap</a> contributors"
           :options="{ maxNativeZoom: 19, maxZoom: 21 }"
         />
 
