@@ -12,8 +12,9 @@
  **********************************************************************/
 
 import { ref } from 'vue'
-import { useWorkspaceFile } from './useWorkspaceFile'
+import { useWorkspaceFile, useWorkspaceOrigin } from './useWorkspaceFile'
 import { useStorageDialog } from './useStorageDialog'
+import { reconnect } from 'org.eclipse.daanse.board.app.lib.persistence.filesystem'
 
 /**
  * Keeping the board, from wherever one happens to be.
@@ -32,6 +33,7 @@ import { useStorageDialog } from './useStorageDialog'
  */
 export function useStoreBoard() {
   const { saveInPlace } = useWorkspaceFile()
+  const origin = useWorkspaceOrigin()
   const { show: showStorage } = useStorageDialog()
 
   const storing = ref(false)
@@ -44,13 +46,34 @@ export function useStoreBoard() {
     stored.value = false
     failed.value = ''
     try {
-      if (await saveInPlace()) {
+      const done = () => {
         stored.value = true
         /* Long enough to be read, short enough not to linger. */
         setTimeout(() => (stored.value = false), 2500)
-        return
       }
-      showStorage()
+
+      const outcome = await saveInPlace()
+      if (outcome === 'saved') return done()
+
+      /*
+       * A place that is merely not connected is asked for again.
+       *
+       * After a reload the folder handle is still in IndexedDB, and this
+       * click is the user gesture that may ask for it back. Nothing else
+       * is awaited in front of the request: the browser ends the
+       * transient activation after a few seconds (#1200).
+       */
+      const where = origin.value
+      if (outcome === 'place-unreachable' && where) {
+        const place = await reconnect(where.placeUri).catch(() => undefined)
+        if (place && (await saveInPlace()) === 'saved') return done()
+      }
+
+      /*
+       * Still here, so ask - but on the place the board came from, with
+       * its name, rather than on whatever stands first in the tree.
+       */
+      showStorage(where ? { placeUri: where.placeUri, name: where.name } : undefined)
     } catch (error: unknown) {
       failed.value = String((error as Error)?.message ?? error)
     } finally {
