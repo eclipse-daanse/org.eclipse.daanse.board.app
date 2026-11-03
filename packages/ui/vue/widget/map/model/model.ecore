@@ -177,9 +177,10 @@
                 <details key="documentation" value="The geographical coordinates for the center of the map (e.g., [longitude, latitude])."/>
             </eAnnotations>
         </eStructuralFeatures>
-        <eStructuralFeatures xsi:type="ecore:EAttribute" name="attribution" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="attribution" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+                             defaultValueLiteral="&amp;copy; &lt;a href='https://www.openstreetmap.org/copyright' target='_blank'&gt;OpenStreetMap&lt;/a&gt; contributors">
             <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-                <details key="documentation" value="Attribution text for the map data."/>
+                <details key="documentation" value="Attribution text for the map data. The default credits OpenStreetMap, whose tiles the default address serves, and whose terms ask for it."/>
             </eAnnotations>
         </eStructuralFeatures>
         <eStructuralFeatures xsi:type="ecore:EReference" name="layers" upperBound="-1"
