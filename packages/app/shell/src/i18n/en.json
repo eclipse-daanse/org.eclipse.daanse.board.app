@@ -120,7 +120,8 @@
       "placeNote": "Where this board is kept. Save writes there from then on.",
       "noPlace": "This browser offers no place that can be written to. The board is made all the same, but kept nowhere yet — saving it will ask where.",
       "connectFolder": "Connect a folder on this machine …",
-      "folderFailed": "The folder could not be connected: {{reason}}"
+      "folderFailed": "The folder could not be connected: {{reason}}",
+      "notStored": "The board was made, but not stored: {{reason}}. Save will ask where it belongs."
     }
   },
   "Storage": {

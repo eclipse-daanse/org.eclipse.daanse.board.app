@@ -31,14 +31,27 @@ import { reconnect } from 'org.eclipse.daanse.board.app.lib.persistence.filesyst
  * Call it from a setup; `saveInPlace` reaches its repositories through
  * inject.
  */
+/*
+ * Module scope, like the storage dialog it opens.
+ *
+ * One board is being kept, whoever pressed the button - and a failure
+ * has to reach the screen that shows it, which is not always the screen
+ * that caused it: making a board stores it straight away, and that write
+ * can fail while the person is already looking at the board (#1200).
+ */
+const storing = ref(false)
+const stored = ref(false)
+const failed = ref('')
+
+/** Says that keeping the board failed, from wherever it failed. */
+export function reportStoreFailure(message: string): void {
+  failed.value = message
+}
+
 export function useStoreBoard() {
   const { saveInPlace } = useWorkspaceFile()
   const origin = useWorkspaceOrigin()
   const { show: showStorage } = useStorageDialog()
-
-  const storing = ref(false)
-  const stored = ref(false)
-  const failed = ref('')
 
   async function store(): Promise<void> {
     if (storing.value) return
