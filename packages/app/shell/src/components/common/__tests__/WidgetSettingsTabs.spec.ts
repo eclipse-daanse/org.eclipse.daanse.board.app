@@ -62,9 +62,22 @@ function setUp(tabs: WidgetSettingsTab[], onType = 'datatable') {
   widget.config = {}
   widget.wrapperConfig = {}
 
+  /*
+   * A registry that can change, because bundles start and stop while the
+   * overlay is open - which is the whole reason it subscribes at all.
+   */
+  let held = tabs
+  const listeners = new Set<() => void>()
   const registry = {
-    getTabs: (type: string) => tabs.filter((tab) => (tab.appliesTo ? tab.appliesTo(type) : true)),
-    onChange: () => () => {},
+    getTabs: (type: string) => held.filter((tab) => (tab.appliesTo ? tab.appliesTo(type) : true)),
+    onChange: (listener: () => void) => {
+      listeners.add(listener)
+      return () => listeners.delete(listener)
+    },
+    contribute(now: WidgetSettingsTab[]) {
+      held = now
+      for (const listener of listeners) listener()
+    },
   }
 
   document.body.innerHTML = ''
@@ -89,7 +102,7 @@ function setUp(tabs: WidgetSettingsTab[], onType = 'datatable') {
       },
     },
   })
-  return { wrapper, widget }
+  return { wrapper, widget, registry, workspace }
 }
 
 /*
@@ -145,6 +158,63 @@ describe('a contributed settings tab', () => {
 
     expect(tabNames().length).toBeGreaterThan(0)
     expect(tabNames()).not.toContain('eventmanager:Tab.events')
+  })
+
+  /*
+   * Bundles start asynchronously, and the overlay may well be open when
+   * one does - the same reason the palette re-reads its widgets (#1076).
+   */
+  it('appears when its bundle starts while the overlay is open', async () => {
+    const { registry } = setUp([])
+    await flushPromises()
+    expect(tabNames()).not.toContain('eventmanager:Tab.events')
+
+    registry.contribute([{ id: 'events', label: 'eventmanager:Tab.events', component: Told }])
+    await flushPromises()
+
+    expect(tabNames()).toContain('eventmanager:Tab.events')
+  })
+
+  /* A pane showing nothing is worse than the tab the overlay started on. */
+  it('falls back to the first own tab when the open one goes away', async () => {
+    const { registry } = setUp([
+      { id: 'events', label: 'eventmanager:Tab.events', component: Told },
+    ])
+    await flushPromises()
+
+    tabStrip().find((each) => each.textContent?.includes('Tab.events'))!.click()
+    await flushPromises()
+    expect(shown('.told')).not.toBeNull()
+
+    registry.contribute([])
+    await flushPromises()
+
+    expect(shown('.told')).toBeNull()
+    const open = tabStrip().find((each) => each.getAttribute('aria-selected') === 'true')
+    /* The data tab carries a count beside its name. */
+    expect(open?.textContent).toContain('WidgetSettings.tabs.data')
+  })
+
+  /* The overlay stays put while the board moves under it. */
+  it('follows the overlay to another widget', async () => {
+    const { wrapper } = setUp([
+      { id: 'events', label: 'eventmanager:Tab.events', component: Told },
+    ])
+    await flushPromises()
+
+    tabStrip().find((each) => each.textContent?.includes('Tab.events'))!.click()
+    await flushPromises()
+    expect(shown('.told')?.textContent).toBe('datatable/w1')
+
+    const another = new WidgetImpl()
+    another.uid = 'w2'
+    another.type = 'markdown'
+    another.config = {}
+    another.wrapperConfig = {}
+    await wrapper.setProps({ modelValue: another })
+    await flushPromises()
+
+    expect(shown('.told')?.textContent).toBe('markdown/w2')
   })
 
   it('leaves the overlay alone when no bundle contributes one', async () => {
