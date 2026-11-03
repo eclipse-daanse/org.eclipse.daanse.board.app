@@ -23,8 +23,10 @@ import {
   type DatasourceRepository,
 } from 'org.eclipse.daanse.board.app.lib.api.datasource'
 import { fits } from 'org.eclipse.daanse.board.app.lib.core'
-import { DSelect } from 'org.eclipse.daanse.board.app.ui.vue.controls'
+import { DIcon, DSelect } from 'org.eclipse.daanse.board.app.ui.vue.controls'
 import { inject, ref, computed } from 'vue'
+import type { TinyEmitter } from 'tiny-emitter'
+import { identifiers } from 'org.eclipse.daanse.board.app.lib.core'
 import Draggable from 'vuedraggable'
 
 const dataSources = useEList(inject<Workspace>(WORKSPACE)!, (w) => w.datasources)
@@ -98,6 +100,24 @@ const answers = computed(() => {
  * reads off what was dropped on it - the grid editor has taken a
  * datasourceId from a dropped item since before anything put one there.
  */
+/*
+ * The second way onto a board.
+ *
+ * Dragging was the only one, which leaves out everyone working by
+ * keyboard - they cannot reach the row at all - and is awkward on a touch
+ * screen and in a narrow window, where the palette and the place the
+ * widget should go are not visible at once (#1165).
+ *
+ * Announced rather than handled here: the editor owns where a widget
+ * lands and how it snaps, and already has a function taking a position.
+ * Optional, so the palette still mounts where no bus is provided.
+ */
+const eventBus = inject<TinyEmitter | undefined>(identifiers.TINY_EMITTER, undefined)
+
+function place(entry: { type: string; datasourceId?: string }) {
+  eventBus?.emit('palette:place', { type: entry.type, datasourceId: entry.datasourceId })
+}
+
 const computedWidgets = computed(() => {
   const source = forSource.value || undefined
   const offered = source
@@ -123,6 +143,8 @@ const computedWidgets = computed(() => {
       {{ t('Palette.noneFit') }}
     </p>
 
+    <p class="add_widget_window__hint">{{ t('Palette.hint') }}</p>
+
     <div class="add_widget_window__scroll">
     <draggable
       class="widgets_grid"
@@ -131,14 +153,24 @@ const computedWidgets = computed(() => {
       itemKey="type"
     >
       <template #item="{ element }">
-        <div
+        <!--
+          A button, not a div: it is reachable by keyboard and answers
+          Enter and Space without a handler of its own, which is what
+          makes the palette usable without a pointer at all.
+        -->
+        <button
+          type="button"
           class="widgets_grid-item"
           draggable="true"
           @dragstart="(event) => onDragStart(event)"
+          @click="place(element)"
         >
+          <!-- The grip says the row can be dragged; the cursor only says
+            so once the pointer is already on it. -->
+          <DIcon name="drag_indicator" size="sm" class="widgets_grid-grip" aria-hidden="true" />
           <span class="widgets_grid-icon"><img :src="element.icon" alt="" /></span>
           <span class="widgets_grid-name">{{ element.nameKey ? t(element.nameKey, { defaultValue: element.name }) : element.name }}</span>
-        </div>
+        </button>
       </template>
     </draggable>
     </div>
@@ -164,14 +196,29 @@ const computedWidgets = computed(() => {
   flex-direction: column;
 }
 
+.add_widget_window__hint {
+  margin: 0;
+  padding: 0 12px 8px;
+  font-size: var(--text-xs);
+  line-height: 1.35;
+  color: var(--color-dim);
+}
+
+/* A button now, so the row is reachable by keyboard - which means undoing
+  what a button brings with it: its own background, border and font. */
 :deep() .widgets_grid-item {
   display: flex;
   flex-direction: row;
   align-items: center;
   gap: 9px;
+  width: calc(100% - 12px);
   padding: 6px 12px;
+  font-family: inherit;
   font-size: var(--text-base, 13px);
+  text-align: left;
   color: var(--color-fg);
+  background: transparent;
+  border: 0;
   cursor: grab;
   border-radius: var(--radius-sm, 5px);
   margin: 0 6px;
@@ -179,6 +226,25 @@ const computedWidgets = computed(() => {
 
 :deep() .widgets_grid-item:hover {
   background: var(--color-bg);
+}
+
+/* Visible where it is focused, because that is now a thing that happens. */
+:deep() .widgets_grid-item:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: -2px;
+}
+
+/* The grip is the quiet one: it says the row can be dragged without
+  competing with the widget's own icon beside it. */
+:deep() .widgets_grid-grip {
+  flex: none;
+  color: var(--color-dim);
+  opacity: 0.55;
+}
+
+:deep() .widgets_grid-item:hover .widgets_grid-grip,
+:deep() .widgets_grid-item:focus-visible .widgets_grid-grip {
+  opacity: 1;
 }
 
 :deep() .widgets_grid-icon {

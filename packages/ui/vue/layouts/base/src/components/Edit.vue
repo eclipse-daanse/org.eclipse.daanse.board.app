@@ -11,11 +11,13 @@ Contributors:
     Smart City Jena
 -->
 <script setup lang="ts">
-import { randomUUID } from 'org.eclipse.daanse.board.app.lib.core'
+import { identifiers, randomUUID } from 'org.eclipse.daanse.board.app.lib.core'
+import type { TinyEmitter } from 'tiny-emitter'
 import { ref, computed, inject, onMounted, onUnmounted, nextTick, watch } from 'vue'
 import Moveable from 'vue3-moveable'
 import Draggable from 'vuedraggable'
 import { useMoveableLayout, type ILayoutItem } from '../composables/useMovableLayout'
+import { restingPlace } from '../composables/restingPlace'
 
 import { DFloatingWindow } from 'org.eclipse.daanse.board.app.ui.vue.controls'
 import { WidgetWrapper,defaultConfig } from 'org.eclipse.daanse.board.app.ui.vue.widget.wrapper'
@@ -591,6 +593,32 @@ const addWidget = (type: string, dropX: number, dropY: number) => {
 
   addWidgetComposable(type, config, wrapperConfig, layoutConfig)
 }
+
+/*
+ * A widget the palette placed by being clicked rather than dragged - the
+ * only way in for anyone working by keyboard (#1165). A click carries no
+ * coordinates, so where it goes is worked out; see restingPlace.
+ *
+ * The palette docks at the left edge at 240 wide, and a widget hidden
+ * behind it is a widget that was never added as far as anyone can tell.
+ */
+const CLEAR_OF_PALETTE = 264
+
+const placeFromPalette = (payload: { type?: string } | undefined) => {
+  const type = payload?.type
+  if (!type) return
+
+  const { x, y } = restingPlace(
+    board.layout.value ?? [],
+    { width: ghostPlaceholder.value.width, height: ghostPlaceholder.value.height },
+    { clearOfPalette: CLEAR_OF_PALETTE, gap: GRID },
+  )
+  addWidget(type, x, y)
+}
+
+const eventBus = inject<TinyEmitter | undefined>(identifiers.TINY_EMITTER, undefined)
+onMounted(() => eventBus?.on('palette:place', placeFromPalette))
+onUnmounted(() => eventBus?.off('palette:place', placeFromPalette))
 
 const openWidgetSettings = (id: string) => {
   emit('openSettings', id)
