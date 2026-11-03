@@ -90,7 +90,7 @@ const {
   currentWeather,
   locationInfo,
   formatTimeRange
-} = useWeatherData(config.value, props.datasourceId)
+} = useWeatherData(() => settings.value, props.datasourceId)
 
 const hasTimeFilter = computed(() => {
   return settings.value?.useTimeRange && (settings.value?.startTime || settings.value?.endTime)
