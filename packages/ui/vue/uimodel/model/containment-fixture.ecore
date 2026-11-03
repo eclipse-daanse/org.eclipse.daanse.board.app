@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/*********************************************************************
+* Copyright (c) 2026 Contributors to the Eclipse Foundation.
+*
+* This program and the accompanying materials are made
+* available under the terms of the Eclipse Public License 2.0
+* which is available at https://www.eclipse.org/legal/epl-2.0/
+*
+* SPDX-License-Identifier: EPL-2.0
+**********************************************************************/
+
+A model for the tests of this package, and for nothing else.
+
+adopt() has to rebuild a stored object into a real one, and what it does
+with the objects *inside* that one is the question (#1195). Answering it
+needs a genuine EClass: a containment EReference that knows its target
+type, and a package with a factory that can make one. A hand-built
+EPackage in the test would be a copy of what the generator emits, and
+would drift away from it.
+
+So this is generated like any other model, and used only from
+src/__tests__. Nothing exports it: it is absent from index.ts and
+therefore from the bundle.
+
+Two features, because adopt() meets both shapes in the widgets it serves:
+a contained list (the map keeps its services that way) and a single
+contained object (the timeline keeps its relative-time settings that way).
+-->
+<ecore:EPackage xmi:version="2.0"
+                xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="containmentfixture"
+                nsURI="http://org.eclipse.daanse.board.app.ui.vue.uimodel.containmentfixture"
+                nsPrefix="containmentfixture">
+
+    <eClassifiers xsi:type="ecore:EClass" name="FixtureChild">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+            <details key="documentation" value="A contained object. Its one field is enough to tell a rebuilt instance from a plain one: a plain one carries the value under the name it was serialised with."/>
+        </eAnnotations>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="label"
+                             eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+
+    <eClassifiers xsi:type="ecore:EClass" name="FixtureSettings">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+            <details key="documentation" value="Settings that hold other modelled objects, in both the shapes adopt() meets: a list and a single one."/>
+        </eAnnotations>
+
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="title"
+                             eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="A plain value beside the contained ones, so a test can tell a failure of the containment branch from a failure of adopt() altogether."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+
+        <eStructuralFeatures xsi:type="ecore:EReference" name="children" upperBound="-1"
+                             eType="#//FixtureChild" containment="true">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="A contained list, as the map keeps its services."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+
+        <eStructuralFeatures xsi:type="ecore:EReference" name="only"
+                             eType="#//FixtureChild" containment="true">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="A single contained object, as the timeline keeps its relative-time settings."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+    </eClassifiers>
+</ecore:EPackage>
