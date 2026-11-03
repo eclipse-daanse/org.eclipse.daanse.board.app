@@ -55,8 +55,15 @@ export function activate({ services }: ActivationContext) {
     label: 'eventmanager:Tab.events',
     component: WidgetEventsTab,
     order: 50,
-    appliesTo: (widgetType: string) =>
-      events.getAllEvents().some((event) => event.type.startsWith(`${widgetType}:`)),
+    /*
+     * Asked of the registry rather than matched here: it keys its events
+     * by `${widgetType}:${type}` and already answers this question.
+     *
+     * Re-asked only when a registration changes or the open widget is of
+     * another kind - so a widget bundle that starts while the overlay is
+     * open shows its tab the next time the overlay is opened, not at once.
+     */
+    appliesTo: (widgetType: string) => events.getWidgetEvents(widgetType).length > 0,
   }
   services.register(WIDGET_SETTINGS_TAB_SERVICE_ID, tab)
 
