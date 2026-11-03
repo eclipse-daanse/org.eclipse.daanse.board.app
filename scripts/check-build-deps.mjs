@@ -85,6 +85,18 @@ const NOT_A_PACKAGE = new Set([
   written both ways, since 'path' and 'node:path' are the same module. */
 const BUILTIN = new Set(builtinModules)
 
+/*
+ * Programs whose package is not called what they are.
+ *
+ * `tsc` is the compiler the `typescript` package installs; asking whether
+ * a package declares "tsc" asks about a package that does not exist, and
+ * answers no for every package that declares typescript properly.
+ */
+const TOOL_PACKAGE = new Map([
+  ['tsc', 'typescript'],
+  ['tsserver', 'typescript'],
+])
+
 /** The package a bare import specifier belongs to, where it is one. */
 function packageOf(specifier) {
   if (specifier.startsWith('.') || specifier.startsWith('/')) return undefined
@@ -184,8 +196,15 @@ for (const manifest of manifests) {
 
   /* tool: what the build script runs */
   for (const tool of toolsIn(pkg.scripts?.build ?? '')) {
-    if (declared.has(tool)) continue
-    report('tool', tool, `build runs ${tool}, which the package does not declare`)
+    const provider = TOOL_PACKAGE.get(tool) ?? tool
+    if (declared.has(provider)) continue
+    report(
+      'tool',
+      provider,
+      provider === tool
+        ? `build runs ${tool}, which the package does not declare`
+        : `build runs ${tool}, and ${provider} that provides it is not declared`,
+    )
   }
 
   /* config: what the vite configs import */
