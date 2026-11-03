@@ -20,6 +20,7 @@
     "dev:app": "NODE_ENV=development npm run dev --workspace=packages/app/default",
     "generate_models": "cd tools/generator && node scan-and-generate.js",
     "check_models": "node scripts/check-model-conformance.mjs",
+    "check_build_deps": "node scripts/check-build-deps.mjs",
     "bundles": "node scripts/build-bundles.mjs",
     "bundles:watch": "node scripts/watch-bundles.mjs",
     "i18n:sync": "node scripts/i18n.mjs sync",
