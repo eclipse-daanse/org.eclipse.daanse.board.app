@@ -35,6 +35,21 @@ const vantaEffect: Ref<any> = ref(null)
 const props = defineProps<{ datasourceId: string; config: any; id?: string }>()
 const { config, id: widgetId } = toRefs(props)
 
+import { useEObject } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+import type { VantaSettings } from './gen/VantaSettings'
+
+/*
+ * The settings, watched rather than read off the prop.
+ *
+ * Widget.config is an attribute, not a containment, so the adapter the
+ * wrapper holds on the widget never hears a write inside this object - and
+ * the wrapper hands this component the same instance on every change, which
+ * is not a prop change Vue acts on. A setting changed in the open dialog
+ * reached the background only once the dialog was reopened (#1203). The reads go
+ * through `settings`; the writes still go to `config`.
+ */
+const settings = useEObject<VantaSettings>(() => config.value)
+
 import { identifiers } from 'org.eclipse.daanse.board.app.lib.core'
 import type { TinyEmitter } from 'tiny-emitter';
 const eventBus = inject<TinyEmitter>(identifiers.TINY_EMITTER)!;
@@ -65,7 +80,13 @@ const resizeObserver = new ResizeObserver(entries => {
   }
 });
 
-watch(() => config.value, async () => {
+/*
+ * Started afresh on every change to the settings. The watched ref is
+ * triggered by the adapter on the settings instance, which a deep watch
+ * on the plain prop never was - the object is not reactive, so there was
+ * nothing in it to track.
+ */
+watch(settings, async () => {
     if (vantaContainer.value) {
         if (vantaEffect.value) {
             vantaEffect.value.destroy()
@@ -74,7 +95,7 @@ watch(() => config.value, async () => {
         await nextTick()
         initVanta()
     }
-}, { deep: true })
+})
 
 onMounted(() => {
     resizeObserver.observe(widgetContainer.value!);
@@ -98,106 +119,106 @@ const initVanta = () => {
     } as any
 
     try {
-      switch (config.value.type) {
+      switch (settings.value?.type) {
         case 'CLOUDS':
-            if (config.value.backgroundColor) {
-                options.backgroundColor = config.value.backgroundColor
+            if (settings.value?.backgroundColor) {
+                options.backgroundColor = settings.value?.backgroundColor
             }
-            if (config.value.skyColor) {
-                options.skyColor = config.value.skyColor
+            if (settings.value?.skyColor) {
+                options.skyColor = settings.value?.skyColor
             }
-            if (config.value.cloudColor) {
-                options.cloudColor = config.value.cloudColor
+            if (settings.value?.cloudColor) {
+                options.cloudColor = settings.value?.cloudColor
             }
-            if (config.value.cloudShadowColor) {
-                options.cloudShadowColor = config.value.cloudShadowColor
+            if (settings.value?.cloudShadowColor) {
+                options.cloudShadowColor = settings.value?.cloudShadowColor
             }
-            if (config.value.sunColor) {
-                options.sunColor = config.value.sunColor
+            if (settings.value?.sunColor) {
+                options.sunColor = settings.value?.sunColor
             }
-            if (config.value.sunGlareColor) {
-                options.sunGlareColor = config.value.sunGlareColor
+            if (settings.value?.sunGlareColor) {
+                options.sunGlareColor = settings.value?.sunGlareColor
             }
-            if (config.value.sunlightColor) {
-                options.sunlightColor = config.value.sunlightColor
+            if (settings.value?.sunlightColor) {
+                options.sunlightColor = settings.value?.sunlightColor
             }
-            if (config.value.speed) {
-                options.speed = config.value.speed
+            if (settings.value?.speed) {
+                options.speed = settings.value?.speed
             }
 
             vantaEffect.value = CLOUDS(options)
             break
         case 'BIRDS':
             options.p5 = p5
-            if (config.value.quantity) {
-                options.quantity = config.value.quantity
+            if (settings.value?.quantity) {
+                options.quantity = settings.value?.quantity
             }
-            if (config.value.birdSize) {
-                options.birdSize = config.value.birdSize
+            if (settings.value?.birdSize) {
+                options.birdSize = settings.value?.birdSize
             }
-            if (config.value.wingSpan) {
-                options.wingSpan = config.value.wingSpan
+            if (settings.value?.wingSpan) {
+                options.wingSpan = settings.value?.wingSpan
             }
-            if (config.value.speedLimit) {
-                options.speedLimit = config.value.speedLimit
+            if (settings.value?.speedLimit) {
+                options.speedLimit = settings.value?.speedLimit
             }
-            if (config.value.separation) {
-                options.separation = config.value.separation
+            if (settings.value?.separation) {
+                options.separation = settings.value?.separation
             }
-            if (config.value.alignment) {
-                options.alignment = config.value.alignment
+            if (settings.value?.alignment) {
+                options.alignment = settings.value?.alignment
             }
             /* The form has offered this all along and nothing passed it on */
-            if (config.value.cohesion) {
-                options.cohesion = config.value.cohesion
+            if (settings.value?.cohesion) {
+                options.cohesion = settings.value?.cohesion
             }
-            if (config.value.color1) {
-                options.color1 = config.value.color1
+            if (settings.value?.color1) {
+                options.color1 = settings.value?.color1
             }
-            if (config.value.color2) {
-                options.color2 = config.value.color2
+            if (settings.value?.color2) {
+                options.color2 = settings.value?.color2
             }
-            if (config.value.backgroundColor) {
-                options.backgroundColor = config.value.backgroundColor
+            if (settings.value?.backgroundColor) {
+                options.backgroundColor = settings.value?.backgroundColor
             }
 
             vantaEffect.value = BIRDS(options)
             break
         case 'NET':
-            if (config.value.color) {
-                options.color = config.value.color
+            if (settings.value?.color) {
+                options.color = settings.value?.color
             }
-            if (config.value.backgroundColor) {
-                options.backgroundColor = config.value.backgroundColor
+            if (settings.value?.backgroundColor) {
+                options.backgroundColor = settings.value?.backgroundColor
             }
-            if (config.value.points) {
-                options.points = config.value.points
+            if (settings.value?.points) {
+                options.points = settings.value?.points
             }
-            if (config.value.maxDistance) {
-                options.maxDistance = config.value.maxDistance
+            if (settings.value?.maxDistance) {
+                options.maxDistance = settings.value?.maxDistance
             }
-            if (config.value.spacing) {
-                options.spacing = config.value.spacing
+            if (settings.value?.spacing) {
+                options.spacing = settings.value?.spacing
             }
 
             vantaEffect.value = NET(options)
             break
         case 'TRUNK':
             options.p5 = p5
-            if (config.value.color) {
-                options.color = config.value.color
+            if (settings.value?.color) {
+                options.color = settings.value?.color
             }
 
-            if (config.value.backgroundColor) {
-                options.backgroundColor = config.value.backgroundColor
+            if (settings.value?.backgroundColor) {
+                options.backgroundColor = settings.value?.backgroundColor
             }
 
-            if (config.value.chaos) {
-                options.chaos = config.value.chaos
+            if (settings.value?.chaos) {
+                options.chaos = settings.value?.chaos
             }
 
-            if (config.value.spacing) {
-                options.spacing = config.value.spacing
+            if (settings.value?.spacing) {
+                options.spacing = settings.value?.spacing
             }
 
             vantaEffect.value = TRUNK(options)
@@ -210,7 +231,7 @@ const initVanta = () => {
             break
       }
     } catch (e) {
-      console.warn('[VantaWidget] Failed to init effect:', config.value.type, e)
+      console.warn('[VantaWidget] Failed to init effect:', settings.value?.type, e)
       // Fallback to CLOUDS on error
       try {
         vantaEffect.value = CLOUDS({
