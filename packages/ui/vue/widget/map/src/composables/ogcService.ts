@@ -12,6 +12,16 @@
 import { type Ref, ref } from 'vue'
 import { v4 } from 'uuid'
 
+/*
+ * Named apart from the model's Service.
+ *
+ * This is the client that talks to a WMS or WFS endpoint. The package
+ * also has a Service generated from the model - a stored entry naming an
+ * address and a type - and the two are different things that shared a
+ * file name, which the conformance check could only report as a note
+ * (#1098).
+ */
+
 
 const useOGCService = () => {
 
