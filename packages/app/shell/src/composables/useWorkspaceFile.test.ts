@@ -190,17 +190,34 @@ describe('saveInPlace', () => {
   const PLACE = 'file:///states'
   const ENTRY = 'file:///states/sparky.json'
 
-  function setUp({ place = PLACE, entry = ENTRY, known = true } = {}) {
+  function setUp({ place = PLACE, entry = ENTRY, known = true, auth }: {
+    place?: string
+    entry?: string
+    known?: boolean
+    /* undefined: a place that cannot be asked, like a server. */
+    auth?: (() => Promise<unknown>) | undefined
+  } = {}) {
     const updated: Array<Record<string, unknown>> = []
     const asked: unknown[] = []
+    /* What happened in which order, for the permission test below. */
+    const order: string[] = []
     const repository = {
       uri: PLACE,
+      ...(auth
+        ? {
+            auth: async () => {
+              order.push('auth')
+              return auth()
+            },
+          }
+        : {}),
       /*
        * A repository reads uri.protocol and uri.hostname to decide
        * whether an entry is one of its own, so it is handed a URL. A
        * string stringifies the same and is answered "never heard of it".
        */
       getEntityByUri: async (uri: unknown) => {
+        order.push('read')
         asked.push(uri)
         if (!(uri instanceof URL)) return undefined
         return known && String(uri) === ENTRY ? { uri: new URL(ENTRY), name: 'Sparky', data: '{}' } : undefined
@@ -213,7 +230,7 @@ describe('saveInPlace', () => {
     const workspace = new WorkspaceImpl()
     useWorkspaceOrigin().value = { placeUri: place, entryUri: entry, name: 'Sparky' }
 
-    let kept: Promise<boolean> | undefined
+    let kept: Promise<string> | undefined
     const host = defineComponent({
       setup() {
         const { saveInPlace } = useWorkspaceFile()
@@ -229,13 +246,13 @@ describe('saveInPlace', () => {
         },
       },
     })
-    return { kept: kept!, updated, asked }
+    return { kept: kept!, updated, asked, order }
   }
 
   it('writes the workspace over the state it came from', async () => {
     const { kept, updated, asked } = setUp()
 
-    expect(await kept).toBe(true)
+    expect(await kept).toBe('saved')
     expect(asked[0]).toBeInstanceOf(URL)
     expect(updated).toHaveLength(1)
     /* The serialized workspace, not the string the entry held before. */
@@ -243,17 +260,74 @@ describe('saveInPlace', () => {
     expect(String(updated[0].uri)).toBe(ENTRY)
   })
 
-  it('writes nothing when the place it names is gone', async () => {
+  /*
+   * The three failures are three different things to do next (#1200), so
+   * they are three different answers.
+   */
+  it('says the place is not reachable when it is not registered', async () => {
     const { kept, updated } = setUp({ place: 'file:///elsewhere' })
 
-    expect(await kept).toBe(false)
+    expect(await kept).toBe('place-unreachable')
     expect(updated).toHaveLength(0)
   })
 
-  it('writes nothing when the state it names is gone', async () => {
+  it('says the entry is gone when the place no longer holds it', async () => {
     const { kept, updated } = setUp({ known: false })
 
-    expect(await kept).toBe(false)
+    expect(await kept).toBe('entry-gone')
+    expect(updated).toHaveLength(0)
+  })
+
+  it('says there is no origin when the board was never stored', async () => {
+    useWorkspaceOrigin().value = undefined
+    const workspace = new WorkspaceImpl()
+    let kept: Promise<string> | undefined
+    const host = defineComponent({
+      setup() {
+        kept = useWorkspaceFile().saveInPlace() as Promise<string>
+        return () => null
+      },
+    })
+    mount(host, {
+      global: {
+        provide: {
+          [WORKSPACE_ID]: workspace,
+          [RepoManagerId]: { getAvailableReposetories: async () => [] },
+        },
+      },
+    })
+
+    expect(await kept!).toBe('no-origin')
+  })
+
+  /*
+   * A folder place answers from a handle whose permission may have
+   * lapsed. Asking is a prompt, and the prompt needs the click that led
+   * here - so it happens before the entry is read, not three awaits
+   * deeper.
+   */
+  it('asks the place for permission before it reads the entry', async () => {
+    const { kept, order } = setUp({ auth: async () => true })
+    await kept
+
+    expect(order).toEqual(['auth', 'read'])
+  })
+
+  it('says the place is not reachable when the person declines', async () => {
+    const { kept, updated } = setUp({ auth: async () => false })
+
+    expect(await kept).toBe('place-unreachable')
+    expect(updated).toHaveLength(0)
+  })
+
+  it('says the same when asking throws', async () => {
+    const { kept, updated } = setUp({
+      auth: async () => {
+        throw new Error('no gesture')
+      },
+    })
+
+    expect(await kept).toBe('place-unreachable')
     expect(updated).toHaveLength(0)
   })
 })
