@@ -24,6 +24,7 @@
     "lodash": "^4.17.16"
   },
   "devDependencies": {
+    "@eclipse-daanse/tsm": "0.1.0-next.1",
     "@types/lodash": "^4.17.16",
     "org.eclipse.daanse.board.app.lib.connection.graphql": "^0.0.1-next.1",
     "org.eclipse.daanse.board.app.lib.factory.connection": "^0.0.1-next.1",
