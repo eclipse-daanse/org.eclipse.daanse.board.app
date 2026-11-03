@@ -38,6 +38,13 @@ instance it mounted with (#1093).
 `useEObject`'s watch flushes before render, not synchronously. Inside a
 component that is invisible; in a test, await a tick.
 
+A widget's settings are the same case. `Widget.config` is an attribute, so
+the adapter on the widget hears nothing written inside the settings object,
+and the wrapper hands the widget the same instance on every change — which
+Vue does not count as a prop change. The wrapper cannot fix that from the
+outside; the widget that reads a plain setting watches the instance itself,
+`useEObject(() => config.value)`, and reads through it (#1203).
+
 Do not wrap an EObject in `reactive()` and do not `cloneDeep` one: both copy
 `_eAdapters` and `_eContainer` and break identity silently.
 

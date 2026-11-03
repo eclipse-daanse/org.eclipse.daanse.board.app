@@ -24,7 +24,7 @@ Contributors:
  */
 import { computed, inject, onMounted, onUnmounted, ref, toRefs, watch } from 'vue'
 import { useRoute } from 'vue-router'
-import { useDatasourceRepository, VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+import { useDatasourceRepository, useEObject, VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import helpers from 'org.eclipse.daanse.board.app.lib.utils.helpers'
 import { identifiers } from 'org.eclipse.daanse.board.app.lib.core'
 import type { TinyEmitter } from 'tiny-emitter'
@@ -37,6 +37,19 @@ const props = defineProps<{ datasourceId: string; id?: string }>()
 const { datasourceId, id: widgetId } = toRefs(props)
 
 const config = defineModel<GaugeSettings>('configv', { required: true })
+
+/*
+ * The settings, watched rather than read off the model prop.
+ *
+ * Widget.config is an attribute, not a containment, so the adapter the
+ * wrapper holds on the widget never hears a write inside this object - and
+ * the wrapper hands this component the same instance on every change, which
+ * is not a prop change Vue acts on. A setting changed in the open dialog
+ * reached the gauge only once the dialog was reopened (#1203). Watching the
+ * instance itself is what makes a write inside it a change here; the reads
+ * go through `settings`, the writes on mount still go to `config`.
+ */
+const settings = useEObject<GaugeSettings>(() => config.value)
 
 const eventBus = inject<TinyEmitter>(identifiers.TINY_EMITTER)!
 const actionsRegistry = inject<EventActionsRegistry>(EVENT_ACTIONS_REGISTRY)!
@@ -120,7 +133,7 @@ onUnmounted(() => {
 
 /** What a wrapper holds, whatever shape it arrived in. */
 function held(key: keyof GaugeSettings): string {
-  const slot = (config.value as any)?.[key]
+  const slot = (settings.value as any)?.[key]
   const value = slot && typeof slot === 'object' && 'value' in slot ? slot.value : slot
   return value === undefined || value === null ? '' : String(value)
 }
@@ -175,7 +188,7 @@ interface Threshold {
  * would otherwise take the wrong colour.
  */
 const thresholds = computed<Threshold[]>(() => {
-  const list: any[] = (config.value as any)?.thresholds?.toArray?.() ?? (config.value as any)?.thresholds ?? []
+  const list: any[] = (settings.value as any)?.thresholds?.toArray?.() ?? (settings.value as any)?.thresholds ?? []
   return list
     .map((each) => {
       const at = parseFloat(each?.at && typeof each.at === 'object' ? each.at.value : each?.at)
@@ -209,7 +222,7 @@ const SHAPES: Record<string, { from: number; sweep: number }> = {
   half: { from: 180, sweep: 180 },
 }
 
-const shape = computed(() => SHAPES[(config.value as any)?.shape as string] ?? SHAPES.threeQuarter)
+const shape = computed(() => SHAPES[(settings.value as any)?.shape as string] ?? SHAPES.threeQuarter)
 
 /* Out of a 100 by 100 box, so the widget scales with its tile. */
 const thickness = computed(() => Math.max(2, Math.min(40, number('thickness', 14))))
@@ -257,7 +270,7 @@ const filled = computed(() => `${length.value * share.value} ${length.value}`)
  * for a gauge that stands among others.
  */
 const bands = computed(() => {
-  if (!(config.value as any)?.showBands || !thresholds.value.length) return []
+  if (!(settings.value as any)?.showBands || !thresholds.value.length) return []
 
   const span = max.value - min.value
   if (span <= 0) return []
@@ -283,7 +296,7 @@ const bands = computed(() => {
 
 const shown = computed(() => {
   if (measured.value === null) return '–'
-  const places = Math.max(0, Math.min(6, Number((config.value as any)?.decimals ?? 0)))
+  const places = Math.max(0, Math.min(6, Number((settings.value as any)?.decimals ?? 0)))
   return measured.value.toFixed(places)
 })
 
@@ -296,7 +309,7 @@ const textColor = computed(() => held('textColor') || 'currentColor')
  * A half gauge has nothing below its middle, so the number sits where the
  * arc actually is rather than in the centre of an empty box.
  */
-const textY = computed(() => ((config.value as any)?.shape === 'half' ? 44 : 50))
+const textY = computed(() => ((settings.value as any)?.shape === 'half' ? 44 : 50))
 
 function emitClick() {
   if (!widgetId?.value) return
@@ -362,7 +375,7 @@ function emitRightClick() {
         stroke-linecap="butt"
       />
 
-      <template v-if="(config as any)?.showValue !== false">
+      <template v-if="(settings as any)?.showValue !== false">
         <text
           class="gauge__number"
           x="50"
