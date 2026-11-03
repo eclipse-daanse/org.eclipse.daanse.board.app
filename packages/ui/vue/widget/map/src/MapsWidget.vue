@@ -93,6 +93,7 @@ import { MapClickPayloadImpl } from './gen/MapClickPayloadImpl'
 import { useRoute } from 'vue-router'
 import { dataTypeFor } from './dataTypes'
 import { presetFor } from './defaults'
+import { renewBaseMap } from './baseMap'
 import { followZoom } from './zoom'
 import { v4 as uuid } from 'uuid'
 
@@ -410,6 +411,17 @@ onMounted(async () => {
             ...plainSettings(config.value),
         })
     ensureCentre()
+
+    /*
+     * A board saved with the retired tiles draws its background again.
+     * Silent on purpose: this happens to every old board at once, and
+     * there is nothing for the person to decide - see ./baseMap.
+     */
+    const renewed = renewBaseMap(config.value as any)
+    if (renewed.baseMapUrl) {
+      Object.assign(config.value as any, renewed)
+      logMap('replaced the retired base map address on a stored board')
+    }
 
     /*
      * A map made from a source starts with something to draw it with.
