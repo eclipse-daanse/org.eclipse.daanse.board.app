@@ -92,6 +92,8 @@ import type { MapClickPayload } from './gen/MapClickPayload'
 import { MapClickPayloadImpl } from './gen/MapClickPayloadImpl'
 import { useRoute } from 'vue-router'
 import { dataTypeFor } from './dataTypes'
+import { presetFor } from './defaults'
+import { v4 as uuid } from 'uuid'
 
 const props = defineProps<{ datasourceId: string; id: string }>()
 const { datasourceId, id: widgetId } = toRefs(props)
@@ -407,6 +409,22 @@ onMounted(async () => {
             ...plainSettings(config.value),
         })
     ensureCentre()
+
+    /*
+     * A map made from a source starts with something to draw it with.
+     *
+     * It arrives with the source set and nothing else, and the GeoJSON
+     * layer draws once per style - so with no style there is no loop to
+     * run, no geometry on the map, and nothing saying why. Only ever
+     * where there is neither a layer nor a style, so a map somebody has
+     * set up is never touched (#1187).
+     */
+    const preset = presetFor(datasourceType.value, config.value as any, () => uuid())
+    if (preset) {
+      ;(config.value as any).layers = preset.layers
+      ;(config.value as any).styles = preset.styles
+      logMap('a source-made map starts with a GeoJSON layer and style')
+    }
 
     // Reconstruct services from URLs after deserialization
     if (config.value.services) {
