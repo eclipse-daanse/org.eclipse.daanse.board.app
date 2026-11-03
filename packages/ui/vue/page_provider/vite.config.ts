@@ -11,8 +11,6 @@ Contributors: Smart City Jena
 import { defineConfig } from 'vite';
 import { resolve } from 'path';
 import dts from "vite-plugin-dts";
-import vue from '@vitejs/plugin-vue'
-
 export default defineConfig({
   build: {
     minify: false,
@@ -38,8 +36,6 @@ export default defineConfig({
     dts({
       insertTypesEntry: true
     }),
-    //@ts-ignore
-    vue()
   ]
 })
 

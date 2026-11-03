@@ -25,5 +25,8 @@
     "@codemirror/autocomplete": "^6.20.3",
     "@codemirror/lsp-client": "^6.2.5",
     "@lezer/highlight": "^1.2.3"
+  },
+  "devDependencies": {
+    "vite": "^6.4.1"
   }
 }
