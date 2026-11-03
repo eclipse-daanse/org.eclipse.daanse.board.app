@@ -79,18 +79,24 @@ const emitRightClick = () => {
         payload: { widgetId: widgetId.value, timestamp: Date.now() }
     });
 };
-const weatherDataRef = ref<any>(null)
 const loading = ref(false)
 const error = ref<string | null>(null)
 const refreshTimer = ref<NodeJS.Timeout | null>(null)
 
-const { update, callEvent, getDataWithOptions } = useDatasourceRepository(computed(() => props.datasourceId), 'WeatherData', weatherDataRef)
-
+/*
+ * One path for the data. The composable owns the answer and everything
+ * computed from it; the datasource writes straight into that ref. This
+ * widget used to fill a ref of its own and compute the weather a second
+ * time beside the composable, which therefore filtered nothing (#1211).
+ */
 const {
+  weatherData,
   currentWeather,
   locationInfo,
   formatTimeRange
 } = useWeatherData(() => settings.value, props.datasourceId)
+
+const { update, callEvent, getDataWithOptions } = useDatasourceRepository(computed(() => props.datasourceId), 'WeatherData', weatherData)
 
 const hasTimeFilter = computed(() => {
   return settings.value?.useTimeRange && (settings.value?.startTime || settings.value?.endTime)
@@ -329,10 +335,10 @@ const getForecastData = (weatherData: any, parameter: string): { period: string,
 
 // Check if forecast data is available
 const hasForecastData = computed(() => {
-  if (!processedWeather.value) return false
+  if (!currentWeather.value) return false
   return availableForecastParameters.some(param => {
     const forecastKey = `${param}Forecast`
-    return processedWeather.value[forecastKey] && Object.keys(processedWeather.value[forecastKey]).length > 0
+    return currentWeather.value[forecastKey] && Object.keys(currentWeather.value[forecastKey]).length > 0
   })
 })
 
@@ -342,112 +348,6 @@ const enabledForecastParameters = computed(() => {
     return hasForecastData.value ? ['temperature', 'humidity', 'pressure', 'windSpeed'] : []
   }
   return settings.value?.selectedForecastParameters
-})
-
-// Process current weather from the fetched data
-const processedWeather = computed(() => {
-  if (!weatherDataRef.value) return null
-
-
-  // Check if this is WeatherData from Weather Composer (array format)
-  if (Array.isArray(weatherDataRef.value) && weatherDataRef.value.length > 0) {
-    let weatherStation = weatherDataRef.value[0]
-
-    // If thingId is specified, find the matching station
-    if (settings.value?.thingId) {
-      const specificStation = weatherDataRef.value.find((station: any) =>
-        station.thingId == settings.value?.thingId || String(station.thingId) == String(settings.value?.thingId)
-      )
-      if (specificStation) {
-        weatherStation = specificStation
-      }
-    }
-
-    return weatherStation // Return weather data directly
-  }
-
-  // Legacy OGC STA format handling
-  if (!weatherDataRef.value?.datastreams) return null
-
-  let datastreams = weatherDataRef.value.datastreams
-
-  // If thingId is specified, filter datastreams to only those from that Thing
-  if (settings.value?.thingId) {
-    datastreams = datastreams.filter((ds: any) => {
-      const thingMatch = ds.thing && ds.thing['@iot.id'] == settings.value?.thingId
-      return thingMatch
-    })
-  }
-
-  const weather: any = {}
-
-  datastreams.forEach((ds: any) => {
-    if (ds.observations && ds.observations.length > 0) {
-      const obs = ds.observations[0]
-      const name = ds.name?.toLowerCase()
-      const description = ds.description?.toLowerCase()
-
-      // Enhanced pattern matching for German weather data
-      if (name?.includes('temperature') || name?.includes('temp') ||
-          description?.includes('temperatur') || name?.includes('lufttemperatur')) {
-        weather.temperature = {
-          value: obs.result,
-          unit: ds.unitOfMeasurement?.symbol || '°C',
-          timestamp: obs.phenomenonTime
-        }
-      } else if (name?.includes('humidity') || name?.includes('feuchte') ||
-                  description?.includes('luftfeuchte')) {
-        weather.humidity = {
-          value: obs.result,
-          unit: ds.unitOfMeasurement?.symbol || '%',
-          timestamp: obs.phenomenonTime
-        }
-      } else if (name?.includes('pressure') || name?.includes('luftdruck') ||
-                  description?.includes('pressure')) {
-        weather.pressure = {
-          value: obs.result,
-          unit: ds.unitOfMeasurement?.symbol || 'hPa',
-          timestamp: obs.phenomenonTime
-        }
-      } else if ((name?.includes('wind') && name?.includes('speed')) ||
-                  name?.includes('windgeschwindigkeit')) {
-        weather.windSpeed = {
-          value: obs.result,
-          unit: ds.unitOfMeasurement?.symbol || 'm/s',
-          timestamp: obs.phenomenonTime
-        }
-      } else if ((name?.includes('wind') && name?.includes('direction')) ||
-                  name?.includes('windrichtung')) {
-        weather.windDirection = {
-          value: obs.result,
-          unit: ds.unitOfMeasurement?.symbol || '°',
-          timestamp: obs.phenomenonTime
-        }
-      } else if (name?.includes('precipitation') || name?.includes('niederschlag') ||
-                  name?.includes('rain') || name?.includes('regen')) {
-        weather.precipitation = {
-          value: obs.result,
-          unit: ds.unitOfMeasurement?.symbol || 'mm',
-          timestamp: obs.phenomenonTime
-        }
-      } else if (name?.includes('visibility') || name?.includes('sicht')) {
-        weather.visibility = {
-          value: obs.result,
-          unit: ds.unitOfMeasurement?.symbol || 'm',
-          timestamp: obs.phenomenonTime
-        }
-      } else if (name?.includes('cloud') || name?.includes('wolken') ||
-                  name?.includes('bedeckung')) {
-        weather.cloudCover = {
-          value: obs.result,
-          unit: ds.unitOfMeasurement?.symbol || '%',
-          timestamp: obs.phenomenonTime
-        }
-      }
-    }
-  })
-
-  return weather
 })
 
 // Get chart color from settings or fallback to default
@@ -470,31 +370,6 @@ const getChartColor = (parameter: string): string => {
 const getFontColor = computed(() => {
   return 'var(--title-color, #495057)'
 })
-
-const processedLocationInfo = computed(() => {
-  if (!weatherDataRef.value?.things || weatherDataRef.value.things.length === 0) return null
-
-  let thing = weatherDataRef.value.things[0]
-
-  // If thingId is specified, find the specific Thing
-  if (settings.value?.thingId) {
-    const specificThing = weatherDataRef.value.things.find((t: any) => t['@iot.id'] == settings.value?.thingId)
-    if (specificThing) {
-      thing = specificThing
-    }
-  }
-
-  const location = thing.Locations?.[0]
-
-  return {
-    name: thing.name || t('Widget.unknownLocation'),
-    description: thing.description,
-    coordinates: location?.location ? {
-      latitude: location.location.coordinates?.[1],
-      longitude: location.location.coordinates?.[0]
-    } : undefined
-  }
-})
 </script>
 
 <template>
@@ -508,10 +383,10 @@ const processedLocationInfo = computed(() => {
       <p>{{ error }}</p>
     </div>
 
-    <div v-else-if="processedWeather" class="weather-content">
-      <div class="weather-header" v-if="processedLocationInfo">
-        <h3>{{ processedLocationInfo.name }}</h3>
-        <p v-if="processedLocationInfo.description" class="location-desc">{{ processedLocationInfo.description }}</p>
+    <div v-else-if="currentWeather" class="weather-content">
+      <div class="weather-header" v-if="locationInfo">
+        <h3>{{ locationInfo.name }}</h3>
+        <p v-if="locationInfo.description" class="location-desc">{{ locationInfo.description }}</p>
         <div v-if="hasTimeFilter" class="time-range">
           <small>{{ formatTimeRange() }}</small>
         </div>
@@ -519,50 +394,50 @@ const processedLocationInfo = computed(() => {
 
       <div class="weather-main">
         <div class="weather-icon-section">
-          <span class="weather-icon">{{ getWeatherIcon(processedWeather) }}</span>
+          <span class="weather-icon">{{ getWeatherIcon(currentWeather) }}</span>
         </div>
 
-        <div v-if="processedWeather.temperature" class="temperature">
-          <span class="temp-value">{{ formatValue(processedWeather.temperature) }}</span>
-          <div v-if="processedWeather.temperature.timestamp" class="timestamp">
-            <small>{{ formatTimestamp(processedWeather.temperature.timestamp) }}</small>
+        <div v-if="currentWeather.temperature" class="temperature">
+          <span class="temp-value">{{ formatValue(currentWeather.temperature) }}</span>
+          <div v-if="currentWeather.temperature.timestamp" class="timestamp">
+            <small>{{ formatTimestamp(currentWeather.temperature.timestamp) }}</small>
           </div>
         </div>
 
         <div class="weather-details">
-          <div v-if="processedWeather.humidity" class="weather-item">
+          <div v-if="currentWeather.humidity" class="weather-item">
             <span class="label">{{ t('Widget.humidity') }}</span>
-            <span class="value">{{ formatValue(processedWeather.humidity) }}</span>
+            <span class="value">{{ formatValue(currentWeather.humidity) }}</span>
           </div>
 
-          <div v-if="processedWeather.pressure" class="weather-item">
+          <div v-if="currentWeather.pressure" class="weather-item">
             <span class="label">{{ t('Widget.pressure') }}</span>
-            <span class="value">{{ formatValue(processedWeather.pressure) }}</span>
+            <span class="value">{{ formatValue(currentWeather.pressure) }}</span>
           </div>
 
-          <div v-if="processedWeather.windSpeed" class="weather-item">
+          <div v-if="currentWeather.windSpeed" class="weather-item">
             <span class="label">{{ t('Widget.wind') }}</span>
             <span class="value">
-              {{ formatValue(processedWeather.windSpeed) }}
-              <span v-if="processedWeather.windDirection">
-                {{ getWindDirection(processedWeather.windDirection.value) }}
+              {{ formatValue(currentWeather.windSpeed) }}
+              <span v-if="currentWeather.windDirection">
+                {{ getWindDirection(currentWeather.windDirection.value) }}
               </span>
             </span>
           </div>
 
-          <div v-if="processedWeather.precipitation" class="weather-item">
+          <div v-if="currentWeather.precipitation" class="weather-item">
             <span class="label">{{ t('Widget.precipitation') }}</span>
-            <span class="value">{{ formatValue(processedWeather.precipitation) }}</span>
+            <span class="value">{{ formatValue(currentWeather.precipitation) }}</span>
           </div>
 
-          <div v-if="processedWeather.visibility" class="weather-item">
+          <div v-if="currentWeather.visibility" class="weather-item">
             <span class="label">{{ t('Widget.visibility') }}</span>
-            <span class="value">{{ formatValue(processedWeather.visibility) }}</span>
+            <span class="value">{{ formatValue(currentWeather.visibility) }}</span>
           </div>
 
-          <div v-if="processedWeather.cloudCover" class="weather-item">
+          <div v-if="currentWeather.cloudCover" class="weather-item">
             <span class="label">{{ t('Widget.cloudCover') }}</span>
-            <span class="value">{{ formatValue(processedWeather.cloudCover) }}</span>
+            <span class="value">{{ formatValue(currentWeather.cloudCover) }}</span>
           </div>
         </div>
       </div>
@@ -574,7 +449,7 @@ const processedLocationInfo = computed(() => {
           <ForecastChart
             v-for="parameter in enabledForecastParameters"
             :key="parameter"
-            :data="getForecastData(processedWeather, parameter)"
+            :data="getForecastData(currentWeather, parameter)"
             :parameter="parameter"
             :color="getChartColor(parameter)"
             :fontColor="getFontColor"

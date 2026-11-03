@@ -16,7 +16,12 @@ import type { WeatherWidgetSettings } from '../types/WeatherWidgetSettings'
 import { useFormat, useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 
 /**
- * The weather an answer holds, filtered by the settings' time range.
+ * The weather an answer holds, filtered by the settings' station and
+ * time range. The one path from the answer to the screen: the widget
+ * hands the datasource answer into `weatherData` and draws from what is
+ * computed here (#1211). Two shapes arrive - a weather composer answers
+ * one station object per thing, forecasts included, and an OGC STA
+ * source answers datastreams and things.
  *
  * The settings arrive as a ref or a getter, not as the instance: read once
  * at setup, the range was fixed for the life of the widget, and a start
@@ -36,6 +41,11 @@ export function useWeatherData(source: MaybeRefOrGetter<WeatherWidgetSettings | 
 
     let datastreams = weatherData.value.datastreams
     const settings = toValue(source)
+
+    // Only the datastreams of the station asked for, where one is named
+    if (settings?.thingId) {
+      datastreams = datastreams.filter((ds: any) => ds.thing && ds.thing['@iot.id'] == settings.thingId)
+    }
 
     // Filter by time range if specified
     if (settings?.useTimeRange && (settings.startTime || settings.endTime)) {
@@ -61,7 +71,22 @@ export function useWeatherData(source: MaybeRefOrGetter<WeatherWidgetSettings | 
     return datastreams
   })
 
+  /** The station asked for out of a composer answer, or the first one. */
+  const station = computed(() => {
+    const answer = weatherData.value
+    if (!Array.isArray(answer) || answer.length === 0) return null
+    const wanted = toValue(source)?.thingId
+    if (wanted) {
+      const named = answer.find((each: any) => each.thingId == wanted || String(each.thingId) == String(wanted))
+      if (named) return named
+    }
+    return answer[0]
+  })
+
   const currentWeather = computed(() => {
+    // A composer answer is the weather already, forecasts included
+    if (station.value) return station.value
+
     const datastreams = filteredDatastreams.value
     if (!datastreams || datastreams.length === 0) return null
 
@@ -139,7 +164,9 @@ export function useWeatherData(source: MaybeRefOrGetter<WeatherWidgetSettings | 
   const locationInfo = computed(() => {
     if (!weatherData.value?.things || weatherData.value.things.length === 0) return null
 
-    const thing = weatherData.value.things[0]
+    const wanted = toValue(source)?.thingId
+    const thing =
+      (wanted && weatherData.value.things.find((each: any) => each['@iot.id'] == wanted)) || weatherData.value.things[0]
     const location = thing.Locations?.[0]
 
     return {
