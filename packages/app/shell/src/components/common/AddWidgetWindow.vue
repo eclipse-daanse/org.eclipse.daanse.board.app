@@ -146,6 +146,16 @@ const computedWidgets = computed(() => {
     <p class="add_widget_window__hint">{{ t('Palette.hint') }}</p>
 
     <div class="add_widget_window__scroll">
+    <!--
+      Each row is a button, not a div: it is reachable by keyboard and
+      answers Enter and Space without a handler of its own, which is what
+      makes the palette usable without a pointer at all.
+
+      Said here rather than inside the item slot, because draggable wants
+      exactly one child there and a comment is a node like any other - one
+      in the slot made every row fail to render with "Item slot must have
+      only one child".
+    -->
     <draggable
       class="widgets_grid"
       :list="computedWidgets"
@@ -153,11 +163,6 @@ const computedWidgets = computed(() => {
       itemKey="type"
     >
       <template #item="{ element }">
-        <!--
-          A button, not a div: it is reachable by keyboard and answers
-          Enter and Space without a handler of its own, which is what
-          makes the palette usable without a pointer at all.
-        -->
         <button
           type="button"
           class="widgets_grid-item"
