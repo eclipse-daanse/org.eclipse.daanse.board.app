@@ -58,9 +58,21 @@ export const READS_NOTHING = 'none' as const
 /** What a widget reads: the shapes it can be given, or nothing at all. */
 export type Reads = typeof READS_NOTHING | DataShape[]
 
-/** Whether a source answering these shapes can feed a widget reading that. */
-export function fits(reads: Reads, answers: readonly DataShape[] | undefined): boolean {
-  if (reads === READS_NOTHING) return false
+/**
+ * Whether a source answering these shapes can feed a widget reading that.
+ *
+ * Both sides may be missing, and a missing side is not an error here. A
+ * widget whose bundle still carries the contract this replaced declares
+ * no `reads` at all, and a browser holding such a bundle in its cache is
+ * the ordinary case for a minute after a build. Asking `.some` of it threw
+ * where it was asked - inside a computed, which took the whole list of
+ * offers down with it and left a dialog that said nothing was available.
+ *
+ * Not offered, rather than fatal: one bundle out of step costs its own
+ * entry and nobody else's.
+ */
+export function fits(reads: Reads | undefined, answers: readonly DataShape[] | undefined): boolean {
+  if (!Array.isArray(reads) || !reads.length) return false
   if (!answers?.length) return false
   return reads.some((shape) => answers.includes(shape))
 }

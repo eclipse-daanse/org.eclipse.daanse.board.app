@@ -56,4 +56,18 @@ describe('fits', () => {
   test('a shape the application does not ship still matches itself', () => {
     expect(fits(['SeismicTrace'], ['SeismicTrace'])).toBe(true)
   })
+
+  /*
+   * A widget whose bundle has not been rebuilt declares no `reads` - which
+   * a browser serves from its cache for a while after every build. Asking
+   * `.some` of that threw inside the computed that builds the list of
+   * offers, and took every other widget down with it: the dialog came up
+   * saying nothing could show this source.
+   */
+  test('a widget that declares nothing is left out, not fatal', () => {
+    expect(() => fits(undefined, ['DataTable'])).not.toThrow()
+    expect(fits(undefined, ['DataTable'])).toBe(false)
+    expect(fits([] as never, ['DataTable'])).toBe(false)
+    expect(fits('supportedDSTypes' as never, ['DataTable'])).toBe(false)
+  })
 })
