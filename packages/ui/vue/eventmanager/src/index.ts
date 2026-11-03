@@ -12,10 +12,16 @@
  **********************************************************************/
 
 import EventManagerUI from './components/EventManagerUI.vue'
+import WidgetEventsTab from './components/WidgetEventsTab.vue'
 import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
 import { NAVIGATION_REGISTRY_ID, type NavigationRegistry } from 'org.eclipse.daanse.board.app.lib.api.navigation'
 import { NavigationItem } from 'org.eclipse.daanse.board.app.lib.api.navigation'
 import { ROUTE_REGISTRY_ID, type RouteRegistry } from 'org.eclipse.daanse.board.app.lib.api.route'
+import {
+  WIDGET_SETTINGS_TAB_SERVICE_ID,
+  type WidgetSettingsTab,
+} from 'org.eclipse.daanse.board.app.lib.api.widget'
+import { EVENT_REGISTRY_ID, type EventRegistry } from 'org.eclipse.daanse.board.app.lib.api.events'
 import { RouteDefinition } from 'org.eclipse.daanse.board.app.lib.api.route'
 
 const ROUTE_NAME = 'events'
@@ -35,6 +41,25 @@ export function activate({ services }: ActivationContext) {
   eventRoute.component = EventManagerUI
   routeRegistry.registerRoute(eventRoute)
 
+  /*
+   * And the same thing in a widget's settings, where the question is
+   * about one widget rather than all of them.
+   *
+   * Offered only where the widget raises events at all: on one that
+   * raises none the tab would open on an empty list and a dialog with
+   * nothing to choose from.
+   */
+  const events = services.getRequired<EventRegistry>(EVENT_REGISTRY_ID)
+  const tab: WidgetSettingsTab = {
+    id: 'events',
+    label: 'eventmanager:Tab.events',
+    component: WidgetEventsTab,
+    order: 50,
+    appliesTo: (widgetType: string) =>
+      events.getAllEvents().some((event) => event.type.startsWith(`${widgetType}:`)),
+  }
+  services.register(WIDGET_SETTINGS_TAB_SERVICE_ID, tab)
+
   const navRegistry = services.getRequired<NavigationRegistry>(NAVIGATION_REGISTRY_ID)
   const eventManagerNav = new NavigationItem()
   eventManagerNav.id = NAV_ID
@@ -49,13 +74,14 @@ export function activate({ services }: ActivationContext) {
 }
 
 export function deactivate({ services }: ActivationContext) {
+  services.unregister(WIDGET_SETTINGS_TAB_SERVICE_ID)
   services.getRequired<RouteRegistry>(ROUTE_REGISTRY_ID).unregisterRoute(ROUTE_NAME)
   services
     .getRequired<NavigationRegistry>(NAVIGATION_REGISTRY_ID)
     .unregisterNavigationItem(NAV_ID)
 }
 
-export { EventManagerUI }
+export { EventManagerUI, WidgetEventsTab }
 
 /* Its texts - collected by lib.i18next, see src/i18n. */
 export { EventmanagerTranslations } from './i18n'

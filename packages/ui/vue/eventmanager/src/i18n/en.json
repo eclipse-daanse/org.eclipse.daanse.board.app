@@ -51,5 +51,12 @@
     "at": "at {{target}}",
     "atAnyWidget": "at any widget of this kind",
     "atAllInstances": "at all instances"
+  },
+  "Tab": {
+    "events": "Events"
+  },
+  "Scoped": {
+    "lead": "What should happen when this widget reports something.",
+    "empty": "Nothing is set up for this widget yet."
   }
 }

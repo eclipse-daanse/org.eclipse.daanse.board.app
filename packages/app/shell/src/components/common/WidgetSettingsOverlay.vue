@@ -41,7 +41,12 @@ import {
 } from 'org.eclipse.daanse.board.app.lib.model.workspace'
 import { plainSettings, useEList, useRegistrations, useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import { type Widget as IWidget } from 'org.eclipse.daanse.board.app.lib.api.page'
-import { WidgetRepository, identifier } from 'org.eclipse.daanse.board.app.lib.api.widget'
+import {
+  WidgetRepository,
+  identifier,
+  settingsTabsIdentifier,
+  type WidgetSettingsTabRegistry,
+} from 'org.eclipse.daanse.board.app.lib.api.widget'
 
 const emit = defineEmits(['close'])
 const widget = defineModel<IWidget>()
@@ -64,8 +69,43 @@ const widgetName = computed(() => {
   return registered.nameKey ? t(registered.nameKey, { defaultValue: registered.name }) : registered.name
 })
 
-type TabId = 'data' | 'look' | 'rest' | 'frame' | 'variables'
+/*
+ * The overlay's own tabs, and the ones a bundle contributes.
+ *
+ * A contributed tab is addressed by its id behind a '+', which is a
+ * character an own tab never carries - so the two can never be mistaken
+ * for one another however a bundle names its tab.
+ */
+type OwnTabId = 'data' | 'look' | 'rest' | 'frame' | 'variables'
+type TabId = OwnTabId | `+${string}`
 const tab = ref<TabId>('look')
+
+/*
+ * What another bundle has to say about this widget.
+ *
+ * Optional on purpose: the overlay works without the registry, which is
+ * what a test mounting it alone gets, and what the application gets if
+ * the bundle providing it is not running.
+ */
+const settingsTabs = inject<WidgetSettingsTabRegistry | undefined>(settingsTabsIdentifier, undefined)
+
+const contributed = settingsTabs
+  ? useRegistrations(settingsTabs, () => widget.value?.type ?? '')
+  : undefined
+
+const extraTabs = computed(() => {
+  const type = widget.value?.type
+  if (!settingsTabs || !type) return []
+  /* Read through the registration ref so a bundle starting later is seen. */
+  void contributed?.value
+  return settingsTabs.getTabs(type)
+})
+
+/* A tab whose bundle went away must not leave the pane showing nothing. */
+watch(extraTabs, (tabs) => {
+  if (!tab.value.startsWith('+')) return
+  if (!tabs.some((each) => `+${each.id}` === tab.value)) tab.value = 'data'
+})
 
 /*
  * A widget may carry its settings form as a model, on its registration -
@@ -556,9 +596,33 @@ onBeforeUnmount(() => {
             >
               {{ t('WidgetSettings.tabs.variables') }} <span class="tab__n">{{ boundFields.length }}</span>
             </button>
+            <!-- What other bundles have to say about this widget. -->
+            <button
+              v-for="extra in extraTabs"
+              :key="extra.id"
+              type="button"
+              role="tab"
+              :aria-selected="tab === `+${extra.id}`"
+              :class="['tab', { on: tab === `+${extra.id}` }]"
+              @click="tab = `+${extra.id}`"
+            >
+              {{ t(extra.label) }}
+            </button>
           </nav>
 
           <div class="fields" v-if="widget">
+            <!-- A contributed tab renders its own component, told which
+              widget it is about and nothing more: a tab wants to know
+              which one, not to be handed the model to write into. -->
+            <template v-for="extra in extraTabs" :key="extra.id">
+              <component
+                v-if="tab === `+${extra.id}`"
+                :is="extra.component"
+                :widget-id="widget.uid"
+                :widget-type="widget.type"
+              />
+            </template>
+
             <template v-if="tab === 'data'">
               <DSelect
                 v-model="chosenDatasource"
