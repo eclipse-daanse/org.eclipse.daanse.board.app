@@ -51,6 +51,10 @@
     "@tailwindcss/vite": "^4.1.4",
     "@vitejs/plugin-vue": "^5.2.3",
     "org.eclipse.daanse.board.app.ui.vue.widget.table.data": "^0.0.1-next.1",
-    "vite": "^6.4.1"
+    "vite": "^6.4.1",
+    "vue": "^3.5.13"
+  },
+  "peerDependencies": {
+    "vue": "^3.5.13"
   }
 }
