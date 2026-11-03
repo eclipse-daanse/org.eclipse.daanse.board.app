@@ -21,7 +21,7 @@ import { inject,
   watch,
 } from 'vue'
 import { useRoute } from 'vue-router'
-import { useDatasourceRepository, useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+import { useDatasourceRepository, useEObject, useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import { identifiers } from 'org.eclipse.daanse.board.app.lib.core'
 import type { TinyEmitter } from 'tiny-emitter'
 import {
@@ -49,6 +49,18 @@ const props = defineProps<{
   id?: string
 }>()
 const { datasourceId, config, id: widgetId } = toRefs(props)
+
+/*
+ * The settings, watched rather than read off the prop.
+ *
+ * Widget.config is an attribute, not a containment, so the adapter the
+ * wrapper holds on the widget never hears a write inside this object - and
+ * the wrapper hands this component the same instance on every change, which
+ * is not a prop change Vue acts on. A setting changed in the open dialog
+ * reached the route only once the dialog was reopened (#1203). The reads go
+ * through `settings`; the writes still go to `config`.
+ */
+const settings = useEObject<RoutingWidgetSettings>(() => config.value)
 
 const eventBus =
   inject<TinyEmitter>(identifiers.TINY_EMITTER)!
@@ -91,6 +103,18 @@ function persistState() {
 
 watch(waypoints, persistState, { deep: true })
 watch(costing, persistState)
+
+/*
+ * The one setting the form offers. Choosing a new default in the open
+ * dialog is choosing the mode: the select follows it, and the widget then
+ * writes it back as the mode in use, as it does for a choice made here.
+ */
+watch(
+  () => settings.value?.defaultCosting,
+  (chosen) => {
+    if (chosen && chosen !== costing.value) costing.value = chosen as CostingModel
+  },
+)
 
 const data = ref(null as any)
 const { update } = useDatasourceRepository(
