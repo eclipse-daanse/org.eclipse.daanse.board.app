@@ -28,6 +28,7 @@ import { DButton, DIcon } from 'org.eclipse.daanse.board.app.ui.vue.controls'
 import BoardFloorplan from './BoardFloorplan.vue'
 import WorkspaceStorage from './WorkspaceStorage.vue'
 import NewBoardDialog from './NewBoardDialog.vue'
+import { reportStoreFailure } from '@/composables/useStoreBoard'
 import { useWorkspaceFile, useWorkspaceOrigin } from '@/composables/useWorkspaceFile'
 import { useLastOpenedState } from '@/composables/useLastOpenedState'
 import { summarizePage, type PageSummary } from '@/composables/pageSummary'
@@ -185,9 +186,16 @@ async function createBoard(name: string, place?: Repository) {
     try {
       await storeAs(place, name)
     } catch (error) {
-      /* The board exists either way; it is simply not kept yet, and
-        saving it will say where it wants to go. */
+      /*
+       * The board exists either way; it is simply not kept yet. Said on
+       * the screen as well as in the console: the person is about to be
+       * taken to a board they believe is stored, and only the console
+       * knew otherwise (#1200).
+       */
       console.warn('the new board could not be stored yet', error)
+      reportStoreFailure(
+        t('Boards.new.notStored', { reason: (error as Error)?.message ?? String(error) }),
+      )
     }
   }
 
