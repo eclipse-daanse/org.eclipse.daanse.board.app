@@ -12,7 +12,7 @@ Contributors:
 */
 
 import { ref, computed, toValue, type MaybeRefOrGetter } from 'vue'
-import type { WeatherWidgetSettings } from '../types/WeatherWidgetSettings'
+import type { WeatherSettings } from '../gen/WeatherSettings'
 import { useFormat, useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 
 /**
@@ -29,7 +29,7 @@ import { useFormat, useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.c
  * widget hands over the ref useEObject gives it, which is re-triggered by
  * the adapter on the settings instance, so the computeds here re-run.
  */
-export function useWeatherData(source: MaybeRefOrGetter<WeatherWidgetSettings | undefined>, datasourceId: string) {
+export function useWeatherData(source: MaybeRefOrGetter<WeatherSettings | undefined>, datasourceId: string) {
   const { t } = useTranslation('weather')
   const format = useFormat()
   const weatherData = ref<any>(null)

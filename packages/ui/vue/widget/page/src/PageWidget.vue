@@ -13,7 +13,7 @@ Contributors:
 
 <script setup lang="ts">
 
-import { computed, toRefs, onMounted, ref, watch, inject, provide } from "vue";
+import { computed, toRefs, onMounted, ref, watch, inject, provide, type ShallowRef } from "vue";
 import { PageI } from './interface/PageI'
 import { RouterView, useRouter, useRoute } from 'vue-router'
 import PageLayoutRenderer from './PageLayoutRenderer.vue'
@@ -33,7 +33,7 @@ const config = defineModel<PageI>('configv', { required: true});
  * reached the page only once the dialog was reopened (#1203). The reads go
  * through `settings`; the writes still go to `config`.
  */
-const settings = useEObject(() => config.value as unknown as EObject | undefined) as unknown as { value: PageI | undefined }
+const settings = useEObject(() => config.value as unknown as EObject | undefined) as unknown as ShallowRef<PageI | undefined>
 const defaultConfig: PageI = {
   /* A placeholder, replaced the moment a page is picked in the settings. */
   path: '',
