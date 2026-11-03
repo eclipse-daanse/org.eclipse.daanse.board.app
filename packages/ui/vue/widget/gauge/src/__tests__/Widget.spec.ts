@@ -342,4 +342,55 @@ describe('GaugeWidget', () => {
       expect(wrapper.find('.gauge__number').text()).toBe('42.12')
     })
   })
+
+  /*
+   * A shape that is not a full circle leaves part of the square empty, and
+   * a box drawn around the whole square scales that empty part up along
+   * with the arc - which is how a half gauge came to fill half its tile
+   * and sit in the middle of it.
+   */
+  describe('the box the drawing is given', () => {
+    const boxOf = (wrapper: any) =>
+      (wrapper.find('.gauge__face').attributes('viewBox') ?? '').split(' ').map(Number)
+
+    it('stops where a half gauge stops, instead of keeping the empty half', async () => {
+      const [, , width, height] = boxOf(await show(settingsWith({ shape: 'half' })))
+
+      expect(height).toBeLessThan(width)
+      expect(height).toBeLessThan(70)
+    })
+
+    it('leaves out the wedge a three-quarter gauge does not draw', async () => {
+      const three = boxOf(await show(settingsWith({ shape: 'threeQuarter' })))
+      const full = boxOf(await show(settingsWith({ shape: 'full' })))
+
+      expect(three[3]).toBeLessThan(full[3])
+      /* Only the height differs: both reach the sides of the circle. */
+      expect(three[2]).toBeCloseTo(full[2], 3)
+    })
+
+    it('gives a full circle the whole square', async () => {
+      const [, , width, height] = boxOf(await show(settingsWith({ shape: 'full' })))
+
+      expect(width).toBeCloseTo(height, 3)
+      expect(width).toBeGreaterThan(95)
+    })
+
+    /* Cropped to the arc alone, a half gauge would cut its caption off. */
+    it('keeps the caption inside the box', async () => {
+      const [, top, , height] = boxOf(
+        await show(settingsWith({ shape: 'half', label: new VariableWrapper('Auslastung') })),
+      )
+
+      expect(top + height).toBeGreaterThanOrEqual(44 + 16 + 4)
+    })
+
+    /* The stroke is drawn on the line, so half of it lies outside the arc. */
+    it('makes room for a thicker stroke', async () => {
+      const thin = boxOf(await show(settingsWith({ shape: 'half', thickness: new VariableWrapper('4') })))
+      const thick = boxOf(await show(settingsWith({ shape: 'half', thickness: new VariableWrapper('30') })))
+
+      expect(thick[3]).toBeGreaterThan(thin[3])
+    })
+  })
 })
