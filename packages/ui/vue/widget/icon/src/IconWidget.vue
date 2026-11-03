@@ -12,7 +12,7 @@ Contributors:
 -->
 <script lang="ts" setup>
 import { inject } from 'vue'
-import { plainSettings } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+import { plainSettings, useEObject } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import { computed, onMounted, toRefs } from "vue";
 import { useVariableRepository, VariableWrapper } from "org.eclipse.daanse.board.app.ui.vue.composables"
 import type { IconSettings } from './gen/IconSettings'
@@ -26,6 +26,18 @@ const { id: widgetId } = toRefs(props);
 const { wrapParameters } = useVariableRepository();
 
 const config = defineModel<IconSettings>('configv', { required: true });
+
+/*
+ * The settings, watched rather than read off the model prop.
+ *
+ * Widget.config is an attribute, not a containment, so the adapter the
+ * wrapper holds on the widget never hears a write inside this object - and
+ * the wrapper hands this component the same instance on every change, which
+ * is not a prop change Vue acts on. A setting changed in the open dialog
+ * reached the icon only once the dialog was reopened (#1203). The reads go
+ * through `settings`; the writes still go to `config`.
+ */
+const settings = useEObject<IconSettings>(() => config.value)
 
 const defaultConfig = new IconSettingsImpl();
 
@@ -69,7 +81,7 @@ const handleClick = () => {
     if (!widgetId.value) return;
 
     const payload = {
-        iconName: config.value?.currentIcon || '',
+        iconName: settings.value?.currentIcon || '',
         widgetId: widgetId.value,
         timestamp: Date.now()
     };
@@ -87,7 +99,7 @@ const handleRightClick = () => {
     if (!widgetId.value) return;
 
     const payload = {
-        iconName: config.value?.currentIcon || '',
+        iconName: settings.value?.currentIcon || '',
         widgetId: widgetId.value,
         timestamp: Date.now()
     };
@@ -104,18 +116,19 @@ const {
     iconColor,
     iconSize,
 } = wrapParameters({
-    iconColor: computed(() => (config.value.iconColor as any)?.value || 'var(--color-fg)'),
-    iconSize: computed(() => config.value.iconSize),
+    iconColor: computed(() => (settings.value?.iconColor as any)?.value || 'var(--color-fg)'),
+    iconSize: computed(() => settings.value?.iconSize),
 });
 
 const iconStyle = computed(() => {
-    if (!config.value) return;
+    const held = settings.value
+    if (!held) return;
     return `
         font-variation-settings:
-            'FILL' ${config.value.isIconFilled ? 1 : 0},
-            'wght' ${config.value.strokeWeight},
-            'GRAD' ${config.value.grade},
-            'opsz' ${config.value.opticSize};
+            'FILL' ${held.isIconFilled ? 1 : 0},
+            'wght' ${held.strokeWeight},
+            'GRAD' ${held.grade},
+            'opsz' ${held.opticSize};
         `;
 });
 </script>
@@ -126,7 +139,7 @@ const iconStyle = computed(() => {
         rel="stylesheet" />
     <div class="icon" @click="handleClick" @contextmenu.prevent="handleRightClick" style="cursor: pointer;">
         <span v-bind="$attrs" :style="iconStyle" class="material-symbols-outlined">
-            {{ config.currentIcon }}
+            {{ settings?.currentIcon }}
         </span>
     </div>
 </template>
