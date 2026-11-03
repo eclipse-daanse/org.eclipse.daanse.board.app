@@ -27,6 +27,7 @@ import { computed, nextTick, ref, shallowRef, watch } from 'vue'
 import { LGeoJson, LMap, LTileLayer } from '@vue-leaflet/vue-leaflet'
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
+import { FREE_BASE_MAP_ATTRIBUTION, FREE_BASE_MAP_URL } from './baseMap'
 import { useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import { boundsOf, countByType, featuresIn, type Feature } from './features'
 
@@ -42,8 +43,8 @@ const props = withDefaults(
   }>(),
   {
     loading: false,
-    baseMapUrl: 'https://a.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png',
-    attribution: '© OpenStreetMap, © CARTO',
+    baseMapUrl: FREE_BASE_MAP_URL,
+    attribution: FREE_BASE_MAP_ATTRIBUTION,
   },
 )
 
