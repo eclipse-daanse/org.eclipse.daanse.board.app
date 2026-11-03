@@ -99,8 +99,10 @@ watch(open, (isOpen) => {
   onPage.value = (boardPages.value[0] as any)?.id ?? ''
 })
 
+/* Keyed as the select is told below, not as DSelect assumes by default -
+  its defaults are uid and name, which a page has only half of. */
 const pageOptions = computed(() =>
-  boardPages.value.map((page: any) => ({ value: page.id, label: page.name ?? page.id })),
+  boardPages.value.map((page: any) => ({ id: page.id, name: page.name || page.id })),
 )
 
 function labelOf(widget: { name: string; nameKey?: string }) {
@@ -108,14 +110,25 @@ function labelOf(widget: { name: string; nameKey?: string }) {
 }
 
 /*
- * Placed below what is already there rather than at the origin, which is
- * where everything else lands and would sit on top of the last one.
+ * Clear of the palette, which the editor docks top left at 240 pixels
+ * wide. A widget placed at the origin lands underneath it and cannot be
+ * seen at all - and the palette is open whenever a board is being built,
+ * which is exactly when a widget arrives.
+ *
+ * It can be moved, so this is where it starts rather than where it is;
+ * what it buys is that the widget is visible when it appears.
  */
-function below() {
+const CLEAR_OF_PALETTE = 264
+
+/*
+ * And below what is already there, rather than on top of the last one -
+ * the layout is stored in pixels, which is what toPixels writes.
+ */
+function free() {
   const page = pages.getPage(onPage.value)
   const items = page?.layout.toArray() ?? []
   const bottom = Math.max(0, ...items.map((item: any) => (item.y ?? 0) + (item.height ?? 0)))
-  return { x: 0, y: bottom, width: 300, height: 150 }
+  return { x: CLEAR_OF_PALETTE, y: bottom, width: 300, height: 150 }
 }
 
 function create() {
@@ -133,7 +146,7 @@ function create() {
       /* Empty: the wrapper fills in what a setting does not say. */
       wrapperConfig: {},
     },
-    below(),
+    free(),
   )
 
   open.value = false
@@ -172,12 +185,15 @@ function create() {
         </li>
       </ul>
 
-      <!-- Asked only where there is a choice to make. -->
+      <!-- Always asked: where a widget goes is part of making it, and a
+        board of one page today has three tomorrow. -->
       <DSelect
-        v-if="offered.length && pageOptions.length > 1"
+        v-if="offered.length"
         v-model="onPage"
         :label="t('NewWidget.page')"
         :options="pageOptions"
+        value-key="id"
+        label-key="name"
         class="where"
       />
     </template>
