@@ -40,7 +40,7 @@ import GeoJsonLayer from './components/GeoJsonLayer.vue'
 import RestGeoJsonLayer from './components/RestGeoJsonLayer.vue'
 import OGCSTALayer from './components/OGCSTALayer.vue'
 import RouteLayer from './components/RouteLayer.vue'
-import { useOGCService } from './composables/Service'
+import { useOGCService } from './composables/ogcService'
 import { logMap, logDatasource, logObservations, logServices, logTasks } from './utils/logger'
 import type { MapWidgetInterface } from './gen/MapWidgetInterface'
 // The class to extend: the interface now carries the EObject members too

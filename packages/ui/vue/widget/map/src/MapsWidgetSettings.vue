@@ -12,7 +12,7 @@ Contributors: Smart City Jena
 import { computed, getCurrentInstance, inject, onMounted, ref, watch } from 'vue'
 
 import Draggable from 'vuedraggable-es'
-import { useOGCService } from './composables/Service'
+import { useOGCService } from './composables/ogcService'
 import type { IMapSettings, LayerI } from './Settings'
 import { WfsEndpoint, WmsEndpoint, type WmsLayerSummary } from '@camptocamp/ogc-client'
 import { v4 } from 'uuid'
