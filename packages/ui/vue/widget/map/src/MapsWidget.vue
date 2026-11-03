@@ -48,29 +48,6 @@ import { MapWidgetInterfaceImpl } from './gen/MapWidgetInterfaceImpl'
 import type { MapSettings } from './gen/MapSettings'
 import { MapSettingsImpl } from './gen/MapSettingsImpl'
 
-/**
- * What this widget expects of the client object a service carries.
- *
- * The model types `Service.service` as unknown on purpose: it is whichever
- * WMS or WFS client the service was built with, and the model has no
- * business knowing their shapes. This says what is actually reached for, so
- * the calls are checked against something rather than against nothing - and
- * so the next reader can see what a service has to provide.
- *
- * Everything is optional because the object arrives from storage as plain
- * JSON, without its methods, and is rebuilt from its URL - which is exactly
- * what the checks below are for.
- */
-interface MapServiceClient {
-  getLayers?: (...args: unknown[]) => unknown
-  getFeatureTypes?: (...args: unknown[]) => unknown
-  getOperationUrl?: (...args: unknown[]) => string
-  fetch?: (...args: unknown[]) => unknown
-  geoJson?: unknown
-  url?: string
-  serviceUrl?: string
-  _capabilitiesUrl?: string
-}
 
 /**
  * A modelled list as a plain array, for the template and for leaflet.
@@ -84,13 +61,11 @@ const asArray = (list: unknown): any[] => {
   return Array.isArray(any) ? any : []
 }
 
-/** The client of a service, as the shape this file works with. */
-const clientOf = (service: unknown): MapServiceClient | undefined =>
-  (service ?? undefined) as MapServiceClient | undefined
 import { EventActionsRegistry, EVENT_ACTIONS_REGISTRY } from 'org.eclipse.daanse.board.app.lib.api.events'
 import type { MapClickPayload } from './gen/MapClickPayload'
 import { MapClickPayloadImpl } from './gen/MapClickPayloadImpl'
 import { useRoute } from 'vue-router'
+import { clientOf } from './serviceClient'
 import { dataTypeFor } from './dataTypes'
 import { presetFor } from './defaults'
 import { renewBaseMap } from './baseMap'
