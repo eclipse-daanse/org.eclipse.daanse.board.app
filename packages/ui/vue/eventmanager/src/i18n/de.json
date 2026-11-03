@@ -27,6 +27,7 @@
     "otherEvents": "Sonstige",
     "allInstances": "alle Instanzen",
     "context": "Kontext",
+    "targetContext": "Zielkontext",
     "widgetPlaceholder": "Kennung, leer für jedes",
     "event": "Ereignis",
     "property": "Eigenschaft",
