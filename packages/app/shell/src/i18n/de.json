@@ -472,7 +472,8 @@
       "title": "Änderungen nicht gespeichert",
       "text": "{{name}} hat Änderungen, die noch nicht gespeichert sind. Vor dem Öffnen von etwas anderem behalten?",
       "stay": "Bleiben"
-    }
+    },
+    "addWidget": "Widget daraus anlegen"
   },
   "Nav": {
     "variables": "Variablen",
@@ -495,5 +496,13 @@
     "rename": "Namen ändern",
     "keepIn": "In „{{name}}“ speichern",
     "keepSomewhere": "Noch nirgends gespeichert — Speicherort wählen"
+  },
+  "NewWidget": {
+    "title": "Widget auf „{{source}}“",
+    "lead": "Was soll diese Daten zeigen?",
+    "none": "Kein Widget kann zeigen, was diese Quelle liefert.",
+    "unknown": "Diese Quellenart sagt noch nicht, was sie liefert — darum ist hier nichts zu wählen.",
+    "page": "Auf welche Seite",
+    "noPages": "Dieses Board hat noch keine Seite, auf die ein Widget könnte."
   }
 }

@@ -472,7 +472,8 @@
       "title": "Changes not saved",
       "text": "{{name}} has changes that are not saved yet. Keep them before opening something else?",
       "stay": "Stay"
-    }
+    },
+    "addWidget": "Add a widget on this"
   },
   "Nav": {
     "variables": "Variables",
@@ -495,5 +496,13 @@
     "rename": "Change the name",
     "keepIn": "Save into \"{{name}}\"",
     "keepSomewhere": "Not stored anywhere yet — pick a place"
+  },
+  "NewWidget": {
+    "title": "A widget on \"{{source}}\"",
+    "lead": "What should show this data?",
+    "none": "No widget can show what this source answers.",
+    "unknown": "This kind of source has not said what it answers, so there is nothing to choose from yet.",
+    "page": "Which page",
+    "noPages": "This board has no page for a widget to go on yet."
   }
 }
