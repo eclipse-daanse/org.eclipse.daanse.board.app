@@ -32,6 +32,10 @@ const PANE = 900
 
 const answer = { entries: [{ id: 1 }, { id: 2 }] }
 
+/* What the endpoint does, per test: answer this, or refuse. */
+let whole: unknown = answer
+let refuses = false
+
 class StubObserver {
   observe() {}
   unobserve() {}
@@ -39,8 +43,14 @@ class StubObserver {
 }
 
 const store = {
-  getData: vi.fn(async () => answer.entries),
-  getOriginalData: vi.fn(async () => answer),
+  getData: vi.fn(async () => {
+    if (refuses) throw new Error('404')
+    return (whole as any)?.entries ?? null
+  }),
+  getOriginalData: vi.fn(async () => {
+    if (refuses) throw new Error('404')
+    return whole
+  }),
   destroy: vi.fn(),
 }
 
@@ -50,6 +60,8 @@ const repository = {
 }
 
 beforeEach(() => {
+  whole = answer
+  refuses = false
   vi.stubGlobal('ResizeObserver', StubObserver)
   Object.defineProperty(HTMLElement.prototype, 'clientHeight', {
     configurable: true,
@@ -95,5 +107,50 @@ describe('how tall the trees are drawn', () => {
   it('has no pane to measure before the store is built', () => {
     const preview = previewOf()
     expect(preview.findAll('.tree')).toHaveLength(0)
+  })
+})
+
+/*
+ * Why there is nothing, where there is nothing (#1194).
+ *
+ * An answer that did not come back, one that came back empty and one
+ * that has not come back yet drew the same blank pane - and a rejected
+ * read drew it with the reason in the console, where nobody looking at
+ * the screen will find it.
+ */
+describe('when there is nothing to show', () => {
+  it('says the endpoint gave nothing, rather than drawing empty panes', async () => {
+    whole = null
+    const preview = previewOf()
+    await flushPromises()
+
+    expect(preview.find('[role="alert"]').text()).toBe('Preview.failed')
+    expect(preview.findAll('.tree')).toHaveLength(0)
+  })
+
+  it('says the same where the read was refused outright', async () => {
+    refuses = true
+    const preview = previewOf()
+    await flushPromises()
+
+    expect(preview.find('[role="alert"]').text()).toBe('Preview.failed')
+    expect(preview.findAll('.tree')).toHaveLength(0)
+  })
+
+  it('says an answer came back empty, which is not the same thing', async () => {
+    whole = {}
+    const preview = previewOf()
+    await flushPromises()
+
+    expect(preview.find('[role="status"]').text()).toBe('Preview.empty')
+    expect(preview.findAll('.tree')).toHaveLength(0)
+  })
+
+  it('draws the trees where there is an answer', async () => {
+    const preview = previewOf()
+    await flushPromises()
+
+    expect(preview.find('[role="alert"]').exists()).toBe(false)
+    expect(preview.findAll('.tree')).toHaveLength(2)
   })
 })
