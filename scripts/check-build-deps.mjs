@@ -62,6 +62,10 @@ const filters = args.filter((a) => !a.startsWith('--'))
  * closing them: a finding in it is reported and does not fail the run, a
  * finding not in it does. An entry whose finding has gone is reported as
  * stale, so the list cannot rot quietly.
+ *
+ * It is gone now: #1192 closed all 865, and a list of nothing is worth
+ * less than its own filename. Writing it again is one command, should a
+ * batch of findings ever need working through rather than fixing.
  */
 const KNOWN_FILE = join(ROOT, 'scripts/check-build-deps.known.json')
 const known = existsSync(KNOWN_FILE)
