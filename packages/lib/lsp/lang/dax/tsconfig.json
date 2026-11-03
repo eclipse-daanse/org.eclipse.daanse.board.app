@@ -9,9 +9,7 @@
       "DOM.Iterable",
       "WebWorker"
     ],
-    "types": [
-      "vite/client"
-    ],
+    "types": ["vite/client", "node"],
     "declaration": true,
     "declarationMap": true,
     "sourceMap": true,

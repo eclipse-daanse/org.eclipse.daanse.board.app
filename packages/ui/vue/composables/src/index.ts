@@ -23,6 +23,9 @@ import { useEObject, useEList, useFeature } from './useEmf'
 export { useRegistrations, type ObservableRegistry } from './useRegistrations'
 /* What is on one board - its widgets and where they sit. */
 import { useBoard } from './useBoard'
+/* The shape useBoard answers with. Exported so a consumer can name it:
+  an inferred type over it points at this file's path and is not portable. */
+export type { Board } from './useBoard'
 // VariableWrapper is Vue-free and therefore lives in lib.variables. The
 // re-export keeps the existing import paths working; new code should import
 // it from org.eclipse.daanse.board.app.lib.variables directly.

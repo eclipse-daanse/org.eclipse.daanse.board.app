@@ -23,6 +23,7 @@ import { randomUUID } from 'org.eclipse.daanse.board.app.lib.core'
 import { ref } from 'vue'
 import type { OnDrag, OnResize } from 'vue3-moveable'
 import { useBoard, useHistory } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+import type { Board } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import type { LayoutItem, StoredWidget } from 'org.eclipse.daanse.board.app.lib.api.page'
 import { useClipboardStore } from './useClipboardStore'
 import { cloneDeep } from 'lodash'
@@ -37,7 +38,7 @@ export function useMoveableLayout(pageId: string = '', gridSize: () => number = 
    * stores, and adding a widget wrote to each in turn - a widget could be
    * on the board and nowhere on it.
    */
-  const board = useBoard(pageId)
+  const board: Board = useBoard(pageId)
 
   /*
    * Lands the value on the grid.

@@ -14,9 +14,7 @@
     "strict": true,
     "skipLibCheck": true,
     "moduleResolution": "bundler",
-    "types": [
-      "vite/client"
-    ]
+    "types": ["vite/client", "node"]
   },
   "exclude": [
     "node_modules",
