@@ -167,8 +167,8 @@ describe('GaugeWidget', () => {
     it('takes the colour of the highest one the value has passed', async () => {
       answered = { percent: 90 }
       const settings = settingsWith()
-      settings.thresholds.push(thresholdAt(60, '#f59e0b'))
-      settings.thresholds.push(thresholdAt(85, '#ef4444'))
+      settings.thresholds.add(thresholdAt(60, '#f59e0b'))
+      settings.thresholds.add(thresholdAt(85, '#ef4444'))
 
       const wrapper = await show(settings)
       expect(wrapper.find('.gauge__value').attributes('stroke')).toBe('#ef4444')
@@ -177,7 +177,7 @@ describe('GaugeWidget', () => {
     it('keeps its own colour below the first one', async () => {
       answered = { percent: 10 }
       const settings = settingsWith()
-      settings.thresholds.push(thresholdAt(60, '#f59e0b'))
+      settings.thresholds.add(thresholdAt(60, '#f59e0b'))
 
       const wrapper = await show(settings)
       expect(wrapper.find('.gauge__value').attributes('stroke')).toBe('#2563eb')
@@ -193,8 +193,8 @@ describe('GaugeWidget', () => {
     it('does not depend on the order they were entered in', async () => {
       answered = { percent: 90 }
       const settings = settingsWith()
-      settings.thresholds.push(thresholdAt(85, '#ef4444'))
-      settings.thresholds.push(thresholdAt(60, '#f59e0b'))
+      settings.thresholds.add(thresholdAt(85, '#ef4444'))
+      settings.thresholds.add(thresholdAt(60, '#f59e0b'))
 
       const wrapper = await show(settings)
       expect(wrapper.find('.gauge__value').attributes('stroke')).toBe('#ef4444')
@@ -202,13 +202,13 @@ describe('GaugeWidget', () => {
 
     it('draws the ranges on the track only where asked', async () => {
       const settings = settingsWith()
-      settings.thresholds.push(thresholdAt(60, '#f59e0b'))
+      settings.thresholds.add(thresholdAt(60, '#f59e0b'))
 
       const quiet = await show(settings)
       expect(quiet.findAll('path')).toHaveLength(2)
 
       const banded = settingsWith({ showBands: true })
-      banded.thresholds.push(thresholdAt(60, '#f59e0b'))
+      banded.thresholds.add(thresholdAt(60, '#f59e0b'))
       const shown = await show(banded)
 
       /* One band below the threshold, one above, plus the value. */
