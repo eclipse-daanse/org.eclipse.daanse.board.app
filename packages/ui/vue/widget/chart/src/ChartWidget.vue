@@ -18,7 +18,7 @@ import {
   RadialLinearScale, ArcElement, Filler
 } from 'chart.js';
 import annotationPlugin from 'chartjs-plugin-annotation';
-import { useDatasourceRepository, useVariableRepository } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+import { useDatasourceRepository, useEObject, useVariableRepository } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import { inject, computed, onMounted, onUnmounted, ref, toRefs, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import { ChartSettingsImpl } from './gen/ChartSettingsImpl';
@@ -37,6 +37,18 @@ ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale,
 const props = defineProps<{ datasourceId: string, id?: string }>();
 const { datasourceId, id: widgetId } = toRefs(props);
 const config = defineModel<ChartSettings>('configv', { required: true });
+
+/*
+ * The settings, watched rather than read off the model prop.
+ *
+ * Widget.config is an attribute, not a containment, so the adapter the
+ * wrapper holds on the widget never hears a write inside this object - and
+ * the wrapper hands this component the same instance on every change, which
+ * is not a prop change Vue acts on. A setting changed in the open dialog
+ * reached the chart only once the dialog was reopened (#1203). The reads go
+ * through `settings`; the writes still go to `config`.
+ */
+const settings = useEObject<ChartSettings>(() => config.value)
 const defaultConfig = new ChartSettingsImpl();
 const data = ref(null as any);
 
@@ -129,7 +141,7 @@ const { update } = useDatasourceRepository(datasourceId, "ChartData", data);
 const chartComponent = computed(() => {
   // Check if we have mixed chart types (different types per series)
   const hasMixedTypes = seriesList().some(
-    (s: any) => s.chartType?.value && s.chartType.value !== config.value?.chartType?.value
+    (s: any) => s.chartType?.value && s.chartType.value !== settings.value?.chartType?.value
   )
 
   // For mixed charts, always use Bar as the base component
@@ -138,7 +150,7 @@ const chartComponent = computed(() => {
   }
 
   // Otherwise use the configured chart type
-  const type = config.value?.chartType?.value ?? 'bar'
+  const type = settings.value?.chartType?.value ?? 'bar'
   const components: Record<string, any> = {
     'bar': Bar,
     'line': Line,
@@ -150,11 +162,16 @@ const chartComponent = computed(() => {
   return components[type] || Bar
 })
 
-// Force re-render when config changes
+/*
+ * Drawn afresh on every change to the settings. The watched ref is
+ * triggered by the adapter on the settings instance, which a deep watch
+ * on a plain prop never was - the object is not reactive, so there was
+ * nothing in it to track.
+ */
 const chartKey = ref(0)
-watch(() => config.value, (newVal) => {
+watch(settings, () => {
   chartKey.value++
-}, { deep: true })
+})
 
 /**
  * The first value that was actually set.
@@ -198,7 +215,7 @@ function dashPattern(given: unknown): number[] | undefined {
 
 /** The series settings as a plain array, whether they arrive as one or as an EList. */
 function seriesList(): any[] {
-  const list: any = config.value?.seriesSettings
+  const list: any = settings.value?.seriesSettings
   if (!list) return []
   if (typeof list.toArray === 'function') return list.toArray()
   return Array.isArray(list) ? list : []
@@ -210,25 +227,25 @@ function seriesList(): any[] {
  * read without .value is permanently on - and the chart drew nothing.
  */
 const resolvedConfig = wrapParameters({
-  chartType: computed(() => (config.value?.chartType as any)?.value ?? 'bar'),
-  borderColor: computed(() => (config.value?.borderColor as any)?.value ?? 'rgba(75, 192, 192, 1)'),
-  backgroundColor: computed(() => (config.value?.backgroundColor as any)?.value ?? 'rgba(75, 192, 192, 0.2)'),
-  borderWidth: computed(() => (config.value?.borderWidth as any)?.value ?? 2),
-  borderDash: computed(() => (config.value?.borderDash as any)?.value ?? []),
-  fill: computed(() => (config.value?.fill as any)?.value ?? false),
-  showPoints: computed(() => (config.value?.showPoints as any)?.value ?? true),
-  pointColor: computed(() => (config.value?.pointColor as any)?.value ?? 'rgba(75, 192, 192, 1)'),
-  pointSize: computed(() => (config.value?.pointSize as any)?.value ?? 3),
-  barOrientation: computed(() => (config.value as any)?.barOrientation?.value ?? 'vertical'),
-  stacked: computed(() => (config.value as any)?.stacked?.value ?? false),
-  showHorizontalGrid: computed(() => (config.value?.showHorizontalGrid as any)?.value ?? true),
-  horizontalGridColor: computed(() => (config.value?.horizontalGridColor as any)?.value ?? 'rgba(0, 0, 0, 0.1)'),
-  horizontalGridWidth: computed(() => (config.value?.horizontalGridWidth as any)?.value ?? 1),
-  showVerticalGrid: computed(() => (config.value?.showVerticalGrid as any)?.value ?? true),
-  verticalGridColor: computed(() => (config.value?.verticalGridColor as any)?.value ?? 'rgba(0, 0, 0, 0.1)'),
-  verticalGridWidth: computed(() => (config.value?.verticalGridWidth as any)?.value ?? 1),
-  dateDisplayFormat: computed(() => (config.value?.dateDisplayFormat as any)?.value ?? 'dd.MM.yyyy HH:mm'),
-  annotationsEditMode: computed(() => (config.value?.annotationsEditMode as any)?.value ?? false)
+  chartType: computed(() => (settings.value?.chartType as any)?.value ?? 'bar'),
+  borderColor: computed(() => (settings.value?.borderColor as any)?.value ?? 'rgba(75, 192, 192, 1)'),
+  backgroundColor: computed(() => (settings.value?.backgroundColor as any)?.value ?? 'rgba(75, 192, 192, 0.2)'),
+  borderWidth: computed(() => (settings.value?.borderWidth as any)?.value ?? 2),
+  borderDash: computed(() => (settings.value?.borderDash as any)?.value ?? []),
+  fill: computed(() => (settings.value?.fill as any)?.value ?? false),
+  showPoints: computed(() => (settings.value?.showPoints as any)?.value ?? true),
+  pointColor: computed(() => (settings.value?.pointColor as any)?.value ?? 'rgba(75, 192, 192, 1)'),
+  pointSize: computed(() => (settings.value?.pointSize as any)?.value ?? 3),
+  barOrientation: computed(() => (settings.value as any)?.barOrientation?.value ?? 'vertical'),
+  stacked: computed(() => (settings.value as any)?.stacked?.value ?? false),
+  showHorizontalGrid: computed(() => (settings.value?.showHorizontalGrid as any)?.value ?? true),
+  horizontalGridColor: computed(() => (settings.value?.horizontalGridColor as any)?.value ?? 'rgba(0, 0, 0, 0.1)'),
+  horizontalGridWidth: computed(() => (settings.value?.horizontalGridWidth as any)?.value ?? 1),
+  showVerticalGrid: computed(() => (settings.value?.showVerticalGrid as any)?.value ?? true),
+  verticalGridColor: computed(() => (settings.value?.verticalGridColor as any)?.value ?? 'rgba(0, 0, 0, 0.1)'),
+  verticalGridWidth: computed(() => (settings.value?.verticalGridWidth as any)?.value ?? 1),
+  dateDisplayFormat: computed(() => (settings.value?.dateDisplayFormat as any)?.value ?? 'dd.MM.yyyy HH:mm'),
+  annotationsEditMode: computed(() => (settings.value?.annotationsEditMode as any)?.value ?? false)
 })
 
 
@@ -285,22 +302,22 @@ const chartData = computed(() => {
        */
       const borderColor = firstSet(
         seriesSettings?.borderColor?.value,
-        config.value?.borderColor?.value,
+        settings.value?.borderColor?.value,
         dataset.borderColor,
       )
       const backgroundColor = firstSet(
         seriesSettings?.backgroundColor?.value,
-        config.value?.backgroundColor?.value,
+        settings.value?.backgroundColor?.value,
         dataset.backgroundColor,
       )
       const borderWidth = firstSet(
         seriesSettings?.borderWidth?.value,
-        config.value?.borderWidth?.value,
+        settings.value?.borderWidth?.value,
         dataset.borderWidth,
       )
       const borderDash = dashPattern(firstSet(
         seriesSettings?.borderDash?.value,
-        config.value?.borderDash?.value,
+        settings.value?.borderDash?.value,
         dataset.borderDash,
       ))
 
@@ -329,8 +346,8 @@ const chartData = computed(() => {
 
       if (chartType === 'line') {
         // Determine line-specific settings (series-specific or global fallback)
-        const showPoints = seriesSettings?.showPoints?.value ?? config.value?.showPoints?.value ?? true
-        const fillEnabled = seriesSettings?.fill?.value ?? config.value?.fill?.value ?? false
+        const showPoints = seriesSettings?.showPoints?.value ?? settings.value?.showPoints?.value ?? true
+        const fillEnabled = seriesSettings?.fill?.value ?? settings.value?.fill?.value ?? false
         /*
          * A point follows the line it sits on unless it was given a colour
          * of its own. The legend draws a line series as its point, so a
@@ -340,12 +357,12 @@ const chartData = computed(() => {
         const pointColor = firstSet(
           seriesSettings?.pointColor?.value,
           seriesSettings?.borderColor?.value,
-          config.value?.pointColor?.value,
-          config.value?.borderColor?.value,
+          settings.value?.pointColor?.value,
+          settings.value?.borderColor?.value,
           dataset.pointBackgroundColor,
           borderColor,
         )
-        const pointSize = seriesSettings?.pointSize?.value ?? config.value?.pointSize?.value ?? 3
+        const pointSize = seriesSettings?.pointSize?.value ?? settings.value?.pointSize?.value ?? 3
 
         result = {
           ...result,
@@ -401,7 +418,7 @@ const chartData = computed(() => {
 })
 
 const chartOptions = computed(() => {
-  if (!config.value) {
+  if (!settings.value) {
     return {
       responsive: true,
     }
@@ -413,7 +430,7 @@ const chartOptions = computed(() => {
   const annotations: any = {}
 
   // Horizontal lines (Y-axis)
-  config.value.horizontalLines?.forEach((line: any, index: number) => {
+  settings.value?.horizontalLines?.forEach((line: any, index: number) => {
     annotations[`hline_${index}`] = {
       type: 'line',
       yMin: line.value,
@@ -435,15 +452,15 @@ const chartOptions = computed(() => {
         if (editMode) element.options.borderWidth = line.width
       },
       drag({ element }: any) {
-        if (editMode && config.value.horizontalLines) {
-          annotationAt(config.value.horizontalLines, index).value = element.y
+        if (editMode && settings.value?.horizontalLines) {
+          annotationAt(settings.value?.horizontalLines, index).value = element.y
         }
       }
     }
   })
 
   // Vertical lines (X-axis)
-  config.value.verticalLines?.forEach((line: any, index: number) => {
+  settings.value?.verticalLines?.forEach((line: any, index: number) => {
     annotations[`vline_${index}`] = {
       type: 'line',
       xMin: line.value,
@@ -465,15 +482,15 @@ const chartOptions = computed(() => {
         if (editMode) element.options.borderWidth = line.width
       },
       drag({ element }: any) {
-        if (editMode && config.value.verticalLines) {
-          annotationAt(config.value.verticalLines, index).value = element.x
+        if (editMode && settings.value?.verticalLines) {
+          annotationAt(settings.value?.verticalLines, index).value = element.x
         }
       }
     }
   })
 
   // Horizontal boxes (Y-axis ranges)
-  config.value.horizontalBoxes?.forEach((box: any, index: number) => {
+  settings.value?.horizontalBoxes?.forEach((box: any, index: number) => {
     annotations[`hbox_${index}`] = {
       type: 'box',
       yMin: box.yMin,
@@ -496,17 +513,17 @@ const chartOptions = computed(() => {
         if (editMode) element.options.borderWidth = 2
       },
       drag({ element }: any) {
-        if (editMode && config.value.horizontalBoxes) {
+        if (editMode && settings.value?.horizontalBoxes) {
           const height = box.yMax - box.yMin
-          annotationAt(config.value.horizontalBoxes, index).yMin = element.y - height / 2
-          annotationAt(config.value.horizontalBoxes, index).yMax = element.y + height / 2
+          annotationAt(settings.value?.horizontalBoxes, index).yMin = element.y - height / 2
+          annotationAt(settings.value?.horizontalBoxes, index).yMax = element.y + height / 2
         }
       }
     }
   })
 
   // Vertical boxes (X-axis ranges)
-  config.value.verticalBoxes?.forEach((box: any, index: number) => {
+  settings.value?.verticalBoxes?.forEach((box: any, index: number) => {
     annotations[`vbox_${index}`] = {
       type: 'box',
       xMin: box.xMin,
@@ -529,10 +546,10 @@ const chartOptions = computed(() => {
         if (editMode) element.options.borderWidth = 2
       },
       drag({ element }: any) {
-        if (editMode && config.value.verticalBoxes) {
+        if (editMode && settings.value?.verticalBoxes) {
           const width = (box.xMax as number) - (box.xMin as number)
-          annotationAt(config.value.verticalBoxes, index).xMin = element.x - width / 2
-          annotationAt(config.value.verticalBoxes, index).xMax = element.x + width / 2
+          annotationAt(settings.value?.verticalBoxes, index).xMin = element.x - width / 2
+          annotationAt(settings.value?.verticalBoxes, index).xMax = element.x + width / 2
         }
       }
     }
@@ -589,7 +606,7 @@ const chartOptions = computed(() => {
   // Collect all unique axis IDs from series settings
   const xAxisIds = new Set<string>()
   const yAxisIds = new Set<string>()
-  const hasSeriesSettings = config.value?.seriesSettings && config.value.seriesSettings.length > 0
+  const hasSeriesSettings = settings.value?.seriesSettings && settings.value?.seriesSettings.length > 0
 
   // Map axis ID -> title from series settings
   const yAxisTitles: Record<string, string> = {}
@@ -598,7 +615,7 @@ const chartOptions = computed(() => {
     // If we have series settings, collect all axis IDs
     xAxisIds.add('x') // Default x-axis
     yAxisIds.add('y') // Default y-axis
-    config.value.seriesSettings?.forEach((s: any) => {
+    settings.value?.seriesSettings?.forEach((s: any) => {
       if ((s?.xAxisId as any)?.value) {
         xAxisIds.add((s.xAxisId as any).value)
       }
@@ -615,8 +632,8 @@ const chartOptions = computed(() => {
   const isStacked = resolvedConfig.stacked.value === true || resolvedConfig.stacked.value === 'true'
 
   // Axis title settings
-  const xAxisTitle = config.value.xAxisTitle?.value ?? ''
-  const yAxisTitle = config.value.yAxisTitle?.value ?? ''
+  const xAxisTitle = settings.value?.xAxisTitle?.value ?? ''
+  const yAxisTitle = settings.value?.yAxisTitle?.value ?? ''
 
   // Build scales configuration dynamically
   const scales: any = {
