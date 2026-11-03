@@ -16,9 +16,12 @@ import { describe, it, expect, vi } from 'vitest';
 import { ProgresswidgetsPackage } from '../gen/ProgresswidgetsPackage';
 import { EVENT_ACTIONS_REGISTRY } from 'org.eclipse.daanse.board.app.lib.api.events';
 import { identifiers } from 'org.eclipse.daanse.board.app.lib.core';
-import { mount } from '@vue/test-utils';
+import { flushPromises, mount } from '@vue/test-utils';
+import { nextTick } from 'vue';
 import ProgressWidget from '../ProgressWidget.vue';
 import ProgressWidgetSettings from '../ProgressWidgetSettings.vue';
+import { ProgressSettingsImpl } from '../gen/ProgressSettingsImpl';
+import { VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables';
 
 if (typeof global.ResizeObserver === 'undefined') {
   global.ResizeObserver = class ResizeObserver {
@@ -673,5 +676,53 @@ describe('Rendering tests for org.eclipse.daanse.board.app.ui.vue.widget.progres
       }
     });
     expect(wrapper.exists()).toBe(true);
+  });
+});
+
+/*
+ * Widget.config is an attribute, not a containment: the adapter on the
+ * widget never hears a write inside the settings object, and the widget is
+ * handed the same instance on every change. A setting changed in the open
+ * dialog has to reach the bar all the same (#1203).
+ */
+describe('a setting changed in the open dialog', () => {
+  function settingsWith(overrides: Record<string, unknown> = {}) {
+    const settings: any = new ProgressSettingsImpl();
+    settings.progress = new VariableWrapper('40');
+    settings.min = new VariableWrapper('0');
+    settings.max = new VariableWrapper('100');
+    for (const [key, value] of Object.entries(overrides)) settings[key] = value;
+    return settings;
+  }
+
+  async function show(settings: any) {
+    const wrapper = mount(ProgressWidget, {
+      props: { datasourceId: 'ds-1', id: 'widget-1', configv: settings } as any,
+      global: { provide: widgetProvides },
+    });
+    await flushPromises();
+    return wrapper;
+  }
+
+  it('reaches the bar: it stands up when it is set vertical', async () => {
+    const settings = settingsWith({ isVertical: false });
+    const wrapper = await show(settings);
+    expect(wrapper.find('.grid-layout').classes()).not.toContain('vertical');
+
+    settings.isVertical = true;
+    await nextTick();
+
+    expect(wrapper.find('.grid-layout').classes()).toContain('vertical');
+  });
+
+  it('reaches the number: it moves when its alignment is set', async () => {
+    const settings = settingsWith({ valueAlign: 'center' });
+    const wrapper = await show(settings);
+    expect(wrapper.find('.progress-value').classes()).toContain('align-center');
+
+    settings.valueAlign = 'right';
+    await nextTick();
+
+    expect(wrapper.find('.progress-value').classes()).toContain('align-right');
   });
 });

@@ -14,9 +14,11 @@
 // @vitest-environment jsdom
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { flushPromises, mount } from '@vue/test-utils'
+import { nextTick } from 'vue'
 import { EVENT_ACTIONS_REGISTRY } from 'org.eclipse.daanse.board.app.lib.api.events'
 import { identifiers } from 'org.eclipse.daanse.board.app.lib.core'
 import { DatatablesettingsPackage } from '../gen/DatatablesettingsPackage'
+import { DataTableSettingsImpl } from '../gen/DataTableSettingsImpl'
 import DataTableWidget from '../DataTableWidget.vue'
 
 vi.mock('vue-router', () => ({
@@ -77,6 +79,18 @@ function show(settings: Record<string, unknown> = {}) {
       id: 'widget-1',
       config: { datasourceId: 'ds-1', ...settings },
     },
+    global: { provide: provides },
+  })
+}
+
+/*
+ * The widget with a settings object built through the factory, which is
+ * what the board hands it once the settings dialog has opened: the same
+ * instance on every change, written from the inside.
+ */
+function showModelled(settings: DataTableSettingsImpl) {
+  return mount(DataTableWidget, {
+    props: { datasourceId: 'ds-1', id: 'widget-1', config: settings },
     global: { provide: provides },
   })
 }
@@ -270,6 +284,66 @@ describe('DataTableWidget', () => {
       await wrapper.findAll('thead th')[2].trigger('click')
       /* The two smallest counts of all six rows, not of the first two. */
       expect(body(wrapper).map((row) => row[2])).toEqual(['7', '8'])
+    })
+  })
+
+  /*
+   * Widget.config is an attribute, not a containment, so the adapter on
+   * the widget never hears a write inside the settings object - and the
+   * widget is handed the same instance on every change. A setting ticked
+   * in the dialog reached the table only once the dialog was reopened
+   * (#1203).
+   */
+  describe('a setting changed in the open dialog', () => {
+    it('reaches the table: the sort marks appear when sorting is switched on', async () => {
+      const settings = new DataTableSettingsImpl()
+      const wrapper = showModelled(settings)
+      await flushPromises()
+      expect(wrapper.findAll('thead th .mark')).toHaveLength(0)
+
+      settings.sortable = true
+      await nextTick()
+
+      expect(wrapper.findAll('thead th .mark')).toHaveLength(3)
+      expect(wrapper.findAll('thead th')[0].attributes('aria-sort')).toBe('none')
+    })
+
+    it('reaches the table: the pager appears when a page size is set', async () => {
+      const settings = new DataTableSettingsImpl()
+      const wrapper = showModelled(settings)
+      await flushPromises()
+      expect(wrapper.find('.pagination').exists()).toBe(false)
+
+      settings.pageSize = 2
+      await nextTick()
+
+      expect(wrapper.find('.pagination').exists()).toBe(true)
+      expect(body(wrapper)).toHaveLength(2)
+    })
+
+    it('reaches the table: the header goes when it is switched off', async () => {
+      const settings = new DataTableSettingsImpl()
+      const wrapper = showModelled(settings)
+      await flushPromises()
+      expect(wrapper.find('thead').exists()).toBe(true)
+
+      settings.showHeader = false
+      await nextTick()
+
+      expect(wrapper.find('thead').exists()).toBe(false)
+    })
+
+    /* An EList add is a notification of the owner, like a set. */
+    it('reaches the table: a column added to the hidden list goes', async () => {
+      const settings = new DataTableSettingsImpl()
+      const wrapper = showModelled(settings)
+      await flushPromises()
+      expect(headers(wrapper)).toEqual(['datum', 'kasse', 'besucher'])
+
+      settings.hiddenColumns.add('kasse')
+      await nextTick()
+
+      expect(headers(wrapper)).toEqual(['datum', 'besucher'])
     })
   })
 })

@@ -15,7 +15,7 @@ Contributors:
 <script setup lang="ts">
 import { inject, computed, toRefs, onMounted, onUnmounted, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
-import { useDatasourceRepository, VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+import { useDatasourceRepository, useEObject, VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import helpers from 'org.eclipse.daanse.board.app.lib.utils.helpers'
 import type { ProgressSettings } from './gen/ProgressSettings'
 import { ProgressSettingsImpl } from './gen/ProgressSettingsImpl'
@@ -74,6 +74,19 @@ const emitRightClick = () => {
     });
 };
 const config = defineModel<ProgressSettings>('configv', { required: true});
+
+/*
+ * The settings, watched rather than read off the model prop.
+ *
+ * Widget.config is an attribute, not a containment, so the adapter the
+ * wrapper holds on the widget never hears a write inside this object - and
+ * the wrapper hands this component the same instance on every change, which
+ * is not a prop change Vue acts on. A setting changed in the open dialog
+ * reached the bar only once the dialog was reopened (#1203). Watching the
+ * instance itself is what makes a write inside it a change here; the reads
+ * go through `settings`, the writes on mount still go to `config`.
+ */
+const settings = useEObject<ProgressSettings>(() => config.value)
 const data = ref(null)
 const { update } = useDatasourceRepository(datasourceId, "object", data)
 
@@ -134,55 +147,55 @@ onMounted(() => {
   }
 })
 
-const backgroundColor = computed(() => (config.value.backgroundColor as any)?.value)
+const backgroundColor = computed(() => (settings.value?.backgroundColor as any)?.value)
 
 const rotationVal = computed(() => {
-    const val = (config.value.rotation as any)?.value;
+    const val = (settings.value?.rotation as any)?.value;
     return parseFloat(val) || 0;
 });
 
-const gradientColor = computed(() => (config.value.gradientColor as any)?.value);
+const gradientColor = computed(() => (settings.value?.gradientColor as any)?.value);
 
 const backgroundProgressColor = computed(() =>
-  config.value.isGradient
+  settings.value?.isGradient
     ? `linear-gradient(${rotationVal.value}deg, ${gradientColor.value})`
-    : (config.value.fillColor as any)?.value
+    : (settings.value?.fillColor as any)?.value
 )
 
 const transition = computed(() =>
-  config.value.isVertical ? "height .7s ease" : "width .7s ease"
+  settings.value?.isVertical ? "height .7s ease" : "width .7s ease"
 )
 
-const minVal = computed(() => parseFloat((config.value.min as any)?.value) || 0);
-const maxVal = computed(() => parseFloat((config.value.max as any)?.value) || 100);
+const minVal = computed(() => parseFloat((settings.value?.min as any)?.value) || 0);
+const maxVal = computed(() => parseFloat((settings.value?.max as any)?.value) || 100);
 
 const verticalPositionFiller = computed(() =>
-  config.value.isVertical && parsedProgress.value !== null
+  settings.value?.isVertical && parsedProgress.value !== null
     ? `${(parsedProgress.value / (maxVal.value)) * 100}%`
     : "35px"
 )
 
 const horizontalPositionFiller = computed(() =>
-  !config.value.isVertical && parsedProgress.value !== null
+  !settings.value?.isVertical && parsedProgress.value !== null
     ? `${(parsedProgress.value / (maxVal.value)) * 100}%`
     : "35px"
 )
 const verticalPositionWrapper = computed(() =>
-  config.value.isVertical && parsedProgress.value !== null
+  settings.value?.isVertical && parsedProgress.value !== null
     ? `35px`
     : "100%"
 )
 
 const horizontalPositionWrapper= computed(() =>
-  !config.value.isVertical && parsedProgress.value !== null
+  !settings.value?.isVertical && parsedProgress.value !== null
     ? `35px`
     : "100%"
 )
 
-const barRadius = computed(() => (config.value.borderRadius as any)?.value || "10px")
+const barRadius = computed(() => (settings.value?.borderRadius as any)?.value || "10px")
 
 const parsedProgress = computed(() => {
-  const progWrapper = (config.value.progress as any);
+  const progWrapper = (settings.value?.progress as any);
   if (!progWrapper) return null;
 
   const rawValue = progWrapper.value;
@@ -212,16 +225,16 @@ const parsedProgress = computed(() => {
  * offers - is the literal the model gives them (left).
  */
 const horizontalAlignClass = computed(() => {
-  switch (config.value?.valueAlign as string | undefined) {
+  switch (settings.value?.valueAlign as string | undefined) {
     case "left": return "align-left"
     case "right": return "align-right"
     default: return "align-center"
   }
 })
-const textColor = computed(() => (config.value.textColor as any)?.value || "#000000")
+const textColor = computed(() => (settings.value?.textColor as any)?.value || "#000000")
 
 const verticalAlignClass = computed(() => {
-  switch (config.value?.valueJustify as string | undefined) {
+  switch (settings.value?.valueJustify as string | undefined) {
     case "top": return "justify-top"
     case "bottom": return "justify-bottom"
     default: return "justify-center"
@@ -231,7 +244,7 @@ const verticalAlignClass = computed(() => {
 
 <template>
   <div class="container" @click="emitClick" @contextmenu.prevent="emitRightClick">
-    <div class="grid-layout" :class="{ vertical: config.isVertical }">
+    <div class="grid-layout" :class="{ vertical: settings?.isVertical }">
       <div
         class="progress-value"
         :class="[verticalAlignClass, horizontalAlignClass]"
