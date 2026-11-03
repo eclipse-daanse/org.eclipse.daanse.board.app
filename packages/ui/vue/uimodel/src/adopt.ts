@@ -23,7 +23,7 @@
  * casting or wrapping. What comes back is a real EObject with the class it
  * claims to have, and the values that were stored.
  */
-import type { EObject } from '@emfts/core'
+import type { EClass, EObject, EReference } from '@emfts/core'
 import { VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 
 /** The class every settings value goes through. */
@@ -87,6 +87,63 @@ function asWrapper(value: unknown): VariableWrapper<unknown> | undefined {
 }
 
 /**
+ * The containment reference a feature name stands for, where it is one.
+ *
+ * A feature that holds other modelled objects is the only kind that needs
+ * rebuilding: everything else is a value, and a value survives storage as
+ * itself.
+ */
+function containmentOf(instance: EObject, name: string): EReference | undefined {
+  let feature: unknown
+  try {
+    feature = instance.eClass()?.getEStructuralFeature?.(name)
+  } catch {
+    return undefined
+  }
+  const reference = feature as EReference | undefined
+  if (typeof reference?.isContainment !== 'function' || !reference.isContainment()) return undefined
+  return reference
+}
+
+/**
+ * A fresh instance of what this reference contains.
+ *
+ * Nothing, where the class cannot be reached - a board written by a later
+ * version may name a package this one does not have, and the stored value
+ * is then kept as it stands rather than dropped.
+ */
+function instanceFor(reference: EReference): EObject | undefined {
+  try {
+    const target: EClass | undefined = reference.getEReferenceType?.()
+    const made = target?.getEPackage?.()?.getEFactoryInstance?.()?.create(target)
+    return made ?? undefined
+  } catch {
+    return undefined
+  }
+}
+
+/** Whether this reference holds many, rather than one. */
+function holdsMany(reference: EReference): boolean {
+  try {
+    return reference.getUpperBound?.() !== 1
+  } catch {
+    return false
+  }
+}
+
+/**
+ * A stored contained object, rebuilt into one of the model's own.
+ *
+ * Adopted in turn, so a contained object that contains others comes back
+ * whole rather than one level deep.
+ */
+function rebuild(reference: EReference, stored: unknown): unknown {
+  if (!stored || typeof stored !== 'object') return stored
+  const made = instanceFor(reference)
+  return made ? adopt(made, stored) : stored
+}
+
+/**
  * Copies a stored settings object into a fresh instance from the factory.
  *
  * Everything is carried over, not just what the model declares. A widget's
@@ -110,8 +167,41 @@ export function adopt<T extends EObject>(instance: T, stored: unknown): T {
     if (!name) continue
     /* A plain key wins over the _-prefixed one for the same feature */
     if (stored.startsWith('_') && name in source) continue
+    const wrapped = asWrapper(value)
+    if (wrapped) {
+      try {
+        target[name] = wrapped
+      } catch {
+        // A derived or read-only feature cannot be restored
+      }
+      continue
+    }
+
+    /*
+     * A feature holding other modelled objects is rebuilt rather than
+     * copied, because what storage leaves behind is a plain object with
+     * the right fields and none of the behaviour (#1195).
+     *
+     * A many-valued one is filled through its list rather than assigned:
+     * EMF gives such a feature a getter that builds the list on demand
+     * and no setter at all, so an assignment had nothing to write to -
+     * and the catch below took that for a read-only feature, which left
+     * a map saved with three services reopening with none.
+     */
+    const containment = containmentOf(instance, name)
+    if (containment && holdsMany(containment)) {
+      if (!Array.isArray(value)) continue
+      try {
+        const list = target[name] as { push: (each: unknown) => unknown }
+        for (const each of value) list.push(rebuild(containment, each))
+      } catch {
+        // No list to fill - nothing sensible to put the values in
+      }
+      continue
+    }
+
     try {
-      target[name] = asWrapper(value) ?? value
+      target[name] = containment ? rebuild(containment, value) : value
     } catch {
       // A derived or read-only feature cannot be restored, and was never
       // stored as a value in the first place
