@@ -39,6 +39,7 @@
     "@vitejs/plugin-vue": "^5.2.3",
     "@vue/test-utils": "^2.4.6",
     "typescript": "~5.9.2",
+    "vite": "^6.4.1",
     "vite-plugin-dts": "4.5.4",
     "vite-plugin-libcss": "^1.1.1",
     "vitest": "5.0.5",
