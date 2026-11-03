@@ -53,7 +53,7 @@ export class MapSettingsImpl extends BasicEObject implements MapSettings {
   // Private fields
   private _datasourceId?: string;
   private _datasourceIds!: EList<string>;
-  private _baseMapUrl: string = "https://a.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png";
+  private _baseMapUrl: string = "https://tile.openstreetmap.org/{z}/{x}/{y}.png";
   private _zoom: number = 14;
   private _center!: EList<number>;
   private _attribution?: string;
@@ -464,7 +464,7 @@ export class MapSettingsImpl extends BasicEObject implements MapSettings {
       case MapSettingsImpl.DATASOURCE_IDS:
         return this._datasourceIds !== undefined && !this._datasourceIds.isEmpty();
       case MapSettingsImpl.BASE_MAP_URL:
-        return this._baseMapUrl !== "https://a.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png";
+        return this._baseMapUrl !== "https://tile.openstreetmap.org/{z}/{x}/{y}.png";
       case MapSettingsImpl.ZOOM:
         return this._zoom !== 14;
       case MapSettingsImpl.CENTER:
@@ -507,7 +507,7 @@ export class MapSettingsImpl extends BasicEObject implements MapSettings {
         if (this._datasourceIds) this._datasourceIds.clear();
         return;
       case MapSettingsImpl.BASE_MAP_URL:
-        this._baseMapUrl = "https://a.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png";
+        this._baseMapUrl = "https://tile.openstreetmap.org/{z}/{x}/{y}.png";
         return;
       case MapSettingsImpl.ZOOM:
         this._zoom = 14;
