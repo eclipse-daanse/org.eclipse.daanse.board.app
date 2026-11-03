@@ -51,5 +51,12 @@
     "at": "an {{target}}",
     "atAnyWidget": "an jedem Widget dieser Art",
     "atAllInstances": "an allen Instanzen"
+  },
+  "Tab": {
+    "events": "Ereignisse"
+  },
+  "Scoped": {
+    "lead": "Was geschehen soll, wenn dieses Widget etwas meldet.",
+    "empty": "Für dieses Widget ist noch nichts eingerichtet."
   }
 }

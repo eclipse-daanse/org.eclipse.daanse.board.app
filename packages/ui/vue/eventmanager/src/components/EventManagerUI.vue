@@ -27,6 +27,25 @@ import { useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 
 const { t } = useTranslation('eventmanager')
 
+/**
+ * What this screen is about, where it is not about everything.
+ *
+ * Unscoped it is the events screen: every rule in the workspace, and a
+ * rule is told which widget or page it belongs to when it is written.
+ * Scoped, the same screen stands in a widget's settings, where the answer
+ * to "which widget" is on the screen already - so it lists that widget's
+ * rules, offers that widget's events, and fills the context in rather
+ * than asking for it (#1188).
+ */
+const props = defineProps<{
+  scope?: {
+    context: EventActionContext
+    contextId: string
+    /** The widget kind, which is the namespace its events are under. */
+    widgetType?: string
+  }
+}>()
+
 let eventManager: EventManager
 let eventRegistry: EventRegistry
 let actionsRegistry: EventActionsRegistry
@@ -42,7 +61,8 @@ const showEditDialog = ref(false)
 const editingMappingId = ref<string | null>(null)
 const currentActionIndex = ref(0)
 const newMapping = ref<Partial<EventActionMapping>>({
-  context: 'widget',
+  context: props.scope?.context ?? 'widget',
+  contextId: props.scope?.contextId,
   conditions: [],
   actions: [{
     targetContext: 'widget',
@@ -136,7 +156,11 @@ const selectAction = (index: number) => {
 }
 
 const loadMappings = () => {
-  mappings.value = eventManager.getAllMappings()
+  const all = eventManager.getAllMappings()
+  const only = props.scope
+  mappings.value = only
+    ? all.filter((m) => m.context === only.context && m.contextId === only.contextId)
+    : all
 }
 
 const loadEvents = () => {
@@ -178,14 +202,21 @@ const availablePayloadProperties = computed(() => {
  * rest is the entry.
  */
 const eventOptions = computed(() =>
-  availableEvents.value.map((event) => {
-    const at = event.type.indexOf(':')
-    return {
-      value: event.type,
-      text: at > -1 ? event.type.slice(at + 1) : event.type,
-      group: at > -1 ? event.type.slice(0, at) : t('Rule.otherEvents'),
-    }
-  }),
+  availableEvents.value
+    .filter((event) => {
+      /* Scoped to a widget, the only events worth offering are the ones
+        that widget raises - the rest could never fire here. */
+      const kind = props.scope?.widgetType
+      return !kind || event.type.startsWith(`${kind}:`)
+    })
+    .map((event) => {
+      const at = event.type.indexOf(':')
+      return {
+        value: event.type,
+        text: at > -1 ? event.type.slice(at + 1) : event.type,
+        group: at > -1 ? event.type.slice(0, at) : t('Rule.otherEvents'),
+      }
+    }),
 )
 
 const availableActions = computed(() => {
@@ -439,7 +470,10 @@ const cancelRemoveMapping = () => {
 
 const resetForm = () => {
   newMapping.value = {
-    context: 'widget',
+    /* Scoped, a new rule belongs to the widget whose settings are open -
+      asking again would be asking about what is on the screen. */
+    context: props.scope?.context ?? 'widget',
+    contextId: props.scope?.contextId,
     conditions: [],
     actions: [{
       targetContext: 'widget',
@@ -625,13 +659,19 @@ onMounted(() => {
 
 <template>
   <div class="events">
+    <!--
+      A heading where this is the screen, and none where it is a tab: the
+      tab strip above has already said what this is, and a second title
+      under it says it twice.
+    -->
     <header class="events__head">
-      <div>
+      <div v-if="!scope">
         <h1 class="events__title">{{ t('Title') }}</h1>
         <p class="events__lead">
           {{ t('Lead') }}
         </p>
       </div>
+      <p v-else class="events__lead">{{ t('Scoped.lead') }}</p>
       <DButton intent="primary" @click="showAddDialog = true">
         <DIcon name="add" size="sm" />{{ t('Rule.create') }}
       </DButton>
@@ -682,7 +722,7 @@ onMounted(() => {
     </ul>
 
     <p v-else class="events__empty">
-      {{ t('Empty') }}
+      {{ scope ? t('Scoped.empty') : t('Empty') }}
     </p>
 
     <DModal
@@ -696,7 +736,10 @@ onMounted(() => {
         <section class="part">
           <h3 class="part__word">{{ t('Rule.when') }}</h3>
           <div class="part__body part__body--row">
+            <!-- Not asked where the answer is the widget whose settings
+              this tab is in. -->
             <DSelect
+              v-if="!scope"
               v-model="newMapping.context"
               :label="t('Rule.context')"
               stacked
@@ -705,7 +748,7 @@ onMounted(() => {
               value-key="value"
             />
             <DSelect
-              v-if="newMapping.context === 'page'"
+              v-if="!scope && newMapping.context === 'page'"
               v-model="newMapping.contextId"
               :label="t('Context.page')"
               stacked
@@ -715,7 +758,7 @@ onMounted(() => {
               clearable
             />
             <DInput
-              v-else-if="newMapping.context === 'widget'"
+              v-else-if="!scope && newMapping.context === 'widget'"
               v-model="newMapping.contextId"
               :label="t('Context.widget')"
               stacked
