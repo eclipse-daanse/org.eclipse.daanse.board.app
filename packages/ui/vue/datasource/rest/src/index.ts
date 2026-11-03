@@ -25,13 +25,16 @@ import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
 // denotes the same symbol the factory package exports.
 const RestDatasourceIdentifier = Symbol.for('RestStoreFactory')
 import Preview from './Preview.vue'
+import MapView from './MapView.vue'
 import Settings from './Settings.vue'
 
 const previewSymbol = Symbol.for('RestPreview')
+const mapSymbol = Symbol.for('RestMapView')
 const settingsSymbol = Symbol.for('RestSettings')
 
 export function activate({ services }: ActivationContext) {
   services.register('RestPreview', Preview)
+  services.register('RestMapView', MapView)
   services.register('RestSettings', Settings)
 
   services
@@ -43,6 +46,16 @@ export function activate({ services }: ActivationContext) {
       Model: MODEL_ECORE,
       Store: RestDatasourceIdentifier,
       Preview: previewSymbol,
+      /*
+       * Two ways to look at one answer: the tree, and - where the answer
+       * carries geometry - a map. A GeoJSON distribution read through this
+       * type had only the tree, which shows coordinate pairs and no shape
+       * (#1187).
+       */
+      Views: [
+        { id: 'preview', label: 'datasourceRest:View.tree', component: previewSymbol },
+        { id: 'map', label: 'datasourceRest:View.map', component: mapSymbol },
+      ],
       Settings: settingsSymbol,
     })
 }
@@ -52,6 +65,7 @@ export function deactivate({ services }: ActivationContext) {
     .getRequired<DatasourceRepository>(DATASOURCE_REPOSITORY)
     .unregisterDatasourceType('rest')
   services.unregister('RestPreview')
+  services.unregister('RestMapView')
   services.unregister('RestSettings')
 }
 
