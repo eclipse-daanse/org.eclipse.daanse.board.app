@@ -11,14 +11,15 @@
  *   Smart City Jena
  **********************************************************************/
 
-import { afterEach, describe, expect, it } from 'vitest'
+import { afterEach, describe, expect, it, vi } from 'vitest'
 import { defineComponent, h } from 'vue'
 import { mount, type VueWrapper } from '@vue/test-utils'
 import { identifier as PAGE_REPOSITORY, type StoredWidget } from 'org.eclipse.daanse.board.app.lib.api.page'
 import { WorkspaceFactory, type LayoutItem, type Page } from 'org.eclipse.daanse.board.app.lib.model.workspace'
 import { useMoveableLayout } from '../composables/useMovableLayout'
 import { useClipboardStore } from '../composables/useClipboardStore'
-import { useClipboardShortcuts, type BoardPoint } from '../composables/useClipboardShortcuts'
+import { COPIED_NOTICE_MS, useClipboardShortcuts, type BoardPoint } from '../composables/useClipboardShortcuts'
+import ClipboardNotice from '../components/ClipboardNotice.vue'
 
 /*
  * Ctrl+C and Ctrl+V on the board (#1225): a copied widget is pasted once
@@ -67,13 +68,15 @@ function boardWithOneWidget() {
 let mounted: VueWrapper | undefined
 
 /** An editor as far as the clipboard goes: the base layout and its keys. */
+let shortcuts!: ReturnType<typeof useClipboardShortcuts>
+
 function editorOn(page: Page, pointer: () => BoardPoint | undefined = () => undefined) {
   let layout!: ReturnType<typeof useMoveableLayout>
   mounted = mount(
     defineComponent({
       setup() {
         layout = useMoveableLayout('p1', () => 24)
-        useClipboardShortcuts({
+        shortcuts = useClipboardShortcuts({
           target: () => 'w1',
           copy: (uid) => layout.copyWidget(uid),
           paste: (at) => layout.pasteWidget(at?.x, at?.y),
@@ -95,6 +98,7 @@ const placements = (page: Page) =>
   page.layout.toArray().map((item: LayoutItem) => ({ id: item.id, x: item.x, y: item.y }))
 
 afterEach(() => {
+  vi.useRealTimers()
   mounted?.unmount()
   mounted = undefined
   useClipboardStore().clear()
@@ -169,5 +173,50 @@ describe('Ctrl+C and Ctrl+V on the board', () => {
     press('v')
 
     expect(placements(page)).toHaveLength(1)
+  })
+})
+
+describe('the notice after a copy', () => {
+  it('says how to paste, for a while', () => {
+    vi.useFakeTimers()
+    editorOn(boardWithOneWidget())
+    expect(shortcuts.copiedNotice.value).toBe(false)
+
+    press('c')
+    expect(shortcuts.copiedNotice.value).toBe(true)
+
+    vi.advanceTimersByTime(COPIED_NOTICE_MS)
+    expect(shortcuts.copiedNotice.value).toBe(false)
+  })
+
+  it('shows for a copy from the menu as well', () => {
+    editorOn(boardWithOneWidget())
+
+    shortcuts.copy('w1')
+
+    expect(shortcuts.copiedNotice.value).toBe(true)
+  })
+
+  it('goes once the widget is pasted', () => {
+    editorOn(boardWithOneWidget())
+
+    press('c')
+    press('v')
+
+    expect(shortcuts.copiedNotice.value).toBe(false)
+  })
+
+  it('names the key and the right click', () => {
+    const translator = {
+      t: (key: string, values?: Record<string, string>) =>
+        key === 'layoutsBase:Clipboard.copied' ? `Kopiert – ${values?.shortcut} oder Rechtsklick aufs Board` : 'Strg+V',
+    }
+    const notice = mount(ClipboardNotice, {
+      props: { shown: true },
+      global: { provide: { i18n: translator, i18next: translator } },
+    })
+
+    expect(notice.get('[role="status"]').text()).toContain('Rechtsklick')
+    notice.unmount()
   })
 })
