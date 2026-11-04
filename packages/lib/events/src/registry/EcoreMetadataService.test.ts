@@ -88,7 +88,8 @@ describe('EcoreMetadataService', () => {
     const setGlobal = actions.find((a) => a.methodName === 'setGlobalVariable')
 
     expect(setGlobal?.parameters).toEqual([
-      { name: 'variableName', type: 'string', optional: true, index: 0 },
+      /* Declared as naming a variable by its ActionParameter annotation (#1237). */
+      { name: 'variableName', type: 'string', optional: true, index: 0, kind: 'variable' },
       { name: 'value', type: 'any', optional: true, index: 1 },
     ])
   })

@@ -24,6 +24,7 @@ import {
 // exported contract, not as a file this bundle reaches in and copies
 import { EVENT_MODEL_ECORE as eventModelContent } from 'org.eclipse.daanse.board.app.lib.api.events';
 import { ECORE_METADATA_SERVICE_ID } from 'org.eclipse.daanse.board.app.lib.api.events'
+import type { ActionParameterKind } from '../decorators/WidgetAction';
 export { ECORE_METADATA_SERVICE_ID } from 'org.eclipse.daanse.board.app.lib.api.events'
 
 const EVENTS_NS_URI = 'http://org.eclipse.daanse.board.app.lib.events';
@@ -41,6 +42,8 @@ export interface EcoreParameterMetadata {
   type: string;
   optional: boolean;
   index: number;
+  /** The ActionParameter annotation's `kind` detail, where it gives one. */
+  kind?: ActionParameterKind;
 }
 
 export interface EcoreActionMetadata {
@@ -243,10 +246,14 @@ export class EcoreMetadataService {
               const lowerBound = param.getLowerBound();
               let optional = lowerBound === 0;
 
+              let kind: ActionParameterKind | undefined;
               if (actionParamAnnotation) {
                 const optionalDetail = this.getAnnotationDetail(actionParamAnnotation, 'optional');
                 if (optionalDetail === 'true') {
                   optional = true;
+                }
+                if (this.getAnnotationDetail(actionParamAnnotation, 'kind') === 'variable') {
+                  kind = 'variable';
                 }
               }
 
@@ -254,7 +261,8 @@ export class EcoreMetadataService {
                 name: param.getName() || `arg${k}`,
                 type: tsType,
                 optional,
-                index: k
+                index: k,
+                ...(kind ? { kind } : {})
               });
             }
 
