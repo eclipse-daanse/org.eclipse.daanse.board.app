@@ -30,8 +30,8 @@ import { ControlwidgetsPackage } from './ControlwidgetsPackage.js';
  */
 export class ButtonSettingsImpl extends ControlSettingsImpl implements ButtonSettings {
   // Feature ID Constants (eLiterals)
-  static readonly TARGET: number = 4;
-  static readonly VALUE: number = 5;
+  static readonly TARGET: number = 5;
+  static readonly VALUE: number = 6;
 
   // Private fields
   private _target: VariableWrapper<string> = new VariableWrapper<string>();

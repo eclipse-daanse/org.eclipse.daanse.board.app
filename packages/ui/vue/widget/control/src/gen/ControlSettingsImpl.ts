@@ -33,12 +33,14 @@ export abstract class ControlSettingsImpl extends BasicEObject implements Contro
   static readonly LABEL: number = 0;
   static readonly COLOR: number = 1;
   static readonly TEXT_COLOR: number = 2;
-  static readonly DISABLED: number = 3;
+  static readonly FONT_SIZE: number = 3;
+  static readonly DISABLED: number = 4;
 
   // Private fields
   private _label: VariableWrapper<string> = new VariableWrapper<string>();
   private _color: VariableWrapper<string> = new VariableWrapper<string>();
   private _textColor: VariableWrapper<string> = new VariableWrapper<string>();
+  private _fontSize: VariableWrapper<string> = new VariableWrapper<string>();
   private _disabled: VariableWrapper<string> = new VariableWrapper<string>();
 
   /**
@@ -121,6 +123,30 @@ export abstract class ControlSettingsImpl extends BasicEObject implements Contro
     }
   }
 
+  get fontSize(): VariableWrapper<string> {
+    return this._fontSize!;
+  }
+
+  set fontSize(value: VariableWrapper<string>) {
+    const oldValue = this._fontSize;
+    this._fontSize = value;
+    if (this.eDeliver()) {
+      this.eNotify({
+        getNotifier: () => this,
+        getEventType: () => 1, // SET
+        getFeature: () => this.eClass().getEStructuralFeature(ControlSettingsImpl.FONT_SIZE),
+        getOldValue: () => oldValue,
+        getNewValue: () => value,
+        getPosition: () => -1,
+        wasSet: () => true,
+        isTouch: () => false,
+        isReset: () => false,
+        getFeatureID: () => ControlSettingsImpl.FONT_SIZE,
+        merge: () => false
+      });
+    }
+  }
+
   get disabled(): VariableWrapper<string> {
     return this._disabled!;
   }
@@ -159,6 +185,8 @@ export abstract class ControlSettingsImpl extends BasicEObject implements Contro
         return this.color;
       case ControlSettingsImpl.TEXT_COLOR:
         return this.textColor;
+      case ControlSettingsImpl.FONT_SIZE:
+        return this.fontSize;
       case ControlSettingsImpl.DISABLED:
         return this.disabled;
       default:
@@ -184,6 +212,10 @@ export abstract class ControlSettingsImpl extends BasicEObject implements Contro
         this.textColor = newValue as VariableWrapper<string>;
         super.eSet(feature, newValue);
         break;
+      case ControlSettingsImpl.FONT_SIZE:
+        this.fontSize = newValue as VariableWrapper<string>;
+        super.eSet(feature, newValue);
+        break;
       case ControlSettingsImpl.DISABLED:
         this.disabled = newValue as VariableWrapper<string>;
         super.eSet(feature, newValue);
@@ -205,6 +237,8 @@ export abstract class ControlSettingsImpl extends BasicEObject implements Contro
         return this._color !== new VariableWrapper<string>();
       case ControlSettingsImpl.TEXT_COLOR:
         return this._textColor !== new VariableWrapper<string>();
+      case ControlSettingsImpl.FONT_SIZE:
+        return this._fontSize !== new VariableWrapper<string>();
       case ControlSettingsImpl.DISABLED:
         return this._disabled !== new VariableWrapper<string>();
       default:
@@ -227,6 +261,9 @@ export abstract class ControlSettingsImpl extends BasicEObject implements Contro
       case ControlSettingsImpl.TEXT_COLOR:
         this._textColor = new VariableWrapper<string>();
         return;
+      case ControlSettingsImpl.FONT_SIZE:
+        this._fontSize = new VariableWrapper<string>();
+        return;
       case ControlSettingsImpl.DISABLED:
         this._disabled = new VariableWrapper<string>();
         return;
@@ -248,6 +285,7 @@ export abstract class ControlSettingsImpl extends BasicEObject implements Contro
       label: this.label,
       color: this.color,
       textColor: this.textColor,
+      fontSize: this.fontSize,
       disabled: this.disabled,
     };
   }

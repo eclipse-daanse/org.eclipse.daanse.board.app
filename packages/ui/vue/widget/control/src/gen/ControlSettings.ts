@@ -29,6 +29,7 @@ export interface ControlSettings extends EObject {
   label?: VariableWrapper<string>;
   color?: VariableWrapper<string>;
   textColor?: VariableWrapper<string>;
+  fontSize?: VariableWrapper<string>;
   disabled?: VariableWrapper<string>;
 
 }

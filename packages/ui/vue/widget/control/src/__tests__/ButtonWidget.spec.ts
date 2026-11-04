@@ -15,6 +15,8 @@
 import { describe, it, expect, vi } from 'vitest'
 import { flushPromises, mount } from '@vue/test-utils'
 import { nextTick } from 'vue'
+import { readFileSync } from 'node:fs'
+import { resolve } from 'node:path'
 import { EVENT_ACTIONS_REGISTRY, EventsPackage } from 'org.eclipse.daanse.board.app.lib.api.events'
 import { identifiers } from 'org.eclipse.daanse.board.app.lib.core'
 import { VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables'
@@ -58,6 +60,7 @@ function settingsWith(overrides: Record<string, unknown> = {}) {
   settings.label = new VariableWrapper('Go')
   settings.color = new VariableWrapper('#2563eb')
   settings.textColor = new VariableWrapper('#ffffff')
+  settings.fontSize = new VariableWrapper('14')
   settings.disabled = new VariableWrapper('false')
   settings.target = new VariableWrapper('')
   settings.value = new VariableWrapper('on')
@@ -159,5 +162,31 @@ describe('ButtonWidget', () => {
     await nextTick()
     expect(wrapper.find('button').attributes('disabled')).toBeUndefined()
     expect(wrapper.find('button').text()).toBe('Now')
+  })
+
+  it('takes its font size from the shared setting, a bare number as pixels', async () => {
+    const settings = settingsWith({ fontSize: new VariableWrapper('22') })
+    const { wrapper } = await show(settings)
+    expect(wrapper.find('button').attributes('style')).toContain('font-size: 22px')
+
+    settings.fontSize.value = '1.5em'
+    await nextTick()
+    expect(wrapper.find('button').attributes('style')).toContain('font-size: 1.5em')
+  })
+
+  it('gives a stored board without a font size the model default', async () => {
+    const settings = settingsWith()
+    settings.fontSize = undefined
+    const { wrapper } = await show(settings)
+    expect(settings.fontSize).toBeInstanceOf(VariableWrapper)
+    expect(wrapper.find('button').attributes('style')).toContain('font-size: 14px')
+  })
+
+  it('shows a press by shade, not by moving the face', () => {
+    /* jsdom applies no :active, so the rule itself is what is checked. */
+    const source = readFileSync(resolve(__dirname, '../ButtonWidget.vue'), 'utf8')
+    const pressed = source.match(/:active[^{]*\{([^}]*)\}/)?.[1] ?? ''
+    expect(pressed).toMatch(/box-shadow|filter/)
+    expect(pressed).not.toMatch(/transform|margin|padding|top|height/)
   })
 })
