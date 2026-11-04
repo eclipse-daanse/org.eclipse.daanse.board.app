@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/*********************************************************************
+* Copyright (c) 2026 Contributors to the Eclipse Foundation.
+*
+* This program and the accompanying materials are made
+* available under the terms of the Eclipse Public License 2.0
+* which is available at https://www.eclipse.org/legal/epl-2.0/
+*
+* SPDX-License-Identifier: EPL-2.0
+**********************************************************************/
+
+The form for a page's weather, in the page settings.
+
+Here rather than beside workspace.ecore: the labels are the page settings'
+own words, and the model package carries no texts. The kind first, because
+the other three mean nothing while it is none; they stay visible all the
+same, so a variable bound to one of them is not hidden away while the kind
+happens to be none.
+
+The kinds are the model's literals, which is what a page stores and what a
+variable has to say; optionLabel gives them the words. Fog is in the model
+and not offered yet: the layer does not draw it (#1228, second part).
+-->
+<uimodel:UIModel
+    xmlns:xmi="http://www.omg.org/XMI"
+    xmi:version="2.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:uimodel="http://uimodel/1.0"
+    name="WeatherForm">
+
+  <targetClasses href="http://org.eclipse.daanse.board.app.lib.model.workspace#//Weather"/>
+
+  <components xsi:type="uimodel:FormView" name="WeatherFormView">
+    <fields xsi:type="uimodel:SelectWidget" name="kind"
+        feature="http://org.eclipse.daanse.board.app.lib.model.workspace#//Weather/kind" label="shell:PageSettings.weather.kind">
+      <values>none</values>
+      <values>rain</values>
+      <values>snow</values>
+      <optionLabel language="JS" body="({ none: 'shell:PageSettings.weather.none', rain: 'shell:PageSettings.weather.rain', snow: 'shell:PageSettings.weather.snow' })[option] ?? option"/>
+    </fields>
+    <fields xsi:type="uimodel:NumberWidget" name="intensity"
+        feature="http://org.eclipse.daanse.board.app.lib.model.workspace#//Weather/intensity" label="shell:PageSettings.weather.intensity"
+        min="0" max="100" step="5"/>
+    <fields xsi:type="uimodel:NumberWidget" name="wind"
+        feature="http://org.eclipse.daanse.board.app.lib.model.workspace#//Weather/wind" label="shell:PageSettings.weather.wind"
+        min="-100" max="100" step="5"/>
+    <fields xsi:type="uimodel:InputWidget" name="color"
+        feature="http://org.eclipse.daanse.board.app.lib.model.workspace#//Weather/color" label="shell:PageSettings.weather.color"
+        placeholder="#ffffff"/>
+  </components>
+</uimodel:UIModel>
