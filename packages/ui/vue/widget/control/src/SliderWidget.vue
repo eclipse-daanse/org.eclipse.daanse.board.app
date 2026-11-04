@@ -212,6 +212,20 @@ const format = (value: number) =>
 /* Where along the track something stands: from the left, or from the bottom where vertical. */
 const along = (value: number) => (vertical.value ? { bottom: `${percent(value)}%` } : { left: `${percent(value)}%` })
 
+/*
+ * Which way a mark's label runs from its tick: the first starts at it and
+ * the last ends at it, so neither spills past the tile's edge; the others
+ * stand centred on their tick. A lone mark runs inward from the end it is
+ * nearer.
+ */
+function edgeOf(index: number): 'start' | 'end' | undefined {
+  const count = marks.value.length
+  if (count === 1) return percent(marks.value[0].at) < 50 ? 'start' : 'end'
+  if (index === 0) return 'start'
+  if (index === count - 1) return 'end'
+  return undefined
+}
+
 /* One badge per thumb, standing on it. */
 /* The colour of the detent the (lower) thumb stands on, where it has one. */
 const detentColor = computed(() => (detented.value ? detents.value[lower.value]?.color || '' : ''))
@@ -347,9 +361,10 @@ onUnmounted(() => {
       <!-- Under the track, or beside it where vertical: a tick at each mark, its label below. -->
       <div v-if="marks.length" class="control-slider__marks" aria-hidden="true">
         <span
-          v-for="mark in marks"
+          v-for="(mark, index) in marks"
           :key="mark.at"
           class="control-slider__mark"
+          :class="edgeOf(index) && `control-slider__mark--${edgeOf(index)}`"
           :style="along(mark.at)"
         ><span class="control-slider__tick"></span><span class="control-slider__mark-label">{{ mark.label }}</span></span>
       </div>
@@ -528,6 +543,17 @@ onUnmounted(() => {
   transform: translateX(-50%);
 }
 
+/* The first and last stay inside the tile: the label runs from the tick inward. */
+.control-slider__mark--start {
+  align-items: flex-start;
+  transform: none;
+}
+
+.control-slider__mark--end {
+  align-items: flex-end;
+  transform: translateX(-100%);
+}
+
 .control-slider__tick {
   width: 1px;
   height: 0.4em;
@@ -623,6 +649,17 @@ onUnmounted(() => {
   flex-direction: row;
   gap: 0.25em;
   transform: translateY(50%);
+}
+
+/* Bottom and top: the lowest label sits on its tick, the highest hangs from it. */
+.control-slider--vertical .control-slider__mark--start {
+  align-items: flex-end;
+  transform: none;
+}
+
+.control-slider--vertical .control-slider__mark--end {
+  align-items: flex-start;
+  transform: translateY(100%);
 }
 
 .control-slider--vertical .control-slider__tick {
