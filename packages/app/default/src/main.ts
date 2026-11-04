@@ -28,6 +28,7 @@ import { installDevtools } from '@eclipse-daanse/tsm/devtools'
 import * as libCore from 'org.eclipse.daanse.board.app.lib.core'
 import { MODULE_LOADER, services } from 'org.eclipse.daanse.board.app.lib.core'
 import { bundles } from './bundles'
+import { loadExtraManifests, type ExtraBundlesConfig } from './extraBundles'
 
 const loader = new ModuleLoader({
   serviceRegistry: services,
@@ -84,6 +85,28 @@ function framed(manifests: ModuleManifest[]): ModuleManifest[] {
   return manifests.filter((manifest) => !FRAMES.includes(manifest.id) || manifest.id === frame)
 }
 
+/*
+ * What the deployment adds: config.json's `extraBundles` (see extraBundles.ts).
+ * A missing or unreadable config.json means there is nothing to add - the
+ * board starts with what it ships.
+ */
+async function extraManifests(): Promise<ModuleManifest[]> {
+  let config: ExtraBundlesConfig | undefined
+  try {
+    const response = await fetch('/config.json')
+    if (response.ok) config = (await response.json())?.extraBundles
+  } catch {
+    return []
+  }
+  const { manifests, problems } = await loadExtraManifests(config, {
+    base: window.location.href,
+    // The built-in ones, and what is already loaded (the boot screen)
+    reserved: [...bundles, ...loader.getManifests()].map((manifest) => manifest.id),
+  })
+  for (const problem of problems) console.error(`extra bundle skipped - ${problem}`)
+  return manifests
+}
+
 async function start() {
   /*
    * The framework publishes itself: the boot screen (and any diagnostic
@@ -122,13 +145,14 @@ async function start() {
    * bundles.ts like everything else, and the vue stack itself arrives
    * through the import map in index.html pointing at its artefacts.
    */
-  loader.register(framed(bundles))
+  const extras = await extraManifests()
+  loader.register(framed([...bundles, ...extras]))
   await loader.loadAll()
 
   const all = loader.getManifests()
   const active = all.filter((m) => loader.getModule(m.id)?.state === 'active').length
   const parked = loader.getUnsatisfiedModules()
-  console.log(`✅ ${active}/${all.length} modules active (${bundles.length} URL bundles)`)
+  console.log(`✅ ${active}/${all.length} modules active (${bundles.length} URL bundles, ${extras.length} extra)`)
   if (parked.length > 0) {
     const waiting = parked.map((p) => `${p.moduleId} <- ${p.waitingFor.join(',')}`)
     console.warn('⏸ unsatisfied:', waiting.join('; '))
