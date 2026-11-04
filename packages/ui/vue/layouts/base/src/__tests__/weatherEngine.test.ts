@@ -13,7 +13,7 @@
 
 import { describe, expect, it } from 'vitest'
 import { WeatherKind } from 'org.eclipse.daanse.board.app.lib.model.workspace'
-import { LIMITS, WeatherEngine, depthAt, type WeatherLayerSettings } from '../weather/engine'
+import { LIMITS, MELT, WeatherEngine, depthAt, type WeatherLayerSettings } from '../weather/engine'
 
 /* Always the middle: deterministic, and never far (0.5 >= the far share) */
 const middle = () => 0.5
@@ -64,6 +64,43 @@ describe('the weather engine', () => {
     }
     expect(profile.heights[bin]).toBeCloseTo(depthAt(profile, bin), 4)
     expect(Math.max(...profile.heights)).toBeLessThanOrEqual(LIMITS.depth)
+  })
+
+  it('melts snow to a steady depth below the cap while it snows', () => {
+    const e = engine(SNOW)
+    const profile = e.profiles.get('w1')!
+    const bin = Math.floor((150 - WIDGET.x) / LIMITS.bin)
+    /* One small flake a second on one column: it brings 0.2 px a second */
+    const snowFor = (seconds: number) => {
+      for (let s = 0; s < seconds; s++) {
+        drop(e, 150, WIDGET.y - profile.heights[bin] - 5, 200, 0.4)
+        for (let i = 0; i < 20; i++) e.step(0.05, SNOW)
+        e.particles.length = 0
+      }
+    }
+    snowFor(300)
+    const settled = profile.heights[bin]
+    snowFor(100)
+
+    const steady = 0.2 / MELT.snowing
+    expect(settled).toBeLessThan(depthAt(profile, bin))
+    expect(settled).toBeGreaterThan(steady * 0.8)
+    expect(settled).toBeLessThan(steady * 1.2)
+    expect(Math.abs(profile.heights[bin] - settled)).toBeLessThan(steady * 0.05)
+  })
+
+  it('melts snow faster once the weather is no longer snow', () => {
+    const left = (after: WeatherLayerSettings) => {
+      const e = engine(SNOW)
+      const profile = e.profiles.get('w1')!
+      profile.heights.fill(8)
+      for (let i = 0; i < 40; i++) e.step(0.05, after) // two seconds
+      return profile.heights[25]
+    }
+    const stillSnowing = left(SNOW)
+    const turnedToRain = left(RAIN)
+    expect(stillSnowing).toBeLessThan(8)
+    expect(turnedToRain).toBeLessThan(stillSnowing / 2)
   })
 
   it('keeps snow on a short widget to a share of its height', () => {
