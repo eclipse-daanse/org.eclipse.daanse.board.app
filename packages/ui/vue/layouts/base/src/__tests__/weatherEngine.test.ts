@@ -223,6 +223,52 @@ describe('the weather engine', () => {
     }
   })
 
+  it('draws only inside the union of a drawn region\'s shapes', () => {
+    const e = new WeatherEngine(Math.random)
+    e.setViewport(0, 0, 400, 600)
+    /* Two shapes with a gap between them, and a triangle drawn the other way round */
+    e.setRegion([
+      { kind: 'rectangle', x: 0, y: 0, width: 100, height: 300 },
+      { kind: 'ellipse', x: 200, y: 0, width: 100, height: 300 },
+      { kind: 'polygon', points: [{ x: 300, y: 400 }, { x: 400, y: 600 }, { x: 400, y: 400 }] },
+    ])
+    expect(e.region).toEqual({ x: 0, y: 0, width: 400, height: 600 })
+    const settings = { ...SNOW, intensity: 100 }
+    for (let i = 0; i < 100; i++) e.step(0.05, settings)
+
+    /* A particle in the gap, outside every shape, and one in each shape */
+    e.particles.length = 0
+    drop(e, 150, 150, 0)
+    drop(e, 50, 150, 0)
+    drop(e, 250, 150, 0)
+    drop(e, 385, 420, 0)
+    /* Inside the ellipse's box, outside the ellipse */
+    drop(e, 205, 5, 0)
+
+    const points: Array<[number, number]> = []
+    const traced: string[] = []
+    let rule: unknown
+    const ctx = new Proxy({} as Record<string, unknown>, {
+      get: (target, key) => {
+        if (key in target) return target[key as string]
+        return (...args: unknown[]) => {
+          if (key === 'arc') points.push([args[0] as number, args[1] as number])
+          if (key === 'rect' || key === 'ellipse') traced.push(key)
+          if (key === 'clip') rule = args[0]
+        }
+      },
+      set: (target, key, value) => ((target[key as string] = value), true),
+    }) as unknown as CanvasRenderingContext2D
+    e.draw({ back: null, front: ctx }, settings)
+
+    expect(points).toEqual([[50, 150], [250, 150], [385, 420]])
+    expect(traced).toEqual(['rect', 'ellipse'])
+    expect(rule).toBe('nonzero')
+    /* The triangle was turned round to go the way the others go */
+    const triangle = e.regionShapes[2] as { points: { x: number; y: number }[] }
+    expect(triangle.points[0]).toEqual({ x: 400, y: 400 })
+  })
+
   it('lets everything pass the widgets by when the weather does not affect them', () => {
     const off = { ...SNOW, affectsWidgets: false }
     const e = engine(off)

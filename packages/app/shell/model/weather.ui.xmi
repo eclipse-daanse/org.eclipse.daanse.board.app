@@ -22,10 +22,11 @@ The kinds are the model's literals, which is what a page stores and what a
 variable has to say; optionLabel gives them the words. Fog is in the model
 and not offered yet: the layer does not draw it (#1228, second part).
 
-The region's area is in grid units of the page's layout. The widget a
-widget region follows is one of the page's own, so its choices cannot be
-written here: the page settings put one value per widget where the
-"widget choices" comment stands, with the words for each in optionLabel.
+An area region is drawn on the page rather than typed, so its shapes are
+not fields here. The widget a widget region follows is one of the page's
+own, so its choices cannot be written here: the page settings put one
+value per widget where the "widget choices" comment stands, with the
+words for each in optionLabel.
 -->
 <uimodel:UIModel
     xmlns:xmi="http://www.omg.org/XMI"
@@ -60,14 +61,6 @@ written here: the page settings put one value per widget where the
       <values>widget</values>
       <optionLabel language="JS" body="({ page: 'shell:PageSettings.weather.regionPage', area: 'shell:PageSettings.weather.regionArea', widget: 'shell:PageSettings.weather.regionWidget' })[option] ?? option"/>
     </fields>
-    <fields xsi:type="uimodel:NumberWidget" name="regionX"
-        feature="http://org.eclipse.daanse.board.app.lib.model.workspace#//Weather/regionX" label="shell:PageSettings.weather.regionX" min="0" step="1"/>
-    <fields xsi:type="uimodel:NumberWidget" name="regionY"
-        feature="http://org.eclipse.daanse.board.app.lib.model.workspace#//Weather/regionY" label="shell:PageSettings.weather.regionY" min="0" step="1"/>
-    <fields xsi:type="uimodel:NumberWidget" name="regionWidth"
-        feature="http://org.eclipse.daanse.board.app.lib.model.workspace#//Weather/regionWidth" label="shell:PageSettings.weather.regionWidth" min="1" step="1"/>
-    <fields xsi:type="uimodel:NumberWidget" name="regionHeight"
-        feature="http://org.eclipse.daanse.board.app.lib.model.workspace#//Weather/regionHeight" label="shell:PageSettings.weather.regionHeight" min="1" step="1"/>
     <fields xsi:type="uimodel:SelectWidget" name="regionWidget"
         feature="http://org.eclipse.daanse.board.app.lib.model.workspace#//Weather/regionWidget" label="shell:PageSettings.weather.regionWidgetChoice">
       <!-- widget choices -->

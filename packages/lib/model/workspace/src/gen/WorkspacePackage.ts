@@ -114,12 +114,22 @@ export class WorkspacePackage extends BasicEPackage {
     WEATHER__WIND: null as unknown as EAttribute | EReference,
     WEATHER__COLOR: null as unknown as EAttribute | EReference,
     WEATHER__REGION: null as unknown as EAttribute | EReference,
-    WEATHER__REGION_X: null as unknown as EAttribute | EReference,
-    WEATHER__REGION_Y: null as unknown as EAttribute | EReference,
-    WEATHER__REGION_WIDTH: null as unknown as EAttribute | EReference,
-    WEATHER__REGION_HEIGHT: null as unknown as EAttribute | EReference,
+    WEATHER__SHAPES: null as unknown as EAttribute | EReference,
     WEATHER__REGION_WIDGET: null as unknown as EAttribute | EReference,
     WEATHER__AFFECTS_WIDGETS: null as unknown as EAttribute | EReference,
+    REGION_SHAPE: null as unknown as EClass,
+    BOX_SHAPE: null as unknown as EClass,
+    BOX_SHAPE__X: null as unknown as EAttribute | EReference,
+    BOX_SHAPE__Y: null as unknown as EAttribute | EReference,
+    BOX_SHAPE__WIDTH: null as unknown as EAttribute | EReference,
+    BOX_SHAPE__HEIGHT: null as unknown as EAttribute | EReference,
+    RECTANGLE_SHAPE: null as unknown as EClass,
+    ELLIPSE_SHAPE: null as unknown as EClass,
+    POLYGON_SHAPE: null as unknown as EClass,
+    POLYGON_SHAPE__POINTS: null as unknown as EAttribute | EReference,
+    REGION_POINT: null as unknown as EClass,
+    REGION_POINT__X: null as unknown as EAttribute | EReference,
+    REGION_POINT__Y: null as unknown as EAttribute | EReference,
     VARIABLE: null as unknown as EClass,
     VARIABLE__UID: null as unknown as EAttribute | EReference,
     VARIABLE__NAME: null as unknown as EAttribute | EReference,
@@ -620,41 +630,14 @@ export class WorkspacePackage extends BasicEPackage {
     weatherClass.getEStructuralFeatures().push(weather_region);
     WorkspacePackage.Literals.WEATHER__REGION = weather_region;
 
-    // Create regionX feature
-    const weather_regionX = new BasicEReference();
-    weather_regionX.setContainment(true);
-    weather_regionX.setName('regionX');
-    weather_regionX.setLowerBound(0);
-    weather_regionX.setUpperBound(1);
-    weatherClass.getEStructuralFeatures().push(weather_regionX);
-    WorkspacePackage.Literals.WEATHER__REGION_X = weather_regionX;
-
-    // Create regionY feature
-    const weather_regionY = new BasicEReference();
-    weather_regionY.setContainment(true);
-    weather_regionY.setName('regionY');
-    weather_regionY.setLowerBound(0);
-    weather_regionY.setUpperBound(1);
-    weatherClass.getEStructuralFeatures().push(weather_regionY);
-    WorkspacePackage.Literals.WEATHER__REGION_Y = weather_regionY;
-
-    // Create regionWidth feature
-    const weather_regionWidth = new BasicEReference();
-    weather_regionWidth.setContainment(true);
-    weather_regionWidth.setName('regionWidth');
-    weather_regionWidth.setLowerBound(0);
-    weather_regionWidth.setUpperBound(1);
-    weatherClass.getEStructuralFeatures().push(weather_regionWidth);
-    WorkspacePackage.Literals.WEATHER__REGION_WIDTH = weather_regionWidth;
-
-    // Create regionHeight feature
-    const weather_regionHeight = new BasicEReference();
-    weather_regionHeight.setContainment(true);
-    weather_regionHeight.setName('regionHeight');
-    weather_regionHeight.setLowerBound(0);
-    weather_regionHeight.setUpperBound(1);
-    weatherClass.getEStructuralFeatures().push(weather_regionHeight);
-    WorkspacePackage.Literals.WEATHER__REGION_HEIGHT = weather_regionHeight;
+    // Create shapes feature
+    const weather_shapes = new BasicEReference();
+    weather_shapes.setContainment(true);
+    weather_shapes.setName('shapes');
+    weather_shapes.setLowerBound(0);
+    weather_shapes.setUpperBound(-1);
+    weatherClass.getEStructuralFeatures().push(weather_shapes);
+    WorkspacePackage.Literals.WEATHER__SHAPES = weather_shapes;
 
     // Create regionWidget feature
     const weather_regionWidget = new BasicEReference();
@@ -673,6 +656,117 @@ export class WorkspacePackage extends BasicEPackage {
     weather_affectsWidgets.setUpperBound(1);
     weatherClass.getEStructuralFeatures().push(weather_affectsWidgets);
     WorkspacePackage.Literals.WEATHER__AFFECTS_WIDGETS = weather_affectsWidgets;
+
+    // Create RegionShape class
+    const regionShapeClass = new BasicEClass();
+    regionShapeClass.setName('RegionShape');
+    regionShapeClass.setAbstract(true);
+    regionShapeClass.setInterface(false);
+    this.getEClassifiers().push(regionShapeClass);
+    regionShapeClass.setEPackage(this);
+    WorkspacePackage.Literals.REGION_SHAPE = regionShapeClass;
+
+    // Create BoxShape class
+    const boxShapeClass = new BasicEClass();
+    boxShapeClass.setName('BoxShape');
+    boxShapeClass.setAbstract(true);
+    boxShapeClass.setInterface(false);
+    this.getEClassifiers().push(boxShapeClass);
+    boxShapeClass.setEPackage(this);
+    WorkspacePackage.Literals.BOX_SHAPE = boxShapeClass;
+
+    // Create x feature
+    const boxShape_x = new BasicEAttribute();
+    boxShape_x.setName('x');
+    boxShape_x.setLowerBound(0);
+    boxShape_x.setUpperBound(1);
+    boxShapeClass.getEStructuralFeatures().push(boxShape_x);
+    WorkspacePackage.Literals.BOX_SHAPE__X = boxShape_x;
+
+    // Create y feature
+    const boxShape_y = new BasicEAttribute();
+    boxShape_y.setName('y');
+    boxShape_y.setLowerBound(0);
+    boxShape_y.setUpperBound(1);
+    boxShapeClass.getEStructuralFeatures().push(boxShape_y);
+    WorkspacePackage.Literals.BOX_SHAPE__Y = boxShape_y;
+
+    // Create width feature
+    const boxShape_width = new BasicEAttribute();
+    boxShape_width.setName('width');
+    boxShape_width.setLowerBound(0);
+    boxShape_width.setUpperBound(1);
+    boxShapeClass.getEStructuralFeatures().push(boxShape_width);
+    WorkspacePackage.Literals.BOX_SHAPE__WIDTH = boxShape_width;
+
+    // Create height feature
+    const boxShape_height = new BasicEAttribute();
+    boxShape_height.setName('height');
+    boxShape_height.setLowerBound(0);
+    boxShape_height.setUpperBound(1);
+    boxShapeClass.getEStructuralFeatures().push(boxShape_height);
+    WorkspacePackage.Literals.BOX_SHAPE__HEIGHT = boxShape_height;
+
+    // Create RectangleShape class
+    const rectangleShapeClass = new BasicEClass();
+    rectangleShapeClass.setName('RectangleShape');
+    rectangleShapeClass.setAbstract(false);
+    rectangleShapeClass.setInterface(false);
+    this.getEClassifiers().push(rectangleShapeClass);
+    rectangleShapeClass.setEPackage(this);
+    WorkspacePackage.Literals.RECTANGLE_SHAPE = rectangleShapeClass;
+
+    // Create EllipseShape class
+    const ellipseShapeClass = new BasicEClass();
+    ellipseShapeClass.setName('EllipseShape');
+    ellipseShapeClass.setAbstract(false);
+    ellipseShapeClass.setInterface(false);
+    this.getEClassifiers().push(ellipseShapeClass);
+    ellipseShapeClass.setEPackage(this);
+    WorkspacePackage.Literals.ELLIPSE_SHAPE = ellipseShapeClass;
+
+    // Create PolygonShape class
+    const polygonShapeClass = new BasicEClass();
+    polygonShapeClass.setName('PolygonShape');
+    polygonShapeClass.setAbstract(false);
+    polygonShapeClass.setInterface(false);
+    this.getEClassifiers().push(polygonShapeClass);
+    polygonShapeClass.setEPackage(this);
+    WorkspacePackage.Literals.POLYGON_SHAPE = polygonShapeClass;
+
+    // Create points feature
+    const polygonShape_points = new BasicEReference();
+    polygonShape_points.setContainment(true);
+    polygonShape_points.setName('points');
+    polygonShape_points.setLowerBound(0);
+    polygonShape_points.setUpperBound(-1);
+    polygonShapeClass.getEStructuralFeatures().push(polygonShape_points);
+    WorkspacePackage.Literals.POLYGON_SHAPE__POINTS = polygonShape_points;
+
+    // Create RegionPoint class
+    const regionPointClass = new BasicEClass();
+    regionPointClass.setName('RegionPoint');
+    regionPointClass.setAbstract(false);
+    regionPointClass.setInterface(false);
+    this.getEClassifiers().push(regionPointClass);
+    regionPointClass.setEPackage(this);
+    WorkspacePackage.Literals.REGION_POINT = regionPointClass;
+
+    // Create x feature
+    const regionPoint_x = new BasicEAttribute();
+    regionPoint_x.setName('x');
+    regionPoint_x.setLowerBound(0);
+    regionPoint_x.setUpperBound(1);
+    regionPointClass.getEStructuralFeatures().push(regionPoint_x);
+    WorkspacePackage.Literals.REGION_POINT__X = regionPoint_x;
+
+    // Create y feature
+    const regionPoint_y = new BasicEAttribute();
+    regionPoint_y.setName('y');
+    regionPoint_y.setLowerBound(0);
+    regionPoint_y.setUpperBound(1);
+    regionPointClass.getEStructuralFeatures().push(regionPoint_y);
+    WorkspacePackage.Literals.REGION_POINT__Y = regionPoint_y;
 
     // Create Variable class
     const variableClass = new BasicEClass();
@@ -1175,6 +1269,10 @@ export class WorkspacePackage extends BasicEPackage {
     // ============================================
     // Set ESuperTypes (must be done after all classes are created)
     // ============================================
+    (WorkspacePackage.Literals.BOX_SHAPE as BasicEClass).getESuperTypes().push(WorkspacePackage.Literals.REGION_SHAPE);
+    (WorkspacePackage.Literals.RECTANGLE_SHAPE as BasicEClass).getESuperTypes().push(WorkspacePackage.Literals.BOX_SHAPE);
+    (WorkspacePackage.Literals.ELLIPSE_SHAPE as BasicEClass).getESuperTypes().push(WorkspacePackage.Literals.BOX_SHAPE);
+    (WorkspacePackage.Literals.POLYGON_SHAPE as BasicEClass).getESuperTypes().push(WorkspacePackage.Literals.REGION_SHAPE);
 
     // ============================================
     // Set ETypes for all features (must be done after all classes are created).
@@ -1226,12 +1324,16 @@ export class WorkspacePackage extends BasicEPackage {
     (WorkspacePackage.Literals.WEATHER__WIND as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
     (WorkspacePackage.Literals.WEATHER__COLOR as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
     (WorkspacePackage.Literals.WEATHER__REGION as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
-    (WorkspacePackage.Literals.WEATHER__REGION_X as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
-    (WorkspacePackage.Literals.WEATHER__REGION_Y as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
-    (WorkspacePackage.Literals.WEATHER__REGION_WIDTH as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
-    (WorkspacePackage.Literals.WEATHER__REGION_HEIGHT as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
+    (WorkspacePackage.Literals.WEATHER__SHAPES as BasicEReference).setEType(WorkspacePackage.Literals.REGION_SHAPE);
     (WorkspacePackage.Literals.WEATHER__REGION_WIDGET as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
     (WorkspacePackage.Literals.WEATHER__AFFECTS_WIDGETS as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
+    (WorkspacePackage.Literals.BOX_SHAPE__X as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EDouble')!);
+    (WorkspacePackage.Literals.BOX_SHAPE__Y as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EDouble')!);
+    (WorkspacePackage.Literals.BOX_SHAPE__WIDTH as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EDouble')!);
+    (WorkspacePackage.Literals.BOX_SHAPE__HEIGHT as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EDouble')!);
+    (WorkspacePackage.Literals.POLYGON_SHAPE__POINTS as BasicEReference).setEType(WorkspacePackage.Literals.REGION_POINT);
+    (WorkspacePackage.Literals.REGION_POINT__X as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EDouble')!);
+    (WorkspacePackage.Literals.REGION_POINT__Y as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EDouble')!);
     (WorkspacePackage.Literals.VARIABLE__UID as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
     (WorkspacePackage.Literals.VARIABLE__NAME as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
     (WorkspacePackage.Literals.VARIABLE__TYPE as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);

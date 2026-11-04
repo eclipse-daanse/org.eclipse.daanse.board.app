@@ -22,6 +22,9 @@ import {
   affectsWidgetsOf,
   WeatherKind,
   WeatherRegion,
+  readShapes,
+  writeShapes,
+  liftTypedWeatherRegions,
   type Page,
 } from './index'
 
@@ -70,6 +73,7 @@ describe('a page with weather', () => {
     expect(weather.region!.value).toBe('page')
     expect(weather.affectsWidgets!.value).toBe(true)
     expect(weather.regionWidget!.eContainer()).toBe(weather)
+    expect(weather.shapes.size()).toBe(0)
     expect(weatherRegionOf(' Widget ')).toBe(WeatherRegion.WIDGET)
     expect(weatherRegionOf('somewhere')).toBe(WeatherRegion.PAGE)
     expect(affectsWidgetsOf(undefined)).toBe(true)
@@ -77,3 +81,60 @@ describe('a page with weather', () => {
     expect(affectsWidgetsOf(false)).toBe(false)
   })
 })
+
+describe('a drawn region', () => {
+  it('keeps its shapes, of every kind, through a save and a load', () => {
+    const page = new PageImpl()
+    page.id = 'p'
+    page.weather = createWeather()
+    writeShapes(page.weather, [
+      { kind: 'rectangle', x: 1, y: 2, width: 3, height: 4 },
+      { kind: 'ellipse', x: 5.5, y: 0, width: 2, height: 1 },
+      { kind: 'polygon', points: [{ x: 0, y: 0 }, { x: 4, y: 0 }, { x: 2, y: 3 }] },
+    ])
+    expect(page.weather.shapes.get(2).eContainer()).toBe(page.weather)
+
+    const back = roundTrip(page)
+    expect(readShapes(back.weather)).toEqual([
+      { kind: 'rectangle', x: 1, y: 2, width: 3, height: 4 },
+      { kind: 'ellipse', x: 5.5, y: 0, width: 2, height: 1 },
+      { kind: 'polygon', points: [{ x: 0, y: 0 }, { x: 4, y: 0 }, { x: 2, y: 3 }] },
+    ])
+  })
+
+  /* As c8ed1ade wrote a page whose weather kept to a typed rectangle */
+  function typedPage(region: Record<string, unknown>) {
+    return {
+      eClass: 'http://org.eclipse.daanse.board.app.lib.model.workspace#//Page',
+      id: 'p',
+      weather: {
+        kind: { value: 'snow' },
+        region,
+        regionX: { value: 2 },
+        regionY: { value: 1 },
+        regionWidth: { value: 4 },
+        regionHeight: { value: 3 },
+      },
+    }
+  }
+
+  function load(stored: unknown): Page {
+    const resource = new JSONResource(URI.createURI('page.json'))
+    resource.loadFromString(JSON.stringify(stored))
+    return resource.getContents().get(0) as Page
+  }
+
+  it('reads an old typed rectangle region as one rectangle shape', () => {
+    const page = load(liftTypedWeatherRegions({ board: { pages: [typedPage({ value: 'area' })] } }).board.pages[0])
+    expect(page.weather?.region?.value).toBe('area')
+    expect(readShapes(page.weather)).toEqual([{ kind: 'rectangle', x: 2, y: 1, width: 4, height: 3 }])
+  })
+
+  it('drops the typed rectangle of a region that was not an area', () => {
+    const stored = typedPage({ value: 'page' })
+    liftTypedWeatherRegions(stored)
+    expect(stored.weather).not.toHaveProperty('regionX')
+    expect(readShapes(load(stored).weather)).toEqual([])
+  })
+})
+
