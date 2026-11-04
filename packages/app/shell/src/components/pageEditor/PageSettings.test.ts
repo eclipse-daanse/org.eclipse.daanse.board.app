@@ -97,7 +97,8 @@ describe('PageSettings', () => {
     await flushPromises()
 
     expect(wrapper.find('[data-uim-name="region"]').exists()).toBe(true)
-    expect(wrapper.find('[data-uim-name="regionWidth"] input').exists()).toBe(true)
+    /* An area is drawn on the page, not typed in */
+    expect(wrapper.find('[data-uim-name="regionWidth"]').exists()).toBe(false)
     expect(wrapper.find('[data-uim-name="regionWidget"]').exists()).toBe(true)
     expect(wrapper.find('[data-uim-name="affectsWidgets"]').exists()).toBe(true)
   })
