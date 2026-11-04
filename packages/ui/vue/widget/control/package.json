@@ -1,0 +1,53 @@
+{
+  "name": "org.eclipse.daanse.board.app.ui.vue.widget.control",
+  "version": "0.0.1-next.1",
+  "description": "Controls a board is operated with: button, and switch, slider, choice and fields to come",
+  "author": "",
+  "homepage": "https://github.com/eclipse-daanse/org.eclipse.daanse.board.app#readme",
+  "license": "ISC",
+  "type": "module",
+  "main": "./dist/org.eclipse.daanse.board.app.ui.vue.widget.control.umd.cjs",
+  "module": "./dist/org.eclipse.daanse.board.app.ui.vue.widget.control.js",
+  "types": "./dist/org.eclipse.daanse.board.app.ui.vue.widget.control.d.ts",
+  "files": [
+    "src"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/eclipse-daanse/org.eclipse.daanse.board.app.git"
+  },
+  "scripts": {
+    "build": "vue-tsc --noEmit && vite build"
+  },
+  "bugs": {
+    "url": "https://github.com/eclipse-daanse/org.eclipse.daanse.board.app/issues"
+  },
+  "dependencies": {
+    "@eclipse-daanse/tsm": "0.1.0-next.1",
+    "org.eclipse.daanse.board.app.lib.annotations": "0.0.1-next.1",
+    "org.eclipse.daanse.board.app.lib.core": "0.0.1-next.1",
+    "org.eclipse.daanse.board.app.lib.events": "0.0.1-next.1",
+    "org.eclipse.daanse.board.app.lib.repository.widget": "0.0.1-next.1",
+    "org.eclipse.daanse.board.app.ui.vue.composables": "0.0.1-next.1",
+    "org.eclipse.daanse.board.app.ui.vue.controls": "^0.0.1-next.1",
+    "org.eclipse.daanse.board.app.ui.vue.plugins.i18next": "0.0.1-next.1",
+    "org.eclipse.daanse.board.app.lib.api.events": "^0.0.1-next.1",
+    "org.eclipse.daanse.board.app.lib.api.widget": "^0.0.1-next.1",
+    "org.eclipse.daanse.board.app.lib.i18next": "^0.0.1-next.1",
+    "org.eclipse.daanse.board.app.lib.variables": "^0.0.1-next.1"
+  },
+  "devDependencies": {
+    "@types/node": "^25.0.8",
+    "@vitejs/plugin-vue": "^5.2.3",
+    "rollup": "^4.36.0",
+    "typescript": "^5.8.2",
+    "vite": "6.4.2",
+    "vite-plugin-dts": "4.5.4",
+    "vite-plugin-libcss": "^1.1.1",
+    "vue": "^3.5.13",
+    "vue-tsc": "^3.2.2"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

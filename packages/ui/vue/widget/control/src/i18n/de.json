@@ -1,0 +1,20 @@
+{
+  "Widget": {
+    "button": "Schaltfläche"
+  },
+  "Form": {
+    "labelGroup": "Beschriftung",
+    "label": "Beschriftung",
+    "writeGroup": "Beim Drücken",
+    "target": "Schreibt in Variable",
+    "value": "Geschriebener Wert",
+    "disabled": "Deaktiviert",
+    "lookGroup": "Aussehen",
+    "color": "Farbe",
+    "textColor": "Textfarbe"
+  },
+  "Action": {
+    "value": "Wert",
+    "label": "Beschriftung"
+  }
+}

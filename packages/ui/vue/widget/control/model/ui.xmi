@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/*********************************************************************
+* Copyright (c) 2026 Contributors to the Eclipse Foundation.
+*
+* This program and the accompanying materials are made
+* available under the terms of the Eclipse Public License 2.0
+* which is available at https://www.eclipse.org/legal/epl-2.0/
+*
+* SPDX-License-Identifier: EPL-2.0
+**********************************************************************/
+
+The form for the button.
+
+In the order the decisions are made: what the button says, what a press
+does, and last how it looks. The value is only asked for once there is a
+variable to write it into.
+-->
+<uimodel:UIModel
+    xmlns:xmi="http://www.omg.org/XMI"
+    xmi:version="2.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:uimodel="http://uimodel/1.0"
+    name="ButtonSettingsForm">
+
+  <targetClasses href="http://org.eclipse.daanse.board.app.ui.vue.widget.control#//ButtonSettings"/>
+
+  <components xsi:type="uimodel:FormView" name="ButtonSettingsFormView">
+
+    <fields xsi:type="uimodel:GroupWidget" name="labelGroup" layout="VERTICAL" label="control:Form.labelGroup">
+      <fields xsi:type="uimodel:InputWidget" name="label"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.control#//ButtonSettings/label" label="control:Form.label"/>
+    </fields>
+
+    <fields xsi:type="uimodel:GroupWidget" name="writeGroup" layout="VERTICAL" label="control:Form.writeGroup">
+      <fields xsi:type="uimodel:InputWidget" name="target"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.control#//ButtonSettings/target" label="control:Form.target"/>
+      <fields xsi:type="uimodel:InputWidget" name="value"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.control#//ButtonSettings/value" label="control:Form.value">
+        <visibilityCondition language="JS" body="!!(self.target?.variable)"/>
+      </fields>
+      <fields xsi:type="uimodel:InputWidget" name="disabled"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.control#//ButtonSettings/disabled" label="control:Form.disabled" placeholder="false"/>
+    </fields>
+
+    <fields xsi:type="uimodel:GroupWidget" name="lookGroup" layout="VERTICAL" label="control:Form.lookGroup">
+      <fields xsi:type="uimodel:InputWidget" name="color"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.control#//ButtonSettings/color" label="control:Form.color"/>
+      <fields xsi:type="uimodel:InputWidget" name="textColor"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.control#//ButtonSettings/textColor" label="control:Form.textColor"/>
+    </fields>
+
+  </components>
+</uimodel:UIModel>
