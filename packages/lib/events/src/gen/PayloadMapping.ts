@@ -31,4 +31,8 @@ export class PayloadMapping {
   @Attribute()
   argIndex?: number;
 
+  @Documentation("Optional expression computing the argument, evaluated like a computed variable's expression with value (the property the path names) and payload (the whole payload) in scope. Without one the property is handed on unchanged.")
+  @Attribute()
+  expression?: string;
+
 }
