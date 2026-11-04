@@ -2,7 +2,8 @@
   "Widget": {
     "button": "Schaltfläche",
     "toggle": "Umschalter",
-    "multiState": "Mehrstufige Schaltfläche"
+    "multiState": "Mehrstufige Schaltfläche",
+    "slider": "Schieberegler"
   },
   "Form": {
     "labelGroup": "Beschriftung",
@@ -24,16 +25,43 @@
     "onColor": "Farbe an",
     "statesGroup": "Zustände",
     "states": "Zustände, in der Reihenfolge eines Drucks",
-    "noStateLabel": "Beschriftung ohne Zustand"
+    "noStateLabel": "Beschriftung ohne Zustand",
+    "scaleGroup": "Skala",
+    "min": "Untere Grenze",
+    "max": "Obere Grenze",
+    "step": "Schrittweite",
+    "unit": "Einheit",
+    "marksGroup": "Rasterpunkte",
+    "marks": "Markierungen",
+    "markEvery": "Markierung alle n Schritte",
+    "snap": "Rastet an Markierungen ein",
+    "slideGroup": "Beim Schieben",
+    "range": "Bereich mit zwei Reglern",
+    "upperTarget": "Obere Grenze schreibt in Variable",
+    "showValue": "Wert anzeigen",
+    "orientation": "Ausrichtung",
+    "valueTextColor": "Textfarbe des Werts"
   },
   "Action": {
     "value": "Wert",
     "label": "Beschriftung",
-    "on": "An"
+    "on": "An",
+    "lower": "Untere Grenze",
+    "upper": "Obere Grenze"
   },
   "FormOption": {
     "label": "Beschriftung",
     "value": "Wert",
     "color": "Farbe"
+  },
+  "FormMark": {
+    "at": "Bei Wert",
+    "label": "Beschriftung"
+  },
+  "Options": {
+    "orientation": {
+      "horizontal": "Waagerecht",
+      "vertical": "Senkrecht"
+    }
   }
 }
