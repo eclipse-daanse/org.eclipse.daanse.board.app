@@ -29,6 +29,10 @@ import { ControlOption } from './ControlOption.js';
 import { ControlOptionImpl } from './ControlOptionImpl.js';
 import { MultiStateSettings } from './MultiStateSettings.js';
 import { MultiStateSettingsImpl } from './MultiStateSettingsImpl.js';
+import { SliderMark } from './SliderMark.js';
+import { SliderMarkImpl } from './SliderMarkImpl.js';
+import { SliderSettings } from './SliderSettings.js';
+import { SliderSettingsImpl } from './SliderSettingsImpl.js';
 import { ControlPayload } from './ControlPayload.js';
 import { ControlPayloadImpl } from './ControlPayloadImpl.js';
 
@@ -81,6 +85,20 @@ export class ControlwidgetsFactory extends BasicEFactory {
   }
 
   /**
+   * Create a new SliderMark instance
+   */
+  createSliderMark(): SliderMark {
+    return new SliderMarkImpl();
+  }
+
+  /**
+   * Create a new SliderSettings instance
+   */
+  createSliderSettings(): SliderSettings {
+    return new SliderSettingsImpl();
+  }
+
+  /**
    * Create a new ControlPayload instance
    */
   createControlPayload(): ControlPayload {
@@ -100,6 +118,10 @@ export class ControlwidgetsFactory extends BasicEFactory {
         return this.createControlOption();
       case 'MultiStateSettings':
         return this.createMultiStateSettings();
+      case 'SliderMark':
+        return this.createSliderMark();
+      case 'SliderSettings':
+        return this.createSliderSettings();
       case 'ControlPayload':
         return this.createControlPayload();
       default:
