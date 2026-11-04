@@ -1,7 +1,8 @@
 {
   "Widget": {
     "button": "Schaltfläche",
-    "toggle": "Umschalter"
+    "toggle": "Umschalter",
+    "multiState": "Mehrstufige Schaltfläche"
   },
   "Form": {
     "labelGroup": "Beschriftung",
@@ -20,11 +21,19 @@
     "onValue": "Wert für an",
     "offValue": "Wert für aus",
     "offColor": "Farbe aus",
-    "onColor": "Farbe an"
+    "onColor": "Farbe an",
+    "statesGroup": "Zustände",
+    "states": "Zustände, in der Reihenfolge eines Drucks",
+    "noStateLabel": "Beschriftung ohne Zustand"
   },
   "Action": {
     "value": "Wert",
     "label": "Beschriftung",
     "on": "An"
+  },
+  "FormOption": {
+    "label": "Beschriftung",
+    "value": "Wert",
+    "color": "Farbe"
   }
 }
