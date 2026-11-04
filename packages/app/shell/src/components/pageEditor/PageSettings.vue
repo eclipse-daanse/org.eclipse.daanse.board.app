@@ -19,7 +19,7 @@ Contributors:
  * navigation. Every field writes straight through - there is no Save, and
  * no way to lose what you typed by closing the window.
  */
-import { inject, ref, computed, watch, onMounted } from 'vue'
+import { inject, ref, computed, watch, onMounted, shallowRef } from 'vue'
 import {
   type PageRegistryI,
   identifier as PageIdentifier,
@@ -38,7 +38,15 @@ import {
   DSwitch,
 } from 'org.eclipse.daanse.board.app.ui.vue.controls'
 import { SettingsForm } from 'org.eclipse.daanse.board.app.ui.vue.uimodel'
-import { useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+import { useEObject, useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+import {
+  WorkspacePackage,
+  createWeather,
+  workspaceEcore,
+  type Weather,
+} from 'org.eclipse.daanse.board.app.lib.model.workspace'
+/* The weather's form, written as a model; see the file for why it is here. */
+import weatherFormXmi from '../../../model/weather.ui.xmi?raw'
 
 const pageid = defineModel<string>({ required: true })
 const emit = defineEmits(['close'])
@@ -151,9 +159,44 @@ function load() {
     : null
 }
 
-onMounted(load)
+/*
+ * The weather is edited on the page itself, not on the copy above: it is a
+ * modelled object holding wrappers, and a variable bound to one of them has
+ * to be bound on the page that is drawn, not on a copy written back.
+ *
+ * A page without weather is shown a fresh one that is not on the page yet.
+ * It goes onto the page with the first edit, so opening this panel does
+ * not change a page nobody touched - the same rule as for the copy above.
+ */
+const weather = shallowRef<Weather | undefined>()
+
+function loadWeather() {
+  let page: Page | undefined
+  try {
+    page = pageid.value ? pageRepo?.getPage(pageid.value) : undefined
+  } catch {
+    page = undefined
+  }
+  weather.value = page ? (page.weather ?? createWeather()) : undefined
+}
+
+const watchedWeather = useEObject(() => weather.value)
+watch(watchedWeather, (now, before) => {
+  /* A different draft is a page opened, not an edit made */
+  if (!now || now !== before || now.eContainer()) return
+  const page = pageRepo?.getPage(pageid.value)
+  if (page && !page.weather) page.weather = now
+})
+
+onMounted(() => {
+  load()
+  loadWeather()
+})
 /* Opened again for a different page while still on screen */
-watch(pageid, load)
+watch(pageid, () => {
+  load()
+  loadWeather()
+})
 
 
 /*
@@ -244,6 +287,18 @@ watch(
             :options="backgroundPositions"
           />
         </template>
+      </section>
+
+      <section v-if="weather" class="group">
+        <h3 class="group__label">{{ t('PageSettings.weather.label') }}</h3>
+        <SettingsForm
+          v-model="weather"
+          :create="createWeather as () => any"
+          :ui-model-xmi="weatherFormXmi"
+          :domain-package="WorkspacePackage.eINSTANCE as any"
+          ui-model-uri="/page-weather.ui.xmi"
+          :ecore="workspaceEcore"
+        />
       </section>
 
       <section class="group">

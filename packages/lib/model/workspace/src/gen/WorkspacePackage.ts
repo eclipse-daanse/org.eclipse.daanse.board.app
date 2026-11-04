@@ -21,8 +21,21 @@
 import { BasicEPackage, BasicEClass, BasicEAttribute, BasicEReference, EPackageRegistry, getEcorePackage, BasicEEnum, BasicEEnumLiteral, BasicEAnnotation } from '@emfts/core';
 import type { EClass, EAttribute, EReference, EEnum, EDataType } from '@emfts/core';
 import { WorkspaceFactory } from './WorkspaceFactory.js';
+import { WeatherKind } from './WeatherKind.js';
 import { SelectionPick } from './SelectionPick.js';
 import { FilterOperator } from './FilterOperator.js';
+
+/**
+ * Resolve a dependency package from the registry, failing with an actionable
+ * message instead of a null dereference when it is not registered yet
+ */
+function requireEPackage(nsURI: string) {
+  const pkg = EPackageRegistry.INSTANCE.getEPackage(nsURI);
+  if (!pkg) {
+    throw new Error(`EPackage '${nsURI}' is not registered. Access the eINSTANCE of that model's generated package (or register it via EPackageRegistry.INSTANCE.registerPackage) before initializing WorkspacePackage.`);
+  }
+  return pkg;
+}
 
 /**
  * Workspace Package
@@ -76,6 +89,7 @@ export class WorkspacePackage extends BasicEPackage {
     PAGE__BACKGROUND_REPEAT: null as unknown as EAttribute | EReference,
     PAGE__WIDGETS: null as unknown as EAttribute | EReference,
     PAGE__LAYOUT: null as unknown as EAttribute | EReference,
+    PAGE__WEATHER: null as unknown as EAttribute | EReference,
     WIDGET: null as unknown as EClass,
     WIDGET__UID: null as unknown as EAttribute | EReference,
     WIDGET__TYPE: null as unknown as EAttribute | EReference,
@@ -93,6 +107,11 @@ export class WorkspacePackage extends BasicEPackage {
     DATA_FILTER__FIELD: null as unknown as EAttribute | EReference,
     DATA_FILTER__OPERATOR: null as unknown as EAttribute | EReference,
     DATA_FILTER__VALUE: null as unknown as EAttribute | EReference,
+    WEATHER: null as unknown as EClass,
+    WEATHER__KIND: null as unknown as EAttribute | EReference,
+    WEATHER__INTENSITY: null as unknown as EAttribute | EReference,
+    WEATHER__WIND: null as unknown as EAttribute | EReference,
+    WEATHER__COLOR: null as unknown as EAttribute | EReference,
     VARIABLE: null as unknown as EClass,
     VARIABLE__UID: null as unknown as EAttribute | EReference,
     VARIABLE__NAME: null as unknown as EAttribute | EReference,
@@ -127,6 +146,7 @@ export class WorkspacePackage extends BasicEPackage {
     CONNECTION__CONFIG: null as unknown as EAttribute | EReference,
     CONNECTION__ICON: null as unknown as EAttribute | EReference,
     CONNECTION__TAGS: null as unknown as EAttribute | EReference,
+    WEATHER_KIND: null as unknown as EEnum,
     SELECTION_PICK: null as unknown as EEnum,
     FILTER_OPERATOR: null as unknown as EEnum,
   };
@@ -386,6 +406,15 @@ export class WorkspacePackage extends BasicEPackage {
     pageClass.getEStructuralFeatures().push(page_layout);
     WorkspacePackage.Literals.PAGE__LAYOUT = page_layout;
 
+    // Create weather feature
+    const page_weather = new BasicEReference();
+    page_weather.setContainment(true);
+    page_weather.setName('weather');
+    page_weather.setLowerBound(0);
+    page_weather.setUpperBound(1);
+    pageClass.getEStructuralFeatures().push(page_weather);
+    WorkspacePackage.Literals.PAGE__WEATHER = page_weather;
+
     // Create Widget class
     const widgetClass = new BasicEClass();
     widgetClass.setName('Widget');
@@ -527,6 +556,51 @@ export class WorkspacePackage extends BasicEPackage {
     dataFilter_value.setUpperBound(1);
     dataFilterClass.getEStructuralFeatures().push(dataFilter_value);
     WorkspacePackage.Literals.DATA_FILTER__VALUE = dataFilter_value;
+
+    // Create Weather class
+    const weatherClass = new BasicEClass();
+    weatherClass.setName('Weather');
+    weatherClass.setAbstract(false);
+    weatherClass.setInterface(false);
+    this.getEClassifiers().push(weatherClass);
+    weatherClass.setEPackage(this);
+    WorkspacePackage.Literals.WEATHER = weatherClass;
+
+    // Create kind feature
+    const weather_kind = new BasicEReference();
+    weather_kind.setContainment(true);
+    weather_kind.setName('kind');
+    weather_kind.setLowerBound(0);
+    weather_kind.setUpperBound(1);
+    weatherClass.getEStructuralFeatures().push(weather_kind);
+    WorkspacePackage.Literals.WEATHER__KIND = weather_kind;
+
+    // Create intensity feature
+    const weather_intensity = new BasicEReference();
+    weather_intensity.setContainment(true);
+    weather_intensity.setName('intensity');
+    weather_intensity.setLowerBound(0);
+    weather_intensity.setUpperBound(1);
+    weatherClass.getEStructuralFeatures().push(weather_intensity);
+    WorkspacePackage.Literals.WEATHER__INTENSITY = weather_intensity;
+
+    // Create wind feature
+    const weather_wind = new BasicEReference();
+    weather_wind.setContainment(true);
+    weather_wind.setName('wind');
+    weather_wind.setLowerBound(0);
+    weather_wind.setUpperBound(1);
+    weatherClass.getEStructuralFeatures().push(weather_wind);
+    WorkspacePackage.Literals.WEATHER__WIND = weather_wind;
+
+    // Create color feature
+    const weather_color = new BasicEReference();
+    weather_color.setContainment(true);
+    weather_color.setName('color');
+    weather_color.setLowerBound(0);
+    weather_color.setUpperBound(1);
+    weatherClass.getEStructuralFeatures().push(weather_color);
+    WorkspacePackage.Literals.WEATHER__COLOR = weather_color;
 
     // Create Variable class
     const variableClass = new BasicEClass();
@@ -807,6 +881,58 @@ export class WorkspacePackage extends BasicEPackage {
     connectionClass.getEStructuralFeatures().push(connection_tags);
     WorkspacePackage.Literals.CONNECTION__TAGS = connection_tags;
 
+    // Create WeatherKind enum
+    const weatherKindEnumType = new BasicEEnum();
+    weatherKindEnumType.setName('WeatherKind');
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("NONE");
+      literal.setValue(0);
+      literal.setLiteral("none");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(WeatherKind.NONE);
+      weatherKindEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("RAIN");
+      literal.setValue(1);
+      literal.setLiteral("rain");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(WeatherKind.RAIN);
+      weatherKindEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("SNOW");
+      literal.setValue(2);
+      literal.setLiteral("snow");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(WeatherKind.SNOW);
+      weatherKindEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("FOG");
+      literal.setValue(3);
+      literal.setLiteral("fog");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(WeatherKind.FOG);
+      weatherKindEnumType.addLiteral(literal);
+    }
+    {
+      const annotation = new BasicEAnnotation();
+      annotation.setSource("http://www.eclipse.org/emf/2002/GenModel");
+      annotation.getDetails().putByKey("documentation", "What a page's weather is. The literal is what Weather.kind holds, so a variable that says rain or snow drives it directly.");
+      weatherKindEnumType.getEAnnotations().push(annotation);
+    }
+    WorkspacePackage.Literals.WEATHER_KIND = weatherKindEnumType;
+    this.getEClassifiers().push(weatherKindEnumType);
+
     // Create SelectionPick enum
     const selectionPickEnumType = new BasicEEnum();
     selectionPickEnumType.setName('SelectionPick');
@@ -966,6 +1092,7 @@ export class WorkspacePackage extends BasicEPackage {
     (WorkspacePackage.Literals.PAGE__BACKGROUND_REPEAT as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
     (WorkspacePackage.Literals.PAGE__WIDGETS as BasicEReference).setEType(WorkspacePackage.Literals.WIDGET);
     (WorkspacePackage.Literals.PAGE__LAYOUT as BasicEReference).setEType(WorkspacePackage.Literals.LAYOUT_ITEM);
+    (WorkspacePackage.Literals.PAGE__WEATHER as BasicEReference).setEType(WorkspacePackage.Literals.WEATHER);
     (WorkspacePackage.Literals.WIDGET__UID as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
     (WorkspacePackage.Literals.WIDGET__TYPE as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
     (WorkspacePackage.Literals.WIDGET__DATASOURCE as BasicEReference).setEType(WorkspacePackage.Literals.DATASOURCE);
@@ -980,6 +1107,10 @@ export class WorkspacePackage extends BasicEPackage {
     (WorkspacePackage.Literals.DATA_FILTER__FIELD as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
     (WorkspacePackage.Literals.DATA_FILTER__OPERATOR as BasicEAttribute).setEType(WorkspacePackage.Literals.FILTER_OPERATOR);
     (WorkspacePackage.Literals.DATA_FILTER__VALUE as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (WorkspacePackage.Literals.WEATHER__KIND as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
+    (WorkspacePackage.Literals.WEATHER__INTENSITY as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
+    (WorkspacePackage.Literals.WEATHER__WIND as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
+    (WorkspacePackage.Literals.WEATHER__COLOR as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
     (WorkspacePackage.Literals.VARIABLE__UID as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
     (WorkspacePackage.Literals.VARIABLE__NAME as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
     (WorkspacePackage.Literals.VARIABLE__TYPE as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);

@@ -76,7 +76,20 @@ describe('PageSettings', () => {
 
     expect(wrapper.find('input').exists()).toBe(true)
     expect(page.layoutId).toBeUndefined()
+    expect(page.weather).toBeUndefined()
     expect(changes.dirty).toBe(false)
+  })
+
+  it('puts weather on the page with the first edit to it', async () => {
+    const { wrapper, page, changes } = setUp()
+    await flushPromises()
+
+    await wrapper.find('[data-uim-name="intensity"] input').setValue('70')
+    await flushPromises()
+
+    expect(page.weather?.eContainer()).toBe(page)
+    expect(Number(page.weather?.intensity?.value)).toBe(70)
+    expect(changes.dirty).toBe(true)
   })
 
   it('writes an edit through, and that counts as a change', async () => {
