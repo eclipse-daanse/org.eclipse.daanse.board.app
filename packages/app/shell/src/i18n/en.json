@@ -366,6 +366,7 @@
       "regionArea": "Drawn area",
       "regionWidget": "Area of a widget",
       "regionWidgetChoice": "Widget",
+      "drawRegion": "Draw region",
       "affectsWidgets": "Affects the widgets"
     }
   },
