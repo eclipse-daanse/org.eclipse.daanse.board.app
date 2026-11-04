@@ -17,8 +17,7 @@
  * No Vue and no DOM in here. The layer measures the widgets and owns the
  * canvases; this is handed the rectangles and a time step and draws onto
  * whatever 2D contexts it is given. That is what lets the behaviour that
- * matters - a particle ending on a widget's top edge - be tested
- * without a browser.
+ * matters - a drop bursting on an edge - be tested without a browser.
  *
  * Everything is in board coordinates: a widget's rectangle as the board
  * lays it out, independent of how far the board is scrolled. The viewport
@@ -61,6 +60,8 @@ export interface WeatherSurfaces {
 export const LIMITS = {
   /** Falling particles, near and far together. */
   particles: 600,
+  /** Splashes alive at once. */
+  splashes: 160,
   /** A step longer than this is a tab coming back, not a frame. */
   step: 0.05,
 } as const
@@ -93,9 +94,19 @@ interface Particle {
   phase: number
 }
 
+interface Splash {
+  x: number
+  y: number
+  /** The edge it jumped off; falling back past it, it is gone. */
+  edge: number
+  vx: number
+  vy: number
+  life: number
+}
 
 export class WeatherEngine {
   readonly particles: Particle[] = []
+  readonly splashes: Splash[] = []
   /** How many particles have been made - what a rate is measured by. */
   spawned = 0
 
@@ -126,6 +137,7 @@ export class WeatherEngine {
   /** Forgets every particle - a fresh start. */
   reset(): void {
     this.particles.length = 0
+    this.splashes.length = 0
     this.carry = 0
     this.filled = false
   }
@@ -156,6 +168,7 @@ export class WeatherEngine {
     }
 
     this.move(t, settings)
+    this.moveSplashes(t)
   }
 
   /** Draws the current state; either surface may be missing. */
@@ -169,6 +182,7 @@ export class WeatherEngine {
     if (back) this.drawFalling(back, color, true, ox, oy, settings)
     if (front) {
       this.drawFalling(front, color, false, ox, oy, settings)
+      this.drawSplashes(front, color, ox, oy)
     }
   }
 
@@ -254,10 +268,45 @@ export class WeatherEngine {
       if (p.x < rect.x || p.x >= rect.x + rect.width) continue
       const surface = rect.y
 
-      if (p.py <= surface && p.y >= surface) return true
+      if (p.py <= surface && p.y >= surface) {
+        if (!snow) this.splash(p.x, surface, p.vx)
+        return true
+      }
       if (p.y > surface && p.y < rect.y + rect.height) return true
     }
     return false
+  }
+
+  /** A drop bursts into a few splashes that jump up and fall back. */
+  private splash(x: number, y: number, vx: number): void {
+    const count = 2 + Math.floor(this.random() * 3)
+    for (let i = 0; i < count; i++) {
+      if (this.splashes.length >= LIMITS.splashes) return
+      this.splashes.push({
+        x,
+        y: y - 1,
+        edge: y,
+        vx: (this.random() - 0.5) * 140 + vx * 0.2,
+        vy: -(60 + this.random() * 120),
+        life: 0.25 + this.random() * 0.25,
+      })
+    }
+  }
+
+  private moveSplashes(t: number): void {
+    let kept = 0
+    for (let i = 0; i < this.splashes.length; i++) {
+      const s = this.splashes[i]
+      s.life -= t
+      if (s.life <= 0) continue
+      s.vy += 900 * t
+      s.x += s.vx * t
+      s.y += s.vy * t
+      /* Back down on the edge, or past it onto the widget's face */
+      if (s.vy > 0 && s.y >= s.edge) continue
+      this.splashes[kept++] = s
+    }
+    this.splashes.length = kept
   }
 
   /* ------------------------------------------------------------ drawing */
@@ -277,10 +326,32 @@ export class WeatherEngine {
       if (p.far !== far) continue
       const x = p.x - ox
       const y = p.y - oy
-      ctx.moveTo(x + p.size, y)
-      ctx.arc(x, y, p.size, 0, Math.PI * 2)
+      if (rain) {
+        /* A streak along the way it falls */
+        ctx.moveTo(x, y)
+        ctx.lineTo(x - p.vx * 0.018, y - p.vy * 0.018)
+      } else {
+        ctx.moveTo(x + p.size, y)
+        ctx.arc(x, y, p.size, 0, Math.PI * 2)
+      }
     }
+    if (rain) {
+      ctx.strokeStyle = color
+      ctx.lineWidth = far ? 0.8 : 1.1
+      ctx.stroke()
+    } else {
+      ctx.fillStyle = color
+      ctx.fill()
+    }
+    ctx.globalAlpha = 1
+  }
+
+  private drawSplashes(ctx: CanvasRenderingContext2D, color: string, ox: number, oy: number): void {
+    if (this.splashes.length === 0) return
+    ctx.globalAlpha = 0.7
     ctx.fillStyle = color
+    ctx.beginPath()
+    for (const s of this.splashes) ctx.rect(s.x - ox - 0.75, s.y - oy - 0.75, 1.5, 1.5)
     ctx.fill()
     ctx.globalAlpha = 1
   }
