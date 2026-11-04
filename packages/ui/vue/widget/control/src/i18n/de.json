@@ -1,6 +1,7 @@
 {
   "Widget": {
-    "button": "Schaltfläche"
+    "button": "Schaltfläche",
+    "toggle": "Umschalter"
   },
   "Form": {
     "labelGroup": "Beschriftung",
@@ -12,10 +13,18 @@
     "lookGroup": "Aussehen",
     "color": "Farbe",
     "textColor": "Textfarbe",
-    "fontSize": "Schriftgröße"
+    "fontSize": "Schriftgröße",
+    "offLabel": "Beschriftung aus",
+    "onLabel": "Beschriftung an",
+    "toggleGroup": "Zustände",
+    "onValue": "Wert für an",
+    "offValue": "Wert für aus",
+    "offColor": "Farbe aus",
+    "onColor": "Farbe an"
   },
   "Action": {
     "value": "Wert",
-    "label": "Beschriftung"
+    "label": "Beschriftung",
+    "on": "An"
   }
 }
