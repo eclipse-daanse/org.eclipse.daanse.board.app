@@ -23,12 +23,12 @@ Contributors:
  * written by another. What is chosen is read from the target, so a
  * variable changed elsewhere changes the choice too.
  */
-import { computed, ref, toRefs, watch } from 'vue'
-import { useDatasourceRepository } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+import { computed, toRefs } from 'vue'
 import type { ButtonGroupSettings } from './gen/ButtonGroupSettings'
 import { ButtonGroupSettingsImpl } from './gen/ButtonGroupSettingsImpl'
 import { ButtonGroupWidgetInterface } from './api/ButtonGroupWidgetInterface'
-import { listOf, rawOf, sameValue, textOf, useControl } from './support/useControl'
+import { rawOf, sameValue, textOf, useControl } from './support/useControl'
+import { useOptions, type Option } from './support/useOptions'
 
 const props = defineProps<{ datasourceId?: string; id?: string }>()
 const { id: widgetId } = toRefs(props)
@@ -62,55 +62,9 @@ const { settings, held, current, label, look, disabled, put, write, operate } = 
 
 const multiple = computed(() => (settings.value as any)?.multiple === true)
 
-/* -------------------------------------------------------------- source */
-
-const data = ref<unknown>(null)
-const { update } = useDatasourceRepository(datasourceId, 'object', data)
-watch(datasourceId, (now, before) => update(now, before))
-
-/* A path of field names and indices: rows, data.items, rows[0].values. A leading $value. is allowed. */
-function at(source: unknown, path: string): unknown {
-  const parts = path
-    .replace(/^\$value\.?/, '')
-    .replace(/\[(\d+)\]/g, '.$1')
-    .split('.')
-    .filter(Boolean)
-  return parts.reduce<any>((found, part) => (found == null ? undefined : found[part]), source)
-}
-
 /* --------------------------------------------------------------- options */
 
-interface Option {
-  label: string
-  value: unknown
-  color: string
-}
-
-const listed = computed<Option[]>(() =>
-  listOf((settings.value as any)?.options).map((each: any) => {
-    const value = textOf(each?.value)
-    return { label: textOf(each?.label) || value, value, color: textOf(each?.color) }
-  }),
-)
-
-const fromSource = computed<Option[]>(() => {
-  if (data.value == null) return []
-  const list = at(data.value, held('optionsPath').trim())
-  if (!Array.isArray(list)) return []
-  const labelField = held('optionLabel').trim()
-  const valueField = held('optionValue').trim()
-  return list
-    .map((item) => {
-      const isRecord = item !== null && typeof item === 'object'
-      const value = valueField ? at(item, valueField) : isRecord ? undefined : item
-      if (value === undefined || value === null) return null
-      const shown = labelField ? at(item, labelField) : value
-      return { label: textOf(shown) || textOf(value), value, color: '' }
-    })
-    .filter((each): each is Option => each !== null)
-})
-
-const options = computed<Option[]>(() => [...listed.value, ...fromSource.value])
+const { options } = useOptions(settings, held, datasourceId)
 
 /* ---------------------------------------------------------------- choice */
 

@@ -107,6 +107,13 @@ export class ControlwidgetsPackage extends BasicEPackage {
     BUTTON_GROUP_SETTINGS__OPTIONS_PATH: null as unknown as EAttribute | EReference,
     BUTTON_GROUP_SETTINGS__OPTION_LABEL: null as unknown as EAttribute | EReference,
     BUTTON_GROUP_SETTINGS__OPTION_VALUE: null as unknown as EAttribute | EReference,
+    CHOICE_SETTINGS: null as unknown as EClass,
+    CHOICE_SETTINGS__TARGET: null as unknown as EAttribute | EReference,
+    CHOICE_SETTINGS__OPTIONS: null as unknown as EAttribute | EReference,
+    CHOICE_SETTINGS__OPTIONS_PATH: null as unknown as EAttribute | EReference,
+    CHOICE_SETTINGS__OPTION_LABEL: null as unknown as EAttribute | EReference,
+    CHOICE_SETTINGS__OPTION_VALUE: null as unknown as EAttribute | EReference,
+    CHOICE_SETTINGS__PLACEHOLDER: null as unknown as EAttribute | EReference,
     CONTROL_PAYLOAD: null as unknown as EClass,
     CONTROL_PAYLOAD__VALUE: null as unknown as EAttribute | EReference,
     CONTROL_PAYLOAD__PREVIOUS_VALUE: null as unknown as EAttribute | EReference,
@@ -555,6 +562,69 @@ export class ControlwidgetsPackage extends BasicEPackage {
     buttonGroupSettingsClass.getEStructuralFeatures().push(buttonGroupSettings_optionValue);
     ControlwidgetsPackage.Literals.BUTTON_GROUP_SETTINGS__OPTION_VALUE = buttonGroupSettings_optionValue;
 
+    // Create ChoiceSettings class
+    const choiceSettingsClass = new BasicEClass();
+    choiceSettingsClass.setName('ChoiceSettings');
+    choiceSettingsClass.setAbstract(false);
+    choiceSettingsClass.setInterface(false);
+    this.getEClassifiers().push(choiceSettingsClass);
+    choiceSettingsClass.setEPackage(this);
+    ControlwidgetsPackage.Literals.CHOICE_SETTINGS = choiceSettingsClass;
+
+    // Create target feature
+    const choiceSettings_target = new BasicEReference();
+    choiceSettings_target.setContainment(false);
+    choiceSettings_target.setName('target');
+    choiceSettings_target.setLowerBound(0);
+    choiceSettings_target.setUpperBound(1);
+    choiceSettingsClass.getEStructuralFeatures().push(choiceSettings_target);
+    ControlwidgetsPackage.Literals.CHOICE_SETTINGS__TARGET = choiceSettings_target;
+
+    // Create options feature
+    const choiceSettings_options = new BasicEReference();
+    choiceSettings_options.setContainment(true);
+    choiceSettings_options.setName('options');
+    choiceSettings_options.setLowerBound(0);
+    choiceSettings_options.setUpperBound(-1);
+    choiceSettingsClass.getEStructuralFeatures().push(choiceSettings_options);
+    ControlwidgetsPackage.Literals.CHOICE_SETTINGS__OPTIONS = choiceSettings_options;
+
+    // Create optionsPath feature
+    const choiceSettings_optionsPath = new BasicEReference();
+    choiceSettings_optionsPath.setContainment(false);
+    choiceSettings_optionsPath.setName('optionsPath');
+    choiceSettings_optionsPath.setLowerBound(0);
+    choiceSettings_optionsPath.setUpperBound(1);
+    choiceSettingsClass.getEStructuralFeatures().push(choiceSettings_optionsPath);
+    ControlwidgetsPackage.Literals.CHOICE_SETTINGS__OPTIONS_PATH = choiceSettings_optionsPath;
+
+    // Create optionLabel feature
+    const choiceSettings_optionLabel = new BasicEReference();
+    choiceSettings_optionLabel.setContainment(false);
+    choiceSettings_optionLabel.setName('optionLabel');
+    choiceSettings_optionLabel.setLowerBound(0);
+    choiceSettings_optionLabel.setUpperBound(1);
+    choiceSettingsClass.getEStructuralFeatures().push(choiceSettings_optionLabel);
+    ControlwidgetsPackage.Literals.CHOICE_SETTINGS__OPTION_LABEL = choiceSettings_optionLabel;
+
+    // Create optionValue feature
+    const choiceSettings_optionValue = new BasicEReference();
+    choiceSettings_optionValue.setContainment(false);
+    choiceSettings_optionValue.setName('optionValue');
+    choiceSettings_optionValue.setLowerBound(0);
+    choiceSettings_optionValue.setUpperBound(1);
+    choiceSettingsClass.getEStructuralFeatures().push(choiceSettings_optionValue);
+    ControlwidgetsPackage.Literals.CHOICE_SETTINGS__OPTION_VALUE = choiceSettings_optionValue;
+
+    // Create placeholder feature
+    const choiceSettings_placeholder = new BasicEReference();
+    choiceSettings_placeholder.setContainment(false);
+    choiceSettings_placeholder.setName('placeholder');
+    choiceSettings_placeholder.setLowerBound(0);
+    choiceSettings_placeholder.setUpperBound(1);
+    choiceSettingsClass.getEStructuralFeatures().push(choiceSettings_placeholder);
+    ControlwidgetsPackage.Literals.CHOICE_SETTINGS__PLACEHOLDER = choiceSettings_placeholder;
+
     // Create ControlPayload class
     const controlPayloadClass = new BasicEClass();
     controlPayloadClass.setName('ControlPayload');
@@ -653,6 +723,7 @@ export class ControlwidgetsPackage extends BasicEPackage {
     (ControlwidgetsPackage.Literals.MULTI_STATE_SETTINGS as BasicEClass).getESuperTypes().push(ControlwidgetsPackage.Literals.CONTROL_SETTINGS);
     (ControlwidgetsPackage.Literals.SLIDER_SETTINGS as BasicEClass).getESuperTypes().push(ControlwidgetsPackage.Literals.CONTROL_SETTINGS);
     (ControlwidgetsPackage.Literals.BUTTON_GROUP_SETTINGS as BasicEClass).getESuperTypes().push(ControlwidgetsPackage.Literals.CONTROL_SETTINGS);
+    (ControlwidgetsPackage.Literals.CHOICE_SETTINGS as BasicEClass).getESuperTypes().push(ControlwidgetsPackage.Literals.CONTROL_SETTINGS);
     (ControlwidgetsPackage.Literals.CONTROL_PAYLOAD as BasicEClass).getESuperTypes().push(requireEPackage('http://org.eclipse.daanse.board.app.lib.events').getEClassifier('Payload')! as EClass);
 
     // ============================================
@@ -699,6 +770,12 @@ export class ControlwidgetsPackage extends BasicEPackage {
     (ControlwidgetsPackage.Literals.BUTTON_GROUP_SETTINGS__OPTIONS_PATH as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
     (ControlwidgetsPackage.Literals.BUTTON_GROUP_SETTINGS__OPTION_LABEL as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
     (ControlwidgetsPackage.Literals.BUTTON_GROUP_SETTINGS__OPTION_VALUE as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
+    (ControlwidgetsPackage.Literals.CHOICE_SETTINGS__TARGET as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
+    (ControlwidgetsPackage.Literals.CHOICE_SETTINGS__OPTIONS as BasicEReference).setEType(ControlwidgetsPackage.Literals.CONTROL_OPTION);
+    (ControlwidgetsPackage.Literals.CHOICE_SETTINGS__OPTIONS_PATH as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
+    (ControlwidgetsPackage.Literals.CHOICE_SETTINGS__OPTION_LABEL as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
+    (ControlwidgetsPackage.Literals.CHOICE_SETTINGS__OPTION_VALUE as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
+    (ControlwidgetsPackage.Literals.CHOICE_SETTINGS__PLACEHOLDER as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
     (ControlwidgetsPackage.Literals.CONTROL_PAYLOAD__VALUE as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EJavaObject')!);
     (ControlwidgetsPackage.Literals.CONTROL_PAYLOAD__PREVIOUS_VALUE as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EJavaObject')!);
 

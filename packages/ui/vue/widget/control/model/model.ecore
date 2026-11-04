@@ -11,8 +11,8 @@
 **********************************************************************/
 
 The controls a board is operated with: a button, a toggle button, a
-multi-state button, a slider and a button group now, the input fields
-beside them later.
+multi-state button, a slider, a button group and a choice now, the input
+fields beside them later.
 
 They share one base - what every control shows (its label, its colours)
 and whether it takes input at all - and one payload, the value a control
@@ -172,7 +172,7 @@ through it into the variable it follows.
 
     <eClassifiers xsi:type="ecore:EClass" name="ControlOption">
         <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-            <details key="documentation" value="One value a control can take, with what it shows for it: a state of a multi-state button, an option of a button group, a named detent of a slider."/>
+            <details key="documentation" value="One value a control can take, with what it shows for it: a state of a multi-state button, an option of a button group or a choice, a named detent of a slider."/>
         </eAnnotations>
 
         <eStructuralFeatures xsi:type="ecore:EReference" name="label" containment="false" defaultValueLiteral="">
@@ -411,6 +411,63 @@ through it into the variable it follows.
             </eGenericType>
             <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
                 <details key="documentation" value="The field of each item of the source&apos;s list written when it is chosen. Left empty, the item itself, where it is a plain value."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+    </eClassifiers>
+
+    <eClassifiers xsi:type="ecore:EClass" name="ChoiceSettings" eSuperTypes="#//ControlSettings">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+            <details key="documentation" value="A choice: a dropdown of options, one of which is chosen. Its options are listed or taken from the widget&apos;s source, as a button group&apos;s are."/>
+        </eAnnotations>
+
+        <eStructuralFeatures xsi:type="ecore:EReference" name="target" containment="false" defaultValueLiteral="">
+            <eGenericType eClassifier="http://org.eclipse.daanse.board.app.lib.variables#//VariableWrapper">
+                <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+            </eGenericType>
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="The variable the choice writes into and shows: the chosen option&apos;s value. Left without one, the setting keeps the choice itself."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+
+        <eStructuralFeatures xsi:type="ecore:EReference" name="options" upperBound="-1" eType="#//ControlOption" containment="true">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="The options, in the order they are listed. Where the source gives options too, these come first."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+
+        <eStructuralFeatures xsi:type="ecore:EReference" name="optionsPath" containment="false" defaultValueLiteral="">
+            <eGenericType eClassifier="http://org.eclipse.daanse.board.app.lib.variables#//VariableWrapper">
+                <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+            </eGenericType>
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="Where in the source&apos;s answer the list of options is, as a path of field names and indices - rows, data.items. Left empty, the answer itself where it is a list."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+
+        <eStructuralFeatures xsi:type="ecore:EReference" name="optionLabel" containment="false" defaultValueLiteral="">
+            <eGenericType eClassifier="http://org.eclipse.daanse.board.app.lib.variables#//VariableWrapper">
+                <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+            </eGenericType>
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="The field of each item of the source&apos;s list shown for it. Left empty, the value."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+
+        <eStructuralFeatures xsi:type="ecore:EReference" name="optionValue" containment="false" defaultValueLiteral="">
+            <eGenericType eClassifier="http://org.eclipse.daanse.board.app.lib.variables#//VariableWrapper">
+                <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+            </eGenericType>
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="The field of each item of the source&apos;s list written when it is chosen. Left empty, the item itself, where it is a plain value."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+
+        <eStructuralFeatures xsi:type="ecore:EReference" name="placeholder" containment="false" defaultValueLiteral="">
+            <eGenericType eClassifier="http://org.eclipse.daanse.board.app.lib.variables#//VariableWrapper">
+                <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+            </eGenericType>
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="What the dropdown shows while the variable holds none of its options. Left empty, a prompt to choose, in the language of the app."/>
             </eAnnotations>
         </eStructuralFeatures>
     </eClassifiers>
