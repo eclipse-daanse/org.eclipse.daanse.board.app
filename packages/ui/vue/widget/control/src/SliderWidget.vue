@@ -146,9 +146,16 @@ const fillFrom = computed(() => (ranged.value ? percent(Math.min(lower.value, up
 const fillTo = computed(() => percent(ranged.value ? Math.max(lower.value, upper.value) : lower.value))
 
 const format = (value: number) => `${value.toFixed(decimals.value)}${unit.value ? ` ${unit.value}` : ''}`
-const valueText = computed(() =>
-  ranged.value ? `${format(lower.value)} – ${format(upper.value)}` : format(lower.value),
-)
+
+/* Where along the track something stands: from the left, or from the bottom where vertical. */
+const along = (value: number) => (vertical.value ? { bottom: `${percent(value)}%` } : { left: `${percent(value)}%` })
+
+/* One badge per thumb, standing on it. */
+const badges = computed(() => {
+  const thumbs = [{ thumb: 'lower', at: lower.value }]
+  if (ranged.value) thumbs.push({ thumb: 'upper', at: upper.value })
+  return thumbs.map((each) => ({ ...each, text: format(each.at) }))
+})
 
 /* ------------------------------------------------------------- operate */
 
@@ -208,12 +215,15 @@ onUnmounted(() => {
 <template>
   <div
     class="control-slider"
-    :class="{ 'control-slider--vertical': vertical, 'control-slider--disabled': disabled }"
+    :class="{
+      'control-slider--vertical': vertical,
+      'control-slider--disabled': disabled,
+      'control-slider--valued': showValue,
+    }"
     :style="look"
   >
-    <div v-if="label || showValue" class="control-slider__head">
+    <div v-if="label" class="control-slider__head">
       <span class="control-slider__label">{{ label }}</span>
-      <span v-if="showValue" class="control-slider__value">{{ valueText }}</span>
     </div>
 
     <div class="control-slider__body">
@@ -226,12 +236,16 @@ onUnmounted(() => {
               ? { bottom: `${fillFrom}%`, height: `${fillTo - fillFrom}%` }
               : { left: `${fillFrom}%`, width: `${fillTo - fillFrom}%` }"
           ></div>
-          <span
-            v-for="mark in marks"
-            :key="mark.at"
-            class="control-slider__tick"
-            :style="vertical ? { bottom: `${percent(mark.at)}%` } : { left: `${percent(mark.at)}%` }"
-          ></span>
+          <!-- The value stands on its thumb and goes where the thumb goes. -->
+          <template v-if="showValue">
+            <span
+              v-for="badge in badges"
+              :key="badge.thumb"
+              class="control-slider__value"
+              :data-thumb="badge.thumb"
+              :style="along(badge.at)"
+            >{{ badge.text }}</span>
+          </template>
         </div>
         <input
           class="control-slider__input"
@@ -263,28 +277,31 @@ onUnmounted(() => {
           @change="released"
         />
       </div>
-      <div v-if="marks.length" class="control-slider__marks">
+      <!-- Under the track, or beside it where vertical: a tick at each mark, its label below. -->
+      <div v-if="marks.length" class="control-slider__marks" aria-hidden="true">
         <span
           v-for="mark in marks"
           :key="mark.at"
           class="control-slider__mark"
-          :style="vertical ? { bottom: `${percent(mark.at)}%` } : { left: `${percent(mark.at)}%` }"
-        >{{ mark.label }}</span>
+          :style="along(mark.at)"
+        ><span class="control-slider__tick"></span><span class="control-slider__mark-label">{{ mark.label }}</span></span>
       </div>
     </div>
   </div>
 </template>
 
 <style scoped>
+/* Everything is in em: the thumb, the track, the badge and the marks grow with the font size. */
 .control-slider {
   --thumb: 1.1em;
+  --rail: 0.3em;
   width: 100%;
   height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  gap: 0.4em;
-  padding: 0.4em;
+  gap: 0.3em;
+  padding: 0.4em 0.6em;
   box-sizing: border-box;
   overflow: hidden;
   color: var(--color-fg, inherit);
@@ -292,8 +309,6 @@ onUnmounted(() => {
 
 .control-slider__head {
   display: flex;
-  justify-content: space-between;
-  gap: 0.5em;
   white-space: nowrap;
 }
 
@@ -303,19 +318,15 @@ onUnmounted(() => {
   text-overflow: ellipsis;
 }
 
-.control-slider__value {
-  padding: 0 0.4em;
-  border-radius: 0.3em;
-  background: var(--control-face);
-  color: var(--control-on-face);
-  font-variant-numeric: tabular-nums;
-}
-
 .control-slider__body {
   position: relative;
   display: flex;
   flex-direction: column;
-  gap: 0.2em;
+}
+
+/* Room above the track for the badge standing on the thumb. */
+.control-slider--valued .control-slider__body {
+  padding-top: 1.8em;
 }
 
 .control-slider__track {
@@ -336,9 +347,9 @@ onUnmounted(() => {
 .control-slider__fill {
   content: '';
   position: absolute;
-  top: calc(50% - 0.15em);
-  height: 0.3em;
-  border-radius: 0.15em;
+  top: calc(50% - var(--rail) / 2);
+  height: var(--rail);
+  border-radius: calc(var(--rail) / 2);
 }
 
 .control-slider__rail::before {
@@ -351,14 +362,31 @@ onUnmounted(() => {
   background: var(--control-face);
 }
 
-.control-slider__tick {
+/* The badge: centred over its thumb, a small pointer down to it. */
+.control-slider__value {
   position: absolute;
-  top: calc(50% - 0.35em);
-  width: 2px;
-  height: 0.7em;
-  margin-left: -1px;
-  background: currentColor;
-  opacity: 0.45;
+  bottom: calc(100% + 0.35em);
+  transform: translateX(-50%);
+  padding: 0.1em 0.45em;
+  border-radius: 0.3em;
+  background: var(--control-face);
+  color: var(--control-on-face);
+  font-size: 0.85em;
+  font-weight: 600;
+  line-height: 1.3;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+  pointer-events: none;
+}
+
+.control-slider__value::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: calc(50% - 0.3em);
+  border: 0.3em solid transparent;
+  border-top-color: var(--control-face);
+  border-bottom: none;
 }
 
 .control-slider__input {
@@ -417,16 +445,32 @@ onUnmounted(() => {
   outline-offset: 2px;
 }
 
+/* The marks: as wide as the rail, so a mark stands where the thumb's centre does at its value. */
 .control-slider__marks {
   position: relative;
-  height: 1.2em;
-  margin: 0 calc(var(--thumb) / 2);
+  height: 1.6em;
+  margin: 0.15em calc(var(--thumb) / 2) 0;
 }
 
 .control-slider__mark {
   position: absolute;
-  font-size: 0.8em;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   transform: translateX(-50%);
+}
+
+.control-slider__tick {
+  width: 1px;
+  height: 0.4em;
+  background: currentColor;
+  opacity: 0.5;
+}
+
+.control-slider__mark-label {
+  font-size: 0.8em;
+  line-height: 1.2;
   white-space: nowrap;
   opacity: 0.8;
 }
@@ -441,21 +485,17 @@ onUnmounted(() => {
 
 /* ------------------------------------------------------------ vertical */
 
-.control-slider--vertical {
-  flex-direction: row;
-  align-items: stretch;
-  justify-content: flex-start;
-}
-
-.control-slider--vertical .control-slider__head {
-  flex-direction: column;
-  justify-content: center;
-  order: 2;
-}
-
 .control-slider--vertical .control-slider__body {
+  flex: 1;
+  min-height: 0;
   flex-direction: row;
-  flex: none;
+  justify-content: center;
+}
+
+/* Room left of the track for the badge, which stands beside its thumb. */
+.control-slider--vertical.control-slider--valued .control-slider__body {
+  padding-top: 0;
+  padding-left: 4em;
 }
 
 .control-slider--vertical .control-slider__track {
@@ -473,8 +513,8 @@ onUnmounted(() => {
 .control-slider--vertical .control-slider__rail::before,
 .control-slider--vertical .control-slider__fill {
   top: auto;
-  left: calc(50% - 0.15em);
-  width: 0.3em;
+  left: calc(50% - var(--rail) / 2);
+  width: var(--rail);
   height: auto;
 }
 
@@ -483,12 +523,18 @@ onUnmounted(() => {
   bottom: 0;
 }
 
-.control-slider--vertical .control-slider__tick {
-  top: auto;
-  left: calc(50% - 0.35em);
-  width: 0.7em;
-  height: 2px;
-  margin: 0 0 -1px 0;
+.control-slider--vertical .control-slider__value {
+  bottom: auto;
+  right: calc(100% + 0.35em);
+  transform: translateY(50%);
+}
+
+.control-slider--vertical .control-slider__value::after {
+  top: calc(50% - 0.3em);
+  left: 100%;
+  border: 0.3em solid transparent;
+  border-left-color: var(--control-face);
+  border-right: none;
 }
 
 /* Bottom to top: low at the bottom, as a fader runs. */
@@ -497,14 +543,23 @@ onUnmounted(() => {
   direction: rtl;
 }
 
+/* Beside the track: a tick pointing at the mark, its label right of it. */
 .control-slider--vertical .control-slider__marks {
   height: auto;
-  width: auto;
   min-width: 2em;
-  margin: calc(var(--thumb) / 2) 0;
+  margin: calc(var(--thumb) / 2) 0 calc(var(--thumb) / 2) 0.15em;
 }
 
 .control-slider--vertical .control-slider__mark {
+  top: auto;
+  left: 0;
+  flex-direction: row;
+  gap: 0.25em;
   transform: translateY(50%);
+}
+
+.control-slider--vertical .control-slider__tick {
+  width: 0.4em;
+  height: 1px;
 }
 </style>
