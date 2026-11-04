@@ -41,6 +41,13 @@ export interface IClipboardItem {
  */
 const clipboardItem = ref<IClipboardItem | null>(null)
 
+/*
+ * How often what is held has been pasted. A paste that has no pointer to
+ * go to lands beside the original, and the next one beside that - not
+ * all of them on the same spot, where they look like one widget.
+ */
+let timesPasted = 0
+
 /**
  * The clipboard, as the two callers already ask for it.
  *
@@ -57,14 +64,21 @@ export function useClipboardStore() {
     get hasClipboard() {
       return clipboardItem.value !== null
     },
+    /** Pastes made since the last copy. */
+    get timesPasted() {
+      return timesPasted
+    },
     copy(widget: Omit<StoredWidget, 'uid'>, layout: Omit<StoredLayoutItem, 'id'>, selection?: DataSelection) {
       clipboardItem.value = { widget, layout, selection }
+      timesPasted = 0
     },
     paste() {
+      if (clipboardItem.value) timesPasted += 1
       return clipboardItem.value
     },
     clear() {
       clipboardItem.value = null
+      timesPasted = 0
     },
   }
 }
