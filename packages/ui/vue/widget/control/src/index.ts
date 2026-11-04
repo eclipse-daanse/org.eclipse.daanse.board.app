@@ -12,7 +12,7 @@
  **********************************************************************/
 
 /* The generated package first: it reaches the factory, the factory every
-  class, and ButtonSettingsImpl extends ControlSettingsImpl. Entered from the
+  class, and every control's settings extend ControlSettingsImpl. Entered from the
   base class instead, the chain reaches the button's settings while their
   base is not yet initialised, and the bundle fails with a ReferenceError -
   the same order the data table needs (#1221). */
@@ -29,8 +29,14 @@ import { ButtonWidgetEvents } from './events/ButtonWidgetEvents'
 import { ButtonWidgetInterface } from './api/ButtonWidgetInterface'
 import { ButtonSettingsImpl } from './gen/ButtonSettingsImpl'
 import { ControlwidgetsPackage } from './gen/ControlwidgetsPackage'
+import ToggleWidget from './ToggleWidget.vue'
+import ToggleIcon from './assets/toggle.svg'
+import { ToggleWidgetEvents } from './events/ToggleWidgetEvents'
+import { ToggleWidgetInterface } from './api/ToggleWidgetInterface'
+import { ToggleSettingsImpl } from './gen/ToggleSettingsImpl'
 /* The form for the button's settings, written as a model beside the Ecore. */
 import buttonSettingsFormXmi from '../model/ui.xmi?raw'
+import toggleSettingsFormXmi from '../model/ui-toggle.xmi?raw'
 /* The Ecore itself, for the sentences the generator drops. */
 import settingsEcore from '../model/model.ecore?raw'
 
@@ -90,10 +96,53 @@ export class ButtonWidgetProvider implements WidgetProvider {
   }
 }
 
-export { ButtonWidget }
-export { ButtonSettingsImpl, ControlwidgetsPackage, buttonSettingsFormXmi }
+const TOGGLE_TYPE = 'ToggleWidget'
+
+/** The toggle button: on or off, a value written for each. */
+@component({
+  service: [WIDGET_SERVICE_ID],
+  properties: { 'widget.type': TOGGLE_TYPE },
+})
+export class ToggleWidgetProvider implements WidgetProvider {
+  readonly type = TOGGLE_TYPE
+  readonly name = 'Toggle button'
+  readonly nameKey = 'control:Widget.toggle'
+
+  readonly settingsForm = {
+    xmi: toggleSettingsFormXmi,
+    ecore: settingsEcore,
+    uri: '/toggle-settings.ui.xmi',
+    ePackage: () => ControlwidgetsPackage.eINSTANCE,
+    create: () => new ToggleSettingsImpl(),
+  }
+
+  readonly icon = ToggleIcon
+  readonly reads = READS_NOTHING
+  readonly component = ToggleWidget
+
+  constructor(
+    @inject(EVENT_REGISTRY_ID) private readonly events: EventRegistry,
+    @inject(EVENT_ACTIONS_REGISTRY_ID) private readonly actions: EventActionsRegistry,
+  ) {}
+
+  @activate()
+  register(): void {
+    this.events.registerWidget(TOGGLE_TYPE, ToggleWidgetEvents)
+    this.actions.registerWidgetType(TOGGLE_TYPE, ToggleWidgetInterface, 'widget')
+  }
+
+  @deactivate()
+  unregister(): void {
+    this.events.unregisterWidget(TOGGLE_TYPE)
+    this.actions.unregisterWidgetType(TOGGLE_TYPE)
+  }
+}
+
+export { ButtonWidget, ToggleWidget }
+export { ButtonSettingsImpl, ToggleSettingsImpl, ControlwidgetsPackage, buttonSettingsFormXmi, toggleSettingsFormXmi }
 export { ControlPayloadImpl } from './gen/ControlPayloadImpl'
 export type { ButtonSettings } from './gen/ButtonSettings'
+export type { ToggleSettings } from './gen/ToggleSettings'
 export type { ControlSettings } from './gen/ControlSettings'
 export type { ControlPayload } from './gen/ControlPayload'
 
