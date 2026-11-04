@@ -221,7 +221,11 @@ export class SliderWidgetProvider implements WidgetProvider {
     uri: '/slider-settings.ui.xmi',
     ePackage: () => ControlwidgetsPackage.eINSTANCE,
     create: () => new SliderSettingsImpl(),
-    entryForms: [{ xmi: markFormXmi, uri: '/slider-mark.ui.xmi' }],
+    /* A named detent is a ControlOption: the option's form serves it. */
+    entryForms: [
+      { xmi: markFormXmi, uri: '/slider-mark.ui.xmi' },
+      { xmi: optionFormXmi, uri: '/control-option.ui.xmi' },
+    ],
   }
 
   readonly icon = SliderIcon
