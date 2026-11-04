@@ -232,9 +232,26 @@ export function useMoveableLayout(pageId: string = '', gridSize: () => number = 
     }
   }
 
-  const pasteWidget = (x: number, y: number) => {
+  /*
+   * Where a paste without a place goes: beside the original, one grid step
+   * further for every paste before it, so it does not land on top of it.
+   */
+  const PASTE_STEP = 24
+
+  /**
+   * @param x, y where the pasted widget's corner goes - the pointer. Left
+   *   out, it goes beside the widget it was copied from.
+   */
+  const pasteWidget = (x?: number, y?: number) => {
+    const before = clipboardStore.timesPasted
     const clipboard = clipboardStore.paste()
     if (!clipboard) return null
+
+    const step = (gridSize() || PASTE_STEP) * (before + 1)
+    const at =
+      x !== undefined && y !== undefined
+        ? { x, y }
+        : { x: toGrid(clipboard.layout.x + step), y: toGrid(clipboard.layout.y + step) }
 
     const newUid = 'li_' + randomUUID()
     const maxZ = Math.max(...board.layout.value.map((item: ILayoutItem) => item.z), 0)
@@ -250,7 +267,7 @@ export function useMoveableLayout(pageId: string = '', gridSize: () => number = 
           config: { datasourceId: copied.config?.datasourceId, settings },
           wrapperConfig: copied.wrapperConfig,
         },
-        { ...clipboard.layout, id: newUid, x, y, z: maxZ + 1 },
+        { ...clipboard.layout, id: newUid, x: at.x, y: at.y, z: maxZ + 1 },
       )
       /* In the same step, so undoing the paste takes the selection with it. */
       const pasted = board.widgets.value.find((w: { uid?: string }) => w.uid === newUid) as
