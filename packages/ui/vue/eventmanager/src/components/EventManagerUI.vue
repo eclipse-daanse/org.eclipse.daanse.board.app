@@ -12,7 +12,7 @@
 import 'reflect-metadata'
 import { inject, ref, computed, onMounted } from 'vue'
 import { EventManager, EVENT_MANAGER, EventRegistry, EVENT_REGISTRY, EventActionsRegistry, EVENT_ACTIONS_REGISTRY } from 'org.eclipse.daanse.board.app.lib.api.events'
-import { type EventActionMapping, type ActionDefinition, type WidgetEventDefinition, type EventActionContext, type WidgetTypeRegistration } from 'org.eclipse.daanse.board.app.lib.events'
+import { type EventActionMapping, type ActionDefinition, type WidgetEventDefinition, type EventActionContext, type WidgetTypeRegistration, type WidgetActionParameter } from 'org.eclipse.daanse.board.app.lib.events'
 import { Comperator } from 'org.eclipse.daanse.board.app.lib.events'
 import { Condition } from 'org.eclipse.daanse.board.app.lib.events'
 import { type PageRegistryI, identifier as PageIdentifier } from 'org.eclipse.daanse.board.app.lib.api.page'
@@ -327,7 +327,7 @@ const availableActions = computed(() => {
     text: string
     group: string
     value: string
-    parameters?: string[]
+    parameters?: WidgetActionParameter[]
     widgetType?: string
   }[] = []
 
@@ -388,8 +388,11 @@ const availableInstances = computed(() => {
 
 interface ActionParameterInfo {
   name: string
+  /** What the dialog shows: the declared label from the widget's language pack, else the name. */
+  label: string
   type: string
   optional: boolean
+  /** The argument position - what a stored rule's argIndex refers to. */
   index: number
 }
 
@@ -418,25 +421,15 @@ const selectedActionParameters = computed<ActionParameterInfo[]>(() => {
   for (const widgetType of searchWidgetTypes) {
     const action = widgetType.actions.find(a => a.methodName === currentAction.value?.actionName)
 
-    if (action && action.parameters) {
-      return action.parameters.map((param, index) => {
-        // Parse parameter string like "thingId: string" or "zoom?: number"
-        const match = param.match(/^(\w+)(\?)?:\s*(.+)$/)
-        if (match) {
-          return {
-            name: match[1],
-            optional: !!match[2],
-            type: match[3],
-            index
-          }
-        }
-        return {
-          name: `arg${index}`,
-          optional: false,
-          type: 'any',
-          index
-        }
-      })
+    if (action) {
+      /* Declared on the action (#1223) - the position is the argument index. */
+      return (action.parameters ?? []).map((param, index) => ({
+        name: param.name,
+        label: param.label ? t(param.label) : param.name,
+        type: param.type,
+        optional: !!param.optional,
+        index
+      }))
     }
   }
 
@@ -989,10 +982,10 @@ onMounted(() => {
                   <div v-if="selectedActionParameters.length" class="params">
                     <div v-for="param in selectedActionParameters" :key="param.index" class="param">
                       <span class="param__name">
-                        {{ param.name }}<span v-if="param.optional" class="param__optional">, {{ t('Rule.optional') }}</span>
+                        {{ param.label }}<span v-if="param.optional" class="param__optional">, {{ t('Rule.optional') }}</span>
                       </span>
                       <div class="param__value">
-                        <div class="source" role="group" :aria-label="t('Rule.valueFor', { name: param.name })">
+                        <div class="source" role="group" :aria-label="t('Rule.valueFor', { name: param.label })">
                           <button
                             type="button"
                             :class="['source__side', { 'source__side--on': getParameterValueSource(param.index) === 'payload' }]"
