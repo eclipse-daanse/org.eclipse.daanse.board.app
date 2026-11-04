@@ -30,5 +30,12 @@ export interface Weather extends EObject {
   intensity?: VariableWrapper<number>;
   wind?: VariableWrapper<number>;
   color?: VariableWrapper<string>;
+  region?: VariableWrapper<string>;
+  regionX?: VariableWrapper<number>;
+  regionY?: VariableWrapper<number>;
+  regionWidth?: VariableWrapper<number>;
+  regionHeight?: VariableWrapper<number>;
+  regionWidget?: VariableWrapper<string>;
+  affectsWidgets?: VariableWrapper<boolean>;
 
 }
