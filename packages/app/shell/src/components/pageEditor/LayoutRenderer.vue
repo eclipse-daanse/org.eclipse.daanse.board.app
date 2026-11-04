@@ -12,7 +12,7 @@ Contributors:
 -->
 <script setup lang="ts">
 import { DIcon } from 'org.eclipse.daanse.board.app.ui.vue.controls'
-import { inject, ref, computed, watch, watchEffect, onMounted, shallowRef, nextTick }
+import { inject, ref, computed, watch, watchEffect, onMounted, onBeforeUnmount, shallowRef, nextTick }
   from 'vue'
 import {
   type LayoutRepositoryI,
@@ -115,6 +115,21 @@ watch(layoutId, () => {
   refreshTrigger.value++
   loadLayout()
 })
+
+/*
+ * The layout is looked up again when one registers or goes away.
+ *
+ * Opened straight from its address, a page is drawn while the bundles are
+ * still activating: the shell asked for the layout a few milliseconds
+ * before its bundle had added it, found nothing, and kept saying the page
+ * has no layout - the widgets never came (#1231).
+ */
+const stopListening = layoutRepo?.onChange?.(() => {
+  const id = currentPage.value?.layoutId as string | undefined
+  if (!id) return
+  if ((layoutRepo.getLayout(id) ?? null) !== currentLayout.value) loadLayout()
+})
+onBeforeUnmount(() => stopListening?.())
 
 /*watchEffect(() => {
   // Trigger reactivity
