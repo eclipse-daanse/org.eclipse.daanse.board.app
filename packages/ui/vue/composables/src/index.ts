@@ -16,6 +16,7 @@ export { DATA_SELECTION, selectionSnapshot, provideDataSelection, injectDataSele
 import { useTemporaryStore } from './useTemporaryStore'
 import { usePromisifiedModal } from './promisifiedModal'
 import { useVariableRepository } from './useVariableRepository'
+import { useGlobalVariables, type GlobalVariableChoice } from './useGlobalVariables'
 import { useGlobalLoading } from './useGlobalLoading'
 import { plainSettings } from './plainSettings'
 /* Modelled objects, as something Vue re-renders on. */
@@ -63,7 +64,7 @@ const WrapperTypes = {
 EPackageRegistry.INSTANCE.registerPackage(ComposablesPackage.eINSTANCE)
 
 export { ComposablesPackage }
-export { useDatasourceRepository, useTemporaryStore, useVariableRepository, usePromisifiedModal, useGlobalLoading, VariableWrapper,VARIABLEWRAPPER,VariableComplexStringWrapper,VARIABLECOMPLEXSTRINGWRAPPER, WrapperTypes, plainSettings, useEObject, useEList, useFeature, useBoard}
+export { useDatasourceRepository, useTemporaryStore, useVariableRepository, useGlobalVariables, usePromisifiedModal, useGlobalLoading, VariableWrapper,VARIABLEWRAPPER,VariableComplexStringWrapper,VARIABLECOMPLEXSTRINGWRAPPER, WrapperTypes, plainSettings, useEObject, useEList, useFeature, useBoard}
 export { useHistory, useCurrentHistory, type History } from './useHistory'
 
 /*
@@ -102,3 +103,5 @@ export type { Language, LanguageChoice } from './useLanguage'
 export { sanitizeHtml, sanitizeSvg, sanitizeStyleBlock } from './sanitize'
 /* Its texts - collected by lib.i18next, see src/i18n. */
 export { CommonTranslations } from './i18n'
+
+export type { GlobalVariableChoice }
