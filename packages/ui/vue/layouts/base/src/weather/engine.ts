@@ -46,6 +46,19 @@ export interface WeatherLayerSettings {
   wind: number
   /** A CSS colour, or empty for the kind's own. */
   color: string
+  /**
+   * Whether what falls acts with the widgets. Off, nothing settles or
+   * splashes, and everything is drawn behind the widgets. Left out, on.
+   */
+  affectsWidgets?: boolean
+}
+
+/** A rectangle on the board, in board coordinates. */
+export interface Area {
+  x: number
+  y: number
+  width: number
+  height: number
 }
 
 /** The two surfaces: behind the widgets and above them. */
@@ -142,6 +155,8 @@ export class WeatherEngine {
 
   private obstacles: Obstacle[] = []
   private viewport = { x: 0, y: 0, width: 0, height: 0 }
+  /** Where the weather is drawn; undefined is the whole board. */
+  private regionHeld: Area | undefined
   private carry = 0
   private time = 0
   private kind: WeatherKind = WeatherKind.NONE
@@ -152,6 +167,35 @@ export class WeatherEngine {
   /** The widgets as last measured. */
   get obstacleRects(): readonly Obstacle[] {
     return this.obstacles
+  }
+
+  /** The region the weather keeps to, or undefined for the whole board. */
+  get region(): Area | undefined {
+    return this.regionHeld
+  }
+
+  /**
+   * Keeps the weather to a rectangle of the board, or lets it cover the
+   * whole board again with undefined. A particle outside it is dropped and
+   * nothing is drawn outside it.
+   */
+  setRegion(area: Area | undefined): void {
+    this.regionHeld = area ? { x: area.x, y: area.y, width: Math.max(0, area.width), height: Math.max(0, area.height) } : undefined
+  }
+
+  /**
+   * Where particles are made and kept: the region where it is on screen,
+   * or the screen.
+   */
+  private get bounds(): Area {
+    const v = this.viewport
+    const r = this.regionHeld
+    if (!r) return v
+    const x = Math.max(v.x, r.x)
+    const y = Math.max(v.y, r.y)
+    const right = Math.min(v.x + v.width, r.x + r.width)
+    const bottom = Math.min(v.y + v.height, r.y + r.height)
+    return { x, y, width: Math.max(0, right - x), height: Math.max(0, bottom - y) }
   }
 
   /** The part of the board on screen, in board coordinates. */
@@ -222,10 +266,13 @@ export class WeatherEngine {
     }
 
     const intensity = clamp(settings.intensity, 0, 100) / 100
-    this.carry += rate * intensity * this.viewport.width * t
+    const bounds = this.bounds
+    /* A region starts the weather at its own top, not above the screen */
+    const top = this.regionHeld ? bounds.y : bounds.y - 4 - this.random() * 20
+    this.carry += rate * intensity * bounds.width * t
     while (this.carry >= 1) {
       this.carry -= 1
-      this.spawn(settings, this.viewport.y - 4 - this.random() * 20)
+      this.spawn(settings, top)
     }
 
     /* Before what falls in this step lands, so the cap still holds exactly */
@@ -242,12 +289,38 @@ export class WeatherEngine {
     front?.clearRect(0, 0, width, height)
 
     const color = settings.color.trim() || DEFAULT_COLOR[settings.kind] || DEFAULT_COLOR[WeatherKind.SNOW]!
-    if (back) this.drawFalling(back, color, true, ox, oy, settings)
-    if (front) {
-      this.drawFalling(front, color, false, ox, oy, settings)
-      this.drawSplashes(front, color, ox, oy)
-      this.drawProfiles(front, ox, oy)
+    /* Not acting with the widgets, all of it is behind them */
+    const affects = settings.affectsWidgets !== false
+    if (back) {
+      this.clip(back, ox, oy, () => {
+        this.drawFalling(back, color, true, ox, oy, settings)
+        if (!affects) this.drawFalling(back, color, false, ox, oy, settings)
+      })
     }
+    if (front && affects) {
+      this.clip(front, ox, oy, () => {
+        this.drawFalling(front, color, false, ox, oy, settings)
+        this.drawSplashes(front, color, ox, oy)
+        this.drawProfiles(front, ox, oy)
+      })
+    }
+  }
+
+  /** Draws inside the region only, when there is one. */
+  private clip(ctx: CanvasRenderingContext2D, ox: number, oy: number, draw: () => void): void {
+    const region = this.regionHeld
+    if (!region) return draw()
+    ctx.save()
+    ctx.beginPath()
+    ctx.rect(region.x - ox, region.y - oy, region.width, region.height)
+    ctx.clip()
+    draw()
+    ctx.restore()
+  }
+
+  private inRegion(x: number, y: number): boolean {
+    const r = this.regionHeld
+    return !r || (x >= r.x && x <= r.x + r.width && y >= r.y && y <= r.y + r.height)
   }
 
   /* ------------------------------------------------------------ making */
@@ -257,10 +330,11 @@ export class WeatherEngine {
     const rate = RATE[settings.kind] ?? 0
     const intensity = clamp(settings.intensity, 0, 100) / 100
     const speed = settings.kind === WeatherKind.RAIN ? 800 : 55
-    const lifetime = (this.viewport.height + 40) / speed
-    const count = Math.round(rate * intensity * this.viewport.width * lifetime)
+    const bounds = this.bounds
+    const lifetime = (bounds.height + 40) / speed
+    const count = Math.round(rate * intensity * bounds.width * lifetime)
     for (let i = 0; i < count; i++) {
-      this.spawn(settings, this.viewport.y + this.random() * this.viewport.height)
+      this.spawn(settings, bounds.y + this.random() * bounds.height)
     }
   }
 
@@ -275,10 +349,14 @@ export class WeatherEngine {
       : (far ? 22 : 45) + this.random() * 30
     const vx = rain ? wind * 3 : wind * 0.6
 
-    /* Upwind of the screen as well, so wind does not leave a dry strip */
-    const drift = (Math.abs(vx) * this.viewport.height) / vy
-    const from = this.viewport.x - (vx > 0 ? drift : 0)
-    const span = this.viewport.width + drift
+    /*
+     * Upwind of the screen as well, so wind does not leave a dry strip. A
+     * region has edges of its own: what falls there starts inside it.
+     */
+    const bounds = this.bounds
+    const drift = this.regionHeld ? 0 : (Math.abs(vx) * bounds.height) / vy
+    const from = bounds.x - (vx > 0 ? drift : 0)
+    const span = bounds.width + drift
 
     const x = from + this.random() * span
     this.particles.push({
@@ -321,9 +399,13 @@ export class WeatherEngine {
 
   private move(t: number, settings: WeatherLayerSettings): void {
     const snow = settings.kind === WeatherKind.SNOW
-    const bottom = this.viewport.y + this.viewport.height + 20
-    const left = this.viewport.x - this.viewport.width
-    const right = this.viewport.x + this.viewport.width * 2
+    const affects = settings.affectsWidgets !== false
+    const region = this.regionHeld
+    const bounds = this.bounds
+    /* Off the screen it may come back with the wind; out of a region it is gone */
+    const bottom = region ? bounds.y + bounds.height : bounds.y + bounds.height + 20
+    const left = region ? bounds.x : bounds.x - bounds.width
+    const right = region ? bounds.x + bounds.width : bounds.x + bounds.width * 2
 
     let kept = 0
     for (let i = 0; i < this.particles.length; i++) {
@@ -335,7 +417,7 @@ export class WeatherEngine {
       p.y += p.vy * t
 
       if (p.y > bottom || p.x < left || p.x > right) continue
-      if (!p.far && this.meets(p, snow)) continue
+      if (affects && !p.far && this.meets(p, snow)) continue
       this.particles[kept++] = p
     }
     this.particles.length = kept
@@ -437,6 +519,7 @@ export class WeatherEngine {
     ctx.beginPath()
     for (const p of this.particles) {
       if (p.far !== far) continue
+      if (!this.inRegion(p.x, p.y)) continue
       const x = p.x - ox
       const y = p.y - oy
       if (rain) {

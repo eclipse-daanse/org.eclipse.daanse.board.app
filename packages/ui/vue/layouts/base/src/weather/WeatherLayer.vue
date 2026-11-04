@@ -22,30 +22,36 @@ Contributors:
  */
 import { ref } from 'vue'
 import type { Page } from 'org.eclipse.daanse.board.app.lib.model.workspace'
-import { useWeatherLayer } from './useWeatherLayer'
+import { DEFAULT_CELL, useWeatherLayer, type GridCell } from './useWeatherLayer'
 
 const props = defineProps<{
   page?: Page
   editMode?: boolean
   /** A selector for the element inside the slot that scrolls the widgets. */
   scroller?: string
+  /**
+   * One grid unit of the layout, in pixels, given the board's width: what
+   * an area region is measured in. Left out, the base layout's 24 px grid.
+   */
+  cell?: (hostWidth: number) => GridCell
 }>()
 
 const host = ref<HTMLElement>()
 const back = ref<HTMLCanvasElement>()
 const front = ref<HTMLCanvasElement>()
 
-const { running, engine, settings } = useWeatherLayer({
+const { running, engine, settings, affectsWidgets } = useWeatherLayer({
   page: () => props.page,
   editMode: () => Boolean(props.editMode),
   host,
   back,
   front,
+  cell: (width) => props.cell?.(width) ?? DEFAULT_CELL,
   scroller: () =>
     props.scroller ? host.value?.querySelector<HTMLElement>(props.scroller) : undefined,
 })
 
-defineExpose({ running, engine, settings })
+defineExpose({ running, engine, settings, affectsWidgets })
 </script>
 
 <template>
@@ -54,7 +60,8 @@ defineExpose({ running, engine, settings })
     <div class="weather__board">
       <slot />
     </div>
-    <canvas ref="front" class="weather__sky weather__sky--front" aria-hidden="true" />
+    <!-- Only while what falls acts with the widgets: otherwise all of it is behind them -->
+    <canvas v-if="affectsWidgets" ref="front" class="weather__sky weather__sky--front" aria-hidden="true" />
   </div>
 </template>
 

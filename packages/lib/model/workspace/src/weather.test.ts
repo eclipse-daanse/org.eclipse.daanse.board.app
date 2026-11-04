@@ -14,7 +14,16 @@
 import { describe, expect, it } from 'vitest'
 import { JSONResource, URI } from '@emfts/core'
 import { VariableWrapper } from 'org.eclipse.daanse.board.app.lib.variables'
-import { PageImpl, createWeather, weatherKindOf, WeatherKind, type Page } from './index'
+import {
+  PageImpl,
+  createWeather,
+  weatherKindOf,
+  weatherRegionOf,
+  affectsWidgetsOf,
+  WeatherKind,
+  WeatherRegion,
+  type Page,
+} from './index'
 
 function roundTrip(page: Page): Page {
   const out = new JSONResource(URI.createURI('page.json'))
@@ -54,5 +63,17 @@ describe('a page with weather', () => {
     expect(weatherKindOf('rain')).toBe(WeatherKind.RAIN)
     expect(weatherKindOf('sunny')).toBe(WeatherKind.NONE)
     expect(weatherKindOf(undefined)).toBe(WeatherKind.NONE)
+  })
+
+  it('covers the whole page and acts with the widgets unless told otherwise', () => {
+    const weather = createWeather()
+    expect(weather.region!.value).toBe('page')
+    expect(weather.affectsWidgets!.value).toBe(true)
+    expect(weather.regionWidget!.eContainer()).toBe(weather)
+    expect(weatherRegionOf(' Widget ')).toBe(WeatherRegion.WIDGET)
+    expect(weatherRegionOf('somewhere')).toBe(WeatherRegion.PAGE)
+    expect(affectsWidgetsOf(undefined)).toBe(true)
+    expect(affectsWidgetsOf('off')).toBe(false)
+    expect(affectsWidgetsOf(false)).toBe(false)
   })
 })

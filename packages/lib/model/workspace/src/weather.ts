@@ -24,12 +24,20 @@ import { VariableWrapper } from 'org.eclipse.daanse.board.app.lib.variables'
 import { WeatherImpl } from './gen/WeatherImpl'
 import type { Weather } from './gen/Weather'
 import { WeatherKind, getWeatherKindByLiteral } from './gen/WeatherKind'
+import { WeatherRegion, getWeatherRegionByLiteral } from './gen/WeatherRegion'
 
 export const WEATHER_DEFAULTS = {
   kind: 'none',
   intensity: 50,
   wind: 0,
   color: '',
+  region: 'page',
+  regionX: 0,
+  regionY: 0,
+  regionWidth: 12,
+  regionHeight: 8,
+  regionWidget: '',
+  affectsWidgets: true,
 } as const
 
 export function createWeather(): Weather {
@@ -38,6 +46,13 @@ export function createWeather(): Weather {
   weather.intensity = new VariableWrapper<number>(WEATHER_DEFAULTS.intensity)
   weather.wind = new VariableWrapper<number>(WEATHER_DEFAULTS.wind)
   weather.color = new VariableWrapper<string>(WEATHER_DEFAULTS.color)
+  weather.region = new VariableWrapper<string>(WEATHER_DEFAULTS.region)
+  weather.regionX = new VariableWrapper<number>(WEATHER_DEFAULTS.regionX)
+  weather.regionY = new VariableWrapper<number>(WEATHER_DEFAULTS.regionY)
+  weather.regionWidth = new VariableWrapper<number>(WEATHER_DEFAULTS.regionWidth)
+  weather.regionHeight = new VariableWrapper<number>(WEATHER_DEFAULTS.regionHeight)
+  weather.regionWidget = new VariableWrapper<string>(WEATHER_DEFAULTS.regionWidget)
+  weather.affectsWidgets = new VariableWrapper<boolean>(WEATHER_DEFAULTS.affectsWidgets)
   return weather
 }
 
@@ -55,4 +70,24 @@ export const WEATHER_KINDS = ['none', 'rain', 'snow', 'fog'] as const
 export function weatherKindOf(value: unknown): WeatherKind {
   const text = String(value ?? '').trim().toLowerCase()
   return getWeatherKindByLiteral(text) ?? WeatherKind.NONE
+}
+
+/** The regions, as Weather.region holds them: the enum's literals. */
+export const WEATHER_REGIONS = ['page', 'area', 'widget'] as const
+
+/** What a region setting means; anything unknown is the whole page. */
+export function weatherRegionOf(value: unknown): WeatherRegion {
+  const text = String(value ?? '').trim().toLowerCase()
+  return getWeatherRegionByLiteral(text) ?? WeatherRegion.PAGE
+}
+
+/**
+ * Whether the weather acts with the widgets. A variable may deliver the
+ * word rather than the boolean, so "false", "off", "no" and "0" are off;
+ * anything unset is the default, on.
+ */
+export function affectsWidgetsOf(value: unknown): boolean {
+  if (value === undefined || value === null || value === '') return WEATHER_DEFAULTS.affectsWidgets
+  if (typeof value === 'boolean') return value
+  return !['false', 'off', 'no', '0'].includes(String(value).trim().toLowerCase())
 }
