@@ -44,5 +44,17 @@
     "copied": "Copied – {{shortcut}} or right-click the board",
     "pasteKey": "Ctrl+V",
     "pasteKeyMac": "⌘V"
+  },
+  "Region": {
+    "toolbar": "Draw region",
+    "tool": {
+      "rectangle": "Rectangle",
+      "ellipse": "Ellipse",
+      "polygon": "Polygon – click points, double-click or click the first point to close",
+      "select": "Select"
+    },
+    "delete": "Delete shape",
+    "cancel": "Cancel (Esc)",
+    "done": "Done"
   }
 }

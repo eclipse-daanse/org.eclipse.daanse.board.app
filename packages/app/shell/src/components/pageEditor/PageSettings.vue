@@ -40,11 +40,15 @@ import {
 import { SettingsForm } from 'org.eclipse.daanse.board.app.ui.vue.uimodel'
 import { useEObject, useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import {
+  DRAW_WEATHER_REGION,
   WorkspacePackage,
   createWeather,
   workspaceEcore,
+  type DrawWeatherRegionEvent,
   type Weather,
 } from 'org.eclipse.daanse.board.app.lib.model.workspace'
+import { identifiers } from 'org.eclipse.daanse.board.app.lib.core'
+import type { TinyEmitter } from 'tiny-emitter'
 import {
   identifier as WidgetRepositoryIdentifier,
   type WidgetRepository,
@@ -60,6 +64,7 @@ const { t } = useTranslation('shell')
 const pageRepo = inject<PageRegistryI>(PageIdentifier)
 const layoutRepo = inject<LayoutRepositoryI>(LayoutRepositoryIdentifier)
 const widgetRepo = inject<WidgetRepository | undefined>(WidgetRepositoryIdentifier, undefined)
+const eventBus = inject<TinyEmitter | undefined>(identifiers.TINY_EMITTER, undefined)
 const pageSettings = ref<StoredPage | null>(null)
 
 const availableLayouts = computed(() => layoutRepo?.getAllLayouts() ?? [])
@@ -214,6 +219,17 @@ watch(watchedWeather, (now, before) => {
   if (page && !page.weather) page.weather = now
 })
 
+/*
+ * A region is drawn on the page, which this panel covers: so it closes,
+ * and the layer around the board takes over. Nothing changes by asking -
+ * the drawing writes the shapes when the person is done with it.
+ */
+function drawRegion() {
+  if (!pageid.value) return
+  eventBus?.emit(DRAW_WEATHER_REGION, { pageId: pageid.value } satisfies DrawWeatherRegionEvent)
+  emit('close')
+}
+
 onMounted(() => {
   load()
   loadWeather()
@@ -325,6 +341,9 @@ watch(
           :ui-model-uri="weatherFormFor.uri"
           :ecore="workspaceEcore"
         />
+        <DButton class="draw-region" data-action="draw-region" @click="drawRegion">
+          {{ t('PageSettings.weather.drawRegion') }}
+        </DButton>
       </section>
 
       <section class="group">

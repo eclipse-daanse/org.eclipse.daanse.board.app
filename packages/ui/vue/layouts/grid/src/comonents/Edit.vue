@@ -12,8 +12,9 @@ Contributors:
 -->
 
 <template>
-  <!-- Still while editing: the weather waits, and draws nothing -->
-  <WeatherLayer :page="board.page.value" edit-mode>
+  <!-- Still while editing: the weather waits, and draws nothing. Its region
+    is drawn here, in the grid the board shows -->
+  <WeatherLayer :page="board.page.value" edit-mode scroller=".scroll" :cell="weatherCell">
   <div class="scroll max-h-screen ml-15">
     <div ref="wrapper" @dragenter="onDragEnter" @drop.prevent="onDrop" @drag="onDragMove" class="alayout" @click="closeAllContextMenus"
       @contextmenu="onCanvasContextMenu"
@@ -374,6 +375,14 @@ function getCurrentCols(width: number) {
   if (width >= BREAKPOINTS.xs) return cols.xs
   return cols.xxs
 }
+/*
+ * One grid unit for the weather's region, as the board's view measures
+ * it: a column as wide as it is now, and a row with the gap below it.
+ */
+function weatherCell(width: number) {
+  return { width: width / Math.max(1, getCurrentCols(width)), height: ROW_HEIGHT.value + ROW_GAP }
+}
+
 function getMetrics() {
   // Use fixed container width to ensure consistent conversion
   const containerW = 1200 // Fixed width

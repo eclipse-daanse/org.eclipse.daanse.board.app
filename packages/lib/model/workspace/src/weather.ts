@@ -240,3 +240,21 @@ function storedNumber(wrapper: unknown, fallback: number): number {
 function shapeClassUri(name: string): string {
   return `${WorkspacePackage.eNS_URI}#//${name}`
 }
+
+/* ------------------------------------------------------------ drawing */
+
+/**
+ * The event that puts a page into the drawing mode of its weather region,
+ * on the application's event bus, with `{ pageId }`.
+ *
+ * Asked for in the page settings, done by the layer around the page's
+ * board - two bundles that do not know each other, and both know this
+ * package. Nothing about the page changes by asking; the drawing mode
+ * writes the shapes when the person is done.
+ */
+/* Not of the shape ns:Key, which the text checks would take for a text */
+export const DRAW_WEATHER_REGION = 'drawWeatherRegion'
+
+export interface DrawWeatherRegionEvent {
+  pageId: string
+}
