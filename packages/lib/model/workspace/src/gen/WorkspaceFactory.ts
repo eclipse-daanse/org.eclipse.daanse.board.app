@@ -35,6 +35,14 @@ import { DataFilter } from './DataFilter.js';
 import { DataFilterImpl } from './DataFilterImpl.js';
 import { Weather } from './Weather.js';
 import { WeatherImpl } from './WeatherImpl.js';
+import { RectangleShape } from './RectangleShape.js';
+import { RectangleShapeImpl } from './RectangleShapeImpl.js';
+import { EllipseShape } from './EllipseShape.js';
+import { EllipseShapeImpl } from './EllipseShapeImpl.js';
+import { PolygonShape } from './PolygonShape.js';
+import { PolygonShapeImpl } from './PolygonShapeImpl.js';
+import { RegionPoint } from './RegionPoint.js';
+import { RegionPointImpl } from './RegionPointImpl.js';
 import { Variable } from './Variable.js';
 import { VariableImpl } from './VariableImpl.js';
 import { EventMapping } from './EventMapping.js';
@@ -116,6 +124,34 @@ export class WorkspaceFactory extends BasicEFactory {
   }
 
   /**
+   * Create a new RectangleShape instance
+   */
+  createRectangleShape(): RectangleShape {
+    return new RectangleShapeImpl();
+  }
+
+  /**
+   * Create a new EllipseShape instance
+   */
+  createEllipseShape(): EllipseShape {
+    return new EllipseShapeImpl();
+  }
+
+  /**
+   * Create a new PolygonShape instance
+   */
+  createPolygonShape(): PolygonShape {
+    return new PolygonShapeImpl();
+  }
+
+  /**
+   * Create a new RegionPoint instance
+   */
+  createRegionPoint(): RegionPoint {
+    return new RegionPointImpl();
+  }
+
+  /**
    * Create a new Variable instance
    */
   createVariable(): Variable {
@@ -169,6 +205,14 @@ export class WorkspaceFactory extends BasicEFactory {
         return this.createDataFilter();
       case 'Weather':
         return this.createWeather();
+      case 'RectangleShape':
+        return this.createRectangleShape();
+      case 'EllipseShape':
+        return this.createEllipseShape();
+      case 'PolygonShape':
+        return this.createPolygonShape();
+      case 'RegionPoint':
+        return this.createRegionPoint();
       case 'Variable':
         return this.createVariable();
       case 'EventMapping':

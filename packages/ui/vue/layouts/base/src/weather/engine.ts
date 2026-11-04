@@ -26,7 +26,7 @@
  * and dropped below it, and drawing shifts by it. Scrolling therefore
  * moves nothing and shakes no snow off.
  */
-import { WeatherKind } from 'org.eclipse.daanse.board.app.lib.model.workspace'
+import { WeatherKind, type ShapeSpec } from 'org.eclipse.daanse.board.app.lib.model.workspace'
 
 /** A widget as an obstacle: where it is on the board, and which one it is. */
 export interface Obstacle {
@@ -60,6 +60,12 @@ export interface Area {
   width: number
   height: number
 }
+
+/**
+ * One shape of a region, in board coordinates: a drawn shape once the
+ * layer has turned its grid units into pixels.
+ */
+export type BoardShape = ShapeSpec
 
 /** The two surfaces: behind the widgets and above them. */
 export interface WeatherSurfaces {
@@ -155,8 +161,10 @@ export class WeatherEngine {
 
   private obstacles: Obstacle[] = []
   private viewport = { x: 0, y: 0, width: 0, height: 0 }
-  /** Where the weather is drawn; undefined is the whole board. */
+  /** The box around the region; undefined is the whole board. */
   private regionHeld: Area | undefined
+  /** The shapes the region is the union of, when there is a region. */
+  private shapesHeld: BoardShape[] = []
   private carry = 0
   private time = 0
   private kind: WeatherKind = WeatherKind.NONE
@@ -169,18 +177,35 @@ export class WeatherEngine {
     return this.obstacles
   }
 
-  /** The region the weather keeps to, or undefined for the whole board. */
+  /** The box around the region the weather keeps to, or undefined for the whole board. */
   get region(): Area | undefined {
     return this.regionHeld
   }
 
+  /** The shapes of the region; none while it covers the whole board. */
+  get regionShapes(): readonly BoardShape[] {
+    return this.shapesHeld
+  }
+
   /**
-   * Keeps the weather to a rectangle of the board, or lets it cover the
-   * whole board again with undefined. A particle outside it is dropped and
-   * nothing is drawn outside it.
+   * Keeps the weather to a rectangle of the board or to the union of
+   * shapes, or lets it cover the whole board again with undefined.
+   *
+   * A particle is made and kept within the box around the shapes, and is
+   * drawn only inside one of them. No shapes at all is a region of
+   * nothing, not the whole board.
    */
-  setRegion(area: Area | undefined): void {
-    this.regionHeld = area ? { x: area.x, y: area.y, width: Math.max(0, area.width), height: Math.max(0, area.height) } : undefined
+  setRegion(region: Area | readonly BoardShape[] | undefined): void {
+    if (!region) {
+      this.regionHeld = undefined
+      this.shapesHeld = []
+      return
+    }
+    const shapes: BoardShape[] = isShapeList(region)
+      ? region.map(normalised).filter((shape): shape is BoardShape => shape !== undefined)
+      : [{ kind: 'rectangle', x: region.x, y: region.y, width: Math.max(0, region.width), height: Math.max(0, region.height) }]
+    this.shapesHeld = shapes
+    this.regionHeld = boxAround(shapes)
   }
 
   /**
@@ -306,21 +331,27 @@ export class WeatherEngine {
     }
   }
 
-  /** Draws inside the region only, when there is one. */
+  /**
+   * Draws inside the region only, when there is one: one path of every
+   * shape, each going round the same way, so the non-zero rule fills
+   * their union and an overlap is no hole.
+   */
   private clip(ctx: CanvasRenderingContext2D, ox: number, oy: number, draw: () => void): void {
-    const region = this.regionHeld
-    if (!region) return draw()
+    if (!this.regionHeld) return draw()
     ctx.save()
     ctx.beginPath()
-    ctx.rect(region.x - ox, region.y - oy, region.width, region.height)
-    ctx.clip()
+    for (const shape of this.shapesHeld) tracePath(ctx, shape, ox, oy)
+    ctx.clip('nonzero')
     draw()
     ctx.restore()
   }
 
-  private inRegion(x: number, y: number): boolean {
+  /** Whether a point of the board is inside the region - inside any of its shapes. */
+  inRegion(x: number, y: number): boolean {
     const r = this.regionHeld
-    return !r || (x >= r.x && x <= r.x + r.width && y >= r.y && y <= r.y + r.height)
+    if (!r) return true
+    if (x < r.x || x > r.x + r.width || y < r.y || y > r.y + r.height) return false
+    return this.shapesHeld.some((shape) => contains(shape, x, y))
   }
 
   /* ------------------------------------------------------------ making */
@@ -417,7 +448,12 @@ export class WeatherEngine {
       p.y += p.vy * t
 
       if (p.y > bottom || p.x < left || p.x > right) continue
-      if (affects && !p.far && this.meets(p, snow)) continue
+      /*
+       * A widget ends what falls onto it wherever it is, so nothing comes
+       * out from under one into a shape below; what it leaves - snow, a
+       * splash - is only left inside the region.
+       */
+      if (affects && !p.far && this.meets(p, snow, this.inRegion(p.x, p.y))) continue
       this.particles[kept++] = p
     }
     this.particles.length = kept
@@ -431,7 +467,7 @@ export class WeatherEngine {
    * that drifted into a widget from the side ends too, unseen: it is
    * behind the widget as far as anyone looking is concerned.
    */
-  private meets(p: Particle, snow: boolean): boolean {
+  private meets(p: Particle, snow: boolean, leaves: boolean): boolean {
     for (const rect of this.obstacles) {
       if (p.x < rect.x || p.x >= rect.x + rect.width) continue
       const profile = this.profiles.get(rect.id)
@@ -440,8 +476,8 @@ export class WeatherEngine {
       const surface = rect.y - lying
 
       if (p.py <= surface && p.y >= surface) {
-        if (snow && profile) this.settle(profile, bin, p.size)
-        else if (!snow) this.splash(p.x, surface, p.vx)
+        if (leaves && snow && profile) this.settle(profile, bin, p.size)
+        else if (leaves && !snow) this.splash(p.x, surface, p.vx)
         return true
       }
       if (p.y > surface && p.y < rect.y + rect.height) return true
@@ -586,6 +622,107 @@ export class WeatherEngine {
     ctx.shadowBlur = 0
     ctx.shadowOffsetY = 0
   }
+}
+
+/* ------------------------------------------------------------ shapes */
+
+function isShapeList(region: Area | readonly BoardShape[]): region is readonly BoardShape[] {
+  return Array.isArray(region)
+}
+
+/**
+ * A shape the region can use: a box with no negative size, a polygon
+ * going round the way a rectangle does (clockwise on screen). Undefined
+ * for a polygon of fewer than three points, which encloses nothing.
+ */
+function normalised(shape: BoardShape): BoardShape | undefined {
+  if (shape.kind === 'polygon') {
+    if (shape.points.length < 3) return undefined
+    const points = shape.points.map((point) => ({ x: point.x, y: point.y }))
+    return { kind: 'polygon', points: signedArea(points) < 0 ? points.reverse() : points }
+  }
+  const x = Math.min(shape.x, shape.x + shape.width)
+  const y = Math.min(shape.y, shape.y + shape.height)
+  return { kind: shape.kind, x, y, width: Math.abs(shape.width), height: Math.abs(shape.height) }
+}
+
+/** Twice the signed area; positive is clockwise on a screen, whose y points down. */
+function signedArea(points: readonly { x: number; y: number }[]): number {
+  let sum = 0
+  for (let i = 0; i < points.length; i++) {
+    const a = points[i]
+    const b = points[(i + 1) % points.length]
+    sum += a.x * b.y - b.x * a.y
+  }
+  return sum
+}
+
+/** The box around every shape; an empty one where there are none. */
+export function boxAround(shapes: readonly BoardShape[]): Area {
+  let left = Infinity
+  let top = Infinity
+  let right = -Infinity
+  let bottom = -Infinity
+  for (const shape of shapes) {
+    const corners =
+      shape.kind === 'polygon'
+        ? shape.points
+        : [{ x: shape.x, y: shape.y }, { x: shape.x + shape.width, y: shape.y + shape.height }]
+    for (const { x, y } of corners) {
+      left = Math.min(left, x)
+      top = Math.min(top, y)
+      right = Math.max(right, x)
+      bottom = Math.max(bottom, y)
+    }
+  }
+  if (left > right) return { x: 0, y: 0, width: 0, height: 0 }
+  return { x: left, y: top, width: right - left, height: bottom - top }
+}
+
+/** Adds a shape to the current path, shifted by the viewport, clockwise. */
+function tracePath(ctx: CanvasRenderingContext2D, shape: BoardShape, ox: number, oy: number): void {
+  if (shape.kind === 'rectangle') {
+    ctx.rect(shape.x - ox, shape.y - oy, shape.width, shape.height)
+  } else if (shape.kind === 'ellipse') {
+    const rx = shape.width / 2
+    const ry = shape.height / 2
+    ctx.moveTo(shape.x + shape.width - ox, shape.y + ry - oy)
+    ctx.ellipse(shape.x + rx - ox, shape.y + ry - oy, rx, ry, 0, 0, Math.PI * 2, false)
+    ctx.closePath()
+  } else {
+    const [first, ...rest] = shape.points
+    ctx.moveTo(first.x - ox, first.y - oy)
+    for (const point of rest) ctx.lineTo(point.x - ox, point.y - oy)
+    ctx.closePath()
+  }
+}
+
+/** Whether a shape holds a point; a polygon by the non-zero rule, as it is clipped. */
+export function contains(shape: BoardShape, x: number, y: number): boolean {
+  if (shape.kind === 'rectangle') {
+    return x >= shape.x && x <= shape.x + shape.width && y >= shape.y && y <= shape.y + shape.height
+  }
+  if (shape.kind === 'ellipse') {
+    const rx = shape.width / 2
+    const ry = shape.height / 2
+    if (rx <= 0 || ry <= 0) return false
+    const dx = (x - (shape.x + rx)) / rx
+    const dy = (y - (shape.y + ry)) / ry
+    return dx * dx + dy * dy <= 1
+  }
+  let winding = 0
+  const points = shape.points
+  for (let i = 0; i < points.length; i++) {
+    const a = points[i]
+    const b = points[(i + 1) % points.length]
+    const side = (b.x - a.x) * (y - a.y) - (x - a.x) * (b.y - a.y)
+    if (a.y <= y) {
+      if (b.y > y && side > 0) winding++
+    } else if (b.y <= y && side < 0) {
+      winding--
+    }
+  }
+  return winding !== 0
 }
 
 function newProfile(rect: Obstacle): Profile {

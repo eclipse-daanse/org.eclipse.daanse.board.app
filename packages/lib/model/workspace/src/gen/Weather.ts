@@ -18,8 +18,9 @@
  * @generated
  */
 
-import type { EObject } from '@emfts/core';
+import type { EObject, EList } from '@emfts/core';
 import type { VariableWrapper } from 'org.eclipse.daanse.board.app.lib.variables';
+import type { RegionShape } from './RegionShape.js';
 
 /**
  * Weather
@@ -31,10 +32,7 @@ export interface Weather extends EObject {
   wind?: VariableWrapper<number>;
   color?: VariableWrapper<string>;
   region?: VariableWrapper<string>;
-  regionX?: VariableWrapper<number>;
-  regionY?: VariableWrapper<number>;
-  regionWidth?: VariableWrapper<number>;
-  regionHeight?: VariableWrapper<number>;
+  shapes: EList<RegionShape>;
   regionWidget?: VariableWrapper<string>;
   affectsWidgets?: VariableWrapper<boolean>;
 
