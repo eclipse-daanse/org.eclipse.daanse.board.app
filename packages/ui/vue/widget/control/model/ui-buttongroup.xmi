@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/*********************************************************************
+* Copyright (c) 2026 Contributors to the Eclipse Foundation.
+*
+* This program and the accompanying materials are made
+* available under the terms of the Eclipse Public License 2.0
+* which is available at https://www.eclipse.org/legal/epl-2.0/
+*
+* SPDX-License-Identifier: EPL-2.0
+**********************************************************************/
+
+The form for the button group.
+
+The options first - listed, then where in the source's answer more are
+found - then whether one or several are chosen and where that is written,
+and last how it looks. The fields of a source's items are only asked for
+once there is a path to the list.
+-->
+<uimodel:UIModel
+    xmlns:xmi="http://www.omg.org/XMI"
+    xmi:version="2.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:uimodel="http://uimodel/1.0"
+    name="ButtonGroupSettingsForm">
+
+  <targetClasses href="http://org.eclipse.daanse.board.app.ui.vue.widget.control#//ButtonGroupSettings"/>
+
+  <components xsi:type="uimodel:FormView" name="ButtonGroupSettingsFormView">
+
+    <fields xsi:type="uimodel:GroupWidget" name="optionsGroup" layout="VERTICAL" label="control:Form.optionsGroup">
+      <fields xsi:type="uimodel:InputWidget" name="options"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.control#//ButtonGroupSettings/options" label="control:Form.options"/>
+      <fields xsi:type="uimodel:InputWidget" name="optionsPath"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.control#//ButtonGroupSettings/optionsPath" label="control:Form.optionsPath" placeholder="rows"/>
+      <fields xsi:type="uimodel:InputWidget" name="optionLabel"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.control#//ButtonGroupSettings/optionLabel" label="control:Form.optionLabel" placeholder="name">
+        <visibilityCondition language="JS" body="!!(self.optionsPath?.value ?? self.optionsPath)"/>
+      </fields>
+      <fields xsi:type="uimodel:InputWidget" name="optionValue"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.control#//ButtonGroupSettings/optionValue" label="control:Form.optionValue" placeholder="id">
+        <visibilityCondition language="JS" body="!!(self.optionsPath?.value ?? self.optionsPath)"/>
+      </fields>
+    </fields>
+
+    <fields xsi:type="uimodel:GroupWidget" name="writeGroup" layout="VERTICAL" label="control:Form.chooseGroup">
+      <fields xsi:type="uimodel:CheckboxWidget" name="multiple"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.control#//ButtonGroupSettings/multiple" label="control:Form.multiple"/>
+      <fields xsi:type="uimodel:InputWidget" name="target"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.control#//ButtonGroupSettings/target" label="control:Form.target"/>
+      <fields xsi:type="uimodel:InputWidget" name="disabled"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.control#//ButtonGroupSettings/disabled" label="control:Form.disabled" placeholder="false"/>
+    </fields>
+
+    <fields xsi:type="uimodel:GroupWidget" name="lookGroup" layout="VERTICAL" label="control:Form.lookGroup">
+      <fields xsi:type="uimodel:InputWidget" name="label"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.control#//ButtonGroupSettings/label" label="control:Form.label"/>
+      <fields xsi:type="uimodel:InputWidget" name="color"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.control#//ButtonGroupSettings/color" label="control:Form.color"/>
+      <fields xsi:type="uimodel:InputWidget" name="textColor"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.control#//ButtonGroupSettings/textColor" label="control:Form.chosenTextColor"/>
+      <fields xsi:type="uimodel:NumberWidget" name="fontSize"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.control#//ButtonGroupSettings/fontSize" label="control:Form.fontSize" min="6" max="200" step="1"/>
+    </fields>
+
+  </components>
+</uimodel:UIModel>

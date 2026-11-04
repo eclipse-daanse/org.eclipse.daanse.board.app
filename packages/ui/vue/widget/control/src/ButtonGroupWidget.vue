@@ -1,0 +1,265 @@
+<!--
+Copyright (c) 2026 Contributors to the Eclipse Foundation.
+
+This program and the accompanying materials are made
+available under the terms of the Eclipse Public License 2.0
+which is available at https://www.eclipse.org/legal/epl-2.0/
+
+SPDX-License-Identifier: EPL-2.0
+
+Contributors:
+    Smart City Jena
+-->
+<script setup lang="ts">
+/**
+ * A button group: one button per option.
+ *
+ * Taking one, a press chooses its option and writes its value. Taking
+ * several, a press adds its option or takes it away again, and what is
+ * written is the list of the chosen values in the order of the options.
+ *
+ * The options are the listed ones, then those the widget's source gives -
+ * a list found at a path in its answer, each item shown by one field and
+ * written by another. What is chosen is read from the target, so a
+ * variable changed elsewhere changes the choice too.
+ */
+import { computed, ref, toRefs, watch } from 'vue'
+import { useDatasourceRepository } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+import type { ButtonGroupSettings } from './gen/ButtonGroupSettings'
+import { ButtonGroupSettingsImpl } from './gen/ButtonGroupSettingsImpl'
+import { ButtonGroupWidgetInterface } from './api/ButtonGroupWidgetInterface'
+import { listOf, rawOf, sameValue, textOf, useControl } from './support/useControl'
+
+const props = defineProps<{ datasourceId?: string; id?: string }>()
+const { id: widgetId } = toRefs(props)
+const datasourceId = computed(() => props.datasourceId ?? '')
+
+const config = defineModel<ButtonGroupSettings>('configv', { required: true })
+
+class ButtonGroupWidgetApi extends ButtonGroupWidgetInterface {
+  setValue(value: unknown): void {
+    write(multiple.value ? chosenIn(value) : value)
+  }
+
+  enable(): void {
+    put('disabled', 'false')
+  }
+
+  disable(): void {
+    put('disabled', 'true')
+  }
+}
+const api = new ButtonGroupWidgetApi()
+defineExpose<ButtonGroupWidgetInterface>(api)
+
+const { settings, held, current, label, color, textColor, fontSize, disabled, put, write, operate } = useControl(
+  config,
+  widgetId,
+  {
+    type: 'ButtonGroupWidget',
+    wrapped: { target: '', optionsPath: '', optionLabel: '', optionValue: '' },
+    create: () => new ButtonGroupSettingsImpl(),
+    api,
+  },
+)
+
+const multiple = computed(() => (settings.value as any)?.multiple === true)
+
+/* -------------------------------------------------------------- source */
+
+const data = ref<unknown>(null)
+const { update } = useDatasourceRepository(datasourceId, 'object', data)
+watch(datasourceId, (now, before) => update(now, before))
+
+/* A path of field names and indices: rows, data.items, rows[0].values. A leading $value. is allowed. */
+function at(source: unknown, path: string): unknown {
+  const parts = path
+    .replace(/^\$value\.?/, '')
+    .replace(/\[(\d+)\]/g, '.$1')
+    .split('.')
+    .filter(Boolean)
+  return parts.reduce<any>((found, part) => (found == null ? undefined : found[part]), source)
+}
+
+/* --------------------------------------------------------------- options */
+
+interface Option {
+  label: string
+  value: unknown
+  color: string
+}
+
+const listed = computed<Option[]>(() =>
+  listOf((settings.value as any)?.options).map((each: any) => {
+    const value = textOf(each?.value)
+    return { label: textOf(each?.label) || value, value, color: textOf(each?.color) }
+  }),
+)
+
+const fromSource = computed<Option[]>(() => {
+  if (data.value == null) return []
+  const list = at(data.value, held('optionsPath').trim())
+  if (!Array.isArray(list)) return []
+  const labelField = held('optionLabel').trim()
+  const valueField = held('optionValue').trim()
+  return list
+    .map((item) => {
+      const isRecord = item !== null && typeof item === 'object'
+      const value = valueField ? at(item, valueField) : isRecord ? undefined : item
+      if (value === undefined || value === null) return null
+      const shown = labelField ? at(item, labelField) : value
+      return { label: textOf(shown) || textOf(value), value, color: '' }
+    })
+    .filter((each): each is Option => each !== null)
+})
+
+const options = computed<Option[]>(() => [...listed.value, ...fromSource.value])
+
+/* ---------------------------------------------------------------- choice */
+
+/*
+ * What a variable holding several values holds, as a list: a list as it
+ * is, text as JSON where it is a JSON list, else split at commas.
+ */
+function chosenIn(held: unknown): unknown[] {
+  const value = rawOf(held)
+  if (Array.isArray(value)) return value
+  const text = textOf(value).trim()
+  if (!text) return []
+  if (text.startsWith('[')) {
+    try {
+      const parsed = JSON.parse(text)
+      if (Array.isArray(parsed)) return parsed
+    } catch {
+      /* not JSON - taken as a list of words below */
+    }
+  }
+  return text.split(',').map((each) => each.trim()).filter(Boolean)
+}
+
+const chosen = computed<unknown[]>(() => {
+  if (multiple.value) return chosenIn(current())
+  const value = current()
+  return value === undefined || value === null || textOf(value) === '' ? [] : [value]
+})
+
+const isChosen = (option: Option) => chosen.value.some((each) => sameValue(each, option.value))
+
+function press(option: Option): void {
+  if (!multiple.value) {
+    operate(option.value)
+    return
+  }
+  const next = options.value
+    .filter((each) => (each === option ? !isChosen(each) : isChosen(each)))
+    .map((each) => each.value)
+  operate(next)
+}
+</script>
+
+<template>
+  <div class="control-group" :style="{ fontSize, '--control-color': color, '--control-text': textColor }">
+    <span v-if="label" class="control-group__label">{{ label }}</span>
+    <div
+      class="control-group__options"
+      :role="multiple ? 'group' : 'radiogroup'"
+      :aria-label="label || undefined"
+    >
+      <button
+        v-for="(option, index) in options"
+        :key="index"
+        type="button"
+        class="control-group__option"
+        :class="{ 'control-group__option--chosen': isChosen(option) }"
+        :role="multiple ? undefined : 'radio'"
+        :aria-checked="multiple ? undefined : isChosen(option)"
+        :aria-pressed="multiple ? isChosen(option) : undefined"
+        :disabled="disabled"
+        :style="isChosen(option) && option.color ? { '--control-color': option.color } : undefined"
+        @click="press(option)"
+      >
+        {{ option.label }}
+      </button>
+    </div>
+  </div>
+</template>
+
+<style scoped>
+.control-group {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.3em;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.control-group__label {
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.control-group__options {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+  gap: 0;
+}
+
+/* One face, divided: the colour outlines every option and fills the chosen ones. */
+.control-group__option {
+  flex: 1 1 auto;
+  min-width: 0;
+  border: 2px solid var(--control-color);
+  margin-left: -2px;
+  padding: 0.3em 0.8em;
+  background: transparent;
+  color: var(--control-color);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: filter 0.15s ease, box-shadow 0.05s ease, background-color 0.15s ease;
+}
+
+.control-group__option:first-child {
+  margin-left: 0;
+  border-radius: 6px 0 0 6px;
+}
+
+.control-group__option:last-child {
+  border-radius: 0 6px 6px 0;
+}
+
+.control-group__option:only-child {
+  border-radius: 6px;
+}
+
+.control-group__option--chosen {
+  background: var(--control-color);
+  color: var(--control-text);
+}
+
+.control-group__option:hover:not(:disabled) {
+  filter: brightness(1.08);
+}
+
+/* Shade only: a moved face would change the layout (see the button). */
+.control-group__option:active:not(:disabled) {
+  filter: brightness(0.9);
+  box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.35);
+}
+
+.control-group__option:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+</style>
