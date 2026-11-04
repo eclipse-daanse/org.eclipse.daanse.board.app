@@ -366,6 +366,7 @@
       "regionArea": "Gezeichneter Bereich",
       "regionWidget": "Fläche eines Widgets",
       "regionWidgetChoice": "Widget",
+      "drawRegion": "Bereich zeichnen",
       "affectsWidgets": "Wirkt auf die Widgets"
     }
   },

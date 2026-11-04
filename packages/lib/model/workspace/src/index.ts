@@ -81,6 +81,8 @@ export {
   shapeSpecOf,
   shapeFromSpec,
   liftTypedWeatherRegions,
+  DRAW_WEATHER_REGION,
+  type DrawWeatherRegionEvent,
   type ShapeSpec,
 } from './weather'
 /* The Ecore as text, for the sentences a form shows beside its fields. */

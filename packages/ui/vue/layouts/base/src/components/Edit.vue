@@ -735,8 +735,9 @@ const change = (e: any) => {
 </script>
 
 <template>
-  <!-- Still while editing: the weather waits, and draws nothing -->
-  <WeatherLayer :page="board.page.value" edit-mode>
+  <!-- Still while editing: the weather waits, and draws nothing. Its region
+    is drawn here, over the board as it scrolls -->
+  <WeatherLayer :page="board.page.value" edit-mode scroller=".scroll-viewport">
   <div
     class="report-container"
     @contextmenu="onCanvasContextMenu"
