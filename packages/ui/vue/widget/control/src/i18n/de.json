@@ -3,7 +3,8 @@
     "button": "Schaltfläche",
     "toggle": "Umschalter",
     "multiState": "Mehrstufige Schaltfläche",
-    "slider": "Schieberegler"
+    "slider": "Schieberegler",
+    "buttonGroup": "Schaltflächengruppe"
   },
   "Form": {
     "labelGroup": "Beschriftung",
@@ -40,7 +41,15 @@
     "upperTarget": "Obere Grenze schreibt in Variable",
     "showValue": "Wert anzeigen",
     "orientation": "Ausrichtung",
-    "valueTextColor": "Textfarbe des Werts"
+    "valueTextColor": "Textfarbe des Werts",
+    "optionsGroup": "Optionen",
+    "options": "Feste Optionen",
+    "optionsPath": "Liste in der Antwort der Datenquelle",
+    "optionLabel": "Feld für die Beschriftung",
+    "optionValue": "Feld für den Wert",
+    "chooseGroup": "Auswahl",
+    "multiple": "Mehrere wählbar",
+    "chosenTextColor": "Textfarbe der gewählten"
   },
   "Action": {
     "value": "Wert",
