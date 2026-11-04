@@ -16,5 +16,9 @@
       "catppuccinMocha": "Catppuccin Mocha",
       "minDark": "Min, dunkel"
     }
+  },
+  "Action": {
+    "code": "Code",
+    "language": "Sprache"
   }
 }
