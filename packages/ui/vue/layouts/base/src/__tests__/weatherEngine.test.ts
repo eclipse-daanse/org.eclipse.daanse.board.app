@@ -38,6 +38,17 @@ function drop(e: WeatherEngine, x: number, y: number, vy: number, size = 2) {
 }
 
 describe('the weather engine', () => {
+  it('bursts a rain drop into splashes on a top edge', () => {
+    const e = engine(RAIN)
+    drop(e, 150, 190, 800)
+
+    e.step(0.05, RAIN)
+
+    expect(e.particles).toHaveLength(0)
+    expect(e.splashes.length).toBeGreaterThanOrEqual(2)
+    for (const splash of e.splashes) expect(splash.vy).toBeLessThan(0)
+  })
+
   it('ends a falling particle on a top edge of a widget', () => {
     const e = engine(RAIN)
     drop(e, 150, 190, 800)
