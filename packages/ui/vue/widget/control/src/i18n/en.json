@@ -4,7 +4,8 @@
     "toggle": "Toggle button",
     "multiState": "Multi-state button",
     "slider": "Slider",
-    "buttonGroup": "Button group"
+    "buttonGroup": "Button group",
+    "choice": "Choice"
   },
   "Form": {
     "labelGroup": "Label",
@@ -51,7 +52,8 @@
     "multiple": "Several can be chosen",
     "chosenTextColor": "Text colour of the chosen",
     "labelSide": "Label stands",
-    "detents": "Named detents"
+    "detents": "Named detents",
+    "placeholder": "Placeholder"
   },
   "Action": {
     "value": "Value",
@@ -83,6 +85,7 @@
     "button": "Button",
     "toggle": "Switch",
     "multiState": "State",
-    "slider": "Slider"
+    "slider": "Slider",
+    "choice": "Choose …"
   }
 }

@@ -35,6 +35,8 @@ import { SliderSettings } from './SliderSettings.js';
 import { SliderSettingsImpl } from './SliderSettingsImpl.js';
 import { ButtonGroupSettings } from './ButtonGroupSettings.js';
 import { ButtonGroupSettingsImpl } from './ButtonGroupSettingsImpl.js';
+import { ChoiceSettings } from './ChoiceSettings.js';
+import { ChoiceSettingsImpl } from './ChoiceSettingsImpl.js';
 import { ControlPayload } from './ControlPayload.js';
 import { ControlPayloadImpl } from './ControlPayloadImpl.js';
 
@@ -108,6 +110,13 @@ export class ControlwidgetsFactory extends BasicEFactory {
   }
 
   /**
+   * Create a new ChoiceSettings instance
+   */
+  createChoiceSettings(): ChoiceSettings {
+    return new ChoiceSettingsImpl();
+  }
+
+  /**
    * Create a new ControlPayload instance
    */
   createControlPayload(): ControlPayload {
@@ -133,6 +142,8 @@ export class ControlwidgetsFactory extends BasicEFactory {
         return this.createSliderSettings();
       case 'ButtonGroupSettings':
         return this.createButtonGroupSettings();
+      case 'ChoiceSettings':
+        return this.createChoiceSettings();
       case 'ControlPayload':
         return this.createControlPayload();
       default:
