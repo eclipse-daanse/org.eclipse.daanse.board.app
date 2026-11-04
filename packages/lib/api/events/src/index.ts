@@ -21,7 +21,7 @@
 /// <reference path="./vite-env.d.ts" />
 
 import { serviceId } from 'org.eclipse.daanse.board.app.lib.core'
-import type { ResourceSet, EPackage } from '@emfts/core'
+import type { ResourceSet, EPackage, EClass } from '@emfts/core'
 /*
  * The events models stay with the implementation for now: their generated
  * classes carry implementation-owned decorators (@WidgetAction), and the
@@ -453,6 +453,10 @@ export interface EcoreMetadataService {
   * Extract payload metadata from an Ecore model by class name
   */
   extractPayloadMetadata(widgetType: string, payloadClassName: string): EcorePayloadMetadata | null;
+  /**
+  * The features of a payload class, read off its EClass
+  */
+  extractPayloadMetadataFromEClass(eClass: EClass): EcorePayloadMetadata;
   /**
   * Check if an EClass extends WidgetActionInterfaceImpl
   */
