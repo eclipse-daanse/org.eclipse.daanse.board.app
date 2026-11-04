@@ -18,7 +18,7 @@
  */
 import { computed, inject, onMounted, onUnmounted, toRaw, type Ref } from 'vue'
 import { useRoute } from 'vue-router'
-import { useEObject, VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+import { useEObject, useTranslation, VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import { identifiers } from 'org.eclipse.daanse.board.app.lib.core'
 import type { TinyEmitter } from 'tiny-emitter'
 import {
@@ -32,10 +32,35 @@ import { ControlPayloadImpl } from '../gen/ControlPayloadImpl'
 /* The wrapped settings every control shares, with the value the model gives them. */
 export const SHARED_WRAPPED: Record<string, string> = {
   label: '',
-  color: '#2563eb',
-  textColor: '#ffffff',
+  color: '',
+  textColor: '',
   fontSize: '14',
   disabled: 'false',
+}
+
+/*
+ * The colours the model used to give every control, and every board saved
+ * before the controls followed the app's theme holds them. They are read as
+ * not set, so those boards follow the theme too.
+ */
+export const FORMER_DEFAULTS = { color: '#2563eb', textColor: '#ffffff', onColor: '#16a34a' }
+
+/** A colour setting, empty where it is not set or still holds the former default. */
+export function colourOf(given: string, former: string): string {
+  const colour = given.trim()
+  return colour.toLowerCase() === former ? '' : colour
+}
+
+/*
+ * Where an unset colour comes from: the shell's tokens, so a control
+ * follows the app's theme, light or dark. The fallbacks after them are the
+ * dark theme's values, for a control shown outside the shell.
+ */
+export const THEME = {
+  face: 'var(--color-primary, var(--color-accent, #4fa3d1))',
+  onFace: 'var(--color-onAccent, var(--color-bg, #08131c))',
+  ink: 'var(--color-fg, currentColor)',
+  ground: 'var(--color-bg, #121820)',
 }
 
 /*
@@ -92,6 +117,12 @@ export interface ControlOptions<T extends ControlSettings> {
   create: () => T
   /** What the control can be told to do from elsewhere. */
   api: WidgetActionInterfaceImpl
+  /**
+   * The translation key of what the control is called, shown while its
+   * label is empty. A model default cannot be translated, so the label's
+   * default is empty and the name stands in for it here.
+   */
+  nameKey?: string
 }
 
 export function useControl<T extends ControlSettings>(
@@ -117,15 +148,38 @@ export function useControl<T extends ControlSettings>(
   const held = (key: string): string => textOf((settings.value as any)?.[key])
   const raw = (key: string): unknown => rawOf((settings.value as any)?.[key])
 
-  const label = computed(() => held('label'))
-  const color = computed(() => held('color') || SHARED_WRAPPED.color)
-  const textColor = computed(() => held('textColor') || SHARED_WRAPPED.textColor)
+  const { t } = useTranslation()
+
+  /* The label as set, or - left empty - what the control is called. */
+  const label = computed(() => held('label') || (options.nameKey ? t(options.nameKey) : ''))
+  /* Empty where not set: the control then takes the theme's colours. */
+  const color = computed(() => colourOf(held('color'), FORMER_DEFAULTS.color))
+  const textColor = computed(() =>
+    /* White was the former default only beside the former blue. */
+    !color.value
+      ? colourOf(held('textColor'), FORMER_DEFAULTS.textColor)
+      : held('textColor').trim(),
+  )
   /* A bare number is pixels; anything else is taken as CSS says it. */
   const fontSize = computed(() => {
     const given = held('fontSize').trim() || SHARED_WRAPPED.fontSize
     return /^\d+(\.\d+)?$/.test(given) ? `${given}px` : given
   })
   const disabled = computed(() => held('disabled').trim().toLowerCase() === 'true')
+
+  /*
+   * The colours and size as CSS variables, set on the control's root:
+   * --control-face fills the control, --control-on-face is text on it,
+   * --control-ink is text beside it, --control-ground what stands on the
+   * face (a thumb). The model's colour overrides the theme where it is set.
+   */
+  const look = computed<Record<string, string>>(() => ({
+    '--control-face': color.value || THEME.face,
+    '--control-on-face': textColor.value || THEME.onFace,
+    '--control-ink': textColor.value || THEME.ink,
+    '--control-ground': THEME.ground,
+    fontSize: fontSize.value,
+  }))
 
   /*
    * Writes into a wrapper's own value, which is what an action is for.
@@ -209,6 +263,8 @@ export function useControl<T extends ControlSettings>(
     textColor,
     fontSize,
     disabled,
+    look,
+    t,
     put,
     variableOf,
     current,

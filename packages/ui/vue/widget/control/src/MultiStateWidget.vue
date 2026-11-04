@@ -47,16 +47,13 @@ class MultiStateWidgetApi extends MultiStateWidgetInterface {
 const api = new MultiStateWidgetApi()
 defineExpose<MultiStateWidgetInterface>(api)
 
-const { settings, current, label, color, textColor, fontSize, disabled, put, write, operate } = useControl(
-  config,
-  widgetId,
-  {
-    type: 'MultiStateWidget',
-    wrapped: { target: '' },
-    create: () => new MultiStateSettingsImpl(),
-    api,
-  },
-)
+const { settings, current, label, color, look, disabled, put, write, operate } = useControl(config, widgetId, {
+  type: 'MultiStateWidget',
+  wrapped: { target: '' },
+  create: () => new MultiStateSettingsImpl(),
+  api,
+  nameKey: 'control:Default.multiState',
+})
 
 interface State {
   label: string
@@ -76,7 +73,8 @@ const index = computed(() => states.value.findIndex((each) => sameValue(current(
 const state = computed<State | undefined>(() => states.value[index.value])
 
 const shownLabel = computed(() => (state.value ? state.value.label || state.value.value : label.value))
-const shownColor = computed(() => state.value?.color || color.value)
+/* A state's own colour, else the control's, else the theme's (through look). */
+const shownColor = computed(() => state.value?.color || color.value || undefined)
 
 function press(): void {
   if (!states.value.length) return
@@ -92,7 +90,7 @@ function press(): void {
       class="control-multistate__face"
       :disabled="disabled"
       :data-state="index"
-      :style="{ background: shownColor, color: textColor, fontSize }"
+      :style="[look, shownColor ? { background: shownColor } : {}]"
       @click="press"
     >
       <span class="control-multistate__label">{{ shownLabel }}</span>
@@ -109,31 +107,40 @@ function press(): void {
 </template>
 
 <style scoped>
+/* The tile: the button stands centred in it, at the size its text gives it. */
 .control-multistate {
   width: 100%;
   height: 100%;
   display: flex;
-  align-items: stretch;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
   box-sizing: border-box;
+  overflow: hidden;
 }
 
+/* Text, padding and radius are in em: they grow with the font size. */
 .control-multistate__face {
-  flex: 1;
-  min-width: 0;
-  min-height: 0;
+  min-width: min(100%, 6em);
+  max-width: 100%;
+  max-height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: 0.3em;
   border: none;
-  border-radius: 6px;
-  padding: 0.4em 1em;
+  border-radius: 0.45em;
+  padding: 0.5em 1.4em;
+  background: var(--control-face);
+  color: var(--control-on-face);
   font: inherit;
   font-weight: 600;
+  line-height: 1.2;
   cursor: pointer;
   overflow: hidden;
   white-space: nowrap;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
   transition: filter 0.15s ease, box-shadow 0.05s ease, background-color 0.15s ease;
 }
 
