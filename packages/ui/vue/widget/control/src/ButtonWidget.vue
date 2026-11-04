@@ -52,16 +52,13 @@ class ButtonWidgetApi extends ButtonWidgetInterface {
 const api = new ButtonWidgetApi()
 defineExpose<ButtonWidgetInterface>(api)
 
-const { held, label, color, textColor, fontSize, disabled, put, variableOf, write, send } = useControl(
-  config,
-  widgetId,
-  {
-    type: 'ButtonWidget',
-    wrapped: { target: '', value: '' },
-    create: () => new ButtonSettingsImpl(),
-    api,
-  },
-)
+const { held, label, look, disabled, put, variableOf, write, send } = useControl(config, widgetId, {
+  type: 'ButtonWidget',
+  wrapped: { target: '', value: '' },
+  create: () => new ButtonSettingsImpl(),
+  api,
+  nameKey: 'control:Default.button',
+})
 
 /* -------------------------------------------------------------- press */
 
@@ -85,7 +82,7 @@ function press(): void {
       type="button"
       class="control-button__face"
       :disabled="disabled"
-      :style="{ background: color, color: textColor, fontSize }"
+      :style="look"
       @click="press"
     >
       {{ label }}
@@ -94,28 +91,36 @@ function press(): void {
 </template>
 
 <style scoped>
+/* The tile: the button stands centred in it, at the size its text gives it. */
 .control-button {
   width: 100%;
   height: 100%;
   display: flex;
-  align-items: stretch;
-  justify-content: stretch;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
   box-sizing: border-box;
+  overflow: hidden;
 }
 
+/* Text, padding and radius are in em: they grow with the font size. */
 .control-button__face {
-  flex: 1;
-  min-width: 0;
-  min-height: 0;
+  min-width: min(100%, 6em);
+  max-width: 100%;
+  max-height: 100%;
   border: none;
-  border-radius: 6px;
-  padding: 0.4em 1em;
+  border-radius: 0.45em;
+  padding: 0.6em 1.4em;
+  background: var(--control-face);
+  color: var(--control-on-face);
   font: inherit;
   font-weight: 600;
+  line-height: 1.2;
   cursor: pointer;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
   transition: filter 0.15s ease, box-shadow 0.05s ease;
 }
 
@@ -131,6 +136,11 @@ function press(): void {
 .control-button__face:active:not(:disabled) {
   filter: brightness(0.9);
   box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.35);
+}
+
+.control-button__face:focus-visible {
+  outline: 2px solid var(--control-face);
+  outline-offset: 2px;
 }
 
 .control-button__face:disabled {
