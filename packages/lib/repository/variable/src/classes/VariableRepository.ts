@@ -92,6 +92,16 @@ export class VariableRepository implements SystemVariableActions, PageVariableAc
       throw Error('Multiple registration of the same variable type')
     }
     this.availableVariablesTypes.set(type, identifiers)
+    /*
+     * A workspace loaded before this type arrived holds variables of it
+     * that could not be built then. They are built now, so they run -
+     * and so whoever looks one up finds it rather than making a second
+     * of the same name (#1237).
+     */
+    if (!this.workspaceHeld) return
+    for (const held of this.getVariableModels()) {
+      if (held.type === type && !this.live.has(held.uid as string)) this.build(held)
+    }
   }
 
   /**
@@ -302,10 +312,30 @@ export class VariableRepository implements SystemVariableActions, PageVariableAc
    * Sets or updates a global variable (Action method)
    */
   setGlobalVariable(variableName: string, value: any): void {
-    const existingVar = this.getVariable(variableName);
+    /*
+     * The global one of that name: a page variable may share it, and is
+     * not the one this action names (#1237).
+     */
+    const held = this.getVariableModels().find(
+      (variable) => variable.name === variableName && (variable.scope ?? 'global') === 'global',
+    )
 
-    if (existingVar) {
-      existingVar.value = value;
+    if (held) {
+      /* Modelled but not running - its type came late: built, not duplicated. */
+      if (!this.live.has(held.uid as string)) this.build(held)
+      const existingVar = this.live.get(held.uid as string)
+      if (existingVar) {
+        existingVar.value = value;
+        /*
+         * Said on the bus as well: a value written from outside is a
+         * change the variables page re-reads on, and setting it alone
+         * tells only the variable's own subscribers.
+         */
+        existingVar.notyfy?.();
+      } else {
+        /* No type to run it with: the value is kept for when it arrives. */
+        held.definition = { ...((held.definition ?? {}) as VariableConfig), value }
+      }
     } else {
       this.registerVariable(variableName, 'constant', {
         value: value,
