@@ -17,18 +17,28 @@ import { WidgetAction } from 'org.eclipse.daanse.board.app.lib.events'
 export abstract class CodeWidgetInterface extends WidgetActionInterfaceImpl {
 
 
-  @WidgetAction({ eventType: 'code.copyContent' })
+  @WidgetAction({ eventType: 'code.copyContent', parameters: [] })
   copyContent(): void { throw new Error("copyContent not implemented"); }
 
-  @WidgetAction({ eventType: 'code.clearCode' })
+  @WidgetAction({ eventType: 'code.clearCode', parameters: [] })
   clearCode(): void { throw new Error("clearCode not implemented"); }
 
-  @WidgetAction({ eventType: 'code.setCode' })
+  @WidgetAction({
+    eventType: 'code.setCode',
+    parameters: [
+      { name: 'code', type: 'string', label: 'code:Action.code' },
+    ],
+  })
   setCode(code: string): void { throw new Error("setCode not implemented"); }
 
-  @WidgetAction({ eventType: 'code.setLanguage' })
+  @WidgetAction({
+    eventType: 'code.setLanguage',
+    parameters: [
+      { name: 'lang', type: 'string', label: 'code:Action.language' },
+    ],
+  })
   setLanguage(lang: string): void { throw new Error("setLanguage not implemented"); }
 
-  @WidgetAction({ eventType: 'code.refresh' })
+  @WidgetAction({ eventType: 'code.refresh', parameters: [] })
   refresh(): void { throw new Error("refresh not implemented"); }
 }

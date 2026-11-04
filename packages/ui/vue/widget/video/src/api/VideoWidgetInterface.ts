@@ -16,37 +16,47 @@ import { WidgetAction } from 'org.eclipse.daanse.board.app.lib.events'
 
 export abstract class VideoWidgetInterface extends WidgetActionInterfaceImpl {
 
-  @WidgetAction({ eventType: 'video.play' })
+  @WidgetAction({ eventType: 'video.play', parameters: [] })
   play(): void {
     throw new Error("play not implemented");
   }
 
-  @WidgetAction({ eventType: 'video.pause' })
+  @WidgetAction({ eventType: 'video.pause', parameters: [] })
   pause(): void {
     throw new Error("pause not implemented");
   }
 
-  @WidgetAction({ eventType: 'video.stop' })
+  @WidgetAction({ eventType: 'video.stop', parameters: [] })
   stop(): void {
     throw new Error("stop not implemented");
   }
 
-  @WidgetAction({ eventType: 'video.seek' })
+  @WidgetAction({
+    eventType: 'video.seek',
+    parameters: [
+      { name: 'time', type: 'number', label: 'video:Action.time' },
+    ],
+  })
   seek(time: number): void {
     throw new Error("seek not implemented");
   }
 
-  @WidgetAction({ eventType: 'video.mute' })
+  @WidgetAction({ eventType: 'video.mute', parameters: [] })
   mute(): void {
     throw new Error("mute not implemented");
   }
 
-  @WidgetAction({ eventType: 'video.unmute' })
+  @WidgetAction({ eventType: 'video.unmute', parameters: [] })
   unmute(): void {
     throw new Error("unmute not implemented");
   }
 
-  @WidgetAction({ eventType: 'video.setVolume' })
+  @WidgetAction({
+    eventType: 'video.setVolume',
+    parameters: [
+      { name: 'volume', type: 'number', label: 'video:Action.volume' },
+    ],
+  })
   setVolume(volume: number): void {
     throw new Error("setVolume not implemented");
   }

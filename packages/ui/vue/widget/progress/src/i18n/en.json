@@ -38,5 +38,8 @@
       "center": "Middle",
       "bottom": "Bottom"
     }
+  },
+  "Action": {
+    "value": "Value"
   }
 }

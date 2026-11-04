@@ -66,5 +66,9 @@
       "x2": "2-fach",
       "x4": "4-fach"
     }
+  },
+  "Action": {
+    "start": "Beginn",
+    "end": "Ende"
   }
 }

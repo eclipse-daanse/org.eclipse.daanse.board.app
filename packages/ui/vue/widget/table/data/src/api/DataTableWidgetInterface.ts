@@ -45,17 +45,28 @@ export type DataTableColumnMatch = string | number
  */
 export abstract class DataTableWidgetInterface extends WidgetActionInterfaceImpl {
 
-  @WidgetAction({ eventType: 'dataTable.refresh' })
+  @WidgetAction({ eventType: 'dataTable.refresh', parameters: [] })
   refresh(): void { throw new Error("refresh not implemented"); }
 
   /** Marks a row: by index, by `{ column, value }`, or by key column and value. */
-  @WidgetAction({ eventType: 'dataTable.highlightRow', parameters: ['match: any', 'value?: any'] })
+  @WidgetAction({
+    eventType: 'dataTable.highlightRow',
+    parameters: [
+      { name: 'match', type: 'any', label: 'tableData:Action.match' },
+      { name: 'value', type: 'any', label: 'tableData:Action.keyValue', optional: true },
+    ],
+  })
   highlightRow(match: DataTableRowMatch | string, value?: unknown): void {
     throw new Error('highlightRow not implemented')
   }
 
   /** Marks a column, by name or by index. */
-  @WidgetAction({ eventType: 'dataTable.highlightColumn', parameters: ['column: any'] })
+  @WidgetAction({
+    eventType: 'dataTable.highlightColumn',
+    parameters: [
+      { name: 'column', type: 'any', label: 'tableData:Action.column' },
+    ],
+  })
   highlightColumn(column: DataTableColumnMatch): void {
     throw new Error('highlightColumn not implemented')
   }
@@ -65,13 +76,20 @@ export abstract class DataTableWidgetInterface extends WidgetActionInterfaceImpl
    * above. Given a third argument, `row` is the key column and `value` the
    * value it must hold.
    */
-  @WidgetAction({ eventType: 'dataTable.highlightCell', parameters: ['row: any', 'column: any', 'value?: any'] })
+  @WidgetAction({
+    eventType: 'dataTable.highlightCell',
+    parameters: [
+      { name: 'row', type: 'any', label: 'tableData:Action.match' },
+      { name: 'column', type: 'any', label: 'tableData:Action.column' },
+      { name: 'value', type: 'any', label: 'tableData:Action.keyValue', optional: true },
+    ],
+  })
   highlightCell(row: DataTableRowMatch | string, column: DataTableColumnMatch, value?: unknown): void {
     throw new Error('highlightCell not implemented')
   }
 
   /** Removes every mark. */
-  @WidgetAction({ eventType: 'dataTable.clearHighlight' })
+  @WidgetAction({ eventType: 'dataTable.clearHighlight', parameters: [] })
   clearHighlight(): void {
     throw new Error('clearHighlight not implemented')
   }

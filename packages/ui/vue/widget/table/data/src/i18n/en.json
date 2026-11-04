@@ -26,5 +26,10 @@
     "page": "Page {{page}} of {{pages}}",
     "previous": "Previous page",
     "next": "Next page"
+  },
+  "Action": {
+    "match": "Row index or key column",
+    "column": "Column name or index",
+    "keyValue": "Value in the key column"
   }
 }
