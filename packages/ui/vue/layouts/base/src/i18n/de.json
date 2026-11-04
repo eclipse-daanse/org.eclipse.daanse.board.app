@@ -39,5 +39,10 @@
   },
   "Base": {
     "name": "Freies Layout (pixelgenau)"
+  },
+  "Clipboard": {
+    "copied": "Kopiert – {{shortcut}} oder Rechtsklick aufs Board",
+    "pasteKey": "Strg+V",
+    "pasteKeyMac": "⌘V"
   }
 }
