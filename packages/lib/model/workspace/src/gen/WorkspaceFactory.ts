@@ -33,6 +33,8 @@ import { DataSelection } from './DataSelection.js';
 import { DataSelectionImpl } from './DataSelectionImpl.js';
 import { DataFilter } from './DataFilter.js';
 import { DataFilterImpl } from './DataFilterImpl.js';
+import { Weather } from './Weather.js';
+import { WeatherImpl } from './WeatherImpl.js';
 import { Variable } from './Variable.js';
 import { VariableImpl } from './VariableImpl.js';
 import { EventMapping } from './EventMapping.js';
@@ -107,6 +109,13 @@ export class WorkspaceFactory extends BasicEFactory {
   }
 
   /**
+   * Create a new Weather instance
+   */
+  createWeather(): Weather {
+    return new WeatherImpl();
+  }
+
+  /**
    * Create a new Variable instance
    */
   createVariable(): Variable {
@@ -158,6 +167,8 @@ export class WorkspaceFactory extends BasicEFactory {
         return this.createDataSelection();
       case 'DataFilter':
         return this.createDataFilter();
+      case 'Weather':
+        return this.createWeather();
       case 'Variable':
         return this.createVariable();
       case 'EventMapping':

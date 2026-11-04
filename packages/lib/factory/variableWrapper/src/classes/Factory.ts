@@ -11,6 +11,21 @@
 import { injectable, inject } from '@eclipse-daanse/tsm'
 import { VariableWrapper, VARIABLEWRAPPER } from 'org.eclipse.daanse.board.app.lib.variables'
 import { VARIABLE_REPOSITORY, identifier as IDVariableRepo,VariableRepository } from 'org.eclipse.daanse.board.app.lib.api.variable'
+/** The class name a contained wrapper carries in the model. */
+const WRAPPER_CLASS = 'VariableWrapper'
+
+/**
+ * As much of an EObject as walking a tree needs. Structural, so this
+ * package does not have to import EMF to read what EMF built.
+ */
+interface ContainedTree {
+  eClass(): { getName?(): string } | null | undefined
+  eAllContents(): Iterable<ContainedTree>
+  eContainer(): ContainedTree | null
+  eContainingFeature(): { isMany?(): boolean } | null
+  eSet(feature: unknown, value: unknown): void
+}
+
 type SearchResult = {
   path: string;
   value: any;
@@ -104,6 +119,42 @@ export class VariableWrapperFactory {
       }
     }
     return json
+  }
+
+  /**
+   * Makes every wrapper contained in a modelled tree a live one again.
+   *
+   * The second way a wrapper is stored. A widget's settings are an opaque
+   * attribute, written out as JSON and rebuilt by initilazeVariableWrappers
+   * above. A page's weather is modelled and holds its wrappers by
+   * containment, so the resource writes them and reads them back itself -
+   * but as the generated class, which holds the variable's name and cannot
+   * follow it. Each one is replaced in its place by the hand-written
+   * wrapper, carrying the same value and bound to the variable it names.
+   *
+   * Called once per page when a stored workspace is put in place; the one
+   * place this happens, so the one place a test has to cover.
+   */
+  bindContainedWrappers(root: ContainedTree | undefined): void {
+    if (!root) return
+    const found: ContainedTree[] = []
+    for (const each of root.eAllContents()) {
+      if (each.eClass?.()?.getName?.() === WRAPPER_CLASS) found.push(each)
+    }
+
+    for (const stored of found) {
+      const container = stored.eContainer()
+      const feature = stored.eContainingFeature()
+      if (!container || !feature || feature.isMany?.()) continue
+
+      const held = stored as unknown as { value: unknown; variable?: string; isSet?: boolean }
+      const live =
+        stored instanceof VariableWrapper ? stored : new VariableWrapper<unknown>(held.value)
+      const name = held.isSet || held.variable ? held.variable : undefined
+      const variable = name ? this.variables.getVariable(name) : undefined
+      if (variable) live.setTo(variable)
+      if (live !== stored) container.eSet(feature, live)
+    }
   }
 
   private findPropertyWithValue(

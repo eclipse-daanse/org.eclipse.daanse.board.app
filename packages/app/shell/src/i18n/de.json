@@ -351,7 +351,17 @@
     },
     "navigation": "Navigation",
     "showInNavigation": "In der Navigation zeigen",
-    "id": "Kennung"
+    "id": "Kennung",
+    "weather": {
+      "label": "Wetter",
+      "kind": "Wetter",
+      "none": "Keins",
+      "rain": "Regen",
+      "snow": "Schnee",
+      "intensity": "Stärke",
+      "wind": "Wind",
+      "color": "Farbe"
+    }
   },
   "Tokens": {
     "role": {
