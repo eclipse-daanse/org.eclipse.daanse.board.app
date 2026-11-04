@@ -18,7 +18,7 @@
  * @generated
  */
 
-import { BasicEPackage, BasicEClass, BasicEAttribute, BasicEReference, EPackageRegistry, getEcorePackage } from '@emfts/core';
+import { BasicEPackage, BasicEClass, BasicEAttribute, BasicEReference, EPackageRegistry, getEcorePackage, BasicEDataType, BasicEAnnotation } from '@emfts/core';
 import type { EClass, EAttribute, EReference, EDataType } from '@emfts/core';
 import { DatatablesettingsFactory } from './DatatablesettingsFactory.js';
 
@@ -64,6 +64,17 @@ export class DatatablesettingsPackage extends BasicEPackage {
     DATA_TABLE_SETTINGS__SORTABLE: null as unknown as EAttribute | EReference,
     DATA_TABLE_SETTINGS__PAGE_SIZE: null as unknown as EAttribute | EReference,
     DATA_TABLE_SETTINGS__HIDDEN_COLUMNS: null as unknown as EAttribute | EReference,
+    DATA_TABLE_ROW_PAYLOAD: null as unknown as EClass,
+    DATA_TABLE_ROW_PAYLOAD__ROW: null as unknown as EAttribute | EReference,
+    DATA_TABLE_ROW_PAYLOAD__ROW_INDEX: null as unknown as EAttribute | EReference,
+    DATA_TABLE_CELL_PAYLOAD: null as unknown as EClass,
+    DATA_TABLE_CELL_PAYLOAD__COLUMN: null as unknown as EAttribute | EReference,
+    DATA_TABLE_CELL_PAYLOAD__COLUMN_INDEX: null as unknown as EAttribute | EReference,
+    DATA_TABLE_CELL_PAYLOAD__VALUE: null as unknown as EAttribute | EReference,
+    DATA_TABLE_COLUMN_PAYLOAD: null as unknown as EClass,
+    DATA_TABLE_COLUMN_PAYLOAD__COLUMN: null as unknown as EAttribute | EReference,
+    DATA_TABLE_COLUMN_PAYLOAD__COLUMN_INDEX: null as unknown as EAttribute | EReference,
+    RECORD: null as unknown as EDataType,
   };
 
   private constructor() {
@@ -137,10 +148,108 @@ export class DatatablesettingsPackage extends BasicEPackage {
     dataTableSettingsClass.getEStructuralFeatures().push(dataTableSettings_hiddenColumns);
     DatatablesettingsPackage.Literals.DATA_TABLE_SETTINGS__HIDDEN_COLUMNS = dataTableSettings_hiddenColumns;
 
+    // Create DataTableRowPayload class
+    const dataTableRowPayloadClass = new BasicEClass();
+    dataTableRowPayloadClass.setName('DataTableRowPayload');
+    dataTableRowPayloadClass.setAbstract(false);
+    dataTableRowPayloadClass.setInterface(false);
+    this.getEClassifiers().push(dataTableRowPayloadClass);
+    dataTableRowPayloadClass.setEPackage(this);
+    DatatablesettingsPackage.Literals.DATA_TABLE_ROW_PAYLOAD = dataTableRowPayloadClass;
+
+    // Create row feature
+    const dataTableRowPayload_row = new BasicEAttribute();
+    dataTableRowPayload_row.setName('row');
+    dataTableRowPayload_row.setLowerBound(0);
+    dataTableRowPayload_row.setUpperBound(1);
+    dataTableRowPayloadClass.getEStructuralFeatures().push(dataTableRowPayload_row);
+    DatatablesettingsPackage.Literals.DATA_TABLE_ROW_PAYLOAD__ROW = dataTableRowPayload_row;
+
+    // Create rowIndex feature
+    const dataTableRowPayload_rowIndex = new BasicEAttribute();
+    dataTableRowPayload_rowIndex.setName('rowIndex');
+    dataTableRowPayload_rowIndex.setLowerBound(0);
+    dataTableRowPayload_rowIndex.setUpperBound(1);
+    dataTableRowPayloadClass.getEStructuralFeatures().push(dataTableRowPayload_rowIndex);
+    DatatablesettingsPackage.Literals.DATA_TABLE_ROW_PAYLOAD__ROW_INDEX = dataTableRowPayload_rowIndex;
+
+    // Create DataTableCellPayload class
+    const dataTableCellPayloadClass = new BasicEClass();
+    dataTableCellPayloadClass.setName('DataTableCellPayload');
+    dataTableCellPayloadClass.setAbstract(false);
+    dataTableCellPayloadClass.setInterface(false);
+    this.getEClassifiers().push(dataTableCellPayloadClass);
+    dataTableCellPayloadClass.setEPackage(this);
+    DatatablesettingsPackage.Literals.DATA_TABLE_CELL_PAYLOAD = dataTableCellPayloadClass;
+
+    // Create column feature
+    const dataTableCellPayload_column = new BasicEAttribute();
+    dataTableCellPayload_column.setName('column');
+    dataTableCellPayload_column.setLowerBound(0);
+    dataTableCellPayload_column.setUpperBound(1);
+    dataTableCellPayloadClass.getEStructuralFeatures().push(dataTableCellPayload_column);
+    DatatablesettingsPackage.Literals.DATA_TABLE_CELL_PAYLOAD__COLUMN = dataTableCellPayload_column;
+
+    // Create columnIndex feature
+    const dataTableCellPayload_columnIndex = new BasicEAttribute();
+    dataTableCellPayload_columnIndex.setName('columnIndex');
+    dataTableCellPayload_columnIndex.setLowerBound(0);
+    dataTableCellPayload_columnIndex.setUpperBound(1);
+    dataTableCellPayloadClass.getEStructuralFeatures().push(dataTableCellPayload_columnIndex);
+    DatatablesettingsPackage.Literals.DATA_TABLE_CELL_PAYLOAD__COLUMN_INDEX = dataTableCellPayload_columnIndex;
+
+    // Create value feature
+    const dataTableCellPayload_value = new BasicEAttribute();
+    dataTableCellPayload_value.setName('value');
+    dataTableCellPayload_value.setLowerBound(0);
+    dataTableCellPayload_value.setUpperBound(1);
+    dataTableCellPayloadClass.getEStructuralFeatures().push(dataTableCellPayload_value);
+    DatatablesettingsPackage.Literals.DATA_TABLE_CELL_PAYLOAD__VALUE = dataTableCellPayload_value;
+
+    // Create DataTableColumnPayload class
+    const dataTableColumnPayloadClass = new BasicEClass();
+    dataTableColumnPayloadClass.setName('DataTableColumnPayload');
+    dataTableColumnPayloadClass.setAbstract(false);
+    dataTableColumnPayloadClass.setInterface(false);
+    this.getEClassifiers().push(dataTableColumnPayloadClass);
+    dataTableColumnPayloadClass.setEPackage(this);
+    DatatablesettingsPackage.Literals.DATA_TABLE_COLUMN_PAYLOAD = dataTableColumnPayloadClass;
+
+    // Create column feature
+    const dataTableColumnPayload_column = new BasicEAttribute();
+    dataTableColumnPayload_column.setName('column');
+    dataTableColumnPayload_column.setLowerBound(0);
+    dataTableColumnPayload_column.setUpperBound(1);
+    dataTableColumnPayloadClass.getEStructuralFeatures().push(dataTableColumnPayload_column);
+    DatatablesettingsPackage.Literals.DATA_TABLE_COLUMN_PAYLOAD__COLUMN = dataTableColumnPayload_column;
+
+    // Create columnIndex feature
+    const dataTableColumnPayload_columnIndex = new BasicEAttribute();
+    dataTableColumnPayload_columnIndex.setName('columnIndex');
+    dataTableColumnPayload_columnIndex.setLowerBound(0);
+    dataTableColumnPayload_columnIndex.setUpperBound(1);
+    dataTableColumnPayloadClass.getEStructuralFeatures().push(dataTableColumnPayload_columnIndex);
+    DatatablesettingsPackage.Literals.DATA_TABLE_COLUMN_PAYLOAD__COLUMN_INDEX = dataTableColumnPayload_columnIndex;
+
+    // Create Record datatype
+    const recordDataType = new BasicEDataType();
+    recordDataType.setName('Record');
+    {
+      const annotation = new BasicEAnnotation();
+      annotation.setSource("http://www.eclipse.org/emf/2002/GenModel");
+      annotation.getDetails().putByKey("documentation", "One record of the source's answer, by column name. Said as its own type so that whoever offers the payload's fields knows this one has fields of its own - the columns - and can offer row.<column>.");
+      recordDataType.getEAnnotations().push(annotation);
+    }
+    DatatablesettingsPackage.Literals.RECORD = recordDataType;
+    this.getEClassifiers().push(recordDataType);
+
 
     // ============================================
     // Set ESuperTypes (must be done after all classes are created)
     // ============================================
+    (DatatablesettingsPackage.Literals.DATA_TABLE_ROW_PAYLOAD as BasicEClass).getESuperTypes().push(requireEPackage('http://org.eclipse.daanse.board.app.lib.events').getEClassifier('Payload')! as EClass);
+    (DatatablesettingsPackage.Literals.DATA_TABLE_CELL_PAYLOAD as BasicEClass).getESuperTypes().push(DatatablesettingsPackage.Literals.DATA_TABLE_ROW_PAYLOAD);
+    (DatatablesettingsPackage.Literals.DATA_TABLE_COLUMN_PAYLOAD as BasicEClass).getESuperTypes().push(requireEPackage('http://org.eclipse.daanse.board.app.lib.events').getEClassifier('Payload')! as EClass);
 
     // ============================================
     // Set ETypes for all features (must be done after all classes are created).
@@ -152,6 +261,13 @@ export class DatatablesettingsPackage extends BasicEPackage {
     (DatatablesettingsPackage.Literals.DATA_TABLE_SETTINGS__SORTABLE as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EBoolean')!);
     (DatatablesettingsPackage.Literals.DATA_TABLE_SETTINGS__PAGE_SIZE as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EInt')!);
     (DatatablesettingsPackage.Literals.DATA_TABLE_SETTINGS__HIDDEN_COLUMNS as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (DatatablesettingsPackage.Literals.DATA_TABLE_ROW_PAYLOAD__ROW as BasicEAttribute).setEType(DatatablesettingsPackage.Literals.RECORD);
+    (DatatablesettingsPackage.Literals.DATA_TABLE_ROW_PAYLOAD__ROW_INDEX as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EInt')!);
+    (DatatablesettingsPackage.Literals.DATA_TABLE_CELL_PAYLOAD__COLUMN as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (DatatablesettingsPackage.Literals.DATA_TABLE_CELL_PAYLOAD__COLUMN_INDEX as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EInt')!);
+    (DatatablesettingsPackage.Literals.DATA_TABLE_CELL_PAYLOAD__VALUE as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EJavaObject')!);
+    (DatatablesettingsPackage.Literals.DATA_TABLE_COLUMN_PAYLOAD__COLUMN as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (DatatablesettingsPackage.Literals.DATA_TABLE_COLUMN_PAYLOAD__COLUMN_INDEX as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EInt')!);
 
     // ============================================
     // Set EOpposites (must be done after all features are created) (#59)
