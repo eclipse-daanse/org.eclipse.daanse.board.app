@@ -363,12 +363,8 @@
       "color": "Colour",
       "region": "Region",
       "regionPage": "Whole page",
-      "regionArea": "Rectangle",
+      "regionArea": "Drawn area",
       "regionWidget": "Area of a widget",
-      "regionX": "Left (grid units)",
-      "regionY": "Top (grid units)",
-      "regionWidth": "Width (grid units)",
-      "regionHeight": "Height (grid units)",
       "regionWidgetChoice": "Widget",
       "affectsWidgets": "Affects the widgets"
     }
