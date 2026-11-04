@@ -271,6 +271,15 @@ describe('SliderWidget', () => {
       expect(marks.map((m) => (m.element as HTMLElement).style.left)).toEqual(['0%', '50%', '100%'])
     })
 
+    it('runs the first and last labels inward from their ticks, the others centred', async () => {
+      const { wrapper } = await show(SliderWidget, detented())
+      const marks = wrapper.findAll('.control-slider__mark')
+      expect(marks[0].classes()).toContain('control-slider__mark--start')
+      expect(marks[1].classes()).not.toContain('control-slider__mark--start')
+      expect(marks[1].classes()).not.toContain('control-slider__mark--end')
+      expect(marks[2].classes()).toContain('control-slider__mark--end')
+    })
+
     it('sends change with the detents\' values, and is set through its action by value', async () => {
       const { variable, target } = bound('level', 1)
       const { wrapper, sent, api } = await show(SliderWidget, detented({ target }))

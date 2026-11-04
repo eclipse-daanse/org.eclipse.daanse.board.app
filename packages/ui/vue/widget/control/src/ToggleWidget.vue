@@ -160,9 +160,14 @@ function press(): void {
   transition: transform 0.18s ease;
 }
 
-/* On, the thumb stands at the far end: the track's width less a thumb and both insets. */
+/*
+ * On, the thumb stands at the far end: the track's width less a thumb and
+ * both insets. It is light there: a dark thumb on the accent reads as a
+ * hole. Not the theme's on-accent, which is dark in the dark theme.
+ */
 .control-toggle__switch--on .control-toggle__thumb {
   transform: translateX(calc(2.6em - var(--thumb) - 2 * var(--inset)));
+  background: #ffffff;
 }
 
 .control-toggle__label {
