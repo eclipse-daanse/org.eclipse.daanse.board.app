@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/*********************************************************************
+* Copyright (c) 2026 Contributors to the Eclipse Foundation.
+*
+* This program and the accompanying materials are made
+* available under the terms of the Eclipse Public License 2.0
+* which is available at https://www.eclipse.org/legal/epl-2.0/
+*
+* SPDX-License-Identifier: EPL-2.0
+**********************************************************************/
+
+The form for the toggle button.
+
+What it says in each state, what it writes in each, and last how it
+looks. Off wears the shared label and colour; on has its own.
+-->
+<uimodel:UIModel
+    xmlns:xmi="http://www.omg.org/XMI"
+    xmi:version="2.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:uimodel="http://uimodel/1.0"
+    name="ToggleSettingsForm">
+
+  <targetClasses href="http://org.eclipse.daanse.board.app.ui.vue.widget.control#//ToggleSettings"/>
+
+  <components xsi:type="uimodel:FormView" name="ToggleSettingsFormView">
+
+    <fields xsi:type="uimodel:GroupWidget" name="labelGroup" layout="VERTICAL" label="control:Form.labelGroup">
+      <fields xsi:type="uimodel:InputWidget" name="label"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.control#//ToggleSettings/label" label="control:Form.offLabel"/>
+      <fields xsi:type="uimodel:InputWidget" name="onLabel"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.control#//ToggleSettings/onLabel" label="control:Form.onLabel"/>
+    </fields>
+
+    <fields xsi:type="uimodel:GroupWidget" name="writeGroup" layout="VERTICAL" label="control:Form.toggleGroup">
+      <fields xsi:type="uimodel:InputWidget" name="target"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.control#//ToggleSettings/target" label="control:Form.target"/>
+      <fields xsi:type="uimodel:InputWidget" name="onValue"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.control#//ToggleSettings/onValue" label="control:Form.onValue" placeholder="true"/>
+      <fields xsi:type="uimodel:InputWidget" name="offValue"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.control#//ToggleSettings/offValue" label="control:Form.offValue" placeholder="false"/>
+      <fields xsi:type="uimodel:InputWidget" name="disabled"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.control#//ToggleSettings/disabled" label="control:Form.disabled" placeholder="false"/>
+    </fields>
+
+    <fields xsi:type="uimodel:GroupWidget" name="lookGroup" layout="VERTICAL" label="control:Form.lookGroup">
+      <fields xsi:type="uimodel:InputWidget" name="color"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.control#//ToggleSettings/color" label="control:Form.offColor"/>
+      <fields xsi:type="uimodel:InputWidget" name="onColor"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.control#//ToggleSettings/onColor" label="control:Form.onColor"/>
+      <fields xsi:type="uimodel:InputWidget" name="textColor"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.control#//ToggleSettings/textColor" label="control:Form.textColor"/>
+      <fields xsi:type="uimodel:NumberWidget" name="fontSize"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.control#//ToggleSettings/fontSize" label="control:Form.fontSize" min="6" max="200" step="1"/>
+    </fields>
+
+  </components>
+</uimodel:UIModel>
