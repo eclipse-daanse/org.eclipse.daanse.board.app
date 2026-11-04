@@ -25,7 +25,7 @@ import type { GeoJsonObject, GeoJsonProperties, Geometry, Polygon } from 'geojso
 import type { Datastream } from 'org.eclipse.daanse.board.app.lib.datasource.ogcsta'
 import { Task, useTaskManager } from './composables/tasktimer'
 import { FILTER, FILTERRESET, UPDATE_MQTT_SUBSCRIPTIONS, MQTT_UNSUBSCRIBE_ALL } from 'org.eclipse.daanse.board.app.lib.datasource.ogcsta'
-import { useDatasourceRepository, plainSettings } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+import { useDatasourceRepository, plainSettings, useEObject } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import booleanContains from '@turf/boolean-contains'
 import { feature } from '@turf/helpers'
 import pointOnFeature from '@turf/point-on-feature'
@@ -69,6 +69,7 @@ import { clientOf } from './serviceClient'
 import { dataTypeFor } from './dataTypes'
 import { presetFor } from './defaults'
 import { renewBaseMap } from './baseMap'
+import { drawOverlay, overlayKey, overlayTiles } from './roadOverlay'
 import { followZoom } from './zoom'
 import { v4 as uuid } from 'uuid'
 
@@ -746,6 +747,7 @@ const maploaded = () => {
   logMap('map ready')
   setFixed()
   createLayerPanes()
+  redrawOverlay()
 
   // Register drag/zoom listeners to suppress processing during interaction
   const leaflet = (map.value as any)?.leafletObject as L.Map
@@ -766,6 +768,28 @@ const maploaded = () => {
     currentZoom.value = zoom
   })
 }
+
+/*
+ * The roads over the base map (#1235).
+ *
+ * Read through the watched instance: the wrapper hands the widget the same
+ * settings object on every change, which Vue does not count as one
+ * (#1203). Redrawn only when what is drawn changes - the settings also
+ * change on every pan, when the zoom is written back.
+ */
+const watchedSettings = useEObject(() => config.value as any)
+const overlay = computed(() => overlayTiles(watchedSettings.value as any))
+let overlayLayers: L.Layer[] = []
+
+const redrawOverlay = () => {
+  const leaflet = (map.value as any)?.leafletObject as L.Map | undefined
+  for (const layer of overlayLayers) layer.remove()
+  overlayLayers = leaflet ? drawOverlay(leaflet, overlay.value) : []
+}
+
+watch(() => overlayKey(overlay.value), () => {
+  if (mounted) redrawOverlay()
+})
 
 const createLayerPanes = () => {
   const mapObject = (map.value as any)?.leafletObject as L.Map

@@ -36,7 +36,24 @@
     "baseMapHint": "Tile server URL template. Use {z}, {x}, {y} placeholders for zoom and coordinates.",
     "fixed": "Map fixed",
     "highlight": "Selection highlight colour",
-    "highlightHint": "Colour used to highlight selected Things on the map."
+    "highlightHint": "Colour used to highlight selected Things on the map.",
+    "overlay": {
+      "label": "Roads overlay",
+      "url": "Overlay URL",
+      "apiKey": "Stadia API key",
+      "apiKeyHint": "Appended to the Stadia tile address. Needed outside localhost, together with a domain registered at Stadia.",
+      "licence": "Commercial use needs an account with the provider: a paid Stadia plan, or an ArcGIS account for Esri.",
+      "opacity": "Overlay opacity",
+      "invertDark": "Invert in dark theme",
+      "invertDarkHint": "Turns black lines white while the dark theme is on.",
+      "presets": {
+        "none": "None",
+        "stadiaLines": "Stadia - roads (lines)",
+        "stadiaLinesLabels": "Stadia - roads and labels",
+        "esriTransportation": "Esri - World Transportation",
+        "custom": "Custom URL"
+      }
+    }
   },
   "Renderer": {
     "trafficLight": {
