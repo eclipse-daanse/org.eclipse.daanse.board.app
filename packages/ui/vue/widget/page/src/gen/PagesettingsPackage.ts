@@ -19,7 +19,7 @@
  */
 
 import { BasicEPackage, BasicEClass, BasicEAttribute, EPackageRegistry, getEcorePackage } from '@emfts/core';
-import type { EClass, EAttribute, EReference } from '@emfts/core';
+import type { EClass, EAttribute, EReference, EDataType } from '@emfts/core';
 import { PagesettingsFactory } from './PagesettingsFactory.js';
 
 /**
@@ -92,6 +92,7 @@ export class PagesettingsPackage extends BasicEPackage {
     pageWidgetSettings_hideTitle.setName('hideTitle');
     pageWidgetSettings_hideTitle.setLowerBound(0);
     pageWidgetSettings_hideTitle.setUpperBound(1);
+    pageWidgetSettings_hideTitle.setDefaultValueLiteral("false");
     pageWidgetSettingsClass.getEStructuralFeatures().push(pageWidgetSettings_hideTitle);
     PagesettingsPackage.Literals.PAGE_WIDGET_SETTINGS__HIDE_TITLE = pageWidgetSettings_hideTitle;
 
@@ -116,6 +117,10 @@ export class PagesettingsPackage extends BasicEPackage {
     (PagesettingsPackage.Literals.PAGE_WIDGET_SETTINGS__PATH as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
     (PagesettingsPackage.Literals.PAGE_WIDGET_SETTINGS__HIDE_TITLE as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EBoolean')!);
     (PagesettingsPackage.Literals.PAGE_WIDGET_SETTINGS__BACKGROUND_COLOR as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+
+    // ============================================
+    // Set EOpposites (must be done after all features are created) (#59)
+    // ============================================
 
     // ============================================
     // Register XML name mappings from ExtendedMetaData annotations

@@ -48,14 +48,14 @@ export class LayerImpl extends BasicEObject implements Layer {
   private _service?: unknown;
   private _type?: string;
   private _childs?: Layer;
-  private _level?: number;
+  private _level: number = 0;
   private _styleIds!: EList<string>;
   private _name?: string;
   private _title?: string;
   private _attribution?: string;
   private _geoJson?: unknown;
   private _wfs_service?: unknown;
-  private _opacity?: number;
+  private _opacity: number = 0;
 
   /**
    * Returns the EClass of this object
@@ -143,6 +143,16 @@ export class LayerImpl extends BasicEObject implements Layer {
 
   set childs(value: Layer) {
     const oldValue = this._childs;
+    if (oldValue !== value) {
+      // containment: the owner becomes the container of the value (#61)
+      if (oldValue) {
+        (oldValue as any).eSetContainer?.(null, null);
+      }
+      if (value) {
+        this.removeFromPreviousContainer(value);
+        (value as any).eSetContainer?.(this, this.eClass().getEStructuralFeature('childs'));
+      }
+    }
     this._childs = value;
     if (this.eDeliver()) {
       this.eNotify({
@@ -336,6 +346,30 @@ export class LayerImpl extends BasicEObject implements Layer {
     }
   }
 
+  /**
+   * Remove a value from its previous container before it is contained here,
+   * like Java EMF's eInverseRemove on the old container (#61)
+   */
+  private removeFromPreviousContainer(value: unknown): void {
+    const v = value as any;
+    const oldContainer = v?.eContainer?.();
+    if (!oldContainer || oldContainer === this) {
+      return;
+    }
+    const oldFeature = v.eContainmentFeature?.();
+    if (!oldFeature) {
+      return;
+    }
+    if (oldFeature.isMany()) {
+      const list = oldContainer.eGet(oldFeature);
+      if (list && typeof list.remove === 'function') {
+        list.remove(v);
+      }
+    } else {
+      oldContainer.eUnset(oldFeature);
+    }
+  }
+
   // Reflective API
 
   /**
@@ -448,7 +482,7 @@ export class LayerImpl extends BasicEObject implements Layer {
       case LayerImpl.CHILDS:
         return this._childs !== undefined;
       case LayerImpl.LEVEL:
-        return this._level !== undefined;
+        return this._level !== 0;
       case LayerImpl.STYLE_IDS:
         return this._styleIds !== undefined && !this._styleIds.isEmpty();
       case LayerImpl.NAME:
@@ -462,7 +496,7 @@ export class LayerImpl extends BasicEObject implements Layer {
       case LayerImpl.WFS_SERVICE:
         return this._wfs_service !== undefined;
       case LayerImpl.OPACITY:
-        return this._opacity !== undefined;
+        return this._opacity !== 0;
       default:
         return super.eIsSet(feature);
     }
@@ -484,10 +518,11 @@ export class LayerImpl extends BasicEObject implements Layer {
         this._type = undefined;
         return;
       case LayerImpl.CHILDS:
+        if (this._childs) (this._childs as any).eSetContainer?.(null, null);
         this._childs = undefined;
         return;
       case LayerImpl.LEVEL:
-        this._level = undefined;
+        this._level = 0;
         return;
       case LayerImpl.STYLE_IDS:
         if (this._styleIds) this._styleIds.clear();
@@ -508,7 +543,7 @@ export class LayerImpl extends BasicEObject implements Layer {
         this._wfs_service = undefined;
         return;
       case LayerImpl.OPACITY:
-        this._opacity = undefined;
+        this._opacity = 0;
         return;
       default:
         super.eUnset(feature);

@@ -19,7 +19,7 @@
  */
 
 import { BasicEPackage, BasicEClass, BasicEAttribute, EPackageRegistry, getEcorePackage } from '@emfts/core';
-import type { EClass, EAttribute, EReference } from '@emfts/core';
+import type { EClass, EAttribute, EReference, EDataType } from '@emfts/core';
 import { VariablesFactory } from './VariablesFactory.js';
 
 /**
@@ -101,6 +101,7 @@ export class VariablesPackage extends BasicEPackage {
     variableWrapper_isSet.setName('isSet');
     variableWrapper_isSet.setLowerBound(0);
     variableWrapper_isSet.setUpperBound(1);
+    variableWrapper_isSet.setDefaultValueLiteral("false");
     variableWrapperClass.getEStructuralFeatures().push(variableWrapper_isSet);
     VariablesPackage.Literals.VARIABLE_WRAPPER__IS_SET = variableWrapper_isSet;
 
@@ -109,6 +110,8 @@ export class VariablesPackage extends BasicEPackage {
     variableWrapper_type.setName('type');
     variableWrapper_type.setLowerBound(0);
     variableWrapper_type.setUpperBound(1);
+    variableWrapper_type.setDefaultValueLiteral("VARIABLEWRAPPER");
+    variableWrapper_type.setChangeable(false);
     variableWrapperClass.getEStructuralFeatures().push(variableWrapper_type);
     VariablesPackage.Literals.VARIABLE_WRAPPER__TYPE = variableWrapper_type;
 
@@ -126,6 +129,10 @@ export class VariablesPackage extends BasicEPackage {
     (VariablesPackage.Literals.VARIABLE_WRAPPER__VARIABLE as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
     (VariablesPackage.Literals.VARIABLE_WRAPPER__IS_SET as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EBoolean')!);
     (VariablesPackage.Literals.VARIABLE_WRAPPER__TYPE as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+
+    // ============================================
+    // Set EOpposites (must be done after all features are created) (#59)
+    // ============================================
 
     // ============================================
     // Register XML name mappings from ExtendedMetaData annotations

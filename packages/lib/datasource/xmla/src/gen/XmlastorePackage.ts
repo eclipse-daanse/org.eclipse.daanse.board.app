@@ -19,7 +19,7 @@
  */
 
 import { BasicEPackage, BasicEClass, BasicEAttribute, BasicEReference, EPackageRegistry, getEcorePackage } from '@emfts/core';
-import type { EClass, EAttribute, EReference } from '@emfts/core';
+import type { EClass, EAttribute, EReference, EDataType } from '@emfts/core';
 import { XmlastoreFactory } from './XmlastoreFactory.js';
 
 /**
@@ -250,6 +250,10 @@ export class XmlastorePackage extends BasicEPackage {
     (XmlastorePackage.Literals.I_XMLA_STORE_CONFIGURATION__POLLING_INTERVAL as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EInt')!);
     (XmlastorePackage.Literals.I_XMLA_STORE_CONFIGURATION__CUBE as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
     (XmlastorePackage.Literals.I_XMLA_STORE_CONFIGURATION__USE_MDX as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EBoolean')!);
+
+    // ============================================
+    // Set EOpposites (must be done after all features are created) (#59)
+    // ============================================
 
     // ============================================
     // Register XML name mappings from ExtendedMetaData annotations

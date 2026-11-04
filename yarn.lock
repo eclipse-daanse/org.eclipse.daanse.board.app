@@ -829,10 +829,10 @@
   resolved "https://registry.npmjs.org/@egjs/list-differ/-/list-differ-1.0.1.tgz"
   integrity sha512-OTFTDQcWS+1ZREOdCWuk5hCBgYO4OsD30lXcOCyVOAjXMhgL5rBRDnt/otb6Nz8CzU0L/igdcaQBDLWc4t9gvg==
 
-"@emfts/codegen@0.0.2-next.8":
-  version "0.0.2-next.8"
-  resolved "https://registry.npmjs.org/@emfts/codegen/-/codegen-0.0.2-next.8.tgz#e8b6c3b59542ca780eca157a559d7e9299b5fa7a"
-  integrity sha512-CTsyGT7hlna6Q8cyqZU8R7NP4YModfYLEV1JKw3LzrZobOBwtOYgM/zgSCWvZUpg1x00NGquKwku2AkldOT14A==
+"@emfts/codegen@0.0.2-next.14":
+  version "0.0.2-next.14"
+  resolved "https://registry.npmjs.org/@emfts/codegen/-/codegen-0.0.2-next.14.tgz#bcd47e5709925bba2f402f4aec3e502516f03a6d"
+  integrity sha512-cNdTrgvvWaxDa3f+T6mTy4e0YmbE2ScByKLQ26+0RSaawqcNRqvIHLe9ftoHqPRg0e3/mPjVTyAWwR++VlTv0A==
   dependencies:
     "@emfts/core" "^0.3.0-next.4"
     commander "^12.0.0"
@@ -844,20 +844,15 @@
   resolved "https://registry.yarnpkg.com/@emfts/core/-/core-0.3.0-next.1.tgz#c81c93abef272b9d9c5daad2b6995095d565584e"
   integrity sha512-SKLBuuo3P58kd2CuvMygEAVUBcoIUf1j/JAmFpcwMufpvbpBHvGXNgQOYAwqfb9j31pQ68G07ijX1Epdgmw7tw==
 
-"@emfts/core@^0.1.1-next.18", "@emfts/core@^0.1.1-next.2":
+"@emfts/core@^0.1.1-next.2":
   version "0.1.1-next.18"
   resolved "https://registry.npmjs.org/@emfts/core/-/core-0.1.1-next.18.tgz#63224ebf97c4d7a565398b890c40c486ca10ad50"
   integrity sha512-fJalqar3AO1vp1P0LWOhR7X1DcZY9P+nPSlwEJqVYu/e2HF0sZO9toO+HBZ5aGQyBhFeG7q5CyTCHmYJWfrmCA==
 
-"@emfts/core@^0.3.0-next.4":
-  version "0.3.0-next.4"
-  resolved "https://registry.npmjs.org/@emfts/core/-/core-0.3.0-next.4.tgz#49122ef59220130054ffa85fa1ca54267d82f98d"
-  integrity sha512-2nV/ya92uDfGSmlofExx2mMA9+OxebY/+Mtw5FUNE3y53wzk/SwTNYGRPT4p2rYuTNmGOC/2N7luHgtWqx1FQw==
-
-"@emfts/core@^0.3.0-next.5":
-  version "0.3.0-next.5"
-  resolved "https://registry.npmjs.org/@emfts/core/-/core-0.3.0-next.5.tgz#58251766eb0e5de1c890bc8ebc606af67d242e83"
-  integrity sha512-8VVfkfRdMAPqWHyynIfhw7r3zfK7i0h3/CvljDEeLtpar5BFA2zcFMFv6uVMqifc8Mx7aPZOTp8czCS2rv6xBg==
+"@emfts/core@^0.3.0-next.4", "@emfts/core@^0.3.0-next.5", "@emfts/core@^0.3.0-next.6":
+  version "0.3.0-next.6"
+  resolved "https://registry.npmjs.org/@emfts/core/-/core-0.3.0-next.6.tgz#f951bf4803b59741ba1032b925947ee300961a61"
+  integrity sha512-CgLbCWKZa5sDSzzKQ5ciipHqrgFIVQonou+bgt11vayqmBsAOPxgkYR/WRplHMuJDR2nkTQ9PnaJfSvLrtOvfw==
 
 "@emfts/uimodel-composer@0.0.2-next.2":
   version "0.0.2-next.2"

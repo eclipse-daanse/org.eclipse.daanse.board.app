@@ -19,7 +19,7 @@
  */
 
 import { BasicEPackage, BasicEClass, BasicEAttribute, BasicEReference, EPackageRegistry, getEcorePackage } from '@emfts/core';
-import type { EClass, EAttribute, EReference } from '@emfts/core';
+import type { EClass, EAttribute, EReference, EDataType } from '@emfts/core';
 import { RichTextEditorFactory } from './RichTextEditorFactory.js';
 
 /**
@@ -130,6 +130,10 @@ export class RichTextEditorPackage extends BasicEPackage {
     (RichTextEditorPackage.Literals.RICH_TEXT_EDITOR_SETTINGS__EDITOR as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
     (RichTextEditorPackage.Literals.RICH_TEXT_EDITOR_SETTINGS__FONT_SIZE as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
     (RichTextEditorPackage.Literals.RICH_TEXT_EDITOR_SETTINGS__FONT_COLOR as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
+
+    // ============================================
+    // Set EOpposites (must be done after all features are created) (#59)
+    // ============================================
 
     // ============================================
     // Register XML name mappings from ExtendedMetaData annotations

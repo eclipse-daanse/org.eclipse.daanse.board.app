@@ -33,8 +33,8 @@ export class MapClickPayloadImpl extends PayloadImpl implements MapClickPayload 
   static readonly LON: number = 5;
 
   // Private fields
-  private _lat?: number;
-  private _lon?: number;
+  private _lat: number = 0;
+  private _lon: number = 0;
 
   /**
    * Returns the EClass of this object
@@ -135,9 +135,9 @@ export class MapClickPayloadImpl extends PayloadImpl implements MapClickPayload 
     const featureID = this.eClass().getFeatureID(feature);
     switch (featureID) {
       case MapClickPayloadImpl.LAT:
-        return this._lat !== undefined;
+        return this._lat !== 0;
       case MapClickPayloadImpl.LON:
-        return this._lon !== undefined;
+        return this._lon !== 0;
       default:
         return super.eIsSet(feature);
     }
@@ -150,10 +150,10 @@ export class MapClickPayloadImpl extends PayloadImpl implements MapClickPayload 
     const featureID = this.eClass().getFeatureID(feature);
     switch (featureID) {
       case MapClickPayloadImpl.LAT:
-        this._lat = undefined;
+        this._lat = 0;
         return;
       case MapClickPayloadImpl.LON:
-        this._lon = undefined;
+        this._lon = 0;
         return;
       default:
         super.eUnset(feature);

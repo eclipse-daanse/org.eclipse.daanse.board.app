@@ -39,7 +39,7 @@ export class BoardImpl extends BasicEObject implements Board {
   static readonly DEFAULT_PAGE: number = 5;
 
   // Private fields
-  private _id: string = "";
+  private _id?: string;
   private _name?: string;
   private _description?: string;
   private _icon?: string;
@@ -249,7 +249,7 @@ export class BoardImpl extends BasicEObject implements Board {
     const featureID = this.eClass().getFeatureID(feature);
     switch (featureID) {
       case BoardImpl.ID:
-        return this._id !== "";
+        return this._id !== undefined;
       case BoardImpl.NAME:
         return this._name !== undefined;
       case BoardImpl.DESCRIPTION:
@@ -272,7 +272,7 @@ export class BoardImpl extends BasicEObject implements Board {
     const featureID = this.eClass().getFeatureID(feature);
     switch (featureID) {
       case BoardImpl.ID:
-        this._id = "";
+        this._id = undefined;
         return;
       case BoardImpl.NAME:
         this._name = undefined;

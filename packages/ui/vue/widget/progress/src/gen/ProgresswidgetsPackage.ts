@@ -18,9 +18,11 @@
  * @generated
  */
 
-import { BasicEPackage, BasicEClass, BasicEAttribute, BasicEReference, EPackageRegistry, getEcorePackage } from '@emfts/core';
-import type { EClass, EAttribute, EReference } from '@emfts/core';
+import { BasicEPackage, BasicEClass, BasicEAttribute, BasicEReference, EPackageRegistry, getEcorePackage, BasicEEnum, BasicEEnumLiteral, BasicEAnnotation } from '@emfts/core';
+import type { EClass, EAttribute, EReference, EEnum, EDataType } from '@emfts/core';
 import { ProgresswidgetsFactory } from './ProgresswidgetsFactory.js';
+import { HorizontalAlign } from './HorizontalAlign.js';
+import { VerticalAlign } from './VerticalAlign.js';
 
 /**
  * Resolve a dependency package from the registry, failing with an actionable
@@ -73,6 +75,8 @@ export class ProgresswidgetsPackage extends BasicEPackage {
     PROGRESS_SETTINGS__BORDER_RADIUS: null as unknown as EAttribute | EReference,
     PROGRESS_SETTINGS__VALUE_ALIGN: null as unknown as EAttribute | EReference,
     PROGRESS_SETTINGS__VALUE_JUSTIFY: null as unknown as EAttribute | EReference,
+    HORIZONTAL_ALIGN: null as unknown as EEnum,
+    VERTICAL_ALIGN: null as unknown as EEnum,
   };
 
   private constructor() {
@@ -143,6 +147,7 @@ export class ProgresswidgetsPackage extends BasicEPackage {
     progressSettings_isGradient.setName('isGradient');
     progressSettings_isGradient.setLowerBound(0);
     progressSettings_isGradient.setUpperBound(1);
+    progressSettings_isGradient.setDefaultValueLiteral("false");
     progressSettingsClass.getEStructuralFeatures().push(progressSettings_isGradient);
     ProgresswidgetsPackage.Literals.PROGRESS_SETTINGS__IS_GRADIENT = progressSettings_isGradient;
 
@@ -151,6 +156,7 @@ export class ProgresswidgetsPackage extends BasicEPackage {
     progressSettings_isVertical.setName('isVertical');
     progressSettings_isVertical.setLowerBound(0);
     progressSettings_isVertical.setUpperBound(1);
+    progressSettings_isVertical.setDefaultValueLiteral("false");
     progressSettingsClass.getEStructuralFeatures().push(progressSettings_isVertical);
     ProgresswidgetsPackage.Literals.PROGRESS_SETTINGS__IS_VERTICAL = progressSettings_isVertical;
 
@@ -213,6 +219,7 @@ export class ProgresswidgetsPackage extends BasicEPackage {
     progressSettings_valueAlign.setName('valueAlign');
     progressSettings_valueAlign.setLowerBound(0);
     progressSettings_valueAlign.setUpperBound(1);
+    progressSettings_valueAlign.setDefaultValueLiteral("center");
     progressSettingsClass.getEStructuralFeatures().push(progressSettings_valueAlign);
     ProgresswidgetsPackage.Literals.PROGRESS_SETTINGS__VALUE_ALIGN = progressSettings_valueAlign;
 
@@ -221,8 +228,93 @@ export class ProgresswidgetsPackage extends BasicEPackage {
     progressSettings_valueJustify.setName('valueJustify');
     progressSettings_valueJustify.setLowerBound(0);
     progressSettings_valueJustify.setUpperBound(1);
+    progressSettings_valueJustify.setDefaultValueLiteral("center");
     progressSettingsClass.getEStructuralFeatures().push(progressSettings_valueJustify);
     ProgresswidgetsPackage.Literals.PROGRESS_SETTINGS__VALUE_JUSTIFY = progressSettings_valueJustify;
+
+    // Create HorizontalAlign enum
+    const horizontalAlignEnumType = new BasicEEnum();
+    horizontalAlignEnumType.setName('HorizontalAlign');
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("LEFT");
+      literal.setValue(0);
+      literal.setLiteral("left");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(HorizontalAlign.LEFT);
+      horizontalAlignEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("CENTER");
+      literal.setValue(1);
+      literal.setLiteral("center");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(HorizontalAlign.CENTER);
+      horizontalAlignEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("RIGHT");
+      literal.setValue(2);
+      literal.setLiteral("right");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(HorizontalAlign.RIGHT);
+      horizontalAlignEnumType.addLiteral(literal);
+    }
+    {
+      const annotation = new BasicEAnnotation();
+      annotation.setSource("http://www.eclipse.org/emf/2002/GenModel");
+      annotation.getDetails().putByKey("documentation", "Enumeration for horizontal alignment options.");
+      horizontalAlignEnumType.getEAnnotations().push(annotation);
+    }
+    ProgresswidgetsPackage.Literals.HORIZONTAL_ALIGN = horizontalAlignEnumType;
+    this.getEClassifiers().push(horizontalAlignEnumType);
+
+    // Create VerticalAlign enum
+    const verticalAlignEnumType = new BasicEEnum();
+    verticalAlignEnumType.setName('VerticalAlign');
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("TOP");
+      literal.setValue(0);
+      literal.setLiteral("top");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(VerticalAlign.TOP);
+      verticalAlignEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("CENTER");
+      literal.setValue(1);
+      literal.setLiteral("center");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(VerticalAlign.CENTER);
+      verticalAlignEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("BOTTOM");
+      literal.setValue(2);
+      literal.setLiteral("bottom");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(VerticalAlign.BOTTOM);
+      verticalAlignEnumType.addLiteral(literal);
+    }
+    {
+      const annotation = new BasicEAnnotation();
+      annotation.setSource("http://www.eclipse.org/emf/2002/GenModel");
+      annotation.getDetails().putByKey("documentation", "Enumeration for vertical alignment options.");
+      verticalAlignEnumType.getEAnnotations().push(annotation);
+    }
+    ProgresswidgetsPackage.Literals.VERTICAL_ALIGN = verticalAlignEnumType;
+    this.getEClassifiers().push(verticalAlignEnumType);
 
 
     // ============================================
@@ -246,6 +338,12 @@ export class ProgresswidgetsPackage extends BasicEPackage {
     (ProgresswidgetsPackage.Literals.PROGRESS_SETTINGS__TEXT_COLOR as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
     (ProgresswidgetsPackage.Literals.PROGRESS_SETTINGS__BAR_THICKNESS as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
     (ProgresswidgetsPackage.Literals.PROGRESS_SETTINGS__BORDER_RADIUS as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
+    (ProgresswidgetsPackage.Literals.PROGRESS_SETTINGS__VALUE_ALIGN as BasicEAttribute).setEType(ProgresswidgetsPackage.Literals.HORIZONTAL_ALIGN);
+    (ProgresswidgetsPackage.Literals.PROGRESS_SETTINGS__VALUE_JUSTIFY as BasicEAttribute).setEType(ProgresswidgetsPackage.Literals.VERTICAL_ALIGN);
+
+    // ============================================
+    // Set EOpposites (must be done after all features are created) (#59)
+    // ============================================
 
     // ============================================
     // Register XML name mappings from ExtendedMetaData annotations

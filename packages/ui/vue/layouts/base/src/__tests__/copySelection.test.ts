@@ -115,14 +115,10 @@ describe('copying a widget', () => {
   })
 
   /*
-   * Known: the generated setter of a single containment reference stores
-   * the value and notifies, but does not make the widget its container -
-   * only loading a stored board does. A defect of emfts-codegen,
-   * eclipse-fennec/emf.ts.codegen#61; this turns green, and has to be made
-   * a plain it, once it is
-   * fixed.
+   * The setter of a single containment reference makes the widget the
+   * container of the selection it is given (emf.ts.codegen#61).
    */
-  it.fails('makes the pasted widget the container of its selection', () => {
+  it('makes the pasted widget the container of its selection', () => {
     const { page } = boardWithOneWidget()
     const layout = layoutOn(page)
 

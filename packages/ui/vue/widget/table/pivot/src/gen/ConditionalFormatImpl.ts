@@ -44,7 +44,7 @@ export class ConditionalFormatImpl extends BasicEObject implements ConditionalFo
   // Private fields
   private _id?: string;
   private _conditionType: string = "greaterThan";
-  private _priority?: number;
+  private _priority: number = 0;
   private _value1: string = "0";
   private _value2: string = "100";
   private _backgroundColor: VariableWrapper<string> = new VariableWrapper<string>();
@@ -396,7 +396,7 @@ export class ConditionalFormatImpl extends BasicEObject implements ConditionalFo
       case ConditionalFormatImpl.CONDITION_TYPE:
         return this._conditionType !== "greaterThan";
       case ConditionalFormatImpl.PRIORITY:
-        return this._priority !== undefined;
+        return this._priority !== 0;
       case ConditionalFormatImpl.VALUE1:
         return this._value1 !== "0";
       case ConditionalFormatImpl.VALUE2:
@@ -429,7 +429,7 @@ export class ConditionalFormatImpl extends BasicEObject implements ConditionalFo
         this._conditionType = "greaterThan";
         return;
       case ConditionalFormatImpl.PRIORITY:
-        this._priority = undefined;
+        this._priority = 0;
         return;
       case ConditionalFormatImpl.VALUE1:
         this._value1 = "0";

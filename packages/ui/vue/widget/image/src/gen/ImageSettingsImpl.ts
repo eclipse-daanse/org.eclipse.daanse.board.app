@@ -53,6 +53,16 @@ export class ImageSettingsImpl extends BasicEObject implements ImageSettings {
 
   set imagesSettings(value: GallerySettings) {
     const oldValue = this._imagesSettings;
+    if (oldValue !== value) {
+      // containment: the owner becomes the container of the value (#61)
+      if (oldValue) {
+        (oldValue as any).eSetContainer?.(null, null);
+      }
+      if (value) {
+        this.removeFromPreviousContainer(value);
+        (value as any).eSetContainer?.(this, this.eClass().getEStructuralFeature('imagesSettings'));
+      }
+    }
     this._imagesSettings = value;
     if (this.eDeliver()) {
       this.eNotify({
@@ -76,6 +86,30 @@ export class ImageSettingsImpl extends BasicEObject implements ImageSettings {
       this._images = createContainmentEList<any>(this, this.eClass().getEStructuralFeature('images') as EReference);
     }
     return this._images;
+  }
+
+  /**
+   * Remove a value from its previous container before it is contained here,
+   * like Java EMF's eInverseRemove on the old container (#61)
+   */
+  private removeFromPreviousContainer(value: unknown): void {
+    const v = value as any;
+    const oldContainer = v?.eContainer?.();
+    if (!oldContainer || oldContainer === this) {
+      return;
+    }
+    const oldFeature = v.eContainmentFeature?.();
+    if (!oldFeature) {
+      return;
+    }
+    if (oldFeature.isMany()) {
+      const list = oldContainer.eGet(oldFeature);
+      if (list && typeof list.remove === 'function') {
+        list.remove(v);
+      }
+    } else {
+      oldContainer.eUnset(oldFeature);
+    }
   }
 
   // Reflective API
@@ -137,6 +171,7 @@ export class ImageSettingsImpl extends BasicEObject implements ImageSettings {
     const featureID = this.eClass().getFeatureID(feature);
     switch (featureID) {
       case ImageSettingsImpl.IMAGES_SETTINGS:
+        if (this._imagesSettings) (this._imagesSettings as any).eSetContainer?.(null, null);
         this._imagesSettings = undefined;
         return;
       case ImageSettingsImpl.IMAGES:

@@ -35,10 +35,10 @@ export class WaypointPayloadImpl extends PayloadImpl implements WaypointPayload 
   static readonly INDEX: number = 7;
 
   // Private fields
-  private _lat?: number;
-  private _lon?: number;
+  private _lat: number = 0;
+  private _lon: number = 0;
   private _name?: string;
-  private _index?: number;
+  private _index: number = 0;
 
   /**
    * Returns the EClass of this object
@@ -199,13 +199,13 @@ export class WaypointPayloadImpl extends PayloadImpl implements WaypointPayload 
     const featureID = this.eClass().getFeatureID(feature);
     switch (featureID) {
       case WaypointPayloadImpl.LAT:
-        return this._lat !== undefined;
+        return this._lat !== 0;
       case WaypointPayloadImpl.LON:
-        return this._lon !== undefined;
+        return this._lon !== 0;
       case WaypointPayloadImpl.NAME:
         return this._name !== undefined;
       case WaypointPayloadImpl.INDEX:
-        return this._index !== undefined;
+        return this._index !== 0;
       default:
         return super.eIsSet(feature);
     }
@@ -218,16 +218,16 @@ export class WaypointPayloadImpl extends PayloadImpl implements WaypointPayload 
     const featureID = this.eClass().getFeatureID(feature);
     switch (featureID) {
       case WaypointPayloadImpl.LAT:
-        this._lat = undefined;
+        this._lat = 0;
         return;
       case WaypointPayloadImpl.LON:
-        this._lon = undefined;
+        this._lon = 0;
         return;
       case WaypointPayloadImpl.NAME:
         this._name = undefined;
         return;
       case WaypointPayloadImpl.INDEX:
-        this._index = undefined;
+        this._index = 0;
         return;
       default:
         super.eUnset(feature);

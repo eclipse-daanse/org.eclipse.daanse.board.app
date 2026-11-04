@@ -19,7 +19,7 @@
  */
 
 import { BasicEPackage, BasicEClass, BasicEAttribute, BasicEReference, EPackageRegistry, getEcorePackage } from '@emfts/core';
-import type { EClass, EAttribute, EReference } from '@emfts/core';
+import type { EClass, EAttribute, EReference, EDataType } from '@emfts/core';
 import { PivotTableFactory } from './PivotTableFactory.js';
 
 /**
@@ -262,6 +262,7 @@ export class PivotTablePackage extends BasicEPackage {
     pivotTable_cellTextAlign.setName('cellTextAlign');
     pivotTable_cellTextAlign.setLowerBound(0);
     pivotTable_cellTextAlign.setUpperBound(1);
+    pivotTable_cellTextAlign.setDefaultValueLiteral("left");
     pivotTableClass.getEStructuralFeatures().push(pivotTable_cellTextAlign);
     PivotTablePackage.Literals.PIVOT_TABLE__CELL_TEXT_ALIGN = pivotTable_cellTextAlign;
 
@@ -270,6 +271,7 @@ export class PivotTablePackage extends BasicEPackage {
     pivotTable_showRowsProperties.setName('showRowsProperties');
     pivotTable_showRowsProperties.setLowerBound(0);
     pivotTable_showRowsProperties.setUpperBound(1);
+    pivotTable_showRowsProperties.setDefaultValueLiteral("false");
     pivotTableClass.getEStructuralFeatures().push(pivotTable_showRowsProperties);
     PivotTablePackage.Literals.PIVOT_TABLE__SHOW_ROWS_PROPERTIES = pivotTable_showRowsProperties;
 
@@ -278,6 +280,7 @@ export class PivotTablePackage extends BasicEPackage {
     pivotTable_showColumnsProperties.setName('showColumnsProperties');
     pivotTable_showColumnsProperties.setLowerBound(0);
     pivotTable_showColumnsProperties.setUpperBound(1);
+    pivotTable_showColumnsProperties.setDefaultValueLiteral("false");
     pivotTableClass.getEStructuralFeatures().push(pivotTable_showColumnsProperties);
     PivotTablePackage.Literals.PIVOT_TABLE__SHOW_COLUMNS_PROPERTIES = pivotTable_showColumnsProperties;
 
@@ -286,6 +289,7 @@ export class PivotTablePackage extends BasicEPackage {
     pivotTable_showSingleMeasureHeader.setName('showSingleMeasureHeader');
     pivotTable_showSingleMeasureHeader.setLowerBound(0);
     pivotTable_showSingleMeasureHeader.setUpperBound(1);
+    pivotTable_showSingleMeasureHeader.setDefaultValueLiteral("false");
     pivotTableClass.getEStructuralFeatures().push(pivotTable_showSingleMeasureHeader);
     PivotTablePackage.Literals.PIVOT_TABLE__SHOW_SINGLE_MEASURE_HEADER = pivotTable_showSingleMeasureHeader;
 
@@ -321,6 +325,7 @@ export class PivotTablePackage extends BasicEPackage {
     pivotTable_mode.setName('mode');
     pivotTable_mode.setLowerBound(0);
     pivotTable_mode.setUpperBound(1);
+    pivotTable_mode.setDefaultValueLiteral("standard");
     pivotTableClass.getEStructuralFeatures().push(pivotTable_mode);
     PivotTablePackage.Literals.PIVOT_TABLE__MODE = pivotTable_mode;
 
@@ -329,6 +334,7 @@ export class PivotTablePackage extends BasicEPackage {
     pivotTable_cascadeDepth.setName('cascadeDepth');
     pivotTable_cascadeDepth.setLowerBound(0);
     pivotTable_cascadeDepth.setUpperBound(1);
+    pivotTable_cascadeDepth.setDefaultValueLiteral("axes");
     pivotTableClass.getEStructuralFeatures().push(pivotTable_cascadeDepth);
     PivotTablePackage.Literals.PIVOT_TABLE__CASCADE_DEPTH = pivotTable_cascadeDepth;
 
@@ -337,6 +343,7 @@ export class PivotTablePackage extends BasicEPackage {
     pivotTable_measure.setName('measure');
     pivotTable_measure.setLowerBound(0);
     pivotTable_measure.setUpperBound(1);
+    pivotTable_measure.setDefaultValueLiteral("");
     pivotTableClass.getEStructuralFeatures().push(pivotTable_measure);
     PivotTablePackage.Literals.PIVOT_TABLE__MEASURE = pivotTable_measure;
 
@@ -345,6 +352,7 @@ export class PivotTablePackage extends BasicEPackage {
     pivotTable_compareLayout.setName('compareLayout');
     pivotTable_compareLayout.setLowerBound(0);
     pivotTable_compareLayout.setUpperBound(1);
+    pivotTable_compareLayout.setDefaultValueLiteral("side-by-side");
     pivotTableClass.getEStructuralFeatures().push(pivotTable_compareLayout);
     PivotTablePackage.Literals.PIVOT_TABLE__COMPARE_LAYOUT = pivotTable_compareLayout;
 
@@ -353,6 +361,7 @@ export class PivotTablePackage extends BasicEPackage {
     pivotTable_diffType.setName('diffType');
     pivotTable_diffType.setLowerBound(0);
     pivotTable_diffType.setUpperBound(1);
+    pivotTable_diffType.setDefaultValueLiteral("absolute");
     pivotTableClass.getEStructuralFeatures().push(pivotTable_diffType);
     PivotTablePackage.Literals.PIVOT_TABLE__DIFF_TYPE = pivotTable_diffType;
 
@@ -361,6 +370,7 @@ export class PivotTablePackage extends BasicEPackage {
     pivotTable_scaleNormalization.setName('scaleNormalization');
     pivotTable_scaleNormalization.setLowerBound(0);
     pivotTable_scaleNormalization.setUpperBound(1);
+    pivotTable_scaleNormalization.setDefaultValueLiteral("global");
     pivotTableClass.getEStructuralFeatures().push(pivotTable_scaleNormalization);
     PivotTablePackage.Literals.PIVOT_TABLE__SCALE_NORMALIZATION = pivotTable_scaleNormalization;
 
@@ -369,6 +379,7 @@ export class PivotTablePackage extends BasicEPackage {
     pivotTable_divergingScale.setName('divergingScale');
     pivotTable_divergingScale.setLowerBound(0);
     pivotTable_divergingScale.setUpperBound(1);
+    pivotTable_divergingScale.setDefaultValueLiteral("true");
     pivotTableClass.getEStructuralFeatures().push(pivotTable_divergingScale);
     PivotTablePackage.Literals.PIVOT_TABLE__DIVERGING_SCALE = pivotTable_divergingScale;
 
@@ -377,6 +388,7 @@ export class PivotTablePackage extends BasicEPackage {
     pivotTable_significanceThreshold.setName('significanceThreshold');
     pivotTable_significanceThreshold.setLowerBound(0);
     pivotTable_significanceThreshold.setUpperBound(1);
+    pivotTable_significanceThreshold.setDefaultValueLiteral("5");
     pivotTableClass.getEStructuralFeatures().push(pivotTable_significanceThreshold);
     PivotTablePackage.Literals.PIVOT_TABLE__SIGNIFICANCE_THRESHOLD = pivotTable_significanceThreshold;
 
@@ -385,6 +397,7 @@ export class PivotTablePackage extends BasicEPackage {
     pivotTable_hideUnchanged.setName('hideUnchanged');
     pivotTable_hideUnchanged.setLowerBound(0);
     pivotTable_hideUnchanged.setUpperBound(1);
+    pivotTable_hideUnchanged.setDefaultValueLiteral("false");
     pivotTableClass.getEStructuralFeatures().push(pivotTable_hideUnchanged);
     PivotTablePackage.Literals.PIVOT_TABLE__HIDE_UNCHANGED = pivotTable_hideUnchanged;
 
@@ -393,6 +406,7 @@ export class PivotTablePackage extends BasicEPackage {
     pivotTable_matrixLimit.setName('matrixLimit');
     pivotTable_matrixLimit.setLowerBound(0);
     pivotTable_matrixLimit.setUpperBound(1);
+    pivotTable_matrixLimit.setDefaultValueLiteral("200");
     pivotTableClass.getEStructuralFeatures().push(pivotTable_matrixLimit);
     PivotTablePackage.Literals.PIVOT_TABLE__MATRIX_LIMIT = pivotTable_matrixLimit;
 
@@ -401,6 +415,7 @@ export class PivotTablePackage extends BasicEPackage {
     pivotTable_timeline.setName('timeline');
     pivotTable_timeline.setLowerBound(0);
     pivotTable_timeline.setUpperBound(1);
+    pivotTable_timeline.setDefaultValueLiteral("true");
     pivotTableClass.getEStructuralFeatures().push(pivotTable_timeline);
     PivotTablePackage.Literals.PIVOT_TABLE__TIMELINE = pivotTable_timeline;
 
@@ -444,6 +459,7 @@ export class PivotTablePackage extends BasicEPackage {
     levelStyle_fontWeight.setName('fontWeight');
     levelStyle_fontWeight.setLowerBound(0);
     levelStyle_fontWeight.setUpperBound(1);
+    levelStyle_fontWeight.setDefaultValueLiteral("600");
     levelStyleClass.getEStructuralFeatures().push(levelStyle_fontWeight);
     PivotTablePackage.Literals.LEVEL_STYLE__FONT_WEIGHT = levelStyle_fontWeight;
 
@@ -469,6 +485,7 @@ export class PivotTablePackage extends BasicEPackage {
     conditionalFormat_conditionType.setName('conditionType');
     conditionalFormat_conditionType.setLowerBound(0);
     conditionalFormat_conditionType.setUpperBound(1);
+    conditionalFormat_conditionType.setDefaultValueLiteral("greaterThan");
     conditionalFormatClass.getEStructuralFeatures().push(conditionalFormat_conditionType);
     PivotTablePackage.Literals.CONDITIONAL_FORMAT__CONDITION_TYPE = conditionalFormat_conditionType;
 
@@ -485,6 +502,7 @@ export class PivotTablePackage extends BasicEPackage {
     conditionalFormat_value1.setName('value1');
     conditionalFormat_value1.setLowerBound(0);
     conditionalFormat_value1.setUpperBound(1);
+    conditionalFormat_value1.setDefaultValueLiteral("0");
     conditionalFormatClass.getEStructuralFeatures().push(conditionalFormat_value1);
     PivotTablePackage.Literals.CONDITIONAL_FORMAT__VALUE1 = conditionalFormat_value1;
 
@@ -493,6 +511,7 @@ export class PivotTablePackage extends BasicEPackage {
     conditionalFormat_value2.setName('value2');
     conditionalFormat_value2.setLowerBound(0);
     conditionalFormat_value2.setUpperBound(1);
+    conditionalFormat_value2.setDefaultValueLiteral("100");
     conditionalFormatClass.getEStructuralFeatures().push(conditionalFormat_value2);
     PivotTablePackage.Literals.CONDITIONAL_FORMAT__VALUE2 = conditionalFormat_value2;
 
@@ -537,6 +556,7 @@ export class PivotTablePackage extends BasicEPackage {
     conditionalFormat_fontWeight.setName('fontWeight');
     conditionalFormat_fontWeight.setLowerBound(0);
     conditionalFormat_fontWeight.setUpperBound(1);
+    conditionalFormat_fontWeight.setDefaultValueLiteral("400");
     conditionalFormatClass.getEStructuralFeatures().push(conditionalFormat_fontWeight);
     PivotTablePackage.Literals.CONDITIONAL_FORMAT__FONT_WEIGHT = conditionalFormat_fontWeight;
 
@@ -652,6 +672,10 @@ export class PivotTablePackage extends BasicEPackage {
     (PivotTablePackage.Literals.CONDITIONAL_FORMAT__FONT_WEIGHT as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EDouble')!);
     (PivotTablePackage.Literals.HEADER_EXPANDED_PAYLOAD__UNIQUE_NAME as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
     (PivotTablePackage.Literals.HEADER_CLICKED_PAYLOAD__UNIQUE_NAME as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+
+    // ============================================
+    // Set EOpposites (must be done after all features are created) (#59)
+    // ============================================
 
     // ============================================
     // Register XML name mappings from ExtendedMetaData annotations
