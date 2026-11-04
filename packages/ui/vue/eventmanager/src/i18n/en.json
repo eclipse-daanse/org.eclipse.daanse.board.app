@@ -44,6 +44,8 @@
     "fromEvent": "from the event",
     "fixedValue": "fixed value",
     "chooseProperty": "Choose property",
+    "chooseVariable": "Choose variable",
+    "newVariable": "or the name of a new variable",
     "freePath": "or a path, e.g. {{example}}",
     "expression": "Expression",
     "resultLast": "Last event: {{result}}",

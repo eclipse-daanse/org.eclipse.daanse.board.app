@@ -24,6 +24,13 @@ const ACTION_PARAMETER_METADATA_KEY = Symbol.for('daanse:actionParameter');
  * (#1223). The position in the list is the argument's index - the `argIndex`
  * a stored rule maps its payload to - so the list follows the signature.
  */
+/**
+ * What a parameter stands for, beyond its type - what the dialog offers
+ * for it. 'variable': the name of a global variable, chosen from the ones
+ * there are or typed for one that is not there yet (#1237).
+ */
+export type ActionParameterKind = 'variable';
+
 export interface WidgetActionParameter {
   /** The parameter's name in the signature; also what a missing label falls back to. */
   name: string;
@@ -32,6 +39,7 @@ export interface WidgetActionParameter {
   /** A language pack key, `namespace:Key`, for the text the dialog shows. */
   label?: string;
   optional?: boolean;
+  kind?: ActionParameterKind;
 }
 
 export interface WidgetActionMetadata {
@@ -46,6 +54,7 @@ export interface ActionParameterMetadata {
   type?: string;
   label?: string;
   optional?: boolean;
+  kind?: ActionParameterKind;
 }
 
 /** The honest name of a parameter nobody declared. */
@@ -126,7 +135,8 @@ export function ActionParameter(metadata?: Partial<Omit<ActionParameterMetadata,
       name,
       type: finalType || 'any',
       label: metadata?.label,
-      optional: metadata?.optional
+      optional: metadata?.optional,
+      kind: metadata?.kind
     });
 
     Reflect.defineMetadata(ACTION_PARAMETER_METADATA_KEY, existingParams, target, key);
@@ -166,7 +176,8 @@ export function getWidgetActions(target: any): Array<WidgetActionMetadata & { me
             name: declared.name || `arg${index}`,
             type: declared.type || 'any',
             ...(declared.label ? { label: declared.label } : {}),
-            ...(declared.optional ? { optional: true } : {})
+            ...(declared.optional ? { optional: true } : {}),
+            ...(declared.kind ? { kind: declared.kind } : {})
           }
         : undeclaredParameter(index));
     }
