@@ -19,6 +19,7 @@ import Draggable from 'vuedraggable'
 import { useMoveableLayout, type ILayoutItem } from '../composables/useMovableLayout'
 import { restingPlace } from '../composables/restingPlace'
 import { useClipboardShortcuts, type BoardPoint } from '../composables/useClipboardShortcuts'
+import ClipboardNotice from './ClipboardNotice.vue'
 
 import { DFloatingWindow } from 'org.eclipse.daanse.board.app.ui.vue.controls'
 import { WidgetWrapper,defaultConfig } from 'org.eclipse.daanse.board.app.ui.vue.widget.wrapper'
@@ -288,7 +289,11 @@ const copyTarget = () => {
   return undefined
 }
 
-const { copy: copyWithShortcut } = useClipboardShortcuts({
+const {
+  copy: copyWithShortcut,
+  copiedNotice,
+  hideNotice,
+} = useClipboardShortcuts({
   target: copyTarget,
   copy: (uid) => copyWidgetComposable(uid),
   paste: (at) => {
@@ -356,6 +361,7 @@ const closeCanvasContextMenu = () => {
 }
 
 const pasteWidgetFromMenu = () => {
+  hideNotice()
   pasteWidgetComposable(pastePosition.value.x, pastePosition.value.y)
   canvasContextMenu.value.visible = false
 }
@@ -1038,6 +1044,8 @@ const change = (e: any) => {
         ></div>
       </div>
     </DFloatingWindow>
+
+    <ClipboardNotice :shown="copiedNotice" @dismiss="hideNotice" />
   </div>
 </template>
 <style>
