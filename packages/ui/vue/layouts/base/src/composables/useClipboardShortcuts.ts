@@ -10,7 +10,7 @@
  * Contributors:
  *   Smart City Jena
  **********************************************************************/
-import { onMounted, onUnmounted } from 'vue'
+import { onMounted, onUnmounted, ref } from 'vue'
 import { useClipboardStore } from './useClipboardStore'
 
 /** A point on the board, in the board's own pixels. */
@@ -57,15 +57,38 @@ export function isTextEntry(target: EventTarget | null): boolean {
  * Listened for on the window while the editor is mounted, the same way the
  * undo keys are: focus is wherever it was last clicked, rarely on the board.
  */
+/** How long the notice after a copy stays up. */
+export const COPIED_NOTICE_MS = 4000
+
 export function useClipboardShortcuts(options: ClipboardShortcutOptions) {
   const clipboard = useClipboardStore()
 
+  /*
+   * A copy changes nothing one can see, so it says what it did and where
+   * the way to paste is - the right click on the board was told to nobody.
+   * Every copy, by key or from a menu, goes through here for that reason.
+   */
+  const copiedNotice = ref(false)
+  let noticeTimer: ReturnType<typeof setTimeout> | undefined
+
+  const hideNotice = () => {
+    clearTimeout(noticeTimer)
+    noticeTimer = undefined
+    copiedNotice.value = false
+  }
+
   const copy = (uid: string) => {
     options.copy(uid)
+    if (!clipboard.hasClipboard) return
+    clearTimeout(noticeTimer)
+    copiedNotice.value = true
+    noticeTimer = setTimeout(hideNotice, COPIED_NOTICE_MS)
   }
 
   const paste = (at: BoardPoint | undefined) => {
     if (!clipboard.hasClipboard) return
+    /* Pasted: the way to paste has been found, the notice has done its job. */
+    hideNotice()
     options.paste(at)
   }
 
@@ -89,7 +112,10 @@ export function useClipboardShortcuts(options: ClipboardShortcutOptions) {
   }
 
   onMounted(() => window.addEventListener('keydown', onKey))
-  onUnmounted(() => window.removeEventListener('keydown', onKey))
+  onUnmounted(() => {
+    window.removeEventListener('keydown', onKey)
+    hideNotice()
+  })
 
-  return { copy, paste }
+  return { copy, paste, copiedNotice, hideNotice }
 }
