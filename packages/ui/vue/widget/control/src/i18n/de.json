@@ -72,5 +72,11 @@
       "horizontal": "Waagerecht",
       "vertical": "Senkrecht"
     }
+  },
+  "Default": {
+    "button": "Knopf",
+    "toggle": "Schalter",
+    "multiState": "Zustand",
+    "slider": "Regler"
   }
 }
