@@ -5,7 +5,9 @@
     "multiState": "Mehrstufige Schaltfläche",
     "slider": "Schieberegler",
     "buttonGroup": "Schaltflächengruppe",
-    "choice": "Auswahlliste"
+    "choice": "Auswahlliste",
+    "textField": "Textfeld",
+    "numberField": "Zahlenfeld"
   },
   "Form": {
     "labelGroup": "Beschriftung",
@@ -53,7 +55,8 @@
     "chosenTextColor": "Textfarbe der gewählten",
     "labelSide": "Beschriftung steht",
     "detents": "Benannte Rasterstufen",
-    "placeholder": "Platzhalter"
+    "placeholder": "Platzhalter",
+    "fieldGroup": "Beim Übernehmen"
   },
   "Action": {
     "value": "Wert",

@@ -37,6 +37,10 @@ import { ButtonGroupSettings } from './ButtonGroupSettings.js';
 import { ButtonGroupSettingsImpl } from './ButtonGroupSettingsImpl.js';
 import { ChoiceSettings } from './ChoiceSettings.js';
 import { ChoiceSettingsImpl } from './ChoiceSettingsImpl.js';
+import { TextFieldSettings } from './TextFieldSettings.js';
+import { TextFieldSettingsImpl } from './TextFieldSettingsImpl.js';
+import { NumberFieldSettings } from './NumberFieldSettings.js';
+import { NumberFieldSettingsImpl } from './NumberFieldSettingsImpl.js';
 import { ControlPayload } from './ControlPayload.js';
 import { ControlPayloadImpl } from './ControlPayloadImpl.js';
 
@@ -117,6 +121,20 @@ export class ControlwidgetsFactory extends BasicEFactory {
   }
 
   /**
+   * Create a new TextFieldSettings instance
+   */
+  createTextFieldSettings(): TextFieldSettings {
+    return new TextFieldSettingsImpl();
+  }
+
+  /**
+   * Create a new NumberFieldSettings instance
+   */
+  createNumberFieldSettings(): NumberFieldSettings {
+    return new NumberFieldSettingsImpl();
+  }
+
+  /**
    * Create a new ControlPayload instance
    */
   createControlPayload(): ControlPayload {
@@ -144,6 +162,10 @@ export class ControlwidgetsFactory extends BasicEFactory {
         return this.createButtonGroupSettings();
       case 'ChoiceSettings':
         return this.createChoiceSettings();
+      case 'TextFieldSettings':
+        return this.createTextFieldSettings();
+      case 'NumberFieldSettings':
+        return this.createNumberFieldSettings();
       case 'ControlPayload':
         return this.createControlPayload();
       default:
