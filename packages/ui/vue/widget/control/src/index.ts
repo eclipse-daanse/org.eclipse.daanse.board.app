@@ -49,16 +49,22 @@ import ButtonGroupIcon from './assets/buttongroup.svg'
 import { ButtonGroupWidgetEvents } from './events/ButtonGroupWidgetEvents'
 import { ButtonGroupWidgetInterface } from './api/ButtonGroupWidgetInterface'
 import { ButtonGroupSettingsImpl } from './gen/ButtonGroupSettingsImpl'
+import ChoiceWidget from './ChoiceWidget.vue'
+import ChoiceIcon from './assets/choice.svg'
+import { ChoiceWidgetEvents } from './events/ChoiceWidgetEvents'
+import { ChoiceWidgetInterface } from './api/ChoiceWidgetInterface'
+import { ChoiceSettingsImpl } from './gen/ChoiceSettingsImpl'
 /* The form for the button's settings, written as a model beside the Ecore. */
 import buttonSettingsFormXmi from '../model/ui.xmi?raw'
 import toggleSettingsFormXmi from '../model/ui-toggle.xmi?raw'
 import multiStateSettingsFormXmi from '../model/ui-multistate.xmi?raw'
-/* One state of a multi-state button, one option of a button group. */
+/* One state of a multi-state button, one option of a button group or a choice. */
 import optionFormXmi from '../model/ui-option.xmi?raw'
 import sliderSettingsFormXmi from '../model/ui-slider.xmi?raw'
 /* One mark of a slider. */
 import markFormXmi from '../model/ui-mark.xmi?raw'
 import buttonGroupSettingsFormXmi from '../model/ui-buttongroup.xmi?raw'
+import choiceSettingsFormXmi from '../model/ui-choice.xmi?raw'
 /* The Ecore itself, for the sentences the generator drops. */
 import settingsEcore from '../model/model.ecore?raw'
 
@@ -294,11 +300,55 @@ export class ButtonGroupWidgetProvider implements WidgetProvider {
   }
 }
 
-export { ButtonWidget, ToggleWidget, MultiStateWidget, SliderWidget, ButtonGroupWidget }
+const CHOICE_TYPE = 'ChoiceWidget'
+
+/** The choice: a dropdown of options, listed or from a source, as the button group has them. */
+@component({
+  service: [WIDGET_SERVICE_ID],
+  properties: { 'widget.type': CHOICE_TYPE },
+})
+export class ChoiceWidgetProvider implements WidgetProvider {
+  readonly type = CHOICE_TYPE
+  readonly name = 'Choice'
+  readonly nameKey = 'control:Widget.choice'
+
+  readonly settingsForm = {
+    xmi: choiceSettingsFormXmi,
+    ecore: settingsEcore,
+    uri: '/choice-settings.ui.xmi',
+    ePackage: () => ControlwidgetsPackage.eINSTANCE,
+    create: () => new ChoiceSettingsImpl(),
+    entryForms: [{ xmi: optionFormXmi, uri: '/control-option.ui.xmi' }],
+  }
+
+  readonly icon = ChoiceIcon
+  readonly reads = ['object']
+  readonly component = ChoiceWidget
+
+  constructor(
+    @inject(EVENT_REGISTRY_ID) private readonly events: EventRegistry,
+    @inject(EVENT_ACTIONS_REGISTRY_ID) private readonly actions: EventActionsRegistry,
+  ) {}
+
+  @activate()
+  register(): void {
+    this.events.registerWidget(CHOICE_TYPE, ChoiceWidgetEvents)
+    this.actions.registerWidgetType(CHOICE_TYPE, ChoiceWidgetInterface, 'widget')
+  }
+
+  @deactivate()
+  unregister(): void {
+    this.events.unregisterWidget(CHOICE_TYPE)
+    this.actions.unregisterWidgetType(CHOICE_TYPE)
+  }
+}
+
+export { ButtonWidget, ToggleWidget, MultiStateWidget, SliderWidget, ButtonGroupWidget, ChoiceWidget }
 export { ButtonSettingsImpl, ToggleSettingsImpl, MultiStateSettingsImpl, SliderSettingsImpl, ButtonGroupSettingsImpl }
+export { ChoiceSettingsImpl }
 export { ControlwidgetsPackage }
 export { buttonSettingsFormXmi, toggleSettingsFormXmi, multiStateSettingsFormXmi, optionFormXmi }
-export { sliderSettingsFormXmi, markFormXmi, buttonGroupSettingsFormXmi }
+export { sliderSettingsFormXmi, markFormXmi, buttonGroupSettingsFormXmi, choiceSettingsFormXmi }
 export { ControlOptionImpl } from './gen/ControlOptionImpl'
 export { SliderMarkImpl } from './gen/SliderMarkImpl'
 export { SliderOrientation } from './gen/SliderOrientation'
@@ -311,6 +361,7 @@ export type { ControlOption } from './gen/ControlOption'
 export type { SliderSettings } from './gen/SliderSettings'
 export type { SliderMark } from './gen/SliderMark'
 export type { ButtonGroupSettings } from './gen/ButtonGroupSettings'
+export type { ChoiceSettings } from './gen/ChoiceSettings'
 export type { ControlSettings } from './gen/ControlSettings'
 export type { ControlPayload } from './gen/ControlPayload'
 
