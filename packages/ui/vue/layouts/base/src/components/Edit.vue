@@ -18,6 +18,7 @@ import Moveable from 'vue3-moveable'
 import Draggable from 'vuedraggable'
 import { useMoveableLayout, type ILayoutItem } from '../composables/useMovableLayout'
 import { restingPlace } from '../composables/restingPlace'
+import { useClipboardShortcuts, type BoardPoint } from '../composables/useClipboardShortcuts'
 
 import { DFloatingWindow } from 'org.eclipse.daanse.board.app.ui.vue.controls'
 import { WidgetWrapper,defaultConfig } from 'org.eclipse.daanse.board.app.ui.vue.widget.wrapper'
@@ -265,8 +266,39 @@ const stackActions = (uid: string) => [
   { id: 'copy', icon: 'content_copy', label: t('Menu.copy'), run: () => copyWidget(uid) },
 ]
 
+/*
+ * Where the pointer is on the board, for Ctrl+V. Board pixels - the
+ * scrolled-away part counted - and nothing while it is elsewhere, in which
+ * case a paste lands beside the original instead.
+ */
+const pointerOnBoard = ref<BoardPoint | undefined>(undefined)
+
+const trackPointer = (event: PointerEvent) => {
+  pointerOnBoard.value = getCanvasCoords(event)
+}
+
+/*
+ * The widget Ctrl+C means: the one picked, or - with none picked - the
+ * one under the pointer. With several picked there is no one widget to
+ * mean, and the clipboard holds one.
+ */
+const copyTarget = () => {
+  if (selected.value.length === 1) return selected.value[0]
+  if (selected.value.length === 0) return hovered.value ?? undefined
+  return undefined
+}
+
+const { copy: copyWithShortcut } = useClipboardShortcuts({
+  target: copyTarget,
+  copy: (uid) => copyWidgetComposable(uid),
+  paste: (at) => {
+    pasteWidgetComposable(at ? toGrid(at.x) : undefined, at ? toGrid(at.y) : undefined)
+  },
+  pointer: () => pointerOnBoard.value,
+})
+
 const copyWidget = (widgetId: string) => {
-  copyWidgetComposable(widgetId)
+  copyWithShortcut(widgetId)
 }
 
 const pasteWidget = () => {
@@ -702,7 +734,13 @@ const change = (e: any) => {
     @click="closeCanvasContextMenu"
     @pointerdown.self="clearSelection"
   >
-    <div class="scroll-viewport" ref="scrollContainer" @scroll="updateViewport">
+    <div
+      class="scroll-viewport"
+      ref="scrollContainer"
+      @scroll="updateViewport"
+      @pointermove="trackPointer"
+      @pointerleave="pointerOnBoard = undefined"
+    >
       <div
         class="canvas dottet"
         :style="{
