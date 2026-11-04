@@ -12,6 +12,8 @@ Contributors:
 -->
 
 <template>
+  <!-- Still while editing: the weather waits, and draws nothing -->
+  <WeatherLayer :page="board.page.value" edit-mode>
   <div class="scroll max-h-screen ml-15">
     <div ref="wrapper" @dragenter="onDragEnter" @drop.prevent="onDrop" @drag="onDragMove" class="alayout" @click="closeAllContextMenus"
       @contextmenu="onCanvasContextMenu"
@@ -96,6 +98,7 @@ Contributors:
 
     <ClipboardNotice :shown="copiedNotice" @dismiss="hideNotice" />
   </div>
+  </WeatherLayer>
 </template>
 
 <script setup lang="ts">
@@ -105,6 +108,7 @@ import { GridLayout, type LayoutItem } from 'grid-layout-plus'
 import { useBoard, useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import type { StoredWidget } from 'org.eclipse.daanse.board.app.lib.api.page'
 import { WidgetWrapper, defaultConfig } from 'org.eclipse.daanse.board.app.ui.vue.widget.wrapper'
+import { WeatherLayer } from 'org.eclipse.daanse.board.app.ui.vue.layouts.base'
 import { useRoute } from 'vue-router'
 import Draggable from 'vuedraggable'
 import { cloneDeep, isEqual } from 'lodash'
