@@ -232,3 +232,52 @@ describe('the rule dialog', () => {
     expect(await labelsIn(2, scope)).toContain('Rule.targetContext')
   })
 })
+
+/*
+ * The fixed-value field belongs to the manual source. It hung by v-else on
+ * the free-path field and stood beside the payload choice too, a field that
+ * did nothing with the type as its placeholder (#1227).
+ */
+describe('a parameter of an action', () => {
+  beforeEach(() => {
+    document.body.innerHTML = ''
+  })
+
+  async function parameterRow(source?: 'payload' | 'manual') {
+    const wrapper = openOn()
+    await flushPromises()
+    const vm = wrapper.vm as any
+    vm.availableWidgetTypes = [
+      {
+        widgetType: 'GaugeWidget',
+        context: 'widget',
+        actions: [{ methodName: 'setValue', parameters: [{ name: 'value', type: 'number' }] }],
+      },
+    ]
+    vm.showAddDialog = true
+    await flushPromises()
+    vm.addAction?.()
+    const action = vm.newMapping.actions[vm.newMapping.actions.length - 1]
+    action.targetContext = 'widget'
+    action.actionName = 'setValue'
+    if (source) vm.setParameterValueSource(0, source)
+    await flushPromises()
+    const row = document.querySelector('.param')
+    const inputs = row?.querySelectorAll('input') ?? []
+    const placeholders = [...inputs].map((each) => each.getAttribute('placeholder'))
+    wrapper.unmount()
+    document.body.innerHTML = ''
+    return { found: !!row, placeholders }
+  }
+
+  it('offers no fixed-value field while the value comes from the event', async () => {
+    const { found, placeholders } = await parameterRow('payload')
+    expect(found).toBe(true)
+    expect(placeholders).not.toContain('number')
+  })
+
+  it('offers the fixed-value field on the manual source', async () => {
+    const { placeholders } = await parameterRow('manual')
+    expect(placeholders).toContain('number')
+  })
+})
