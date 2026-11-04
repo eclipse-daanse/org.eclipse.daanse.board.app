@@ -34,12 +34,26 @@ export class WeatherImpl extends BasicEObject implements Weather {
   static readonly INTENSITY: number = 1;
   static readonly WIND: number = 2;
   static readonly COLOR: number = 3;
+  static readonly REGION: number = 4;
+  static readonly REGION_X: number = 5;
+  static readonly REGION_Y: number = 6;
+  static readonly REGION_WIDTH: number = 7;
+  static readonly REGION_HEIGHT: number = 8;
+  static readonly REGION_WIDGET: number = 9;
+  static readonly AFFECTS_WIDGETS: number = 10;
 
   // Private fields
   private _kind?: VariableWrapper<string>;
   private _intensity?: VariableWrapper<number>;
   private _wind?: VariableWrapper<number>;
   private _color?: VariableWrapper<string>;
+  private _region?: VariableWrapper<string>;
+  private _regionX?: VariableWrapper<number>;
+  private _regionY?: VariableWrapper<number>;
+  private _regionWidth?: VariableWrapper<number>;
+  private _regionHeight?: VariableWrapper<number>;
+  private _regionWidget?: VariableWrapper<string>;
+  private _affectsWidgets?: VariableWrapper<boolean>;
 
   /**
    * Returns the EClass of this object
@@ -185,6 +199,244 @@ export class WeatherImpl extends BasicEObject implements Weather {
     }
   }
 
+  get region(): VariableWrapper<string> {
+    return this._region!;
+  }
+
+  set region(value: VariableWrapper<string>) {
+    const oldValue = this._region;
+    if (oldValue !== value) {
+      // containment: the owner becomes the container of the value (#61)
+      if (oldValue) {
+        (oldValue as any).eSetContainer?.(null, null);
+      }
+      if (value) {
+        this.removeFromPreviousContainer(value);
+        (value as any).eSetContainer?.(this, this.eClass().getEStructuralFeature('region'));
+      }
+    }
+    this._region = value;
+    if (this.eDeliver()) {
+      this.eNotify({
+        getNotifier: () => this,
+        getEventType: () => 1, // SET
+        getFeature: () => this.eClass().getEStructuralFeature(WeatherImpl.REGION),
+        getOldValue: () => oldValue,
+        getNewValue: () => value,
+        getPosition: () => -1,
+        wasSet: () => true,
+        isTouch: () => false,
+        isReset: () => false,
+        getFeatureID: () => WeatherImpl.REGION,
+        merge: () => false
+      });
+    }
+  }
+
+  get regionX(): VariableWrapper<number> {
+    return this._regionX!;
+  }
+
+  set regionX(value: VariableWrapper<number>) {
+    const oldValue = this._regionX;
+    if (oldValue !== value) {
+      // containment: the owner becomes the container of the value (#61)
+      if (oldValue) {
+        (oldValue as any).eSetContainer?.(null, null);
+      }
+      if (value) {
+        this.removeFromPreviousContainer(value);
+        (value as any).eSetContainer?.(this, this.eClass().getEStructuralFeature('regionX'));
+      }
+    }
+    this._regionX = value;
+    if (this.eDeliver()) {
+      this.eNotify({
+        getNotifier: () => this,
+        getEventType: () => 1, // SET
+        getFeature: () => this.eClass().getEStructuralFeature(WeatherImpl.REGION_X),
+        getOldValue: () => oldValue,
+        getNewValue: () => value,
+        getPosition: () => -1,
+        wasSet: () => true,
+        isTouch: () => false,
+        isReset: () => false,
+        getFeatureID: () => WeatherImpl.REGION_X,
+        merge: () => false
+      });
+    }
+  }
+
+  get regionY(): VariableWrapper<number> {
+    return this._regionY!;
+  }
+
+  set regionY(value: VariableWrapper<number>) {
+    const oldValue = this._regionY;
+    if (oldValue !== value) {
+      // containment: the owner becomes the container of the value (#61)
+      if (oldValue) {
+        (oldValue as any).eSetContainer?.(null, null);
+      }
+      if (value) {
+        this.removeFromPreviousContainer(value);
+        (value as any).eSetContainer?.(this, this.eClass().getEStructuralFeature('regionY'));
+      }
+    }
+    this._regionY = value;
+    if (this.eDeliver()) {
+      this.eNotify({
+        getNotifier: () => this,
+        getEventType: () => 1, // SET
+        getFeature: () => this.eClass().getEStructuralFeature(WeatherImpl.REGION_Y),
+        getOldValue: () => oldValue,
+        getNewValue: () => value,
+        getPosition: () => -1,
+        wasSet: () => true,
+        isTouch: () => false,
+        isReset: () => false,
+        getFeatureID: () => WeatherImpl.REGION_Y,
+        merge: () => false
+      });
+    }
+  }
+
+  get regionWidth(): VariableWrapper<number> {
+    return this._regionWidth!;
+  }
+
+  set regionWidth(value: VariableWrapper<number>) {
+    const oldValue = this._regionWidth;
+    if (oldValue !== value) {
+      // containment: the owner becomes the container of the value (#61)
+      if (oldValue) {
+        (oldValue as any).eSetContainer?.(null, null);
+      }
+      if (value) {
+        this.removeFromPreviousContainer(value);
+        (value as any).eSetContainer?.(this, this.eClass().getEStructuralFeature('regionWidth'));
+      }
+    }
+    this._regionWidth = value;
+    if (this.eDeliver()) {
+      this.eNotify({
+        getNotifier: () => this,
+        getEventType: () => 1, // SET
+        getFeature: () => this.eClass().getEStructuralFeature(WeatherImpl.REGION_WIDTH),
+        getOldValue: () => oldValue,
+        getNewValue: () => value,
+        getPosition: () => -1,
+        wasSet: () => true,
+        isTouch: () => false,
+        isReset: () => false,
+        getFeatureID: () => WeatherImpl.REGION_WIDTH,
+        merge: () => false
+      });
+    }
+  }
+
+  get regionHeight(): VariableWrapper<number> {
+    return this._regionHeight!;
+  }
+
+  set regionHeight(value: VariableWrapper<number>) {
+    const oldValue = this._regionHeight;
+    if (oldValue !== value) {
+      // containment: the owner becomes the container of the value (#61)
+      if (oldValue) {
+        (oldValue as any).eSetContainer?.(null, null);
+      }
+      if (value) {
+        this.removeFromPreviousContainer(value);
+        (value as any).eSetContainer?.(this, this.eClass().getEStructuralFeature('regionHeight'));
+      }
+    }
+    this._regionHeight = value;
+    if (this.eDeliver()) {
+      this.eNotify({
+        getNotifier: () => this,
+        getEventType: () => 1, // SET
+        getFeature: () => this.eClass().getEStructuralFeature(WeatherImpl.REGION_HEIGHT),
+        getOldValue: () => oldValue,
+        getNewValue: () => value,
+        getPosition: () => -1,
+        wasSet: () => true,
+        isTouch: () => false,
+        isReset: () => false,
+        getFeatureID: () => WeatherImpl.REGION_HEIGHT,
+        merge: () => false
+      });
+    }
+  }
+
+  get regionWidget(): VariableWrapper<string> {
+    return this._regionWidget!;
+  }
+
+  set regionWidget(value: VariableWrapper<string>) {
+    const oldValue = this._regionWidget;
+    if (oldValue !== value) {
+      // containment: the owner becomes the container of the value (#61)
+      if (oldValue) {
+        (oldValue as any).eSetContainer?.(null, null);
+      }
+      if (value) {
+        this.removeFromPreviousContainer(value);
+        (value as any).eSetContainer?.(this, this.eClass().getEStructuralFeature('regionWidget'));
+      }
+    }
+    this._regionWidget = value;
+    if (this.eDeliver()) {
+      this.eNotify({
+        getNotifier: () => this,
+        getEventType: () => 1, // SET
+        getFeature: () => this.eClass().getEStructuralFeature(WeatherImpl.REGION_WIDGET),
+        getOldValue: () => oldValue,
+        getNewValue: () => value,
+        getPosition: () => -1,
+        wasSet: () => true,
+        isTouch: () => false,
+        isReset: () => false,
+        getFeatureID: () => WeatherImpl.REGION_WIDGET,
+        merge: () => false
+      });
+    }
+  }
+
+  get affectsWidgets(): VariableWrapper<boolean> {
+    return this._affectsWidgets!;
+  }
+
+  set affectsWidgets(value: VariableWrapper<boolean>) {
+    const oldValue = this._affectsWidgets;
+    if (oldValue !== value) {
+      // containment: the owner becomes the container of the value (#61)
+      if (oldValue) {
+        (oldValue as any).eSetContainer?.(null, null);
+      }
+      if (value) {
+        this.removeFromPreviousContainer(value);
+        (value as any).eSetContainer?.(this, this.eClass().getEStructuralFeature('affectsWidgets'));
+      }
+    }
+    this._affectsWidgets = value;
+    if (this.eDeliver()) {
+      this.eNotify({
+        getNotifier: () => this,
+        getEventType: () => 1, // SET
+        getFeature: () => this.eClass().getEStructuralFeature(WeatherImpl.AFFECTS_WIDGETS),
+        getOldValue: () => oldValue,
+        getNewValue: () => value,
+        getPosition: () => -1,
+        wasSet: () => true,
+        isTouch: () => false,
+        isReset: () => false,
+        getFeatureID: () => WeatherImpl.AFFECTS_WIDGETS,
+        merge: () => false
+      });
+    }
+  }
+
   /**
    * Remove a value from its previous container before it is contained here,
    * like Java EMF's eInverseRemove on the old container (#61)
@@ -225,6 +477,20 @@ export class WeatherImpl extends BasicEObject implements Weather {
         return this.wind;
       case WeatherImpl.COLOR:
         return this.color;
+      case WeatherImpl.REGION:
+        return this.region;
+      case WeatherImpl.REGION_X:
+        return this.regionX;
+      case WeatherImpl.REGION_Y:
+        return this.regionY;
+      case WeatherImpl.REGION_WIDTH:
+        return this.regionWidth;
+      case WeatherImpl.REGION_HEIGHT:
+        return this.regionHeight;
+      case WeatherImpl.REGION_WIDGET:
+        return this.regionWidget;
+      case WeatherImpl.AFFECTS_WIDGETS:
+        return this.affectsWidgets;
       default:
         return super.eGet(feature);
     }
@@ -252,6 +518,34 @@ export class WeatherImpl extends BasicEObject implements Weather {
         this.color = newValue as VariableWrapper<string>;
         super.eSet(feature, newValue);
         break;
+      case WeatherImpl.REGION:
+        this.region = newValue as VariableWrapper<string>;
+        super.eSet(feature, newValue);
+        break;
+      case WeatherImpl.REGION_X:
+        this.regionX = newValue as VariableWrapper<number>;
+        super.eSet(feature, newValue);
+        break;
+      case WeatherImpl.REGION_Y:
+        this.regionY = newValue as VariableWrapper<number>;
+        super.eSet(feature, newValue);
+        break;
+      case WeatherImpl.REGION_WIDTH:
+        this.regionWidth = newValue as VariableWrapper<number>;
+        super.eSet(feature, newValue);
+        break;
+      case WeatherImpl.REGION_HEIGHT:
+        this.regionHeight = newValue as VariableWrapper<number>;
+        super.eSet(feature, newValue);
+        break;
+      case WeatherImpl.REGION_WIDGET:
+        this.regionWidget = newValue as VariableWrapper<string>;
+        super.eSet(feature, newValue);
+        break;
+      case WeatherImpl.AFFECTS_WIDGETS:
+        this.affectsWidgets = newValue as VariableWrapper<boolean>;
+        super.eSet(feature, newValue);
+        break;
       default:
         super.eSet(feature, newValue);
     }
@@ -271,6 +565,20 @@ export class WeatherImpl extends BasicEObject implements Weather {
         return this._wind !== undefined;
       case WeatherImpl.COLOR:
         return this._color !== undefined;
+      case WeatherImpl.REGION:
+        return this._region !== undefined;
+      case WeatherImpl.REGION_X:
+        return this._regionX !== undefined;
+      case WeatherImpl.REGION_Y:
+        return this._regionY !== undefined;
+      case WeatherImpl.REGION_WIDTH:
+        return this._regionWidth !== undefined;
+      case WeatherImpl.REGION_HEIGHT:
+        return this._regionHeight !== undefined;
+      case WeatherImpl.REGION_WIDGET:
+        return this._regionWidget !== undefined;
+      case WeatherImpl.AFFECTS_WIDGETS:
+        return this._affectsWidgets !== undefined;
       default:
         return super.eIsSet(feature);
     }
@@ -298,6 +606,34 @@ export class WeatherImpl extends BasicEObject implements Weather {
         if (this._color) (this._color as any).eSetContainer?.(null, null);
         this._color = undefined;
         return;
+      case WeatherImpl.REGION:
+        if (this._region) (this._region as any).eSetContainer?.(null, null);
+        this._region = undefined;
+        return;
+      case WeatherImpl.REGION_X:
+        if (this._regionX) (this._regionX as any).eSetContainer?.(null, null);
+        this._regionX = undefined;
+        return;
+      case WeatherImpl.REGION_Y:
+        if (this._regionY) (this._regionY as any).eSetContainer?.(null, null);
+        this._regionY = undefined;
+        return;
+      case WeatherImpl.REGION_WIDTH:
+        if (this._regionWidth) (this._regionWidth as any).eSetContainer?.(null, null);
+        this._regionWidth = undefined;
+        return;
+      case WeatherImpl.REGION_HEIGHT:
+        if (this._regionHeight) (this._regionHeight as any).eSetContainer?.(null, null);
+        this._regionHeight = undefined;
+        return;
+      case WeatherImpl.REGION_WIDGET:
+        if (this._regionWidget) (this._regionWidget as any).eSetContainer?.(null, null);
+        this._regionWidget = undefined;
+        return;
+      case WeatherImpl.AFFECTS_WIDGETS:
+        if (this._affectsWidgets) (this._affectsWidgets as any).eSetContainer?.(null, null);
+        this._affectsWidgets = undefined;
+        return;
       default:
         super.eUnset(feature);
     }
@@ -317,6 +653,13 @@ export class WeatherImpl extends BasicEObject implements Weather {
       intensity: this.intensity,
       wind: this.wind,
       color: this.color,
+      region: this.region,
+      regionX: this.regionX,
+      regionY: this.regionY,
+      regionWidth: this.regionWidth,
+      regionHeight: this.regionHeight,
+      regionWidget: this.regionWidget,
+      affectsWidgets: this.affectsWidgets,
     };
   }
 }
