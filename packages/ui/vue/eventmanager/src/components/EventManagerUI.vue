@@ -1019,8 +1019,11 @@ onMounted(() => {
                           :placeholder="t('Rule.freePath', { example: freePathExample })"
                           @update:model-value="updateParameterMapping(param.index, String($event ?? ''))"
                         />
+                        <!-- On the manual source only. It hung by v-else on the free path
+                          field above, and so stood beside the payload choice too, a field
+                          that did nothing with the type as its placeholder (#1227). -->
                         <DInput
-                          v-else
+                          v-if="getParameterValueSource(param.index) === 'manual'"
                           :model-value="getManualValueForParameter(param.index)"
                           :placeholder="param.type"
                           @update:model-value="updateManualParameterValue(param.index, String($event ?? ''))"
