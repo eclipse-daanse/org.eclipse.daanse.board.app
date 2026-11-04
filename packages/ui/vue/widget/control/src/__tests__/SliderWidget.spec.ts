@@ -21,6 +21,7 @@ import SliderWidget from '../SliderWidget.vue'
 import { SliderSettingsImpl } from '../gen/SliderSettingsImpl'
 import { ControlPayloadImpl } from '../gen/ControlPayloadImpl'
 import { SliderMarkImpl } from '../gen/SliderMarkImpl'
+import { ControlOptionImpl } from '../gen/ControlOptionImpl'
 import { bound, settingsOf, show } from './helpers'
 
 void EventsPackage.eINSTANCE
@@ -36,6 +37,21 @@ function mark(at: string, label = '') {
   made.at = new VariableWrapper(at)
   made.label = new VariableWrapper(label)
   return made
+}
+
+function detent(label: string, value: string) {
+  const made: any = new ControlOptionImpl()
+  made.label = new VariableWrapper(label)
+  made.value = new VariableWrapper(value)
+  made.color = new VariableWrapper('')
+  return made
+}
+
+/* Three named detents - niedrig, mittel, hoch - writing 1, 2 and 3. */
+function detented(overrides: Record<string, unknown> = {}) {
+  const settings = slider(overrides)
+  settings.detents.addAll([detent('niedrig', '1'), detent('mittel', '2'), detent('hoch', '3')])
+  return settings
 }
 
 function slider(overrides: Record<string, unknown> = {}) {
@@ -214,5 +230,64 @@ describe('SliderWidget', () => {
     const beside = wrapper.findAll('.control-slider__mark')
     expect((beside[1].element as HTMLElement).style.bottom).toBe('50%')
     expect((wrapper.find('.control-slider__value').element as HTMLElement).style.bottom).toBe('0%')
+  })
+
+  describe('with named detents', () => {
+    it('stops only on a detent: a drag between them writes the nearest one\'s value', async () => {
+      const { variable, target } = bound('level', 1)
+      const { wrapper } = await show(SliderWidget, detented({ target }))
+      const input = wrapper.find('input').element as HTMLInputElement
+      expect(input.min).toBe('0')
+      expect(input.max).toBe('2')
+
+      await slide(wrapper, 1.4)
+      expect(variable.value).toBe(2)
+      expect(input.value).toBe('1')
+
+      await slide(wrapper, 1.6)
+      expect(variable.value).toBe(3)
+      await slide(wrapper, 0.3)
+      expect(variable.value).toBe(1)
+    })
+
+    it('puts the thumb on mittel for a variable holding 2, and the badge says mittel', async () => {
+      const { variable, target } = bound('level', 1)
+      const { wrapper } = await show(SliderWidget, detented({ target }))
+      variable.value = 2
+      await nextTick()
+      expect((wrapper.find('input').element as HTMLInputElement).value).toBe('1')
+      expect(wrapper.find('input').attributes('aria-valuetext')).toBe('mittel')
+      expect(wrapper.find('.control-slider__value').text()).toBe('mittel')
+      expect((wrapper.find('.control-slider__value').element as HTMLElement).style.left).toBe('50%')
+    })
+
+    it('writes each label under the track at its detent, and no other marks', async () => {
+      const { target } = bound('level', 1)
+      const settings = detented({ target, markEvery: new VariableWrapper('10') })
+      settings.marks.add(mark('33', 'third'))
+      const { wrapper } = await show(SliderWidget, settings)
+      const marks = wrapper.findAll('.control-slider__mark')
+      expect(marks.map((m) => m.text())).toEqual(['niedrig', 'mittel', 'hoch'])
+      expect(marks.map((m) => (m.element as HTMLElement).style.left)).toEqual(['0%', '50%', '100%'])
+    })
+
+    it('sends change with the detents\' values, and is set through its action by value', async () => {
+      const { variable, target } = bound('level', 1)
+      const { wrapper, sent, api } = await show(SliderWidget, detented({ target }))
+      await slide(wrapper, 2)
+      expect(sent('change')[0].value).toBe(3)
+      expect(sent('change')[0].previousValue).toBe(1)
+
+      api().setValue(2)
+      expect(variable.value).toBe(2)
+    })
+
+    it('behaves as before without detents', async () => {
+      const { variable, target } = bound('speed', 0)
+      const { wrapper } = await show(SliderWidget, slider({ target }))
+      expect((wrapper.find('input').element as HTMLInputElement).max).toBe('100')
+      await slide(wrapper, 42)
+      expect(variable.value).toBe(40)
+    })
   })
 })

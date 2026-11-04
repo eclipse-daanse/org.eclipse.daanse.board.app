@@ -50,7 +50,8 @@
     "chooseGroup": "Auswahl",
     "multiple": "Mehrere wählbar",
     "chosenTextColor": "Textfarbe der gewählten",
-    "labelSide": "Beschriftung steht"
+    "labelSide": "Beschriftung steht",
+    "detents": "Benannte Rasterstufen"
   },
   "Action": {
     "value": "Wert",
