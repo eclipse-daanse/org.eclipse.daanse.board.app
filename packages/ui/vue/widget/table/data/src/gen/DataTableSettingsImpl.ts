@@ -36,6 +36,9 @@ export class DataTableSettingsImpl extends BasicEObject implements DataTableSett
   static readonly SORTABLE: number = 2;
   static readonly PAGE_SIZE: number = 3;
   static readonly HIDDEN_COLUMNS: number = 4;
+  static readonly MARKED_ROW_COLOR: number = 5;
+  static readonly MARKED_COLUMN_COLOR: number = 6;
+  static readonly MARKED_CELL_COLOR: number = 7;
 
   // Private fields
   private _headerBackground: VariableWrapper<string> = new VariableWrapper<string>();
@@ -43,6 +46,9 @@ export class DataTableSettingsImpl extends BasicEObject implements DataTableSett
   private _sortable: boolean = false;
   private _pageSize: number = 0;
   private _hiddenColumns!: EList<string>;
+  private _markedRowColor: string = "color-mix(in srgb, var(--color-accent) 18%, transparent)";
+  private _markedColumnColor: string = "color-mix(in srgb, var(--color-accent) 12%, transparent)";
+  private _markedCellColor: string = "color-mix(in srgb, var(--color-accent) 40%, transparent)";
 
   /**
    * Returns the EClass of this object
@@ -155,6 +161,78 @@ export class DataTableSettingsImpl extends BasicEObject implements DataTableSett
     return this._hiddenColumns;
   }
 
+  get markedRowColor(): string {
+    return this._markedRowColor!;
+  }
+
+  set markedRowColor(value: string) {
+    const oldValue = this._markedRowColor;
+    this._markedRowColor = value;
+    if (this.eDeliver()) {
+      this.eNotify({
+        getNotifier: () => this,
+        getEventType: () => 1, // SET
+        getFeature: () => this.eClass().getEStructuralFeature(DataTableSettingsImpl.MARKED_ROW_COLOR),
+        getOldValue: () => oldValue,
+        getNewValue: () => value,
+        getPosition: () => -1,
+        wasSet: () => true,
+        isTouch: () => false,
+        isReset: () => false,
+        getFeatureID: () => DataTableSettingsImpl.MARKED_ROW_COLOR,
+        merge: () => false
+      });
+    }
+  }
+
+  get markedColumnColor(): string {
+    return this._markedColumnColor!;
+  }
+
+  set markedColumnColor(value: string) {
+    const oldValue = this._markedColumnColor;
+    this._markedColumnColor = value;
+    if (this.eDeliver()) {
+      this.eNotify({
+        getNotifier: () => this,
+        getEventType: () => 1, // SET
+        getFeature: () => this.eClass().getEStructuralFeature(DataTableSettingsImpl.MARKED_COLUMN_COLOR),
+        getOldValue: () => oldValue,
+        getNewValue: () => value,
+        getPosition: () => -1,
+        wasSet: () => true,
+        isTouch: () => false,
+        isReset: () => false,
+        getFeatureID: () => DataTableSettingsImpl.MARKED_COLUMN_COLOR,
+        merge: () => false
+      });
+    }
+  }
+
+  get markedCellColor(): string {
+    return this._markedCellColor!;
+  }
+
+  set markedCellColor(value: string) {
+    const oldValue = this._markedCellColor;
+    this._markedCellColor = value;
+    if (this.eDeliver()) {
+      this.eNotify({
+        getNotifier: () => this,
+        getEventType: () => 1, // SET
+        getFeature: () => this.eClass().getEStructuralFeature(DataTableSettingsImpl.MARKED_CELL_COLOR),
+        getOldValue: () => oldValue,
+        getNewValue: () => value,
+        getPosition: () => -1,
+        wasSet: () => true,
+        isTouch: () => false,
+        isReset: () => false,
+        getFeatureID: () => DataTableSettingsImpl.MARKED_CELL_COLOR,
+        merge: () => false
+      });
+    }
+  }
+
   // Reflective API
 
   /**
@@ -173,6 +251,12 @@ export class DataTableSettingsImpl extends BasicEObject implements DataTableSett
         return this.pageSize;
       case DataTableSettingsImpl.HIDDEN_COLUMNS:
         return this.hiddenColumns;
+      case DataTableSettingsImpl.MARKED_ROW_COLOR:
+        return this.markedRowColor;
+      case DataTableSettingsImpl.MARKED_COLUMN_COLOR:
+        return this.markedColumnColor;
+      case DataTableSettingsImpl.MARKED_CELL_COLOR:
+        return this.markedCellColor;
       default:
         return super.eGet(feature);
     }
@@ -205,6 +289,18 @@ export class DataTableSettingsImpl extends BasicEObject implements DataTableSett
         this.hiddenColumns.addAll(newValue as any[]);
         super.eSet(feature, newValue);
         break;
+      case DataTableSettingsImpl.MARKED_ROW_COLOR:
+        this.markedRowColor = newValue as string;
+        super.eSet(feature, newValue);
+        break;
+      case DataTableSettingsImpl.MARKED_COLUMN_COLOR:
+        this.markedColumnColor = newValue as string;
+        super.eSet(feature, newValue);
+        break;
+      case DataTableSettingsImpl.MARKED_CELL_COLOR:
+        this.markedCellColor = newValue as string;
+        super.eSet(feature, newValue);
+        break;
       default:
         super.eSet(feature, newValue);
     }
@@ -226,6 +322,12 @@ export class DataTableSettingsImpl extends BasicEObject implements DataTableSett
         return this._pageSize !== 0;
       case DataTableSettingsImpl.HIDDEN_COLUMNS:
         return this._hiddenColumns !== undefined && !this._hiddenColumns.isEmpty();
+      case DataTableSettingsImpl.MARKED_ROW_COLOR:
+        return this._markedRowColor !== "color-mix(in srgb, var(--color-accent) 18%, transparent)";
+      case DataTableSettingsImpl.MARKED_COLUMN_COLOR:
+        return this._markedColumnColor !== "color-mix(in srgb, var(--color-accent) 12%, transparent)";
+      case DataTableSettingsImpl.MARKED_CELL_COLOR:
+        return this._markedCellColor !== "color-mix(in srgb, var(--color-accent) 40%, transparent)";
       default:
         return super.eIsSet(feature);
     }
@@ -252,6 +354,15 @@ export class DataTableSettingsImpl extends BasicEObject implements DataTableSett
       case DataTableSettingsImpl.HIDDEN_COLUMNS:
         if (this._hiddenColumns) this._hiddenColumns.clear();
         return;
+      case DataTableSettingsImpl.MARKED_ROW_COLOR:
+        this._markedRowColor = "color-mix(in srgb, var(--color-accent) 18%, transparent)";
+        return;
+      case DataTableSettingsImpl.MARKED_COLUMN_COLOR:
+        this._markedColumnColor = "color-mix(in srgb, var(--color-accent) 12%, transparent)";
+        return;
+      case DataTableSettingsImpl.MARKED_CELL_COLOR:
+        this._markedCellColor = "color-mix(in srgb, var(--color-accent) 40%, transparent)";
+        return;
       default:
         super.eUnset(feature);
     }
@@ -272,6 +383,9 @@ export class DataTableSettingsImpl extends BasicEObject implements DataTableSett
       sortable: this.sortable,
       pageSize: this.pageSize,
       hiddenColumns: this.hiddenColumns?.toArray?.() ?? this.hiddenColumns,
+      markedRowColor: this.markedRowColor,
+      markedColumnColor: this.markedColumnColor,
+      markedCellColor: this.markedCellColor,
     };
   }
 }
