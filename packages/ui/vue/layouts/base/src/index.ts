@@ -19,6 +19,14 @@ import Edit from './components/Edit.vue'
 
 // Export clipboard store for use in other layouts
 export { useClipboardStore } from './composables/useClipboardStore'
+/* The keys, the top bar's paste and the notice after a copy - one place for every layout (#1225). */
+export {
+  useClipboardShortcuts,
+  isTextEntry,
+  type BoardPoint,
+  type ClipboardShortcutOptions,
+} from './composables/useClipboardShortcuts'
+export { default as ClipboardNotice } from './components/ClipboardNotice.vue'
 
 const LAYOUT_ID = 'org.eclipse.daanse.board.app.ui.vue.layouts.base'
 
