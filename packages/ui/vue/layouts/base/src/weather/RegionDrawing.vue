@@ -22,11 +22,11 @@ Contributors:
  * Done hands the draft over; Escape, or the cancel button, leaves
  * without it. Both are the layer's to act on, which owns the page.
  */
-import { computed, onBeforeUnmount, onMounted, reactive, ref } from 'vue'
+import { computed, onBeforeUnmount, onMounted, reactive, ref, watch } from 'vue'
 import type { ShapeSpec } from 'org.eclipse.daanse.board.app.lib.model.workspace'
 import { useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import { DIcon } from 'org.eclipse.daanse.board.app.ui.vue.controls'
-import { RegionDrawing, type DrawingTool, type GridPoint } from './regionDrawing'
+import { RegionDrawing, copyShape, type DrawingTool, type GridPoint } from './regionDrawing'
 import type { GridCell } from './useWeatherLayer'
 
 const props = defineProps<{
@@ -39,6 +39,8 @@ const props = defineProps<{
 }>()
 
 const emit = defineEmits<{
+  /** The draft as it now stands, the shape being drawn included: for the weather to keep to. */
+  change: [shapes: ShapeSpec[]]
   done: [shapes: ShapeSpec[]]
   cancel: []
 }>()
@@ -89,6 +91,17 @@ function onWheel(event: WheelEvent) {
   element.scrollTop += event.deltaY
   readScroll()
 }
+
+/* What the weather shows meanwhile: the draft, and a shape being drawn once it encloses something */
+watch(
+  () => {
+    const pending = drawing.pending
+    const encloses = pending && (pending.kind === 'polygon' ? pending.points.length >= 3 : pending.width > 0 && pending.height > 0)
+    return encloses ? [...drawing.shapes, pending] : drawing.shapes
+  },
+  (shapes) => emit('change', shapes.map(copyShape)),
+  { deep: true },
+)
 
 function finish() {
   emit('done', drawing.result())
