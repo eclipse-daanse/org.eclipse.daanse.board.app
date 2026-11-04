@@ -43,7 +43,8 @@
     "valueFor": "Value for {{name}}",
     "fromEvent": "from the event",
     "fixedValue": "fixed value",
-    "chooseProperty": "Choose property"
+    "chooseProperty": "Choose property",
+    "freePath": "or a path, e.g. {{example}}"
   },
   "Phrase": {
     "inSystem": "in the system",

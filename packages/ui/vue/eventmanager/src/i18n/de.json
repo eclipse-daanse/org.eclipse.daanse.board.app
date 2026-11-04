@@ -43,7 +43,8 @@
     "valueFor": "Wert für {{name}}",
     "fromEvent": "aus dem Ereignis",
     "fixedValue": "fester Wert",
-    "chooseProperty": "Eigenschaft wählen"
+    "chooseProperty": "Eigenschaft wählen",
+    "freePath": "oder ein Pfad, z. B. {{example}}"
   },
   "Phrase": {
     "inSystem": "im System",

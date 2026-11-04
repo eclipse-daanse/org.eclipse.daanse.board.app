@@ -23,7 +23,9 @@ import {
   DModal,
   DSelect,
 } from 'org.eclipse.daanse.board.app.ui.vue.controls'
-import { useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+import { useDatasourceRepository, useEObject, useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+import { identifier as WidgetRepositoryIdentifier, type WidgetRepository } from 'org.eclipse.daanse.board.app.lib.api.widget'
+import type { EObject } from '@emfts/core'
 
 const { t } = useTranslation('eventmanager')
 
@@ -50,6 +52,12 @@ let eventManager: EventManager
 let eventRegistry: EventRegistry
 let actionsRegistry: EventActionsRegistry
 let pageRegistry: PageRegistryI
+
+const injectedEventManager = inject<EventManager>(EVENT_MANAGER)!
+const injectedEventRegistry = inject<EventRegistry>(EVENT_REGISTRY)!
+const injectedActionsRegistry = inject<EventActionsRegistry>(EVENT_ACTIONS_REGISTRY)!
+const injectedPageRegistry = inject<PageRegistryI>(PageIdentifier)!
+const injectedWidgetRepository = inject<WidgetRepository | undefined>(WidgetRepositoryIdentifier, undefined)
 
 const mappings = ref<EventActionMapping[]>([])
 const availableEvents = ref<WidgetEventDefinition[]>([])
@@ -184,22 +192,105 @@ const loadPages = () => {
   availablePages.value = pageRegistry.getAllPageIds()
 }
 
-const availablePayloadProperties = computed(() => {
+/** What the declared payload of the chosen event holds, by feature. */
+const payloadProperties = computed(() => {
   if (!newMapping.value.eventType) return []
-
   try {
-    // Use EventRegistry's extractPayloadPropertiesForEvent which extracts from Ecore model
-    const properties = eventRegistry.extractPayloadPropertiesForEvent(newMapping.value.eventType)
-
-    // Return options with text showing "name: type"
-    return properties.map(prop => ({
-      text: `${prop.name}: ${prop.type}${prop.optional ? '?' : ''}`,
-      value: prop.name
-    }))
+    return eventRegistry.extractPayloadPropertiesForEvent(newMapping.value.eventType)
   } catch (e) {
-    console.error('❌ Error extracting properties from Ecore:', e)
+    console.error('Could not read the payload of', newMapping.value.eventType, e)
     return []
   }
+})
+
+/*
+ * A feature holding a record - a row of a table - has fields of its own,
+ * and those are what a rule wants: the value in one column of the clicked
+ * row. The model says so by the feature's type (#1221).
+ */
+const RECORD_TYPE = 'Record'
+
+/*
+ * The widget this screen is scoped to, found on the board that holds it.
+ *
+ * A contributed settings tab is told the widget's id, not handed the
+ * widget, so it is looked up. Watched, because a source chosen under
+ * "Data" while this tab is open sets a reference on the widget, and the
+ * column list should follow it.
+ */
+const scopedWidget = (() => {
+  const only = props.scope
+  if (!only || only.context !== 'widget' || !only.contextId) return undefined
+  for (const page of injectedPageRegistry?.getPages?.() ?? []) {
+    for (const widget of page.widgets ?? []) {
+      if (widget.uid === only.contextId) return widget
+    }
+  }
+  return undefined
+})()
+const watchedWidget = useEObject(() => scopedWidget as EObject | undefined)
+
+/*
+ * Which source the widget reads from - asked the way the data table's
+ * column list asks since #1202: the reference first, the id a board
+ * written before the reference existed carries in its configuration
+ * second.
+ */
+const sourceId = computed<string>(() => {
+  const widget = watchedWidget.value as
+    | { datasource?: { uid?: string }; config?: { datasourceId?: string } }
+    | undefined
+  return widget?.datasource?.uid ?? widget?.config?.datasourceId ?? ''
+})
+
+/* Asked in the shape the widget reads, so the answer is the one its rows come from. */
+const sourceShape = (() => {
+  if (!scopedWidget?.type) return undefined
+  const reads = injectedWidgetRepository?.getAllWidgets?.()[scopedWidget.type]?.reads
+  return Array.isArray(reads) ? reads[0] : undefined
+})()
+
+const sourceAnswer = ref<any>(null)
+if (scopedWidget && sourceShape) {
+  try {
+    useDatasourceRepository(sourceId, sourceShape, sourceAnswer)
+  } catch {
+    /* No source repository where this screen stands: no columns to offer. */
+  }
+}
+
+/** The columns of the source's answer, as its first record names them. */
+const sourceColumns = computed<string[]>(() => {
+  const first = sourceAnswer.value?.items?.[0]
+  return first && typeof first === 'object' ? Object.keys(first) : []
+})
+
+const availablePayloadProperties = computed(() => {
+  const options: { text: string; value: string }[] = []
+  for (const prop of payloadProperties.value) {
+    options.push({
+      text: `${prop.name}: ${prop.type}${prop.optional ? '?' : ''}`,
+      value: prop.name,
+    })
+    if (prop.type === RECORD_TYPE) {
+      for (const column of sourceColumns.value) {
+        options.push({ text: `${prop.name}.${column}`, value: `${prop.name}.${column}` })
+      }
+    }
+  }
+  return options
+})
+
+/*
+ * Where there is a record but no columns to name - the unscoped screen, or
+ * a widget with no source yet - a path into it is typed instead.
+ */
+const offersFreePath = computed(
+  () => sourceColumns.value.length === 0 && payloadProperties.value.some((prop) => prop.type === RECORD_TYPE),
+)
+const freePathExample = computed(() => {
+  const record = payloadProperties.value.find((prop) => prop.type === RECORD_TYPE)
+  return record ? `${record.name}.…` : ''
 })
 
 /**
@@ -647,10 +738,6 @@ const dialogOpen = computed({
   },
 })
 
-const injectedEventManager = inject<EventManager>(EVENT_MANAGER)!
-const injectedEventRegistry = inject<EventRegistry>(EVENT_REGISTRY)!
-const injectedActionsRegistry = inject<EventActionsRegistry>(EVENT_ACTIONS_REGISTRY)!
-const injectedPageRegistry = inject<PageRegistryI>(PageIdentifier)!
 
 onMounted(() => {
   // Injected at setup below; by mount time the loader has long registered them
@@ -801,6 +888,11 @@ onMounted(() => {
                   label-key="text"
                   value-key="value"
                 />
+                <DInput
+                  v-if="offersFreePath"
+                  v-model="condition.prop"
+                  :placeholder="t('Rule.freePath', { example: freePathExample })"
+                />
                 <DSelect
                   v-model="condition.comperator"
                   :options="comperatorOptions"
@@ -926,6 +1018,12 @@ onMounted(() => {
                           value-key="value"
                           :placeholder="param.optional ? t('Rule.optional') : t('Rule.chooseProperty')"
                           clearable
+                          @update:model-value="updateParameterMapping(param.index, String($event ?? ''))"
+                        />
+                        <DInput
+                          v-if="getParameterValueSource(param.index) === 'payload' && offersFreePath"
+                          :model-value="getPayloadPathForParameter(param.index)"
+                          :placeholder="t('Rule.freePath', { example: freePathExample })"
                           @update:model-value="updateParameterMapping(param.index, String($event ?? ''))"
                         />
                         <DInput
