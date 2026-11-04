@@ -54,6 +54,16 @@ import ChoiceIcon from './assets/choice.svg'
 import { ChoiceWidgetEvents } from './events/ChoiceWidgetEvents'
 import { ChoiceWidgetInterface } from './api/ChoiceWidgetInterface'
 import { ChoiceSettingsImpl } from './gen/ChoiceSettingsImpl'
+import TextFieldWidget from './TextFieldWidget.vue'
+import TextFieldIcon from './assets/textfield.svg'
+import { TextFieldWidgetEvents } from './events/TextFieldWidgetEvents'
+import { TextFieldWidgetInterface } from './api/TextFieldWidgetInterface'
+import { TextFieldSettingsImpl } from './gen/TextFieldSettingsImpl'
+import NumberFieldWidget from './NumberFieldWidget.vue'
+import NumberFieldIcon from './assets/numberfield.svg'
+import { NumberFieldWidgetEvents } from './events/NumberFieldWidgetEvents'
+import { NumberFieldWidgetInterface } from './api/NumberFieldWidgetInterface'
+import { NumberFieldSettingsImpl } from './gen/NumberFieldSettingsImpl'
 /* The form for the button's settings, written as a model beside the Ecore. */
 import buttonSettingsFormXmi from '../model/ui.xmi?raw'
 import toggleSettingsFormXmi from '../model/ui-toggle.xmi?raw'
@@ -65,6 +75,8 @@ import sliderSettingsFormXmi from '../model/ui-slider.xmi?raw'
 import markFormXmi from '../model/ui-mark.xmi?raw'
 import buttonGroupSettingsFormXmi from '../model/ui-buttongroup.xmi?raw'
 import choiceSettingsFormXmi from '../model/ui-choice.xmi?raw'
+import textFieldSettingsFormXmi from '../model/ui-textfield.xmi?raw'
+import numberFieldSettingsFormXmi from '../model/ui-numberfield.xmi?raw'
 /* The Ecore itself, for the sentences the generator drops. */
 import settingsEcore from '../model/model.ecore?raw'
 
@@ -343,12 +355,98 @@ export class ChoiceWidgetProvider implements WidgetProvider {
   }
 }
 
+const TEXT_FIELD_TYPE = 'TextFieldWidget'
+
+/** The text field: what is typed, written once it is committed. */
+@component({
+  service: [WIDGET_SERVICE_ID],
+  properties: { 'widget.type': TEXT_FIELD_TYPE },
+})
+export class TextFieldWidgetProvider implements WidgetProvider {
+  readonly type = TEXT_FIELD_TYPE
+  readonly name = 'Text field'
+  readonly nameKey = 'control:Widget.textField'
+
+  readonly settingsForm = {
+    xmi: textFieldSettingsFormXmi,
+    ecore: settingsEcore,
+    uri: '/textfield-settings.ui.xmi',
+    ePackage: () => ControlwidgetsPackage.eINSTANCE,
+    create: () => new TextFieldSettingsImpl(),
+  }
+
+  readonly icon = TextFieldIcon
+  readonly reads = READS_NOTHING
+  readonly component = TextFieldWidget
+
+  constructor(
+    @inject(EVENT_REGISTRY_ID) private readonly events: EventRegistry,
+    @inject(EVENT_ACTIONS_REGISTRY_ID) private readonly actions: EventActionsRegistry,
+  ) {}
+
+  @activate()
+  register(): void {
+    this.events.registerWidget(TEXT_FIELD_TYPE, TextFieldWidgetEvents)
+    this.actions.registerWidgetType(TEXT_FIELD_TYPE, TextFieldWidgetInterface, 'widget')
+  }
+
+  @deactivate()
+  unregister(): void {
+    this.events.unregisterWidget(TEXT_FIELD_TYPE)
+    this.actions.unregisterWidgetType(TEXT_FIELD_TYPE)
+  }
+}
+
+const NUMBER_FIELD_TYPE = 'NumberFieldWidget'
+
+/** The number field: a number between min and max in steps, written once it is committed. */
+@component({
+  service: [WIDGET_SERVICE_ID],
+  properties: { 'widget.type': NUMBER_FIELD_TYPE },
+})
+export class NumberFieldWidgetProvider implements WidgetProvider {
+  readonly type = NUMBER_FIELD_TYPE
+  readonly name = 'Number field'
+  readonly nameKey = 'control:Widget.numberField'
+
+  readonly settingsForm = {
+    xmi: numberFieldSettingsFormXmi,
+    ecore: settingsEcore,
+    uri: '/numberfield-settings.ui.xmi',
+    ePackage: () => ControlwidgetsPackage.eINSTANCE,
+    create: () => new NumberFieldSettingsImpl(),
+  }
+
+  readonly icon = NumberFieldIcon
+  readonly reads = READS_NOTHING
+  readonly component = NumberFieldWidget
+
+  constructor(
+    @inject(EVENT_REGISTRY_ID) private readonly events: EventRegistry,
+    @inject(EVENT_ACTIONS_REGISTRY_ID) private readonly actions: EventActionsRegistry,
+  ) {}
+
+  @activate()
+  register(): void {
+    this.events.registerWidget(NUMBER_FIELD_TYPE, NumberFieldWidgetEvents)
+    this.actions.registerWidgetType(NUMBER_FIELD_TYPE, NumberFieldWidgetInterface, 'widget')
+  }
+
+  @deactivate()
+  unregister(): void {
+    this.events.unregisterWidget(NUMBER_FIELD_TYPE)
+    this.actions.unregisterWidgetType(NUMBER_FIELD_TYPE)
+  }
+}
+
 export { ButtonWidget, ToggleWidget, MultiStateWidget, SliderWidget, ButtonGroupWidget, ChoiceWidget }
+export { TextFieldWidget, NumberFieldWidget }
 export { ButtonSettingsImpl, ToggleSettingsImpl, MultiStateSettingsImpl, SliderSettingsImpl, ButtonGroupSettingsImpl }
-export { ChoiceSettingsImpl }
+export { ChoiceSettingsImpl, TextFieldSettingsImpl, NumberFieldSettingsImpl }
 export { ControlwidgetsPackage }
 export { buttonSettingsFormXmi, toggleSettingsFormXmi, multiStateSettingsFormXmi, optionFormXmi }
 export { sliderSettingsFormXmi, markFormXmi, buttonGroupSettingsFormXmi, choiceSettingsFormXmi }
+export { textFieldSettingsFormXmi, numberFieldSettingsFormXmi }
 export { ControlOptionImpl } from './gen/ControlOptionImpl'
 export { SliderMarkImpl } from './gen/SliderMarkImpl'
 export { SliderOrientation } from './gen/SliderOrientation'
@@ -362,6 +460,8 @@ export type { SliderSettings } from './gen/SliderSettings'
 export type { SliderMark } from './gen/SliderMark'
 export type { ButtonGroupSettings } from './gen/ButtonGroupSettings'
 export type { ChoiceSettings } from './gen/ChoiceSettings'
+export type { TextFieldSettings } from './gen/TextFieldSettings'
+export type { NumberFieldSettings } from './gen/NumberFieldSettings'
 export type { ControlSettings } from './gen/ControlSettings'
 export type { ControlPayload } from './gen/ControlPayload'
 
