@@ -23,6 +23,12 @@ import type { EClass, EObject } from '@emfts/core';
 import { DatatablesettingsPackage } from './DatatablesettingsPackage.js';
 import { DataTableSettings } from './DataTableSettings.js';
 import { DataTableSettingsImpl } from './DataTableSettingsImpl.js';
+import { DataTableRowPayload } from './DataTableRowPayload.js';
+import { DataTableRowPayloadImpl } from './DataTableRowPayloadImpl.js';
+import { DataTableCellPayload } from './DataTableCellPayload.js';
+import { DataTableCellPayloadImpl } from './DataTableCellPayloadImpl.js';
+import { DataTableColumnPayload } from './DataTableColumnPayload.js';
+import { DataTableColumnPayloadImpl } from './DataTableColumnPayloadImpl.js';
 
 /**
  * Factory for creating Datatablesettings model objects
@@ -52,12 +58,39 @@ export class DatatablesettingsFactory extends BasicEFactory {
   }
 
   /**
+   * Create a new DataTableRowPayload instance
+   */
+  createDataTableRowPayload(): DataTableRowPayload {
+    return new DataTableRowPayloadImpl();
+  }
+
+  /**
+   * Create a new DataTableCellPayload instance
+   */
+  createDataTableCellPayload(): DataTableCellPayload {
+    return new DataTableCellPayloadImpl();
+  }
+
+  /**
+   * Create a new DataTableColumnPayload instance
+   */
+  createDataTableColumnPayload(): DataTableColumnPayload {
+    return new DataTableColumnPayloadImpl();
+  }
+
+  /**
    * Create an instance of the given class
    */
   override create(eClass: EClass): EObject {
     switch (eClass.getName()) {
       case 'DataTableSettings':
         return this.createDataTableSettings();
+      case 'DataTableRowPayload':
+        return this.createDataTableRowPayload();
+      case 'DataTableCellPayload':
+        return this.createDataTableCellPayload();
+      case 'DataTableColumnPayload':
+        return this.createDataTableColumnPayload();
       default:
         throw new Error(`Unknown class: ${eClass.getName()}`);
     }
