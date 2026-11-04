@@ -1,6 +1,7 @@
 {
   "Widget": {
-    "button": "Button"
+    "button": "Button",
+    "toggle": "Toggle button"
   },
   "Form": {
     "labelGroup": "Label",
@@ -12,10 +13,18 @@
     "lookGroup": "Look",
     "color": "Colour",
     "textColor": "Text colour",
-    "fontSize": "Font size"
+    "fontSize": "Font size",
+    "offLabel": "Label when off",
+    "onLabel": "Label when on",
+    "toggleGroup": "States",
+    "onValue": "Value when on",
+    "offValue": "Value when off",
+    "offColor": "Colour when off",
+    "onColor": "Colour when on"
   },
   "Action": {
     "value": "Value",
-    "label": "Label"
+    "label": "Label",
+    "on": "On"
   }
 }

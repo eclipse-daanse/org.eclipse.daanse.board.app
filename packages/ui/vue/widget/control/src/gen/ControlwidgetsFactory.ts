@@ -23,6 +23,8 @@ import type { EClass, EObject } from '@emfts/core';
 import { ControlwidgetsPackage } from './ControlwidgetsPackage.js';
 import { ButtonSettings } from './ButtonSettings.js';
 import { ButtonSettingsImpl } from './ButtonSettingsImpl.js';
+import { ToggleSettings } from './ToggleSettings.js';
+import { ToggleSettingsImpl } from './ToggleSettingsImpl.js';
 import { ControlPayload } from './ControlPayload.js';
 import { ControlPayloadImpl } from './ControlPayloadImpl.js';
 
@@ -54,6 +56,13 @@ export class ControlwidgetsFactory extends BasicEFactory {
   }
 
   /**
+   * Create a new ToggleSettings instance
+   */
+  createToggleSettings(): ToggleSettings {
+    return new ToggleSettingsImpl();
+  }
+
+  /**
    * Create a new ControlPayload instance
    */
   createControlPayload(): ControlPayload {
@@ -67,6 +76,8 @@ export class ControlwidgetsFactory extends BasicEFactory {
     switch (eClass.getName()) {
       case 'ButtonSettings':
         return this.createButtonSettings();
+      case 'ToggleSettings':
+        return this.createToggleSettings();
       case 'ControlPayload':
         return this.createControlPayload();
       default:
