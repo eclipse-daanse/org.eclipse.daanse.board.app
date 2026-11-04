@@ -36,6 +36,8 @@
     "redoLabel": "Redo the undone change",
     "snap": "Snap to grid",
     "snapLabel": "Snap widgets to the grid",
+    "paste": "Paste",
+    "pasteLabel": "Paste the copied widget beside the original",
     "backdrop": "Show page background",
     "backdropLabel": "Show or hide the page background while editing",
     "palette": "Widgets",

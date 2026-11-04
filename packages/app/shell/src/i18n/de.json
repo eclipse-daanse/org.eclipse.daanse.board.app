@@ -36,6 +36,8 @@
     "redoLabel": "Rückgängig gemachte Änderung wiederholen",
     "snap": "Am Raster ausrichten",
     "snapLabel": "Widgets am Raster ausrichten",
+    "paste": "Einfügen",
+    "pasteLabel": "Kopiertes Widget neben dem Original einfügen",
     "backdrop": "Hintergrund der Seite zeigen",
     "backdropLabel": "Hintergrund der Seite beim Bearbeiten zeigen oder verbergen",
     "palette": "Widgets",
