@@ -298,45 +298,46 @@ export class EcoreMetadataService {
         const eClass = classifier as EClass;
 
         if (eClass.getName() === payloadClassName) {
-          const properties: EcorePayloadPropertyMetadata[] = [];
-
-          // Extract all structural features (attributes and references)
-          const features = eClass.getEAllStructuralFeatures();
-          for (let j = 0; j < features.length; j++) {
-            const feature = features[j];
-            const featureName = feature.getName() as string;
-            const featureType = feature.getEType();
-            const lowerBound = feature.getLowerBound();
-            const upperBound = feature.getUpperBound();
-
-            // Determine TypeScript type
-            let tsType = this.mapEcoreTypeToTS(featureType);
-
-            // Check if it's an array (upperBound > 1 or upperBound === -1 means unbounded)
-            if (upperBound > 1 || upperBound === -1) {
-              tsType += '[]';
-            }
-
-            // Property is optional if lowerBound is 0
-            const optional = lowerBound === 0;
-
-            properties.push({
-              name: featureName,
-              type: tsType,
-              optional
-            });
-          }
-
-          return {
-            className: payloadClassName,
-            properties
-          };
+          return this.extractPayloadMetadataFromEClass(eClass);
         }
       }
     }
 
     console.warn(`Payload class "${payloadClassName}" not found in Ecore model for "${widgetType}"`);
     return null;
+  }
+
+  /**
+   * The features of a payload class, read off its EClass.
+   *
+   * A generated payload knows its EClass, so whoever holds the class needs
+   * no model registered under a widget type to ask - and no name to match
+   * against it, which never matched: an event declares the Impl, whose
+   * name is not the EClass's (#1221).
+   */
+  extractPayloadMetadataFromEClass(eClass: EClass): EcorePayloadMetadata {
+    const properties: EcorePayloadPropertyMetadata[] = [];
+
+    const features = eClass.getEAllStructuralFeatures();
+    for (let j = 0; j < features.length; j++) {
+      const feature = features[j];
+      const upperBound = feature.getUpperBound();
+
+      let tsType = this.mapEcoreTypeToTS(feature.getEType());
+      // upperBound > 1 or -1 (unbounded) means a list
+      if (upperBound > 1 || upperBound === -1) {
+        tsType += '[]';
+      }
+
+      properties.push({
+        name: feature.getName() as string,
+        type: tsType,
+        // optional where nothing has to be there
+        optional: feature.getLowerBound() === 0
+      });
+    }
+
+    return { className: eClass.getName() as string, properties };
   }
 
   /**
