@@ -33,6 +33,8 @@ import { SliderMark } from './SliderMark.js';
 import { SliderMarkImpl } from './SliderMarkImpl.js';
 import { SliderSettings } from './SliderSettings.js';
 import { SliderSettingsImpl } from './SliderSettingsImpl.js';
+import { ButtonGroupSettings } from './ButtonGroupSettings.js';
+import { ButtonGroupSettingsImpl } from './ButtonGroupSettingsImpl.js';
 import { ControlPayload } from './ControlPayload.js';
 import { ControlPayloadImpl } from './ControlPayloadImpl.js';
 
@@ -99,6 +101,13 @@ export class ControlwidgetsFactory extends BasicEFactory {
   }
 
   /**
+   * Create a new ButtonGroupSettings instance
+   */
+  createButtonGroupSettings(): ButtonGroupSettings {
+    return new ButtonGroupSettingsImpl();
+  }
+
+  /**
    * Create a new ControlPayload instance
    */
   createControlPayload(): ControlPayload {
@@ -122,6 +131,8 @@ export class ControlwidgetsFactory extends BasicEFactory {
         return this.createSliderMark();
       case 'SliderSettings':
         return this.createSliderSettings();
+      case 'ButtonGroupSettings':
+        return this.createButtonGroupSettings();
       case 'ControlPayload':
         return this.createControlPayload();
       default:

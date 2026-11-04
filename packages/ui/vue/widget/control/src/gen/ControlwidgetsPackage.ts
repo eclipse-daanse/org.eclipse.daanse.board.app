@@ -97,6 +97,13 @@ export class ControlwidgetsPackage extends BasicEPackage {
     SLIDER_SETTINGS__RANGE: null as unknown as EAttribute | EReference,
     SLIDER_SETTINGS__ORIENTATION: null as unknown as EAttribute | EReference,
     SLIDER_SETTINGS__SHOW_VALUE: null as unknown as EAttribute | EReference,
+    BUTTON_GROUP_SETTINGS: null as unknown as EClass,
+    BUTTON_GROUP_SETTINGS__TARGET: null as unknown as EAttribute | EReference,
+    BUTTON_GROUP_SETTINGS__MULTIPLE: null as unknown as EAttribute | EReference,
+    BUTTON_GROUP_SETTINGS__OPTIONS: null as unknown as EAttribute | EReference,
+    BUTTON_GROUP_SETTINGS__OPTIONS_PATH: null as unknown as EAttribute | EReference,
+    BUTTON_GROUP_SETTINGS__OPTION_LABEL: null as unknown as EAttribute | EReference,
+    BUTTON_GROUP_SETTINGS__OPTION_VALUE: null as unknown as EAttribute | EReference,
     CONTROL_PAYLOAD: null as unknown as EClass,
     CONTROL_PAYLOAD__VALUE: null as unknown as EAttribute | EReference,
     CONTROL_PAYLOAD__PREVIOUS_VALUE: null as unknown as EAttribute | EReference,
@@ -463,6 +470,69 @@ export class ControlwidgetsPackage extends BasicEPackage {
     sliderSettingsClass.getEStructuralFeatures().push(sliderSettings_showValue);
     ControlwidgetsPackage.Literals.SLIDER_SETTINGS__SHOW_VALUE = sliderSettings_showValue;
 
+    // Create ButtonGroupSettings class
+    const buttonGroupSettingsClass = new BasicEClass();
+    buttonGroupSettingsClass.setName('ButtonGroupSettings');
+    buttonGroupSettingsClass.setAbstract(false);
+    buttonGroupSettingsClass.setInterface(false);
+    this.getEClassifiers().push(buttonGroupSettingsClass);
+    buttonGroupSettingsClass.setEPackage(this);
+    ControlwidgetsPackage.Literals.BUTTON_GROUP_SETTINGS = buttonGroupSettingsClass;
+
+    // Create target feature
+    const buttonGroupSettings_target = new BasicEReference();
+    buttonGroupSettings_target.setContainment(false);
+    buttonGroupSettings_target.setName('target');
+    buttonGroupSettings_target.setLowerBound(0);
+    buttonGroupSettings_target.setUpperBound(1);
+    buttonGroupSettingsClass.getEStructuralFeatures().push(buttonGroupSettings_target);
+    ControlwidgetsPackage.Literals.BUTTON_GROUP_SETTINGS__TARGET = buttonGroupSettings_target;
+
+    // Create multiple feature
+    const buttonGroupSettings_multiple = new BasicEAttribute();
+    buttonGroupSettings_multiple.setName('multiple');
+    buttonGroupSettings_multiple.setLowerBound(0);
+    buttonGroupSettings_multiple.setUpperBound(1);
+    buttonGroupSettings_multiple.setDefaultValueLiteral("false");
+    buttonGroupSettingsClass.getEStructuralFeatures().push(buttonGroupSettings_multiple);
+    ControlwidgetsPackage.Literals.BUTTON_GROUP_SETTINGS__MULTIPLE = buttonGroupSettings_multiple;
+
+    // Create options feature
+    const buttonGroupSettings_options = new BasicEReference();
+    buttonGroupSettings_options.setContainment(true);
+    buttonGroupSettings_options.setName('options');
+    buttonGroupSettings_options.setLowerBound(0);
+    buttonGroupSettings_options.setUpperBound(-1);
+    buttonGroupSettingsClass.getEStructuralFeatures().push(buttonGroupSettings_options);
+    ControlwidgetsPackage.Literals.BUTTON_GROUP_SETTINGS__OPTIONS = buttonGroupSettings_options;
+
+    // Create optionsPath feature
+    const buttonGroupSettings_optionsPath = new BasicEReference();
+    buttonGroupSettings_optionsPath.setContainment(false);
+    buttonGroupSettings_optionsPath.setName('optionsPath');
+    buttonGroupSettings_optionsPath.setLowerBound(0);
+    buttonGroupSettings_optionsPath.setUpperBound(1);
+    buttonGroupSettingsClass.getEStructuralFeatures().push(buttonGroupSettings_optionsPath);
+    ControlwidgetsPackage.Literals.BUTTON_GROUP_SETTINGS__OPTIONS_PATH = buttonGroupSettings_optionsPath;
+
+    // Create optionLabel feature
+    const buttonGroupSettings_optionLabel = new BasicEReference();
+    buttonGroupSettings_optionLabel.setContainment(false);
+    buttonGroupSettings_optionLabel.setName('optionLabel');
+    buttonGroupSettings_optionLabel.setLowerBound(0);
+    buttonGroupSettings_optionLabel.setUpperBound(1);
+    buttonGroupSettingsClass.getEStructuralFeatures().push(buttonGroupSettings_optionLabel);
+    ControlwidgetsPackage.Literals.BUTTON_GROUP_SETTINGS__OPTION_LABEL = buttonGroupSettings_optionLabel;
+
+    // Create optionValue feature
+    const buttonGroupSettings_optionValue = new BasicEReference();
+    buttonGroupSettings_optionValue.setContainment(false);
+    buttonGroupSettings_optionValue.setName('optionValue');
+    buttonGroupSettings_optionValue.setLowerBound(0);
+    buttonGroupSettings_optionValue.setUpperBound(1);
+    buttonGroupSettingsClass.getEStructuralFeatures().push(buttonGroupSettings_optionValue);
+    ControlwidgetsPackage.Literals.BUTTON_GROUP_SETTINGS__OPTION_VALUE = buttonGroupSettings_optionValue;
+
     // Create ControlPayload class
     const controlPayloadClass = new BasicEClass();
     controlPayloadClass.setName('ControlPayload');
@@ -528,6 +598,7 @@ export class ControlwidgetsPackage extends BasicEPackage {
     (ControlwidgetsPackage.Literals.TOGGLE_SETTINGS as BasicEClass).getESuperTypes().push(ControlwidgetsPackage.Literals.CONTROL_SETTINGS);
     (ControlwidgetsPackage.Literals.MULTI_STATE_SETTINGS as BasicEClass).getESuperTypes().push(ControlwidgetsPackage.Literals.CONTROL_SETTINGS);
     (ControlwidgetsPackage.Literals.SLIDER_SETTINGS as BasicEClass).getESuperTypes().push(ControlwidgetsPackage.Literals.CONTROL_SETTINGS);
+    (ControlwidgetsPackage.Literals.BUTTON_GROUP_SETTINGS as BasicEClass).getESuperTypes().push(ControlwidgetsPackage.Literals.CONTROL_SETTINGS);
     (ControlwidgetsPackage.Literals.CONTROL_PAYLOAD as BasicEClass).getESuperTypes().push(requireEPackage('http://org.eclipse.daanse.board.app.lib.events').getEClassifier('Payload')! as EClass);
 
     // ============================================
@@ -566,6 +637,12 @@ export class ControlwidgetsPackage extends BasicEPackage {
     (ControlwidgetsPackage.Literals.SLIDER_SETTINGS__RANGE as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EBoolean')!);
     (ControlwidgetsPackage.Literals.SLIDER_SETTINGS__ORIENTATION as BasicEAttribute).setEType(ControlwidgetsPackage.Literals.SLIDER_ORIENTATION);
     (ControlwidgetsPackage.Literals.SLIDER_SETTINGS__SHOW_VALUE as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EBoolean')!);
+    (ControlwidgetsPackage.Literals.BUTTON_GROUP_SETTINGS__TARGET as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
+    (ControlwidgetsPackage.Literals.BUTTON_GROUP_SETTINGS__MULTIPLE as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EBoolean')!);
+    (ControlwidgetsPackage.Literals.BUTTON_GROUP_SETTINGS__OPTIONS as BasicEReference).setEType(ControlwidgetsPackage.Literals.CONTROL_OPTION);
+    (ControlwidgetsPackage.Literals.BUTTON_GROUP_SETTINGS__OPTIONS_PATH as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
+    (ControlwidgetsPackage.Literals.BUTTON_GROUP_SETTINGS__OPTION_LABEL as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
+    (ControlwidgetsPackage.Literals.BUTTON_GROUP_SETTINGS__OPTION_VALUE as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
     (ControlwidgetsPackage.Literals.CONTROL_PAYLOAD__VALUE as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EJavaObject')!);
     (ControlwidgetsPackage.Literals.CONTROL_PAYLOAD__PREVIOUS_VALUE as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EJavaObject')!);
 
