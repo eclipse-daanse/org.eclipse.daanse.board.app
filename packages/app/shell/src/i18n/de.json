@@ -360,7 +360,17 @@
       "snow": "Schnee",
       "intensity": "Stärke",
       "wind": "Wind",
-      "color": "Farbe"
+      "color": "Farbe",
+      "region": "Bereich",
+      "regionPage": "Ganze Seite",
+      "regionArea": "Rechteck",
+      "regionWidget": "Fläche eines Widgets",
+      "regionX": "Links (Rastereinheiten)",
+      "regionY": "Oben (Rastereinheiten)",
+      "regionWidth": "Breite (Rastereinheiten)",
+      "regionHeight": "Höhe (Rastereinheiten)",
+      "regionWidgetChoice": "Widget",
+      "affectsWidgets": "Wirkt auf die Widgets"
     }
   },
   "Tokens": {
