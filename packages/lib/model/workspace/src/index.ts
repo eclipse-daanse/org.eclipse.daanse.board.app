@@ -54,6 +54,12 @@ export type { Page } from './gen/Page'
 export type { Widget } from './gen/Widget'
 export type { LayoutItem } from './gen/LayoutItem'
 export type { Weather } from './gen/Weather'
+export type { RegionShape } from './gen/RegionShape'
+export type { BoxShape } from './gen/BoxShape'
+export type { RectangleShape } from './gen/RectangleShape'
+export type { EllipseShape } from './gen/EllipseShape'
+export type { PolygonShape } from './gen/PolygonShape'
+export type { RegionPoint } from './gen/RegionPoint'
 export type { Variable } from './gen/Variable'
 export type { EventMapping } from './gen/EventMapping'
 export type { DataSelection } from './gen/DataSelection'
@@ -70,6 +76,12 @@ export {
   WEATHER_DEFAULTS,
   WEATHER_KINDS,
   WEATHER_REGIONS,
+  readShapes,
+  writeShapes,
+  shapeSpecOf,
+  shapeFromSpec,
+  liftTypedWeatherRegions,
+  type ShapeSpec,
 } from './weather'
 /* The Ecore as text, for the sentences a form shows beside its fields. */
 export { default as workspaceEcore } from '../model/workspace.ecore?raw'
@@ -81,6 +93,10 @@ export { PageImpl } from './gen/PageImpl'
 export { WidgetImpl } from './gen/WidgetImpl'
 export { LayoutItemImpl } from './gen/LayoutItemImpl'
 export { WeatherImpl } from './gen/WeatherImpl'
+export { RectangleShapeImpl } from './gen/RectangleShapeImpl'
+export { EllipseShapeImpl } from './gen/EllipseShapeImpl'
+export { PolygonShapeImpl } from './gen/PolygonShapeImpl'
+export { RegionPointImpl } from './gen/RegionPointImpl'
 export { VariableImpl } from './gen/VariableImpl'
 export { EventMappingImpl } from './gen/EventMappingImpl'
 export { DataSelectionImpl } from './gen/DataSelectionImpl'

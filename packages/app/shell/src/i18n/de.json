@@ -363,12 +363,8 @@
       "color": "Farbe",
       "region": "Bereich",
       "regionPage": "Ganze Seite",
-      "regionArea": "Rechteck",
+      "regionArea": "Gezeichneter Bereich",
       "regionWidget": "Fläche eines Widgets",
-      "regionX": "Links (Rastereinheiten)",
-      "regionY": "Oben (Rastereinheiten)",
-      "regionWidth": "Breite (Rastereinheiten)",
-      "regionHeight": "Höhe (Rastereinheiten)",
       "regionWidgetChoice": "Widget",
       "affectsWidgets": "Wirkt auf die Widgets"
     }
