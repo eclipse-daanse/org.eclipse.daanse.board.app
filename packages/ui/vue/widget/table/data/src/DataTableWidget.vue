@@ -39,7 +39,11 @@ const settings = useEObject<DataTableSettings>(() => config.value)
 import { identifiers } from 'org.eclipse.daanse.board.app.lib.core'
 import type { TinyEmitter } from 'tiny-emitter';
 import { EventActionsRegistry, EVENT_ACTIONS_REGISTRY } from 'org.eclipse.daanse.board.app.lib.api.events';
-import { DataTableWidgetInterface } from './api/DataTableWidgetInterface';
+import {
+    DataTableWidgetInterface,
+    type DataTableColumnMatch,
+    type DataTableRowMatch,
+} from './api/DataTableWidgetInterface';
 import type { DataTableSettings } from './gen/DataTableSettings';
 import { DataTableRowPayloadImpl } from './gen/DataTableRowPayloadImpl';
 import { DataTableCellPayloadImpl } from './gen/DataTableCellPayloadImpl';
@@ -54,6 +58,24 @@ const pageId = (route.params.pageid as string) || '';
 class DataTableWidgetApi extends DataTableWidgetInterface {
     refresh(): void {
         update(datasourceId.value, datasourceId.value);
+    }
+
+    highlightRow(match: DataTableRowMatch | string, value?: unknown): void {
+        const row = rowMarkOf(match, value);
+        if (row) marks.value = { ...marks.value, row };
+    }
+
+    highlightColumn(column: DataTableColumnMatch): void {
+        if (isGiven(column)) marks.value = { ...marks.value, column };
+    }
+
+    highlightCell(row: DataTableRowMatch | string, column: DataTableColumnMatch, value?: unknown): void {
+        const where = rowMarkOf(row, value);
+        if (where && isGiven(column)) marks.value = { ...marks.value, cell: { row: where, column } };
+    }
+
+    clearHighlight(): void {
+        marks.value = {};
     }
 }
 const api = new DataTableWidgetApi();
@@ -213,6 +235,81 @@ const hidden = computed<Set<string>>(() => {
 const allColumns = computed<string[]>(() => Object.keys(rows.value[0] ?? {}))
 const columns = computed<string[]>(() => allColumns.value.filter((column) => !hidden.value.has(column)))
 
+/*
+ * The marks a rule has set (#1222).
+ *
+ * Runtime state, held here and nowhere else: a mark says what somebody on
+ * the board is pointing at right now, which is not something a saved board
+ * should remember. Each is kept as it was asked for - an index or a key -
+ * and resolved against the rows as they are, so a new answer is searched
+ * again rather than marking whatever now sits at the old place.
+ */
+type RowMark = { index: number } | { column: string; value: unknown };
+
+const marks = ref<{
+    row?: RowMark;
+    column?: DataTableColumnMatch;
+    cell?: { row: RowMark; column: DataTableColumnMatch };
+}>({});
+
+/* An argument a rule left empty arrives as undefined, or as '' from a typed field. */
+const isGiven = (value: unknown) => value !== undefined && value !== null && value !== '';
+
+/*
+ * The two forms of a row, from whatever a rule hands over: an object with a
+ * key, a key column followed by its value, or an index - typed into the
+ * rule dialog, an index is a string, and is read as a number.
+ */
+const rowMarkOf = (match: unknown, value?: unknown): RowMark | undefined => {
+    if (match && typeof match === 'object' && 'column' in match) {
+        const key = match as { column: unknown; value?: unknown };
+        return { column: String(key.column), value: key.value };
+    }
+    if (isGiven(value) && typeof match === 'string') return { column: match, value };
+    if (!isGiven(match)) return undefined;
+    const index = Number(match);
+    return Number.isInteger(index) && index >= 0 ? { index } : undefined;
+};
+
+/*
+ * Equal as the screen shows them: a value typed into a rule is a string,
+ * and the cell it is meant to find may hold the number.
+ */
+const sameValue = (left: unknown, right: unknown) =>
+    left === right || (isGiven(left) && isGiven(right) && String(left) === String(right));
+
+/** The records a row mark means, in the answer as it came. */
+const rowsMarkedBy = (mark: RowMark | undefined): Set<Record<string, unknown>> => {
+    if (!mark) return new Set();
+    if ('index' in mark) {
+        const row = rows.value[mark.index];
+        return new Set(row ? [row] : []);
+    }
+    return new Set(rows.value.filter((row) => sameValue(row[mark.column], mark.value)));
+};
+
+/*
+ * A column by name where the answer has one by that name, otherwise by its
+ * index among all columns - hidden ones counted, as columnIndex counts them.
+ */
+const columnMarkedBy = (mark: DataTableColumnMatch | undefined): string | undefined => {
+    if (!isGiven(mark)) return undefined;
+    const name = String(mark);
+    if (allColumns.value.includes(name)) return name;
+    const index = Number(mark);
+    return Number.isInteger(index) ? allColumns.value[index] : undefined;
+};
+
+const markedRows = computed(() => rowsMarkedBy(marks.value.row));
+const markedColumn = computed(() => columnMarkedBy(marks.value.column));
+const markedCellRows = computed(() => rowsMarkedBy(marks.value.cell?.row));
+const markedCellColumn = computed(() => columnMarkedBy(marks.value.cell?.column));
+
+/* A cell is marked when it is asked for, and where a marked row crosses a marked column. */
+const isMarkedCell = (row: Record<string, unknown>, column: string) =>
+    (markedCellColumn.value === column && markedCellRows.value.has(row)) ||
+    (markedColumn.value === column && markedRows.value.has(row));
+
 const showHeader = computed<boolean>(() => settings.value?.showHeader !== false)
 const sortable = computed<boolean>(() => settings.value?.sortable === true)
 const pageSize = computed<number>(() => Math.max(0, Math.floor(Number(settings.value?.pageSize) || 0)))
@@ -305,7 +402,7 @@ const lastShown = computed(() => Math.min((page.value + 1) * pageSize.value, ord
                         <th
                             v-for="column in columns"
                             :key="column"
-                            :class="{ sortable, sorted: sortedBy?.column === column }"
+                            :class="{ sortable, sorted: sortedBy?.column === column, marked_column: markedColumn === column }"
                             :aria-sort="
                                 sortedBy?.column === column
                                     ? sortedBy.descending
@@ -329,12 +426,14 @@ const lastShown = computed(() => Math.min((page.value + 1) * pageSize.value, ord
                     <tr
                         v-for="(row, rowIndex) in shownRows"
                         :key="rowIdOf(rowIndex)"
+                        :class="{ marked_row: markedRows.has(row) }"
                         @click="emitRowClick(row)"
                         @contextmenu.prevent="emitRowRightClick(row)"
                     >
                         <td
                             v-for="column in columns"
                             :key="column"
+                            :class="{ marked_column: markedColumn === column, marked_cell: isMarkedCell(row, column) }"
                             @click="emitCellClick(row, column)"
                             @contextmenu.prevent="emitCellRightClick(row, column)"
                         >
@@ -443,6 +542,26 @@ const lastShown = computed(() => Math.min((page.value + 1) * pageSize.value, ord
 
 .table tbody tr:hover {
     background: var(--color-raised);
+}
+
+/*
+ * What a rule marked. The row's colour sits on the row, the column's and
+ * the cell's on the cells, so the cell where both cross shows its own.
+ */
+.table tbody tr.marked_row {
+    background: var(--marked-row, color-mix(in srgb, var(--color-accent) 18%, transparent));
+}
+
+.table td.marked_column {
+    background: var(--marked-column, color-mix(in srgb, var(--color-accent) 12%, transparent));
+}
+
+.table th.marked_column {
+    box-shadow: inset 0 -2px 0 var(--color-accent);
+}
+
+.table td.marked_cell {
+    background: var(--marked-cell, color-mix(in srgb, var(--color-accent) 40%, transparent));
 }
 
 /* A column that cannot be sorted does not offer to be. */
