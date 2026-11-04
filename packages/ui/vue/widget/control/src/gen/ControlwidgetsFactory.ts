@@ -25,6 +25,10 @@ import { ButtonSettings } from './ButtonSettings.js';
 import { ButtonSettingsImpl } from './ButtonSettingsImpl.js';
 import { ToggleSettings } from './ToggleSettings.js';
 import { ToggleSettingsImpl } from './ToggleSettingsImpl.js';
+import { ControlOption } from './ControlOption.js';
+import { ControlOptionImpl } from './ControlOptionImpl.js';
+import { MultiStateSettings } from './MultiStateSettings.js';
+import { MultiStateSettingsImpl } from './MultiStateSettingsImpl.js';
 import { ControlPayload } from './ControlPayload.js';
 import { ControlPayloadImpl } from './ControlPayloadImpl.js';
 
@@ -63,6 +67,20 @@ export class ControlwidgetsFactory extends BasicEFactory {
   }
 
   /**
+   * Create a new ControlOption instance
+   */
+  createControlOption(): ControlOption {
+    return new ControlOptionImpl();
+  }
+
+  /**
+   * Create a new MultiStateSettings instance
+   */
+  createMultiStateSettings(): MultiStateSettings {
+    return new MultiStateSettingsImpl();
+  }
+
+  /**
    * Create a new ControlPayload instance
    */
   createControlPayload(): ControlPayload {
@@ -78,6 +96,10 @@ export class ControlwidgetsFactory extends BasicEFactory {
         return this.createButtonSettings();
       case 'ToggleSettings':
         return this.createToggleSettings();
+      case 'ControlOption':
+        return this.createControlOption();
+      case 'MultiStateSettings':
+        return this.createMultiStateSettings();
       case 'ControlPayload':
         return this.createControlPayload();
       default:
