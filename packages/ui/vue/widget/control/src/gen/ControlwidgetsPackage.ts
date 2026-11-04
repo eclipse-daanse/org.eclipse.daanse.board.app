@@ -21,6 +21,7 @@
 import { BasicEPackage, BasicEClass, BasicEAttribute, BasicEReference, EPackageRegistry, getEcorePackage, BasicEEnum, BasicEEnumLiteral, BasicEAnnotation } from '@emfts/core';
 import type { EClass, EAttribute, EReference, EEnum, EDataType } from '@emfts/core';
 import { ControlwidgetsFactory } from './ControlwidgetsFactory.js';
+import { LabelSide } from './LabelSide.js';
 import { SliderOrientation } from './SliderOrientation.js';
 
 /**
@@ -74,6 +75,7 @@ export class ControlwidgetsPackage extends BasicEPackage {
     TOGGLE_SETTINGS__OFF_VALUE: null as unknown as EAttribute | EReference,
     TOGGLE_SETTINGS__ON_LABEL: null as unknown as EAttribute | EReference,
     TOGGLE_SETTINGS__ON_COLOR: null as unknown as EAttribute | EReference,
+    TOGGLE_SETTINGS__LABEL_SIDE: null as unknown as EAttribute | EReference,
     CONTROL_OPTION: null as unknown as EClass,
     CONTROL_OPTION__LABEL: null as unknown as EAttribute | EReference,
     CONTROL_OPTION__VALUE: null as unknown as EAttribute | EReference,
@@ -107,6 +109,7 @@ export class ControlwidgetsPackage extends BasicEPackage {
     CONTROL_PAYLOAD: null as unknown as EClass,
     CONTROL_PAYLOAD__VALUE: null as unknown as EAttribute | EReference,
     CONTROL_PAYLOAD__PREVIOUS_VALUE: null as unknown as EAttribute | EReference,
+    LABEL_SIDE: null as unknown as EEnum,
     SLIDER_ORIENTATION: null as unknown as EEnum,
   };
 
@@ -262,6 +265,15 @@ export class ControlwidgetsPackage extends BasicEPackage {
     toggleSettings_onColor.setUpperBound(1);
     toggleSettingsClass.getEStructuralFeatures().push(toggleSettings_onColor);
     ControlwidgetsPackage.Literals.TOGGLE_SETTINGS__ON_COLOR = toggleSettings_onColor;
+
+    // Create labelSide feature
+    const toggleSettings_labelSide = new BasicEAttribute();
+    toggleSettings_labelSide.setName('labelSide');
+    toggleSettings_labelSide.setLowerBound(0);
+    toggleSettings_labelSide.setUpperBound(1);
+    toggleSettings_labelSide.setDefaultValueLiteral("right");
+    toggleSettingsClass.getEStructuralFeatures().push(toggleSettings_labelSide);
+    ControlwidgetsPackage.Literals.TOGGLE_SETTINGS__LABEL_SIDE = toggleSettings_labelSide;
 
     // Create ControlOption class
     const controlOptionClass = new BasicEClass();
@@ -558,6 +570,38 @@ export class ControlwidgetsPackage extends BasicEPackage {
     controlPayloadClass.getEStructuralFeatures().push(controlPayload_previousValue);
     ControlwidgetsPackage.Literals.CONTROL_PAYLOAD__PREVIOUS_VALUE = controlPayload_previousValue;
 
+    // Create LabelSide enum
+    const labelSideEnumType = new BasicEEnum();
+    labelSideEnumType.setName('LabelSide');
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("RIGHT");
+      literal.setValue(0);
+      literal.setLiteral("right");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(LabelSide.RIGHT);
+      labelSideEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("LEFT");
+      literal.setValue(1);
+      literal.setLiteral("left");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(LabelSide.LEFT);
+      labelSideEnumType.addLiteral(literal);
+    }
+    {
+      const annotation = new BasicEAnnotation();
+      annotation.setSource("http://www.eclipse.org/emf/2002/GenModel");
+      annotation.getDetails().putByKey("documentation", "Which side of a switch its label stands on.");
+      labelSideEnumType.getEAnnotations().push(annotation);
+    }
+    ControlwidgetsPackage.Literals.LABEL_SIDE = labelSideEnumType;
+    this.getEClassifiers().push(labelSideEnumType);
+
     // Create SliderOrientation enum
     const sliderOrientationEnumType = new BasicEEnum();
     sliderOrientationEnumType.setName('SliderOrientation');
@@ -618,6 +662,7 @@ export class ControlwidgetsPackage extends BasicEPackage {
     (ControlwidgetsPackage.Literals.TOGGLE_SETTINGS__OFF_VALUE as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
     (ControlwidgetsPackage.Literals.TOGGLE_SETTINGS__ON_LABEL as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
     (ControlwidgetsPackage.Literals.TOGGLE_SETTINGS__ON_COLOR as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
+    (ControlwidgetsPackage.Literals.TOGGLE_SETTINGS__LABEL_SIDE as BasicEAttribute).setEType(ControlwidgetsPackage.Literals.LABEL_SIDE);
     (ControlwidgetsPackage.Literals.CONTROL_OPTION__LABEL as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
     (ControlwidgetsPackage.Literals.CONTROL_OPTION__VALUE as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
     (ControlwidgetsPackage.Literals.CONTROL_OPTION__COLOR as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
