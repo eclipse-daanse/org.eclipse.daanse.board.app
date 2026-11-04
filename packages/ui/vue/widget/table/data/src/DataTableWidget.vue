@@ -41,6 +41,9 @@ import type { TinyEmitter } from 'tiny-emitter';
 import { EventActionsRegistry, EVENT_ACTIONS_REGISTRY } from 'org.eclipse.daanse.board.app.lib.api.events';
 import { DataTableWidgetInterface } from './api/DataTableWidgetInterface';
 import type { DataTableSettings } from './gen/DataTableSettings';
+import { DataTableRowPayloadImpl } from './gen/DataTableRowPayloadImpl';
+import { DataTableCellPayloadImpl } from './gen/DataTableCellPayloadImpl';
+import { DataTableColumnPayloadImpl } from './gen/DataTableColumnPayloadImpl';
 
 const eventBus = inject<TinyEmitter>(identifiers.TINY_EMITTER)!;
 const actionsRegistry = inject<EventActionsRegistry>(EVENT_ACTIONS_REGISTRY)!;
@@ -76,58 +79,78 @@ const emitRightClick = () => {
     });
 };
 
-const emitRowClick = (rowId: string) => {
-    if (!widgetId?.value) return;
-    eventBus.emit('widget:DataTableWidget:row_click', {
-        type: 'widget:DataTableWidget:row_click',
-        widgetId: widgetId.value,
-        payload: { widgetId: widgetId.value, timestamp: Date.now(), rowId }
-    });
+/*
+ * What a row, a cell or a header click hands on: the record and where it
+ * sits, as the modelled payloads declare them (#1221). A rule on a row
+ * click wants a value of that row, and an id it would have to look up
+ * again gave it none.
+ *
+ * Both indices count the answer as it came - see the model for why a sort
+ * or a hidden column moves neither.
+ */
+const rowPayload = (row: Record<string, unknown>) => {
+    const payload = new DataTableRowPayloadImpl();
+    payload.widgetId = widgetId!.value!;
+    payload.timestamp = Date.now();
+    payload.row = row;
+    payload.rowIndex = rows.value.indexOf(row);
+    return payload;
 };
 
-const emitRowRightClick = (rowId: string) => {
-    if (!widgetId?.value) return;
-    eventBus.emit('widget:DataTableWidget:row_right_click', {
-        type: 'widget:DataTableWidget:row_right_click',
-        widgetId: widgetId.value,
-        payload: { widgetId: widgetId.value, timestamp: Date.now(), rowId }
-    });
+const cellPayload = (row: Record<string, unknown>, column: string) => {
+    const payload = new DataTableCellPayloadImpl();
+    payload.widgetId = widgetId!.value!;
+    payload.timestamp = Date.now();
+    payload.row = row;
+    payload.rowIndex = rows.value.indexOf(row);
+    payload.column = column;
+    payload.columnIndex = allColumns.value.indexOf(column);
+    payload.value = row[column];
+    return payload;
 };
 
-const emitColumnClick = (colId: string) => {
-    if (!widgetId?.value) return;
-    eventBus.emit('widget:DataTableWidget:col_click', {
-        type: 'widget:DataTableWidget:col_click',
-        widgetId: widgetId.value,
-        payload: { widgetId: widgetId.value, timestamp: Date.now(), colId }
-    });
+const columnPayload = (column: string) => {
+    const payload = new DataTableColumnPayloadImpl();
+    payload.widgetId = widgetId!.value!;
+    payload.timestamp = Date.now();
+    payload.column = column;
+    payload.columnIndex = allColumns.value.indexOf(column);
+    return payload;
 };
 
-const emitColumnRightClick = (colId: string) => {
-    if (!widgetId?.value) return;
-    eventBus.emit('widget:DataTableWidget:col_right_click', {
-        type: 'widget:DataTableWidget:col_right_click',
-        widgetId: widgetId.value,
-        payload: { widgetId: widgetId.value, timestamp: Date.now(), colId }
-    });
+const emitWith = (event: string, payload: object) => {
+    const type = `widget:DataTableWidget:${event}`;
+    eventBus.emit(type, { type, widgetId: widgetId!.value, payload });
 };
 
-const emitCellClick = (rowId: string, colId: string) => {
+const emitRowClick = (row: Record<string, unknown>) => {
     if (!widgetId?.value) return;
-    eventBus.emit('widget:DataTableWidget:cell_click', {
-        type: 'widget:DataTableWidget:cell_click',
-        widgetId: widgetId.value,
-        payload: { widgetId: widgetId.value, timestamp: Date.now(), rowId, colId }
-    });
+    emitWith('row_click', rowPayload(row));
 };
 
-const emitCellRightClick = (rowId: string, colId: string) => {
+const emitRowRightClick = (row: Record<string, unknown>) => {
     if (!widgetId?.value) return;
-    eventBus.emit('widget:DataTableWidget:cell_right_click', {
-        type: 'widget:DataTableWidget:cell_right_click',
-        widgetId: widgetId.value,
-        payload: { widgetId: widgetId.value, timestamp: Date.now(), rowId, colId }
-    });
+    emitWith('row_right_click', rowPayload(row));
+};
+
+const emitColumnClick = (column: string) => {
+    if (!widgetId?.value) return;
+    emitWith('col_click', columnPayload(column));
+};
+
+const emitColumnRightClick = (column: string) => {
+    if (!widgetId?.value) return;
+    emitWith('col_right_click', columnPayload(column));
+};
+
+const emitCellClick = (row: Record<string, unknown>, column: string) => {
+    if (!widgetId?.value) return;
+    emitWith('cell_click', cellPayload(row, column));
+};
+
+const emitCellRightClick = (row: Record<string, unknown>, column: string) => {
+    if (!widgetId?.value) return;
+    emitWith('cell_right_click', cellPayload(row, column));
 };
 
 const data = ref(null as any);
@@ -266,7 +289,7 @@ const shownRows = computed<Record<string, unknown>[]>(() => {
     return ordered.value.slice(from, from + pageSize.value)
 })
 
-/** The row's place in the whole answer, which is what an event means by it. */
+/** The row's place in the shown order, which keeps a key stable across pages. */
 const rowIdOf = (indexOnPage: number) => String(page.value * pageSize.value + indexOnPage)
 
 const firstShown = computed(() => (ordered.value.length ? page.value * pageSize.value + 1 : 0))
@@ -306,14 +329,14 @@ const lastShown = computed(() => Math.min((page.value + 1) * pageSize.value, ord
                     <tr
                         v-for="(row, rowIndex) in shownRows"
                         :key="rowIdOf(rowIndex)"
-                        @click="emitRowClick(rowIdOf(rowIndex))"
-                        @contextmenu.prevent="emitRowRightClick(rowIdOf(rowIndex))"
+                        @click="emitRowClick(row)"
+                        @contextmenu.prevent="emitRowRightClick(row)"
                     >
                         <td
                             v-for="column in columns"
                             :key="column"
-                            @click="emitCellClick(rowIdOf(rowIndex), column)"
-                            @contextmenu.prevent="emitCellRightClick(rowIdOf(rowIndex), column)"
+                            @click="emitCellClick(row, column)"
+                            @contextmenu.prevent="emitCellRightClick(row, column)"
                         >
                             {{ row[column] }}
                         </td>

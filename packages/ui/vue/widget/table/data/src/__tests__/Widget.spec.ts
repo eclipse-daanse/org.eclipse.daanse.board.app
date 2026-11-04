@@ -12,6 +12,7 @@
  * ********************************************************************/
 
 // @vitest-environment jsdom
+import { EventsPackage } from 'org.eclipse.daanse.board.app.lib.api.events'
 import { describe, it, expect, vi } from 'vitest';
 import { DatatablesettingsPackage } from '../gen/DatatablesettingsPackage';
 import { EVENT_ACTIONS_REGISTRY } from 'org.eclipse.daanse.board.app.lib.api.events';
@@ -277,6 +278,9 @@ const widgetProvides = {
  * feature lookup on a settings object throws. src/index.ts does the
  * same when the bundle activates.
  */
+/* The payloads extend the events model's Payload, which has to be
+  registered before this package can point at it. */
+void EventsPackage.eINSTANCE
 void DatatablesettingsPackage.eINSTANCE;
 
 describe('Rendering tests for org.eclipse.daanse.board.app.ui.vue.widget.table.data', () => {
