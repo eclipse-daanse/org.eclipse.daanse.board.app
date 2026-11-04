@@ -64,6 +64,9 @@ export class DatatablesettingsPackage extends BasicEPackage {
     DATA_TABLE_SETTINGS__SORTABLE: null as unknown as EAttribute | EReference,
     DATA_TABLE_SETTINGS__PAGE_SIZE: null as unknown as EAttribute | EReference,
     DATA_TABLE_SETTINGS__HIDDEN_COLUMNS: null as unknown as EAttribute | EReference,
+    DATA_TABLE_SETTINGS__MARKED_ROW_COLOR: null as unknown as EAttribute | EReference,
+    DATA_TABLE_SETTINGS__MARKED_COLUMN_COLOR: null as unknown as EAttribute | EReference,
+    DATA_TABLE_SETTINGS__MARKED_CELL_COLOR: null as unknown as EAttribute | EReference,
     DATA_TABLE_ROW_PAYLOAD: null as unknown as EClass,
     DATA_TABLE_ROW_PAYLOAD__ROW: null as unknown as EAttribute | EReference,
     DATA_TABLE_ROW_PAYLOAD__ROW_INDEX: null as unknown as EAttribute | EReference,
@@ -147,6 +150,33 @@ export class DatatablesettingsPackage extends BasicEPackage {
     dataTableSettings_hiddenColumns.setUpperBound(-1);
     dataTableSettingsClass.getEStructuralFeatures().push(dataTableSettings_hiddenColumns);
     DatatablesettingsPackage.Literals.DATA_TABLE_SETTINGS__HIDDEN_COLUMNS = dataTableSettings_hiddenColumns;
+
+    // Create markedRowColor feature
+    const dataTableSettings_markedRowColor = new BasicEAttribute();
+    dataTableSettings_markedRowColor.setName('markedRowColor');
+    dataTableSettings_markedRowColor.setLowerBound(0);
+    dataTableSettings_markedRowColor.setUpperBound(1);
+    dataTableSettings_markedRowColor.setDefaultValueLiteral("color-mix(in srgb, var(--color-accent) 18%, transparent)");
+    dataTableSettingsClass.getEStructuralFeatures().push(dataTableSettings_markedRowColor);
+    DatatablesettingsPackage.Literals.DATA_TABLE_SETTINGS__MARKED_ROW_COLOR = dataTableSettings_markedRowColor;
+
+    // Create markedColumnColor feature
+    const dataTableSettings_markedColumnColor = new BasicEAttribute();
+    dataTableSettings_markedColumnColor.setName('markedColumnColor');
+    dataTableSettings_markedColumnColor.setLowerBound(0);
+    dataTableSettings_markedColumnColor.setUpperBound(1);
+    dataTableSettings_markedColumnColor.setDefaultValueLiteral("color-mix(in srgb, var(--color-accent) 12%, transparent)");
+    dataTableSettingsClass.getEStructuralFeatures().push(dataTableSettings_markedColumnColor);
+    DatatablesettingsPackage.Literals.DATA_TABLE_SETTINGS__MARKED_COLUMN_COLOR = dataTableSettings_markedColumnColor;
+
+    // Create markedCellColor feature
+    const dataTableSettings_markedCellColor = new BasicEAttribute();
+    dataTableSettings_markedCellColor.setName('markedCellColor');
+    dataTableSettings_markedCellColor.setLowerBound(0);
+    dataTableSettings_markedCellColor.setUpperBound(1);
+    dataTableSettings_markedCellColor.setDefaultValueLiteral("color-mix(in srgb, var(--color-accent) 40%, transparent)");
+    dataTableSettingsClass.getEStructuralFeatures().push(dataTableSettings_markedCellColor);
+    DatatablesettingsPackage.Literals.DATA_TABLE_SETTINGS__MARKED_CELL_COLOR = dataTableSettings_markedCellColor;
 
     // Create DataTableRowPayload class
     const dataTableRowPayloadClass = new BasicEClass();
@@ -261,6 +291,9 @@ export class DatatablesettingsPackage extends BasicEPackage {
     (DatatablesettingsPackage.Literals.DATA_TABLE_SETTINGS__SORTABLE as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EBoolean')!);
     (DatatablesettingsPackage.Literals.DATA_TABLE_SETTINGS__PAGE_SIZE as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EInt')!);
     (DatatablesettingsPackage.Literals.DATA_TABLE_SETTINGS__HIDDEN_COLUMNS as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (DatatablesettingsPackage.Literals.DATA_TABLE_SETTINGS__MARKED_ROW_COLOR as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (DatatablesettingsPackage.Literals.DATA_TABLE_SETTINGS__MARKED_COLUMN_COLOR as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (DatatablesettingsPackage.Literals.DATA_TABLE_SETTINGS__MARKED_CELL_COLOR as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
     (DatatablesettingsPackage.Literals.DATA_TABLE_ROW_PAYLOAD__ROW as BasicEAttribute).setEType(DatatablesettingsPackage.Literals.RECORD);
     (DatatablesettingsPackage.Literals.DATA_TABLE_ROW_PAYLOAD__ROW_INDEX as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EInt')!);
     (DatatablesettingsPackage.Literals.DATA_TABLE_CELL_PAYLOAD__COLUMN as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
