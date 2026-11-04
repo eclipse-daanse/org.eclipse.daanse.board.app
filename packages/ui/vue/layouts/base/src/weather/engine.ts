@@ -17,13 +17,14 @@
  * No Vue and no DOM in here. The layer measures the widgets and owns the
  * canvases; this is handed the rectangles and a time step and draws onto
  * whatever 2D contexts it is given. That is what lets the behaviour that
- * matters - a drop bursting on an edge - be tested without a browser.
+ * matters - a flake stopping on an edge, a drop bursting on one, snow
+ * falling off a widget that moved - be tested without a browser.
  *
  * Everything is in board coordinates: a widget's rectangle as the board
  * lays it out, independent of how far the board is scrolled. The viewport
  * says which part of the board is on screen; particles are made above it
  * and dropped below it, and drawing shifts by it. Scrolling therefore
- * moves nothing.
+ * moves nothing and shakes no snow off.
  */
 import { WeatherKind } from 'org.eclipse.daanse.board.app.lib.model.workspace'
 
@@ -62,6 +63,12 @@ export const LIMITS = {
   particles: 600,
   /** Splashes alive at once. */
   splashes: 160,
+  /** Width of one column of a snow profile, in pixels. */
+  bin: 4,
+  /** The deepest snow can lie on a widget, in pixels. */
+  depth: 12,
+  /** Of a widget's height, at most this much may be snow. */
+  depthShare: 0.2,
   /** A step longer than this is a tab coming back, not a frame. */
   step: 0.05,
 } as const
@@ -104,9 +111,16 @@ interface Splash {
   life: number
 }
 
+/** The snow lying on one widget: a height per column across its top edge. */
+export interface Profile {
+  rect: Obstacle
+  heights: Float32Array
+}
+
 export class WeatherEngine {
   readonly particles: Particle[] = []
   readonly splashes: Splash[] = []
+  readonly profiles = new Map<string, Profile>()
   /** How many particles have been made - what a rate is measured by. */
   spawned = 0
 
@@ -129,15 +143,46 @@ export class WeatherEngine {
     this.viewport = { x, y, width, height }
   }
 
-  /** The widgets, as they now stand. */
+  /**
+   * The widgets, as they now stand.
+   *
+   * A widget that moved, changed width or went away loses its snow: what
+   * lay on it falls as flakes from where its top edge was. One that only
+   * grew taller keeps it - its top did not move.
+   */
   setObstacles(next: Obstacle[]): void {
+    const seen = new Set<string>()
+    for (const rect of next) {
+      seen.add(rect.id)
+      const held = this.profiles.get(rect.id)
+      if (!held) {
+        this.profiles.set(rect.id, newProfile(rect))
+        continue
+      }
+      const moved =
+        Math.abs(held.rect.x - rect.x) > 0.5 ||
+        Math.abs(held.rect.y - rect.y) > 0.5 ||
+        Math.abs(held.rect.width - rect.width) > 0.5
+      if (moved) {
+        this.shakeOff(held)
+        this.profiles.set(rect.id, newProfile(rect))
+      } else {
+        held.rect = rect
+      }
+    }
+    for (const [id, held] of this.profiles) {
+      if (seen.has(id)) continue
+      this.shakeOff(held)
+      this.profiles.delete(id)
+    }
     this.obstacles = next
   }
 
-  /** Forgets every particle - a fresh start. */
+  /** Forgets every particle and all settled snow - a fresh start. */
   reset(): void {
     this.particles.length = 0
     this.splashes.length = 0
+    for (const profile of this.profiles.values()) profile.heights.fill(0)
     this.carry = 0
     this.filled = false
   }
@@ -169,6 +214,7 @@ export class WeatherEngine {
 
     this.move(t, settings)
     this.moveSplashes(t)
+    if (settings.kind !== WeatherKind.SNOW) this.melt(t)
   }
 
   /** Draws the current state; either surface may be missing. */
@@ -183,6 +229,7 @@ export class WeatherEngine {
     if (front) {
       this.drawFalling(front, color, false, ox, oy, settings)
       this.drawSplashes(front, color, ox, oy)
+      this.drawProfiles(front, ox, oy)
     }
   }
 
@@ -231,6 +278,28 @@ export class WeatherEngine {
     this.spawned++
   }
 
+  /** Lets the snow on a widget fall, from where the widget's top edge was. */
+  private shakeOff(profile: Profile): void {
+    const { rect, heights } = profile
+    for (let i = 0; i < heights.length; i++) {
+      if (heights[i] < 1) continue
+      if (this.particles.length >= LIMITS.particles) break
+      /* One flake for every few pixels of depth - a token, not the volume */
+      for (let n = 0; n < Math.ceil(heights[i] / 4); n++) {
+        const x = rect.x + (i + this.random()) * LIMITS.bin
+        const y = rect.y - this.random() * heights[i]
+        this.particles.push({
+          x, y, px: x, py: y,
+          vx: (this.random() - 0.5) * 20,
+          vy: 30 + this.random() * 40,
+          size: 1.4 + this.random() * 1.2,
+          far: false,
+          phase: this.random() * Math.PI * 2,
+        })
+      }
+    }
+  }
+
   /* ------------------------------------------------------------ moving */
 
   private move(t: number, settings: WeatherLayerSettings): void {
@@ -258,23 +327,35 @@ export class WeatherEngine {
   /**
    * Whether a falling particle ends here, and what it leaves.
    *
-   * It ends where it crosses a widget's top edge between its last
-   * position and this one. A particle
+   * It ends where it crosses a widget's top edge - or the snow already
+   * lying there - between its last position and this one. A particle
    * that drifted into a widget from the side ends too, unseen: it is
    * behind the widget as far as anyone looking is concerned.
    */
   private meets(p: Particle, snow: boolean): boolean {
     for (const rect of this.obstacles) {
       if (p.x < rect.x || p.x >= rect.x + rect.width) continue
-      const surface = rect.y
+      const profile = this.profiles.get(rect.id)
+      const bin = profile ? Math.min(profile.heights.length - 1, Math.floor((p.x - rect.x) / LIMITS.bin)) : -1
+      const lying = profile && bin >= 0 ? profile.heights[bin] : 0
+      const surface = rect.y - lying
 
       if (p.py <= surface && p.y >= surface) {
-        if (!snow) this.splash(p.x, surface, p.vx)
+        if (snow && profile) this.settle(profile, bin, p.size)
+        else if (!snow) this.splash(p.x, surface, p.vx)
         return true
       }
       if (p.y > surface && p.y < rect.y + rect.height) return true
     }
     return false
+  }
+
+  /** A flake adds to the snow where it landed, a little to either side as well. */
+  private settle(profile: Profile, bin: number, size: number): void {
+    const amount = size * 0.5
+    add(profile, bin, amount)
+    add(profile, bin - 1, amount * 0.5)
+    add(profile, bin + 1, amount * 0.5)
   }
 
   /** A drop bursts into a few splashes that jump up and fall back. */
@@ -307,6 +388,14 @@ export class WeatherEngine {
       this.splashes[kept++] = s
     }
     this.splashes.length = kept
+  }
+
+  /** Snow left over from a change of weather thaws away. */
+  private melt(t: number): void {
+    for (const profile of this.profiles.values()) {
+      const h = profile.heights
+      for (let i = 0; i < h.length; i++) if (h[i] > 0) h[i] = Math.max(0, h[i] - 1.5 * t)
+    }
   }
 
   /* ------------------------------------------------------------ drawing */
@@ -356,6 +445,61 @@ export class WeatherEngine {
     ctx.globalAlpha = 1
   }
 
+  /** The snow on each widget, as one shape per widget along its top edge. */
+  private drawProfiles(ctx: CanvasRenderingContext2D, ox: number, oy: number): void {
+    ctx.fillStyle = 'rgb(255, 255, 255)'
+    ctx.shadowColor = 'rgba(0, 0, 0, 0.18)'
+    ctx.shadowBlur = 3
+    ctx.shadowOffsetY = 1
+    for (const { rect, heights } of this.profiles.values()) {
+      let any = false
+      for (let i = 0; i < heights.length; i++) if (heights[i] >= 0.3) { any = true; break }
+      if (!any) continue
+      const top = rect.y - oy
+      const left = rect.x - ox
+      /* Through the middle of each pair of columns, so the heap reads as soft */
+      ctx.beginPath()
+      ctx.moveTo(left, top)
+      let px = left
+      let py = top - heights[0]
+      ctx.lineTo(px, py)
+      for (let i = 1; i < heights.length; i++) {
+        const x = left + Math.min(i * LIMITS.bin, rect.width)
+        const y = top - heights[i]
+        ctx.quadraticCurveTo(px, py, (px + x) / 2, (py + y) / 2)
+        px = x
+        py = y
+      }
+      ctx.lineTo(left + rect.width, py)
+      ctx.lineTo(left + rect.width, top)
+      ctx.closePath()
+      ctx.fill()
+    }
+    ctx.shadowColor = 'transparent'
+    ctx.shadowBlur = 0
+    ctx.shadowOffsetY = 0
+  }
+}
+
+function newProfile(rect: Obstacle): Profile {
+  return { rect, heights: new Float32Array(Math.max(1, Math.ceil(rect.width / LIMITS.bin))) }
+}
+
+/**
+ * How deep snow may lie in one column: the cap, less towards the corners
+ * so a heap rounds off instead of standing in a block, and never more
+ * than a share of a short widget's height.
+ */
+export function depthAt(profile: Profile, bin: number): number {
+  const n = profile.heights.length
+  const fromEdge = Math.min(bin, n - 1 - bin)
+  const corner = Math.min(1, (fromEdge + 1) / 3)
+  return Math.min(LIMITS.depth, profile.rect.height * LIMITS.depthShare) * corner
+}
+
+function add(profile: Profile, bin: number, amount: number): void {
+  if (bin < 0 || bin >= profile.heights.length) return
+  profile.heights[bin] = Math.min(depthAt(profile, bin), profile.heights[bin] + amount)
 }
 
 function clamp(value: number, min: number, max: number): number {
