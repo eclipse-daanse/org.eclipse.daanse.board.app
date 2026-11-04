@@ -328,6 +328,11 @@ export function useWorkspaceFile() {
           wrapperConfig: widget.wrapperConfig,
         })),
       )
+      /*
+       * The page's own modelled settings - its weather - hold their
+       * wrappers by containment and came back as the generated class.
+       */
+      variableWrappers?.bindContainedWrappers(page as never)
       opened.push(page.id as string)
     }
     return opened
