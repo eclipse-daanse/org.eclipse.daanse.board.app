@@ -25,6 +25,7 @@ import type { Layer } from './Layer.js';
 import type { DSRenderer } from './DSRenderer.js';
 import type { Renderer } from './Renderer.js';
 import type { Service } from './Service.js';
+import { RoadOverlay } from './RoadOverlay.js';
 import type { MapSettings } from './MapSettings.js';
 import { MapSettingsPackage } from './MapSettingsPackage.js';
 
@@ -49,6 +50,11 @@ export class MapSettingsImpl extends BasicEObject implements MapSettings {
   static readonly SELECTION_HIGHLIGHT_COLOR: number = 12;
   static readonly SELECTED_THING_ID: number = 13;
   static readonly CLUSTER_GLOBAL: number = 14;
+  static readonly OVERLAY: number = 15;
+  static readonly OVERLAY_URL: number = 16;
+  static readonly OVERLAY_API_KEY: number = 17;
+  static readonly OVERLAY_OPACITY: number = 18;
+  static readonly OVERLAY_INVERT_DARK: number = 19;
 
   // Private fields
   private _datasourceId?: string;
@@ -66,6 +72,11 @@ export class MapSettingsImpl extends BasicEObject implements MapSettings {
   private _selectionHighlightColor: string = "#ff0000";
   private _selectedThingId?: string;
   private _clusterGlobal: boolean = false;
+  private _overlay: RoadOverlay = RoadOverlay.none;
+  private _overlayUrl: string = "";
+  private _overlayApiKey: string = "";
+  private _overlayOpacity: number = 1;
+  private _overlayInvertDark: boolean = false;
 
   /**
    * Returns the EClass of this object
@@ -333,6 +344,126 @@ export class MapSettingsImpl extends BasicEObject implements MapSettings {
     }
   }
 
+  get overlay(): RoadOverlay {
+    return this._overlay!;
+  }
+
+  set overlay(value: RoadOverlay) {
+    const oldValue = this._overlay;
+    this._overlay = value;
+    if (this.eDeliver()) {
+      this.eNotify({
+        getNotifier: () => this,
+        getEventType: () => 1, // SET
+        getFeature: () => this.eClass().getEStructuralFeature(MapSettingsImpl.OVERLAY),
+        getOldValue: () => oldValue,
+        getNewValue: () => value,
+        getPosition: () => -1,
+        wasSet: () => true,
+        isTouch: () => false,
+        isReset: () => false,
+        getFeatureID: () => MapSettingsImpl.OVERLAY,
+        merge: () => false
+      });
+    }
+  }
+
+  get overlayUrl(): string {
+    return this._overlayUrl!;
+  }
+
+  set overlayUrl(value: string) {
+    const oldValue = this._overlayUrl;
+    this._overlayUrl = value;
+    if (this.eDeliver()) {
+      this.eNotify({
+        getNotifier: () => this,
+        getEventType: () => 1, // SET
+        getFeature: () => this.eClass().getEStructuralFeature(MapSettingsImpl.OVERLAY_URL),
+        getOldValue: () => oldValue,
+        getNewValue: () => value,
+        getPosition: () => -1,
+        wasSet: () => true,
+        isTouch: () => false,
+        isReset: () => false,
+        getFeatureID: () => MapSettingsImpl.OVERLAY_URL,
+        merge: () => false
+      });
+    }
+  }
+
+  get overlayApiKey(): string {
+    return this._overlayApiKey!;
+  }
+
+  set overlayApiKey(value: string) {
+    const oldValue = this._overlayApiKey;
+    this._overlayApiKey = value;
+    if (this.eDeliver()) {
+      this.eNotify({
+        getNotifier: () => this,
+        getEventType: () => 1, // SET
+        getFeature: () => this.eClass().getEStructuralFeature(MapSettingsImpl.OVERLAY_API_KEY),
+        getOldValue: () => oldValue,
+        getNewValue: () => value,
+        getPosition: () => -1,
+        wasSet: () => true,
+        isTouch: () => false,
+        isReset: () => false,
+        getFeatureID: () => MapSettingsImpl.OVERLAY_API_KEY,
+        merge: () => false
+      });
+    }
+  }
+
+  get overlayOpacity(): number {
+    return this._overlayOpacity!;
+  }
+
+  set overlayOpacity(value: number) {
+    const oldValue = this._overlayOpacity;
+    this._overlayOpacity = value;
+    if (this.eDeliver()) {
+      this.eNotify({
+        getNotifier: () => this,
+        getEventType: () => 1, // SET
+        getFeature: () => this.eClass().getEStructuralFeature(MapSettingsImpl.OVERLAY_OPACITY),
+        getOldValue: () => oldValue,
+        getNewValue: () => value,
+        getPosition: () => -1,
+        wasSet: () => true,
+        isTouch: () => false,
+        isReset: () => false,
+        getFeatureID: () => MapSettingsImpl.OVERLAY_OPACITY,
+        merge: () => false
+      });
+    }
+  }
+
+  get overlayInvertDark(): boolean {
+    return this._overlayInvertDark!;
+  }
+
+  set overlayInvertDark(value: boolean) {
+    const oldValue = this._overlayInvertDark;
+    this._overlayInvertDark = value;
+    if (this.eDeliver()) {
+      this.eNotify({
+        getNotifier: () => this,
+        getEventType: () => 1, // SET
+        getFeature: () => this.eClass().getEStructuralFeature(MapSettingsImpl.OVERLAY_INVERT_DARK),
+        getOldValue: () => oldValue,
+        getNewValue: () => value,
+        getPosition: () => -1,
+        wasSet: () => true,
+        isTouch: () => false,
+        isReset: () => false,
+        getFeatureID: () => MapSettingsImpl.OVERLAY_INVERT_DARK,
+        merge: () => false
+      });
+    }
+  }
+
   // Reflective API
 
   /**
@@ -371,6 +502,16 @@ export class MapSettingsImpl extends BasicEObject implements MapSettings {
         return this.selectedThingId;
       case MapSettingsImpl.CLUSTER_GLOBAL:
         return this.clusterGlobal;
+      case MapSettingsImpl.OVERLAY:
+        return this.overlay;
+      case MapSettingsImpl.OVERLAY_URL:
+        return this.overlayUrl;
+      case MapSettingsImpl.OVERLAY_API_KEY:
+        return this.overlayApiKey;
+      case MapSettingsImpl.OVERLAY_OPACITY:
+        return this.overlayOpacity;
+      case MapSettingsImpl.OVERLAY_INVERT_DARK:
+        return this.overlayInvertDark;
       default:
         return super.eGet(feature);
     }
@@ -448,6 +589,26 @@ export class MapSettingsImpl extends BasicEObject implements MapSettings {
         this.clusterGlobal = newValue as boolean;
         super.eSet(feature, newValue);
         break;
+      case MapSettingsImpl.OVERLAY:
+        this.overlay = newValue as RoadOverlay;
+        super.eSet(feature, newValue);
+        break;
+      case MapSettingsImpl.OVERLAY_URL:
+        this.overlayUrl = newValue as string;
+        super.eSet(feature, newValue);
+        break;
+      case MapSettingsImpl.OVERLAY_API_KEY:
+        this.overlayApiKey = newValue as string;
+        super.eSet(feature, newValue);
+        break;
+      case MapSettingsImpl.OVERLAY_OPACITY:
+        this.overlayOpacity = newValue as number;
+        super.eSet(feature, newValue);
+        break;
+      case MapSettingsImpl.OVERLAY_INVERT_DARK:
+        this.overlayInvertDark = newValue as boolean;
+        super.eSet(feature, newValue);
+        break;
       default:
         super.eSet(feature, newValue);
     }
@@ -489,6 +650,16 @@ export class MapSettingsImpl extends BasicEObject implements MapSettings {
         return this._selectedThingId !== undefined;
       case MapSettingsImpl.CLUSTER_GLOBAL:
         return this._clusterGlobal !== false;
+      case MapSettingsImpl.OVERLAY:
+        return this._overlay !== RoadOverlay.none;
+      case MapSettingsImpl.OVERLAY_URL:
+        return this._overlayUrl !== "";
+      case MapSettingsImpl.OVERLAY_API_KEY:
+        return this._overlayApiKey !== "";
+      case MapSettingsImpl.OVERLAY_OPACITY:
+        return this._overlayOpacity !== 1;
+      case MapSettingsImpl.OVERLAY_INVERT_DARK:
+        return this._overlayInvertDark !== false;
       default:
         return super.eIsSet(feature);
     }
@@ -545,6 +716,21 @@ export class MapSettingsImpl extends BasicEObject implements MapSettings {
       case MapSettingsImpl.CLUSTER_GLOBAL:
         this._clusterGlobal = false;
         return;
+      case MapSettingsImpl.OVERLAY:
+        this._overlay = RoadOverlay.none;
+        return;
+      case MapSettingsImpl.OVERLAY_URL:
+        this._overlayUrl = "";
+        return;
+      case MapSettingsImpl.OVERLAY_API_KEY:
+        this._overlayApiKey = "";
+        return;
+      case MapSettingsImpl.OVERLAY_OPACITY:
+        this._overlayOpacity = 1;
+        return;
+      case MapSettingsImpl.OVERLAY_INVERT_DARK:
+        this._overlayInvertDark = false;
+        return;
       default:
         super.eUnset(feature);
     }
@@ -575,6 +761,11 @@ export class MapSettingsImpl extends BasicEObject implements MapSettings {
       selectionHighlightColor: this.selectionHighlightColor,
       selectedThingId: this.selectedThingId,
       clusterGlobal: this.clusterGlobal,
+      overlay: this.overlay,
+      overlayUrl: this.overlayUrl,
+      overlayApiKey: this.overlayApiKey,
+      overlayOpacity: this.overlayOpacity,
+      overlayInvertDark: this.overlayInvertDark,
     };
   }
 }
