@@ -23,6 +23,7 @@ import type { Layer } from './Layer.js';
 import type { DSRenderer } from './DSRenderer.js';
 import type { Renderer } from './Renderer.js';
 import type { Service } from './Service.js';
+import type { RoadOverlay } from './RoadOverlay.js';
 
 /**
  * MapSettings
@@ -44,5 +45,10 @@ export interface MapSettings extends EObject {
   selectionHighlightColor?: string;
   selectedThingId?: string;
   clusterGlobal?: boolean;
+  overlay?: RoadOverlay;
+  overlayUrl?: string;
+  overlayApiKey?: string;
+  overlayOpacity?: number;
+  overlayInvertDark?: boolean;
 
 }
