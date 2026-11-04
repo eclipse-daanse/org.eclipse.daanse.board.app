@@ -3,7 +3,8 @@
     "button": "Button",
     "toggle": "Toggle button",
     "multiState": "Multi-state button",
-    "slider": "Slider"
+    "slider": "Slider",
+    "buttonGroup": "Button group"
   },
   "Form": {
     "labelGroup": "Label",
@@ -40,7 +41,15 @@
     "upperTarget": "Upper thumb writes into variable",
     "showValue": "Show the value",
     "orientation": "Orientation",
-    "valueTextColor": "Text colour of the value"
+    "valueTextColor": "Text colour of the value",
+    "optionsGroup": "Options",
+    "options": "Fixed options",
+    "optionsPath": "List in the source’s answer",
+    "optionLabel": "Field shown as the label",
+    "optionValue": "Field written as the value",
+    "chooseGroup": "Choice",
+    "multiple": "Several can be chosen",
+    "chosenTextColor": "Text colour of the chosen"
   },
   "Action": {
     "value": "Value",
