@@ -18,9 +18,11 @@
  * @generated
  */
 
-import { BasicEPackage, BasicEClass, BasicEAttribute, BasicEReference, EPackageRegistry, getEcorePackage } from '@emfts/core';
-import type { EClass, EAttribute, EReference } from '@emfts/core';
+import { BasicEPackage, BasicEClass, BasicEAttribute, BasicEReference, EPackageRegistry, getEcorePackage, BasicEEnum, BasicEEnumLiteral, BasicEAnnotation } from '@emfts/core';
+import type { EClass, EAttribute, EReference, EEnum, EDataType } from '@emfts/core';
 import { MapSettingsFactory } from './MapSettingsFactory.js';
+import { ERefType } from './ERefType.js';
+import { Comperator } from './Comperator.js';
 
 /**
  * Resolve a dependency package from the registry, failing with an actionable
@@ -192,6 +194,8 @@ export class MapSettingsPackage extends BasicEPackage {
     LOCATION_CLICK_PAYLOAD__NAME: null as unknown as EAttribute | EReference,
     LOCATION_CLICK_PAYLOAD__GEOMETRY: null as unknown as EAttribute | EReference,
     LOCATION_CLICK_PAYLOAD__THING_IDS: null as unknown as EAttribute | EReference,
+    E_REF_TYPE: null as unknown as EEnum,
+    COMPERATOR: null as unknown as EEnum,
   };
 
   private constructor() {
@@ -243,6 +247,7 @@ export class MapSettingsPackage extends BasicEPackage {
     mapSettings_datasourceIds.setName('datasourceIds');
     mapSettings_datasourceIds.setLowerBound(0);
     mapSettings_datasourceIds.setUpperBound(-1);
+    mapSettings_datasourceIds.setDefaultValueLiteral("[]");
     mapSettingsClass.getEStructuralFeatures().push(mapSettings_datasourceIds);
     MapSettingsPackage.Literals.MAP_SETTINGS__DATASOURCE_IDS = mapSettings_datasourceIds;
 
@@ -251,6 +256,7 @@ export class MapSettingsPackage extends BasicEPackage {
     mapSettings_baseMapUrl.setName('baseMapUrl');
     mapSettings_baseMapUrl.setLowerBound(0);
     mapSettings_baseMapUrl.setUpperBound(1);
+    mapSettings_baseMapUrl.setDefaultValueLiteral("https://tile.openstreetmap.org/{z}/{x}/{y}.png");
     mapSettingsClass.getEStructuralFeatures().push(mapSettings_baseMapUrl);
     MapSettingsPackage.Literals.MAP_SETTINGS__BASE_MAP_URL = mapSettings_baseMapUrl;
 
@@ -259,6 +265,7 @@ export class MapSettingsPackage extends BasicEPackage {
     mapSettings_zoom.setName('zoom');
     mapSettings_zoom.setLowerBound(0);
     mapSettings_zoom.setUpperBound(1);
+    mapSettings_zoom.setDefaultValueLiteral("14");
     mapSettingsClass.getEStructuralFeatures().push(mapSettings_zoom);
     MapSettingsPackage.Literals.MAP_SETTINGS__ZOOM = mapSettings_zoom;
 
@@ -267,6 +274,7 @@ export class MapSettingsPackage extends BasicEPackage {
     mapSettings_center.setName('center');
     mapSettings_center.setLowerBound(0);
     mapSettings_center.setUpperBound(-1);
+    mapSettings_center.setDefaultValueLiteral("[50.93115286, 11.60392726]");
     mapSettingsClass.getEStructuralFeatures().push(mapSettings_center);
     MapSettingsPackage.Literals.MAP_SETTINGS__CENTER = mapSettings_center;
 
@@ -275,6 +283,7 @@ export class MapSettingsPackage extends BasicEPackage {
     mapSettings_attribution.setName('attribution');
     mapSettings_attribution.setLowerBound(0);
     mapSettings_attribution.setUpperBound(1);
+    mapSettings_attribution.setDefaultValueLiteral("&copy; <a href='https://www.openstreetmap.org/copyright' target='_blank'>OpenStreetMap</a> contributors");
     mapSettingsClass.getEStructuralFeatures().push(mapSettings_attribution);
     MapSettingsPackage.Literals.MAP_SETTINGS__ATTRIBUTION = mapSettings_attribution;
 
@@ -335,6 +344,7 @@ export class MapSettingsPackage extends BasicEPackage {
     mapSettings_selectionHighlightColor.setName('selectionHighlightColor');
     mapSettings_selectionHighlightColor.setLowerBound(0);
     mapSettings_selectionHighlightColor.setUpperBound(1);
+    mapSettings_selectionHighlightColor.setDefaultValueLiteral("#ff0000");
     mapSettingsClass.getEStructuralFeatures().push(mapSettings_selectionHighlightColor);
     MapSettingsPackage.Literals.MAP_SETTINGS__SELECTION_HIGHLIGHT_COLOR = mapSettings_selectionHighlightColor;
 
@@ -1321,6 +1331,110 @@ export class MapSettingsPackage extends BasicEPackage {
     locationClickPayloadClass.getEStructuralFeatures().push(locationClickPayload_thingIds);
     MapSettingsPackage.Literals.LOCATION_CLICK_PAYLOAD__THING_IDS = locationClickPayload_thingIds;
 
+    // Create ERefType enum
+    const eRefTypeEnumType = new BasicEEnum();
+    eRefTypeEnumType.setName('ERefType');
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("Thing");
+      literal.setValue(0);
+      literal.setLiteral("Thing");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(ERefType.Thing);
+      eRefTypeEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("OberservedArea");
+      literal.setValue(1);
+      literal.setLiteral("OberservedArea");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(ERefType.OberservedArea);
+      eRefTypeEnumType.addLiteral(literal);
+    }
+    {
+      const annotation = new BasicEAnnotation();
+      annotation.setSource("http://www.eclipse.org/emf/2002/GenModel");
+      annotation.getDetails().putByKey("documentation", "Enumeration for different types of references or placements.");
+      eRefTypeEnumType.getEAnnotations().push(annotation);
+    }
+    MapSettingsPackage.Literals.E_REF_TYPE = eRefTypeEnumType;
+    this.getEClassifiers().push(eRefTypeEnumType);
+
+    // Create Comperator enum
+    const comperatorEnumType = new BasicEEnum();
+    comperatorEnumType.setName('Comperator');
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("eq");
+      literal.setValue(0);
+      literal.setLiteral("eq");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(Comperator.eq);
+      comperatorEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("lt");
+      literal.setValue(1);
+      literal.setLiteral("lt");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(Comperator.lt);
+      comperatorEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("gt");
+      literal.setValue(2);
+      literal.setLiteral("gt");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(Comperator.gt);
+      comperatorEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("lte");
+      literal.setValue(3);
+      literal.setLiteral("lte");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(Comperator.lte);
+      comperatorEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("gte");
+      literal.setValue(4);
+      literal.setLiteral("gte");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(Comperator.gte);
+      comperatorEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("neq");
+      literal.setValue(5);
+      literal.setLiteral("neq");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(Comperator.neq);
+      comperatorEnumType.addLiteral(literal);
+    }
+    {
+      const annotation = new BasicEAnnotation();
+      annotation.setSource("http://www.eclipse.org/emf/2002/GenModel");
+      annotation.getDetails().putByKey("documentation", "Enumeration for comparison operators used in conditions.");
+      comperatorEnumType.getEAnnotations().push(annotation);
+    }
+    MapSettingsPackage.Literals.COMPERATOR = comperatorEnumType;
+    this.getEClassifiers().push(comperatorEnumType);
+
 
     // ============================================
     // Set ESuperTypes (must be done after all classes are created)
@@ -1398,11 +1512,14 @@ export class MapSettingsPackage extends BasicEPackage {
     (MapSettingsPackage.Literals.D_S_RENDERER__OBSERVATIONS as BasicEReference).setEType(MapSettingsPackage.Literals.OBSERVATION);
     (MapSettingsPackage.Literals.D_S_RENDERER__RENDERER as BasicEReference).setEType(MapSettingsPackage.Literals.POINT_AND_AREA_SETTINGS);
     (MapSettingsPackage.Literals.D_S_RENDERER__ID as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (MapSettingsPackage.Literals.D_S_RENDERER__PLACEMENT as BasicEAttribute).setEType(MapSettingsPackage.Literals.E_REF_TYPE);
+    (MapSettingsPackage.Literals.PLACEMENT__PLACEMENT as BasicEAttribute).setEType(MapSettingsPackage.Literals.E_REF_TYPE);
     (MapSettingsPackage.Literals.OBSERVATION__SETTING as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EJavaObject')!);
     (MapSettingsPackage.Literals.OBSERVATION__COMPONENT as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
     (MapSettingsPackage.Literals.OBSERVATION__RENDERER as BasicEReference).setEType(MapSettingsPackage.Literals.POINT_AND_AREA_SETTINGS);
     (MapSettingsPackage.Literals.OBSERVATION__CONDITIONS as BasicEReference).setEType(MapSettingsPackage.Literals.CONDITION);
     (MapSettingsPackage.Literals.CONDITION__PROP as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (MapSettingsPackage.Literals.CONDITION__COMPERATOR as BasicEAttribute).setEType(MapSettingsPackage.Literals.COMPERATOR);
     (MapSettingsPackage.Literals.CONDITION__VALUE as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
     (MapSettingsPackage.Literals.RENDERER__NAME as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
     (MapSettingsPackage.Literals.RENDERER__THING as BasicEReference).setEType(MapSettingsPackage.Literals.CONDITION);
@@ -1449,6 +1566,10 @@ export class MapSettingsPackage extends BasicEPackage {
     (MapSettingsPackage.Literals.LOCATION_CLICK_PAYLOAD__NAME as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
     (MapSettingsPackage.Literals.LOCATION_CLICK_PAYLOAD__GEOMETRY as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EJavaObject')!);
     (MapSettingsPackage.Literals.LOCATION_CLICK_PAYLOAD__THING_IDS as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+
+    // ============================================
+    // Set EOpposites (must be done after all features are created) (#59)
+    // ============================================
 
     // ============================================
     // Register XML name mappings from ExtendedMetaData annotations

@@ -50,22 +50,22 @@ export class PointAndAreaSettingsImpl extends BasicEObject implements PointAndAr
   static readonly CLUSTER_RADIUS: number = 15;
 
   // Private fields
-  private _show_SubElements?: boolean;
+  private _show_SubElements: boolean = false;
   private _point_render_as?: string;
   private _point_prop?: string;
   private _point?: IconSettings;
   private _pointPin?: PointPin;
   private _area?: MapProps;
   private _label?: unknown;
-  private _iconMinZoom?: number;
-  private _iconScaleWithZoom?: boolean;
-  private _iconFullSizeZoom?: number;
-  private _labelMinZoom?: number;
-  private _labelScaleWithZoom?: boolean;
-  private _labelFullSizeZoom?: number;
-  private _clusterEnabled?: boolean;
-  private _clusterBelowZoom?: number;
-  private _clusterRadius?: number;
+  private _iconMinZoom: number = 0;
+  private _iconScaleWithZoom: boolean = false;
+  private _iconFullSizeZoom: number = 0;
+  private _labelMinZoom: number = 0;
+  private _labelScaleWithZoom: boolean = false;
+  private _labelFullSizeZoom: number = 0;
+  private _clusterEnabled: boolean = false;
+  private _clusterBelowZoom: number = 0;
+  private _clusterRadius: number = 0;
 
   /**
    * Returns the EClass of this object
@@ -153,6 +153,16 @@ export class PointAndAreaSettingsImpl extends BasicEObject implements PointAndAr
 
   set point(value: IconSettings) {
     const oldValue = this._point;
+    if (oldValue !== value) {
+      // containment: the owner becomes the container of the value (#61)
+      if (oldValue) {
+        (oldValue as any).eSetContainer?.(null, null);
+      }
+      if (value) {
+        this.removeFromPreviousContainer(value);
+        (value as any).eSetContainer?.(this, this.eClass().getEStructuralFeature('point'));
+      }
+    }
     this._point = value;
     if (this.eDeliver()) {
       this.eNotify({
@@ -177,6 +187,16 @@ export class PointAndAreaSettingsImpl extends BasicEObject implements PointAndAr
 
   set pointPin(value: PointPin) {
     const oldValue = this._pointPin;
+    if (oldValue !== value) {
+      // containment: the owner becomes the container of the value (#61)
+      if (oldValue) {
+        (oldValue as any).eSetContainer?.(null, null);
+      }
+      if (value) {
+        this.removeFromPreviousContainer(value);
+        (value as any).eSetContainer?.(this, this.eClass().getEStructuralFeature('pointPin'));
+      }
+    }
     this._pointPin = value;
     if (this.eDeliver()) {
       this.eNotify({
@@ -201,6 +221,16 @@ export class PointAndAreaSettingsImpl extends BasicEObject implements PointAndAr
 
   set area(value: MapProps) {
     const oldValue = this._area;
+    if (oldValue !== value) {
+      // containment: the owner becomes the container of the value (#61)
+      if (oldValue) {
+        (oldValue as any).eSetContainer?.(null, null);
+      }
+      if (value) {
+        this.removeFromPreviousContainer(value);
+        (value as any).eSetContainer?.(this, this.eClass().getEStructuralFeature('area'));
+      }
+    }
     this._area = value;
     if (this.eDeliver()) {
       this.eNotify({
@@ -459,6 +489,30 @@ export class PointAndAreaSettingsImpl extends BasicEObject implements PointAndAr
     }
   }
 
+  /**
+   * Remove a value from its previous container before it is contained here,
+   * like Java EMF's eInverseRemove on the old container (#61)
+   */
+  private removeFromPreviousContainer(value: unknown): void {
+    const v = value as any;
+    const oldContainer = v?.eContainer?.();
+    if (!oldContainer || oldContainer === this) {
+      return;
+    }
+    const oldFeature = v.eContainmentFeature?.();
+    if (!oldFeature) {
+      return;
+    }
+    if (oldFeature.isMany()) {
+      const list = oldContainer.eGet(oldFeature);
+      if (list && typeof list.remove === 'function') {
+        list.remove(v);
+      }
+    } else {
+      oldContainer.eUnset(oldFeature);
+    }
+  }
+
   // Reflective API
 
   /**
@@ -586,7 +640,7 @@ export class PointAndAreaSettingsImpl extends BasicEObject implements PointAndAr
     const featureID = this.eClass().getFeatureID(feature);
     switch (featureID) {
       case PointAndAreaSettingsImpl.SHOW__SUB_ELEMENTS:
-        return this._show_SubElements !== undefined;
+        return this._show_SubElements !== false;
       case PointAndAreaSettingsImpl.POINT_RENDER_AS:
         return this._point_render_as !== undefined;
       case PointAndAreaSettingsImpl.POINT_PROP:
@@ -600,23 +654,23 @@ export class PointAndAreaSettingsImpl extends BasicEObject implements PointAndAr
       case PointAndAreaSettingsImpl.LABEL:
         return this._label !== undefined;
       case PointAndAreaSettingsImpl.ICON_MIN_ZOOM:
-        return this._iconMinZoom !== undefined;
+        return this._iconMinZoom !== 0;
       case PointAndAreaSettingsImpl.ICON_SCALE_WITH_ZOOM:
-        return this._iconScaleWithZoom !== undefined;
+        return this._iconScaleWithZoom !== false;
       case PointAndAreaSettingsImpl.ICON_FULL_SIZE_ZOOM:
-        return this._iconFullSizeZoom !== undefined;
+        return this._iconFullSizeZoom !== 0;
       case PointAndAreaSettingsImpl.LABEL_MIN_ZOOM:
-        return this._labelMinZoom !== undefined;
+        return this._labelMinZoom !== 0;
       case PointAndAreaSettingsImpl.LABEL_SCALE_WITH_ZOOM:
-        return this._labelScaleWithZoom !== undefined;
+        return this._labelScaleWithZoom !== false;
       case PointAndAreaSettingsImpl.LABEL_FULL_SIZE_ZOOM:
-        return this._labelFullSizeZoom !== undefined;
+        return this._labelFullSizeZoom !== 0;
       case PointAndAreaSettingsImpl.CLUSTER_ENABLED:
-        return this._clusterEnabled !== undefined;
+        return this._clusterEnabled !== false;
       case PointAndAreaSettingsImpl.CLUSTER_BELOW_ZOOM:
-        return this._clusterBelowZoom !== undefined;
+        return this._clusterBelowZoom !== 0;
       case PointAndAreaSettingsImpl.CLUSTER_RADIUS:
-        return this._clusterRadius !== undefined;
+        return this._clusterRadius !== 0;
       default:
         return super.eIsSet(feature);
     }
@@ -629,7 +683,7 @@ export class PointAndAreaSettingsImpl extends BasicEObject implements PointAndAr
     const featureID = this.eClass().getFeatureID(feature);
     switch (featureID) {
       case PointAndAreaSettingsImpl.SHOW__SUB_ELEMENTS:
-        this._show_SubElements = undefined;
+        this._show_SubElements = false;
         return;
       case PointAndAreaSettingsImpl.POINT_RENDER_AS:
         this._point_render_as = undefined;
@@ -638,43 +692,46 @@ export class PointAndAreaSettingsImpl extends BasicEObject implements PointAndAr
         this._point_prop = undefined;
         return;
       case PointAndAreaSettingsImpl.POINT:
+        if (this._point) (this._point as any).eSetContainer?.(null, null);
         this._point = undefined;
         return;
       case PointAndAreaSettingsImpl.POINT_PIN:
+        if (this._pointPin) (this._pointPin as any).eSetContainer?.(null, null);
         this._pointPin = undefined;
         return;
       case PointAndAreaSettingsImpl.AREA:
+        if (this._area) (this._area as any).eSetContainer?.(null, null);
         this._area = undefined;
         return;
       case PointAndAreaSettingsImpl.LABEL:
         this._label = undefined;
         return;
       case PointAndAreaSettingsImpl.ICON_MIN_ZOOM:
-        this._iconMinZoom = undefined;
+        this._iconMinZoom = 0;
         return;
       case PointAndAreaSettingsImpl.ICON_SCALE_WITH_ZOOM:
-        this._iconScaleWithZoom = undefined;
+        this._iconScaleWithZoom = false;
         return;
       case PointAndAreaSettingsImpl.ICON_FULL_SIZE_ZOOM:
-        this._iconFullSizeZoom = undefined;
+        this._iconFullSizeZoom = 0;
         return;
       case PointAndAreaSettingsImpl.LABEL_MIN_ZOOM:
-        this._labelMinZoom = undefined;
+        this._labelMinZoom = 0;
         return;
       case PointAndAreaSettingsImpl.LABEL_SCALE_WITH_ZOOM:
-        this._labelScaleWithZoom = undefined;
+        this._labelScaleWithZoom = false;
         return;
       case PointAndAreaSettingsImpl.LABEL_FULL_SIZE_ZOOM:
-        this._labelFullSizeZoom = undefined;
+        this._labelFullSizeZoom = 0;
         return;
       case PointAndAreaSettingsImpl.CLUSTER_ENABLED:
-        this._clusterEnabled = undefined;
+        this._clusterEnabled = false;
         return;
       case PointAndAreaSettingsImpl.CLUSTER_BELOW_ZOOM:
-        this._clusterBelowZoom = undefined;
+        this._clusterBelowZoom = 0;
         return;
       case PointAndAreaSettingsImpl.CLUSTER_RADIUS:
-        this._clusterRadius = undefined;
+        this._clusterRadius = 0;
         return;
       default:
         super.eUnset(feature);

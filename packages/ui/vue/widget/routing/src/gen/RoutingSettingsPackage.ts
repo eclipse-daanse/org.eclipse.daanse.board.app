@@ -19,7 +19,7 @@
  */
 
 import { BasicEPackage, BasicEClass, BasicEAttribute, EPackageRegistry, getEcorePackage } from '@emfts/core';
-import type { EClass, EAttribute, EReference } from '@emfts/core';
+import type { EClass, EAttribute, EReference, EDataType } from '@emfts/core';
 import { RoutingSettingsFactory } from './RoutingSettingsFactory.js';
 
 /**
@@ -117,6 +117,7 @@ export class RoutingSettingsPackage extends BasicEPackage {
     routingWidgetSettings_defaultCosting.setName('defaultCosting');
     routingWidgetSettings_defaultCosting.setLowerBound(0);
     routingWidgetSettings_defaultCosting.setUpperBound(1);
+    routingWidgetSettings_defaultCosting.setDefaultValueLiteral("auto");
     routingWidgetSettingsClass.getEStructuralFeatures().push(routingWidgetSettings_defaultCosting);
     RoutingSettingsPackage.Literals.ROUTING_WIDGET_SETTINGS__DEFAULT_COSTING = routingWidgetSettings_defaultCosting;
 
@@ -125,6 +126,7 @@ export class RoutingSettingsPackage extends BasicEPackage {
     routingWidgetSettings_costing.setName('costing');
     routingWidgetSettings_costing.setLowerBound(0);
     routingWidgetSettings_costing.setUpperBound(1);
+    routingWidgetSettings_costing.setDefaultValueLiteral("auto");
     routingWidgetSettingsClass.getEStructuralFeatures().push(routingWidgetSettings_costing);
     RoutingSettingsPackage.Literals.ROUTING_WIDGET_SETTINGS__COSTING = routingWidgetSettings_costing;
 
@@ -251,6 +253,10 @@ export class RoutingSettingsPackage extends BasicEPackage {
     (RoutingSettingsPackage.Literals.WAYPOINT_PAYLOAD__LON as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EDouble')!);
     (RoutingSettingsPackage.Literals.WAYPOINT_PAYLOAD__NAME as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
     (RoutingSettingsPackage.Literals.WAYPOINT_PAYLOAD__INDEX as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EInt')!);
+
+    // ============================================
+    // Set EOpposites (must be done after all features are created) (#59)
+    // ============================================
 
     // ============================================
     // Register XML name mappings from ExtendedMetaData annotations

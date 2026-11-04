@@ -76,6 +76,16 @@ export class WorkspaceImpl extends BasicEObject implements Workspace {
 
   set board(value: Board) {
     const oldValue = this._board;
+    if (oldValue !== value) {
+      // containment: the owner becomes the container of the value (#61)
+      if (oldValue) {
+        (oldValue as any).eSetContainer?.(null, null);
+      }
+      if (value) {
+        this.removeFromPreviousContainer(value);
+        (value as any).eSetContainer?.(this, this.eClass().getEStructuralFeature('board'));
+      }
+    }
     this._board = value;
     if (this.eDeliver()) {
       this.eNotify({
@@ -106,6 +116,30 @@ export class WorkspaceImpl extends BasicEObject implements Workspace {
       this._eventMappings = createContainmentEList<any>(this, this.eClass().getEStructuralFeature('eventMappings') as EReference);
     }
     return this._eventMappings;
+  }
+
+  /**
+   * Remove a value from its previous container before it is contained here,
+   * like Java EMF's eInverseRemove on the old container (#61)
+   */
+  private removeFromPreviousContainer(value: unknown): void {
+    const v = value as any;
+    const oldContainer = v?.eContainer?.();
+    if (!oldContainer || oldContainer === this) {
+      return;
+    }
+    const oldFeature = v.eContainmentFeature?.();
+    if (!oldFeature) {
+      return;
+    }
+    if (oldFeature.isMany()) {
+      const list = oldContainer.eGet(oldFeature);
+      if (list && typeof list.remove === 'function') {
+        list.remove(v);
+      }
+    } else {
+      oldContainer.eUnset(oldFeature);
+    }
   }
 
   // Reflective API
@@ -200,6 +234,7 @@ export class WorkspaceImpl extends BasicEObject implements Workspace {
         if (this._datasources) this._datasources.clear();
         return;
       case WorkspaceImpl.BOARD:
+        if (this._board) (this._board as any).eSetContainer?.(null, null);
         this._board = undefined;
         return;
       case WorkspaceImpl.VARIABLES:

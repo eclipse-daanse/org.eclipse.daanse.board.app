@@ -19,7 +19,7 @@
  */
 
 import { BasicEPackage, BasicEClass, BasicEAttribute, EPackageRegistry, getEcorePackage } from '@emfts/core';
-import type { EClass, EAttribute, EReference } from '@emfts/core';
+import type { EClass, EAttribute, EReference, EDataType } from '@emfts/core';
 import { ReststoreFactory } from './ReststoreFactory.js';
 
 /**
@@ -139,6 +139,10 @@ export class ReststorePackage extends BasicEPackage {
     (ReststorePackage.Literals.I_REST_STORE_CONFIGURATION__CONNECTION as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
     (ReststorePackage.Literals.I_REST_STORE_CONFIGURATION__SELECTED_J_S_O_N_VALUE as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
     (ReststorePackage.Literals.I_REST_STORE_CONFIGURATION__POLLING_INTERVAL as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EInt')!);
+
+    // ============================================
+    // Set EOpposites (must be done after all features are created) (#59)
+    // ============================================
 
     // ============================================
     // Register XML name mappings from ExtendedMetaData annotations

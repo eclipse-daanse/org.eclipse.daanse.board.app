@@ -19,7 +19,7 @@
  */
 
 import { BasicEPackage, BasicEClass, BasicEAttribute, BasicEReference, EPackageRegistry, getEcorePackage } from '@emfts/core';
-import type { EClass, EAttribute, EReference } from '@emfts/core';
+import type { EClass, EAttribute, EReference, EDataType } from '@emfts/core';
 import { ContainmentfixtureFactory } from './ContainmentfixtureFactory.js';
 
 /**
@@ -138,6 +138,10 @@ export class ContainmentfixturePackage extends BasicEPackage {
     (ContainmentfixturePackage.Literals.FIXTURE_SETTINGS__TITLE as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
     (ContainmentfixturePackage.Literals.FIXTURE_SETTINGS__CHILDREN as BasicEReference).setEType(ContainmentfixturePackage.Literals.FIXTURE_CHILD);
     (ContainmentfixturePackage.Literals.FIXTURE_SETTINGS__ONLY as BasicEReference).setEType(ContainmentfixturePackage.Literals.FIXTURE_CHILD);
+
+    // ============================================
+    // Set EOpposites (must be done after all features are created) (#59)
+    // ============================================
 
     // ============================================
     // Register XML name mappings from ExtendedMetaData annotations

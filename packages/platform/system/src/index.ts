@@ -34,7 +34,7 @@ interface SharedLibraryRuntime {
 }
 
 /** Must match the actually bundled version; checked in index.test.ts. */
-export const EMFTS_CORE_VERSION = '0.1.1-next.18'
+export const EMFTS_CORE_VERSION = '0.3.0-next.6'
 
 export async function activate({ services, log }: ActivationContext) {
   services.register(TINY_EMITTER, new TinyEmitter())

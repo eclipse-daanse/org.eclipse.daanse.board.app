@@ -19,7 +19,7 @@
  */
 
 import { BasicEPackage, BasicEClass, BasicEAttribute, EPackageRegistry, getEcorePackage } from '@emfts/core';
-import type { EClass, EAttribute, EReference } from '@emfts/core';
+import type { EClass, EAttribute, EReference, EDataType } from '@emfts/core';
 import { CodesettingsFactory } from './CodesettingsFactory.js';
 
 /**
@@ -92,6 +92,7 @@ export class CodesettingsPackage extends BasicEPackage {
     codeSettings_theme.setName('theme');
     codeSettings_theme.setLowerBound(0);
     codeSettings_theme.setUpperBound(1);
+    codeSettings_theme.setDefaultValueLiteral("github-light");
     codeSettingsClass.getEStructuralFeatures().push(codeSettings_theme);
     CodesettingsPackage.Literals.CODE_SETTINGS__THEME = codeSettings_theme;
 
@@ -100,6 +101,7 @@ export class CodesettingsPackage extends BasicEPackage {
     codeSettings_language.setName('language');
     codeSettings_language.setLowerBound(0);
     codeSettings_language.setUpperBound(1);
+    codeSettings_language.setDefaultValueLiteral("typescript");
     codeSettingsClass.getEStructuralFeatures().push(codeSettings_language);
     CodesettingsPackage.Literals.CODE_SETTINGS__LANGUAGE = codeSettings_language;
 
@@ -116,6 +118,10 @@ export class CodesettingsPackage extends BasicEPackage {
     (CodesettingsPackage.Literals.CODE_SETTINGS__CODE as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
     (CodesettingsPackage.Literals.CODE_SETTINGS__THEME as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
     (CodesettingsPackage.Literals.CODE_SETTINGS__LANGUAGE as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+
+    // ============================================
+    // Set EOpposites (must be done after all features are created) (#59)
+    // ============================================
 
     // ============================================
     // Register XML name mappings from ExtendedMetaData annotations

@@ -39,8 +39,8 @@ export class VariableImpl extends BasicEObject implements Variable {
   static readonly DEFINITION: number = 6;
 
   // Private fields
-  private _uid: string = "";
-  private _name: string = "";
+  private _uid?: string;
+  private _name?: string;
   private _type?: string;
   private _scope?: string;
   private _accessMode?: string;
@@ -296,9 +296,9 @@ export class VariableImpl extends BasicEObject implements Variable {
     const featureID = this.eClass().getFeatureID(feature);
     switch (featureID) {
       case VariableImpl.UID:
-        return this._uid !== "";
+        return this._uid !== undefined;
       case VariableImpl.NAME:
-        return this._name !== "";
+        return this._name !== undefined;
       case VariableImpl.TYPE:
         return this._type !== undefined;
       case VariableImpl.SCOPE:
@@ -321,10 +321,10 @@ export class VariableImpl extends BasicEObject implements Variable {
     const featureID = this.eClass().getFeatureID(feature);
     switch (featureID) {
       case VariableImpl.UID:
-        this._uid = "";
+        this._uid = undefined;
         return;
       case VariableImpl.NAME:
-        this._name = "";
+        this._name = undefined;
         return;
       case VariableImpl.TYPE:
         this._type = undefined;

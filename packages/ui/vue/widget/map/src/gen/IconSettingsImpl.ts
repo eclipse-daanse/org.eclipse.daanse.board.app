@@ -41,11 +41,11 @@ export class IconSettingsImpl extends BasicEObject implements IconSettings {
   // Private fields
   private _currentIcon?: string;
   private _iconColor: VariableWrapper<string> = new VariableWrapper<string>();
-  private _iconSize?: number;
-  private _isIconFilled?: boolean;
-  private _strokeWeight?: number;
-  private _opticSize?: number;
-  private _grade?: number;
+  private _iconSize: number = 0;
+  private _isIconFilled: boolean = false;
+  private _strokeWeight: number = 0;
+  private _opticSize: number = 0;
+  private _grade: number = 0;
 
   /**
    * Returns the EClass of this object
@@ -300,15 +300,15 @@ export class IconSettingsImpl extends BasicEObject implements IconSettings {
       case IconSettingsImpl.ICON_COLOR:
         return this._iconColor !== new VariableWrapper<string>();
       case IconSettingsImpl.ICON_SIZE:
-        return this._iconSize !== undefined;
+        return this._iconSize !== 0;
       case IconSettingsImpl.IS_ICON_FILLED:
-        return this._isIconFilled !== undefined;
+        return this._isIconFilled !== false;
       case IconSettingsImpl.STROKE_WEIGHT:
-        return this._strokeWeight !== undefined;
+        return this._strokeWeight !== 0;
       case IconSettingsImpl.OPTIC_SIZE:
-        return this._opticSize !== undefined;
+        return this._opticSize !== 0;
       case IconSettingsImpl.GRADE:
-        return this._grade !== undefined;
+        return this._grade !== 0;
       default:
         return super.eIsSet(feature);
     }
@@ -327,19 +327,19 @@ export class IconSettingsImpl extends BasicEObject implements IconSettings {
         this._iconColor = new VariableWrapper<string>();
         return;
       case IconSettingsImpl.ICON_SIZE:
-        this._iconSize = undefined;
+        this._iconSize = 0;
         return;
       case IconSettingsImpl.IS_ICON_FILLED:
-        this._isIconFilled = undefined;
+        this._isIconFilled = false;
         return;
       case IconSettingsImpl.STROKE_WEIGHT:
-        this._strokeWeight = undefined;
+        this._strokeWeight = 0;
         return;
       case IconSettingsImpl.OPTIC_SIZE:
-        this._opticSize = undefined;
+        this._opticSize = 0;
         return;
       case IconSettingsImpl.GRADE:
-        this._grade = undefined;
+        this._grade = 0;
         return;
       default:
         super.eUnset(feature);

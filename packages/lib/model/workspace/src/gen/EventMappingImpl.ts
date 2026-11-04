@@ -33,7 +33,7 @@ export class EventMappingImpl extends BasicEObject implements EventMapping {
   static readonly DEFINITION: number = 1;
 
   // Private fields
-  private _id: string = "";
+  private _id?: string;
   private _definition?: unknown;
 
   /**
@@ -135,7 +135,7 @@ export class EventMappingImpl extends BasicEObject implements EventMapping {
     const featureID = this.eClass().getFeatureID(feature);
     switch (featureID) {
       case EventMappingImpl.ID:
-        return this._id !== "";
+        return this._id !== undefined;
       case EventMappingImpl.DEFINITION:
         return this._definition !== undefined;
       default:
@@ -150,7 +150,7 @@ export class EventMappingImpl extends BasicEObject implements EventMapping {
     const featureID = this.eClass().getFeatureID(feature);
     switch (featureID) {
       case EventMappingImpl.ID:
-        this._id = "";
+        this._id = undefined;
         return;
       case EventMappingImpl.DEFINITION:
         this._definition = undefined;

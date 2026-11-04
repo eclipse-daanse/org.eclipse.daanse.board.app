@@ -27,7 +27,7 @@ import type { Board } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import type { LayoutItem, StoredWidget } from 'org.eclipse.daanse.board.app.lib.api.page'
 import { useClipboardStore } from './useClipboardStore'
 import { cloneDeep } from 'lodash'
-import { EcoreUtil, type EList, type EObject } from '@emfts/core'
+import { EcoreUtil } from '@emfts/core'
 import type { DataSelection } from 'org.eclipse.daanse.board.app.lib.model.workspace'
 
 /**
@@ -199,13 +199,13 @@ export function useMoveableLayout(pageId: string = '', gridSize: () => number = 
   }
 
   /*
-   * A selection is an EObject contained in its widget (#1216). Copied
-   * through the model rather than by cloneDeep, which would carry its
-   * adapters and its container along - and a copy per paste, so two pasted
-   * widgets do not share one selection.
+   * A selection is an EObject contained in its widget (#1216). Copied by
+   * EcoreUtil, which copies deep, rather than by cloneDeep, which would
+   * carry its adapters and its container along - and a copy per paste, so
+   * two pasted widgets do not share one selection.
    */
   const copiedSelection = (selection: DataSelection | undefined): DataSelection | undefined =>
-    selection ? (copyContained(selection as unknown as EObject) as unknown as DataSelection) : undefined
+    selection ? (EcoreUtil.copy(selection as never) as unknown as DataSelection) : undefined
 
   const copyWidget = (widgetId: string) => {
     const widget = board.widgets.value.find((w: { uid?: string }) => w.uid === widgetId)
@@ -284,27 +284,4 @@ export function useMoveableLayout(pageId: string = '', gridSize: () => number = 
     copyWidget,
     pasteWidget,
   }
-}
-
-/**
- * An object and everything it contains, copied.
- *
- * EcoreUtil.copy in @emfts/core copies the attributes only and leaves the
- * contained objects behind - a selection came back without its filters.
- * EMF's own copy is deep; until this one is, the containment is copied
- * here, through the model's own features.
- */
-function copyContained(original: EObject): EObject {
-  const copy = EcoreUtil.copy(original)
-  for (const reference of original.eClass().getEAllReferences()) {
-    if (!reference.isContainment() || reference.isDerived() || reference.isTransient()) continue
-    const value = original.eGet(reference)
-    if (reference.getUpperBound() !== 1) {
-      const target = copy.eGet(reference) as EList<EObject>
-      for (const child of ((value as EList<EObject> | undefined)?.toArray() ?? [])) target.push(copyContained(child))
-    } else if (value) {
-      copy.eSet(reference, copyContained(value as EObject))
-    }
-  }
-  return copy
 }

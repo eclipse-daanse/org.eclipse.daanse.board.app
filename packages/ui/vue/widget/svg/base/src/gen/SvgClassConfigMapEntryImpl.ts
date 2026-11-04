@@ -75,6 +75,16 @@ export class SvgClassConfigMapEntryImpl extends BasicEObject implements SvgClass
 
   set value(value: SvgConfigItem) {
     const oldValue = this._value;
+    if (oldValue !== value) {
+      // containment: the owner becomes the container of the value (#61)
+      if (oldValue) {
+        (oldValue as any).eSetContainer?.(null, null);
+      }
+      if (value) {
+        this.removeFromPreviousContainer(value);
+        (value as any).eSetContainer?.(this, this.eClass().getEStructuralFeature('value'));
+      }
+    }
     this._value = value;
     if (this.eDeliver()) {
       this.eNotify({
@@ -90,6 +100,30 @@ export class SvgClassConfigMapEntryImpl extends BasicEObject implements SvgClass
         getFeatureID: () => SvgClassConfigMapEntryImpl.VALUE,
         merge: () => false
       });
+    }
+  }
+
+  /**
+   * Remove a value from its previous container before it is contained here,
+   * like Java EMF's eInverseRemove on the old container (#61)
+   */
+  private removeFromPreviousContainer(value: unknown): void {
+    const v = value as any;
+    const oldContainer = v?.eContainer?.();
+    if (!oldContainer || oldContainer === this) {
+      return;
+    }
+    const oldFeature = v.eContainmentFeature?.();
+    if (!oldFeature) {
+      return;
+    }
+    if (oldFeature.isMany()) {
+      const list = oldContainer.eGet(oldFeature);
+      if (list && typeof list.remove === 'function') {
+        list.remove(v);
+      }
+    } else {
+      oldContainer.eUnset(oldFeature);
     }
   }
 
@@ -154,6 +188,7 @@ export class SvgClassConfigMapEntryImpl extends BasicEObject implements SvgClass
         this._key = undefined;
         return;
       case SvgClassConfigMapEntryImpl.VALUE:
+        if (this._value) (this._value as any).eSetContainer?.(null, null);
         this._value = undefined;
         return;
       default:

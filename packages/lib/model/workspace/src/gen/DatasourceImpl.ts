@@ -40,7 +40,7 @@ export class DatasourceImpl extends BasicEObject implements Datasource {
   static readonly TAGS: number = 6;
 
   // Private fields
-  private _uid: string = "";
+  private _uid?: string;
   private _name?: string;
   private _type?: string;
   private _connection?: Connection;
@@ -281,7 +281,7 @@ export class DatasourceImpl extends BasicEObject implements Datasource {
     const featureID = this.eClass().getFeatureID(feature);
     switch (featureID) {
       case DatasourceImpl.UID:
-        return this._uid !== "";
+        return this._uid !== undefined;
       case DatasourceImpl.NAME:
         return this._name !== undefined;
       case DatasourceImpl.TYPE:
@@ -306,7 +306,7 @@ export class DatasourceImpl extends BasicEObject implements Datasource {
     const featureID = this.eClass().getFeatureID(feature);
     switch (featureID) {
       case DatasourceImpl.UID:
-        this._uid = "";
+        this._uid = undefined;
         return;
       case DatasourceImpl.NAME:
         this._name = undefined;

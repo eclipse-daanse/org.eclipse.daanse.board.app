@@ -19,7 +19,7 @@
  */
 
 import { BasicEPackage, BasicEClass, BasicEAttribute, EPackageRegistry, getEcorePackage } from '@emfts/core';
-import type { EClass, EAttribute, EReference } from '@emfts/core';
+import type { EClass, EAttribute, EReference, EDataType } from '@emfts/core';
 import { EventsFactory } from './EventsFactory.js';
 
 /**
@@ -158,6 +158,10 @@ export class EventsPackage extends BasicEPackage {
     (EventsPackage.Literals.PAYLOAD__WIDGET_ID as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
     (EventsPackage.Literals.PAYLOAD__TIMESTAMP as BasicEAttribute).setEType(getEcorePackage().getEClassifier('ELong')!);
     (EventsPackage.Literals.PAYLOAD__METADATA as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EJavaObject')!);
+
+    // ============================================
+    // Set EOpposites (must be done after all features are created) (#59)
+    // ============================================
 
     // ============================================
     // Register XML name mappings from ExtendedMetaData annotations

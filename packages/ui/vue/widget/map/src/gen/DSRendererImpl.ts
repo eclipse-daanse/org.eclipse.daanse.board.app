@@ -101,6 +101,16 @@ export class DSRendererImpl extends BasicEObject implements DSRenderer {
 
   set renderer(value: PointAndAreaSettings) {
     const oldValue = this._renderer;
+    if (oldValue !== value) {
+      // containment: the owner becomes the container of the value (#61)
+      if (oldValue) {
+        (oldValue as any).eSetContainer?.(null, null);
+      }
+      if (value) {
+        this.removeFromPreviousContainer(value);
+        (value as any).eSetContainer?.(this, this.eClass().getEStructuralFeature('renderer'));
+      }
+    }
     this._renderer = value;
     if (this.eDeliver()) {
       this.eNotify({
@@ -164,6 +174,30 @@ export class DSRendererImpl extends BasicEObject implements DSRenderer {
         getFeatureID: () => DSRendererImpl.PLACEMENT,
         merge: () => false
       });
+    }
+  }
+
+  /**
+   * Remove a value from its previous container before it is contained here,
+   * like Java EMF's eInverseRemove on the old container (#61)
+   */
+  private removeFromPreviousContainer(value: unknown): void {
+    const v = value as any;
+    const oldContainer = v?.eContainer?.();
+    if (!oldContainer || oldContainer === this) {
+      return;
+    }
+    const oldFeature = v.eContainmentFeature?.();
+    if (!oldFeature) {
+      return;
+    }
+    if (oldFeature.isMany()) {
+      const list = oldContainer.eGet(oldFeature);
+      if (list && typeof list.remove === 'function') {
+        list.remove(v);
+      }
+    } else {
+      oldContainer.eUnset(oldFeature);
     }
   }
 
@@ -268,6 +302,7 @@ export class DSRendererImpl extends BasicEObject implements DSRenderer {
         if (this._observations) this._observations.clear();
         return;
       case DSRendererImpl.RENDERER:
+        if (this._renderer) (this._renderer as any).eSetContainer?.(null, null);
         this._renderer = undefined;
         return;
       case DSRendererImpl.ID:

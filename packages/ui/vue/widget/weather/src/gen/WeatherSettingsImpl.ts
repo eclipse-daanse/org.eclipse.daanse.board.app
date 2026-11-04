@@ -46,7 +46,7 @@ export class WeatherSettingsImpl extends BasicEObject implements WeatherSettings
   // Private fields
   private _thingId?: string;
   private _location?: string;
-  private _useLocation?: boolean;
+  private _useLocation: boolean = false;
   private _startTime?: string;
   private _endTime?: string;
   private _useTimeRange: boolean = false;
@@ -428,7 +428,7 @@ export class WeatherSettingsImpl extends BasicEObject implements WeatherSettings
       case WeatherSettingsImpl.LOCATION:
         return this._location !== undefined;
       case WeatherSettingsImpl.USE_LOCATION:
-        return this._useLocation !== undefined;
+        return this._useLocation !== false;
       case WeatherSettingsImpl.START_TIME:
         return this._startTime !== undefined;
       case WeatherSettingsImpl.END_TIME:
@@ -465,7 +465,7 @@ export class WeatherSettingsImpl extends BasicEObject implements WeatherSettings
         this._location = undefined;
         return;
       case WeatherSettingsImpl.USE_LOCATION:
-        this._useLocation = undefined;
+        this._useLocation = false;
         return;
       case WeatherSettingsImpl.START_TIME:
         this._startTime = undefined;

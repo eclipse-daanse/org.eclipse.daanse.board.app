@@ -19,7 +19,7 @@
  */
 
 import { BasicEPackage, BasicEClass, BasicEAttribute, BasicEReference, EPackageRegistry } from '@emfts/core';
-import type { EClass, EAttribute, EReference } from '@emfts/core';
+import type { EClass, EAttribute, EReference, EDataType } from '@emfts/core';
 import { ChartsettingsFactory } from './ChartsettingsFactory.js';
 
 /**
@@ -551,6 +551,10 @@ export class ChartsettingsPackage extends BasicEPackage {
     (ChartsettingsPackage.Literals.CHART_SETTINGS__Y_AXIS_TITLE as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
     (ChartsettingsPackage.Literals.CHART_SETTINGS__ANNOTATIONS_EDIT_MODE as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
     (ChartsettingsPackage.Literals.CHART_SETTINGS__DATE_DISPLAY_FORMAT as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
+
+    // ============================================
+    // Set EOpposites (must be done after all features are created) (#59)
+    // ============================================
 
     // ============================================
     // Register XML name mappings from ExtendedMetaData annotations

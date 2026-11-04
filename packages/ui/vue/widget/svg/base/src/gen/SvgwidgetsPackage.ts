@@ -19,7 +19,7 @@
  */
 
 import { BasicEPackage, BasicEClass, BasicEAttribute, BasicEReference, EPackageRegistry, getEcorePackage } from '@emfts/core';
-import type { EClass, EAttribute, EReference } from '@emfts/core';
+import type { EClass, EAttribute, EReference, EDataType } from '@emfts/core';
 import { SvgwidgetsFactory } from './SvgwidgetsFactory.js';
 
 /**
@@ -204,6 +204,10 @@ export class SvgwidgetsPackage extends BasicEPackage {
     (SvgwidgetsPackage.Literals.SVG_CONFIG_ITEM__STROKE as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
     (SvgwidgetsPackage.Literals.SVG_CONFIG_ITEM__STROKE_WIDTH as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
     (SvgwidgetsPackage.Literals.SVG_CONFIG_ITEM__CLASS_NAME as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+
+    // ============================================
+    // Set EOpposites (must be done after all features are created) (#59)
+    // ============================================
 
     // ============================================
     // Register XML name mappings from ExtendedMetaData annotations

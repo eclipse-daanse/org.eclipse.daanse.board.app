@@ -19,7 +19,7 @@
  */
 
 import { BasicEPackage, BasicEClass, BasicEAttribute, BasicEReference, EPackageRegistry, getEcorePackage } from '@emfts/core';
-import type { EClass, EAttribute, EReference } from '@emfts/core';
+import type { EClass, EAttribute, EReference, EDataType } from '@emfts/core';
 import { IconSettingsFactory } from './IconSettingsFactory.js';
 
 /**
@@ -211,6 +211,10 @@ export class IconSettingsPackage extends BasicEPackage {
     (IconSettingsPackage.Literals.ICON_SETTINGS__CURRENT_ICON as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
     (IconSettingsPackage.Literals.ICON_CLICK_PAYLOAD__ICON_NAME as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
     (IconSettingsPackage.Literals.ICON_RIGHT_CLICK_PAYLOAD__ICON_NAME as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+
+    // ============================================
+    // Set EOpposites (must be done after all features are created) (#59)
+    // ============================================
 
     // ============================================
     // Register XML name mappings from ExtendedMetaData annotations

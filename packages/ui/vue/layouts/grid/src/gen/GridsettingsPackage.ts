@@ -19,7 +19,7 @@
  */
 
 import { BasicEPackage, BasicEClass, BasicEAttribute, BasicEReference, EPackageRegistry, getEcorePackage } from '@emfts/core';
-import type { EClass, EAttribute, EReference } from '@emfts/core';
+import type { EClass, EAttribute, EReference, EDataType } from '@emfts/core';
 import { GridsettingsFactory } from './GridsettingsFactory.js';
 
 /**
@@ -89,6 +89,7 @@ export class GridsettingsPackage extends BasicEPackage {
     gridColumns_lg.setName('lg');
     gridColumns_lg.setLowerBound(0);
     gridColumns_lg.setUpperBound(1);
+    gridColumns_lg.setDefaultValueLiteral("18");
     gridColumnsClass.getEStructuralFeatures().push(gridColumns_lg);
     GridsettingsPackage.Literals.GRID_COLUMNS__LG = gridColumns_lg;
 
@@ -97,6 +98,7 @@ export class GridsettingsPackage extends BasicEPackage {
     gridColumns_md.setName('md');
     gridColumns_md.setLowerBound(0);
     gridColumns_md.setUpperBound(1);
+    gridColumns_md.setDefaultValueLiteral("12");
     gridColumnsClass.getEStructuralFeatures().push(gridColumns_md);
     GridsettingsPackage.Literals.GRID_COLUMNS__MD = gridColumns_md;
 
@@ -105,6 +107,7 @@ export class GridsettingsPackage extends BasicEPackage {
     gridColumns_sm.setName('sm');
     gridColumns_sm.setLowerBound(0);
     gridColumns_sm.setUpperBound(1);
+    gridColumns_sm.setDefaultValueLiteral("6");
     gridColumnsClass.getEStructuralFeatures().push(gridColumns_sm);
     GridsettingsPackage.Literals.GRID_COLUMNS__SM = gridColumns_sm;
 
@@ -113,6 +116,7 @@ export class GridsettingsPackage extends BasicEPackage {
     gridColumns_xs.setName('xs');
     gridColumns_xs.setLowerBound(0);
     gridColumns_xs.setUpperBound(1);
+    gridColumns_xs.setDefaultValueLiteral("4");
     gridColumnsClass.getEStructuralFeatures().push(gridColumns_xs);
     GridsettingsPackage.Literals.GRID_COLUMNS__XS = gridColumns_xs;
 
@@ -121,6 +125,7 @@ export class GridsettingsPackage extends BasicEPackage {
     gridColumns_xxs.setName('xxs');
     gridColumns_xxs.setLowerBound(0);
     gridColumns_xxs.setUpperBound(1);
+    gridColumns_xxs.setDefaultValueLiteral("2");
     gridColumnsClass.getEStructuralFeatures().push(gridColumns_xxs);
     GridsettingsPackage.Literals.GRID_COLUMNS__XXS = gridColumns_xxs;
 
@@ -138,6 +143,7 @@ export class GridsettingsPackage extends BasicEPackage {
     gridSettings_rowHeight.setName('rowHeight');
     gridSettings_rowHeight.setLowerBound(0);
     gridSettings_rowHeight.setUpperBound(1);
+    gridSettings_rowHeight.setDefaultValueLiteral("30");
     gridSettingsClass.getEStructuralFeatures().push(gridSettings_rowHeight);
     GridsettingsPackage.Literals.GRID_SETTINGS__ROW_HEIGHT = gridSettings_rowHeight;
 
@@ -167,6 +173,10 @@ export class GridsettingsPackage extends BasicEPackage {
     (GridsettingsPackage.Literals.GRID_COLUMNS__XXS as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EInt')!);
     (GridsettingsPackage.Literals.GRID_SETTINGS__ROW_HEIGHT as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EInt')!);
     (GridsettingsPackage.Literals.GRID_SETTINGS__COLS as BasicEReference).setEType(GridsettingsPackage.Literals.GRID_COLUMNS);
+
+    // ============================================
+    // Set EOpposites (must be done after all features are created) (#59)
+    // ============================================
 
     // ============================================
     // Register XML name mappings from ExtendedMetaData annotations

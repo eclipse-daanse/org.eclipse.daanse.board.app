@@ -52,6 +52,16 @@ export class VideoSettingsImpl extends BasicEObject implements VideoSettings {
 
   set videoFitSettings(value: ObjectFitSetting) {
     const oldValue = this._videoFitSettings;
+    if (oldValue !== value) {
+      // containment: the owner becomes the container of the value (#61)
+      if (oldValue) {
+        (oldValue as any).eSetContainer?.(null, null);
+      }
+      if (value) {
+        this.removeFromPreviousContainer(value);
+        (value as any).eSetContainer?.(this, this.eClass().getEStructuralFeature('videoFitSettings'));
+      }
+    }
     this._videoFitSettings = value;
     if (this.eDeliver()) {
       this.eNotify({
@@ -91,6 +101,30 @@ export class VideoSettingsImpl extends BasicEObject implements VideoSettings {
         getFeatureID: () => VideoSettingsImpl.VIDEO_URL,
         merge: () => false
       });
+    }
+  }
+
+  /**
+   * Remove a value from its previous container before it is contained here,
+   * like Java EMF's eInverseRemove on the old container (#61)
+   */
+  private removeFromPreviousContainer(value: unknown): void {
+    const v = value as any;
+    const oldContainer = v?.eContainer?.();
+    if (!oldContainer || oldContainer === this) {
+      return;
+    }
+    const oldFeature = v.eContainmentFeature?.();
+    if (!oldFeature) {
+      return;
+    }
+    if (oldFeature.isMany()) {
+      const list = oldContainer.eGet(oldFeature);
+      if (list && typeof list.remove === 'function') {
+        list.remove(v);
+      }
+    } else {
+      oldContainer.eUnset(oldFeature);
     }
   }
 
@@ -152,6 +186,7 @@ export class VideoSettingsImpl extends BasicEObject implements VideoSettings {
     const featureID = this.eClass().getFeatureID(feature);
     switch (featureID) {
       case VideoSettingsImpl.VIDEO_FIT_SETTINGS:
+        if (this._videoFitSettings) (this._videoFitSettings as any).eSetContainer?.(null, null);
         this._videoFitSettings = undefined;
         return;
       case VideoSettingsImpl.VIDEO_URL:

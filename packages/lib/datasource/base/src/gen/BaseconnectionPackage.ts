@@ -19,7 +19,7 @@
  */
 
 import { BasicEPackage, BasicEClass, BasicEAttribute, EPackageRegistry, getEcorePackage } from '@emfts/core';
-import type { EClass, EAttribute, EReference } from '@emfts/core';
+import type { EClass, EAttribute, EReference, EDataType } from '@emfts/core';
 import { BaseconnectionFactory } from './BaseconnectionFactory.js';
 
 /**
@@ -126,6 +126,10 @@ export class BaseconnectionPackage extends BasicEPackage {
     (BaseconnectionPackage.Literals.I_BASE_CONNECTION_CONFIGURATION__TYPE as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
     (BaseconnectionPackage.Literals.I_BASE_CONNECTION_CONFIGURATION__UID as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
     (BaseconnectionPackage.Literals.I_BASE_CONNECTION_CONFIGURATION__POLLING_ENABLED as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EBoolean')!);
+
+    // ============================================
+    // Set EOpposites (must be done after all features are created) (#59)
+    // ============================================
 
     // ============================================
     // Register XML name mappings from ExtendedMetaData annotations
