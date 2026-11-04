@@ -74,12 +74,12 @@ function onDown(event: PointerEvent) {
   } catch {
     /* A synthetic event has no pointer to capture */
   }
-  drawing.down(gridPoint(event))
+  drawing.down(gridPoint(event), event.shiftKey)
 }
 
 const onMove = (event: PointerEvent) => drawing.move(gridPoint(event))
 const onUp = (event: PointerEvent) => drawing.up(gridPoint(event))
-const onDoubleClick = () => drawing.doubleClick()
+const onDoubleClick = (event: MouseEvent) => drawing.doubleClick(gridPoint(event))
 
 /* The board underneath cannot be reached, so its scrolling is passed on */
 function onWheel(event: WheelEvent) {
@@ -98,7 +98,10 @@ function onKey(event: KeyboardEvent) {
   const target = event.target as HTMLElement | null
   if (target?.closest?.('input, textarea, [contenteditable="true"]')) return
   let handled = true
-  if (event.key === 'Escape') emit('cancel')
+  /* A first Escape clears what is selected; the next one leaves */
+  if (event.key === 'Escape') {
+    if (!drawing.escape()) emit('cancel')
+  }
   else if (event.key === 'Delete' || event.key === 'Backspace') drawing.remove()
   else if (event.key === 'Enter') {
     if (drawing.drawingPolygon) drawing.closePolygon()
@@ -158,6 +161,16 @@ const pendingLine = computed(() => {
   const points = drawing.cursor ? [...pending.points, drawing.cursor] : pending.points
   return points.map((p) => `${p.x * props.cell.width},${p.y * props.cell.height}`).join(' ')
 })
+/* The selected shape's handles, in board pixels */
+const handles = computed(() =>
+  drawing.handles.map((handle) => ({
+    key: handle.kind === 'box' ? handle.id : `${handle.kind}${handle.index}`,
+    kind: handle.kind,
+    x: handle.x * props.cell.width,
+    y: handle.y * props.cell.height,
+  })),
+)
+
 const firstPoint = computed(() => {
   const pending = drawing.pending
   if (pending?.kind !== 'polygon') return undefined
@@ -200,21 +213,21 @@ defineExpose({ drawing })
           <rect
             v-if="d.kind === 'rect'"
             class="region__shape"
-            :class="{ 'region__shape--selected': index === drawing.selected }"
+            :class="{ 'region__shape--selected': drawing.isSelected(index) }"
             :data-shape="index"
             :x="d.x" :y="d.y" :width="d.width" :height="d.height"
           />
           <ellipse
             v-else-if="d.kind === 'ellipse'"
             class="region__shape"
-            :class="{ 'region__shape--selected': index === drawing.selected }"
+            :class="{ 'region__shape--selected': drawing.isSelected(index) }"
             :data-shape="index"
             :cx="d.cx" :cy="d.cy" :rx="d.rx" :ry="d.ry"
           />
           <polygon
             v-else
             class="region__shape"
-            :class="{ 'region__shape--selected': index === drawing.selected }"
+            :class="{ 'region__shape--selected': drawing.isSelected(index) }"
             :data-shape="index"
             :points="d.points"
           />
@@ -234,6 +247,22 @@ defineExpose({ drawing })
           <polyline class="region__line" :points="pendingLine" />
           <!-- Where a click closes it -->
           <circle class="region__first" :cx="firstPoint!.x" :cy="firstPoint!.y" r="5" />
+        </template>
+
+        <template v-for="handle in handles" :key="handle.key">
+          <rect
+            v-if="handle.kind === 'box'"
+            class="region__handle"
+            :data-handle="handle.key"
+            :x="handle.x - 4" :y="handle.y - 4" width="8" height="8"
+          />
+          <circle
+            v-else
+            class="region__handle"
+            :class="{ 'region__handle--insert': handle.kind === 'insert' }"
+            :data-handle="handle.key"
+            :cx="handle.x" :cy="handle.y" :r="handle.kind === 'insert' ? 3 : 5"
+          />
         </template>
       </g>
     </svg>
@@ -257,8 +286,20 @@ defineExpose({ drawing })
       <button
         type="button"
         class="region__button"
+        :class="{ 'region__button--on': drawing.snap }"
+        data-action="snap"
+        :title="t('Region.snap')"
+        :aria-label="t('Region.snap')"
+        :aria-pressed="drawing.snap"
+        @click="drawing.snap = !drawing.snap"
+      >
+        <DIcon :name="drawing.snap ? 'grid_on' : 'grid_off'" size="sm" />
+      </button>
+      <button
+        type="button"
+        class="region__button"
         data-action="delete"
-        :disabled="drawing.selected < 0"
+        :disabled="drawing.selection.length === 0"
         :title="t('Region.delete')"
         :aria-label="t('Region.delete')"
         @click="drawing.remove()"
@@ -315,8 +356,9 @@ defineExpose({ drawing })
 }
 
 .region__shape--selected {
-  stroke-width: 2.5;
-  fill: color-mix(in srgb, var(--color-accent, #3b82f6) 28%, transparent);
+  stroke-width: 3;
+  fill: color-mix(in srgb, var(--color-accent, #3b82f6) 34%, transparent);
+  filter: drop-shadow(0 0 3px var(--color-accent, #3b82f6));
 }
 
 .region__shape--pending,
@@ -328,6 +370,17 @@ defineExpose({ drawing })
   fill: none;
   stroke: var(--color-accent, #3b82f6);
   stroke-width: 1.5;
+}
+
+.region__handle {
+  fill: var(--color-pane, #fff);
+  stroke: var(--color-accent, #3b82f6);
+  stroke-width: 1.5;
+}
+
+.region__handle--insert {
+  fill: var(--color-accent, #3b82f6);
+  opacity: 0.6;
 }
 
 .region__first {

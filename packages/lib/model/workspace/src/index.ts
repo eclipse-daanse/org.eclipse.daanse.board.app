@@ -70,6 +70,7 @@ export { WeatherKind } from './gen/WeatherKind'
 export { WeatherRegion } from './gen/WeatherRegion'
 export {
   createWeather,
+  completeWeather,
   weatherKindOf,
   weatherRegionOf,
   affectsWidgetsOf,
