@@ -67,6 +67,12 @@ export class ControlwidgetsPackage extends BasicEPackage {
     BUTTON_SETTINGS: null as unknown as EClass,
     BUTTON_SETTINGS__TARGET: null as unknown as EAttribute | EReference,
     BUTTON_SETTINGS__VALUE: null as unknown as EAttribute | EReference,
+    TOGGLE_SETTINGS: null as unknown as EClass,
+    TOGGLE_SETTINGS__TARGET: null as unknown as EAttribute | EReference,
+    TOGGLE_SETTINGS__ON_VALUE: null as unknown as EAttribute | EReference,
+    TOGGLE_SETTINGS__OFF_VALUE: null as unknown as EAttribute | EReference,
+    TOGGLE_SETTINGS__ON_LABEL: null as unknown as EAttribute | EReference,
+    TOGGLE_SETTINGS__ON_COLOR: null as unknown as EAttribute | EReference,
     CONTROL_PAYLOAD: null as unknown as EClass,
     CONTROL_PAYLOAD__VALUE: null as unknown as EAttribute | EReference,
     CONTROL_PAYLOAD__PREVIOUS_VALUE: null as unknown as EAttribute | EReference,
@@ -171,6 +177,60 @@ export class ControlwidgetsPackage extends BasicEPackage {
     buttonSettingsClass.getEStructuralFeatures().push(buttonSettings_value);
     ControlwidgetsPackage.Literals.BUTTON_SETTINGS__VALUE = buttonSettings_value;
 
+    // Create ToggleSettings class
+    const toggleSettingsClass = new BasicEClass();
+    toggleSettingsClass.setName('ToggleSettings');
+    toggleSettingsClass.setAbstract(false);
+    toggleSettingsClass.setInterface(false);
+    this.getEClassifiers().push(toggleSettingsClass);
+    toggleSettingsClass.setEPackage(this);
+    ControlwidgetsPackage.Literals.TOGGLE_SETTINGS = toggleSettingsClass;
+
+    // Create target feature
+    const toggleSettings_target = new BasicEReference();
+    toggleSettings_target.setContainment(false);
+    toggleSettings_target.setName('target');
+    toggleSettings_target.setLowerBound(0);
+    toggleSettings_target.setUpperBound(1);
+    toggleSettingsClass.getEStructuralFeatures().push(toggleSettings_target);
+    ControlwidgetsPackage.Literals.TOGGLE_SETTINGS__TARGET = toggleSettings_target;
+
+    // Create onValue feature
+    const toggleSettings_onValue = new BasicEReference();
+    toggleSettings_onValue.setContainment(false);
+    toggleSettings_onValue.setName('onValue');
+    toggleSettings_onValue.setLowerBound(0);
+    toggleSettings_onValue.setUpperBound(1);
+    toggleSettingsClass.getEStructuralFeatures().push(toggleSettings_onValue);
+    ControlwidgetsPackage.Literals.TOGGLE_SETTINGS__ON_VALUE = toggleSettings_onValue;
+
+    // Create offValue feature
+    const toggleSettings_offValue = new BasicEReference();
+    toggleSettings_offValue.setContainment(false);
+    toggleSettings_offValue.setName('offValue');
+    toggleSettings_offValue.setLowerBound(0);
+    toggleSettings_offValue.setUpperBound(1);
+    toggleSettingsClass.getEStructuralFeatures().push(toggleSettings_offValue);
+    ControlwidgetsPackage.Literals.TOGGLE_SETTINGS__OFF_VALUE = toggleSettings_offValue;
+
+    // Create onLabel feature
+    const toggleSettings_onLabel = new BasicEReference();
+    toggleSettings_onLabel.setContainment(false);
+    toggleSettings_onLabel.setName('onLabel');
+    toggleSettings_onLabel.setLowerBound(0);
+    toggleSettings_onLabel.setUpperBound(1);
+    toggleSettingsClass.getEStructuralFeatures().push(toggleSettings_onLabel);
+    ControlwidgetsPackage.Literals.TOGGLE_SETTINGS__ON_LABEL = toggleSettings_onLabel;
+
+    // Create onColor feature
+    const toggleSettings_onColor = new BasicEReference();
+    toggleSettings_onColor.setContainment(false);
+    toggleSettings_onColor.setName('onColor');
+    toggleSettings_onColor.setLowerBound(0);
+    toggleSettings_onColor.setUpperBound(1);
+    toggleSettingsClass.getEStructuralFeatures().push(toggleSettings_onColor);
+    ControlwidgetsPackage.Literals.TOGGLE_SETTINGS__ON_COLOR = toggleSettings_onColor;
+
     // Create ControlPayload class
     const controlPayloadClass = new BasicEClass();
     controlPayloadClass.setName('ControlPayload');
@@ -201,6 +261,7 @@ export class ControlwidgetsPackage extends BasicEPackage {
     // Set ESuperTypes (must be done after all classes are created)
     // ============================================
     (ControlwidgetsPackage.Literals.BUTTON_SETTINGS as BasicEClass).getESuperTypes().push(ControlwidgetsPackage.Literals.CONTROL_SETTINGS);
+    (ControlwidgetsPackage.Literals.TOGGLE_SETTINGS as BasicEClass).getESuperTypes().push(ControlwidgetsPackage.Literals.CONTROL_SETTINGS);
     (ControlwidgetsPackage.Literals.CONTROL_PAYLOAD as BasicEClass).getESuperTypes().push(requireEPackage('http://org.eclipse.daanse.board.app.lib.events').getEClassifier('Payload')! as EClass);
 
     // ============================================
@@ -215,6 +276,11 @@ export class ControlwidgetsPackage extends BasicEPackage {
     (ControlwidgetsPackage.Literals.CONTROL_SETTINGS__DISABLED as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
     (ControlwidgetsPackage.Literals.BUTTON_SETTINGS__TARGET as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
     (ControlwidgetsPackage.Literals.BUTTON_SETTINGS__VALUE as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
+    (ControlwidgetsPackage.Literals.TOGGLE_SETTINGS__TARGET as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
+    (ControlwidgetsPackage.Literals.TOGGLE_SETTINGS__ON_VALUE as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
+    (ControlwidgetsPackage.Literals.TOGGLE_SETTINGS__OFF_VALUE as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
+    (ControlwidgetsPackage.Literals.TOGGLE_SETTINGS__ON_LABEL as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
+    (ControlwidgetsPackage.Literals.TOGGLE_SETTINGS__ON_COLOR as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
     (ControlwidgetsPackage.Literals.CONTROL_PAYLOAD__VALUE as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EJavaObject')!);
     (ControlwidgetsPackage.Literals.CONTROL_PAYLOAD__PREVIOUS_VALUE as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EJavaObject')!);
 
