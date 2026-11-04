@@ -44,6 +44,11 @@ import SliderIcon from './assets/slider.svg'
 import { SliderWidgetEvents } from './events/SliderWidgetEvents'
 import { SliderWidgetInterface } from './api/SliderWidgetInterface'
 import { SliderSettingsImpl } from './gen/SliderSettingsImpl'
+import ButtonGroupWidget from './ButtonGroupWidget.vue'
+import ButtonGroupIcon from './assets/buttongroup.svg'
+import { ButtonGroupWidgetEvents } from './events/ButtonGroupWidgetEvents'
+import { ButtonGroupWidgetInterface } from './api/ButtonGroupWidgetInterface'
+import { ButtonGroupSettingsImpl } from './gen/ButtonGroupSettingsImpl'
 /* The form for the button's settings, written as a model beside the Ecore. */
 import buttonSettingsFormXmi from '../model/ui.xmi?raw'
 import toggleSettingsFormXmi from '../model/ui-toggle.xmi?raw'
@@ -53,6 +58,7 @@ import optionFormXmi from '../model/ui-option.xmi?raw'
 import sliderSettingsFormXmi from '../model/ui-slider.xmi?raw'
 /* One mark of a slider. */
 import markFormXmi from '../model/ui-mark.xmi?raw'
+import buttonGroupSettingsFormXmi from '../model/ui-buttongroup.xmi?raw'
 /* The Ecore itself, for the sentences the generator drops. */
 import settingsEcore from '../model/model.ecore?raw'
 
@@ -240,10 +246,55 @@ export class SliderWidgetProvider implements WidgetProvider {
   }
 }
 
-export { ButtonWidget, ToggleWidget, MultiStateWidget, SliderWidget }
-export { ButtonSettingsImpl, ToggleSettingsImpl, MultiStateSettingsImpl, SliderSettingsImpl, ControlwidgetsPackage }
+const BUTTON_GROUP_TYPE = 'ButtonGroupWidget'
+
+/** The button group: one or several of its options chosen, listed or from a source. */
+@component({
+  service: [WIDGET_SERVICE_ID],
+  properties: { 'widget.type': BUTTON_GROUP_TYPE },
+})
+export class ButtonGroupWidgetProvider implements WidgetProvider {
+  readonly type = BUTTON_GROUP_TYPE
+  readonly name = 'Button group'
+  readonly nameKey = 'control:Widget.buttonGroup'
+
+  readonly settingsForm = {
+    xmi: buttonGroupSettingsFormXmi,
+    ecore: settingsEcore,
+    uri: '/buttongroup-settings.ui.xmi',
+    ePackage: () => ControlwidgetsPackage.eINSTANCE,
+    create: () => new ButtonGroupSettingsImpl(),
+    entryForms: [{ xmi: optionFormXmi, uri: '/control-option.ui.xmi' }],
+  }
+
+  readonly icon = ButtonGroupIcon
+  /* Options may come from a source: a list somewhere in whatever it answered. */
+  readonly reads = ['object']
+  readonly component = ButtonGroupWidget
+
+  constructor(
+    @inject(EVENT_REGISTRY_ID) private readonly events: EventRegistry,
+    @inject(EVENT_ACTIONS_REGISTRY_ID) private readonly actions: EventActionsRegistry,
+  ) {}
+
+  @activate()
+  register(): void {
+    this.events.registerWidget(BUTTON_GROUP_TYPE, ButtonGroupWidgetEvents)
+    this.actions.registerWidgetType(BUTTON_GROUP_TYPE, ButtonGroupWidgetInterface, 'widget')
+  }
+
+  @deactivate()
+  unregister(): void {
+    this.events.unregisterWidget(BUTTON_GROUP_TYPE)
+    this.actions.unregisterWidgetType(BUTTON_GROUP_TYPE)
+  }
+}
+
+export { ButtonWidget, ToggleWidget, MultiStateWidget, SliderWidget, ButtonGroupWidget }
+export { ButtonSettingsImpl, ToggleSettingsImpl, MultiStateSettingsImpl, SliderSettingsImpl, ButtonGroupSettingsImpl }
+export { ControlwidgetsPackage }
 export { buttonSettingsFormXmi, toggleSettingsFormXmi, multiStateSettingsFormXmi, optionFormXmi }
-export { sliderSettingsFormXmi, markFormXmi }
+export { sliderSettingsFormXmi, markFormXmi, buttonGroupSettingsFormXmi }
 export { ControlOptionImpl } from './gen/ControlOptionImpl'
 export { SliderMarkImpl } from './gen/SliderMarkImpl'
 export { SliderOrientation } from './gen/SliderOrientation'
@@ -254,6 +305,7 @@ export type { MultiStateSettings } from './gen/MultiStateSettings'
 export type { ControlOption } from './gen/ControlOption'
 export type { SliderSettings } from './gen/SliderSettings'
 export type { SliderMark } from './gen/SliderMark'
+export type { ButtonGroupSettings } from './gen/ButtonGroupSettings'
 export type { ControlSettings } from './gen/ControlSettings'
 export type { ControlPayload } from './gen/ControlPayload'
 
