@@ -103,6 +103,8 @@ export interface EcorePayloadMetadata {
 export interface PayloadToArgMapping {
     payloadPath: string;
     argIndex: number;
+    /** Computes the argument from `value` (the property the path names) and `payload` (#1224). */
+    expression?: string;
 }
 
 export interface WidgetActionMetadata {
@@ -359,6 +361,16 @@ export interface EventManager {
   * Verarbeitet ein Event und führt alle passenden Actions aus
   */
   handleEvent(context: EventActionContext, eventType: string, payload: any, contextId?: string): Promise<void>;
+  /**
+  * The argument one payload mapping hands to its action: the property the
+  * path names, or the result of the mapping's expression over `value` and
+  * `payload`. Throws when the expression does not compile or throws.
+  */
+  evaluatePayloadMapping(mapping: PayloadToArgMapping, payload: any, ruleId?: string): any;
+  /**
+  * The last payload the rule saw, if it has seen one since it was loaded.
+  */
+  getLastPayload(mappingId: string): any;
   /**
   * Gibt alle Mappings zurück
   */
