@@ -23,7 +23,7 @@ import {
   DModal,
   DSelect,
 } from 'org.eclipse.daanse.board.app.ui.vue.controls'
-import { useDatasourceRepository, useEObject, useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+import { useDatasourceRepository, useEObject, useGlobalVariables, useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import { identifier as WidgetRepositoryIdentifier, type WidgetRepository } from 'org.eclipse.daanse.board.app.lib.api.widget'
 import type { EObject } from '@emfts/core'
 
@@ -394,6 +394,8 @@ interface ActionParameterInfo {
   optional: boolean
   /** The argument position - what a stored rule's argIndex refers to. */
   index: number
+  /** What the parameter stands for, as the action declares it (#1237). */
+  kind?: WidgetActionParameter['kind']
 }
 
 const selectedActionParameters = computed<ActionParameterInfo[]>(() => {
@@ -428,7 +430,8 @@ const selectedActionParameters = computed<ActionParameterInfo[]>(() => {
         label: param.label ? t(param.label) : param.name,
         type: param.type,
         optional: !!param.optional,
-        index
+        index,
+        ...(param.kind ? { kind: param.kind } : {})
       }))
     }
   }
@@ -733,9 +736,30 @@ const updateManualParameterValue = (paramIndex: number, value: string) => {
   }
 }
 
+/*
+ * A parameter naming a variable is fixed by default: the variable is
+ * chosen, not taken from the event.
+ */
 const getParameterValueSource = (paramIndex: number): 'payload' | 'manual' => {
-  return parameterValueSources.value.get(paramIndex) || 'payload'
+  const chosen = parameterValueSources.value.get(paramIndex)
+  if (chosen) return chosen
+  return selectedActionParameters.value.find(p => p.index === paramIndex)?.kind === 'variable' ? 'manual' : 'payload'
 }
+
+/*
+ * The global variables, for a parameter declared as naming one (#1237):
+ * by name, with their type. Asked again whenever the list is drawn, since
+ * a variable is added on another screen.
+ */
+const globalVariables = useGlobalVariables()
+const variableOptions = computed(() => {
+  void showAddDialog.value
+  void showEditDialog.value
+  return globalVariables().map(variable => ({
+    text: variable.type ? `${variable.name} (${variable.type})` : variable.name,
+    value: variable.name
+  }))
+})
 
 const setParameterValueSource = (paramIndex: number, source: 'payload' | 'manual') => {
   parameterValueSources.value.set(paramIndex, source)
@@ -1117,10 +1141,22 @@ onMounted(() => {
                         <!-- On the manual source only. It hung by v-else on the free path
                           field above, and so stood beside the payload choice too, a field
                           that did nothing with the type as its placeholder (#1227). -->
+                        <!-- A parameter naming a variable offers the global ones; the field
+                          beside it still takes a name for one that does not exist yet (#1237). -->
+                        <DSelect
+                          v-if="getParameterValueSource(param.index) === 'manual' && param.kind === 'variable'"
+                          class="param__variable"
+                          :model-value="getManualValueForParameter(param.index)"
+                          :options="variableOptions"
+                          label-key="text"
+                          value-key="value"
+                          :placeholder="t('Rule.chooseVariable')"
+                          @update:model-value="updateManualParameterValue(param.index, String($event ?? ''))"
+                        />
                         <DInput
                           v-if="getParameterValueSource(param.index) === 'manual'"
                           :model-value="getManualValueForParameter(param.index)"
-                          :placeholder="param.type"
+                          :placeholder="param.kind === 'variable' ? t('Rule.newVariable') : param.type"
                           @update:model-value="updateManualParameterValue(param.index, String($event ?? ''))"
                         />
                       </div>

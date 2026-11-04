@@ -27,7 +27,7 @@ import { EventActionsRegistry, EVENT_ACTIONS_REGISTRY, EVENT_ACTIONS_REGISTRY_ID
   type EventAction, type EventActionContext, type WidgetTypeRegistration, type RegisteredInstance } from './registry/EventActionsRegistry';
 import { EventManager, EVENT_MANAGER, EVENT_MANAGER_ID, PayloadExpressionError, type EventActionMapping, type ActionDefinition, type PayloadToArgMapping } from './manager/EventManager';
 import { EventBusBridge, EVENT_BUS_BRIDGE, EVENT_BUS_BRIDGE_ID } from './bridge/EventBusBridge';
-import { WidgetAction, ActionParameter, getWidgetActions, type WidgetActionMetadata, type WidgetActionParameter, type ActionParameterMetadata } from './decorators/WidgetAction';
+import { WidgetAction, ActionParameter, getWidgetActions, type WidgetActionMetadata, type WidgetActionParameter, type ActionParameterMetadata, type ActionParameterKind } from './decorators/WidgetAction';
 import { EcoreMetadataService, ECORE_METADATA_SERVICE, ECORE_METADATA_SERVICE_ID, type EcoreActionMetadata, type EcoreParameterMetadata } from './registry/EcoreMetadataService';
 import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core';
 
@@ -129,6 +129,7 @@ export {
   type EventActionContext,
   type WidgetActionMetadata,
   type WidgetActionParameter,
+  type ActionParameterKind,
   type ActionParameterMetadata,
   type EcoreActionMetadata,
   type EcoreParameterMetadata,
