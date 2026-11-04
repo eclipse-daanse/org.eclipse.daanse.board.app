@@ -44,6 +44,8 @@
     "fromEvent": "aus dem Ereignis",
     "fixedValue": "fester Wert",
     "chooseProperty": "Eigenschaft wählen",
+    "chooseVariable": "Variable wählen",
+    "newVariable": "oder Name einer neuen Variable",
     "freePath": "oder ein Pfad, z. B. {{example}}",
     "expression": "Ausdruck",
     "resultLast": "Letztes Ereignis: {{result}}",

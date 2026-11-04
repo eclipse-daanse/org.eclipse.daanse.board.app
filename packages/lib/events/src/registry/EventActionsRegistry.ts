@@ -247,7 +247,7 @@ export class EventActionsRegistry {
         eventType: ecoreAction.eventType,
         parameters: [...ecoreAction.parameters]
           .sort((a, b) => a.index - b.index)
-          .map((p): WidgetActionParameter => ({ name: p.name, type: p.type, optional: p.optional }))
+          .map((p): WidgetActionParameter => ({ name: p.name, type: p.type, optional: p.optional, ...(p.kind ? { kind: p.kind } : {}) }))
       }));
 
       // Register the action type
@@ -307,7 +307,7 @@ export class EventActionsRegistry {
         eventType: ecoreAction.eventType,
         parameters: [...ecoreAction.parameters]
           .sort((a, b) => a.index - b.index)
-          .map((p): WidgetActionParameter => ({ name: p.name, type: p.type, optional: p.optional }))
+          .map((p): WidgetActionParameter => ({ name: p.name, type: p.type, optional: p.optional, ...(p.kind ? { kind: p.kind } : {}) }))
       }));
 
       // Register the action type
