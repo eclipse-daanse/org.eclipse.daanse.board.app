@@ -45,8 +45,13 @@ import {
   workspaceEcore,
   type Weather,
 } from 'org.eclipse.daanse.board.app.lib.model.workspace'
+import {
+  identifier as WidgetRepositoryIdentifier,
+  type WidgetRepository,
+} from 'org.eclipse.daanse.board.app.lib.api.widget'
 /* The weather's form, written as a model; see the file for why it is here. */
 import weatherFormXmi from '../../../model/weather.ui.xmi?raw'
+import { weatherForm } from './weatherForm'
 
 const pageid = defineModel<string>({ required: true })
 const emit = defineEmits(['close'])
@@ -54,6 +59,7 @@ const { t } = useTranslation('shell')
 
 const pageRepo = inject<PageRegistryI>(PageIdentifier)
 const layoutRepo = inject<LayoutRepositoryI>(LayoutRepositoryIdentifier)
+const widgetRepo = inject<WidgetRepository | undefined>(WidgetRepositoryIdentifier, undefined)
 const pageSettings = ref<StoredPage | null>(null)
 
 const availableLayouts = computed(() => layoutRepo?.getAllLayouts() ?? [])
@@ -170,6 +176,9 @@ function load() {
  */
 const weather = shallowRef<Weather | undefined>()
 
+/* The form, with the page's widgets as the choices for a widget region */
+const weatherFormFor = shallowRef(weatherForm(weatherFormXmi, []))
+
 function loadWeather() {
   let page: Page | undefined
   try {
@@ -178,6 +187,23 @@ function loadWeather() {
     page = undefined
   }
   weather.value = page ? (page.weather ?? createWeather()) : undefined
+  const widgets = page?.widgets?.toArray?.() ?? []
+  weatherFormFor.value = weatherForm(
+    weatherFormXmi,
+    widgets.map((widget) => {
+      const type = widget.type ? safeWidgetType(widget.type) : undefined
+      const name = type?.nameKey ? t(type.nameKey) : (type?.name ?? widget.type ?? '')
+      return { id: widget.uid as string, label: `${name} (${String(widget.uid).slice(0, 6)})` }
+    }),
+  )
+}
+
+function safeWidgetType(type: string) {
+  try {
+    return widgetRepo?.getWidget(type)
+  } catch {
+    return undefined
+  }
 }
 
 const watchedWeather = useEObject(() => weather.value)
@@ -294,9 +320,9 @@ watch(
         <SettingsForm
           v-model="weather"
           :create="createWeather as () => any"
-          :ui-model-xmi="weatherFormXmi"
+          :ui-model-xmi="weatherFormFor.xmi"
           :domain-package="WorkspacePackage.eINSTANCE as any"
-          ui-model-uri="/page-weather.ui.xmi"
+          :ui-model-uri="weatherFormFor.uri"
           :ecore="workspaceEcore"
         />
       </section>
