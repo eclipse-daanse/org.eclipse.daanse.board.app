@@ -20,6 +20,7 @@
 
 import type { ControlSettings } from './ControlSettings.js';
 import type { VariableWrapper } from 'org.eclipse.daanse.board.app.lib.variables';
+import type { LabelSide } from './LabelSide.js';
 
 /**
  * ToggleSettings
@@ -31,5 +32,6 @@ export interface ToggleSettings extends ControlSettings {
   offValue?: VariableWrapper<string>;
   onLabel?: VariableWrapper<string>;
   onColor?: VariableWrapper<string>;
+  labelSide?: LabelSide;
 
 }
