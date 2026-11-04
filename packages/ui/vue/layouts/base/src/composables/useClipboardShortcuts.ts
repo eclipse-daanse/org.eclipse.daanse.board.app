@@ -11,7 +11,7 @@
  *   Smart City Jena
  **********************************************************************/
 import { onMounted, onUnmounted, ref } from 'vue'
-import { useClipboardStore } from './useClipboardStore'
+import { PASTE_REQUEST_EVENT, useClipboardStore } from './useClipboardStore'
 
 /** A point on the board, in the board's own pixels. */
 export interface BoardPoint {
@@ -111,9 +111,16 @@ export function useClipboardShortcuts(options: ClipboardShortcutOptions) {
     }
   }
 
-  onMounted(() => window.addEventListener('keydown', onKey))
+  /* "Einfügen" in the top bar: the pointer is up there, not on the board. */
+  const onPasteRequest = () => paste(undefined)
+
+  onMounted(() => {
+    window.addEventListener('keydown', onKey)
+    window.addEventListener(PASTE_REQUEST_EVENT, onPasteRequest)
+  })
   onUnmounted(() => {
     window.removeEventListener('keydown', onKey)
+    window.removeEventListener(PASTE_REQUEST_EVENT, onPasteRequest)
     hideNotice()
   })
 
