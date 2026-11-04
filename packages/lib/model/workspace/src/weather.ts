@@ -56,6 +56,29 @@ export function createWeather(): Weather {
   return weather
 }
 
+/**
+ * Puts a wrapper, holding its default, into every setting a stored weather
+ * came back without, and says whether it had to.
+ *
+ * A weather written before a setting existed - one from 085750e1 has kind,
+ * intensity, wind and colour and nothing else - comes back with that
+ * reference empty. The layer reads an empty one as its default, so it
+ * looks right; but the form has nothing to bind a field to and leaves it
+ * out, and nothing can set it. Called when a stored workspace is read,
+ * before anyone watches it.
+ */
+export function completeWeather(weather: Weather): boolean {
+  const fresh = createWeather() as unknown as Record<string, unknown>
+  const held = weather as unknown as Record<string, unknown>
+  let completed = false
+  for (const key of Object.keys(WEATHER_DEFAULTS)) {
+    if (held[key]) continue
+    held[key] = fresh[key]
+    completed = true
+  }
+  return completed
+}
+
 /** The kinds, as Weather.kind holds them: the enum's literals. */
 export const WEATHER_KINDS = ['none', 'rain', 'snow', 'fog'] as const
 

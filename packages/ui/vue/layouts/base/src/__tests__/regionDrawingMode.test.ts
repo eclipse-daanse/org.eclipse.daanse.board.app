@@ -152,6 +152,52 @@ describe('the drawing mode of a weather region', () => {
     wrapper.unmount()
   })
 
+  it('changes the stored shape by a moved handle', async () => {
+    const p = page()
+    writeShapes(p.weather!, [{ kind: 'rectangle', x: 1, y: 1, width: 2, height: 2 }])
+    const { wrapper, bus } = mountLayer(p)
+    await startDrawing(bus)
+    await wrapper.find('[data-tool="select"]').trigger('click')
+    await dragOn(wrapper, [40, 20], [40, 20])
+    expect(wrapper.findAll('[data-handle]')).toHaveLength(8)
+
+    /* The bottom right corner, at (3, 3) grid units, pulled to (6, 5) */
+    await dragOn(wrapper, [60, 30], [120, 50])
+    await wrapper.find('[data-action="done"]').trigger('click')
+    expect(readShapes(p.weather)).toEqual([{ kind: 'rectangle', x: 1, y: 1, width: 5, height: 4 }])
+    wrapper.unmount()
+  })
+
+  it('deletes the selected shapes with Delete, and offers the button only with a selection', async () => {
+    const p = page()
+    writeShapes(p.weather!, [
+      { kind: 'rectangle', x: 1, y: 1, width: 2, height: 2 },
+      { kind: 'rectangle', x: 5, y: 1, width: 2, height: 2 },
+      { kind: 'rectangle', x: 9, y: 1, width: 2, height: 2 },
+    ])
+    const { wrapper, bus } = mountLayer(p)
+    await startDrawing(bus)
+    await wrapper.find('[data-tool="select"]').trigger('click')
+    const remove = () => wrapper.find('[data-action="delete"]').element as HTMLButtonElement
+    expect(remove().disabled).toBe(true)
+
+    await dragOn(wrapper, [40, 20], [40, 20])
+    const surface = wrapper.find('.region__surface').element
+    surface.dispatchEvent(new MouseEvent('pointerdown', { clientX: 200, clientY: 20, shiftKey: true, bubbles: true }))
+    surface.dispatchEvent(new MouseEvent('pointerup', { clientX: 200, clientY: 20, bubbles: true }))
+    await nextTick()
+    expect(wrapper.findAll('.region__shape--selected')).toHaveLength(2)
+    expect(remove().disabled).toBe(false)
+
+    key('Delete')
+    await nextTick()
+    expect(wrapper.findAll('.region__shape')).toHaveLength(1)
+    expect(remove().disabled).toBe(true)
+    await wrapper.find('[data-action="done"]').trigger('click')
+    expect(readShapes(p.weather)).toEqual([{ kind: 'rectangle', x: 5, y: 1, width: 2, height: 2 }])
+    wrapper.unmount()
+  })
+
   it('leaves the page as it was on Escape', async () => {
     const p = page()
     p.weather!.region!.value = 'page'
@@ -166,6 +212,11 @@ describe('the drawing mode of a weather region', () => {
     await wrapper.find('[data-tool="rectangle"]').trigger('click')
     await dragOn(wrapper, [100, 100], [200, 200])
 
+    /* The first Escape lets go of the new shape, the second leaves */
+    key('Escape')
+    await nextTick()
+    expect(wrapper.find('.region').exists()).toBe(true)
+    expect(wrapper.find('.region__shape--selected').exists()).toBe(false)
     key('Escape')
     await nextTick()
     expect(wrapper.find('.region').exists()).toBe(false)
