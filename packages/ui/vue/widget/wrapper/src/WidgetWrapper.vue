@@ -16,7 +16,7 @@
 // import type { IWidget } from "@/types/Widgets";
 // import { WidgetRepository } from "@/plugins/data/WidgetRepository";
 // import SERVICE_IDENTIFIER from "@/config/identifiers/services";
-import { inject, computed, ref, onUnmounted } from 'vue'
+import { inject, computed, ref, onUnmounted, watch } from 'vue'
 import {
   WidgetRepository,
   identifier as WidgetIdentifier,
@@ -208,64 +208,84 @@ const defaultConfig = {
   transparency: 255
 }
 
-Object.keys(defaultConfig).forEach((key) => {
-  // Check if the property exists and is a VariableWrapper
-  // We assume if it's an object with 'value', it might be a wrapper or compatible.
-  // However, to ensure it has methods like setTo, we might need to re-wrap or check prototype.
-  // For simplicity/robustness, if it's strictly a primitive, we wrap it.
-  // If it is undefined, we wrap the default.
-  // If existing boards have primitives, this upgrades them.
+/*
+ * The frame's settings, watched the way the widget's own are (#1203).
+ *
+ * Widget.wrapperConfig is an attribute, so the adapter on the widget
+ * hears the frame being replaced - which opening the settings does, when
+ * the form adopts a stored frame into a modelled instance - but nothing
+ * written inside it. And read straight off the prop, as it was, not even
+ * the replacement reached a computed: the preview and the board went on
+ * drawing the frame they had mounted with, whose wrappers the form no
+ * longer wrote to, until a change of mode mounted them again (#1233).
+ *
+ * So the frame is read through the watched widget (#1093) and watched
+ * itself: a replaced wrapper is an eSet on the modelled frame, and a value
+ * written into a wrapper reaches the computeds through wrapperReactivity.
+ */
+const frame = useEObject(() => (watchedWidget.value as any)?.wrapperConfig as EObject | undefined)
+/*
+ * A getter, not a computed: a change inside the frame re-triggers the same
+ * instance, and a computed handing back an identical value would tell
+ * nothing downstream to look again.
+ */
+const wrapperConfig = (): Record<string, any> => (frame.value as Record<string, any> | undefined) ?? {}
 
-  const val = widget.wrapperConfig[key];
+/*
+ * Every frame this wrapper is handed gets a wrapper per setting - the one
+ * it mounted with and any that replaces it later.
+ */
+function fillDefaults(settings: Record<string, any> | undefined) {
+  if (!settings) return
+  Object.keys(defaultConfig).forEach((key) => {
+    // A missing or primitive value is wrapped; a plain JSON object with a
+    // value - a board stored before the wrappers were modelled - is
+    // re-hydrated, and anything else falls back to the default.
+    const val = settings[key];
 
-  // Logic: if missing, use default wrapped.
-  // If present but primitive, wrap it.
-  // If present and object, assume it's ok (or maybe we should ensure instance?)
-  // VariableWrapper constructor: constructor(value?: T)
-
-  if (val === undefined || val === null) {
-    widget.wrapperConfig[key] = new VariableWrapper(defaultConfig[key as keyof typeof defaultConfig]);
-  } else if (typeof val !== 'object') {
-    widget.wrapperConfig[key] = new VariableWrapper(val);
-  } else if (!(val instanceof VariableWrapper)) {
-    // It is an object but not a VariableWrapper instance (e.g. simple JSON object)
-    // Re-hydrate if it has value property?
-    if ('value' in val) {
-      const v = new VariableWrapper(val.value);
-      // handle other props like variable name if present?
-      if ('variable' in val) v.variable = val.variable;
-      widget.wrapperConfig[key] = v;
-    } else {
-      // Fallback
-      widget.wrapperConfig[key] = new VariableWrapper(defaultConfig[key as keyof typeof defaultConfig]);
+    if (val === undefined || val === null) {
+      settings[key] = new VariableWrapper(defaultConfig[key as keyof typeof defaultConfig]);
+    } else if (typeof val !== 'object') {
+      settings[key] = new VariableWrapper(val);
+    } else if (!(val instanceof VariableWrapper)) {
+      if ('value' in val) {
+        const v = new VariableWrapper(val.value);
+        if ('variable' in val) v.variable = val.variable;
+        settings[key] = v;
+      } else {
+        settings[key] = new VariableWrapper(defaultConfig[key as keyof typeof defaultConfig]);
+      }
     }
-  }
-});
+  });
+}
+
+fillDefaults(widget.wrapperConfig)
+watch(frame, (settings) => fillDefaults(settings as Record<string, any> | undefined))
 
 
 const getShadow = computed(() => {
   let post = ''
-  const shadowTransparence = widget.wrapperConfig.shadowTransparence?.value;
+  const shadowTransparence = wrapperConfig().shadowTransparence?.value;
   if (isByte(shadowTransparence)) {
     post = shadowTransparence.toString(16)
   }
-  let color = (widget.wrapperConfig.shadowColor?.value || '#FFFFFF').replace('#', '')
+  let color = (wrapperConfig().shadowColor?.value || '#FFFFFF').replace('#', '')
   if (color.length == 3) {
     color = color[0] + color[0] + color[1] + color[1] + color[2] + color[2]
   }
 
-  const ret = `${widget.wrapperConfig.shadowX?.value}px ${widget.wrapperConfig.shadowY?.value}px ${widget.wrapperConfig.shadowBlur?.value}px #${color}${post}`
+  const ret = `${wrapperConfig().shadowX?.value}px ${wrapperConfig().shadowY?.value}px ${wrapperConfig().shadowBlur?.value}px #${color}${post}`
   return ret
 })
 
 const getBackground = computed(() => {
   let bgAlpha = 255
-  const bgTransparence = widget.wrapperConfig.backgroundColorTransparence?.value;
+  const bgTransparence = wrapperConfig().backgroundColorTransparence?.value;
   if (isByte(bgTransparence)) {
     bgAlpha = bgTransparence
   }
   // Also factor in overall widget transparency
-  const transparencyVal = widget.wrapperConfig.transparency?.value;
+  const transparencyVal = wrapperConfig().transparency?.value;
   if (isByte(transparencyVal)) {
     bgAlpha = Math.round(bgAlpha * (transparencyVal / 255))
   }
@@ -275,7 +295,7 @@ const getBackground = computed(() => {
    * default while the app only had a light surface, but it burns a hole in
    * a dark board. Widgets that carry a stored colour keep it.
    */
-  const stored = widget.wrapperConfig.backgroundColor?.value
+  const stored = wrapperConfig().backgroundColor?.value
   if (!stored) return 'var(--color-pane)'
 
   let color = stored.replace('#', '')
@@ -289,39 +309,39 @@ const getBackground = computed(() => {
 })
 
 const borderColor = computed(() => {
-  return widget.wrapperConfig.borderColor?.value || 'var(--color-divider)'
+  return wrapperConfig().borderColor?.value || 'var(--color-divider)'
 })
 
 const borderSize = computed(() => {
-  return widget.wrapperConfig.borderSize?.value || 0
+  return wrapperConfig().borderSize?.value || 0
 })
 
 const borderRadius = computed(() => {
-  return widget.wrapperConfig.borderRadius?.value || 0
+  return wrapperConfig().borderRadius?.value || 0
 })
 
 const transparency = computed(() => {
-  const t = widget.wrapperConfig.transparency?.value;
+  const t = wrapperConfig().transparency?.value;
   return isByte(t)
     ? t / 255
     : 1
 })
 
 const titleFontSize = computed(() => {
-  return widget.wrapperConfig.titleFontSize?.value || 16
+  return wrapperConfig().titleFontSize?.value || 16
 })
 
 const titleColor = computed(() => {
-  return widget.wrapperConfig.titleColor?.value || 'var(--color-divider)'
+  return wrapperConfig().titleColor?.value || 'var(--color-divider)'
 })
 
 // Unused? But kept for consistency
 const getShadowColor = computed(() => {
-  let color = (widget.wrapperConfig.shadowColor?.value || '#FFFFFF').replace('#', '')
+  let color = (wrapperConfig().shadowColor?.value || '#FFFFFF').replace('#', '')
   if (color.length == 3) {
     color = color[0] + color[0] + color[1] + color[1] + color[2] + color[2]
   }
-  const t = widget.wrapperConfig.shadowTransparence?.value;
+  const t = wrapperConfig().shadowTransparence?.value;
   return (
     color +
     (isByte(t)
@@ -337,12 +357,12 @@ function isByte(value: any): value is number {
   return parsedValue >= 0 && parsedValue <= 255;
 }
 const getBlur = computed(() => {
-  const b = widget.wrapperConfig.blur?.value;
+  const b = wrapperConfig().blur?.value;
   return (isByte(b)) ?
     b : ''
 })
 const getpadding = computed(() => {
-  const int = parseInt(widget.wrapperConfig.padding?.value);
+  const int = parseInt(wrapperConfig().padding?.value);
   return isNaN(int) ? 0 : int;
 })
 
@@ -353,7 +373,7 @@ const getpadding = computed(() => {
     class="flex relative flex-col w-full h-full wrapper-container"
     :style="{ '--blur-amount': getBlur + 'px', '--title-color': titleColor }">
     <div
-      v-if="widget.wrapperConfig.title?.value"
+      v-if="wrapperConfig().title?.value"
       class="font-semibold capitalize"
       :style="{
         fontSize: titleFontSize + 'px',
@@ -363,7 +383,7 @@ const getpadding = computed(() => {
         opacity: transparency,
       }"
     >
-      {{ widget.wrapperConfig.title.value }}
+      {{ wrapperConfig().title.value }}
     </div>
     <template v-if="isWidgetRegistered">
       <div
