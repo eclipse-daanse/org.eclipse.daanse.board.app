@@ -72,5 +72,11 @@
       "horizontal": "Horizontal",
       "vertical": "Vertical"
     }
+  },
+  "Default": {
+    "button": "Button",
+    "toggle": "Switch",
+    "multiState": "State",
+    "slider": "Slider"
   }
 }

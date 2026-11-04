@@ -23,7 +23,7 @@ import { computed, toRefs } from 'vue'
 import type { ToggleSettings } from './gen/ToggleSettings'
 import { ToggleSettingsImpl } from './gen/ToggleSettingsImpl'
 import { ToggleWidgetInterface } from './api/ToggleWidgetInterface'
-import { sameValue, useControl } from './support/useControl'
+import { colourOf, FORMER_DEFAULTS, sameValue, useControl } from './support/useControl'
 
 const props = defineProps<{ datasourceId?: string; id?: string }>()
 const { id: widgetId } = toRefs(props)
@@ -54,23 +54,24 @@ class ToggleWidgetApi extends ToggleWidgetInterface {
 const api = new ToggleWidgetApi()
 defineExpose<ToggleWidgetInterface>(api)
 
-const { held, current, label, color, textColor, fontSize, disabled, put, write, operate } = useControl(
-  config,
-  widgetId,
-  {
-    type: 'ToggleWidget',
-    wrapped: { target: '', onValue: 'true', offValue: 'false', onLabel: '', onColor: '#16a34a' },
-    create: () => new ToggleSettingsImpl(),
-    api,
-  },
-)
+const { held, current, label, color, look, disabled, put, write, operate } = useControl(config, widgetId, {
+  type: 'ToggleWidget',
+  wrapped: { target: '', onValue: 'true', offValue: 'false', onLabel: '', onColor: '' },
+  create: () => new ToggleSettingsImpl(),
+  api,
+  nameKey: 'control:Default.toggle',
+})
 
 const onValue = computed(() => typed(held('onValue')))
 const offValue = computed(() => typed(held('offValue')))
 const on = computed(() => sameValue(current(), onValue.value))
 
 const shownLabel = computed(() => (on.value && held('onLabel')) || label.value)
-const shownColor = computed(() => (on.value ? held('onColor') || '#16a34a' : color.value))
+/* Unset, on takes the theme's accent and off a muted shade of the text. */
+const onColor = computed(() => colourOf(held('onColor'), FORMER_DEFAULTS.onColor))
+const shownColor = computed(() =>
+  on.value ? onColor.value || 'var(--control-face)' : color.value || 'var(--control-off)',
+)
 
 function press(): void {
   operate(on.value ? offValue.value : onValue.value)
@@ -85,7 +86,7 @@ function press(): void {
       :class="{ 'control-toggle__face--on': on }"
       :aria-pressed="on"
       :disabled="disabled"
-      :style="{ background: shownColor, color: textColor, fontSize }"
+      :style="[look, { background: shownColor }]"
       @click="press"
     >
       <span class="control-toggle__lamp" aria-hidden="true"></span>
@@ -104,7 +105,9 @@ function press(): void {
 }
 
 .control-toggle__face {
+  --control-off: color-mix(in srgb, var(--color-fg, #dfe8ef) 30%, transparent);
   flex: 1;
+  color: var(--control-on-face);
   min-width: 0;
   min-height: 0;
   display: flex;
