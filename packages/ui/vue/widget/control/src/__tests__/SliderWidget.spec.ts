@@ -181,4 +181,38 @@ describe('SliderWidget', () => {
     expect(emit).not.toHaveBeenCalled()
     expect(wrapper.find('input').attributes('disabled')).toBeUndefined()
   })
+
+  it('puts the value badge on the thumb, and it follows the thumb', async () => {
+    const { variable, target } = bound('speed', 25)
+    const { wrapper } = await show(SliderWidget, slider({ target }))
+    const badge = () => wrapper.find('.control-slider__value')
+    expect(badge().text()).toBe('25 %')
+    expect((badge().element as HTMLElement).style.left).toBe('25%')
+
+    variable.value = 80
+    await nextTick()
+    expect((badge().element as HTMLElement).style.left).toBe('80%')
+  })
+
+  it('gives each thumb of a range a badge of its own', async () => {
+    const low = bound('from', 20)
+    const high = bound('to', 80)
+    const { wrapper } = await show(SliderWidget, slider({ target: low.target, upperTarget: high.target, range: true }))
+    expect(wrapper.findAll('.control-slider__value').map((b) => b.text())).toEqual(['20 %', '80 %'])
+  })
+
+  it('draws a tick at each mark with its label under it, beside the track where vertical', async () => {
+    const settings = slider({ markEvery: new VariableWrapper('10') })
+    const { wrapper } = await show(SliderWidget, settings)
+    const marks = wrapper.findAll('.control-slider__mark')
+    expect(marks).toHaveLength(3)
+    expect(marks.every((m) => m.find('.control-slider__tick').exists())).toBe(true)
+    expect((marks[1].element as HTMLElement).style.left).toBe('50%')
+
+    settings.orientation = 'vertical'
+    await nextTick()
+    const beside = wrapper.findAll('.control-slider__mark')
+    expect((beside[1].element as HTMLElement).style.bottom).toBe('50%')
+    expect((wrapper.find('.control-slider__value').element as HTMLElement).style.bottom).toBe('0%')
+  })
 })
