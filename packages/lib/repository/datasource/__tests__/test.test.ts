@@ -52,3 +52,23 @@ describe('DatasourceRepository Tests', () => {
     expect(ds).toBeInstanceOf(TestClass);
   });
 });
+
+describe('a source whose type arrives later (#1230)', () => {
+  test('is kept and becomes usable once its type registers', () => {
+    const lateSymbol = Symbol.for('LateClass');
+    services.register(lateSymbol.description!, (config: unknown) => ({ config }));
+
+    datasourceRepository.registerDatasource('late-id', 'late', { type: 'late', url: 'u' });
+    expect(() => datasourceRepository.getDatasource('late-id')).toThrow();
+
+    datasourceRepository.registerDatasourceType('late', {
+      Store: lateSymbol,
+      Preview: null as any,
+      Settings: null as any,
+    });
+
+    const ds = datasourceRepository.getDatasource('late-id') as unknown as { config: { url: string } };
+    expect(ds.config.url).toBe('u');
+    expect(datasourceRepository.getDatasourceType('late-id')).toBe('late');
+  });
+});
