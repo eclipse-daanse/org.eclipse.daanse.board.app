@@ -5,5 +5,8 @@
   "Form": {
     "value": "Diagram",
     "theme": "Colour scheme"
+  },
+  "Action": {
+    "level": "Zoom level"
   }
 }

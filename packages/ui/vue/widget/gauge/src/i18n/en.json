@@ -33,5 +33,9 @@
       "threeQuarter": "Three-quarter circle",
       "half": "Half circle"
     }
+  },
+  "Action": {
+    "value": "Value",
+    "max": "Upper limit"
   }
 }

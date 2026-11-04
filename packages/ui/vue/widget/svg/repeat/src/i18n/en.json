@@ -13,5 +13,8 @@
     "progress": "Of which highlighted",
     "activeGroup": "Highlighted",
     "defaultGroup": "Others"
+  },
+  "Action": {
+    "level": "Zoom level"
   }
 }

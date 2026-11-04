@@ -13,5 +13,8 @@
     "progress": "Davon hervorgehoben",
     "activeGroup": "Hervorgehoben",
     "defaultGroup": "Übrige"
+  },
+  "Action": {
+    "level": "Zoomstufe"
   }
 }
