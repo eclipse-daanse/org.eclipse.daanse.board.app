@@ -16,15 +16,21 @@ import { WidgetAction } from 'org.eclipse.daanse.board.app.lib.events'
 
 export abstract class TimelineWidgetInterface extends WidgetActionInterfaceImpl {
 
-  @WidgetAction({ eventType: 'timeline.zoomIn' })
+  @WidgetAction({ eventType: 'timeline.zoomIn', parameters: [] })
   zoomIn(): void { throw new Error("zoomIn not implemented"); }
 
-  @WidgetAction({ eventType: 'timeline.zoomOut' })
+  @WidgetAction({ eventType: 'timeline.zoomOut', parameters: [] })
   zoomOut(): void { throw new Error("zoomOut not implemented"); }
 
-  @WidgetAction({ eventType: 'timeline.setDateRange' })
+  @WidgetAction({
+    eventType: 'timeline.setDateRange',
+    parameters: [
+      { name: 'start', type: 'string', label: 'timeline:Action.start' },
+      { name: 'end', type: 'string', label: 'timeline:Action.end' },
+    ],
+  })
   setDateRange(start: string, end: string): void { throw new Error("setDateRange not implemented"); }
 
-  @WidgetAction({ eventType: 'timeline.jumpToNow' })
+  @WidgetAction({ eventType: 'timeline.jumpToNow', parameters: [] })
   jumpToNow(): void { throw new Error("jumpToNow not implemented"); }
 }

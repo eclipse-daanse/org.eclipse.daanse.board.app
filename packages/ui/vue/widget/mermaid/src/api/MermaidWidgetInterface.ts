@@ -16,9 +16,14 @@ import { WidgetAction } from 'org.eclipse.daanse.board.app.lib.events'
 
 export abstract class MermaidWidgetInterface extends WidgetActionInterfaceImpl {
 
-  @WidgetAction({ eventType: 'mermaid.refresh' })
+  @WidgetAction({ eventType: 'mermaid.refresh', parameters: [] })
   refresh(): void { throw new Error("refresh not implemented"); }
 
-  @WidgetAction({ eventType: 'mermaid.zoom' })
+  @WidgetAction({
+    eventType: 'mermaid.zoom',
+    parameters: [
+      { name: 'level', type: 'number', label: 'mermaid:Action.level' },
+    ],
+  })
   zoom(level: number): void { throw new Error("zoom not implemented"); }
 }

@@ -12,5 +12,8 @@
   "Form": {
     "src": "Address of the graphic",
     "classesConfig": "Class rules"
+  },
+  "Action": {
+    "level": "Zoom level"
   }
 }

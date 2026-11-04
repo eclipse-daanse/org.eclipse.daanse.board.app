@@ -90,5 +90,8 @@
       "dotted": "Gepunktet",
       "dashDot": "Strich-Punkt"
     }
+  },
+  "Action": {
+    "format": "Bildformat, etwa image/png"
   }
 }

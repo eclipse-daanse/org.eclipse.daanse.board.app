@@ -12,5 +12,8 @@
   "Form": {
     "src": "Adresse der Grafik",
     "classesConfig": "Klassenregeln"
+  },
+  "Action": {
+    "level": "Zoomstufe"
   }
 }
