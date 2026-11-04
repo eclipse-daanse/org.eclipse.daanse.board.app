@@ -21,6 +21,7 @@
 import { createContainmentEList } from '@emfts/core';
 import type { EClass, EStructuralFeature, EList, EReference } from '@emfts/core';
 import type { SliderMark } from './SliderMark.js';
+import type { ControlOption } from './ControlOption.js';
 import { VariableWrapper } from 'org.eclipse.daanse.board.app.lib.variables';
 import { SliderOrientation } from './SliderOrientation.js';
 import { ControlSettingsImpl } from './ControlSettingsImpl.js';
@@ -40,11 +41,12 @@ export class SliderSettingsImpl extends ControlSettingsImpl implements SliderSet
   static readonly STEP: number = 9;
   static readonly UNIT: number = 10;
   static readonly MARKS: number = 11;
-  static readonly MARK_EVERY: number = 12;
-  static readonly SNAP: number = 13;
-  static readonly RANGE: number = 14;
-  static readonly ORIENTATION: number = 15;
-  static readonly SHOW_VALUE: number = 16;
+  static readonly DETENTS: number = 12;
+  static readonly MARK_EVERY: number = 13;
+  static readonly SNAP: number = 14;
+  static readonly RANGE: number = 15;
+  static readonly ORIENTATION: number = 16;
+  static readonly SHOW_VALUE: number = 17;
 
   // Private fields
   private _target: VariableWrapper<string> = new VariableWrapper<string>();
@@ -54,6 +56,7 @@ export class SliderSettingsImpl extends ControlSettingsImpl implements SliderSet
   private _step: VariableWrapper<string> = new VariableWrapper<string>();
   private _unit: VariableWrapper<string> = new VariableWrapper<string>();
   private _marks!: EList<SliderMark>;
+  private _detents!: EList<ControlOption>;
   private _markEvery: VariableWrapper<string> = new VariableWrapper<string>();
   private _snap: boolean = true;
   private _range: boolean = false;
@@ -219,6 +222,13 @@ export class SliderSettingsImpl extends ControlSettingsImpl implements SliderSet
     return this._marks;
   }
 
+  get detents(): EList<ControlOption> {
+    if (!this._detents) {
+      this._detents = createContainmentEList<any>(this, this.eClass().getEStructuralFeature('detents') as EReference);
+    }
+    return this._detents;
+  }
+
   get markEvery(): VariableWrapper<string> {
     return this._markEvery!;
   }
@@ -361,6 +371,8 @@ export class SliderSettingsImpl extends ControlSettingsImpl implements SliderSet
         return this.unit;
       case SliderSettingsImpl.MARKS:
         return this.marks;
+      case SliderSettingsImpl.DETENTS:
+        return this.detents;
       case SliderSettingsImpl.MARK_EVERY:
         return this.markEvery;
       case SliderSettingsImpl.SNAP:
@@ -411,6 +423,11 @@ export class SliderSettingsImpl extends ControlSettingsImpl implements SliderSet
         this.marks.addAll(newValue as any[]);
         super.eSet(feature, newValue);
         break;
+      case SliderSettingsImpl.DETENTS:
+        this.detents.clear();
+        this.detents.addAll(newValue as any[]);
+        super.eSet(feature, newValue);
+        break;
       case SliderSettingsImpl.MARK_EVERY:
         this.markEvery = newValue as VariableWrapper<string>;
         super.eSet(feature, newValue);
@@ -456,6 +473,8 @@ export class SliderSettingsImpl extends ControlSettingsImpl implements SliderSet
         return this._unit !== new VariableWrapper<string>();
       case SliderSettingsImpl.MARKS:
         return this._marks !== undefined && !this._marks.isEmpty();
+      case SliderSettingsImpl.DETENTS:
+        return this._detents !== undefined && !this._detents.isEmpty();
       case SliderSettingsImpl.MARK_EVERY:
         return this._markEvery !== new VariableWrapper<string>();
       case SliderSettingsImpl.SNAP:
@@ -498,6 +517,9 @@ export class SliderSettingsImpl extends ControlSettingsImpl implements SliderSet
       case SliderSettingsImpl.MARKS:
         if (this._marks) this._marks.clear();
         return;
+      case SliderSettingsImpl.DETENTS:
+        if (this._detents) this._detents.clear();
+        return;
       case SliderSettingsImpl.MARK_EVERY:
         this._markEvery = new VariableWrapper<string>();
         return;
@@ -535,6 +557,7 @@ export class SliderSettingsImpl extends ControlSettingsImpl implements SliderSet
       step: this.step,
       unit: this.unit,
       marks: this.marks?.toArray?.() ?? this.marks,
+      detents: this.detents?.toArray?.() ?? this.detents,
       markEvery: this.markEvery,
       snap: this.snap,
       range: this.range,

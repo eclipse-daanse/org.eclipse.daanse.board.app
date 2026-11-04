@@ -172,7 +172,7 @@ through it into the variable it follows.
 
     <eClassifiers xsi:type="ecore:EClass" name="ControlOption">
         <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-            <details key="documentation" value="One value a control can take, with what it shows for it: a state of a multi-state button, an option of a button group."/>
+            <details key="documentation" value="One value a control can take, with what it shows for it: a state of a multi-state button, an option of a button group, a named detent of a slider."/>
         </eAnnotations>
 
         <eStructuralFeatures xsi:type="ecore:EReference" name="label" containment="false" defaultValueLiteral="">
@@ -318,6 +318,12 @@ through it into the variable it follows.
         <eStructuralFeatures xsi:type="ecore:EReference" name="marks" upperBound="-1" eType="#//SliderMark" containment="true">
             <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
                 <details key="documentation" value="Marked values on the scale, each with a label."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+
+        <eStructuralFeatures xsi:type="ecore:EReference" name="detents" upperBound="-1" eType="#//ControlOption" containment="true">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="Named detents, in the order they stand along the track, evenly spaced. Where there are any they are the slider's scale: the thumb stops only on them, each label is written at its detent, the value badge shows the label of the one the thumb stands on, and what is written is that detent's value - a number where it reads as one. min, max, step, marks and markEvery then do not apply. A detent's colour, where set, is the slider's while the thumb stands on it."/>
             </eAnnotations>
         </eStructuralFeatures>
 
