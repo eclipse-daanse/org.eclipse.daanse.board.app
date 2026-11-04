@@ -16,9 +16,9 @@ import { WidgetAction } from 'org.eclipse.daanse.board.app.lib.events'
 
 export abstract class RichTextWidgetInterface extends WidgetActionInterfaceImpl {
 
-  @WidgetAction({ eventType: 'richText.clearContent' })
+  @WidgetAction({ eventType: 'richText.clearContent', parameters: [] })
   clearContent(): void { throw new Error("clearContent not implemented"); }
 
-  @WidgetAction({ eventType: 'richText.copyContent' })
+  @WidgetAction({ eventType: 'richText.copyContent', parameters: [] })
   copyContent(): void { throw new Error("copyContent not implemented"); }
 }

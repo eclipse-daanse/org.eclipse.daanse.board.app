@@ -16,6 +16,6 @@ import { WidgetAction } from 'org.eclipse.daanse.board.app.lib.events'
 
 export abstract class KpiTableWidgetInterface extends WidgetActionInterfaceImpl {
 
-  @WidgetAction({ eventType: 'kpiTable.refresh' })
+  @WidgetAction({ eventType: 'kpiTable.refresh', parameters: [] })
   refresh(): void { throw new Error("refresh not implemented"); }
 }

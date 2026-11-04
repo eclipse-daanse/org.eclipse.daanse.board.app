@@ -18,5 +18,9 @@
       "scaleDown": "Only scale down",
       "none": "Original size"
     }
+  },
+  "Action": {
+    "time": "Position in seconds",
+    "volume": "Volume, 0 to 1"
   }
 }
