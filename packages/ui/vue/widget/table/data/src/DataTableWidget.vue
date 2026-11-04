@@ -48,6 +48,7 @@ import type { DataTableSettings } from './gen/DataTableSettings';
 import { DataTableRowPayloadImpl } from './gen/DataTableRowPayloadImpl';
 import { DataTableCellPayloadImpl } from './gen/DataTableCellPayloadImpl';
 import { DataTableColumnPayloadImpl } from './gen/DataTableColumnPayloadImpl';
+import { DataTableSettingsImpl } from './gen/DataTableSettingsImpl';
 
 const eventBus = inject<TinyEmitter>(identifiers.TINY_EMITTER)!;
 const actionsRegistry = inject<EventActionsRegistry>(EVENT_ACTIONS_REGISTRY)!;
@@ -310,6 +311,25 @@ const isMarkedCell = (row: Record<string, unknown>, column: string) =>
     (markedCellColumn.value === column && markedCellRows.value.has(row)) ||
     (markedColumn.value === column && markedRows.value.has(row));
 
+/*
+ * How a mark looks, which is a setting where the mark itself is not.
+ *
+ * Read through the watched settings, so a colour changed in the open dialog
+ * shows at once (#1203). A board stored before these settings existed hands
+ * over a plain object without them; the defaults are then the model's, read
+ * off an instance rather than written out a second time here.
+ */
+const MODEL_DEFAULTS = new DataTableSettingsImpl();
+const colourOf = (key: 'markedRowColor' | 'markedColumnColor' | 'markedCellColor'): string => {
+    const held = settings.value?.[key];
+    return typeof held === 'string' && held.trim() !== '' ? held : MODEL_DEFAULTS[key];
+};
+const markColours = computed(() => ({
+    '--marked-row': colourOf('markedRowColor'),
+    '--marked-column': colourOf('markedColumnColor'),
+    '--marked-cell': colourOf('markedCellColor'),
+}));
+
 const showHeader = computed<boolean>(() => settings.value?.showHeader !== false)
 const sortable = computed<boolean>(() => settings.value?.sortable === true)
 const pageSize = computed<number>(() => Math.max(0, Math.floor(Number(settings.value?.pageSize) || 0)))
@@ -396,7 +416,7 @@ const lastShown = computed(() => Math.min((page.value + 1) * pageSize.value, ord
     <div class="table_container" @click="emitClick" @contextmenu.prevent="emitRightClick">
         <!-- The rows scroll, the pager below them does not. -->
         <div class="table_scroll">
-            <table class="table" :style="{ '--header-background': headerBackground }">
+            <table class="table" :style="{ '--header-background': headerBackground, ...markColours }">
                 <thead v-if="showHeader">
                     <tr>
                         <th
@@ -549,11 +569,11 @@ const lastShown = computed(() => Math.min((page.value + 1) * pageSize.value, ord
  * the cell's on the cells, so the cell where both cross shows its own.
  */
 .table tbody tr.marked_row {
-    background: var(--marked-row, color-mix(in srgb, var(--color-accent) 18%, transparent));
+    background: var(--marked-row);
 }
 
 .table td.marked_column {
-    background: var(--marked-column, color-mix(in srgb, var(--color-accent) 12%, transparent));
+    background: var(--marked-column);
 }
 
 .table th.marked_column {
@@ -561,7 +581,7 @@ const lastShown = computed(() => Math.min((page.value + 1) * pageSize.value, ord
 }
 
 .table td.marked_cell {
-    background: var(--marked-cell, color-mix(in srgb, var(--color-accent) 40%, transparent));
+    background: var(--marked-cell);
 }
 
 /* A column that cannot be sorted does not offer to be. */

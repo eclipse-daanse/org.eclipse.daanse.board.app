@@ -12,7 +12,8 @@
 
 The form for the data table.
 
-Two groups: what the table shows, and how it looks. Which columns are shown
+Three groups: what the table shows, how its header looks, and how the
+rows, columns and cells a rule marks look. Which columns are shown
 is not here - the model has no idea what columns an answer carries, so that
 question is asked by a hand-written section beside this one.
 -->
@@ -37,6 +38,14 @@ question is asked by a hand-written section beside this one.
           feature="http://org.eclipse.daanse.board.app.ui.vue.widget.table.data#//DataTableSettings/showHeader" label="tableData:Form.showHeader"/>
       <fields xsi:type="uimodel:InputWidget" name="headerBackground"
           feature="http://org.eclipse.daanse.board.app.ui.vue.widget.table.data#//DataTableSettings/headerBackground" label="tableData:Form.headerBackground"/>
+    </fields>
+    <fields xsi:type="uimodel:GroupWidget" name="marksGroup" layout="VERTICAL" label="tableData:Form.marksGroup">
+      <fields xsi:type="uimodel:InputWidget" name="markedRowColor"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.table.data#//DataTableSettings/markedRowColor" label="tableData:Form.markedRowColor"/>
+      <fields xsi:type="uimodel:InputWidget" name="markedColumnColor"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.table.data#//DataTableSettings/markedColumnColor" label="tableData:Form.markedColumnColor"/>
+      <fields xsi:type="uimodel:InputWidget" name="markedCellColor"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.table.data#//DataTableSettings/markedCellColor" label="tableData:Form.markedCellColor"/>
     </fields>
   </components>
 </uimodel:UIModel>
