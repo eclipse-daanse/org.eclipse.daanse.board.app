@@ -10,8 +10,9 @@
 * SPDX-License-Identifier: EPL-2.0
 **********************************************************************/
 
-The controls a board is operated with: a button now, a switch, a slider, a
-choice and the input fields beside it later.
+The controls a board is operated with: a button and a toggle button now,
+a multi-state button, a slider, a button group and the input fields beside
+them later.
 
 They share one base - what every control shows (its label, its colours)
 and whether it takes input at all - and one payload, the value a control
@@ -100,6 +101,57 @@ through it into the variable it follows.
             </eGenericType>
             <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
                 <details key="documentation" value="What a press writes into the target variable."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+    </eClassifiers>
+
+    <eClassifiers xsi:type="ecore:EClass" name="ToggleSettings" eSuperTypes="#//ControlSettings">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+            <details key="documentation" value="A toggle button: on or off, a press turns it to the other state and writes that state's value. Off it wears the shared label and colour, on its own."/>
+        </eAnnotations>
+
+        <eStructuralFeatures xsi:type="ecore:EReference" name="target" containment="false" defaultValueLiteral="">
+            <eGenericType eClassifier="http://org.eclipse.daanse.board.app.lib.variables#//VariableWrapper">
+                <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+            </eGenericType>
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="The variable the toggle writes into and shows, chosen as the variable this setting follows. Left without one, the setting keeps the state itself."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+
+        <eStructuralFeatures xsi:type="ecore:EReference" name="onValue" containment="false" defaultValueLiteral="true">
+            <eGenericType eClassifier="http://org.eclipse.daanse.board.app.lib.variables#//VariableWrapper">
+                <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+            </eGenericType>
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="What the toggle writes when turned on. true and false are written as booleans, anything else as it is typed."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+
+        <eStructuralFeatures xsi:type="ecore:EReference" name="offValue" containment="false" defaultValueLiteral="false">
+            <eGenericType eClassifier="http://org.eclipse.daanse.board.app.lib.variables#//VariableWrapper">
+                <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+            </eGenericType>
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="What the toggle writes when turned off."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+
+        <eStructuralFeatures xsi:type="ecore:EReference" name="onLabel" containment="false" defaultValueLiteral="">
+            <eGenericType eClassifier="http://org.eclipse.daanse.board.app.lib.variables#//VariableWrapper">
+                <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+            </eGenericType>
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="The label while on. Left empty, the shared label stands in both states."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+
+        <eStructuralFeatures xsi:type="ecore:EReference" name="onColor" containment="false" defaultValueLiteral="#16a34a">
+            <eGenericType eClassifier="http://org.eclipse.daanse.board.app.lib.variables#//VariableWrapper">
+                <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+            </eGenericType>
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="The colour of the face while on; off it takes the shared colour."/>
             </eAnnotations>
         </eStructuralFeatures>
     </eClassifiers>
