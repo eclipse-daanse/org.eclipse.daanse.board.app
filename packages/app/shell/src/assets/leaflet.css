@@ -1,0 +1,99 @@
+/*********************************************************************
+ * Copyright (c) 2026 Contributors to the Eclipse Foundation.
+ *
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ *
+ * SPDX-License-Identifier: EPL-2.0
+ *
+ * Contributors:
+ *   Smart City Jena
+ **********************************************************************/
+
+/*
+ * Leaflet's controls in the dark theme (#1235).
+ *
+ * Leaflet paints its zoom buttons, layer control, popups and attribution
+ * white, whatever the page around them. Here they take the shell's
+ * tokens - in every map the application shows: the map widget and the
+ * previews of common/map, ogcsta and valhalla. One sheet in the shell
+ * rather than one per package, because the shell is what every one of
+ * them runs in and where the tokens are defined; none of those packages
+ * depends on another that could carry it.
+ *
+ * Dark is the shell's default, so only an explicit light theme keeps
+ * Leaflet's own look. The bundles load leaflet.css after this sheet, so
+ * every rule here outranks Leaflet's by specificity, not by order.
+ */
+
+:root:not([data-theme='light']) .leaflet-container .leaflet-bar,
+:root:not([data-theme='light']) .leaflet-container .leaflet-control-layers {
+  border: 1px solid var(--color-divider);
+  background-clip: padding-box;
+  box-shadow: var(--shadow-e1);
+}
+
+:root:not([data-theme='light']) .leaflet-container .leaflet-bar a {
+  background-color: var(--color-bg);
+  border-bottom-color: var(--color-divider);
+  color: var(--color-fg);
+}
+
+:root:not([data-theme='light']) .leaflet-container .leaflet-bar a:hover,
+:root:not([data-theme='light']) .leaflet-container .leaflet-bar a:focus {
+  background-color: var(--color-raised);
+  color: var(--color-primary);
+}
+
+:root:not([data-theme='light']) .leaflet-container .leaflet-bar a.leaflet-disabled {
+  background-color: var(--color-bg);
+  color: var(--color-dim);
+}
+
+:root:not([data-theme='light']) .leaflet-container .leaflet-control-layers,
+:root:not([data-theme='light']) .leaflet-container .leaflet-control-layers-expanded {
+  background: var(--color-bg);
+  color: var(--color-fg);
+}
+
+/* Leaflet's icon is a dark stack on a transparent ground. */
+:root:not([data-theme='light']) .leaflet-container .leaflet-control-layers-toggle {
+  filter: invert(1);
+}
+
+:root:not([data-theme='light']) .leaflet-container .leaflet-control-layers-separator {
+  border-top-color: var(--color-divider);
+}
+
+:root:not([data-theme='light']) .leaflet-container .leaflet-popup-content-wrapper,
+:root:not([data-theme='light']) .leaflet-container .leaflet-popup-tip {
+  background: var(--color-bg);
+  color: var(--color-fg);
+  border: 1px solid var(--color-divider);
+}
+
+:root:not([data-theme='light']) .leaflet-container a.leaflet-popup-close-button {
+  color: var(--color-dim);
+}
+
+:root:not([data-theme='light']) .leaflet-container a.leaflet-popup-close-button:hover,
+:root:not([data-theme='light']) .leaflet-container a.leaflet-popup-close-button:focus {
+  color: var(--color-primary);
+}
+
+:root:not([data-theme='light']) .leaflet-container .leaflet-control-attribution,
+:root:not([data-theme='light']) .leaflet-container .leaflet-control-scale-line {
+  background: color-mix(in srgb, var(--color-bg) 80%, transparent);
+  color: var(--color-fg);
+  text-shadow: none;
+}
+
+:root:not([data-theme='light']) .leaflet-container .leaflet-control-scale-line {
+  border-color: var(--color-divider);
+}
+
+:root:not([data-theme='light']) .leaflet-container .leaflet-control-attribution a,
+:root:not([data-theme='light']) .leaflet-container .leaflet-popup-content a {
+  color: var(--color-primary);
+}
