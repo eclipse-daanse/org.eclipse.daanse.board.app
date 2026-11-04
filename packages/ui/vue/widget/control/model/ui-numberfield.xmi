@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/*********************************************************************
+* Copyright (c) 2026 Contributors to the Eclipse Foundation.
+*
+* This program and the accompanying materials are made
+* available under the terms of the Eclipse Public License 2.0
+* which is available at https://www.eclipse.org/legal/epl-2.0/
+*
+* SPDX-License-Identifier: EPL-2.0
+**********************************************************************/
+
+The form for the number field: the numbers it takes, where it writes
+them, then how it looks.
+-->
+<uimodel:UIModel
+    xmlns:xmi="http://www.omg.org/XMI"
+    xmi:version="2.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:uimodel="http://uimodel/1.0"
+    name="NumberFieldSettingsForm">
+
+  <targetClasses href="http://org.eclipse.daanse.board.app.ui.vue.widget.control#//NumberFieldSettings"/>
+
+  <components xsi:type="uimodel:FormView" name="NumberFieldSettingsFormView">
+
+    <fields xsi:type="uimodel:GroupWidget" name="scaleGroup" layout="VERTICAL" label="control:Form.scaleGroup">
+      <fields xsi:type="uimodel:NumberWidget" name="min"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.control#//NumberFieldSettings/min" label="control:Form.min"/>
+      <fields xsi:type="uimodel:NumberWidget" name="max"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.control#//NumberFieldSettings/max" label="control:Form.max"/>
+      <fields xsi:type="uimodel:NumberWidget" name="step"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.control#//NumberFieldSettings/step" label="control:Form.step"/>
+      <fields xsi:type="uimodel:InputWidget" name="unit"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.control#//NumberFieldSettings/unit" label="control:Form.unit" placeholder="%"/>
+    </fields>
+
+    <fields xsi:type="uimodel:GroupWidget" name="writeGroup" layout="VERTICAL" label="control:Form.fieldGroup">
+      <fields xsi:type="uimodel:InputWidget" name="target"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.control#//NumberFieldSettings/target" label="control:Form.target"/>
+      <fields xsi:type="uimodel:InputWidget" name="disabled"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.control#//NumberFieldSettings/disabled" label="control:Form.disabled" placeholder="false"/>
+    </fields>
+
+    <fields xsi:type="uimodel:GroupWidget" name="lookGroup" layout="VERTICAL" label="control:Form.lookGroup">
+      <fields xsi:type="uimodel:InputWidget" name="label"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.control#//NumberFieldSettings/label" label="control:Form.label"/>
+      <fields xsi:type="uimodel:InputWidget" name="placeholder"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.control#//NumberFieldSettings/placeholder" label="control:Form.placeholder"/>
+      <fields xsi:type="uimodel:InputWidget" name="color"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.control#//NumberFieldSettings/color" label="control:Form.color"/>
+      <fields xsi:type="uimodel:InputWidget" name="textColor"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.control#//NumberFieldSettings/textColor" label="control:Form.textColor"/>
+      <fields xsi:type="uimodel:NumberWidget" name="fontSize"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.control#//NumberFieldSettings/fontSize" label="control:Form.fontSize" min="6" max="200" step="1"/>
+    </fields>
+
+  </components>
+</uimodel:UIModel>

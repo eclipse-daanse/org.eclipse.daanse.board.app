@@ -114,6 +114,16 @@ export class ControlwidgetsPackage extends BasicEPackage {
     CHOICE_SETTINGS__OPTION_LABEL: null as unknown as EAttribute | EReference,
     CHOICE_SETTINGS__OPTION_VALUE: null as unknown as EAttribute | EReference,
     CHOICE_SETTINGS__PLACEHOLDER: null as unknown as EAttribute | EReference,
+    TEXT_FIELD_SETTINGS: null as unknown as EClass,
+    TEXT_FIELD_SETTINGS__TARGET: null as unknown as EAttribute | EReference,
+    TEXT_FIELD_SETTINGS__PLACEHOLDER: null as unknown as EAttribute | EReference,
+    NUMBER_FIELD_SETTINGS: null as unknown as EClass,
+    NUMBER_FIELD_SETTINGS__TARGET: null as unknown as EAttribute | EReference,
+    NUMBER_FIELD_SETTINGS__MIN: null as unknown as EAttribute | EReference,
+    NUMBER_FIELD_SETTINGS__MAX: null as unknown as EAttribute | EReference,
+    NUMBER_FIELD_SETTINGS__STEP: null as unknown as EAttribute | EReference,
+    NUMBER_FIELD_SETTINGS__UNIT: null as unknown as EAttribute | EReference,
+    NUMBER_FIELD_SETTINGS__PLACEHOLDER: null as unknown as EAttribute | EReference,
     CONTROL_PAYLOAD: null as unknown as EClass,
     CONTROL_PAYLOAD__VALUE: null as unknown as EAttribute | EReference,
     CONTROL_PAYLOAD__PREVIOUS_VALUE: null as unknown as EAttribute | EReference,
@@ -625,6 +635,96 @@ export class ControlwidgetsPackage extends BasicEPackage {
     choiceSettingsClass.getEStructuralFeatures().push(choiceSettings_placeholder);
     ControlwidgetsPackage.Literals.CHOICE_SETTINGS__PLACEHOLDER = choiceSettings_placeholder;
 
+    // Create TextFieldSettings class
+    const textFieldSettingsClass = new BasicEClass();
+    textFieldSettingsClass.setName('TextFieldSettings');
+    textFieldSettingsClass.setAbstract(false);
+    textFieldSettingsClass.setInterface(false);
+    this.getEClassifiers().push(textFieldSettingsClass);
+    textFieldSettingsClass.setEPackage(this);
+    ControlwidgetsPackage.Literals.TEXT_FIELD_SETTINGS = textFieldSettingsClass;
+
+    // Create target feature
+    const textFieldSettings_target = new BasicEReference();
+    textFieldSettings_target.setContainment(false);
+    textFieldSettings_target.setName('target');
+    textFieldSettings_target.setLowerBound(0);
+    textFieldSettings_target.setUpperBound(1);
+    textFieldSettingsClass.getEStructuralFeatures().push(textFieldSettings_target);
+    ControlwidgetsPackage.Literals.TEXT_FIELD_SETTINGS__TARGET = textFieldSettings_target;
+
+    // Create placeholder feature
+    const textFieldSettings_placeholder = new BasicEReference();
+    textFieldSettings_placeholder.setContainment(false);
+    textFieldSettings_placeholder.setName('placeholder');
+    textFieldSettings_placeholder.setLowerBound(0);
+    textFieldSettings_placeholder.setUpperBound(1);
+    textFieldSettingsClass.getEStructuralFeatures().push(textFieldSettings_placeholder);
+    ControlwidgetsPackage.Literals.TEXT_FIELD_SETTINGS__PLACEHOLDER = textFieldSettings_placeholder;
+
+    // Create NumberFieldSettings class
+    const numberFieldSettingsClass = new BasicEClass();
+    numberFieldSettingsClass.setName('NumberFieldSettings');
+    numberFieldSettingsClass.setAbstract(false);
+    numberFieldSettingsClass.setInterface(false);
+    this.getEClassifiers().push(numberFieldSettingsClass);
+    numberFieldSettingsClass.setEPackage(this);
+    ControlwidgetsPackage.Literals.NUMBER_FIELD_SETTINGS = numberFieldSettingsClass;
+
+    // Create target feature
+    const numberFieldSettings_target = new BasicEReference();
+    numberFieldSettings_target.setContainment(false);
+    numberFieldSettings_target.setName('target');
+    numberFieldSettings_target.setLowerBound(0);
+    numberFieldSettings_target.setUpperBound(1);
+    numberFieldSettingsClass.getEStructuralFeatures().push(numberFieldSettings_target);
+    ControlwidgetsPackage.Literals.NUMBER_FIELD_SETTINGS__TARGET = numberFieldSettings_target;
+
+    // Create min feature
+    const numberFieldSettings_min = new BasicEReference();
+    numberFieldSettings_min.setContainment(false);
+    numberFieldSettings_min.setName('min');
+    numberFieldSettings_min.setLowerBound(0);
+    numberFieldSettings_min.setUpperBound(1);
+    numberFieldSettingsClass.getEStructuralFeatures().push(numberFieldSettings_min);
+    ControlwidgetsPackage.Literals.NUMBER_FIELD_SETTINGS__MIN = numberFieldSettings_min;
+
+    // Create max feature
+    const numberFieldSettings_max = new BasicEReference();
+    numberFieldSettings_max.setContainment(false);
+    numberFieldSettings_max.setName('max');
+    numberFieldSettings_max.setLowerBound(0);
+    numberFieldSettings_max.setUpperBound(1);
+    numberFieldSettingsClass.getEStructuralFeatures().push(numberFieldSettings_max);
+    ControlwidgetsPackage.Literals.NUMBER_FIELD_SETTINGS__MAX = numberFieldSettings_max;
+
+    // Create step feature
+    const numberFieldSettings_step = new BasicEReference();
+    numberFieldSettings_step.setContainment(false);
+    numberFieldSettings_step.setName('step');
+    numberFieldSettings_step.setLowerBound(0);
+    numberFieldSettings_step.setUpperBound(1);
+    numberFieldSettingsClass.getEStructuralFeatures().push(numberFieldSettings_step);
+    ControlwidgetsPackage.Literals.NUMBER_FIELD_SETTINGS__STEP = numberFieldSettings_step;
+
+    // Create unit feature
+    const numberFieldSettings_unit = new BasicEReference();
+    numberFieldSettings_unit.setContainment(false);
+    numberFieldSettings_unit.setName('unit');
+    numberFieldSettings_unit.setLowerBound(0);
+    numberFieldSettings_unit.setUpperBound(1);
+    numberFieldSettingsClass.getEStructuralFeatures().push(numberFieldSettings_unit);
+    ControlwidgetsPackage.Literals.NUMBER_FIELD_SETTINGS__UNIT = numberFieldSettings_unit;
+
+    // Create placeholder feature
+    const numberFieldSettings_placeholder = new BasicEReference();
+    numberFieldSettings_placeholder.setContainment(false);
+    numberFieldSettings_placeholder.setName('placeholder');
+    numberFieldSettings_placeholder.setLowerBound(0);
+    numberFieldSettings_placeholder.setUpperBound(1);
+    numberFieldSettingsClass.getEStructuralFeatures().push(numberFieldSettings_placeholder);
+    ControlwidgetsPackage.Literals.NUMBER_FIELD_SETTINGS__PLACEHOLDER = numberFieldSettings_placeholder;
+
     // Create ControlPayload class
     const controlPayloadClass = new BasicEClass();
     controlPayloadClass.setName('ControlPayload');
@@ -724,6 +824,8 @@ export class ControlwidgetsPackage extends BasicEPackage {
     (ControlwidgetsPackage.Literals.SLIDER_SETTINGS as BasicEClass).getESuperTypes().push(ControlwidgetsPackage.Literals.CONTROL_SETTINGS);
     (ControlwidgetsPackage.Literals.BUTTON_GROUP_SETTINGS as BasicEClass).getESuperTypes().push(ControlwidgetsPackage.Literals.CONTROL_SETTINGS);
     (ControlwidgetsPackage.Literals.CHOICE_SETTINGS as BasicEClass).getESuperTypes().push(ControlwidgetsPackage.Literals.CONTROL_SETTINGS);
+    (ControlwidgetsPackage.Literals.TEXT_FIELD_SETTINGS as BasicEClass).getESuperTypes().push(ControlwidgetsPackage.Literals.CONTROL_SETTINGS);
+    (ControlwidgetsPackage.Literals.NUMBER_FIELD_SETTINGS as BasicEClass).getESuperTypes().push(ControlwidgetsPackage.Literals.CONTROL_SETTINGS);
     (ControlwidgetsPackage.Literals.CONTROL_PAYLOAD as BasicEClass).getESuperTypes().push(requireEPackage('http://org.eclipse.daanse.board.app.lib.events').getEClassifier('Payload')! as EClass);
 
     // ============================================
@@ -776,6 +878,14 @@ export class ControlwidgetsPackage extends BasicEPackage {
     (ControlwidgetsPackage.Literals.CHOICE_SETTINGS__OPTION_LABEL as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
     (ControlwidgetsPackage.Literals.CHOICE_SETTINGS__OPTION_VALUE as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
     (ControlwidgetsPackage.Literals.CHOICE_SETTINGS__PLACEHOLDER as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
+    (ControlwidgetsPackage.Literals.TEXT_FIELD_SETTINGS__TARGET as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
+    (ControlwidgetsPackage.Literals.TEXT_FIELD_SETTINGS__PLACEHOLDER as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
+    (ControlwidgetsPackage.Literals.NUMBER_FIELD_SETTINGS__TARGET as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
+    (ControlwidgetsPackage.Literals.NUMBER_FIELD_SETTINGS__MIN as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
+    (ControlwidgetsPackage.Literals.NUMBER_FIELD_SETTINGS__MAX as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
+    (ControlwidgetsPackage.Literals.NUMBER_FIELD_SETTINGS__STEP as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
+    (ControlwidgetsPackage.Literals.NUMBER_FIELD_SETTINGS__UNIT as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
+    (ControlwidgetsPackage.Literals.NUMBER_FIELD_SETTINGS__PLACEHOLDER as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
     (ControlwidgetsPackage.Literals.CONTROL_PAYLOAD__VALUE as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EJavaObject')!);
     (ControlwidgetsPackage.Literals.CONTROL_PAYLOAD__PREVIOUS_VALUE as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EJavaObject')!);
 
