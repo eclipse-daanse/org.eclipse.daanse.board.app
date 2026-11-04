@@ -13,7 +13,7 @@
 
 import { describe, expect, it } from 'vitest'
 import { WeatherKind } from 'org.eclipse.daanse.board.app.lib.model.workspace'
-import { WeatherEngine, LIMITS, type WeatherLayerSettings } from '../weather/engine'
+import { LIMITS, WeatherEngine, depthAt, type WeatherLayerSettings } from '../weather/engine'
 
 /* Always the middle: deterministic, and never far (0.5 >= the far share) */
 const middle = () => 0.5
@@ -38,6 +38,42 @@ function drop(e: WeatherEngine, x: number, y: number, vy: number, size = 2) {
 }
 
 describe('the weather engine', () => {
+  it('stops a snow flake on a top edge and adds it to the snow there', () => {
+    const e = engine(SNOW)
+    drop(e, 150, 195, 200)
+
+    e.step(0.05, SNOW)
+
+    expect(e.particles).toHaveLength(0)
+    const heights = e.profiles.get('w1')!.heights
+    const bin = Math.floor((150 - WIDGET.x) / LIMITS.bin)
+    expect(heights[bin]).toBeGreaterThan(0)
+    expect(heights[bin + 1]).toBeGreaterThan(0)
+    expect(heights[bin + 10]).toBe(0)
+  })
+
+  it('lets snow lie only so deep', () => {
+    const e = engine(SNOW)
+    const profile = e.profiles.get('w1')!
+    const bin = Math.floor((150 - WIDGET.x) / LIMITS.bin)
+    for (let i = 0; i < 400; i++) {
+      /* Just above whatever lies there already */
+      drop(e, 150, WIDGET.y - profile.heights[bin] - 5, 200)
+      e.step(0.05, SNOW)
+      e.particles.length = 0
+    }
+    expect(profile.heights[bin]).toBeCloseTo(depthAt(profile, bin), 4)
+    expect(Math.max(...profile.heights)).toBeLessThanOrEqual(LIMITS.depth)
+  })
+
+  it('keeps snow on a short widget to a share of its height', () => {
+    const e = new WeatherEngine(middle)
+    e.setViewport(0, 0, 400, 600)
+    e.setObstacles([{ id: 'thin', x: 0, y: 100, width: 200, height: 20 }])
+    const profile = e.profiles.get('thin')!
+    expect(depthAt(profile, 25)).toBeCloseTo(20 * LIMITS.depthShare)
+  })
+
   it('bursts a rain drop into splashes on a top edge', () => {
     const e = engine(RAIN)
     drop(e, 150, 190, 800)
@@ -47,6 +83,7 @@ describe('the weather engine', () => {
     expect(e.particles).toHaveLength(0)
     expect(e.splashes.length).toBeGreaterThanOrEqual(2)
     for (const splash of e.splashes) expect(splash.vy).toBeLessThan(0)
+    expect(Math.max(...e.profiles.get('w1')!.heights)).toBe(0)
   })
 
   it('ends a falling particle on a top edge of a widget', () => {
@@ -61,6 +98,29 @@ describe('the weather engine', () => {
     drop(e, 50, 195, 200)
     e.step(0.05, SNOW)
     expect(e.particles).toHaveLength(1)
+  })
+
+  it('shakes the snow off a widget that moved', () => {
+    const e = engine(SNOW)
+    drop(e, 150, 195, 200)
+    e.step(0.05, SNOW)
+    expect(Math.max(...e.profiles.get('w1')!.heights)).toBeGreaterThan(0)
+
+    e.setObstacles([{ ...WIDGET, x: 140 }])
+
+    expect(Math.max(...e.profiles.get('w1')!.heights)).toBe(0)
+    expect(e.profiles.get('w1')!.rect.x).toBe(140)
+    /* What lay there falls, from where the edge was */
+    expect(e.particles.length).toBeGreaterThan(0)
+    expect(e.particles.every((p) => p.y <= WIDGET.y)).toBe(true)
+  })
+
+  it('keeps the snow on a widget that only grew taller', () => {
+    const e = engine(SNOW)
+    drop(e, 150, 195, 200)
+    e.step(0.05, SNOW)
+    e.setObstacles([{ ...WIDGET, height: 300 }])
+    expect(Math.max(...e.profiles.get('w1')!.heights)).toBeGreaterThan(0)
   })
 
   it('makes more particles the higher the intensity', () => {
