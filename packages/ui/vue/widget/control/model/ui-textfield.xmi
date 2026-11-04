@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/*********************************************************************
+* Copyright (c) 2026 Contributors to the Eclipse Foundation.
+*
+* This program and the accompanying materials are made
+* available under the terms of the Eclipse Public License 2.0
+* which is available at https://www.eclipse.org/legal/epl-2.0/
+*
+* SPDX-License-Identifier: EPL-2.0
+**********************************************************************/
+
+The form for the text field: where what is typed is written, then how
+it looks.
+-->
+<uimodel:UIModel
+    xmlns:xmi="http://www.omg.org/XMI"
+    xmi:version="2.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:uimodel="http://uimodel/1.0"
+    name="TextFieldSettingsForm">
+
+  <targetClasses href="http://org.eclipse.daanse.board.app.ui.vue.widget.control#//TextFieldSettings"/>
+
+  <components xsi:type="uimodel:FormView" name="TextFieldSettingsFormView">
+
+    <fields xsi:type="uimodel:GroupWidget" name="writeGroup" layout="VERTICAL" label="control:Form.fieldGroup">
+      <fields xsi:type="uimodel:InputWidget" name="target"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.control#//TextFieldSettings/target" label="control:Form.target"/>
+      <fields xsi:type="uimodel:InputWidget" name="disabled"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.control#//TextFieldSettings/disabled" label="control:Form.disabled" placeholder="false"/>
+    </fields>
+
+    <fields xsi:type="uimodel:GroupWidget" name="lookGroup" layout="VERTICAL" label="control:Form.lookGroup">
+      <fields xsi:type="uimodel:InputWidget" name="label"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.control#//TextFieldSettings/label" label="control:Form.label"/>
+      <fields xsi:type="uimodel:InputWidget" name="placeholder"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.control#//TextFieldSettings/placeholder" label="control:Form.placeholder"/>
+      <fields xsi:type="uimodel:InputWidget" name="color"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.control#//TextFieldSettings/color" label="control:Form.color"/>
+      <fields xsi:type="uimodel:InputWidget" name="textColor"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.control#//TextFieldSettings/textColor" label="control:Form.textColor"/>
+      <fields xsi:type="uimodel:NumberWidget" name="fontSize"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.control#//TextFieldSettings/fontSize" label="control:Form.fontSize" min="6" max="200" step="1"/>
+    </fields>
+
+  </components>
+</uimodel:UIModel>
