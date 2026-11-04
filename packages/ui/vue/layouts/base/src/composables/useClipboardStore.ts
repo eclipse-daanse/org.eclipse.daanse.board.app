@@ -48,6 +48,23 @@ const clipboardItem = ref<IClipboardItem | null>(null)
  */
 let timesPasted = 0
 
+/*
+ * Whether there is something to paste, said on the root element.
+ *
+ * The top bar offers "Einfügen" while there is (#1225), and the top bar is
+ * the shell's, a different bundle - the same way the snap switch travels
+ * the other way, an attribute rather than a module both would have to
+ * depend on. The bar asks for a paste with the event below.
+ */
+export const CLIPBOARD_ATTRIBUTE = 'data-board-clipboard'
+export const PASTE_REQUEST_EVENT = 'daanse:board-paste'
+
+function announce() {
+  if (typeof document === 'undefined') return
+  if (clipboardItem.value) document.documentElement.setAttribute(CLIPBOARD_ATTRIBUTE, 'full')
+  else document.documentElement.removeAttribute(CLIPBOARD_ATTRIBUTE)
+}
+
 /**
  * The clipboard, as the two callers already ask for it.
  *
@@ -71,6 +88,7 @@ export function useClipboardStore() {
     copy(widget: Omit<StoredWidget, 'uid'>, layout: Omit<StoredLayoutItem, 'id'>, selection?: DataSelection) {
       clipboardItem.value = { widget, layout, selection }
       timesPasted = 0
+      announce()
     },
     paste() {
       if (clipboardItem.value) timesPasted += 1
@@ -79,6 +97,7 @@ export function useClipboardStore() {
     clear() {
       clipboardItem.value = null
       timesPasted = 0
+      announce()
     },
   }
 }
