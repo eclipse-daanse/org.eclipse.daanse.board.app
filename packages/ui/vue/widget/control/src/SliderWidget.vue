@@ -23,6 +23,12 @@ Contributors:
  * A range is two inputs over one track, the lower writing into target, the
  * upper into upperTarget; neither passes the other.
  *
+ * With named detents the scale is theirs instead: they stand evenly along
+ * the track in the order listed, the thumb stops only on them, the badge
+ * shows the label of the one it stands on, and what is written is that
+ * detent's value. The inputs then run over the detents' positions, 0 to
+ * the last; everything below that says "position" means that.
+ *
  * Every value the thumb comes to is written; `change` is throttled while
  * dragging and says what the variable held before the burst it covers.
  * Letting go sends `release`.
@@ -31,7 +37,7 @@ import { computed, onUnmounted, toRefs } from 'vue'
 import type { SliderSettings } from './gen/SliderSettings'
 import { SliderSettingsImpl } from './gen/SliderSettingsImpl'
 import { SliderWidgetInterface } from './api/SliderWidgetInterface'
-import { listOf, numberOf, textOf, useControl } from './support/useControl'
+import { listOf, numberOf, sameValue, textOf, useControl } from './support/useControl'
 
 const props = defineProps<{ datasourceId?: string; id?: string }>()
 const { id: widgetId } = toRefs(props)
@@ -43,16 +49,16 @@ const THROTTLE_MS = 100
 
 class SliderWidgetApi extends SliderWidgetInterface {
   setValue(value: number): void {
-    const at = place(Number(value))
-    if (at !== null) write(at, 'target')
+    const at = positionOf(value)
+    if (at !== null) write(valueAt(at), 'target')
   }
 
   setRange(lower: number, upper: number): void {
-    const low = place(Number(lower))
-    const high = place(Number(upper))
+    const low = positionOf(lower)
+    const high = positionOf(upper)
     if (low === null || high === null) return
-    write(Math.min(low, high), 'target')
-    write(Math.max(low, high), 'upperTarget')
+    write(valueAt(Math.min(low, high)), 'target')
+    write(valueAt(Math.max(low, high)), 'upperTarget')
   }
 
   enable(): void {
@@ -102,7 +108,57 @@ interface Mark {
   label: string
 }
 
+/* ------------------------------------------------------------ detents */
+
+interface Detent {
+  label: string
+  value: unknown
+  color: string
+}
+
+/* A detent's value as the variable gets it: a number where it reads as one, else as typed. */
+const NUMBER = /^-?\d+(\.\d+)?$/
+const typed = (text: string): unknown => (NUMBER.test(text.trim()) ? Number(text) : text)
+
+const detents = computed<Detent[]>(() =>
+  listOf((settings.value as any)?.detents).map((each: any) => {
+    const value = textOf(each?.value)
+    return { label: textOf(each?.label) || value, value: typed(value), color: textOf(each?.color) }
+  }),
+)
+const detented = computed(() => detents.value.length > 0)
+
+/* The inputs' scale: the detents' positions, or min to max. */
+const low = computed(() => (detented.value ? 0 : min.value))
+const high = computed(() => (detented.value ? Math.max(1, detents.value.length - 1) : max.value))
+
+/*
+ * The detent a value names: the one holding it, else - for a number - the
+ * nearest by value. Null where it names none.
+ */
+function detentOf(held: unknown): number | null {
+  const exact = detents.value.findIndex((each) => sameValue(each.value, held))
+  if (exact >= 0) return exact
+  const wanted = parseFloat(textOf(held))
+  if (!Number.isFinite(wanted)) return null
+  let best: number | null = null
+  detents.value.forEach((each, at) => {
+    if (typeof each.value !== 'number') return
+    if (best === null || Math.abs(each.value - wanted) < Math.abs((detents.value[best].value as number) - wanted)) best = at
+  })
+  return best
+}
+
+/* What a position writes: its detent's value, or the number itself. */
+const valueAt = (at: number): unknown => (detented.value ? detents.value[at]?.value : at)
+
+/* The position a value written from elsewhere - an action - puts the thumb at. */
+function positionOf(value: unknown): number | null {
+  return detented.value ? detentOf(value) : place(Number(value))
+}
+
 const marks = computed<Mark[]>(() => {
+  if (detented.value) return detents.value.map((each, at) => ({ at, label: each.label }))
   const found = new Map<number, string>()
   const every = numberOf(plain('markEvery'), 0)
   if (every > 0) {
@@ -120,6 +176,7 @@ const marks = computed<Mark[]>(() => {
 /** Where a value may stand: on the nearest mark where it snaps, else on the step grid. Null for no number. */
 function place(value: number): number | null {
   if (!Number.isFinite(value)) return null
+  if (detented.value) return Math.min(detents.value.length - 1, Math.max(0, Math.round(value)))
   const clamped = Math.min(max.value, Math.max(min.value, value))
   if (snap.value && marks.value.length) {
     return marks.value.reduce((best, each) => (Math.abs(each.at - clamped) < Math.abs(best - clamped) ? each.at : best), marks.value[0].at)
@@ -129,28 +186,36 @@ function place(value: number): number | null {
 }
 
 /** Where on the track a value is, 0 to 100. */
-const percent = (value: number) => ((value - min.value) / (max.value - min.value)) * 100
+const percent = (value: number) => ((value - low.value) / (high.value - low.value)) * 100
 
 /* -------------------------------------------------------------- values */
 
-/* What a thumb shows: the variable's number, placed; min where it holds none. */
+/* Where a thumb stands: at the variable's number, or its detent; the fallback where it holds none. */
 function shown(key: 'target' | 'upperTarget', fallback: number): number {
+  if (detented.value) return detentOf(current(key)) ?? fallback
   const parsed = parseFloat(textOf(current(key)))
   return Number.isFinite(parsed) ? Math.min(max.value, Math.max(min.value, parsed)) : fallback
 }
 
-const lower = computed(() => shown('target', min.value))
-const upper = computed(() => (ranged.value ? shown('upperTarget', max.value) : lower.value))
+const lower = computed(() => shown('target', low.value))
+const upper = computed(() => (ranged.value ? shown('upperTarget', high.value) : lower.value))
 
 const fillFrom = computed(() => (ranged.value ? percent(Math.min(lower.value, upper.value)) : 0))
 const fillTo = computed(() => percent(ranged.value ? Math.max(lower.value, upper.value) : lower.value))
 
-const format = (value: number) => `${value.toFixed(decimals.value)}${unit.value ? ` ${unit.value}` : ''}`
+/* What a badge says: the detent's label, or the number with its unit. */
+const format = (value: number) =>
+  detented.value
+    ? (detents.value[value]?.label ?? '')
+    : `${value.toFixed(decimals.value)}${unit.value ? ` ${unit.value}` : ''}`
 
 /* Where along the track something stands: from the left, or from the bottom where vertical. */
 const along = (value: number) => (vertical.value ? { bottom: `${percent(value)}%` } : { left: `${percent(value)}%` })
 
 /* One badge per thumb, standing on it. */
+/* The colour of the detent the (lower) thumb stands on, where it has one. */
+const detentColor = computed(() => (detented.value ? detents.value[lower.value]?.color || '' : ''))
+
 const badges = computed(() => {
   const thumbs = [{ thumb: 'lower', at: lower.value }]
   if (ranged.value) thumbs.push({ thumb: 'upper', at: upper.value })
@@ -160,7 +225,7 @@ const badges = computed(() => {
 /* ------------------------------------------------------------- operate */
 
 /* The payload's value: a number, or for a range the pair. */
-const valueNow = () => (ranged.value ? [lower.value, upper.value] : lower.value)
+const valueNow = () => (ranged.value ? [valueAt(lower.value), valueAt(upper.value)] : valueAt(lower.value))
 
 /* The value before the burst of moves the next change covers. */
 let before: unknown = undefined
@@ -191,7 +256,7 @@ function moved(key: 'target' | 'upperTarget', event: Event): void {
   if (at === thumbBefore) return
 
   if (before === undefined) before = valueNow()
-  write(at, key)
+  write(valueAt(at), key)
 
   const wait = THROTTLE_MS - (Date.now() - sentAt)
   if (wait <= 0) announce()
@@ -220,7 +285,7 @@ onUnmounted(() => {
       'control-slider--disabled': disabled,
       'control-slider--valued': showValue,
     }"
-    :style="look"
+    :style="[look, detentColor ? { '--control-face': detentColor } : {}]"
   >
     <div v-if="label" class="control-slider__head">
       <span class="control-slider__label">{{ label }}</span>
@@ -251,9 +316,10 @@ onUnmounted(() => {
           class="control-slider__input"
           type="range"
           step="any"
-          :min="min"
-          :max="max"
+          :min="low"
+          :max="high"
           :value="lower"
+          :aria-valuetext="format(lower)"
           :disabled="disabled"
           :aria-label="label || undefined"
           :aria-orientation="vertical ? 'vertical' : 'horizontal'"
@@ -266,9 +332,10 @@ onUnmounted(() => {
           class="control-slider__input"
           type="range"
           step="any"
-          :min="min"
-          :max="max"
+          :min="low"
+          :max="high"
           :value="upper"
+          :aria-valuetext="format(upper)"
           :disabled="disabled"
           :aria-label="label || undefined"
           :aria-orientation="vertical ? 'vertical' : 'horizontal'"

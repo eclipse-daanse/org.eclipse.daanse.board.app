@@ -22,6 +22,7 @@ import type { EList } from '@emfts/core';
 import type { ControlSettings } from './ControlSettings.js';
 import type { VariableWrapper } from 'org.eclipse.daanse.board.app.lib.variables';
 import type { SliderMark } from './SliderMark.js';
+import type { ControlOption } from './ControlOption.js';
 import type { SliderOrientation } from './SliderOrientation.js';
 
 /**
@@ -36,6 +37,7 @@ export interface SliderSettings extends ControlSettings {
   step?: VariableWrapper<string>;
   unit?: VariableWrapper<string>;
   marks: EList<SliderMark>;
+  detents: EList<ControlOption>;
   markEvery?: VariableWrapper<string>;
   snap?: boolean;
   range?: boolean;
