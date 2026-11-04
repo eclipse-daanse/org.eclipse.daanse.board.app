@@ -444,7 +444,12 @@
     "preview": "Preview",
     "pick": "Pick a connection or a data source on the left.",
     "usedIn": "Used in {{usage}}",
-    "view": "View of the selection"
+    "view": "View of the selection",
+    "leaving": {
+      "title": "Changes not saved",
+      "text": "{{name}} has changes that are not saved yet. Keep them before opening something else?",
+      "stay": "Stay"
+    }
   },
   "Nav": {
     "variables": "Variables"

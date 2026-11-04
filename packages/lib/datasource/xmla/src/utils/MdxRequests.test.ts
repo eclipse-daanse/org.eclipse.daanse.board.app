@@ -226,3 +226,104 @@ describe('a lone measure with its header hidden', () => {
     expect(table.columns.map((tuple: any[]) => tuple[0].UName)).toEqual(['[Gender].[F]', '[Gender].[M]'])
   })
 })
+
+describe('the table state of an answer', () => {
+  it('is a list of its own each time, so a view sees a member expanded since', async () => {
+    const { XmlaStore } = await import('../classes/index')
+    const { DrilldownHandler } = await import('../classes/DrilldownHandler')
+    const store = Object.create(XmlaStore.prototype)
+    const metadata = { getProperties: () => [], getLevels: () => levels, getDimensions: () => [] }
+    const all = { u: '[Gender].[All Gender]', c: 'All Gender' }
+    const connection = { fetch: async () => answer([[all]], { 0: '10' }) }
+    Object.assign(store, {
+      cube: 'Sales',
+      connection: 'c',
+      askUpdateable: false,
+      requestParams: { rows: [hierarchy('[Gender]')], columns: [values], measures: [unitSales], filters: [], pages: [], chapters: [] },
+      drilldownHandler: new DrilldownHandler(connection as any, {}),
+      connectionRepository: { getConnection: () => connection },
+      metadata,
+      queryMetadata: async () => metadata,
+    })
+
+    const before = (await store.getData('PivotTable')).tableState.rowsExpandedMembers
+    store.expand({ value: { UName: all.u, LNum: '0', HIERARCHY_UNIQUE_NAME: '[Gender]' }, area: 'rows' })
+    const after = (await store.getData('PivotTable')).tableState.rowsExpandedMembers
+
+    // Was: the same array both times, changed in place, and the table's set of expanded members stayed empty.
+    expect(after).not.toBe(before)
+    expect(before).toEqual([])
+    expect(after.map((m: any) => m.UName)).toEqual([all.u])
+  })
+})
+
+describe('a query without a measure', () => {
+  async function storeWith(measures: any[], answered: any) {
+    const { XmlaStore } = await import('../classes/index')
+    const store = Object.create(XmlaStore.prototype)
+    const metadata = { getProperties: () => [], getLevels: () => levels, getDimensions: () => [] }
+    const connection = { fetch: async () => answered }
+    Object.assign(store, {
+      cube: 'Sales',
+      connection: 'c',
+      askUpdateable: false,
+      // The designer takes Values off the columns once Data is empty.
+      requestParams: { rows: [hierarchy('[Gender]')], columns: measures.length ? [values] : [], measures, filters: [], pages: [], chapters: [] },
+      drilldownHandler: {
+        rowsDrilldownMembers: [], columnsDrilldownMembers: [], rowsExpandedMembers: [], columnsExpandedMembers: [],
+        flushExpands: () => {}, flushDrilldowns: () => {},
+      },
+      connectionRepository: { getConnection: () => connection },
+      metadata,
+      queryMetadata: async () => metadata,
+    })
+    return store
+  }
+  const female = { u: '[Gender].[F]', c: 'F' }
+  const cellValues = (table: any) => table.cells.flat().map((cell: any) => cell?.Value).filter((v: any) => v !== undefined)
+
+  it('shows its members and none of the default measure the server put in', async () => {
+    const store = await storeWith([], answer([[female]], { 0: '131558' }))
+    const table = await store.getData('PivotTable')
+    expect([...table.rows, ...table.columns].flat().map((m: any) => m.UName)).toContain('[Gender].[F]')
+    // Was: 131558, the cube's default measure, under no header.
+    expect(cellValues(table)).toEqual([])
+  })
+
+  it('keeps the values of a measure that was asked for', async () => {
+    const store = await storeWith([unitSales], answer([[female]], { 0: '131558' }))
+    expect(cellValues(await store.getData('PivotTable'))).not.toEqual([])
+  })
+})
+
+describe('MDX written in the editor', () => {
+  it('stays what runs when the designer changes after it', async () => {
+    const { XmlaStore } = await import('../classes/index')
+    const store = Object.create(XmlaStore.prototype)
+    const metadata = { getProperties: () => [], getLevels: () => levels, getDimensions: () => [] }
+    const sent: string[] = []
+    const connection = { fetch: async ({ data }: any) => { sent.push(data.mdx); return answer([[{ u: '[Gender].[F]', c: 'F' }]], {}) } }
+    const params = { rows: [hierarchy('[Gender]')], columns: [values], measures: [unitSales], filters: [], pages: [], chapters: [] }
+    Object.assign(store, {
+      cube: 'Sales',
+      connection: 'c',
+      askUpdateable: false,
+      requestParams: params,
+      drilldownHandler: {
+        rowsDrilldownMembers: [], columnsDrilldownMembers: [], rowsExpandedMembers: [], columnsExpandedMembers: [],
+        flushExpands: () => {}, flushDrilldowns: () => {},
+      },
+      connectionRepository: { getConnection: () => connection },
+      metadata,
+      queryMetadata: async () => metadata,
+    })
+    const written = 'SELECT {[Measures].[Store Sales]} ON 0 FROM [Sales]'
+
+    store.setMdx(written, true)
+    // A filter moved in the designer; it used to put the designer's query back.
+    await store.setRequestParams({ ...params, rows: [hierarchy('[Store]')] })
+    await store.getData('PivotTable')
+
+    expect(sent).toEqual([written])
+  })
+})

@@ -15,7 +15,7 @@
 
 import { describe, expect, it, vi } from 'vitest'
 import { flushPromises, mount } from '@vue/test-utils'
-import { defineComponent, h } from 'vue'
+import { defineComponent, h, reactive } from 'vue'
 import { identifier as DATASOURCE_REPOSITORY } from 'org.eclipse.daanse.board.app.lib.api.datasource'
 import { identifier as WORKSPACE, WorkspaceImpl } from 'org.eclipse.daanse.board.app.lib.model.workspace'
 import DatasourceEditor from '../DatasourceEditor.vue'
@@ -41,7 +41,21 @@ const Preview = defineComponent({
   },
 })
 
-function setUp() {
+/* The designer goes on to change the lists it was handed, in place. */
+const PreviewEditingInPlace = defineComponent({
+  props: { dataSource: { type: Object, required: true } },
+  emits: ['updateConfig'],
+  setup(props, { emit }) {
+    // Reactive, as the xmla preview's queryConfig is.
+    const params = reactive({ rows: ['[Time]'], columns: [], measures: [] as string[], filters: [] })
+    return () => [
+      h('button', { class: 'build', onClick: () => emit('updateConfig', { ...(props.dataSource as any).config, requestParams: params }) }, 'build'),
+      h('button', { class: 'more', onClick: () => params.measures.push('[Measures].[Store Cost]') }, 'more'),
+    ]
+  },
+})
+
+function setUp(preview: any = Preview) {
   const source: any = {
     uid: 'ds1',
     name: 'Sales',
@@ -52,7 +66,7 @@ function setUp() {
   const repository = {
     getDatasourceModel: () => source,
     getDatasourceIdentifiers: () => ({ Preview: Symbol.for('P'), Settings: Symbol.for('S') }),
-    resolveIdentifier: (symbol: symbol) => (symbol === Symbol.for('P') ? Preview : null),
+    resolveIdentifier: (symbol: symbol) => (symbol === Symbol.for('P') ? preview : null),
     registeredDatasources: ['xmla'],
     saveDatasource: vi.fn(),
   }
@@ -108,5 +122,20 @@ describe('DatasourceEditor', () => {
 
     expect(wrapper.find('.editor__unsaved').exists()).toBe(false)
     expect(repository.saveDatasource).not.toHaveBeenCalled()
+  })
+
+  it('keeps what was saved apart from the draft the preview goes on editing', async () => {
+    const { wrapper, source } = setUp(PreviewEditingInPlace)
+    await flushPromises()
+
+    await wrapper.find('.build').trigger('click')
+    const save = wrapper.findAll('.editor__unsaved button').find((b) => b.text() === 'common:Action.save')!
+    await save.trigger('click')
+
+    await wrapper.find('.more').trigger('click')
+
+    // Was: the stored source held the draft itself, and took the change without a Save.
+    expect(source.config.requestParams.measures).toEqual([])
+    expect((wrapper.vm as any).unsaved).toBe(true)
   })
 })

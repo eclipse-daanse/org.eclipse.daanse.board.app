@@ -22,6 +22,7 @@ const levels = [
   { HIERARCHY_UNIQUE_NAME: '[Store]', LEVEL_UNIQUE_NAME: '[Store].[Store Country]', LEVEL_NUMBER: '1', LEVEL_TYPE: '0' },
   { HIERARCHY_UNIQUE_NAME: '[Time]', LEVEL_UNIQUE_NAME: '[Time].[Year]', LEVEL_NUMBER: '0', LEVEL_TYPE: '20' },
   { HIERARCHY_UNIQUE_NAME: '[Time]', LEVEL_UNIQUE_NAME: '[Time].[Quarter]', LEVEL_NUMBER: '1', LEVEL_TYPE: '68' },
+  { HIERARCHY_UNIQUE_NAME: '[Time]', LEVEL_UNIQUE_NAME: '[Time].[Month]', LEVEL_NUMBER: '2', LEVEL_TYPE: '132' },
   { HIERARCHY_UNIQUE_NAME: '[Product]', LEVEL_UNIQUE_NAME: '[Product].[(All)]', LEVEL_NUMBER: '0', LEVEL_TYPE: '1' },
 ]
 
@@ -59,7 +60,7 @@ describe('getMdxRequest with pages and chapters', () => {
 
     expect(axes(mdx)).toEqual([1, 0, 2, 3])
     expect(mdx).toMatch(
-      /Descendants\(\{\[Time\]\.\[Year\]\.members\}, 1, SELF_AND_BEFORE\).*ON 2/s,
+      /Descendants\(\{\[Time\]\.\[Year\]\.members\}, \[Time\]\.\[Month\], SELF_AND_BEFORE\).*ON 2/s,
     )
     expect(mdx).toMatch(/\[Store\]\.\[Store Country\]\.members.*ON 3/s)
   })
@@ -99,6 +100,11 @@ describe('getMdxRequest with pages and chapters', () => {
     expect(mdx).not.toContain('ON 2')
   })
 
+  it('offers every level of a page hierarchy, down to its last', async () => {
+    const mdx = await request({ pages: [hierarchy('[Time]')] })
+    expect(mdx).toContain('Descendants({[Time].[Year].members}, [Time].[Month], SELF_AND_BEFORE)')
+  })
+
   it('keeps empty slices out unless asked to show them', async () => {
     const pages = [hierarchy('[Time]')]
     expect(await request({ pages })).toMatch(/NON EMPTY\s+Hierarchize\(AddCalculatedMembers\(Descendants/)
@@ -117,6 +123,13 @@ describe('getMdxRequest with pages and chapters', () => {
     const mdx = await request({ pages: [filtered] })
     expect(mdx).toMatch(/SET \[FILTER_[^\]]+\] AS .*\[Time\]\.\[1997\]/s)
     expect(mdx).toMatch(/Intersect\(AddCalculatedMembers\(\{\[Time\]\.\[Year\]\.members\}\), \[FILTER_[^\]]+\]\)\) DIMENSION PROPERTIES PARENT_UNIQUE_NAME,HIERARCHY_UNIQUE_NAME ON 2/)
+  })
+})
+
+describe('getMdxRequest and the cell format', () => {
+  it('asks the server for the value its format string makes of a cell', async () => {
+    expect(await request()).toMatch(/CELL PROPERTIES [^\n]*FORMATTED_VALUE/)
+    expect(await request({ rows: [], columns: [values] })).toMatch(/CELL PROPERTIES [^\n]*FORMATTED_VALUE/)
   })
 })
 
