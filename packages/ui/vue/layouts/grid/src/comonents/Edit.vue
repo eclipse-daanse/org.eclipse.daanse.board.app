@@ -14,6 +14,10 @@ Contributors:
 <template>
   <div class="scroll max-h-screen ml-15">
     <div ref="wrapper" @dragenter="onDragEnter" @drop.prevent="onDrop" @drag="onDragMove" class="alayout" @click="closeAllContextMenus"
+      @contextmenu="onCanvasContextMenu"
+      @pointermove="trackPointer"
+      @pointerleave="pointerOnBoard = undefined"
+      @pointerdown="pickFrom($event)"
       :style="{ '--grid-row-height': ROW_HEIGHT + 'px', '--grid-cols': currentColCount }"
     >
           <GridLayout
@@ -28,7 +32,13 @@ Contributors:
             @layout-updated="persistLayout"
           >
           <template #item="{ item }">
-            <div class="widget-item-wrapper" @contextmenu.stop.prevent="openWidgetContextMenu($event, String(item.i))">
+            <div
+              class="widget-item-wrapper"
+              :data-widget="String(item.i)"
+              @contextmenu.stop.prevent="openWidgetContextMenu($event, String(item.i))"
+              @pointerenter="hovered = String(item.i)"
+              @pointerleave="hovered = hovered === String(item.i) ? undefined : hovered"
+            >
               <WidgetWrapper
                 v-if="widgets?.find((w:any) => w.uid === item.i)"
                 :widget="widgets.find((w:any) => w.uid === item.i)"
@@ -83,6 +93,8 @@ Contributors:
         </DButton>
       </div>
     </div>
+
+    <ClipboardNotice :shown="copiedNotice" @dismiss="hideNotice" />
   </div>
 </template>
 
@@ -97,7 +109,12 @@ import { useRoute } from 'vue-router'
 import Draggable from 'vuedraggable'
 import { cloneDeep, isEqual } from 'lodash'
 import throttle from 'lodash/throttle'
-import { useClipboardStore } from 'org.eclipse.daanse.board.app.ui.vue.layouts.base'
+import {
+  ClipboardNotice,
+  useClipboardShortcuts,
+  useClipboardStore,
+  type BoardPoint,
+} from 'org.eclipse.daanse.board.app.ui.vue.layouts.base'
 
 const { t } = useTranslation('layoutsGrid')
 import { BREAKPOINTS, resolveGridSettings } from '../GridSettings'
@@ -124,7 +141,47 @@ const storedLayout = board.layout
 const clipboardStore = useClipboardStore()
 
 /** Copy/Paste */
-const pastePosition = ref({ x: 0, y: 0 })
+/* Where the right click was, on the board - what a paste from the menu takes. */
+const pastePosition = ref<BoardPoint>({ x: 0, y: 0 })
+
+/*
+ * A point on the board: from the corner of the grid itself, past the
+ * room the wrapper leaves on its left.
+ */
+function boardPoint(event: MouseEvent): BoardPoint {
+  const element = wrapper.value ?? (event.currentTarget as HTMLElement)
+  const rect = element.getBoundingClientRect()
+  const inset = parseFloat(getComputedStyle(element).paddingLeft) || 0
+  return { x: event.clientX - rect.left - inset, y: event.clientY - rect.top }
+}
+
+/* Where the pointer is on the board for Ctrl+V; nothing while it is elsewhere. */
+const pointerOnBoard = ref<BoardPoint | undefined>(undefined)
+const trackPointer = (event: PointerEvent) => {
+  pointerOnBoard.value = boardPoint(event)
+}
+
+/*
+ * The widget Ctrl+C means: the one last clicked, or the one under the
+ * pointer. A click on the grid between widgets lets go of it.
+ */
+const picked = ref<string | undefined>(undefined)
+const hovered = ref<string | undefined>(undefined)
+function pickFrom(event: PointerEvent) {
+  const item = (event.target as HTMLElement | null)?.closest?.('[data-widget]') as HTMLElement | null
+  picked.value = item?.dataset.widget
+}
+
+const {
+  copy: copyWithShortcut,
+  copiedNotice,
+  hideNotice,
+} = useClipboardShortcuts({
+  target: () => picked.value ?? hovered.value,
+  copy: (uid) => copyWidget(uid),
+  paste: (at) => pasteWidget(at),
+  pointer: () => pointerOnBoard.value,
+})
 
 // Widget context menu state
 const widgetContextMenu = ref({
@@ -155,11 +212,7 @@ const onCanvasContextMenu = (event: MouseEvent) => {
   // Prevent native context menu only when we show our paste menu
   event.preventDefault()
 
-  const rect = (event.currentTarget as HTMLElement).getBoundingClientRect()
-  pastePosition.value = {
-    x: event.clientX - rect.left,
-    y: event.clientY - rect.top
-  }
+  pastePosition.value = boardPoint(event)
   // Show canvas context menu
   canvasContextMenu.value = {
     visible: true,
@@ -185,12 +238,13 @@ const closeAllContextMenus = () => {
 }
 
 const copyWidgetFromMenu = () => {
-  copyWidget(widgetContextMenu.value.widgetId)
+  copyWithShortcut(widgetContextMenu.value.widgetId)
   closeAllContextMenus()
 }
 
 const pasteWidgetFromMenu = () => {
-  pasteWidget()
+  hideNotice()
+  pasteWidget(pastePosition.value)
   closeAllContextMenus()
 }
 
@@ -218,7 +272,29 @@ const copyWidget = (widgetId: string) => {
   }
 }
 
-const pasteWidget = () => {
+/*
+ * The cell under a point on the board, from the grid as it is drawn now:
+ * the columns share the width, a row is its height and the gap below it.
+ */
+const ROW_GAP = 10
+function cellAt(at: BoardPoint) {
+  const inset = wrapper.value ? parseFloat(getComputedStyle(wrapper.value).paddingLeft) || 0 : 0
+  const width = (wrapper.value?.clientWidth ?? 0) - inset
+  const cols = currentColCount.value
+  const colPitch = width > 0 ? width / cols : getMetrics().colW
+  return {
+    x: Math.min(cols - 1, Math.max(0, Math.floor(at.x / colPitch))),
+    y: Math.max(0, Math.floor(at.y / (ROW_HEIGHT.value + ROW_GAP))),
+  }
+}
+
+/**
+ * @param at where on the board it goes - the pointer, or the right click.
+ *   Left out, it goes beside the widget it was copied from: a cell to the
+ *   right and one down for every paste before it.
+ */
+const pasteWidget = (at?: BoardPoint) => {
+  const before = clipboardStore.timesPasted
   const clipboard = clipboardStore.paste()
   if (!clipboard) return
 
@@ -231,10 +307,11 @@ const pasteWidget = () => {
     newWidget.config.settings.name = 'widget_' + newUid
   }
 
-  // Clone layout with new position (convert mouse position to grid position)
   const { colW, rowH } = getMetrics()
-  const gridX = Math.round(pastePosition.value.x / colW)
-  const gridY = Math.round(pastePosition.value.y / rowH)
+  const original = toGrid({ ...clipboard.layout, id: newUid })
+  const cell = at ? cellAt(at) : { x: original.x + before + 1, y: original.y + before + 1 }
+  const gridX = Math.min(cell.x, Math.max(0, currentColCount.value - original.w))
+  const gridY = cell.y
 
   const newLayout: LayoutItem = {
     i: newUid,
