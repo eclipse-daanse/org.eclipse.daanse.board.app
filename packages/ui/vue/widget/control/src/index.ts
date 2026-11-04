@@ -39,12 +39,20 @@ import MultiStateIcon from './assets/multistate.svg'
 import { MultiStateWidgetEvents } from './events/MultiStateWidgetEvents'
 import { MultiStateWidgetInterface } from './api/MultiStateWidgetInterface'
 import { MultiStateSettingsImpl } from './gen/MultiStateSettingsImpl'
+import SliderWidget from './SliderWidget.vue'
+import SliderIcon from './assets/slider.svg'
+import { SliderWidgetEvents } from './events/SliderWidgetEvents'
+import { SliderWidgetInterface } from './api/SliderWidgetInterface'
+import { SliderSettingsImpl } from './gen/SliderSettingsImpl'
 /* The form for the button's settings, written as a model beside the Ecore. */
 import buttonSettingsFormXmi from '../model/ui.xmi?raw'
 import toggleSettingsFormXmi from '../model/ui-toggle.xmi?raw'
 import multiStateSettingsFormXmi from '../model/ui-multistate.xmi?raw'
 /* One state of a multi-state button, one option of a button group. */
 import optionFormXmi from '../model/ui-option.xmi?raw'
+import sliderSettingsFormXmi from '../model/ui-slider.xmi?raw'
+/* One mark of a slider. */
+import markFormXmi from '../model/ui-mark.xmi?raw'
 /* The Ecore itself, for the sentences the generator drops. */
 import settingsEcore from '../model/model.ecore?raw'
 
@@ -189,15 +197,63 @@ export class MultiStateWidgetProvider implements WidgetProvider {
   }
 }
 
-export { ButtonWidget, ToggleWidget, MultiStateWidget }
-export { ButtonSettingsImpl, ToggleSettingsImpl, MultiStateSettingsImpl, ControlwidgetsPackage }
+const SLIDER_TYPE = 'SliderWidget'
+
+/** The slider: a number in steps, with detents and an optional second thumb. */
+@component({
+  service: [WIDGET_SERVICE_ID],
+  properties: { 'widget.type': SLIDER_TYPE },
+})
+export class SliderWidgetProvider implements WidgetProvider {
+  readonly type = SLIDER_TYPE
+  readonly name = 'Slider'
+  readonly nameKey = 'control:Widget.slider'
+
+  readonly settingsForm = {
+    xmi: sliderSettingsFormXmi,
+    ecore: settingsEcore,
+    uri: '/slider-settings.ui.xmi',
+    ePackage: () => ControlwidgetsPackage.eINSTANCE,
+    create: () => new SliderSettingsImpl(),
+    entryForms: [{ xmi: markFormXmi, uri: '/slider-mark.ui.xmi' }],
+  }
+
+  readonly icon = SliderIcon
+  readonly reads = READS_NOTHING
+  readonly component = SliderWidget
+
+  constructor(
+    @inject(EVENT_REGISTRY_ID) private readonly events: EventRegistry,
+    @inject(EVENT_ACTIONS_REGISTRY_ID) private readonly actions: EventActionsRegistry,
+  ) {}
+
+  @activate()
+  register(): void {
+    this.events.registerWidget(SLIDER_TYPE, SliderWidgetEvents)
+    this.actions.registerWidgetType(SLIDER_TYPE, SliderWidgetInterface, 'widget')
+  }
+
+  @deactivate()
+  unregister(): void {
+    this.events.unregisterWidget(SLIDER_TYPE)
+    this.actions.unregisterWidgetType(SLIDER_TYPE)
+  }
+}
+
+export { ButtonWidget, ToggleWidget, MultiStateWidget, SliderWidget }
+export { ButtonSettingsImpl, ToggleSettingsImpl, MultiStateSettingsImpl, SliderSettingsImpl, ControlwidgetsPackage }
 export { buttonSettingsFormXmi, toggleSettingsFormXmi, multiStateSettingsFormXmi, optionFormXmi }
+export { sliderSettingsFormXmi, markFormXmi }
 export { ControlOptionImpl } from './gen/ControlOptionImpl'
+export { SliderMarkImpl } from './gen/SliderMarkImpl'
+export { SliderOrientation } from './gen/SliderOrientation'
 export { ControlPayloadImpl } from './gen/ControlPayloadImpl'
 export type { ButtonSettings } from './gen/ButtonSettings'
 export type { ToggleSettings } from './gen/ToggleSettings'
 export type { MultiStateSettings } from './gen/MultiStateSettings'
 export type { ControlOption } from './gen/ControlOption'
+export type { SliderSettings } from './gen/SliderSettings'
+export type { SliderMark } from './gen/SliderMark'
 export type { ControlSettings } from './gen/ControlSettings'
 export type { ControlPayload } from './gen/ControlPayload'
 
