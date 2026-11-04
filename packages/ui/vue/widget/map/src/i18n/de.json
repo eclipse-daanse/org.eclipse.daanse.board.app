@@ -36,7 +36,24 @@
     "baseMapHint": "Vorlage für die Kachel-Adresse. {z}, {x} und {y} stehen für Zoomstufe und Koordinaten.",
     "fixed": "Karte fixiert",
     "highlight": "Farbe für die Auswahl",
-    "highlightHint": "Farbe, mit der ausgewählte Things auf der Karte hervorgehoben werden."
+    "highlightHint": "Farbe, mit der ausgewählte Things auf der Karte hervorgehoben werden.",
+    "overlay": {
+      "label": "Straßen-Overlay",
+      "url": "Overlay-URL",
+      "apiKey": "Stadia-API-Schlüssel",
+      "apiKeyHint": "Wird an die Kachel-Adresse von Stadia angehängt. Außerhalb von localhost nötig, zusammen mit einer bei Stadia registrierten Domain.",
+      "licence": "Kommerzielle Nutzung braucht ein Konto beim Anbieter: einen bezahlten Stadia-Tarif oder für Esri ein ArcGIS-Konto.",
+      "opacity": "Deckkraft des Overlays",
+      "invertDark": "Im dunklen Theme invertieren",
+      "invertDarkHint": "Macht schwarze Linien weiß, solange das dunkle Theme aktiv ist.",
+      "presets": {
+        "none": "Keines",
+        "stadiaLines": "Stadia - Straßen (Linien)",
+        "stadiaLinesLabels": "Stadia - Straßen und Beschriftungen",
+        "esriTransportation": "Esri - World Transportation",
+        "custom": "Eigene URL"
+      }
+    }
   },
   "Renderer": {
     "trafficLight": {

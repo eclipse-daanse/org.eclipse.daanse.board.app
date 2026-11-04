@@ -21,6 +21,7 @@
 import { BasicEPackage, BasicEClass, BasicEAttribute, BasicEReference, EPackageRegistry, getEcorePackage, BasicEEnum, BasicEEnumLiteral, BasicEAnnotation } from '@emfts/core';
 import type { EClass, EAttribute, EReference, EEnum, EDataType } from '@emfts/core';
 import { MapSettingsFactory } from './MapSettingsFactory.js';
+import { RoadOverlay } from './RoadOverlay.js';
 import { ERefType } from './ERefType.js';
 import { Comperator } from './Comperator.js';
 
@@ -77,6 +78,11 @@ export class MapSettingsPackage extends BasicEPackage {
     MAP_SETTINGS__SELECTION_HIGHLIGHT_COLOR: null as unknown as EAttribute | EReference,
     MAP_SETTINGS__SELECTED_THING_ID: null as unknown as EAttribute | EReference,
     MAP_SETTINGS__CLUSTER_GLOBAL: null as unknown as EAttribute | EReference,
+    MAP_SETTINGS__OVERLAY: null as unknown as EAttribute | EReference,
+    MAP_SETTINGS__OVERLAY_URL: null as unknown as EAttribute | EReference,
+    MAP_SETTINGS__OVERLAY_API_KEY: null as unknown as EAttribute | EReference,
+    MAP_SETTINGS__OVERLAY_OPACITY: null as unknown as EAttribute | EReference,
+    MAP_SETTINGS__OVERLAY_INVERT_DARK: null as unknown as EAttribute | EReference,
     LAYER: null as unknown as EClass,
     LAYER__DATASOURCE_ID: null as unknown as EAttribute | EReference,
     LAYER__SERVICE: null as unknown as EAttribute | EReference,
@@ -194,6 +200,7 @@ export class MapSettingsPackage extends BasicEPackage {
     LOCATION_CLICK_PAYLOAD__NAME: null as unknown as EAttribute | EReference,
     LOCATION_CLICK_PAYLOAD__GEOMETRY: null as unknown as EAttribute | EReference,
     LOCATION_CLICK_PAYLOAD__THING_IDS: null as unknown as EAttribute | EReference,
+    ROAD_OVERLAY: null as unknown as EEnum,
     E_REF_TYPE: null as unknown as EEnum,
     COMPERATOR: null as unknown as EEnum,
   };
@@ -363,6 +370,51 @@ export class MapSettingsPackage extends BasicEPackage {
     mapSettings_clusterGlobal.setUpperBound(1);
     mapSettingsClass.getEStructuralFeatures().push(mapSettings_clusterGlobal);
     MapSettingsPackage.Literals.MAP_SETTINGS__CLUSTER_GLOBAL = mapSettings_clusterGlobal;
+
+    // Create overlay feature
+    const mapSettings_overlay = new BasicEAttribute();
+    mapSettings_overlay.setName('overlay');
+    mapSettings_overlay.setLowerBound(0);
+    mapSettings_overlay.setUpperBound(1);
+    mapSettings_overlay.setDefaultValueLiteral("none");
+    mapSettingsClass.getEStructuralFeatures().push(mapSettings_overlay);
+    MapSettingsPackage.Literals.MAP_SETTINGS__OVERLAY = mapSettings_overlay;
+
+    // Create overlayUrl feature
+    const mapSettings_overlayUrl = new BasicEAttribute();
+    mapSettings_overlayUrl.setName('overlayUrl');
+    mapSettings_overlayUrl.setLowerBound(0);
+    mapSettings_overlayUrl.setUpperBound(1);
+    mapSettings_overlayUrl.setDefaultValueLiteral("");
+    mapSettingsClass.getEStructuralFeatures().push(mapSettings_overlayUrl);
+    MapSettingsPackage.Literals.MAP_SETTINGS__OVERLAY_URL = mapSettings_overlayUrl;
+
+    // Create overlayApiKey feature
+    const mapSettings_overlayApiKey = new BasicEAttribute();
+    mapSettings_overlayApiKey.setName('overlayApiKey');
+    mapSettings_overlayApiKey.setLowerBound(0);
+    mapSettings_overlayApiKey.setUpperBound(1);
+    mapSettings_overlayApiKey.setDefaultValueLiteral("");
+    mapSettingsClass.getEStructuralFeatures().push(mapSettings_overlayApiKey);
+    MapSettingsPackage.Literals.MAP_SETTINGS__OVERLAY_API_KEY = mapSettings_overlayApiKey;
+
+    // Create overlayOpacity feature
+    const mapSettings_overlayOpacity = new BasicEAttribute();
+    mapSettings_overlayOpacity.setName('overlayOpacity');
+    mapSettings_overlayOpacity.setLowerBound(0);
+    mapSettings_overlayOpacity.setUpperBound(1);
+    mapSettings_overlayOpacity.setDefaultValueLiteral("1");
+    mapSettingsClass.getEStructuralFeatures().push(mapSettings_overlayOpacity);
+    MapSettingsPackage.Literals.MAP_SETTINGS__OVERLAY_OPACITY = mapSettings_overlayOpacity;
+
+    // Create overlayInvertDark feature
+    const mapSettings_overlayInvertDark = new BasicEAttribute();
+    mapSettings_overlayInvertDark.setName('overlayInvertDark');
+    mapSettings_overlayInvertDark.setLowerBound(0);
+    mapSettings_overlayInvertDark.setUpperBound(1);
+    mapSettings_overlayInvertDark.setDefaultValueLiteral("false");
+    mapSettingsClass.getEStructuralFeatures().push(mapSettings_overlayInvertDark);
+    MapSettingsPackage.Literals.MAP_SETTINGS__OVERLAY_INVERT_DARK = mapSettings_overlayInvertDark;
 
     // Create Layer class
     const layerClass = new BasicEClass();
@@ -1345,6 +1397,68 @@ export class MapSettingsPackage extends BasicEPackage {
     locationClickPayloadClass.getEStructuralFeatures().push(locationClickPayload_thingIds);
     MapSettingsPackage.Literals.LOCATION_CLICK_PAYLOAD__THING_IDS = locationClickPayload_thingIds;
 
+    // Create RoadOverlay enum
+    const roadOverlayEnumType = new BasicEEnum();
+    roadOverlayEnumType.setName('RoadOverlay');
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("none");
+      literal.setValue(0);
+      literal.setLiteral("none");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(RoadOverlay.none);
+      roadOverlayEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("stadiaLines");
+      literal.setValue(1);
+      literal.setLiteral("stadiaLines");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(RoadOverlay.stadiaLines);
+      roadOverlayEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("stadiaLinesLabels");
+      literal.setValue(2);
+      literal.setLiteral("stadiaLinesLabels");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(RoadOverlay.stadiaLinesLabels);
+      roadOverlayEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("esriTransportation");
+      literal.setValue(3);
+      literal.setLiteral("esriTransportation");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(RoadOverlay.esriTransportation);
+      roadOverlayEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("custom");
+      literal.setValue(4);
+      literal.setLiteral("custom");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(RoadOverlay.custom);
+      roadOverlayEnumType.addLiteral(literal);
+    }
+    {
+      const annotation = new BasicEAnnotation();
+      annotation.setSource("http://www.eclipse.org/emf/2002/GenModel");
+      annotation.getDetails().putByKey("documentation", "Raster tiles a map can draw over its base map.");
+      roadOverlayEnumType.getEAnnotations().push(annotation);
+    }
+    MapSettingsPackage.Literals.ROAD_OVERLAY = roadOverlayEnumType;
+    this.getEClassifiers().push(roadOverlayEnumType);
+
     // Create ERefType enum
     const eRefTypeEnumType = new BasicEEnum();
     eRefTypeEnumType.setName('ERefType');
@@ -1480,6 +1594,11 @@ export class MapSettingsPackage extends BasicEPackage {
     (MapSettingsPackage.Literals.MAP_SETTINGS__SELECTION_HIGHLIGHT_COLOR as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
     (MapSettingsPackage.Literals.MAP_SETTINGS__SELECTED_THING_ID as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
     (MapSettingsPackage.Literals.MAP_SETTINGS__CLUSTER_GLOBAL as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EBoolean')!);
+    (MapSettingsPackage.Literals.MAP_SETTINGS__OVERLAY as BasicEAttribute).setEType(MapSettingsPackage.Literals.ROAD_OVERLAY);
+    (MapSettingsPackage.Literals.MAP_SETTINGS__OVERLAY_URL as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (MapSettingsPackage.Literals.MAP_SETTINGS__OVERLAY_API_KEY as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (MapSettingsPackage.Literals.MAP_SETTINGS__OVERLAY_OPACITY as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EDouble')!);
+    (MapSettingsPackage.Literals.MAP_SETTINGS__OVERLAY_INVERT_DARK as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EBoolean')!);
     (MapSettingsPackage.Literals.LAYER__DATASOURCE_ID as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
     (MapSettingsPackage.Literals.LAYER__SERVICE as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EJavaObject')!);
     (MapSettingsPackage.Literals.LAYER__TYPE as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);

@@ -12,6 +12,7 @@ import  type { IDSRenderer, IRenderer } from './api/Renderer'
 import WFS from './WFS'
 import { TileLayer } from 'leaflet'
 import type { Service } from './gen/Service'
+import type { RoadOverlay } from './gen/RoadOverlay'
 import WMS = TileLayer.WMS
 
 
@@ -30,6 +31,11 @@ export interface IMapSettings {
   selectionHighlightColor?: string,
   selectedThingId?: string | null
   clusterGlobal?: boolean,
+  overlay?: RoadOverlay,
+  overlayUrl?: string,
+  overlayApiKey?: string,
+  overlayOpacity?: number,
+  overlayInvertDark?: boolean,
 }
 
 export interface LayerI {

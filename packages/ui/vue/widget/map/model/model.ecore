@@ -236,6 +236,31 @@
                 <details key="documentation" value="Cluster markers across all layers instead of per layer."/>
             </eAnnotations>
         </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="overlay" eType="#//RoadOverlay" lowerBound="0" defaultValueLiteral="none">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="Transparent raster tiles drawn over the base map, such as roads. None by default: every preset but the custom one asks for an account for commercial use."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="overlayUrl" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" lowerBound="0" defaultValueLiteral="">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="Tile URL template of the overlay when it is 'custom', with {z}, {x} and {y} placeholders."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="overlayApiKey" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" lowerBound="0" defaultValueLiteral="">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="API key for the Stadia presets, appended to their tile URL as api_key. Not sent to any other overlay."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="overlayOpacity" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble" lowerBound="0" defaultValueLiteral="1">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="Opacity of the overlay, from 0 (invisible) to 1."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="overlayInvertDark" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean" lowerBound="0" defaultValueLiteral="false">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="Inverts the overlay's colours in the dark theme, which turns the black Stadia lines white."/>
+            </eAnnotations>
+        </eStructuralFeatures>
 
     </eClassifiers>
 
@@ -675,6 +700,37 @@
                 <details key="documentation" value="Optional CSS class name for styling."/>
             </eAnnotations>
         </eStructuralFeatures>
+    </eClassifiers>
+
+    <eClassifiers xsi:type="ecore:EEnum" name="RoadOverlay">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+            <details key="documentation" value="Raster tiles a map can draw over its base map."/>
+        </eAnnotations>
+        <eLiterals name="none" value="0" literal="none">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="No overlay."/>
+            </eAnnotations>
+        </eLiterals>
+        <eLiterals name="stadiaLines" value="1" literal="stadiaLines">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="Stadia &apos;Stamen Toner Lines&apos;: roads as black and grey lines, no labels."/>
+            </eAnnotations>
+        </eLiterals>
+        <eLiterals name="stadiaLinesLabels" value="2" literal="stadiaLinesLabels">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="Stadia &apos;Stamen Toner Lines&apos; with &apos;Stamen Toner Labels&apos; above them."/>
+            </eAnnotations>
+        </eLiterals>
+        <eLiterals name="esriTransportation" value="3" literal="esriTransportation">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="Esri &apos;World Transportation&apos;: coloured roads with names."/>
+            </eAnnotations>
+        </eLiterals>
+        <eLiterals name="custom" value="4" literal="custom">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="The tile URL template in overlayUrl."/>
+            </eAnnotations>
+        </eLiterals>
     </eClassifiers>
 
     <eClassifiers xsi:type="ecore:EEnum" name="ERefType">
