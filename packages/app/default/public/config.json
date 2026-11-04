@@ -29,5 +29,10 @@
         "url":"https://github.com/de-jena/daanse-dash"
       }
     ]
+  },
+  "extraBundles":{
+    "$comment":"Bundles this deployment adds: URLs of manifest.json files (relative to the page) or manifests inline. Same-origin only, unless the origin is listed in allowedOrigins. See packages/app/default/README.md.",
+    "manifests":[],
+    "allowedOrigins":[]
   }
 }
