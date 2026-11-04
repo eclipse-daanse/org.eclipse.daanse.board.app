@@ -4,6 +4,10 @@
   },
   "Form": {
     "headerBackground": "Kopfzeilenfarbe",
+    "marksGroup": "Markierungen",
+    "markedRowColor": "Farbe einer markierten Zeile",
+    "markedColumnColor": "Farbe einer markierten Spalte",
+    "markedCellColor": "Farbe einer markierten Zelle",
     "rowsGroup": "Zeilen",
     "headerGroup": "Kopfzeile",
     "pageSize": "Zeilen je Seite (0 = alle)",
