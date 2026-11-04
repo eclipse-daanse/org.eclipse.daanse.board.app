@@ -78,6 +78,12 @@ export interface LayoutRepositoryI {
     getLayout(layoutId: string): LayoutI | undefined;
     getAllLayouts(): LayoutI[];
     hasLayout(layoutId: string): boolean;
+    /**
+     * Called after a layout is added or removed. Bundles activate in no
+     * particular order, so a page can be opened before its layout's bundle
+     * has registered it (#1231). Returns the unsubscribe function.
+     */
+    onChange(listener: () => void): () => void;
 }
 
 export const LAYOUT_REPOSITORY = serviceId<LayoutRepositoryI>('LayoutRepository')
