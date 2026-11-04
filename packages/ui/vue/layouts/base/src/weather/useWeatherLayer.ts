@@ -17,7 +17,7 @@
  * The layout hands over the page, its two canvases and the element its
  * widgets are drawn in; this measures the widgets, runs the engine and
  * decides when not to. It runs only when there is weather to draw, the
- * board is not being edited, nobody asked for reduced motion and the
+ * board is not being edited (or a region is being drawn on it), nobody asked for reduced motion and the
  * layer is on screen - otherwise no frame is requested at all.
  *
  * The widgets are found by the attribute `data-weather-obstacle`, whose
@@ -141,6 +141,12 @@ export interface WeatherLayerOptions {
   page: MaybeRefOrGetter<Page | undefined>
   /** True while the board is being edited: the layer stands still and draws nothing. */
   editMode: MaybeRefOrGetter<boolean>
+  /**
+   * The region being drawn, in grid units, while it is: the layer then
+   * runs even on a board being edited, clipped to these shapes rather
+   * than to the page's region, so the person sees what they draw.
+   */
+  drawing?: MaybeRefOrGetter<ShapeSpec[] | undefined>
   host: Ref<HTMLElement | undefined>
   back: Ref<HTMLCanvasElement | undefined>
   front: Ref<HTMLCanvasElement | undefined>
@@ -220,10 +226,11 @@ export function useWeatherLayer(options: WeatherLayerOptions) {
   const tabVisible = ref(true)
   const onScreen = ref(true)
 
+  const drawn = () => toValue(options.drawing)
   const running = computed(
     () =>
       DRAWN.has(kind.value) &&
-      !toValue(options.editMode) &&
+      (!toValue(options.editMode) || drawn() !== undefined) &&
       !reducedMotion.value &&
       tabVisible.value &&
       onScreen.value,
@@ -249,8 +256,10 @@ export function useWeatherLayer(options: WeatherLayerOptions) {
     const scroll = scrollOffset()
     engine.setViewport(scroll.left, scroll.top, size.width, size.height)
     const cell = options.cell?.(size.width) ?? DEFAULT_CELL
+    const draft = drawn()
+    const region = readRegion(watched.value?.weather)
     const { area, obstacles } = resolveRegion(
-      readRegion(watched.value?.weather),
+      draft ? { ...region, region: WeatherRegion.AREA, shapes: draft } : region,
       measureObstacles(host, scroll),
       cell,
     )
@@ -321,6 +330,15 @@ export function useWeatherLayer(options: WeatherLayerOptions) {
   watch(options.front, () => {
     if (running.value) resize()
   })
+
+  /* The region being drawn changed: clipped to it at once */
+  watch(
+    () => drawn(),
+    () => {
+      if (running.value) measure()
+    },
+    { deep: true },
+  )
 
   /* The page changed - a widget moved, came or went */
   watch(watched, () => {
