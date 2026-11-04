@@ -256,4 +256,51 @@ describe('the weather layer', () => {
     expect(rate()).toBeGreaterThan(calm * 4)
     wrapper.unmount()
   })
+
+  it('keeps a widget region on its widget when the widget moves', async () => {
+    const page = snowPage()
+    page.weather!.region!.value = 'widget'
+    page.weather!.regionWidget!.value = 'w1'
+    const wrapper = mountLayer(page)
+    await nextTick()
+    const layer = layerOf(wrapper)
+
+    expect(layer.engine.region).toEqual({ x: 100, y: 200, width: 200, height: 100 })
+    /* The region's widget is where the weather is, not something in its way */
+    expect(layer.engine.obstacleRects).toEqual([])
+
+    boxes.set('w1', { left: 40, top: 320, width: 260, height: 150 })
+    page.layout.get(0).x = 40
+    await nextTick()
+    await nextTick()
+
+    expect(layer.engine.region).toEqual({ x: 40, y: 320, width: 260, height: 150 })
+    wrapper.unmount()
+  })
+
+  it('measures an area region in the grid units of its layout', async () => {
+    const page = snowPage()
+    page.weather!.region!.value = 'area'
+    page.weather!.regionX!.value = 2
+    page.weather!.regionY!.value = 1
+    page.weather!.regionWidth!.value = 4
+    page.weather!.regionHeight!.value = 3
+    const wrapper = mountLayer(page, { cell: () => ({ width: 50, height: 30 }) })
+    await nextTick()
+    expect(layerOf(wrapper).engine.region).toEqual({ x: 100, y: 30, width: 200, height: 90 })
+    wrapper.unmount()
+  })
+
+  it('draws no front canvas and meets no widget when it does not affect them', async () => {
+    const page = snowPage()
+    page.weather!.affectsWidgets!.value = false
+    const wrapper = mountLayer(page)
+    await nextTick()
+    expect(wrapper.findAll('canvas')).toHaveLength(1)
+    expect(layerOf(wrapper).engine.obstacleRects).toEqual([])
+    run(5)
+    expect(drawn).toBeGreaterThan(0)
+    wrapper.unmount()
+  })
 })
+

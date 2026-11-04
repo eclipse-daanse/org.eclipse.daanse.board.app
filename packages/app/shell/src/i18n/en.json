@@ -360,7 +360,17 @@
       "snow": "Snow",
       "intensity": "Intensity",
       "wind": "Wind",
-      "color": "Colour"
+      "color": "Colour",
+      "region": "Region",
+      "regionPage": "Whole page",
+      "regionArea": "Rectangle",
+      "regionWidget": "Area of a widget",
+      "regionX": "Left (grid units)",
+      "regionY": "Top (grid units)",
+      "regionWidth": "Width (grid units)",
+      "regionHeight": "Height (grid units)",
+      "regionWidgetChoice": "Widget",
+      "affectsWidgets": "Affects the widgets"
     }
   },
   "Tokens": {

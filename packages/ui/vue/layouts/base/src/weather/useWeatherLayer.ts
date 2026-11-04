@@ -41,12 +41,15 @@ import {
 import { useEObject } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import {
   WeatherKind,
+  WeatherRegion,
+  affectsWidgetsOf,
   weatherKindOf,
+  weatherRegionOf,
   WEATHER_DEFAULTS,
   type Page,
   type Weather,
 } from 'org.eclipse.daanse.board.app.lib.model.workspace'
-import { WeatherEngine, type Obstacle, type WeatherLayerSettings } from './engine'
+import { WeatherEngine, type Area, type Obstacle, type WeatherLayerSettings } from './engine'
 
 export const OBSTACLE_ATTRIBUTE = 'data-weather-obstacle'
 
@@ -58,6 +61,74 @@ const DRAWN: ReadonlySet<WeatherKind> = new Set([WeatherKind.RAIN, WeatherKind.S
 
 const REMEASURE_MS = 1000
 
+/** One grid unit, in pixels: what an area region is measured in. */
+export interface GridCell {
+  width: number
+  height: number
+}
+
+/** The base layout's grid: what its widgets line up with when snapping. */
+export const DEFAULT_CELL: GridCell = { width: 24, height: 24 }
+
+/** Where a page's weather is drawn, read out of its wrappers. */
+export interface WeatherRegionSettings {
+  region: WeatherRegion
+  /** The area region, in grid units. */
+  x: number
+  y: number
+  width: number
+  height: number
+  /** The widget region's widget. */
+  widget: string
+}
+
+export function readRegion(weather: Weather | undefined): WeatherRegionSettings {
+  return {
+    region: weatherRegionOf(weather?.region?.value ?? WEATHER_DEFAULTS.region),
+    x: numberOr(weather?.regionX?.value, WEATHER_DEFAULTS.regionX),
+    y: numberOr(weather?.regionY?.value, WEATHER_DEFAULTS.regionY),
+    width: numberOr(weather?.regionWidth?.value, WEATHER_DEFAULTS.regionWidth),
+    height: numberOr(weather?.regionHeight?.value, WEATHER_DEFAULTS.regionHeight),
+    widget: String(weather?.regionWidget?.value ?? WEATHER_DEFAULTS.regionWidget),
+  }
+}
+
+/**
+ * The region on the board, and the widgets that are obstacles within it.
+ *
+ * A widget region is the widget as just measured, so it follows the widget
+ * when it moves or is resized; that widget is the region rather than
+ * something in it, so it is no obstacle. A widget that is not on the page
+ * is a region of nothing: no weather rather than weather everywhere.
+ */
+export function resolveRegion(
+  settings: WeatherRegionSettings,
+  obstacles: Obstacle[],
+  cell: GridCell,
+): { area: Area | undefined; obstacles: Obstacle[] } {
+  if (settings.region === WeatherRegion.AREA) {
+    return {
+      area: {
+        x: settings.x * cell.width,
+        y: settings.y * cell.height,
+        width: settings.width * cell.width,
+        height: settings.height * cell.height,
+      },
+      obstacles,
+    }
+  }
+  if (settings.region === WeatherRegion.WIDGET) {
+    const widget = obstacles.find((each) => each.id === settings.widget)
+    return {
+      area: widget
+        ? { x: widget.x, y: widget.y, width: widget.width, height: widget.height }
+        : { x: 0, y: 0, width: 0, height: 0 },
+      obstacles: obstacles.filter((each) => each !== widget),
+    }
+  }
+  return { area: undefined, obstacles }
+}
+
 export interface WeatherLayerOptions {
   page: MaybeRefOrGetter<Page | undefined>
   /** True while the board is being edited: the layer stands still and draws nothing. */
@@ -67,6 +138,8 @@ export interface WeatherLayerOptions {
   front: Ref<HTMLCanvasElement | undefined>
   /** The element that scrolls the widgets, if one does. */
   scroller?: () => HTMLElement | null | undefined
+  /** One grid unit of the layout, in pixels, given the host's width. */
+  cell?: (hostWidth: number) => GridCell
   /** For tests: where random numbers come from. */
   random?: () => number
 }
@@ -78,6 +151,7 @@ export function readWeather(weather: Weather | undefined): WeatherLayerSettings 
     intensity: numberOr(weather?.intensity?.value, WEATHER_DEFAULTS.intensity),
     wind: numberOr(weather?.wind?.value, WEATHER_DEFAULTS.wind),
     color: String(weather?.color?.value ?? WEATHER_DEFAULTS.color),
+    affectsWidgets: affectsWidgetsOf(weather?.affectsWidgets?.value),
   }
 }
 
@@ -131,6 +205,8 @@ export function useWeatherLayer(options: WeatherLayerOptions) {
   const watched = useEObject(() => toValue(options.page))
   const settings = () => readWeather(watched.value?.weather)
   const kind = computed(() => readWeather(watched.value?.weather).kind)
+  /* Off, the layer draws behind the widgets only and has no front canvas */
+  const affectsWidgets = computed(() => affectsWidgetsOf(watched.value?.weather?.affectsWidgets?.value))
 
   const reducedMotion = ref(false)
   const tabVisible = ref(true)
@@ -164,7 +240,15 @@ export function useWeatherLayer(options: WeatherLayerOptions) {
     if (!host) return
     const scroll = scrollOffset()
     engine.setViewport(scroll.left, scroll.top, size.width, size.height)
-    engine.setObstacles(measureObstacles(host, scroll))
+    const cell = options.cell?.(size.width) ?? DEFAULT_CELL
+    const { area, obstacles } = resolveRegion(
+      readRegion(watched.value?.weather),
+      measureObstacles(host, scroll),
+      cell,
+    )
+    engine.setRegion(area)
+    /* Passing the widgets by: none of them is in the way */
+    engine.setObstacles(affectsWidgets.value ? obstacles : [])
     lastMeasure = performance.now()
   }
 
@@ -225,6 +309,11 @@ export function useWeatherLayer(options: WeatherLayerOptions) {
 
   watch(running, (now) => (now ? start() : stop()))
 
+  /* The front canvas comes and goes with affectsWidgets */
+  watch(options.front, () => {
+    if (running.value) resize()
+  })
+
   /* The page changed - a widget moved, came or went */
   watch(watched, () => {
     if (running.value) measure()
@@ -272,5 +361,5 @@ export function useWeatherLayer(options: WeatherLayerOptions) {
     intersectionObserver?.disconnect()
   })
 
-  return { engine, running, settings, measure }
+  return { engine, running, settings, measure, affectsWidgets }
 }
