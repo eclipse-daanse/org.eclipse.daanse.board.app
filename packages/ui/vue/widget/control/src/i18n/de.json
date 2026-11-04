@@ -49,7 +49,8 @@
     "optionValue": "Feld für den Wert",
     "chooseGroup": "Auswahl",
     "multiple": "Mehrere wählbar",
-    "chosenTextColor": "Textfarbe der gewählten"
+    "chosenTextColor": "Textfarbe der gewählten",
+    "labelSide": "Beschriftung steht"
   },
   "Action": {
     "value": "Wert",
@@ -71,6 +72,10 @@
     "orientation": {
       "horizontal": "Waagerecht",
       "vertical": "Senkrecht"
+    },
+    "labelSide": {
+      "right": "Rechts",
+      "left": "Links"
     }
   },
   "Default": {
