@@ -12,6 +12,7 @@
  * ********************************************************************/
 
 // @vitest-environment jsdom
+import { EventsPackage } from 'org.eclipse.daanse.board.app.lib.api.events'
 import { describe, it, expect, vi } from 'vitest'
 import { flushPromises, mount } from '@vue/test-utils'
 import { nextTick, watch } from 'vue'
@@ -40,6 +41,9 @@ vi.mock('org.eclipse.daanse.board.app.ui.vue.composables', async (importOriginal
 })
 
 /* The class literals are built on first access. */
+/* The payloads extend the events model's Payload, which has to be
+  registered before this package can point at it. */
+void EventsPackage.eINSTANCE
 void DatatablesettingsPackage.eINSTANCE
 void WorkspacePackage.eINSTANCE
 
