@@ -19,7 +19,7 @@
  */
 
 import { BasicEPackage, BasicEClass, BasicEAttribute, EPackageRegistry, getEcorePackage } from '@emfts/core';
-import type { EClass, EAttribute, EReference } from '@emfts/core';
+import type { EClass, EAttribute, EReference, EDataType } from '@emfts/core';
 import { VantasettingsFactory } from './VantasettingsFactory.js';
 
 /**
@@ -104,6 +104,7 @@ export class VantasettingsPackage extends BasicEPackage {
     vantaSettings_type.setName('type');
     vantaSettings_type.setLowerBound(0);
     vantaSettings_type.setUpperBound(1);
+    vantaSettings_type.setDefaultValueLiteral("CLOUDS");
     vantaSettingsClass.getEStructuralFeatures().push(vantaSettings_type);
     VantasettingsPackage.Literals.VANTA_SETTINGS__TYPE = vantaSettings_type;
 
@@ -316,6 +317,10 @@ export class VantasettingsPackage extends BasicEPackage {
     (VantasettingsPackage.Literals.VANTA_SETTINGS__POINTS as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EDouble')!);
     (VantasettingsPackage.Literals.VANTA_SETTINGS__MAX_DISTANCE as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EDouble')!);
     (VantasettingsPackage.Literals.VANTA_SETTINGS__CHAOS as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EDouble')!);
+
+    // ============================================
+    // Set EOpposites (must be done after all features are created) (#59)
+    // ============================================
 
     // ============================================
     // Register XML name mappings from ExtendedMetaData annotations

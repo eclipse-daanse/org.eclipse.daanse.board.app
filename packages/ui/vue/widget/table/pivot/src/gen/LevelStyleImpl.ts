@@ -36,7 +36,7 @@ export class LevelStyleImpl extends BasicEObject implements LevelStyle {
   static readonly FONT_WEIGHT: number = 3;
 
   // Private fields
-  private _level?: number;
+  private _level: number = 0;
   private _backgroundColor: VariableWrapper<string> = new VariableWrapper<string>();
   private _textColor: VariableWrapper<string> = new VariableWrapper<string>();
   private _fontWeight: number = 600;
@@ -200,7 +200,7 @@ export class LevelStyleImpl extends BasicEObject implements LevelStyle {
     const featureID = this.eClass().getFeatureID(feature);
     switch (featureID) {
       case LevelStyleImpl.LEVEL:
-        return this._level !== undefined;
+        return this._level !== 0;
       case LevelStyleImpl.BACKGROUND_COLOR:
         return this._backgroundColor !== new VariableWrapper<string>();
       case LevelStyleImpl.TEXT_COLOR:
@@ -219,7 +219,7 @@ export class LevelStyleImpl extends BasicEObject implements LevelStyle {
     const featureID = this.eClass().getFeatureID(feature);
     switch (featureID) {
       case LevelStyleImpl.LEVEL:
-        this._level = undefined;
+        this._level = 0;
         return;
       case LevelStyleImpl.BACKGROUND_COLOR:
         this._backgroundColor = new VariableWrapper<string>();

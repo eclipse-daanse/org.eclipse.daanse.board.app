@@ -37,8 +37,8 @@ export class RouteCalculatedPayloadImpl extends PayloadImpl implements RouteCalc
 
   // Private fields
   private _geojson?: unknown;
-  private _distance_km?: number;
-  private _duration_min?: number;
+  private _distance_km: number = 0;
+  private _duration_min: number = 0;
   private _waypoints?: unknown;
   private _costing?: string;
 
@@ -233,9 +233,9 @@ export class RouteCalculatedPayloadImpl extends PayloadImpl implements RouteCalc
       case RouteCalculatedPayloadImpl.GEOJSON:
         return this._geojson !== undefined;
       case RouteCalculatedPayloadImpl.DISTANCE_KM:
-        return this._distance_km !== undefined;
+        return this._distance_km !== 0;
       case RouteCalculatedPayloadImpl.DURATION_MIN:
-        return this._duration_min !== undefined;
+        return this._duration_min !== 0;
       case RouteCalculatedPayloadImpl.WAYPOINTS:
         return this._waypoints !== undefined;
       case RouteCalculatedPayloadImpl.COSTING:
@@ -255,10 +255,10 @@ export class RouteCalculatedPayloadImpl extends PayloadImpl implements RouteCalc
         this._geojson = undefined;
         return;
       case RouteCalculatedPayloadImpl.DISTANCE_KM:
-        this._distance_km = undefined;
+        this._distance_km = 0;
         return;
       case RouteCalculatedPayloadImpl.DURATION_MIN:
-        this._duration_min = undefined;
+        this._duration_min = 0;
         return;
       case RouteCalculatedPayloadImpl.WAYPOINTS:
         this._waypoints = undefined;

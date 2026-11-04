@@ -37,7 +37,7 @@ export abstract class PayloadImpl extends BasicEObject implements Payload {
   // Private fields
   private _eventType?: string;
   private _widgetId?: string;
-  private _timestamp?: number;
+  private _timestamp: number = 0;
   private _metadata?: unknown;
 
   /**
@@ -203,7 +203,7 @@ export abstract class PayloadImpl extends BasicEObject implements Payload {
       case PayloadImpl.WIDGET_ID:
         return this._widgetId !== undefined;
       case PayloadImpl.TIMESTAMP:
-        return this._timestamp !== undefined;
+        return this._timestamp !== 0;
       case PayloadImpl.METADATA:
         return this._metadata !== undefined;
       default:
@@ -224,7 +224,7 @@ export abstract class PayloadImpl extends BasicEObject implements Payload {
         this._widgetId = undefined;
         return;
       case PayloadImpl.TIMESTAMP:
-        this._timestamp = undefined;
+        this._timestamp = 0;
         return;
       case PayloadImpl.METADATA:
         this._metadata = undefined;

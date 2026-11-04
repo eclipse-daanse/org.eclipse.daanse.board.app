@@ -38,7 +38,7 @@ export abstract class IBaseConnectionConfigurationImpl extends BasicEObject impl
   private _name?: string;
   private _type?: string;
   private _uid?: string;
-  private _pollingEnabled?: boolean;
+  private _pollingEnabled: boolean = false;
 
   /**
    * Returns the EClass of this object
@@ -205,7 +205,7 @@ export abstract class IBaseConnectionConfigurationImpl extends BasicEObject impl
       case IBaseConnectionConfigurationImpl.UID:
         return this._uid !== undefined;
       case IBaseConnectionConfigurationImpl.POLLING_ENABLED:
-        return this._pollingEnabled !== undefined;
+        return this._pollingEnabled !== false;
       default:
         return super.eIsSet(feature);
     }
@@ -227,7 +227,7 @@ export abstract class IBaseConnectionConfigurationImpl extends BasicEObject impl
         this._uid = undefined;
         return;
       case IBaseConnectionConfigurationImpl.POLLING_ENABLED:
-        this._pollingEnabled = undefined;
+        this._pollingEnabled = false;
         return;
       default:
         super.eUnset(feature);

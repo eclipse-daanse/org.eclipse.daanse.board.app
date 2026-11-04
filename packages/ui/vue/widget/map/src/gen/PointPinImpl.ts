@@ -34,7 +34,7 @@ export class PointPinImpl extends BasicEObject implements PointPin {
 
   // Private fields
   private _color?: string;
-  private _solid?: boolean;
+  private _solid: boolean = false;
 
   /**
    * Returns the EClass of this object
@@ -137,7 +137,7 @@ export class PointPinImpl extends BasicEObject implements PointPin {
       case PointPinImpl.COLOR:
         return this._color !== undefined;
       case PointPinImpl.SOLID:
-        return this._solid !== undefined;
+        return this._solid !== false;
       default:
         return super.eIsSet(feature);
     }
@@ -153,7 +153,7 @@ export class PointPinImpl extends BasicEObject implements PointPin {
         this._color = undefined;
         return;
       case PointPinImpl.SOLID:
-        this._solid = undefined;
+        this._solid = false;
         return;
       default:
         super.eUnset(feature);

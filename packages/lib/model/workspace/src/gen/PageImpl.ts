@@ -48,11 +48,11 @@ export class PageImpl extends BasicEObject implements Page {
   static readonly LAYOUT: number = 13;
 
   // Private fields
-  private _id: string = "";
+  private _id?: string;
   private _name?: string;
   private _description?: string;
   private _icon?: string;
-  private _visibleInNavigation?: boolean;
+  private _visibleInNavigation: boolean = false;
   private _layoutId?: string;
   private _layoutSettings?: unknown;
   private _backgroundColor?: string;
@@ -490,7 +490,7 @@ export class PageImpl extends BasicEObject implements Page {
     const featureID = this.eClass().getFeatureID(feature);
     switch (featureID) {
       case PageImpl.ID:
-        return this._id !== "";
+        return this._id !== undefined;
       case PageImpl.NAME:
         return this._name !== undefined;
       case PageImpl.DESCRIPTION:
@@ -498,7 +498,7 @@ export class PageImpl extends BasicEObject implements Page {
       case PageImpl.ICON:
         return this._icon !== undefined;
       case PageImpl.VISIBLE_IN_NAVIGATION:
-        return this._visibleInNavigation !== undefined;
+        return this._visibleInNavigation !== false;
       case PageImpl.LAYOUT_ID:
         return this._layoutId !== undefined;
       case PageImpl.LAYOUT_SETTINGS:
@@ -529,7 +529,7 @@ export class PageImpl extends BasicEObject implements Page {
     const featureID = this.eClass().getFeatureID(feature);
     switch (featureID) {
       case PageImpl.ID:
-        this._id = "";
+        this._id = undefined;
         return;
       case PageImpl.NAME:
         this._name = undefined;
@@ -541,7 +541,7 @@ export class PageImpl extends BasicEObject implements Page {
         this._icon = undefined;
         return;
       case PageImpl.VISIBLE_IN_NAVIGATION:
-        this._visibleInNavigation = undefined;
+        this._visibleInNavigation = false;
         return;
       case PageImpl.LAYOUT_ID:
         this._layoutId = undefined;

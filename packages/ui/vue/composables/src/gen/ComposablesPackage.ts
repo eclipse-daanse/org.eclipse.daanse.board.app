@@ -19,7 +19,7 @@
  */
 
 import { BasicEPackage, BasicEClass, BasicEAttribute, EPackageRegistry, getEcorePackage } from '@emfts/core';
-import type { EClass, EAttribute, EReference } from '@emfts/core';
+import type { EClass, EAttribute, EReference, EDataType } from '@emfts/core';
 import { ComposablesFactory } from './ComposablesFactory.js';
 
 /**
@@ -91,6 +91,8 @@ export class ComposablesPackage extends BasicEPackage {
     variableComplexStringWrapper_type.setName('type');
     variableComplexStringWrapper_type.setLowerBound(0);
     variableComplexStringWrapper_type.setUpperBound(1);
+    variableComplexStringWrapper_type.setDefaultValueLiteral("VARIABLECOMPLEXSTRINGWRAPPER");
+    variableComplexStringWrapper_type.setChangeable(false);
     variableComplexStringWrapperClass.getEStructuralFeatures().push(variableComplexStringWrapper_type);
     ComposablesPackage.Literals.VARIABLE_COMPLEX_STRING_WRAPPER__TYPE = variableComplexStringWrapper_type;
 
@@ -106,6 +108,10 @@ export class ComposablesPackage extends BasicEPackage {
     // ============================================
     (ComposablesPackage.Literals.VARIABLE_COMPLEX_STRING_WRAPPER__VALUE as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EObject')!);
     (ComposablesPackage.Literals.VARIABLE_COMPLEX_STRING_WRAPPER__TYPE as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+
+    // ============================================
+    // Set EOpposites (must be done after all features are created) (#59)
+    // ============================================
 
     // ============================================
     // Register XML name mappings from ExtendedMetaData annotations

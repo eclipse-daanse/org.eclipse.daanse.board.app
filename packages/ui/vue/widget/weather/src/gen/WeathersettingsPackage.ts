@@ -19,7 +19,7 @@
  */
 
 import { BasicEPackage, BasicEClass, BasicEAttribute, EPackageRegistry, getEcorePackage } from '@emfts/core';
-import type { EClass, EAttribute, EReference } from '@emfts/core';
+import type { EClass, EAttribute, EReference, EDataType } from '@emfts/core';
 import { WeathersettingsFactory } from './WeathersettingsFactory.js';
 
 /**
@@ -133,6 +133,7 @@ export class WeathersettingsPackage extends BasicEPackage {
     weatherSettings_useTimeRange.setName('useTimeRange');
     weatherSettings_useTimeRange.setLowerBound(0);
     weatherSettings_useTimeRange.setUpperBound(1);
+    weatherSettings_useTimeRange.setDefaultValueLiteral("false");
     weatherSettingsClass.getEStructuralFeatures().push(weatherSettings_useTimeRange);
     WeathersettingsPackage.Literals.WEATHER_SETTINGS__USE_TIME_RANGE = weatherSettings_useTimeRange;
 
@@ -141,6 +142,7 @@ export class WeathersettingsPackage extends BasicEPackage {
     weatherSettings_manualTimeSelection.setName('manualTimeSelection');
     weatherSettings_manualTimeSelection.setLowerBound(0);
     weatherSettings_manualTimeSelection.setUpperBound(1);
+    weatherSettings_manualTimeSelection.setDefaultValueLiteral("false");
     weatherSettingsClass.getEStructuralFeatures().push(weatherSettings_manualTimeSelection);
     WeathersettingsPackage.Literals.WEATHER_SETTINGS__MANUAL_TIME_SELECTION = weatherSettings_manualTimeSelection;
 
@@ -149,6 +151,7 @@ export class WeathersettingsPackage extends BasicEPackage {
     weatherSettings_refreshInterval.setName('refreshInterval');
     weatherSettings_refreshInterval.setLowerBound(0);
     weatherSettings_refreshInterval.setUpperBound(1);
+    weatherSettings_refreshInterval.setDefaultValueLiteral("300000");
     weatherSettingsClass.getEStructuralFeatures().push(weatherSettings_refreshInterval);
     WeathersettingsPackage.Literals.WEATHER_SETTINGS__REFRESH_INTERVAL = weatherSettings_refreshInterval;
 
@@ -157,6 +160,7 @@ export class WeathersettingsPackage extends BasicEPackage {
     weatherSettings_showForecast.setName('showForecast');
     weatherSettings_showForecast.setLowerBound(0);
     weatherSettings_showForecast.setUpperBound(1);
+    weatherSettings_showForecast.setDefaultValueLiteral("false");
     weatherSettingsClass.getEStructuralFeatures().push(weatherSettings_showForecast);
     WeathersettingsPackage.Literals.WEATHER_SETTINGS__SHOW_FORECAST = weatherSettings_showForecast;
 
@@ -206,6 +210,10 @@ export class WeathersettingsPackage extends BasicEPackage {
     (WeathersettingsPackage.Literals.WEATHER_SETTINGS__SELECTED_FORECAST_PARAMETERS as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
     (WeathersettingsPackage.Literals.WEATHER_SETTINGS__FORECAST_PERIODS as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
     (WeathersettingsPackage.Literals.WEATHER_SETTINGS__GRID_COLOR as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+
+    // ============================================
+    // Set EOpposites (must be done after all features are created) (#59)
+    // ============================================
 
     // ============================================
     // Register XML name mappings from ExtendedMetaData annotations

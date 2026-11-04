@@ -19,7 +19,7 @@
  */
 
 import { BasicEPackage, BasicEClass, BasicEAttribute, BasicEReference, EPackageRegistry, getEcorePackage } from '@emfts/core';
-import type { EClass, EAttribute, EReference } from '@emfts/core';
+import type { EClass, EAttribute, EReference, EDataType } from '@emfts/core';
 import { DatatablesettingsFactory } from './DatatablesettingsFactory.js';
 
 /**
@@ -107,6 +107,7 @@ export class DatatablesettingsPackage extends BasicEPackage {
     dataTableSettings_showHeader.setName('showHeader');
     dataTableSettings_showHeader.setLowerBound(0);
     dataTableSettings_showHeader.setUpperBound(1);
+    dataTableSettings_showHeader.setDefaultValueLiteral("true");
     dataTableSettingsClass.getEStructuralFeatures().push(dataTableSettings_showHeader);
     DatatablesettingsPackage.Literals.DATA_TABLE_SETTINGS__SHOW_HEADER = dataTableSettings_showHeader;
 
@@ -115,6 +116,7 @@ export class DatatablesettingsPackage extends BasicEPackage {
     dataTableSettings_sortable.setName('sortable');
     dataTableSettings_sortable.setLowerBound(0);
     dataTableSettings_sortable.setUpperBound(1);
+    dataTableSettings_sortable.setDefaultValueLiteral("false");
     dataTableSettingsClass.getEStructuralFeatures().push(dataTableSettings_sortable);
     DatatablesettingsPackage.Literals.DATA_TABLE_SETTINGS__SORTABLE = dataTableSettings_sortable;
 
@@ -123,6 +125,7 @@ export class DatatablesettingsPackage extends BasicEPackage {
     dataTableSettings_pageSize.setName('pageSize');
     dataTableSettings_pageSize.setLowerBound(0);
     dataTableSettings_pageSize.setUpperBound(1);
+    dataTableSettings_pageSize.setDefaultValueLiteral("0");
     dataTableSettingsClass.getEStructuralFeatures().push(dataTableSettings_pageSize);
     DatatablesettingsPackage.Literals.DATA_TABLE_SETTINGS__PAGE_SIZE = dataTableSettings_pageSize;
 
@@ -149,6 +152,10 @@ export class DatatablesettingsPackage extends BasicEPackage {
     (DatatablesettingsPackage.Literals.DATA_TABLE_SETTINGS__SORTABLE as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EBoolean')!);
     (DatatablesettingsPackage.Literals.DATA_TABLE_SETTINGS__PAGE_SIZE as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EInt')!);
     (DatatablesettingsPackage.Literals.DATA_TABLE_SETTINGS__HIDDEN_COLUMNS as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+
+    // ============================================
+    // Set EOpposites (must be done after all features are created) (#59)
+    // ============================================
 
     // ============================================
     // Register XML name mappings from ExtendedMetaData annotations

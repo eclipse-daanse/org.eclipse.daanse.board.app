@@ -85,6 +85,16 @@ export class FixtureSettingsImpl extends BasicEObject implements FixtureSettings
 
   set only(value: FixtureChild) {
     const oldValue = this._only;
+    if (oldValue !== value) {
+      // containment: the owner becomes the container of the value (#61)
+      if (oldValue) {
+        (oldValue as any).eSetContainer?.(null, null);
+      }
+      if (value) {
+        this.removeFromPreviousContainer(value);
+        (value as any).eSetContainer?.(this, this.eClass().getEStructuralFeature('only'));
+      }
+    }
     this._only = value;
     if (this.eDeliver()) {
       this.eNotify({
@@ -100,6 +110,30 @@ export class FixtureSettingsImpl extends BasicEObject implements FixtureSettings
         getFeatureID: () => FixtureSettingsImpl.ONLY,
         merge: () => false
       });
+    }
+  }
+
+  /**
+   * Remove a value from its previous container before it is contained here,
+   * like Java EMF's eInverseRemove on the old container (#61)
+   */
+  private removeFromPreviousContainer(value: unknown): void {
+    const v = value as any;
+    const oldContainer = v?.eContainer?.();
+    if (!oldContainer || oldContainer === this) {
+      return;
+    }
+    const oldFeature = v.eContainmentFeature?.();
+    if (!oldFeature) {
+      return;
+    }
+    if (oldFeature.isMany()) {
+      const list = oldContainer.eGet(oldFeature);
+      if (list && typeof list.remove === 'function') {
+        list.remove(v);
+      }
+    } else {
+      oldContainer.eUnset(oldFeature);
     }
   }
 
@@ -176,6 +210,7 @@ export class FixtureSettingsImpl extends BasicEObject implements FixtureSettings
         if (this._children) this._children.clear();
         return;
       case FixtureSettingsImpl.ONLY:
+        if (this._only) (this._only as any).eSetContainer?.(null, null);
         this._only = undefined;
         return;
       default:
