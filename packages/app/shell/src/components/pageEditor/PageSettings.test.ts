@@ -92,6 +92,16 @@ describe('PageSettings', () => {
     expect(changes.dirty).toBe(true)
   })
 
+  it('offers the region and whether the weather affects the widgets', async () => {
+    const { wrapper } = setUp()
+    await flushPromises()
+
+    expect(wrapper.find('[data-uim-name="region"]').exists()).toBe(true)
+    expect(wrapper.find('[data-uim-name="regionWidth"] input').exists()).toBe(true)
+    expect(wrapper.find('[data-uim-name="regionWidget"]').exists()).toBe(true)
+    expect(wrapper.find('[data-uim-name="affectsWidgets"]').exists()).toBe(true)
+  })
+
   it('writes an edit through, and that counts as a change', async () => {
     const { wrapper, page, changes } = setUp()
     await flushPromises()

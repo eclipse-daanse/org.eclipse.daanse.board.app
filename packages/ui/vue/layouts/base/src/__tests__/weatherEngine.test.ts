@@ -181,4 +181,64 @@ describe('the weather engine', () => {
     for (let i = 0; i < 200; i++) e.step(0.05, settings)
     expect(e.particles.length).toBeLessThanOrEqual(LIMITS.particles)
   })
+
+  it('draws nothing outside a rectangle region', () => {
+    const region = { x: 150, y: 100, width: 120, height: 200 }
+    const e = new WeatherEngine(Math.random)
+    e.setViewport(0, 0, 400, 600)
+    e.setRegion(region)
+    const settings = { ...SNOW, intensity: 100, wind: 60 }
+    for (let i = 0; i < 200; i++) e.step(0.05, settings)
+    expect(e.particles.length).toBeGreaterThan(0)
+
+    /* Every point drawn, and the clip it is drawn in */
+    const points: Array<[number, number]> = []
+    const clips: number[][] = []
+    let clipped = false
+    const ctx = new Proxy({} as Record<string, unknown>, {
+      get: (target, key) => {
+        if (key in target) return target[key as string]
+        return (...args: number[]) => {
+          if (key === 'rect' && !clipped) clips.push(args)
+          if (key === 'clip') clipped = true
+          if (key === 'restore') clipped = false
+          if (key === 'arc') points.push([args[0], args[1]])
+        }
+      },
+      set: (target, key, value) => ((target[key as string] = value), true),
+    }) as unknown as CanvasRenderingContext2D
+    e.draw({ back: ctx, front: ctx }, settings)
+
+    expect(points.length).toBeGreaterThan(0)
+    for (const [x, y] of points) {
+      expect(x).toBeGreaterThanOrEqual(region.x)
+      expect(x).toBeLessThanOrEqual(region.x + region.width)
+      expect(y).toBeGreaterThanOrEqual(region.y)
+      expect(y).toBeLessThanOrEqual(region.y + region.height)
+    }
+    expect(clips).toContainEqual([region.x, region.y, region.width, region.height])
+    for (const p of e.particles) {
+      expect(p.x).toBeGreaterThanOrEqual(region.x)
+      expect(p.x).toBeLessThanOrEqual(region.x + region.width)
+    }
+  })
+
+  it('lets everything pass the widgets by when the weather does not affect them', () => {
+    const off = { ...SNOW, affectsWidgets: false }
+    const e = engine(off)
+    drop(e, 150, 195, 200)
+    for (let i = 0; i < 4; i++) e.step(0.05, off)
+
+    expect(e.particles).toHaveLength(1)
+    expect(e.particles[0].y).toBeGreaterThan(WIDGET.y)
+    expect(Math.max(...e.profiles.get('w1')!.heights)).toBe(0)
+
+    /* And rain does not splash */
+    const rainOff = { ...RAIN, affectsWidgets: false }
+    const r = engine(rainOff)
+    drop(r, 150, 190, 800)
+    r.step(0.05, rainOff)
+    expect(r.splashes).toHaveLength(0)
+    expect(r.particles).toHaveLength(1)
+  })
 })

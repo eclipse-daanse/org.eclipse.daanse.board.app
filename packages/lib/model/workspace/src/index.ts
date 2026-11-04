@@ -61,7 +61,16 @@ export type { DataFilter } from './gen/DataFilter'
 export { SelectionPick } from './gen/SelectionPick'
 export { FilterOperator } from './gen/FilterOperator'
 export { WeatherKind } from './gen/WeatherKind'
-export { createWeather, weatherKindOf, WEATHER_DEFAULTS, WEATHER_KINDS } from './weather'
+export { WeatherRegion } from './gen/WeatherRegion'
+export {
+  createWeather,
+  weatherKindOf,
+  weatherRegionOf,
+  affectsWidgetsOf,
+  WEATHER_DEFAULTS,
+  WEATHER_KINDS,
+  WEATHER_REGIONS,
+} from './weather'
 /* The Ecore as text, for the sentences a form shows beside its fields. */
 export { default as workspaceEcore } from '../model/workspace.ecore?raw'
 export { WorkspaceImpl } from './gen/WorkspaceImpl'
