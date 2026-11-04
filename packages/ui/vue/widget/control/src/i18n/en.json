@@ -1,7 +1,8 @@
 {
   "Widget": {
     "button": "Button",
-    "toggle": "Toggle button"
+    "toggle": "Toggle button",
+    "multiState": "Multi-state button"
   },
   "Form": {
     "labelGroup": "Label",
@@ -20,11 +21,19 @@
     "onValue": "Value when on",
     "offValue": "Value when off",
     "offColor": "Colour when off",
-    "onColor": "Colour when on"
+    "onColor": "Colour when on",
+    "statesGroup": "States",
+    "states": "States, in the order a press goes through them",
+    "noStateLabel": "Label without a state"
   },
   "Action": {
     "value": "Value",
     "label": "Label",
     "on": "On"
+  },
+  "FormOption": {
+    "label": "Label",
+    "value": "Value",
+    "color": "Colour"
   }
 }
