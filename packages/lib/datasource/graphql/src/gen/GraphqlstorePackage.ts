@@ -121,6 +121,7 @@ export class GraphqlstorePackage extends BasicEPackage {
     iGraphQLStoreConfiguration_pollingInterval.setName('pollingInterval');
     iGraphQLStoreConfiguration_pollingInterval.setLowerBound(0);
     iGraphQLStoreConfiguration_pollingInterval.setUpperBound(1);
+    iGraphQLStoreConfiguration_pollingInterval.setDefaultValueLiteral("5000");
     iGraphQLStoreConfigurationClass.getEStructuralFeatures().push(iGraphQLStoreConfiguration_pollingInterval);
     GraphqlstorePackage.Literals.I_GRAPH_Q_L_STORE_CONFIGURATION__POLLING_INTERVAL = iGraphQLStoreConfiguration_pollingInterval;
 

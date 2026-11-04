@@ -36,7 +36,7 @@ export class ISqlXmlaStoreConfigurationImpl extends IBaseConnectionConfiguration
   // Private fields
   private _connection?: string;
   private _sql?: string;
-  private _pollingInterval: number = 0;
+  private _pollingInterval: number = 5000;
 
   /**
    * Returns the EClass of this object
@@ -171,7 +171,7 @@ export class ISqlXmlaStoreConfigurationImpl extends IBaseConnectionConfiguration
       case ISqlXmlaStoreConfigurationImpl.SQL:
         return this._sql !== undefined;
       case ISqlXmlaStoreConfigurationImpl.POLLING_INTERVAL:
-        return this._pollingInterval !== 0;
+        return this._pollingInterval !== 5000;
       default:
         return super.eIsSet(feature);
     }
@@ -190,7 +190,7 @@ export class ISqlXmlaStoreConfigurationImpl extends IBaseConnectionConfiguration
         this._sql = undefined;
         return;
       case ISqlXmlaStoreConfigurationImpl.POLLING_INTERVAL:
-        this._pollingInterval = 0;
+        this._pollingInterval = 5000;
         return;
       default:
         super.eUnset(feature);

@@ -113,6 +113,7 @@ export class IconSettingsPackage extends BasicEPackage {
     iconSettings_iconSize.setName('iconSize');
     iconSettings_iconSize.setLowerBound(0);
     iconSettings_iconSize.setUpperBound(1);
+    iconSettings_iconSize.setDefaultValueLiteral("48");
     iconSettingsClass.getEStructuralFeatures().push(iconSettings_iconSize);
     IconSettingsPackage.Literals.ICON_SETTINGS__ICON_SIZE = iconSettings_iconSize;
 
@@ -129,6 +130,7 @@ export class IconSettingsPackage extends BasicEPackage {
     iconSettings_strokeWeight.setName('strokeWeight');
     iconSettings_strokeWeight.setLowerBound(0);
     iconSettings_strokeWeight.setUpperBound(1);
+    iconSettings_strokeWeight.setDefaultValueLiteral("400");
     iconSettingsClass.getEStructuralFeatures().push(iconSettings_strokeWeight);
     IconSettingsPackage.Literals.ICON_SETTINGS__STROKE_WEIGHT = iconSettings_strokeWeight;
 
@@ -137,6 +139,7 @@ export class IconSettingsPackage extends BasicEPackage {
     iconSettings_opticSize.setName('opticSize');
     iconSettings_opticSize.setLowerBound(0);
     iconSettings_opticSize.setUpperBound(1);
+    iconSettings_opticSize.setDefaultValueLiteral("24");
     iconSettingsClass.getEStructuralFeatures().push(iconSettings_opticSize);
     IconSettingsPackage.Literals.ICON_SETTINGS__OPTIC_SIZE = iconSettings_opticSize;
 
@@ -145,6 +148,7 @@ export class IconSettingsPackage extends BasicEPackage {
     iconSettings_grade.setName('grade');
     iconSettings_grade.setLowerBound(0);
     iconSettings_grade.setUpperBound(1);
+    iconSettings_grade.setDefaultValueLiteral("0");
     iconSettingsClass.getEStructuralFeatures().push(iconSettings_grade);
     IconSettingsPackage.Literals.ICON_SETTINGS__GRADE = iconSettings_grade;
 
