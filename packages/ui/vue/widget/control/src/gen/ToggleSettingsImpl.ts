@@ -20,6 +20,7 @@
 
 import type { EClass, EStructuralFeature } from '@emfts/core';
 import { VariableWrapper } from 'org.eclipse.daanse.board.app.lib.variables';
+import { LabelSide } from './LabelSide.js';
 import { ControlSettingsImpl } from './ControlSettingsImpl.js';
 import type { ToggleSettings } from './ToggleSettings.js';
 import { ControlwidgetsPackage } from './ControlwidgetsPackage.js';
@@ -35,6 +36,7 @@ export class ToggleSettingsImpl extends ControlSettingsImpl implements ToggleSet
   static readonly OFF_VALUE: number = 7;
   static readonly ON_LABEL: number = 8;
   static readonly ON_COLOR: number = 9;
+  static readonly LABEL_SIDE: number = 10;
 
   // Private fields
   private _target: VariableWrapper<string> = new VariableWrapper<string>();
@@ -42,6 +44,7 @@ export class ToggleSettingsImpl extends ControlSettingsImpl implements ToggleSet
   private _offValue: VariableWrapper<string> = new VariableWrapper<string>();
   private _onLabel: VariableWrapper<string> = new VariableWrapper<string>();
   private _onColor: VariableWrapper<string> = new VariableWrapper<string>();
+  private _labelSide: LabelSide = LabelSide.RIGHT;
 
   /**
    * Returns the EClass of this object
@@ -171,6 +174,30 @@ export class ToggleSettingsImpl extends ControlSettingsImpl implements ToggleSet
     }
   }
 
+  get labelSide(): LabelSide {
+    return this._labelSide!;
+  }
+
+  set labelSide(value: LabelSide) {
+    const oldValue = this._labelSide;
+    this._labelSide = value;
+    if (this.eDeliver()) {
+      this.eNotify({
+        getNotifier: () => this,
+        getEventType: () => 1, // SET
+        getFeature: () => this.eClass().getEStructuralFeature(ToggleSettingsImpl.LABEL_SIDE),
+        getOldValue: () => oldValue,
+        getNewValue: () => value,
+        getPosition: () => -1,
+        wasSet: () => true,
+        isTouch: () => false,
+        isReset: () => false,
+        getFeatureID: () => ToggleSettingsImpl.LABEL_SIDE,
+        merge: () => false
+      });
+    }
+  }
+
   // Reflective API
 
   /**
@@ -189,6 +216,8 @@ export class ToggleSettingsImpl extends ControlSettingsImpl implements ToggleSet
         return this.onLabel;
       case ToggleSettingsImpl.ON_COLOR:
         return this.onColor;
+      case ToggleSettingsImpl.LABEL_SIDE:
+        return this.labelSide;
       default:
         return super.eGet(feature);
     }
@@ -220,6 +249,10 @@ export class ToggleSettingsImpl extends ControlSettingsImpl implements ToggleSet
         this.onColor = newValue as VariableWrapper<string>;
         super.eSet(feature, newValue);
         break;
+      case ToggleSettingsImpl.LABEL_SIDE:
+        this.labelSide = newValue as LabelSide;
+        super.eSet(feature, newValue);
+        break;
       default:
         super.eSet(feature, newValue);
     }
@@ -241,6 +274,8 @@ export class ToggleSettingsImpl extends ControlSettingsImpl implements ToggleSet
         return this._onLabel !== new VariableWrapper<string>();
       case ToggleSettingsImpl.ON_COLOR:
         return this._onColor !== new VariableWrapper<string>();
+      case ToggleSettingsImpl.LABEL_SIDE:
+        return this._labelSide !== LabelSide.RIGHT;
       default:
         return super.eIsSet(feature);
     }
@@ -267,6 +302,9 @@ export class ToggleSettingsImpl extends ControlSettingsImpl implements ToggleSet
       case ToggleSettingsImpl.ON_COLOR:
         this._onColor = new VariableWrapper<string>();
         return;
+      case ToggleSettingsImpl.LABEL_SIDE:
+        this._labelSide = LabelSide.RIGHT;
+        return;
       default:
         super.eUnset(feature);
     }
@@ -287,6 +325,7 @@ export class ToggleSettingsImpl extends ControlSettingsImpl implements ToggleSet
       offValue: this.offValue,
       onLabel: this.onLabel,
       onColor: this.onColor,
+      labelSide: this.labelSide,
     };
   }
 }
