@@ -16,9 +16,14 @@ import { WidgetAction } from 'org.eclipse.daanse.board.app.lib.events'
 
 export abstract class RepeatableSvgWidgetInterface extends WidgetActionInterfaceImpl {
 
-  @WidgetAction({ eventType: 'svgRepeat.zoom' })
+  @WidgetAction({
+    eventType: 'svgRepeat.zoom',
+    parameters: [
+      { name: 'level', type: 'number', label: 'svgRepeat:Action.level' },
+    ],
+  })
   zoom(level: number): void { throw new Error("zoom not implemented"); }
 
-  @WidgetAction({ eventType: 'svgRepeat.resetZoom' })
+  @WidgetAction({ eventType: 'svgRepeat.resetZoom', parameters: [] })
   resetZoom(): void { throw new Error("resetZoom not implemented"); }
 }

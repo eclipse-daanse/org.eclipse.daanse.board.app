@@ -16,15 +16,20 @@ import { WidgetAction } from 'org.eclipse.daanse.board.app.lib.events'
 
 export abstract class MarkdownWidgetInterface extends WidgetActionInterfaceImpl {
 
-  @WidgetAction({ eventType: 'markdown.scrollToTop' })
+  @WidgetAction({ eventType: 'markdown.scrollToTop', parameters: [] })
   scrollToTop(): void { throw new Error("scrollToTop not implemented"); }
 
-  @WidgetAction({ eventType: 'markdown.scrollToHash' })
+  @WidgetAction({
+    eventType: 'markdown.scrollToHash',
+    parameters: [
+      { name: 'hashId', type: 'string', label: 'markdown:Action.anchor' },
+    ],
+  })
   scrollToHash(hashId: string): void { throw new Error("scrollToHash not implemented"); }
 
-  @WidgetAction({ eventType: 'markdown.refresh' })
+  @WidgetAction({ eventType: 'markdown.refresh', parameters: [] })
   refresh(): void { throw new Error("refresh not implemented"); }
 
-  @WidgetAction({ eventType: 'markdown.copyContent' })
+  @WidgetAction({ eventType: 'markdown.copyContent', parameters: [] })
   copyContent(): void { throw new Error("copyContent not implemented"); }
 }

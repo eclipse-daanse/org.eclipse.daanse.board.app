@@ -18,5 +18,9 @@
       "scaleDown": "Nur verkleinern",
       "none": "Originalgröße"
     }
+  },
+  "Action": {
+    "time": "Position in Sekunden",
+    "volume": "Lautstärke, 0 bis 1"
   }
 }

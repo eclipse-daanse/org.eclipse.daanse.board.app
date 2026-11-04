@@ -90,5 +90,8 @@
       "dotted": "Dotted",
       "dashDot": "Dash-dot"
     }
+  },
+  "Action": {
+    "format": "Image format, e.g. image/png"
   }
 }
