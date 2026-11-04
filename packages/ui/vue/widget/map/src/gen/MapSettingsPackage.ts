@@ -467,6 +467,7 @@ export class MapSettingsPackage extends BasicEPackage {
     layer_opacity.setName('opacity');
     layer_opacity.setLowerBound(0);
     layer_opacity.setUpperBound(1);
+    layer_opacity.setDefaultValueLiteral("1.0");
     layerClass.getEStructuralFeatures().push(layer_opacity);
     MapSettingsPackage.Literals.LAYER__OPACITY = layer_opacity;
 
@@ -542,6 +543,7 @@ export class MapSettingsPackage extends BasicEPackage {
     iconSettings_iconSize.setName('iconSize');
     iconSettings_iconSize.setLowerBound(0);
     iconSettings_iconSize.setUpperBound(1);
+    iconSettings_iconSize.setDefaultValueLiteral("48");
     iconSettingsClass.getEStructuralFeatures().push(iconSettings_iconSize);
     MapSettingsPackage.Literals.ICON_SETTINGS__ICON_SIZE = iconSettings_iconSize;
 
@@ -558,6 +560,7 @@ export class MapSettingsPackage extends BasicEPackage {
     iconSettings_strokeWeight.setName('strokeWeight');
     iconSettings_strokeWeight.setLowerBound(0);
     iconSettings_strokeWeight.setUpperBound(1);
+    iconSettings_strokeWeight.setDefaultValueLiteral("400");
     iconSettingsClass.getEStructuralFeatures().push(iconSettings_strokeWeight);
     MapSettingsPackage.Literals.ICON_SETTINGS__STROKE_WEIGHT = iconSettings_strokeWeight;
 
@@ -566,6 +569,7 @@ export class MapSettingsPackage extends BasicEPackage {
     iconSettings_opticSize.setName('opticSize');
     iconSettings_opticSize.setLowerBound(0);
     iconSettings_opticSize.setUpperBound(1);
+    iconSettings_opticSize.setDefaultValueLiteral("24");
     iconSettingsClass.getEStructuralFeatures().push(iconSettings_opticSize);
     MapSettingsPackage.Literals.ICON_SETTINGS__OPTIC_SIZE = iconSettings_opticSize;
 
@@ -574,6 +578,7 @@ export class MapSettingsPackage extends BasicEPackage {
     iconSettings_grade.setName('grade');
     iconSettings_grade.setLowerBound(0);
     iconSettings_grade.setUpperBound(1);
+    iconSettings_grade.setDefaultValueLiteral("0");
     iconSettingsClass.getEStructuralFeatures().push(iconSettings_grade);
     MapSettingsPackage.Literals.ICON_SETTINGS__GRADE = iconSettings_grade;
 
@@ -691,6 +696,7 @@ export class MapSettingsPackage extends BasicEPackage {
     pointAndAreaSettings_iconFullSizeZoom.setName('iconFullSizeZoom');
     pointAndAreaSettings_iconFullSizeZoom.setLowerBound(0);
     pointAndAreaSettings_iconFullSizeZoom.setUpperBound(1);
+    pointAndAreaSettings_iconFullSizeZoom.setDefaultValueLiteral("18");
     pointAndAreaSettingsClass.getEStructuralFeatures().push(pointAndAreaSettings_iconFullSizeZoom);
     MapSettingsPackage.Literals.POINT_AND_AREA_SETTINGS__ICON_FULL_SIZE_ZOOM = pointAndAreaSettings_iconFullSizeZoom;
 
@@ -715,6 +721,7 @@ export class MapSettingsPackage extends BasicEPackage {
     pointAndAreaSettings_labelFullSizeZoom.setName('labelFullSizeZoom');
     pointAndAreaSettings_labelFullSizeZoom.setLowerBound(0);
     pointAndAreaSettings_labelFullSizeZoom.setUpperBound(1);
+    pointAndAreaSettings_labelFullSizeZoom.setDefaultValueLiteral("18");
     pointAndAreaSettingsClass.getEStructuralFeatures().push(pointAndAreaSettings_labelFullSizeZoom);
     MapSettingsPackage.Literals.POINT_AND_AREA_SETTINGS__LABEL_FULL_SIZE_ZOOM = pointAndAreaSettings_labelFullSizeZoom;
 
@@ -731,6 +738,7 @@ export class MapSettingsPackage extends BasicEPackage {
     pointAndAreaSettings_clusterBelowZoom.setName('clusterBelowZoom');
     pointAndAreaSettings_clusterBelowZoom.setLowerBound(0);
     pointAndAreaSettings_clusterBelowZoom.setUpperBound(1);
+    pointAndAreaSettings_clusterBelowZoom.setDefaultValueLiteral("14");
     pointAndAreaSettingsClass.getEStructuralFeatures().push(pointAndAreaSettings_clusterBelowZoom);
     MapSettingsPackage.Literals.POINT_AND_AREA_SETTINGS__CLUSTER_BELOW_ZOOM = pointAndAreaSettings_clusterBelowZoom;
 
@@ -739,6 +747,7 @@ export class MapSettingsPackage extends BasicEPackage {
     pointAndAreaSettings_clusterRadius.setName('clusterRadius');
     pointAndAreaSettings_clusterRadius.setLowerBound(0);
     pointAndAreaSettings_clusterRadius.setUpperBound(1);
+    pointAndAreaSettings_clusterRadius.setDefaultValueLiteral("40");
     pointAndAreaSettingsClass.getEStructuralFeatures().push(pointAndAreaSettings_clusterRadius);
     MapSettingsPackage.Literals.POINT_AND_AREA_SETTINGS__CLUSTER_RADIUS = pointAndAreaSettings_clusterRadius;
 
@@ -977,6 +986,7 @@ export class MapSettingsPackage extends BasicEPackage {
     mapProps_stroke.setName('stroke');
     mapProps_stroke.setLowerBound(0);
     mapProps_stroke.setUpperBound(1);
+    mapProps_stroke.setDefaultValueLiteral("true");
     mapPropsClass.getEStructuralFeatures().push(mapProps_stroke);
     MapSettingsPackage.Literals.MAP_PROPS__STROKE = mapProps_stroke;
 
@@ -993,6 +1003,7 @@ export class MapSettingsPackage extends BasicEPackage {
     mapProps_weight.setName('weight');
     mapProps_weight.setLowerBound(0);
     mapProps_weight.setUpperBound(1);
+    mapProps_weight.setDefaultValueLiteral("3");
     mapPropsClass.getEStructuralFeatures().push(mapProps_weight);
     MapSettingsPackage.Literals.MAP_PROPS__WEIGHT = mapProps_weight;
 
@@ -1001,6 +1012,7 @@ export class MapSettingsPackage extends BasicEPackage {
     mapProps_opacity.setName('opacity');
     mapProps_opacity.setLowerBound(0);
     mapProps_opacity.setUpperBound(1);
+    mapProps_opacity.setDefaultValueLiteral("1.0");
     mapPropsClass.getEStructuralFeatures().push(mapProps_opacity);
     MapSettingsPackage.Literals.MAP_PROPS__OPACITY = mapProps_opacity;
 
@@ -1025,6 +1037,7 @@ export class MapSettingsPackage extends BasicEPackage {
     mapProps_fill.setName('fill');
     mapProps_fill.setLowerBound(0);
     mapProps_fill.setUpperBound(1);
+    mapProps_fill.setDefaultValueLiteral("true");
     mapPropsClass.getEStructuralFeatures().push(mapProps_fill);
     MapSettingsPackage.Literals.MAP_PROPS__FILL = mapProps_fill;
 
@@ -1033,6 +1046,7 @@ export class MapSettingsPackage extends BasicEPackage {
     mapProps_fillOpacity.setName('fillOpacity');
     mapProps_fillOpacity.setLowerBound(0);
     mapProps_fillOpacity.setUpperBound(1);
+    mapProps_fillOpacity.setDefaultValueLiteral("0.2");
     mapPropsClass.getEStructuralFeatures().push(mapProps_fillOpacity);
     MapSettingsPackage.Literals.MAP_PROPS__FILL_OPACITY = mapProps_fillOpacity;
 

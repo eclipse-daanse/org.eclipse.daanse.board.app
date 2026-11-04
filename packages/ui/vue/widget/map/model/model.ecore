@@ -306,7 +306,7 @@
             </eAnnotations>
         </eStructuralFeatures>
         <eStructuralFeatures xsi:type="ecore:EAttribute" name="opacity" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"
-                             lowerBound="0">
+                             lowerBound="0" defaultValueLiteral="1.0">
             <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
                 <details key="documentation" value="Optional opacity level for the layer (0.0 to 1.0)."/>
             </eAnnotations>
@@ -358,7 +358,7 @@
                 <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
             </eGenericType>
         </eStructuralFeatures>
-        <eStructuralFeatures xsi:type="ecore:EAttribute" name="iconSize" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="iconSize" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt" defaultValueLiteral="48">
             <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
                 <details key="documentation" value="The size of the icon in pixels."/>
             </eAnnotations>
@@ -368,17 +368,17 @@
                 <details key="documentation" value="Indicates if the icon should be filled."/>
             </eAnnotations>
         </eStructuralFeatures>
-        <eStructuralFeatures xsi:type="ecore:EAttribute" name="strokeWeight" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="strokeWeight" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt" defaultValueLiteral="400">
             <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
                 <details key="documentation" value="The weight of the icon's stroke."/>
             </eAnnotations>
         </eStructuralFeatures>
-        <eStructuralFeatures xsi:type="ecore:EAttribute" name="opticSize" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="opticSize" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt" defaultValueLiteral="24">
             <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
                 <details key="documentation" value="The optical size of the icon."/>
             </eAnnotations>
         </eStructuralFeatures>
-        <eStructuralFeatures xsi:type="ecore:EAttribute" name="grade" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="grade" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt" defaultValueLiteral="0">
             <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
                 <details key="documentation" value="The grade or visual weight of the icon."/>
             </eAnnotations>
@@ -448,22 +448,22 @@
         </eStructuralFeatures>
         <eStructuralFeatures xsi:type="ecore:EAttribute" name="iconScaleWithZoom" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean" lowerBound="0">
         </eStructuralFeatures>
-        <eStructuralFeatures xsi:type="ecore:EAttribute" name="iconFullSizeZoom" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt" lowerBound="0">
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="iconFullSizeZoom" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt" lowerBound="0" defaultValueLiteral="18">
         </eStructuralFeatures>
         <eStructuralFeatures xsi:type="ecore:EAttribute" name="labelMinZoom" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt" lowerBound="0">
         </eStructuralFeatures>
         <eStructuralFeatures xsi:type="ecore:EAttribute" name="labelScaleWithZoom" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean" lowerBound="0">
         </eStructuralFeatures>
-        <eStructuralFeatures xsi:type="ecore:EAttribute" name="labelFullSizeZoom" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt" lowerBound="0">
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="labelFullSizeZoom" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt" lowerBound="0" defaultValueLiteral="18">
         </eStructuralFeatures>
         <eStructuralFeatures xsi:type="ecore:EAttribute" name="clusterEnabled" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean" lowerBound="0">
             <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
                 <details key="documentation" value="Enable clustering of markers when zoomed out. Below clusterBelowZoom, nearby markers are grouped into one."/>
             </eAnnotations>
         </eStructuralFeatures>
-        <eStructuralFeatures xsi:type="ecore:EAttribute" name="clusterBelowZoom" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt" lowerBound="0">
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="clusterBelowZoom" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt" lowerBound="0" defaultValueLiteral="14">
         </eStructuralFeatures>
-        <eStructuralFeatures xsi:type="ecore:EAttribute" name="clusterRadius" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt" lowerBound="0">
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="clusterRadius" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt" lowerBound="0" defaultValueLiteral="40">
         </eStructuralFeatures>
 
     </eClassifiers>
@@ -616,7 +616,7 @@
             <details key="documentation" value="General properties for rendering map elements like lines or polygons."/>
         </eAnnotations>
         <eStructuralFeatures xsi:type="ecore:EAttribute" name="stroke" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
-                             lowerBound="0">
+                             lowerBound="0" defaultValueLiteral="true">
             <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
                 <details key="documentation" value="Optional flag indicating if a stroke should be applied."/>
             </eAnnotations>
@@ -628,13 +628,13 @@
             </eAnnotations>
         </eStructuralFeatures>
         <eStructuralFeatures xsi:type="ecore:EAttribute" name="weight" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
-                             lowerBound="0">
+                             lowerBound="0" defaultValueLiteral="3">
             <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
                 <details key="documentation" value="Optional stroke weight."/>
             </eAnnotations>
         </eStructuralFeatures>
         <eStructuralFeatures xsi:type="ecore:EAttribute" name="opacity" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"
-                             lowerBound="0">
+                             lowerBound="0" defaultValueLiteral="1.0">
             <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
                 <details key="documentation" value="Optional opacity for the stroke (0.0 to 1.0)."/>
             </eAnnotations>
@@ -652,13 +652,13 @@
             </eAnnotations>
         </eStructuralFeatures>
         <eStructuralFeatures xsi:type="ecore:EAttribute" name="fill" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
-                             lowerBound="0">
+                             lowerBound="0" defaultValueLiteral="true">
             <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
                 <details key="documentation" value="Optional flag indicating if the shape should be filled."/>
             </eAnnotations>
         </eStructuralFeatures>
         <eStructuralFeatures xsi:type="ecore:EAttribute" name="fillOpacity" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"
-                             lowerBound="0">
+                             lowerBound="0" defaultValueLiteral="0.2">
             <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
                 <details key="documentation" value="Optional opacity for the fill color (0.0 to 1.0)."/>
             </eAnnotations>

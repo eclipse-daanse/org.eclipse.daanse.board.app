@@ -55,7 +55,7 @@ export class LayerImpl extends BasicEObject implements Layer {
   private _attribution?: string;
   private _geoJson?: unknown;
   private _wfs_service?: unknown;
-  private _opacity: number = 0;
+  private _opacity: number = 1.0;
 
   /**
    * Returns the EClass of this object
@@ -496,7 +496,7 @@ export class LayerImpl extends BasicEObject implements Layer {
       case LayerImpl.WFS_SERVICE:
         return this._wfs_service !== undefined;
       case LayerImpl.OPACITY:
-        return this._opacity !== 0;
+        return this._opacity !== 1.0;
       default:
         return super.eIsSet(feature);
     }
@@ -543,7 +543,7 @@ export class LayerImpl extends BasicEObject implements Layer {
         this._wfs_service = undefined;
         return;
       case LayerImpl.OPACITY:
-        this._opacity = 0;
+        this._opacity = 1.0;
         return;
       default:
         super.eUnset(feature);

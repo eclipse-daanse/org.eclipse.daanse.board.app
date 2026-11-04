@@ -52,7 +52,7 @@ export class PageImpl extends BasicEObject implements Page {
   private _name?: string;
   private _description?: string;
   private _icon?: string;
-  private _visibleInNavigation: boolean = false;
+  private _visibleInNavigation: boolean = true;
   private _layoutId?: string;
   private _layoutSettings?: unknown;
   private _backgroundColor?: string;
@@ -498,7 +498,7 @@ export class PageImpl extends BasicEObject implements Page {
       case PageImpl.ICON:
         return this._icon !== undefined;
       case PageImpl.VISIBLE_IN_NAVIGATION:
-        return this._visibleInNavigation !== false;
+        return this._visibleInNavigation !== true;
       case PageImpl.LAYOUT_ID:
         return this._layoutId !== undefined;
       case PageImpl.LAYOUT_SETTINGS:
@@ -541,7 +541,7 @@ export class PageImpl extends BasicEObject implements Page {
         this._icon = undefined;
         return;
       case PageImpl.VISIBLE_IN_NAVIGATION:
-        this._visibleInNavigation = false;
+        this._visibleInNavigation = true;
         return;
       case PageImpl.LAYOUT_ID:
         this._layoutId = undefined;

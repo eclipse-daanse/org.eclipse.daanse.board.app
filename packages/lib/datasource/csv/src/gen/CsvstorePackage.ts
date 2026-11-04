@@ -115,6 +115,7 @@ export class CsvstorePackage extends BasicEPackage {
     iCsvStoreConfiguration_pollingInterval.setName('pollingInterval');
     iCsvStoreConfiguration_pollingInterval.setLowerBound(0);
     iCsvStoreConfiguration_pollingInterval.setUpperBound(1);
+    iCsvStoreConfiguration_pollingInterval.setDefaultValueLiteral("5000");
     iCsvStoreConfigurationClass.getEStructuralFeatures().push(iCsvStoreConfiguration_pollingInterval);
     CsvstorePackage.Literals.I_CSV_STORE_CONFIGURATION__POLLING_INTERVAL = iCsvStoreConfiguration_pollingInterval;
 
