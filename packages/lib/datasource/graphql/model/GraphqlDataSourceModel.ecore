@@ -36,7 +36,7 @@
                 <details key="documentation" value="Optional variables to be passed with the GraphQL query."/>
             </eAnnotations>
         </eStructuralFeatures>
-            <eStructuralFeatures xsi:type="ecore:EAttribute" name="pollingInterval" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt" lowerBound="0">
+            <eStructuralFeatures xsi:type="ecore:EAttribute" name="pollingInterval" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt" lowerBound="0" defaultValueLiteral="5000">
             <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
                 <details key="documentation" value="How often the query is sent again, in milliseconds, while polling is on."/>
             </eAnnotations>

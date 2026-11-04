@@ -125,4 +125,15 @@ describe('whether the zoom is consulted at all', () => {
     expect(usesZoomSettings({})).toBe(false)
     expect(usesZoomSettings(null)).toBe(false)
   })
+
+  /*
+   * What a renderer starts with since #1218: the generator gives a number
+   * without a declared default 0 rather than undefined. A minimum of 0
+   * hides nothing, and must not switch the zoom on for every map.
+   */
+  it('asks nothing of the zoom for a minimum of 0', () => {
+    expect(usesZoomSettings({ iconMinZoom: 0, labelMinZoom: 0 })).toBe(false)
+    expect(zoomFeaturesActive([{ renderer: { iconMinZoom: 0, labelMinZoom: 0 } }])).toBe(false)
+    expect(isIconVisible({ renderer: { iconMinZoom: 0 } }, 3)).toBe(true)
+  })
 })

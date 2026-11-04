@@ -308,6 +308,7 @@ export class WorkspacePackage extends BasicEPackage {
     page_visibleInNavigation.setName('visibleInNavigation');
     page_visibleInNavigation.setLowerBound(0);
     page_visibleInNavigation.setUpperBound(1);
+    page_visibleInNavigation.setDefaultValueLiteral("true");
     pageClass.getEStructuralFeatures().push(page_visibleInNavigation);
     WorkspacePackage.Literals.PAGE__VISIBLE_IN_NAVIGATION = page_visibleInNavigation;
 

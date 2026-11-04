@@ -206,6 +206,7 @@ export class XmlastorePackage extends BasicEPackage {
     iXmlaStoreConfiguration_pollingInterval.setName('pollingInterval');
     iXmlaStoreConfiguration_pollingInterval.setLowerBound(0);
     iXmlaStoreConfiguration_pollingInterval.setUpperBound(1);
+    iXmlaStoreConfiguration_pollingInterval.setDefaultValueLiteral("5000");
     iXmlaStoreConfigurationClass.getEStructuralFeatures().push(iXmlaStoreConfiguration_pollingInterval);
     XmlastorePackage.Literals.I_XMLA_STORE_CONFIGURATION__POLLING_INTERVAL = iXmlaStoreConfiguration_pollingInterval;
 

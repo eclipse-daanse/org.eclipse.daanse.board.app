@@ -38,7 +38,7 @@ export class IRestStoreConfigurationImpl extends IBaseConnectionConfigurationImp
   private _resourceUrl?: string;
   private _connection?: string;
   private _selectedJSONValue?: string;
-  private _pollingInterval: number = 0;
+  private _pollingInterval: number = 5000;
 
   /**
    * Returns the EClass of this object
@@ -205,7 +205,7 @@ export class IRestStoreConfigurationImpl extends IBaseConnectionConfigurationImp
       case IRestStoreConfigurationImpl.SELECTED_J_S_O_N_VALUE:
         return this._selectedJSONValue !== undefined;
       case IRestStoreConfigurationImpl.POLLING_INTERVAL:
-        return this._pollingInterval !== 0;
+        return this._pollingInterval !== 5000;
       default:
         return super.eIsSet(feature);
     }
@@ -227,7 +227,7 @@ export class IRestStoreConfigurationImpl extends IBaseConnectionConfigurationImp
         this._selectedJSONValue = undefined;
         return;
       case IRestStoreConfigurationImpl.POLLING_INTERVAL:
-        this._pollingInterval = 0;
+        this._pollingInterval = 5000;
         return;
       default:
         super.eUnset(feature);

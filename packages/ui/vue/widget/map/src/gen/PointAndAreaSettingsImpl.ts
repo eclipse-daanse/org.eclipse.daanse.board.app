@@ -59,13 +59,13 @@ export class PointAndAreaSettingsImpl extends BasicEObject implements PointAndAr
   private _label?: unknown;
   private _iconMinZoom: number = 0;
   private _iconScaleWithZoom: boolean = false;
-  private _iconFullSizeZoom: number = 0;
+  private _iconFullSizeZoom: number = 18;
   private _labelMinZoom: number = 0;
   private _labelScaleWithZoom: boolean = false;
-  private _labelFullSizeZoom: number = 0;
+  private _labelFullSizeZoom: number = 18;
   private _clusterEnabled: boolean = false;
-  private _clusterBelowZoom: number = 0;
-  private _clusterRadius: number = 0;
+  private _clusterBelowZoom: number = 14;
+  private _clusterRadius: number = 40;
 
   /**
    * Returns the EClass of this object
@@ -658,19 +658,19 @@ export class PointAndAreaSettingsImpl extends BasicEObject implements PointAndAr
       case PointAndAreaSettingsImpl.ICON_SCALE_WITH_ZOOM:
         return this._iconScaleWithZoom !== false;
       case PointAndAreaSettingsImpl.ICON_FULL_SIZE_ZOOM:
-        return this._iconFullSizeZoom !== 0;
+        return this._iconFullSizeZoom !== 18;
       case PointAndAreaSettingsImpl.LABEL_MIN_ZOOM:
         return this._labelMinZoom !== 0;
       case PointAndAreaSettingsImpl.LABEL_SCALE_WITH_ZOOM:
         return this._labelScaleWithZoom !== false;
       case PointAndAreaSettingsImpl.LABEL_FULL_SIZE_ZOOM:
-        return this._labelFullSizeZoom !== 0;
+        return this._labelFullSizeZoom !== 18;
       case PointAndAreaSettingsImpl.CLUSTER_ENABLED:
         return this._clusterEnabled !== false;
       case PointAndAreaSettingsImpl.CLUSTER_BELOW_ZOOM:
-        return this._clusterBelowZoom !== 0;
+        return this._clusterBelowZoom !== 14;
       case PointAndAreaSettingsImpl.CLUSTER_RADIUS:
-        return this._clusterRadius !== 0;
+        return this._clusterRadius !== 40;
       default:
         return super.eIsSet(feature);
     }
@@ -713,7 +713,7 @@ export class PointAndAreaSettingsImpl extends BasicEObject implements PointAndAr
         this._iconScaleWithZoom = false;
         return;
       case PointAndAreaSettingsImpl.ICON_FULL_SIZE_ZOOM:
-        this._iconFullSizeZoom = 0;
+        this._iconFullSizeZoom = 18;
         return;
       case PointAndAreaSettingsImpl.LABEL_MIN_ZOOM:
         this._labelMinZoom = 0;
@@ -722,16 +722,16 @@ export class PointAndAreaSettingsImpl extends BasicEObject implements PointAndAr
         this._labelScaleWithZoom = false;
         return;
       case PointAndAreaSettingsImpl.LABEL_FULL_SIZE_ZOOM:
-        this._labelFullSizeZoom = 0;
+        this._labelFullSizeZoom = 18;
         return;
       case PointAndAreaSettingsImpl.CLUSTER_ENABLED:
         this._clusterEnabled = false;
         return;
       case PointAndAreaSettingsImpl.CLUSTER_BELOW_ZOOM:
-        this._clusterBelowZoom = 0;
+        this._clusterBelowZoom = 14;
         return;
       case PointAndAreaSettingsImpl.CLUSTER_RADIUS:
-        this._clusterRadius = 0;
+        this._clusterRadius = 40;
         return;
       default:
         super.eUnset(feature);
