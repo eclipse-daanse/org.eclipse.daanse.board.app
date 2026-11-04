@@ -34,9 +34,17 @@ import ToggleIcon from './assets/toggle.svg'
 import { ToggleWidgetEvents } from './events/ToggleWidgetEvents'
 import { ToggleWidgetInterface } from './api/ToggleWidgetInterface'
 import { ToggleSettingsImpl } from './gen/ToggleSettingsImpl'
+import MultiStateWidget from './MultiStateWidget.vue'
+import MultiStateIcon from './assets/multistate.svg'
+import { MultiStateWidgetEvents } from './events/MultiStateWidgetEvents'
+import { MultiStateWidgetInterface } from './api/MultiStateWidgetInterface'
+import { MultiStateSettingsImpl } from './gen/MultiStateSettingsImpl'
 /* The form for the button's settings, written as a model beside the Ecore. */
 import buttonSettingsFormXmi from '../model/ui.xmi?raw'
 import toggleSettingsFormXmi from '../model/ui-toggle.xmi?raw'
+import multiStateSettingsFormXmi from '../model/ui-multistate.xmi?raw'
+/* One state of a multi-state button, one option of a button group. */
+import optionFormXmi from '../model/ui-option.xmi?raw'
 /* The Ecore itself, for the sentences the generator drops. */
 import settingsEcore from '../model/model.ecore?raw'
 
@@ -138,11 +146,58 @@ export class ToggleWidgetProvider implements WidgetProvider {
   }
 }
 
-export { ButtonWidget, ToggleWidget }
-export { ButtonSettingsImpl, ToggleSettingsImpl, ControlwidgetsPackage, buttonSettingsFormXmi, toggleSettingsFormXmi }
+const MULTI_STATE_TYPE = 'MultiStateWidget'
+
+/** The multi-state button: each press moves on to the next of its states. */
+@component({
+  service: [WIDGET_SERVICE_ID],
+  properties: { 'widget.type': MULTI_STATE_TYPE },
+})
+export class MultiStateWidgetProvider implements WidgetProvider {
+  readonly type = MULTI_STATE_TYPE
+  readonly name = 'Multi-state button'
+  readonly nameKey = 'control:Widget.multiState'
+
+  readonly settingsForm = {
+    xmi: multiStateSettingsFormXmi,
+    ecore: settingsEcore,
+    uri: '/multistate-settings.ui.xmi',
+    ePackage: () => ControlwidgetsPackage.eINSTANCE,
+    create: () => new MultiStateSettingsImpl(),
+    entryForms: [{ xmi: optionFormXmi, uri: '/control-option.ui.xmi' }],
+  }
+
+  readonly icon = MultiStateIcon
+  readonly reads = READS_NOTHING
+  readonly component = MultiStateWidget
+
+  constructor(
+    @inject(EVENT_REGISTRY_ID) private readonly events: EventRegistry,
+    @inject(EVENT_ACTIONS_REGISTRY_ID) private readonly actions: EventActionsRegistry,
+  ) {}
+
+  @activate()
+  register(): void {
+    this.events.registerWidget(MULTI_STATE_TYPE, MultiStateWidgetEvents)
+    this.actions.registerWidgetType(MULTI_STATE_TYPE, MultiStateWidgetInterface, 'widget')
+  }
+
+  @deactivate()
+  unregister(): void {
+    this.events.unregisterWidget(MULTI_STATE_TYPE)
+    this.actions.unregisterWidgetType(MULTI_STATE_TYPE)
+  }
+}
+
+export { ButtonWidget, ToggleWidget, MultiStateWidget }
+export { ButtonSettingsImpl, ToggleSettingsImpl, MultiStateSettingsImpl, ControlwidgetsPackage }
+export { buttonSettingsFormXmi, toggleSettingsFormXmi, multiStateSettingsFormXmi, optionFormXmi }
+export { ControlOptionImpl } from './gen/ControlOptionImpl'
 export { ControlPayloadImpl } from './gen/ControlPayloadImpl'
 export type { ButtonSettings } from './gen/ButtonSettings'
 export type { ToggleSettings } from './gen/ToggleSettings'
+export type { MultiStateSettings } from './gen/MultiStateSettings'
+export type { ControlOption } from './gen/ControlOption'
 export type { ControlSettings } from './gen/ControlSettings'
 export type { ControlPayload } from './gen/ControlPayload'
 

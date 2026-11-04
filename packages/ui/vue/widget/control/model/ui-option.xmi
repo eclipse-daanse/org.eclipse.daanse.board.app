@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/*********************************************************************
+* Copyright (c) 2026 Contributors to the Eclipse Foundation.
+*
+* This program and the accompanying materials are made
+* available under the terms of the Eclipse Public License 2.0
+* which is available at https://www.eclipse.org/legal/epl-2.0/
+*
+* SPDX-License-Identifier: EPL-2.0
+**********************************************************************/
+
+One state of a multi-state button, or one option of a button group: what
+it shows, what it writes, and the colour it wears while chosen.
+-->
+<uimodel:UIModel
+    xmlns:xmi="http://www.omg.org/XMI"
+    xmi:version="2.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:uimodel="http://uimodel/1.0"
+    name="ControlOptionForm">
+
+  <targetClasses href="http://org.eclipse.daanse.board.app.ui.vue.widget.control#//ControlOption"/>
+
+  <components xsi:type="uimodel:FormView" name="ControlOptionFormView">
+    <fields xsi:type="uimodel:InputWidget" name="label"
+        feature="http://org.eclipse.daanse.board.app.ui.vue.widget.control#//ControlOption/label" label="control:FormOption.label"/>
+    <fields xsi:type="uimodel:InputWidget" name="value"
+        feature="http://org.eclipse.daanse.board.app.ui.vue.widget.control#//ControlOption/value" label="control:FormOption.value"/>
+    <fields xsi:type="uimodel:InputWidget" name="color"
+        feature="http://org.eclipse.daanse.board.app.ui.vue.widget.control#//ControlOption/color" label="control:FormOption.color"/>
+  </components>
+</uimodel:UIModel>

@@ -73,6 +73,13 @@ export class ControlwidgetsPackage extends BasicEPackage {
     TOGGLE_SETTINGS__OFF_VALUE: null as unknown as EAttribute | EReference,
     TOGGLE_SETTINGS__ON_LABEL: null as unknown as EAttribute | EReference,
     TOGGLE_SETTINGS__ON_COLOR: null as unknown as EAttribute | EReference,
+    CONTROL_OPTION: null as unknown as EClass,
+    CONTROL_OPTION__LABEL: null as unknown as EAttribute | EReference,
+    CONTROL_OPTION__VALUE: null as unknown as EAttribute | EReference,
+    CONTROL_OPTION__COLOR: null as unknown as EAttribute | EReference,
+    MULTI_STATE_SETTINGS: null as unknown as EClass,
+    MULTI_STATE_SETTINGS__TARGET: null as unknown as EAttribute | EReference,
+    MULTI_STATE_SETTINGS__STATES: null as unknown as EAttribute | EReference,
     CONTROL_PAYLOAD: null as unknown as EClass,
     CONTROL_PAYLOAD__VALUE: null as unknown as EAttribute | EReference,
     CONTROL_PAYLOAD__PREVIOUS_VALUE: null as unknown as EAttribute | EReference,
@@ -231,6 +238,69 @@ export class ControlwidgetsPackage extends BasicEPackage {
     toggleSettingsClass.getEStructuralFeatures().push(toggleSettings_onColor);
     ControlwidgetsPackage.Literals.TOGGLE_SETTINGS__ON_COLOR = toggleSettings_onColor;
 
+    // Create ControlOption class
+    const controlOptionClass = new BasicEClass();
+    controlOptionClass.setName('ControlOption');
+    controlOptionClass.setAbstract(false);
+    controlOptionClass.setInterface(false);
+    this.getEClassifiers().push(controlOptionClass);
+    controlOptionClass.setEPackage(this);
+    ControlwidgetsPackage.Literals.CONTROL_OPTION = controlOptionClass;
+
+    // Create label feature
+    const controlOption_label = new BasicEReference();
+    controlOption_label.setContainment(false);
+    controlOption_label.setName('label');
+    controlOption_label.setLowerBound(0);
+    controlOption_label.setUpperBound(1);
+    controlOptionClass.getEStructuralFeatures().push(controlOption_label);
+    ControlwidgetsPackage.Literals.CONTROL_OPTION__LABEL = controlOption_label;
+
+    // Create value feature
+    const controlOption_value = new BasicEReference();
+    controlOption_value.setContainment(false);
+    controlOption_value.setName('value');
+    controlOption_value.setLowerBound(0);
+    controlOption_value.setUpperBound(1);
+    controlOptionClass.getEStructuralFeatures().push(controlOption_value);
+    ControlwidgetsPackage.Literals.CONTROL_OPTION__VALUE = controlOption_value;
+
+    // Create color feature
+    const controlOption_color = new BasicEReference();
+    controlOption_color.setContainment(false);
+    controlOption_color.setName('color');
+    controlOption_color.setLowerBound(0);
+    controlOption_color.setUpperBound(1);
+    controlOptionClass.getEStructuralFeatures().push(controlOption_color);
+    ControlwidgetsPackage.Literals.CONTROL_OPTION__COLOR = controlOption_color;
+
+    // Create MultiStateSettings class
+    const multiStateSettingsClass = new BasicEClass();
+    multiStateSettingsClass.setName('MultiStateSettings');
+    multiStateSettingsClass.setAbstract(false);
+    multiStateSettingsClass.setInterface(false);
+    this.getEClassifiers().push(multiStateSettingsClass);
+    multiStateSettingsClass.setEPackage(this);
+    ControlwidgetsPackage.Literals.MULTI_STATE_SETTINGS = multiStateSettingsClass;
+
+    // Create target feature
+    const multiStateSettings_target = new BasicEReference();
+    multiStateSettings_target.setContainment(false);
+    multiStateSettings_target.setName('target');
+    multiStateSettings_target.setLowerBound(0);
+    multiStateSettings_target.setUpperBound(1);
+    multiStateSettingsClass.getEStructuralFeatures().push(multiStateSettings_target);
+    ControlwidgetsPackage.Literals.MULTI_STATE_SETTINGS__TARGET = multiStateSettings_target;
+
+    // Create states feature
+    const multiStateSettings_states = new BasicEReference();
+    multiStateSettings_states.setContainment(true);
+    multiStateSettings_states.setName('states');
+    multiStateSettings_states.setLowerBound(0);
+    multiStateSettings_states.setUpperBound(-1);
+    multiStateSettingsClass.getEStructuralFeatures().push(multiStateSettings_states);
+    ControlwidgetsPackage.Literals.MULTI_STATE_SETTINGS__STATES = multiStateSettings_states;
+
     // Create ControlPayload class
     const controlPayloadClass = new BasicEClass();
     controlPayloadClass.setName('ControlPayload');
@@ -262,6 +332,7 @@ export class ControlwidgetsPackage extends BasicEPackage {
     // ============================================
     (ControlwidgetsPackage.Literals.BUTTON_SETTINGS as BasicEClass).getESuperTypes().push(ControlwidgetsPackage.Literals.CONTROL_SETTINGS);
     (ControlwidgetsPackage.Literals.TOGGLE_SETTINGS as BasicEClass).getESuperTypes().push(ControlwidgetsPackage.Literals.CONTROL_SETTINGS);
+    (ControlwidgetsPackage.Literals.MULTI_STATE_SETTINGS as BasicEClass).getESuperTypes().push(ControlwidgetsPackage.Literals.CONTROL_SETTINGS);
     (ControlwidgetsPackage.Literals.CONTROL_PAYLOAD as BasicEClass).getESuperTypes().push(requireEPackage('http://org.eclipse.daanse.board.app.lib.events').getEClassifier('Payload')! as EClass);
 
     // ============================================
@@ -281,6 +352,11 @@ export class ControlwidgetsPackage extends BasicEPackage {
     (ControlwidgetsPackage.Literals.TOGGLE_SETTINGS__OFF_VALUE as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
     (ControlwidgetsPackage.Literals.TOGGLE_SETTINGS__ON_LABEL as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
     (ControlwidgetsPackage.Literals.TOGGLE_SETTINGS__ON_COLOR as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
+    (ControlwidgetsPackage.Literals.CONTROL_OPTION__LABEL as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
+    (ControlwidgetsPackage.Literals.CONTROL_OPTION__VALUE as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
+    (ControlwidgetsPackage.Literals.CONTROL_OPTION__COLOR as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
+    (ControlwidgetsPackage.Literals.MULTI_STATE_SETTINGS__TARGET as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
+    (ControlwidgetsPackage.Literals.MULTI_STATE_SETTINGS__STATES as BasicEReference).setEType(ControlwidgetsPackage.Literals.CONTROL_OPTION);
     (ControlwidgetsPackage.Literals.CONTROL_PAYLOAD__VALUE as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EJavaObject')!);
     (ControlwidgetsPackage.Literals.CONTROL_PAYLOAD__PREVIOUS_VALUE as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EJavaObject')!);
 
