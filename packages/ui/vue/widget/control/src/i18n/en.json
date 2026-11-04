@@ -2,7 +2,8 @@
   "Widget": {
     "button": "Button",
     "toggle": "Toggle button",
-    "multiState": "Multi-state button"
+    "multiState": "Multi-state button",
+    "slider": "Slider"
   },
   "Form": {
     "labelGroup": "Label",
@@ -24,16 +25,43 @@
     "onColor": "Colour when on",
     "statesGroup": "States",
     "states": "States, in the order a press goes through them",
-    "noStateLabel": "Label without a state"
+    "noStateLabel": "Label without a state",
+    "scaleGroup": "Scale",
+    "min": "Lower limit",
+    "max": "Upper limit",
+    "step": "Step",
+    "unit": "Unit",
+    "marksGroup": "Detents",
+    "marks": "Marks",
+    "markEvery": "A mark every n steps",
+    "snap": "Snaps to the marks",
+    "slideGroup": "When moved",
+    "range": "Range with two thumbs",
+    "upperTarget": "Upper thumb writes into variable",
+    "showValue": "Show the value",
+    "orientation": "Orientation",
+    "valueTextColor": "Text colour of the value"
   },
   "Action": {
     "value": "Value",
     "label": "Label",
-    "on": "On"
+    "on": "On",
+    "lower": "Lower end",
+    "upper": "Upper end"
   },
   "FormOption": {
     "label": "Label",
     "value": "Value",
     "color": "Colour"
+  },
+  "FormMark": {
+    "at": "At value",
+    "label": "Label"
+  },
+  "Options": {
+    "orientation": {
+      "horizontal": "Horizontal",
+      "vertical": "Vertical"
+    }
   }
 }
