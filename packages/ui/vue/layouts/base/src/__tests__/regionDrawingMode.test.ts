@@ -198,6 +198,46 @@ describe('the drawing mode of a weather region', () => {
     wrapper.unmount()
   })
 
+  it('runs the weather while drawing, on the board being edited, clipped to the shapes as they are drawn', async () => {
+    const p = page()
+    writeShapes(p.weather!, [{ kind: 'rectangle', x: 1, y: 1, width: 2, height: 2 }])
+    const { wrapper, bus } = mountLayer(p)
+    const layer = wrapper.findComponent(WeatherLayer).vm as unknown as {
+      running: boolean
+      engine: import('../weather/engine').WeatherEngine
+    }
+    await nextTick()
+    expect(layer.running).toBe(false)
+
+    await startDrawing(bus)
+    await nextTick()
+    expect(layer.running).toBe(true)
+    expect(layer.engine.regionShapes).toEqual([{ kind: 'rectangle', x: 20, y: 10, width: 40, height: 20 }])
+
+    /* An ellipse dragged out: the weather keeps to it while the pointer is still down */
+    await wrapper.find('[data-tool="ellipse"]').trigger('click')
+    await pointer(wrapper, 'pointerdown', 200, 100)
+    await pointer(wrapper, 'pointermove', 300, 150)
+    await nextTick()
+    expect(layer.engine.regionShapes).toEqual([
+      { kind: 'rectangle', x: 20, y: 10, width: 40, height: 20 },
+      { kind: 'ellipse', x: 200, y: 100, width: 100, height: 50 },
+    ])
+    /* A particle outside both is not drawn, one inside is */
+    expect(layer.engine.inRegion(100, 200)).toBe(false)
+    expect(layer.engine.inRegion(250, 125)).toBe(true)
+    await pointer(wrapper, 'pointerup', 300, 150)
+
+    /* Escape twice: the page's region again, and the board being edited stands still */
+    key('Escape')
+    key('Escape')
+    await nextTick()
+    await nextTick()
+    expect(layer.running).toBe(false)
+    expect(readShapes(p.weather)).toEqual([{ kind: 'rectangle', x: 1, y: 1, width: 2, height: 2 }])
+    wrapper.unmount()
+  })
+
   it('leaves the page as it was on Escape', async () => {
     const p = page()
     p.weather!.region!.value = 'page'

@@ -24,6 +24,8 @@ Contributors:
  * the drawing mode of the weather region over the board. The widgets stay
  * visible and take no pointer meanwhile. Done writes the drawn shapes to
  * the page and makes them its region; Escape leaves the page as it was.
+ * Meanwhile the weather runs, on the board being edited too, clipped to
+ * the shapes as they are drawn - the person sees what they will get.
  */
 import { inject, onBeforeUnmount, ref } from 'vue'
 import type { TinyEmitter } from 'tiny-emitter'
@@ -60,9 +62,13 @@ const cellAt = (width: number) => props.cell?.(width) ?? DEFAULT_CELL
 const scrollerElement = () =>
   props.scroller ? host.value?.querySelector<HTMLElement>(props.scroller) : undefined
 
+/* The draft while drawing, which the weather keeps to meanwhile */
+const preview = ref<ShapeSpec[] | undefined>()
+
 const { running, engine, settings, affectsWidgets } = useWeatherLayer({
   page: () => props.page,
   editMode: () => Boolean(props.editMode),
+  drawing: () => preview.value,
   host,
   back,
   front,
@@ -78,13 +84,16 @@ const drawing = ref<{ shapes: ShapeSpec[]; cell: GridCell } | undefined>()
 function startDrawing(): void {
   if (!props.page) return
   const width = host.value?.getBoundingClientRect().width ?? 0
-  drawing.value = { shapes: readShapes(props.page.weather), cell: cellAt(width) }
+  const shapes = readShapes(props.page.weather)
+  drawing.value = { shapes, cell: cellAt(width) }
+  preview.value = shapes
 }
 
 /** Writes what was drawn to the page, and makes it the page's region. */
 function finishDrawing(shapes: ShapeSpec[]): void {
   const page = props.page
   drawing.value = undefined
+  preview.value = undefined
   if (!page) return
   const weather = page.weather ?? (page.weather = createWeather())
   if (weather.region) weather.region.value = 'area'
@@ -93,6 +102,7 @@ function finishDrawing(shapes: ShapeSpec[]): void {
 
 function cancelDrawing(): void {
   drawing.value = undefined
+  preview.value = undefined
 }
 
 const bus = inject<TinyEmitter | null>(identifiers.TINY_EMITTER, null)
@@ -118,6 +128,7 @@ defineExpose({ running, engine, settings, affectsWidgets, startDrawing, drawing 
       :shapes="drawing.shapes"
       :cell="drawing.cell"
       :scroller="scrollerElement"
+      @change="preview = $event"
       @done="finishDrawing"
       @cancel="cancelDrawing"
     />
