@@ -19,7 +19,7 @@
  */
 
 import { BasicEPackage, BasicEClass, BasicEAttribute, BasicEReference, EPackageRegistry, getEcorePackage } from '@emfts/core';
-import type { EClass, EAttribute, EReference } from '@emfts/core';
+import type { EClass, EAttribute, EReference, EDataType } from '@emfts/core';
 import { VideoSettingsFactory } from './VideoSettingsFactory.js';
 
 /**
@@ -140,6 +140,10 @@ export class VideoSettingsPackage extends BasicEPackage {
     (VideoSettingsPackage.Literals.OBJECT_FIT_SETTING__FIT as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
     (VideoSettingsPackage.Literals.VIDEO_SETTINGS__VIDEO_FIT_SETTINGS as BasicEReference).setEType(VideoSettingsPackage.Literals.OBJECT_FIT_SETTING);
     (VideoSettingsPackage.Literals.VIDEO_SETTINGS__VIDEO_URL as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
+
+    // ============================================
+    // Set EOpposites (must be done after all features are created) (#59)
+    // ============================================
 
     // ============================================
     // Register XML name mappings from ExtendedMetaData annotations

@@ -19,7 +19,7 @@
  */
 
 import { BasicEPackage, BasicEClass, BasicEAttribute, EPackageRegistry, getEcorePackage } from '@emfts/core';
-import type { EClass, EAttribute, EReference } from '@emfts/core';
+import type { EClass, EAttribute, EReference, EDataType } from '@emfts/core';
 import { CsvstoreFactory } from './CsvstoreFactory.js';
 
 /**
@@ -159,6 +159,10 @@ export class CsvstorePackage extends BasicEPackage {
     (CsvstorePackage.Literals.I_CSV_STORE_CONFIGURATION__SEPARATORS as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
     (CsvstorePackage.Literals.I_CSV_STORE_CONFIGURATION__SKIP_ROWS_FROM_START as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EInt')!);
     (CsvstorePackage.Literals.I_CSV_STORE_CONFIGURATION__SKIP_ROWS_FROM_END as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EInt')!);
+
+    // ============================================
+    // Set EOpposites (must be done after all features are created) (#59)
+    // ============================================
 
     // ============================================
     // Register XML name mappings from ExtendedMetaData annotations

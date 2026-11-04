@@ -42,7 +42,7 @@ export class DataSelectionImpl extends BasicEObject implements DataSelection {
   private _path?: string;
   private _filters!: EList<DataFilter>;
   private _pick: SelectionPick = SelectionPick.ALL;
-  private _index?: number;
+  private _index: number = 0;
   private _fields!: EList<string>;
 
   /**
@@ -208,7 +208,7 @@ export class DataSelectionImpl extends BasicEObject implements DataSelection {
       case DataSelectionImpl.PICK:
         return this._pick !== SelectionPick.ALL;
       case DataSelectionImpl.INDEX:
-        return this._index !== undefined;
+        return this._index !== 0;
       case DataSelectionImpl.FIELDS:
         return this._fields !== undefined && !this._fields.isEmpty();
       default:
@@ -232,7 +232,7 @@ export class DataSelectionImpl extends BasicEObject implements DataSelection {
         this._pick = SelectionPick.ALL;
         return;
       case DataSelectionImpl.INDEX:
-        this._index = undefined;
+        this._index = 0;
         return;
       case DataSelectionImpl.FIELDS:
         if (this._fields) this._fields.clear();

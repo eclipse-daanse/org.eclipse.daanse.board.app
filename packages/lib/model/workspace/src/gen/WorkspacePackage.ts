@@ -18,9 +18,11 @@
  * @generated
  */
 
-import { BasicEPackage, BasicEClass, BasicEAttribute, BasicEReference, EPackageRegistry, getEcorePackage } from '@emfts/core';
-import type { EClass, EAttribute, EReference } from '@emfts/core';
+import { BasicEPackage, BasicEClass, BasicEAttribute, BasicEReference, EPackageRegistry, getEcorePackage, BasicEEnum, BasicEEnumLiteral, BasicEAnnotation } from '@emfts/core';
+import type { EClass, EAttribute, EReference, EEnum, EDataType } from '@emfts/core';
 import { WorkspaceFactory } from './WorkspaceFactory.js';
+import { SelectionPick } from './SelectionPick.js';
+import { FilterOperator } from './FilterOperator.js';
 
 /**
  * Workspace Package
@@ -125,6 +127,8 @@ export class WorkspacePackage extends BasicEPackage {
     CONNECTION__CONFIG: null as unknown as EAttribute | EReference,
     CONNECTION__ICON: null as unknown as EAttribute | EReference,
     CONNECTION__TAGS: null as unknown as EAttribute | EReference,
+    SELECTION_PICK: null as unknown as EEnum,
+    FILTER_OPERATOR: null as unknown as EEnum,
   };
 
   private constructor() {
@@ -802,6 +806,130 @@ export class WorkspacePackage extends BasicEPackage {
     connectionClass.getEStructuralFeatures().push(connection_tags);
     WorkspacePackage.Literals.CONNECTION__TAGS = connection_tags;
 
+    // Create SelectionPick enum
+    const selectionPickEnumType = new BasicEEnum();
+    selectionPickEnumType.setName('SelectionPick');
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("ALL");
+      literal.setValue(0);
+      literal.setLiteral("all");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(SelectionPick.ALL);
+      selectionPickEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("FIRST");
+      literal.setValue(1);
+      literal.setLiteral("first");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(SelectionPick.FIRST);
+      selectionPickEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("LAST");
+      literal.setValue(2);
+      literal.setLiteral("last");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(SelectionPick.LAST);
+      selectionPickEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("INDEX");
+      literal.setValue(3);
+      literal.setLiteral("index");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(SelectionPick.INDEX);
+      selectionPickEnumType.addLiteral(literal);
+    }
+    {
+      const annotation = new BasicEAnnotation();
+      annotation.setSource("http://www.eclipse.org/emf/2002/GenModel");
+      annotation.getDetails().putByKey("documentation", "Which of the elements that stay are taken.");
+      selectionPickEnumType.getEAnnotations().push(annotation);
+    }
+    WorkspacePackage.Literals.SELECTION_PICK = selectionPickEnumType;
+    this.getEClassifiers().push(selectionPickEnumType);
+
+    // Create FilterOperator enum
+    const filterOperatorEnumType = new BasicEEnum();
+    filterOperatorEnumType.setName('FilterOperator');
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("EQUALS");
+      literal.setValue(0);
+      literal.setLiteral("equals");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(FilterOperator.EQUALS);
+      filterOperatorEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("NOT_EQUALS");
+      literal.setValue(1);
+      literal.setLiteral("notEquals");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(FilterOperator.NOT_EQUALS);
+      filterOperatorEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("CONTAINS");
+      literal.setValue(2);
+      literal.setLiteral("contains");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(FilterOperator.CONTAINS);
+      filterOperatorEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("GREATER_THAN");
+      literal.setValue(3);
+      literal.setLiteral("greaterThan");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(FilterOperator.GREATER_THAN);
+      filterOperatorEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("LESS_THAN");
+      literal.setValue(4);
+      literal.setLiteral("lessThan");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(FilterOperator.LESS_THAN);
+      filterOperatorEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("EXISTS");
+      literal.setValue(5);
+      literal.setLiteral("exists");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(FilterOperator.EXISTS);
+      filterOperatorEnumType.addLiteral(literal);
+    }
+    {
+      const annotation = new BasicEAnnotation();
+      annotation.setSource("http://www.eclipse.org/emf/2002/GenModel");
+      annotation.getDetails().putByKey("documentation", "How a filter compares the value in an element with its own.");
+      filterOperatorEnumType.getEAnnotations().push(annotation);
+    }
+    WorkspacePackage.Literals.FILTER_OPERATOR = filterOperatorEnumType;
+    this.getEClassifiers().push(filterOperatorEnumType);
+
 
     // ============================================
     // Set ESuperTypes (must be done after all classes are created)
@@ -845,9 +973,11 @@ export class WorkspacePackage extends BasicEPackage {
     (WorkspacePackage.Literals.WIDGET__SELECTION as BasicEReference).setEType(WorkspacePackage.Literals.DATA_SELECTION);
     (WorkspacePackage.Literals.DATA_SELECTION__PATH as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
     (WorkspacePackage.Literals.DATA_SELECTION__FILTERS as BasicEReference).setEType(WorkspacePackage.Literals.DATA_FILTER);
+    (WorkspacePackage.Literals.DATA_SELECTION__PICK as BasicEAttribute).setEType(WorkspacePackage.Literals.SELECTION_PICK);
     (WorkspacePackage.Literals.DATA_SELECTION__INDEX as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EInt')!);
     (WorkspacePackage.Literals.DATA_SELECTION__FIELDS as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
     (WorkspacePackage.Literals.DATA_FILTER__FIELD as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (WorkspacePackage.Literals.DATA_FILTER__OPERATOR as BasicEAttribute).setEType(WorkspacePackage.Literals.FILTER_OPERATOR);
     (WorkspacePackage.Literals.DATA_FILTER__VALUE as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
     (WorkspacePackage.Literals.VARIABLE__UID as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
     (WorkspacePackage.Literals.VARIABLE__NAME as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
@@ -878,6 +1008,10 @@ export class WorkspacePackage extends BasicEPackage {
     (WorkspacePackage.Literals.CONNECTION__CONFIG as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EJavaObject')!);
     (WorkspacePackage.Literals.CONNECTION__ICON as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
     (WorkspacePackage.Literals.CONNECTION__TAGS as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+
+    // ============================================
+    // Set EOpposites (must be done after all features are created) (#59)
+    // ============================================
 
     // ============================================
     // Register XML name mappings from ExtendedMetaData annotations

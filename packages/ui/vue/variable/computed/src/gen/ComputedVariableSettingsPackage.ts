@@ -19,7 +19,7 @@
  */
 
 import { BasicEPackage, BasicEClass, BasicEAttribute, EPackageRegistry, getEcorePackage } from '@emfts/core';
-import type { EClass, EAttribute, EReference } from '@emfts/core';
+import type { EClass, EAttribute, EReference, EDataType } from '@emfts/core';
 import { ComputedVariableSettingsFactory } from './ComputedVariableSettingsFactory.js';
 
 /**
@@ -96,6 +96,10 @@ export class ComputedVariableSettingsPackage extends BasicEPackage {
     // convert against - every value would arrive as a raw string (#37)
     // ============================================
     (ComputedVariableSettingsPackage.Literals.COMPUTED_VARIABLE_SETTINGS__EXPRESSION as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+
+    // ============================================
+    // Set EOpposites (must be done after all features are created) (#59)
+    // ============================================
 
     // ============================================
     // Register XML name mappings from ExtendedMetaData annotations

@@ -75,6 +75,16 @@ export class GridSettingsImpl extends BasicEObject implements GridSettings {
 
   set cols(value: GridColumns) {
     const oldValue = this._cols;
+    if (oldValue !== value) {
+      // containment: the owner becomes the container of the value (#61)
+      if (oldValue) {
+        (oldValue as any).eSetContainer?.(null, null);
+      }
+      if (value) {
+        this.removeFromPreviousContainer(value);
+        (value as any).eSetContainer?.(this, this.eClass().getEStructuralFeature('cols'));
+      }
+    }
     this._cols = value;
     if (this.eDeliver()) {
       this.eNotify({
@@ -90,6 +100,30 @@ export class GridSettingsImpl extends BasicEObject implements GridSettings {
         getFeatureID: () => GridSettingsImpl.COLS,
         merge: () => false
       });
+    }
+  }
+
+  /**
+   * Remove a value from its previous container before it is contained here,
+   * like Java EMF's eInverseRemove on the old container (#61)
+   */
+  private removeFromPreviousContainer(value: unknown): void {
+    const v = value as any;
+    const oldContainer = v?.eContainer?.();
+    if (!oldContainer || oldContainer === this) {
+      return;
+    }
+    const oldFeature = v.eContainmentFeature?.();
+    if (!oldFeature) {
+      return;
+    }
+    if (oldFeature.isMany()) {
+      const list = oldContainer.eGet(oldFeature);
+      if (list && typeof list.remove === 'function') {
+        list.remove(v);
+      }
+    } else {
+      oldContainer.eUnset(oldFeature);
     }
   }
 
@@ -154,6 +188,7 @@ export class GridSettingsImpl extends BasicEObject implements GridSettings {
         this._rowHeight = 30;
         return;
       case GridSettingsImpl.COLS:
+        if (this._cols) (this._cols as any).eSetContainer?.(null, null);
         this._cols = undefined;
         return;
       default:

@@ -19,7 +19,7 @@
  */
 
 import { BasicEPackage, BasicEClass, BasicEAttribute, EPackageRegistry, getEcorePackage } from '@emfts/core';
-import type { EClass, EAttribute, EReference } from '@emfts/core';
+import type { EClass, EAttribute, EReference, EDataType } from '@emfts/core';
 import { MermaidwidgetsFactory } from './MermaidwidgetsFactory.js';
 
 /**
@@ -83,6 +83,7 @@ export class MermaidwidgetsPackage extends BasicEPackage {
     mermaidWidgetSettings_theme.setName('theme');
     mermaidWidgetSettings_theme.setLowerBound(0);
     mermaidWidgetSettings_theme.setUpperBound(1);
+    mermaidWidgetSettings_theme.setDefaultValueLiteral("default");
     mermaidWidgetSettingsClass.getEStructuralFeatures().push(mermaidWidgetSettings_theme);
     MermaidwidgetsPackage.Literals.MERMAID_WIDGET_SETTINGS__THEME = mermaidWidgetSettings_theme;
 
@@ -91,6 +92,7 @@ export class MermaidwidgetsPackage extends BasicEPackage {
     mermaidWidgetSettings_value.setName('value');
     mermaidWidgetSettings_value.setLowerBound(0);
     mermaidWidgetSettings_value.setUpperBound(1);
+    mermaidWidgetSettings_value.setDefaultValueLiteral("flowchart TD A[Christmas] -->|Get money| B(Go shopping) B --> C{Let me think} C -->|One| D[Laptop C -->|Two| E[iPhone] C -->|Three| F[fa:fa-car Car]");
     mermaidWidgetSettingsClass.getEStructuralFeatures().push(mermaidWidgetSettings_value);
     MermaidwidgetsPackage.Literals.MERMAID_WIDGET_SETTINGS__VALUE = mermaidWidgetSettings_value;
 
@@ -106,6 +108,10 @@ export class MermaidwidgetsPackage extends BasicEPackage {
     // ============================================
     (MermaidwidgetsPackage.Literals.MERMAID_WIDGET_SETTINGS__THEME as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
     (MermaidwidgetsPackage.Literals.MERMAID_WIDGET_SETTINGS__VALUE as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+
+    // ============================================
+    // Set EOpposites (must be done after all features are created) (#59)
+    // ============================================
 
     // ============================================
     // Register XML name mappings from ExtendedMetaData annotations

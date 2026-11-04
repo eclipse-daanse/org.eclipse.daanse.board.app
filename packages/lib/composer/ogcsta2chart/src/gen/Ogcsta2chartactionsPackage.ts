@@ -19,7 +19,7 @@
  */
 
 import { BasicEPackage, BasicEClass, EPackageRegistry } from '@emfts/core';
-import type { EClass, EAttribute } from '@emfts/core';
+import type { EClass, EAttribute, EDataType } from '@emfts/core';
 import { Ogcsta2chartactionsFactory } from './Ogcsta2chartactionsFactory.js';
 
 /**
@@ -98,6 +98,10 @@ export class Ogcsta2chartactionsPackage extends BasicEPackage {
     // Set ETypes for all features (must be done after all classes are created).
     // An EAttribute without eType leaves the XMI reader no EDataType to
     // convert against - every value would arrive as a raw string (#37)
+    // ============================================
+
+    // ============================================
+    // Set EOpposites (must be done after all features are created) (#59)
     // ============================================
 
     // ============================================

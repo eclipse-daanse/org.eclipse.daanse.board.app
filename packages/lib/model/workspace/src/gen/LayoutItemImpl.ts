@@ -38,7 +38,7 @@ export class LayoutItemImpl extends BasicEObject implements LayoutItem {
   static readonly GROUP: number = 6;
 
   // Private fields
-  private _id: string = "";
+  private _id?: string;
   private _x: number = 0;
   private _y: number = 0;
   private _z: number = 0;
@@ -295,7 +295,7 @@ export class LayoutItemImpl extends BasicEObject implements LayoutItem {
     const featureID = this.eClass().getFeatureID(feature);
     switch (featureID) {
       case LayoutItemImpl.ID:
-        return this._id !== "";
+        return this._id !== undefined;
       case LayoutItemImpl.X:
         return this._x !== 0;
       case LayoutItemImpl.Y:
@@ -320,7 +320,7 @@ export class LayoutItemImpl extends BasicEObject implements LayoutItem {
     const featureID = this.eClass().getFeatureID(feature);
     switch (featureID) {
       case LayoutItemImpl.ID:
-        this._id = "";
+        this._id = undefined;
         return;
       case LayoutItemImpl.X:
         this._x = 0;

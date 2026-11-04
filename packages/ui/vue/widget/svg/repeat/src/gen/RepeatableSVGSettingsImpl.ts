@@ -82,6 +82,16 @@ export class RepeatableSVGSettingsImpl extends BasicEObject implements Repeatabl
 
   set activeItemStyles(value: SVGItemStyles) {
     const oldValue = this._activeItemStyles;
+    if (oldValue !== value) {
+      // containment: the owner becomes the container of the value (#61)
+      if (oldValue) {
+        (oldValue as any).eSetContainer?.(null, null);
+      }
+      if (value) {
+        this.removeFromPreviousContainer(value);
+        (value as any).eSetContainer?.(this, this.eClass().getEStructuralFeature('activeItemStyles'));
+      }
+    }
     this._activeItemStyles = value;
     if (this.eDeliver()) {
       this.eNotify({
@@ -106,6 +116,16 @@ export class RepeatableSVGSettingsImpl extends BasicEObject implements Repeatabl
 
   set defaultItemStyles(value: SVGItemStyles) {
     const oldValue = this._defaultItemStyles;
+    if (oldValue !== value) {
+      // containment: the owner becomes the container of the value (#61)
+      if (oldValue) {
+        (oldValue as any).eSetContainer?.(null, null);
+      }
+      if (value) {
+        this.removeFromPreviousContainer(value);
+        (value as any).eSetContainer?.(this, this.eClass().getEStructuralFeature('defaultItemStyles'));
+      }
+    }
     this._defaultItemStyles = value;
     if (this.eDeliver()) {
       this.eNotify({
@@ -169,6 +189,30 @@ export class RepeatableSVGSettingsImpl extends BasicEObject implements Repeatabl
         getFeatureID: () => RepeatableSVGSettingsImpl.PROGRESS,
         merge: () => false
       });
+    }
+  }
+
+  /**
+   * Remove a value from its previous container before it is contained here,
+   * like Java EMF's eInverseRemove on the old container (#61)
+   */
+  private removeFromPreviousContainer(value: unknown): void {
+    const v = value as any;
+    const oldContainer = v?.eContainer?.();
+    if (!oldContainer || oldContainer === this) {
+      return;
+    }
+    const oldFeature = v.eContainmentFeature?.();
+    if (!oldFeature) {
+      return;
+    }
+    if (oldFeature.isMany()) {
+      const list = oldContainer.eGet(oldFeature);
+      if (list && typeof list.remove === 'function') {
+        list.remove(v);
+      }
+    } else {
+      oldContainer.eUnset(oldFeature);
     }
   }
 
@@ -257,9 +301,11 @@ export class RepeatableSVGSettingsImpl extends BasicEObject implements Repeatabl
         this._src = undefined;
         return;
       case RepeatableSVGSettingsImpl.ACTIVE_ITEM_STYLES:
+        if (this._activeItemStyles) (this._activeItemStyles as any).eSetContainer?.(null, null);
         this._activeItemStyles = undefined;
         return;
       case RepeatableSVGSettingsImpl.DEFAULT_ITEM_STYLES:
+        if (this._defaultItemStyles) (this._defaultItemStyles as any).eSetContainer?.(null, null);
         this._defaultItemStyles = undefined;
         return;
       case RepeatableSVGSettingsImpl.REPETITIONS:

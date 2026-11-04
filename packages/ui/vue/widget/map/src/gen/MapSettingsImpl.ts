@@ -61,11 +61,11 @@ export class MapSettingsImpl extends BasicEObject implements MapSettings {
   private _styles!: EList<DSRenderer>;
   private _OGCSstyles!: EList<Renderer>;
   private _services!: EList<Service>;
-  private _fixed?: boolean;
-  private _enableClustering?: boolean;
+  private _fixed: boolean = false;
+  private _enableClustering: boolean = false;
   private _selectionHighlightColor: string = "#ff0000";
   private _selectedThingId?: string;
-  private _clusterGlobal?: boolean;
+  private _clusterGlobal: boolean = false;
 
   /**
    * Returns the EClass of this object
@@ -480,15 +480,15 @@ export class MapSettingsImpl extends BasicEObject implements MapSettings {
       case MapSettingsImpl.SERVICES:
         return this._services !== undefined && !this._services.isEmpty();
       case MapSettingsImpl.FIXED:
-        return this._fixed !== undefined;
+        return this._fixed !== false;
       case MapSettingsImpl.ENABLE_CLUSTERING:
-        return this._enableClustering !== undefined;
+        return this._enableClustering !== false;
       case MapSettingsImpl.SELECTION_HIGHLIGHT_COLOR:
         return this._selectionHighlightColor !== "#ff0000";
       case MapSettingsImpl.SELECTED_THING_ID:
         return this._selectedThingId !== undefined;
       case MapSettingsImpl.CLUSTER_GLOBAL:
-        return this._clusterGlobal !== undefined;
+        return this._clusterGlobal !== false;
       default:
         return super.eIsSet(feature);
     }
@@ -531,10 +531,10 @@ export class MapSettingsImpl extends BasicEObject implements MapSettings {
         if (this._services) this._services.clear();
         return;
       case MapSettingsImpl.FIXED:
-        this._fixed = undefined;
+        this._fixed = false;
         return;
       case MapSettingsImpl.ENABLE_CLUSTERING:
-        this._enableClustering = undefined;
+        this._enableClustering = false;
         return;
       case MapSettingsImpl.SELECTION_HIGHLIGHT_COLOR:
         this._selectionHighlightColor = "#ff0000";
@@ -543,7 +543,7 @@ export class MapSettingsImpl extends BasicEObject implements MapSettings {
         this._selectedThingId = undefined;
         return;
       case MapSettingsImpl.CLUSTER_GLOBAL:
-        this._clusterGlobal = undefined;
+        this._clusterGlobal = false;
         return;
       default:
         super.eUnset(feature);

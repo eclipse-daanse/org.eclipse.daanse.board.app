@@ -19,7 +19,7 @@
  */
 
 import { BasicEPackage, BasicEClass, BasicEAttribute, EPackageRegistry, getEcorePackage } from '@emfts/core';
-import type { EClass, EAttribute, EReference } from '@emfts/core';
+import type { EClass, EAttribute, EReference, EDataType } from '@emfts/core';
 import { SparqlstoreFactory } from './SparqlstoreFactory.js';
 
 /**
@@ -119,6 +119,10 @@ export class SparqlstorePackage extends BasicEPackage {
     // ============================================
     (SparqlstorePackage.Literals.I_SPARQL_STORE_CONFIGURATION__QUERY as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
     (SparqlstorePackage.Literals.I_SPARQL_STORE_CONFIGURATION__CONNECTION as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+
+    // ============================================
+    // Set EOpposites (must be done after all features are created) (#59)
+    // ============================================
 
     // ============================================
     // Register XML name mappings from ExtendedMetaData annotations

@@ -41,14 +41,14 @@ export class MapPropsImpl extends BasicEObject implements MapProps {
   static readonly CLASS_NAME: number = 9;
 
   // Private fields
-  private _stroke?: boolean;
+  private _stroke: boolean = false;
   private _color?: string;
-  private _weight?: number;
-  private _opacity?: number;
+  private _weight: number = 0;
+  private _opacity: number = 0;
   private _lineCap?: string;
   private _dashOffset?: string;
-  private _fill?: boolean;
-  private _fillOpacity?: number;
+  private _fill: boolean = false;
+  private _fillOpacity: number = 0;
   private _fillColor?: string;
   private _className?: string;
 
@@ -391,21 +391,21 @@ export class MapPropsImpl extends BasicEObject implements MapProps {
     const featureID = this.eClass().getFeatureID(feature);
     switch (featureID) {
       case MapPropsImpl.STROKE:
-        return this._stroke !== undefined;
+        return this._stroke !== false;
       case MapPropsImpl.COLOR:
         return this._color !== undefined;
       case MapPropsImpl.WEIGHT:
-        return this._weight !== undefined;
+        return this._weight !== 0;
       case MapPropsImpl.OPACITY:
-        return this._opacity !== undefined;
+        return this._opacity !== 0;
       case MapPropsImpl.LINE_CAP:
         return this._lineCap !== undefined;
       case MapPropsImpl.DASH_OFFSET:
         return this._dashOffset !== undefined;
       case MapPropsImpl.FILL:
-        return this._fill !== undefined;
+        return this._fill !== false;
       case MapPropsImpl.FILL_OPACITY:
-        return this._fillOpacity !== undefined;
+        return this._fillOpacity !== 0;
       case MapPropsImpl.FILL_COLOR:
         return this._fillColor !== undefined;
       case MapPropsImpl.CLASS_NAME:
@@ -422,16 +422,16 @@ export class MapPropsImpl extends BasicEObject implements MapProps {
     const featureID = this.eClass().getFeatureID(feature);
     switch (featureID) {
       case MapPropsImpl.STROKE:
-        this._stroke = undefined;
+        this._stroke = false;
         return;
       case MapPropsImpl.COLOR:
         this._color = undefined;
         return;
       case MapPropsImpl.WEIGHT:
-        this._weight = undefined;
+        this._weight = 0;
         return;
       case MapPropsImpl.OPACITY:
-        this._opacity = undefined;
+        this._opacity = 0;
         return;
       case MapPropsImpl.LINE_CAP:
         this._lineCap = undefined;
@@ -440,10 +440,10 @@ export class MapPropsImpl extends BasicEObject implements MapProps {
         this._dashOffset = undefined;
         return;
       case MapPropsImpl.FILL:
-        this._fill = undefined;
+        this._fill = false;
         return;
       case MapPropsImpl.FILL_OPACITY:
-        this._fillOpacity = undefined;
+        this._fillOpacity = 0;
         return;
       case MapPropsImpl.FILL_COLOR:
         this._fillColor = undefined;

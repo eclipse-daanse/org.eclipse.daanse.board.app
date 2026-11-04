@@ -19,7 +19,7 @@
  */
 
 import { BasicEPackage, BasicEClass, BasicEAttribute, BasicEReference, EPackageRegistry, getEcorePackage } from '@emfts/core';
-import type { EClass, EAttribute, EReference } from '@emfts/core';
+import type { EClass, EAttribute, EReference, EDataType } from '@emfts/core';
 import { TimelinesettingsFactory } from './TimelinesettingsFactory.js';
 
 /**
@@ -102,6 +102,7 @@ export class TimelinesettingsPackage extends BasicEPackage {
     relativeTimeConfig_enabled.setName('enabled');
     relativeTimeConfig_enabled.setLowerBound(0);
     relativeTimeConfig_enabled.setUpperBound(1);
+    relativeTimeConfig_enabled.setDefaultValueLiteral("false");
     relativeTimeConfigClass.getEStructuralFeatures().push(relativeTimeConfig_enabled);
     TimelinesettingsPackage.Literals.RELATIVE_TIME_CONFIG__ENABLED = relativeTimeConfig_enabled;
 
@@ -110,6 +111,7 @@ export class TimelinesettingsPackage extends BasicEPackage {
     relativeTimeConfig_offset.setName('offset');
     relativeTimeConfig_offset.setLowerBound(0);
     relativeTimeConfig_offset.setUpperBound(1);
+    relativeTimeConfig_offset.setDefaultValueLiteral("24");
     relativeTimeConfigClass.getEStructuralFeatures().push(relativeTimeConfig_offset);
     TimelinesettingsPackage.Literals.RELATIVE_TIME_CONFIG__OFFSET = relativeTimeConfig_offset;
 
@@ -118,6 +120,7 @@ export class TimelinesettingsPackage extends BasicEPackage {
     relativeTimeConfig_unit.setName('unit');
     relativeTimeConfig_unit.setLowerBound(0);
     relativeTimeConfig_unit.setUpperBound(1);
+    relativeTimeConfig_unit.setDefaultValueLiteral("hours");
     relativeTimeConfigClass.getEStructuralFeatures().push(relativeTimeConfig_unit);
     TimelinesettingsPackage.Literals.RELATIVE_TIME_CONFIG__UNIT = relativeTimeConfig_unit;
 
@@ -216,6 +219,7 @@ export class TimelinesettingsPackage extends BasicEPackage {
     timelineSettings_stepSize.setName('stepSize');
     timelineSettings_stepSize.setLowerBound(0);
     timelineSettings_stepSize.setUpperBound(1);
+    timelineSettings_stepSize.setDefaultValueLiteral("hour");
     timelineSettingsClass.getEStructuralFeatures().push(timelineSettings_stepSize);
     TimelinesettingsPackage.Literals.TIMELINE_SETTINGS__STEP_SIZE = timelineSettings_stepSize;
 
@@ -224,6 +228,7 @@ export class TimelinesettingsPackage extends BasicEPackage {
     timelineSettings_playbackSpeed.setName('playbackSpeed');
     timelineSettings_playbackSpeed.setLowerBound(0);
     timelineSettings_playbackSpeed.setUpperBound(1);
+    timelineSettings_playbackSpeed.setDefaultValueLiteral("1");
     timelineSettingsClass.getEStructuralFeatures().push(timelineSettings_playbackSpeed);
     TimelinesettingsPackage.Literals.TIMELINE_SETTINGS__PLAYBACK_SPEED = timelineSettings_playbackSpeed;
 
@@ -232,6 +237,7 @@ export class TimelinesettingsPackage extends BasicEPackage {
     timelineSettings_autoPlay.setName('autoPlay');
     timelineSettings_autoPlay.setLowerBound(0);
     timelineSettings_autoPlay.setUpperBound(1);
+    timelineSettings_autoPlay.setDefaultValueLiteral("false");
     timelineSettingsClass.getEStructuralFeatures().push(timelineSettings_autoPlay);
     TimelinesettingsPackage.Literals.TIMELINE_SETTINGS__AUTO_PLAY = timelineSettings_autoPlay;
 
@@ -240,6 +246,7 @@ export class TimelinesettingsPackage extends BasicEPackage {
     timelineSettings_fixStartKnob.setName('fixStartKnob');
     timelineSettings_fixStartKnob.setLowerBound(0);
     timelineSettings_fixStartKnob.setUpperBound(1);
+    timelineSettings_fixStartKnob.setDefaultValueLiteral("false");
     timelineSettingsClass.getEStructuralFeatures().push(timelineSettings_fixStartKnob);
     TimelinesettingsPackage.Literals.TIMELINE_SETTINGS__FIX_START_KNOB = timelineSettings_fixStartKnob;
 
@@ -248,6 +255,7 @@ export class TimelinesettingsPackage extends BasicEPackage {
     timelineSettings_showControls.setName('showControls');
     timelineSettings_showControls.setLowerBound(0);
     timelineSettings_showControls.setUpperBound(1);
+    timelineSettings_showControls.setDefaultValueLiteral("true");
     timelineSettingsClass.getEStructuralFeatures().push(timelineSettings_showControls);
     TimelinesettingsPackage.Literals.TIMELINE_SETTINGS__SHOW_CONTROLS = timelineSettings_showControls;
 
@@ -256,6 +264,7 @@ export class TimelinesettingsPackage extends BasicEPackage {
     timelineSettings_rangeStripColor.setName('rangeStripColor');
     timelineSettings_rangeStripColor.setLowerBound(0);
     timelineSettings_rangeStripColor.setUpperBound(1);
+    timelineSettings_rangeStripColor.setDefaultValueLiteral("#d17600");
     timelineSettingsClass.getEStructuralFeatures().push(timelineSettings_rangeStripColor);
     TimelinesettingsPackage.Literals.TIMELINE_SETTINGS__RANGE_STRIP_COLOR = timelineSettings_rangeStripColor;
 
@@ -264,6 +273,7 @@ export class TimelinesettingsPackage extends BasicEPackage {
     timelineSettings_showTimeInfo.setName('showTimeInfo');
     timelineSettings_showTimeInfo.setLowerBound(0);
     timelineSettings_showTimeInfo.setUpperBound(1);
+    timelineSettings_showTimeInfo.setDefaultValueLiteral("true");
     timelineSettingsClass.getEStructuralFeatures().push(timelineSettings_showTimeInfo);
     TimelinesettingsPackage.Literals.TIMELINE_SETTINGS__SHOW_TIME_INFO = timelineSettings_showTimeInfo;
 
@@ -297,6 +307,10 @@ export class TimelinesettingsPackage extends BasicEPackage {
     (TimelinesettingsPackage.Literals.TIMELINE_SETTINGS__SHOW_CONTROLS as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EBoolean')!);
     (TimelinesettingsPackage.Literals.TIMELINE_SETTINGS__RANGE_STRIP_COLOR as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
     (TimelinesettingsPackage.Literals.TIMELINE_SETTINGS__SHOW_TIME_INFO as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EBoolean')!);
+
+    // ============================================
+    // Set EOpposites (must be done after all features are created) (#59)
+    // ============================================
 
     // ============================================
     // Register XML name mappings from ExtendedMetaData annotations
