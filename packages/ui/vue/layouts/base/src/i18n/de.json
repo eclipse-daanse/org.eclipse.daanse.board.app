@@ -53,6 +53,7 @@
       "polygon": "Vieleck – Punkte setzen, Doppelklick oder Klick auf den ersten Punkt schließt",
       "select": "Auswählen"
     },
+    "snap": "Am Raster ausrichten",
     "delete": "Form löschen",
     "cancel": "Abbrechen (Esc)",
     "done": "Fertig"

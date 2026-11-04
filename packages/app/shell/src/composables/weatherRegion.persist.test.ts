@@ -46,3 +46,23 @@ it('opens a board with a typed weather rectangle as one drawn rectangle', () => 
   expect(page.weather?.kind?.value).toBe('rain')
   expect(readShapes(page.weather)).toEqual([{ kind: 'rectangle', x: 3, y: 2, width: 6, height: 5 }])
 })
+
+/*
+ * A weather stored by 085750e1, before region and affectsWidgets existed.
+ * It came back with those references empty: the layer took the defaults,
+ * but the form had no wrapper to bind "affects the widgets" to and left it
+ * out, and a drawn region could not be made the region.
+ */
+it('opens a weather stored before its later settings with every setting in a wrapper', () => {
+  const stored = {
+    eClass: 'http://org.eclipse.daanse.board.app.lib.model.workspace#//Workspace',
+    board: { name: 'Board', pages: [{ id: 'p', weather: { kind: { value: 'snow' }, intensity: { value: 80 } } }] },
+  }
+  const weather = parseWorkspace(JSON.stringify(stored))!.board!.pages.get(0).weather!
+  expect(weather.kind?.value).toBe('snow')
+  expect(weather.intensity?.value).toBe(80)
+  expect(weather.affectsWidgets?.value).toBe(true)
+  expect(weather.affectsWidgets?.eContainer()).toBe(weather)
+  expect(weather.region?.value).toBe('page')
+  expect(weather.regionWidget?.value).toBe('')
+})
