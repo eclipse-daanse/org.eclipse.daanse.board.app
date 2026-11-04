@@ -23,6 +23,7 @@ import ClipboardNotice from './ClipboardNotice.vue'
 
 import { DFloatingWindow } from 'org.eclipse.daanse.board.app.ui.vue.controls'
 import { WidgetWrapper,defaultConfig } from 'org.eclipse.daanse.board.app.ui.vue.widget.wrapper'
+import WeatherLayer from '../weather/WeatherLayer.vue'
 import { cloneDeep } from 'lodash'
 import { useRouter, useRoute } from 'vue-router'
 import { DButton, DIcon } from 'org.eclipse.daanse.board.app.ui.vue.controls'
@@ -734,6 +735,8 @@ const change = (e: any) => {
 </script>
 
 <template>
+  <!-- Still while editing: the weather waits, and draws nothing -->
+  <WeatherLayer :page="board.page.value" edit-mode>
   <div
     class="report-container"
     @contextmenu="onCanvasContextMenu"
@@ -1047,6 +1050,7 @@ const change = (e: any) => {
 
     <ClipboardNotice :shown="copiedNotice" @dismiss="hideNotice" />
   </div>
+  </WeatherLayer>
 </template>
 <style>
 .ghost {
