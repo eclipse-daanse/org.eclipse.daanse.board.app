@@ -48,6 +48,8 @@ variable to write it into.
           feature="http://org.eclipse.daanse.board.app.ui.vue.widget.control#//ButtonSettings/color" label="control:Form.color"/>
       <fields xsi:type="uimodel:InputWidget" name="textColor"
           feature="http://org.eclipse.daanse.board.app.ui.vue.widget.control#//ButtonSettings/textColor" label="control:Form.textColor"/>
+      <fields xsi:type="uimodel:NumberWidget" name="fontSize"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.control#//ButtonSettings/fontSize" label="control:Form.fontSize" min="6" max="200" step="1"/>
     </fields>
 
   </components>

@@ -11,7 +11,8 @@
     "disabled": "Disabled",
     "lookGroup": "Look",
     "color": "Colour",
-    "textColor": "Text colour"
+    "textColor": "Text colour",
+    "fontSize": "Font size"
   },
   "Action": {
     "value": "Value",

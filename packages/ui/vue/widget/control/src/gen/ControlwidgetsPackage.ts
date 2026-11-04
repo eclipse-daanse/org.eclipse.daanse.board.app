@@ -62,6 +62,7 @@ export class ControlwidgetsPackage extends BasicEPackage {
     CONTROL_SETTINGS__LABEL: null as unknown as EAttribute | EReference,
     CONTROL_SETTINGS__COLOR: null as unknown as EAttribute | EReference,
     CONTROL_SETTINGS__TEXT_COLOR: null as unknown as EAttribute | EReference,
+    CONTROL_SETTINGS__FONT_SIZE: null as unknown as EAttribute | EReference,
     CONTROL_SETTINGS__DISABLED: null as unknown as EAttribute | EReference,
     BUTTON_SETTINGS: null as unknown as EClass,
     BUTTON_SETTINGS__TARGET: null as unknown as EAttribute | EReference,
@@ -124,6 +125,15 @@ export class ControlwidgetsPackage extends BasicEPackage {
     controlSettings_textColor.setUpperBound(1);
     controlSettingsClass.getEStructuralFeatures().push(controlSettings_textColor);
     ControlwidgetsPackage.Literals.CONTROL_SETTINGS__TEXT_COLOR = controlSettings_textColor;
+
+    // Create fontSize feature
+    const controlSettings_fontSize = new BasicEReference();
+    controlSettings_fontSize.setContainment(false);
+    controlSettings_fontSize.setName('fontSize');
+    controlSettings_fontSize.setLowerBound(0);
+    controlSettings_fontSize.setUpperBound(1);
+    controlSettingsClass.getEStructuralFeatures().push(controlSettings_fontSize);
+    ControlwidgetsPackage.Literals.CONTROL_SETTINGS__FONT_SIZE = controlSettings_fontSize;
 
     // Create disabled feature
     const controlSettings_disabled = new BasicEReference();
@@ -201,6 +211,7 @@ export class ControlwidgetsPackage extends BasicEPackage {
     (ControlwidgetsPackage.Literals.CONTROL_SETTINGS__LABEL as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
     (ControlwidgetsPackage.Literals.CONTROL_SETTINGS__COLOR as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
     (ControlwidgetsPackage.Literals.CONTROL_SETTINGS__TEXT_COLOR as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
+    (ControlwidgetsPackage.Literals.CONTROL_SETTINGS__FONT_SIZE as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
     (ControlwidgetsPackage.Literals.CONTROL_SETTINGS__DISABLED as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
     (ControlwidgetsPackage.Literals.BUTTON_SETTINGS__TARGET as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
     (ControlwidgetsPackage.Literals.BUTTON_SETTINGS__VALUE as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
