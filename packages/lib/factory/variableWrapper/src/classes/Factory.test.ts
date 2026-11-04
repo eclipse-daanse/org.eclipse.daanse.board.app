@@ -115,3 +115,49 @@ describe('restoring wrappers from a stored board', () => {
     expect(restored).toEqual({ type: VARIABLEWRAPPER, isSet: false })
   })
 })
+
+/*
+ * The other way a wrapper is stored: contained in a modelled object, here
+ * a page's weather, and read back by the resource as the generated class.
+ */
+describe('binding the wrappers a stored page contains', () => {
+  it('follows the bound variable once the page is read back', async () => {
+    const { JSONResource, URI } = await import('@emfts/core')
+    const { PageImpl, createWeather } = await import('org.eclipse.daanse.board.app.lib.model.workspace')
+    const { VariableWrapper } = await import('org.eclipse.daanse.board.app.lib.variables')
+
+    const page = new PageImpl()
+    page.id = 'p'
+    page.weather = createWeather()
+    page.weather.intensity!.value = 20
+    page.weather.intensity!.variable = 'storm'
+    page.weather.intensity!.isSet = true
+    const out = new JSONResource(URI.createURI('page.json'))
+    out.getContents().add(page)
+    const text = out.saveToString()
+
+    const back = new JSONResource(URI.createURI('page.json'))
+    back.loadFromString(text)
+    const loaded = back.getContents().get(0) as typeof page
+
+    let notify: () => void = () => {}
+    const storm = {
+      name: 'storm',
+      value: 70,
+      subscribe(listener: () => void) { notify = listener },
+      unsubscribe() {},
+    }
+    factoryKnowing(storm as never).bindContainedWrappers(loaded as never)
+
+    const intensity = loaded.weather!.intensity!
+    expect(intensity).toBeInstanceOf(VariableWrapper)
+    expect(intensity.eContainer()).toBe(loaded.weather)
+    expect(intensity.value).toBe(70)
+    expect(loaded.weather!.wind!).toBeInstanceOf(VariableWrapper)
+    expect(loaded.weather!.wind!.value).toBe(0)
+
+    storm.value = 90
+    notify()
+    expect(loaded.weather!.intensity!.value).toBe(90)
+  })
+})
