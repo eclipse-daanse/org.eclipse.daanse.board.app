@@ -12,8 +12,10 @@ Contributors:
 -->
 <script setup lang="ts">
 /**
- * A toggle button: on or off. A press turns it to the other state, writes
- * that state's value and sends `change`.
+ * A toggle button: on or off, drawn as a switch - a pill-shaped track whose
+ * round thumb slides from one end to the other, the label beside it. A
+ * press turns it to the other state, writes that state's value and sends
+ * `change`.
  *
  * What it shows is read from the target, so a variable changed elsewhere
  * turns the toggle too. On is whatever equals the on value; anything else,
@@ -54,7 +56,7 @@ class ToggleWidgetApi extends ToggleWidgetInterface {
 const api = new ToggleWidgetApi()
 defineExpose<ToggleWidgetInterface>(api)
 
-const { held, current, label, color, look, disabled, put, write, operate } = useControl(config, widgetId, {
+const { settings, held, current, label, color, look, disabled, put, write, operate } = useControl(config, widgetId, {
   type: 'ToggleWidget',
   wrapped: { target: '', onValue: 'true', offValue: 'false', onLabel: '', onColor: '' },
   create: () => new ToggleSettingsImpl(),
@@ -67,7 +69,8 @@ const offValue = computed(() => typed(held('offValue')))
 const on = computed(() => sameValue(current(), onValue.value))
 
 const shownLabel = computed(() => (on.value && held('onLabel')) || label.value)
-/* Unset, on takes the theme's accent and off a muted shade of the text. */
+const labelLeft = computed(() => String((settings.value as any)?.labelSide ?? '').toLowerCase() === 'left')
+/* The track wears the state. Unset, on takes the theme's accent and off a muted shade of its text. */
 const onColor = computed(() => colourOf(held('onColor'), FORMER_DEFAULTS.onColor))
 const shownColor = computed(() =>
   on.value ? onColor.value || 'var(--control-face)' : color.value || 'var(--control-off)',
@@ -79,84 +82,120 @@ function press(): void {
 </script>
 
 <template>
-  <div class="control-toggle">
+  <div class="control-toggle" :style="look">
     <button
       type="button"
-      class="control-toggle__face"
-      :class="{ 'control-toggle__face--on': on }"
-      :aria-pressed="on"
+      role="switch"
+      class="control-toggle__switch"
+      :class="{ 'control-toggle__switch--on': on, 'control-toggle__switch--label-left': labelLeft }"
+      :aria-checked="on"
       :disabled="disabled"
-      :style="[look, { background: shownColor }]"
       @click="press"
     >
-      <span class="control-toggle__lamp" aria-hidden="true"></span>
-      <span class="control-toggle__label">{{ shownLabel }}</span>
+      <span class="control-toggle__track" :style="{ background: shownColor }" aria-hidden="true">
+        <span class="control-toggle__thumb"></span>
+      </span>
+      <span v-if="shownLabel" class="control-toggle__label">{{ shownLabel }}</span>
     </button>
   </div>
 </template>
 
 <style scoped>
+/* The tile stays transparent: only the switch and its label are drawn, centred. */
 .control-toggle {
+  --control-off: color-mix(in srgb, var(--color-fg, #dfe8ef) 30%, transparent);
   width: 100%;
   height: 100%;
   display: flex;
-  align-items: stretch;
-  box-sizing: border-box;
-}
-
-.control-toggle__face {
-  --control-off: color-mix(in srgb, var(--color-fg, #dfe8ef) 30%, transparent);
-  flex: 1;
-  color: var(--control-on-face);
-  min-width: 0;
-  min-height: 0;
-  display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0.5em;
+  padding: 4px;
+  box-sizing: border-box;
+  overflow: hidden;
+  background: transparent;
+}
+
+/* The whole of it takes the press, label included, as a native switch does. */
+.control-toggle__switch {
+  max-width: 100%;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6em;
+  padding: 0.2em;
   border: none;
-  border-radius: 6px;
-  padding: 0.4em 1em;
+  border-radius: 0.4em;
+  background: transparent;
+  color: var(--control-ink);
   font: inherit;
   font-weight: 600;
+  line-height: 1.2;
   cursor: pointer;
-  overflow: hidden;
-  white-space: nowrap;
-  transition: filter 0.15s ease, box-shadow 0.05s ease, background-color 0.15s ease;
+}
+
+.control-toggle__switch--label-left {
+  flex-direction: row-reverse;
+}
+
+/* Its height follows the font size: everything below is in em. */
+.control-toggle__track {
+  --thumb: 1.1em;
+  --inset: 0.2em;
+  position: relative;
+  flex: none;
+  width: 2.6em;
+  height: calc(var(--thumb) + 2 * var(--inset));
+  border-radius: 999px;
+  transition: background-color 0.18s ease;
+}
+
+.control-toggle__thumb {
+  position: absolute;
+  top: var(--inset);
+  left: var(--inset);
+  width: var(--thumb);
+  height: var(--thumb);
+  border-radius: 50%;
+  background: var(--control-ground);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
+  transition: transform 0.18s ease;
+}
+
+/* On, the thumb stands at the far end: the track's width less a thumb and both insets. */
+.control-toggle__switch--on .control-toggle__thumb {
+  transform: translateX(calc(2.6em - var(--thumb) - 2 * var(--inset)));
 }
 
 .control-toggle__label {
+  min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
-/* The state at a glance, whatever colours were chosen: a lamp that is lit while on. */
-.control-toggle__lamp {
-  flex: none;
-  width: 0.6em;
-  height: 0.6em;
-  border-radius: 50%;
-  border: 2px solid currentColor;
-  opacity: 0.6;
-}
-
-.control-toggle__face--on .control-toggle__lamp {
-  background: currentColor;
-  opacity: 1;
-}
-
-.control-toggle__face:hover:not(:disabled) {
+.control-toggle__switch:hover:not(:disabled) .control-toggle__track {
   filter: brightness(1.08);
 }
 
 /* Shade only: a moved face would change the layout (see the button). */
-.control-toggle__face:active:not(:disabled) {
+.control-toggle__switch:active:not(:disabled) .control-toggle__track {
   filter: brightness(0.9);
   box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.35);
 }
 
-.control-toggle__face:disabled {
+.control-toggle__switch:focus-visible {
+  outline: 2px solid var(--control-face);
+  outline-offset: 2px;
+}
+
+.control-toggle__switch:disabled {
   cursor: not-allowed;
   opacity: 0.5;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .control-toggle__track,
+  .control-toggle__thumb {
+    transition: none;
+  }
 }
 </style>

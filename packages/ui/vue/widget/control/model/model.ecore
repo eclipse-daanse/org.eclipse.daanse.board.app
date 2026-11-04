@@ -107,7 +107,7 @@ through it into the variable it follows.
 
     <eClassifiers xsi:type="ecore:EClass" name="ToggleSettings" eSuperTypes="#//ControlSettings">
         <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-            <details key="documentation" value="A toggle button: on or off, a press turns it to the other state and writes that state's value. Off it wears the shared label and colour, on its own."/>
+            <details key="documentation" value="A toggle button, drawn as a switch: a track and a thumb that slides between off and on, the label beside it. A press turns it to the other state and writes that state's value. Off it wears the shared label and colour, on its own."/>
         </eAnnotations>
 
         <eStructuralFeatures xsi:type="ecore:EReference" name="target" containment="false" defaultValueLiteral="">
@@ -151,9 +151,23 @@ through it into the variable it follows.
                 <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
             </eGenericType>
             <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-                <details key="documentation" value="The colour of the face while on; off it takes the shared colour. Left empty, the app's accent colour."/>
+                <details key="documentation" value="The colour of the track while on; off it takes the shared colour. Left empty, the app's accent colour."/>
             </eAnnotations>
         </eStructuralFeatures>
+
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="labelSide" eType="#//LabelSide" defaultValueLiteral="right">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="Whether the label stands right of the switch or left of it."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+    </eClassifiers>
+
+    <eClassifiers xsi:type="ecore:EEnum" name="LabelSide">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+            <details key="documentation" value="Which side of a switch its label stands on."/>
+        </eAnnotations>
+        <eLiterals name="RIGHT" literal="right"/>
+        <eLiterals name="LEFT" literal="left" value="1"/>
     </eClassifiers>
 
     <eClassifiers xsi:type="ecore:EClass" name="ControlOption">
