@@ -10,7 +10,7 @@ Contributors: Smart City Jena
 */
 
 import 'reflect-metadata';
-import { getWidgetActions, type WidgetActionMetadata } from '../decorators/WidgetAction';
+import { getWidgetActions, formatActionParameter, type WidgetActionMetadata, type WidgetActionParameter } from '../decorators/WidgetAction';
 import { EcoreMetadataService } from './EcoreMetadataService';
 import { EVENT_ACTIONS_REGISTRY_ID } from 'org.eclipse.daanse.board.app.lib.api.events'
 export { EVENT_ACTIONS_REGISTRY_ID } from 'org.eclipse.daanse.board.app.lib.api.events'
@@ -36,7 +36,7 @@ export interface EventAction {
 export interface WidgetTypeRegistration {
   widgetType: string;
   baseClass: any; // Die abstrakte Basis-Klasse mit @WidgetAction Decorators
-  actions: Array<WidgetActionMetadata & { methodName: string }>;
+  actions: Array<WidgetActionMetadata & { methodName: string; parameters: WidgetActionParameter[] }>;
   context?: EventActionContext; // Optional: Kontext für diese Actions (widget, system, page)
 }
 
@@ -201,7 +201,7 @@ export class EventActionsRegistry {
 
     console.log(`📝 Registered widget type "${widgetType}" (context: ${context || 'widget'}) with ${actions.length} actions:`);
     actions.forEach(action => {
-      console.log(`  - ${action.methodName}(${action.parameters?.join(', ') || ''})`, action);
+      console.log(`  - ${action.methodName}(${action.parameters.map(formatActionParameter).join(', ')})`, action);
     });
   }
 
@@ -245,9 +245,9 @@ export class EventActionsRegistry {
       const actions = ecoreActions.map(ecoreAction => ({
         methodName: ecoreAction.methodName,
         eventType: ecoreAction.eventType,
-        parameters: ecoreAction.parameters.map(p =>
-          `${p.name}${p.optional ? '?' : ''}: ${p.type}`
-        )
+        parameters: [...ecoreAction.parameters]
+          .sort((a, b) => a.index - b.index)
+          .map((p): WidgetActionParameter => ({ name: p.name, type: p.type, optional: p.optional }))
       }));
 
       // Register the action type
@@ -260,7 +260,7 @@ export class EventActionsRegistry {
 
       console.log(`📝 Registered actions "${name}" (context: ${context || 'widget'}) from Ecore with ${actions.length} actions:`);
       actions.forEach(action => {
-        console.log(`  - ${action.methodName}(${action.parameters?.join(', ') || ''})`, action);
+        console.log(`  - ${action.methodName}(${action.parameters.map(formatActionParameter).join(', ')})`, action);
       });
     } catch (error) {
       console.error(`Failed to register actions "${name}" from Ecore:`, error);
@@ -305,9 +305,9 @@ export class EventActionsRegistry {
       const actions = ecoreActions.map(ecoreAction => ({
         methodName: ecoreAction.methodName,
         eventType: ecoreAction.eventType,
-        parameters: ecoreAction.parameters.map(p =>
-          `${p.name}${p.optional ? '?' : ''}: ${p.type}`
-        )
+        parameters: [...ecoreAction.parameters]
+          .sort((a, b) => a.index - b.index)
+          .map((p): WidgetActionParameter => ({ name: p.name, type: p.type, optional: p.optional }))
       }));
 
       // Register the action type
@@ -320,7 +320,7 @@ export class EventActionsRegistry {
 
       console.log(`📝 Registered actions "${name}" (context: ${context || 'widget'}) from Ecore string with ${actions.length} actions:`);
       actions.forEach(action => {
-        console.log(`  - ${action.methodName}(${action.parameters?.join(', ') || ''})`, action);
+        console.log(`  - ${action.methodName}(${action.parameters.map(formatActionParameter).join(', ')})`, action);
       });
     } catch (error) {
       console.error(`Failed to register actions "${name}" from Ecore string:`, error);
