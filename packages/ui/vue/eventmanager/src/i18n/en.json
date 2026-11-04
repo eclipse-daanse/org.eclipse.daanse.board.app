@@ -44,7 +44,11 @@
     "fromEvent": "from the event",
     "fixedValue": "fixed value",
     "chooseProperty": "Choose property",
-    "freePath": "or a path, e.g. {{example}}"
+    "freePath": "or a path, e.g. {{example}}",
+    "expression": "Expression",
+    "resultLast": "Last event: {{result}}",
+    "resultSample": "Sample: {{result}}",
+    "resultFailed": "Expression fails: {{message}}"
   },
   "Phrase": {
     "inSystem": "in the system",
