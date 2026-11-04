@@ -75,6 +75,11 @@
                 <details key="documentation" value="Index of the function argument to map to."/>
             </eAnnotations>
         </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="expression" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="Optional expression computing the argument, evaluated like a computed variable's expression with value (the property the path names) and payload (the whole payload) in scope. Without one the property is handed on unchanged."/>
+            </eAnnotations>
+        </eStructuralFeatures>
     </eClassifiers>
 
     <!-- EventActionMapping Class -->
