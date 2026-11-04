@@ -21,6 +21,7 @@
 import type { EObject, EList } from '@emfts/core';
 import type { Widget } from './Widget.js';
 import type { LayoutItem } from './LayoutItem.js';
+import type { Weather } from './Weather.js';
 
 /**
  * Page
@@ -41,5 +42,6 @@ export interface Page extends EObject {
   backgroundRepeat?: string;
   widgets: EList<Widget>;
   layout: EList<LayoutItem>;
+  weather?: Weather;
 
 }
