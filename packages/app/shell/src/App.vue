@@ -221,6 +221,7 @@ const noBoard = computed(() => {
 
 <style>
 @import './assets/main.css';
+@import './assets/leaflet.css';
 @import 'floating-vue/dist/style.css';
 
 </style>
