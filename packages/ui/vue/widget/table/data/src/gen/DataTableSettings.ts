@@ -31,5 +31,8 @@ export interface DataTableSettings extends EObject {
   sortable?: boolean;
   pageSize?: number;
   hiddenColumns: EList<string>;
+  markedRowColor?: string;
+  markedColumnColor?: string;
+  markedCellColor?: string;
 
 }

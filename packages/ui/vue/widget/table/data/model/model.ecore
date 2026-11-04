@@ -64,6 +64,30 @@ variable at them.
                 <details key="documentation" value="The columns left out, by name. Said this way round so that a column the answer grows later is shown rather than silently missing."/>
             </eAnnotations>
         </eStructuralFeatures>
+
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="markedRowColor"
+                             eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+                             defaultValueLiteral="color-mix(in srgb, var(--color-accent) 18%, transparent)">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="The background of a row a rule marked. Marks are set by rules while the board runs and are not saved; only how they look is."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="markedColumnColor"
+                             eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+                             defaultValueLiteral="color-mix(in srgb, var(--color-accent) 12%, transparent)">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="The background of the cells of a column a rule marked."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="markedCellColor"
+                             eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+                             defaultValueLiteral="color-mix(in srgb, var(--color-accent) 40%, transparent)">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="The background of a cell a rule marked, and of the cell where a marked row crosses a marked column - stronger than either, so the crossing stands out."/>
+            </eAnnotations>
+        </eStructuralFeatures>
     </eClassifiers>
     <!--
     What the table tells the event system when it is clicked (#1221).
