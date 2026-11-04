@@ -604,17 +604,104 @@ const updateParameterMapping = (paramIndex: number, payloadPath: string) => {
     action.payloadMapping = []
   }
 
+  const previous = action.payloadMapping.find(pm => pm.argIndex === paramIndex)
+
   // Remove existing mapping for this parameter index
   action.payloadMapping = action.payloadMapping.filter(
     pm => pm.argIndex !== paramIndex
   )
 
-  // Add new mapping if a payload path is selected
-  if (payloadPath) {
+  // Add new mapping if a payload path is selected - keeping its expression,
+  // which computes from whichever field is chosen (#1224)
+  if (payloadPath || previous?.expression) {
     action.payloadMapping.push({
       payloadPath,
-      argIndex: paramIndex
+      argIndex: paramIndex,
+      ...(previous?.expression ? { expression: previous.expression } : {})
     })
+  }
+}
+
+/*
+ * The expression that computes the argument from the chosen field (#1224).
+ * Emptied, the key goes, so the rule is stored as one without an expression.
+ */
+const updateParameterExpression = (paramIndex: number, expression: string) => {
+  const action = currentAction.value
+  if (!action) return
+
+  const mappings = action.payloadMapping ?? []
+  const previous = mappings.find(pm => pm.argIndex === paramIndex)
+  const rest = mappings.filter(pm => pm.argIndex !== paramIndex)
+  const payloadPath = previous?.payloadPath ?? ''
+
+  if (!expression.trim() && !payloadPath) {
+    action.payloadMapping = rest
+    return
+  }
+  action.payloadMapping = [
+    ...rest,
+    { payloadPath, argIndex: paramIndex, ...(expression.trim() ? { expression } : {}) }
+  ]
+}
+
+const getExpressionForParameter = (paramIndex: number): string =>
+  currentAction.value?.payloadMapping?.find(pm => pm.argIndex === paramIndex)?.expression ?? ''
+
+/*
+ * A payload to show a result for where the rule has seen no event yet:
+ * a value per declared feature, and for a record the first one the
+ * widget's source answers with.
+ */
+const samplePayload = computed(() => {
+  const sample: Record<string, unknown> = {}
+  for (const prop of payloadProperties.value) {
+    if (prop.type === RECORD_TYPE) {
+      const first = sourceAnswer.value?.items?.[0]
+      sample[prop.name] = first && typeof first === 'object' ? { ...first } : {}
+    } else if (prop.type === 'number') {
+      sample[prop.name] = 0
+    } else if (prop.type === 'boolean') {
+      sample[prop.name] = false
+    } else if (prop.type === 'string') {
+      sample[prop.name] = ''
+    }
+  }
+  return sample
+})
+
+const formatResult = (result: unknown): string => {
+  if (result === undefined) return 'undefined'
+  if (typeof result === 'string') return JSON.stringify(result)
+  try {
+    return JSON.stringify(result) ?? String(result)
+  } catch {
+    return String(result)
+  }
+}
+
+/**
+ * What the parameter's mapping yields, by the manager's own evaluation:
+ * for the last event the rule saw, else for the sample payload.
+ */
+const getResultPreview = (paramIndex: number): { text: string; failed: boolean } | null => {
+  const mapping = currentAction.value?.payloadMapping?.find(pm => pm.argIndex === paramIndex)
+  if (!mapping || (!mapping.payloadPath && !mapping.expression?.trim())) return null
+
+  const last = editingMappingId.value ? eventManager?.getLastPayload?.(editingMappingId.value) : undefined
+  try {
+    if (last !== undefined) {
+      const result = formatResult(eventManager.evaluatePayloadMapping(mapping, last))
+      return { text: t('Rule.resultLast', { result }), failed: false }
+    }
+    const result = formatResult(eventManager.evaluatePayloadMapping(mapping, samplePayload.value))
+    return { text: t('Rule.resultSample', { result }), failed: false }
+  } catch (error) {
+    const cause = (error as { cause?: unknown }).cause ?? error
+    return {
+      text: t('Rule.resultFailed', { message: cause instanceof Error ? cause.message : String(cause) }),
+      failed: true
+    }
   }
 }
 
@@ -1019,6 +1106,14 @@ onMounted(() => {
                           :placeholder="t('Rule.freePath', { example: freePathExample })"
                           @update:model-value="updateParameterMapping(param.index, String($event ?? ''))"
                         />
+                        <DInput
+                          v-if="getParameterValueSource(param.index) === 'payload'"
+                          class="param__expression"
+                          :model-value="getExpressionForParameter(param.index)"
+                          :aria-label="t('Rule.expression')"
+                          placeholder="value * 100"
+                          @update:model-value="updateParameterExpression(param.index, String($event ?? ''))"
+                        />
                         <!-- On the manual source only. It hung by v-else on the free path
                           field above, and so stood beside the payload choice too, a field
                           that did nothing with the type as its placeholder (#1227). -->
@@ -1029,6 +1124,13 @@ onMounted(() => {
                           @update:model-value="updateManualParameterValue(param.index, String($event ?? ''))"
                         />
                       </div>
+                      <p
+                        v-if="getParameterValueSource(param.index) === 'payload' && getResultPreview(param.index)"
+                        :class="['param__result', { 'param__result--failed': getResultPreview(param.index)?.failed }]"
+                        aria-live="polite"
+                      >
+                        {{ getResultPreview(param.index)?.text }}
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -1391,9 +1493,24 @@ onMounted(() => {
   min-width: 0;
 }
 
-.param__value > *:last-child {
+.param__value > *:last-child,
+.param__value > .param__expression {
   flex: 1 1 0;
   min-width: 0;
+}
+
+/* What the mapping yields, under the fields that make it. */
+.param__result {
+  grid-column: 2;
+  margin: -6px 0 0;
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  color: var(--color-dim);
+  overflow-wrap: anywhere;
+}
+
+.param__result--failed {
+  color: var(--color-err);
 }
 
 /* Where a value comes from is a choice between two, so it is shown as two. */
