@@ -66,16 +66,13 @@ class SliderWidgetApi extends SliderWidgetInterface {
 const api = new SliderWidgetApi()
 defineExpose<SliderWidgetInterface>(api)
 
-const { settings, held, current, label, color, textColor, fontSize, disabled, put, write, send } = useControl(
-  config,
-  widgetId,
-  {
-    type: 'SliderWidget',
-    wrapped: { target: '', upperTarget: '', min: '0', max: '100', step: '1', unit: '', markEvery: '' },
-    create: () => new SliderSettingsImpl(),
-    api,
-  },
-)
+const { settings, held, current, label, look, disabled, put, write, send } = useControl(config, widgetId, {
+  type: 'SliderWidget',
+  wrapped: { target: '', upperTarget: '', min: '0', max: '100', step: '1', unit: '', markEvery: '' },
+  create: () => new SliderSettingsImpl(),
+  api,
+  nameKey: 'control:Default.slider',
+})
 
 /* ---------------------------------------------------------------- scale */
 
@@ -212,7 +209,7 @@ onUnmounted(() => {
   <div
     class="control-slider"
     :class="{ 'control-slider--vertical': vertical, 'control-slider--disabled': disabled }"
-    :style="{ fontSize, '--control-color': color, '--control-text': textColor }"
+    :style="look"
   >
     <div v-if="label || showValue" class="control-slider__head">
       <span class="control-slider__label">{{ label }}</span>
@@ -290,6 +287,7 @@ onUnmounted(() => {
   padding: 0.4em;
   box-sizing: border-box;
   overflow: hidden;
+  color: var(--color-fg, inherit);
 }
 
 .control-slider__head {
@@ -307,9 +305,9 @@ onUnmounted(() => {
 
 .control-slider__value {
   padding: 0 0.4em;
-  border-radius: 4px;
-  background: var(--control-color);
-  color: var(--control-text);
+  border-radius: 0.3em;
+  background: var(--control-face);
+  color: var(--control-on-face);
   font-variant-numeric: tabular-nums;
 }
 
@@ -346,11 +344,11 @@ onUnmounted(() => {
 .control-slider__rail::before {
   left: 0;
   right: 0;
-  background: color-mix(in srgb, var(--control-color) 20%, #d1d5db);
+  background: color-mix(in srgb, var(--color-fg, #dfe8ef) 22%, transparent);
 }
 
 .control-slider__fill {
-  background: var(--control-color);
+  background: var(--control-face);
 }
 
 .control-slider__tick {
@@ -386,8 +384,8 @@ onUnmounted(() => {
   width: var(--thumb);
   height: var(--thumb);
   border-radius: 50%;
-  background: var(--control-color);
-  border: 2px solid #ffffff;
+  background: var(--control-face);
+  border: 2px solid var(--control-ground);
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
   cursor: grab;
   pointer-events: auto;
@@ -397,8 +395,8 @@ onUnmounted(() => {
   width: var(--thumb);
   height: var(--thumb);
   border-radius: 50%;
-  background: var(--control-color);
-  border: 2px solid #ffffff;
+  background: var(--control-face);
+  border: 2px solid var(--control-ground);
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
   cursor: grab;
   pointer-events: auto;
@@ -415,7 +413,7 @@ onUnmounted(() => {
 }
 
 .control-slider__input:focus-visible::-webkit-slider-thumb {
-  outline: 2px solid var(--control-color);
+  outline: 2px solid var(--control-face);
   outline-offset: 2px;
 }
 
