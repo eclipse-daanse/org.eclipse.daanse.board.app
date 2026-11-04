@@ -52,16 +52,13 @@ class ButtonGroupWidgetApi extends ButtonGroupWidgetInterface {
 const api = new ButtonGroupWidgetApi()
 defineExpose<ButtonGroupWidgetInterface>(api)
 
-const { settings, held, current, label, color, textColor, fontSize, disabled, put, write, operate } = useControl(
-  config,
-  widgetId,
-  {
-    type: 'ButtonGroupWidget',
-    wrapped: { target: '', optionsPath: '', optionLabel: '', optionValue: '' },
-    create: () => new ButtonGroupSettingsImpl(),
-    api,
-  },
-)
+/* No name stands in for an empty label: the label is a heading above the options, and none is wanted by default. */
+const { settings, held, current, label, look, disabled, put, write, operate } = useControl(config, widgetId, {
+  type: 'ButtonGroupWidget',
+  wrapped: { target: '', optionsPath: '', optionLabel: '', optionValue: '' },
+  create: () => new ButtonGroupSettingsImpl(),
+  api,
+})
 
 const multiple = computed(() => (settings.value as any)?.multiple === true)
 
@@ -158,7 +155,7 @@ function press(option: Option): void {
 </script>
 
 <template>
-  <div class="control-group" :style="{ fontSize, '--control-color': color, '--control-text': textColor }">
+  <div class="control-group" :style="look">
     <span v-if="label" class="control-group__label">{{ label }}</span>
     <div
       class="control-group__options"
@@ -175,7 +172,7 @@ function press(option: Option): void {
         :aria-checked="multiple ? undefined : isChosen(option)"
         :aria-pressed="multiple ? isChosen(option) : undefined"
         :disabled="disabled"
-        :style="isChosen(option) && option.color ? { '--control-color': option.color } : undefined"
+        :style="isChosen(option) && option.color ? { '--control-face': option.color } : undefined"
         @click="press(option)"
       >
         {{ option.label }}
@@ -197,6 +194,7 @@ function press(option: Option): void {
 }
 
 .control-group__label {
+  color: var(--color-fg, inherit);
   font-weight: 600;
   white-space: nowrap;
   overflow: hidden;
@@ -204,7 +202,7 @@ function press(option: Option): void {
 }
 
 .control-group__options {
-  flex: 1;
+  flex: 0 1 auto;
   min-height: 0;
   display: flex;
   flex-wrap: wrap;
@@ -216,11 +214,12 @@ function press(option: Option): void {
 .control-group__option {
   flex: 1 1 auto;
   min-width: 0;
-  border: 2px solid var(--control-color);
+  border: 2px solid var(--control-face);
   margin-left: -2px;
-  padding: 0.3em 0.8em;
+  padding: 0.5em 1em;
+  line-height: 1.2;
   background: transparent;
-  color: var(--control-color);
+  color: var(--control-face);
   font: inherit;
   font-weight: 600;
   cursor: pointer;
@@ -232,20 +231,20 @@ function press(option: Option): void {
 
 .control-group__option:first-child {
   margin-left: 0;
-  border-radius: 6px 0 0 6px;
+  border-radius: 0.45em 0 0 0.45em;
 }
 
 .control-group__option:last-child {
-  border-radius: 0 6px 6px 0;
+  border-radius: 0 0.45em 0.45em 0;
 }
 
 .control-group__option:only-child {
-  border-radius: 6px;
+  border-radius: 0.45em;
 }
 
 .control-group__option--chosen {
-  background: var(--control-color);
-  color: var(--control-text);
+  background: var(--control-face);
+  color: var(--control-on-face);
 }
 
 .control-group__option:hover:not(:disabled) {

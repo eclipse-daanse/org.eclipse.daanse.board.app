@@ -25,6 +25,7 @@ import { ControlwidgetsPackage } from '../gen/ControlwidgetsPackage'
 import ButtonWidget from '../ButtonWidget.vue'
 import { ButtonSettingsImpl } from '../gen/ButtonSettingsImpl'
 import { ControlPayloadImpl } from '../gen/ControlPayloadImpl'
+import { show as showWith } from './helpers'
 
 /* The payload extends the events model's Payload: that package first. */
 void EventsPackage.eINSTANCE
@@ -188,5 +189,30 @@ describe('ButtonWidget', () => {
     const pressed = source.match(/:active[^{]*\{([^}]*)\}/)?.[1] ?? ''
     expect(pressed).toMatch(/box-shadow|filter/)
     expect(pressed).not.toMatch(/transform|margin|padding|top|height/)
+  })
+
+  it('shows its translated name while its label is empty', async () => {
+    const i18n = { t: (key: string) => (key === 'control:Default.button' ? 'Knopf' : key) }
+    const { wrapper } = await showWith(ButtonWidget, settingsWith({ label: new VariableWrapper('') }), { i18n })
+    expect(wrapper.find('button').text()).toBe('Knopf')
+  })
+
+  it('takes the theme colours where none are set, and the model colour where one is', async () => {
+    const settings = settingsWith({ color: new VariableWrapper(''), textColor: new VariableWrapper('') })
+    const { wrapper } = await show(settings)
+    const style = () => (wrapper.find('button').element as HTMLElement).style
+    expect(style().getPropertyValue('--control-face')).toContain('var(--color-primary')
+    expect(style().getPropertyValue('--control-on-face')).toContain('var(--color-onAccent')
+
+    settings.color.value = '#aa0000'
+    await nextTick()
+    expect(style().getPropertyValue('--control-face')).toBe('#aa0000')
+  })
+
+  it('reads the colours every control used to be given as not set', async () => {
+    const { wrapper } = await show(settingsWith())
+    const style = (wrapper.find('button').element as HTMLElement).style
+    expect(style.getPropertyValue('--control-face')).toContain('var(--color-primary')
+    expect(style.getPropertyValue('--control-on-face')).toContain('var(--color-onAccent')
   })
 })
