@@ -1,0 +1,20 @@
+{
+  "Widget": {
+    "button": "Button"
+  },
+  "Form": {
+    "labelGroup": "Label",
+    "label": "Label",
+    "writeGroup": "When pressed",
+    "target": "Writes into variable",
+    "value": "Value it writes",
+    "disabled": "Disabled",
+    "lookGroup": "Look",
+    "color": "Colour",
+    "textColor": "Text colour"
+  },
+  "Action": {
+    "value": "Value",
+    "label": "Label"
+  }
+}
