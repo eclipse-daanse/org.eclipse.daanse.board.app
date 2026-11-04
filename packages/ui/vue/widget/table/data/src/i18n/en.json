@@ -4,6 +4,10 @@
   },
   "Form": {
     "headerBackground": "Header colour",
+    "marksGroup": "Marks",
+    "markedRowColor": "Marked row colour",
+    "markedColumnColor": "Marked column colour",
+    "markedCellColor": "Marked cell colour",
     "rowsGroup": "Rows",
     "headerGroup": "Header",
     "pageSize": "Rows per page (0 = all)",
