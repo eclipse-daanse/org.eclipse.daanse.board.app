@@ -45,11 +45,19 @@ import {
   affectsWidgetsOf,
   weatherKindOf,
   weatherRegionOf,
+  readShapes,
   WEATHER_DEFAULTS,
   type Page,
+  type ShapeSpec,
   type Weather,
 } from 'org.eclipse.daanse.board.app.lib.model.workspace'
-import { WeatherEngine, type Area, type Obstacle, type WeatherLayerSettings } from './engine'
+import {
+  WeatherEngine,
+  type Area,
+  type BoardShape,
+  type Obstacle,
+  type WeatherLayerSettings,
+} from './engine'
 
 export const OBSTACLE_ATTRIBUTE = 'data-weather-obstacle'
 
@@ -61,7 +69,7 @@ const DRAWN: ReadonlySet<WeatherKind> = new Set([WeatherKind.RAIN, WeatherKind.S
 
 const REMEASURE_MS = 1000
 
-/** One grid unit, in pixels: what an area region is measured in. */
+/** One grid unit, in pixels: what a drawn region is measured in. */
 export interface GridCell {
   width: number
   height: number
@@ -73,11 +81,8 @@ export const DEFAULT_CELL: GridCell = { width: 24, height: 24 }
 /** Where a page's weather is drawn, read out of its wrappers. */
 export interface WeatherRegionSettings {
   region: WeatherRegion
-  /** The area region, in grid units. */
-  x: number
-  y: number
-  width: number
-  height: number
+  /** The area region's shapes, in grid units. */
+  shapes: ShapeSpec[]
   /** The widget region's widget. */
   widget: string
 }
@@ -85,11 +90,22 @@ export interface WeatherRegionSettings {
 export function readRegion(weather: Weather | undefined): WeatherRegionSettings {
   return {
     region: weatherRegionOf(weather?.region?.value ?? WEATHER_DEFAULTS.region),
-    x: numberOr(weather?.regionX?.value, WEATHER_DEFAULTS.regionX),
-    y: numberOr(weather?.regionY?.value, WEATHER_DEFAULTS.regionY),
-    width: numberOr(weather?.regionWidth?.value, WEATHER_DEFAULTS.regionWidth),
-    height: numberOr(weather?.regionHeight?.value, WEATHER_DEFAULTS.regionHeight),
+    shapes: readShapes(weather),
     widget: String(weather?.regionWidget?.value ?? WEATHER_DEFAULTS.regionWidget),
+  }
+}
+
+/** A shape in grid units, on the board in pixels. */
+export function shapeOnBoard(shape: ShapeSpec, cell: GridCell): BoardShape {
+  if (shape.kind === 'polygon') {
+    return { kind: 'polygon', points: shape.points.map((p) => ({ x: p.x * cell.width, y: p.y * cell.height })) }
+  }
+  return {
+    kind: shape.kind,
+    x: shape.x * cell.width,
+    y: shape.y * cell.height,
+    width: shape.width * cell.width,
+    height: shape.height * cell.height,
   }
 }
 
@@ -105,17 +121,9 @@ export function resolveRegion(
   settings: WeatherRegionSettings,
   obstacles: Obstacle[],
   cell: GridCell,
-): { area: Area | undefined; obstacles: Obstacle[] } {
+): { area: Area | BoardShape[] | undefined; obstacles: Obstacle[] } {
   if (settings.region === WeatherRegion.AREA) {
-    return {
-      area: {
-        x: settings.x * cell.width,
-        y: settings.y * cell.height,
-        width: settings.width * cell.width,
-        height: settings.height * cell.height,
-      },
-      obstacles,
-    }
+    return { area: settings.shapes.map((shape) => shapeOnBoard(shape, cell)), obstacles }
   }
   if (settings.region === WeatherRegion.WIDGET) {
     const widget = obstacles.find((each) => each.id === settings.widget)

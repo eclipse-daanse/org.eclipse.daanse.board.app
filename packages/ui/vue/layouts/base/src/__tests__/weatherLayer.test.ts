@@ -26,6 +26,7 @@ import {
   PageImpl,
   WeatherKind,
   createWeather,
+  writeShapes,
   type Page,
 } from 'org.eclipse.daanse.board.app.lib.model.workspace'
 import { DefaultServiceRegistry } from '@eclipse-daanse/tsm'
@@ -278,16 +279,21 @@ describe('the weather layer', () => {
     wrapper.unmount()
   })
 
-  it('measures an area region in the grid units of its layout', async () => {
+  it('measures a drawn region in the grid units of its layout', async () => {
     const page = snowPage()
     page.weather!.region!.value = 'area'
-    page.weather!.regionX!.value = 2
-    page.weather!.regionY!.value = 1
-    page.weather!.regionWidth!.value = 4
-    page.weather!.regionHeight!.value = 3
+    writeShapes(page.weather!, [
+      { kind: 'rectangle', x: 2, y: 1, width: 4, height: 3 },
+      { kind: 'polygon', points: [{ x: 6, y: 4 }, { x: 8, y: 4 }, { x: 7, y: 6 }] },
+    ])
     const wrapper = mountLayer(page, { cell: () => ({ width: 50, height: 30 }) })
     await nextTick()
-    expect(layerOf(wrapper).engine.region).toEqual({ x: 100, y: 30, width: 200, height: 90 })
+    const { engine } = layerOf(wrapper)
+    expect(engine.regionShapes).toEqual([
+      { kind: 'rectangle', x: 100, y: 30, width: 200, height: 90 },
+      { kind: 'polygon', points: [{ x: 300, y: 120 }, { x: 400, y: 120 }, { x: 350, y: 180 }] },
+    ])
+    expect(engine.region).toEqual({ x: 100, y: 30, width: 300, height: 150 })
     wrapper.unmount()
   })
 
