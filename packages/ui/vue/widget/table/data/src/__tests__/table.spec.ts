@@ -12,6 +12,7 @@
  * ********************************************************************/
 
 // @vitest-environment jsdom
+import { EventsPackage } from 'org.eclipse.daanse.board.app.lib.api.events'
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { flushPromises, mount } from '@vue/test-utils'
 import { nextTick } from 'vue'
@@ -55,6 +56,9 @@ vi.mock('org.eclipse.daanse.board.app.ui.vue.composables', async (importOriginal
 
 /* The class literals are built on first access; src/index.ts does this
   when the bundle activates. */
+/* The payloads extend the events model's Payload, which has to be
+  registered before this package can point at it. */
+void EventsPackage.eINSTANCE
 void DatatablesettingsPackage.eINSTANCE
 
 const emit = vi.fn()
@@ -274,7 +278,7 @@ describe('DataTableWidget', () => {
       await wrapper.findAll('tbody tr')[0].trigger('click')
 
       const call = emit.mock.calls.find(([name]) => name === 'widget:DataTableWidget:row_click')
-      expect(call?.[1].payload.rowId).toBe('2')
+      expect(call?.[1].payload.rowIndex).toBe(2)
     })
 
     it('sorts the whole answer, not the page in view', async () => {
@@ -284,6 +288,76 @@ describe('DataTableWidget', () => {
       await wrapper.findAll('thead th')[2].trigger('click')
       /* The two smallest counts of all six rows, not of the first two. */
       expect(body(wrapper).map((row) => row[2])).toEqual(['7', '8'])
+    })
+  })
+
+  /*
+   * What a click hands on (#1221): the record and where it sits, as the
+   * modelled payloads declare it - not an id a rule would have to look up.
+   */
+  describe('what a click hands on', () => {
+    const sent = (event: string) =>
+      emit.mock.calls.find(([name]) => name === `widget:DataTableWidget:${event}`)?.[1].payload
+
+    it('a row click carries the record it was on', async () => {
+      const wrapper = show()
+      await flushPromises()
+
+      await wrapper.findAll('tbody tr')[1].trigger('click')
+
+      const payload = sent('row_click')
+      expect(payload.eClass().getName()).toBe('DataTableRowPayload')
+      expect(payload.row).toEqual(ROWS[1])
+      expect(payload.rowIndex).toBe(1)
+      expect(payload.widgetId).toBe('widget-1')
+    })
+
+    it('a cell click carries the row, the column twice, and the value', async () => {
+      const wrapper = show()
+      await flushPromises()
+
+      await wrapper.findAll('tbody tr')[0].findAll('td')[2].trigger('click')
+
+      expect(sent('cell_click')).toMatchObject({
+        row: ROWS[0],
+        rowIndex: 0,
+        column: 'besucher',
+        columnIndex: 2,
+        value: 99,
+      })
+    })
+
+    it('a header click carries the column, by name and by place', async () => {
+      const wrapper = show()
+      await flushPromises()
+
+      await wrapper.findAll('thead th')[1].trigger('click')
+
+      expect(sent('col_click')).toMatchObject({ column: 'kasse', columnIndex: 1 })
+    })
+
+    /* The index counts the source's columns: a rule written against the
+      third column still means it after someone hides the first. */
+    it('a hidden column does not shift the index of the columns after it', async () => {
+      const wrapper = show({ hiddenColumns: ['datum'] })
+      await flushPromises()
+
+      await wrapper.findAll('thead th')[1].trigger('click')
+      await wrapper.findAll('tbody tr')[0].findAll('td')[1].trigger('click')
+
+      expect(sent('col_click')).toMatchObject({ column: 'besucher', columnIndex: 2 })
+      expect(sent('cell_click')).toMatchObject({ column: 'besucher', columnIndex: 2 })
+    })
+
+    it('a sort does not change which row an index names', async () => {
+      const wrapper = show({ sortable: true })
+      await flushPromises()
+
+      await wrapper.findAll('thead th')[2].trigger('click')
+      await wrapper.findAll('tbody tr')[0].trigger('click')
+
+      /* The smallest count is shown first; it is the fifth row of the answer. */
+      expect(sent('row_click')).toMatchObject({ row: ROWS[4], rowIndex: 4 })
     })
   })
 
