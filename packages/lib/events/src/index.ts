@@ -25,7 +25,7 @@ import { Comperator } from './manager/Comperator';
 import { EventRegistry, EVENT_REGISTRY, EVENT_REGISTRY_ID, type MetadataEntry, type PayloadMetadata, type PayloadPropertyInfo, type WidgetEventDefinition } from './registry/EventRegistry';
 import { EventActionsRegistry, EVENT_ACTIONS_REGISTRY, EVENT_ACTIONS_REGISTRY_ID,
   type EventAction, type EventActionContext, type WidgetTypeRegistration, type RegisteredInstance } from './registry/EventActionsRegistry';
-import { EventManager, EVENT_MANAGER, EVENT_MANAGER_ID, type EventActionMapping, type ActionDefinition, type PayloadToArgMapping } from './manager/EventManager';
+import { EventManager, EVENT_MANAGER, EVENT_MANAGER_ID, PayloadExpressionError, type EventActionMapping, type ActionDefinition, type PayloadToArgMapping } from './manager/EventManager';
 import { EventBusBridge, EVENT_BUS_BRIDGE, EVENT_BUS_BRIDGE_ID } from './bridge/EventBusBridge';
 import { WidgetAction, ActionParameter, getWidgetActions, type WidgetActionMetadata, type WidgetActionParameter, type ActionParameterMetadata } from './decorators/WidgetAction';
 import { EcoreMetadataService, ECORE_METADATA_SERVICE, ECORE_METADATA_SERVICE_ID, type EcoreActionMetadata, type EcoreParameterMetadata } from './registry/EcoreMetadataService';
@@ -103,6 +103,7 @@ export {
   EventRegistry,
   EventActionsRegistry,
   EventManager,
+  PayloadExpressionError,
   EventBusBridge,
   EcoreMetadataService,
   WidgetAction,
