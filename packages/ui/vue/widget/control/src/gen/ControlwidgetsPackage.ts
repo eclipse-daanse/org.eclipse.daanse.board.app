@@ -94,6 +94,7 @@ export class ControlwidgetsPackage extends BasicEPackage {
     SLIDER_SETTINGS__STEP: null as unknown as EAttribute | EReference,
     SLIDER_SETTINGS__UNIT: null as unknown as EAttribute | EReference,
     SLIDER_SETTINGS__MARKS: null as unknown as EAttribute | EReference,
+    SLIDER_SETTINGS__DETENTS: null as unknown as EAttribute | EReference,
     SLIDER_SETTINGS__MARK_EVERY: null as unknown as EAttribute | EReference,
     SLIDER_SETTINGS__SNAP: null as unknown as EAttribute | EReference,
     SLIDER_SETTINGS__RANGE: null as unknown as EAttribute | EReference,
@@ -437,6 +438,15 @@ export class ControlwidgetsPackage extends BasicEPackage {
     sliderSettingsClass.getEStructuralFeatures().push(sliderSettings_marks);
     ControlwidgetsPackage.Literals.SLIDER_SETTINGS__MARKS = sliderSettings_marks;
 
+    // Create detents feature
+    const sliderSettings_detents = new BasicEReference();
+    sliderSettings_detents.setContainment(true);
+    sliderSettings_detents.setName('detents');
+    sliderSettings_detents.setLowerBound(0);
+    sliderSettings_detents.setUpperBound(-1);
+    sliderSettingsClass.getEStructuralFeatures().push(sliderSettings_detents);
+    ControlwidgetsPackage.Literals.SLIDER_SETTINGS__DETENTS = sliderSettings_detents;
+
     // Create markEvery feature
     const sliderSettings_markEvery = new BasicEReference();
     sliderSettings_markEvery.setContainment(false);
@@ -677,6 +687,7 @@ export class ControlwidgetsPackage extends BasicEPackage {
     (ControlwidgetsPackage.Literals.SLIDER_SETTINGS__STEP as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
     (ControlwidgetsPackage.Literals.SLIDER_SETTINGS__UNIT as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
     (ControlwidgetsPackage.Literals.SLIDER_SETTINGS__MARKS as BasicEReference).setEType(ControlwidgetsPackage.Literals.SLIDER_MARK);
+    (ControlwidgetsPackage.Literals.SLIDER_SETTINGS__DETENTS as BasicEReference).setEType(ControlwidgetsPackage.Literals.CONTROL_OPTION);
     (ControlwidgetsPackage.Literals.SLIDER_SETTINGS__MARK_EVERY as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
     (ControlwidgetsPackage.Literals.SLIDER_SETTINGS__SNAP as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EBoolean')!);
     (ControlwidgetsPackage.Literals.SLIDER_SETTINGS__RANGE as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EBoolean')!);

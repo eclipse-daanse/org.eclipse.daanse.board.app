@@ -50,7 +50,8 @@
     "chooseGroup": "Choice",
     "multiple": "Several can be chosen",
     "chosenTextColor": "Text colour of the chosen",
-    "labelSide": "Label stands"
+    "labelSide": "Label stands",
+    "detents": "Named detents"
   },
   "Action": {
     "value": "Value",

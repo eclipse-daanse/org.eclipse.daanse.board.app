@@ -38,6 +38,8 @@ only once it is a range - and last how it looks.
     </fields>
 
     <fields xsi:type="uimodel:GroupWidget" name="marksGroup" layout="VERTICAL" label="control:Form.marksGroup">
+      <fields xsi:type="uimodel:InputWidget" name="detents"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.control#//SliderSettings/detents" label="control:Form.detents"/>
       <fields xsi:type="uimodel:InputWidget" name="marks"
           feature="http://org.eclipse.daanse.board.app.ui.vue.widget.control#//SliderSettings/marks" label="control:Form.marks"/>
       <fields xsi:type="uimodel:NumberWidget" name="markEvery"
