@@ -73,6 +73,22 @@ export const LIMITS = {
   step: 0.05,
 } as const
 
+/*
+ * Melting, as a share of the depth per second. Snow that melts in
+ * proportion to its depth settles where melting takes away what falls:
+ * twice the snowfall, twice the depth, instead of a heap that grows to the
+ * cap and stays there. Once it stops snowing it goes faster, and a fixed
+ * part on top, so the last of it does not linger.
+ */
+export const MELT = {
+  /** While it snows. */
+  snowing: 0.04,
+  /** Once the kind is something else. */
+  after: 0.5,
+  /** Pixels per second on top of that, once the kind is something else. */
+  afterFixed: 1.5,
+} as const
+
 /** Particles made per pixel of width per second, at intensity 100. */
 const RATE: Partial<Record<WeatherKind, number>> = {
   [WeatherKind.RAIN]: 0.3,
@@ -212,9 +228,10 @@ export class WeatherEngine {
       this.spawn(settings, this.viewport.y - 4 - this.random() * 20)
     }
 
+    /* Before what falls in this step lands, so the cap still holds exactly */
+    this.melt(t, settings.kind === WeatherKind.SNOW)
     this.move(t, settings)
     this.moveSplashes(t)
-    if (settings.kind !== WeatherKind.SNOW) this.melt(t)
   }
 
   /** Draws the current state; either surface may be missing. */
@@ -390,11 +407,18 @@ export class WeatherEngine {
     this.splashes.length = kept
   }
 
-  /** Snow left over from a change of weather thaws away. */
-  private melt(t: number): void {
+  /**
+   * Snow lying melts: slowly in proportion to its depth while it snows, so
+   * each edge comes to a steady depth; quickly once the kind has changed.
+   */
+  private melt(t: number, snowing: boolean): void {
+    const share = snowing ? MELT.snowing : MELT.after
+    const fixed = snowing ? 0 : MELT.afterFixed
     for (const profile of this.profiles.values()) {
       const h = profile.heights
-      for (let i = 0; i < h.length; i++) if (h[i] > 0) h[i] = Math.max(0, h[i] - 1.5 * t)
+      for (let i = 0; i < h.length; i++) {
+        if (h[i] > 0) h[i] = Math.max(0, h[i] - (h[i] * share + fixed) * t)
+      }
     }
   }
 
