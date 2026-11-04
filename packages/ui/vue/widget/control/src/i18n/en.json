@@ -5,7 +5,9 @@
     "multiState": "Multi-state button",
     "slider": "Slider",
     "buttonGroup": "Button group",
-    "choice": "Choice"
+    "choice": "Choice",
+    "textField": "Text field",
+    "numberField": "Number field"
   },
   "Form": {
     "labelGroup": "Label",
@@ -53,7 +55,8 @@
     "chosenTextColor": "Text colour of the chosen",
     "labelSide": "Label stands",
     "detents": "Named detents",
-    "placeholder": "Placeholder"
+    "placeholder": "Placeholder",
+    "fieldGroup": "When committed"
   },
   "Action": {
     "value": "Value",
