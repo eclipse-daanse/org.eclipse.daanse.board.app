@@ -27,6 +27,8 @@ export {
   type ClipboardShortcutOptions,
 } from './composables/useClipboardShortcuts'
 export { default as ClipboardNotice } from './components/ClipboardNotice.vue'
+/* The page's weather, around any layout's board (#1228). */
+export { default as WeatherLayer } from './weather/WeatherLayer.vue'
 
 const LAYOUT_ID = 'org.eclipse.daanse.board.app.ui.vue.layouts.base'
 

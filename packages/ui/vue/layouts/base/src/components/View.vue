@@ -16,6 +16,7 @@ Contributors:
 import { inject, onMounted, nextTick } from 'vue'
 import { useMoveableLayout } from '../composables/useMovableLayout'
 import { WidgetWrapper } from 'org.eclipse.daanse.board.app.ui.vue.widget.wrapper'
+import WeatherLayer from '../weather/WeatherLayer.vue'
 import { useRoute } from 'vue-router'
 import { identifiers } from 'org.eclipse.daanse.board.app.lib.core'
 import type { TinyEmitter } from 'tiny-emitter'
@@ -45,6 +46,7 @@ onMounted(async () => {
 </script>
 
 <template>
+  <WeatherLayer :page="board.page.value">
   <div class="widget-board">
     <template v-for="widget in board.widgets.value" :key="widget.uid">
       <div
@@ -57,11 +59,13 @@ onMounted(async () => {
             :widget="widget"
             :ref="`${widget.uid}_wrapper`"
             :editEnabled="false"
+            :data-weather-obstacle="widget.uid"
           />
         </div>
       </div>
     </template>
   </div>
+  </WeatherLayer>
 </template>
 <style scoped>
 .dottet{
