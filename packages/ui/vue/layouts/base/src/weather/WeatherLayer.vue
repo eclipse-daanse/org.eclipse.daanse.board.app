@@ -146,8 +146,13 @@ defineExpose({ running, engine, settings, affectsWidgets, startDrawing, drawing 
   z-index: 0;
 }
 
-/* Visible, and out of reach: every pointer goes to the drawing */
+/*
+ * Visible, and out of reach: every pointer goes to the drawing. In a
+ * stacking context of its own here too, or a widget's z-index would lift
+ * it over the drawing.
+ */
 .weather--drawing .weather__board {
+  z-index: 0;
   pointer-events: none;
   user-select: none;
 }
