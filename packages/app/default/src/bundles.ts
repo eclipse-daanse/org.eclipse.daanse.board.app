@@ -17,6 +17,7 @@ import b1 from 'org.eclipse.daanse.board.app.shell/manifest.json'
 import workbench from 'org.eclipse.daanse.board.app.workbench/manifest.json'
 import b2 from 'org.eclipse.daanse.board.app.ui.vue.widget.progress/manifest.json'
 import gauge from 'org.eclipse.daanse.board.app.ui.vue.widget.gauge/manifest.json'
+import control from 'org.eclipse.daanse.board.app.ui.vue.widget.control/manifest.json'
 import b3 from 'org.eclipse.daanse.board.app.ui.vue.widget.map/manifest.json'
 import b4 from 'org.eclipse.daanse.board.app.ui.vue.plugins.geojson_renderer/manifest.json'
 import b5 from 'org.eclipse.daanse.board.app.ui.vue.plugins.endpointfinder/manifest.json'
@@ -172,6 +173,7 @@ export const bundles: ModuleManifest[] = [
   workbench as ModuleManifest,
   b2 as ModuleManifest,
   gauge as ModuleManifest,
+  control as ModuleManifest,
   b3 as ModuleManifest,
   b4 as ModuleManifest,
   b5 as ModuleManifest,
