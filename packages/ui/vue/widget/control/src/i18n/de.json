@@ -4,7 +4,8 @@
     "toggle": "Umschalter",
     "multiState": "Mehrstufige Schaltfläche",
     "slider": "Schieberegler",
-    "buttonGroup": "Schaltflächengruppe"
+    "buttonGroup": "Schaltflächengruppe",
+    "choice": "Auswahlliste"
   },
   "Form": {
     "labelGroup": "Beschriftung",
@@ -51,7 +52,8 @@
     "multiple": "Mehrere wählbar",
     "chosenTextColor": "Textfarbe der gewählten",
     "labelSide": "Beschriftung steht",
-    "detents": "Benannte Rasterstufen"
+    "detents": "Benannte Rasterstufen",
+    "placeholder": "Platzhalter"
   },
   "Action": {
     "value": "Wert",
@@ -83,6 +85,7 @@
     "button": "Knopf",
     "toggle": "Schalter",
     "multiState": "Zustand",
-    "slider": "Regler"
+    "slider": "Regler",
+    "choice": "Bitte wählen …"
   }
 }
