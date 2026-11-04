@@ -11,7 +11,8 @@
     "disabled": "Deaktiviert",
     "lookGroup": "Aussehen",
     "color": "Farbe",
-    "textColor": "Textfarbe"
+    "textColor": "Textfarbe",
+    "fontSize": "Schriftgröße"
   },
   "Action": {
     "value": "Wert",
