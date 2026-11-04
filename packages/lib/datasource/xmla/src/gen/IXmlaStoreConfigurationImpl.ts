@@ -45,7 +45,7 @@ export class IXmlaStoreConfigurationImpl extends IBaseConnectionConfigurationImp
   private _useVisualEditor: boolean = false;
   private _mdx?: string;
   private _drilldownState?: unknown;
-  private _pollingInterval: number = 0;
+  private _pollingInterval: number = 5000;
   private _cube?: string;
   private _useMdx: boolean = false;
 
@@ -372,7 +372,7 @@ export class IXmlaStoreConfigurationImpl extends IBaseConnectionConfigurationImp
       case IXmlaStoreConfigurationImpl.DRILLDOWN_STATE:
         return this._drilldownState !== undefined;
       case IXmlaStoreConfigurationImpl.POLLING_INTERVAL:
-        return this._pollingInterval !== 0;
+        return this._pollingInterval !== 5000;
       case IXmlaStoreConfigurationImpl.CUBE:
         return this._cube !== undefined;
       case IXmlaStoreConfigurationImpl.USE_MDX:
@@ -405,7 +405,7 @@ export class IXmlaStoreConfigurationImpl extends IBaseConnectionConfigurationImp
         this._drilldownState = undefined;
         return;
       case IXmlaStoreConfigurationImpl.POLLING_INTERVAL:
-        this._pollingInterval = 0;
+        this._pollingInterval = 5000;
         return;
       case IXmlaStoreConfigurationImpl.CUBE:
         this._cube = undefined;

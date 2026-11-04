@@ -38,7 +38,7 @@ export class IGraphQLStoreConfigurationImpl extends IBaseConnectionConfiguration
   private _connection?: string;
   private _query?: string;
   private _variables?: unknown;
-  private _pollingInterval: number = 0;
+  private _pollingInterval: number = 5000;
 
   /**
    * Returns the EClass of this object
@@ -205,7 +205,7 @@ export class IGraphQLStoreConfigurationImpl extends IBaseConnectionConfiguration
       case IGraphQLStoreConfigurationImpl.VARIABLES:
         return this._variables !== undefined;
       case IGraphQLStoreConfigurationImpl.POLLING_INTERVAL:
-        return this._pollingInterval !== 0;
+        return this._pollingInterval !== 5000;
       default:
         return super.eIsSet(feature);
     }
@@ -227,7 +227,7 @@ export class IGraphQLStoreConfigurationImpl extends IBaseConnectionConfiguration
         this._variables = undefined;
         return;
       case IGraphQLStoreConfigurationImpl.POLLING_INTERVAL:
-        this._pollingInterval = 0;
+        this._pollingInterval = 5000;
         return;
       default:
         super.eUnset(feature);

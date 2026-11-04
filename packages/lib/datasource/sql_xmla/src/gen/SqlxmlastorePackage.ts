@@ -112,6 +112,7 @@ export class SqlxmlastorePackage extends BasicEPackage {
     iSqlXmlaStoreConfiguration_pollingInterval.setName('pollingInterval');
     iSqlXmlaStoreConfiguration_pollingInterval.setLowerBound(0);
     iSqlXmlaStoreConfiguration_pollingInterval.setUpperBound(1);
+    iSqlXmlaStoreConfiguration_pollingInterval.setDefaultValueLiteral("5000");
     iSqlXmlaStoreConfigurationClass.getEStructuralFeatures().push(iSqlXmlaStoreConfiguration_pollingInterval);
     SqlxmlastorePackage.Literals.I_SQL_XMLA_STORE_CONFIGURATION__POLLING_INTERVAL = iSqlXmlaStoreConfiguration_pollingInterval;
 

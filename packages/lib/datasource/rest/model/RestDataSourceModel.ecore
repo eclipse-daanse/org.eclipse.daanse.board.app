@@ -36,7 +36,7 @@
                 <details key="documentation" value="An optional JSONPath or similar expression to select a specific value from the REST response."/>
             </eAnnotations>
         </eStructuralFeatures>
-        <eStructuralFeatures xsi:type="ecore:EAttribute" name="pollingInterval" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt" lowerBound="0">
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="pollingInterval" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt" lowerBound="0" defaultValueLiteral="5000">
             <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
                 <details key="documentation" value="The optional interval in milliseconds to poll the REST resource for updates. If not specified, polling might be disabled or use a default value."/>
             </eAnnotations>

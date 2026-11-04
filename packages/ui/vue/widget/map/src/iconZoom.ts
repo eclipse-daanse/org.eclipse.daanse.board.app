@@ -50,13 +50,20 @@ export interface ZoomRules {
   ds_renderer?: Array<{ renderer?: ZoomSettings | null }> | null
 }
 
-/** Whether these settings ask anything of the zoom at all. */
+/**
+ * Whether these settings ask anything of the zoom at all.
+ *
+ * A minimum of 0 asks nothing: every zoom is at least 0. It is also what a
+ * renderer starts with - the generator gives a number without a declared
+ * default 0, not undefined, as EMF does (#1218) - so testing for a value
+ * at all would have held every map to re-rendering its markers on each pan.
+ */
 export function usesZoomSettings(settings: ZoomSettings | null | undefined): boolean {
   if (settings == null) return false
   return (
-    settings.iconMinZoom != null ||
+    (settings.iconMinZoom ?? 0) > 0 ||
     !!settings.iconScaleWithZoom ||
-    settings.labelMinZoom != null ||
+    (settings.labelMinZoom ?? 0) > 0 ||
     !!settings.labelScaleWithZoom ||
     !!settings.clusterEnabled
   )
