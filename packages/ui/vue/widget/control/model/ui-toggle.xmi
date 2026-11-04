@@ -31,6 +31,12 @@ looks. Off wears the shared label and colour; on has its own.
           feature="http://org.eclipse.daanse.board.app.ui.vue.widget.control#//ToggleSettings/label" label="control:Form.offLabel"/>
       <fields xsi:type="uimodel:InputWidget" name="onLabel"
           feature="http://org.eclipse.daanse.board.app.ui.vue.widget.control#//ToggleSettings/onLabel" label="control:Form.onLabel"/>
+      <fields xsi:type="uimodel:SelectWidget" name="labelSide"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.control#//ToggleSettings/labelSide" label="control:Form.labelSide">
+        <values>right</values>
+        <values>left</values>
+        <optionLabel language="JS" body="({ right: 'control:Options.labelSide.right', left: 'control:Options.labelSide.left' })[String(option).toLowerCase()] ?? option"/>
+      </fields>
     </fields>
 
     <fields xsi:type="uimodel:GroupWidget" name="writeGroup" layout="VERTICAL" label="control:Form.toggleGroup">

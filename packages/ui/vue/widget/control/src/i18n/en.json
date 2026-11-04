@@ -49,7 +49,8 @@
     "optionValue": "Field written as the value",
     "chooseGroup": "Choice",
     "multiple": "Several can be chosen",
-    "chosenTextColor": "Text colour of the chosen"
+    "chosenTextColor": "Text colour of the chosen",
+    "labelSide": "Label stands"
   },
   "Action": {
     "value": "Value",
@@ -71,6 +72,10 @@
     "orientation": {
       "horizontal": "Horizontal",
       "vertical": "Vertical"
+    },
+    "labelSide": {
+      "right": "Right",
+      "left": "Left"
     }
   },
   "Default": {

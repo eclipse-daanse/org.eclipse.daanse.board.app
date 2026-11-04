@@ -298,6 +298,7 @@ export { sliderSettingsFormXmi, markFormXmi, buttonGroupSettingsFormXmi }
 export { ControlOptionImpl } from './gen/ControlOptionImpl'
 export { SliderMarkImpl } from './gen/SliderMarkImpl'
 export { SliderOrientation } from './gen/SliderOrientation'
+export { LabelSide } from './gen/LabelSide'
 export { ControlPayloadImpl } from './gen/ControlPayloadImpl'
 export type { ButtonSettings } from './gen/ButtonSettings'
 export type { ToggleSettings } from './gen/ToggleSettings'
