@@ -67,6 +67,13 @@ export class DatasourceRepository implements IDatasourceRepository {
   private availableDatasources: Record<string, StoreIdentifiers> = {}
   private datasourcesByType: Record<string, string> = {}
 
+  /*
+   * Sources asked for before their type registered, by source id. Bundles
+   * activate in no particular order, so a source restored or seeded early
+   * waits here and is built when its type arrives (#1230).
+   */
+  private readonly pending = new Map<string, { type: string; config: unknown }>()
+
   constructor(private readonly resolver: IdentifierResolver) {}
 
   /*
@@ -90,6 +97,7 @@ export class DatasourceRepository implements IDatasourceRepository {
 
   /** Lets go of the live store without touching the workspace. */
   private dropLive(datasourceId: string): void {
+    this.pending.delete(datasourceId)
     const datasource = datasources.get(datasourceId)
     if (!datasource) return
     datasource.destroy()
@@ -231,13 +239,27 @@ export class DatasourceRepository implements IDatasourceRepository {
 
   getDatasource(datasourceId: string): IDataRetrieveable {
     const datasource = datasources.get(datasourceId)
-    if (!datasource) throw new Error(`Store with id ${datasourceId} not found`)
+    if (!datasource) {
+      const waiting = this.pending.get(datasourceId)
+      if (waiting) {
+        throw new Error(`Store with id ${datasourceId} waits for datasource type "${waiting.type}"`)
+      }
+      throw new Error(`Store with id ${datasourceId} not found`)
+    }
 
     return datasource
   }
 
   registerDatasourceType(name: string, identifiers: StoreIdentifiers): void {
     this.availableDatasources[name] = identifiers
+    for (const [datasourceId, waiting] of [...this.pending]) {
+      if (waiting.type !== name) continue
+      try {
+        this.registerDatasource(datasourceId, name, waiting.config)
+      } catch (error) {
+        console.warn(`datasource ${datasourceId} could not be built for type "${name}":`, error)
+      }
+    }
     this.notifyChange()
   }
 
@@ -296,17 +318,17 @@ export class DatasourceRepository implements IDatasourceRepository {
     const identifiers = this.availableDatasources[type]
 
     /*
-     * Saying so rather than dropping it: the caller asked for a source of
-     * this type to exist, and it will not. Every widget reading from it
-     * fails later with "Store with id ... not found", far from here.
+     * Kept, not dropped: the type's bundle may simply not have activated
+     * yet. Dropping it left every widget reading from it failing later with
+     * "Store with id ... not found" (#1230); registerDatasourceType builds
+     * it once the type arrives.
      */
     if (!identifiers) {
-      console.warn(
-        `Datasource "${datasourceId}" not registered: no datasource type "${type}". ` +
-          `Known types: ${Object.keys(this.availableDatasources).join(', ') || 'none'}`,
-      )
+      this.pending.set(datasourceId, { type, config })
       return
     }
+
+    this.pending.delete(datasourceId)
 
     const datasourceFactory = this.resolveIdentifier<(c: unknown) => IDataRetrieveable>(identifiers.Store)
     const datasource = datasourceFactory(config)
