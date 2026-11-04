@@ -12,7 +12,7 @@ Contributors:
 -->
 <script lang="ts" setup>
 import { useDatasourceRepository, useEObject, useTranslation, VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables'
-import { inject, toRefs, ref, watch, computed, onMounted, onUnmounted } from 'vue';
+import { inject, toRefs, ref, watch, computed, nextTick, onMounted, onUnmounted } from 'vue';
 import { useRoute } from 'vue-router';
 import { useVariableRepository } from "org.eclipse.daanse.board.app.ui.vue.composables"
 
@@ -400,6 +400,35 @@ watch(rows, () => {
     page.value = 0
 })
 
+const scroller = ref<HTMLElement>()
+
+/*
+ * A marked row is brought into view (#1222).
+ *
+ * The mark sits on the record, not on a place on screen, so sorting carries
+ * it along by itself. A row on another page is not seen though - a map
+ * marker clicked elsewhere on the board would mark a row nobody can find -
+ * so the table turns to its page, unless one of the marked rows is on the
+ * page already, and scrolls it into sight. Done when a mark is set and when
+ * a new answer arrives, which may hold the row somewhere else; not when the
+ * reader pages or sorts, which would take the table out of their hands.
+ * Declared after the reset above, so a new answer lands on the mark rather
+ * than on the first page.
+ */
+const bringMarkIntoView = () => {
+    const marked = new Set([...markedRows.value, ...markedCellRows.value])
+    if (!marked.size) return
+    if (pageSize.value > 0 && !shownRows.value.some((row) => marked.has(row))) {
+        const position = ordered.value.findIndex((row) => marked.has(row))
+        if (position >= 0) page.value = Math.floor(position / pageSize.value)
+    }
+    void nextTick(() => {
+        scroller.value?.querySelector('.marked_cell, .marked_row')?.scrollIntoView?.({ block: 'nearest' })
+    })
+}
+
+watch([marks, rows], bringMarkIntoView)
+
 const shownRows = computed<Record<string, unknown>[]>(() => {
     if (pageSize.value <= 0) return ordered.value
     const from = page.value * pageSize.value
@@ -415,7 +444,7 @@ const lastShown = computed(() => Math.min((page.value + 1) * pageSize.value, ord
 <template>
     <div class="table_container" @click="emitClick" @contextmenu.prevent="emitRightClick">
         <!-- The rows scroll, the pager below them does not. -->
-        <div class="table_scroll">
+        <div ref="scroller" class="table_scroll">
             <table class="table" :style="{ '--header-background': headerBackground, ...markColours }">
                 <thead v-if="showHeader">
                     <tr>
