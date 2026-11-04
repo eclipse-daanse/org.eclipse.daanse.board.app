@@ -220,3 +220,28 @@ describe('the notice after a copy', () => {
     notice.unmount()
   })
 })
+
+describe('the paste in the top bar', () => {
+  it('learns from the root element that there is something to paste', () => {
+    editorOn(boardWithOneWidget())
+    expect(document.documentElement.hasAttribute('data-board-clipboard')).toBe(false)
+
+    press('c')
+    expect(document.documentElement.getAttribute('data-board-clipboard')).toBe('full')
+
+    useClipboardStore().clear()
+    expect(document.documentElement.hasAttribute('data-board-clipboard')).toBe(false)
+  })
+
+  it('pastes beside the original when it asks', () => {
+    const page = boardWithOneWidget()
+    editorOn(page, () => ({ x: 240, y: 312 }))
+
+    press('c')
+    window.dispatchEvent(new CustomEvent('daanse:board-paste'))
+
+    const placed = placements(page)
+    expect(placed).toHaveLength(2)
+    expect(placed[1]).toMatchObject({ x: 72, y: 120 })
+  })
+})
