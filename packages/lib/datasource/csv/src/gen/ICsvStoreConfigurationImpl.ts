@@ -40,7 +40,7 @@ export class ICsvStoreConfigurationImpl extends IBaseConnectionConfigurationImpl
   // Private fields
   private _resourceUrl?: string;
   private _connection?: string;
-  private _pollingInterval: number = 0;
+  private _pollingInterval: number = 5000;
   private _separators!: EList<string>;
   private _skipRowsFromStart: number = 0;
   private _skipRowsFromEnd: number = 0;
@@ -252,7 +252,7 @@ export class ICsvStoreConfigurationImpl extends IBaseConnectionConfigurationImpl
       case ICsvStoreConfigurationImpl.CONNECTION:
         return this._connection !== undefined;
       case ICsvStoreConfigurationImpl.POLLING_INTERVAL:
-        return this._pollingInterval !== 0;
+        return this._pollingInterval !== 5000;
       case ICsvStoreConfigurationImpl.SEPARATORS:
         return this._separators !== undefined && !this._separators.isEmpty();
       case ICsvStoreConfigurationImpl.SKIP_ROWS_FROM_START:
@@ -277,7 +277,7 @@ export class ICsvStoreConfigurationImpl extends IBaseConnectionConfigurationImpl
         this._connection = undefined;
         return;
       case ICsvStoreConfigurationImpl.POLLING_INTERVAL:
-        this._pollingInterval = 0;
+        this._pollingInterval = 5000;
         return;
       case ICsvStoreConfigurationImpl.SEPARATORS:
         if (this._separators) this._separators.clear();

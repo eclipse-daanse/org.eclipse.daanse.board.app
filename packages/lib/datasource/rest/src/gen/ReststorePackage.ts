@@ -121,6 +121,7 @@ export class ReststorePackage extends BasicEPackage {
     iRestStoreConfiguration_pollingInterval.setName('pollingInterval');
     iRestStoreConfiguration_pollingInterval.setLowerBound(0);
     iRestStoreConfiguration_pollingInterval.setUpperBound(1);
+    iRestStoreConfiguration_pollingInterval.setDefaultValueLiteral("5000");
     iRestStoreConfigurationClass.getEStructuralFeatures().push(iRestStoreConfiguration_pollingInterval);
     ReststorePackage.Literals.I_REST_STORE_CONFIGURATION__POLLING_INTERVAL = iRestStoreConfiguration_pollingInterval;
 
