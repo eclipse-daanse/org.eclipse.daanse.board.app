@@ -19,7 +19,7 @@
  */
 
 import { BasicEPackage, BasicEClass, BasicEReference, EPackageRegistry } from '@emfts/core';
-import type { EClass, EAttribute, EReference } from '@emfts/core';
+import type { EClass, EAttribute, EReference, EDataType } from '@emfts/core';
 import { TextsettingsFactory } from './TextsettingsFactory.js';
 
 /**
@@ -186,6 +186,10 @@ export class TextsettingsPackage extends BasicEPackage {
     (TextsettingsPackage.Literals.TEXT_SETTINGS__TEXT_DECORATION as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
     (TextsettingsPackage.Literals.TEXT_SETTINGS__HORIZONTAL_ALIGN as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
     (TextsettingsPackage.Literals.TEXT_SETTINGS__VERTICAL_ALIGN as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
+
+    // ============================================
+    // Set EOpposites (must be done after all features are created) (#59)
+    // ============================================
 
     // ============================================
     // Register XML name mappings from ExtendedMetaData annotations

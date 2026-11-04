@@ -62,21 +62,21 @@ export class VantaSettingsImpl extends BasicEObject implements VantaSettings {
   private _sunColor?: string;
   private _sunGlareColor?: string;
   private _sunlightColor?: string;
-  private _speed?: number;
+  private _speed: number = 0;
   private _color1?: string;
   private _color2?: string;
-  private _quantity?: number;
-  private _birdSize?: number;
-  private _wingSpan?: number;
-  private _speedLimit?: number;
-  private _separation?: number;
-  private _alignment?: number;
-  private _cohesion?: number;
+  private _quantity: number = 0;
+  private _birdSize: number = 0;
+  private _wingSpan: number = 0;
+  private _speedLimit: number = 0;
+  private _separation: number = 0;
+  private _alignment: number = 0;
+  private _cohesion: number = 0;
   private _color?: string;
-  private _spacing?: number;
-  private _points?: number;
-  private _maxDistance?: number;
-  private _chaos?: number;
+  private _spacing: number = 0;
+  private _points: number = 0;
+  private _maxDistance: number = 0;
+  private _chaos: number = 0;
 
   /**
    * Returns the EClass of this object
@@ -823,35 +823,35 @@ export class VantaSettingsImpl extends BasicEObject implements VantaSettings {
       case VantaSettingsImpl.SUNLIGHT_COLOR:
         return this._sunlightColor !== undefined;
       case VantaSettingsImpl.SPEED:
-        return this._speed !== undefined;
+        return this._speed !== 0;
       case VantaSettingsImpl.COLOR1:
         return this._color1 !== undefined;
       case VantaSettingsImpl.COLOR2:
         return this._color2 !== undefined;
       case VantaSettingsImpl.QUANTITY:
-        return this._quantity !== undefined;
+        return this._quantity !== 0;
       case VantaSettingsImpl.BIRD_SIZE:
-        return this._birdSize !== undefined;
+        return this._birdSize !== 0;
       case VantaSettingsImpl.WING_SPAN:
-        return this._wingSpan !== undefined;
+        return this._wingSpan !== 0;
       case VantaSettingsImpl.SPEED_LIMIT:
-        return this._speedLimit !== undefined;
+        return this._speedLimit !== 0;
       case VantaSettingsImpl.SEPARATION:
-        return this._separation !== undefined;
+        return this._separation !== 0;
       case VantaSettingsImpl.ALIGNMENT:
-        return this._alignment !== undefined;
+        return this._alignment !== 0;
       case VantaSettingsImpl.COHESION:
-        return this._cohesion !== undefined;
+        return this._cohesion !== 0;
       case VantaSettingsImpl.COLOR:
         return this._color !== undefined;
       case VantaSettingsImpl.SPACING:
-        return this._spacing !== undefined;
+        return this._spacing !== 0;
       case VantaSettingsImpl.POINTS:
-        return this._points !== undefined;
+        return this._points !== 0;
       case VantaSettingsImpl.MAX_DISTANCE:
-        return this._maxDistance !== undefined;
+        return this._maxDistance !== 0;
       case VantaSettingsImpl.CHAOS:
-        return this._chaos !== undefined;
+        return this._chaos !== 0;
       default:
         return super.eIsSet(feature);
     }
@@ -888,7 +888,7 @@ export class VantaSettingsImpl extends BasicEObject implements VantaSettings {
         this._sunlightColor = undefined;
         return;
       case VantaSettingsImpl.SPEED:
-        this._speed = undefined;
+        this._speed = 0;
         return;
       case VantaSettingsImpl.COLOR1:
         this._color1 = undefined;
@@ -897,40 +897,40 @@ export class VantaSettingsImpl extends BasicEObject implements VantaSettings {
         this._color2 = undefined;
         return;
       case VantaSettingsImpl.QUANTITY:
-        this._quantity = undefined;
+        this._quantity = 0;
         return;
       case VantaSettingsImpl.BIRD_SIZE:
-        this._birdSize = undefined;
+        this._birdSize = 0;
         return;
       case VantaSettingsImpl.WING_SPAN:
-        this._wingSpan = undefined;
+        this._wingSpan = 0;
         return;
       case VantaSettingsImpl.SPEED_LIMIT:
-        this._speedLimit = undefined;
+        this._speedLimit = 0;
         return;
       case VantaSettingsImpl.SEPARATION:
-        this._separation = undefined;
+        this._separation = 0;
         return;
       case VantaSettingsImpl.ALIGNMENT:
-        this._alignment = undefined;
+        this._alignment = 0;
         return;
       case VantaSettingsImpl.COHESION:
-        this._cohesion = undefined;
+        this._cohesion = 0;
         return;
       case VantaSettingsImpl.COLOR:
         this._color = undefined;
         return;
       case VantaSettingsImpl.SPACING:
-        this._spacing = undefined;
+        this._spacing = 0;
         return;
       case VantaSettingsImpl.POINTS:
-        this._points = undefined;
+        this._points = 0;
         return;
       case VantaSettingsImpl.MAX_DISTANCE:
-        this._maxDistance = undefined;
+        this._maxDistance = 0;
         return;
       case VantaSettingsImpl.CHAOS:
-        this._chaos = undefined;
+        this._chaos = 0;
         return;
       default:
         super.eUnset(feature);

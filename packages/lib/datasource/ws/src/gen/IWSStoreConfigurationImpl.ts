@@ -36,7 +36,7 @@ export class IWSStoreConfigurationImpl extends IBaseConnectionConfigurationImpl 
   // Private fields
   private _connection?: string;
   private _topic?: string;
-  private _accumulate?: boolean;
+  private _accumulate: boolean = false;
 
   /**
    * Returns the EClass of this object
@@ -171,7 +171,7 @@ export class IWSStoreConfigurationImpl extends IBaseConnectionConfigurationImpl 
       case IWSStoreConfigurationImpl.TOPIC:
         return this._topic !== undefined;
       case IWSStoreConfigurationImpl.ACCUMULATE:
-        return this._accumulate !== undefined;
+        return this._accumulate !== false;
       default:
         return super.eIsSet(feature);
     }
@@ -190,7 +190,7 @@ export class IWSStoreConfigurationImpl extends IBaseConnectionConfigurationImpl 
         this._topic = undefined;
         return;
       case IWSStoreConfigurationImpl.ACCUMULATE:
-        this._accumulate = undefined;
+        this._accumulate = false;
         return;
       default:
         super.eUnset(feature);

@@ -19,7 +19,7 @@
  */
 
 import { BasicEPackage, BasicEClass, BasicEAttribute, BasicEReference, EPackageRegistry, getEcorePackage } from '@emfts/core';
-import type { EClass, EAttribute, EReference } from '@emfts/core';
+import type { EClass, EAttribute, EReference, EDataType } from '@emfts/core';
 import { ImagesettingsFactory } from './ImagesettingsFactory.js';
 
 /**
@@ -224,6 +224,10 @@ export class ImagesettingsPackage extends BasicEPackage {
     (ImagesettingsPackage.Literals.GALLERY_SETTINGS__DIASHOW_INTERVAL as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
     (ImagesettingsPackage.Literals.IMAGE_CLICK_PAYLOAD__IMAGE_URL as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
     (ImagesettingsPackage.Literals.IMAGE_RIGHT_CLICK_PAYLOAD__IMAGE_URL as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+
+    // ============================================
+    // Set EOpposites (must be done after all features are created) (#59)
+    // ============================================
 
     // ============================================
     // Register XML name mappings from ExtendedMetaData annotations

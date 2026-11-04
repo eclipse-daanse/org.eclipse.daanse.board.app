@@ -39,7 +39,7 @@ export class WidgetImpl extends BasicEObject implements Widget {
   static readonly SELECTION: number = 5;
 
   // Private fields
-  private _uid: string = "";
+  private _uid?: string;
   private _type?: string;
   private _datasource?: Datasource;
   private _config?: unknown;
@@ -180,6 +180,16 @@ export class WidgetImpl extends BasicEObject implements Widget {
 
   set selection(value: DataSelection) {
     const oldValue = this._selection;
+    if (oldValue !== value) {
+      // containment: the owner becomes the container of the value (#61)
+      if (oldValue) {
+        (oldValue as any).eSetContainer?.(null, null);
+      }
+      if (value) {
+        this.removeFromPreviousContainer(value);
+        (value as any).eSetContainer?.(this, this.eClass().getEStructuralFeature('selection'));
+      }
+    }
     this._selection = value;
     if (this.eDeliver()) {
       this.eNotify({
@@ -195,6 +205,30 @@ export class WidgetImpl extends BasicEObject implements Widget {
         getFeatureID: () => WidgetImpl.SELECTION,
         merge: () => false
       });
+    }
+  }
+
+  /**
+   * Remove a value from its previous container before it is contained here,
+   * like Java EMF's eInverseRemove on the old container (#61)
+   */
+  private removeFromPreviousContainer(value: unknown): void {
+    const v = value as any;
+    const oldContainer = v?.eContainer?.();
+    if (!oldContainer || oldContainer === this) {
+      return;
+    }
+    const oldFeature = v.eContainmentFeature?.();
+    if (!oldFeature) {
+      return;
+    }
+    if (oldFeature.isMany()) {
+      const list = oldContainer.eGet(oldFeature);
+      if (list && typeof list.remove === 'function') {
+        list.remove(v);
+      }
+    } else {
+      oldContainer.eUnset(oldFeature);
     }
   }
 
@@ -265,7 +299,7 @@ export class WidgetImpl extends BasicEObject implements Widget {
     const featureID = this.eClass().getFeatureID(feature);
     switch (featureID) {
       case WidgetImpl.UID:
-        return this._uid !== "";
+        return this._uid !== undefined;
       case WidgetImpl.TYPE:
         return this._type !== undefined;
       case WidgetImpl.DATASOURCE:
@@ -288,7 +322,7 @@ export class WidgetImpl extends BasicEObject implements Widget {
     const featureID = this.eClass().getFeatureID(feature);
     switch (featureID) {
       case WidgetImpl.UID:
-        this._uid = "";
+        this._uid = undefined;
         return;
       case WidgetImpl.TYPE:
         this._type = undefined;
@@ -303,6 +337,7 @@ export class WidgetImpl extends BasicEObject implements Widget {
         this._wrapperConfig = undefined;
         return;
       case WidgetImpl.SELECTION:
+        if (this._selection) (this._selection as any).eSetContainer?.(null, null);
         this._selection = undefined;
         return;
       default:

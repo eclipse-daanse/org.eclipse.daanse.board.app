@@ -18,9 +18,10 @@
  * @generated
  */
 
-import { BasicEPackage, BasicEClass, BasicEAttribute, BasicEReference, EPackageRegistry, getEcorePackage } from '@emfts/core';
-import type { EClass, EAttribute, EReference } from '@emfts/core';
+import { BasicEPackage, BasicEClass, BasicEAttribute, BasicEReference, EPackageRegistry, getEcorePackage, BasicEEnum, BasicEEnumLiteral, BasicEAnnotation } from '@emfts/core';
+import type { EClass, EAttribute, EReference, EEnum, EDataType } from '@emfts/core';
 import { GaugewidgetsFactory } from './GaugewidgetsFactory.js';
+import { GaugeShape } from './GaugeShape.js';
 
 /**
  * Resolve a dependency package from the registry, failing with an actionable
@@ -77,6 +78,7 @@ export class GaugewidgetsPackage extends BasicEPackage {
     GAUGE_SETTINGS__UNIT: null as unknown as EAttribute | EReference,
     GAUGE_SETTINGS__LABEL: null as unknown as EAttribute | EReference,
     GAUGE_SETTINGS__TEXT_COLOR: null as unknown as EAttribute | EReference,
+    GAUGE_SHAPE: null as unknown as EEnum,
   };
 
   private constructor() {
@@ -129,6 +131,7 @@ export class GaugewidgetsPackage extends BasicEPackage {
     gaugeThreshold_label.setName('label');
     gaugeThreshold_label.setLowerBound(0);
     gaugeThreshold_label.setUpperBound(1);
+    gaugeThreshold_label.setDefaultValueLiteral("");
     gaugeThresholdClass.getEStructuralFeatures().push(gaugeThreshold_label);
     GaugewidgetsPackage.Literals.GAUGE_THRESHOLD__LABEL = gaugeThreshold_label;
 
@@ -173,6 +176,7 @@ export class GaugewidgetsPackage extends BasicEPackage {
     gaugeSettings_shape.setName('shape');
     gaugeSettings_shape.setLowerBound(0);
     gaugeSettings_shape.setUpperBound(1);
+    gaugeSettings_shape.setDefaultValueLiteral("threeQuarter");
     gaugeSettingsClass.getEStructuralFeatures().push(gaugeSettings_shape);
     GaugewidgetsPackage.Literals.GAUGE_SETTINGS__SHAPE = gaugeSettings_shape;
 
@@ -217,6 +221,7 @@ export class GaugewidgetsPackage extends BasicEPackage {
     gaugeSettings_showBands.setName('showBands');
     gaugeSettings_showBands.setLowerBound(0);
     gaugeSettings_showBands.setUpperBound(1);
+    gaugeSettings_showBands.setDefaultValueLiteral("false");
     gaugeSettingsClass.getEStructuralFeatures().push(gaugeSettings_showBands);
     GaugewidgetsPackage.Literals.GAUGE_SETTINGS__SHOW_BANDS = gaugeSettings_showBands;
 
@@ -225,6 +230,7 @@ export class GaugewidgetsPackage extends BasicEPackage {
     gaugeSettings_showValue.setName('showValue');
     gaugeSettings_showValue.setLowerBound(0);
     gaugeSettings_showValue.setUpperBound(1);
+    gaugeSettings_showValue.setDefaultValueLiteral("true");
     gaugeSettingsClass.getEStructuralFeatures().push(gaugeSettings_showValue);
     GaugewidgetsPackage.Literals.GAUGE_SETTINGS__SHOW_VALUE = gaugeSettings_showValue;
 
@@ -233,6 +239,7 @@ export class GaugewidgetsPackage extends BasicEPackage {
     gaugeSettings_decimals.setName('decimals');
     gaugeSettings_decimals.setLowerBound(0);
     gaugeSettings_decimals.setUpperBound(1);
+    gaugeSettings_decimals.setDefaultValueLiteral("0");
     gaugeSettingsClass.getEStructuralFeatures().push(gaugeSettings_decimals);
     GaugewidgetsPackage.Literals.GAUGE_SETTINGS__DECIMALS = gaugeSettings_decimals;
 
@@ -263,6 +270,48 @@ export class GaugewidgetsPackage extends BasicEPackage {
     gaugeSettingsClass.getEStructuralFeatures().push(gaugeSettings_textColor);
     GaugewidgetsPackage.Literals.GAUGE_SETTINGS__TEXT_COLOR = gaugeSettings_textColor;
 
+    // Create GaugeShape enum
+    const gaugeShapeEnumType = new BasicEEnum();
+    gaugeShapeEnumType.setName('GaugeShape');
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("FULL");
+      literal.setValue(0);
+      literal.setLiteral("full");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(GaugeShape.FULL);
+      gaugeShapeEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("THREE_QUARTER");
+      literal.setValue(1);
+      literal.setLiteral("threeQuarter");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(GaugeShape.THREE_QUARTER);
+      gaugeShapeEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("HALF");
+      literal.setValue(2);
+      literal.setLiteral("half");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(GaugeShape.HALF);
+      gaugeShapeEnumType.addLiteral(literal);
+    }
+    {
+      const annotation = new BasicEAnnotation();
+      annotation.setSource("http://www.eclipse.org/emf/2002/GenModel");
+      annotation.getDetails().putByKey("documentation", "How much of a circle the gauge draws, and where it starts.");
+      gaugeShapeEnumType.getEAnnotations().push(annotation);
+    }
+    GaugewidgetsPackage.Literals.GAUGE_SHAPE = gaugeShapeEnumType;
+    this.getEClassifiers().push(gaugeShapeEnumType);
+
 
     // ============================================
     // Set ESuperTypes (must be done after all classes are created)
@@ -279,6 +328,7 @@ export class GaugewidgetsPackage extends BasicEPackage {
     (GaugewidgetsPackage.Literals.GAUGE_SETTINGS__VALUE as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
     (GaugewidgetsPackage.Literals.GAUGE_SETTINGS__MIN as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
     (GaugewidgetsPackage.Literals.GAUGE_SETTINGS__MAX as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
+    (GaugewidgetsPackage.Literals.GAUGE_SETTINGS__SHAPE as BasicEAttribute).setEType(GaugewidgetsPackage.Literals.GAUGE_SHAPE);
     (GaugewidgetsPackage.Literals.GAUGE_SETTINGS__COLOR as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
     (GaugewidgetsPackage.Literals.GAUGE_SETTINGS__TRACK_COLOR as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
     (GaugewidgetsPackage.Literals.GAUGE_SETTINGS__THICKNESS as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
@@ -289,6 +339,10 @@ export class GaugewidgetsPackage extends BasicEPackage {
     (GaugewidgetsPackage.Literals.GAUGE_SETTINGS__UNIT as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
     (GaugewidgetsPackage.Literals.GAUGE_SETTINGS__LABEL as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
     (GaugewidgetsPackage.Literals.GAUGE_SETTINGS__TEXT_COLOR as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
+
+    // ============================================
+    // Set EOpposites (must be done after all features are created) (#59)
+    // ============================================
 
     // ============================================
     // Register XML name mappings from ExtendedMetaData annotations

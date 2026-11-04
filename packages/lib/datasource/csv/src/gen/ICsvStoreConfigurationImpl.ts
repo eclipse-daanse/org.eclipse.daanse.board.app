@@ -38,12 +38,12 @@ export class ICsvStoreConfigurationImpl extends IBaseConnectionConfigurationImpl
   static readonly SKIP_ROWS_FROM_END: number = 9;
 
   // Private fields
-  private _resourceUrl: string = "";
+  private _resourceUrl?: string;
   private _connection?: string;
-  private _pollingInterval?: number;
+  private _pollingInterval: number = 0;
   private _separators!: EList<string>;
-  private _skipRowsFromStart?: number;
-  private _skipRowsFromEnd?: number;
+  private _skipRowsFromStart: number = 0;
+  private _skipRowsFromEnd: number = 0;
 
   /**
    * Returns the EClass of this object
@@ -248,17 +248,17 @@ export class ICsvStoreConfigurationImpl extends IBaseConnectionConfigurationImpl
     const featureID = this.eClass().getFeatureID(feature);
     switch (featureID) {
       case ICsvStoreConfigurationImpl.RESOURCE_URL:
-        return this._resourceUrl !== "";
+        return this._resourceUrl !== undefined;
       case ICsvStoreConfigurationImpl.CONNECTION:
         return this._connection !== undefined;
       case ICsvStoreConfigurationImpl.POLLING_INTERVAL:
-        return this._pollingInterval !== undefined;
+        return this._pollingInterval !== 0;
       case ICsvStoreConfigurationImpl.SEPARATORS:
         return this._separators !== undefined && !this._separators.isEmpty();
       case ICsvStoreConfigurationImpl.SKIP_ROWS_FROM_START:
-        return this._skipRowsFromStart !== undefined;
+        return this._skipRowsFromStart !== 0;
       case ICsvStoreConfigurationImpl.SKIP_ROWS_FROM_END:
-        return this._skipRowsFromEnd !== undefined;
+        return this._skipRowsFromEnd !== 0;
       default:
         return super.eIsSet(feature);
     }
@@ -271,22 +271,22 @@ export class ICsvStoreConfigurationImpl extends IBaseConnectionConfigurationImpl
     const featureID = this.eClass().getFeatureID(feature);
     switch (featureID) {
       case ICsvStoreConfigurationImpl.RESOURCE_URL:
-        this._resourceUrl = "";
+        this._resourceUrl = undefined;
         return;
       case ICsvStoreConfigurationImpl.CONNECTION:
         this._connection = undefined;
         return;
       case ICsvStoreConfigurationImpl.POLLING_INTERVAL:
-        this._pollingInterval = undefined;
+        this._pollingInterval = 0;
         return;
       case ICsvStoreConfigurationImpl.SEPARATORS:
         if (this._separators) this._separators.clear();
         return;
       case ICsvStoreConfigurationImpl.SKIP_ROWS_FROM_START:
-        this._skipRowsFromStart = undefined;
+        this._skipRowsFromStart = 0;
         return;
       case ICsvStoreConfigurationImpl.SKIP_ROWS_FROM_END:
-        this._skipRowsFromEnd = undefined;
+        this._skipRowsFromEnd = 0;
         return;
       default:
         super.eUnset(feature);

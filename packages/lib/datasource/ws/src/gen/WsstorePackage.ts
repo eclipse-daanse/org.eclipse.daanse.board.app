@@ -19,7 +19,7 @@
  */
 
 import { BasicEPackage, BasicEClass, BasicEAttribute, EPackageRegistry, getEcorePackage } from '@emfts/core';
-import type { EClass, EAttribute, EReference } from '@emfts/core';
+import type { EClass, EAttribute, EReference, EDataType } from '@emfts/core';
 import { WsstoreFactory } from './WsstoreFactory.js';
 
 /**
@@ -129,6 +129,10 @@ export class WsstorePackage extends BasicEPackage {
     (WsstorePackage.Literals.I_W_S_STORE_CONFIGURATION__CONNECTION as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
     (WsstorePackage.Literals.I_W_S_STORE_CONFIGURATION__TOPIC as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
     (WsstorePackage.Literals.I_W_S_STORE_CONFIGURATION__ACCUMULATE as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EBoolean')!);
+
+    // ============================================
+    // Set EOpposites (must be done after all features are created) (#59)
+    // ============================================
 
     // ============================================
     // Register XML name mappings from ExtendedMetaData annotations

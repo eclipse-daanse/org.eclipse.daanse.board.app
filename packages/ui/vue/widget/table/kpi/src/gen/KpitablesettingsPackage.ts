@@ -19,7 +19,7 @@
  */
 
 import { BasicEPackage, BasicEClass, BasicEAttribute, BasicEReference, EPackageRegistry, getEcorePackage } from '@emfts/core';
-import type { EClass, EAttribute, EReference } from '@emfts/core';
+import type { EClass, EAttribute, EReference, EDataType } from '@emfts/core';
 import { KpitablesettingsFactory } from './KpitablesettingsFactory.js';
 
 /**
@@ -107,6 +107,7 @@ export class KpitablesettingsPackage extends BasicEPackage {
     kpiTableSettings_trendVisualType.setName('trendVisualType');
     kpiTableSettings_trendVisualType.setLowerBound(0);
     kpiTableSettings_trendVisualType.setUpperBound(1);
+    kpiTableSettings_trendVisualType.setDefaultValueLiteral("Badge");
     kpiTableSettingsClass.getEStructuralFeatures().push(kpiTableSettings_trendVisualType);
     KpitablesettingsPackage.Literals.KPI_TABLE_SETTINGS__TREND_VISUAL_TYPE = kpiTableSettings_trendVisualType;
 
@@ -115,6 +116,7 @@ export class KpitablesettingsPackage extends BasicEPackage {
     kpiTableSettings_statusVisualType.setName('statusVisualType');
     kpiTableSettings_statusVisualType.setLowerBound(0);
     kpiTableSettings_statusVisualType.setUpperBound(1);
+    kpiTableSettings_statusVisualType.setDefaultValueLiteral("Badge");
     kpiTableSettingsClass.getEStructuralFeatures().push(kpiTableSettings_statusVisualType);
     KpitablesettingsPackage.Literals.KPI_TABLE_SETTINGS__STATUS_VISUAL_TYPE = kpiTableSettings_statusVisualType;
 
@@ -123,6 +125,7 @@ export class KpitablesettingsPackage extends BasicEPackage {
     kpiTableSettings_showFolders.setName('showFolders');
     kpiTableSettings_showFolders.setLowerBound(0);
     kpiTableSettings_showFolders.setUpperBound(1);
+    kpiTableSettings_showFolders.setDefaultValueLiteral("false");
     kpiTableSettingsClass.getEStructuralFeatures().push(kpiTableSettings_showFolders);
     KpitablesettingsPackage.Literals.KPI_TABLE_SETTINGS__SHOW_FOLDERS = kpiTableSettings_showFolders;
 
@@ -131,6 +134,7 @@ export class KpitablesettingsPackage extends BasicEPackage {
     kpiTableSettings_showParentChild.setName('showParentChild');
     kpiTableSettings_showParentChild.setLowerBound(0);
     kpiTableSettings_showParentChild.setUpperBound(1);
+    kpiTableSettings_showParentChild.setDefaultValueLiteral("false");
     kpiTableSettingsClass.getEStructuralFeatures().push(kpiTableSettings_showParentChild);
     KpitablesettingsPackage.Literals.KPI_TABLE_SETTINGS__SHOW_PARENT_CHILD = kpiTableSettings_showParentChild;
 
@@ -149,6 +153,10 @@ export class KpitablesettingsPackage extends BasicEPackage {
     (KpitablesettingsPackage.Literals.KPI_TABLE_SETTINGS__STATUS_VISUAL_TYPE as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
     (KpitablesettingsPackage.Literals.KPI_TABLE_SETTINGS__SHOW_FOLDERS as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EBoolean')!);
     (KpitablesettingsPackage.Literals.KPI_TABLE_SETTINGS__SHOW_PARENT_CHILD as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EBoolean')!);
+
+    // ============================================
+    // Set EOpposites (must be done after all features are created) (#59)
+    // ============================================
 
     // ============================================
     // Register XML name mappings from ExtendedMetaData annotations

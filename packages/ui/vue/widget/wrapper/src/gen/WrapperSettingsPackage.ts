@@ -19,7 +19,7 @@
  */
 
 import { BasicEPackage, BasicEClass, BasicEReference, EPackageRegistry } from '@emfts/core';
-import type { EClass, EAttribute, EReference } from '@emfts/core';
+import type { EClass, EAttribute, EReference, EDataType } from '@emfts/core';
 import { WrapperSettingsFactory } from './WrapperSettingsFactory.js';
 
 /**
@@ -285,6 +285,10 @@ export class WrapperSettingsPackage extends BasicEPackage {
     (WrapperSettingsPackage.Literals.WRAPPER_SETTINGS__SHADOW_Y as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
     (WrapperSettingsPackage.Literals.WRAPPER_SETTINGS__SHADOW_TRANSPARENCE as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
     (WrapperSettingsPackage.Literals.WRAPPER_SETTINGS__TRANSPARENCY as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
+
+    // ============================================
+    // Set EOpposites (must be done after all features are created) (#59)
+    // ============================================
 
     // ============================================
     // Register XML name mappings from ExtendedMetaData annotations

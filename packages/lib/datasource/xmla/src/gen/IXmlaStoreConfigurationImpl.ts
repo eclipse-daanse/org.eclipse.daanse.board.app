@@ -42,12 +42,12 @@ export class IXmlaStoreConfigurationImpl extends IBaseConnectionConfigurationImp
   // Private fields
   private _connection?: string;
   private _requestParams?: XMLARequestParams;
-  private _useVisualEditor?: boolean;
+  private _useVisualEditor: boolean = false;
   private _mdx?: string;
   private _drilldownState?: unknown;
-  private _pollingInterval?: number;
-  private _cube: string = "";
-  private _useMdx?: boolean;
+  private _pollingInterval: number = 0;
+  private _cube?: string;
+  private _useMdx: boolean = false;
 
   /**
    * Returns the EClass of this object
@@ -87,6 +87,16 @@ export class IXmlaStoreConfigurationImpl extends IBaseConnectionConfigurationImp
 
   set requestParams(value: XMLARequestParams) {
     const oldValue = this._requestParams;
+    if (oldValue !== value) {
+      // containment: the owner becomes the container of the value (#61)
+      if (oldValue) {
+        (oldValue as any).eSetContainer?.(null, null);
+      }
+      if (value) {
+        this.removeFromPreviousContainer(value);
+        (value as any).eSetContainer?.(this, this.eClass().getEStructuralFeature('requestParams'));
+      }
+    }
     this._requestParams = value;
     if (this.eDeliver()) {
       this.eNotify({
@@ -249,6 +259,30 @@ export class IXmlaStoreConfigurationImpl extends IBaseConnectionConfigurationImp
     }
   }
 
+  /**
+   * Remove a value from its previous container before it is contained here,
+   * like Java EMF's eInverseRemove on the old container (#61)
+   */
+  private removeFromPreviousContainer(value: unknown): void {
+    const v = value as any;
+    const oldContainer = v?.eContainer?.();
+    if (!oldContainer || oldContainer === this) {
+      return;
+    }
+    const oldFeature = v.eContainmentFeature?.();
+    if (!oldFeature) {
+      return;
+    }
+    if (oldFeature.isMany()) {
+      const list = oldContainer.eGet(oldFeature);
+      if (list && typeof list.remove === 'function') {
+        list.remove(v);
+      }
+    } else {
+      oldContainer.eUnset(oldFeature);
+    }
+  }
+
   // Reflective API
 
   /**
@@ -332,17 +366,17 @@ export class IXmlaStoreConfigurationImpl extends IBaseConnectionConfigurationImp
       case IXmlaStoreConfigurationImpl.REQUEST_PARAMS:
         return this._requestParams !== undefined;
       case IXmlaStoreConfigurationImpl.USE_VISUAL_EDITOR:
-        return this._useVisualEditor !== undefined;
+        return this._useVisualEditor !== false;
       case IXmlaStoreConfigurationImpl.MDX:
         return this._mdx !== undefined;
       case IXmlaStoreConfigurationImpl.DRILLDOWN_STATE:
         return this._drilldownState !== undefined;
       case IXmlaStoreConfigurationImpl.POLLING_INTERVAL:
-        return this._pollingInterval !== undefined;
+        return this._pollingInterval !== 0;
       case IXmlaStoreConfigurationImpl.CUBE:
-        return this._cube !== "";
+        return this._cube !== undefined;
       case IXmlaStoreConfigurationImpl.USE_MDX:
-        return this._useMdx !== undefined;
+        return this._useMdx !== false;
       default:
         return super.eIsSet(feature);
     }
@@ -358,10 +392,11 @@ export class IXmlaStoreConfigurationImpl extends IBaseConnectionConfigurationImp
         this._connection = undefined;
         return;
       case IXmlaStoreConfigurationImpl.REQUEST_PARAMS:
+        if (this._requestParams) (this._requestParams as any).eSetContainer?.(null, null);
         this._requestParams = undefined;
         return;
       case IXmlaStoreConfigurationImpl.USE_VISUAL_EDITOR:
-        this._useVisualEditor = undefined;
+        this._useVisualEditor = false;
         return;
       case IXmlaStoreConfigurationImpl.MDX:
         this._mdx = undefined;
@@ -370,13 +405,13 @@ export class IXmlaStoreConfigurationImpl extends IBaseConnectionConfigurationImp
         this._drilldownState = undefined;
         return;
       case IXmlaStoreConfigurationImpl.POLLING_INTERVAL:
-        this._pollingInterval = undefined;
+        this._pollingInterval = 0;
         return;
       case IXmlaStoreConfigurationImpl.CUBE:
-        this._cube = "";
+        this._cube = undefined;
         return;
       case IXmlaStoreConfigurationImpl.USE_MDX:
-        this._useMdx = undefined;
+        this._useMdx = false;
         return;
       default:
         super.eUnset(feature);

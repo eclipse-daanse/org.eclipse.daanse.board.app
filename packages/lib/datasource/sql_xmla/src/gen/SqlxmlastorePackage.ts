@@ -19,7 +19,7 @@
  */
 
 import { BasicEPackage, BasicEClass, BasicEAttribute, EPackageRegistry, getEcorePackage } from '@emfts/core';
-import type { EClass, EAttribute, EReference } from '@emfts/core';
+import type { EClass, EAttribute, EReference, EDataType } from '@emfts/core';
 import { SqlxmlastoreFactory } from './SqlxmlastoreFactory.js';
 
 /**
@@ -129,6 +129,10 @@ export class SqlxmlastorePackage extends BasicEPackage {
     (SqlxmlastorePackage.Literals.I_SQL_XMLA_STORE_CONFIGURATION__CONNECTION as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
     (SqlxmlastorePackage.Literals.I_SQL_XMLA_STORE_CONFIGURATION__SQL as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
     (SqlxmlastorePackage.Literals.I_SQL_XMLA_STORE_CONFIGURATION__POLLING_INTERVAL as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EInt')!);
+
+    // ============================================
+    // Set EOpposites (must be done after all features are created) (#59)
+    // ============================================
 
     // ============================================
     // Register XML name mappings from ExtendedMetaData annotations

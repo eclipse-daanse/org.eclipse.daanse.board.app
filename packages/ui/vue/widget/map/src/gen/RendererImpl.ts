@@ -46,8 +46,8 @@ export class RendererImpl extends BasicEObject implements Renderer {
   private _thing!: EList<Condition>;
   private _renderer?: PointAndAreaSettings;
   private _ds_renderer!: EList<DSRenderer>;
-  private _ObservationrefreshTime?: number;
-  private _lastUpdate?: number;
+  private _ObservationrefreshTime: number = 0;
+  private _lastUpdate: number = 0;
   private _id?: string;
 
   /**
@@ -95,6 +95,16 @@ export class RendererImpl extends BasicEObject implements Renderer {
 
   set renderer(value: PointAndAreaSettings) {
     const oldValue = this._renderer;
+    if (oldValue !== value) {
+      // containment: the owner becomes the container of the value (#61)
+      if (oldValue) {
+        (oldValue as any).eSetContainer?.(null, null);
+      }
+      if (value) {
+        this.removeFromPreviousContainer(value);
+        (value as any).eSetContainer?.(this, this.eClass().getEStructuralFeature('renderer'));
+      }
+    }
     this._renderer = value;
     if (this.eDeliver()) {
       this.eNotify({
@@ -192,6 +202,30 @@ export class RendererImpl extends BasicEObject implements Renderer {
     }
   }
 
+  /**
+   * Remove a value from its previous container before it is contained here,
+   * like Java EMF's eInverseRemove on the old container (#61)
+   */
+  private removeFromPreviousContainer(value: unknown): void {
+    const v = value as any;
+    const oldContainer = v?.eContainer?.();
+    if (!oldContainer || oldContainer === this) {
+      return;
+    }
+    const oldFeature = v.eContainmentFeature?.();
+    if (!oldFeature) {
+      return;
+    }
+    if (oldFeature.isMany()) {
+      const list = oldContainer.eGet(oldFeature);
+      if (list && typeof list.remove === 'function') {
+        list.remove(v);
+      }
+    } else {
+      oldContainer.eUnset(oldFeature);
+    }
+  }
+
   // Reflective API
 
   /**
@@ -275,9 +309,9 @@ export class RendererImpl extends BasicEObject implements Renderer {
       case RendererImpl.DS_RENDERER:
         return this._ds_renderer !== undefined && !this._ds_renderer.isEmpty();
       case RendererImpl.OBSERVATIONREFRESH_TIME:
-        return this._ObservationrefreshTime !== undefined;
+        return this._ObservationrefreshTime !== 0;
       case RendererImpl.LAST_UPDATE:
-        return this._lastUpdate !== undefined;
+        return this._lastUpdate !== 0;
       case RendererImpl.ID:
         return this._id !== undefined;
       default:
@@ -298,16 +332,17 @@ export class RendererImpl extends BasicEObject implements Renderer {
         if (this._thing) this._thing.clear();
         return;
       case RendererImpl.RENDERER:
+        if (this._renderer) (this._renderer as any).eSetContainer?.(null, null);
         this._renderer = undefined;
         return;
       case RendererImpl.DS_RENDERER:
         if (this._ds_renderer) this._ds_renderer.clear();
         return;
       case RendererImpl.OBSERVATIONREFRESH_TIME:
-        this._ObservationrefreshTime = undefined;
+        this._ObservationrefreshTime = 0;
         return;
       case RendererImpl.LAST_UPDATE:
-        this._lastUpdate = undefined;
+        this._lastUpdate = 0;
         return;
       case RendererImpl.ID:
         this._id = undefined;
