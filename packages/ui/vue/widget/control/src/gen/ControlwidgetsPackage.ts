@@ -18,9 +18,10 @@
  * @generated
  */
 
-import { BasicEPackage, BasicEClass, BasicEAttribute, BasicEReference, EPackageRegistry, getEcorePackage } from '@emfts/core';
-import type { EClass, EAttribute, EReference, EDataType } from '@emfts/core';
+import { BasicEPackage, BasicEClass, BasicEAttribute, BasicEReference, EPackageRegistry, getEcorePackage, BasicEEnum, BasicEEnumLiteral, BasicEAnnotation } from '@emfts/core';
+import type { EClass, EAttribute, EReference, EEnum, EDataType } from '@emfts/core';
 import { ControlwidgetsFactory } from './ControlwidgetsFactory.js';
+import { SliderOrientation } from './SliderOrientation.js';
 
 /**
  * Resolve a dependency package from the registry, failing with an actionable
@@ -80,9 +81,26 @@ export class ControlwidgetsPackage extends BasicEPackage {
     MULTI_STATE_SETTINGS: null as unknown as EClass,
     MULTI_STATE_SETTINGS__TARGET: null as unknown as EAttribute | EReference,
     MULTI_STATE_SETTINGS__STATES: null as unknown as EAttribute | EReference,
+    SLIDER_MARK: null as unknown as EClass,
+    SLIDER_MARK__AT: null as unknown as EAttribute | EReference,
+    SLIDER_MARK__LABEL: null as unknown as EAttribute | EReference,
+    SLIDER_SETTINGS: null as unknown as EClass,
+    SLIDER_SETTINGS__TARGET: null as unknown as EAttribute | EReference,
+    SLIDER_SETTINGS__UPPER_TARGET: null as unknown as EAttribute | EReference,
+    SLIDER_SETTINGS__MIN: null as unknown as EAttribute | EReference,
+    SLIDER_SETTINGS__MAX: null as unknown as EAttribute | EReference,
+    SLIDER_SETTINGS__STEP: null as unknown as EAttribute | EReference,
+    SLIDER_SETTINGS__UNIT: null as unknown as EAttribute | EReference,
+    SLIDER_SETTINGS__MARKS: null as unknown as EAttribute | EReference,
+    SLIDER_SETTINGS__MARK_EVERY: null as unknown as EAttribute | EReference,
+    SLIDER_SETTINGS__SNAP: null as unknown as EAttribute | EReference,
+    SLIDER_SETTINGS__RANGE: null as unknown as EAttribute | EReference,
+    SLIDER_SETTINGS__ORIENTATION: null as unknown as EAttribute | EReference,
+    SLIDER_SETTINGS__SHOW_VALUE: null as unknown as EAttribute | EReference,
     CONTROL_PAYLOAD: null as unknown as EClass,
     CONTROL_PAYLOAD__VALUE: null as unknown as EAttribute | EReference,
     CONTROL_PAYLOAD__PREVIOUS_VALUE: null as unknown as EAttribute | EReference,
+    SLIDER_ORIENTATION: null as unknown as EEnum,
   };
 
   private constructor() {
@@ -301,6 +319,150 @@ export class ControlwidgetsPackage extends BasicEPackage {
     multiStateSettingsClass.getEStructuralFeatures().push(multiStateSettings_states);
     ControlwidgetsPackage.Literals.MULTI_STATE_SETTINGS__STATES = multiStateSettings_states;
 
+    // Create SliderMark class
+    const sliderMarkClass = new BasicEClass();
+    sliderMarkClass.setName('SliderMark');
+    sliderMarkClass.setAbstract(false);
+    sliderMarkClass.setInterface(false);
+    this.getEClassifiers().push(sliderMarkClass);
+    sliderMarkClass.setEPackage(this);
+    ControlwidgetsPackage.Literals.SLIDER_MARK = sliderMarkClass;
+
+    // Create at feature
+    const sliderMark_at = new BasicEReference();
+    sliderMark_at.setContainment(false);
+    sliderMark_at.setName('at');
+    sliderMark_at.setLowerBound(0);
+    sliderMark_at.setUpperBound(1);
+    sliderMarkClass.getEStructuralFeatures().push(sliderMark_at);
+    ControlwidgetsPackage.Literals.SLIDER_MARK__AT = sliderMark_at;
+
+    // Create label feature
+    const sliderMark_label = new BasicEReference();
+    sliderMark_label.setContainment(false);
+    sliderMark_label.setName('label');
+    sliderMark_label.setLowerBound(0);
+    sliderMark_label.setUpperBound(1);
+    sliderMarkClass.getEStructuralFeatures().push(sliderMark_label);
+    ControlwidgetsPackage.Literals.SLIDER_MARK__LABEL = sliderMark_label;
+
+    // Create SliderSettings class
+    const sliderSettingsClass = new BasicEClass();
+    sliderSettingsClass.setName('SliderSettings');
+    sliderSettingsClass.setAbstract(false);
+    sliderSettingsClass.setInterface(false);
+    this.getEClassifiers().push(sliderSettingsClass);
+    sliderSettingsClass.setEPackage(this);
+    ControlwidgetsPackage.Literals.SLIDER_SETTINGS = sliderSettingsClass;
+
+    // Create target feature
+    const sliderSettings_target = new BasicEReference();
+    sliderSettings_target.setContainment(false);
+    sliderSettings_target.setName('target');
+    sliderSettings_target.setLowerBound(0);
+    sliderSettings_target.setUpperBound(1);
+    sliderSettingsClass.getEStructuralFeatures().push(sliderSettings_target);
+    ControlwidgetsPackage.Literals.SLIDER_SETTINGS__TARGET = sliderSettings_target;
+
+    // Create upperTarget feature
+    const sliderSettings_upperTarget = new BasicEReference();
+    sliderSettings_upperTarget.setContainment(false);
+    sliderSettings_upperTarget.setName('upperTarget');
+    sliderSettings_upperTarget.setLowerBound(0);
+    sliderSettings_upperTarget.setUpperBound(1);
+    sliderSettingsClass.getEStructuralFeatures().push(sliderSettings_upperTarget);
+    ControlwidgetsPackage.Literals.SLIDER_SETTINGS__UPPER_TARGET = sliderSettings_upperTarget;
+
+    // Create min feature
+    const sliderSettings_min = new BasicEReference();
+    sliderSettings_min.setContainment(false);
+    sliderSettings_min.setName('min');
+    sliderSettings_min.setLowerBound(0);
+    sliderSettings_min.setUpperBound(1);
+    sliderSettingsClass.getEStructuralFeatures().push(sliderSettings_min);
+    ControlwidgetsPackage.Literals.SLIDER_SETTINGS__MIN = sliderSettings_min;
+
+    // Create max feature
+    const sliderSettings_max = new BasicEReference();
+    sliderSettings_max.setContainment(false);
+    sliderSettings_max.setName('max');
+    sliderSettings_max.setLowerBound(0);
+    sliderSettings_max.setUpperBound(1);
+    sliderSettingsClass.getEStructuralFeatures().push(sliderSettings_max);
+    ControlwidgetsPackage.Literals.SLIDER_SETTINGS__MAX = sliderSettings_max;
+
+    // Create step feature
+    const sliderSettings_step = new BasicEReference();
+    sliderSettings_step.setContainment(false);
+    sliderSettings_step.setName('step');
+    sliderSettings_step.setLowerBound(0);
+    sliderSettings_step.setUpperBound(1);
+    sliderSettingsClass.getEStructuralFeatures().push(sliderSettings_step);
+    ControlwidgetsPackage.Literals.SLIDER_SETTINGS__STEP = sliderSettings_step;
+
+    // Create unit feature
+    const sliderSettings_unit = new BasicEReference();
+    sliderSettings_unit.setContainment(false);
+    sliderSettings_unit.setName('unit');
+    sliderSettings_unit.setLowerBound(0);
+    sliderSettings_unit.setUpperBound(1);
+    sliderSettingsClass.getEStructuralFeatures().push(sliderSettings_unit);
+    ControlwidgetsPackage.Literals.SLIDER_SETTINGS__UNIT = sliderSettings_unit;
+
+    // Create marks feature
+    const sliderSettings_marks = new BasicEReference();
+    sliderSettings_marks.setContainment(true);
+    sliderSettings_marks.setName('marks');
+    sliderSettings_marks.setLowerBound(0);
+    sliderSettings_marks.setUpperBound(-1);
+    sliderSettingsClass.getEStructuralFeatures().push(sliderSettings_marks);
+    ControlwidgetsPackage.Literals.SLIDER_SETTINGS__MARKS = sliderSettings_marks;
+
+    // Create markEvery feature
+    const sliderSettings_markEvery = new BasicEReference();
+    sliderSettings_markEvery.setContainment(false);
+    sliderSettings_markEvery.setName('markEvery');
+    sliderSettings_markEvery.setLowerBound(0);
+    sliderSettings_markEvery.setUpperBound(1);
+    sliderSettingsClass.getEStructuralFeatures().push(sliderSettings_markEvery);
+    ControlwidgetsPackage.Literals.SLIDER_SETTINGS__MARK_EVERY = sliderSettings_markEvery;
+
+    // Create snap feature
+    const sliderSettings_snap = new BasicEAttribute();
+    sliderSettings_snap.setName('snap');
+    sliderSettings_snap.setLowerBound(0);
+    sliderSettings_snap.setUpperBound(1);
+    sliderSettings_snap.setDefaultValueLiteral("true");
+    sliderSettingsClass.getEStructuralFeatures().push(sliderSettings_snap);
+    ControlwidgetsPackage.Literals.SLIDER_SETTINGS__SNAP = sliderSettings_snap;
+
+    // Create range feature
+    const sliderSettings_range = new BasicEAttribute();
+    sliderSettings_range.setName('range');
+    sliderSettings_range.setLowerBound(0);
+    sliderSettings_range.setUpperBound(1);
+    sliderSettings_range.setDefaultValueLiteral("false");
+    sliderSettingsClass.getEStructuralFeatures().push(sliderSettings_range);
+    ControlwidgetsPackage.Literals.SLIDER_SETTINGS__RANGE = sliderSettings_range;
+
+    // Create orientation feature
+    const sliderSettings_orientation = new BasicEAttribute();
+    sliderSettings_orientation.setName('orientation');
+    sliderSettings_orientation.setLowerBound(0);
+    sliderSettings_orientation.setUpperBound(1);
+    sliderSettings_orientation.setDefaultValueLiteral("horizontal");
+    sliderSettingsClass.getEStructuralFeatures().push(sliderSettings_orientation);
+    ControlwidgetsPackage.Literals.SLIDER_SETTINGS__ORIENTATION = sliderSettings_orientation;
+
+    // Create showValue feature
+    const sliderSettings_showValue = new BasicEAttribute();
+    sliderSettings_showValue.setName('showValue');
+    sliderSettings_showValue.setLowerBound(0);
+    sliderSettings_showValue.setUpperBound(1);
+    sliderSettings_showValue.setDefaultValueLiteral("true");
+    sliderSettingsClass.getEStructuralFeatures().push(sliderSettings_showValue);
+    ControlwidgetsPackage.Literals.SLIDER_SETTINGS__SHOW_VALUE = sliderSettings_showValue;
+
     // Create ControlPayload class
     const controlPayloadClass = new BasicEClass();
     controlPayloadClass.setName('ControlPayload');
@@ -326,6 +488,38 @@ export class ControlwidgetsPackage extends BasicEPackage {
     controlPayloadClass.getEStructuralFeatures().push(controlPayload_previousValue);
     ControlwidgetsPackage.Literals.CONTROL_PAYLOAD__PREVIOUS_VALUE = controlPayload_previousValue;
 
+    // Create SliderOrientation enum
+    const sliderOrientationEnumType = new BasicEEnum();
+    sliderOrientationEnumType.setName('SliderOrientation');
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("HORIZONTAL");
+      literal.setValue(0);
+      literal.setLiteral("horizontal");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(SliderOrientation.HORIZONTAL);
+      sliderOrientationEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("VERTICAL");
+      literal.setValue(1);
+      literal.setLiteral("vertical");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(SliderOrientation.VERTICAL);
+      sliderOrientationEnumType.addLiteral(literal);
+    }
+    {
+      const annotation = new BasicEAnnotation();
+      annotation.setSource("http://www.eclipse.org/emf/2002/GenModel");
+      annotation.getDetails().putByKey("documentation", "Which way a slider runs: left to right, or bottom to top.");
+      sliderOrientationEnumType.getEAnnotations().push(annotation);
+    }
+    ControlwidgetsPackage.Literals.SLIDER_ORIENTATION = sliderOrientationEnumType;
+    this.getEClassifiers().push(sliderOrientationEnumType);
+
 
     // ============================================
     // Set ESuperTypes (must be done after all classes are created)
@@ -333,6 +527,7 @@ export class ControlwidgetsPackage extends BasicEPackage {
     (ControlwidgetsPackage.Literals.BUTTON_SETTINGS as BasicEClass).getESuperTypes().push(ControlwidgetsPackage.Literals.CONTROL_SETTINGS);
     (ControlwidgetsPackage.Literals.TOGGLE_SETTINGS as BasicEClass).getESuperTypes().push(ControlwidgetsPackage.Literals.CONTROL_SETTINGS);
     (ControlwidgetsPackage.Literals.MULTI_STATE_SETTINGS as BasicEClass).getESuperTypes().push(ControlwidgetsPackage.Literals.CONTROL_SETTINGS);
+    (ControlwidgetsPackage.Literals.SLIDER_SETTINGS as BasicEClass).getESuperTypes().push(ControlwidgetsPackage.Literals.CONTROL_SETTINGS);
     (ControlwidgetsPackage.Literals.CONTROL_PAYLOAD as BasicEClass).getESuperTypes().push(requireEPackage('http://org.eclipse.daanse.board.app.lib.events').getEClassifier('Payload')! as EClass);
 
     // ============================================
@@ -357,6 +552,20 @@ export class ControlwidgetsPackage extends BasicEPackage {
     (ControlwidgetsPackage.Literals.CONTROL_OPTION__COLOR as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
     (ControlwidgetsPackage.Literals.MULTI_STATE_SETTINGS__TARGET as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
     (ControlwidgetsPackage.Literals.MULTI_STATE_SETTINGS__STATES as BasicEReference).setEType(ControlwidgetsPackage.Literals.CONTROL_OPTION);
+    (ControlwidgetsPackage.Literals.SLIDER_MARK__AT as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
+    (ControlwidgetsPackage.Literals.SLIDER_MARK__LABEL as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
+    (ControlwidgetsPackage.Literals.SLIDER_SETTINGS__TARGET as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
+    (ControlwidgetsPackage.Literals.SLIDER_SETTINGS__UPPER_TARGET as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
+    (ControlwidgetsPackage.Literals.SLIDER_SETTINGS__MIN as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
+    (ControlwidgetsPackage.Literals.SLIDER_SETTINGS__MAX as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
+    (ControlwidgetsPackage.Literals.SLIDER_SETTINGS__STEP as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
+    (ControlwidgetsPackage.Literals.SLIDER_SETTINGS__UNIT as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
+    (ControlwidgetsPackage.Literals.SLIDER_SETTINGS__MARKS as BasicEReference).setEType(ControlwidgetsPackage.Literals.SLIDER_MARK);
+    (ControlwidgetsPackage.Literals.SLIDER_SETTINGS__MARK_EVERY as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
+    (ControlwidgetsPackage.Literals.SLIDER_SETTINGS__SNAP as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EBoolean')!);
+    (ControlwidgetsPackage.Literals.SLIDER_SETTINGS__RANGE as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EBoolean')!);
+    (ControlwidgetsPackage.Literals.SLIDER_SETTINGS__ORIENTATION as BasicEAttribute).setEType(ControlwidgetsPackage.Literals.SLIDER_ORIENTATION);
+    (ControlwidgetsPackage.Literals.SLIDER_SETTINGS__SHOW_VALUE as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EBoolean')!);
     (ControlwidgetsPackage.Literals.CONTROL_PAYLOAD__VALUE as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EJavaObject')!);
     (ControlwidgetsPackage.Literals.CONTROL_PAYLOAD__PREVIOUS_VALUE as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EJavaObject')!);
 
