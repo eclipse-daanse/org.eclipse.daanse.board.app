@@ -437,7 +437,13 @@ function getNavigationDefaultSet(e: NavigationItem, levels: LevelRow[]): string 
   // LEVEL_TYPE 1 is MDLEVEL_TYPE_ALL: one member, nothing to navigate.
   const top = own.find(l => String(l.LEVEL_TYPE) !== '1') ?? own[0]
   if (!top) return ''
-  return `Hierarchize(AddCalculatedMembers(Descendants({${top.LEVEL_UNIQUE_NAME}.members}, 1, SELF_AND_BEFORE)))`
+  /*
+   * Every level from the top down to the last, so a page can be a year, a
+   * quarter or a month. A distance of 1 stopped one level below the top:
+   * Time offered its years and quarters, and no month.
+   */
+  const bottom = own[own.length - 1]
+  return `Hierarchize(AddCalculatedMembers(Descendants({${top.LEVEL_UNIQUE_NAME}.members}, ${bottom.LEVEL_UNIQUE_NAME}, SELF_AND_BEFORE)))`
 }
 
 function getRowsProperies(rows: any, properties: any[]) {
@@ -580,7 +586,12 @@ function getFromPart(measures: any[], cubename: string, filtersWhere: any, hasVa
     measuresPart = `${measures[0].originalItem.MEASURE_UNIQUE_NAME}`
   }
 
-  const cellProperties = `CELL PROPERTIES VALUE, FORMAT_STRING, LANGUAGE, BACK_COLOR, FORE_COLOR, FONT_FLAGS${updateable ? ', UPDATEABLE' : ''}`
+  /*
+   * FORMATTED_VALUE: the server applies the measure's FORMAT_STRING. Left
+   * out, a cell had only its raw value, and 225629.566 under "#,###.00"
+   * read as the locale's 225,629.566 instead of 225,629.57.
+   */
+  const cellProperties = `CELL PROPERTIES VALUE, FORMATTED_VALUE, FORMAT_STRING, LANGUAGE, BACK_COLOR, FORE_COLOR, FONT_FLAGS${updateable ? ', UPDATEABLE' : ''}`
   let result = ''
   if (filtersWhere) {
     if (measuresPart) {

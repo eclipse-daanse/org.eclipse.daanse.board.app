@@ -131,7 +131,13 @@ const commit = () => {
     /* Replaced wholesale: the EList is the model's, the array was a copy. */
     dataSource.tags.clear()
     for (const tag of datasourceProxy.value.tags ?? []) dataSource.tags.add(tag)
-    dataSource.config = datasourceProxy.value.config
+    /*
+     * A copy, as load() takes one: the preview goes on editing the draft's
+     * configuration in place, and handed over itself, the next change made
+     * there was in the stored source at once - Save or not, and with no
+     * "not saved" left to say so after the source was opened again.
+     */
+    dataSource.config = cloneDeep(datasourceProxy.value.config)
     /* The settings name the connection by id; the model holds the reference. */
     dataSource.connection = connections.value.find(
       (connection) => connection.uid === datasourceProxy.value.config?.connection,
@@ -180,6 +186,9 @@ const updateConfig = (config: any) => {
 
 const emit = defineEmits(['close'])
 const { t } = useTranslation('shell')
+
+/* The page asks before it opens something else over a draft that is not saved. */
+defineExpose({ unsaved, commit })
 </script>
 <template>
   <div class="editor">
