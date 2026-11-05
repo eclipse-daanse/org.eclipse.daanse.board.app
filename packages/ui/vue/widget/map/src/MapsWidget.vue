@@ -603,13 +603,15 @@ onMounted(async () => {
 // Watch data changes - load observations when data arrives
 // Use a targeted getter instead of deep: true to avoid expensive deep comparison of the entire data tree
 let previousLocationCount = 0
+const hasLocations = () => ((data.value as any)?.locations?.length || 0) > 0
+const loadWithData = async () => {
+  await buildSpatialIndex()
+  loadObservationsInView()
+  loadHistoricalLocationsForAllThings()
+}
 watch(() => (data.value as any)?.locations?.length || 0, async (newLocations) => {
   // First load: when we go from no locations to having locations
-  if (previousLocationCount === 0 && newLocations > 0) {
-    await buildSpatialIndex()
-    loadObservationsInView()
-    loadHistoricalLocationsForAllThings()
-  }
+  if (previousLocationCount === 0 && newLocations > 0) await loadWithData()
   previousLocationCount = newLocations
 })
 
@@ -851,6 +853,16 @@ const maploaded = () => {
   followZoom(leaflet, config.value?.zoom, (zoom) => {
     currentZoom.value = zoom
   })
+
+  /*
+   * The data may have been there before the map was: a source keeps what
+   * it loaded, so a widget mounted again - a mode switch, a page switch -
+   * finds its locations at once. The watch on them saw no change then,
+   * and the call from there found no map yet, so the colours waited for
+   * the first moveend (#1263). The map being ready is the other half of
+   * that condition, so it starts the load as well.
+   */
+  if (hasLocations()) void loadWithData()
 }
 
 /*

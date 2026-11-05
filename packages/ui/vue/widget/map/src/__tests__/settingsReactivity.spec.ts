@@ -14,7 +14,8 @@
 // @vitest-environment jsdom
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { flushPromises, mount } from '@vue/test-utils'
-import { defineComponent, h, nextTick, ref } from 'vue'
+import { defineComponent, h, nextTick, onMounted, ref } from 'vue'
+import { FILTER } from 'org.eclipse.daanse.board.app.lib.datasource.ogcsta'
 import { EVENT_ACTIONS_REGISTRY, EventsPackage } from 'org.eclipse.daanse.board.app.lib.api.events'
 import { identifier as DATASOURCES } from 'org.eclipse.daanse.board.app.lib.api.datasource'
 import { identifiers } from 'org.eclipse.daanse.board.app.lib.core'
@@ -34,6 +35,10 @@ function wmsClient() {
 }
 
 const createServiceWMS = vi.fn(async (_url: string) => wmsClient())
+/* What the source holds when the widget mounts, and what it is asked */
+let sourceData: unknown = null
+const callEvent = vi.fn()
+
 const createServiceWFS = vi.fn(async (_url: string) => {
   throw new Error('not a WFS')
 })
@@ -53,8 +58,8 @@ vi.mock('org.eclipse.daanse.board.app.ui.vue.composables', async (importOriginal
     ...actual,
     useTranslation: () => ({ t: (key: string) => key }),
     useDatasourceRepository: (_id: unknown, _type: string, data: { value: unknown }) => {
-      data.value = null
-      return { update: vi.fn(), callEvent: vi.fn(), getDatasourceInstance: () => null }
+      data.value = sourceData
+      return { update: vi.fn(), callEvent, getDatasourceInstance: () => null }
     },
   }
 })
@@ -67,8 +72,27 @@ vi.mock('@vue-leaflet/vue-leaflet', () => {
       inheritAttrs: false,
       setup: (_props, { slots }) => () => h('div', { class: name }, slots.default?.()),
     })
+  /* Leaflet's map as far as the widget asks it: a view over Jena */
+  const leafletObject = {
+    getBounds: () => ({ _southWest: { lat: 50.8, lng: 11.4 }, _northEast: { lat: 51.0, lng: 11.8 } }),
+    getZoom: () => 14,
+    getCenter: () => ({ lat: 50.93, lng: 11.6 }),
+    on: () => undefined,
+    getPane: () => undefined,
+    createPane: () => document.createElement('div'),
+    invalidateSize: () => undefined,
+  }
   return {
-    LMap: passThrough('l-map'),
+    /* Ready once mounted, as leaflet is - without ever moving */
+    LMap: defineComponent({
+      name: 'l-map',
+      emits: ['ready'],
+      setup: (_props, { slots, emit, expose }) => {
+        expose({ leafletObject })
+        onMounted(() => emit('ready', leafletObject))
+        return () => h('div', { class: 'l-map' }, slots.default?.())
+      },
+    }),
     LTileLayer: passThrough('l-tile-layer'),
     LGeoJson: passThrough('l-geo-json'),
     LMarker: passThrough('l-marker'),
@@ -130,6 +154,8 @@ async function settle() {
 }
 
 beforeEach(() => {
+  sourceData = null
+  callEvent.mockClear()
   createServiceWMS.mockClear()
   document.body.innerHTML = ''
 })
@@ -302,6 +328,53 @@ describe('the map widget', () => {
     const drawn = wrapper.findAll('i.wms')
     expect(drawn).toHaveLength(1)
     expect(drawn[0].attributes('data-layers')).toBe('stadtplan_sw')
+    wrapper.unmount()
+  })
+})
+
+/*
+ * A source keeps what it loaded, so a widget mounted again - a mode switch,
+ * a page switch - finds its locations already there. Nothing changed then
+ * for the watch on them to see, and the colours of things and areas
+ * waited for the first moveend (#1263).
+ */
+describe('the colours of an OGC STA layer', () => {
+  it('are asked for when the data was there before the map, without the map being moved', async () => {
+    const colour = {
+      iotId: 'ZW-01~referenceArea~color',
+      name: 'color',
+      thing: {
+        name: 'Reference Area ZW-01',
+        locations: [{ location: { type: 'Point', coordinates: [11.6, 50.93] } }],
+      },
+    }
+    sourceData = { locations: [colour.thing.locations[0]], things: [colour.thing], datastreams: [colour] }
+    const config = modelledSettings({
+      layers: [{ id: 'l1', type: 'OGCSTA', name: 'OGCSTA', title: 'OGCSTA', checked: true }],
+      OGCSstyles: [{
+        id: 'r1',
+        name: 'Reference Area',
+        thing: [{ prop: 'name', comperator: 'eq', value: '*' }],
+        renderer: { point_render_as: 'icon' },
+        ds_renderer: [{
+          id: 'd1',
+          name: 'Red',
+          datastream: [{ prop: 'name', comperator: 'eq', value: '*' }],
+          renderer: { point_render_as: 'icon', area: { fillColor: '#E53935' } },
+        }],
+      }],
+    })!
+
+    const wrapper = mount(MapsWidget as any, {
+      props: { datasourceId: 'xeonoi', id: 'w1', configv: config },
+      global: { provide },
+    })
+    await settle()
+
+    const asked = callEvent.mock.calls
+      .filter(([event]) => event === FILTER)
+      .flatMap(([, payload]) => (payload as { observations: { iotId: string }[] }).observations)
+    expect(asked.map((datastream) => datastream.iotId)).toContain(colour.iotId)
     wrapper.unmount()
   })
 })
