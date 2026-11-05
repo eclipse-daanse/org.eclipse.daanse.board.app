@@ -88,6 +88,22 @@ variable at them.
                 <details key="documentation" value="The background of a cell a rule marked, and of the cell where a marked row crosses a marked column - stronger than either, so the crossing stands out."/>
             </eAnnotations>
         </eStructuralFeatures>
+
+        <eStructuralFeatures xsi:type="ecore:EReference" name="colorRules" eType="#//DataTableColorRule" lowerBound="0" upperBound="-1" containment="true">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="Colours a cell or a row by a value of the row (#1265). In order: the first rule that matches a cell decides its colour. A rule wins over a colour the source sends with a value; that one stays as the default."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="filterRules" eType="#//DataTableFilterRule" lowerBound="0" upperBound="-1" containment="true">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="Which rows are shown (#1265). A presentation of the answer, not a selection of it: sorting, paging and the indices of a click payload work on the answer as the source sent it, and only the rows that pass are drawn."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="filterMatch" eType="#//DataTableFilterMatch" defaultValueLiteral="all">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="Whether a row must pass every filter rule or one of them."/>
+            </eAnnotations>
+        </eStructuralFeatures>
     </eClassifiers>
     <!--
     What the table tells the event system when it is clicked (#1221).
@@ -160,6 +176,101 @@ variable at them.
         <eStructuralFeatures xsi:type="ecore:EAttribute" name="columnIndex" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
             <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
                 <details key="documentation" value="The column's position among the source's columns, counted from zero. Hidden columns are counted: hiding one does not move the index of those after it."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EEnum" name="DataTableCondition">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+            <details key="documentation" value="How a rule compares a value of the row with its own value. A rule holds the name (EQUALS); the literal (equals) is read as well. Numbers are compared as numbers where both sides are numbers, everything else as text."/>
+        </eAnnotations>
+        <eLiterals name="EQUALS" literal="equals"/>
+        <eLiterals name="NOT_EQUALS" literal="notEquals" value="1"/>
+        <eLiterals name="CONTAINS" literal="contains" value="2"/>
+        <eLiterals name="GREATER_THAN" literal="greaterThan" value="3"/>
+        <eLiterals name="LESS_THAN" literal="lessThan" value="4"/>
+        <eLiterals name="BETWEEN" literal="between" value="5"/>
+        <eLiterals name="EMPTY" literal="empty" value="6"/>
+    </eClassifiers>
+
+    <eClassifiers xsi:type="ecore:EEnum" name="DataTableFilterMatch">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+            <details key="documentation" value="Whether a row must pass every filter rule (ALL) or one of them (ANY). The name is held; the literal is read as well."/>
+        </eAnnotations>
+        <eLiterals name="ALL" literal="all"/>
+        <eLiterals name="ANY" literal="any" value="1"/>
+    </eClassifiers>
+
+    <eClassifiers xsi:type="ecore:EEnum" name="DataTableColorTarget">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+            <details key="documentation" value="What a colour rule paints: the cell of its column, or every cell of the row."/>
+        </eAnnotations>
+        <eLiterals name="CELL" literal="cell"/>
+        <eLiterals name="ROW" literal="row" value="1"/>
+    </eClassifiers>
+
+    <eClassifiers xsi:type="ecore:EClass" name="DataTableColorRule">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+            <details key="documentation" value="A colour for the cells, or the rows, whose value in one column meets a condition."/>
+        </eAnnotations>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="column" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="The column whose value is compared, by name."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="condition" eType="#//DataTableCondition" defaultValueLiteral="equals">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="How the value is compared."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="What the value is compared with. May name variables as {name}; their current values are put in."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="valueTo" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="The upper end for between, which includes both ends. Unused by the other conditions."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="color" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="The background, as a CSS colour."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="textColor" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="The text colour, as a CSS colour. Empty: dark or light, whichever reads on the background; a background not written in hex keeps the table's text colour."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="target" eType="#//DataTableColorTarget" defaultValueLiteral="cell">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="Whether the rule paints the cell of its column or the whole row."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+    </eClassifiers>
+
+    <eClassifiers xsi:type="ecore:EClass" name="DataTableFilterRule">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+            <details key="documentation" value="A condition a row has to meet to be shown."/>
+        </eAnnotations>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="column" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="The column whose value is compared, by name."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="condition" eType="#//DataTableCondition" defaultValueLiteral="equals">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="How the value is compared."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="What the value is compared with. May name variables as {name}; their current values are put in."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="valueTo" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="The upper end for between, which includes both ends. Unused by the other conditions."/>
             </eAnnotations>
         </eStructuralFeatures>
     </eClassifiers>

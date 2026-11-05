@@ -15,6 +15,7 @@ import { useDatasourceRepository, useEObject, useTranslation, VariableWrapper } 
 import { inject, toRefs, ref, watch, computed, nextTick, onMounted, onUnmounted } from 'vue';
 import { useRoute } from 'vue-router';
 import { useVariableRepository } from "org.eclipse.daanse.board.app.ui.vue.composables"
+import { cellColor, filterRows, ruleTexts, type CellColor } from './rules'
 
 const { wrapParameters } = useVariableRepository();
 const { t } = useTranslation('tableData');
@@ -236,35 +237,52 @@ const hidden = computed<Set<string>>(() => {
 const allColumns = computed<string[]>(() => Object.keys(rows.value[0] ?? {}))
 
 /*
- * The colour a source gives a value (#1264): an answer may carry, beside
- * its rows, a colour per column and shown value - an OGC STA source says
- * so for a code it shows as a word. Said by value rather than by row, so
- * sorting, paging and a selection keep the colours where they belong.
+ * The colour of a cell (#1265): the table's colour rules first, in their
+ * order, then the colour a source sends with a value (#1264) - an OGC STA
+ * source says so for a code it shows as a word. Said by value or by rule
+ * rather than by place, so sorting, paging and a selection keep the
+ * colours where they belong.
  */
 const valueColors = computed<Record<string, Record<string, string>>>(() => data.value?.colors ?? {})
 
-const cellColorOf = (row: Record<string, unknown>, column: string): string | undefined => {
-    const value = row[column]
-    if (value === undefined || value === null) return undefined
-    return valueColors.value[column]?.[String(value)]
-}
+/*
+ * The rule values with the current values of the variables they name
+ * ({name}). One template for all of them, resolved by an instance of its
+ * own: an instance follows the variables of its last template only, so
+ * sharing the one of the header colour would make each forget the other.
+ */
+const RULE_VALUE_SEPARATOR = '\u001f'
+const ruleValueTexts = computed(() => ruleTexts(settings.value?.colorRules, settings.value?.filterRules))
+const { wrapParameters: wrapRuleValues } = useVariableRepository()
+const { resolvedRuleValues } = wrapRuleValues({
+    resolvedRuleValues: computed(() => ruleValueTexts.value.join(RULE_VALUE_SEPARATOR)),
+})
+const resolveRuleValue = computed(() => {
+    const texts = ruleValueTexts.value
+    const resolved = String(resolvedRuleValues?.value ?? '').split(RULE_VALUE_SEPARATOR)
+    const byText = new Map<string, string>()
+    texts.forEach((text, at) => byText.set(text, resolved.length === texts.length ? resolved[at] : text))
+    return (text: string) => byText.get(text) ?? text
+})
 
-/* Dark text on a light colour, light text on a dark one; a colour that is
-  not written in hex keeps the table's text colour. */
-const textOn = (color: string): string | undefined => {
-    const hex = color.trim().match(/^#([0-9a-f]{3}|[0-9a-f]{6})$/i)?.[1]
-    if (!hex) return undefined
-    const full = hex.length === 3 ? hex.replace(/./g, (c) => c + c) : hex
-    const [r, g, b] = [0, 2, 4].map((i) => parseInt(full.slice(i, i + 2), 16))
-    return 0.299 * r + 0.587 * g + 0.114 * b > 150 ? '#1a1a1a' : '#ffffff'
-}
+const cellColorOf = (row: Record<string, unknown>, column: string): CellColor | undefined =>
+    cellColor(row, column, settings.value?.colorRules, valueColors.value, resolveRuleValue.value)
 
 const cellStyle = (row: Record<string, unknown>, column: string) => {
     const color = cellColorOf(row, column)
     if (!color) return undefined
-    const text = textOn(color)
-    return text ? { '--cell-color': color, '--cell-text': text } : { '--cell-color': color }
+    return color.text ? { '--cell-color': color.background, '--cell-text': color.text } : { '--cell-color': color.background }
 }
+
+/*
+ * The rows the filter rules let through (#1265). Everything after this -
+ * sorting, paging, bringing a mark into view - works on these; the indices
+ * of a click payload still count the answer as it came.
+ */
+const shown = computed<Record<string, unknown>[]>(() =>
+    filterRows(rows.value, settings.value?.filterRules, settings.value?.filterMatch, resolveRuleValue.value),
+)
+
 const columns = computed<string[]>(() => allColumns.value.filter((column) => !hidden.value.has(column)))
 
 /*
@@ -407,10 +425,10 @@ const compare = (left: unknown, right: unknown): number => {
 
 const ordered = computed<Record<string, unknown>[]>(() => {
     const by = sortedBy.value
-    if (!sortable.value || !by) return rows.value
+    if (!sortable.value || !by) return shown.value
     /* Copied before sorting: the array is the store's answer, and the
       other readers of it did not ask for a new order. */
-    const sorted = [...rows.value].sort((a, b) => compare(a[by.column], b[by.column]))
+    const sorted = [...shown.value].sort((a, b) => compare(a[by.column], b[by.column]))
     return by.descending ? sorted.reverse() : sorted
 })
 

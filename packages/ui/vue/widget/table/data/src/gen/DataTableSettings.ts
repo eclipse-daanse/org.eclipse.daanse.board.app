@@ -18,8 +18,11 @@
  * @generated
  */
 
-import type { EObject, EList } from '@emfts/core';
+import type { EObject, EList, BasicEObject, EClass, EStructuralFeature } from '@emfts/core';
 import type { VariableWrapper } from 'org.eclipse.daanse.board.app.lib.variables';
+import type { DataTableColorRule } from './DataTableColorRule.js';
+import type { DataTableFilterRule } from './DataTableFilterRule.js';
+import type { DataTableFilterMatch } from './DataTableFilterMatch.js';
 
 /**
  * DataTableSettings
@@ -34,5 +37,8 @@ export interface DataTableSettings extends EObject {
   markedRowColor?: string;
   markedColumnColor?: string;
   markedCellColor?: string;
+  colorRules: EList<DataTableColorRule>;
+  filterRules: EList<DataTableFilterRule>;
+  filterMatch?: DataTableFilterMatch;
 
 }

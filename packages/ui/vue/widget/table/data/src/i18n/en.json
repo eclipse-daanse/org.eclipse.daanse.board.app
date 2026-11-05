@@ -31,5 +31,39 @@
     "match": "Row index or key column",
     "column": "Column name or index",
     "keyValue": "Value in the key column"
+  },
+  "Rules": {
+    "colorTitle": "Colour rules",
+    "colorHint": "The first rule that matches a cell gives its colour. Rules win over colours the source sends.",
+    "filterTitle": "Filter rules",
+    "filterHint": "Only rows that meet the rules are shown.",
+    "match": "A row is shown when it meets",
+    "matchAll": "all rules",
+    "matchAny": "one of the rules",
+    "column": "Column",
+    "conditionLabel": "Condition",
+    "value": "Value",
+    "valueHint": "A variable as {name}",
+    "valueTo": "Up to",
+    "color": "Colour",
+    "textColor": "Text colour",
+    "textColorHint": "Empty: dark or light by contrast",
+    "target": "Paints",
+    "targetCell": "the cell",
+    "targetRow": "the whole row",
+    "up": "Move up",
+    "down": "Move down",
+    "remove": "Remove rule",
+    "addColor": "Add colour rule",
+    "addFilter": "Add filter rule",
+    "condition": {
+      "EQUALS": "equals",
+      "NOT_EQUALS": "does not equal",
+      "CONTAINS": "contains",
+      "GREATER_THAN": "greater than",
+      "LESS_THAN": "less than",
+      "BETWEEN": "between",
+      "EMPTY": "is empty"
+    }
   }
 }

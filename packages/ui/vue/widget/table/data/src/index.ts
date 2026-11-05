@@ -75,7 +75,7 @@ export class DataTableWidgetProvider implements WidgetProvider {
     uri: '/data-table-settings.ui.xmi',
     ePackage: () => DatatablesettingsPackage.eINSTANCE,
     create: () => new DataTableSettingsImpl(),
-    unmodelledSections: ['columns'],
+    unmodelledSections: ['columns', 'colorRules', 'filterRules'],
   }
   readonly reads = ['DataTable']
   readonly icon = Icon
