@@ -162,6 +162,13 @@ onMounted(() => {
     }
     // For the query designer, should the drag be over before SortableJS has seen it start.
     writeTreeItem(event.dataTransfer, event._xmla_context);
+    /*
+     * SortableJS allows 'move' alone, for its own lists. An editor asks to
+     * copy the name in, and a drop whose effect the source does not allow
+     * is one the browser never delivers - so measures and hierarchies, the
+     * two rows SortableJS drags, could not be dropped into the query.
+     */
+    event.dataTransfer.effectAllowed = 'copyMove';
   });
   /*
    * SortableJS marks the row it drags with its drag class and takes it off a

@@ -200,6 +200,39 @@ describe('a row dragged out of the cube explorer', () => {
     })
   })
 
+  it('lets a hierarchy be copied into an editor as well as moved into the designer', async () => {
+    const metadata = store([])
+    const wrapper = mountTree(metadata)
+    await flushPromises()
+    await open(wrapper, 'Dimensions')
+    await open(wrapper, 'Gender')
+
+    // As SortableJS leaves it on its own dragstart, which runs first.
+    const { dataTransfer } = transfer()
+    const dragged = Object.assign(dataTransfer, { effectAllowed: 'move' })
+    const hierarchyRow = wrapper.findComponent({ name: 'draggable' }).find('.cursor-pointer')
+    await hierarchyRow.trigger('dragstart', { dataTransfer: dragged })
+
+    // Was: 'move', and a drop that copies - an editor's - never happened.
+    expect(dragged.effectAllowed).toBe('copyMove')
+  })
+
+  it('carries a named set as its bracketed name', async () => {
+    const metadata = store([])
+    metadata.storage.sets = [{ SET_NAME: 'Top 10 Customers', SET_CAPTION: 'Top 10 Customers', SET_DISPLAY_FOLDER: '', DIMENSIONS: '[Customers]' }] as any
+    const wrapper = mountTree(metadata)
+    await flushPromises()
+    await open(wrapper, 'Sets')
+
+    const { data, dataTransfer } = transfer()
+    const setRow = wrapper.findAll('[draggable="true"]').find(r => r.text() === 'Top 10 Customers')
+    // Was: not draggable at all - the row carried no SET_NAME to drag by.
+    expect(setRow).toBeDefined()
+    await setRow!.trigger('dragstart', { dataTransfer })
+
+    expect(data.get('text/plain')).toBe('[Top 10 Customers]')
+  })
+
   it('carries a level as its name only', async () => {
     const metadata = store([])
     const wrapper = mountTree(metadata)
