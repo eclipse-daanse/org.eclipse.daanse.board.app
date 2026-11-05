@@ -24,6 +24,7 @@ import type { EClass, EStructuralFeature, EList, EReference } from '@emfts/core'
 import type { Widget } from './Widget.js';
 import type { LayoutItem } from './LayoutItem.js';
 import type { Weather } from './Weather.js';
+import type { Lighting } from './Lighting.js';
 import type { Page } from './Page.js';
 import { WorkspacePackage } from './WorkspacePackage.js';
 
@@ -48,6 +49,7 @@ export class PageImpl extends BasicEObject implements Page {
   static readonly WIDGETS: number = 12;
   static readonly LAYOUT: number = 13;
   static readonly WEATHER: number = 14;
+  static readonly LIGHTING: number = 15;
 
   // Private fields
   private _id?: string;
@@ -65,6 +67,7 @@ export class PageImpl extends BasicEObject implements Page {
   private _widgets!: EList<Widget>;
   private _layout!: EList<LayoutItem>;
   private _weather?: Weather;
+  private _lighting?: Lighting;
 
   /**
    * Returns the EClass of this object
@@ -410,6 +413,40 @@ export class PageImpl extends BasicEObject implements Page {
     }
   }
 
+  get lighting(): Lighting {
+    return this._lighting!;
+  }
+
+  set lighting(value: Lighting) {
+    const oldValue = this._lighting;
+    if (oldValue !== value) {
+      // containment: the owner becomes the container of the value (#61)
+      if (oldValue) {
+        (oldValue as any).eSetContainer?.(null, null);
+      }
+      if (value) {
+        this.removeFromPreviousContainer(value);
+        (value as any).eSetContainer?.(this, this.eClass().getEStructuralFeature('lighting'));
+      }
+    }
+    this._lighting = value;
+    if (this.eDeliver()) {
+      this.eNotify({
+        getNotifier: () => this,
+        getEventType: () => 1, // SET
+        getFeature: () => this.eClass().getEStructuralFeature(PageImpl.LIGHTING),
+        getOldValue: () => oldValue,
+        getNewValue: () => value,
+        getPosition: () => -1,
+        wasSet: () => true,
+        isTouch: () => false,
+        isReset: () => false,
+        getFeatureID: () => PageImpl.LIGHTING,
+        merge: () => false
+      });
+    }
+  }
+
   /**
    * Remove a value from its previous container before it is contained here,
    * like Java EMF's eInverseRemove on the old container (#61)
@@ -472,6 +509,8 @@ export class PageImpl extends BasicEObject implements Page {
         return this.layout;
       case PageImpl.WEATHER:
         return this.weather;
+      case PageImpl.LIGHTING:
+        return this.lighting;
       default:
         return super.eGet(feature);
     }
@@ -545,6 +584,10 @@ export class PageImpl extends BasicEObject implements Page {
         this.weather = newValue as Weather;
         super.eSet(feature, newValue);
         break;
+      case PageImpl.LIGHTING:
+        this.lighting = newValue as Lighting;
+        super.eSet(feature, newValue);
+        break;
       default:
         super.eSet(feature, newValue);
     }
@@ -586,6 +629,8 @@ export class PageImpl extends BasicEObject implements Page {
         return this._layout !== undefined && !this._layout.isEmpty();
       case PageImpl.WEATHER:
         return this._weather !== undefined;
+      case PageImpl.LIGHTING:
+        return this._lighting !== undefined;
       default:
         return super.eIsSet(feature);
     }
@@ -643,6 +688,10 @@ export class PageImpl extends BasicEObject implements Page {
         if (this._weather) (this._weather as any).eSetContainer?.(null, null);
         this._weather = undefined;
         return;
+      case PageImpl.LIGHTING:
+        if (this._lighting) (this._lighting as any).eSetContainer?.(null, null);
+        this._lighting = undefined;
+        return;
       default:
         super.eUnset(feature);
     }
@@ -673,6 +722,7 @@ export class PageImpl extends BasicEObject implements Page {
       widgets: this.widgets?.toArray?.() ?? this.widgets,
       layout: this.layout?.toArray?.() ?? this.layout,
       weather: this.weather,
+      lighting: this.lighting,
     };
   }
 }

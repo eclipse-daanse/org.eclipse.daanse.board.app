@@ -35,6 +35,8 @@ import { DataFilter } from './DataFilter.js';
 import { DataFilterImpl } from './DataFilterImpl.js';
 import { Weather } from './Weather.js';
 import { WeatherImpl } from './WeatherImpl.js';
+import { Lighting } from './Lighting.js';
+import { LightingImpl } from './LightingImpl.js';
 import { RectangleShape } from './RectangleShape.js';
 import { RectangleShapeImpl } from './RectangleShapeImpl.js';
 import { EllipseShape } from './EllipseShape.js';
@@ -124,6 +126,13 @@ export class WorkspaceFactory extends BasicEFactory {
   }
 
   /**
+   * Create a new Lighting instance
+   */
+  createLighting(): Lighting {
+    return new LightingImpl();
+  }
+
+  /**
    * Create a new RectangleShape instance
    */
   createRectangleShape(): RectangleShape {
@@ -205,6 +214,8 @@ export class WorkspaceFactory extends BasicEFactory {
         return this.createDataFilter();
       case 'Weather':
         return this.createWeather();
+      case 'Lighting':
+        return this.createLighting();
       case 'RectangleShape':
         return this.createRectangleShape();
       case 'EllipseShape':

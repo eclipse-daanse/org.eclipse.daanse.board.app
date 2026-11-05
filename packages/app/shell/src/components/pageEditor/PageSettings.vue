@@ -43,8 +43,10 @@ import {
   DRAW_WEATHER_REGION,
   WorkspacePackage,
   createWeather,
+  createLighting,
   workspaceEcore,
   type DrawWeatherRegionEvent,
+  type Lighting,
   type Weather,
 } from 'org.eclipse.daanse.board.app.lib.model.workspace'
 import { identifiers } from 'org.eclipse.daanse.board.app.lib.core'
@@ -56,6 +58,8 @@ import {
 /* The weather's form, written as a model; see the file for why it is here. */
 import weatherFormXmi from '../../../model/weather.ui.xmi?raw'
 import { weatherForm } from './weatherForm'
+/* The lighting's form, beside the weather's. */
+import lightingFormXmi from '../../../model/lighting.ui.xmi?raw'
 
 const pageid = defineModel<string>({ required: true })
 const emit = defineEmits(['close'])
@@ -220,6 +224,30 @@ watch(watchedWeather, (now, before) => {
 })
 
 /*
+ * The lighting, edited on the page itself as the weather is and for the
+ * same reasons: a fresh one is shown for a page without, and goes onto the
+ * page with the first edit (#1242).
+ */
+const lighting = shallowRef<Lighting | undefined>()
+
+function loadLighting() {
+  let page: Page | undefined
+  try {
+    page = pageid.value ? pageRepo?.getPage(pageid.value) : undefined
+  } catch {
+    page = undefined
+  }
+  lighting.value = page ? (page.lighting ?? createLighting()) : undefined
+}
+
+const watchedLighting = useEObject(() => lighting.value)
+watch(watchedLighting, (now, before) => {
+  if (!now || now !== before || now.eContainer()) return
+  const page = pageRepo?.getPage(pageid.value)
+  if (page && !page.lighting) page.lighting = now
+})
+
+/*
  * A region is drawn on the page, which this panel covers: so it closes,
  * and the layer around the board takes over. Nothing changes by asking -
  * the drawing writes the shapes when the person is done with it.
@@ -233,11 +261,13 @@ function drawRegion() {
 onMounted(() => {
   load()
   loadWeather()
+  loadLighting()
 })
 /* Opened again for a different page while still on screen */
 watch(pageid, () => {
   load()
   loadWeather()
+  loadLighting()
 })
 
 
@@ -344,6 +374,18 @@ watch(
         <DButton class="draw-region" data-action="draw-region" @click="drawRegion">
           {{ t('PageSettings.weather.drawRegion') }}
         </DButton>
+      </section>
+
+      <section v-if="lighting" class="group">
+        <h3 class="group__label">{{ t('PageSettings.lighting.label') }}</h3>
+        <SettingsForm
+          v-model="lighting"
+          :create="createLighting as () => any"
+          :ui-model-xmi="lightingFormXmi"
+          :domain-package="WorkspacePackage.eINSTANCE as any"
+          ui-model-uri="/page-lighting.ui.xmi"
+          :ecore="workspaceEcore"
+        />
       </section>
 
       <section class="group">
