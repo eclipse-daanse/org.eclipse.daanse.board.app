@@ -110,7 +110,7 @@ Contributors:
 </template>
 
 <script lang="ts" setup>
-import { ref, computed, onMounted, onUnmounted, inject, watch } from 'vue';
+import { ref, shallowRef, computed, onMounted, onUnmounted, inject, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import { VariableWrapper, useFormat, useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables';
 import {
@@ -242,8 +242,15 @@ const emitRightClick = () => {
 
 // Variable Support
 const variableRepository = ref<VariableRepository | null>(null);
-const rangeStartWrapper = ref(new VariableWrapper<string>(''));
-const rangeEndWrapper = ref(new VariableWrapper<string>(''));
+/*
+ * shallowRef, not ref: a wrapper is an EObject and must stay out of deep
+ * reactivity. Behind a reactive proxy its adapters run on the proxy, the
+ * reactivity adapter's tick ref is unwrapped to a number, and setTo throws
+ * "Cannot create property 'value' on number" before the relative time range
+ * is applied (#1248). The wrapper notifies Vue itself (wrapperReactivity.ts).
+ */
+const rangeStartWrapper = shallowRef(new VariableWrapper<string>(''));
+const rangeEndWrapper = shallowRef(new VariableWrapper<string>(''));
 
 // Reactive state
 const isPlaying = ref(false);
