@@ -88,6 +88,11 @@ export class OgcStaStore extends BaseDatasource implements OgcStaStoreI {
   private pendingRequestFlag: { key: string; params: any } | null = null;
   private workerManager: ObservationsWorkerManager | null = null;
   private connectionBaseUrl: string = '';
+  /*
+   * The things each consumer shows, as filters on /Things, by consumer key.
+   * null: that consumer needs every thing. See setThingScope.
+   */
+  private thingScopes: Map<string, string | null> = new Map();
 
   init(configuration: ConfigurationOf<IOGCSTAConfigartion>): void {
     super.init(configuration)
@@ -524,9 +529,69 @@ export class OgcStaStore extends BaseDatasource implements OgcStaStoreI {
     return !!configuration?.connection
   }
 
+  /**
+   * Says which things a consumer shows, as an OData filter on `/Things`
+   * (null: every thing; undefined: the consumer is gone).
+   *
+   * A map shows only the things its rules match. With a scope for every
+   * consumer, the catalogue is loaded as `Things?$filter=<scopes>` instead
+   * of every thing of the server: on the Bodenfeuchte board 27 things
+   * instead of 126, 0.7 MB instead of 3.8 MB (#1250). The filter runs on
+   * `/Things`, which is complete on every server we know; `/Datastreams`
+   * is not, so datastreams are never filtered there.
+   */
+  setThingScope(key: string, filter: string | null | undefined): void {
+    const before = this.thingScopeFilter()
+    if (filter === undefined) this.thingScopes.delete(key)
+    else this.thingScopes.set(key, filter)
+    if (this.thingScopeFilter() === before) return
+    // Loaded already with another scope: load again with this one. A
+    // consumer that leaves does not make the others load anything now.
+    if (this.resultMap.things?.length) {
+      this.requestFlag = { key: FILTERRESET, params: undefined }
+      if (filter !== undefined) this.notify()
+    }
+  }
+
+  /** The union of all scopes, or null when anyone needs every thing. */
+  private thingScopeFilter(): string | null {
+    if (this.thingScopes.size === 0) return null
+    const filters = new Set<string>()
+    for (const filter of this.thingScopes.values()) {
+      if (filter === null) return null
+      filters.add(filter)
+    }
+    const all = [...filters].sort()
+    return all.length === 1 ? all[0] : all.map((f) => `(${f})`).join(' or ')
+  }
+
+  /**
+   * The things in scope, with datastreams and locations. ObservedProperty
+   * comes along for the click payloads of the map; a server that refuses
+   * the deep expand is asked again without it. Undefined when the scoped
+   * request fails, so the caller can fall back to the full catalogue.
+   */
+  private async loadScopedThings(filter: string): Promise<BoxedThing[] | undefined> {
+    const api = new ThingsApi(this.baseConfigration)
+    for (const $expand of ['Datastreams/ObservedProperty,Locations', 'Datastreams,Locations']) {
+      try {
+        const things = (await api.v11ThingsGet({ $filter: filter, $expand })).value ?? []
+        return things as BoxedThing[]
+      } catch (e) {
+        this.logData('Scoped things request failed', $expand, e)
+      }
+    }
+    return undefined
+  }
+
   getAllData(listOfPromesis: Promise<IOGCSTAData>[]) {
     listOfPromesis.push(
       (async () => {
+        const scope = this.thingScopeFilter()
+        if (scope !== null) {
+          const things = await this.loadScopedThings(scope)
+          if (things) return transformFromThingLocationDastreamToLocationThingDatastream(things)
+        }
         try {
           const things = (
             await new ThingsApi(this.baseConfigration).v11ThingsGet({
