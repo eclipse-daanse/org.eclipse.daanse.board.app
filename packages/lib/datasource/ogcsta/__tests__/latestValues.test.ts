@@ -154,13 +154,16 @@ describe('the latest values view of an OGC STA source', () => {
     expect(server.requests).toEqual([])
   })
 
-  it('leaves a source without the view as it was', async () => {
+  it('is an empty table for a source without the view, and loads nothing for it', async () => {
     const { server, store } = setup({}, null)
 
     const data = await store.getData('DataTable')
 
-    expect(data.items).toBeUndefined()
-    expect(server.requests[0].startsWith('v1.1/Things?$expand=')).toBe(true)
+    expect(data).toEqual({ items: [], headers: [], rows: [], colors: {} })
+    expect(server.requests).toEqual([])
+    // The map's shape is not touched by it.
+    const catalogue = await store.getData('OGCSTAData')
+    expect(catalogue.things.length).toBeGreaterThan(0)
   })
 })
 

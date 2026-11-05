@@ -273,9 +273,13 @@ export class OgcStaStore extends BaseDatasource implements OgcStaStoreI {
   }
 
   async getData<T>(type: string, options?: any): Promise<T> {
-    // A table of a source with a latest values view gets the view, and
-    // nothing of the catalogue is loaded for it (#1264).
-    if (type === 'DataTable' && columnsOf(this.configuration?.latestValues).length) {
+    // A table gets the latest values view, and nothing of the catalogue
+    // is loaded for it (#1264). Without a view it is an empty table: the
+    // catalogue is no table, and a reader of one expects headers and rows.
+    if (type === 'DataTable') {
+      if (!columnsOf(this.configuration?.latestValues).length) {
+        return { items: [], headers: [], rows: [], colors: {} } as LatestValuesTable as T
+      }
       return (await this.loadLatestValuesTable()) as T
     }
 

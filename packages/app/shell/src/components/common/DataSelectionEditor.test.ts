@@ -125,3 +125,57 @@ describe('the data tab', () => {
     expect(wrapper.find('.node__pick').exists()).toBe(false)
   })
 })
+
+/*
+ * #1264: a data table on an OGC STA source. The type answers its map
+ * shape first and a table as well; the tab used to drop the table and
+ * stayed empty.
+ */
+describe('the data tab of a table on an OGC STA source', () => {
+  const table = {
+    headers: ['Fläche', 'Zustand', 'Sensoren', 'Stand'],
+    items: [
+      { Fläche: 'JeN-02', Zustand: 'Trockenstress', Sensoren: 1, Stand: '2026-11-05 19:59' },
+      { Fläche: 'Löb/ZW-01', Zustand: 'feucht', Sensoren: 4, Stand: '2026-11-05 20:33' },
+      { Fläche: 'ZW-01', Zustand: 'Trockenstress', Sensoren: 3, Stand: '2026-11-05 21:11' },
+    ],
+    rows: [],
+    colors: { Zustand: { feucht: '#1E88E5', Trockenstress: '#E53935' } },
+  }
+
+  async function onSta(on: Widget) {
+    const getData = vi.fn(async () => structuredClone(table))
+    const repo = {
+      getDatasource: () => ({ getData }),
+      getDatasourceType: () => 'ogcsta',
+      getDatasourceIdentifiers: () => ({ answers: ['OGCSTAData', 'DataTable'] }),
+    }
+    const wrapper = mount(DataSelectionEditor, {
+      props: { widget: on, reads: ['DataTable'] },
+      global: { provide: { [DATASOURCE_REPOSITORY as unknown as symbol]: repo } },
+    })
+    await flushPromises()
+    return { wrapper, getData }
+  }
+
+  it('shows the rows of the latest values view', async () => {
+    const { wrapper, getData } = await onSta(widget())
+
+    expect(getData).toHaveBeenCalledWith('DataTable')
+    expect(wrapper.find('[data-result-count]').attributes('data-result-count')).toBe('3')
+  })
+
+  it('narrows them with a filter on the state', async () => {
+    const on = widget()
+    const { wrapper } = await onSta(on)
+
+    await wrapper.find('[data-add-filter]').trigger('click')
+    await flushPromises()
+    const filter = on.selection!.filters.get(0)
+    filter.field = 'Zustand'
+    filter.value = 'Trockenstress'
+    await flushPromises()
+
+    expect(wrapper.find('[data-result-count]').attributes('data-result-count')).toBe('2')
+  })
+})
