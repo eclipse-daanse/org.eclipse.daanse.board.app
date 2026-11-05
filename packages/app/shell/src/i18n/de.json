@@ -444,7 +444,12 @@
     "preview": "Vorschau",
     "pick": "Wähle links eine Verbindung oder eine Datenquelle.",
     "usedIn": "Verwendet in {{usage}}",
-    "view": "Ansicht der Auswahl"
+    "view": "Ansicht der Auswahl",
+    "leaving": {
+      "title": "Änderungen nicht gespeichert",
+      "text": "{{name}} hat Änderungen, die noch nicht gespeichert sind. Vor dem Öffnen von etwas anderem behalten?",
+      "stay": "Bleiben"
+    }
   },
   "Nav": {
     "variables": "Variablen"
