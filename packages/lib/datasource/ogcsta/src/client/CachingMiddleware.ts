@@ -37,10 +37,16 @@ class CachingFetchWrapper {
     this.maxEntries = options.maxEntries ?? 200
   }
 
-  private getCacheKey(url: string, init?: RequestInit): string {
+  /*
+   * Keyed by the absolute URL. The client hands relative paths
+   * (`/v1.1/Things`), and one cache serves every OGC STA source of the
+   * board: keyed by the path alone, two servers answered each other's
+   * requests (#1251).
+   */
+  private getCacheKey(base: string, url: string, init?: RequestInit): string {
     const method = init?.method || 'GET'
     const body = init?.body ? String(init.body) : ''
-    return `${method}:${url}:${body}`
+    return `${method}:${absoluteUrl(base, url)}:${body}`
   }
 
   private isValidCacheEntry(entry: CacheEntry): boolean {
@@ -69,7 +75,7 @@ class CachingFetchWrapper {
     this.pendingRequests.clear()
   }
 
-  createCachingFetch(baseFetch: FetchAPI): FetchAPI {
+  createCachingFetch(baseFetch: FetchAPI, base: string): FetchAPI {
     return async (input: RequestInfo | URL, init?: RequestInit): Promise<Response> => {
       const url = typeof input === 'string' ? input : input.toString()
       const method = init?.method || 'GET'
@@ -79,7 +85,7 @@ class CachingFetchWrapper {
         return baseFetch(input, init)
       }
 
-      const cacheKey = this.getCacheKey(url, init)
+      const cacheKey = this.getCacheKey(base, url, init)
 
       // Check cache first
       const cachedEntry = this.cache.get(cacheKey)
@@ -149,25 +155,27 @@ class CachingFetchWrapper {
   }
 }
 
+/** `base` and a path joined as the connection joins them; an absolute URL stays as it is. */
+export function absoluteUrl(base: string, url: string): string {
+  if (/^[a-z]+:\/\//i.test(url)) return url
+  return base.replace(/\/+$/, '') + '/' + url.replace(/^\/+/, '')
+}
+
 // Singleton instance for shared caching across all OGC STA API calls
 let sharedCachingWrapper: CachingFetchWrapper | null = null
 
-export function getSharedCachingFetch(baseFetch: FetchAPI, options?: CachingFetchOptions): FetchAPI {
+/**
+ * A fetch that answers from the shared cache, or joins a request for the
+ * same URL that is still on its way. `base` is the URL of the connection
+ * the requests go to, which makes the cache key absolute.
+ */
+export function getSharedCachingFetch(baseFetch: FetchAPI, options: CachingFetchOptions | undefined, base: string): FetchAPI {
   if (!sharedCachingWrapper) {
     sharedCachingWrapper = new CachingFetchWrapper(options)
   }
-  return sharedCachingWrapper.createCachingFetch(baseFetch)
+  return sharedCachingWrapper.createCachingFetch(baseFetch, base)
 }
 
 export function clearSharedCache(): void {
   sharedCachingWrapper?.clearCache()
-}
-
-// Legacy export for backwards compatibility
-export function getSharedCachingMiddleware(options?: CachingFetchOptions): any {
-  // Return empty middleware - caching is now done via fetchApi wrapper
-  return {
-    pre: async () => undefined,
-    post: async () => undefined,
-  }
 }
