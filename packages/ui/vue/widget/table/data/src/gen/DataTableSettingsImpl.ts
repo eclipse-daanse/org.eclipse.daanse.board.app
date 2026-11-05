@@ -19,9 +19,12 @@
  */
 
 import { BasicEObject } from '@emfts/core';
-import { createBasicEList } from '@emfts/core';
-import type { EClass, EStructuralFeature, EList } from '@emfts/core';
+import { createContainmentEList, createBasicEList } from '@emfts/core';
+import type { EClass, EStructuralFeature, EList, EReference } from '@emfts/core';
+import type { DataTableColorRule } from './DataTableColorRule.js';
+import type { DataTableFilterRule } from './DataTableFilterRule.js';
 import { VariableWrapper } from 'org.eclipse.daanse.board.app.lib.variables';
+import { DataTableFilterMatch } from './DataTableFilterMatch.js';
 import type { DataTableSettings } from './DataTableSettings.js';
 import { DatatablesettingsPackage } from './DatatablesettingsPackage.js';
 
@@ -39,6 +42,9 @@ export class DataTableSettingsImpl extends BasicEObject implements DataTableSett
   static readonly MARKED_ROW_COLOR: number = 5;
   static readonly MARKED_COLUMN_COLOR: number = 6;
   static readonly MARKED_CELL_COLOR: number = 7;
+  static readonly COLOR_RULES: number = 8;
+  static readonly FILTER_RULES: number = 9;
+  static readonly FILTER_MATCH: number = 10;
 
   // Private fields
   private _headerBackground: VariableWrapper<string> = new VariableWrapper<string>();
@@ -49,6 +55,9 @@ export class DataTableSettingsImpl extends BasicEObject implements DataTableSett
   private _markedRowColor: string = "color-mix(in srgb, var(--color-accent) 18%, transparent)";
   private _markedColumnColor: string = "color-mix(in srgb, var(--color-accent) 12%, transparent)";
   private _markedCellColor: string = "color-mix(in srgb, var(--color-accent) 40%, transparent)";
+  private _colorRules!: EList<DataTableColorRule>;
+  private _filterRules!: EList<DataTableFilterRule>;
+  private _filterMatch: DataTableFilterMatch = DataTableFilterMatch.ALL;
 
   /**
    * Returns the EClass of this object
@@ -233,6 +242,44 @@ export class DataTableSettingsImpl extends BasicEObject implements DataTableSett
     }
   }
 
+  get colorRules(): EList<DataTableColorRule> {
+    if (!this._colorRules) {
+      this._colorRules = createContainmentEList<any>(this, this.eClass().getEStructuralFeature('colorRules') as EReference);
+    }
+    return this._colorRules;
+  }
+
+  get filterRules(): EList<DataTableFilterRule> {
+    if (!this._filterRules) {
+      this._filterRules = createContainmentEList<any>(this, this.eClass().getEStructuralFeature('filterRules') as EReference);
+    }
+    return this._filterRules;
+  }
+
+  get filterMatch(): DataTableFilterMatch {
+    return this._filterMatch!;
+  }
+
+  set filterMatch(value: DataTableFilterMatch) {
+    const oldValue = this._filterMatch;
+    this._filterMatch = value;
+    if (this.eDeliver()) {
+      this.eNotify({
+        getNotifier: () => this,
+        getEventType: () => 1, // SET
+        getFeature: () => this.eClass().getEStructuralFeature(DataTableSettingsImpl.FILTER_MATCH),
+        getOldValue: () => oldValue,
+        getNewValue: () => value,
+        getPosition: () => -1,
+        wasSet: () => true,
+        isTouch: () => false,
+        isReset: () => false,
+        getFeatureID: () => DataTableSettingsImpl.FILTER_MATCH,
+        merge: () => false
+      });
+    }
+  }
+
   // Reflective API
 
   /**
@@ -257,6 +304,12 @@ export class DataTableSettingsImpl extends BasicEObject implements DataTableSett
         return this.markedColumnColor;
       case DataTableSettingsImpl.MARKED_CELL_COLOR:
         return this.markedCellColor;
+      case DataTableSettingsImpl.COLOR_RULES:
+        return this.colorRules;
+      case DataTableSettingsImpl.FILTER_RULES:
+        return this.filterRules;
+      case DataTableSettingsImpl.FILTER_MATCH:
+        return this.filterMatch;
       default:
         return super.eGet(feature);
     }
@@ -301,6 +354,20 @@ export class DataTableSettingsImpl extends BasicEObject implements DataTableSett
         this.markedCellColor = newValue as string;
         super.eSet(feature, newValue);
         break;
+      case DataTableSettingsImpl.COLOR_RULES:
+        this.colorRules.clear();
+        this.colorRules.addAll(newValue as any[]);
+        super.eSet(feature, newValue);
+        break;
+      case DataTableSettingsImpl.FILTER_RULES:
+        this.filterRules.clear();
+        this.filterRules.addAll(newValue as any[]);
+        super.eSet(feature, newValue);
+        break;
+      case DataTableSettingsImpl.FILTER_MATCH:
+        this.filterMatch = newValue as DataTableFilterMatch;
+        super.eSet(feature, newValue);
+        break;
       default:
         super.eSet(feature, newValue);
     }
@@ -328,6 +395,12 @@ export class DataTableSettingsImpl extends BasicEObject implements DataTableSett
         return this._markedColumnColor !== "color-mix(in srgb, var(--color-accent) 12%, transparent)";
       case DataTableSettingsImpl.MARKED_CELL_COLOR:
         return this._markedCellColor !== "color-mix(in srgb, var(--color-accent) 40%, transparent)";
+      case DataTableSettingsImpl.COLOR_RULES:
+        return this._colorRules !== undefined && !this._colorRules.isEmpty();
+      case DataTableSettingsImpl.FILTER_RULES:
+        return this._filterRules !== undefined && !this._filterRules.isEmpty();
+      case DataTableSettingsImpl.FILTER_MATCH:
+        return this._filterMatch !== DataTableFilterMatch.ALL;
       default:
         return super.eIsSet(feature);
     }
@@ -363,11 +436,19 @@ export class DataTableSettingsImpl extends BasicEObject implements DataTableSett
       case DataTableSettingsImpl.MARKED_CELL_COLOR:
         this._markedCellColor = "color-mix(in srgb, var(--color-accent) 40%, transparent)";
         return;
+      case DataTableSettingsImpl.COLOR_RULES:
+        if (this._colorRules) this._colorRules.clear();
+        return;
+      case DataTableSettingsImpl.FILTER_RULES:
+        if (this._filterRules) this._filterRules.clear();
+        return;
+      case DataTableSettingsImpl.FILTER_MATCH:
+        this._filterMatch = DataTableFilterMatch.ALL;
+        return;
       default:
         super.eUnset(feature);
     }
   }
-
 
   /**
    * What this object is when it is stored.
@@ -386,6 +467,9 @@ export class DataTableSettingsImpl extends BasicEObject implements DataTableSett
       markedRowColor: this.markedRowColor,
       markedColumnColor: this.markedColumnColor,
       markedCellColor: this.markedCellColor,
+      colorRules: this.colorRules?.toArray?.() ?? this.colorRules,
+      filterRules: this.filterRules?.toArray?.() ?? this.filterRules,
+      filterMatch: this.filterMatch,
     };
   }
 }

@@ -21,14 +21,18 @@
 import { BasicEFactory } from '@emfts/core';
 import type { EClass, EObject } from '@emfts/core';
 import { DatatablesettingsPackage } from './DatatablesettingsPackage.js';
-import { DataTableSettings } from './DataTableSettings.js';
+import type { DataTableSettings } from './DataTableSettings.js';
 import { DataTableSettingsImpl } from './DataTableSettingsImpl.js';
-import { DataTableRowPayload } from './DataTableRowPayload.js';
+import type { DataTableRowPayload } from './DataTableRowPayload.js';
 import { DataTableRowPayloadImpl } from './DataTableRowPayloadImpl.js';
-import { DataTableCellPayload } from './DataTableCellPayload.js';
+import type { DataTableCellPayload } from './DataTableCellPayload.js';
 import { DataTableCellPayloadImpl } from './DataTableCellPayloadImpl.js';
-import { DataTableColumnPayload } from './DataTableColumnPayload.js';
+import type { DataTableColumnPayload } from './DataTableColumnPayload.js';
 import { DataTableColumnPayloadImpl } from './DataTableColumnPayloadImpl.js';
+import type { DataTableColorRule } from './DataTableColorRule.js';
+import { DataTableColorRuleImpl } from './DataTableColorRuleImpl.js';
+import type { DataTableFilterRule } from './DataTableFilterRule.js';
+import { DataTableFilterRuleImpl } from './DataTableFilterRuleImpl.js';
 
 /**
  * Factory for creating Datatablesettings model objects
@@ -79,6 +83,20 @@ export class DatatablesettingsFactory extends BasicEFactory {
   }
 
   /**
+   * Create a new DataTableColorRule instance
+   */
+  createDataTableColorRule(): DataTableColorRule {
+    return new DataTableColorRuleImpl();
+  }
+
+  /**
+   * Create a new DataTableFilterRule instance
+   */
+  createDataTableFilterRule(): DataTableFilterRule {
+    return new DataTableFilterRuleImpl();
+  }
+
+  /**
    * Create an instance of the given class
    */
   override create(eClass: EClass): EObject {
@@ -91,6 +109,10 @@ export class DatatablesettingsFactory extends BasicEFactory {
         return this.createDataTableCellPayload();
       case 'DataTableColumnPayload':
         return this.createDataTableColumnPayload();
+      case 'DataTableColorRule':
+        return this.createDataTableColorRule();
+      case 'DataTableFilterRule':
+        return this.createDataTableFilterRule();
       default:
         throw new Error(`Unknown class: ${eClass.getName()}`);
     }

@@ -154,3 +154,48 @@ describe('DataTableWidgetSettings', () => {
     expect(settings.hiddenColumns.toArray()).toEqual(['kasse'])
   })
 })
+
+/*
+ * #1265: the rule lists. Rules are added as modelled objects into the
+ * modelled settings, offered the columns of the answer, and kept in order.
+ */
+describe('the rules in DataTableWidgetSettings', () => {
+  function withSource() {
+    const widget = new WidgetImpl()
+    widget.datasource = sourceNamed('ds-1')
+    const settings = new DataTableSettingsImpl()
+    widget.config = settings
+    return { wrapper: show(widget, settings), settings }
+  }
+
+  it('adds a colour rule and a filter rule on the first column', async () => {
+    const { wrapper, settings } = withSource()
+    await flushPromises()
+
+    await wrapper.find('[data-add-color-rule]').trigger('click')
+    await wrapper.find('[data-add-filter-rule]').trigger('click')
+
+    expect(settings.colorRules.size()).toBe(1)
+    expect(settings.colorRules.get(0).eClass().getName()).toBe('DataTableColorRule')
+    expect(settings.colorRules.get(0).column).toBe('datum')
+    expect(settings.filterRules.get(0).column).toBe('datum')
+    expect(wrapper.findAll('[data-color-rule]')).toHaveLength(1)
+    expect(wrapper.findAll('[data-filter-rule]')).toHaveLength(1)
+  })
+
+  it('moves a rule up and removes one', async () => {
+    const { wrapper, settings } = withSource()
+    await flushPromises()
+    await wrapper.find('[data-add-color-rule]').trigger('click')
+    await wrapper.find('[data-add-color-rule]').trigger('click')
+    settings.colorRules.get(1).value = 'second'
+    await flushPromises()
+
+    await wrapper.findAll('[data-color-rule]')[1].find('button[title="Rules.up"]').trigger('click')
+    expect(settings.colorRules.get(0).value).toBe('second')
+
+    await wrapper.findAll('[data-color-rule]')[1].find('button[title="Rules.remove"]').trigger('click')
+    expect(settings.colorRules.size()).toBe(1)
+    expect(settings.colorRules.get(0).value).toBe('second')
+  })
+})

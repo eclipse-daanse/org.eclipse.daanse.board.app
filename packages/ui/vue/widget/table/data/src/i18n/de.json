@@ -31,5 +31,39 @@
     "match": "Zeilennummer oder Schlüsselspalte",
     "column": "Spaltenname oder -nummer",
     "keyValue": "Wert in der Schlüsselspalte"
+  },
+  "Rules": {
+    "colorTitle": "Farbregeln",
+    "colorHint": "Die erste Regel, die auf eine Zelle passt, gibt ihre Farbe. Regeln gehen vor Farben, die die Quelle mitschickt.",
+    "filterTitle": "Filterregeln",
+    "filterHint": "Nur Zeilen, die die Regeln erfüllen, werden gezeigt.",
+    "match": "Eine Zeile wird gezeigt, wenn sie erfüllt",
+    "matchAll": "alle Regeln",
+    "matchAny": "eine der Regeln",
+    "column": "Spalte",
+    "conditionLabel": "Bedingung",
+    "value": "Wert",
+    "valueHint": "Eine Variable als {name}",
+    "valueTo": "Bis",
+    "color": "Farbe",
+    "textColor": "Textfarbe",
+    "textColorHint": "Leer: dunkel oder hell nach Kontrast",
+    "target": "Färbt",
+    "targetCell": "die Zelle",
+    "targetRow": "die ganze Zeile",
+    "up": "Nach oben",
+    "down": "Nach unten",
+    "remove": "Regel entfernen",
+    "addColor": "Farbregel hinzufügen",
+    "addFilter": "Filterregel hinzufügen",
+    "condition": {
+      "EQUALS": "ist gleich",
+      "NOT_EQUALS": "ist nicht",
+      "CONTAINS": "enthält",
+      "GREATER_THAN": "größer als",
+      "LESS_THAN": "kleiner als",
+      "BETWEEN": "zwischen",
+      "EMPTY": "ist leer"
+    }
   }
 }

@@ -18,9 +18,12 @@
  * @generated
  */
 
-import { BasicEPackage, BasicEClass, BasicEAttribute, BasicEReference, EPackageRegistry, getEcorePackage, BasicEDataType, BasicEAnnotation } from '@emfts/core';
-import type { EClass, EAttribute, EReference, EDataType } from '@emfts/core';
+import { BasicEPackage, BasicEClass, BasicEAttribute, BasicEReference, EPackageRegistry, getEcorePackage, BasicEEnum, BasicEEnumLiteral, BasicEDataType, BasicEAnnotation } from '@emfts/core';
+import type { EClass, EAttribute, EReference, EEnum, EDataType } from '@emfts/core';
 import { DatatablesettingsFactory } from './DatatablesettingsFactory.js';
+import { DataTableCondition } from './DataTableCondition.js';
+import { DataTableFilterMatch } from './DataTableFilterMatch.js';
+import { DataTableColorTarget } from './DataTableColorTarget.js';
 
 /**
  * Resolve a dependency package from the registry, failing with an actionable
@@ -67,6 +70,9 @@ export class DatatablesettingsPackage extends BasicEPackage {
     DATA_TABLE_SETTINGS__MARKED_ROW_COLOR: null as unknown as EAttribute | EReference,
     DATA_TABLE_SETTINGS__MARKED_COLUMN_COLOR: null as unknown as EAttribute | EReference,
     DATA_TABLE_SETTINGS__MARKED_CELL_COLOR: null as unknown as EAttribute | EReference,
+    DATA_TABLE_SETTINGS__COLOR_RULES: null as unknown as EAttribute | EReference,
+    DATA_TABLE_SETTINGS__FILTER_RULES: null as unknown as EAttribute | EReference,
+    DATA_TABLE_SETTINGS__FILTER_MATCH: null as unknown as EAttribute | EReference,
     DATA_TABLE_ROW_PAYLOAD: null as unknown as EClass,
     DATA_TABLE_ROW_PAYLOAD__ROW: null as unknown as EAttribute | EReference,
     DATA_TABLE_ROW_PAYLOAD__ROW_INDEX: null as unknown as EAttribute | EReference,
@@ -77,6 +83,22 @@ export class DatatablesettingsPackage extends BasicEPackage {
     DATA_TABLE_COLUMN_PAYLOAD: null as unknown as EClass,
     DATA_TABLE_COLUMN_PAYLOAD__COLUMN: null as unknown as EAttribute | EReference,
     DATA_TABLE_COLUMN_PAYLOAD__COLUMN_INDEX: null as unknown as EAttribute | EReference,
+    DATA_TABLE_COLOR_RULE: null as unknown as EClass,
+    DATA_TABLE_COLOR_RULE__COLUMN: null as unknown as EAttribute | EReference,
+    DATA_TABLE_COLOR_RULE__CONDITION: null as unknown as EAttribute | EReference,
+    DATA_TABLE_COLOR_RULE__VALUE: null as unknown as EAttribute | EReference,
+    DATA_TABLE_COLOR_RULE__VALUE_TO: null as unknown as EAttribute | EReference,
+    DATA_TABLE_COLOR_RULE__COLOR: null as unknown as EAttribute | EReference,
+    DATA_TABLE_COLOR_RULE__TEXT_COLOR: null as unknown as EAttribute | EReference,
+    DATA_TABLE_COLOR_RULE__TARGET: null as unknown as EAttribute | EReference,
+    DATA_TABLE_FILTER_RULE: null as unknown as EClass,
+    DATA_TABLE_FILTER_RULE__COLUMN: null as unknown as EAttribute | EReference,
+    DATA_TABLE_FILTER_RULE__CONDITION: null as unknown as EAttribute | EReference,
+    DATA_TABLE_FILTER_RULE__VALUE: null as unknown as EAttribute | EReference,
+    DATA_TABLE_FILTER_RULE__VALUE_TO: null as unknown as EAttribute | EReference,
+    DATA_TABLE_CONDITION: null as unknown as EEnum,
+    DATA_TABLE_FILTER_MATCH: null as unknown as EEnum,
+    DATA_TABLE_COLOR_TARGET: null as unknown as EEnum,
     RECORD: null as unknown as EDataType,
   };
 
@@ -178,6 +200,33 @@ export class DatatablesettingsPackage extends BasicEPackage {
     dataTableSettingsClass.getEStructuralFeatures().push(dataTableSettings_markedCellColor);
     DatatablesettingsPackage.Literals.DATA_TABLE_SETTINGS__MARKED_CELL_COLOR = dataTableSettings_markedCellColor;
 
+    // Create colorRules feature
+    const dataTableSettings_colorRules = new BasicEReference();
+    dataTableSettings_colorRules.setContainment(true);
+    dataTableSettings_colorRules.setName('colorRules');
+    dataTableSettings_colorRules.setLowerBound(0);
+    dataTableSettings_colorRules.setUpperBound(-1);
+    dataTableSettingsClass.getEStructuralFeatures().push(dataTableSettings_colorRules);
+    DatatablesettingsPackage.Literals.DATA_TABLE_SETTINGS__COLOR_RULES = dataTableSettings_colorRules;
+
+    // Create filterRules feature
+    const dataTableSettings_filterRules = new BasicEReference();
+    dataTableSettings_filterRules.setContainment(true);
+    dataTableSettings_filterRules.setName('filterRules');
+    dataTableSettings_filterRules.setLowerBound(0);
+    dataTableSettings_filterRules.setUpperBound(-1);
+    dataTableSettingsClass.getEStructuralFeatures().push(dataTableSettings_filterRules);
+    DatatablesettingsPackage.Literals.DATA_TABLE_SETTINGS__FILTER_RULES = dataTableSettings_filterRules;
+
+    // Create filterMatch feature
+    const dataTableSettings_filterMatch = new BasicEAttribute();
+    dataTableSettings_filterMatch.setName('filterMatch');
+    dataTableSettings_filterMatch.setLowerBound(0);
+    dataTableSettings_filterMatch.setUpperBound(1);
+    dataTableSettings_filterMatch.setDefaultValueLiteral("all");
+    dataTableSettingsClass.getEStructuralFeatures().push(dataTableSettings_filterMatch);
+    DatatablesettingsPackage.Literals.DATA_TABLE_SETTINGS__FILTER_MATCH = dataTableSettings_filterMatch;
+
     // Create DataTableRowPayload class
     const dataTableRowPayloadClass = new BasicEClass();
     dataTableRowPayloadClass.setName('DataTableRowPayload');
@@ -261,6 +310,261 @@ export class DatatablesettingsPackage extends BasicEPackage {
     dataTableColumnPayloadClass.getEStructuralFeatures().push(dataTableColumnPayload_columnIndex);
     DatatablesettingsPackage.Literals.DATA_TABLE_COLUMN_PAYLOAD__COLUMN_INDEX = dataTableColumnPayload_columnIndex;
 
+    // Create DataTableColorRule class
+    const dataTableColorRuleClass = new BasicEClass();
+    dataTableColorRuleClass.setName('DataTableColorRule');
+    dataTableColorRuleClass.setAbstract(false);
+    dataTableColorRuleClass.setInterface(false);
+    this.getEClassifiers().push(dataTableColorRuleClass);
+    dataTableColorRuleClass.setEPackage(this);
+    DatatablesettingsPackage.Literals.DATA_TABLE_COLOR_RULE = dataTableColorRuleClass;
+
+    // Create column feature
+    const dataTableColorRule_column = new BasicEAttribute();
+    dataTableColorRule_column.setName('column');
+    dataTableColorRule_column.setLowerBound(0);
+    dataTableColorRule_column.setUpperBound(1);
+    dataTableColorRuleClass.getEStructuralFeatures().push(dataTableColorRule_column);
+    DatatablesettingsPackage.Literals.DATA_TABLE_COLOR_RULE__COLUMN = dataTableColorRule_column;
+
+    // Create condition feature
+    const dataTableColorRule_condition = new BasicEAttribute();
+    dataTableColorRule_condition.setName('condition');
+    dataTableColorRule_condition.setLowerBound(0);
+    dataTableColorRule_condition.setUpperBound(1);
+    dataTableColorRule_condition.setDefaultValueLiteral("equals");
+    dataTableColorRuleClass.getEStructuralFeatures().push(dataTableColorRule_condition);
+    DatatablesettingsPackage.Literals.DATA_TABLE_COLOR_RULE__CONDITION = dataTableColorRule_condition;
+
+    // Create value feature
+    const dataTableColorRule_value = new BasicEAttribute();
+    dataTableColorRule_value.setName('value');
+    dataTableColorRule_value.setLowerBound(0);
+    dataTableColorRule_value.setUpperBound(1);
+    dataTableColorRuleClass.getEStructuralFeatures().push(dataTableColorRule_value);
+    DatatablesettingsPackage.Literals.DATA_TABLE_COLOR_RULE__VALUE = dataTableColorRule_value;
+
+    // Create valueTo feature
+    const dataTableColorRule_valueTo = new BasicEAttribute();
+    dataTableColorRule_valueTo.setName('valueTo');
+    dataTableColorRule_valueTo.setLowerBound(0);
+    dataTableColorRule_valueTo.setUpperBound(1);
+    dataTableColorRuleClass.getEStructuralFeatures().push(dataTableColorRule_valueTo);
+    DatatablesettingsPackage.Literals.DATA_TABLE_COLOR_RULE__VALUE_TO = dataTableColorRule_valueTo;
+
+    // Create color feature
+    const dataTableColorRule_color = new BasicEAttribute();
+    dataTableColorRule_color.setName('color');
+    dataTableColorRule_color.setLowerBound(0);
+    dataTableColorRule_color.setUpperBound(1);
+    dataTableColorRuleClass.getEStructuralFeatures().push(dataTableColorRule_color);
+    DatatablesettingsPackage.Literals.DATA_TABLE_COLOR_RULE__COLOR = dataTableColorRule_color;
+
+    // Create textColor feature
+    const dataTableColorRule_textColor = new BasicEAttribute();
+    dataTableColorRule_textColor.setName('textColor');
+    dataTableColorRule_textColor.setLowerBound(0);
+    dataTableColorRule_textColor.setUpperBound(1);
+    dataTableColorRuleClass.getEStructuralFeatures().push(dataTableColorRule_textColor);
+    DatatablesettingsPackage.Literals.DATA_TABLE_COLOR_RULE__TEXT_COLOR = dataTableColorRule_textColor;
+
+    // Create target feature
+    const dataTableColorRule_target = new BasicEAttribute();
+    dataTableColorRule_target.setName('target');
+    dataTableColorRule_target.setLowerBound(0);
+    dataTableColorRule_target.setUpperBound(1);
+    dataTableColorRule_target.setDefaultValueLiteral("cell");
+    dataTableColorRuleClass.getEStructuralFeatures().push(dataTableColorRule_target);
+    DatatablesettingsPackage.Literals.DATA_TABLE_COLOR_RULE__TARGET = dataTableColorRule_target;
+
+    // Create DataTableFilterRule class
+    const dataTableFilterRuleClass = new BasicEClass();
+    dataTableFilterRuleClass.setName('DataTableFilterRule');
+    dataTableFilterRuleClass.setAbstract(false);
+    dataTableFilterRuleClass.setInterface(false);
+    this.getEClassifiers().push(dataTableFilterRuleClass);
+    dataTableFilterRuleClass.setEPackage(this);
+    DatatablesettingsPackage.Literals.DATA_TABLE_FILTER_RULE = dataTableFilterRuleClass;
+
+    // Create column feature
+    const dataTableFilterRule_column = new BasicEAttribute();
+    dataTableFilterRule_column.setName('column');
+    dataTableFilterRule_column.setLowerBound(0);
+    dataTableFilterRule_column.setUpperBound(1);
+    dataTableFilterRuleClass.getEStructuralFeatures().push(dataTableFilterRule_column);
+    DatatablesettingsPackage.Literals.DATA_TABLE_FILTER_RULE__COLUMN = dataTableFilterRule_column;
+
+    // Create condition feature
+    const dataTableFilterRule_condition = new BasicEAttribute();
+    dataTableFilterRule_condition.setName('condition');
+    dataTableFilterRule_condition.setLowerBound(0);
+    dataTableFilterRule_condition.setUpperBound(1);
+    dataTableFilterRule_condition.setDefaultValueLiteral("equals");
+    dataTableFilterRuleClass.getEStructuralFeatures().push(dataTableFilterRule_condition);
+    DatatablesettingsPackage.Literals.DATA_TABLE_FILTER_RULE__CONDITION = dataTableFilterRule_condition;
+
+    // Create value feature
+    const dataTableFilterRule_value = new BasicEAttribute();
+    dataTableFilterRule_value.setName('value');
+    dataTableFilterRule_value.setLowerBound(0);
+    dataTableFilterRule_value.setUpperBound(1);
+    dataTableFilterRuleClass.getEStructuralFeatures().push(dataTableFilterRule_value);
+    DatatablesettingsPackage.Literals.DATA_TABLE_FILTER_RULE__VALUE = dataTableFilterRule_value;
+
+    // Create valueTo feature
+    const dataTableFilterRule_valueTo = new BasicEAttribute();
+    dataTableFilterRule_valueTo.setName('valueTo');
+    dataTableFilterRule_valueTo.setLowerBound(0);
+    dataTableFilterRule_valueTo.setUpperBound(1);
+    dataTableFilterRuleClass.getEStructuralFeatures().push(dataTableFilterRule_valueTo);
+    DatatablesettingsPackage.Literals.DATA_TABLE_FILTER_RULE__VALUE_TO = dataTableFilterRule_valueTo;
+
+    // Create DataTableCondition enum
+    const dataTableConditionEnumType = new BasicEEnum();
+    dataTableConditionEnumType.setName('DataTableCondition');
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("EQUALS");
+      literal.setValue(0);
+      literal.setLiteral("equals");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(DataTableCondition.EQUALS);
+      dataTableConditionEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("NOT_EQUALS");
+      literal.setValue(1);
+      literal.setLiteral("notEquals");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(DataTableCondition.NOT_EQUALS);
+      dataTableConditionEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("CONTAINS");
+      literal.setValue(2);
+      literal.setLiteral("contains");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(DataTableCondition.CONTAINS);
+      dataTableConditionEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("GREATER_THAN");
+      literal.setValue(3);
+      literal.setLiteral("greaterThan");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(DataTableCondition.GREATER_THAN);
+      dataTableConditionEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("LESS_THAN");
+      literal.setValue(4);
+      literal.setLiteral("lessThan");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(DataTableCondition.LESS_THAN);
+      dataTableConditionEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("BETWEEN");
+      literal.setValue(5);
+      literal.setLiteral("between");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(DataTableCondition.BETWEEN);
+      dataTableConditionEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("EMPTY");
+      literal.setValue(6);
+      literal.setLiteral("empty");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(DataTableCondition.EMPTY);
+      dataTableConditionEnumType.addLiteral(literal);
+    }
+    {
+      const annotation = new BasicEAnnotation();
+      annotation.setSource("http://www.eclipse.org/emf/2002/GenModel");
+      annotation.getDetails().putByKey("documentation", "How a rule compares a value of the row with its own value. A rule holds the name (EQUALS); the literal (equals) is read as well. Numbers are compared as numbers where both sides are numbers, everything else as text.");
+      dataTableConditionEnumType.getEAnnotations().push(annotation);
+    }
+    DatatablesettingsPackage.Literals.DATA_TABLE_CONDITION = dataTableConditionEnumType;
+    this.getEClassifiers().push(dataTableConditionEnumType);
+
+    // Create DataTableFilterMatch enum
+    const dataTableFilterMatchEnumType = new BasicEEnum();
+    dataTableFilterMatchEnumType.setName('DataTableFilterMatch');
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("ALL");
+      literal.setValue(0);
+      literal.setLiteral("all");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(DataTableFilterMatch.ALL);
+      dataTableFilterMatchEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("ANY");
+      literal.setValue(1);
+      literal.setLiteral("any");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(DataTableFilterMatch.ANY);
+      dataTableFilterMatchEnumType.addLiteral(literal);
+    }
+    {
+      const annotation = new BasicEAnnotation();
+      annotation.setSource("http://www.eclipse.org/emf/2002/GenModel");
+      annotation.getDetails().putByKey("documentation", "Whether a row must pass every filter rule (ALL) or one of them (ANY). The name is held; the literal is read as well.");
+      dataTableFilterMatchEnumType.getEAnnotations().push(annotation);
+    }
+    DatatablesettingsPackage.Literals.DATA_TABLE_FILTER_MATCH = dataTableFilterMatchEnumType;
+    this.getEClassifiers().push(dataTableFilterMatchEnumType);
+
+    // Create DataTableColorTarget enum
+    const dataTableColorTargetEnumType = new BasicEEnum();
+    dataTableColorTargetEnumType.setName('DataTableColorTarget');
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("CELL");
+      literal.setValue(0);
+      literal.setLiteral("cell");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(DataTableColorTarget.CELL);
+      dataTableColorTargetEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("ROW");
+      literal.setValue(1);
+      literal.setLiteral("row");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(DataTableColorTarget.ROW);
+      dataTableColorTargetEnumType.addLiteral(literal);
+    }
+    {
+      const annotation = new BasicEAnnotation();
+      annotation.setSource("http://www.eclipse.org/emf/2002/GenModel");
+      annotation.getDetails().putByKey("documentation", "What a colour rule paints: the cell of its column, or every cell of the row.");
+      dataTableColorTargetEnumType.getEAnnotations().push(annotation);
+    }
+    DatatablesettingsPackage.Literals.DATA_TABLE_COLOR_TARGET = dataTableColorTargetEnumType;
+    this.getEClassifiers().push(dataTableColorTargetEnumType);
+
     // Create Record datatype
     const recordDataType = new BasicEDataType();
     recordDataType.setName('Record');
@@ -294,6 +598,9 @@ export class DatatablesettingsPackage extends BasicEPackage {
     (DatatablesettingsPackage.Literals.DATA_TABLE_SETTINGS__MARKED_ROW_COLOR as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
     (DatatablesettingsPackage.Literals.DATA_TABLE_SETTINGS__MARKED_COLUMN_COLOR as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
     (DatatablesettingsPackage.Literals.DATA_TABLE_SETTINGS__MARKED_CELL_COLOR as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (DatatablesettingsPackage.Literals.DATA_TABLE_SETTINGS__COLOR_RULES as BasicEReference).setEType(DatatablesettingsPackage.Literals.DATA_TABLE_COLOR_RULE);
+    (DatatablesettingsPackage.Literals.DATA_TABLE_SETTINGS__FILTER_RULES as BasicEReference).setEType(DatatablesettingsPackage.Literals.DATA_TABLE_FILTER_RULE);
+    (DatatablesettingsPackage.Literals.DATA_TABLE_SETTINGS__FILTER_MATCH as BasicEAttribute).setEType(DatatablesettingsPackage.Literals.DATA_TABLE_FILTER_MATCH);
     (DatatablesettingsPackage.Literals.DATA_TABLE_ROW_PAYLOAD__ROW as BasicEAttribute).setEType(DatatablesettingsPackage.Literals.RECORD);
     (DatatablesettingsPackage.Literals.DATA_TABLE_ROW_PAYLOAD__ROW_INDEX as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EInt')!);
     (DatatablesettingsPackage.Literals.DATA_TABLE_CELL_PAYLOAD__COLUMN as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
@@ -301,6 +608,17 @@ export class DatatablesettingsPackage extends BasicEPackage {
     (DatatablesettingsPackage.Literals.DATA_TABLE_CELL_PAYLOAD__VALUE as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EJavaObject')!);
     (DatatablesettingsPackage.Literals.DATA_TABLE_COLUMN_PAYLOAD__COLUMN as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
     (DatatablesettingsPackage.Literals.DATA_TABLE_COLUMN_PAYLOAD__COLUMN_INDEX as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EInt')!);
+    (DatatablesettingsPackage.Literals.DATA_TABLE_COLOR_RULE__COLUMN as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (DatatablesettingsPackage.Literals.DATA_TABLE_COLOR_RULE__CONDITION as BasicEAttribute).setEType(DatatablesettingsPackage.Literals.DATA_TABLE_CONDITION);
+    (DatatablesettingsPackage.Literals.DATA_TABLE_COLOR_RULE__VALUE as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (DatatablesettingsPackage.Literals.DATA_TABLE_COLOR_RULE__VALUE_TO as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (DatatablesettingsPackage.Literals.DATA_TABLE_COLOR_RULE__COLOR as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (DatatablesettingsPackage.Literals.DATA_TABLE_COLOR_RULE__TEXT_COLOR as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (DatatablesettingsPackage.Literals.DATA_TABLE_COLOR_RULE__TARGET as BasicEAttribute).setEType(DatatablesettingsPackage.Literals.DATA_TABLE_COLOR_TARGET);
+    (DatatablesettingsPackage.Literals.DATA_TABLE_FILTER_RULE__COLUMN as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (DatatablesettingsPackage.Literals.DATA_TABLE_FILTER_RULE__CONDITION as BasicEAttribute).setEType(DatatablesettingsPackage.Literals.DATA_TABLE_CONDITION);
+    (DatatablesettingsPackage.Literals.DATA_TABLE_FILTER_RULE__VALUE as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (DatatablesettingsPackage.Literals.DATA_TABLE_FILTER_RULE__VALUE_TO as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
 
     // ============================================
     // Set EOpposites (must be done after all features are created) (#59)
