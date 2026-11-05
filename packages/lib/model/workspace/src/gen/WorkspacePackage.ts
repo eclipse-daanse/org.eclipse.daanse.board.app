@@ -91,6 +91,7 @@ export class WorkspacePackage extends BasicEPackage {
     PAGE__WIDGETS: null as unknown as EAttribute | EReference,
     PAGE__LAYOUT: null as unknown as EAttribute | EReference,
     PAGE__WEATHER: null as unknown as EAttribute | EReference,
+    PAGE__LIGHTING: null as unknown as EAttribute | EReference,
     WIDGET: null as unknown as EClass,
     WIDGET__UID: null as unknown as EAttribute | EReference,
     WIDGET__TYPE: null as unknown as EAttribute | EReference,
@@ -117,6 +118,8 @@ export class WorkspacePackage extends BasicEPackage {
     WEATHER__SHAPES: null as unknown as EAttribute | EReference,
     WEATHER__REGION_WIDGET: null as unknown as EAttribute | EReference,
     WEATHER__AFFECTS_WIDGETS: null as unknown as EAttribute | EReference,
+    LIGHTING: null as unknown as EClass,
+    LIGHTING__AMBIENT: null as unknown as EAttribute | EReference,
     REGION_SHAPE: null as unknown as EClass,
     BOX_SHAPE: null as unknown as EClass,
     BOX_SHAPE__X: null as unknown as EAttribute | EReference,
@@ -434,6 +437,15 @@ export class WorkspacePackage extends BasicEPackage {
     pageClass.getEStructuralFeatures().push(page_weather);
     WorkspacePackage.Literals.PAGE__WEATHER = page_weather;
 
+    // Create lighting feature
+    const page_lighting = new BasicEReference();
+    page_lighting.setContainment(true);
+    page_lighting.setName('lighting');
+    page_lighting.setLowerBound(0);
+    page_lighting.setUpperBound(1);
+    pageClass.getEStructuralFeatures().push(page_lighting);
+    WorkspacePackage.Literals.PAGE__LIGHTING = page_lighting;
+
     // Create Widget class
     const widgetClass = new BasicEClass();
     widgetClass.setName('Widget');
@@ -656,6 +668,24 @@ export class WorkspacePackage extends BasicEPackage {
     weather_affectsWidgets.setUpperBound(1);
     weatherClass.getEStructuralFeatures().push(weather_affectsWidgets);
     WorkspacePackage.Literals.WEATHER__AFFECTS_WIDGETS = weather_affectsWidgets;
+
+    // Create Lighting class
+    const lightingClass = new BasicEClass();
+    lightingClass.setName('Lighting');
+    lightingClass.setAbstract(false);
+    lightingClass.setInterface(false);
+    this.getEClassifiers().push(lightingClass);
+    lightingClass.setEPackage(this);
+    WorkspacePackage.Literals.LIGHTING = lightingClass;
+
+    // Create ambient feature
+    const lighting_ambient = new BasicEReference();
+    lighting_ambient.setContainment(true);
+    lighting_ambient.setName('ambient');
+    lighting_ambient.setLowerBound(0);
+    lighting_ambient.setUpperBound(1);
+    lightingClass.getEStructuralFeatures().push(lighting_ambient);
+    WorkspacePackage.Literals.LIGHTING__AMBIENT = lighting_ambient;
 
     // Create RegionShape class
     const regionShapeClass = new BasicEClass();
@@ -1305,6 +1335,7 @@ export class WorkspacePackage extends BasicEPackage {
     (WorkspacePackage.Literals.PAGE__WIDGETS as BasicEReference).setEType(WorkspacePackage.Literals.WIDGET);
     (WorkspacePackage.Literals.PAGE__LAYOUT as BasicEReference).setEType(WorkspacePackage.Literals.LAYOUT_ITEM);
     (WorkspacePackage.Literals.PAGE__WEATHER as BasicEReference).setEType(WorkspacePackage.Literals.WEATHER);
+    (WorkspacePackage.Literals.PAGE__LIGHTING as BasicEReference).setEType(WorkspacePackage.Literals.LIGHTING);
     (WorkspacePackage.Literals.WIDGET__UID as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
     (WorkspacePackage.Literals.WIDGET__TYPE as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
     (WorkspacePackage.Literals.WIDGET__DATASOURCE as BasicEReference).setEType(WorkspacePackage.Literals.DATASOURCE);
@@ -1327,6 +1358,7 @@ export class WorkspacePackage extends BasicEPackage {
     (WorkspacePackage.Literals.WEATHER__SHAPES as BasicEReference).setEType(WorkspacePackage.Literals.REGION_SHAPE);
     (WorkspacePackage.Literals.WEATHER__REGION_WIDGET as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
     (WorkspacePackage.Literals.WEATHER__AFFECTS_WIDGETS as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
+    (WorkspacePackage.Literals.LIGHTING__AMBIENT as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
     (WorkspacePackage.Literals.BOX_SHAPE__X as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EDouble')!);
     (WorkspacePackage.Literals.BOX_SHAPE__Y as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EDouble')!);
     (WorkspacePackage.Literals.BOX_SHAPE__WIDTH as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EDouble')!);
