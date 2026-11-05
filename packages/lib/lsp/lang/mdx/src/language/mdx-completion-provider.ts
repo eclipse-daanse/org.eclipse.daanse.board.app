@@ -12,7 +12,7 @@
  **********************************************************************/
 
 import type { LangiumDocument } from 'langium'
-import { DefaultCompletionProvider } from 'langium/lsp'
+import { DefaultCompletionProvider, type CompletionProviderOptions } from 'langium/lsp'
 import {
   CompletionItemKind,
   CompletionList,
@@ -60,6 +60,12 @@ function arityLabel(signature: MdxFunctionSignature): string {
 }
 
 export class MdxCompletionProvider extends DefaultCompletionProvider {
+  // The dot opens the list: what follows `[Gender].[Gender].` is where the
+  // postfix functions are, and nothing offered them until a letter was typed.
+  override readonly completionOptions: CompletionProviderOptions = {
+    triggerCharacters: ['.'],
+  }
+
   override async getCompletion(
     document: LangiumDocument,
     params: CompletionParams,
@@ -67,13 +73,38 @@ export class MdxCompletionProvider extends DefaultCompletionProvider {
   ): Promise<CompletionList | undefined> {
     const list = await super.getCompletion(document, params, cancelToken)
     const functions = this.functionCompletions(document, params)
-    if (functions.length === 0) {
+    const items = [...(list?.items ?? []), ...functions].map(item =>
+      this.replacingTheWholeWord(item, document, params),
+    )
+    if (items.length === 0) {
       return list
     }
-    return CompletionList.create(
-      [...(list?.items ?? []), ...functions],
-      list?.isIncomplete ?? false,
-    )
+    return CompletionList.create(items, list?.isIncomplete ?? false)
+  }
+
+  /**
+   * A completion accepted inside a word replaces the whole word. The edits
+   * ended at the caret, so `WH|ERE` plus WHERE made `WHEREERE`.
+   */
+  protected replacingTheWholeWord(
+    item: CompletionItem,
+    document: LangiumDocument,
+    params: CompletionParams,
+  ): CompletionItem {
+    const edit = item.textEdit
+    if (!edit || !TextEdit.is(edit)) return item
+    const { end } = edit.range
+    if (end.line !== params.position.line || end.character !== params.position.character) return item
+    const offset = document.textDocument.offsetAt(params.position)
+    const tail = /^\w*/.exec(document.textDocument.getText().slice(offset))?.[0] ?? ''
+    if (!tail) return item
+    return {
+      ...item,
+      textEdit: TextEdit.replace(
+        Range.create(edit.range.start, { line: end.line, character: end.character + tail.length }),
+        edit.newText,
+      ),
+    }
   }
 
   protected functionCompletions(
@@ -127,10 +158,14 @@ export class MdxCompletionProvider extends DefaultCompletionProvider {
         detail,
         insertTextFormat: InsertTextFormat.Snippet,
         // A property-style function takes no parentheses: `.Parent`,
-        // never `.Parent()`. The table already says which those are.
+        // never `.Parent()`. After a dot, so does one whose arguments are
+        // all optional - `.Members`, not `.Members()`, which the server
+        // refuses. The table already says which those are.
         textEdit: TextEdit.replace(
           range,
-          signature.maxArgs === 0 ? label : `${label}($0)`,
+          signature.maxArgs === 0 || (postfix && signature.minArgs === 0)
+            ? label
+            : `${label}($0)`,
         ),
       })
     }

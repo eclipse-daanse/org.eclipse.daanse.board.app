@@ -108,6 +108,12 @@ function navigatedHierarchies(mdxResponse: unknown): string[] {
  * "{}" as text included. Every list the query is built from is there.
  */
 
+/** An Execute answer with its cell values taken out; the axes stay. */
+function withoutCells(mdxResponse: any) {
+  const root = mdxResponse?.Body?.ExecuteResponse?.return?.root
+  if (root) delete root.CellData
+}
+
 /* eMondrian's fault for a cell property it does not know: a null CellProperty. */
 const refusesUpdateable = (error: unknown) =>
   /cellProperty|UPDATEABLE/i.test(error instanceof Error ? error.message : String(error))
@@ -254,7 +260,19 @@ export class XmlaStore extends BaseDatasource {
   public async setRequestParams(requestParams: XMLARequestParams) {
     this.requestParams = requestParamsFrom(requestParams);
     this.executeCleanup();
-    this.mdx = await this.getMdxRequest();
+    // MDX somebody wrote is theirs; a change in the designer does not replace it.
+    if (!this.useMdx) this.mdx = await this.getMdxRequest();
+  }
+
+  /**
+   * The MDX written in the editor, and whether it is what runs. Taken
+   * from the configuration only when the store is built, so an editor that
+   * changes them says so here - otherwise the store kept running the
+   * designer's query, whatever was typed.
+   */
+  public setMdx(mdx: string, useMdx: boolean) {
+    this.mdx = mdx
+    this.useMdx = useMdx
   }
 
   /** Drilldowns and expansions of hierarchies no longer on their axis are dropped. */
@@ -313,19 +331,32 @@ export class XmlaStore extends BaseDatasource {
       mdxResponse = await send(request)
     }
 
+    /*
+     * A query built without a measure still gets values: the server fills
+     * in the cube's default measure. Nobody asked for that one, and the
+     * table showed its numbers under no header - so the members come
+     * without values, as a pivot with an empty Data area does elsewhere.
+     */
+    if (!this.useMdx && !this.requestParams.measures.length) withoutCells(mdxResponse)
+
     if (type === 'PivotTable') {
       // Pages and chapters of hand-written MDX are known only from the answer.
       await this.queryMetadata(navigatedHierarchies(mdxResponse))
       response = this.parseToPivotTable(mdxResponse, requestConfig)
       if (!response) return null
 
+      /*
+       * Copies, not the handler's own lists: it changes those in place, so
+       * every answer handed out the same array, and a view that had read
+       * it once - the table's set of expanded members - never saw a member
+       * added. An expanded member then had no collapse toggle.
+       */
+      const handler = this.drilldownHandler
       response.tableState = {
-        rowsExpandedMembers: this.drilldownHandler?.rowsExpandedMembers || [],
-        rowsDrilldownMembers: this.drilldownHandler?.rowsDrilldownMembers || [],
-        columnsExpandedMembers:
-          this.drilldownHandler?.columnsExpandedMembers || [],
-        columnsDrilldownMembers:
-          this.drilldownHandler?.columnsDrilldownMembers || [],
+        rowsExpandedMembers: [...(handler?.rowsExpandedMembers ?? [])],
+        rowsDrilldownMembers: [...(handler?.rowsDrilldownMembers ?? [])],
+        columnsExpandedMembers: [...(handler?.columnsExpandedMembers ?? [])],
+        columnsDrilldownMembers: [...(handler?.columnsDrilldownMembers ?? [])],
       }
     } else if (type === 'DataTable') {
       response = this.parseToDataTable(mdxResponse)
