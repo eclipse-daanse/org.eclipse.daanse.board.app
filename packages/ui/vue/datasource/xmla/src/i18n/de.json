@@ -11,7 +11,9 @@
     "tabs": "Abfrage bauen oder schreiben",
     "useMdx": "MDX-Abfrage verwenden",
     "preview": "Datenvorschau",
-    "pickConnection": "Wähle eine Verbindung, um die Metadaten zu laden"
+    "pickConnection": "Wähle eine Verbindung, um die Metadaten zu laden",
+    "editor": "Editor für die MDX-Abfrage",
+    "failed": "Der Server hat diese Abfrage nicht ausgeführt:"
   },
   "Fields": {
     "cube": "Würfel",

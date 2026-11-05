@@ -9,8 +9,9 @@
     "lib.api.connection",
     "lib.api.datasource",
     "lib.datasource.xmla",
+    "lib.lsp.lang.mdx",
     "platform.vue",
-    "ui.vue.common.monaco",
+    "ui.vue.common.lsp",
     "ui.vue.common.xmla",
     "ui.vue.composables",
     "ui.vue.controls"
@@ -41,7 +42,11 @@
       "versionRange": ">=0.0.1-0"
     },
     {
-      "id": "org.eclipse.daanse.board.app.ui.vue.common.monaco",
+      "id": "org.eclipse.daanse.board.app.lib.lsp.lang.mdx",
+      "versionRange": ">=0.0.1-0"
+    },
+    {
+      "id": "org.eclipse.daanse.board.app.ui.vue.common.lsp",
       "versionRange": ">=0.0.1-0"
     },
     {
