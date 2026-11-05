@@ -368,6 +368,10 @@
       "regionWidgetChoice": "Widget",
       "drawRegion": "Bereich zeichnen",
       "affectsWidgets": "Wirkt auf die Widgets"
+    },
+    "lighting": {
+      "label": "Beleuchtung",
+      "ambient": "Umgebungslicht"
     }
   },
   "Tokens": {

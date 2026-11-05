@@ -1,0 +1,45 @@
+{
+  "Widget": {
+    "lamp": "Lamp"
+  },
+  "State": {
+    "on": "On - click to switch off",
+    "off": "Off - click to switch on"
+  },
+  "Action": {
+    "brightness": "Brightness (0-100)",
+    "color": "Colour",
+    "colorTemperature": "Colour temperature (kelvin)"
+  },
+  "Form": {
+    "lampGroup": "Lamp",
+    "fixture": "Fixture",
+    "on": "On",
+    "brightness": "Brightness",
+    "colorGroup": "Colour",
+    "color": "Colour (empty: colour temperature)",
+    "colorTemperature": "Colour temperature (kelvin)",
+    "lightGroup": "Light on the page",
+    "radius": "Reach (px)",
+    "lightShape": "Shape of the light",
+    "direction": "Direction (degrees, 90 = down)",
+    "angle": "Opening angle (degrees)",
+    "originX": "Light source across the widget (%)",
+    "originY": "Light source down the widget (%)",
+    "lightsWidgets": "Lights the widgets",
+    "sourceGroup": "Data source",
+    "stateField": "Field with the state"
+  },
+  "Options": {
+    "fixture": {
+      "bulb": "Bulb",
+      "spot": "Spot",
+      "strip": "Strip",
+      "ceiling": "Ceiling light"
+    },
+    "lightShape": {
+      "round": "Round",
+      "cone": "Cone"
+    }
+  }
+}
