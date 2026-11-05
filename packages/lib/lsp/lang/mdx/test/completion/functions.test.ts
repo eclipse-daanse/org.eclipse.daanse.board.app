@@ -12,7 +12,7 @@
  **********************************************************************/
 
 import { describe, expect, test } from 'vitest'
-import type { CompletionItem } from 'vscode-languageserver'
+import { Range, TextEdit, type CompletionItem } from 'vscode-languageserver'
 import { parseMdx, services } from '../test-helper.js'
 import {
   functionDisplayName,
@@ -45,6 +45,23 @@ describe('display names', () => {
       expect(display, `${name} has no display name`).not.toBe(name)
       expect(display.toUpperCase()).toBe(name)
     }
+  })
+})
+
+describe('what the server tells the client about completion', () => {
+  test('the dot is a trigger character', () => {
+    expect(provider.completionOptions?.triggerCharacters).toContain('.')
+  })
+})
+
+describe('inside a word', () => {
+  test('an accepted item replaces the whole word, not only what is before the caret', async () => {
+    const items = await completeAt('SELECT {} ON 0 FROM [Sales] WH|ERE')
+    const edit = items.find(item => item.label === 'WHERE')?.textEdit
+    expect(edit && TextEdit.is(edit) ? edit.range : undefined).toEqual(
+      Range.create(0, 28, 0, 33),
+    )
+    // Was: the range ended at the caret, and WHERE + ERE made WHEREERE.
   })
 })
 
@@ -125,5 +142,18 @@ describe('positions where nothing is offered', () => {
 
   test('inside a line comment', async () => {
     expect(labels(await completeAt('SELECT // Su|'))).not.toContain('Sum')
+  })
+})
+
+describe('after a dot, the spelling', () => {
+  test('a function whose arguments are all optional is inserted bare', async () => {
+    const items = await completeAt('SELECT {[Gender].[Gender].Mem|')
+    // Was: `Members()`, which the server refuses.
+    expect(insertOf(items, 'Members')).toBe('Members')
+  })
+
+  test('one that needs an argument keeps its parentheses', async () => {
+    const items = await completeAt('SELECT {[Gender].[Gender].Prop|')
+    expect(insertOf(items, 'Properties')).toBe('Properties($0)')
   })
 })
