@@ -14,6 +14,14 @@ should change — `emf.ts` and `emf.ts.codegen` are separate projects, so that
 is an issue filed there, not a hand-written class here. The same holds for
 `@eclipse-daanse/tsm`.
 
+Generate through the repository's driver, never through the `emfts-codegen`
+CLI alone: `yarn generate_models <path filter>` (it runs
+`tools/generator/scan-and-generate.js`). After the codegen run the driver adds
+two things the generator does not write: a `toJSON()` on each `*Impl.ts` that
+has none (`addToJson`) and the licence header. A direct CLI run leaves both
+out, and hand-adding them was how three packages got a hand-written part under
+`src/gen` in one day.
+
 `yarn check_models` must pass. It reports when a package hands out a
 hand-written class under a modelled name, which is a defect that otherwise
 stays invisible for months (#1068). Findings already filed sit in the script's
