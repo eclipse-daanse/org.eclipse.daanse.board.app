@@ -13,12 +13,17 @@ import 'reflect-metadata';
 import { getWidgetActions, formatActionParameter, type WidgetActionMetadata, type WidgetActionParameter } from '../decorators/WidgetAction';
 import { EcoreMetadataService } from './EcoreMetadataService';
 import { EVENT_ACTIONS_REGISTRY_ID } from 'org.eclipse.daanse.board.app.lib.api.events'
+import type { ActionProvider, ProvidedAction, ProvidedTarget } from 'org.eclipse.daanse.board.app.lib.api.events'
+import type { EventActionContext as ModelledEventActionContext } from '../gen/EventActionContext'
 export { EVENT_ACTIONS_REGISTRY_ID } from 'org.eclipse.daanse.board.app.lib.api.events'
 
 /**
  * Kontext für Event-Aktionen
+ *
+ * The literals of the modelled enum (MappingModel.ecore), as the strings a
+ * stored rule carries.
  */
-export type EventActionContext = 'system' | 'page' | 'widget';
+export type EventActionContext = `${ModelledEventActionContext}`;
 
 /**
  * Event-Aktion Definition
@@ -61,6 +66,9 @@ export class EventActionsRegistry {
   private instancePages: Map<string, string> = new Map(); // instanceId -> pageId
   private ecoreMetadataService?: EcoreMetadataService;
   private pageIdLookupFn?: (widgetId: string) => string | undefined;
+  /** Providers by the context they offer actions in, each with what removes its change listener. */
+  private providers: Map<EventActionContext, Map<ActionProvider, (() => void) | undefined>> = new Map();
+  private providedActionsListeners: Set<() => void> = new Set();
 
   /**
    * Erstellt einen eindeutigen Key für die Registry
@@ -529,6 +537,135 @@ export class EventActionsRegistry {
    */
   getWidgetType(widgetType: string): WidgetTypeRegistration | undefined {
     return this.widgetTypes.get(widgetType);
+  }
+
+  /*
+   * Actions offered by providers.
+   *
+   * A widget type declares its actions once, as methods of a class; a
+   * provider names them per target whenever asked, and announces when its
+   * list changed. Kept beside the widget types rather than folded into
+   * them, so that nothing about how a widget type is registered, listed or
+   * called changes.
+   */
+
+  /**
+   * Registers a provider of actions for targets in a context.
+   * Returns what takes the registration back.
+   */
+  registerActionProvider(context: EventActionContext, provider: ActionProvider): () => void {
+    let inContext = this.providers.get(context);
+    if (!inContext) {
+      inContext = new Map();
+      this.providers.set(context, inContext);
+    }
+    if (!inContext.has(provider)) {
+      const stopListening = provider.onChange?.(() => this.notifyProvidedActionsChanged());
+      inContext.set(provider, stopListening);
+      this.notifyProvidedActionsChanged();
+    }
+    return () => {
+      this.unregisterActionProvider(context, provider);
+    };
+  }
+
+  /**
+   * Takes a provider's registration back.
+   * @returns whether it was registered
+   */
+  unregisterActionProvider(context: EventActionContext, provider: ActionProvider): boolean {
+    const inContext = this.providers.get(context);
+    if (!inContext?.has(provider)) return false;
+    inContext.get(provider)?.();
+    inContext.delete(provider);
+    if (inContext.size === 0) this.providers.delete(context);
+    this.notifyProvidedActionsChanged();
+    return true;
+  }
+
+  /** Every target the providers of a context name. */
+  getProvidedTargets(context: EventActionContext): ProvidedTarget[] {
+    const result: ProvidedTarget[] = [];
+    for (const provider of this.providers.get(context)?.keys() ?? []) {
+      for (const target of this.safely(() => provider.targets(), [])) {
+        result.push({ ...target, context, provider });
+      }
+    }
+    return result;
+  }
+
+  /** Whether a provider of the context names the target. */
+  hasProvidedTarget(context: EventActionContext, targetId: string): boolean {
+    return this.providerFor(context, targetId) !== undefined;
+  }
+
+  /** The actions the provider of a target offers for it; none when no provider names the target. */
+  getProvidedActions(context: EventActionContext, targetId: string): ProvidedAction[] {
+    const provider = this.providerFor(context, targetId);
+    return provider ? this.safely(() => provider.actions(targetId), []) : [];
+  }
+
+  /**
+   * Carries out an action through the provider that names the target.
+   * @returns whether a provider was found for the target
+   */
+  async executeProvidedAction(
+    context: EventActionContext,
+    targetId: string,
+    actionName: string,
+    args: unknown[]
+  ): Promise<boolean> {
+    const provider = this.providerFor(context, targetId);
+    if (!provider) {
+      console.warn(`No action provider names "${targetId}" in context "${context}".`);
+      return false;
+    }
+    try {
+      await provider.execute(targetId, actionName, args);
+    } catch (error) {
+      console.error(`Error executing action "${actionName}" on "${targetId}":`, error);
+    }
+    return true;
+  }
+
+  /**
+   * Calls the listener whenever a provider is registered or taken back, or
+   * announces that its list changed. Returns what removes the listener.
+   */
+  onProvidedActionsChanged(listener: () => void): () => void {
+    this.providedActionsListeners.add(listener);
+    return () => {
+      this.providedActionsListeners.delete(listener);
+    };
+  }
+
+  private providerFor(context: EventActionContext, targetId: string): ActionProvider | undefined {
+    for (const provider of this.providers.get(context)?.keys() ?? []) {
+      if (this.safely(() => provider.targets(), []).some((target) => target.id === targetId)) {
+        return provider;
+      }
+    }
+    return undefined;
+  }
+
+  private notifyProvidedActionsChanged(): void {
+    for (const listener of [...this.providedActionsListeners]) {
+      try {
+        listener();
+      } catch (error) {
+        console.error('Error in a listener for provided actions:', error);
+      }
+    }
+  }
+
+  /* A provider that throws offers nothing; it does not take the dialog or the rule down with it. */
+  private safely<T>(ask: () => T, fallback: T): T {
+    try {
+      return ask() ?? fallback;
+    } catch (error) {
+      console.error('An action provider failed:', error);
+      return fallback;
+    }
   }
 }
 
