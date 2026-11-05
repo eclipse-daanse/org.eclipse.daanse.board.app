@@ -50,9 +50,13 @@ export interface StaFixture {
   pageSize?: number
   /** `/Observations` answers with every observation, not only the latest. */
   observationsCollectionIsHistory?: boolean
+  /** Answers 400 to `$expand=Datastreams/ObservedProperty`. */
+  refuseDeepExpand?: boolean
   /** Milliseconds before an answer, so parallel requests overlap. */
   delay?: number
 }
+
+class BadRequest extends Error {}
 
 export const STA_BASE = 'https://sta.example/udp/rest/'
 
@@ -105,6 +109,10 @@ export function staServer(fixture: StaFixture) {
     }
     for (const nav of expand) {
       if (nav === 'Datastreams') out.Datastreams = (item.Datastreams ?? []).map((d: StaDatastream) => withoutNav(d))
+      else if (nav === 'Datastreams/ObservedProperty') {
+        if (fixture.refuseDeepExpand) throw new BadRequest()
+        out.Datastreams = item.Datastreams ?? []
+      }
       else if (nav === 'Locations') out.Locations = item.Locations ?? []
       else if (nav === 'ObservedProperty') out.ObservedProperty = item.ObservedProperty
     }
@@ -190,7 +198,13 @@ export function staServer(fixture: StaFixture) {
       try {
         await new Promise((r) => setTimeout(r, fixture.delay ?? 1))
         const path = full.pathname.replace(/^\/udp\/rest\/v1\.1\//, '')
-        const body = answer(path, full.searchParams)
+        let body: unknown
+        try {
+          body = answer(path, full.searchParams)
+        } catch (e) {
+          if (e instanceof BadRequest) return new Response('{"message":"bad request"}', { status: 400 })
+          throw e
+        }
         if (body === 404) return new Response('{"message":"not found"}', { status: 404 })
         return new Response(JSON.stringify(body), { status: 200, headers: { 'content-type': 'application/json' } })
       } finally {
