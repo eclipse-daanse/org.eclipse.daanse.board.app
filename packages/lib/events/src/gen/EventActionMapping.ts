@@ -46,11 +46,11 @@ export class EventActionMapping {
   @Reference('Condition')
   conditions: Condition[] = [];
 
-  @Documentation("Context where the action should execute (system, page, widget).")
+  @Documentation("Context where the action should execute (system, page, widget, datasource).")
   @Enum('EventActionContext')
   targetContext: EventActionContext = EventActionContext.system;
 
-  @Documentation("Optional specific target context ID.")
+  @Documentation("Optional specific target context ID; for a datasource target, the datasource uid.")
   @Attribute()
   targetContextId?: string;
 
