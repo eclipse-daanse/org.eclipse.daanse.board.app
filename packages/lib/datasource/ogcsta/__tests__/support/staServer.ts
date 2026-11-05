@@ -88,7 +88,7 @@ function timeWindow(expr: string | null) {
     (!after || o.phenomenonTime > after) && (!before || o.phenomenonTime < before)
 }
 
-export function staServer(fixture: StaFixture) {
+export function staServer(fixture: StaFixture, base: string = STA_BASE) {
   const requests: string[] = []
   let inFlight = 0
   let maxInFlight = 0
@@ -189,9 +189,9 @@ export function staServer(fixture: StaFixture) {
   }
 
   const connection = {
-    url: STA_BASE,
+    url: base,
     async fetch(config: { url: string }, _init?: RequestInit): Promise<Response> {
-      const full = new URL(config.url.replace(/^\/+/, ''), STA_BASE)
+      const full = new URL(config.url.replace(/^\/+/, ''), base)
       requests.push(decodeURIComponent(full.pathname + full.search).replace('/udp/rest/', ''))
       inFlight++
       maxInFlight = Math.max(maxInFlight, inFlight)
