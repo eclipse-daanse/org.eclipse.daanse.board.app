@@ -291,14 +291,15 @@ const getShadow = computed(() => {
 })
 
 const getBackground = computed(() => {
-  let bgAlpha = 255
-  const bgTransparence = wrapperConfig().backgroundColorTransparence?.value;
-  if (isByte(bgTransparence)) {
-    bgAlpha = bgTransparence
-  }
+  /*
+   * The settings are modelled as strings, so a value from the form is
+   * "128", not 128. Read as numbers: a string handed on as it is gave
+   * "128" where the hex digits "80" belonged, and an invalid colour.
+   */
+  let bgAlpha = byteOf(wrapperConfig().backgroundColorTransparence?.value) ?? 255
   // Also factor in overall widget transparency
-  const transparencyVal = wrapperConfig().transparency?.value;
-  if (isByte(transparencyVal)) {
+  const transparencyVal = byteOf(wrapperConfig().transparency?.value)
+  if (transparencyVal !== undefined) {
     bgAlpha = Math.round(bgAlpha * (transparencyVal / 255))
   }
 
@@ -306,11 +307,20 @@ const getBackground = computed(() => {
    * No colour of its own means "follow the theme" - white was a sensible
    * default while the app only had a light surface, but it burns a hole in
    * a dark board. Widgets that carry a stored colour keep it.
+   *
+   * The theme colour takes the same transparency as a stored one. It used
+   * to stay opaque, and since new frames store no colour, most widgets
+   * ignored their transparency - and their blur too, which only shows
+   * through a background that lets something through (#1260).
    */
   const stored = wrapperConfig().backgroundColor?.value
-  if (!stored) return 'var(--color-pane)'
+  if (!stored) return withAlpha('var(--color-pane)', bgAlpha)
 
-  let color = stored.replace('#', '')
+  let color = String(stored).trim().replace('#', '')
+  if (!/^([0-9a-f]{3}|[0-9a-f]{6})$/i.test(color)) {
+    // Not a plain hex colour (a name, rgb(), one with its own alpha)
+    return withAlpha(String(stored).trim(), bgAlpha)
+  }
   if (color.length == 3) {
     color = color[0] + color[0] + color[1] + color[1] + color[2] + color[2]
   }
@@ -319,6 +329,13 @@ const getBackground = computed(() => {
   const ret = `#${color}${post}`
   return ret
 })
+
+/** A colour with an alpha of 0 to 255, for colours that carry no hex digits to append it to */
+function withAlpha(color: string, alpha: number): string {
+  if (alpha >= 255) return color
+  const percent = Math.round((alpha / 255) * 1000) / 10
+  return `color-mix(in srgb, ${color} ${percent}%, transparent)`
+}
 
 const borderColor = computed(() => {
   return wrapperConfig().borderColor?.value || 'var(--color-divider)'
@@ -368,6 +385,10 @@ function isByte(value: any): value is number {
   }
   return parsedValue >= 0 && parsedValue <= 255;
 }
+/** The value as a number from 0 to 255, or undefined when it is none */
+function byteOf(value: any): number | undefined {
+  return isByte(value) ? parseInt(String(value)) : undefined
+}
 const getBlur = computed(() => {
   const b = wrapperConfig().blur?.value;
   return (isByte(b)) ?
@@ -385,7 +406,7 @@ const getpadding = computed(() => {
     class="flex relative flex-col w-full h-full wrapper-container"
     :class="{ 'wrapper-container--frameless': frameless, 'wrapper-container--pass-through': passThrough }"
     v-bind="frameless ? { [FRAMELESS_ATTRIBUTE]: '' } : {}"
-    :style="{ '--blur-amount': getBlur + 'px', '--title-color': titleColor }">
+    :style="{ '--blur-amount': getBlur + 'px', '--title-color': titleColor, '--frame-background': getBackground }">
     <div
       v-if="wrapperConfig().title?.value && !frameless"
       class="font-semibold capitalize"
@@ -460,7 +481,8 @@ const getpadding = computed(() => {
 
 .wrapper-container {
 
-  background-color: v-bind(getBackground);
+  /* Set on the element itself, beside the blur it lets show through */
+  background-color: var(--frame-background);
   border-color: v-bind(borderColor);
   border-width: v-bind(borderSize + "px");
   border-style: solid;

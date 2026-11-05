@@ -27,7 +27,7 @@ Contributors:
  * Meanwhile the weather runs, on the board being edited too, clipped to
  * the shapes as they are drawn - the person sees what they will get.
  */
-import { inject, onBeforeUnmount, ref } from 'vue'
+import { inject, onBeforeUnmount, provide, ref } from 'vue'
 import type { TinyEmitter } from 'tiny-emitter'
 import { identifiers } from 'org.eclipse.daanse.board.app.lib.core'
 import {
@@ -41,6 +41,7 @@ import {
 } from 'org.eclipse.daanse.board.app.lib.model.workspace'
 import { DEFAULT_CELL, useWeatherLayer, type GridCell } from './useWeatherLayer'
 import RegionDrawing from './RegionDrawing.vue'
+import { WEATHER_BOARD_STACKING } from './boardStacking'
 
 const props = defineProps<{
   page?: Page
@@ -74,6 +75,16 @@ const { running, engine, settings, affectsWidgets } = useWeatherLayer({
   front,
   cell: cellAt,
   scroller: scrollerElement,
+})
+
+/* A light layer inside stacks the widgets itself (#1260) */
+const stackedInside = ref(false)
+provide(WEATHER_BOARD_STACKING, {
+  running,
+  stackInside: () => {
+    stackedInside.value = true
+    return () => (stackedInside.value = false)
+  },
 })
 
 /* ------------------------------------------------------------ drawing */
@@ -116,7 +127,11 @@ defineExpose({ running, engine, settings, affectsWidgets, startDrawing, drawing 
 </script>
 
 <template>
-  <div ref="host" class="weather" :class="{ 'weather--on': running, 'weather--drawing': drawing }">
+  <div
+    ref="host"
+    class="weather"
+    :class="{ 'weather--on': running, 'weather--drawing': drawing, 'weather--stacked-inside': stackedInside }"
+  >
     <canvas ref="back" class="weather__sky weather__sky--back" aria-hidden="true" />
     <div class="weather__board">
       <slot />
@@ -145,7 +160,9 @@ defineExpose({ running, engine, settings, affectsWidgets, startDrawing, drawing 
 /*
  * Its own stacking context while the weather runs: widgets order among
  * themselves, under the sky. Only then - a board being edited keeps its
- * menus and handles free to rise above everything around it.
+ * menus and handles free to rise above everything around it. Not when a
+ * light layer inside does it on its own board: its blended canvas would
+ * end what a frame's blur sees at this board (boardStacking.ts).
  */
 .weather__board {
   position: relative;
@@ -153,7 +170,7 @@ defineExpose({ running, engine, settings, affectsWidgets, startDrawing, drawing 
   height: 100%;
 }
 
-.weather--on .weather__board {
+.weather--on:not(.weather--stacked-inside) .weather__board {
   z-index: 0;
 }
 
