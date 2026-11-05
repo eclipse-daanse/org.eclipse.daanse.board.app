@@ -21,6 +21,7 @@ import {
   WidgetRepository,
   identifier as WidgetIdentifier,
   WIDGET_EDIT_MODE,
+  FRAMELESS_ATTRIBUTE,
 } from 'org.eclipse.daanse.board.app.lib.api.widget'
 
 import { useEObject, VariableWrapper, useTranslation, provideDataSelection, selectionSnapshot } from 'org.eclipse.daanse.board.app.ui.vue.composables'
@@ -383,6 +384,7 @@ const getpadding = computed(() => {
   <div
     class="flex relative flex-col w-full h-full wrapper-container"
     :class="{ 'wrapper-container--frameless': frameless, 'wrapper-container--pass-through': passThrough }"
+    v-bind="frameless ? { [FRAMELESS_ATTRIBUTE]: '' } : {}"
     :style="{ '--blur-amount': getBlur + 'px', '--title-color': titleColor }">
     <div
       v-if="wrapperConfig().title?.value && !frameless"
