@@ -9,6 +9,7 @@ Contributors: Smart City Jena
 
 -->
 <script lang="ts" setup>
+import { plainSettings } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import { inject, ref, computed, onErrorCaptured, toRaw, type Ref } from 'vue'
 import { LGeoJson, LMarker, LIcon, LTooltip } from '@vue-leaflet/vue-leaflet'
 import { type BoxedDatastream } from 'org.eclipse.daanse.board.app.lib.datasource.ogcsta'
@@ -487,7 +488,9 @@ const thingAreas = computed(() => {
       seen.set(locId, {
         key: `area-${locId}`,
         geojson: item.location.location,
-        area: item.renderer.renderer.area,
+        // Plain: leaflet copies a style with for..in, which sees none of
+        // a modelled object's getters (#1262)
+        area: plainSettings(item.renderer.renderer.area),
         selected: false,
       })
     }
@@ -506,7 +509,7 @@ const datastreamAreas = computed(() => {
     seen.set(dsId, {
       key: `dsarea-${dsId}`,
       geojson: item.observedAreaGeoJson,
-      area: item.subrenderer.renderer.area,
+      area: plainSettings(item.subrenderer.renderer.area),
     })
   }
   return [...seen.values()]
