@@ -23,10 +23,9 @@ Contributors:
  * weather, so a widget's z-index orders it among the widgets and never
  * above the light.
  *
- * Being edited, a board covers the page behind its widgets with a ground
- * of its own: every light is drawn over the board then, and the page is
- * not darkened, so the person sees where the light falls as they move
- * the lamp.
+ * While there is light the layer carries the class light--on: a layout
+ * whose editor covers the page with a ground of its own makes that ground
+ * transparent then, so the light and the dark are seen while editing too.
  */
 import { ref } from 'vue'
 import type { Page } from 'org.eclipse.daanse.board.app.lib.model.workspace'
@@ -34,7 +33,6 @@ import { useLightLayer } from './useLightLayer'
 
 const props = defineProps<{
   page?: Page
-  editMode?: boolean
   /** A selector for the element inside the slot that scrolls the widgets. */
   scroller?: string
 }>()
@@ -45,7 +43,6 @@ const front = ref<HTMLCanvasElement>()
 
 const { scene, lit, sources, ambient, measure } = useLightLayer({
   page: () => props.page,
-  editMode: () => Boolean(props.editMode),
   host,
   back,
   front,

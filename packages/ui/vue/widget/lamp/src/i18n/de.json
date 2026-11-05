@@ -1,10 +1,11 @@
 {
   "Widget": {
-    "lamp": "Lampe"
+    "lamp": "Lichtquelle"
   },
-  "State": {
-    "on": "An - zum Ausschalten klicken",
-    "off": "Aus - zum Einschalten klicken"
+  "Marker": {
+    "label": "Lichtquelle",
+    "on": "Lichtquelle - an",
+    "off": "Lichtquelle - aus"
   },
   "Action": {
     "brightness": "Helligkeit (0-100)",
@@ -12,31 +13,22 @@
     "colorTemperature": "Farbtemperatur (Kelvin)"
   },
   "Form": {
-    "lampGroup": "Lampe",
-    "fixture": "Leuchte",
+    "lampGroup": "Licht",
     "on": "An",
     "brightness": "Helligkeit",
     "colorGroup": "Farbe",
     "color": "Farbe (leer: Farbtemperatur)",
     "colorTemperature": "Farbtemperatur (Kelvin)",
     "lightGroup": "Licht auf der Seite",
-    "radius": "Reichweite (px)",
+    "radius": "Reichweite (px, leer: Widgetgröße)",
     "lightShape": "Form des Lichts",
     "direction": "Richtung (Grad, 90 = nach unten)",
     "angle": "Öffnungswinkel (Grad)",
-    "originX": "Lichtquelle quer im Widget (%)",
-    "originY": "Lichtquelle längs im Widget (%)",
     "lightsWidgets": "Beleuchtet die Widgets",
     "sourceGroup": "Datenquelle",
     "stateField": "Feld mit dem Zustand"
   },
   "Options": {
-    "fixture": {
-      "bulb": "Glühbirne",
-      "spot": "Strahler",
-      "strip": "Lichtleiste",
-      "ceiling": "Deckenleuchte"
-    },
     "lightShape": {
       "round": "Rund",
       "cone": "Kegel"

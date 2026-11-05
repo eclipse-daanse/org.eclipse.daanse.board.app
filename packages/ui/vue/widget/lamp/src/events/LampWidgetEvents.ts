@@ -14,14 +14,11 @@
 import type { WidgetEventDefinition } from 'org.eclipse.daanse.board.app.lib.events'
 import { LampPayloadImpl } from '../gen/LampPayloadImpl'
 
-/* Both carry the lamp's whole state, so a rule can pass it on (#1221). */
+/*
+ * It carries the lamp's whole state, so a rule can pass it on (#1221).
+ * There is no click: shown, a light source takes no pointer (#1242).
+ */
 export const LampWidgetEvents: WidgetEventDefinition[] = [
-  {
-    name: 'Lamp Clicked',
-    type: 'clicked',
-    description: 'Triggered when the lamp is clicked, before it is switched',
-    payloadType: LampPayloadImpl,
-  },
   {
     name: 'Lamp State Changed',
     type: 'stateChanged',

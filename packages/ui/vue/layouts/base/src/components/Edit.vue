@@ -739,8 +739,8 @@ const change = (e: any) => {
   <!-- Still while editing: the weather waits, and draws nothing. Its region
     is drawn here, over the board as it scrolls -->
   <WeatherLayer :page="board.page.value" edit-mode scroller=".scroll-viewport">
-  <!-- The lamps' light, drawn over the board while it is edited: it follows a lamp as it is moved -->
-  <LightLayer :page="board.page.value" edit-mode scroller=".scroll-viewport">
+  <!-- The lamps' light and the page's dark, as when shown: it follows a lamp as it is moved -->
+  <LightLayer :page="board.page.value" scroller=".scroll-viewport">
   <div
     class="report-container"
     @contextmenu="onCanvasContextMenu"
@@ -1188,6 +1188,14 @@ const change = (e: any) => {
  * is needed most when placing something against the picture.
  */
 :root[data-board-backdrop='on'] .canvas.dottet {
+  background-color: transparent;
+}
+
+/*
+ * The same while the page has light or dark (#1242): the light layer draws
+ * behind the board, and the surface would hide it.
+ */
+.light--on .canvas.dottet {
   background-color: transparent;
 }
 

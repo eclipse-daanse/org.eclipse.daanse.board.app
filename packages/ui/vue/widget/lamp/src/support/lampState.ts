@@ -21,22 +21,16 @@ import { VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables
 /** The wrapped settings with the value the model gives them. */
 export const WRAPPED: Record<string, string> = {
   on: 'false',
-  fixture: 'bulb',
   brightness: '100',
   color: '',
   colorTemperature: '2700',
-  radius: '240',
+  radius: '',
   lightShape: 'round',
   direction: '90',
   angle: '60',
-  originX: '50',
-  originY: '50',
   lightsWidgets: 'false',
   stateField: '',
 }
-
-export const FIXTURES = ['bulb', 'spot', 'strip', 'ceiling'] as const
-export type Fixture = (typeof FIXTURES)[number]
 
 /** The state a lamp shows and sends. */
 export interface LampState {
