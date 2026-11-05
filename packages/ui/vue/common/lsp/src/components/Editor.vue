@@ -13,7 +13,7 @@ Contributors:
 
 <script setup lang="ts">
 import { onBeforeUnmount, onMounted, ref, watch } from 'vue'
-import type { Extension } from '@codemirror/state'
+import { EditorState, type Extension } from '@codemirror/state'
 import type { EditorView } from '@codemirror/view'
 import type { LanguageDescriptor } from 'org.eclipse.daanse.board.app.lib.lsp.core'
 import { useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
@@ -35,6 +35,44 @@ const emit = defineEmits<{
   (event: 'textChanged', text: string): void
 }>()
 
+/*
+ * CodeMirror's own words - the search panel, the lint list, what it tells a
+ * screen reader - in the language of the host. Each phrase names its key in
+ * the pack; what the pack does not hold stays English.
+ */
+/* i18n-keys: lsp:Phrases.* */
+const PHRASES: Record<string, string> = {
+  Find: 'find',
+  Replace: 'replaceWith',
+  next: 'next',
+  previous: 'previous',
+  all: 'all',
+  'match case': 'matchCase',
+  'by word': 'byWord',
+  regexp: 'regexp',
+  replace: 'replace',
+  'replace all': 'replaceAll',
+  close: 'close',
+  'current match': 'currentMatch',
+  'replaced $ matches': 'replacedMatches',
+  'replaced match on line $': 'replacedOnLine',
+  'on line': 'onLine',
+  'Go to line': 'goToLine',
+  go: 'go',
+  Completions: 'completions',
+  Diagnostics: 'diagnostics',
+  'No diagnostics': 'noDiagnostics',
+  'Selection deleted': 'selectionDeleted',
+  'Control character': 'controlCharacter',
+  'New name': 'newName',
+  rename: 'rename',
+  'Reference list': 'references',
+}
+const phrases = () =>
+  EditorState.phrases.of(
+    Object.fromEntries(Object.entries(PHRASES).map(([phrase, key]) => [phrase, t(`Phrases.${key}`)])),
+  )
+
 const container = ref<HTMLDivElement | null>(null)
 const status = ref<'starting' | 'ready' | 'failed'>('starting')
 const errorMessage = ref('')
@@ -51,7 +89,7 @@ onMounted(async () => {
       language: props.language,
       uri: props.uri,
       text: props.text,
-      extensions: props.extensions,
+      extensions: [phrases(), ...(props.extensions ?? [])],
       onUpdate: (view, docChanged) => {
         emit('update', view)
         if (docChanged) emit('textChanged', view.state.doc.toString())

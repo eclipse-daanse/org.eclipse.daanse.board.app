@@ -24,5 +24,32 @@
   },
   "Diagnostics": {
     "none": "Keine Probleme."
+  },
+  "Phrases": {
+    "find": "Suchen",
+    "replaceWith": "Ersetzen durch",
+    "next": "weiter",
+    "previous": "zurück",
+    "all": "alle",
+    "matchCase": "Groß-/Kleinschreibung",
+    "byWord": "ganze Wörter",
+    "regexp": "RegExp",
+    "replace": "ersetzen",
+    "replaceAll": "alle ersetzen",
+    "close": "schließen",
+    "currentMatch": "aktueller Treffer",
+    "replacedMatches": "$ Treffer ersetzt",
+    "replacedOnLine": "Treffer in Zeile $ ersetzt",
+    "onLine": "in Zeile",
+    "goToLine": "Gehe zu Zeile",
+    "go": "los",
+    "completions": "Vorschläge",
+    "diagnostics": "Probleme",
+    "noDiagnostics": "Keine Probleme",
+    "selectionDeleted": "Auswahl gelöscht",
+    "controlCharacter": "Steuerzeichen",
+    "newName": "Neuer Name",
+    "rename": "umbenennen",
+    "references": "Referenzen"
   }
 }

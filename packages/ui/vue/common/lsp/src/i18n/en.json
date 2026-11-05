@@ -24,5 +24,32 @@
   },
   "Diagnostics": {
     "none": "No problems."
+  },
+  "Phrases": {
+    "find": "Find",
+    "replaceWith": "Replace",
+    "next": "next",
+    "previous": "previous",
+    "all": "all",
+    "matchCase": "match case",
+    "byWord": "by word",
+    "regexp": "regexp",
+    "replace": "replace",
+    "replaceAll": "replace all",
+    "close": "close",
+    "currentMatch": "current match",
+    "replacedMatches": "replaced $ matches",
+    "replacedOnLine": "replaced match on line $",
+    "onLine": "on line",
+    "goToLine": "Go to line",
+    "go": "go",
+    "completions": "Completions",
+    "diagnostics": "Diagnostics",
+    "noDiagnostics": "No diagnostics",
+    "selectionDeleted": "Selection deleted",
+    "controlCharacter": "Control character",
+    "newName": "New name",
+    "rename": "rename",
+    "references": "Reference list"
   }
 }

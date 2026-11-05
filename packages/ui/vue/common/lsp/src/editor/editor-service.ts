@@ -25,8 +25,6 @@ import {
 } from '@codemirror/commands'
 import {
   bracketMatching,
-  foldGutter,
-  foldKeymap,
   indentOnInput,
   indentUnit,
 } from '@codemirror/language'
@@ -71,9 +69,12 @@ function extensionsFor(
   return [
     lineNumbers(),
     highlightActiveLineGutter(),
-    highlightSpecialChars(),
+    // The Unicode spaces too: a no-break space pasted from a page or a chat
+    // looked like a space and failed on the server with a lexical error.
+    highlightSpecialChars({ addSpecialChars: /[\u00a0\u2000-\u200a\u202f\u3000]/g }),
     history(),
-    foldGutter(),
+    // No fold gutter: a stream language has no fold ranges and the LSP
+    // client asks for none, so it was an empty strip with five dead keys.
     drawSelection(),
     dropCursor(),
     EditorState.allowMultipleSelections.of(true),
@@ -90,7 +91,6 @@ function extensionsFor(
       ...defaultKeymap,
       ...searchKeymap,
       ...historyKeymap,
-      ...foldKeymap,
       ...completionKeymap,
       ...lintKeymap,
       indentWithTab,
