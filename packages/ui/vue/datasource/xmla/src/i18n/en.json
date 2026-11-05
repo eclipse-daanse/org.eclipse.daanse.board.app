@@ -11,7 +11,9 @@
     "tabs": "Build or write the query",
     "useMdx": "Use MDX query",
     "preview": "Data preview",
-    "pickConnection": "Select a connection to load the metadata"
+    "pickConnection": "Select a connection to load the metadata",
+    "editor": "MDX query editor",
+    "failed": "The server did not run this query:"
   },
   "Fields": {
     "cube": "Cube",
