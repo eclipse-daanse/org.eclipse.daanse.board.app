@@ -81,6 +81,7 @@ describe('PageSettings', () => {
     expect(wrapper.find('input').exists()).toBe(true)
     expect(page.layoutId).toBeUndefined()
     expect(page.weather).toBeUndefined()
+    expect(page.lighting).toBeUndefined()
     expect(changes.dirty).toBe(false)
   })
 
@@ -93,6 +94,18 @@ describe('PageSettings', () => {
 
     expect(page.weather?.eContainer()).toBe(page)
     expect(Number(page.weather?.intensity?.value)).toBe(70)
+    expect(changes.dirty).toBe(true)
+  })
+
+  it('puts lighting on the page with the first edit to its ambient light', async () => {
+    const { wrapper, page, changes } = setUp()
+    await flushPromises()
+
+    await wrapper.find('[data-uim-name="ambient"] input').setValue('40')
+    await flushPromises()
+
+    expect(page.lighting?.eContainer()).toBe(page)
+    expect(Number(page.lighting?.ambient?.value)).toBe(40)
     expect(changes.dirty).toBe(true)
   })
 
