@@ -20,6 +20,7 @@ import gauge from 'org.eclipse.daanse.board.app.ui.vue.widget.gauge/manifest.jso
 import control from 'org.eclipse.daanse.board.app.ui.vue.widget.control/manifest.json'
 import lamp from 'org.eclipse.daanse.board.app.ui.vue.widget.lamp/manifest.json'
 import b3 from 'org.eclipse.daanse.board.app.ui.vue.widget.map/manifest.json'
+import maplibre from 'org.eclipse.daanse.board.app.ui.vue.widget.maplibre/manifest.json'
 import b4 from 'org.eclipse.daanse.board.app.ui.vue.plugins.geojson_renderer/manifest.json'
 import b5 from 'org.eclipse.daanse.board.app.ui.vue.plugins.endpointfinder/manifest.json'
 import b6 from 'org.eclipse.daanse.board.app.ui.vue.composer.chart/manifest.json'
@@ -177,6 +178,7 @@ export const bundles: ModuleManifest[] = [
   control as ModuleManifest,
   lamp as ModuleManifest,
   b3 as ModuleManifest,
+  maplibre as ModuleManifest,
   b4 as ModuleManifest,
   b5 as ModuleManifest,
   b6 as ModuleManifest,
