@@ -9,7 +9,8 @@
   "Context": {
     "system": "System",
     "page": "Seite",
-    "widget": "Widget"
+    "widget": "Widget",
+    "datasource": "Datenquelle"
   },
   "Rule": {
     "create": "Regel anlegen",
@@ -50,7 +51,8 @@
     "expression": "Ausdruck",
     "resultLast": "Letztes Ereignis: {{result}}",
     "resultSample": "Beispiel: {{result}}",
-    "resultFailed": "Ausdruck schlägt fehl: {{message}}"
+    "resultFailed": "Ausdruck schlägt fehl: {{message}}",
+    "chooseSource": "Datenquelle wählen"
   },
   "Phrase": {
     "inSystem": "im System",
@@ -58,7 +60,8 @@
     "onAnyPage": "auf jeder Seite",
     "at": "an {{target}}",
     "atAnyWidget": "an jedem Widget dieser Art",
-    "atAllInstances": "an allen Instanzen"
+    "atAllInstances": "an allen Instanzen",
+    "atSource": "an Datenquelle {{source}}"
   },
   "Tab": {
     "events": "Ereignisse"

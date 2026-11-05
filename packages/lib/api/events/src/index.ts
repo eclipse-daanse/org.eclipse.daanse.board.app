@@ -72,8 +72,8 @@ export type { PageActionInterface } from './gen/PageActionInterface'
  * the comparator, the raw ecore content - and are not part of the contract
  * a widget needs.
  */
-import type { Condition, WidgetAction, ActionParameter, SystemActionsEcoreContent, WidgetEventDefinition, Comperator, MetadataEntry, PayloadMetadata, PayloadPropertyInfo, ActionDefinition, WidgetTypeRegistration, EventActionContext, EventActionMapping } from 'org.eclipse.daanse.board.app.lib.events'
-export type { Condition, WidgetAction, ActionParameter, SystemActionsEcoreContent, WidgetEventDefinition, Comperator, MetadataEntry, PayloadMetadata, PayloadPropertyInfo, ActionDefinition, WidgetTypeRegistration, EventActionContext, EventActionMapping }
+import type { Condition, WidgetAction, ActionParameter, SystemActionsEcoreContent, WidgetEventDefinition, Comperator, MetadataEntry, PayloadMetadata, PayloadPropertyInfo, ActionDefinition, WidgetTypeRegistration, EventActionContext, EventActionMapping, WidgetActionParameter } from 'org.eclipse.daanse.board.app.lib.events'
+export type { Condition, WidgetAction, ActionParameter, SystemActionsEcoreContent, WidgetEventDefinition, Comperator, MetadataEntry, PayloadMetadata, PayloadPropertyInfo, ActionDefinition, WidgetTypeRegistration, EventActionContext, EventActionMapping, WidgetActionParameter }
 
 export interface RegisteredInstance {
     instanceId: string;
@@ -168,6 +168,55 @@ export interface EventRegistry {
   * Entfernt alle Events eines Widget-Typs
   */
   unregisterWidget(widgetType: string): void;
+}
+
+/**
+ * One action a provider offers for a target: what a rule calls, and the
+ * parameters it takes, declared as a widget action declares them (#1223).
+ */
+export interface ProvidedAction {
+    /** What a rule stores as its actionName. */
+    name: string;
+    /** What the dialog shows; a key of a language pack or the text itself. Falls back to the name. */
+    label?: string;
+    /** The parameters in argument order; the position is what a payload mapping's argIndex refers to. */
+    parameters: WidgetActionParameter[];
+}
+
+/** Something a provider offers actions for, such as a datasource by its uid. */
+export interface ActionTarget {
+    id: string;
+    /** What the dialog shows for it. Falls back to the id. */
+    label?: string;
+}
+
+/**
+ * Offers actions to rules for targets other than widget types.
+ *
+ * A widget type declares its actions once, at bundle start, as methods of a
+ * class. A provider instead names them per target and when asked, so the
+ * list can come from somewhere that only answers at runtime and can change
+ * while the board runs - then the provider announces it, and whoever shows
+ * the list asks again.
+ */
+export interface ActionProvider {
+    /** The targets this provider offers actions for. */
+    targets(): ActionTarget[];
+    /** The actions it offers for one of its targets, now. */
+    actions(targetId: string): ProvidedAction[];
+    /** Carries out one action on a target with the arguments the rule mapped. */
+    execute(targetId: string, actionName: string, args: unknown[]): void | Promise<void>;
+    /**
+     * Calls the listener whenever the targets or the actions changed.
+     * Returns what removes the listener again.
+     */
+    onChange?(listener: () => void): () => void;
+}
+
+/** A target as the registry lists it: with the context and provider it belongs to. */
+export interface ProvidedTarget extends ActionTarget {
+    context: EventActionContext;
+    provider: ActionProvider;
 }
 
 export interface EventActionsRegistry {
@@ -317,6 +366,38 @@ export interface EventActionsRegistry {
   * Gibt die Registrierung für einen Widget-Typ zurück
   */
   getWidgetType(widgetType: string): WidgetTypeRegistration | undefined;
+  /**
+  * Registers a provider of actions for targets in a context.
+  * Returns what takes the registration back.
+  */
+  registerActionProvider(context: EventActionContext, provider: ActionProvider): () => void;
+  /**
+  * Takes a provider's registration back.
+  * @returns whether it was registered
+  */
+  unregisterActionProvider(context: EventActionContext, provider: ActionProvider): boolean;
+  /**
+  * Every target the providers of a context name.
+  */
+  getProvidedTargets(context: EventActionContext): ProvidedTarget[];
+  /**
+  * The actions the provider of a target offers for it; none when no provider names the target.
+  */
+  getProvidedActions(context: EventActionContext, targetId: string): ProvidedAction[];
+  /**
+  * Whether a provider of the context names the target.
+  */
+  hasProvidedTarget(context: EventActionContext, targetId: string): boolean;
+  /**
+  * Carries out an action through the provider that names the target.
+  * @returns whether a provider was found for the target
+  */
+  executeProvidedAction(context: EventActionContext, targetId: string, actionName: string, args: unknown[]): Promise<boolean>;
+  /**
+  * Calls the listener whenever a provider is registered or taken back, or announces that its list changed.
+  * Returns what removes the listener again.
+  */
+  onProvidedActionsChanged(listener: () => void): () => void;
 }
 
 export interface EventManager {
