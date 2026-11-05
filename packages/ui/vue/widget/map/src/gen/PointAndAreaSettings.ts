@@ -44,5 +44,7 @@ export interface PointAndAreaSettings extends EObject {
   clusterEnabled?: boolean;
   clusterBelowZoom?: number;
   clusterRadius?: number;
+  point_image_url?: string;
+  point_image_size?: number;
 
 }

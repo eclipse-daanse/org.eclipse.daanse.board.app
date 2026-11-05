@@ -502,6 +502,16 @@
         </eStructuralFeatures>
         <eStructuralFeatures xsi:type="ecore:EAttribute" name="clusterRadius" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt" lowerBound="0" defaultValueLiteral="40">
         </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="point_image_url" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" lowerBound="0">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="Address of the image a point is drawn as, when point_render_as is 'image'."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="point_image_size" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt" lowerBound="0">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="Size in pixels of the image a point is drawn as."/>
+            </eAnnotations>
+        </eStructuralFeatures>
 
     </eClassifiers>
 
