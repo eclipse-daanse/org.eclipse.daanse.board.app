@@ -102,3 +102,20 @@ export function resolveObj(obj: any, dotNotatedstring: string) {
 
 
 
+
+/**
+ * The newest observation of a list, whatever order it came in.
+ *
+ * Observations arrive `phenomenonTime desc` by default, but a source can
+ * be set to another order; the last element used to be read as the latest
+ * and was the oldest of the window (#1250). An interval time compares by
+ * its start, as ISO strings sort.
+ */
+export function latestObservation<T extends { phenomenonTime?: string; result?: any }>(observations: T[] | null | undefined): T | undefined {
+  if (!observations?.length) return undefined
+  let latest = observations[0]
+  for (const observation of observations) {
+    if ((observation.phenomenonTime ?? '') > (latest.phenomenonTime ?? '')) latest = observation
+  }
+  return latest
+}
