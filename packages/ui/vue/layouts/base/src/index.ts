@@ -29,6 +29,9 @@ export {
 export { default as ClipboardNotice } from './components/ClipboardNotice.vue'
 /* The page's weather, around any layout's board (#1228). */
 export { default as WeatherLayer } from './weather/WeatherLayer.vue'
+/* The light of the lamps on a page, around any layout's board (#1242). */
+export { default as LightLayer } from './light/LightLayer.vue'
+export { LIGHT_BOX_ATTRIBUTE } from './light/useLightLayer'
 
 const LAYOUT_ID = 'org.eclipse.daanse.board.app.ui.vue.layouts.base'
 

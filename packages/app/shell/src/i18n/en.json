@@ -368,6 +368,10 @@
       "regionWidgetChoice": "Widget",
       "drawRegion": "Draw region",
       "affectsWidgets": "Affects the widgets"
+    },
+    "lighting": {
+      "label": "Lighting",
+      "ambient": "Ambient light"
     }
   },
   "Tokens": {

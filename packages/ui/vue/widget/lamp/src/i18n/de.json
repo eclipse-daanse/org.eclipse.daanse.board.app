@@ -1,0 +1,45 @@
+{
+  "Widget": {
+    "lamp": "Lampe"
+  },
+  "State": {
+    "on": "An - zum Ausschalten klicken",
+    "off": "Aus - zum Einschalten klicken"
+  },
+  "Action": {
+    "brightness": "Helligkeit (0-100)",
+    "color": "Farbe",
+    "colorTemperature": "Farbtemperatur (Kelvin)"
+  },
+  "Form": {
+    "lampGroup": "Lampe",
+    "fixture": "Leuchte",
+    "on": "An",
+    "brightness": "Helligkeit",
+    "colorGroup": "Farbe",
+    "color": "Farbe (leer: Farbtemperatur)",
+    "colorTemperature": "Farbtemperatur (Kelvin)",
+    "lightGroup": "Licht auf der Seite",
+    "radius": "Reichweite (px)",
+    "lightShape": "Form des Lichts",
+    "direction": "Richtung (Grad, 90 = nach unten)",
+    "angle": "Öffnungswinkel (Grad)",
+    "originX": "Lichtquelle quer im Widget (%)",
+    "originY": "Lichtquelle längs im Widget (%)",
+    "lightsWidgets": "Beleuchtet die Widgets",
+    "sourceGroup": "Datenquelle",
+    "stateField": "Feld mit dem Zustand"
+  },
+  "Options": {
+    "fixture": {
+      "bulb": "Glühbirne",
+      "spot": "Strahler",
+      "strip": "Lichtleiste",
+      "ceiling": "Deckenleuchte"
+    },
+    "lightShape": {
+      "round": "Rund",
+      "cone": "Kegel"
+    }
+  }
+}
