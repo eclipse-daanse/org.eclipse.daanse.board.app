@@ -129,4 +129,16 @@ describe('a chart on an OGC STA source', () => {
     expect(table.rows).toContainEqual(['Moisture', 31, '%', '2026-11-04T12:00:00Z'])
     expect(table.rows).toContainEqual(['temperature', 7, '°C', '2026-11-04T12:00:00Z'])
   })
+
+  it('finds a thing and its datastreams for an action without the catalogue', async () => {
+    const { server, composer } = setup()
+    composer.removeAllDatastreams()
+    server.reset()
+
+    await composer.switchThingById('JeN-06')
+    await composer.addDatastreamsByName('moisture')
+
+    expect(server.requests).toEqual(['v1.1/Things?$select=@iot.id,name', 'v1.1/Things(JeN-06)/Datastreams'])
+    expect((composer as any).datastreams.map((d: any) => d.datastreamId)).toEqual(['JeN-06~soil~moisture'])
+  })
 })

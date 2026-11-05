@@ -9,41 +9,36 @@
 
 */
 import { BoxedDatastream, BoxedLocation, BoxedThing, IOGCSTAData } from '../interfaces/OgcStaConfiguration'
-import { Datastream, Datastreams } from '../client'
 
 
-export const transformFromThingLocationDastreamToLocationThingDatastream=(things: BoxedThing[]):IOGCSTAData=> {
-  const ret:IOGCSTAData={locations:[],things:things,datastreams:[]}
-  const locations: BoxedLocation[] = [];
-  let datastreams: (Datastreams | Datastream)[] = [];
+/**
+ * The things of a server answer, turned around for a map: every location
+ * with the things at it, every datastream with its thing.
+ *
+ * Locations are kept by id. A second thing at a location already seen goes
+ * into that location's `things` - it used to go into `Things`, which the
+ * map did not read, by an operator-precedence slip (#1250).
+ */
+export const transformFromThingLocationDastreamToLocationThingDatastream = (things: BoxedThing[]): IOGCSTAData => {
+  const locations = new Map<unknown, BoxedLocation>()
+  const datastreams: BoxedDatastream[] = []
   for (const thing of things ?? []) {
-    if(thing.datastreams){
-      datastreams = [...datastreams,...thing.datastreams] ;
-      for (const datastream of thing.datastreams ?? []) {
-        datastream.thing = thing;
-      }
+    for (const datastream of thing.datastreams ?? []) {
+      datastream.thing = thing
+      datastreams.push(datastream)
     }
     for (const location of thing.locations ?? []) {
-      if (!location.things) {
-        location.things = [];
+      const key = location.iotId ?? location
+      let known = locations.get(key)
+      if (!known) {
+        known = location
+        known.things = []
+        locations.set(key, known)
       }
-      const isAlreadyinLocation = locations.find((l: BoxedLocation) => l.iotId  === location.iotId);
-      if (isAlreadyinLocation) {
-        const allredyexistingThing = isAlreadyinLocation.Things ?? [].find((t: BoxedThing) => t.iotId == thing.iotId);
-        if (!allredyexistingThing) {
-          if (!isAlreadyinLocation.Things) {
-            isAlreadyinLocation.Things = [];
-          }
-          isAlreadyinLocation.Things.push(thing);
-        }
-      } else {
-        location.things.push(thing);
-        locations.push(location as BoxedLocation);
-
+      if (!known.things.some((t) => t === thing || (t.iotId != null && t.iotId === thing.iotId))) {
+        known.things.push(thing)
       }
     }
   }
-  ret.datastreams = datastreams as BoxedDatastream[];
-  ret.locations = locations;
-  return ret;
+  return { things: things, datastreams, locations: [...locations.values()] }
 }
