@@ -87,9 +87,9 @@ function syncLayoutSettings() {
   if (pageRepo && pageId) {
     const page = pageRepo.getPage(pageId)
     /* Copied by the model's names: the settings are a modelled instance
-       once the form has been open, and spreading one gives the private
-       fields its getters sit in - the grid then silently fell back to
-       every default while the form showed what had been set. */
+      once the form has been open, and spreading one gives the private
+      fields its getters sit in - the grid then silently fell back to
+      every default while the form showed what had been set. */
     layoutSettingsRef.value = page?.layoutSettings
       ? { ...plainSettings(page.layoutSettings) }
       : undefined
@@ -109,7 +109,7 @@ onMounted(async () => {
   }
 
   /* One tick, so the widgets this mounts exist before it says so. The
-     second one was waiting for Pinia to finish starting. */
+    second one was waiting for Pinia to finish starting. */
   await nextTick()
   emitPageLoaded()
 })
