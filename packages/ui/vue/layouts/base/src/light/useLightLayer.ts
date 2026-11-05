@@ -22,6 +22,9 @@
  * taken away, the page's ambient light, a widget moved or resized, the
  * board scrolled or the layer resized.
  *
+ * It draws the same while the board is edited, darkness included: the
+ * person placing a light judges it as it will be seen.
+ *
  * The widgets are found by the attribute `data-light-box`, whose value is
  * the widget's id, on the element that is moved and resized. A widget's
  * style changing is what moving it is, in both layouts and in edit mode
@@ -61,8 +64,6 @@ export const MAX_PIXEL_RATIO = 2
 
 export interface LightLayerOptions {
   page: MaybeRefOrGetter<Page | undefined>
-  /** True while the board is being edited: every light is drawn over the board, the page is not darkened. */
-  editMode: MaybeRefOrGetter<boolean>
   host: Ref<HTMLElement | undefined>
   back: Ref<HTMLCanvasElement | undefined>
   front: Ref<HTMLCanvasElement | undefined>
@@ -94,7 +95,7 @@ export function useLightLayer(options: LightLayerOptions) {
   const boxes = shallowRef(new Map<string, Box>())
 
   const scene = computed(() =>
-    composeLightScene(sources.value.values(), boxes.value, ambient.value, Boolean(toValue(options.editMode))),
+    composeLightScene(sources.value.values(), boxes.value, ambient.value),
   )
   const lit = computed(() => isLit(scene.value))
 

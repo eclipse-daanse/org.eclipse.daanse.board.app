@@ -13,9 +13,10 @@
 
 // @vitest-environment jsdom
 import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { nextTick } from 'vue'
+import { nextTick, ref } from 'vue'
 import { flushPromises, mount } from '@vue/test-utils'
 import { EventsPackage, EVENT_ACTIONS_REGISTRY } from 'org.eclipse.daanse.board.app.lib.api.events'
+import { WIDGET_EDIT_MODE } from 'org.eclipse.daanse.board.app.lib.api.widget'
 import { identifiers } from 'org.eclipse.daanse.board.app.lib.core'
 import { VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import {
@@ -92,7 +93,7 @@ function lampSettings(overrides: Record<string, unknown> = {}) {
   return settings
 }
 
-async function show(settings: any, props: Record<string, unknown> = {}) {
+async function show(settings: any, props: Record<string, unknown> = {}, editing = false) {
   const bus = new TinyEmitter()
   const sent: { type: string; payload: LampPayloadImpl }[] = []
   const lights: LightSourceSpec[] = []
@@ -111,6 +112,7 @@ async function show(settings: any, props: Record<string, unknown> = {}) {
       provide: {
         [identifiers.TINY_EMITTER as symbol]: bus,
         [EVENT_ACTIONS_REGISTRY as unknown as symbol]: { registerInstance: vi.fn(), unregisterInstance: vi.fn() },
+        [WIDGET_EDIT_MODE as symbol]: ref(editing),
       },
     },
   })
@@ -120,45 +122,41 @@ async function show(settings: any, props: Record<string, unknown> = {}) {
 }
 
 describe('LampWidget', () => {
+  it('shows nothing while the board is shown, and takes no pointer', async () => {
+    const { wrapper } = await show(lampSettings({ on: new VariableWrapper('true') }))
+    expect(wrapper.find('.lamp__marker').exists()).toBe(false)
+    expect(wrapper.find('button').exists()).toBe(false)
+    expect(wrapper.text()).toBe('')
+  })
+
+  it('shows a marker while the board is edited', async () => {
+    const { wrapper } = await show(lampSettings(), {}, true)
+    expect(wrapper.find('.lamp__marker').exists()).toBe(true)
+    expect(wrapper.find('.lamp').classes()).toContain('lamp--editing')
+  })
+
   it('starts off, every setting in a wrapper, an empty one read as the model default', async () => {
     const settings = lampSettings()
-    const { wrapper, lights } = await show(settings)
-    expect(wrapper.find('button').attributes('aria-checked')).toBe('false')
+    const { lights } = await show(settings)
     expect(settings.brightness).toBeInstanceOf(VariableWrapper)
-    expect(wrapper.find('.lamp').classes()).toContain('lamp--bulb')
-    expect(lights.at(-1)).toMatchObject({ on: false, radius: 240, shape: 'round', direction: 90, angle: 60, x: 0.5, y: 0.5 })
+    expect(lights.at(-1)).toMatchObject({ on: false, radius: undefined, shape: 'round', direction: 90, angle: 60 })
   })
 
-  it('a press sends clicked and switches the lamp, sending stateChanged with the whole state', async () => {
-    const { wrapper, events } = await show(lampSettings({ colorTemperature: new VariableWrapper('2700') }))
-    await wrapper.find('button').trigger('click')
-    await nextTick()
-
-    expect(wrapper.find('button').attributes('aria-checked')).toBe('true')
-    expect(events('clicked')).toHaveLength(1)
-    expect(events('clicked')[0].on).toBe(false)
-    const changed = events('stateChanged')
-    expect(changed).toHaveLength(1)
-    expect(changed[0]).toBeInstanceOf(LampPayloadImpl)
-    expect(changed[0]).toMatchObject({ widgetId: 'lamp1', on: true, brightness: 100, color: '', colorTemperature: 2700 })
-    expect(changed[0].lightColor).toMatch(/^rgb\(255, /)
-  })
-
-  it('turns on, off and over through its actions', async () => {
-    const { wrapper, api, events } = await show(lampSettings())
-    const button = () => wrapper.find('button').attributes('aria-checked')
+  it('turns on, off and over through its actions, sending stateChanged with the whole state', async () => {
+    const { api, events, lights } = await show(lampSettings({ colorTemperature: new VariableWrapper('2700') }))
 
     api().turnOn()
     await nextTick()
-    expect(button()).toBe('true')
+    expect(lights.at(-1)?.on).toBe(true)
     api().turnOff()
     await nextTick()
-    expect(button()).toBe('false')
     api().toggle()
     await nextTick()
-    expect(button()).toBe('true')
-    expect(events('stateChanged').map((each) => each.on)).toEqual([true, false, true])
-    expect(events('clicked')).toHaveLength(0)
+    const changed = events('stateChanged')
+    expect(changed.map((each) => each.on)).toEqual([true, false, true])
+    expect(changed[0]).toBeInstanceOf(LampPayloadImpl)
+    expect(changed[0]).toMatchObject({ widgetId: 'lamp1', on: true, brightness: 100, color: '', colorTemperature: 2700 })
+    expect(changed[0].lightColor).toMatch(/^rgb\(255, /)
   })
 
   it('dims and colours through its actions, within their bounds', async () => {
@@ -187,12 +185,12 @@ describe('LampWidget', () => {
 
   it('mirrors a variable bound to on, and writes into it rather than into the wrapper', async () => {
     const { variable, wrapper: on } = bound(false)
-    const { wrapper, api, events } = await show(lampSettings({ on }))
-    expect(wrapper.find('button').attributes('aria-checked')).toBe('false')
+    const { api, events, lights } = await show(lampSettings({ on }))
+    expect(lights.at(-1)?.on).toBe(false)
 
     variable.value = true
     await nextTick()
-    expect(wrapper.find('button').attributes('aria-checked')).toBe('true')
+    expect(lights.at(-1)?.on).toBe(true)
     expect(events('stateChanged').at(-1)?.on).toBe(true)
 
     api().turnOff()
@@ -202,10 +200,10 @@ describe('LampWidget', () => {
 
   it('follows a datasource field: a word switches it, a number dims it, an object says it all', async () => {
     answered = { status: { light: 'on' } }
-    const { wrapper, events } = await show(lampSettings({ stateField: new VariableWrapper('status.light') }), {
+    const { events, lights } = await show(lampSettings({ stateField: new VariableWrapper('status.light') }), {
       datasourceId: 'ds1',
     })
-    expect(wrapper.find('button').attributes('aria-checked')).toBe('true')
+    expect(lights.at(-1)?.on).toBe(true)
 
     answer!({ status: { light: 30 } })
     await nextTick()
@@ -213,14 +211,14 @@ describe('LampWidget', () => {
 
     answer!({ status: { light: { on: false, color: 'blue' } } })
     await nextTick()
-    expect(wrapper.find('button').attributes('aria-checked')).toBe('false')
+    expect(lights.at(-1)?.on).toBe(false)
     expect(events('stateChanged').at(-1)).toMatchObject({ on: false, color: 'blue' })
   })
 
   it('reads no datasource without a field named', async () => {
     answered = { light: 'on' }
-    const { wrapper } = await show(lampSettings(), { datasourceId: 'ds1' })
-    expect(wrapper.find('button').attributes('aria-checked')).toBe('false')
+    const { lights } = await show(lampSettings(), { datasourceId: 'ds1' })
+    expect(lights.at(-1)?.on).toBe(false)
   })
 
   it('announces its light, announces it again when it changes or is asked, and withdraws it when removed', async () => {
@@ -230,7 +228,7 @@ describe('LampWidget', () => {
       color: new VariableWrapper('#00ff00'),
       lightShape: new VariableWrapper('cone'),
       direction: new VariableWrapper('180'),
-      originX: new VariableWrapper('0'),
+      radius: new VariableWrapper('300'),
       lightsWidgets: new VariableWrapper('true'),
     })
     const { wrapper, bus, lights, withdrawn, api } = await show(settings)
@@ -241,9 +239,7 @@ describe('LampWidget', () => {
       color: '#00ff00',
       shape: 'cone',
       direction: 180,
-      x: 0,
-      y: 0.5,
-      radius: 240,
+      radius: 300,
       lightsWidgets: true,
     })
 
@@ -263,9 +259,9 @@ describe('LampWidget', () => {
 
   it('a setting written while it is shown reaches it (#1203)', async () => {
     const settings = lampSettings()
-    const { wrapper } = await show(settings)
-    settings.fixture = new VariableWrapper('strip')
+    const { lights } = await show(settings)
+    settings.lightShape = new VariableWrapper('cone')
     await nextTick()
-    expect(wrapper.find('.lamp').classes()).toContain('lamp--strip')
+    expect(lights.at(-1)?.shape).toBe('cone')
   })
 })
