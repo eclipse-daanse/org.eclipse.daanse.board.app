@@ -35,7 +35,9 @@ export function activate({ services }: ActivationContext) {
   services
     .getRequired<DatasourceRepository>(DATASOURCE_REPOSITORY)
     .registerDatasourceType('ogcsta', {
-      answers: ['OGCSTAData'],
+      /* A table reads the latest values view (#1264); a source without
+        one answers it with an empty table. */
+      answers: ['OGCSTAData', 'DataTable'],
       icon: 'sensors',
       connections: ['rest'],
       Model: MODEL_ECORE,
