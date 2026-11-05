@@ -34,6 +34,9 @@ export { adopt, asModel, isModelled } from './adopt'
 export { formFor, kindOf, labelOf, type FieldKind } from './buildForm'
 export { loadUIModel } from './loadUIModel'
 
+/* The composer itself, for bundles that render a UIModel of their own. */
+export * from './composer'
+
 
 /* Its texts - collected by lib.i18next, see src/i18n. */
 export { UimodelTranslations } from './i18n'
