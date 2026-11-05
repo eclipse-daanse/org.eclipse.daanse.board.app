@@ -27,9 +27,10 @@ Contributors:
  * whose editor covers the page with a ground of its own makes that ground
  * transparent then, so the light and the dark are seen while editing too.
  */
-import { ref } from 'vue'
+import { computed, inject, onBeforeUnmount, ref } from 'vue'
 import type { Page } from 'org.eclipse.daanse.board.app.lib.model.workspace'
 import { useLightLayer } from './useLightLayer'
+import { WEATHER_BOARD_STACKING } from '../weather/boardStacking'
 
 const props = defineProps<{
   page?: Page
@@ -49,11 +50,21 @@ const { scene, lit, sources, ambient, measure } = useLightLayer({
   scroller: () => (props.scroller ? host.value?.querySelector<HTMLElement>(props.scroller) : undefined),
 })
 
+/*
+ * Under a weather layer this board is the one in a stacking context while
+ * the weather runs, not the weather's: that one would hold the blended
+ * canvas below, and the frames' blur would stop at it (#1260).
+ */
+const weather = inject(WEATHER_BOARD_STACKING, null)
+const handBack = weather?.stackInside()
+onBeforeUnmount(() => handBack?.())
+const stacked = computed(() => lit.value || Boolean(weather?.running.value))
+
 defineExpose({ scene, lit, sources, ambient, measure })
 </script>
 
 <template>
-  <div ref="host" class="light" :class="{ 'light--on': lit }">
+  <div ref="host" class="light" :class="{ 'light--on': lit, 'light--stacked': stacked }">
     <canvas ref="back" class="light__canvas light__canvas--back" aria-hidden="true" />
     <div class="light__board">
       <slot />
@@ -75,7 +86,7 @@ defineExpose({ scene, lit, sources, ambient, measure })
   height: 100%;
 }
 
-.light--on .light__board {
+.light--stacked .light__board {
   z-index: 0;
 }
 

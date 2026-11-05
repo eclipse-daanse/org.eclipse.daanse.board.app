@@ -33,6 +33,7 @@ import { DefaultServiceRegistry } from '@eclipse-daanse/tsm'
 import * as wrapperFactory from 'org.eclipse.daanse.board.app.lib.factory.variableWrapper'
 import { VARIABLE_REPOSITORY } from 'org.eclipse.daanse.board.app.lib.api.variable'
 import WeatherLayer from '../weather/WeatherLayer.vue'
+import LightLayer from '../light/LightLayer.vue'
 import { MAX_PIXEL_RATIO } from '../weather/useWeatherLayer'
 import { FRAMELESS_ATTRIBUTE } from 'org.eclipse.daanse.board.app.lib.api.widget'
 
@@ -346,3 +347,55 @@ describe('the weather layer', () => {
   })
 })
 
+/*
+ * #1260: a light layer blends its front canvas, and the element holding a
+ * blended canvas is drawn as a group of its own - where Chrome ends what a
+ * frame's backdrop-filter sees. While the weather ran, its board was that
+ * element, and no frame's blur showed the page behind the board.
+ */
+describe('the weather with a light layer inside', () => {
+  function mountWithLight(page: Page) {
+    boxes.set('w1', { left: 100, top: 200, width: 200, height: 100 })
+    const Board = defineComponent({
+      setup: () => () =>
+        h(WeatherLayer, { page }, () =>
+          h(LightLayer, { page }, () => h('div', { 'data-weather-obstacle': 'w1' })),
+        ),
+    })
+    return mount(Board, { attachTo: document.body })
+  }
+
+  it('leaves the stacking context of the widgets to the light layer while it runs', async () => {
+    const wrapper = mountWithLight(snowPage())
+    await nextTick()
+    expect(layerOf(wrapper).running).toBe(true)
+    const weather = wrapper.find('.weather')
+    expect(weather.classes()).toContain('weather--on')
+    expect(weather.classes()).toContain('weather--stacked-inside')
+    // The light board holds the widgets, the blended canvas stays outside it
+    const light = wrapper.find('.light')
+    expect(light.classes()).toContain('light--stacked')
+    expect(light.find('.light__board .light__canvas--front').exists()).toBe(false)
+    wrapper.unmount()
+  })
+
+  it('stacks the widgets on its own board without a light layer', async () => {
+    const wrapper = mountLayer(snowPage())
+    await nextTick()
+    expect(wrapper.find('.weather').classes()).toContain('weather--on')
+    expect(wrapper.find('.weather').classes()).not.toContain('weather--stacked-inside')
+    wrapper.unmount()
+  })
+
+  it('leaves the light board free while the weather is still', async () => {
+    const Still = defineComponent({
+      setup: () => () =>
+        h(WeatherLayer, { page: snowPage(), editMode: true }, () => h(LightLayer, { page: snowPage() })),
+    })
+    const still = mount(Still, { attachTo: document.body })
+    await nextTick()
+    expect(still.find('.weather').classes()).not.toContain('weather--on')
+    expect(still.find('.light').classes()).not.toContain('light--stacked')
+    still.unmount()
+  })
+})
