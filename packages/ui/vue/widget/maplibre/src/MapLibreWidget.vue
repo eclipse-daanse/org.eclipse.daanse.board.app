@@ -1,0 +1,376 @@
+<!--
+Copyright (c) 2026 Contributors to the Eclipse Foundation.
+This program and the accompanying materials are made
+available under the terms of the Eclipse Public License 2.0
+which is available at https://www.eclipse.org/legal/epl-2.0/
+SPDX-License-Identifier: EPL-2.0
+Contributors:
+    Smart City Jena
+-->
+<script setup lang="ts">
+/**
+ * A map drawn with MapLibre GL (#1266): a vector or raster base that can be
+ * tilted and turned, the buildings of the style in 3D, terrain, and the
+ * data layers on top - OGC STA things coloured and raised by their latest
+ * values, and GeoJSON.
+ *
+ * The settings are read through useEObject (#1203), so a change in the
+ * settings reaches the preview and the board at once. A change of the
+ * style loads the style again; any other change of the look takes the
+ * map's own additions off and puts them on again, which costs no reload;
+ * new data only replaces the data of its source.
+ */
+import { computed, inject, onMounted, onUnmounted, ref, shallowRef, toRefs, watch } from 'vue'
+import { Map as MapLibreMap, NavigationControl, type GeoJSONSource, type MapMouseEvent } from 'maplibre-gl'
+import { useMapLibreWorker } from './worker'
+import 'maplibre-gl/dist/maplibre-gl.css'
+import { useRoute } from 'vue-router'
+import type { TinyEmitter } from 'tiny-emitter'
+import { identifiers } from 'org.eclipse.daanse.board.app.lib.core'
+import { EVENT_ACTIONS_REGISTRY, type EventActionsRegistry } from 'org.eclipse.daanse.board.app.lib.api.events'
+import { identifier, type DatasourceRepository } from 'org.eclipse.daanse.board.app.lib.api.datasource'
+import { useEObject, useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+import type { MapLibreSettings } from './gen/MapLibreSettings'
+import { MapLibreWidgetInterfaceImpl } from './gen/MapLibreWidgetInterfaceImpl'
+import { modelledSettings } from './settingsModel'
+import {
+  PREFIX,
+  RASTER_ID,
+  TERRAIN_ID,
+  buildingLayerOf,
+  buildingSourceOf,
+  dataLayerOf,
+  exaggerationOf,
+  featureLayersOf,
+  geoJsonLookOf,
+  rasterLayerOf,
+  rasterSourceOf,
+  skyOf,
+  sourceIdOf,
+  styleExtrusionsOf,
+  styleUrlOf,
+  terrainSourceOf,
+  thingLookOf,
+} from './mapStyle'
+import { centerOf, geometriesOf, thingFeaturesOf, thingIdOf, type ThingLike } from './things'
+import { useGeoJsonData, useThingData, type ThingStore } from './useLayerData'
+import { WIDGET_TYPE, busEventOf, clickEventOf } from './events/payloads'
+
+const props = defineProps<{ datasourceId?: string; id?: string }>()
+const { id: widgetId } = toRefs(props)
+const stored = defineModel<MapLibreSettings>('configv', { required: true })
+const { t } = useTranslation('maplibre')
+
+/* The adoption is shared with the settings, which hold the same object (#1262). */
+const config = computed(() => modelledSettings(stored.value))
+const settings = useEObject(() => config.value)
+const held = () => settings.value ?? config.value
+
+const route = useRoute()
+const pageId = (route?.params?.pageid as string) || ''
+const eventBus = inject<TinyEmitter | undefined>(identifiers.TINY_EMITTER, undefined)
+const actionsRegistry = inject<EventActionsRegistry | undefined>(EVENT_ACTIONS_REGISTRY, undefined)
+const repository = inject<DatasourceRepository | undefined>(identifier, undefined)
+
+const container = ref<HTMLElement | null>(null)
+const failed = ref(false)
+const selectedThingId = ref<string | undefined>()
+let map: MapLibreMap | undefined
+/*
+ * Whether the style is there to add to. Not isStyleLoaded(): that waits for
+ * every tile as well, and stays false while the map moves.
+ */
+let styleReady = false
+
+/* ---------------------------------------------------------------- theme */
+
+/* Dark is the shell's default; only an explicit light theme is light. */
+const readDark = () => typeof document !== 'undefined' && document.documentElement.getAttribute('data-theme') !== 'light'
+const dark = ref(readDark())
+let themeObserver: MutationObserver | undefined
+
+/* ----------------------------------------------------------------- data */
+
+const resolveStore = (id: string): ThingStore | undefined => {
+  try {
+    return repository?.getDatasource(id) as unknown as ThingStore
+  } catch {
+    return undefined
+  }
+}
+const thingLayers = () => held().thingLayers.toArray()
+const geoJsonLayers = () => held().geoJsonLayers.toArray()
+const thingData = useThingData({
+  layers: thingLayers,
+  fallbackSource: () => props.datasourceId || held().datasourceId,
+  resolve: resolveStore,
+  scopeKey: () => `maplibre:${widgetId?.value ?? ''}`,
+})
+const geoJsonData = useGeoJsonData(geoJsonLayers)
+
+function findThing(id: string): ThingLike | undefined {
+  for (const layer of thingLayers()) {
+    const thing = thingData.thingsOf(layer).find((each) => thingIdOf(each) === id)
+    if (thing) return thing
+  }
+  return undefined
+}
+
+/* What each data source of the map holds now, by source id. */
+const collections = computed(() => {
+  void thingData.revision.value
+  void geoJsonData.revision.value
+  const out = new Map<string, unknown>()
+  for (const layer of thingLayers()) {
+    if (layer.visible === false) continue
+    out.set(
+      sourceIdOf('things', layer.id),
+      thingFeaturesOf(layer, thingData.thingsOf(layer), thingData.latestOf(layer), selectedThingId.value),
+    )
+  }
+  for (const layer of geoJsonLayers()) {
+    if (layer.visible !== false) out.set(sourceIdOf('geojson', layer.id), geoJsonData.documentOf(layer))
+  }
+  return out
+})
+
+/* ---------------------------------------------------------------- style */
+
+const styleUrl = computed(() => styleUrlOf(held(), dark.value))
+
+/* Everything the map adds to its style, as one value: a change re-applies it. */
+const lookKey = computed(() => {
+  const s = held()
+  return JSON.stringify([
+    dark.value,
+    [s.rasterUrl, s.rasterLayers, s.rasterOpacity, s.rasterAttribution, s.rasterInvertDark],
+    [s.buildings, s.buildingColor, s.buildingOpacity, s.buildingSourceLayer],
+    [s.terrainUrl, s.terrainEncoding, s.terrainExaggeration, s.sky, s.selectionColor],
+    s.thingLayers.toArray().map((l) => [l.id, l.visible, l.fillColor, l.fillOpacity, l.outlineColor, l.pointRadius, l.extrude]),
+    s.geoJsonLayers.toArray().map((l) => [l.id, l.visible, l.color, l.opacity, l.extrude, l.heightProperty, l.heightFactor, l.baseHeight]),
+  ])
+})
+
+/** Takes off everything the map added to its style. */
+function clearAdditions(target: MapLibreMap) {
+  const style = target.getStyle()
+  if (target.getTerrain()) target.setTerrain(null)
+  for (const layer of [...(style.layers ?? [])].reverse()) {
+    if (layer.id.startsWith(PREFIX)) target.removeLayer(layer.id)
+  }
+  for (const id of Object.keys(style.sources ?? {})) {
+    if (id.startsWith(PREFIX)) target.removeSource(id)
+  }
+}
+
+/** Puts the raster base, buildings, terrain, sky and data layers on the style. */
+function applyAdditions() {
+  const target = map
+  if (!target || !styleReady) return
+  const s = held()
+  clearAdditions(target)
+  const style = target.getStyle()
+
+  for (const id of styleExtrusionsOf(style)) target.setLayoutProperty(id, 'visibility', 'none')
+
+  const raster = rasterSourceOf(s)
+  if (raster) {
+    target.addSource(RASTER_ID, raster)
+    target.addLayer(rasterLayerOf(s, dark.value))
+  }
+
+  if (s.buildings) {
+    const source = buildingSourceOf(style, s.buildingSourceLayer || 'building')
+    if (source) target.addLayer(buildingLayerOf(s, source))
+  }
+
+  const terrain = terrainSourceOf(s)
+  if (terrain) {
+    target.addSource(TERRAIN_ID, terrain)
+    target.setTerrain({ source: TERRAIN_ID, exaggeration: exaggerationOf(s) })
+  }
+
+  if (typeof target.setSky === 'function') target.setSky(s.sky ? skyOf(dark.value) : {})
+
+  const selection = s.selectionColor || '#ffb300'
+  const data = collections.value
+  const addData = (id: string, layers: ReturnType<typeof featureLayersOf>) => {
+    target.addSource(id, { type: 'geojson', data: (data.get(id) ?? { type: 'FeatureCollection', features: [] }) as never })
+    for (const layer of layers) target.addLayer(layer)
+  }
+  for (const layer of s.thingLayers.toArray()) {
+    if (layer.visible === false) continue
+    const id = sourceIdOf('things', layer.id)
+    addData(id, featureLayersOf(id, thingLookOf(layer, selection)))
+  }
+  for (const layer of s.geoJsonLayers.toArray()) {
+    if (layer.visible === false) continue
+    const id = sourceIdOf('geojson', layer.id)
+    addData(id, featureLayersOf(id, geoJsonLookOf(layer, selection)))
+  }
+}
+
+/** Replaces the data of each source the map holds. */
+function applyData() {
+  if (!map || !styleReady) return
+  for (const [id, data] of collections.value) {
+    ;(map.getSource(id) as GeoJSONSource | undefined)?.setData(data as never)
+  }
+}
+
+/* ----------------------------------------------------------------- view */
+
+const view = computed(() => {
+  const s = held()
+  return { center: [s.centerLon, s.centerLat] as [number, number], zoom: s.zoom, pitch: s.pitch, bearing: s.bearing }
+})
+
+const HANDLERS = ['scrollZoom', 'boxZoom', 'dragRotate', 'dragPan', 'keyboard', 'doubleClickZoom', 'touchZoomRotate', 'touchPitch'] as const
+function applyInteractive(target: MapLibreMap, on: boolean) {
+  for (const name of HANDLERS) {
+    const handler = (target as unknown as Record<string, { enable(): void; disable(): void } | undefined>)[name]
+    if (on) handler?.enable()
+    else handler?.disable()
+  }
+}
+
+/* --------------------------------------------------------------- events */
+
+function onClick(event: MapMouseEvent) {
+  if (!map || !widgetId?.value) return
+  const dataLayers = (map.getStyle().layers ?? []).filter((l) => dataLayerOf(l.id)).map((l) => l.id)
+  const hit = dataLayers.length ? map.queryRenderedFeatures(event.point, { layers: dataLayers })[0] : undefined
+  const clicked = clickEventOf(
+    {
+      lng: event.lngLat.lng,
+      lat: event.lngLat.lat,
+      layer: hit ? dataLayerOf(hit.layer.id) ?? undefined : undefined,
+      properties: hit?.properties as Record<string, unknown> | undefined,
+      featureId: hit?.id,
+    },
+    widgetId.value,
+    findThing,
+  )
+  const type = busEventOf(clicked.event)
+  eventBus?.emit(type, { type, widgetId: widgetId.value, payload: clicked.payload, timestamp: Date.now() })
+}
+
+function onMove(event: MapMouseEvent) {
+  if (!map) return
+  const dataLayers = (map.getStyle().layers ?? []).filter((l) => dataLayerOf(l.id)).map((l) => l.id)
+  const over = dataLayers.length > 0 && map.queryRenderedFeatures(event.point, { layers: dataLayers }).length > 0
+  map.getCanvas().style.cursor = over ? 'pointer' : ''
+}
+
+/* -------------------------------------------------------------- actions */
+
+const api = new (class extends MapLibreWidgetInterfaceImpl {
+  flyTo = (lat: number, lon: number, zoom?: number, pitch?: number, bearing?: number, duration = 1000) => {
+    const has = (n: unknown) => n !== undefined && n !== null && (n as unknown) !== '' && Number.isFinite(Number(n))
+    map?.flyTo({
+      center: [Number(lon), Number(lat)],
+      ...(has(zoom) ? { zoom: Number(zoom) } : {}),
+      ...(has(pitch) ? { pitch: Number(pitch) } : {}),
+      ...(has(bearing) ? { bearing: Number(bearing) } : {}),
+      duration: Number(duration) || 0,
+    })
+  }
+  zoomToThing = (thingId: string, zoom = 16, duration = 1000) => {
+    const thing = findThing(String(thingId))
+    const center = thing ? centerOf(geometriesOf(thing.locations?.[0]?.location)) : null
+    if (center) map?.flyTo({ center, zoom: Number(zoom) || 16, duration: Number(duration) || 0 })
+  }
+  selectThingById = (thingId: string) => {
+    selectedThingId.value = thingId ? String(thingId) : undefined
+  }
+  clearSelection = () => {
+    selectedThingId.value = undefined
+  }
+})()
+
+/* ------------------------------------------------------------ lifecycle */
+
+let resizeObserver: ResizeObserver | undefined
+
+onMounted(() => {
+  if (widgetId?.value) actionsRegistry?.registerInstance(widgetId.value, api, WIDGET_TYPE, pageId)
+  themeObserver = new MutationObserver(() => (dark.value = readDark()))
+  themeObserver.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] })
+  if (!container.value) return
+  try {
+    useMapLibreWorker()
+    map = new MapLibreMap({
+      container: container.value,
+      style: styleUrl.value,
+      ...view.value,
+      maxPitch: 85,
+      attributionControl: { compact: true },
+    })
+  } catch {
+    failed.value = true
+    return
+  }
+  map.addControl(new NavigationControl({ visualizePitch: true }), 'top-right')
+  applyInteractive(map, held().interactive !== false)
+  map.on('style.load', () => {
+    styleReady = true
+    applyAdditions()
+  })
+  map.on('click', onClick)
+  map.on('mousemove', onMove)
+  resizeObserver = new ResizeObserver(() => map?.resize())
+  resizeObserver.observe(container.value)
+})
+
+watch(styleUrl, (url) => {
+  if (!map) return
+  styleReady = false
+  // Loaded whole, not diffed: only a whole load says style.load, which puts the additions back.
+  map.setStyle(url, { diff: false })
+})
+watch(lookKey, applyAdditions)
+watch(collections, applyData)
+watch(view, (next) => map?.jumpTo(next))
+watch(() => held().interactive, (on) => map && applyInteractive(map, on !== false))
+
+onUnmounted(() => {
+  if (widgetId?.value) actionsRegistry?.unregisterInstance(widgetId.value)
+  themeObserver?.disconnect()
+  resizeObserver?.disconnect()
+  map?.remove()
+  map = undefined
+})
+
+</script>
+
+<template>
+  <div class="maplibre-widget">
+    <div ref="container" class="maplibre-widget__map" />
+    <div v-if="failed" class="maplibre-widget__failed">{{ t('Widget.noWebGL') }}</div>
+  </div>
+</template>
+
+<style scoped>
+.maplibre-widget {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 120px;
+}
+
+.maplibre-widget__map {
+  position: absolute;
+  inset: 0;
+}
+
+.maplibre-widget__failed {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  text-align: center;
+  color: var(--color-fg-muted, #666);
+}
+</style>
