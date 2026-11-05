@@ -60,7 +60,6 @@ export class LampwidgetPackage extends BasicEPackage {
   static readonly Literals = {
     LAMP_SETTINGS: null as unknown as EClass,
     LAMP_SETTINGS__ON: null as unknown as EAttribute | EReference,
-    LAMP_SETTINGS__FIXTURE: null as unknown as EAttribute | EReference,
     LAMP_SETTINGS__BRIGHTNESS: null as unknown as EAttribute | EReference,
     LAMP_SETTINGS__COLOR: null as unknown as EAttribute | EReference,
     LAMP_SETTINGS__COLOR_TEMPERATURE: null as unknown as EAttribute | EReference,
@@ -68,8 +67,6 @@ export class LampwidgetPackage extends BasicEPackage {
     LAMP_SETTINGS__LIGHT_SHAPE: null as unknown as EAttribute | EReference,
     LAMP_SETTINGS__DIRECTION: null as unknown as EAttribute | EReference,
     LAMP_SETTINGS__ANGLE: null as unknown as EAttribute | EReference,
-    LAMP_SETTINGS__ORIGIN_X: null as unknown as EAttribute | EReference,
-    LAMP_SETTINGS__ORIGIN_Y: null as unknown as EAttribute | EReference,
     LAMP_SETTINGS__LIGHTS_WIDGETS: null as unknown as EAttribute | EReference,
     LAMP_SETTINGS__STATE_FIELD: null as unknown as EAttribute | EReference,
     LAMP_PAYLOAD: null as unknown as EClass,
@@ -115,15 +112,6 @@ export class LampwidgetPackage extends BasicEPackage {
     lampSettings_on.setUpperBound(1);
     lampSettingsClass.getEStructuralFeatures().push(lampSettings_on);
     LampwidgetPackage.Literals.LAMP_SETTINGS__ON = lampSettings_on;
-
-    // Create fixture feature
-    const lampSettings_fixture = new BasicEReference();
-    lampSettings_fixture.setContainment(false);
-    lampSettings_fixture.setName('fixture');
-    lampSettings_fixture.setLowerBound(0);
-    lampSettings_fixture.setUpperBound(1);
-    lampSettingsClass.getEStructuralFeatures().push(lampSettings_fixture);
-    LampwidgetPackage.Literals.LAMP_SETTINGS__FIXTURE = lampSettings_fixture;
 
     // Create brightness feature
     const lampSettings_brightness = new BasicEReference();
@@ -187,24 +175,6 @@ export class LampwidgetPackage extends BasicEPackage {
     lampSettings_angle.setUpperBound(1);
     lampSettingsClass.getEStructuralFeatures().push(lampSettings_angle);
     LampwidgetPackage.Literals.LAMP_SETTINGS__ANGLE = lampSettings_angle;
-
-    // Create originX feature
-    const lampSettings_originX = new BasicEReference();
-    lampSettings_originX.setContainment(false);
-    lampSettings_originX.setName('originX');
-    lampSettings_originX.setLowerBound(0);
-    lampSettings_originX.setUpperBound(1);
-    lampSettingsClass.getEStructuralFeatures().push(lampSettings_originX);
-    LampwidgetPackage.Literals.LAMP_SETTINGS__ORIGIN_X = lampSettings_originX;
-
-    // Create originY feature
-    const lampSettings_originY = new BasicEReference();
-    lampSettings_originY.setContainment(false);
-    lampSettings_originY.setName('originY');
-    lampSettings_originY.setLowerBound(0);
-    lampSettings_originY.setUpperBound(1);
-    lampSettingsClass.getEStructuralFeatures().push(lampSettings_originY);
-    LampwidgetPackage.Literals.LAMP_SETTINGS__ORIGIN_Y = lampSettings_originY;
 
     // Create lightsWidgets feature
     const lampSettings_lightsWidgets = new BasicEReference();
@@ -285,7 +255,6 @@ export class LampwidgetPackage extends BasicEPackage {
     // convert against - every value would arrive as a raw string (#37)
     // ============================================
     (LampwidgetPackage.Literals.LAMP_SETTINGS__ON as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
-    (LampwidgetPackage.Literals.LAMP_SETTINGS__FIXTURE as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
     (LampwidgetPackage.Literals.LAMP_SETTINGS__BRIGHTNESS as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
     (LampwidgetPackage.Literals.LAMP_SETTINGS__COLOR as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
     (LampwidgetPackage.Literals.LAMP_SETTINGS__COLOR_TEMPERATURE as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
@@ -293,8 +262,6 @@ export class LampwidgetPackage extends BasicEPackage {
     (LampwidgetPackage.Literals.LAMP_SETTINGS__LIGHT_SHAPE as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
     (LampwidgetPackage.Literals.LAMP_SETTINGS__DIRECTION as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
     (LampwidgetPackage.Literals.LAMP_SETTINGS__ANGLE as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
-    (LampwidgetPackage.Literals.LAMP_SETTINGS__ORIGIN_X as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
-    (LampwidgetPackage.Literals.LAMP_SETTINGS__ORIGIN_Y as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
     (LampwidgetPackage.Literals.LAMP_SETTINGS__LIGHTS_WIDGETS as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
     (LampwidgetPackage.Literals.LAMP_SETTINGS__STATE_FIELD as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
     (LampwidgetPackage.Literals.LAMP_PAYLOAD__ON as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EBoolean')!);

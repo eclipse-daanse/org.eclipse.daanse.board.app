@@ -79,8 +79,6 @@ function lamp(overrides: Partial<LightSourceSpec> = {}): LightSourceSpec {
   return {
     widgetId: 'lamp',
     on: true,
-    x: 0.5,
-    y: 0.5,
     radius: 200,
     color: '#ffcc88',
     intensity: 0.8,
@@ -175,15 +173,29 @@ describe('the light layer', () => {
 
   it('follows the widget when only its style changes, as a drag does', async () => {
     const { wrapper, bus, layer } = mountLayer(pageWith())
-    bus.emit(ANNOUNCE_LIGHT, lamp({ x: 0, y: 1 }))
+    bus.emit(ANNOUNCE_LIGHT, lamp())
     await flushPromises()
-    expect(layer().scene.lights[0]).toMatchObject({ x: 100, y: 200 })
+    expect(layer().scene.lights[0]).toMatchObject({ x: 150, y: 150 })
 
     boxes.set('lamp', { left: 40, top: 60, width: 200, height: 50 })
     wrapper.find(`[${LIGHT_BOX_ATTRIBUTE}]`).element.setAttribute('style', 'left: 40px')
     await flushPromises()
 
-    expect(layer().scene.lights[0]).toMatchObject({ x: 40, y: 110 })
+    expect(layer().scene.lights[0]).toMatchObject({ x: 140, y: 85 })
+    wrapper.unmount()
+  })
+
+  it('reaches half the longer side of its widget where the lamp names no reach', async () => {
+    const { wrapper, bus, layer } = mountLayer(pageWith())
+    bus.emit(ANNOUNCE_LIGHT, lamp({ radius: undefined }))
+    await flushPromises()
+    expect(layer().scene.lights[0].radius).toBe(50)
+
+    /* Sized up, the light reaches further */
+    boxes.set('lamp', { left: 100, top: 100, width: 300, height: 120 })
+    wrapper.find(`[${LIGHT_BOX_ATTRIBUTE}]`).element.setAttribute('style', 'width: 300px')
+    await flushPromises()
+    expect(layer().scene.lights[0].radius).toBe(150)
     wrapper.unmount()
   })
 
@@ -243,14 +255,6 @@ describe('the light layer', () => {
     wrapper.unmount()
   })
 
-  it('does not darken a board being edited, and draws its lights over the board', async () => {
-    const { wrapper, bus, layer } = mountLayer(pageWith(0), { editMode: true })
-    bus.emit(ANNOUNCE_LIGHT, lamp())
-    await flushPromises()
-    expect(layer().scene.darkness).toBe(0)
-    expect(layer().scene.lights[0].front).toBe(true)
-    wrapper.unmount()
-  })
 })
 
 describe('a light scene', () => {

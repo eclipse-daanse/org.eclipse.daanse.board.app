@@ -27,7 +27,6 @@ import type { VariableWrapper } from 'org.eclipse.daanse.board.app.lib.variables
  */
 export interface LampSettings extends EObject {
   on?: VariableWrapper<string>;
-  fixture?: VariableWrapper<string>;
   brightness?: VariableWrapper<string>;
   color?: VariableWrapper<string>;
   colorTemperature?: VariableWrapper<string>;
@@ -35,8 +34,6 @@ export interface LampSettings extends EObject {
   lightShape?: VariableWrapper<string>;
   direction?: VariableWrapper<string>;
   angle?: VariableWrapper<string>;
-  originX?: VariableWrapper<string>;
-  originY?: VariableWrapper<string>;
   lightsWidgets?: VariableWrapper<string>;
   stateField?: VariableWrapper<string>;
 
