@@ -78,11 +78,22 @@ const updateData = async () => {
   const req = await store.getData('PivotTable');
   if (update !== latestUpdate) return;
   data.value = req;
-  if (props.dataSource.config.useVisualEditor) {
-    generatedMdx = await store.getMdxRequest();
-    query.value = generatedMdx;
+  // The editor shows what the designer built - unless what it shows is what runs.
+  if (!useMdx.value) {
+    const generated = await store.getMdxRequest();
+    // Somebody may have typed while it was asked for; what they wrote stays.
+    if (useMdx.value || update !== latestUpdate) return;
+    generatedMdx = generated;
+    query.value = generated;
   }
 }
+
+/*
+ * Whether the MDX in the editor is what runs. Typing there turns it on: the
+ * text used to snap back to the designer's query with the next answer, and
+ * the store went on running that one, so nothing written there could run.
+ */
+const useMdx = ref(Boolean(props.dataSource.config.useMdx));
 
 /*
  * The MDX the designer built, last time it was asked. Writing it into the
@@ -101,7 +112,13 @@ onMounted(async () => {
   // metadata.value = await tempStore.value.getMetadata();
 });
 
-// Runs each time the temporary store is created or replaced.
+/*
+ * Runs each time the temporary store is created or replaced - and only
+ * then. It watched deep, into the store: that holds the designer's request
+ * and the metadata the cube explorer shows, both reactive, and something in
+ * them is written with every answer. So every answer asked for the next one,
+ * and the preview queried the server without pause.
+ */
 watch(tempStore, async () => {
   if (!tempStore.value) return;
   /*
@@ -117,7 +134,7 @@ watch(tempStore, async () => {
   debouncedUpdateData();
   const loaded = await store.getMetadata();
   if (tempStore.value === store) metadata.value = loaded;
-}, { deep: true });
+});
 
 watch(() => queryConfig, async () => {
   emit('updateConfig', {
@@ -129,15 +146,25 @@ watch(() => queryConfig, async () => {
   debouncedUpdateData();
 }, { deep: true });
 
-watch(() => query, async () => {
-  if (query.value === generatedMdx) return;
+/* The editor's text and whether it runs go to the store and the configuration together. */
+const useWrittenMdx = () => {
+  tempStore.value?.setMdx(query.value, useMdx.value);
   emit('updateConfig', {
     ...props.dataSource.config,
     mdx: query.value,
+    useMdx: useMdx.value,
   });
-
   debouncedUpdateData();
-}, { deep: true });
+}
+
+watch(query, () => {
+  if (query.value === generatedMdx) return;
+  useMdx.value = true;
+  useWrittenMdx();
+});
+
+// Turned off, the designer's query runs again and comes back into the editor.
+watch(useMdx, useWrittenMdx);
 
 const onExpand = async (e: any) => {
   drilldownState.value = tempStore.value.expand(e);
@@ -246,7 +273,7 @@ watch(metadata, () => {
           <!-- <MonacoEditor v-model="query" height="100%" width="100%" language="mdx" :supported-languages="[ 'mdx' ]" :metadata="metadataStore" /> -->
           <MonacoEditor v-model="query" class="monaco-container" language="mdx" :supported-languages="['mdx']">
             <template #actions>
-              <DCheckbox v-model="props.dataSource.config.useMdx" class="mt-2" :label="t('Xmla.useMdx')" />
+              <DCheckbox v-model="useMdx" class="mt-2" :label="t('Xmla.useMdx')" />
             </template>
           </MonacoEditor>
         </template>

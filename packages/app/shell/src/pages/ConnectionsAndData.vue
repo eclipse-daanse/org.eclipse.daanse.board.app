@@ -26,7 +26,8 @@ Contributors:
  * from it before either is touched.
  */
 import { computed, inject, ref, watch } from 'vue'
-import { DTabs } from 'org.eclipse.daanse.board.app.ui.vue.controls'
+import { onBeforeRouteLeave } from 'vue-router'
+import { DButton, DIcon, DModal, DTabs } from 'org.eclipse.daanse.board.app.ui.vue.controls'
 import {
   identifier as WORKSPACE,
   type Workspace,
@@ -36,6 +37,7 @@ import DataTree, { type Selection } from '@/components/datasources/DataTree.vue'
 import DatasourceEditor from '@/components/datasources/DatasourceEditor.vue'
 import ConnectionEditor from '@/components/connections/ConnectionEditor.vue'
 import { useDatasourceUsage } from '@/composables/useDatasourceUsage'
+import { leavingADraft, type Draft } from '@/composables/leavingADraft'
 
 const workspace = inject<Workspace>(WORKSPACE)!
 const connections = useEList(workspace, (w) => w.connections)
@@ -95,12 +97,29 @@ const tabs = computed(() =>
 watch(selected, (at) => {
   tab.value = at?.type === 'DataSource' ? 'preview' : 'settings'
 })
+
+/* Opening something else over a draft that is not saved asks first. */
+const editor = ref<Draft | null>(null)
+const { asking, mayLeave, answer: answerLeaving } = leavingADraft(editor)
+
+const sameItem = (a?: Selection, b?: Selection) => a?.type === b?.type && a?.itemId === b?.itemId
+
+/* What the tree picks; it becomes the selection once the draft is taken care of. */
+const picked = computed<Selection | undefined>({
+  get: () => selected.value,
+  set: async (next) => {
+    if (sameItem(next, selected.value)) return
+    if (await mayLeave()) selected.value = next
+  },
+})
+
+onBeforeRouteLeave(() => mayLeave())
 </script>
 
 <template>
   <div class="data-page">
     <aside class="data-page__tree">
-      <DataTree v-model="selected" @find-endpoints="findEndpoints" @view="tab = $event" />
+      <DataTree v-model="picked" @find-endpoints="findEndpoints" @view="tab = $event" />
     </aside>
 
     <section class="data-page__detail">
@@ -130,6 +149,7 @@ watch(selected, (at) => {
             is part of the draft that Save in the settings commits. -->
           <DatasourceEditor
             v-else
+            ref="editor"
             :key="selected.itemId"
             :item-id="selected.itemId"
             :view="tab === 'preview' ? 'preview' : 'settings'"
@@ -138,10 +158,37 @@ watch(selected, (at) => {
         </div>
       </template>
     </section>
+
+    <DModal :model-value="asking" size="sm" @update:model-value="answerLeaving('stay')" @cancel="answerLeaving('stay')">
+      <template #header>
+        <DIcon name="warning" size="lg" tone="color-warn" />
+        <h2 class="leaving__title">{{ t('Data.leaving.title') }}</h2>
+      </template>
+      <p class="leaving__text">{{ t('Data.leaving.text', { name: (held as any)?.name ?? '' }) }}</p>
+      <template #actions>
+        <DButton intent="quiet" @click="answerLeaving('stay')">{{ t('Data.leaving.stay') }}</DButton>
+        <DButton intent="quiet" @click="answerLeaving('discard')">{{ t('Editor.discard') }}</DButton>
+        <DButton intent="primary" @click="answerLeaving('save')">{{ t('common:Action.save') }}</DButton>
+      </template>
+    </DModal>
   </div>
 </template>
 
 <style scoped>
+.leaving__title {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  font-weight: 600;
+  color: var(--color-fg);
+}
+
+.leaving__text {
+  margin: 0 0 6px;
+  color: var(--color-dim);
+  line-height: 1.5;
+}
+
 .data-page {
   display: flex;
   height: 100%;
