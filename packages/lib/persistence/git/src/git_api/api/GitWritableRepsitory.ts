@@ -20,4 +20,5 @@ export interface GitWritableRepository extends WritableRepository{
   setCommit(commit:CommitI):void;
   getCurrentCommit():CommitI|undefined;
   auth(options: any): Promise<any>
+  isAuthenticated(): boolean
 }
