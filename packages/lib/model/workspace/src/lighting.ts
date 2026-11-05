@@ -76,21 +76,20 @@ export type LightShape = 'round' | 'cone'
 /**
  * One light as a lamp announces it.
  *
- * Its place is given relative to the lamp's widget, never in pixels: the
- * layer measures the widget, so the light follows the widget when it is
- * moved or resized, whoever moves it.
+ * It has no place of its own: the light starts at the centre of the lamp's
+ * widget, which the layer measures, so the light follows the widget when
+ * it is moved or resized, whoever moves it.
  */
 export interface LightSourceSpec {
   /** The widget the light belongs to; one light per widget. */
   widgetId: string
   /** Off, the light is announced all the same and draws nothing. */
   on: boolean
-  /** Where in the widget the light comes from, 0 (left) to 1 (right). */
-  x: number
-  /** Where in the widget the light comes from, 0 (top) to 1 (bottom). */
-  y: number
-  /** How far the light reaches, in pixels. */
-  radius: number
+  /**
+   * How far the light reaches, in pixels. Left out (or 0), the widget's
+   * size decides: half its longer side.
+   */
+  radius?: number
   /** Any CSS colour the canvas understands. */
   color: string
   /** How strong the light is, 0 to 1. */

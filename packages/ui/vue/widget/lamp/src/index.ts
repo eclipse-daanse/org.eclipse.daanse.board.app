@@ -39,7 +39,7 @@ void LampwidgetPackage.eINSTANCE
 const LAMP_TYPE = 'LampWidget'
 
 /**
- * The lamp, declared as a component: the loader registers it under
+ * The lamp - a light source - declared as a component: the loader registers it under
  * WIDGET_SERVICE_ID, the WidgetRepository tracks that into the palette,
  * and unloading the bundle withdraws it.
  */
@@ -49,8 +49,10 @@ const LAMP_TYPE = 'LampWidget'
 })
 export class LampWidgetProvider implements WidgetProvider {
   readonly type = LAMP_TYPE
-  readonly name = 'Lamp'
+  readonly name = 'Light source'
   readonly nameKey = 'lamp:Widget.lamp'
+  /* No picture on the board: shown, only its light is seen (#1242) */
+  readonly frameless = true
 
   readonly settingsForm = {
     xmi: lampSettingsFormXmi,
