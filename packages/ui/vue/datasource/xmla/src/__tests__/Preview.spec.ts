@@ -46,17 +46,31 @@ vi.mock('org.eclipse.daanse.board.app.ui.vue.common.xmla', async () => {
   };
 });
 
-vi.mock('org.eclipse.daanse.board.app.ui.vue.common.monaco', async () => {
-  const { defineComponent, h } = await import('vue');
+/*
+ * The language server's editor, as far as the preview uses it: built with a
+ * text, telling what was typed, and given a text from outside by setText.
+ */
+vi.mock('org.eclipse.daanse.board.app.ui.vue.common.lsp', async () => {
+  const { defineComponent, h, ref } = await import('vue');
   return {
-    MonacoEditor: defineComponent({
-      name: 'MonacoEditor',
-      props: ['modelValue'],
-      emits: ['update:modelValue'],
-      setup: (_, { slots }) => () => h('div', { class: 'monaco' }, slots.actions?.()),
+    Editor: defineComponent({
+      name: 'Editor',
+      props: ['language', 'uri', 'text'],
+      emits: ['textChanged'],
+      setup(props, { expose }) {
+        const shown = ref(props.text as string);
+        expose({ getText: () => shown.value, setText: (text: string) => { shown.value = text; } });
+        return () => h('div', { class: 'lsp-editor', 'data-text': shown.value });
+      },
     }),
   };
 });
+
+vi.mock('org.eclipse.daanse.board.app.lib.lsp.lang.mdx', () => ({ MDX_LANGUAGE: { id: 'mdx', label: 'MDX' } }));
+
+/* What the editor shows, and typing into it. */
+const shownIn = (wrapper: any) => wrapper.find('.lsp-editor').attributes('data-text');
+const typeInto = (wrapper: any, text: string) => wrapper.findComponent({ name: 'Editor' }).vm.$emit('textChanged', text);
 
 const tableState = { rowsExpandedMembers: [], columnsExpandedMembers: [] };
 
@@ -155,6 +169,50 @@ describe('XMLA Datasource Preview.vue', () => {
     expect(store.getData).toHaveBeenCalledTimes(1);
   });
 
+  it('asks the server nothing while there is no query to run', async () => {
+    store.getMdxRequest.mockResolvedValue('');
+    mountPreview();
+    await new Promise(resolve => setTimeout(resolve, 300));
+    // Was: an empty statement, sent and answered with nothing.
+    expect(store.getData).not.toHaveBeenCalled();
+  });
+
+  it("says why the server did not run a query, until one runs", async () => {
+    const wrapper = await openTheEditor();
+    store.getData.mockRejectedValueOnce(new Error('MDX cube NOWHERE not found'));
+    typeInto(wrapper, 'SELECT FROM [NOWHERE]');
+    await vi.waitFor(() => expect(wrapper.find('[role="alert"]').exists()).toBe(true));
+    expect(wrapper.find('[role="alert"]').text()).toContain('MDX cube NOWHERE not found');
+    // The table of the previous answer is still there.
+    expect(wrapper.findComponent({ name: 'PivotTable' }).exists()).toBe(true);
+
+    typeInto(wrapper, 'SELECT FROM [Sales]');
+    await vi.waitFor(() => expect(wrapper.find('[role="alert"]').exists()).toBe(false));
+  });
+
+  it('opens on the written MDX when that is what runs, and keeps the editor on the other tab', async () => {
+    const datasourceRepository = {
+      getDatasourceIdentifiers: () => ({ Store: Symbol.for('XmlaStore') }),
+      resolveIdentifier: () => () => store,
+    };
+    const wrapper = mount(Preview, {
+      props: { dataSource: { type: 'xmla', config: { connection: 'c', cube: 'Sales', requestParams: {}, mdx: 'SELECT FROM [Sales]', useMdx: true } } },
+      global: { provide: { [datasourceIdentifier]: datasourceRepository } },
+    });
+    await vi.waitFor(() => expect(store.getData).toHaveBeenCalledTimes(1));
+    await flushPromises();
+    // Not attached to a document, so visibility is read from the style v-show writes.
+    expect(wrapper.find('.mdx-editor').attributes('style') ?? '').not.toContain('display: none');
+    expect(shownIn(wrapper)).toBe('SELECT FROM [Sales]');
+
+    const tab = wrapper.findAll('button, [role="tab"]').find(b => b.text().includes('Xmla.build'))!;
+    await tab.trigger('click');
+    await flushPromises();
+    // Hidden, not gone: its undo history survives the visit to the designer.
+    expect(wrapper.find('.mdx-editor').exists()).toBe(true);
+    expect(wrapper.find('.mdx-editor').attributes('style')).toContain('display: none');
+  });
+
   async function openTheEditor() {
     const wrapper = mountPreview();
     await vi.waitFor(() => expect(store.getData).toHaveBeenCalledTimes(1));
@@ -167,18 +225,17 @@ describe('XMLA Datasource Preview.vue', () => {
 
   it('runs the MDX typed in the editor and leaves it there', async () => {
     const wrapper = await openTheEditor();
-    const editor = wrapper.findComponent({ name: 'MonacoEditor' });
-    expect(editor.props('modelValue')).toBe('SELECT FROM [Sales]');
+    expect(shownIn(wrapper)).toBe('SELECT FROM [Sales]');
 
     const typed = 'SELECT {[Measures].[Store Cost]} ON 0 FROM [Sales]';
-    editor.vm.$emit('update:modelValue', typed);
+    typeInto(wrapper, typed);
     await vi.waitFor(() => expect(store.getData).toHaveBeenCalledTimes(2));
     await flushPromises();
 
     expect(store.setMdx).toHaveBeenLastCalledWith(typed, true);
     expect(wrapper.emitted('updateConfig')!.at(-1)![0]).toMatchObject({ mdx: typed, useMdx: true });
     // Was: the designer's query written back over it with the answer.
-    expect(wrapper.findComponent({ name: 'MonacoEditor' }).props('modelValue')).toBe(typed);
+    expect(shownIn(wrapper)).toBe(typed);
   });
 
   it('keeps what is typed while the designer\'s query is still being asked for', async () => {
@@ -190,17 +247,38 @@ describe('XMLA Datasource Preview.vue', () => {
     await tab.trigger('click');
 
     const typed = 'SELECT {[Measures].[Profit]} ON 0 FROM [Sales]';
-    wrapper.findComponent({ name: 'MonacoEditor' }).vm.$emit('update:modelValue', typed);
+    typeInto(wrapper, typed);
     give('SELECT FROM [Sales]');
     await flushPromises();
 
     // Was: the late designer's query landed over what was typed.
-    expect(wrapper.findComponent({ name: 'MonacoEditor' }).props('modelValue')).toBe(typed);
+    expect(shownIn(wrapper)).toBe(typed);
+  });
+
+  it("runs the text brought back to the designer's query as written MDX", async () => {
+    const wrapper = await openTheEditor();
+    typeInto(wrapper, 'SELECT FROM [Sales] WHERE 1');
+    await vi.waitFor(() => expect(store.getData).toHaveBeenCalledTimes(2));
+    await flushPromises();
+    await wrapper.find('input[type="checkbox"]').setValue(false);
+    await vi.waitFor(() => expect(store.getData).toHaveBeenCalledTimes(3));
+    await flushPromises();
+    // Typed again - or redone - while the written MDX is in use.
+    typeInto(wrapper, 'SELECT FROM [Sales] WHERE 1');
+    await vi.waitFor(() => expect(store.getData).toHaveBeenCalledTimes(4));
+    typeInto(wrapper, 'SELECT FROM [Sales]');
+    await vi.waitFor(() => expect(store.getData).toHaveBeenCalledTimes(5));
+    await flushPromises();
+
+    // Was: left alone for matching the designer's text; the store and the
+    // configuration kept "WHERE 1" while the editor showed this.
+    expect(store.setMdx).toHaveBeenLastCalledWith('SELECT FROM [Sales]', true);
+    expect(wrapper.emitted('updateConfig')!.at(-1)![0]).toMatchObject({ mdx: 'SELECT FROM [Sales]', useMdx: true });
   });
 
   it("goes back to the designer's query when the MDX is no longer used", async () => {
     const wrapper = await openTheEditor();
-    wrapper.findComponent({ name: 'MonacoEditor' }).vm.$emit('update:modelValue', 'SELECT FROM [Sales] WHERE 1');
+    typeInto(wrapper, 'SELECT FROM [Sales] WHERE 1');
     await vi.waitFor(() => expect(store.getData).toHaveBeenCalledTimes(2));
     await flushPromises();
 
@@ -209,6 +287,6 @@ describe('XMLA Datasource Preview.vue', () => {
     await flushPromises();
 
     expect(store.setMdx).toHaveBeenLastCalledWith('SELECT FROM [Sales] WHERE 1', false);
-    expect(wrapper.findComponent({ name: 'MonacoEditor' }).props('modelValue')).toBe('SELECT FROM [Sales]');
+    expect(shownIn(wrapper)).toBe('SELECT FROM [Sales]');
   });
 });

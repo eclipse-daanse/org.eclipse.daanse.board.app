@@ -14,7 +14,7 @@ Contributors:
 <script setup lang="ts">
 import { onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import type { Extension } from '@codemirror/state'
-import type { EditorView } from '@codemirror/view'
+import { EditorView } from '@codemirror/view'
 import type { LanguageDescriptor } from 'org.eclipse.daanse.board.app.lib.lsp.core'
 import { useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import { createEditor, type EditorHandle } from '../editor/editor-service.js'
@@ -26,6 +26,8 @@ const props = defineProps<{
   uri: string
   text: string
   extensions?: Extension[]
+  /** What the text box is, for assistive technology; without it only "edit text" is read. */
+  label?: string
 }>()
 
 const emit = defineEmits<{
@@ -51,7 +53,10 @@ onMounted(async () => {
       language: props.language,
       uri: props.uri,
       text: props.text,
-      extensions: props.extensions,
+      extensions: [
+        ...(props.extensions ?? []),
+        ...(props.label ? [EditorView.contentAttributes.of({ 'aria-label': props.label })] : []),
+      ],
       onUpdate: (view, docChanged) => {
         emit('update', view)
         if (docChanged) emit('textChanged', view.state.doc.toString())
@@ -163,7 +168,11 @@ defineExpose({
 function onDragOver(event: DragEvent) {
   if (!event.dataTransfer) return
   event.preventDefault()
-  event.dataTransfer.dropEffect = 'copy'
+  // The effect has to be one the source allows, or the browser drops nothing
+  // and never says so: a tree row under SortableJS allows 'move' only, and
+  // asking for 'copy' there left measures and hierarchies undroppable.
+  const allowed = event.dataTransfer.effectAllowed
+  event.dataTransfer.dropEffect = allowed === 'move' ? 'move' : 'copy'
 }
 
 function onDrop(event: DragEvent) {

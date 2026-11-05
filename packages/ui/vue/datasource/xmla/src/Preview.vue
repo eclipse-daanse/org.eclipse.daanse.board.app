@@ -18,7 +18,8 @@ import { computed, provide, ref, watch, toRef, shallowRef, nextTick, onMounted, 
 import { debounce } from 'lodash';
 import { MetadataTree, QueryDesigner, PivotTable, SlicePicker } from 'org.eclipse.daanse.board.app.ui.vue.common.xmla';
 import { axisOptions, pivotSlice, positionsOf, sliceByKeys, sliceKeys, type SliceRef } from 'org.eclipse.daanse.board.app.lib.datasource.xmla';
-import { MonacoEditor } from 'org.eclipse.daanse.board.app.ui.vue.common.monaco';
+import { Editor } from 'org.eclipse.daanse.board.app.ui.vue.common.lsp';
+import { MDX_LANGUAGE } from 'org.eclipse.daanse.board.app.lib.lsp.lang.mdx';
 
 const props = defineProps<{ dataSource: any }>();
 
@@ -39,7 +40,8 @@ const tabs = computed(() => [
   { id: 'visual', label: t('Xmla.build') },
   { id: 'code', label: t('Xmla.write') },
 ]);
-const currentTab = ref('visual');
+// Opens on the half that runs - also after Discard, which builds the preview afresh.
+const currentTab = ref(props.dataSource.config.useMdx ? 'code' : 'visual');
 const api = ref(null as any);
 const catalog = ref(null as any);
 
@@ -75,18 +77,38 @@ const updateData = async () => {
   if (!store) return;
   // Answers can arrive out of order; only the latest request's counts.
   const update = ++latestUpdate;
-  const req = await store.getData('PivotTable');
+  // Nothing to run yet - an empty editor, or a designer with nothing on its
+  // axes - used to go to the server as an empty statement.
+  const request = useMdx.value ? query.value : await store.getMdxRequest();
+  if (update !== latestUpdate) return;
+  if (!request.trim()) {
+    data.value = null;
+    queryError.value = '';
+    return;
+  }
+  let req;
+  try {
+    req = await store.getData('PivotTable');
+  } catch (error) {
+    // The server's answer is shown under the preview; the table that was
+    // there stays, so what the previous query showed is not lost with it.
+    if (update === latestUpdate) queryError.value = error instanceof Error ? error.message : String(error);
+    return;
+  }
   if (update !== latestUpdate) return;
   data.value = req;
+  queryError.value = '';
   // The editor shows what the designer built - unless what it shows is what runs.
   if (!useMdx.value) {
     const generated = await store.getMdxRequest();
     // Somebody may have typed while it was asked for; what they wrote stays.
     if (useMdx.value || update !== latestUpdate) return;
-    generatedMdx = generated;
     query.value = generated;
   }
 }
+
+/* Why the server did not run the last query, in its own words; empty while it did. */
+const queryError = ref('');
 
 /*
  * Whether the MDX in the editor is what runs. Typing there turns it on: the
@@ -94,13 +116,6 @@ const updateData = async () => {
  * the store went on running that one, so nothing written there could run.
  */
 const useMdx = ref(Boolean(props.dataSource.config.useMdx));
-
-/*
- * The MDX the designer built, last time it was asked. Writing it into the
- * editor is not a change somebody made, and reporting it as one marked the
- * source unsaved for merely being looked at.
- */
-let generatedMdx = '';
 
 // Edits, expands and collapses come in bursts; the preview asks once.
 const debouncedUpdateData = debounce(updateData, 100);
@@ -157,14 +172,34 @@ const useWrittenMdx = () => {
   debouncedUpdateData();
 }
 
-watch(query, () => {
-  if (query.value === generatedMdx) return;
-  useMdx.value = true;
-  useWrittenMdx();
-});
-
 // Turned off, the designer's query runs again and comes back into the editor.
 watch(useMdx, useWrittenMdx);
+
+/*
+ * The editor is the MDX language server's, as in the workbench: it takes its
+ * text once, when it is built, and says when it was typed in. A query that
+ * changes from outside - the designer's, arriving with an answer - is put
+ * into it, one undo step; typing comes back here and goes the way above.
+ */
+const editor = ref<InstanceType<typeof Editor> | null>(null);
+const editorUri = computed(() => `inmemory://datasource/${props.dataSource.uid ?? 'preview'}.mdx`);
+/*
+ * Only what is typed counts as written MDX. The designer's query, put into
+ * the editor below, comes back here as the same text and is left alone; a
+ * text somebody brought back to it - by undo, redo or retyping - is theirs
+ * and runs as written. Comparing against the designer's text instead left
+ * the checkbox on while the store and the configuration kept an older text.
+ */
+const onTyped = (text: string) => {
+  if (text === query.value) return;
+  query.value = text;
+  // Turning the checkbox on runs it through the watcher below; otherwise here.
+  if (useMdx.value) useWrittenMdx();
+  else useMdx.value = true;
+};
+watch(query, (text) => {
+  if (editor.value && editor.value.getText() !== text) editor.value.setText(text);
+});
 
 const onExpand = async (e: any) => {
   drilldownState.value = tempStore.value.expand(e);
@@ -269,14 +304,23 @@ watch(metadata, () => {
       <DTabs v-model="currentTab" :tabs="tabs" :label="t('Xmla.tabs')" />
 
       <div class="editor-pane">
-        <template v-if="currentTab === 'code' && connection">
-          <!-- <MonacoEditor v-model="query" height="100%" width="100%" language="mdx" :supported-languages="[ 'mdx' ]" :metadata="metadataStore" /> -->
-          <MonacoEditor v-model="query" class="monaco-container" language="mdx" :supported-languages="['mdx']">
-            <template #actions>
-              <DCheckbox v-model="useMdx" class="mt-2" :label="t('Xmla.useMdx')" />
-            </template>
-          </MonacoEditor>
-        </template>
+        <!-- Hidden, not removed, on the other tab: the editor keeps its undo history. -->
+        <div v-if="connection" v-show="currentTab === 'code'" class="mdx-editor">
+          <div class="mdx-editor__actions">
+            <DCheckbox v-model="useMdx" :label="t('Xmla.useMdx')" />
+          </div>
+          <!-- The editor fills what it is put in; the height is this box's. -->
+          <div class="mdx-editor__text">
+            <Editor
+              ref="editor"
+              :language="MDX_LANGUAGE"
+              :uri="editorUri"
+              :text="query"
+              :label="t('Xmla.editor')"
+              @textChanged="onTyped"
+            />
+          </div>
+        </div>
         <template v-if="currentTab === 'visual'">
           <QueryDesigner v-model="queryConfig" :api="api" :catalog="catalog"/>
         </template>
@@ -285,6 +329,9 @@ watch(metadata, () => {
         <h4 class="data-preview__title">
           {{ t('Xmla.preview') }}
         </h4>
+        <p v-if="queryError" class="data-preview__error" role="alert">
+          <strong>{{ t('Xmla.failed') }}</strong> {{ queryError }}
+        </p>
         <SlicePicker
           v-if="slice"
           class="data-preview__slice"
@@ -342,7 +389,10 @@ watch(metadata, () => {
   display: grid;
   /* One column as wide as the pane - not as the widest table in it. */
   grid-template-columns: minmax(0, 1fr);
-  grid-template-rows: auto minmax(0, max-content) minmax(160px, 1fr);
+  /* The query's row keeps its height; the preview takes the rest. A middle
+     row allowed to shrink clipped the editor's bottom edge, scrollbar and
+     all, as soon as the unsaved banner above took its 38px. */
+  grid-template-rows: auto auto minmax(160px, 1fr);
   flex: 1 1 auto;
   min-width: 0;
   min-height: 0;
@@ -351,14 +401,21 @@ watch(metadata, () => {
 
 .editor-pane {
   min-width: 0;
-  min-height: 0;
-  max-height: 55vh;
-  overflow: auto;
   padding-top: 8px;
 }
 
-.monaco-container {
-  height: 320px;
+.mdx-editor {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.mdx-editor__text {
+  /* Shorter on a short screen rather than cut off; the pane around it does not scroll. */
+  height: clamp(160px, 40vh, 320px);
+  border: 1px solid var(--color-divider);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
 }
 
 .data-preview {
@@ -383,6 +440,17 @@ watch(metadata, () => {
   margin-bottom: 6px;
 }
 
+.data-preview__error {
+  margin: 0 0 6px;
+  padding: 8px 12px;
+  font-size: var(--text-sm);
+  line-height: 1.45;
+  color: var(--color-err);
+  border: 1px solid var(--color-err);
+  border-radius: var(--radius-xs);
+  overflow-wrap: anywhere;
+}
+
 /* A big table scrolls here, in both directions, instead of widening the page. */
 .data-preview__table {
   flex: 1;
@@ -398,10 +466,31 @@ watch(metadata, () => {
 }
 
 .metadata-container {
-  flex: 0 0 300px;
+  /* Gives way on a narrow screen; it used to keep its 300px while the editor shrank to nothing. */
+  flex: 0 1 300px;
+  min-width: 200px;
   min-height: 0;
   overflow: auto;
   padding: 8px;
+}
+
+/*
+ * A narrow window: the cube explorer goes underneath instead of squeezing
+ * the editor to a few dozen pixels, and the pane around scrolls as a whole.
+ * The app's sidebar is fixed, so the window's width says what is left.
+ */
+@media (max-width: 1100px) {
+  .xmla-preview {
+    flex-wrap: wrap;
+    height: auto;
+    min-height: 100%;
+    overflow: visible;
+  }
+
+  .metadata-container {
+    flex: 1 1 100%;
+    max-height: 40vh;
+  }
 }
 
 .metadata-container__empty {
