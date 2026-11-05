@@ -10,261 +10,242 @@ Contributors: Smart City Jena
 -->
 
 <script setup lang="ts">
+/*
+ * What a git place adds to the storage view: where the repository is, which
+ * branch and which commit are read, and whether a token is set.
+ *
+ * Only that. The storage view lists the entries, shows an entry and stores
+ * the current workspace for every kind of place, git included (#1247). This
+ * view had its own file table, load button and save input, teleported into
+ * a modal that no longer exists.
+ */
 import { computed, ref, watch } from 'vue'
-import type {
-  Repository,
-  Entity,
-  WritableRepository
-} from 'org.eclipse.daanse.board.app.lib.api.persistence'
+import { DButton, DChip, DIcon, DInput, DModal, DSelect } from 'org.eclipse.daanse.board.app.ui.vue.controls'
+import { useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+import type { GitWritableRepository } from 'org.eclipse.daanse.board.app.lib.persistence.git'
 
-import { asyncComputed } from '@vueuse/core'
-import { DButton, DIcon, DInput, DModal, DSelect, DTable } from 'org.eclipse.daanse.board.app.ui.vue.controls'
+/* Whether a token is set is newer than some builds of the library; a
+  repository without it is taken as read only. */
+type GitPlace = GitWritableRepository & { isAuthenticated?(): boolean }
 
-import { usePromisifiedModal, useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
-import { GitWritableRepository, AuthentificationError } from 'org.eclipse.daanse.board.app.lib.persistence.git'
-import SaveInputGit from './SaveInputGit.vue'
+const props = defineProps<{ repo: GitPlace }>()
 
-//Props
-const props = defineProps<{ repo: GitWritableRepository, context: { context: string, state?: any } | undefined }>()
+/** The branch or the commit changed: what the place holds has to be read again. */
+const emit = defineEmits<{ refresh: [] }>()
+
 const { t } = useTranslation('persistence')
 
-//Emits
-const emts = defineEmits<{ close: [data?: unknown, entry?: Entity] }>()
+type CommitLike = { hash: string; creation_date: string; message?: string }
 
-//Refs
-/*
- * Three columns. There was a fourth holding a newspaper icon on every
- * row, and a fifth with a download and a delete button whose only
- * handler was `ev.stopImmediatePropagation()` - they have never done
- * anything.
- */
-const columns = computed(() => [
-  { key: 'name', label: t('Git.columns.name') },
-  { key: 'date', label: t('Git.columns.date') },
-  { key: 'size', label: t('Git.columns.size') },
-])
-
-const savedData = ref<Entity[]>([])
-const branch = ref<string>('main')
+const branchNames = ref<string[]>([])
+const branch = ref<string>('')
+const commits = ref<CommitLike[]>([])
 const commit = ref<string>('')
-const isTableLoading = ref<boolean>(false)
-const token = ref<undefined | string>(undefined)
-const selectedRow = ref<any>(undefined)
+const authenticated = ref(false)
 
-//Logic
-watch(() => props.repo, async (_new) => {
-  await getFiles()
-}, { immediate: true })
-
-watch(branch, async (name) => {
-  const branch = (await props.repo.getBranches()).find(b => b.name == name)
-  if (branch) {
-    props.repo.setBranch(branch)
-    props.repo.getCommits()
-    getFiles()
-  }
-})
-watch(commit, async (date) => {
-  const commit = (await props.repo.getCommits()).find(c => c.creation_date == date)
-  if (commit) {
-    props.repo.setCommit(commit)
-    getFiles()
-  }
-})
-
-const branch_options = asyncComputed(async () => {
-  return (await props.repo.getBranches()).map(b => b.name)
-})
-const commit_options = asyncComputed(async () => {
-  return (await props.repo.getCommits()).map(c => c.creation_date)
-})
-
-async function getFiles() {
-  if (props.repo != undefined) {
-    try {
-      isTableLoading.value = true
-      savedData.value = await (props.repo as Repository).findAll()
-    } catch (e) {
-      savedData.value = []
-    } finally {
-      isTableLoading.value = false
-    }
-  } else savedData.value = []
+/* The date says when, the first line of the message says what. */
+function when(iso: string): string {
+  const date = new Date(iso)
+  if (Number.isNaN(date.getTime())) return iso
+  return date.toLocaleString(undefined, { dateStyle: 'medium', timeStyle: 'short' })
 }
 
-const override = async (e: Entity) => {
-  if (!props.context?.state) {
-    console.log('no context')
-    return false
-  }
-  e.data = props.context!.state
-  try {
-    await (props.repo as WritableRepository).update(e)
-    notify({ message: t('Git.stored') })
-  } catch (ee) {
-    let token = await run(null)
-    if (!token) {
-      notify({ title: t('Git.storeFailed'), message: String(ee) })
-    } else {
-      await props.repo.auth({ auth: token })
-      override(e)
-    }
-  } finally {
-    //emts('close')
-  }
-}
-const save = async (e: Entity) => {
-  if (!props.context?.state) {
-    console.log('no context')
-    return false
-  }
-  e.data = props.context!.state
-  try {
-    await (props.repo as WritableRepository).create(e)
-    notify({ message: t('Git.stored') })
-  } catch (ee) {
-    if (ee instanceof AuthentificationError) {
-      //alert('not auth')
-      let token = await run(null)
-      if (!token) {
-        notify({ title: t('Git.storeFailed'), message: String(ee) })
-      } else {
-        await props.repo.auth({ auth: token })
-        await save(e)
-      }
+const commitChoices = computed(() =>
+  commits.value.map((each) => {
+    const line = (each.message ?? '').split('\n')[0] ?? ''
+    const short = line.length > 48 ? `${line.slice(0, 47)}…` : line
+    return { uid: each.hash, name: short ? `${when(each.creation_date)} · ${short}` : when(each.creation_date) }
+  }),
+)
 
-    } else {
-      notify({ title: t('Git.storeFailed'), message: String(ee) })
-      console.log(e)
-    }
+const link = computed(() => String(props.repo.uri ?? ''))
 
-  } finally {
-    await getFiles()
-    //emts('close')
-  }
-}
-const auth = () => {
-  return token.value
+/** Reads what the repository stands on now - the view may mount after it moved. */
+async function readState() {
+  const branches = (await props.repo.getBranches()) ?? []
+  branchNames.value = branches.map((b) => b.name)
+  branch.value = props.repo.getCurrentBranch()?.name ?? branchNames.value[0] ?? ''
+  commits.value = ((await props.repo.getCommits()) ?? []) as CommitLike[]
+  commit.value = props.repo.getCurrentCommit()?.hash ?? ''
+  authenticated.value = props.repo.isAuthenticated?.() ?? false
 }
 
-/**
- * What just happened, said where it happened.
- *
- * This used to be a floating toast in the corner of the window, three
- * hex colours for its background. A save either worked or did not, and
- * the place to say so is beside the list it changed.
- */
-const message = ref<{ text: string; bad?: boolean } | undefined>()
-let clearAt: ReturnType<typeof setTimeout> | undefined
+watch(() => props.repo, readState, { immediate: true })
 
-function notify(what: { message: string; title?: string; color?: string }) {
-  message.value = {
-    text: what.title ? `${what.title}: ${what.message}` : what.message,
-    bad: !!what.title,
-  }
-  if (clearAt) clearTimeout(clearAt)
-  clearAt = setTimeout(() => (message.value = undefined), 4000)
+async function chooseBranch(name: unknown) {
+  const chosen = ((await props.repo.getBranches()) ?? []).find((b) => b.name === name)
+  if (!chosen) return
+  branch.value = chosen.name
+  props.repo.setBranch(chosen)
+  /* A new branch starts at its newest commit, not at the old branch's. */
+  commits.value = (await chosen.fetchCommits()) as CommitLike[]
+  const newest = chosen.getCommits()[0]
+  if (newest) props.repo.setCommit(newest)
+  commit.value = newest?.hash ?? ''
+  emit('refresh')
 }
 
-//Uses
-const { isOpened, run, close } = usePromisifiedModal(auth)
+function chooseCommit(hash: unknown) {
+  const chosen = props.repo.getCurrentBranch()?.getCommits().find((c: { hash: string }) => c.hash === hash)
+  if (!chosen) return
+  commit.value = chosen.hash
+  props.repo.setCommit(chosen)
+  emit('refresh')
+}
 
-const loadFile = async () => {
-  const row = selectedRow.value
-  try {
-    const entity = await (props.repo as Repository).getEntityByUri(row.uri)
-    if (entity && entity.data) {
-      /* The host loads the data; the row tells it which entry that was. */
-      emts('close', entity.data, { ...entity, name: row.name ?? entity.name })
-    }
-    notify({ message: t('Git.loaded') })
-  } catch (e) {
-    console.log(e)
-  }
+/* --------------------------------------------------------------- token */
+
+const asking = ref(false)
+const token = ref('')
+
+async function giveToken() {
+  const value = token.value.trim()
+  asking.value = false
+  token.value = ''
+  if (!value) return
+  await props.repo.auth({ auth: value })
+  authenticated.value = props.repo.isAuthenticated?.() ?? true
 }
 </script>
 
 <template>
-  <!-- The controls sit in the view itself. They were teleported into a
-    footer of the old load/save modal; the storage view that replaced it
-    has no such element, and a teleport without a target left Vue patching
-    children it never mounted (#1247). -->
-  <div class="toolbar">
-    <!-- Picking a branch and picking a commit is picking from a list. It
-      was a dropdown button with a menu hanging off it, twice. -->
-    <DSelect v-model="branch" :label="t('Git.branch')" :options="branch_options ?? []" size="sm" />
-    <DSelect v-model="commit" :label="t('Git.commit')" :options="commit_options ?? []" size="sm" clearable />
+  <!-- Where it is and what access there is; under it, which branch and commit. -->
+  <div class="git">
+    <div class="git__top">
+      <div class="git__field">
+        <span class="git__label">{{ t('Git.repository') }}</span>
+        <a class="git__link" :href="link" target="_blank" rel="noopener noreferrer" :title="t('Git.openRepository')">
+          <DIcon name="open_in_new" size="xs" />{{ link.replace(/^https?:\/\//, '') }}
+        </a>
+      </div>
 
-    <DButton intent="primary" :disabled="!selectedRow" @click="loadFile">
-      <DIcon name="task" size="sm" />{{ t('Git.load') }}
-    </DButton>
+      <div class="git__access">
+        <DChip :tone="authenticated ? 'ok' : 'neutral'">
+          {{ authenticated ? t('Git.tokenSet') : t('Git.readOnly') }}
+        </DChip>
+        <DButton v-if="!authenticated" intent="quiet" size="sm" @click="asking = true">
+          <DIcon name="key" size="sm" />{{ t('Git.setToken') }}
+        </DButton>
+      </div>
+    </div>
 
-    <span class="toolbar__spacer" />
+    <div class="git__pick">
+      <DSelect
+        class="git__branch"
+        :model-value="branch"
+        :label="t('Git.branch')"
+        :options="branchNames"
+        size="sm"
+        stacked
+        @update:model-value="chooseBranch"
+      />
+      <DSelect
+        class="git__commit"
+        :model-value="commit"
+        :label="t('Git.commit')"
+        :options="commitChoices"
+        size="sm"
+        stacked
+        @update:model-value="chooseCommit"
+      />
+    </div>
 
-    <SaveInputGit :repo="repo" @save="save" @override="override" />
+    <!-- Inside the one root, so the host's class lands on this view. -->
+    <DModal v-model="asking" size="sm">
+      <template #header>
+        <h2 class="token__title">{{ t('Git.access') }}</h2>
+      </template>
+
+      <DInput v-model="token" :label="t('Git.token')" type="password" :hint="t('Git.tokenHint')" />
+
+      <template #actions>
+        <DButton intent="quiet" @click="() => { token = ''; asking = false }">{{ t('common:Action.cancel') }}</DButton>
+        <DButton intent="primary" :disabled="!token.trim()" @click="giveToken">{{ t('Git.continue') }}</DButton>
+      </template>
+    </DModal>
   </div>
-
-  <p v-if="message" :class="['note', { 'note--bad': message.bad }]" role="status">
-    {{ message.text }}
-  </p>
-
-  <DTable
-    v-model:selected="selectedRow"
-    class="saved-states"
-    :items="savedData"
-    :columns="columns"
-    selectable
-    :empty="isTableLoading ? t('Git.loading') : t('Git.empty')"
-  />
-
-  <DModal v-model="isOpened" size="sm">
-    <template #header>
-      <h2 class="token__title">{{ t('Git.access') }}</h2>
-    </template>
-
-    <DInput
-      v-model="token"
-      :label="t('Git.token')"
-      type="password"
-      :hint="t('Git.tokenHint')"
-    />
-
-    <template #actions>
-      <DButton intent="quiet" @click="() => { token = undefined; close(null) }">{{ t('common:Action.cancel') }}</DButton>
-      <DButton intent="primary" @click="() => close(token)">{{ t('Git.continue') }}</DButton>
-    </template>
-  </DModal>
 </template>
 
-<style scoped lang="scss">
-/* Not "table": Tailwind owns that name as a utility, and it lands on
-  DTable's own root - see #1181. */
-.saved-states {
-  min-height: 100px;
+<style scoped>
+/* A strip like the storage view's other boxes: pane ground, one border. */
+.git {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 10px 14px;
+  background: var(--color-pane);
+  border: 1px solid var(--color-divider);
+  border-radius: var(--radius-sm);
 }
 
-.toolbar {
+/* The fields sit in a row here, not in a form: no gap under each. */
+.git :deep(.field) {
+  margin-bottom: 0;
+}
+
+.git__top,
+.git__pick {
   display: flex;
-  flex-direction: row;
   flex-wrap: wrap;
   align-items: flex-end;
-  gap: 8px;
-  padding: 8px 12px;
+  gap: 8px 16px;
 }
 
-.toolbar__spacer {
-  flex: 1 1 auto;
+.git__top {
+  justify-content: space-between;
 }
 
-.note {
-  margin: 8px 0;
+.git__field {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.git__label {
   font-family: var(--font-sans);
   font-size: var(--text-sm);
   color: var(--color-dim);
 }
 
-.note--bad {
-  color: var(--color-err);
+.git__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  height: 22px;
+  max-width: 420px;
+  overflow: hidden;
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  color: var(--color-accent);
+  text-decoration: none;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.git__link:hover {
+  text-decoration: underline;
+}
+
+.git__link:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 1px;
+}
+
+.git__branch {
+  width: 140px;
+}
+
+.git__commit {
+  flex: 0 1 380px;
+  min-width: 220px;
+}
+
+.git__access {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  height: 22px;
 }
 
 .token__title {
