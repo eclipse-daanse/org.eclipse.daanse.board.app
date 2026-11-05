@@ -39,6 +39,7 @@ import {
   BoardImpl,
   liftTypedWeatherRegions,
   completeWeather,
+  completeLighting,
 } from 'org.eclipse.daanse.board.app.lib.model.workspace'
 import {
   type ConnectionRepository,
@@ -180,6 +181,7 @@ export function parseWorkspace(content: unknown): Workspace | undefined {
     /* A weather stored before some of its settings existed gets them, or the form cannot offer them */
     for (const page of workspace.board?.pages.toArray() ?? []) {
       if (page.weather) completeWeather(page.weather)
+      if (page.lighting) completeLighting(page.lighting)
     }
     return workspace
   } catch {
