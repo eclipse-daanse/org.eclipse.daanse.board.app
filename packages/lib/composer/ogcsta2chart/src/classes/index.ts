@@ -27,6 +27,11 @@ import { OGCSTAToChartComposerActions } from '../gen/OGCSTAToChartComposerAction
  * What this composer needs from an OGC STA source. Stated here rather than
  * imported, so the composer does not depend on the source's package.
  */
+interface ThingListSource {
+  listThings(): Promise<{ id: string; name: string }[]>
+  listDatastreamsOfThing(thingId: string): Promise<any[]>
+}
+
 interface DatastreamWindowSource {
   loadDatastreamWindow(datastreamId: string): Promise<{ datastream?: any; observations: any[] }>
 }
@@ -308,32 +313,20 @@ export class OGCSTAToChartComposer extends BaseDatasource implements OGCSTAToCha
       return  // Cache is already populated
     }
 
+    /*
+     * Ids and names only (`Things?$select=@iot.id,name`). This used to read
+     * the source's private catalogue, or else send a filter the source did
+     * not act on, so it found things only after a map had loaded them all.
+     * Datastreams of the chosen thing come later, by navigation.
+     */
     const datasourceRepository = this.datasourceRepository
-
     for (const datasourceId of this.connectedDatasources) {
       if (!datasourceId) continue
-
       try {
-        const datasourceInstance = datasourceRepository.getDatasource(datasourceId)
-        const resultMap = (datasourceInstance as any).resultMap
-
-        if (resultMap?.things && resultMap.things.length > 0) {
-          this.allThingsCache.push(...resultMap.things)
-        } else {
-          // Try to load things directly
-          const data = await datasourceInstance.getData('OGCSTAData', {
-            isolatedRequest: true,
-            filter: {
-              things: {
-                includeDatastreams: true,
-                includeLocations: false
-              }
-            }
-          })
-
-          if (data?.things) {
-            this.allThingsCache.push(...data.things)
-          }
+        const source = datasourceRepository.getDatasource(datasourceId) as unknown as Partial<ThingListSource>
+        if (typeof source.listThings !== 'function') continue
+        for (const thing of await source.listThings()) {
+          this.allThingsCache.push({ iotId: thing.id, name: thing.name })
         }
       } catch (error) {
         console.error(`Error loading things from datasource ${datasourceId}:`, error)
@@ -368,6 +361,19 @@ export class OGCSTAToChartComposer extends BaseDatasource implements OGCSTAToCha
 
       try {
         const datasourceInstance = datasourceRepository.getDatasource(datasourceId)
+
+        // By navigation, Things(id)/Datastreams: complete on every server.
+        const source = datasourceInstance as unknown as Partial<ThingListSource>
+        if (typeof source.listDatastreamsOfThing === 'function') {
+          const datastreams = await source.listDatastreamsOfThing(String(thingId))
+          if (thing) {
+            thing.datastreams = datastreams
+            return thing
+          }
+          const loaded = { iotId: thingId, datastreams }
+          this.allThingsCache.push(loaded)
+          return loaded
+        }
 
         const data = await datasourceInstance.getData('OGCSTAData', {
           isolatedRequest: true,

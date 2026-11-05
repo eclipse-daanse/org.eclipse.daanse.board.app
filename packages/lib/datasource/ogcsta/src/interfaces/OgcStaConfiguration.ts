@@ -55,11 +55,13 @@ export interface IOGCSTAData {
   locations?: BoxedLocation[]
 }
 export interface BoxedLocation extends Location{
-  Things:BoxedThing[]
+  /** The things at this location (util/transformThings.ts). */
+  things: BoxedThing[]
 }
 export interface BoxedDatastream extends Datastream{
-  Thing:BoxedThing
-  observations:Observation[]
+  /** The thing this datastream belongs to (util/transformThings.ts). */
+  thing?: BoxedThing
+  observations?: Observation[]
 }
 export interface BoxedThing extends Thing{
   datastreams?: BoxedDatastream[],

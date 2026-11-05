@@ -89,6 +89,18 @@ const loadThings = async () => {
     for (const datasourceId of validDatasources) {
       const datasourceInstance = datasourceRepository.getDatasource(datasourceId)
 
+      /*
+       * Ids and names are all the picker shows: Things?$select=@iot.id,name,
+       * a few KB, and nothing merged into the source's catalogue.
+       */
+      const source = datasourceInstance as unknown as { listThings?: () => Promise<{ id: string; name: string }[]> }
+      if (typeof source.listThings === 'function') {
+        for (const thing of await source.listThings()) {
+          if (!allThings.some(t => t.id === thing.id)) allThings.push({ id: thing.id, name: thing.name })
+        }
+        continue
+      }
+
       const options = {
         filter: {
           things: {

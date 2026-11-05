@@ -20,8 +20,10 @@ import {
   Configuration,
   Datastream,
   DatastreamsApi,
+  DatastreamFromJSON,
   Observation,
   ObservationFromJSON,
+  ThingFromJSON,
   ObservationsApi,
   ResponseError,
   ThingsApi,
@@ -36,6 +38,7 @@ import { VARIABLE_REPOSITORY, type VariableRepository,
   identifier as variableIdentifier } from 'org.eclipse.daanse.board.app.lib.api.variable'
 import { type IRequestParams } from 'org.eclipse.daanse.board.app.lib.connection.base'
 import { transformFromThingLocationDastreamToLocationThingDatastream } from '../util/transformThings'
+import { CatalogueIndexCache } from '../util/idIndex'
 import { FILTER, FILTERRESET, NOACTION, UPDATE_MQTT_SUBSCRIPTIONS, MQTT_UNSUBSCRIBE_ALL } from '../interfaces/Constances'
 import { OgcStaStoreI } from '../interface/OgcStaI'
 import { BaseDatasource, type ConfigurationOf } from 'org.eclipse.daanse.board.app.lib.datasource.base'
@@ -91,6 +94,10 @@ export class OgcStaStore extends BaseDatasource implements OgcStaStoreI {
    * null: that consumer needs every thing. See setThingScope.
    */
   private thingScopes: Map<string, string | null> = new Map();
+  /* Things, datastreams and locations of resultMap by id. */
+  private catalogueIndex = new CatalogueIndexCache();
+  /* The URL of the connection, for next links; set by api(). */
+  private connectionUrl: string | undefined;
   /* Set when /Observations answered with history; see loadLatest. */
   private latestBatchUnsupported = false;
 
@@ -385,41 +392,28 @@ export class OgcStaStore extends BaseDatasource implements OgcStaStoreI {
       if (options?.filter || effectiveRequestFlag.key == FILTER) {
         const observationsParam = options?.filter?.observations || effectiveRequestFlag.params?.observations
 
+        const index = this.catalogueIndex.of(this.resultMap)
+        const byDatastream = new Map<string, Observation[]>()
+        for (const o of this.resultMap.observations ?? []) {
+          if (o.ds_source == null) continue
+          const list = byDatastream.get(String(o.ds_source))
+          if (list) list.push(o)
+          else byDatastream.set(String(o.ds_source), [o])
+        }
         for (const d of observationsParam ?? []) {
-          const ds = this.resultMap.datastreams?.find(s => s.iotId == d.iotId)
-          if (ds) {
-            // Get ALL observations for this datastream, not just the first one
-            const datastreamObservations = this.resultMap.observations?.filter(
-              o => o.ds_source == d.iotId
-            ) || []
-
-            ds.observations = datastreamObservations as Observation[]
-
-            // Also assign to the datastream in the thing (nested structure)
-            for (const thing of this.resultMap.things || []) {
-              const nestedDs = thing.datastreams?.find(tds => tds.iotId == d.iotId)
-              if (nestedDs) {
-                nestedDs.observations = datastreamObservations as Observation[]
-              }
-            }
-
-            // Also update in locations->things->datastreams
-            for (const location of this.resultMap.locations || []) {
-              for (const thing of location.things || []) {
-                const locationDs = thing.datastreams?.find(lds => lds.iotId == d.iotId)
-                if (locationDs) {
-                  locationDs.observations = datastreamObservations as Observation[]
-                }
-              }
-            }
+          // Every copy of the datastream: flat list, under its thing, under its location.
+          const id = String(d.iotId)
+          for (const ds of index.datastreams.get(id) ?? []) {
+            ds.observations = byDatastream.get(id) ?? []
           }
         }
       }
 
       // Clear processed observations
-      for (const d of effectiveRequestFlag.params?.observations ?? []) {
+      const processed = new Set((effectiveRequestFlag.params?.observations ?? []).map((d: Datastream) => d.iotId))
+      if (processed.size) {
         this.resultMap.observations = this.resultMap.observations?.filter(
-          o => o.ds_source !== d.iotId
+          o => !processed.has(o.ds_source)
         ) || []
       }
     }
@@ -459,6 +453,7 @@ export class OgcStaStore extends BaseDatasource implements OgcStaStoreI {
 
     // Wrap with caching for request deduplication and TTL caching
     const base = (connection as { url?: string }).url ?? `connection:${this.connection}`
+    this.connectionUrl = (connection as { url?: string }).url
     const cachingFetch = getSharedCachingFetch(baseFetch, { ttl: 30000, maxEntries: 200 }, base)
 
     return new Configuration({
@@ -501,13 +496,78 @@ export class OgcStaStore extends BaseDatasource implements OgcStaStoreI {
         }),
       new DatastreamsApi(configuration)
         .v11DatastreamsEntityIdObservationsGet({ entityId: datastreamId, ...queryParams })
-        .then((data) => data.value ?? []),
+        // A window is wanted whole; a limit set in the settings is one page.
+        .then((data) => (queryParams.$top ? data.value ?? [] : this.followNextLinks(data, ObservationFromJSON))),
     ])
 
     for (const observation of observations as (Observation & { ds_source?: string })[]) {
       observation.ds_source = datastreamId
     }
     return { datastream, observations }
+  }
+
+  /**
+   * The rest of a collection after its first page: follows `@iot.nextLink`
+   * through the connection and the cache. A server page holds 100-500
+   * entries, and a longer list used to be cut there silently.
+   *
+   * The next link is absolute and, on some servers, http:// on an https
+   * service; it is read as a path below the connection URL, so neither the
+   * scheme nor the host of the link is trusted. A link elsewhere ends the
+   * list, as does `maxPages`.
+   */
+  private async followNextLinks<T>(
+    first: { value?: T[]; iotNextLink?: string },
+    fromJson: (json: any) => T,
+    maxPages = 50,
+  ): Promise<T[]> {
+    const items = [...(first.value ?? [])]
+    let next = first.iotNextLink
+    const configuration = this.api()
+    for (let page = 1; next && page < maxPages; page++) {
+      const path = this.pathBelowConnection(next)
+      if (!path) {
+        this.logData('Next link outside the connection, list ends here:', next)
+        break
+      }
+      const response = await configuration.fetchApi!(path, { method: 'GET' })
+      if (!response.ok) throw new Error(`HTTP ${response.status} for ${path}`)
+      const json = await response.json()
+      items.push(...((json.value ?? []) as any[]).map(fromJson))
+      next = json['@iot.nextLink']
+    }
+    return items
+  }
+
+  /** `http://host/base/v1.1/X?y` as `/v1.1/X?y` when it lies below the connection URL. */
+  private pathBelowConnection(link: string): string | undefined {
+    const base = this.connectionUrl
+    if (!base) return undefined
+    const strip = (u: string) => u.replace(/^[a-z]+:\/\//i, '').replace(/\/+$/, '')
+    const target = strip(link)
+    const root = strip(base)
+    if (!target.startsWith(root + '/')) return undefined
+    return target.slice(root.length)
+  }
+
+  /**
+   * Ids and names of all things, for a picker: `Things?$select=@iot.id,name`,
+   * 9 KB instead of the 3.8 MB catalogue. The catalogue is not touched.
+   */
+  async listThings(): Promise<{ id: string; name: string }[]> {
+    const first = await new ThingsApi(this.api()).v11ThingsGet({ $select: '@iot.id,name' })
+    const things = await this.followNextLinks(first, ThingFromJSON)
+    return things.map((t) => ({ id: String(t.iotId), name: t.name ?? '' }))
+  }
+
+  /**
+   * The datastreams of one thing, by navigation (`Things(id)/Datastreams`).
+   * Never a `Thing/id` filter on `/Datastreams`: that collection is
+   * incomplete on the server this was measured on.
+   */
+  async listDatastreamsOfThing(thingId: string): Promise<Datastream[]> {
+    const first = await new ThingsApi(this.api()).v11ThingsEntityIdDatastreamsGet({ entityId: thingId })
+    return this.followNextLinks(first, DatastreamFromJSON)
   }
 
   getOriginalData(): any {
@@ -564,8 +624,8 @@ export class OgcStaStore extends BaseDatasource implements OgcStaStoreI {
     const api = new ThingsApi(this.baseConfigration)
     for (const $expand of ['Datastreams/ObservedProperty,Locations', 'Datastreams,Locations']) {
       try {
-        const things = (await api.v11ThingsGet({ $filter: filter, $expand })).value ?? []
-        return things as BoxedThing[]
+        const first = await api.v11ThingsGet({ $filter: filter, $expand })
+        return (await this.followNextLinks(first, ThingFromJSON)) as BoxedThing[]
       } catch (e) {
         this.logData('Scoped things request failed', $expand, e)
       }
@@ -582,11 +642,12 @@ export class OgcStaStore extends BaseDatasource implements OgcStaStoreI {
           if (things) return transformFromThingLocationDastreamToLocationThingDatastream(things)
         }
         try {
-          const things = (
+          const things = await this.followNextLinks(
             await new ThingsApi(this.baseConfigration).v11ThingsGet({
               $expand: 'Datastreams,Locations',
-            })
-          ).value!
+            }),
+            ThingFromJSON,
+          )
           return transformFromThingLocationDastreamToLocationThingDatastream(
             things as BoxedThing[],
           )
@@ -1423,55 +1484,32 @@ export class OgcStaStore extends BaseDatasource implements OgcStaStoreI {
   private handleObservationUpdate(datastreamId: string, observation: any): void {
     this.logMqtt(`Received observation for datastream ${datastreamId}:`, observation)
 
-    // Find the datastream in resultMap
-    const datastream = this.resultMap.datastreams?.find(ds => ds.iotId === datastreamId)
-    if (datastream) {
+    const copies = this.catalogueIndex.of(this.resultMap).datastreams.get(String(datastreamId))
+    if (copies?.length) {
       // Update observations - replace with newest observation
-      datastream.observations = [observation]
+      for (const datastream of copies) datastream.observations = [observation]
       this.logMqtt(`Updated datastream ${datastreamId} observations`)
 
       // Trigger debounced UI update
       this.triggerDebouncedUpdate()
     } else {
-      this.logMqtt(`Datastream ${datastreamId} not found in resultMap. Available datastreams:`,
-        this.resultMap.datastreams?.map(ds => ds.iotId).slice(0, 10))
+      this.logMqtt(`Datastream ${datastreamId} not found in resultMap`)
     }
   }
 
   private handleLocationUpdate(locationId: string, location: any): void {
     this.logMqtt(`Received location update for ${locationId}:`, location)
 
-    // Find the location in resultMap
-    const existingLocation = this.resultMap.locations?.find(loc => loc.iotId === locationId)
-    if (existingLocation) {
-      // Update location coordinates in-place
-      existingLocation.location = location.location
-      existingLocation.encodingType = location.encodingType
-      if (location.name) existingLocation.name = location.name
-      if (location.description) existingLocation.description = location.description
+    // Every copy of the location: the flat list and under each thing.
+    const copies = this.catalogueIndex.of(this.resultMap).locations.get(String(locationId))
+    if (copies?.length) {
+      for (const existing of copies) {
+        existing.location = location.location
+        existing.encodingType = location.encodingType
+        if (location.name) existing.name = location.name
+        if (location.description) existing.description = location.description
+      }
       this.logMqtt(`Updated location ${locationId}`)
-
-      // Also update in all things that reference this location
-      for (const thing of this.resultMap.things || []) {
-        const thingLocation = thing.locations?.find(loc => loc.iotId === locationId)
-        if (thingLocation) {
-          thingLocation.location = location.location
-          thingLocation.encodingType = location.encodingType
-          if (location.name) thingLocation.name = location.name
-          if (location.description) thingLocation.description = location.description
-        }
-      }
-
-      // Also update in datastreams
-      for (const datastream of this.resultMap.datastreams || []) {
-        const datastreamLocation = datastream.thing?.locations?.find(loc => loc.iotId === locationId)
-        if (datastreamLocation) {
-          datastreamLocation.location = location.location
-          datastreamLocation.encodingType = location.encodingType
-          if (location.name) datastreamLocation.name = location.name
-          if (location.description) datastreamLocation.description = location.description
-        }
-      }
 
       // Trigger debounced UI update
       this.triggerDebouncedUpdate()
