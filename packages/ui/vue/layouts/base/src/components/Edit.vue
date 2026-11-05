@@ -24,6 +24,7 @@ import ClipboardNotice from './ClipboardNotice.vue'
 import { DFloatingWindow } from 'org.eclipse.daanse.board.app.ui.vue.controls'
 import { WidgetWrapper,defaultConfig } from 'org.eclipse.daanse.board.app.ui.vue.widget.wrapper'
 import WeatherLayer from '../weather/WeatherLayer.vue'
+import LightLayer from '../light/LightLayer.vue'
 import { cloneDeep } from 'lodash'
 import { useRouter, useRoute } from 'vue-router'
 import { DButton, DIcon } from 'org.eclipse.daanse.board.app.ui.vue.controls'
@@ -738,6 +739,8 @@ const change = (e: any) => {
   <!-- Still while editing: the weather waits, and draws nothing. Its region
     is drawn here, over the board as it scrolls -->
   <WeatherLayer :page="board.page.value" edit-mode scroller=".scroll-viewport">
+  <!-- The lamps' light, drawn over the board while it is edited: it follows a lamp as it is moved -->
+  <LightLayer :page="board.page.value" edit-mode scroller=".scroll-viewport">
   <div
     class="report-container"
     @contextmenu="onCanvasContextMenu"
@@ -797,6 +800,7 @@ const change = (e: any) => {
           ]"
           :style="getInitialStyle(widget.uid)"
           :ref="widget.uid"
+          :data-light-box="widget.uid"
           @pointerdown="toggleSelection(widget.uid, $event)"
           @pointerenter="hovered = widget.uid"
           @pointerleave="hovered = hovered === widget.uid ? null : hovered"
@@ -1051,6 +1055,7 @@ const change = (e: any) => {
 
     <ClipboardNotice :shown="copiedNotice" @dismiss="hideNotice" />
   </div>
+  </LightLayer>
   </WeatherLayer>
 </template>
 <style>
