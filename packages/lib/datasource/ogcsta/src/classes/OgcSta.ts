@@ -269,26 +269,7 @@ export class OgcStaStore extends BaseDatasource implements OgcStaStoreI {
     const effectiveRequestFlag = this.pendingRequestFlag || this.requestFlag;
     this.pendingRequestFlag = null; // Clear after use
 
-    if (!this.connectionRepository) {
-      throw new Error('ConnectionRepository is not provided to Store Classes')
-    }
-    const connection = this.connectionRepository.getConnection(
-      this.connection,
-    ) as IConnection
-
-    // Create base fetch function using the connection
-    const baseFetch = (a: any, b: any) => {
-      //@ts-ignore
-      return connection.fetch({ url: a } as IRequestParams, b) as Promise<any>
-    }
-
-    // Wrap with caching for request deduplication and TTL caching
-    const cachingFetch = getSharedCachingFetch(baseFetch, { ttl: 30000, maxEntries: 200 })
-
-    this.baseConfigration = new Configuration({
-      basePath: '',
-      fetchApi: cachingFetch,
-    })
+    this.baseConfigration = this.api()
 
     // Check if this is an isolated request (don't modify cache)
     const isIsolatedRequest = options?.isolatedRequest === true
@@ -461,6 +442,78 @@ export class OgcStaStore extends BaseDatasource implements OgcStaStoreI {
       } as T
     }
     return this.resultMap as T
+  }
+
+  /**
+   * The client configuration every request of this store goes through: the
+   * connection (base URL, headers) and the shared cache. Built on demand, so
+   * a consumer that only wants one datastream does not have to load the
+   * catalogue first to get it.
+   */
+  private api(): Configuration {
+    if (!this.connectionRepository) {
+      throw new Error('ConnectionRepository is not provided to Store Classes')
+    }
+    const connection = this.connectionRepository.getConnection(
+      this.connection,
+    ) as IConnection
+
+    // Create base fetch function using the connection
+    const baseFetch = (a: any, b: any) => {
+      //@ts-ignore
+      return connection.fetch({ url: a } as IRequestParams, b) as Promise<any>
+    }
+
+    // Wrap with caching for request deduplication and TTL caching
+    const cachingFetch = getSharedCachingFetch(baseFetch, { ttl: 30000, maxEntries: 200 })
+
+    return new Configuration({
+      basePath: '',
+      fetchApi: cachingFetch,
+    })
+  }
+
+  /**
+   * One datastream and its observations in the configured time window,
+   * loaded directly: `Datastreams(id)` and `Datastreams(id)/Observations`,
+   * both at once. Nothing of the catalogue is read or written, and the
+   * observations belong to the caller alone - a map that loads the latest
+   * value of the same datastream does not change them (#1250).
+   *
+   * Direct reads on purpose: this server's `/Datastreams` collection is
+   * incomplete, so a filter on it can miss a datastream that exists.
+   */
+  async loadDatastreamWindow(datastreamId: string): Promise<{ datastream?: Datastream; observations: Observation[] }> {
+    const configuration = this.api()
+    /*
+     * The window applies whether or not the source shows history itself: a
+     * chart asks for a window by definition, and without it the server
+     * answers its first page in its own order.
+     */
+    const history: IOGCSTAHistoryConfig = { ...(this.configuration?.history ?? {}), enabled: true }
+    const queryParams = this.getHistoryQueryParams(history)
+    if (!queryParams.$top) {
+      // A chart reads nothing else; a tenth of the bytes.
+      queryParams.$select = 'phenomenonTime,resultTime,result'
+    }
+
+    const [datastream, observations] = await Promise.all([
+      new DatastreamsApi(configuration)
+        .v11DatastreamsEntityIdGet({ entityId: datastreamId })
+        .catch((e) => {
+          // Label and unit are a nicety; the series does not depend on them.
+          this.logData?.('Could not load datastream', datastreamId, e)
+          return undefined
+        }),
+      new DatastreamsApi(configuration)
+        .v11DatastreamsEntityIdObservationsGet({ entityId: datastreamId, ...queryParams })
+        .then((data) => data.value ?? []),
+    ])
+
+    for (const observation of observations as (Observation & { ds_source?: string })[]) {
+      observation.ds_source = datastreamId
+    }
+    return { datastream, observations }
   }
 
   getOriginalData(): any {
@@ -642,13 +695,9 @@ export class OgcStaStore extends BaseDatasource implements OgcStaStoreI {
   }
 
   async getHistoricalObservations(datastreamId: string, historyConfig?: IOGCSTAHistoryConfig): Promise<Observation[]> {
-    if (!this.baseConfigration) {
-      throw new Error('Base configuration not initialized');
-    }
-
     const queryParams = this.getHistoryQueryParams(historyConfig);
 
-    const data = await new DatastreamsApi(this.baseConfigration)
+    const data = await new DatastreamsApi(this.api())
       .v11DatastreamsEntityIdObservationsGet({
         entityId: datastreamId,
         ...queryParams
