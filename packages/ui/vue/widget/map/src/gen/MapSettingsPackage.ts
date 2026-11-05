@@ -131,6 +131,8 @@ export class MapSettingsPackage extends BasicEPackage {
     POINT_AND_AREA_SETTINGS__CLUSTER_ENABLED: null as unknown as EAttribute | EReference,
     POINT_AND_AREA_SETTINGS__CLUSTER_BELOW_ZOOM: null as unknown as EAttribute | EReference,
     POINT_AND_AREA_SETTINGS__CLUSTER_RADIUS: null as unknown as EAttribute | EReference,
+    POINT_AND_AREA_SETTINGS__POINT_IMAGE_URL: null as unknown as EAttribute | EReference,
+    POINT_AND_AREA_SETTINGS__POINT_IMAGE_SIZE: null as unknown as EAttribute | EReference,
     D_S_RENDERER: null as unknown as EClass,
     D_S_RENDERER__NAME: null as unknown as EAttribute | EReference,
     D_S_RENDERER__DATASTREAM: null as unknown as EAttribute | EReference,
@@ -821,6 +823,22 @@ export class MapSettingsPackage extends BasicEPackage {
     pointAndAreaSettings_clusterRadius.setDefaultValueLiteral("40");
     pointAndAreaSettingsClass.getEStructuralFeatures().push(pointAndAreaSettings_clusterRadius);
     MapSettingsPackage.Literals.POINT_AND_AREA_SETTINGS__CLUSTER_RADIUS = pointAndAreaSettings_clusterRadius;
+
+    // Create point_image_url feature
+    const pointAndAreaSettings_point_image_url = new BasicEAttribute();
+    pointAndAreaSettings_point_image_url.setName('point_image_url');
+    pointAndAreaSettings_point_image_url.setLowerBound(0);
+    pointAndAreaSettings_point_image_url.setUpperBound(1);
+    pointAndAreaSettingsClass.getEStructuralFeatures().push(pointAndAreaSettings_point_image_url);
+    MapSettingsPackage.Literals.POINT_AND_AREA_SETTINGS__POINT_IMAGE_URL = pointAndAreaSettings_point_image_url;
+
+    // Create point_image_size feature
+    const pointAndAreaSettings_point_image_size = new BasicEAttribute();
+    pointAndAreaSettings_point_image_size.setName('point_image_size');
+    pointAndAreaSettings_point_image_size.setLowerBound(0);
+    pointAndAreaSettings_point_image_size.setUpperBound(1);
+    pointAndAreaSettingsClass.getEStructuralFeatures().push(pointAndAreaSettings_point_image_size);
+    MapSettingsPackage.Literals.POINT_AND_AREA_SETTINGS__POINT_IMAGE_SIZE = pointAndAreaSettings_point_image_size;
 
     // Create DSRenderer class
     const dSRendererClass = new BasicEClass();
@@ -1661,6 +1679,8 @@ export class MapSettingsPackage extends BasicEPackage {
     (MapSettingsPackage.Literals.POINT_AND_AREA_SETTINGS__CLUSTER_ENABLED as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EBoolean')!);
     (MapSettingsPackage.Literals.POINT_AND_AREA_SETTINGS__CLUSTER_BELOW_ZOOM as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EInt')!);
     (MapSettingsPackage.Literals.POINT_AND_AREA_SETTINGS__CLUSTER_RADIUS as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EInt')!);
+    (MapSettingsPackage.Literals.POINT_AND_AREA_SETTINGS__POINT_IMAGE_URL as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (MapSettingsPackage.Literals.POINT_AND_AREA_SETTINGS__POINT_IMAGE_SIZE as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EInt')!);
     (MapSettingsPackage.Literals.D_S_RENDERER__NAME as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
     (MapSettingsPackage.Literals.D_S_RENDERER__DATASTREAM as BasicEReference).setEType(MapSettingsPackage.Literals.CONDITION);
     (MapSettingsPackage.Literals.D_S_RENDERER__OBSERVATIONS as BasicEReference).setEType(MapSettingsPackage.Literals.OBSERVATION);

@@ -48,6 +48,8 @@ export class PointAndAreaSettingsImpl extends BasicEObject implements PointAndAr
   static readonly CLUSTER_ENABLED: number = 13;
   static readonly CLUSTER_BELOW_ZOOM: number = 14;
   static readonly CLUSTER_RADIUS: number = 15;
+  static readonly POINT_IMAGE_URL: number = 16;
+  static readonly POINT_IMAGE_SIZE: number = 17;
 
   // Private fields
   private _show_SubElements: boolean = false;
@@ -66,6 +68,8 @@ export class PointAndAreaSettingsImpl extends BasicEObject implements PointAndAr
   private _clusterEnabled: boolean = false;
   private _clusterBelowZoom: number = 14;
   private _clusterRadius: number = 40;
+  private _point_image_url?: string;
+  private _point_image_size: number = 0;
 
   /**
    * Returns the EClass of this object
@@ -489,6 +493,54 @@ export class PointAndAreaSettingsImpl extends BasicEObject implements PointAndAr
     }
   }
 
+  get point_image_url(): string {
+    return this._point_image_url!;
+  }
+
+  set point_image_url(value: string) {
+    const oldValue = this._point_image_url;
+    this._point_image_url = value;
+    if (this.eDeliver()) {
+      this.eNotify({
+        getNotifier: () => this,
+        getEventType: () => 1, // SET
+        getFeature: () => this.eClass().getEStructuralFeature(PointAndAreaSettingsImpl.POINT_IMAGE_URL),
+        getOldValue: () => oldValue,
+        getNewValue: () => value,
+        getPosition: () => -1,
+        wasSet: () => true,
+        isTouch: () => false,
+        isReset: () => false,
+        getFeatureID: () => PointAndAreaSettingsImpl.POINT_IMAGE_URL,
+        merge: () => false
+      });
+    }
+  }
+
+  get point_image_size(): number {
+    return this._point_image_size!;
+  }
+
+  set point_image_size(value: number) {
+    const oldValue = this._point_image_size;
+    this._point_image_size = value;
+    if (this.eDeliver()) {
+      this.eNotify({
+        getNotifier: () => this,
+        getEventType: () => 1, // SET
+        getFeature: () => this.eClass().getEStructuralFeature(PointAndAreaSettingsImpl.POINT_IMAGE_SIZE),
+        getOldValue: () => oldValue,
+        getNewValue: () => value,
+        getPosition: () => -1,
+        wasSet: () => true,
+        isTouch: () => false,
+        isReset: () => false,
+        getFeatureID: () => PointAndAreaSettingsImpl.POINT_IMAGE_SIZE,
+        merge: () => false
+      });
+    }
+  }
+
   /**
    * Remove a value from its previous container before it is contained here,
    * like Java EMF's eInverseRemove on the old container (#61)
@@ -553,6 +605,10 @@ export class PointAndAreaSettingsImpl extends BasicEObject implements PointAndAr
         return this.clusterBelowZoom;
       case PointAndAreaSettingsImpl.CLUSTER_RADIUS:
         return this.clusterRadius;
+      case PointAndAreaSettingsImpl.POINT_IMAGE_URL:
+        return this.point_image_url;
+      case PointAndAreaSettingsImpl.POINT_IMAGE_SIZE:
+        return this.point_image_size;
       default:
         return super.eGet(feature);
     }
@@ -628,6 +684,14 @@ export class PointAndAreaSettingsImpl extends BasicEObject implements PointAndAr
         this.clusterRadius = newValue as number;
         super.eSet(feature, newValue);
         break;
+      case PointAndAreaSettingsImpl.POINT_IMAGE_URL:
+        this.point_image_url = newValue as string;
+        super.eSet(feature, newValue);
+        break;
+      case PointAndAreaSettingsImpl.POINT_IMAGE_SIZE:
+        this.point_image_size = newValue as number;
+        super.eSet(feature, newValue);
+        break;
       default:
         super.eSet(feature, newValue);
     }
@@ -671,6 +735,10 @@ export class PointAndAreaSettingsImpl extends BasicEObject implements PointAndAr
         return this._clusterBelowZoom !== 14;
       case PointAndAreaSettingsImpl.CLUSTER_RADIUS:
         return this._clusterRadius !== 40;
+      case PointAndAreaSettingsImpl.POINT_IMAGE_URL:
+        return this._point_image_url !== undefined;
+      case PointAndAreaSettingsImpl.POINT_IMAGE_SIZE:
+        return this._point_image_size !== 0;
       default:
         return super.eIsSet(feature);
     }
@@ -733,11 +801,16 @@ export class PointAndAreaSettingsImpl extends BasicEObject implements PointAndAr
       case PointAndAreaSettingsImpl.CLUSTER_RADIUS:
         this._clusterRadius = 40;
         return;
+      case PointAndAreaSettingsImpl.POINT_IMAGE_URL:
+        this._point_image_url = undefined;
+        return;
+      case PointAndAreaSettingsImpl.POINT_IMAGE_SIZE:
+        this._point_image_size = 0;
+        return;
       default:
         super.eUnset(feature);
     }
   }
-
 
   /**
    * What this object is when it is stored.
@@ -764,6 +837,8 @@ export class PointAndAreaSettingsImpl extends BasicEObject implements PointAndAr
       clusterEnabled: this.clusterEnabled,
       clusterBelowZoom: this.clusterBelowZoom,
       clusterRadius: this.clusterRadius,
+      point_image_url: this.point_image_url,
+      point_image_size: this.point_image_size,
     };
   }
 }

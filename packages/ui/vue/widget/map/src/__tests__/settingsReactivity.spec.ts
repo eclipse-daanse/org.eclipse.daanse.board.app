@@ -214,6 +214,32 @@ describe('a stored map, adopted into the model', () => {
   })
 })
 
+describe('a stored map, saved again', () => {
+  /*
+   * A save writes the settings through toJSON, which names the model's
+   * features only: what the widget draws by must be one, or it is lost.
+   */
+  it('keeps the image a style draws its points as', () => {
+    const stored = {
+      OGCSstyles: [{
+        id: 'r1',
+        name: 'Reference Area',
+        thing: [{ prop: 'name', comperator: 'eq', value: 'Reference Area*' }],
+        renderer: { point_render_as: 'image', point_image_url: 'data:image/svg+xml,x', point_image_size: 14 },
+        ds_renderer: [{ id: 'd1', name: 'Bodenfeuchte', datastream: [], renderer: { point_render_as: 'icon' } }],
+      }],
+      layers: [storedOgcLayer],
+    }
+    const saved = JSON.parse(JSON.stringify(modelledSettings(stored)))
+
+    expect(saved.OGCSstyles[0].renderer).toMatchObject({ point_image_url: 'data:image/svg+xml,x', point_image_size: 14 })
+    expect(saved.OGCSstyles[0].thing[0]).toMatchObject({ prop: 'name', value: 'Reference Area*' })
+    expect(saved.OGCSstyles[0].ds_renderer[0].name).toBe('Bodenfeuchte')
+    expect(saved.layers[0]).toMatchObject({ id: storedOgcLayer.id, checked: true, type: 'OGCSTA' })
+    expect(JSON.stringify(saved)).not.toContain('connectionRepository')
+  })
+})
+
 describe('the map settings with the preview open (#1262)', () => {
   it('list an added service, and an added layer reaches the list and the preview without a remount', async () => {
     const { wrapper, held } = overlay({})
