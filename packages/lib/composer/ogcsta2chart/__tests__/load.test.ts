@@ -20,7 +20,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { wireRepositories } from '../../../../../test/support/wiring'
 import * as ogcsta from '../../../datasource/ogcsta/src/index'
-import { factorySymbol } from '../../../datasource/ogcsta/src/index'
+import { factorySymbol, FILTER } from '../../../datasource/ogcsta/src/index'
 import { clearSharedCache } from '../../../datasource/ogcsta/src/client/CachingMiddleware'
 import { staServer } from '../../../datasource/ogcsta/__tests__/support/staServer'
 import { OGCSTAToChartComposer } from '../src/classes/index'
@@ -115,7 +115,7 @@ describe('a chart on an OGC STA source', () => {
     const before = await composer.getData('ChartData')
 
     // What a map does: the latest value only, merged into the shared store.
-    await store.callEvent('FILTER', { observations: [{ iotId: 'JeN-06~soil~moisture' }] }, false)
+    await store.callEvent(FILTER, { observations: [{ iotId: 'JeN-06~soil~moisture' }] }, false)
     const after = await composer.getData('ChartData')
 
     expect(after.datasets[0].data).toEqual(before.datasets[0].data)

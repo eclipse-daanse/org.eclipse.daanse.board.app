@@ -41,7 +41,6 @@ import { BaseDatasource, type ConfigurationOf } from 'org.eclipse.daanse.board.a
 import { LOGGER_FACTORY, LoggerFactory,
   identifier as loggerIdentifier,
   type ILogger } from 'org.eclipse.daanse.board.app.lib.api.logger'
-import { getObservationsWorkerManager, type ObservationsWorkerManager } from '../workers/ObservationsWorkerManager'
 
 @injectable()
 export class OgcStaStore extends BaseDatasource implements OgcStaStoreI {
@@ -86,8 +85,6 @@ export class OgcStaStore extends BaseDatasource implements OgcStaStoreI {
   private lastObservationsParams: any = null;
   private watchedVariables: Set<string> = new Set();
   private pendingRequestFlag: { key: string; params: any } | null = null;
-  private workerManager: ObservationsWorkerManager | null = null;
-  private connectionBaseUrl: string = '';
   /*
    * The things each consumer shows, as filters on /Things, by consumer key.
    * null: that consumer needs every thing. See setThingScope.
@@ -152,18 +149,6 @@ export class OgcStaStore extends BaseDatasource implements OgcStaStoreI {
 
     this.setupVariableWatchers();
 
-    // Initialize worker manager for background fetching
-    this.workerManager = getObservationsWorkerManager();
-
-    // Get base URL from connection for worker
-    try {
-      const connection = this.connectionRepository.getConnection(this.connection) as any;
-      if (connection?.url) {
-        this.connectionBaseUrl = connection.url;
-      }
-    } catch (e) {
-      this.logCore('Could not get connection base URL:', e);
-    }
   }
 
   callEvent(event: string, params: any, shouldUpdate: boolean = true): Promise<void> | void {
@@ -470,7 +455,8 @@ export class OgcStaStore extends BaseDatasource implements OgcStaStoreI {
     }
 
     // Wrap with caching for request deduplication and TTL caching
-    const cachingFetch = getSharedCachingFetch(baseFetch, { ttl: 30000, maxEntries: 200 })
+    const base = (connection as { url?: string }).url ?? `connection:${this.connection}`
+    const cachingFetch = getSharedCachingFetch(baseFetch, { ttl: 30000, maxEntries: 200 }, base)
 
     return new Configuration({
       basePath: '',
@@ -834,71 +820,37 @@ export class OgcStaStore extends BaseDatasource implements OgcStaStoreI {
             this.subscribeToLocations()
           }
         } else {
-          // HTTP Mode (no MQTT or history mode enabled)
-          // Use Web Worker for background fetching if available and baseUrl is set
-          if (this.workerManager && this.connectionBaseUrl) {
-            const queryParams = this.getHistoryQueryParams(historyConfig);
-            const historyParams: any = {
-              $orderby: queryParams.$orderby || 'phenomenonTime desc',
-            };
-            if (queryParams.$filter) historyParams.$filter = queryParams.$filter;
-            if (!historyConfig?.enabled) {
-              historyParams.$top = 1;
-            } else if (queryParams.$top) {
-              historyParams.$top = queryParams.$top;
-            }
-
-            // Single promise that fetches all observations via worker
+          // HTTP Mode (no MQTT or history mode enabled). One request per
+          // datastream, through the connection and the shared cache: the
+          // same datastream asked by two widgets at once is one request
+          // (#1251). A web worker used to send these with plain fetch,
+          // past the connection's base URL and headers and past the cache.
+          const queryParams = this.getHistoryQueryParams(historyConfig);
+          const api = new DatastreamsApi(this.baseConfigration)
+          for (const ds of this.requestFlag.params.observations) {
+            const datastreamId = ((ds as Datastream).iotId ?? (ds as any)['@iot.id']) + ''
             listOfPromesis.push(
               (async () => {
-                const results = await this.workerManager!.fetchObservations(
-                  this.connectionBaseUrl,
-                  this.requestFlag.params.observations,
-                  historyParams
-                );
-
-                // Flatten results into observations array
-                const allObservations: (Observation & { ds_source?: string })[] = [];
-                for (const result of results) {
-                  allObservations.push(...result.observations);
+                const baseParams: any = {
+                  entityId: datastreamId,
+                  $orderby: 'phenomenonTime desc',
+                };
+                if (!historyConfig?.enabled) {
+                  baseParams.$top = 1;
                 }
-
-                return { observations: allObservations };
-              })(),
-            );
-          } else {
-            // Fallback: fetch on main thread
-            for (const ds of this.requestFlag.params.observations) {
-              listOfPromesis.push(
-                (async () => {
-                  const queryParams = this.getHistoryQueryParams(historyConfig);
-                  const baseParams: any = {
-                    entityId: (ds as Datastream).iotId + '',
-                    $orderby: 'phenomenonTime desc',
-                  };
-
-                  if (!historyConfig?.enabled) {
-                    baseParams.$top = 1;
-                  }
-
+                try {
                   const data = (
-                    await new DatastreamsApi(
-                      this.baseConfigration,
-                    ).v11DatastreamsEntityIdObservationsGet({
-                      ...baseParams,
-                      ...queryParams
-                    })
+                    await api.v11DatastreamsEntityIdObservationsGet({ ...baseParams, ...queryParams })
                   ).value as (Observation & { ds_source?: string })[]
-
-                  if (data && data.length > 0) {
-                    data.forEach(obs => {
-                      obs['ds_source'] = (ds as Datastream).iotId + '';
-                    });
-                  }
-                  return { observations: data }
-                })(),
-              )
-            }
+                  for (const obs of data ?? []) obs.ds_source = datastreamId
+                  return { observations: data ?? [] }
+                } catch (e) {
+                  // One datastream that fails does not take the others with it.
+                  this.logData('Observations failed for', datastreamId, e)
+                  return { observations: [] }
+                }
+              })(),
+            )
           }
         }
       }
@@ -923,22 +875,6 @@ export class OgcStaStore extends BaseDatasource implements OgcStaStoreI {
             return { datastreams: data }
           })(),
         )
-      } else if ('ids' in this.requestFlag.params.datastreams!) {
-        for (const id of this.requestFlag.params.datastreams!.ids!) {
-          listOfPromesis.push(
-            (async () => {
-              const data = (
-                await new DatastreamsApi(
-                  this.baseConfigration,
-                ).v11DatastreamsEntityIdObservationsGet({
-                  entityId: id,
-                  $top: 1,
-                })
-              ).value!
-              return { observations: data }
-            })(),
-          )
-        }
       }
     }
   }
