@@ -12,22 +12,25 @@ Contributors:
 -->
 <script setup lang="ts">
 /**
- * A lamp: a fixture on the board that is on or off, dimmed, in a colour or
- * a colour temperature (#1242).
+ * A light source: on or off, dimmed, in a colour or a colour temperature
+ * (#1242). It is no picture on the board - a page whose background is a
+ * photo of a room gets its light where the room's lamps are.
  *
- * Its light falls outside its frame, but the lamp does not draw it: it
- * announces the light on the event bus and the light layer of the layout
- * draws it onto the page, following the widget wherever it is moved. The
- * lamp only draws the fixture itself.
+ * The lamp does not draw its light: it announces it on the event bus and
+ * the light layer of the layout draws it onto the page, from the centre of
+ * the widget, following it wherever it is moved. While the board is shown
+ * the widget itself draws nothing and takes no pointer (its provider is
+ * frameless); while it is edited it shows a marker, so it can be found,
+ * placed, sized and selected.
  *
- * What it shows is read from its settings, so a variable bound to one of
- * them drives the lamp; a datasource field, where one is named, says the
- * last word. A press switches it - into the variable `on` follows, if it
- * follows one - and the actions do the same for each part of the state.
- * It sends clicked on a press and stateChanged whenever its state changed,
- * from whatever source, each with the whole state.
+ * Its state is read from its settings, so a variable bound to one of them
+ * drives the lamp; a datasource field, where one is named, says the last
+ * word. The actions write into the variable a setting follows, if it
+ * follows one. It sends stateChanged whenever its state changed, from
+ * whatever source, with the whole state.
  */
 import { computed, inject, onMounted, onUnmounted, ref, toRaw, toRefs, watch } from 'vue'
+import { WIDGET_EDIT_MODE } from 'org.eclipse.daanse.board.app.lib.api.widget'
 import { useRoute } from 'vue-router'
 import type { TinyEmitter } from 'tiny-emitter'
 import { identifiers } from 'org.eclipse.daanse.board.app.lib.core'
@@ -51,7 +54,6 @@ import { LampSettingsImpl } from './gen/LampSettingsImpl'
 import { LampPayloadImpl } from './gen/LampPayloadImpl'
 import { LampWidgetInterface } from './api/LampWidgetInterface'
 import {
-  FIXTURES,
   WRAPPED,
   clamp,
   lightColorOf,
@@ -61,7 +63,6 @@ import {
   switchOf,
   textOf,
   wrap,
-  type Fixture,
   type LampState,
 } from './support/lampState'
 
@@ -81,6 +82,9 @@ const actionsRegistry = inject<EventActionsRegistry>(EVENT_ACTIONS_REGISTRY)!
 const route = useRoute()
 const pageId = (route?.params?.pageid as string) || ''
 const { t } = useTranslation()
+/* Outside a wrapper - in a test, say - the board is not edited */
+const editMode = inject<{ readonly value: boolean } | undefined>(WIDGET_EDIT_MODE, undefined)
+const editing = computed(() => Boolean(editMode?.value))
 
 const data = ref<unknown>(null)
 const { update } = useDatasourceRepository(datasourceId, 'object', data)
@@ -110,11 +114,6 @@ const sourceValue = computed(() => {
 const state = computed<LampState>(() => stateFromSource(sourceValue.value, settingState.value))
 const lightColor = computed(() => lightColorOf(state.value))
 
-const fixture = computed<Fixture>(() => {
-  const given = held('fixture').trim().toLowerCase()
-  return (FIXTURES as readonly string[]).includes(given) ? (given as Fixture) : 'bulb'
-})
-
 /* ------------------------------------------------------------ writing */
 
 /*
@@ -135,7 +134,7 @@ function write(key: keyof LampSettings & string, value: string | number | boolea
 }
 
 /** Sends one of the lamp's events with its whole state. */
-function send(event: 'clicked' | 'stateChanged'): void {
+function send(event: 'stateChanged'): void {
   if (!widgetId?.value) return
   const payload = new LampPayloadImpl()
   payload.widgetId = widgetId.value
@@ -149,7 +148,7 @@ function send(event: 'clicked' | 'stateChanged'): void {
   eventBus.emit(type, { type, widgetId: widgetId.value, payload })
 }
 
-/* Whatever changed it - a press, an action, a variable, the source */
+/* Whatever changed it - an action, a variable, the source */
 watch(state, (now, before) => {
   if (!sameState(now, before)) send('stateChanged')
 })
@@ -177,21 +176,16 @@ class LampWidgetApi extends LampWidgetInterface {
 const api = new LampWidgetApi()
 defineExpose<LampWidgetInterface>(api)
 
-function press(): void {
-  send('clicked')
-  api.toggle()
-}
-
 /* ------------------------------------------------------------ light */
 
 const light = computed<LightSourceSpec | undefined>(() => {
   if (!widgetId?.value) return undefined
+  /* Empty: the widget's size decides, which only the layer knows */
+  const radius = numberOf(held('radius'), 0)
   return {
     widgetId: widgetId.value,
     on: state.value.on && state.value.brightness > 0,
-    x: clamp(number('originX'), 0, 100) / 100,
-    y: clamp(number('originY'), 0, 100) / 100,
-    radius: Math.max(0, number('radius')),
+    radius: radius > 0 ? radius : undefined,
     color: lightColor.value,
     intensity: state.value.brightness / 100,
     shape: held('lightShape').trim().toLowerCase() === 'cone' ? 'cone' : 'round',
@@ -225,106 +219,64 @@ onUnmounted(() => {
   }
 })
 
-/* ------------------------------------------------------------ look */
+/* ------------------------------------------------------------ marker */
 
-/* The glass glows in the light's colour, as strong as the lamp is bright */
+/* While it is edited the marker wears the light's colour, dimmed when it is off */
 const look = computed<Record<string, string>>(() => ({
   '--lamp-light': lightColor.value,
-  '--lamp-glow': String(state.value.on ? 0.25 + 0.75 * (state.value.brightness / 100) : 0),
 }))
 </script>
 
 <template>
-  <div class="lamp" :class="[`lamp--${fixture}`, { 'lamp--on': state.on }]" :style="look">
-    <button
-      type="button"
-      role="switch"
-      class="lamp__switch"
-      :aria-checked="state.on"
-      :aria-label="t('lamp:Widget.lamp')"
-      :title="state.on ? t('lamp:State.on') : t('lamp:State.off')"
-      @click="press"
+  <!-- Shown, nothing: only the light on the page. Edited, a marker to place it by -->
+  <div class="lamp" :class="{ 'lamp--editing': editing, 'lamp--on': state.on }" :style="look">
+    <div
+      v-if="editing"
+      class="lamp__marker"
+      role="img"
+      :aria-label="t('lamp:Marker.label')"
+      :title="state.on ? t('lamp:Marker.on') : t('lamp:Marker.off')"
     >
-      <svg class="lamp__fixture" viewBox="0 0 100 100" aria-hidden="true">
-        <template v-if="fixture === 'bulb'">
-          <path class="lamp__glass" d="M50 8 C29 8 18 24 18 40 C18 54 29 61 35 70 L65 70 C71 61 82 54 82 40 C82 24 71 8 50 8 Z" />
-          <rect class="lamp__body" x="36" y="72" width="28" height="7" rx="2" />
-          <rect class="lamp__body" x="38" y="81" width="24" height="6" rx="2" />
-          <rect class="lamp__body" x="43" y="89" width="14" height="5" rx="2" />
-        </template>
-        <template v-else-if="fixture === 'spot'">
-          <rect class="lamp__body" x="44" y="6" width="12" height="20" rx="3" />
-          <path class="lamp__body" d="M28 30 L72 30 L80 70 L20 70 Z" />
-          <ellipse class="lamp__glass" cx="50" cy="72" rx="30" ry="9" />
-        </template>
-        <template v-else-if="fixture === 'strip'">
-          <rect class="lamp__body" x="4" y="38" width="92" height="24" rx="12" />
-          <rect class="lamp__glass" x="10" y="44" width="80" height="12" rx="6" />
-        </template>
-        <template v-else>
-          <rect class="lamp__body" x="47" y="0" width="6" height="28" />
-          <path class="lamp__body" d="M14 64 C14 42 30 28 50 28 C70 28 86 42 86 64 Z" />
-          <ellipse class="lamp__glass" cx="50" cy="66" rx="30" ry="8" />
-        </template>
-      </svg>
-    </button>
+      <span class="lamp__dot"></span>
+    </div>
   </div>
 </template>
 
 <style scoped>
-/* The tile stays transparent: only the fixture is drawn, and the light is the layer's. */
 .lamp {
-  --lamp-off: color-mix(in srgb, var(--color-fg, #dfe8ef) 22%, transparent);
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  background: transparent;
+  pointer-events: none;
+}
+
+/* The widget's box, so its size - the light's reach - can be judged */
+.lamp--editing {
+  pointer-events: auto;
+  border: 1px dashed color-mix(in srgb, var(--color-fg, #dfe8ef) 55%, transparent);
+  border-radius: 50%;
+}
+
+.lamp__marker {
   width: 100%;
   height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-sizing: border-box;
-  overflow: visible;
-  background: transparent;
 }
 
-.lamp__switch {
-  width: 100%;
-  height: 100%;
-  padding: 4px;
-  border: none;
-  background: transparent;
-  cursor: pointer;
+/* The centre the light starts from */
+.lamp__dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 2px solid var(--color-fg, #dfe8ef);
+  background: color-mix(in srgb, var(--lamp-light) 35%, transparent);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--color-bg, #121820) 70%, transparent);
 }
 
-.lamp__switch:focus-visible {
-  outline: 2px solid var(--color-primary, #4fa3d1);
-  outline-offset: 2px;
-}
-
-.lamp__fixture {
-  width: 100%;
-  height: 100%;
-  overflow: visible;
-}
-
-.lamp__body {
-  fill: color-mix(in srgb, var(--color-fg, #dfe8ef) 55%, transparent);
-}
-
-.lamp__glass {
-  fill: var(--lamp-off);
-  stroke: color-mix(in srgb, var(--color-fg, #dfe8ef) 40%, transparent);
-  stroke-width: 1.5;
-  transition: fill 0.2s ease, filter 0.2s ease;
-}
-
-.lamp--on .lamp__glass {
-  fill: var(--lamp-light);
-  fill-opacity: var(--lamp-glow);
-  filter: drop-shadow(0 0 6px var(--lamp-light));
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .lamp__glass {
-    transition: none;
-  }
+.lamp--on .lamp__dot {
+  background: var(--lamp-light);
 }
 </style>

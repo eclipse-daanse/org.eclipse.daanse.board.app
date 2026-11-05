@@ -16,10 +16,11 @@
 // import type { IWidget } from "@/types/Widgets";
 // import { WidgetRepository } from "@/plugins/data/WidgetRepository";
 // import SERVICE_IDENTIFIER from "@/config/identifiers/services";
-import { inject, computed, ref, onUnmounted, watch } from 'vue'
+import { inject, computed, ref, onUnmounted, provide, watch } from 'vue'
 import {
   WidgetRepository,
   identifier as WidgetIdentifier,
+  WIDGET_EDIT_MODE,
 } from 'org.eclipse.daanse.board.app.lib.api.widget'
 
 import { useEObject, VariableWrapper, useTranslation, provideDataSelection, selectionSnapshot } from 'org.eclipse.daanse.board.app.ui.vue.composables'
@@ -31,7 +32,7 @@ import {
 } from 'org.eclipse.daanse.board.app.ui.vue.controls'
 
 
-const { widget, extraActions } = defineProps<{
+const { widget, extraActions, editEnabled } = defineProps<{
   widget: any
   editEnabled: boolean
   /**
@@ -120,6 +121,16 @@ const availableWidgets = computed(() => {
   void registryVersion.value
   return registeredWidgets.getAllWidgets()
 })
+
+/*
+ * A frameless widget (#1242) gets no chrome at all, and while the board is
+ * not edited it lets every pointer through to what lies under it.
+ */
+const frameless = computed(() => Boolean((isWidgetRegistered.value as { frameless?: boolean } | undefined)?.frameless))
+const passThrough = computed(() => frameless.value && !editEnabled)
+
+/* The widget inside may look different while it is placed */
+provide(WIDGET_EDIT_MODE, computed(() => Boolean(editEnabled)))
 
 const showDeleteConfirm = ref(false)
 const widgetToDelete = ref<string | null>(null)
@@ -371,9 +382,10 @@ const getpadding = computed(() => {
 <template>
   <div
     class="flex relative flex-col w-full h-full wrapper-container"
+    :class="{ 'wrapper-container--frameless': frameless, 'wrapper-container--pass-through': passThrough }"
     :style="{ '--blur-amount': getBlur + 'px', '--title-color': titleColor }">
     <div
-      v-if="wrapperConfig().title?.value"
+      v-if="wrapperConfig().title?.value && !frameless"
       class="font-semibold capitalize"
       :style="{
         fontSize: titleFontSize + 'px',
@@ -457,6 +469,19 @@ const getpadding = computed(() => {
   box-Shadow: v-bind(getShadow);
   border-radius: v-bind(borderRadius + "px");
   backdrop-filter: blur(var(--blur-amount));
+}
+
+/* No picture on the board: nothing of the frame is drawn */
+.wrapper-container--frameless {
+  background-color: transparent;
+  border-color: transparent;
+  box-shadow: none;
+  backdrop-filter: none;
+}
+
+.wrapper-container--pass-through,
+.wrapper-container--pass-through * {
+  pointer-events: none;
 }
 
 .sub {

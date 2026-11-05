@@ -13,7 +13,8 @@
 
 // @vitest-environment jsdom
 import { describe, expect, it, vi } from 'vitest'
-import { defineComponent, h } from 'vue'
+import { defineComponent, h, inject } from 'vue'
+import { WIDGET_EDIT_MODE } from 'org.eclipse.daanse.board.app.lib.api.widget'
 import { flushPromises, mount } from '@vue/test-utils'
 import { identifier as WIDGET_REPOSITORY } from 'org.eclipse.daanse.board.app.lib.repository.widget'
 import { WorkspaceFactory, type Widget } from 'org.eclipse.daanse.board.app.lib.model.workspace'
@@ -30,7 +31,17 @@ vi.mock('vue-router', () => ({
 void WrapperSettingsPackage.eINSTANCE
 
 const Probe = defineComponent({ setup: () => () => h('span', 'probe') })
-const registered = { Probe: { component: Probe, settingsComponent: 'div' } }
+/* A frameless widget that says whether it is edited, as a light source does (#1242) */
+const Light = defineComponent({
+  setup: () => {
+    const editing = inject<{ value: boolean } | undefined>(WIDGET_EDIT_MODE, undefined)
+    return () => h('span', { class: 'light' }, editing?.value ? 'edited' : 'shown')
+  },
+})
+const registered = {
+  Probe: { component: Probe, settingsComponent: 'div' },
+  Light: { component: Light, settingsComponent: 'div', frameless: true },
+}
 
 function widgetWithFrame(frame: object): Widget {
   const widget = WorkspaceFactory.eINSTANCE.createWidget()
@@ -41,9 +52,9 @@ function widgetWithFrame(frame: object): Widget {
   return widget
 }
 
-function mounted(widget: Widget) {
+function mounted(widget: Widget, editEnabled = false) {
   return mount(WidgetWrapper, {
-    props: { widget: widget as never, editEnabled: false } as never,
+    props: { widget: widget as never, editEnabled } as never,
     global: {
       provide: {
         [WIDGET_REPOSITORY as unknown as symbol]: {
@@ -119,5 +130,39 @@ describe('the frame around a widget', () => {
     widget.wrapperConfig = { title: new VariableWrapper('Later') } as never
     await flushPromises()
     expect((widget.wrapperConfig as any).borderRadius?.value).toBe(8)
+  })
+})
+
+describe('a frameless widget', () => {
+  function light() {
+    const widget = widgetWithFrame({ title: new VariableWrapper('Lamp') })
+    widget.type = 'Light'
+    return widget
+  }
+
+  it('gets no frame and no title, and lets every pointer through while shown', async () => {
+    const wrapper = mounted(light())
+    await flushPromises()
+    const container = wrapper.find('.wrapper-container')
+    expect(container.classes()).toContain('wrapper-container--frameless')
+    expect(container.classes()).toContain('wrapper-container--pass-through')
+    expect(wrapper.find('.font-semibold').exists()).toBe(false)
+    expect(wrapper.find('.light').text()).toBe('shown')
+  })
+
+  it('takes the pointer and is told so while edited', async () => {
+    const wrapper = mounted(light(), true)
+    await flushPromises()
+    const container = wrapper.find('.wrapper-container')
+    expect(container.classes()).toContain('wrapper-container--frameless')
+    expect(container.classes()).not.toContain('wrapper-container--pass-through')
+    expect(wrapper.find('.light').text()).toBe('edited')
+  })
+
+  it('leaves the frame of any other widget as it is', async () => {
+    const wrapper = mounted(widgetWithFrame({ title: new VariableWrapper('Chart') }))
+    await flushPromises()
+    expect(wrapper.find('.wrapper-container').classes()).not.toContain('wrapper-container--frameless')
+    expect(title(wrapper)).toBe('Chart')
   })
 })
