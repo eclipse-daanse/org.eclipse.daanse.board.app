@@ -171,6 +171,8 @@ export interface SetsFolderTreeItem extends TreeItem {
 
 export interface SetTreeItem extends TreeItem {
   type: TreeItemTypesEnum.Set
+  /* The row is dragged and inserted by SET_NAME; without it a set could be neither. */
+  originalItem: MDSchemaSet
 }
 
 export interface MeasureGroupTreeItem extends TreeItem {
@@ -454,12 +456,14 @@ export function getSetDesc(
       type: TreeItemTypesEnum.Set,
       caption: set.SET_CAPTION,
       id: `Dimension(${dimension.DIMENSION_UNIQUE_NAME})_Set(${set.SET_NAME})`,
+      originalItem: set,
     }
   } else {
     return {
       type: TreeItemTypesEnum.Set,
       caption: set.SET_CAPTION,
       id: `Set(${set.SET_DISPLAY_FOLDER} ${set.SET_NAME})`,
+      originalItem: set,
     }
   }
 }
