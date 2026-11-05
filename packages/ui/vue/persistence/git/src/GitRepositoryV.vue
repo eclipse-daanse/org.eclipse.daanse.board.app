@@ -29,7 +29,7 @@ const props = defineProps<{ repo: GitWritableRepository, context: { context: str
 const { t } = useTranslation('persistence')
 
 //Emits
-const emts = defineEmits<{ close: any }>()
+const emts = defineEmits<{ close: [data?: unknown, entry?: Entity] }>()
 
 //Refs
 /*
@@ -172,9 +172,10 @@ const { isOpened, run, close } = usePromisifiedModal(auth)
 const loadFile = async () => {
   const row = selectedRow.value
   try {
-    let entity = await (props.repo as Repository).getEntityByUri(row.uri)
+    const entity = await (props.repo as Repository).getEntityByUri(row.uri)
     if (entity && entity.data) {
-      emts('close', entity?.data as any)
+      /* The host loads the data; the row tells it which entry that was. */
+      emts('close', entity.data, { ...entity, name: row.name ?? entity.name })
     }
     notify({ message: t('Git.loaded') })
   } catch (e) {
@@ -184,21 +185,23 @@ const loadFile = async () => {
 </script>
 
 <template>
-  <div class="flex-nowrap">
-    <Teleport defer to="#loadSaveModalFooter">
-      <!-- Picking a branch and picking a commit is picking from a list. It
-        was a dropdown button with a menu hanging off it, twice. -->
-      <DSelect v-model="branch" :label="t('Git.branch')" :options="branch_options ?? []" size="sm" />
-      <DSelect v-model="commit" :label="t('Git.commit')" :options="commit_options ?? []" size="sm" clearable />
-    </Teleport>
+  <!-- The controls sit in the view itself. They were teleported into a
+    footer of the old load/save modal; the storage view that replaced it
+    has no such element, and a teleport without a target left Vue patching
+    children it never mounted (#1247). -->
+  <div class="toolbar">
+    <!-- Picking a branch and picking a commit is picking from a list. It
+      was a dropdown button with a menu hanging off it, twice. -->
+    <DSelect v-model="branch" :label="t('Git.branch')" :options="branch_options ?? []" size="sm" />
+    <DSelect v-model="commit" :label="t('Git.commit')" :options="commit_options ?? []" size="sm" clearable />
+
+    <DButton intent="primary" :disabled="!selectedRow" @click="loadFile">
+      <DIcon name="task" size="sm" />{{ t('Git.load') }}
+    </DButton>
+
+    <span class="toolbar__spacer" />
 
     <SaveInputGit :repo="repo" @save="save" @override="override" />
-
-    <Teleport defer to="#loadSaveModalFooter">
-      <DButton intent="primary" :disabled="!selectedRow" @click="loadFile">
-        <DIcon name="task" size="sm" />{{ t('Git.load') }}
-      </DButton>
-    </Teleport>
   </div>
 
   <p v-if="message" :class="['note', { 'note--bad': message.bad }]" role="status">
@@ -240,12 +243,17 @@ const loadFile = async () => {
   min-height: 100px;
 }
 
-.flex-nowrap {
+.toolbar {
   display: flex;
   flex-direction: row;
-  flex-wrap: nowrap;
+  flex-wrap: wrap;
   align-items: flex-end;
   gap: 8px;
+  padding: 8px 12px;
+}
+
+.toolbar__spacer {
+  flex: 1 1 auto;
 }
 
 .note {
