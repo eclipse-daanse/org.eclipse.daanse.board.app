@@ -23,5 +23,6 @@
 export enum EventActionContext {
   system = "system",
   page = "page",
-  widget = "widget"
+  widget = "widget",
+  datasource = "datasource"
 }

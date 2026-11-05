@@ -10,7 +10,7 @@
 -->
 <script lang="ts" setup>
 import 'reflect-metadata'
-import { inject, ref, computed, onMounted } from 'vue'
+import { inject, ref, computed, onMounted, onUnmounted } from 'vue'
 import { EventManager, EVENT_MANAGER, EventRegistry, EVENT_REGISTRY, EventActionsRegistry, EVENT_ACTIONS_REGISTRY } from 'org.eclipse.daanse.board.app.lib.api.events'
 import { type EventActionMapping, type ActionDefinition, type WidgetEventDefinition, type EventActionContext, type WidgetTypeRegistration, type WidgetActionParameter } from 'org.eclipse.daanse.board.app.lib.events'
 import { Comperator } from 'org.eclipse.daanse.board.app.lib.events'
@@ -85,6 +85,44 @@ const contextOptions = computed(() => [
   { text: t('Context.page'), value: 'page' },
   { text: t('Context.widget'), value: 'widget' }
 ])
+
+/*
+ * Where an action can land: where an event can come from, and a
+ * datasource besides. A datasource raises no events of its own, so it is
+ * offered as a target only.
+ */
+const targetContextOptions = computed(() => [
+  ...contextOptions.value,
+  { text: t('Context.datasource'), value: 'datasource' }
+])
+
+/*
+ * Actions a provider offers change while the board runs, and the provider
+ * says so. Every computed that reads them reads this counter too, so it is
+ * asked again when the list changed - with the dialog open or not.
+ */
+const providedRevision = ref(0)
+const stopWatchingProvided = injectedActionsRegistry?.onProvidedActionsChanged?.(() => {
+  providedRevision.value++
+})
+onUnmounted(() => stopWatchingProvided?.())
+
+/** The targets the providers of a context name, for the target field. */
+const providedTargetOptions = (context: EventActionContext) => {
+  void providedRevision.value
+  return (injectedActionsRegistry?.getProvidedTargets?.(context) ?? []).map((target) => ({
+    text: target.label ?? target.id,
+    value: target.id,
+  }))
+}
+
+/** What the provider of the current action's target offers for it. */
+const currentProvidedActions = computed(() => {
+  void providedRevision.value
+  const action = currentAction.value
+  if (!action?.targetContext || !action.targetContextId) return []
+  return injectedActionsRegistry?.getProvidedActions?.(action.targetContext, action.targetContextId) ?? []
+})
 
 /* Every page, and the choice of none in particular. */
 const pageOptions = computed(() => [
@@ -331,6 +369,20 @@ const availableActions = computed(() => {
     widgetType?: string
   }[] = []
 
+  /* Offered by the provider that names the chosen target, under the target's name. */
+  if (currentProvidedActions.value.length) {
+    const targetId = currentAction.value.targetContextId!
+    const group = providedTargetOptions(targetContext).find((o) => o.value === targetId)?.text ?? targetId
+    for (const provided of currentProvidedActions.value) {
+      actions.push({
+        text: provided.label ? t(provided.label) : provided.name,
+        group,
+        value: provided.name,
+        parameters: provided.parameters,
+      })
+    }
+  }
+
   for (const widgetType of availableWidgetTypes.value) {
     // Filter by context field, fallback to name-based filtering only if context is not set
     const hasExplicitContext = widgetType.context !== undefined
@@ -434,6 +486,19 @@ const selectedActionParameters = computed<ActionParameterInfo[]>(() => {
         ...(param.kind ? { kind: param.kind } : {})
       }))
     }
+  }
+
+  /* An action the target's provider offers declares its parameters the same way. */
+  const provided = currentProvidedActions.value.find(a => a.name === currentAction.value?.actionName)
+  if (provided) {
+    return (provided.parameters ?? []).map((param, index) => ({
+      name: param.name,
+      label: param.label ? t(param.label) : param.name,
+      type: param.type,
+      optional: !!param.optional,
+      index,
+      ...(param.kind ? { kind: param.kind } : {})
+    }))
   }
 
   return []
@@ -823,6 +888,10 @@ const sourcePhrase = (mapping: EventActionMapping) => {
 const targetPhrase = (action: ActionDefinition) => {
   if (action.targetContext === 'system') return t('Phrase.inSystem')
   if (action.targetContext === 'page') return action.targetContextId ? t('Phrase.onPage', { page: action.targetContextId }) : t('Phrase.onAnyPage')
+  if (action.targetContext === 'datasource') {
+    const label = providedTargetOptions('datasource').find((o) => o.value === action.targetContextId)?.text
+    return t('Phrase.atSource', { source: label ?? action.targetContextId ?? '' })
+  }
   return action.targetContextId ? t('Phrase.at', { target: action.targetContextId }) : t('Phrase.atAllInstances')
 }
 
@@ -1054,7 +1123,7 @@ onMounted(() => {
                       v-model="action.targetContext"
                       :label="t('Rule.targetContext')"
                       stacked
-                      :options="contextOptions"
+                      :options="targetContextOptions"
                       label-key="text"
                       value-key="value"
                     />
@@ -1067,6 +1136,18 @@ onMounted(() => {
                       label-key="text"
                       value-key="value"
                       clearable
+                    />
+                    <!-- A datasource action needs its datasource: there is no "all of them". -->
+                    <DSelect
+                      v-else-if="action.targetContext === 'datasource'"
+                      v-model="action.targetContextId"
+                      class="action__source"
+                      :label="t('Context.datasource')"
+                      stacked
+                      :options="providedTargetOptions('datasource')"
+                      label-key="text"
+                      value-key="value"
+                      :placeholder="t('Rule.chooseSource')"
                     />
                     <DSelect
                       v-else-if="action.targetContext === 'widget' || action.targetContext === 'system'"
