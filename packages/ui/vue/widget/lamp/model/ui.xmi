@@ -10,11 +10,13 @@
 * SPDX-License-Identifier: EPL-2.0
 **********************************************************************/
 
-The form for the lamp.
+The form for the lamp, a light source.
 
-In the order the decisions are made: the lamp and its state, the colour
-of its light, how the light falls onto the page, and last where the state
-comes from when a datasource says it. A cone's direction and angle are
+In the order the decisions are made: its state, the colour of its light,
+how the light falls onto the page, and last where the state comes from
+when a datasource says it. There is no place to set: the light starts at
+the centre of the widget, and its reach, left empty, follows the
+widget's size. A cone's direction and angle are
 only asked for once the light is a cone.
 -->
 <uimodel:UIModel
@@ -29,14 +31,6 @@ only asked for once the light is a cone.
   <components xsi:type="uimodel:FormView" name="LampSettingsFormView">
 
     <fields xsi:type="uimodel:GroupWidget" name="lampGroup" layout="VERTICAL" label="lamp:Form.lampGroup">
-      <fields xsi:type="uimodel:SelectWidget" name="fixture"
-          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.lamp#//LampSettings/fixture" label="lamp:Form.fixture">
-        <values>bulb</values>
-        <values>spot</values>
-        <values>strip</values>
-        <values>ceiling</values>
-        <optionLabel language="JS" body="({ bulb: 'lamp:Options.fixture.bulb', spot: 'lamp:Options.fixture.spot', strip: 'lamp:Options.fixture.strip', ceiling: 'lamp:Options.fixture.ceiling' })[String(option).toLowerCase()] ?? option"/>
-      </fields>
       <fields xsi:type="uimodel:CheckboxWidget" name="on"
           feature="http://org.eclipse.daanse.board.app.ui.vue.widget.lamp#//LampSettings/on" label="lamp:Form.on" asToggle="true"/>
       <fields xsi:type="uimodel:NumberWidget" name="brightness"
@@ -67,10 +61,6 @@ only asked for once the light is a cone.
           feature="http://org.eclipse.daanse.board.app.ui.vue.widget.lamp#//LampSettings/angle" label="lamp:Form.angle" min="1" max="360" step="5">
         <visibilityCondition language="JS" body="String(self.lightShape?.value ?? self.lightShape ?? '').toLowerCase() === 'cone'"/>
       </fields>
-      <fields xsi:type="uimodel:NumberWidget" name="originX"
-          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.lamp#//LampSettings/originX" label="lamp:Form.originX" min="0" max="100" step="5"/>
-      <fields xsi:type="uimodel:NumberWidget" name="originY"
-          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.lamp#//LampSettings/originY" label="lamp:Form.originY" min="0" max="100" step="5"/>
       <fields xsi:type="uimodel:CheckboxWidget" name="lightsWidgets"
           feature="http://org.eclipse.daanse.board.app.ui.vue.widget.lamp#//LampSettings/lightsWidgets" label="lamp:Form.lightsWidgets" asToggle="true"/>
     </fields>

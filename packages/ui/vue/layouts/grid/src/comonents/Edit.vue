@@ -15,6 +15,8 @@ Contributors:
   <!-- Still while editing: the weather waits, and draws nothing. Its region
     is drawn here, in the grid the board shows -->
   <WeatherLayer :page="board.page.value" edit-mode scroller=".scroll" :cell="weatherCell">
+  <!-- The lamps' light and the page's dark, as when shown (#1242) -->
+  <LightLayer :page="board.page.value" scroller=".scroll">
   <div class="scroll max-h-screen ml-15">
     <div ref="wrapper" @dragenter="onDragEnter" @drop.prevent="onDrop" @drag="onDragMove" class="alayout" @click="closeAllContextMenus"
       @contextmenu="onCanvasContextMenu"
@@ -48,6 +50,7 @@ Contributors:
                 :ref="`${item.i}_wrapper`"
                 @openSettings="openWidgetSettings"
                 editEnabled
+                :data-light-box="String(item.i)"
                 @removeWidget="() => removeWidget(item.i.toString())"
               />
               <span v-else class="text">{{ `${item.i}${item.static ? '- Static' : ''}` }}</span>
@@ -99,6 +102,7 @@ Contributors:
 
     <ClipboardNotice :shown="copiedNotice" @dismiss="hideNotice" />
   </div>
+  </LightLayer>
   </WeatherLayer>
 </template>
 
@@ -109,7 +113,7 @@ import { GridLayout, type LayoutItem } from 'grid-layout-plus'
 import { useBoard, useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import type { StoredWidget } from 'org.eclipse.daanse.board.app.lib.api.page'
 import { WidgetWrapper, defaultConfig } from 'org.eclipse.daanse.board.app.ui.vue.widget.wrapper'
-import { WeatherLayer } from 'org.eclipse.daanse.board.app.ui.vue.layouts.base'
+import { LightLayer, WeatherLayer } from 'org.eclipse.daanse.board.app.ui.vue.layouts.base'
 import { useRoute } from 'vue-router'
 import Draggable from 'vuedraggable'
 import { cloneDeep, isEqual } from 'lodash'

@@ -12,6 +12,8 @@ Contributors:
 -->
 <template>
   <WeatherLayer :page="board.page.value" scroller=".scroll" :cell="weatherCell">
+  <!-- The lamps' light and the page's dark (#1242) -->
+  <LightLayer :page="board.page.value" scroller=".scroll">
   <div class="scroll max-h-screen ml-15">
     <div ref="wrapper" class="view_grid_layout">
       <GridLayout ref="gridLayout" :key="gridSettingsKey" v-model:layout="layout" :row-height="ROW_HEIGHT" :responsive="true" :vertical-compact="false" :breakpoints="BREAKPOINTS" :cols="COLS as any" :is-draggable="false" :is-resizable="false">
@@ -21,12 +23,14 @@ Contributors:
             :ref="`${item.i}_wrapper`"
             :editEnabled="false"
             :data-weather-obstacle="item.i"
+            :data-light-box="item.i"
           />
           <span v-else class="text">{{ `${item.i}${item.static ? '- Static' : ''}` }}</span>
         </template>
       </GridLayout>
     </div>
   </div>
+  </LightLayer>
   </WeatherLayer>
 </template>
 
@@ -36,7 +40,7 @@ import { GridLayout } from 'grid-layout-plus'
 
 import { useBoard } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import { WidgetWrapper } from 'org.eclipse.daanse.board.app.ui.vue.widget.wrapper'
-import { WeatherLayer } from 'org.eclipse.daanse.board.app.ui.vue.layouts.base'
+import { LightLayer, WeatherLayer } from 'org.eclipse.daanse.board.app.ui.vue.layouts.base'
 import { useRoute } from 'vue-router'
 import { identifiers } from 'org.eclipse.daanse.board.app.lib.core'
 import type { TinyEmitter } from 'tiny-emitter'

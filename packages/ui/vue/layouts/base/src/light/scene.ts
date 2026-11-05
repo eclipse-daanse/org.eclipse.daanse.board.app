@@ -68,39 +68,39 @@ const unit = (value: number, fallback: number) => Math.min(1, Math.max(0, finite
 /**
  * The lights of the sources whose widget was measured, in pixels.
  *
- * A source whose widget is not under the layer - removed, or on another
- * page - draws nothing: its light goes with it. One that is off draws
- * nothing either. In edit mode every light is drawn over the board, which
- * covers the page behind its widgets with a canvas of its own.
+ * A light starts at the centre of its widget and, where the lamp names no
+ * reach, reaches half the widget's longer side. A source whose widget is
+ * not under the layer - removed, or on another page - draws nothing: its
+ * light goes with it. One that is off draws nothing either.
  */
 export function composeLightScene(
   sources: Iterable<LightSourceSpec>,
   boxes: ReadonlyMap<string, Box>,
   ambient: number,
-  editMode = false,
 ): LightScene {
   const lights: DrawnLight[] = []
   for (const source of sources) {
     if (!source.on) continue
     const box = boxes.get(source.widgetId)
     if (!box) continue
-    const radius = Math.max(0, finite(source.radius, 0))
+    const given = finite(source.radius ?? 0, 0)
+    const radius = given > 0 ? given : Math.max(box.width, box.height) / 2
     const intensity = unit(source.intensity, 1)
     if (radius <= 0 || intensity <= 0) continue
     lights.push({
       widgetId: source.widgetId,
-      x: box.x + box.width * unit(source.x, 0.5),
-      y: box.y + box.height * unit(source.y, 0.5),
+      x: box.x + box.width / 2,
+      y: box.y + box.height / 2,
       radius,
       color: source.color || '#ffffff',
       intensity,
       shape: source.shape === 'cone' ? 'cone' : 'round',
       direction: toRadians(finite(source.direction, 90)),
       angle: toRadians(Math.min(360, Math.max(1, finite(source.angle, 60)))),
-      front: editMode || Boolean(source.lightsWidgets),
+      front: Boolean(source.lightsWidgets),
     })
   }
-  return { darkness: editMode ? 0 : darknessOf(ambient), lights }
+  return { darkness: darknessOf(ambient), lights }
 }
 
 /** Whether there is anything to draw at all. */

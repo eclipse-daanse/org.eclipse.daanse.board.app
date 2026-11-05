@@ -82,7 +82,22 @@ export interface WidgetConfig {
    * a widget without a language pack still shows up under its name.
    */
   nameKey?: string
+  /**
+   * A widget that is no picture on the board, such as a light source
+   * (#1242): the wrapper draws no frame around it - no background, no
+   * border, no shadow, no title - and, while the board is not edited, the
+   * widget takes no pointer, so whatever lies under it stays operable.
+   */
+  frameless?: boolean
 }
+
+/**
+ * What the wrapper provides to the widget inside it: whether the board is
+ * being edited, as `{ value: boolean }` (a Vue ref). A widget that looks
+ * different while it is placed - a frameless one shows a marker then -
+ * injects it; outside a wrapper there is none, and the board is not edited.
+ */
+export const WIDGET_EDIT_MODE = Symbol.for('daanse.widget.editMode')
 
 /**
  * What a widget bundle offers as a service: its type key plus the
