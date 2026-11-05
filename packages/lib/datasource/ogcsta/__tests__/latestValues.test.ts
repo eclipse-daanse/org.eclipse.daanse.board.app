@@ -167,6 +167,17 @@ describe('the latest values view of an OGC STA source', () => {
   })
 })
 
+describe('a column of the view', () => {
+  it('shows the time for the name of the part as for its literal', async () => {
+    const columns = [{ suffix: '~referenceArea~color', label: 'Stand', part: 'PHENOMENON_TIME' }]
+    const { store } = setup({}, { ...view, columns })
+
+    const table = await store.getData('DataTable')
+
+    expect(table.items.find((r: any) => r['Fläche'] === 'Reference Area ZW-01').Stand).toBe(formatTime(T1))
+  })
+})
+
 describe('the thing names of the view', () => {
   it('read as the map reads a name rule', () => {
     expect(thingFilterOfNames(['Reference Area*', '*-derived', "*O'Neil*", 'Weather Jena', '*', 'A*b*'])).toBe(

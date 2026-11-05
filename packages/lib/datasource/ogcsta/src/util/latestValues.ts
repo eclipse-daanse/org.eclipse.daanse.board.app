@@ -100,6 +100,12 @@ export function formatTime(time: string | undefined): string | undefined {
   return `${date.getFullYear()}-${two(date.getMonth() + 1)}-${two(date.getDate())} ${two(date.getHours())}:${two(date.getMinutes())}`
 }
 
+/*
+ * A modelled column holds the name of the part (PHENOMENON_TIME), a
+ * stored board may hold the literal (phenomenonTime).
+ */
+const showsTime = (column: LatestValueColumn) => ['phenomenonTime', 'PHENOMENON_TIME'].includes(String(column.part ?? ''))
+
 const headerOf = (column: LatestValueColumn) => String(column.label ?? '').trim() || String(column.suffix).trim()
 
 /**
@@ -144,7 +150,7 @@ export function buildLatestValuesTable(
       for (const column of columns) {
         const observation = latest.get(datastreamIdOf(thing.id, column))
         let value: unknown
-        if (String(column.part ?? 'result') === 'phenomenonTime') {
+        if (showsTime(column)) {
           value = formatTime(observation?.phenomenonTime)
         } else if (observation && observation.result !== undefined) {
           const mapping = mappingsOf.get(column)!.get(String(observation.result))
