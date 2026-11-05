@@ -58,18 +58,16 @@ defineExpose({ setNameSuggestion })
 
 </script>
 <template>
-  <Teleport defer to="#loadSaveModalFooter">
-    <div class="save">
-      <DInput v-model="nameForSaving" :label="t('Git.name')" :placeholder="t('Git.fileName')" />
+  <div class="save">
+    <DInput v-model="nameForSaving" :label="t('Git.name')" :placeholder="t('Git.fileName')" />
 
-      <DButton v-if="isSameName" intent="danger" :disabled="isDisabled" @click="override">
-        <DIcon name="save" size="sm" />{{ t('Git.overwrite') }}
-      </DButton>
-      <DButton v-else intent="primary" :disabled="isDisabled" @click="save">
-        <DIcon name="save" size="sm" />{{ t('Git.store') }}
-      </DButton>
-    </div>
-  </Teleport>
+    <DButton v-if="isSameName" intent="danger" :disabled="isDisabled" @click="override">
+      <DIcon name="save" size="sm" />{{ t('Git.overwrite') }}
+    </DButton>
+    <DButton v-else intent="primary" :disabled="isDisabled" @click="save">
+      <DIcon name="save" size="sm" />{{ t('Git.store') }}
+    </DButton>
+  </div>
 </template>
 
 <style scoped lang="scss">
