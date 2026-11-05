@@ -39,6 +39,7 @@ import {
   type Ref,
 } from 'vue'
 import { useEObject } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+import { FRAMELESS_ATTRIBUTE } from 'org.eclipse.daanse.board.app.lib.api.widget'
 import {
   WeatherKind,
   WeatherRegion,
@@ -197,6 +198,23 @@ export function measureObstacles(
   return found
 }
 
+/**
+ * The widgets under a host that are frameless, by id: nothing of them is
+ * seen, so nothing falls on them (#1242). The wrapper marks its root, which
+ * is the element a layout puts the obstacle attribute on, or a child of it.
+ */
+export function framelessObstacles(host: HTMLElement): Set<string> {
+  const found = new Set<string>()
+  for (const element of host.querySelectorAll<HTMLElement>(`[${OBSTACLE_ATTRIBUTE}]`)) {
+    const id = element.getAttribute(OBSTACLE_ATTRIBUTE)
+    if (!id) continue
+    if (element.hasAttribute(FRAMELESS_ATTRIBUTE) || element.querySelector(`:scope > [${FRAMELESS_ATTRIBUTE}]`)) {
+      found.add(id)
+    }
+  }
+  return found
+}
+
 function numberOr(value: unknown, fallback: number): number {
   if (value === '' || value === null || value === undefined) return fallback
   const n = Number(value)
@@ -264,8 +282,11 @@ export function useWeatherLayer(options: WeatherLayerOptions) {
       cell,
     )
     engine.setRegion(area)
+    /* A frameless widget is still a region, but never in the way */
+    const unseen = framelessObstacles(host)
+    const inTheWay = obstacles.filter((each) => !unseen.has(each.id))
     /* Passing the widgets by: none of them is in the way */
-    engine.setObstacles(affectsWidgets.value ? obstacles : [])
+    engine.setObstacles(affectsWidgets.value ? inTheWay : [])
     lastMeasure = performance.now()
   }
 
