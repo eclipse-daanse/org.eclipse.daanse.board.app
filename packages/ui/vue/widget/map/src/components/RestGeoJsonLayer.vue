@@ -9,6 +9,7 @@ Contributors: Smart City Jena
 
 -->
 <script lang="ts" setup>
+import { plainSettings } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import { LGeoJson, LMarker, LIcon } from '@vue-leaflet/vue-leaflet'
 import L from 'leaflet'
 import MapMarker from './MapMarker.vue'
@@ -38,7 +39,7 @@ const props = defineProps<RestGeoJsonLayerProps>()
           ref="restGeojsonLayer"
           :geojson="feature"
           :options="layerOptions"
-          :options-style="()=>getStyleById(styleID)?.renderer.area as any"
+          :options-style="()=>plainSettings(getStyleById(styleID)?.renderer.area) as any"
         />
       </template>
 
