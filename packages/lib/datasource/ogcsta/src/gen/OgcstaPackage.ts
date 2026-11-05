@@ -18,9 +18,10 @@
  * @generated
  */
 
-import { BasicEPackage, BasicEClass, BasicEAttribute, EPackageRegistry, getEcorePackage } from '@emfts/core';
-import type { EClass, EAttribute, EReference, EDataType } from '@emfts/core';
+import { BasicEPackage, BasicEClass, BasicEAttribute, BasicEReference, EPackageRegistry, getEcorePackage, BasicEEnum, BasicEEnumLiteral, BasicEAnnotation } from '@emfts/core';
+import type { EClass, EAttribute, EReference, EEnum, EDataType } from '@emfts/core';
 import { OgcstaFactory } from './OgcstaFactory.js';
+import { OGCSTALatestValuePart } from './OGCSTALatestValuePart.js';
 
 /**
  * Resolve a dependency package from the registry, failing with an actionable
@@ -60,6 +61,22 @@ export class OgcstaPackage extends BasicEPackage {
   static readonly Literals = {
     I_O_G_C_S_T_A_CONFIGURATION: null as unknown as EClass,
     I_O_G_C_S_T_A_CONFIGURATION__CONNECTION: null as unknown as EAttribute | EReference,
+    I_O_G_C_S_T_A_CONFIGURATION__LATEST_VALUES: null as unknown as EAttribute | EReference,
+    O_G_C_S_T_A_LATEST_VALUES: null as unknown as EClass,
+    O_G_C_S_T_A_LATEST_VALUES__THING_NAMES: null as unknown as EAttribute | EReference,
+    O_G_C_S_T_A_LATEST_VALUES__NAME_COLUMN: null as unknown as EAttribute | EReference,
+    O_G_C_S_T_A_LATEST_VALUES__ID_COLUMN: null as unknown as EAttribute | EReference,
+    O_G_C_S_T_A_LATEST_VALUES__COLUMNS: null as unknown as EAttribute | EReference,
+    O_G_C_S_T_A_LATEST_VALUE_COLUMN: null as unknown as EClass,
+    O_G_C_S_T_A_LATEST_VALUE_COLUMN__SUFFIX: null as unknown as EAttribute | EReference,
+    O_G_C_S_T_A_LATEST_VALUE_COLUMN__LABEL: null as unknown as EAttribute | EReference,
+    O_G_C_S_T_A_LATEST_VALUE_COLUMN__PART: null as unknown as EAttribute | EReference,
+    O_G_C_S_T_A_LATEST_VALUE_COLUMN__MAPPINGS: null as unknown as EAttribute | EReference,
+    O_G_C_S_T_A_VALUE_MAPPING: null as unknown as EClass,
+    O_G_C_S_T_A_VALUE_MAPPING__CODE: null as unknown as EAttribute | EReference,
+    O_G_C_S_T_A_VALUE_MAPPING__LABEL: null as unknown as EAttribute | EReference,
+    O_G_C_S_T_A_VALUE_MAPPING__COLOR: null as unknown as EAttribute | EReference,
+    O_G_C_S_T_A_LATEST_VALUE_PART: null as unknown as EEnum,
   };
 
   private constructor() {
@@ -97,6 +114,166 @@ export class OgcstaPackage extends BasicEPackage {
     iOGCSTAConfigurationClass.getEStructuralFeatures().push(iOGCSTAConfiguration_connection);
     OgcstaPackage.Literals.I_O_G_C_S_T_A_CONFIGURATION__CONNECTION = iOGCSTAConfiguration_connection;
 
+    // Create latestValues feature
+    const iOGCSTAConfiguration_latestValues = new BasicEReference();
+    iOGCSTAConfiguration_latestValues.setContainment(true);
+    iOGCSTAConfiguration_latestValues.setName('latestValues');
+    iOGCSTAConfiguration_latestValues.setLowerBound(0);
+    iOGCSTAConfiguration_latestValues.setUpperBound(1);
+    iOGCSTAConfigurationClass.getEStructuralFeatures().push(iOGCSTAConfiguration_latestValues);
+    OgcstaPackage.Literals.I_O_G_C_S_T_A_CONFIGURATION__LATEST_VALUES = iOGCSTAConfiguration_latestValues;
+
+    // Create OGCSTALatestValues class
+    const oGCSTALatestValuesClass = new BasicEClass();
+    oGCSTALatestValuesClass.setName('OGCSTALatestValues');
+    oGCSTALatestValuesClass.setAbstract(false);
+    oGCSTALatestValuesClass.setInterface(false);
+    this.getEClassifiers().push(oGCSTALatestValuesClass);
+    oGCSTALatestValuesClass.setEPackage(this);
+    OgcstaPackage.Literals.O_G_C_S_T_A_LATEST_VALUES = oGCSTALatestValuesClass;
+
+    // Create thingNames feature
+    const oGCSTALatestValues_thingNames = new BasicEAttribute();
+    oGCSTALatestValues_thingNames.setName('thingNames');
+    oGCSTALatestValues_thingNames.setLowerBound(0);
+    oGCSTALatestValues_thingNames.setUpperBound(-1);
+    oGCSTALatestValuesClass.getEStructuralFeatures().push(oGCSTALatestValues_thingNames);
+    OgcstaPackage.Literals.O_G_C_S_T_A_LATEST_VALUES__THING_NAMES = oGCSTALatestValues_thingNames;
+
+    // Create nameColumn feature
+    const oGCSTALatestValues_nameColumn = new BasicEAttribute();
+    oGCSTALatestValues_nameColumn.setName('nameColumn');
+    oGCSTALatestValues_nameColumn.setLowerBound(0);
+    oGCSTALatestValues_nameColumn.setUpperBound(1);
+    oGCSTALatestValues_nameColumn.setDefaultValueLiteral("name");
+    oGCSTALatestValuesClass.getEStructuralFeatures().push(oGCSTALatestValues_nameColumn);
+    OgcstaPackage.Literals.O_G_C_S_T_A_LATEST_VALUES__NAME_COLUMN = oGCSTALatestValues_nameColumn;
+
+    // Create idColumn feature
+    const oGCSTALatestValues_idColumn = new BasicEAttribute();
+    oGCSTALatestValues_idColumn.setName('idColumn');
+    oGCSTALatestValues_idColumn.setLowerBound(0);
+    oGCSTALatestValues_idColumn.setUpperBound(1);
+    oGCSTALatestValuesClass.getEStructuralFeatures().push(oGCSTALatestValues_idColumn);
+    OgcstaPackage.Literals.O_G_C_S_T_A_LATEST_VALUES__ID_COLUMN = oGCSTALatestValues_idColumn;
+
+    // Create columns feature
+    const oGCSTALatestValues_columns = new BasicEReference();
+    oGCSTALatestValues_columns.setContainment(true);
+    oGCSTALatestValues_columns.setName('columns');
+    oGCSTALatestValues_columns.setLowerBound(0);
+    oGCSTALatestValues_columns.setUpperBound(-1);
+    oGCSTALatestValuesClass.getEStructuralFeatures().push(oGCSTALatestValues_columns);
+    OgcstaPackage.Literals.O_G_C_S_T_A_LATEST_VALUES__COLUMNS = oGCSTALatestValues_columns;
+
+    // Create OGCSTALatestValueColumn class
+    const oGCSTALatestValueColumnClass = new BasicEClass();
+    oGCSTALatestValueColumnClass.setName('OGCSTALatestValueColumn');
+    oGCSTALatestValueColumnClass.setAbstract(false);
+    oGCSTALatestValueColumnClass.setInterface(false);
+    this.getEClassifiers().push(oGCSTALatestValueColumnClass);
+    oGCSTALatestValueColumnClass.setEPackage(this);
+    OgcstaPackage.Literals.O_G_C_S_T_A_LATEST_VALUE_COLUMN = oGCSTALatestValueColumnClass;
+
+    // Create suffix feature
+    const oGCSTALatestValueColumn_suffix = new BasicEAttribute();
+    oGCSTALatestValueColumn_suffix.setName('suffix');
+    oGCSTALatestValueColumn_suffix.setLowerBound(0);
+    oGCSTALatestValueColumn_suffix.setUpperBound(1);
+    oGCSTALatestValueColumnClass.getEStructuralFeatures().push(oGCSTALatestValueColumn_suffix);
+    OgcstaPackage.Literals.O_G_C_S_T_A_LATEST_VALUE_COLUMN__SUFFIX = oGCSTALatestValueColumn_suffix;
+
+    // Create label feature
+    const oGCSTALatestValueColumn_label = new BasicEAttribute();
+    oGCSTALatestValueColumn_label.setName('label');
+    oGCSTALatestValueColumn_label.setLowerBound(0);
+    oGCSTALatestValueColumn_label.setUpperBound(1);
+    oGCSTALatestValueColumnClass.getEStructuralFeatures().push(oGCSTALatestValueColumn_label);
+    OgcstaPackage.Literals.O_G_C_S_T_A_LATEST_VALUE_COLUMN__LABEL = oGCSTALatestValueColumn_label;
+
+    // Create part feature
+    const oGCSTALatestValueColumn_part = new BasicEAttribute();
+    oGCSTALatestValueColumn_part.setName('part');
+    oGCSTALatestValueColumn_part.setLowerBound(0);
+    oGCSTALatestValueColumn_part.setUpperBound(1);
+    oGCSTALatestValueColumn_part.setDefaultValueLiteral("result");
+    oGCSTALatestValueColumnClass.getEStructuralFeatures().push(oGCSTALatestValueColumn_part);
+    OgcstaPackage.Literals.O_G_C_S_T_A_LATEST_VALUE_COLUMN__PART = oGCSTALatestValueColumn_part;
+
+    // Create mappings feature
+    const oGCSTALatestValueColumn_mappings = new BasicEReference();
+    oGCSTALatestValueColumn_mappings.setContainment(true);
+    oGCSTALatestValueColumn_mappings.setName('mappings');
+    oGCSTALatestValueColumn_mappings.setLowerBound(0);
+    oGCSTALatestValueColumn_mappings.setUpperBound(-1);
+    oGCSTALatestValueColumnClass.getEStructuralFeatures().push(oGCSTALatestValueColumn_mappings);
+    OgcstaPackage.Literals.O_G_C_S_T_A_LATEST_VALUE_COLUMN__MAPPINGS = oGCSTALatestValueColumn_mappings;
+
+    // Create OGCSTAValueMapping class
+    const oGCSTAValueMappingClass = new BasicEClass();
+    oGCSTAValueMappingClass.setName('OGCSTAValueMapping');
+    oGCSTAValueMappingClass.setAbstract(false);
+    oGCSTAValueMappingClass.setInterface(false);
+    this.getEClassifiers().push(oGCSTAValueMappingClass);
+    oGCSTAValueMappingClass.setEPackage(this);
+    OgcstaPackage.Literals.O_G_C_S_T_A_VALUE_MAPPING = oGCSTAValueMappingClass;
+
+    // Create code feature
+    const oGCSTAValueMapping_code = new BasicEAttribute();
+    oGCSTAValueMapping_code.setName('code');
+    oGCSTAValueMapping_code.setLowerBound(0);
+    oGCSTAValueMapping_code.setUpperBound(1);
+    oGCSTAValueMappingClass.getEStructuralFeatures().push(oGCSTAValueMapping_code);
+    OgcstaPackage.Literals.O_G_C_S_T_A_VALUE_MAPPING__CODE = oGCSTAValueMapping_code;
+
+    // Create label feature
+    const oGCSTAValueMapping_label = new BasicEAttribute();
+    oGCSTAValueMapping_label.setName('label');
+    oGCSTAValueMapping_label.setLowerBound(0);
+    oGCSTAValueMapping_label.setUpperBound(1);
+    oGCSTAValueMappingClass.getEStructuralFeatures().push(oGCSTAValueMapping_label);
+    OgcstaPackage.Literals.O_G_C_S_T_A_VALUE_MAPPING__LABEL = oGCSTAValueMapping_label;
+
+    // Create color feature
+    const oGCSTAValueMapping_color = new BasicEAttribute();
+    oGCSTAValueMapping_color.setName('color');
+    oGCSTAValueMapping_color.setLowerBound(0);
+    oGCSTAValueMapping_color.setUpperBound(1);
+    oGCSTAValueMappingClass.getEStructuralFeatures().push(oGCSTAValueMapping_color);
+    OgcstaPackage.Literals.O_G_C_S_T_A_VALUE_MAPPING__COLOR = oGCSTAValueMapping_color;
+
+    // Create OGCSTALatestValuePart enum
+    const oGCSTALatestValuePartEnumType = new BasicEEnum();
+    oGCSTALatestValuePartEnumType.setName('OGCSTALatestValuePart');
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("RESULT");
+      literal.setValue(0);
+      literal.setLiteral("result");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(OGCSTALatestValuePart.RESULT);
+      oGCSTALatestValuePartEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("PHENOMENON_TIME");
+      literal.setValue(1);
+      literal.setLiteral("phenomenonTime");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(OGCSTALatestValuePart.PHENOMENON_TIME);
+      oGCSTALatestValuePartEnumType.addLiteral(literal);
+    }
+    {
+      const annotation = new BasicEAnnotation();
+      annotation.setSource("http://www.eclipse.org/emf/2002/GenModel");
+      annotation.getDetails().putByKey("documentation", "Which part of the latest observation a column shows. The literal is what a column holds.");
+      oGCSTALatestValuePartEnumType.getEAnnotations().push(annotation);
+    }
+    OgcstaPackage.Literals.O_G_C_S_T_A_LATEST_VALUE_PART = oGCSTALatestValuePartEnumType;
+    this.getEClassifiers().push(oGCSTALatestValuePartEnumType);
+
 
     // ============================================
     // Set ESuperTypes (must be done after all classes are created)
@@ -109,6 +286,18 @@ export class OgcstaPackage extends BasicEPackage {
     // convert against - every value would arrive as a raw string (#37)
     // ============================================
     (OgcstaPackage.Literals.I_O_G_C_S_T_A_CONFIGURATION__CONNECTION as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (OgcstaPackage.Literals.I_O_G_C_S_T_A_CONFIGURATION__LATEST_VALUES as BasicEReference).setEType(OgcstaPackage.Literals.O_G_C_S_T_A_LATEST_VALUES);
+    (OgcstaPackage.Literals.O_G_C_S_T_A_LATEST_VALUES__THING_NAMES as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (OgcstaPackage.Literals.O_G_C_S_T_A_LATEST_VALUES__NAME_COLUMN as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (OgcstaPackage.Literals.O_G_C_S_T_A_LATEST_VALUES__ID_COLUMN as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (OgcstaPackage.Literals.O_G_C_S_T_A_LATEST_VALUES__COLUMNS as BasicEReference).setEType(OgcstaPackage.Literals.O_G_C_S_T_A_LATEST_VALUE_COLUMN);
+    (OgcstaPackage.Literals.O_G_C_S_T_A_LATEST_VALUE_COLUMN__SUFFIX as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (OgcstaPackage.Literals.O_G_C_S_T_A_LATEST_VALUE_COLUMN__LABEL as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (OgcstaPackage.Literals.O_G_C_S_T_A_LATEST_VALUE_COLUMN__PART as BasicEAttribute).setEType(OgcstaPackage.Literals.O_G_C_S_T_A_LATEST_VALUE_PART);
+    (OgcstaPackage.Literals.O_G_C_S_T_A_LATEST_VALUE_COLUMN__MAPPINGS as BasicEReference).setEType(OgcstaPackage.Literals.O_G_C_S_T_A_VALUE_MAPPING);
+    (OgcstaPackage.Literals.O_G_C_S_T_A_VALUE_MAPPING__CODE as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (OgcstaPackage.Literals.O_G_C_S_T_A_VALUE_MAPPING__LABEL as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (OgcstaPackage.Literals.O_G_C_S_T_A_VALUE_MAPPING__COLOR as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
 
     // ============================================
     // Set EOpposites (must be done after all features are created) (#59)

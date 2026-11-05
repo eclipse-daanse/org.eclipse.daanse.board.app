@@ -51,6 +51,28 @@
       "noData": "Keine Daten vorhanden",
       "dsShort": "{{count}} DS",
       "obsShort": "{{count}} Beob."
+    },
+    "latest": {
+      "title": "Ansicht aktueller Werte (Tabelle)",
+      "thingNames": "Things nach Name",
+      "thingNamesHint": "Ein Muster pro Zeile: Reference Area* beginnt mit, *-derived endet mit, *x* enthält, ohne Stern gleich",
+      "nameColumn": "Spalte für den Thing-Namen",
+      "idColumn": "Spalte für die Thing-ID",
+      "emptyNoColumn": "Leer: keine solche Spalte",
+      "column": "Spalte {{index}}",
+      "removeColumn": "Spalte entfernen",
+      "suffix": "Datastream-Suffix",
+      "suffixHint": "Die Thing-ID mit diesem Suffix ist der Datastream, z. B. ~referenceArea~color",
+      "label": "Spaltenüberschrift",
+      "part": "Zeigt",
+      "partResult": "Letztes Ergebnis",
+      "partTime": "Zeit des letzten Ergebnisses",
+      "code": "Code",
+      "shownAs": "Angezeigt als",
+      "color": "Farbe",
+      "removeMapping": "Zuordnung entfernen",
+      "addMapping": "Zuordnung hinzufügen",
+      "addColumn": "Spalte hinzufügen"
     }
   }
 }

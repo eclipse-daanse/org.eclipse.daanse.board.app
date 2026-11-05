@@ -58,3 +58,4 @@ export { OGC_STA_STORE_FACTORY, factorySymbol, FILTER, FILTERRESET, UPDATE_MQTT_
 export type { BoxedDatastream, BoxedThing, BoxedLocation, IOGCSTAData, IOGCSTAConfigartion, IOGCSTAHistoryConfig } from './interfaces/OgcStaConfiguration'
 export type { Datastream } from './client'
 export { OgcstaPackage, OgcstaFactory, IOGCSTAConfigurationImpl }
+export type { LatestValuesTable, LatestValuesView, LatestValueColumn, ValueMapping } from './util/latestValues'

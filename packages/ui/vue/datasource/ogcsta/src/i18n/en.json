@@ -51,6 +51,28 @@
       "noData": "No data available",
       "dsShort": "{{count}} DS",
       "obsShort": "{{count}} obs"
+    },
+    "latest": {
+      "title": "Latest values view (table)",
+      "thingNames": "Things by name",
+      "thingNamesHint": "One pattern per line: Reference Area* starts with, *-derived ends with, *x* contains, no star is equal",
+      "nameColumn": "Column of the thing name",
+      "idColumn": "Column of the thing id",
+      "emptyNoColumn": "Empty: no such column",
+      "column": "Column {{index}}",
+      "removeColumn": "Remove column",
+      "suffix": "Datastream suffix",
+      "suffixHint": "The thing id followed by this is the datastream, e.g. ~referenceArea~color",
+      "label": "Column header",
+      "part": "Shows",
+      "partResult": "Latest result",
+      "partTime": "Time of the latest result",
+      "code": "Code",
+      "shownAs": "Shown as",
+      "color": "Colour",
+      "removeMapping": "Remove mapping",
+      "addMapping": "Add mapping",
+      "addColumn": "Add column"
     }
   }
 }

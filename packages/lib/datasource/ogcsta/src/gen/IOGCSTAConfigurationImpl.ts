@@ -19,6 +19,8 @@
  */
 
 import type { EClass, EStructuralFeature } from '@emfts/core';
+import type { IBaseConnectionConfiguration } from 'org.eclipse.daanse.board.app.lib.datasource.base';
+import type { OGCSTALatestValues } from './OGCSTALatestValues.js';
 import { IBaseConnectionConfigurationImpl } from 'org.eclipse.daanse.board.app.lib.datasource.base';
 import type { IOGCSTAConfiguration } from './IOGCSTAConfiguration.js';
 import { OgcstaPackage } from './OgcstaPackage.js';
@@ -30,9 +32,11 @@ import { OgcstaPackage } from './OgcstaPackage.js';
 export class IOGCSTAConfigurationImpl extends IBaseConnectionConfigurationImpl implements IOGCSTAConfiguration {
   // Feature ID Constants (eLiterals)
   static readonly CONNECTION: number = 4;
+  static readonly LATEST_VALUES: number = 5;
 
   // Private fields
   private _connection?: string;
+  private _latestValues?: OGCSTALatestValues;
 
   /**
    * Returns the EClass of this object
@@ -66,6 +70,64 @@ export class IOGCSTAConfigurationImpl extends IBaseConnectionConfigurationImpl i
     }
   }
 
+  get latestValues(): OGCSTALatestValues {
+    return this._latestValues!;
+  }
+
+  set latestValues(value: OGCSTALatestValues) {
+    const oldValue = this._latestValues;
+    if (oldValue !== value) {
+      // containment: the owner becomes the container of the value (#61)
+      if (oldValue) {
+        (oldValue as any).eSetContainer?.(null, null);
+      }
+      if (value) {
+        this.removeFromPreviousContainer(value);
+        (value as any).eSetContainer?.(this, this.eClass().getEStructuralFeature('latestValues'));
+      }
+    }
+    this._latestValues = value;
+    if (this.eDeliver()) {
+      this.eNotify({
+        getNotifier: () => this,
+        getEventType: () => 1, // SET
+        getFeature: () => this.eClass().getEStructuralFeature(IOGCSTAConfigurationImpl.LATEST_VALUES),
+        getOldValue: () => oldValue,
+        getNewValue: () => value,
+        getPosition: () => -1,
+        wasSet: () => true,
+        isTouch: () => false,
+        isReset: () => false,
+        getFeatureID: () => IOGCSTAConfigurationImpl.LATEST_VALUES,
+        merge: () => false
+      });
+    }
+  }
+
+  /**
+   * Remove a value from its previous container before it is contained here,
+   * like Java EMF's eInverseRemove on the old container (#61)
+   */
+  private removeFromPreviousContainer(value: unknown): void {
+    const v = value as any;
+    const oldContainer = v?.eContainer?.();
+    if (!oldContainer || oldContainer === this) {
+      return;
+    }
+    const oldFeature = v.eContainmentFeature?.();
+    if (!oldFeature) {
+      return;
+    }
+    if (oldFeature.isMany()) {
+      const list = oldContainer.eGet(oldFeature);
+      if (list && typeof list.remove === 'function') {
+        list.remove(v);
+      }
+    } else {
+      oldContainer.eUnset(oldFeature);
+    }
+  }
+
   // Reflective API
 
   /**
@@ -76,6 +138,8 @@ export class IOGCSTAConfigurationImpl extends IBaseConnectionConfigurationImpl i
     switch (featureID) {
       case IOGCSTAConfigurationImpl.CONNECTION:
         return this.connection;
+      case IOGCSTAConfigurationImpl.LATEST_VALUES:
+        return this.latestValues;
       default:
         return super.eGet(feature);
     }
@@ -91,6 +155,10 @@ export class IOGCSTAConfigurationImpl extends IBaseConnectionConfigurationImpl i
         this.connection = newValue as string;
         super.eSet(feature, newValue);
         break;
+      case IOGCSTAConfigurationImpl.LATEST_VALUES:
+        this.latestValues = newValue as OGCSTALatestValues;
+        super.eSet(feature, newValue);
+        break;
       default:
         super.eSet(feature, newValue);
     }
@@ -104,6 +172,8 @@ export class IOGCSTAConfigurationImpl extends IBaseConnectionConfigurationImpl i
     switch (featureID) {
       case IOGCSTAConfigurationImpl.CONNECTION:
         return this._connection !== undefined;
+      case IOGCSTAConfigurationImpl.LATEST_VALUES:
+        return this._latestValues !== undefined;
       default:
         return super.eIsSet(feature);
     }
@@ -118,11 +188,14 @@ export class IOGCSTAConfigurationImpl extends IBaseConnectionConfigurationImpl i
       case IOGCSTAConfigurationImpl.CONNECTION:
         this._connection = undefined;
         return;
+      case IOGCSTAConfigurationImpl.LATEST_VALUES:
+        if (this._latestValues) (this._latestValues as any).eSetContainer?.(null, null);
+        this._latestValues = undefined;
+        return;
       default:
         super.eUnset(feature);
     }
   }
-
 
   /**
    * What this object is when it is stored.
@@ -134,6 +207,7 @@ export class IOGCSTAConfigurationImpl extends IBaseConnectionConfigurationImpl i
   toJSON(): Record<string, unknown> {
     return {
       connection: this.connection,
+      latestValues: this.latestValues,
     };
   }
 }

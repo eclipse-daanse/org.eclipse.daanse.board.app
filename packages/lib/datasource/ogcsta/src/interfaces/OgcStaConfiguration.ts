@@ -10,6 +10,7 @@
 */
 import { Datastream, Observation, Thing, Location } from '../client'
 import { IBaseConnectionConfiguration, type ConfigurationOf } from 'org.eclipse.daanse.board.app.lib.datasource.base'
+import type { LatestValuesView } from '../util/latestValues'
 
 export interface IOGCSTAHistoryConfig {
   enabled: boolean;
@@ -46,6 +47,8 @@ export interface IOGCSTAConfigartion extends ConfigurationOf<IBaseConnectionConf
   mqttConnection?: string;
   history?: IOGCSTAHistoryConfig;
   useCurrentLocationInsteadOfHistorical?: boolean; // If true, use already loaded current Locations instead of fetching HistoricalLocations
+  /** The latest values view, modelled as OGCSTALatestValues (#1264). */
+  latestValues?: LatestValuesView;
 }
 export abstract class DataTypeBase {}
 export interface IOGCSTAData {

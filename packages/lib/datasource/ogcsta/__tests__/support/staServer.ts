@@ -17,7 +17,8 @@
  *
  *   - `/Datastreams` lists only some datastreams (`hiddenFromCollection`);
  *     direct reads and navigation from a thing find all of them.
- *   - `/Observations` holds only the latest observation per datastream.
+ *   - `/Observations` holds only the latest observation per datastream,
+ *     and not of every datastream (`missingFromObservations`).
  *   - self and next links are written with http://.
  *
  * It answers through a connection, as the store sees one: `fetch({url})`
@@ -54,6 +55,8 @@ export interface StaFixture {
   observationPageSize?: number
   /** Answers 400 to `$expand=Datastreams/ObservedProperty`. */
   refuseDeepExpand?: boolean
+  /** Datastream ids whose observations `/Observations` leaves out; direct reads find them. */
+  missingFromObservations?: string[]
   /** Milliseconds before an answer, so parallel requests overlap. */
   delay?: number
 }
@@ -185,7 +188,8 @@ export function staServer(fixture: StaFixture, base: string = STA_BASE) {
     }
     if (path === 'Observations') {
       const ids = [...(q.get('$filter') ?? '').matchAll(/Datastream\/id eq '([^']*)'/g)].map((x) => x[1])
-      const rows = ids.flatMap((id) => {
+      const missing = new Set(fixture.missingFromObservations ?? [])
+      const rows = ids.filter((id) => !missing.has(id)).flatMap((id) => {
         const all = observationsOf(id).map((o) => ({ ...o, 'Datastream@iot.navigationLink': `http://sta.example/udp/rest/v1.1/Observations(x)/Datastream`, Datastream: undefined, '@iot.id': `${id}#${o.phenomenonTime}` , datastreamId: id }))
         return fixture.observationsCollectionIsHistory ? all : all.slice(0, 1)
       })

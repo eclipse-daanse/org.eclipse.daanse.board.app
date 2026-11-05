@@ -234,6 +234,37 @@ const hidden = computed<Set<string>>(() => {
 })
 
 const allColumns = computed<string[]>(() => Object.keys(rows.value[0] ?? {}))
+
+/*
+ * The colour a source gives a value (#1264): an answer may carry, beside
+ * its rows, a colour per column and shown value - an OGC STA source says
+ * so for a code it shows as a word. Said by value rather than by row, so
+ * sorting, paging and a selection keep the colours where they belong.
+ */
+const valueColors = computed<Record<string, Record<string, string>>>(() => data.value?.colors ?? {})
+
+const cellColorOf = (row: Record<string, unknown>, column: string): string | undefined => {
+    const value = row[column]
+    if (value === undefined || value === null) return undefined
+    return valueColors.value[column]?.[String(value)]
+}
+
+/* Dark text on a light colour, light text on a dark one; a colour that is
+  not written in hex keeps the table's text colour. */
+const textOn = (color: string): string | undefined => {
+    const hex = color.trim().match(/^#([0-9a-f]{3}|[0-9a-f]{6})$/i)?.[1]
+    if (!hex) return undefined
+    const full = hex.length === 3 ? hex.replace(/./g, (c) => c + c) : hex
+    const [r, g, b] = [0, 2, 4].map((i) => parseInt(full.slice(i, i + 2), 16))
+    return 0.299 * r + 0.587 * g + 0.114 * b > 150 ? '#1a1a1a' : '#ffffff'
+}
+
+const cellStyle = (row: Record<string, unknown>, column: string) => {
+    const color = cellColorOf(row, column)
+    if (!color) return undefined
+    const text = textOn(color)
+    return text ? { '--cell-color': color, '--cell-text': text } : { '--cell-color': color }
+}
 const columns = computed<string[]>(() => allColumns.value.filter((column) => !hidden.value.has(column)))
 
 /*
@@ -482,7 +513,12 @@ const lastShown = computed(() => Math.min((page.value + 1) * pageSize.value, ord
                         <td
                             v-for="column in columns"
                             :key="column"
-                            :class="{ marked_column: markedColumn === column, marked_cell: isMarkedCell(row, column) }"
+                            :class="{
+                                coloured: !!cellColorOf(row, column),
+                                marked_column: markedColumn === column,
+                                marked_cell: isMarkedCell(row, column),
+                            }"
+                            :style="cellStyle(row, column)"
                             @click="emitCellClick(row, column)"
                             @contextmenu.prevent="emitCellRightClick(row, column)"
                         >
@@ -591,6 +627,12 @@ const lastShown = computed(() => Math.min((page.value + 1) * pageSize.value, ord
 
 .table tbody tr:hover {
     background: var(--color-raised);
+}
+
+/* The colour of a value, as the source gave it. Before the marks, so a mark still shows. */
+.table td.coloured {
+    background: var(--cell-color);
+    color: var(--cell-text, inherit);
 }
 
 /*

@@ -82,3 +82,48 @@ describe.skipIf(!process.env.RUN_LIVE_TESTS)('OGCSTA Datasource Live API Integra
     }
   }, 10000);
 });
+
+/*
+ * #1264 against the server of the Bodenfeuchte board: twelve Reference
+ * Areas, among them ids with a slash, each with its state as a colour code.
+ */
+describe.skipIf(!process.env.RUN_LIVE_TESTS)('the latest values view against udp-broker', () => {
+  test('has a row per Reference Area, its state mapped to a word', async () => {
+    connectionRepository.registerConnectionType('rest-udp', { Connection: restConnectionFactorySymbol, Settings: null as any });
+    datasourceRepository.registerDatasourceType('ogcsta-udp', { Store: ogcStoreFactorySymbol, Preview: null as any, Settings: null as any });
+    connectionRepository.registerConnection('udp-conn', 'rest-udp', {
+      url: 'https://udp-broker.nomad-dmz.jena.de/udp/rest/',
+      uid: 'udp-conn',
+      type: 'rest-udp',
+      name: 'udp-broker',
+    });
+    const states = ['feucht', 'optimal', 'leichter Trockenstress', 'Trockenstress'];
+    datasourceRepository.registerDatasource('udp-ds', 'ogcsta-udp', {
+      connection: 'udp-conn',
+      uid: 'udp-ds',
+      type: 'ogcsta-udp',
+      name: 'Reference Areas',
+      latestValues: {
+        thingNames: ['Reference Area*'],
+        nameColumn: '',
+        columns: [
+          { suffix: '~referenceArea~name', label: 'Fläche' },
+          {
+            suffix: '~referenceArea~color',
+            label: 'Zustand',
+            mappings: ['BLUE', 'GREEN', 'YELLOW', 'RED'].map((code, i) => ({ code, label: states[i] })),
+          },
+          { suffix: '~referenceArea~sensorCount', label: 'Sensoren' },
+          { suffix: '~referenceArea~color', label: 'Stand', part: 'phenomenonTime' },
+        ],
+      },
+    } as any);
+
+    const store = datasourceRepository.getDatasource('udp-ds') as OgcStaStore;
+    const table = await store.getData<any>('DataTable');
+
+    expect(table.items).toHaveLength(12);
+    expect(table.items.every((r: any) => states.includes(r.Zustand))).toBe(true);
+    expect(table.items.some((r: any) => String(r['Fläche']).includes('/'))).toBe(true);
+  }, 120000);
+});

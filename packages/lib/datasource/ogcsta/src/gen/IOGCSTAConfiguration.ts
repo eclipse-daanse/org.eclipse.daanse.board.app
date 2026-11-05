@@ -18,7 +18,9 @@
  * @generated
  */
 
+import type { EObject, BasicEObject, EClass, EStructuralFeature } from '@emfts/core';
 import type { IBaseConnectionConfiguration } from 'org.eclipse.daanse.board.app.lib.datasource.base';
+import type { OGCSTALatestValues } from './OGCSTALatestValues.js';
 
 /**
  * IOGCSTAConfiguration
@@ -26,5 +28,6 @@ import type { IBaseConnectionConfiguration } from 'org.eclipse.daanse.board.app.
  */
 export interface IOGCSTAConfiguration extends IBaseConnectionConfiguration {
   connection?: string;
+  latestValues?: OGCSTALatestValues;
 
 }

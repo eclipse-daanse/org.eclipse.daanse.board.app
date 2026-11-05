@@ -39,6 +39,14 @@ import { VARIABLE_REPOSITORY, type VariableRepository,
 import { type IRequestParams } from 'org.eclipse.daanse.board.app.lib.connection.base'
 import { transformFromThingLocationDastreamToLocationThingDatastream } from '../util/transformThings'
 import { CatalogueIndexCache } from '../util/idIndex'
+import {
+  buildLatestValuesTable,
+  columnsOf,
+  datastreamIdOf,
+  thingFilterOfNames,
+  type LatestObservation,
+  type LatestValuesTable,
+} from '../util/latestValues'
 import { FILTER, FILTERRESET, NOACTION, UPDATE_MQTT_SUBSCRIPTIONS, MQTT_UNSUBSCRIBE_ALL } from '../interfaces/Constances'
 import { OgcStaStoreI } from '../interface/OgcStaI'
 import { BaseDatasource, type ConfigurationOf } from 'org.eclipse.daanse.board.app.lib.datasource.base'
@@ -265,6 +273,12 @@ export class OgcStaStore extends BaseDatasource implements OgcStaStoreI {
   }
 
   async getData<T>(type: string, options?: any): Promise<T> {
+    // A table of a source with a latest values view gets the view, and
+    // nothing of the catalogue is loaded for it (#1264).
+    if (type === 'DataTable' && columnsOf(this.configuration?.latestValues).length) {
+      return (await this.loadLatestValuesTable()) as T
+    }
+
     // Use pendingRequestFlag if available (set when different filter types interleave)
     const effectiveRequestFlag = this.pendingRequestFlag || this.requestFlag;
     this.pendingRequestFlag = null; // Clear after use
@@ -979,6 +993,56 @@ export class OgcStaStore extends BaseDatasource implements OgcStaStoreI {
     const missing = unique.filter((id) => !found.has(id))
     const single = await Promise.all(missing.map((id) => perDatastream(id)))
     return [...found.values(), ...single.flat()]
+  }
+
+  /**
+   * The latest values view (#1264): the things its name patterns match, as
+   * `Things?$filter=…&$select=@iot.id,name` (`/Things` is complete), and
+   * the latest observation of each datastream a column names, by id - the
+   * thing id followed by the column's suffix. The observations come as in
+   * loadLatest: in batches where the server allows it, and each one the
+   * batch misses directly from `Datastreams('id')/Observations`, the only
+   * request that finds every datastream on this server (#1250). An id with
+   * a slash in it is encoded in the path by the client.
+   */
+  async loadLatestValuesTable(): Promise<LatestValuesTable> {
+    const view = this.configuration?.latestValues ?? {}
+    const filter = thingFilterOfNames(view.thingNames)
+    if (!filter) return buildLatestValuesTable(view, [], new Map())
+    try {
+      this.baseConfigration = this.api()
+      const first = await new ThingsApi(this.baseConfigration).v11ThingsGet({ $filter: filter, $select: '@iot.id,name' })
+      const things = (await this.followNextLinks(first, ThingFromJSON))
+        .map((t) => ({ id: String(t.iotId), name: t.name ?? String(t.iotId) }))
+
+      const columns = columnsOf(view)
+      const ids = things.flatMap((thing) => columns.map((column) => datastreamIdOf(thing.id, column)))
+      const api = new DatastreamsApi(this.baseConfigration)
+      const perDatastream = async (datastreamId: string) => {
+        try {
+          const data = await api.v11DatastreamsEntityIdObservationsGet({
+            entityId: datastreamId,
+            $top: 1,
+            $orderby: 'phenomenonTime desc',
+          })
+          return ((data.value ?? []) as (Observation & { ds_source?: string })[])
+            .map((o) => ({ ...o, ds_source: datastreamId }))
+        } catch (e) {
+          // A thing without this datastream has no value in its column.
+          this.logData('Latest observation failed for', datastreamId, e)
+          return []
+        }
+      }
+      const latest = new Map<string, LatestObservation>()
+      for (const observation of await this.loadLatest(ids, perDatastream)) {
+        const id = String(observation.ds_source)
+        if (!latest.has(id)) latest.set(id, observation)
+      }
+      return buildLatestValuesTable(view, things, latest)
+    } catch (e) {
+      this.logData('Latest values view failed', e)
+      return buildLatestValuesTable(view, [], new Map())
+    }
   }
 
   getDataStreams(listOfPromesis: Promise<IOGCSTAData>[]) {
