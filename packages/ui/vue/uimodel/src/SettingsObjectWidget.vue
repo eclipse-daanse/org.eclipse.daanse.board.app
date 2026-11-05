@@ -29,11 +29,10 @@ Contributors:
 import { computed, inject, unref, watch } from 'vue'
 import type { EClass, EObject, EStructuralFeature } from '@emfts/core'
 import { UIModelComposer, TRANSLATOR_KEY } from '@emfts/uimodel-composer'
-import { ensureWrappers } from './adopt'
 import { formFor, labelOf } from './buildForm'
 import { formForClass } from './loadUIModel'
 import { useLabel } from './useLabel'
-import { useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+import { ensureWrappers, useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 
 const props = defineProps<{
   eObject?: EObject

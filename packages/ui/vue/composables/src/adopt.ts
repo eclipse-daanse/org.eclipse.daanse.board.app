@@ -24,7 +24,7 @@
  * claims to have, and the values that were stored.
  */
 import type { EClass, EObject, EReference } from '@emfts/core'
-import { VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+import { VariableWrapper } from 'org.eclipse.daanse.board.app.lib.variables'
 
 /** The class every settings value goes through. */
 const WRAPPER_CLASS = 'VariableWrapper'
@@ -122,6 +122,21 @@ function instanceFor(reference: EReference): EObject | undefined {
   }
 }
 
+/**
+ * Whether the feature of this name holds many values without containing
+ * them - a list of strings or numbers, such as a map's centre.
+ */
+function manyValuedAttribute(instance: EObject, name: string): boolean {
+  try {
+    const feature = instance.eClass()?.getEStructuralFeature?.(name) as
+      | { isMany?: () => boolean; isContainment?: () => boolean }
+      | undefined
+    return !!feature?.isMany?.() && typeof feature.isContainment !== 'function'
+  } catch {
+    return false
+  }
+}
+
 /** Whether this reference holds many, rather than one. */
 function holdsMany(reference: EReference): boolean {
   try {
@@ -139,6 +154,8 @@ function holdsMany(reference: EReference): boolean {
  */
 function rebuild(reference: EReference, stored: unknown): unknown {
   if (!stored || typeof stored !== 'object') return stored
+  /* Already one of the model's own: rebuilding it would cut its identity */
+  if (isModelled(stored)) return stored
   const made = instanceFor(reference)
   return made ? adopt(made, stored) : stored
 }
@@ -194,6 +211,22 @@ export function adopt<T extends EObject>(instance: T, stored: unknown): T {
       try {
         const list = target[name] as { push: (each: unknown) => unknown }
         for (const each of value) list.push(rebuild(containment, each))
+      } catch {
+        // No list to fill - nothing sensible to put the values in
+      }
+      continue
+    }
+
+    /*
+     * A many-valued attribute has the same getter and no setter, so its
+     * values go into its list as well - the assignment below dropped a
+     * stored centre without a word.
+     */
+    if (!containment && Array.isArray(value) && manyValuedAttribute(instance, name)) {
+      try {
+        const list = target[name] as { clear: () => void; push: (each: unknown) => unknown }
+        list.clear()
+        for (const each of value) list.push(each)
       } catch {
         // No list to fill - nothing sensible to put the values in
       }

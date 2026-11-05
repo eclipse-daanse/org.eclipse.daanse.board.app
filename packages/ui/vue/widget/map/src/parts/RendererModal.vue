@@ -8,8 +8,11 @@ SPDX-License-Identifier: EPL-2.0
 Contributors: Smart City Jena
 -->
 <script lang="ts" setup>
-import { computed, type ModelRef, reactive, ref, toRefs, watch } from 'vue'
+import { computed, reactive, ref, toRefs, watch, type ModelRef } from 'vue'
+import type { EList } from '@emfts/core'
 import { IconSettingsImpl } from '../gen/IconSettingsImpl'
+import { MapSettingsFactory } from '../gen/MapSettingsFactory'
+import { modelled } from '../settingsModel'
 
 
 import { v4 } from 'uuid'
@@ -43,14 +46,19 @@ import { useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 const { t } = useTranslation('map')
 
 
-const model: ModelRef<(IDSRenderer | IRenderer)[]> = defineModel<(IDSRenderer | IRenderer)[]>({
+/*
+ * The style list of the settings, which is an EList (#1262) - typed as the
+ * array it is used like, and declared as an object too, so that Vue's
+ * prop check takes it.
+ */
+const model = defineModel<(IDSRenderer | IRenderer)[] | EList<IDSRenderer | IRenderer>>({
   default:
     () => {
       return (
         reactive([]
         ) as (IDSRenderer | IRenderer)[])
     }
-})
+}) as unknown as ModelRef<(IDSRenderer | IRenderer)[]>
 
 const showModal = defineModel<boolean>('show', { default: () => false })
 
@@ -125,9 +133,15 @@ const cancelDelete = () => {
   affectedLayers.value = []
 }
 
+/*
+ * Built as the model's objects: the style lists are containment lists of
+ * the adopted settings, and take nothing else (#1262).
+ */
+const factory = MapSettingsFactory.eINSTANCE
+
 const addStyle = () => {
   if (layerModel.value?.type == 'OGCSTA') {
-    model.value.push({
+    model.value.push(modelled(() => factory.createRenderer(), {
       name: t('Renderer.newStyle'),
       thing: [
         {
@@ -166,9 +180,9 @@ const addStyle = () => {
       },
       ds_renderer: [],
       id: v4()
-    } as IRenderer)
+    }) as unknown as IRenderer)
   } else {
-    model.value.push({
+    model.value.push(modelled(() => factory.createDSRenderer(), {
       name: t('Renderer.newStyle'),
       datastream: [
         {
@@ -207,12 +221,12 @@ const addStyle = () => {
         }
       },
       id: v4()
-    } as IDSRenderer)
+    }) as unknown as IDSRenderer)
   }
 
 }
 const addDSStyle = () => {
-  selection.value.ds_renderer.push({
+  selection.value.ds_renderer.push(modelled(() => factory.createDSRenderer(), {
     name: t('Renderer.newDatastreamStyle'),
     datastream: [
       {
@@ -251,7 +265,7 @@ const addDSStyle = () => {
     },
     observations: [],
     id: v4()
-  })
+  }))
 }
 
 const promptAddObservation = (dsRenderer: any) => {
@@ -310,7 +324,7 @@ const addObservationRenderer = (componentId: string) => {
     observationParentRenderer.value.observations = []
   }
 
-  observationParentRenderer.value.observations.push(newObservation)
+  observationParentRenderer.value.observations.push(modelled(() => factory.createObservation(), newObservation))
 
   showObservationTypeDialog.value = false
   observationParentRenderer.value = null

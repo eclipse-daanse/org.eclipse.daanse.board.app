@@ -37,5 +37,7 @@ export interface Layer extends EObject {
   geoJson?: unknown;
   wfs_service?: unknown;
   opacity?: number;
+  id?: string;
+  checked?: boolean;
 
 }
