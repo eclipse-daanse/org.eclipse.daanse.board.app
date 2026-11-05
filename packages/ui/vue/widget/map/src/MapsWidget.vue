@@ -15,6 +15,7 @@ import 'leaflet/dist/leaflet.css'
 
 import { LMap, LWmsTileLayer, LTileLayer, LGeoJson, LMarker, LIcon } from '@vue-leaflet/vue-leaflet'
 import { useComparator } from './composables/comparator'
+import { thingFilterOf } from './composables/thingScope'
 import { useUtils } from './composables/utils'
 import { type BoxedDatastream } from 'org.eclipse.daanse.board.app.lib.datasource.ogcsta'
 import L, { PointExpression } from 'leaflet'
@@ -246,6 +247,53 @@ const datasourceType = computed(() => {
 
 /* Which shape to ask for, by the kind of source - see ./dataTypes. */
 const dataType = computed(() => dataTypeFor(datasourceType.value))
+
+/*
+ * Each OGC STA source learns which things this map shows, before it loads
+ * anything: the thing rules as a filter on /Things. A source then loads
+ * those things instead of its whole catalogue (#1250). A rule without a
+ * server form gives null, and that source loads everything, as before.
+ */
+const scopeRepository = inject<DatasourceRepository>(identifier)
+const scopeKey = computed(() => `map:${widgetId.value}`)
+let scopedSources = new Set<string>()
+const applyThingScope = () => {
+  if (!scopeRepository) return
+  const filter = thingFilterOf(asArray(config.value?.OGCSstyles) as any)
+  const ids = new Set<string>([
+    datasourceId.value,
+    ...(config.value?.datasourceIds ?? []),
+    ...(config.value?.layers ?? []).map((layer: any) => layer.datasourceId),
+  ].filter((id): id is string => !!id))
+  const scoped = (id: string) => {
+    try {
+      const source = scopeRepository.getDatasource(id) as unknown as { setThingScope?: (key: string, filter: string | null | undefined) => void }
+      return typeof source?.setThingScope === 'function' ? source : undefined
+    } catch {
+      return undefined
+    }
+  }
+  for (const id of scopedSources) {
+    if (!ids.has(id)) scoped(id)?.setThingScope!(scopeKey.value, undefined)
+  }
+  for (const id of ids) scoped(id)?.setThingScope!(scopeKey.value, filter)
+  scopedSources = ids
+}
+applyThingScope()
+watch(
+  () => [datasourceId.value, config.value?.OGCSstyles, config.value?.layers, config.value?.datasourceIds],
+  applyThingScope,
+  { deep: true },
+)
+onUnmounted(() => {
+  const leaving = new Set(scopedSources)
+  scopedSources = new Set()
+  for (const id of leaving) {
+    try {
+      ;(scopeRepository?.getDatasource(id) as any)?.setThingScope?.(scopeKey.value, undefined)
+    } catch { /* source already removed */ }
+  }
+})
 
 const { update, callEvent } = useDatasourceRepository(datasourceId, dataType.value as any, data)
 
