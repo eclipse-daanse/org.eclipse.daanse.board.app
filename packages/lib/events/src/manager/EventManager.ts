@@ -304,6 +304,21 @@ export class EventManager {
   private async executeAction(action: ActionDefinition, payload: any, ruleId?: string): Promise<void> {
     const args = this.buildActionArgs(action, payload, ruleId);
 
+    /*
+     * A target a provider names is carried out by that provider. Nothing
+     * registers providers for the widget, page or system contexts, so the
+     * rules stored for those keep taking the path below.
+     */
+    if (action.targetContextId && this.actionsRegistry.hasProvidedTarget?.(action.targetContext, action.targetContextId)) {
+      await this.actionsRegistry.executeProvidedAction(action.targetContext, action.targetContextId, action.actionName, args);
+      return;
+    }
+    /* A provided target is never an instance: one nobody provides is not run. */
+    if (action.targetContext === 'datasource') {
+      console.warn(`No action provider for "${action.targetContextId ?? ''}"; "${action.actionName}" was not run.`);
+      return;
+    }
+
     if (!action.targetContextId) {
       // Wenn keine targetContextId angegeben ist, führe auf allen Instanzen aus
       log('No targetContextId specified, executing action on all instances');
