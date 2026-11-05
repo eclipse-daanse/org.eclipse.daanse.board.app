@@ -29,10 +29,10 @@ import {
   parseWorkspace,
   useWorkspaceFile,
   useWorkspaceOrigin,
-} from '@/composables/useWorkspaceFile'
-import { summarizePage, type PageSummary } from '@/composables/pageSummary'
-import { useUnsavedChanges } from '@/composables/unsavedChanges'
-import { useLastOpenedState } from '@/composables/useLastOpenedState'
+} from '../../composables/useWorkspaceFile'
+import { summarizePage, type PageSummary } from '../../composables/pageSummary'
+import { useUnsavedChanges } from '../../composables/unsavedChanges'
+import { useLastOpenedState } from '../../composables/useLastOpenedState'
 import {
   identifier as WORKSPACE,
   type Workspace,
@@ -126,6 +126,39 @@ function viewFor(place: Repository | undefined) {
 }
 
 const placeView = computed(() => viewFor(selectedPlace.value))
+
+/*
+ * What a place view is handed and what it hands back - the contract of the
+ * load/save modal it was written for. `state` is what it stores; it is
+ * serialised when read, at the moment of storing, not on every render.
+ *
+ * A place view renders all of its controls inside itself. The modal had a
+ * footer the views teleported into; this view has none, and must not need
+ * one (#1247).
+ */
+const placeContext = {
+  context: 'SAVE',
+  get state() {
+    return save()
+  },
+}
+
+/** A place view closes with the data it read, or with nothing after storing. */
+async function placeViewClosed(data?: unknown, entry?: Entity) {
+  const place = selectedPlace.value
+  if (data === undefined || data === null) {
+    if (place) await readEntries(place)
+    return
+  }
+  failure.value = ''
+  try {
+    const ids = load(data)
+    if (entry) remember(entry, label(entry))
+    emit('restored', ids)
+  } catch (error) {
+    failure.value = t('Storage.failure.load', { reason: reason(error) })
+  }
+}
 
 /* ------------------------------------------------------------------ tree */
 
@@ -281,6 +314,32 @@ function selectEntry(place: Repository, entry: Entity) {
   selectedEntry.value = entry
   creating.value = false
   failure.value = ''
+  if (!isRead(entry)) readEntry(place, entry)
+}
+
+/*
+ * Some places list their entries without reading them - git fetches a
+ * file's content only when asked for that file. Such an entry is read when
+ * it is selected, so the right side can show what it holds.
+ */
+const reading = ref(false)
+
+function isRead(entry: Entity): boolean {
+  return entry.data !== undefined && entry.data !== null
+}
+
+async function readEntry(place: Repository, entry: Entity) {
+  reading.value = true
+  try {
+    const stored = await place.getEntityByUri(entry.uri as unknown as URL)
+    if (stored && isRead(stored)) entry.data = stored.data
+  } catch (error) {
+    if (selectedEntry.value === entry) {
+      failure.value = t('Storage.failure.read', { reason: reason(error) })
+    }
+  } finally {
+    reading.value = false
+  }
 }
 
 function isOpen(entry: Entity): boolean {
@@ -333,6 +392,8 @@ const totals = computed(() => ({
 
 /** Short summary for a tree row, so the tree says what is inside each state. */
 function entrySummary(entry: Entity): string {
+  /* Not read yet is not empty - say nothing until it is known (#1247). */
+  if (!isRead(entry)) return ''
   const list = boardsIn(entry)
   if (list.length > 0) {
     /* Pages, not boards: a stored state holds one board, and what is
@@ -562,8 +623,8 @@ watch(() => repoManager, loadPlaces)
         :is="placeView"
         v-else-if="placeView && !selectedEntry"
         :repo="selectedPlace"
-        :context="entriesByPlace[key(selectedPlace!)]"
-        @close="readEntries(selectedPlace as Repository)"
+        :context="placeContext"
+        @close="placeViewClosed"
       />
 
       <template v-else-if="selectedEntry">
@@ -609,6 +670,9 @@ watch(() => repoManager, loadPlaces)
             </div>
           </article>
         </div>
+        <p v-else-if="reading && !isRead(selectedEntry)" class="detail__hint">
+          {{ t('Storage.reading') }}
+        </p>
         <!-- No pages, but what is here is worth naming: this is the state
           one explores its connections from. -->
         <p v-else class="detail__hint">
