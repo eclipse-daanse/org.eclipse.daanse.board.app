@@ -100,6 +100,13 @@ export interface WidgetConfig {
 export const WIDGET_EDIT_MODE = Symbol.for('daanse.widget.editMode')
 
 /**
+ * The attribute the wrapper puts on its root element when its widget is
+ * frameless. Whoever measures the widgets on a page reads it there: the
+ * weather passes such a widget by, as nothing is seen of it (#1242).
+ */
+export const FRAMELESS_ATTRIBUTE = 'data-frameless'
+
+/**
  * What a widget bundle offers as a service: its type key plus the
  * configuration the palette and the wrapper consume.
  */
