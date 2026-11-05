@@ -31,22 +31,18 @@ import { LampwidgetPackage } from './LampwidgetPackage.js';
 export class LampSettingsImpl extends BasicEObject implements LampSettings {
   // Feature ID Constants (eLiterals)
   static readonly ON: number = 0;
-  static readonly FIXTURE: number = 1;
-  static readonly BRIGHTNESS: number = 2;
-  static readonly COLOR: number = 3;
-  static readonly COLOR_TEMPERATURE: number = 4;
-  static readonly RADIUS: number = 5;
-  static readonly LIGHT_SHAPE: number = 6;
-  static readonly DIRECTION: number = 7;
-  static readonly ANGLE: number = 8;
-  static readonly ORIGIN_X: number = 9;
-  static readonly ORIGIN_Y: number = 10;
-  static readonly LIGHTS_WIDGETS: number = 11;
-  static readonly STATE_FIELD: number = 12;
+  static readonly BRIGHTNESS: number = 1;
+  static readonly COLOR: number = 2;
+  static readonly COLOR_TEMPERATURE: number = 3;
+  static readonly RADIUS: number = 4;
+  static readonly LIGHT_SHAPE: number = 5;
+  static readonly DIRECTION: number = 6;
+  static readonly ANGLE: number = 7;
+  static readonly LIGHTS_WIDGETS: number = 8;
+  static readonly STATE_FIELD: number = 9;
 
   // Private fields
   private _on: VariableWrapper<string> = new VariableWrapper<string>();
-  private _fixture: VariableWrapper<string> = new VariableWrapper<string>();
   private _brightness: VariableWrapper<string> = new VariableWrapper<string>();
   private _color: VariableWrapper<string> = new VariableWrapper<string>();
   private _colorTemperature: VariableWrapper<string> = new VariableWrapper<string>();
@@ -54,8 +50,6 @@ export class LampSettingsImpl extends BasicEObject implements LampSettings {
   private _lightShape: VariableWrapper<string> = new VariableWrapper<string>();
   private _direction: VariableWrapper<string> = new VariableWrapper<string>();
   private _angle: VariableWrapper<string> = new VariableWrapper<string>();
-  private _originX: VariableWrapper<string> = new VariableWrapper<string>();
-  private _originY: VariableWrapper<string> = new VariableWrapper<string>();
   private _lightsWidgets: VariableWrapper<string> = new VariableWrapper<string>();
   private _stateField: VariableWrapper<string> = new VariableWrapper<string>();
 
@@ -86,30 +80,6 @@ export class LampSettingsImpl extends BasicEObject implements LampSettings {
         isTouch: () => false,
         isReset: () => false,
         getFeatureID: () => LampSettingsImpl.ON,
-        merge: () => false
-      });
-    }
-  }
-
-  get fixture(): VariableWrapper<string> {
-    return this._fixture!;
-  }
-
-  set fixture(value: VariableWrapper<string>) {
-    const oldValue = this._fixture;
-    this._fixture = value;
-    if (this.eDeliver()) {
-      this.eNotify({
-        getNotifier: () => this,
-        getEventType: () => 1, // SET
-        getFeature: () => this.eClass().getEStructuralFeature(LampSettingsImpl.FIXTURE),
-        getOldValue: () => oldValue,
-        getNewValue: () => value,
-        getPosition: () => -1,
-        wasSet: () => true,
-        isTouch: () => false,
-        isReset: () => false,
-        getFeatureID: () => LampSettingsImpl.FIXTURE,
         merge: () => false
       });
     }
@@ -283,54 +253,6 @@ export class LampSettingsImpl extends BasicEObject implements LampSettings {
     }
   }
 
-  get originX(): VariableWrapper<string> {
-    return this._originX!;
-  }
-
-  set originX(value: VariableWrapper<string>) {
-    const oldValue = this._originX;
-    this._originX = value;
-    if (this.eDeliver()) {
-      this.eNotify({
-        getNotifier: () => this,
-        getEventType: () => 1, // SET
-        getFeature: () => this.eClass().getEStructuralFeature(LampSettingsImpl.ORIGIN_X),
-        getOldValue: () => oldValue,
-        getNewValue: () => value,
-        getPosition: () => -1,
-        wasSet: () => true,
-        isTouch: () => false,
-        isReset: () => false,
-        getFeatureID: () => LampSettingsImpl.ORIGIN_X,
-        merge: () => false
-      });
-    }
-  }
-
-  get originY(): VariableWrapper<string> {
-    return this._originY!;
-  }
-
-  set originY(value: VariableWrapper<string>) {
-    const oldValue = this._originY;
-    this._originY = value;
-    if (this.eDeliver()) {
-      this.eNotify({
-        getNotifier: () => this,
-        getEventType: () => 1, // SET
-        getFeature: () => this.eClass().getEStructuralFeature(LampSettingsImpl.ORIGIN_Y),
-        getOldValue: () => oldValue,
-        getNewValue: () => value,
-        getPosition: () => -1,
-        wasSet: () => true,
-        isTouch: () => false,
-        isReset: () => false,
-        getFeatureID: () => LampSettingsImpl.ORIGIN_Y,
-        merge: () => false
-      });
-    }
-  }
-
   get lightsWidgets(): VariableWrapper<string> {
     return this._lightsWidgets!;
   }
@@ -389,8 +311,6 @@ export class LampSettingsImpl extends BasicEObject implements LampSettings {
     switch (featureID) {
       case LampSettingsImpl.ON:
         return this.on;
-      case LampSettingsImpl.FIXTURE:
-        return this.fixture;
       case LampSettingsImpl.BRIGHTNESS:
         return this.brightness;
       case LampSettingsImpl.COLOR:
@@ -405,10 +325,6 @@ export class LampSettingsImpl extends BasicEObject implements LampSettings {
         return this.direction;
       case LampSettingsImpl.ANGLE:
         return this.angle;
-      case LampSettingsImpl.ORIGIN_X:
-        return this.originX;
-      case LampSettingsImpl.ORIGIN_Y:
-        return this.originY;
       case LampSettingsImpl.LIGHTS_WIDGETS:
         return this.lightsWidgets;
       case LampSettingsImpl.STATE_FIELD:
@@ -426,10 +342,6 @@ export class LampSettingsImpl extends BasicEObject implements LampSettings {
     switch (featureID) {
       case LampSettingsImpl.ON:
         this.on = newValue as VariableWrapper<string>;
-        super.eSet(feature, newValue);
-        break;
-      case LampSettingsImpl.FIXTURE:
-        this.fixture = newValue as VariableWrapper<string>;
         super.eSet(feature, newValue);
         break;
       case LampSettingsImpl.BRIGHTNESS:
@@ -460,14 +372,6 @@ export class LampSettingsImpl extends BasicEObject implements LampSettings {
         this.angle = newValue as VariableWrapper<string>;
         super.eSet(feature, newValue);
         break;
-      case LampSettingsImpl.ORIGIN_X:
-        this.originX = newValue as VariableWrapper<string>;
-        super.eSet(feature, newValue);
-        break;
-      case LampSettingsImpl.ORIGIN_Y:
-        this.originY = newValue as VariableWrapper<string>;
-        super.eSet(feature, newValue);
-        break;
       case LampSettingsImpl.LIGHTS_WIDGETS:
         this.lightsWidgets = newValue as VariableWrapper<string>;
         super.eSet(feature, newValue);
@@ -489,8 +393,6 @@ export class LampSettingsImpl extends BasicEObject implements LampSettings {
     switch (featureID) {
       case LampSettingsImpl.ON:
         return this._on !== new VariableWrapper<string>();
-      case LampSettingsImpl.FIXTURE:
-        return this._fixture !== new VariableWrapper<string>();
       case LampSettingsImpl.BRIGHTNESS:
         return this._brightness !== new VariableWrapper<string>();
       case LampSettingsImpl.COLOR:
@@ -505,10 +407,6 @@ export class LampSettingsImpl extends BasicEObject implements LampSettings {
         return this._direction !== new VariableWrapper<string>();
       case LampSettingsImpl.ANGLE:
         return this._angle !== new VariableWrapper<string>();
-      case LampSettingsImpl.ORIGIN_X:
-        return this._originX !== new VariableWrapper<string>();
-      case LampSettingsImpl.ORIGIN_Y:
-        return this._originY !== new VariableWrapper<string>();
       case LampSettingsImpl.LIGHTS_WIDGETS:
         return this._lightsWidgets !== new VariableWrapper<string>();
       case LampSettingsImpl.STATE_FIELD:
@@ -526,9 +424,6 @@ export class LampSettingsImpl extends BasicEObject implements LampSettings {
     switch (featureID) {
       case LampSettingsImpl.ON:
         this._on = new VariableWrapper<string>();
-        return;
-      case LampSettingsImpl.FIXTURE:
-        this._fixture = new VariableWrapper<string>();
         return;
       case LampSettingsImpl.BRIGHTNESS:
         this._brightness = new VariableWrapper<string>();
@@ -550,12 +445,6 @@ export class LampSettingsImpl extends BasicEObject implements LampSettings {
         return;
       case LampSettingsImpl.ANGLE:
         this._angle = new VariableWrapper<string>();
-        return;
-      case LampSettingsImpl.ORIGIN_X:
-        this._originX = new VariableWrapper<string>();
-        return;
-      case LampSettingsImpl.ORIGIN_Y:
-        this._originY = new VariableWrapper<string>();
         return;
       case LampSettingsImpl.LIGHTS_WIDGETS:
         this._lightsWidgets = new VariableWrapper<string>();
@@ -579,7 +468,6 @@ export class LampSettingsImpl extends BasicEObject implements LampSettings {
   toJSON(): Record<string, unknown> {
     return {
       on: this.on,
-      fixture: this.fixture,
       brightness: this.brightness,
       color: this.color,
       colorTemperature: this.colorTemperature,
@@ -587,8 +475,6 @@ export class LampSettingsImpl extends BasicEObject implements LampSettings {
       lightShape: this.lightShape,
       direction: this.direction,
       angle: this.angle,
-      originX: this.originX,
-      originY: this.originY,
       lightsWidgets: this.lightsWidgets,
       stateField: this.stateField,
     };
