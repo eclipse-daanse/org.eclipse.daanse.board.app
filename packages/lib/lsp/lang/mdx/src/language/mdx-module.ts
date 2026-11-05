@@ -35,6 +35,7 @@ import {
 } from './generated/module.js'
 import { MdxCodeActionProvider } from './mdx-code-actions.js'
 import { MdxCompletionProvider } from './mdx-completion-provider.js'
+import { MdxDefinitionProvider } from './mdx-definition.js'
 import { MdxFormatter } from './mdx-formatter.js'
 import {
   createMdxParser,
@@ -83,6 +84,7 @@ export const MdxModule: Module<
   lsp: {
     DocumentSymbolProvider: services => new MdxDocumentSymbolProvider(services),
     CompletionProvider: services => new MdxCompletionProvider(services),
+    DefinitionProvider: services => new MdxDefinitionProvider(services),
     Formatter: () => new MdxFormatter(),
     CodeActionProvider: () => new MdxCodeActionProvider(),
   },
