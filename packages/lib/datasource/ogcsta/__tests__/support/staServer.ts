@@ -50,6 +50,8 @@ export interface StaFixture {
   pageSize?: number
   /** `/Observations` answers with every observation, not only the latest. */
   observationsCollectionIsHistory?: boolean
+  /** Page size of `Datastreams(id)/Observations`, with an http:// next link. */
+  observationPageSize?: number
   /** Answers 400 to `$expand=Datastreams/ObservedProperty`. */
   refuseDeepExpand?: boolean
   /** Milliseconds before an answer, so parallel requests overlap. */
@@ -133,7 +135,17 @@ export function staServer(fixture: StaFixture, base: string = STA_BASE) {
       if (q.get('$orderby') === 'phenomenonTime asc') rows = [...rows].reverse()
       const top = q.get('$top')
       if (top) rows = rows.slice(0, Number(top))
-      return { value: rows.map((r) => (select ? project(r, select, []) : r)) }
+      const size = top ? Infinity : fixture.observationPageSize ?? Infinity
+      const skip = Number(q.get('$skip') ?? 0)
+      const result: Record<string, unknown> = {
+        value: rows.slice(skip, skip + size).map((r) => (select ? project(r, select, []) : r)),
+      }
+      if (skip + size < rows.length) {
+        const next = new URLSearchParams(q)
+        next.set('$skip', String(skip + size))
+        result['@iot.nextLink'] = `${base.replace('https://', 'http://')}v1.1/${path}?${next}`
+      }
+      return result
     }
     if ((m = path.match(/^Datastreams\((.+?)\)$/))) {
       const hit = datastreams.get(quote(decodeURIComponent(m[1])))
@@ -167,7 +179,7 @@ export function staServer(fixture: StaFixture, base: string = STA_BASE) {
       if (skip + pageSize < rows.length) {
         const next = new URLSearchParams(q)
         next.set('$skip', String(skip + pageSize))
-        result['@iot.nextLink'] = `${STA_BASE.replace('https://', 'http://')}v1.1/Things?${next}`
+        result['@iot.nextLink'] = `${base.replace('https://', 'http://')}v1.1/Things?${next}`
       }
       return result
     }
