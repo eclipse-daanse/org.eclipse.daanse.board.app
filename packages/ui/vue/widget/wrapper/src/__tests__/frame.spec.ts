@@ -14,7 +14,7 @@
 // @vitest-environment jsdom
 import { describe, expect, it, vi } from 'vitest'
 import { defineComponent, h, inject } from 'vue'
-import { WIDGET_EDIT_MODE } from 'org.eclipse.daanse.board.app.lib.api.widget'
+import { FRAMELESS_ATTRIBUTE, WIDGET_EDIT_MODE } from 'org.eclipse.daanse.board.app.lib.api.widget'
 import { flushPromises, mount } from '@vue/test-utils'
 import { identifier as WIDGET_REPOSITORY } from 'org.eclipse.daanse.board.app.lib.repository.widget'
 import { WorkspaceFactory, type Widget } from 'org.eclipse.daanse.board.app.lib.model.workspace'
@@ -146,6 +146,7 @@ describe('a frameless widget', () => {
     const container = wrapper.find('.wrapper-container')
     expect(container.classes()).toContain('wrapper-container--frameless')
     expect(container.classes()).toContain('wrapper-container--pass-through')
+    expect(container.attributes(FRAMELESS_ATTRIBUTE)).toBe('')
     expect(wrapper.find('.font-semibold').exists()).toBe(false)
     expect(wrapper.find('.light').text()).toBe('shown')
   })
@@ -163,6 +164,7 @@ describe('a frameless widget', () => {
     const wrapper = mounted(widgetWithFrame({ title: new VariableWrapper('Chart') }))
     await flushPromises()
     expect(wrapper.find('.wrapper-container').classes()).not.toContain('wrapper-container--frameless')
+    expect(wrapper.find('.wrapper-container').attributes(FRAMELESS_ATTRIBUTE)).toBeUndefined()
     expect(title(wrapper)).toBe('Chart')
   })
 })
