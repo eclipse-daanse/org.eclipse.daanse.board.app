@@ -34,6 +34,7 @@ import * as wrapperFactory from 'org.eclipse.daanse.board.app.lib.factory.variab
 import { VARIABLE_REPOSITORY } from 'org.eclipse.daanse.board.app.lib.api.variable'
 import WeatherLayer from '../weather/WeatherLayer.vue'
 import { MAX_PIXEL_RATIO } from '../weather/useWeatherLayer'
+import { FRAMELESS_ATTRIBUTE } from 'org.eclipse.daanse.board.app.lib.api.widget'
 
 /* Where each widget is on screen; the host sits at the origin. */
 const boxes = new Map<string, { left: number; top: number; width: number; height: number }>()
@@ -138,6 +139,41 @@ describe('the weather layer', () => {
     await nextTick()
 
     expect(layer.engine.obstacleRects).toEqual([{ id: 'w1', x: 160, y: 240, width: 200, height: 100 }])
+    wrapper.unmount()
+  })
+
+  it('lets a frameless widget be: nothing falls on what is not seen (#1242)', async () => {
+    const page = snowPage()
+    boxes.set('w1', { left: 100, top: 200, width: 200, height: 100 })
+    boxes.set('light', { left: 20, top: 40, width: 80, height: 80 })
+    const Board = defineComponent({
+      setup: () => () =>
+        h(WeatherLayer, { page }, () => [
+          h('div', { 'data-weather-obstacle': 'w1' }),
+          /* The wrapper marks the root it hands the obstacle attribute to */
+          h('div', { 'data-weather-obstacle': 'light', [FRAMELESS_ATTRIBUTE]: '' }),
+        ]),
+    })
+    const wrapper = mount(Board, { attachTo: document.body })
+    await nextTick()
+
+    expect(layerOf(wrapper as never).engine.obstacleRects.map((each) => each.id)).toEqual(['w1'])
+    wrapper.unmount()
+  })
+
+  it('still keeps to a frameless widget that is its region', async () => {
+    const page = snowPage()
+    page.weather!.region!.value = 'widget'
+    page.weather!.regionWidget!.value = 'light'
+    boxes.set('light', { left: 20, top: 40, width: 80, height: 80 })
+    const Board = defineComponent({
+      setup: () => () =>
+        h(WeatherLayer, { page }, () => h('div', { 'data-weather-obstacle': 'light', [FRAMELESS_ATTRIBUTE]: '' })),
+    })
+    const wrapper = mount(Board, { attachTo: document.body })
+    await nextTick()
+
+    expect(layerOf(wrapper as never).engine.region).toMatchObject({ x: 20, y: 40, width: 80, height: 80 })
     wrapper.unmount()
   })
 
