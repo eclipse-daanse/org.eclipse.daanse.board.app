@@ -360,7 +360,7 @@ const selectedIndexes = computed<string[]>({
 }
 
 /* The list itself is drawn by the browser, which does not inherit the
-   panel's colours - so the options get them explicitly. */
+  panel's colours - so the options get them explicitly. */
 .select option {
   color: var(--color-fg);
   background-color: var(--color-pane);
