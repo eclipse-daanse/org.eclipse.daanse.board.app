@@ -96,6 +96,8 @@ export class MapSettingsPackage extends BasicEPackage {
     LAYER__GEO_JSON: null as unknown as EAttribute | EReference,
     LAYER__WFS_SERVICE: null as unknown as EAttribute | EReference,
     LAYER__OPACITY: null as unknown as EAttribute | EReference,
+    LAYER__ID: null as unknown as EAttribute | EReference,
+    LAYER__CHECKED: null as unknown as EAttribute | EReference,
     SERVICE: null as unknown as EClass,
     SERVICE__TYPE: null as unknown as EAttribute | EReference,
     SERVICE__URL: null as unknown as EAttribute | EReference,
@@ -522,6 +524,23 @@ export class MapSettingsPackage extends BasicEPackage {
     layer_opacity.setDefaultValueLiteral("1.0");
     layerClass.getEStructuralFeatures().push(layer_opacity);
     MapSettingsPackage.Literals.LAYER__OPACITY = layer_opacity;
+
+    // Create id feature
+    const layer_id = new BasicEAttribute();
+    layer_id.setName('id');
+    layer_id.setLowerBound(0);
+    layer_id.setUpperBound(1);
+    layerClass.getEStructuralFeatures().push(layer_id);
+    MapSettingsPackage.Literals.LAYER__ID = layer_id;
+
+    // Create checked feature
+    const layer_checked = new BasicEAttribute();
+    layer_checked.setName('checked');
+    layer_checked.setLowerBound(0);
+    layer_checked.setUpperBound(1);
+    layer_checked.setDefaultValueLiteral("true");
+    layerClass.getEStructuralFeatures().push(layer_checked);
+    MapSettingsPackage.Literals.LAYER__CHECKED = layer_checked;
 
     // Create Service class
     const serviceClass = new BasicEClass();
@@ -1611,6 +1630,8 @@ export class MapSettingsPackage extends BasicEPackage {
     (MapSettingsPackage.Literals.LAYER__GEO_JSON as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EJavaObject')!);
     (MapSettingsPackage.Literals.LAYER__WFS_SERVICE as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EJavaObject')!);
     (MapSettingsPackage.Literals.LAYER__OPACITY as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EDouble')!);
+    (MapSettingsPackage.Literals.LAYER__ID as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (MapSettingsPackage.Literals.LAYER__CHECKED as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EBoolean')!);
     (MapSettingsPackage.Literals.SERVICE__TYPE as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
     (MapSettingsPackage.Literals.SERVICE__URL as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
     (MapSettingsPackage.Literals.SERVICE__SERVICE as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EJavaObject')!);

@@ -26,7 +26,7 @@ import type { GeoJsonObject, GeoJsonProperties, Geometry, Polygon } from 'geojso
 import type { Datastream } from 'org.eclipse.daanse.board.app.lib.datasource.ogcsta'
 import { Task, useTaskManager } from './composables/tasktimer'
 import { FILTER, FILTERRESET, UPDATE_MQTT_SUBSCRIPTIONS, MQTT_UNSUBSCRIBE_ALL } from 'org.eclipse.daanse.board.app.lib.datasource.ogcsta'
-import { useDatasourceRepository, plainSettings, useEObject } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+import { useDatasourceRepository, isModelled, useEObject } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import booleanContains from '@turf/boolean-contains'
 import { feature } from '@turf/helpers'
 import pointOnFeature from '@turf/point-on-feature'
@@ -47,7 +47,8 @@ import type { MapWidgetInterface } from './gen/MapWidgetInterface'
 // The class to extend: the interface now carries the EObject members too
 import { MapWidgetInterfaceImpl } from './gen/MapWidgetInterfaceImpl'
 import type { MapSettings } from './gen/MapSettings'
-import { MapSettingsImpl } from './gen/MapSettingsImpl'
+import { modelled, modelledLayer, modelledSettings } from './settingsModel'
+import { MapSettingsFactory } from './gen/MapSettingsFactory'
 
 
 /**
@@ -80,19 +81,22 @@ const { datasourceId, id: widgetId } = toRefs(props)
 // Get pageId from route
 const route = useRoute()
 const pageId = (route.params.pageid as string) || ''
-const config = defineModel<MapSettings>('configv', { required: true});
-const map = ref(null)
-const defaultConfig = new MapSettingsImpl()
-
+const stored = defineModel<MapSettings>('configv', { required: true});
 /*
- * Where the map starts when nothing says otherwise.
- *
- * The model carries this as defaultValueLiteral on a many-valued feature,
- * which the generator cannot express: an EList is created empty by its
- * getter and takes no initialiser. So it is applied here, where an empty
- * centre would otherwise leave leaflet without one.
+ * The settings as the model's own object (#1262). A board hands them over
+ * as plain JSON; the adoption is shared with the settings and the preview,
+ * which hold the same configuration, so all three work on one instance.
+ * The widget does not write it back - opening a board is not a change -
+ * the settings do, as soon as they are opened.
  */
-const DEFAULT_CENTER = [50.93115286, 11.60392726]
+const config = computed(() => modelledSettings(stored.value) as MapSettings)
+/*
+ * Read through this, not through config: a list changed in the settings
+ * is a change below the instance, which only the adapter hears (#1203).
+ */
+const settings = useEObject(() => config.value)
+const map = ref(null)
+
 
 /**
  * Puts a whole list into the configuration, by the name the model gives it.
@@ -104,19 +108,33 @@ const DEFAULT_CENTER = [50.93115286, 11.60392726]
  * that is filled rather than replaced - a containment list belongs to its
  * object.
  */
-function setList(name: 'center' | 'layers', values: unknown[]) {
-  const held = (config.value as any)[name] as { clear?: () => void; add?: (value: unknown) => void }
-  if (typeof held?.clear === 'function' && typeof held?.add === 'function') {
-    held.clear()
-    for (const value of values) held.add!(value)
-    return
-  }
-  ;(config.value as any)[name] = values
+function setList(name: 'center' | 'layers' | 'styles', values: unknown[]) {
+  const held = (config.value as any)[name] as { clear: () => void; add: (value: unknown) => void }
+  held.clear()
+  for (const value of values) held.add(value)
 }
 
-function ensureCentre() {
-  if (asArray(config.value.center).length === 0) setList('center', DEFAULT_CENTER)
+/*
+ * A value the map itself keeps - where it was left, what was selected.
+ *
+ * Written into the model without a notification: a pan is not an edit, and
+ * re-rendering on it would fight leaflet. Until the settings have written
+ * the adopted instance back, the stored plain object is what a save
+ * writes, so the value goes there as well, as it always did.
+ */
+function remember(name: 'center' | 'zoom' | 'selectedThingId', value: unknown) {
+  const held = config.value as unknown as { eDeliver(): boolean; eSetDeliver(deliver: boolean): void }
+  const delivering = held.eDeliver()
+  held.eSetDeliver(false)
+  try {
+    if (name === 'center') setList('center', value as unknown[])
+    else (config.value as any)[name] = value
+  } finally {
+    held.eSetDeliver(delivering)
+  }
+  if (!isModelled(stored.value)) (stored.value as any)[name] = value
 }
+
 
 // Get EventActionsRegistry
 const actionsRegistry = inject<EventActionsRegistry>(EVENT_ACTIONS_REGISTRY)!
@@ -263,7 +281,7 @@ const applyThingScope = () => {
   const ids = new Set<string>([
     datasourceId.value,
     ...(config.value?.datasourceIds ?? []),
-    ...(config.value?.layers ?? []).map((layer: any) => layer.datasourceId),
+    ...asArray(config.value?.layers).map((layer: any) => layer.datasourceId),
   ].filter((id): id is string => !!id))
   const scoped = (id: string) => {
     try {
@@ -280,11 +298,25 @@ const applyThingScope = () => {
   scopedSources = ids
 }
 applyThingScope()
-watch(
-  () => [datasourceId.value, config.value?.OGCSstyles, config.value?.layers, config.value?.datasourceIds],
-  applyThingScope,
-  { deep: true },
-)
+/*
+ * What the sources and the styles depend on, as one value: the settings
+ * are watched as a whole (#1203), and a pan writes into them as well -
+ * which must not reload anything.
+ */
+const sourcesKey = computed(() => {
+  const held = settings.value
+  if (!held) return ''
+  return JSON.stringify([
+    held.datasourceIds.toArray(),
+    held.layers.toArray().map((layer) => [layer.id, layer.type, layer.datasourceId, asArray(layer.styleIds)]),
+  ])
+})
+const stylesKey = computed(() => {
+  const held = settings.value
+  return held ? JSON.stringify([held.OGCSstyles.toArray(), held.styles.toArray()]) : ''
+})
+
+watch([datasourceId, sourcesKey, stylesKey], applyThingScope)
 onUnmounted(() => {
   const leaving = new Set(scopedSources)
   scopedSources = new Set()
@@ -343,7 +375,7 @@ const loadDatasourceData = async (dsId: string) => {
 }
 
 // Watch for changes in datasourceIds and layers to load additional datasources
-watch(() => [config.value?.datasourceIds, config.value?.layers], async () => {
+watch(sourcesKey, async () => {
   const allDsIds = new Set<string>()
 
   // Collect all datasource IDs
@@ -373,16 +405,16 @@ watch(() => [config.value?.datasourceIds, config.value?.layers], async () => {
     await buildSpatialIndex()
     loadObservationsInView()
   }
-}, { deep: true, immediate: true })
+}, { immediate: true })
 
 watch(datasourceId, (value, oldValue, onCleanup) => {
   update(value, oldValue)
 })
 
-watch(() => config.value?.OGCSstyles, (value, oldValue, onCleanup) => {
+watch(() => settings.value && JSON.stringify(settings.value.OGCSstyles.toArray()), () => {
   loadObservationsInView()
   loadHistoricalLocationsForAllThings()
-}, { deep: true })
+})
 
 
 const { getById } = useDataPointRegistry()
@@ -402,9 +434,7 @@ let routeLayerGroup: L.LayerGroup | null = null
 
 // Watch for changes to selectedThingId and sync back to config
 watch(selectedThingId, (newValue) => {
-  if (config.value) {
-    config.value.selectedThingId = newValue ?? undefined
-  }
+  if (config.value) remember('selectedThingId', newValue ?? undefined)
 })
 
 const mapReady = ref(false)
@@ -426,15 +456,106 @@ const getLayerData = (layer: any) => {
   return data.value
 }
 
+/*
+ * The live clients of the services and of the WMS and WFS layers.
+ *
+ * Storage keeps an address, not a client, so a client is built again from
+ * it - on mount, and whenever a service or a layer arrives later: one added
+ * in the settings, or put back by "Verwerfen". Only reconstructing on mount
+ * left a layer that came later undrawn until the widget was mounted again
+ * (#1262). Each entry is rebuilt in place; the list itself stays the same.
+ */
+const reviving = new WeakSet<object>()
+
+async function reviveService(service: any) {
+  const isWms = service.type === 'WMS'
+  if (!isWms && service.type !== 'WFS') return
+  const client = clientOf(service.service)
+  const live = isWms ? typeof client?.getLayers === 'function' : typeof client?.getFeatureTypes === 'function'
+  if (live || !service.url || reviving.has(service)) return
+  reviving.add(service)
+  logServices('Reconstructing %s service from URL: %s', service.type, service.url)
+  try {
+    const made = isWms ? await createServiceWMS(service.url) : await createServiceWFS(service.url)
+    service.reconstructionFailed = false
+    service.service = made
+  } catch (e) {
+    logServices('Could not reconstruct %s service: %o', service.type, e)
+    service.reconstructionFailed = true
+    service.service = undefined
+  } finally {
+    reviving.delete(service)
+  }
+}
+
+async function reviveLayer(layer: any) {
+  if (reviving.has(layer)) return
+  if (layer.type === 'WMSLayer' && layer.service && typeof clientOf(layer.service)?.getOperationUrl !== 'function') {
+    const held = clientOf(layer.service)
+    const serviceUrl = held?._capabilitiesUrl || held?.url || held?.serviceUrl
+    if (!serviceUrl) {
+      logServices('WMS layer missing service URL: %s', layer.name)
+      layer.reconstructionFailed = true
+      return
+    }
+    reviving.add(layer)
+    try {
+      const made = await createServiceWMS(serviceUrl)
+      layer.reconstructionFailed = false
+      layer.service = made
+    } catch (e) {
+      logServices('Could not reconstruct WMS service for layer %s: %o', layer.name, e)
+      layer.reconstructionFailed = true
+      layer.service = { url: serviceUrl }
+    } finally {
+      reviving.delete(layer)
+    }
+  } else if (layer.type === 'WFSLayer' && layer.wfs_service && typeof clientOf(layer.wfs_service)?.fetch !== 'function') {
+    const wfsUrl = clientOf(layer.wfs_service)?.url
+    if (!wfsUrl) {
+      logServices('WFS layer missing service URL: %s', layer.name)
+      layer.reconstructionFailed = true
+      return
+    }
+    reviving.add(layer)
+    try {
+      const WFS = (await import('./WFS')).default
+      const made = new WFS(wfsUrl)
+      await made.fetch()
+      layer.reconstructionFailed = false
+      layer.wfs_service = made
+    } catch (e) {
+      logServices('Could not reconstruct WFS service for layer %s: %o', layer.name, e)
+      layer.reconstructionFailed = true
+    } finally {
+      reviving.delete(layer)
+    }
+  }
+}
+
+async function reviveClients() {
+  const held = config.value
+  if (!held) return
+  await Promise.all([
+    ...held.services.toArray().map(reviveService),
+    ...held.layers.toArray().map(reviveLayer),
+  ])
+}
+
+/* The entries the lists hold, by identity - a new one is what needs a client. */
+const listedEntries = computed(() => {
+  const held = settings.value
+  return held ? [...held.services.toArray(), ...held.layers.toArray()] : []
+})
+watch(listedEntries, (now, before) => {
+  // Before that, the mount is still reviving what the board stored
+  if (!servicesReady.value) return
+  if (now.length === before?.length && now.every((entry, index) => entry === before[index])) return
+  void reviveClients()
+})
+
 onMounted(async () => {
   if (config.value) {
-    /* Read by the model's names: spreading a generated instance gives
-         * the private fields the getters sit in, not the features. */
-        Object.assign(config.value, {
-            ...plainSettings(defaultConfig),
-            ...plainSettings(config.value),
-        })
-    ensureCentre()
 
     /*
      * A board saved with the retired tiles draws its background again.
@@ -458,97 +579,12 @@ onMounted(async () => {
      */
     const preset = presetFor(datasourceType.value, config.value as any, () => uuid())
     if (preset) {
-      ;(config.value as any).layers = preset.layers
-      ;(config.value as any).styles = preset.styles
+      setList('layers', preset.layers.map((layer) => modelledLayer({ id: uuid(), checked: true, ...layer })))
+      setList('styles', preset.styles.map((style) => modelled(() => MapSettingsFactory.eINSTANCE.createDSRenderer(), style)))
       logMap('a source-made map starts with a GeoJSON layer and style')
     }
 
-    // Reconstruct services from URLs after deserialization
-    if (config.value.services) {
-      for (const service of config.value.services) {
-        // Check if service needs reconstruction by checking for methods
-        if (service.type === 'WMS') {
-          const hasGetLayersMethod = typeof clientOf(service.service)?.getLayers === 'function'
-          if (!hasGetLayersMethod && service.url) {
-            logServices('Reconstructing WMS service from URL: %s', service.url)
-            try {
-              service.service = await createServiceWMS(service.url)
-              logServices('WMS service reconstructed successfully')
-              ;(service as any).reconstructionFailed = false
-            } catch (e) {
-              logServices('Could not reconstruct WMS service: %o', e)
-              ;(service as any).reconstructionFailed = true
-            }
-          }
-        } else if (service.type === 'WFS') {
-          const hasGetFeatureTypesMethod = typeof clientOf(service.service)?.getFeatureTypes === 'function'
-          if (!hasGetFeatureTypesMethod && service.url) {
-            logServices('Reconstructing WFS service from URL: %s', service.url)
-            try {
-              service.service = await createServiceWFS(service.url)
-              logServices('WFS service reconstructed successfully')
-              ;(service as any).reconstructionFailed = false
-            } catch (e) {
-              logServices('Could not reconstruct WFS service: %o', e)
-              ;(service as any).reconstructionFailed = true
-            }
-          }
-        }
-      }
-      // The list notifies on its own now - reassigning it was a way to
-      // make a plain array reactive, and an EList cannot be replaced anyway
-    }
-
-    // Reconstruct service instances for WMS/WFS layers after deserialization
-    if (config.value.layers) {
-      const newLayers = []
-      for (const layer of config.value.layers) {
-        if (layer.type === 'WMSLayer' && layer.service && !clientOf(layer.service)?.getOperationUrl) {
-          // Service was deserialized as plain object, reconstruct WmsEndpoint
-          const serviceUrl = clientOf(layer.service)?._capabilitiesUrl || clientOf(layer.service)?.url || clientOf(layer.service)?.serviceUrl
-          if (serviceUrl) {
-            try {
-              const newService = await createServiceWMS(serviceUrl)
-              newLayers.push({ ...layer, service: newService, reconstructionFailed: false })
-            } catch (e) {
-              logServices('Could not reconstruct WMS service for layer %s: %o', layer.name, e)
-              newLayers.push({ ...layer, reconstructionFailed: true })
-            }
-          } else {
-            logServices('WMS layer missing service URL: %s', layer.name)
-            newLayers.push({ ...layer, reconstructionFailed: true })
-          }
-        } else if (layer.type === 'WFSLayer' && layer.wfs_service) {
-          // WFS service needs reconstruction - check if it has fetch method
-          if (typeof clientOf(layer.wfs_service)?.fetch !== 'function') {
-            // Deserialized WFS service - reconstruct from URL
-            const wfsUrl = clientOf(layer.wfs_service)?.url
-            if (wfsUrl) {
-              try {
-                // Import WFS class dynamically
-                const WFS = (await import('./WFS')).default
-                const newWfsService = new WFS(wfsUrl)
-                // Fetch the GeoJSON data
-                await newWfsService.fetch()
-                newLayers.push({ ...layer, wfs_service: newWfsService, reconstructionFailed: false })
-              } catch (e) {
-                logServices('Could not reconstruct WFS service for layer %s: %o', layer.name, e)
-                newLayers.push({ ...layer, reconstructionFailed: true })
-              }
-            } else {
-              logServices('WFS layer missing service URL: %s', layer.name)
-              newLayers.push({ ...layer, reconstructionFailed: true })
-            }
-          } else {
-            // WFS service is already valid, just keep it
-            newLayers.push(layer)
-          }
-        } else {
-          newLayers.push(layer)
-        }
-      }
-      setList('layers', newLayers)
-    }
+    await reviveClients()
     servicesReady.value = true
   }
 
@@ -663,7 +699,7 @@ const setFixed = ()=>{
     logMap('Error in setFixed:', e)
   }
 }
-watch(() => config.value.fixed, (value, oldValue, onCleanup) => {
+watch(() => settings.value?.fixed, (value, oldValue, onCleanup) => {
   setFixed();
 })
 const locations = computed(() => {
@@ -759,7 +795,7 @@ const invalidateStylesCache = () => {
 // Watch for changes in styles and invalidate cache
 // We create a hash of the styles to detect actual changes
 let stylesHash = ''
-watch(() => config.value?.styles, (newStyles) => {
+watch(() => settings.value?.styles.toArray(), (newStyles) => {
   if (!newStyles) return
 
   // Create a simple hash by stringifying the styles
@@ -770,7 +806,7 @@ watch(() => config.value?.styles, (newStyles) => {
     stylesHash = newHash
     invalidateStylesCache()
   }
-}, { deep: true })
+})
 
 
 // Track whether the user is actively interacting with the map (drag/zoom)
@@ -825,8 +861,7 @@ const maploaded = () => {
  * (#1203). Redrawn only when what is drawn changes - the settings also
  * change on every pan, when the zoom is written back.
  */
-const watchedSettings = useEObject(() => config.value as any)
-const overlay = computed(() => overlayTiles(watchedSettings.value as any))
+const overlay = computed(() => overlayTiles(settings.value as any))
 let overlayLayers: L.Layer[] = []
 
 const redrawOverlay = () => {
@@ -868,11 +903,11 @@ const createLayerPanes = () => {
 }
 
 // Watch for layer changes and update z-index
-watch(() => config.value.layers, () => {
+watch(() => settings.value?.layers.toArray().map((layer) => layer.id).join(), () => {
   if (mounted) {
     createLayerPanes()
   }
-}, { deep: true })
+})
 const rev = (arr: any) => {
   return {
     lat: arr[1],
@@ -907,8 +942,8 @@ const mapmove = debounce(() => {
   const leaflet = (map.value as any)?.leafletObject
   if (leaflet) {
     const center = leaflet.getCenter()
-    setList('center', [center.lat, center.lng])
-    config.value.zoom = leaflet.getZoom()
+    remember('center', [center.lat, center.lng])
+    remember('zoom', leaflet.getZoom())
   }
   loadObservationsInView()
 }, 500, { leading: false, trailing: true })
@@ -1443,11 +1478,11 @@ onUnmounted(() => {
 <template>
 
   <div id="mapholder" class="holder" style="height: 100%">
-    <l-map v-if="config.baseMapUrl" id="map" ref="map"
-            :center="asArray(config.center) as PointExpression"
+    <l-map v-if="settings!.baseMapUrl" id="map" ref="map"
+            :center="asArray(settings!.center) as PointExpression"
             :max-zoom="21"
             :use-global-leaflet="false"
-            :zoom="config.zoom"
+            :zoom="settings!.zoom"
             :options="{ zoomAnimation: true,
                         zoomSnap: 0,
                         wheelPxPerZoomLevel: 120,
@@ -1460,11 +1495,11 @@ onUnmounted(() => {
             @moveend="mapmove"
             @ready="maploaded"
             @click="handleMapClick"
-            :dragging="!config.fixed"
+            :dragging="!settings!.fixed"
     >
-      <l-tile-layer :attribution="config.attribution" :options="{maxNativeZoom:19,
-        maxZoom:25}" :url="config.baseMapUrl"></l-tile-layer>
-      <template v-for="(wmsLayer, index) in [...config.layers].reverse()" :key="`${wmsLayer.name}-${getOriginalLayerIndex(wmsLayer)}`">
+      <l-tile-layer :attribution="settings!.attribution" :options="{maxNativeZoom:19,
+        maxZoom:25}" :url="settings!.baseMapUrl"></l-tile-layer>
+      <template v-for="(wmsLayer, index) in [...settings!.layers].reverse()" :key="`${wmsLayer.name}-${getOriginalLayerIndex(wmsLayer)}`">
         <LWmsTileLayer v-if="wmsLayer.type == 'WMSLayer' && wmsLayer.service && typeof clientOf(wmsLayer.service)?.getOperationUrl === 'function'"
                         :attribution="wmsLayer.attribution"
                         :layers="wmsLayer.name!"
@@ -1516,7 +1551,7 @@ onUnmounted(() => {
         <OGCSTALayer
           v-if="wmsLayer.type == 'OGCSTA'"
           :locations="getLayerLocations(wmsLayer)"
-          :renderers="asArray(config.OGCSstyles)"
+          :renderers="asArray(settings!.OGCSstyles)"
           :layer-options="getLayerOptions(wmsLayer)"
           :marker-pane="getMarkerPane(wmsLayer)"
           :area-pane="getAreaPane(wmsLayer)"
@@ -1530,11 +1565,11 @@ onUnmounted(() => {
           :transform-to-geo-json="transformToGeoJson"
           :get-by-id="getById"
           :selected-thing-id="selectedThingId"
-          :selection-highlight-color="config.selectionHighlightColor ?? '#ff0000'"
+          :selection-highlight-color="settings!.selectionHighlightColor ?? '#ff0000'"
           :tooltip-thing-id="tooltipThingId"
           :tooltip-content="tooltipContent"
           :current-zoom="currentZoom"
-          :cluster-global="config.clusterGlobal ?? false"
+          :cluster-global="settings!.clusterGlobal ?? false"
         />
       </template>
 

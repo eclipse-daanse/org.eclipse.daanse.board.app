@@ -9,13 +9,14 @@ Contributors: Smart City Jena
 
 -->
 <script lang="ts" setup>
-import { computed, getCurrentInstance, inject, onMounted, ref, watch } from 'vue'
+import { computed, getCurrentInstance, inject, ref, watch, type ShallowRef } from 'vue'
 
 import VueDraggable from 'vuedraggable-es'
 // vuedraggable-es declares no slots, so under vue 3.5.45 its #item slot does not type-check.
 const Draggable = VueDraggable as any
 import { useOGCService } from './composables/ogcService'
-import type { IMapSettings, LayerI } from './Settings'
+import type { IMapSettings } from './Settings'
+import type { IDSRenderer, IRenderer } from './api/Renderer'
 import { RoadOverlay } from './gen/RoadOverlay'
 import { clientOf, describedService } from './serviceClient'
 import { WfsEndpoint, WmsEndpoint, type WmsLayerSummary } from '@camptocamp/ogc-client'
@@ -26,7 +27,10 @@ import RendererModal from './parts/RendererModal.vue'
 import { computedAsync } from '@vueuse/core'
 import { DatasourceRepository, identifier } from 'org.eclipse.daanse.board.app.lib.api.datasource'
 import { logServices, logDatasource } from './utils/logger'
-import { useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+import { useEList, useEObject, useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+import { modelledLayer, modelledSettings } from './settingsModel'
+import type { MapSettings } from './gen/MapSettings'
+import type { Layer } from './gen/Layer'
 import {
   DButton,
   DCheckbox,
@@ -46,8 +50,27 @@ const props = defineProps<{
   dataSources?: any[]
 }>()
 
-const widgetSettings = defineModel<IMapSettings>({ required: true })
+const stored = defineModel<IMapSettings | MapSettings>({ required: true })
 const { t } = useTranslation('map')
+
+/*
+ * The settings as the model's own object (#1262).
+ *
+ * A board hands a map its settings as plain JSON, and nothing hears a
+ * plain array change: an added service or layer reached neither the lists
+ * here, nor the preview, nor the board, until a mode switch mounted it all
+ * again. Adopted, every list is a containment EList, and one watch on the
+ * instance hears all of them. Written back at once, as the settings form
+ * does for the other widgets, so that what is edited here is what is
+ * saved - and what "Verwerfen" puts back. The widget on the board and the
+ * preview share the same adoption (see ./settingsModel).
+ */
+const adoptedAtOpen = modelledSettings(stored.value)
+if (adoptedAtOpen && adoptedAtOpen !== stored.value) stored.value = adoptedAtOpen
+const settings = computed(() => modelledSettings(stored.value) as MapSettings)
+/* What the template reads and binds: re-rendered on any change below it */
+const widgetSettings = useEObject(() => settings.value) as ShallowRef<MapSettings>
+const layers = useEList(() => settings.value, (held) => held.layers)
 
 /* The overlay's presets, in the order the model lists them (#1235). */
 const overlayOptions = computed(() => [
@@ -101,9 +124,7 @@ const addService = async () => {
     const service = await OGCService.createServiceWMS(url.value)
     console.log('WMS result:', service)
     if (service) {
-      widgetSettings.value.services.push(
-        describedService(service, url.value, 'WMS'),
-      )
+      settings.value.services.push(describedService(service, url.value, 'WMS'))
       hasService = true
     }
   } catch (e) {
@@ -117,9 +138,7 @@ const addService = async () => {
     const service2 = await OGCService.createServiceWFS(url.value)
     console.log('WFS result:', service2)
     if (service2) {
-      widgetSettings.value.services.push(
-        describedService(service2, url.value, 'WFS'),
-      )
+      settings.value.services.push(describedService(service2, url.value, 'WFS'))
       hasService = true
     }
   } catch (e) {
@@ -160,9 +179,12 @@ const addChilds = (layer: any, service: any) => {
 // Cache for service nodes to prevent re-creating with new IDs
 const serviceNodesCache = ref<Map<string, any>>(new Map())
 
+const datasourceRepository = inject<DatasourceRepository>(identifier)!
+
 const services = computedAsync(async () => {
   logServices('Computing services async')
   const ret: any = []
+  const held = widgetSettings.value
 
   /*
    * A widget that has never had a service has none of the three lists the
@@ -170,7 +192,7 @@ const services = computedAsync(async () => {
    * up, so walking an absent one took the whole form with it and the tab
    * opened on nothing.
    */
-  for (let service of widgetSettings.value.services ?? []) {
+  for (const service of held?.services ?? []) {
     logServices('Service:', service)
 
     const isFailed = !!(service as any).reconstructionFailed
@@ -179,6 +201,7 @@ const services = computedAsync(async () => {
       // Add failed service to tree with error marker
       logServices('Service failed reconstruction:', service.url)
       ret.push({
+        id: service.id,
         service: { _info: { title: `${service.url} ${t('Settings.failed')}`, name: service.url } },
         type: service.type,
         level: 0,
@@ -196,6 +219,7 @@ const services = computedAsync(async () => {
       const wfs = clientOf(service.service)
       if (typeof wfs?.getFeatureTypes === 'function') {
         ret.push({
+          id: service.id,
           service: service.service,
           type: 'WFS',
           level: 0,
@@ -225,25 +249,23 @@ const services = computedAsync(async () => {
         const layers = wms.getLayers()
         console.log('[MapsWidgetSettings] WMS layers:', layers)
         ret.push({
+          id: service.id,
           service: service.service,
           type: 'WMS',
           childs: addChilds(layers, service.service),
           level: 0
         })
         logServices('WMS service added to tree')
-        console.log('[MapsWidgetSettings] ret after adding WMS:', JSON.parse(JSON.stringify(ret)))
       } else {
         logServices('WMS service missing getLayers method')
       }
     }
   }
   // Process primary datasource and all additional datasources
-  const allDatasourceIds = [widgetSettings.value.datasourceId, ...(widgetSettings.value.datasourceIds ?? [])].filter(Boolean)
+  const allDatasourceIds = [held?.datasourceId, ...(held?.datasourceIds ?? [])].filter(Boolean)
 
   for (const id of allDatasourceIds) {
     if (!id) continue
-
-    const datasourceRepository = inject<DatasourceRepository>(identifier)!
 
     try {
       const OGCStore = datasourceRepository.getDatasource(id)
@@ -311,6 +333,7 @@ const services = computedAsync(async () => {
 
       if(dsType == 'OGC Composer'){
         ret.push({
+          id,
           service: { '_info': { title: id + '[Composer]', name: id } },
           type: 'GEOJSON',
           level: 0,
@@ -318,6 +341,7 @@ const services = computedAsync(async () => {
         })
       } else if (dsType == 'valhalla') {
         ret.push({
+          id,
           service: { '_info': { title: id + '[Valhalla Route]', name: id } },
           type: 'ROUTE',
           level: 0,
@@ -325,6 +349,7 @@ const services = computedAsync(async () => {
         })
       } else if (dsType == 'rest') {
         ret.push({
+          id,
           service: { '_info': { title: id + '[REST]', name: id } },
           type: 'REST-GEOJSON',
           level: 0,
@@ -332,6 +357,7 @@ const services = computedAsync(async () => {
         })
       } else {
         ret.push({
+          id,
           service: { '_info': { title: id + '[OGCSTA]', name: id } },
           type: 'OGCSTA',
           childs: [cachedChild],
@@ -349,33 +375,47 @@ const services = computedAsync(async () => {
 })
 const value = ref(0.5)
 const renderShow = ref(false)
+/*
+ * A node of the service tree becomes a layer of the model - with an id of
+ * its own, so the same layer can be added twice, and shown at once.
+ */
 const addLayer = async (node: any) => {
-  // Create a new layer object with its own styleIds array to avoid sharing references
-  const newLayer = { ...node, checked: true, styleIds: [] }
-
-  if (newLayer.type == 'WFSLayer') {
-    const data = await newLayer.wfs_service.fetch()
+  if (node.type == 'WFSLayer') {
+    const data = await node.wfs_service.fetch()
     logServices('WFS data fetched:', data)
   }
 
-  widgetSettings.value.layers.push(newLayer)
+  settings.value.layers.push(modelledLayer({ ...node, id: v4(), checked: true, styleIds: [] }))
 }
 
-const removeLayer = (layer: any) => {
-  const index = widgetSettings.value.layers.indexOf(layer)
-  if (index > -1) {
-    widgetSettings.value.layers.splice(index, 1)
-  }
+const removeLayer = (layer: Layer) => {
+  settings.value.layers.remove(layer)
 }
 
-const selectedLayer = ref<LayerI | undefined>(undefined)
+/*
+ * The order Draggable hands back, put into the list by moving entries:
+ * the list belongs to the settings and cannot be swapped for the array.
+ */
+const reorderLayers = (order: Layer[]) => {
+  const list = settings.value.layers
+  order.forEach((layer, index) => {
+    const from = list.indexOf(layer)
+    if (from > -1 && from !== index) list.move(index, from)
+  })
+}
 
+const selectedLayer = ref<Layer | undefined>(undefined)
+
+/*
+ * The style list itself, not a copy: the modal adds to it and removes from
+ * it. It is an EList, which takes the array methods the modal uses.
+ */
 const modelswitch = computed(() => {
-  if (selectedLayer.value?.type == 'OGCSTA') {
-    return widgetSettings.value.OGCSstyles
-  }
-  return widgetSettings.value.styles
+  const held = widgetSettings.value
+  const list = selectedLayer.value?.type == 'OGCSTA' ? held.OGCSstyles : held.styles
+  return list as unknown as (IDSRenderer | IRenderer)[]
 })
+const serviceList = useEList(() => settings.value, (held) => held.services)
 
 // Multi-datasource management
 const addServiceType = ref<'wms_wfs' | 'datasource'>('wms_wfs')
@@ -403,9 +443,7 @@ const addServiceFromDatasource = () => {
 }
 
 const removeDatasource = (dsId: string) => {
-  const index = widgetSettings.value.datasourceIds.indexOf(dsId)
-  if (index > -1) {
-    widgetSettings.value.datasourceIds.splice(index, 1)
+  if (widgetSettings.value.datasourceIds.remove(dsId)) {
     // Clear from cache
     serviceNodesCache.value.delete(dsId)
   }
@@ -479,19 +517,19 @@ const assignDatasourceToLayer = (layer: any, dsId: string) => {
     </template>
   </DModal>
 
-  <RendererModal v-model="modelswitch" v-model:layer="selectedLayer as any" v-model:show="renderShow" :services="widgetSettings.services" :all-layers="widgetSettings.layers"></RendererModal>
+  <RendererModal v-model="modelswitch" v-model:layer="selectedLayer as any" v-model:show="renderShow" :services="serviceList" :all-layers="layers as any"></RendererModal>
   <section class="settings-section" data-section-id="layers" :data-section="t('Settings.sections.layers')">
 
-        <span v-if="!widgetSettings.layers?.length" class="empty">
+        <span v-if="!layers.length" class="empty">
             {{ t('Settings.noLayers') }}
         </span>
 
-    <Draggable v-else v-model="widgetSettings.layers" :animation="150" :component-data="{
+    <Draggable v-else :model-value="layers" :animation="150" :component-data="{
           tag: 'ul',
           type: 'transition-group',
           name: !drag ? 'flip-list' : null
         }" class="list-group" item-key="id" v-bind="dragOptions" @end="drag = false"
-                @start="drag = true">
+                @start="drag = true" @update:model-value="reorderLayers">
       <template #item="{ element  }">
         <li class="list-group-item">
           <div class="row dragIcon">

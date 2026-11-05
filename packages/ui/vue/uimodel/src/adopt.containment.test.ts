@@ -13,7 +13,7 @@
 
 import { describe, it, expect } from 'vitest'
 import type { EObject } from '@emfts/core'
-import { adopt, asModel, isModelled } from './adopt'
+import { adopt, asModel, isModelled } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import { ContainmentfixtureFactory } from './gen/ContainmentfixtureFactory'
 import { ContainmentfixturePackage } from './gen/ContainmentfixturePackage'
 import type { FixtureChild } from './gen/FixtureChild'

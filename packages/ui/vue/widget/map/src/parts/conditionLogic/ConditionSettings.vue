@@ -13,6 +13,8 @@ import { Comperator, type ICondition } from './../../api/Renderer'
 import { computed, type ModelRef, reactive, ref, useId } from 'vue'
 import { DButton, DIcon, DSelect } from 'org.eclipse.daanse.board.app.ui.vue.controls'
 import { useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+import { MapSettingsFactory } from '../../gen/MapSettingsFactory'
+import { modelled } from '../../settingsModel'
 
 const { t } = useTranslation('map')
 
@@ -124,11 +126,12 @@ const rememberProp = (selector: string) => {
 
 const addContition = () => {
   rememberProp(newCreateProp.value)
-  model.value.push({
+  // The model's own object: a containment list takes nothing else (#1262)
+  model.value.push(modelled(() => MapSettingsFactory.eINSTANCE.createCondition(), {
     comperator: newCreateComperator.value,
     value: newCreateValue.value,
     prop: newCreateProp.value
-  } as ICondition)
+  }) as unknown as ICondition)
   newCreateComperator.value = Comperator.equals
   newCreateValue.value = ''
   newCreateProp.value = ''

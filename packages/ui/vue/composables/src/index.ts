@@ -19,6 +19,7 @@ import { useVariableRepository } from './useVariableRepository'
 import { useGlobalVariables, type GlobalVariableChoice } from './useGlobalVariables'
 import { useGlobalLoading } from './useGlobalLoading'
 import { plainSettings } from './plainSettings'
+import { adopt, asModel, ensureWrappers, isModelled } from './adopt'
 /* Modelled objects, as something Vue re-renders on. */
 import { useEObject, useEList, useFeature } from './useEmf'
 /* What a registry offers - types and widgets whose bundles arrive late. */
@@ -64,7 +65,7 @@ const WrapperTypes = {
 EPackageRegistry.INSTANCE.registerPackage(ComposablesPackage.eINSTANCE)
 
 export { ComposablesPackage }
-export { useDatasourceRepository, useTemporaryStore, useVariableRepository, useGlobalVariables, usePromisifiedModal, useGlobalLoading, VariableWrapper,VARIABLEWRAPPER,VariableComplexStringWrapper,VARIABLECOMPLEXSTRINGWRAPPER, WrapperTypes, plainSettings, useEObject, useEList, useFeature, useBoard}
+export { useDatasourceRepository, useTemporaryStore, useVariableRepository, useGlobalVariables, usePromisifiedModal, useGlobalLoading, VariableWrapper,VARIABLEWRAPPER,VariableComplexStringWrapper,VARIABLECOMPLEXSTRINGWRAPPER, WrapperTypes, plainSettings, adopt, asModel, ensureWrappers, isModelled, useEObject, useEList, useFeature, useBoard}
 export { useHistory, useCurrentHistory, type History } from './useHistory'
 
 /*

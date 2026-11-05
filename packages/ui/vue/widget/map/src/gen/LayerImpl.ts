@@ -42,6 +42,8 @@ export class LayerImpl extends BasicEObject implements Layer {
   static readonly GEO_JSON: number = 9;
   static readonly WFS_SERVICE: number = 10;
   static readonly OPACITY: number = 11;
+  static readonly ID: number = 12;
+  static readonly CHECKED: number = 13;
 
   // Private fields
   private _datasourceId?: string;
@@ -56,6 +58,8 @@ export class LayerImpl extends BasicEObject implements Layer {
   private _geoJson?: unknown;
   private _wfs_service?: unknown;
   private _opacity: number = 1.0;
+  private _id?: string;
+  private _checked: boolean = true;
 
   /**
    * Returns the EClass of this object
@@ -346,6 +350,54 @@ export class LayerImpl extends BasicEObject implements Layer {
     }
   }
 
+  get id(): string {
+    return this._id!;
+  }
+
+  set id(value: string) {
+    const oldValue = this._id;
+    this._id = value;
+    if (this.eDeliver()) {
+      this.eNotify({
+        getNotifier: () => this,
+        getEventType: () => 1, // SET
+        getFeature: () => this.eClass().getEStructuralFeature(LayerImpl.ID),
+        getOldValue: () => oldValue,
+        getNewValue: () => value,
+        getPosition: () => -1,
+        wasSet: () => true,
+        isTouch: () => false,
+        isReset: () => false,
+        getFeatureID: () => LayerImpl.ID,
+        merge: () => false
+      });
+    }
+  }
+
+  get checked(): boolean {
+    return this._checked!;
+  }
+
+  set checked(value: boolean) {
+    const oldValue = this._checked;
+    this._checked = value;
+    if (this.eDeliver()) {
+      this.eNotify({
+        getNotifier: () => this,
+        getEventType: () => 1, // SET
+        getFeature: () => this.eClass().getEStructuralFeature(LayerImpl.CHECKED),
+        getOldValue: () => oldValue,
+        getNewValue: () => value,
+        getPosition: () => -1,
+        wasSet: () => true,
+        isTouch: () => false,
+        isReset: () => false,
+        getFeatureID: () => LayerImpl.CHECKED,
+        merge: () => false
+      });
+    }
+  }
+
   /**
    * Remove a value from its previous container before it is contained here,
    * like Java EMF's eInverseRemove on the old container (#61)
@@ -402,6 +454,10 @@ export class LayerImpl extends BasicEObject implements Layer {
         return this.wfs_service;
       case LayerImpl.OPACITY:
         return this.opacity;
+      case LayerImpl.ID:
+        return this.id;
+      case LayerImpl.CHECKED:
+        return this.checked;
       default:
         return super.eGet(feature);
     }
@@ -462,6 +518,14 @@ export class LayerImpl extends BasicEObject implements Layer {
         this.opacity = newValue as number;
         super.eSet(feature, newValue);
         break;
+      case LayerImpl.ID:
+        this.id = newValue as string;
+        super.eSet(feature, newValue);
+        break;
+      case LayerImpl.CHECKED:
+        this.checked = newValue as boolean;
+        super.eSet(feature, newValue);
+        break;
       default:
         super.eSet(feature, newValue);
     }
@@ -497,6 +561,10 @@ export class LayerImpl extends BasicEObject implements Layer {
         return this._wfs_service !== undefined;
       case LayerImpl.OPACITY:
         return this._opacity !== 1.0;
+      case LayerImpl.ID:
+        return this._id !== undefined;
+      case LayerImpl.CHECKED:
+        return this._checked !== true;
       default:
         return super.eIsSet(feature);
     }
@@ -545,11 +613,16 @@ export class LayerImpl extends BasicEObject implements Layer {
       case LayerImpl.OPACITY:
         this._opacity = 1.0;
         return;
+      case LayerImpl.ID:
+        this._id = undefined;
+        return;
+      case LayerImpl.CHECKED:
+        this._checked = true;
+        return;
       default:
         super.eUnset(feature);
     }
   }
-
 
   /**
    * What this object is when it is stored.
@@ -572,6 +645,8 @@ export class LayerImpl extends BasicEObject implements Layer {
       geoJson: this.geoJson,
       wfs_service: this.wfs_service,
       opacity: this.opacity,
+      id: this.id,
+      checked: this.checked,
     };
   }
 }

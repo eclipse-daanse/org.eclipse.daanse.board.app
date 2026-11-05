@@ -30,7 +30,7 @@ import SettingsObjectWidget from './SettingsObjectWidget.vue'
 import SettingsFieldWidget from './SettingsFieldWidget.vue'
 
 export { SettingsForm, SettingsListWidget, SettingsObjectWidget, SettingsFieldWidget }
-export { adopt, asModel, isModelled } from './adopt'
+export { adopt, asModel, isModelled } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 export { formFor, kindOf, labelOf, type FieldKind } from './buildForm'
 export { loadUIModel } from './loadUIModel'
 
