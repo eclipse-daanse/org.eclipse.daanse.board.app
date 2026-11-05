@@ -13,16 +13,19 @@ Contributors:
 
 <script setup lang="ts">
 /*
- * The storage view, on the same pattern as the other detail screens: a tree
+ * The storage view, on the same pattern as the other detail screens: a list
  * on the left, the selected thing on the right.
  *
- * The tree holds places and the states kept in them; the right side opens a
- * state and shows the boards inside it, each with the floorplan it will have
- * once loaded. That is what the layout is for - you see what a stored state
+ * The left side holds the places; the right side shows the selected place -
+ * what kind it is, the states kept in it, and storing the current workspace
+ * there - or, once a state is picked, the boards inside it, each with the
+ * floorplan it will have once loaded. One layout for every kind of place; a
+ * kind that needs more, git with its branch and commit, adds its controls to
+ * the place's header and nothing else (#1247). That is what the layout is for - you see what a stored state
  * contains before you replace your workspace with it.
  */
 import { computed, inject, onMounted, ref, watch } from 'vue'
-import { DButton } from 'org.eclipse.daanse.board.app.ui.vue.controls'
+import { DButton, DIcon, DInput } from 'org.eclipse.daanse.board.app.ui.vue.controls'
 import { useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import BoardFloorplan from './BoardFloorplan.vue'
 import {
@@ -57,7 +60,7 @@ const emit = defineEmits<{ restored: [ids: string[]] }>()
  * A board that has a place it came from is shown standing there, with
  * its name filled in, rather than on whatever place happens to be first.
  * Both are optional: opened from the topbar there is nothing to go on,
- * and then the tree behaves as it always did.
+ * and then the view behaves as it always did.
  */
 const props = defineProps<{ onPlace?: string; withName?: string }>()
 
@@ -70,7 +73,6 @@ const { t } = useTranslation('shell')
 
 const places = ref<Repository[]>([])
 const entriesByPlace = ref<Record<string, Entity[]>>({})
-const expanded = ref<Set<string>>(new Set())
 const selectedPlace = ref<Repository | undefined>()
 const selectedEntry = ref<Entity | undefined>()
 const query = ref('')
@@ -80,8 +82,7 @@ const busy = ref(false)
 /** The entry this workspace came from - kept with the workspace, not with this view. */
 const origin = useWorkspaceOrigin()
 
-/** Naming form for storing the current workspace, shown instead of a state. */
-const creating = ref(false)
+/** Name for storing the current workspace in the selected place. */
 const newName = ref('')
 
 /**
@@ -128,43 +129,40 @@ function viewFor(place: Repository | undefined) {
 const placeView = computed(() => viewFor(selectedPlace.value))
 
 /*
- * What a place view is handed and what it hands back - the contract of the
- * load/save modal it was written for. `state` is what it stores; it is
- * serialised when read, at the moment of storing, not on every render.
+ * What kind of place it is, in words. A kind not named here is shown by
+ * its type, which is better than nothing and tells a developer what to add.
  *
- * A place view renders all of its controls inside itself. The modal had a
- * footer the views teleported into; this view has none, and must not need
- * one (#1247).
+ * i18n-keys: shell:Storage.kind.*
  */
-const placeContext = {
-  context: 'SAVE',
-  get state() {
-    return save()
-  },
+const KIND: Record<string, string> = {
+  gitRepositories: 'Storage.kind.git',
+  localRepositories: 'Storage.kind.local',
+  fileSystemRepositories: 'Storage.kind.folder',
+  restRepositories: 'Storage.kind.rest',
 }
 
-/** A place view closes with the data it read, or with nothing after storing. */
-async function placeViewClosed(data?: unknown, entry?: Entity) {
-  const place = selectedPlace.value
-  if (data === undefined || data === null) {
-    if (place) await readEntries(place)
-    return
-  }
-  failure.value = ''
-  try {
-    const ids = load(data)
-    if (entry) remember(entry, label(entry))
-    emit('restored', ids)
-  } catch (error) {
-    failure.value = t('Storage.failure.load', { reason: reason(error) })
-  }
+/* And as a sign in the list of places. */
+const ICON: Record<string, string> = {
+  gitRepositories: 'commit',
+  localRepositories: 'web',
+  fileSystemRepositories: 'folder',
+  restRepositories: 'cloud',
 }
 
-/* ------------------------------------------------------------------ tree */
+function iconOf(place: Repository | undefined): string {
+  return ICON[typeOf(place)] ?? 'inventory_2'
+}
+
+function kindOf(place: Repository | undefined): string {
+  const type = typeOf(place)
+  return KIND[type] ? t(KIND[type]) : type
+}
+
+/* ---------------------------------------------------------------- places */
 
 async function loadPlaces() {
   places.value = (await repoManager?.getAvailableReposetories()) ?? []
-  if (expanded.value.size !== 0) return
+  if (selectedPlace.value) return
 
   /* The place the caller named, where it is there to be found. */
   const asked = props.onPlace
@@ -173,9 +171,8 @@ async function loadPlaces() {
   const open = asked ?? places.value[0]
   if (!open) return
 
-  selectedPlace.value = open
   if (props.withName) newName.value = props.withName
-  await expand(open)
+  await selectPlace(open)
 }
 
 /*
@@ -194,17 +191,10 @@ async function connectFolder() {
     /* Closing the picker is not a failure; nothing was chosen, nothing said. */
     if (!place) return
     await loadPlaces()
-    selectedPlace.value = places.value.find((p) => String(p.uri) === String(place.uri)) ?? place
-    await expand(selectedPlace.value)
+    await selectPlace(places.value.find((p) => String(p.uri) === String(place.uri)) ?? place)
   } catch (error) {
-    failure.value = `Der Ordner liess sich nicht verbinden: ${(error as Error).message}`
+    failure.value = t('Storage.failure.connect', { reason: reason(error) })
   }
-}
-
-async function expand(place: Repository) {
-  expanded.value.add(key(place))
-  expanded.value = new Set(expanded.value)
-  await readEntries(place)
 }
 
 async function readEntries(place: Repository) {
@@ -220,15 +210,27 @@ async function readEntries(place: Repository) {
   }
 }
 
-function togglePlace(place: Repository) {
+/** Shows a place on the right; its entries are read the first time. */
+async function selectPlace(place: Repository) {
   selectedPlace.value = place
-  creating.value = false
-  if (expanded.value.has(key(place))) {
-    expanded.value.delete(key(place))
-    expanded.value = new Set(expanded.value)
-  } else {
-    expand(place)
-  }
+  selectedEntry.value = undefined
+  query.value = ''
+  failure.value = ''
+  if (!entriesByPlace.value[key(place)]) await readEntries(place)
+}
+
+/** Back from a state to the place it is kept in. */
+function backToPlace() {
+  selectedEntry.value = undefined
+  failure.value = ''
+}
+
+/** The place view changed what the place reads - git's branch or commit. */
+async function refreshPlace() {
+  const place = selectedPlace.value
+  if (!place) return
+  selectedEntry.value = undefined
+  await readEntries(place)
 }
 
 function entriesOf(place: Repository): Entity[] {
@@ -246,7 +248,7 @@ function entriesOf(place: Repository): Entity[] {
  * rather than kept twice. Rendered as one flat list of rows with a depth
  * each, which keeps the markup and the keyboard order simple.
  *
- * While a filter is typed the tree is dropped and full paths are shown:
+ * While a filter is typed the folders are dropped and full paths are shown:
  * what is wanted then is the hit, not where it sits.
  */
 const openFolders = ref<Set<string>>(new Set())
@@ -312,7 +314,6 @@ function rowsOf(place: Repository): Row[] {
 function selectEntry(place: Repository, entry: Entity) {
   selectedPlace.value = place
   selectedEntry.value = entry
-  creating.value = false
   failure.value = ''
   if (!isRead(entry)) readEntry(place, entry)
 }
@@ -390,7 +391,7 @@ const totals = computed(() => ({
   variables: held.value?.variables.toArray().length ?? 0,
 }))
 
-/** Short summary for a tree row, so the tree says what is inside each state. */
+/** Short summary for a list row, so the list says what is inside each state. */
 function entrySummary(entry: Entity): string {
   /* Not read yet is not empty - say nothing until it is known (#1247). */
   if (!isRead(entry)) return ''
@@ -398,7 +399,8 @@ function entrySummary(entry: Entity): string {
   if (list.length > 0) {
     /* Pages, not boards: a stored state holds one board, and what is
       counted here is what is inside it. */
-    return t('Storage.pages', { count: list.length })
+    const widgets = list.reduce((sum, b) => sum + b.widgetCount, 0)
+    return `${t('Storage.pages', { count: list.length })} · ${t('Storage.widgets', { count: widgets })}`
   }
   /* No pages is not nothing: say what it does hold, where it holds any. */
   const inside = parseWorkspace(entry.data)
@@ -409,7 +411,7 @@ function entrySummary(entry: Entity): string {
 
 /** What the current workspace would be stored as, shown before storing it. */
 const pending = computed(() => {
-  if (!creating.value) return { boards: 0, widgets: 0 }
+  if (selectedEntry.value || !isWritable(selectedPlace.value)) return { boards: 0, widgets: 0 }
   const list = summarize(parseWorkspace(save()))
   return {
     boards: list.length,
@@ -450,14 +452,6 @@ async function overwrite(entry: Entity) {
   }
 }
 
-function startCreating(place: Repository) {
-  selectedPlace.value = place
-  selectedEntry.value = undefined
-  creating.value = true
-  newName.value = ''
-  failure.value = ''
-}
-
 async function createEntry() {
   const place = selectedPlace.value
   const name = newName.value.trim()
@@ -469,8 +463,8 @@ async function createEntry() {
       the origin itself; what is kept here is which place is selected. */
     await storeAs(place, name)
     selectedPlace.value = place
-    await expand(place)
-    creating.value = false
+    await readEntries(place)
+    newName.value = ''
     selectedEntry.value = entriesOf(place).find((e) => label(e) === name)
   } catch (error) {
     failure.value = t('Storage.failure.create', { reason: reason(error) })
@@ -507,257 +501,606 @@ watch(() => repoManager, loadPlaces)
 
 <template>
   <div class="storage">
-    <aside class="tree" :aria-label="t('Storage.title')">
-      <input
-        v-model="query"
-        class="tree__search"
-        type="search"
-        :placeholder="t('Storage.filter')"
-        :aria-label="t('Storage.filter')"
-      />
+    <!-- ------------------------------------------------------ places -->
+    <aside class="places" :aria-label="t('Storage.places')">
+      <header class="places__head">
+        <h2 class="places__title">{{ t('Storage.places') }}</h2>
+      </header>
 
-      <div class="tree__body" role="tree">
-        <template v-for="place in places" :key="key(place)">
-          <button
-            type="button"
-            role="treeitem"
-            :aria-expanded="expanded.has(key(place))"
-            :class="['row', 'row--place', { on: selectedPlace === place && !selectedEntry }]"
-            @click="togglePlace(place)"
-          >
-            <span class="row__twist">{{ expanded.has(key(place)) ? '▾' : '▸' }}</span>
-            <span class="row__name">{{ place.name }}</span>
-            <span class="row__meta">{{ (entriesByPlace[key(place)] ?? []).length }}</span>
-          </button>
+      <nav class="places__body">
+        <button
+          v-for="place in places"
+          :key="key(place)"
+          type="button"
+          :aria-current="selectedPlace === place ? 'true' : undefined"
+          :class="['place', { 'place--on': selectedPlace === place }]"
+          @click="selectPlace(place)"
+        >
+          <DIcon class="place__icon" :name="iconOf(place)" size="sm" />
+          <span class="place__text">
+            <span class="place__name">{{ place.name }}</span>
+            <span class="place__kind">{{ kindOf(place) }}</span>
+          </span>
+          <span v-if="entriesByPlace[key(place)]" class="place__count">
+            {{ entriesByPlace[key(place)]!.length }}
+          </span>
+        </button>
 
-          <template v-if="expanded.has(key(place))">
-            <template v-for="row in rowsOf(place)" :key="row.id">
-              <!-- A folder the place walked into; its depth is its indent -->
-              <button
-                v-if="row.kind === 'folder'"
-                type="button"
-                role="treeitem"
-                :aria-expanded="openFolders.has(row.id)"
-                class="row row--folder"
-                :style="{ paddingLeft: `${16 + row.depth * 14}px` }"
-                @click="toggleFolder(row.id)"
+        <p v-if="!places.length" class="places__none">{{ t('Storage.noPlaces') }}</p>
+      </nav>
+
+      <footer class="places__foot">
+        <DButton v-if="canUseFolders" intent="quiet" size="sm" @click="connectFolder">
+          <DIcon name="create_new_folder" size="sm" />{{ t('Storage.connectFolder') }}
+        </DButton>
+        <p v-else class="places__none">{{ t('Storage.noFolderSupport') }}</p>
+      </footer>
+    </aside>
+
+    <!-- ------------------------------------------------------ detail -->
+    <section class="detail">
+      <div class="detail__inner">
+        <p v-if="failure" class="failure" role="alert">
+          <DIcon name="error" size="sm" />
+          <span>{{ failure }}</span>
+        </p>
+
+        <!-- One state, as it would open -->
+        <template v-if="selectedEntry">
+          <header class="head">
+            <div class="head__what">
+              <DButton class="head__back" intent="quiet" size="sm" :title="t('Storage.backTo', { place: selectedPlace?.name })" @click="backToPlace">
+                <DIcon name="arrow_back" size="sm" />{{ selectedPlace?.name }}
+              </DButton>
+              <h1 class="head__name">
+                {{ label(selectedEntry) }}
+                <span v-if="isOpen(selectedEntry)" class="head__badge">{{ t('Storage.loaded') }}</span>
+              </h1>
+            </div>
+            <div class="actions" role="group" :aria-label="label(selectedEntry)">
+              <DButton intent="primary" size="sm" :disabled="!isRead(selectedEntry)" @click="open(selectedEntry)">
+                <DIcon name="open_in_browser" size="sm" />{{ t('Storage.load') }}
+              </DButton>
+              <DButton
+                v-if="isWritable(selectedPlace)"
+                size="sm"
+                :title="t('Storage.overwriteLabel')"
+                @click="overwrite(selectedEntry)"
               >
-                <span class="row__twist">{{ openFolders.has(row.id) ? '▾' : '▸' }}</span>
-                <span class="row__name">{{ row.name }}</span>
-                <span class="row__meta">{{ row.count }}</span>
-              </button>
-
-              <button
-                v-else
-                type="button"
-                role="treeitem"
-                :class="['row', 'row--entry', { on: selectedEntry === row.entry }]"
-                :style="{ paddingLeft: `${16 + row.depth * 14}px` }"
-                @click="selectEntry(place, row.entry)"
+                {{ t('Storage.overwrite') }}
+              </DButton>
+              <DButton size="sm" :disabled="!isRead(selectedEntry)" @click="download(selectedEntry)">{{ t('Storage.download') }}</DButton>
+              <DButton
+                v-if="isWritable(selectedPlace)"
+                intent="danger"
+                size="sm"
+                @click="remove(selectedEntry)"
               >
-                <span class="row__dot" :class="{ open: isOpen(row.entry) }" aria-hidden="true" />
-                <span class="row__name">{{ row.name }}</span>
-                <span class="row__meta">{{ entrySummary(row.entry) }}</span>
-              </button>
-            </template>
+                {{ t('common:Action.delete') }}
+              </DButton>
+            </div>
+          </header>
 
-            <p v-if="entriesOf(place).length === 0" class="row row--hint">
-              {{ query ? t('Storage.nothingFound') : t('Storage.noEntry') }}
-            </p>
+          <!-- Read on selection; until then a sketch of what is coming -->
+          <template v-if="reading && !isRead(selectedEntry)">
+            <ul class="figures" aria-hidden="true">
+              <li v-for="n in 3" :key="n" class="figure figure--ghost" />
+            </ul>
+            <p class="quiet" role="status">{{ t('Storage.readingEntry') }}</p>
+          </template>
 
-            <button
-              v-if="isWritable(place)"
-              type="button"
-              class="row row--add"
-              @click="startCreating(place)"
-            >
-              <span class="row__twist">＋</span>
-              <span class="row__name">{{ t('Storage.storeCurrent') }}</span>
-            </button>
+          <template v-else-if="isRead(selectedEntry)">
+            <ul class="figures">
+              <li class="figure">
+                <span class="figure__value">{{ totals.boards }}</span>
+                <span class="figure__label">{{ t('Storage.figure.pages') }}</span>
+              </li>
+              <li class="figure">
+                <span class="figure__value">{{ totals.widgets }}</span>
+                <span class="figure__label">{{ t('Storage.figure.widgets') }}</span>
+              </li>
+              <li class="figure">
+                <span class="figure__value">{{ totals.connections }}</span>
+                <span class="figure__label">{{ t('Storage.figure.connections') }}</span>
+              </li>
+              <li class="figure">
+                <span class="figure__value">{{ totals.datasources }}</span>
+                <span class="figure__label">{{ t('Storage.figure.sources') }}</span>
+              </li>
+              <li class="figure">
+                <span class="figure__value">{{ totals.variables }}</span>
+                <span class="figure__label">{{ t('Storage.figure.variables') }}</span>
+              </li>
+            </ul>
+
+            <section v-if="boards.length">
+              <h2 class="section__heading">
+                {{ t('Storage.figure.pages') }}
+                <span class="section__count">{{ boards.length }}</span>
+              </h2>
+              <ul class="cards">
+                <li v-for="board in boards" :key="board.id" class="card">
+                  <BoardFloorplan class="card__plan" :items="board.items" :type-by-id="board.typeById" />
+                  <div class="card__text">
+                    <h3 class="card__name">{{ board.name }}</h3>
+                    <p class="card__facts">
+                      {{ t('Storage.widgets', { count: board.widgetCount }) }} ·
+                      {{ t('Storage.sources', { count: board.sourceCount }) }}
+                    </p>
+                    <p v-if="board.kinds.length" class="card__kinds">{{ board.kinds.join(' · ') }}</p>
+                  </div>
+                </li>
+              </ul>
+            </section>
+            <!-- No pages, but what is here is worth naming: this is the state
+              one explores its connections from. -->
+            <p v-else class="quiet">{{ t('Storage.noBoard') }}</p>
           </template>
         </template>
 
-        <p v-if="!places.length" class="row row--hint">{{ t('Storage.noPlaces') }}</p>
-
-        <button
-          v-if="canUseFolders"
-          type="button"
-          class="row row--add"
-          @click="connectFolder"
-        >
-          <span class="row__twist">＋</span>
-          <span class="row__name">{{ t('Storage.connectFolder') }}</span>
-        </button>
-        <p v-else class="row row--hint">
-          {{ t('Storage.noFolderSupport') }}
-        </p>
-      </div>
-    </aside>
-
-    <section class="detail">
-      <p v-if="failure" class="detail__failure" role="alert">{{ failure }}</p>
-
-      <template v-if="creating">
-        <header class="detail__head">
-          <h2 class="detail__name">{{ t('Storage.create.title') }}</h2>
-          <span class="detail__facts">{{ t('Storage.create.in', { place: selectedPlace?.name }) }}</span>
-        </header>
-        <form class="create" @submit.prevent="createEntry">
-          <label class="create__label" for="storage-name">{{ t('Storage.create.name') }}</label>
-          <input
-            id="storage-name"
-            v-model="newName"
-            class="create__input"
-            type="text"
-            :placeholder="t('Storage.create.placeholder')"
-          />
-          <DButton intent="primary" size="sm" type="submit" :disabled="!newName.trim()">{{ t('Storage.create.submit') }}</DButton>
-          <DButton size="sm" @click="creating = false">{{ t('common:Action.cancel') }}</DButton>
-          <p class="create__hint">
-            {{ t('Storage.create.hint', { pages: t('Storage.pages', { count: pending.boards }), widgets: t('Storage.widgets', { count: pending.widgets }) }) }}
-          </p>
-        </form>
-      </template>
-
-      <component
-        :is="placeView"
-        v-else-if="placeView && !selectedEntry"
-        :repo="selectedPlace"
-        :context="placeContext"
-        @close="placeViewClosed"
-      />
-
-      <template v-else-if="selectedEntry">
-        <header class="detail__head">
-          <h2 class="detail__name">{{ label(selectedEntry) }}</h2>
-          <span v-if="isOpen(selectedEntry)" class="detail__badge">{{ t('Storage.loaded') }}</span>
-          <span class="detail__facts">
-            {{ selectedPlace?.name }} · {{ t('Storage.pages', { count: totals.boards }) }} ·
-            {{ t('Storage.widgets', { count: totals.widgets }) }} ·
-            {{ t('Storage.sources', { count: totals.sources }) }}
-          </span>
-          <span class="detail__spacer" />
-          <DButton intent="primary" size="sm" @click="open(selectedEntry)">{{ t('Storage.load') }}</DButton>
-          <DButton
-            v-if="isWritable(selectedPlace)"
-            size="sm"
-            :title="t('Storage.overwriteLabel')"
-            @click="overwrite(selectedEntry)"
-          >
-            {{ t('Storage.overwrite') }}
-          </DButton>
-          <DButton size="sm" @click="download(selectedEntry)">{{ t('Storage.download') }}</DButton>
-          <DButton
-            v-if="isWritable(selectedPlace)"
-            intent="danger"
-            size="sm"
-            @click="remove(selectedEntry)"
-          >
-            {{ t('common:Action.delete') }}
-          </DButton>
-        </header>
-
-        <div v-if="boards.length" class="boards">
-          <article v-for="board in boards" :key="board.id" class="board">
-            <BoardFloorplan :items="board.items" :type-by-id="board.typeById" />
-            <div class="board__text">
-              <h3 class="board__name">{{ board.name }}</h3>
-              <p class="board__facts">
-                {{ t('Storage.widgets', { count: board.widgetCount }) }} ·
-                {{ t('Storage.sources', { count: board.sourceCount }) }}
+        <!-- The place: its kind, what is kept in it, and storing into it. The
+          same for every kind; a kind's own view adds header controls only. -->
+        <template v-else-if="selectedPlace">
+          <header class="head head--place">
+            <div class="head__what">
+              <h1 class="head__name">{{ selectedPlace.name }}</h1>
+              <p class="head__desc">
+                <DIcon :name="iconOf(selectedPlace)" size="xs" />
+                {{ kindOf(selectedPlace) }}
+                <template v-if="!busy">
+                  · {{ t('Storage.entries', { count: (entriesByPlace[key(selectedPlace)] ?? []).length }) }}
+                </template>
               </p>
-              <p v-if="board.kinds.length" class="board__kinds">{{ board.kinds.join(' · ') }}</p>
             </div>
-          </article>
-        </div>
-        <p v-else-if="reading && !isRead(selectedEntry)" class="detail__hint">
-          {{ t('Storage.reading') }}
-        </p>
-        <!-- No pages, but what is here is worth naming: this is the state
-          one explores its connections from. -->
-        <p v-else class="detail__hint">
-          {{ t('Storage.noBoard') }}
-          <span v-if="totals.connections || totals.datasources || totals.variables">
-            {{ t('Storage.holds', {
-              connections: totals.connections,
-              datasources: totals.datasources,
-              variables: totals.variables,
-            }) }}
-          </span>
-        </p>
-      </template>
+            <component
+              :is="placeView"
+              v-if="placeView"
+              :key="key(selectedPlace)"
+              class="head__controls"
+              :repo="selectedPlace"
+              @refresh="refreshPlace"
+            />
+          </header>
 
-      <p v-else-if="busy" class="detail__hint">{{ t('Storage.reading') }}</p>
-      <!--
-        Nothing picked: the pane used to hold one grey line in the middle
-        of three quarters of empty. It says what a state is and what can
-        be done here instead, which is what one needs before picking.
-      -->
-      <div v-else class="detail__nothing">
-        <h2 class="nothing__title">{{ t('Storage.nothing.title') }}</h2>
-        <p class="nothing__text">{{ t('Storage.nothing.text') }}</p>
-        <ul class="nothing__points">
-          <li>{{ t('Storage.nothing.open') }}</li>
-          <li>{{ t('Storage.nothing.store') }}</li>
-          <li>{{ t('Storage.nothing.carry') }}</li>
-        </ul>
+          <section>
+            <div class="section__bar">
+              <h2 class="section__heading">
+                {{ t('Storage.list.title') }}
+                <span v-if="!busy" class="section__count">{{ entriesOf(selectedPlace).length }}</span>
+              </h2>
+              <DInput
+                v-if="(entriesByPlace[key(selectedPlace)] ?? []).length > 5 || query"
+                v-model="query"
+                class="section__search"
+                type="search"
+                size="sm"
+                :placeholder="t('Storage.filter')"
+                :aria-label="t('Storage.filter')"
+              />
+            </div>
+
+            <!-- Reading: the shape of a list, not a word in a corner -->
+            <ul v-if="busy" class="list" aria-hidden="true">
+              <li v-for="n in 4" :key="n" class="list__ghost" />
+            </ul>
+            <p v-if="busy" class="quiet" role="status">{{ t('Storage.reading') }}</p>
+
+            <div v-else-if="entriesOf(selectedPlace).length === 0" class="empty">
+              <DIcon class="empty__icon" :name="query ? 'search_off' : 'inventory_2'" size="lg" />
+              <p class="empty__title">{{ query ? t('Storage.nothingFound') : t('Storage.noEntry') }}</p>
+              <p v-if="!query" class="empty__text">
+                {{ isWritable(selectedPlace) ? t('Storage.list.emptyWritable') : t('Storage.list.emptyReadOnly') }}
+              </p>
+            </div>
+
+            <ul v-else class="list">
+              <li v-for="row in rowsOf(selectedPlace)" :key="row.id">
+                <!-- A folder the place walked into; its depth is its indent -->
+                <button
+                  v-if="row.kind === 'folder'"
+                  type="button"
+                  :aria-expanded="openFolders.has(row.id)"
+                  class="row row--folder"
+                  :style="{ paddingLeft: `${12 + row.depth * 18}px` }"
+                  @click="toggleFolder(row.id)"
+                >
+                  <DIcon class="row__icon" :name="openFolders.has(row.id) ? 'folder_open' : 'folder'" size="sm" />
+                  <span class="row__name">{{ row.name }}</span>
+                  <span class="row__meta">{{ row.count }}</span>
+                </button>
+
+                <button
+                  v-else
+                  type="button"
+                  class="row row--entry"
+                  :style="{ paddingLeft: `${12 + row.depth * 18}px` }"
+                  @click="selectEntry(selectedPlace, row.entry)"
+                >
+                  <DIcon class="row__icon" name="dashboard" size="sm" />
+                  <span class="row__name">{{ row.name }}</span>
+                  <span v-if="isOpen(row.entry)" class="row__badge">{{ t('Storage.loaded') }}</span>
+                  <span class="row__meta">{{ entrySummary(row.entry) }}</span>
+                  <DIcon class="row__go" name="chevron_right" size="sm" />
+                </button>
+              </li>
+            </ul>
+          </section>
+
+          <section v-if="isWritable(selectedPlace)">
+            <h2 class="section__heading">{{ t('Storage.create.title') }}</h2>
+            <form class="store" @submit.prevent="createEntry">
+              <DInput
+                id="storage-name"
+                v-model="newName"
+                class="store__name"
+                size="sm"
+                stacked
+                :label="t('Storage.create.name')"
+                :placeholder="t('Storage.create.placeholder')"
+              />
+              <DButton intent="primary" size="sm" type="submit" :disabled="!newName.trim()">
+                <DIcon name="save" size="sm" />{{ t('Storage.create.submit') }}
+              </DButton>
+              <p class="store__hint">
+                {{ t('Storage.create.hint', { pages: t('Storage.pages', { count: pending.boards }), widgets: t('Storage.widgets', { count: pending.widgets }) }) }}
+              </p>
+            </form>
+          </section>
+        </template>
+
+        <!--
+          Nothing picked: it says what a state is and what can be done here
+          instead, which is what one needs before picking.
+        -->
+        <div v-else class="nothing">
+          <h2 class="nothing__title">{{ t('Storage.nothing.title') }}</h2>
+          <p class="nothing__text">{{ t('Storage.nothing.text') }}</p>
+          <ul class="nothing__points">
+            <li>{{ t('Storage.nothing.open') }}</li>
+            <li>{{ t('Storage.nothing.store') }}</li>
+            <li>{{ t('Storage.nothing.carry') }}</li>
+          </ul>
+        </div>
       </div>
     </section>
   </div>
 </template>
 
 <style scoped>
+/*
+ * Laid out like the other finished screens: a panel on the left as in
+ * "Connections & data", and on the right the board overview's header,
+ * figures, section headings and bordered lists.
+ */
 .storage {
   display: grid;
   grid-template-columns: 280px minmax(0, 1fr);
   flex: 1 1 auto;
   min-height: 0;
-  background-color: var(--color-pane);
+  background-color: var(--color-bg);
   overflow: hidden;
 }
 
-/* ------------------------------------------------------------------ tree */
+/* ---------------------------------------------------------------- places */
 
-.tree {
+.places {
   display: flex;
   flex-direction: column;
   min-height: 0;
+  background: var(--color-pane);
   border-right: 1px solid var(--color-divider);
 }
 
-.tree__search {
-  margin: 8px;
-  height: 26px;
-  padding: 0 8px;
+.places__head {
+  flex: none;
+  padding: 9px 10px;
+  border-bottom: 1px solid var(--color-divider);
+}
+
+.places__title {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--color-dim);
+}
+
+.places__body {
+  flex: 1 1 auto;
+  min-height: 0;
+  padding: 4px 0;
+  overflow-y: auto;
+}
+
+.places__foot {
+  flex: none;
+  padding: 6px 6px;
+  border-top: 1px solid var(--color-divider);
+}
+
+.places__none {
+  margin: 0;
+  padding: 6px 10px;
+  font-family: var(--font-sans);
   font-size: var(--text-sm);
-  font-family: inherit;
+  color: var(--color-dim);
+}
+
+.place {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 7px 10px;
+  text-align: left;
+  background: transparent;
+  border: 0;
+  box-shadow: inset 2px 0 0 transparent;
+  cursor: pointer;
+}
+
+.place:hover {
+  background: var(--color-raised);
+}
+
+.place--on,
+.place--on:hover {
+  background: color-mix(in srgb, var(--color-accent) 14%, transparent);
+  box-shadow: inset 2px 0 0 var(--color-accent);
+}
+
+.place:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: -2px;
+}
+
+.place__icon {
+  flex: none;
+  color: var(--color-dim);
+}
+
+.place--on .place__icon {
+  color: var(--color-accent);
+}
+
+.place__text {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.place__name {
+  overflow: hidden;
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  font-weight: 600;
   color: var(--color-fg);
-  background-color: var(--color-bg);
-  border: 1px solid var(--color-divider);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.place__kind {
+  font-family: var(--font-sans);
+  font-size: var(--text-xs);
+  color: var(--color-dim);
+}
+
+.place__count {
+  flex: none;
+  min-width: 20px;
+  padding: 0 6px;
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  line-height: 1.6;
+  text-align: center;
+  color: var(--color-dim);
+  background: var(--color-raised);
+  border-radius: 999px;
+}
+
+/* ---------------------------------------------------------------- detail */
+
+.detail {
+  min-width: 0;
+  min-height: 0;
+  overflow: auto;
+}
+
+.detail__inner {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  max-width: 920px;
+  padding: 20px 24px 32px;
+}
+
+.head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 12px 16px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--color-divider);
+}
+
+.head__what {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  min-width: 0;
+}
+
+.head__back {
+  margin-left: -8px;
+}
+
+.head__name {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: var(--text-xl);
+  font-weight: 600;
+  line-height: 1.2;
+  color: var(--color-fg);
+  overflow-wrap: anywhere;
+}
+
+.head__desc {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  color: var(--color-dim);
+}
+
+.head__badge,
+.row__badge {
+  padding: 1px 6px;
+  font-family: var(--font-sans);
+  font-size: var(--text-xs);
+  font-weight: 500;
+  color: var(--color-accent);
+  background-color: color-mix(in srgb, var(--color-accent) 14%, transparent);
   border-radius: var(--radius-xs);
 }
 
-.tree__body {
-  flex: 1 1 auto;
-  min-height: 0;
-  padding: 0 4px 8px;
-  overflow-y: auto;
+/* A place's own controls - git's repository, branch and commit - sit in
+  its header, as one row under the name. */
+.head--place {
+  flex-direction: column;
+  flex-wrap: nowrap;
+  align-items: stretch;
+  justify-content: flex-start;
+}
+
+.head__controls {
+  flex: none;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+/* ---------------------------------------------------------------- figures */
+
+.figures {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.figure {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 112px;
+  padding: 12px 14px;
+  background-color: var(--color-pane);
+  border: 1px solid var(--color-divider);
+  border-radius: var(--radius-sm);
+}
+
+.figure--ghost {
+  height: 60px;
+}
+
+.figure__value {
+  font-family: var(--font-mono);
+  font-size: var(--text-xl);
+  line-height: 1.1;
+  color: var(--color-fg);
+}
+
+.figure__label {
+  font-family: var(--font-sans);
+  font-size: var(--text-xs);
+  letter-spacing: 0.02em;
+  color: var(--color-dim);
+}
+
+/* --------------------------------------------------------------- sections */
+
+.section__bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.section__bar .section__heading {
+  margin: 0;
+}
+
+.section__search {
+  width: 240px;
+}
+
+.section__heading {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin: 0 0 8px;
+  font-family: var(--font-sans);
+  font-size: var(--text-lg);
+  font-weight: 600;
+  color: var(--color-fg);
+}
+
+.section__count {
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  font-weight: 400;
+  color: var(--color-dim);
+}
+
+.quiet {
+  margin: 8px 0 0;
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  color: var(--color-dim);
+}
+
+/* ------------------------------------------------------- entries of a place */
+
+.list {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border: 1px solid var(--color-divider);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+
+.list > li + li {
+  border-top: 1px solid var(--color-divider);
 }
 
 .row {
   display: flex;
-  align-items: baseline;
-  flex-wrap: nowrap;
-  gap: 6px;
+  align-items: center;
+  gap: 10px;
   width: 100%;
-  padding: 4px 6px;
-  font-family: inherit;
-  font-size: var(--text-base);
-  color: var(--color-fg);
+  padding: 8px 12px;
   text-align: left;
-  background: none;
+  background: var(--color-pane);
   border: 0;
-  border-radius: var(--radius-xs);
   cursor: pointer;
 }
 
@@ -765,57 +1108,32 @@ watch(() => repoManager, loadPlaces)
   background-color: var(--color-raised);
 }
 
-.row.on {
-  background-color: color-mix(in srgb, var(--color-accent) 12%, transparent);
-  box-shadow: inset 2px 0 0 var(--color-accent);
+.row:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: -2px;
 }
 
-.row--place {
-  font-weight: 600;
-}
-
-.row--entry {
-  padding-left: 22px;
-  font-family: var(--font-mono);
-  font-size: var(--text-sm);
-}
-
-.row--hint {
-  padding-left: 22px;
-  margin: 0;
-  color: var(--color-dim);
-  font-size: var(--text-sm);
-  cursor: default;
-}
-
-/* A folder inside a place - lighter than the place, firmer than a board. */
-.row--folder {
-  color: var(--text-1, inherit);
-  font-weight: 500;
-}
-
-.row--add {
-  color: var(--color-dim);
-  font-size: var(--text-sm);
-}
-
-.row__twist {
-  width: 12px;
+.row__icon {
   flex: none;
-  font-size: var(--text-xs);
   color: var(--color-dim);
 }
 
 .row__name {
   min-width: 0;
   overflow: hidden;
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  color: var(--color-fg);
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
+.row--folder .row__name {
+  font-weight: 600;
+}
+
 .row__meta {
   margin-left: auto;
-  padding-left: 8px;
   flex: none;
   font-family: var(--font-mono);
   font-variant-numeric: tabular-nums;
@@ -823,70 +1141,185 @@ watch(() => repoManager, loadPlaces)
   color: var(--color-dim);
 }
 
-/* The state that is loaded right now carries the accent; the others stay quiet. */
-.row__dot {
-  width: 5px;
-  height: 5px;
+.row__go {
   flex: none;
-  border-radius: 50%;
-  background-color: transparent;
+  color: var(--color-dim);
+  opacity: 0;
 }
 
-.row__dot.open {
-  background-color: var(--color-accent);
+.row:hover .row__go,
+.row:focus-visible .row__go {
+  opacity: 1;
 }
 
-/* ---------------------------------------------------------------- detail */
+/* A sketch of rows while the place is read */
+.list__ghost {
+  height: 37px;
+  background: var(--color-pane);
+}
 
-.detail {
+.figure--ghost,
+.list__ghost {
+  background-image: linear-gradient(
+    90deg,
+    transparent 0,
+    color-mix(in srgb, var(--color-fg) 6%, transparent) 50%,
+    transparent 100%
+  );
+  background-size: 200% 100%;
+  animation: ghost 1.4s ease-in-out infinite;
+}
+
+@keyframes ghost {
+  from {
+    background-position: 100% 0;
+  }
+  to {
+    background-position: -100% 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .figure--ghost,
+  .list__ghost {
+    animation: none;
+  }
+}
+
+.empty {
   display: flex;
   flex-direction: column;
-  min-width: 0;
-  min-height: 0;
-  background-color: var(--color-bg);
-  overflow-y: auto;
-}
-
-.detail__head {
-  display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 7px 12px;
-  background-color: var(--color-pane);
-  border-bottom: 1px solid var(--color-divider);
+  gap: 4px;
+  padding: 28px 16px;
+  text-align: center;
+  background: var(--color-pane);
+  border: 1px dashed var(--color-divider);
+  border-radius: var(--radius-sm);
 }
 
-.detail__name {
-  margin: 0;
+.empty__icon {
+  color: var(--color-dim);
+}
+
+.empty__title {
+  margin: 4px 0 0;
+  font-family: var(--font-sans);
   font-size: var(--text-base);
   font-weight: 600;
   color: var(--color-fg);
 }
 
-.detail__facts {
-  font-family: var(--font-mono);
-  font-variant-numeric: tabular-nums;
+.empty__text {
+  margin: 0;
+  max-width: 44ch;
+  font-family: var(--font-sans);
   font-size: var(--text-sm);
   color: var(--color-dim);
 }
 
-.detail__spacer {
-  flex: 1 1 auto;
+/* ------------------------------------------------------------------ store */
+
+.store {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 8px 10px;
+  padding: 12px 14px;
+  background: var(--color-pane);
+  border: 1px solid var(--color-divider);
+  border-radius: var(--radius-sm);
 }
 
-.detail__badge {
-  padding: 1px 6px;
+.store__name {
+  flex: 0 1 320px;
+}
+
+/* In a row, not a form column: no gap under the field. */
+.store :deep(.field) {
+  margin-bottom: 0;
+}
+
+.store__hint {
+  flex: 1 0 100%;
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  color: var(--color-dim);
+}
+
+/* ------------------------------------------------------------------ cards */
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 8px;
+  background-color: var(--color-pane);
+  border: 1px solid var(--color-divider);
+  border-radius: var(--radius-sm);
+}
+
+.card__text {
+  padding: 0 2px 2px;
+}
+
+.card__name {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--color-fg);
+}
+
+.card__facts {
+  margin: 2px 0 0;
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
   font-size: var(--text-xs);
-  color: var(--color-accent);
-  background-color: color-mix(in srgb, var(--color-accent) 14%, transparent);
-  border-radius: var(--radius-xs);
+  color: var(--color-dim);
 }
 
-.detail__nothing {
-  max-width: 420px;
-  margin: auto;
-  padding: 24px;
-  text-align: left;
+.card__kinds {
+  margin: 4px 0 0;
+  overflow: hidden;
+  font-family: var(--font-sans);
+  font-size: var(--text-xs);
+  color: var(--color-dim);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ---------------------------------------------------------------- failure */
+
+.failure {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin: 0;
+  padding: 10px 12px;
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  color: var(--color-err);
+  background-color: color-mix(in srgb, var(--color-err) 10%, transparent);
+  border: 1px solid color-mix(in srgb, var(--color-err) 35%, transparent);
+  border-radius: var(--radius-sm);
+}
+
+/* ---------------------------------------------------------------- nothing */
+
+.nothing {
+  max-width: 440px;
+  margin: 40px auto;
 }
 
 .nothing__title {
@@ -919,110 +1352,5 @@ watch(() => repoManager, loadPlaces)
   font-size: var(--text-sm);
   color: var(--color-dim);
   border-left: 2px solid var(--color-divider);
-}
-
-.detail__hint {
-  display: grid;
-  place-items: center;
-  flex: 1 1 auto;
-  margin: 0;
-  padding: 24px;
-  font-size: var(--text-sm);
-  color: var(--color-dim);
-  text-align: center;
-}
-
-.detail__failure {
-  margin: 12px 12px 0;
-  padding: 8px 10px;
-  font-size: var(--text-sm);
-  color: var(--color-err);
-  background-color: color-mix(in srgb, var(--color-err) 10%, transparent);
-  border-radius: var(--radius-xs);
-}
-
-/* --------------------------------------------------- boards inside a state */
-
-.boards {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 12px;
-  padding: 12px;
-}
-
-.board {
-  background-color: var(--color-pane);
-  border: 1px solid var(--color-divider);
-  border-radius: var(--radius-sm);
-  overflow: hidden;
-}
-
-.board__text {
-  padding: 8px 10px;
-}
-
-.board__name {
-  margin: 0;
-  font-size: var(--text-base);
-  font-weight: 600;
-  color: var(--color-fg);
-}
-
-.board__facts {
-  margin: 2px 0 0;
-  font-family: var(--font-mono);
-  font-variant-numeric: tabular-nums;
-  font-size: var(--text-sm);
-  color: var(--color-dim);
-}
-
-.board__kinds {
-  margin: 4px 0 0;
-  font-size: var(--text-xs);
-  color: var(--color-dim);
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-/* ---------------------------------------------------------------- create */
-
-.create {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 8px;
-  padding: 16px;
-}
-
-.create__label {
-  font-size: var(--text-sm);
-  color: var(--color-dim);
-}
-
-.create__input {
-  height: 26px;
-  min-width: 220px;
-  padding: 0 8px;
-  font-size: var(--text-base);
-  font-family: inherit;
-  color: var(--color-fg);
-  background-color: var(--color-raised);
-  border: 1px solid var(--color-divider);
-  border-radius: var(--radius-xs);
-}
-
-.create__hint {
-  flex: 1 0 100%;
-  margin: 0;
-  font-size: var(--text-sm);
-  color: var(--color-dim);
-}
-
-.row:focus-visible,
-.tree__search:focus-visible,
-.create__input:focus-visible {
-  outline: 2px solid var(--color-accent);
-  outline-offset: 1px;
 }
 </style>
