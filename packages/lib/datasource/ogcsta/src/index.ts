@@ -59,3 +59,6 @@ export type { BoxedDatastream, BoxedThing, BoxedLocation, IOGCSTAData, IOGCSTACo
 export type { Datastream } from './client'
 export { OgcstaPackage, OgcstaFactory, IOGCSTAConfigurationImpl }
 export type { LatestValuesTable, LatestValuesView, LatestValueColumn, ValueMapping } from './util/latestValues'
+export type { LatestObservation } from './util/latestValues'
+/* Name patterns as both sides read them: a filter on /Things, and a test on a name (#1266). */
+export { thingFilterOfNames, matchesNamePattern } from './util/latestValues'
