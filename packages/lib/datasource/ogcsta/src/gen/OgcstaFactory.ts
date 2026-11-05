@@ -21,8 +21,14 @@
 import { BasicEFactory } from '@emfts/core';
 import type { EClass, EObject } from '@emfts/core';
 import { OgcstaPackage } from './OgcstaPackage.js';
-import { IOGCSTAConfiguration } from './IOGCSTAConfiguration.js';
+import type { IOGCSTAConfiguration } from './IOGCSTAConfiguration.js';
 import { IOGCSTAConfigurationImpl } from './IOGCSTAConfigurationImpl.js';
+import type { OGCSTALatestValues } from './OGCSTALatestValues.js';
+import { OGCSTALatestValuesImpl } from './OGCSTALatestValuesImpl.js';
+import type { OGCSTALatestValueColumn } from './OGCSTALatestValueColumn.js';
+import { OGCSTALatestValueColumnImpl } from './OGCSTALatestValueColumnImpl.js';
+import type { OGCSTAValueMapping } from './OGCSTAValueMapping.js';
+import { OGCSTAValueMappingImpl } from './OGCSTAValueMappingImpl.js';
 
 /**
  * Factory for creating Ogcsta model objects
@@ -52,12 +58,39 @@ export class OgcstaFactory extends BasicEFactory {
   }
 
   /**
+   * Create a new OGCSTALatestValues instance
+   */
+  createOGCSTALatestValues(): OGCSTALatestValues {
+    return new OGCSTALatestValuesImpl();
+  }
+
+  /**
+   * Create a new OGCSTALatestValueColumn instance
+   */
+  createOGCSTALatestValueColumn(): OGCSTALatestValueColumn {
+    return new OGCSTALatestValueColumnImpl();
+  }
+
+  /**
+   * Create a new OGCSTAValueMapping instance
+   */
+  createOGCSTAValueMapping(): OGCSTAValueMapping {
+    return new OGCSTAValueMappingImpl();
+  }
+
+  /**
    * Create an instance of the given class
    */
   override create(eClass: EClass): EObject {
     switch (eClass.getName()) {
       case 'IOGCSTAConfiguration':
         return this.createIOGCSTAConfiguration();
+      case 'OGCSTALatestValues':
+        return this.createOGCSTALatestValues();
+      case 'OGCSTALatestValueColumn':
+        return this.createOGCSTALatestValueColumn();
+      case 'OGCSTAValueMapping':
+        return this.createOGCSTAValueMapping();
       default:
         throw new Error(`Unknown class: ${eClass.getName()}`);
     }

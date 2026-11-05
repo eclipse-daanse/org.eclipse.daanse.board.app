@@ -100,3 +100,51 @@ describe('OGCSTAStoreSettings.vue', () => {
     expect(config.connection).toBe('conn-rest-1')
   })
 })
+
+/*
+ * #1264: the latest values view is set in the dialog and stored as plain
+ * JSON, like the rest of the configuration.
+ */
+describe('the latest values view in OGCSTAStoreSettings.vue', () => {
+  const mountWith = (config: any) =>
+    mount(OGCSTAStoreSettings, {
+      props: { config, dataSources: [], connections: [] },
+      global: { provide: { [variableIdentifier]: variableRepository } },
+    })
+
+  it('is switched on with its summary and stored as plain objects', async () => {
+    const config: any = { connection: '' }
+    const wrapper = mountWith(config)
+    expect(config.latestValues).toBeUndefined()
+
+    await wrapper.find('details.latest summary').trigger('click')
+    const textarea = wrapper.find('details.latest textarea')
+    await textarea.setValue('Reference Area*\n\n*-derived ')
+    const add = wrapper.findAll('details.latest button').find((b) => b.text() === 'Ogcsta.latest.addColumn')
+    await add!.trigger('click')
+
+    expect(JSON.parse(JSON.stringify(config.latestValues))).toEqual({
+      thingNames: ['Reference Area*', '*-derived'],
+      nameColumn: 'name',
+      idColumn: '',
+      columns: [{ suffix: '', label: '', part: 'result', mappings: [] }],
+    })
+
+    await wrapper.find('details.latest summary').trigger('click')
+    expect('latestValues' in config).toBe(false)
+  })
+
+  it('shows a stored view with its mappings', () => {
+    const config: any = {
+      connection: '',
+      latestValues: {
+        thingNames: ['Reference Area*'],
+        columns: [{ suffix: '~referenceArea~color', label: 'Zustand', mappings: [{ code: 'BLUE', label: 'feucht', color: '#1e88e5' }] }],
+      },
+    }
+    const wrapper = mountWith(config)
+
+    expect(wrapper.find('details.latest').attributes('open')).toBeDefined()
+    expect(wrapper.findAll('details.latest .latest__mapping')).toHaveLength(1)
+  })
+})

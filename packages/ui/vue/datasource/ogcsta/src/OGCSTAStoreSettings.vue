@@ -9,7 +9,7 @@ Contributors: Smart City Jena
 
 -->
 <script setup lang="ts">
-import { DButton, DCheckbox, DDateInput, DInput, DSelect } from 'org.eclipse.daanse.board.app.ui.vue.controls'
+import { DButton, DCheckbox, DColorInput, DDateInput, DIcon, DInput, DSelect } from 'org.eclipse.daanse.board.app.ui.vue.controls'
 import { inject, computed, reactive, watch, ref } from 'vue';
 import { VariableWrapper, useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables';
 import {
@@ -193,6 +193,52 @@ const phenomenonTimeEndDT = createDateTimeComputed(() => timeWrappers.phenomenon
 const resultTimeStartDT = createDateTimeComputed(() => timeWrappers.resultTimeStart);
 const resultTimeEndDT = createDateTimeComputed(() => timeWrappers.resultTimeEnd);
 
+/*
+ * The latest values view (#1264), modelled as OGCSTALatestValues. Stored
+ * as plain JSON like the rest of this configuration, so it is written as
+ * plain objects here; a view that is switched off is not stored at all.
+ */
+type Mapping = { code?: string; label?: string; color?: string };
+type Column = { suffix?: string; label?: string; part?: string; mappings?: Mapping[] };
+type View = { thingNames?: string[]; nameColumn?: string; idColumn?: string; columns?: Column[] };
+
+const view = ref<View | null>(config.latestValues ? reactive(config.latestValues as View) : null);
+
+const toggleView = () => {
+  if (view.value) {
+    delete config.latestValues;
+    view.value = null;
+    return;
+  }
+  config.latestValues = { thingNames: [], nameColumn: 'name', idColumn: '', columns: [] };
+  view.value = reactive(config.latestValues as View);
+};
+
+/* One name pattern per line. */
+const thingNamesText = computed({
+  get: () => (view.value?.thingNames ?? []).join('\n'),
+  set: (text: string) => {
+    if (!view.value) return;
+    view.value.thingNames = text.split('\n').map((line) => line.trim()).filter(Boolean);
+  },
+});
+
+const parts = computed(() => [
+  { text: t('Ogcsta.latest.partResult'), value: 'result' },
+  { text: t('Ogcsta.latest.partTime'), value: 'phenomenonTime' },
+]);
+
+const addColumn = () => {
+  if (!view.value) return;
+  (view.value.columns ??= []).push({ suffix: '', label: '', part: 'result', mappings: [] });
+};
+
+const removeColumn = (index: number) => view.value?.columns?.splice(index, 1);
+
+const addMapping = (column: Column) => (column.mappings ??= []).push({ code: '', label: '', color: '' });
+
+const removeMapping = (column: Column, index: number) => column.mappings?.splice(index, 1);
+
 </script>
 
 <template>
@@ -222,6 +268,53 @@ const resultTimeEndDT = createDateTimeComputed(() => timeWrappers.resultTimeEnd)
             clearable
           />
         </div>
+
+        <!-- Latest values view: a table of things, a column per datastream. -->
+        <details class="history latest" :open="!!view">
+          <summary class="history__head" @click.prevent="toggleView">
+            <DIcon name="table" size="sm" tone="color-dim" />{{ t('Ogcsta.latest.title') }}
+          </summary>
+          <div v-if="view" class="history-settings">
+            <DInput
+              v-model="thingNamesText"
+              :label="t('Ogcsta.latest.thingNames')"
+              :hint="t('Ogcsta.latest.thingNamesHint')"
+              :rows="2"
+            />
+            <DInput v-model="view.nameColumn" :label="t('Ogcsta.latest.nameColumn')" :hint="t('Ogcsta.latest.emptyNoColumn')" />
+            <DInput v-model="view.idColumn" :label="t('Ogcsta.latest.idColumn')" :hint="t('Ogcsta.latest.emptyNoColumn')" />
+
+            <div v-for="(column, index) in view.columns" :key="index" class="setting-group latest__column">
+              <div class="filter-header">
+                <h4>{{ t('Ogcsta.latest.column', { index: index + 1 }) }}</h4>
+                <DButton intent="danger" size="sm" :title="t('Ogcsta.latest.removeColumn')" @click="removeColumn(index)">
+                  <DIcon name="delete" size="sm" />
+                </DButton>
+              </div>
+              <DInput v-model="column.suffix" :label="t('Ogcsta.latest.suffix')" :hint="t('Ogcsta.latest.suffixHint')" />
+              <DInput v-model="column.label" :label="t('Ogcsta.latest.label')" />
+              <DSelect
+                v-model="column.part"
+                :label="t('Ogcsta.latest.part')"
+                :options="parts"
+                label-key="text"
+                value-key="value"
+              />
+              <template v-if="column.part !== 'phenomenonTime'">
+                <div v-for="(mapping, at) in column.mappings" :key="at" class="latest__mapping">
+                  <DInput v-model="mapping.code" :label="t('Ogcsta.latest.code')" />
+                  <DInput v-model="mapping.label" :label="t('Ogcsta.latest.shownAs')" />
+                  <DColorInput v-model="mapping.color" :label="t('Ogcsta.latest.color')" />
+                  <DButton intent="danger" size="sm" :title="t('Ogcsta.latest.removeMapping')" @click="removeMapping(column, at)">
+                    <DIcon name="delete" size="sm" />
+                  </DButton>
+                </div>
+                <DButton size="sm" @click="addMapping(column)">{{ t('Ogcsta.latest.addMapping') }}</DButton>
+              </template>
+            </div>
+            <DButton size="sm" @click="addColumn">{{ t('Ogcsta.latest.addColumn') }}</DButton>
+          </div>
+        </details>
 
         <!-- History Configuration -->
         <!-- A disclosure, which the browser already has. Its open state is
@@ -496,6 +589,13 @@ const resultTimeEndDT = createDateTimeComputed(() => timeWrappers.resultTimeEnd)
 .history {
   border-top: 1px solid var(--color-divider);
   padding-top: 8px;
+}
+
+.latest__mapping {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr auto;
+  gap: 0.5rem;
+  align-items: end;
 }
 
 .history__head {
