@@ -1000,6 +1000,40 @@ export class OgcStaStore extends BaseDatasource implements OgcStaStoreI {
   }
 
   /**
+   * The latest observation of each datastream named, by its id - the way
+   * the latest values view reads them: in batches where the server allows
+   * it, and each one a batch misses directly from
+   * `Datastreams('id')/Observations`. A datastream without an observation,
+   * or one the server does not know, is absent from the answer. The 3D map
+   * colours and raises its areas by these (#1266).
+   */
+  async latestObservations(datastreamIds: string[]): Promise<Map<string, LatestObservation>> {
+    this.baseConfigration = this.api()
+    const api = new DatastreamsApi(this.baseConfigration)
+    const perDatastream = async (datastreamId: string) => {
+      try {
+        const data = await api.v11DatastreamsEntityIdObservationsGet({
+          entityId: datastreamId,
+          $top: 1,
+          $orderby: 'phenomenonTime desc',
+        })
+        return ((data.value ?? []) as (Observation & { ds_source?: string })[])
+          .map((o) => ({ ...o, ds_source: datastreamId }))
+      } catch (e) {
+        // A thing without this datastream has no value there.
+        this.logData('Latest observation failed for', datastreamId, e)
+        return []
+      }
+    }
+    const latest = new Map<string, LatestObservation>()
+    for (const observation of await this.loadLatest(datastreamIds, perDatastream)) {
+      const id = String(observation.ds_source)
+      if (!latest.has(id)) latest.set(id, observation)
+    }
+    return latest
+  }
+
+  /**
    * The latest values view (#1264): the things its name patterns match, as
    * `Things?$filter=…&$select=@iot.id,name` (`/Things` is complete), and
    * the latest observation of each datastream a column names, by id - the
@@ -1021,28 +1055,7 @@ export class OgcStaStore extends BaseDatasource implements OgcStaStoreI {
 
       const columns = columnsOf(view)
       const ids = things.flatMap((thing) => columns.map((column) => datastreamIdOf(thing.id, column)))
-      const api = new DatastreamsApi(this.baseConfigration)
-      const perDatastream = async (datastreamId: string) => {
-        try {
-          const data = await api.v11DatastreamsEntityIdObservationsGet({
-            entityId: datastreamId,
-            $top: 1,
-            $orderby: 'phenomenonTime desc',
-          })
-          return ((data.value ?? []) as (Observation & { ds_source?: string })[])
-            .map((o) => ({ ...o, ds_source: datastreamId }))
-        } catch (e) {
-          // A thing without this datastream has no value in its column.
-          this.logData('Latest observation failed for', datastreamId, e)
-          return []
-        }
-      }
-      const latest = new Map<string, LatestObservation>()
-      for (const observation of await this.loadLatest(ids, perDatastream)) {
-        const id = String(observation.ds_source)
-        if (!latest.has(id)) latest.set(id, observation)
-      }
-      return buildLatestValuesTable(view, things, latest)
+      return buildLatestValuesTable(view, things, await this.latestObservations(ids))
     } catch (e) {
       this.logData('Latest values view failed', e)
       return buildLatestValuesTable(view, [], new Map())

@@ -21,7 +21,7 @@ import { wireRepositories } from '../../../../../test/support/wiring'
 import * as ogcsta from '../src/index'
 import { factorySymbol } from '../src/index'
 import { clearSharedCache } from '../src/client/CachingMiddleware'
-import { formatTime, thingFilterOfNames } from '../src/util/latestValues'
+import { formatTime, matchesNamePattern, thingFilterOfNames } from '../src/util/latestValues'
 import { IOGCSTAConfigurationImpl } from '../src/gen/IOGCSTAConfigurationImpl'
 import { staServer, type StaFixture } from './support/staServer'
 
@@ -184,6 +184,35 @@ describe('the thing names of the view', () => {
       "startswith(name,'Reference Area') or endswith(name,'-derived') or substringof('O''Neil',name) or name eq 'Weather Jena'",
     )
     expect(thingFilterOfNames(undefined)).toBeNull()
+  })
+
+  it('pick on a name the things the server filter picks (#1266)', () => {
+    expect(matchesNamePattern('Reference Area ZW-01', 'Reference Area*')).toBe(true)
+    expect(matchesNamePattern('Sensor 1-derived', '*-derived')).toBe(true)
+    expect(matchesNamePattern("Mr O'Neil", "*O'Neil*")).toBe(true)
+    expect(matchesNamePattern('Weather Jena', 'Weather Jena')).toBe(true)
+    expect(matchesNamePattern('Weather Jena 2', 'Weather Jena')).toBe(false)
+    expect(matchesNamePattern('anything', '*')).toBe(true)
+    expect(matchesNamePattern('anything', '')).toBe(false)
+  })
+})
+
+describe('the latest observations of named datastreams (#1266)', () => {
+  beforeEach(() => clearSharedCache())
+
+  it('come by id, in one batch where the server allows it, and directly for what it misses', async () => {
+    const { store } = setup()
+
+    const latest = await store.latestObservations([
+      'ZW-01~referenceArea~color',
+      'ZW-01~referenceArea~sensorCount',
+      'JeN-02~referenceArea~color',
+    ])
+
+    expect(latest.get('ZW-01~referenceArea~sensorCount')?.result).toBe(3)
+    expect(latest.has('ZW-01~referenceArea~color')).toBe(true)
+    // A datastream without an observation is absent, not an error.
+    expect(latest.has('JeN-02~referenceArea~color')).toBe(false)
   })
 })
 

@@ -70,6 +70,26 @@ function namePatternFilter(pattern: string): string | null {
 }
 
 /**
+ * Whether a thing name matches one name pattern, read as namePatternFilter
+ * reads it on the server: `x*` starts with, `*x` ends with, `*x*`
+ * contains, no star is equality, and `*` alone matches every name. The
+ * same pattern thus picks the same things on both sides - a map that loads
+ * its things by the pattern draws them by it too (#1266).
+ */
+export function matchesNamePattern(name: string, pattern: string): boolean {
+  const value = String(pattern ?? '').trim()
+  if (!value) return false
+  if (value === '*') return true
+  const lead = value.startsWith('*')
+  const trail = value.length > 1 && value.endsWith('*')
+  const core = value.slice(lead ? 1 : 0, trail ? -1 : undefined)
+  if (lead && trail) return name.includes(core)
+  if (lead) return name.endsWith(core)
+  if (trail) return name.startsWith(core)
+  return name === core
+}
+
+/**
  * The things of the view as a filter on `/Things`, the patterns joined with
  * `or`. Null when there is no pattern the server can express: the view then
  * has no rows, rather than one per thing of the server.
