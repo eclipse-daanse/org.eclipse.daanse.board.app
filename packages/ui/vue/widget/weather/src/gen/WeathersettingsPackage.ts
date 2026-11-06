@@ -59,6 +59,7 @@ export class WeathersettingsPackage extends BasicEPackage {
     WEATHER_SETTINGS__SELECTED_FORECAST_PARAMETERS: null as unknown as EAttribute | EReference,
     WEATHER_SETTINGS__FORECAST_PERIODS: null as unknown as EAttribute | EReference,
     WEATHER_SETTINGS__GRID_COLOR: null as unknown as EAttribute | EReference,
+    WEATHER_SETTINGS__TEMPERATURE_UNIT: null as unknown as EAttribute | EReference,
   };
 
   private constructor() {
@@ -188,6 +189,15 @@ export class WeathersettingsPackage extends BasicEPackage {
     weatherSettingsClass.getEStructuralFeatures().push(weatherSettings_gridColor);
     WeathersettingsPackage.Literals.WEATHER_SETTINGS__GRID_COLOR = weatherSettings_gridColor;
 
+    // Create temperatureUnit feature
+    const weatherSettings_temperatureUnit = new BasicEAttribute();
+    weatherSettings_temperatureUnit.setName('temperatureUnit');
+    weatherSettings_temperatureUnit.setLowerBound(0);
+    weatherSettings_temperatureUnit.setUpperBound(1);
+    weatherSettings_temperatureUnit.setDefaultValueLiteral("");
+    weatherSettingsClass.getEStructuralFeatures().push(weatherSettings_temperatureUnit);
+    WeathersettingsPackage.Literals.WEATHER_SETTINGS__TEMPERATURE_UNIT = weatherSettings_temperatureUnit;
+
 
     // ============================================
     // Set ESuperTypes (must be done after all classes are created)
@@ -210,6 +220,7 @@ export class WeathersettingsPackage extends BasicEPackage {
     (WeathersettingsPackage.Literals.WEATHER_SETTINGS__SELECTED_FORECAST_PARAMETERS as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
     (WeathersettingsPackage.Literals.WEATHER_SETTINGS__FORECAST_PERIODS as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
     (WeathersettingsPackage.Literals.WEATHER_SETTINGS__GRID_COLOR as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (WeathersettingsPackage.Literals.WEATHER_SETTINGS__TEMPERATURE_UNIT as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
 
     // ============================================
     // Set EOpposites (must be done after all features are created) (#59)

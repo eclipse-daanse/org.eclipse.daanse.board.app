@@ -71,5 +71,14 @@ takes and what the widget stores.
                              eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
         <eStructuralFeatures xsi:type="ecore:EAttribute" name="gridColor"
                              eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+
+        <!-- The unit of a temperature the source sends without one (#1267) -->
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="temperatureUnit"
+                             eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+                             defaultValueLiteral="">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="The unit of a temperature that the source sends without a unit of its own, as the DWD forecast on the udp-broker does: K or °F is shown converted to °C, °C as it is. Empty: shown as it comes, which is what a board without this setting did. A temperature that names its unit keeps it."/>
+            </eAnnotations>
+        </eStructuralFeatures>
     </eClassifiers>
 </ecore:EPackage>

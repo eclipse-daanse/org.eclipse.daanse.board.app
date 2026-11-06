@@ -17,6 +17,7 @@ import { useDatasourceRepository, useEObject, useFormat, useTranslation } from '
 import type { WeatherSettings } from './gen/WeatherSettings'
 import type { WeatherWidgetSettings } from './types/WeatherWidgetSettings'
 import { useWeatherData } from './composables/useWeatherData'
+import { isNight, nightIcon } from './composables/weatherUnits'
 import ForecastChart from './components/ForecastChart.vue'
 
 const props = defineProps<{
@@ -247,8 +248,20 @@ const getWeatherIconFromWMO = (wmoCode: number): string => {
   return wmoIcons[wmoCode] || '🌤️'
 }
 
-// Get weather icon from available data
+/*
+ * The icon as it is at the time of the value: at night a clear sky shows
+ * the moon and no icon shows the sun (#1267). The place is the station's;
+ * without one the day icons stay, as before.
+ */
 const getWeatherIcon = (weather: any): string => {
+  const icon = getDayIcon(weather)
+  const at = weather?.temperature?.timestamp ?? weather?.timestamp
+  const place = weather?.location?.coordinates ?? locationInfo.value?.coordinates
+  return isNight(at, place) ? nightIcon(icon) : icon
+}
+
+// Get weather icon from available data
+const getDayIcon = (weather: any): string => {
   if (!weather) return '🌤️'
 
   // Check if we have a WMO weather code in the data

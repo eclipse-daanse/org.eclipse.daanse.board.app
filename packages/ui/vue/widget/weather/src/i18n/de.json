@@ -51,7 +51,8 @@
     "showForecast": "Vorhersage zeigen",
     "selectedForecastParameters": "Welche Werte",
     "forecastPeriods": "Welche Zeiträume",
-    "gridColor": "Farbe der Gitterlinien"
+    "gridColor": "Farbe der Gitterlinien",
+    "temperatureUnit": "Temperatur ohne Einheit ist in"
   },
   "Options": {
     "refresh": {
@@ -68,6 +69,12 @@
       "h48": "48 Stunden",
       "h60": "60 Stunden",
       "h72": "72 Stunden"
+    },
+    "unit": {
+      "asSent": "wie geliefert",
+      "kelvin": "Kelvin (K)",
+      "celsius": "Celsius (°C)",
+      "fahrenheit": "Fahrenheit (°F)"
     }
   }
 }

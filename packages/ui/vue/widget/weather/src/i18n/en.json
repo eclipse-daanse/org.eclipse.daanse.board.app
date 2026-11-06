@@ -51,7 +51,8 @@
     "showForecast": "Show forecast",
     "selectedForecastParameters": "Which values",
     "forecastPeriods": "Which periods",
-    "gridColor": "Grid line colour"
+    "gridColor": "Grid line colour",
+    "temperatureUnit": "Temperature without unit is in"
   },
   "Options": {
     "refresh": {
@@ -68,6 +69,12 @@
       "h48": "48 hours",
       "h60": "60 hours",
       "h72": "72 hours"
+    },
+    "unit": {
+      "asSent": "as sent",
+      "kelvin": "Kelvin (K)",
+      "celsius": "Celsius (°C)",
+      "fahrenheit": "Fahrenheit (°F)"
     }
   }
 }

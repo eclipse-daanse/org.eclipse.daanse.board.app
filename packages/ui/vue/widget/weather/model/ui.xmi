@@ -76,6 +76,14 @@ setInterval; the labels say it in the units someone thinks in.
         <optionLabel language="JS" body="({ forecast12h: 'weather:Options.period.h12', forecast24h: 'weather:Options.period.h24', forecast36h: 'weather:Options.period.h36', forecast48h: 'weather:Options.period.h48', forecast60h: 'weather:Options.period.h60', forecast72h: 'weather:Options.period.h72' })[option] ?? option"/>
         <visibilityCondition language="JS" body="self.showForecast === true || self.showForecast === 'true'"/>
       </fields>
+      <fields xsi:type="uimodel:SelectWidget" name="temperatureUnit"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.weather#//WeatherSettings/temperatureUnit" label="weather:Form.temperatureUnit">
+        <values></values>
+        <values>K</values>
+        <values>°C</values>
+        <values>°F</values>
+        <optionLabel language="JS" body="({ '': 'weather:Options.unit.asSent', K: 'weather:Options.unit.kelvin', '°C': 'weather:Options.unit.celsius', '°F': 'weather:Options.unit.fahrenheit' })[option] ?? option"/>
+      </fields>
       <fields xsi:type="uimodel:InputWidget" name="gridColor"
           feature="http://org.eclipse.daanse.board.app.ui.vue.widget.weather#//WeatherSettings/gridColor" label="weather:Form.gridColor">
         <visibilityCondition language="JS" body="self.showForecast === true || self.showForecast === 'true'"/>
