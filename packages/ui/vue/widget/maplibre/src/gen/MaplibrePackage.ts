@@ -68,6 +68,8 @@ export class MaplibrePackage extends BasicEPackage {
     MAP_LIBRE_SETTINGS__RASTER_OPACITY: null as unknown as EAttribute | EReference,
     MAP_LIBRE_SETTINGS__RASTER_ATTRIBUTION: null as unknown as EAttribute | EReference,
     MAP_LIBRE_SETTINGS__RASTER_INVERT_DARK: null as unknown as EAttribute | EReference,
+    MAP_LIBRE_SETTINGS__ATTRIBUTION: null as unknown as EAttribute | EReference,
+    MAP_LIBRE_SETTINGS__ATTRIBUTION_COMPACT: null as unknown as EAttribute | EReference,
     MAP_LIBRE_SETTINGS__CENTER_LAT: null as unknown as EAttribute | EReference,
     MAP_LIBRE_SETTINGS__CENTER_LON: null as unknown as EAttribute | EReference,
     MAP_LIBRE_SETTINGS__ZOOM: null as unknown as EAttribute | EReference,
@@ -243,6 +245,24 @@ export class MaplibrePackage extends BasicEPackage {
     mapLibreSettings_rasterInvertDark.setDefaultValueLiteral("true");
     mapLibreSettingsClass.getEStructuralFeatures().push(mapLibreSettings_rasterInvertDark);
     MaplibrePackage.Literals.MAP_LIBRE_SETTINGS__RASTER_INVERT_DARK = mapLibreSettings_rasterInvertDark;
+
+    // Create attribution feature
+    const mapLibreSettings_attribution = new BasicEAttribute();
+    mapLibreSettings_attribution.setName('attribution');
+    mapLibreSettings_attribution.setLowerBound(0);
+    mapLibreSettings_attribution.setUpperBound(1);
+    mapLibreSettings_attribution.setDefaultValueLiteral("");
+    mapLibreSettingsClass.getEStructuralFeatures().push(mapLibreSettings_attribution);
+    MaplibrePackage.Literals.MAP_LIBRE_SETTINGS__ATTRIBUTION = mapLibreSettings_attribution;
+
+    // Create attributionCompact feature
+    const mapLibreSettings_attributionCompact = new BasicEAttribute();
+    mapLibreSettings_attributionCompact.setName('attributionCompact');
+    mapLibreSettings_attributionCompact.setLowerBound(0);
+    mapLibreSettings_attributionCompact.setUpperBound(1);
+    mapLibreSettings_attributionCompact.setDefaultValueLiteral("true");
+    mapLibreSettingsClass.getEStructuralFeatures().push(mapLibreSettings_attributionCompact);
+    MaplibrePackage.Literals.MAP_LIBRE_SETTINGS__ATTRIBUTION_COMPACT = mapLibreSettings_attributionCompact;
 
     // Create centerLat feature
     const mapLibreSettings_centerLat = new BasicEAttribute();
@@ -846,6 +866,8 @@ export class MaplibrePackage extends BasicEPackage {
     (MaplibrePackage.Literals.MAP_LIBRE_SETTINGS__RASTER_OPACITY as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EDouble')!);
     (MaplibrePackage.Literals.MAP_LIBRE_SETTINGS__RASTER_ATTRIBUTION as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
     (MaplibrePackage.Literals.MAP_LIBRE_SETTINGS__RASTER_INVERT_DARK as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EBoolean')!);
+    (MaplibrePackage.Literals.MAP_LIBRE_SETTINGS__ATTRIBUTION as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (MaplibrePackage.Literals.MAP_LIBRE_SETTINGS__ATTRIBUTION_COMPACT as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EBoolean')!);
     (MaplibrePackage.Literals.MAP_LIBRE_SETTINGS__CENTER_LAT as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EDouble')!);
     (MaplibrePackage.Literals.MAP_LIBRE_SETTINGS__CENTER_LON as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EDouble')!);
     (MaplibrePackage.Literals.MAP_LIBRE_SETTINGS__ZOOM as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EDouble')!);

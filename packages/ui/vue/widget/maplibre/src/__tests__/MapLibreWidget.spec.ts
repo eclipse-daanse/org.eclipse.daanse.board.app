@@ -27,6 +27,7 @@ import { TinyEmitter } from 'tiny-emitter'
 import { MaplibrePackage } from '../gen/MaplibrePackage'
 import { modelledSettings } from '../settingsModel'
 import { clickEventOf } from '../events/payloads'
+import { TextAttributionControl, attributionFragment } from '../attribution'
 
 void EventsPackage.eINSTANCE
 void MaplibrePackage.eINSTANCE
@@ -54,7 +55,15 @@ vi.mock('maplibre-gl', () => {
     on(event: string, fn: (event?: unknown) => void) {
       this.handlers[event] = fn
     }
-    addControl() {}
+    controls: any[] = []
+    addControl(control: any) {
+      control.element = control.onAdd?.(this)
+      this.controls.push(control)
+    }
+    removeControl(control: any) {
+      control.onRemove?.(this)
+      this.controls = this.controls.filter((c) => c !== control)
+    }
     getStyle() {
       return { layers: [...this.styleLayers, ...this.layers], sources: { openmaptiles: { type: 'vector' }, ...this.sources } }
     }
@@ -88,7 +97,10 @@ vi.mock('maplibre-gl', () => {
     remove() {}
   }
   class NavigationControl {}
-  return { Map, NavigationControl, getWorkerUrl: () => '', setWorkerUrl: vi.fn() }
+  class AttributionControl {
+    constructor(public options: any) {}
+  }
+  return { Map, NavigationControl, AttributionControl, getWorkerUrl: () => '', setWorkerUrl: vi.fn() }
 })
 
 vi.mock('vue-router', () => ({ useRoute: () => ({ params: { pageid: 'p1' } }) }))
@@ -184,6 +196,36 @@ describe('the 3D map widget', () => {
     expect(map.layers.map((l: any) => l.id).at(-1)).toBe('daanse:things:areas:circle')
   })
 
+  it('shows the attribution a board sets in place of the sources\' one, and follows it without a reload (#1271)', async () => {
+    const settings = stored()
+    const { map } = await mountWidget(settings)
+    const model = modelledSettings(settings)
+    const attributionOf = () => map.controls.find((c: any) => c.constructor.name.includes('Attribution'))
+
+    // An old board: MapLibre's own control, folded, as before.
+    expect(attributionOf().constructor.name).toBe('AttributionControl')
+    expect(attributionOf().options).toEqual({ compact: true })
+
+    model.attribution = '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    await nextTick()
+    const control = attributionOf()
+    expect(control).toBeInstanceOf(TextAttributionControl)
+    expect(control.element.textContent).toBe('© OpenStreetMap contributors')
+    expect(control.element.querySelector('a').getAttribute('href')).toBe('https://www.openstreetmap.org/copyright')
+
+    model.attribution = '© Stadt Jena'
+    await nextTick()
+    expect(attributionOf()).toBe(control)
+    expect(control.element.textContent).toBe('© Stadt Jena')
+
+    model.attributionCompact = false
+    await nextTick()
+    expect(attributionOf()).not.toBe(control)
+    expect(attributionOf().element.tagName).toBe('DIV')
+    expect(map.controls.filter((c: any) => c.constructor.name.includes('Attribution'))).toHaveLength(1)
+    expect(map.setStyle).not.toHaveBeenCalled()
+  })
+
   it('loads only the things of its patterns, and colours and raises them by their latest values', async () => {
     const { map, store } = await mountWidget(stored())
     expect(store.setThingScope).toHaveBeenCalledWith('maplibre:w1', "startswith(name,'Reference Area')")
@@ -253,6 +295,14 @@ describe('the 3D map widget', () => {
 
     api.flyTo(50.9, 11.5, 14, 60, 30, 500)
     expect(map.flyTo).toHaveBeenLastCalledWith({ center: [11.5, 50.9], zoom: 14, pitch: 60, bearing: 30, duration: 500 })
+  })
+})
+
+describe('the attribution text', () => {
+  it('keeps links and emphasis, and drops scripts, handlers and other link targets', () => {
+    const box = document.createElement('div')
+    box.appendChild(attributionFragment('<b>Map</b> <a href="https://a.example" onclick="x()">A</a> <a href="javascript:alert(1)">B</a><script>bad()</script><img src=x onerror="y()">'))
+    expect(box.innerHTML).toBe('<b>Map</b> <a href="https://a.example" target="_blank" rel="noopener noreferrer">A</a> <a>B</a>')
   })
 })
 

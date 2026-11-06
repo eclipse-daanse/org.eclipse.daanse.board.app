@@ -96,6 +96,9 @@ function addColor(layer: ThingLayer) {
       <DSlider v-model="settings.rasterOpacity" :label="t('Settings.rasterOpacity')" :min="0" :max="1" :step="0.05" />
       <DCheckbox v-model="settings.rasterInvertDark" :label="t('Settings.rasterInvertDark')" />
       <DInput v-model="settings.rasterAttribution" :label="t('Settings.rasterAttribution')" />
+      <DInput v-model="settings.attribution" :label="t('Settings.attribution')" :rows="2"
+        placeholder="© OpenStreetMap contributors" :hint="t('Settings.attributionHint')" />
+      <DCheckbox v-model="settings.attributionCompact" :label="t('Settings.attributionCompact')" />
     </div>
   </section>
 

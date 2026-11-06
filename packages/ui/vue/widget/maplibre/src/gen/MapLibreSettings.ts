@@ -35,6 +35,8 @@ export interface MapLibreSettings extends EObject {
   rasterOpacity?: number;
   rasterAttribution?: string;
   rasterInvertDark?: boolean;
+  attribution?: string;
+  attributionCompact?: boolean;
   centerLat?: number;
   centerLon?: number;
   zoom?: number;
