@@ -259,8 +259,11 @@ async function trimRestSections() {
   if (!wanted || !host) return
   await nextTick()
   for (const section of sectionsIn(host)) {
-    const id = section.dataset.sectionId ?? labelOf(section)
-    section.style.display = wanted.includes(id) ? '' : 'none'
+    /* By its id, which does not change with the language; by its label
+      for a section that has no id (#1269). */
+    const id = section.dataset.sectionId
+    const shown = (id !== undefined && wanted.includes(id)) || wanted.includes(labelOf(section))
+    section.style.display = shown ? '' : 'none'
   }
 }
 

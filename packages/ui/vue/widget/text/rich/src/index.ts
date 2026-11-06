@@ -71,7 +71,7 @@ export class RichTextWidgetProvider implements WidgetProvider {
      * type into and a row of things you press. Named so that what is
      * modelled is not offered twice.
      */
-    unmodelledSections: ['Text und Formatierung'],
+    unmodelledSections: ['text'],
   }
 
   constructor(

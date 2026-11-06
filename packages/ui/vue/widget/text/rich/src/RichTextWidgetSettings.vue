@@ -14,7 +14,7 @@ Contributors:
 <script lang="ts" setup>
 import { inject, ref, watch, onMounted } from 'vue'
 import StarterKit from "@tiptap/starter-kit";
-import { useEditor } from "@tiptap/vue-3";
+import { useEditor, EditorContent } from "@tiptap/vue-3";
 import Bold from "@tiptap/extension-bold";
 import Italic from "@tiptap/extension-italic";
 import Heading from "@tiptap/extension-heading";
@@ -565,7 +565,7 @@ watch(
                 </div>
             </div>
             <div class="rte-surface">
-                <editor-content class="ml-2" :editor="editor" />
+                <EditorContent class="ml-2" :editor="editor" />
             </div>
         </div>
     </section>

@@ -69,7 +69,7 @@ export class PageWidgetProvider implements WidgetProvider {
      * right now, and it refuses the page it is sitting on. Named so that
      * what is modelled is not offered twice.
      */
-    unmodelledSections: ['Seite wählen'],
+    unmodelledSections: ['page'],
   }
 }
 

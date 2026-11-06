@@ -72,7 +72,7 @@ export class ProgressWidgetProvider implements WidgetProvider {
      * table built up row by row, and the colour they produce is worked out
      * rather than typed.
      */
-    unmodelledSections: ['Farbstopps'],
+    unmodelledSections: ['stops'],
   }
   readonly icon = Icon
   readonly reads = ['object']
