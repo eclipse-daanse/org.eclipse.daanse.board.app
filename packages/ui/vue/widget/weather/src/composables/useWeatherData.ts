@@ -14,6 +14,7 @@ Contributors:
 import { ref, computed, toValue, type MaybeRefOrGetter } from 'vue'
 import type { WeatherSettings } from '../gen/WeatherSettings'
 import { useFormat, useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+import { applyTemperatureUnit } from './weatherUnits'
 
 /**
  * The weather an answer holds, filtered by the settings' station and
@@ -83,7 +84,14 @@ export function useWeatherData(source: MaybeRefOrGetter<WeatherSettings | undefi
     return answer[0]
   })
 
-  const currentWeather = computed(() => {
+  /*
+   * The temperatures in the unit the settings name for values without one
+   * (#1267): the DWD forecast on the udp-broker sends Kelvin and says
+   * nothing about it. An empty setting leaves everything as it was.
+   */
+  const currentWeather = computed(() => applyTemperatureUnit(rawWeather.value, toValue(source)?.temperatureUnit))
+
+  const rawWeather = computed(() => {
     // A composer answer is the weather already, forecasts included
     if (station.value) return station.value
 
@@ -103,7 +111,8 @@ export function useWeatherData(source: MaybeRefOrGetter<WeatherSettings | undefi
             description?.includes('temperatur') || name?.includes('lufttemperatur')) {
           weather.temperature = {
             value: obs.result,
-            unit: ds.unitOfMeasurement?.symbol || '°C',
+            // Without a unit: the configured one, else Celsius as before (#1267)
+            unit: ds.unitOfMeasurement?.symbol || (toValue(source)?.temperatureUnit ? '' : '°C'),
             timestamp: obs.phenomenonTime
           }
         } else if (name?.includes('humidity') || name?.includes('feuchte') ||

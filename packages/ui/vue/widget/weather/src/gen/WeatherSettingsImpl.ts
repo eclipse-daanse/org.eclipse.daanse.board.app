@@ -42,6 +42,7 @@ export class WeatherSettingsImpl extends BasicEObject implements WeatherSettings
   static readonly SELECTED_FORECAST_PARAMETERS: number = 9;
   static readonly FORECAST_PERIODS: number = 10;
   static readonly GRID_COLOR: number = 11;
+  static readonly TEMPERATURE_UNIT: number = 12;
 
   // Private fields
   private _thingId?: string;
@@ -56,6 +57,7 @@ export class WeatherSettingsImpl extends BasicEObject implements WeatherSettings
   private _selectedForecastParameters!: EList<string>;
   private _forecastPeriods!: EList<string>;
   private _gridColor?: string;
+  private _temperatureUnit: string = "";
 
   /**
    * Returns the EClass of this object
@@ -319,6 +321,30 @@ export class WeatherSettingsImpl extends BasicEObject implements WeatherSettings
     }
   }
 
+  get temperatureUnit(): string {
+    return this._temperatureUnit!;
+  }
+
+  set temperatureUnit(value: string) {
+    const oldValue = this._temperatureUnit;
+    this._temperatureUnit = value;
+    if (this.eDeliver()) {
+      this.eNotify({
+        getNotifier: () => this,
+        getEventType: () => 1, // SET
+        getFeature: () => this.eClass().getEStructuralFeature(WeatherSettingsImpl.TEMPERATURE_UNIT),
+        getOldValue: () => oldValue,
+        getNewValue: () => value,
+        getPosition: () => -1,
+        wasSet: () => true,
+        isTouch: () => false,
+        isReset: () => false,
+        getFeatureID: () => WeatherSettingsImpl.TEMPERATURE_UNIT,
+        merge: () => false
+      });
+    }
+  }
+
   // Reflective API
 
   /**
@@ -351,6 +377,8 @@ export class WeatherSettingsImpl extends BasicEObject implements WeatherSettings
         return this.forecastPeriods;
       case WeatherSettingsImpl.GRID_COLOR:
         return this.gridColor;
+      case WeatherSettingsImpl.TEMPERATURE_UNIT:
+        return this.temperatureUnit;
       default:
         return super.eGet(feature);
     }
@@ -412,6 +440,10 @@ export class WeatherSettingsImpl extends BasicEObject implements WeatherSettings
         this.gridColor = newValue as string;
         super.eSet(feature, newValue);
         break;
+      case WeatherSettingsImpl.TEMPERATURE_UNIT:
+        this.temperatureUnit = newValue as string;
+        super.eSet(feature, newValue);
+        break;
       default:
         super.eSet(feature, newValue);
     }
@@ -447,6 +479,8 @@ export class WeatherSettingsImpl extends BasicEObject implements WeatherSettings
         return this._forecastPeriods !== undefined && !this._forecastPeriods.isEmpty();
       case WeatherSettingsImpl.GRID_COLOR:
         return this._gridColor !== undefined;
+      case WeatherSettingsImpl.TEMPERATURE_UNIT:
+        return this._temperatureUnit !== "";
       default:
         return super.eIsSet(feature);
     }
@@ -494,6 +528,9 @@ export class WeatherSettingsImpl extends BasicEObject implements WeatherSettings
       case WeatherSettingsImpl.GRID_COLOR:
         this._gridColor = undefined;
         return;
+      case WeatherSettingsImpl.TEMPERATURE_UNIT:
+        this._temperatureUnit = "";
+        return;
       default:
         super.eUnset(feature);
     }
@@ -521,6 +558,7 @@ export class WeatherSettingsImpl extends BasicEObject implements WeatherSettings
       selectedForecastParameters: this.selectedForecastParameters?.toArray?.() ?? this.selectedForecastParameters,
       forecastPeriods: this.forecastPeriods?.toArray?.() ?? this.forecastPeriods,
       gridColor: this.gridColor,
+      temperatureUnit: this.temperatureUnit,
     };
   }
 }

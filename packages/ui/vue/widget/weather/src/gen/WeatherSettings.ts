@@ -37,5 +37,6 @@ export interface WeatherSettings extends EObject {
   selectedForecastParameters: EList<string>;
   forecastPeriods: EList<string>;
   gridColor?: string;
+  temperatureUnit?: string;
 
 }
