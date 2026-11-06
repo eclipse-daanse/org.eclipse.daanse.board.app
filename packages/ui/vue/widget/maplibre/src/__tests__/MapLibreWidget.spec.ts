@@ -70,8 +70,10 @@ vi.mock('maplibre-gl', () => {
     removeSource(id: string) {
       delete this.sources[id]
     }
-    addLayer(layer: any) {
-      this.layers.push(layer)
+    addLayer(layer: any, beforeId?: string) {
+      const at = beforeId ? this.layers.findIndex((l) => l.id === beforeId) : -1
+      if (at >= 0) this.layers.splice(at, 0, layer)
+      else this.layers.push(layer)
     }
     getLayer(id: string) {
       return this.layers.find((l) => l.id === id)
@@ -158,9 +160,28 @@ describe('the 3D map widget', () => {
     const { map } = await mountWidget(stored())
     expect(map.options.pitch).toBe(55)
     const ids = map.layers.map((l: any) => l.id)
-    expect(ids).toEqual(['daanse:raster', 'daanse:buildings', 'daanse:things:areas:extrusion', 'daanse:things:areas:line', 'daanse:things:areas:circle'])
+    expect(ids).toEqual(['daanse:raster', 'daanse:things:areas:line', 'daanse:things:areas:circle', 'daanse:buildings', 'daanse:things:areas:extrusion'])
     // The style's own 3D buildings give way to the map's.
     expect(map.setLayoutProperty).toHaveBeenCalledWith('building-3d', 'visibility', 'none')
+  })
+
+  it('puts flat areas below the 3D buildings, and blocks above them (#1270)', async () => {
+    const settings = stored()
+    const { map } = await mountWidget(settings)
+    const model = modelledSettings(settings)
+    model.thingLayers.get(0).extrude = false
+    await nextTick()
+    expect(map.layers.map((l: any) => l.id)).toEqual([
+      'daanse:raster',
+      'daanse:things:areas:fill',
+      'daanse:things:areas:line',
+      'daanse:things:areas:circle',
+      'daanse:buildings',
+    ])
+
+    model.buildings = false
+    await nextTick()
+    expect(map.layers.map((l: any) => l.id).at(-1)).toBe('daanse:things:areas:circle')
   })
 
   it('loads only the things of its patterns, and colours and raises them by their latest values', async () => {
