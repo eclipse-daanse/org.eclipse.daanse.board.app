@@ -69,7 +69,7 @@ export class TextWidgetProvider implements WidgetProvider {
      * written in a field that can name variables inside it, and the rest
      * is six buttons that show at a glance which way it sits.
      */
-    unmodelledSections: ['Text und Formatierung'],
+    unmodelledSections: ['text'],
   }
 
   constructor(

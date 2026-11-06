@@ -75,7 +75,7 @@ export class IconWidgetProvider implements WidgetProvider {
      * clicking one - so it stays with the hand-written component. Named so
      * that what is modelled is not offered twice.
      */
-    unmodelledSections: ['Symbol wählen'],
+    unmodelledSections: ['symbol'],
   }
 
   constructor(
