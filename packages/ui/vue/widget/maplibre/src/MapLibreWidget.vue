@@ -21,7 +21,8 @@ Contributors:
  * new data only replaces the data of its source.
  */
 import { computed, inject, onMounted, onUnmounted, ref, shallowRef, toRefs, watch } from 'vue'
-import { Map as MapLibreMap, NavigationControl, type GeoJSONSource, type MapMouseEvent } from 'maplibre-gl'
+import { AttributionControl, Map as MapLibreMap, NavigationControl, type GeoJSONSource, type IControl, type MapMouseEvent } from 'maplibre-gl'
+import { TextAttributionControl } from './attribution'
 import { useMapLibreWorker } from './worker'
 import 'maplibre-gl/dist/maplibre-gl.css'
 import { useRoute } from 'vue-router'
@@ -237,6 +238,34 @@ function applyInteractive(target: MapLibreMap, on: boolean) {
   }
 }
 
+/* ---------------------------------------------------------- attribution */
+
+/*
+ * The attribution (#1271): MapLibre's own control, with what the style and
+ * the raster base say, until a board sets a text of its own - that text then
+ * replaces all of it. A changed text is put in place; a changed fold makes
+ * the control anew. Neither reloads the map.
+ */
+let attribution: IControl | undefined
+let attributionKind = ''
+function applyAttribution() {
+  if (!map) return
+  const s = held()
+  const text = String(s.attribution ?? '').trim()
+  const compact = s.attributionCompact !== false
+  const kind = `${text ? 'text' : 'sources'}:${compact}`
+  if (attribution && kind === attributionKind) {
+    if (attribution instanceof TextAttributionControl) attribution.setText(text)
+    return
+  }
+  if (attribution) map.removeControl(attribution)
+  attribution = text
+    ? new TextAttributionControl(text, compact, t('Widget.attribution'))
+    : new AttributionControl({ compact })
+  attributionKind = kind
+  map.addControl(attribution, 'bottom-right')
+}
+
 /* --------------------------------------------------------------- events */
 
 function onClick(event: MapMouseEvent) {
@@ -307,13 +336,14 @@ onMounted(() => {
       style: styleUrl.value,
       ...view.value,
       maxPitch: 85,
-      attributionControl: { compact: true },
+      attributionControl: false,
     })
   } catch {
     failed.value = true
     return
   }
   map.addControl(new NavigationControl({ visualizePitch: true }), 'top-right')
+  applyAttribution()
   applyInteractive(map, held().interactive !== false)
   map.on('style.load', () => {
     styleReady = true
@@ -334,6 +364,7 @@ watch(styleUrl, (url) => {
 watch(lookKey, applyAdditions)
 watch(collections, applyData)
 watch(view, (next) => map?.jumpTo(next))
+watch(() => [held().attribution, held().attributionCompact], applyAttribution)
 watch(() => held().interactive, (on) => map && applyInteractive(map, on !== false))
 
 onUnmounted(() => {
@@ -364,6 +395,11 @@ onUnmounted(() => {
 .maplibre-widget__map {
   position: absolute;
   inset: 0;
+}
+
+/* The attribution box is light; the text inherits the app's, which is light in the dark theme. */
+.maplibre-widget :deep(.maplibregl-ctrl-attrib) {
+  color: #222;
 }
 
 .maplibre-widget__failed {

@@ -40,23 +40,25 @@ export class MapLibreSettingsImpl extends BasicEObject implements MapLibreSettin
   static readonly RASTER_OPACITY: number = 5;
   static readonly RASTER_ATTRIBUTION: number = 6;
   static readonly RASTER_INVERT_DARK: number = 7;
-  static readonly CENTER_LAT: number = 8;
-  static readonly CENTER_LON: number = 9;
-  static readonly ZOOM: number = 10;
-  static readonly PITCH: number = 11;
-  static readonly BEARING: number = 12;
-  static readonly INTERACTIVE: number = 13;
-  static readonly BUILDINGS: number = 14;
-  static readonly BUILDING_COLOR: number = 15;
-  static readonly BUILDING_OPACITY: number = 16;
-  static readonly BUILDING_SOURCE_LAYER: number = 17;
-  static readonly TERRAIN_URL: number = 18;
-  static readonly TERRAIN_ENCODING: number = 19;
-  static readonly TERRAIN_EXAGGERATION: number = 20;
-  static readonly SKY: number = 21;
-  static readonly SELECTION_COLOR: number = 22;
-  static readonly THING_LAYERS: number = 23;
-  static readonly GEO_JSON_LAYERS: number = 24;
+  static readonly ATTRIBUTION: number = 8;
+  static readonly ATTRIBUTION_COMPACT: number = 9;
+  static readonly CENTER_LAT: number = 10;
+  static readonly CENTER_LON: number = 11;
+  static readonly ZOOM: number = 12;
+  static readonly PITCH: number = 13;
+  static readonly BEARING: number = 14;
+  static readonly INTERACTIVE: number = 15;
+  static readonly BUILDINGS: number = 16;
+  static readonly BUILDING_COLOR: number = 17;
+  static readonly BUILDING_OPACITY: number = 18;
+  static readonly BUILDING_SOURCE_LAYER: number = 19;
+  static readonly TERRAIN_URL: number = 20;
+  static readonly TERRAIN_ENCODING: number = 21;
+  static readonly TERRAIN_EXAGGERATION: number = 22;
+  static readonly SKY: number = 23;
+  static readonly SELECTION_COLOR: number = 24;
+  static readonly THING_LAYERS: number = 25;
+  static readonly GEO_JSON_LAYERS: number = 26;
 
   // Private fields
   private _datasourceId?: string;
@@ -67,6 +69,8 @@ export class MapLibreSettingsImpl extends BasicEObject implements MapLibreSettin
   private _rasterOpacity: number = 1;
   private _rasterAttribution: string = "";
   private _rasterInvertDark: boolean = true;
+  private _attribution: string = "";
+  private _attributionCompact: boolean = true;
   private _centerLat: number = 50.9271;
   private _centerLon: number = 11.5892;
   private _zoom: number = 15;
@@ -280,6 +284,54 @@ export class MapLibreSettingsImpl extends BasicEObject implements MapLibreSettin
         isTouch: () => false,
         isReset: () => false,
         getFeatureID: () => MapLibreSettingsImpl.RASTER_INVERT_DARK,
+        merge: () => false
+      });
+    }
+  }
+
+  get attribution(): string {
+    return this._attribution!;
+  }
+
+  set attribution(value: string) {
+    const oldValue = this._attribution;
+    this._attribution = value;
+    if (this.eDeliver()) {
+      this.eNotify({
+        getNotifier: () => this,
+        getEventType: () => 1, // SET
+        getFeature: () => this.eClass().getEStructuralFeature(MapLibreSettingsImpl.ATTRIBUTION),
+        getOldValue: () => oldValue,
+        getNewValue: () => value,
+        getPosition: () => -1,
+        wasSet: () => true,
+        isTouch: () => false,
+        isReset: () => false,
+        getFeatureID: () => MapLibreSettingsImpl.ATTRIBUTION,
+        merge: () => false
+      });
+    }
+  }
+
+  get attributionCompact(): boolean {
+    return this._attributionCompact!;
+  }
+
+  set attributionCompact(value: boolean) {
+    const oldValue = this._attributionCompact;
+    this._attributionCompact = value;
+    if (this.eDeliver()) {
+      this.eNotify({
+        getNotifier: () => this,
+        getEventType: () => 1, // SET
+        getFeature: () => this.eClass().getEStructuralFeature(MapLibreSettingsImpl.ATTRIBUTION_COMPACT),
+        getOldValue: () => oldValue,
+        getNewValue: () => value,
+        getPosition: () => -1,
+        wasSet: () => true,
+        isTouch: () => false,
+        isReset: () => false,
+        getFeatureID: () => MapLibreSettingsImpl.ATTRIBUTION_COMPACT,
         merge: () => false
       });
     }
@@ -683,6 +735,10 @@ export class MapLibreSettingsImpl extends BasicEObject implements MapLibreSettin
         return this.rasterAttribution;
       case MapLibreSettingsImpl.RASTER_INVERT_DARK:
         return this.rasterInvertDark;
+      case MapLibreSettingsImpl.ATTRIBUTION:
+        return this.attribution;
+      case MapLibreSettingsImpl.ATTRIBUTION_COMPACT:
+        return this.attributionCompact;
       case MapLibreSettingsImpl.CENTER_LAT:
         return this.centerLat;
       case MapLibreSettingsImpl.CENTER_LON:
@@ -758,6 +814,14 @@ export class MapLibreSettingsImpl extends BasicEObject implements MapLibreSettin
         break;
       case MapLibreSettingsImpl.RASTER_INVERT_DARK:
         this.rasterInvertDark = newValue as boolean;
+        super.eSet(feature, newValue);
+        break;
+      case MapLibreSettingsImpl.ATTRIBUTION:
+        this.attribution = newValue as string;
+        super.eSet(feature, newValue);
+        break;
+      case MapLibreSettingsImpl.ATTRIBUTION_COMPACT:
+        this.attributionCompact = newValue as boolean;
         super.eSet(feature, newValue);
         break;
       case MapLibreSettingsImpl.CENTER_LAT:
@@ -857,6 +921,10 @@ export class MapLibreSettingsImpl extends BasicEObject implements MapLibreSettin
         return this._rasterAttribution !== "";
       case MapLibreSettingsImpl.RASTER_INVERT_DARK:
         return this._rasterInvertDark !== true;
+      case MapLibreSettingsImpl.ATTRIBUTION:
+        return this._attribution !== "";
+      case MapLibreSettingsImpl.ATTRIBUTION_COMPACT:
+        return this._attributionCompact !== true;
       case MapLibreSettingsImpl.CENTER_LAT:
         return this._centerLat !== 50.9271;
       case MapLibreSettingsImpl.CENTER_LON:
@@ -925,6 +993,12 @@ export class MapLibreSettingsImpl extends BasicEObject implements MapLibreSettin
         return;
       case MapLibreSettingsImpl.RASTER_INVERT_DARK:
         this._rasterInvertDark = true;
+        return;
+      case MapLibreSettingsImpl.ATTRIBUTION:
+        this._attribution = "";
+        return;
+      case MapLibreSettingsImpl.ATTRIBUTION_COMPACT:
+        this._attributionCompact = true;
         return;
       case MapLibreSettingsImpl.CENTER_LAT:
         this._centerLat = 50.9271;
@@ -1000,6 +1074,8 @@ export class MapLibreSettingsImpl extends BasicEObject implements MapLibreSettin
       rasterOpacity: this.rasterOpacity,
       rasterAttribution: this.rasterAttribution,
       rasterInvertDark: this.rasterInvertDark,
+      attribution: this.attribution,
+      attributionCompact: this.attributionCompact,
       centerLat: this.centerLat,
       centerLon: this.centerLon,
       zoom: this.zoom,

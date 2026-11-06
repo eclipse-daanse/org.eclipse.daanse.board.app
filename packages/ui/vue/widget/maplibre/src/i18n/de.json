@@ -1,7 +1,8 @@
 {
   "Widget": {
     "name": "3D-Karte",
-    "noWebGL": "Diese Karte braucht WebGL, das dieser Browser nicht bietet."
+    "noWebGL": "Diese Karte braucht WebGL, das dieser Browser nicht bietet.",
+    "attribution": "Quellenangabe"
   },
   "Settings": {
     "sections": {
@@ -20,6 +21,9 @@
     "rasterOpacity": "Deckkraft der Raster-Grundkarte",
     "rasterInvertDark": "Raster-Grundkarte im dunklen Thema abdunkeln",
     "rasterAttribution": "Quellenangabe der Raster-Grundkarte",
+    "attribution": "Quellenangabe der ganzen Karte (leer: die des Stils und der Raster-Grundkarte)",
+    "attributionHint": "Ersetzt die ganze Quellenangabe. Die Angabe, die die Lizenz der Kartendaten verlangt (z. B. © OpenStreetMap-Mitwirkende), muss sichtbar bleiben. Links sind erlaubt.",
+    "attributionCompact": "Quellenangabe hinter einem i-Knopf einklappen",
     "centerLat": "Mitte, Breite",
     "centerLon": "Mitte, Länge",
     "zoom": "Zoom",

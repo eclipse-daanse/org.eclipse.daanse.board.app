@@ -1,7 +1,8 @@
 {
   "Widget": {
     "name": "3D Map",
-    "noWebGL": "This map needs WebGL, which this browser does not offer."
+    "noWebGL": "This map needs WebGL, which this browser does not offer.",
+    "attribution": "Attribution"
   },
   "Settings": {
     "sections": {
@@ -20,6 +21,9 @@
     "rasterOpacity": "Opacity of the raster base",
     "rasterInvertDark": "Turn the raster base dark in the dark theme",
     "rasterAttribution": "Attribution of the raster base",
+    "attribution": "Attribution of the whole map (empty: the one of the style and the raster base)",
+    "attributionHint": "Replaces the whole attribution. The attribution the licence of the map data asks for (e.g. © OpenStreetMap contributors) must stay visible. Links are allowed.",
+    "attributionCompact": "Fold the attribution behind an i button",
     "centerLat": "Centre latitude",
     "centerLon": "Centre longitude",
     "zoom": "Zoom",
