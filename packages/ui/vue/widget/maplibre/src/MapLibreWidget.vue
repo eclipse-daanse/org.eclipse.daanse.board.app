@@ -37,6 +37,8 @@ import {
   PREFIX,
   RASTER_ID,
   TERRAIN_ID,
+  BUILDINGS_ID,
+  beforeIdOf,
   buildingLayerOf,
   buildingSourceOf,
   dataLayerOf,
@@ -196,7 +198,8 @@ function applyAdditions() {
   const data = collections.value
   const addData = (id: string, layers: ReturnType<typeof featureLayersOf>) => {
     target.addSource(id, { type: 'geojson', data: (data.get(id) ?? { type: 'FeatureCollection', features: [] }) as never })
-    for (const layer of layers) target.addLayer(layer)
+    const buildingsShown = !!target.getLayer(BUILDINGS_ID)
+    for (const layer of layers) target.addLayer(layer, beforeIdOf(layer, buildingsShown))
   }
   for (const layer of s.thingLayers.toArray()) {
     if (layer.visible === false) continue

@@ -301,6 +301,18 @@ export function featureLayersOf(source: string, look: FeatureLook): LayerSpecifi
   return layers
 }
 
+/**
+ * The layer a data layer is put below, or undefined for the top (#1270).
+ *
+ * A flat layer drawn after the 3D buildings is painted over them, so an
+ * area showed through every building in a tilted view. Flat layers go
+ * below the buildings, which then hide what lies behind them; a block
+ * stays on top and meets the buildings in the 3D pass.
+ */
+export function beforeIdOf(layer: Pick<LayerSpecification, 'type'>, buildingsShown: boolean): string | undefined {
+  return buildingsShown && layer.type !== 'fill-extrusion' ? BUILDINGS_ID : undefined
+}
+
 /** The source id a data layer draws from. */
 export const sourceIdOf = (kind: 'things' | 'geojson', id: string | undefined) => `${PREFIX}${kind}:${id ?? ''}`
 

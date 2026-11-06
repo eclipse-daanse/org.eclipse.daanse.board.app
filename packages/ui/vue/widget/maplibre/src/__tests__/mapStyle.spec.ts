@@ -13,6 +13,7 @@
 
 import { describe, it, expect } from 'vitest'
 import {
+  beforeIdOf,
   buildingLayerOf,
   buildingSourceOf,
   dataLayerOf,
@@ -99,6 +100,14 @@ describe('the data layers of the 3D map', () => {
   it('raise GeoJSON by a property of each feature', () => {
     const look = geoJsonLookOf({ extrude: true, heightProperty: 'levels', heightFactor: 3, baseHeight: 5 }, '#ff0')
     expect(look.height).toEqual(['case', ['has', 'levels'], ['*', ['to-number', ['get', 'levels'], 0], 3], 5])
+  })
+
+  it('lie below the 3D buildings while flat, and above them as blocks (#1270)', () => {
+    expect(beforeIdOf({ type: 'fill' }, true)).toBe('daanse:buildings')
+    expect(beforeIdOf({ type: 'line' }, true)).toBe('daanse:buildings')
+    expect(beforeIdOf({ type: 'circle' }, true)).toBe('daanse:buildings')
+    expect(beforeIdOf({ type: 'fill-extrusion' }, true)).toBeUndefined()
+    expect(beforeIdOf({ type: 'fill' }, false)).toBeUndefined()
   })
 
   it('name the layer a click hit', () => {
