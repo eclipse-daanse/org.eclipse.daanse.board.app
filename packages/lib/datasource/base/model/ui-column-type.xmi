@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/*********************************************************************
+* Copyright (c) 2026 Contributors to the Eclipse Foundation.
+*
+* This program and the accompanying materials are made
+* available under the terms of the Eclipse Public License 2.0
+* which is available at https://www.eclipse.org/legal/epl-2.0/
+*
+* SPDX-License-Identifier: EPL-2.0
+**********************************************************************/
+
+How one column of a dataset is read (#1286) - a number that arrives as
+text sorts and scales as text.
+-->
+<uimodel:UIModel
+    xmlns:xmi="http://www.omg.org/XMI"
+    xmi:version="2.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:uimodel="http://uimodel/1.0"
+    name="ColumnTypeForm">
+
+  <targetClasses href="http://org.eclipse.daanse.board.app.lib.datasource.base#//ColumnType"/>
+
+  <components xsi:type="uimodel:FormView" name="ColumnTypeFormView">
+    <fields xsi:type="uimodel:ComboboxWidget"
+        name="column"
+        feature="http://org.eclipse.daanse.board.app.lib.datasource.base#//ColumnType/column"
+        label="datasourceBase:FormColumnType.column"/>
+    <fields xsi:type="uimodel:SelectWidget"
+        name="type"
+        feature="http://org.eclipse.daanse.board.app.lib.datasource.base#//ColumnType/type"
+        label="datasourceBase:FormColumnType.type">
+      <values>string</values>
+      <values>number</values>
+      <values>date</values>
+      <values>boolean</values>
+      <optionLabel language="JS" body="({ string: 'datasourceBase:Options.columnType.string', number: 'datasourceBase:Options.columnType.number', date: 'datasourceBase:Options.columnType.date', boolean: 'datasourceBase:Options.columnType.boolean' })[option] ?? option"/>
+    </fields>
+    <fields xsi:type="uimodel:InputWidget"
+        name="unit"
+        feature="http://org.eclipse.daanse.board.app.lib.datasource.base#//ColumnType/unit"
+        label="datasourceBase:FormColumnType.unit">
+      <visibilityCondition language="JS" body="self.type === 'number'"/>
+    </fields>
+    <fields xsi:type="uimodel:InputWidget"
+        name="label"
+        feature="http://org.eclipse.daanse.board.app.lib.datasource.base#//ColumnType/label"
+        label="datasourceBase:FormColumnType.label"/>
+  </components>
+</uimodel:UIModel>

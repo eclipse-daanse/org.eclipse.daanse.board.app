@@ -26,6 +26,16 @@
         "library": "org.eclipse.daanse.board.app.lib.datasource.base",
         "version": "0.0.1-next.1"
       }
+    },
+    {
+      "namespace": "tsm.i18n",
+      "attributes": {
+        "namespace": "datasourceBase",
+        "languages": [
+          "de",
+          "en"
+        ]
+      }
     }
   ],
   "dependencies": [

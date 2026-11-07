@@ -25,11 +25,11 @@ import { headersOfAnswer, suggestFields } from './suggest'
 import vegaSettingsFormXmi from '../model/ui.xmi?raw'
 import layerFormXmi from '../model/ui-layer.xmi?raw'
 import encodingFormXmi from '../model/ui-encoding.xmi?raw'
-import transformFormXmi from '../model/ui-transform.xmi?raw'
+import transformFormXmi from 'org.eclipse.daanse.board.app.lib.datasource.base/model/ui-transform.xmi?raw'
 import paramFormXmi from '../model/ui-param.xmi?raw'
 import facetFormXmi from '../model/ui-facet.xmi?raw'
 import datasetFormXmi from '../model/ui-dataset.xmi?raw'
-import columnTypeFormXmi from '../model/ui-column-type.xmi?raw'
+import columnTypeFormXmi from 'org.eclipse.daanse.board.app.lib.datasource.base/model/ui-column-type.xmi?raw'
 /* The Ecore itself, for the sentences the generator drops. */
 import settingsEcore from '../model/model.ecore?raw'
 

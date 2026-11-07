@@ -1,0 +1,68 @@
+{
+  "FormTransform": {
+    "kind": "Schritt",
+    "op": "Zeilen behalten, deren Feld",
+    "field": "Feld",
+    "value": "Wert",
+    "param": "Auswahl",
+    "fields": "Spalten, die zu Zeilen werden",
+    "keyAs": "Name des Spaltenfelds",
+    "valueAs": "Name des Wertfelds",
+    "as": "Name des neuen Felds",
+    "expression": "Ausdruck (z. B. datum.price * datum.amount)",
+    "pattern": "Muster (ein regulärer Ausdruck mit einer Gruppe)"
+  },
+  "FormColumnType": {
+    "column": "Spalte",
+    "type": "Gelesen als",
+    "unit": "Einheit (z. B. m)",
+    "label": "Angezeigt als"
+  },
+  "Options": {
+    "kind": {
+      "filter": "Zeilen filtern",
+      "fold": "Spalten zu Zeilen",
+      "calculate": "Feld berechnen",
+      "extract": "Einen Teil eines Feldes nehmen"
+    },
+    "op": {
+      "eq": "gleich",
+      "neq": "ungleich",
+      "lt": "kleiner als",
+      "lte": "höchstens",
+      "gt": "größer als",
+      "gte": "mindestens",
+      "oneOf": "einer von (mit Komma getrennt)",
+      "range": "zwischen (zwei Werte, mit Komma getrennt)",
+      "valid": "hat einen Wert",
+      "param": "ist in einer Auswahl"
+    },
+    "columnType": {
+      "string": "Text",
+      "number": "Zahl",
+      "date": "Datum und Uhrzeit",
+      "boolean": "Ja oder nein"
+    }
+  },
+  "Hints": {
+    "Transform": {
+      "kind": "Was der Schritt tut.",
+      "field": "Filter: das verglichene Feld. Bei „ist in einer Auswahl“ nicht gelesen.",
+      "op": "Filter: der Vergleich.",
+      "value": "Filter: womit das Feld verglichen wird; bei „einer von“ eine mit Komma getrennte Liste, bei „zwischen“ zwei mit Komma getrennte Grenzen. Zahlen werden als Zahlen gelesen.",
+      "param": "Filter: die Auswahl, deren Inhalt durchkommt, bei „ist in einer Auswahl“.",
+      "fields": "Spalten zu Zeilen: die Felder, die umgelegt werden – jedes wird eine Zeile mit dem Feldnamen als Schlüssel und seinem Wert, so werden mehrere Spalten zu je einer Reihe.",
+      "keyAs": "Spalten zu Zeilen: der Name des neuen Felds mit dem früheren Spaltennamen.",
+      "valueAs": "Spalten zu Zeilen: der Name des neuen Felds mit dem Wert.",
+      "as": "Feld berechnen: der Name des neuen Felds.",
+      "expression": "Feld berechnen: der Vega-Ausdruck, etwa datum.price * datum.amount; datum ist die Zeile. Ausdrücke werden interpretiert, nie zu Code übersetzt.",
+      "pattern": "extract: Was die Gruppe dieses Ausdrucks im Feld trifft, wird das neue Feld, z. B. ^(\\S+) für das erste Wort."
+    },
+    "ColumnType": {
+      "column": "Der Name der Spalte.",
+      "type": "Als was ihre Werte gelesen werden.",
+      "unit": "Die Einheit einer Zahl, z. B. m oder cm.",
+      "label": "Wie die Spalte angezeigt heißt. Leer: ihr Name."
+    }
+  }
+}

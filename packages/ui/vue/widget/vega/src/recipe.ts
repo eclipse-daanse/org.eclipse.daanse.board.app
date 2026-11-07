@@ -290,6 +290,18 @@ export function transformSpec(transform: Transform): Json | undefined {
       const expression = text(transform.expression)
       return as && expression ? { calculate: expression, as } : undefined
     }
+    case 'extract': {
+      /* A part of a field by a regular expression (#1295): what its group matches, as calculate replace. */
+      const as = text(transform.as)
+      const field = text(transform.field)
+      const pattern = String(transform.pattern ?? '')
+      if (!as || !field || !pattern) return undefined
+      const quoted = (value: string) => JSON.stringify(value)
+      const value = `datum[${quoted(field)}]`
+      const whole = `regexp(${quoted(`^.*?(?:${pattern}).*$`)})`
+      // A value the pattern does not match gives no value, as the shared applyTransforms does.
+      return { calculate: `test(${whole}, ${value}) ? replace(${value}, ${whole}, '$1') : null`, as }
+    }
     default:
       return filterOf(transform)
   }
