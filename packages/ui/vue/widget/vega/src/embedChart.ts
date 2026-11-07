@@ -233,3 +233,15 @@ export async function setValueParam(view: View, name: string, value: unknown): P
 export function imageOf(view: View, format: 'png' | 'svg'): Promise<string> {
   return view.toImageURL(format)
 }
+
+/**
+ * Lays the chart out again at this total size (#1305).
+ *
+ * Laid out again even when the size is the one it had: what changed may be
+ * the text - a web font that arrived after the first layout measured its
+ * labels in the fallback font. A two-layer chart came out 10 px taller than
+ * its frame that way, with its time labels cut off at the bottom.
+ */
+export async function fitTo(view: View, width: number, height: number): Promise<void> {
+  await view.width(width).height(height).resize().runAsync()
+}

@@ -264,8 +264,9 @@ const draw = async (keepSignals = false) => {
       onSelection: (name, value) => emit(selectionEventOf(name, value, props.id ?? '')),
       onValue: (name, value) => emit(paramEventOf(name, value, props.id ?? '')),
     })
-    /* The frame may have changed while Vega loaded. */
-    fit()
+    /* The frame may have changed while Vega loaded, and a font may still come. */
+    void fit()
+    void fonts?.ready?.then(() => { if (!unmounted) void fit() })
     for (const [name, value] of pendingParams) void applyParam(name, value)
     pendingParams.clear()
     /* Rows that arrived while the chart was drawn go in now. */
@@ -284,11 +285,20 @@ const draw = async (keepSignals = false) => {
  * with plot, axes and legend. Vega follows nothing by itself here - a
  * widget is resized without a window resize.
  */
-const fit = () => {
+const fit = async () => {
   const el = container.value
   if (!chart || !el || !el.clientWidth || !el.clientHeight) return
-  void chart.view.width(el.clientWidth).height(el.clientHeight).runAsync()
+  const { fitTo } = await import('./embedChart')
+  if (chart) await fitTo(chart.view, el.clientWidth, el.clientHeight)
 }
+
+/*
+ * Fonts that arrive after the chart was laid out (#1305): the labels were
+ * measured in the fallback font, and the chart is laid out again once the
+ * board's own font is there.
+ */
+const fonts = typeof document !== 'undefined' ? (document as Document & { fonts?: FontFaceSet }).fonts : undefined
+const onFontsLoaded = () => void fit()
 
 onMounted(() => {
   /*
@@ -311,6 +321,7 @@ onMounted(() => {
     themeObserver.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme', 'style', 'class'] })
   }
   if (props.id) actionsRegistry?.registerInstance(props.id, api, WIDGET_TYPE, pageId)
+  fonts?.addEventListener?.('loadingdone', onFontsLoaded)
   void draw()
 })
 
@@ -322,6 +333,7 @@ onUnmounted(() => {
   generation++
   resizeObserver?.disconnect()
   themeObserver?.disconnect()
+  fonts?.removeEventListener?.('loadingdone', onFontsLoaded)
   if (props.id) actionsRegistry?.unregisterInstance(props.id)
   finalize()
 })
