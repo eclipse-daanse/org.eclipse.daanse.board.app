@@ -153,7 +153,7 @@ export default defineConfig(({ mode }) => ({
        * descriptions the generator drops, and carrying a copy of a text
        * file across the boundary costs nothing at runtime.
        */
-      boundary: { allow: ['../../../../lib/datasource/wfs/model'] },
+      boundary: { allow: ['../../../../lib/datasource/wfs/model', '../../../../lib/datasource/base/model'] },
       components: 'derive',
       sharedModules,
       // Cast: tsm links its own vite copy, whose Plugin type is nominally
