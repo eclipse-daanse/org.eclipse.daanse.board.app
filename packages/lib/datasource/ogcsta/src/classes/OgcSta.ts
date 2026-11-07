@@ -54,6 +54,10 @@ import { LOGGER_FACTORY, LoggerFactory,
   identifier as loggerIdentifier,
   type ILogger } from 'org.eclipse.daanse.board.app.lib.api.logger'
 
+/** How often and how far apart a missing history time variable is looked for again (#1294). */
+const VARIABLE_RETRIES = 60
+const VARIABLE_RETRY_MS = 1000
+
 /** Count requests in flight at once for one datastream's buckets (#1280). */
 const BUCKET_REQUESTS_AT_ONCE = 6
 /** Counts of buckets that have ended, by server, datastream and bucket. */
@@ -134,7 +138,15 @@ export class OgcStaStore extends BaseDatasource implements OgcStaStoreI {
   private filterDebounceTimer: any | null = null;
   private lastFilterType: string | null = null;
   private lastObservationsParams: any = null;
-  private watchedVariables: Set<string> = new Set();
+  /*
+   * The history time variables this source listens to, by name, with the
+   * instance it subscribed to. Kept with the instance, because a loaded
+   * board registers new ones under the same names (#1294).
+   */
+  private watchedVariables: Map<string, { variable: any; handler: () => void }> = new Map();
+  /** Looks again for history time variables the board has not registered yet. */
+  private variableRetryTimer: ReturnType<typeof setTimeout> | null = null;
+  private variableRetries = 0;
   private pendingRequestFlag: { key: string; params: any } | null = null;
   /*
    * The things each consumer shows, as filters on /Things, by consumer key.
@@ -209,6 +221,7 @@ export class OgcStaStore extends BaseDatasource implements OgcStaStoreI {
   }
 
   callEvent(event: string, params: any, shouldUpdate: boolean = true): Promise<void> | void {
+    this.setupVariableWatchers();
     if (event == FILTER) {
       // Determine filter type based on params
       const filterType = Object.keys(params)[0] // 'observations', 'historicalLocations', etc.
@@ -278,6 +291,7 @@ export class OgcStaStore extends BaseDatasource implements OgcStaStoreI {
 
   destroy(): void {
     this.logCore('Store destroy() called')
+    this.stopVariableWatchers();
 
     if (this.debounceTimer) {
       clearTimeout(this.debounceTimer);
@@ -312,6 +326,7 @@ export class OgcStaStore extends BaseDatasource implements OgcStaStoreI {
   }
 
   async getData<T>(type: string, options?: any): Promise<T> {
+    this.setupVariableWatchers();
     // A table gets the latest values view, and nothing of the catalogue
     // is loaded for it (#1264). Without a view it is an empty table: the
     // catalogue is no table, and a reader of one expects headers and rows.
@@ -530,6 +545,8 @@ export class OgcStaStore extends BaseDatasource implements OgcStaStoreI {
    * incomplete, so a filter on it can miss a datastream that exists.
    */
   async loadDatastreamWindow(datastreamId: string): Promise<{ datastream?: Datastream; observations: Observation[] }> {
+    // The window is read from the variables; whoever asks for one also needs to hear them change
+    this.setupVariableWatchers()
     const configuration = this.api()
     /*
      * The window applies whether or not the source shows history itself: a
@@ -1287,24 +1304,70 @@ export class OgcStaStore extends BaseDatasource implements OgcStaStoreI {
     return variables;
   }
 
+  /**
+   * Listens to the history time variables (#1294).
+   *
+   * Looked up again on every call, so it is cheap and safe to call often:
+   * from init, from getData, callEvent and loadDatastreamWindow. A variable
+   * the board has not registered yet is looked for again a little later;
+   * one that was replaced - a loaded board registers new instances under
+   * the same names - is followed to its new instance.
+   */
   private setupVariableWatchers(): void {
     if (!this.variableRepository) return;
 
-    const variableNames = this.collectVariableNames();
+    const variableNames = new Set(this.collectVariableNames());
+    let missing = false;
 
-    for (const variableName of variableNames) {
-      if (!this.watchedVariables.has(variableName)) {
-        const variable = this.variableRepository.getVariable(variableName);
-        if (variable) {
-          variable.subscribe(()=>{
-            this.onVariableChanged();
-          })
-
-          // Setup polling-based watcher since we don't have reactive variables
-          this.watchedVariables.add(variableName);
-        }
+    for (const [name, held] of this.watchedVariables) {
+      if (!variableNames.has(name)) {
+        held.variable?.unsubscribe?.(held.handler);
+        this.watchedVariables.delete(name);
       }
     }
+
+    for (const variableName of variableNames) {
+      let current: any;
+      try {
+        current = this.variableRepository.getVariable(variableName);
+      } catch {
+        current = undefined;
+      }
+      const held = this.watchedVariables.get(variableName);
+      if (held && held.variable === current) continue;
+      if (held) {
+        held.variable?.unsubscribe?.(held.handler);
+        this.watchedVariables.delete(variableName);
+      }
+      if (!current || typeof current.subscribe !== 'function') {
+        missing = true;
+        continue;
+      }
+      const handler = () => this.onVariableChanged();
+      current.subscribe(handler);
+      this.watchedVariables.set(variableName, { variable: current, handler });
+    }
+
+    if (missing) this.retryVariableWatchers();
+    else this.variableRetries = 0;
+  }
+
+  private retryVariableWatchers(): void {
+    if (this.variableRetryTimer || this.variableRetries >= VARIABLE_RETRIES) return;
+    this.variableRetries++;
+    this.variableRetryTimer = setTimeout(() => {
+      this.variableRetryTimer = null;
+      this.setupVariableWatchers();
+    }, VARIABLE_RETRY_MS);
+  }
+
+  private stopVariableWatchers(): void {
+    if (this.variableRetryTimer) {
+      clearTimeout(this.variableRetryTimer);
+      this.variableRetryTimer = null;
+    }
+    for (const held of this.watchedVariables.values()) held.variable?.unsubscribe?.(held.handler);
+    this.watchedVariables.clear();
   }
 
   private async fetchHistoricalLocations(): Promise<void> {
