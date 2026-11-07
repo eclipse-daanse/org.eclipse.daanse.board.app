@@ -68,6 +68,7 @@ import {
 import { boundsOf, geometriesOf, thingFeaturesOf, thingIdOf, type ThingLike } from './things'
 import { useFeatureData, useGeoJsonData, useThingData, type ThingStore } from './useLayerData'
 import { symbolsByModel } from './models/symbols'
+import { createViewportSender, viewOfMap } from './viewportEvents'
 import { WIDGET_TYPE, busEventOf, clickEventOf } from './events/payloads'
 
 const props = defineProps<{ datasourceId?: string; id?: string }>()
@@ -251,6 +252,25 @@ const modelData = useFeatureData({
   ids: () => held().modelLayers.toArray().map((layer) => String(layer.datasourceId ?? '')),
   resolve: resolveStore,
 })
+
+/*
+ * The sources of the symbol layers hear what the map shows (#1297): a WFS
+ * with the extent viewport then reads only the tiles in view.
+ */
+const viewportSender = createViewportSender({
+  sender: () => String(widgetId?.value ?? ''),
+  sources: () => held().modelLayers.toArray().filter((layer) => layer.visible !== false).map((layer) => String(layer.datasourceId ?? '')),
+  resolve: resolveStore,
+})
+function tellViewport() {
+  if (!map) return
+  const b = map.getBounds()
+  const c = map.getCenter()
+  const canvas = map.getCanvas()
+  const bbox = viewOfMap([b.getWest(), b.getSouth(), b.getEast(), b.getNorth()], [c.lng, c.lat], map.getZoom(), canvas.clientWidth, canvas.clientHeight)
+  viewportSender.moved(bbox, map.getZoom())
+}
+watch(() => held().modelLayers.toArray().map((layer) => `${layer.datasourceId ?? ''}:${layer.visible !== false}`).join(), () => viewportSender.resend())
 
 /** The units of the column types of a data source, by column (#1295). */
 function unitsOf(datasourceId: string): Record<string, string> {
@@ -532,6 +552,8 @@ onMounted(() => {
   map.on('mousedown', onPlaceDown)
   map.on('mouseup', onPlaceUp)
   map.on('contextmenu', onPlaceMenu)
+  map.on('moveend', tellViewport)
+  map.on('load', tellViewport)
   resizeObserver = new ResizeObserver(() => map?.resize())
   resizeObserver.observe(container.value)
 })
@@ -550,6 +572,7 @@ watch(() => held().interactive, (on) => map && applyInteractive(map, on !== fals
 
 onUnmounted(() => {
   if (widgetId?.value) actionsRegistry?.unregisterInstance(widgetId.value)
+  viewportSender.stop()
   themeObserver?.disconnect()
   resizeObserver?.disconnect()
   map?.remove()

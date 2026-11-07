@@ -71,6 +71,8 @@ export class WfsstorePackage extends BasicEPackage {
     I_WFS_STORE_CONFIGURATION__MODE: null as unknown as EAttribute | EReference,
     I_WFS_STORE_CONFIGURATION__TILE_SIZE: null as unknown as EAttribute | EReference,
     I_WFS_STORE_CONFIGURATION__POINT_TOLERANCE: null as unknown as EAttribute | EReference,
+    I_WFS_STORE_CONFIGURATION__EXTENT: null as unknown as EAttribute | EReference,
+    I_WFS_STORE_CONFIGURATION__MIN_ZOOM: null as unknown as EAttribute | EReference,
     I_WFS_STORE_CONFIGURATION__COLUMN_TYPES: null as unknown as EAttribute | EReference,
   };
 
@@ -208,6 +210,24 @@ export class WfsstorePackage extends BasicEPackage {
     iWfsStoreConfigurationClass.getEStructuralFeatures().push(iWfsStoreConfiguration_pointTolerance);
     WfsstorePackage.Literals.I_WFS_STORE_CONFIGURATION__POINT_TOLERANCE = iWfsStoreConfiguration_pointTolerance;
 
+    // Create extent feature
+    const iWfsStoreConfiguration_extent = new BasicEAttribute();
+    iWfsStoreConfiguration_extent.setName('extent');
+    iWfsStoreConfiguration_extent.setLowerBound(0);
+    iWfsStoreConfiguration_extent.setUpperBound(1);
+    iWfsStoreConfiguration_extent.setDefaultValueLiteral("fixed");
+    iWfsStoreConfigurationClass.getEStructuralFeatures().push(iWfsStoreConfiguration_extent);
+    WfsstorePackage.Literals.I_WFS_STORE_CONFIGURATION__EXTENT = iWfsStoreConfiguration_extent;
+
+    // Create minZoom feature
+    const iWfsStoreConfiguration_minZoom = new BasicEAttribute();
+    iWfsStoreConfiguration_minZoom.setName('minZoom');
+    iWfsStoreConfiguration_minZoom.setLowerBound(0);
+    iWfsStoreConfiguration_minZoom.setUpperBound(1);
+    iWfsStoreConfiguration_minZoom.setDefaultValueLiteral("14");
+    iWfsStoreConfigurationClass.getEStructuralFeatures().push(iWfsStoreConfiguration_minZoom);
+    WfsstorePackage.Literals.I_WFS_STORE_CONFIGURATION__MIN_ZOOM = iWfsStoreConfiguration_minZoom;
+
     // Create columnTypes feature
     const iWfsStoreConfiguration_columnTypes = new BasicEReference();
     iWfsStoreConfiguration_columnTypes.setContainment(true);
@@ -240,6 +260,8 @@ export class WfsstorePackage extends BasicEPackage {
     (WfsstorePackage.Literals.I_WFS_STORE_CONFIGURATION__MODE as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
     (WfsstorePackage.Literals.I_WFS_STORE_CONFIGURATION__TILE_SIZE as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EDouble')!);
     (WfsstorePackage.Literals.I_WFS_STORE_CONFIGURATION__POINT_TOLERANCE as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EInt')!);
+    (WfsstorePackage.Literals.I_WFS_STORE_CONFIGURATION__EXTENT as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (WfsstorePackage.Literals.I_WFS_STORE_CONFIGURATION__MIN_ZOOM as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EDouble')!);
     (WfsstorePackage.Literals.I_WFS_STORE_CONFIGURATION__COLUMN_TYPES as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.datasource.base').getEClassifier('ColumnType')!);
 
     // ============================================

@@ -43,7 +43,9 @@ export class IWfsStoreConfigurationImpl extends IBaseConnectionConfigurationImpl
   static readonly MODE: number = 13;
   static readonly TILE_SIZE: number = 14;
   static readonly POINT_TOLERANCE: number = 15;
-  static readonly COLUMN_TYPES: number = 16;
+  static readonly EXTENT: number = 16;
+  static readonly MIN_ZOOM: number = 17;
+  static readonly COLUMN_TYPES: number = 18;
 
   // Private fields
   private _connection?: string;
@@ -58,6 +60,8 @@ export class IWfsStoreConfigurationImpl extends IBaseConnectionConfigurationImpl
   private _mode: string = "wfs";
   private _tileSize: number = 0.01;
   private _pointTolerance: number = 70;
+  private _extent: string = "fixed";
+  private _minZoom: number = 14;
   private _columnTypes!: EList<ColumnType>;
 
   /**
@@ -356,6 +360,54 @@ export class IWfsStoreConfigurationImpl extends IBaseConnectionConfigurationImpl
     }
   }
 
+  get extent(): string {
+    return this._extent!;
+  }
+
+  set extent(value: string) {
+    const oldValue = this._extent;
+    this._extent = value;
+    if (this.eDeliver()) {
+      this.eNotify({
+        getNotifier: () => this,
+        getEventType: () => 1, // SET
+        getFeature: () => this.eClass().getEStructuralFeature(IWfsStoreConfigurationImpl.EXTENT),
+        getOldValue: () => oldValue,
+        getNewValue: () => value,
+        getPosition: () => -1,
+        wasSet: () => true,
+        isTouch: () => false,
+        isReset: () => false,
+        getFeatureID: () => IWfsStoreConfigurationImpl.EXTENT,
+        merge: () => false
+      });
+    }
+  }
+
+  get minZoom(): number {
+    return this._minZoom!;
+  }
+
+  set minZoom(value: number) {
+    const oldValue = this._minZoom;
+    this._minZoom = value;
+    if (this.eDeliver()) {
+      this.eNotify({
+        getNotifier: () => this,
+        getEventType: () => 1, // SET
+        getFeature: () => this.eClass().getEStructuralFeature(IWfsStoreConfigurationImpl.MIN_ZOOM),
+        getOldValue: () => oldValue,
+        getNewValue: () => value,
+        getPosition: () => -1,
+        wasSet: () => true,
+        isTouch: () => false,
+        isReset: () => false,
+        getFeatureID: () => IWfsStoreConfigurationImpl.MIN_ZOOM,
+        merge: () => false
+      });
+    }
+  }
+
   get columnTypes(): EList<ColumnType> {
     if (!this._columnTypes) {
       this._columnTypes = createContainmentEList<any>(this, this.eClass().getEStructuralFeature('columnTypes') as EReference);
@@ -395,6 +447,10 @@ export class IWfsStoreConfigurationImpl extends IBaseConnectionConfigurationImpl
         return this.tileSize;
       case IWfsStoreConfigurationImpl.POINT_TOLERANCE:
         return this.pointTolerance;
+      case IWfsStoreConfigurationImpl.EXTENT:
+        return this.extent;
+      case IWfsStoreConfigurationImpl.MIN_ZOOM:
+        return this.minZoom;
       case IWfsStoreConfigurationImpl.COLUMN_TYPES:
         return this.columnTypes;
       default:
@@ -456,6 +512,14 @@ export class IWfsStoreConfigurationImpl extends IBaseConnectionConfigurationImpl
         this.pointTolerance = newValue as number;
         super.eSet(feature, newValue);
         break;
+      case IWfsStoreConfigurationImpl.EXTENT:
+        this.extent = newValue as string;
+        super.eSet(feature, newValue);
+        break;
+      case IWfsStoreConfigurationImpl.MIN_ZOOM:
+        this.minZoom = newValue as number;
+        super.eSet(feature, newValue);
+        break;
       case IWfsStoreConfigurationImpl.COLUMN_TYPES:
         this.columnTypes.clear();
         this.columnTypes.addAll(newValue as any[]);
@@ -496,6 +560,10 @@ export class IWfsStoreConfigurationImpl extends IBaseConnectionConfigurationImpl
         return this._tileSize !== 0.01;
       case IWfsStoreConfigurationImpl.POINT_TOLERANCE:
         return this._pointTolerance !== 70;
+      case IWfsStoreConfigurationImpl.EXTENT:
+        return this._extent !== "fixed";
+      case IWfsStoreConfigurationImpl.MIN_ZOOM:
+        return this._minZoom !== 14;
       case IWfsStoreConfigurationImpl.COLUMN_TYPES:
         return this._columnTypes !== undefined && !this._columnTypes.isEmpty();
       default:
@@ -545,6 +613,12 @@ export class IWfsStoreConfigurationImpl extends IBaseConnectionConfigurationImpl
       case IWfsStoreConfigurationImpl.POINT_TOLERANCE:
         this._pointTolerance = 70;
         return;
+      case IWfsStoreConfigurationImpl.EXTENT:
+        this._extent = "fixed";
+        return;
+      case IWfsStoreConfigurationImpl.MIN_ZOOM:
+        this._minZoom = 14;
+        return;
       case IWfsStoreConfigurationImpl.COLUMN_TYPES:
         if (this._columnTypes) this._columnTypes.clear();
         return;
@@ -575,6 +649,8 @@ export class IWfsStoreConfigurationImpl extends IBaseConnectionConfigurationImpl
       mode: this.mode,
       tileSize: this.tileSize,
       pointTolerance: this.pointTolerance,
+      extent: this.extent,
+      minZoom: this.minZoom,
       columnTypes: this.columnTypes?.toArray?.() ?? this.columnTypes,
     };
   }
