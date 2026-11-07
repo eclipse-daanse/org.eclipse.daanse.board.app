@@ -12,7 +12,9 @@
  **********************************************************************/
 
 import './referencedPackages'
-import { component, inject } from '@eclipse-daanse/tsm'
+import { activate, component, deactivate, inject } from '@eclipse-daanse/tsm'
+import { EVENT_REGISTRY_ID, type EventRegistry } from 'org.eclipse.daanse.board.app.lib.api.events'
+import { VegaWidgetEvents, WIDGET_TYPE } from './events/VegaWidgetEvents'
 import { DATASOURCE_REPOSITORY, type DatasourceRepository } from 'org.eclipse.daanse.board.app.lib.api.datasource'
 import { WIDGET_SERVICE_ID, type WidgetProvider } from 'org.eclipse.daanse.board.app.lib.api.widget'
 import Icon from './assets/vega.svg'
@@ -40,7 +42,7 @@ import settingsEcore from '../model/model.ecore?raw'
  */
 void VegawidgetPackage.eINSTANCE
 
-export const WIDGET_TYPE = 'VegaWidget'
+export { WIDGET_TYPE }
 
 /**
  * The Vega-Lite chart (#1283), declared as a component: the loader
@@ -89,7 +91,21 @@ export class VegaWidgetProvider implements WidgetProvider {
       }),
   }
 
-  constructor(@inject(DATASOURCE_REPOSITORY) private readonly datasources: DatasourceRepository) {}
+  constructor(
+    @inject(DATASOURCE_REPOSITORY) private readonly datasources: DatasourceRepository,
+    @inject(EVENT_REGISTRY_ID) private readonly events: EventRegistry,
+  ) {}
+
+  /* Its events, so the rule editor offers them (#1289). */
+  @activate()
+  register(): void {
+    this.events.registerWidget(WIDGET_TYPE, VegaWidgetEvents)
+  }
+
+  @deactivate()
+  unregister(): void {
+    this.events.unregisterWidget(WIDGET_TYPE)
+  }
 }
 
 export { VegaWidget, VegawidgetPackage, vegaSettingsFormXmi }

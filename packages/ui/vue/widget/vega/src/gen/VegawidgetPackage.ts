@@ -135,6 +135,16 @@ export class VegawidgetPackage extends BasicEPackage {
     PARAM__ENCODINGS: null as unknown as EAttribute | EReference,
     PARAM__BIND: null as unknown as EAttribute | EReference,
     PARAM__VALUE: null as unknown as EAttribute | EReference,
+    MARK_CLICK_PAYLOAD: null as unknown as EClass,
+    MARK_CLICK_PAYLOAD__LAYER: null as unknown as EAttribute | EReference,
+    MARK_CLICK_PAYLOAD__MARK: null as unknown as EAttribute | EReference,
+    MARK_CLICK_PAYLOAD__DATUM: null as unknown as EAttribute | EReference,
+    SELECTION_PAYLOAD: null as unknown as EClass,
+    SELECTION_PAYLOAD__PARAM: null as unknown as EAttribute | EReference,
+    SELECTION_PAYLOAD__VALUE: null as unknown as EAttribute | EReference,
+    PARAM_PAYLOAD: null as unknown as EClass,
+    PARAM_PAYLOAD__PARAM: null as unknown as EAttribute | EReference,
+    PARAM_PAYLOAD__VALUE: null as unknown as EAttribute | EReference,
     VEGA_RENDERER: null as unknown as EEnum,
     LEGEND_POSITION: null as unknown as EEnum,
     MARK_TYPE: null as unknown as EEnum,
@@ -733,6 +743,89 @@ export class VegawidgetPackage extends BasicEPackage {
     param_value.setDefaultValueLiteral("");
     paramClass.getEStructuralFeatures().push(param_value);
     VegawidgetPackage.Literals.PARAM__VALUE = param_value;
+
+    // Create MarkClickPayload class
+    const markClickPayloadClass = new BasicEClass();
+    markClickPayloadClass.setName('MarkClickPayload');
+    markClickPayloadClass.setAbstract(false);
+    markClickPayloadClass.setInterface(false);
+    this.getEClassifiers().push(markClickPayloadClass);
+    markClickPayloadClass.setEPackage(this);
+    VegawidgetPackage.Literals.MARK_CLICK_PAYLOAD = markClickPayloadClass;
+
+    // Create layer feature
+    const markClickPayload_layer = new BasicEAttribute();
+    markClickPayload_layer.setName('layer');
+    markClickPayload_layer.setLowerBound(0);
+    markClickPayload_layer.setUpperBound(1);
+    markClickPayloadClass.getEStructuralFeatures().push(markClickPayload_layer);
+    VegawidgetPackage.Literals.MARK_CLICK_PAYLOAD__LAYER = markClickPayload_layer;
+
+    // Create mark feature
+    const markClickPayload_mark = new BasicEAttribute();
+    markClickPayload_mark.setName('mark');
+    markClickPayload_mark.setLowerBound(0);
+    markClickPayload_mark.setUpperBound(1);
+    markClickPayloadClass.getEStructuralFeatures().push(markClickPayload_mark);
+    VegawidgetPackage.Literals.MARK_CLICK_PAYLOAD__MARK = markClickPayload_mark;
+
+    // Create datum feature
+    const markClickPayload_datum = new BasicEAttribute();
+    markClickPayload_datum.setName('datum');
+    markClickPayload_datum.setLowerBound(0);
+    markClickPayload_datum.setUpperBound(1);
+    markClickPayloadClass.getEStructuralFeatures().push(markClickPayload_datum);
+    VegawidgetPackage.Literals.MARK_CLICK_PAYLOAD__DATUM = markClickPayload_datum;
+
+    // Create SelectionPayload class
+    const selectionPayloadClass = new BasicEClass();
+    selectionPayloadClass.setName('SelectionPayload');
+    selectionPayloadClass.setAbstract(false);
+    selectionPayloadClass.setInterface(false);
+    this.getEClassifiers().push(selectionPayloadClass);
+    selectionPayloadClass.setEPackage(this);
+    VegawidgetPackage.Literals.SELECTION_PAYLOAD = selectionPayloadClass;
+
+    // Create param feature
+    const selectionPayload_param = new BasicEAttribute();
+    selectionPayload_param.setName('param');
+    selectionPayload_param.setLowerBound(0);
+    selectionPayload_param.setUpperBound(1);
+    selectionPayloadClass.getEStructuralFeatures().push(selectionPayload_param);
+    VegawidgetPackage.Literals.SELECTION_PAYLOAD__PARAM = selectionPayload_param;
+
+    // Create value feature
+    const selectionPayload_value = new BasicEAttribute();
+    selectionPayload_value.setName('value');
+    selectionPayload_value.setLowerBound(0);
+    selectionPayload_value.setUpperBound(1);
+    selectionPayloadClass.getEStructuralFeatures().push(selectionPayload_value);
+    VegawidgetPackage.Literals.SELECTION_PAYLOAD__VALUE = selectionPayload_value;
+
+    // Create ParamPayload class
+    const paramPayloadClass = new BasicEClass();
+    paramPayloadClass.setName('ParamPayload');
+    paramPayloadClass.setAbstract(false);
+    paramPayloadClass.setInterface(false);
+    this.getEClassifiers().push(paramPayloadClass);
+    paramPayloadClass.setEPackage(this);
+    VegawidgetPackage.Literals.PARAM_PAYLOAD = paramPayloadClass;
+
+    // Create param feature
+    const paramPayload_param = new BasicEAttribute();
+    paramPayload_param.setName('param');
+    paramPayload_param.setLowerBound(0);
+    paramPayload_param.setUpperBound(1);
+    paramPayloadClass.getEStructuralFeatures().push(paramPayload_param);
+    VegawidgetPackage.Literals.PARAM_PAYLOAD__PARAM = paramPayload_param;
+
+    // Create value feature
+    const paramPayload_value = new BasicEAttribute();
+    paramPayload_value.setName('value');
+    paramPayload_value.setLowerBound(0);
+    paramPayload_value.setUpperBound(1);
+    paramPayloadClass.getEStructuralFeatures().push(paramPayload_value);
+    VegawidgetPackage.Literals.PARAM_PAYLOAD__VALUE = paramPayload_value;
 
     // Create VegaRenderer enum
     const vegaRendererEnumType = new BasicEEnum();
@@ -1816,6 +1909,9 @@ export class VegawidgetPackage extends BasicEPackage {
     // ============================================
     // Set ESuperTypes (must be done after all classes are created)
     // ============================================
+    (VegawidgetPackage.Literals.MARK_CLICK_PAYLOAD as BasicEClass).getESuperTypes().push(requireEPackage('http://org.eclipse.daanse.board.app.lib.events').getEClassifier('Payload')! as EClass);
+    (VegawidgetPackage.Literals.SELECTION_PAYLOAD as BasicEClass).getESuperTypes().push(requireEPackage('http://org.eclipse.daanse.board.app.lib.events').getEClassifier('Payload')! as EClass);
+    (VegawidgetPackage.Literals.PARAM_PAYLOAD as BasicEClass).getESuperTypes().push(requireEPackage('http://org.eclipse.daanse.board.app.lib.events').getEClassifier('Payload')! as EClass);
 
     // ============================================
     // Set ETypes for all features (must be done after all classes are created).
@@ -1879,6 +1975,13 @@ export class VegawidgetPackage extends BasicEPackage {
     (VegawidgetPackage.Literals.PARAM__ENCODINGS as BasicEAttribute).setEType(VegawidgetPackage.Literals.CHANNEL);
     (VegawidgetPackage.Literals.PARAM__BIND as BasicEAttribute).setEType(VegawidgetPackage.Literals.PARAM_BIND);
     (VegawidgetPackage.Literals.PARAM__VALUE as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (VegawidgetPackage.Literals.MARK_CLICK_PAYLOAD__LAYER as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EInt')!);
+    (VegawidgetPackage.Literals.MARK_CLICK_PAYLOAD__MARK as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (VegawidgetPackage.Literals.MARK_CLICK_PAYLOAD__DATUM as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EJavaObject')!);
+    (VegawidgetPackage.Literals.SELECTION_PAYLOAD__PARAM as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (VegawidgetPackage.Literals.SELECTION_PAYLOAD__VALUE as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EJavaObject')!);
+    (VegawidgetPackage.Literals.PARAM_PAYLOAD__PARAM as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (VegawidgetPackage.Literals.PARAM_PAYLOAD__VALUE as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EJavaObject')!);
 
     // ============================================
     // Set EOpposites (must be done after all features are created) (#59)

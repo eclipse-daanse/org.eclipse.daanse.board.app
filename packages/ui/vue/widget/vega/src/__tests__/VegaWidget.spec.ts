@@ -23,6 +23,8 @@ import { VegawidgetPackage } from '../gen/VegawidgetPackage'
 import { emptySettings, modelledSettings } from '../settingsModel'
 import VegaWidget from '../VegaWidget.vue'
 import { identifier } from 'org.eclipse.daanse.board.app.lib.api.datasource'
+import { identifiers } from 'org.eclipse.daanse.board.app.lib.core'
+import { vi } from 'vitest'
 
 void VegawidgetPackage.eINSTANCE
 
@@ -34,11 +36,15 @@ const settle = async () => {
   }
 }
 
+const bus = { emit: vi.fn(), on: vi.fn(), off: vi.fn() }
 const mountWith = (settings: unknown) =>
   mount(VegaWidget, {
     props: { id: 'w1', configv: settings as any },
     /* No source: the widget draws its sample. */
-    global: { provide: { [identifier as symbol]: { getDatasource: () => { throw new Error('none') } } } },
+    global: { provide: {
+      [identifier as symbol]: { getDatasource: () => { throw new Error('none') } },
+      [identifiers.TINY_EMITTER as symbol]: bus,
+    } },
     attachTo: document.body,
   })
 
@@ -104,6 +110,19 @@ describe('VegaWidget', () => {
 
     root.style.removeProperty('--color-fg')
     root.removeAttribute('data-theme')
+    wrapper.unmount()
+  })
+
+  it('tells the board of a clicked mark, named as the recipe names it', async () => {
+    bus.emit.mockClear()
+    const wrapper = mountWith(modelledSettings({ renderer: 'svg' }))
+    await settle()
+    const bar = wrapper.get('[data-testid="vega-chart"]').element.querySelectorAll('.mark-rect.role-mark path')[2]
+    bar.dispatchEvent(new MouseEvent('click', { bubbles: true }))
+    await settle()
+    const [type, event] = bus.emit.mock.calls.find(([name]) => name === 'widget:VegaWidget:click')!
+    expect(type).toBe('widget:VegaWidget:click')
+    expect(event).toMatchObject({ type, widgetId: 'w1', payload: { widgetId: 'w1', layer: 0, mark: 'bar', datum: { category: 'C', amount: 43 } } })
     wrapper.unmount()
   })
 })
