@@ -87,4 +87,23 @@ describe('VegaWidget', () => {
     expect(wrapper.get('[role="alert"]').text()).toBe('Recipe.noLayers')
     wrapper.unmount()
   })
+
+  it('draws in the board theme and follows a change of it', async () => {
+    const root = document.documentElement
+    root.style.setProperty('--color-fg', 'rgb(1, 2, 3)')
+    const settings = modelledSettings({ renderer: 'svg', title: 'Themed', params: [{ name: 'limit', kind: 'value', value: '3' }] })
+    const wrapper = mountWith(settings)
+    await settle()
+    const title = () => wrapper.get('[data-testid="vega-chart"]').element.querySelector('.role-title-text text')
+    expect(title()?.getAttribute('fill')).toBe('rgb(1, 2, 3)')
+
+    root.style.setProperty('--color-fg', 'rgb(9, 8, 7)')
+    root.setAttribute('data-theme', 'light')
+    await settle()
+    expect(title()?.getAttribute('fill')).toBe('rgb(9, 8, 7)')
+
+    root.style.removeProperty('--color-fg')
+    root.removeAttribute('data-theme')
+    wrapper.unmount()
+  })
 })

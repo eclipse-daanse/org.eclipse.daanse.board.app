@@ -18,7 +18,7 @@
  */
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import type { TopLevelSpec } from 'vega-lite'
-import { drawChart, refusingLoader, replaceData, UrlRefusedError } from '../embedChart'
+import { drawChart, refusingLoader, replaceData, restoreSignals, signalsOf, UrlRefusedError } from '../embedChart'
 import { compileRecipe } from '../recipe'
 import { sampleDatasets, withDatasets } from '../sample'
 import { modelledSettings } from '../settingsModel'
@@ -108,6 +108,28 @@ describe('replaceData', () => {
       expect(await replaceData(chart.view, 'nothing', [])).toBe(false)
     } finally {
       chart.finalize()
+    }
+  })
+})
+
+describe('signalsOf and restoreSignals', () => {
+  it('carry what a reader set over to a chart drawn anew', async () => {
+    const spec = withDatasets(
+      compileRecipe(modelledSettings({ params: [{ name: 'limit', kind: 'value', value: '3' }] })),
+      sampleDatasets(),
+    )
+    const before = await drawChart(host(), spec, { renderer: 'svg' })
+    before.view.signal('limit', 42)
+    await before.view.runAsync()
+    const kept = signalsOf(before.view)
+    before.finalize()
+    const after = await drawChart(host(), spec, { renderer: 'svg', config: { mark: { color: 'red' } } })
+    try {
+      expect(after.view.signal('limit')).toBe(3)
+      await restoreSignals(after.view, kept)
+      expect(after.view.signal('limit')).toBe(42)
+    } finally {
+      after.finalize()
     }
   })
 })
