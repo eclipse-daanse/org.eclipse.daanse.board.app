@@ -190,5 +190,72 @@
         "km": "km"
       }
     }
+  },
+  "Hints": {
+    "MapLibreSettings": {
+      "modelLayers": "Symbol-Layer der Karte: an jedem Punkt einer Datenquelle oder von Hand gesetzt ein 3D-Modell."
+    },
+    "ModelLayer": {
+      "name": "Name des Layers, wie man ihn kennt.",
+      "visible": "Ob der Layer gezeichnet wird.",
+      "url": "Adresse der Modelldatei. Der Server muss dem Board das Lesen erlauben (CORS).",
+      "format": "Das Format der Datei: FBX, glTF (auch GLB) oder leer, dann nach der Endung der Adresse.",
+      "scale": "Meter je Einheit des Modells. Eine Datei in Zentimetern (die meisten FBX-Dateien) braucht 0,01.",
+      "rotation": "Drehung des Modells um die Senkrechte, in Grad im Uhrzeigersinn von Norden.",
+      "altitudeOffset": "Höhe über dem Boden, in Metern.",
+      "instances": "Wo das Modell von Hand gesetzt steht.",
+      "datasourceId": "Eine Datenquelle von Punkten (z. B. ein WFS-Baumkataster): An jedem Punkt steht ein Modell, neben den von Hand gesetzten. Leer: nur diese.",
+      "transforms": "Schritte auf den Punkten, bevor sie gezeichnet werden: filtern oder einen Teil eines Felds nehmen, z. B. die Gattung als erstes Wort der Art.",
+      "size": "Wie hoch und wie breit ein Modell ist, aus Feldern seines Punkts.",
+      "color": "Die Farbe des Modells aus einem Feld seines Punkts; die Teile unten haben ihre eigene.",
+      "modelBy": "Welche Modelldatei ein Punkt bekommt, nach einem Feld des Punkts. Ohne: die Datei oben.",
+      "parts": "Meshes des Modells mit eigener Farbe, z. B. der Stamm eines Baums."
+    },
+    "SizeEncoding": {
+      "height": "Wie hoch das Modell ist, in Metern; das Modell wird darauf skaliert.",
+      "width": "Wie breit das Modell ist, in Metern. Ohne: in der Breite im Verhältnis zur Höhe."
+    },
+    "FieldEncoding": {
+      "field": "Das Feld des Punkts. Leer: jeder Punkt hat den Wert unten.",
+      "unit": "Die Einheit des Felds: m, cm, mm oder km. Leer: die Einheit seines Spaltentyps, sonst m.",
+      "scaleType": "Der Wert in Metern: der Wert, wie er ist. Linear: der Bereich unten wird auf die Meter unten abgebildet.",
+      "domainMin": "Linear: der kleinste Wert des Felds.",
+      "domainMax": "Linear: der größte Wert des Felds.",
+      "rangeMin": "Linear: die Meter des kleinsten Werts.",
+      "rangeMax": "Linear: die Meter des größten Werts.",
+      "value": "Die Meter, wo das Feld keinen Wert hat; 0: der Maßstab des Modells."
+    },
+    "ColorEncoding": {
+      "field": "Das Feld des Punkts. Leer: jeder Punkt hat die Farbe unten.",
+      "type": "Eine Farbe je Wert (Liste unten) oder ein Verlauf von der unteren zur oberen Farbe.",
+      "mappings": "Welcher Wert welche Farbe gibt.",
+      "domainMin": "Verlauf: der Wert der unteren Farbe.",
+      "domainMax": "Verlauf: der Wert der oberen Farbe.",
+      "lowColor": "Verlauf: die Farbe des unteren Endes.",
+      "highColor": "Verlauf: die Farbe des oberen Endes.",
+      "color": "Die Farbe, wo kein Wert eine gibt. Leer: die Farben der Datei."
+    },
+    "ColorMapping": {
+      "code": "Der Wert, wie das Feld oder der Datastream ihn gibt, z. B. RED.",
+      "color": "Die Farbe, die er gibt, jede CSS-Farbe."
+    },
+    "ModelEncoding": {
+      "field": "Das Feld des Punkts.",
+      "mappings": "Welcher Wert welche Datei gibt."
+    },
+    "ModelMapping": {
+      "code": "Der Wert des Felds.",
+      "url": "Die Modelldatei."
+    },
+    "PartEncoding": {
+      "mesh": "Welche Meshes: ein regulärer Ausdruck auf ihre Namen (und die ihrer Materialien), ohne Groß-/Kleinschreibung, z. B. trunk|stem|cylinder.",
+      "color": "Die Farbe dieser Meshes."
+    },
+    "ModelInstance": {
+      "lon": "Geografische Länge.",
+      "lat": "Geografische Breite.",
+      "scale": "Größe dieser Instanz, als Faktor auf den Maßstab des Layers.",
+      "rotation": "Drehung dieser Instanz in Grad, zur Drehung des Layers addiert."
+    }
   }
 }

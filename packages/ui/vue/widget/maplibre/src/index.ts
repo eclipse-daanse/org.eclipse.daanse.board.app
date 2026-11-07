@@ -80,5 +80,6 @@ export { MapLibreWidget, MapLibreWidgetSettings, MaplibrePackage }
 export { MapLibreSettingsImpl } from './gen/MapLibreSettingsImpl'
 export type { MapLibreSettings } from './gen/MapLibreSettings'
 
-/* Its texts - collected by lib.i18next, see src/i18n. */
+/* Its texts - collected by lib.i18next, see src/i18n. The hints are read by the generated form under its
+  field (i18n-keys: maplibre:Hints.*). */
 export { MaplibreTranslations } from './i18n'
