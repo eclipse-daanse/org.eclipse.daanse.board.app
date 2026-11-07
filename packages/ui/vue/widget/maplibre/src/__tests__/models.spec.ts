@@ -268,6 +268,32 @@ describe('the instances of a symbol layer (#1296)', () => {
     expect(trunk.material.color.getHexString()).toBe('795548')
   })
 
+  it('paint each material of a mesh with several on its own: Bark as the trunk, Tree as the crown (#1299)', () => {
+    const geometry = new THREE.BoxGeometry(1, 4, 1)
+    // A box has six groups, one per side; sides 0-1 are the bark, the rest the crown.
+    geometry.groups.forEach((group: { materialIndex?: number }, index: number) => (group.materialIndex = index < 2 ? 0 : 1))
+    const bark = new THREE.MeshPhongMaterial({ color: 0x795548, name: 'Bark' })
+    const leaves = new THREE.MeshPhongMaterial({ color: 0x33aa33, name: 'Tree' })
+    const tree = new THREE.Mesh(geometry, [bark, leaves])
+    tree.name = 'Tree_lp_11'
+    const source = new THREE.Group()
+    source.add(tree)
+    const group = instancedOf(THREE, source, [
+      { position: [0, 0, 0], rotation: 0, scale: 1, color: '#5b8c3a', partColors: ['#6b4f32'] },
+    ], [{ mesh: 'trunk|stem|bark|cylinder|stamm|rinde' }])
+    expect(group.children).toHaveLength(2)
+    const [barkMesh, crownMesh] = group.children
+    const color = new THREE.Color()
+    barkMesh.getColorAt(0, color)
+    expect(color.getHexString()).toBe('6b4f32')
+    crownMesh.getColorAt(0, color)
+    expect(color.getHexString()).toBe('5b8c3a')
+    // Each piece draws only the sides of its material, on the vertices of the mesh.
+    expect(barkMesh.geometry.groups.map((g: any) => g.materialIndex)).toEqual([0, 0])
+    expect(crownMesh.geometry.groups).toHaveLength(4)
+    expect(barkMesh.geometry.attributes.position).toBe(geometry.attributes.position)
+  })
+
   it('scale a model to the height and across to the width', () => {
     const source = new THREE.Group()
     source.add(new THREE.Mesh(new THREE.BoxGeometry(2, 4, 2), new THREE.MeshBasicMaterial()))
