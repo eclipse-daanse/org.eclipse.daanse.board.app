@@ -55,6 +55,7 @@ export class WfsStore extends BaseDatasource {
   private mode = 'wfs'
   private extent: 'fixed' | 'viewport' = 'fixed'
   private minZoom = 14
+  private maxViewportFeatures = 5000
   private viewports = new Viewports()
   /** The features of each tile read, by its key in the grid; in the order last used. */
   private tiles = new Map<string, Feature[]>()
@@ -90,6 +91,8 @@ export class WfsStore extends BaseDatasource {
     this.extent = configuration.extent === 'viewport' ? 'viewport' : 'fixed'
     const minZoom = configuration.minZoom == null ? NaN : Number(configuration.minZoom)
     this.minZoom = Number.isFinite(minZoom) ? minZoom : 14
+    const cap = configuration.maxViewportFeatures == null ? NaN : Number(configuration.maxViewportFeatures)
+    this.maxViewportFeatures = Number.isFinite(cap) && cap >= 0 ? Math.floor(cap) : 5000
     this.tiles.clear()
     this.tileReads.clear()
     this.columnTypes = configuration.columnTypes ?? []
@@ -148,7 +151,8 @@ export class WfsStore extends BaseDatasource {
 
   /**
    * The extent viewport: the tiles in view of the maps, each read once and
-   * kept. Below minZoom no tile is in view. A tile that fails fails the read,
+   * kept. Below minZoom no tile is in view. At most maxViewportFeatures, of
+   * the tiles nearest the middle first. A tile that fails fails the read,
    * with its reason, and is read again the next time.
    */
   private async readViewport(): Promise<FeatureCollection> {
@@ -156,7 +160,7 @@ export class WfsStore extends BaseDatasource {
     try {
       const answers = await Promise.all(keys.map((key) => this.readTile(key)))
       this.lastFailure = undefined
-      return this.typedCollection(mergedOnce(answers))
+      return this.typedCollection(mergedOnce(answers, this.maxViewportFeatures))
     } catch (e) {
       const failure = e as Error & { status?: number }
       this.lastFailure = { status: failure.status, message: failure.message }
@@ -255,7 +259,7 @@ export type { IWfsStoreConfiguration }
  * The features of several tiles, each once: a feature on the edge of two
  * tiles is in both answers. By its id, and where it has none by what it is.
  */
-function mergedOnce(answers: Feature[][]): FeatureCollection {
+function mergedOnce(answers: Feature[][], limit = 0): FeatureCollection {
   const seen = new Set<string>()
   const features: Feature[] = []
   for (const answer of answers) {
@@ -264,6 +268,7 @@ function mergedOnce(answers: Feature[][]): FeatureCollection {
       if (seen.has(key)) continue
       seen.add(key)
       features.push(feature)
+      if (limit > 0 && features.length >= limit) return { type: 'FeatureCollection', features }
     }
   }
   return { type: 'FeatureCollection', features }

@@ -21,6 +21,7 @@ import { SettingsForm } from 'org.eclipse.daanse.board.app.ui.vue.uimodel'
 import { BaseconnectionFactory } from 'org.eclipse.daanse.board.app.lib.datasource.base'
 import { WfsstoreFactory, WfsstorePackage } from 'org.eclipse.daanse.board.app.lib.datasource.wfs'
 import columnsFormXmi from '../model/ui-columns.xmi?raw'
+import extentFormXmi from '../model/ui-extent.xmi?raw'
 import wfsEcore from 'org.eclipse.daanse.board.app.lib.datasource.wfs/model/WfsDataSourceModel.ecore?raw'
 import columnTypeFormXmi from 'org.eclipse.daanse.board.app.lib.datasource.base/model/ui-column-type.xmi?raw'
 import { useOGCService } from 'org.eclipse.daanse.board.app.ui.vue.common.map'
@@ -79,12 +80,28 @@ const modes = computed(() => [
 ])
 watch([serviceUrl, featureInfo], () => void readCapabilities(), { immediate: true })
 
-/* Which area is read (#1297): the box, or the tiles the maps on the source show. */
-const viewport = computed(() => config.extent === 'viewport')
-const extents = computed(() => [
-  { value: 'fixed', label: t('Settings.extents.fixed') },
-  { value: 'viewport', label: t('Settings.extents.viewport') },
-])
+/*
+ * Which area is read, in a generated form (ui-extent.xmi): the box, or the
+ * tiles the maps on the source show, from which zoom and how many features
+ * at most. Like the column types, the form edits a modelled copy; the mode
+ * is copied in, as the tile size is for GetFeatureInfo too.
+ */
+const EXTENT_FIELDS = ['extent', 'tileSize', 'minZoom', 'maxViewportFeatures'] as const
+function extentOf() {
+  const given: Record<string, unknown> = { mode: config.mode || 'wfs' }
+  for (const name of EXTENT_FIELDS) if (config[name] !== undefined && config[name] !== null) given[name] = config[name]
+  return adopt(WfsstoreFactory.eINSTANCE.createIWfsStoreConfiguration(), given)
+}
+const extentModel = shallowRef<any>(extentOf())
+const extentHeld = useEObject(() => extentModel.value)
+watch(extentHeld, (held: any) => {
+  if (!held) return
+  for (const name of EXTENT_FIELDS) (config as Record<string, unknown>)[name] = held[name]
+})
+watch(() => config.mode, (mode) => {
+  if (extentModel.value.mode !== (mode || 'wfs')) extentModel.value.mode = mode || 'wfs'
+})
+const createExtent = () => WfsstoreFactory.eINSTANCE.createIWfsStoreConfiguration()
 
 /* ------------------------------------------------ column types (#1295) */
 
@@ -162,12 +179,14 @@ function setNumber(name: string, value: unknown, fallback: number) {
       <DInput type="number" :model-value="config.pointTolerance" :label="t('Fields.pointTolerance')"
         @update:model-value="(v) => setNumber('pointTolerance', v, 70)" />
     </template>
-    <DSelect :model-value="config.extent || 'fixed'" :options="extents" value-key="value" label-key="label" :label="t('Fields.extent')"
-      :hint="t('Hints.extent')" @update:model-value="(v) => (config.extent = v)" />
-    <DInput v-if="featureInfo || viewport" type="number" :model-value="config.tileSize" :label="t('Fields.tileSize')" :hint="t('Hints.tileSize')"
-      :step="0.005" @update:model-value="(v) => setNumber('tileSize', v, 0.01)" />
-    <DInput v-if="viewport" type="number" :model-value="config.minZoom" :label="t('Fields.minZoom')" :hint="t('Hints.minZoom')"
-      @update:model-value="(v) => setNumber('minZoom', v, 14)" />
+    <SettingsForm
+      v-model="extentModel"
+      :create="createExtent"
+      :ui-model-xmi="extentFormXmi"
+      :domain-package="WfsstorePackage.eINSTANCE"
+      ui-model-uri="/wfs-extent.ui.xmi"
+      :ecore="wfsEcore"
+    />
     <DInput type="number" :model-value="config.maxFeatures" :label="t('Fields.maxFeatures')" :hint="t('Hints.maxFeatures')"
       @update:model-value="(v) => setNumber('maxFeatures', v, 1000)" />
     <DInput v-model="config.bbox" :label="t('Fields.bbox')" placeholder="13.44,52.44,13.46,52.45" :hint="t('Hints.bbox')" />

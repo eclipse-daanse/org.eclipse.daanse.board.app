@@ -106,13 +106,23 @@ export class Viewports {
     return this.bySender.size
   }
 
-  /** The keys of all tiles in view of a sender whose zoom is at least minZoom, once each. */
+  /**
+   * The keys of all tiles in view of a sender whose zoom is at least
+   * minZoom, once each - nearest the middle of its view first, so a source
+   * that answers only so many features answers those someone looks at.
+   */
   tiles(size: number, minZoom = 0): string[] {
-    const keys = new Set<string>()
+    const distance = new Map<string, number>()
     for (const viewport of this.bySender.values()) {
       if (!viewport.bbox || viewport.zoom < minZoom) continue
-      for (const key of gridTilesOf(viewport.bbox, size)) keys.add(key)
+      const [west, south, east, north] = viewport.bbox
+      const middle = [(west + east) / 2, (south + north) / 2] as const
+      for (const key of gridTilesOf(viewport.bbox, size)) {
+        const [w, s, e, n] = gridTileBox(key, size)
+        const d = Math.hypot((w + e) / 2 - middle[0], (s + n) / 2 - middle[1])
+        distance.set(key, Math.min(distance.get(key) ?? Infinity, d))
+      }
     }
-    return [...keys]
+    return [...distance.keys()].sort((a, b) => distance.get(a)! - distance.get(b)! || (a < b ? -1 : 1))
   }
 }
