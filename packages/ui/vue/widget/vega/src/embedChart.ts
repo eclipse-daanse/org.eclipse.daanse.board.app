@@ -132,3 +132,51 @@ export async function restoreSignals(view: View, state: unknown): Promise<void> 
     // A signal the new chart no longer has is not worth an error
   }
 }
+
+/** What the chart reports while it is shown (#1289). */
+export interface ChartListeners {
+  /** The names of the selections and of the value parameters to follow. */
+  selections: string[]
+  values: string[]
+  onClick(hit: { markName?: string; markType?: string; datum?: unknown }): void
+  onSelection(name: string, value: unknown): void
+  onValue(name: string, value: unknown): void
+}
+
+const nextFrame = (run: () => void) =>
+  typeof requestAnimationFrame === 'function' ? requestAnimationFrame(() => run()) : setTimeout(run, 16)
+
+/**
+ * Follows a drawn chart: clicks on marks, and its selections and values.
+ *
+ * A signal is reported once per animation frame with its latest value - a
+ * brush changes on every mouse move, and a rule acting on each would act
+ * hundreds of times for one gesture. Finalizing the view removes the
+ * listeners with it.
+ */
+export function listenTo(view: View, listeners: ChartListeners): void {
+  view.addEventListener('click', (_event, item) => {
+    const hit = item as { datum?: unknown; mark?: { name?: string; marktype?: string } } | null | undefined
+    if (!hit?.mark || hit.datum === undefined) return
+    listeners.onClick({ markName: hit.mark.name, markType: hit.mark.marktype, datum: hit.datum })
+  })
+  const latest = new Map<string, unknown>()
+  const pending = new Set<string>()
+  const follow = (name: string, report: (name: string, value: unknown) => void) => {
+    try {
+      view.addSignalListener(name, (_name, value) => {
+        latest.set(name, value)
+        if (pending.has(name)) return
+        pending.add(name)
+        nextFrame(() => {
+          pending.delete(name)
+          report(name, latest.get(name))
+        })
+      })
+    } catch {
+      // A name the chart does not have - a selection not yet complete in the form
+    }
+  }
+  for (const name of listeners.selections) follow(name, listeners.onSelection)
+  for (const name of listeners.values) follow(name, listeners.onValue)
+}

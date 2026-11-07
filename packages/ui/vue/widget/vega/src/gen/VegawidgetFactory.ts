@@ -33,6 +33,12 @@ import { Facet } from './Facet.js';
 import { FacetImpl } from './FacetImpl.js';
 import { Param } from './Param.js';
 import { ParamImpl } from './ParamImpl.js';
+import { MarkClickPayload } from './MarkClickPayload.js';
+import { MarkClickPayloadImpl } from './MarkClickPayloadImpl.js';
+import { SelectionPayload } from './SelectionPayload.js';
+import { SelectionPayloadImpl } from './SelectionPayloadImpl.js';
+import { ParamPayload } from './ParamPayload.js';
+import { ParamPayloadImpl } from './ParamPayloadImpl.js';
 
 /**
  * Factory for creating Vegawidget model objects
@@ -97,6 +103,27 @@ export class VegawidgetFactory extends BasicEFactory {
   }
 
   /**
+   * Create a new MarkClickPayload instance
+   */
+  createMarkClickPayload(): MarkClickPayload {
+    return new MarkClickPayloadImpl();
+  }
+
+  /**
+   * Create a new SelectionPayload instance
+   */
+  createSelectionPayload(): SelectionPayload {
+    return new SelectionPayloadImpl();
+  }
+
+  /**
+   * Create a new ParamPayload instance
+   */
+  createParamPayload(): ParamPayload {
+    return new ParamPayloadImpl();
+  }
+
+  /**
    * Create an instance of the given class
    */
   override create(eClass: EClass): EObject {
@@ -113,6 +140,12 @@ export class VegawidgetFactory extends BasicEFactory {
         return this.createFacet();
       case 'Param':
         return this.createParam();
+      case 'MarkClickPayload':
+        return this.createMarkClickPayload();
+      case 'SelectionPayload':
+        return this.createSelectionPayload();
+      case 'ParamPayload':
+        return this.createParamPayload();
       default:
         throw new Error(`Unknown class: ${eClass.getName()}`);
     }

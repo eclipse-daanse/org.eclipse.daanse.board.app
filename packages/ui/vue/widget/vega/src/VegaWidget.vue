@@ -34,6 +34,9 @@ import { SAMPLE_VALUES, withDatasets, type Row } from './sample'
 import { datasetSources, rowsOf, typed } from './datasets'
 import { useDatasets, type ChartStore } from './useDatasets'
 import { modelledSettings } from './settingsModel'
+import { identifiers } from 'org.eclipse.daanse.board.app.lib.core'
+import type { TinyEmitter } from 'tiny-emitter'
+import { busEventOf, clickEventOf, paramEventOf, selectionEventOf, type VegaEvent } from './events/VegaWidgetEvents'
 import { themeConfig } from './theme'
 
 const stored = defineModel<unknown>('configv', { required: true })
@@ -47,6 +50,20 @@ const props = defineProps<{ id?: string; datasourceId?: string }>()
 const config = computed(() => modelledSettings(stored.value))
 const settings = useEObject<VegaWidgetSettings>(() => config.value)
 const { t } = useTranslation('vega')
+
+/* ----------------------------------------------------------- events */
+
+/*
+ * What the chart tells the board (#1289): board events with modelled
+ * payloads, on the bus every widget uses. A rule maps them to actions;
+ * the chart itself writes no variable.
+ */
+const bus = inject<TinyEmitter | undefined>(identifiers.TINY_EMITTER, undefined)
+const emit = ({ event, payload }: VegaEvent) => {
+  if (!props.id || !bus) return
+  const type = busEventOf(event)
+  bus.emit(type, { type, widgetId: props.id, payload })
+}
 
 /* ------------------------------------------------------------ theme */
 
@@ -146,7 +163,7 @@ const draw = async (keepSignals = false) => {
   try {
     /* Compiled before Vega is loaded: a recipe that gives no chart needs none. */
     const spec = withSize(withDatasets(compileRecipe(s), datasetsNow()), el.clientWidth, el.clientHeight)
-    const { drawChart, signalsOf, restoreSignals } = await import('./embedChart')
+    const { drawChart, signalsOf, restoreSignals, listenTo } = await import('./embedChart')
     const kept = keepSignals && chart ? signalsOf(chart.view) : undefined
     const next = await drawChart(el, spec, {
       renderer: s?.renderer === 'svg' ? 'svg' : 'canvas',
@@ -161,6 +178,21 @@ const draw = async (keepSignals = false) => {
     chart = next
     error.value = null
     if (kept) await restoreSignals(next.view, kept)
+    const params = [...(s.params ?? [])].filter((p) => String(p.name ?? '').trim())
+    const layers = [...(s.layers ?? [])]
+    listenTo(next.view, {
+      selections: params.filter((p) => p.kind !== 'value').map((p) => String(p.name).trim()),
+      values: params.filter((p) => p.kind === 'value').map((p) => String(p.name).trim()),
+      onClick: (hit) => {
+        const clicked = clickEventOf(hit, props.id ?? '')
+        /* The mark as the recipe names it - Vega calls a bar a rect. */
+        const layer = layers[(clicked.payload as { layer?: number }).layer ?? 0]
+        if (layer?.mark) (clicked.payload as { mark?: string }).mark = layer.mark
+        emit(clicked)
+      },
+      onSelection: (name, value) => emit(selectionEventOf(name, value, props.id ?? '')),
+      onValue: (name, value) => emit(paramEventOf(name, value, props.id ?? '')),
+    })
     /* The frame may have changed while Vega loaded. */
     fit()
     /* Rows that arrived while the chart was drawn go in now. */

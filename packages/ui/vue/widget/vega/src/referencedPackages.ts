@@ -13,10 +13,14 @@
 
 /*
  * The packages the vega model refers to, built before it: the column types
- * and transforms are classes of lib.datasource.base since #1295, and the
- * vega package cannot resolve them until that package is registered.
+ * and transforms are classes of lib.datasource.base since #1295, the
+ * payloads extend lib.events' Payload (#1289), and the vega package cannot
+ * resolve them until those packages are registered.
  * Imported first by every module that reaches the vega package.
  */
 import { BaseconnectionPackage } from 'org.eclipse.daanse.board.app.lib.datasource.base'
+/* The payloads of the chart's events extend the events model's Payload (#1289). */
+import { EventsPackage } from 'org.eclipse.daanse.board.app.lib.api.events'
 
 void BaseconnectionPackage.eINSTANCE
+void EventsPackage.eINSTANCE
