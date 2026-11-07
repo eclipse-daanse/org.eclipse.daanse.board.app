@@ -46,14 +46,22 @@ const adopted = new WeakMap<object, MapLibreSettings>()
  * object. Already modelled input is handed back as it is; nothing at all
  * gives fresh settings with the model's defaults.
  */
-export function modelledSettings(given: unknown): MapLibreSettings {
+/** How a migration names what it adds, in the reader's language - passed by the components, which can translate. */
+export interface MigrationNames {
+  /** The field holding the first word of another, e.g. "Baumart (erstes Wort)". */
+  firstWordOf(field: string): string
+}
+
+const ENGLISH_NAMES: MigrationNames = { firstWordOf: (field) => `${field} (first word)` }
+
+export function modelledSettings(given: unknown, names: MigrationNames = ENGLISH_NAMES): MapLibreSettings {
   /* By the object itself: a reactive proxy of it is the same configuration. */
   const stored = given && typeof given === 'object' ? toRaw(given) : given
   if (!stored || typeof stored !== 'object') return factory().createMapLibreSettings()
   if (isModelled(stored)) return stored as unknown as MapLibreSettings
   const held = adopted.get(stored)
   if (held) return held
-  const made = migrated(adopt(factory().createMapLibreSettings(), withSymbolLayers(stored as Record<string, unknown>)))
+  const made = migrated(adopt(factory().createMapLibreSettings(), withSymbolLayers(stored as Record<string, unknown>, names)))
   adopted.set(stored, made)
   return made
 }
@@ -179,7 +187,7 @@ function patternOfGlob(glob: string): string {
  * globs an extract per pattern. trunkColor becomes the part of the meshes
  * named as the trunk used to be found. A layer in the new form is kept.
  */
-export function migratedModelLayer(stored: Record<string, unknown>): Record<string, unknown> {
+export function migratedModelLayer(stored: Record<string, unknown>, names: MigrationNames = ENGLISH_NAMES): Record<string, unknown> {
   const old = ['heightProperty', 'widthProperty', 'defaultHeight', 'rules', 'trunkColor'].some((key) => key in stored) || typeof stored.color === 'string'
   if (!old) return stored
   const {
@@ -209,7 +217,7 @@ export function migratedModelLayer(stored: Record<string, unknown>): Record<stri
   for (const [property, group] of byProperty) {
     const firstWords = group.every((r: any) => /^[^*\s]+\*$/.test(text(r.value)))
     if (firstWords) {
-      const as = `${property} (first word)`
+      const as = names.firstWordOf(property)
       transforms.push({ kind: 'extract', field: property, pattern: '^(\\S+)', as })
       colorField = colorField || as
       for (const r of group) {
@@ -242,7 +250,7 @@ export function migratedModelLayer(stored: Record<string, unknown>): Record<stri
 }
 
 /** The stored settings with their model layers in the form of #1296. */
-function withSymbolLayers(stored: Record<string, unknown>): Record<string, unknown> {
+function withSymbolLayers(stored: Record<string, unknown>, names: MigrationNames): Record<string, unknown> {
   if (!Array.isArray(stored.modelLayers)) return stored
-  return { ...stored, modelLayers: stored.modelLayers.map((layer) => (layer && typeof layer === 'object' ? migratedModelLayer(layer as Record<string, unknown>) : layer)) }
+  return { ...stored, modelLayers: stored.modelLayers.map((layer) => (layer && typeof layer === 'object' ? migratedModelLayer(layer as Record<string, unknown>, names) : layer)) }
 }
