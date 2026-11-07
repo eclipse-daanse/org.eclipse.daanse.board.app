@@ -203,3 +203,50 @@ export function useGeoJsonData(layers: () => LoadedGeoJsonLayer[], fetcher: type
 
   return { revision, documentOf }
 }
+
+/**
+ * The answers of the data sources a model layer stands its models on (#1282),
+ * as GeoJSON, read again whenever a source says it has news.
+ */
+export function useFeatureData(options: { ids: () => string[]; resolve: (datasourceId: string) => ThingStore | undefined }) {
+  const answers = new Map<string, unknown>()
+  const revision = ref(0)
+  const subscriptions = new Map<string, () => void>()
+  let generation = 0
+
+  async function load(id: string, run: number) {
+    try {
+      const answer = await options.resolve(id)?.getData('geojson')
+      if (run !== generation) return
+      answers.set(id, answer)
+      revision.value++
+    } catch {
+      // Left as it was; the next notification of the source tries again.
+    }
+  }
+
+  watch(
+    () => [...new Set(options.ids().filter(Boolean))].sort().join('|'),
+    (key) => {
+      const run = ++generation
+      for (const unsubscribe of subscriptions.values()) unsubscribe()
+      subscriptions.clear()
+      const ids = key ? key.split('|') : []
+      for (const id of [...answers.keys()]) if (!ids.includes(id)) answers.delete(id)
+      for (const id of ids) {
+        const unsubscribe = options.resolve(id)?.subscribe?.(() => void load(id, generation))
+        if (typeof unsubscribe === 'function') subscriptions.set(id, unsubscribe)
+        void load(id, run)
+      }
+      revision.value++
+    },
+    { immediate: true },
+  )
+
+  onUnmounted(() => {
+    generation++
+    for (const unsubscribe of subscriptions.values()) unsubscribe()
+  })
+
+  return { revision, answerOf: (id: string) => answers.get(id) }
+}

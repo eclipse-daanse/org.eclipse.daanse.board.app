@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- The answer of a QGIS Server that offers no WFS on a path, as the Jena portal gives it. -->
+<ServiceExceptionReport version="1.3.0" xmlns="http://www.opengis.net/ogc">
+  <ServiceException code="Service configuration error">Service unknown or not permitted</ServiceException>
+</ServiceExceptionReport>

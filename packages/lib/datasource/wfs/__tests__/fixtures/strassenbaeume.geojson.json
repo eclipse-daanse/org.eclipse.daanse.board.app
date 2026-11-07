@@ -1,0 +1,19 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "id": "strassenbaeume.1",
+      "geometry": { "type": "Point", "coordinates": [13.4482, 52.4431] },
+      "properties": { "gattung_deutsch": "Linde", "art_dtsch": "Winter-Linde", "baumhoehe": 15, "kronedurch": 8 }
+    },
+    {
+      "type": "Feature",
+      "id": "strassenbaeume.2",
+      "geometry": { "type": "Point", "coordinates": [13.4490, 52.4435] },
+      "properties": { "gattung_deutsch": "Ahorn", "art_dtsch": "Spitz-Ahorn", "baumhoehe": null, "kronedurch": 0 }
+    }
+  ],
+  "totalFeatures": 2,
+  "numberReturned": 2
+}

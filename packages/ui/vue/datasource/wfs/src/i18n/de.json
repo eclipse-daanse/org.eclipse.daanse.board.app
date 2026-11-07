@@ -1,0 +1,31 @@
+{
+  "Fields": {
+    "connection": "Verbindung (der WFS-Dienst)",
+    "url": "Pfad nach der Adresse der Verbindung",
+    "typeName": "Feature-Typ",
+    "version": "WFS-Version",
+    "outputFormat": "Ausgabeformat",
+    "srsName": "Koordinatensystem",
+    "maxFeatures": "Höchstens so viele Features",
+    "bbox": "Nur in diesem Rechteck",
+    "filter": "CQL-Filter"
+  },
+  "Hints": {
+    "connection": "Eine REST-Verbindung, deren Adresse der Dienst ist, z. B. https://gdi.berlin.de/services/wfs/baumbestand",
+    "url": "Leer, wenn der Dienst unter der Adresse der Verbindung liegt.",
+    "outputFormat": "Leer: GeoJSON. Ein Dienst ohne GeoJSON antwortet mit GML, das ebenfalls gelesen wird.",
+    "maxFeatures": "0: keine Grenze.",
+    "bbox": "West,Süd,Ost,Nord in Grad. Leer: überall.",
+    "filter": "Wo der Dienst CQL kennt. Leer: kein Filter."
+  },
+  "Settings": {
+    "reload": "Feature-Typen neu lesen",
+    "noTypes": "Der Dienst nennt keinen Feature-Typ.",
+    "noWfs": "Diese Adresse antwortet nicht mit WFS-GetCapabilities.",
+    "unreachable": "Der Dienst ist nicht erreichbar oder erlaubt dem Board das Lesen nicht (CORS)."
+  },
+  "Preview": {
+    "count": "{{count}} Features",
+    "failed": "Der Dienst antwortete mit einem Fehler: {{message}}"
+  }
+}

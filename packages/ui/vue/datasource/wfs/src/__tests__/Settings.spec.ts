@@ -1,0 +1,61 @@
+/*********************************************************************
+ * Copyright (c) 2026 Contributors to the Eclipse Foundation.
+ *
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ *
+ * SPDX-License-Identifier: EPL-2.0
+ *
+ * Contributors:
+ *   Smart City Jena
+ **********************************************************************/
+
+// @vitest-environment jsdom
+/*
+ * #1282: the settings of a WFS data source list the feature types of the
+ * service, and say in the service's words why there are none.
+ */
+import { describe, it, expect, vi, afterEach } from 'vitest'
+import { flushPromises, mount } from '@vue/test-utils'
+import { reactive } from 'vue'
+import Settings from '../Settings.vue'
+
+const createServiceWFS = vi.fn()
+vi.mock('org.eclipse.daanse.board.app.ui.vue.common.map', async (original) => ({
+  ...((await original()) as object),
+  useOGCService: () => ({ createServiceWFS }),
+}))
+
+const connections = [{ uid: 'berlin', name: 'Berlin', type: 'rest', config: { url: 'https://gdi.berlin.de/services/wfs/baumbestand' } }]
+
+afterEach(() => {
+  vi.unstubAllGlobals()
+  createServiceWFS.mockReset()
+})
+
+describe('the WFS settings', () => {
+  it('offer the feature types the service lists', async () => {
+    createServiceWFS.mockResolvedValue({
+      getFeatureTypes: () => [{ name: 'baumbestand:strassenbaeume', title: 'Straßenbäume' }, { name: '' }],
+    })
+    const config = reactive<any>({ connection: 'berlin', url: '', typeName: '' })
+    const wrapper = mount(Settings, { props: { config, connections } })
+    await flushPromises()
+    expect(createServiceWFS).toHaveBeenCalledWith('https://gdi.berlin.de/services/wfs/baumbestand')
+    expect(wrapper.find('.wfs-settings__error').exists()).toBe(false)
+    const options = wrapper.findAll('option').map((o) => o.text())
+    expect(options).toContain('Straßenbäume (baumbestand:strassenbaeume)')
+  })
+
+  it('say why there are none in the service words', async () => {
+    createServiceWFS.mockRejectedValue(new Error('Not a valid WFS GetCapabilities response'))
+    vi.stubGlobal('fetch', vi.fn(async () => new Response(
+      '<ServiceExceptionReport><ServiceException>Service unknown or not permitted</ServiceException></ServiceExceptionReport>',
+    )))
+    const config = reactive<any>({ connection: 'berlin', url: '' })
+    const wrapper = mount(Settings, { props: { config, connections } })
+    await flushPromises()
+    expect(wrapper.find('.wfs-settings__error').text()).toBe('Service unknown or not permitted')
+  })
+})

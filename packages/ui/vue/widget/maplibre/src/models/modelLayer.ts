@@ -60,20 +60,49 @@ export function instancedOf(THREE: any, source: any, placements: InstancePlaceme
   const turn = new THREE.Matrix4()
   const size = new THREE.Matrix4()
   const ground = new THREE.Matrix4().makeTranslation(0, lift, 0)
+  const tall = Number.isFinite(box.max.y - box.min.y) ? box.max.y - box.min.y : 0
+  const tinted = placements.some((placement) => !!placement.color)
   for (const mesh of meshes) {
-    const instanced = new THREE.InstancedMesh(mesh.geometry, mesh.material, placements.length)
+    // A rule's colour paints the model, not its trunk (#1282).
+    const paint = tinted && !TRUNK.test(`${mesh.name ?? ''} ${materialNames(mesh)}`)
+    const material = paint ? whiteCopyOf(mesh.material) : mesh.material
+    const instanced = new THREE.InstancedMesh(mesh.geometry, material, placements.length)
+    const own = new THREE.Color(firstColorOf(mesh.material))
     placements.forEach((placement, index) => {
       at.makeTranslation(...placement.position)
       turn.makeRotationY(placement.rotation)
-      size.makeScale(placement.scale, placement.scale, placement.scale)
+      // A height in metres scales the model to it; otherwise the scale of layer and instance.
+      const factor = placement.height && tall > 0 ? placement.height / tall : placement.scale
+      size.makeScale(factor, factor, factor)
+      if (paint) instanced.setColorAt(index, placement.color ? new THREE.Color(placement.color) : own)
       const matrix = new THREE.Matrix4().multiplyMatrices(at, turn).multiply(size).multiply(ground).multiply(mesh.matrixWorld)
       instanced.setMatrixAt(index, matrix)
     })
     instanced.instanceMatrix.needsUpdate = true
+    if (instanced.instanceColor) instanced.instanceColor.needsUpdate = true
     instanced.frustumCulled = false
     group.add(instanced)
   }
   return group
+}
+
+/** A mesh that is the trunk of a tree keeps its colour under a rule's colour. */
+const TRUNK = /trunk|stem|bark|cylinder|stamm|rinde/i
+
+const materialNames = (mesh: any) =>
+  (Array.isArray(mesh.material) ? mesh.material : [mesh.material]).map((m: any) => m?.name ?? '').join(' ')
+
+/** The colour a mesh is drawn in, to keep for an instance without a rule colour. */
+const firstColorOf = (material: any) => (Array.isArray(material) ? material[0] : material)?.color?.getHex?.() ?? 0xffffff
+
+/** The material in white, so that an instance colour shows as itself, not darkened by the model's. */
+function whiteCopyOf(material: any): any {
+  const copy = (one: any) => {
+    const made = one?.clone?.() ?? one
+    made?.color?.set?.(0xffffff)
+    return made
+  }
+  return Array.isArray(material) ? material.map(copy) : copy(material)
 }
 
 /** The matrix from the frame (x east, y up, z south, metres) to web mercator units. */

@@ -65,7 +65,8 @@ import {
   thingLookOf,
 } from './mapStyle'
 import { boundsOf, geometriesOf, thingFeaturesOf, thingIdOf, type ThingLike } from './things'
-import { useGeoJsonData, useThingData, type ThingStore } from './useLayerData'
+import { useFeatureData, useGeoJsonData, useThingData, type ThingStore } from './useLayerData'
+import { instancesByModel } from './models/modelRules'
 import { WIDGET_TYPE, busEventOf, clickEventOf } from './events/payloads'
 
 const props = defineProps<{ datasourceId?: string; id?: string }>()
@@ -243,17 +244,36 @@ function applyAdditions() {
 /* ---------------------------------------------------------- 3D models */
 
 let modelLayer: ModelCustomLayer | undefined
-const drawnModels = (): DrawnModelLayer[] =>
-  held().modelLayers.toArray().map((layer) => ({
-    id: layer.id,
-    visible: layer.visible,
-    url: layer.url,
-    format: layer.format,
-    scale: layer.scale,
-    rotation: layer.rotation,
-    altitudeOffset: layer.altitudeOffset,
-    instances: layer.instances.toArray().map((i) => ({ id: i.id, lon: i.lon, lat: i.lat, scale: i.scale, rotation: i.rotation })),
-  }))
+
+/* The points the model layers stand their models on (#1282). */
+const modelData = useFeatureData({
+  ids: () => held().modelLayers.toArray().map((layer) => String(layer.datasourceId ?? '')),
+  resolve: resolveStore,
+})
+
+/**
+ * What the custom layer draws: per model layer its own instances, and the
+ * points of its data source by the model their rule gives - one drawn layer
+ * per model file.
+ */
+const drawnModels = (): DrawnModelLayer[] => {
+  void modelData.revision.value
+  const out: DrawnModelLayer[] = []
+  for (const layer of held().modelLayers.toArray()) {
+    const base = { visible: layer.visible, scale: layer.scale, rotation: layer.rotation, altitudeOffset: layer.altitudeOffset }
+    const url = String(layer.url ?? '').trim()
+    const placed = layer.instances.toArray().map((i) => ({ id: i.id, lon: i.lon, lat: i.lat, scale: i.scale, rotation: i.rotation }))
+    const byModel = layer.datasourceId ? instancesByModel(
+      { id: layer.id, url, heightProperty: layer.heightProperty, defaultHeight: layer.defaultHeight, rules: layer.rules.toArray() },
+      modelData.answerOf(layer.datasourceId),
+    ) : new Map()
+    if (url) out.push({ ...base, id: layer.id, url, format: layer.format, instances: [...placed, ...(byModel.get(url) ?? [])] })
+    for (const [other, instances] of byModel) {
+      if (other !== url) out.push({ ...base, id: `${layer.id}:${other}`, url: other, instances })
+    }
+  }
+  return out
+}
 const modelsKey = computed(() => JSON.stringify(drawnModels()))
 watch(modelsKey, () => {
   if (!map || !styleReady) return
