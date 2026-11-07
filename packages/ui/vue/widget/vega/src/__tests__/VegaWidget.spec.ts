@@ -20,7 +20,7 @@
 import { describe, expect, it } from 'vitest'
 import { flushPromises, mount } from '@vue/test-utils'
 import { VegawidgetPackage } from '../gen/VegawidgetPackage'
-import { VegaWidgetSettingsImpl } from '../gen/VegaWidgetSettingsImpl'
+import { emptySettings, modelledSettings } from '../settingsModel'
 import VegaWidget from '../VegaWidget.vue'
 
 void VegawidgetPackage.eINSTANCE
@@ -33,12 +33,12 @@ const settle = async () => {
   }
 }
 
-const mountWith = (settings: VegaWidgetSettingsImpl) =>
+const mountWith = (settings: unknown) =>
   mount(VegaWidget, { props: { id: 'w1', configv: settings as any }, attachTo: document.body })
 
 describe('VegaWidget', () => {
   it('draws the chart', async () => {
-    const settings = new VegaWidgetSettingsImpl()
+    const settings = modelledSettings(undefined)
     settings.renderer = 'svg'
     const wrapper = mountWith(settings)
     await settle()
@@ -49,7 +49,7 @@ describe('VegaWidget', () => {
   })
 
   it('follows a setting written into the same instance', async () => {
-    const settings = new VegaWidgetSettingsImpl()
+    const settings = modelledSettings(undefined)
     settings.renderer = 'svg'
     const wrapper = mountWith(settings)
     await settle()
@@ -62,12 +62,23 @@ describe('VegaWidget', () => {
     wrapper.unmount()
   })
 
-  it('takes the model defaults for what a stored chart does not hold', async () => {
-    const settings = new VegaWidgetSettingsImpl()
-    const wrapper = mountWith(settings)
+  it('adopts the stored JSON and hands the model object back to the board', async () => {
+    const stored = { renderer: 'svg', layers: [{ mark: 'point', encodings: [
+      { channel: 'x', field: 'category', type: 'nominal' },
+      { channel: 'y', field: 'amount', type: 'quantitative' },
+    ] }] }
+    const wrapper = mountWith(stored)
     await settle()
-    expect(settings.tooltip).toBe(true)
-    expect(settings.renderer).toBe('canvas')
+    const handed = wrapper.emitted('update:configv')?.at(-1)?.[0] as ReturnType<typeof modelledSettings>
+    expect(handed?.layers.get(0).mark).toBe('point')
+    expect(wrapper.get('[data-testid="vega-chart"]').element.querySelector('svg .mark-symbol')).toBeTruthy()
+    wrapper.unmount()
+  })
+
+  it('says so when the chart has no layer', async () => {
+    const wrapper = mountWith(emptySettings())
+    await settle()
+    expect(wrapper.get('[role="alert"]').text()).toBe('Recipe.noLayers')
     wrapper.unmount()
   })
 })

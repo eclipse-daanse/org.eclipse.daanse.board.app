@@ -19,8 +19,13 @@
  */
 
 import { BasicEObject } from '@emfts/core';
-import type { EClass, EStructuralFeature } from '@emfts/core';
+import { createContainmentEList } from '@emfts/core';
+import type { EClass, EStructuralFeature, EList, EReference } from '@emfts/core';
+import type { Layer } from './Layer.js';
+import type { Facet } from './Facet.js';
+import type { Param } from './Param.js';
 import { VegaRenderer } from './VegaRenderer.js';
+import { LegendPosition } from './LegendPosition.js';
 import type { VegaWidgetSettings } from './VegaWidgetSettings.js';
 import { VegawidgetPackage } from './VegawidgetPackage.js';
 
@@ -33,11 +38,19 @@ export class VegaWidgetSettingsImpl extends BasicEObject implements VegaWidgetSe
   static readonly TITLE: number = 0;
   static readonly RENDERER: number = 1;
   static readonly TOOLTIP: number = 2;
+  static readonly LEGEND_POSITION: number = 3;
+  static readonly LAYERS: number = 4;
+  static readonly FACET: number = 5;
+  static readonly PARAMS: number = 6;
 
   // Private fields
   private _title: string = "";
   private _renderer: VegaRenderer = VegaRenderer.canvas;
   private _tooltip: boolean = true;
+  private _legendPosition: LegendPosition = LegendPosition.right;
+  private _layers!: EList<Layer>;
+  private _facet?: Facet;
+  private _params!: EList<Param>;
 
   /**
    * Returns the EClass of this object
@@ -119,6 +132,102 @@ export class VegaWidgetSettingsImpl extends BasicEObject implements VegaWidgetSe
     }
   }
 
+  get legendPosition(): LegendPosition {
+    return this._legendPosition!;
+  }
+
+  set legendPosition(value: LegendPosition) {
+    const oldValue = this._legendPosition;
+    this._legendPosition = value;
+    if (this.eDeliver()) {
+      this.eNotify({
+        getNotifier: () => this,
+        getEventType: () => 1, // SET
+        getFeature: () => this.eClass().getEStructuralFeature(VegaWidgetSettingsImpl.LEGEND_POSITION),
+        getOldValue: () => oldValue,
+        getNewValue: () => value,
+        getPosition: () => -1,
+        wasSet: () => true,
+        isTouch: () => false,
+        isReset: () => false,
+        getFeatureID: () => VegaWidgetSettingsImpl.LEGEND_POSITION,
+        merge: () => false
+      });
+    }
+  }
+
+  get layers(): EList<Layer> {
+    if (!this._layers) {
+      this._layers = createContainmentEList<any>(this, this.eClass().getEStructuralFeature('layers') as EReference);
+    }
+    return this._layers;
+  }
+
+  get facet(): Facet {
+    return this._facet!;
+  }
+
+  set facet(value: Facet) {
+    const oldValue = this._facet;
+    if (oldValue !== value) {
+      // containment: the owner becomes the container of the value (#61)
+      if (oldValue) {
+        (oldValue as any).eSetContainer?.(null, null);
+      }
+      if (value) {
+        this.removeFromPreviousContainer(value);
+        (value as any).eSetContainer?.(this, this.eClass().getEStructuralFeature('facet'));
+      }
+    }
+    this._facet = value;
+    if (this.eDeliver()) {
+      this.eNotify({
+        getNotifier: () => this,
+        getEventType: () => 1, // SET
+        getFeature: () => this.eClass().getEStructuralFeature(VegaWidgetSettingsImpl.FACET),
+        getOldValue: () => oldValue,
+        getNewValue: () => value,
+        getPosition: () => -1,
+        wasSet: () => true,
+        isTouch: () => false,
+        isReset: () => false,
+        getFeatureID: () => VegaWidgetSettingsImpl.FACET,
+        merge: () => false
+      });
+    }
+  }
+
+  get params(): EList<Param> {
+    if (!this._params) {
+      this._params = createContainmentEList<any>(this, this.eClass().getEStructuralFeature('params') as EReference);
+    }
+    return this._params;
+  }
+
+  /**
+   * Remove a value from its previous container before it is contained here,
+   * like Java EMF's eInverseRemove on the old container (#61)
+   */
+  private removeFromPreviousContainer(value: unknown): void {
+    const v = value as any;
+    const oldContainer = v?.eContainer?.();
+    if (!oldContainer || oldContainer === this) {
+      return;
+    }
+    const oldFeature = v.eContainmentFeature?.();
+    if (!oldFeature) {
+      return;
+    }
+    if (oldFeature.isMany()) {
+      const list = oldContainer.eGet(oldFeature);
+      if (list && typeof list.remove === 'function') {
+        list.remove(v);
+      }
+    } else {
+      oldContainer.eUnset(oldFeature);
+    }
+  }
+
   // Reflective API
 
   /**
@@ -133,6 +242,14 @@ export class VegaWidgetSettingsImpl extends BasicEObject implements VegaWidgetSe
         return this.renderer;
       case VegaWidgetSettingsImpl.TOOLTIP:
         return this.tooltip;
+      case VegaWidgetSettingsImpl.LEGEND_POSITION:
+        return this.legendPosition;
+      case VegaWidgetSettingsImpl.LAYERS:
+        return this.layers;
+      case VegaWidgetSettingsImpl.FACET:
+        return this.facet;
+      case VegaWidgetSettingsImpl.PARAMS:
+        return this.params;
       default:
         return super.eGet(feature);
     }
@@ -156,6 +273,24 @@ export class VegaWidgetSettingsImpl extends BasicEObject implements VegaWidgetSe
         this.tooltip = newValue as boolean;
         super.eSet(feature, newValue);
         break;
+      case VegaWidgetSettingsImpl.LEGEND_POSITION:
+        this.legendPosition = newValue as LegendPosition;
+        super.eSet(feature, newValue);
+        break;
+      case VegaWidgetSettingsImpl.LAYERS:
+        this.layers.clear();
+        this.layers.addAll(newValue as any[]);
+        super.eSet(feature, newValue);
+        break;
+      case VegaWidgetSettingsImpl.FACET:
+        this.facet = newValue as Facet;
+        super.eSet(feature, newValue);
+        break;
+      case VegaWidgetSettingsImpl.PARAMS:
+        this.params.clear();
+        this.params.addAll(newValue as any[]);
+        super.eSet(feature, newValue);
+        break;
       default:
         super.eSet(feature, newValue);
     }
@@ -173,6 +308,14 @@ export class VegaWidgetSettingsImpl extends BasicEObject implements VegaWidgetSe
         return this._renderer !== VegaRenderer.canvas;
       case VegaWidgetSettingsImpl.TOOLTIP:
         return this._tooltip !== true;
+      case VegaWidgetSettingsImpl.LEGEND_POSITION:
+        return this._legendPosition !== LegendPosition.right;
+      case VegaWidgetSettingsImpl.LAYERS:
+        return this._layers !== undefined && !this._layers.isEmpty();
+      case VegaWidgetSettingsImpl.FACET:
+        return this._facet !== undefined;
+      case VegaWidgetSettingsImpl.PARAMS:
+        return this._params !== undefined && !this._params.isEmpty();
       default:
         return super.eIsSet(feature);
     }
@@ -193,6 +336,19 @@ export class VegaWidgetSettingsImpl extends BasicEObject implements VegaWidgetSe
       case VegaWidgetSettingsImpl.TOOLTIP:
         this._tooltip = true;
         return;
+      case VegaWidgetSettingsImpl.LEGEND_POSITION:
+        this._legendPosition = LegendPosition.right;
+        return;
+      case VegaWidgetSettingsImpl.LAYERS:
+        if (this._layers) this._layers.clear();
+        return;
+      case VegaWidgetSettingsImpl.FACET:
+        if (this._facet) (this._facet as any).eSetContainer?.(null, null);
+        this._facet = undefined;
+        return;
+      case VegaWidgetSettingsImpl.PARAMS:
+        if (this._params) this._params.clear();
+        return;
       default:
         super.eUnset(feature);
     }
@@ -211,6 +367,10 @@ export class VegaWidgetSettingsImpl extends BasicEObject implements VegaWidgetSe
       title: this.title,
       renderer: this.renderer,
       tooltip: this.tooltip,
+      legendPosition: this.legendPosition,
+      layers: this.layers?.toArray?.() ?? this.layers,
+      facet: this.facet,
+      params: this.params?.toArray?.() ?? this.params,
     };
   }
 }

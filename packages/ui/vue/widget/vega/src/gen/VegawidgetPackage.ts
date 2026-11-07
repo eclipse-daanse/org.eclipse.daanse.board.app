@@ -18,10 +18,24 @@
  * @generated
  */
 
-import { BasicEPackage, BasicEClass, BasicEAttribute, EPackageRegistry, getEcorePackage, BasicEEnum, BasicEEnumLiteral, BasicEAnnotation } from '@emfts/core';
+import { BasicEPackage, BasicEClass, BasicEAttribute, BasicEReference, EPackageRegistry, getEcorePackage, BasicEEnum, BasicEEnumLiteral, BasicEAnnotation } from '@emfts/core';
 import type { EClass, EAttribute, EReference, EEnum, EDataType } from '@emfts/core';
 import { VegawidgetFactory } from './VegawidgetFactory.js';
 import { VegaRenderer } from './VegaRenderer.js';
+import { LegendPosition } from './LegendPosition.js';
+import { MarkType } from './MarkType.js';
+import { Interpolate } from './Interpolate.js';
+import { Channel } from './Channel.js';
+import { FieldType } from './FieldType.js';
+import { Aggregate } from './Aggregate.js';
+import { TimeUnit } from './TimeUnit.js';
+import { SortOrder } from './SortOrder.js';
+import { StackMode } from './StackMode.js';
+import { ScaleType } from './ScaleType.js';
+import { FilterOp } from './FilterOp.js';
+import { ParamKind } from './ParamKind.js';
+import { ParamBind } from './ParamBind.js';
+import { TransformKind } from './TransformKind.js';
 
 /**
  * Vegawidget Package
@@ -51,7 +65,84 @@ export class VegawidgetPackage extends BasicEPackage {
     VEGA_WIDGET_SETTINGS__TITLE: null as unknown as EAttribute | EReference,
     VEGA_WIDGET_SETTINGS__RENDERER: null as unknown as EAttribute | EReference,
     VEGA_WIDGET_SETTINGS__TOOLTIP: null as unknown as EAttribute | EReference,
+    VEGA_WIDGET_SETTINGS__LEGEND_POSITION: null as unknown as EAttribute | EReference,
+    VEGA_WIDGET_SETTINGS__LAYERS: null as unknown as EAttribute | EReference,
+    VEGA_WIDGET_SETTINGS__FACET: null as unknown as EAttribute | EReference,
+    VEGA_WIDGET_SETTINGS__PARAMS: null as unknown as EAttribute | EReference,
+    LAYER: null as unknown as EClass,
+    LAYER__DATASET: null as unknown as EAttribute | EReference,
+    LAYER__MARK: null as unknown as EAttribute | EReference,
+    LAYER__INTERPOLATE: null as unknown as EAttribute | EReference,
+    LAYER__SHOW_POINTS: null as unknown as EAttribute | EReference,
+    LAYER__FILLED: null as unknown as EAttribute | EReference,
+    LAYER__COLOR: null as unknown as EAttribute | EReference,
+    LAYER__OPACITY: null as unknown as EAttribute | EReference,
+    LAYER__CORNER_RADIUS: null as unknown as EAttribute | EReference,
+    LAYER__INNER_RADIUS: null as unknown as EAttribute | EReference,
+    LAYER__STROKE_WIDTH: null as unknown as EAttribute | EReference,
+    LAYER__ENCODINGS: null as unknown as EAttribute | EReference,
+    LAYER__TRANSFORMS: null as unknown as EAttribute | EReference,
+    ENCODING: null as unknown as EClass,
+    ENCODING__CHANNEL: null as unknown as EAttribute | EReference,
+    ENCODING__FIELD: null as unknown as EAttribute | EReference,
+    ENCODING__TYPE: null as unknown as EAttribute | EReference,
+    ENCODING__AGGREGATE: null as unknown as EAttribute | EReference,
+    ENCODING__BIN: null as unknown as EAttribute | EReference,
+    ENCODING__MAX_BINS: null as unknown as EAttribute | EReference,
+    ENCODING__TIME_UNIT: null as unknown as EAttribute | EReference,
+    ENCODING__SORT: null as unknown as EAttribute | EReference,
+    ENCODING__STACK: null as unknown as EAttribute | EReference,
+    ENCODING__TITLE: null as unknown as EAttribute | EReference,
+    ENCODING__FORMAT: null as unknown as EAttribute | EReference,
+    ENCODING__VALUE: null as unknown as EAttribute | EReference,
+    ENCODING__SCALE_TYPE: null as unknown as EAttribute | EReference,
+    ENCODING__SCALE_ZERO: null as unknown as EAttribute | EReference,
+    ENCODING__DOMAIN_MIN: null as unknown as EAttribute | EReference,
+    ENCODING__DOMAIN_MAX: null as unknown as EAttribute | EReference,
+    ENCODING__SCHEME: null as unknown as EAttribute | EReference,
+    ENCODING__SHOW_AXIS: null as unknown as EAttribute | EReference,
+    ENCODING__SHOW_GRID: null as unknown as EAttribute | EReference,
+    ENCODING__LABEL_ANGLE: null as unknown as EAttribute | EReference,
+    ENCODING__SHOW_LEGEND: null as unknown as EAttribute | EReference,
+    ENCODING__HIGHLIGHT_PARAM: null as unknown as EAttribute | EReference,
+    ENCODING__VALUE_IF_NOT_SELECTED: null as unknown as EAttribute | EReference,
+    TRANSFORM: null as unknown as EClass,
+    TRANSFORM__KIND: null as unknown as EAttribute | EReference,
+    TRANSFORM__FIELD: null as unknown as EAttribute | EReference,
+    TRANSFORM__OP: null as unknown as EAttribute | EReference,
+    TRANSFORM__VALUE: null as unknown as EAttribute | EReference,
+    TRANSFORM__PARAM: null as unknown as EAttribute | EReference,
+    TRANSFORM__FIELDS: null as unknown as EAttribute | EReference,
+    TRANSFORM__KEY_AS: null as unknown as EAttribute | EReference,
+    TRANSFORM__VALUE_AS: null as unknown as EAttribute | EReference,
+    TRANSFORM__AS: null as unknown as EAttribute | EReference,
+    TRANSFORM__EXPRESSION: null as unknown as EAttribute | EReference,
+    FACET: null as unknown as EClass,
+    FACET__ROW: null as unknown as EAttribute | EReference,
+    FACET__COLUMN: null as unknown as EAttribute | EReference,
+    FACET__COLUMNS: null as unknown as EAttribute | EReference,
+    PARAM: null as unknown as EClass,
+    PARAM__NAME: null as unknown as EAttribute | EReference,
+    PARAM__KIND: null as unknown as EAttribute | EReference,
+    PARAM__FIELDS: null as unknown as EAttribute | EReference,
+    PARAM__ENCODINGS: null as unknown as EAttribute | EReference,
+    PARAM__BIND: null as unknown as EAttribute | EReference,
+    PARAM__VALUE: null as unknown as EAttribute | EReference,
     VEGA_RENDERER: null as unknown as EEnum,
+    LEGEND_POSITION: null as unknown as EEnum,
+    MARK_TYPE: null as unknown as EEnum,
+    INTERPOLATE: null as unknown as EEnum,
+    CHANNEL: null as unknown as EEnum,
+    FIELD_TYPE: null as unknown as EEnum,
+    AGGREGATE: null as unknown as EEnum,
+    TIME_UNIT: null as unknown as EEnum,
+    SORT_ORDER: null as unknown as EEnum,
+    STACK_MODE: null as unknown as EEnum,
+    SCALE_TYPE: null as unknown as EEnum,
+    FILTER_OP: null as unknown as EEnum,
+    PARAM_KIND: null as unknown as EEnum,
+    PARAM_BIND: null as unknown as EEnum,
+    TRANSFORM_KIND: null as unknown as EEnum,
   };
 
   private constructor() {
@@ -108,6 +199,570 @@ export class VegawidgetPackage extends BasicEPackage {
     vegaWidgetSettingsClass.getEStructuralFeatures().push(vegaWidgetSettings_tooltip);
     VegawidgetPackage.Literals.VEGA_WIDGET_SETTINGS__TOOLTIP = vegaWidgetSettings_tooltip;
 
+    // Create legendPosition feature
+    const vegaWidgetSettings_legendPosition = new BasicEAttribute();
+    vegaWidgetSettings_legendPosition.setName('legendPosition');
+    vegaWidgetSettings_legendPosition.setLowerBound(0);
+    vegaWidgetSettings_legendPosition.setUpperBound(1);
+    vegaWidgetSettings_legendPosition.setDefaultValueLiteral("right");
+    vegaWidgetSettingsClass.getEStructuralFeatures().push(vegaWidgetSettings_legendPosition);
+    VegawidgetPackage.Literals.VEGA_WIDGET_SETTINGS__LEGEND_POSITION = vegaWidgetSettings_legendPosition;
+
+    // Create layers feature
+    const vegaWidgetSettings_layers = new BasicEReference();
+    vegaWidgetSettings_layers.setContainment(true);
+    vegaWidgetSettings_layers.setName('layers');
+    vegaWidgetSettings_layers.setLowerBound(0);
+    vegaWidgetSettings_layers.setUpperBound(-1);
+    vegaWidgetSettingsClass.getEStructuralFeatures().push(vegaWidgetSettings_layers);
+    VegawidgetPackage.Literals.VEGA_WIDGET_SETTINGS__LAYERS = vegaWidgetSettings_layers;
+
+    // Create facet feature
+    const vegaWidgetSettings_facet = new BasicEReference();
+    vegaWidgetSettings_facet.setContainment(true);
+    vegaWidgetSettings_facet.setName('facet');
+    vegaWidgetSettings_facet.setLowerBound(0);
+    vegaWidgetSettings_facet.setUpperBound(1);
+    vegaWidgetSettingsClass.getEStructuralFeatures().push(vegaWidgetSettings_facet);
+    VegawidgetPackage.Literals.VEGA_WIDGET_SETTINGS__FACET = vegaWidgetSettings_facet;
+
+    // Create params feature
+    const vegaWidgetSettings_params = new BasicEReference();
+    vegaWidgetSettings_params.setContainment(true);
+    vegaWidgetSettings_params.setName('params');
+    vegaWidgetSettings_params.setLowerBound(0);
+    vegaWidgetSettings_params.setUpperBound(-1);
+    vegaWidgetSettingsClass.getEStructuralFeatures().push(vegaWidgetSettings_params);
+    VegawidgetPackage.Literals.VEGA_WIDGET_SETTINGS__PARAMS = vegaWidgetSettings_params;
+
+    // Create Layer class
+    const layerClass = new BasicEClass();
+    layerClass.setName('Layer');
+    layerClass.setAbstract(false);
+    layerClass.setInterface(false);
+    this.getEClassifiers().push(layerClass);
+    layerClass.setEPackage(this);
+    VegawidgetPackage.Literals.LAYER = layerClass;
+
+    // Create dataset feature
+    const layer_dataset = new BasicEAttribute();
+    layer_dataset.setName('dataset');
+    layer_dataset.setLowerBound(0);
+    layer_dataset.setUpperBound(1);
+    layer_dataset.setDefaultValueLiteral("");
+    layerClass.getEStructuralFeatures().push(layer_dataset);
+    VegawidgetPackage.Literals.LAYER__DATASET = layer_dataset;
+
+    // Create mark feature
+    const layer_mark = new BasicEAttribute();
+    layer_mark.setName('mark');
+    layer_mark.setLowerBound(0);
+    layer_mark.setUpperBound(1);
+    layer_mark.setDefaultValueLiteral("bar");
+    layerClass.getEStructuralFeatures().push(layer_mark);
+    VegawidgetPackage.Literals.LAYER__MARK = layer_mark;
+
+    // Create interpolate feature
+    const layer_interpolate = new BasicEAttribute();
+    layer_interpolate.setName('interpolate');
+    layer_interpolate.setLowerBound(0);
+    layer_interpolate.setUpperBound(1);
+    layer_interpolate.setDefaultValueLiteral("linear");
+    layerClass.getEStructuralFeatures().push(layer_interpolate);
+    VegawidgetPackage.Literals.LAYER__INTERPOLATE = layer_interpolate;
+
+    // Create showPoints feature
+    const layer_showPoints = new BasicEAttribute();
+    layer_showPoints.setName('showPoints');
+    layer_showPoints.setLowerBound(0);
+    layer_showPoints.setUpperBound(1);
+    layer_showPoints.setDefaultValueLiteral("false");
+    layerClass.getEStructuralFeatures().push(layer_showPoints);
+    VegawidgetPackage.Literals.LAYER__SHOW_POINTS = layer_showPoints;
+
+    // Create filled feature
+    const layer_filled = new BasicEAttribute();
+    layer_filled.setName('filled');
+    layer_filled.setLowerBound(0);
+    layer_filled.setUpperBound(1);
+    layer_filled.setDefaultValueLiteral("true");
+    layerClass.getEStructuralFeatures().push(layer_filled);
+    VegawidgetPackage.Literals.LAYER__FILLED = layer_filled;
+
+    // Create color feature
+    const layer_color = new BasicEAttribute();
+    layer_color.setName('color');
+    layer_color.setLowerBound(0);
+    layer_color.setUpperBound(1);
+    layer_color.setDefaultValueLiteral("");
+    layerClass.getEStructuralFeatures().push(layer_color);
+    VegawidgetPackage.Literals.LAYER__COLOR = layer_color;
+
+    // Create opacity feature
+    const layer_opacity = new BasicEAttribute();
+    layer_opacity.setName('opacity');
+    layer_opacity.setLowerBound(0);
+    layer_opacity.setUpperBound(1);
+    layer_opacity.setDefaultValueLiteral("1");
+    layerClass.getEStructuralFeatures().push(layer_opacity);
+    VegawidgetPackage.Literals.LAYER__OPACITY = layer_opacity;
+
+    // Create cornerRadius feature
+    const layer_cornerRadius = new BasicEAttribute();
+    layer_cornerRadius.setName('cornerRadius');
+    layer_cornerRadius.setLowerBound(0);
+    layer_cornerRadius.setUpperBound(1);
+    layer_cornerRadius.setDefaultValueLiteral("0");
+    layerClass.getEStructuralFeatures().push(layer_cornerRadius);
+    VegawidgetPackage.Literals.LAYER__CORNER_RADIUS = layer_cornerRadius;
+
+    // Create innerRadius feature
+    const layer_innerRadius = new BasicEAttribute();
+    layer_innerRadius.setName('innerRadius');
+    layer_innerRadius.setLowerBound(0);
+    layer_innerRadius.setUpperBound(1);
+    layer_innerRadius.setDefaultValueLiteral("0");
+    layerClass.getEStructuralFeatures().push(layer_innerRadius);
+    VegawidgetPackage.Literals.LAYER__INNER_RADIUS = layer_innerRadius;
+
+    // Create strokeWidth feature
+    const layer_strokeWidth = new BasicEAttribute();
+    layer_strokeWidth.setName('strokeWidth');
+    layer_strokeWidth.setLowerBound(0);
+    layer_strokeWidth.setUpperBound(1);
+    layer_strokeWidth.setDefaultValueLiteral("0");
+    layerClass.getEStructuralFeatures().push(layer_strokeWidth);
+    VegawidgetPackage.Literals.LAYER__STROKE_WIDTH = layer_strokeWidth;
+
+    // Create encodings feature
+    const layer_encodings = new BasicEReference();
+    layer_encodings.setContainment(true);
+    layer_encodings.setName('encodings');
+    layer_encodings.setLowerBound(0);
+    layer_encodings.setUpperBound(-1);
+    layerClass.getEStructuralFeatures().push(layer_encodings);
+    VegawidgetPackage.Literals.LAYER__ENCODINGS = layer_encodings;
+
+    // Create transforms feature
+    const layer_transforms = new BasicEReference();
+    layer_transforms.setContainment(true);
+    layer_transforms.setName('transforms');
+    layer_transforms.setLowerBound(0);
+    layer_transforms.setUpperBound(-1);
+    layerClass.getEStructuralFeatures().push(layer_transforms);
+    VegawidgetPackage.Literals.LAYER__TRANSFORMS = layer_transforms;
+
+    // Create Encoding class
+    const encodingClass = new BasicEClass();
+    encodingClass.setName('Encoding');
+    encodingClass.setAbstract(false);
+    encodingClass.setInterface(false);
+    this.getEClassifiers().push(encodingClass);
+    encodingClass.setEPackage(this);
+    VegawidgetPackage.Literals.ENCODING = encodingClass;
+
+    // Create channel feature
+    const encoding_channel = new BasicEAttribute();
+    encoding_channel.setName('channel');
+    encoding_channel.setLowerBound(0);
+    encoding_channel.setUpperBound(1);
+    encoding_channel.setDefaultValueLiteral("x");
+    encodingClass.getEStructuralFeatures().push(encoding_channel);
+    VegawidgetPackage.Literals.ENCODING__CHANNEL = encoding_channel;
+
+    // Create field feature
+    const encoding_field = new BasicEAttribute();
+    encoding_field.setName('field');
+    encoding_field.setLowerBound(0);
+    encoding_field.setUpperBound(1);
+    encoding_field.setDefaultValueLiteral("");
+    encodingClass.getEStructuralFeatures().push(encoding_field);
+    VegawidgetPackage.Literals.ENCODING__FIELD = encoding_field;
+
+    // Create type feature
+    const encoding_type = new BasicEAttribute();
+    encoding_type.setName('type');
+    encoding_type.setLowerBound(0);
+    encoding_type.setUpperBound(1);
+    encoding_type.setDefaultValueLiteral("nominal");
+    encodingClass.getEStructuralFeatures().push(encoding_type);
+    VegawidgetPackage.Literals.ENCODING__TYPE = encoding_type;
+
+    // Create aggregate feature
+    const encoding_aggregate = new BasicEAttribute();
+    encoding_aggregate.setName('aggregate');
+    encoding_aggregate.setLowerBound(0);
+    encoding_aggregate.setUpperBound(1);
+    encoding_aggregate.setDefaultValueLiteral("none");
+    encodingClass.getEStructuralFeatures().push(encoding_aggregate);
+    VegawidgetPackage.Literals.ENCODING__AGGREGATE = encoding_aggregate;
+
+    // Create bin feature
+    const encoding_bin = new BasicEAttribute();
+    encoding_bin.setName('bin');
+    encoding_bin.setLowerBound(0);
+    encoding_bin.setUpperBound(1);
+    encoding_bin.setDefaultValueLiteral("false");
+    encodingClass.getEStructuralFeatures().push(encoding_bin);
+    VegawidgetPackage.Literals.ENCODING__BIN = encoding_bin;
+
+    // Create maxBins feature
+    const encoding_maxBins = new BasicEAttribute();
+    encoding_maxBins.setName('maxBins');
+    encoding_maxBins.setLowerBound(0);
+    encoding_maxBins.setUpperBound(1);
+    encoding_maxBins.setDefaultValueLiteral("0");
+    encodingClass.getEStructuralFeatures().push(encoding_maxBins);
+    VegawidgetPackage.Literals.ENCODING__MAX_BINS = encoding_maxBins;
+
+    // Create timeUnit feature
+    const encoding_timeUnit = new BasicEAttribute();
+    encoding_timeUnit.setName('timeUnit');
+    encoding_timeUnit.setLowerBound(0);
+    encoding_timeUnit.setUpperBound(1);
+    encoding_timeUnit.setDefaultValueLiteral("none");
+    encodingClass.getEStructuralFeatures().push(encoding_timeUnit);
+    VegawidgetPackage.Literals.ENCODING__TIME_UNIT = encoding_timeUnit;
+
+    // Create sort feature
+    const encoding_sort = new BasicEAttribute();
+    encoding_sort.setName('sort');
+    encoding_sort.setLowerBound(0);
+    encoding_sort.setUpperBound(1);
+    encoding_sort.setDefaultValueLiteral("none");
+    encodingClass.getEStructuralFeatures().push(encoding_sort);
+    VegawidgetPackage.Literals.ENCODING__SORT = encoding_sort;
+
+    // Create stack feature
+    const encoding_stack = new BasicEAttribute();
+    encoding_stack.setName('stack');
+    encoding_stack.setLowerBound(0);
+    encoding_stack.setUpperBound(1);
+    encoding_stack.setDefaultValueLiteral("auto");
+    encodingClass.getEStructuralFeatures().push(encoding_stack);
+    VegawidgetPackage.Literals.ENCODING__STACK = encoding_stack;
+
+    // Create title feature
+    const encoding_title = new BasicEAttribute();
+    encoding_title.setName('title');
+    encoding_title.setLowerBound(0);
+    encoding_title.setUpperBound(1);
+    encoding_title.setDefaultValueLiteral("");
+    encodingClass.getEStructuralFeatures().push(encoding_title);
+    VegawidgetPackage.Literals.ENCODING__TITLE = encoding_title;
+
+    // Create format feature
+    const encoding_format = new BasicEAttribute();
+    encoding_format.setName('format');
+    encoding_format.setLowerBound(0);
+    encoding_format.setUpperBound(1);
+    encoding_format.setDefaultValueLiteral("");
+    encodingClass.getEStructuralFeatures().push(encoding_format);
+    VegawidgetPackage.Literals.ENCODING__FORMAT = encoding_format;
+
+    // Create value feature
+    const encoding_value = new BasicEAttribute();
+    encoding_value.setName('value');
+    encoding_value.setLowerBound(0);
+    encoding_value.setUpperBound(1);
+    encoding_value.setDefaultValueLiteral("");
+    encodingClass.getEStructuralFeatures().push(encoding_value);
+    VegawidgetPackage.Literals.ENCODING__VALUE = encoding_value;
+
+    // Create scaleType feature
+    const encoding_scaleType = new BasicEAttribute();
+    encoding_scaleType.setName('scaleType');
+    encoding_scaleType.setLowerBound(0);
+    encoding_scaleType.setUpperBound(1);
+    encoding_scaleType.setDefaultValueLiteral("auto");
+    encodingClass.getEStructuralFeatures().push(encoding_scaleType);
+    VegawidgetPackage.Literals.ENCODING__SCALE_TYPE = encoding_scaleType;
+
+    // Create scaleZero feature
+    const encoding_scaleZero = new BasicEAttribute();
+    encoding_scaleZero.setName('scaleZero');
+    encoding_scaleZero.setLowerBound(0);
+    encoding_scaleZero.setUpperBound(1);
+    encoding_scaleZero.setDefaultValueLiteral("true");
+    encodingClass.getEStructuralFeatures().push(encoding_scaleZero);
+    VegawidgetPackage.Literals.ENCODING__SCALE_ZERO = encoding_scaleZero;
+
+    // Create domainMin feature
+    const encoding_domainMin = new BasicEAttribute();
+    encoding_domainMin.setName('domainMin');
+    encoding_domainMin.setLowerBound(0);
+    encoding_domainMin.setUpperBound(1);
+    encoding_domainMin.setDefaultValueLiteral("");
+    encodingClass.getEStructuralFeatures().push(encoding_domainMin);
+    VegawidgetPackage.Literals.ENCODING__DOMAIN_MIN = encoding_domainMin;
+
+    // Create domainMax feature
+    const encoding_domainMax = new BasicEAttribute();
+    encoding_domainMax.setName('domainMax');
+    encoding_domainMax.setLowerBound(0);
+    encoding_domainMax.setUpperBound(1);
+    encoding_domainMax.setDefaultValueLiteral("");
+    encodingClass.getEStructuralFeatures().push(encoding_domainMax);
+    VegawidgetPackage.Literals.ENCODING__DOMAIN_MAX = encoding_domainMax;
+
+    // Create scheme feature
+    const encoding_scheme = new BasicEAttribute();
+    encoding_scheme.setName('scheme');
+    encoding_scheme.setLowerBound(0);
+    encoding_scheme.setUpperBound(1);
+    encoding_scheme.setDefaultValueLiteral("");
+    encodingClass.getEStructuralFeatures().push(encoding_scheme);
+    VegawidgetPackage.Literals.ENCODING__SCHEME = encoding_scheme;
+
+    // Create showAxis feature
+    const encoding_showAxis = new BasicEAttribute();
+    encoding_showAxis.setName('showAxis');
+    encoding_showAxis.setLowerBound(0);
+    encoding_showAxis.setUpperBound(1);
+    encoding_showAxis.setDefaultValueLiteral("true");
+    encodingClass.getEStructuralFeatures().push(encoding_showAxis);
+    VegawidgetPackage.Literals.ENCODING__SHOW_AXIS = encoding_showAxis;
+
+    // Create showGrid feature
+    const encoding_showGrid = new BasicEAttribute();
+    encoding_showGrid.setName('showGrid');
+    encoding_showGrid.setLowerBound(0);
+    encoding_showGrid.setUpperBound(1);
+    encoding_showGrid.setDefaultValueLiteral("true");
+    encodingClass.getEStructuralFeatures().push(encoding_showGrid);
+    VegawidgetPackage.Literals.ENCODING__SHOW_GRID = encoding_showGrid;
+
+    // Create labelAngle feature
+    const encoding_labelAngle = new BasicEAttribute();
+    encoding_labelAngle.setName('labelAngle');
+    encoding_labelAngle.setLowerBound(0);
+    encoding_labelAngle.setUpperBound(1);
+    encoding_labelAngle.setDefaultValueLiteral("");
+    encodingClass.getEStructuralFeatures().push(encoding_labelAngle);
+    VegawidgetPackage.Literals.ENCODING__LABEL_ANGLE = encoding_labelAngle;
+
+    // Create showLegend feature
+    const encoding_showLegend = new BasicEAttribute();
+    encoding_showLegend.setName('showLegend');
+    encoding_showLegend.setLowerBound(0);
+    encoding_showLegend.setUpperBound(1);
+    encoding_showLegend.setDefaultValueLiteral("true");
+    encodingClass.getEStructuralFeatures().push(encoding_showLegend);
+    VegawidgetPackage.Literals.ENCODING__SHOW_LEGEND = encoding_showLegend;
+
+    // Create highlightParam feature
+    const encoding_highlightParam = new BasicEAttribute();
+    encoding_highlightParam.setName('highlightParam');
+    encoding_highlightParam.setLowerBound(0);
+    encoding_highlightParam.setUpperBound(1);
+    encoding_highlightParam.setDefaultValueLiteral("");
+    encodingClass.getEStructuralFeatures().push(encoding_highlightParam);
+    VegawidgetPackage.Literals.ENCODING__HIGHLIGHT_PARAM = encoding_highlightParam;
+
+    // Create valueIfNotSelected feature
+    const encoding_valueIfNotSelected = new BasicEAttribute();
+    encoding_valueIfNotSelected.setName('valueIfNotSelected');
+    encoding_valueIfNotSelected.setLowerBound(0);
+    encoding_valueIfNotSelected.setUpperBound(1);
+    encoding_valueIfNotSelected.setDefaultValueLiteral("");
+    encodingClass.getEStructuralFeatures().push(encoding_valueIfNotSelected);
+    VegawidgetPackage.Literals.ENCODING__VALUE_IF_NOT_SELECTED = encoding_valueIfNotSelected;
+
+    // Create Transform class
+    const transformClass = new BasicEClass();
+    transformClass.setName('Transform');
+    transformClass.setAbstract(false);
+    transformClass.setInterface(false);
+    this.getEClassifiers().push(transformClass);
+    transformClass.setEPackage(this);
+    VegawidgetPackage.Literals.TRANSFORM = transformClass;
+
+    // Create kind feature
+    const transform_kind = new BasicEAttribute();
+    transform_kind.setName('kind');
+    transform_kind.setLowerBound(0);
+    transform_kind.setUpperBound(1);
+    transform_kind.setDefaultValueLiteral("filter");
+    transformClass.getEStructuralFeatures().push(transform_kind);
+    VegawidgetPackage.Literals.TRANSFORM__KIND = transform_kind;
+
+    // Create field feature
+    const transform_field = new BasicEAttribute();
+    transform_field.setName('field');
+    transform_field.setLowerBound(0);
+    transform_field.setUpperBound(1);
+    transform_field.setDefaultValueLiteral("");
+    transformClass.getEStructuralFeatures().push(transform_field);
+    VegawidgetPackage.Literals.TRANSFORM__FIELD = transform_field;
+
+    // Create op feature
+    const transform_op = new BasicEAttribute();
+    transform_op.setName('op');
+    transform_op.setLowerBound(0);
+    transform_op.setUpperBound(1);
+    transform_op.setDefaultValueLiteral("eq");
+    transformClass.getEStructuralFeatures().push(transform_op);
+    VegawidgetPackage.Literals.TRANSFORM__OP = transform_op;
+
+    // Create value feature
+    const transform_value = new BasicEAttribute();
+    transform_value.setName('value');
+    transform_value.setLowerBound(0);
+    transform_value.setUpperBound(1);
+    transform_value.setDefaultValueLiteral("");
+    transformClass.getEStructuralFeatures().push(transform_value);
+    VegawidgetPackage.Literals.TRANSFORM__VALUE = transform_value;
+
+    // Create param feature
+    const transform_param = new BasicEAttribute();
+    transform_param.setName('param');
+    transform_param.setLowerBound(0);
+    transform_param.setUpperBound(1);
+    transform_param.setDefaultValueLiteral("");
+    transformClass.getEStructuralFeatures().push(transform_param);
+    VegawidgetPackage.Literals.TRANSFORM__PARAM = transform_param;
+
+    // Create fields feature
+    const transform_fields = new BasicEAttribute();
+    transform_fields.setName('fields');
+    transform_fields.setLowerBound(0);
+    transform_fields.setUpperBound(-1);
+    transformClass.getEStructuralFeatures().push(transform_fields);
+    VegawidgetPackage.Literals.TRANSFORM__FIELDS = transform_fields;
+
+    // Create keyAs feature
+    const transform_keyAs = new BasicEAttribute();
+    transform_keyAs.setName('keyAs');
+    transform_keyAs.setLowerBound(0);
+    transform_keyAs.setUpperBound(1);
+    transform_keyAs.setDefaultValueLiteral("key");
+    transformClass.getEStructuralFeatures().push(transform_keyAs);
+    VegawidgetPackage.Literals.TRANSFORM__KEY_AS = transform_keyAs;
+
+    // Create valueAs feature
+    const transform_valueAs = new BasicEAttribute();
+    transform_valueAs.setName('valueAs');
+    transform_valueAs.setLowerBound(0);
+    transform_valueAs.setUpperBound(1);
+    transform_valueAs.setDefaultValueLiteral("value");
+    transformClass.getEStructuralFeatures().push(transform_valueAs);
+    VegawidgetPackage.Literals.TRANSFORM__VALUE_AS = transform_valueAs;
+
+    // Create as feature
+    const transform_as = new BasicEAttribute();
+    transform_as.setName('as');
+    transform_as.setLowerBound(0);
+    transform_as.setUpperBound(1);
+    transform_as.setDefaultValueLiteral("");
+    transformClass.getEStructuralFeatures().push(transform_as);
+    VegawidgetPackage.Literals.TRANSFORM__AS = transform_as;
+
+    // Create expression feature
+    const transform_expression = new BasicEAttribute();
+    transform_expression.setName('expression');
+    transform_expression.setLowerBound(0);
+    transform_expression.setUpperBound(1);
+    transform_expression.setDefaultValueLiteral("");
+    transformClass.getEStructuralFeatures().push(transform_expression);
+    VegawidgetPackage.Literals.TRANSFORM__EXPRESSION = transform_expression;
+
+    // Create Facet class
+    const facetClass = new BasicEClass();
+    facetClass.setName('Facet');
+    facetClass.setAbstract(false);
+    facetClass.setInterface(false);
+    this.getEClassifiers().push(facetClass);
+    facetClass.setEPackage(this);
+    VegawidgetPackage.Literals.FACET = facetClass;
+
+    // Create row feature
+    const facet_row = new BasicEAttribute();
+    facet_row.setName('row');
+    facet_row.setLowerBound(0);
+    facet_row.setUpperBound(1);
+    facet_row.setDefaultValueLiteral("");
+    facetClass.getEStructuralFeatures().push(facet_row);
+    VegawidgetPackage.Literals.FACET__ROW = facet_row;
+
+    // Create column feature
+    const facet_column = new BasicEAttribute();
+    facet_column.setName('column');
+    facet_column.setLowerBound(0);
+    facet_column.setUpperBound(1);
+    facet_column.setDefaultValueLiteral("");
+    facetClass.getEStructuralFeatures().push(facet_column);
+    VegawidgetPackage.Literals.FACET__COLUMN = facet_column;
+
+    // Create columns feature
+    const facet_columns = new BasicEAttribute();
+    facet_columns.setName('columns');
+    facet_columns.setLowerBound(0);
+    facet_columns.setUpperBound(1);
+    facet_columns.setDefaultValueLiteral("0");
+    facetClass.getEStructuralFeatures().push(facet_columns);
+    VegawidgetPackage.Literals.FACET__COLUMNS = facet_columns;
+
+    // Create Param class
+    const paramClass = new BasicEClass();
+    paramClass.setName('Param');
+    paramClass.setAbstract(false);
+    paramClass.setInterface(false);
+    this.getEClassifiers().push(paramClass);
+    paramClass.setEPackage(this);
+    VegawidgetPackage.Literals.PARAM = paramClass;
+
+    // Create name feature
+    const param_name = new BasicEAttribute();
+    param_name.setName('name');
+    param_name.setLowerBound(0);
+    param_name.setUpperBound(1);
+    param_name.setDefaultValueLiteral("");
+    paramClass.getEStructuralFeatures().push(param_name);
+    VegawidgetPackage.Literals.PARAM__NAME = param_name;
+
+    // Create kind feature
+    const param_kind = new BasicEAttribute();
+    param_kind.setName('kind');
+    param_kind.setLowerBound(0);
+    param_kind.setUpperBound(1);
+    param_kind.setDefaultValueLiteral("point");
+    paramClass.getEStructuralFeatures().push(param_kind);
+    VegawidgetPackage.Literals.PARAM__KIND = param_kind;
+
+    // Create fields feature
+    const param_fields = new BasicEAttribute();
+    param_fields.setName('fields');
+    param_fields.setLowerBound(0);
+    param_fields.setUpperBound(-1);
+    paramClass.getEStructuralFeatures().push(param_fields);
+    VegawidgetPackage.Literals.PARAM__FIELDS = param_fields;
+
+    // Create encodings feature
+    const param_encodings = new BasicEAttribute();
+    param_encodings.setName('encodings');
+    param_encodings.setLowerBound(0);
+    param_encodings.setUpperBound(-1);
+    paramClass.getEStructuralFeatures().push(param_encodings);
+    VegawidgetPackage.Literals.PARAM__ENCODINGS = param_encodings;
+
+    // Create bind feature
+    const param_bind = new BasicEAttribute();
+    param_bind.setName('bind');
+    param_bind.setLowerBound(0);
+    param_bind.setUpperBound(1);
+    param_bind.setDefaultValueLiteral("none");
+    paramClass.getEStructuralFeatures().push(param_bind);
+    VegawidgetPackage.Literals.PARAM__BIND = param_bind;
+
+    // Create value feature
+    const param_value = new BasicEAttribute();
+    param_value.setName('value');
+    param_value.setLowerBound(0);
+    param_value.setUpperBound(1);
+    param_value.setDefaultValueLiteral("");
+    paramClass.getEStructuralFeatures().push(param_value);
+    VegawidgetPackage.Literals.PARAM__VALUE = param_value;
+
     // Create VegaRenderer enum
     const vegaRendererEnumType = new BasicEEnum();
     vegaRendererEnumType.setName('VegaRenderer');
@@ -140,6 +795,1164 @@ export class VegawidgetPackage extends BasicEPackage {
     VegawidgetPackage.Literals.VEGA_RENDERER = vegaRendererEnumType;
     this.getEClassifiers().push(vegaRendererEnumType);
 
+    // Create LegendPosition enum
+    const legendPositionEnumType = new BasicEEnum();
+    legendPositionEnumType.setName('LegendPosition');
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("right");
+      literal.setValue(0);
+      literal.setLiteral("right");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(LegendPosition.right);
+      legendPositionEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("bottom");
+      literal.setValue(1);
+      literal.setLiteral("bottom");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(LegendPosition.bottom);
+      legendPositionEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("top");
+      literal.setValue(2);
+      literal.setLiteral("top");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(LegendPosition.top);
+      legendPositionEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("left");
+      literal.setValue(3);
+      literal.setLiteral("left");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(LegendPosition.left);
+      legendPositionEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("none");
+      literal.setValue(4);
+      literal.setLiteral("none");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(LegendPosition.none);
+      legendPositionEnumType.addLiteral(literal);
+    }
+    {
+      const annotation = new BasicEAnnotation();
+      annotation.setSource("http://www.eclipse.org/emf/2002/GenModel");
+      annotation.getDetails().putByKey("documentation", "Where the legends stand, or none at all.");
+      legendPositionEnumType.getEAnnotations().push(annotation);
+    }
+    VegawidgetPackage.Literals.LEGEND_POSITION = legendPositionEnumType;
+    this.getEClassifiers().push(legendPositionEnumType);
+
+    // Create MarkType enum
+    const markTypeEnumType = new BasicEEnum();
+    markTypeEnumType.setName('MarkType');
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("bar");
+      literal.setValue(0);
+      literal.setLiteral("bar");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(MarkType.bar);
+      markTypeEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("line");
+      literal.setValue(1);
+      literal.setLiteral("line");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(MarkType.line);
+      markTypeEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("area");
+      literal.setValue(2);
+      literal.setLiteral("area");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(MarkType.area);
+      markTypeEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("point");
+      literal.setValue(3);
+      literal.setLiteral("point");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(MarkType.point);
+      markTypeEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("circle");
+      literal.setValue(4);
+      literal.setLiteral("circle");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(MarkType.circle);
+      markTypeEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("square");
+      literal.setValue(5);
+      literal.setLiteral("square");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(MarkType.square);
+      markTypeEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("tick");
+      literal.setValue(6);
+      literal.setLiteral("tick");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(MarkType.tick);
+      markTypeEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("rule");
+      literal.setValue(7);
+      literal.setLiteral("rule");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(MarkType.rule);
+      markTypeEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("rect");
+      literal.setValue(8);
+      literal.setLiteral("rect");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(MarkType.rect);
+      markTypeEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("arc");
+      literal.setValue(9);
+      literal.setLiteral("arc");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(MarkType.arc);
+      markTypeEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("text");
+      literal.setValue(10);
+      literal.setLiteral("text");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(MarkType.text);
+      markTypeEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("trail");
+      literal.setValue(11);
+      literal.setLiteral("trail");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(MarkType.trail);
+      markTypeEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("boxplot");
+      literal.setValue(12);
+      literal.setLiteral("boxplot");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(MarkType.boxplot);
+      markTypeEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("errorbar");
+      literal.setValue(13);
+      literal.setLiteral("errorbar");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(MarkType.errorbar);
+      markTypeEnumType.addLiteral(literal);
+    }
+    {
+      const annotation = new BasicEAnnotation();
+      annotation.setSource("http://www.eclipse.org/emf/2002/GenModel");
+      annotation.getDetails().putByKey("documentation", "The Vega-Lite mark a layer draws. boxplot and errorbar are composite marks that compute their statistics from the data.");
+      markTypeEnumType.getEAnnotations().push(annotation);
+    }
+    VegawidgetPackage.Literals.MARK_TYPE = markTypeEnumType;
+    this.getEClassifiers().push(markTypeEnumType);
+
+    // Create Interpolate enum
+    const interpolateEnumType = new BasicEEnum();
+    interpolateEnumType.setName('Interpolate');
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("linear");
+      literal.setValue(0);
+      literal.setLiteral("linear");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(Interpolate.linear);
+      interpolateEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("monotone");
+      literal.setValue(1);
+      literal.setLiteral("monotone");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(Interpolate.monotone);
+      interpolateEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("step");
+      literal.setValue(2);
+      literal.setLiteral("step");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(Interpolate.step);
+      interpolateEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("basis");
+      literal.setValue(3);
+      literal.setLiteral("basis");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(Interpolate.basis);
+      interpolateEnumType.addLiteral(literal);
+    }
+    {
+      const annotation = new BasicEAnnotation();
+      annotation.setSource("http://www.eclipse.org/emf/2002/GenModel");
+      annotation.getDetails().putByKey("documentation", "How a line or area runs between its points.");
+      interpolateEnumType.getEAnnotations().push(annotation);
+    }
+    VegawidgetPackage.Literals.INTERPOLATE = interpolateEnumType;
+    this.getEClassifiers().push(interpolateEnumType);
+
+    // Create Channel enum
+    const channelEnumType = new BasicEEnum();
+    channelEnumType.setName('Channel');
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("x");
+      literal.setValue(0);
+      literal.setLiteral("x");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(Channel.x);
+      channelEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("y");
+      literal.setValue(1);
+      literal.setLiteral("y");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(Channel.y);
+      channelEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("x2");
+      literal.setValue(2);
+      literal.setLiteral("x2");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(Channel.x2);
+      channelEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("y2");
+      literal.setValue(3);
+      literal.setLiteral("y2");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(Channel.y2);
+      channelEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("xOffset");
+      literal.setValue(4);
+      literal.setLiteral("xOffset");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(Channel.xOffset);
+      channelEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("yOffset");
+      literal.setValue(5);
+      literal.setLiteral("yOffset");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(Channel.yOffset);
+      channelEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("color");
+      literal.setValue(6);
+      literal.setLiteral("color");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(Channel.color);
+      channelEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("size");
+      literal.setValue(7);
+      literal.setLiteral("size");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(Channel.size);
+      channelEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("shape");
+      literal.setValue(8);
+      literal.setLiteral("shape");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(Channel.shape);
+      channelEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("opacity");
+      literal.setValue(9);
+      literal.setLiteral("opacity");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(Channel.opacity);
+      channelEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("theta");
+      literal.setValue(10);
+      literal.setLiteral("theta");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(Channel.theta);
+      channelEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("radius");
+      literal.setValue(11);
+      literal.setLiteral("radius");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(Channel.radius);
+      channelEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("text");
+      literal.setValue(12);
+      literal.setLiteral("text");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(Channel.text);
+      channelEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("tooltip");
+      literal.setValue(13);
+      literal.setLiteral("tooltip");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(Channel.tooltip);
+      channelEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("detail");
+      literal.setValue(14);
+      literal.setLiteral("detail");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(Channel.detail);
+      channelEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("order");
+      literal.setValue(15);
+      literal.setLiteral("order");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(Channel.order);
+      channelEnumType.addLiteral(literal);
+    }
+    {
+      const annotation = new BasicEAnnotation();
+      annotation.setSource("http://www.eclipse.org/emf/2002/GenModel");
+      annotation.getDetails().putByKey("documentation", "What an encoding drives: a position, a second position for ranges, an offset within a band, the look of a mark, the angle and radius of an arc, the text, the tooltip, a grouping without a visual channel (detail) or the drawing order.");
+      channelEnumType.getEAnnotations().push(annotation);
+    }
+    VegawidgetPackage.Literals.CHANNEL = channelEnumType;
+    this.getEClassifiers().push(channelEnumType);
+
+    // Create FieldType enum
+    const fieldTypeEnumType = new BasicEEnum();
+    fieldTypeEnumType.setName('FieldType');
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("quantitative");
+      literal.setValue(0);
+      literal.setLiteral("quantitative");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(FieldType.quantitative);
+      fieldTypeEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("temporal");
+      literal.setValue(1);
+      literal.setLiteral("temporal");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(FieldType.temporal);
+      fieldTypeEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("ordinal");
+      literal.setValue(2);
+      literal.setLiteral("ordinal");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(FieldType.ordinal);
+      fieldTypeEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("nominal");
+      literal.setValue(3);
+      literal.setLiteral("nominal");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(FieldType.nominal);
+      fieldTypeEnumType.addLiteral(literal);
+    }
+    {
+      const annotation = new BasicEAnnotation();
+      annotation.setSource("http://www.eclipse.org/emf/2002/GenModel");
+      annotation.getDetails().putByKey("documentation", "What the values of a field are: numbers (quantitative), points in time (temporal), ordered categories (ordinal) or categories (nominal).");
+      fieldTypeEnumType.getEAnnotations().push(annotation);
+    }
+    VegawidgetPackage.Literals.FIELD_TYPE = fieldTypeEnumType;
+    this.getEClassifiers().push(fieldTypeEnumType);
+
+    // Create Aggregate enum
+    const aggregateEnumType = new BasicEEnum();
+    aggregateEnumType.setName('Aggregate');
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("none");
+      literal.setValue(0);
+      literal.setLiteral("none");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(Aggregate.none);
+      aggregateEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("count");
+      literal.setValue(1);
+      literal.setLiteral("count");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(Aggregate.count);
+      aggregateEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("sum");
+      literal.setValue(2);
+      literal.setLiteral("sum");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(Aggregate.sum);
+      aggregateEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("mean");
+      literal.setValue(3);
+      literal.setLiteral("mean");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(Aggregate.mean);
+      aggregateEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("median");
+      literal.setValue(4);
+      literal.setLiteral("median");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(Aggregate.median);
+      aggregateEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("min");
+      literal.setValue(5);
+      literal.setLiteral("min");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(Aggregate.min);
+      aggregateEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("max");
+      literal.setValue(6);
+      literal.setLiteral("max");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(Aggregate.max);
+      aggregateEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("distinct");
+      literal.setValue(7);
+      literal.setLiteral("distinct");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(Aggregate.distinct);
+      aggregateEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("stdev");
+      literal.setValue(8);
+      literal.setLiteral("stdev");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(Aggregate.stdev);
+      aggregateEnumType.addLiteral(literal);
+    }
+    {
+      const annotation = new BasicEAnnotation();
+      annotation.setSource("http://www.eclipse.org/emf/2002/GenModel");
+      annotation.getDetails().putByKey("documentation", "How the values of a field are combined for each group; none draws every value. count needs no field.");
+      aggregateEnumType.getEAnnotations().push(annotation);
+    }
+    VegawidgetPackage.Literals.AGGREGATE = aggregateEnumType;
+    this.getEClassifiers().push(aggregateEnumType);
+
+    // Create TimeUnit enum
+    const timeUnitEnumType = new BasicEEnum();
+    timeUnitEnumType.setName('TimeUnit');
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("none");
+      literal.setValue(0);
+      literal.setLiteral("none");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(TimeUnit.none);
+      timeUnitEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("year");
+      literal.setValue(1);
+      literal.setLiteral("year");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(TimeUnit.year);
+      timeUnitEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("yearmonth");
+      literal.setValue(2);
+      literal.setLiteral("yearmonth");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(TimeUnit.yearmonth);
+      timeUnitEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("yearmonthdate");
+      literal.setValue(3);
+      literal.setLiteral("yearmonthdate");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(TimeUnit.yearmonthdate);
+      timeUnitEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("month");
+      literal.setValue(4);
+      literal.setLiteral("month");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(TimeUnit.month);
+      timeUnitEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("date");
+      literal.setValue(5);
+      literal.setLiteral("date");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(TimeUnit.date);
+      timeUnitEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("day");
+      literal.setValue(6);
+      literal.setLiteral("day");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(TimeUnit.day);
+      timeUnitEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("hours");
+      literal.setValue(7);
+      literal.setLiteral("hours");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(TimeUnit.hours);
+      timeUnitEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("hoursminutes");
+      literal.setValue(8);
+      literal.setLiteral("hoursminutes");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(TimeUnit.hoursminutes);
+      timeUnitEnumType.addLiteral(literal);
+    }
+    {
+      const annotation = new BasicEAnnotation();
+      annotation.setSource("http://www.eclipse.org/emf/2002/GenModel");
+      annotation.getDetails().putByKey("documentation", "The part of a point in time the encoding uses; none uses the whole point in time.");
+      timeUnitEnumType.getEAnnotations().push(annotation);
+    }
+    VegawidgetPackage.Literals.TIME_UNIT = timeUnitEnumType;
+    this.getEClassifiers().push(timeUnitEnumType);
+
+    // Create SortOrder enum
+    const sortOrderEnumType = new BasicEEnum();
+    sortOrderEnumType.setName('SortOrder');
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("none");
+      literal.setValue(0);
+      literal.setLiteral("none");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(SortOrder.none);
+      sortOrderEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("ascending");
+      literal.setValue(1);
+      literal.setLiteral("ascending");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(SortOrder.ascending);
+      sortOrderEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("descending");
+      literal.setValue(2);
+      literal.setLiteral("descending");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(SortOrder.descending);
+      sortOrderEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("otherAscending");
+      literal.setValue(3);
+      literal.setLiteral("otherAscending");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(SortOrder.otherAscending);
+      sortOrderEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("otherDescending");
+      literal.setValue(4);
+      literal.setLiteral("otherDescending");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(SortOrder.otherDescending);
+      sortOrderEnumType.addLiteral(literal);
+    }
+    {
+      const annotation = new BasicEAnnotation();
+      annotation.setSource("http://www.eclipse.org/emf/2002/GenModel");
+      annotation.getDetails().putByKey("documentation", "How the values along the channel are ordered: as they come (none), by their own value, or by the value of the other position channel (y for x, x for every other channel).");
+      sortOrderEnumType.getEAnnotations().push(annotation);
+    }
+    VegawidgetPackage.Literals.SORT_ORDER = sortOrderEnumType;
+    this.getEClassifiers().push(sortOrderEnumType);
+
+    // Create StackMode enum
+    const stackModeEnumType = new BasicEEnum();
+    stackModeEnumType.setName('StackMode');
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("auto");
+      literal.setValue(0);
+      literal.setLiteral("auto");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(StackMode.auto);
+      stackModeEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("zero");
+      literal.setValue(1);
+      literal.setLiteral("zero");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(StackMode.zero);
+      stackModeEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("normalize");
+      literal.setValue(2);
+      literal.setLiteral("normalize");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(StackMode.normalize);
+      stackModeEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("center");
+      literal.setValue(3);
+      literal.setLiteral("center");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(StackMode.center);
+      stackModeEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("none");
+      literal.setValue(4);
+      literal.setLiteral("none");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(StackMode.none);
+      stackModeEnumType.addLiteral(literal);
+    }
+    {
+      const annotation = new BasicEAnnotation();
+      annotation.setSource("http://www.eclipse.org/emf/2002/GenModel");
+      annotation.getDetails().putByKey("documentation", "How marks on the same position stack: as Vega-Lite decides for the mark (auto), from zero, as shares of the whole (normalize), centred (center) or not at all (none).");
+      stackModeEnumType.getEAnnotations().push(annotation);
+    }
+    VegawidgetPackage.Literals.STACK_MODE = stackModeEnumType;
+    this.getEClassifiers().push(stackModeEnumType);
+
+    // Create ScaleType enum
+    const scaleTypeEnumType = new BasicEEnum();
+    scaleTypeEnumType.setName('ScaleType');
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("auto");
+      literal.setValue(0);
+      literal.setLiteral("auto");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(ScaleType.auto);
+      scaleTypeEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("linear");
+      literal.setValue(1);
+      literal.setLiteral("linear");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(ScaleType.linear);
+      scaleTypeEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("log");
+      literal.setValue(2);
+      literal.setLiteral("log");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(ScaleType.log);
+      scaleTypeEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("sqrt");
+      literal.setValue(3);
+      literal.setLiteral("sqrt");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(ScaleType.sqrt);
+      scaleTypeEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("pow");
+      literal.setValue(4);
+      literal.setLiteral("pow");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(ScaleType.pow);
+      scaleTypeEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("time");
+      literal.setValue(5);
+      literal.setLiteral("time");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(ScaleType.time);
+      scaleTypeEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("utc");
+      literal.setValue(6);
+      literal.setLiteral("utc");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(ScaleType.utc);
+      scaleTypeEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("band");
+      literal.setValue(7);
+      literal.setLiteral("band");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(ScaleType.band);
+      scaleTypeEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("point");
+      literal.setValue(8);
+      literal.setLiteral("point");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(ScaleType.point);
+      scaleTypeEnumType.addLiteral(literal);
+    }
+    {
+      const annotation = new BasicEAnnotation();
+      annotation.setSource("http://www.eclipse.org/emf/2002/GenModel");
+      annotation.getDetails().putByKey("documentation", "How values are mapped to the channel; auto lets Vega-Lite choose from the field type.");
+      scaleTypeEnumType.getEAnnotations().push(annotation);
+    }
+    VegawidgetPackage.Literals.SCALE_TYPE = scaleTypeEnumType;
+    this.getEClassifiers().push(scaleTypeEnumType);
+
+    // Create FilterOp enum
+    const filterOpEnumType = new BasicEEnum();
+    filterOpEnumType.setName('FilterOp');
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("eq");
+      literal.setValue(0);
+      literal.setLiteral("eq");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(FilterOp.eq);
+      filterOpEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("neq");
+      literal.setValue(1);
+      literal.setLiteral("neq");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(FilterOp.neq);
+      filterOpEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("lt");
+      literal.setValue(2);
+      literal.setLiteral("lt");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(FilterOp.lt);
+      filterOpEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("lte");
+      literal.setValue(3);
+      literal.setLiteral("lte");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(FilterOp.lte);
+      filterOpEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("gt");
+      literal.setValue(4);
+      literal.setLiteral("gt");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(FilterOp.gt);
+      filterOpEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("gte");
+      literal.setValue(5);
+      literal.setLiteral("gte");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(FilterOp.gte);
+      filterOpEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("oneOf");
+      literal.setValue(6);
+      literal.setLiteral("oneOf");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(FilterOp.oneOf);
+      filterOpEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("range");
+      literal.setValue(7);
+      literal.setLiteral("range");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(FilterOp.range);
+      filterOpEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("valid");
+      literal.setValue(8);
+      literal.setLiteral("valid");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(FilterOp.valid);
+      filterOpEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("param");
+      literal.setValue(9);
+      literal.setLiteral("param");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(FilterOp.param);
+      filterOpEnumType.addLiteral(literal);
+    }
+    {
+      const annotation = new BasicEAnnotation();
+      annotation.setSource("http://www.eclipse.org/emf/2002/GenModel");
+      annotation.getDetails().putByKey("documentation", "The comparison a filter makes. oneOf takes a comma-separated list, range takes two comma-separated bounds, valid keeps rows with a value, param keeps what a selection holds.");
+      filterOpEnumType.getEAnnotations().push(annotation);
+    }
+    VegawidgetPackage.Literals.FILTER_OP = filterOpEnumType;
+    this.getEClassifiers().push(filterOpEnumType);
+
+    // Create ParamKind enum
+    const paramKindEnumType = new BasicEEnum();
+    paramKindEnumType.setName('ParamKind');
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("point");
+      literal.setValue(0);
+      literal.setLiteral("point");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(ParamKind.point);
+      paramKindEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("interval");
+      literal.setValue(1);
+      literal.setLiteral("interval");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(ParamKind.interval);
+      paramKindEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("value");
+      literal.setValue(2);
+      literal.setLiteral("value");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(ParamKind.value);
+      paramKindEnumType.addLiteral(literal);
+    }
+    {
+      const annotation = new BasicEAnnotation();
+      annotation.setSource("http://www.eclipse.org/emf/2002/GenModel");
+      annotation.getDetails().putByKey("documentation", "What a parameter is: a selection of single marks (point), a selection of a range (interval), or a plain value (value).");
+      paramKindEnumType.getEAnnotations().push(annotation);
+    }
+    VegawidgetPackage.Literals.PARAM_KIND = paramKindEnumType;
+    this.getEClassifiers().push(paramKindEnumType);
+
+    // Create ParamBind enum
+    const paramBindEnumType = new BasicEEnum();
+    paramBindEnumType.setName('ParamBind');
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("none");
+      literal.setValue(0);
+      literal.setLiteral("none");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(ParamBind.none);
+      paramBindEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("legend");
+      literal.setValue(1);
+      literal.setLiteral("legend");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(ParamBind.legend);
+      paramBindEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("scales");
+      literal.setValue(2);
+      literal.setLiteral("scales");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(ParamBind.scales);
+      paramBindEnumType.addLiteral(literal);
+    }
+    {
+      const annotation = new BasicEAnnotation();
+      annotation.setSource("http://www.eclipse.org/emf/2002/GenModel");
+      annotation.getDetails().putByKey("documentation", "What a selection is bound to: nothing (marks are picked in the chart), the legend (clicking a legend entry selects), or the scales (an interval then zooms and pans the chart).");
+      paramBindEnumType.getEAnnotations().push(annotation);
+    }
+    VegawidgetPackage.Literals.PARAM_BIND = paramBindEnumType;
+    this.getEClassifiers().push(paramBindEnumType);
+
+    // Create TransformKind enum
+    const transformKindEnumType = new BasicEEnum();
+    transformKindEnumType.setName('TransformKind');
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("filter");
+      literal.setValue(0);
+      literal.setLiteral("filter");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(TransformKind.filter);
+      transformKindEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("fold");
+      literal.setValue(1);
+      literal.setLiteral("fold");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(TransformKind.fold);
+      transformKindEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("calculate");
+      literal.setValue(2);
+      literal.setLiteral("calculate");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(TransformKind.calculate);
+      transformKindEnumType.addLiteral(literal);
+    }
+    {
+      const annotation = new BasicEAnnotation();
+      annotation.setSource("http://www.eclipse.org/emf/2002/GenModel");
+      annotation.getDetails().putByKey("documentation", "What a transform does: keep the rows that pass a comparison or a selection (filter), turn columns into rows (fold), or add a computed field (calculate).");
+      transformKindEnumType.getEAnnotations().push(annotation);
+    }
+    VegawidgetPackage.Literals.TRANSFORM_KIND = transformKindEnumType;
+    this.getEClassifiers().push(transformKindEnumType);
+
 
     // ============================================
     // Set ESuperTypes (must be done after all classes are created)
@@ -153,6 +1966,64 @@ export class VegawidgetPackage extends BasicEPackage {
     (VegawidgetPackage.Literals.VEGA_WIDGET_SETTINGS__TITLE as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
     (VegawidgetPackage.Literals.VEGA_WIDGET_SETTINGS__RENDERER as BasicEAttribute).setEType(VegawidgetPackage.Literals.VEGA_RENDERER);
     (VegawidgetPackage.Literals.VEGA_WIDGET_SETTINGS__TOOLTIP as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EBoolean')!);
+    (VegawidgetPackage.Literals.VEGA_WIDGET_SETTINGS__LEGEND_POSITION as BasicEAttribute).setEType(VegawidgetPackage.Literals.LEGEND_POSITION);
+    (VegawidgetPackage.Literals.VEGA_WIDGET_SETTINGS__LAYERS as BasicEReference).setEType(VegawidgetPackage.Literals.LAYER);
+    (VegawidgetPackage.Literals.VEGA_WIDGET_SETTINGS__FACET as BasicEReference).setEType(VegawidgetPackage.Literals.FACET);
+    (VegawidgetPackage.Literals.VEGA_WIDGET_SETTINGS__PARAMS as BasicEReference).setEType(VegawidgetPackage.Literals.PARAM);
+    (VegawidgetPackage.Literals.LAYER__DATASET as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (VegawidgetPackage.Literals.LAYER__MARK as BasicEAttribute).setEType(VegawidgetPackage.Literals.MARK_TYPE);
+    (VegawidgetPackage.Literals.LAYER__INTERPOLATE as BasicEAttribute).setEType(VegawidgetPackage.Literals.INTERPOLATE);
+    (VegawidgetPackage.Literals.LAYER__SHOW_POINTS as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EBoolean')!);
+    (VegawidgetPackage.Literals.LAYER__FILLED as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EBoolean')!);
+    (VegawidgetPackage.Literals.LAYER__COLOR as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (VegawidgetPackage.Literals.LAYER__OPACITY as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EDouble')!);
+    (VegawidgetPackage.Literals.LAYER__CORNER_RADIUS as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EDouble')!);
+    (VegawidgetPackage.Literals.LAYER__INNER_RADIUS as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EDouble')!);
+    (VegawidgetPackage.Literals.LAYER__STROKE_WIDTH as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EDouble')!);
+    (VegawidgetPackage.Literals.LAYER__ENCODINGS as BasicEReference).setEType(VegawidgetPackage.Literals.ENCODING);
+    (VegawidgetPackage.Literals.LAYER__TRANSFORMS as BasicEReference).setEType(VegawidgetPackage.Literals.TRANSFORM);
+    (VegawidgetPackage.Literals.ENCODING__CHANNEL as BasicEAttribute).setEType(VegawidgetPackage.Literals.CHANNEL);
+    (VegawidgetPackage.Literals.ENCODING__FIELD as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (VegawidgetPackage.Literals.ENCODING__TYPE as BasicEAttribute).setEType(VegawidgetPackage.Literals.FIELD_TYPE);
+    (VegawidgetPackage.Literals.ENCODING__AGGREGATE as BasicEAttribute).setEType(VegawidgetPackage.Literals.AGGREGATE);
+    (VegawidgetPackage.Literals.ENCODING__BIN as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EBoolean')!);
+    (VegawidgetPackage.Literals.ENCODING__MAX_BINS as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EInt')!);
+    (VegawidgetPackage.Literals.ENCODING__TIME_UNIT as BasicEAttribute).setEType(VegawidgetPackage.Literals.TIME_UNIT);
+    (VegawidgetPackage.Literals.ENCODING__SORT as BasicEAttribute).setEType(VegawidgetPackage.Literals.SORT_ORDER);
+    (VegawidgetPackage.Literals.ENCODING__STACK as BasicEAttribute).setEType(VegawidgetPackage.Literals.STACK_MODE);
+    (VegawidgetPackage.Literals.ENCODING__TITLE as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (VegawidgetPackage.Literals.ENCODING__FORMAT as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (VegawidgetPackage.Literals.ENCODING__VALUE as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (VegawidgetPackage.Literals.ENCODING__SCALE_TYPE as BasicEAttribute).setEType(VegawidgetPackage.Literals.SCALE_TYPE);
+    (VegawidgetPackage.Literals.ENCODING__SCALE_ZERO as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EBoolean')!);
+    (VegawidgetPackage.Literals.ENCODING__DOMAIN_MIN as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (VegawidgetPackage.Literals.ENCODING__DOMAIN_MAX as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (VegawidgetPackage.Literals.ENCODING__SCHEME as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (VegawidgetPackage.Literals.ENCODING__SHOW_AXIS as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EBoolean')!);
+    (VegawidgetPackage.Literals.ENCODING__SHOW_GRID as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EBoolean')!);
+    (VegawidgetPackage.Literals.ENCODING__LABEL_ANGLE as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (VegawidgetPackage.Literals.ENCODING__SHOW_LEGEND as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EBoolean')!);
+    (VegawidgetPackage.Literals.ENCODING__HIGHLIGHT_PARAM as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (VegawidgetPackage.Literals.ENCODING__VALUE_IF_NOT_SELECTED as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (VegawidgetPackage.Literals.TRANSFORM__KIND as BasicEAttribute).setEType(VegawidgetPackage.Literals.TRANSFORM_KIND);
+    (VegawidgetPackage.Literals.TRANSFORM__FIELD as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (VegawidgetPackage.Literals.TRANSFORM__OP as BasicEAttribute).setEType(VegawidgetPackage.Literals.FILTER_OP);
+    (VegawidgetPackage.Literals.TRANSFORM__VALUE as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (VegawidgetPackage.Literals.TRANSFORM__PARAM as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (VegawidgetPackage.Literals.TRANSFORM__FIELDS as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (VegawidgetPackage.Literals.TRANSFORM__KEY_AS as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (VegawidgetPackage.Literals.TRANSFORM__VALUE_AS as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (VegawidgetPackage.Literals.TRANSFORM__AS as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (VegawidgetPackage.Literals.TRANSFORM__EXPRESSION as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (VegawidgetPackage.Literals.FACET__ROW as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (VegawidgetPackage.Literals.FACET__COLUMN as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (VegawidgetPackage.Literals.FACET__COLUMNS as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EInt')!);
+    (VegawidgetPackage.Literals.PARAM__NAME as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (VegawidgetPackage.Literals.PARAM__KIND as BasicEAttribute).setEType(VegawidgetPackage.Literals.PARAM_KIND);
+    (VegawidgetPackage.Literals.PARAM__FIELDS as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (VegawidgetPackage.Literals.PARAM__ENCODINGS as BasicEAttribute).setEType(VegawidgetPackage.Literals.CHANNEL);
+    (VegawidgetPackage.Literals.PARAM__BIND as BasicEAttribute).setEType(VegawidgetPackage.Literals.PARAM_BIND);
+    (VegawidgetPackage.Literals.PARAM__VALUE as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
 
     // ============================================
     // Set EOpposites (must be done after all features are created) (#59)
