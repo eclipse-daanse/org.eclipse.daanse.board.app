@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- A DescribeFeatureType answer in the form a GeoServer gives (WFS 2.0, GML 3.2); trimmed to a few properties. -->
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:gml="http://www.opengis.net/gml/3.2"
+    xmlns:baumbestand="https://gdi.berlin.de/baumbestand" elementFormDefault="qualified" targetNamespace="https://gdi.berlin.de/baumbestand">
+  <xsd:complexType name="strassenbaeumeType">
+    <xsd:complexContent>
+      <xsd:extension base="gml:AbstractFeatureType">
+        <xsd:sequence>
+          <xsd:element maxOccurs="1" minOccurs="0" name="gattung_deutsch" nillable="true" type="xsd:string"/>
+          <xsd:element maxOccurs="1" minOccurs="0" name="pflanzjahr" nillable="true" type="xsd:int"/>
+          <xsd:element maxOccurs="1" minOccurs="0" name="baumhoehe" nillable="true" type="xsd:double"/>
+          <xsd:element maxOccurs="1" minOccurs="0" name="erfasst" nillable="true" type="xsd:dateTime"/>
+          <xsd:element maxOccurs="1" minOccurs="0" name="geom" nillable="true" type="gml:PointPropertyType"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:element name="strassenbaeume" substitutionGroup="gml:AbstractFeature" type="baumbestand:strassenbaeumeType"/>
+</xsd:schema>

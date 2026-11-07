@@ -18,7 +18,7 @@
  * @generated
  */
 
-import { BasicEPackage, BasicEClass, BasicEAttribute, EPackageRegistry, getEcorePackage } from '@emfts/core';
+import { BasicEPackage, BasicEClass, BasicEAttribute, BasicEReference, EPackageRegistry, getEcorePackage } from '@emfts/core';
 import type { EClass, EAttribute, EReference, EDataType } from '@emfts/core';
 import { WfsstoreFactory } from './WfsstoreFactory.js';
 
@@ -71,6 +71,7 @@ export class WfsstorePackage extends BasicEPackage {
     I_WFS_STORE_CONFIGURATION__MODE: null as unknown as EAttribute | EReference,
     I_WFS_STORE_CONFIGURATION__TILE_SIZE: null as unknown as EAttribute | EReference,
     I_WFS_STORE_CONFIGURATION__POINT_TOLERANCE: null as unknown as EAttribute | EReference,
+    I_WFS_STORE_CONFIGURATION__COLUMN_TYPES: null as unknown as EAttribute | EReference,
   };
 
   private constructor() {
@@ -207,6 +208,15 @@ export class WfsstorePackage extends BasicEPackage {
     iWfsStoreConfigurationClass.getEStructuralFeatures().push(iWfsStoreConfiguration_pointTolerance);
     WfsstorePackage.Literals.I_WFS_STORE_CONFIGURATION__POINT_TOLERANCE = iWfsStoreConfiguration_pointTolerance;
 
+    // Create columnTypes feature
+    const iWfsStoreConfiguration_columnTypes = new BasicEReference();
+    iWfsStoreConfiguration_columnTypes.setContainment(true);
+    iWfsStoreConfiguration_columnTypes.setName('columnTypes');
+    iWfsStoreConfiguration_columnTypes.setLowerBound(0);
+    iWfsStoreConfiguration_columnTypes.setUpperBound(-1);
+    iWfsStoreConfigurationClass.getEStructuralFeatures().push(iWfsStoreConfiguration_columnTypes);
+    WfsstorePackage.Literals.I_WFS_STORE_CONFIGURATION__COLUMN_TYPES = iWfsStoreConfiguration_columnTypes;
+
 
     // ============================================
     // Set ESuperTypes (must be done after all classes are created)
@@ -230,6 +240,7 @@ export class WfsstorePackage extends BasicEPackage {
     (WfsstorePackage.Literals.I_WFS_STORE_CONFIGURATION__MODE as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
     (WfsstorePackage.Literals.I_WFS_STORE_CONFIGURATION__TILE_SIZE as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EDouble')!);
     (WfsstorePackage.Literals.I_WFS_STORE_CONFIGURATION__POINT_TOLERANCE as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EInt')!);
+    (WfsstorePackage.Literals.I_WFS_STORE_CONFIGURATION__COLUMN_TYPES as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.datasource.base').getEClassifier('ColumnType')!);
 
     // ============================================
     // Set EOpposites (must be done after all features are created) (#59)

@@ -18,7 +18,9 @@
  * @generated
  */
 
-import type { EClass, EStructuralFeature } from '@emfts/core';
+import { createContainmentEList } from '@emfts/core';
+import type { EClass, EStructuralFeature, EList, EReference } from '@emfts/core';
+import type { ColumnType } from 'org.eclipse.daanse.board.app.lib.datasource.base';
 import { IBaseConnectionConfigurationImpl } from 'org.eclipse.daanse.board.app.lib.datasource.base';
 import type { IWfsStoreConfiguration } from './IWfsStoreConfiguration.js';
 import { WfsstorePackage } from './WfsstorePackage.js';
@@ -41,6 +43,7 @@ export class IWfsStoreConfigurationImpl extends IBaseConnectionConfigurationImpl
   static readonly MODE: number = 13;
   static readonly TILE_SIZE: number = 14;
   static readonly POINT_TOLERANCE: number = 15;
+  static readonly COLUMN_TYPES: number = 16;
 
   // Private fields
   private _connection?: string;
@@ -55,6 +58,7 @@ export class IWfsStoreConfigurationImpl extends IBaseConnectionConfigurationImpl
   private _mode: string = "wfs";
   private _tileSize: number = 0.01;
   private _pointTolerance: number = 70;
+  private _columnTypes!: EList<ColumnType>;
 
   /**
    * Returns the EClass of this object
@@ -352,6 +356,13 @@ export class IWfsStoreConfigurationImpl extends IBaseConnectionConfigurationImpl
     }
   }
 
+  get columnTypes(): EList<ColumnType> {
+    if (!this._columnTypes) {
+      this._columnTypes = createContainmentEList<any>(this, this.eClass().getEStructuralFeature('columnTypes') as EReference);
+    }
+    return this._columnTypes;
+  }
+
   // Reflective API
 
   /**
@@ -384,6 +395,8 @@ export class IWfsStoreConfigurationImpl extends IBaseConnectionConfigurationImpl
         return this.tileSize;
       case IWfsStoreConfigurationImpl.POINT_TOLERANCE:
         return this.pointTolerance;
+      case IWfsStoreConfigurationImpl.COLUMN_TYPES:
+        return this.columnTypes;
       default:
         return super.eGet(feature);
     }
@@ -443,6 +456,11 @@ export class IWfsStoreConfigurationImpl extends IBaseConnectionConfigurationImpl
         this.pointTolerance = newValue as number;
         super.eSet(feature, newValue);
         break;
+      case IWfsStoreConfigurationImpl.COLUMN_TYPES:
+        this.columnTypes.clear();
+        this.columnTypes.addAll(newValue as any[]);
+        super.eSet(feature, newValue);
+        break;
       default:
         super.eSet(feature, newValue);
     }
@@ -478,6 +496,8 @@ export class IWfsStoreConfigurationImpl extends IBaseConnectionConfigurationImpl
         return this._tileSize !== 0.01;
       case IWfsStoreConfigurationImpl.POINT_TOLERANCE:
         return this._pointTolerance !== 70;
+      case IWfsStoreConfigurationImpl.COLUMN_TYPES:
+        return this._columnTypes !== undefined && !this._columnTypes.isEmpty();
       default:
         return super.eIsSet(feature);
     }
@@ -525,6 +545,9 @@ export class IWfsStoreConfigurationImpl extends IBaseConnectionConfigurationImpl
       case IWfsStoreConfigurationImpl.POINT_TOLERANCE:
         this._pointTolerance = 70;
         return;
+      case IWfsStoreConfigurationImpl.COLUMN_TYPES:
+        if (this._columnTypes) this._columnTypes.clear();
+        return;
       default:
         super.eUnset(feature);
     }
@@ -552,6 +575,7 @@ export class IWfsStoreConfigurationImpl extends IBaseConnectionConfigurationImpl
       mode: this.mode,
       tileSize: this.tileSize,
       pointTolerance: this.pointTolerance,
+      columnTypes: this.columnTypes?.toArray?.() ?? this.columnTypes,
     };
   }
 }

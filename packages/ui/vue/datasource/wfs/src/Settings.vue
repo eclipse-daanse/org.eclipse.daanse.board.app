@@ -18,7 +18,7 @@ import { computed, ref, watch } from 'vue'
 import { DButton, DIcon, DInput, DSelect } from 'org.eclipse.daanse.board.app.ui.vue.controls'
 import { useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import { useOGCService } from 'org.eclipse.daanse.board.app.ui.vue.common.map'
-import { exceptionOf, getCapabilitiesPath } from 'org.eclipse.daanse.board.app.lib.datasource.wfs'
+import { columnTypesOfSchema, describeFeatureTypePath, exceptionOf, getCapabilitiesPath } from 'org.eclipse.daanse.board.app.lib.datasource.wfs'
 
 const { config, connections } = defineProps<{ config: any; dataSources?: any; connections: any[] }>()
 const { t } = useTranslation('datasourceWfs')
@@ -73,6 +73,42 @@ const modes = computed(() => [
 ])
 watch([serviceUrl, featureInfo], () => void readCapabilities(), { immediate: true })
 
+/* ------------------------------------------------ column types (#1295) */
+
+/*
+ * What the properties are: written by hand here, as a data source's
+ * settings are a form of their own and a list in it is a list of rows. In
+ * the WFS mode they are read from DescribeFeatureType; GetFeatureInfo says
+ * nothing about its attributes.
+ */
+/* i18n-keys: datasourceWfs:Settings.valueTypes.* */
+const valueTypes = computed(() => ['string', 'number', 'date', 'boolean'].map((value) => ({ value, label: t(`Settings.valueTypes.${value}`) })))
+const columns = computed<any[]>(() => (Array.isArray(config.columnTypes) ? config.columnTypes : []))
+function addColumn() {
+  config.columnTypes = [...columns.value, { column: '', type: 'number', unit: '', label: '' }]
+}
+function removeColumn(index: number) {
+  config.columnTypes = columns.value.filter((_, at) => at !== index)
+}
+const describing = ref(false)
+async function readColumnTypes() {
+  if (!connection.value) return
+  describing.value = true
+  error.value = ''
+  try {
+    const answer = await (await fetch(`${connection.value?.config?.url ?? ''}${describeFeatureTypePath({ url: config.url, typeName: config.typeName, version: config.version })}`)).text()
+    const read = columnTypesOfSchema(answer)
+    if (!read.length) error.value = exceptionOf(answer) ?? t('Settings.noColumns')
+    // Units and labels already set stay.
+    const kept = new Map(columns.value.map((each) => [each.column, each]))
+    config.columnTypes = read.map((each) => ({ unit: '', label: '', ...kept.get(each.column), ...each }))
+  } catch {
+    error.value = t('Settings.unreachable')
+  } finally {
+    describing.value = false
+  }
+}
+
 /** A number field writes a number; empty writes the default. */
 function setNumber(name: string, value: unknown, fallback: number) {
   const n = Number(value)
@@ -110,6 +146,21 @@ function setNumber(name: string, value: unknown, fallback: number) {
     <DInput type="number" :model-value="config.maxFeatures" :label="t('Fields.maxFeatures')" :hint="t('Hints.maxFeatures')"
       @update:model-value="(v) => setNumber('maxFeatures', v, 1000)" />
     <DInput v-model="config.bbox" :label="t('Fields.bbox')" placeholder="13.44,52.44,13.46,52.45" :hint="t('Hints.bbox')" />
+    <section class="wfs-settings__columns">
+      <div class="wfs-settings__head">
+        <span>{{ t('Settings.columnTypes') }}</span>
+        <DButton v-if="!featureInfo" intent="quiet" size="sm" :busy="describing" :title="t('Settings.readColumns')" @click="readColumnTypes">
+          <DIcon name="schema" size="sm" />
+        </DButton>
+        <DButton intent="quiet" size="sm" :title="t('Settings.addColumn')" @click="addColumn"><DIcon name="add" size="sm" /></DButton>
+      </div>
+      <div v-for="(column, index) in columns" :key="index" class="wfs-settings__column">
+        <DInput v-model="column.column" :label="t('Fields.column')" />
+        <DSelect v-model="column.type" :options="valueTypes" value-key="value" label-key="label" :label="t('Fields.type')" />
+        <DInput v-model="column.unit" :label="t('Fields.unit')" placeholder="m" />
+        <DButton intent="quiet" size="sm" :title="t('Settings.removeColumn')" @click="removeColumn(index)"><DIcon name="delete" size="sm" /></DButton>
+      </div>
+    </section>
     <DInput v-if="!featureInfo" v-model="config.filter" :label="t('Fields.filter')" placeholder="gattung_deutsch='Linde'" :hint="t('Hints.filter')" />
   </div>
 </template>
@@ -129,6 +180,37 @@ function setNumber(name: string, value: unknown, fallback: number) {
 
 .wfs-settings__row > :first-child {
   flex: 1 1 auto;
+}
+
+.wfs-settings__columns {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.wfs-settings__head {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 600;
+}
+
+.wfs-settings__head > span {
+  flex: 1 1 auto;
+}
+
+/* One column type per block: no row wider than the settings. */
+.wfs-settings__column {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 6px 8px;
+  border: 1px solid var(--color-divider);
+  border-radius: var(--radius-xs, 4px);
+}
+
+.wfs-settings__column > button {
+  align-self: flex-end;
 }
 
 .wfs-settings__error {
