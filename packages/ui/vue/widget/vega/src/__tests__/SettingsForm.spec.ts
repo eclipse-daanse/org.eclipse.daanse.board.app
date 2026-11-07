@@ -38,18 +38,19 @@ import datasetFormXmi from '../../model/ui-dataset.xmi?raw'
 import columnTypeFormXmi from '../../model/ui-column-type.xmi?raw'
 import settingsEcore from '../../model/model.ecore?raw'
 import en from '../i18n/en.json'
+import de from '../i18n/de.json'
 import uimodelEn from '../../../../uimodel/src/i18n/en.json'
 
 void VegawidgetPackage.eINSTANCE
 const factory = VegawidgetFactory.eINSTANCE
 
-async function translator() {
+async function translator(lng: 'en' | 'de' = 'en') {
   const i18n = i18next.createInstance()
-  await i18n.init({ fallbackLng: 'en', lng: 'en', resources: { en: { vega: en, uimodel: uimodelEn } } })
+  await i18n.init({ fallbackLng: 'en', lng, resources: { en: { vega: en, uimodel: uimodelEn }, de: { vega: de, uimodel: uimodelEn } } })
   return i18n
 }
 
-async function settingsForm(settings: VegaWidgetSettings, suggest?: (owner: unknown, feature: string) => string[]) {
+async function settingsForm(settings: VegaWidgetSettings, suggest?: (owner: unknown, feature: string) => string[], lng: 'en' | 'de' = 'en') {
   const view = mount(SettingsForm, {
     props: {
       modelValue: markRaw(settings),
@@ -69,7 +70,7 @@ async function settingsForm(settings: VegaWidgetSettings, suggest?: (owner: unkn
       ecore: settingsEcore,
       suggest: suggest as never,
     },
-    global: { provide: { i18n: await translator() } },
+    global: { provide: { i18n: await translator(lng) } },
     attachTo: document.body,
   })
   await flushPromises()
@@ -180,6 +181,14 @@ describe('the chart settings form', () => {
     expect(asked).toContain('field')
     const offered = view.findAll('datalist option').map((option) => option.attributes('value'))
     expect(offered).toContain('region')
+    view.unmount()
+  })
+
+  it('explains each field in the reader's language', async () => {
+    const view = await settingsForm(CHARTS.bar.settings(), undefined, 'de')
+    expect(view.text()).toContain(de.Hints.Layer.mark)
+    expect(view.text()).toContain(de.Hints.Encoding.field)
+    expect(view.text()).not.toContain('The kind of mark the layer draws.')
     view.unmount()
   })
 })

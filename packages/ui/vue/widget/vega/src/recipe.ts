@@ -350,10 +350,10 @@ function paramSpec(param: Param): Json {
  * and are left as they are.
  */
 export function withSize(spec: TopLevelSpec, width: number, height: number): TopLevelSpec {
-  const held = spec as Json
+  const held = spec as unknown as Json
   if (held.width !== 'container' && held.height !== 'container') return spec
   const next: Json = { ...held }
   if (held.width === 'container') next.width = width > 0 ? Math.floor(width) : 300
   if (held.height === 'container') next.height = height > 0 ? Math.floor(height) : 200
-  return next as TopLevelSpec
+  return next as unknown as TopLevelSpec
 }

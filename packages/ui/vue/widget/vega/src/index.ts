@@ -80,6 +80,7 @@ export class VegaWidgetProvider implements WidgetProvider {
       { xmi: datasetFormXmi, uri: '/vega-dataset.ui.xmi' },
       { xmi: columnTypeFormXmi, uri: '/vega-column-type.ui.xmi' },
     ],
+    /* i18n-keys: vega:Hints.* - the hint under each field, one per feature (#1285). */
     /* A field is picked from the names the chart's data has. */
     suggest: (owner: unknown, feature: string, context: { datasourceId?: string }) =>
       suggestFields(owner, feature, context.datasourceId, {

@@ -244,5 +244,92 @@
   "FormColumnType": {
     "column": "Spalte",
     "type": "Gelesen als"
+  },
+  "Hints": {
+    "VegaWidgetSettings": {
+      "title": "Der Titel über dem Diagramm. Leer zeichnet keinen.",
+      "renderer": "Canvas oder SVG. Canvas bleibt bei Tausenden Marken schnell, SVG bleibt beim Zoomen scharf.",
+      "tooltip": "Ob eine Marke ihre Werte im Tooltip zeigt, solange der Zeiger darüber ist. Tooltip-Kodierungen wählen die Werte; ohne eine zeigt eine Marke alle ihre Felder.",
+      "legendPosition": "Wo die Legenden stehen; „Keine Legende“ blendet alle aus.",
+      "layers": "Die Ebenen des Diagramms, in dieser Reihenfolge gezeichnet – die erste ganz unten. Eine Ebene ist ein einfaches Diagramm; eine zweite fügt etwa Punkte auf einer Linie oder eine Linie über Balken hinzu.",
+      "facet": "Teilt das Diagramm in kleine Vielfache, eines je Wert eines Felds. Leer zeichnet ein einziges Diagramm.",
+      "params": "Auswahlen und Werte, die das Diagramm hält: was ausgewählt oder aufgezogen ist, und Werte, auf die andere Einstellungen mit ihrem Namen verweisen.",
+      "datasets": "Die Daten, die das Diagramm zeichnet, nach Namen. Ohne Eintrag ist die Datenquelle des Widgets der Datensatz table; ein Eintrag namens table ohne eigene Quelle sagt, wie diese gelesen wird."
+    },
+    "DatasetBinding": {
+      "name": "Der Name, unter dem Ebenen diesen Datensatz zeichnen. table ist die Datenquelle des Widgets.",
+      "datasourceId": "Die Datenquelle des Boards, aus der der Datensatz kommt. Leer: die Datenquelle des Widgets.",
+      "shape": "In welcher Form der Datensatz angefragt wird. Die Datenquelle des Widgets selbst wird immer als Tabelle gelesen, damit das Diagramm zeigt, was der Rahmen davon auswählt.",
+      "path": "Bei JSON: wo die Liste der Zeilen in der Antwort steht, als Namen mit Punkten getrennt (data.items). Leer: die Antwort selbst.",
+      "columnTypes": "Spalten, die als Zahl, Datum oder Ja/Nein gelesen werden statt so, wie sie ankommen."
+    },
+    "ColumnType": {
+      "column": "Der Name der Spalte.",
+      "type": "Als was ihre Werte gelesen werden."
+    },
+    "Layer": {
+      "dataset": "Der Name des Datensatzes, den die Ebene zeichnet. Leer zeichnet den Datensatz des Widgets, table.",
+      "mark": "Welche Art Marke die Ebene zeichnet.",
+      "interpolate": "Wie eine Linie, Fläche oder Spur zwischen ihren Punkten verläuft. Andere Marken lesen das nicht.",
+      "showPoints": "Ob eine Linie, Fläche oder Spur an jedem Wert zusätzlich einen Punkt zeichnet.",
+      "filled": "Ob ein Punkt, Kreis oder Quadrat gefüllt oder nur als Umriss gezeichnet wird.",
+      "color": "Eine feste Farbe für alle Marken der Ebene, als CSS-Farbe. Leer nimmt die Farbe des Themes oder einer Farbkodierung.",
+      "opacity": "Die Deckkraft der Marken, von 0 (unsichtbar) bis 1 (deckend).",
+      "cornerRadius": "Rundet die Ecken von Balken, Rechtecken und Bögen um so viele Pixel; 0 lässt sie spitz.",
+      "innerRadius": "Der innere Radius eines Bogens in Pixeln: 0 zeichnet eine Torte, mehr einen Ring. Andere Marken lesen das nicht.",
+      "strokeWidth": "Die Breite von Linien und Umrissen in Pixeln; 0 nimmt die Vorgabe.",
+      "encodings": "Was die Marken steuert: welches Feld auf welchen Kanal geht, und wie.",
+      "transforms": "Schritte auf den Daten, bevor die Ebene sie zeichnet, in dieser Reihenfolge."
+    },
+    "Encoding": {
+      "channel": "Der Kanal, den diese Kodierung steuert.",
+      "field": "Das Feld des Datensatzes, das den Kanal steuert. Leer mit einem festen Wert nimmt den Wert; leer mit „Anzahl der Zeilen“ zählt die Zeilen.",
+      "type": "Was die Werte des Felds sind.",
+      "aggregate": "Wie Werte, die auf dieselbe Stelle fallen, zusammengefasst werden.",
+      "bin": "Ob die Werte in Klassen gruppiert werden – ein Histogramm ist ein klassiertes x mit einer Anzahl auf y.",
+      "maxBins": "Die größte Zahl der Klassen; 0 lässt Vega-Lite wählen.",
+      "timeUnit": "Der Teil des Zeitpunkts, den der Kanal nimmt, etwa der Monat, um Monate über Jahre zu vergleichen.",
+      "sort": "Wie die Werte entlang des Kanals geordnet sind.",
+      "stack": "Wie Marken auf derselben Position stapeln. Nur auf einem Positionskanal gelesen.",
+      "title": "Der Titel der Achse oder Legende. Leer nimmt den Namen des Felds.",
+      "format": "Wie Werte an der Achse, in der Legende oder im Text geschrieben werden: ein d3-Zahlenformat (,.2f) oder für Zeitpunkte ein d3-Zeitformat (%Y-%m). Leer nimmt die Vorgabe.",
+      "value": "Ein fester Wert für den Kanal, wenn kein Feld ihn steuert, etwa eine Farbe oder eine Deckkraft. Zahlen werden als Zahlen gelesen.",
+      "scaleType": "Wie Werte auf den Kanal abgebildet werden.",
+      "scaleZero": "Ob eine Zahlenskala null enthält. Ausgeschaltet passt sich die Skala den Werten an.",
+      "domainMin": "Der kleinste Wert, den die Skala zeigt. Leer passt sich den Daten an.",
+      "domainMax": "Der größte Wert, den die Skala zeigt. Leer passt sich den Daten an.",
+      "scheme": "Ein Vega-Farbschema für eine Farbkodierung, etwa tableau10, blues oder viridis. Leer nimmt die Farben des Themes.",
+      "showAxis": "Ob ein Positionskanal seine Achse zeichnet.",
+      "showGrid": "Ob die Achse Gitterlinien zeichnet.",
+      "labelAngle": "Der Winkel der Achsenbeschriftung in Grad, etwa -45. Leer lässt Vega-Lite wählen.",
+      "showLegend": "Ob ein Farb-, Größen-, Form- oder Deckkraftkanal seine Legende zeichnet.",
+      "highlightParam": "Der Name einer Auswahl. Marken in der Auswahl behalten Feld oder Wert oben; die anderen nehmen den Wert darunter – so hebt eine Auswahl hervor.",
+      "valueIfNotSelected": "Der Wert, den Marken außerhalb der Auswahl nehmen, etwa lightgray oder 0.2."
+    },
+    "Transform": {
+      "kind": "Was der Schritt tut.",
+      "field": "Filter: das verglichene Feld. Bei „ist in einer Auswahl“ nicht gelesen.",
+      "op": "Filter: der Vergleich.",
+      "value": "Filter: womit das Feld verglichen wird; bei „einer von“ eine mit Komma getrennte Liste, bei „zwischen“ zwei mit Komma getrennte Grenzen. Zahlen werden als Zahlen gelesen.",
+      "param": "Filter: die Auswahl, deren Inhalt durchkommt, bei „ist in einer Auswahl“.",
+      "fields": "Spalten zu Zeilen: die Felder, die umgelegt werden – jedes wird eine Zeile mit dem Feldnamen als Schlüssel und seinem Wert, so werden mehrere Spalten zu je einer Reihe.",
+      "keyAs": "Spalten zu Zeilen: der Name des neuen Felds mit dem früheren Spaltennamen.",
+      "valueAs": "Spalten zu Zeilen: der Name des neuen Felds mit dem Wert.",
+      "as": "Feld berechnen: der Name des neuen Felds.",
+      "expression": "Feld berechnen: der Vega-Ausdruck, etwa datum.price * datum.amount; datum ist die Zeile. Ausdrücke werden interpretiert, nie zu Code übersetzt."
+    },
+    "Facet": {
+      "row": "Das Feld, dessen Werte die Zeilen bilden. Leer bildet keine Zeilen.",
+      "column": "Das Feld, dessen Werte die Spalten bilden. Leer bildet keine Spalten.",
+      "columns": "Nur mit einem Spaltenfeld: wie viele Spalten, bevor die Diagramme in die nächste Zeile umbrechen; 0 bricht nie um."
+    },
+    "Param": {
+      "name": "Der Name, den Kodierungen, Filter und Board-Aktionen verwenden. Buchstaben, Ziffern und Unterstrich.",
+      "kind": "Was der Parameter ist.",
+      "fields": "Die Felder, auf die eine Auswahl projiziert: eine ausgewählte Marke wählt dann alle Marken mit denselben Werten. Leer wählt einzelne Marken.",
+      "encodings": "Die Kanäle, über die ein Bereich spannt, meist x oder x und y. Leer spannt über beide.",
+      "bind": "Woran die Auswahl gebunden ist.",
+      "value": "Der Anfangswert als JSON – bei einem Wert dessen Wert, bei einer Auswahl, was sie zu Beginn enthält. Leer beginnt leer."
+    }
   }
 }

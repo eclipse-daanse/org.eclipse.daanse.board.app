@@ -244,5 +244,92 @@
   "FormColumnType": {
     "column": "Column",
     "type": "Read as"
+  },
+  "Hints": {
+    "VegaWidgetSettings": {
+      "title": "The title drawn above the chart. Empty draws none.",
+      "renderer": "Canvas or SVG. Canvas stays fast with thousands of marks; SVG stays sharp when zoomed.",
+      "tooltip": "Whether a mark shows its values in a tooltip while the pointer is over it. Tooltip encodings choose the values; without one a mark shows all of its fields.",
+      "legendPosition": "Where the legends stand; none hides every legend.",
+      "layers": "The layers of the chart, drawn in this order - the first one at the bottom. One layer is a plain chart; a second one adds, for example, points on a line or a rule on bars.",
+      "facet": "Splits the chart into small multiples, one per value of a field. Empty draws a single chart.",
+      "params": "Selections and values the chart holds: what is picked or brushed, and values other settings refer to by name.",
+      "datasets": "The data the chart draws, by name. Without an entry the data source of the widget is the dataset table; an entry named table without a source of its own says how to read that one."
+    },
+    "DatasetBinding": {
+      "name": "The name layers use for this dataset. table is the data source of the widget.",
+      "datasourceId": "The board data source the dataset comes from. Empty: the data source of the widget.",
+      "shape": "The form the dataset is asked for. The data source of the widget itself is always read as a table, so that the part of it the frame selects is what the chart draws.",
+      "path": "For the shape object: where the list of rows is in the answer, as names separated by dots (data.items). Empty: the answer itself.",
+      "columnTypes": "Columns read as numbers, dates or booleans rather than as they arrive."
+    },
+    "ColumnType": {
+      "column": "The name of the column.",
+      "type": "What its values are read as."
+    },
+    "Layer": {
+      "dataset": "The name of the dataset the layer draws. Empty draws the dataset of the widget, named table.",
+      "mark": "The kind of mark the layer draws.",
+      "interpolate": "How a line, area or trail runs between its points. Ignored by other marks.",
+      "showPoints": "Whether a line, area or trail also draws a point at each value.",
+      "filled": "Whether a point, circle or square is filled rather than drawn as an outline.",
+      "color": "A fixed colour for every mark of the layer, as a CSS colour. Empty takes the colour of the theme or of a colour encoding.",
+      "opacity": "The opacity of the marks, from 0 (invisible) to 1 (solid).",
+      "cornerRadius": "Rounds the corners of bars, rects and arcs by this many pixels; 0 keeps them sharp.",
+      "innerRadius": "The inner radius of an arc in pixels: 0 draws a pie, more draws a donut. Ignored by other marks.",
+      "strokeWidth": "The width of lines and outlines in pixels; 0 takes the default.",
+      "encodings": "What drives the marks: which field goes to which channel, and how.",
+      "transforms": "Steps applied to the data before the layer draws it, in this order."
+    },
+    "Encoding": {
+      "channel": "The channel this encoding drives.",
+      "field": "The field of the dataset that drives the channel. Empty with a value set uses the value; empty with the aggregate count counts the rows.",
+      "type": "What the values of the field are.",
+      "aggregate": "How values that fall on the same place are combined.",
+      "bin": "Whether the values are grouped into bins - a histogram is a binned x with a count on y.",
+      "maxBins": "The largest number of bins; 0 lets Vega-Lite choose.",
+      "timeUnit": "The part of a point in time the channel uses, for example the month to compare months across years.",
+      "sort": "How the values along the channel are ordered.",
+      "stack": "How marks on the same position stack. Only read on a position channel.",
+      "title": "The title of the axis or legend. Empty takes the name of the field.",
+      "format": "How values are written on the axis, in the legend or in the text: a d3 number format (,.2f) or, for points in time, a d3 time format (%Y-%m). Empty takes the default.",
+      "value": "A fixed value for the channel when no field drives it, for example a colour or an opacity. Numbers are read as numbers.",
+      "scaleType": "How values are mapped to the channel.",
+      "scaleZero": "Whether a quantitative scale includes zero. Turned off, the scale fits the values.",
+      "domainMin": "The lowest value the scale shows. Empty fits the data.",
+      "domainMax": "The highest value the scale shows. Empty fits the data.",
+      "scheme": "A Vega colour scheme for a colour encoding, for example tableau10, blues or viridis. Empty takes the colours of the theme.",
+      "showAxis": "Whether a position channel draws its axis.",
+      "showGrid": "Whether the axis draws grid lines.",
+      "labelAngle": "The angle of the axis labels in degrees, for example -45. Empty lets Vega-Lite choose.",
+      "showLegend": "Whether a colour, size, shape or opacity channel draws its legend.",
+      "highlightParam": "The name of a selection. Marks the selection holds keep the field or value above; the others take the value below - this is how a selection highlights.",
+      "valueIfNotSelected": "The value the marks outside the selection take, for example lightgray or 0.2."
+    },
+    "Transform": {
+      "kind": "What the transform does.",
+      "field": "filter: the field compared. Not read by the operation param.",
+      "op": "filter: the comparison.",
+      "value": "filter: what the field is compared with; for oneOf a comma-separated list, for range two comma-separated bounds. Numbers are read as numbers.",
+      "param": "filter: the selection whose content passes, for the operation param.",
+      "fields": "fold: the fields to fold - each becomes a row with the field name as key and its value as value, so several columns become one series per column.",
+      "keyAs": "fold: the name of the new field holding the former column name.",
+      "valueAs": "fold: the name of the new field holding the value.",
+      "as": "calculate: the name of the new field.",
+      "expression": "calculate: the Vega expression, for example datum.price * datum.amount; datum is the row. Expressions are interpreted, never compiled to code."
+    },
+    "Facet": {
+      "row": "The field whose values make the rows. Empty makes no rows.",
+      "column": "The field whose values make the columns. Empty makes no columns.",
+      "columns": "With only a column field: the number of columns before the charts wrap to the next row; 0 never wraps."
+    },
+    "Param": {
+      "name": "The name the encodings, filters and board actions use. Letters, digits and underscore.",
+      "kind": "What the parameter is.",
+      "fields": "The fields a selection projects on: picking one mark then selects every mark with the same values. Empty selects single marks.",
+      "encodings": "The channels an interval spans, usually x, or x and y. Empty spans both.",
+      "bind": "What the selection is bound to.",
+      "value": "The initial value, as JSON - for a value parameter its value, for a selection what it holds at the start. Empty starts empty."
+    }
   }
 }
