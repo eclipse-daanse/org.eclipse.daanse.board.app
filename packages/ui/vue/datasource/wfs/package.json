@@ -6,9 +6,9 @@
   "homepage": "https://github.com/eclipse-daanse/org.eclipse.daanse.board.app#readme",
   "license": "EPL-2.0",
   "type": "module",
-  "main": "./dist/org.eclipse.daanse.board.app.ui.vue.datasource.csv.umd.cjs",
-  "module": "./dist/org.eclipse.daanse.board.app.ui.vue.datasource.csv.js",
-  "types": "./dist/org.eclipse.daanse.board.app.ui.vue.datasource.csv.d.ts",
+  "main": "./dist/org.eclipse.daanse.board.app.ui.vue.datasource.wfs.umd.cjs",
+  "module": "./dist/org.eclipse.daanse.board.app.ui.vue.datasource.wfs.js",
+  "types": "./dist/org.eclipse.daanse.board.app.ui.vue.datasource.wfs.d.ts",
   "files": [
     "src"
   ],
