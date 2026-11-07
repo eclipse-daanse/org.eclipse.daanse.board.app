@@ -94,6 +94,10 @@ export abstract class MapLibreWidgetInterfaceImpl extends WidgetActionInterfaceI
     throw new Error('zoomToThing not implemented');
   }
 
+  zoomToLocation(_location: unknown, _zoom: number, _duration: number): void {
+    throw new Error('zoomToLocation not implemented');
+  }
+
   selectThingById(_thingId: string): void {
     throw new Error('selectThingById not implemented');
   }

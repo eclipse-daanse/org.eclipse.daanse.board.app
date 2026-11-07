@@ -42,6 +42,9 @@ vi.mock('maplibre-gl', () => {
     sources: Record<string, any> = {}
     jumpTo = vi.fn()
     flyTo = vi.fn()
+    fitBounds = vi.fn()
+    getBearing = () => -20
+    getPitch = () => 55
     setStyle = vi.fn()
     setTerrain = vi.fn()
     setSky = vi.fn()
@@ -291,10 +294,41 @@ describe('the 3D map widget', () => {
     expect(source.setData.mock.calls.at(-1)[0].features[0].properties.selected).toBe(true)
 
     api.zoomToThing('JeN-06', 17, 0)
-    expect(map.flyTo).toHaveBeenCalledWith(expect.objectContaining({ center: [11.605, 50.945], zoom: 17 }))
+    expect(map.fitBounds).toHaveBeenLastCalledWith([[11.6, 50.94], [11.61, 50.95]], expect.objectContaining({ maxZoom: 17, pitch: 55, bearing: -20 }))
 
     api.flyTo(50.9, 11.5, 14, 60, 30, 500)
     expect(map.flyTo).toHaveBeenLastCalledWith({ center: [11.5, 50.9], zoom: 14, pitch: 60, bearing: 30, duration: 500 })
+  })
+})
+
+describe('the actions after a change of page (#1272)', () => {
+  it('fit an area given as GeoJSON into the view, and fly to a point', async () => {
+    const { map, registry } = await mountWidget(stored())
+    const api = registry.registerInstance.mock.calls[0][1]
+    api.zoomToLocation({ type: 'FeatureCollection', features: [{ type: 'Feature', geometry: polygon }] }, 17, 0)
+    expect(map.fitBounds).toHaveBeenLastCalledWith([[11.6, 50.94], [11.61, 50.95]], expect.objectContaining({ maxZoom: 17 }))
+    api.zoomToLocation({ type: 'Point', coordinates: [11.6, 50.9] }, 18, 0)
+    expect(map.flyTo).toHaveBeenLastCalledWith({ center: [11.6, 50.9], zoom: 18, duration: 0 })
+    api.zoomToLocation(undefined)
+    expect(map.flyTo).toHaveBeenCalledTimes(1)
+  })
+
+  it('fly to a thing asked for before it was loaded, once it is', async () => {
+    let answer!: (value: unknown) => void
+    const store = fakeStore()
+    store.getData = vi.fn(() => new Promise((resolve) => (answer = resolve))) as any
+    const { map, registry } = await mountWidget(stored(), store)
+    const api = registry.registerInstance.mock.calls[0][1]
+
+    api.selectThingById('JeN-06')
+    api.zoomToThing('JeN-06', 16, 0)
+    expect(map.fitBounds).not.toHaveBeenCalled()
+
+    answer({ things })
+    await flushPromises()
+    expect(map.fitBounds).toHaveBeenCalledTimes(1)
+    const source = map.sources['daanse:things:areas']
+    expect(source.setData.mock.calls.at(-1)[0].features[0].properties.selected).toBe(true)
   })
 })
 
