@@ -35,7 +35,15 @@ import {
   DSlider,
   DSwitch,
 } from 'org.eclipse.daanse.board.app.ui.vue.controls'
-import { useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+import { ADVANCED_EDITING, usePreference, useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+
+/*
+ * A preference of the reader, beside the look they chose (#1291): forms that
+ * compile to a text - a chart to its Vega-Lite spec - also offer that text.
+ * Kept in this browser, so a board cannot turn it on for anyone.
+ */
+const advancedEditing = usePreference(ADVANCED_EDITING)
+const advanced = computed({ get: () => advancedEditing.value.value, set: (on: boolean) => advancedEditing.set(on) })
 
 const {
   themes,
@@ -139,6 +147,11 @@ async function copyTheme() {
           </button>
         </span>
       </header>
+
+      <div class="reader-prefs">
+        <DSwitch v-model="advanced" :label="t('Appearance.advancedEditing')" data-testid="advanced-editing" />
+        <span class="reader-prefs__hint">{{ t('Appearance.advancedEditingHint') }}</span>
+      </div>
 
       <div v-if="view === 'controls'" class="gallery">
         <p class="gallery__lead">
@@ -281,6 +294,20 @@ async function copyTheme() {
 </template>
 
 <style scoped>
+.reader-prefs {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.25rem 0.75rem;
+  padding: 0.5rem 1rem;
+  border-bottom: 1px solid var(--color-divider);
+}
+
+.reader-prefs__hint {
+  font-size: var(--text-xs);
+  color: var(--color-dim);
+}
+
 .appearance {
   display: flex;
   width: 100%;
