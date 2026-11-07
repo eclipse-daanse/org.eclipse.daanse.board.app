@@ -189,6 +189,9 @@
         "mm": "mm",
         "km": "km"
       }
+    },
+    "migration": {
+      "firstWord": "{{field}} (erstes Wort)"
     }
   },
   "Hints": {

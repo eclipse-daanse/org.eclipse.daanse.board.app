@@ -297,6 +297,16 @@ describe('a symbol layer stored before #1296', () => {
     expect(migratedModelLayer(layer)).toBe(layer)
   })
 
+  it('names the field it adds in the reader\'s language, and keeps a name stored before', () => {
+    const german = { firstWordOf: (field: string) => `${field} (erstes Wort)` }
+    const layer = migratedModelLayer(stored, german)
+    expect(layer.transforms).toEqual([{ kind: 'extract', field: 'Baumart', pattern: '^(\\S+)', as: 'Baumart (erstes Wort)' }])
+    expect(layer.color).toMatchObject({ field: 'Baumart (erstes Wort)' })
+    // Migrated before, in English: the stored name stays.
+    const before = migratedModelLayer(stored)
+    expect(migratedModelLayer(before, german)).toBe(before)
+  })
+
   it('draws as before: the same colours and sizes for the same trees', () => {
     const settings = modelledSettings({ modelLayers: [stored] })
     const layer = settings.modelLayers.get(0)

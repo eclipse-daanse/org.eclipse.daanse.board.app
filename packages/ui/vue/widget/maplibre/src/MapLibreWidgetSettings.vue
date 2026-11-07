@@ -55,9 +55,11 @@ const props = defineProps<{ dataSources?: { uid: string; name?: string; type?: s
 const stored = defineModel<MapLibreSettings>({ required: true })
 const { t } = useTranslation('maplibre')
 
-const adoptedAtOpen = modelledSettings(stored.value)
+/* A migration names what it adds in the reader's language; a name stored before stays. */
+const migrationNames = { firstWordOf: (field: string) => t('Symbols.migration.firstWord', { field }) }
+const adoptedAtOpen = modelledSettings(stored.value, migrationNames)
 if (adoptedAtOpen !== stored.value) stored.value = adoptedAtOpen
-const settings = useEObject(() => modelledSettings(stored.value)) as ShallowRef<MapLibreSettings>
+const settings = useEObject(() => modelledSettings(stored.value, migrationNames)) as ShallowRef<MapLibreSettings>
 
 const repository = inject<DatasourceRepository | undefined>(identifier, undefined)
 /* The OGC STA sources to choose from; the widget's own when none is chosen. */

@@ -77,7 +77,9 @@ const stored = defineModel<MapLibreSettings>('configv', { required: true })
 const { t } = useTranslation('maplibre')
 
 /* The adoption is shared with the settings, which hold the same object (#1262). */
-const config = computed(() => modelledSettings(stored.value))
+/* A migration names what it adds in the reader's language; a name stored before stays. */
+const migrationNames = { firstWordOf: (field: string) => t('Symbols.migration.firstWord', { field }) }
+const config = computed(() => modelledSettings(stored.value, migrationNames))
 const settings = useEObject(() => config.value)
 const held = () => settings.value ?? config.value
 
