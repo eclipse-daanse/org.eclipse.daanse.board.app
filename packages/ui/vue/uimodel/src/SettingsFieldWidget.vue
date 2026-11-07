@@ -274,11 +274,30 @@ const featureDoc = computed(() => {
 })
 
 /*
- * The model's sentence is English; a package that translates the field's
- * label can translate its help beside it (see helpKeyOf), and the sentence
- * stays what is shown where it does not.
+ * The same sentence in the reader's language, where the form's package
+ * has one: `<namespace>:Hints.<Class>.<feature>`, the namespace taken from
+ * the field's label key. The model's documentation is English, and stayed
+ * English under a German label (#1285).
  */
-const modelHint = computed(() => helpFor(props.custom?.rawWidget?.label, featureDoc.value?.documentation))
+const translatedHint = computed(() => {
+  const label = props.custom?.rawWidget?.label
+  const namespace = typeof label === 'string' ? /^([A-Za-z][\w-]*):/.exec(label)?.[1] : undefined
+  const owner = props.feature?.getEContainingClass?.()?.getName?.()
+  const name = props.feature?.getName?.()
+  if (!namespace || !owner || !name) return undefined
+  const key = `${namespace}:Hints.${owner}.${name}`
+  const text = localized(key)
+  return text && text !== key && text !== `Hints.${owner}.${name}` ? text : undefined
+})
+
+/*
+ * The help is also looked up beside the label's own key, as
+ * `<namespace>:<Section>Help.<field>` (see helpKeyOf); a package may carry
+ * either. Where neither has the sentence, the model's English one is shown.
+ */
+const modelHint = computed(
+  () => translatedHint.value ?? helpFor(props.custom?.rawWidget?.label, featureDoc.value?.documentation),
+)
 
 /* Where it is bound, that is the more urgent thing to say. */
 const fieldHint = computed(() => boundHint.value ?? modelHint.value)
