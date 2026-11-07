@@ -4,5 +4,13 @@
     "features_one": "One feature",
     "loading": "Loading …",
     "none": "No geometry found in this answer."
+  },
+  "Layers": {
+    "empty": "No layer yet.",
+    "hide": "Hide layer",
+    "show": "Show layer",
+    "remove": "Remove layer",
+    "failed": "could not be loaded",
+    "opacity": "Opacity"
   }
 }

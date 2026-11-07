@@ -24,5 +24,11 @@ export { GeoFeatureMap }
 export { featuresIn, boundsOf, countByType, type Bounds, type Feature } from './features'
 export { FREE_BASE_MAP_URL, FREE_BASE_MAP_ATTRIBUTION } from './baseMap'
 
+/* WMS and WFS: the client and the layer list, shared by the Leaflet map and the 3D map (#1274). */
+import WmsLayerList from './wms/WmsLayerList.vue'
+export { WmsLayerList }
+export type { ListedLayer } from './wms/listedLayer'
+export { useOGCService } from './wms/ogcService'
+
 /* Its texts - collected by lib.i18next, see src/i18n. */
 export { CommonMapTranslations } from './i18n'

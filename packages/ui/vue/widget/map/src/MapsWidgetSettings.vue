@@ -11,9 +11,7 @@ Contributors: Smart City Jena
 <script lang="ts" setup>
 import { computed, getCurrentInstance, inject, ref, watch, type ShallowRef } from 'vue'
 
-import VueDraggable from 'vuedraggable-es'
-// vuedraggable-es declares no slots, so under vue 3.5.45 its #item slot does not type-check.
-const Draggable = VueDraggable as any
+import { WmsLayerList } from 'org.eclipse.daanse.board.app.ui.vue.common.map'
 import { useOGCService } from './composables/ogcService'
 import type { IMapSettings } from './Settings'
 import type { IDSRenderer, IRenderer } from './api/Renderer'
@@ -92,21 +90,12 @@ const serviceLoading = ref(false)
 const showErrorModal = ref(false)
 const errorMessage = ref('')
 const OGCService = useOGCService()
-const drag = ref(false)
 const selectedNodes = ref([])
 
 
 
 watch(selectedNodes, (chng) => {
   logServices('Selected nodes changed:', chng)
-})
-const dragOptions = computed(() => {
-  return {
-
-    group: 'description',
-    disabled: false,
-    ghostClass: 'ghost'
-  }
 })
 
 const url = ref('')
@@ -393,7 +382,7 @@ const removeLayer = (layer: Layer) => {
 }
 
 /*
- * The order Draggable hands back, put into the list by moving entries:
+ * The order the layer list hands back, put into the list by moving entries:
  * the list belongs to the settings and cannot be swapped for the array.
  */
 const reorderLayers = (order: Layer[]) => {
@@ -520,55 +509,20 @@ const assignDatasourceToLayer = (layer: any, dsId: string) => {
   <RendererModal v-model="modelswitch" v-model:layer="selectedLayer as any" v-model:show="renderShow" :services="serviceList" :all-layers="layers as any"></RendererModal>
   <section class="settings-section" data-section-id="layers" :data-section="t('Settings.sections.layers')">
 
-        <span v-if="!layers.length" class="empty">
-            {{ t('Settings.noLayers') }}
-        </span>
-
-    <Draggable v-else :model-value="layers" :animation="150" :component-data="{
-          tag: 'ul',
-          type: 'transition-group',
-          name: !drag ? 'flip-list' : null
-        }" class="list-group" item-key="id" v-bind="dragOptions" @end="drag = false"
-                @start="drag = true" @update:model-value="reorderLayers">
-      <template #item="{ element  }">
-        <li class="list-group-item">
-          <div class="row dragIcon">
-            <DIcon v-if="element.reconstructionFailed" name="error" tone="color-err" />
-            <DIcon
-              v-else
-              :name="element.checked ? 'layers' : 'layers_clear'"
-              :title="element.checked ? t('Settings.hideLayer') : t('Settings.showLayer')"
-              @click="element.checked = !element.checked"
-            />
-            {{ element.title }}
-            <span v-if="element.reconstructionFailed" class="failed">{{ t('Settings.failed') }}</span>
-          </div>
-          <div class="row nhidden options">
-            <DIcon name="opacity" />
-            <div :id="element.id" class="slider nhidden sliderPopOver">
-              <div class="slider__track">
-                <DSlider v-model="element.opacity" :min="0" :max="1" :step="0.01" />
-              </div>
-            </div>
-            <div v-if="element.type=='WFSLayer' || element.type=='OGCSTA' || element.type=='GEOJSON' || element.type=='REST-GEOJSON'">
-              <DButton
-                intent="quiet"
-                :title="t('Settings.styles')"
-                @click="()=>{selectedLayer=element;renderShow=true}"
-              >
-                <DIcon name="settings" size="sm" />
-              </DButton>
-            </div>
-            <DButton intent="danger" :title="t('Settings.removeLayer')" @click.stop="removeLayer(element)">
-              <DIcon name="delete" size="sm" />
-            </DButton>
-
-          </div>
-
-
-        </li>
+    <!-- The list is shared with the 3D map (#1274); the styles button is the Leaflet map's own. -->
+    <WmsLayerList :layers="layers" @reorder="(order) => reorderLayers(order as Layer[])"
+      @remove="(layer) => removeLayer(layer as Layer)">
+      <template #actions="{ layer }">
+        <DButton
+          v-if="['WFSLayer', 'OGCSTA', 'GEOJSON', 'REST-GEOJSON'].includes(String((layer as Layer).type))"
+          intent="quiet"
+          :title="t('Settings.styles')"
+          @click="()=>{selectedLayer=layer as Layer;renderShow=true}"
+        >
+          <DIcon name="settings" size="sm" />
+        </DButton>
       </template>
-    </Draggable>
+    </WmsLayerList>
 
   </section>
 
@@ -698,7 +652,6 @@ const assignDatasourceToLayer = (layer: any, dsId: string) => {
 </template>
 <style scoped>
 
-
 .settings-container {
   display: flex;
   flex-direction: column;
@@ -753,10 +706,6 @@ const assignDatasourceToLayer = (layer: any, dsId: string) => {
   color: var(--color-err);
 }
 
-.slider__track {
-  min-width: 150px;
-}
-
 .tree {
   margin: 0;
   padding: 0;
@@ -782,29 +731,6 @@ const assignDatasourceToLayer = (layer: any, dsId: string) => {
   cursor: pointer;
 }
 
-.list-group-item {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-
-  .row {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: nowrap;
-    gap: 6px;
-    align-items: center;
-  }
-
-  cursor: move;
-  padding: 4px;
-  list-style: none;
-
-  &:hover {
-    background-color: #d6dde3;
-    border-radius: var(--radius-xs);
-  }
-}
-
 .empty {
   display: block;
   width: 100%;
@@ -824,19 +750,6 @@ const assignDatasourceToLayer = (layer: any, dsId: string) => {
   padding: 6px 12px 6px 12px;
 }
 
-.options {
-  padding-top: 6px;
-  padding-left: 12px;
-  border-top: 1px dotted #00000047;
-}
-
-.row.nhidden {
-  display: none;
-}
-
-.dragIcon {
-  cursor: n-resize;;
-}
 </style>
 <style>
 .button {

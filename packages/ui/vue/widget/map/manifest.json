@@ -14,6 +14,7 @@
     "lib.events",
     "lib.logger",
     "platform.vue",
+    "ui.vue.common.map",
     "ui.vue.composables",
     "ui.vue.controls",
     "ui.vue.widget.icon"
@@ -85,6 +86,10 @@
     },
     {
       "id": "org.eclipse.daanse.board.app.ui.vue.controls",
+      "versionRange": ">=0.0.1-0"
+    },
+    {
+      "id": "org.eclipse.daanse.board.app.ui.vue.common.map",
       "versionRange": ">=0.0.1-0"
     }
   ],
