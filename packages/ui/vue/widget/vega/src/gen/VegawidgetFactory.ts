@@ -39,6 +39,8 @@ import { SelectionPayload } from './SelectionPayload.js';
 import { SelectionPayloadImpl } from './SelectionPayloadImpl.js';
 import { ParamPayload } from './ParamPayload.js';
 import { ParamPayloadImpl } from './ParamPayloadImpl.js';
+import { ScaleEntry } from './ScaleEntry.js';
+import { ScaleEntryImpl } from './ScaleEntryImpl.js';
 
 /**
  * Factory for creating Vegawidget model objects
@@ -124,6 +126,13 @@ export class VegawidgetFactory extends BasicEFactory {
   }
 
   /**
+   * Create a new ScaleEntry instance
+   */
+  createScaleEntry(): ScaleEntry {
+    return new ScaleEntryImpl();
+  }
+
+  /**
    * Create an instance of the given class
    */
   override create(eClass: EClass): EObject {
@@ -146,6 +155,8 @@ export class VegawidgetFactory extends BasicEFactory {
         return this.createSelectionPayload();
       case 'ParamPayload':
         return this.createParamPayload();
+      case 'ScaleEntry':
+        return this.createScaleEntry();
       default:
         throw new Error(`Unknown class: ${eClass.getName()}`);
     }

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/*********************************************************************
+* Copyright (c) 2026 Contributors to the Eclipse Foundation.
+*
+* This program and the accompanying materials are made
+* available under the terms of the Eclipse Public License 2.0
+* which is available at https://www.eclipse.org/legal/epl-2.0/
+*
+* SPDX-License-Identifier: EPL-2.0
+**********************************************************************/
+
+One data value and what it is drawn as (#1304). The value is typed with
+the values of the field suggested.
+-->
+<uimodel:UIModel
+    xmlns:xmi="http://www.omg.org/XMI"
+    xmi:version="2.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:uimodel="http://uimodel/1.0"
+    name="VegaScaleEntryForm">
+
+  <targetClasses href="http://org.eclipse.daanse.board.app.ui.vue.widget.vega#//ScaleEntry"/>
+
+  <components xsi:type="uimodel:FormView" name="VegaScaleEntryFormView">
+    <fields xsi:type="uimodel:ComboboxWidget"
+        name="value"
+        feature="http://org.eclipse.daanse.board.app.ui.vue.widget.vega#//ScaleEntry/value"
+        label="vega:FormScaleEntry.value"/>
+    <fields xsi:type="uimodel:InputWidget"
+        name="output"
+        feature="http://org.eclipse.daanse.board.app.ui.vue.widget.vega#//ScaleEntry/output"
+        label="vega:FormScaleEntry.output"/>
+  </components>
+</uimodel:UIModel>

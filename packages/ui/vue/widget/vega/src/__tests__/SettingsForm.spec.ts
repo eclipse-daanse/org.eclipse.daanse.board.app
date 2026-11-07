@@ -35,6 +35,7 @@ import transformFormXmi from 'org.eclipse.daanse.board.app.lib.datasource.base/m
 import paramFormXmi from '../../model/ui-param.xmi?raw'
 import facetFormXmi from '../../model/ui-facet.xmi?raw'
 import datasetFormXmi from '../../model/ui-dataset.xmi?raw'
+import scaleEntryFormXmi from '../../model/ui-scale-entry.xmi?raw'
 import columnTypeFormXmi from 'org.eclipse.daanse.board.app.lib.datasource.base/model/ui-column-type.xmi?raw'
 import settingsEcore from '../../model/model.ecore?raw'
 import en from '../i18n/en.json'
@@ -65,6 +66,7 @@ async function settingsForm(settings: VegaWidgetSettings, suggest?: (owner: unkn
         { xmi: paramFormXmi, uri: '/vega-param.ui.xmi' },
         { xmi: facetFormXmi, uri: '/vega-facet.ui.xmi' },
         { xmi: datasetFormXmi, uri: '/vega-dataset.ui.xmi' },
+        { xmi: scaleEntryFormXmi, uri: '/vega-scale-entry.ui.xmi' },
         { xmi: columnTypeFormXmi, uri: '/vega-column-type.ui.xmi' },
       ],
       ecore: settingsEcore,
@@ -203,6 +205,14 @@ describe('the chart settings form', () => {
     await flushPromises()
     const shown = (starter.element as HTMLSelectElement).selectedOptions[0]?.textContent?.trim()
     expect(shown).not.toBe(de.Options.starter.donut)
+    view.unmount()
+  })
+
+  it('offers fixed outputs per value on a colour, not on the text (#1304)', async () => {
+    const settings = chart('line', [{ channel: 'color', field: 'category' }, { channel: 'text', field: 'amount' }])
+    const view = await settingsForm(settings)
+    const lists = view.findAll('.list__label').map((label) => label.text())
+    expect(lists.filter((label) => label === en.FormEncoding.scaleEntries)).toHaveLength(1)
     view.unmount()
   })
 })

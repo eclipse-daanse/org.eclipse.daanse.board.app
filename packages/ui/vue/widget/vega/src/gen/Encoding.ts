@@ -18,7 +18,7 @@
  * @generated
  */
 
-import type { EObject } from '@emfts/core';
+import type { EObject, EList } from '@emfts/core';
 import type { Channel } from './Channel.js';
 import type { FieldType } from './FieldType.js';
 import type { Aggregate } from './Aggregate.js';
@@ -26,6 +26,7 @@ import type { TimeUnit } from './TimeUnit.js';
 import type { SortOrder } from './SortOrder.js';
 import type { StackMode } from './StackMode.js';
 import type { ScaleType } from './ScaleType.js';
+import type { ScaleEntry } from './ScaleEntry.js';
 
 /**
  * Encoding
@@ -55,5 +56,6 @@ export interface Encoding extends EObject {
   showLegend?: boolean;
   highlightParam?: string;
   valueIfNotSelected?: string;
+  scaleEntries: EList<ScaleEntry>;
 
 }

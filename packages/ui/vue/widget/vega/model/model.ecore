@@ -484,6 +484,11 @@ they are.
                 <details key="documentation" value="The value the marks outside the selection take, for example lightgray or 0.2."/>
             </eAnnotations>
         </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="scaleEntries" upperBound="-1" eType="#//ScaleEntry" containment="true">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="Fixed outputs per data value (#1304): each listed value of the field is drawn as its own output - a colour, a shape, a size, an opacity - rather than as the scheme picks. List every value, or none: a value not listed gets no output of its own."/>
+            </eAnnotations>
+        </eStructuralFeatures>
     </eClassifiers>
 
     <eClassifiers xsi:type="ecore:EEnum" name="DatasetShape">
@@ -659,5 +664,21 @@ they are.
                 </eAnnotations>
             </eParameters>
         </eOperations>
+    </eClassifiers>
+
+    <eClassifiers xsi:type="ecore:EClass" name="ScaleEntry">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+            <details key="documentation" value="One data value and what it is drawn as (#1304)."/>
+        </eAnnotations>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" lowerBound="0" defaultValueLiteral="">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="The value of the field, as it appears in the data. A number may be written as text."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="output" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" lowerBound="0" defaultValueLiteral="">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="What the value is drawn as: a CSS colour for colour, a shape name (circle, square, triangle-up, ...) for shape, a number for size and opacity."/>
+            </eAnnotations>
+        </eStructuralFeatures>
     </eClassifiers>
 </ecore:EPackage>

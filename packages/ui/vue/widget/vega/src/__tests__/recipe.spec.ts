@@ -330,4 +330,18 @@ describe('compileRecipe', () => {
     const facet = compileRecipe(recipe({ facet: { column: 'series' }, layers: [bars()] }))
     expect(withSize(facet, 500, 300)).toBe(facet)
   })
+
+  it('draws each listed value as its own output: a colour per series (#1304)', () => {
+    const spec = compileRecipe(recipe({ layers: [{ mark: 'line', encodings: [
+      { channel: 'x', field: 'category', type: 'nominal' },
+      { channel: 'y', field: 'amount', type: 'quantitative' },
+      { channel: 'color', field: 'category', type: 'nominal', scaleEntries: [
+        { value: 'A', output: '#4FC3F7' }, { value: 'B', output: '#B39DDB' }, { value: '', output: 'red' },
+      ] },
+      { channel: 'size', field: 'amount', type: 'quantitative', scaleEntries: [{ value: '28', output: '10' }, { value: '55', output: '40' }] },
+    ] }] })) as Record<string, any>
+    expect(spec.encoding.color.scale).toEqual({ domain: ['A', 'B'], range: ['#4FC3F7', '#B39DDB'] })
+    expect(spec.encoding.size.scale).toEqual({ domain: [28, 55], range: [10, 40] })
+    expect(complaintsOf(withDatasets(spec as never, sampleDatasets()))).toEqual([])
+  })
 })
