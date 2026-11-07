@@ -14,7 +14,10 @@
 import { BaseDatasource, IBaseConnectionConfiguration, type ConfigurationOf } from 'org.eclipse.daanse.board.app.lib.datasource.base'
 import {
   identifier,
-  DatasourceRepository
+  DatasourceRepository,
+  TIME_COVERAGE,
+  type TimeCoverage,
+  type TimeCoverageSeries
 } from 'org.eclipse.daanse.board.app.lib.api.datasource'
 import { DatastreamSelection, OGCSTAToChartData } from '../interfaces/OGCSTAToChartData'
 import {
@@ -34,6 +37,10 @@ interface ThingListSource {
 
 interface DatastreamWindowSource {
   loadDatastreamWindow(datastreamId: string): Promise<{ datastream?: any; observations: any[] }>
+}
+
+interface DatastreamCoverageSource {
+  loadDatastreamCoverage(datastreamId: string): Promise<{ name?: string; start?: string; end?: string }>
 }
 
 export interface IOGCSTAToChartComposerConfiguration extends ConfigurationOf<IBaseConnectionConfiguration> {
@@ -182,6 +189,8 @@ export class OGCSTAToChartComposer extends BaseDatasource implements OGCSTAToCha
       throw new Error('DatasourceRepository is not provided to DataSource Classes')
     }
 
+    if (type === TIME_COVERAGE) return this.loadCoverage()
+
     /*
      * Each configured datastream is loaded directly, with its window, all at
      * once. The catalogue of the source is not touched: the chart knows its
@@ -226,6 +235,43 @@ export class OGCSTAToChartComposer extends BaseDatasource implements OGCSTAToCha
       console.warn("Invalid data type for OGCSTAToChartComposer")
       return null
     }
+  }
+
+  /**
+   * For which stretch of time each selected datastream holds data (#1279).
+   *
+   * Asks each source for the interval of the datastream only - not for its
+   * observations, which the chart loads cut to the selected window and
+   * which therefore cannot say where data exists outside of it.
+   */
+  private async loadCoverage(): Promise<TimeCoverage> {
+    const sources = this.connectedDatasources
+      .filter((datasourceId) => datasourceId)
+      .map((datasourceId) => this.datasourceRepository.getDatasource(datasourceId) as unknown as Partial<DatastreamCoverageSource>)
+      .filter((source) => typeof source.loadDatastreamCoverage === 'function')
+
+    const series = await Promise.all(
+      this.datastreams.map(async (selection): Promise<TimeCoverageSeries> => {
+        for (const source of sources) {
+          try {
+            const coverage = await source.loadDatastreamCoverage!(selection.datastreamId)
+            if (coverage.start && coverage.end) {
+              return {
+                id: selection.datastreamId,
+                label: selection.label || coverage.name,
+                color: selection.color,
+                intervals: [{ start: coverage.start, end: coverage.end }],
+              }
+            }
+          } catch (error) {
+            // The next source may know it; none knowing it leaves it empty
+            console.warn(`No coverage for ${selection.datastreamId}:`, error)
+          }
+        }
+        return { id: selection.datastreamId, label: selection.label, color: selection.color, intervals: [] }
+      }),
+    )
+    return { series }
   }
 
   async getOriginalData() {

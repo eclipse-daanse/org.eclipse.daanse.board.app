@@ -46,7 +46,9 @@ function setup() {
       '@iot.id': 'JeN-06',
       name: 'Reference Area JeN-06',
       Datastreams: [
-        { '@iot.id': 'JeN-06~soil~moisture', name: 'moisture', unitOfMeasurement: { symbol: '%' } },
+        { '@iot.id': 'JeN-06~soil~moisture', name: 'moisture', unitOfMeasurement: { symbol: '%' },
+          phenomenonTime: '2026-10-01T12:00:00Z/2026-11-04T12:00:00Z' },
+        // Without phenomenonTime, as on the real server
         { '@iot.id': 'JeN-06~soil~temperature', name: 'temperature', unitOfMeasurement: { symbol: '°C' } },
       ],
     }],
@@ -140,5 +142,31 @@ describe('a chart on an OGC STA source', () => {
 
     expect(server.requests).toEqual(['v1.1/Things?$select=@iot.id,name', 'v1.1/Things(JeN-06)/Datastreams'])
     expect((composer as any).datastreams.map((d: any) => d.datastreamId)).toEqual(['JeN-06~soil~moisture'])
+  })
+
+  it('says where each datastream holds data without loading an observation (#1279)', async () => {
+    const { server, composer } = setup()
+
+    const coverage = await composer.getData('TimeCoverage')
+
+    const asked = server.requests.map((r) => decodeURIComponent(r))
+    expect(asked.filter((r) => r.includes('moisture'))).toEqual([
+      'v1.1/Datastreams(JeN-06~soil~moisture)?$select=name,phenomenonTime',
+    ])
+    // The server leaves it out: first and last observation, one each, and no $select
+    const temperature = asked.filter((r) => r.includes('temperature'))
+    expect(temperature).toHaveLength(3)
+    expect(temperature.filter((r) => r.includes('/Observations')).every((r) => r.includes('$top=1') && !r.includes('$select'))).toBe(true)
+    expect(coverage.series).toEqual([
+      {
+        id: 'JeN-06~soil~moisture', label: 'Moisture', color: undefined,
+        intervals: [{ start: '2026-10-01T12:00:00Z', end: '2026-11-04T12:00:00Z' }],
+      },
+      {
+        // One observation: an interval of no length
+        id: 'JeN-06~soil~temperature', label: 'temperature', color: undefined,
+        intervals: [{ start: '2026-11-04T12:00:00Z', end: '2026-11-04T12:00:00Z' }],
+      },
+    ])
   })
 })

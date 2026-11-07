@@ -224,3 +224,34 @@ export interface StoredDatasource {
   type: string;
   config?: Record<string, unknown>;
 }
+
+/**
+ * The shape name a source answers in `getData` when it can say for which
+ * stretches of time it holds data (#1279).
+ */
+export const TIME_COVERAGE = 'TimeCoverage'
+
+/** One stretch of time with data, as ISO 8601 instants. */
+export interface TimeInterval {
+  start: string;
+  end: string;
+}
+
+/**
+ * For which stretches of time one series of a source holds data.
+ *
+ * A source that knows only the outer limits gives one interval; one that
+ * knows its gaps gives several.
+ */
+export interface TimeCoverageSeries {
+  id: string;
+  label?: string;
+  /** The colour the source gives this series, if any. */
+  color?: string;
+  intervals: TimeInterval[];
+}
+
+/** What `getData('TimeCoverage')` answers. */
+export interface TimeCoverage {
+  series: TimeCoverageSeries[];
+}

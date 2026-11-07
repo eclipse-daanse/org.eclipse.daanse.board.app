@@ -63,6 +63,8 @@ them the words. The speed is a factor, so its labels are the factors.
           feature="http://org.eclipse.daanse.board.app.ui.vue.widget.timeline#//TimelineSettings/rangeStripColor" label="timeline:Form.rangeStripColor"/>
       <fields xsi:type="uimodel:CheckboxWidget" name="showTimeInfo"
           feature="http://org.eclipse.daanse.board.app.ui.vue.widget.timeline#//TimelineSettings/showTimeInfo" label="timeline:Form.showTimeInfo"/>
+      <fields xsi:type="uimodel:InputWidget" name="coverageColor"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.timeline#//TimelineSettings/coverageColor" label="timeline:Form.coverageColor"/>
     </fields>
 
   </components>

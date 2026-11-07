@@ -92,5 +92,19 @@ what the widget reads and what a board carries between sessions.
         <eStructuralFeatures xsi:type="ecore:EAttribute" name="showTimeInfo"
                              eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
                              defaultValueLiteral="true"/>
+
+        <!-- Where data is available (#1279) -->
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="coverageDatasourceIds" upperBound="-1"
+                             eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="Data sources asked for 'TimeCoverage'. The rail shows in one lane for which stretches of time they hold data."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="coverageColor"
+                             eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="Colour of the coverage bands. Empty means a quiet theme colour (--color-dim)."/>
+            </eAnnotations>
+        </eStructuralFeatures>
     </eClassifiers>
 </ecore:EPackage>

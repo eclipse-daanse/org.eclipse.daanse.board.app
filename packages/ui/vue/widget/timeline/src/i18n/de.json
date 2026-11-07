@@ -11,9 +11,16 @@
     "duration": "Dauer",
     "speed": "Tempo",
     "play": "Abspielen",
-    "pause": "Anhalten"
+    "pause": "Anhalten",
+    "coverage": "Daten von {{start}} bis {{end}}"
   },
   "Settings": {
+    "coverage": {
+      "section": "Datenverfügbarkeit",
+      "sources": "Daten zeigen von",
+      "hint": "Die Leiste markiert, wo diese Quellen Daten haben.",
+      "none": "Keine Datenquelle dieses Boards kann sagen, wo sie Daten hat."
+    },
     "section": "Zeitraum",
     "mode": "Art des Zeitraums",
     "modes": {
@@ -51,6 +58,7 @@
     "showControls": "Bedienelemente zeigen",
     "lookGroup": "Darstellung",
     "rangeStripColor": "Farbe des Ausschnitts",
+    "coverageColor": "Farbe der Datenverfügbarkeit",
     "showTimeInfo": "Zeitangaben zeigen"
   },
   "Options": {

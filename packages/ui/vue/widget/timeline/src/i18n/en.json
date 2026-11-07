@@ -11,9 +11,16 @@
     "duration": "Duration",
     "speed": "Speed",
     "play": "Play",
-    "pause": "Pause"
+    "pause": "Pause",
+    "coverage": "Data from {{start}} to {{end}}"
   },
   "Settings": {
+    "coverage": {
+      "section": "Data availability",
+      "sources": "Show data of",
+      "hint": "The rail marks where these sources hold data.",
+      "none": "No data source in this board can say where it holds data."
+    },
     "section": "Time range",
     "mode": "Time range mode",
     "modes": {
@@ -51,6 +58,7 @@
     "showControls": "Show controls",
     "lookGroup": "Appearance",
     "rangeStripColor": "Range colour",
+    "coverageColor": "Colour of data availability",
     "showTimeInfo": "Show time information"
   },
   "Options": {

@@ -80,7 +80,7 @@ export class TimelineWidgetProvider implements WidgetProvider {
      * moments or an offset from now, typed or taken from a variable, with
      * each end edited as a date and a time apart.
      */
-    unmodelledSections: ['range'],
+    unmodelledSections: ['range', 'coverage'],
   }
 
   constructor(

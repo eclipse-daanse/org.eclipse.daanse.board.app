@@ -525,6 +525,43 @@ export class OgcStaStore extends BaseDatasource implements OgcStaStoreI {
   }
 
   /**
+   * For which stretch of time one datastream holds data: its
+   * `phenomenonTime`, which the server keeps as the interval of all its
+   * observations. One small request, and no observation is read (#1279).
+   *
+   * The property is optional in STA, and some servers leave it out. Then
+   * the first and the last observation are asked for, one each - without
+   * `$select`, which makes such a server ignore `$top` and answer every
+   * observation.
+   *
+   * The interval is the outer limit only; gaps inside it are not known
+   * from it.
+   */
+  async loadDatastreamCoverage(datastreamId: string): Promise<{ name?: string; start?: string; end?: string }> {
+    const api = new DatastreamsApi(this.api())
+    const datastream = await api.v11DatastreamsEntityIdGet({ entityId: datastreamId, $select: 'name,phenomenonTime' })
+    const [start, end] = (datastream.phenomenonTime ?? '').split('/')
+    if (start) {
+      // A single instant is written without a slash
+      return { name: datastream.name, start, end: end || start }
+    }
+
+    const edge = async (order: 'asc' | 'desc') => {
+      const page = await api.v11DatastreamsEntityIdObservationsGet({
+        entityId: datastreamId,
+        $top: 1,
+        $orderby: `phenomenonTime ${order}`,
+      })
+      const time = page.value?.[0]?.phenomenonTime ?? ''
+      // An observation over an interval: its start when first, its end when last
+      const [from, to] = time.split('/')
+      return order === 'asc' ? from : to || from
+    }
+    const [first, last] = await Promise.all([edge('asc'), edge('desc')])
+    return { name: datastream.name, start: first || undefined, end: last || first || undefined }
+  }
+
+  /**
    * The rest of a collection after its first page: follows `@iot.nextLink`
    * through the connection and the cache. A server page holds 100-500
    * entries, and a longer list used to be cut there silently.

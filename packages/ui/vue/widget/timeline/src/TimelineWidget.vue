@@ -14,7 +14,7 @@ Contributors:
 <template>
   <div
     class="timeline-widget"
-    :style="{ '--range-color': rangeFill }"
+    :style="{ '--range-color': rangeFill, '--coverage-color': coverageFill }"
     @click="emitClick"
     @contextmenu.prevent="emitRightClick"
   >
@@ -22,6 +22,16 @@ Contributors:
       <!-- The track: a rail from the theme, the selected range on it -->
       <div class="timeline-track" ref="trackRef">
         <div class="rail"></div>
+        <!-- Where the data sources hold data, one lane under the rail -->
+        <div v-if="coverageBands.length" class="coverage-lane">
+          <div
+            v-for="band in coverageBands"
+            :key="band.startMs"
+            class="coverage-band"
+            :style="{ left: band.left + '%', width: `max(${band.width}%, 2px)` }"
+            :title="t('Widget.coverage', { start: formatDateTime(new Date(band.startMs)), end: formatDateTime(new Date(band.endMs)) })"
+          ></div>
+        </div>
         <div
           class="range-strip"
           :style="rangeStripStyle"
@@ -124,9 +134,10 @@ Contributors:
 <script lang="ts" setup>
 import { ref, shallowRef, computed, onMounted, onUnmounted, inject, watch } from 'vue';
 import { useRoute } from 'vue-router';
-import { VariableWrapper, useFormat, useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables';
+import { VariableWrapper, isModelled, useEObject, useFormat, useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables';
 import { DSelect } from 'org.eclipse.daanse.board.app.ui.vue.controls';
 import { axisTicks, rangeColor, TICK_FORMAT, type TickKind } from './timelineAxis';
+import { placeBands, useTimeCoverage } from './coverage';
 import {
     identifier as variableIdentifier,
     type VariableRepository
@@ -167,6 +178,9 @@ interface TimelineSettings {
   // UI Display
   showTimeInfo?: boolean;
   showControls?: boolean;
+  // Where data is available (#1279)
+  coverageDatasourceIds?: string[];
+  coverageColor?: string;
 }
 
 const props = defineProps<{ datasourceId: string; id?: string }>();
@@ -430,6 +444,21 @@ const rangeStripStyle = computed(() => {
 
 /* Only the range follows the setting; rail and handles come from the theme. */
 const rangeFill = computed(() => rangeColor(config.value.rangeStripColor));
+
+/*
+ * The settings instance watched, so an added or removed coverage source is
+ * seen: the list lives inside the settings, which Vue does not track (#1203).
+ */
+const watchedConfig = useEObject(() => (isModelled(config.value) ? config.value : undefined));
+const coverageIds = computed(() => {
+  void watchedConfig.value;
+  return [...(config.value.coverageDatasourceIds ?? [])].filter((id): id is string => !!id);
+});
+const coverageFill = computed(() => (config.value.coverageColor ?? '').trim() || 'var(--color-dim)');
+const { bands: coverage } = useTimeCoverage(coverageIds);
+const coverageBands = computed(() =>
+  placeBands(coverage.value, timelineMin.value.getTime(), timelineMax.value.getTime())
+);
 
 // Berechne Zeitschritt in Millisekunden basierend auf StepSize
 const getStepSizeInMs = (): number => {
@@ -1120,6 +1149,26 @@ onUnmounted(() => {
 .fixed-knob:hover {
   transform: translate(-50%, -50%);
   box-shadow: var(--shadow-e1);
+}
+
+/* Coverage: one quiet lane just under the rail */
+.coverage-lane {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: calc(50% + var(--rail-height) / 2 + 2px);
+  height: 3px;
+  pointer-events: none;
+}
+
+.coverage-band {
+  pointer-events: auto;
+  position: absolute;
+  top: 0;
+  height: 100%;
+  background: var(--coverage-color);
+  border-radius: 999px;
+  opacity: 0.8;
 }
 
 /* Axis: flat, on the widget surface */
