@@ -4,5 +4,13 @@
     "features_one": "Ein Objekt",
     "loading": "Wird geladen …",
     "none": "Keine Geometrie in dieser Antwort gefunden."
+  },
+  "Layers": {
+    "empty": "Noch kein Layer.",
+    "hide": "Layer ausblenden",
+    "show": "Layer einblenden",
+    "remove": "Layer entfernen",
+    "failed": "konnte nicht geladen werden",
+    "opacity": "Deckkraft"
   }
 }

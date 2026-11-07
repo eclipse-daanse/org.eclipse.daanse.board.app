@@ -24,13 +24,9 @@
       "services": "Services",
       "map": "Map"
     },
-    "noLayers": "No layers here",
     "noServices": "No services here",
-    "hideLayer": "Hide layer",
-    "showLayer": "Show layer",
     "failed": "(failed)",
     "styles": "Styles",
-    "removeLayer": "Remove layer",
     "removeDatasource": "Remove data source",
     "baseMap": "Base map URL",
     "baseMapHint": "Tile server URL template. Use {z}, {x}, {y} placeholders for zoom and coordinates.",

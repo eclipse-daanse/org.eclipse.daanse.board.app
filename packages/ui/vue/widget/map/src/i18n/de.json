@@ -24,13 +24,9 @@
       "services": "Dienste",
       "map": "Karte"
     },
-    "noLayers": "Noch keine Ebenen",
     "noServices": "Noch keine Dienste",
-    "hideLayer": "Ebene ausblenden",
-    "showLayer": "Ebene zeigen",
     "failed": "(fehlgeschlagen)",
     "styles": "Stile",
-    "removeLayer": "Ebene entfernen",
     "removeDatasource": "Datenquelle entfernen",
     "baseMap": "Adresse der Grundkarte",
     "baseMapHint": "Vorlage für die Kachel-Adresse. {z}, {x} und {y} stehen für Zoomstufe und Koordinaten.",

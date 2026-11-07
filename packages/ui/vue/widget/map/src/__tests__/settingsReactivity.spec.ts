@@ -291,7 +291,7 @@ describe('the map settings with the preview open (#1262)', () => {
     await offered.trigger('click')
     await settle()
 
-    expect(wrapper.findAll('.list-group-item').map((item) => item.text()).join()).toContain('Stadtplan (S/W)')
+    expect(wrapper.findAll('.wms-layers__item').map((item) => item.text()).join()).toContain('Stadtplan (S/W)')
     const drawn = wrapper.findAll('i.wms')
     expect(drawn).toHaveLength(1)
     expect(drawn[0].attributes('data-layers')).toBe('stadtplan_sw')
@@ -303,9 +303,9 @@ describe('the map settings with the preview open (#1262)', () => {
     expect(wrapper.find('i.wms').attributes('data-visible')).toBe('false')
 
     // Removed in the settings, gone from both
-    await wrapper.find('.list-group-item button[title="Settings.removeLayer"]').trigger('click')
+    await wrapper.find('.wms-layers__item button[title="Layers.remove"]').trigger('click')
     await settle()
-    expect(wrapper.findAll('.list-group-item')).toHaveLength(0)
+    expect(wrapper.findAll('.wms-layers__item')).toHaveLength(0)
     expect(wrapper.findAll('i.wms')).toHaveLength(0)
     wrapper.unmount()
   })
