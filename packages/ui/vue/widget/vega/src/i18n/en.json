@@ -1,0 +1,17 @@
+{
+  "Widget": {
+    "name": "Vega-Lite chart",
+    "error": "The chart cannot be drawn: {{message}}"
+  },
+  "Form": {
+    "title": "Title",
+    "renderer": "Drawn as",
+    "tooltip": "Show values in a tooltip"
+  },
+  "Options": {
+    "renderer": {
+      "canvas": "Canvas (fast with many marks)",
+      "svg": "SVG (sharp when zoomed)"
+    }
+  }
+}

@@ -1,0 +1,75 @@
+/*********************************************************************
+ * Copyright (c) 2026 Contributors to the Eclipse Foundation.
+ *
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ *
+ * SPDX-License-Identifier: EPL-2.0
+ *
+ * Contributors:
+ *   Smart City Jena
+ **********************************************************************/
+
+/*
+ * Draws a Vega-Lite spec into an element (#1283).
+ *
+ * The one place the widget touches Vega. The component imports this module
+ * dynamically, so Vega, Vega-Lite and vega-embed form a chunk of their own
+ * and load only when a chart is drawn.
+ *
+ * Two rules hold for every chart, whatever its spec says:
+ * - Expressions are interpreted, never compiled with the Function
+ *   constructor (`ast` + vega-interpreter), so the board needs no
+ *   'unsafe-eval' in its Content Security Policy.
+ * - Nothing is loaded by URL. Data comes from board datasources; a spec
+ *   that names a URL - data, image or anything else - gets an error, not
+ *   a request.
+ */
+
+import embed, { type Result } from 'vega-embed'
+import { expressionInterpreter } from 'vega-interpreter'
+import { loader, type Loader } from 'vega'
+import type { TopLevelSpec } from 'vega-lite'
+
+export type ChartRenderer = 'canvas' | 'svg'
+
+export interface DrawOptions {
+  renderer?: ChartRenderer
+  tooltip?: boolean
+}
+
+/** Thrown for every URL a spec names. */
+export class UrlRefusedError extends Error {
+  constructor(readonly uri: string) {
+    super(`a chart loads no URL ("${uri}"); its data comes from board datasources`)
+    this.name = 'UrlRefusedError'
+  }
+}
+
+/**
+ * A Vega loader that loads nothing.
+ *
+ * Every load passes through `sanitize` first; refusing there stops data,
+ * images and nested specs alike, before any request is made.
+ */
+export function refusingLoader(): Loader {
+  const refusing = loader()
+  refusing.sanitize = (uri: string) => Promise.reject(new UrlRefusedError(String(uri)))
+  return refusing
+}
+
+/** Draws the spec into the element; the caller finalizes the result. */
+export function drawChart(el: HTMLElement, spec: TopLevelSpec, options: DrawOptions = {}): Promise<Result> {
+  return embed(el, spec, {
+    mode: 'vega-lite',
+    renderer: options.renderer ?? 'canvas',
+    tooltip: options.tooltip ?? true,
+    actions: false,
+    /* No style tag of vega-embed's own: there is no action menu to style. */
+    defaultStyle: false,
+    ast: true,
+    expr: expressionInterpreter,
+    loader: refusingLoader(),
+  })
+}

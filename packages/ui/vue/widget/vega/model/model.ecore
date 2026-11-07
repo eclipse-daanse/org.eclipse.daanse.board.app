@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/*********************************************************************
+* Copyright (c) 2026 Contributors to the Eclipse Foundation.
+*
+* This program and the accompanying materials are made
+* available under the terms of the Eclipse Public License 2.0
+* which is available at https://www.eclipse.org/legal/epl-2.0/
+*
+* SPDX-License-Identifier: EPL-2.0
+**********************************************************************/
+
+A chart drawn with Vega-Lite (#1283).
+
+The chart is configured by this model, not by a spec written by hand: the
+widget derives the Vega-Lite spec from the settings. This first version
+holds what every chart has - how it is drawn and whether it shows
+tooltips; the chart recipe (marks, encodings, layers) follows in #1284.
+-->
+<ecore:EPackage xmi:version="2.0"
+                xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="vegawidget"
+                nsURI="http://org.eclipse.daanse.board.app.ui.vue.widget.vega" nsPrefix="vegawidget">
+
+    <eClassifiers xsi:type="ecore:EEnum" name="VegaRenderer">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+            <details key="documentation" value="How Vega draws the chart: on a canvas (fast with many marks) or as SVG (sharp at every zoom, exported as vector graphics)."/>
+        </eAnnotations>
+        <eLiterals name="canvas" literal="canvas"/>
+        <eLiterals name="svg" literal="svg" value="1"/>
+    </eClassifiers>
+
+    <eClassifiers xsi:type="ecore:EClass" name="VegaWidgetSettings">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+            <details key="documentation" value="A chart drawn with Vega-Lite. The widget builds the Vega-Lite spec from these settings; a changed setting shows at once, in the board and in the preview."/>
+        </eAnnotations>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="title" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" lowerBound="0" defaultValueLiteral="">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="The title drawn above the chart. Empty draws none."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="renderer" eType="#//VegaRenderer" lowerBound="0" defaultValueLiteral="canvas">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="Canvas or SVG. Canvas stays fast with thousands of marks; SVG stays sharp when zoomed."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="tooltip" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean" lowerBound="0" defaultValueLiteral="true">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="Whether a mark shows its values in a tooltip while the pointer is over it."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+    </eClassifiers>
+</ecore:EPackage>
