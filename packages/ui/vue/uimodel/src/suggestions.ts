@@ -22,12 +22,20 @@
  * A suggestion never restricts the field: what is typed is what is stored,
  * because a source that has not answered yet, or a field computed by a
  * step of the chart itself, is still a field someone means.
+ *
+ * A SelectWidget asks the same function, and offers its answer as the
+ * choices: the data sources of the board, say. There a suggestion may name
+ * what is stored and what the reader sees apart - the id of a source and
+ * its name.
  */
 import { inject, onMounted, ref, watch, type Ref } from 'vue'
 import type { EObject } from '@emfts/core'
 
+/** A value to offer, or a value and the words the reader sees for it. */
+export type FieldSuggestion = string | { value: string; label?: string }
+
 /** Asked with the object being edited and the name of the feature. */
-export type FieldSuggest = (owner: EObject, feature: string) => Promise<string[]> | string[]
+export type FieldSuggest = (owner: EObject, feature: string) => Promise<FieldSuggestion[]> | FieldSuggestion[]
 
 /** Under this key SettingsForm provides a getter of its `suggest` prop. */
 export const FIELD_SUGGESTIONS = Symbol.for('daanse.uimodel.fieldSuggestions')
@@ -40,9 +48,10 @@ export function useSuggestions(
   owner: () => EObject | undefined,
   feature: () => string | undefined,
   enabled: () => boolean,
-): { suggestions: Ref<string[]>; refresh: () => void } {
+): { suggestions: Ref<string[]>; labels: Ref<Record<string, string>>; refresh: () => void } {
   const provided = inject<(() => FieldSuggest | undefined) | undefined>(FIELD_SUGGESTIONS, undefined)
   const suggestions = ref<string[]>([])
+  const labels = ref<Record<string, string>>({})
   let asked = 0
 
   const refresh = () => {
@@ -55,7 +64,17 @@ export function useSuggestions(
       .then(() => suggest(object, name))
       .then((answer) => {
         if (mine !== asked) return
-        suggestions.value = [...new Set((answer ?? []).map(String).filter(Boolean))]
+        const named: Record<string, string> = {}
+        const values = (answer ?? []).map((each) => {
+          if (each && typeof each === 'object') {
+            const value = String(each.value ?? '')
+            if (value && each.label) named[value] = String(each.label)
+            return value
+          }
+          return String(each ?? '')
+        })
+        suggestions.value = [...new Set(values.filter(Boolean))]
+        labels.value = named
       })
       .catch(() => {
         // No suggestions is a field to type in, not an error to show
@@ -64,5 +83,5 @@ export function useSuggestions(
 
   onMounted(refresh)
   watch([owner, feature], refresh)
-  return { suggestions, refresh }
+  return { suggestions, labels, refresh }
 }

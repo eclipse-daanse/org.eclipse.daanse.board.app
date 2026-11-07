@@ -27,7 +27,7 @@ A symbol layer (#1296), in the order its parts are decided: the layer, its data,
       <fields xsi:type="uimodel:CheckboxWidget" name="visible" feature="http://org.eclipse.daanse.board.app.ui.vue.widget.maplibre#//ModelLayer/visible" label="maplibre:Symbols.ModelLayer.visible"/>
     </fields>
     <fields xsi:type="uimodel:GroupWidget" name="data" layout="VERTICAL" label="maplibre:Symbols.groups.data">
-      <fields xsi:type="uimodel:ComboboxWidget" name="datasourceId" feature="http://org.eclipse.daanse.board.app.ui.vue.widget.maplibre#//ModelLayer/datasourceId" label="maplibre:Symbols.ModelLayer.datasourceId"/>
+      <fields xsi:type="uimodel:SelectWidget" name="datasourceId" feature="http://org.eclipse.daanse.board.app.ui.vue.widget.maplibre#//ModelLayer/datasourceId" label="maplibre:Symbols.ModelLayer.datasourceId"/>
       <fields xsi:type="uimodel:InputWidget" name="transforms" feature="http://org.eclipse.daanse.board.app.ui.vue.widget.maplibre#//ModelLayer/transforms" label="maplibre:Symbols.ModelLayer.transforms"/>
     </fields>
     <fields xsi:type="uimodel:GroupWidget" name="model" layout="VERTICAL" label="maplibre:Symbols.groups.model">

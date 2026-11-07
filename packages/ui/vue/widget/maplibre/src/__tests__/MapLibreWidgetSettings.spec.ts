@@ -25,6 +25,7 @@ import { MaplibrePackage } from '../gen/MaplibrePackage'
 import MapLibreWidgetSettings from '../MapLibreWidgetSettings.vue'
 import { modelledSettings } from '../settingsModel'
 import { placing } from '../models/placementMode'
+import { identifier } from 'org.eclipse.daanse.board.app.lib.api.datasource'
 import ModelFileField from '../symbols/ModelFileField.vue'
 import ModelInstancesField from '../symbols/ModelInstancesField.vue'
 
@@ -93,5 +94,23 @@ describe('the symbol layers in the settings of the 3D map (#1296)', () => {
     // Closing the dialog ends the place mode.
     wrapper.unmount()
     expect(placing.value).toBeNull()
+  })
+
+  it('pick the data source of their points by name', async () => {
+    const stored = modelledSettings({ modelLayers: [{ id: 'trees', name: 'Bäume', datasourceId: 'jena-baeume' }] })
+    const repository = {
+      getDatasources: () => [{ uid: 'jena-baeume', name: 'Jena Bäume' }, { uid: 'sta', name: 'Messstellen' }],
+      getDatasource: () => ({ getData: async () => ({ features: [] }) }),
+    }
+    const wrapper = mount(MapLibreWidgetSettings, { props: { modelValue: stored }, global: { provide: { [identifier as symbol]: repository } } })
+    await flushPromises()
+    const picker = wrapper.findAllComponents({ name: 'DSelect' }).find((select) =>
+      (select.props('options') as { value: string }[] | undefined)?.some((option) => option.value === 'jena-baeume'))!
+    expect(picker.props('options')).toEqual([
+      { value: 'jena-baeume', text: 'Jena Bäume' },
+      { value: 'sta', text: 'Messstellen' },
+    ])
+    expect(picker.props('modelValue')).toBe('jena-baeume')
+    wrapper.unmount()
   })
 })

@@ -218,11 +218,15 @@ function symbolLayerOf(owner: unknown): ModelLayer | undefined {
 
 /**
  * What a field of a symbol layer is offered (#1296): the board's data sources
- * for the data source, and for a field the columns of the layer's source
- * with the fields its transforms add.
+ * for the data source, by name, and for a field the columns of the layer's
+ * source with the fields its transforms add.
  */
-async function suggestSymbolFields(owner: unknown, feature: string): Promise<string[]> {
-  if (feature === 'datasourceId') return repository?.getDatasources?.().map((d) => d.uid).filter(Boolean) ?? []
+async function suggestSymbolFields(owner: unknown, feature: string): Promise<Array<string | { value: string; label: string }>> {
+  if (feature === 'datasourceId') {
+    return (repository?.getDatasources?.() ?? [])
+      .filter((d) => d.uid)
+      .map((d) => ({ value: String(d.uid), label: String(d.name || d.uid) }))
+  }
   if (feature !== 'field') return []
   const layer = symbolLayerOf(owner)
   const added = fieldsAddedBy(layer?.transforms)

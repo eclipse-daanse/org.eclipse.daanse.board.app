@@ -389,27 +389,34 @@ const storesNumber = computed(() => {
 /*
  * A ComboboxWidget suggests what the form was handed for it (#1285): the
  * text field offers the values while typing, a set of several shows them
- * as choices beside the ones already held.
+ * as choices beside the ones already held. A SelectWidget offers them as
+ * its choices, after those its form lists, in the words the suggestion
+ * gives - the name of a data source for its id.
  */
 const suggesting = computed(() => modelKind.value === 'ComboboxWidget')
-const { suggestions, refresh: refreshSuggestions } = useSuggestions(
+const selecting = computed(() => modelKind.value === 'SelectWidget')
+const { suggestions, labels: suggestedLabels, refresh: refreshSuggestions } = useSuggestions(
   () => props.eObject,
   () => props.feature?.getName?.() ?? undefined,
-  () => suggesting.value,
+  () => suggesting.value || selecting.value,
 )
 
 const options = computed<Array<{ value: string | number; text: string }>>(() => {
   const raw = props.custom?.rawWidget
   const values = raw?.values
   const listed: string[] = values && typeof values.map === 'function' ? [...values] : []
+  /* A held value the answer does not name stays a choice, so it is not lost - a source not loaded yet, say. */
+  const held = selecting.value && !isMany.value && value.value != null && value.value !== '' ? [String(value.value)] : []
   const list = suggesting.value
     ? [...new Set([...listed, ...suggestions.value, ...chosen.value.map(String)])]
-    : listed
+    : selecting.value
+      ? [...new Set([...listed, ...suggestions.value, ...held])]
+      : listed
   const labelExpression = raw?.optionLabel
 
   return list.map((given) => {
     const value = storesNumber.value ? Number(given) : given
-    let text = given
+    let text = suggestedLabels.value[given] ?? given
     if (labelExpression?.body && props.eObject) {
       try {
         const named = evaluateValue(labelExpression, props.eObject, { option: given })

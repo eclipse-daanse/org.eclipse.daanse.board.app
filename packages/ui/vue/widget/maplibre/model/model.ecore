@@ -90,7 +90,7 @@ once. The OGC STA layer reads its things the way the Leaflet map does since
         </eOperations>
         <eOperations name="zoomToLocation">
             <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-                <details key="documentation" value="Flies the map to a place given as GeoJSON - a geometry, a Feature or a FeatureCollection. An area is fitted into the view, a point is flown to (#1272)."/>
+                <details key="documentation" value="Flies the map to a place given as GeoJSON - a geometry, a Feature or a FeatureCollection. An area is fitted into the view, a point is flown to."/>
             </eAnnotations>
             <eAnnotations source="org.eclipse.daanse.board.app.lib.events/WidgetAction">
                 <details key="eventType" value="maplibre.zoomToLocation"/>
@@ -155,12 +155,12 @@ once. The OGC STA layer reads its things the way the Leaflet map does since
         </eStructuralFeatures>
         <eStructuralFeatures xsi:type="ecore:EAttribute" name="rasterUrl" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" lowerBound="0" defaultValueLiteral="">
             <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-                <details key="documentation" value="Address of raster tiles drawn over the base map, as an XYZ template ({z}/{x}/{y}) or a GetMap template with {bbox-epsg-3857}. A WMS server is added as a service instead (#1274). Empty draws no raster base."/>
+                <details key="documentation" value="Address of raster tiles drawn over the base map, as an XYZ template ({z}/{x}/{y}) or a GetMap template with {bbox-epsg-3857}. A WMS server is added as a service instead. Empty draws no raster base."/>
             </eAnnotations>
         </eStructuralFeatures>
         <eStructuralFeatures xsi:type="ecore:EAttribute" name="rasterLayers" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" lowerBound="0" defaultValueLiteral="">
             <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-                <details key="documentation" value="Deprecated since #1274: WMS layers are services and layers of their own (services, wmsLayers). A board that still names layers here is moved to those when it is opened. Empty for every new map."/>
+                <details key="documentation" value="Deprecated: WMS layers are services and layers of their own (services, wmsLayers). A board that still names layers here is moved to those when it is opened. Empty for every new map."/>
             </eAnnotations>
         </eStructuralFeatures>
         <eStructuralFeatures xsi:type="ecore:EAttribute" name="rasterOpacity" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble" lowerBound="0" defaultValueLiteral="1">
@@ -180,7 +180,7 @@ once. The OGC STA layer reads its things the way the Leaflet map does since
         </eStructuralFeatures>
         <eStructuralFeatures xsi:type="ecore:EAttribute" name="attribution" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" lowerBound="0" defaultValueLiteral="">
             <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-                <details key="documentation" value="The attribution of the whole map, HTML with links allowed. Set, it replaces what the style and the raster base say; empty, the map shows theirs. The attribution the licence of the map data asks for (e.g. © OpenStreetMap contributors) has to stay in it (#1271)."/>
+                <details key="documentation" value="The attribution of the whole map, HTML with links allowed. Set, it replaces what the style and the raster base say; empty, the map shows theirs. The attribution the licence of the map data asks for (e.g. © OpenStreetMap contributors) has to stay in it."/>
             </eAnnotations>
         </eStructuralFeatures>
         <eStructuralFeatures xsi:type="ecore:EAttribute" name="attributionCompact" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean" lowerBound="0" defaultValueLiteral="true">
@@ -275,7 +275,7 @@ once. The OGC STA layer reads its things the way the Leaflet map does since
         </eStructuralFeatures>
         <eStructuralFeatures xsi:type="ecore:EReference" name="services" upperBound="-1" eType="#//WmsService" containment="true">
             <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-                <details key="documentation" value="The WMS services of the map, read by their GetCapabilities; their layers can be added to wmsLayers (#1274)."/>
+                <details key="documentation" value="The WMS services of the map, read by their GetCapabilities; their layers can be added to wmsLayers."/>
             </eAnnotations>
         </eStructuralFeatures>
         <eStructuralFeatures xsi:type="ecore:EReference" name="wmsLayers" upperBound="-1" eType="#//WmsLayer" containment="true">
@@ -285,7 +285,7 @@ once. The OGC STA layer reads its things the way the Leaflet map does since
         </eStructuralFeatures>
         <eStructuralFeatures xsi:type="ecore:EReference" name="modelLayers" upperBound="-1" eType="#//ModelLayer" containment="true">
             <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-                <details key="documentation" value="3D models placed on the map, e.g. trees: each layer one model file, drawn once per instance (#1281)."/>
+                <details key="documentation" value="3D models placed on the map, e.g. trees: each layer one model file, drawn once per instance."/>
             </eAnnotations>
         </eStructuralFeatures>
     </eClassifiers>
@@ -351,7 +351,7 @@ once. The OGC STA layer reads its things the way the Leaflet map does since
         </eStructuralFeatures>
         <eStructuralFeatures xsi:type="ecore:EAttribute" name="pointStyle" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" lowerBound="0" defaultValueLiteral="circle">
             <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-                <details key="documentation" value="How a point thing is drawn: circle, a flat dot, or pin, a marker standing on the place in the colour of its value; a selected pin is larger, in the colour of its value, with a ring in the selection colour under it (#1273)."/>
+                <details key="documentation" value="How a point thing is drawn: circle, a flat dot, or pin, a marker standing on the place in the colour of its value; a selected pin is larger, in the colour of its value, with a ring in the selection colour under it."/>
             </eAnnotations>
         </eStructuralFeatures>
         <eStructuralFeatures xsi:type="ecore:EAttribute" name="markerSize" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble" lowerBound="0" defaultValueLiteral="1">
@@ -537,7 +537,7 @@ once. The OGC STA layer reads its things the way the Leaflet map does since
 
     <eClassifiers xsi:type="ecore:EClass" name="ModelLayer">
         <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-            <details key="documentation" value="A symbol layer: a 3D model drawn at many places of the map - one file (FBX, glTF or GLB), many instances, placed by hand or at the points of a data source, sized, coloured and chosen by encodings of their fields (#1281, #1296). It stands on the ground with the lowest point of the model, and the buildings hide it where they are in front."/>
+            <details key="documentation" value="A symbol layer: a 3D model drawn at many places of the map - one file (FBX, glTF or GLB), many instances, placed by hand or at the points of a data source, sized, coloured and chosen by encodings of their fields. It stands on the ground with the lowest point of the model, and the buildings hide it where they are in front."/>
         </eAnnotations>
         <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" lowerBound="0">
             <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
@@ -586,13 +586,13 @@ once. The OGC STA layer reads its things the way the Leaflet map does since
         </eStructuralFeatures>
         <eStructuralFeatures xsi:type="ecore:EAttribute" name="datasourceId" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" lowerBound="0" defaultValueLiteral="">
             <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-                <details key="documentation" value="A data source of points (e.g. a WFS tree cadastre): a model stands at every point, besides the instances placed by hand (#1282). Empty: only those."/>
+                <details key="documentation" value="A data source of points (e.g. a WFS tree cadastre): a model stands at every point, besides the instances placed by hand. Empty: only those."/>
             </eAnnotations>
         </eStructuralFeatures>
         <eStructuralFeatures xsi:type="ecore:EReference" name="transforms" upperBound="-1" containment="true">
             <eGenericType eClassifier="http://org.eclipse.daanse.board.app.lib.datasource.base#//Transform"/>
             <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-                <details key="documentation" value="Steps on the points before they are drawn - filter, or extract a part of a field, e.g. the genus as the first word of a species (#1296). The shared transform of lib.datasource.base."/>
+                <details key="documentation" value="Steps on the points before they are drawn - filter, or extract a part of a field, e.g. the genus as the first word of a species. The shared transform of lib.datasource.base."/>
             </eAnnotations>
         </eStructuralFeatures>
         <eStructuralFeatures xsi:type="ecore:EReference" name="size" eType="#//SizeEncoding" containment="true">
@@ -619,7 +619,7 @@ once. The OGC STA layer reads its things the way the Leaflet map does since
 
     <eClassifiers xsi:type="ecore:EClass" name="SizeEncoding">
         <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-            <details key="documentation" value="The size of a model from fields of its point (#1296)."/>
+            <details key="documentation" value="The size of a model from fields of its point."/>
         </eAnnotations>
         <eStructuralFeatures xsi:type="ecore:EReference" name="height" eType="#//FieldEncoding" containment="true">
             <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
@@ -635,7 +635,7 @@ once. The OGC STA layer reads its things the way the Leaflet map does since
 
     <eClassifiers xsi:type="ecore:EClass" name="FieldEncoding">
         <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-            <details key="documentation" value="A length from a field of a point, in the shape of a Vega encoding: the field, the unit of its values, a scale, and a value where the field has none (#1296)."/>
+            <details key="documentation" value="A length from a field of a point, in the shape of a Vega encoding: the field, the unit of its values, a scale, and a value where the field has none."/>
         </eAnnotations>
         <eStructuralFeatures xsi:type="ecore:EAttribute" name="field" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" lowerBound="0" defaultValueLiteral="">
             <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
@@ -681,7 +681,7 @@ once. The OGC STA layer reads its things the way the Leaflet map does since
 
     <eClassifiers xsi:type="ecore:EClass" name="ColorEncoding">
         <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-            <details key="documentation" value="A colour from a field of a point (#1296): nominal, a colour per value; quantitative, a ramp from low to high over the domain."/>
+            <details key="documentation" value="A colour from a field of a point: nominal, a colour per value; quantitative, a ramp from low to high over the domain."/>
         </eAnnotations>
         <eStructuralFeatures xsi:type="ecore:EAttribute" name="field" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" lowerBound="0" defaultValueLiteral="">
             <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
@@ -727,7 +727,7 @@ once. The OGC STA layer reads its things the way the Leaflet map does since
 
     <eClassifiers xsi:type="ecore:EClass" name="ModelEncoding">
         <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-            <details key="documentation" value="Which model file a point gets, by a field of its point (#1296)."/>
+            <details key="documentation" value="Which model file a point gets, by a field of its point."/>
         </eAnnotations>
         <eStructuralFeatures xsi:type="ecore:EAttribute" name="field" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" lowerBound="0" defaultValueLiteral="">
             <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
@@ -759,7 +759,7 @@ once. The OGC STA layer reads its things the way the Leaflet map does since
 
     <eClassifiers xsi:type="ecore:EClass" name="PartEncoding">
         <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-            <details key="documentation" value="Meshes of a model with a colour of their own (#1296), e.g. the trunk of a tree; replaces names known to the code."/>
+            <details key="documentation" value="Meshes of a model with a colour of their own, e.g. the trunk of a tree; replaces names known to the code."/>
         </eAnnotations>
         <eStructuralFeatures xsi:type="ecore:EAttribute" name="mesh" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" lowerBound="0" defaultValueLiteral="">
             <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
