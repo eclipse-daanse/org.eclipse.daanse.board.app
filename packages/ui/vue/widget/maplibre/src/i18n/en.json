@@ -66,6 +66,8 @@
       "pin": "Pin (marker)"
     },
     "markerSize": "Size of the pins",
+    "markerIcon": "Icon in the pins",
+    "markerIconHint": "A Material Symbols icon, e.g. sensors. Empty: a white dot.",
     "extrude": "Areas in 3D",
     "heightSuffix": "Datastream of the height (end of its id)",
     "heightFactor": "Metres per unit",

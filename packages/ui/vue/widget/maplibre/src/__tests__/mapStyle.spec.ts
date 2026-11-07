@@ -110,7 +110,7 @@ describe('the data layers of the 3D map', () => {
     expect(beforeIdOf({ type: 'fill' }, false)).toBeUndefined()
   })
 
-  it('draw points as pins in the colour of their value, a selected one larger with a ring (#1273)', () => {
+  it('draw points as pins in the colour of their value, with an icon, a selected one larger with a ring (#1273)', () => {
     const layers = featureLayersOf(source, thingLookOf({ pointStyle: 'pin', markerSize: 2, fillColor: '#123' }, '#ff0')) as any[]
     expect(layers.map((l) => l.id)).toEqual([
       'daanse:things:areas:fill',
@@ -120,12 +120,10 @@ describe('the data layers of the 3D map', () => {
     ])
     const pin = layers[3]
     expect(pin.type).toBe('symbol')
-    expect(pin.layout['icon-image']).toEqual([
-      'case',
-      ['boolean', ['get', 'selected'], false],
-      'daanse-pin:#ff0',
-      ['concat', 'daanse-pin:', ['coalesce', ['get', 'color'], '#123']],
-    ])
+    // Selected or not, a pin keeps the colour of its value: the size and the ring say it is selected.
+    expect(pin.layout['icon-image']).toEqual(['concat', 'daanse-pin:', ['coalesce', ['get', 'color'], '#123']])
+    const withIcon = featureLayersOf(source, thingLookOf({ pointStyle: 'pin', markerIcon: 'sensors' }, '#ff0')) as any[]
+    expect(withIcon[3].layout['icon-image']).toEqual(['concat', 'daanse-pin:sensors|', ['coalesce', ['get', 'color'], '#3388ff']])
     expect(pin.layout['icon-anchor']).toBe('bottom')
     expect(pin.layout['icon-size']).toEqual(['case', ['boolean', ['get', 'selected'], false], 2.7, 2])
     expect(layers[2].filter[2]).toEqual(['boolean', ['get', 'selected'], false])

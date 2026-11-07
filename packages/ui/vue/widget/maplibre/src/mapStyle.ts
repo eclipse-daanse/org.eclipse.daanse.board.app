@@ -21,7 +21,7 @@
  * and removes it again before it applies a changed setting.
  */
 
-import { PIN_PREFIX } from './pin'
+import { pinImageId } from './pin'
 import type {
   ExpressionSpecification,
   LayerSpecification,
@@ -66,6 +66,8 @@ export interface FeatureLook {
   pointStyle?: string
   /** Size of a pin, 1 is 24 by 32 pixels. */
   markerSize?: number
+  /** A Material Symbols icon in the head of a pin. */
+  markerIcon?: string
 }
 
 export const PREFIX = 'daanse:'
@@ -313,8 +315,9 @@ function circleLayerOf(source: string, look: FeatureLook, color: ExpressionSpeci
 /**
  * Points as pins (#1273): a ring on the ground under a selected one, and the
  * pin itself, standing on the place, upright however the map is tilted. The
- * image is named by its colour (pinImageOf makes it when asked); a selected
- * pin is larger, in the selection colour, and drawn over the others.
+ * image is named by its icon and colour (the widget makes it when asked); a
+ * selected pin is larger, in the colour of its value, drawn over the others,
+ * with a ring in the selection colour under it.
  */
 function pinLayersOf(source: string, look: FeatureLook): LayerSpecification[] {
   const selected: ExpressionSpecification = ['boolean', ['get', 'selected'], false]
@@ -340,12 +343,8 @@ function pinLayersOf(source: string, look: FeatureLook): LayerSpecification[] {
       source,
       filter: POINT,
       layout: {
-        'icon-image': [
-          'case',
-          selected,
-          `${PIN_PREFIX}${look.selectionColor}`,
-          ['concat', PIN_PREFIX, ['coalesce', ['get', 'color'], look.color]],
-        ],
+        // The colour of its value, selected or not: the size and the ring say it is selected.
+        'icon-image': ['concat', pinImageId('', look.markerIcon), ['coalesce', ['get', 'color'], look.color]],
         'icon-anchor': 'bottom',
         'icon-size': ['case', selected, 1.35 * size, size],
         'icon-allow-overlap': true,
@@ -389,12 +388,14 @@ export function thingLookOf(
     extrude?: boolean
     pointStyle?: string
     markerSize?: number
+    markerIcon?: string
   },
   selectionColor: string,
 ): FeatureLook {
   return {
     pointStyle: layer.pointStyle === 'pin' ? 'pin' : 'circle',
     markerSize: number(layer.markerSize, 1),
+    markerIcon: text(layer.markerIcon).replace(/[^a-z0-9_]/gi, ''),
     color: text(layer.fillColor) || '#3388ff',
     opacity: number(layer.fillOpacity, 0.6),
     outlineColor: text(layer.outlineColor) || '#1f2937',

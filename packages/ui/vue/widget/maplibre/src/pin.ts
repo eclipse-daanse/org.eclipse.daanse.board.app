@@ -50,8 +50,18 @@ function inDrop(x: number, y: number, inset: number): boolean {
   return Math.abs(dx) <= (r * (tip - y)) / (tip - HEAD.y)
 }
 
-/** The pin in a colour, as an RGBA image MapLibre takes with addImage. */
-export function pinImage(color: string): { width: number; height: number; data: Uint8Array } {
+/** The name of a pin image: the icon, if any, and the colour. */
+export const pinImageId = (color: string, icon = '') => `${PIN_PREFIX}${icon ? `${icon}|` : ''}${color}`
+
+/** The colour and icon a pin image's name stands for. */
+export function pinOfImageId(id: string): { color: string; icon: string } {
+  const rest = id.slice(PIN_PREFIX.length)
+  const bar = rest.indexOf('|')
+  return bar < 0 ? { color: rest, icon: '' } : { icon: rest.slice(0, bar), color: rest.slice(bar + 1) }
+}
+
+/** The pin in a colour, as an RGBA image MapLibre takes with addImage; without the eye, its head is for an icon. */
+export function pinImage(color: string, eyed = true): { width: number; height: number; data: Uint8Array } {
   const [r, g, b] = rgbOf(color)
   const data = new Uint8Array(W * H * 4)
   const SAMPLES = 4
@@ -67,7 +77,7 @@ export function pinImage(color: string): { width: number; height: number; data: 
           if (!inDrop(x, y, 0)) continue
           const dx = x - HEAD.x
           const dy = y - HEAD.y
-          if (dx * dx + dy * dy <= EYE * EYE) eye++
+          if (eyed && dx * dx + dy * dy <= EYE * EYE) eye++
           else if (inDrop(x, y, OUTLINE)) fill++
           else outline++
         }
@@ -84,4 +94,44 @@ export function pinImage(color: string): { width: number; height: number; data: 
     }
   }
   return { width: W, height: H, data }
+}
+
+/* The icon font the board's icons use; loaded once where no icon widget did. */
+const ICON_FONT = 'Material Symbols Outlined'
+const ICON_FONT_CSS =
+  'https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200'
+
+/**
+ * The pin with a Material Symbols icon drawn white in its head. Drawn on a
+ * canvas over the pin, as the font has it. Where there is no canvas or the
+ * font does not come, the pin keeps its eye.
+ */
+export async function pinWithIcon(color: string, icon: string, doc: Document = document) {
+  const plain = pinImage(color, false)
+  const canvas = doc.createElement('canvas')
+  canvas.width = plain.width
+  canvas.height = plain.height
+  const context = canvas.getContext('2d')
+  if (!context) return pinImage(color)
+  try {
+    if (!doc.querySelector(`link[href="${ICON_FONT_CSS}"]`)) {
+      const link = doc.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = ICON_FONT_CSS
+      doc.head.appendChild(link)
+    }
+    const font = `28px "${ICON_FONT}"`
+    await doc.fonts.load(font, icon)
+    if (!doc.fonts.check(font, icon)) return pinImage(color)
+    context.putImageData(new ImageData(new Uint8ClampedArray(plain.data), plain.width, plain.height), 0, 0)
+    context.font = font
+    context.fillStyle = '#ffffff'
+    context.textAlign = 'center'
+    context.textBaseline = 'middle'
+    context.fillText(icon, HEAD.x, HEAD.y + 1)
+    const drawn = context.getImageData(0, 0, plain.width, plain.height)
+    return { width: drawn.width, height: drawn.height, data: new Uint8Array(drawn.data.buffer) }
+  } catch {
+    return pinImage(color)
+  }
 }
