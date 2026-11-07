@@ -91,6 +91,14 @@ describe('the WFS store with the extent viewport', () => {
     expect(new URLSearchParams(fetch.mock.calls[0]![0].url.split('?')[1]).get('bbox')).toBe('11.5,50.9,11.51,50.91,EPSG:4326')
   })
 
+  it('answers at most maxViewportFeatures, those of the tiles nearest the middle first', async () => {
+    const { store } = viewportStore({ maxViewportFeatures: 2 })
+    // Three tiles across; the middle one is nearest the middle of the view.
+    await store.callEvent(VIEWPORT_EVENT, view([11.581, 50.921, 11.609, 50.929]))
+    const data = (await store.getData('geojson')) as { features: { id: string }[] }
+    expect(data.features.map((f) => f.id)).toEqual(['tree.11.59.50.92', 'edge'])
+  })
+
   it('takes no viewport event with the extent fixed', async () => {
     const { store, fetch, heard } = viewportStore({ extent: 'fixed' })
     await store.callEvent(VIEWPORT_EVENT, view([11.581, 50.921, 11.598, 50.928]))
@@ -104,7 +112,8 @@ describe('the WFS store with the extent viewport', () => {
     await store.callEvent(VIEWPORT_EVENT, view([11.5, 50.9, 11.67, 51.07]))
     expect(fetch).toHaveBeenCalledTimes(289)
     expect(289).toBeGreaterThan(TILE_CACHE_SIZE)
-    await store.callEvent(VIEWPORT_EVENT, view([11.501, 50.901, 11.509, 50.909]))
+    // The middle tile was read first, so it was dropped first.
+    await store.callEvent(VIEWPORT_EVENT, view([11.581, 50.981, 11.589, 50.989]))
     expect(fetch).toHaveBeenCalledTimes(290)
   })
 })

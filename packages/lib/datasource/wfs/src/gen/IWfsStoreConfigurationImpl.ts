@@ -45,7 +45,8 @@ export class IWfsStoreConfigurationImpl extends IBaseConnectionConfigurationImpl
   static readonly POINT_TOLERANCE: number = 15;
   static readonly EXTENT: number = 16;
   static readonly MIN_ZOOM: number = 17;
-  static readonly COLUMN_TYPES: number = 18;
+  static readonly MAX_VIEWPORT_FEATURES: number = 18;
+  static readonly COLUMN_TYPES: number = 19;
 
   // Private fields
   private _connection?: string;
@@ -62,6 +63,7 @@ export class IWfsStoreConfigurationImpl extends IBaseConnectionConfigurationImpl
   private _pointTolerance: number = 70;
   private _extent: string = "fixed";
   private _minZoom: number = 14;
+  private _maxViewportFeatures: number = 5000;
   private _columnTypes!: EList<ColumnType>;
 
   /**
@@ -408,6 +410,30 @@ export class IWfsStoreConfigurationImpl extends IBaseConnectionConfigurationImpl
     }
   }
 
+  get maxViewportFeatures(): number {
+    return this._maxViewportFeatures!;
+  }
+
+  set maxViewportFeatures(value: number) {
+    const oldValue = this._maxViewportFeatures;
+    this._maxViewportFeatures = value;
+    if (this.eDeliver()) {
+      this.eNotify({
+        getNotifier: () => this,
+        getEventType: () => 1, // SET
+        getFeature: () => this.eClass().getEStructuralFeature(IWfsStoreConfigurationImpl.MAX_VIEWPORT_FEATURES),
+        getOldValue: () => oldValue,
+        getNewValue: () => value,
+        getPosition: () => -1,
+        wasSet: () => true,
+        isTouch: () => false,
+        isReset: () => false,
+        getFeatureID: () => IWfsStoreConfigurationImpl.MAX_VIEWPORT_FEATURES,
+        merge: () => false
+      });
+    }
+  }
+
   get columnTypes(): EList<ColumnType> {
     if (!this._columnTypes) {
       this._columnTypes = createContainmentEList<any>(this, this.eClass().getEStructuralFeature('columnTypes') as EReference);
@@ -451,6 +477,8 @@ export class IWfsStoreConfigurationImpl extends IBaseConnectionConfigurationImpl
         return this.extent;
       case IWfsStoreConfigurationImpl.MIN_ZOOM:
         return this.minZoom;
+      case IWfsStoreConfigurationImpl.MAX_VIEWPORT_FEATURES:
+        return this.maxViewportFeatures;
       case IWfsStoreConfigurationImpl.COLUMN_TYPES:
         return this.columnTypes;
       default:
@@ -520,6 +548,10 @@ export class IWfsStoreConfigurationImpl extends IBaseConnectionConfigurationImpl
         this.minZoom = newValue as number;
         super.eSet(feature, newValue);
         break;
+      case IWfsStoreConfigurationImpl.MAX_VIEWPORT_FEATURES:
+        this.maxViewportFeatures = newValue as number;
+        super.eSet(feature, newValue);
+        break;
       case IWfsStoreConfigurationImpl.COLUMN_TYPES:
         this.columnTypes.clear();
         this.columnTypes.addAll(newValue as any[]);
@@ -564,6 +596,8 @@ export class IWfsStoreConfigurationImpl extends IBaseConnectionConfigurationImpl
         return this._extent !== "fixed";
       case IWfsStoreConfigurationImpl.MIN_ZOOM:
         return this._minZoom !== 14;
+      case IWfsStoreConfigurationImpl.MAX_VIEWPORT_FEATURES:
+        return this._maxViewportFeatures !== 5000;
       case IWfsStoreConfigurationImpl.COLUMN_TYPES:
         return this._columnTypes !== undefined && !this._columnTypes.isEmpty();
       default:
@@ -619,6 +653,9 @@ export class IWfsStoreConfigurationImpl extends IBaseConnectionConfigurationImpl
       case IWfsStoreConfigurationImpl.MIN_ZOOM:
         this._minZoom = 14;
         return;
+      case IWfsStoreConfigurationImpl.MAX_VIEWPORT_FEATURES:
+        this._maxViewportFeatures = 5000;
+        return;
       case IWfsStoreConfigurationImpl.COLUMN_TYPES:
         if (this._columnTypes) this._columnTypes.clear();
         return;
@@ -651,6 +688,7 @@ export class IWfsStoreConfigurationImpl extends IBaseConnectionConfigurationImpl
       pointTolerance: this.pointTolerance,
       extent: this.extent,
       minZoom: this.minZoom,
+      maxViewportFeatures: this.maxViewportFeatures,
       columnTypes: this.columnTypes?.toArray?.() ?? this.columnTypes,
     };
   }

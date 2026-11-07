@@ -73,6 +73,7 @@ export class WfsstorePackage extends BasicEPackage {
     I_WFS_STORE_CONFIGURATION__POINT_TOLERANCE: null as unknown as EAttribute | EReference,
     I_WFS_STORE_CONFIGURATION__EXTENT: null as unknown as EAttribute | EReference,
     I_WFS_STORE_CONFIGURATION__MIN_ZOOM: null as unknown as EAttribute | EReference,
+    I_WFS_STORE_CONFIGURATION__MAX_VIEWPORT_FEATURES: null as unknown as EAttribute | EReference,
     I_WFS_STORE_CONFIGURATION__COLUMN_TYPES: null as unknown as EAttribute | EReference,
   };
 
@@ -228,6 +229,15 @@ export class WfsstorePackage extends BasicEPackage {
     iWfsStoreConfigurationClass.getEStructuralFeatures().push(iWfsStoreConfiguration_minZoom);
     WfsstorePackage.Literals.I_WFS_STORE_CONFIGURATION__MIN_ZOOM = iWfsStoreConfiguration_minZoom;
 
+    // Create maxViewportFeatures feature
+    const iWfsStoreConfiguration_maxViewportFeatures = new BasicEAttribute();
+    iWfsStoreConfiguration_maxViewportFeatures.setName('maxViewportFeatures');
+    iWfsStoreConfiguration_maxViewportFeatures.setLowerBound(0);
+    iWfsStoreConfiguration_maxViewportFeatures.setUpperBound(1);
+    iWfsStoreConfiguration_maxViewportFeatures.setDefaultValueLiteral("5000");
+    iWfsStoreConfigurationClass.getEStructuralFeatures().push(iWfsStoreConfiguration_maxViewportFeatures);
+    WfsstorePackage.Literals.I_WFS_STORE_CONFIGURATION__MAX_VIEWPORT_FEATURES = iWfsStoreConfiguration_maxViewportFeatures;
+
     // Create columnTypes feature
     const iWfsStoreConfiguration_columnTypes = new BasicEReference();
     iWfsStoreConfiguration_columnTypes.setContainment(true);
@@ -262,6 +272,7 @@ export class WfsstorePackage extends BasicEPackage {
     (WfsstorePackage.Literals.I_WFS_STORE_CONFIGURATION__POINT_TOLERANCE as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EInt')!);
     (WfsstorePackage.Literals.I_WFS_STORE_CONFIGURATION__EXTENT as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
     (WfsstorePackage.Literals.I_WFS_STORE_CONFIGURATION__MIN_ZOOM as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EDouble')!);
+    (WfsstorePackage.Literals.I_WFS_STORE_CONFIGURATION__MAX_VIEWPORT_FEATURES as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EInt')!);
     (WfsstorePackage.Literals.I_WFS_STORE_CONFIGURATION__COLUMN_TYPES as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.datasource.base').getEClassifier('ColumnType')!);
 
     // ============================================

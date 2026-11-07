@@ -50,4 +50,5 @@ export function deactivate({ services }: ActivationContext) {
 }
 
 /* Its texts - collected by lib.i18next, see src/i18n. */
+/* The hints of the generated forms are read by the form under its field (i18n-keys: datasourceWfs:Hints.IWfsStoreConfiguration.*). */
 export { DatasourceWfsTranslations } from './i18n'

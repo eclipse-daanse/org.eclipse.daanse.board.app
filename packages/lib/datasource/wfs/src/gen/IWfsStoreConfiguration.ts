@@ -41,6 +41,7 @@ export interface IWfsStoreConfiguration extends IBaseConnectionConfiguration {
   pointTolerance?: number;
   extent?: string;
   minZoom?: number;
+  maxViewportFeatures?: number;
   columnTypes: EList<ColumnType>;
 
 }
