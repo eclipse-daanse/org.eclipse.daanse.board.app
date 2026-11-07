@@ -52,6 +52,9 @@ export interface ChartSettings extends EObject {
   verticalLines: EList<unknown>;
   horizontalBoxes: EList<unknown>;
   verticalBoxes: EList<unknown>;
+  lineTension?: VariableWrapper<number>;
+  xTicksHorizontal?: VariableWrapper<boolean>;
+  xTicksLimit?: VariableWrapper<number>;
   dateDisplayFormat?: VariableWrapper<string>;
 
 }

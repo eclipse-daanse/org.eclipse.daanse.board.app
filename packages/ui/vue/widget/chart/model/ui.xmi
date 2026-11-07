@@ -95,6 +95,10 @@ from, so they still come from the hand-written component beside this.
         <values>15,5,5,5</values>
         <optionLabel language="JS" body="({ durchgezogen: 'chart:Options.borderDash.solid', '5,5': 'chart:Options.borderDash.dashed', '10,5': 'chart:Options.borderDash.longDashes', '2,2': 'chart:Options.borderDash.dotted', '15,5,5,5': 'chart:Options.borderDash.dashDot' })[option] ?? option"/>
       </fields>
+      <fields xsi:type="uimodel:NumberWidget"
+          name="lineTension"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.chart#//ChartSettings/lineTension"
+          label="chart:Form.lineTension" min="0" max="1" step="0.05"/>
       <fields xsi:type="uimodel:CheckboxWidget"
           name="fill"
           feature="http://org.eclipse.daanse.board.app.ui.vue.widget.chart#//ChartSettings/fill"
@@ -172,6 +176,14 @@ from, so they still come from the hand-written component beside this.
           name="yAxisTitle"
           feature="http://org.eclipse.daanse.board.app.ui.vue.widget.chart#//ChartSettings/yAxisTitle"
           label="chart:Form.yAxisTitle"/>
+      <fields xsi:type="uimodel:CheckboxWidget"
+          name="xTicksHorizontal"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.chart#//ChartSettings/xTicksHorizontal"
+          label="chart:Form.xTicksHorizontal"/>
+      <fields xsi:type="uimodel:NumberWidget"
+          name="xTicksLimit"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.chart#//ChartSettings/xTicksLimit"
+          label="chart:Form.xTicksLimit" min="0" max="50" step="1"/>
       <fields xsi:type="uimodel:SelectWidget"
           name="dateDisplayFormat"
           feature="http://org.eclipse.daanse.board.app.ui.vue.widget.chart#//ChartSettings/dateDisplayFormat"

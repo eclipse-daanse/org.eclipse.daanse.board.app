@@ -100,6 +100,9 @@ export class ChartsettingsPackage extends BasicEPackage {
     CHART_SETTINGS__VERTICAL_LINES: null as unknown as EAttribute | EReference,
     CHART_SETTINGS__HORIZONTAL_BOXES: null as unknown as EAttribute | EReference,
     CHART_SETTINGS__VERTICAL_BOXES: null as unknown as EAttribute | EReference,
+    CHART_SETTINGS__LINE_TENSION: null as unknown as EAttribute | EReference,
+    CHART_SETTINGS__X_TICKS_HORIZONTAL: null as unknown as EAttribute | EReference,
+    CHART_SETTINGS__X_TICKS_LIMIT: null as unknown as EAttribute | EReference,
     CHART_SETTINGS__DATE_DISPLAY_FORMAT: null as unknown as EAttribute | EReference,
   };
 
@@ -495,6 +498,33 @@ export class ChartsettingsPackage extends BasicEPackage {
     chartSettingsClass.getEStructuralFeatures().push(chartSettings_verticalBoxes);
     ChartsettingsPackage.Literals.CHART_SETTINGS__VERTICAL_BOXES = chartSettings_verticalBoxes;
 
+    // Create lineTension feature
+    const chartSettings_lineTension = new BasicEReference();
+    chartSettings_lineTension.setContainment(false);
+    chartSettings_lineTension.setName('lineTension');
+    chartSettings_lineTension.setLowerBound(0);
+    chartSettings_lineTension.setUpperBound(1);
+    chartSettingsClass.getEStructuralFeatures().push(chartSettings_lineTension);
+    ChartsettingsPackage.Literals.CHART_SETTINGS__LINE_TENSION = chartSettings_lineTension;
+
+    // Create xTicksHorizontal feature
+    const chartSettings_xTicksHorizontal = new BasicEReference();
+    chartSettings_xTicksHorizontal.setContainment(false);
+    chartSettings_xTicksHorizontal.setName('xTicksHorizontal');
+    chartSettings_xTicksHorizontal.setLowerBound(0);
+    chartSettings_xTicksHorizontal.setUpperBound(1);
+    chartSettingsClass.getEStructuralFeatures().push(chartSettings_xTicksHorizontal);
+    ChartsettingsPackage.Literals.CHART_SETTINGS__X_TICKS_HORIZONTAL = chartSettings_xTicksHorizontal;
+
+    // Create xTicksLimit feature
+    const chartSettings_xTicksLimit = new BasicEReference();
+    chartSettings_xTicksLimit.setContainment(false);
+    chartSettings_xTicksLimit.setName('xTicksLimit');
+    chartSettings_xTicksLimit.setLowerBound(0);
+    chartSettings_xTicksLimit.setUpperBound(1);
+    chartSettingsClass.getEStructuralFeatures().push(chartSettings_xTicksLimit);
+    ChartsettingsPackage.Literals.CHART_SETTINGS__X_TICKS_LIMIT = chartSettings_xTicksLimit;
+
     // Create dateDisplayFormat feature
     const chartSettings_dateDisplayFormat = new BasicEReference();
     chartSettings_dateDisplayFormat.setContainment(false);
@@ -550,6 +580,9 @@ export class ChartsettingsPackage extends BasicEPackage {
     (ChartsettingsPackage.Literals.CHART_SETTINGS__X_AXIS_TITLE as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
     (ChartsettingsPackage.Literals.CHART_SETTINGS__Y_AXIS_TITLE as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
     (ChartsettingsPackage.Literals.CHART_SETTINGS__ANNOTATIONS_EDIT_MODE as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
+    (ChartsettingsPackage.Literals.CHART_SETTINGS__LINE_TENSION as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
+    (ChartsettingsPackage.Literals.CHART_SETTINGS__X_TICKS_HORIZONTAL as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
+    (ChartsettingsPackage.Literals.CHART_SETTINGS__X_TICKS_LIMIT as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
     (ChartsettingsPackage.Literals.CHART_SETTINGS__DATE_DISPLAY_FORMAT as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.variables').getEClassifier('VariableWrapper')!);
 
     // ============================================
