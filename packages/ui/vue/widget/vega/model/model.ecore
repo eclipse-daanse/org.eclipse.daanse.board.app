@@ -174,22 +174,6 @@ they are.
         <eLiterals name="point" literal="point" value="8"/>
     </eClassifiers>
 
-    <eClassifiers xsi:type="ecore:EEnum" name="FilterOp">
-        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-            <details key="documentation" value="The comparison a filter makes. oneOf takes a comma-separated list, range takes two comma-separated bounds, valid keeps rows with a value, param keeps what a selection holds."/>
-        </eAnnotations>
-        <eLiterals name="eq" literal="eq"/>
-        <eLiterals name="neq" literal="neq" value="1"/>
-        <eLiterals name="lt" literal="lt" value="2"/>
-        <eLiterals name="lte" literal="lte" value="3"/>
-        <eLiterals name="gt" literal="gt" value="4"/>
-        <eLiterals name="gte" literal="gte" value="5"/>
-        <eLiterals name="oneOf" literal="oneOf" value="6"/>
-        <eLiterals name="range" literal="range" value="7"/>
-        <eLiterals name="valid" literal="valid" value="8"/>
-        <eLiterals name="param" literal="param" value="9"/>
-    </eClassifiers>
-
     <eClassifiers xsi:type="ecore:EEnum" name="ParamKind">
         <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
             <details key="documentation" value="What a parameter is: a selection of single marks (point), a selection of a range (interval), or a plain value (value)."/>
@@ -278,25 +262,10 @@ they are.
                 <details key="documentation" value="For the shape object: where the list of rows is in the answer, as names separated by dots (data.items). Empty: the answer itself."/>
             </eAnnotations>
         </eStructuralFeatures>
-        <eStructuralFeatures xsi:type="ecore:EReference" name="columnTypes" upperBound="-1" eType="#//ColumnType" containment="true">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="columnTypes" upperBound="-1" containment="true">
+            <eGenericType eClassifier="http://org.eclipse.daanse.board.app.lib.datasource.base#//ColumnType"/>
             <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
                 <details key="documentation" value="Columns read as numbers, dates or booleans rather than as they arrive."/>
-            </eAnnotations>
-        </eStructuralFeatures>
-    </eClassifiers>
-
-    <eClassifiers xsi:type="ecore:EClass" name="ColumnType">
-        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-            <details key="documentation" value="How one column of a dataset is read."/>
-        </eAnnotations>
-        <eStructuralFeatures xsi:type="ecore:EAttribute" name="column" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" lowerBound="0" defaultValueLiteral="">
-            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-                <details key="documentation" value="The name of the column."/>
-            </eAnnotations>
-        </eStructuralFeatures>
-        <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="#//ColumnValueType" lowerBound="0" defaultValueLiteral="number">
-            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-                <details key="documentation" value="What its values are read as."/>
             </eAnnotations>
         </eStructuralFeatures>
     </eClassifiers>
@@ -360,7 +329,8 @@ they are.
                 <details key="documentation" value="What drives the marks: which field goes to which channel, and how."/>
             </eAnnotations>
         </eStructuralFeatures>
-        <eStructuralFeatures xsi:type="ecore:EReference" name="transforms" upperBound="-1" eType="#//Transform" containment="true">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="transforms" upperBound="-1" containment="true">
+            <eGenericType eClassifier="http://org.eclipse.daanse.board.app.lib.datasource.base#//Transform"/>
             <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
                 <details key="documentation" value="Steps applied to the data before the layer draws it, in this order."/>
             </eAnnotations>
@@ -495,81 +465,6 @@ they are.
         <eLiterals name="table" literal="table"/>
         <eLiterals name="object" literal="object" value="1"/>
         <eLiterals name="geojson" literal="geojson" value="2"/>
-    </eClassifiers>
-
-    <eClassifiers xsi:type="ecore:EEnum" name="ColumnValueType">
-        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-            <details key="documentation" value="What the values of a column are read as before the chart draws them. Sources such as SPARQL and CSV answer text; a number or a date that arrives as text sorts and scales as text."/>
-        </eAnnotations>
-        <eLiterals name="string" literal="string"/>
-        <eLiterals name="number" literal="number" value="1"/>
-        <eLiterals name="date" literal="date" value="2"/>
-        <eLiterals name="boolean" literal="boolean" value="3"/>
-    </eClassifiers>
-
-    <eClassifiers xsi:type="ecore:EEnum" name="TransformKind">
-        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-            <details key="documentation" value="What a transform does: keep the rows that pass a comparison or a selection (filter), turn columns into rows (fold), or add a computed field (calculate)."/>
-        </eAnnotations>
-        <eLiterals name="filter" literal="filter"/>
-        <eLiterals name="fold" literal="fold" value="1"/>
-        <eLiterals name="calculate" literal="calculate" value="2"/>
-    </eClassifiers>
-
-    <eClassifiers xsi:type="ecore:EClass" name="Transform">
-        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-            <details key="documentation" value="A step applied to the data of a layer before it is drawn. One class for every kind, so a stored chart comes back as it was saved; the kind decides which of the fields below are read."/>
-        </eAnnotations>
-        <eStructuralFeatures xsi:type="ecore:EAttribute" name="kind" eType="#//TransformKind" lowerBound="0" defaultValueLiteral="filter">
-            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-                <details key="documentation" value="What the transform does."/>
-            </eAnnotations>
-        </eStructuralFeatures>
-        <eStructuralFeatures xsi:type="ecore:EAttribute" name="field" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" lowerBound="0" defaultValueLiteral="">
-            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-                <details key="documentation" value="filter: the field compared. Not read by the operation param."/>
-            </eAnnotations>
-        </eStructuralFeatures>
-        <eStructuralFeatures xsi:type="ecore:EAttribute" name="op" eType="#//FilterOp" lowerBound="0" defaultValueLiteral="eq">
-            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-                <details key="documentation" value="filter: the comparison."/>
-            </eAnnotations>
-        </eStructuralFeatures>
-        <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" lowerBound="0" defaultValueLiteral="">
-            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-                <details key="documentation" value="filter: what the field is compared with; for oneOf a comma-separated list, for range two comma-separated bounds. Numbers are read as numbers."/>
-            </eAnnotations>
-        </eStructuralFeatures>
-        <eStructuralFeatures xsi:type="ecore:EAttribute" name="param" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" lowerBound="0" defaultValueLiteral="">
-            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-                <details key="documentation" value="filter: the selection whose content passes, for the operation param."/>
-            </eAnnotations>
-        </eStructuralFeatures>
-        <eStructuralFeatures xsi:type="ecore:EAttribute" name="fields" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" upperBound="-1" lowerBound="0">
-            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-                <details key="documentation" value="fold: the fields to fold - each becomes a row with the field name as key and its value as value, so several columns become one series per column."/>
-            </eAnnotations>
-        </eStructuralFeatures>
-        <eStructuralFeatures xsi:type="ecore:EAttribute" name="keyAs" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" lowerBound="0" defaultValueLiteral="key">
-            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-                <details key="documentation" value="fold: the name of the new field holding the former column name."/>
-            </eAnnotations>
-        </eStructuralFeatures>
-        <eStructuralFeatures xsi:type="ecore:EAttribute" name="valueAs" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" lowerBound="0" defaultValueLiteral="value">
-            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-                <details key="documentation" value="fold: the name of the new field holding the value."/>
-            </eAnnotations>
-        </eStructuralFeatures>
-        <eStructuralFeatures xsi:type="ecore:EAttribute" name="as" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" lowerBound="0" defaultValueLiteral="">
-            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-                <details key="documentation" value="calculate: the name of the new field."/>
-            </eAnnotations>
-        </eStructuralFeatures>
-        <eStructuralFeatures xsi:type="ecore:EAttribute" name="expression" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" lowerBound="0" defaultValueLiteral="">
-            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-                <details key="documentation" value="calculate: the Vega expression, for example datum.price * datum.amount; datum is the row. Expressions are interpreted, never compiled to code."/>
-            </eAnnotations>
-        </eStructuralFeatures>
     </eClassifiers>
 
     <eClassifiers xsi:type="ecore:EClass" name="Facet">

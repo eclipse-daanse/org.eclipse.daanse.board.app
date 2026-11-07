@@ -25,14 +25,10 @@ import { VegaWidgetSettings } from './VegaWidgetSettings.js';
 import { VegaWidgetSettingsImpl } from './VegaWidgetSettingsImpl.js';
 import { DatasetBinding } from './DatasetBinding.js';
 import { DatasetBindingImpl } from './DatasetBindingImpl.js';
-import { ColumnType } from './ColumnType.js';
-import { ColumnTypeImpl } from './ColumnTypeImpl.js';
 import { Layer } from './Layer.js';
 import { LayerImpl } from './LayerImpl.js';
 import { Encoding } from './Encoding.js';
 import { EncodingImpl } from './EncodingImpl.js';
-import { Transform } from './Transform.js';
-import { TransformImpl } from './TransformImpl.js';
 import { Facet } from './Facet.js';
 import { FacetImpl } from './FacetImpl.js';
 import { Param } from './Param.js';
@@ -73,13 +69,6 @@ export class VegawidgetFactory extends BasicEFactory {
   }
 
   /**
-   * Create a new ColumnType instance
-   */
-  createColumnType(): ColumnType {
-    return new ColumnTypeImpl();
-  }
-
-  /**
    * Create a new Layer instance
    */
   createLayer(): Layer {
@@ -91,13 +80,6 @@ export class VegawidgetFactory extends BasicEFactory {
    */
   createEncoding(): Encoding {
     return new EncodingImpl();
-  }
-
-  /**
-   * Create a new Transform instance
-   */
-  createTransform(): Transform {
-    return new TransformImpl();
   }
 
   /**
@@ -123,14 +105,10 @@ export class VegawidgetFactory extends BasicEFactory {
         return this.createVegaWidgetSettings();
       case 'DatasetBinding':
         return this.createDatasetBinding();
-      case 'ColumnType':
-        return this.createColumnType();
       case 'Layer':
         return this.createLayer();
       case 'Encoding':
         return this.createEncoding();
-      case 'Transform':
-        return this.createTransform();
       case 'Facet':
         return this.createFacet();
       case 'Param':

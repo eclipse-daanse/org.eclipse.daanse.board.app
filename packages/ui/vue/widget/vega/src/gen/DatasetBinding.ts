@@ -20,7 +20,7 @@
 
 import type { EObject, EList } from '@emfts/core';
 import type { DatasetShape } from './DatasetShape.js';
-import type { ColumnType } from './ColumnType.js';
+import type { ColumnType } from 'org.eclipse.daanse.board.app.lib.datasource.base';
 
 /**
  * DatasetBinding

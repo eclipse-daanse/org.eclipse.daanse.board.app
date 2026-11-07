@@ -336,3 +336,23 @@ function paramSpec(param: Param): Json {
   if (initial !== undefined) spec.value = initial
   return spec
 }
+
+/**
+ * The spec at the size of the frame it is drawn in (#1287).
+ *
+ * A spec sized "container" asks Vega to measure the element it draws into
+ * - the wrapper vega-embed puts inside the widget, which is only as large
+ * as what was drawn in it. The chart then kept its first size, and its
+ * labels and legend were cut at the widget's edge. Given in pixels, the
+ * size is the total one: with autosize fit and contains padding, axes,
+ * labels and legend are fitted inside it. Small multiples size themselves
+ * and are left as they are.
+ */
+export function withSize(spec: TopLevelSpec, width: number, height: number): TopLevelSpec {
+  const held = spec as Json
+  if (held.width !== 'container' && held.height !== 'container') return spec
+  const next: Json = { ...held }
+  if (held.width === 'container') next.width = width > 0 ? Math.floor(width) : 300
+  if (held.height === 'container') next.height = height > 0 ? Math.floor(height) : 200
+  return next as TopLevelSpec
+}

@@ -32,12 +32,21 @@ import { TimeUnit } from './TimeUnit.js';
 import { SortOrder } from './SortOrder.js';
 import { StackMode } from './StackMode.js';
 import { ScaleType } from './ScaleType.js';
-import { FilterOp } from './FilterOp.js';
 import { ParamKind } from './ParamKind.js';
 import { ParamBind } from './ParamBind.js';
 import { DatasetShape } from './DatasetShape.js';
-import { ColumnValueType } from './ColumnValueType.js';
-import { TransformKind } from './TransformKind.js';
+
+/**
+ * Resolve a dependency package from the registry, failing with an actionable
+ * message instead of a null dereference when it is not registered yet
+ */
+function requireEPackage(nsURI: string) {
+  const pkg = EPackageRegistry.INSTANCE.getEPackage(nsURI);
+  if (!pkg) {
+    throw new Error(`EPackage '${nsURI}' is not registered. Access the eINSTANCE of that model's generated package (or register it via EPackageRegistry.INSTANCE.registerPackage) before initializing VegawidgetPackage.`);
+  }
+  return pkg;
+}
 
 /**
  * Vegawidget Package
@@ -78,9 +87,6 @@ export class VegawidgetPackage extends BasicEPackage {
     DATASET_BINDING__SHAPE: null as unknown as EAttribute | EReference,
     DATASET_BINDING__PATH: null as unknown as EAttribute | EReference,
     DATASET_BINDING__COLUMN_TYPES: null as unknown as EAttribute | EReference,
-    COLUMN_TYPE: null as unknown as EClass,
-    COLUMN_TYPE__COLUMN: null as unknown as EAttribute | EReference,
-    COLUMN_TYPE__TYPE: null as unknown as EAttribute | EReference,
     LAYER: null as unknown as EClass,
     LAYER__DATASET: null as unknown as EAttribute | EReference,
     LAYER__MARK: null as unknown as EAttribute | EReference,
@@ -118,17 +124,6 @@ export class VegawidgetPackage extends BasicEPackage {
     ENCODING__SHOW_LEGEND: null as unknown as EAttribute | EReference,
     ENCODING__HIGHLIGHT_PARAM: null as unknown as EAttribute | EReference,
     ENCODING__VALUE_IF_NOT_SELECTED: null as unknown as EAttribute | EReference,
-    TRANSFORM: null as unknown as EClass,
-    TRANSFORM__KIND: null as unknown as EAttribute | EReference,
-    TRANSFORM__FIELD: null as unknown as EAttribute | EReference,
-    TRANSFORM__OP: null as unknown as EAttribute | EReference,
-    TRANSFORM__VALUE: null as unknown as EAttribute | EReference,
-    TRANSFORM__PARAM: null as unknown as EAttribute | EReference,
-    TRANSFORM__FIELDS: null as unknown as EAttribute | EReference,
-    TRANSFORM__KEY_AS: null as unknown as EAttribute | EReference,
-    TRANSFORM__VALUE_AS: null as unknown as EAttribute | EReference,
-    TRANSFORM__AS: null as unknown as EAttribute | EReference,
-    TRANSFORM__EXPRESSION: null as unknown as EAttribute | EReference,
     FACET: null as unknown as EClass,
     FACET__ROW: null as unknown as EAttribute | EReference,
     FACET__COLUMN: null as unknown as EAttribute | EReference,
@@ -151,12 +146,9 @@ export class VegawidgetPackage extends BasicEPackage {
     SORT_ORDER: null as unknown as EEnum,
     STACK_MODE: null as unknown as EEnum,
     SCALE_TYPE: null as unknown as EEnum,
-    FILTER_OP: null as unknown as EEnum,
     PARAM_KIND: null as unknown as EEnum,
     PARAM_BIND: null as unknown as EEnum,
     DATASET_SHAPE: null as unknown as EEnum,
-    COLUMN_VALUE_TYPE: null as unknown as EEnum,
-    TRANSFORM_KIND: null as unknown as EEnum,
   };
 
   private constructor() {
@@ -311,33 +303,6 @@ export class VegawidgetPackage extends BasicEPackage {
     datasetBinding_columnTypes.setUpperBound(-1);
     datasetBindingClass.getEStructuralFeatures().push(datasetBinding_columnTypes);
     VegawidgetPackage.Literals.DATASET_BINDING__COLUMN_TYPES = datasetBinding_columnTypes;
-
-    // Create ColumnType class
-    const columnTypeClass = new BasicEClass();
-    columnTypeClass.setName('ColumnType');
-    columnTypeClass.setAbstract(false);
-    columnTypeClass.setInterface(false);
-    this.getEClassifiers().push(columnTypeClass);
-    columnTypeClass.setEPackage(this);
-    VegawidgetPackage.Literals.COLUMN_TYPE = columnTypeClass;
-
-    // Create column feature
-    const columnType_column = new BasicEAttribute();
-    columnType_column.setName('column');
-    columnType_column.setLowerBound(0);
-    columnType_column.setUpperBound(1);
-    columnType_column.setDefaultValueLiteral("");
-    columnTypeClass.getEStructuralFeatures().push(columnType_column);
-    VegawidgetPackage.Literals.COLUMN_TYPE__COLUMN = columnType_column;
-
-    // Create type feature
-    const columnType_type = new BasicEAttribute();
-    columnType_type.setName('type');
-    columnType_type.setLowerBound(0);
-    columnType_type.setUpperBound(1);
-    columnType_type.setDefaultValueLiteral("number");
-    columnTypeClass.getEStructuralFeatures().push(columnType_type);
-    VegawidgetPackage.Literals.COLUMN_TYPE__TYPE = columnType_type;
 
     // Create Layer class
     const layerClass = new BasicEClass();
@@ -671,104 +636,6 @@ export class VegawidgetPackage extends BasicEPackage {
     encoding_valueIfNotSelected.setDefaultValueLiteral("");
     encodingClass.getEStructuralFeatures().push(encoding_valueIfNotSelected);
     VegawidgetPackage.Literals.ENCODING__VALUE_IF_NOT_SELECTED = encoding_valueIfNotSelected;
-
-    // Create Transform class
-    const transformClass = new BasicEClass();
-    transformClass.setName('Transform');
-    transformClass.setAbstract(false);
-    transformClass.setInterface(false);
-    this.getEClassifiers().push(transformClass);
-    transformClass.setEPackage(this);
-    VegawidgetPackage.Literals.TRANSFORM = transformClass;
-
-    // Create kind feature
-    const transform_kind = new BasicEAttribute();
-    transform_kind.setName('kind');
-    transform_kind.setLowerBound(0);
-    transform_kind.setUpperBound(1);
-    transform_kind.setDefaultValueLiteral("filter");
-    transformClass.getEStructuralFeatures().push(transform_kind);
-    VegawidgetPackage.Literals.TRANSFORM__KIND = transform_kind;
-
-    // Create field feature
-    const transform_field = new BasicEAttribute();
-    transform_field.setName('field');
-    transform_field.setLowerBound(0);
-    transform_field.setUpperBound(1);
-    transform_field.setDefaultValueLiteral("");
-    transformClass.getEStructuralFeatures().push(transform_field);
-    VegawidgetPackage.Literals.TRANSFORM__FIELD = transform_field;
-
-    // Create op feature
-    const transform_op = new BasicEAttribute();
-    transform_op.setName('op');
-    transform_op.setLowerBound(0);
-    transform_op.setUpperBound(1);
-    transform_op.setDefaultValueLiteral("eq");
-    transformClass.getEStructuralFeatures().push(transform_op);
-    VegawidgetPackage.Literals.TRANSFORM__OP = transform_op;
-
-    // Create value feature
-    const transform_value = new BasicEAttribute();
-    transform_value.setName('value');
-    transform_value.setLowerBound(0);
-    transform_value.setUpperBound(1);
-    transform_value.setDefaultValueLiteral("");
-    transformClass.getEStructuralFeatures().push(transform_value);
-    VegawidgetPackage.Literals.TRANSFORM__VALUE = transform_value;
-
-    // Create param feature
-    const transform_param = new BasicEAttribute();
-    transform_param.setName('param');
-    transform_param.setLowerBound(0);
-    transform_param.setUpperBound(1);
-    transform_param.setDefaultValueLiteral("");
-    transformClass.getEStructuralFeatures().push(transform_param);
-    VegawidgetPackage.Literals.TRANSFORM__PARAM = transform_param;
-
-    // Create fields feature
-    const transform_fields = new BasicEAttribute();
-    transform_fields.setName('fields');
-    transform_fields.setLowerBound(0);
-    transform_fields.setUpperBound(-1);
-    transformClass.getEStructuralFeatures().push(transform_fields);
-    VegawidgetPackage.Literals.TRANSFORM__FIELDS = transform_fields;
-
-    // Create keyAs feature
-    const transform_keyAs = new BasicEAttribute();
-    transform_keyAs.setName('keyAs');
-    transform_keyAs.setLowerBound(0);
-    transform_keyAs.setUpperBound(1);
-    transform_keyAs.setDefaultValueLiteral("key");
-    transformClass.getEStructuralFeatures().push(transform_keyAs);
-    VegawidgetPackage.Literals.TRANSFORM__KEY_AS = transform_keyAs;
-
-    // Create valueAs feature
-    const transform_valueAs = new BasicEAttribute();
-    transform_valueAs.setName('valueAs');
-    transform_valueAs.setLowerBound(0);
-    transform_valueAs.setUpperBound(1);
-    transform_valueAs.setDefaultValueLiteral("value");
-    transformClass.getEStructuralFeatures().push(transform_valueAs);
-    VegawidgetPackage.Literals.TRANSFORM__VALUE_AS = transform_valueAs;
-
-    // Create as feature
-    const transform_as = new BasicEAttribute();
-    transform_as.setName('as');
-    transform_as.setLowerBound(0);
-    transform_as.setUpperBound(1);
-    transform_as.setDefaultValueLiteral("");
-    transformClass.getEStructuralFeatures().push(transform_as);
-    VegawidgetPackage.Literals.TRANSFORM__AS = transform_as;
-
-    // Create expression feature
-    const transform_expression = new BasicEAttribute();
-    transform_expression.setName('expression');
-    transform_expression.setLowerBound(0);
-    transform_expression.setUpperBound(1);
-    transform_expression.setDefaultValueLiteral("");
-    transformClass.getEStructuralFeatures().push(transform_expression);
-    VegawidgetPackage.Literals.TRANSFORM__EXPRESSION = transform_expression;
 
     // Create Facet class
     const facetClass = new BasicEClass();
@@ -1819,118 +1686,6 @@ export class VegawidgetPackage extends BasicEPackage {
     VegawidgetPackage.Literals.SCALE_TYPE = scaleTypeEnumType;
     this.getEClassifiers().push(scaleTypeEnumType);
 
-    // Create FilterOp enum
-    const filterOpEnumType = new BasicEEnum();
-    filterOpEnumType.setName('FilterOp');
-    {
-      const literal = new BasicEEnumLiteral();
-      literal.setName("eq");
-      literal.setValue(0);
-      literal.setLiteral("eq");
-      // the generated string constant is the literal's instance, so
-      // createFromString returns the value the generated type declares (#53)
-      literal.setInstance(FilterOp.eq);
-      filterOpEnumType.addLiteral(literal);
-    }
-    {
-      const literal = new BasicEEnumLiteral();
-      literal.setName("neq");
-      literal.setValue(1);
-      literal.setLiteral("neq");
-      // the generated string constant is the literal's instance, so
-      // createFromString returns the value the generated type declares (#53)
-      literal.setInstance(FilterOp.neq);
-      filterOpEnumType.addLiteral(literal);
-    }
-    {
-      const literal = new BasicEEnumLiteral();
-      literal.setName("lt");
-      literal.setValue(2);
-      literal.setLiteral("lt");
-      // the generated string constant is the literal's instance, so
-      // createFromString returns the value the generated type declares (#53)
-      literal.setInstance(FilterOp.lt);
-      filterOpEnumType.addLiteral(literal);
-    }
-    {
-      const literal = new BasicEEnumLiteral();
-      literal.setName("lte");
-      literal.setValue(3);
-      literal.setLiteral("lte");
-      // the generated string constant is the literal's instance, so
-      // createFromString returns the value the generated type declares (#53)
-      literal.setInstance(FilterOp.lte);
-      filterOpEnumType.addLiteral(literal);
-    }
-    {
-      const literal = new BasicEEnumLiteral();
-      literal.setName("gt");
-      literal.setValue(4);
-      literal.setLiteral("gt");
-      // the generated string constant is the literal's instance, so
-      // createFromString returns the value the generated type declares (#53)
-      literal.setInstance(FilterOp.gt);
-      filterOpEnumType.addLiteral(literal);
-    }
-    {
-      const literal = new BasicEEnumLiteral();
-      literal.setName("gte");
-      literal.setValue(5);
-      literal.setLiteral("gte");
-      // the generated string constant is the literal's instance, so
-      // createFromString returns the value the generated type declares (#53)
-      literal.setInstance(FilterOp.gte);
-      filterOpEnumType.addLiteral(literal);
-    }
-    {
-      const literal = new BasicEEnumLiteral();
-      literal.setName("oneOf");
-      literal.setValue(6);
-      literal.setLiteral("oneOf");
-      // the generated string constant is the literal's instance, so
-      // createFromString returns the value the generated type declares (#53)
-      literal.setInstance(FilterOp.oneOf);
-      filterOpEnumType.addLiteral(literal);
-    }
-    {
-      const literal = new BasicEEnumLiteral();
-      literal.setName("range");
-      literal.setValue(7);
-      literal.setLiteral("range");
-      // the generated string constant is the literal's instance, so
-      // createFromString returns the value the generated type declares (#53)
-      literal.setInstance(FilterOp.range);
-      filterOpEnumType.addLiteral(literal);
-    }
-    {
-      const literal = new BasicEEnumLiteral();
-      literal.setName("valid");
-      literal.setValue(8);
-      literal.setLiteral("valid");
-      // the generated string constant is the literal's instance, so
-      // createFromString returns the value the generated type declares (#53)
-      literal.setInstance(FilterOp.valid);
-      filterOpEnumType.addLiteral(literal);
-    }
-    {
-      const literal = new BasicEEnumLiteral();
-      literal.setName("param");
-      literal.setValue(9);
-      literal.setLiteral("param");
-      // the generated string constant is the literal's instance, so
-      // createFromString returns the value the generated type declares (#53)
-      literal.setInstance(FilterOp.param);
-      filterOpEnumType.addLiteral(literal);
-    }
-    {
-      const annotation = new BasicEAnnotation();
-      annotation.setSource("http://www.eclipse.org/emf/2002/GenModel");
-      annotation.getDetails().putByKey("documentation", "The comparison a filter makes. oneOf takes a comma-separated list, range takes two comma-separated bounds, valid keeps rows with a value, param keeps what a selection holds.");
-      filterOpEnumType.getEAnnotations().push(annotation);
-    }
-    VegawidgetPackage.Literals.FILTER_OP = filterOpEnumType;
-    this.getEClassifiers().push(filterOpEnumType);
-
     // Create ParamKind enum
     const paramKindEnumType = new BasicEEnum();
     paramKindEnumType.setName('ParamKind');
@@ -2057,100 +1812,6 @@ export class VegawidgetPackage extends BasicEPackage {
     VegawidgetPackage.Literals.DATASET_SHAPE = datasetShapeEnumType;
     this.getEClassifiers().push(datasetShapeEnumType);
 
-    // Create ColumnValueType enum
-    const columnValueTypeEnumType = new BasicEEnum();
-    columnValueTypeEnumType.setName('ColumnValueType');
-    {
-      const literal = new BasicEEnumLiteral();
-      literal.setName("string");
-      literal.setValue(0);
-      literal.setLiteral("string");
-      // the generated string constant is the literal's instance, so
-      // createFromString returns the value the generated type declares (#53)
-      literal.setInstance(ColumnValueType.string);
-      columnValueTypeEnumType.addLiteral(literal);
-    }
-    {
-      const literal = new BasicEEnumLiteral();
-      literal.setName("number");
-      literal.setValue(1);
-      literal.setLiteral("number");
-      // the generated string constant is the literal's instance, so
-      // createFromString returns the value the generated type declares (#53)
-      literal.setInstance(ColumnValueType.number);
-      columnValueTypeEnumType.addLiteral(literal);
-    }
-    {
-      const literal = new BasicEEnumLiteral();
-      literal.setName("date");
-      literal.setValue(2);
-      literal.setLiteral("date");
-      // the generated string constant is the literal's instance, so
-      // createFromString returns the value the generated type declares (#53)
-      literal.setInstance(ColumnValueType.date);
-      columnValueTypeEnumType.addLiteral(literal);
-    }
-    {
-      const literal = new BasicEEnumLiteral();
-      literal.setName("boolean");
-      literal.setValue(3);
-      literal.setLiteral("boolean");
-      // the generated string constant is the literal's instance, so
-      // createFromString returns the value the generated type declares (#53)
-      literal.setInstance(ColumnValueType.boolean);
-      columnValueTypeEnumType.addLiteral(literal);
-    }
-    {
-      const annotation = new BasicEAnnotation();
-      annotation.setSource("http://www.eclipse.org/emf/2002/GenModel");
-      annotation.getDetails().putByKey("documentation", "What the values of a column are read as before the chart draws them. Sources such as SPARQL and CSV answer text; a number or a date that arrives as text sorts and scales as text.");
-      columnValueTypeEnumType.getEAnnotations().push(annotation);
-    }
-    VegawidgetPackage.Literals.COLUMN_VALUE_TYPE = columnValueTypeEnumType;
-    this.getEClassifiers().push(columnValueTypeEnumType);
-
-    // Create TransformKind enum
-    const transformKindEnumType = new BasicEEnum();
-    transformKindEnumType.setName('TransformKind');
-    {
-      const literal = new BasicEEnumLiteral();
-      literal.setName("filter");
-      literal.setValue(0);
-      literal.setLiteral("filter");
-      // the generated string constant is the literal's instance, so
-      // createFromString returns the value the generated type declares (#53)
-      literal.setInstance(TransformKind.filter);
-      transformKindEnumType.addLiteral(literal);
-    }
-    {
-      const literal = new BasicEEnumLiteral();
-      literal.setName("fold");
-      literal.setValue(1);
-      literal.setLiteral("fold");
-      // the generated string constant is the literal's instance, so
-      // createFromString returns the value the generated type declares (#53)
-      literal.setInstance(TransformKind.fold);
-      transformKindEnumType.addLiteral(literal);
-    }
-    {
-      const literal = new BasicEEnumLiteral();
-      literal.setName("calculate");
-      literal.setValue(2);
-      literal.setLiteral("calculate");
-      // the generated string constant is the literal's instance, so
-      // createFromString returns the value the generated type declares (#53)
-      literal.setInstance(TransformKind.calculate);
-      transformKindEnumType.addLiteral(literal);
-    }
-    {
-      const annotation = new BasicEAnnotation();
-      annotation.setSource("http://www.eclipse.org/emf/2002/GenModel");
-      annotation.getDetails().putByKey("documentation", "What a transform does: keep the rows that pass a comparison or a selection (filter), turn columns into rows (fold), or add a computed field (calculate).");
-      transformKindEnumType.getEAnnotations().push(annotation);
-    }
-    VegawidgetPackage.Literals.TRANSFORM_KIND = transformKindEnumType;
-    this.getEClassifiers().push(transformKindEnumType);
-
 
     // ============================================
     // Set ESuperTypes (must be done after all classes are created)
@@ -2173,9 +1834,7 @@ export class VegawidgetPackage extends BasicEPackage {
     (VegawidgetPackage.Literals.DATASET_BINDING__DATASOURCE_ID as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
     (VegawidgetPackage.Literals.DATASET_BINDING__SHAPE as BasicEAttribute).setEType(VegawidgetPackage.Literals.DATASET_SHAPE);
     (VegawidgetPackage.Literals.DATASET_BINDING__PATH as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
-    (VegawidgetPackage.Literals.DATASET_BINDING__COLUMN_TYPES as BasicEReference).setEType(VegawidgetPackage.Literals.COLUMN_TYPE);
-    (VegawidgetPackage.Literals.COLUMN_TYPE__COLUMN as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
-    (VegawidgetPackage.Literals.COLUMN_TYPE__TYPE as BasicEAttribute).setEType(VegawidgetPackage.Literals.COLUMN_VALUE_TYPE);
+    (VegawidgetPackage.Literals.DATASET_BINDING__COLUMN_TYPES as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.datasource.base').getEClassifier('ColumnType')!);
     (VegawidgetPackage.Literals.LAYER__DATASET as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
     (VegawidgetPackage.Literals.LAYER__MARK as BasicEAttribute).setEType(VegawidgetPackage.Literals.MARK_TYPE);
     (VegawidgetPackage.Literals.LAYER__INTERPOLATE as BasicEAttribute).setEType(VegawidgetPackage.Literals.INTERPOLATE);
@@ -2187,7 +1846,7 @@ export class VegawidgetPackage extends BasicEPackage {
     (VegawidgetPackage.Literals.LAYER__INNER_RADIUS as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EDouble')!);
     (VegawidgetPackage.Literals.LAYER__STROKE_WIDTH as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EDouble')!);
     (VegawidgetPackage.Literals.LAYER__ENCODINGS as BasicEReference).setEType(VegawidgetPackage.Literals.ENCODING);
-    (VegawidgetPackage.Literals.LAYER__TRANSFORMS as BasicEReference).setEType(VegawidgetPackage.Literals.TRANSFORM);
+    (VegawidgetPackage.Literals.LAYER__TRANSFORMS as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.datasource.base').getEClassifier('Transform')!);
     (VegawidgetPackage.Literals.ENCODING__CHANNEL as BasicEAttribute).setEType(VegawidgetPackage.Literals.CHANNEL);
     (VegawidgetPackage.Literals.ENCODING__FIELD as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
     (VegawidgetPackage.Literals.ENCODING__TYPE as BasicEAttribute).setEType(VegawidgetPackage.Literals.FIELD_TYPE);
@@ -2211,16 +1870,6 @@ export class VegawidgetPackage extends BasicEPackage {
     (VegawidgetPackage.Literals.ENCODING__SHOW_LEGEND as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EBoolean')!);
     (VegawidgetPackage.Literals.ENCODING__HIGHLIGHT_PARAM as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
     (VegawidgetPackage.Literals.ENCODING__VALUE_IF_NOT_SELECTED as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
-    (VegawidgetPackage.Literals.TRANSFORM__KIND as BasicEAttribute).setEType(VegawidgetPackage.Literals.TRANSFORM_KIND);
-    (VegawidgetPackage.Literals.TRANSFORM__FIELD as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
-    (VegawidgetPackage.Literals.TRANSFORM__OP as BasicEAttribute).setEType(VegawidgetPackage.Literals.FILTER_OP);
-    (VegawidgetPackage.Literals.TRANSFORM__VALUE as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
-    (VegawidgetPackage.Literals.TRANSFORM__PARAM as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
-    (VegawidgetPackage.Literals.TRANSFORM__FIELDS as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
-    (VegawidgetPackage.Literals.TRANSFORM__KEY_AS as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
-    (VegawidgetPackage.Literals.TRANSFORM__VALUE_AS as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
-    (VegawidgetPackage.Literals.TRANSFORM__AS as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
-    (VegawidgetPackage.Literals.TRANSFORM__EXPRESSION as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
     (VegawidgetPackage.Literals.FACET__ROW as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
     (VegawidgetPackage.Literals.FACET__COLUMN as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
     (VegawidgetPackage.Literals.FACET__COLUMNS as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EInt')!);

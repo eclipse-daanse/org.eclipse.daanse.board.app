@@ -21,7 +21,7 @@
 import { BasicEObject } from '@emfts/core';
 import { createContainmentEList } from '@emfts/core';
 import type { EClass, EStructuralFeature, EList, EReference } from '@emfts/core';
-import type { ColumnType } from './ColumnType.js';
+import type { ColumnType } from 'org.eclipse.daanse.board.app.lib.datasource.base';
 import { DatasetShape } from './DatasetShape.js';
 import type { DatasetBinding } from './DatasetBinding.js';
 import { VegawidgetPackage } from './VegawidgetPackage.js';
