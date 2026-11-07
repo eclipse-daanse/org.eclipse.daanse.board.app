@@ -46,8 +46,10 @@ async function readCapabilities() {
   loading.value = true
   error.value = ''
   try {
-    const client = await ogc.createServiceWFS(serviceUrl.value)
-    types.value = ((client?.getFeatureTypes?.() ?? []) as { name?: string; title?: string }[])
+    // In the GetFeatureInfo mode the layers are those of the WMS (#1282).
+    const client = featureInfo.value ? await ogc.createServiceWMS(serviceUrl.value) : await ogc.createServiceWFS(serviceUrl.value)
+    const listed = featureInfo.value ? client?.getLayers?.() : client?.getFeatureTypes?.()
+    types.value = ((listed ?? []) as { name?: string; title?: string }[])
       .filter((type) => !!type.name)
       .map((type) => ({ value: String(type.name), label: type.title ? `${type.title} (${type.name})` : String(type.name) }))
     if (!types.value.length) error.value = t('Settings.noTypes')
@@ -64,7 +66,12 @@ async function readCapabilities() {
     loading.value = false
   }
 }
-watch(serviceUrl, () => void readCapabilities(), { immediate: true })
+const featureInfo = computed(() => config.mode === 'getFeatureInfo')
+const modes = computed(() => [
+  { value: 'wfs', label: t('Settings.modes.wfs') },
+  { value: 'getFeatureInfo', label: t('Settings.modes.getFeatureInfo') },
+])
+watch([serviceUrl, featureInfo], () => void readCapabilities(), { immediate: true })
 
 /** A number field writes a number; empty writes the default. */
 function setNumber(name: string, value: unknown, fallback: number) {
@@ -78,6 +85,8 @@ function setNumber(name: string, value: unknown, fallback: number) {
     <DSelect v-model="config.connection" :options="restConnections" value-key="value" label-key="label"
       :label="t('Fields.connection')" :hint="t('Hints.connection')" />
     <DInput v-model="config.url" :label="t('Fields.url')" :hint="t('Hints.url')" placeholder="" />
+    <DSelect :model-value="config.mode || 'wfs'" :options="modes" value-key="value" label-key="label" :label="t('Fields.mode')"
+      :hint="t('Hints.mode')" @update:model-value="(v) => (config.mode = v)" />
     <div class="wfs-settings__row">
       <DSelect v-if="types.length" v-model="config.typeName" :options="types" value-key="value" label-key="label"
         :label="t('Fields.typeName')" />
@@ -87,13 +96,21 @@ function setNumber(name: string, value: unknown, fallback: number) {
       </DButton>
     </div>
     <p v-if="error" class="wfs-settings__error">{{ error }}</p>
-    <DSelect v-model="config.version" :options="versions" value-key="value" label-key="label" :label="t('Fields.version')" />
-    <DInput v-model="config.outputFormat" :label="t('Fields.outputFormat')" placeholder="application/json" :hint="t('Hints.outputFormat')" />
-    <DInput v-model="config.srsName" :label="t('Fields.srsName')" placeholder="EPSG:4326" />
+    <template v-if="!featureInfo">
+      <DSelect v-model="config.version" :options="versions" value-key="value" label-key="label" :label="t('Fields.version')" />
+      <DInput v-model="config.outputFormat" :label="t('Fields.outputFormat')" placeholder="application/json" :hint="t('Hints.outputFormat')" />
+      <DInput v-model="config.srsName" :label="t('Fields.srsName')" placeholder="EPSG:4326" />
+    </template>
+    <template v-else>
+      <DInput type="number" :model-value="config.tileSize" :label="t('Fields.tileSize')" :hint="t('Hints.tileSize')" :step="0.005"
+        @update:model-value="(v) => setNumber('tileSize', v, 0.01)" />
+      <DInput type="number" :model-value="config.pointTolerance" :label="t('Fields.pointTolerance')"
+        @update:model-value="(v) => setNumber('pointTolerance', v, 70)" />
+    </template>
     <DInput type="number" :model-value="config.maxFeatures" :label="t('Fields.maxFeatures')" :hint="t('Hints.maxFeatures')"
       @update:model-value="(v) => setNumber('maxFeatures', v, 1000)" />
     <DInput v-model="config.bbox" :label="t('Fields.bbox')" placeholder="13.44,52.44,13.46,52.45" :hint="t('Hints.bbox')" />
-    <DInput v-model="config.filter" :label="t('Fields.filter')" placeholder="gattung_deutsch='Linde'" :hint="t('Hints.filter')" />
+    <DInput v-if="!featureInfo" v-model="config.filter" :label="t('Fields.filter')" placeholder="gattung_deutsch='Linde'" :hint="t('Hints.filter')" />
   </div>
 </template>
 

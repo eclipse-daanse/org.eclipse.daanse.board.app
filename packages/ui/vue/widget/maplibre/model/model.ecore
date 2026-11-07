@@ -599,6 +599,11 @@ once. The OGC STA layer reads its things the way the Leaflet map does since
                 <details key="documentation" value="The height in metres of a point without a height; 0: the scale of the layer."/>
             </eAnnotations>
         </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="widthProperty" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" lowerBound="0" defaultValueLiteral="">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="The property of a point that says how wide it is, in metres (e.g. Kronendurchmesser, the crown of a tree): the model is scaled across to that width. Empty: in proportion to the height."/>
+            </eAnnotations>
+        </eStructuralFeatures>
         <eStructuralFeatures xsi:type="ecore:EReference" name="rules" upperBound="-1" eType="#//ModelRule" containment="true">
             <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
                 <details key="documentation" value="Which point gets which model and colour, by a property: the first rule that matches decides."/>

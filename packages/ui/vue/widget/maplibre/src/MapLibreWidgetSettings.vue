@@ -422,6 +422,8 @@ function addColor(layer: ThingLayer) {
           <template v-if="layer.datasourceId">
             <DInput v-model="layer.heightProperty" :label="t('Settings.models.heightProperty')" placeholder="baumhoehe"
               :hint="t('Settings.models.heightPropertyHint')" />
+            <DInput v-model="layer.widthProperty" :label="t('Settings.models.widthProperty')" placeholder="Kronendurchmesser"
+              :hint="t('Settings.models.widthPropertyHint')" />
             <DInput type="number" :model-value="layer.defaultHeight" :label="t('Settings.models.defaultHeight')"
               @update:model-value="(v) => setNumber(layer, 'defaultHeight', v)" />
             <div v-for="(rule, at) in layer.rules.toArray()" :key="at" class="row">

@@ -61,6 +61,7 @@ export function instancedOf(THREE: any, source: any, placements: InstancePlaceme
   const size = new THREE.Matrix4()
   const ground = new THREE.Matrix4().makeTranslation(0, lift, 0)
   const tall = Number.isFinite(box.max.y - box.min.y) ? box.max.y - box.min.y : 0
+  const wide = Math.max(box.max.x - box.min.x, box.max.z - box.min.z)
   const tinted = placements.some((placement) => !!placement.color)
   for (const mesh of meshes) {
     // A rule's colour paints the model, not its trunk (#1282).
@@ -73,7 +74,9 @@ export function instancedOf(THREE: any, source: any, placements: InstancePlaceme
       turn.makeRotationY(placement.rotation)
       // A height in metres scales the model to it; otherwise the scale of layer and instance.
       const factor = placement.height && tall > 0 ? placement.height / tall : placement.scale
-      size.makeScale(factor, factor, factor)
+      // A width in metres scales across; without one, across as up.
+      const across = placement.width && wide > 0 ? placement.width / wide : factor
+      size.makeScale(across, factor, across)
       if (paint) instanced.setColorAt(index, placement.color ? new THREE.Color(placement.color) : own)
       const matrix = new THREE.Matrix4().multiplyMatrices(at, turn).multiply(size).multiply(ground).multiply(mesh.matrixWorld)
       instanced.setMatrixAt(index, matrix)
@@ -170,8 +173,8 @@ export function createModelLayer(): ModelCustomLayer {
         if (!map) return
         camera = new THREE.Camera()
         scene = new THREE.Scene()
-        scene.add(new THREE.AmbientLight(0xffffff, 0.65))
-        const sun = new THREE.DirectionalLight(0xffffff, 0.75)
+        scene.add(new THREE.AmbientLight(0xffffff, 0.45))
+        const sun = new THREE.DirectionalLight(0xffffff, 0.6)
         sun.position.set(-0.4, 1, 0.6).normalize()
         scene.add(sun)
         renderer = new THREE.WebGLRenderer({ canvas: map.getCanvas(), context: gl, antialias: true })

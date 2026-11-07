@@ -34,6 +34,7 @@ export interface DataLayerLike {
   url?: string
   heightProperty?: string
   defaultHeight?: number
+  widthProperty?: string
   rules?: Iterable<RuleLike> | null
 }
 
@@ -43,6 +44,7 @@ export interface DataInstance {
   lon: number
   lat: number
   height?: number
+  width?: number
   color?: string
 }
 
@@ -70,6 +72,14 @@ export function heightFor(layer: DataLayerLike, properties: Record<string, unkno
   return Number.isFinite(fallback) && fallback > 0 ? fallback : undefined
 }
 
+/** The width of a point in metres from its property, or undefined. */
+export function widthFor(layer: DataLayerLike, properties: Record<string, unknown>): number | undefined {
+  const property = text(layer.widthProperty)
+  const raw = property ? properties[property] : undefined
+  const value = typeof raw === 'number' ? raw : Number.parseFloat(String(raw ?? ''))
+  return Number.isFinite(value) && value > 0 ? value : undefined
+}
+
 /** The place of a point feature: a Point, or the first point of a MultiPoint. */
 function pointOf(geometry: any): [number, number] | null {
   const coordinates = geometry?.type === 'Point' ? geometry.coordinates : geometry?.type === 'MultiPoint' ? geometry.coordinates?.[0] : null
@@ -95,6 +105,8 @@ export function instancesByModel(layer: DataLayerLike, collection: unknown): Map
     const instance: DataInstance = { id: String(feature.id ?? `${layer.id}:${index}`), lon: place[0], lat: place[1] }
     const height = heightFor(layer, properties)
     if (height !== undefined) instance.height = height
+    const width = widthFor(layer, properties)
+    if (width !== undefined) instance.width = width
     if (text(rule?.color)) instance.color = text(rule?.color)
     out.set(url, [...(out.get(url) ?? []), instance])
   })

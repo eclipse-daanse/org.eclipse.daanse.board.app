@@ -8,7 +8,10 @@
     "srsName": "Coordinate system",
     "maxFeatures": "Features at most",
     "bbox": "Only in this box",
-    "filter": "CQL filter"
+    "filter": "CQL filter",
+    "mode": "Read by",
+    "tileSize": "Tile edge (degrees of latitude)",
+    "pointTolerance": "Tolerance (px)"
   },
   "Hints": {
     "connection": "A REST connection whose address is the service, e.g. https://gdi.berlin.de/services/wfs/baumbestand",
@@ -16,13 +19,19 @@
     "outputFormat": "Empty: GeoJSON. A service without it answers GML, which is read too.",
     "maxFeatures": "0: no limit.",
     "bbox": "west,south,east,north in degrees. Empty: anywhere.",
-    "filter": "Where the service supports CQL. Empty: no filter."
+    "filter": "Where the service supports CQL. Empty: no filter.",
+    "mode": "WMS GetFeatureInfo is for a QGIS Server that offers the layer as WMS only; it needs a box and reads it in tiles.",
+    "tileSize": "One request per tile; 0.01 is about 1 km."
   },
   "Settings": {
     "reload": "Read the feature types again",
     "noTypes": "The service lists no feature type.",
     "noWfs": "This address answers no WFS GetCapabilities.",
-    "unreachable": "The service cannot be reached, or does not allow the board to read it (CORS)."
+    "unreachable": "The service cannot be reached, or does not allow the board to read it (CORS).",
+    "modes": {
+      "wfs": "WFS GetFeature",
+      "getFeatureInfo": "WMS GetFeatureInfo (in tiles)"
+    }
   },
   "Preview": {
     "count": "{{count}} features",

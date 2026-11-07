@@ -34,5 +34,8 @@ export interface IWfsStoreConfiguration extends IBaseConnectionConfiguration {
   maxFeatures?: number;
   bbox?: string;
   filter?: string;
+  mode?: string;
+  tileSize?: number;
+  pointTolerance?: number;
 
 }

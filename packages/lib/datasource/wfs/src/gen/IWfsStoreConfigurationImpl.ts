@@ -38,6 +38,9 @@ export class IWfsStoreConfigurationImpl extends IBaseConnectionConfigurationImpl
   static readonly MAX_FEATURES: number = 10;
   static readonly BBOX: number = 11;
   static readonly FILTER: number = 12;
+  static readonly MODE: number = 13;
+  static readonly TILE_SIZE: number = 14;
+  static readonly POINT_TOLERANCE: number = 15;
 
   // Private fields
   private _connection?: string;
@@ -49,6 +52,9 @@ export class IWfsStoreConfigurationImpl extends IBaseConnectionConfigurationImpl
   private _maxFeatures: number = 1000;
   private _bbox: string = "";
   private _filter: string = "";
+  private _mode: string = "wfs";
+  private _tileSize: number = 0.01;
+  private _pointTolerance: number = 70;
 
   /**
    * Returns the EClass of this object
@@ -274,6 +280,78 @@ export class IWfsStoreConfigurationImpl extends IBaseConnectionConfigurationImpl
     }
   }
 
+  get mode(): string {
+    return this._mode!;
+  }
+
+  set mode(value: string) {
+    const oldValue = this._mode;
+    this._mode = value;
+    if (this.eDeliver()) {
+      this.eNotify({
+        getNotifier: () => this,
+        getEventType: () => 1, // SET
+        getFeature: () => this.eClass().getEStructuralFeature(IWfsStoreConfigurationImpl.MODE),
+        getOldValue: () => oldValue,
+        getNewValue: () => value,
+        getPosition: () => -1,
+        wasSet: () => true,
+        isTouch: () => false,
+        isReset: () => false,
+        getFeatureID: () => IWfsStoreConfigurationImpl.MODE,
+        merge: () => false
+      });
+    }
+  }
+
+  get tileSize(): number {
+    return this._tileSize!;
+  }
+
+  set tileSize(value: number) {
+    const oldValue = this._tileSize;
+    this._tileSize = value;
+    if (this.eDeliver()) {
+      this.eNotify({
+        getNotifier: () => this,
+        getEventType: () => 1, // SET
+        getFeature: () => this.eClass().getEStructuralFeature(IWfsStoreConfigurationImpl.TILE_SIZE),
+        getOldValue: () => oldValue,
+        getNewValue: () => value,
+        getPosition: () => -1,
+        wasSet: () => true,
+        isTouch: () => false,
+        isReset: () => false,
+        getFeatureID: () => IWfsStoreConfigurationImpl.TILE_SIZE,
+        merge: () => false
+      });
+    }
+  }
+
+  get pointTolerance(): number {
+    return this._pointTolerance!;
+  }
+
+  set pointTolerance(value: number) {
+    const oldValue = this._pointTolerance;
+    this._pointTolerance = value;
+    if (this.eDeliver()) {
+      this.eNotify({
+        getNotifier: () => this,
+        getEventType: () => 1, // SET
+        getFeature: () => this.eClass().getEStructuralFeature(IWfsStoreConfigurationImpl.POINT_TOLERANCE),
+        getOldValue: () => oldValue,
+        getNewValue: () => value,
+        getPosition: () => -1,
+        wasSet: () => true,
+        isTouch: () => false,
+        isReset: () => false,
+        getFeatureID: () => IWfsStoreConfigurationImpl.POINT_TOLERANCE,
+        merge: () => false
+      });
+    }
+  }
+
   // Reflective API
 
   /**
@@ -300,6 +378,12 @@ export class IWfsStoreConfigurationImpl extends IBaseConnectionConfigurationImpl
         return this.bbox;
       case IWfsStoreConfigurationImpl.FILTER:
         return this.filter;
+      case IWfsStoreConfigurationImpl.MODE:
+        return this.mode;
+      case IWfsStoreConfigurationImpl.TILE_SIZE:
+        return this.tileSize;
+      case IWfsStoreConfigurationImpl.POINT_TOLERANCE:
+        return this.pointTolerance;
       default:
         return super.eGet(feature);
     }
@@ -347,6 +431,18 @@ export class IWfsStoreConfigurationImpl extends IBaseConnectionConfigurationImpl
         this.filter = newValue as string;
         super.eSet(feature, newValue);
         break;
+      case IWfsStoreConfigurationImpl.MODE:
+        this.mode = newValue as string;
+        super.eSet(feature, newValue);
+        break;
+      case IWfsStoreConfigurationImpl.TILE_SIZE:
+        this.tileSize = newValue as number;
+        super.eSet(feature, newValue);
+        break;
+      case IWfsStoreConfigurationImpl.POINT_TOLERANCE:
+        this.pointTolerance = newValue as number;
+        super.eSet(feature, newValue);
+        break;
       default:
         super.eSet(feature, newValue);
     }
@@ -376,6 +472,12 @@ export class IWfsStoreConfigurationImpl extends IBaseConnectionConfigurationImpl
         return this._bbox !== "";
       case IWfsStoreConfigurationImpl.FILTER:
         return this._filter !== "";
+      case IWfsStoreConfigurationImpl.MODE:
+        return this._mode !== "wfs";
+      case IWfsStoreConfigurationImpl.TILE_SIZE:
+        return this._tileSize !== 0.01;
+      case IWfsStoreConfigurationImpl.POINT_TOLERANCE:
+        return this._pointTolerance !== 70;
       default:
         return super.eIsSet(feature);
     }
@@ -414,6 +516,15 @@ export class IWfsStoreConfigurationImpl extends IBaseConnectionConfigurationImpl
       case IWfsStoreConfigurationImpl.FILTER:
         this._filter = "";
         return;
+      case IWfsStoreConfigurationImpl.MODE:
+        this._mode = "wfs";
+        return;
+      case IWfsStoreConfigurationImpl.TILE_SIZE:
+        this._tileSize = 0.01;
+        return;
+      case IWfsStoreConfigurationImpl.POINT_TOLERANCE:
+        this._pointTolerance = 70;
+        return;
       default:
         super.eUnset(feature);
     }
@@ -438,6 +549,9 @@ export class IWfsStoreConfigurationImpl extends IBaseConnectionConfigurationImpl
       maxFeatures: this.maxFeatures,
       bbox: this.bbox,
       filter: this.filter,
+      mode: this.mode,
+      tileSize: this.tileSize,
+      pointTolerance: this.pointTolerance,
     };
   }
 }

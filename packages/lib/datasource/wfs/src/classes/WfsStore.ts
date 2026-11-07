@@ -16,7 +16,8 @@ import { type ConfigurationOf, BaseDatasource } from 'org.eclipse.daanse.board.a
 import { CONNECTION_REPOSITORY, type IConnection, ConnectionRepository } from 'org.eclipse.daanse.board.app.lib.api.connection'
 import type { FeatureCollection } from 'geojson'
 import type { IWfsStoreConfiguration } from '../gen/IWfsStoreConfiguration'
-import { featuresOf, getFeaturePath, tableOf, type WfsRequest } from '../wfs'
+import { exceptionOf, featuresOf, getFeaturePath, tableOf, type WfsRequest } from '../wfs'
+import { featureInfoPath, featuresOfFeatureInfo, mergedOf, tilesOf, type FeatureInfoRequest } from '../featureInfo'
 
 /** What the store says when it could not read: for the preview and the settings. */
 export interface WfsFailure {
@@ -33,7 +34,8 @@ export interface WfsFailure {
 @injectable()
 export class WfsStore extends BaseDatasource {
   private connection = ''
-  private request: WfsRequest = {}
+  private request: WfsRequest & FeatureInfoRequest = {}
+  private mode = 'wfs'
   private reading?: Promise<FeatureCollection>
   /** Why the last read failed, if it did. */
   lastFailure?: WfsFailure
@@ -57,7 +59,10 @@ export class WfsStore extends BaseDatasource {
       maxFeatures: configuration.maxFeatures,
       bbox: configuration.bbox,
       filter: configuration.filter,
+      tileSize: configuration.tileSize,
+      pointTolerance: configuration.pointTolerance,
     }
+    this.mode = configuration.mode === 'getFeatureInfo' ? 'getFeatureInfo' : 'wfs'
     if (this.pollingEnabled) this.startPolling(this.pollingInterval)
   }
 
@@ -70,6 +75,7 @@ export class WfsStore extends BaseDatasource {
     if (this.reading) return this.reading
     const reading = (async () => {
       const connection = this.connectionRepository.getConnection(this.connection) as IConnection
+      if (this.mode === 'getFeatureInfo') return this.readFeatureInfo(connection)
       const response = await connection.fetch({ url: this.path }, { headers: { Accept: 'application/json, application/geo+json, text/xml;q=0.8' } })
       const answer = await response.text()
       if (!response.ok) throw Object.assign(new Error(answer.slice(0, 200) || response.statusText), { status: response.status })
@@ -83,6 +89,26 @@ export class WfsStore extends BaseDatasource {
         if (this.reading === reading) this.reading = undefined
       })
     return reading
+  }
+
+  /**
+   * The GetFeatureInfo mode: every tile of the box at once, the features of
+   * all of them once each. A tile that fails fails the read, with its reason.
+   */
+  private async readFeatureInfo(connection: IConnection): Promise<FeatureCollection> {
+    const tiles = tilesOf(this.request.bbox, Number(this.request.tileSize ?? 0.01))
+    if (!tiles.length) throw new Error('The GetFeatureInfo mode needs a box (west,south,east,north).')
+    const answers = await Promise.all(
+      tiles.map(async (tile) => {
+        const response = await connection.fetch({ url: featureInfoPath(this.request, tile) }, { headers: { Accept: 'text/xml' } })
+        const answer = await response.text()
+        if (!response.ok) throw Object.assign(new Error(answer.slice(0, 200) || response.statusText), { status: response.status })
+        const exception = exceptionOf(answer)
+        if (exception) throw new Error(exception)
+        return featuresOfFeatureInfo(answer)
+      }),
+    )
+    return mergedOf(answers)
   }
 
   async getOriginalData(): Promise<unknown> {

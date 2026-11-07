@@ -44,7 +44,8 @@ export class ModelLayerImpl extends BasicEObject implements ModelLayer {
   static readonly DATASOURCE_ID: number = 9;
   static readonly HEIGHT_PROPERTY: number = 10;
   static readonly DEFAULT_HEIGHT: number = 11;
-  static readonly RULES: number = 12;
+  static readonly WIDTH_PROPERTY: number = 12;
+  static readonly RULES: number = 13;
 
   // Private fields
   private _id?: string;
@@ -59,6 +60,7 @@ export class ModelLayerImpl extends BasicEObject implements ModelLayer {
   private _datasourceId: string = "";
   private _heightProperty: string = "";
   private _defaultHeight: number = 0;
+  private _widthProperty: string = "";
   private _rules!: EList<ModelRule>;
 
   /**
@@ -340,6 +342,30 @@ export class ModelLayerImpl extends BasicEObject implements ModelLayer {
     }
   }
 
+  get widthProperty(): string {
+    return this._widthProperty!;
+  }
+
+  set widthProperty(value: string) {
+    const oldValue = this._widthProperty;
+    this._widthProperty = value;
+    if (this.eDeliver()) {
+      this.eNotify({
+        getNotifier: () => this,
+        getEventType: () => 1, // SET
+        getFeature: () => this.eClass().getEStructuralFeature(ModelLayerImpl.WIDTH_PROPERTY),
+        getOldValue: () => oldValue,
+        getNewValue: () => value,
+        getPosition: () => -1,
+        wasSet: () => true,
+        isTouch: () => false,
+        isReset: () => false,
+        getFeatureID: () => ModelLayerImpl.WIDTH_PROPERTY,
+        merge: () => false
+      });
+    }
+  }
+
   get rules(): EList<ModelRule> {
     if (!this._rules) {
       this._rules = createContainmentEList<any>(this, this.eClass().getEStructuralFeature('rules') as EReference);
@@ -379,6 +405,8 @@ export class ModelLayerImpl extends BasicEObject implements ModelLayer {
         return this.heightProperty;
       case ModelLayerImpl.DEFAULT_HEIGHT:
         return this.defaultHeight;
+      case ModelLayerImpl.WIDTH_PROPERTY:
+        return this.widthProperty;
       case ModelLayerImpl.RULES:
         return this.rules;
       default:
@@ -441,6 +469,10 @@ export class ModelLayerImpl extends BasicEObject implements ModelLayer {
         this.defaultHeight = newValue as number;
         super.eSet(feature, newValue);
         break;
+      case ModelLayerImpl.WIDTH_PROPERTY:
+        this.widthProperty = newValue as string;
+        super.eSet(feature, newValue);
+        break;
       case ModelLayerImpl.RULES:
         this.rules.clear();
         this.rules.addAll(newValue as any[]);
@@ -481,6 +513,8 @@ export class ModelLayerImpl extends BasicEObject implements ModelLayer {
         return this._heightProperty !== "";
       case ModelLayerImpl.DEFAULT_HEIGHT:
         return this._defaultHeight !== 0;
+      case ModelLayerImpl.WIDTH_PROPERTY:
+        return this._widthProperty !== "";
       case ModelLayerImpl.RULES:
         return this._rules !== undefined && !this._rules.isEmpty();
       default:
@@ -530,6 +564,9 @@ export class ModelLayerImpl extends BasicEObject implements ModelLayer {
       case ModelLayerImpl.DEFAULT_HEIGHT:
         this._defaultHeight = 0;
         return;
+      case ModelLayerImpl.WIDTH_PROPERTY:
+        this._widthProperty = "";
+        return;
       case ModelLayerImpl.RULES:
         if (this._rules) this._rules.clear();
         return;
@@ -560,6 +597,7 @@ export class ModelLayerImpl extends BasicEObject implements ModelLayer {
       datasourceId: this.datasourceId,
       heightProperty: this.heightProperty,
       defaultHeight: this.defaultHeight,
+      widthProperty: this.widthProperty,
       rules: this.rules?.toArray?.() ?? this.rules,
     };
   }

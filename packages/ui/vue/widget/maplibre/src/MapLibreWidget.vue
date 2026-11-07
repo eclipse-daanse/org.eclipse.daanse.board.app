@@ -264,7 +264,7 @@ const drawnModels = (): DrawnModelLayer[] => {
     const url = String(layer.url ?? '').trim()
     const placed = layer.instances.toArray().map((i) => ({ id: i.id, lon: i.lon, lat: i.lat, scale: i.scale, rotation: i.rotation }))
     const byModel = layer.datasourceId ? instancesByModel(
-      { id: layer.id, url, heightProperty: layer.heightProperty, defaultHeight: layer.defaultHeight, rules: layer.rules.toArray() },
+      { id: layer.id, url, heightProperty: layer.heightProperty, defaultHeight: layer.defaultHeight, widthProperty: layer.widthProperty, rules: layer.rules.toArray() },
       modelData.answerOf(layer.datasourceId),
     ) : new Map()
     if (url) out.push({ ...base, id: layer.id, url, format: layer.format, instances: [...placed, ...(byModel.get(url) ?? [])] })
