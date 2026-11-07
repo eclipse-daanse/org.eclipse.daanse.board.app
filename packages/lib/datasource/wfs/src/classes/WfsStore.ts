@@ -109,13 +109,16 @@ export class WfsStore extends BaseDatasource {
     return Number.isFinite(size) && size > 0 ? size : 0.01
   }
 
-  /* Whether the area is that of the maps: the extent viewport, and a map has sent its view. */
-  private get followsViewport(): boolean {
-    return this.extent === 'viewport' && this.viewports.size > 0
-  }
-
   private read(): Promise<FeatureCollection> {
-    if (this.followsViewport) return this.readViewport()
+    /*
+     * With the extent viewport the area is that of the maps, and only that:
+     * before a map has sent its view there is no area, and no features. The
+     * fixed box is not read in its place - its answer came after the tiles
+     * of the view and stood in for them (#1300). Nothing waits for a view
+     * either: a table or a preview on the source may never get one; a map
+     * sends its view at once, and the store then tells its subscribers.
+     */
+    if (this.extent === 'viewport') return this.readViewport()
     if (this.reading) return this.reading
     const reading = (async () => {
       const connection = this.connectionRepository.getConnection(this.connection) as IConnection

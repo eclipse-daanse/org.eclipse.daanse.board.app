@@ -84,11 +84,18 @@ describe('the WFS store with the extent viewport', () => {
     expect(fetch).toHaveBeenCalledTimes(2)
   })
 
-  it('reads the box of its configuration until a map sends its view', async () => {
-    const { store, fetch } = viewportStore()
-    await store.getData('geojson')
-    expect(fetch).toHaveBeenCalledTimes(1)
-    expect(new URLSearchParams(fetch.mock.calls[0]![0].url.split('?')[1]).get('bbox')).toBe('11.5,50.9,11.51,50.91,EPSG:4326')
+  it('reads nothing and has no features until a map sends its view; the fixed box is never read (#1300)', async () => {
+    const { store, fetch, heard } = viewportStore()
+    expect(((await store.getData('geojson')) as { features: unknown[] }).features).toEqual([])
+    expect(fetch).not.toHaveBeenCalled()
+    await store.callEvent(VIEWPORT_EVENT, view([11.581, 50.921, 11.589, 50.929]))
+    expect(heard).toHaveBeenCalledTimes(1)
+    expect(((await store.getData('geojson')) as { features: unknown[] }).features).toHaveLength(2)
+    const boxes = fetch.mock.calls.map(([{ url }]) => new URLSearchParams(url.split('?')[1]).get('bbox'))
+    expect(boxes).toEqual(['11.58,50.92,11.59,50.93,EPSG:4326'])
+    // A map that goes away leaves no area again.
+    await store.callEvent(VIEWPORT_EVENT, view(null))
+    expect(((await store.getData('geojson')) as { features: unknown[] }).features).toEqual([])
   })
 
   it('answers at most maxViewportFeatures, those of the tiles nearest the middle first', async () => {

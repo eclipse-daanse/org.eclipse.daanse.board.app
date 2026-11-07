@@ -25,7 +25,7 @@
     "filter": "Where the service supports CQL. Empty: no filter.",
     "mode": "WMS GetFeatureInfo is for a QGIS Server that offers the layer as WMS only; it needs a box and reads it in tiles.",
     "IWfsStoreConfiguration": {
-      "extent": "What the map shows: a map on this source sends its view, and only the tiles in it are read, each once. Without a map: the box below.",
+      "extent": "What the map shows: a map on this source sends its view, and only the tiles in it are read, each once. Without a map: no features.",
       "tileSize": "The edge of a tile in degrees of latitude (longitude in proportion); one request per tile.",
       "minZoom": "Further out nothing is read; the view would have too many tiles.",
       "maxViewportFeatures": "At most this many features in the view, those of the tiles near the middle first; 0: no limit."
