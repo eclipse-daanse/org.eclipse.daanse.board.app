@@ -14,9 +14,15 @@ Contributors:
  * how the features are asked for. A service that offers no WFS says so in
  * its own words ("Service unknown or not permitted").
  */
-import { computed, ref, watch } from 'vue'
+import { computed, ref, shallowRef, watch } from 'vue'
 import { DButton, DIcon, DInput, DSelect } from 'org.eclipse.daanse.board.app.ui.vue.controls'
-import { useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+import { adopt, useEObject, useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+import { SettingsForm } from 'org.eclipse.daanse.board.app.ui.vue.uimodel'
+import { BaseconnectionFactory } from 'org.eclipse.daanse.board.app.lib.datasource.base'
+import { WfsstoreFactory, WfsstorePackage } from 'org.eclipse.daanse.board.app.lib.datasource.wfs'
+import columnsFormXmi from '../model/ui-columns.xmi?raw'
+import wfsEcore from 'org.eclipse.daanse.board.app.lib.datasource.wfs/model/WfsDataSourceModel.ecore?raw'
+import columnTypeFormXmi from 'org.eclipse.daanse.board.app.lib.datasource.base/model/ui-column-type.xmi?raw'
 import { useOGCService } from 'org.eclipse.daanse.board.app.ui.vue.common.map'
 import { columnTypesOfSchema, describeFeatureTypePath, exceptionOf, getCapabilitiesPath } from 'org.eclipse.daanse.board.app.lib.datasource.wfs'
 
@@ -76,20 +82,25 @@ watch([serviceUrl, featureInfo], () => void readCapabilities(), { immediate: tru
 /* ------------------------------------------------ column types (#1295) */
 
 /*
- * What the properties are: written by hand here, as a data source's
- * settings are a form of their own and a list in it is a list of rows. In
- * the WFS mode they are read from DescribeFeatureType; GetFeatureInfo says
- * nothing about its attributes.
+ * What the properties are, in the generated form of the shared column type
+ * (ui-column-type.xmi of lib.datasource.base): the form edits a modelled
+ * copy, and each change is written into the configuration as plain data.
+ * In the WFS mode they can be read from DescribeFeatureType; GetFeatureInfo
+ * says nothing about its attributes, so there they are entered.
  */
-/* i18n-keys: datasourceWfs:Settings.valueTypes.* */
-const valueTypes = computed(() => ['string', 'number', 'date', 'boolean'].map((value) => ({ value, label: t(`Settings.valueTypes.${value}`) })))
-const columns = computed<any[]>(() => (Array.isArray(config.columnTypes) ? config.columnTypes : []))
-function addColumn() {
-  config.columnTypes = [...columns.value, { column: '', type: 'number', unit: '', label: '' }]
+const columnsModel = shallowRef<any>(adopt(WfsstoreFactory.eINSTANCE.createIWfsStoreConfiguration(), { columnTypes: config.columnTypes ?? [] }))
+const columnsHeld = useEObject(() => columnsModel.value)
+watch(columnsHeld, (held: any) => {
+  if (!held) return
+  config.columnTypes = held.columnTypes.toArray().map((each: any) => each.toJSON())
+})
+function setColumns(columns: { column: string; type: string; unit?: string; label?: string }[]) {
+  const list = columnsModel.value.columnTypes
+  list.clear()
+  for (const each of columns) list.add(adopt(BaseconnectionFactory.eINSTANCE.createColumnType(), each))
 }
-function removeColumn(index: number) {
-  config.columnTypes = columns.value.filter((_, at) => at !== index)
-}
+const columnEntryForms = [{ xmi: columnTypeFormXmi, uri: '/column-type.ui.xmi' }]
+const createColumns = () => WfsstoreFactory.eINSTANCE.createIWfsStoreConfiguration()
 const describing = ref(false)
 async function readColumnTypes() {
   if (!connection.value) return
@@ -98,10 +109,13 @@ async function readColumnTypes() {
   try {
     const answer = await (await fetch(`${connection.value?.config?.url ?? ''}${describeFeatureTypePath({ url: config.url, typeName: config.typeName, version: config.version })}`)).text()
     const read = columnTypesOfSchema(answer)
-    if (!read.length) error.value = exceptionOf(answer) ?? t('Settings.noColumns')
+    if (!read.length) {
+      error.value = exceptionOf(answer) ?? t('Settings.noColumns')
+      return
+    }
     // Units and labels already set stay.
-    const kept = new Map(columns.value.map((each) => [each.column, each]))
-    config.columnTypes = read.map((each) => ({ unit: '', label: '', ...kept.get(each.column), ...each }))
+    const kept = new Map<string, any>(columnsModel.value.columnTypes.toArray().map((each: any) => [each.column, each.toJSON()]))
+    setColumns(read.map((each) => ({ unit: '', label: '', ...kept.get(each.column), ...each })))
   } catch {
     error.value = t('Settings.unreachable')
   } finally {
@@ -152,14 +166,16 @@ function setNumber(name: string, value: unknown, fallback: number) {
         <DButton v-if="!featureInfo" intent="quiet" size="sm" :busy="describing" :title="t('Settings.readColumns')" @click="readColumnTypes">
           <DIcon name="schema" size="sm" />
         </DButton>
-        <DButton intent="quiet" size="sm" :title="t('Settings.addColumn')" @click="addColumn"><DIcon name="add" size="sm" /></DButton>
       </div>
-      <div v-for="(column, index) in columns" :key="index" class="wfs-settings__column">
-        <DInput v-model="column.column" :label="t('Fields.column')" />
-        <DSelect v-model="column.type" :options="valueTypes" value-key="value" label-key="label" :label="t('Fields.type')" />
-        <DInput v-model="column.unit" :label="t('Fields.unit')" placeholder="m" />
-        <DButton intent="quiet" size="sm" :title="t('Settings.removeColumn')" @click="removeColumn(index)"><DIcon name="delete" size="sm" /></DButton>
-      </div>
+      <SettingsForm
+        v-model="columnsModel"
+        :create="createColumns"
+        :ui-model-xmi="columnsFormXmi"
+        :domain-package="WfsstorePackage.eINSTANCE"
+        ui-model-uri="/wfs-columns.ui.xmi"
+        :entry-forms="columnEntryForms"
+        :ecore="wfsEcore"
+      />
     </section>
     <DInput v-if="!featureInfo" v-model="config.filter" :label="t('Fields.filter')" placeholder="gattung_deutsch='Linde'" :hint="t('Hints.filter')" />
   </div>
@@ -197,20 +213,6 @@ function setNumber(name: string, value: unknown, fallback: number) {
 
 .wfs-settings__head > span {
   flex: 1 1 auto;
-}
-
-/* One column type per block: no row wider than the settings. */
-.wfs-settings__column {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  padding: 6px 8px;
-  border: 1px solid var(--color-divider);
-  border-radius: var(--radius-xs, 4px);
-}
-
-.wfs-settings__column > button {
-  align-self: flex-end;
 }
 
 .wfs-settings__error {

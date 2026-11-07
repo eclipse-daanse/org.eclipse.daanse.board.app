@@ -76,7 +76,9 @@ describe('the WFS settings', () => {
       { column: 'baumhoehe', type: 'number', unit: 'm', label: '' },
       { column: 'art', type: 'string', unit: '', label: '' },
     ])
-    expect(wrapper.findAll('.wfs-settings__column')).toHaveLength(2)
+    // The list is the generated form of the shared column type.
+    expect(wrapper.findComponent({ name: 'SettingsForm' }).exists()).toBe(true)
+    expect(wrapper.find('.wfs-settings__columns').findAll('input').some((input) => (input.element as HTMLInputElement).value === 'baumhoehe')).toBe(true)
   })
 
   it('say why there are none in the service words', async () => {

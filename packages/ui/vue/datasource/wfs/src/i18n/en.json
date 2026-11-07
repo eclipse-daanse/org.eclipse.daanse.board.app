@@ -11,10 +11,7 @@
     "filter": "CQL filter",
     "mode": "Read by",
     "tileSize": "Tile edge (degrees of latitude)",
-    "pointTolerance": "Tolerance (px)",
-    "column": "Column",
-    "type": "Type",
-    "unit": "Unit"
+    "pointTolerance": "Tolerance (px)"
   },
   "Hints": {
     "connection": "A REST connection whose address is the service, e.g. https://gdi.berlin.de/services/wfs/baumbestand",
@@ -37,15 +34,7 @@
     },
     "columnTypes": "Column types",
     "readColumns": "Read the column types from the service (DescribeFeatureType)",
-    "addColumn": "Add a column type",
-    "removeColumn": "Remove",
-    "noColumns": "The service describes no columns of this feature type.",
-    "valueTypes": {
-      "string": "Text",
-      "number": "Number",
-      "date": "Date",
-      "boolean": "Yes/no"
-    }
+    "noColumns": "The service describes no columns of this feature type."
   },
   "Preview": {
     "count": "{{count}} features",
