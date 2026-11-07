@@ -86,7 +86,7 @@ A data source that reads a feature type of an OGC Web Feature Service
         </eStructuralFeatures>
         <eStructuralFeatures xsi:type="ecore:EAttribute" name="extent" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" lowerBound="0" defaultValueLiteral="fixed">
             <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-                <details key="documentation" value="Which area is read: fixed, the box above; or viewport, the tiles a map shows - a map that moves sends its view, and the store reads the tiles it has not read yet. Without a view the box above."/>
+                <details key="documentation" value="Which area is read: fixed, the box above; or viewport, the tiles a map shows - a map that moves sends its view, and the store reads the tiles it has not read yet. Without a view: no features."/>
             </eAnnotations>
         </eStructuralFeatures>
         <eStructuralFeatures xsi:type="ecore:EAttribute" name="minZoom" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble" lowerBound="0" defaultValueLiteral="14">

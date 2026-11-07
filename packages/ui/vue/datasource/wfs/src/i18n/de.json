@@ -25,7 +25,7 @@
     "filter": "Wo der Dienst CQL kennt. Leer: kein Filter.",
     "mode": "WMS GetFeatureInfo ist für einen QGIS Server, der den Layer nur als WMS anbietet; es braucht ein Rechteck und liest es in Kacheln.",
     "IWfsStoreConfiguration": {
-      "extent": "Was die Karte zeigt: Eine Karte auf dieser Quelle sendet ihren Ausschnitt, und es werden nur die Kacheln darin gelesen, jede einmal. Ohne Karte: das Rechteck unten.",
+      "extent": "Was die Karte zeigt: Eine Karte auf dieser Quelle sendet ihren Ausschnitt, und es werden nur die Kacheln darin gelesen, jede einmal. Ohne Karte: keine Features.",
       "tileSize": "Die Kante einer Kachel in Grad Breite (Länge im Verhältnis); eine Anfrage je Kachel.",
       "minZoom": "Weiter herausgezoomt wird nichts gelesen; der Ausschnitt hätte zu viele Kacheln.",
       "maxViewportFeatures": "Höchstens so viele Features im Ausschnitt, die der Kacheln nahe der Mitte zuerst; 0: keine Grenze."
