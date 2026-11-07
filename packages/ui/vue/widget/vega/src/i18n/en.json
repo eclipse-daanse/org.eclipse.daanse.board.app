@@ -18,7 +18,8 @@
     "renderer": "Drawn as",
     "layersHint": "No layer yet: add one to draw marks.",
     "datasetsHint": "None: the chart draws the data source of the widget as the dataset table.",
-    "paramsHint": "No selection: marks are not picked."
+    "paramsHint": "No selection: marks are not picked.",
+    "starter": "Start from a chart"
   },
   "Options": {
     "legendPosition": {
@@ -143,6 +144,20 @@
       "table": "Table (rows with headers)",
       "object": "JSON with a list of rows",
       "geojson": "GeoJSON features"
+    },
+    "starter": {
+      "none": "—",
+      "bar": "Bars",
+      "stackedBar": "Stacked bars",
+      "groupedBar": "Grouped bars",
+      "line": "Line",
+      "area": "Stacked areas",
+      "scatter": "Scatter plot",
+      "heatmap": "Heatmap",
+      "histogram": "Histogram",
+      "boxplot": "Box plot",
+      "donut": "Donut",
+      "brush": "Brush and link"
     }
   },
   "FormLayer": {
@@ -215,7 +230,8 @@
       "layers": "The layers of the chart, drawn in this order - the first one at the bottom. One layer is a plain chart; a second one adds, for example, points on a line or a rule on bars.",
       "facet": "Splits the chart into small multiples, one per value of a field. Empty draws a single chart.",
       "params": "Selections and values the chart holds: what is picked or brushed, and values other settings refer to by name.",
-      "datasets": "The data the chart draws, by name. Without an entry the data source of the widget is the dataset table; an entry named table without a source of its own says how to read that one."
+      "datasets": "The data the chart draws, by name. Without an entry the data source of the widget is the dataset table; an entry named table without a source of its own says how to read that one.",
+      "starter": "Replaces the layers, selections and small multiples with this chart, filled with columns of the data. Then the choice is empty again; \"Discard\" brings the chart back."
     },
     "DatasetBinding": {
       "name": "The name layers use for this dataset. table is the data source of the widget.",

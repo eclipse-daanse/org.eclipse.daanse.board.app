@@ -31,6 +31,7 @@ import { identifier as DATASOURCE_REPOSITORY, type DatasourceRepository } from '
 import type { VegaWidgetSettings } from './gen/VegaWidgetSettings'
 import { compileRecipe, DEFAULT_DATASET, RecipeError, withSize } from './recipe'
 import { withOverlay } from './overlay'
+import { applyStarter } from './starters'
 import { SAMPLE_VALUES, withDatasets, type Row } from './sample'
 import { datasetSources, rowsOf, typed } from './datasets'
 import { useDatasets, type ChartStore } from './useDatasets'
@@ -69,6 +70,24 @@ const emit = ({ event, payload }: VegaEvent) => {
   const type = busEventOf(event)
   bus.emit(type, { type, widgetId: props.id, payload })
 }
+
+/* --------------------------------------------------------- starters */
+
+/*
+ * A starter chart picked in the form (#1292) is written into the recipe,
+ * filled with the columns of the rows the chart has now; the choice is
+ * then empty again. The board and the preview hold the same settings, so
+ * whichever widget sees it first writes it, once.
+ */
+watch(
+  () => settings.value?.starter,
+  (starter) => {
+    const held = config.value
+    if (!held || !starter || starter === 'none') return
+    const rows = arrived.get(DEFAULT_DATASET) ?? (ownSource.value || tableHasOwnSource.value ? [] : SAMPLE_VALUES)
+    applyStarter(held, starter, rows)
+  },
+)
 
 /* ---------------------------------------------------------- actions */
 

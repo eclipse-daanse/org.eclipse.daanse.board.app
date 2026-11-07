@@ -192,6 +192,24 @@ they are.
         <eLiterals name="scales" literal="scales" value="2"/>
     </eClassifiers>
 
+    <eClassifiers xsi:type="ecore:EEnum" name="StarterChart">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+            <details key="documentation" value="A chart to start from (#1292): a recipe of layers, encodings and selections filled with columns of the data the chart reads - the first text, number and date columns it finds. The fields can be changed afterwards like any other."/>
+        </eAnnotations>
+        <eLiterals name="none" literal="none"/>
+        <eLiterals name="bar" literal="bar" value="1"/>
+        <eLiterals name="stackedBar" literal="stackedBar" value="2"/>
+        <eLiterals name="groupedBar" literal="groupedBar" value="3"/>
+        <eLiterals name="line" literal="line" value="4"/>
+        <eLiterals name="area" literal="area" value="5"/>
+        <eLiterals name="scatter" literal="scatter" value="6"/>
+        <eLiterals name="heatmap" literal="heatmap" value="7"/>
+        <eLiterals name="histogram" literal="histogram" value="8"/>
+        <eLiterals name="boxplot" literal="boxplot" value="9"/>
+        <eLiterals name="donut" literal="donut" value="10"/>
+        <eLiterals name="brush" literal="brush" value="11"/>
+    </eClassifiers>
+
     <eClassifiers xsi:type="ecore:EClass" name="VegaWidgetSettings">
         <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
             <details key="documentation" value="A chart drawn with Vega-Lite, described as a recipe: one or more layers of marks, each with its encodings, optionally split into small multiples and with selections. The widget derives the Vega-Lite spec from these settings; a changed setting shows at once, in the board and in the preview."/>
@@ -239,6 +257,11 @@ they are.
         <eStructuralFeatures xsi:type="ecore:EAttribute" name="specOverlay" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" lowerBound="0" defaultValueLiteral="">
             <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
                 <details key="documentation" value="What an advanced reader added to the spec beyond the form (#1291): a JSON object merged into the compiled Vega-Lite spec - objects key by key, arrays by position - where it wins over the recipe. Only the difference to the compiled spec is kept, so the form still decides everything the overlay does not say. Edited in the Spec tab, which only readers who turned on advanced editing see; a stored overlay applies for everyone. URLs, links, data of its own and another schema are taken out."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="starter" eType="#//StarterChart" lowerBound="0" defaultValueLiteral="none">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="Picking a starter chart replaces the layers, selections and small multiples with that chart, filled with columns of the data; then this field is empty again. Discarding the settings brings the chart back as it was."/>
             </eAnnotations>
         </eStructuralFeatures>
     </eClassifiers>

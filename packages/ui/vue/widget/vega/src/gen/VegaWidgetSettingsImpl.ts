@@ -27,6 +27,7 @@ import type { Param } from './Param.js';
 import type { DatasetBinding } from './DatasetBinding.js';
 import { VegaRenderer } from './VegaRenderer.js';
 import { LegendPosition } from './LegendPosition.js';
+import { StarterChart } from './StarterChart.js';
 import type { VegaWidgetSettings } from './VegaWidgetSettings.js';
 import { VegawidgetPackage } from './VegawidgetPackage.js';
 
@@ -45,6 +46,7 @@ export class VegaWidgetSettingsImpl extends BasicEObject implements VegaWidgetSe
   static readonly PARAMS: number = 6;
   static readonly DATASETS: number = 7;
   static readonly SPEC_OVERLAY: number = 8;
+  static readonly STARTER: number = 9;
 
   // Private fields
   private _title: string = "";
@@ -56,6 +58,7 @@ export class VegaWidgetSettingsImpl extends BasicEObject implements VegaWidgetSe
   private _params!: EList<Param>;
   private _datasets!: EList<DatasetBinding>;
   private _specOverlay: string = "";
+  private _starter: StarterChart = StarterChart.none;
 
   /**
    * Returns the EClass of this object
@@ -240,6 +243,30 @@ export class VegaWidgetSettingsImpl extends BasicEObject implements VegaWidgetSe
     }
   }
 
+  get starter(): StarterChart {
+    return this._starter!;
+  }
+
+  set starter(value: StarterChart) {
+    const oldValue = this._starter;
+    this._starter = value;
+    if (this.eDeliver()) {
+      this.eNotify({
+        getNotifier: () => this,
+        getEventType: () => 1, // SET
+        getFeature: () => this.eClass().getEStructuralFeature(VegaWidgetSettingsImpl.STARTER),
+        getOldValue: () => oldValue,
+        getNewValue: () => value,
+        getPosition: () => -1,
+        wasSet: () => true,
+        isTouch: () => false,
+        isReset: () => false,
+        getFeatureID: () => VegaWidgetSettingsImpl.STARTER,
+        merge: () => false
+      });
+    }
+  }
+
   /**
    * Remove a value from its previous container before it is contained here,
    * like Java EMF's eInverseRemove on the old container (#61)
@@ -290,6 +317,8 @@ export class VegaWidgetSettingsImpl extends BasicEObject implements VegaWidgetSe
         return this.datasets;
       case VegaWidgetSettingsImpl.SPEC_OVERLAY:
         return this.specOverlay;
+      case VegaWidgetSettingsImpl.STARTER:
+        return this.starter;
       default:
         return super.eGet(feature);
     }
@@ -340,6 +369,10 @@ export class VegaWidgetSettingsImpl extends BasicEObject implements VegaWidgetSe
         this.specOverlay = newValue as string;
         super.eSet(feature, newValue);
         break;
+      case VegaWidgetSettingsImpl.STARTER:
+        this.starter = newValue as StarterChart;
+        super.eSet(feature, newValue);
+        break;
       default:
         super.eSet(feature, newValue);
     }
@@ -369,6 +402,8 @@ export class VegaWidgetSettingsImpl extends BasicEObject implements VegaWidgetSe
         return this._datasets !== undefined && !this._datasets.isEmpty();
       case VegaWidgetSettingsImpl.SPEC_OVERLAY:
         return this._specOverlay !== "";
+      case VegaWidgetSettingsImpl.STARTER:
+        return this._starter !== StarterChart.none;
       default:
         return super.eIsSet(feature);
     }
@@ -408,6 +443,9 @@ export class VegaWidgetSettingsImpl extends BasicEObject implements VegaWidgetSe
       case VegaWidgetSettingsImpl.SPEC_OVERLAY:
         this._specOverlay = "";
         return;
+      case VegaWidgetSettingsImpl.STARTER:
+        this._starter = StarterChart.none;
+        return;
       default:
         super.eUnset(feature);
     }
@@ -432,6 +470,7 @@ export class VegaWidgetSettingsImpl extends BasicEObject implements VegaWidgetSe
       params: this.params?.toArray?.() ?? this.params,
       datasets: this.datasets?.toArray?.() ?? this.datasets,
       specOverlay: this.specOverlay,
+      starter: this.starter,
     };
   }
 }
