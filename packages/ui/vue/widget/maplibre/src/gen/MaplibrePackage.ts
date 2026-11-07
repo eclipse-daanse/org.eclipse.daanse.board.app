@@ -87,6 +87,8 @@ export class MaplibrePackage extends BasicEPackage {
     MAP_LIBRE_SETTINGS__SELECTION_COLOR: null as unknown as EAttribute | EReference,
     MAP_LIBRE_SETTINGS__THING_LAYERS: null as unknown as EAttribute | EReference,
     MAP_LIBRE_SETTINGS__GEO_JSON_LAYERS: null as unknown as EAttribute | EReference,
+    MAP_LIBRE_SETTINGS__SERVICES: null as unknown as EAttribute | EReference,
+    MAP_LIBRE_SETTINGS__WMS_LAYERS: null as unknown as EAttribute | EReference,
     THING_LAYER: null as unknown as EClass,
     THING_LAYER__ID: null as unknown as EAttribute | EReference,
     THING_LAYER__NAME: null as unknown as EAttribute | EReference,
@@ -122,6 +124,19 @@ export class MaplibrePackage extends BasicEPackage {
     GEO_JSON_LAYER__HEIGHT_PROPERTY: null as unknown as EAttribute | EReference,
     GEO_JSON_LAYER__HEIGHT_FACTOR: null as unknown as EAttribute | EReference,
     GEO_JSON_LAYER__BASE_HEIGHT: null as unknown as EAttribute | EReference,
+    WMS_SERVICE: null as unknown as EClass,
+    WMS_SERVICE__ID: null as unknown as EAttribute | EReference,
+    WMS_SERVICE__URL: null as unknown as EAttribute | EReference,
+    WMS_SERVICE__TITLE: null as unknown as EAttribute | EReference,
+    WMS_SERVICE__GET_MAP_URL: null as unknown as EAttribute | EReference,
+    WMS_LAYER: null as unknown as EClass,
+    WMS_LAYER__ID: null as unknown as EAttribute | EReference,
+    WMS_LAYER__SERVICE_ID: null as unknown as EAttribute | EReference,
+    WMS_LAYER__NAME: null as unknown as EAttribute | EReference,
+    WMS_LAYER__TITLE: null as unknown as EAttribute | EReference,
+    WMS_LAYER__OPACITY: null as unknown as EAttribute | EReference,
+    WMS_LAYER__CHECKED: null as unknown as EAttribute | EReference,
+    WMS_LAYER__ATTRIBUTION: null as unknown as EAttribute | EReference,
     MAP_CLICK_PAYLOAD: null as unknown as EClass,
     MAP_CLICK_PAYLOAD__LAT: null as unknown as EAttribute | EReference,
     MAP_CLICK_PAYLOAD__LON: null as unknown as EAttribute | EReference,
@@ -419,6 +434,24 @@ export class MaplibrePackage extends BasicEPackage {
     mapLibreSettings_geoJsonLayers.setUpperBound(-1);
     mapLibreSettingsClass.getEStructuralFeatures().push(mapLibreSettings_geoJsonLayers);
     MaplibrePackage.Literals.MAP_LIBRE_SETTINGS__GEO_JSON_LAYERS = mapLibreSettings_geoJsonLayers;
+
+    // Create services feature
+    const mapLibreSettings_services = new BasicEReference();
+    mapLibreSettings_services.setContainment(true);
+    mapLibreSettings_services.setName('services');
+    mapLibreSettings_services.setLowerBound(0);
+    mapLibreSettings_services.setUpperBound(-1);
+    mapLibreSettingsClass.getEStructuralFeatures().push(mapLibreSettings_services);
+    MaplibrePackage.Literals.MAP_LIBRE_SETTINGS__SERVICES = mapLibreSettings_services;
+
+    // Create wmsLayers feature
+    const mapLibreSettings_wmsLayers = new BasicEReference();
+    mapLibreSettings_wmsLayers.setContainment(true);
+    mapLibreSettings_wmsLayers.setName('wmsLayers');
+    mapLibreSettings_wmsLayers.setLowerBound(0);
+    mapLibreSettings_wmsLayers.setUpperBound(-1);
+    mapLibreSettingsClass.getEStructuralFeatures().push(mapLibreSettings_wmsLayers);
+    MaplibrePackage.Literals.MAP_LIBRE_SETTINGS__WMS_LAYERS = mapLibreSettings_wmsLayers;
 
     // Create ThingLayer class
     const thingLayerClass = new BasicEClass();
@@ -727,6 +760,115 @@ export class MaplibrePackage extends BasicEPackage {
     geoJsonLayerClass.getEStructuralFeatures().push(geoJsonLayer_baseHeight);
     MaplibrePackage.Literals.GEO_JSON_LAYER__BASE_HEIGHT = geoJsonLayer_baseHeight;
 
+    // Create WmsService class
+    const wmsServiceClass = new BasicEClass();
+    wmsServiceClass.setName('WmsService');
+    wmsServiceClass.setAbstract(false);
+    wmsServiceClass.setInterface(false);
+    this.getEClassifiers().push(wmsServiceClass);
+    wmsServiceClass.setEPackage(this);
+    MaplibrePackage.Literals.WMS_SERVICE = wmsServiceClass;
+
+    // Create id feature
+    const wmsService_id = new BasicEAttribute();
+    wmsService_id.setName('id');
+    wmsService_id.setLowerBound(0);
+    wmsService_id.setUpperBound(1);
+    wmsServiceClass.getEStructuralFeatures().push(wmsService_id);
+    MaplibrePackage.Literals.WMS_SERVICE__ID = wmsService_id;
+
+    // Create url feature
+    const wmsService_url = new BasicEAttribute();
+    wmsService_url.setName('url');
+    wmsService_url.setLowerBound(0);
+    wmsService_url.setUpperBound(1);
+    wmsServiceClass.getEStructuralFeatures().push(wmsService_url);
+    MaplibrePackage.Literals.WMS_SERVICE__URL = wmsService_url;
+
+    // Create title feature
+    const wmsService_title = new BasicEAttribute();
+    wmsService_title.setName('title');
+    wmsService_title.setLowerBound(0);
+    wmsService_title.setUpperBound(1);
+    wmsServiceClass.getEStructuralFeatures().push(wmsService_title);
+    MaplibrePackage.Literals.WMS_SERVICE__TITLE = wmsService_title;
+
+    // Create getMapUrl feature
+    const wmsService_getMapUrl = new BasicEAttribute();
+    wmsService_getMapUrl.setName('getMapUrl');
+    wmsService_getMapUrl.setLowerBound(0);
+    wmsService_getMapUrl.setUpperBound(1);
+    wmsServiceClass.getEStructuralFeatures().push(wmsService_getMapUrl);
+    MaplibrePackage.Literals.WMS_SERVICE__GET_MAP_URL = wmsService_getMapUrl;
+
+    // Create WmsLayer class
+    const wmsLayerClass = new BasicEClass();
+    wmsLayerClass.setName('WmsLayer');
+    wmsLayerClass.setAbstract(false);
+    wmsLayerClass.setInterface(false);
+    this.getEClassifiers().push(wmsLayerClass);
+    wmsLayerClass.setEPackage(this);
+    MaplibrePackage.Literals.WMS_LAYER = wmsLayerClass;
+
+    // Create id feature
+    const wmsLayer_id = new BasicEAttribute();
+    wmsLayer_id.setName('id');
+    wmsLayer_id.setLowerBound(0);
+    wmsLayer_id.setUpperBound(1);
+    wmsLayerClass.getEStructuralFeatures().push(wmsLayer_id);
+    MaplibrePackage.Literals.WMS_LAYER__ID = wmsLayer_id;
+
+    // Create serviceId feature
+    const wmsLayer_serviceId = new BasicEAttribute();
+    wmsLayer_serviceId.setName('serviceId');
+    wmsLayer_serviceId.setLowerBound(0);
+    wmsLayer_serviceId.setUpperBound(1);
+    wmsLayerClass.getEStructuralFeatures().push(wmsLayer_serviceId);
+    MaplibrePackage.Literals.WMS_LAYER__SERVICE_ID = wmsLayer_serviceId;
+
+    // Create name feature
+    const wmsLayer_name = new BasicEAttribute();
+    wmsLayer_name.setName('name');
+    wmsLayer_name.setLowerBound(0);
+    wmsLayer_name.setUpperBound(1);
+    wmsLayerClass.getEStructuralFeatures().push(wmsLayer_name);
+    MaplibrePackage.Literals.WMS_LAYER__NAME = wmsLayer_name;
+
+    // Create title feature
+    const wmsLayer_title = new BasicEAttribute();
+    wmsLayer_title.setName('title');
+    wmsLayer_title.setLowerBound(0);
+    wmsLayer_title.setUpperBound(1);
+    wmsLayerClass.getEStructuralFeatures().push(wmsLayer_title);
+    MaplibrePackage.Literals.WMS_LAYER__TITLE = wmsLayer_title;
+
+    // Create opacity feature
+    const wmsLayer_opacity = new BasicEAttribute();
+    wmsLayer_opacity.setName('opacity');
+    wmsLayer_opacity.setLowerBound(0);
+    wmsLayer_opacity.setUpperBound(1);
+    wmsLayer_opacity.setDefaultValueLiteral("1");
+    wmsLayerClass.getEStructuralFeatures().push(wmsLayer_opacity);
+    MaplibrePackage.Literals.WMS_LAYER__OPACITY = wmsLayer_opacity;
+
+    // Create checked feature
+    const wmsLayer_checked = new BasicEAttribute();
+    wmsLayer_checked.setName('checked');
+    wmsLayer_checked.setLowerBound(0);
+    wmsLayer_checked.setUpperBound(1);
+    wmsLayer_checked.setDefaultValueLiteral("true");
+    wmsLayerClass.getEStructuralFeatures().push(wmsLayer_checked);
+    MaplibrePackage.Literals.WMS_LAYER__CHECKED = wmsLayer_checked;
+
+    // Create attribution feature
+    const wmsLayer_attribution = new BasicEAttribute();
+    wmsLayer_attribution.setName('attribution');
+    wmsLayer_attribution.setLowerBound(0);
+    wmsLayer_attribution.setUpperBound(1);
+    wmsLayer_attribution.setDefaultValueLiteral("");
+    wmsLayerClass.getEStructuralFeatures().push(wmsLayer_attribution);
+    MaplibrePackage.Literals.WMS_LAYER__ATTRIBUTION = wmsLayer_attribution;
+
     // Create MapClickPayload class
     const mapClickPayloadClass = new BasicEClass();
     mapClickPayloadClass.setName('MapClickPayload');
@@ -915,6 +1057,8 @@ export class MaplibrePackage extends BasicEPackage {
     (MaplibrePackage.Literals.MAP_LIBRE_SETTINGS__SELECTION_COLOR as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
     (MaplibrePackage.Literals.MAP_LIBRE_SETTINGS__THING_LAYERS as BasicEReference).setEType(MaplibrePackage.Literals.THING_LAYER);
     (MaplibrePackage.Literals.MAP_LIBRE_SETTINGS__GEO_JSON_LAYERS as BasicEReference).setEType(MaplibrePackage.Literals.GEO_JSON_LAYER);
+    (MaplibrePackage.Literals.MAP_LIBRE_SETTINGS__SERVICES as BasicEReference).setEType(MaplibrePackage.Literals.WMS_SERVICE);
+    (MaplibrePackage.Literals.MAP_LIBRE_SETTINGS__WMS_LAYERS as BasicEReference).setEType(MaplibrePackage.Literals.WMS_LAYER);
     (MaplibrePackage.Literals.THING_LAYER__ID as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
     (MaplibrePackage.Literals.THING_LAYER__NAME as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
     (MaplibrePackage.Literals.THING_LAYER__VISIBLE as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EBoolean')!);
@@ -947,6 +1091,17 @@ export class MaplibrePackage extends BasicEPackage {
     (MaplibrePackage.Literals.GEO_JSON_LAYER__HEIGHT_PROPERTY as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
     (MaplibrePackage.Literals.GEO_JSON_LAYER__HEIGHT_FACTOR as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EDouble')!);
     (MaplibrePackage.Literals.GEO_JSON_LAYER__BASE_HEIGHT as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EDouble')!);
+    (MaplibrePackage.Literals.WMS_SERVICE__ID as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (MaplibrePackage.Literals.WMS_SERVICE__URL as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (MaplibrePackage.Literals.WMS_SERVICE__TITLE as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (MaplibrePackage.Literals.WMS_SERVICE__GET_MAP_URL as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (MaplibrePackage.Literals.WMS_LAYER__ID as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (MaplibrePackage.Literals.WMS_LAYER__SERVICE_ID as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (MaplibrePackage.Literals.WMS_LAYER__NAME as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (MaplibrePackage.Literals.WMS_LAYER__TITLE as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (MaplibrePackage.Literals.WMS_LAYER__OPACITY as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EDouble')!);
+    (MaplibrePackage.Literals.WMS_LAYER__CHECKED as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EBoolean')!);
+    (MaplibrePackage.Literals.WMS_LAYER__ATTRIBUTION as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
     (MaplibrePackage.Literals.MAP_CLICK_PAYLOAD__LAT as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EDouble')!);
     (MaplibrePackage.Literals.MAP_CLICK_PAYLOAD__LON as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EDouble')!);
     (MaplibrePackage.Literals.THING_CLICK_PAYLOAD__ID as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);

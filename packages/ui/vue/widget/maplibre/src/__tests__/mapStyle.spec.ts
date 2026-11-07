@@ -27,6 +27,7 @@ import {
   styleUrlOf,
   terrainSourceOf,
   thingLookOf,
+  wmsLayersOf,
 } from '../mapStyle'
 
 describe('the base of the 3D map', () => {
@@ -77,6 +78,39 @@ describe('the base of the 3D map', () => {
     expect(layer['source-layer']).toBe('building')
     expect(layer.paint['fill-extrusion-color']).toBe('#abc')
     expect(layer.paint['fill-extrusion-height'][1]).toEqual(['get', 'render_height'])
+  })
+})
+
+describe('the WMS layers of the 3D map (#1274)', () => {
+  const services = [
+    { id: 's1', url: 'https://kartenportal.jena.de/mapproxy/service', getMapUrl: '' },
+    { id: 's2', url: 'https://wms.example/caps', getMapUrl: 'https://wms.example/map?' },
+  ]
+
+  it('draw each layer switched on, in the order of the list, from its service', () => {
+    const drawn = wmsLayersOf(
+      services,
+      [
+        { id: 'a', serviceId: 's1', name: 'stadtplan_sw', opacity: 0.6, attribution: '© Stadt Jena' },
+        { id: 'b', serviceId: 's2', name: 'luft bild', checked: false },
+        { id: 'c', serviceId: 's2', name: 'orthophoto' },
+        { id: 'd', serviceId: 'gone', name: 'x' },
+      ],
+      {},
+      false,
+    )
+    expect(drawn.map((d) => d.id)).toEqual(['daanse:wms:a', 'daanse:wms:c'])
+    expect(drawn[0].source.tiles![0]).toMatch(/^https:\/\/kartenportal\.jena\.de\/mapproxy\/service\?SERVICE=WMS&.*LAYERS=stadtplan_sw&.*SRS=EPSG:3857/)
+    expect(drawn[0].source.attribution).toBe('© Stadt Jena')
+    expect((drawn[0].layer as any).paint['raster-opacity']).toBe(0.6)
+    // GetMap where the capabilities say, not where they were asked.
+    expect(drawn[1].source.tiles![0].startsWith('https://wms.example/map?SERVICE=WMS')).toBe(true)
+  })
+
+  it('turn dark in the dark theme, unless told not to', () => {
+    const layers = [{ id: 'a', serviceId: 's1', name: 'stadtplan_sw' }]
+    expect((wmsLayersOf(services, layers, {}, true)[0].layer as any).paint['raster-brightness-min']).toBe(1)
+    expect((wmsLayersOf(services, layers, { rasterInvertDark: false }, true)[0].layer as any).paint).not.toHaveProperty('raster-brightness-min')
   })
 })
 

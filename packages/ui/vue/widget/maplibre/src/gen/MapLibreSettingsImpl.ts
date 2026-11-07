@@ -23,6 +23,8 @@ import { createContainmentEList } from '@emfts/core';
 import type { EClass, EStructuralFeature, EList, EReference } from '@emfts/core';
 import type { ThingLayer } from './ThingLayer.js';
 import type { GeoJsonLayer } from './GeoJsonLayer.js';
+import type { WmsService } from './WmsService.js';
+import type { WmsLayer } from './WmsLayer.js';
 import type { MapLibreSettings } from './MapLibreSettings.js';
 import { MaplibrePackage } from './MaplibrePackage.js';
 
@@ -59,6 +61,8 @@ export class MapLibreSettingsImpl extends BasicEObject implements MapLibreSettin
   static readonly SELECTION_COLOR: number = 24;
   static readonly THING_LAYERS: number = 25;
   static readonly GEO_JSON_LAYERS: number = 26;
+  static readonly SERVICES: number = 27;
+  static readonly WMS_LAYERS: number = 28;
 
   // Private fields
   private _datasourceId?: string;
@@ -88,6 +92,8 @@ export class MapLibreSettingsImpl extends BasicEObject implements MapLibreSettin
   private _selectionColor: string = "#ffb300";
   private _thingLayers!: EList<ThingLayer>;
   private _geoJsonLayers!: EList<GeoJsonLayer>;
+  private _services!: EList<WmsService>;
+  private _wmsLayers!: EList<WmsLayer>;
 
   /**
    * Returns the EClass of this object
@@ -711,6 +717,20 @@ export class MapLibreSettingsImpl extends BasicEObject implements MapLibreSettin
     return this._geoJsonLayers;
   }
 
+  get services(): EList<WmsService> {
+    if (!this._services) {
+      this._services = createContainmentEList<any>(this, this.eClass().getEStructuralFeature('services') as EReference);
+    }
+    return this._services;
+  }
+
+  get wmsLayers(): EList<WmsLayer> {
+    if (!this._wmsLayers) {
+      this._wmsLayers = createContainmentEList<any>(this, this.eClass().getEStructuralFeature('wmsLayers') as EReference);
+    }
+    return this._wmsLayers;
+  }
+
   // Reflective API
 
   /**
@@ -773,6 +793,10 @@ export class MapLibreSettingsImpl extends BasicEObject implements MapLibreSettin
         return this.thingLayers;
       case MapLibreSettingsImpl.GEO_JSON_LAYERS:
         return this.geoJsonLayers;
+      case MapLibreSettingsImpl.SERVICES:
+        return this.services;
+      case MapLibreSettingsImpl.WMS_LAYERS:
+        return this.wmsLayers;
       default:
         return super.eGet(feature);
     }
@@ -894,6 +918,16 @@ export class MapLibreSettingsImpl extends BasicEObject implements MapLibreSettin
         this.geoJsonLayers.addAll(newValue as any[]);
         super.eSet(feature, newValue);
         break;
+      case MapLibreSettingsImpl.SERVICES:
+        this.services.clear();
+        this.services.addAll(newValue as any[]);
+        super.eSet(feature, newValue);
+        break;
+      case MapLibreSettingsImpl.WMS_LAYERS:
+        this.wmsLayers.clear();
+        this.wmsLayers.addAll(newValue as any[]);
+        super.eSet(feature, newValue);
+        break;
       default:
         super.eSet(feature, newValue);
     }
@@ -959,6 +993,10 @@ export class MapLibreSettingsImpl extends BasicEObject implements MapLibreSettin
         return this._thingLayers !== undefined && !this._thingLayers.isEmpty();
       case MapLibreSettingsImpl.GEO_JSON_LAYERS:
         return this._geoJsonLayers !== undefined && !this._geoJsonLayers.isEmpty();
+      case MapLibreSettingsImpl.SERVICES:
+        return this._services !== undefined && !this._services.isEmpty();
+      case MapLibreSettingsImpl.WMS_LAYERS:
+        return this._wmsLayers !== undefined && !this._wmsLayers.isEmpty();
       default:
         return super.eIsSet(feature);
     }
@@ -1051,6 +1089,12 @@ export class MapLibreSettingsImpl extends BasicEObject implements MapLibreSettin
       case MapLibreSettingsImpl.GEO_JSON_LAYERS:
         if (this._geoJsonLayers) this._geoJsonLayers.clear();
         return;
+      case MapLibreSettingsImpl.SERVICES:
+        if (this._services) this._services.clear();
+        return;
+      case MapLibreSettingsImpl.WMS_LAYERS:
+        if (this._wmsLayers) this._wmsLayers.clear();
+        return;
       default:
         super.eUnset(feature);
     }
@@ -1093,6 +1137,8 @@ export class MapLibreSettingsImpl extends BasicEObject implements MapLibreSettin
       selectionColor: this.selectionColor,
       thingLayers: this.thingLayers?.toArray?.() ?? this.thingLayers,
       geoJsonLayers: this.geoJsonLayers?.toArray?.() ?? this.geoJsonLayers,
+      services: this.services?.toArray?.() ?? this.services,
+      wmsLayers: this.wmsLayers?.toArray?.() ?? this.wmsLayers,
     };
   }
 }

@@ -98,7 +98,11 @@ export function rasterTilesOf(settings: BaseSettings): string[] | null {
   const url = text(settings.rasterUrl)
   if (!url) return null
   const layers = text(settings.rasterLayers)
-  if (!layers) return [url]
+  return [layers ? wmsTileUrlOf(url, layers) : url]
+}
+
+/** A GetMap template for 256 px tiles in EPSG:3857, for the layers named. */
+export function wmsTileUrlOf(url: string, layers: string): string {
   const query = [
     'SERVICE=WMS',
     'VERSION=1.1.1',
@@ -113,7 +117,62 @@ export function rasterTilesOf(settings: BaseSettings): string[] | null {
     'BBOX={bbox-epsg-3857}',
   ].join('&')
   const separator = url.includes('?') ? (/[?&]$/.test(url) ? '' : '&') : '?'
-  return [`${url}${separator}${query}`]
+  return `${url}${separator}${query}`
+}
+
+/** What of a WMS service and its layers is read here - the model's names. */
+export interface WmsServiceLike {
+  id?: string
+  url?: string
+  getMapUrl?: string
+}
+export interface WmsLayerLike {
+  id?: string
+  serviceId?: string
+  name?: string
+  opacity?: number
+  checked?: boolean
+  attribution?: string
+}
+
+/**
+ * The WMS layers of the map as sources and layers, in the order of the list
+ * (a later one over an earlier one, as in the Leaflet map); only the ones
+ * switched on whose service is known. In the dark theme their brightness is
+ * turned round where asked, like the raster base (#1274).
+ */
+export function wmsLayersOf(
+  services: Iterable<WmsServiceLike>,
+  layers: Iterable<WmsLayerLike>,
+  settings: BaseSettings,
+  dark: boolean,
+): { id: string; source: RasterSourceSpecification; layer: LayerSpecification }[] {
+  const byId = new Map<string, WmsServiceLike>()
+  for (const service of services) if (service.id) byId.set(service.id, service)
+  const invert = dark && settings.rasterInvertDark !== false
+  const out: { id: string; source: RasterSourceSpecification; layer: LayerSpecification }[] = []
+  for (const layer of layers) {
+    const service = byId.get(text(layer.serviceId))
+    const base = text(service?.getMapUrl) || text(service?.url)
+    if (layer.checked === false || !base || !text(layer.name)) continue
+    const id = `${PREFIX}wms:${layer.id ?? out.length}`
+    const source: RasterSourceSpecification = { type: 'raster', tiles: [wmsTileUrlOf(base, text(layer.name))], tileSize: 256 }
+    if (text(layer.attribution)) source.attribution = text(layer.attribution)
+    out.push({
+      id,
+      source,
+      layer: {
+        id,
+        type: 'raster',
+        source: id,
+        paint: {
+          'raster-opacity': number(layer.opacity, 1),
+          ...(invert ? { 'raster-brightness-min': 1, 'raster-brightness-max': 0.15 } : {}),
+        },
+      },
+    })
+  }
+  return out
 }
 
 /** The raster base as a source, or null where there is none. */

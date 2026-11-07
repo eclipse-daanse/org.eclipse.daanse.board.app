@@ -18,13 +18,16 @@ Contributors:
  * instance; every field writes into it, and the adapter of the widget
  * hears the change.
  */
-import { computed, inject, type ShallowRef } from 'vue'
+import { computed, inject, reactive, ref, type ShallowRef } from 'vue'
 import { identifier, type DatasourceRepository } from 'org.eclipse.daanse.board.app.lib.api.datasource'
 import { useEObject, useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import { DButton, DCheckbox, DColorInput, DIcon, DIconPicker, DInput, DSelect, DSlider } from 'org.eclipse.daanse.board.app.ui.vue.controls'
 import type { MapLibreSettings } from './gen/MapLibreSettings'
 import type { ThingLayer } from './gen/ThingLayer'
-import { modelledSettings, newColorMapping, newGeoJsonLayer, newThingLayer } from './settingsModel'
+import { modelledSettings, newColorMapping, newGeoJsonLayer, newThingLayer, newWmsLayer, newWmsService } from './settingsModel'
+import type { WmsLayer } from './gen/WmsLayer'
+import type { WmsService } from './gen/WmsService'
+import { WmsLayerList, useOGCService } from 'org.eclipse.daanse.board.app.ui.vue.common.map'
 
 const props = defineProps<{ dataSources?: { uid: string; name?: string; type?: string }[] }>()
 const stored = defineModel<MapLibreSettings>({ required: true })
@@ -71,6 +74,76 @@ function setNames(layer: ThingLayer, value: unknown) {
   for (const name of names) layer.thingNames.add(name)
 }
 
+/* ------------------------------------------------------------- WMS (#1274) */
+
+const ogc = useOGCService()
+/** The layers a service offers, by service id, once its capabilities were read. */
+const offered = reactive<Record<string, { name: string; title: string }[]>>({})
+const loading = ref('')
+const newServiceUrl = ref('')
+const serviceError = ref('')
+
+/** The named layers of a client - a group without a name cannot be asked for. */
+const namedLayers = (client: { getLayers?: () => unknown }) =>
+  ((client.getLayers?.() ?? []) as { name?: string; title?: string }[])
+    .filter((layer) => !!layer.name)
+    .map((layer) => ({ name: String(layer.name), title: String(layer.title ?? layer.name) }))
+
+async function addService() {
+  const url = newServiceUrl.value.trim()
+  if (!url) return
+  loading.value = 'new'
+  serviceError.value = ''
+  try {
+    const client = await ogc.createServiceWMS(url)
+    const service = newWmsService(url, client?._info?.title ?? '', client?.getOperationUrl?.('GetMap') ?? '')
+    settings.value.services.add(service)
+    offered[service.id!] = namedLayers(client)
+    newServiceUrl.value = ''
+  } catch {
+    serviceError.value = t('Settings.wmsFailed')
+  } finally {
+    loading.value = ''
+  }
+}
+
+async function toggleOffered(service: WmsService) {
+  const id = service.id ?? ''
+  if (offered[id]) {
+    delete offered[id]
+    return
+  }
+  loading.value = id
+  try {
+    offered[id] = namedLayers(await ogc.createServiceWMS(String(service.url ?? '')))
+  } catch {
+    serviceError.value = t('Settings.wmsFailed')
+  } finally {
+    loading.value = ''
+  }
+}
+
+function addWmsLayer(service: WmsService, layer: { name: string; title: string }) {
+  settings.value.wmsLayers.add(newWmsLayer(String(service.id), layer.name, layer.title))
+}
+
+function removeService(service: WmsService) {
+  for (const layer of settings.value.wmsLayers.toArray()) {
+    if (layer.serviceId === service.id) settings.value.wmsLayers.remove(layer)
+  }
+  settings.value.services.remove(service)
+  delete offered[service.id ?? '']
+}
+
+/* The order the list hands back, put into the list by moving entries: the list belongs to the settings. */
+function reorderWmsLayers(order: unknown[]) {
+  const list = settings.value.wmsLayers
+  order.forEach((layer, index) => {
+    const from = list.indexOf(layer as WmsLayer)
+    if (from > -1 && from !== index) list.move(index, from)
+  })
+}
+
 function addThingLayer() {
   settings.value.thingLayers.add(newThingLayer(t('Settings.newThingLayer')))
 }
@@ -94,16 +167,54 @@ function addColor(layer: ThingLayer) {
       <DInput
         v-model="settings.rasterUrl"
         :label="t('Settings.rasterUrl')"
-        placeholder="https://kartenportal.jena.de/mapproxy/service"
+        placeholder="https://tile.example.org/{z}/{x}/{y}.png"
         :hint="t('Settings.rasterUrlHint')"
       />
-      <DInput v-model="settings.rasterLayers" :label="t('Settings.rasterLayers')" placeholder="stadtplan_sw" />
       <DSlider v-model="settings.rasterOpacity" :label="t('Settings.rasterOpacity')" :min="0" :max="1" :step="0.05" />
       <DCheckbox v-model="settings.rasterInvertDark" :label="t('Settings.rasterInvertDark')" />
       <DInput v-model="settings.rasterAttribution" :label="t('Settings.rasterAttribution')" />
       <DInput v-model="settings.attribution" :label="t('Settings.attribution')" :rows="2"
         placeholder="© OpenStreetMap contributors" :hint="t('Settings.attributionHint')" />
       <DCheckbox v-model="settings.attributionCompact" :label="t('Settings.attributionCompact')" />
+    </div>
+  </section>
+
+  <section class="settings-section" data-section-id="wms" :data-section="t('Settings.sections.wms')">
+    <div class="section__head">
+      <DIcon name="layers" size="sm" />
+      <span class="section__title">{{ t('Settings.sections.wms') }}</span>
+    </div>
+    <div class="settings-container">
+      <WmsLayerList :layers="settings.wmsLayers.toArray()" @reorder="reorderWmsLayers"
+        @remove="(layer) => settings.wmsLayers.remove(layer as WmsLayer)" />
+
+      <div v-for="service in settings.services.toArray()" :key="service.id" class="wms-service">
+        <div class="wms-service__head">
+          <DIcon name="cable" size="sm" />
+          <span class="wms-service__title" :title="service.url">{{ service.title || service.url }}</span>
+          <DButton intent="quiet" size="sm" :busy="loading === service.id" :title="t('Settings.wmsShowLayers')"
+            @click="toggleOffered(service)">
+            <DIcon :name="offered[service.id ?? ''] ? 'expand_less' : 'expand_more'" size="sm" />
+          </DButton>
+          <DButton intent="quiet" size="sm" :title="t('Settings.remove')" @click="removeService(service)">
+            <DIcon name="delete" size="sm" />
+          </DButton>
+        </div>
+        <ul v-if="offered[service.id ?? '']" class="wms-service__layers">
+          <li v-for="layer in offered[service.id ?? '']" :key="layer.name" class="wms-service__layer"
+            @click="addWmsLayer(service, layer)">
+            <DIcon name="add" size="sm" />{{ layer.title || layer.name }}
+          </li>
+        </ul>
+      </div>
+
+      <div class="row">
+        <DInput v-model="newServiceUrl" :label="t('Settings.wmsUrl')" placeholder="https://kartenportal.jena.de/mapproxy/service"
+          :error="serviceError" />
+        <DButton :busy="loading === 'new'" :disabled="!newServiceUrl" @click="addService">
+          <DIcon name="add" size="sm" />{{ t('Settings.add') }}
+        </DButton>
+      </div>
     </div>
   </section>
 
@@ -276,6 +387,36 @@ function addColor(layer: ThingLayer) {
 
 .row > button {
   flex: none;
+}
+
+.wms-service__head {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.wms-service__title {
+  flex: 1 1 auto;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.wms-service__layers {
+  margin: 4px 0 0;
+  padding-left: 22px;
+  list-style: none;
+}
+
+.wms-service__layer {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+}
+
+.wms-service__layer:hover {
+  text-decoration: underline;
 }
 
 .layer {

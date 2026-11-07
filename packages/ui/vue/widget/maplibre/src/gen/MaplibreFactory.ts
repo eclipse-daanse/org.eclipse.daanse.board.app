@@ -29,6 +29,10 @@ import { ColorMapping } from './ColorMapping.js';
 import { ColorMappingImpl } from './ColorMappingImpl.js';
 import { GeoJsonLayer } from './GeoJsonLayer.js';
 import { GeoJsonLayerImpl } from './GeoJsonLayerImpl.js';
+import { WmsService } from './WmsService.js';
+import { WmsServiceImpl } from './WmsServiceImpl.js';
+import { WmsLayer } from './WmsLayer.js';
+import { WmsLayerImpl } from './WmsLayerImpl.js';
 import { MapClickPayload } from './MapClickPayload.js';
 import { MapClickPayloadImpl } from './MapClickPayloadImpl.js';
 import { ThingClickPayload } from './ThingClickPayload.js';
@@ -85,6 +89,20 @@ export class MaplibreFactory extends BasicEFactory {
   }
 
   /**
+   * Create a new WmsService instance
+   */
+  createWmsService(): WmsService {
+    return new WmsServiceImpl();
+  }
+
+  /**
+   * Create a new WmsLayer instance
+   */
+  createWmsLayer(): WmsLayer {
+    return new WmsLayerImpl();
+  }
+
+  /**
    * Create a new MapClickPayload instance
    */
   createMapClickPayload(): MapClickPayload {
@@ -118,6 +136,10 @@ export class MaplibreFactory extends BasicEFactory {
         return this.createColorMapping();
       case 'GeoJsonLayer':
         return this.createGeoJsonLayer();
+      case 'WmsService':
+        return this.createWmsService();
+      case 'WmsLayer':
+        return this.createWmsLayer();
       case 'MapClickPayload':
         return this.createMapClickPayload();
       case 'ThingClickPayload':

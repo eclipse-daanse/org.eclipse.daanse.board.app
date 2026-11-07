@@ -49,6 +49,7 @@ import {
   geoJsonLookOf,
   rasterLayerOf,
   rasterSourceOf,
+  wmsLayersOf,
   skyOf,
   sourceIdOf,
   styleExtrusionsOf,
@@ -148,6 +149,8 @@ const lookKey = computed(() => {
   return JSON.stringify([
     dark.value,
     [s.rasterUrl, s.rasterLayers, s.rasterOpacity, s.rasterAttribution, s.rasterInvertDark],
+    s.services.toArray().map((w) => [w.id, w.url, w.getMapUrl]),
+    s.wmsLayers.toArray().map((w) => [w.id, w.serviceId, w.name, w.opacity, w.checked, w.attribution]),
     [s.buildings, s.buildingColor, s.buildingOpacity, s.buildingSourceLayer],
     [s.terrainUrl, s.terrainEncoding, s.terrainExaggeration, s.sky, s.selectionColor],
     s.thingLayers.toArray().map((l) => [l.id, l.visible, l.fillColor, l.fillOpacity, l.outlineColor, l.pointRadius, l.extrude, l.pointStyle, l.markerSize, l.markerIcon]),
@@ -181,6 +184,12 @@ function applyAdditions() {
   if (raster) {
     target.addSource(RASTER_ID, raster)
     target.addLayer(rasterLayerOf(s, dark.value))
+  }
+
+  // The WMS layers, over the raster base and under the buildings (#1274).
+  for (const wms of wmsLayersOf(s.services.toArray(), s.wmsLayers.toArray(), s, dark.value)) {
+    target.addSource(wms.id, wms.source)
+    target.addLayer(wms.layer)
   }
 
   if (s.buildings) {

@@ -21,6 +21,8 @@
 import type { EObject, EList } from '@emfts/core';
 import type { ThingLayer } from './ThingLayer.js';
 import type { GeoJsonLayer } from './GeoJsonLayer.js';
+import type { WmsService } from './WmsService.js';
+import type { WmsLayer } from './WmsLayer.js';
 
 /**
  * MapLibreSettings
@@ -54,5 +56,7 @@ export interface MapLibreSettings extends EObject {
   selectionColor?: string;
   thingLayers: EList<ThingLayer>;
   geoJsonLayers: EList<GeoJsonLayer>;
+  services: EList<WmsService>;
+  wmsLayers: EList<WmsLayer>;
 
 }
