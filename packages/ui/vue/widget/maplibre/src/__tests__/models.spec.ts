@@ -263,3 +263,25 @@ describe('the width of model instances (#1282)', () => {
     expect(corner.z).toBeCloseTo(4, 9)
   })
 })
+
+describe('the colours of a model layer (#1282)', () => {
+  it('paint the model where no rule does, and the trunk in its own', () => {
+    const source = new THREE.Group()
+    const trunk = new THREE.Mesh(new THREE.BoxGeometry(1, 4, 1), new THREE.MeshPhongMaterial({ color: 0xcccccc }))
+    trunk.name = 'Cylinder'
+    const crown = new THREE.Mesh(new THREE.SphereGeometry(2), new THREE.MeshPhongMaterial({ color: 0xcccccc }))
+    source.add(trunk, crown)
+    const group = instancedOf(THREE, source, [
+      { position: [0, 0, 0], rotation: 0, scale: 1 },
+      { position: [5, 0, 0], rotation: 0, scale: 1, color: '#ff0000' },
+    ], { color: '#5b8c3a', trunkColor: '#6b4f32' })
+    const [trunkMesh, crownMesh] = group.children
+    expect(trunkMesh.material.color.getHexString()).toBe('6b4f32')
+    expect(trunk.material.color.getHexString()).toBe('cccccc')
+    const color = new THREE.Color()
+    crownMesh.getColorAt(0, color)
+    expect(color.getHexString()).toBe('5b8c3a')
+    crownMesh.getColorAt(1, color)
+    expect(color.getHexString()).toBe('ff0000')
+  })
+})

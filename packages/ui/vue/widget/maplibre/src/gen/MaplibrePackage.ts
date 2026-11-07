@@ -147,6 +147,8 @@ export class MaplibrePackage extends BasicEPackage {
     MODEL_LAYER__SCALE: null as unknown as EAttribute | EReference,
     MODEL_LAYER__ROTATION: null as unknown as EAttribute | EReference,
     MODEL_LAYER__ALTITUDE_OFFSET: null as unknown as EAttribute | EReference,
+    MODEL_LAYER__COLOR: null as unknown as EAttribute | EReference,
+    MODEL_LAYER__TRUNK_COLOR: null as unknown as EAttribute | EReference,
     MODEL_LAYER__INSTANCES: null as unknown as EAttribute | EReference,
     MODEL_LAYER__DATASOURCE_ID: null as unknown as EAttribute | EReference,
     MODEL_LAYER__HEIGHT_PROPERTY: null as unknown as EAttribute | EReference,
@@ -984,6 +986,24 @@ export class MaplibrePackage extends BasicEPackage {
     modelLayerClass.getEStructuralFeatures().push(modelLayer_altitudeOffset);
     MaplibrePackage.Literals.MODEL_LAYER__ALTITUDE_OFFSET = modelLayer_altitudeOffset;
 
+    // Create color feature
+    const modelLayer_color = new BasicEAttribute();
+    modelLayer_color.setName('color');
+    modelLayer_color.setLowerBound(0);
+    modelLayer_color.setUpperBound(1);
+    modelLayer_color.setDefaultValueLiteral("");
+    modelLayerClass.getEStructuralFeatures().push(modelLayer_color);
+    MaplibrePackage.Literals.MODEL_LAYER__COLOR = modelLayer_color;
+
+    // Create trunkColor feature
+    const modelLayer_trunkColor = new BasicEAttribute();
+    modelLayer_trunkColor.setName('trunkColor');
+    modelLayer_trunkColor.setLowerBound(0);
+    modelLayer_trunkColor.setUpperBound(1);
+    modelLayer_trunkColor.setDefaultValueLiteral("");
+    modelLayerClass.getEStructuralFeatures().push(modelLayer_trunkColor);
+    MaplibrePackage.Literals.MODEL_LAYER__TRUNK_COLOR = modelLayer_trunkColor;
+
     // Create instances feature
     const modelLayer_instances = new BasicEReference();
     modelLayer_instances.setContainment(true);
@@ -1374,6 +1394,8 @@ export class MaplibrePackage extends BasicEPackage {
     (MaplibrePackage.Literals.MODEL_LAYER__SCALE as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EDouble')!);
     (MaplibrePackage.Literals.MODEL_LAYER__ROTATION as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EDouble')!);
     (MaplibrePackage.Literals.MODEL_LAYER__ALTITUDE_OFFSET as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EDouble')!);
+    (MaplibrePackage.Literals.MODEL_LAYER__COLOR as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (MaplibrePackage.Literals.MODEL_LAYER__TRUNK_COLOR as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
     (MaplibrePackage.Literals.MODEL_LAYER__INSTANCES as BasicEReference).setEType(MaplibrePackage.Literals.MODEL_INSTANCE);
     (MaplibrePackage.Literals.MODEL_LAYER__DATASOURCE_ID as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
     (MaplibrePackage.Literals.MODEL_LAYER__HEIGHT_PROPERTY as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);

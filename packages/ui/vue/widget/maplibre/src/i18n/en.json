@@ -117,7 +117,9 @@
       "ruleUrl": "Model file",
       "ruleUrlHint": "empty: the model above",
       "widthProperty": "Property with the width (m)",
-      "widthPropertyHint": "E.g. the crown diameter. Empty: in proportion to the height."
+      "widthPropertyHint": "E.g. the crown diameter. Empty: in proportion to the height.",
+      "color": "Colour of the model (empty: of the file)",
+      "trunkColor": "Colour of the trunk (empty: of the file)"
     }
   }
 }

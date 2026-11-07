@@ -35,6 +35,8 @@ export interface ModelLayer extends EObject {
   scale?: number;
   rotation?: number;
   altitudeOffset?: number;
+  color?: string;
+  trunkColor?: string;
   instances: EList<ModelInstance>;
   datasourceId?: string;
   heightProperty?: string;

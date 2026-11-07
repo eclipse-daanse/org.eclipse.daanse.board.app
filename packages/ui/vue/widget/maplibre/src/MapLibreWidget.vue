@@ -260,7 +260,7 @@ const drawnModels = (): DrawnModelLayer[] => {
   void modelData.revision.value
   const out: DrawnModelLayer[] = []
   for (const layer of held().modelLayers.toArray()) {
-    const base = { visible: layer.visible, scale: layer.scale, rotation: layer.rotation, altitudeOffset: layer.altitudeOffset }
+    const base = { visible: layer.visible, scale: layer.scale, rotation: layer.rotation, altitudeOffset: layer.altitudeOffset, color: layer.color, trunkColor: layer.trunkColor }
     const url = String(layer.url ?? '').trim()
     const placed = layer.instances.toArray().map((i) => ({ id: i.id, lon: i.lon, lat: i.lat, scale: i.scale, rotation: i.rotation }))
     const byModel = layer.datasourceId ? instancesByModel(

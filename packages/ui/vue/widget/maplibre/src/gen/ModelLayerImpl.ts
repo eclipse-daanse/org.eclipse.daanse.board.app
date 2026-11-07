@@ -40,12 +40,14 @@ export class ModelLayerImpl extends BasicEObject implements ModelLayer {
   static readonly SCALE: number = 5;
   static readonly ROTATION: number = 6;
   static readonly ALTITUDE_OFFSET: number = 7;
-  static readonly INSTANCES: number = 8;
-  static readonly DATASOURCE_ID: number = 9;
-  static readonly HEIGHT_PROPERTY: number = 10;
-  static readonly DEFAULT_HEIGHT: number = 11;
-  static readonly WIDTH_PROPERTY: number = 12;
-  static readonly RULES: number = 13;
+  static readonly COLOR: number = 8;
+  static readonly TRUNK_COLOR: number = 9;
+  static readonly INSTANCES: number = 10;
+  static readonly DATASOURCE_ID: number = 11;
+  static readonly HEIGHT_PROPERTY: number = 12;
+  static readonly DEFAULT_HEIGHT: number = 13;
+  static readonly WIDTH_PROPERTY: number = 14;
+  static readonly RULES: number = 15;
 
   // Private fields
   private _id?: string;
@@ -56,6 +58,8 @@ export class ModelLayerImpl extends BasicEObject implements ModelLayer {
   private _scale: number = 1;
   private _rotation: number = 0;
   private _altitudeOffset: number = 0;
+  private _color: string = "";
+  private _trunkColor: string = "";
   private _instances!: EList<ModelInstance>;
   private _datasourceId: string = "";
   private _heightProperty: string = "";
@@ -263,6 +267,54 @@ export class ModelLayerImpl extends BasicEObject implements ModelLayer {
     }
   }
 
+  get color(): string {
+    return this._color!;
+  }
+
+  set color(value: string) {
+    const oldValue = this._color;
+    this._color = value;
+    if (this.eDeliver()) {
+      this.eNotify({
+        getNotifier: () => this,
+        getEventType: () => 1, // SET
+        getFeature: () => this.eClass().getEStructuralFeature(ModelLayerImpl.COLOR),
+        getOldValue: () => oldValue,
+        getNewValue: () => value,
+        getPosition: () => -1,
+        wasSet: () => true,
+        isTouch: () => false,
+        isReset: () => false,
+        getFeatureID: () => ModelLayerImpl.COLOR,
+        merge: () => false
+      });
+    }
+  }
+
+  get trunkColor(): string {
+    return this._trunkColor!;
+  }
+
+  set trunkColor(value: string) {
+    const oldValue = this._trunkColor;
+    this._trunkColor = value;
+    if (this.eDeliver()) {
+      this.eNotify({
+        getNotifier: () => this,
+        getEventType: () => 1, // SET
+        getFeature: () => this.eClass().getEStructuralFeature(ModelLayerImpl.TRUNK_COLOR),
+        getOldValue: () => oldValue,
+        getNewValue: () => value,
+        getPosition: () => -1,
+        wasSet: () => true,
+        isTouch: () => false,
+        isReset: () => false,
+        getFeatureID: () => ModelLayerImpl.TRUNK_COLOR,
+        merge: () => false
+      });
+    }
+  }
+
   get instances(): EList<ModelInstance> {
     if (!this._instances) {
       this._instances = createContainmentEList<any>(this, this.eClass().getEStructuralFeature('instances') as EReference);
@@ -397,6 +449,10 @@ export class ModelLayerImpl extends BasicEObject implements ModelLayer {
         return this.rotation;
       case ModelLayerImpl.ALTITUDE_OFFSET:
         return this.altitudeOffset;
+      case ModelLayerImpl.COLOR:
+        return this.color;
+      case ModelLayerImpl.TRUNK_COLOR:
+        return this.trunkColor;
       case ModelLayerImpl.INSTANCES:
         return this.instances;
       case ModelLayerImpl.DATASOURCE_ID:
@@ -452,6 +508,14 @@ export class ModelLayerImpl extends BasicEObject implements ModelLayer {
         this.altitudeOffset = newValue as number;
         super.eSet(feature, newValue);
         break;
+      case ModelLayerImpl.COLOR:
+        this.color = newValue as string;
+        super.eSet(feature, newValue);
+        break;
+      case ModelLayerImpl.TRUNK_COLOR:
+        this.trunkColor = newValue as string;
+        super.eSet(feature, newValue);
+        break;
       case ModelLayerImpl.INSTANCES:
         this.instances.clear();
         this.instances.addAll(newValue as any[]);
@@ -505,6 +569,10 @@ export class ModelLayerImpl extends BasicEObject implements ModelLayer {
         return this._rotation !== 0;
       case ModelLayerImpl.ALTITUDE_OFFSET:
         return this._altitudeOffset !== 0;
+      case ModelLayerImpl.COLOR:
+        return this._color !== "";
+      case ModelLayerImpl.TRUNK_COLOR:
+        return this._trunkColor !== "";
       case ModelLayerImpl.INSTANCES:
         return this._instances !== undefined && !this._instances.isEmpty();
       case ModelLayerImpl.DATASOURCE_ID:
@@ -552,6 +620,12 @@ export class ModelLayerImpl extends BasicEObject implements ModelLayer {
       case ModelLayerImpl.ALTITUDE_OFFSET:
         this._altitudeOffset = 0;
         return;
+      case ModelLayerImpl.COLOR:
+        this._color = "";
+        return;
+      case ModelLayerImpl.TRUNK_COLOR:
+        this._trunkColor = "";
+        return;
       case ModelLayerImpl.INSTANCES:
         if (this._instances) this._instances.clear();
         return;
@@ -593,6 +667,8 @@ export class ModelLayerImpl extends BasicEObject implements ModelLayer {
       scale: this.scale,
       rotation: this.rotation,
       altitudeOffset: this.altitudeOffset,
+      color: this.color,
+      trunkColor: this.trunkColor,
       instances: this.instances?.toArray?.() ?? this.instances,
       datasourceId: this.datasourceId,
       heightProperty: this.heightProperty,
