@@ -14,7 +14,7 @@ Contributors:
 <template>
   <div
     class="timeline-widget"
-    :style="{ '--range-color': rangeFill, '--coverage-color': coverageFill }"
+    :style="{ '--range-color': rangeFill, '--coverage-color': coverageFill, '--coverage-in-color': coverageInFill }"
     @click="emitClick"
     @contextmenu.prevent="emitRightClick"
   >
@@ -27,12 +27,12 @@ Contributors:
           v-for="(lane, index) in coverageLanes"
           :key="lane.id"
           class="coverage-lane"
-          :style="{ '--lane-index': index, ...(lane.color ? { '--coverage-color': lane.color } : {}) }"
+          :style="{ '--lane-index': index, ...(lane.color ? { '--coverage-color': lane.color, '--coverage-in-color': lane.color } : {}) }"
         >
           <div
             v-for="cell in lane.cells"
             :key="cell.key"
-            class="coverage-band"
+            :class="['coverage-band', { 'coverage-band--in': cell.inRange }]"
             :style="{ left: cell.left + '%', width: `max(${cell.width}%, 2px)`, opacity: cell.opacity }"
             :title="cell.title"
           ></div>
@@ -465,6 +465,8 @@ const coverageIds = computed(() => {
   return [...(config.value.coverageDatasourceIds ?? [])].filter((id): id is string => !!id);
 });
 const coverageFill = computed(() => (config.value.coverageColor ?? '').trim() || 'var(--color-dim)');
+/* Inside the selected range the lane takes the range's colour, as it is what the charts show (#1293). */
+const coverageInFill = computed(() => (config.value.coverageColor ?? '').trim() || rangeFill.value);
 
 // Berechne Zeitschritt in Millisekunden basierend auf StepSize
 const getStepSizeInMs = (): number => {
@@ -539,7 +541,7 @@ const { series: coverageSeries } = useTimeCoverage({
   timeField: coverageTimeField,
 });
 
-interface CoverageCell { key: string; left: number; width: number; opacity: number; title: string }
+interface CoverageCell { key: string; left: number; width: number; opacity: number; title: string; inRange: boolean }
 
 /** How much the lanes fade outside the selected range, which is all the charts show (#1293). */
 const OUTSIDE_RANGE_FADE = 0.35;
@@ -577,6 +579,7 @@ const coverageLanes = computed(() => {
           left: cell.left,
           width: cell.width,
           opacity: cell.inRange ? strength : strength * OUTSIDE_RANGE_FADE,
+          inRange: cell.inRange,
           title
         };
       });
@@ -1135,7 +1138,7 @@ onUnmounted(() => {
 /* The hit area is taller than the rail, so the range is easy to grab */
 .timeline-track {
   --track-core: 24px;
-  --lane-height: 3px;
+  --lane-height: 6px;
   --lane-gap: 2px;
   position: relative;
   /* Lanes after the first one need room below the rail */
@@ -1252,6 +1255,10 @@ onUnmounted(() => {
   background: var(--coverage-color);
   /* Square enough that density buckets side by side read as one strip */
   border-radius: 1.5px;
+}
+
+.coverage-band--in {
+  background: var(--coverage-in-color);
 }
 
 /* Axis: flat, on the widget surface */
