@@ -90,6 +90,11 @@ export async function replaceData(view: View, name: string, rows: object[]): Pro
   } catch {
     return false
   }
+  /*
+   * Laid out again: autosize fit keeps the plot size it found for the rows
+   * before, so labels and a legend that grew with the new rows ran out of
+   * the widget (#1287).
+   */
   await view
     .change(
       name,
@@ -97,6 +102,7 @@ export async function replaceData(view: View, name: string, rows: object[]): Pro
         .remove(() => true)
         .insert(rows),
     )
+    .resize()
     .runAsync()
   return true
 }
