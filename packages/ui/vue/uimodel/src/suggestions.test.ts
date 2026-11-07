@@ -17,10 +17,14 @@
  * shown, again for another object, and the latest answer wins.
  */
 import { describe, expect, it } from 'vitest'
-import { defineComponent, h, nextTick, provide, ref } from 'vue'
+import { defineComponent, h, markRaw, nextTick, provide, ref } from 'vue'
 import { flushPromises, mount } from '@vue/test-utils'
 import type { EObject } from '@emfts/core'
 import { FIELD_SUGGESTIONS, useSuggestions, type FieldSuggest } from './suggestions'
+import SettingsForm from './SettingsForm.vue'
+import { ContainmentfixturePackage } from './gen/ContainmentfixturePackage'
+import { ContainmentfixtureFactory } from './gen/ContainmentfixtureFactory'
+import fixtureEcore from '../model/containment-fixture.ecore?raw'
 
 function harness(suggest: FieldSuggest | undefined, enabled = true) {
   const owner = ref<EObject>({ name: 'first' } as unknown as EObject)
@@ -77,5 +81,55 @@ describe('useSuggestions', () => {
     const plain = harness(() => ['a'], false)
     await flushPromises()
     expect([without.view.text(), failing.view.text(), plain.view.text()]).toEqual(['', '', ''])
+  })
+})
+
+describe('a suggestion with words of its own', () => {
+  it('keeps the value, and the words apart', async () => {
+    const { view, shown } = harness(() => [{ value: 'ds-1', label: 'Bäume' }, 'plain'])
+    await flushPromises()
+    expect(view.text()).toBe('ds-1,plain')
+    expect(shown().labels.value).toEqual({ 'ds-1': 'Bäume' })
+  })
+
+  it('is a choice of a SelectWidget: the reader sees the words, the value is stored', async () => {
+    void ContainmentfixturePackage.eINSTANCE
+    const NS = 'http://org.eclipse.daanse.board.app.ui.vue.uimodel.containmentfixture'
+    const xmi = `<?xml version="1.0" encoding="UTF-8"?>
+<uimodel:UIModel xmlns:xmi="http://www.omg.org/XMI" xmi:version="2.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:uimodel="http://uimodel/1.0" name="SelectSuggestFixture">
+  <targetClasses href="${NS}#//FixtureSettings"/>
+  <components xsi:type="uimodel:FormView" name="SelectSuggestFixtureView">
+    <fields xsi:type="uimodel:SelectWidget" name="title" feature="${NS}#//FixtureSettings/title" label="Source"/>
+  </components>
+</uimodel:UIModel>`
+    const settings = ContainmentfixtureFactory.eINSTANCE.createFixtureSettings()
+    ;(settings as unknown as { title: string }).title = 'gone'
+    const view = mount(SettingsForm, {
+      props: {
+        modelValue: markRaw(settings),
+        create: () => ContainmentfixtureFactory.eINSTANCE.createFixtureSettings(),
+        uiModelXmi: xmi,
+        domainPackage: ContainmentfixturePackage.eINSTANCE,
+        uiModelUri: '/select-suggest-fixture.ui.xmi',
+        ecore: fixtureEcore,
+        suggest: (_owner: EObject, feature: string) => (feature === 'title' ? [{ value: 'ds-1', label: 'Bäume' }, { value: 'ds-2', label: 'Messstellen' }] : []),
+      },
+      attachTo: document.body,
+    })
+    await flushPromises()
+    const select = view.findComponent({ name: 'DSelect' })
+    const options = select.props('options') as { value: string; text: string }[]
+    // A held value the answer does not name stays a choice.
+    expect(options).toEqual([
+      { value: 'ds-1', text: 'Bäume' },
+      { value: 'ds-2', text: 'Messstellen' },
+      { value: 'gone', text: 'gone' },
+    ])
+    select.vm.$emit('update:modelValue', 'ds-2')
+    await flushPromises()
+    expect((settings as unknown as { title: string }).title).toBe('ds-2')
+    view.unmount()
   })
 })

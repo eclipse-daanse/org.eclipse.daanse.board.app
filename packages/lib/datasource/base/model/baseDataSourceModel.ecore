@@ -47,7 +47,7 @@
 
     <eClassifiers xsi:type="ecore:EClass" name="ColumnType">
         <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-            <details key="documentation" value="How one column of a data source is read: its type, and for a number its unit (#1295). Shared by the data sources (a WFS fills it from DescribeFeatureType) and their readers - the Vega chart, the 3D map."/>
+            <details key="documentation" value="How one column of a data source is read: its type, and for a number its unit. Shared by the data sources (a WFS fills it from DescribeFeatureType) and their readers - the Vega chart, the 3D map."/>
         </eAnnotations>
         <eStructuralFeatures xsi:type="ecore:EAttribute" name="column" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" lowerBound="0" defaultValueLiteral="">
             <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
@@ -61,7 +61,7 @@
         </eStructuralFeatures>
         <eStructuralFeatures xsi:type="ecore:EAttribute" name="unit" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" lowerBound="0" defaultValueLiteral="">
             <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-                <details key="documentation" value="The unit of a number column, e.g. m or cm; a consumer that needs another unit converts by it (#1295). Empty: none said."/>
+                <details key="documentation" value="The unit of a number column, e.g. m or cm; a consumer that needs another unit converts by it. Empty: none said."/>
             </eAnnotations>
         </eStructuralFeatures>
         <eStructuralFeatures xsi:type="ecore:EAttribute" name="label" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" lowerBound="0" defaultValueLiteral="">
@@ -144,7 +144,7 @@
 
     <eClassifiers xsi:type="ecore:EEnum" name="TransformKind">
         <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-            <details key="documentation" value="What a transform does: keep the rows that pass a comparison or a selection (filter), turn columns into rows (fold), or add a computed field (calculate), or take a part of a field by a regular expression (extract, #1295)."/>
+            <details key="documentation" value="What a transform does: keep the rows that pass a comparison or a selection (filter), turn columns into rows (fold), or add a computed field (calculate), or take a part of a field by a regular expression (extract)."/>
         </eAnnotations>
         <eLiterals name="filter" literal="filter"/>
         <eLiterals name="fold" literal="fold" value="1"/>

@@ -385,7 +385,7 @@ export class BaseconnectionPackage extends BasicEPackage {
     {
       const annotation = new BasicEAnnotation();
       annotation.setSource("http://www.eclipse.org/emf/2002/GenModel");
-      annotation.getDetails().putByKey("documentation", "What a transform does: keep the rows that pass a comparison or a selection (filter), turn columns into rows (fold), or add a computed field (calculate), or take a part of a field by a regular expression (extract, #1295).");
+      annotation.getDetails().putByKey("documentation", "What a transform does: keep the rows that pass a comparison or a selection (filter), turn columns into rows (fold), or add a computed field (calculate), or take a part of a field by a regular expression (extract).");
       transformKindEnumType.getEAnnotations().push(annotation);
     }
     BaseconnectionPackage.Literals.TRANSFORM_KIND = transformKindEnumType;
