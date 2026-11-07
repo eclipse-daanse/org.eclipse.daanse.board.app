@@ -29,6 +29,7 @@ import { TimeUnit } from './TimeUnit.js';
 import { SortOrder } from './SortOrder.js';
 import { StackMode } from './StackMode.js';
 import { ScaleType } from './ScaleType.js';
+import { AxisOrient } from './AxisOrient.js';
 import type { Encoding } from './Encoding.js';
 import { VegawidgetPackage } from './VegawidgetPackage.js';
 
@@ -62,6 +63,7 @@ export class EncodingImpl extends BasicEObject implements Encoding {
   static readonly HIGHLIGHT_PARAM: number = 21;
   static readonly VALUE_IF_NOT_SELECTED: number = 22;
   static readonly SCALE_ENTRIES: number = 23;
+  static readonly AXIS_ORIENT: number = 24;
 
   // Private fields
   private _channel: Channel = Channel.x;
@@ -88,6 +90,7 @@ export class EncodingImpl extends BasicEObject implements Encoding {
   private _highlightParam: string = "";
   private _valueIfNotSelected: string = "";
   private _scaleEntries!: EList<ScaleEntry>;
+  private _axisOrient: AxisOrient = AxisOrient.auto;
 
   /**
    * Returns the EClass of this object
@@ -656,6 +659,30 @@ export class EncodingImpl extends BasicEObject implements Encoding {
     return this._scaleEntries;
   }
 
+  get axisOrient(): AxisOrient {
+    return this._axisOrient!;
+  }
+
+  set axisOrient(value: AxisOrient) {
+    const oldValue = this._axisOrient;
+    this._axisOrient = value;
+    if (this.eDeliver()) {
+      this.eNotify({
+        getNotifier: () => this,
+        getEventType: () => 1, // SET
+        getFeature: () => this.eClass().getEStructuralFeature(EncodingImpl.AXIS_ORIENT),
+        getOldValue: () => oldValue,
+        getNewValue: () => value,
+        getPosition: () => -1,
+        wasSet: () => true,
+        isTouch: () => false,
+        isReset: () => false,
+        getFeatureID: () => EncodingImpl.AXIS_ORIENT,
+        merge: () => false
+      });
+    }
+  }
+
   // Reflective API
 
   /**
@@ -712,6 +739,8 @@ export class EncodingImpl extends BasicEObject implements Encoding {
         return this.valueIfNotSelected;
       case EncodingImpl.SCALE_ENTRIES:
         return this.scaleEntries;
+      case EncodingImpl.AXIS_ORIENT:
+        return this.axisOrient;
       default:
         return super.eGet(feature);
     }
@@ -820,6 +849,10 @@ export class EncodingImpl extends BasicEObject implements Encoding {
         this.scaleEntries.addAll(newValue as any[]);
         super.eSet(feature, newValue);
         break;
+      case EncodingImpl.AXIS_ORIENT:
+        this.axisOrient = newValue as AxisOrient;
+        super.eSet(feature, newValue);
+        break;
       default:
         super.eSet(feature, newValue);
     }
@@ -879,6 +912,8 @@ export class EncodingImpl extends BasicEObject implements Encoding {
         return this._valueIfNotSelected !== "";
       case EncodingImpl.SCALE_ENTRIES:
         return this._scaleEntries !== undefined && !this._scaleEntries.isEmpty();
+      case EncodingImpl.AXIS_ORIENT:
+        return this._axisOrient !== AxisOrient.auto;
       default:
         return super.eIsSet(feature);
     }
@@ -962,6 +997,9 @@ export class EncodingImpl extends BasicEObject implements Encoding {
       case EncodingImpl.SCALE_ENTRIES:
         if (this._scaleEntries) this._scaleEntries.clear();
         return;
+      case EncodingImpl.AXIS_ORIENT:
+        this._axisOrient = AxisOrient.auto;
+        return;
       default:
         super.eUnset(feature);
     }
@@ -1001,6 +1039,7 @@ export class EncodingImpl extends BasicEObject implements Encoding {
       highlightParam: this.highlightParam,
       valueIfNotSelected: this.valueIfNotSelected,
       scaleEntries: this.scaleEntries?.toArray?.() ?? this.scaleEntries,
+      axisOrient: this.axisOrient,
     };
   }
 }

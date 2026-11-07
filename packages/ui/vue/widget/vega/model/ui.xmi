@@ -69,6 +69,18 @@ small multiples and the selections follow.
         label="vega:Form.params"
         placeholder="vega:Form.paramsHint"/>
     <fields xsi:type="uimodel:SelectWidget"
+        name="independentScales"
+        feature="http://org.eclipse.daanse.board.app.ui.vue.widget.vega#//VegaWidgetSettings/independentScales"
+        label="vega:Form.independentScales" multiSelect="true">
+      <values>y</values>
+      <values>x</values>
+      <values>color</values>
+      <values>size</values>
+      <values>opacity</values>
+      <optionLabel language="JS" body="({ y: 'vega:Options.channel.y', x: 'vega:Options.channel.x', color: 'vega:Options.channel.color', size: 'vega:Options.channel.size', opacity: 'vega:Options.channel.opacity' })[option] ?? option"/>
+      <visibilityCondition language="JS" body="self.layers.size() &gt; 1 || !!(self.facet &amp;&amp; (self.facet.row || self.facet.column))"/>
+    </fields>
+    <fields xsi:type="uimodel:SelectWidget"
         name="legendPosition"
         feature="http://org.eclipse.daanse.board.app.ui.vue.widget.vega#//VegaWidgetSettings/legendPosition"
         label="vega:Form.legendPosition">

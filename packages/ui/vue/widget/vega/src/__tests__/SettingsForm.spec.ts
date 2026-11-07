@@ -215,4 +215,16 @@ describe('the chart settings form', () => {
     expect(lists.filter((label) => label === en.FormEncoding.scaleEntries)).toHaveLength(1)
     view.unmount()
   })
+
+  it('offers own scales per layer only with more than one layer, and the axis side on x and y (#1304)', async () => {
+    const one = await settingsForm(CHARTS.line.settings())
+    expect(labels(one).has(en.Form.independentScales)).toBe(false)
+    expect(labels(one).has(en.FormEncoding.axisOrient)).toBe(true)
+    one.unmount()
+    const settings = CHARTS.line.settings()
+    settings.layers.add(VegawidgetFactory.eINSTANCE.createLayer())
+    const two = await settingsForm(settings)
+    expect(labels(two).has(en.Form.independentScales)).toBe(true)
+    two.unmount()
+  })
 })

@@ -200,6 +200,18 @@ x - is not shown.
         label="vega:FormEncoding.showAxis">
       <visibilityCondition language="JS" body="['x', 'y'].includes(self.channel)"/>
     </fields>
+    <fields xsi:type="uimodel:SelectWidget"
+        name="axisOrient"
+        feature="http://org.eclipse.daanse.board.app.ui.vue.widget.vega#//Encoding/axisOrient"
+        label="vega:FormEncoding.axisOrient">
+      <values>auto</values>
+      <values>left</values>
+      <values>right</values>
+      <values>top</values>
+      <values>bottom</values>
+      <optionLabel language="JS" body="({ auto: 'vega:Options.axisOrient.auto', left: 'vega:Options.axisOrient.left', right: 'vega:Options.axisOrient.right', top: 'vega:Options.axisOrient.top', bottom: 'vega:Options.axisOrient.bottom' })[option] ?? option"/>
+      <visibilityCondition language="JS" body="['x', 'y'].includes(self.channel) &amp;&amp; self.showAxis !== false"/>
+    </fields>
     <fields xsi:type="uimodel:CheckboxWidget"
         name="showGrid"
         feature="http://org.eclipse.daanse.board.app.ui.vue.widget.vega#//Encoding/showGrid"
