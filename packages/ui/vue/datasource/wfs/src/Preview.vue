@@ -75,12 +75,22 @@ const count = computed(() => data.value?.features?.length ?? 0)
 </template>
 
 <style scoped>
+/* The whole pane: in a row of its host it had only the width of its text (#1302). */
 .wfs-preview {
   display: flex;
   flex-direction: column;
+  flex: 1 1 auto;
   gap: 8px;
+  width: 100%;
+  min-width: 0;
   height: 100%;
   min-height: 300px;
+}
+
+/* The map takes the height below the count. */
+.wfs-preview :deep(.geomap) {
+  flex: 1 1 auto;
+  min-height: 0;
 }
 
 .wfs-preview__error {

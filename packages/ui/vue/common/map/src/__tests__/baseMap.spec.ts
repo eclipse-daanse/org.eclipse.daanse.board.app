@@ -12,7 +12,7 @@
  **********************************************************************/
 // @vitest-environment jsdom
 import { describe, it, expect, vi } from 'vitest'
-import { mount } from '@vue/test-utils'
+import { flushPromises, mount } from '@vue/test-utils'
 import GeoFeatureMap from '../GeoFeatureMap.vue'
 import { FREE_BASE_MAP_ATTRIBUTION, FREE_BASE_MAP_URL } from '../baseMap'
 
@@ -27,7 +27,8 @@ vi.mock('@vue-leaflet/vue-leaflet', () => ({
   },
   LGeoJson: { name: 'LGeoJson', props: ['geojson'], template: '<div class="l-geojson" />' },
 }))
-vi.mock('leaflet', () => ({ default: { latLngBounds: () => ({}) } }))
+/* The map mounts once the Leaflet it draws with is there (#1302). */
+vi.mock('../leaflet', () => ({ loadLeaflet: async () => ({ circleMarker: () => ({}) }) }))
 vi.mock('leaflet/dist/leaflet.css', () => ({}))
 
 describe('the background of a map nobody chose one for', () => {
@@ -37,17 +38,19 @@ describe('the background of a map nobody chose one for', () => {
     expect(FREE_BASE_MAP_ATTRIBUTION).toContain('OpenStreetMap')
   })
 
-  it('is what the map draws its tiles from', () => {
+  it('is what the map draws its tiles from', async () => {
     const wrapper = mount(GeoFeatureMap, { props: { data: null } })
+    await flushPromises()
     const tiles = wrapper.find('.l-tiles')
     expect(tiles.attributes('data-url')).toBe(FREE_BASE_MAP_URL)
     expect(tiles.attributes('data-attribution')).toBe(FREE_BASE_MAP_ATTRIBUTION)
   })
 
-  it('gives way to a background the caller names', () => {
+  it('gives way to a background the caller names', async () => {
     const wrapper = mount(GeoFeatureMap, {
       props: { data: null, baseMapUrl: 'https://tiles.example.org/{z}/{x}/{y}.png' },
     })
+    await flushPromises()
     expect(wrapper.find('.l-tiles').attributes('data-url')).toBe('https://tiles.example.org/{z}/{x}/{y}.png')
   })
 })

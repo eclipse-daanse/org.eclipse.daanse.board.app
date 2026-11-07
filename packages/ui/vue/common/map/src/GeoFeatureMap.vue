@@ -23,10 +23,11 @@ Contributors:
  * Points, lines and areas, all of them: a preview that silently drops two
  * of the three is worse than none, because it looks like an empty dataset.
  */
-import { computed, nextTick, ref, shallowRef, watch } from 'vue'
+import { computed, nextTick, onBeforeUnmount, onMounted, ref, shallowRef, watch } from 'vue'
 import { LGeoJson, LMap, LTileLayer } from '@vue-leaflet/vue-leaflet'
-import L from 'leaflet'
+import type * as Leaflet from 'leaflet'
 import 'leaflet/dist/leaflet.css'
+import { loadLeaflet } from './leaflet'
 import { FREE_BASE_MAP_ATTRIBUTION, FREE_BASE_MAP_URL } from './baseMap'
 import { useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import { boundsOf, countByType, featuresIn, type Feature } from './features'
@@ -72,17 +73,38 @@ watch(
 
 const map = ref<any>(null)
 
+/*
+ * The Leaflet the map is drawn with (#1302). vue-leaflet loads its own -
+ * the ES module build, at mount - and a marker made by another copy of
+ * Leaflet (the UMD build of a plain import of 'leaflet') is not one of its
+ * layers: it threw "Cannot read properties of undefined (reading 'x')" on
+ * every point. The markers are made with the same module, and the map is
+ * mounted once it is there, so a preview that is mounted and at once
+ * replaced does not leave vue-leaflet a map without its container ("Map
+ * container not found").
+ */
+const leaflet = shallowRef<typeof Leaflet | null>(null)
+let mounted = false
+onMounted(async () => {
+  mounted = true
+  const loaded = await loadLeaflet()
+  if (mounted) leaflet.value = loaded
+})
+onBeforeUnmount(() => {
+  mounted = false
+})
+
 /** Points as circles: a GeoJSON point has no icon of its own to draw. */
 const options = {
-  pointToLayer: (_feature: unknown, latlng: L.LatLng) =>
-    L.circleMarker(latlng, {
+  pointToLayer: (_feature: unknown, latlng: Leaflet.LatLng) =>
+    leaflet.value!.circleMarker(latlng, {
       radius: 5,
       color: '#1d4ed8',
       weight: 2,
       fillColor: '#3b82f6',
       fillOpacity: 0.8,
     }),
-  onEachFeature: (feature: Feature, layer: L.Layer) => {
+  onEachFeature: (feature: Feature, layer: Leaflet.Layer) => {
     const properties = feature.properties
     if (!properties || typeof properties !== 'object') return
     const rows = Object.entries(properties)
@@ -143,7 +165,7 @@ async function frame() {
     </header>
 
     <div class="geomap__canvas">
-      <LMap ref="map" :zoom="6" :center="[50.93, 11.6]" :use-global-leaflet="false" @ready="frame">
+      <LMap v-if="leaflet" ref="map" :zoom="6" :center="[50.93, 11.6]" :use-global-leaflet="false" @ready="frame">
         <LTileLayer :url="baseMapUrl" :attribution="attribution" />
         <LGeoJson v-if="collection" :geojson="collection as any" :options="options" :options-style="style" />
       </LMap>
