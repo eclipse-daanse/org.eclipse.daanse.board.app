@@ -13,7 +13,8 @@
 
 import './referencedPackages'
 import { activate, component, deactivate, inject } from '@eclipse-daanse/tsm'
-import { EVENT_REGISTRY_ID, type EventRegistry } from 'org.eclipse.daanse.board.app.lib.api.events'
+import { EVENT_ACTIONS_REGISTRY_ID, EVENT_REGISTRY_ID, type EventActionsRegistry, type EventRegistry } from 'org.eclipse.daanse.board.app.lib.api.events'
+import { VegaWidgetInterfaceImpl } from './gen/VegaWidgetInterfaceImpl'
 import { VegaWidgetEvents, WIDGET_TYPE } from './events/VegaWidgetEvents'
 import { DATASOURCE_REPOSITORY, type DatasourceRepository } from 'org.eclipse.daanse.board.app.lib.api.datasource'
 import { WIDGET_SERVICE_ID, type WidgetProvider } from 'org.eclipse.daanse.board.app.lib.api.widget'
@@ -94,17 +95,25 @@ export class VegaWidgetProvider implements WidgetProvider {
   constructor(
     @inject(DATASOURCE_REPOSITORY) private readonly datasources: DatasourceRepository,
     @inject(EVENT_REGISTRY_ID) private readonly events: EventRegistry,
+    @inject(EVENT_ACTIONS_REGISTRY_ID) private readonly actions: EventActionsRegistry,
   ) {}
 
-  /* Its events, so the rule editor offers them (#1289). */
+  /* Its events (#1289) and its actions (#1290), so the rule editor offers them. */
   @activate()
   register(): void {
     this.events.registerWidget(WIDGET_TYPE, VegaWidgetEvents)
+    // Actions from the Ecore model; the generated class is the fallback.
+    this.actions
+      .registerActionsFromEcoreString(WIDGET_TYPE, settingsEcore, 'widget', 'model.ecore')
+      .catch(() => {
+        this.actions.registerWidgetType(WIDGET_TYPE, VegaWidgetInterfaceImpl, 'widget')
+      })
   }
 
   @deactivate()
   unregister(): void {
     this.events.unregisterWidget(WIDGET_TYPE)
+    this.actions.unregisterWidgetType(WIDGET_TYPE)
   }
 }
 

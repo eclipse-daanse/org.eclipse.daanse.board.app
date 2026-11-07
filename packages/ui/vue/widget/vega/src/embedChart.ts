@@ -180,3 +180,56 @@ export function listenTo(view: View, listeners: ChartListeners): void {
   for (const name of listeners.selections) follow(name, listeners.onSelection)
   for (const name of listeners.values) follow(name, listeners.onValue)
 }
+
+/* ------------------------------------------------------------ actions */
+
+type TupleField = { type?: string; field?: string; channel?: string }
+
+/**
+ * Sets what a selection holds (#1290): an object of field values - or a
+ * list of them - as Vega-Lite's store keeps it, one entry per object; an
+ * empty value clears it. Answers false when the chart has no such
+ * selection, so the caller can try it as a value parameter.
+ */
+export async function setSelection(view: View, name: string, value: unknown): Promise<boolean> {
+  let fields: TupleField[]
+  try {
+    fields = view.signal(`${name}_tuple_fields`) as TupleField[]
+    view.data(`${name}_store`)
+  } catch {
+    return false
+  }
+  const wanted = value === null || value === undefined || value === '' ? [] : Array.isArray(value) ? value : [value]
+  const tuples = wanted
+    .filter((each): each is Record<string, unknown> => !!each && typeof each === 'object')
+    .map((each) => ({
+      unit: '',
+      fields,
+      values: (fields ?? []).map((field) => each[field.field ?? ''] ?? (field.channel ? each[field.channel] : undefined)),
+    }))
+  await view
+    .change(
+      `${name}_store`,
+      changeset()
+        .remove(() => true)
+        .insert(tuples),
+    )
+    .runAsync()
+  return true
+}
+
+/** Sets a value parameter; answers false when the chart has none of that name. */
+export async function setValueParam(view: View, name: string, value: unknown): Promise<boolean> {
+  try {
+    view.signal(name)
+  } catch {
+    return false
+  }
+  await view.signal(name, value as never).runAsync()
+  return true
+}
+
+/** The chart as an image, as a data URL. */
+export function imageOf(view: View, format: 'png' | 'svg'): Promise<string> {
+  return view.toImageURL(format)
+}

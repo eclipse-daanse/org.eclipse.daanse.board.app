@@ -21,6 +21,9 @@
     },
     {
       "id": "EventRegistry"
+    },
+    {
+      "id": "EventActionsRegistry"
     }
   ],
   "sharedDependencies": [

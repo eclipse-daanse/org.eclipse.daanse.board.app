@@ -145,6 +145,7 @@ export class VegawidgetPackage extends BasicEPackage {
     PARAM_PAYLOAD: null as unknown as EClass,
     PARAM_PAYLOAD__PARAM: null as unknown as EAttribute | EReference,
     PARAM_PAYLOAD__VALUE: null as unknown as EAttribute | EReference,
+    VEGA_WIDGET_INTERFACE: null as unknown as EClass,
     VEGA_RENDERER: null as unknown as EEnum,
     LEGEND_POSITION: null as unknown as EEnum,
     MARK_TYPE: null as unknown as EEnum,
@@ -826,6 +827,15 @@ export class VegawidgetPackage extends BasicEPackage {
     paramPayload_value.setUpperBound(1);
     paramPayloadClass.getEStructuralFeatures().push(paramPayload_value);
     VegawidgetPackage.Literals.PARAM_PAYLOAD__VALUE = paramPayload_value;
+
+    // Create VegaWidgetInterface class
+    const vegaWidgetInterfaceClass = new BasicEClass();
+    vegaWidgetInterfaceClass.setName('VegaWidgetInterface');
+    vegaWidgetInterfaceClass.setAbstract(true);
+    vegaWidgetInterfaceClass.setInterface(false);
+    this.getEClassifiers().push(vegaWidgetInterfaceClass);
+    vegaWidgetInterfaceClass.setEPackage(this);
+    VegawidgetPackage.Literals.VEGA_WIDGET_INTERFACE = vegaWidgetInterfaceClass;
 
     // Create VegaRenderer enum
     const vegaRendererEnumType = new BasicEEnum();
@@ -1912,6 +1922,7 @@ export class VegawidgetPackage extends BasicEPackage {
     (VegawidgetPackage.Literals.MARK_CLICK_PAYLOAD as BasicEClass).getESuperTypes().push(requireEPackage('http://org.eclipse.daanse.board.app.lib.events').getEClassifier('Payload')! as EClass);
     (VegawidgetPackage.Literals.SELECTION_PAYLOAD as BasicEClass).getESuperTypes().push(requireEPackage('http://org.eclipse.daanse.board.app.lib.events').getEClassifier('Payload')! as EClass);
     (VegawidgetPackage.Literals.PARAM_PAYLOAD as BasicEClass).getESuperTypes().push(requireEPackage('http://org.eclipse.daanse.board.app.lib.events').getEClassifier('Payload')! as EClass);
+    (VegawidgetPackage.Literals.VEGA_WIDGET_INTERFACE as BasicEClass).getESuperTypes().push(requireEPackage('http://org.eclipse.daanse.board.app.lib.events').getEClassifier('WidgetActionInterface')! as EClass);
 
     // ============================================
     // Set ETypes for all features (must be done after all classes are created).
