@@ -24,13 +24,28 @@ import { useEObject, useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.
 import { DButton, DCheckbox, DColorInput, DIcon, DIconPicker, DInput, DSelect, DSlider } from 'org.eclipse.daanse.board.app.ui.vue.controls'
 import type { MapLibreSettings } from './gen/MapLibreSettings'
 import type { ThingLayer } from './gen/ThingLayer'
-import { modelledSettings, newColorMapping, newGeoJsonLayer, newThingLayer, newModelLayer, newWmsLayer, newWmsService } from './settingsModel'
+import { modelledSettings, newColorMapping, newGeoJsonLayer, newThingLayer, newWmsLayer, newWmsService } from './settingsModel'
 import type { WmsLayer } from './gen/WmsLayer'
 import type { WmsService } from './gen/WmsService'
 import type { ModelLayer } from './gen/ModelLayer'
 import { loadModel, modelStatus } from './models/modelLoader'
 import { placing } from './models/placementMode'
 import { MaplibreFactory } from './gen/MaplibreFactory'
+import { SettingsForm } from 'org.eclipse.daanse.board.app.ui.vue.uimodel'
+import { fieldsAddedBy } from 'org.eclipse.daanse.board.app.lib.datasource.base'
+import transformFormXmi from 'org.eclipse.daanse.board.app.lib.datasource.base/model/ui-transform.xmi?raw'
+import { MaplibrePackage } from './gen/MaplibrePackage'
+import maplibreEcore from '../model/model.ecore?raw'
+import symbolsFormXmi from '../model/ui-symbols.xmi?raw'
+import modelLayerFormXmi from '../model/ui-model-layer.xmi?raw'
+import sizeFormXmi from '../model/ui-size-encoding.xmi?raw'
+import fieldFormXmi from '../model/ui-field-encoding.xmi?raw'
+import colorFormXmi from '../model/ui-color-encoding.xmi?raw'
+import colorMappingFormXmi from '../model/ui-color-mapping.xmi?raw'
+import modelEncodingFormXmi from '../model/ui-model-encoding.xmi?raw'
+import modelMappingFormXmi from '../model/ui-model-mapping.xmi?raw'
+import partFormXmi from '../model/ui-part-encoding.xmi?raw'
+import instanceFormXmi from '../model/ui-model-instance.xmi?raw'
 import { WmsLayerList, useOGCService } from 'org.eclipse.daanse.board.app.ui.vue.common.map'
 
 const props = defineProps<{ dataSources?: { uid: string; name?: string; type?: string }[] }>()
@@ -95,7 +110,6 @@ const geoJsonExample = 'https://example.org/areas.geojson'
 const examples = {
   tiles: 'https://tile.example.org/{z}/{x}/{y}.png',
   wms: 'https://kartenportal.jena.de/mapproxy/service',
-  model: 'https://example.org/tree.glb',
 }
 const loading = ref('')
 const newServiceUrl = ref('')
@@ -162,34 +176,59 @@ function reorderWmsLayers(order: unknown[]) {
   })
 }
 
-/* -------------------------------------------------------- 3D models (#1281) */
+/* ------------------------------------------------ symbol layers (#1296) */
 
-const modelFormats = computed(() => [
-  { value: '', label: t('Settings.models.formats.auto') },
-  { value: 'fbx', label: 'FBX' },
-  { value: 'gltf', label: 'glTF / GLB' },
-])
+/*
+ * The symbol layers are edited in generated forms (model/ui-symbols.xmi and
+ * the entry forms beside it), not here. What a form cannot do stays here:
+ * whether a model file can be read (it is fetched to say so), and the place
+ * mode, which takes clicks on the preview map rather than a value.
+ */
+const symbolEntryForms = [
+  { xmi: modelLayerFormXmi, uri: '/maplibre-model-layer.ui.xmi' },
+  { xmi: sizeFormXmi, uri: '/maplibre-size-encoding.ui.xmi' },
+  { xmi: fieldFormXmi, uri: '/maplibre-field-encoding.ui.xmi' },
+  { xmi: colorFormXmi, uri: '/maplibre-color-encoding.ui.xmi' },
+  { xmi: colorMappingFormXmi, uri: '/maplibre-color-mapping.ui.xmi' },
+  { xmi: modelEncodingFormXmi, uri: '/maplibre-model-encoding.ui.xmi' },
+  { xmi: modelMappingFormXmi, uri: '/maplibre-model-mapping.ui.xmi' },
+  { xmi: partFormXmi, uri: '/maplibre-part-encoding.ui.xmi' },
+  { xmi: instanceFormXmi, uri: '/maplibre-model-instance.ui.xmi' },
+  { xmi: transformFormXmi, uri: '/transform.ui.xmi' },
+]
+const createSettings = () => MaplibreFactory.eINSTANCE.createMapLibreSettings()
 
-/* The data sources a model layer can stand on: the ones that answer points (WFS and others with GeoJSON). */
-const pointSources = computed(() => {
-  const listed = props.dataSources ?? repository?.getDatasources?.().map((d) => ({ uid: d.uid, name: d.name, type: d.type })) ?? []
-  return [
-    { value: '', label: t('Settings.models.noDatasource') },
-    ...listed.filter((d) => ['wfs', 'valhalla', 'rest'].includes(String(d.type))).map((d) => ({ value: d.uid, label: d.name || d.uid })),
-  ]
-})
-function addRule(layer: ModelLayer) {
-  const rule = MaplibreFactory.eINSTANCE.createModelRule()
-  rule.property = layer.rules.size() ? String(layer.rules.get(layer.rules.size() - 1).property ?? '') : ''
-  layer.rules.add(rule)
+/** The symbol layer an edited object belongs to: itself or one of its containers. */
+function symbolLayerOf(owner: unknown): ModelLayer | undefined {
+  let at = owner as { eContainer?: () => unknown } | undefined
+  for (let depth = 0; at && depth < 6; depth++) {
+    if (typeof at === 'object' && 'instances' in (at as object) && 'transforms' in (at as object)) return at as unknown as ModelLayer
+    at = at.eContainer?.() as typeof at
+  }
+  return undefined
 }
 
-function addModelLayer() {
-  settings.value.modelLayers.add(newModelLayer(t('Settings.models.newLayer')))
-}
-function removeModelLayer(layer: ModelLayer) {
-  if (placing.value?.layerId === layer.id) placing.value = null
-  settings.value.modelLayers.remove(layer)
+/**
+ * What a field of a symbol layer is offered (#1296): the board's data sources
+ * for the data source, and for a field the columns of the layer's source
+ * with the fields its transforms add.
+ */
+async function suggestSymbolFields(owner: unknown, feature: string): Promise<string[]> {
+  if (feature === 'datasourceId') return repository?.getDatasources?.().map((d) => d.uid).filter(Boolean) ?? []
+  if (feature !== 'field') return []
+  const layer = symbolLayerOf(owner)
+  const added = fieldsAddedBy(layer?.transforms)
+  const id = String(layer?.datasourceId ?? '')
+  let columns: string[] = []
+  if (id) {
+    try {
+      const answer = (await repository?.getDatasource(id).getData('geojson')) as { features?: { properties?: object }[] } | undefined
+      columns = [...new Set((answer?.features ?? []).slice(0, 50).flatMap((f) => Object.keys(f?.properties ?? {})))]
+    } catch {
+      columns = []
+    }
+  }
+  return [...new Set([...columns, ...added])]
 }
 
 /* Placing: clicks on the map of these settings - the preview - add, move or remove instances. */
@@ -209,18 +248,16 @@ watch(
   },
   { immediate: true, deep: true },
 )
-function modelError(url: unknown): string | undefined {
+function modelStatusText(url: unknown): { text: string; error: boolean } {
   const status = modelStatus[String(url ?? '').trim()]
-  if (status?.state !== 'error') return undefined
-  if (status.error === 'blocked') return t('Settings.models.errors.blocked')
-  if (status.error === 'http') return t('Settings.models.errors.http', { status: status.status })
-  return t('Settings.models.errors.format')
-}
-function modelHint(url: unknown): string {
-  const status = modelStatus[String(url ?? '').trim()]
-  if (status?.state === 'loading') return t('Settings.models.loading')
-  if (status?.state === 'ready') return t('Settings.models.ready')
-  return t('Settings.models.urlHint')
+  if (!String(url ?? '').trim()) return { text: t('Settings.models.urlHint'), error: false }
+  if (status?.state === 'error') {
+    if (status.error === 'blocked') return { text: t('Settings.models.errors.blocked'), error: true }
+    if (status.error === 'http') return { text: t('Settings.models.errors.http', { status: status.status }), error: true }
+    return { text: t('Settings.models.errors.format'), error: true }
+  }
+  if (status?.state === 'ready') return { text: t('Settings.models.ready'), error: false }
+  return { text: t('Settings.models.loading'), error: false }
 }
 
 function addThingLayer() {
@@ -399,69 +436,29 @@ function addColor(layer: ThingLayer) {
     <div class="section__head">
       <DIcon name="park" size="sm" />
       <span class="section__title">{{ t('Settings.sections.models') }}</span>
-      <DButton intent="quiet" size="sm" @click="addModelLayer"><DIcon name="add" size="sm" />{{ t('Settings.add') }}</DButton>
     </div>
     <div class="settings-container">
-      <p v-if="settings.modelLayers.size() === 0" class="note">{{ t('Settings.models.none') }}</p>
-      <details v-for="(layer, index) in settings.modelLayers.toArray()" :key="layer.id ?? index" class="layer" open>
-        <summary class="layer__head">
-          <span class="layer__name">{{ layer.name || layer.id }}</span>
-          <DButton intent="quiet" size="sm" :title="t('Settings.remove')" @click.prevent="removeModelLayer(layer)">
-            <DIcon name="delete" size="sm" />
-          </DButton>
-        </summary>
-        <div class="settings-container">
-          <DInput v-model="layer.name" :label="t('Settings.layerName')" />
-          <DCheckbox v-model="layer.visible" :label="t('Settings.visible')" />
-          <DInput v-model="layer.url" :label="t('Settings.models.url')" :placeholder="examples.model"
-            :error="modelError(layer.url)" :hint="modelHint(layer.url)" />
-          <DSelect v-model="layer.format" :options="modelFormats" value-key="value" label-key="label"
-            :label="t('Settings.models.format')" />
-          <DInput type="number" :model-value="layer.scale" :label="t('Settings.models.scale')" :step="0.01"
-            :hint="t('Settings.models.scaleHint')" @update:model-value="(v) => setNumber(layer, 'scale', v)" />
-          <DSlider v-model="layer.rotation" :label="t('Settings.models.rotation')" :min="0" :max="359" :step="1" suffix="°" />
-          <DInput type="number" :model-value="layer.altitudeOffset" :label="t('Settings.models.altitudeOffset')"
-            @update:model-value="(v) => setNumber(layer, 'altitudeOffset', v)" />
-          <DColorInput v-model="layer.color" :label="t('Settings.models.color')" />
-          <DColorInput v-model="layer.trunkColor" :label="t('Settings.models.trunkColor')" />
-          <DButton :intent="placingId === layer.id ? 'primary' : 'default'" @click="togglePlacing(layer)">
-            <DIcon name="ads_click" size="sm" />{{ placingId === layer.id ? t('Settings.models.placing') : t('Settings.models.place') }}
-          </DButton>
-          <p v-if="placingId === layer.id" class="note">{{ t('Settings.models.placeHint') }}</p>
-          <DSelect v-model="layer.datasourceId" :options="pointSources" value-key="value" label-key="label"
-            :label="t('Settings.models.datasource')" :hint="t('Settings.models.datasourceHint')" />
-          <template v-if="layer.datasourceId">
-            <DInput v-model="layer.heightProperty" :label="t('Settings.models.heightProperty')" placeholder="baumhoehe"
-              :hint="t('Settings.models.heightPropertyHint')" />
-            <DInput v-model="layer.widthProperty" :label="t('Settings.models.widthProperty')" placeholder="Kronendurchmesser"
-              :hint="t('Settings.models.widthPropertyHint')" />
-            <DInput type="number" :model-value="layer.defaultHeight" :label="t('Settings.models.defaultHeight')"
-              @update:model-value="(v) => setNumber(layer, 'defaultHeight', v)" />
-            <div v-for="(rule, at) in layer.rules.toArray()" :key="at" class="row">
-              <DInput v-model="rule.property" :label="t('Settings.models.ruleProperty')" placeholder="gattung_deutsch" />
-              <DInput v-model="rule.value" :label="t('Settings.models.ruleValue')" placeholder="Linde" />
-              <DColorInput v-model="rule.color" :label="t('Settings.color')" />
-              <DInput v-model="rule.url" :label="t('Settings.models.ruleUrl')" :placeholder="t('Settings.models.ruleUrlHint')" />
-              <DButton intent="quiet" size="sm" :title="t('Settings.remove')" @click="layer.rules.remove(rule)">
-                <DIcon name="delete" size="sm" />
-              </DButton>
-            </div>
-            <DButton size="sm" @click="addRule(layer)"><DIcon name="add" size="sm" />{{ t('Settings.models.addRule') }}</DButton>
-          </template>
-          <p class="note">{{ t('Settings.models.count', { count: layer.instances.size() }) }}</p>
-          <div v-for="instance in layer.instances.toArray()" :key="instance.id" class="row">
-            <DInput type="number" :model-value="instance.lat" :label="t('Settings.centerLat')" :step="0.00001"
-              @update:model-value="(v) => setNumber(instance, 'lat', v)" />
-            <DInput type="number" :model-value="instance.lon" :label="t('Settings.centerLon')" :step="0.00001"
-              @update:model-value="(v) => setNumber(instance, 'lon', v)" />
-            <DInput type="number" :model-value="instance.scale" :label="t('Settings.models.instanceScale')" :step="0.1"
-              @update:model-value="(v) => setNumber(instance, 'scale', v)" />
-            <DButton intent="quiet" size="sm" :title="t('Settings.remove')" @click="layer.instances.remove(instance)">
-              <DIcon name="delete" size="sm" />
-            </DButton>
-          </div>
-        </div>
-      </details>
+      <!-- What a form cannot say: whether the file can be read, and the place mode on the preview. -->
+      <div v-for="layer in settings.modelLayers.toArray()" :key="layer.id" class="symbol-status">
+        <span class="symbol-status__name">{{ layer.name || layer.id }}</span>
+        <span :class="['symbol-status__text', { 'symbol-status__text--error': modelStatusText(layer.url).error }]">
+          {{ modelStatusText(layer.url).text }}
+        </span>
+        <DButton size="sm" :intent="placingId === layer.id ? 'primary' : 'default'" @click="togglePlacing(layer)">
+          <DIcon name="ads_click" size="sm" />{{ placingId === layer.id ? t('Settings.models.placing') : t('Settings.models.place') }}
+        </DButton>
+        <p v-if="placingId === layer.id" class="note">{{ t('Settings.models.placeHint') }}</p>
+      </div>
+      <SettingsForm
+        :model-value="settings"
+        :create="createSettings"
+        :ui-model-xmi="symbolsFormXmi"
+        :domain-package="MaplibrePackage.eINSTANCE"
+        ui-model-uri="/maplibre-symbols.ui.xmi"
+        :entry-forms="symbolEntryForms"
+        :ecore="maplibreEcore"
+        :suggest="suggestSymbolFields"
+      />
     </div>
   </section>
 
@@ -566,6 +563,26 @@ function addColor(layer: ThingLayer) {
 
 .wms-service__layer:hover {
   text-decoration: underline;
+}
+
+.symbol-status {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.symbol-status__name {
+  font-weight: 600;
+}
+
+.symbol-status__text {
+  font-size: var(--text-sm);
+  color: var(--color-dim);
+  overflow-wrap: anywhere;
+}
+
+.symbol-status__text--error {
+  color: var(--color-err);
 }
 
 .layer {

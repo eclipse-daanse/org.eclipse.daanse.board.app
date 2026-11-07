@@ -30,7 +30,6 @@ import { clickEventOf } from '../events/payloads'
 import { TextAttributionControl, attributionFragment } from '../attribution'
 import { placing } from '../models/placementMode'
 import { newModelLayer } from '../settingsModel'
-import { MaplibreFactory } from '../gen/MaplibreFactory'
 
 void EventsPackage.eINSTANCE
 void MaplibrePackage.eINSTANCE
@@ -420,8 +419,8 @@ describe('the 3D models of the map (#1281)', () => {
   })
 })
 
-describe('the 3D models on data (#1282)', () => {
-  it('stand at the points of their data source, with the height and colour of their rules', async () => {
+describe('the 3D models on data (#1282, #1296)', () => {
+  it('stand at the points of their data source, with the size and colour of their encodings', async () => {
     const store = fakeStore()
     ;(store as any).getData = vi.fn(async (type: string) =>
       type === 'geojson'
@@ -431,16 +430,11 @@ describe('the 3D models on data (#1282)', () => {
     const settings = stored()
     const { map } = await mountWidget(settings, store)
     const model = modelledSettings(settings)
-    const layer = newModelLayer('Trees')
-    layer.url = 'https://x/tree.fbx'
-    layer.datasourceId = 'wfs'
-    layer.heightProperty = 'hoehe'
-    const rule = MaplibreFactory.eINSTANCE.createModelRule()
-    rule.property = 'gattung'
-    rule.value = 'Linde'
-    rule.color = '#2e7d32'
-    layer.rules.add(rule)
-    model.modelLayers.add(layer)
+    model.modelLayers.add(modelledSettings({ modelLayers: [{
+      id: 'trees', url: 'https://x/tree.fbx', datasourceId: 'wfs',
+      size: { height: { field: 'hoehe' } },
+      color: { field: 'gattung', mappings: [{ code: 'Linde', color: '#2e7d32' }] },
+    }] }).modelLayers.get(0))
     await flushPromises()
     expect(map.layers.at(-1).id).toBe('daanse:models')
     expect(store.getData).toHaveBeenCalledWith('geojson')

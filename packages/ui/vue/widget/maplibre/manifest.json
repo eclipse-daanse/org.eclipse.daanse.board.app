@@ -10,12 +10,14 @@
     "lib.api.datasource",
     "lib.api.events",
     "lib.api.widget",
+    "lib.datasource.base",
     "lib.datasource.ogcsta",
     "lib.events",
     "platform.vue",
     "ui.vue.common.map",
     "ui.vue.composables",
-    "ui.vue.controls"
+    "ui.vue.controls",
+    "ui.vue.uimodel"
   ],
   "requiresService": [
     {
@@ -72,6 +74,14 @@
     },
     {
       "id": "org.eclipse.daanse.board.app.ui.vue.common.map",
+      "versionRange": ">=0.0.1-0"
+    },
+    {
+      "id": "org.eclipse.daanse.board.app.ui.vue.uimodel",
+      "versionRange": ">=0.0.1-0"
+    },
+    {
+      "id": "org.eclipse.daanse.board.app.lib.datasource.base",
       "versionRange": ">=0.0.1-0"
     }
   ],

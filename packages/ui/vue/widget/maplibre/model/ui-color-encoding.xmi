@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/*********************************************************************
+* Copyright (c) 2026 Contributors to the Eclipse Foundation.
+*
+* This program and the accompanying materials are made
+* available under the terms of the Eclipse Public License 2.0
+* which is available at https://www.eclipse.org/legal/epl-2.0/
+*
+* SPDX-License-Identifier: EPL-2.0
+**********************************************************************/
+
+A colour from a field (#1296): a colour per value, or a ramp over a domain.
+-->
+<uimodel:UIModel
+    xmlns:xmi="http://www.omg.org/XMI"
+    xmi:version="2.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:uimodel="http://uimodel/1.0"
+    name="ColorEncodingForm">
+
+  <targetClasses href="http://org.eclipse.daanse.board.app.ui.vue.widget.maplibre#//ColorEncoding"/>
+
+  <components xsi:type="uimodel:FormView" name="ColorEncodingFormView">
+    <fields xsi:type="uimodel:ComboboxWidget" name="field" feature="http://org.eclipse.daanse.board.app.ui.vue.widget.maplibre#//ColorEncoding/field" label="maplibre:Symbols.ColorEncoding.field"/>
+    <fields xsi:type="uimodel:SelectWidget" name="type" feature="http://org.eclipse.daanse.board.app.ui.vue.widget.maplibre#//ColorEncoding/type" label="maplibre:Symbols.ColorEncoding.type">
+      <values>nominal</values>
+      <values>quantitative</values>
+      <optionLabel language="JS" body="({ nominal: 'maplibre:Symbols.options.type.nominal', quantitative: 'maplibre:Symbols.options.type.quantitative' })[option || 'auto'] ?? option"/>
+    </fields>
+    <fields xsi:type="uimodel:InputWidget" name="mappings" feature="http://org.eclipse.daanse.board.app.ui.vue.widget.maplibre#//ColorEncoding/mappings" label="maplibre:Symbols.ColorEncoding.mappings">
+      <visibilityCondition language="JS" body="self.type !== 'quantitative'"/>
+    </fields>
+    <fields xsi:type="uimodel:NumberWidget" name="domainMin" feature="http://org.eclipse.daanse.board.app.ui.vue.widget.maplibre#//ColorEncoding/domainMin" label="maplibre:Symbols.ColorEncoding.domainMin">
+      <visibilityCondition language="JS" body="self.type === 'quantitative'"/>
+    </fields>
+    <fields xsi:type="uimodel:NumberWidget" name="domainMax" feature="http://org.eclipse.daanse.board.app.ui.vue.widget.maplibre#//ColorEncoding/domainMax" label="maplibre:Symbols.ColorEncoding.domainMax">
+      <visibilityCondition language="JS" body="self.type === 'quantitative'"/>
+    </fields>
+    <fields xsi:type="uimodel:InputWidget" name="lowColor" feature="http://org.eclipse.daanse.board.app.ui.vue.widget.maplibre#//ColorEncoding/lowColor" label="maplibre:Symbols.ColorEncoding.lowColor">
+      <visibilityCondition language="JS" body="self.type === 'quantitative'"/>
+    </fields>
+    <fields xsi:type="uimodel:InputWidget" name="highColor" feature="http://org.eclipse.daanse.board.app.ui.vue.widget.maplibre#//ColorEncoding/highColor" label="maplibre:Symbols.ColorEncoding.highColor">
+      <visibilityCondition language="JS" body="self.type === 'quantitative'"/>
+    </fields>
+    <fields xsi:type="uimodel:InputWidget" name="color" feature="http://org.eclipse.daanse.board.app.ui.vue.widget.maplibre#//ColorEncoding/color" label="maplibre:Symbols.ColorEncoding.color"/>
+  </components>
+</uimodel:UIModel>

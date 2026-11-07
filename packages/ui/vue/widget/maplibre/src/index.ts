@@ -13,6 +13,7 @@
 
 
 /* The events package first: the payloads and the actions extend its classes. */
+import './referencedPackages'
 import { EventsPackage } from 'org.eclipse.daanse.board.app.lib.api.events'
 import { EVENT_ACTIONS_REGISTRY_ID, EVENT_REGISTRY_ID } from 'org.eclipse.daanse.board.app.lib.api.events'
 import type { EventActionsRegistry, EventRegistry } from 'org.eclipse.daanse.board.app.lib.api.events'

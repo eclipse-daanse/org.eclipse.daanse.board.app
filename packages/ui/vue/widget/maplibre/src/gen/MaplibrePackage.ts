@@ -147,19 +147,43 @@ export class MaplibrePackage extends BasicEPackage {
     MODEL_LAYER__SCALE: null as unknown as EAttribute | EReference,
     MODEL_LAYER__ROTATION: null as unknown as EAttribute | EReference,
     MODEL_LAYER__ALTITUDE_OFFSET: null as unknown as EAttribute | EReference,
-    MODEL_LAYER__COLOR: null as unknown as EAttribute | EReference,
-    MODEL_LAYER__TRUNK_COLOR: null as unknown as EAttribute | EReference,
     MODEL_LAYER__INSTANCES: null as unknown as EAttribute | EReference,
     MODEL_LAYER__DATASOURCE_ID: null as unknown as EAttribute | EReference,
-    MODEL_LAYER__HEIGHT_PROPERTY: null as unknown as EAttribute | EReference,
-    MODEL_LAYER__DEFAULT_HEIGHT: null as unknown as EAttribute | EReference,
-    MODEL_LAYER__WIDTH_PROPERTY: null as unknown as EAttribute | EReference,
-    MODEL_LAYER__RULES: null as unknown as EAttribute | EReference,
-    MODEL_RULE: null as unknown as EClass,
-    MODEL_RULE__PROPERTY: null as unknown as EAttribute | EReference,
-    MODEL_RULE__VALUE: null as unknown as EAttribute | EReference,
-    MODEL_RULE__URL: null as unknown as EAttribute | EReference,
-    MODEL_RULE__COLOR: null as unknown as EAttribute | EReference,
+    MODEL_LAYER__TRANSFORMS: null as unknown as EAttribute | EReference,
+    MODEL_LAYER__SIZE: null as unknown as EAttribute | EReference,
+    MODEL_LAYER__COLOR: null as unknown as EAttribute | EReference,
+    MODEL_LAYER__MODEL_BY: null as unknown as EAttribute | EReference,
+    MODEL_LAYER__PARTS: null as unknown as EAttribute | EReference,
+    SIZE_ENCODING: null as unknown as EClass,
+    SIZE_ENCODING__HEIGHT: null as unknown as EAttribute | EReference,
+    SIZE_ENCODING__WIDTH: null as unknown as EAttribute | EReference,
+    FIELD_ENCODING: null as unknown as EClass,
+    FIELD_ENCODING__FIELD: null as unknown as EAttribute | EReference,
+    FIELD_ENCODING__UNIT: null as unknown as EAttribute | EReference,
+    FIELD_ENCODING__SCALE_TYPE: null as unknown as EAttribute | EReference,
+    FIELD_ENCODING__DOMAIN_MIN: null as unknown as EAttribute | EReference,
+    FIELD_ENCODING__DOMAIN_MAX: null as unknown as EAttribute | EReference,
+    FIELD_ENCODING__RANGE_MIN: null as unknown as EAttribute | EReference,
+    FIELD_ENCODING__RANGE_MAX: null as unknown as EAttribute | EReference,
+    FIELD_ENCODING__VALUE: null as unknown as EAttribute | EReference,
+    COLOR_ENCODING: null as unknown as EClass,
+    COLOR_ENCODING__FIELD: null as unknown as EAttribute | EReference,
+    COLOR_ENCODING__TYPE: null as unknown as EAttribute | EReference,
+    COLOR_ENCODING__MAPPINGS: null as unknown as EAttribute | EReference,
+    COLOR_ENCODING__DOMAIN_MIN: null as unknown as EAttribute | EReference,
+    COLOR_ENCODING__DOMAIN_MAX: null as unknown as EAttribute | EReference,
+    COLOR_ENCODING__LOW_COLOR: null as unknown as EAttribute | EReference,
+    COLOR_ENCODING__HIGH_COLOR: null as unknown as EAttribute | EReference,
+    COLOR_ENCODING__COLOR: null as unknown as EAttribute | EReference,
+    MODEL_ENCODING: null as unknown as EClass,
+    MODEL_ENCODING__FIELD: null as unknown as EAttribute | EReference,
+    MODEL_ENCODING__MAPPINGS: null as unknown as EAttribute | EReference,
+    MODEL_MAPPING: null as unknown as EClass,
+    MODEL_MAPPING__CODE: null as unknown as EAttribute | EReference,
+    MODEL_MAPPING__URL: null as unknown as EAttribute | EReference,
+    PART_ENCODING: null as unknown as EClass,
+    PART_ENCODING__MESH: null as unknown as EAttribute | EReference,
+    PART_ENCODING__COLOR: null as unknown as EAttribute | EReference,
     MODEL_INSTANCE: null as unknown as EClass,
     MODEL_INSTANCE__ID: null as unknown as EAttribute | EReference,
     MODEL_INSTANCE__LON: null as unknown as EAttribute | EReference,
@@ -986,24 +1010,6 @@ export class MaplibrePackage extends BasicEPackage {
     modelLayerClass.getEStructuralFeatures().push(modelLayer_altitudeOffset);
     MaplibrePackage.Literals.MODEL_LAYER__ALTITUDE_OFFSET = modelLayer_altitudeOffset;
 
-    // Create color feature
-    const modelLayer_color = new BasicEAttribute();
-    modelLayer_color.setName('color');
-    modelLayer_color.setLowerBound(0);
-    modelLayer_color.setUpperBound(1);
-    modelLayer_color.setDefaultValueLiteral("");
-    modelLayerClass.getEStructuralFeatures().push(modelLayer_color);
-    MaplibrePackage.Literals.MODEL_LAYER__COLOR = modelLayer_color;
-
-    // Create trunkColor feature
-    const modelLayer_trunkColor = new BasicEAttribute();
-    modelLayer_trunkColor.setName('trunkColor');
-    modelLayer_trunkColor.setLowerBound(0);
-    modelLayer_trunkColor.setUpperBound(1);
-    modelLayer_trunkColor.setDefaultValueLiteral("");
-    modelLayerClass.getEStructuralFeatures().push(modelLayer_trunkColor);
-    MaplibrePackage.Literals.MODEL_LAYER__TRUNK_COLOR = modelLayer_trunkColor;
-
     // Create instances feature
     const modelLayer_instances = new BasicEReference();
     modelLayer_instances.setContainment(true);
@@ -1022,84 +1028,318 @@ export class MaplibrePackage extends BasicEPackage {
     modelLayerClass.getEStructuralFeatures().push(modelLayer_datasourceId);
     MaplibrePackage.Literals.MODEL_LAYER__DATASOURCE_ID = modelLayer_datasourceId;
 
-    // Create heightProperty feature
-    const modelLayer_heightProperty = new BasicEAttribute();
-    modelLayer_heightProperty.setName('heightProperty');
-    modelLayer_heightProperty.setLowerBound(0);
-    modelLayer_heightProperty.setUpperBound(1);
-    modelLayer_heightProperty.setDefaultValueLiteral("");
-    modelLayerClass.getEStructuralFeatures().push(modelLayer_heightProperty);
-    MaplibrePackage.Literals.MODEL_LAYER__HEIGHT_PROPERTY = modelLayer_heightProperty;
+    // Create transforms feature
+    const modelLayer_transforms = new BasicEReference();
+    modelLayer_transforms.setContainment(true);
+    modelLayer_transforms.setName('transforms');
+    modelLayer_transforms.setLowerBound(0);
+    modelLayer_transforms.setUpperBound(-1);
+    modelLayerClass.getEStructuralFeatures().push(modelLayer_transforms);
+    MaplibrePackage.Literals.MODEL_LAYER__TRANSFORMS = modelLayer_transforms;
 
-    // Create defaultHeight feature
-    const modelLayer_defaultHeight = new BasicEAttribute();
-    modelLayer_defaultHeight.setName('defaultHeight');
-    modelLayer_defaultHeight.setLowerBound(0);
-    modelLayer_defaultHeight.setUpperBound(1);
-    modelLayer_defaultHeight.setDefaultValueLiteral("0");
-    modelLayerClass.getEStructuralFeatures().push(modelLayer_defaultHeight);
-    MaplibrePackage.Literals.MODEL_LAYER__DEFAULT_HEIGHT = modelLayer_defaultHeight;
-
-    // Create widthProperty feature
-    const modelLayer_widthProperty = new BasicEAttribute();
-    modelLayer_widthProperty.setName('widthProperty');
-    modelLayer_widthProperty.setLowerBound(0);
-    modelLayer_widthProperty.setUpperBound(1);
-    modelLayer_widthProperty.setDefaultValueLiteral("");
-    modelLayerClass.getEStructuralFeatures().push(modelLayer_widthProperty);
-    MaplibrePackage.Literals.MODEL_LAYER__WIDTH_PROPERTY = modelLayer_widthProperty;
-
-    // Create rules feature
-    const modelLayer_rules = new BasicEReference();
-    modelLayer_rules.setContainment(true);
-    modelLayer_rules.setName('rules');
-    modelLayer_rules.setLowerBound(0);
-    modelLayer_rules.setUpperBound(-1);
-    modelLayerClass.getEStructuralFeatures().push(modelLayer_rules);
-    MaplibrePackage.Literals.MODEL_LAYER__RULES = modelLayer_rules;
-
-    // Create ModelRule class
-    const modelRuleClass = new BasicEClass();
-    modelRuleClass.setName('ModelRule');
-    modelRuleClass.setAbstract(false);
-    modelRuleClass.setInterface(false);
-    this.getEClassifiers().push(modelRuleClass);
-    modelRuleClass.setEPackage(this);
-    MaplibrePackage.Literals.MODEL_RULE = modelRuleClass;
-
-    // Create property feature
-    const modelRule_property = new BasicEAttribute();
-    modelRule_property.setName('property');
-    modelRule_property.setLowerBound(0);
-    modelRule_property.setUpperBound(1);
-    modelRuleClass.getEStructuralFeatures().push(modelRule_property);
-    MaplibrePackage.Literals.MODEL_RULE__PROPERTY = modelRule_property;
-
-    // Create value feature
-    const modelRule_value = new BasicEAttribute();
-    modelRule_value.setName('value');
-    modelRule_value.setLowerBound(0);
-    modelRule_value.setUpperBound(1);
-    modelRuleClass.getEStructuralFeatures().push(modelRule_value);
-    MaplibrePackage.Literals.MODEL_RULE__VALUE = modelRule_value;
-
-    // Create url feature
-    const modelRule_url = new BasicEAttribute();
-    modelRule_url.setName('url');
-    modelRule_url.setLowerBound(0);
-    modelRule_url.setUpperBound(1);
-    modelRule_url.setDefaultValueLiteral("");
-    modelRuleClass.getEStructuralFeatures().push(modelRule_url);
-    MaplibrePackage.Literals.MODEL_RULE__URL = modelRule_url;
+    // Create size feature
+    const modelLayer_size = new BasicEReference();
+    modelLayer_size.setContainment(true);
+    modelLayer_size.setName('size');
+    modelLayer_size.setLowerBound(0);
+    modelLayer_size.setUpperBound(1);
+    modelLayerClass.getEStructuralFeatures().push(modelLayer_size);
+    MaplibrePackage.Literals.MODEL_LAYER__SIZE = modelLayer_size;
 
     // Create color feature
-    const modelRule_color = new BasicEAttribute();
-    modelRule_color.setName('color');
-    modelRule_color.setLowerBound(0);
-    modelRule_color.setUpperBound(1);
-    modelRule_color.setDefaultValueLiteral("");
-    modelRuleClass.getEStructuralFeatures().push(modelRule_color);
-    MaplibrePackage.Literals.MODEL_RULE__COLOR = modelRule_color;
+    const modelLayer_color = new BasicEReference();
+    modelLayer_color.setContainment(true);
+    modelLayer_color.setName('color');
+    modelLayer_color.setLowerBound(0);
+    modelLayer_color.setUpperBound(1);
+    modelLayerClass.getEStructuralFeatures().push(modelLayer_color);
+    MaplibrePackage.Literals.MODEL_LAYER__COLOR = modelLayer_color;
+
+    // Create modelBy feature
+    const modelLayer_modelBy = new BasicEReference();
+    modelLayer_modelBy.setContainment(true);
+    modelLayer_modelBy.setName('modelBy');
+    modelLayer_modelBy.setLowerBound(0);
+    modelLayer_modelBy.setUpperBound(1);
+    modelLayerClass.getEStructuralFeatures().push(modelLayer_modelBy);
+    MaplibrePackage.Literals.MODEL_LAYER__MODEL_BY = modelLayer_modelBy;
+
+    // Create parts feature
+    const modelLayer_parts = new BasicEReference();
+    modelLayer_parts.setContainment(true);
+    modelLayer_parts.setName('parts');
+    modelLayer_parts.setLowerBound(0);
+    modelLayer_parts.setUpperBound(-1);
+    modelLayerClass.getEStructuralFeatures().push(modelLayer_parts);
+    MaplibrePackage.Literals.MODEL_LAYER__PARTS = modelLayer_parts;
+
+    // Create SizeEncoding class
+    const sizeEncodingClass = new BasicEClass();
+    sizeEncodingClass.setName('SizeEncoding');
+    sizeEncodingClass.setAbstract(false);
+    sizeEncodingClass.setInterface(false);
+    this.getEClassifiers().push(sizeEncodingClass);
+    sizeEncodingClass.setEPackage(this);
+    MaplibrePackage.Literals.SIZE_ENCODING = sizeEncodingClass;
+
+    // Create height feature
+    const sizeEncoding_height = new BasicEReference();
+    sizeEncoding_height.setContainment(true);
+    sizeEncoding_height.setName('height');
+    sizeEncoding_height.setLowerBound(0);
+    sizeEncoding_height.setUpperBound(1);
+    sizeEncodingClass.getEStructuralFeatures().push(sizeEncoding_height);
+    MaplibrePackage.Literals.SIZE_ENCODING__HEIGHT = sizeEncoding_height;
+
+    // Create width feature
+    const sizeEncoding_width = new BasicEReference();
+    sizeEncoding_width.setContainment(true);
+    sizeEncoding_width.setName('width');
+    sizeEncoding_width.setLowerBound(0);
+    sizeEncoding_width.setUpperBound(1);
+    sizeEncodingClass.getEStructuralFeatures().push(sizeEncoding_width);
+    MaplibrePackage.Literals.SIZE_ENCODING__WIDTH = sizeEncoding_width;
+
+    // Create FieldEncoding class
+    const fieldEncodingClass = new BasicEClass();
+    fieldEncodingClass.setName('FieldEncoding');
+    fieldEncodingClass.setAbstract(false);
+    fieldEncodingClass.setInterface(false);
+    this.getEClassifiers().push(fieldEncodingClass);
+    fieldEncodingClass.setEPackage(this);
+    MaplibrePackage.Literals.FIELD_ENCODING = fieldEncodingClass;
+
+    // Create field feature
+    const fieldEncoding_field = new BasicEAttribute();
+    fieldEncoding_field.setName('field');
+    fieldEncoding_field.setLowerBound(0);
+    fieldEncoding_field.setUpperBound(1);
+    fieldEncoding_field.setDefaultValueLiteral("");
+    fieldEncodingClass.getEStructuralFeatures().push(fieldEncoding_field);
+    MaplibrePackage.Literals.FIELD_ENCODING__FIELD = fieldEncoding_field;
+
+    // Create unit feature
+    const fieldEncoding_unit = new BasicEAttribute();
+    fieldEncoding_unit.setName('unit');
+    fieldEncoding_unit.setLowerBound(0);
+    fieldEncoding_unit.setUpperBound(1);
+    fieldEncoding_unit.setDefaultValueLiteral("");
+    fieldEncodingClass.getEStructuralFeatures().push(fieldEncoding_unit);
+    MaplibrePackage.Literals.FIELD_ENCODING__UNIT = fieldEncoding_unit;
+
+    // Create scaleType feature
+    const fieldEncoding_scaleType = new BasicEAttribute();
+    fieldEncoding_scaleType.setName('scaleType');
+    fieldEncoding_scaleType.setLowerBound(0);
+    fieldEncoding_scaleType.setUpperBound(1);
+    fieldEncoding_scaleType.setDefaultValueLiteral("identity");
+    fieldEncodingClass.getEStructuralFeatures().push(fieldEncoding_scaleType);
+    MaplibrePackage.Literals.FIELD_ENCODING__SCALE_TYPE = fieldEncoding_scaleType;
+
+    // Create domainMin feature
+    const fieldEncoding_domainMin = new BasicEAttribute();
+    fieldEncoding_domainMin.setName('domainMin');
+    fieldEncoding_domainMin.setLowerBound(0);
+    fieldEncoding_domainMin.setUpperBound(1);
+    fieldEncoding_domainMin.setDefaultValueLiteral("0");
+    fieldEncodingClass.getEStructuralFeatures().push(fieldEncoding_domainMin);
+    MaplibrePackage.Literals.FIELD_ENCODING__DOMAIN_MIN = fieldEncoding_domainMin;
+
+    // Create domainMax feature
+    const fieldEncoding_domainMax = new BasicEAttribute();
+    fieldEncoding_domainMax.setName('domainMax');
+    fieldEncoding_domainMax.setLowerBound(0);
+    fieldEncoding_domainMax.setUpperBound(1);
+    fieldEncoding_domainMax.setDefaultValueLiteral("1");
+    fieldEncodingClass.getEStructuralFeatures().push(fieldEncoding_domainMax);
+    MaplibrePackage.Literals.FIELD_ENCODING__DOMAIN_MAX = fieldEncoding_domainMax;
+
+    // Create rangeMin feature
+    const fieldEncoding_rangeMin = new BasicEAttribute();
+    fieldEncoding_rangeMin.setName('rangeMin');
+    fieldEncoding_rangeMin.setLowerBound(0);
+    fieldEncoding_rangeMin.setUpperBound(1);
+    fieldEncoding_rangeMin.setDefaultValueLiteral("0");
+    fieldEncodingClass.getEStructuralFeatures().push(fieldEncoding_rangeMin);
+    MaplibrePackage.Literals.FIELD_ENCODING__RANGE_MIN = fieldEncoding_rangeMin;
+
+    // Create rangeMax feature
+    const fieldEncoding_rangeMax = new BasicEAttribute();
+    fieldEncoding_rangeMax.setName('rangeMax');
+    fieldEncoding_rangeMax.setLowerBound(0);
+    fieldEncoding_rangeMax.setUpperBound(1);
+    fieldEncoding_rangeMax.setDefaultValueLiteral("1");
+    fieldEncodingClass.getEStructuralFeatures().push(fieldEncoding_rangeMax);
+    MaplibrePackage.Literals.FIELD_ENCODING__RANGE_MAX = fieldEncoding_rangeMax;
+
+    // Create value feature
+    const fieldEncoding_value = new BasicEAttribute();
+    fieldEncoding_value.setName('value');
+    fieldEncoding_value.setLowerBound(0);
+    fieldEncoding_value.setUpperBound(1);
+    fieldEncoding_value.setDefaultValueLiteral("0");
+    fieldEncodingClass.getEStructuralFeatures().push(fieldEncoding_value);
+    MaplibrePackage.Literals.FIELD_ENCODING__VALUE = fieldEncoding_value;
+
+    // Create ColorEncoding class
+    const colorEncodingClass = new BasicEClass();
+    colorEncodingClass.setName('ColorEncoding');
+    colorEncodingClass.setAbstract(false);
+    colorEncodingClass.setInterface(false);
+    this.getEClassifiers().push(colorEncodingClass);
+    colorEncodingClass.setEPackage(this);
+    MaplibrePackage.Literals.COLOR_ENCODING = colorEncodingClass;
+
+    // Create field feature
+    const colorEncoding_field = new BasicEAttribute();
+    colorEncoding_field.setName('field');
+    colorEncoding_field.setLowerBound(0);
+    colorEncoding_field.setUpperBound(1);
+    colorEncoding_field.setDefaultValueLiteral("");
+    colorEncodingClass.getEStructuralFeatures().push(colorEncoding_field);
+    MaplibrePackage.Literals.COLOR_ENCODING__FIELD = colorEncoding_field;
+
+    // Create type feature
+    const colorEncoding_type = new BasicEAttribute();
+    colorEncoding_type.setName('type');
+    colorEncoding_type.setLowerBound(0);
+    colorEncoding_type.setUpperBound(1);
+    colorEncoding_type.setDefaultValueLiteral("nominal");
+    colorEncodingClass.getEStructuralFeatures().push(colorEncoding_type);
+    MaplibrePackage.Literals.COLOR_ENCODING__TYPE = colorEncoding_type;
+
+    // Create mappings feature
+    const colorEncoding_mappings = new BasicEReference();
+    colorEncoding_mappings.setContainment(true);
+    colorEncoding_mappings.setName('mappings');
+    colorEncoding_mappings.setLowerBound(0);
+    colorEncoding_mappings.setUpperBound(-1);
+    colorEncodingClass.getEStructuralFeatures().push(colorEncoding_mappings);
+    MaplibrePackage.Literals.COLOR_ENCODING__MAPPINGS = colorEncoding_mappings;
+
+    // Create domainMin feature
+    const colorEncoding_domainMin = new BasicEAttribute();
+    colorEncoding_domainMin.setName('domainMin');
+    colorEncoding_domainMin.setLowerBound(0);
+    colorEncoding_domainMin.setUpperBound(1);
+    colorEncoding_domainMin.setDefaultValueLiteral("0");
+    colorEncodingClass.getEStructuralFeatures().push(colorEncoding_domainMin);
+    MaplibrePackage.Literals.COLOR_ENCODING__DOMAIN_MIN = colorEncoding_domainMin;
+
+    // Create domainMax feature
+    const colorEncoding_domainMax = new BasicEAttribute();
+    colorEncoding_domainMax.setName('domainMax');
+    colorEncoding_domainMax.setLowerBound(0);
+    colorEncoding_domainMax.setUpperBound(1);
+    colorEncoding_domainMax.setDefaultValueLiteral("1");
+    colorEncodingClass.getEStructuralFeatures().push(colorEncoding_domainMax);
+    MaplibrePackage.Literals.COLOR_ENCODING__DOMAIN_MAX = colorEncoding_domainMax;
+
+    // Create lowColor feature
+    const colorEncoding_lowColor = new BasicEAttribute();
+    colorEncoding_lowColor.setName('lowColor');
+    colorEncoding_lowColor.setLowerBound(0);
+    colorEncoding_lowColor.setUpperBound(1);
+    colorEncoding_lowColor.setDefaultValueLiteral("#c8e6c9");
+    colorEncodingClass.getEStructuralFeatures().push(colorEncoding_lowColor);
+    MaplibrePackage.Literals.COLOR_ENCODING__LOW_COLOR = colorEncoding_lowColor;
+
+    // Create highColor feature
+    const colorEncoding_highColor = new BasicEAttribute();
+    colorEncoding_highColor.setName('highColor');
+    colorEncoding_highColor.setLowerBound(0);
+    colorEncoding_highColor.setUpperBound(1);
+    colorEncoding_highColor.setDefaultValueLiteral("#1b5e20");
+    colorEncodingClass.getEStructuralFeatures().push(colorEncoding_highColor);
+    MaplibrePackage.Literals.COLOR_ENCODING__HIGH_COLOR = colorEncoding_highColor;
+
+    // Create color feature
+    const colorEncoding_color = new BasicEAttribute();
+    colorEncoding_color.setName('color');
+    colorEncoding_color.setLowerBound(0);
+    colorEncoding_color.setUpperBound(1);
+    colorEncoding_color.setDefaultValueLiteral("");
+    colorEncodingClass.getEStructuralFeatures().push(colorEncoding_color);
+    MaplibrePackage.Literals.COLOR_ENCODING__COLOR = colorEncoding_color;
+
+    // Create ModelEncoding class
+    const modelEncodingClass = new BasicEClass();
+    modelEncodingClass.setName('ModelEncoding');
+    modelEncodingClass.setAbstract(false);
+    modelEncodingClass.setInterface(false);
+    this.getEClassifiers().push(modelEncodingClass);
+    modelEncodingClass.setEPackage(this);
+    MaplibrePackage.Literals.MODEL_ENCODING = modelEncodingClass;
+
+    // Create field feature
+    const modelEncoding_field = new BasicEAttribute();
+    modelEncoding_field.setName('field');
+    modelEncoding_field.setLowerBound(0);
+    modelEncoding_field.setUpperBound(1);
+    modelEncoding_field.setDefaultValueLiteral("");
+    modelEncodingClass.getEStructuralFeatures().push(modelEncoding_field);
+    MaplibrePackage.Literals.MODEL_ENCODING__FIELD = modelEncoding_field;
+
+    // Create mappings feature
+    const modelEncoding_mappings = new BasicEReference();
+    modelEncoding_mappings.setContainment(true);
+    modelEncoding_mappings.setName('mappings');
+    modelEncoding_mappings.setLowerBound(0);
+    modelEncoding_mappings.setUpperBound(-1);
+    modelEncodingClass.getEStructuralFeatures().push(modelEncoding_mappings);
+    MaplibrePackage.Literals.MODEL_ENCODING__MAPPINGS = modelEncoding_mappings;
+
+    // Create ModelMapping class
+    const modelMappingClass = new BasicEClass();
+    modelMappingClass.setName('ModelMapping');
+    modelMappingClass.setAbstract(false);
+    modelMappingClass.setInterface(false);
+    this.getEClassifiers().push(modelMappingClass);
+    modelMappingClass.setEPackage(this);
+    MaplibrePackage.Literals.MODEL_MAPPING = modelMappingClass;
+
+    // Create code feature
+    const modelMapping_code = new BasicEAttribute();
+    modelMapping_code.setName('code');
+    modelMapping_code.setLowerBound(0);
+    modelMapping_code.setUpperBound(1);
+    modelMappingClass.getEStructuralFeatures().push(modelMapping_code);
+    MaplibrePackage.Literals.MODEL_MAPPING__CODE = modelMapping_code;
+
+    // Create url feature
+    const modelMapping_url = new BasicEAttribute();
+    modelMapping_url.setName('url');
+    modelMapping_url.setLowerBound(0);
+    modelMapping_url.setUpperBound(1);
+    modelMappingClass.getEStructuralFeatures().push(modelMapping_url);
+    MaplibrePackage.Literals.MODEL_MAPPING__URL = modelMapping_url;
+
+    // Create PartEncoding class
+    const partEncodingClass = new BasicEClass();
+    partEncodingClass.setName('PartEncoding');
+    partEncodingClass.setAbstract(false);
+    partEncodingClass.setInterface(false);
+    this.getEClassifiers().push(partEncodingClass);
+    partEncodingClass.setEPackage(this);
+    MaplibrePackage.Literals.PART_ENCODING = partEncodingClass;
+
+    // Create mesh feature
+    const partEncoding_mesh = new BasicEAttribute();
+    partEncoding_mesh.setName('mesh');
+    partEncoding_mesh.setLowerBound(0);
+    partEncoding_mesh.setUpperBound(1);
+    partEncoding_mesh.setDefaultValueLiteral("");
+    partEncodingClass.getEStructuralFeatures().push(partEncoding_mesh);
+    MaplibrePackage.Literals.PART_ENCODING__MESH = partEncoding_mesh;
+
+    // Create color feature
+    const partEncoding_color = new BasicEReference();
+    partEncoding_color.setContainment(true);
+    partEncoding_color.setName('color');
+    partEncoding_color.setLowerBound(0);
+    partEncoding_color.setUpperBound(1);
+    partEncodingClass.getEStructuralFeatures().push(partEncoding_color);
+    MaplibrePackage.Literals.PART_ENCODING__COLOR = partEncoding_color;
 
     // Create ModelInstance class
     const modelInstanceClass = new BasicEClass();
@@ -1394,18 +1634,37 @@ export class MaplibrePackage extends BasicEPackage {
     (MaplibrePackage.Literals.MODEL_LAYER__SCALE as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EDouble')!);
     (MaplibrePackage.Literals.MODEL_LAYER__ROTATION as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EDouble')!);
     (MaplibrePackage.Literals.MODEL_LAYER__ALTITUDE_OFFSET as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EDouble')!);
-    (MaplibrePackage.Literals.MODEL_LAYER__COLOR as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
-    (MaplibrePackage.Literals.MODEL_LAYER__TRUNK_COLOR as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
     (MaplibrePackage.Literals.MODEL_LAYER__INSTANCES as BasicEReference).setEType(MaplibrePackage.Literals.MODEL_INSTANCE);
     (MaplibrePackage.Literals.MODEL_LAYER__DATASOURCE_ID as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
-    (MaplibrePackage.Literals.MODEL_LAYER__HEIGHT_PROPERTY as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
-    (MaplibrePackage.Literals.MODEL_LAYER__DEFAULT_HEIGHT as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EDouble')!);
-    (MaplibrePackage.Literals.MODEL_LAYER__WIDTH_PROPERTY as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
-    (MaplibrePackage.Literals.MODEL_LAYER__RULES as BasicEReference).setEType(MaplibrePackage.Literals.MODEL_RULE);
-    (MaplibrePackage.Literals.MODEL_RULE__PROPERTY as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
-    (MaplibrePackage.Literals.MODEL_RULE__VALUE as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
-    (MaplibrePackage.Literals.MODEL_RULE__URL as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
-    (MaplibrePackage.Literals.MODEL_RULE__COLOR as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (MaplibrePackage.Literals.MODEL_LAYER__TRANSFORMS as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.datasource.base').getEClassifier('Transform')!);
+    (MaplibrePackage.Literals.MODEL_LAYER__SIZE as BasicEReference).setEType(MaplibrePackage.Literals.SIZE_ENCODING);
+    (MaplibrePackage.Literals.MODEL_LAYER__COLOR as BasicEReference).setEType(MaplibrePackage.Literals.COLOR_ENCODING);
+    (MaplibrePackage.Literals.MODEL_LAYER__MODEL_BY as BasicEReference).setEType(MaplibrePackage.Literals.MODEL_ENCODING);
+    (MaplibrePackage.Literals.MODEL_LAYER__PARTS as BasicEReference).setEType(MaplibrePackage.Literals.PART_ENCODING);
+    (MaplibrePackage.Literals.SIZE_ENCODING__HEIGHT as BasicEReference).setEType(MaplibrePackage.Literals.FIELD_ENCODING);
+    (MaplibrePackage.Literals.SIZE_ENCODING__WIDTH as BasicEReference).setEType(MaplibrePackage.Literals.FIELD_ENCODING);
+    (MaplibrePackage.Literals.FIELD_ENCODING__FIELD as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (MaplibrePackage.Literals.FIELD_ENCODING__UNIT as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (MaplibrePackage.Literals.FIELD_ENCODING__SCALE_TYPE as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (MaplibrePackage.Literals.FIELD_ENCODING__DOMAIN_MIN as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EDouble')!);
+    (MaplibrePackage.Literals.FIELD_ENCODING__DOMAIN_MAX as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EDouble')!);
+    (MaplibrePackage.Literals.FIELD_ENCODING__RANGE_MIN as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EDouble')!);
+    (MaplibrePackage.Literals.FIELD_ENCODING__RANGE_MAX as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EDouble')!);
+    (MaplibrePackage.Literals.FIELD_ENCODING__VALUE as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EDouble')!);
+    (MaplibrePackage.Literals.COLOR_ENCODING__FIELD as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (MaplibrePackage.Literals.COLOR_ENCODING__TYPE as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (MaplibrePackage.Literals.COLOR_ENCODING__MAPPINGS as BasicEReference).setEType(MaplibrePackage.Literals.COLOR_MAPPING);
+    (MaplibrePackage.Literals.COLOR_ENCODING__DOMAIN_MIN as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EDouble')!);
+    (MaplibrePackage.Literals.COLOR_ENCODING__DOMAIN_MAX as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EDouble')!);
+    (MaplibrePackage.Literals.COLOR_ENCODING__LOW_COLOR as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (MaplibrePackage.Literals.COLOR_ENCODING__HIGH_COLOR as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (MaplibrePackage.Literals.COLOR_ENCODING__COLOR as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (MaplibrePackage.Literals.MODEL_ENCODING__FIELD as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (MaplibrePackage.Literals.MODEL_ENCODING__MAPPINGS as BasicEReference).setEType(MaplibrePackage.Literals.MODEL_MAPPING);
+    (MaplibrePackage.Literals.MODEL_MAPPING__CODE as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (MaplibrePackage.Literals.MODEL_MAPPING__URL as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (MaplibrePackage.Literals.PART_ENCODING__MESH as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (MaplibrePackage.Literals.PART_ENCODING__COLOR as BasicEReference).setEType(MaplibrePackage.Literals.COLOR_ENCODING);
     (MaplibrePackage.Literals.MODEL_INSTANCE__ID as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
     (MaplibrePackage.Literals.MODEL_INSTANCE__LON as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EDouble')!);
     (MaplibrePackage.Literals.MODEL_INSTANCE__LAT as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EDouble')!);

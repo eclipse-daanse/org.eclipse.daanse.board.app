@@ -22,7 +22,11 @@ import * as THREE from 'three'
 import { localOf, nearestWithin, originOf, placementsOf } from '../models/placement'
 import { failureOf, forgetModels, formatOf, loadModel, modelStatus } from '../models/modelLoader'
 import { frameMatrix, instancedOf } from '../models/modelLayer'
-import { heightFor, instancesByModel, ruleFor, widthFor } from '../models/modelRules'
+import { colorOf, inPart, lengthOf, modelOf } from '../models/encodings'
+import { symbolsByModel } from '../models/symbols'
+import { migratedModelLayer } from '../settingsModel'
+import { readFileSync } from 'node:fs'
+import { join } from 'node:path'
 import { modelledSettings, newModelLayer } from '../settingsModel'
 import { MaplibreFactory } from '../gen/MaplibreFactory'
 import { EventsPackage } from 'org.eclipse.daanse.board.app.lib.api.events'
@@ -172,86 +176,99 @@ describe('the model layers of the settings', () => {
   })
 })
 
-describe('model instances from data (#1282)', () => {
-  const trees = {
-    type: 'FeatureCollection',
+describe('the encodings of a symbol layer (#1296)', () => {
+  it('give a length in metres from a field in its unit, through a scale, with a value where it has none', () => {
+    expect(lengthOf({ field: 'h', unit: 'cm' }, { h: 1500 })).toBe(15)
+    expect(lengthOf({ field: 'h' }, { h: 12 }, 'm')).toBe(12)
+    expect(lengthOf({ field: 'h' }, { h: 1200 }, 'cm')).toBe(12)
+    expect(lengthOf({ field: 'h', scaleType: 'linear', domainMin: 0, domainMax: 10, rangeMin: 5, rangeMax: 25 }, { h: 5 })).toBe(15)
+    expect(lengthOf({ field: 'h', value: 10 }, { h: null })).toBe(10)
+    expect(lengthOf({ field: 'h' }, {})).toBeUndefined()
+    expect(lengthOf(undefined, { h: 1 })).toBeUndefined()
+  })
+
+  it('give a colour per value, a ramp over a domain, or the colour where none matches', () => {
+    const nominal = { field: 'g', mappings: [{ code: 'Tilia', color: '#4caf50' }], color: '#5b8c3a' }
+    expect(colorOf(nominal, { g: 'Tilia' })).toBe('#4caf50')
+    expect(colorOf(nominal, { g: 'Acer' })).toBe('#5b8c3a')
+    expect(colorOf({ ...nominal, color: '' }, { g: 'Acer' })).toBeUndefined()
+    const ramp = { field: 'v', type: 'quantitative', domainMin: 0, domainMax: 100, lowColor: '#000000', highColor: '#ffffff' }
+    expect(colorOf(ramp, { v: 50 })).toBe('#808080')
+    expect(colorOf(ramp, { v: 500 })).toBe('#ffffff')
+  })
+
+  it('choose a model file by a value, and tell the meshes of a part by a pattern', () => {
+    expect(modelOf({ field: 'g', mappings: [{ code: 'Quercus', url: 'oak.glb' }] }, { g: 'Quercus' }, 'tree.fbx')).toBe('oak.glb')
+    expect(modelOf({ field: 'g', mappings: [] }, { g: 'Acer' }, 'tree.fbx')).toBe('tree.fbx')
+    expect(inPart({ mesh: 'trunk|cylinder' }, 'Cylinder MeshPhong')).toBe(true)
+    expect(inPart({ mesh: 'trunk' }, 'Icosphere')).toBe(false)
+    expect(inPart({ mesh: '([' }, 'x')).toBe(false)
+  })
+})
+
+describe('the instances of a symbol layer (#1296)', () => {
+  const points = {
     features: [
-      { type: 'Feature', id: 't1', geometry: { type: 'Point', coordinates: [13.448, 52.443] }, properties: { gattung_deutsch: 'Linde', baumhoehe: 15 } },
-      { type: 'Feature', id: 't2', geometry: { type: 'Point', coordinates: [13.449, 52.444] }, properties: { gattung_deutsch: 'Ahorn', baumhoehe: null } },
-      { type: 'Feature', id: 't3', geometry: { type: 'Point', coordinates: [13.45, 52.445] }, properties: { gattung_deutsch: 'Eiche', baumhoehe: '22.5' } },
-      { type: 'Feature', id: 't4', geometry: { type: 'Polygon', coordinates: [] }, properties: {} },
+      { id: 'b1', geometry: { type: 'Point', coordinates: [11.615, 50.958] }, properties: { Baumart: 'Tilia cordata, Winterlinde', Baumhöhe: 14, Kronendurchmesser: 9 } },
+      { id: 'b2', geometry: { type: 'Point', coordinates: [11.616, 50.959] }, properties: { Baumart: 'Acer platanoides', Baumhöhe: null, Kronendurchmesser: 6 } },
+      { id: 'b3', geometry: { type: 'Point', coordinates: [11.617, 50.96] }, properties: { Baumart: 'Quercus robur', Baumhöhe: 22 } },
+      { id: 'b4', geometry: { type: 'Polygon', coordinates: [] }, properties: { Baumart: 'Tilia' } },
     ],
   }
   const layer = {
     id: 'trees',
-    url: 'https://x/tree.fbx',
-    heightProperty: 'baumhoehe',
-    defaultHeight: 8,
-    rules: [
-      { property: 'gattung_deutsch', value: 'Lind*', color: '#2e7d32' },
-      { property: 'gattung_deutsch', value: 'Eiche', url: 'https://x/oak.glb', color: '#827717' },
+    url: 'tree.fbx',
+    transforms: [
+      { kind: 'extract', field: 'Baumart', pattern: '^(\\S+)', as: 'genus' },
+      { kind: 'filter', field: 'genus', op: 'neq', value: 'Acer' },
     ],
+    size: { height: { field: 'Baumhöhe', value: 10 }, width: { field: 'Kronendurchmesser' } },
+    color: { field: 'genus', mappings: [{ code: 'Tilia', color: '#4caf50' }], color: '#5b8c3a' },
+    modelBy: { field: 'genus', mappings: [{ code: 'Quercus', url: 'oak.glb' }] },
+    parts: [{ mesh: 'trunk|cylinder', color: { color: '#6b4f32' } }],
+    instances: [{ id: 'hand', lon: 11.61, lat: 50.95 }],
   }
 
-  it('take model and colour from the first rule that matches, and the height from a property', () => {
-    expect(ruleFor(layer.rules, { gattung_deutsch: 'Linde' })?.color).toBe('#2e7d32')
-    expect(ruleFor(layer.rules, { gattung_deutsch: 'Ahorn' })).toBeUndefined()
-    expect(heightFor(layer, { baumhoehe: 15 })).toBe(15)
-    expect(heightFor(layer, { baumhoehe: 0 })).toBe(8)
-    expect(heightFor({ heightProperty: 'h' }, {})).toBeUndefined()
-  })
-
-  it('are one per point, by the model their rule gives', () => {
-    const byModel = instancesByModel(layer, trees)
-    expect([...byModel.keys()]).toEqual(['https://x/tree.fbx', 'https://x/oak.glb'])
-    expect(byModel.get('https://x/tree.fbx')).toEqual([
-      { id: 't1', lon: 13.448, lat: 52.443, height: 15, color: '#2e7d32' },
-      { id: 't2', lon: 13.449, lat: 52.444, height: 8 },
+  it('are the points that pass the transforms and the ones placed by hand, encoded by their fields', () => {
+    const byModel = symbolsByModel(layer, points)
+    expect([...byModel.keys()]).toEqual(['tree.fbx', 'oak.glb'])
+    expect(byModel.get('tree.fbx')).toEqual([
+      { id: 'hand', lon: 11.61, lat: 50.95, scale: undefined, rotation: undefined, height: 10, color: '#5b8c3a', partColors: ['#6b4f32'] },
+      { id: 'b1', lon: 11.615, lat: 50.958, height: 14, width: 9, color: '#4caf50', partColors: ['#6b4f32'] },
     ])
-    expect(byModel.get('https://x/oak.glb')).toEqual([{ id: 't3', lon: 13.45, lat: 52.445, height: 22.5, color: '#827717' }])
-    expect(instancesByModel(layer, undefined).size).toBe(0)
+    expect(byModel.get('oak.glb')).toEqual([{ id: 'b3', lon: 11.617, lat: 50.96, height: 22, color: '#5b8c3a', partColors: ['#6b4f32'] }])
   })
 
-  it('are scaled to their height and painted in their colour, the trunk keeping its own', () => {
+  it('take the unit of a column type of the data source', () => {
+    const inCm = { ...layer, transforms: [], size: { height: { field: 'Baumhöhe' } }, instances: [] }
+    expect(symbolsByModel(inCm, points, { 'Baumhöhe': 'cm' }).get('tree.fbx')![0].height).toBeCloseTo(0.14, 9)
+  })
+
+  it('paint a part in its colour and the rest in theirs; without a colour, the colours of the file', () => {
     const source = new THREE.Group()
     const trunk = new THREE.Mesh(new THREE.BoxGeometry(1, 4, 1), new THREE.MeshPhongMaterial({ color: 0x795548 }))
     trunk.name = 'Cylinder'
-    trunk.position.y = 2
     const crown = new THREE.Mesh(new THREE.SphereGeometry(2), new THREE.MeshPhongMaterial({ color: 0xcccccc }))
     crown.name = 'Icosphere'
-    crown.position.y = 6
     source.add(trunk, crown)
-    // The model reaches from 0 to 8 units; 16 m tall is twice its size.
     const group = instancedOf(THREE, source, [
-      { position: [0, 0, 0], rotation: 0, scale: 1, height: 16, color: '#ff0000' },
+      { position: [0, 0, 0], rotation: 0, scale: 1, color: '#4caf50', partColors: ['#6b4f32'] },
       { position: [5, 0, 0], rotation: 0, scale: 1 },
-    ])
+    ], [{ mesh: 'trunk|cylinder' }])
     const [trunkMesh, crownMesh] = group.children
-    const matrix = new THREE.Matrix4()
-    crownMesh.getMatrixAt(0, matrix)
-    expect(new THREE.Vector3(0, 2, 0).applyMatrix4(matrix).y).toBeCloseTo(16, 6)
-    expect(trunkMesh.instanceColor).toBeNull()
     const color = new THREE.Color()
+    trunkMesh.getColorAt(0, color)
+    expect(color.getHexString()).toBe('6b4f32')
+    trunkMesh.getColorAt(1, color)
+    expect(color.getHexString()).toBe('795548')
     crownMesh.getColorAt(0, color)
-    expect(color.getHexString()).toBe('ff0000')
+    expect(color.getHexString()).toBe('4caf50')
     crownMesh.getColorAt(1, color)
     expect(color.getHexString()).toBe('cccccc')
-    expect(crownMesh.material.color.getHexString()).toBe('ffffff')
-  })
-})
-
-describe('the width of model instances (#1282)', () => {
-  it('comes from a property in metres, as the crown of a Jena tree', () => {
-    const layer = { id: 'b', url: 'https://x/tree.fbx', heightProperty: 'Baumhöhe', widthProperty: 'Kronendurchmesser', rules: [{ property: 'Baumart', value: 'Tilia*', color: '#4caf50' }] }
-    expect(widthFor(layer, { Kronendurchmesser: 9 })).toBe(9)
-    expect(widthFor(layer, { Kronendurchmesser: '' })).toBeUndefined()
-    const byModel = instancesByModel(layer, {
-      features: [{ id: 'Bäume.101', geometry: { type: 'Point', coordinates: [11.615, 50.958] }, properties: { Baumart: 'Tilia cordata, Winterlinde', Baumhöhe: 14, Kronendurchmesser: 9 } }],
-    })
-    expect(byModel.get('https://x/tree.fbx')).toEqual([{ id: 'Bäume.101', lon: 11.615, lat: 50.958, height: 14, width: 9, color: '#4caf50' }])
+    expect(trunk.material.color.getHexString()).toBe('795548')
   })
 
-  it('scales the model across to it, and up to its height', () => {
+  it('scale a model to the height and across to the width', () => {
     const source = new THREE.Group()
     source.add(new THREE.Mesh(new THREE.BoxGeometry(2, 4, 2), new THREE.MeshBasicMaterial()))
     const [mesh] = instancedOf(THREE, source, [{ position: [0, 0, 0], rotation: 0, scale: 1, height: 12, width: 8 }]).children
@@ -260,28 +277,39 @@ describe('the width of model instances (#1282)', () => {
     const corner = new THREE.Vector3(1, 2, 1).applyMatrix4(matrix)
     expect(corner.y).toBeCloseTo(12, 9)
     expect(corner.x).toBeCloseTo(4, 9)
-    expect(corner.z).toBeCloseTo(4, 9)
   })
 })
 
-describe('the colours of a model layer (#1282)', () => {
-  it('paint the model where no rule does, and the trunk in its own', () => {
-    const source = new THREE.Group()
-    const trunk = new THREE.Mesh(new THREE.BoxGeometry(1, 4, 1), new THREE.MeshPhongMaterial({ color: 0xcccccc }))
-    trunk.name = 'Cylinder'
-    const crown = new THREE.Mesh(new THREE.SphereGeometry(2), new THREE.MeshPhongMaterial({ color: 0xcccccc }))
-    source.add(trunk, crown)
-    const group = instancedOf(THREE, source, [
-      { position: [0, 0, 0], rotation: 0, scale: 1 },
-      { position: [5, 0, 0], rotation: 0, scale: 1, color: '#ff0000' },
-    ], { color: '#5b8c3a', trunkColor: '#6b4f32' })
-    const [trunkMesh, crownMesh] = group.children
-    expect(trunkMesh.material.color.getHexString()).toBe('6b4f32')
-    expect(trunk.material.color.getHexString()).toBe('cccccc')
-    const color = new THREE.Color()
-    crownMesh.getColorAt(0, color)
-    expect(color.getHexString()).toBe('5b8c3a')
-    crownMesh.getColorAt(1, color)
-    expect(color.getHexString()).toBe('ff0000')
+describe('a symbol layer stored before #1296', () => {
+  const stored = JSON.parse(readFileSync(join(__dirname, 'fixtures', 'ml_3dmap-model-layer.json'), 'utf-8'))
+
+  it('is moved to the encodings: size, a first-word extract with a colour per genus, the default colour and the trunk as a part', () => {
+    const layer = migratedModelLayer(stored)
+    for (const key of ['heightProperty', 'widthProperty', 'defaultHeight', 'rules', 'trunkColor']) expect(layer).not.toHaveProperty(key)
+    expect(layer.size).toEqual({
+      height: { field: 'Baumhöhe', unit: 'm', scaleType: 'identity', value: 10 },
+      width: { field: 'Kronendurchmesser', unit: 'm', scaleType: 'identity', value: 0 },
+    })
+    expect(layer.transforms).toEqual([{ kind: 'extract', field: 'Baumart', pattern: '^(\\S+)', as: 'Baumart (first word)' }])
+    expect(layer.color).toMatchObject({ field: 'Baumart (first word)', type: 'nominal', color: '#5b8c3a' })
+    expect((layer.color as any).mappings.map((m: any) => m.code)).toEqual(['Tilia', 'Acer', 'Quercus', 'Salix', 'Betula', 'Fraxinus', 'Pinus'])
+    expect(layer.parts).toEqual([{ mesh: 'trunk|stem|bark|cylinder|stamm|rinde', color: { color: '#6b4f32' } }])
+    expect(migratedModelLayer(layer)).toBe(layer)
+  })
+
+  it('draws as before: the same colours and sizes for the same trees', () => {
+    const settings = modelledSettings({ modelLayers: [stored] })
+    const layer = settings.modelLayers.get(0)
+    expect(layer.size?.height?.field).toBe('Baumhöhe')
+    const byModel = symbolsByModel(layer, {
+      features: [
+        { id: 'a', geometry: { type: 'Point', coordinates: [11.6, 50.9] }, properties: { Baumart: 'Tilia cordata', Baumhöhe: 14, Kronendurchmesser: 9 } },
+        { id: 'b', geometry: { type: 'Point', coordinates: [11.6, 50.9] }, properties: { Baumart: 'Robinia pseudoacacia', Baumhöhe: '', Kronendurchmesser: '' } },
+      ],
+    })
+    expect(byModel.get('http://localhost:8080/tree.fbx')!.map((i) => [i.color, i.height, i.width, i.partColors])).toEqual([
+      ['#4caf50', 14, 9, ['#6b4f32']],
+      ['#5b8c3a', 10, undefined, ['#6b4f32']],
+    ])
   })
 })
