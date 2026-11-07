@@ -30,6 +30,8 @@ import type { MapLibreSettings } from './gen/MapLibreSettings'
 import type { ThingLayer } from './gen/ThingLayer'
 import type { GeoJsonLayer } from './gen/GeoJsonLayer'
 import type { ColorMapping } from './gen/ColorMapping'
+import type { WmsService } from './gen/WmsService'
+import type { WmsLayer } from './gen/WmsLayer'
 
 /* Read when used: the package needs the events package registered first */
 const factory = () => MaplibreFactory.eINSTANCE
@@ -49,9 +51,72 @@ export function modelledSettings(given: unknown): MapLibreSettings {
   if (isModelled(stored)) return stored as unknown as MapLibreSettings
   const held = adopted.get(stored)
   if (held) return held
-  const made = adopt(factory().createMapLibreSettings(), stored)
+  const made = migrated(adopt(factory().createMapLibreSettings(), stored))
   adopted.set(stored, made)
   return made
+}
+
+/**
+ * A board from before #1274 named its WMS layers in rasterLayers, comma
+ * separated, on the server in rasterUrl. That becomes a service with one
+ * layer per name, at the opacity of the raster base; the two old fields are
+ * emptied. Nothing changes for a board that has services already, or no
+ * layers named.
+ */
+export function migrated(settings: MapLibreSettings): MapLibreSettings {
+  const names = String(settings.rasterLayers ?? '')
+    .split(',')
+    .map((name) => name.trim())
+    .filter(Boolean)
+  const url = String(settings.rasterUrl ?? '').trim()
+  if (!names.length || !url || settings.services.size() > 0) return settings
+  const service = factory().createWmsService()
+  service.id = layerId('wms-service')
+  service.url = url
+  service.title = hostOf(url)
+  settings.services.add(service)
+  for (const name of names) {
+    const layer = factory().createWmsLayer()
+    layer.id = layerId('wms')
+    layer.serviceId = service.id
+    layer.name = name
+    layer.title = name
+    layer.opacity = Number.isFinite(Number(settings.rasterOpacity)) ? Number(settings.rasterOpacity) : 1
+    layer.attribution = String(settings.rasterAttribution ?? '')
+    settings.wmsLayers.add(layer)
+  }
+  settings.rasterLayers = ''
+  settings.rasterUrl = ''
+  settings.rasterAttribution = ''
+  return settings
+}
+
+const hostOf = (url: string) => {
+  try {
+    return new URL(url).host
+  } catch {
+    return url
+  }
+}
+
+/** A new WMS service, from the address it was found at and what its capabilities say. */
+export function newWmsService(url: string, title: string, getMapUrl: string): WmsService {
+  const service = factory().createWmsService()
+  service.id = layerId('wms-service')
+  service.url = url
+  service.title = title || hostOf(url)
+  service.getMapUrl = getMapUrl
+  return service
+}
+
+/** A new WMS layer of a service. */
+export function newWmsLayer(serviceId: string, name: string, title: string): WmsLayer {
+  const layer = factory().createWmsLayer()
+  layer.id = layerId('wms')
+  layer.serviceId = serviceId
+  layer.name = name
+  layer.title = title || name
+  return layer
 }
 
 let counter = 0

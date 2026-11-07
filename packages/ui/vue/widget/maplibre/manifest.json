@@ -13,6 +13,7 @@
     "lib.datasource.ogcsta",
     "lib.events",
     "platform.vue",
+    "ui.vue.common.map",
     "ui.vue.composables",
     "ui.vue.controls"
   ],
@@ -68,6 +69,10 @@
     {
       "id": "@emfts/core",
       "versionRange": "^0.3.0-next.6"
+    },
+    {
+      "id": "org.eclipse.daanse.board.app.ui.vue.common.map",
+      "versionRange": ">=0.0.1-0"
     }
   ],
   "capabilities": [

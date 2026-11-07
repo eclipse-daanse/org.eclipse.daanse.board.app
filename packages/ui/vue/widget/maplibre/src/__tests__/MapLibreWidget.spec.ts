@@ -158,6 +158,9 @@ async function mountWidget(stored: object, store = fakeStore()) {
   return { wrapper, bus, registry, store, map }
 }
 
+/** The ids of the layers the map added, a WMS layer by its kind (its id is made anew). */
+const idsOf = (map: any) => map.layers.map((l: any) => (l.id.startsWith('daanse:wms:') ? 'daanse:wms' : l.id))
+
 const stored = () => ({
   pitch: 55,
   rasterUrl: 'https://kartenportal.jena.de/mapproxy/service',
@@ -183,8 +186,9 @@ describe('the 3D map widget', () => {
   it('starts tilted where its settings say, over the city map, with buildings and areas in 3D', async () => {
     const { map } = await mountWidget(stored())
     expect(map.options.pitch).toBe(55)
-    const ids = map.layers.map((l: any) => l.id)
-    expect(ids).toEqual(['daanse:raster', 'daanse:things:areas:line', 'daanse:things:areas:circle', 'daanse:buildings', 'daanse:things:areas:extrusion'])
+    const ids = idsOf(map)
+    // A board of before #1274 names its WMS layer in rasterLayers: it is drawn as a WMS layer now.
+    expect(ids).toEqual(['daanse:wms', 'daanse:things:areas:line', 'daanse:things:areas:circle', 'daanse:buildings', 'daanse:things:areas:extrusion'])
     // The style's own 3D buildings give way to the map's.
     expect(map.setLayoutProperty).toHaveBeenCalledWith('building-3d', 'visibility', 'none')
   })
@@ -195,8 +199,8 @@ describe('the 3D map widget', () => {
     const model = modelledSettings(settings)
     model.thingLayers.get(0).extrude = false
     await nextTick()
-    expect(map.layers.map((l: any) => l.id)).toEqual([
-      'daanse:raster',
+    expect(idsOf(map)).toEqual([
+      'daanse:wms',
       'daanse:things:areas:fill',
       'daanse:things:areas:line',
       'daanse:things:areas:circle',
