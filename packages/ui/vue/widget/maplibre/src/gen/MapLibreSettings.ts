@@ -23,6 +23,7 @@ import type { ThingLayer } from './ThingLayer.js';
 import type { GeoJsonLayer } from './GeoJsonLayer.js';
 import type { WmsService } from './WmsService.js';
 import type { WmsLayer } from './WmsLayer.js';
+import type { ModelLayer } from './ModelLayer.js';
 
 /**
  * MapLibreSettings
@@ -58,5 +59,6 @@ export interface MapLibreSettings extends EObject {
   geoJsonLayers: EList<GeoJsonLayer>;
   services: EList<WmsService>;
   wmsLayers: EList<WmsLayer>;
+  modelLayers: EList<ModelLayer>;
 
 }

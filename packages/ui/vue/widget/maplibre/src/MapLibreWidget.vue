@@ -24,6 +24,13 @@ import { computed, inject, onMounted, onUnmounted, ref, shallowRef, toRefs, watc
 import { AttributionControl, Map as MapLibreMap, NavigationControl, type GeoJSONSource, type IControl, type MapMouseEvent } from 'maplibre-gl'
 import { TextAttributionControl } from './attribution'
 import { PIN_PIXEL_RATIO, PIN_PREFIX, pinImage, pinOfImageId, pinWithIcon } from './pin'
+import { MODELS_ID, createModelLayer, type DrawnModelLayer, type ModelCustomLayer } from './models/modelLayer'
+import { nearestWithin } from './models/placement'
+import { placing } from './models/placementMode'
+import { MaplibreFactory } from './gen/MaplibreFactory'
+import type { ModelInstance } from './gen/ModelInstance'
+import type { ModelLayer } from './gen/ModelLayer'
+import { layerId as newId } from './settingsModel'
 import { useMapLibreWorker } from './worker'
 import 'maplibre-gl/dist/maplibre-gl.css'
 import { useRoute } from 'vue-router'
@@ -160,6 +167,9 @@ const lookKey = computed(() => {
 
 /** Takes off everything the map added to its style. */
 function clearAdditions(target: MapLibreMap) {
+  // A custom layer is not part of the serialised style: taken off by its id.
+  if (target.getLayer(MODELS_ID)) target.removeLayer(MODELS_ID)
+  modelLayer = undefined
   const style = target.getStyle()
   if (target.getTerrain()) target.setTerrain(null)
   for (const layer of [...(style.layers ?? [])].reverse()) {
@@ -222,6 +232,82 @@ function applyAdditions() {
     const id = sourceIdOf('geojson', layer.id)
     addData(id, featureLayersOf(id, geoJsonLookOf(layer, selection)))
   }
+  // The 3D models on top, meeting the buildings in the 3D pass (#1281).
+  if (s.modelLayers.size() > 0) {
+    modelLayer = createModelLayer()
+    target.addLayer(modelLayer)
+    modelLayer.update(drawnModels())
+  }
+}
+
+/* ---------------------------------------------------------- 3D models */
+
+let modelLayer: ModelCustomLayer | undefined
+const drawnModels = (): DrawnModelLayer[] =>
+  held().modelLayers.toArray().map((layer) => ({
+    id: layer.id,
+    visible: layer.visible,
+    url: layer.url,
+    format: layer.format,
+    scale: layer.scale,
+    rotation: layer.rotation,
+    altitudeOffset: layer.altitudeOffset,
+    instances: layer.instances.toArray().map((i) => ({ id: i.id, lon: i.lon, lat: i.lat, scale: i.scale, rotation: i.rotation })),
+  }))
+const modelsKey = computed(() => JSON.stringify(drawnModels()))
+watch(modelsKey, () => {
+  if (!map || !styleReady) return
+  // The first model layer needs the custom layer; later changes only hand it the layers.
+  if (!modelLayer && held().modelLayers.size() > 0) applyAdditions()
+  else modelLayer?.update(drawnModels())
+})
+
+/** The model layer the settings place with, if they place in this map. */
+const placingLayer = computed<ModelLayer | undefined>(() => {
+  const mode = placing.value
+  if (!mode || mode.settings !== config.value) return undefined
+  return held().modelLayers.toArray().find((layer) => layer.id === mode.layerId)
+})
+
+/** The instance of the placing layer under a point of the screen. */
+function instanceAt(point: { x: number; y: number }): ModelInstance | undefined {
+  const layer = placingLayer.value
+  if (!map || !layer) return undefined
+  const candidates = layer.instances.toArray().map((item) => ({ item, ...map!.project([item.lon ?? 0, item.lat ?? 0]) }))
+  return nearestWithin(point, candidates, 14)
+}
+
+let dragged: ModelInstance | undefined
+function onPlaceDown(event: MapMouseEvent) {
+  const hit = instanceAt(event.point)
+  if (!hit || !map) return
+  dragged = hit
+  map.dragPan.disable()
+}
+function onPlaceUp() {
+  if (!dragged) return
+  dragged = undefined
+  map?.dragPan.enable()
+}
+function onPlaceMenu(event: MapMouseEvent) {
+  const layer = placingLayer.value
+  const hit = instanceAt(event.point)
+  if (layer && hit) {
+    event.preventDefault()
+    layer.instances.remove(hit)
+  }
+}
+/** A click while placing adds an instance where no instance is. */
+function placeAt(event: MapMouseEvent): boolean {
+  const layer = placingLayer.value
+  if (!layer) return false
+  if (instanceAt(event.point)) return true
+  const instance = MaplibreFactory.eINSTANCE.createModelInstance()
+  instance.id = newId('model')
+  instance.lon = event.lngLat.lng
+  instance.lat = event.lngLat.lat
+  layer.instances.add(instance)
+  return true
 }
 
 /** Replaces the data of each source the map holds. */
@@ -279,6 +365,7 @@ function applyAttribution() {
 /* --------------------------------------------------------------- events */
 
 function onClick(event: MapMouseEvent) {
+  if (placeAt(event)) return
   if (!map || !widgetId?.value) return
   const dataLayers = (map.getStyle().layers ?? []).filter((l) => dataLayerOf(l.id)).map((l) => l.id)
   const hit = dataLayers.length ? map.queryRenderedFeatures(event.point, { layers: dataLayers })[0] : undefined
@@ -299,6 +386,15 @@ function onClick(event: MapMouseEvent) {
 
 function onMove(event: MapMouseEvent) {
   if (!map) return
+  if (dragged) {
+    dragged.lon = event.lngLat.lng
+    dragged.lat = event.lngLat.lat
+    return
+  }
+  if (placingLayer.value) {
+    map.getCanvas().style.cursor = instanceAt(event.point) ? 'move' : 'crosshair'
+    return
+  }
   const dataLayers = (map.getStyle().layers ?? []).filter((l) => dataLayerOf(l.id)).map((l) => l.id)
   const over = dataLayers.length > 0 && map.queryRenderedFeatures(event.point, { layers: dataLayers }).length > 0
   map.getCanvas().style.cursor = over ? 'pointer' : ''
@@ -403,6 +499,9 @@ onMounted(() => {
   })
   map.on('click', onClick)
   map.on('mousemove', onMove)
+  map.on('mousedown', onPlaceDown)
+  map.on('mouseup', onPlaceUp)
+  map.on('contextmenu', onPlaceMenu)
   resizeObserver = new ResizeObserver(() => map?.resize())
   resizeObserver.observe(container.value)
 })

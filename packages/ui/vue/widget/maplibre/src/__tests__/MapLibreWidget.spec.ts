@@ -28,6 +28,8 @@ import { MaplibrePackage } from '../gen/MaplibrePackage'
 import { modelledSettings } from '../settingsModel'
 import { clickEventOf } from '../events/payloads'
 import { TextAttributionControl, attributionFragment } from '../attribution'
+import { placing } from '../models/placementMode'
+import { newModelLayer } from '../settingsModel'
 
 void EventsPackage.eINSTANCE
 void MaplibrePackage.eINSTANCE
@@ -102,8 +104,13 @@ vi.mock('maplibre-gl', () => {
     removeLayer(id: string) {
       this.layers = this.layers.filter((l) => l.id !== id)
     }
+    canvasStyle: Record<string, string> = {}
     getCanvas() {
-      return { style: {} }
+      return { style: this.canvasStyle }
+    }
+    /* A plain projection for the test: 1 px per 0.0001 degree, from 11.6 / 50.95. */
+    project([lng, lat]: [number, number]) {
+      return { x: (lng - 11.6) * 10000, y: (50.95 - lat) * 10000 }
     }
     resize() {}
     remove() {}
@@ -356,6 +363,52 @@ describe('the pins of a layer (#1273)', () => {
     expect(id).toBe('daanse-pin:#E53935')
     expect([image.width, image.height]).toEqual([48, 64])
     expect(options).toEqual({ pixelRatio: 2 })
+  })
+})
+
+describe('the 3D models of the map (#1281)', () => {
+  it('draw in a custom layer over the data, and take instances while the settings place', async () => {
+    const settings = stored()
+    const { map, bus } = await mountWidget(settings)
+    const model = modelledSettings(settings)
+    const layer = newModelLayer('Trees')
+    layer.url = 'http://localhost:8080/tree.fbx'
+    model.modelLayers.add(layer)
+    await nextTick()
+    expect(map.layers.at(-1).id).toBe('daanse:models')
+    expect(map.layers.at(-1).type).toBe('custom')
+
+    const heard = vi.fn()
+    bus.on('widget:MapLibreWidget:click_on_map', heard)
+    placing.value = { settings: model, layerId: String(layer.id) }
+    await nextTick()
+    const at = (x: number, y: number) => ({ point: { x, y }, lngLat: { lng: 11.6 + x / 10000, lat: 50.95 - y / 10000 }, preventDefault: vi.fn() })
+
+    // A click adds an instance, and sends no click event.
+    map.handlers.click(at(10, 20))
+    expect(layer.instances.size()).toBe(1)
+    expect(layer.instances.get(0).lon).toBeCloseTo(11.601, 9)
+    expect(layer.instances.get(0).lat).toBeCloseTo(50.948, 9)
+    expect(heard).not.toHaveBeenCalled()
+    // A click on it adds none; dragging moves it.
+    map.handlers.click(at(12, 21))
+    expect(layer.instances.size()).toBe(1)
+    map.handlers.mousedown(at(11, 19))
+    expect(map.dragPan.disable).toHaveBeenCalled()
+    map.handlers.mousemove(at(50, 60))
+    map.handlers.mouseup(at(50, 60))
+    expect(layer.instances.get(0).lon).toBeCloseTo(11.605, 9)
+    expect(map.dragPan.enable).toHaveBeenCalled()
+    // A right click on it removes it.
+    map.handlers.contextmenu(at(49, 61))
+    expect(layer.instances.size()).toBe(0)
+
+    // Not placing, a click is an event again.
+    placing.value = null
+    await nextTick()
+    map.handlers.click(at(10, 20))
+    expect(layer.instances.size()).toBe(0)
+    expect(heard).toHaveBeenCalledTimes(1)
   })
 })
 

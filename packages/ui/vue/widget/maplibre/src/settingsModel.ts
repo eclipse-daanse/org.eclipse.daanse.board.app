@@ -32,6 +32,7 @@ import type { GeoJsonLayer } from './gen/GeoJsonLayer'
 import type { ColorMapping } from './gen/ColorMapping'
 import type { WmsService } from './gen/WmsService'
 import type { WmsLayer } from './gen/WmsLayer'
+import type { ModelLayer } from './gen/ModelLayer'
 
 /* Read when used: the package needs the events package registered first */
 const factory = () => MaplibreFactory.eINSTANCE
@@ -145,4 +146,12 @@ export function newColorMapping(code: string, color: string): ColorMapping {
   mapping.code = code
   mapping.color = color
   return mapping
+}
+
+/** A new 3D model layer (#1281). */
+export function newModelLayer(name: string): ModelLayer {
+  const layer = factory().createModelLayer()
+  layer.id = layerId('models')
+  layer.name = name
+  return layer
 }
