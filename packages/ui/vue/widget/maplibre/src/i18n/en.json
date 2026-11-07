@@ -11,7 +11,8 @@
       "threeD": "3D",
       "things": "OGC STA things",
       "geojson": "GeoJSON",
-      "wms": "WMS layers"
+      "wms": "WMS layers",
+      "models": "3D models"
     },
     "styleUrl": "Style (style.json)",
     "styleUrlHint": "A MapLibre style. The default, OpenFreeMap Liberty, is free and needs no key.",
@@ -78,6 +79,32 @@
     "refreshSeconds": "Read the latest values every (s, 0: once)",
     "geoJsonUrl": "GeoJSON address",
     "geoJson": "GeoJSON (written in, wins over the address)",
-    "heightProperty": "Property with the height"
+    "heightProperty": "Property with the height",
+    "models": {
+      "none": "No 3D model yet.",
+      "url": "Model file (FBX, glTF, GLB)",
+      "urlHint": "The server of the file must allow the board to read it (CORS).",
+      "format": "Format",
+      "formats": {
+        "auto": "By the ending of the address"
+      },
+      "scale": "Metres per unit of the model",
+      "scaleHint": "Most FBX files are in centimetres: 0.01.",
+      "rotation": "Rotation (clockwise from north)",
+      "altitudeOffset": "Height above the ground (m)",
+      "place": "Place on the map",
+      "placing": "Placing - click here to end",
+      "placeHint": "In the preview: a click adds the model, drag moves it, a right click removes it.",
+      "count": "{{count}} placed",
+      "instanceScale": "Size",
+      "newLayer": "Trees",
+      "loading": "Loading …",
+      "ready": "The model is loaded.",
+      "errors": {
+        "blocked": "The file cannot be read: the server does not allow it (no CORS header) or cannot be reached.",
+        "http": "The server answered with an error ({{status}}).",
+        "format": "The file is no model in this format."
+      }
+    }
   }
 }

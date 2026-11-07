@@ -18,15 +18,18 @@ Contributors:
  * instance; every field writes into it, and the adapter of the widget
  * hears the change.
  */
-import { computed, inject, reactive, ref, type ShallowRef } from 'vue'
+import { computed, inject, onUnmounted, reactive, ref, watch, type ShallowRef } from 'vue'
 import { identifier, type DatasourceRepository } from 'org.eclipse.daanse.board.app.lib.api.datasource'
 import { useEObject, useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import { DButton, DCheckbox, DColorInput, DIcon, DIconPicker, DInput, DSelect, DSlider } from 'org.eclipse.daanse.board.app.ui.vue.controls'
 import type { MapLibreSettings } from './gen/MapLibreSettings'
 import type { ThingLayer } from './gen/ThingLayer'
-import { modelledSettings, newColorMapping, newGeoJsonLayer, newThingLayer, newWmsLayer, newWmsService } from './settingsModel'
+import { modelledSettings, newColorMapping, newGeoJsonLayer, newThingLayer, newModelLayer, newWmsLayer, newWmsService } from './settingsModel'
 import type { WmsLayer } from './gen/WmsLayer'
 import type { WmsService } from './gen/WmsService'
+import type { ModelLayer } from './gen/ModelLayer'
+import { loadModel, modelStatus } from './models/modelLoader'
+import { placing } from './models/placementMode'
 import { WmsLayerList, useOGCService } from 'org.eclipse.daanse.board.app.ui.vue.common.map'
 
 const props = defineProps<{ dataSources?: { uid: string; name?: string; type?: string }[] }>()
@@ -147,6 +150,53 @@ function reorderWmsLayers(order: unknown[]) {
     const from = list.indexOf(layer as WmsLayer)
     if (from > -1 && from !== index) list.move(index, from)
   })
+}
+
+/* -------------------------------------------------------- 3D models (#1281) */
+
+const modelFormats = computed(() => [
+  { value: '', label: t('Settings.models.formats.auto') },
+  { value: 'fbx', label: 'FBX' },
+  { value: 'gltf', label: 'glTF / GLB' },
+])
+
+function addModelLayer() {
+  settings.value.modelLayers.add(newModelLayer(t('Settings.models.newLayer')))
+}
+function removeModelLayer(layer: ModelLayer) {
+  if (placing.value?.layerId === layer.id) placing.value = null
+  settings.value.modelLayers.remove(layer)
+}
+
+/* Placing: clicks on the map of these settings - the preview - add, move or remove instances. */
+const placingId = computed(() => (placing.value?.settings === settings.value ? placing.value.layerId : undefined))
+function togglePlacing(layer: ModelLayer) {
+  placing.value = placingId.value === layer.id ? null : { settings: settings.value, layerId: String(layer.id) }
+}
+onUnmounted(() => {
+  if (placing.value?.settings === settings.value) placing.value = null
+})
+
+/* The settings load a model as soon as its address is set, to say at once whether it can be read. */
+watch(
+  () => settings.value.modelLayers.toArray().map((layer) => [String(layer.url ?? '').trim(), layer.format]),
+  (wanted) => {
+    for (const [url, format] of wanted) if (url) loadModel(String(url), String(format ?? '')).catch(() => undefined)
+  },
+  { immediate: true, deep: true },
+)
+function modelError(url: unknown): string | undefined {
+  const status = modelStatus[String(url ?? '').trim()]
+  if (status?.state !== 'error') return undefined
+  if (status.error === 'blocked') return t('Settings.models.errors.blocked')
+  if (status.error === 'http') return t('Settings.models.errors.http', { status: status.status })
+  return t('Settings.models.errors.format')
+}
+function modelHint(url: unknown): string {
+  const status = modelStatus[String(url ?? '').trim()]
+  if (status?.state === 'loading') return t('Settings.models.loading')
+  if (status?.state === 'ready') return t('Settings.models.ready')
+  return t('Settings.models.urlHint')
 }
 
 function addThingLayer() {
@@ -316,6 +366,54 @@ function addColor(layer: ThingLayer) {
           </template>
           <DInput type="number" :model-value="layer.refreshSeconds" :label="t('Settings.refreshSeconds')"
             @update:model-value="(v) => setNumber(layer, 'refreshSeconds', v)" />
+        </div>
+      </details>
+    </div>
+  </section>
+
+  <section class="settings-section" data-section-id="models" :data-section="t('Settings.sections.models')">
+    <div class="section__head">
+      <DIcon name="park" size="sm" />
+      <span class="section__title">{{ t('Settings.sections.models') }}</span>
+      <DButton intent="quiet" size="sm" @click="addModelLayer"><DIcon name="add" size="sm" />{{ t('Settings.add') }}</DButton>
+    </div>
+    <div class="settings-container">
+      <p v-if="settings.modelLayers.size() === 0" class="note">{{ t('Settings.models.none') }}</p>
+      <details v-for="(layer, index) in settings.modelLayers.toArray()" :key="layer.id ?? index" class="layer" open>
+        <summary class="layer__head">
+          <span class="layer__name">{{ layer.name || layer.id }}</span>
+          <DButton intent="quiet" size="sm" :title="t('Settings.remove')" @click.prevent="removeModelLayer(layer)">
+            <DIcon name="delete" size="sm" />
+          </DButton>
+        </summary>
+        <div class="settings-container">
+          <DInput v-model="layer.name" :label="t('Settings.layerName')" />
+          <DCheckbox v-model="layer.visible" :label="t('Settings.visible')" />
+          <DInput v-model="layer.url" :label="t('Settings.models.url')" placeholder="https://example.org/tree.glb"
+            :error="modelError(layer.url)" :hint="modelHint(layer.url)" />
+          <DSelect v-model="layer.format" :options="modelFormats" value-key="value" label-key="label"
+            :label="t('Settings.models.format')" />
+          <DInput type="number" :model-value="layer.scale" :label="t('Settings.models.scale')" :step="0.01"
+            :hint="t('Settings.models.scaleHint')" @update:model-value="(v) => setNumber(layer, 'scale', v)" />
+          <DSlider v-model="layer.rotation" :label="t('Settings.models.rotation')" :min="0" :max="359" :step="1" suffix="°" />
+          <DInput type="number" :model-value="layer.altitudeOffset" :label="t('Settings.models.altitudeOffset')"
+            @update:model-value="(v) => setNumber(layer, 'altitudeOffset', v)" />
+          <DButton :intent="placingId === layer.id ? 'primary' : 'default'" @click="togglePlacing(layer)">
+            <DIcon name="ads_click" size="sm" />{{ placingId === layer.id ? t('Settings.models.placing') : t('Settings.models.place') }}
+          </DButton>
+          <p v-if="placingId === layer.id" class="note">{{ t('Settings.models.placeHint') }}</p>
+          <p class="note">{{ t('Settings.models.count', { count: layer.instances.size() }) }}</p>
+          <div v-for="instance in layer.instances.toArray()" :key="instance.id" class="row">
+            <DInput type="number" :model-value="instance.lat" :label="t('Settings.centerLat')" :step="0.00001"
+              @update:model-value="(v) => setNumber(instance, 'lat', v)" />
+            <DInput type="number" :model-value="instance.lon" :label="t('Settings.centerLon')" :step="0.00001"
+              @update:model-value="(v) => setNumber(instance, 'lon', v)" />
+            <DInput type="number" :model-value="instance.scale" :label="t('Settings.models.instanceScale')" :step="0.1"
+              @update:model-value="(v) => setNumber(instance, 'scale', v)" />
+            <DButton intent="quiet" size="sm" :title="t('Settings.remove')" @click="layer.instances.remove(instance)">
+              <DIcon name="delete" size="sm" />
+            </DButton>
+          </div>
         </div>
       </details>
     </div>

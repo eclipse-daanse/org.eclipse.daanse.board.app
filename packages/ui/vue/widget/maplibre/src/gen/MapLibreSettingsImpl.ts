@@ -25,6 +25,7 @@ import type { ThingLayer } from './ThingLayer.js';
 import type { GeoJsonLayer } from './GeoJsonLayer.js';
 import type { WmsService } from './WmsService.js';
 import type { WmsLayer } from './WmsLayer.js';
+import type { ModelLayer } from './ModelLayer.js';
 import type { MapLibreSettings } from './MapLibreSettings.js';
 import { MaplibrePackage } from './MaplibrePackage.js';
 
@@ -63,6 +64,7 @@ export class MapLibreSettingsImpl extends BasicEObject implements MapLibreSettin
   static readonly GEO_JSON_LAYERS: number = 26;
   static readonly SERVICES: number = 27;
   static readonly WMS_LAYERS: number = 28;
+  static readonly MODEL_LAYERS: number = 29;
 
   // Private fields
   private _datasourceId?: string;
@@ -94,6 +96,7 @@ export class MapLibreSettingsImpl extends BasicEObject implements MapLibreSettin
   private _geoJsonLayers!: EList<GeoJsonLayer>;
   private _services!: EList<WmsService>;
   private _wmsLayers!: EList<WmsLayer>;
+  private _modelLayers!: EList<ModelLayer>;
 
   /**
    * Returns the EClass of this object
@@ -731,6 +734,13 @@ export class MapLibreSettingsImpl extends BasicEObject implements MapLibreSettin
     return this._wmsLayers;
   }
 
+  get modelLayers(): EList<ModelLayer> {
+    if (!this._modelLayers) {
+      this._modelLayers = createContainmentEList<any>(this, this.eClass().getEStructuralFeature('modelLayers') as EReference);
+    }
+    return this._modelLayers;
+  }
+
   // Reflective API
 
   /**
@@ -797,6 +807,8 @@ export class MapLibreSettingsImpl extends BasicEObject implements MapLibreSettin
         return this.services;
       case MapLibreSettingsImpl.WMS_LAYERS:
         return this.wmsLayers;
+      case MapLibreSettingsImpl.MODEL_LAYERS:
+        return this.modelLayers;
       default:
         return super.eGet(feature);
     }
@@ -928,6 +940,11 @@ export class MapLibreSettingsImpl extends BasicEObject implements MapLibreSettin
         this.wmsLayers.addAll(newValue as any[]);
         super.eSet(feature, newValue);
         break;
+      case MapLibreSettingsImpl.MODEL_LAYERS:
+        this.modelLayers.clear();
+        this.modelLayers.addAll(newValue as any[]);
+        super.eSet(feature, newValue);
+        break;
       default:
         super.eSet(feature, newValue);
     }
@@ -997,6 +1014,8 @@ export class MapLibreSettingsImpl extends BasicEObject implements MapLibreSettin
         return this._services !== undefined && !this._services.isEmpty();
       case MapLibreSettingsImpl.WMS_LAYERS:
         return this._wmsLayers !== undefined && !this._wmsLayers.isEmpty();
+      case MapLibreSettingsImpl.MODEL_LAYERS:
+        return this._modelLayers !== undefined && !this._modelLayers.isEmpty();
       default:
         return super.eIsSet(feature);
     }
@@ -1095,6 +1114,9 @@ export class MapLibreSettingsImpl extends BasicEObject implements MapLibreSettin
       case MapLibreSettingsImpl.WMS_LAYERS:
         if (this._wmsLayers) this._wmsLayers.clear();
         return;
+      case MapLibreSettingsImpl.MODEL_LAYERS:
+        if (this._modelLayers) this._modelLayers.clear();
+        return;
       default:
         super.eUnset(feature);
     }
@@ -1139,6 +1161,7 @@ export class MapLibreSettingsImpl extends BasicEObject implements MapLibreSettin
       geoJsonLayers: this.geoJsonLayers?.toArray?.() ?? this.geoJsonLayers,
       services: this.services?.toArray?.() ?? this.services,
       wmsLayers: this.wmsLayers?.toArray?.() ?? this.wmsLayers,
+      modelLayers: this.modelLayers?.toArray?.() ?? this.modelLayers,
     };
   }
 }
