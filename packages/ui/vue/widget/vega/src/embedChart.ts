@@ -244,4 +244,26 @@ export function imageOf(view: View, format: 'png' | 'svg'): Promise<string> {
  */
 export async function fitTo(view: View, width: number, height: number): Promise<void> {
   await view.width(width).height(height).resize().runAsync()
+  /*
+   * One layout is not always enough: a chart first laid out at another
+   * size - two layers, a second axis - kept extents from that layout and
+   * stayed 10 px taller than asked, until its size changed once more. A
+   * chart larger than its frame is therefore laid out from a size one
+   * pixel smaller, then from the size it has.
+   */
+  const { width: drawnWidth, height: drawnHeight } = drawnSize(view)
+  if (drawnWidth > width + 0.5 || drawnHeight > height + 0.5) {
+    await view.width(width - 1).height(height - 1).runAsync()
+    await view.width(width).height(height).resize().runAsync()
+  }
+}
+
+/** The size the chart takes on screen: its scene with the padding around it. */
+export function drawnSize(view: View): { width: number; height: number } {
+  const { bounds } = (view.scenegraph() as unknown as { root: { bounds: { x1: number; x2: number; y1: number; y2: number } } }).root
+  const padding = view.padding() as { left?: number; right?: number; top?: number; bottom?: number }
+  return {
+    width: bounds.x2 - bounds.x1 + (padding.left ?? 0) + (padding.right ?? 0),
+    height: bounds.y2 - bounds.y1 + (padding.top ?? 0) + (padding.bottom ?? 0),
+  }
 }
