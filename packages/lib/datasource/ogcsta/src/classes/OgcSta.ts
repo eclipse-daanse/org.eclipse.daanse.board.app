@@ -59,6 +59,11 @@ const BUCKET_REQUESTS_AT_ONCE = 6
 /** Counts of buckets that have ended, by server, datastream and bucket. */
 const closedBucketCounts = new Map<string, number>()
 const CLOSED_BUCKETS_KEPT = 20000
+/**
+ * How long after its end a bucket is still asked again. Derived values
+ * arrive late, so a count taken just after the end can still grow (#1293).
+ */
+const BUCKET_SETTLES_MS = 24 * 60 * 60 * 1000
 
 function rememberClosedBucket(key: string, count: number): void {
   if (closedBucketCounts.size >= CLOSED_BUCKETS_KEPT) {
@@ -601,9 +606,10 @@ export class OgcStaStore extends BaseDatasource implements OgcStaStoreI {
    * `$count=true`, as servers refuse `$top=0` and ignore `$top` together
    * with `$select`.
    *
-   * A bucket that has ended is kept: its count no longer changes, and the
-   * timeline asks for the same buckets again whenever it is drawn. The
-   * bucket that holds now is always asked again.
+   * A bucket that ended more than a day ago is kept: its count no longer
+   * changes, and the timeline asks for the same buckets again whenever it
+   * is drawn. Younger buckets are always asked again, as derived values
+   * can still arrive for them (#1293).
    */
   async countDatastreamBuckets(
     datastreamId: string,
@@ -628,7 +634,7 @@ export class OgcStaStore extends BaseDatasource implements OgcStaStoreI {
         $filter: `phenomenonTime ge ${bucket.start} and phenomenonTime lt ${bucket.end}`,
       })
       const count = page.iotCount ?? page.value?.length ?? 0
-      if (Date.parse(bucket.end) < now) rememberClosedBucket(key, count)
+      if (Date.parse(bucket.end) < now - BUCKET_SETTLES_MS) rememberClosedBucket(key, count)
       return count
     })
   }

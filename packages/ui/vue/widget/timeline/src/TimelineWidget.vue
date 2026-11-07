@@ -142,7 +142,9 @@ import { useRoute } from 'vue-router';
 import { VariableWrapper, isModelled, useEObject, useFormat, useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables';
 import { DSelect } from 'org.eclipse.daanse.board.app.ui.vue.controls';
 import { axisTicks, rangeColor, TICK_FORMAT, type TickKind } from './timelineAxis';
-import { combineSeries, coverageBuckets, placeBands, useTimeCoverage, type CoverageStyle } from './coverage';
+import {
+  combineSeries, coverageBuckets, densityOpacity, placeBands, splitAtRange, useTimeCoverage, type CoverageStyle
+} from './coverage';
 import {
     identifier as variableIdentifier,
     type VariableRepository
@@ -537,37 +539,47 @@ const { series: coverageSeries } = useTimeCoverage({
   timeField: coverageTimeField,
 });
 
-interface CoverageCell { key: number; left: number; width: number; opacity: number; title: string }
+interface CoverageCell { key: string; left: number; width: number; opacity: number; title: string }
+
+/** How much the lanes fade outside the selected range, which is all the charts show (#1293). */
+const OUTSIDE_RANGE_FADE = 0.35;
 
 const coverageLanes = computed(() => {
   void watchedConfig.value;
   const minMs = timelineMin.value.getTime();
   const maxMs = timelineMax.value.getTime();
+  const fromMs = rangeStart.value.getTime();
+  const toMs = rangeEnd.value.getTime();
   const perSeries = !!config.value.coverageLanePerSeries;
   const lanes = perSeries ? coverageSeries.value : combineSeries(coverageSeries.value);
   const buckets = coverageBucketList.value;
+  const when = (ms: number) => formatDateTime(new Date(ms));
   return lanes
     .map((lane) => {
-      let cells: CoverageCell[];
       const bins = lane.bins;
-      if (coverageStyle.value === 'density' && bins && bins.length === buckets.length) {
-        const most = Math.max(1, ...bins);
-        const counted = buckets.map((bucket, index) => ({
-          startMs: Date.parse(bucket.start), endMs: Date.parse(bucket.end), count: bins[index] ?? 0
-        })).filter((cell) => cell.count > 0);
-        cells = placeBands(counted, minMs, maxMs).map((cell) => ({
-          key: cell.startMs, left: cell.left, width: cell.width,
-          opacity: 0.25 + 0.75 * (cell.count / most),
-          title: t('Widget.coverageCount', { count: cell.count, start: formatDateTime(new Date(cell.startMs)), end: formatDateTime(new Date(cell.endMs)) })
-        }));
-      } else {
-        cells = placeBands(lane.bands, minMs, maxMs).map((band) => ({
-          key: band.startMs, left: band.left, width: band.width, opacity: 0.8,
-          title: lane.label
-            ? t('Widget.coverageSeries', { label: lane.label, start: formatDateTime(new Date(band.startMs)), end: formatDateTime(new Date(band.endMs)) })
-            : t('Widget.coverage', { start: formatDateTime(new Date(band.startMs)), end: formatDateTime(new Date(band.endMs)) })
-        }));
-      }
+      const density = coverageStyle.value === 'density' && !!bins && bins.length === buckets.length;
+      const most = density ? Math.max(0, ...bins!) : 0;
+      const raw = density
+        ? buckets
+            .map((bucket, index) => ({ startMs: Date.parse(bucket.start), endMs: Date.parse(bucket.end), count: bins![index] ?? 0 }))
+            .filter((cell) => cell.count > 0)
+        : lane.bands.map((band) => ({ ...band, count: 0 }));
+      // The parts outside the selected range fade; a bucket split there keeps its count
+      const cells: CoverageCell[] = placeBands(splitAtRange(raw, fromMs, toMs), minMs, maxMs).map((cell) => {
+        const strength = density ? densityOpacity(cell.count, most) : 0.8;
+        const title = density
+          ? t('Widget.coverageCount', { count: cell.count, start: when(cell.startMs), end: when(cell.endMs) })
+          : lane.label
+            ? t('Widget.coverageSeries', { label: lane.label, start: when(cell.startMs), end: when(cell.endMs) })
+            : t('Widget.coverage', { start: when(cell.startMs), end: when(cell.endMs) });
+        return {
+          key: `${cell.startMs}-${cell.endMs}`,
+          left: cell.left,
+          width: cell.width,
+          opacity: cell.inRange ? strength : strength * OUTSIDE_RANGE_FADE,
+          title
+        };
+      });
       return { id: lane.id, color: (perSeries && lane.color) || undefined, cells };
     })
     .filter((lane) => perSeries || lane.cells.length > 0);
