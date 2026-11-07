@@ -79,9 +79,9 @@ A data source that reads a feature type of an OGC Web Feature Service
                 <details key="documentation" value="The edge of a tile in degrees of latitude (longitude in proportion); one request per tile. In the GetFeatureInfo mode and with the extent viewport."/>
             </eAnnotations>
         </eStructuralFeatures>
-        <eStructuralFeatures xsi:type="ecore:EAttribute" name="pointTolerance" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt" lowerBound="0" defaultValueLiteral="70">
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="pointTolerance" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt" lowerBound="0" defaultValueLiteral="72">
             <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-                <details key="documentation" value="In the GetFeatureInfo mode: the tolerance in pixels around the middle of a 101 px tile that a feature is found in (FI_POINT_TOLERANCE of QGIS Server)."/>
+                <details key="documentation" value="In the GetFeatureInfo mode: the tolerance in pixels around the middle of a 101 px tile that a feature is found in (FI_POINT_TOLERANCE of QGIS Server). At least 72, which reaches the corners of the tile; less is raised to it."/>
             </eAnnotations>
         </eStructuralFeatures>
         <eStructuralFeatures xsi:type="ecore:EAttribute" name="extent" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" lowerBound="0" defaultValueLiteral="fixed">

@@ -20,7 +20,7 @@
 import { describe, it, expect, vi } from 'vitest'
 import { readFileSync } from 'node:fs'
 import { join } from 'node:path'
-import { featureInfoPath, featuresOfFeatureInfo, mergedOf, tilesOf, MAX_TILES } from '../src/featureInfo'
+import { featureInfoPath, featuresOfFeatureInfo, mergedOf, tilesOf, MAX_TILES, CORNER_TOLERANCE } from '../src/featureInfo'
 import { WfsStore } from '../src/classes/WfsStore'
 
 const answer = readFileSync(join(__dirname, 'fixtures', 'baeume.featureinfo.xml'), 'utf-8')
@@ -59,8 +59,16 @@ describe('a GetFeatureInfo request', () => {
       I: '50',
       INFO_FORMAT: 'text/xml',
       FEATURE_COUNT: '5000',
-      FI_POINT_TOLERANCE: '70',
+      FI_POINT_TOLERANCE: '72',
     })
+  })
+
+  it('reaches the corners of the tile: a tolerance below 50 * sqrt(2) px is raised to it', () => {
+    const tolerance = (pointTolerance?: number) =>
+      new URLSearchParams(featureInfoPath({ url: '', typeName: 'Bäume', pointTolerance }, [11.61, 50.95, 11.62, 50.96]).slice(1)).get('FI_POINT_TOLERANCE')
+    expect(CORNER_TOLERANCE).toBe(72)
+    expect(CORNER_TOLERANCE).toBeGreaterThan(50 * Math.SQRT2)
+    expect([tolerance(undefined), tolerance(70), tolerance(0), tolerance(90)]).toEqual(['72', '72', '72', '90'])
   })
 })
 

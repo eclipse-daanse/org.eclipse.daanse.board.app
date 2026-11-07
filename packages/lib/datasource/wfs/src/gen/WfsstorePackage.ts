@@ -207,7 +207,7 @@ export class WfsstorePackage extends BasicEPackage {
     iWfsStoreConfiguration_pointTolerance.setName('pointTolerance');
     iWfsStoreConfiguration_pointTolerance.setLowerBound(0);
     iWfsStoreConfiguration_pointTolerance.setUpperBound(1);
-    iWfsStoreConfiguration_pointTolerance.setDefaultValueLiteral("70");
+    iWfsStoreConfiguration_pointTolerance.setDefaultValueLiteral("72");
     iWfsStoreConfigurationClass.getEStructuralFeatures().push(iWfsStoreConfiguration_pointTolerance);
     WfsstorePackage.Literals.I_WFS_STORE_CONFIGURATION__POINT_TOLERANCE = iWfsStoreConfiguration_pointTolerance;
 

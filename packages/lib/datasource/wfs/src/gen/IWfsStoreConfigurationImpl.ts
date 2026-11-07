@@ -60,7 +60,7 @@ export class IWfsStoreConfigurationImpl extends IBaseConnectionConfigurationImpl
   private _filter: string = "";
   private _mode: string = "wfs";
   private _tileSize: number = 0.01;
-  private _pointTolerance: number = 70;
+  private _pointTolerance: number = 72;
   private _extent: string = "fixed";
   private _minZoom: number = 14;
   private _maxViewportFeatures: number = 5000;
@@ -591,7 +591,7 @@ export class IWfsStoreConfigurationImpl extends IBaseConnectionConfigurationImpl
       case IWfsStoreConfigurationImpl.TILE_SIZE:
         return this._tileSize !== 0.01;
       case IWfsStoreConfigurationImpl.POINT_TOLERANCE:
-        return this._pointTolerance !== 70;
+        return this._pointTolerance !== 72;
       case IWfsStoreConfigurationImpl.EXTENT:
         return this._extent !== "fixed";
       case IWfsStoreConfigurationImpl.MIN_ZOOM:
@@ -645,7 +645,7 @@ export class IWfsStoreConfigurationImpl extends IBaseConnectionConfigurationImpl
         this._tileSize = 0.01;
         return;
       case IWfsStoreConfigurationImpl.POINT_TOLERANCE:
-        this._pointTolerance = 70;
+        this._pointTolerance = 72;
         return;
       case IWfsStoreConfigurationImpl.EXTENT:
         this._extent = "fixed";

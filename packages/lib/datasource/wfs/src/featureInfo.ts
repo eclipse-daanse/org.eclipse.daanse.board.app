@@ -36,6 +36,13 @@ export interface FeatureInfoRequest {
 /** The image a tile is asked on: 101 px, its middle pixel 50. */
 const SIZE = 101
 const MIDDLE = 50
+/*
+ * The tolerance that reaches the corners of the tile from its middle:
+ * 50 px * sqrt(2) = 70.7 px, and one more for rounding. Less loses the
+ * features in the corners - between the circles of neighbouring tiles - so
+ * a smaller tolerance given is raised to it.
+ */
+export const CORNER_TOLERANCE = Math.ceil(MIDDLE * Math.SQRT2) + 1
 /** Never more requests than this for one read. */
 export const MAX_TILES = 36
 
@@ -83,7 +90,7 @@ export function featureInfoPath(request: FeatureInfoRequest, tile: [number, numb
     J: String(MIDDLE),
     INFO_FORMAT: 'text/xml',
     FEATURE_COUNT: String(request.maxFeatures && request.maxFeatures > 0 ? Math.min(request.maxFeatures, 5000) : 5000),
-    FI_POINT_TOLERANCE: String(request.pointTolerance && request.pointTolerance > 0 ? request.pointTolerance : 70),
+    FI_POINT_TOLERANCE: String(Math.max(CORNER_TOLERANCE, Math.round(Number(request.pointTolerance) || 0))),
   })
   const path = String(request.url ?? '').trim()
   return `${path}${path.includes('?') ? '&' : '?'}${params.toString()}`
