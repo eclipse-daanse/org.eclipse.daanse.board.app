@@ -191,4 +191,18 @@ describe('the chart settings form', () => {
     expect(view.text()).not.toContain('The kind of mark the layer draws.')
     view.unmount()
   })
+
+  it('shows the starter choice empty again once the chart applied it (#1292)', async () => {
+    const settings = CHARTS.bar.settings()
+    const view = await settingsForm(settings, undefined, 'de')
+    const starter = view.findAll('select').find((select) => select.findAll('option').some((o) => o.text() === de.Options.starter.donut))!
+    expect(starter.findAll('option').filter((o) => o.text() === '—').length).toBeLessThanOrEqual(1)
+    settings.starter = 'donut'
+    await flushPromises()
+    settings.starter = 'none'
+    await flushPromises()
+    const shown = (starter.element as HTMLSelectElement).selectedOptions[0]?.textContent?.trim()
+    expect(shown).not.toBe(de.Options.starter.donut)
+    view.unmount()
+  })
 })

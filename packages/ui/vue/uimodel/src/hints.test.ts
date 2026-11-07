@@ -76,4 +76,27 @@ describe('the hint under a field', () => {
     expect(asked.filter((key) => key.includes('Hints'))).toEqual([])
     view.unmount()
   })
+
+  it('shows a value the model gets from elsewhere, not only one typed in (#1292)', async () => {
+    const settings = ContainmentfixtureFactory.eINSTANCE.createFixtureSettings()
+    const i18n = i18next.createInstance()
+    await i18n.init({ lng: 'de', resources: { de: { fixture: {}, uimodel: uimodelEn } } })
+    const view = mount(SettingsForm, {
+      props: {
+        modelValue: markRaw(settings),
+        create: () => ContainmentfixtureFactory.eINSTANCE.createFixtureSettings(),
+        uiModelXmi: XMI,
+        domainPackage: ContainmentfixturePackage.eINSTANCE,
+        uiModelUri: '/hint-fixture-2.ui.xmi',
+        ecore: fixtureEcore,
+      },
+      global: { provide: { i18n } },
+      attachTo: document.body,
+    })
+    await flushPromises()
+    settings.title = 'set by code'
+    await flushPromises()
+    expect((view.find('input').element as HTMLInputElement).value).toBe('set by code')
+    view.unmount()
+  })
 })

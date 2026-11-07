@@ -146,7 +146,7 @@
       "geojson": "GeoJSON-Features"
     },
     "starter": {
-      "none": "—",
+      "none": "Keine Vorlage",
       "bar": "Balken",
       "stackedBar": "Gestapelte Balken",
       "groupedBar": "Gruppierte Balken",

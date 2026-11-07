@@ -146,7 +146,7 @@
       "geojson": "GeoJSON features"
     },
     "starter": {
-      "none": "—",
+      "none": "No starter",
       "bar": "Bars",
       "stackedBar": "Stacked bars",
       "groupedBar": "Grouped bars",
