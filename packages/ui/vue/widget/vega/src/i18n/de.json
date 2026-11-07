@@ -10,12 +10,14 @@
   "Form": {
     "title": "Titel",
     "layers": "Ebenen",
+    "datasets": "Datensätze",
     "facet": "Kleine Vielfache",
     "params": "Auswahlen und Werte",
     "legendPosition": "Legende",
     "tooltip": "Werte im Tooltip zeigen",
     "renderer": "Gezeichnet als",
     "layersHint": "Noch keine Ebene: füge eine hinzu, um Marken zu zeichnen.",
+    "datasetsHint": "Keiner: das Diagramm zeichnet die Datenquelle des Widgets als Datensatz table.",
     "paramsHint": "Keine Auswahl: Marken werden nicht ausgewählt."
   },
   "Options": {
@@ -153,6 +155,17 @@
       "none": "Im Diagramm",
       "legend": "In der Legende",
       "scales": "Diagramm zoomen und verschieben"
+    },
+    "shape": {
+      "table": "Tabelle (Zeilen mit Überschriften)",
+      "object": "JSON mit einer Liste von Zeilen",
+      "geojson": "GeoJSON-Features"
+    },
+    "columnType": {
+      "string": "Text",
+      "number": "Zahl",
+      "date": "Datum und Uhrzeit",
+      "boolean": "Ja oder nein"
     }
   },
   "FormLayer": {
@@ -219,5 +232,17 @@
     "row": "Eine Zeile je",
     "column": "Eine Spalte je",
     "columns": "Spalten bis zum Umbruch (0: kein Umbruch)"
+  },
+  "FormDataset": {
+    "name": "Name",
+    "datasourceId": "Datenquelle (leer: die des Widgets)",
+    "shape": "Gelesen als",
+    "path": "Pfad zu den Zeilen (z. B. data.items)",
+    "columnTypes": "Spalten gelesen als",
+    "columnTypesHint": "Keine: jeder Wert, wie er ankommt."
+  },
+  "FormColumnType": {
+    "column": "Spalte",
+    "type": "Gelesen als"
   }
 }

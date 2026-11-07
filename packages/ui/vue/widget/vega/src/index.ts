@@ -14,7 +14,6 @@
 import { component, inject } from '@eclipse-daanse/tsm'
 import { DATASOURCE_REPOSITORY, type DatasourceRepository } from 'org.eclipse.daanse.board.app.lib.api.datasource'
 import { WIDGET_SERVICE_ID, type WidgetProvider } from 'org.eclipse.daanse.board.app.lib.api.widget'
-import { READS_NOTHING } from 'org.eclipse.daanse.board.app.lib.core'
 import Icon from './assets/vega.svg'
 import VegaWidget from './VegaWidget.vue'
 import { VegawidgetPackage } from './gen/VegawidgetPackage'
@@ -28,6 +27,8 @@ import encodingFormXmi from '../model/ui-encoding.xmi?raw'
 import transformFormXmi from '../model/ui-transform.xmi?raw'
 import paramFormXmi from '../model/ui-param.xmi?raw'
 import facetFormXmi from '../model/ui-facet.xmi?raw'
+import datasetFormXmi from '../model/ui-dataset.xmi?raw'
+import columnTypeFormXmi from '../model/ui-column-type.xmi?raw'
 /* The Ecore itself, for the sentences the generator drops. */
 import settingsEcore from '../model/model.ecore?raw'
 
@@ -44,8 +45,9 @@ export const WIDGET_TYPE = 'VegaWidget'
  * The Vega-Lite chart (#1283), declared as a component: the loader
  * registers it under WIDGET_SERVICE_ID and the palette shows it.
  *
- * Its data and its events follow (#1286, #1289); until then it draws a
- * sample in the dataset its starter layer reads, and reads nothing.
+ * It draws the data of board datasources (#1286); a widget without one
+ * draws a sample in the dataset its starter layer reads. Its events follow
+ * (#1289).
  */
 @component({
   service: [WIDGET_SERVICE_ID],
@@ -54,7 +56,8 @@ export const WIDGET_TYPE = 'VegaWidget'
 export class VegaWidgetProvider implements WidgetProvider {
   readonly type = WIDGET_TYPE
   readonly component = VegaWidget
-  readonly reads = READS_NOTHING
+  /* Its own source as a table; datasets with a source of their own ask for theirs. */
+  readonly reads = ['DataTable']
   readonly icon = Icon
   readonly name = 'Vega-Lite chart'
   readonly nameKey = 'vega:Widget.name'
@@ -73,12 +76,15 @@ export class VegaWidgetProvider implements WidgetProvider {
       { xmi: transformFormXmi, uri: '/vega-transform.ui.xmi' },
       { xmi: paramFormXmi, uri: '/vega-param.ui.xmi' },
       { xmi: facetFormXmi, uri: '/vega-facet.ui.xmi' },
+      { xmi: datasetFormXmi, uri: '/vega-dataset.ui.xmi' },
+      { xmi: columnTypeFormXmi, uri: '/vega-column-type.ui.xmi' },
     ],
     /* A field is picked from the names the chart's data has. */
     suggest: (owner: unknown, feature: string, context: { datasourceId?: string }) =>
-      suggestFields(owner, feature, context.datasourceId, async (id) =>
-        headersOfAnswer(await this.datasources.getDatasource(id).getData('DataTable')),
-      ),
+      suggestFields(owner, feature, context.datasourceId, {
+        headersOf: async (id) => headersOfAnswer(await this.datasources.getDatasource(id).getData('DataTable')),
+        datasourceIds: () => this.datasources.getDatasources().map((each) => each.uid).filter(Boolean),
+      }),
   }
 
   constructor(@inject(DATASOURCE_REPOSITORY) private readonly datasources: DatasourceRepository) {}

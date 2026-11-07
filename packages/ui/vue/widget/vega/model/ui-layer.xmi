@@ -105,7 +105,7 @@ nothing.
         label="vega:FormLayer.strokeWidth" min="0" step="0.5">
       <visibilityCondition language="JS" body="!['boxplot', 'errorbar'].includes(self.mark)"/>
     </fields>
-    <fields xsi:type="uimodel:InputWidget"
+    <fields xsi:type="uimodel:ComboboxWidget"
         name="dataset"
         feature="http://org.eclipse.daanse.board.app.ui.vue.widget.vega#//Layer/dataset"
         label="vega:FormLayer.dataset"/>

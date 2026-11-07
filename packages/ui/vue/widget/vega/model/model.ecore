@@ -247,6 +247,58 @@ they are.
                 <details key="documentation" value="Selections and values the chart holds: what is picked or brushed, and values other settings refer to by name."/>
             </eAnnotations>
         </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="datasets" upperBound="-1" eType="#//DatasetBinding" containment="true">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="The data the chart draws, by name. Without an entry the data source of the widget is the dataset table; an entry named table without a source of its own says how to read that one."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+    </eClassifiers>
+
+    <eClassifiers xsi:type="ecore:EClass" name="DatasetBinding">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+            <details key="documentation" value="A named dataset of the chart and the board data source it comes from. A layer draws it by its name; a change of the source shows at once, without drawing the chart anew."/>
+        </eAnnotations>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" lowerBound="0" defaultValueLiteral="table">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="The name layers use for this dataset. table is the data source of the widget."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="datasourceId" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" lowerBound="0" defaultValueLiteral="">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="The board data source the dataset comes from. Empty: the data source of the widget."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="shape" eType="#//DatasetShape" lowerBound="0" defaultValueLiteral="table">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="The form the dataset is asked for. The data source of the widget itself is always read as a table, so that the part of it the frame selects is what the chart draws."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="path" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" lowerBound="0" defaultValueLiteral="">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="For the shape object: where the list of rows is in the answer, as names separated by dots (data.items). Empty: the answer itself."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="columnTypes" upperBound="-1" eType="#//ColumnType" containment="true">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="Columns read as numbers, dates or booleans rather than as they arrive."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+    </eClassifiers>
+
+    <eClassifiers xsi:type="ecore:EClass" name="ColumnType">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+            <details key="documentation" value="How one column of a dataset is read."/>
+        </eAnnotations>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="column" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" lowerBound="0" defaultValueLiteral="">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="The name of the column."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="#//ColumnValueType" lowerBound="0" defaultValueLiteral="number">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="What its values are read as."/>
+            </eAnnotations>
+        </eStructuralFeatures>
     </eClassifiers>
 
     <eClassifiers xsi:type="ecore:EClass" name="Layer">
@@ -434,6 +486,25 @@ they are.
                 <details key="documentation" value="The value the marks outside the selection take, for example lightgray or 0.2."/>
             </eAnnotations>
         </eStructuralFeatures>
+    </eClassifiers>
+
+    <eClassifiers xsi:type="ecore:EEnum" name="DatasetShape">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+            <details key="documentation" value="The form a data source answers in, as the widget asks for it: rows with headers (table), any JSON with a list somewhere in it (object), or GeoJSON features (geojson)."/>
+        </eAnnotations>
+        <eLiterals name="table" literal="table"/>
+        <eLiterals name="object" literal="object" value="1"/>
+        <eLiterals name="geojson" literal="geojson" value="2"/>
+    </eClassifiers>
+
+    <eClassifiers xsi:type="ecore:EEnum" name="ColumnValueType">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+            <details key="documentation" value="What the values of a column are read as before the chart draws them. Sources such as SPARQL and CSV answer text; a number or a date that arrives as text sorts and scales as text."/>
+        </eAnnotations>
+        <eLiterals name="string" literal="string"/>
+        <eLiterals name="number" literal="number" value="1"/>
+        <eLiterals name="date" literal="date" value="2"/>
+        <eLiterals name="boolean" literal="boolean" value="3"/>
     </eClassifiers>
 
     <eClassifiers xsi:type="ecore:EEnum" name="TransformKind">

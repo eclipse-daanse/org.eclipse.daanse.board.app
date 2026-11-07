@@ -22,6 +22,7 @@ import { flushPromises, mount } from '@vue/test-utils'
 import { VegawidgetPackage } from '../gen/VegawidgetPackage'
 import { emptySettings, modelledSettings } from '../settingsModel'
 import VegaWidget from '../VegaWidget.vue'
+import { identifier } from 'org.eclipse.daanse.board.app.lib.api.datasource'
 
 void VegawidgetPackage.eINSTANCE
 
@@ -34,7 +35,12 @@ const settle = async () => {
 }
 
 const mountWith = (settings: unknown) =>
-  mount(VegaWidget, { props: { id: 'w1', configv: settings as any }, attachTo: document.body })
+  mount(VegaWidget, {
+    props: { id: 'w1', configv: settings as any },
+    /* No source: the widget draws its sample. */
+    global: { provide: { [identifier as symbol]: { getDatasource: () => { throw new Error('none') } } } },
+    attachTo: document.body,
+  })
 
 describe('VegaWidget', () => {
   it('draws the chart', async () => {

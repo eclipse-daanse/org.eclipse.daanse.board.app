@@ -18,7 +18,7 @@
  */
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import type { TopLevelSpec } from 'vega-lite'
-import { drawChart, refusingLoader, UrlRefusedError } from '../embedChart'
+import { drawChart, refusingLoader, replaceData, UrlRefusedError } from '../embedChart'
 import { compileRecipe } from '../recipe'
 import { sampleDatasets, withDatasets } from '../sample'
 import { modelledSettings } from '../settingsModel'
@@ -89,6 +89,26 @@ describe('drawChart', () => {
     expect(fetchSpy).not.toHaveBeenCalled()
     vi.unstubAllGlobals()
     warn.mockRestore()
+  })
+})
+
+describe('replaceData', () => {
+  it('puts new rows into the drawn chart and keeps what the reader picked', async () => {
+    const spec = withDatasets(
+      compileRecipe(modelledSettings({ params: [{ name: 'limit', kind: 'value', value: '3' }] })),
+      sampleDatasets(),
+    )
+    const chart = await drawChart(host(), spec, { renderer: 'svg' })
+    try {
+      chart.view.signal('limit', 9)
+      await chart.view.runAsync()
+      expect(await replaceData(chart.view, 'table', [{ category: 'Z', amount: 5 }])).toBe(true)
+      expect(chart.view.data('table')).toEqual([expect.objectContaining({ category: 'Z', amount: 5 })])
+      expect(chart.view.signal('limit')).toBe(9)
+      expect(await replaceData(chart.view, 'nothing', [])).toBe(false)
+    } finally {
+      chart.finalize()
+    }
   })
 })
 

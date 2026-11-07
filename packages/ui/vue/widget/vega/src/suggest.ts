@@ -16,18 +16,28 @@
  *
  * The names of the data the chart draws, and the fields its own steps add -
  * a fold's key and value, a calculated field - so a field computed in the
- * chart is offered beside those that came from the source. Until board
- * datasources feed the chart (#1286) a widget without a source draws the
- * sample, and its columns are suggested.
+ * chart is offered beside those that came from the source. The source is
+ * the one of the dataset the edited part draws (#1286): a layer's dataset,
+ * a dataset entry's own source, else the widget's. A widget without any
+ * draws the sample, and its columns are suggested.
+ *
+ * Besides fields: the names of the datasets for a layer, and the data
+ * sources of the board for a dataset entry.
  */
 
+import { DEFAULT_DATASET } from './recipe'
 import { SAMPLE_VALUES } from './sample'
 
 /** The features that name a field of the data. */
 const FIELD_FEATURES = new Set(['field', 'fields', 'row', 'column'])
 
-/** Where the column names of a source come from; a test hands a stand-in. */
-export type HeadersOf = (datasourceId: string) => Promise<string[]>
+/** What the board knows; a test hands a stand-in. */
+export interface BoardSources {
+  /** The column names of a source. */
+  headersOf: (datasourceId: string) => Promise<string[]>
+  /** The ids of the board's data sources. */
+  datasourceIds?: () => string[]
+}
 
 const text = (value: unknown) => String(value ?? '').trim()
 const items = (held: unknown): unknown[] => (held && typeof (held as Iterable<unknown>)[Symbol.iterator] === 'function' ? Array.from(held as Iterable<unknown>) : [])
@@ -36,14 +46,27 @@ interface Contained {
   eContainer?: () => unknown
 }
 
-/** The settings object an edited object sits in, walking up its containers. */
-function rootOf(owner: unknown): unknown {
+/** The nearest of an edited object and its containers that holds this feature. */
+function holding(owner: unknown, feature: string, levels = 5): Record<string, unknown> | undefined {
   let at = owner as Contained | undefined
-  for (let depth = 0; at && depth < 5; depth++) {
-    if ('layers' in (at as object)) return at
+  for (let depth = 0; at && depth < levels; depth++) {
+    if (typeof at === 'object' && feature in (at as object)) return at as Record<string, unknown>
     at = at.eContainer?.() as Contained | undefined
   }
   return undefined
+}
+
+const rootOf = (owner: unknown) => holding(owner, 'layers')
+
+/** The source whose columns an edited object names, or none for the sample. */
+function sourceOf(owner: unknown, widgetSource: string | undefined): string | undefined {
+  const own = holding(owner, 'columnTypes', 2)
+  const bindings = items(rootOf(owner)?.datasets) as Array<{ name?: string; datasourceId?: string }>
+  if (own) return text(own.datasourceId) || widgetSource
+  const layer = layerOf(owner) as { dataset?: string } | undefined
+  const name = text(layer?.dataset) || DEFAULT_DATASET
+  const binding = bindings.find((each) => (text(each.name) || DEFAULT_DATASET) === name)
+  return text(binding?.datasourceId) || widgetSource
 }
 
 /** The layer an edited object belongs to, if it belongs to one. */
@@ -76,14 +99,20 @@ function derivedFields(layers: unknown[]): string[] {
 export async function suggestFields(
   owner: unknown,
   feature: string,
-  datasourceId: string | undefined,
-  headersOf: HeadersOf,
+  widgetSource: string | undefined,
+  board: BoardSources,
 ): Promise<string[]> {
+  if (feature === 'datasourceId') return board.datasourceIds?.() ?? []
+  if (feature === 'dataset') {
+    const names = items(rootOf(owner)?.datasets).map((each) => text((each as { name?: string }).name) || DEFAULT_DATASET)
+    return [...new Set([DEFAULT_DATASET, ...names])]
+  }
   if (!FIELD_FEATURES.has(feature)) return []
+  const datasourceId = sourceOf(owner, widgetSource)
   let source: string[] = []
   if (datasourceId) {
     try {
-      source = await headersOf(datasourceId)
+      source = await board.headersOf(datasourceId)
     } catch {
       source = []
     }
@@ -92,7 +121,7 @@ export async function suggestFields(
   }
   /* A step of a layer adds to that layer; the facet and the selections see all of them. */
   const layer = layerOf(owner)
-  const layers = layer ? [layer] : items((rootOf(owner) as { layers?: unknown } | undefined)?.layers)
+  const layers = layer ? [layer] : items(rootOf(owner)?.layers)
   return [...new Set([...source, ...derivedFields(layers)].map(text).filter(Boolean))]
 }
 
