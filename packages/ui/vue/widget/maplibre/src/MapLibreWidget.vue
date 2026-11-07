@@ -55,7 +55,7 @@ import {
   terrainSourceOf,
   thingLookOf,
 } from './mapStyle'
-import { centerOf, geometriesOf, thingFeaturesOf, thingIdOf, type ThingLike } from './things'
+import { boundsOf, geometriesOf, thingFeaturesOf, thingIdOf, type ThingLike } from './things'
 import { useGeoJsonData, useThingData, type ThingStore } from './useLayerData'
 import { WIDGET_TYPE, busEventOf, clickEventOf } from './events/payloads'
 
@@ -296,6 +296,29 @@ function onMove(event: MapMouseEvent) {
 
 /* -------------------------------------------------------------- actions */
 
+/**
+ * Flies to geometries: an area is fitted into the view, no closer than the
+ * zoom given; a point is flown to at that zoom. Tilt and rotation stay.
+ */
+function goTo(geometries: ReturnType<typeof geometriesOf>, zoom: unknown, duration: unknown) {
+  const box = boundsOf(geometries)
+  if (!map || !box) return
+  const level = Number(zoom) || 16
+  const time = Number(duration) || 0
+  const [[west, south], [east, north]] = box
+  if (west === east && south === north) {
+    map.flyTo({ center: [west, south], zoom: level, duration: time })
+    return
+  }
+  map.fitBounds(box, { padding: 48, maxZoom: level, duration: time, bearing: map.getBearing(), pitch: map.getPitch() })
+}
+
+/* A thing asked for before it was loaded (#1272). */
+let pendingZoom: { thingId: string; zoom: unknown; duration: unknown } | undefined
+watch(thingData.revision, () => {
+  if (pendingZoom && findThing(pendingZoom.thingId)) api.zoomToThing(pendingZoom.thingId, Number(pendingZoom.zoom), Number(pendingZoom.duration))
+})
+
 const api = new (class extends MapLibreWidgetInterfaceImpl {
   flyTo = (lat: number, lon: number, zoom?: number, pitch?: number, bearing?: number, duration = 1000) => {
     const has = (n: unknown) => n !== undefined && n !== null && (n as unknown) !== '' && Number.isFinite(Number(n))
@@ -307,10 +330,18 @@ const api = new (class extends MapLibreWidgetInterfaceImpl {
       duration: Number(duration) || 0,
     })
   }
+  zoomToLocation = (location: unknown, zoom = 16, duration = 1000) => {
+    goTo(geometriesOf(location), zoom, duration)
+  }
   zoomToThing = (thingId: string, zoom = 16, duration = 1000) => {
     const thing = findThing(String(thingId))
-    const center = thing ? centerOf(geometriesOf(thing.locations?.[0]?.location)) : null
-    if (center) map?.flyTo({ center, zoom: Number(zoom) || 16, duration: Number(duration) || 0 })
+    if (thing) {
+      pendingZoom = undefined
+      goTo(geometriesOf(thing.locations?.[0]?.location), zoom, duration)
+    } else {
+      // Not loaded yet - right after a change of page: flown to once it is (#1272).
+      pendingZoom = { thingId: String(thingId), zoom, duration }
+    }
   }
   selectThingById = (thingId: string) => {
     selectedThingId.value = thingId ? String(thingId) : undefined

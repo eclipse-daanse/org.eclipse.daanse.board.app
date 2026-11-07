@@ -141,8 +141,8 @@ export function thingFeaturesOf(
   return { type: 'FeatureCollection', features }
 }
 
-/** A point to fly to for a thing: the middle of the box around its geometries. */
-export function centerOf(geometries: Geometry[]): [number, number] | null {
+/** The box around geometries, as [[west, south], [east, north]], or null for none. */
+export function boundsOf(geometries: Geometry[]): [[number, number], [number, number]] | null {
   let minX = Infinity
   let minY = Infinity
   let maxX = -Infinity
@@ -159,5 +159,11 @@ export function centerOf(geometries: Geometry[]): [number, number] | null {
     for (const each of coords) visit(each)
   }
   for (const geometry of geometries) visit((geometry as { coordinates?: unknown }).coordinates)
-  return Number.isFinite(minX) ? [(minX + maxX) / 2, (minY + maxY) / 2] : null
+  return Number.isFinite(minX) ? [[minX, minY], [maxX, maxY]] : null
+}
+
+/** A point to fly to for a thing: the middle of the box around its geometries. */
+export function centerOf(geometries: Geometry[]): [number, number] | null {
+  const box = boundsOf(geometries)
+  return box ? [(box[0][0] + box[1][0]) / 2, (box[0][1] + box[1][1]) / 2] : null
 }

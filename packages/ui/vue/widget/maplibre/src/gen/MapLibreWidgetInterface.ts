@@ -28,6 +28,7 @@ export interface MapLibreWidgetInterface extends WidgetActionInterface {
 
   flyTo(lat: number, lon: number, zoom: number, pitch: number, bearing: number, duration: number): void;
   zoomToThing(thingId: string, zoom: number, duration: number): void;
+  zoomToLocation(location: unknown, zoom: number, duration: number): void;
   selectThingById(thingId: string): void;
   clearSelection(): void;
 }
