@@ -34,6 +34,7 @@ import { SAMPLE_VALUES, withDatasets, type Row } from './sample'
 import { datasetSources, rowsOf, typed } from './datasets'
 import { useDatasets, type ChartStore } from './useDatasets'
 import { modelledSettings } from './settingsModel'
+import { themeConfig } from './theme'
 
 const stored = defineModel<unknown>('configv', { required: true })
 const props = defineProps<{ id?: string; datasourceId?: string }>()
@@ -46,6 +47,18 @@ const props = defineProps<{ id?: string; datasourceId?: string }>()
 const config = computed(() => modelledSettings(stored.value))
 const settings = useEObject<VegaWidgetSettings>(() => config.value)
 const { t } = useTranslation('vega')
+
+/* ------------------------------------------------------------ theme */
+
+/*
+ * Counted up when the shell changes its theme (#1287): data-theme on
+ * <html>, or the tokens it sets there inline. The config is compile time,
+ * so the chart is drawn anew - keeping its data and its signals.
+ */
+const themeRevision = ref(0)
+let themeObserver: MutationObserver | undefined
+/* What the theme resolved to when last drawn; a mutation that changes nothing draws nothing. */
+let themeSeen = ''
 
 /* ------------------------------------------------------------- data */
 
@@ -124,7 +137,7 @@ const finalize = () => {
   chart = null
 }
 
-const draw = async () => {
+const draw = async (keepSignals = false) => {
   const el = container.value
   const s = settings.value
   if (!el || !s || unmounted) return
@@ -133,10 +146,12 @@ const draw = async () => {
   try {
     /* Compiled before Vega is loaded: a recipe that gives no chart needs none. */
     const spec = withDatasets(compileRecipe(s), datasetsNow())
-    const { drawChart } = await import('./embedChart')
+    const { drawChart, signalsOf, restoreSignals } = await import('./embedChart')
+    const kept = keepSignals && chart ? signalsOf(chart.view) : undefined
     const next = await drawChart(el, spec, {
       renderer: s?.renderer === 'svg' ? 'svg' : 'canvas',
       tooltip: s?.tooltip !== false,
+      config: themeConfig(),
     })
     if (mine !== generation || unmounted) {
       next.finalize()
@@ -145,6 +160,7 @@ const draw = async () => {
     finalize()
     chart = next
     error.value = null
+    if (kept) await restoreSignals(next.view, kept)
     /* Rows that arrived while the chart was drawn go in now. */
     if (dataRevision !== drawnRevision) for (const name of Object.keys(datasetsNow())) void push(name)
   } catch (e) {
@@ -176,15 +192,27 @@ onMounted(() => {
     resizeObserver = new ResizeObserver(fit)
     resizeObserver.observe(container.value)
   }
+  if (typeof MutationObserver !== 'undefined') {
+    themeSeen = JSON.stringify(themeConfig())
+    themeObserver = new MutationObserver(() => {
+      const now = JSON.stringify(themeConfig())
+      if (now === themeSeen) return
+      themeSeen = now
+      themeRevision.value++
+    })
+    themeObserver.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme', 'style', 'class'] })
+  }
   void draw()
 })
 
 watch(settings, () => void draw())
+watch(themeRevision, () => void draw(true))
 
 onUnmounted(() => {
   unmounted = true
   generation++
   resizeObserver?.disconnect()
+  themeObserver?.disconnect()
   finalize()
 })
 </script>

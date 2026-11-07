@@ -37,6 +37,8 @@ export type ChartRenderer = 'canvas' | 'svg'
 export interface DrawOptions {
   renderer?: ChartRenderer
   tooltip?: boolean
+  /** The base config - the board's theme; the spec's own config wins over it. */
+  config?: Record<string, unknown>
 }
 
 /** Thrown for every URL a spec names. */
@@ -71,6 +73,7 @@ export function drawChart(el: HTMLElement, spec: TopLevelSpec, options: DrawOpti
     ast: true,
     expr: expressionInterpreter,
     loader: refusingLoader(),
+    ...(options.config ? { config: options.config } : {}),
   })
 }
 
@@ -96,4 +99,30 @@ export async function replaceData(view: View, name: string, rows: object[]): Pro
     )
     .runAsync()
   return true
+}
+
+/* The signals every view has, which the new chart sets for itself. */
+const OWN_SIGNALS = new Set(['width', 'height', 'padding', 'autosize', 'background', 'cursor'])
+
+/**
+ * The values of a drawn chart's signals - what the reader did with it: the
+ * params and selections, not the size the new chart takes from its frame.
+ * Vega's default keeps none of them, so the filter is said here.
+ */
+export function signalsOf(view: View): unknown {
+  return view.getState({
+    data: () => false,
+    signals: (name?: string) => !!name && !OWN_SIGNALS.has(name),
+    recurse: true,
+  })
+}
+
+/** Gives a chart drawn anew the signals the one before held. */
+export async function restoreSignals(view: View, state: unknown): Promise<void> {
+  try {
+    view.setState(state as never)
+    await view.runAsync()
+  } catch {
+    // A signal the new chart no longer has is not worth an error
+  }
 }
