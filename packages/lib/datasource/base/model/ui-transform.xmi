@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/*********************************************************************
+* Copyright (c) 2026 Contributors to the Eclipse Foundation.
+*
+* This program and the accompanying materials are made
+* available under the terms of the Eclipse Public License 2.0
+* which is available at https://www.eclipse.org/legal/epl-2.0/
+*
+* SPDX-License-Identifier: EPL-2.0
+**********************************************************************/
+
+One step on the data of a reader (#1285, shared since #1295): the rows of a Vega layer, the points of a 3D map layer. One class for every kind of step;
+the kind decides which of the fields below the form shows.
+-->
+<uimodel:UIModel
+    xmlns:xmi="http://www.omg.org/XMI"
+    xmi:version="2.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:uimodel="http://uimodel/1.0"
+    name="TransformForm">
+
+  <targetClasses href="http://org.eclipse.daanse.board.app.lib.datasource.base#//Transform"/>
+
+  <components xsi:type="uimodel:FormView" name="TransformFormView">
+    <fields xsi:type="uimodel:SelectWidget"
+        name="kind"
+        feature="http://org.eclipse.daanse.board.app.lib.datasource.base#//Transform/kind"
+        label="datasourceBase:FormTransform.kind">
+      <values>filter</values>
+      <values>fold</values>
+      <values>calculate</values>
+      <values>extract</values>
+      <optionLabel language="JS" body="({ filter: 'datasourceBase:Options.kind.filter', fold: 'datasourceBase:Options.kind.fold', calculate: 'datasourceBase:Options.kind.calculate', extract: 'datasourceBase:Options.kind.extract' })[option] ?? option"/>
+    </fields>
+    <fields xsi:type="uimodel:SelectWidget"
+        name="op"
+        feature="http://org.eclipse.daanse.board.app.lib.datasource.base#//Transform/op"
+        label="datasourceBase:FormTransform.op">
+      <values>eq</values>
+      <values>neq</values>
+      <values>lt</values>
+      <values>lte</values>
+      <values>gt</values>
+      <values>gte</values>
+      <values>oneOf</values>
+      <values>range</values>
+      <values>valid</values>
+      <values>param</values>
+      <optionLabel language="JS" body="({ eq: 'datasourceBase:Options.op.eq', neq: 'datasourceBase:Options.op.neq', lt: 'datasourceBase:Options.op.lt', lte: 'datasourceBase:Options.op.lte', gt: 'datasourceBase:Options.op.gt', gte: 'datasourceBase:Options.op.gte', oneOf: 'datasourceBase:Options.op.oneOf', range: 'datasourceBase:Options.op.range', valid: 'datasourceBase:Options.op.valid', param: 'datasourceBase:Options.op.param' })[option] ?? option"/>
+      <visibilityCondition language="JS" body="self.kind === 'filter'"/>
+    </fields>
+    <fields xsi:type="uimodel:ComboboxWidget"
+        name="field"
+        feature="http://org.eclipse.daanse.board.app.lib.datasource.base#//Transform/field"
+        label="datasourceBase:FormTransform.field">
+      <visibilityCondition language="JS" body="(self.kind === 'filter' &amp;&amp; self.op !== 'param') || self.kind === 'extract'"/>
+    </fields>
+    <fields xsi:type="uimodel:InputWidget"
+        name="value"
+        feature="http://org.eclipse.daanse.board.app.lib.datasource.base#//Transform/value"
+        label="datasourceBase:FormTransform.value">
+      <visibilityCondition language="JS" body="self.kind === 'filter' &amp;&amp; !['valid', 'param'].includes(self.op)"/>
+    </fields>
+    <fields xsi:type="uimodel:InputWidget"
+        name="param"
+        feature="http://org.eclipse.daanse.board.app.lib.datasource.base#//Transform/param"
+        label="datasourceBase:FormTransform.param">
+      <visibilityCondition language="JS" body="self.kind === 'filter' &amp;&amp; self.op === 'param'"/>
+    </fields>
+    <fields xsi:type="uimodel:ComboboxWidget"
+        name="fields"
+        feature="http://org.eclipse.daanse.board.app.lib.datasource.base#//Transform/fields"
+        label="datasourceBase:FormTransform.fields" multiSelect="true">
+      <visibilityCondition language="JS" body="self.kind === 'fold'"/>
+    </fields>
+    <fields xsi:type="uimodel:InputWidget"
+        name="keyAs"
+        feature="http://org.eclipse.daanse.board.app.lib.datasource.base#//Transform/keyAs"
+        label="datasourceBase:FormTransform.keyAs">
+      <visibilityCondition language="JS" body="self.kind === 'fold'"/>
+    </fields>
+    <fields xsi:type="uimodel:InputWidget"
+        name="valueAs"
+        feature="http://org.eclipse.daanse.board.app.lib.datasource.base#//Transform/valueAs"
+        label="datasourceBase:FormTransform.valueAs">
+      <visibilityCondition language="JS" body="self.kind === 'fold'"/>
+    </fields>
+    <fields xsi:type="uimodel:InputWidget"
+        name="as"
+        feature="http://org.eclipse.daanse.board.app.lib.datasource.base#//Transform/as"
+        label="datasourceBase:FormTransform.as">
+      <visibilityCondition language="JS" body="self.kind === 'calculate' || self.kind === 'extract'"/>
+    </fields>
+    <fields xsi:type="uimodel:InputWidget"
+        name="expression"
+        feature="http://org.eclipse.daanse.board.app.lib.datasource.base#//Transform/expression"
+        label="datasourceBase:FormTransform.expression">
+      <visibilityCondition language="JS" body="self.kind === 'calculate'"/>
+    </fields>
+    <fields xsi:type="uimodel:InputWidget"
+        name="pattern"
+        feature="http://org.eclipse.daanse.board.app.lib.datasource.base#//Transform/pattern"
+        label="datasourceBase:FormTransform.pattern">
+      <visibilityCondition language="JS" body="self.kind === 'extract'"/>
+    </fields>
+  </components>
+</uimodel:UIModel>

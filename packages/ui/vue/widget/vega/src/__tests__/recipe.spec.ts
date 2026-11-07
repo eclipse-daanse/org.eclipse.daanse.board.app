@@ -280,6 +280,25 @@ describe('compileRecipe', () => {
     ])
   })
 
+  it('writes an extract step as calculate, and Vega computes the part it names (#1295)', async () => {
+    const spec = compileRecipe(recipe({ layers: [bars({ transforms: [
+      { kind: 'extract', field: 'Baumart', pattern: '^(\\S+)', as: 'genus' },
+      { kind: 'extract', field: 'Baumart', as: 'unfinished' },
+    ] })] })) as Record<string, any>
+    expect(spec.transform).toEqual([{
+      calculate: 'test(regexp("^.*?(?:^(\\\\S+)).*$"), datum["Baumart"]) ? replace(datum["Baumart"], regexp("^.*?(?:^(\\\\S+)).*$"), \'$1\') : null',
+      as: 'genus',
+    }])
+    const { parse, View } = await import('vega')
+    const withRows = { ...spec, data: { values: [{ Baumart: 'Tilia cordata, Winterlinde', amount: 1, category: 'a' }, { Baumart: '', amount: 2, category: 'b' }] } }
+    const compiled = compile(withRows as never).spec as any
+    const view = new View(parse(compiled), { renderer: 'none' })
+    await view.runAsync()
+    const named = compiled.data.find((d: any) => (d.transform ?? []).some((t: any) => t.type === 'formula'))
+    expect(view.data(named.name).map((row: any) => row.genus)).toEqual(['Tilia', null])
+    view.finalize()
+  })
+
   it('says why a chart without layers gives no chart', () => {
     expect(() => compileRecipe(recipe({ layers: [] }))).toThrow(RecipeError)
   })

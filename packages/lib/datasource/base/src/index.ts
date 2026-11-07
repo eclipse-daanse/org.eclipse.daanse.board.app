@@ -161,3 +161,7 @@ export abstract class BaseDatasource extends UsesComputedVariable implements IDa
 
   abstract destroy(): void
 }
+
+/* Its texts - collected by lib.i18next, see src/i18n. The hints are read by the form under its field
+  (i18n-keys: datasourceBase:Hints.*). */
+export { DatasourceBaseTranslations } from './i18n'

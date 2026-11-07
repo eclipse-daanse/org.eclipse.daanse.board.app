@@ -1,0 +1,68 @@
+{
+  "FormTransform": {
+    "kind": "Step",
+    "op": "Keep the rows where the field",
+    "field": "Field",
+    "value": "Value",
+    "param": "Selection",
+    "fields": "Columns to turn into rows",
+    "keyAs": "Name of the column field",
+    "valueAs": "Name of the value field",
+    "as": "Name of the new field",
+    "expression": "Expression (e.g. datum.price * datum.amount)",
+    "pattern": "Pattern (a regular expression with one group)"
+  },
+  "FormColumnType": {
+    "column": "Column",
+    "type": "Read as",
+    "unit": "Unit (e.g. m)",
+    "label": "Shown as"
+  },
+  "Options": {
+    "kind": {
+      "filter": "Filter rows",
+      "fold": "Columns to rows",
+      "calculate": "Calculate a field",
+      "extract": "Take a part of a field"
+    },
+    "op": {
+      "eq": "equals",
+      "neq": "does not equal",
+      "lt": "less than",
+      "lte": "at most",
+      "gt": "greater than",
+      "gte": "at least",
+      "oneOf": "one of (comma-separated)",
+      "range": "between (two values, comma-separated)",
+      "valid": "has a value",
+      "param": "is in a selection"
+    },
+    "columnType": {
+      "string": "Text",
+      "number": "Number",
+      "date": "Date and time",
+      "boolean": "Yes or no"
+    }
+  },
+  "Hints": {
+    "Transform": {
+      "kind": "What the transform does.",
+      "field": "filter: the field compared. Not read by the operation param.",
+      "op": "filter: the comparison.",
+      "value": "filter: what the field is compared with; for oneOf a comma-separated list, for range two comma-separated bounds. Numbers are read as numbers.",
+      "param": "filter: the selection whose content passes, for the operation param.",
+      "fields": "fold: the fields to fold - each becomes a row with the field name as key and its value as value, so several columns become one series per column.",
+      "keyAs": "fold: the name of the new field holding the former column name.",
+      "valueAs": "fold: the name of the new field holding the value.",
+      "as": "calculate: the name of the new field.",
+      "expression": "calculate: the Vega expression, for example datum.price * datum.amount; datum is the row. Expressions are interpreted, never compiled to code.",
+      "pattern": "extract: what the group of this expression matches in the field becomes the new field, e.g. ^(\\S+) for the first word."
+    },
+    "ColumnType": {
+      "column": "The name of the column.",
+      "type": "What its values are read as.",
+      "unit": "The unit of a number, e.g. m or cm.",
+      "label": "How the column is called where it is shown. Empty: its name."
+    }
+  }
+}

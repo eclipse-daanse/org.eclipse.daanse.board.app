@@ -125,23 +125,6 @@
       "band": "Bands",
       "point": "Points"
     },
-    "kind": {
-      "filter": "Filter rows",
-      "fold": "Columns to rows",
-      "calculate": "Calculate a field"
-    },
-    "op": {
-      "eq": "equals",
-      "neq": "does not equal",
-      "lt": "less than",
-      "lte": "at most",
-      "gt": "greater than",
-      "gte": "at least",
-      "oneOf": "one of (comma-separated)",
-      "range": "between (two values, comma-separated)",
-      "valid": "has a value",
-      "param": "is in a selection"
-    },
     "paramKind": {
       "point": "Pick marks",
       "interval": "Pick a range",
@@ -160,12 +143,6 @@
       "table": "Table (rows with headers)",
       "object": "JSON with a list of rows",
       "geojson": "GeoJSON features"
-    },
-    "columnType": {
-      "string": "Text",
-      "number": "Number",
-      "date": "Date and time",
-      "boolean": "Yes or no"
     }
   },
   "FormLayer": {
@@ -208,18 +185,6 @@
     "highlightParam": "Highlight what this selection holds",
     "valueIfNotSelected": "Value outside the selection (e.g. lightgray, 0.2)"
   },
-  "FormTransform": {
-    "kind": "Step",
-    "op": "Keep the rows where the field",
-    "field": "Field",
-    "value": "Value",
-    "param": "Selection",
-    "fields": "Columns to turn into rows",
-    "keyAs": "Name of the column field",
-    "valueAs": "Name of the value field",
-    "as": "Name of the new field",
-    "expression": "Expression (e.g. datum.price * datum.amount)"
-  },
   "FormParam": {
     "name": "Name",
     "kind": "What it is",
@@ -241,10 +206,6 @@
     "columnTypes": "Columns read as",
     "columnTypesHint": "None: every value as it arrives."
   },
-  "FormColumnType": {
-    "column": "Column",
-    "type": "Read as"
-  },
   "Hints": {
     "VegaWidgetSettings": {
       "title": "The title drawn above the chart. Empty draws none.",
@@ -262,10 +223,6 @@
       "shape": "The form the dataset is asked for. The data source of the widget itself is always read as a table, so that the part of it the frame selects is what the chart draws.",
       "path": "For the shape object: where the list of rows is in the answer, as names separated by dots (data.items). Empty: the answer itself.",
       "columnTypes": "Columns read as numbers, dates or booleans rather than as they arrive."
-    },
-    "ColumnType": {
-      "column": "The name of the column.",
-      "type": "What its values are read as."
     },
     "Layer": {
       "dataset": "The name of the dataset the layer draws. Empty draws the dataset of the widget, named table.",
@@ -305,18 +262,6 @@
       "showLegend": "Whether a colour, size, shape or opacity channel draws its legend.",
       "highlightParam": "The name of a selection. Marks the selection holds keep the field or value above; the others take the value below - this is how a selection highlights.",
       "valueIfNotSelected": "The value the marks outside the selection take, for example lightgray or 0.2."
-    },
-    "Transform": {
-      "kind": "What the transform does.",
-      "field": "filter: the field compared. Not read by the operation param.",
-      "op": "filter: the comparison.",
-      "value": "filter: what the field is compared with; for oneOf a comma-separated list, for range two comma-separated bounds. Numbers are read as numbers.",
-      "param": "filter: the selection whose content passes, for the operation param.",
-      "fields": "fold: the fields to fold - each becomes a row with the field name as key and its value as value, so several columns become one series per column.",
-      "keyAs": "fold: the name of the new field holding the former column name.",
-      "valueAs": "fold: the name of the new field holding the value.",
-      "as": "calculate: the name of the new field.",
-      "expression": "calculate: the Vega expression, for example datum.price * datum.amount; datum is the row. Expressions are interpreted, never compiled to code."
     },
     "Facet": {
       "row": "The field whose values make the rows. Empty makes no rows.",
