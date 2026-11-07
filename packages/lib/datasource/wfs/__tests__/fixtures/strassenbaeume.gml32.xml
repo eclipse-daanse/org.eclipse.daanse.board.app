@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- A WFS 2.0.0 GetFeature answer in GML 3.2, in the form a GeoServer gives; the values are made up. -->
+<wfs:FeatureCollection xmlns:wfs="http://www.opengis.net/wfs/2.0" xmlns:gml="http://www.opengis.net/gml/3.2"
+    xmlns:baumbestand="https://gdi.berlin.de/baumbestand" numberMatched="2" numberReturned="2">
+  <wfs:member>
+    <baumbestand:strassenbaeume gml:id="strassenbaeume.1">
+      <baumbestand:gattung_deutsch>Linde</baumbestand:gattung_deutsch>
+      <baumbestand:baumhoehe>15</baumbestand:baumhoehe>
+      <baumbestand:geom>
+        <gml:Point srsName="urn:ogc:def:crs:EPSG::4326"><gml:pos>52.4431 13.4482</gml:pos></gml:Point>
+      </baumbestand:geom>
+    </baumbestand:strassenbaeume>
+  </wfs:member>
+  <wfs:member>
+    <baumbestand:strassenbaeume gml:id="strassenbaeume.3">
+      <baumbestand:gattung_deutsch>Eiche</baumbestand:gattung_deutsch>
+      <baumbestand:baumhoehe>22.5</baumbestand:baumhoehe>
+      <baumbestand:geom>
+        <gml:Polygon srsName="EPSG:4326"><gml:exterior><gml:LinearRing>
+          <gml:posList>13.40 52.40 13.41 52.40 13.41 52.41 13.40 52.40</gml:posList>
+        </gml:LinearRing></gml:exterior></gml:Polygon>
+      </baumbestand:geom>
+    </baumbestand:strassenbaeume>
+  </wfs:member>
+</wfs:FeatureCollection>

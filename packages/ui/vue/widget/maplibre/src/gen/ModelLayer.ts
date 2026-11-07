@@ -20,6 +20,7 @@
 
 import type { EObject, EList } from '@emfts/core';
 import type { ModelInstance } from './ModelInstance.js';
+import type { ModelRule } from './ModelRule.js';
 
 /**
  * ModelLayer
@@ -35,5 +36,9 @@ export interface ModelLayer extends EObject {
   rotation?: number;
   altitudeOffset?: number;
   instances: EList<ModelInstance>;
+  datasourceId?: string;
+  heightProperty?: string;
+  defaultHeight?: number;
+  rules: EList<ModelRule>;
 
 }

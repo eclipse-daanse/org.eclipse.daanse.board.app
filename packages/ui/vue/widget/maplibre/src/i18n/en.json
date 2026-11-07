@@ -104,7 +104,18 @@
         "blocked": "The file cannot be read: the server does not allow it (no CORS header) or cannot be reached.",
         "http": "The server answered with an error ({{status}}).",
         "format": "The file is no model in this format."
-      }
+      },
+      "datasource": "Stand on the points of a data source",
+      "datasourceHint": "E.g. a WFS tree cadastre: a model at every point, besides the ones placed by hand.",
+      "noDatasource": "None - only the ones placed by hand",
+      "heightProperty": "Property with the height (m)",
+      "heightPropertyHint": "The model is scaled to it. Empty: the scale above.",
+      "defaultHeight": "Height without a value (m, 0: the scale above)",
+      "ruleProperty": "Property",
+      "ruleValue": "Value (x* starts with)",
+      "addRule": "Add a rule",
+      "ruleUrl": "Model file",
+      "ruleUrlHint": "empty: the model above"
     }
   }
 }

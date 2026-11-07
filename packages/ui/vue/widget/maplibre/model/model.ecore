@@ -584,6 +584,52 @@ once. The OGC STA layer reads its things the way the Leaflet map does since
                 <details key="documentation" value="Where the model stands."/>
             </eAnnotations>
         </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="datasourceId" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" lowerBound="0" defaultValueLiteral="">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="A data source of points (e.g. a WFS tree cadastre): a model stands at every point, besides the instances placed by hand (#1282). Empty: only those."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="heightProperty" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" lowerBound="0" defaultValueLiteral="">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="The property of a point that says how tall it is, in metres (e.g. baumhoehe): the model is scaled to that height. Empty: the scale of the layer."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="defaultHeight" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble" lowerBound="0" defaultValueLiteral="0">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="The height in metres of a point without a height; 0: the scale of the layer."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="rules" upperBound="-1" eType="#//ModelRule" containment="true">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="Which point gets which model and colour, by a property: the first rule that matches decides."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+    </eClassifiers>
+
+    <eClassifiers xsi:type="ecore:EClass" name="ModelRule">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+            <details key="documentation" value="A rule for the points of a model layer: a property and a pattern (x* starts with, *x ends with, *x* contains, no star is equal), and the model and colour a point that matches gets (#1282)."/>
+        </eAnnotations>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="property" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" lowerBound="0">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="The property of the point, e.g. gattung_deutsch."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" lowerBound="0">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="The pattern its value is matched against, e.g. Linde or Ahorn*."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="url" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" lowerBound="0" defaultValueLiteral="">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="The model file such a point gets. Empty: the model of the layer."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="color" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" lowerBound="0" defaultValueLiteral="">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="The colour such a point gets, any CSS colour; the trunk (a mesh named trunk, stem, bark or cylinder) keeps its own. Empty: the colours of the model."/>
+            </eAnnotations>
+        </eStructuralFeatures>
     </eClassifiers>
 
     <eClassifiers xsi:type="ecore:EClass" name="ModelInstance">

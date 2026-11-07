@@ -30,6 +30,7 @@ import { clickEventOf } from '../events/payloads'
 import { TextAttributionControl, attributionFragment } from '../attribution'
 import { placing } from '../models/placementMode'
 import { newModelLayer } from '../settingsModel'
+import { MaplibreFactory } from '../gen/MaplibreFactory'
 
 void EventsPackage.eINSTANCE
 void MaplibrePackage.eINSTANCE
@@ -123,6 +124,13 @@ vi.mock('maplibre-gl', () => {
 })
 
 vi.mock('vue-router', () => ({ useRoute: () => ({ params: { pageid: 'p1' } }) }))
+
+/* The custom layer draws with three in WebGL; here it only records what it is handed. */
+const drawnModels: any[][] = []
+vi.mock('../models/modelLayer', () => ({
+  MODELS_ID: 'daanse:models',
+  createModelLayer: () => ({ id: 'daanse:models', type: 'custom', update: (layers: any[]) => drawnModels.push(layers) }),
+}))
 
 class Observer {
   observe() {}
@@ -409,6 +417,37 @@ describe('the 3D models of the map (#1281)', () => {
     map.handlers.click(at(10, 20))
     expect(layer.instances.size()).toBe(0)
     expect(heard).toHaveBeenCalledTimes(1)
+  })
+})
+
+describe('the 3D models on data (#1282)', () => {
+  it('stand at the points of their data source, with the height and colour of their rules', async () => {
+    const store = fakeStore()
+    ;(store as any).getData = vi.fn(async (type: string) =>
+      type === 'geojson'
+        ? { type: 'FeatureCollection', features: [{ id: 'b1', type: 'Feature', geometry: { type: 'Point', coordinates: [11.6, 50.95] }, properties: { gattung: 'Linde', hoehe: 12 } }] }
+        : { things },
+    )
+    const settings = stored()
+    const { map } = await mountWidget(settings, store)
+    const model = modelledSettings(settings)
+    const layer = newModelLayer('Trees')
+    layer.url = 'https://x/tree.fbx'
+    layer.datasourceId = 'wfs'
+    layer.heightProperty = 'hoehe'
+    const rule = MaplibreFactory.eINSTANCE.createModelRule()
+    rule.property = 'gattung'
+    rule.value = 'Linde'
+    rule.color = '#2e7d32'
+    layer.rules.add(rule)
+    model.modelLayers.add(layer)
+    await flushPromises()
+    expect(map.layers.at(-1).id).toBe('daanse:models')
+    expect(store.getData).toHaveBeenCalledWith('geojson')
+    const last = drawnModels.at(-1)!
+    expect(last).toHaveLength(1)
+    expect(last[0].url).toBe('https://x/tree.fbx')
+    expect(last[0].instances).toEqual([{ id: 'b1', lon: 11.6, lat: 50.95, height: 12, color: '#2e7d32' }])
   })
 })
 

@@ -148,6 +148,15 @@ export class MaplibrePackage extends BasicEPackage {
     MODEL_LAYER__ROTATION: null as unknown as EAttribute | EReference,
     MODEL_LAYER__ALTITUDE_OFFSET: null as unknown as EAttribute | EReference,
     MODEL_LAYER__INSTANCES: null as unknown as EAttribute | EReference,
+    MODEL_LAYER__DATASOURCE_ID: null as unknown as EAttribute | EReference,
+    MODEL_LAYER__HEIGHT_PROPERTY: null as unknown as EAttribute | EReference,
+    MODEL_LAYER__DEFAULT_HEIGHT: null as unknown as EAttribute | EReference,
+    MODEL_LAYER__RULES: null as unknown as EAttribute | EReference,
+    MODEL_RULE: null as unknown as EClass,
+    MODEL_RULE__PROPERTY: null as unknown as EAttribute | EReference,
+    MODEL_RULE__VALUE: null as unknown as EAttribute | EReference,
+    MODEL_RULE__URL: null as unknown as EAttribute | EReference,
+    MODEL_RULE__COLOR: null as unknown as EAttribute | EReference,
     MODEL_INSTANCE: null as unknown as EClass,
     MODEL_INSTANCE__ID: null as unknown as EAttribute | EReference,
     MODEL_INSTANCE__LON: null as unknown as EAttribute | EReference,
@@ -983,6 +992,85 @@ export class MaplibrePackage extends BasicEPackage {
     modelLayerClass.getEStructuralFeatures().push(modelLayer_instances);
     MaplibrePackage.Literals.MODEL_LAYER__INSTANCES = modelLayer_instances;
 
+    // Create datasourceId feature
+    const modelLayer_datasourceId = new BasicEAttribute();
+    modelLayer_datasourceId.setName('datasourceId');
+    modelLayer_datasourceId.setLowerBound(0);
+    modelLayer_datasourceId.setUpperBound(1);
+    modelLayer_datasourceId.setDefaultValueLiteral("");
+    modelLayerClass.getEStructuralFeatures().push(modelLayer_datasourceId);
+    MaplibrePackage.Literals.MODEL_LAYER__DATASOURCE_ID = modelLayer_datasourceId;
+
+    // Create heightProperty feature
+    const modelLayer_heightProperty = new BasicEAttribute();
+    modelLayer_heightProperty.setName('heightProperty');
+    modelLayer_heightProperty.setLowerBound(0);
+    modelLayer_heightProperty.setUpperBound(1);
+    modelLayer_heightProperty.setDefaultValueLiteral("");
+    modelLayerClass.getEStructuralFeatures().push(modelLayer_heightProperty);
+    MaplibrePackage.Literals.MODEL_LAYER__HEIGHT_PROPERTY = modelLayer_heightProperty;
+
+    // Create defaultHeight feature
+    const modelLayer_defaultHeight = new BasicEAttribute();
+    modelLayer_defaultHeight.setName('defaultHeight');
+    modelLayer_defaultHeight.setLowerBound(0);
+    modelLayer_defaultHeight.setUpperBound(1);
+    modelLayer_defaultHeight.setDefaultValueLiteral("0");
+    modelLayerClass.getEStructuralFeatures().push(modelLayer_defaultHeight);
+    MaplibrePackage.Literals.MODEL_LAYER__DEFAULT_HEIGHT = modelLayer_defaultHeight;
+
+    // Create rules feature
+    const modelLayer_rules = new BasicEReference();
+    modelLayer_rules.setContainment(true);
+    modelLayer_rules.setName('rules');
+    modelLayer_rules.setLowerBound(0);
+    modelLayer_rules.setUpperBound(-1);
+    modelLayerClass.getEStructuralFeatures().push(modelLayer_rules);
+    MaplibrePackage.Literals.MODEL_LAYER__RULES = modelLayer_rules;
+
+    // Create ModelRule class
+    const modelRuleClass = new BasicEClass();
+    modelRuleClass.setName('ModelRule');
+    modelRuleClass.setAbstract(false);
+    modelRuleClass.setInterface(false);
+    this.getEClassifiers().push(modelRuleClass);
+    modelRuleClass.setEPackage(this);
+    MaplibrePackage.Literals.MODEL_RULE = modelRuleClass;
+
+    // Create property feature
+    const modelRule_property = new BasicEAttribute();
+    modelRule_property.setName('property');
+    modelRule_property.setLowerBound(0);
+    modelRule_property.setUpperBound(1);
+    modelRuleClass.getEStructuralFeatures().push(modelRule_property);
+    MaplibrePackage.Literals.MODEL_RULE__PROPERTY = modelRule_property;
+
+    // Create value feature
+    const modelRule_value = new BasicEAttribute();
+    modelRule_value.setName('value');
+    modelRule_value.setLowerBound(0);
+    modelRule_value.setUpperBound(1);
+    modelRuleClass.getEStructuralFeatures().push(modelRule_value);
+    MaplibrePackage.Literals.MODEL_RULE__VALUE = modelRule_value;
+
+    // Create url feature
+    const modelRule_url = new BasicEAttribute();
+    modelRule_url.setName('url');
+    modelRule_url.setLowerBound(0);
+    modelRule_url.setUpperBound(1);
+    modelRule_url.setDefaultValueLiteral("");
+    modelRuleClass.getEStructuralFeatures().push(modelRule_url);
+    MaplibrePackage.Literals.MODEL_RULE__URL = modelRule_url;
+
+    // Create color feature
+    const modelRule_color = new BasicEAttribute();
+    modelRule_color.setName('color');
+    modelRule_color.setLowerBound(0);
+    modelRule_color.setUpperBound(1);
+    modelRule_color.setDefaultValueLiteral("");
+    modelRuleClass.getEStructuralFeatures().push(modelRule_color);
+    MaplibrePackage.Literals.MODEL_RULE__COLOR = modelRule_color;
+
     // Create ModelInstance class
     const modelInstanceClass = new BasicEClass();
     modelInstanceClass.setName('ModelInstance');
@@ -1277,6 +1365,14 @@ export class MaplibrePackage extends BasicEPackage {
     (MaplibrePackage.Literals.MODEL_LAYER__ROTATION as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EDouble')!);
     (MaplibrePackage.Literals.MODEL_LAYER__ALTITUDE_OFFSET as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EDouble')!);
     (MaplibrePackage.Literals.MODEL_LAYER__INSTANCES as BasicEReference).setEType(MaplibrePackage.Literals.MODEL_INSTANCE);
+    (MaplibrePackage.Literals.MODEL_LAYER__DATASOURCE_ID as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (MaplibrePackage.Literals.MODEL_LAYER__HEIGHT_PROPERTY as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (MaplibrePackage.Literals.MODEL_LAYER__DEFAULT_HEIGHT as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EDouble')!);
+    (MaplibrePackage.Literals.MODEL_LAYER__RULES as BasicEReference).setEType(MaplibrePackage.Literals.MODEL_RULE);
+    (MaplibrePackage.Literals.MODEL_RULE__PROPERTY as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (MaplibrePackage.Literals.MODEL_RULE__VALUE as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (MaplibrePackage.Literals.MODEL_RULE__URL as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (MaplibrePackage.Literals.MODEL_RULE__COLOR as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
     (MaplibrePackage.Literals.MODEL_INSTANCE__ID as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
     (MaplibrePackage.Literals.MODEL_INSTANCE__LON as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EDouble')!);
     (MaplibrePackage.Literals.MODEL_INSTANCE__LAT as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EDouble')!);

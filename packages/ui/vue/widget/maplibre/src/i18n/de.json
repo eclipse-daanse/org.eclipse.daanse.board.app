@@ -104,7 +104,18 @@
         "blocked": "Die Datei kann nicht gelesen werden: Der Server erlaubt es nicht (kein CORS-Header) oder ist nicht erreichbar.",
         "http": "Der Server antwortete mit einem Fehler ({{status}}).",
         "format": "Die Datei ist kein Modell in diesem Format."
-      }
+      },
+      "datasource": "Auf die Punkte einer Datenquelle stellen",
+      "datasourceHint": "Z. B. ein WFS-Baumkataster: ein Modell an jedem Punkt, neben den von Hand gesetzten.",
+      "noDatasource": "Keine - nur die von Hand gesetzten",
+      "heightProperty": "Eigenschaft mit der Höhe (m)",
+      "heightPropertyHint": "Das Modell wird auf sie skaliert. Leer: der Maßstab oben.",
+      "defaultHeight": "Höhe ohne Wert (m, 0: der Maßstab oben)",
+      "ruleProperty": "Eigenschaft",
+      "ruleValue": "Wert (x* beginnt mit)",
+      "addRule": "Regel hinzufügen",
+      "ruleUrl": "Modelldatei",
+      "ruleUrlHint": "leer: das Modell oben"
     }
   }
 }

@@ -35,6 +35,8 @@ import { WmsLayer } from './WmsLayer.js';
 import { WmsLayerImpl } from './WmsLayerImpl.js';
 import { ModelLayer } from './ModelLayer.js';
 import { ModelLayerImpl } from './ModelLayerImpl.js';
+import { ModelRule } from './ModelRule.js';
+import { ModelRuleImpl } from './ModelRuleImpl.js';
 import { ModelInstance } from './ModelInstance.js';
 import { ModelInstanceImpl } from './ModelInstanceImpl.js';
 import { MapClickPayload } from './MapClickPayload.js';
@@ -114,6 +116,13 @@ export class MaplibreFactory extends BasicEFactory {
   }
 
   /**
+   * Create a new ModelRule instance
+   */
+  createModelRule(): ModelRule {
+    return new ModelRuleImpl();
+  }
+
+  /**
    * Create a new ModelInstance instance
    */
   createModelInstance(): ModelInstance {
@@ -160,6 +169,8 @@ export class MaplibreFactory extends BasicEFactory {
         return this.createWmsLayer();
       case 'ModelLayer':
         return this.createModelLayer();
+      case 'ModelRule':
+        return this.createModelRule();
       case 'ModelInstance':
         return this.createModelInstance();
       case 'MapClickPayload':

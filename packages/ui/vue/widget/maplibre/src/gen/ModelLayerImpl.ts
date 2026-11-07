@@ -22,6 +22,7 @@ import { BasicEObject } from '@emfts/core';
 import { createContainmentEList } from '@emfts/core';
 import type { EClass, EStructuralFeature, EList, EReference } from '@emfts/core';
 import type { ModelInstance } from './ModelInstance.js';
+import type { ModelRule } from './ModelRule.js';
 import type { ModelLayer } from './ModelLayer.js';
 import { MaplibrePackage } from './MaplibrePackage.js';
 
@@ -40,6 +41,10 @@ export class ModelLayerImpl extends BasicEObject implements ModelLayer {
   static readonly ROTATION: number = 6;
   static readonly ALTITUDE_OFFSET: number = 7;
   static readonly INSTANCES: number = 8;
+  static readonly DATASOURCE_ID: number = 9;
+  static readonly HEIGHT_PROPERTY: number = 10;
+  static readonly DEFAULT_HEIGHT: number = 11;
+  static readonly RULES: number = 12;
 
   // Private fields
   private _id?: string;
@@ -51,6 +56,10 @@ export class ModelLayerImpl extends BasicEObject implements ModelLayer {
   private _rotation: number = 0;
   private _altitudeOffset: number = 0;
   private _instances!: EList<ModelInstance>;
+  private _datasourceId: string = "";
+  private _heightProperty: string = "";
+  private _defaultHeight: number = 0;
+  private _rules!: EList<ModelRule>;
 
   /**
    * Returns the EClass of this object
@@ -259,6 +268,85 @@ export class ModelLayerImpl extends BasicEObject implements ModelLayer {
     return this._instances;
   }
 
+  get datasourceId(): string {
+    return this._datasourceId!;
+  }
+
+  set datasourceId(value: string) {
+    const oldValue = this._datasourceId;
+    this._datasourceId = value;
+    if (this.eDeliver()) {
+      this.eNotify({
+        getNotifier: () => this,
+        getEventType: () => 1, // SET
+        getFeature: () => this.eClass().getEStructuralFeature(ModelLayerImpl.DATASOURCE_ID),
+        getOldValue: () => oldValue,
+        getNewValue: () => value,
+        getPosition: () => -1,
+        wasSet: () => true,
+        isTouch: () => false,
+        isReset: () => false,
+        getFeatureID: () => ModelLayerImpl.DATASOURCE_ID,
+        merge: () => false
+      });
+    }
+  }
+
+  get heightProperty(): string {
+    return this._heightProperty!;
+  }
+
+  set heightProperty(value: string) {
+    const oldValue = this._heightProperty;
+    this._heightProperty = value;
+    if (this.eDeliver()) {
+      this.eNotify({
+        getNotifier: () => this,
+        getEventType: () => 1, // SET
+        getFeature: () => this.eClass().getEStructuralFeature(ModelLayerImpl.HEIGHT_PROPERTY),
+        getOldValue: () => oldValue,
+        getNewValue: () => value,
+        getPosition: () => -1,
+        wasSet: () => true,
+        isTouch: () => false,
+        isReset: () => false,
+        getFeatureID: () => ModelLayerImpl.HEIGHT_PROPERTY,
+        merge: () => false
+      });
+    }
+  }
+
+  get defaultHeight(): number {
+    return this._defaultHeight!;
+  }
+
+  set defaultHeight(value: number) {
+    const oldValue = this._defaultHeight;
+    this._defaultHeight = value;
+    if (this.eDeliver()) {
+      this.eNotify({
+        getNotifier: () => this,
+        getEventType: () => 1, // SET
+        getFeature: () => this.eClass().getEStructuralFeature(ModelLayerImpl.DEFAULT_HEIGHT),
+        getOldValue: () => oldValue,
+        getNewValue: () => value,
+        getPosition: () => -1,
+        wasSet: () => true,
+        isTouch: () => false,
+        isReset: () => false,
+        getFeatureID: () => ModelLayerImpl.DEFAULT_HEIGHT,
+        merge: () => false
+      });
+    }
+  }
+
+  get rules(): EList<ModelRule> {
+    if (!this._rules) {
+      this._rules = createContainmentEList<any>(this, this.eClass().getEStructuralFeature('rules') as EReference);
+    }
+    return this._rules;
+  }
+
   // Reflective API
 
   /**
@@ -285,6 +373,14 @@ export class ModelLayerImpl extends BasicEObject implements ModelLayer {
         return this.altitudeOffset;
       case ModelLayerImpl.INSTANCES:
         return this.instances;
+      case ModelLayerImpl.DATASOURCE_ID:
+        return this.datasourceId;
+      case ModelLayerImpl.HEIGHT_PROPERTY:
+        return this.heightProperty;
+      case ModelLayerImpl.DEFAULT_HEIGHT:
+        return this.defaultHeight;
+      case ModelLayerImpl.RULES:
+        return this.rules;
       default:
         return super.eGet(feature);
     }
@@ -333,6 +429,23 @@ export class ModelLayerImpl extends BasicEObject implements ModelLayer {
         this.instances.addAll(newValue as any[]);
         super.eSet(feature, newValue);
         break;
+      case ModelLayerImpl.DATASOURCE_ID:
+        this.datasourceId = newValue as string;
+        super.eSet(feature, newValue);
+        break;
+      case ModelLayerImpl.HEIGHT_PROPERTY:
+        this.heightProperty = newValue as string;
+        super.eSet(feature, newValue);
+        break;
+      case ModelLayerImpl.DEFAULT_HEIGHT:
+        this.defaultHeight = newValue as number;
+        super.eSet(feature, newValue);
+        break;
+      case ModelLayerImpl.RULES:
+        this.rules.clear();
+        this.rules.addAll(newValue as any[]);
+        super.eSet(feature, newValue);
+        break;
       default:
         super.eSet(feature, newValue);
     }
@@ -362,6 +475,14 @@ export class ModelLayerImpl extends BasicEObject implements ModelLayer {
         return this._altitudeOffset !== 0;
       case ModelLayerImpl.INSTANCES:
         return this._instances !== undefined && !this._instances.isEmpty();
+      case ModelLayerImpl.DATASOURCE_ID:
+        return this._datasourceId !== "";
+      case ModelLayerImpl.HEIGHT_PROPERTY:
+        return this._heightProperty !== "";
+      case ModelLayerImpl.DEFAULT_HEIGHT:
+        return this._defaultHeight !== 0;
+      case ModelLayerImpl.RULES:
+        return this._rules !== undefined && !this._rules.isEmpty();
       default:
         return super.eIsSet(feature);
     }
@@ -400,6 +521,18 @@ export class ModelLayerImpl extends BasicEObject implements ModelLayer {
       case ModelLayerImpl.INSTANCES:
         if (this._instances) this._instances.clear();
         return;
+      case ModelLayerImpl.DATASOURCE_ID:
+        this._datasourceId = "";
+        return;
+      case ModelLayerImpl.HEIGHT_PROPERTY:
+        this._heightProperty = "";
+        return;
+      case ModelLayerImpl.DEFAULT_HEIGHT:
+        this._defaultHeight = 0;
+        return;
+      case ModelLayerImpl.RULES:
+        if (this._rules) this._rules.clear();
+        return;
       default:
         super.eUnset(feature);
     }
@@ -424,6 +557,10 @@ export class ModelLayerImpl extends BasicEObject implements ModelLayer {
       rotation: this.rotation,
       altitudeOffset: this.altitudeOffset,
       instances: this.instances?.toArray?.() ?? this.instances,
+      datasourceId: this.datasourceId,
+      heightProperty: this.heightProperty,
+      defaultHeight: this.defaultHeight,
+      rules: this.rules?.toArray?.() ?? this.rules,
     };
   }
 }

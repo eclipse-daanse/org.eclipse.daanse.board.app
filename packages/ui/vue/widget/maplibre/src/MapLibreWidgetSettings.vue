@@ -30,6 +30,7 @@ import type { WmsService } from './gen/WmsService'
 import type { ModelLayer } from './gen/ModelLayer'
 import { loadModel, modelStatus } from './models/modelLoader'
 import { placing } from './models/placementMode'
+import { MaplibreFactory } from './gen/MaplibreFactory'
 import { WmsLayerList, useOGCService } from 'org.eclipse.daanse.board.app.ui.vue.common.map'
 
 const props = defineProps<{ dataSources?: { uid: string; name?: string; type?: string }[] }>()
@@ -159,6 +160,20 @@ const modelFormats = computed(() => [
   { value: 'fbx', label: 'FBX' },
   { value: 'gltf', label: 'glTF / GLB' },
 ])
+
+/* The data sources a model layer can stand on: the ones that answer points (WFS and others with GeoJSON). */
+const pointSources = computed(() => {
+  const listed = props.dataSources ?? repository?.getDatasources?.().map((d) => ({ uid: d.uid, name: d.name, type: d.type })) ?? []
+  return [
+    { value: '', label: t('Settings.models.noDatasource') },
+    ...listed.filter((d) => ['wfs', 'valhalla', 'rest'].includes(String(d.type))).map((d) => ({ value: d.uid, label: d.name || d.uid })),
+  ]
+})
+function addRule(layer: ModelLayer) {
+  const rule = MaplibreFactory.eINSTANCE.createModelRule()
+  rule.property = layer.rules.size() ? String(layer.rules.get(layer.rules.size() - 1).property ?? '') : ''
+  layer.rules.add(rule)
+}
 
 function addModelLayer() {
   settings.value.modelLayers.add(newModelLayer(t('Settings.models.newLayer')))
@@ -402,6 +417,24 @@ function addColor(layer: ThingLayer) {
             <DIcon name="ads_click" size="sm" />{{ placingId === layer.id ? t('Settings.models.placing') : t('Settings.models.place') }}
           </DButton>
           <p v-if="placingId === layer.id" class="note">{{ t('Settings.models.placeHint') }}</p>
+          <DSelect v-model="layer.datasourceId" :options="pointSources" value-key="value" label-key="label"
+            :label="t('Settings.models.datasource')" :hint="t('Settings.models.datasourceHint')" />
+          <template v-if="layer.datasourceId">
+            <DInput v-model="layer.heightProperty" :label="t('Settings.models.heightProperty')" placeholder="baumhoehe"
+              :hint="t('Settings.models.heightPropertyHint')" />
+            <DInput type="number" :model-value="layer.defaultHeight" :label="t('Settings.models.defaultHeight')"
+              @update:model-value="(v) => setNumber(layer, 'defaultHeight', v)" />
+            <div v-for="(rule, at) in layer.rules.toArray()" :key="at" class="row">
+              <DInput v-model="rule.property" :label="t('Settings.models.ruleProperty')" placeholder="gattung_deutsch" />
+              <DInput v-model="rule.value" :label="t('Settings.models.ruleValue')" placeholder="Linde" />
+              <DColorInput v-model="rule.color" :label="t('Settings.color')" />
+              <DInput v-model="rule.url" :label="t('Settings.models.ruleUrl')" :placeholder="t('Settings.models.ruleUrlHint')" />
+              <DButton intent="quiet" size="sm" :title="t('Settings.remove')" @click="layer.rules.remove(rule)">
+                <DIcon name="delete" size="sm" />
+              </DButton>
+            </div>
+            <DButton size="sm" @click="addRule(layer)"><DIcon name="add" size="sm" />{{ t('Settings.models.addRule') }}</DButton>
+          </template>
           <p class="note">{{ t('Settings.models.count', { count: layer.instances.size() }) }}</p>
           <div v-for="instance in layer.instances.toArray()" :key="instance.id" class="row">
             <DInput type="number" :model-value="instance.lat" :label="t('Settings.centerLat')" :step="0.00001"

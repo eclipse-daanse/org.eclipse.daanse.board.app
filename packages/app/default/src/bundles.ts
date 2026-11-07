@@ -37,6 +37,7 @@ import b15 from 'org.eclipse.daanse.board.app.ui.vue.connection.rss/manifest.jso
 import b16 from 'org.eclipse.daanse.board.app.ui.vue.connection.ws/manifest.json'
 import b17 from 'org.eclipse.daanse.board.app.ui.vue.connection.xmla/manifest.json'
 import b18 from 'org.eclipse.daanse.board.app.ui.vue.datasource.csv/manifest.json'
+import uiWfs from 'org.eclipse.daanse.board.app.ui.vue.datasource.wfs/manifest.json'
 import b19 from 'org.eclipse.daanse.board.app.ui.vue.datasource.graphql/manifest.json'
 import b20 from 'org.eclipse.daanse.board.app.ui.vue.datasource.kpi/manifest.json'
 import b21 from 'org.eclipse.daanse.board.app.ui.vue.datasource.ogcsta/manifest.json'
@@ -88,6 +89,7 @@ import b66 from 'org.eclipse.daanse.board.app.lib.connection.rss/manifest.json'
 import b67 from 'org.eclipse.daanse.board.app.lib.connection.websocket/manifest.json'
 import b68 from 'org.eclipse.daanse.board.app.lib.connection.xmla/manifest.json'
 import b69 from 'org.eclipse.daanse.board.app.lib.datasource.csv/manifest.json'
+import libWfs from 'org.eclipse.daanse.board.app.lib.datasource.wfs/manifest.json'
 import b70 from 'org.eclipse.daanse.board.app.lib.datasource.graphql/manifest.json'
 import b71 from 'org.eclipse.daanse.board.app.lib.datasource.kpi_tmp/manifest.json'
 import b72 from 'org.eclipse.daanse.board.app.lib.datasource.ogcsta/manifest.json'
@@ -196,6 +198,7 @@ export const bundles: ModuleManifest[] = [
   b16 as ModuleManifest,
   b17 as ModuleManifest,
   b18 as ModuleManifest,
+  uiWfs as ModuleManifest,
   b19 as ModuleManifest,
   b20 as ModuleManifest,
   b21 as ModuleManifest,
@@ -247,6 +250,7 @@ export const bundles: ModuleManifest[] = [
   b67 as ModuleManifest,
   b68 as ModuleManifest,
   b69 as ModuleManifest,
+  libWfs as ModuleManifest,
   b70 as ModuleManifest,
   b71 as ModuleManifest,
   b72 as ModuleManifest,

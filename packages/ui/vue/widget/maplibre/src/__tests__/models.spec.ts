@@ -22,6 +22,7 @@ import * as THREE from 'three'
 import { localOf, nearestWithin, originOf, placementsOf } from '../models/placement'
 import { failureOf, forgetModels, formatOf, loadModel, modelStatus } from '../models/modelLoader'
 import { frameMatrix, instancedOf } from '../models/modelLayer'
+import { heightFor, instancesByModel, ruleFor } from '../models/modelRules'
 import { modelledSettings, newModelLayer } from '../settingsModel'
 import { MaplibreFactory } from '../gen/MaplibreFactory'
 import { EventsPackage } from 'org.eclipse.daanse.board.app.lib.api.events'
@@ -168,5 +169,73 @@ describe('the model layers of the settings', () => {
     expect(json.modelLayers[0].instances).toEqual([{ id: 'i1', lon: 11.6, lat: 50.95, scale: 1, rotation: 0 }])
     const again = modelledSettings(json)
     expect(again.modelLayers.get(0).instances.get(0).lat).toBe(50.95)
+  })
+})
+
+describe('model instances from data (#1282)', () => {
+  const trees = {
+    type: 'FeatureCollection',
+    features: [
+      { type: 'Feature', id: 't1', geometry: { type: 'Point', coordinates: [13.448, 52.443] }, properties: { gattung_deutsch: 'Linde', baumhoehe: 15 } },
+      { type: 'Feature', id: 't2', geometry: { type: 'Point', coordinates: [13.449, 52.444] }, properties: { gattung_deutsch: 'Ahorn', baumhoehe: null } },
+      { type: 'Feature', id: 't3', geometry: { type: 'Point', coordinates: [13.45, 52.445] }, properties: { gattung_deutsch: 'Eiche', baumhoehe: '22.5' } },
+      { type: 'Feature', id: 't4', geometry: { type: 'Polygon', coordinates: [] }, properties: {} },
+    ],
+  }
+  const layer = {
+    id: 'trees',
+    url: 'https://x/tree.fbx',
+    heightProperty: 'baumhoehe',
+    defaultHeight: 8,
+    rules: [
+      { property: 'gattung_deutsch', value: 'Lind*', color: '#2e7d32' },
+      { property: 'gattung_deutsch', value: 'Eiche', url: 'https://x/oak.glb', color: '#827717' },
+    ],
+  }
+
+  it('take model and colour from the first rule that matches, and the height from a property', () => {
+    expect(ruleFor(layer.rules, { gattung_deutsch: 'Linde' })?.color).toBe('#2e7d32')
+    expect(ruleFor(layer.rules, { gattung_deutsch: 'Ahorn' })).toBeUndefined()
+    expect(heightFor(layer, { baumhoehe: 15 })).toBe(15)
+    expect(heightFor(layer, { baumhoehe: 0 })).toBe(8)
+    expect(heightFor({ heightProperty: 'h' }, {})).toBeUndefined()
+  })
+
+  it('are one per point, by the model their rule gives', () => {
+    const byModel = instancesByModel(layer, trees)
+    expect([...byModel.keys()]).toEqual(['https://x/tree.fbx', 'https://x/oak.glb'])
+    expect(byModel.get('https://x/tree.fbx')).toEqual([
+      { id: 't1', lon: 13.448, lat: 52.443, height: 15, color: '#2e7d32' },
+      { id: 't2', lon: 13.449, lat: 52.444, height: 8 },
+    ])
+    expect(byModel.get('https://x/oak.glb')).toEqual([{ id: 't3', lon: 13.45, lat: 52.445, height: 22.5, color: '#827717' }])
+    expect(instancesByModel(layer, undefined).size).toBe(0)
+  })
+
+  it('are scaled to their height and painted in their colour, the trunk keeping its own', () => {
+    const source = new THREE.Group()
+    const trunk = new THREE.Mesh(new THREE.BoxGeometry(1, 4, 1), new THREE.MeshPhongMaterial({ color: 0x795548 }))
+    trunk.name = 'Cylinder'
+    trunk.position.y = 2
+    const crown = new THREE.Mesh(new THREE.SphereGeometry(2), new THREE.MeshPhongMaterial({ color: 0xcccccc }))
+    crown.name = 'Icosphere'
+    crown.position.y = 6
+    source.add(trunk, crown)
+    // The model reaches from 0 to 8 units; 16 m tall is twice its size.
+    const group = instancedOf(THREE, source, [
+      { position: [0, 0, 0], rotation: 0, scale: 1, height: 16, color: '#ff0000' },
+      { position: [5, 0, 0], rotation: 0, scale: 1 },
+    ])
+    const [trunkMesh, crownMesh] = group.children
+    const matrix = new THREE.Matrix4()
+    crownMesh.getMatrixAt(0, matrix)
+    expect(new THREE.Vector3(0, 2, 0).applyMatrix4(matrix).y).toBeCloseTo(16, 6)
+    expect(trunkMesh.instanceColor).toBeNull()
+    const color = new THREE.Color()
+    crownMesh.getColorAt(0, color)
+    expect(color.getHexString()).toBe('ff0000')
+    crownMesh.getColorAt(1, color)
+    expect(color.getHexString()).toBe('cccccc')
+    expect(crownMesh.material.color.getHexString()).toBe('ffffff')
   })
 })

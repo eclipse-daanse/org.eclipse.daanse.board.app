@@ -52,7 +52,7 @@ export interface PlacedLayer {
   scale?: number
   rotation?: number
   altitudeOffset?: number
-  instances?: Iterable<{ id?: string; lon?: number; lat?: number; scale?: number; rotation?: number }> | null
+  instances?: Iterable<{ id?: string; lon?: number; lat?: number; scale?: number; rotation?: number; height?: number; color?: string }> | null
 }
 
 /** One instance in the frame: where, turned by how much (radians about y), how large. */
@@ -61,6 +61,10 @@ export interface InstancePlacement {
   position: [number, number, number]
   rotation: number
   scale: number
+  /** How tall in metres, where the data says it (#1282): the model is scaled to it instead. */
+  height?: number
+  /** A colour for the model, where a rule gives one. */
+  color?: string
 }
 
 const number = (value: unknown, fallback: number) => {
@@ -88,6 +92,8 @@ export function placementsOf(layer: PlacedLayer, origin: Origin): InstancePlacem
       position: [east, up, south],
       rotation: (-(layerRotation + number(instance.rotation, 0)) * Math.PI) / 180,
       scale: layerScale * number(instance.scale, 1),
+      ...(Number(instance.height) > 0 ? { height: Number(instance.height) } : {}),
+      ...(instance.color ? { color: String(instance.color) } : {}),
     })
   }
   return out
