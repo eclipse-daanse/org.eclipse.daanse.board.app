@@ -12,9 +12,11 @@ Contributors:
  * What a WFS data source answers (#1282): its features on a map, how many,
  * and why there are none where there are none.
  */
-import { computed, ref, shallowRef, watch } from 'vue'
+import { computed, onUnmounted, ref, shallowRef, watch } from 'vue'
 import { useTemporaryStore, useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import { GeoFeatureMap } from 'org.eclipse.daanse.board.app.ui.vue.common.map'
+import { VIEWPORT_EVENT, acceptsEvent, type Box } from 'org.eclipse.daanse.board.app.lib.datasource.base'
+import { boxOf } from 'org.eclipse.daanse.board.app.lib.datasource.wfs'
 
 const props = defineProps<{ dataSource: any }>()
 const { t } = useTranslation('datasourceWfs')
@@ -27,19 +29,39 @@ const data = shallowRef<any>(null)
 const loading = ref(false)
 const failure = ref('')
 
+/*
+ * The preview is a reader like a map (#1301): a store that reads by the
+ * area in view - a WFS with the extent viewport - is sent the box of the
+ * configuration as the view of the preview, and the view is taken back when
+ * the preview closes or its store is rebuilt. Without a box it shows what
+ * such a store has without a view: nothing.
+ */
+const sender = `wfs-preview-${Math.random().toString(36).slice(2, 10)}`
+/* The box is what the preview shows, so its tiles are read at any minZoom. */
+const PREVIEW_ZOOM = 22
+async function tellView(store: any, bbox: Box | null) {
+  if (!store || !acceptsEvent(store, VIEWPORT_EVENT)) return
+  await store.callEvent(VIEWPORT_EVENT, { bbox, zoom: PREVIEW_ZOOM, sender })
+}
+
 /* Watched for being rebuilt: a new store is a new request. */
-watch(tempStore, async () => {
-  if (!tempStore.value) return
+watch(tempStore, async (store, before) => {
+  if (before && before !== store) void tellView(before, null)
+  if (!store) return
   loading.value = true
   failure.value = ''
   try {
-    data.value = await tempStore.value.getData('geojson')
-    const why = tempStore.value.lastFailure
+    const box = boxOf(props.dataSource?.config?.bbox)
+    if (box) await tellView(store, box)
+    data.value = await store.getData('geojson')
+    const why = store.lastFailure
     if (why) failure.value = why.status ? `${why.status} ${why.message}` : why.message
   } finally {
     loading.value = false
   }
 })
+
+onUnmounted(() => void tellView(tempStore.value, null))
 
 const count = computed(() => data.value?.features?.length ?? 0)
 </script>
