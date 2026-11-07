@@ -47,6 +47,7 @@ import {
 import { describeClass, useEObject, useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import { kindOf, labelOf } from './buildForm'
 import { useHelp, useLabel } from './useLabel'
+import { useSuggestions } from './suggestions'
 
 const props = defineProps<{
   eObject?: EObject
@@ -351,10 +352,25 @@ const storesNumber = computed(() => {
   return type === 'EInt' || type === 'EDouble' || type === 'ELong' || type === 'EFloat'
 })
 
+/*
+ * A ComboboxWidget suggests what the form was handed for it (#1285): the
+ * text field offers the values while typing, a set of several shows them
+ * as choices beside the ones already held.
+ */
+const suggesting = computed(() => modelKind.value === 'ComboboxWidget')
+const { suggestions, refresh: refreshSuggestions } = useSuggestions(
+  () => props.eObject,
+  () => props.feature?.getName?.() ?? undefined,
+  () => suggesting.value,
+)
+
 const options = computed<Array<{ value: string | number; text: string }>>(() => {
   const raw = props.custom?.rawWidget
   const values = raw?.values
-  const list: string[] = values && typeof values.map === 'function' ? [...values] : []
+  const listed: string[] = values && typeof values.map === 'function' ? [...values] : []
+  const list = suggesting.value
+    ? [...new Set([...listed, ...suggestions.value, ...chosen.value.map(String)])]
+    : listed
   const labelExpression = raw?.optionLabel
 
   return list.map((given) => {
@@ -441,8 +457,10 @@ const kind = computed<
     case 'NumberWidget':
       return 'number'
     case 'SelectWidget':
-    case 'ComboboxWidget':
       return 'choice'
+    /* Free text that suggests - a choice would refuse what it does not list */
+    case 'ComboboxWidget':
+      return 'text'
     case 'InputWidget': {
       /*
        * The metamodel has no colour or date widget; the name is what is
@@ -603,6 +621,8 @@ const noVariables = computed(() => bindingMode.value && variableNames.value.leng
         :placeholder="placeholder"
         :hint="fieldHint"
         :disabled="!editable"
+        :suggestions="suggesting && suggestions.length ? suggestions : undefined"
+        @focusin="suggesting && refreshSuggestions()"
       />
     </div>
 

@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/*********************************************************************
+* Copyright (c) 2026 Contributors to the Eclipse Foundation.
+*
+* This program and the accompanying materials are made
+* available under the terms of the Eclipse Public License 2.0
+* which is available at https://www.eclipse.org/legal/epl-2.0/
+*
+* SPDX-License-Identifier: EPL-2.0
+**********************************************************************/
+
+One layer of the chart (#1285): its mark, how the mark looks, and the
+encodings and steps of its data. A property that the mark does not read is
+not shown - the interpolation of a bar would be a setting that does
+nothing.
+-->
+<uimodel:UIModel
+    xmlns:xmi="http://www.omg.org/XMI"
+    xmi:version="2.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:uimodel="http://uimodel/1.0"
+    name="VegaLayerForm">
+
+  <targetClasses href="http://org.eclipse.daanse.board.app.ui.vue.widget.vega#//Layer"/>
+
+  <components xsi:type="uimodel:FormView" name="VegaLayerFormView">
+    <fields xsi:type="uimodel:SelectWidget"
+        name="mark"
+        feature="http://org.eclipse.daanse.board.app.ui.vue.widget.vega#//Layer/mark"
+        label="vega:FormLayer.mark">
+      <values>bar</values>
+      <values>line</values>
+      <values>area</values>
+      <values>point</values>
+      <values>circle</values>
+      <values>square</values>
+      <values>tick</values>
+      <values>rule</values>
+      <values>rect</values>
+      <values>arc</values>
+      <values>text</values>
+      <values>trail</values>
+      <values>boxplot</values>
+      <values>errorbar</values>
+      <optionLabel language="JS" body="({ bar: 'vega:Options.mark.bar', line: 'vega:Options.mark.line', area: 'vega:Options.mark.area', point: 'vega:Options.mark.point', circle: 'vega:Options.mark.circle', square: 'vega:Options.mark.square', tick: 'vega:Options.mark.tick', rule: 'vega:Options.mark.rule', rect: 'vega:Options.mark.rect', arc: 'vega:Options.mark.arc', text: 'vega:Options.mark.text', trail: 'vega:Options.mark.trail', boxplot: 'vega:Options.mark.boxplot', errorbar: 'vega:Options.mark.errorbar' })[option] ?? option"/>
+    </fields>
+    <fields xsi:type="uimodel:InputWidget"
+        name="encodings"
+        feature="http://org.eclipse.daanse.board.app.ui.vue.widget.vega#//Layer/encodings"
+        label="vega:FormLayer.encodings"
+        placeholder="vega:FormLayer.encodingsHint"/>
+    <fields xsi:type="uimodel:InputWidget"
+        name="transforms"
+        feature="http://org.eclipse.daanse.board.app.ui.vue.widget.vega#//Layer/transforms"
+        label="vega:FormLayer.transforms"/>
+    <fields xsi:type="uimodel:SelectWidget"
+        name="interpolate"
+        feature="http://org.eclipse.daanse.board.app.ui.vue.widget.vega#//Layer/interpolate"
+        label="vega:FormLayer.interpolate">
+      <values>linear</values>
+      <values>monotone</values>
+      <values>step</values>
+      <values>basis</values>
+      <optionLabel language="JS" body="({ linear: 'vega:Options.interpolate.linear', monotone: 'vega:Options.interpolate.monotone', step: 'vega:Options.interpolate.step', basis: 'vega:Options.interpolate.basis' })[option] ?? option"/>
+      <visibilityCondition language="JS" body="['line', 'area', 'trail'].includes(self.mark)"/>
+    </fields>
+    <fields xsi:type="uimodel:CheckboxWidget"
+        name="showPoints"
+        feature="http://org.eclipse.daanse.board.app.ui.vue.widget.vega#//Layer/showPoints"
+        label="vega:FormLayer.showPoints">
+      <visibilityCondition language="JS" body="['line', 'area', 'trail'].includes(self.mark)"/>
+    </fields>
+    <fields xsi:type="uimodel:CheckboxWidget"
+        name="filled"
+        feature="http://org.eclipse.daanse.board.app.ui.vue.widget.vega#//Layer/filled"
+        label="vega:FormLayer.filled">
+      <visibilityCondition language="JS" body="['point', 'circle', 'square'].includes(self.mark)"/>
+    </fields>
+    <fields xsi:type="uimodel:InputWidget"
+        name="color"
+        feature="http://org.eclipse.daanse.board.app.ui.vue.widget.vega#//Layer/color"
+        label="vega:FormLayer.color"/>
+    <fields xsi:type="uimodel:NumberWidget"
+        name="opacity"
+        feature="http://org.eclipse.daanse.board.app.ui.vue.widget.vega#//Layer/opacity"
+        label="vega:FormLayer.opacity" min="0" max="1" step="0.05">
+      <visibilityCondition language="JS" body="!['boxplot', 'errorbar'].includes(self.mark)"/>
+    </fields>
+    <fields xsi:type="uimodel:NumberWidget"
+        name="cornerRadius"
+        feature="http://org.eclipse.daanse.board.app.ui.vue.widget.vega#//Layer/cornerRadius"
+        label="vega:FormLayer.cornerRadius" min="0" step="1">
+      <visibilityCondition language="JS" body="['bar', 'rect', 'arc'].includes(self.mark)"/>
+    </fields>
+    <fields xsi:type="uimodel:NumberWidget"
+        name="innerRadius"
+        feature="http://org.eclipse.daanse.board.app.ui.vue.widget.vega#//Layer/innerRadius"
+        label="vega:FormLayer.innerRadius" min="0" step="1">
+      <visibilityCondition language="JS" body="self.mark === 'arc'"/>
+    </fields>
+    <fields xsi:type="uimodel:NumberWidget"
+        name="strokeWidth"
+        feature="http://org.eclipse.daanse.board.app.ui.vue.widget.vega#//Layer/strokeWidth"
+        label="vega:FormLayer.strokeWidth" min="0" step="0.5">
+      <visibilityCondition language="JS" body="!['boxplot', 'errorbar'].includes(self.mark)"/>
+    </fields>
+    <fields xsi:type="uimodel:InputWidget"
+        name="dataset"
+        feature="http://org.eclipse.daanse.board.app.ui.vue.widget.vega#//Layer/dataset"
+        label="vega:FormLayer.dataset"/>
+  </components>
+</uimodel:UIModel>

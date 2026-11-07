@@ -3,19 +3,221 @@
     "name": "Vega-Lite-Diagramm",
     "error": "Das Diagramm kann nicht gezeichnet werden: {{message}}"
   },
-  "Form": {
-    "title": "Titel",
-    "renderer": "Gezeichnet als",
-    "tooltip": "Werte im Tooltip zeigen"
-  },
-  "Options": {
-    "renderer": {
-      "canvas": "Canvas (schnell bei vielen Marken)",
-      "svg": "SVG (scharf beim Zoomen)"
-    }
-  },
   "Recipe": {
     "noLayers": "Das Diagramm hat noch keine Ebene. Füge in den Einstellungen eine hinzu.",
     "facetNeedsOneDataset": "Kleine Vielfache brauchen für alle Ebenen denselben Datensatz."
+  },
+  "Form": {
+    "title": "Titel",
+    "layers": "Ebenen",
+    "facet": "Kleine Vielfache",
+    "params": "Auswahlen und Werte",
+    "legendPosition": "Legende",
+    "tooltip": "Werte im Tooltip zeigen",
+    "renderer": "Gezeichnet als",
+    "layersHint": "Noch keine Ebene: füge eine hinzu, um Marken zu zeichnen.",
+    "paramsHint": "Keine Auswahl: Marken werden nicht ausgewählt."
+  },
+  "Options": {
+    "legendPosition": {
+      "right": "Rechts",
+      "bottom": "Unten",
+      "top": "Oben",
+      "left": "Links",
+      "none": "Keine Legende"
+    },
+    "renderer": {
+      "canvas": "Canvas (schnell bei vielen Marken)",
+      "svg": "SVG (scharf beim Zoomen)"
+    },
+    "mark": {
+      "bar": "Balken",
+      "line": "Linie",
+      "area": "Fläche",
+      "point": "Punkte",
+      "circle": "Kreise",
+      "square": "Quadrate",
+      "tick": "Striche",
+      "rule": "Linie (Referenzlinie)",
+      "rect": "Rechtecke (Heatmap)",
+      "arc": "Bogen (Torte, Ring)",
+      "text": "Text",
+      "trail": "Spur (Linie mit wechselnder Breite)",
+      "boxplot": "Boxplot",
+      "errorbar": "Fehlerbalken"
+    },
+    "interpolate": {
+      "linear": "Gerade",
+      "monotone": "Geglättet",
+      "step": "Stufen",
+      "basis": "Gekrümmt"
+    },
+    "channel": {
+      "x": "x - waagerechte Position",
+      "y": "y - senkrechte Position",
+      "x2": "x2 - Ende eines waagerechten Bereichs",
+      "y2": "y2 - Ende eines senkrechten Bereichs",
+      "xOffset": "x-Versatz - nebeneinander im Band",
+      "yOffset": "y-Versatz - übereinander im Band",
+      "color": "Farbe",
+      "size": "Größe",
+      "shape": "Form",
+      "opacity": "Deckkraft",
+      "theta": "Winkel (Bogen)",
+      "radius": "Radius (Bogen)",
+      "text": "Text",
+      "tooltip": "Tooltip",
+      "detail": "Detail - gruppieren ohne sichtbaren Kanal",
+      "order": "Zeichenreihenfolge"
+    },
+    "type": {
+      "quantitative": "Zahlen",
+      "temporal": "Zeitpunkte",
+      "ordinal": "Geordnete Kategorien",
+      "nominal": "Kategorien"
+    },
+    "aggregate": {
+      "none": "Keine - jeder Wert",
+      "count": "Anzahl der Zeilen",
+      "sum": "Summe",
+      "mean": "Mittelwert",
+      "median": "Median",
+      "min": "Minimum",
+      "max": "Maximum",
+      "distinct": "Verschiedene Werte",
+      "stdev": "Standardabweichung"
+    },
+    "timeUnit": {
+      "none": "Der ganze Zeitpunkt",
+      "year": "Jahr",
+      "yearmonth": "Jahr und Monat",
+      "yearmonthdate": "Tag",
+      "month": "Monat im Jahr",
+      "date": "Tag im Monat",
+      "day": "Wochentag",
+      "hours": "Stunde am Tag",
+      "hoursminutes": "Uhrzeit"
+    },
+    "sort": {
+      "none": "Wie die Daten kommen",
+      "ascending": "Aufsteigend",
+      "descending": "Absteigend",
+      "otherAscending": "Nach der anderen Achse, aufsteigend",
+      "otherDescending": "Nach der anderen Achse, absteigend"
+    },
+    "stack": {
+      "auto": "Wie die Marke stapelt",
+      "zero": "Ab null",
+      "normalize": "Als Anteile am Ganzen",
+      "center": "Zentriert",
+      "none": "Nicht gestapelt"
+    },
+    "scaleType": {
+      "auto": "Automatisch",
+      "linear": "Linear",
+      "log": "Logarithmisch",
+      "sqrt": "Quadratwurzel",
+      "pow": "Potenz",
+      "time": "Zeit (lokal)",
+      "utc": "Zeit (UTC)",
+      "band": "Bänder",
+      "point": "Punkte"
+    },
+    "kind": {
+      "filter": "Zeilen filtern",
+      "fold": "Spalten zu Zeilen",
+      "calculate": "Feld berechnen"
+    },
+    "op": {
+      "eq": "gleich",
+      "neq": "ungleich",
+      "lt": "kleiner als",
+      "lte": "höchstens",
+      "gt": "größer als",
+      "gte": "mindestens",
+      "oneOf": "einer von (mit Komma getrennt)",
+      "range": "zwischen (zwei Werte, mit Komma getrennt)",
+      "valid": "hat einen Wert",
+      "param": "ist in einer Auswahl"
+    },
+    "paramKind": {
+      "point": "Marken auswählen",
+      "interval": "Bereich auswählen",
+      "value": "Ein Wert"
+    },
+    "encodings": {
+      "x": "x",
+      "y": "y"
+    },
+    "bind": {
+      "none": "Im Diagramm",
+      "legend": "In der Legende",
+      "scales": "Diagramm zoomen und verschieben"
+    }
+  },
+  "FormLayer": {
+    "mark": "Marke",
+    "encodings": "Kodierungen",
+    "transforms": "Schritte auf den Daten",
+    "interpolate": "Linie zwischen den Punkten",
+    "showPoints": "Punkt an jedem Wert zeichnen",
+    "filled": "Gefüllt",
+    "color": "Farbe aller Marken",
+    "opacity": "Deckkraft",
+    "cornerRadius": "Abgerundete Ecken (px)",
+    "innerRadius": "Innerer Radius (px) - mehr als 0 zeichnet einen Ring",
+    "strokeWidth": "Linienbreite (px)",
+    "dataset": "Datensatz (leer: die Daten des Widgets)",
+    "encodingsHint": "Keine Kodierung: füge x und y hinzu, um die Marken zu platzieren."
+  },
+  "FormEncoding": {
+    "channel": "Kanal",
+    "field": "Feld",
+    "type": "Die Werte sind",
+    "aggregate": "Werte zusammenfassen",
+    "value": "Fester Wert (ohne Feld)",
+    "bin": "In Klassen gruppieren (Histogramm)",
+    "maxBins": "Höchste Zahl der Klassen (0: automatisch)",
+    "timeUnit": "Teil des Zeitpunkts",
+    "sort": "Reihenfolge",
+    "stack": "Stapeln",
+    "title": "Titel der Achse oder Legende",
+    "format": "Format (d3, z. B. ,.2f oder %Y-%m)",
+    "scaleType": "Skala",
+    "scaleZero": "Skala enthält null",
+    "domainMin": "Kleinster gezeigter Wert",
+    "domainMax": "Größter gezeigter Wert",
+    "scheme": "Farbschema (z. B. tableau10, blues, viridis)",
+    "showAxis": "Achse zeichnen",
+    "showGrid": "Gitterlinien",
+    "labelAngle": "Winkel der Beschriftung (Grad)",
+    "showLegend": "Legende zeichnen",
+    "highlightParam": "Hervorheben, was diese Auswahl enthält",
+    "valueIfNotSelected": "Wert außerhalb der Auswahl (z. B. lightgray, 0.2)"
+  },
+  "FormTransform": {
+    "kind": "Schritt",
+    "op": "Zeilen behalten, deren Feld",
+    "field": "Feld",
+    "value": "Wert",
+    "param": "Auswahl",
+    "fields": "Spalten, die zu Zeilen werden",
+    "keyAs": "Name des Spaltenfelds",
+    "valueAs": "Name des Wertfelds",
+    "as": "Name des neuen Felds",
+    "expression": "Ausdruck (z. B. datum.price * datum.amount)"
+  },
+  "FormParam": {
+    "name": "Name",
+    "kind": "Was es ist",
+    "fields": "Alle Marken mit demselben auswählen",
+    "encodings": "Der Bereich spannt über",
+    "bind": "Ausgewählt",
+    "value": "Anfangswert (JSON)"
+  },
+  "FormFacet": {
+    "row": "Eine Zeile je",
+    "column": "Eine Spalte je",
+    "columns": "Spalten bis zum Umbruch (0: kein Umbruch)"
   }
 }
