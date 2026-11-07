@@ -70,6 +70,9 @@ export class TimelinesettingsPackage extends BasicEPackage {
     TIMELINE_SETTINGS__SHOW_TIME_INFO: null as unknown as EAttribute | EReference,
     TIMELINE_SETTINGS__COVERAGE_DATASOURCE_IDS: null as unknown as EAttribute | EReference,
     TIMELINE_SETTINGS__COVERAGE_COLOR: null as unknown as EAttribute | EReference,
+    TIMELINE_SETTINGS__COVERAGE_STYLE: null as unknown as EAttribute | EReference,
+    TIMELINE_SETTINGS__COVERAGE_LANE_PER_SERIES: null as unknown as EAttribute | EReference,
+    TIMELINE_SETTINGS__COVERAGE_TIME_FIELD: null as unknown as EAttribute | EReference,
   };
 
   private constructor() {
@@ -294,6 +297,32 @@ export class TimelinesettingsPackage extends BasicEPackage {
     timelineSettingsClass.getEStructuralFeatures().push(timelineSettings_coverageColor);
     TimelinesettingsPackage.Literals.TIMELINE_SETTINGS__COVERAGE_COLOR = timelineSettings_coverageColor;
 
+    // Create coverageStyle feature
+    const timelineSettings_coverageStyle = new BasicEAttribute();
+    timelineSettings_coverageStyle.setName('coverageStyle');
+    timelineSettings_coverageStyle.setLowerBound(0);
+    timelineSettings_coverageStyle.setUpperBound(1);
+    timelineSettings_coverageStyle.setDefaultValueLiteral("bands");
+    timelineSettingsClass.getEStructuralFeatures().push(timelineSettings_coverageStyle);
+    TimelinesettingsPackage.Literals.TIMELINE_SETTINGS__COVERAGE_STYLE = timelineSettings_coverageStyle;
+
+    // Create coverageLanePerSeries feature
+    const timelineSettings_coverageLanePerSeries = new BasicEAttribute();
+    timelineSettings_coverageLanePerSeries.setName('coverageLanePerSeries');
+    timelineSettings_coverageLanePerSeries.setLowerBound(0);
+    timelineSettings_coverageLanePerSeries.setUpperBound(1);
+    timelineSettings_coverageLanePerSeries.setDefaultValueLiteral("false");
+    timelineSettingsClass.getEStructuralFeatures().push(timelineSettings_coverageLanePerSeries);
+    TimelinesettingsPackage.Literals.TIMELINE_SETTINGS__COVERAGE_LANE_PER_SERIES = timelineSettings_coverageLanePerSeries;
+
+    // Create coverageTimeField feature
+    const timelineSettings_coverageTimeField = new BasicEAttribute();
+    timelineSettings_coverageTimeField.setName('coverageTimeField');
+    timelineSettings_coverageTimeField.setLowerBound(0);
+    timelineSettings_coverageTimeField.setUpperBound(1);
+    timelineSettingsClass.getEStructuralFeatures().push(timelineSettings_coverageTimeField);
+    TimelinesettingsPackage.Literals.TIMELINE_SETTINGS__COVERAGE_TIME_FIELD = timelineSettings_coverageTimeField;
+
 
     // ============================================
     // Set ESuperTypes (must be done after all classes are created)
@@ -326,6 +355,9 @@ export class TimelinesettingsPackage extends BasicEPackage {
     (TimelinesettingsPackage.Literals.TIMELINE_SETTINGS__SHOW_TIME_INFO as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EBoolean')!);
     (TimelinesettingsPackage.Literals.TIMELINE_SETTINGS__COVERAGE_DATASOURCE_IDS as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
     (TimelinesettingsPackage.Literals.TIMELINE_SETTINGS__COVERAGE_COLOR as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (TimelinesettingsPackage.Literals.TIMELINE_SETTINGS__COVERAGE_STYLE as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (TimelinesettingsPackage.Literals.TIMELINE_SETTINGS__COVERAGE_LANE_PER_SERIES as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EBoolean')!);
+    (TimelinesettingsPackage.Literals.TIMELINE_SETTINGS__COVERAGE_TIME_FIELD as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
 
     // ============================================
     // Set EOpposites (must be done after all features are created) (#59)

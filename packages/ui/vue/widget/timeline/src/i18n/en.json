@@ -12,13 +12,15 @@
     "speed": "Speed",
     "play": "Play",
     "pause": "Pause",
-    "coverage": "Data from {{start}} to {{end}}"
+    "coverage": "Data from {{start}} to {{end}}",
+    "coverageCount": "{{count}} values from {{start}} to {{end}}",
+    "coverageSeries": "{{label}}: data from {{start}} to {{end}}"
   },
   "Settings": {
     "coverage": {
       "section": "Data availability",
       "sources": "Show data of",
-      "hint": "The rail marks where these sources hold data.",
+      "hint": "The rail marks where these sources hold data. For a table, set its time column under Appearance.",
       "none": "No data source in this board can say where it holds data."
     },
     "section": "Time range",
@@ -59,7 +61,10 @@
     "lookGroup": "Appearance",
     "rangeStripColor": "Range colour",
     "coverageColor": "Colour of data availability",
-    "showTimeInfo": "Show time information"
+    "showTimeInfo": "Show time information",
+    "coverageStyle": "Show data as",
+    "coverageLanePerSeries": "One lane per series",
+    "coverageTimeField": "Time column (tables only)"
   },
   "Options": {
     "step": {
@@ -75,6 +80,10 @@
       "x1": "1×",
       "x2": "2×",
       "x4": "4×"
+    },
+    "coverage": {
+      "bands": "Stretches with data",
+      "density": "Density (shows gaps)"
     }
   },
   "Action": {

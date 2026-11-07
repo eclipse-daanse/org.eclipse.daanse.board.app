@@ -20,16 +20,21 @@ Contributors:
   >
     <div class="timeline-container">
       <!-- The track: a rail from the theme, the selected range on it -->
-      <div class="timeline-track" ref="trackRef">
+      <div class="timeline-track" ref="trackRef" :style="{ '--coverage-lanes': coverageLanes.length }">
         <div class="rail"></div>
-        <!-- Where the data sources hold data, one lane under the rail -->
-        <div v-if="coverageBands.length" class="coverage-lane">
+        <!-- Where the data sources hold data: lanes under the rail -->
+        <div
+          v-for="(lane, index) in coverageLanes"
+          :key="lane.id"
+          class="coverage-lane"
+          :style="{ '--lane-index': index, ...(lane.color ? { '--coverage-color': lane.color } : {}) }"
+        >
           <div
-            v-for="band in coverageBands"
-            :key="band.startMs"
+            v-for="cell in lane.cells"
+            :key="cell.key"
             class="coverage-band"
-            :style="{ left: band.left + '%', width: `max(${band.width}%, 2px)` }"
-            :title="t('Widget.coverage', { start: formatDateTime(new Date(band.startMs)), end: formatDateTime(new Date(band.endMs)) })"
+            :style="{ left: cell.left + '%', width: `max(${cell.width}%, 2px)`, opacity: cell.opacity }"
+            :title="cell.title"
           ></div>
         </div>
         <div
@@ -137,7 +142,7 @@ import { useRoute } from 'vue-router';
 import { VariableWrapper, isModelled, useEObject, useFormat, useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables';
 import { DSelect } from 'org.eclipse.daanse.board.app.ui.vue.controls';
 import { axisTicks, rangeColor, TICK_FORMAT, type TickKind } from './timelineAxis';
-import { placeBands, useTimeCoverage } from './coverage';
+import { combineSeries, coverageBuckets, placeBands, useTimeCoverage, type CoverageStyle } from './coverage';
 import {
     identifier as variableIdentifier,
     type VariableRepository
@@ -181,6 +186,9 @@ interface TimelineSettings {
   // Where data is available (#1279)
   coverageDatasourceIds?: string[];
   coverageColor?: string;
+  coverageStyle?: string;
+  coverageLanePerSeries?: boolean;
+  coverageTimeField?: string;
 }
 
 const props = defineProps<{ datasourceId: string; id?: string }>();
@@ -455,10 +463,6 @@ const coverageIds = computed(() => {
   return [...(config.value.coverageDatasourceIds ?? [])].filter((id): id is string => !!id);
 });
 const coverageFill = computed(() => (config.value.coverageColor ?? '').trim() || 'var(--color-dim)');
-const { bands: coverage } = useTimeCoverage(coverageIds);
-const coverageBands = computed(() =>
-  placeBands(coverage.value, timelineMin.value.getTime(), timelineMax.value.getTime())
-);
 
 // Berechne Zeitschritt in Millisekunden basierend auf StepSize
 const getStepSizeInMs = (): number => {
@@ -504,6 +508,69 @@ const timeAxisTicks = computed(() => {
     // Labels at the ends grow inwards, so they are not cut off
     edge: tick.position < 4 ? 'start' : tick.position > 96 ? 'end' : null
   }));
+});
+
+/*
+ * Coverage (#1279, #1280): one lane, or one per series, under the rail.
+ * Density draws each bucket of the axis by how many values it holds, so a
+ * bucket without any is a gap.
+ */
+const coverageStyle = computed<CoverageStyle>(() => {
+  void watchedConfig.value;
+  return config.value.coverageStyle === 'density' ? 'density' : 'bands';
+});
+const coverageTimeField = computed(() => {
+  void watchedConfig.value;
+  return (config.value.coverageTimeField ?? '').trim();
+});
+/** Room for one density bucket; fewer buckets are fewer requests. */
+const BUCKET_SPACING_PX = 24;
+const MAX_BUCKETS = 60;
+const coverageBucketList = computed(() => {
+  const target = trackWidth.value > 0 ? Math.min(MAX_BUCKETS, trackWidth.value / BUCKET_SPACING_PX) : 40;
+  return coverageBuckets(timelineMin.value.getTime(), timelineMax.value.getTime(), target);
+});
+const { series: coverageSeries } = useTimeCoverage({
+  datasourceIds: coverageIds,
+  style: coverageStyle,
+  buckets: coverageBucketList,
+  timeField: coverageTimeField,
+});
+
+interface CoverageCell { key: number; left: number; width: number; opacity: number; title: string }
+
+const coverageLanes = computed(() => {
+  void watchedConfig.value;
+  const minMs = timelineMin.value.getTime();
+  const maxMs = timelineMax.value.getTime();
+  const perSeries = !!config.value.coverageLanePerSeries;
+  const lanes = perSeries ? coverageSeries.value : combineSeries(coverageSeries.value);
+  const buckets = coverageBucketList.value;
+  return lanes
+    .map((lane) => {
+      let cells: CoverageCell[];
+      const bins = lane.bins;
+      if (coverageStyle.value === 'density' && bins && bins.length === buckets.length) {
+        const most = Math.max(1, ...bins);
+        const counted = buckets.map((bucket, index) => ({
+          startMs: Date.parse(bucket.start), endMs: Date.parse(bucket.end), count: bins[index] ?? 0
+        })).filter((cell) => cell.count > 0);
+        cells = placeBands(counted, minMs, maxMs).map((cell) => ({
+          key: cell.startMs, left: cell.left, width: cell.width,
+          opacity: 0.25 + 0.75 * (cell.count / most),
+          title: t('Widget.coverageCount', { count: cell.count, start: formatDateTime(new Date(cell.startMs)), end: formatDateTime(new Date(cell.endMs)) })
+        }));
+      } else {
+        cells = placeBands(lane.bands, minMs, maxMs).map((band) => ({
+          key: band.startMs, left: band.left, width: band.width, opacity: 0.8,
+          title: lane.label
+            ? t('Widget.coverageSeries', { label: lane.label, start: formatDateTime(new Date(band.startMs)), end: formatDateTime(new Date(band.endMs)) })
+            : t('Widget.coverage', { start: formatDateTime(new Date(band.startMs)), end: formatDateTime(new Date(band.endMs)) })
+        }));
+      }
+      return { id: lane.id, color: (perSeries && lane.color) || undefined, cells };
+    })
+    .filter((lane) => perSeries || lane.cells.length > 0);
 });
 
 const speedOptions = [0.25, 0.5, 1, 2, 4].map((value) => ({ label: `${value}×`, value }));
@@ -1055,13 +1122,17 @@ onUnmounted(() => {
 
 /* The hit area is taller than the rail, so the range is easy to grab */
 .timeline-track {
+  --track-core: 24px;
+  --lane-height: 3px;
+  --lane-gap: 2px;
   position: relative;
-  height: 24px;
+  /* Lanes after the first one need room below the rail */
+  height: calc(var(--track-core) + max(0, var(--coverage-lanes, 0) - 1) * (var(--lane-height) + var(--lane-gap)));
 }
 
 .rail {
   position: absolute;
-  top: 50%;
+  top: calc(var(--track-core) / 2);
   left: 0;
   right: 0;
   height: var(--rail-height);
@@ -1073,7 +1144,7 @@ onUnmounted(() => {
 .range-strip {
   position: absolute;
   top: 0;
-  height: 100%;
+  height: var(--track-core);
   cursor: grab;
   z-index: 1;
 }
@@ -1151,13 +1222,13 @@ onUnmounted(() => {
   box-shadow: var(--shadow-e1);
 }
 
-/* Coverage: one quiet lane just under the rail */
+/* Coverage: quiet lanes just under the rail */
 .coverage-lane {
   position: absolute;
   left: 0;
   right: 0;
-  top: calc(50% + var(--rail-height) / 2 + 2px);
-  height: 3px;
+  top: calc(var(--track-core) / 2 + var(--rail-height) / 2 + var(--lane-gap) + var(--lane-index, 0) * (var(--lane-height) + var(--lane-gap)));
+  height: var(--lane-height);
   pointer-events: none;
 }
 
@@ -1167,8 +1238,8 @@ onUnmounted(() => {
   top: 0;
   height: 100%;
   background: var(--coverage-color);
-  border-radius: 999px;
-  opacity: 0.8;
+  /* Square enough that density buckets side by side read as one strip */
+  border-radius: 1.5px;
 }
 
 /* Axis: flat, on the widget surface */

@@ -12,13 +12,15 @@
     "speed": "Tempo",
     "play": "Abspielen",
     "pause": "Anhalten",
-    "coverage": "Daten von {{start}} bis {{end}}"
+    "coverage": "Daten von {{start}} bis {{end}}",
+    "coverageCount": "{{count}} Werte von {{start}} bis {{end}}",
+    "coverageSeries": "{{label}}: Daten von {{start}} bis {{end}}"
   },
   "Settings": {
     "coverage": {
       "section": "Datenverfügbarkeit",
       "sources": "Daten zeigen von",
-      "hint": "Die Leiste markiert, wo diese Quellen Daten haben.",
+      "hint": "Die Leiste markiert, wo diese Quellen Daten haben. Für eine Tabelle die Zeitspalte unter Darstellung setzen.",
       "none": "Keine Datenquelle dieses Boards kann sagen, wo sie Daten hat."
     },
     "section": "Zeitraum",
@@ -59,7 +61,10 @@
     "lookGroup": "Darstellung",
     "rangeStripColor": "Farbe des Ausschnitts",
     "coverageColor": "Farbe der Datenverfügbarkeit",
-    "showTimeInfo": "Zeitangaben zeigen"
+    "showTimeInfo": "Zeitangaben zeigen",
+    "coverageStyle": "Daten zeigen als",
+    "coverageLanePerSeries": "Eine Spur je Reihe",
+    "coverageTimeField": "Zeitspalte (nur Tabellen)"
   },
   "Options": {
     "step": {
@@ -75,6 +80,10 @@
       "x1": "1-fach",
       "x2": "2-fach",
       "x4": "4-fach"
+    },
+    "coverage": {
+      "bands": "Zeiträume mit Daten",
+      "density": "Dichte (zeigt Lücken)"
     }
   },
   "Action": {

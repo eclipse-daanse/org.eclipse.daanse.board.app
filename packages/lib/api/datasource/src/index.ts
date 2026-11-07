@@ -249,9 +249,26 @@ export interface TimeCoverageSeries {
   /** The colour the source gives this series, if any. */
   color?: string;
   intervals: TimeInterval[];
+  /**
+   * How many values fall into each of the requested buckets, in their
+   * order - only when buckets were asked for (#1280). A bucket with none
+   * is a gap.
+   */
+  bins?: number[];
 }
 
 /** What `getData('TimeCoverage')` answers. */
 export interface TimeCoverage {
   series: TimeCoverageSeries[];
+}
+
+/**
+ * The options of `getData('TimeCoverage', options)`.
+ *
+ * Without buckets a source answers the outer intervals only, which is
+ * cheap. With them it also counts the values in each bucket.
+ */
+export interface TimeCoverageRequest {
+  buckets?: TimeInterval[];
+  signal?: AbortSignal;
 }

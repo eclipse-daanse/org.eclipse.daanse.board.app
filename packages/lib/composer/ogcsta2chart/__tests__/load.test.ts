@@ -22,6 +22,7 @@ import { wireRepositories } from '../../../../../test/support/wiring'
 import * as ogcsta from '../../../datasource/ogcsta/src/index'
 import { factorySymbol, FILTER } from '../../../datasource/ogcsta/src/index'
 import { clearSharedCache } from '../../../datasource/ogcsta/src/client/CachingMiddleware'
+import { clearBucketCounts } from '../../../datasource/ogcsta/src/classes/OgcSta'
 import { staServer } from '../../../datasource/ogcsta/__tests__/support/staServer'
 import { OGCSTAToChartComposer } from '../src/classes/index'
 
@@ -86,6 +87,7 @@ describe('a chart on an OGC STA source', () => {
   beforeEach(() => {
     vi.useFakeTimers({ toFake: ['setTimeout'], shouldAdvanceTime: true })
     clearSharedCache()
+    clearBucketCounts()
   })
   afterEach(() => vi.useRealTimers())
 
@@ -168,5 +170,27 @@ describe('a chart on an OGC STA source', () => {
         intervals: [{ start: '2026-11-04T12:00:00Z', end: '2026-11-04T12:00:00Z' }],
       },
     ])
+  })
+
+  it('counts each datastream per bucket, so gaps show, and keeps the counts of ended buckets (#1280)', async () => {
+    const { server, composer } = setup()
+    const buckets = [
+      { start: '2026-10-01T00:00:00Z', end: '2026-10-02T00:00:00Z' },
+      { start: '2026-10-02T00:00:00Z', end: '2026-11-03T00:00:00Z' },
+      { start: '2026-11-03T00:00:00Z', end: '2026-11-05T00:00:00Z' },
+    ]
+
+    const coverage = await composer.getData('TimeCoverage', { buckets })
+
+    expect(coverage.series.map((series: any) => series.bins)).toEqual([[1, 0, 2], [0, 0, 1]])
+    const counts = server.requests.filter((r) => r.includes('$count=true'))
+    expect(counts).toHaveLength(6)
+    expect(counts.every((r) => r.includes('$top=1') && !r.includes('$select'))).toBe(true)
+
+    // Asked again: the buckets have ended, nothing is counted a second time
+    server.reset()
+    clearSharedCache()
+    await composer.getData('TimeCoverage', { buckets })
+    expect(server.requests.filter((r) => r.includes('$count=true'))).toEqual([])
   })
 })
