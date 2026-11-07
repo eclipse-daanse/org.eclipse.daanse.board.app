@@ -34,6 +34,8 @@ export { adopt, asModel, isModelled } from 'org.eclipse.daanse.board.app.ui.vue.
 export { formFor, kindOf, labelOf, type FieldKind } from './buildForm'
 export { loadUIModel } from './loadUIModel'
 export { FIELD_SUGGESTIONS, useSuggestions, type FieldSuggest } from './suggestions'
+/* A widget of a bundle's own for one field of a generated form. */
+export { registerFieldWidget, FIELD_WIDGET_PRIORITY } from './fieldWidgets'
 
 /* The composer itself, for bundles that render a UIModel of their own. */
 export * from './composer'

@@ -13,9 +13,12 @@
 
 /*
  * ui.vue.uimodel is built as a bundle only and brings no declarations; the
- * settings use one component of it, typed here as loosely as it is used.
+ * settings use these parts of it, typed here as loosely as they are used.
  */
 declare module 'org.eclipse.daanse.board.app.ui.vue.uimodel' {
-  import type { DefineComponent } from 'vue'
+  import type { Component, DefineComponent } from 'vue'
   export const SettingsForm: DefineComponent<Record<string, unknown>, Record<string, unknown>, any>
+  export const SettingsListWidget: DefineComponent<Record<string, unknown>, Record<string, unknown>, any>
+  export const SettingsFieldWidget: DefineComponent<Record<string, unknown>, Record<string, unknown>, any>
+  export function registerFieldWidget(eClass: unknown, featureName: string, component: Component): () => void
 }

@@ -18,7 +18,7 @@ Contributors:
  * instance; every field writes into it, and the adapter of the widget
  * hears the change.
  */
-import { computed, inject, onUnmounted, reactive, ref, watch, type ShallowRef } from 'vue'
+import { computed, inject, onUnmounted, provide, reactive, ref, watch, type ShallowRef } from 'vue'
 import { identifier, type DatasourceRepository } from 'org.eclipse.daanse.board.app.lib.api.datasource'
 import { useEObject, useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import { DButton, DCheckbox, DColorInput, DIcon, DIconPicker, DInput, DSelect, DSlider } from 'org.eclipse.daanse.board.app.ui.vue.controls'
@@ -31,7 +31,10 @@ import type { ModelLayer } from './gen/ModelLayer'
 import { loadModel, modelStatus } from './models/modelLoader'
 import { placing } from './models/placementMode'
 import { MaplibreFactory } from './gen/MaplibreFactory'
-import { SettingsForm } from 'org.eclipse.daanse.board.app.ui.vue.uimodel'
+import { SettingsForm, registerFieldWidget } from 'org.eclipse.daanse.board.app.ui.vue.uimodel'
+import { SYMBOL_LAYER_CONTEXT } from './symbols/symbolLayerContext'
+import ModelFileField from './symbols/ModelFileField.vue'
+import ModelInstancesField from './symbols/ModelInstancesField.vue'
 import { fieldsAddedBy } from 'org.eclipse.daanse.board.app.lib.datasource.base'
 import transformFormXmi from 'org.eclipse.daanse.board.app.lib.datasource.base/model/ui-transform.xmi?raw'
 import { MaplibrePackage } from './gen/MaplibrePackage'
@@ -180,10 +183,15 @@ function reorderWmsLayers(order: unknown[]) {
 
 /*
  * The symbol layers are edited in generated forms (model/ui-symbols.xmi and
- * the entry forms beside it), not here. What a form cannot do stays here:
- * whether a model file can be read (it is fetched to say so), and the place
- * mode, which takes clicks on the preview map rather than a value.
+ * the entry forms beside it), not here. Two fields need more than their
+ * value: the model file says whether it can be read (it is fetched to say
+ * so), and the instances have the place mode, which takes clicks on the
+ * preview map. Both are field widgets of their own in the generated form;
+ * this dialog lends them the state through SYMBOL_LAYER_CONTEXT.
  */
+const modelLayerClass = MaplibrePackage.eINSTANCE.getEClassifier('ModelLayer')
+registerFieldWidget(modelLayerClass, 'url', ModelFileField)
+registerFieldWidget(modelLayerClass, 'instances', ModelInstancesField)
 const symbolEntryForms = [
   { xmi: modelLayerFormXmi, uri: '/maplibre-model-layer.ui.xmi' },
   { xmi: sizeFormXmi, uri: '/maplibre-size-encoding.ui.xmi' },
@@ -233,8 +241,9 @@ async function suggestSymbolFields(owner: unknown, feature: string): Promise<str
 
 /* Placing: clicks on the map of these settings - the preview - add, move or remove instances. */
 const placingId = computed(() => (placing.value?.settings === settings.value ? placing.value.layerId : undefined))
-function togglePlacing(layer: ModelLayer) {
-  placing.value = placingId.value === layer.id ? null : { settings: settings.value, layerId: String(layer.id) }
+function togglePlacing(layer: { id?: unknown }) {
+  const id = String(layer.id ?? '')
+  placing.value = !id || placingId.value === id ? null : { settings: settings.value, layerId: id }
 }
 onUnmounted(() => {
   if (placing.value?.settings === settings.value) placing.value = null
@@ -259,6 +268,7 @@ function modelStatusText(url: unknown): { text: string; error: boolean } {
   if (status?.state === 'ready') return { text: t('Settings.models.ready'), error: false }
   return { text: t('Settings.models.loading'), error: false }
 }
+provide(SYMBOL_LAYER_CONTEXT, { placingId, togglePlacing, fileStatus: modelStatusText })
 
 function addThingLayer() {
   settings.value.thingLayers.add(newThingLayer(t('Settings.newThingLayer')))
@@ -438,17 +448,6 @@ function addColor(layer: ThingLayer) {
       <span class="section__title">{{ t('Settings.sections.models') }}</span>
     </div>
     <div class="settings-container">
-      <!-- What a form cannot say: whether the file can be read, and the place mode on the preview. -->
-      <div v-for="layer in settings.modelLayers.toArray()" :key="layer.id" class="symbol-status">
-        <span class="symbol-status__name">{{ layer.name || layer.id }}</span>
-        <span :class="['symbol-status__text', { 'symbol-status__text--error': modelStatusText(layer.url).error }]">
-          {{ modelStatusText(layer.url).text }}
-        </span>
-        <DButton size="sm" :intent="placingId === layer.id ? 'primary' : 'default'" @click="togglePlacing(layer)">
-          <DIcon name="ads_click" size="sm" />{{ placingId === layer.id ? t('Settings.models.placing') : t('Settings.models.place') }}
-        </DButton>
-        <p v-if="placingId === layer.id" class="note">{{ t('Settings.models.placeHint') }}</p>
-      </div>
       <SettingsForm
         :model-value="settings"
         :create="createSettings"
@@ -563,26 +562,6 @@ function addColor(layer: ThingLayer) {
 
 .wms-service__layer:hover {
   text-decoration: underline;
-}
-
-.symbol-status {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.symbol-status__name {
-  font-weight: 600;
-}
-
-.symbol-status__text {
-  font-size: var(--text-sm);
-  color: var(--color-dim);
-  overflow-wrap: anywhere;
-}
-
-.symbol-status__text--error {
-  color: var(--color-err);
 }
 
 .layer {
