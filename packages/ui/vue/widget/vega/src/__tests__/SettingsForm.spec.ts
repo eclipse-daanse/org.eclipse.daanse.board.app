@@ -184,7 +184,7 @@ describe('the chart settings form', () => {
     view.unmount()
   })
 
-  it('explains each field in the reader's language', async () => {
+  it('explains each field in the language of the reader', async () => {
     const view = await settingsForm(CHARTS.bar.settings(), undefined, 'de')
     expect(view.text()).toContain(de.Hints.Layer.mark)
     expect(view.text()).toContain(de.Hints.Encoding.field)
