@@ -84,8 +84,11 @@ what the widget reads and what a board carries between sessions.
 
         <!-- Drawing it -->
         <eStructuralFeatures xsi:type="ecore:EAttribute" name="rangeStripColor"
-                             eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
-                             defaultValueLiteral="#d17600"/>
+                             eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="Colour of the selected range and of the handle rings. Empty means the theme accent (--color-accent). The rail and the handles always take their colours from the theme."/>
+            </eAnnotations>
+        </eStructuralFeatures>
         <eStructuralFeatures xsi:type="ecore:EAttribute" name="showTimeInfo"
                              eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
                              defaultValueLiteral="true"/>

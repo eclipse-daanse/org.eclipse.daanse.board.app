@@ -12,24 +12,32 @@ Contributors:
 -->
 
 <template>
-  <div class="timeline-widget" @click="emitClick" @contextmenu.prevent="emitRightClick">
-    <!-- Timeline Slider Container -->
+  <div
+    class="timeline-widget"
+    :style="{ '--range-color': rangeFill }"
+    @click="emitClick"
+    @contextmenu.prevent="emitRightClick"
+  >
     <div class="timeline-container">
-      <!-- Timeline Track -->
-      <div class="timeline-track" ref="trackRef" :style="timelineTrackStyle">
-        <!-- Transparenter Range-Streifen mit Knobs -->
+      <!-- The track: a rail from the theme, the selected range on it -->
+      <div class="timeline-track" ref="trackRef">
+        <div class="rail"></div>
         <div
           class="range-strip"
           :style="rangeStripStyle"
           @mousedown="onRangeStripMouseDown"
           :title="config.fixStartKnob ? t('Widget.rangeFixed') : t('Widget.range')"
         >
-          <!-- Linker Knob (Start) -->
           <div
             v-if="!config.fixStartKnob"
             class="timeline-knob start-knob"
+            role="slider"
+            tabindex="0"
+            :aria-label="t('Widget.startKnob')"
+            :aria-valuetext="formatDateTime(rangeStart)"
             :style="{ zIndex: startKnobOnTop ? 5 : 4 }"
             @mousedown.stop="onStartKnobMouseDown"
+            @keydown="onKnobKeydown('start', $event)"
             :title="t('Widget.startKnob')"
           ></div>
           <div
@@ -38,22 +46,26 @@ Contributors:
             :title="t('Widget.startKnobFixed')"
           ></div>
 
-          <!-- Rechter Knob (Ende) -->
           <div
             class="timeline-knob end-knob"
+            role="slider"
+            tabindex="0"
+            :aria-label="t('Widget.endKnob')"
+            :aria-valuetext="formatDateTime(rangeEnd)"
             :style="{ zIndex: startKnobOnTop ? 3 : 4 }"
             @mousedown.stop="onEndKnobMouseDown"
+            @keydown="onKnobKeydown('end', $event)"
             :title="t('Widget.endKnob')"
           ></div>
         </div>
       </div>
 
-      <!-- Zeitbereich-Display unterhalb des Sliders -->
+      <!-- Axis at round times -->
       <div class="time-axis">
         <div
           v-for="tick in timeAxisTicks"
-          :key="tick.timestamp"
-          class="time-tick"
+          :key="tick.ms"
+          :class="['time-tick', `time-tick--${tick.kind}`, tick.edge && `time-tick--${tick.edge}`]"
           :style="{ left: tick.position + '%' }"
         >
           <div class="tick-mark"></div>
@@ -62,7 +74,6 @@ Contributors:
       </div>
     </div>
 
-    <!-- Aktueller Zeitbereich-Info -->
     <div v-if="config.showTimeInfo !== false" class="time-info">
       <div class="time-display">
         <span class="time-label">{{ t('Widget.start') }}</span>
@@ -78,32 +89,33 @@ Contributors:
       </div>
     </div>
 
-    <!-- Play-Button und Geschwindigkeits-Kontrolle -->
     <div v-if="config.showControls !== false" class="controls">
       <button
+        type="button"
         class="play-button"
         :class="{ 'playing': isPlaying }"
-        :style="playButtonStyle"
-        @click="togglePlay"
+        :aria-label="isPlaying ? t('Widget.pause') : t('Widget.play')"
+        :title="isPlaying ? t('Widget.pause') : t('Widget.play')"
+        @click.stop="togglePlay"
         :disabled="isAtEnd"
       >
-        <svg v-if="!isPlaying" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+        <svg v-if="!isPlaying" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
           <path d="M8 5v14l11-7z"/>
         </svg>
-        <svg v-else width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+        <svg v-else width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
           <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
         </svg>
       </button>
 
-      <div class="speed-control">
-        <label>{{ t('Widget.speed') }}</label>
-        <select v-model="playbackSpeed">
-          <option value="0.25">0.25x</option>
-          <option value="0.5">0.5x</option>
-          <option value="1">1x</option>
-          <option value="2">2x</option>
-          <option value="4">4x</option>
-        </select>
+      <div class="speed-control" @click.stop>
+        <DSelect
+          v-model="playbackSpeed"
+          :options="speedOptions"
+          value-key="value"
+          label-key="label"
+          :label="t('Widget.speed')"
+          size="sm"
+        />
       </div>
     </div>
   </div>
@@ -113,6 +125,8 @@ Contributors:
 import { ref, shallowRef, computed, onMounted, onUnmounted, inject, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import { VariableWrapper, useFormat, useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables';
+import { DSelect } from 'org.eclipse.daanse.board.app.ui.vue.controls';
+import { axisTicks, rangeColor, TICK_FORMAT, type TickKind } from './timelineAxis';
 import {
     identifier as variableIdentifier,
     type VariableRepository
@@ -405,58 +419,17 @@ const endKnobPosition = computed(() => {
   return Math.max(0, Math.min(100, ((endMs - minMs) / (maxMs - minMs)) * 100));
 });
 
-// Style für den transparenten Streifen zwischen den Knobs
+// Position of the selected range on the track
 const rangeStripStyle = computed(() => {
-  if (tempRangeStripStyle.value) {
-    return {
-      ...tempRangeStripStyle.value,
-      background: getRangeStripColor(0.5),
-      borderColor: config.value.rangeStripColor || '#d17600'
-    };
-  }
+  if (tempRangeStripStyle.value) return tempRangeStripStyle.value;
   return {
     left: startKnobPosition.value + '%',
-    width: (endKnobPosition.value - startKnobPosition.value) + '%',
-    background: getRangeStripColor(0.5),
-    borderColor: config.value.rangeStripColor || '#d17600'
+    width: (endKnobPosition.value - startKnobPosition.value) + '%'
   };
 });
 
-// Helper für Range-Strip-Farbe mit Transparenz
-const getRangeStripColor = (opacity: number): string => {
-  const color = config.value.rangeStripColor || '#d17600';
-  // Konvertiere Hex zu RGBA
-  const hex = color.replace('#', '');
-  const r = parseInt(hex.substr(0, 2), 16);
-  const g = parseInt(hex.substr(2, 2), 16);
-  const b = parseInt(hex.substr(4, 2), 16);
-  return `rgba(${r}, ${g}, ${b}, ${opacity})`;
-};
-
-// Style für Timeline-Track (Delta-berechnet basierend auf Range-Strip Farbe)
-const timelineTrackStyle = computed(() => {
-  const baseColor = config.value.rangeStripColor || '#d17600';
-  const trackColor = calculateTrackColor(baseColor);
-  return {
-    backgroundColor: trackColor
-  };
-});
-
-// Berechne Track-Farbe als hellere Variante der Range-Strip Farbe
-const calculateTrackColor = (hexColor: string): string => {
-  const hex = hexColor.replace('#', '');
-  const r = parseInt(hex.substr(0, 2), 16);
-  const g = parseInt(hex.substr(2, 2), 16);
-  const b = parseInt(hex.substr(4, 2), 16);
-
-  // Hellere Variante: 40% heller, aber nicht über 255
-  const deltaFactor = 0.6; // 60% zum Weiß hin
-  const lightR = Math.min(255, Math.round(r + (255 - r) * deltaFactor));
-  const lightG = Math.min(255, Math.round(g + (255 - g) * deltaFactor));
-  const lightB = Math.min(255, Math.round(b + (255 - b) * deltaFactor));
-
-  return `rgb(${lightR}, ${lightG}, ${lightB})`;
-};
+/* Only the range follows the setting; rail and handles come from the theme. */
+const rangeFill = computed(() => rangeColor(config.value.rangeStripColor));
 
 // Berechne Zeitschritt in Millisekunden basierend auf StepSize
 const getStepSizeInMs = (): number => {
@@ -470,35 +443,6 @@ const getStepSizeInMs = (): number => {
     case 'month': return 30 * 24 * 60 * 60 * 1000; // 1 Monat (ca. 30 Tage)
     default: return 60 * 60 * 1000;           // Default: 1 Stunde
   }
-};
-
-// Style für Play-Button basierend auf RangeStripColor
-const playButtonStyle = computed(() => {
-  const baseColor = config.value.rangeStripColor || '#d17600';
-  const playingColor = calculatePlayingColor(baseColor);
-
-  return {
-    '--play-button-bg': baseColor,
-    '--play-button-playing': playingColor
-  };
-});
-
-// Berechne Playing-Farbe als dunklere/wärmere Variante
-const calculatePlayingColor = (hexColor: string): string => {
-  const hex = hexColor.replace('#', '');
-  const r = parseInt(hex.substr(0, 2), 16);
-  const g = parseInt(hex.substr(2, 2), 16);
-  const b = parseInt(hex.substr(4, 2), 16);
-
-  // Dunklere und etwas rötlichere Variante für "Playing" State
-  const darkenFactor = 0.8; // 20% dunkler
-  const warmFactor = 1.1;   // Leicht wärmer (mehr rot)
-
-  const darkR = Math.min(255, Math.round(r * darkenFactor * warmFactor));
-  const darkG = Math.round(g * darkenFactor);
-  const darkB = Math.round(b * darkenFactor);
-
-  return `rgb(${darkR}, ${darkG}, ${darkB})`;
 };
 
 // Prüfung ob Ende erreicht
@@ -515,35 +459,54 @@ const startKnobOnTop = computed(() => {
   return startKnobPosition.value > 50;
 });
 
-// Zeitachse mit formatierten Ticks
+/* The width of the track decides how many labels fit. */
+const trackWidth = ref(0);
+let trackObserver: ResizeObserver | null = null;
+/** Room for one label in monospace, with a gap. */
+const TICK_SPACING_PX = 96;
+
 const timeAxisTicks = computed(() => {
-  const ticks: Array<{timestamp: string, position: number, label: string}> = [];
   const minMs = timelineMin.value.getTime();
   const maxMs = timelineMax.value.getTime();
-  const totalRange = maxMs - minMs;
-  const tickCount = 8; // Anzahl der Ticks
-
-  for (let i = 0; i <= tickCount; i++) {
-    const tickMs = minMs + (totalRange / tickCount) * i;
-    const tickDate = new Date(tickMs);
-    const position = (i / tickCount) * 100;
-
-    const label = format.date(tickDate, {
-      day: '2-digit',
-      month: '2-digit',
-      hour: '2-digit',
-      minute: '2-digit'
-    });
-
-    ticks.push({
-      timestamp: tickDate.toISOString(),
-      position,
-      label
-    });
-  }
-
-  return ticks;
+  const target = trackWidth.value > 0 ? trackWidth.value / TICK_SPACING_PX : 8;
+  return axisTicks(minMs, maxMs, target).map((tick) => ({
+    ...tick,
+    label: format.date(new Date(tick.ms), TICK_FORMAT[tick.kind as TickKind]),
+    // Labels at the ends grow inwards, so they are not cut off
+    edge: tick.position < 4 ? 'start' : tick.position > 96 ? 'end' : null
+  }));
 });
+
+const speedOptions = [0.25, 0.5, 1, 2, 4].map((value) => ({ label: `${value}×`, value }));
+
+/* Keyboard: arrows move a handle by one step, Page keys by ten, Home and End to the limits. */
+const onKnobKeydown = (which: 'start' | 'end', event: KeyboardEvent) => {
+  const step = getStepSizeInMs();
+  const moves: Record<string, number> = {
+    ArrowLeft: -step, ArrowDown: -step, ArrowRight: step, ArrowUp: step,
+    PageDown: -10 * step, PageUp: 10 * step
+  };
+  const minMs = timelineMin.value.getTime();
+  const maxMs = timelineMax.value.getTime();
+  const startMs = rangeStart.value.getTime();
+  const endMs = rangeEnd.value.getTime();
+  let target: number;
+  if (event.key in moves) {
+    target = (which === 'start' ? startMs : endMs) + moves[event.key];
+  } else if (event.key === 'Home') {
+    target = minMs;
+  } else if (event.key === 'End') {
+    target = maxMs;
+  } else {
+    return;
+  }
+  event.preventDefault();
+  if (which === 'start') {
+    updateConfig(new Date(Math.max(minMs, Math.min(target, endMs - 60000))), new Date(endMs), true);
+  } else {
+    updateConfig(new Date(startMs), new Date(Math.min(maxMs, Math.max(target, startMs + 60000))), true);
+  }
+};
 
 // Formatierungshelfer
 const formatDateTime = (date: Date): string => {
@@ -982,13 +945,10 @@ onMounted(() => {
     config.value.playbackSpeed = 1;
     playbackSpeed.value = 1;
   } else {
-    playbackSpeed.value = config.value.playbackSpeed;
+    playbackSpeed.value = Number(config.value.playbackSpeed);
   }
 
-  // Farbe und Verhalten initialisieren
-  if (!config.value.rangeStripColor) {
-    config.value.rangeStripColor = '#d17600';
-  }
+  /* No colour is written here: an empty one means the theme accent. */
   if (config.value.fixStartKnob === undefined) {
     config.value.fixStartKnob = false;
   }
@@ -1021,94 +981,124 @@ onMounted(() => {
   if (config.value.relativeTime?.enabled) {
     applyRelativeTime();
   }
+
+  if (trackRef.value && typeof ResizeObserver !== 'undefined') {
+    trackObserver = new ResizeObserver((entries) => {
+      trackWidth.value = entries[0]?.contentRect.width ?? 0;
+    });
+    trackObserver.observe(trackRef.value);
+  }
 });
 
 // Cleanup
 onUnmounted(() => {
   if (widgetId?.value) actionsRegistry.unregisterInstance(widgetId.value);
   stopPlayback();
+  trackObserver?.disconnect();
+  trackObserver = null;
 });
 </script>
 
 <style scoped>
-/* Timeline Widget Hauptcontainer */
+/*
+ * Every colour comes from a theme token. The one exception is --range-color,
+ * the selected range: the setting rangeStripColor, or the theme accent.
+ */
 .timeline-widget {
+  --range-color: var(--color-accent);
+  --knob-size: 14px;
+  --rail-height: 6px;
   display: flex;
   flex-direction: column;
-  gap: 1rem;
-  padding: 1rem;
-
+  justify-content: center;
+  gap: 10px;
+  height: 100%;
+  box-sizing: border-box;
+  padding: 10px 14px;
+  font-family: var(--font-sans);
+  color: var(--color-fg);
 }
 
-/* Timeline Container mit Slider und Zeitachse */
 .timeline-container {
-  overflow: hidden;
   position: relative;
-  background: var(--color-bg);
-  border: 1px solid var(--color-divider);
-  border-radius: 8px;
-  padding: 1rem;
-  min-height: 80px;
+  padding: 0 calc(var(--knob-size) / 2);
 }
 
-/* Timeline Track (Slider-Bereich) */
+/* The hit area is taller than the rail, so the range is easy to grab */
 .timeline-track {
   position: relative;
-  height: 40px;
-  /* background wird via computed style gesetzt */
-  border-radius: 20px;
-  margin-bottom: 1rem;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
+  height: 24px;
 }
 
-/* Transparenter Range-Streifen zwischen den Knobs */
+.rail {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: var(--rail-height);
+  transform: translateY(-50%);
+  background: var(--color-divider);
+  border-radius: 999px;
+}
+
 .range-strip {
   position: absolute;
   top: 0;
   height: 100%;
-  /* background und border werden via computed style gesetzt */
-  border-width: 1px;
-  border-style: solid;
-  border-radius: 20px;
   cursor: grab;
-  transition: background-color 0.2s ease, border-color 0.2s ease;
   z-index: 1;
 }
 
-.range-strip:hover {
-  filter: brightness(1.1);
+.range-strip::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: var(--rail-height);
+  transform: translateY(-50%);
+  background: var(--range-color);
+  border-radius: 999px;
+  transition: height 0.15s ease;
+}
+
+.range-strip:hover::before {
+  height: calc(var(--rail-height) + 2px);
 }
 
 .range-strip:active {
   cursor: grabbing;
 }
 
-/* Timeline Knobs (Start und Ende) - relativ zum Range-Strip positioniert */
 .timeline-knob {
   position: absolute;
   top: 50%;
-  width: 24px;
-  height: 24px;
-  background: var(--color-accent);
-  border: 3px solid white;
+  width: var(--knob-size);
+  height: var(--knob-size);
+  box-sizing: border-box;
+  background: var(--color-raised);
+  border: 2px solid var(--range-color);
   border-radius: 50%;
   cursor: grab;
   transform: translate(-50%, -50%);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-  transition: all 0.2s ease;
+  box-shadow: var(--shadow-e1);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
   z-index: 3;
 }
 
 .timeline-knob:hover {
-  background: var(--color-accent);
-  transform: translate(-50%, -50%) scale(1.1);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  transform: translate(-50%, -50%) scale(1.2);
+  box-shadow: var(--shadow-e2);
 }
 
 .timeline-knob:active {
   cursor: grabbing;
-  transform: translate(-50%, -50%) scale(1.2);
+  transform: translate(-50%, -50%) scale(1.25);
+}
+
+.timeline-knob:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
 }
 
 .start-knob {
@@ -1116,200 +1106,168 @@ onUnmounted(() => {
   z-index: 4;
 }
 
-.fixed-knob {
-  cursor: not-allowed !important;
-  opacity: 0.7;
-}
-
-.fixed-knob:hover {
-  transform: translate(-50%, -50%) !important;
-  background: var(--color-divider) !important;
-}
-
 .end-knob {
-  right: -24px;
+  left: 100%;
   z-index: 4;
 }
 
-/* Zeitachse unterhalb des Sliders */
-.time-axis {
-  position: relative;
-  height: 30px;
-  background: var(--color-pane);
-  border-top: 1px solid var(--color-divider);
-  border-radius: 0 0 8px 8px;
-  margin: 0 -1rem -1rem -1rem;
-  padding: 0 1rem;
+.fixed-knob {
+  cursor: not-allowed;
+  background: var(--color-divider);
+  border-color: var(--color-outline);
 }
 
-/* Zeit-Ticks auf der Zeitachse */
+.fixed-knob:hover {
+  transform: translate(-50%, -50%);
+  box-shadow: var(--shadow-e1);
+}
+
+/* Axis: flat, on the widget surface */
+.time-axis {
+  position: relative;
+  height: 20px;
+}
+
 .time-tick {
   position: absolute;
   top: 0;
-  height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
   transform: translateX(-50%);
   pointer-events: none;
-  z-index: 2;
+}
+
+.time-tick--start {
+  align-items: flex-start;
+  transform: none;
+}
+
+.time-tick--end {
+  align-items: flex-end;
+  transform: translateX(-100%);
 }
 
 .tick-mark {
   width: 1px;
-  height: 8px;
-  background: var(--color-dim);
-  margin-top: 2px;
+  height: 4px;
+  background: var(--color-outline);
 }
 
 .tick-label {
-  font-size: 0.7rem;
+  margin-top: 2px;
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  font-variant-numeric: tabular-nums;
+  line-height: 1.2;
   color: var(--color-dim);
-  margin-top: 4px;
   white-space: nowrap;
   user-select: none;
 }
 
-/* Zeitbereich-Info */
+/* Day and year boundaries stand out from clock times */
+.time-tick--date .tick-mark,
+.time-tick--year .tick-mark {
+  height: 6px;
+  background: var(--color-dim);
+}
+
+.time-tick--date .tick-label,
+.time-tick--year .tick-label {
+  color: var(--color-fg);
+}
+
 .time-info {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 1rem;
-  font-size: 0.9rem;
-  background: var(--color-bg);
-  border: 1px solid var(--color-divider);
-  border-radius: 6px;
-  padding: 0.75rem;
+  gap: 16px;
+  padding-top: 8px;
+  border-top: 1px solid var(--color-divider);
 }
 
 .time-display {
   display: flex;
   flex-direction: column;
-  gap: 0.25rem;
+  gap: 2px;
   flex: 1;
-  text-align: center;
+  min-width: 0;
 }
 
 .time-label {
-  font-size: 0.8rem;
-  font-weight: 500;
+  font-size: var(--text-xs);
   color: var(--color-dim);
 }
 
 .time-value {
-  font-size: 0.9rem;
-  font-weight: 600;
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  font-variant-numeric: tabular-nums;
   color: var(--color-fg);
-  word-wrap: break-word;
+  overflow-wrap: anywhere;
 }
 
-/* Kontrollen (Play-Button und Geschwindigkeit) */
 .controls {
   display: flex;
   align-items: center;
-  gap: 1rem;
-  justify-content: center;
-  flex-wrap: wrap;
+  gap: 12px;
 }
 
 .play-button {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 56px;
-  height: 56px;
-  border: none;
+  flex: none;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 1px solid var(--color-outline);
   border-radius: 50%;
-  background: var(--play-button-bg, var(--color-accent));
-  color: white;
+  background: var(--color-raised);
+  color: var(--range-color);
   cursor: pointer;
-  transition: all 0.2s ease;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  box-shadow: var(--shadow-e1);
+  transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
 }
 
 .play-button:hover:not(:disabled) {
-  background: var(--color-accent);
-  transform: scale(1.05);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  border-color: var(--range-color);
 }
 
-.play-button:disabled {
-  background: var(--color-divider);
-  color: var(--color-dim);
-  cursor: not-allowed;
-  transform: none;
+.play-button:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
 }
 
 .play-button.playing {
-  background: var(--play-button-playing, #ff6b35);
-  animation: pulse 2s infinite;
+  background: var(--range-color);
+  border-color: var(--range-color);
+  color: var(--color-onAccent);
 }
 
-.play-button.playing:hover {
-  filter: brightness(0.9);
+.play-button:disabled {
+  color: var(--color-dim);
+  cursor: not-allowed;
+  box-shadow: none;
+  opacity: 0.6;
 }
 
-@keyframes pulse {
-  0% { box-shadow: 0 2px 8px var(--play-button-bg, rgba(255, 107, 53, 0.4)); }
-  50% { box-shadow: 0 4px 16px var(--play-button-bg, rgba(255, 107, 53, 0.8)); }
-  100% { box-shadow: 0 2px 8px var(--play-button-bg, rgba(255, 107, 53, 0.4)); }
-}
-
-.speed-control {
-  display: flex;
+.speed-control :deep(.field) {
+  margin-bottom: 0;
   align-items: center;
-  gap: 0.5rem;
-  font-size: 0.9rem;
 }
 
-.speed-control label {
-  font-weight: 500;
-  color: var(--color-fg);
-  min-width: fit-content;
+.speed-control :deep(.field__label) {
+  width: auto;
+  font-size: var(--text-xs);
 }
 
-.speed-control select {
-  padding: 0.5rem;
-  border: 1px solid var(--color-divider);
-  border-radius: 4px;
-  background: var(--color-bg);
-  color: var(--color-fg);
-  font-size: 0.9rem;
-  cursor: pointer;
-}
-
-/* Responsive Design */
 @media (max-width: 768px) {
   .time-info {
     flex-direction: column;
-    gap: 0.75rem;
+    gap: 8px;
   }
 
-  .time-display {
-    text-align: left;
-  }
-
-  .controls {
-    flex-direction: column;
-    gap: 0.75rem;
-  }
-
-  .timeline-knob {
-    width: 28px;
-    height: 28px;
-  }
-
-  .tick-label {
-    font-size: 0.6rem;
-  }
-
-  .timeline-container {
-    min-height: 70px;
-  }
-
-  .timeline-track {
-    height: 35px;
+  .timeline-widget {
+    --knob-size: 18px;
   }
 }
 </style>

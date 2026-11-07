@@ -6,10 +6,12 @@
     "startKnob": "Start time",
     "startKnobFixed": "Start time (fixed)",
     "endKnob": "End time",
-    "start": "Start:",
-    "end": "End:",
-    "duration": "Duration:",
-    "speed": "Speed:"
+    "start": "Start",
+    "end": "End",
+    "duration": "Duration",
+    "speed": "Speed",
+    "play": "Play",
+    "pause": "Pause"
   },
   "Settings": {
     "section": "Time range",

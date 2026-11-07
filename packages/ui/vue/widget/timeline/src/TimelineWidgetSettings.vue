@@ -230,7 +230,7 @@ const settings = ref<TimelineSettings>({
   stepSize: 'hour',
   playbackSpeed: 1,
   autoPlay: false,
-  rangeStripColor: '#d17600',
+  rangeStripColor: undefined,
   fixStartKnob: false,
   showTimeInfo: true,
   showControls: true
@@ -618,7 +618,7 @@ const resetToDefaults = () => {
     stepSize: 'hour',
     playbackSpeed: 1,
     autoPlay: false,
-    rangeStripColor: '#d17600',
+    rangeStripColor: undefined,
     fixStartKnob: false,
     showTimeInfo: true,
     showControls: true
