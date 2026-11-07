@@ -279,6 +279,14 @@ const featureDoc = computed(() => {
  * the field's label key. The model's documentation is English, and stayed
  * English under a German label (#1285).
  */
+/*
+ * Asked whether the text exists before it is asked for: most fields of
+ * most packages have no hint text, and asking for each logged a missing
+ * key for every field of every form opened.
+ */
+const i18n = inject<{ exists?: (key: string) => boolean } | undefined>('i18n', undefined)
+  ?? inject<{ exists?: (key: string) => boolean } | undefined>('I18next', undefined)
+
 const translatedHint = computed(() => {
   const label = props.custom?.rawWidget?.label
   const namespace = typeof label === 'string' ? /^([A-Za-z][\w-]*):/.exec(label)?.[1] : undefined
@@ -286,6 +294,7 @@ const translatedHint = computed(() => {
   const name = props.feature?.getName?.()
   if (!namespace || !owner || !name) return undefined
   const key = `${namespace}:Hints.${owner}.${name}`
+  if (typeof i18n?.exists === 'function' && !i18n.exists(key)) return undefined
   const text = localized(key)
   return text && text !== key && text !== `Hints.${owner}.${name}` ? text : undefined
 })
