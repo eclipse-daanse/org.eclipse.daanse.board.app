@@ -38,17 +38,25 @@ const MIDDLE = 50
 /** Never more requests than this for one read. */
 export const MAX_TILES = 36
 
-/** The tiles of a box: [west, south, east, north] each, about square on the ground. */
+/**
+ * The tiles of a box: [west, south, east, north] each, about square on the
+ * ground and at most tileSize high; the box is shared out evenly, so no
+ * tile is a sliver.
+ */
 export function tilesOf(bbox: unknown, tileSize = 0.01): [number, number, number, number][] {
   const box = boxOf(bbox)
   if (!box) return []
   const [west, south, east, north] = box
   const dLat = tileSize > 0 ? tileSize : 0.01
   const dLon = dLat / Math.max(0.2, Math.cos((((south + north) / 2) * Math.PI) / 180))
+  const rows = Math.max(1, Math.ceil((north - south) / dLat - 1e-9))
+  const columns = Math.max(1, Math.ceil((east - west) / dLon - 1e-9))
+  const height = (north - south) / rows
+  const width = (east - west) / columns
   const tiles: [number, number, number, number][] = []
-  for (let y = south; y < north - 1e-12; y += dLat) {
-    for (let x = west; x < east - 1e-12; x += dLon) {
-      tiles.push([x, y, Math.min(x + dLon, east), Math.min(y + dLat, north)])
+  for (let row = 0; row < rows; row++) {
+    for (let column = 0; column < columns; column++) {
+      tiles.push([west + column * width, south + row * height, west + (column + 1) * width, south + (row + 1) * height])
       if (tiles.length >= MAX_TILES) return tiles
     }
   }
