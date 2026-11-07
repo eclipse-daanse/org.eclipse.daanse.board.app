@@ -264,6 +264,11 @@ they are.
                 <details key="documentation" value="Picking a starter chart replaces the layers, selections and small multiples with that chart, filled with columns of the data; then this field is empty again. Discarding the settings brings the chart back as it was."/>
             </eAnnotations>
         </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="independentScales" eType="#//Channel" upperBound="-1" lowerBound="0">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="The channels whose scale each layer has for itself (#1304): y gives every layer its own y axis - a temperature on the left, a precipitation on the right. Only read with more than one layer or with small multiples."/>
+            </eAnnotations>
+        </eStructuralFeatures>
     </eClassifiers>
 
     <eClassifiers xsi:type="ecore:EClass" name="DatasetBinding">
@@ -489,6 +494,11 @@ they are.
                 <details key="documentation" value="Fixed outputs per data value (#1304): each listed value of the field is drawn as its own output - a colour, a shape, a size, an opacity - rather than as the scheme picks. List every value, or none: a value not listed gets no output of its own."/>
             </eAnnotations>
         </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="axisOrient" eType="#//AxisOrient" lowerBound="0" defaultValueLiteral="auto">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="The side the axis of this position channel is drawn on. auto: x below, y left."/>
+            </eAnnotations>
+        </eStructuralFeatures>
     </eClassifiers>
 
     <eClassifiers xsi:type="ecore:EEnum" name="DatasetShape">
@@ -680,5 +690,16 @@ they are.
                 <details key="documentation" value="What the value is drawn as: a CSS colour for colour, a shape name (circle, square, triangle-up, ...) for shape, a number for size and opacity."/>
             </eAnnotations>
         </eStructuralFeatures>
+    </eClassifiers>
+
+    <eClassifiers xsi:type="ecore:EEnum" name="AxisOrient">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+            <details key="documentation" value="The side of the chart an axis is drawn on; auto lets Vega-Lite choose."/>
+        </eAnnotations>
+        <eLiterals name="auto" literal="auto"/>
+        <eLiterals name="left" literal="left" value="1"/>
+        <eLiterals name="right" literal="right" value="2"/>
+        <eLiterals name="top" literal="top" value="3"/>
+        <eLiterals name="bottom" literal="bottom" value="4"/>
     </eClassifiers>
 </ecore:EPackage>

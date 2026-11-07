@@ -19,7 +19,8 @@
     "layersHint": "Noch keine Ebene: füge eine hinzu, um Marken zu zeichnen.",
     "datasetsHint": "Keiner: das Diagramm zeichnet die Datenquelle des Widgets als Datensatz table.",
     "paramsHint": "Keine Auswahl: Marken werden nicht ausgewählt.",
-    "starter": "Mit einem Diagramm beginnen"
+    "starter": "Mit einem Diagramm beginnen",
+    "independentScales": "Eigene Skala je Ebene für"
   },
   "Options": {
     "legendPosition": {
@@ -158,6 +159,13 @@
       "boxplot": "Boxplot",
       "donut": "Ring",
       "brush": "Aufziehen und hervorheben"
+    },
+    "axisOrient": {
+      "auto": "Automatisch",
+      "left": "Links",
+      "right": "Rechts",
+      "top": "Oben",
+      "bottom": "Unten"
     }
   },
   "FormLayer": {
@@ -200,7 +208,8 @@
     "highlightParam": "Hervorheben, was diese Auswahl enthält",
     "valueIfNotSelected": "Wert außerhalb der Auswahl (z. B. lightgray, 0.2)",
     "scaleEntries": "Feste Ausgabe je Wert",
-    "scaleEntriesHint": "Keine: das Schema entscheidet."
+    "scaleEntriesHint": "Keine: das Schema entscheidet.",
+    "axisOrient": "Seite der Achse"
   },
   "FormParam": {
     "name": "Name",
@@ -233,7 +242,8 @@
       "facet": "Teilt das Diagramm in kleine Vielfache, eines je Wert eines Felds. Leer zeichnet ein einziges Diagramm.",
       "params": "Auswahlen und Werte, die das Diagramm hält: was ausgewählt oder aufgezogen ist, und Werte, auf die andere Einstellungen mit ihrem Namen verweisen.",
       "datasets": "Die Daten, die das Diagramm zeichnet, nach Namen. Ohne Eintrag ist die Datenquelle des Widgets der Datensatz table; ein Eintrag namens table ohne eigene Quelle sagt, wie diese gelesen wird.",
-      "starter": "Ersetzt Ebenen, Auswahlen und kleine Vielfache durch dieses Diagramm, gefüllt mit Spalten der Daten. Danach ist die Wahl wieder leer; „Verwerfen“ holt das Diagramm zurück."
+      "starter": "Ersetzt Ebenen, Auswahlen und kleine Vielfache durch dieses Diagramm, gefüllt mit Spalten der Daten. Danach ist die Wahl wieder leer; „Verwerfen“ holt das Diagramm zurück.",
+      "independentScales": "Die Kanäle, deren Skala jede Ebene für sich hat: y gibt jeder Ebene ihre eigene y-Achse - eine Temperatur links, einen Niederschlag rechts. Nur mit mehr als einer Ebene oder mit kleinen Vielfachen gelesen."
     },
     "DatasetBinding": {
       "name": "Der Name, unter dem Ebenen diesen Datensatz zeichnen. table ist die Datenquelle des Widgets.",
@@ -280,7 +290,8 @@
       "showLegend": "Ob ein Farb-, Größen-, Form- oder Deckkraftkanal seine Legende zeichnet.",
       "highlightParam": "Der Name einer Auswahl. Marken in der Auswahl behalten Feld oder Wert oben; die anderen nehmen den Wert darunter – so hebt eine Auswahl hervor.",
       "valueIfNotSelected": "Der Wert, den Marken außerhalb der Auswahl nehmen, etwa lightgray oder 0.2.",
-      "scaleEntries": "Jeder hier genannte Wert des Felds wird mit seiner eigenen Ausgabe gezeichnet - Farbe, Form, Größe, Deckkraft - statt wie das Schema wählt. Nenne alle Werte oder keinen: ein nicht genannter Wert bekommt keine eigene Ausgabe."
+      "scaleEntries": "Jeder hier genannte Wert des Felds wird mit seiner eigenen Ausgabe gezeichnet - Farbe, Form, Größe, Deckkraft - statt wie das Schema wählt. Nenne alle Werte oder keinen: ein nicht genannter Wert bekommt keine eigene Ausgabe.",
+      "axisOrient": "Auf welcher Seite die Achse dieses Positionskanals steht. Automatisch: x unten, y links."
     },
     "Facet": {
       "row": "Das Feld, dessen Werte die Zeilen bilden. Leer bildet keine Zeilen.",

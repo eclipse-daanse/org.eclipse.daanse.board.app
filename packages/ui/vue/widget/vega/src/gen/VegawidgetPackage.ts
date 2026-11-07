@@ -36,6 +36,7 @@ import { ParamKind } from './ParamKind.js';
 import { ParamBind } from './ParamBind.js';
 import { StarterChart } from './StarterChart.js';
 import { DatasetShape } from './DatasetShape.js';
+import { AxisOrient } from './AxisOrient.js';
 
 /**
  * Resolve a dependency package from the registry, failing with an actionable
@@ -84,6 +85,7 @@ export class VegawidgetPackage extends BasicEPackage {
     VEGA_WIDGET_SETTINGS__DATASETS: null as unknown as EAttribute | EReference,
     VEGA_WIDGET_SETTINGS__SPEC_OVERLAY: null as unknown as EAttribute | EReference,
     VEGA_WIDGET_SETTINGS__STARTER: null as unknown as EAttribute | EReference,
+    VEGA_WIDGET_SETTINGS__INDEPENDENT_SCALES: null as unknown as EAttribute | EReference,
     DATASET_BINDING: null as unknown as EClass,
     DATASET_BINDING__NAME: null as unknown as EAttribute | EReference,
     DATASET_BINDING__DATASOURCE_ID: null as unknown as EAttribute | EReference,
@@ -128,6 +130,7 @@ export class VegawidgetPackage extends BasicEPackage {
     ENCODING__HIGHLIGHT_PARAM: null as unknown as EAttribute | EReference,
     ENCODING__VALUE_IF_NOT_SELECTED: null as unknown as EAttribute | EReference,
     ENCODING__SCALE_ENTRIES: null as unknown as EAttribute | EReference,
+    ENCODING__AXIS_ORIENT: null as unknown as EAttribute | EReference,
     FACET: null as unknown as EClass,
     FACET__ROW: null as unknown as EAttribute | EReference,
     FACET__COLUMN: null as unknown as EAttribute | EReference,
@@ -168,6 +171,7 @@ export class VegawidgetPackage extends BasicEPackage {
     PARAM_BIND: null as unknown as EEnum,
     STARTER_CHART: null as unknown as EEnum,
     DATASET_SHAPE: null as unknown as EEnum,
+    AXIS_ORIENT: null as unknown as EEnum,
   };
 
   private constructor() {
@@ -286,6 +290,14 @@ export class VegawidgetPackage extends BasicEPackage {
     vegaWidgetSettings_starter.setDefaultValueLiteral("none");
     vegaWidgetSettingsClass.getEStructuralFeatures().push(vegaWidgetSettings_starter);
     VegawidgetPackage.Literals.VEGA_WIDGET_SETTINGS__STARTER = vegaWidgetSettings_starter;
+
+    // Create independentScales feature
+    const vegaWidgetSettings_independentScales = new BasicEAttribute();
+    vegaWidgetSettings_independentScales.setName('independentScales');
+    vegaWidgetSettings_independentScales.setLowerBound(0);
+    vegaWidgetSettings_independentScales.setUpperBound(-1);
+    vegaWidgetSettingsClass.getEStructuralFeatures().push(vegaWidgetSettings_independentScales);
+    VegawidgetPackage.Literals.VEGA_WIDGET_SETTINGS__INDEPENDENT_SCALES = vegaWidgetSettings_independentScales;
 
     // Create DatasetBinding class
     const datasetBindingClass = new BasicEClass();
@@ -682,6 +694,15 @@ export class VegawidgetPackage extends BasicEPackage {
     encoding_scaleEntries.setUpperBound(-1);
     encodingClass.getEStructuralFeatures().push(encoding_scaleEntries);
     VegawidgetPackage.Literals.ENCODING__SCALE_ENTRIES = encoding_scaleEntries;
+
+    // Create axisOrient feature
+    const encoding_axisOrient = new BasicEAttribute();
+    encoding_axisOrient.setName('axisOrient');
+    encoding_axisOrient.setLowerBound(0);
+    encoding_axisOrient.setUpperBound(1);
+    encoding_axisOrient.setDefaultValueLiteral("auto");
+    encodingClass.getEStructuralFeatures().push(encoding_axisOrient);
+    VegawidgetPackage.Literals.ENCODING__AXIS_ORIENT = encoding_axisOrient;
 
     // Create Facet class
     const facetClass = new BasicEClass();
@@ -2109,6 +2130,68 @@ export class VegawidgetPackage extends BasicEPackage {
     VegawidgetPackage.Literals.DATASET_SHAPE = datasetShapeEnumType;
     this.getEClassifiers().push(datasetShapeEnumType);
 
+    // Create AxisOrient enum
+    const axisOrientEnumType = new BasicEEnum();
+    axisOrientEnumType.setName('AxisOrient');
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("auto");
+      literal.setValue(0);
+      literal.setLiteral("auto");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(AxisOrient.auto);
+      axisOrientEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("left");
+      literal.setValue(1);
+      literal.setLiteral("left");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(AxisOrient.left);
+      axisOrientEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("right");
+      literal.setValue(2);
+      literal.setLiteral("right");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(AxisOrient.right);
+      axisOrientEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("top");
+      literal.setValue(3);
+      literal.setLiteral("top");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(AxisOrient.top);
+      axisOrientEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("bottom");
+      literal.setValue(4);
+      literal.setLiteral("bottom");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(AxisOrient.bottom);
+      axisOrientEnumType.addLiteral(literal);
+    }
+    {
+      const annotation = new BasicEAnnotation();
+      annotation.setSource("http://www.eclipse.org/emf/2002/GenModel");
+      annotation.getDetails().putByKey("documentation", "The side of the chart an axis is drawn on; auto lets Vega-Lite choose.");
+      axisOrientEnumType.getEAnnotations().push(annotation);
+    }
+    VegawidgetPackage.Literals.AXIS_ORIENT = axisOrientEnumType;
+    this.getEClassifiers().push(axisOrientEnumType);
+
 
     // ============================================
     // Set ESuperTypes (must be done after all classes are created)
@@ -2133,6 +2216,7 @@ export class VegawidgetPackage extends BasicEPackage {
     (VegawidgetPackage.Literals.VEGA_WIDGET_SETTINGS__DATASETS as BasicEReference).setEType(VegawidgetPackage.Literals.DATASET_BINDING);
     (VegawidgetPackage.Literals.VEGA_WIDGET_SETTINGS__SPEC_OVERLAY as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
     (VegawidgetPackage.Literals.VEGA_WIDGET_SETTINGS__STARTER as BasicEAttribute).setEType(VegawidgetPackage.Literals.STARTER_CHART);
+    (VegawidgetPackage.Literals.VEGA_WIDGET_SETTINGS__INDEPENDENT_SCALES as BasicEAttribute).setEType(VegawidgetPackage.Literals.CHANNEL);
     (VegawidgetPackage.Literals.DATASET_BINDING__NAME as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
     (VegawidgetPackage.Literals.DATASET_BINDING__DATASOURCE_ID as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
     (VegawidgetPackage.Literals.DATASET_BINDING__SHAPE as BasicEAttribute).setEType(VegawidgetPackage.Literals.DATASET_SHAPE);
@@ -2174,6 +2258,7 @@ export class VegawidgetPackage extends BasicEPackage {
     (VegawidgetPackage.Literals.ENCODING__HIGHLIGHT_PARAM as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
     (VegawidgetPackage.Literals.ENCODING__VALUE_IF_NOT_SELECTED as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
     (VegawidgetPackage.Literals.ENCODING__SCALE_ENTRIES as BasicEReference).setEType(VegawidgetPackage.Literals.SCALE_ENTRY);
+    (VegawidgetPackage.Literals.ENCODING__AXIS_ORIENT as BasicEAttribute).setEType(VegawidgetPackage.Literals.AXIS_ORIENT);
     (VegawidgetPackage.Literals.FACET__ROW as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
     (VegawidgetPackage.Literals.FACET__COLUMN as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
     (VegawidgetPackage.Literals.FACET__COLUMNS as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EInt')!);

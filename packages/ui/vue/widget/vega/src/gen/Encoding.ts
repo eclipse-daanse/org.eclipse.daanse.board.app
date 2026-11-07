@@ -27,6 +27,7 @@ import type { SortOrder } from './SortOrder.js';
 import type { StackMode } from './StackMode.js';
 import type { ScaleType } from './ScaleType.js';
 import type { ScaleEntry } from './ScaleEntry.js';
+import type { AxisOrient } from './AxisOrient.js';
 
 /**
  * Encoding
@@ -57,5 +58,6 @@ export interface Encoding extends EObject {
   highlightParam?: string;
   valueIfNotSelected?: string;
   scaleEntries: EList<ScaleEntry>;
+  axisOrient?: AxisOrient;
 
 }

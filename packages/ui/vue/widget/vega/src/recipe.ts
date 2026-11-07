@@ -108,6 +108,11 @@ export function compileRecipe(settings: VegaWidgetSettings): TopLevelSpec {
   const title = text(settings.title)
   if (title) top.title = title
   if (values.length) top.params = values
+  /* Own scales per layer (#1304): only where there is more than one view to have them. */
+  const independent = [...new Set(items(settings.independentScales).map(String).filter(Boolean))]
+  if (independent.length && (layers.length > 1 || facetOf(settings))) {
+    top.resolve = { scale: Object.fromEntries(independent.map((channel) => [channel, 'independent'])) }
+  }
   const config = configOf(settings)
   if (config) top.config = config
 
@@ -240,6 +245,7 @@ export function channelDef(encoding: Encoding): Json | undefined {
       const angle = text(encoding.labelAngle)
       if (angle && Number.isFinite(Number(angle))) axis.labelAngle = Number(angle)
       if (format) axis.format = format
+      if (encoding.axisOrient && encoding.axisOrient !== 'auto') axis.orient = encoding.axisOrient
       if (Object.keys(axis).length) def.axis = axis
     }
   } else if (WITH_LEGEND.has(channel)) {

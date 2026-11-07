@@ -19,7 +19,8 @@
     "layersHint": "No layer yet: add one to draw marks.",
     "datasetsHint": "None: the chart draws the data source of the widget as the dataset table.",
     "paramsHint": "No selection: marks are not picked.",
-    "starter": "Start from a chart"
+    "starter": "Start from a chart",
+    "independentScales": "Own scale per layer for"
   },
   "Options": {
     "legendPosition": {
@@ -158,6 +159,13 @@
       "boxplot": "Box plot",
       "donut": "Donut",
       "brush": "Brush and link"
+    },
+    "axisOrient": {
+      "auto": "Automatic",
+      "left": "Left",
+      "right": "Right",
+      "top": "Top",
+      "bottom": "Bottom"
     }
   },
   "FormLayer": {
@@ -200,7 +208,8 @@
     "highlightParam": "Highlight what this selection holds",
     "valueIfNotSelected": "Value outside the selection (e.g. lightgray, 0.2)",
     "scaleEntries": "Fixed output per value",
-    "scaleEntriesHint": "None: the scheme decides."
+    "scaleEntriesHint": "None: the scheme decides.",
+    "axisOrient": "Axis side"
   },
   "FormParam": {
     "name": "Name",
@@ -233,7 +242,8 @@
       "facet": "Splits the chart into small multiples, one per value of a field. Empty draws a single chart.",
       "params": "Selections and values the chart holds: what is picked or brushed, and values other settings refer to by name.",
       "datasets": "The data the chart draws, by name. Without an entry the data source of the widget is the dataset table; an entry named table without a source of its own says how to read that one.",
-      "starter": "Replaces the layers, selections and small multiples with this chart, filled with columns of the data. Then the choice is empty again; \"Discard\" brings the chart back."
+      "starter": "Replaces the layers, selections and small multiples with this chart, filled with columns of the data. Then the choice is empty again; \"Discard\" brings the chart back.",
+      "independentScales": "The channels whose scale each layer has for itself: y gives every layer its own y axis - a temperature on the left, a precipitation on the right. Only read with more than one layer or with small multiples."
     },
     "DatasetBinding": {
       "name": "The name layers use for this dataset. table is the data source of the widget.",
@@ -280,7 +290,8 @@
       "showLegend": "Whether a colour, size, shape or opacity channel draws its legend.",
       "highlightParam": "The name of a selection. Marks the selection holds keep the field or value above; the others take the value below - this is how a selection highlights.",
       "valueIfNotSelected": "The value the marks outside the selection take, for example lightgray or 0.2.",
-      "scaleEntries": "Each listed value of the field is drawn as its own output - a colour, a shape, a size, an opacity - rather than as the scheme picks. List every value, or none: a value not listed gets no output of its own."
+      "scaleEntries": "Each listed value of the field is drawn as its own output - a colour, a shape, a size, an opacity - rather than as the scheme picks. List every value, or none: a value not listed gets no output of its own.",
+      "axisOrient": "The side the axis of this position channel is drawn on. Automatic: x below, y left."
     },
     "Facet": {
       "row": "The field whose values make the rows. Empty makes no rows.",

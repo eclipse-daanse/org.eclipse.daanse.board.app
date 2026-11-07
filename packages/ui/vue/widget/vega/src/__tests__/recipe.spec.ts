@@ -344,4 +344,19 @@ describe('compileRecipe', () => {
     expect(spec.encoding.size.scale).toEqual({ domain: [28, 55], range: [10, 40] })
     expect(complaintsOf(withDatasets(spec as never, sampleDatasets()))).toEqual([])
   })
+
+  it('gives layers their own y scale and puts an axis on the right (#1304)', () => {
+    const stored = (independentScales: string[]) => recipe({ independentScales, layers: [
+      { mark: 'line', encodings: [{ channel: 'x', field: 'category', type: 'nominal' }, { channel: 'y', field: 'amount', type: 'quantitative' }] },
+      { mark: 'bar', encodings: [{ channel: 'x', field: 'category', type: 'nominal' }, { channel: 'y', field: 'amount', type: 'quantitative', axisOrient: 'right' }] },
+    ] })
+    const spec = compileRecipe(stored(['y'])) as Record<string, any>
+    expect(spec.resolve).toEqual({ scale: { y: 'independent' } })
+    expect(spec.layer[1].encoding.y.axis).toEqual({ orient: 'right' })
+    expect(spec.layer[0].encoding.y.axis).toBeUndefined()
+    expect(complaintsOf(withDatasets(spec as never, sampleDatasets()))).toEqual([])
+    /* One view has nothing to resolve. */
+    const single = compileRecipe(recipe({ independentScales: ['y'], layers: [bars()] })) as Record<string, any>
+    expect(single.resolve).toBeUndefined()
+  })
 })

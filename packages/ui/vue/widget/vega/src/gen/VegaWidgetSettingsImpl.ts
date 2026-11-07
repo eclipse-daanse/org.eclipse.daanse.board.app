@@ -19,12 +19,13 @@
  */
 
 import { BasicEObject } from '@emfts/core';
-import { createContainmentEList } from '@emfts/core';
+import { createContainmentEList, createBasicEList } from '@emfts/core';
 import type { EClass, EStructuralFeature, EList, EReference } from '@emfts/core';
 import type { Layer } from './Layer.js';
 import type { Facet } from './Facet.js';
 import type { Param } from './Param.js';
 import type { DatasetBinding } from './DatasetBinding.js';
+import type { Channel } from './Channel.js';
 import { VegaRenderer } from './VegaRenderer.js';
 import { LegendPosition } from './LegendPosition.js';
 import { StarterChart } from './StarterChart.js';
@@ -47,6 +48,7 @@ export class VegaWidgetSettingsImpl extends BasicEObject implements VegaWidgetSe
   static readonly DATASETS: number = 7;
   static readonly SPEC_OVERLAY: number = 8;
   static readonly STARTER: number = 9;
+  static readonly INDEPENDENT_SCALES: number = 10;
 
   // Private fields
   private _title: string = "";
@@ -59,6 +61,7 @@ export class VegaWidgetSettingsImpl extends BasicEObject implements VegaWidgetSe
   private _datasets!: EList<DatasetBinding>;
   private _specOverlay: string = "";
   private _starter: StarterChart = StarterChart.none;
+  private _independentScales!: EList<Channel>;
 
   /**
    * Returns the EClass of this object
@@ -267,6 +270,13 @@ export class VegaWidgetSettingsImpl extends BasicEObject implements VegaWidgetSe
     }
   }
 
+  get independentScales(): EList<Channel> {
+    if (!this._independentScales) {
+      this._independentScales = createBasicEList<any>(this, this.eClass().getEStructuralFeature('independentScales')!);
+    }
+    return this._independentScales;
+  }
+
   /**
    * Remove a value from its previous container before it is contained here,
    * like Java EMF's eInverseRemove on the old container (#61)
@@ -319,6 +329,8 @@ export class VegaWidgetSettingsImpl extends BasicEObject implements VegaWidgetSe
         return this.specOverlay;
       case VegaWidgetSettingsImpl.STARTER:
         return this.starter;
+      case VegaWidgetSettingsImpl.INDEPENDENT_SCALES:
+        return this.independentScales;
       default:
         return super.eGet(feature);
     }
@@ -373,6 +385,11 @@ export class VegaWidgetSettingsImpl extends BasicEObject implements VegaWidgetSe
         this.starter = newValue as StarterChart;
         super.eSet(feature, newValue);
         break;
+      case VegaWidgetSettingsImpl.INDEPENDENT_SCALES:
+        this.independentScales.clear();
+        this.independentScales.addAll(newValue as any[]);
+        super.eSet(feature, newValue);
+        break;
       default:
         super.eSet(feature, newValue);
     }
@@ -404,6 +421,8 @@ export class VegaWidgetSettingsImpl extends BasicEObject implements VegaWidgetSe
         return this._specOverlay !== "";
       case VegaWidgetSettingsImpl.STARTER:
         return this._starter !== StarterChart.none;
+      case VegaWidgetSettingsImpl.INDEPENDENT_SCALES:
+        return this._independentScales !== undefined && !this._independentScales.isEmpty();
       default:
         return super.eIsSet(feature);
     }
@@ -446,6 +465,9 @@ export class VegaWidgetSettingsImpl extends BasicEObject implements VegaWidgetSe
       case VegaWidgetSettingsImpl.STARTER:
         this._starter = StarterChart.none;
         return;
+      case VegaWidgetSettingsImpl.INDEPENDENT_SCALES:
+        if (this._independentScales) this._independentScales.clear();
+        return;
       default:
         super.eUnset(feature);
     }
@@ -471,6 +493,7 @@ export class VegaWidgetSettingsImpl extends BasicEObject implements VegaWidgetSe
       datasets: this.datasets?.toArray?.() ?? this.datasets,
       specOverlay: this.specOverlay,
       starter: this.starter,
+      independentScales: this.independentScales?.toArray?.() ?? this.independentScales,
     };
   }
 }
