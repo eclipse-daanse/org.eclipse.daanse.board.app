@@ -1,0 +1,17 @@
+{
+  "Widget": {
+    "name": "Vega-Lite-Diagramm",
+    "error": "Das Diagramm kann nicht gezeichnet werden: {{message}}"
+  },
+  "Form": {
+    "title": "Titel",
+    "renderer": "Gezeichnet als",
+    "tooltip": "Werte im Tooltip zeigen"
+  },
+  "Options": {
+    "renderer": {
+      "canvas": "Canvas (schnell bei vielen Marken)",
+      "svg": "SVG (scharf beim Zoomen)"
+    }
+  }
+}

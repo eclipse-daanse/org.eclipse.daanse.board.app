@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/*********************************************************************
+* Copyright (c) 2026 Contributors to the Eclipse Foundation.
+*
+* This program and the accompanying materials are made
+* available under the terms of the Eclipse Public License 2.0
+* which is available at https://www.eclipse.org/legal/epl-2.0/
+*
+* SPDX-License-Identifier: EPL-2.0
+**********************************************************************/
+
+The form for the Vega-Lite chart (#1283). The chart is configured here and
+nowhere else; the widget derives the spec from what this form writes.
+-->
+<uimodel:UIModel
+    xmlns:xmi="http://www.omg.org/XMI"
+    xmi:version="2.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:uimodel="http://uimodel/1.0"
+    name="VegaWidgetSettingsForm">
+
+  <targetClasses href="http://org.eclipse.daanse.board.app.ui.vue.widget.vega#//VegaWidgetSettings"/>
+
+  <components xsi:type="uimodel:FormView" name="VegaWidgetSettingsFormView">
+    <fields xsi:type="uimodel:InputWidget"
+        name="title"
+        feature="http://org.eclipse.daanse.board.app.ui.vue.widget.vega#//VegaWidgetSettings/title"
+        label="vega:Form.title"/>
+    <fields xsi:type="uimodel:SelectWidget"
+        name="renderer"
+        feature="http://org.eclipse.daanse.board.app.ui.vue.widget.vega#//VegaWidgetSettings/renderer"
+        label="vega:Form.renderer">
+      <values>canvas</values>
+      <values>svg</values>
+      <optionLabel language="JS" body="({ canvas: 'vega:Options.renderer.canvas', svg: 'vega:Options.renderer.svg' })[option] ?? option"/>
+    </fields>
+    <fields xsi:type="uimodel:CheckboxWidget"
+        name="tooltip"
+        feature="http://org.eclipse.daanse.board.app.ui.vue.widget.vega#//VegaWidgetSettings/tooltip"
+        label="vega:Form.tooltip"/>
+  </components>
+</uimodel:UIModel>
