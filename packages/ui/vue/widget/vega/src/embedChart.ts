@@ -29,7 +29,7 @@
 
 import embed, { type Result } from 'vega-embed'
 import { expressionInterpreter } from 'vega-interpreter'
-import { loader, type Loader } from 'vega'
+import { changeset, loader, type Loader, type View } from 'vega'
 import type { TopLevelSpec } from 'vega-lite'
 
 export type ChartRenderer = 'canvas' | 'svg'
@@ -72,4 +72,28 @@ export function drawChart(el: HTMLElement, spec: TopLevelSpec, options: DrawOpti
     expr: expressionInterpreter,
     loader: refusingLoader(),
   })
+}
+
+/**
+ * Puts new rows into a named dataset of a drawn chart (#1286).
+ *
+ * The view is kept, so what the reader did with it stays: a zoom, a brush,
+ * a picked mark. Answers false when the chart has no dataset of that name -
+ * the caller draws the chart anew then.
+ */
+export async function replaceData(view: View, name: string, rows: object[]): Promise<boolean> {
+  try {
+    view.data(name)
+  } catch {
+    return false
+  }
+  await view
+    .change(
+      name,
+      changeset()
+        .remove(() => true)
+        .insert(rows),
+    )
+    .runAsync()
+  return true
 }

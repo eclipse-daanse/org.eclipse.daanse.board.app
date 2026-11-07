@@ -23,6 +23,10 @@ import type { EClass, EObject } from '@emfts/core';
 import { VegawidgetPackage } from './VegawidgetPackage.js';
 import { VegaWidgetSettings } from './VegaWidgetSettings.js';
 import { VegaWidgetSettingsImpl } from './VegaWidgetSettingsImpl.js';
+import { DatasetBinding } from './DatasetBinding.js';
+import { DatasetBindingImpl } from './DatasetBindingImpl.js';
+import { ColumnType } from './ColumnType.js';
+import { ColumnTypeImpl } from './ColumnTypeImpl.js';
 import { Layer } from './Layer.js';
 import { LayerImpl } from './LayerImpl.js';
 import { Encoding } from './Encoding.js';
@@ -59,6 +63,20 @@ export class VegawidgetFactory extends BasicEFactory {
    */
   createVegaWidgetSettings(): VegaWidgetSettings {
     return new VegaWidgetSettingsImpl();
+  }
+
+  /**
+   * Create a new DatasetBinding instance
+   */
+  createDatasetBinding(): DatasetBinding {
+    return new DatasetBindingImpl();
+  }
+
+  /**
+   * Create a new ColumnType instance
+   */
+  createColumnType(): ColumnType {
+    return new ColumnTypeImpl();
   }
 
   /**
@@ -103,6 +121,10 @@ export class VegawidgetFactory extends BasicEFactory {
     switch (eClass.getName()) {
       case 'VegaWidgetSettings':
         return this.createVegaWidgetSettings();
+      case 'DatasetBinding':
+        return this.createDatasetBinding();
+      case 'ColumnType':
+        return this.createColumnType();
       case 'Layer':
         return this.createLayer();
       case 'Encoding':

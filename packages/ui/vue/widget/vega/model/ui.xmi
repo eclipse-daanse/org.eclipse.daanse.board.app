@@ -37,6 +37,11 @@ small multiples and the selections follow.
         label="vega:Form.layers"
         placeholder="vega:Form.layersHint"/>
     <fields xsi:type="uimodel:InputWidget"
+        name="datasets"
+        feature="http://org.eclipse.daanse.board.app.ui.vue.widget.vega#//VegaWidgetSettings/datasets"
+        label="vega:Form.datasets"
+        placeholder="vega:Form.datasetsHint"/>
+    <fields xsi:type="uimodel:InputWidget"
         name="facet"
         feature="http://org.eclipse.daanse.board.app.ui.vue.widget.vega#//VegaWidgetSettings/facet"
         label="vega:Form.facet"/>

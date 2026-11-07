@@ -18,17 +18,25 @@ Contributors:
  * The spec is compiled from the chart recipe (recipe.ts, #1284) and drawn
  * by embedChart.ts, which this component loads on first use - Vega is the
  * heavy part of the bundle and stays out of it until a chart is shown.
+ *
+ * The data comes from board datasources (#1286): the widget's own source is
+ * the dataset table, other datasets name a source of their own. New rows go
+ * into the drawn chart (embedChart.replaceData), so what the reader did
+ * with it - a zoom, a brush - stays.
  */
-import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
+import { computed, inject, onMounted, onUnmounted, ref, watch, type Ref } from 'vue'
 import type { Result } from 'vega-embed'
-import { useEObject, useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+import { useDatasourceRepository, useEObject, useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+import { identifier as DATASOURCE_REPOSITORY, type DatasourceRepository } from 'org.eclipse.daanse.board.app.lib.api.datasource'
 import type { VegaWidgetSettings } from './gen/VegaWidgetSettings'
-import { compileRecipe, RecipeError } from './recipe'
-import { sampleDatasets, withDatasets } from './sample'
+import { compileRecipe, DEFAULT_DATASET, RecipeError } from './recipe'
+import { SAMPLE_VALUES, withDatasets, type Row } from './sample'
+import { datasetSources, rowsOf, typed } from './datasets'
+import { useDatasets, type ChartStore } from './useDatasets'
 import { modelledSettings } from './settingsModel'
 
 const stored = defineModel<unknown>('configv', { required: true })
-defineProps<{ id?: string }>()
+const props = defineProps<{ id?: string; datasourceId?: string }>()
 
 /*
  * The stored settings as the model's object, and watched rather than read
@@ -38,6 +46,70 @@ defineProps<{ id?: string }>()
 const config = computed(() => modelledSettings(stored.value))
 const settings = useEObject<VegaWidgetSettings>(() => config.value)
 const { t } = useTranslation('vega')
+
+/* ------------------------------------------------------------- data */
+
+/** The rows of each dataset as they arrived, before their columns are read. */
+const arrived = new Map<string, Row[]>()
+/** Counted up with every arrival; a draw that started before one catches up. */
+let dataRevision = 0
+
+const sources = computed(() => datasetSources(settings.value?.datasets))
+const ownSource = computed(() => props.datasourceId ?? '')
+/* The widget's own source fills table, unless an entry of that name reads another. */
+const tableHasOwnSource = computed(() => !!sources.value.find((source) => source.name === DEFAULT_DATASET)?.datasourceId)
+
+/** The rows of every dataset, read as their columns say; the sample while nothing feeds the chart. */
+const datasetsNow = (): Record<string, Row[]> => {
+  const datasets: Record<string, Row[]> = {}
+  for (const source of sources.value) {
+    const rows = arrived.get(source.name)
+    if (rows) datasets[source.name] = typed(rows, source.types)
+  }
+  if (!ownSource.value && !tableHasOwnSource.value && !arrived.has(DEFAULT_DATASET)) {
+    datasets[DEFAULT_DATASET] = SAMPLE_VALUES
+  }
+  return datasets
+}
+
+const own = ref<unknown>(null)
+const { update } = useDatasourceRepository(ownSource as unknown as Ref<string>, 'DataTable', own)
+watch(ownSource, (next, previous) => {
+  if (!next) arrived.delete(DEFAULT_DATASET)
+  update(next, previous)
+})
+watch(own, (answer) => {
+  if (tableHasOwnSource.value || !ownSource.value) return
+  arrived.set(DEFAULT_DATASET, rowsOf(answer, 'table'))
+  void push(DEFAULT_DATASET)
+})
+
+const repository = inject<DatasourceRepository | undefined>(DATASOURCE_REPOSITORY, undefined)
+useDatasets({
+  sources: () => sources.value.filter((source) => source.datasourceId),
+  resolve: (id) => {
+    try {
+      return repository?.getDatasource(id) as ChartStore | undefined
+    } catch {
+      return undefined
+    }
+  },
+  onRows: (name, rows) => {
+    arrived.set(name, rows)
+    void push(name)
+  },
+})
+
+/** New rows of a dataset into the drawn chart; drawn anew where it has no such dataset. */
+async function push(name: string) {
+  dataRevision++
+  if (!chart) return
+  const source = sources.value.find((each) => each.name === name)
+  const rows = typed(arrived.get(name) ?? [], source?.types ?? {})
+  const { replaceData } = await import('./embedChart')
+  if (!chart) return
+  if (!(await replaceData(chart.view, name, rows))) void draw()
+}
 
 const container = ref<HTMLDivElement | null>(null)
 const error = ref<string | null>(null)
@@ -57,9 +129,10 @@ const draw = async () => {
   const s = settings.value
   if (!el || !s || unmounted) return
   const mine = ++generation
+  const drawnRevision = dataRevision
   try {
     /* Compiled before Vega is loaded: a recipe that gives no chart needs none. */
-    const spec = withDatasets(compileRecipe(s), sampleDatasets())
+    const spec = withDatasets(compileRecipe(s), datasetsNow())
     const { drawChart } = await import('./embedChart')
     const next = await drawChart(el, spec, {
       renderer: s?.renderer === 'svg' ? 'svg' : 'canvas',
@@ -72,6 +145,8 @@ const draw = async () => {
     finalize()
     chart = next
     error.value = null
+    /* Rows that arrived while the chart was drawn go in now. */
+    if (dataRevision !== drawnRevision) for (const name of Object.keys(datasetsNow())) void push(name)
   } catch (e) {
     if (mine !== generation) return
     finalize()

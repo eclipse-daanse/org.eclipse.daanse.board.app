@@ -10,12 +10,14 @@
   "Form": {
     "title": "Title",
     "layers": "Layers",
+    "datasets": "Datasets",
     "facet": "Small multiples",
     "params": "Selections and values",
     "legendPosition": "Legend",
     "tooltip": "Show values in a tooltip",
     "renderer": "Drawn as",
     "layersHint": "No layer yet: add one to draw marks.",
+    "datasetsHint": "None: the chart draws the data source of the widget as the dataset table.",
     "paramsHint": "No selection: marks are not picked."
   },
   "Options": {
@@ -153,6 +155,17 @@
       "none": "In the chart",
       "legend": "In the legend",
       "scales": "Zoom and pan the chart"
+    },
+    "shape": {
+      "table": "Table (rows with headers)",
+      "object": "JSON with a list of rows",
+      "geojson": "GeoJSON features"
+    },
+    "columnType": {
+      "string": "Text",
+      "number": "Number",
+      "date": "Date and time",
+      "boolean": "Yes or no"
     }
   },
   "FormLayer": {
@@ -219,5 +232,17 @@
     "row": "One row per",
     "column": "One column per",
     "columns": "Columns before wrapping (0: no wrap)"
+  },
+  "FormDataset": {
+    "name": "Name",
+    "datasourceId": "Data source (empty: the one of the widget)",
+    "shape": "Read as",
+    "path": "Path to the rows (e.g. data.items)",
+    "columnTypes": "Columns read as",
+    "columnTypesHint": "None: every value as it arrives."
+  },
+  "FormColumnType": {
+    "column": "Column",
+    "type": "Read as"
   }
 }

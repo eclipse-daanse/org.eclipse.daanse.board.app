@@ -24,6 +24,7 @@ import type { LegendPosition } from './LegendPosition.js';
 import type { Layer } from './Layer.js';
 import type { Facet } from './Facet.js';
 import type { Param } from './Param.js';
+import type { DatasetBinding } from './DatasetBinding.js';
 
 /**
  * VegaWidgetSettings
@@ -37,5 +38,6 @@ export interface VegaWidgetSettings extends EObject {
   layers: EList<Layer>;
   facet?: Facet;
   params: EList<Param>;
+  datasets: EList<DatasetBinding>;
 
 }

@@ -34,6 +34,8 @@ import encodingFormXmi from '../../model/ui-encoding.xmi?raw'
 import transformFormXmi from '../../model/ui-transform.xmi?raw'
 import paramFormXmi from '../../model/ui-param.xmi?raw'
 import facetFormXmi from '../../model/ui-facet.xmi?raw'
+import datasetFormXmi from '../../model/ui-dataset.xmi?raw'
+import columnTypeFormXmi from '../../model/ui-column-type.xmi?raw'
 import settingsEcore from '../../model/model.ecore?raw'
 import en from '../i18n/en.json'
 import uimodelEn from '../../../../uimodel/src/i18n/en.json'
@@ -61,6 +63,8 @@ async function settingsForm(settings: VegaWidgetSettings, suggest?: (owner: unkn
         { xmi: transformFormXmi, uri: '/vega-transform.ui.xmi' },
         { xmi: paramFormXmi, uri: '/vega-param.ui.xmi' },
         { xmi: facetFormXmi, uri: '/vega-facet.ui.xmi' },
+        { xmi: datasetFormXmi, uri: '/vega-dataset.ui.xmi' },
+        { xmi: columnTypeFormXmi, uri: '/vega-column-type.ui.xmi' },
       ],
       ecore: settingsEcore,
       suggest: suggest as never,

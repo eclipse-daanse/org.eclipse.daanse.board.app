@@ -35,6 +35,8 @@ import { ScaleType } from './ScaleType.js';
 import { FilterOp } from './FilterOp.js';
 import { ParamKind } from './ParamKind.js';
 import { ParamBind } from './ParamBind.js';
+import { DatasetShape } from './DatasetShape.js';
+import { ColumnValueType } from './ColumnValueType.js';
 import { TransformKind } from './TransformKind.js';
 
 /**
@@ -69,6 +71,16 @@ export class VegawidgetPackage extends BasicEPackage {
     VEGA_WIDGET_SETTINGS__LAYERS: null as unknown as EAttribute | EReference,
     VEGA_WIDGET_SETTINGS__FACET: null as unknown as EAttribute | EReference,
     VEGA_WIDGET_SETTINGS__PARAMS: null as unknown as EAttribute | EReference,
+    VEGA_WIDGET_SETTINGS__DATASETS: null as unknown as EAttribute | EReference,
+    DATASET_BINDING: null as unknown as EClass,
+    DATASET_BINDING__NAME: null as unknown as EAttribute | EReference,
+    DATASET_BINDING__DATASOURCE_ID: null as unknown as EAttribute | EReference,
+    DATASET_BINDING__SHAPE: null as unknown as EAttribute | EReference,
+    DATASET_BINDING__PATH: null as unknown as EAttribute | EReference,
+    DATASET_BINDING__COLUMN_TYPES: null as unknown as EAttribute | EReference,
+    COLUMN_TYPE: null as unknown as EClass,
+    COLUMN_TYPE__COLUMN: null as unknown as EAttribute | EReference,
+    COLUMN_TYPE__TYPE: null as unknown as EAttribute | EReference,
     LAYER: null as unknown as EClass,
     LAYER__DATASET: null as unknown as EAttribute | EReference,
     LAYER__MARK: null as unknown as EAttribute | EReference,
@@ -142,6 +154,8 @@ export class VegawidgetPackage extends BasicEPackage {
     FILTER_OP: null as unknown as EEnum,
     PARAM_KIND: null as unknown as EEnum,
     PARAM_BIND: null as unknown as EEnum,
+    DATASET_SHAPE: null as unknown as EEnum,
+    COLUMN_VALUE_TYPE: null as unknown as EEnum,
     TRANSFORM_KIND: null as unknown as EEnum,
   };
 
@@ -234,6 +248,96 @@ export class VegawidgetPackage extends BasicEPackage {
     vegaWidgetSettings_params.setUpperBound(-1);
     vegaWidgetSettingsClass.getEStructuralFeatures().push(vegaWidgetSettings_params);
     VegawidgetPackage.Literals.VEGA_WIDGET_SETTINGS__PARAMS = vegaWidgetSettings_params;
+
+    // Create datasets feature
+    const vegaWidgetSettings_datasets = new BasicEReference();
+    vegaWidgetSettings_datasets.setContainment(true);
+    vegaWidgetSettings_datasets.setName('datasets');
+    vegaWidgetSettings_datasets.setLowerBound(0);
+    vegaWidgetSettings_datasets.setUpperBound(-1);
+    vegaWidgetSettingsClass.getEStructuralFeatures().push(vegaWidgetSettings_datasets);
+    VegawidgetPackage.Literals.VEGA_WIDGET_SETTINGS__DATASETS = vegaWidgetSettings_datasets;
+
+    // Create DatasetBinding class
+    const datasetBindingClass = new BasicEClass();
+    datasetBindingClass.setName('DatasetBinding');
+    datasetBindingClass.setAbstract(false);
+    datasetBindingClass.setInterface(false);
+    this.getEClassifiers().push(datasetBindingClass);
+    datasetBindingClass.setEPackage(this);
+    VegawidgetPackage.Literals.DATASET_BINDING = datasetBindingClass;
+
+    // Create name feature
+    const datasetBinding_name = new BasicEAttribute();
+    datasetBinding_name.setName('name');
+    datasetBinding_name.setLowerBound(0);
+    datasetBinding_name.setUpperBound(1);
+    datasetBinding_name.setDefaultValueLiteral("table");
+    datasetBindingClass.getEStructuralFeatures().push(datasetBinding_name);
+    VegawidgetPackage.Literals.DATASET_BINDING__NAME = datasetBinding_name;
+
+    // Create datasourceId feature
+    const datasetBinding_datasourceId = new BasicEAttribute();
+    datasetBinding_datasourceId.setName('datasourceId');
+    datasetBinding_datasourceId.setLowerBound(0);
+    datasetBinding_datasourceId.setUpperBound(1);
+    datasetBinding_datasourceId.setDefaultValueLiteral("");
+    datasetBindingClass.getEStructuralFeatures().push(datasetBinding_datasourceId);
+    VegawidgetPackage.Literals.DATASET_BINDING__DATASOURCE_ID = datasetBinding_datasourceId;
+
+    // Create shape feature
+    const datasetBinding_shape = new BasicEAttribute();
+    datasetBinding_shape.setName('shape');
+    datasetBinding_shape.setLowerBound(0);
+    datasetBinding_shape.setUpperBound(1);
+    datasetBinding_shape.setDefaultValueLiteral("table");
+    datasetBindingClass.getEStructuralFeatures().push(datasetBinding_shape);
+    VegawidgetPackage.Literals.DATASET_BINDING__SHAPE = datasetBinding_shape;
+
+    // Create path feature
+    const datasetBinding_path = new BasicEAttribute();
+    datasetBinding_path.setName('path');
+    datasetBinding_path.setLowerBound(0);
+    datasetBinding_path.setUpperBound(1);
+    datasetBinding_path.setDefaultValueLiteral("");
+    datasetBindingClass.getEStructuralFeatures().push(datasetBinding_path);
+    VegawidgetPackage.Literals.DATASET_BINDING__PATH = datasetBinding_path;
+
+    // Create columnTypes feature
+    const datasetBinding_columnTypes = new BasicEReference();
+    datasetBinding_columnTypes.setContainment(true);
+    datasetBinding_columnTypes.setName('columnTypes');
+    datasetBinding_columnTypes.setLowerBound(0);
+    datasetBinding_columnTypes.setUpperBound(-1);
+    datasetBindingClass.getEStructuralFeatures().push(datasetBinding_columnTypes);
+    VegawidgetPackage.Literals.DATASET_BINDING__COLUMN_TYPES = datasetBinding_columnTypes;
+
+    // Create ColumnType class
+    const columnTypeClass = new BasicEClass();
+    columnTypeClass.setName('ColumnType');
+    columnTypeClass.setAbstract(false);
+    columnTypeClass.setInterface(false);
+    this.getEClassifiers().push(columnTypeClass);
+    columnTypeClass.setEPackage(this);
+    VegawidgetPackage.Literals.COLUMN_TYPE = columnTypeClass;
+
+    // Create column feature
+    const columnType_column = new BasicEAttribute();
+    columnType_column.setName('column');
+    columnType_column.setLowerBound(0);
+    columnType_column.setUpperBound(1);
+    columnType_column.setDefaultValueLiteral("");
+    columnTypeClass.getEStructuralFeatures().push(columnType_column);
+    VegawidgetPackage.Literals.COLUMN_TYPE__COLUMN = columnType_column;
+
+    // Create type feature
+    const columnType_type = new BasicEAttribute();
+    columnType_type.setName('type');
+    columnType_type.setLowerBound(0);
+    columnType_type.setUpperBound(1);
+    columnType_type.setDefaultValueLiteral("number");
+    columnTypeClass.getEStructuralFeatures().push(columnType_type);
+    VegawidgetPackage.Literals.COLUMN_TYPE__TYPE = columnType_type;
 
     // Create Layer class
     const layerClass = new BasicEClass();
@@ -1911,6 +2015,100 @@ export class VegawidgetPackage extends BasicEPackage {
     VegawidgetPackage.Literals.PARAM_BIND = paramBindEnumType;
     this.getEClassifiers().push(paramBindEnumType);
 
+    // Create DatasetShape enum
+    const datasetShapeEnumType = new BasicEEnum();
+    datasetShapeEnumType.setName('DatasetShape');
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("table");
+      literal.setValue(0);
+      literal.setLiteral("table");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(DatasetShape.table);
+      datasetShapeEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("object");
+      literal.setValue(1);
+      literal.setLiteral("object");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(DatasetShape.object);
+      datasetShapeEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("geojson");
+      literal.setValue(2);
+      literal.setLiteral("geojson");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(DatasetShape.geojson);
+      datasetShapeEnumType.addLiteral(literal);
+    }
+    {
+      const annotation = new BasicEAnnotation();
+      annotation.setSource("http://www.eclipse.org/emf/2002/GenModel");
+      annotation.getDetails().putByKey("documentation", "The form a data source answers in, as the widget asks for it: rows with headers (table), any JSON with a list somewhere in it (object), or GeoJSON features (geojson).");
+      datasetShapeEnumType.getEAnnotations().push(annotation);
+    }
+    VegawidgetPackage.Literals.DATASET_SHAPE = datasetShapeEnumType;
+    this.getEClassifiers().push(datasetShapeEnumType);
+
+    // Create ColumnValueType enum
+    const columnValueTypeEnumType = new BasicEEnum();
+    columnValueTypeEnumType.setName('ColumnValueType');
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("string");
+      literal.setValue(0);
+      literal.setLiteral("string");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(ColumnValueType.string);
+      columnValueTypeEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("number");
+      literal.setValue(1);
+      literal.setLiteral("number");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(ColumnValueType.number);
+      columnValueTypeEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("date");
+      literal.setValue(2);
+      literal.setLiteral("date");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(ColumnValueType.date);
+      columnValueTypeEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("boolean");
+      literal.setValue(3);
+      literal.setLiteral("boolean");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(ColumnValueType.boolean);
+      columnValueTypeEnumType.addLiteral(literal);
+    }
+    {
+      const annotation = new BasicEAnnotation();
+      annotation.setSource("http://www.eclipse.org/emf/2002/GenModel");
+      annotation.getDetails().putByKey("documentation", "What the values of a column are read as before the chart draws them. Sources such as SPARQL and CSV answer text; a number or a date that arrives as text sorts and scales as text.");
+      columnValueTypeEnumType.getEAnnotations().push(annotation);
+    }
+    VegawidgetPackage.Literals.COLUMN_VALUE_TYPE = columnValueTypeEnumType;
+    this.getEClassifiers().push(columnValueTypeEnumType);
+
     // Create TransformKind enum
     const transformKindEnumType = new BasicEEnum();
     transformKindEnumType.setName('TransformKind');
@@ -1970,6 +2168,14 @@ export class VegawidgetPackage extends BasicEPackage {
     (VegawidgetPackage.Literals.VEGA_WIDGET_SETTINGS__LAYERS as BasicEReference).setEType(VegawidgetPackage.Literals.LAYER);
     (VegawidgetPackage.Literals.VEGA_WIDGET_SETTINGS__FACET as BasicEReference).setEType(VegawidgetPackage.Literals.FACET);
     (VegawidgetPackage.Literals.VEGA_WIDGET_SETTINGS__PARAMS as BasicEReference).setEType(VegawidgetPackage.Literals.PARAM);
+    (VegawidgetPackage.Literals.VEGA_WIDGET_SETTINGS__DATASETS as BasicEReference).setEType(VegawidgetPackage.Literals.DATASET_BINDING);
+    (VegawidgetPackage.Literals.DATASET_BINDING__NAME as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (VegawidgetPackage.Literals.DATASET_BINDING__DATASOURCE_ID as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (VegawidgetPackage.Literals.DATASET_BINDING__SHAPE as BasicEAttribute).setEType(VegawidgetPackage.Literals.DATASET_SHAPE);
+    (VegawidgetPackage.Literals.DATASET_BINDING__PATH as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (VegawidgetPackage.Literals.DATASET_BINDING__COLUMN_TYPES as BasicEReference).setEType(VegawidgetPackage.Literals.COLUMN_TYPE);
+    (VegawidgetPackage.Literals.COLUMN_TYPE__COLUMN as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (VegawidgetPackage.Literals.COLUMN_TYPE__TYPE as BasicEAttribute).setEType(VegawidgetPackage.Literals.COLUMN_VALUE_TYPE);
     (VegawidgetPackage.Literals.LAYER__DATASET as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
     (VegawidgetPackage.Literals.LAYER__MARK as BasicEAttribute).setEType(VegawidgetPackage.Literals.MARK_TYPE);
     (VegawidgetPackage.Literals.LAYER__INTERPOLATE as BasicEAttribute).setEType(VegawidgetPackage.Literals.INTERPOLATE);
