@@ -19,7 +19,7 @@
 import { describe, expect, it } from 'vitest'
 import { compile } from 'vega-lite'
 import { VegawidgetPackage } from '../gen/VegawidgetPackage'
-import { compileRecipe, RecipeError } from '../recipe'
+import { compileRecipe, RecipeError, withSize } from '../recipe'
 import { modelledSettings } from '../settingsModel'
 import { sampleDatasets, withDatasets } from '../sample'
 import type { MarkType } from '../gen/MarkType'
@@ -287,5 +287,19 @@ describe('compileRecipe', () => {
   it('names its data and inlines none of it', () => {
     const spec = compileRecipe(recipe({ layers: [bars()] }))
     expect(JSON.stringify(spec)).not.toMatch(/"values"|"url"/)
+  })
+
+  it('is drawn at the size of its frame, labels and legend inside it', () => {
+    const spec = withSize(compileRecipe(recipe({ layers: [bars({ encodings: [
+      { channel: 'x', field: 'category', type: 'nominal', labelAngle: '-30' },
+      { channel: 'y', field: 'amount', type: 'quantitative' },
+      { channel: 'color', field: 'category', type: 'nominal' },
+    ] })] })), 760.6, 420) as Record<string, any>
+    expect([spec.width, spec.height, spec.autosize]).toEqual([760, 420, { type: 'fit', contains: 'padding' }])
+    expect(complaintsOf(withDatasets(spec as never, sampleDatasets()))).toEqual([])
+    /* An unmeasured frame still draws; small multiples keep sizing themselves. */
+    expect((withSize(compileRecipe(recipe({ layers: [bars()] })), 0, 0) as any).width).toBe(300)
+    const facet = compileRecipe(recipe({ facet: { column: 'series' }, layers: [bars()] }))
+    expect(withSize(facet, 500, 300)).toBe(facet)
   })
 })

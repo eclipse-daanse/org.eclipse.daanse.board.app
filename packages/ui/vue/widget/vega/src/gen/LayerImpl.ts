@@ -22,7 +22,7 @@ import { BasicEObject } from '@emfts/core';
 import { createContainmentEList } from '@emfts/core';
 import type { EClass, EStructuralFeature, EList, EReference } from '@emfts/core';
 import type { Encoding } from './Encoding.js';
-import type { Transform } from './Transform.js';
+import type { Transform } from 'org.eclipse.daanse.board.app.lib.datasource.base';
 import { MarkType } from './MarkType.js';
 import { Interpolate } from './Interpolate.js';
 import type { Layer } from './Layer.js';

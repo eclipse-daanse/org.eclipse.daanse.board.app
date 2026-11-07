@@ -29,7 +29,7 @@ import type { Result } from 'vega-embed'
 import { useDatasourceRepository, useEObject, useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import { identifier as DATASOURCE_REPOSITORY, type DatasourceRepository } from 'org.eclipse.daanse.board.app.lib.api.datasource'
 import type { VegaWidgetSettings } from './gen/VegaWidgetSettings'
-import { compileRecipe, DEFAULT_DATASET, RecipeError } from './recipe'
+import { compileRecipe, DEFAULT_DATASET, RecipeError, withSize } from './recipe'
 import { SAMPLE_VALUES, withDatasets, type Row } from './sample'
 import { datasetSources, rowsOf, typed } from './datasets'
 import { useDatasets, type ChartStore } from './useDatasets'
@@ -145,7 +145,7 @@ const draw = async (keepSignals = false) => {
   const drawnRevision = dataRevision
   try {
     /* Compiled before Vega is loaded: a recipe that gives no chart needs none. */
-    const spec = withDatasets(compileRecipe(s), datasetsNow())
+    const spec = withSize(withDatasets(compileRecipe(s), datasetsNow()), el.clientWidth, el.clientHeight)
     const { drawChart, signalsOf, restoreSignals } = await import('./embedChart')
     const kept = keepSignals && chart ? signalsOf(chart.view) : undefined
     const next = await drawChart(el, spec, {
@@ -161,6 +161,8 @@ const draw = async (keepSignals = false) => {
     chart = next
     error.value = null
     if (kept) await restoreSignals(next.view, kept)
+    /* The frame may have changed while Vega loaded. */
+    fit()
     /* Rows that arrived while the chart was drawn go in now. */
     if (dataRevision !== drawnRevision) for (const name of Object.keys(datasetsNow())) void push(name)
   } catch (e) {
@@ -173,8 +175,9 @@ const draw = async (keepSignals = false) => {
 }
 
 /*
- * The frame decides the size. Vega follows its container only on a window
- * resize; a widget is resized without one.
+ * The frame decides the size: the total one, which autosize fit fills
+ * with plot, axes and legend. Vega follows nothing by itself here - a
+ * widget is resized without a window resize.
  */
 const fit = () => {
   const el = container.value

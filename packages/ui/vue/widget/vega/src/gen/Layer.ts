@@ -22,7 +22,7 @@ import type { EObject, EList } from '@emfts/core';
 import type { MarkType } from './MarkType.js';
 import type { Interpolate } from './Interpolate.js';
 import type { Encoding } from './Encoding.js';
-import type { Transform } from './Transform.js';
+import type { Transform } from 'org.eclipse.daanse.board.app.lib.datasource.base';
 
 /**
  * Layer
