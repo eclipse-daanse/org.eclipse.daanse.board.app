@@ -39,5 +39,6 @@ export interface VegaWidgetSettings extends EObject {
   facet?: Facet;
   params: EList<Param>;
   datasets: EList<DatasetBinding>;
+  specOverlay?: string;
 
 }

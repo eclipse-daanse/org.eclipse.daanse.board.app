@@ -30,6 +30,7 @@ import { useDatasourceRepository, useEObject, useTranslation } from 'org.eclipse
 import { identifier as DATASOURCE_REPOSITORY, type DatasourceRepository } from 'org.eclipse.daanse.board.app.lib.api.datasource'
 import type { VegaWidgetSettings } from './gen/VegaWidgetSettings'
 import { compileRecipe, DEFAULT_DATASET, RecipeError, withSize } from './recipe'
+import { withOverlay } from './overlay'
 import { SAMPLE_VALUES, withDatasets, type Row } from './sample'
 import { datasetSources, rowsOf, typed } from './datasets'
 import { useDatasets, type ChartStore } from './useDatasets'
@@ -210,7 +211,10 @@ const draw = async (keepSignals = false) => {
   const drawnRevision = dataRevision
   try {
     /* Compiled before Vega is loaded: a recipe that gives no chart needs none. */
-    const spec = withSize(withDatasets(compileRecipe(s), datasetsNow()), el.clientWidth, el.clientHeight)
+    /* The advanced overlay applies for every reader, whether the Spec tab is shown or not (#1291). */
+    const drawn = withOverlay(compileRecipe(s), s.specOverlay)
+    if (drawn.error) console.warn(`vega: the stored spec overlay is not applied: ${drawn.error}`)
+    const spec = withSize(withDatasets(drawn.spec, datasetsNow()), el.clientWidth, el.clientHeight)
     const { drawChart, signalsOf, restoreSignals, listenTo } = await import('./embedChart')
     const kept = keepSignals && chart ? signalsOf(chart.view) : undefined
     const next = await drawChart(el, spec, {

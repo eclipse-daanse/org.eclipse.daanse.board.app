@@ -91,6 +91,7 @@ export type { ClassDoc, FeatureDoc } from './modelDocs'
  */
 export { useTranslation } from './useTranslation'
 export { useLanguage } from './useLanguage'
+export { usePreference, ADVANCED_EDITING } from './usePreference'
 /* Numbers and dates in the language on screen. */
 export { useFormat, numberFormat, dateFormat, relativeDays } from './useFormat'
 export type { Format } from './useFormat'

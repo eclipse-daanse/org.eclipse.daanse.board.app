@@ -515,7 +515,9 @@
       "warn": "prüfen",
       "err": "getrennt",
       "divider": "Trenner"
-    }
+    },
+    "advancedEditing": "Erweitertes Bearbeiten: die Spezifikation hinter einem Diagramm zeigen",
+    "advancedEditingHint": "Für dich, in diesem Browser: Diagramme bekommen einen Tab „Spezifikation“ mit ihrer Vega-Lite-Spezifikation. Ein Board kann das nicht einschalten."
   },
   "Pages": {
     "title": "Seiten",

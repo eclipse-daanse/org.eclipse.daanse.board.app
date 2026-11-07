@@ -236,6 +236,11 @@ they are.
                 <details key="documentation" value="The data the chart draws, by name. Without an entry the data source of the widget is the dataset table; an entry named table without a source of its own says how to read that one."/>
             </eAnnotations>
         </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="specOverlay" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" lowerBound="0" defaultValueLiteral="">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="What an advanced reader added to the spec beyond the form (#1291): a JSON object merged into the compiled Vega-Lite spec - objects key by key, arrays by position - where it wins over the recipe. Only the difference to the compiled spec is kept, so the form still decides everything the overlay does not say. Edited in the Spec tab, which only readers who turned on advanced editing see; a stored overlay applies for everyone. URLs, links, data of its own and another schema are taken out."/>
+            </eAnnotations>
+        </eStructuralFeatures>
     </eClassifiers>
 
     <eClassifiers xsi:type="ecore:EClass" name="DatasetBinding">

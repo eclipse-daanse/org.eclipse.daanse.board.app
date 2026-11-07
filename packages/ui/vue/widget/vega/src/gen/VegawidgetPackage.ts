@@ -81,6 +81,7 @@ export class VegawidgetPackage extends BasicEPackage {
     VEGA_WIDGET_SETTINGS__FACET: null as unknown as EAttribute | EReference,
     VEGA_WIDGET_SETTINGS__PARAMS: null as unknown as EAttribute | EReference,
     VEGA_WIDGET_SETTINGS__DATASETS: null as unknown as EAttribute | EReference,
+    VEGA_WIDGET_SETTINGS__SPEC_OVERLAY: null as unknown as EAttribute | EReference,
     DATASET_BINDING: null as unknown as EClass,
     DATASET_BINDING__NAME: null as unknown as EAttribute | EReference,
     DATASET_BINDING__DATASOURCE_ID: null as unknown as EAttribute | EReference,
@@ -260,6 +261,15 @@ export class VegawidgetPackage extends BasicEPackage {
     vegaWidgetSettings_datasets.setUpperBound(-1);
     vegaWidgetSettingsClass.getEStructuralFeatures().push(vegaWidgetSettings_datasets);
     VegawidgetPackage.Literals.VEGA_WIDGET_SETTINGS__DATASETS = vegaWidgetSettings_datasets;
+
+    // Create specOverlay feature
+    const vegaWidgetSettings_specOverlay = new BasicEAttribute();
+    vegaWidgetSettings_specOverlay.setName('specOverlay');
+    vegaWidgetSettings_specOverlay.setLowerBound(0);
+    vegaWidgetSettings_specOverlay.setUpperBound(1);
+    vegaWidgetSettings_specOverlay.setDefaultValueLiteral("");
+    vegaWidgetSettingsClass.getEStructuralFeatures().push(vegaWidgetSettings_specOverlay);
+    VegawidgetPackage.Literals.VEGA_WIDGET_SETTINGS__SPEC_OVERLAY = vegaWidgetSettings_specOverlay;
 
     // Create DatasetBinding class
     const datasetBindingClass = new BasicEClass();
@@ -1937,6 +1947,7 @@ export class VegawidgetPackage extends BasicEPackage {
     (VegawidgetPackage.Literals.VEGA_WIDGET_SETTINGS__FACET as BasicEReference).setEType(VegawidgetPackage.Literals.FACET);
     (VegawidgetPackage.Literals.VEGA_WIDGET_SETTINGS__PARAMS as BasicEReference).setEType(VegawidgetPackage.Literals.PARAM);
     (VegawidgetPackage.Literals.VEGA_WIDGET_SETTINGS__DATASETS as BasicEReference).setEType(VegawidgetPackage.Literals.DATASET_BINDING);
+    (VegawidgetPackage.Literals.VEGA_WIDGET_SETTINGS__SPEC_OVERLAY as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
     (VegawidgetPackage.Literals.DATASET_BINDING__NAME as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
     (VegawidgetPackage.Literals.DATASET_BINDING__DATASOURCE_ID as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
     (VegawidgetPackage.Literals.DATASET_BINDING__SHAPE as BasicEAttribute).setEType(VegawidgetPackage.Literals.DATASET_SHAPE);

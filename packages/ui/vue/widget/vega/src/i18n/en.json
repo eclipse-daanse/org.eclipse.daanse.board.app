@@ -276,5 +276,17 @@
       "bind": "What the selection is bound to.",
       "value": "The initial value, as JSON - for a value parameter its value, for a selection what it holds at the start. Empty starts empty."
     }
+  },
+  "SpecTab": {
+    "label": "Spec",
+    "explain": "The whole Vega-Lite spec the chart draws. What you change here beyond the form is kept as an override; the form still decides the rest. URLs, links and data of its own are taken out.",
+    "apply": "Apply",
+    "removeAll": "Remove all overrides",
+    "remove": "Remove this override",
+    "overrides": "Overrides",
+    "unused": "Overrides that find nothing to change",
+    "refused": "Taken out",
+    "invalid": "This is no JSON object: {{message}}",
+    "noWidget": "The widget is not on this board."
   }
 }

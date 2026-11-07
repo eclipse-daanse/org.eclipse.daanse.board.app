@@ -17,7 +17,9 @@ import { EVENT_ACTIONS_REGISTRY_ID, EVENT_REGISTRY_ID, type EventActionsRegistry
 import { VegaWidgetInterfaceImpl } from './gen/VegaWidgetInterfaceImpl'
 import { VegaWidgetEvents, WIDGET_TYPE } from './events/VegaWidgetEvents'
 import { DATASOURCE_REPOSITORY, type DatasourceRepository } from 'org.eclipse.daanse.board.app.lib.api.datasource'
-import { WIDGET_SERVICE_ID, type WidgetProvider } from 'org.eclipse.daanse.board.app.lib.api.widget'
+import { WIDGET_SERVICE_ID, WIDGET_SETTINGS_TAB_SERVICE_ID, type WidgetProvider, type WidgetSettingsTab } from 'org.eclipse.daanse.board.app.lib.api.widget'
+import { ADVANCED_EDITING, usePreference } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+import VegaSpecTab from './VegaSpecTab.vue'
 import Icon from './assets/vega.svg'
 import VegaWidget from './VegaWidget.vue'
 import { VegawidgetPackage } from './gen/VegawidgetPackage'
@@ -125,3 +127,21 @@ export { modelledSettings } from './settingsModel'
 
 /* Its texts - collected by lib.i18next, see src/i18n. */
 export { VegaTranslations } from './i18n'
+
+/**
+ * The Spec tab of a chart's settings (#1291): the raw Vega-Lite spec, for
+ * readers who turned on advanced editing - a preference of theirs, which a
+ * board cannot turn on for them. Without it the tab is not offered; an
+ * overlay stored with the chart still applies.
+ */
+@component({ service: [WIDGET_SETTINGS_TAB_SERVICE_ID] })
+export class VegaSpecTabProvider implements WidgetSettingsTab {
+  readonly id = 'vega-spec'
+  readonly label = 'vega:SpecTab.label'
+  readonly component = VegaSpecTab
+  readonly order = 50
+
+  appliesTo(widgetType: string): boolean {
+    return widgetType === WIDGET_TYPE && usePreference(ADVANCED_EDITING).value.value
+  }
+}

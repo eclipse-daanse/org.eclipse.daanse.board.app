@@ -515,7 +515,9 @@
       "warn": "check",
       "err": "disconnected",
       "divider": "Divider"
-    }
+    },
+    "advancedEditing": "Advanced editing: show the spec behind a chart",
+    "advancedEditingHint": "For you, in this browser: charts get a Spec tab with their Vega-Lite spec. A board cannot turn this on."
   },
   "Pages": {
     "title": "Pages",

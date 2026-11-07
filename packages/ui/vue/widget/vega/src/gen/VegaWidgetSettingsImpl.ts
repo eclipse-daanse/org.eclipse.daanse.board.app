@@ -44,6 +44,7 @@ export class VegaWidgetSettingsImpl extends BasicEObject implements VegaWidgetSe
   static readonly FACET: number = 5;
   static readonly PARAMS: number = 6;
   static readonly DATASETS: number = 7;
+  static readonly SPEC_OVERLAY: number = 8;
 
   // Private fields
   private _title: string = "";
@@ -54,6 +55,7 @@ export class VegaWidgetSettingsImpl extends BasicEObject implements VegaWidgetSe
   private _facet?: Facet;
   private _params!: EList<Param>;
   private _datasets!: EList<DatasetBinding>;
+  private _specOverlay: string = "";
 
   /**
    * Returns the EClass of this object
@@ -214,6 +216,30 @@ export class VegaWidgetSettingsImpl extends BasicEObject implements VegaWidgetSe
     return this._datasets;
   }
 
+  get specOverlay(): string {
+    return this._specOverlay!;
+  }
+
+  set specOverlay(value: string) {
+    const oldValue = this._specOverlay;
+    this._specOverlay = value;
+    if (this.eDeliver()) {
+      this.eNotify({
+        getNotifier: () => this,
+        getEventType: () => 1, // SET
+        getFeature: () => this.eClass().getEStructuralFeature(VegaWidgetSettingsImpl.SPEC_OVERLAY),
+        getOldValue: () => oldValue,
+        getNewValue: () => value,
+        getPosition: () => -1,
+        wasSet: () => true,
+        isTouch: () => false,
+        isReset: () => false,
+        getFeatureID: () => VegaWidgetSettingsImpl.SPEC_OVERLAY,
+        merge: () => false
+      });
+    }
+  }
+
   /**
    * Remove a value from its previous container before it is contained here,
    * like Java EMF's eInverseRemove on the old container (#61)
@@ -262,6 +288,8 @@ export class VegaWidgetSettingsImpl extends BasicEObject implements VegaWidgetSe
         return this.params;
       case VegaWidgetSettingsImpl.DATASETS:
         return this.datasets;
+      case VegaWidgetSettingsImpl.SPEC_OVERLAY:
+        return this.specOverlay;
       default:
         return super.eGet(feature);
     }
@@ -308,6 +336,10 @@ export class VegaWidgetSettingsImpl extends BasicEObject implements VegaWidgetSe
         this.datasets.addAll(newValue as any[]);
         super.eSet(feature, newValue);
         break;
+      case VegaWidgetSettingsImpl.SPEC_OVERLAY:
+        this.specOverlay = newValue as string;
+        super.eSet(feature, newValue);
+        break;
       default:
         super.eSet(feature, newValue);
     }
@@ -335,6 +367,8 @@ export class VegaWidgetSettingsImpl extends BasicEObject implements VegaWidgetSe
         return this._params !== undefined && !this._params.isEmpty();
       case VegaWidgetSettingsImpl.DATASETS:
         return this._datasets !== undefined && !this._datasets.isEmpty();
+      case VegaWidgetSettingsImpl.SPEC_OVERLAY:
+        return this._specOverlay !== "";
       default:
         return super.eIsSet(feature);
     }
@@ -371,6 +405,9 @@ export class VegaWidgetSettingsImpl extends BasicEObject implements VegaWidgetSe
       case VegaWidgetSettingsImpl.DATASETS:
         if (this._datasets) this._datasets.clear();
         return;
+      case VegaWidgetSettingsImpl.SPEC_OVERLAY:
+        this._specOverlay = "";
+        return;
       default:
         super.eUnset(feature);
     }
@@ -394,6 +431,7 @@ export class VegaWidgetSettingsImpl extends BasicEObject implements VegaWidgetSe
       facet: this.facet,
       params: this.params?.toArray?.() ?? this.params,
       datasets: this.datasets?.toArray?.() ?? this.datasets,
+      specOverlay: this.specOverlay,
     };
   }
 }

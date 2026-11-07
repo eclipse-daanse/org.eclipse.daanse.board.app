@@ -276,5 +276,17 @@
       "bind": "Woran die Auswahl gebunden ist.",
       "value": "Der Anfangswert als JSON – bei einem Wert dessen Wert, bei einer Auswahl, was sie zu Beginn enthält. Leer beginnt leer."
     }
+  },
+  "SpecTab": {
+    "label": "Spezifikation",
+    "explain": "Die ganze Vega-Lite-Spezifikation, die das Diagramm zeichnet. Was du hier über das Formular hinaus änderst, wird als Überschreibung gespeichert; den Rest bestimmt weiter das Formular. URLs, Links und eigene Daten werden entfernt.",
+    "apply": "Übernehmen",
+    "removeAll": "Alle Überschreibungen entfernen",
+    "remove": "Diese Überschreibung entfernen",
+    "overrides": "Überschreibungen",
+    "unused": "Überschreibungen, die nichts mehr finden",
+    "refused": "Entfernt",
+    "invalid": "Das ist kein JSON-Objekt: {{message}}",
+    "noWidget": "Das Widget ist nicht auf diesem Board."
   }
 }
