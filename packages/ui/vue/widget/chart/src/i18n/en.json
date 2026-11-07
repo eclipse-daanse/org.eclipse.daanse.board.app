@@ -80,7 +80,10 @@
     "yAxisTitle": "Y title",
     "dateDisplayFormat": "Date format",
     "borderColorHint": "visible from width 1",
-    "backgroundColorHint": "bars, pie, filled area"
+    "backgroundColorHint": "bars, pie, filled area",
+    "lineTension": "Line curve (0 = straight, 0.35 = smooth)",
+    "xTicksHorizontal": "Keep x axis labels level",
+    "xTicksLimit": "At most this many x axis labels (0 = as many as fit)"
   },
   "Options": {
     "borderDash": {

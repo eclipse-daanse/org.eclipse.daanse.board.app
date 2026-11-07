@@ -57,7 +57,10 @@ export class ChartSettingsImpl extends BasicEObject implements ChartSettings {
   static readonly VERTICAL_LINES: number = 22;
   static readonly HORIZONTAL_BOXES: number = 23;
   static readonly VERTICAL_BOXES: number = 24;
-  static readonly DATE_DISPLAY_FORMAT: number = 25;
+  static readonly LINE_TENSION: number = 25;
+  static readonly X_TICKS_HORIZONTAL: number = 26;
+  static readonly X_TICKS_LIMIT: number = 27;
+  static readonly DATE_DISPLAY_FORMAT: number = 28;
 
   // Private fields
   private _seriesSettings!: EList<SeriesSettings>;
@@ -85,6 +88,9 @@ export class ChartSettingsImpl extends BasicEObject implements ChartSettings {
   private _verticalLines!: EList<unknown>;
   private _horizontalBoxes!: EList<unknown>;
   private _verticalBoxes!: EList<unknown>;
+  private _lineTension: VariableWrapper<number> = new VariableWrapper<number>();
+  private _xTicksHorizontal: VariableWrapper<boolean> = new VariableWrapper<boolean>();
+  private _xTicksLimit: VariableWrapper<number> = new VariableWrapper<number>();
   private _dateDisplayFormat: VariableWrapper<string> = new VariableWrapper<string>();
 
   /**
@@ -610,6 +616,78 @@ export class ChartSettingsImpl extends BasicEObject implements ChartSettings {
     return this._verticalBoxes;
   }
 
+  get lineTension(): VariableWrapper<number> {
+    return this._lineTension!;
+  }
+
+  set lineTension(value: VariableWrapper<number>) {
+    const oldValue = this._lineTension;
+    this._lineTension = value;
+    if (this.eDeliver()) {
+      this.eNotify({
+        getNotifier: () => this,
+        getEventType: () => 1, // SET
+        getFeature: () => this.eClass().getEStructuralFeature(ChartSettingsImpl.LINE_TENSION),
+        getOldValue: () => oldValue,
+        getNewValue: () => value,
+        getPosition: () => -1,
+        wasSet: () => true,
+        isTouch: () => false,
+        isReset: () => false,
+        getFeatureID: () => ChartSettingsImpl.LINE_TENSION,
+        merge: () => false
+      });
+    }
+  }
+
+  get xTicksHorizontal(): VariableWrapper<boolean> {
+    return this._xTicksHorizontal!;
+  }
+
+  set xTicksHorizontal(value: VariableWrapper<boolean>) {
+    const oldValue = this._xTicksHorizontal;
+    this._xTicksHorizontal = value;
+    if (this.eDeliver()) {
+      this.eNotify({
+        getNotifier: () => this,
+        getEventType: () => 1, // SET
+        getFeature: () => this.eClass().getEStructuralFeature(ChartSettingsImpl.X_TICKS_HORIZONTAL),
+        getOldValue: () => oldValue,
+        getNewValue: () => value,
+        getPosition: () => -1,
+        wasSet: () => true,
+        isTouch: () => false,
+        isReset: () => false,
+        getFeatureID: () => ChartSettingsImpl.X_TICKS_HORIZONTAL,
+        merge: () => false
+      });
+    }
+  }
+
+  get xTicksLimit(): VariableWrapper<number> {
+    return this._xTicksLimit!;
+  }
+
+  set xTicksLimit(value: VariableWrapper<number>) {
+    const oldValue = this._xTicksLimit;
+    this._xTicksLimit = value;
+    if (this.eDeliver()) {
+      this.eNotify({
+        getNotifier: () => this,
+        getEventType: () => 1, // SET
+        getFeature: () => this.eClass().getEStructuralFeature(ChartSettingsImpl.X_TICKS_LIMIT),
+        getOldValue: () => oldValue,
+        getNewValue: () => value,
+        getPosition: () => -1,
+        wasSet: () => true,
+        isTouch: () => false,
+        isReset: () => false,
+        getFeatureID: () => ChartSettingsImpl.X_TICKS_LIMIT,
+        merge: () => false
+      });
+    }
+  }
+
   get dateDisplayFormat(): VariableWrapper<string> {
     return this._dateDisplayFormat!;
   }
@@ -692,6 +770,12 @@ export class ChartSettingsImpl extends BasicEObject implements ChartSettings {
         return this.horizontalBoxes;
       case ChartSettingsImpl.VERTICAL_BOXES:
         return this.verticalBoxes;
+      case ChartSettingsImpl.LINE_TENSION:
+        return this.lineTension;
+      case ChartSettingsImpl.X_TICKS_HORIZONTAL:
+        return this.xTicksHorizontal;
+      case ChartSettingsImpl.X_TICKS_LIMIT:
+        return this.xTicksLimit;
       case ChartSettingsImpl.DATE_DISPLAY_FORMAT:
         return this.dateDisplayFormat;
       default:
@@ -810,6 +894,18 @@ export class ChartSettingsImpl extends BasicEObject implements ChartSettings {
         this.verticalBoxes.addAll(newValue as any[]);
         super.eSet(feature, newValue);
         break;
+      case ChartSettingsImpl.LINE_TENSION:
+        this.lineTension = newValue as VariableWrapper<number>;
+        super.eSet(feature, newValue);
+        break;
+      case ChartSettingsImpl.X_TICKS_HORIZONTAL:
+        this.xTicksHorizontal = newValue as VariableWrapper<boolean>;
+        super.eSet(feature, newValue);
+        break;
+      case ChartSettingsImpl.X_TICKS_LIMIT:
+        this.xTicksLimit = newValue as VariableWrapper<number>;
+        super.eSet(feature, newValue);
+        break;
       case ChartSettingsImpl.DATE_DISPLAY_FORMAT:
         this.dateDisplayFormat = newValue as VariableWrapper<string>;
         super.eSet(feature, newValue);
@@ -875,6 +971,12 @@ export class ChartSettingsImpl extends BasicEObject implements ChartSettings {
         return this._horizontalBoxes !== undefined && !this._horizontalBoxes.isEmpty();
       case ChartSettingsImpl.VERTICAL_BOXES:
         return this._verticalBoxes !== undefined && !this._verticalBoxes.isEmpty();
+      case ChartSettingsImpl.LINE_TENSION:
+        return this._lineTension !== new VariableWrapper<number>();
+      case ChartSettingsImpl.X_TICKS_HORIZONTAL:
+        return this._xTicksHorizontal !== new VariableWrapper<boolean>();
+      case ChartSettingsImpl.X_TICKS_LIMIT:
+        return this._xTicksLimit !== new VariableWrapper<number>();
       case ChartSettingsImpl.DATE_DISPLAY_FORMAT:
         return this._dateDisplayFormat !== new VariableWrapper<string>();
       default:
@@ -963,6 +1065,15 @@ export class ChartSettingsImpl extends BasicEObject implements ChartSettings {
       case ChartSettingsImpl.VERTICAL_BOXES:
         if (this._verticalBoxes) this._verticalBoxes.clear();
         return;
+      case ChartSettingsImpl.LINE_TENSION:
+        this._lineTension = new VariableWrapper<number>();
+        return;
+      case ChartSettingsImpl.X_TICKS_HORIZONTAL:
+        this._xTicksHorizontal = new VariableWrapper<boolean>();
+        return;
+      case ChartSettingsImpl.X_TICKS_LIMIT:
+        this._xTicksLimit = new VariableWrapper<number>();
+        return;
       case ChartSettingsImpl.DATE_DISPLAY_FORMAT:
         this._dateDisplayFormat = new VariableWrapper<string>();
         return;
@@ -1006,6 +1117,9 @@ export class ChartSettingsImpl extends BasicEObject implements ChartSettings {
       verticalLines: this.verticalLines?.toArray?.() ?? this.verticalLines,
       horizontalBoxes: this.horizontalBoxes?.toArray?.() ?? this.horizontalBoxes,
       verticalBoxes: this.verticalBoxes?.toArray?.() ?? this.verticalBoxes,
+      lineTension: this.lineTension,
+      xTicksHorizontal: this.xTicksHorizontal,
+      xTicksLimit: this.xTicksLimit,
       dateDisplayFormat: this.dateDisplayFormat,
     };
   }

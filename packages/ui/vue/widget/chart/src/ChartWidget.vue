@@ -29,6 +29,7 @@ import { identifiers } from 'org.eclipse.daanse.board.app.lib.core'
 import type { TinyEmitter } from 'tiny-emitter';
 import { EventActionsRegistry, EVENT_ACTIONS_REGISTRY } from 'org.eclipse.daanse.board.app.lib.api.events';
 import { ChartWidgetInterface } from './api/ChartWidgetInterface';
+import { isOn, numberOf, useThemeTokens } from './chartTheme';
 
 const { wrapParameters } = useVariableRepository()
 
@@ -245,8 +246,14 @@ const resolvedConfig = wrapParameters({
   verticalGridColor: computed(() => (settings.value?.verticalGridColor as any)?.value ?? 'rgba(0, 0, 0, 0.1)'),
   verticalGridWidth: computed(() => (settings.value?.verticalGridWidth as any)?.value ?? 1),
   dateDisplayFormat: computed(() => (settings.value?.dateDisplayFormat as any)?.value ?? 'dd.MM.yyyy HH:mm'),
-  annotationsEditMode: computed(() => (settings.value?.annotationsEditMode as any)?.value ?? false)
+  annotationsEditMode: computed(() => (settings.value?.annotationsEditMode as any)?.value ?? false),
+  lineTension: computed(() => (settings.value as any)?.lineTension?.value ?? 0),
+  xTicksHorizontal: computed(() => (settings.value as any)?.xTicksHorizontal?.value ?? false),
+  xTicksLimit: computed(() => (settings.value as any)?.xTicksLimit?.value ?? 0),
 })
+
+/* The board's colours and font, followed when the theme changes (#1275). */
+const theme = useThemeTokens()
 
 
 // Apply settings to data (override dataset colors and apply per-series settings)
@@ -373,6 +380,8 @@ const chartData = computed(() => {
           pointBackgroundColor: pointColor,
           pointBorderColor: pointColor,
           pointHoverRadius: showPoints ? (pointSize + 2) : 0,
+          // How much the line curves; 0, straight, unless set (#1275)
+          tension: numberOf(resolvedConfig.lineTension.value, 0),
         }
       } else if (chartType === 'bar') {
         result = {
@@ -424,7 +433,21 @@ const chartOptions = computed(() => {
     }
   }
 
-  const editMode = resolvedConfig.annotationsEditMode.value
+  // The wrappers hand flags on as text; "false" is not edit mode (#1275)
+  const editMode = isOn(resolvedConfig.annotationsEditMode.value)
+  const tokens = theme.value
+  const font = { family: tokens.font }
+  /* A zone's name sits small and dim at its left edge, not bold and black
+    in its middle (#1275). */
+  const zoneLabel = (content: string) => ({
+    display: true,
+    content,
+    position: { x: 'start', y: 'center' },
+    color: tokens.dim,
+    backgroundColor: 'transparent',
+    font: { family: tokens.font, size: 11, weight: 'normal' },
+    padding: 6,
+  })
 
   // Build annotations
   const annotations: any = {}
@@ -499,11 +522,7 @@ const chartOptions = computed(() => {
       borderWidth: editMode ? 2 : 0,
       borderColor: editMode ? 'rgba(0,0,0,0.5)' : undefined,
       borderDash: editMode ? [5, 5] : undefined,
-      label: box.label ? {
-        display: true,
-        content: box.label,
-        position: 'center'
-      } : undefined,
+      label: box.label ? zoneLabel(box.label) : undefined,
       // Draggable options
       draggable: editMode,
       enter({ element }: any) {
@@ -532,11 +551,7 @@ const chartOptions = computed(() => {
       borderWidth: editMode ? 2 : 0,
       borderColor: editMode ? 'rgba(0,0,0,0.5)' : undefined,
       borderDash: editMode ? [5, 5] : undefined,
-      label: box.label ? {
-        display: true,
-        content: box.label,
-        position: 'center'
-      } : undefined,
+      label: box.label ? zoneLabel(box.label) : undefined,
       // Draggable options
       draggable: editMode,
       enter({ element }: any) {
@@ -635,6 +650,16 @@ const chartOptions = computed(() => {
   const xAxisTitle = settings.value?.xAxisTitle?.value ?? ''
   const yAxisTitle = settings.value?.yAxisTitle?.value ?? ''
 
+  /*
+   * The labels of a time axis: level and thinned out where the settings
+   * say so, turned by Chart.js where they do not, as before (#1275).
+   */
+  const xTicksLimit = numberOf(resolvedConfig.xTicksLimit.value, 0)
+  const xTicks: Record<string, unknown> = {
+    ...(isOn(resolvedConfig.xTicksHorizontal.value) ? { maxRotation: 0, minRotation: 0, autoSkip: true, autoSkipPadding: 12 } : {}),
+    ...(xTicksLimit > 0 ? { autoSkip: true, maxTicksLimit: xTicksLimit } : {}),
+  }
+
   // Build scales configuration dynamically
   const scales: any = {
     y: {
@@ -642,9 +667,12 @@ const chartOptions = computed(() => {
       title: {
         display: !!yAxisTitle,
         text: yAxisTitle,
+        color: tokens.dim,
+        font,
       },
+      ticks: { color: tokens.dim, font },
       grid: {
-        display: resolvedConfig.showHorizontalGrid.value,
+        display: isOn(resolvedConfig.showHorizontalGrid.value),
         color: resolvedConfig.horizontalGridColor.value,
         lineWidth: resolvedConfig.horizontalGridWidth.value,
       }
@@ -654,13 +682,18 @@ const chartOptions = computed(() => {
       title: {
         display: !!xAxisTitle,
         text: xAxisTitle,
+        color: tokens.dim,
+        font,
       },
       grid: {
-        display: resolvedConfig.showVerticalGrid.value,
+        display: isOn(resolvedConfig.showVerticalGrid.value),
         color: resolvedConfig.verticalGridColor.value,
         lineWidth: resolvedConfig.verticalGridWidth.value,
       },
       ticks: {
+        color: tokens.dim,
+        font,
+        ...xTicks,
         callback: function(value: any, index: number, ticks: any[]): string {
           const label: any = (this as any).getLabelForValue(value)
           return formatDate(label, dateFormat)
@@ -676,11 +709,14 @@ const chartOptions = computed(() => {
         scales[axisId] = {
           type: 'category', // Explicitly set the axis type
           grid: {
-            display: resolvedConfig.showVerticalGrid.value,
+            display: isOn(resolvedConfig.showVerticalGrid.value),
             color: resolvedConfig.verticalGridColor.value,
             lineWidth: resolvedConfig.verticalGridWidth.value,
           },
           ticks: {
+            color: tokens.dim,
+            font,
+            ...xTicks,
             callback: function(value: any, index: number, ticks: any[]): string {
               // Try to format as date if the value looks like a date
               const label: any = (this as any).getLabelForValue(value)
@@ -704,9 +740,12 @@ const chartOptions = computed(() => {
           title: {
             display: !!axisTitle,
             text: axisTitle,
+            color: tokens.dim,
+            font,
           },
+          ticks: { color: tokens.dim, font },
           grid: {
-            display: resolvedConfig.showHorizontalGrid.value,
+            display: isOn(resolvedConfig.showHorizontalGrid.value),
             color: resolvedConfig.horizontalGridColor.value,
             lineWidth: resolvedConfig.horizontalGridWidth.value,
           },
@@ -723,15 +762,27 @@ const chartOptions = computed(() => {
 
   const options: any = {
     responsive: true,
-    maintainAspectRatio: true,
+    // The chart fills its widget rather than keeping a ratio of its own (#1275)
+    maintainAspectRatio: false,
     indexAxis,
     scales,
     plugins: {
       legend: {
         labels: {
           usePointStyle: true,
-          pointStyle: 'circle'
+          pointStyle: 'circle',
+          color: tokens.fg,
+          font,
         }
+      },
+      tooltip: {
+        backgroundColor: tokens.raised,
+        titleColor: tokens.fg,
+        bodyColor: tokens.fg,
+        borderColor: tokens.divider,
+        borderWidth: 1,
+        titleFont: font,
+        bodyFont: font,
       },
       annotation: {
         annotations
@@ -743,7 +794,9 @@ const chartOptions = computed(() => {
 })
 </script>
 <template>
-  <div class="w-full h-full" @click="emitClick" @contextmenu.prevent="emitRightClick">
+  <!-- Relative and sized: with no ratio of its own the chart takes the
+    size of this box, and Chart.js measures the box it sits in (#1275). -->
+  <div class="w-full h-full" style="position: relative; width: 100%; height: 100%" @click="emitClick" @contextmenu.prevent="emitRightClick">
     <component
       :is="chartComponent"
       :key="chartKey"

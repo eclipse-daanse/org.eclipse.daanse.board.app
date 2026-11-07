@@ -80,7 +80,10 @@
     "yAxisTitle": "Titel Y",
     "dateDisplayFormat": "Datumsformat",
     "borderColorHint": "sichtbar ab Stärke 1",
-    "backgroundColorHint": "Balken, Torte, gefüllte Fläche"
+    "backgroundColorHint": "Balken, Torte, gefüllte Fläche",
+    "lineTension": "Linienkrümmung (0 = gerade, 0,35 = weich)",
+    "xTicksHorizontal": "Beschriftung der x-Achse waagerecht",
+    "xTicksLimit": "Höchstens so viele Beschriftungen der x-Achse (0 = so viele wie passen)"
   },
   "Options": {
     "borderDash": {
