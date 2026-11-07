@@ -28,11 +28,16 @@ const answer = readFileSync(join(__dirname, 'fixtures', 'baeume.featureinfo.xml'
 describe('the tiles of a box', () => {
   it('are about square on the ground and cover the box, never too many', () => {
     const tiles = tilesOf('11.60,50.95,11.63,50.97', 0.01)
-    // 0.01 degree of latitude, 0.0159 of longitude at 51 N: 2 rows, 2 columns.
+    // 0.01 degree of latitude, 0.0159 of longitude at 51 N: 2 rows, 2 columns of 0.015.
     expect(tiles).toHaveLength(4)
     expect(tiles[0][0]).toBe(11.6)
     expect(tiles[0][3] - tiles[0][1]).toBeCloseTo(0.01, 9)
+    expect(tiles[0][2] - tiles[0][0]).toBeCloseTo(0.015, 9)
     expect(Math.max(...tiles.map((t) => t[2]))).toBeCloseTo(11.63, 9)
+    // A box a little wider than one tile is shared out evenly, without a sliver.
+    const two = tilesOf('11.610,50.955,11.626,50.963', 0.01)
+    expect(two).toHaveLength(2)
+    expect(two[0][2] - two[0][0]).toBeCloseTo(0.008, 9)
     expect(tilesOf('', 0.01)).toEqual([])
     expect(tilesOf('0,0,10,10', 0.01)).toHaveLength(MAX_TILES)
   })
