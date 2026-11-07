@@ -413,6 +413,8 @@ function addColor(layer: ThingLayer) {
           <DSlider v-model="layer.rotation" :label="t('Settings.models.rotation')" :min="0" :max="359" :step="1" suffix="°" />
           <DInput type="number" :model-value="layer.altitudeOffset" :label="t('Settings.models.altitudeOffset')"
             @update:model-value="(v) => setNumber(layer, 'altitudeOffset', v)" />
+          <DColorInput v-model="layer.color" :label="t('Settings.models.color')" />
+          <DColorInput v-model="layer.trunkColor" :label="t('Settings.models.trunkColor')" />
           <DButton :intent="placingId === layer.id ? 'primary' : 'default'" @click="togglePlacing(layer)">
             <DIcon name="ads_click" size="sm" />{{ placingId === layer.id ? t('Settings.models.placing') : t('Settings.models.place') }}
           </DButton>

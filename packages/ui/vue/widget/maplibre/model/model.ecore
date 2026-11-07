@@ -579,6 +579,16 @@ once. The OGC STA layer reads its things the way the Leaflet map does since
                 <details key="documentation" value="Height above the ground, in metres."/>
             </eAnnotations>
         </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="color" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" lowerBound="0" defaultValueLiteral="">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="The colour of the model where no rule gives one, any CSS colour; the trunk (a mesh named trunk, stem, bark or cylinder) takes trunkColor. Empty: the colours of the file."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="trunkColor" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" lowerBound="0" defaultValueLiteral="">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="The colour of the trunk of the model, any CSS colour. Empty: the colour of the file."/>
+            </eAnnotations>
+        </eStructuralFeatures>
         <eStructuralFeatures xsi:type="ecore:EReference" name="instances" upperBound="-1" eType="#//ModelInstance" containment="true">
             <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
                 <details key="documentation" value="Where the model stands."/>

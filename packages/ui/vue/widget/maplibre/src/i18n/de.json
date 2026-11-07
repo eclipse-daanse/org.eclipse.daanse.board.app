@@ -117,7 +117,9 @@
       "ruleUrl": "Modelldatei",
       "ruleUrlHint": "leer: das Modell oben",
       "widthProperty": "Eigenschaft mit der Breite (m)",
-      "widthPropertyHint": "Z. B. der Kronendurchmesser. Leer: im Verhältnis zur Höhe."
+      "widthPropertyHint": "Z. B. der Kronendurchmesser. Leer: im Verhältnis zur Höhe.",
+      "color": "Farbe des Modells (leer: aus der Datei)",
+      "trunkColor": "Farbe des Stamms (leer: aus der Datei)"
     }
   }
 }
