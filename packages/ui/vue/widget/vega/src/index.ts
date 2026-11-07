@@ -11,6 +11,7 @@
  *   Smart City Jena
  **********************************************************************/
 
+import './referencedPackages'
 import { component, inject } from '@eclipse-daanse/tsm'
 import { DATASOURCE_REPOSITORY, type DatasourceRepository } from 'org.eclipse.daanse.board.app.lib.api.datasource'
 import { WIDGET_SERVICE_ID, type WidgetProvider } from 'org.eclipse.daanse.board.app.lib.api.widget'

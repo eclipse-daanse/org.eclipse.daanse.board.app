@@ -20,6 +20,7 @@
  * without a source.
  */
 
+import './referencedPackages'
 import type { DatasetBinding } from './gen/DatasetBinding'
 import type { DatasetShape } from './gen/DatasetShape'
 import { DEFAULT_DATASET } from './recipe'

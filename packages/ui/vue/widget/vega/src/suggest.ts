@@ -25,6 +25,7 @@
  * sources of the board for a dataset entry.
  */
 
+import './referencedPackages'
 import { DEFAULT_DATASET } from './recipe'
 import { SAMPLE_VALUES } from './sample'
 

@@ -31,6 +31,14 @@ export type { IBaseConnectionConfiguration } from './gen/IBaseConnectionConfigur
 export { IBaseConnectionConfigurationImpl } from './gen/IBaseConnectionConfigurationImpl'
 export { BaseconnectionPackage } from './gen/BaseconnectionPackage'
 export { BaseconnectionFactory } from './gen/BaseconnectionFactory'
+/* Column types and transforms, shared by the data sources and their readers - Vega chart, 3D map (#1295). */
+export type { ColumnType } from './gen/ColumnType'
+export { ColumnTypeImpl } from './gen/ColumnTypeImpl'
+export { ColumnValueType } from './gen/ColumnValueType'
+export type { Transform } from './gen/Transform'
+export { TransformImpl } from './gen/TransformImpl'
+export { TransformKind } from './gen/TransformKind'
+export { FilterOp } from './gen/FilterOp'
 
 import type { EObject } from '@emfts/core'
 import type { IBaseConnectionConfiguration } from './gen/IBaseConnectionConfiguration'

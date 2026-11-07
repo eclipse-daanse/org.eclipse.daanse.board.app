@@ -22,6 +22,7 @@
  * and the settings form hold the same instance.
  */
 
+import './referencedPackages'
 import { toRaw } from 'vue'
 import { adopt, isModelled } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import { VegawidgetFactory } from './gen/VegawidgetFactory'

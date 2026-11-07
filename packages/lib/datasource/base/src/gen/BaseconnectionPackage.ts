@@ -18,9 +18,12 @@
  * @generated
  */
 
-import { BasicEPackage, BasicEClass, BasicEAttribute, EPackageRegistry, getEcorePackage } from '@emfts/core';
-import type { EClass, EAttribute, EReference, EDataType } from '@emfts/core';
+import { BasicEPackage, BasicEClass, BasicEAttribute, EPackageRegistry, getEcorePackage, BasicEEnum, BasicEEnumLiteral, BasicEAnnotation } from '@emfts/core';
+import type { EClass, EAttribute, EReference, EEnum, EDataType } from '@emfts/core';
 import { BaseconnectionFactory } from './BaseconnectionFactory.js';
+import { ColumnValueType } from './ColumnValueType.js';
+import { TransformKind } from './TransformKind.js';
+import { FilterOp } from './FilterOp.js';
 
 /**
  * Baseconnection Package
@@ -51,6 +54,26 @@ export class BaseconnectionPackage extends BasicEPackage {
     I_BASE_CONNECTION_CONFIGURATION__TYPE: null as unknown as EAttribute | EReference,
     I_BASE_CONNECTION_CONFIGURATION__UID: null as unknown as EAttribute | EReference,
     I_BASE_CONNECTION_CONFIGURATION__POLLING_ENABLED: null as unknown as EAttribute | EReference,
+    COLUMN_TYPE: null as unknown as EClass,
+    COLUMN_TYPE__COLUMN: null as unknown as EAttribute | EReference,
+    COLUMN_TYPE__TYPE: null as unknown as EAttribute | EReference,
+    COLUMN_TYPE__UNIT: null as unknown as EAttribute | EReference,
+    COLUMN_TYPE__LABEL: null as unknown as EAttribute | EReference,
+    TRANSFORM: null as unknown as EClass,
+    TRANSFORM__KIND: null as unknown as EAttribute | EReference,
+    TRANSFORM__FIELD: null as unknown as EAttribute | EReference,
+    TRANSFORM__OP: null as unknown as EAttribute | EReference,
+    TRANSFORM__VALUE: null as unknown as EAttribute | EReference,
+    TRANSFORM__PARAM: null as unknown as EAttribute | EReference,
+    TRANSFORM__FIELDS: null as unknown as EAttribute | EReference,
+    TRANSFORM__KEY_AS: null as unknown as EAttribute | EReference,
+    TRANSFORM__VALUE_AS: null as unknown as EAttribute | EReference,
+    TRANSFORM__AS: null as unknown as EAttribute | EReference,
+    TRANSFORM__EXPRESSION: null as unknown as EAttribute | EReference,
+    TRANSFORM__PATTERN: null as unknown as EAttribute | EReference,
+    COLUMN_VALUE_TYPE: null as unknown as EEnum,
+    TRANSFORM_KIND: null as unknown as EEnum,
+    FILTER_OP: null as unknown as EEnum,
   };
 
   private constructor() {
@@ -112,6 +135,374 @@ export class BaseconnectionPackage extends BasicEPackage {
     iBaseConnectionConfigurationClass.getEStructuralFeatures().push(iBaseConnectionConfiguration_pollingEnabled);
     BaseconnectionPackage.Literals.I_BASE_CONNECTION_CONFIGURATION__POLLING_ENABLED = iBaseConnectionConfiguration_pollingEnabled;
 
+    // Create ColumnType class
+    const columnTypeClass = new BasicEClass();
+    columnTypeClass.setName('ColumnType');
+    columnTypeClass.setAbstract(false);
+    columnTypeClass.setInterface(false);
+    this.getEClassifiers().push(columnTypeClass);
+    columnTypeClass.setEPackage(this);
+    BaseconnectionPackage.Literals.COLUMN_TYPE = columnTypeClass;
+
+    // Create column feature
+    const columnType_column = new BasicEAttribute();
+    columnType_column.setName('column');
+    columnType_column.setLowerBound(0);
+    columnType_column.setUpperBound(1);
+    columnType_column.setDefaultValueLiteral("");
+    columnTypeClass.getEStructuralFeatures().push(columnType_column);
+    BaseconnectionPackage.Literals.COLUMN_TYPE__COLUMN = columnType_column;
+
+    // Create type feature
+    const columnType_type = new BasicEAttribute();
+    columnType_type.setName('type');
+    columnType_type.setLowerBound(0);
+    columnType_type.setUpperBound(1);
+    columnType_type.setDefaultValueLiteral("number");
+    columnTypeClass.getEStructuralFeatures().push(columnType_type);
+    BaseconnectionPackage.Literals.COLUMN_TYPE__TYPE = columnType_type;
+
+    // Create unit feature
+    const columnType_unit = new BasicEAttribute();
+    columnType_unit.setName('unit');
+    columnType_unit.setLowerBound(0);
+    columnType_unit.setUpperBound(1);
+    columnType_unit.setDefaultValueLiteral("");
+    columnTypeClass.getEStructuralFeatures().push(columnType_unit);
+    BaseconnectionPackage.Literals.COLUMN_TYPE__UNIT = columnType_unit;
+
+    // Create label feature
+    const columnType_label = new BasicEAttribute();
+    columnType_label.setName('label');
+    columnType_label.setLowerBound(0);
+    columnType_label.setUpperBound(1);
+    columnType_label.setDefaultValueLiteral("");
+    columnTypeClass.getEStructuralFeatures().push(columnType_label);
+    BaseconnectionPackage.Literals.COLUMN_TYPE__LABEL = columnType_label;
+
+    // Create Transform class
+    const transformClass = new BasicEClass();
+    transformClass.setName('Transform');
+    transformClass.setAbstract(false);
+    transformClass.setInterface(false);
+    this.getEClassifiers().push(transformClass);
+    transformClass.setEPackage(this);
+    BaseconnectionPackage.Literals.TRANSFORM = transformClass;
+
+    // Create kind feature
+    const transform_kind = new BasicEAttribute();
+    transform_kind.setName('kind');
+    transform_kind.setLowerBound(0);
+    transform_kind.setUpperBound(1);
+    transform_kind.setDefaultValueLiteral("filter");
+    transformClass.getEStructuralFeatures().push(transform_kind);
+    BaseconnectionPackage.Literals.TRANSFORM__KIND = transform_kind;
+
+    // Create field feature
+    const transform_field = new BasicEAttribute();
+    transform_field.setName('field');
+    transform_field.setLowerBound(0);
+    transform_field.setUpperBound(1);
+    transform_field.setDefaultValueLiteral("");
+    transformClass.getEStructuralFeatures().push(transform_field);
+    BaseconnectionPackage.Literals.TRANSFORM__FIELD = transform_field;
+
+    // Create op feature
+    const transform_op = new BasicEAttribute();
+    transform_op.setName('op');
+    transform_op.setLowerBound(0);
+    transform_op.setUpperBound(1);
+    transform_op.setDefaultValueLiteral("eq");
+    transformClass.getEStructuralFeatures().push(transform_op);
+    BaseconnectionPackage.Literals.TRANSFORM__OP = transform_op;
+
+    // Create value feature
+    const transform_value = new BasicEAttribute();
+    transform_value.setName('value');
+    transform_value.setLowerBound(0);
+    transform_value.setUpperBound(1);
+    transform_value.setDefaultValueLiteral("");
+    transformClass.getEStructuralFeatures().push(transform_value);
+    BaseconnectionPackage.Literals.TRANSFORM__VALUE = transform_value;
+
+    // Create param feature
+    const transform_param = new BasicEAttribute();
+    transform_param.setName('param');
+    transform_param.setLowerBound(0);
+    transform_param.setUpperBound(1);
+    transform_param.setDefaultValueLiteral("");
+    transformClass.getEStructuralFeatures().push(transform_param);
+    BaseconnectionPackage.Literals.TRANSFORM__PARAM = transform_param;
+
+    // Create fields feature
+    const transform_fields = new BasicEAttribute();
+    transform_fields.setName('fields');
+    transform_fields.setLowerBound(0);
+    transform_fields.setUpperBound(-1);
+    transformClass.getEStructuralFeatures().push(transform_fields);
+    BaseconnectionPackage.Literals.TRANSFORM__FIELDS = transform_fields;
+
+    // Create keyAs feature
+    const transform_keyAs = new BasicEAttribute();
+    transform_keyAs.setName('keyAs');
+    transform_keyAs.setLowerBound(0);
+    transform_keyAs.setUpperBound(1);
+    transform_keyAs.setDefaultValueLiteral("key");
+    transformClass.getEStructuralFeatures().push(transform_keyAs);
+    BaseconnectionPackage.Literals.TRANSFORM__KEY_AS = transform_keyAs;
+
+    // Create valueAs feature
+    const transform_valueAs = new BasicEAttribute();
+    transform_valueAs.setName('valueAs');
+    transform_valueAs.setLowerBound(0);
+    transform_valueAs.setUpperBound(1);
+    transform_valueAs.setDefaultValueLiteral("value");
+    transformClass.getEStructuralFeatures().push(transform_valueAs);
+    BaseconnectionPackage.Literals.TRANSFORM__VALUE_AS = transform_valueAs;
+
+    // Create as feature
+    const transform_as = new BasicEAttribute();
+    transform_as.setName('as');
+    transform_as.setLowerBound(0);
+    transform_as.setUpperBound(1);
+    transform_as.setDefaultValueLiteral("");
+    transformClass.getEStructuralFeatures().push(transform_as);
+    BaseconnectionPackage.Literals.TRANSFORM__AS = transform_as;
+
+    // Create expression feature
+    const transform_expression = new BasicEAttribute();
+    transform_expression.setName('expression');
+    transform_expression.setLowerBound(0);
+    transform_expression.setUpperBound(1);
+    transform_expression.setDefaultValueLiteral("");
+    transformClass.getEStructuralFeatures().push(transform_expression);
+    BaseconnectionPackage.Literals.TRANSFORM__EXPRESSION = transform_expression;
+
+    // Create pattern feature
+    const transform_pattern = new BasicEAttribute();
+    transform_pattern.setName('pattern');
+    transform_pattern.setLowerBound(0);
+    transform_pattern.setUpperBound(1);
+    transform_pattern.setDefaultValueLiteral("");
+    transformClass.getEStructuralFeatures().push(transform_pattern);
+    BaseconnectionPackage.Literals.TRANSFORM__PATTERN = transform_pattern;
+
+    // Create ColumnValueType enum
+    const columnValueTypeEnumType = new BasicEEnum();
+    columnValueTypeEnumType.setName('ColumnValueType');
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("string");
+      literal.setValue(0);
+      literal.setLiteral("string");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(ColumnValueType.string);
+      columnValueTypeEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("number");
+      literal.setValue(1);
+      literal.setLiteral("number");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(ColumnValueType.number);
+      columnValueTypeEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("date");
+      literal.setValue(2);
+      literal.setLiteral("date");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(ColumnValueType.date);
+      columnValueTypeEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("boolean");
+      literal.setValue(3);
+      literal.setLiteral("boolean");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(ColumnValueType.boolean);
+      columnValueTypeEnumType.addLiteral(literal);
+    }
+    {
+      const annotation = new BasicEAnnotation();
+      annotation.setSource("http://www.eclipse.org/emf/2002/GenModel");
+      annotation.getDetails().putByKey("documentation", "What the values of a column are read as before the chart draws them. Sources such as SPARQL and CSV answer text; a number or a date that arrives as text sorts and scales as text.");
+      columnValueTypeEnumType.getEAnnotations().push(annotation);
+    }
+    BaseconnectionPackage.Literals.COLUMN_VALUE_TYPE = columnValueTypeEnumType;
+    this.getEClassifiers().push(columnValueTypeEnumType);
+
+    // Create TransformKind enum
+    const transformKindEnumType = new BasicEEnum();
+    transformKindEnumType.setName('TransformKind');
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("filter");
+      literal.setValue(0);
+      literal.setLiteral("filter");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(TransformKind.filter);
+      transformKindEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("fold");
+      literal.setValue(1);
+      literal.setLiteral("fold");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(TransformKind.fold);
+      transformKindEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("calculate");
+      literal.setValue(2);
+      literal.setLiteral("calculate");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(TransformKind.calculate);
+      transformKindEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("extract");
+      literal.setValue(3);
+      literal.setLiteral("extract");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(TransformKind.extract);
+      transformKindEnumType.addLiteral(literal);
+    }
+    {
+      const annotation = new BasicEAnnotation();
+      annotation.setSource("http://www.eclipse.org/emf/2002/GenModel");
+      annotation.getDetails().putByKey("documentation", "What a transform does: keep the rows that pass a comparison or a selection (filter), turn columns into rows (fold), or add a computed field (calculate), or take a part of a field by a regular expression (extract, #1295).");
+      transformKindEnumType.getEAnnotations().push(annotation);
+    }
+    BaseconnectionPackage.Literals.TRANSFORM_KIND = transformKindEnumType;
+    this.getEClassifiers().push(transformKindEnumType);
+
+    // Create FilterOp enum
+    const filterOpEnumType = new BasicEEnum();
+    filterOpEnumType.setName('FilterOp');
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("eq");
+      literal.setValue(0);
+      literal.setLiteral("eq");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(FilterOp.eq);
+      filterOpEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("neq");
+      literal.setValue(1);
+      literal.setLiteral("neq");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(FilterOp.neq);
+      filterOpEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("lt");
+      literal.setValue(2);
+      literal.setLiteral("lt");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(FilterOp.lt);
+      filterOpEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("lte");
+      literal.setValue(3);
+      literal.setLiteral("lte");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(FilterOp.lte);
+      filterOpEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("gt");
+      literal.setValue(4);
+      literal.setLiteral("gt");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(FilterOp.gt);
+      filterOpEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("gte");
+      literal.setValue(5);
+      literal.setLiteral("gte");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(FilterOp.gte);
+      filterOpEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("oneOf");
+      literal.setValue(6);
+      literal.setLiteral("oneOf");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(FilterOp.oneOf);
+      filterOpEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("range");
+      literal.setValue(7);
+      literal.setLiteral("range");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(FilterOp.range);
+      filterOpEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("valid");
+      literal.setValue(8);
+      literal.setLiteral("valid");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(FilterOp.valid);
+      filterOpEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("param");
+      literal.setValue(9);
+      literal.setLiteral("param");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(FilterOp.param);
+      filterOpEnumType.addLiteral(literal);
+    }
+    {
+      const annotation = new BasicEAnnotation();
+      annotation.setSource("http://www.eclipse.org/emf/2002/GenModel");
+      annotation.getDetails().putByKey("documentation", "The comparison a filter makes. oneOf takes a comma-separated list, range takes two comma-separated bounds, valid keeps rows with a value, param keeps what a selection holds.");
+      filterOpEnumType.getEAnnotations().push(annotation);
+    }
+    BaseconnectionPackage.Literals.FILTER_OP = filterOpEnumType;
+    this.getEClassifiers().push(filterOpEnumType);
+
 
     // ============================================
     // Set ESuperTypes (must be done after all classes are created)
@@ -126,6 +517,21 @@ export class BaseconnectionPackage extends BasicEPackage {
     (BaseconnectionPackage.Literals.I_BASE_CONNECTION_CONFIGURATION__TYPE as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
     (BaseconnectionPackage.Literals.I_BASE_CONNECTION_CONFIGURATION__UID as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
     (BaseconnectionPackage.Literals.I_BASE_CONNECTION_CONFIGURATION__POLLING_ENABLED as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EBoolean')!);
+    (BaseconnectionPackage.Literals.COLUMN_TYPE__COLUMN as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (BaseconnectionPackage.Literals.COLUMN_TYPE__TYPE as BasicEAttribute).setEType(BaseconnectionPackage.Literals.COLUMN_VALUE_TYPE);
+    (BaseconnectionPackage.Literals.COLUMN_TYPE__UNIT as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (BaseconnectionPackage.Literals.COLUMN_TYPE__LABEL as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (BaseconnectionPackage.Literals.TRANSFORM__KIND as BasicEAttribute).setEType(BaseconnectionPackage.Literals.TRANSFORM_KIND);
+    (BaseconnectionPackage.Literals.TRANSFORM__FIELD as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (BaseconnectionPackage.Literals.TRANSFORM__OP as BasicEAttribute).setEType(BaseconnectionPackage.Literals.FILTER_OP);
+    (BaseconnectionPackage.Literals.TRANSFORM__VALUE as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (BaseconnectionPackage.Literals.TRANSFORM__PARAM as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (BaseconnectionPackage.Literals.TRANSFORM__FIELDS as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (BaseconnectionPackage.Literals.TRANSFORM__KEY_AS as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (BaseconnectionPackage.Literals.TRANSFORM__VALUE_AS as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (BaseconnectionPackage.Literals.TRANSFORM__AS as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (BaseconnectionPackage.Literals.TRANSFORM__EXPRESSION as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (BaseconnectionPackage.Literals.TRANSFORM__PATTERN as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
 
     // ============================================
     // Set EOpposites (must be done after all features are created) (#59)
